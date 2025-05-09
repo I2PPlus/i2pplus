@@ -14981,7 +14981,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       - Clean up / shorten description for required stats
       - Change bw.sendBps and bw.receiveBps from KBps to Bps
 
-* 2011-05-16  0.8.6 released
+* 2011-05-16 0.8.6 released
 
 2011-05-13 zzz
     * Increase min floodfills; decrease min routerinfo expiration
@@ -15003,7 +15003,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * UPnP: Strip trailing nulls from incoming XML to prevent
       "content not allowed in trailing section" exceptions
 
-* 2011-04-18  0.8.5 released
+* 2011-04-18 0.8.5 released
 
 2011-04-11 zzz
     * Console: Hide iframe on mobile browsers
@@ -15085,7 +15085,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * OutNetMessage: Remove dead code
     * Tunnel cleanups, final, javadoc
 
-* 2011-03-02  0.8.4 released
+* 2011-03-02 0.8.4 released
 
 2011-02-27 zzz
     * Console:
@@ -15264,7 +15264,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       - Case cleanups
       - Javadoc
 
-* 2011-01-24  0.8.3 released
+* 2011-01-24 0.8.3 released
 
 2011-01-16 zzz
     * Console: Allow editing of console args
@@ -15412,7 +15412,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Fix 302 redirects so they URL encode properly.
     * bump to -1
 
-* 2010-12-22  0.8.2 released
+* 2010-12-22 0.8.2 released
 
 2010-12-13 dr|z3d
     * Console themes: Midnight & Classic renovations.
@@ -15663,7 +15663,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * stats.jsp: Cleanup, more tagging, hide obscure stuff unless ?f=1
     * Streaming: Fix bug causing read() to incorrectly return EOF
 
-* 2010-11-15  0.8.1 released
+* 2010-11-15 0.8.1 released
 
 2010-11-08 zzz
     * I2CP: Fix NPE caused by null session options (seen in i2pbote)
@@ -15840,7 +15840,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 2010-09-15 dr|z3d
     * I2PSnark: Overhaul UI, implement new theme.
 
-* 2010-07-12  0.8 released
+* 2010-07-12 0.8 released
 
 2010-07-08 zzz
     * I2PTunnel: More error propagation fixes
@@ -15904,7 +15904,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 2010-06-12 welterde
     * fixed possible race-condition and improved code style in ObjectCounter utility class
 
-* 2010-06-07  0.7.14 released
+* 2010-06-07 0.7.14 released
 
 2010-06-07 zzz
     * Misc tweaks after code review
@@ -16048,7 +16048,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Jetty: Backport directory listing bugfix from jetty 6
     * peers.jsp: Cleanup and tag
 
-* 2010-04-27  0.7.13 released
+* 2010-04-27 0.7.13 released
 
 2010-04-23 zzz
     * Plugins: Cleanups
@@ -16222,7 +16222,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * I2PTunnel: Disable nonce checking when console password set
     * Reseed: Add another host
 
-* 2010-03-15  0.7.12 released
+* 2010-03-15 0.7.12 released
 
 2010-03-13 zzz
     * Partial fix for I2PTunnel nonce troubles
@@ -16389,7 +16389,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       - VTBM generation only through routers >= 0.7.12
       - VTBM generation disabled for now
 
-* 2010-02-15  0.7.11 released
+* 2010-02-15 0.7.11 released
 
 2010-02-13 sponge
     * Fix addWebApplications API goofup
@@ -16509,7 +16509,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 2010-01-21 dr|z3d
     * New eepsite structure and enhanced pages. Now with graphics and stuff!
 
-* 2010-01-22  0.7.10 released
+* 2010-01-22 0.7.10 released
 
 2010-01-21 zzz
     * eepget.bat: Add to pkg
@@ -16578,7 +16578,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Insert reverse connection ability into the http server code so that
       seedless can start to get worked on. It's disabled by default.
 
-* 2010-01-12  0.7.9 released
+* 2010-01-12 0.7.9 released
 
 2010-01-12 zzz
     * I2CP: Clean up resources on 5-minute leaseset timeout at startup
@@ -16759,7 +16759,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Translation: Move code from routerconsole to core,
       to support translation of other webapps
 
-* 2009-12-08  0.7.8 released
+* 2009-12-08 0.7.8 released
 
 2009-12-08 zzz
     * Misc. cleanups after review, prep for release
@@ -17045,7 +17045,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Router: Add router.hideFloodfillParticipant option for testing
     * StatisticsManager: Cleanup after release
 
-* 2009-10-12  0.7.7 released
+* 2009-10-12 0.7.7 released
 
 2009-10-11 zzz
     * Misc. cleanups after review, prep for release
@@ -17360,7 +17360,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Fix themes issue with horizontal width of radio/checkbox icons.
     * Other cosmetic UI enhancements.
 
-* 2009-07-31  0.7.6 released
+* 2009-07-31 0.7.6 released
 
 2009-07-31 zzz
     * Update versions, package release
@@ -17697,7 +17697,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       There is no code-flow changes, just lint. One warning remains as I am
       unsure exactly how to solve the problem yet.
 
-* 2009-06-29  0.7.5 released
+* 2009-06-29 0.7.5 released
 
 2009-06-29 Complication
     * Update versions, package release
@@ -17800,7 +17800,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Watchdog: Only try to dump threads if there is a wrapper
          and we aren't on windows
 
-* 2009-06-12  0.7.4 released
+* 2009-06-12 0.7.4 released
 
 2009-06-12 Complication
     * Update versions, package release
@@ -18110,7 +18110,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       - Clean up file names
       - Clarify messages about filter and search
 
-* 2009-05-16  0.7.3 released
+* 2009-05-16 0.7.3 released
 
 2009-05-16 Complication
     * Update versions, package release
@@ -18253,7 +18253,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 2009-04-18 Complication
     * Fix typo in "news.xml", no build number increase.
 
-* 2009-04-18  0.7.2 released
+* 2009-04-18 0.7.2 released
 
 2009-04-18 Complication
     * Update versions, package release
@@ -18391,7 +18391,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
         router.maxTunnelPercentage=nn, default 33
       - Add chart to tunnels.jsp to see results
 
-* 2009-03-29  0.7.1 released
+* 2009-03-29 0.7.1 released
 
 2009-03-29 Complication
     * Update versions, package release
@@ -18588,7 +18588,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       Should help reliability.
     * Streaming: TCB control block sharing
 
-* 2009-01-24  0.7 released
+* 2009-01-24 0.7 released
 
 2009-01-24 Complication
     * Update versions, package release
@@ -18759,7 +18759,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       - Use new I2PAppThread that does not call global listeners on OOM,
         so that OOMing SAM will not shutdown the whole router.
 
-* 2008-12-01  0.6.5 released
+* 2008-12-01 0.6.5 released
 
 2008-12-01 Complication
     * Update versions, package release, fix typo in comment
@@ -18964,7 +18964,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Fixed SimpleTimer class to allow exit.
     * BOB (Basic Open Bridge) added.
 
-* 2008-10-05  0.6.4 released
+* 2008-10-05 0.6.4 released
 
 2008-10-05 Complication
     * Update versions, package release
@@ -19065,7 +19065,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * NTCP: Reduce max idle time from 20m to 15m
     * NetDb stats: Post-0.6.3 clean up
 
-* 2008-08-24  0.6.3 released
+* 2008-08-24 0.6.3 released
 
 2008-08-24 Complication
     * Update versions, package release
@@ -19267,7 +19267,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 2008-06-07 Complication
     * Fix version in news.xml so it could be published
 
-* 2008-06-07  0.6.2 released
+* 2008-06-07 0.6.2 released
 
 2008-06-07 Complication
     * Write announcement and prepare for release
@@ -19402,7 +19402,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * I2PTunnel: Change default outproxy to false.i2p
     * profiles.jsp: Add router version
 
-* 2008-04-26  0.6.1.33 released
+* 2008-04-26 0.6.1.33 released
 
 2008-04-20 zzz
     * Outbound message/Reachability:
@@ -19432,7 +19432,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       - Exclude netDb-listed unreachable peers from inbound tunnels;
         this won't help much since there are very few of these now
       - Remove 10s delay on inbound UDP connections used for the
-        0.6.1.10 transition
+       0.6.1.10 transition
       - Track and display UDP connection direction on peers.jsp
       - Show banlist status in-line on profiles.jsp
 
@@ -19613,7 +19613,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       in accordance with this change.
     * Improve the release checklist.
 
-* 2008-03-09  0.6.1.32 released
+* 2008-03-09 0.6.1.32 released
 
 2008-03-07 zzz
     * Update news and version numbers
@@ -19681,7 +19681,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Change NTCP backlogged message from error to warning
     * Checklist updates
 
-* 2008-02-10  0.6.1.31 released
+* 2008-02-10 0.6.1.31 released
 
 2008-02-10 Complication
     * Update news and version numbers
@@ -19725,7 +19725,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * eepsite_index.html: Change stats.i2p addressbook subscription URL
     * hosts.txt: Add krabs.i2p, true.i2p, www.i2p2.i2p
 
-* 2008-01-28  0.6.1.30-20 converted from CVS to MTN
+* 2008-01-28 0.6.1.30-20 converted from CVS to MTN
 
 2008-01-08 zzz
     * addressbook: Limit size of subscribed hosts.txt,
@@ -19828,84 +19828,84 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       - Check for lower case commands
     (Thanks sponge!)
 
-2007-10-07  jrandom
+2007-10-07 jrandom
     * back out the NTCP backlog pushback, as it could be used to mount an
       active anonymity attack.
 
-* 2007-10-07  0.6.1.30 released
+* 2007-10-07 0.6.1.30 released
 
-2007-10-07  Complication
+2007-10-07 Complication
     * Fix an issue in EepGet whereby sending of "etag" and "lastModified" headers
       broke retrying.
 
-2007-09-27  zzz
+2007-09-27 zzz
     * Implement pushback of NTCP transport backlog to the outbound tunnel selection code
     * Clean up the NTCP and UDP tables on peers.jsp to be consistent,
       fix some of the sorting
 
-2007-09-22  zzz
+2007-09-22 zzz
     * Send messages for the same destination out the same outbound
       tunnel to reduce out-of-order delivery.
 
-2007-09-19  zzz
+2007-09-19 zzz
     * I2PSnark: Fix broken multifile torrent Delete;
         cleanup Storage resources in AddTorrent;
         don't autostart torrent after Create
 
-2007-09-18  zzz
+2007-09-18 zzz
     * eepsite_index.html: Add links to trevorreznik address book
     * streaming lib: Fix SocketManagerFactory to honor options on outbound connections
     * streaming lib: Fix setDefaultOptions() when called with a ConnectionOptions parameter
     * I2PSnark: Don't make outbound connections to already-connected peers
     * I2PSnark: Debug logging cleanup
 
-2007-09-14  zzz
+2007-09-14 zzz
     * eepget: Increase header timeout to 45s
     * HTTP proxy: Return a better error message for localhost requests
     * tunnels: Fix PooledTunnelCreatorConfig memory leak
 
-2007-09-09  zzz
+2007-09-09 zzz
     * eepget: Add support for Last-Modified and If-Modified-Since
     * addressbook: Finish incomplete support for Last-Modified
 
-2007-09-08  zzz
+2007-09-08 zzz
     * eepget: Copy over SocketTimeout.java file from syndie
 
-2007-09-07  jrandom
+2007-09-07 jrandom
     * eepget: Merge timeout support from syndie
 
-* 2007-08-23  0.6.1.29 released
+* 2007-08-23 0.6.1.29 released
 
-2007-08-12  zzz
+2007-08-12 zzz
     * readme.html - Add inproxy.tino.i2p, replace search.i2p with eepsites.i2p,
       tweak the eepsite and troubleshooting sections
 
-2007-08-11  zzz
+2007-08-11 zzz
     * Add stats for individual tunnel rates (nice when graphed)
     * I2PSnark: Fix outbound tunnel nickname
 
-2007-08-05  Complication
+2007-08-05 Complication
     * Update the sharing calculator on config.jsp
       and explain the trade-off even more thoroughly.
 
-2007-08-04  Complication
+2007-08-04 Complication
     * Lower the threshold between the K and L bandwidth class,
       so that K is now < 12 KB/s, instead of <= 16 KB/s.
       Hopefully this lets people with 128 kbit/s (16 KB/s) upload lines
       participate in routing, if they keep the default share percentage.
 
-2007-07-16  zzz
+2007-07-16 zzz
     * I2PSnark: Add tooltip info for choked/uninterested
 
-2007-07-16  zzz
+2007-07-16 zzz
     * Make selection of graphed data configurable via configstats.jsp,
       remove most of the default graphs to save some memory
 
-2007-07-15  zzz
+2007-07-15 zzz
     * Add current values to graph legends
     * Fix up previous Rate fix to check for divide by zero
 
-2007-07-14  Complication
+2007-07-14 Complication
     * Take the post-download routerInfo size check back out of ReseedHandler,
       since it wasn't helpful, and a lower limit caused false warnings.
     * Give EepGet ability to enforce a min/max HTTP response size.
@@ -19918,7 +19918,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Enable icon for default eepsite, and the index page
       of the router console (more later).
 
-2007-07-14  zzz
+2007-07-14 zzz
     * Clean up graphs.jsp - set K=1024 where appropriate,
       output image sizes in html, catch ooms, other minor tweaks
     * Fix current event count truncation which fixes graphs with low
@@ -19926,19 +19926,19 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       (bw.* and router.* graphs for example were 1.5x too high)
       Affects all "events per period" (non-lifetime) counts.
 
-2007-07-09  zzz
+2007-07-09 zzz
     * I2PSnark: give a better error message for a non-i2p torrent
 
-2007-07-07  zzz
+2007-07-07 zzz
     * Add auto-detect IP/Port to NTCP. When enabled on config.jsp,
       SSU will notify/restart NTCP when the external address changes.
       Now you can enable inbound TCP without a static IP or dyndns service.
 
-2007-07-04  zzz
+2007-07-04 zzz
     * Display calculated share bandwidth and remove load testing
       on config.jsp
 
-2007-07-01  zzz
+2007-07-01 zzz
     * Replace broken option i2np.udp.alwaysPreferred with
       i2np.udp.preferred and adjust UDP bids; possible settings are
       "false" (default), "true", and "always".
@@ -19946,11 +19946,11 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       (NTCP is preferred unless it isn't established and UDP is established).
       Use to compare NTCP and UDP transports.
 
-2007-06-27  jrandom
+2007-06-27 jrandom
     * fix for a streaming lib bug that could leave a thread waiting
       indefinitely (thanks Complication!)
 
-2007-06-16  Complication
+2007-06-16 Complication
     * First pass on EepGet and ReseedHandler improvements,
       please avoid use on routers which matter!
     * Give EepGet ability of downloading into an OutputStream,
@@ -19959,18 +19959,18 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       and more verbosely, provide a link to logs
       and suggest manual reseed.
 
-2007-05-06  Complication
+2007-05-06 Complication
     * Fix the build.xml file, so the preppkg build target won't try copying files
       which became deprecated with the old Syndie (thanks for alerting, itsu!)
 
-2007-03-31  zzz
+2007-03-31 zzz
     * Add trevorreznik jump server to the http proxy error page
     * Add anonymity to the trackers supporting details links in I2PSnark
 
-2007-03-24  zzz
+2007-03-24 zzz
     * Remove Syndie from build targets and navbar
 
-2007-03-22  zzz
+2007-03-22 zzz
     * I2PSnark tracker handling tweaks:
     -   Add link to tracker details page (Postman only for now, requires bytemonsoon patch)
     -   Add Base URL to tracker list configuration
@@ -19981,24 +19981,24 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     -   Stop torrent if not registered with tracker
     -   Mark temp files as delete on exit
 
-2007-03-18  zzz
+2007-03-18 zzz
     * I2PSnark: Cleanup some handling of saved partial pieces
     * I2PSnark: Put bit counting in Bitfield.java for efficiency
     * I2PSnark: Save torrent completion state in I2PSnark.config
 
-* 2007-03-17  0.6.1.28 released
+* 2007-03-17 0.6.1.28 released
 
-2007-03-13  zzz
+2007-03-13 zzz
     * I2PSnark: Make max total uploaders configurable (thanks Amiga4000!)
 
-2007-03-12  jrandom
+2007-03-12 jrandom
     * dodge a race on startup (thanks zzz!)
 
-2007-03-10  zzz
+2007-03-10 zzz
     * Streaming lib: Change initial RTT deviation from RTT to RTT/2
       (RFC 2988) to reduce early RTO values
 
-2007-03-08  zzz
+2007-03-08 zzz
     * I2PSnark changes to improve upload performance:
     *  Implement total uploader limit (10)
     *  Don't timeout non-piece messages out
@@ -20006,10 +20006,10 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     *  Change request limit to 64K (was 256K)
     * I2PSnark: Disconnect from seeds when complete
 
-2007-03-07  zzz
+2007-03-07 zzz
     * Remove dynamic router keys from config.jsp
 
-2007-03-07  zzz
+2007-03-07 zzz
     * Streaming lib changes to improve upstream performance during congestion:
     *   Change min window size from 12 to 1
     *   Change max timeout from 10 to 45 sec
@@ -20017,36 +20017,36 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     *   Change intial window size for I2PSnark from 12 to 1
     *   Change slow start growth rate for I2PSnark from 1/2 to 1
 
-2007-03-04  zzz
+2007-03-04 zzz
     * Update eepsite_index.html
 
-2007-03-03  zzz
+2007-03-03 zzz
     * Upgrade from Jetty 5.1.6 to 5.1.12 which fixes spaces in URL
     * Add a updaterWithJetty build target
 
-2007-03-03  zzz
+2007-03-03 zzz
     * Implement priority sending for NTCP
     * Disable trimForOverload() in tunnel BuildExecutor which
       was preventing tunnel builds when outbound traffic was high
       (i.e. most of the time when running I2PSnark)
 
-2007-02-28  zzz
+2007-02-28 zzz
     * I2PSnark: File reopen cleanup
 
-2007-02-28  zzz
+2007-02-28 zzz
     * I2PSnark: Add peer details to web page
 
-* 2007-02-15  0.6.1.27 released
+* 2007-02-15 0.6.1.27 released
 
-2007-02-15  jrandom
+2007-02-15 jrandom
     * Limit the whispering floodfill sends to at most 3 randomly
       chosen from the known floodfill peers
 
-2007-02-14  jrandom
+2007-02-14 jrandom
     * Don't filter out KICK and H(ide oper status) IRC messages
       (thanks Takk and postman!)
 
-2007-02-13  jrandom
+2007-02-13 jrandom
     * Tell our peers about who we know in the floodfill netDb every
       6 hours or so, mitigating the situation where peers lose track
       of floodfill routers.
@@ -20054,61 +20054,61 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       not this one)
     * Disable the eepsite tunnel by default
 
-2007-01-30  zzz
+2007-01-30 zzz
     * I2PSnark: Don't hold _snarks lock while checking a snark,
       so web page is responsive at startup
 
-2007-01-29  zzz
+2007-01-29 zzz
     * I2PSnark: Add NickyB tracker
 
-2007-01-28  zzz
+2007-01-28 zzz
     * I2PSnark: Don't hold sendQueue lock while flushing output,
       to make everything run smoother
 
-2007-01-27  zzz
+2007-01-27 zzz
     * I2PSnark: Fix orphaned Snark reader tasks leading to OOMs
 
-2007-01-20  Complication
+2007-01-20 Complication
     * Drop overlooked comment
 
-2007-01-20  Complication
+2007-01-20 Complication
     * Modify ReseedHandler to query the "i2p.reseedURL" property from I2PAppContext
       instead of System, so setting a reseed URL in advanced configuration has effect.
     * Clean out obsolete reseed code from ConfigNetHandler.
 
-2007-01-20  zzz
+2007-01-20 zzz
     * I2PSnark: More choking rotation tweaks
     * Improve performance by not reading in the whole
       piece from disk for each request. A huge memory savings
       on 1MB torrents with many peers.
 
-2007-01-17  zzz
+2007-01-17 zzz
     * Add new HTTP Proxy error message for non-http protocols
 
-2007-01-17  zzz
+2007-01-17 zzz
     * Add note on Syndie index.html steering people to new Syndie
 
-2007-01-16  zzz
+2007-01-16 zzz
     * I2PSnark: Fix crash when autostart off and
       tcrrent started manually
 
-2007-01-16  zzz
+2007-01-16 zzz
     * I2PSnark: Fix bug caused by last I2PSnark checkin
       (ConnectionAcceptor not started)
     * Don't start PeerCoordinator, ConnectionAcceptor,
       and TrackerClient unless starting torrent
 
-2007-01-15  jrandom
+2007-01-15 jrandom
     * small guard against unnecessary streaming lib reset packets
       (thanks Complication!)
 
-2007-01-15  zzz
+2007-01-15 zzz
     * I2PSnark: Add 'Stop All' link on web page
     * Add some links to trackers and forum on web page
     * Don't start tunnel if 'Autostart' unchecked
     * Fix torrent restart bug by reopening file descriptors
 
-2007-01-14  zzz
+2007-01-14 zzz
     * I2PSnark: Improvements for torrents with > 4 leechers:
       choke based on upload rate when seeding, and
       be smarter and fairer about rotating choked peers.
@@ -20117,16 +20117,16 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Fix reporting to tracker of remaining bytes for
       torrents > 4GB (but ByteMonsoon still has a bug)
 
-2006-10-29  zzz
+2006-10-29 zzz
     * I2PSnark: Fix and enable generation of multifile torrents,
       print error if no tracker selected at create-torrent,
       fix stopping a torrent that hasn't started successfully,
       add eBook and GayTorrents trackers to form,
       web page formatting tweaks
 
-* 2006-10-10  0.6.1.26 released
+* 2006-10-10 0.6.1.26 released
 
-2006-10-29  Complication
+2006-10-29 Complication
     * Ensure we get NTP samples from more diverse sources
       (0.pool.ntp.org, 1.pool.ntp.org, etc)
     * Discard median-based peer skew calculator as framed average works,
@@ -20134,11 +20134,11 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Require more data points (from at least 20 peers)
       before considering a peer skew measurement reliable
 
-2006-10-10  jrandom
+2006-10-10 jrandom
     * Removed the status display from the console, as its more confusing
       than informative (though the content is still displayed in the HTML)
 
-2006-10-08  Complication
+2006-10-08 Complication
     * Add a framed average peer clock skew calculator
     * Add config property "router.clockOffsetSanityCheck" to determine
       if NTP-suggested clock offsets get sanity checked (default "true")
@@ -20146,24 +20146,24 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       by more than 5 seconds, or make it more than 20 seconds total
     * Decrease log level in getMedianPeerClockSkew()
 
-2006-09-29  zzz
+2006-09-29 zzz
     * I2PSnark: Second try at synchronization fix - synch addRequest()
       completely rather than just portions of it and requestNextPiece()
 
-2006-09-27  jrandom
+2006-09-27 jrandom
     * added HMAC-SHA256
     * properly use CRLF with EepPost
     * suppress jbigi/jcpuid messages if jbigi.dontLog/jcpuid.dontLog is set
     * PBE session key generation (with 1000 rounds of SHA256)
     * misc SDK helper functions
 
-2006-09-26  Complication
+2006-09-26 Complication
     * Take back another inadverent logging change in NTCPConnection
 
-2006-09-26  Complication
+2006-09-26 Complication
     * Take back an accidental log level change
 
-2006-09-26  Complication
+2006-09-26 Complication
     * Subclass from Clock a RouterClock which can access router transports,
       with the goal of developing it to second-guess NTP results
     * Make transports report clock skew in seconds
@@ -20176,30 +20176,30 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Extra explicitness in NTCP classes to denote unit of time.
     * Fix some places in NTCPConnection where milliseconds and seconds were confused
 
-2006-09-25  zzz
+2006-09-25 zzz
     * I2PSnark: Paranoid copy before writing pieces,
       recheck files on completion, redownload bad pieces
     * I2PSnark: Don't contact tracker as often when seeding
 
-2006-09-24  zzz
+2006-09-24 zzz
     * I2PSnark: Add some synchronization to prevent rare problem
       after restoring orphan piece
 
-2006-09-20  zzz
+2006-09-20 zzz
     * I2PSnark: Eliminate duplicate requests caused by i2p-bt's
       rapid choke/unchokes
     * I2PSnark: Truncate long TrackerErr messages on web page
 
-2006-09-16  zzz
+2006-09-16 zzz
     * I2PSnark: Implement retransmission of requests. This
       eliminates one cause of complete stalls with a peer.
       This problem is common on torrents with a small number of
       active peers where there are no choke/unchokes to kickstart things.
 
-2006-09-13  zzz
+2006-09-13 zzz
     * I2PSnark: Fix restoral of partial pieces broken by last patch
 
-2006-09-13  zzz
+2006-09-13 zzz
     * I2PSnark: Mark a peer's requests as unrequested on disconnect,
       preventing premature end game
     * I2PSnark: Randomize selection of next piece during end game
@@ -20207,18 +20207,18 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * I2PSnark: strip ".torrent" on web page
     * I2PSnark: Limit piece size in generated torrent to 1MB max
 
-2006-09-09  zzz
+2006-09-09 zzz
     * I2PSnark: Add "Stalled" indication and stat totals on web page
 
-2006-09-09  zzz
+2006-09-09 zzz
     * I2PSnark: Fix bug where new peers would always be sent an "interested"
       regardless of actual interest
     * I2PSnark: Reduce max piece size from 10MB to 1MB; larger may have severe
       memory and efficiency problems
 
-* 2006-09-09  0.6.1.25 released
+* 2006-09-09 0.6.1.25 released
 
-2006-09-08  jrandom
+2006-09-08 jrandom
     * Tweak the PRNG logging so it only displays error messages if there are
       problems
     * Disable dynamic router keys for the time being, as they don't offer
@@ -20229,12 +20229,12 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       the time being.
     * Spattering of bugfixes
 
-2006-09-07  zzz
+2006-09-07 zzz
     * I2PSnark: Increase output timeout from 2 min to 4 min
     * I2PSnark: Orphan debug msg cleanup
     * I2PSnark: More web rate report cleanup
 
-2006-09-05  zzz
+2006-09-05 zzz
     * I2PSnark: Implement basic partial-piece saves across connections
     * I2PSnark: Implement keep-alive sending. This will keep non-I2PSnark clients
       from dropping us for inactivity but also renders the 2-minute transmit-inactivity
@@ -20245,66 +20245,66 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * I2PSnark: Fix dropped chunk handling
     * I2PSnark: Web rate report cleanup
 
-2006-09-04  zzz
+2006-09-04 zzz
     * I2PSnark: Report cleared trackerErr immediately
     * I2PSnark: Add trackerErr reporting after previous success; retry more quickly
     * I2PSnark: Set up new connections more quickly
     * I2PSnark: Don't delay tracker fetch when setting up lots of connections
     * I2PSnark: Reduce MAX_UPLOADERS from 12 to 4
 
-2006-09-04  zzz
+2006-09-04 zzz
     * Enable pipelining in I2PSnark
     * Make I2PSnark tunnel default be 1 + 0-1
 
-2006-09-03  zzz
+2006-09-03 zzz
     * Add rate reporting to I2PSnark
 
-2006-09-03  Complication
+2006-09-03 Complication
     * Limit form size in SusiDNS to avoid exceeding a POST size limit on postback
     * Print messages about addressbook size to give better overview
     * Enable delete function in published addressbook
 
-2006-08-21  Complication
+2006-08-21 Complication
     * Fix error reporting discrepancy (thanks for helping notice, yojoe!)
 
-2006-08-03  jrandom
+2006-08-03 jrandom
     * Decrease the recently modified tunnel building timeout, though keep
       the scaling on their processing
 
-2006-07-31  jrandom
+2006-07-31 jrandom
     * Increase the tunnel building timeout
     * Avoid a rare race (thanks bar!)
     * Fix the bandwidth capacity publishing code to factor in share percentage
       and outbound throttling (oops)
 
-2006-07-29  Complication
+2006-07-29 Complication
     * Treat NTP responses from unexpected stratums like failures
 
-* 2006-07-28  0.6.1.24 released
+* 2006-07-28 0.6.1.24 released
 
-2006-07-28  jrandom
+2006-07-28 jrandom
     * Don't try to reverify too many netDb entries at once (thanks
-      cervantes and Complication!)
+     cervantes and Complication!)
 
-2006-07-28  jrandom
+2006-07-28 jrandom
     * Actually fix the threading deadlock issue in the netDb (removing
       the synchronized access to individual kbuckets while validating
       individual entries) (thanks cervantes, postman, frosk, et al!)
 
-* 2006-07-27  0.6.1.23 released
+* 2006-07-27 0.6.1.23 released
 
-2006-07-27  jrandom
+2006-07-27 jrandom
     * Cut down NTCP connection establishments once we know the peer is skewed
       (rather than wait for full establishment before verifying)
     * Removed a lock on the stats framework when accessing rates, which
       shouldn't be a problem, assuming rates are created (pretty much) all at
       once and merely updated during the lifetime of the jvm.
 
-2006-07-27  jrandom
+2006-07-27 jrandom
     * Further NTCP write status cleanup
     * Handle more oddly-timed NTCP disconnections (thanks bar!)
 
-2006-07-26  jrandom
+2006-07-26 jrandom
     * When dropping a netDb router reference, only accept newer
       references as part of the update check
     * If we have been up for a while, don't accept really old
@@ -20312,7 +20312,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Drop router references once they are no longer valid, even if
       they were allowed in due to the lax restrictions on startup
 
-2006-07-26  jrandom
+2006-07-26 jrandom
     * Every time we create a new router identity, add an entry to the
       new "identlog.txt" text file in the I2P install directory.  For
       debugging purposes, publish the count of how many identities the
@@ -20334,20 +20334,20 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Allow people to specify the IP that the SSU transport binds on
       locally, via the advanced config "i2np.udp.bindInterface=1.2.3.4"
 
-* 2006-07-18  0.6.1.22 released
+* 2006-07-18 0.6.1.22 released
 
-2006-07-18  jrandom
+2006-07-18 jrandom
     * Add a failsafe to the NTCP transport to make sure we keep
       pumping writes when we should.
     * Properly reallow 16-32KBps routers in the default config
       (thanks Complication!)
 
-2006-07-16  Complication
+2006-07-16 Complication
     * Collect tunnel build agree/reject/expire statistics
       for each bandwidth tier of peers (and peers of unknown tiers,
       even if those shouldn't exist)
 
-2006-07-14  jrandom
+2006-07-14 jrandom
     * Improve the multitransport banlisting (thanks Complication!)
     * Allow routers with a capacity of 16-32KBps to be used in tunnels under
       the default configuration (thanks for the stats Complication!)
@@ -20358,7 +20358,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Improved NTCP buffering
     * Close NTCP connections if we are too backlogged when writing to them
 
-2006-07-04  jrandom
+2006-07-04 jrandom
     * New NIO-based tcp transport (NTCP), enabled by default for outbound
       connections only.  Those who configure their NAT/firewall to allow
       inbound connections and specify the external host and port
@@ -20374,21 +20374,21 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Add a new async pumped tunnel gateway to reduce tunnel dispatcher
       contention
 
-2006-07-01  Complication
+2006-07-01 Complication
     * Ensure that the I2PTunnel web interface won't update tunnel settings
       for shared clients when a non-shared client is modified
       (thanks for spotting, BarkerJr!)
 
-2006-06-14  cervantes
+2006-06-14 cervantes
     * Small tweak to I2PTunnel CSS, so it looks better with desktops
       that use Bitstream Vera fonts @ 96 dpi
 
-* 2006-06-14  0.6.1.21 released
+* 2006-06-14 0.6.1.21 released
 
-2006-06-13  jrandom
+2006-06-13 jrandom
     * Use a minimum uptime of 2 hours, not 4 (oops)
 
-2006-06-13  jrandom
+2006-06-13 jrandom
     * Cut down the proactive rejections due to queue size - if we are
       at the point of having decrypted the request off the queue, might
       as well let it through, rather than waste that decryption
@@ -20397,59 +20397,59 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Bugfix to the I2PTunnel IRC filter to support multiple concurrent
       outstanding pings/pongs
 
-2006-06-10  jrandom
+2006-06-10 jrandom
     * Further reduction in proactive rejections
 
-2006-06-09  jrandom
+2006-06-09 jrandom
     * Don't let the pending tunnel request queue grow beyond reason
       (letting things sit for up to 30s when they fail after 10s
       seems a bit... off)
 
-2006-06-08  jrandom
+2006-06-08 jrandom
     * Be more conservative in the proactive rejections
 
-2006-06-04  Complication
+2006-06-04 Complication
     * Trim out sending a blank line before USER in SusiMail.
       Seemed to break in rare cases, thanks for reporting, Brachtus!
 
-* 2006-06-04  0.6.1.20 released
+* 2006-06-04 0.6.1.20 released
 
-2006-06-04  jrandom
+2006-06-04 jrandom
     * Reduce the SSU ack frequency
     * Tweaked the tunnel rejection settings to reject less aggressively
 
-2006-05-31  jrandom
+2006-05-31 jrandom
     * Only send netDb searches to the floodfill peers for the time being
     * Add some proof of concept filters for tunnel participation.  By default,
       it will skip peers with an advertised bandwith of less than 32KBps or
       an advertised uptime of less than 2 hours.  If this is sufficient, a
       safer implementation of these filters will be implemented.
 
-* 2006-05-18  0.6.1.19 released
+* 2006-05-18 0.6.1.19 released
 
-2006-05-18  jrandom
+2006-05-18 jrandom
     * Made the SSU ACKs less frequent when possible
 
-2006-05-17  Complication
+2006-05-17 Complication
     * Fix some oversights in my previous changes:
       adjust some loglevels, make a few statements less wasteful,
       make one comparison less confusing and more likely to log unexpected values
 
-2006-05-17  jrandom
+2006-05-17 jrandom
     * Make the peer page sortable
     * SSU modifications to cut down on unnecessary connection failures
 
-2006-05-16  jrandom
+2006-05-16 jrandom
     * Further banlist randomizations
     * Adjust the stats monitored for detecting cpu overload when dropping new
       tunnel requests
 
-2006-05-15  jrandom
+2006-05-15 jrandom
     * Add a load dependent throttle on the pending inbound tunnel request
       backlog
     * Increased the tunnel test failure slack before killing a tunnel
 
-2006-05-13  Complication
+2006-05-13 Complication
     * Separate growth factors for tunnel count and tunnel test time
     * Reduce growth factors, so probabalistic throttle would activate
     * Square probAccept values to decelerate stronger when far from average
@@ -20463,33 +20463,33 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       It doesn't seem very effective, so disabled by default
       ("router.dropTunnelsOnOverload=true" to enable)
 
-2006-05-11  jrandom
+2006-05-11 jrandom
     * PRNG bugfix (thanks cervantes and Complication!)
 
-* 2006-05-09  0.6.1.18 released
+* 2006-05-09 0.6.1.18 released
 
-2006-05-09  jrandom
+2006-05-09 jrandom
     * Further tunnel creation timeout revamp
 
-2006-05-07  Complication
+2006-05-07 Complication
     * Fix problem whereby repeated calls to allowed() would make
       the 1-tunnel exception permit more than one concurrent build
 
-2006-05-06  jrandom
+2006-05-06 jrandom
     * Readjust the tunnel creation timeouts to reject less but fail earlier,
       while tracking the extended timeout events.
 
-2006-05-04  jrandom
+2006-05-04 jrandom
     * Short circuit a highly congested part of the stat logging unless its
       required (may or may not help with a synchronization issue reported by
       andreas)
 
-2006-05-03  Complication
+2006-05-03 Complication
     * Allow a single build attempt to proceed despite 1-minute overload
       only if the 1-second rate shows enough spare bandwidth
       (e.g. overload has already eased)
 
-2006-05-02  Complication
+2006-05-02 Complication
     * Correct a misnamed property in SummaryHelper.java
       to avoid confusion
     * Make the maximum allowance of our own concurrent
@@ -20498,25 +20498,25 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * While overloaded, try to avoid completely choking our own build attempts,
       instead prefer limiting them to 1
 
-2006-05-01  jrandom
+2006-05-01 jrandom
     * Adjust the tunnel build timeouts to cut down on expirations, and
       increased the SSU connection establishment retransmission rate to
       something less glacial.
     * For the first 5 minutes of uptime, be less aggressive with tunnel
       exploration, opting for more reliable peers to start with.
 
-2006-05-01  jrandom
+2006-05-01 jrandom
     * Fix for a netDb lookup race (thanks cervantes!)
 
-2006-04-27  jrandom
+2006-04-27 jrandom
     * Avoid a race in the message reply registry (thanks cervantes!)
 
-2006-04-27  jrandom
+2006-04-27 jrandom
     * Fixed the tunnel expiration desync code (thanks Complication!)
 
-* 2006-04-23  0.6.1.17 released
+* 2006-04-23 0.6.1.17 released
 
-2006-04-19  jrandom
+2006-04-19 jrandom
     * Adjust how we pick high capacity peers to allow the inclusion of fast
       peers (the previous filter assumed an old usage pattern)
     * New set of stats to help track per-packet-type bandwidth usage better
@@ -20524,35 +20524,35 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Reduce the frequency of tunnel build attempts while we're saturated
     * Don't drop tunnel requests as easily - prefer to explicitly reject them
 
-* 2006-04-15  0.6.1.16 released
+* 2006-04-15 0.6.1.16 released
 
-2006-04-15  jrandom
+2006-04-15 jrandom
     * Adjust the proactive tunnel request dropping so we will reject what we
       can instead of dropping so much (but still dropping if we get too far
       overloaded)
 
-2006-04-14  jrandom
+2006-04-14 jrandom
     * 0 isn't very random
     * Adjust the tunnel drop to be more reasonable
 
-2006-04-14  jrandom
+2006-04-14 jrandom
     * -28.00230115311259 is not between 0 and 1 in any universe I know.
     * Made the bw-related tunnel join throttle much simpler
 
-2006-04-14  jrandom
+2006-04-14 jrandom
     * Make some more stats graphable, and allow some internal tweaking on the
       tunnel pairing for creation and testing.
 
-* 2006-04-13  0.6.1.15 released
+* 2006-04-13 0.6.1.15 released
 
-2006-04-12  jrandom
+2006-04-12 jrandom
     * Added a further failsafe against trying to queue up too many messages to
       a peer.
 
-2006-04-12  jrandom
+2006-04-12 jrandom
     * Watch out for failed syndie index fetches (thanks bar!)
 
-2006-04-11  jrandom
+2006-04-11 jrandom
     * Throttling improvements on SSU - throttle all transmissions to a peer
       when we are retransmitting, not just retransmissions.  Also, if
       we're already retransmitting to a peer, probabalistically tail drop new
@@ -20560,17 +20560,17 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       transmission.
     * Fixed the rounding error in the inbound tunnel drop probability.
 
-2006-04-10  jrandom
+2006-04-10 jrandom
     * Include a combined send/receive graph (good idea cervantes!)
     * Proactively drop inbound tunnel requests probabalistically as the
       estimated queue time approaches our limit, rather than letting them all
       through up to that limit.
 
-2006-04-08  jrandom
+2006-04-08 jrandom
     * Stat summarization fix (removing the occational holes in the jrobin
       graphs)
 
-2006-04-08  jrandom
+2006-04-08 jrandom
     * Process inbound tunnel requests more efficiently
     * Proactively drop inbound tunnel requests if the queue before we'd
       process it in is too long (dynamically adjusted by cpu load)
@@ -20580,15 +20580,15 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       console (as the "handle backlog")
     * Include a few more stats in the default set of graphs
 
-2006-04-06  jrandom
+2006-04-06 jrandom
     * Fix for a bug in the new irc ping/pong filter (thanks Complication!)
 
-2006-04-06  jrandom
+2006-04-06 jrandom
     * Fixed a typo in the reply cleanup code
 
-* 2006-04-05  0.6.1.14 released
+* 2006-04-05 0.6.1.14 released
 
-2006-04-05  jrandom
+2006-04-05 jrandom
     * Cut down on the time that we allow a tunnel creation request to sit by
       without response, and reject tunnel creation requests that are lagged
       locally.  Also switch to a bounded FIFO instead of a LIFO
@@ -20596,7 +20596,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Don't add addresses to syndie with blank names (thanks Complication!)
     * Further ban clearance
 
-2006-04-05  jrandom
+2006-04-05 jrandom
     * Fix during the ssu handshake to avoid an unnecessary failure on
       packet retransmission (thanks ripple!)
     * Fix during the SSU handshake to use the negotiated session key asap,
@@ -20609,7 +20609,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       won't cause us to pick very bad peers (unless we have very few good
       ones)
     * Bugfix to cut down on peers using introducers unneessarily (thanks
-      Complication!)
+     Complication!)
     * Reduced the default streaming lib message size to fit into a single
       tunnel message, rather than require 5 tunnel messages to be transferred
       without loss before recomposition.  This reduces throughput, but should
@@ -20617,12 +20617,12 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Misc small bugfixes in the router (thanks all!)
     * More tweaking for Syndie's CSS (thanks Doubtful Salmon!)
 
-2006-04-01  jrandom
+2006-04-01 jrandom
     * Take out the router watchdog's teeth (don't restart on leaseset failure)
     * Filter the IRC ping/pong messages, as some clients send unsafe
       information in them (thanks aardvax and dust!)
 
-2006-03-30  jrandom
+2006-03-30 jrandom
     * Substantially reduced the lock contention in the message registry (a
       major hotspot that can choke most threads).  Also reworked the locking
       so we don't need per-message timer events
@@ -20630,9 +20630,9 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       either unregistered individually or expired.
     * Include some of the more transient tunnel throttling
 
-* 2006-03-26  0.6.1.13 released
+* 2006-03-26 0.6.1.13 released
 
-2006-03-25  jrandom
+2006-03-25 jrandom
     * Added a simple purge and ban of syndie authors, shown as the
       "Purge and ban" button on the addressbook for authors that are already
       on the ignore list.  All of their entries and metadata are deleted from
@@ -20641,13 +20641,13 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       from them)
     * More strict tunnel join throtting when congested
 
-2006-03-24  jrandom
+2006-03-24 jrandom
     * Try to desync tunnel building near startup (thanks Complication!)
     * If we are highly congested, fall back on only querying the floodfill
       netDb peers, and only storing to those peers too
     * Cleaned up the floodfill-only queries
 
-2006-03-21  jrandom
+2006-03-21 jrandom
     * Avoid a very strange (unconfirmed) bug that people using the systray's
       browser picker dialog could cause by disabling the GUI-based browser
       picker.
@@ -20659,20 +20659,20 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       searches are used by default, but can be disabled by adding
       netDb.floodfillOnly=true to the advanced config)
 
-2006-03-20  jrandom
+2006-03-20 jrandom
     * Fix to allow for some slack when coalescing stats
     * Workaround some oddball errors
 
-2006-03-18  jrandom
+2006-03-18 jrandom
     * Added a new graphs.jsp page to show all of the stats being harvested
 
-2006-03-18  jrandom
+2006-03-18 jrandom
     * Made the netDb search load limitations a little less stringent
     * Add support for specifying the number of periods to be plotted on the
       graphs - e.g. to plot only the last hour of a stat that is averaged at
       the 60 second period, add &periodCount=60
 
-2006-03-17  jrandom
+2006-03-17 jrandom
     * Add support for graphing the event count as well as the average stat
       value (done by adding &showEvents=true to the URL).  Also supports
       hiding the legend (&hideLegend=true), the grid (&hideGrid=true), and
@@ -20680,7 +20680,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Removed an unnecessary arbitrary filter on the profile organizer so we
       can pick high capacity and fast peers more appropriately
 
-2006-03-16  jrandom
+2006-03-16 jrandom
     * Integrate basic hooks for jrobin (http://jrobin.org) into the router
       console.  Selected stats can be harvested automatically and fed into
       in-memory RRD databases, and those databases can be served up either as
@@ -20692,11 +20692,11 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * HTML tweaking for the general config page (thanks void!)
     * Odd NPE fix (thanks Complication!)
 
-2006-03-15  Complication
+2006-03-15 Complication
     * Trim out an old, inactive IP second-guessing method
       (thanks for spotting, Anonymous!)
 
-2006-03-15  jrandom
+2006-03-15 jrandom
     * Further stat cleanup
     * Keep track of how many peers we are actively trying to communicate with,
       beyond those who are just trying to communicate with us.
@@ -20705,10 +20705,10 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Rate stat display cleanup (thanks ripple!)
     * Don't even try to send messages that have been queued too long
 
-2006-03-05  zzz
+2006-03-05 zzz
     * Remove the +++--- from the logs on I2PSnark startup
 
-2006-03-05  jrandom
+2006-03-05 jrandom
     * HTML fixes in Syndie to work better with opera (thanks shaklen!)
     * Give netDb lookups to floodfill peers more time, as they are much more
       likely to succeed (thereby cutting down on the unnecessary netDb
@@ -20722,73 +20722,73 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       as its too volatile to have much meaning.
     * Don't bork if a Syndie post is missing an entry.sml
 
-2006-03-05  Complication
+2006-03-05 Complication
     * Reduce exposed statistical information,
       to make build and uptime tracking more expensive
 
-2006-03-04  Complication
+2006-03-04 Complication
     * Fix the announce URL of orion's tracker in Snark sources
 
-2006-03-03  Complication
+2006-03-03 Complication
     * Explicit check for an index out of bounds exception while parsing
       an inbound IRC command (implicit check was there already)
 
-2006-03-01  jrandom
+2006-03-01 jrandom
     * More aggressive tunnel throttling as we approach our bandwidth limit,
       and throttle based off periods wider than 1 second.
     * Included Doubtful Salmon's syndie stylings (thanks!)
 
-2006-02-27  zzz
+2006-02-27 zzz
     * Update error page templates to add \r, Connection: close, and
       Proxy-connection: close to headers.
 
-* 2006-02-27  0.6.1.12 released
+* 2006-02-27 0.6.1.12 released
 
-2006-02-27  jrandom
+2006-02-27 jrandom
     * Adjust the jbigi.jar to use the athlon-optimized jbigi on windows/amd64
       machines, rather than the generic jbigi (until we have an athlon64
       optimized version)
 
-2006-02-26  jrandom
+2006-02-26 jrandom
     * Switch from the bouncycastle to the gnu-crypto implementation for
       SHA256, as benchmarks show a 10-30% speedup.
     * Removed some unnecessary object caches
     * Don't close I2PSnark streams prematurely
 
-2006-02-25  jrandom
+2006-02-25 jrandom
     * Made the Syndie permalinks in the thread view point to the blog view
     * Disabled TCP again (since the live net seems to be doing well w/out it)
     * Fix the message time on inbound SSU establishment (thanks zzz!)
     * Don't be so aggressive with parallel tunnel creation when a tunnel pool
       just starts up
 
-2006-02-24  jrandom
+2006-02-24 jrandom
     * Rounding calculation cleanup in the stats, and avoid an uncontested
       mutex (thanks ripple!)
     * SSU handshake cleanup to help force incompatible peers to stop nagging
       us by both not giving them an updated reference to us and by dropping
       future handshake packets from them.
 
-2006-02-23  jrandom
+2006-02-23 jrandom
     * Increase the SSU retransmit ceiling (for slow links)
     * Estimate the sender's SSU MTU (to help see if we agree)
 
-2006-02-22  jrandom
+2006-02-22 jrandom
     * Fix to properly profile tunnel joins (thanks Ragnarok, frosk, et al!)
     * More aggressive poor-man's PMTU, allowing larger MTUs on less reliable
       links
     * Further class validator refactorings
 
-2006-02-22  jrandom
+2006-02-22 jrandom
     * Handle a rare race under high bandwidth situations in the SSU transport
     * Minor refactoring so we don't confuse sun's 1.6.0-b2 validator
 
-2006-02-21  Complication
+2006-02-21 Complication
     * Reactivate TCP tranport by default, in addition to re-allowing
 
-* 2006-02-21  0.6.1.11 released
+* 2006-02-21 0.6.1.11 released
 
-2006-02-21  jrandom
+2006-02-21 jrandom
     * Throttle the outbound SSU establishment queue, so it doesn't fill up the
       heap when backlogged (and so that the messages queued up on it don't sit
       there forever)
@@ -20796,16 +20796,16 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Clean up the address regeneration code so it knows when to rebuild the
       local info more precisely.
 
-2006-02-20  jrandom
+2006-02-20 jrandom
     * Properly enable TCP this time (oops)
     * Deal with multiple form handlers on the same page in the console without
       being too annoying (thanks blubb and bd_!)
 
-2006-02-20  jrandom
+2006-02-20 jrandom
     * Reenable the TCP transport as a fallback (we'll continue to muck with
       debugging SSU-only elsewhere)
 
-2006-02-20  jrandom
+2006-02-20 jrandom
     * Major SSU and router tuning to reduce contention, memory usage, and GC
       churn.  There are still issues to be worked out, but this should be a
       substantial improvement.
@@ -20816,10 +20816,10 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       connection type can be chosen via "netDb.harvestDirectly=false" (default
       is false).
 
-2006-02-19  dust
+2006-02-19 dust
     * Added pruning of suckers history (it used to grow indefinitely).
 
-2006-02-19  jrandom
+2006-02-19 jrandom
     * Moved the current net's reseed URL to a different location than where
       the old net looks (dev.i2p.net/i2pdb2/ vs .../i2pdb/)
     * More aggressively expire inbound messages (on receive, not just on send)
@@ -20832,7 +20832,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Delete the message history file on startup
     * Reworked the restart/shutdown display on the console (thanks bd_!)
 
-2006-02-18  jrandom
+2006-02-18 jrandom
     * Migrate the outbound packets from a central component to the individual
       per-peer components, substantially cutting down on lock contention when
       dealing with higher degrees.
@@ -20841,18 +20841,18 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       with many).
     * Reduce the frequency of router info rebuilds (thanks bar!)
 
-2006-02-18  jrandom
+2006-02-18 jrandom
     * Add a new AIMD throttle in SSU to control the number of concurrent
       messages being sent to a given peer, in addition to the throttle on the
       number of concurrent bytes to that peer.
     * Adjust the existing SSU outbound queue to throttle based on the queue's
       lag, not an arbitrary number of packets.
 
-2006-02-17  jrandom
+2006-02-17 jrandom
     * Properly fix the build request queue throttling, using queue age to
       detect congestion, rather than queue size.
 
-2006-02-17  jrandom
+2006-02-17 jrandom
     * Disable the message history log file by default (duh - feel free to
       delete messageHistory.txt after upgrading.  thanks deathfatty!)
     * Limit the size of the inbound tunnel build request queue so we don't
@@ -20863,22 +20863,22 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Renamed modified PRNG classes that were imported from gnu-crypto so we
       don't conflict with JVMs using that as a JCE provider (thanks blx!)
 
-* 2006-02-16  0.6.1.10 released
+* 2006-02-16 0.6.1.10 released
 
-2006-02-16  jrandom
+2006-02-16 jrandom
     * Add a new toggle to the web config to enable/disable the load testing
 
-2006-02-16  jrandom
+2006-02-16 jrandom
     * Dropped much of the abandonware from the apps/ directory
 
-2006-02-16  jrandom
+2006-02-16 jrandom
     * Bugfix to the I2PTunnel web config to properly accept i2cp port settings
     * Initial sucker refactoring to simplify reuse of the html parsing
     * Beginnings of hooks to push imported rss/atom out to remote syndie
       archives automatically (though not enabled currently)
     * Further SSU peer test cleanup
 
-2006-02-15  jrandom
+2006-02-15 jrandom
     * Add in per-blog RSS feeds to Syndie
     * Upgraded sucker's ROME dependency to 0.8, bundling sucked enclosures
       with the posts, marking additional attachments as Media RSS enclosures
@@ -20887,15 +20887,15 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Don't allow the default syndie user to be set to something invalid if
       its in single user mode.
 
-2006-02-15  jrandom
+2006-02-15 jrandom
     * Merged in the i2p_0_6_1_10_PRE branch to the trunk, so CVS HEAD is no
       longer backwards compatible (and should not be used until 0.6.1.1 is
       out)
 
-2006-02-14  jrandom
+2006-02-14 jrandom
     * Syndie ui bugfixes (thanks all!)
 
-2006-02-13  jrandom
+2006-02-13 jrandom
     * Use the current directory for some temporary I2PSnark files, rather than
       the OS default temp dir (thanks anon!)
     * Increase the base streaming lib window size (still shrinks to 1 on
@@ -20906,30 +20906,30 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Don't ask for garlic level message acks for end to end messages unless
       they're useful (e.g. to ack session tags)
 
-2006-02-12  cervantes
+2006-02-12 cervantes
     * Use a different santisation method for some SML attributes
     * Make router console update config save button actually save.
     * Fix console bandwidth limiter burst rate dropdowns, so the display
       relates to what is saved in the config.
 
-2006-02-12  cervantes
+2006-02-12 cervantes
     * SML is now stricter in it's formatting (attributes should only use
       double quotes instead of being allowed to mix with singles).
     * Using apostrophes in SML attributes will no longer invalidate the tag.
     * Some instances of [blog] tag description were not being displayed
       correctly.
 
-2006-02-12  jrandom
+2006-02-12 jrandom
     * Further SSU peer test throttling
     * Put the most common router console features on the main index page too
 
-2006-02-11  jrandom
+2006-02-11 jrandom
     * Be more careful about SSU peer test floods
 
-2006-02-09  jrandom
+2006-02-09 jrandom
     * Adjusted one of the SSU timeouts so we don't drop peers as easily (duh)
 
-2006-02-08  jrandom
+2006-02-08 jrandom
     * Added transparent support for VIA C3 CPUs to jbigi (thanks Nekow42), and
       bundled a precompiled libjbigi.so in the jbigi.jar
     * Cleaned up the synchronization for some SSU packet handling code
@@ -20937,7 +20937,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       than dropping them outright
     * Use lighter load testing
 
-2006-02-07  jrandom
+2006-02-07 jrandom
     * Handle HTTP headers without any values (thanks Sugadude!)
     * Don't show the option to make Syndie multiuser, since very few people
       need it, and multiuser mode is a lot more complex to use.  Geeks can
@@ -20952,17 +20952,17 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       inbound messages (duh)
     * Migrate most of the message state across SSU connection reestablishment
 
-2006-02-06  jrandom
+2006-02-06 jrandom
     * Reduce the SSU retransmit timeout range, and increase the number of ACKs
       piggybacked
 
-2006-02-05  jrandom
+2006-02-05 jrandom
     * Experiment with short exponents for DH/ElGamal, using a 226bit x instead
       of a 2048bit x, as reports suggest that size is sufficient for 2048bit
       DH/ElGamal when using safe primes (see KeyGenerator.java for references)
     * Enable the messageHistory.txt by default, for debugging
 
-2006-02-05  jrandom
+2006-02-05 jrandom
     * Substantial bugfix for the duplicate message detection in the transport
       layer
     * Handle tunnel build responses ASAP, rather than queueing them up to wait
@@ -20971,31 +20971,31 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       locally, as the requestor will have timed it out anyway (perhaps we
       should reply regardless, but with a backoff instead?)
 
-2006-02-04  jrandom
+2006-02-04 jrandom
     * Further tunnel test cleanup and disabling of the old tunnel creation
       code
 
-2006-02-04  jrandom
+2006-02-04 jrandom
     * Clean up and reenable the tunnel testing for the new tunnel system.
 
-2006-02-04  jrandom
+2006-02-04 jrandom
     * Don't cache the archive.txt in syndie when fetching it through the web
       interface.
     * Logging updates
 
-2006-02-03  jrandom
+2006-02-03 jrandom
     * Added further replay prevention on the tunnel build requests
     * More aggressive streaming lib closing on reset
 
-2006-02-03  jrandom
+2006-02-03 jrandom
     * More aggressive refusal of peers from the wrong network (oops)
 
-2006-02-01  jrandom
+2006-02-01 jrandom
     * Instruct the router to reseed against a new URL, for migration purposes:
       http://dev.i2p.net/i2pdb2/
     * Aggressive error handling during UDP packet creation (thanks cervantes)
 
-2006-02-01  jrandom
+2006-02-01 jrandom
     * Fix the new tunnel creation crypto, including the addition of a 4 byte
       "next message ID" to the encrypted request structure in the spec.
     * Backwards incompatible change, using the new tunnel creation crypto, the
@@ -21005,11 +21005,11 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Disable the TCP transport
     * Run four separate threads on the job queue to cut down on job lag
 
-2006-01-28  jrandom
+2006-01-28 jrandom
     * Removed a race that could show up in leaseSet requesting with the new
       tunnel building process
 
-2006-01-25  jrandom
+2006-01-25 jrandom
     * Run the peer profile coalescing/reorganization outside the job queue
       (on one of the timers), to cut down on some job queue congestion.  Also,
       trim old profiles while running, not just when starting up.
@@ -21023,10 +21023,10 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Remove much of the transient overload throttling (it wasn't using a good
       metric)
 
-2006-01-25  dust
+2006-01-25 dust
     * Fix IRC client proxy to use ISO-8859-1.
 
-2006-01-22  jrandom
+2006-01-22 jrandom
     * New tunnel build process - does not use the new crypto or new peer
       selection strategies.  However, it does drop the fallback tunnel
       procedure, except for tunnels who are configured to allow them, or for
@@ -21040,55 +21040,55 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Do all of the netDb entry writing in a separate thread, avoiding
       duplicates and batching them up.
 
-2006-01-19  Complication
+2006-01-19 Complication
     * Explain better where eepsite's destkey can be found
 
-2006-01-18  cervantes
+2006-01-18 cervantes
     * Add title attributes to all external links in Syndie, so we can rollover
       and quickly see if it's worth clicking on.
     * Fixed a minor compiler warning.
 
-2006-01-17  jrandom
+2006-01-17 jrandom
     * First pass of the new tunnel creation crypto, specified in the new
       router/doc/tunnel-alt-creation.html (referenced in the current
       router/doc/tunnel-alt.html).  It isn't actually used anywhere yet, other
       than in the test code, but the code verifies the technical viability, so
       further scrutiny would be warranted.
 
-2006-01-16  cervantes
+2006-01-16 cervantes
     * Dragged I2P kicking and screaming into 2006 (Oops)
 
-2006-01-14  cervantes
+2006-01-14 cervantes
     * Removed entirely misleading memory status from the console summary.
 
-2006-01-13  cervantes
+2006-01-13 cervantes
     * Further Syndie layout hardening and typeface balancing.
 
-* 2006-01-12  0.6.1.9 released
+* 2006-01-12 0.6.1.9 released
 
-2006-01-12  jrandom
+2006-01-12 jrandom
     * Only create the loadtest.log if requested to do so (thanks zzz!)
     * Make sure we cleanly take into consideration the appropriate data
       points when filtering out duplicate messages in the message validator,
       and report the right bloom filter false positives rate (not used for
       anything except debugging)
 
-2006-01-12  cervantes
+2006-01-12 cervantes
     * Syndie CSS tweaks to removed some redundant declarations, improve font
       scaling and layout robustness. Improved cross browser compatibility
       (in other words "kicked IE"). Tightened the look of the blog template
       a little.
 
-2006-01-11  Complication
+2006-01-11 Complication
     * CSS comment fixes
 
-2006-01-11  jrandom
+2006-01-11 jrandom
     * Include the attachments/blogs/etc for comments on the blog view
     * Syndie HTML fixes (thanks cervantes!)
     * Make sure we fully reset the objects going into our cache before we
       reuse them (thanks zzz!)
 
-2006-01-10  jrandom
+2006-01-10 jrandom
     * Added the per-post list of attachments/blogs/etc to the blog view in
       Syndie (though this does not yet include comments or some further
       refinements)
@@ -21097,7 +21097,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Give the i2p.exe the correct java.library.path to support the systray
       dll (thanks Bobcat, Sugadude, anon!)
 
-2006-01-09  jrandom
+2006-01-09 jrandom
     * Removed a longstanding bug that had caused unnecessary router identity
       churn due to clock skew
     * Temporarily sanity check within the streaming lib for long pending
@@ -21105,16 +21105,16 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Added support for a blog-wide logo to Syndie, and automated the pushing
       of updated extended blog info data along side the metadata.
 
-2006-01-09  jrandom
+2006-01-09 jrandom
     * Bugfix for a rare SSU error (thanks cervantes!)
     * More progress on the blog interface, allowing customizable blog-wide
       links.
 
-2006-01-08  jrandom
+2006-01-08 jrandom
     * First pass of the new blog interface, though without much of the useful
       customization features (coming soon)
 
-2006-01-04  jrandom
+2006-01-04 jrandom
     * Rather than profile individual tunnels for throughput over their
       lifetime, do so at 1 minute intervals (allowing less frequently active
       tunnels to be more fairly measured).
@@ -21123,7 +21123,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       self paced.  This should help gathering data for profiling peers that
       are in exploratory tunnels.
 
-2006-01-03  jrandom
+2006-01-03 jrandom
     * Calculate the overall peer throughput across the 3 fastest one minute
       tunnel throughput values, rather than the single fastest throughput.
     * Degrade the profiled throughput data over time (cutting the profiled
@@ -21138,36 +21138,36 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Add basic OS/2 support to the jbigi code (though we do not bundle a
       precompiled OS/2 library)
 
-2006-01-01  jrandom
+2006-01-01 jrandom
     * Disable multifile torrent creation in I2PSnark's web UI for the moment
       (though it can still seed and participate in multifile swarms)
     * Enable a new speed calculation for profiling peers, using their peak
       1 minute average tunnel throughput as their speed.
 
-2005-12-31  jrandom
+2005-12-31 jrandom
     * Include a simple torrent creator in the I2PSnark web UI
     * Further streaming lib closing improvements
     * Refactored the load test components to run off live tunnels (though,
       still not safe for normal/anonymous load testing)
 
-2005-12-30  jrandom
+2005-12-30 jrandom
     * Close streams more gracefully
 
-2005-12-30  jrandom
+2005-12-30 jrandom
     * Small streaming lib bugfixes for the modified timeouts
     * Minor Syndie/Sucker RSS html fix
     * Small synchronization fix in I2PSnark (thanks fsm!)
 
-2005-12-30  jrandom
+2005-12-30 jrandom
     * Replaced the bundled linux jcpuid (written in C++) with scintilla's
       jcpuid (written in C), removing the libg++.so.5 dependency that has bit
       some distros (e.g. mandriva)
 
-2005-12-29  jrandom
+2005-12-29 jrandom
     * Minor fix to the new ERR-ClockSkew to deal with people whose clocks are
       actually correct
 
-2005-12-27  jrandom
+2005-12-27 jrandom
     * Add a new Status: line on the router console - "ERR-ClockSkew", in case
       the clock is too skewed to do anything useful (check the year and month,
       not just the hour and minute).
@@ -21177,13 +21177,13 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       torrent closing)
     * Handle an oddball tunnel creation failure (thanks Xunk)
 
-2005-12-26  Complication
+2005-12-26 Complication
     * Fix some integer typecasting in I2PSnark (caused >2GB torrents to fail)
     * HTML readability cosmetics on "Peers" page
 
-* 2005-12-22  0.6.1.8 released
+* 2005-12-22 0.6.1.8 released
 
-2005-12-22  jrandom
+2005-12-22 jrandom
     * Bundle the standalone I2PSnark launcher in the installer and update
       process (launch as "java -jar launch-I2PSnark.jar", viewing the
       interface on http://localhost:8002/)
@@ -21193,27 +21193,27 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Fixed a rare streaming lib bug that could let a blocking call wait
       forever.
 
-2005-12-22  jrandom
+2005-12-22 jrandom
     * Cleaned up some buffer synchronization issues in I2PSnark that could
       cause blockage.
 
-2005-12-21  jrandom
+2005-12-21 jrandom
     * Adjusted I2PSnark's usage of the streaming lib (tweaking it for BT's
       behavior)
     * Fixed the I2PSnark bug that would lose track of live peers
 
-2005-12-20  jrandom
+2005-12-20 jrandom
     * Enabled the control in I2PSnark to toggle whether torrents should be
       started automatically or not
     * Hopefully finished the last hook to close down torrents completely when
       they're stopped.
 
-2005-12-19  jrandom
+2005-12-19 jrandom
     * Fix for old Syndie blog bookmarks (thanks Complication!)
     * Fix for I2PSnark to accept incoming connections again (oops)
     * Randomize the order that peers from the tracker are contacted
 
-2005-12-19  jrandom
+2005-12-19 jrandom
     * I2PSnark logging, disconnect old inactive peers rather than new ones,
       memory usage reduction, better OOM handling, and a shared connection
       acceptor.
@@ -21221,13 +21221,13 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       blog from the blog page shows threads started by the selected author,
       not those that they merely participate in)
 
-2005-12-18  jrandom
+2005-12-18 jrandom
     * Added a standalone runner for the I2PSnark web ui (build with the
       command "ant I2PSnark", unzip I2PSnark-standalone.zip somewhere, run
       with "java -jar launch-I2PSnark.jar", and go to http://localhost:8002/).
     * Further I2PSnark error handling
 
-2005-12-17  jrandom
+2005-12-17 jrandom
     * Let multiuser accounts authorize themselves to access the remote
       functionality again (thanks Ch0Hag!)
     * Adjust the JVM heap size to 128MB for new installs (existing users can
@@ -21236,35 +21236,35 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       of the router).  This is relevent for heavy usage of I2PSnark in the
       router console.
 
-2005-12-17  jrandom
+2005-12-17 jrandom
     * Use our faster SHA1, rather than the JVM's within I2PSnark, and let
       'piece' sizes grow larger than before.
 
-2005-12-16  jrandom
+2005-12-16 jrandom
     * Added some I2PSnark sanity checks, an OOMListener when running
       standalone, and a guard against keeping memory tied up indefinitely.
     * Sanity check on the watchdog (thanks zzz!)
     * Handle invalid HTTP requests in I2PTunnel a little better
 
-2005-12-16  jrandom
+2005-12-16 jrandom
     * Moved I2PSnark from using Threads to I2PThreads, so we handle OOMs
       properly (thanks Complication!)
     * More guards in I2PSnark for zany behavior (I2PSession recon w/ skew,
       b0rking in the DirMonitor, etc)
 
-2005-12-16  jrandom
+2005-12-16 jrandom
     * Try to run a torrent in readonly mode if we can't write to the file, and
       handle failures a little more gracefully (thanks polecat!)
 
-2005-12-16  jrandom
+2005-12-16 jrandom
     * Refuse torrents with too many files (128), avoiding ulimit errors.
     * Remove an fd leak in I2PSnark
     * Further I2PSnark web UI cleanup
 
-2005-12-15  jrandom
+2005-12-15 jrandom
     * Added a first pass to the I2PSnark web UI (see /I2PSnark/)
 
-2005-12-15  jrandom
+2005-12-15 jrandom
     * Added multitorrent support to I2PSnark, accessible currently by running
       "I2PSnark.jar --config I2PSnark.config" (which may or may not exist).
       It then joins the swarm for any torrents in ./I2PSnark/*.torrent, saving
@@ -21273,12 +21273,12 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       is logged to the logger and standard output, with further UI interaction
       left to the (work in progress) web UI.
 
-2005-12-14  jrandom
+2005-12-14 jrandom
     * Fix to drop peer references when we banlist people again (thanks zzz!)
     * Further I2PSnark fixes to deal with arbitrary torrent info attributes
       (thanks Complication!)
 
-2005-12-13  zzz
+2005-12-13 zzz
     * Don't test tunnels expiring within 90 seconds
     * Defer Test Tunnel jobs if job lag too large
     * Use JobQueue.getMaxLag() rather than the jobQueue.jobLag stat to measure
@@ -21287,12 +21287,12 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Use tunnel length override if all tunnels are expiring within one
       minute.
 
-2005-12-13  jrandom
+2005-12-13 jrandom
     * Fixed I2PSnark's handling of some torrent files to deal with those
       created by Azureus and I2PRufus (it didn't know how to deal with
       additional meta info, such as path.utf-8 or name.utf-8).
 
-2005-12-09  zzz
+2005-12-09 zzz
     * Create different strategies for exploratory tunnels (which are difficult
       to create) and client tunnels (which are much easier)
     * Gradually increase number of parallel build attempts as tunnel expiry
@@ -21313,18 +21313,18 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       process.
     * Miscellaneous router console enhancements
 
-2005-12-08  jrandom
+2005-12-08 jrandom
     * Minor bugfix in SSU for dealing with corrupt packets
     * Added some hooks for load testing
 
-2005-12-07  jrandom
+2005-12-07 jrandom
     * Added a first pass at a blog view in Syndie
 
-2005-12-07  jrandom
+2005-12-07 jrandom
     * Expand the thread we're viewing to its leaf
     * Bugfix on intraday ordering (children are always newer than parents)
 
-2005-12-05  jrandom
+2005-12-05 jrandom
     * Added an RDF and XML thread export to Syndie, reachable at
       .../threadnav/rdf or .../threadnav/xml, accepting the parameters
       count=$numThreads and offset=$threadIndex.  If the $numThreads is -1, it
@@ -21333,25 +21333,25 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 2005-12-04  TLorD
     * Patch for the C SAM library to null terminate strings on copy (thanks!)
 
-2005-12-04  jrandom
+2005-12-04 jrandom
     * Bugfix in Syndie for a problem in the threaded indexer (thanks CofE!)
     * Always include ourselves in the favorite authors (since we don't
       bookmark ourselves)
 
-2005-12-03  jrandom
+2005-12-03 jrandom
     * Use newgroup-like tags by default in Syndie's interface
 
-2005-12-03  jrandom
+2005-12-03 jrandom
     * Added support for a 'most recent posts' view that CofE requested, which
       includes the ability to filter by age (e.g. posts by your favorite
       authors in the last 5 days).
 
-2005-12-03  jrandom
+2005-12-03 jrandom
     * Adjusted Syndie to use the threaded view that cervantes suggested, which
       displays a a single thread path at a time - from root to leaf - rather
       than a depth first traversal.
 
-2005-12-03  jrandom
+2005-12-03 jrandom
     * Package up a standalone Syndie install into a "syndie-standalone.zip",
       buildable with "ant syndie".  It extracts into ./syndie/, launches with
       "java -jar launchsyndie.jar" (or javaw, on windows, to avoid a dos box),
@@ -21360,19 +21360,19 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       proxy).  Upgrades can be done by just replacing the syndie.war with the
       one from I2P.
 
-* 2005-12-01  0.6.1.7 released
+* 2005-12-01 0.6.1.7 released
 
-2005-12-01  jrandom
+2005-12-01 jrandom
     * Add a new criteria to the tunnel join throttle, backing off people if we
       are failing to talk to our peers more than usual.
 
-2005-11-30  jrandom
+2005-11-30 jrandom
     * Cleaned up the build process to deal with Jetty 5.1.6 and rename the
       new commons-logging-api.jar to commons-logging.jar, which it replaces.
       Jetty 5.1.6 is pushed with all updates.  Also, no need to push a
       separate jdom or rome, as they're inside syndie.war.
 
-2005-11-30  jrandom
+2005-11-30 jrandom
     * Don't let the TCP transport alone banlist a peer, since other
       transports may be working.  Also display whether TCP connections are
       inbound or outbound on the peers page.
@@ -21384,10 +21384,10 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       and a third a packet at 9s.
     * Fixed Syndie attachments (oops)
 
-2005-11-29  zzz
+2005-11-29 zzz
     * Added a link to orion's jump page on the 'key not found' error page.
 
-2005-11-29  jrandom
+2005-11-29 jrandom
     * Further Syndie UI cleanup
     * Bundled our patched MultiPartRequest code from jetty (APL2 licensed),
       since it hasn't been applied to the jetty CVS yet [1].  Its packaged
@@ -21399,7 +21399,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       isn't pushed as part of the update yet, as there aren't any critical
       bugs.
 
-2005-11-29  jrandom
+2005-11-29 jrandom
     * Added back in the OSX jbigi, which was accidentally removed a few revs
       back (thanks for the bug report stoerte!)  New installs will get the
       full jbigi, or you can pull the jbigi.jar from CVS by going to
@@ -21408,7 +21408,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       lib/jbigi.jar in your I2P installation directory.  After restarting your
       router, it should load up fine.
 
-2005-11-27  jrandom
+2005-11-27 jrandom
     * Inlined the Syndie CSS to reduce the number of HTTP requests (and
       because firefox [and others?] delay rendering until they fetch the css).
     * Make sure we fire the shutdown tasks when regenerating a new identity
@@ -21421,7 +21421,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 
 * 2005-11-26 0.6.1.6 released
 
-2005-11-26  jrandom
+2005-11-26 jrandom
     * Update the sorting in Syndie to consider children 'newer' than parents,
       even if they have the same message ID (duh)
     * Cleaned up some nav links in Syndie (good idea gloin, spaetz!)
@@ -21429,13 +21429,13 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Force support for nonvalidating XML in Jetty (so we can handle GCJ/etc
       better)
 
-2005-11-26  jrandom
+2005-11-26 jrandom
     * Be more explicit about what messages we will handle through a client
       tunnel, and how we will handle them.  This cuts off a set of attacks
       that an active adversary could mount, though they're probably nonobvious
       and would require at least some sophistication.
 
-2005-11-26  Raccoon23
+2005-11-26 Raccoon23
     * Added support for 'dynamic keys' mode, where the router creates a new
       router identity whenever it detects a substantial change in its public
       address (read: SSU IP or port).  This only offers minimal additional
@@ -21445,26 +21445,26 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Added further infrastructure for restricted route operation, but its use
       is not recommended.
 
-2005-11-25  jrandom
+2005-11-25 jrandom
     * Further Syndie UI cleanups
     * Logging cleanup
     * Fixed link to fproxy.tino.i2p (thanks zzz!)
 
-2005-11-25  jrandom
+2005-11-25 jrandom
     * Don't publish stats for periods we haven't reached yet (thanks zzz!)
     * Cleaned up the syndie threaded display to show the last updated date for
       a subthread, and to highlight threads updated in the last two days.
 
-2005-11-24  jrandom
+2005-11-24 jrandom
     * Fix to save syndication settings in Syndie (thanks spaetz!)
 
-2005-11-23  jrandom
+2005-11-23 jrandom
     * Removed spurious streaming lib RTO increase (it wasn't helpful)
     * Streamlined the tunnel batching to schedule batch transmissions more
       appropriately.
     * Default tunnel pool variance to 2 +0-1 hops
 
-2005-11-21  jrandom
+2005-11-21 jrandom
     * IE doesn't strip SPAN from <button> form fields, so add in a workaround
       within I2PTunnel.
     * Increase the maximum SSU retransmission timeout to accomodate slower or
@@ -21478,15 +21478,15 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Syndie cleanup - new edit form on the preview page, and fixed some blog
       links (thanks tino!)
 
-2005-11-19  jrandom
+2005-11-19 jrandom
     * Implemented a trivial pure java PMTU backoff strategy, switching between
       a 608 byte MTU and a 1350 byte MTU, depending upon retransmission rates.
     * Fixed new user registration in Syndie (thanks Complication!)
 
-2005-11-17  jrandom
+2005-11-17 jrandom
     * More cautious file handling in Syndie
 
-2005-11-16  jrandom
+2005-11-16 jrandom
     * More aggressive I2PTunnel content encoding munging to work around some
       rare HTTP behavior (ignoring q values on Accept-encoding, using gzip
       even when only identity is specified, etc).  I2PTunnelHTTPServer now
@@ -21495,12 +21495,12 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       or X-Accept-encoding headers.  Eepsite operators who do not know to
       check for X-Accept-encoding will simply use the identity encoding.
 
-* 2005-11-15  0.6.1.5 released
+* 2005-11-15 0.6.1.5 released
 
-2005-11-14  jrandom
+2005-11-14 jrandom
     * Migrate to the new Syndie interface
 
-2005-11-11  jrandom
+2005-11-11 jrandom
     * Add filtering threads by author to Syndie, populated with authors in the
       user's addressbook
     * When creating the default user, add
@@ -21511,7 +21511,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       the installer/resources/themes/** into ./docs/themes/** on both install
       and update.
 
-2005-11-11  cervantes
+2005-11-11 cervantes
     * Initial pass of the routerconsole revamp, starting with I2PTunnel and
       being progressively rolled out to other sections at later dates.
       Featuring abstracted W3C strict XHTML1.0 markup, with CSS providing
@@ -21532,18 +21532,18 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       title information and form labels).
     * So far only tested on IE6, Firefox 1.0.6, Opera 8 and lynx.
 
-2005-11-11  jrandom
+2005-11-11 jrandom
     * Default Syndie to single user mode, and automatically log into a default
       user account (additional accounts can be logged into with the 'switch'
       or login pages, and new accounts can be created with the register page).
     * Disable the 'automated' column on the Syndie addressbook unless the user
       is appropriately authorized (good idea Polecat!)
 
-2005-11-10  jrandom
+2005-11-10 jrandom
     * First pass to a new threaded Syndie interface, which isn't enabled by
       default, as its not done yet.
 
-2005-11-06  jrandom
+2005-11-06 jrandom
     * Include SSU establishment failure in the peer profile as a commError,
       as we do for TCP establishment failures.
     * Don't throttle the initial transmission of a message because of ongoing
@@ -21551,7 +21551,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       is more valuable than a retransmission (since it has less latency).
     * Cleaned up links to SusiDNS and I2PTunnel (thanks zzz!)
 
-2005-11-05  jrandom
+2005-11-05 jrandom
     * Include the most recent ACKs with packets, rather than only sending an
       ack exactly once.  SSU differs from TCP in this regard, as TCP has ever
       increasing sequence numbers, while each message ID in SSU is random, so
@@ -21561,31 +21561,31 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Don't try to send messages queued up for a long time waiting for
       establishment.
 
-2005-11-05  dust
+2005-11-05 dust
     * Fix sucker to delete its temporary files.
     * Improve sucker's sml output some.
     * Fix Exception in SMLParser for weird sml.
 
-2005-11-03  zzz
+2005-11-03 zzz
     * Added a new error page to the eepproxy to differentiate the full 60
       second timeout from the immediate "I don't know this base64" failure.
 
-2005-11-01  jrandom
+2005-11-01 jrandom
     * Added a few more css elements (thanks identiguy!)
 
-2005-10-31  jrandom
+2005-10-31 jrandom
     * Fix for some syndie reply scenarios (thanks identiguy and CofE!)
     * Removed a potentially infinitely recursive call (oops)
 
-2005-10-30  dust
+2005-10-30 dust
     * Merge sucker into syndie with a rssimport.jsp page.
     * Add getContentType() to EepGet.
     * Make chunked transfer work (better) with EepGet.
     * Do replaceAll("<","&lt;") for logs.
 
-* 2005-10-29  0.6.1.4 released
+* 2005-10-29 0.6.1.4 released
 
-2005-10-29  jrandom
+2005-10-29 jrandom
     * Improved the bandwidth throtting on tunnel participation, especially for
       low bandwidth peers.
     * Improved failure handling in SSU with proactive reestablishment of
@@ -21595,14 +21595,14 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Clarify the cause of the banlist on the profiles page, and include
       bandwidth limiter info at the bottom of the peers page.
 
-2005-10-26  jrandom
+2005-10-26 jrandom
     * In Syndie, propogate the subject and tags in a reply, and show the parent
       post on the edit page for easy quoting.  (thanks identiguy and CofE!)
     * Streamline some netDb query handling to run outside the jobqueue -
       which means they'll run on the particular SSU thread that handles the
       message.  This should help out heavily loaded netDb peers.
 
-2005-10-25  jrandom
+2005-10-25 jrandom
     * Defer netDb searches for newly referenced peers until we actually want
       them
     * Ignore netDb references to peers on our banlist
@@ -21622,7 +21622,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Load balancing bugfix on end to end messages to distribute across
       tunnels more evenly.
 
-2005-10-22  jrandom
+2005-10-22 jrandom
     * Integrated GNU-Crypto's Fortuna PRNG, seeding it off /dev/urandom and
       ./prngseed.rnd (if they exist), and reseeding it with data out of
       various crypto operations (unused bits in a DH exchange, intermediary
@@ -21633,25 +21633,25 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       under GPL+Classpath's linking exception (~= LGPL).  I2P's SecureRandom
       wrapper around it is, of course, public domain.
 
-2005-10-20  dust
+2005-10-20 dust
     * Fix bug in ircclient that prevented it to use its own dest (i.e. was
       always shared. (thx for info Ragnarok)
     * Fix crash in Sucker with some bad html.
 
-2005-10-20  jrandom
+2005-10-20 jrandom
     * Workaround a bug in GCJ's Calendar implementation
     * Propery throw an exception in the streaming lib if we try to write to a
       closed stream.  This will hopefully help clear some I2Phex bugs (thanks
       GregorK!)
 
-2005-10-19  jrandom
+2005-10-19 jrandom
     * Ported the snark bittorrent client to I2P such that it is compatible
       with i2p-bt and azneti2p.  For usage information, grab an update and run
       "java -jar lib/I2PSnark.jar".  It isn't currently multitorrent capable,
       but adding in support would be fairly easy (see PeerAcceptor.java:49)
     * Don't allow leaseSets expiring too far in the future (thanks postman)
 
-2005-10-19  jrandom
+2005-10-19 jrandom
     * Bugfix for the auto-update code to handle different usage patterns
     * Decreased the addressbook recheck frequency to once every 12 hours
       instead of hourly.
@@ -21659,11 +21659,11 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       toad or jrandom, ignore this ;)
     * Cleaned up some synchronization/locking code
 
-2005-10-17  dust
+2005-10-17 dust
     * Exchange the remaining URL with EepGet in Sucker.
     * Allow /TOPIC irc command.
 
-2005-10-17  jrandom
+2005-10-17 jrandom
     * Allow an env prop to configure whether we want to use the backwards
       compatible (but not standards compliant) HMAC-MD5, or whether we want
       to use the not-backwards compatible (but standards compliant) one.  No
@@ -21675,30 +21675,30 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       types without having to modify any code.
     * Demo code for using a castrated router for SSU comm (SSUDemo.java)
 
-2005-10-14  jrandom
+2005-10-14 jrandom
     * More explicit filter for linux/PPC building (thanks anon!)
     * Fixed Syndie's Sucker to not explicitly reference something only found
       in sun's JVM (thanks cervantes!)
     * Don't filter IRC "MAP" messages (not critical, but it doesn't hurt)
 
-* 2005-10-14  0.6.1.3 released
+* 2005-10-14 0.6.1.3 released
 
-2005-10-14  jrandom
+2005-10-14 jrandom
     * Added a key explaining peers.jsp a bit (thanks tethra!)
 
-2005-10-13  dust
+2005-10-13 dust
     * Bundled dust's Sucker for pulling RSS/Atom content into SML, which can
       then be injected into Syndie with the Syndie CLI.
     * Bundled ROME and JDOM (BSD and Apache licensed, respectively) for
       RSS/Atom parsing.
 
-2005-10-13  jrandom
+2005-10-13 jrandom
     * SSU retransmission choke bugfix (== != !=)
     * Include initial transmissions in the retransmission choke, so that
       if we are already retransmitting a message, we won't send anything
       to that peer other than that message (or ACKs, if necessary)
 
-2005-10-12  jrandom
+2005-10-12 jrandom
     * Choke SSU retransmissions to a peer while there is already a
       retransmission in flight to them.  This currently lets other initial
       transmissions through, since packet loss is often sporadic, but maybe
@@ -21706,18 +21706,18 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Display the retransmission bytes stat on peers.jsp (thanks bar!)
     * Filter QUIT messages in the I2PTunnelIRCClient proxy
 
-2005-10-11  jrandom
+2005-10-11 jrandom
     * Piggyback the SSU partial ACKs with data packets.  This is backwards
       compatible.
     * Syndie RSS renderer bugfix, plus now include the full entry instead of
       just the blurb before the cut.
 
-2005-10-11  jrandom
+2005-10-11 jrandom
     * Piggyback the SSU explicit ACKs with data packets (partial ACKs aren't
       yet piggybacked).  This is backwards compatible.
     * SML parser cleanup in Syndie
 
-2005-10-10  dust
+2005-10-10 dust
     * Implemented a new I2PTunnelIRCClient which locally filters inbound and
       outbound IRC commands for anonymity and security purposes, removing all
       CTCP messages except ACTION, as well as stripping the hostname from the
@@ -21726,18 +21726,18 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       "IRC proxy" tunnel on the web interface, or by changing the tunnel type
       to "ircclient" in I2PTunnel.config.
 
-2005-10-10  jrandom
+2005-10-10 jrandom
     * I2PTunnel http client config cleanup and stats
     * Minor SSU congestion tweaks and stats
     * Reduced netDb exploration period
 
-2005-10-09  jrandom
+2005-10-09 jrandom
     * Syndie CLI cleanup for simpler CLI posting.  Usage shown with
       java -jar lib/syndie.jar
     * Beginnings of the Syndie logging cleanup
     * Delete corrupt Syndie posts
 
-2005-10-09  jrandom
+2005-10-09 jrandom
     * Now that the streaming lib works reasonably, set the default inactivity
       event to send a 0 byte keepalive payload, rather than disconnecting the
       stream.  This should cut the irc netsplits and help out with other long
@@ -21745,19 +21745,19 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       well, so the keepalive will be sent before earlier builds fire their
       fatal timeouts.
 
-2005-10-08  jrandom
+2005-10-08 jrandom
     * Use the OS clock for stat timing, since it doesn't jump around (though
       still use the NTP'ed clock for display)
     * Added new DH stats
 
-* 2005-10-07  0.6.1.2 released
+* 2005-10-07 0.6.1.2 released
 
-2005-10-07  jrandom
+2005-10-07 jrandom
     * Include the 1 second bandwidth usage on the console rather than the
       1 minute rate, as the 1 second value doesn't have the 1m/5m quantization
       issues.
 
-2005-10-07  jrandom
+2005-10-07 jrandom
     * Allow the I2PTunnelHTTPServer to send back the first few packets of an
       HTTP response quicker, and initialize the streaming lib's cwin more
       carefully.
@@ -21766,26 +21766,26 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       request remote archives in your address book to be automatically pulled
       down by checking the "scheduled?" checkbox.
 
-2005-10-05  jrandom
+2005-10-05 jrandom
     * Allow the first few packets in the stream to fill in their IDs during
       handshake (thanks cervantes, Complication, et al!)  This should fix at
       least some of the intermittent HTTP POST issues.
 
-2005-10-04  jrandom
+2005-10-04 jrandom
     * Syndie patch for single user remote archives (thanks nickless_head!)
     * Handle an invalid netDb store (thanks Complication!)
 
-2005-10-04  jrandom
+2005-10-04 jrandom
     * Further reduction in unnecessary streaming packets.
 
-2005-10-03  jrandom
+2005-10-03 jrandom
     * Properly reject unroutable IP addresses *cough*
 
-2005-10-03  rangarok
+2005-10-03 rangarok
     * Changed default update delay to twelve hours, and enforced a minimum
       delay of one hour.
 
-2005-10-03  ragnarok
+2005-10-03 ragnarok
     * Implemented a Syndie auto-updater.  It will automatically pull new posts
       from selected syndie archives.  To try it out, add
       syndie.updateArchives=<comma seperated list of syndie archives> to your
@@ -21794,28 +21794,28 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       for new posts every hour.  This can be modified by setting
       syndie.updateDelay=<delay in hours> also in syndie.config.
 
-* 2005-10-01  0.6.1.1 released
+* 2005-10-01 0.6.1.1 released
 
-2005-09-30  ragnarok
+2005-09-30 ragnarok
     * Implemented conditional get for syndie remote archive imports.
 
-2005-09-30  jrandom
+2005-09-30 jrandom
     * Killed three more streaming lib bugs, one of which caused excess packets
       to be transmitted (dupacking dupacks), one that was the root of many of
       the old hung streams (shrinking highest received), and another that was
       releasing data too soon.
 
-2005-09-30  jrandom
+2005-09-30 jrandom
     * Only allow autodetection of our IP address if we haven't received an
       inbound connection in the last two minutes.
     * Increase the default max streaming resends to 8 from 5 (and down from
       the earlier 10)
 
-2005-09-29  ragnarok
+2005-09-29 ragnarok
     * Export petnames from syndie to the router's petname db instead of
       userhosts.txt.
 
-2005-09-29  jrandom
+2005-09-29 jrandom
     * Support noreseed.i2p in addition to .i2pnoreseed for disabling automatic
       reseeding - useful on OSes that make it hard to create dot files.
       Thanks Complication (and anon)!
@@ -21825,24 +21825,24 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       addresses, and log an error if it happens. (Thanks Complication, ptm,
       and adab!)
 
-* 2005-09-29  0.6.1 released
+* 2005-09-29 0.6.1 released
 
-2005-09-29  jrandom
+2005-09-29 jrandom
     * Let syndie users modify their metadata.
     * Reseed the router on startup if there aren't enough peer references
       known locally.  This can be disabled by creating the file .i2pnoreseed
       in your home directory, and the existing detection and reseed handling
       on the web interface is unchanged.
 
-2005-09-28  jrandom
+2005-09-28 jrandom
     * Fix for at least some (all?) of the wrong stream errors in the streaming
       lib
 
-2005-09-27  jrandom
+2005-09-27 jrandom
     * Properly suggest filenames for attachments in Syndie (thanks all!)
     * Fixed the Syndie authorization scheme for single user vs. multiuser
 
-2005-09-27  jrandom
+2005-09-27 jrandom
     * I2PTunnel bugfix (thanks Complication!)
     * Increase the SSU cwin slower during congestion avoidance (at k/cwin^2
       instead of k/cwin)
@@ -21852,7 +21852,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       common transports).
     * More careful bandwidth bursting
 
-2005-09-26  jrandom
+2005-09-26 jrandom
     * Reworded the SSU introductions config section (thanks duck!)
     * Force identity content encoding for I2PTunnel httpserver requests
       (thanks redzara!)
@@ -21861,7 +21861,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       I2P's performance at 3KBps is another issue)
     * Cleaned up some streaming lib structures
 
-2005-09-25  jrandom
+2005-09-25 jrandom
     * Allow reseeding on the console if the netDb knows less than 30 peers,
       rather than less than 10 (without internet connectivity, we keep the
       last 15 router references)
@@ -21871,12 +21871,12 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Reduced the default maximum number of streaming lib resends of a packet
       (10 retransmits is a bit much with a reasonable RTO)
 
-2005-09-25  Complication
+2005-09-25 Complication
     * Better i2paddresshelper handling in the I2PTunnel httpclient, plus a new
       conflict resolution page if the i2paddresshelper parameter differs from
       an existing name to destination mapping.
 
-2005-09-25  jrandom
+2005-09-25 jrandom
     * Fix a long standing streaming lib bug (in the inactivity detection code)
     * Improved handling of initial streaming lib packet retransmissions to
       kill the "lost first packet" bug (where a page shows up with the first
@@ -21888,27 +21888,27 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Adjusted the streaming lib retransmission calculation algorithm to be
       more TCP-like.
 
-2005-09-21  redzara
+2005-09-21 redzara
     * Use ISO-8859-1 for the SusiDNS xml
 
-2005-09-21  susi
+2005-09-21 susi
     * Bugfix in SusiDNS for deleting entries
 
-2005-09-21  jrandom
+2005-09-21 jrandom
     * Add support for HTTP POST to EepGet
     * Use HTTP POST for syndie bulk fetches, since there's a lot of data to
       put in that URL.
 
-2005-09-18  jrandom
+2005-09-18 jrandom
     * Added support for pure 64bit linux with jbigi and the java service
       wrapper (no need for jcpuid if we're on os.arch=amd64).  Thanks mule
       et al for help testing!
     * UI cleanup in Syndie (thanks gloin and bar!)
 
-2005-09-18  Ragnarok
+2005-09-18 ragnarok
     * Made MetaNamingService the default naming service.
 
-2005-09-17  Ragnarok
+2005-09-17 ragnarok
     * Implemented a naming service using Syndie's petname db.  It's not enabled
       by default, but you can try it out by setting
       i2p.naming.impl=net.i2p.client.naming.PetNameNamingService in
@@ -21920,14 +21920,14 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       so please help test it out by setting
       i2p.naming.impl=net.i2p.client.naming.MetaNamingService in router.config.
 
-* 2005-09-17  0.6.0.6 released
+* 2005-09-17 0.6.0.6 released
 
-2005-09-17  jrandom
+2005-09-17 jrandom
     * Clean up syndie a bit more and bundle a default introductory post with
       both new installs and updates.
     * Typo fixes on the console (thanks bar!)
 
-2005-09-17  jrandom
+2005-09-17 jrandom
     * Updated the bandwidth limiter to use two tiers of bandwidth - our normal
       steady state rate, plus a new limit on how fast we transfer when
       bursting.  This is different from the old "burst as fast as possible
@@ -21937,7 +21937,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       old posts just didn't show up).
     * Log properly in EepPost
 
-2005-09-17  jrandom
+2005-09-17 jrandom
     * Added the natively compiled jbigi and patched java service wrapper for
       OS X.  Thanks Bill Dorsey for letting me use your machine!
     * Don't build i2p.exe or i2pinstall.exe when run on OS X machines, as we
@@ -21949,11 +21949,11 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Temporarily disable the x-i2p-gzip in I2PTunnel until it is more closely
       debugged.
 
-2005-09-16  jrandom
+2005-09-16 jrandom
     * Reject unroutable IPs in SSU like we do for the TCP transport (unless
       you have i2np.udp.allowLocal=true defined - useful for private nets)
 
-2005-09-16  jrandom
+2005-09-16 jrandom
     * Adjust I2PTunnelHTTPServer so it can be used for outproxy operators
       (just specify the spoofed host as an empty string), allowing them to
       honor x-i2p-gzip encoding.
@@ -21962,7 +21962,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       individual tunnels with the I2PTunnel.gzip=false client option
       (good idea susi!)
 
-2005-09-16  jrandom
+2005-09-16 jrandom
     * Added the i2p.exe and i2pinstall.exe for windows users, using launch4j.
     * Added runplain.sh for *nix/osx users having problems using the java
       service wrapper (called from the install dir as: sh runplain.sh)
@@ -21978,19 +21978,19 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       has config to work off, and expose a method for SusiDNS to tell it to
       reload its config and rerun.
 
-2005-09-15  jrandom
+2005-09-15 jrandom
     * Error handling for failed intro packets (thanks red.hand!)
     * More carefully verify intro addresses
 
-2005-09-13  jrandom
+2005-09-13 jrandom
     * More careful error handling with introductions (thanks dust!)
     * Fix the forceIntroducers checkbox on config.jsp (thanks Complication!)
     * Hide the banlist on the summary so it doesn't confuse new users.
 
-2005-09-12  comwiz
+2005-09-12 comwiz
     * Migrated the router tests to junit
 
-2005-09-12  jrandom
+2005-09-12 jrandom
     * Removed guaranteed delivery mode entirely (so existing i2phex clients
       using it can get the benefits of mode=best_effort).  Guaranteed delivery
       is offered at the streaming lib level.
@@ -22002,18 +22002,18 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       restarts, and can be disabled by "watchdog.haltOnHang=false", but the
       cause of the spurious restarts should be gone.
 
-2005-09-12  jrandom
+2005-09-12 jrandom
     * Bugfix for skewed store which could kill a UDP thread (causing complete
       comm failure and eventual OOM)
 
-2005-09-12  jrandom
+2005-09-12 jrandom
     * More aggressively publish updated routerInfo.
     * Expose the flag to force SSU introductions on the router console
     * Don't give people the option to disable SNTP time sync, at least not
       through the router console, because there is no reason to disable it.
       No, not even if your OS is "ntp synced", because chances are, its not.
 
-2005-09-10  jrandom
+2005-09-10 jrandom
     * Test the router's reachability earlier and more aggressively
     * Use the low level bandwidth limiter's rates for the router console, and
       if the router has net.i2p.router.transport.FIFOBandwidthLimiter=INFO in
@@ -22021,18 +22021,18 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       'bw.sendBps1s' and 'bw.recvBps1s', allowing closer monitoring of burst
       behavior.
 
-2005-09-09  jrandom
+2005-09-09 jrandom
     * Added preliminary support for NAT hole punching through SSU introducers
     * Honor peer test results from peers that we have an SSU session with if
       those sessions are idle for 3 minutes or more.
 
-2005-09-09  cervantes
+2005-09-09 cervantes
     * New build due to change in build number :P (thanks ugha!)
 
-2005-09-07  BarkerJr
+2005-09-07 BarkerJr
     * HTML cleanup for the router console (thanks!)
 
-2005-09-07  jrandom
+2005-09-07 jrandom
     * Lay the foundation for 'client routers' - the ability for peers to opt
       out of participating in tunnels entirely due to firewall/NAT issues.
       Individual routers have control over where those peers are used in
@@ -22044,12 +22044,12 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       as unreachable, though this too is disabled by default (meaning the
       routerInfo is retrievable from the netDb).
 
-2005-09-05  jrandom
+2005-09-05 jrandom
     * Expose the HTTP headers to EepGet status listeners
     * Handle DSA key failures properly (if the signature is not invertable, it
       is obviously invalid)
 
-2005-09-04  jrandom
+2005-09-04 jrandom
     * Don't persist peer profiles until we are shutting down, as the
       persistence process gobbles RAM and wall time.
     * Bugfix to allow you to check/uncheck the sharedClient setting on the
@@ -22057,20 +22057,20 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Be more careful when expiring a failed tunnel message fragment so we
       don't drop the data while attempting to read it.
 
-* 2005-09-02  0.6.0.5 released
+* 2005-09-02 0.6.0.5 released
 
-2005-09-02  jrandom
+2005-09-02 jrandom
     * Don't refuse to send a netDb store if the targetted peer has failed a
       bit (the value was an arbitrary amount).
     * Logging changes
 
-* 2005-09-01  0.6.0.4 released
+* 2005-09-01 0.6.0.4 released
 
-2005-09-01  jrandom
+2005-09-01 jrandom
     * Don't send out a netDb store of a router if it is more than a few hours
       old, even if someone asked us for it.
 
-2005-08-31  jrandom
+2005-08-31 jrandom
     * Don't publish leaseSets to the netDb if they will never be looked for -
       namely, if they are for destinations that only establish outbound
       streams.  I2PTunnel's 'client' and 'httpclient' proxies have been
@@ -22080,16 +22080,16 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Don't publish the top 10 peer rankings of each router in the netdb, as
       it isn't being watched right now.
 
-2005-08-29  jrandom
+2005-08-29 jrandom
     * Added the new test Floodfill netDb
 
-2005-08-27  jrandom
+2005-08-27 jrandom
     * Minor logging and optimization tweaks in the router and SDK
     * Use ISO-8859-1 in the XML files (thanks redzara!)
     * The consolePassword config property can now be used to bypass the router
       console's nonce checking, allowing CLI restarts
 
-2005-08-24  jrandom
+2005-08-24 jrandom
     * Catch errors with corrupt tunnel messages more gracefully (no need to
       kill the thread and cause an OOM...)
     * Don't skip banlisted peers for netDb store messages, as they aren't
@@ -22108,7 +22108,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Don't overwrite a known status (OK/ERR-Reject/ERR-SymmetricNAT) with
       Unknown.
 
-2005-08-23  jrandom
+2005-08-23 jrandom
     * Removed the concept of "no bandwidth limit" - if none is specified, its
       16KBps in/out.
     * Include ack packets in the per-peer cwin throttle (they were part of the
@@ -22118,20 +22118,20 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * SSU improvements to resend more efficiently.
     * Added a basic scheduler to eepget to fetch multiple files sequentially.
 
-* 2005-08-21  0.6.0.3 released
+* 2005-08-21 0.6.0.3 released
 
-2005-08-21  jrandom
+2005-08-21 jrandom
     * If we already have an established SSU session with the Charlie helping
       test us, cancel the test with the status of "unknown".
 
-2005-08-17  jrandom
+2005-08-17 jrandom
     * Revise the SSU peer testing protocol so that Bob verifies Charlie's
       viability before agreeing to Alice's request.  This doesn't work with
       older SSU peer test builds, but is backwards compatible (older nodes
       won't ask newer nodes to participate in tests, and newer nodes won't
       ask older nodes to either).
 
-2005-08-12  jrandom
+2005-08-12 jrandom
     * Keep detailed stats on the peer testing, publishing the results in the
       netDb.
     * Don't overwrite the status with 'unknown' unless we haven't had a valid
@@ -22147,7 +22147,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       we monitor netDb store progress (to clear up the high netDb.storePeers
       stat)
 
-2005-08-10  jrandom
+2005-08-10 jrandom
     * Deployed the peer testing implementation to be run every few minutes on
       each router, as well as any time the user requests a test manually.  The
       tests do not reconfigure the ports at the moment, merely determine under
@@ -22159,18 +22159,18 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       participants were unreachable, or "OK" if the router can receive
       unsolicited connections and those connections use the same IP and port.
 
-* 2005-08-08  0.6.0.2 released
+* 2005-08-08 0.6.0.2 released
 
-2005-08-08  jrandom
+2005-08-08 jrandom
     * Add a configurable throttle to the number of concurrent outbound SSU
       connection negotiations (via i2np.udp.maxConcurrentEstablish=4).  This
       may help those with slow connections to get integrated at the start.
     * Further fixlets to the streaming lib
 
-2005-08-07  Complication
+2005-08-07 Complication
     * Display the average clock skew for both SSU and TCP connections
 
-2005-08-07  jrandom
+2005-08-07 jrandom
     * Fixed the long standing streaming lib bug where we could lose the first
       packet on retransmission.
     * Avoid an NPE when a message expires on the SSU queue.
@@ -22183,23 +22183,23 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * If our netDb store of our leaseSet fails, give it a few seconds before
       republishing.
 
-* 2005-08-03  0.6.0.1 released
+* 2005-08-03 0.6.0.1 released
 
-2005-08-03  jrandom
+2005-08-03 jrandom
     * Backed out an inadvertant change to the netDb store redundancy factor.
     * Verify tunnel participant caching.
     * Logging cleanup
 
-2005-08-01  duck
+2005-08-01 duck
     * Update IzPack to 3.7.2 (build 2005.04.22). This fixes bug #82.
 
-2005-08-01  duck
+2005-08-01 duck
     * Fix an addressbook NPE when a new hostname from the master addressbook
       didn't exist in the router addressbook.
     * Fix an addressbook bug which caused subscriptions not to be parsed at
       all. (Oops!)
 
-2005-07-31  jrandom
+2005-07-31 jrandom
     * Adjust the netDb search and store per peer timeouts to match the average
       measured per peer success times, rather than huge fixed values.
     * Optimized and reverified the netDb peer selection / retrieval process
@@ -22208,9 +22208,9 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * If i2np.udp.fixedPort=true, never change the externally published port,
       even if we are autodetecting the IP address.
 
-* 2005-07-27  0.6 released
+* 2005-07-27 0.6 released
 
-2005-07-27  jrandom
+2005-07-27 jrandom
     * Enabled SSU as the default top priority transport, adjusting the
       config.jsp page accordingly.
     * Add verification fields to the SSU and TCP connection negotiation (not
@@ -22227,52 +22227,52 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Reduce some unnecessary netDb resending by inluding the peers queried
       successfully in the store redundancy count.
 
-2005-07-22  jrandom
+2005-07-22 jrandom
     * Use the small thread pool for I2PTunnelHTTPServer (already used for
       I2PTunnelServer)
     * Minor memory churn reduction in I2CP
     * Small stats update
 
-2005-07-21  jrandom
+2005-07-21 jrandom
     * Fix in the SDK for a bug which would manifest itself as misrouted
       streaming packets when a destination has many concurrent streaming
       connections (thanks duck!)
     * No more "Graceful shutdown in -18140121441141s"
 
-2005-07-20  jrandom
+2005-07-20 jrandom
     * Allow the user to specify an external port # for SSU even if the external
       host isn't specified (thanks duck!)
 
-2005-07-19  jrandom
+2005-07-19 jrandom
     * Further preparation for removing I2CP crypto
     * Added some validation to the DH key agreement (thanks $anon)
     * Validate tunnel data message expirations (though not really a problem,
       since tunnels expire)
     * Minor PRNG threading cleanup
 
-2005-07-15  cervantes
+2005-07-15 cervantes
     * Added workaround for an odd win32 bug in the stats configuration console
       page which meant only the first checkbox selection was saved.
 
-2005-07-15  Romster
+2005-07-15 Romster
     * Added per group selection toggles in the stats configuration console
       page.
 
-2005-07-13  jrandom
+2005-07-13 jrandom
     * Fixed a recently injected bug in the multitransport bidding which had
       allowed an essentially arbitrary choice of transports, rather than the
       properly ordered choice.
 
-2005-07-13  jrandom
+2005-07-13 jrandom
     * Fixed a long standing bug where we weren't properly comparing session
       tags but instead largely depending upon comparing their hashCode,
       causing intermittent decryption errors.
 
-2005-07-12  jrandom
+2005-07-12 jrandom
     * Add some data duplication to avoid a recently injected concurrency
       problem in the session tag manager (thanks redzara and romster).
 
-2005-07-11  jrandom
+2005-07-11 jrandom
     * Reduced the growth factor on the slow start and congestion avoidance for
       the streaming lib.
     * Adjusted some of the I2PTunnelServer threading to use a small pool of
@@ -22286,13 +22286,13 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Disable SSU flooding by default (duh)
     * Updates to the StreamSink apps for better throttling tests.
 
-2005-07-05  jrandom
+2005-07-05 jrandom
     * Use a buffered PRNG, pulling the PRNG data off a larger precalculated
       buffer, rather than the underlying PRNG's (likely small) one, which in
       turn reduces the frequency of recalcing.
     * More tuning to reduce temporary allocation churn
 
-2005-07-04  jrandom
+2005-07-04 jrandom
     * Within the tunnel, use xor(IV, msg[0:16]) as the flag to detect dups,
       rather than the IV by itself, preventing an attack that would let
       colluding internal adversaries tag a message to determine that they are
@@ -22307,34 +22307,34 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * StreamSinkClient: add support for sending an unlimited amount of data
     * Migrate the tests out of the default build jars
 
-2005-06-22  Comwiz
+2005-06-22 Comwiz
     * Migrate the core tests to junit
 
-2005-05-25  duck
+2005-05-25 duck
     * Fixed PRNG bug (bugzilla #107)
 
-2005-05-01  jrandom
+2005-05-01 jrandom
     * Added a substantial optimization to the AES engine by caching the
       prepared session keys (duh).
 
-2005-05-01  jrandom
+2005-05-01 jrandom
     * Cleaned up the peers page a bit more.
 
-2005-04-30  jrandom
+2005-04-30 jrandom
     * Added a small new page to the web console (/peers.jsp) which contains
       the peer connection information.  This will be cleaned up a lot more
       before 0.6 is out, but its a start.
 
-2005-04-30  jrandom
+2005-04-30 jrandom
     * Reduced some SimpleTimer churn
 
-2005-04-29  jrandom
-    * Reduce the peer profile stat coallesce overhead by inlining it with the
+2005-04-29 jrandom
+    * Reduce the peer profile stat coalesce overhead by inlining it with the
       reorganize.
     * Limit each transport to at most one address (any transport that requires
       multiple entry points can include those alternatives in the address).
 
-2005-04-28  jrandom
+2005-04-28 jrandom
     * More fixes for the I2PTunnel "other" interface handling (thanks nelgin!)
     * Add back the code to handle bids from multiple transports (though there
       is still only one transport enabled by default)
@@ -22344,12 +22344,12 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       hosed.
     * No need to validate or persist a netDb entry if we already have it
 
-2005-04-25  smeghead
+2005-04-25 smeghead
     * Added button to router console for manual update checks.
     * Fixed bug in configupdate.jsp that caused the proxy port to be updated
       every time the form was submitted even if it hadn't changed.
 
-2005-04-24  jrandom
+2005-04-24 jrandom
     * Added a pool of PRNGs using a different synchronization technique,
       hopefully sufficient to work around IBM's PRNG bugs until we get our
       own Fortuna.
@@ -22360,9 +22360,9 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Handle out of order tunnel fragment delivery (not an issue on the live
       net with TCP, but critical with UDP).
 
-* 2005-04-20  0.5.0.7 released
+* 2005-04-20 0.5.0.7 released
 
-2005-04-20  jrandom
+2005-04-20 jrandom
     * In the SDK, we don't actually need to block when we're sending a message
       as BestEffort (and these days, we're always sending BestEffort).
     * Pass out client messages in fewer (larger) steps.
@@ -22379,38 +22379,38 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Let the user specify an interface besides 127.0.0.1 or 0.0.0.0 on the
       I2PTunnel client page (thanks maestro^!)
 
-2005-04-17  sirup
+2005-04-17 sirup
     * Added the possibility for I2PTunnel client and httpclient instances to
       have their own i2p session (and hence, destination and tunnels).  By
       default, tunnels are shared, but that can be changed on the web
       interface or with the sharedClient config option in I2PTunnel.config.
 
-2005-04-17  jrandom
+2005-04-17 jrandom
     * Marked the net.i2p.I2PTunnel.TunnelManager as deprecated.  Anyone use
       this?  If not, I want to drop it (lots of tiny details with lots of
       duplicated semantics).
 
-2005-04-17  zzz
+2005-04-17 zzz
     * Added new user-editable eepproxy error page templates.
 
-2005-04-17  jrandom
+2005-04-17 jrandom
     * Revamp the tunnel building throttles, fixing a situation where the
       rebuild may not recover, and defaulting it to unthrottled (users with
       slow CPUs may want to set "router.tunnel.shouldThrottle=true" in their
       advanced router config)
 
-2005-04-16  jrandom
+2005-04-16 jrandom
     * Migrated to Bouncycastle's SHA256 and HMAC implementations for efficiency
 
-2005-04-12  jrandom
+2005-04-12 jrandom
     * Make sure we don't get cached updates (thanks smeghead!)
     * Clear out the callback for the TestJob after it passes (only affects the
       job timing accounting)
 
-2005-04-08  smeghead
+2005-04-08 smeghead
     * Added NativeBigInteger benchmark to scripts/i2pbench.sh.
 
-2005-04-08  smeghead
+2005-04-08 smeghead
     * Security improvements to TrustedUpdate: signing and verification of the
       version string along with the data payload for signed update files
       (consequently the positions of the DSA signature and version string fields
@@ -22420,14 +22420,14 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Added two new CLI commands to TrustedUpdate: showversion, verifyupdate.
     * Extended TrustedUpdate public API for use by third party applications.
 
-* 2005-04-06  0.5.0.6 released
+* 2005-04-06 0.5.0.6 released
 
-2005-04-05  jrandom
+2005-04-05 jrandom
     * Retry I2PTunnel startup if we are unable to build a socketManager for a
       client or httpclient tunnel.
     * Add some basic sanity checking on the I2CP settings (thanks duck!)
 
-2005-04-05  jrandom
+2005-04-05 jrandom
     * After a successfull netDb search for a leaseSet, republish it to all of
       the peers we have tried so far who did not give us the key (up to 10),
       rather than the old K closest (which may include peers who had given us
@@ -22438,25 +22438,25 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Minor fix for oddball startup race (thanks travis_bickle!)
     * Minor AES update to allow in-place decryption.
 
-2005-04-03  jrandom
+2005-04-03 jrandom
     * EepGet fix for open-ended HTTP fetches (such as the news.xml
       feeding the NewsFetcher)
 
-2005-04-01  jrandom
+2005-04-01 jrandom
     * Allow editing I2PTunnel server instances with five digit ports
       (thanks nickless_head!)
     * More NewsFetcher debugging for reported weirdness
 
-2005-04-01  jrandom
+2005-04-01 jrandom
     * Fix to check for missing news file (thanks smeghead!)
     * Added destination display CLI:
       java -cp lib/i2p.jar net.i2p.data.Destination privKeyFilename
     * Added destination display to the web interface (thanks pnspns)
     * Installed CIA backdoor
 
-* 2005-03-29  0.5.0.5 released
+* 2005-03-29 0.5.0.5 released
 
-2005-03-29  jrandom
+2005-03-29 jrandom
     * Decreased the initial RTT estimate to 10s to allow more retries.
     * Increased the default netDb store replication factor from 2 to 6 to take
       into consideration tunnel failures.
@@ -22475,21 +22475,21 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Enable the tunnel batching with a 500ms delay by default
     * Dropped compatability with 0.5.0.3 and earlier releases
 
-2005-03-26  jrandom
+2005-03-26 jrandom
     * Added some error handling and fairly safe to cache data to the streaming
       lib (good call Tom!)
 
-2005-03-25  jrandom
+2005-03-25 jrandom
     * Fixed up building dependencies for the routerconsole on some more
       aggressive compilers (thanks polecat!)
 
-* 2005-03-24  0.5.0.4 released
+* 2005-03-24 0.5.0.4 released
 
-2005-03-23  jrandom
+2005-03-23 jrandom
     * Added more intelligent version checking in news.xml, in case we have a
       version newer than the one specified.
 
-2005-03-23  jrandom
+2005-03-23 jrandom
     * Added support for Transfer-Encoding: chunked to the EepGet, so that the
       cvsweb.cgi doesn't puke on us.
 
@@ -22497,7 +22497,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Fixed Bugzilla Bug #99 in the SAM Bridge, which caused pending
       stream send data to not be sent if STREAM CLOSE is issued too fast.
 
-2005-03-23  jrandom
+2005-03-23 jrandom
     * Implemented the news fetch / update policy code, as configurated on
       /configupdate.jsp.  Defaults are to grab the news every 24h (or if it
       doesn't exist yet, on startup).  No action is taken however, though if
@@ -22507,7 +22507,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       of the i2pwww module and into the i2p module so that we can bundle it
       within each update.
 
-2005-03-23  jrandom
+2005-03-23 jrandom
     * New /configupdate.jsp page for controlling the update / notification
       process, as well as various minor related updates.  Note that not all
       options are exposed yet, and the update detection code isn't in place
@@ -22526,11 +22526,11 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
           TrustedUpdate sign origFile signedFile privKeyFile
           TrustedUpdate verify signedFile
 
-2005-03-22  smeghead
+2005-03-22 smeghead
     * New TrustedUpdate component for signing/verifying files with a DSA
       signature.
 
-2005-03-21  jrandom
+2005-03-21 jrandom
     * Fixed the tunnel fragmentation handler to deal with multiple fragments
       in a single message properly (rather than release the buffer into the
       cache after processing the first one) (duh!)
@@ -22543,9 +22543,9 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       .5s before randomizing and selecting again, instead of randomizing the
       pool each time a tunnel is needed.
 
-* 2005-03-18  0.5.0.3 released
+* 2005-03-18 0.5.0.3 released
 
-2005-03-18  jrandom
+2005-03-18 jrandom
     * Minor tweak to the timestamper to help reduce small skews
     * Adjust the stats published to include only the relevent ones
     * Only show the currently used speed calculation on the profile page
@@ -22555,11 +22555,11 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Drop support for routers running 0.5 or 0.5.0.1 while maintaining
       backwards compatability for users running 0.5.0.2.
 
-2005-03-18  jrandom
+2005-03-18 jrandom
     * Eepproxy Fix for corrupted HTTP headers (thanks nickster!)
     * Fixed case sensitivity issues on the HTTP headers (thanks duck!)
 
-2005-03-17  jrandom
+2005-03-17 jrandom
     * Update the old speed calculator and associated profile data points to
       use a non-tiered moving average of the tunnel test time, avoiding the
       freshness issues of the old tiered speed stats.
@@ -22575,7 +22575,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       dealing with client apps that hang up early (e.g. wget)
     * Added more alternative socketManager factories (good call aum!)
 
-2005-03-16  jrandom
+2005-03-16 jrandom
     * Adjust the old speed calculator to include end to end RTT data in its
       estimates, and use that as the primary speed calculator again.
     * Use the mean of the high capacity speeds to determine the fast
@@ -22584,7 +22584,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Updated the profile page to sort by tier, then alphabetically.
     * Added some alternative socketManager factories (good call aum!)
 
-2005-03-14  jrandom
+2005-03-14 jrandom
     * New strict speed calculator that goes off the actual number of messages
       verifiably sent through the peer by way of tunnels.  Initially, this only
       contains the successful message count on inbound tunnels, but may be
@@ -22593,7 +22593,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       a better differential than the previous stat (both values are shown on
       the /profiles.jsp page)
 
-2005-03-11  jrandom
+2005-03-11 jrandom
     * Rather than the fixed resend timeout floor (10s), use 10s+RTT as the
       minimum (increased on resends as before, of course).
     * Always prod the clock update listeners, even if just to tell them that
@@ -22617,16 +22617,16 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Logging updates
     * Minor formatting updates
 
-2005-03-08  jrandom
+2005-03-08 jrandom
     * More aggressively adjust the clock
 
-2005-03-07  jrandom
+2005-03-07 jrandom
     * Fix the HTTP response header filter to allow multiple headers with the
       same name (thanks duck and spotteri!)
 
-* 2005-03-06  0.5.0.2 released
+* 2005-03-06 0.5.0.2 released
 
-2005-03-06  jrandom
+2005-03-06 jrandom
     * Allow the I2PTunnel web interface to select streaming lib options for
       individual client tunnels, rather than sharing them across all of them,
       as we do with the session options.  This way people can (and should) set
@@ -22636,7 +22636,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       I2P.
     * Properly expand the HTTP response header buffer (thanks shendaras!)
 
-2005-03-04  jrandom
+2005-03-04 jrandom
     * Filter HTTP response headers in the eepproxy, forcing Connection: close
       so that broken (/malicious) webservers can't allow persistent
       connections.  All HTTP compliant browsers should now always close the
@@ -22645,7 +22645,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Make sure our first send is always a SYN (duh)
     * Workaround for some buggy compilers
 
-2005-03-03  jrandom
+2005-03-03 jrandom
     * Loop while starting up the I2PTunnel instances, in case the I2CP
       listener isn't up yet (thanks detonate!)
     * Implement custom reusable GZIP streams to both reduce memory churn
@@ -22656,14 +22656,14 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Preemptively support the next protocol version, so that after the 0.5.0.2
       release, we'll be able to drop protocol=2 to get rid of 0.5 users.
 
-2005-03-02  jrandom
+2005-03-02 jrandom
     * Fix one substantial OOM cause (session tag manager was only dropping
       tags once the critical limit was met, rather than honoring their
       expiration) (duh)
     * Lots of small memory fixes
     * Double the allowable concurrent outstanding tunnel build tasks (20)
 
-2005-03-01  jrandom
+2005-03-01 jrandom
     * Really disable the streaming lib packet caching
     * Synchronized a message handling point in the SDK (even though its use is
       already essentially single threaded, its better to play it safe)
@@ -22682,16 +22682,16 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Updated the StreamSinkServer to ignore all read bytes, rather than write
       them to the filesystem.
 
-2005-02-27  jrandom
+2005-02-27 jrandom
     * Don't rerequest leaseSets if there are already pending requests
     * Reverted the insufficiently tested caching in the DSA/SHA1 impl, and
       temporary disabled the streaming lib packet caching.
     * Reduced the resend RTT penalty to 10s
 
-2005-02-26  jrandom
+2005-02-26 jrandom
     * Force 1.3-isms on the precompiled jsps too (thanks laberhost)
 
-2005-02-26  jrandom
+2005-02-26 jrandom
     * Further streaming lib caching improvements
     * Reduce the minimum RTT (used to calculate retry timeouts), but also
       increase the RTT on resends.
@@ -22703,24 +22703,24 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * New stats for end to end messages - "client.leaseSetFoundLocally",
       "client.leaseSetFoundRemoteTime", and "client.leaseSetFailedRemoteTime"
 
-2005-02-24  jrandom
+2005-02-24 jrandom
     * Throttle the number of tunnel rebuilds per minute, preventing CPU
       overload under catastrophic failures (thanks Tracker and cervantes!)
     * Block the router startup process until we've initialized the clock
 
-2005-02-24  jrandom
+2005-02-24 jrandom
     * Cache temporary memory allocation in the DSA's SHA1 impl, and the packet
       data in the streaming lib.
     * Fixed a streaming lib bug where the connection initiator would fail the
       stream if the ACK to their SYN was lost.
 
-2005-02-23  jrandom
+2005-02-23 jrandom
     * Now that we don't get stale SAM sessions, it'd be nice if we didn't
       get stale tunnel pools, don't you think?
 
-* 2005-02-23  0.5.0.1 released
+* 2005-02-23 0.5.0.1 released
 
-2005-02-22  jrandom
+2005-02-22 jrandom
     * Reworked the tunnel (re)building process to remove the tokens and
       provide cleaner controls on the tunnels built.
     * Fixed situations where the timestamper wanted to test more servers than
@@ -22728,12 +22728,12 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Get rid of the dead SAM sessions by using the streaming lib's callbacks
       (thanks Tracker!)
 
-2005-02-22  jrandom
+2005-02-22 jrandom
     * Temporary workaround for the I2CP disconnect bug (have the streaminglib
       try to automatically reconnect on accept()/connect(..)).
     * Loop check for expired lease republishing (just in case)
 
-2005-02-22  jrandom
+2005-02-22 jrandom
     * Adjusted (and fixed...) the timestamper change detection
     * Deal with a rare reordering bug at the beginning of a stream (so we
       don't drop it unnecessarily)
@@ -22749,7 +22749,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Allow reseeding when there are less than 10 known peer references
     * Lots of logging updates.
 
-2005-02-20  jrandom
+2005-02-20 jrandom
     * Allow the streaming lib resend frequency to drop down to 20s as the
       minimum, so that up to 2 retries can get sent on an http request.
     * Add further limits to failsafe tunnels.
@@ -22763,14 +22763,14 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       unchoke messages when the window size grows.
     * Make sure the window size never reaches 0 (duh)
 
-2005-02-20  jrandom
+2005-02-20 jrandom
     * Only build failsafe tunnels if we need them
     * Properly implement the selectNotFailingPeers so that we get a random
       selection of peers, rather than using the strictOrdering (thanks dm!)
     * Don't include too many "don't tell me about" peer references in the
       lookup message - only send the 10 peer references closest to the target.
 
-2005-02-19  jrandom
+2005-02-19 jrandom
     * Only build new extra tunnels on failure if we don't have enough
     * Fix a fencepost in the tunnel building so that e.g. a variance of
       2 means +/- 2, not +/- 1 (thanks dm!)
@@ -22784,23 +22784,23 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       to shove an additional 2MB in each update to those already on 0.5.
     * Imported the SusiMail css (oops, thanks susi!)
 
-* 2005-02-18  0.5 released
+* 2005-02-18 0.5 released
 
-2005-02-17  jrandom
+2005-02-17 jrandom
     * If the clock is adjusted during a job run, don't act as if the job took
       negative time.
 
-2005-02-17  jrandom
+2005-02-17 jrandom
     * Included the GPL'ed SusiMail 0.13 by default (thanks susi23!)
 
-2005-02-17  jrandom
+2005-02-17 jrandom
     * Fixed the braindead tunnel testing logic
     * If a large number of tunnels are failing (within the last 5-10 minutes)
       and the current tunnel pool's configuration allows it, randomly build a
       zero hop tunnel to replace failed tunnels.
     * Enable postman's POP3 and SMTP tunnels by default
 
-2005-02-16  jrandom
+2005-02-16 jrandom
     * Added some error handling when the number of session tags exceeds the
       realistic capacity, dropping a random chunk of received tag sets and
       conducting some minor analysis of the remaining ones.  This is a part
@@ -22811,7 +22811,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       if the addressbook's config contains "should_publish=true" (by default,
       it contains "should_publish=false")
 
-2005-02-16  jrandom
+2005-02-16 jrandom
     * (Merged the 0.5-pre branch back into CVS HEAD)
     * Replaced the old tunnel routing crypto with the one specified in
       router/doc/tunnel-alt.html, including updates to the web console to view
@@ -22860,34 +22860,34 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       however.
     * More bugfixes than you can shake a stick at.
 
-2005-02-13  jrandom
+2005-02-13 jrandom
     * Updated jbigi source to handle 64bit CPUs.  The bundled jbigi.jar still
       only contains 32bit versions, so build your own, placing libjbigi.so in
       your install dir if necessary.  (thanks mule!)
     * Added support for libjbigi-$os-athlon64 to NativeBigInteger and CPUID
       (thanks spaetz!)
 
-2005-02-10  smeghead
+2005-02-10 smeghead
     * Initial check-in of Pants, a new utility to help us manage our 3rd-party
       dependencies (Fortuna, Jetty, Java Service Wrapper, etc.). Some parts of
       Pants are still non-functional at this time so don't mess with it yet
       unless you want to potentially mangle your working copy of CVS.
 
-2005-02-09  duck
+2005-02-09 duck
     * Allow an unneeded newline in the SAM client connection without
       disconnecting.
 
-2005-02-07  jrandom
+2005-02-07 jrandom
     * Fixed a race in the streaming lib's delayed flush algorithm (thanks anon!)
 
 2005-02-06  Sugadude
     * Added a filter to the addressbook to remove entries that dont end in ".i2p"
 
-2005-02-03  smeghead
+2005-02-03 smeghead
     * Added Ant buildfile in apps/fortuna for creating a custom Fortuna PRNG jar
       library from GNU Crypto's CVS HEAD sources.
 
-2005-01-26  smeghead
+2005-01-26 smeghead
     * i2pProxy.pac, i2pbench.sh, and i2ptest.sh are now shipped with the dist
       packages and installed to $i2pinstalldir/scripts.
     * Added command line params to i2ptest.sh and i2pbench.sh: --gij to run them
@@ -22896,42 +22896,42 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Fixed unreachable for() statement clause in the KBucketImpl class that was
       causing gcj to toss a compilation warning (jrandom++).
 
-2005-01-26  smeghead
+2005-01-26 smeghead
     * Added a couple of scripts, i2ptest.sh and i2pbench.sh, to manage the core
       tests and benchmarks.
     * Routerconsole now builds under gcj 3.4.3.
     * Corrected divide by zero error in TunnelId class under gcj (jrandom++).
 
-2005-01-25  smeghead
+2005-01-25 smeghead
     * Tweaked some classes to enable gcj 3.4.3 to compile the router and
       supporting apps (except for the routerconsole which is still being
       investigated).
 
-2005-01-24  smeghead
+2005-01-24 smeghead
     * C#-ification of sam-sharp: interface greatly simplified using delegates
       and events; SamBaseEventHandler provides basic implementation and helper
       methods but is now optional.
     * NAnt buildfile and README added for sam-sharp.
 
-2005-01-23  smeghead
+2005-01-23 smeghead
     * Port the java SAM client library to mono/C# and released into the
       public domain.  The 0.1 version of this port is available in CVS as
       i2p/apps/sam/csharp/src/I2P.SAM.Client.  The other nonfunctional C#
       library has been removed.
 
-2005-01-21  Jhor
+2005-01-21 Jhor
     * Updated jbigi build scripts for OSX.
 
-2005-01-21  jrandom
+2005-01-21 jrandom
     * Added support for OSX to the NativeBigInteger code so that it will look
       in the classpath for libjbigi-osx-none.jnilib.  At the moment, that file
       is not bundled with the shipped jbigi.jar yet though.
 
-2005-01-18  jrandom
+2005-01-18 jrandom
     * Increased the max # session tags maintained and decreased slightly the
       period over which they are gathered.
 
-2005-01-17  jrandom
+2005-01-17 jrandom
     * Added meaningful support for adjusting the preferred message size in the
       streaming lib by setting the i2p.streaming.maxMessageSize=32768 (or
       whatever).  The other side will mimic a reduction (but never an increase).
@@ -22942,12 +22942,12 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Don't bundle a new jetty.xml with updates
     * Catch another local routerInfo corruption issue on startup.
 
-2005-01-15  cervantes
+2005-01-15 cervantes
     * Added support to the eepproxy for URLs such as
       http://localhost:4444/eepproxy/foo.i2p/bar/baz or even
       http://localhost:4444/eepproxy/foo.i2p/?i2paddresshelper=base64
 
-2005-01-15  jrandom
+2005-01-15 jrandom
     * Caught a series of (previously unhandled) errors caused by requeueing
       messages that had timed out on the TCP transport (thanks mae^!)
     * Reduce the barrier to dropping session tags on streaming lib resends -
@@ -22955,15 +22955,15 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       will help speed up the recovery after a disconnect, rather than the drop
       every fifth send.
 
-* 2005-01-06  0.4.2.6 released
+* 2005-01-06 0.4.2.6 released
 
-2005-01-06  jrandom
+2005-01-06 jrandom
     * Added a startup message to the addressbook, printing its version number
       to stdout (which is sent to wrapper.config) when it loads.
     * Updated the addressbook to reread the config file periodically
     * Added orion.i2p to the list of eepsites on the default homepage
 
-2005-01-05  jrandom
+2005-01-05 jrandom
     * Handle unexpected network read errors more carefully (thanks parg!)
     * Added more methods to partially compare (DataHelper) and display
       arrays (Base64.encode).
@@ -22976,18 +22976,18 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       one and restart the router.  Alternately, you can run the Router with
       the single command line argument "rebuild" and it will do the same.
 
-2004-12-31  ragnarok
+2004-12-31 ragnarok
     * Integrated latest addressbook changes (2.0.3) which include support for
       deploying as a .war file with no existing addressbook configuration.
     * Updated main build process to bundle the addressbook.war in the
       i2pinstall.jar and i2pupdate.zip.
 
-2004-12-31  jrandom
+2004-12-31 jrandom
     * Speling fxi (thanks digum!)
     * Bugfix for the I2PTunnel web interface so that it now properly launches
       newly added tunnels that are defined to be run on startup (thanks ugha!)
 
-2004-12-30  jrandom
+2004-12-30 jrandom
     * Revised the I2PTunnel client and httpclient connection establishment
       throttles.  There is now a pool of threads that build the I2PSocket
       connections with a default size of 5, configurable via the I2PTunnel
@@ -22998,30 +22998,30 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       after 30 seconds, configurable via 'I2PTunnel.maxWaitTime' (if set to
       0, it will wait indefinitely).
 
-2004-12-29  jrandom
+2004-12-29 jrandom
     * Imported Ragnarok's addressbook source (2.0.2) which is built but not
       deployed in the i2pinstall.jar/i2pupdate.zip (yet).
     * Don't treat connection inactivity closure as a connection error.
 
-2004-12-29  jrandom
+2004-12-29 jrandom
     * Add in a new keepalive event on each TCP connection, proactively sending
       a (tiny) time message every minute or two, as well as killing the
       connection if no message has been fully sent within 5 minutes or so.
       This should help deal with hung connections from IP address changes.
 
-2004-12-28  jrandom
+2004-12-28 jrandom
     * Cleaned up the resending and choking algorithm in the streaming lib.
     * Removed the read timeout override for I2PTunnel's httpclient, allowing
       it to use the default for the streaming lib.
     * Revised ack triggers in the streaming lib.
     * Logging.
 
-* 2004-12-21  0.4.2.5 released
+* 2004-12-21 0.4.2.5 released
 
-2004-12-21  jrandom
+2004-12-21 jrandom
     * Track a new stat for expired client leases (client.leaseSetExpired).
 
-2004-12-21  jrandom
+2004-12-21 jrandom
     * Cleaned up the postinstall/startup scripts a bit more to handle winME,
       and added windows info to the headless docs. (thanks ardvark!)
     * Fixed a harmless (yet NPE inspiring) race during the final shutdown of
@@ -23033,20 +23033,20 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       further monitor congestion issues.
     * Made the NamingService factory property public (thanks susi!)
 
-2004-12-20  jrandom
+2004-12-20 jrandom
     * No longer do a blocking DNS lookup within the jobqueue (thanks mule!)
     * Set a 60s dns cache TTL, instead of 0s.  Most users who used to use
       dyndns/etc now just use IP autodetection, so the old "we need ttl=0"
       reasoning is gone.
 
-2004-12-19  jrandom
+2004-12-19 jrandom
     * Fix for a race on startup wrt the new stats (thanks susi!)
 
-2004-12-19  jrandom
+2004-12-19 jrandom
     * Added three new stats - router.activePeers, router.fastPeers, and
       router.highCapacityPeers, updated every minute
 
-2004-12-19  jrandom
+2004-12-19 jrandom
     * Added a new I2PTunnel type: 'httpserver', allowing you to specify what
       hostname should be sent to the webserver.  By default, new installs will
       have an httpserver pointing at their jetty instance with the spoofed
@@ -23056,16 +23056,16 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Convert native jcpuid code from C++ to C. This should alleviate build
       problems experienced by some users.
 
-* 2004-12-18  0.4.2.4 released
+* 2004-12-18 0.4.2.4 released
 
-2004-12-16  jrandom
+2004-12-16 jrandom
     * Catch another oddball case for a reset connection in the streaming lib.
     * Add a dumpprofile.jsp page, called with ?peer=base64OfPeerHash, which
       dumps the current state of that peer's profile.  Instead of the full
       base64, you can pass in however many characters you have and it will
       return the first match found.
 
-2004-12-16  jrandom
+2004-12-16 jrandom
     * Remove the randomized factor in the tunnel rejection by bandwidth -
       we now accept the request if we've allocated less than our limit
       and reject it if we've allocated more.
@@ -23073,7 +23073,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       the 10m period.
     * Build the time message at the very last possible moment
 
-2004-12-15  jrandom
+2004-12-15 jrandom
     * Handle hard disconnects more gracefully within the streaming lib, and
       log unmonitored events more aggressively.
     * If we drop a peer after connection due to clock skew, log it to the
@@ -23090,7 +23090,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Adjust the capacity calculations so that tunnel failures alone in the
       last 10m will not trigger a 0 capacity rank.
 
-2004-12-14  jrandom
+2004-12-14 jrandom
     * Periodically send a message along all I2NP connections with the router's
       current time, allowing the receiving peer to determine that the clock
       has skewed too much, and hence, disconnect.  For backwards compatability
@@ -23098,7 +23098,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       next time we have a backwards compatability break, we can put in a proper
       message setup for it.
 
-2004-12-14  jrandom
+2004-12-14 jrandom
     * Reenable the probabalistic drop on the TCP queues to deal with good old
       fashioned bandwidth limiting.  However, by default the probability is
       rigged to reserve 0% of the queue free - meaning we just aggressively
@@ -23114,7 +23114,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Allow the timestamper to fix skews of up to 10 minutes
     * Logging
 
-2004-12-13  jrandom
+2004-12-13 jrandom
     * Added some error checking on the new client send job (thanks duck!)
     * Implemented tunnel rejection based on bandwidth usage (rejecting tunnels
       proportional to the bytes allocated in existing tunnels vs the bytes
@@ -23127,7 +23127,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Fix a truncation/type conversion problem on the long term capacity
       values (we were ignoring the daily stats outright)
 
-2004-12-11  jrandom
+2004-12-11 jrandom
     * Fix the missing HTTP timeout, which was caused by the deferred syn used
       by default.  This, in turn, meant the I2PSocket creation doesn't fail
       on .connect, but is unable to transfer any data in any direction.  We now
@@ -23135,7 +23135,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       error page.
     * Logging
 
-2004-12-11  jrandom
+2004-12-11 jrandom
     * Use a simpler and less memory intensive job for processing outbound
       client messages when the session is in mode=bestEffort.  We can
       immediately discard the data as soon as its sent the first time,
@@ -23146,9 +23146,9 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Script cleanup for building jbigi/jcpuid
     * Logging
 
-* 2004-12-08  0.4.2.3 released
+* 2004-12-08 0.4.2.3 released
 
-2004-12-08  jrandom
+2004-12-08 jrandom
     * Revised the buffering when reading from the SAM client and writing
       to the stream.  Also added a thread (sigh) so we don't block the
       SAM client from giving us more messages for abnormally long periods
@@ -23156,39 +23156,39 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Display the router version in the logs on startup (oft requested)
     * Fix a race during the closing of a messageOutputStream
 
-2004-12-06  jrandom
+2004-12-06 jrandom
     * Don't do a 'passive flush' while there are already outbound messages
       unacked.
     * Show the reseed link if up to 10 peers profiles are active (thanks
       dburton!)
 
-2004-12-06  jrandom
+2004-12-06 jrandom
     * Don't propogate streaming connection failures out to the SAM bridge as
       fatal errors.
     * Dont barf on repeated I2CP closure.
 
-2004-12-05  jrandom
+2004-12-05 jrandom
     * Explicitly use "127.0.0.1" to bind the I2CP listener, not the JVM's
       getLocalhost call
 
-2004-12-05  jrandom
+2004-12-05 jrandom
     * Default the I2CP listener to localhost only, unless overridden by
       i2cp.tcp.bindAllInterfaces=true (thanks dm!)
     * More SAM fixes for things recently broken (whee)
 
-2004-12-05  jrandom
+2004-12-05 jrandom
     * Fix the recently broken SAM bridge (duh)
     * Add a new pair of SAM apps - net.i2p.sam.client.SAMStreamSink and
       net.i2p.sam.client.SAMStreamSend, mirroring the streaming lib's
       StreamSink and StreamSend apps for transferring files.
     * Make the passive flush timer fire more frequently.
 
-2004-12-05  jrandom
+2004-12-05 jrandom
     * Fixed some links in the console (thanks ugha!) and the javadoc
       (thanks dinoman!)
     * Fix the stream's passive flush timer (oh, its supposed to work?)
 
-2004-12-03  jrandom
+2004-12-03 jrandom
     * Toss in a small pool of threads (3) to execute the events queued up with
       the SimpleTimer, as we do currently see the occational event
       notification spiking up to a second or so.
@@ -23217,26 +23217,26 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Default the streaming lib to disconnect on inactivity, rather than send
       an empty message.
 
-2004-12-01  jrandom
+2004-12-01 jrandom
     * Fix for a race in the streaming lib as caused by some odd SAM activity
 
-* 2004-12-01  0.4.2.2 released
+* 2004-12-01 0.4.2.2 released
 
-2004-12-01  jrandom
+2004-12-01 jrandom
     * Fixed a stupid typo that inadvertantly allowed persistent HTTP
       connections to work (thanks duck!)
     * Make sure we override the inactivity timeout too
 
-* 2004-12-01  0.4.2.1 released
+* 2004-12-01 0.4.2.1 released
 
-2004-12-01  jrandom
+2004-12-01 jrandom
     * Strip out any of the Accept-* HTTP header lines, and always make sure to
       include the forged User-agent header.
     * Adjust the default read timeout on the eepproxy to 60s, unless
       overridden.
     * Minor tweak on stream shutdown.
 
-2004-11-30  jrandom
+2004-11-30 jrandom
     * Render the burst rate fields on /config.jsp properly (thanks ugha!)
     * Build in a simple timeout to flush data queued into the I2PSocket but
       not yet flushed.
@@ -23249,10 +23249,10 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       is close()ed (duh)
     * Never wait more than the disconnect timeout for a write to complete
 
-2004-11-29  jrandom
+2004-11-29 jrandom
     * Minor fixes to avoid unnecessary errors on shutdown (thanks susi!)
 
-2004-11-29  jrandom
+2004-11-29 jrandom
     * Reduced contention for local client delivery
     * Drop the new code that munges the wrapper.config.  Instead, updates that
       need to change it will include their own wrapper.config in the
@@ -23267,24 +23267,24 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       is terminated (thanks susi!)
     * Split up the I2PTunnel closing a little further.
 
-2004-11-28  jrandom
+2004-11-28 jrandom
     * Accept IP address detection changes with a 2-out-of-3 minimum.
     * As long as the router is up, keep retrying to bind the I2CP listener.
     * Decrease the java service wrapper ping frequency to once every 10
       minutes, rather than once every 5 seconds.
 
-2004-11-27  jrandom
+2004-11-27 jrandom
     * Some cleanup and bugfixes for the IP address detection code where we
       only consider connections that have actually sent and received messages
       recently as active, rather than the mere presence of a TCP socket as
       activity.
 
-2004-11-27  jrandom
+2004-11-27 jrandom
     * Removed the I2PTunnel inactivity timeout thread, since the new streaming
       lib can do that (without an additional per-connection thread).
     * Close the I2PTunnel forwarder threads more aggressively
 
-2004-11-27  jrandom
+2004-11-27 jrandom
     * Fix for a fast loop caused by a race in the new streaming library (thanks
       DrWoo, frontier, pwk_, and thetower!)
     * Minor updates to the SimpleTimer and Connection to help track down a
@@ -23294,11 +23294,11 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 
 * 2004-11-26  0.4.2 released
 
-2004-11-26  jrandom
+2004-11-26 jrandom
     * Enable the new streaming lib as the default.  That means, for any
       substantial definition, it is NOT BACKWARDS COMPATIBLE.
 
-2004-11-25  jrandom
+2004-11-25 jrandom
     * Revised the installer to include start menu and desktop shortcuts for
       windows platforms, including pretty icons (thanks DrWoo!)
     * Allow clients specified in clients.config to have an explicit startup
@@ -23316,18 +23316,18 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       requiring the user to manually restart the service after an update.
     * Increase the TCP connection timeout to 30s (which is obscenely long)
 
-2004-11-22  jrandom
+2004-11-22 jrandom
     * Update to the SAM bridge to reduce some unnecessary memory allocation.
     * New stat to keep track of slow jobs (ones that take more than a second
       to excute).  This is published in the netDb as jobQueue.jobRunSlow
 
-2004-11-21  jrandom
+2004-11-21 jrandom
     * Update the I2PTunnel web interface to include an option for the new
       streaming lib (which is ignored until the 0.4.2 release).
     * Revised the I2PTunnel web interface to keep the I2CP options of client
       and httpclient tunnels in sync, as they all share the same I2CP session.
 
-2004-11-21  jrandom
+2004-11-21 jrandom
     * Only allow small clock skews after the first 10 minutes of operation
       (to prevent later network lag bouncing us way off course - yes, we
       really need an NTP impl to balance out the network burps...)
@@ -23339,7 +23339,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Increase the bandwidth limiter burst values available to 10-60s (or
       whatever is placed in /configadvanced.jsp, of course)
 
-2004-11-21  jrandom
+2004-11-21 jrandom
     * Allow end of line comments in the hosts.txt and other config files,
       using '#' to begin the comments (thanks susi!)
     * Add support to I2PTunnel's 'client' feature for picking between multiple
@@ -23348,38 +23348,38 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       known peers, as well as link to the config page if there are no active
       peers.  Revised config page accordingly.
 
-2004-11-21  jrandom
+2004-11-21 jrandom
     * Destroy ElGamal/AES+SessionTag keys after 15 minutes of inactivity
       rather that every 15 minutes, and increase the warning period in which
       we refresh tags from 30s to 2 minutes.
     * Bugfix for a rare problem closing an I2PTunnel stream where we'd fail
       to close the I2PSocket (leaving it to timeout).
 
-2004-11-19  jrandom
+2004-11-19 jrandom
     * Off-by-one fix to the tunnel pool management code, along side some
       explicit initialization.  This can affect clients whose lengths are
       shorter than the router's default (thanks duck!)
 
-2004-11-17  jrandom
+2004-11-17 jrandom
     * Fix to propogate i2psocket options into the SAM bridge correctly (thanks
-      Ragnarok!)
+     ragnarok!)
 
-2004-11-17  jrandom
+2004-11-17 jrandom
     * Minor logging update.
 
-2004-11-16  jrandom
+2004-11-16 jrandom
     * Clean up the propogation of i2psocket options so that various streaming
       libs can honor them more precisely
 
-2004-11-16  jrandom
+2004-11-16 jrandom
     * Minor logging update
 
-2004-11-14  jrandom
+2004-11-14 jrandom
     * Fix a long standing leak in I2PTunnel (hanging on to i2psocket objects)
     * Fix a leak injected into the SimpleTimer
     * Fix a race condition in the tunnel message handling
 
-2004-11-13  jrandom
+2004-11-13 jrandom
     * Added throttles on how many I2PTunnel client connections we open at once
     * Replaced some buffered streams in I2PTunnel with unbuffered streams, as
       the streaming library used should take care of any buffering.
@@ -23387,12 +23387,12 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       there are many short lived connections.
     * Trimmed the SimpleTimer's processing a bit
 
-2004-11-10  jrandom
+2004-11-10 jrandom
     * Allow loading the (mini)streaming connection options from the
       environment.
     * More defensive programming in the DSA implementation.
 
-2004-11-08  jrandom
+2004-11-08 jrandom
     * Remove spurious flush calls from I2PTunnel, and work with the
       I2PSocket's output stream directly (as the various implementations
       do their own buffering).
@@ -23402,12 +23402,12 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       going at once).
     * Logging
 
-2004-11-08  jrandom
+2004-11-08 jrandom
     * Make the SAM bridge more resiliant to bad handshakes (thanks duck!)
 
-* 2004-11-06  0.4.1.4 released
+* 2004-11-06 0.4.1.4 released
 
-2004-11-06  jrandom
+2004-11-06 jrandom
     * Expose a drop down on the /configclients.jsp to enter the outbound
       tunnel depth.
     * Improved *hosts.txt loading
@@ -23416,29 +23416,29 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       data (thanks gott!)
     * Bundle sam.jar in the update (thanks duck!)
 
-2004-11-06  jrandom
+2004-11-06 jrandom
     * Fix for a long standing synchronization bug in the SDK that in rare
       instances can add a few seconds of lag.
 
-2004-11-05  jrandom
+2004-11-05 jrandom
     * Bugfixes and unit tests for the SAM bridge to handle quoted message
       parameters, verify proper operation after multiple session lifetimes,
       as well as some synchronization problems.
     * New properties method on the DataHelper class.
     * Address a race on fast disconnecting clients
 
-2004-11-02  jrandom
+2004-11-02 jrandom
     * Fix for a long standing synchronization bug in the JobQueue (and added
       some kooky flags to make sure it stays dead)
     * Update the ministreaming lib to force mode=guaranteed if the default
       lib is used, and mode=best_effort for all other libs.
 
-2004-11-02  jrandom
+2004-11-02 jrandom
     * Fixed up the configuration overrides for the streaming socket lib
       integration so that it properly honors env settings.
     * More memory usage streamlining (last major revamp for now, i promise)
 
-2004-11-01  jrandom
+2004-11-01 jrandom
     * Increase the tunnel test timeout rapidly if our tunnels are failing.
     * Honor message expirations for some tunnel jobs that were prematurely
       expired.
@@ -23450,7 +23450,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       is remote, honor the message by tunnel routing the data rather than
       sending it directly to the requested location.
 
-2004-10-30  jrandom
+2004-10-30 jrandom
     * Cache the temporary objects used in the AES encryption/decryption
       process so that AES doesn't require any memory allocation to process
       data.
@@ -23464,18 +23464,18 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       updated with the "router.clientPartialSendTimeout" router config prop.
     * Logging
 
-2004-10-29  jrandom
+2004-10-29 jrandom
     * Strip the Referer, Via, and From headers completely, rather than
       inserting a bogus value ("i2p").  This should help with the use of
       SnipSnap and Geeklog (thanks nickster and DrWoo!)
 
-2004-10-27  jrandom
+2004-10-27 jrandom
     * Fix a strange race condition on i2cp client disconnect.
     * win98 startup fixes (thanks tester-1 and ardvark!)
     * include build scripts for the new streaming lib (which is NOT ready
       for use yet, but you can hack around with it)
 
-2004-10-24  jrandom
+2004-10-24 jrandom
     * Allow explicit inclusion of session tags in the SDK, enabling the
       resending of tags bundled with messages that would not otherwise
       be ACKed.
@@ -23488,21 +23488,21 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       I2PSocketManager instance based on the "i2p.streaming.manager" property,
       containing the class name of the I2PSocketManager to instantiate.
 
-2004-10-23  jrandom
+2004-10-23 jrandom
     * Minor ministreaming lib refactoring to simplify integration of the full
       streaming lib.
     * Minor bugfixes to data structure serialization.
 
 * 2004-10-18  0.4.1.3 released
 
-2004-10-18  jrandom
+2004-10-18 jrandom
     * Allow sending messages with a section of a byte array.
     * Reduced stats published.
 
-2004-10-17  jrandom
+2004-10-17 jrandom
     * Don't b0rk on whitespace in the router address.
 
-2004-10-16  jrandom
+2004-10-16 jrandom
     * More aggressively reduce the capacity of peers if their tunnels are
       failing so that we move off them quicker.
     * Simplify some data structure serialization for reuse in the streaming
@@ -23510,23 +23510,23 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       arrays.
     * Logging updates
 
-2004-10-16  jrandom
+2004-10-16 jrandom
     * Increased the default minimum tunnel test time to 5 seconds, since we
       still see the occational message processing time spike to 2 seconds.
     * Update the SimpleTimer to allow rescheduling a task thats already
       queued (useful for the new streaming lib).
 
-2004-10-15  jrandom
+2004-10-15 jrandom
     * Replaced old minimum tunnel test timeout of 1s with a configurable
       value (router.config property "router.tunnelTestMinimum", with the
       default of 2s).
 
-2004-10-14  jrandom
+2004-10-14 jrandom
     * Tunnel rejection is no longer a sign of an overwhelmingly loaded
       peer, so don't use it as a key point of the IsFailing calculator.
       We still use it as a key point of the Capacity calculator, however.
 
-2004-10-14  jrandom
+2004-10-14 jrandom
     * Allow for a configurable tunnel "growth factor", rather than trying
       to achieve a steady state.  This will let us grow gradually when
       the router is needed more, rather than blindly accepting the request
@@ -23539,12 +23539,12 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       find the 'good' tunnels.
     * Added some crazy debugging to try and track down an intermittent hang.
 
-2004-10-13  jrandom
+2004-10-13 jrandom
     * Fix the probabalistic tunnel reject (we always accepted everything,
       since the docs on java.util.Random.nextDouble() are wrong..)
     * Fixed a race on startup (thanks Quadn!)
 
-2004-10-12  jrandom
+2004-10-12 jrandom
     * Disable the probabalistic drop by default (enable via the router config
       property "tcp.dropProbabalistically=true")
     * Disable the actual watchdog shutdown by default, but keep track of more
@@ -23558,42 +23558,42 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       and you had previously only participated in 50, you'll have a 25% chance
       of accepting a subsequent request.
 
-* 2004-10-10  0.4.1.2 released
+* 2004-10-10 0.4.1.2 released
 
-2004-10-10  cervantes
+2004-10-10 cervantes
     * Update the I2PTunnel HTTP proxy to strip out the i2paddresshelper from
       the request.
 
-2004-10-09  jrandom
+2004-10-09 jrandom
     * Added a watchdog timer to do some baseline liveliness checking to help
       debug some odd errors.
     * Added a pair of summary stats for bandwidth usage, allowing easy export
       with the other stats ("bw.sendBps" and "bw.receiveBps")
     * Trimmed another memory allocation on message reception.
 
-2004-10-08  jrandom
+2004-10-08 jrandom
     * Revamp the AESInputStream so it doesn't allocate any temporary objects
       during its operation.
 
-2004-10-08  jrandom
+2004-10-08 jrandom
     * Don't kill the establisher threads during a soft restart.
     * Attempt to validate the peer's routerInfo earlier during handshaking.
     * Revamp the AESOutputStream so it doesn't allocate any temporary objects
       during its operation.
 
-2004-10-07  jrandom
+2004-10-07 jrandom
     * Reimplement the I2NP reading with less temporary memory allocation.
       There is still significant GC churn, especially under load, but this
       should help.
     * Catch some oddball errors in the transport (message timeout while
       establishing).
 
-2004-10-07  jrandom
+2004-10-07 jrandom
     * Expire queued messages even when the writer is blocked.
     * Reimplement most of the I2NP writing with less temporary memory
       allocations (I2NP reading still gobbles memory).
 
-2004-10-06  jrandom
+2004-10-06 jrandom
     * Implement an active queue management scheme on the TCP transports,
       dropping messages probabalistically as the queue fills up.  The
       estimated queue capacity is determined by the rate at which messages
@@ -23605,31 +23605,31 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       rate and queue size measured across all connections, to deal with our
       own local bandwidth saturation, but we'll try the per-con metrics first.
 
-2004-10-06  jrandom
+2004-10-06 jrandom
     * Enable explicit disabling of the systray entirely for windows machines
       with strange configurations: add -Dsystray.disable=true to the java
       command line.  (thanks mihi!)
 
-2004-10-05  jrandom
+2004-10-05 jrandom
     * Allow peers on the same LAN to communicate with each other safely even
       when they cannot talk to each other through the external address.
 
-2004-10-05  jrandom
+2004-10-05 jrandom
     * Display how much time is left before the graceful shutdown is complete.
     * Debug some improperly failed messages on timeout or disconnection.
 
-2004-10-05  jrandom
+2004-10-05 jrandom
     * Don't go into a fast busy if an I2PTunnel 'server' is explicitly killed
       (thanks mule!)
     * Handle some more error conditions regarding abruptly closing sockets
       (thanks Jonva!)
 
-2004-10-04  jrandom
+2004-10-04 jrandom
     * Update the banlist to reject a peer for an exponentially increasing
       period of time (with an upper bounds of an hour).
     * Various minor stat and debugging fixes
 
-2004-10-03  jrandom
+2004-10-03 jrandom
     * Add a new stat logging component to optionally dump the raw stats to
       disk as they are generated, rather than rely upon the summarized data.
       By default, this is off, but the router property "stat.logFilters" can
@@ -23638,13 +23638,13 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       "stat.logFile" is set to).  This can also log profile related stats,
       such as "dbResponseTime" or "tunnelTestResponseTime".
 
-2004-10-02  jrandom
+2004-10-02 jrandom
     * Assure that we quickly fail messages bound for banlisted peers.
     * Address a race on startup where the first peer contacted could hang the
       router (thanks Romster!)
     * Only whine about an intermittent inability to query the time server once
 
-2004-10-02  jrandom
+2004-10-02 jrandom
     * Command line utility to verify a peer's reachability - simply run
       net.i2p.router.transport.tcp.ConnectionHandler hostname port# and it
       will print out whether that peer is reachable or not (using a simple
@@ -23652,20 +23652,20 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
 
 * 2004-10-01  0.4.1.1 released
 
-2004-10-01  jrandom
+2004-10-01 jrandom
     * Handle partial reseeds, caused by seeds going away before the download
       completes (thanks Sugadude!)
 
-2004-10-01  jrandom
+2004-10-01 jrandom
     * Explicitly refuse IPv6 addresses, since only some peers support
       them and we want fully reachable peers.
 
-2004-10-01  jrandom
+2004-10-01 jrandom
     * Additional error handling for a variety of transport layer errors.
 
 * 2004-09-30  0.4.1 released (not backwards compatible)
 
-2004-09-30  jrandom
+2004-09-30 jrandom
     * Bundle the configuration necessary to run an eepsite out of the box
       with Jetty - simply edit ./eepsite/docroot/index.html and give people
       the key listed on the I2PTunnel configuration page, and its up.
@@ -23673,19 +23673,19 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       smtp.postman.i2p (port 7659), pop.postman.i2p (port 7660), and
       irc.baffled.i2p (port 7661)
 
-2004-09-29  jrandom
+2004-09-29 jrandom
     * Always wipe the Jetty work directory on startup, so that web updates
       are reflected immediately (Jetty does not honor the cache across
       multiple executions)
 
-2004-09-27  jrandom
+2004-09-27 jrandom
     * Limit the number of connection tags saved to 10,000.  This is a huge
       limit, but consumes no more than 1MB of RAM.  For now, we drop them
       randomly after reaching that size, forcing those dropped peers to use
       a full DH negotiation.
     * HTML cleanup in the console.
 
-2004-09-26  jrandom
+2004-09-26 jrandom
     * Complete rewrite of the TCP transport with IP autodetection and
       low CPU overhead reconnections.  More concise connectivity errors
       are listed on the /oldconsole.jsp as well.  The IP autodetection works
@@ -23701,13 +23701,13 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Removed all of the old unused PHTTP code.
     * Refactor various methods and clean up some javadoc.
 
-2004-09-21  jrandom
+2004-09-21 jrandom
     * Have two tiers of hosts.txt files - the standard "hosts.txt" and
       the new "userhosts.txt".  Updates to I2P will only overwrite the former,
       but values stored in the later take precedence.  Both are queried on
       lookup.
 
-2004-09-16  jrandom
+2004-09-16 jrandom
     * Refactor the TCP transport to deal with changing identities gracefully,
       and to prevent some wasted effort by keeping track of what host+port
       combinations we are connected to (rather than just the identities).  Also
@@ -23717,14 +23717,14 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Removed the 0.4.0.1 specific files from i2pupdate.zip (relating to script
       updates)
 
-2004-09-13  jrandom
+2004-09-13 jrandom
     * Update for the SDK reconnection to deal with overflow.
     * Web improvements (@ not # on the /logs.jsp [thanks ugha!] and fixed the
       rounding on lifetime bandwidth used [thanks gott!]).
 
-* 2004-09-08  0.4.0.1 released
+* 2004-09-08 0.4.0.1 released
 
-2004-09-08  jrandom
+2004-09-08 jrandom
     * Updated the "Active:" peer count to display the # of connections as well
       as the number of recently active router identities.
     * Implement some basic updating code - on startup, if there is a file named
@@ -23735,7 +23735,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Logging updates.
     * Updated VERSION constants to 0.4.0.1
 
-2004-09-08  hypercubus
+2004-09-08 hypercubus
     * Bugfix: Running the installer as a non-privileged user on Red Hat (and
       hopefully any other affected *nix systems) now properly discards non-
       essential directories after installation.
@@ -23745,26 +23745,26 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Changed "wrapper.conf" to "wrapper.config" for naming consistency with the
       other configuration files.
 
-2004-09-07  cervantes:
+2004-09-07 cervantes
     * Proxy recursion disabled by default (strict)
     * Password Authentication for session commands
     * Support for http://path?i2paddresshelper=BASE64
     * Support for http://i2p/BASE64/path syntax
 
-2004-09-07  jrandom
+2004-09-07 jrandom
     * Make sure that peers placed in the 'fast' group are ones we both know
       how to reach and have been able to reach recently.  These peers may
       still be placed in the 'high capacity' group however (though that group
       is only queried if the 'fast' group is too small)
     * Include some updates to the ProgileOrganizer's CLI.
 
-2004-09-07  jrandom
+2004-09-07 jrandom
     * Disable the timestamper by default for all applications except the router
       (enable via -Dtime.disabled=false)
     * Simplify the retrieval of the full destination with text based browsers.
     * Bundle the updated wrapper.config and hosts.txt in the i2pupdate.tar.bz2
 
-2004-09-07  jrandom
+2004-09-07 jrandom
     * Write the native libraries to the current directory when they are loaded
       from a resource, and load them from that file on subsequent runs (in
       turn, we no longer *cough* delete the running libraries...)
@@ -23785,7 +23785,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       with a closed session when starting a new I2PTunnel instance.
     * Refactoring and logging.
 
-2004-09-06  jrandom
+2004-09-06 jrandom
     * Address a race condition in the key management code that would manifest
       itself as a corrupt router identity.
     * Properly clear old transport addresses from being displayed on the old
@@ -23797,7 +23797,7 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * More defensive programming, HTML cleanup, logging
     * wrapper.config cleanup of duplicate lines
 
-2004-09-04  jrandom
+2004-09-04 jrandom
     * Added some basic guards to prevent multiple instances from running.
       Specifically, a file "router.ping" in the install directory which is
       written to once a minute - if that file exists and has been modified
@@ -23807,39 +23807,39 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
       use for all of its temporary files.
     * Tell the browser not to cache most of the router console's pages.
 
-2004-09-04  jrandom
+2004-09-04 jrandom
     * Update the SDK to automatically reconnect indefinitely with an
       exponential delay on retries (capped at 5 minutes).
 
 * 2004-09-03  0.4 released
 
-2004-09-03  jrandom
+2004-09-03 jrandom
     * Updated default wrapper.config to deal with the hard restart option
     * Include the history.txt in the /help.jsp page
     * HTML updates (wrapper.log, and no more unix scripts)
     * Updated VERSION constants to 0.4
 
-2004-09-03  hypercubus
+2004-09-03 hypercubus
     * Bugfix: Installer launches postinstall.bat on WinNT/2K properly.
     * Temporarily removed install_i2p_service_unix and
       uninstall_i2p_service_unix from distribution packages.
     * postinstall.bat/postinstall.sh cleans installation directory of all files
       not applicable to the host OS.
 
-2004-09-03  oOo
+2004-09-03 oOo
     * Added some filters to the HTTP request, replacing the User-Agent,
       Referrer, Via, and From headers, which helps until we have a more
       comprehensive filtering system.
 
-2004-09-03  jrandom
+2004-09-03 jrandom
     * Disabled the old listener on port 7655.
 
-2004-09-02  jrandom
+2004-09-02 jrandom
     * Cleaned up the base build.xml, adding a new target ("updater") which
       builds the file i2pupdate.tar.bz2 which can be safely extracted over
       existing installs.
 
-2004-xx-xx  jrandom
+2004-xx-xx jrandom
     * Implemented the new web architecture and router console
     * Implemented I2PTunnel web interface, and revamped startup process.
     * Revamped peer selection code to address skew.
@@ -23847,60 +23847,60 @@ I2PSnark: Fix ConnectionAcceptor not restarting after tunnel
     * Bugfix dealing with timeouts and resends.
     * Integrated Iakin's jcpuid library and jbigi update, with modifications.
 
-2004-xx-xx  hypercubus
+2004-xx-xx hypercubus
     * Implemented the new installation process.
     * Integrated systray
     * Integrated service manager
 
-2004-xx-xx  oOo
+2004-xx-xx oOo
     * Implemented ?i2paddresshelper= hook
     * Many small bugfixes to the web interface, router, I2PTunnel, and core.
 
-2004-xx-xx  Nightblade
+2004-xx-xx Nightblade
     * libSAM updates.
 
-2004-xx-xx  cervantes
+2004-xx-xx cervantes
     * Imported i2pProxy.pac proxy script in with the build.
 
-* 2004-08-20  0.3.4.3 released
-* 2004-08-12  0.3.4.2 released
-* 2004-08-08  0.3.4.1 released
-* 2004-07-29  0.3.4 released
-* 2004-07-23  0.3.3 released
-* 2004-07-16  0.3.2.3 released
-* 2004-07-14  0.3.2.2 released
-* 2004-07-11  0.3.2.1 released
-* 2004-07-07  0.3.2 released
-* 2004-06-25  0.3.1.5 released
-* 2004-05-23  0.3.1.4 released
-* 2004-05-20  0.3.1.3 released
-* 2004-05-13  0.3.1.2 released
-* 2004-05-07  0.3.1.1 released
-* 2004-04-30  0.3.1 released
-* 2004-04-20  0.3.0.4 released
-* 2004-04-04  0.3.0.3 released
-* 2004-03-30  0.3.0.2 released
-* 2004-03-25  0.3.0.1 released
-* 2004-03-21  0.3.0 released
-* 2004-03-10  0.2.5.4 released
-* 2004-03-04  0.2.5.3 released
-* 2004-02-28  0.2.5.2 released
-* 2004-02-27  0.2.5.1 released
-* 2004-02-25  0.2.5 released
-* 2004-02-19  0.2.4.2 released
-* 2004-02-15  0.2.4.1 released
-* 2004-02-14  0.2.4 released
-* 2004-01-27  0.2.3.6 released
-* 2004-01-21  0.2.3.5 released
-* 2004-01-14  0.2.3.4 released
-* 2003-12-29  0.2.3.3 released
-* 2003-12-27  0.2.3.2 released
-* 2003-12-25  0.2.3.1 released
-* 2003-12-13  0.2.3 released
-* 2003-12-01  0.2.2 released
-* 2003-11-18  0.2.1.1 released
-* 2003-11-12  0.2.1 released
-* 2003-11-09  0.2.0.3 released
-* 2003-11-08  0.2.0.2 released
-* 2003-11-03  0.2.0.1 released
-* 2003-11-01  0.2 released
+* 2004-08-20 0.3.4.3 released
+* 2004-08-12 0.3.4.2 released
+* 2004-08-08 0.3.4.1 released
+* 2004-07-29 0.3.4 released
+* 2004-07-23 0.3.3 released
+* 2004-07-16 0.3.2.3 released
+* 2004-07-14 0.3.2.2 released
+* 2004-07-11 0.3.2.1 released
+* 2004-07-07 0.3.2 released
+* 2004-06-25 0.3.1.5 released
+* 2004-05-23 0.3.1.4 released
+* 2004-05-20 0.3.1.3 released
+* 2004-05-13 0.3.1.2 released
+* 2004-05-07 0.3.1.1 released
+* 2004-04-30 0.3.1 released
+* 2004-04-20 0.3.0.4 released
+* 2004-04-04 0.3.0.3 released
+* 2004-03-30 0.3.0.2 released
+* 2004-03-25 0.3.0.1 released
+* 2004-03-21 0.3.0 released
+* 2004-03-10 0.2.5.4 released
+* 2004-03-04 0.2.5.3 released
+* 2004-02-28 0.2.5.2 released
+* 2004-02-27 0.2.5.1 released
+* 2004-02-25 0.2.5 released
+* 2004-02-19 0.2.4.2 released
+* 2004-02-15 0.2.4.1 released
+* 2004-02-14 0.2.4 released
+* 2004-01-27 0.2.3.6 released
+* 2004-01-21 0.2.3.5 released
+* 2004-01-14 0.2.3.4 released
+* 2003-12-29 0.2.3.3 released
+* 2003-12-27 0.2.3.2 released
+* 2003-12-25 0.2.3.1 released
+* 2003-12-13 0.2.3 released
+* 2003-12-01 0.2.2 released
+* 2003-11-18 0.2.1.1 released
+* 2003-11-12 0.2.1 released
+* 2003-11-09 0.2.0.3 released
+* 2003-11-08 0.2.0.2 released
+* 2003-11-03 0.2.0.1 released
+* 2003-11-01 0.2 released
