@@ -69,14 +69,14 @@ hr:last-child{margin-top:20px;margin-bottom:20px}
 #proxyNewHost{margin:20px auto 0 100px;width:calc(100% - 100px);border-collapse:collapse;box-shadow:var(--fatshadow)}
 #proxyNewHost td:first-child{font-weight:700}
 #proxyNewHost td{padding:8px;font-size:10pt;border:1px solid #131;background:#000}
-#warning{margin:20px 20px 20px 248px;padding:10px 30px 20px 150px;min-width:300px;position:relative;border:1px solid #252;word-wrap:break-word;text-align:justify;font-size:10pt;border:5px solid #010;border-image:repeating-linear-gradient(135deg,#010,#010 20px,#660 20px,#660 40px,#010 40px) 5 repeat repeat;border-image-width:5px;border-image-outset:1px;box-shadow:var(--shadow_warn);background:url(images/specialops.webp) no-repeat 18px calc(50% + 16px)/auto 300px,var(--mainbg)}
+#warning{margin:20px 20px 20px 248px;padding:10px 30px 30px 150px;min-height: 340px;min-width:300px;position:relative;border:1px solid #252;word-wrap:break-word;text-align:justify;font-size:10pt;border:5px solid #010;border-image:repeating-linear-gradient(135deg,#010,#010 20px,#660 20px,#660 40px,#010 40px) 5 repeat repeat;border-image-width:5px;border-image-outset:1px;box-shadow:var(--shadow_warn);background:url(images/specialops.webp) no-repeat 18px calc(50% + 16px)/auto 300px,var(--mainbg)}
 #warning .formaction+h4{margin-top:-10px}
 #warning .formaction{padding:10px 0 0;text-align:right}
 #warning h3{margin:-9px -29px 15px -149px;padding:9px 10px 7px;letter-spacing:.1em;text-align:left;font-size:11.5pt;text-transform:uppercase;text-shadow:0 0 2px #010;border-bottom:1px solid #700}
 #warning h3+p{margin-top:30px}
-#warning h4{margin:12px 15px 10px;padding:0 0 10px;text-align:left;font-size:11pt;box-shadow:none}
+#warning h4{margin:12px 15px 15px;padding:0 0 10px;text-align:left;font-size:11pt;box-shadow:none}
 #warning h4::after{margin:15px -15px -15px;width:calc(100% + 30px);height:1px;display:inline-block;background:#131;content:""}
-#warning hr{margin:20px 0}
+#warning hr{margin:40px 0}
 #warning h4+p,#warning br+b{padding-left:20px;padding-right:20px}
 #warning br+b{margin-top:10px}
 #warning #jumplinks h4::after{margin:0 -15px -5px}
