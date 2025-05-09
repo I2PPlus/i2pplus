@@ -625,15 +625,12 @@ public class ConfigClientsHandler extends FormHandler {
             // linkify the app name for the message if available
             Properties props = PluginStarter.pluginProperties(_context, app);
             String name = ConfigClientsHelper.stripHTML(props, "consoleLinkName_" + Messages.getLanguage(_context));
-            if (name == null)
-                name = ConfigClientsHelper.stripHTML(props, "consoleLinkName");
+            if (name == null) {name = ConfigClientsHelper.stripHTML(props, "consoleLinkName");}
             String url = ConfigClientsHelper.stripHTML(props, "consoleLinkURL");
             if (name != null && url != null && name.length() > 0 && url.length() > 0) {
                 app = "<a href=\"" + url + "\" target=_blank>" + name + "</a>";
                 addFormNoticeNoEscape(_t("Started plugin {0}", app), true);
-            } else {
-                addFormNotice(_t("Started plugin {0}", app), true);
-            }
+            } else {addFormNotice(_t("Started plugin {0}", app), true);}
         } catch (Throwable e) {
             addFormError(_t("Error starting plugin {0}", app) + ": " + e.getMessage(), true);
             _log.error("Error starting plugin " + app,  e);
@@ -645,13 +642,18 @@ public class ConfigClientsHandler extends FormHandler {
      *  @since 0.8.3
      */
     private void saveInterfaceChanges() {
+        boolean restart = false;
         Map<String, String> changes = new HashMap<String, String>();
         String port = getJettyString("port");
-        if (port != null)
+        if (port != null && !port.equals(_context.getProperty(ClientManagerFacadeImpl.PROP_CLIENT_PORT, "7654"))) {
             changes.put(ClientManagerFacadeImpl.PROP_CLIENT_PORT, port);
+            restart = true;
+        }
         String intfc = getJettyString("interface");
-        if (intfc != null)
+        if (intfc != null && !intfc.equals(_context.getProperty(ClientManagerFacadeImpl.PROP_CLIENT_HOST, "127.0.0.1"))) {
             changes.put(ClientManagerFacadeImpl.PROP_CLIENT_HOST, intfc);
+            restart = true;
+        }
         String user = getJettyString("user");
         String pw = getJettyString("nofilter_pw");
         if (user != null && pw != null && user.length() > 0 && pw.length() > 0) {
@@ -662,18 +664,23 @@ public class ConfigClientsHandler extends FormHandler {
         String mode = getJettyString("mode");
         boolean disabled = "0".equals(mode);
         boolean ssl = "2".equals(mode);
-        changes.put(ConfigClientsHelper.PROP_DISABLE_EXTERNAL,
-                                           Boolean.toString(disabled));
-        changes.put(ConfigClientsHelper.PROP_ENABLE_SSL,
-                                           Boolean.toString(ssl));
-        changes.put(ConfigClientsHelper.PROP_AUTH,
-                                           Boolean.toString((_settings.get("auth") != null)));
-        boolean all = "0.0.0.0".equals(intfc) || "0:0:0:0:0:0:0:0".equals(intfc) ||
-                      "::".equals(intfc);
-        changes.put(ConfigClientsHelper.BIND_ALL_INTERFACES, Boolean.toString(all));
+        if (disabled != _context.getProperty(ConfigClientsHelper.PROP_DISABLE_EXTERNAL, false)) {
+            changes.put(ConfigClientsHelper.PROP_DISABLE_EXTERNAL, Boolean.toString(disabled));
+            restart = true;
+        }
+        if (ssl != _context.getProperty(ConfigClientsHelper.PROP_ENABLE_SSL, false)) {
+            changes.put(ConfigClientsHelper.PROP_ENABLE_SSL, Boolean.toString(ssl));
+            restart = true;
+        }
+        changes.put(ConfigClientsHelper.PROP_AUTH, Boolean.toString((_settings.get("auth") != null)));
+        boolean all = "0.0.0.0".equals(intfc) || "0:0:0:0:0:0:0:0".equals(intfc) || "::".equals(intfc);
+        if (all != _context.getProperty(ConfigClientsHelper.BIND_ALL_INTERFACES, false)) {
+            changes.put(ConfigClientsHelper.BIND_ALL_INTERFACES, Boolean.toString(all));
+            restart = true;
+        }
         if (_context.router().saveConfig(changes, null)) {
             addFormNotice(_t("Interface configuration saved"), true);
-            addFormNotice(_t("Restart required to take effect"), true);
+            if (restart) {addFormNotice(_t("Restart required to take effect"), true);}
         } else
             addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs"), true);
     }
