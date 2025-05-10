@@ -41,7 +41,6 @@ hr:last-child{margin-top:20px;margin-bottom:20px}
 #jumplinks a:first-of-type{margin-left:19px}
 #jumplinks a{margin:3px 0 3px 5px;padding:9px 12px 9px 34px;float:left;text-shadow:var(--txt_shadow);box-shadow:var(--outline),var(--bevel);background:url(../images/arrow_right.svg) no-repeat 10px center/20px,var(--badge);animation:fade .5s ease 3s both}
 #jumplinks br{display:none}
-#jumplinks h4{margin:0 15px 5px;padding:0 0 10px}
 #jumplinks{margin-bottom:50px}
 #jumplinks #linuxfarm{background:url(../images/eepsites/linuxfarm.svg) no-repeat 10px center/20px,var(--badge)!important;display:none}
 #jumplinks #notbob{background:url(../images/eepsites/notbob.png) no-repeat 10px center/20px,var(--badge)}
@@ -49,6 +48,7 @@ hr:last-child{margin-top:20px;margin-bottom:20px}
 #jumplinks #stats{background:url(../images/stats.svg) no-repeat 10px center/20px,var(--badge)}
 #proxy_error #jumplinks a:hover,#proxy_error #jumplinks a:focus{box-shadow:var(--badge_shadow_hover);background:url(../images/arrow_right.svg) no-repeat 10px center/20px,var(--badge_hover)!important}
 #proxy_error #jumplinks a:active{padding:10px 11px 8px 35px;text-shadow:0 1px 1px #000c;box-shadow:var(--badge_shadow_hover),var(--btn_shadow_active);background:url(../images/arrow_right.svg) no-repeat 12px calc(50% + 1px)/19px,var(--badge_active)!important;background-blend-mode:luminosity}
+#warning #jumplinks h4{margin:10px 15px;padding:0 0 10px}
 
 .option{padding:10px 20px 0;border:1px solid #252;box-shadow:var(--fatshadow);background:linear-gradient(180deg,rgba(0,32,0,.5),rgba(0,16,0,.5))}
 .option:last-of-type{margin-bottom:11px}
