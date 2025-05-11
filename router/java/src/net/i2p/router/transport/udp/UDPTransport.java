@@ -64,7 +64,7 @@ import net.i2p.util.VersionComparator;
 /**
  *  The SSU transport
  */
-public class UDPTransport extends TransportImpl implements TimedWeightedPriorityMessageQueue.FailedListener {
+public class UDPTransport extends TransportImpl {
     private final Log _log;
     private final List<UDPEndpoint> _endpoints;
     private final Object _addDropLock = new Object();
@@ -76,10 +76,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     private final Map<Long, PeerStateDestroyed> _recentlyClosedConnIDs;
     private PacketHandler _handler;
     private EstablishmentManager _establisher;
-    private final MessageQueue _outboundMessages;
     private final OutboundMessageFragments _fragments;
-    private final OutboundMessageFragments.ActiveThrottle _activeThrottle;
-    private OutboundRefiller _refiller;
     private volatile PacketPusher _pusher;
     private final InboundMessageFragments _inboundFragments;
     //private UDPFlooder _flooder;
@@ -221,27 +218,19 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
     /** how many relays offered to us will we use at a time? */
     public static final int PUBLIC_RELAY_COUNT = 3;
 
-    private static final boolean USE_PRIORITY = false;
-
     /** configure the priority queue with the given split points */
     private static final int PRIORITY_LIMITS[] = new int[] { 100, 200, 300, 400, 500, 1000 };
     /** configure the priority queue with the given weighting per priority group */
     private static final int PRIORITY_WEIGHT[] = new int[] { 1, 1, 1, 1, 1, 2 };
-
-    /** should we flood all UDP peers with the configured rate? This is for testing only! */
-    //private static final boolean SHOULD_FLOOD_PEERS = false;
-
     private static final int MAX_CONSECUTIVE_FAILED = 3;
 
     public static final int DEFAULT_COST = 5;
     private static final int SSU_OUTBOUND_COST = 14;
     static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
     /** minimum active peers to maintain IP detection, etc. */
-//    private static final int MIN_PEERS = 5;
     private static final int MIN_PEERS = 10;
     private static final int MIN_PEERS_IF_HAVE_V6 = 30;
     /** minimum peers volunteering to be introducers if we need that */
-//    private static final int MIN_INTRODUCER_POOL = 5;
     private static final int MIN_INTRODUCER_POOL = 10;
     static final long INTRODUCER_EXPIRATION_MARGIN = 20*60*1000L;
     private static final long MIN_DOWNTIME_TO_REKEY = 30*24*60*60*1000L;
@@ -376,27 +365,14 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         _dropList = new ConcurrentHashSet<RemoteHostId>(2);
         _endpoints = new CopyOnWriteArrayList<UDPEndpoint>();
 
-        // See comments in DummyThrottle.java
-        if (USE_PRIORITY) {
-            TimedWeightedPriorityMessageQueue mq = new TimedWeightedPriorityMessageQueue(ctx, PRIORITY_LIMITS, PRIORITY_WEIGHT, this);
-            _outboundMessages = mq;
-            _activeThrottle = mq;
-        } else {
-            DummyThrottle mq = new DummyThrottle();
-            _outboundMessages = null;
-            _activeThrottle = mq;
-        }
-
         _cachedBid = new SharedBid[BID_VALUES.length];
         for (int i = 0; i < BID_VALUES.length; i++) {
             _cachedBid[i] = new SharedBid(BID_VALUES[i]);
         }
 
         _packetBuilder2 = new PacketBuilder2(_context, this);
-        _fragments = new OutboundMessageFragments(_context, this, _activeThrottle);
+        _fragments = new OutboundMessageFragments(_context, this);
         _inboundFragments = new InboundMessageFragments(_context, _fragments, this);
-        //if (SHOULD_FLOOD_PEERS)
-        //    _flooder = new UDPFlooder(_context, this);
         _expireTimeout = EXPIRE_TIMEOUT;
         _expireEvent = new ExpirePeerEvent();
         _testManager = new PeerTestManager(_context, this);
@@ -536,11 +512,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         }
         if (_establisher != null)
             _establisher.shutdown();
-        if (_refiller != null)
-            _refiller.shutdown();
         _inboundFragments.shutdown();
-        //if (_flooder != null)
-        //    _flooder.shutdown();
         _introManager.reset();
         UDPPacket.clearCache();
 
@@ -683,13 +655,6 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         if (_handler == null)
             _handler = new PacketHandler(_context, this, _establisher, _inboundFragments, _testManager, _introManager);
 
-        // See comments in DummyThrottle.java
-        if (USE_PRIORITY && _refiller == null)
-            _refiller = new OutboundRefiller(_context, _fragments, _outboundMessages);
-
-        //if (SHOULD_FLOOD_PEERS && _flooder == null)
-        //    _flooder = new UDPFlooder(_context, this);
-
         // Startup the endpoint with the requested port, check the actual port, and
         // take action if it failed or was different than requested or it needs to be saved
         int newPort = -1;
@@ -714,8 +679,7 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         }
         if (newPort > 0 &&
             (newPort != port || newPort != oldIPort)) {
-            // attempt to use it as our external port - this will be overridden by
-            // externalAddressReceived(...)
+            // Attempt to use it as our external port - this will be overridden by externalAddressReceived(...)
             Map<String, String> changes = new HashMap<String, String>();
             String sport = Integer.toString(newPort);
             changes.put(PROP_INTERNAL_PORT, sport);
@@ -728,10 +692,6 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
         _inboundFragments.startup();
         _pusher = new PacketPusher(_context, _fragments, _endpoints);
         _pusher.startup();
-        if (USE_PRIORITY)
-            _refiller.startup();
-        //if (SHOULD_FLOOD_PEERS)
-        //    _flooder.startup();
         _expireEvent.setIsAlive(true);
         _reachabilityStatus = Status.UNKNOWN;
         _testEvent.setIsAlive(true);
@@ -854,10 +814,6 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
             // should we remove?
             _endpoints.remove(endpoint);
         }
-        //if (_flooder != null)
-        //    _flooder.shutdown();
-        if (_refiller != null)
-            _refiller.shutdown();
         if (_handler != null)
             _handler.shutdown();
         if (_pusher != null)
@@ -1933,18 +1889,13 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                        + " byHostsz = " + _peersByRemoteHost.size());
         }
 
-        _activeThrottle.unchoke(peer.getRemotePeer());
         markReachable(peer.getRemotePeer(), peer.isInbound());
-
-        //if (SHOULD_FLOOD_PEERS)
-        //    _flooder.addPeer(peer);
-
         _introManager.add(peer);
 
         if (oldEstablishedOn > 0)
             _context.statManager().addRateData("udp.alreadyConnected", oldEstablishedOn);
 
-        // the only possible reason to rebuild is if they can be an introducer for us
+        // The only possible reason to rebuild is if they can be an introducer for us
         // so avoid going through rebuildIfNecessary()
         long tag = peer.getTheyRelayToUsAs();
         if (tag > 0) {
@@ -2180,12 +2131,6 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                       + " byHost = " + altByHost
                       + " byIDsz = " + _peersByIdent.size()
                       + " byHostsz = " + _peersByRemoteHost.size());
-
-        // unchoke 'em, but just because we'll never talk again...
-        _activeThrottle.unchoke(peer.getRemotePeer());
-
-        //if (SHOULD_FLOOD_PEERS)
-        //    _flooder.removePeer(peer);
 
         // deal with races to make sure we drop the peers fully
         if ( (altByIdent != null) && (peer != altByIdent) ) locked_dropPeer(altByIdent, shouldBanlist, "recurse");
@@ -2634,14 +2579,8 @@ public class UDPTransport extends TransportImpl implements TimedWeightedPriority
                 }
             }
             msg.timestamp("Enqueueing for an already established peer");
-            //if (_log.shouldDebug())
-            //    _log.debug("Add to fragments for " + to);
-
-            // See comments in DummyThrottle.java
-            if (USE_PRIORITY)
-                _outboundMessages.add(msg);
-            else  // skip the priority queue and go straight to the active pool
-                _fragments.add(msg);
+            // skip the priority queue and go straight to the active pool
+            _fragments.add(msg);
         } else {
             if (_log.shouldDebug())
                 _log.debug("Establish new connection to " + to);

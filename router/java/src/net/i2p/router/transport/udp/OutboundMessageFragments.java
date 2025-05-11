@@ -52,7 +52,7 @@ class OutboundMessageFragments {
     static final int MAX_VOLLEYS = 10; // don't send a packet more than 10 times
     private static final int MAX_WAIT = SystemVersion.isSlow() ? 1000 : 500;
 
-    public OutboundMessageFragments(RouterContext ctx, UDPTransport transport, ActiveThrottle throttle) {
+    public OutboundMessageFragments(RouterContext ctx, UDPTransport transport) {
         _context = ctx;
         _log = ctx.logManager().getLog(OutboundMessageFragments.class);
         _transport = transport;
@@ -85,19 +85,6 @@ class OutboundMessageFragments {
         if (_log.shouldDebug()) {_log.debug("Dropping peer " + peer.getRemotePeer());}
         peer.dropOutbound();
         _activePeers.remove(peer);
-    }
-
-    /**
-     * Block until we allow more messages to be admitted to the active
-     * pool.  This is called by the {@link OutboundRefiller}
-     *
-     * @return true if more messages are allowed
-     */
-    public boolean waitForMoreAllowed() {
-        // test without choking.
-        // perhaps this should check the lifetime of the first activeMessage?
-        if (true) {return true;}
-        return false;
     }
 
     /**
@@ -229,7 +216,7 @@ class OutboundMessageFragments {
                 if (peersProcessed >= _activePeers.size()) {break;} // we've gone all the way around, time to sleep
             }
 
-            // if we've gone all the way through the loop, wait
+            // If we've gone all the way through the loop, wait
             // ... unless nextSendDelay says we have more ready now
             if (states == null && peersProcessed >= _activePeers.size() && nextSendDelay > 0) {
                 peersProcessed = 0;
@@ -361,13 +348,6 @@ class OutboundMessageFragments {
         }
 
         return rv;
-    }
-
-    /** throttle */
-    public interface ActiveThrottle {
-        public void choke(Hash peer);
-        public void unchoke(Hash peer);
-        public boolean isChoked(Hash peer);
     }
 
 }
