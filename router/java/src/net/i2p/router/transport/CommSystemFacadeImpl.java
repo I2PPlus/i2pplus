@@ -48,7 +48,6 @@ import net.i2p.I2PAppContext;
 import net.i2p.router.CommSystemFacade;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
-import net.i2p.router.transport.crypto.DHSessionKeyBuilder;
 import net.i2p.router.transport.crypto.X25519KeyFactory;
 import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.router.util.EventLog;
@@ -451,16 +450,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     @Override
     public void unregisterTransport(Transport t) {
         _manager.stopAndUnregister(t);
-    }
-
-    /**
-     *  Hook for pluggable transport creation.
-     *
-     *  @since 0.9.16
-     */
-    @Override
-    public DHSessionKeyBuilder.Factory getDHFactory() {
-        return _manager.getDHFactory();
     }
 
     /**

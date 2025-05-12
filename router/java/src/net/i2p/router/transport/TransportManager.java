@@ -40,7 +40,6 @@ import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
 import static net.i2p.router.transport.Transport.AddressSource.*;
-import net.i2p.router.transport.crypto.DHSessionKeyBuilder;
 import net.i2p.router.transport.crypto.X25519KeyFactory;
 import net.i2p.router.transport.ntcp.NTCPTransport;
 import net.i2p.router.transport.udp.UDPTransport;
@@ -75,7 +74,6 @@ public class TransportManager implements TransportEventListener {
     private final RouterContext _context;
     private final UPnPManager _upnpManager;
     private final SimpleTimer2.TimedEvent _upnpRefresher;
-    private final DHSessionKeyBuilder.PrecalcRunner _dhThread;
     private final X25519KeyFactory _xdhThread;
     private final boolean _enableUDP;
     private final boolean _enableNTCP1;
@@ -122,7 +120,6 @@ public class TransportManager implements TransportEventListener {
         _enableUDP = _context.getBooleanPropertyDefaultTrue(PROP_ENABLE_UDP);
         _enableNTCP1 = false;
         boolean enableNTCP2 = isNTCPEnabled(context);
-        _dhThread = (_enableUDP || enableNTCP2) ? new DHSessionKeyBuilder.PrecalcRunner(context) : null;
         // always created, even if NTCP2 is not enabled, because ratchet needs it
         _xdhThread = new X25519KeyFactory(context);
         _msgIDBloomXor = _context.random().nextLong(I2NPMessage.MAX_ID_VALUE);
@@ -221,16 +218,6 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  Hook for pluggable transport creation.
-     *
-     *  @return null if both NTCP1 and SSU are disabled
-     *  @since 0.9.16
-     */
-    DHSessionKeyBuilder.Factory getDHFactory() {
-        return _dhThread;
-    }
-
-    /**
      *  Factory for making X25519 key pairs.
      *  @since 0.9.46
      */
@@ -262,7 +249,7 @@ public class TransportManager implements TransportEventListener {
             initializeAddress(udp);
         }
         if (isNTCPEnabled(_context)) {
-            Transport ntcp = new NTCPTransport(_context, null, _xdhThread);
+            Transport ntcp = new NTCPTransport(_context, _xdhThread);
             addTransport(ntcp);
             initializeAddress(ntcp);
             if (udp != null) {
@@ -434,24 +421,20 @@ public class TransportManager implements TransportEventListener {
     }
 
     synchronized void startListening() {
-        if (_dhThread != null && _dhThread.getState() == Thread.State.NEW)
-            _dhThread.start();
         if (_xdhThread != null && _xdhThread.getState() == Thread.State.NEW)
             _xdhThread.start();
         // For now, only start UPnP if we have no publicly-routable addresses
         // so we don't open the listener ports to the world.
         // Maybe we need a config option to force on? Probably not.
-        // What firewall supports UPnP and is configured with a public address on the LAN side?
-        // Unlikely.
-        // Always start on Android, as we may have a cellular IPv4 address but
-        // are routing all traffic through WiFi.
+        // What firewall supports UPnP and is configured with a public address on the LAN side? Unlikely.
+        // Always start on Android, as we may have a cellular IPv4 address but are routing all traffic through WiFi.
         // Also, conditions may change rapidly.
         if (_upnpManager != null && (SystemVersion.isAndroid() || Addresses.getAnyAddress() == null)) {
             _upnpManager.start();
             _upnpRefresher.schedule(UPNP_REFRESH_TIME);
         }
         configTransports();
-        _log.debug("Starting up the transport manager...");
+        _log.debug("Starting up the Transport Manager...");
         // Let's do this in a predictable order to make testing easier
         // Start NTCP first so it can get notified from SSU
         List<Transport> tps = new ArrayList<Transport>();
@@ -503,8 +486,6 @@ public class TransportManager implements TransportEventListener {
      */
     synchronized void shutdown() {
         stopListening();
-        if (_dhThread != null)
-            _dhThread.shutdown();
         if (_xdhThread != null)
             _xdhThread.shutdown();
         Addresses.clearCaches();
