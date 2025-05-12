@@ -58,7 +58,8 @@ public class EepGet {
     protected final String _url;
     /** the URL we actually fetch from (may differ from the _url in case of redirect) */
     protected String _actualURL;
-    private final String _postData;
+    private String _postData;
+    private byte[] _postBinaryData;
     private boolean _allowCaching;
     protected final List<StatusListener> _listeners;
     protected List<String> _extraHeaders;
@@ -437,15 +438,15 @@ public class EepGet {
     private static String usage() {
         return
             "Usage:\n" +
-            "  eepget [opts] <url>   retrieve webpage or file from remote server\n\n" +
+            "  eepget [opts] <url>  retrieve webpage or file from remote server\n\n" +
             "Options:\n" +
-            "  -c                    do not use proxy\n" +
-            "  -n <value>            number of retries (default 10)\n" +
-            "  -o <filename>         use specified output filename\n" +
-            "  -p <host:port>        use alternative proxy (default is 127.0.0.1:4444)\n" +
-            "  -t <value>            timeout in seconds (default 120)\n" +
-            "  -u <value>            proxy username\n" +
-            "  -x <value>            proxy password\n";
+            "  -c                   do not use proxy\n" +
+            "  -n <value>           number of retries (default 10)\n" +
+            "  -o <filename>        use specified output filename\n" +
+            "  -p <host:port>       use alternative proxy (default is 127.0.0.1:4444)\n" +
+            "  -t <value>           timeout in seconds (default 120)\n" +
+            "  -u <value>           proxy username\n" +
+            "  -x <value>           proxy password\n";
     }
 
 //            "  -e <value>          require specified etag\n" +
@@ -539,10 +540,10 @@ public class EepGet {
             }
             for (int i = 0; i < currentWrite; i++) {
                 _written++;
-                if ( (_markSize > 0) && (_written % _markSize == 0) ) {
+                if ((_markSize > 0) && (_written % _markSize == 0)) {
 //                    System.out.print("◼");
 
-                    if ( (_lineSize > 0) && (_written % ((long)_markSize*(long)_lineSize) == 0l) ) {
+                    if ((_lineSize > 0) && (_written % ((long)_markSize*(long)_lineSize) == 0l)) {
                         long now = _context.clock().now();
                         long timeToSend = now - _lastComplete;
                         if (timeToSend > 0) {
@@ -1019,7 +1020,7 @@ public class EepGet {
 
         int remaining = (int)_bytesRemaining;
         byte buf[] = new byte[16*1024];
-        while (_keepFetching && ( (remaining > 0) || !strictSize ) && !_aborted) {
+        while (_keepFetching && ((remaining > 0) || !strictSize ) && !_aborted) {
             int toRead = buf.length;
             if (strictSize && toRead > remaining)
                 toRead = remaining;
@@ -1114,7 +1115,7 @@ public class EepGet {
             }
         } else if ((_minSize > 0) && (_alreadyTransferred < _minSize)) {
             throw new IOException("Bytes transferred " + _alreadyTransferred + " violates minimum of " + _minSize + " bytes");
-        } else if ( (_bytesRemaining == -1) || (remaining == 0) ) {
+        } else if ((_bytesRemaining == -1) || (remaining == 0)) {
             for (int i = 0; i < _listeners.size(); i++)
                 _listeners.get(i).transferComplete(
                         _alreadyTransferred,
@@ -1571,6 +1572,8 @@ public class EepGet {
             timeout.setSocket(_proxy);
 
         _proxyOut.write(DataHelper.getUTF8(req));
+        if (_postBinaryData != null)
+            _proxyOut.write(_postBinaryData);
         _proxyOut.flush();
 
         if (_log.shouldDebug())
@@ -1580,7 +1583,8 @@ public class EepGet {
     protected String getRequest() throws IOException {
         StringBuilder buf = new StringBuilder(2048);
         boolean post = false;
-        if ( (_postData != null) && (_postData.length() > 0) )
+        if ((_postData != null && _postData.length() > 0) ||
+            (_postBinaryData != null && _postBinaryData.length > 0))
             post = true;
         URI url;
         try {
@@ -1707,8 +1711,12 @@ public class EepGet {
             buf.append(_lastModified);
             buf.append("\r\n");
         }
-        if (post)
-            buf.append("Content-length: ").append(_postData.length()).append("\r\n");
+        if (post) {
+            buf.append("Content-length: ");
+            if (_postData != null) {buf.append(_postData.length());}
+            else {buf.append(_postBinaryData.length);}
+            buf.append("\r\n");
+        }
         // This will be replaced if we are going through I2PTunnelHTTPClient
         buf.append("Accept-Encoding: ");
         // as of 0.9.23, the proxy passes the Accept-Encoding header through
@@ -1728,8 +1736,9 @@ public class EepGet {
             buf.append("\r\n");
         }
         buf.append("Connection: close\r\n\r\n");
-        if (post)
+        if (_postData != null)
             buf.append(_postData);
+        // _postBinaryData will be appended by caller
         if (_log.shouldDebug())
             _log.debug("Request:\n" + buf.toString().trim());
         return buf.toString();
@@ -2016,6 +2025,34 @@ public class EepGet {
                 throw new IllegalStateException();
             _authState = new AuthState(userName, password);
         }
+    }
+
+    /**
+     *  Set post data.
+     *  Must be called before fetch().
+     *
+     *  @throws IllegalStateException if already set
+     *  @since 0.9.67
+     */
+    protected void setPostData(String contentType, String data) {
+        if (_postData != null || _postBinaryData != null)
+            throw new IllegalStateException();
+        addHeader("Content-Type", contentType);
+        _postData = data;
+    }
+
+    /**
+     *  Set post data.
+     *  Must be called before fetch().
+     *
+     *  @throws IllegalStateException if already set
+     *  @since 0.9.67
+     */
+    protected void setPostData(String contentType, byte[] data) {
+        if (_postData != null || _postBinaryData != null)
+            throw new IllegalStateException();
+        addHeader("Content-Type", contentType);
+        _postBinaryData = data;
     }
 
     /**
