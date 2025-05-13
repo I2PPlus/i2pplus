@@ -3,6 +3,7 @@ package net.i2p.util;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,7 +27,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 
 import gnu.getopt.Getopt;
 
@@ -60,6 +60,7 @@ public class EepGet {
     protected String _actualURL;
     private String _postData;
     private byte[] _postBinaryData;
+    private File _postDataFile;
     private boolean _allowCaching;
     protected final List<StatusListener> _listeners;
     protected List<String> _extraHeaders;
@@ -1572,8 +1573,16 @@ public class EepGet {
             timeout.setSocket(_proxy);
 
         _proxyOut.write(DataHelper.getUTF8(req));
-        if (_postBinaryData != null)
+        if (_postBinaryData != null) {
             _proxyOut.write(_postBinaryData);
+        } else if (_postDataFile != null) {
+            InputStream in = new FileInputStream(_postDataFile);
+            try {
+                DataHelper.copy(in, _proxyOut);
+            } finally {
+                try { in.close(); } catch (IOException ioe) {}
+            }
+        }
         _proxyOut.flush();
 
         if (_log.shouldDebug())
@@ -1584,7 +1593,8 @@ public class EepGet {
         StringBuilder buf = new StringBuilder(2048);
         boolean post = false;
         if ((_postData != null && _postData.length() > 0) ||
-            (_postBinaryData != null && _postBinaryData.length > 0))
+            (_postBinaryData != null && _postBinaryData.length > 0) ||
+            (_postDataFile != null && _postDataFile.length() > 0))
             post = true;
         URI url;
         try {
@@ -1714,7 +1724,8 @@ public class EepGet {
         if (post) {
             buf.append("Content-length: ");
             if (_postData != null) {buf.append(_postData.length());}
-            else {buf.append(_postBinaryData.length);}
+            else if (_postBinaryData != null) {buf.append(_postBinaryData.length);}
+            else {buf.append(_postDataFile.length());}
             buf.append("\r\n");
         }
         // This will be replaced if we are going through I2PTunnelHTTPClient
@@ -2035,7 +2046,7 @@ public class EepGet {
      *  @since 0.9.67
      */
     protected void setPostData(String contentType, String data) {
-        if (_postData != null || _postBinaryData != null)
+        if (_postData != null || _postBinaryData != null || _postDataFile != null)
             throw new IllegalStateException();
         addHeader("Content-Type", contentType);
         _postData = data;
@@ -2048,8 +2059,22 @@ public class EepGet {
      *  @throws IllegalStateException if already set
      *  @since 0.9.67
      */
+    protected void setPostData(String contentType, File data) {
+        if (_postData != null || _postBinaryData != null || _postDataFile != null)
+            throw new IllegalStateException();
+        addHeader("Content-Type", contentType);
+        _postDataFile = data;
+    }
+
+    /**
+     *  Set post data.
+     *  Must be called before fetch().
+     *
+     *  @throws IllegalStateException if already set
+     *  @since 0.9.67
+     */
     protected void setPostData(String contentType, byte[] data) {
-        if (_postData != null || _postBinaryData != null)
+        if (_postData != null || _postBinaryData != null || _postDataFile != null)
             throw new IllegalStateException();
         addHeader("Content-Type", contentType);
         _postBinaryData = data;

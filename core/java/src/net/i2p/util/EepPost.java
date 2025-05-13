@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -24,6 +25,7 @@ import net.i2p.data.DataHelper;
 /**
  * Extends EepGet for POST.
  * Adapted from old jrandom EepPost, removed 2012 as unused.
+ * Ref: RFC 7578
  *
  * @since 0.9.67
  */
@@ -31,12 +33,15 @@ public class EepPost extends EepGet {
 
     private static final String CRLF = "\r\n";
     private static final byte[] CRLFB = DataHelper.getASCII(CRLF);
+    private static final int MAX_POST_PAYLOAD_RAM = 32*1024;
 
     public EepPost(I2PAppContext ctx, String proxyHost, int proxyPort, int numRetries, String outputFile, String url) {
-        // we're using this constructor:
-        // public EepGet(I2PAppContext ctx, boolean shouldProxy, String proxyHost, int proxyPort, int numRetries, long minSize,
-        //               long maxSize, String outputFile, OutputStream outputStream, String url, boolean allowCaching, String etag,
-        //               String postData) {
+        /*
+         * We're using this constructor:
+         * public EepGet(I2PAppContext ctx, boolean shouldProxy, String proxyHost, int proxyPort, int numRetries, long minSize,
+         *               long maxSize, String outputFile, OutputStream outputStream, String url, boolean allowCaching, String etag,
+         *               String postData) {
+         */
         super(ctx, true, proxyHost, proxyPort, numRetries, -1, -1, outputFile, null, url, true, null, null);
     }
 
@@ -47,7 +52,8 @@ public class EepPost extends EepGet {
      * value is posted for that particular field.  Multiple values for one
      * field name is not currently supported.
      *
-     * Warning: Files are loaded in-memory. Do not use for large files.
+     * Large files will be copied to a temp file.
+     * For large String content, consider the post(File) method.
      *
      * @param field values must be String or File.
      */
@@ -55,22 +61,44 @@ public class EepPost extends EepGet {
         if (fields.isEmpty())
             throw new IllegalArgumentException();
         boolean multipart = false;
+        long sz = 0;
         for (Object o : fields.values()) {
             if (o instanceof File) {
+                sz += ((File) o).length();
                 multipart = true;
                 break;
             }
         }
         if (multipart) {
             String sep = multipart ? getSeparator() : null;
-            ByteArrayOutputStream out = new ByteArrayOutputStream(4096);
+            boolean useTmp = sz > MAX_POST_PAYLOAD_RAM;
+            File tmp = null;
+            OutputStream out = null;
+            ByteArrayOutputStream baos = null;
             try {
+                if (useTmp) {
+                    tmp = new File(_context.getTempDir(), "eeppost-" + _context.random().nextLong() + ".dat");
+                    out = new FileOutputStream(tmp);
+                    if (_log.shouldDebug())
+                        _log.debug("Estimated size: " + sz + ", using temp file " + tmp);
+                } else {baos = new ByteArrayOutputStream(4096);}
                 sendFields(out, sep, fields);
+                if (useTmp) {out.close();}
             } catch (IOException ioe) {
+                try {out.close();}
+                catch (IOException ioe2) {}
+                if (tmp != null) {tmp.delete();}
                 return false;
             }
             String type = "multipart/form-data, boundary=" + sep;
-            return post(type, out.toByteArray(), headerTimeout, totalTimeout, inactivityTimeout);
+            boolean rv;
+            if (tmp != null) {
+                rv = post(type, tmp, headerTimeout, totalTimeout, inactivityTimeout);
+                tmp.delete();
+            } else {
+                rv = post(type, baos.toByteArray(), headerTimeout, totalTimeout, inactivityTimeout);
+            }
+            return rv;
         } else {
             StringBuilder out = new StringBuilder(2048);
             sendFields(out, fields);
@@ -79,6 +107,9 @@ public class EepPost extends EepGet {
         }
     }
 
+    /**
+     *  In-memory, not for large POSTs
+     */
     public boolean post(String contentType, String data, long headerTimeout, long totalTimeout, long inactivityTimeout) {
         if (data.length() == 0)
             throw new IllegalArgumentException();
@@ -86,8 +117,21 @@ public class EepPost extends EepGet {
         return super.fetch(headerTimeout, totalTimeout, inactivityTimeout);
     }
 
+    /**
+     *  In-memory, not for large POSTs
+     */
     public boolean post(String contentType, byte[] data, long headerTimeout, long totalTimeout, long inactivityTimeout) {
         if (data.length == 0)
+            throw new IllegalArgumentException();
+        setPostData(contentType, data);
+        return super.fetch(headerTimeout, totalTimeout, inactivityTimeout);
+    }
+
+    /**
+     *  For large POSTs
+     */
+    public boolean post(String contentType, File data, long headerTimeout, long totalTimeout, long inactivityTimeout) {
+        if (!data.isFile() || data.length() == 0)
             throw new IllegalArgumentException();
         setPostData(contentType, data);
         return super.fetch(headerTimeout, totalTimeout, inactivityTimeout);
