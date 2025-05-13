@@ -34,7 +34,9 @@ public class EepPost extends EepGet {
 
     public EepPost(I2PAppContext ctx, String proxyHost, int proxyPort, int numRetries, String outputFile, String url) {
         // we're using this constructor:
-        // public EepGet(I2PAppContext ctx, boolean shouldProxy, String proxyHost, int proxyPort, int numRetries, long minSize, long maxSize, String outputFile, OutputStream outputStream, String url, boolean allowCaching, String etag, String postData) {
+        // public EepGet(I2PAppContext ctx, boolean shouldProxy, String proxyHost, int proxyPort, int numRetries, long minSize,
+        //               long maxSize, String outputFile, OutputStream outputStream, String url, boolean allowCaching, String etag,
+        //               String postData) {
         super(ctx, true, proxyHost, proxyPort, numRetries, -1, -1, outputFile, null, url, true, null, null);
     }
 
@@ -134,17 +136,13 @@ public class EepPost extends EepGet {
      *  @param separator non-null
      */
     private static void sendFields(OutputStream out, String separator, Map<String, Object> fields) throws IOException {
-        boolean first = true;
         for (Map.Entry<String, Object> e : fields.entrySet()) {
             String field = e.getKey();
             Object val = e.getValue();
             if (val instanceof File) {
                 sendFile(out, separator, field, (File)val);
             } else {
-                if (separator == null && !first)
-                    out.write('&');
                 sendField(out, separator, field, val.toString());
-                first = false;
             }
         }
         out.write(DataHelper.getUTF8("--" + separator + "--" + CRLF));
