@@ -187,7 +187,7 @@ class FloodfillMonitorJob extends JobImpl {
         RouterInfo ri = getContext().router().getRouterInfo();
         if (ri == null) {
             if (autoff && _log.shouldInfo())
-                _log.info("No routerinfo for this router found - not automatically enrolling as a floodfill");
+                _log.info("No RouterInfo for this router found - not automatically enrolling as a floodfill");
             return false;
         }
 

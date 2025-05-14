@@ -635,8 +635,8 @@ public class Reseeder {
                 if (contentRaw == null) {
                     // Logging deprecated here since attemptFailed() provides better info
                     if (_log.shouldWarn())
-                        _log.warn("Failed to download routerinfos from: " + trimmed);
-                    System.err.println("No router infos " + s);
+                        _log.warn("Failed to download RouterInfos from: " + trimmed);
+                    System.err.println("No RouterInfos received from: " + s);
                     return 0;
                 }
                 String content = DataHelper.getUTF8(contentRaw);
@@ -673,8 +673,8 @@ public class Reseeder {
                 }
                 if (total <= 0) {
                     if (_log.shouldWarn())
-                        _log.warn("Read " + contentRaw.length + " bytes " + s + ", but found no RouterInfo URLs");
-                    System.err.println("No router infos " + s);
+                        _log.warn("Read " + contentRaw.length + " bytes from reseed server " + s + " but found no RouterInfo URLs");
+                    System.err.println("No RouterInfos received from: " + s);
                     return 0;
                 }
 
@@ -686,8 +686,7 @@ public class Reseeder {
                 for (Iterator<String> iter = urlList.iterator();
                      iter.hasNext() && fetched < 250 && System.currentTimeMillis() < timeLimit; ) {
                     try {
-                        _checker.setStatus(
-                            _t("Reseeding: fetching router info from seed URL ({0} successful, {1} errors).", fetched, errors));
+                        _checker.setStatus(_t("Reseeding: fetching router info from seed URL ({0} successful, {1} errors).", fetched, errors));
 
                         if (!fetchSeed(seedURL.toString(), iter.next()))
                             continue;
