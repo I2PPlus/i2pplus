@@ -676,6 +676,7 @@ public class I2PSnarkServlet extends BasicServlet {
         /** dl, ul, down rate, up rate, peers, size */
         final long stats[] = new long[6];
         String filter = req.getParameter("filter") != null ? req.getParameter("filter") : "";
+        String filterParam = filter;
         String peerParam = req.getParameter("p");
         String psize = req.getParameter("ps");
         String search = req.getParameter("search");
@@ -686,7 +687,6 @@ public class I2PSnarkServlet extends BasicServlet {
         int total = snarks.size();
         boolean isForm = _manager.util().connected() || !snarks.isEmpty();
         boolean showStatusFilter = _manager.util().showStatusFilter();
-        filterParam = filter;
         filterEnabled = filterParam != null && !filterParam.equals("all") && !filterParam.equals("");
         boolean searchActive = (search != null && !search.equals("") && search.length() > 0);
         if (isForm) {
@@ -752,7 +752,7 @@ public class I2PSnarkServlet extends BasicServlet {
         filterParam = req.getParameter("filter") != null ? req.getParameter("filter") : "";
         String filterQuery = "";
         String separator = hasQueryParams ? "&" : "?";
-        filterQuery = "filter=" + (filterParam.isEmpty() ? "all" : filterParam);
+        filterQuery = "filter=" + (filterParam == null || filterParam.isEmpty() ? "all" : filterParam);
         boolean showSort = total > 1;
         StringBuilder hbuf = new StringBuilder(2*1024);
         hbuf.append("<tr><th class=status>");
@@ -789,7 +789,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 String link = _contextPath + '/' + queryString + filterQuery;
                 tx = peerParam != null ? _t("Hide Peers") : _t("Show Peers");
                 String img = peerParam != null ? "hidepeers" : "showpeers";
-                String filterParam = peerParam == null ? "&filter=" : "?filter=";
+                filterParam = peerParam == null ? "&filter=" + filterQuery : "?filter=" + filterQuery;
                 if (link.contains("filter=")) {
                     int index = link.indexOf("filter=");
                     link = link.substring(0, index) + link.substring(index).replaceFirst("filter=", filterParam);
@@ -5323,20 +5323,26 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("<th>").append(_t("Announce URL")).append("</th><th>")
                .append(_t("Primary")).append("</th><th id=remove>").append(_t("Delete")).append("</th></tr>\n");
             for (String s : annlist) {
-                int hc = s.hashCode();
+                String hc = Integer.toString(s.hashCode());
                 buf.append("<tr><td>");
                 s = DataHelper.stripHTML(s);
                 buf.append("<span class=info_tracker>").append(getShortTrackerLink(s, snark.getInfoHash())).append("</span>")
-                   .append("</td><td>").append(s).append("</td><td>")
-                   .append("<input type=radio class=optbox name=primary");
-                if (s.equals(announce)) {buf.append(" checked=checked ");}
-                buf.append(" value=\"").append(hc).append("\"");
-                if (isRunning) {buf.append(" disabled=disabled");}
-                buf.append("></td><td>")
-                   .append("<input type=checkbox class=optbox name=\"removeTracker-")
-                   .append(hc).append("\" title=\"").append(_t("Mark for deletion")).append("\"");
-                if (isRunning) {buf.append(" disabled=disabled");}
-                buf.append("></td></tr>\n");
+                   .append("</td><td>").append(s).append("</td><td>");
+                if (hc != null) {
+                    buf.append("<input type=radio class=optbox name=primary");
+                    if (s.equals(announce)) {buf.append(" checked=checked ");}
+                    buf.append(" value=\"").append(hc).append("\"");
+                    if (isRunning) {buf.append(" disabled=disabled");}
+                    buf.append(">");
+                }
+                buf.append("</td><td>");
+                if (hc != null) {
+                    buf.append("<input type=checkbox class=optbox name=\"removeTracker-")
+                       .append(hc).append("\" title=\"").append(_t("Mark for deletion")).append("\"");
+                    if (isRunning) {buf.append(" disabled=disabled");}
+                    buf.append(">");
+                }
+                buf.append("</td></tr>\n");
             }
         }
 
