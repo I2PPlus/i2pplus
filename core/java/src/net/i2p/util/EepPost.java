@@ -33,7 +33,7 @@ public class EepPost extends EepGet {
 
     private static final String CRLF = "\r\n";
     private static final byte[] CRLFB = DataHelper.getASCII(CRLF);
-    private static final int MAX_POST_PAYLOAD_RAM = 32*1024;
+    private static final int PROP_MAX_POST_PAYLOAD_RAM = 32*1024;
 
     public EepPost(I2PAppContext ctx, String proxyHost, int proxyPort, int numRetries, String outputFile, String url) {
         /*
@@ -71,7 +71,7 @@ public class EepPost extends EepGet {
         }
         if (multipart) {
             String sep = multipart ? getSeparator() : null;
-            boolean useTmp = sz > MAX_POST_PAYLOAD_RAM;
+            boolean useTmp = sz > PROP_MAX_POST_PAYLOAD_RAM;
             File tmp = null;
             OutputStream out = null;
             ByteArrayOutputStream baos = null;
