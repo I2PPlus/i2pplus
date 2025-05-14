@@ -747,10 +747,9 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(TABLE_HEADER);
 
         String currentSort = req.getParameter("sort");
+        String filterQuery = "";
         String url = req.getRequestURL().toString();
         boolean hasQueryParams = req.getQueryString() != null && !req.getQueryString().isEmpty();
-        filterParam = req.getParameter("filter") != null ? req.getParameter("filter") : "";
-        String filterQuery = "";
         String separator = hasQueryParams ? "&" : "?";
         filterQuery = "filter=" + (filterParam == null || filterParam.isEmpty() ? "all" : filterParam);
         boolean showSort = total > 1;
@@ -789,7 +788,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 String link = _contextPath + '/' + queryString + filterQuery;
                 tx = peerParam != null ? _t("Hide Peers") : _t("Show Peers");
                 String img = peerParam != null ? "hidepeers" : "showpeers";
-                filterParam = peerParam == null ? "&filter=" + filterQuery : "?filter=" + filterQuery;
+                filterParam = filterParam = peerParam == null ? "&filter=" : "?filter=";
                 if (link.contains("filter=")) {
                     int index = link.indexOf("filter=");
                     link = link.substring(0, index) + link.substring(index).replaceFirst("filter=", filterParam);
@@ -2191,6 +2190,8 @@ public class I2PSnarkServlet extends BasicServlet {
     private static final int MAX_DISPLAYED_ERROR_LENGTH = 43;
 
     private boolean snarkMatchesFilter(Snark s, String filter) {
+        if (s == null || filter == null || filter.isEmpty()) {return true;}
+
         String snarkStatus = this.snarkStatus;
         switch (filter) {
             case "active":
