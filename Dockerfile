@@ -5,6 +5,7 @@ ENV APP_HOME="/i2p"
 WORKDIR /tmp/build
 
 RUN apk add gettext tar bzip2 apache-ant openjdk21 git
+RUN wget https://repo1.maven.org/maven2/ant-contrib/ant-contrib/1.0b3/ant-contrib-1.0b3.jar -O /usr/share/java/ant-contrib.jar
 
 COPY . .
 
