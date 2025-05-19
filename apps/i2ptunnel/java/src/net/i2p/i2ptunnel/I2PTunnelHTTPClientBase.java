@@ -943,8 +943,8 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
             errMessage = errMessage.replace("Could not find the following", "Could not establish a connection to the following");
             out.write(errMessage);
             out.write("<a id=proxyrequest href=\"");
-            out.write("\">");
             out.write(uri);
+            out.write("\">");
             // Long URLs are handled in CSS
             out.write(decodeIDNURI(uri));
             out.write("</a>");
