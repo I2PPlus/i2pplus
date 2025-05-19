@@ -2750,6 +2750,7 @@ body:not(#homepage):not(.ready) .lazy{display:none}
 #i2ptunnelframe{margin:1px auto -1px 3px;width:calc(100% - 4px)}
 iframe{height:0}
 iframe.iframed{margin:15px 0 0}
+#jsRequired {margin:20px 10px!important}
 #main#embedded{padding:0}
 #pageloader{top:-1px;width:100%;height:2px}
 #rawtext_frame{margin:0;height:calc(100vh - 80px)!important;overflow:auto!important}
