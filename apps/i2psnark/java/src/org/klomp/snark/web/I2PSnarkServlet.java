@@ -747,7 +747,8 @@ public class I2PSnarkServlet extends BasicServlet {
         out.write(TABLE_HEADER);
 
         String currentSort = req.getParameter("sort");
-        String filterQuery = "";
+        String currentSearch = req.getParameter("search");
+        String filterQuery = "" + (currentSearch == null ? "" : "&search=" + currentSearch);
         String url = req.getRequestURL().toString();
         boolean hasQueryParams = req.getQueryString() != null && !req.getQueryString().isEmpty();
         String separator = hasQueryParams ? "&" : "?";
@@ -1010,7 +1011,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         StringBuilder ftr = new StringBuilder(2*1024);
-        if (total == 0) {
+        if (totalSnarks == 0) {
             ftr.append("<tr id=noload class=noneLoaded><td colspan=12><i>");
             synchronized(this) {
                 File dd = _resourceBase;
@@ -1025,10 +1026,10 @@ public class I2PSnarkServlet extends BasicServlet {
                 } else if (isSearch) {ftr.append(_t("No torrents found."));}
                 else {ftr.append(_t("No torrents loaded."));}
             }
-            ftr.append("</i></td></tr></tbody>\n").append("<tfoot id=\"snarkFoot");
-            if (_manager.util().isConnecting()) {ftr.append("\" class=\"initializing");}
-            ftr.append("\"><tr><th id=torrentTotals class=left colspan=12></th></tr></tfoot>\n");
-        } else if (snarks.size() > 0) {
+            ftr.append("</i></td></tr></tbody>\n").append("<tfoot id=snarkFoot");
+            if (_manager.util().isConnecting()) {ftr.append(" class=initializing");}
+            ftr.append("><tr><th id=torrentTotals class=left colspan=12></th></tr></tfoot>\n");
+        } else if (totalSnarks > 0) {
             // Add a pagenav to bottom of table if we have 50+ torrents per page
             // TODO: disable on pages where torrents is < 50 e.g. last page
             if (total > 0 && (start > 0 || total > pageSize) && pageSize >= 50 && total - start >= 20) {
@@ -1115,7 +1116,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
             if (_manager.util().connected() && total > 0) {
                 ftr.append("<th class=ETA>");
-                if (_manager.util().connected() && !snarks.isEmpty()) {
+                if (!snarks.isEmpty()) {
                     hasPeers = false;
                     long remainingSeconds = 0;
                     long totalETA = 0;
@@ -3191,7 +3192,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append((smartSort ? "checked " : ""))
            .append("title=\"")
            .append(_t("Ignore words such as 'a' and 'the' when sorting"))
-           .append("\" ></span><br>\n")
+           .append("\"></span><br>\n")
 **/
 
         buf.append("<span class=configOption><label for=\"collapsePanels\"><b>")
@@ -3246,20 +3247,20 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(useRatings ? "checked " : "")
            .append("title=\"")
            .append(_t("Show ratings on torrent pages"))
-           .append("\" ></span><br>\n")
+           .append("\"></span><br>\n")
            .append("<span class=configOption><label for=\"comments\"><b>")
            .append(_t("Enable Comments"))
            .append("</b></label> <input type=checkbox class=\"optbox slider\" name=comments id=comments ")
            .append(useComments ? "checked " : "")
            .append("title=\"")
            .append(_t("Show comments on torrent pages"))
-           .append("\" ></span><br>\n")
+           .append("\"></span><br>\n")
            .append("<span class=configOption id=configureAuthor><label><b>")
            .append(_t("Comment Author"))
            .append("</b> <input type=text name=nofilter_commentsName spellcheck=false value=\"")
            .append(DataHelper.escapeHTML(_manager.util().getCommentsName())).append("\" size=15 maxlength=16 title=\"")
            .append(_t("Set the author name for your comments and ratings"))
-           .append("\" ></label></span>\n")
+           .append("\"></label></span>\n")
            .append("</div>\n</td></tr>\n");
 
 /* torrent options */
@@ -3343,7 +3344,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("</b> </label><input type=checkbox class=\"optbox slider\" name=filesPublic id=filesPublic ")
            .append(filesPublic ? "checked " : "").append("title=\"")
            .append(_t("Set file permissions to allow other local users to access the downloaded files"))
-           .append("\" ></span>\n")
+           .append("\"></span>\n")
            .append("<span class=configOption><label for=\"maxFiles\"><b>")
            .append(_t("Max files per torrent"))
            .append("</b> <input type=text name=maxFiles size=5 maxlength=5 pattern=\"[0-9]{1,5}\" class=\"r numeric\"").append(" title=\"")
@@ -3466,7 +3467,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private void writeTorrentCreateFilterForm(PrintWriter out, HttpServletRequest req) throws IOException {
         StringBuilder buf = new StringBuilder(5*1024);
         buf.append("<form action=\"").append(_contextPath).append("/configure#navbar\" method=POST>\n")
-           .append("<div class=configPanel id=fileFilter><div class=snarkConfig>\n");
+           .append("<div class=configPanel id=fileFilter>\n<div class=snarkConfig>\n");
         writeHiddenInputs(buf, req, "Save3");
         buf.append("<span id=filtersTitle class=\"configTitle expanded\">").append(_t("Torrent Create File Filtering")).append("</span><hr>\n")
            .append("<table hidden>\n<tr>")
@@ -3486,33 +3487,35 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("<td><input type=checkbox class=optbox name=\"delete_").append(f.name).append("\"></td>")
                .append("<td>").append(f.name).append("</td>")
                .append("<td>").append(f.filterPattern).append("</td>")
-               .append("<td>").append("<label class=filterStartsWith><input type=radio class=optbox value=\"starts_with\" name=\"filterType_")
+               .append("<td>").append("<label class=filterStartsWith><input type=radio class=optbox value=starts_with name=\"filterType_")
                .append(nameUnderscore).append("\"").append(filterType.equals("starts_with") ? " checked" : "").append("></label></td>")
-               .append("<td>").append("<label class=filterContains><input type=radio class=optbox value=\"contains\" name=\"filterType_")
+               .append("<td>").append("<label class=filterContains><input type=radio class=optbox value=contains name=\"filterType_")
                .append(nameUnderscore).append("\"").append(filterType.equals("contains") ? " checked" : "").append("></label></td>")
-               .append("<td>").append("<label class=filterEndsWith><input type=radio class=optbox value=\"ends_with\" name=\"filterType_")
+               .append("<td>").append("<label class=filterEndsWith><input type=radio class=optbox value=ends_with name=\"filterType_")
                .append(nameUnderscore).append("\"").append(filterType.equals("ends_with") ? " checked" : "").append("></label></td>")
                .append("<td><input type=checkbox class=optbox name=\"defaultEnabled_").append(f.name).append("\"");
             if (f.isDefault) {buf.append(" checked=checked");}
             buf.append("></td></tr>\n");
         }
-        buf.append("<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n") // spacer
+        String spacer = "<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n";
+        String filterFormElements =
+            "<td><input type=text class=torrentCreateFilterName name=fname spellcheck=false></td>" +
+            "<td><input type=text class=torrentCreateFilterPattern name=filterPattern spellcheck=false></td>" +
+            "<td><label class=filterStartsWith><input type=radio class=optbox name=filterType value=starts_with></label></td>" +
+            "<td><label class=filterContains><input type=radio class=optbox name=filterType value=contains checked></label></td>" +
+            "<td><label class=filterEndsWith><input type=radio class=optbox name=filterType value=ends_with></label></td>" +
+            "<td><input type=checkbox class=optbox name=filterIsDefault></td>";
+        buf.append(spacer)
            .append("<tr id=addFileFilter>")
-           .append("<td><b>").append(_t("Add")).append(":</b></td>")
-           .append("<td><input type=text class=torrentCreateFilterName name=fname spellcheck=false></td>")
-           .append("<td><input type=text class=torrentCreateFilterPattern name=filterPattern spellcheck=false></td>")
-           .append("<td><label class=filterStartsWith><input type=radio class=optbox name=\"filterType\" value=\"starts_with\"></label></td>")
-           .append("<td><label class=filterContains><input type=radio class=optbox name=\"filterType\" value=\"contains\" checked></label></td>")
-           .append("<td><label class=filterEndsWith><input type=radio class=optbox name=\"filterType\" value=\"ends_with\"></label></td>")
-           .append("<td><input type=checkbox class=optbox name=filterIsDefault></td>")
-           .append("<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n") // spacer
+           .append("<td><b>").append(_t("Add")).append(":</b></td>").append(filterFormElements).append("</tr>")
+           .append(spacer)
            .append("<tr><td colspan=7>\n")
            .append("<input type=submit name=raction class=delete value=\"").append(_t("Delete selected")).append("\">\n")
            .append("<input type=submit name=raction class=accept value=\"").append(_t("Save Filter Configuration")).append("\">\n")
            .append("<input type=submit name=raction class=reload value=\"").append(_t("Restore defaults")).append("\">\n")
            .append("<input type=submit name=raction class=add value=\"").append(_t("Add File Filter")).append("\">\n")
            .append("</td></tr>\n")
-           .append("<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n") // spacer
+           .append(spacer)
            .append("</table>\n</div>\n</div>\n</form>\n");
         out.append(buf);
         out.flush();
@@ -3581,16 +3584,26 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("></td><td>").append(urlify(announceURL, 64)).append("</td></tr>\n");
         }
         _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
-        buf.append("<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n")  // spacer
+        String spacer = "<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n";
+        String trackerFormElements =
+            "<td><input type=text class=trackername name=tname spellcheck=false></td>" +
+            "<td><input type=text class=trackerhome name=thurl spellcheck=false></td>" +
+            "<td><input type=radio class=optbox value=0 name=add_tracker_type checked=checked></td>" +
+            "<td><input type=radio class=optbox value=1 name=add_tracker_type></td>" +
+            "<td><input type=radio class=optbox value=2 name=add_tracker_type></td>" +
+            "<td><input type=text class=trackerannounce name=taurl spellcheck=false></td>";
+        String noscript =
+            "<noscript><style>" +
+            ".configPanel .configTitle{pointer-events:none!important}" +
+            "#fileFilter table,#trackers table{display:table!important}" +
+            "#fileFilter .configTitle::after,#trackers .configTitle::after{display:none!important}" +
+            "</style></noscript>\n";
+        buf.append(spacer)
            .append("<tr id=addtracker><td><b>")
            .append(_t("Add")).append(":</b></td>")
-           .append("<td><input type=text class=trackername name=tname spellcheck=false></td>")
-           .append("<td><input type=text class=trackerhome name=thurl spellcheck=false></td>")
-           .append("<td><input type=radio class=optbox value=\"0\" name=add_tracker_type checked=checked></td>")
-           .append("<td><input type=radio class=optbox value=1 name=add_tracker_type></td>")
-           .append("<td><input type=radio class=optbox value=2 name=add_tracker_type></td>")
-           .append("<td><input type=text class=trackerannounce name=taurl spellcheck=false></td></tr>\n")
-           .append("<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n") // spacer
+           .append(trackerFormElements)
+           .append("</tr>\n")
+           .append(spacer)
            .append("<tr><td colspan=7>\n")
            .append("<input type=submit name=taction class=default value=\"")
            .append(_t("Add tracker")).append("\">\n")
@@ -3603,13 +3616,9 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<input type=submit name=taction class=reload value=\"")
            .append(_t("Restore defaults")).append("\">\n")
            .append("</td></tr>")
-           .append("<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n") // spacer
+           .append(spacer)
            .append("</table>\n</div>\n</div></form>\n")
-           .append("<noscript><style>")
-           .append(".configPanel .configTitle{pointer-events:none!important}")
-           .append("#fileFilter table,#trackers table{display:table!important}")
-           .append("#fileFilter .configTitle::after,#trackers .configTitle::after{display:none!important}")
-           .append("</style></noscript>\n")
+           .append(noscript)
            .append("<script src=\"" + _resourcePath + "js/toggleConfigs.js?" + CoreVersion.VERSION + "\"></script>\n");
         out.append(buf);
         out.flush();
