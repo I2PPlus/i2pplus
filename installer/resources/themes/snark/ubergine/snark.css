@@ -1065,7 +1065,8 @@ hr.debug{display:none}
 #debugMode:active{transform:scale(.9)}
 #dhtDebug{line-height:1.5}
 #dhtDebug span::selection,#dhtDebug span b::selection{color:#000;background:#ff0}
-#dhtDebug th{text-align:center;border-top:var(--border_inner);border-bottom:0;border-radius:0 0 4px 4px;background:linear-gradient(180deg,#6061,#0002),repeating-linear-gradient(180deg,#212 2px,#000 4px)}
+#dhtDebug th{text-align:center;border-top:var(--border_inner);border-bottom:0;border-radius:0 0 4px 4px;background:linear-gradient(180deg,#6061,#0002),repeating-linear-gradient(180deg,#212 2px,#000 4px);contain:paint}
+#dhtDebug th::before{width:108px;height:108px;display:inline-block;position:absolute;bottom:-6px;left:0;background:url(images/chameleon.webp) no-repeat left -12px bottom -10px/100% auto;content:"";opacity:.7;mix-blend-mode:screen}
 #dhtDebug th b{font-weight:700;color:var(--ink)}
 #dhtDebug .dht{font-weight:500;color:#f5eff1}
 body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
