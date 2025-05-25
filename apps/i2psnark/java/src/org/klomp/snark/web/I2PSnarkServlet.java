@@ -5027,7 +5027,7 @@ public class I2PSnarkServlet extends BasicServlet {
         else if (mime.equals("application/x-rar-compressed")) {icon = "rar";}
 
         else if (mime.equals("application/x-gtar") || mime.equals("application/x-tar") ||
-                 plc.endsWith(".txz")) {icon = "tar";}
+                 plc.endsWith(".txz") || plc.endsWith(".tgz")) {icon = "tar";}
 
         else if (mime.equals("application/x-xz") || mime.equals("application/compress") ||
                  mime.equals("application/gzip") || mime.equals("application/x-7z-compressed") ||
