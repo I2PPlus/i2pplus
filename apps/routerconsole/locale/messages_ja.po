@@ -6090,8 +6090,8 @@ msgstr "私のアドレスブックにはたくさんのホストが欠落して
 msgid "The default subscription is to <code>http://i2p-projekt.i2p/hosts.txt</code> which is seldom updated. If you don't have another subscription, you may often have to use \"jump\" links which is much slower but ensures that your addressbook is only populated by sites you use (in addition to the default subscription addresses). To speed up browsing on I2P, it's a good idea to add some addressbook subscriptions."
 msgstr "デフォルトの購読は、通常は更新されない<code>http://i2p-projekt.i2p/hosts.txt</code>に設定されています。他の購読がない場合、よく「jump」リンクを使用する必要があります。これは非常に遅くなりますが、アドレスブックがデフォルトの購読アドレスに加えて使用するサイトのみで埋められることを保証します。I2Pでのブラウジングを高速化するために、いくつかのアドレスブックの購読を追加することがおすすめです。"
 
-msgid "Here are some other public addressbook subscription links. You may wish to add one or two to your <a href=/susidns/subscriptions target=_blank rel=noreferrer>susidns subscription list</a>. In the event that addresses conflict in the subscriptions, the lists placed at the top of your susidns configuration will take precedence over those placed further down."
-msgstr "以下は、他の公開アドレスブック購読リンクです。いくつかを<a href=/susidns/subscriptions target=_blank rel=noreferrer>サブスクリプションリスト</a>に追加することをお勧めします。購読アドレスが衝突する場合は、susidnsの設定の上部に配置されたリストが下部に配置されたリストよりも優先されます。"
+msgid "Here are some other public addressbook subscription links. You may wish to add one or two to your <a href='/dns?subscriptions' target=_blank rel=noreferrer>susidns subscription list</a>. In the event that addresses conflict in the subscriptions, the lists placed at the top of your susidns configuration will take precedence over those placed further down."
+msgstr "以下は、他の公開アドレスブック購読リンクです。いくつかを<a href='/dns?subscriptions' target=_blank rel=noreferrer>サブスクリプションリスト</a>に追加することをお勧めします。購読アドレスが衝突する場合は、susidnsの設定の上部に配置されたリストが下部に配置されたリストよりも優先されます。"
 
 msgid "Note that subscribing to a hosts.txt service is an act of trust, as a malicious subscription could give you incorrect addresses, so be careful subscribing to lists from unknown sources. The operators of these services may have various policies for listing hosts. Presence on this list does not imply endorsement."
 msgstr "hosts.txtサービスに購読することは信頼の行為です。悪意のある購読が間違ったアドレスを提供する可能性があるため、不明なソースからのリストに購読する場合は注意してください。これらのサービスのオペレーターは、ホストのリストに対してさまざまなポリシーを持っているかもしれません。このリストに掲載されているだけでは、推奨を意味しません。"
@@ -6561,8 +6561,8 @@ msgstr "もし<i>登録認証</i>文字列が要求された場合は、<a href=
 msgid "If you are in a hurry and can't wait a few hours, you can tell people to use a \"jump\" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is working, you can tell others to use it."
 msgstr "急いでいて数時間待つことができない場合は、「ジャンプ」アドレスヘルパーのリダイレクトサービスを使用するよう他の人に伝えることができます。これは、同じサイトでホスト名を登録した後数分以内に通常動作します。まず、ブラウザに<code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code>を入力してテストしてください。動作するようになったら、他の人に使うよう伝えることができます。"
 
-msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='http://127.0.0.1:7657/susidns/details?h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for i2p-projekt.i2p</a>, and paste the link where it's required to share it with others."
-msgstr "また、ドメインの<i>アドレスヘルパーリンク</i>をコピーして、アドレス帳リストページまたはドメインの詳細ページ（例：<a href='http://127.0.0.1:7657/susidns/details?h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>i2p-projekt.i2pの詳細</a>）で示されている場所に貼り付けることもできます。それによって、他の人と共有する必要がある場所にリンクを貼り付けることができます。"
+msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skanki2p</a>, and paste the link where it's required to share it with others."
+msgstr "また、ドメインの<i>アドレスヘルパーリンク</i>をコピーして、アドレス帳リストページまたはドメインの詳細ページ（例：<a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>i2p-projekt.i2pの詳細</a>）で示されている場所に貼り付けることもできます。それによって、他の人と共有する必要がある場所にリンクを貼り付けることができます。"
 
 msgid "Backup your private key!"
 msgstr "秘密鍵をバックアップしてください。"
@@ -7266,8 +7266,8 @@ msgstr "メインのトンネルマネージャーページの<a href=/i2ptunnel
 msgid "Highlight and copy the entire <i>Local destination</i> on the <a href='/i2ptunnel/edit?tunnel=3'>Tunnel Manager Configuration page</a>."
 msgstr "トンネルマネージャーの設定ページで、<i>ローカル宛先</i>全体を強調表示してコピーしてください。"
 
-msgid "Enter the name and paste the destination into your <a href='/susidns/addressbook?book=router&amp;filter=none'>address book</a>. Click <i>Add</i> to save the new entry."
-msgstr "名前を入力し、宛先を<a href='/susidns/addressbook?book=router&amp;filter=none'>アドレスブック</a>に貼り付けてください。<i>追加</i>をクリックして新しいエントリを保存してください。"
+msgid "Enter the name and paste the destination into your <a href='/dns?book=router&amp;filter=none'>address book</a>. Click <i>Add</i> to save the new entry."
+msgstr "名前を入力し、宛先を<a href='/dns?book=router&amp;filter=none'>アドレスブック</a>に貼り付けてください。<i>追加</i>をクリックして新しいエントリを保存してください。"
 
 msgid "In the web browser you have configured for I2P usage, browse to your website name (<i>chosenhostname</i>.i2p) and you should be returned to this page."
 msgstr "I2Pの使用に構成したウェブブラウザで、ウェブサイトの名前(<i>chosenhostname</i>.i2p)にアクセスし、このページに戻ってくるはずです。"

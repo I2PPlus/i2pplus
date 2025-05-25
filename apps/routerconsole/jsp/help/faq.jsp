@@ -46,7 +46,7 @@
 <div>
 <p><%=intl._t("The default subscription is to <code>http://i2p-projekt.i2p/hosts.txt</code> which is seldom updated. If you don't have another subscription, you may often have to use \"jump\" links which is much slower but ensures that your addressbook is only populated by sites you use (in addition to the default subscription addresses). To speed up browsing on I2P, it's a good idea to add some addressbook subscriptions.")%></p>
 
-<p><%=intl._t("Here are some other public addressbook subscription links. You may wish to add one or two to your <a href=/susidns/subscriptions target=_blank rel=noreferrer>susidns subscription list</a>. In the event that addresses conflict in the subscriptions, the lists placed at the top of your susidns configuration will take precedence over those placed further down.")%></p>
+<p><%=intl._t("Here are some other public addressbook subscription links. You may wish to add one or two to your <a href='/dns?subscriptions' target=_blank rel=noreferrer>susidns subscription list</a>. In the event that addresses conflict in the subscriptions, the lists placed at the top of your susidns configuration will take precedence over those placed further down.")%></p>
 
 <ul>
 <li><code>http://stats.i2p/cgi-bin/newhosts.txt</code></li>

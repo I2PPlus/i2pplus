@@ -6090,8 +6090,8 @@ msgstr "我在地址簿中缺少很多网站。有哪些好的订阅链接？"
 msgid "The default subscription is to <code>http://i2p-projekt.i2p/hosts.txt</code> which is seldom updated. If you don't have another subscription, you may often have to use \"jump\" links which is much slower but ensures that your addressbook is only populated by sites you use (in addition to the default subscription addresses). To speed up browsing on I2P, it's a good idea to add some addressbook subscriptions."
 msgstr "默认的订阅地址是<code>http://i2p-projekt.i2p/hosts.txt</code>，它很少被更新。如果您没有其他订阅，您可能经常要使用跳转助手，这样会慢得多，但可以确保您的地址簿只填入您使用的网站(除了默认的订阅地址)。为了加快I2P的浏览速度，添加一些地址簿订阅是个好主意。"
 
-msgid "Here are some other public addressbook subscription links. You may wish to add one or two to your <a href=/susidns/subscriptions target=_blank rel=noreferrer>susidns subscription list</a>. In the event that addresses conflict in the subscriptions, the lists placed at the top of your susidns configuration will take precedence over those placed further down."
-msgstr "这里有一些其他公共地址簿的订阅链接。你可能希望在你的<a href=/susidns/subscriptions target=_blank rel=noreferrer>susidns订阅列表</a>中添加一两个。如果地址在订阅中发生冲突，放置在你的susidns配置顶部的列表将优先于放置在下面的列表。"
+msgid "Here are some other public addressbook subscription links. You may wish to add one or two to your <a href='/dns?subscriptions' target=_blank rel=noreferrer>susidns subscription list</a>. In the event that addresses conflict in the subscriptions, the lists placed at the top of your susidns configuration will take precedence over those placed further down."
+msgstr "这里有一些其他公共地址簿的订阅链接。你可能希望在你的<a href='/dns?subscriptions' target=_blank rel=noreferrer>susidns订阅列表</a>中添加一两个。如果地址在订阅中发生冲突，放置在你的susidns配置顶部的列表将优先于放置在下面的列表。"
 
 msgid "Note that subscribing to a hosts.txt service is an act of trust, as a malicious subscription could give you incorrect addresses, so be careful subscribing to lists from unknown sources. The operators of these services may have various policies for listing hosts. Presence on this list does not imply endorsement."
 msgstr "请注意，订阅hosts.txt服务是一种信任行为，因为恶意的订阅可能给你提供错误的地址，所以要小心订阅未知来源的列表。这些服务的运营商可能有各种注册的政策，出现在这个名单上并不意味着得到官方的认可。"
@@ -6561,8 +6561,8 @@ msgstr "如果需要<i>注册认证</i>，你可以在<a href='http://127.0.0.1:
 msgid "If you are in a hurry and can't wait a few hours, you can tell people to use a \"jump\" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is working, you can tell others to use it."
 msgstr "如果你很着急，等不了几个小时，你可以告诉人们使用 \"跳转\"服务帮助重定向。这通常会在你在同一网站上注册你的域名后几分钟内起作用。先自己在浏览器中输入测试 <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>你的域名.i2p</i></code>。一旦一切顺利，你就可以告诉其他人使用它。"
 
-msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='http://127.0.0.1:7657/susidns/details?h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for i2p-projekt.i2p</a>, and paste the link where it's required to share it with others."
-msgstr "另外，您可以复制您的<i>地址助手</i>链接，位于地址簿列表页或您的域名的详细信息页，例如：<a href='http://127.0.0.1:7657/susidns/details?h=skank.i2p和book=router' target=_blank rel=noreferrer>i2p-projekt.i2p的详细信息</a>，并将该链接粘贴在需要与他人分享的地方。"
+msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skanki2p</a>, and paste the link where it's required to share it with others."
+msgstr "另外，您可以复制您的<i>地址助手</i>链接，位于地址簿列表页或您的域名的详细信息页，例如：<a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>i2p-projekt.i2p的详细信息</a>，并将该链接粘贴在需要与他人分享的地方。"
 
 msgid "Backup your private key!"
 msgstr "备份你的私钥！"
@@ -7266,7 +7266,7 @@ msgstr "在<a href=/i2ptunnelmgr/>隧道管理器主页</a>上，单击Web服务
 msgid "Highlight and copy the entire <i>Local destination</i> on the <a href='/i2ptunnel/edit?tunnel=3'>Tunnel Manager Configuration page</a>."
 msgstr "在<a href='/i2ptunnel/edit?tunnel=3'>隧道管理器配置页面</a>上突出并复制整个本地<i>本地目标</i>。"
 
-msgid "Enter the name and paste the destination into your <a href='/susidns/addressbook?book=router&amp;filter=none'>address book</a>. Click <i>Add</i> to save the new entry."
+msgid "Enter the name and paste the destination into your <a href='/dns?book=router&amp;filter=none'>address book</a>. Click <i>Add</i> to save the new entry."
 msgstr "输入名称并将目的地粘贴到你的<a href='/susidns/addressbook?book=router和filter=none'>地址簿</a>上。点击 <i>添加</i>以保存新条目。"
 
 msgid "In the web browser you have configured for I2P usage, browse to your website name (<i>chosenhostname</i>.i2p) and you should be returned to this page."
