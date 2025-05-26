@@ -139,8 +139,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public static final String CONFIG_FILE = "i2psnark" + CONFIG_FILE_SUFFIX;
     private static final String COMMENT_FILE_SUFFIX = ".comments.txt.gz";
     public static final String PROP_FILES_PUBLIC = "i2psnark.filesPublic";
-    public static final String PROP_OLD_AUTO_START = "i2snark.autoStart";   // oops
-    public static final String PROP_AUTO_START = "i2psnark.autoStart";      // convert in migration to new config file
+    /** @since 0.9.66+ */
+    public static final String PROP_PREALLOCATE_FILES = "i2psnark.shouldPreallocateFiles";
+    public static final String DEFAULT_PREALLOCATE_FILES = "true";
+    public static final String PROP_OLD_AUTO_START = "i2snark.autoStart"; // oops
+    public static final String PROP_AUTO_START = "i2psnark.autoStart"; // convert in migration to new config file
     private final boolean DEFAULT_AUTO_START;
     //public static final String PROP_LINK_PREFIX = "i2psnark.linkPrefix";
     //public static final String DEFAULT_LINK_PREFIX = "file:///";
@@ -561,6 +564,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public boolean areFilesPublic() {
         return Boolean.parseBoolean(_config.getProperty(PROP_FILES_PUBLIC));
+    }
+
+    /**
+     *  @return default true
+     *  @since 0.9.66+
+     */
+    public boolean shouldPreallocateFiles() {
+        return Boolean.parseBoolean(_config.getProperty(PROP_PREALLOCATE_FILES, DEFAULT_PREALLOCATE_FILES));
     }
 
     public boolean shouldAutoStart() {
@@ -1075,12 +1086,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                              String i2cpPort, String i2cpOpts, String upLimit, String upBW, String downBW, boolean useOpenTrackers,
                              boolean useDHT, String theme, String lang, boolean enableRatings, boolean enableComments, String commentName,
                              boolean collapsePanels, boolean showStatusFilter, boolean enableLightbox, boolean enableAddCreate,
-                             boolean enableVaryInboundHops, boolean enableVaryOutboundHops) {
+                             boolean enableVaryInboundHops, boolean enableVaryOutboundHops, boolean preallocateFiles) {
         synchronized(_configLock) {
             locked_updateConfig(dataDir, filesPublic, autoStart, smartSort, refreshDelay, startDelay, pageSize, seedPct, eepHost, eepPort,
                                 i2cpHost, i2cpPort, i2cpOpts, upLimit, upBW, downBW, useOpenTrackers, useDHT, theme, lang, enableRatings,
                                 enableComments, commentName, collapsePanels, showStatusFilter, enableLightbox, enableAddCreate,
-                                enableVaryInboundHops, enableVaryOutboundHops);
+                                enableVaryInboundHops, enableVaryOutboundHops, preallocateFiles);
         }
     }
 
@@ -1089,7 +1100,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                              String i2cpPort, String i2cpOpts, String upLimit, String upBW, String downBW, boolean useOpenTrackers,
                              boolean useDHT, String theme, String lang, boolean enableRatings, boolean enableComments, String commentName,
                              boolean collapsePanels, boolean showStatusFilter, boolean enableLightbox, boolean enableAddCreate,
-                             boolean enableVaryInboundHops, boolean enableVaryOutboundHops) {
+                             boolean enableVaryInboundHops, boolean enableVaryOutboundHops, boolean preallocateFiles) {
         boolean changed = false;
         boolean interruptMonitor = false;
 
@@ -1226,6 +1237,21 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
            } else {
                String msg = _t("New files will not be publicly readable");
+               addMessage(msg);
+               if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
+           }
+           changed = true;
+       }
+
+       if (shouldPreallocateFiles() != preallocateFiles) {
+           _config.setProperty(PROP_PREALLOCATE_FILES, Boolean.toString(preallocateFiles));
+           _util.setPreallocateFiles(preallocateFiles);
+           if (preallocateFiles) {
+               String msg = _t("Files will be pre-allocated on disk.");
+               addMessage(msg);
+               if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
+           } else {
+               String msg = _t("Files will be not pre-allocated on disk.");
                addMessage(msg);
                if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
            }

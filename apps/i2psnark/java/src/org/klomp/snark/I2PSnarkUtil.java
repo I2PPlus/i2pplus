@@ -87,6 +87,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     private boolean _enableRatings, _enableComments;
     private String _commentsName;
     private boolean _areFilesPublic;
+    private boolean _shouldPreallocateFiles;
     private boolean _varyInboundHops;
     private boolean _varyOutboundHops;
     private List<String> _openTrackers;
@@ -233,6 +234,12 @@ public class I2PSnarkUtil implements DisconnectListener {
 
     /** @since 0.8.9 */
     public void setFilesPublic(boolean yes) {_areFilesPublic = yes;}
+
+    /** @since 0.9.66+ */
+    public boolean getPreallocateFiles() {return _shouldPreallocateFiles;}
+
+    /** @since 0.9.66+ */
+    public void setPreallocateFiles(boolean yes) {_shouldPreallocateFiles = yes;}
 
     /** @since 0.9.1 */
     public File getTempDir() {return _tmpDir;}
