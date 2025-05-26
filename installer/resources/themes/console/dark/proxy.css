@@ -110,8 +110,10 @@ h1+.sorry,#console_404 .sorry{margin:-1px 5px 10px 226px;padding:20px 20px 20px 
 #error500 #warning2 p:first-child{text-decoration:none}
 #error500 #warning.sorry{border-radius:0}
 #servletError .warning{animation:none;opacity:1}
-#servletError .warning{padding-left:70px;background-size:auto 90px,4px 4px,175px;background-position:16px calc(50% + 16px)}
+#servletError .warning{padding-left:70px;min-height:unset;background-size:auto 90px,4px 4px,175px;background-position:16px calc(50% + 16px)}
 #servletError .warning h3{margin-left:-69px}
+#servletError #warning hr{margin:20px 0}
+#servletError #warning p{margin-top:20px}
 #stacktrace p{word-break:break-all}
 #stacktrace p:first-of-type{margin-top:20px;font-size:130%;font-weight:700}
 #stacktrace p:last-child{font-family:var(--monospaced)}
