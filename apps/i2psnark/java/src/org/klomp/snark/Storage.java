@@ -105,8 +105,8 @@ public class Storage implements Closeable {
     private static final ByteCache _cache = ByteCache.getInstance(16, BUFSIZE);
 
     private Properties _config;
-    public static final String PROP_SHOULD_PREALLOCATE_FILES = "i2psnark.preallocateFiles";
-    public static final boolean DEFAULT_SHOULD_PREALLOCATE_FILES = true;
+    public static final String PROP_PREALLOCATE_FILES = "i2psnark.preallocateFiles";
+    public static final boolean DEFAULT_PREALLOCATE_FILES = true;
 
     /**
      * Creates a new storage based on the supplied MetaInfo.
@@ -1516,7 +1516,7 @@ public class Storage implements Closeable {
             openRAF(false); // RW
             raf.setLength(length);
             I2PAppContext ctx = I2PAppContext.getGlobalContext();
-            boolean shouldPreallocate = ctx.getProperty(PROP_SHOULD_PREALLOCATE_FILES, DEFAULT_SHOULD_PREALLOCATE_FILES);
+            boolean shouldPreallocate = ctx.getProperty(PROP_PREALLOCATE_FILES, DEFAULT_PREALLOCATE_FILES);
             /**
              * Don't bother ballooning later on Windows since there is no sparse file support until
              * JDK7 using the JSR-203 interface.

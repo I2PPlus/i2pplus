@@ -140,7 +140,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static final String COMMENT_FILE_SUFFIX = ".comments.txt.gz";
     public static final String PROP_FILES_PUBLIC = "i2psnark.filesPublic";
     /** @since 0.9.66+ */
-    public static final String PROP_PREALLOCATE_FILES = "i2psnark.shouldPreallocateFiles";
+    public static final String PROP_PREALLOCATE_FILES = "i2psnark.preallocateFiles";
     public static final String DEFAULT_PREALLOCATE_FILES = "true";
     public static final String PROP_OLD_AUTO_START = "i2snark.autoStart"; // oops
     public static final String PROP_AUTO_START = "i2psnark.autoStart"; // convert in migration to new config file
