@@ -46,9 +46,12 @@
  * I2PTunnel: Reduce HTTP server thread usage
    - Increase performance and properly enforce limits.
    - Handle all GET and HEAD requests in the handler thread
-   - Handle POST and CONNECT in threads from the server pool, to not bypass server thread limits
-   - For POST and CONNECT, the opposite-direction (Sender) thread is still run in the client pool
-   - Ensure the server thread limit is at least the streaming max connections limit so we don't run out
+   - Handle POST and CONNECT in threads from the server pool,
+     to not bypass server thread limits
+   - For POST and CONNECT, the opposite-direction (Sender) thread
+     is still run in the client pool
+   - Ensure the server thread limit is at least the streaming
+     max connections limit so we don't run out
 
 2025-04-04 zzz
  * Crypto: Use /dev/random PRNG by default
@@ -78,8 +81,8 @@
  * Tunnels: Fix tunnel test for OB client tunnels
 
 2025-02-17 zzz
- * I2PTunnel: Add .i2p.alt support to HTTP and SOCKS client tunnels (MR 222)
- * SusiDNS: Implement sort-by-added-date (MR 231)
+ * I2PTunnel: Add .i2p.alt support to HTTP and SOCKS client tunnels
+ * SusiDNS: Implement sort-by-added-date
 
 2025-02-10 zzz
  * Router: Unused stats removal
