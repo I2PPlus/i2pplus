@@ -3,7 +3,8 @@
 /* Author: dr|z3d */
 
 document.addEventListener("DOMContentLoaded", function() {
-  const headerRow = document.querySelector("#dirInfo tbody tr:first-child");
+  const dirNav = document.getElementById("dirNav");
+  const headerRow = dirNav ? document.querySelector("#dirInfo tbody tr:first-child") : document.querySelector("#dirInfo thead tr:last-child");
   const incomplete = document.querySelectorAll("#dirInfo tr.incomplete").length;
   if (!incomplete || incomplete < 2 || !headerRow) {return;}
   const priorityColumn = document.querySelector("#dirInfo td.priority");

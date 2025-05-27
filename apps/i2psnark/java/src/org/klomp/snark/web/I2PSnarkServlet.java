@@ -4436,7 +4436,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         buf.append("</th></tr></thead>\n<tbody>");
         if (!isTopLevel || hasCompleteAudio(fileList, storage, remainingArray)) { // don't show row if top level or no playlist
-            buf.append("<tr><td colspan=\"" + (showPriority ? '3' : '2') + "\" class=ParentDir>");
+            buf.append("<tr id=dirNav><td colspan=\"" + (showPriority ? '3' : '2') + "\" class=ParentDir>");
             if (!isTopLevel) { // don't show parent dir link if top level
                 up = "up";
                 buf.append("<a href=\"");
