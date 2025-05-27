@@ -706,33 +706,29 @@ public class Storage implements Closeable {
         boolean areFilesPublic = _util.getFilesPublic();
         boolean useSavedBitField = savedTime > 0 && savedBitField != null;
 
-        if (!_torrentFiles.isEmpty())
-            throw new IllegalStateException();
+        if (!_torrentFiles.isEmpty()) {throw new IllegalStateException();}
         List<List<String>> files = metainfo.getFiles();
         if (files == null) {
             // Create base as file.
-            if (_log.shouldInfo())
-                _log.info("[I2PSnark] Creating/checking file: " + _base);
+            if (_log.shouldInfo()) {_log.info("[I2PSnark] Creating/checking file: " + _base);}
             // createNewFile() can throw a "Permission denied" IOE even if the file exists???
             // so do it second
-            if (!_base.exists() && !_base.createNewFile())
-              throw new IOException("Could not create file " + _base);
+            if (!_base.exists() && !_base.createNewFile()) {
+                throw new IOException("Could not create file " + _base);
+            }
 
             _torrentFiles.add(new TorrentFile(_base, _base, metainfo.getTotalLength()));
             if (useSavedBitField) {
                 long lm = _base.lastModified();
-                if (lm <= 0 || lm > savedTime)
-                    useSavedBitField = false;
-                else if (_base.length() != metainfo.getTotalLength())
-                    useSavedBitField = false;
+                if (lm <= 0 || lm > savedTime) {useSavedBitField = false;}
+                else if (_base.length() != metainfo.getTotalLength()) {useSavedBitField = false;}
             }
         } else {
             // Create base as dir.
-            if (_log.shouldInfo())
-                _log.info("[I2PSnark] Creating/checking directory: " + _base);
-            if (!_base.mkdir() && !_base.isDirectory())
+            if (_log.shouldInfo()) {_log.info("[I2PSnark] Creating/checking directory: " + _base);}
+            if (!_base.mkdir() && !_base.isDirectory()) {
                 throw new IOException("Could not create directory " + _base);
-
+            }
             List<Long> ls = metainfo.getLengths();
             int size = files.size();
             long total = 0;
@@ -749,10 +745,8 @@ public class Storage implements Closeable {
                         String lastPath = path.get(last);
                         int dot = lastPath.lastIndexOf('.');
                         // foo.mp3 -> foo_.mp3; foo -> _foo
-                        if (dot >= 0)
-                            lastPath = lastPath.substring(0, dot) + '_' + lastPath.substring(dot);
-                        else
-                            lastPath = '_' + lastPath;
+                        if (dot >= 0) {lastPath = lastPath.substring(0, dot) + '_' + lastPath.substring(dot);}
+                        else {lastPath = '_' + lastPath;}
                         path.set(last, lastPath);
                         f = createFileFromNames(_base, path, areFilesPublic);
                         j = 0;
@@ -763,10 +757,8 @@ public class Storage implements Closeable {
                 total += len;
                 if (useSavedBitField) {
                     long lm = f.lastModified();
-                    if (lm <= 0 || lm > savedTime)
-                        useSavedBitField = false;
-                    else if (f.length() != len)
-                        useSavedBitField = false;
+                    if (lm <= 0 || lm > savedTime) {useSavedBitField = false;}
+                    else if (f.length() != len) {useSavedBitField = false;}
                 }
             }
 
@@ -811,9 +803,8 @@ public class Storage implements Closeable {
             if (!tf.RAFfile.exists()) {
                 // File should exist when we get here, but could have vanished
                 List<List<String>> files = metainfo.getFiles();
-                if (files != null) {
-                    createFileFromNames(_base, files.get(i), _util.getFilesPublic());
-                } else {
+                if (files != null) {createFileFromNames(_base, files.get(i), _util.getFilesPublic());}
+                else {
                     if (!_base.createNewFile()) {
                         throw new IOException("File '" + tf.name + "' was deleted, unable to recreate");
                     }
@@ -1233,6 +1224,7 @@ public class Storage implements Closeable {
     public boolean putPiece(PartialPiece pp) throws IOException {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         int piece = pp.getPiece();
+        boolean shouldPreallocate = ctx.getProperty(PROP_PREALLOCATE_FILES, DEFAULT_PREALLOCATE_FILES);
         try {
             synchronized(bitfield) {
                 if (bitfield.get(piece))
@@ -1266,7 +1258,7 @@ public class Storage implements Closeable {
                 synchronized(tf) {
                     try {
                         RandomAccessFile raf = tf.checkRAF();
-                        if (tf.isSparse) {
+                        if (tf.isSparse && shouldPreallocate) {
                             /*
                              * If the file is a newly created sparse file, AND we aren't skipping it,
                              * balloon it with all zeros to un-sparse it by allocating the space.
@@ -1275,18 +1267,25 @@ public class Storage implements Closeable {
                              */
                             if (tf.priority >= 0) {
                                 if (_log.shouldInfo()) {
-                                     String msg = "Pre-allocating file: " + tf + "...";
+                                    String msg = "Pre-allocating file: " + tf + "...";
                                     _log.info("[I2PSnark] " + msg);
                                     if (!ctx.isRouterContext()) {System.out.println(" • " + msg);}
                                 }
                                 tf.balloonFile();
                             } else {tf.isSparse = false;}
+                        } else {
+                            if (_log.shouldInfo()) {
+                                String msg = "Not pre-allocating file: " + tf + " -> Disabled by configuration";
+                                _log.info("[I2PSnark] " + msg);
+                                if (!ctx.isRouterContext()) {System.out.println(" • " + msg);}
+                            }
                         }
                         raf.seek(start);
                         //rafs[i].write(bs, off + written, len);
                         pp.write(raf, written, len);
                     } catch (IOException ioe) {
-                        try { tf.closeRAF(); } catch (IOException ioe2) {}
+                        try {tf.closeRAF();}
+                        catch (IOException ioe2) {}
                         // get the file name in the logs
                         IOException ioe2 = new IOException("Error writing " + tf.RAFfile.getAbsolutePath());
                         ioe2.initCause(ioe);

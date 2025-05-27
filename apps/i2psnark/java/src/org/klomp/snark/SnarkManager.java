@@ -1247,11 +1247,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
            _config.setProperty(PROP_PREALLOCATE_FILES, Boolean.toString(preallocateFiles));
            _util.setPreallocateFiles(preallocateFiles);
            if (preallocateFiles) {
-               String msg = _t("Files will be pre-allocated on disk.");
+               String msg = _t("Files will be pre-allocated on disk before downloading starts.");
                addMessage(msg);
                if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
            } else {
-               String msg = _t("Files will be not pre-allocated on disk.");
+               String msg = _t("Files will not be pre-allocated on disk before downloading starts.");
                addMessage(msg);
                if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
            }

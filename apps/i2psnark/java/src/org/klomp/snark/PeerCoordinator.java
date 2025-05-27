@@ -1048,10 +1048,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener
             if (_log.shouldInfo())
                 if (piece.getPriority() > 0) {
                     _log.info("Requesting piece [" + piece + "] from [" + peer + "] (Priority: " + piece.getPriority() + ")");
-//                              ", Peers: " + piece.getPeerCount() + '/' + peers.size() + ")");
                 } else {
-                    _log.info("Requesting piece [" + piece + "] from [" + peer + "]"); // (" +
-//                              "Peers: " + piece.getPeerCount() + '/' + peers.size() + ")");
+                    _log.info("Requesting piece [" + piece + "] from [" + peer + "]");
                 }
             piece.setRequested(peer, true);
         }
