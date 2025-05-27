@@ -416,7 +416,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .priorityNormal{background:url(/i2psnark/.res/icons/clock.png) no-repeat left 26px center/18px}
 .prioritySkip{background:url(/i2psnark/.res/icons/block.png) no-repeat left 26px center/18px}
 .priority{padding:5px;width:1%;text-align:center;white-space:nowrap}
-.snarkFileName{width:90%}
+.snarkFileName{width:90%;text-align:left}
 .thumb{max-width:80px}
 .thumb:hover,.thumb:focus,audio:hover,audio:focus,video:hover,video:focus{border:1px solid var(--a)}
 .tName{font-style:italic}

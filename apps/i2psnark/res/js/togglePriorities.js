@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const dirNav = document.getElementById("dirNav");
   const headerRow = dirNav ? document.querySelector("#dirInfo tbody tr:first-child") : document.querySelector("#dirInfo thead tr:last-child");
   const incomplete = document.querySelectorAll("#dirInfo tr.incomplete").length;
-  if (!incomplete || incomplete < 2 || !headerRow) {return;}
+  if (!incomplete || incomplete < 2) {return;}
   const priorityColumn = document.querySelector("#dirInfo td.priority");
   const columns = ["prihigh", "priskip"];
   const toggleRow = headerRow.cloneNode(false);
@@ -29,10 +29,7 @@ document.addEventListener("DOMContentLoaded", function() {
   });
 
   const style = document.createElement("style");
-  style.textContent = `
-    label[for="toggle-prihigh"],label[for="toggle-priskip"]{height:24px;width:50%;display:inline-block;vertical-align:middle;background:url(/i2psnark/.res/icons/clock_red.png) no-repeat 30% center/18px;cursor:pointer}
-    label[for="toggle-priskip"]{background:url(/i2psnark/.res/icons/block.png) no-repeat 60% center/18px}
-  `;
+  style.textContent = '#togglePriorities label{height:24px;width:50%;display:inline-block;vertical-align:middle;background:url(/i2psnark/.res/icons/clock_red.png) no-repeat 30% center/18px;cursor:pointer;mix-blend-mode:luminosity}#togglePriorities label[for="toggle-priskip"]{background:url(/i2psnark/.res/icons/block.png) no-repeat 60% center/18px}#togglePriorities label:hover{background-size:22px;mix-blend-mode:normal}';
   document.head.appendChild(style);
   toggleRow.appendChild(thToggle);
   toggleRow.insertBefore(thSpacer, thToggle);
