@@ -10,9 +10,10 @@
 --badge:linear-gradient(180deg,#414,#313);
 --bevel:inset 0 0 2px 1px rgba(16,0,16,.5),0 0 0 1px #202;
 --bevel_notify:inset 0 0 0 1px #101,inset 0 0 2px 0 #414,inset 0 0 4px 0 #905;
+--border_filtered:var(--border_hard);
 --border_hard:1px solid #101;
 --border_inner:1px solid #313;
---border_filtered:var(--border_hard);
+--border_soft:var(--border_soft);
 --btnAction_active:linear-gradient(180deg,#212,#414);
 --btnAction_hover:linear-gradient(180deg,#b50,#730 50%,#212 50%,#100,#000);
 --btnAction:linear-gradient(180deg,#737,#582858 50%,#101 50%,#080008);
@@ -21,8 +22,8 @@
 --highlight:inset 0 0 0 1px #000;
 --highlight_light:inset 0 0 0 1px #fef1;
 --hover:#f60;
---ink:#e4d3d7;
 --ink_btn:#2f1d30;
+--ink:#e4d3d7;
 --isDown:repeating-linear-gradient(90deg,#101,#0000,#101),linear-gradient(90deg,#303,#101,#303) center center,#101;
 --link:linear-gradient(180deg,#313 50%,#101 50%);
 --nav_active:radial-gradient(at center bottom,rgba(255,200,0,.5) 0,#0000 70%),linear-gradient(180deg,#f50,#f70);
@@ -30,20 +31,20 @@
 --nav:radial-gradient(at center bottom,rgba(148,48,0,.25),rgba(80,16,0,.15) 80%,#0000),linear-gradient(180deg,#a68058 1%,#7a6045 27%,#5e4730 50%,#2e1700 51%,#1f0f00);
 --notify:var(--panel);
 --panel:linear-gradient(180deg,#545,#434);
+--row_filtered:var(--row);
 --row:linear-gradient(90deg,#808 2px,#0000 2px),linear-gradient(180deg,#260d26,#1f001f);
 --row_odd:linear-gradient(90deg,#606 2px,#0000 2px),linear-gradient(180deg,#260d26,#1f001f);
---row_filtered:var(--row);
 --select_hover:linear-gradient(180deg,var(--hover) 50%,#f40 50%);
 --select:linear-gradient(180deg,rgba(96,0,96,.2) 50%,rgba(16,0,16,.3) 50%),var(--tile);
 --shadow_inset:inset 3px 3px 3px #0009;
 --shadow_table:0 0 0 1px rgba(119,102,119,.9),0 0 0 2px #212,0 0 2px 2px rgba(8,0,8,.3);
 --snarkGraph:url();
 --tabicon:linear-gradient(180deg,#767 50%,#323 50%,#212);
---txtInputBevel:inset 0 0 0 1px #280028,inset 2px 2px 2px 1px #101;
+--th2_bg:linear-gradient(180deg,rgba(68,51,68,.8) 50%,rgba(28,0,28,.8) 50%);
+--th2:linear-gradient(180deg,#1018,#101b),var(--th2_bg);
 --th:linear-gradient(180deg,#202,#101);
 --th_sub:url(/i2psnark/.res/icons/favicon.svg) no-repeat 7px center/20px,linear-gradient(135deg,rgba(16,0,16,.6),rgba(16,0,16,.3),rgba(16,0,16,.7)),var(--th2_bg);
---th2:linear-gradient(180deg,#1018,#101b),var(--th2_bg);
---th2_bg:linear-gradient(180deg,rgba(68,51,68,.8) 50%,rgba(28,0,28,.8) 50%);
+--txtInputBevel:inset 0 0 0 1px #280028,inset 2px 2px 2px 1px #101;
 --txt_shadow:1px 1px 1px #000c;
 }
 
@@ -94,7 +95,7 @@ tfoot td:first-child{padding-left:0;text-align:left}
 .newTab:hover,.newTab:focus{filter:sepia(1) saturate(0) invert(1) drop-shadow(0 0 2px var(--hover))}
 .noPointer{filter:saturate(0) opacity(.5);pointer-events:none}
 .notify td{text-shadow:1px 1px 1px #0008;background:linear-gradient(to bottom,rgba(72,0,72,.2),rgba(24,0,24,.3))}
-.routerdown{padding:15px 10px;vertical-align:middle;color:#ee9;font-size:10pt;border:1px solid #202;border-radius:3px;box-shadow:inset 0 0 0 1px #313,inset 0 0 6px 4px #101,inset 0 0 0 8px rgba(0,0,0,.7);background:var(--isDown)}
+.routerdown{padding:15px 10px;vertical-align:middle;color:#ee9;font-size:10pt;border:var(--border_soft);border-radius:3px;box-shadow:inset 0 0 0 1px #313,inset 0 0 6px 4px #101,inset 0 0 0 8px rgba(0,0,0,.7);background:var(--isDown)}
 .routerdown::after,#snarkHead.initializing::after{display:inline-block;width:40px;height:40px;vertical-align:middle;background:var(--offline) no-repeat center center;background-size:40px;content:"";mix-blend-mode:difference;animation:linear spin 5s reverse infinite}
 .routerdown span{display:none}
 .rowOdd{background:var(--row_odd)}
@@ -350,7 +351,7 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 #dirInfo th:last-child{border-right:var(--border_hard)}
 #dirInfo input[type=submit],#dirInfo a.control{margin:2px 3px}
 #dirInfo input.disabled,#dirInfo a.controld{display:none}
-#dirInfo td,#dirInfo th{min-width:0;border-bottom:1px solid #202}
+#dirInfo td,#dirInfo th{min-width:0;border-bottom:var(--border_soft)}
 #dirInfo thead th{padding-top:2px;padding-bottom:2px}
 #dirInfo #setPriority th{padding:7px 4px 6px}
 #dirInfo th a:hover img{opacity:.9;filter:drop-shadow(0 0 1px var(--hover))}
@@ -469,6 +470,8 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 #dirInfo img[src$="priority.png"]{margin:0}
 #setPriority{border-top:1px solid #000}
 #setPriority th{text-align:right}
+#togglePriorities{border-bottom:var(--border_inner);border-top}
+#togglePriorities th{border-bottom:var(--border_inner);border-top:var(--border_inner);background:var(--th)}
 
 /* panel titles */
 .configPanel .configTitle{padding:6px 20px 5px;min-width:500px;position:relative;font:700 10pt var(--bodyfont);color:#f7e3fc;text-transform:uppercase;letter-spacing:.15em;text-shadow:0 0 1px #000;border:var(--border_hard);border-bottom:1px solid #212;border-top:0;box-shadow:inset 0 0 1px #545;background:linear-gradient(180deg,#545,#3d303d 50%,#101 51%,#190019 51%,#0d000d);filter:drop-shadow(0 1px 1px rgba(16,0,16,.5))}
@@ -788,7 +791,7 @@ html:not(.iframed) #trackerselect tr:first-child td:last-child{border-radius:0 3
 html:not(.iframed) #trackerselect tr:last-child td:first-child{border-radius:0 0 0 3px}
 html:not(.iframed) #trackerselect tr:last-child td:last-child{border-radius:0 0 3px 0}
 #trackerselect input[type=radio],#trackerselect input[type=checkbox]{margin:2px}
-#trackerselect tr:hover span.trackerName{color:#fff;border:1px solid #202;border:1px solid rgba(34,0,34,.7);box-shadow:inset 0 0 0 1px #414;background:linear-gradient(180deg,#303,#202)}
+#trackerselect tr:hover span.trackerName{color:#fff;border:var(--border_soft);border:1px solid rgba(34,0,34,.7);box-shadow:inset 0 0 0 1px #414;background:linear-gradient(180deg,#303,#202)}
 #trackerselect tr:hover span.trackerName::before,span.trackerName:hover::before{background:var(--tracker_hover) no-repeat left center/16px}
 #trackerselect tr:hover span.trackerName a,span.trackerName a:hover{color:#d2baff}
 
@@ -917,7 +920,7 @@ html:not(.iframed) #filterBar #stopped{border-radius:0 3px 3px 0}
 .peerdata{padding-left:0;text-align:left}
 .peerinfo td[colspan="4"],.debuginfo td[colspan="10"]{padding-left:0;line-height:1.2}
 .peerinfo td,.debuginfo td{padding-top:5px;padding-bottom:5px;color:#eee}
-.peerinfo td{border-bottom:1px solid #202}
+.peerinfo td{border-bottom:var(--border_soft)}
 .peerinfo td:first-child{background:var(--peer) no-repeat center center;background-size:18px}
 #ourDest{margin:-5px -1px -5px 0;padding:1px 0 1px 6px;display:inline-block;float:right;font-size:95%;text-shadow:1px 1px 1px #000a;border-radius:2px;box-shadow:var(--highlight);background:#414}
 #ourDest code{margin:1px 2px 1px 5px;padding:2px 5px;display:inline-block;box-shadow:var(--highlight);background:#212;user-select:all}
@@ -933,8 +936,8 @@ input[type=radio]:checked::before{border-radius:50%}
 .optbox[type=radio],.optbox[type=radio]:checked,.optbox[type=radio][disabled],.optbox[type=radio][disabled]:checked{border-radius:50%}
 .optbox[disabled]{box-shadow:none;background:#000;opacity:.7;pointer-events:none}
 .optbox:hover,.optbox:focus{box-shadow:0 0 1px 1px rgba(0,0,0,.9),0 0 0 2px var(--hover),inset 0 0 0 1px #101;background:#202}
-.optbox::before{width:50%;height:50%;position:absolute;top:25%;left:25%;line-height:.8;font-size:0;border-radius:1px;box-shadow:0 0 0 1px #730,0 0 0 2px #101,inset 1px 1px 3px #f90;transition:linear all .1s;transform:scale(1);will-change:transform}
-.optbox:checked::before{overflow:hidden;background:var(--hover);content:""}
+.optbox::before{width:50%;height:50%;position:absolute;top:25%;left:25%;line-height:.8;font-size:0;border-radius:1px;box-shadow:0 0 0 1px #730,0 0 0 2px #101,inset 1px 1px 3px #f90;transition:linear all .1s;content:none;transform:scale(1);will-change:transform}
+.optbox:checked::before,.optbox[checked="checked"]::before{overflow:hidden;background:var(--hover);content:""}
 .optbox:not(:checked)::before{transform:scale(0)}
 .optbox[disabled]::before{box-shadow:none;opacity:.7}
 #torrentOrderControl input[type=checkbox],#torrentOrderControl input[type=checkbox]:checked,#torrentOrderControl input[type=checkbox][disabled],#torrentOrderControl input[type=checkbox][disabled]:checked{border:var(--border_inner)}
@@ -1105,7 +1108,7 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 #textview-content{padding-top:44px;color:var(--ink);text-shadow:1px 1px 1px #0008;box-shadow:0 0 0 10px #404,0 0 0 11px #505,0 0 0 12px #101,var(--highlight),0 0 0 2px #505 inset;background:linear-gradient(180deg,#280828,#303);scrollbar-color:#505 #0000}
 #textview-content.pre{color:var(--ink)}
 #textview-content.lines{padding-top:20px}
-#textview-content li{border-bottom:1px solid #202}
+#textview-content li{border-bottom:var(--border_soft)}
 #textview-content li{padding:2px 8px}
 #textview-content li::marker{color:#e4d3d7aa}
 #textview-content li{background:#0001}
