@@ -1460,7 +1460,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             if (action == null) {
                 // click.js will generate this error when a remove/delete is cancelled, so suppress it.
-                //_manager.addMessage("No action specified");
+                //_manager.addMessage(_t("No action specified"));
                 return;
             }
         }
@@ -2971,7 +2971,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("<div class=sectionPanel id=addSection>\n");
         writeHiddenInputs(buf, req, "Add");
         buf.append("<input hidden class=toggle_input id=toggle_addtorrent type=checkbox");
-        if (newURL.length() > 0) {buf.append(" checked=checked>");} // force toggle open
+        if (newURL.length() > 0) {buf.append(" checked>");} // force toggle open
         else {buf.append('>');}
         buf.append("<label id=tab_addtorrent class=toggleview for=\"toggle_addtorrent\"><span class=tab_label>").append(_t("Add Torrent")).append("</span></label>")
            .append("<hr>\n<table border=0><tr>")
@@ -3336,6 +3336,9 @@ public class I2PSnarkServlet extends BasicServlet {
 
 /* data storage */
 
+        boolean isWindows = SystemVersion.isWindows();
+        boolean isARM = SystemVersion.isARM();
+
         buf.append("<tr><th class=suboption>")
            .append(_t("Data Storage"))
            .append("</th></tr><tr><td>\n<div class=optionlist>\n")
@@ -3349,14 +3352,16 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("</b> </label><input type=checkbox class=\"optbox slider\" name=filesPublic id=filesPublic ")
            .append(filesPublic ? "checked " : "").append("title=\"")
            .append(_t("Set file permissions to allow other local users to access the downloaded files"))
-           .append("\"></span>\n")
-           .append("<span class=configOption><label for=\"preallocate\"><b>")
-           .append(_t("Pre-allocate files"))
-           .append("</b> </label><input type=checkbox class=\"optbox slider\" name=preallocateFiles id=preallocateFiles ")
-           .append(preallocateFiles ? "checked " : "").append("title=\"")
-           .append(_t("Pre-allocate files on disk to avoid fragmentation on non-solid state storage"))
-           .append("\"></span>\n")
-           .append("<span class=configOption><label for=\"maxFiles\"><b>")
+           .append("\"></span>\n");
+        if (!isWindows && !isARM) {
+            buf.append("<span class=configOption><label for=\"preallocate\"><b>")
+               .append(_t("Pre-allocate files"))
+               .append("</b> </label><input type=checkbox class=\"optbox slider\" name=preallocateFiles id=preallocateFiles ")
+               .append(preallocateFiles ? "checked " : "").append("title=\"")
+               .append(_t("Pre-allocate files on disk to avoid fragmentation on non-solid state storage"))
+               .append("\"></span>\n");
+        }
+        buf.append("<span class=configOption><label for=\"maxFiles\"><b>")
            .append(_t("Max files per torrent"))
            .append("</b> <input type=text name=maxFiles size=5 maxlength=5 pattern=\"[0-9]{1,5}\" class=\"r numeric\"").append(" title=\"")
            .append(_t("Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"))
@@ -3505,7 +3510,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("<td>").append("<label class=filterEndsWith><input type=radio class=optbox value=ends_with name=\"filterType_")
                .append(nameUnderscore).append("\"").append(filterType.equals("ends_with") ? " checked" : "").append("></label></td>")
                .append("<td><input type=checkbox class=optbox name=\"defaultEnabled_").append(f.name).append("\"");
-            if (f.isDefault) {buf.append(" checked=checked");}
+            if (f.isDefault) {buf.append(" checked");}
             buf.append("></td></tr>\n");
         }
         String spacer = "<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n";
@@ -3573,11 +3578,11 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append(urlify(homeURL, 64))
                .append("</td><td><input type=radio class=optbox value=\"0\" tabindex=-1 name=\"ttype_")
                .append(announceURL).append("\"");
-            if (!(isOpen || isPrivate)) {buf.append(" checked=checked");}
+            if (!(isOpen || isPrivate)) {buf.append(" checked");}
             else if (isKnownOpen) {buf.append(" disabled=disabled");}
             buf.append("></td><td><input type=radio class=optbox value=1 tabindex=-1 name=\"ttype_")
                .append(announceURL).append("\"");
-            if (isOpen) {buf.append(" checked=checked");}
+            if (isOpen) {buf.append(" checked");}
             else if (t.announceURL.equals("http://diftracker.i2p/announce.php") ||
                      t.announceURL.equals("http://tracker2.postman.i2p/announce.php") ||
                      t.announceURL.equals("http://torrfreedom.i2p/announce.php")) {
@@ -3585,7 +3590,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             buf.append("></td><td><input type=radio class=optbox value=2 tabindex=-1 name=\"ttype_")
                .append(announceURL).append("\"");
-            if (isPrivate) {buf.append(" checked=checked");}
+            if (isPrivate) {buf.append(" checked");}
             else if (isKnownOpen ||
                      t.announceURL.equals("http://diftracker.i2p/announce.php") ||
                      t.announceURL.equals("http://tracker2.postman.i2p/announce.php") ||
@@ -3599,7 +3604,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String trackerFormElements =
             "<td><input type=text class=trackername name=tname spellcheck=false></td>" +
             "<td><input type=text class=trackerhome name=thurl spellcheck=false></td>" +
-            "<td><input type=radio class=optbox value=0 name=add_tracker_type checked=checked></td>" +
+            "<td><input type=radio class=optbox value=0 name=add_tracker_type checked></td>" +
             "<td><input type=radio class=optbox value=1 name=add_tracker_type></td>" +
             "<td><input type=radio class=optbox value=2 name=add_tracker_type></td>" +
             "<td><input type=text class=trackerannounce name=taurl spellcheck=false></td>";
@@ -4264,7 +4269,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append(txt);
                     buf.append("</b></label><input type=checkbox class=optbox name=enableInOrder id=enableInOrder");
                     if (storage.getInOrder())
-                        buf.append(" checked=checked");
+                        buf.append(" checked");
                     buf.append(">" +
                                "<input type=submit name=setInOrderEnabled value=\"");
                     buf.append(_t("Save Preference"));
@@ -4459,7 +4464,7 @@ public class I2PSnarkServlet extends BasicServlet {
         //DateFormat dfmt=DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
         boolean showSaveButton = false;
         boolean rowEven = true;
-        boolean inOrder = storage != null && storage.getInOrder();
+        //boolean inOrder = storage != null && storage.getInOrder(); // disabled for now
         int videoCount = 0;
         int imgCount = 0;
         int txtCount = 0;
@@ -4481,13 +4486,11 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (storage == null) {
                     // Assume complete, perhaps he removed a completed torrent but kept a bookmark
                     complete = true;
-                    //status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Not found"), _t("Torrent not found?").replace("?", ""));
                     status = toSVG("warn", "iconStatus", _t("Not found"), _t("Torrent not found?").replace("?", ""));
                 } else {
                     long remaining = fai.remaining;
                     if (remaining < 0) {
                         complete = true;
-                        //status = fai.isDirectory ? "" : toSVG("warn", "iconStatus", _t("Unrecognized"), _t("File not found in torrent?").replace("?", ""));
                         status = toSVG("warn", "iconStatus", _t("Unrecognized"), _t("File not found in torrent?").replace("?", ""));
                     } else if (remaining == 0 || length <= 0) {
                         complete = true;
@@ -4596,24 +4599,26 @@ public class I2PSnarkServlet extends BasicServlet {
             if (!fai.isDirectory) {buf.append(formatSize(length));}
             buf.append("</td><td class=\"fileStatus volatile\">").append(status).append("</td>");
             if (showPriority) {
-                buf.append("<td class=\"priority volatile\">");
-                if ((!complete) && (!fai.isDirectory)) {
-                    if (!inOrder) {
-                        buf.append("<label class=priorityHigh title=\"")
-                           .append(_t("Download file at high priority")).append("\">")
-                           .append("\n<input type=radio class=\"prihigh optbox\" value=5 name=\"pri.")
-                           .append(fileIndex).append("\" ");
-                        if (priority > 0) {buf.append("checked=checked");}
-                        buf.append('>').append(_t("High")).append("</label>");
-                    }
-                    buf.append("<label class=priorityNormal title=\"").append(_t("Download file at normal priority")).append("\">")
-                       .append("\n<input type=radio class=\"prinorm optbox\" value=0 name=\"pri.").append(fileIndex).append("\" ");
-                    if (priority == 0 || (inOrder && priority >= 0)) {buf.append("checked=checked");}
-                    buf.append('>').append(_t("Normal")).append("</label>")
-                       .append("<label class=prioritySkip title=\"").append(_t("Do not download this file")).append("\">")
-                       .append("\n<input type=radio class=\"priskip optbox\" value=-9 name=\"pri.").append(fileIndex).append("\" ");
-                    if (priority < 0) {buf.append("checked=checked");}
-                    buf.append('>').append(_t("Skip")).append("</label>");
+                buf.append("<td class=\"priority volatile\">\n");
+                if (!complete && !fai.isDirectory) {
+                    buf.append("<label class=priorityHigh title=\"")
+                       .append(_t("Download file at high priority")).append("\">")
+                       .append("<input type=radio class=\"optbox prihigh\" value=5 name=\"pri_")
+                       .append(fileIndex).append("\"");
+                    if (priority > 0) {buf.append(" checked");}
+                    buf.append('>').append(_t("High")).append("</label>\n");
+                    buf.append("<label class=priorityNormal title=\"")
+                       .append(_t("Download file at normal priority")).append("\">")
+                       .append("<input type=radio class=\"optbox prinorm\" value=0 name=\"pri_")
+                       .append(fileIndex).append("\"");
+                    if (priority == 0) {buf.append(" checked");}
+                    buf.append('>').append(_t("Normal")).append("</label>\n")
+                       .append("<label class=prioritySkip title=\"")
+                       .append(_t("Do not download this file")).append("\">")
+                       .append("<input type=radio class=\"optbox priskip\" value=-9 name=\"pri_")
+                       .append(fileIndex).append("\"");
+                    if (priority < 0) {buf.append(" checked");}
+                    buf.append('>').append(_t("Skip")).append("</label>\n");
                     showSaveButton = true;
                 }
                 buf.append("</td>");
@@ -5247,18 +5252,19 @@ public class I2PSnarkServlet extends BasicServlet {
         if (storage == null) {return;}
         for (Map.Entry<String, String[]> entry : postParams.entrySet()) {
             String key = entry.getKey();
-            if (key.startsWith("pri.")) {
+            if (key.startsWith("pri_")) {
                 try {
                     int fileIndex = Integer.parseInt(key.substring(4));
                     String val = entry.getValue()[0]; // jetty arrays
                     int pri = Integer.parseInt(val);
                     storage.setPriority(fileIndex, pri);
+                    _manager.addMessage(_t("File downloading priorities updated for torrent ") + storage.getBaseName());
                 } catch (Throwable t) {t.printStackTrace();}
             }
         }
-        if (postParams.get("setInOrderEnabled") != null) {
-            storage.setInOrder(postParams.get("enableInOrder") != null);
-        }
+        //if (postParams.get("setInOrderEnabled") != null) {
+        //    storage.setInOrder(postParams.get("enableInOrder") != null);
+        //}
         snark.updatePiecePriorities();
         _manager.saveTorrentStatus(snark);
     }
@@ -5341,7 +5347,7 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append("</td><td>").append(s).append("</td><td>");
                 if (hc != null) {
                     buf.append("<input type=radio class=optbox name=primary");
-                    if (s.equals(announce)) {buf.append(" checked=checked ");}
+                    if (s.equals(announce)) {buf.append(" checked ");}
                     buf.append(" value=\"").append(hc).append("\"");
                     if (isRunning) {buf.append(" disabled=disabled");}
                     buf.append(">");

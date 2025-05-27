@@ -3,14 +3,16 @@
 /* Author: dr|z3d */
 
 document.addEventListener("DOMContentLoaded", function() {
+  const headerRow = document.querySelector("#dirInfo tbody tr:first-child");
+  const incomplete = document.querySelectorAll("#dirInfo tr.incomplete").length;
+  if (!incomplete || incomplete < 2 || !headerRow) {return;}
   const priorityColumn = document.querySelector("#dirInfo td.priority");
-  if (!priorityColumn) {return;}
   const columns = ["prihigh", "priskip"];
-  const headerRow = document.querySelector("#dirInfo thead tr:first-child");
   const toggleRow = headerRow.cloneNode(false);
   const thSpacer = document.createElement("th");
   const thToggle = document.createElement("th");
   toggleRow.removeAttribute("class");
+  toggleRow.id = "togglePriorities";
   thSpacer.setAttribute("colspan", "4");
 
   columns.forEach(function(column, index) {
@@ -34,8 +36,6 @@ document.addEventListener("DOMContentLoaded", function() {
   toggleRow.appendChild(thToggle);
   toggleRow.insertBefore(thSpacer, thToggle);
   headerRow.parentNode.insertBefore(toggleRow, headerRow.nextSibling);
-  const normalRadios = document.querySelectorAll("#dirInfo .prinorm");
-  normalRadios.forEach(function(radio) {radio.checked = true;});
 
   document.body.addEventListener("click", function(event) {
     const target = event.target;
@@ -43,11 +43,22 @@ document.addEventListener("DOMContentLoaded", function() {
       const toggleId = target.id;
       const column = toggleId.substr(7);
       const radios = document.querySelectorAll(`#dirInfo .${column}`);
-      radios.forEach(function(radio) {radio.checked = target.checked;});
+      const normalPriority = document.querySelectorAll("#dirInfo .prinorm");
+      let allChecked = true;
+      radios.forEach(function(radio) {
+        if (!radio.checked) {allChecked = false;}
+      });
+      if (allChecked) {
+        radios.forEach(function(radio) {
+          radio.checked = false;
+          normalPriority.forEach(function(radio) {radio.checked = true;});
+        });
+      } else {
+        radios.forEach(function(radio) {radio.checked = target.checked;});
+      }
       const checkedToggles = document.querySelectorAll("#dirInfo input[type=checkbox]:checked");
       if (checkedToggles.length === 0) {
-        const normalRadios = document.querySelectorAll("#dirInfo .prinorm");
-        normalRadios.forEach(function(radio) {radio.checked = true;});
+        normalPriority.forEach(function(radio) {radio.checked = true;});
       }
       columns.forEach(function(col, i) {
         if (col !== column) {
