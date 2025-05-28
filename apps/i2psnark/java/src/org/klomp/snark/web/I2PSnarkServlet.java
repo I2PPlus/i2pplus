@@ -575,7 +575,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String pageSize = String.valueOf(_manager.getPageSize());
         String refresh = String.valueOf(_manager.getRefreshDelaySeconds());
         StringBuilder headers = new StringBuilder(1024);
-        headers.append("Cache-Control: private, no-cache, max-age=60\r\n");
+        headers.append("Cache-Control: private, no-cache, max-age=" + Math.min(Integer.valueOf(refresh), 60) + "\r\n");
         headers.append("Content-Security-Policy: default-src 'none'; child-src 'self'\r\n");
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("text/html; charset=utf-8");
@@ -692,7 +692,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (showStatusFilter) {renderFilterBar(out, req);}
             else {
                 StringBuilder buf = new StringBuilder(1280);
-                buf.append("<form id=torrentlist action=\"_post\" method=POST target=processForm>\n");
+                buf.append("<form id=torrentlist action=_post method=POST target=processForm>\n");
                 out.append(buf);
                 buf.setLength(0);
             }
@@ -1207,7 +1207,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean searchActive = (search != null && !search.equals("") && search.length() > 0);
 
         StringBuilder buf = new StringBuilder(1280);
-        buf.append("<form id=torrentlist action=\"_post\" method=POST target=processForm>\n");
+        buf.append("<form id=torrentlist action=_post method=POST target=processForm>\n");
         StringBuilder activeQuery = new StringBuilder("/i2psnark/?");
         if (peerParam != null) {activeQuery.append("p=" + peerParam + "&");}
         if (srt != null) {activeQuery.append("sort=" + srt + "&");}
@@ -2966,27 +2966,37 @@ public class I2PSnarkServlet extends BasicServlet {
         if (newURL == null || newURL.trim().length() <= 0 || req.getMethod().equals("POST")) {newURL = "";}
         else {newURL = DataHelper.stripHTML(newURL);} // XSS
 
-        buf.append("<div id=add class=snarkNewTorrent>\n")
-           .append("<form id=addForm action=\"_post\" method=POST enctype=\"multipart/form-data\" accept-charset=\"UTF-8\" target=processForm>\n")
-           .append("<div class=sectionPanel id=addSection>\n");
+        String addTop =
+            "<div id=add class=snarkNewTorrent>\n" +
+            "<form id=addForm action=_post method=POST enctype=multipart/form-data " +
+            "accept-charset=UTF-8 target=processForm>\n" +
+            "<div class=sectionPanel id=addSection>\n";
+        buf.append(addTop);
         writeHiddenInputs(buf, req, "Add");
         buf.append("<input hidden class=toggle_input id=toggle_addtorrent type=checkbox");
         if (newURL.length() > 0) {buf.append(" checked>");} // force toggle open
         else {buf.append('>');}
-        buf.append("<label id=tab_addtorrent class=toggleview for=\"toggle_addtorrent\"><span class=tab_label>").append(_t("Add Torrent")).append("</span></label>")
+        buf.append("<label id=tab_addtorrent class=toggleview for=toggle_addtorrent><span class=tab_label>")
+           .append(_t("Add Torrent")).append("</span></label>")
            .append("<hr>\n<table border=0><tr>")
            .append("<td class=right>").append("<span>").append(_t("From URL")).append("</span>:</td>")
-           .append("<td class=left><input id=addTorrentURL type=text name=nofilter_newURL size=85 value=\"" + newURL + "\" spellcheck=false")
-           .append(" title=\"").append(_t("Enter the torrent file download URL (I2P only), magnet link, or info hash")).append("\" required>\n")
-           .append("<input type=submit class=add value=\"").append(_t("Add torrent")).append("\" name=foo></td>\n")
+           .append("<td class=left><input id=addTorrentURL type=text name=nofilter_newURL size=85 value=\"")
+           .append(newURL).append("\" spellcheck=false")
+           .append(" title=\"").append(_t("Enter the torrent file download URL (I2P only), magnet link, or info hash"))
+           .append("\" required>\n").append("<input type=submit class=add value=\"").append(_t("Add torrent"))
+           .append("\" name=foo></td>\n")
            .append("<tr hidden><td class=right>").append(_t("Torrent file")).append(":</td>")
            .append("<td class=left><input type=file name=newFile accept=\".torrent\"/></td>")
            .append("<tr><td class=right><span>").append(_t("Data dir")).append("</span>:</td>")
-           .append("<td class=left><input type=text name=nofilter_newDir size=85 value=\"").append(_manager.getDataDir().getAbsolutePath()).append("\" spellcheck=false")
-           .append(" title=\"").append(_t("Enter the directory to save the data in (default {0})", _manager.getDataDir().getAbsolutePath())).append("\"></td></tr>\n")
-           .append("</table>\n")
-           .append("<div id=addNotify class=notify hidden><table><tr><td></td></tr></table></div>\n")
-           .append("</div>\n</form>\n</div>\n");
+           .append("<td class=left><input type=text name=nofilter_newDir size=85 value=\"")
+           .append(_manager.getDataDir().getAbsolutePath()).append("\" spellcheck=false").append(" title=\"")
+           .append(_t("Enter the directory to save the data in (default {0})", _manager.getDataDir().getAbsolutePath()));
+
+        String addBottom =
+            "\"></td></tr>\n</table>\n" +
+            "<div id=addNotify class=notify hidden><table><tr><td></td></tr></table></div>\n" +
+            "</div>\n</form>\n</div>\n";
+        buf.append(addBottom);
 
         out.append(buf);
         out.flush();
@@ -2996,13 +3006,15 @@ public class I2PSnarkServlet extends BasicServlet {
     private void writeSeedForm(PrintWriter out, HttpServletRequest req, List<Tracker> sortedTrackers, List<TorrentCreateFilter> sortedFilters) throws IOException {
         StringBuilder buf = new StringBuilder(3*1024);
         _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
-        buf.append("<div class=sectionPanel id=createSection>\n<div>\n");
-        // *not* enctype="multipart/form-data", so that the input type=file sends the filename, not the file
-        buf.append("<form id=createForm action=\"_post\" method=POST target=processForm>\n");
+        String createTop =
+            "<div class=sectionPanel id=createSection>\n<div>\n" +
+            // *not* enctype="multipart/form-data", so input type=file sends filename, not the file
+            "<form id=createForm action=_post method=POST target=processForm>\n";
+        buf.append(createTop);
         writeHiddenInputs(buf, req, "Create");
         buf.append("<input hidden class=toggle_input id=toggle_createtorrent type=checkbox>")
-           .append("<label id=tab_newtorrent class=toggleview for=\"toggle_createtorrent\"><span class=tab_label>").append(_t("Create Torrent")).append("</span></label>")
-           .append("<hr>\n<table border=0>")
+           .append("<label id=tab_newtorrent class=toggleview for=toggle_createtorrent><span class=tab_label>")
+           .append(_t("Create Torrent")).append("</span></label><hr>\n<table border=0>")
            //.append("From file: <input type=file name=newFile size=50 value=\"" + newFile + "\" /><br>\n");
            .append("<tr><td class=right><span>").append(_t("Data to seed")).append("</span>:</td>")
            .append("<td class=left><input id=createTorrentFile type=text name=nofilter_baseFile size=85 value=\"").append("\" spellcheck=false title=\"")
@@ -3021,7 +3033,7 @@ public class I2PSnarkServlet extends BasicServlet {
            boolean isDefault = f.isDefault;
            buf.append("<input type=checkbox id=").append(nameUnderscore).append(" name=filters")
               .append(" value=\"").append(name).append("\"").append(isDefault ? " checked" : "").append(" hidden>")
-              .append("<label for=\"").append(nameUnderscore).append("\" class=\"createFilterToggle ").append(type)
+              .append("<label for=").append(nameUnderscore).append(" class=\"createFilterToggle ").append(type)
               .append("\" title=\"Filter pattern: (").append(filterTypeLabel).append(") ").append(pattern).append("\">")
               .append(name).append("</label>");
         }
@@ -3056,10 +3068,11 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<tr><td><i>").append(_t("none"))
            .append("</i></td><td><input type=radio class=optbox name=announceURL value=\"none\"");
         if (_lastAnnounceURL == null) {buf.append(" checked");}
-        buf.append("></td><td></td><td></td></tr>\n</table>\n")
-           .append("</td></tr>\n</table>\n</form>\n</div>\n")
-           .append("<div id=createNotify class=notify hidden><table><tr><td></td></tr></table></div>\n")
-           .append("</div>\n");
+
+        String createBottom =
+            "></td><td></td><td></td></tr>\n</table>\n</td></tr>\n</table>\n</form>\n</div>\n" +
+            "<div id=createNotify class=notify hidden><table><tr><td></td></tr></table></div>\n</div>\n";
+        buf.append(createBottom);
 
         out.append(buf);
         out.flush();
@@ -3113,7 +3126,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(_t("Theme"))
            .append("</b> \n");
         if (_manager.getUniversalTheming()) {
-            buf.append("<select id=themeSelect name=theme disabled=disabled title=\"")
+            buf.append("<select id=themeSelect name=theme disabled title=\"")
                .append(_t("To change themes manually, disable universal theming"))
                .append("\"><option>")
                .append(_manager.getTheme())
@@ -3190,7 +3203,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
 /**
-        buf.append("<span class=configOption><label for=\"smartSort\"><b>")
+        buf.append("<span class=configOption><label for=smartSort><b>")
            .append(_t("Smart torrent sorting"))
            .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
            .append("name=smartSort id=smartSort ")
@@ -3200,7 +3213,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("\"></span><br>\n")
 **/
 
-        buf.append("<span class=configOption><label for=\"collapsePanels\"><b>")
+        buf.append("<span class=configOption><label for=collapsePanels><b>")
            .append(_t("Collapsible panels"))
            .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
            .append("name=collapsePanels id=collapsePanels ")
@@ -3213,7 +3226,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append(_t("Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode"));
         }
         buf.append("\"></span><br>\n")
-           .append("<span class=configOption><label for=\"showStatusFilter\"><b>")
+           .append("<span class=configOption><label for=showStatusFilter><b>")
            .append(_t("Torrent filter bar"))
            .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
            .append("name=showStatusFilter id=showStatusFilter ")
@@ -3222,7 +3235,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(_t("Show filter bar above torrents for selective display based on status"))
            .append(" (").append(_t("requires javascript")).append(")")
            .append("\"></span><br>\n")
-           .append("<span class=configOption><label for=\"enableLightbox\"><b>")
+           .append("<span class=configOption><label for=enableLightbox><b>")
            .append(_t("Enable lightbox"))
            .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
            .append("name=enableLightbox id=enableLightbox ")
@@ -3231,7 +3244,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(_t("Use a lightbox to display images when thumbnails are clicked"))
            .append(" (").append(_t("requires javascript")).append(")")
            .append("\"></span><br>\n")
-           .append("<span class=configOption><label for=\"enableAddCreate\"><b>")
+           .append("<span class=configOption><label for=enableAddCreate><b>")
            .append(_t("Persist Add/Create"))
            .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
            .append("name=enableAddCreate id=enableAddCreate ")
@@ -3246,14 +3259,14 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<tr><th class=suboption>")
            .append(_t("Comments &amp; Ratings"))
            .append("</th></tr>\n<tr><td>\n<div class=optionlist>\n")
-           .append("<span class=configOption><label for=\"ratings\"><b>")
+           .append("<span class=configOption><label for=ratings><b>")
            .append(_t("Enable Ratings"))
            .append("</b></label> <input type=checkbox class=\"optbox slider\" name=ratings id=ratings ")
            .append(useRatings ? "checked " : "")
            .append("title=\"")
            .append(_t("Show ratings on torrent pages"))
            .append("\"></span><br>\n")
-           .append("<span class=configOption><label for=\"comments\"><b>")
+           .append("<span class=configOption><label for=comments><b>")
            .append(_t("Enable Comments"))
            .append("</b></label> <input type=checkbox class=\"optbox slider\" name=comments id=comments ")
            .append(useComments ? "checked " : "")
@@ -3300,21 +3313,21 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("\"> ")
            .append(_t("peers"))
            .append("</label></span><br>\n")
-           .append("<span class=configOption><label for=\"useOpenTrackers\"><b>")
+           .append("<span class=configOption><label for=useOpenTrackers><b>")
            .append(_t("Use open trackers also").replace(" also", ""))
            .append("</b></label> <input type=checkbox class=\"optbox slider\" name=useOpenTrackers id=useOpenTrackers ")
            .append(useOpenTrackers ? "checked " : "")
            .append("title=\"")
            .append(_t("Announce torrents to open trackers as well as trackers listed in the torrent file"))
            .append("\"></span><br>\n")
-           .append("<span class=configOption><label for=\"useDHT\"><b>")
+           .append("<span class=configOption><label for=useDHT><b>")
            .append(_t("Enable DHT"))
            .append("</b></label> <input type=checkbox class=\"optbox slider\" name=useDHT id=useDHT ")
            .append(useDHT ? "checked " : "")
            .append("title=\"")
            .append(_t("Use DHT to find additional peers"))
            .append("\"></span><br>\n")
-           .append("<span class=configOption><label for=\"autoStart\"><b>")
+           .append("<span class=configOption><label for=autoStart><b>")
            .append(_t("Auto start torrents"))
            .append("</b> </label><input type=checkbox class=\"optbox slider\" name=autoStart id=autoStart ")
            .append(autoStart ? "checked " : "")
@@ -3347,21 +3360,21 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("</b> <input type=text name=nofilter_dataDir size=60").append(" title=\"")
            .append(_t("Directory where torrents and downloaded/shared files are stored"))
            .append("\" value=\"").append(DataHelper.escapeHTML(dataDir)).append("\" spellcheck=false></label></span><br>\n")
-           .append("<span class=configOption><label for=\"filesPublic\"><b>")
+           .append("<span class=configOption><label for=filesPublic><b>")
            .append(_t("Files readable by all"))
            .append("</b> </label><input type=checkbox class=\"optbox slider\" name=filesPublic id=filesPublic ")
            .append(filesPublic ? "checked " : "").append("title=\"")
            .append(_t("Set file permissions to allow other local users to access the downloaded files"))
            .append("\"></span>\n");
         if (!isWindows && !isARM) {
-            buf.append("<span class=configOption><label for=\"preallocate\"><b>")
+            buf.append("<span class=configOption><label for=preallocateFiles><b>")
                .append(_t("Pre-allocate files"))
                .append("</b> </label><input type=checkbox class=\"optbox slider\" name=preallocateFiles id=preallocateFiles ")
                .append(preallocateFiles ? "checked " : "").append("title=\"")
                .append(_t("Pre-allocate files on disk to avoid fragmentation on non-solid state storage"))
                .append("\"></span>\n");
         }
-        buf.append("<span class=configOption><label for=\"maxFiles\"><b>")
+        buf.append("<span class=configOption><label for=maxFiles><b>")
            .append(_t("Max files per torrent"))
            .append("</b> <input type=text name=maxFiles size=5 maxlength=5 pattern=\"[0-9]{1,5}\" class=\"r numeric\"").append(" title=\"")
            .append(_t("Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"))
@@ -3453,19 +3466,20 @@ public class I2PSnarkServlet extends BasicServlet {
                 _manager.util().setVaryOutboundHops(false);
             }
         }
+        String spacer = "<tr class=spacer><td></td></tr>\n";
         buf.append("<span class=configOption id=i2cpOptions><label><b>")
            .append(_t("I2CP options"))
            .append("</b> <input type=text id=i2cpOpts name=i2cpOpts value=\"")
            .append(opts.toString().trim()).append("\" size=60></label></span>\n")
            .append("</div>\n</td></tr>\n")
-           .append("<tr class=spacer><td></td></tr>\n");  // spacer
+           .append(spacer);
 
 /* save config */
 
         buf.append("<tr><td><input type=submit class=accept value=\"")
            .append(_t("Save configuration"))
            .append("\" name=foo></td></tr>\n")
-           .append("<tr class=spacer><td>&nbsp;</td></tr>\n")  // spacer
+           .append(spacer)
            .append("</table></div></div></form>");
         out.append(buf);
         out.flush();
@@ -3579,14 +3593,14 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("</td><td><input type=radio class=optbox value=\"0\" tabindex=-1 name=\"ttype_")
                .append(announceURL).append("\"");
             if (!(isOpen || isPrivate)) {buf.append(" checked");}
-            else if (isKnownOpen) {buf.append(" disabled=disabled");}
+            else if (isKnownOpen) {buf.append(" disabled");}
             buf.append("></td><td><input type=radio class=optbox value=1 tabindex=-1 name=\"ttype_")
                .append(announceURL).append("\"");
             if (isOpen) {buf.append(" checked");}
             else if (t.announceURL.equals("http://diftracker.i2p/announce.php") ||
                      t.announceURL.equals("http://tracker2.postman.i2p/announce.php") ||
                      t.announceURL.equals("http://torrfreedom.i2p/announce.php")) {
-                buf.append(" disabled=disabled");
+                buf.append(" disabled");
             }
             buf.append("></td><td><input type=radio class=optbox value=2 tabindex=-1 name=\"ttype_")
                .append(announceURL).append("\"");
@@ -3595,7 +3609,7 @@ public class I2PSnarkServlet extends BasicServlet {
                      t.announceURL.equals("http://diftracker.i2p/announce.php") ||
                      t.announceURL.equals("http://tracker2.postman.i2p/announce.php") ||
                      t.announceURL.equals("http://torrfreedom.i2p/announce.php")) {
-                buf.append(" disabled=disabled");
+                buf.append(" disabled");
             }
             buf.append("></td><td>").append(urlify(announceURL, 64)).append("</td></tr>\n");
         }
@@ -4252,7 +4266,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     else {buf.append(_t("Start")).append("\" name=start class=starttorrent>");}
                     buf.append("<input type=submit name=recheck value=\"").append(_t("Force Recheck"));
                     if (isRunning) {
-                        buf.append("\" class=disabled disabled=disabled title=\"")
+                        buf.append("\" class=disabled disabled title=\"")
                            .append(_t("Stop the torrent in order to check file integrity")).append("\">");
                     } else {
                         buf.append("\" class=reload title=\"").append(_t("Check integrity of the downloaded files")).append("\">");
@@ -4262,7 +4276,7 @@ public class I2PSnarkServlet extends BasicServlet {
 // TODO: fix feature so checkbox status is saved
                 boolean showInOrder = storage != null && !storage.complete() && meta != null;
                 if (showInOrder && meta != null) {
-                    buf.append("<span id=torrentOrderControl><label for=\"enableInOrder\"><b>");
+                    buf.append("<span id=torrentOrderControl><label for=enableInOrder><b>");
                     String txt = (meta.getFiles() != null && meta.getFiles().size() > 1) ?
                                    _t("Download files in order") :
                                    _t("Download pieces in order");
@@ -4339,7 +4353,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("<div class=mainsection id=commentSection>")
                    .append("<input hidden class=toggle_input id=toggle_comments type=checkbox");
                 if (comments != null && !comments.isEmpty()) {buf.append(" checked");}
-                buf.append(">\n<label id=tab_comments class=toggleview for=\"toggle_comments\"><span class=tab_label>")
+                buf.append(">\n<label id=tab_comments class=toggleview for=toggle_comments><span class=tab_label>")
                    .append(_t("Comments &amp; Ratings"))
                    .append("</span></label><hr>\n");
                 displayComments(snark, er, ec, esc, buf);
@@ -4385,7 +4399,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String up = "";
         if (!isTopLevel || fileList.size() <= 10 || sortParam != null || getQueryString(up) != null) {buf.append(" checked");}
         buf.append(">")
-           .append("<label id=tab_files class=toggleview for=\"toggle_files\"><span class=tab_label>")
+           .append("<label id=tab_files class=toggleview for=toggle_files><span class=tab_label>")
            .append(_t("Files"))
            .append("</span></label><hr>\n")
            .append("<table id=dirInfo>\n<thead>\n<tr>\n<th colspan=2>");
@@ -4644,7 +4658,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("<input hidden class=toggle_input id=toggle_comments type=checkbox");
             if (comments != null && !comments.isEmpty()) {buf.append(" checked");}
         }
-        buf.append(">\n<label id=tab_comments class=toggleview for=\"toggle_comments\">")
+        buf.append(">\n<label id=tab_comments class=toggleview for=toggle_comments>")
            .append("<span class=tab_label>").append(_t("Comments")).append("</span></label><hr>\n");
         displayComments(snark, er, ec, esc, buf);
         // for stop/start/check
@@ -5316,10 +5330,11 @@ public class I2PSnarkServlet extends BasicServlet {
         if (snark == null) {return;}
         MetaInfo meta = snark.getMetaInfo();
         if (meta == null) {return;}
-        buf.append("<div id=editSection class=mainsection>\n")
-           .append("<input hidden class=toggle_input id=toggle_torrentedit type=checkbox>")
-           .append("<label id=tab_torrentedit class=toggleview for=\"toggle_torrentedit\"><span class=tab_label>")
-           .append(_t("Edit Torrent")).append("</span></label><hr>\n")
+        String editSectionTop =
+            "<div id=editSection class=mainsection>\n" +
+            "<input hidden class=toggle_input id=toggle_torrentedit type=checkbox>" +
+            "<label id=tab_torrentedit class=toggleview for=toggle_torrentedit><span class=tab_label>";
+        buf.append(editSectionTop).append(_t("Edit Torrent")).append("</span></label><hr>\n")
            .append("<table id=torrentEdit>\n");
         boolean isRunning = !snark.isStopped();
         String announce = meta.getAnnounce();
@@ -5349,14 +5364,14 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append("<input type=radio class=optbox name=primary");
                     if (s.equals(announce)) {buf.append(" checked ");}
                     buf.append(" value=\"").append(hc).append("\"");
-                    if (isRunning) {buf.append(" disabled=disabled");}
+                    if (isRunning) {buf.append(" disabled");}
                     buf.append(">");
                 }
                 buf.append("</td><td>");
                 if (hc != null) {
                     buf.append("<input type=checkbox class=optbox name=\"removeTracker-")
                        .append(hc).append("\" title=\"").append(_t("Mark for deletion")).append("\"");
-                    if (isRunning) {buf.append(" disabled=disabled");}
+                    if (isRunning) {buf.append(" disabled");}
                     buf.append(">");
                 }
                 buf.append("</td></tr>\n");
@@ -5382,11 +5397,11 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append(announceURL).append("</td><td>")
                    .append("<input type=radio class=optbox name=primary value=\"")
                    .append(hc).append("\"");
-                if (isRunning) {buf.append(" disabled=disabled");}
+                if (isRunning) {buf.append(" disabled");}
                 buf.append("></td><td>")
                    .append("<input type=checkbox class=optbox id=\"").append(name).append("\" name=\"addTracker-")
                    .append(hc).append("\" title=\"").append(_t("Add tracker")).append("\"");
-                if (isRunning) {buf.append(" disabled=disabled");}
+                if (isRunning) {buf.append(" disabled");}
                 buf.append("></td></tr>\n");
             }
         }
