@@ -1,6 +1,8 @@
+2025-05-29
+ * I2PSnark: Ensure csp response headers are sent for html and js
+
 2025-05-26
  * I2PSnark:
-   - Add option in the UI to toggle file pre-allocation
    - Reimplement toggle all file download priorities
 
 2025-05-20 dr|z3d
