@@ -11,6 +11,24 @@ input_file="torbulkexitlist"
 second_list_input_file="torlist_exit"
 output_file="blocklist_tor.txt"
 http_proxy=${http_proxy:-"http://127.0.0.1:4444"}
+backup_http_proxy=${http_backup_proxy:-"http://127.0.0.1:4001"}
+
+# Check the availability of the primary proxy
+echo "Verifying primary proxy ${http_proxy}..."
+if ! curl --silent --head --fail --proxy "${http_proxy}" https://check.torproject.org/ > /dev/null; then
+  echo "Connection to primary proxy ${http_proxy} failed, attempting to use backup proxy ${backup_http_proxy}..."
+
+  # Check the availability of the backup proxy
+  if ! curl --silent --head --fail --proxy "${backup_http_proxy}" https://check.torproject.org/ > /dev/null; then
+    echo "Connection to backup proxy ${backup_http_proxy} also failed - both proxies are unavailable."
+    exit 1
+  else
+    echo "Backup proxy ${backup_http_proxy} is good - attempting to download lists..."
+    http_proxy="${backup_http_proxy}"
+  fi
+else
+  echo "Primary proxy ${http_proxy} is good - attempting to download lists..."
+fi
 
 # Variables
 url="https://check.torproject.org/$input_file"
