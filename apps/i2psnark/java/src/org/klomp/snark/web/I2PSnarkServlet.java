@@ -204,6 +204,8 @@ public class I2PSnarkServlet extends BasicServlet {
     private void doGetAndPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String method = req.getMethod(); // since we are not overriding handle*(), do this here
         String path = req.getServletPath(); // this is the part after /i2psnark
+        String csp = "default-src 'self'; base-uri 'self'; worker-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; ";
+        if (path.contains(".js")) {resp.setHeader("Content-Security-Policy", csp);}
 
         // in-war icons etc.
         if (path != null && path.startsWith(WARBASE)) {
@@ -289,6 +291,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         // Either the main page or /configure
 
+        setHTMLHeaders(resp, cspNonce, true);
         String nonce = req.getParameter("nonce");
         if (nonce != null) {
             // the clear messages button is a GET
@@ -308,62 +311,64 @@ public class I2PSnarkServlet extends BasicServlet {
         StringBuilder buf = new StringBuilder(4*1024);
         String theme = _manager.getTheme();
         String pageBackground = "#fff";
+        String preload;
+        _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
+
         if (theme.equals("dark")) {pageBackground = "#000";}
         else if (theme.equals("midnight")) {pageBackground = "#001";}
         else if (theme.equals("ubergine")) {pageBackground = "#101";}
         else if (theme.equals("vanilla")) {pageBackground = "#cab39b";}
-        buf.append(DOCTYPE).append("<html").append(isStandalone() ? " class=\"standalone\"" : "")
+        buf.append(DOCTYPE).append("<html").append(isStandalone() ? " class=standalone" : "")
            .append(" style=\"background:").append(pageBackground).append("\">\n")
            .append("<head>\n").append("<meta charset=utf-8>\n")
            .append("<meta name=viewport content=\"width=device-width, initial-scale=1\">\n")
-           .append("<script nonce=").append(cspNonce).append(">const theme = \"").append(theme).append("\";</script>");
+           .append("<script nonce=").append(cspNonce).append(">const theme = \"").append(theme).append("\";</script>\n");
 
         if (!isConfigure && !isStandalone()) {
-            buf.append("<link rel=modulepreload href=/js/iframeResizer/updatedEvent.js>")
-               .append("<link rel=modulepreload href=").append(_resourcePath).append("js/tunnelCounter.js").append(">")
-               .append("<link rel=modulepreload href=/js/iframeResizer/iframeResizer.contentWindow.js>")
-               .append("<link rel=modulepreload href=/js/setupIframe.js>");
+            preload =
+               "<link rel=modulepreload href=/js/iframeResizer/updatedEvent.js>\n" +
+               "<link rel=modulepreload href=/js/iframeResizer/iframeResizer.contentWindow.js>\n" +
+               "<link rel=modulepreload href=/js/setupIframe.js>\n" +
+               "<link rel=modulepreload href=" + _resourcePath + "js/tunnelCounter.js>\n";
+            buf.append(preload);
         }
 
         if (!isConfigure) {
-            buf.append("<link rel=modulepreload href=").append(_resourcePath).append("js/refreshTorrents.js").append(">")
-               .append("<link rel=modulepreload href=").append(_resourcePath).append("js/snarkAlert.js").append(">")
-               .append("<link rel=modulepreload href=").append(_resourcePath).append("js/snarkSort.js").append(">")
-               .append("<link rel=modulepreload href=").append(_resourcePath).append("js/click.js").append(">")
-               .append("<link rel=modulepreload href=").append(_resourcePath).append("js/toggleLinks.js").append(">")
-               .append("<link rel=modulepreload href=").append(_resourcePath).append("js/toggleLog.js").append(">");
+            preload =
+                "<link rel=modulepreload href=" + _resourcePath + "js/refreshTorrents.js>\n" +
+                "<link rel=modulepreload href=" + _resourcePath + "js/snarkAlert.js>\n" +
+                "<link rel=modulepreload href=" + _resourcePath + "js/snarkSort.js>\n" +
+                "<link rel=modulepreload href=" + _resourcePath + "js/click.js>\n" +
+                "<link rel=modulepreload href=" + _resourcePath + "js/toggleLinks.js>\n" +
+                "<link rel=modulepreload href=" + _resourcePath + "js/toggleLog.js>\n";
+            buf.append(preload);
             if (showStatusFilter) {
-               buf.append("<link rel=modulepreload href=").append(_resourcePath).append("js/filterBar.js").append(">")
-                  .append("<link rel=modulepreload href=").append(_resourcePath).append("js/setFilterQuery.js").append(">");
+                preload =
+                    "<link rel=modulepreload href=" + _resourcePath + "js/filterBar.js>\n" +
+                    "<link rel=modulepreload href=" + _resourcePath + "js/setFilterQuery.js>\n";
+                buf.append(preload);
             }
         }
 
+        String v = CoreVersion.VERSION;
         String fontPath = isStandalone() ? "/i2psnark/.res/themes/fonts" : "/themes/fonts";
-        if (isStandalone() || useSoraFont()) {
-            buf.append("<link rel=preload href=").append(fontPath).append("/Sora.css as=style>\n")
-               .append("<link rel=preload href=").append(fontPath).append("/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>\n")
-               .append("<link rel=stylesheet href=").append(fontPath).append("/Sora.css>\n");
-        } else {
-            buf.append("<link rel=preload href=/themes/fonts/OpenSans.css as=style>\n")
-               .append("<link rel=preload href=/themes/fonts/OpenSans/OpenSans.woff2 as=font type=font/woff2 crossorigin>\n")
-               .append("<link rel=stylesheet href=/themes/fonts/OpenSans.css>\n");
-        }
-        buf.append("<link rel=preload href=\"").append(_themePath).append("snark.css?").append(CoreVersion.VERSION).append("\" as=style>\n")
-           .append("<link rel=preload href=\"").append(_themePath).append("images/images.css?").append(CoreVersion.VERSION).append("\" as=style>\n")
+        String displayFont = isStandalone() || useSoraFont() ? "Sora" : "OpenSans";
+        String fontCss =
+            "<link rel=preload href=" + fontPath + "/" + displayFont + ".css as=style>\n" +
+            "<link rel=preload href=" + fontPath + "/" + displayFont + "/" + displayFont + ".woff2 as=font type=font/woff2 crossorigin>\n" +
+            "<link rel=stylesheet href=" + fontPath + "/" + displayFont + ".css>\n";
+        buf.append(fontCss);
+        buf.append("<link rel=preload href=\"").append(_themePath).append("snark.css?").append(v).append("\" as=style>\n")
+           .append("<link rel=preload href=\"").append(_themePath).append("images/images.css?").append(v).append("\" as=style>\n")
            .append("<link rel=\"shortcut icon\" href=\"").append(_contextPath).append(WARBASE).append("icons/favicon.svg\">\n");
         buf.append("<title>");
         if (_contextName.equals(DEFAULT_NAME)) {buf.append(_t("I2PSnark"));}
         else {buf.append(_contextName);}
         buf.append(" - ");
         if (isConfigure) {buf.append(_t("Configuration"));}
-        else {
-            String peerParam = req.getParameter("p");
-            if ("2".equals(peerParam)) {buf.append(_t("Debug Mode"));}
-            else {buf.append(_t("Anonymous BitTorrent Client"));}
-        }
+        else {buf.append(_t("Anonymous BitTorrent Client"));}
         buf.append("</title>\n");
 
-        _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
         int delay = _manager.getRefreshDelaySeconds();
         String pageSize = String.valueOf(_manager.getPageSize());
 
@@ -388,9 +393,11 @@ public class I2PSnarkServlet extends BasicServlet {
             if (!isStandalone()) {
                 buf.append("<script src=").append(_resourcePath).append("js/tunnelCounter.js type=module></script>\n");
             }
-            buf.append("<script nonce=").append(cspNonce).append(" type=module>\n")
-               .append("  import {initSnarkRefresh} from \"").append(_resourcePath).append("js/refreshTorrents.js").append("\";\n")
-               .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n");
+            String initScript =
+                "<script nonce=" + cspNonce + " type=module>\n" +
+                "  import {initSnarkRefresh} from \"" + _resourcePath + "js/refreshTorrents.js\";\n" +
+                "  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n";
+            buf.append(initScript);
 
             if (delay > 0) {
                 String downMsg = _context.isRouterContext() ? _t("Router is down") : _t("I2PSnark has stopped");
@@ -538,13 +545,14 @@ public class I2PSnarkServlet extends BasicServlet {
         String mimeType = resp.getContentType();
         if (mimeType != null && (mimeType.equals("image/png") || mimeType.equals("image/jpeg") || mimeType.equals("font/woff2") ||
             mimeType.equals("image/gif") || mimeType.equals("image/webp") || mimeType.equals("image/svg+xml") ||
-            mimeType.equals("text/css") || mimeType.endsWith("/javascript"))) {
+            mimeType.equals("text/css") || mimeType.contains("javascript"))) {
             headers.append("Cache-Control\t: private, max-age=2628000, immutable\r\n");
         } else {headers.append("Cache-Control\t: private, no-cache, max-age=2628000\r\n");}
         StringBuilder csp = new StringBuilder("default-src 'self'; base-uri 'self'; worker-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; ");
         csp.append("script-src 'self' 'nonce-").append(cspNonce).append("'; ");
         csp.append("object-src 'none'; media-src '").append(allowMedia ? "self" : "none").append("'");
-        if (mimeType != null && (mimeType.equals("text/html") || mimeType.equals("text/javascript"))) {
+        //if (mimeType != null && (mimeType.contains("html") || mimeType.contains("javascript"))) {
+        if (mimeType == null || mimeType.contains("text") || mimeType.contains("script") || mimeType.contains("application")) {
             headers.append("Content-Security-Policy\t: ").append(csp).append("\r\n");
             headers.append("Permissions-Policy\t: fullscreen=(self)\r\n");
             headers.append("Referrer-Policy\t: same-origin\r\n");
@@ -3366,6 +3374,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(filesPublic ? "checked " : "").append("title=\"")
            .append(_t("Set file permissions to allow other local users to access the downloaded files"))
            .append("\"></span>\n");
+/* TODO: Make sure this functions as intended
         if (!isWindows && !isARM) {
             buf.append("<span class=configOption><label for=preallocateFiles><b>")
                .append(_t("Pre-allocate files"))
@@ -3374,6 +3383,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(_t("Pre-allocate files on disk to avoid fragmentation on non-solid state storage"))
                .append("\"></span>\n");
         }
+*/
         buf.append("<span class=configOption><label for=maxFiles><b>")
            .append(_t("Max files per torrent"))
            .append("</b> <input type=text name=maxFiles size=5 maxlength=5 pattern=\"[0-9]{1,5}\" class=\"r numeric\"").append(" title=\"")
