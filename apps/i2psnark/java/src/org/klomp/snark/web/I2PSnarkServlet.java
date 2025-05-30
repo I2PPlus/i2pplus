@@ -1186,6 +1186,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
             ftr.append("</table>\n");
             if (isForm) {ftr.append("</form>");}
+            if (total > 0) {ftr.append("<script src=/i2psnark/.res/js/convertTooltips.js></script>\n");}
 
             out.write(ftr.toString());
             ftr.setLength(0);
@@ -2388,9 +2389,7 @@ public class I2PSnarkServlet extends BasicServlet {
         StringBuilder buf = new StringBuilder(2*1024);
         if (!filterEnabled || snarkMatchesFilter(snark, filterParam)) {
             buf.append("<tr class=\"").append(rowStatus).append(" volatile\">").append("<td class=status>").append(statusString);
-
-            // link column
-            buf.append("</b></td><td class=trackerLink>");
+            buf.append("</b></td><td class=trackerLink>"); // link column
             if (isValid) {
                 String announce = meta.getAnnounce();
                 if (announce == null) {announce = snark.getTrackerURL();}
@@ -3545,17 +3544,22 @@ public class I2PSnarkServlet extends BasicServlet {
             "<td><label class=filterContains><input type=radio class=optbox name=filterType value=contains checked></label></td>" +
             "<td><label class=filterEndsWith><input type=radio class=optbox name=filterType value=ends_with></label></td>" +
             "<td><input type=checkbox class=optbox name=filterIsDefault></td>";
+        String buttons = String.format(
+            "<tr><td colspan=7>\n" +
+            "<input type=submit name=raction class=delete value=\"%s\">\n" +
+            "<input type=submit name=raction class=accept value=\"%s\">\n" +
+            "<input type=submit name=raction class=reload value=\"%s\">\n" +
+            "<input type=submit name=raction class=add value=\"%s\">\n" +
+            "</td></tr>\n",
+            _t("Delete selected"),
+            _t("Save Filter Configuration"),
+            _t("Restore defaults"),
+            _t("Add File Filter")
+        );
         buf.append(spacer)
            .append("<tr id=addFileFilter>")
            .append("<td><b>").append(_t("Add")).append(":</b></td>").append(filterFormElements).append("</tr>")
-           .append(spacer)
-           .append("<tr><td colspan=7>\n")
-           .append("<input type=submit name=raction class=delete value=\"").append(_t("Delete selected")).append("\">\n")
-           .append("<input type=submit name=raction class=accept value=\"").append(_t("Save Filter Configuration")).append("\">\n")
-           .append("<input type=submit name=raction class=reload value=\"").append(_t("Restore defaults")).append("\">\n")
-           .append("<input type=submit name=raction class=add value=\"").append(_t("Add File Filter")).append("\">\n")
-           .append("</td></tr>\n")
-           .append(spacer)
+           .append(spacer).append(buttons).append(spacer)
            .append("</table>\n</div>\n</div>\n</form>\n");
         out.append(buf);
         out.flush();
@@ -4282,24 +4286,6 @@ public class I2PSnarkServlet extends BasicServlet {
                         buf.append("\" class=reload title=\"").append(_t("Check integrity of the downloaded files")).append("\">");
                     }
                 }
-/*
-// TODO: fix feature so checkbox status is saved
-                boolean showInOrder = storage != null && !storage.complete() && meta != null;
-                if (showInOrder && meta != null) {
-                    buf.append("<span id=torrentOrderControl><label for=enableInOrder><b>");
-                    String txt = (meta.getFiles() != null && meta.getFiles().size() > 1) ?
-                                   _t("Download files in order") :
-                                   _t("Download pieces in order");
-                    buf.append(txt);
-                    buf.append("</b></label><input type=checkbox class=optbox name=enableInOrder id=enableInOrder");
-                    if (storage.getInOrder())
-                        buf.append(" checked");
-                    buf.append(">" +
-                               "<input type=submit name=setInOrderEnabled value=\"");
-                    buf.append(_t("Save Preference"));
-                    buf.append("\" class=accept></span>");
-                }
-*/
                 buf.append("</td></tr>\n");
             }
         } else {
