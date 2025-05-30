@@ -1,3 +1,6 @@
+2025-05-30
+ * I2PSnark: Enhance download/upload bar tooltips with js
+
 2025-05-29
  * I2PSnark: Ensure csp response headers are sent for html and js
 
