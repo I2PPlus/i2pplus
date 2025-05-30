@@ -1185,7 +1185,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
 
             ftr.append("</table>\n");
-            if (isForm) {ftr.append("</form>");}
+            if (isForm) {ftr.append("</form>\n");}
             if (total > 0) {ftr.append("<script src=/i2psnark/.res/js/convertTooltips.js></script>\n");}
 
             out.write(ftr.toString());

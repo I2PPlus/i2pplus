@@ -23,6 +23,7 @@
 --tabimg:linear-gradient(180deg,#f8f8ff 50%,#e2e2ff 50%,#bbf);
 --section:linear-gradient(180deg,#fafaff,#efefff);
 --snarkGraph:url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true");
+--tooltip:#eef;
 }
 
 /* globals*/

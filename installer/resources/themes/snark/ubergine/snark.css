@@ -44,6 +44,7 @@
 --th2:linear-gradient(180deg,#1018,#101b),var(--th2_bg);
 --th:linear-gradient(180deg,#202,#101);
 --th_sub:url(/i2psnark/.res/icons/favicon.svg) no-repeat 7px center/20px,linear-gradient(135deg,rgba(16,0,16,.6),rgba(16,0,16,.3),rgba(16,0,16,.7)),var(--th2_bg);
+--tooltip:#101;
 --txtInputBevel:inset 0 0 0 1px #280028,inset 2px 2px 2px 1px #101;
 --txt_shadow:1px 1px 1px #000c;
 }

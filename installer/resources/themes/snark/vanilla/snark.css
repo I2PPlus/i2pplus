@@ -38,6 +38,7 @@
 --tab_section_active:linear-gradient(180deg,#baa397,#e5d2c8);
 --th:linear-gradient(180deg,#f5f0ed,#e4d6ce);
 --th_config:linear-gradient(180deg,#f4f2f1,#cfc7c2 75%,#c7bdb8,#bcb0a9);
+--tooltip:#f9f5d8;
 }
 
 /* globals */

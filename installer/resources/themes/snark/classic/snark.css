@@ -27,6 +27,7 @@
 --title_shadow:var(--highlight),inset 0 0 0 0 var(--bg),0 1px 1px var(--bg4);
 --label_shadow_active:1px 1px 1px #0003 inset,2px 2px 2px rgba(255,255,255,.1) inset;
 --snarkGraph:url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true");
+--tooltip:var(--bg4);
 }
 
 body{margin:3px 4px;display:block!important;background:var(--bg3) url(/themes/console/classic/images/bg0.png) repeat scroll center bottom/120px;pointer-events:auto!important}

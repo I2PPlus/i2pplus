@@ -14,6 +14,7 @@
 --row_highlight:var(--highlight),inset 0 0 2px 1px #040,inset 0 0 0 3px #000800;
 --snarkGraph:url("/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true&hideGrid=true");
 --tabIcon:linear-gradient(180deg,#000 50%,#040 50%);
+--tooltip:#001800;
 --tr:linear-gradient(180deg,rgba(0,24,0,.5),rgba(0,8,0,.5));
 --tr_snark:linear-gradient(90deg,#373 2px,#0000 2px),linear-gradient(180deg,rgba(0,24,0,.5),rgba(0,8,0,.5));
 --tr_snark_odd:linear-gradient(90deg,#5a5 2px,#0000 2px),linear-gradient(180deg,rgba(0,24,0,.5),rgba(0,8,0,.5));

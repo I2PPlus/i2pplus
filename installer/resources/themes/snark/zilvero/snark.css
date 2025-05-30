@@ -35,6 +35,7 @@
 --softborder:0 0 0 1px #bbb;
 --td_dl:linear-gradient(270deg,#3d3 3px,#0000 3px);
 --th:linear-gradient(180deg,#fff,#e8e8e8);
+--tooltip:#fff;
 --tr:var(--bg),linear-gradient(180deg,#fefefe,#ebebeb);
 --tr_odd:var(--bg),linear-gradient(180deg,#fcfcfc,#e4e4e4);
 --tr_hover:var(--bg),linear-gradient(180deg,#fff0f0,#ffe8e8);
@@ -582,6 +583,7 @@ body.debug #dhtDebug{display:table-row;box-shadow:var(--highlight);background:li
 #bwHoverHelp:hover #bwHelp,#bwHoverHelp:active #bwHelp{visibility:visible;text-align:center;color:#333;opacity:1;transition:ease opacity .3s}
 #bwHoverHelp{display:inline-block;position:relative}
 #bwHoverHelp:hover+#bwHelp{padding:20px;width:100%;display:block;float:left;position:fixed;top:48px;left:0;z-index:9999;white-space:nowrap;font-size:12pt;border-bottom:5px solid #212;border-top:5px solid #212;box-shadow:0 1px 3px #101;text-align:center;background:#313}
+.barTooltip::before{text-shadow:none}
 
 /* filter bar */
 #filterBar{margin-bottom:-1px;border:var(--border)}
