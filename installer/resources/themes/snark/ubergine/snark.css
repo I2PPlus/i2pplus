@@ -892,6 +892,10 @@ th .commentAuthorName{margin-right:-10px;padding-right:6px;font-size:90%}
 #bwHoverHelp::before{margin:0 4px 0 8px;width:24px;height:24px;display:inline-block;vertical-align:middle;background:var(--infohelp) no-repeat center center;background-size:24px;opacity:.7;content:""}
 #bwHoverHelp:hover::before{opacity:1}
 #bwHoverHelp:hover+#bwHelp{padding:20px;width:100%;display:block;float:left;position:fixed;top:48px;left:0;z-index:9999;white-space:nowrap;text-align:center;font-size:12pt;border-bottom:5px solid #212;border-top:5px solid #212;box-shadow:0 1px 3px #101;background:#313}
+.barTooltip::before,.barTooltip::after{box-shadow:0 0 0 1px #717,0 0 0 1px #000 inset!important}
+.barTooltip::before{background:linear-gradient(180deg,#404,#303)!important;border-radius:3px!important}
+.barComplete.barTooltip::before{padding-left:28px!important;background:url(/i2psnark/.res/icons/tick.svg) no-repeat 10px center/12px,linear-gradient(180deg,#404,#303)!important;border-radius:3px!important}
+.barTooltip::after{z-index:998!important;border-color:#0000 #717 #717 #000!important}
 
 /* filter bar */
 #filtercount:not(:empty):not([hidden]){margin-left:4px;padding:0 4px;min-width:18px;display:inline-block!important;font-size:90%;border-radius:1px;box-shadow:0 0 0 1px #313,0 0 0 1px rgba(184,72,184,.2) inset;background:linear-gradient(180deg,#414,#212);will-change:transform}
