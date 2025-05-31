@@ -19,9 +19,7 @@ import net.i2p.util.SystemVersion;
 
 public class JobQueueHelper extends HelperBase {
 
-//    private static final int MAX_JOBS = 50;
-    // 32 if android (see below)
-    private static int MAX_JOBS = 72;
+    private static int MAX_JOBS = 50; // 32 if android (see below)
 
     public String getJobQueueSummary() {
         try {
@@ -143,10 +141,12 @@ public class JobQueueHelper extends HelperBase {
             // translators: {0} is a job name, {1} is a time, e.g. 6 min
             buf.append("<li>").append(_t("{0} starts in {1}", "<b title=\"" + j.toString() + "\">" +
                        j.getName() + "</b> &#10140; ", "<i>" + DataHelper.formatDuration2(time) + "</i>"));
-            if (time < 0)
+            if (time < 0) {
                 buf.append(" <span class=delayed>[").append(_t("DELAYED")).append("]</span>");
-            if (time < prev)
+            }
+            if (time < prev) {
                 buf.append(" <span class=outOfOrder>[").append(_t("OUT OF ORDER")).append("]</span>");
+            }
             prev = time;
             buf.append("</li>\n");
         }
@@ -154,21 +154,19 @@ public class JobQueueHelper extends HelperBase {
         getJobCounts(buf, counter);
         out.append(buf);
         buf.setLength(0);
-        //getJobStats(buf);
-        out.append(buf);
     }
 
     private void renderJobStatsHTML(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(32*1024);
         getJobStats(buf);
         out.append(buf);
+        buf.setLength(0);
     }
 
     /** @since 0.9.5 */
     private void getJobCounts(StringBuilder buf, ObjectCounterUnsafe<String> counter) {
         List<String> names = new ArrayList<String>(counter.objects());
-        if (names.size() < 4)
-            return;
+        if (names.size() < 4) {return;}
 
         buf.append("<table id=schedjobs>\n");
         buf.append("<thead><tr><th>").append(_t("Queue Totals")).append("</th></tr></thead>\n");
@@ -183,6 +181,7 @@ public class JobQueueHelper extends HelperBase {
             // .append(otherjobs).append("</span>").append(_t("Total jobs scheduled")).append(": ").append(totaljobs);
             buf.append("</ul></td></tr></table>\n");
     }
+
 
     /**
      *  Render the HTML for the job stats.
