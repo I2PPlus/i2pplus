@@ -148,8 +148,8 @@ public class NTCPConnection implements Closeable {
      *  Needs to be fixed. But SSU can handle it?
      *  In the meantime, don't let the transport bid on big messages.
      */
-//    static final int BUFFER_SIZE = 16*1024;
-    static final int BUFFER_SIZE = SystemVersion.isSlow() ? 16*1024: 32*1024;
+    static final int BUFFER_SIZE = 16*1024;
+    //static final int BUFFER_SIZE = SystemVersion.isSlow() ? 16*1024: 32*1024;
 //    private static final int MAX_DATA_READ_BUFS = 16;
     private static final int MAX_DATA_READ_BUFS = SystemVersion.isSlow() ? 16 : 48;
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
