@@ -62,8 +62,7 @@ public class InNetMessagePool implements Service {
      * DISPATCH_DIRECT=false with router.dispatchThreaded=false (job queue)
      * DISPATCH_DIRECT=false with router.dispatchThreaded=true (INMP queue)
      *
-     * The fourth case,
-     * DISPATCH_DIRECT=true with router.dispatchThreaded=true
+     * The fourth case, DISPATCH_DIRECT=true with router.dispatchThreaded=true
      * will never work, is now prevented below.
      *
      * Both must be configured before starting.
@@ -122,9 +121,8 @@ public class InNetMessagePool implements Service {
 
     /**
      * Add a new message to the pool.
-     * If there is
-     * a HandlerJobBuilder for the inbound message type, the message is loaded
-     * into a job created by that builder and queued up for processing instead
+     * If there is a HandlerJobBuilder for the inbound message type, the message
+     * is loaded into a job created by that builder and queued up for processing instead
      * (though if the builder doesn't create a job, it is added to the pool).
      * Equivalent to the 4-argument version with a 0-value msgIDBloomXor
      *
@@ -311,12 +309,14 @@ public class InNetMessagePool implements Service {
                         break;
 
                       case DatabaseSearchReplyMessage.MESSAGE_TYPE:
-                        // This is normal.
-                        // The three netdb selectors,
-                        // FloodOnlyLookupSelector, IterativeLookupSelector, and SearchMessageSelector
-                        // never return true from isMatch() for a DSRM.
-                        // IterativeLookupSelector.isMatch() queues a new IterativeLookupJob
-                        // to fetch the responses.
+                        /*
+                         * This is normal.
+                         * The three netdb selectors:
+                         * FloodOnlyLookupSelector, IterativeLookupSelector, and SearchMessageSelector
+                         * never return true from isMatch() for a DSRM.
+                         * IterativeLookupSelector.isMatch() queues a new IterativeLookupJob
+                         * to fetch the responses.
+                         */
                         break;
 
                       case DatabaseLookupMessage.MESSAGE_TYPE:
@@ -456,7 +456,7 @@ public class InNetMessagePool implements Service {
         }
     }
 
-    /** unused unless DISPATCH_DIRECT == false */
+    /** Unused unless DISPATCH_DIRECT == false */
     private class SharedShortCircuitDataJob extends JobImpl {
         public SharedShortCircuitDataJob(RouterContext ctx) {
             super(ctx);
