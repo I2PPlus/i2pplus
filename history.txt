@@ -1,3 +1,5 @@
+2025-06-03 2.9.0+ released
+
 2025-05-30
  * I2PSnark: Enhance download/upload bar tooltips with js
 

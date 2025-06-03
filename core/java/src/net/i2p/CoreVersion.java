@@ -29,7 +29,7 @@ public class CoreVersion {
      *
      *  RouterVersion.FULL_VERSION is suggested for display to the user.
      */
-    public final static String VERSION = "2.8.5";
+    public final static String VERSION = "2.9.0";
 
     /**
      *  The version published in the netdb via StatisticsManager. This is the API version.
@@ -44,7 +44,7 @@ public class CoreVersion {
      *
      *  @since 0.9.46
      */
-    public final static String PUBLISHED_VERSION = "0.9.65";
+    public final static String PUBLISHED_VERSION = "0.9.66";
 
     /**
      *  For Vuze.
@@ -56,7 +56,6 @@ public class CoreVersion {
     public static void main(String args[]) {
         System.out.println("I2P+ Core version: " + VERSION);
         System.out.println("I2P+ API version: " + PUBLISHED_VERSION);
-        //System.out.println("ID: " + ID);
     }
 
 }
