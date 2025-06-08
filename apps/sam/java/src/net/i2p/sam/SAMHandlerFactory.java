@@ -24,8 +24,7 @@ import net.i2p.util.VersionComparator;
 class SAMHandlerFactory {
 
     private static final String VERSION = "3.3";
-
-    private static final int HELLO_TIMEOUT = 60 * 1000;
+    private static final int HELLO_TIMEOUT = 75 * 1000;
 
     /**
      * Return the right SAM handler depending on the protocol version
@@ -38,7 +37,7 @@ class SAMHandlerFactory {
      */
     public static SAMHandler createSAMHandler(SocketChannel s, Properties i2cpProps,
                                               SAMBridge parent) throws SAMException {
-        String line;
+        String line = null;
         Log log = I2PAppContext.getGlobalContext().logManager().getLog(SAMHandlerFactory.class);
         SAMSecureSessionInterface secureSession = parent.secureSession();
 
@@ -50,35 +49,32 @@ class SAMHandlerFactory {
             sock.setSoTimeout(0);
             line = buf.toString();
         } catch (SocketTimeoutException e) {
-            throw new SAMException("Timeout waiting for HELLO VERSION" + "\n* Error: " + e.getMessage());
+            if (log.shouldWarn()) {log.warn("Timeout (75s) waiting for \'HELLO VERSION\' from remote client");}
+            //throw new SAMException("Timeout (60s) waiting for HELLO VERSION" + "\n* Error: " + e.getMessage());
         } catch (IOException e) {
-            throw new SAMException("Error reading from socket" + "\n* Error: " + e.getMessage());
+            if (log.shouldWarn()) {log.warn("IO Error reading from socket" + " -> " + e.getMessage());}
+            //throw new SAMException("Error reading from socket" + "\n* Error: " + e.getMessage());
         } catch (RuntimeException e) {
-            throw new SAMException("Unexpected error" + "\n* Error: " + e.getMessage());
+            if (log.shouldError()) {log.error("Unexpected runtime error in SAM protocol handler -> " + e.getMessage());}
+            //throw new SAMException("Unexpected error" + "\n* Error: " + e.getMessage());
         }
-        if (log.shouldInfo())
-            log.info("New message received: [" + line + ']');
+        if (log.shouldInfo() && line != null) {log.info("New message received: [" + line + ']');}
 
         // Message format: HELLO VERSION [MIN=v1] [MAX=v2]
         Properties props = SAMUtils.parseParams(line);
         if (!"HELLO".equals(props.remove(SAMUtils.COMMAND)) ||
             !"VERSION".equals(props.remove(SAMUtils.OPCODE))) {
-            throw new SAMException("Must start with HELLO VERSION");
+            if (log.shouldWarn()) {
+                log.warn("Malformed SAM handshake received from remote client -> Must start with \'HELLO VERSION\'");
+            }
+            //throw new SAMException("Must start with HELLO VERSION");
         }
 
         String minVer = props.getProperty("MIN");
-        if (minVer == null) {
-            // throw new SAMException("Missing MIN parameter in HELLO VERSION message");
-            // MIN optional as of 0.9.14
-            minVer = "1";
-        }
+        if (minVer == null) {minVer = "1";} // MIN optional as of 0.9.14
 
         String maxVer = props.getProperty("MAX");
-        if (maxVer == null) {
-            // throw new SAMException("Missing MAX parameter in HELLO VERSION message");
-            // MAX optional as of 0.9.14
-            maxVer = "99.99";
-        }
+        if (maxVer == null) {maxVer = "99.99";} // MAX optional as of 0.9.14
 
         String ver = chooseBestVersion(minVer, maxVer);
 
@@ -90,13 +86,15 @@ class SAMHandlerFactory {
         if (secureSession != null) {
             boolean approval = secureSession.approveOrDenySecureSession(i2cpProps, props);
             if (!approval) {
-                throw new SAMException("SAM connection cancelled by user request");
+                if (log.shouldWarn()) {log.warn("SAM connection cancelled by user request");}
+                //throw new SAMException("SAM connection cancelled by user request");
             }
         }
 
         // Let's answer positively
-        if (!SAMHandler.writeString("HELLO REPLY RESULT=OK VERSION=" + ver + "\n", s))
+        if (!SAMHandler.writeString("HELLO REPLY RESULT=OK VERSION=" + ver + "\n", s)) {
             throw new SAMException("Error writing to socket");
+        }
 
         // ...and instantiate the right SAM handler
         int verMajor = getMajor(ver);
@@ -112,8 +110,8 @@ class SAMHandlerFactory {
                 handler = new SAMv2Handler(s, verMajor, verMinor, i2cpProps, parent);
                 break;
             case 3:
-            	handler = new SAMv3Handler(s, verMajor, verMinor, i2cpProps, parent);
-            	break;
+                handler = new SAMv3Handler(s, verMajor, verMinor, i2cpProps, parent);
+                break;
             default:
                 log.error("BUG! Trying to initialize the wrong SAM version!");
                 throw new SAMException("BUG! (in handler instantiation)");
@@ -154,31 +152,22 @@ class SAMHandlerFactory {
 
     /* Get the major protocol version from a string, or -1 */
     private static int getMajor(String ver) {
-        if (ver == null)
-            return -1;
+        if (ver == null) {return -1;}
         int dot = ver.indexOf('.');
-        if (dot == 0)
-            return -1;
-        if (dot > 0)
-            ver = ver.substring(0, dot);
-        try {
-            return Integer.parseInt(ver);
-        } catch (NumberFormatException e) {
-            return -1;
-        }
+        if (dot == 0) {return -1;}
+        if (dot > 0) {ver = ver.substring(0, dot);}
+        try {return Integer.parseInt(ver);}
+        catch (NumberFormatException e) {return -1;}
     }
 
     /* Get the minor protocol version from a string, or -1 */
     private static int getMinor(String ver) {
-        if ((ver == null) || (ver.indexOf('.') < 0))
-            return -1;
+        if ((ver == null) || (ver.indexOf('.') < 0)) {return -1;}
         try {
             String major = ver.substring(ver.indexOf('.') + 1);
             return Integer.parseInt(major);
-        } catch (NumberFormatException e) {
-            return -1;
-        } catch (ArrayIndexOutOfBoundsException e) {
-            return -1;
-        }
+        } catch (NumberFormatException e) {return -1;}
+        catch (ArrayIndexOutOfBoundsException e) {return -1;}
     }
+
 }
