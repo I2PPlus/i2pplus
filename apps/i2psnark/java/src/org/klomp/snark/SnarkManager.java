@@ -2822,8 +2822,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         MetaInfo meta = snark.getMetaInfo();
         Storage storage = snark.getStorage();
         if (meta == null || storage == null) {return;}
-        if (snark.getDownloaded() > 0) {
+        if (snark.getDownloaded() > 0 && !snark.isNotificationSent()) {
             addMessageNoEscape(_t("Download finished: {0}", linkify(snark)));
+            snark.setNotificationSent(true);
+/**
             ClientAppManager cmgr = _context.clientAppManager();
             if (cmgr != null) {
                 NotificationService ns = (NotificationService) cmgr.getRegisteredApp("desktopgui");
@@ -2833,6 +2835,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                               "/i2psnark/" + linkify(snark));
                 }
             }
+**/
         }
         updateStatus(snark);
     }

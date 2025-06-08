@@ -343,17 +343,16 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      */
     public synchronized void stopTorrent(boolean fast) {
         TrackerClient tc = trackerclient;
-        if (tc != null)
-            tc.halt(fast);
+        if (tc != null) {tc.halt(fast);}
         PeerCoordinator pc = coordinator;
-        if (pc != null)
-            pc.halt();
+        if (pc != null) {pc.halt();}
         Storage st = storage;
-        if (!fast)
+        if (!fast) {
             // HACK: Needed a way to distinguish between user-stop and
             // shutdown-stop. stopTorrent(true) is in stopAllTorrents().
             // (#766)
             stopped = true;
+        }
         if (st != null) {
             // TODO: Cache the config-in-mem to compare vs config-on-disk
             // (needed for auto-save to not double-save in some cases)
@@ -361,18 +360,15 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             // If autoStart is enabled, always save the config, so we know whether to start it up next time
             boolean changed = storage.isChanged() || nowUploaded != savedUploaded ||
                     (completeListener != null && completeListener.shouldAutoStart());
-            try {
-                storage.close();
-            } catch (IOException ioe) {
-                if (_log.shouldWarn())
-                    _log.warn("Error closing " + torrent);
+            try {storage.close();}
+            catch (IOException ioe) {
+                if (_log.shouldWarn()) {_log.warn("Error closing " + torrent);}
                 ioe.printStackTrace();
             }
             savedUploaded = nowUploaded;
             // SnarkManager.stopAllTorrents() will save comments at shutdown even if never started...
             if (completeListener != null) {
-                if (changed)
-                    completeListener.updateStatus(this);
+                if (changed) {completeListener.updateStatus(this);}
                 synchronized (_commentLock) {
                     if (_comments != null) {
                         synchronized (_comments) {
@@ -383,13 +379,11 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
                 }
             }
         }
-        if (fast) {
-            stopped = true;
-        } // HACK: See above if(!fast)
-        if (pc != null && _peerCoordinatorSet != null)
-            _peerCoordinatorSet.remove(pc);
-        if (_peerCoordinatorSet == null)
+        if (fast) {stopped = true;} // HACK: See above if(!fast)
+        if (_peerCoordinatorSet != null) {
+            if (pc != null) {_peerCoordinatorSet.remove(pc);}
             _util.disconnect();
+        }
     }
 
     // Accessors
@@ -398,17 +392,14 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @return file name of .torrent file (should be full absolute path), or a fake name if in magnet mode.
      * @since 0.8.4
      */
-    public String getName() {
-        return torrent;
-    }
+    public String getName() {return torrent;}
 
     /**
      * @return base name of torrent [filtered version of getMetaInfo.getName()], or a fake name if in magnet mode
      * @since 0.8.4
      */
     public String getBaseName() {
-        if (storage != null)
-            return storage.getBaseName();
+        if (storage != null) {return storage.getBaseName();}
         return torrent;
     }
 
@@ -419,9 +410,10 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @since 0.9.44
      */
     private String getBaseInfo() {
-        if (storage != null)
-            return storage.getBaseName() + " at " +
-                    storage.getBase() + " - check that device is present and writable";
+        if (storage != null) {
+            return storage.getBaseName() + " at " + storage.getBase() +
+                   " - check that device is present and writable";
+        }
         return torrent;
     }
 
@@ -429,9 +421,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @return always will be valid even in magnet mode
      * @since 0.8.4
      */
-    public byte[] getID() {
-        return id;
-    }
+    public byte[] getID() {return id;}
 
     /**
      * @return always will be valid even in magnet mode
@@ -439,8 +429,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      */
     public byte[] getInfoHash() {
         // should always be the same
-        if (meta != null)
-            return meta.getInfoHash();
+        if (meta != null) {return meta.getInfoHash();}
         return infoHash;
     }
 
@@ -448,42 +437,32 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @return may be null if in magnet mode
      * @since 0.8.4
      */
-    public MetaInfo getMetaInfo() {
-        return meta;
-    }
+    public MetaInfo getMetaInfo() {return meta;}
 
     /**
      * @return may be null if in magnet mode
      * @since 0.8.4
      */
-    public Storage getStorage() {
-        return storage;
-    }
+    public Storage getStorage() {return storage;}
 
     /**
      * @since 0.8.4
      */
-    public boolean isStopped() {
-        return stopped;
-    }
+    public boolean isStopped() {return stopped;}
 
     /**
      * Startup in progress.
      *
      * @since 0.9.1
      */
-    public boolean isStarting() {
-        return starting && stopped;
-    }
+    public boolean isStarting() {return starting && stopped;}
 
     /**
      * Set startup in progress.
      *
      * @since 0.9.1
      */
-    public void setStarting() {
-        starting = true;
-    }
+    public void setStarting() {starting = true;}
 
     /**
      * File checking in progress.
@@ -500,10 +479,9 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @since 0.9.23
      */
     public double getCheckingProgress() {
-        if (storage != null && storage.isChecking())
+        if (storage != null && storage.isChecking()) {
             return storage.getCheckingProgress();
-        else
-            return 1.0d;
+        } else {return 1.0d;}
     }
 
     /**
@@ -520,8 +498,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      */
     public long getDownloadRate() {
         PeerCoordinator coord = coordinator;
-        if (coord != null)
-            return coord.getDownloadRate();
+        if (coord != null) {return coord.getDownloadRate();}
         return 0;
     }
 
@@ -530,8 +507,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      */
     public long getUploadRate() {
         PeerCoordinator coord = coordinator;
-        if (coord != null)
-            return coord.getUploadRate();
+        if (coord != null) {return coord.getUploadRate();}
         return 0;
     }
 
@@ -540,8 +516,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      */
     public long getDownloaded() {
         PeerCoordinator coord = coordinator;
-        if (coord != null)
-            return coord.getDownloaded();
+        if (coord != null) {return coord.getDownloaded();}
         return 0;
     }
 
@@ -550,8 +525,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      */
     public long getUploaded() {
         PeerCoordinator coord = coordinator;
-        if (coord != null)
-            return coord.getUploaded();
+        if (coord != null) {return coord.getUploaded();}
         return savedUploaded;
     }
 
@@ -560,8 +534,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      */
     public int getPeerCount() {
         PeerCoordinator coord = coordinator;
-        if (coord != null)
-            return coord.getPeerCount();
+        if (coord != null) {return coord.getPeerCount();}
         return 0;
     }
 
@@ -570,8 +543,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      */
     public List<Peer> getPeerList() {
         PeerCoordinator coord = coordinator;
-        if (coord != null)
-            return coord.peerList();
+        if (coord != null) {return coord.peerList();}
         return Collections.emptyList();
     }
 
@@ -581,40 +553,31 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @return String returned from tracker, or null if no error
      * @since 0.8.4
      */
-    public String getTrackerProblems() {
-        return trackerProblems;
-    }
+    public String getTrackerProblems() {return trackerProblems;}
 
     /**
      * @param p tracker error string or null
      * @since 0.8.4
      */
-    public void setTrackerProblems(String p) {
-        trackerProblems = p;
-    }
+    public void setTrackerProblems(String p) {trackerProblems = p;}
 
     /**
      * @return count returned from tracker
      * @since 0.8.4
      */
-    public int getTrackerSeenPeers() {
-        return trackerSeenPeers;
-    }
+    public int getTrackerSeenPeers() {return trackerSeenPeers;}
 
     /**
      * @since 0.8.4
      */
-    public void setTrackerSeenPeers(int p) {
-        trackerSeenPeers = p;
-    }
+    public void setTrackerSeenPeers(int p) {trackerSeenPeers = p;}
 
     /**
      * @since 0.8.4
      */
     public void updatePiecePriorities() {
         PeerCoordinator coord = coordinator;
-        if (coord != null)
-            coord.updatePiecePriorities();
+        if (coord != null) {coord.updatePiecePriorities();}
     }
 
     /**
@@ -622,10 +585,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @since 0.8.4
      */
     public long getTotalLength() {
-        if (meta != null)
-            return meta.getTotalLength();
-        // FIXME else return metainfo length if available
-        return -1;
+        if (meta != null) {return meta.getTotalLength();}
+        return -1; // FIXME else return metainfo length if available
     }
 
     /**
@@ -643,8 +604,9 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             long remaining = needed * length0;
             // fixup if last piece is needed
             int last = meta.getPieces() - 1;
-            if (last != 0 && !storage.getBitField().get(last))
+            if (last != 0 && !storage.getBitField().get(last)) {
                 remaining -= length0 - meta.getPieceLength(last);
+            }
             return remaining;
         }
         return -1;
@@ -659,8 +621,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      */
     public long getNeededLength() {
         PeerCoordinator coord = coordinator;
-        if (coord != null)
-            return coord.getNeededLength();
+        if (coord != null) {return coord.getNeededLength();}
         return -1;
     }
 
@@ -677,14 +638,10 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         if (coord != null) {
             // fast way
             long r = getRemainingLength();
-            if (r <= 0)
-                return 0;
+            if (r <= 0) {return 0;}
             long n = coord.getNeededLength();
             return r - n;
-        } else if (storage != null) {
-            // slow way
-            return storage.getSkippedLength();
-        }
+        } else if (storage != null) {return storage.getSkippedLength();} // slow way
         return 0;
     }
 
@@ -695,13 +652,9 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @since 0.8.4
      */
     public long getNeeded() {
-        if (storage != null)
-            return storage.needed();
-        if (meta != null)
-            // FIXME subtract chunks we have
-            return meta.getTotalLength();
-        // FIXME fake
-        return -1;
+        if (storage != null) {return storage.needed();}
+        if (meta != null) {return meta.getTotalLength();} // FIXME subtract chunks we have
+        return -1; // FIXME fake
     }
 
     /**
@@ -710,8 +663,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @since 0.8.4
      */
     public int getPieceLength(int p) {
-        if (meta != null)
-            return meta.getPieceLength(p);
+        if (meta != null) {return meta.getPieceLength(p);}
         return 16 * 1024;
     }
 
@@ -720,10 +672,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @since 0.8.4
      */
     public int getPieces() {
-        if (meta != null)
-            return meta.getPieces();
-        // FIXME else return metainfo pieces if available
-        return -1;
+        if (meta != null) {return meta.getPieces();}
+        return -1; // FIXME else return metainfo pieces if available
     }
 
     /**
@@ -731,8 +681,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @since 0.8.4
      */
     public boolean restartAcceptor() {
-        if (acceptor == null)
-            return false;
+        if (acceptor == null) {return false;}
         acceptor.restart();
         return true;
     }
@@ -741,32 +690,24 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @return trackerURL string from magnet-mode constructor, may be null
      * @since 0.8.4
      */
-    public String getTrackerURL() {
-        return additionalTrackerURL;
-    }
+    public String getTrackerURL() {return additionalTrackerURL;}
 
     /**
      * @since 0.9.9
      */
-    public boolean isAutoStoppable() {
-        return _autoStoppable;
-    }
+    public boolean isAutoStoppable() {return _autoStoppable;}
 
     /**
      * @since 0.9.9
      */
-    public void setAutoStoppable(boolean yes) {
-        _autoStoppable = yes;
-    }
+    public void setAutoStoppable(boolean yes) {_autoStoppable = yes;}
 
     /**
      * Aborts program abnormally.
      *
      * @throws RuntimeException always
      */
-    private void fatal(String s) throws RuntimeException {
-        fatal(s, null);
-    }
+    private void fatal(String s) throws RuntimeException {fatal(s, null);}
 
     /**
      * Aborts program abnormally.
@@ -776,10 +717,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     private void fatal(String s, Throwable t) throws RuntimeException {
         _log.error(s, t);
         stopTorrent();
-        if (t != null)
-            s += ": " + t;
-        if (completeListener != null)
-            completeListener.fatal(this, s);
+        if (t != null) {s += ": " + t;}
+        if (completeListener != null) {completeListener.fatal(this, s);}
         throw new RuntimeException(s, t);
     }
 
@@ -792,11 +731,9 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      */
     private void fatalRouter(String s, Throwable t) throws RouterException {
         _log.error(s, t);
-        if (!_util.getContext().isRouterContext())
-            System.out.println(s);
+        if (!_util.getContext().isRouterContext()) {System.out.println(s);}
         stopTorrent(true);
-        if (completeListener != null)
-            completeListener.fatal(this, s);
+        if (completeListener != null) {completeListener.fatal(this, s);}
         throw new RouterException(s, t);
     }
 
@@ -807,18 +744,12 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @since 0.9.46
      */
     static class RouterException extends RuntimeException {
-        public RouterException(String s) {
-            super(s);
-        }
-
-        public RouterException(String s, Throwable t) {
-            super(s, t);
-        }
+        public RouterException(String s) {super(s);}
+        public RouterException(String s, Throwable t) {super(s, t);}
     }
 
     /** CoordinatorListener - this does nothing */
-    public void peerChange(PeerCoordinator coordinator, Peer peer) {
-    }
+    public void peerChange(PeerCoordinator coordinator, Peer peer) {}
 
     /**
      * Called when the PeerCoordinator got the MetaInfo via magnet.
@@ -833,12 +764,11 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         try {
             String base = Storage.filterName(metainfo.getName());
             File baseFile;
-            if (_util.getFilesPublic())
-                baseFile = new File(rootDataDir, base);
-            else
-                baseFile = new SecureFile(rootDataDir, base);
-            if (baseFile.exists())
+            if (_util.getFilesPublic()) {baseFile = new File(rootDataDir, base);}
+            else {baseFile = new SecureFile(rootDataDir, base);}
+            if (baseFile.exists()) {
                 throw new IOException("\n* Data location already exists: " + baseFile);
+            }
             // The following two may throw IOE...
             storage = new Storage(_util, baseFile, metainfo, this, false);
             storage.check();
@@ -846,25 +776,21 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             meta = metainfo;
             if (completeListener != null) {
                 String newName = completeListener.gotMetaInfo(this);
-                if (newName != null)
-                    torrent = newName;
-                // else some horrible problem
+                if (newName != null) {torrent = newName;} // else some horrible problem
             }
             coordinator.setStorage(storage);
         } catch (IOException ioe) {
             if (storage != null) {
-                try {
-                    storage.close();
-                } catch (IOException ioee) {
-                }
+                try {storage.close();}
+                catch (IOException ioee) {}
                 // clear storage, we have a mess if we have non-null storage and null metainfo,
                 // as on restart, Storage.reopen() will throw an ioe
                 storage = null;
             }
             // TODO we're still in an inconsistent state, won't work if restarted
             // (PeerState "disconnecting seed that connects to seeds"
-            fatal("Could not create file for " + getBaseInfo().replace("Magnet", "info hash:") + ' '
-                    + ioe.getMessage());
+            fatal("Could not create file for " + getBaseInfo().replace("Magnet", "info hash:") + ' ' +
+                  ioe.getMessage());
         }
     }
 
@@ -877,8 +803,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     public void replaceMetaInfo(MetaInfo metainfo) {
         meta = metainfo;
         TrackerClient tc = trackerclient;
-        if (tc != null)
-            tc.reinitialize();
+        if (tc != null) {tc.reinitialize();}
     }
 
     ///////////// Begin StorageListener methods
@@ -897,14 +822,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
 
     public void storageChecked(Storage storage, int num, boolean checked) {
         // allocating = false;
-        if (!allChecked && !checking) {
-            checking = true;
-        }
-        if (!checking) {
-            if (completeListener != null) {
-                completeListener.gotPiece(this);
-            }
-        }
+        if (!allChecked && !checking) {checking = true;}
+        if (!checking && completeListener != null) {completeListener.gotPiece(this);}
     }
 
     public void storageAllChecked(Storage storage) {
@@ -936,8 +855,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     public void setWantedPieces(Storage storage) {
-        if (coordinator != null)
-            coordinator.setWantedPieces();
+        if (coordinator != null) {coordinator.setWantedPieces();}
     }
 
     ///////////// End StorageListener methods
@@ -951,8 +869,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @since 0.9.2
      */
     public void addMessage(String message) {
-        if (completeListener != null)
-            completeListener.addMessage(this, message);
+        if (completeListener != null) {completeListener.addMessage(this, message);}
     }
 
     /**
@@ -984,9 +901,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @return positive value unless you wrap around
      * @since 0.9.30
      */
-    public int getRPCID() {
-        return _rpcID;
-    }
+    public int getRPCID() {return _rpcID;}
 
     /**
      * When did we start this torrent
@@ -995,9 +910,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @return 0 if not started before. Not cleared when stopped.
      * @since 0.9.30
      */
-    public long getStartedTime() {
-        return _startedTime;
-    }
+    public long getStartedTime() {return _startedTime;}
 
     /**
      * The current comment set for this torrent.
@@ -1008,9 +921,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
      * @since 0.9.31
      */
     public CommentSet getComments() {
-        synchronized (_commentLock) {
-            return _comments;
-        }
+        synchronized (_commentLock) {return _comments;}
     }
 
     /**
@@ -1032,4 +943,9 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
             }
         }
     }
+
+    private boolean notificationSent;
+    public boolean isNotificationSent() {return notificationSent;}
+    public void setNotificationSent(boolean sent) {this.notificationSent = sent;}
+
 }
