@@ -579,29 +579,22 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                             totalReceived += len;
                         }
                     }
-
-                    if (in.available() == 0) {
-                        if (_toI2P) {
-                            try {Thread.sleep(5);}
-                            catch (InterruptedException e) {e.printStackTrace();}
-                            if (in.available() <= 0) {out.flush();}
-                        } else {out.flush();}
-                    }
+                    if (in.available() == 0) {out.flush();}
                 }
             } catch (SocketException ex) {
                 // This *will* occur when the other threads closes the socket
                 if (_log.shouldDebug()) {
                     boolean fnshd;
                     synchronized (finishLock) {fnshd = finished;}
-                    if (!fnshd) {_log.debug(direction + " IO Error - Error forwarding (" + ex.getMessage() + ")");}
-                    else {_log.debug(direction + " IO Error caused by other direction (" + ex.getMessage() + ")");}
+                    if (!fnshd) {_log.debug(direction + " IO Error: Error forwarding -> " + ex.getMessage());}
+                    else {_log.debug(direction + " IO Error caused by other direction -> " + ex.getMessage());}
                 }
                 _failure = ex;
             } catch (IOException ex) {
                 if (_log.shouldWarn()) {
                     boolean fnshd;
                     synchronized (finishLock) {fnshd = finished;}
-                    if (!fnshd) {_log.warn(direction + " IO Error -> Error forwarding (" + ex.getMessage() + ")");}
+                    if (!fnshd) {_log.warn(direction + " IO Error: Error forwarding (" + ex.getMessage() + ")");}
                     else if (_log.shouldDebug()) {_log.debug(direction + " IO Error caused by other direction (" + ex.getMessage() + ")");}
                 }
                 _failure = ex;
