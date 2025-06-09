@@ -252,7 +252,7 @@ td.details{padding-left:0}
 #torrents thead th.torrentLink{padding:0;width:1%;text-align:center}
 #torrents td[colspan="3"],#torrents td[colspan="9"]{text-align:left}
 #torrents td[colspan="9"]{white-space:normal}
-#torrents th:empty,#torrents td:empty{padding:0;width:0;min-width:0;font-size:0}
+#torrents th:empty,#torrents td:empty{padding:0;width:0;min-width:0!important;font-size:0}
 #torrents code{padding:2px 3px;letter-spacing:.1em;color:#fff;background:#7f654f}
 #torrentSort{text-align:right}
 #torrentTotals{contain:paint}
@@ -971,8 +971,8 @@ tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before,tfoot .rateUp
 #navbar{width:calc(100% - 22px);transition:ease width .5s .5s}
 #ourDest,#pagenavtop{display:none!important}
 #pagenavbottom img{height:14px}
-#torrents .tName a{max-width:240px}
 #torrents tfoot tr:first-child th{padding-top:2px;padding-bottom:2px;line-height:1.2}
+#totals .counter{margin-top:-2px}
 #userComments .commentDate{padding-left:20px}
 }
 
