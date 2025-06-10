@@ -165,12 +165,16 @@ public class TunnelHistory {
         _lifetimeAgreedTo.set(getLong(props, "tunnels.lifetimeAgreedTo"));
         _lifetimeFailed.set(getLong(props, "tunnels.lifetimeFailed"));
         _lifetimeRejected.set(getLong(props, "tunnels.lifetimeRejected"));
+
+        // TODO: work out why this is causing errors at startup when loading profiles
+/**
         try {
             _rejectRate.load(props, "tunnelHistory.rejectRate", true);
             _failRate.load(props, "tunnelHistory.failRate", true);
         } catch (IllegalArgumentException iae) {
             _log.warn("TunnelHistory rates are corrupt, resetting...", iae);
         }
+**/
     }
 
     private final static long getLong(Properties props, String key) {
