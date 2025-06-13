@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.crypto.SessionKeyManager;
 import net.i2p.data.SessionTag;
 import net.i2p.data.i2np.DeliveryStatusMessage;
+import net.i2p.data.i2np.GarlicMessage;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.router.JobImpl;
 import net.i2p.router.MessageSelector;
@@ -12,6 +13,7 @@ import net.i2p.router.OutNetMessage;
 import net.i2p.router.ReplyJob;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
+import net.i2p.router.crypto.ratchet.MuxedPQSKM;
 import net.i2p.router.crypto.ratchet.MuxedSKM;
 import net.i2p.router.crypto.ratchet.RatchetSessionTag;
 import net.i2p.router.crypto.ratchet.RatchetSKM;
@@ -70,10 +72,6 @@ public class TestJob extends JobImpl {
         }
         if (ctx.router().gracefulShutdownInProgress()) {return;} // don't reschedule
         _found = false;
-        /*
-         * NOTE: We now only support client-to-client and expl-to-expl testing.
-         * To support "mixed" testing, fix sendTest() to use the SKM of the inbound tunnel.
-         */
         boolean isExpl = _pool.getSettings().isExploratory();
         if (_cfg.isInbound()) {
             _replyTunnel = _cfg;
@@ -119,11 +117,7 @@ public class TestJob extends JobImpl {
         _id = __id.getAndIncrement();
         if (ctx.random().nextInt(4) != 0) {
             MessageWrapper.OneTimeSession sess;
-            // NOTE:
-            // We now only support client-to-client and expl-to-expl testing.
-            // To support "mixed" testing, fix this to use the SKM
-            // of the inbound tunnel, not the tested tunnel.
-            if (!_pool.getSettings().isExploratory()) {
+            if (_cfg.isInbound() && !_pool.getSettings().isExploratory()) {
                 // to client. false means don't force AES
                 sess = MessageWrapper.generateSession(ctx, _pool.getSettings().getDestination(), testPeriod, false);
             } else {sess = MessageWrapper.generateSession(ctx, testPeriod);} // to router. AES or ChaCha.
@@ -326,16 +320,21 @@ public class TestJob extends JobImpl {
             if (!_found && (_encryptTag != null || _ratchetEncryptTag != null)) {
                 // don't clog up the SKM with old one-tag tagsets
                 SessionKeyManager skm;
-                if (!_pool.getSettings().isExploratory()) {
+                if (_cfg.isInbound() && !_pool.getSettings().isExploratory()) {
                     skm = getContext().clientManager().getClientSessionKeyManager(_pool.getSettings().getDestination());
                 } else {skm = getContext().sessionKeyManager();}
                 if (skm != null) {
                     if (_encryptTag != null) {skm.consumeTag(_encryptTag);} // AES
-                    else {
-                        RatchetSKM rskm; // ratchet
-                        if (skm instanceof RatchetSKM) {rskm = (RatchetSKM) skm;}
-                        else if (skm instanceof MuxedSKM) {rskm = ((MuxedSKM) skm).getECSKM();}
-                        else {rskm = null;} // shouldn't happen
+                } else {
+                        // ratchet
+                        RatchetSKM rskm;
+                        if (skm instanceof RatchetSKM) {
+                            rskm = (RatchetSKM) skm;
+                        } else if (skm instanceof MuxedSKM) {
+                            rskm = ((MuxedSKM) skm).getECSKM();
+                        } else if (skm instanceof MuxedPQSKM) {
+                            rskm = ((MuxedPQSKM) skm).getECSKM();
+                        } else {rskm = null;} // shouldn't happen
                         if (rskm != null) {rskm.consumeTag(_ratchetEncryptTag);}
                     }
                 }

@@ -3,7 +3,9 @@ package net.i2p.router.crypto.ratchet;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.southernstorm.noise.crypto.x25519.Curve25519;
 import com.southernstorm.noise.protocol.ChaChaPolyCipherState;
@@ -14,25 +16,32 @@ import com.southernstorm.noise.protocol.HandshakeState;
 
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.HKDF;
+import net.i2p.crypto.KeyFactory;
+import net.i2p.crypto.SessionKeyManager;
 import net.i2p.data.Base64;
 import net.i2p.data.Certificate;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
+import net.i2p.data.Hash;
+import net.i2p.data.LeaseSet;
 import net.i2p.data.LeaseSet2;
 import net.i2p.data.PrivateKey;
 import net.i2p.data.PublicKey;
 import net.i2p.data.SessionKey;
+import net.i2p.data.SessionTag;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.i2np.GarlicClove;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.router.crypto.pqc.MLKEM;
 import static net.i2p.router.crypto.ratchet.RatchetPayload.*;
 import net.i2p.router.LeaseSetKeys;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.message.CloveSet;
 import net.i2p.util.Log;
+import net.i2p.util.SimpleByteCache;
 
 /**
  * Handles the actual ECIES+AEAD encryption and decryption scenarios using the
@@ -46,6 +55,7 @@ public final class ECIESAEADEngine {
     private final RouterContext _context;
     private final Log _log;
     private final MuxedEngine _muxedEngine;
+    private final MuxedPQEngine _muxedPQEngine;
     private final HKDF _hkdf;
     private final Elg2KeyFactory _edhThread;
     private boolean _isRunning;
@@ -81,6 +91,22 @@ public final class ECIESAEADEngine {
 
     private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l };
 
+    // These are the min sizes for the MLKEM New Session Message.
+    // It contains an extra MLKEM key and MAC.
+    // 112
+    private static final int NS_MLKEM_OVERHEAD = NS_OVERHEAD + MACLEN;
+    // 800 + 112 + 7 = 919
+    private static final int MIN_NS_MLKEM512_SIZE = EncType.MLKEM512_X25519_INT.getPubkeyLen() + NS_MLKEM_OVERHEAD + DATETIME_SIZE;
+    // 1184 + 112 + 7 = 1303
+    private static final int MIN_NS_MLKEM768_SIZE = EncType.MLKEM768_X25519_INT.getPubkeyLen() + NS_MLKEM_OVERHEAD + DATETIME_SIZE;
+    // 1568 + 112 + 7 = 1687
+    private static final int MIN_NS_MLKEM1024_SIZE = EncType.MLKEM1024_X25519_INT.getPubkeyLen() + NS_MLKEM_OVERHEAD + DATETIME_SIZE;
+    // 856
+    private static final int MIN_NSR_MLKEM512_SIZE = EncType.MLKEM512_X25519_CT.getPubkeyLen() + MIN_NSR_SIZE + MACLEN;
+    // 1176
+    private static final int MIN_NSR_MLKEM768_SIZE = EncType.MLKEM768_X25519_CT.getPubkeyLen() + MIN_NSR_SIZE + MACLEN;
+    // 1656
+    private static final int MIN_NSR_MLKEM1024_SIZE = EncType.MLKEM1024_X25519_CT.getPubkeyLen() + MIN_NSR_SIZE + MACLEN;
     /**
      *  Caller MUST call startup() to get threaded generation.
      *  Will still work without, will just generate inline.
@@ -91,6 +117,7 @@ public final class ECIESAEADEngine {
         _context = ctx;
         _log = _context.logManager().getLog(ECIESAEADEngine.class);
         _muxedEngine = new MuxedEngine(ctx);
+        _muxedPQEngine = new MuxedPQEngine(ctx);
         _hkdf = new HKDF(ctx);
         _edhThread = new Elg2KeyFactory(ctx);
 
@@ -138,6 +165,18 @@ public final class ECIESAEADEngine {
     }
 
     /**
+     * Try to decrypt the message with one or both of the given private keys
+     *
+     * @param ecKey must be EC, non-null
+     * @param pqKey must be PQ, non-null
+     * @return decrypted data or null on failure
+     * @since 0.9.67
+     */
+    public CloveSet decrypt(byte data[], PrivateKey ecKey, PrivateKey pqKey, MuxedPQSKM keyManager) throws DataFormatException {
+        return _muxedPQEngine.decrypt(data, ecKey, pqKey, keyManager);
+    }
+
+    /**
      * Decrypt the message using the given private key
      * and using tags from the specified key manager.
      * This works according to the
@@ -165,8 +204,7 @@ public final class ECIESAEADEngine {
 
     private CloveSet x_decrypt(byte data[], PrivateKey targetPrivateKey,
                                RatchetSKM keyManager) throws DataFormatException {
-        if (targetPrivateKey.getType() != EncType.ECIES_X25519)
-            throw new IllegalArgumentException();
+        checkType(targetPrivateKey.getType());
         if (data == null) {
             if (_log.shouldError()) _log.error("Null data being decrypted?");
             return null;
@@ -254,24 +292,34 @@ public final class ECIESAEADEngine {
         final boolean shouldDebug = _log.shouldDebug();
         HandshakeState state = key.getHandshakeState();
         if (state == null) {
-            if (shouldDebug)
+            if (shouldDebug) {
                 _log.debug("Decrypting ExistingSession with tag: " + st.toBase64() + "\n* Key: " + key + " (" + data.length + " bytes)");
+            }
             decrypted = decryptExistingSession(tag, data, key, targetPrivateKey, keyManager);
-        } else if (data.length >= MIN_NSR_SIZE) {
-            if (shouldDebug)
-                _log.debug("Decrypting NewSessionReply with tag: " + st.toBase64() + "\n* Key: " + key + "(" + data.length + " bytes)");
-            decrypted = decryptNewSessionReply(tag, data, state, keyManager);
         } else {
-            decrypted = null;
-            if (_log.shouldWarn())
-                _log.warn("ECIES decryption failure -> Tag found but no state and too small (" + data.length + " bytes) for NewSessionReply");
-        }
-        if (decrypted != null) {
-            _context.statManager().updateFrequency("crypto.eciesAEAD.decryptExistingSession");
-        } else {
-            _context.statManager().updateFrequency("crypto.eciesAEAD.decryptFailed");
-            if (_log.shouldWarn()) {
-                _log.warn("ECIES decryption failure -> Known tag [" + st + "] but failed decrypt with key \n* Key: " + key);
+            // it's important not to attempt decryption for too-short packets,
+            // because Noise will destroy() the handshake state on failure,
+            // and we don't clone() on the first one, so it's fatal.
+            EncType type = targetPrivateKey.getType();
+            int min = getMinNSRSize(type);
+            if (data.length >= min) {
+                if (shouldDebug) {
+                    _log.debug("Decrypting NewSessionReply with tag: " + st.toBase64() + "\n* Key: " + key + "(" + data.length + " bytes)");
+                }
+                decrypted = decryptNewSessionReply(tag, data, state, keyManager);
+            } else {
+                decrypted = null;
+                if (_log.shouldWarn()) {
+                    _log.warn("NewSessionReply decryption failure -> Tag found but no state and too small (" + data.length + " bytes) for NewSessionReply");
+                }
+            }
+            if (decrypted != null) {
+                _context.statManager().updateFrequency("crypto.eciesAEAD.decryptExistingSession");
+            } else {
+                _context.statManager().updateFrequency("crypto.eciesAEAD.decryptFailed");
+                if (_log.shouldWarn()) {
+                    _log.warn("ECIES decryption failure -> Known tag [" + st + "] but failed decrypt with key \n* Key: " + key);
+                }
             }
         }
         return decrypted;
@@ -306,26 +354,130 @@ public final class ECIESAEADEngine {
     private CloveSet x_decryptSlow(byte data[], PrivateKey targetPrivateKey,
                                    RatchetSKM keyManager) throws DataFormatException {
         CloveSet decrypted;
+        EncType type = targetPrivateKey.getType();
+        int minns = getMinNSSize(type);
         boolean isRouter = keyManager.getDestination() == null;
-        if (data.length >= MIN_NS_SIZE || (isRouter && data.length >= MIN_NS_N_SIZE)) {
-            if (isRouter)
-                decrypted = decryptNewSession_N(data, targetPrivateKey, keyManager);
-            else
-            decrypted = decryptNewSession(data, targetPrivateKey, keyManager);
+        if (data.length >= minns || (isRouter && data.length >= MIN_NS_N_SIZE)) {
+            if (isRouter) {decrypted = decryptNewSession_N(data, targetPrivateKey, keyManager);}
+            else {decrypted = decryptNewSession(data, targetPrivateKey, keyManager);}
             if (decrypted != null) {
                 _context.statManager().updateFrequency("crypto.eciesAEAD.decryptNewSession");
             } else {
                 _context.statManager().updateFrequency("crypto.eciesAEAD.decryptFailed");
                 // we'll get this a lot on muxed SKM
-                if (_log.shouldInfo())
-                    _log.info("ECIES decryption failure for NewSession");
+                if (_log.shouldInfo()) {_log.info("ECIES decryption failure for NewSession");}
             }
         } else {
             decrypted = null;
-            if (_log.shouldDebug())
-                _log.debug("ECIES decryption failure, too small (" + data.length + " bytes) for NewSession");
+            if (_log.shouldDebug()) {
+                _log.debug("ECIES decryption failure, too small (" + data.length + " bytes) for NewSession (minimum is " + minns + " for " + type + ")");
+            }
         }
         return decrypted;
+    }
+
+    /**
+     * @throws IllegalArgumentException if unsupported
+     * @since 0.9.67
+     */
+    private static void checkType(EncType type) {
+        switch(type) {
+          case ECIES_X25519:
+          case MLKEM512_X25519:
+          case MLKEM768_X25519:
+          case MLKEM1024_X25519:
+              return;
+          default:
+              throw new IllegalArgumentException("Unsupported key type " + type);
+        }
+    }
+
+    /**
+     * @since 0.9.67
+     */
+    private static String getNoisePattern(EncType type) {
+        switch(type) {
+          case ECIES_X25519:
+              return HandshakeState.PATTERN_ID_IK;
+          case MLKEM512_X25519:
+              return HandshakeState.PATTERN_ID_IKHFS_512;
+          case MLKEM768_X25519:
+              return HandshakeState.PATTERN_ID_IKHFS_768;
+          case MLKEM1024_X25519:
+              return HandshakeState.PATTERN_ID_IKHFS_1024;
+          default:
+              throw new IllegalArgumentException("No pattern for " + type);
+        }
+    }
+
+    /**
+     * @since 0.9.67
+     */
+    private static KeyFactory getHybridKeyFactory(EncType type) {
+        switch(type) {
+          case MLKEM512_X25519:
+              return MLKEM.MLKEM512KeyFactory;
+          case MLKEM768_X25519:
+              return MLKEM.MLKEM768KeyFactory;
+          case MLKEM1024_X25519:
+              return MLKEM.MLKEM1024KeyFactory;
+          default:
+              return null;
+        }
+    }
+
+    /**
+     * @since 0.9.67
+     */
+    private static int getMinNSSize(EncType type) {
+        switch(type) {
+          case ECIES_X25519:
+              return MIN_NS_SIZE;
+          case MLKEM512_X25519:
+              return MIN_NS_MLKEM512_SIZE;
+          case MLKEM768_X25519:
+              return MIN_NS_MLKEM768_SIZE;
+          case MLKEM1024_X25519:
+              return MIN_NS_MLKEM1024_SIZE;
+          default:
+              throw new IllegalArgumentException("No pattern for " + type);
+        }
+    }
+
+    /**
+     * @since 0.9.67
+     */
+    private static int getMinNSRSize(EncType type) {
+        switch(type) {
+          case ECIES_X25519:
+              return MIN_NSR_SIZE;
+          case MLKEM512_X25519:
+              return MIN_NSR_MLKEM512_SIZE;
+          case MLKEM768_X25519:
+              return MIN_NSR_MLKEM768_SIZE;
+          case MLKEM1024_X25519:
+              return MIN_NSR_MLKEM1024_SIZE;
+          default:
+              throw new IllegalArgumentException("No pattern for " + type);
+        }
+    }
+
+    /**
+     * @since 0.9.67
+     */
+    private static Set<EncType> getEncTypeSet(EncType type) {
+        switch(type) {
+          case ECIES_X25519:
+              return LeaseSetKeys.SET_EC;
+          case MLKEM512_X25519:
+              return LeaseSetKeys.SET_PQ1;
+          case MLKEM768_X25519:
+              return LeaseSetKeys.SET_PQ2;
+          case MLKEM1024_X25519:
+              return LeaseSetKeys.SET_PQ3;
+          default:
+              throw new IllegalArgumentException("No pattern for " + type);
+        }
     }
 
     /**
@@ -373,8 +525,12 @@ public final class ECIESAEADEngine {
         System.arraycopy(pk.getData(), 0, data, 0, KEYLEN);
 
         HandshakeState state;
+        EncType type = targetPrivateKey.getType();
         try {
-            state = new HandshakeState(HandshakeState.PATTERN_ID_IK, HandshakeState.RESPONDER, _edhThread);
+            String pattern = getNoisePattern(type);
+            // Bob does not need a key factory
+            //state = new HandshakeState(pattern, HandshakeState.RESPONDER, _edhThread, getHybridKeyFactory(type));
+            state = new HandshakeState(pattern, HandshakeState.RESPONDER, _edhThread);
         } catch (GeneralSecurityException gse) {
             throw new IllegalStateException("bad proto", gse);
         }
@@ -385,6 +541,10 @@ public final class ECIESAEADEngine {
             _log.debug("State before decrypting NewSession: " + state);
 
         int payloadlen = data.length - (KEYLEN + KEYLEN + MACLEN + MACLEN);
+        DHState hyb = state.getRemoteHybridKeyPair();
+        if (hyb != null) {
+            payloadlen -= hyb.getPublicKeyLength() + MACLEN;
+        }
         byte[] payload = new byte[payloadlen];
         try {
             state.readMessage(data, 0, data.length, payload, 0);
@@ -457,7 +617,7 @@ public final class ECIESAEADEngine {
             state.destroy();
         } else {
             // tell the SKM
-            PublicKey alice = new PublicKey(EncType.ECIES_X25519, alicePK);
+            PublicKey alice = new PublicKey(type, alicePK);
             keyManager.createSession(alice, null, state, null);
             setResponseTimerNS(alice, pc.cloveSet, keyManager);
         }
@@ -628,8 +788,13 @@ public final class ECIESAEADEngine {
         state.mixHash(tag, 0, TAGLEN);
         if (_log.shouldDebug())
             _log.debug("State after mixhash tag before decryption of NewSessionReply: " + state);
+        int tmplen = 48;
+        DHState hyb = state.getRemoteHybridKeyPair();
+        if (hyb != null) {
+            tmplen += hyb.getPublicKeyLength() + MACLEN;
+        }
         try {
-            state.readMessage(data, 8, 48, ZEROLEN, 0);
+            state.readMessage(data, 8, tmplen, ZEROLEN, 0);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldWarn()) {
                 boolean gseNotNull = gse.getMessage() != null && gse.getMessage() != "null";
@@ -658,9 +823,16 @@ public final class ECIESAEADEngine {
         byte[] encpayloadkey = new byte[32];
         _hkdf.calculate(split.k_ba.getData(), ZEROLEN, INFO_6, encpayloadkey);
         rcvr.initializeKey(encpayloadkey, 0);
-        byte[] payload = new byte[data.length - (TAGLEN + KEYLEN + MACLEN + MACLEN)];
+        int off = TAGLEN + KEYLEN + MACLEN;
+        int plen = data.length - (TAGLEN + KEYLEN + MACLEN + MACLEN);
+        if (hyb != null) {
+            int len = hyb.getPublicKeyLength() + MACLEN;
+            off += len;
+            plen -= len;
+        }
+        byte[] payload = new byte[plen];
         try {
-            rcvr.decryptWithAd(hash, data, TAGLEN + KEYLEN + MACLEN, payload, 0, payload.length + MACLEN);
+            rcvr.decryptWithAd(hash, data, off, payload, 0, plen + MACLEN);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldWarn()) {
                 boolean gseNotNull = gse.getMessage() != null && gse.getMessage() != "null";
@@ -706,7 +878,7 @@ public final class ECIESAEADEngine {
         }
 
         // tell the SKM
-        PublicKey bob = new PublicKey(EncType.ECIES_X25519, bobPK);
+        PublicKey bob = new PublicKey(keyManager.getType(), bobPK);
         keyManager.updateSession(bob, oldState, state, null, split);
 
         if (pc == null)
@@ -864,8 +1036,7 @@ public final class ECIESAEADEngine {
     private byte[] x_encrypt(CloveSet cloves, PublicKey target, Destination to, PrivateKey priv,
                              RatchetSKM keyManager,
                              ReplyCallback callback) {
-        if (target.getType() != EncType.ECIES_X25519)
-            throw new IllegalArgumentException();
+        checkType(target.getType());
         if (Arrays.equals(target.getData(), NULLPK)) {
             if (_log.shouldWarn())
                 _log.warn("Zero static key target");
@@ -896,6 +1067,7 @@ public final class ECIESAEADEngine {
             }
             if (_log.shouldDebug())
                 _log.debug("Encrypting as NewSession Reply \n* Target: " + target + "\n* Tag: " + re.tag.toBase64());
+// trash old state if this throws IAE???
             return encryptNewSessionReply(cloves, target, state, re.tag, keyManager, callback);
         }
         if (_log.shouldDebug())
@@ -937,9 +1109,13 @@ public final class ECIESAEADEngine {
     private byte[] encryptNewSession(CloveSet cloves, PublicKey target, Destination to, PrivateKey priv,
                                      RatchetSKM keyManager,
                                      ReplyCallback callback) {
+        EncType type = target.getType();
+        if (type != priv.getType())
+            throw new IllegalArgumentException("Key mismatch " + target + ' ' + priv);
         HandshakeState state;
         try {
-            state = new HandshakeState(HandshakeState.PATTERN_ID_IK, HandshakeState.INITIATOR, _edhThread);
+            String pattern = getNoisePattern(target.getType());
+            state = new HandshakeState(pattern, HandshakeState.INITIATOR, _edhThread, getHybridKeyFactory(type));
         } catch (GeneralSecurityException gse) {
             throw new IllegalStateException("Bad protocol", gse);
         }
@@ -956,7 +1132,12 @@ public final class ECIESAEADEngine {
 
         byte[] payload = createPayload(cloves, cloves.getExpiration(), NS_OVERHEAD);
 
-        byte[] enc = new byte[KEYLEN + KEYLEN + MACLEN + payload.length + MACLEN];
+        int enclen = KEYLEN + KEYLEN + MACLEN + payload.length + MACLEN;
+        DHState hyb = state.getLocalHybridKeyPair();
+        if (hyb != null) {
+            enclen += hyb.getPublicKeyLength() + MACLEN;
+        }
+        byte[] enc = new byte[enclen];
         try {
             state.writeMessage(enc, 0, payload, 0, payload.length);
         } catch (GeneralSecurityException gse) {
@@ -1065,7 +1246,12 @@ public final class ECIESAEADEngine {
         byte[] payload = createPayload(cloves, 0, NSR_OVERHEAD);
 
         // part 1 - tag and empty payload
-        byte[] enc = new byte[TAGLEN + KEYLEN + MACLEN + payload.length + MACLEN];
+        int enclen = TAGLEN + KEYLEN + MACLEN + payload.length + MACLEN;
+        DHState hyb = state.getLocalHybridKeyPair();
+        if (hyb != null) {
+            enclen += hyb.getPublicKeyLength() + MACLEN;
+        }
+        byte[] enc = new byte[enclen];
         System.arraycopy(tag, 0, enc, 0, TAGLEN);
         try {
             state.writeMessage(enc, TAGLEN, ZEROLEN, 0, 0);
@@ -1097,8 +1283,12 @@ public final class ECIESAEADEngine {
         byte[] encpayloadkey = new byte[32];
         _hkdf.calculate(split.k_ba.getData(), ZEROLEN, INFO_6, encpayloadkey);
         sender.initializeKey(encpayloadkey, 0);
+        int off = TAGLEN + KEYLEN + MACLEN;
+        if (hyb != null) {
+            off += hyb.getPublicKeyLength() + MACLEN;
+        }
         try {
-            sender.encryptWithAd(hash, payload, 0, enc, TAGLEN + KEYLEN + MACLEN, payload.length);
+            sender.encryptWithAd(hash, payload, 0, enc, off, payload.length);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldWarn())
                 _log.warn("Encrypt failure for NewSessionReply part 2", gse);
@@ -1482,7 +1672,7 @@ public final class ECIESAEADEngine {
                 return;
             if (!ls2.isCurrent(Router.CLOCK_FUDGE_FACTOR))
                 continue;
-            PublicKey pk = ls2.getEncryptionKey(LeaseSetKeys.SET_EC);
+            PublicKey pk = ls2.getEncryptionKey(getEncTypeSet(from.getType()));
             if (!from.equals(pk))
                 continue;
             if (!ls2.verifySignature())

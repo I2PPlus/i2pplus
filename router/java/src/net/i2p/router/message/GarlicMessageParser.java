@@ -18,6 +18,7 @@ import net.i2p.data.PrivateKey;
 import net.i2p.data.i2np.GarlicClove;
 import net.i2p.data.i2np.GarlicMessage;
 import net.i2p.router.RouterContext;
+import net.i2p.router.crypto.ratchet.MuxedPQSKM;
 import net.i2p.router.crypto.ratchet.MuxedSKM;
 import net.i2p.router.crypto.ratchet.RatchetSKM;
 import net.i2p.util.Log;
@@ -43,7 +44,7 @@ public class GarlicMessageParser {
     }
 
     /**
-     *  Supports both ELGAMAL_2048 and ECIES_X25519.
+     *  Supports ELGAMAL_2048, ECIES_X25519, and PQ
      *
      *  @param encryptionKey either type TODO need both for muxed
      *  @param skm use tags from this session key manager
@@ -64,6 +65,8 @@ public class GarlicMessageParser {
                     rskm = (RatchetSKM) skm;
                 } else if (skm instanceof MuxedSKM) {
                     rskm = ((MuxedSKM) skm).getECSKM();
+                } else if (skm instanceof MuxedPQSKM) {
+                    rskm = ((MuxedPQSKM) skm).getECSKM();
                 } else {
                     if (_log.shouldWarn())
                         _log.warn("No SKM to decrypt ECIES");
@@ -78,6 +81,27 @@ public class GarlicMessageParser {
                     // logged elsewhere in more detail
                     //if (_log.shouldWarn())
                     //    _log.warn("ECIES decryption failure");
+                    return null;
+                }
+            } else if (type.isPQ()) {
+                RatchetSKM rskm;
+                if (skm instanceof RatchetSKM) {
+                    rskm = (RatchetSKM) skm;
+                } else if (skm instanceof MuxedPQSKM) {
+                    rskm = ((MuxedPQSKM) skm).getPQSKM();
+                } else {
+                    if (_log.shouldWarn())
+                        _log.warn("No SKM to decrypt PQ");
+                    return null;
+                }
+                CloveSet rv = _context.eciesEngine().decrypt(encData, encryptionKey, rskm);
+                if (rv != null) {
+                    if (_log.shouldDebug())
+                        _log.debug("PQ decrypt success, cloves: " + rv.getCloveCount());
+                    return rv;
+                } else {
+                    if (_log.shouldWarn())
+                        _log.warn("PQ decrypt fail");
                     return null;
                 }
             } else {
@@ -114,7 +138,7 @@ public class GarlicMessageParser {
     /**
      *  Supports both ELGAMAL_2048 and ECIES_X25519.
      *
-     *  @param elgKey must be ElG, non-null
+     *  @param elgKey must be ElG OR PQ, non-null
      *  @param ecKey must be EC, non-null
      *  @param skm use tags from this session key manager
      *  @return null on error
@@ -127,6 +151,10 @@ public class GarlicMessageParser {
             if (skm instanceof MuxedSKM) {
                 MuxedSKM mskm = (MuxedSKM) skm;
                 rv = _context.eciesEngine().decrypt(encData, elgKey, ecKey, mskm);
+            } else if (skm instanceof MuxedPQSKM) {
+                MuxedPQSKM mskm = (MuxedPQSKM) skm;
+                // EC is first
+                rv = _context.eciesEngine().decrypt(encData, ecKey, elgKey, mskm);
             } else if (skm instanceof RatchetSKM) {
                 // unlikely, if we have two keys we should have a MuxedSKM
                 RatchetSKM rskm = (RatchetSKM) skm;

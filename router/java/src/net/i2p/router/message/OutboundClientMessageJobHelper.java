@@ -16,10 +16,12 @@ import net.i2p.data.Certificate;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
+import net.i2p.data.Payload;
 import net.i2p.data.PublicKey;
 import net.i2p.data.SessionKey;
 import net.i2p.data.SessionTag;
 import net.i2p.data.TunnelId;
+import net.i2p.data.i2np.DataMessage;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.i2np.DeliveryInstructions;
 import net.i2p.data.i2np.DeliveryStatusMessage;
@@ -110,7 +112,7 @@ class OutboundClientMessageJobHelper {
 
         SessionKeyManager skm = ctx.clientManager().getClientSessionKeyManager(from);
         if (skm == null) {return null;}
-        boolean isECIES = recipientPK.getType() == EncType.ECIES_X25519;
+        boolean isECIES = recipientPK.getType() != EncType.ELGAMAL_2048;
         boolean ackInGarlic = isECIES ? false : requireAck; // force ack off if ECIES
         GarlicConfig config = createGarlicConfig(ctx, replyToken, expiration, recipientPK, dataClove,
                                                  from, dest, replyTunnel, ackInGarlic, bundledReplyLeaseSet, skm);
