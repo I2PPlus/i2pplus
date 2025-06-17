@@ -89,8 +89,8 @@ public class I2PSnarkServlet extends BasicServlet {
 
     private static final String DEFAULT_NAME = "i2psnark";
     public static final String PROP_CONFIG_FILE = "i2psnark.configFile";
-    private static final String WARBASE = "/.res/";
-    private static final char HELLIP = '\u2026';
+    public static final String WARBASE = "/.res/";
+    static final char HELLIP = '\u2026';
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     private static final String RC_PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
     private int searchResults;
@@ -1818,10 +1818,12 @@ public class I2PSnarkServlet extends BasicServlet {
             boolean enableAddCreate = req.getParameter("enableAddCreate") != null;
             boolean enableVaryInboundHops = req.getParameter("varyInbound") != null;
             boolean enableVaryOutboundHops = req.getParameter("varyOutbound") != null;
+            String apiTarget = req.getParameter("apiTarget");
+            String apiKey = req.getParameter("apiKey");
             _manager.updateConfig(dataDir, filesPublic, autoStart, smartSort, refreshDel, startupDel, pageSize, seedPct, eepHost, eepPort,
                                   i2cpHost, i2cpPort, i2cpOpts, upLimit, upBW, downBW, useOpenTrackers, useDHT, theme, lang, ratings, comments,
                                   commentsName, collapsePanels, showStatusFilter, enableLightbox, enableAddCreate, enableVaryInboundHops,
-                                  enableVaryOutboundHops, preallocateFiles);
+                                  enableVaryOutboundHops, preallocateFiles, apiTarget, apiKey);
             // update servlet
             try {setResourceBase(_manager.getDataDir());}
             catch (ServletException se) {}
@@ -2199,7 +2201,7 @@ public class I2PSnarkServlet extends BasicServlet {
         return rv;
     }
 
-    private static final int MAX_DISPLAYED_FILENAME_LENGTH = 255;
+    static final int MAX_DISPLAYED_FILENAME_LENGTH = 255;
     private static final int MAX_DISPLAYED_ERROR_LENGTH = 43;
 
     private boolean snarkMatchesFilter(Snark s, String filter) {

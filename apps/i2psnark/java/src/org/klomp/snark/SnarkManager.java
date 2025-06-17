@@ -180,6 +180,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static final String PROP_COMMENTS_NAME = "i2psnark.commentsName";
     /** @since 0.9.58 */
     public static final String PROP_MAX_FILES_PER_TORRENT = "i2psnark.maxFilesPerTorrent";
+    /** @since 0.9.67 */
+    private static final String PROP_API_PREFIX = "i2psnark.apikey.";
     /** @since 0.9.61+ */
     public static final String PROP_MAX_MESSAGES = "i2psnark.maxLogMessages";
     /** @since 0.9.64+ */
@@ -1051,6 +1053,17 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         _util.setEnableLightbox(Boolean.parseBoolean(_config.getProperty(PROP_ENABLE_LIGHTBOX, Boolean.toString(I2PSnarkUtil.DEFAULT_ENABLE_LIGHTBOX))));
         _util.setVaryInboundHops(Boolean.parseBoolean(_config.getProperty(PROP_VARY_INBOUND_HOPS, Boolean.toString(I2PSnarkUtil.DEFAULT_VARY_INBOUND_HOPS))));
         _util.setVaryOutboundHops(Boolean.parseBoolean(_config.getProperty(PROP_VARY_OUTBOUND_HOPS, Boolean.toString(I2PSnarkUtil.DEFAULT_VARY_OUTBOUND_HOPS))));
+
+        for (String c : _config.stringPropertyNames()) {
+            if (c.startsWith(PROP_API_PREFIX)) {
+                String tgt = c.substring(PROP_API_PREFIX.length());
+                String key = _config.getProperty(c);
+                // we only support one for now
+                _util.setAPI(tgt, key);
+                break;
+            }
+        }
+
         File dd = getDataDir();
 
         if (dd.isDirectory()) {
@@ -1086,12 +1099,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                              String i2cpPort, String i2cpOpts, String upLimit, String upBW, String downBW, boolean useOpenTrackers,
                              boolean useDHT, String theme, String lang, boolean enableRatings, boolean enableComments, String commentName,
                              boolean collapsePanels, boolean showStatusFilter, boolean enableLightbox, boolean enableAddCreate,
-                             boolean enableVaryInboundHops, boolean enableVaryOutboundHops, boolean preallocateFiles) {
+                             boolean enableVaryInboundHops, boolean enableVaryOutboundHops, boolean preallocateFiles, String apiTarget, String apiKey) {
         synchronized(_configLock) {
             locked_updateConfig(dataDir, filesPublic, autoStart, smartSort, refreshDelay, startDelay, pageSize, seedPct, eepHost, eepPort,
                                 i2cpHost, i2cpPort, i2cpOpts, upLimit, upBW, downBW, useOpenTrackers, useDHT, theme, lang, enableRatings,
                                 enableComments, commentName, collapsePanels, showStatusFilter, enableLightbox, enableAddCreate,
-                                enableVaryInboundHops, enableVaryOutboundHops, preallocateFiles);
+                                enableVaryInboundHops, enableVaryOutboundHops, preallocateFiles, apiTarget, apiKey);
         }
     }
 
@@ -1100,7 +1113,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                              String i2cpPort, String i2cpOpts, String upLimit, String upBW, String downBW, boolean useOpenTrackers,
                              boolean useDHT, String theme, String lang, boolean enableRatings, boolean enableComments, String commentName,
                              boolean collapsePanels, boolean showStatusFilter, boolean enableLightbox, boolean enableAddCreate,
-                             boolean enableVaryInboundHops, boolean enableVaryOutboundHops, boolean preallocateFiles) {
+                             boolean enableVaryInboundHops, boolean enableVaryOutboundHops, boolean preallocateFiles, String apiTarget, String apiKey) {
         boolean changed = false;
         boolean interruptMonitor = false;
 
@@ -1546,6 +1559,20 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             else {addMessage(_t("Add and Create sections to display only on first page of multipage torrent listing pages."));}
             _util.setEnableAddCreate(enableAddCreate);
             changed = true;
+        }
+
+        if (apiKey != null && apiKey.length() > 0 &&
+            apiTarget != null && apiTarget.length() > 0) {
+            apiKey = DataHelper.stripHTML(apiKey.trim());
+            apiTarget = DataHelper.stripHTML(apiTarget.trim());
+            String oldk = _util.getAPIKey();
+            String oldt = _util.getAPITarget();
+            if (!apiKey.equals(oldk) || !apiTarget.equals(oldt)) {
+                _config.setProperty(PROP_API_PREFIX + apiTarget, apiKey);
+                _util.setAPI(apiTarget, apiKey);
+                addMessage(_t("API key updated."));
+                changed = true;
+            }
         }
 
         if (changed) {

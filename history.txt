@@ -1,12 +1,12 @@
 2025-06-03 2.9.0+ released
 
-2025-05-30
+2025-05-30 dr|z3d
  * I2PSnark: Enhance download/upload bar tooltips with js
 
-2025-05-29
+2025-05-29 dr|z3d
  * I2PSnark: Ensure csp response headers are sent for html and js
 
-2025-05-26
+2025-05-26 dr|z3d
  * I2PSnark:
    - Reimplement toggle all file download priorities
 

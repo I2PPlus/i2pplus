@@ -95,6 +95,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     private long _startedTime;
     private final DisconnectListener _discon;
     private int _maxFilesPerTorrent = SnarkManager.DEFAULT_MAX_FILES_PER_TORRENT;
+    private String _apiTarget, _apiKey;
     private static final int EEPGET_CONNECT_TIMEOUT = 60*1000;
     private static final int EEPGET_CONNECT_TIMEOUT_SHORT = 15*1000;
     public static final int DEFAULT_STARTUP_DELAY = 3;
@@ -109,6 +110,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     public static final String PROP_MAX_BW = "i2cp.outboundBytesPerSecond";
     public static final boolean DEFAULT_USE_DHT = true;
     public static final String EEPGET_USER_AGENT = "I2PSnark";
+    private static final boolean ENABLE_UDP_TRACKER = true;
     private static final List<String> HIDDEN_I2CP_OPTS = Arrays.asList(new String[] {
         PROP_MAX_BW, "inbound.length", "outbound.length", "inbound.quantity", "outbound.quantity",
         //"inbound.lengthVariance", "oubound.lengthVariance",
@@ -248,6 +250,21 @@ public class I2PSnarkUtil implements DisconnectListener {
     public int getMaxFilesPerTorrent() {return _maxFilesPerTorrent;}
     /** @since 0.9.58 */
     public void setMaxFilesPerTorrent(int max) {_maxFilesPerTorrent = Math.max(max, 1);}
+
+    /** @since 0.9.67 */
+    public String getAPITarget() { return _apiTarget; };
+    /** @since 0.9.67 */
+    public String getAPIKey() { return _apiKey; };
+    /** @since 0.9.67 */
+    public void setAPI(String target, String key) {
+        _apiTarget = target;
+        _apiKey = key;
+    }
+    /** @since 0.9.67 */
+    public boolean hasAPIKey() {
+        return _apiTarget != null && _apiTarget.length() > 0 &&
+               _apiKey != null && _apiKey.length() > 0;
+    }
 
     /** @since 0.9.64+ */
     public boolean getVaryInboundHops() {return _varyInboundHops;}
