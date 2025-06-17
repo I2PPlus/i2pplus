@@ -5,7 +5,7 @@
 <!-- This is the configuration for a standalone i2psnark and         -->
 <!-- jetty instance connecting to a router in another jvm.           -->
 <!-- Run it with the launch-i2psnark script.                         -->
-<!-- i2psnark will be accessed at http://127.0.0.1:8002/             -->
+<!-- i2psnark will be accessible at http://127.0.0.1:8002/           -->
 <!-- =============================================================== -->
 
 <!-- =============================================================== -->
@@ -23,22 +23,22 @@
   <Call name="addConnector">
     <Arg>
       <New class="org.eclipse.jetty.server.ServerConnector">
-        <Arg><Ref refid="Server" /></Arg>
-        <Arg type="int">1</Arg>   <!-- number of acceptors -->
-        <Arg type="int">0</Arg>   <!-- default number of selectors -->
+        <Arg><Ref refid="Server"/></Arg>
+        <Arg type="int">1</Arg>  <!-- number of acceptors -->
+        <Arg type="int">0</Arg>  <!-- default number of selectors -->
         <Arg>
           <Array type="org.eclipse.jetty.server.ConnectionFactory">  <!-- varargs so we need an array -->
             <Item>
               <New class="org.eclipse.jetty.server.HttpConnectionFactory">
                 <Arg>
-                  <New class="org.eclipse.jetty.server.HttpConfiguration" />
+                  <New class="org.eclipse.jetty.server.HttpConfiguration"/>
                 </Arg>
               </New>
             </Item>
           </Array>
         </Arg>
-        <Set name="host">127.0.0.1</Set>
-        <Set name="port">8002</Set>
+        <Set name="host">127.0.0.1</Set> <!-- listening address -->
+        <Set name="port">8002</Set> <!-- listening port -->
         <Set name="idleTimeout">600000</Set>
       </New>
     </Arg>
@@ -55,15 +55,9 @@
     <New id="Handlers" class="org.eclipse.jetty.server.handler.HandlerCollection">
       <Set name="handlers">
         <Array type="org.eclipse.jetty.server.Handler">
-          <Item>
-            <New id="HostChecker" class="org.klomp.snark.standalone.HostCheckHandler"/>
-          </Item>
-          <Item>
-            <New id="Contexts" class="org.eclipse.jetty.server.handler.ContextHandlerCollection"/>
-          </Item>
-          <Item>
-            <New id="DefaultHandler" class="org.eclipse.jetty.server.handler.DefaultHandler"/>
-          </Item>
+          <Item><New id="HostChecker" class="org.klomp.snark.standalone.HostCheckHandler"/></Item>
+          <Item><New id="Contexts" class="org.eclipse.jetty.server.handler.ContextHandlerCollection"/></Item>
+          <Item><New id="DefaultHandler" class="org.eclipse.jetty.server.handler.DefaultHandler"/></Item>
         </Array>
       </Set>
     </New>
@@ -84,7 +78,7 @@
     <Arg>
       <New id="DeploymentManager" class="org.eclipse.jetty.deploy.DeploymentManager">
         <Set name="contexts">
-          <Ref id="Contexts"/>
+          <Ref refid=="Contexts"/>
         </Set>
         <Call name="setContextAttribute">
           <Arg>org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern</Arg>
@@ -105,7 +99,7 @@
   <!-- in the $JETTY_HOME/contexts directory                       -->
   <!--                                                             -->
   <!-- =========================================================== -->
-  <Ref id="DeploymentManager">
+  <Ref refid=="DeploymentManager">
     <Call name="addAppProvider">
       <Arg>
         <New class="org.eclipse.jetty.deploy.providers.WebAppProvider">
@@ -129,7 +123,7 @@
   <!-- Normally only one type of deployer need be used.            -->
   <!--                                                             -->
   <!-- =========================================================== -->
-  <Ref id="DeploymentManager">
+  <Ref refid=="DeploymentManager">
     <Call id="webappprovider" name="addAppProvider">
       <Arg>
         <New class="org.eclipse.jetty.deploy.providers.WebAppProvider">
@@ -146,7 +140,7 @@
   <!-- DefaultHandler config -->
   <!-- http://stackoverflow.com/questions/4202275/how-to-prevent-jetty-from-showing-context-related-information -->
   <!-- ===================== -->
-  <Ref id="DefaultHandler">
+  <Ref refid=="DefaultHandler">
     <Set name="showContexts">false</Set>
   </Ref>
 
