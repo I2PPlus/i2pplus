@@ -69,12 +69,16 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 
     public static final int MAX_TO_FLOOD = SystemVersion.isSlow() ? 6 : 12;
     private static final int FLOOD_PRIORITY = OutNetMessage.PRIORITY_NETDB_FLOOD;
-    private static final int FLOOD_TIMEOUT = 90*1000;
+    private static final int FLOOD_TIMEOUT = 60*1000;
     static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000;
     private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000;
     private static final int NEXT_FLOOD_QTY = MAX_TO_FLOOD / 2;
     private static final int MAX_LAG_BEFORE_SKIP_SEARCH = SystemVersion.isSlow() ? 600 : 300;
     private static final int PUBLISH_JOB_DELAY = 15*1000;
+    /** @since 0.9.66 moved from FloodfillMonitorJob */
+    public static final String PROP_FLOODFILL_PARTICIPANT = "router.floodfillParticipant";
+    /** @since 0.9.66 */
+    public static final String PROP_FLOODFILL_AT_RESTART = "router.wasFloodfill";
 
 /**
     public static final int MAX_TO_FLOOD = 3;
@@ -131,7 +135,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         if (_ffMonitor != null) {_context.jobQueue().addJob(_ffMonitor);}
         if (isClientDb()) {isFF = false;}
         else {
-            isFF = _context.getBooleanProperty(FloodfillMonitorJob.PROP_FLOODFILL_PARTICIPANT);
+            isFF = _context.getBooleanProperty(PROP_FLOODFILL_PARTICIPANT);
             _lookupThrottler = new LookupThrottler(this);
             _lookupBanner = new LookupBanHammer();
         }
@@ -257,7 +261,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *        unused if we are ff and ds is an RI
      */
 
-    private int concurrent = 1;
+    private int concurrent = 2;
     private int failCount = 0;
     private int successCount = 0;
 
@@ -280,8 +284,8 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
                 else if (successCount == 0) {
                     _context.jobQueue().addJob(new FloodfillStoreJob(_context, this, key, ds, onSuccess, onFailure, sendTimeout, toIgnore));
                     failCount++;
-                    if (failCount >= 10) {concurrent = 3;}
-                    else if (failCount >= 3) {concurrent = 2;}
+                    if (failCount >= 10) {concurrent = 4;}
+                    else if (failCount >= 3) {concurrent = 3;}
                     if (_log.shouldWarn()) {
                         _log.warn("Flood of key [" + key.toBase32().substring(0,8) + "] to [" + peer.toBase64().substring(0,6) + "] failed -> " +
                                   "Resending to " + (concurrent > 1 ? concurrent + " new peers" : "a different peer") + "...");
