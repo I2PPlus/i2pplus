@@ -2906,6 +2906,8 @@ public class I2PSnarkServlet extends BasicServlet {
         String trackerLinkUrl = getTrackerLinkUrl(announce, infohash);
         if (announce.startsWith("http://")) {announce = announce.substring(7);}
         else if (announce.startsWith("https://")) {announce = announce.substring(8);}
+        else if (announce.startsWith("udp://")) {announce = announce.substring(6);}
+/**
         else if (announce.startsWith("udp://tracker.")) {
             announce = announce.substring(14) + " [ext]";
             int colon = announce.indexOf(':');
@@ -2923,6 +2925,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 announce = announce.substring(0, colon);
             }
         }
+**/
         // strip path
         int slsh = announce.indexOf('/');
         if (slsh > 0) {announce = announce.substring(0, slsh);}
@@ -4686,11 +4689,11 @@ public class I2PSnarkServlet extends BasicServlet {
      * Just to hide non-i2p trackers from the details page.
      * @since 0.9.46
      */
-    private static boolean isI2PTracker(String url) {
+    private boolean isI2PTracker(String url) {
         try {
             URI uri = new URI(url);
             String method = uri.getScheme();
-            if (!"http".equals(method) && !"https".equals(method)) {return false;}
+            if (!("http".equals(method) || (_manager.util().udpEnabled() && "udp".equals(method)))) {return false;}
             String host = uri.getHost();
             if (host == null || !host.endsWith(".i2p")) {return false;}
         } catch (URISyntaxException use) {return false;}

@@ -92,6 +92,8 @@ public class I2PSnarkUtil implements DisconnectListener {
     private boolean _varyOutboundHops;
     private List<String> _openTrackers;
     private DHT _dht;
+    private boolean _enableUDP = ENABLE_UDP_TRACKER;
+    private UDPTrackerClient _udpTracker;
     private long _startedTime;
     private final DisconnectListener _discon;
     private int _maxFilesPerTorrent = SnarkManager.DEFAULT_MAX_FILES_PER_TORRENT;
@@ -355,6 +357,10 @@ public class I2PSnarkUtil implements DisconnectListener {
             _connecting = false;
         }
         if (_shouldUseDHT && _manager != null && _dht == null) {_dht = new KRPC(_context, _baseName, _manager.getSession());}
+        if (_enableUDP &&_manager != null) {
+            if (_udpTracker == null) {_udpTracker = new UDPTrackerClient(_context, _manager.getSession(), this);}
+            _udpTracker.start();
+        }
         return (_manager != null);
     }
 
@@ -380,6 +386,13 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     public DHT getDHT() {return _dht;}
 
+
+    /**
+     * @return null if disabled or not started
+     * @since 0.9.14
+     */
+    public UDPTrackerClient getUDPTrackerClient() {return _udpTracker;}
+
     public boolean connected() {return _manager != null;}
 
     /** @since 0.9.1 */
@@ -399,6 +412,10 @@ public class I2PSnarkUtil implements DisconnectListener {
         if (_dht != null) {
             _dht.stop();
             _dht = null;
+        }
+        if (_udpTracker != null) {
+            _udpTracker.stop();
+            _udpTracker = null;
         }
         _startedTime = 0;
         I2PSocketManager mgr = _manager;
@@ -665,9 +682,7 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /** @param ot non-null list of announce URLs */
-    public void setOpenTrackers(List<String> ot) {
-        _openTrackers = ot;
-    }
+    public void setOpenTrackers(List<String> ot) {_openTrackers = ot;}
 
     /** List of open tracker announce URLs to use as backups
      *  @return non-null, possibly unmodifiable, empty if disabled
@@ -695,17 +710,11 @@ public class I2PSnarkUtil implements DisconnectListener {
      *  @return non-null
      *  @since 0.9.4
      */
-    public List<String> getBackupTrackers() {
-        return _openTrackers;
-    }
+    public List<String> getBackupTrackers() {return _openTrackers;}
 
-    public void setUseOpenTrackers(boolean yes) {
-        _shouldUseOT = yes;
-    }
+    public void setUseOpenTrackers(boolean yes) {_shouldUseOT = yes;}
 
-    public boolean shouldUseOpenTrackers() {
-        return _shouldUseOT;
-    }
+    public boolean shouldUseOpenTrackers() {return _shouldUseOT;}
 
     /** @since DHT */
     public synchronized void setUseDHT(boolean yes) {
@@ -719,107 +728,73 @@ public class I2PSnarkUtil implements DisconnectListener {
     }
 
     /** @since DHT */
-    public boolean shouldUseDHT() {
-        return _shouldUseDHT;
-    }
+    public boolean shouldUseDHT() {return _shouldUseDHT;}
+
+    /** @since 0.9.67 */
+    public void setUDPEnabled(boolean yes) {_enableUDP = yes;}
+
+    /** @since 0.9.67 */
+    public boolean udpEnabled() {return _enableUDP;}
 
     /** @since 0.9.31 */
-    public void setRatingsEnabled(boolean yes) {
-        _enableRatings = yes;
-    }
+    public void setRatingsEnabled(boolean yes) {_enableRatings = yes;}
 
     /** @since 0.9.31 */
-    public boolean ratingsEnabled() {
-        return _enableRatings;
-    }
+    public boolean ratingsEnabled() {return _enableRatings;}
 
     /** @since 0.9.31 */
-    public void setCommentsEnabled(boolean yes) {
-        _enableComments = yes;
-    }
+    public void setCommentsEnabled(boolean yes) {_enableComments = yes;}
 
     /** @since 0.9.31 */
-    public boolean commentsEnabled() {
-        return _enableComments;
-    }
+    public boolean commentsEnabled() {return _enableComments;}
 
     /** @since 0.9.31 */
-    public void setCommentsName(String name) {
-        _commentsName = name;
-    }
+    public void setCommentsName(String name) {_commentsName = name;}
 
     /**
      *  @return non-null, "" if none
      *  @since 0.9.31
      */
-    public String getCommentsName() {
-        return _commentsName == null ? "" : _commentsName;
-    }
+    public String getCommentsName() {return _commentsName == null ? "" : _commentsName;}
 
     /** @since 0.9.31 */
-    public boolean utCommentsEnabled() {
-        return _enableRatings || _enableComments;
-    }
+    public boolean utCommentsEnabled() {return _enableRatings || _enableComments;}
 
     /** @since 0.9.32 */
-    public boolean collapsePanels() {
-        return _collapsePanels;
-    }
+    public boolean collapsePanels() {return _collapsePanels;}
 
     /** @since 0.9.32 */
-    public void setCollapsePanels(boolean yes) {
-        _collapsePanels = yes;
-    }
+    public void setCollapsePanels(boolean yes) {_collapsePanels = yes;}
+
+    /** @since 0.9.34+ */
+    public boolean showStatusFilter() {return _showStatusFilter;}
+
+    /** @since 0.9.34+ */
+    public void setShowStatusFilter(boolean yes) {_showStatusFilter = yes;}
+
+    /** @since 0.9.34+ */
+    public boolean enableLightbox() {return _enableLightbox;}
 
     /** @since 0.9.34 */
-    public boolean showStatusFilter() {
-        return _showStatusFilter;
-    }
+    public void setEnableLightbox(boolean yes) {_enableLightbox = yes;}
 
-    /** @since 0.9.34 */
-    public void setShowStatusFilter(boolean yes) {
-        _showStatusFilter = yes;
-    }
+    /** @since 0.9.38+ */
+    public boolean enableAddCreate() {return _enableAddCreate;}
 
-    /** @since 0.9.34 */
-    public boolean enableLightbox() {
-        return _enableLightbox;
-    }
-
-    /** @since 0.9.34 */
-    public void setEnableLightbox(boolean yes) {
-        _enableLightbox = yes;
-    }
-
-    /** @since 0.9.38 */
-    public boolean enableAddCreate() {
-        return _enableAddCreate;
-    }
-
-    /** @since 0.9.38 */
-    public void setEnableAddCreate(boolean yes) {
-        _enableAddCreate = yes;
-    }
+    /** @since 0.9.38+ */
+    public void setEnableAddCreate(boolean yes) {_enableAddCreate = yes;}
 
     /** @since 0.9.64+ */
-    public boolean enableVaryInboundHops() {
-        return _varyInboundHops;
-    }
+    public boolean enableVaryInboundHops() {return _varyInboundHops;}
 
     /** @since 0.9.64+ */
-    public boolean enableVaryOutboundHops() {
-        return _varyOutboundHops;
-    }
+    public boolean enableVaryOutboundHops() {return _varyOutboundHops;}
 
     /** @since 0.9.64+ */
-    public void setEnableVaryInboundHops(boolean yes) {
-        _varyInboundHops = yes;
-    }
+    public void setEnableVaryInboundHops(boolean yes) {_varyInboundHops = yes;}
 
     /** @since 0.9.64+ */
-    public void setEnableVaryOutboundHops(boolean yes) {
-        _varyOutboundHops = yes;
-    }
+    public void setEnableVaryOutboundHops(boolean yes) {_varyOutboundHops = yes;}
 
     /**
      *  Like DataHelper.toHexString but ensures no loss of leading zero bytes
@@ -829,8 +804,7 @@ public class I2PSnarkUtil implements DisconnectListener {
         StringBuilder buf = new StringBuilder(40);
         for (int i = 0; i < b.length; i++) {
             int bi = b[i] & 0xff;
-            if (bi < 16)
-                buf.append('0');
+            if (bi < 16) {buf.append('0');}
             buf.append(Integer.toHexString(bi));
         }
         return buf.toString();
