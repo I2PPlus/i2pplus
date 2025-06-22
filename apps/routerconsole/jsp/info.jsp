@@ -30,7 +30,16 @@
    }
 %>
 &ensp;<span class=nowrap>[Jcpuid version: <%=freenet.support.CPUInformation.CPUID.getJcpuidVersion()%></span>]</td></tr>
-<tr><td><b>Java:</b></td><td><%=System.getProperty("java.vendor")%>&ensp;<%=System.getProperty("java.version")%>&ensp;(<%=System.getProperty("java.runtime.name")%>&ensp;<%=System.getProperty("java.runtime.version")%>)</td></tr>
+<tr><td><b>Java:</b></td><td><%=System.getProperty("java.vendor")%>&ensp;<%=System.getProperty("java.version")%>&ensp;(<%=System.getProperty("java.runtime.name")%>&ensp;<%=System.getProperty("java.runtime.version")%>)
+<%
+   boolean recentJavaVersion = net.i2p.util.SystemVersion.isJava(17);
+   if (!recentJavaVersion) {
+%>
+<br><span style=color:red>Warning: You are running an older version of Java that will soon no longer be supported. Please update to Java 17 or later to receive future router updates.</span>
+<%
+   }
+%>
+</td></tr>
 <jsp:getProperty name="logsHelper" property="unavailableCrypto" />
 <tr><td><b>Jetty:</b></td><td><jsp:getProperty name="logsHelper" property="jettyVersion" />&ensp;<b>Servlet:</b>&ensp;<%=getServletInfo()%></td></tr>
 <tr><td><b>JBigI:</b></td><td><%=net.i2p.util.NativeBigInteger.loadStatus()%>&ensp;<span class=nowrap>[version: <%=net.i2p.util.NativeBigInteger.getJbigiVersion()%>]</span>&ensp;<span class=nowrap><b>GMP:</b>&ensp;<%=net.i2p.util.NativeBigInteger.getLibGMPVersion()%></span></td></tr>
