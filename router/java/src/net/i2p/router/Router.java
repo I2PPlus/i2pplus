@@ -39,6 +39,7 @@ import net.i2p.data.Hash;
 import net.i2p.data.i2np.GarlicMessage;
 import net.i2p.data.PublicKey;
 import net.i2p.data.router.RouterAddress;
+import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.SigningPublicKey;
@@ -90,6 +91,8 @@ public class Router implements RouterClock.ClockShiftListener {
     private String _configFilename;
     private RouterInfo _routerInfo;
     private final ReentrantReadWriteLock _routerInfoLock = new ReentrantReadWriteLock(false);
+    private RouterIdentity _routerIdent;
+    private Hash _routerHash;
     /** not for external use */
     public final Object routerInfoFileLock = new Object();
     private final Object _configFileLock = new Object();
@@ -528,6 +531,22 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
+     *  Our current router identity.
+     *  Warning, may be null if called very early.
+     *  Lockless.
+     *  @since 0.9.67
+     */
+    public RouterIdentity getRouterIdentity() {return _routerIdent;}
+
+    /**
+     *  Our current router hash.
+     *  Warning, may be null if called very early.
+     *  Lockless.
+     *  @since 0.9.67
+     */
+    public Hash getRouterHash() {return _routerHash;}
+
+    /**
      *  Caller must ensure info is valid - no validation done here.
      *  Not for external use.
      *
@@ -536,6 +555,11 @@ public class Router implements RouterClock.ClockShiftListener {
      */
     public void setRouterInfo(RouterInfo info) {
         _routerInfoLock.writeLock().lock();
+        if (!info.getIdentity().equals(_routerIdent)) {
+            if (_routerIdent != null) {_log.log(Log.CRIT, "Changing router ident while running");} // shouldn't happen
+            _routerIdent = info.getIdentity();
+            _routerHash = _routerIdent.calculateHash();
+        }
         try {_routerInfo = info;}
         finally {_routerInfoLock.writeLock().unlock();}
         if (_log.shouldInfo()) {_log.info("setRouterInfo() : " + info);}
