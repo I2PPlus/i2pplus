@@ -78,7 +78,7 @@
     <Arg>
       <New id="DeploymentManager" class="org.eclipse.jetty.deploy.DeploymentManager">
         <Set name="contexts">
-          <Ref refid=="Contexts"/>
+          <Ref refid="Contexts"/>
         </Set>
         <Call name="setContextAttribute">
           <Arg>org.eclipse.jetty.server.webapp.ContainerIncludeJarPattern</Arg>
@@ -99,7 +99,7 @@
   <!-- in the $JETTY_HOME/contexts directory                       -->
   <!--                                                             -->
   <!-- =========================================================== -->
-  <Ref refid=="DeploymentManager">
+  <Ref refid="DeploymentManager">
     <Call name="addAppProvider">
       <Arg>
         <New class="org.eclipse.jetty.deploy.providers.WebAppProvider">
@@ -123,7 +123,7 @@
   <!-- Normally only one type of deployer need be used.            -->
   <!--                                                             -->
   <!-- =========================================================== -->
-  <Ref refid=="DeploymentManager">
+  <Ref refid="DeploymentManager">
     <Call id="webappprovider" name="addAppProvider">
       <Arg>
         <New class="org.eclipse.jetty.deploy.providers.WebAppProvider">
@@ -140,7 +140,7 @@
   <!-- DefaultHandler config -->
   <!-- http://stackoverflow.com/questions/4202275/how-to-prevent-jetty-from-showing-context-related-information -->
   <!-- ===================== -->
-  <Ref refid=="DefaultHandler">
+  <Ref refid="DefaultHandler">
     <Set name="showContexts">false</Set>
   </Ref>
 
