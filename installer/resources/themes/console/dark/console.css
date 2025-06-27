@@ -2712,7 +2712,7 @@ body.hasExpandedElement #configinfo tr.config:not(.expanded) th{color:#770;trans
 #portfaq th:first-child,#portfaq td:first-child{font-weight:700;text-align:right}
 #portfaq .infohelp{padding-top:15px;padding-bottom:15px}
 #portfaq th{padding:8px 5px;text-align:left}
-#portfaq th[colspan="3"]{padding:8px 10px;text-align:left;word-spacing:.1em;letter-spacing:.08em;font-size:10.5pt}
+#portfaq th[colspan="3"]{padding:8px 10px;text-align:left;word-spacing:.1em;letter-spacing:.08em;font-size:10.5pt;border-top:0}
 #portfaq td[colspan="3"]{font-weight:400}
 #portfaq td:nth-child(2){white-space:nowrap}
 #portfaq td:not(.infohelp):first-child{padding-left:10px}
