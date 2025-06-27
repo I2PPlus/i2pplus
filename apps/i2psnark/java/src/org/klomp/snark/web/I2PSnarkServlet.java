@@ -272,7 +272,8 @@ public class I2PSnarkServlet extends BasicServlet {
                     } else {resp.sendError(404);}
                 } else {
                     String base = addPaths(req.getRequestURI(), "/");
-                    String listing = getListHTML(resource, base, true, method.equals("POST") ? req.getParameterMap() : null,
+                    String listing = getListHTML(resource, base, true,
+                                                 method.equals("POST") ? req.getParameterMap() : null,
                                                  req.getParameter("sort"));
                     if (method.equals("POST")) {sendRedirect(req, resp, "");} // P-R-G
                     else if (listing != null) {
@@ -2592,10 +2593,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 long t = peer.getInactiveTime();
                 if ((peer.getUploadRate() > 0 || peer.getDownloadRate() > 0) && t < 60 * 1000) {
                     snarkStatus = "active";
-                    if (peer.getUploadRate() > 0 && !peer.isInteresting() && !peer.isChoking())
-                        snarkStatus += " TX";
-                    if (peer.getDownloadRate() > 0 && !peer.isInterested() && !peer.isChoked())
-                        snarkStatus += " RX";
+                    if (peer.getUploadRate() > 0 && !peer.isInteresting() && !peer.isChoking()) {snarkStatus += " TX";}
+                    if (peer.getDownloadRate() > 0 && !peer.isInterested() && !peer.isChoked()) {snarkStatus += " RX";}
                 } else {snarkStatus = "inactive";}
                 if (!peer.isConnected()) {continue;}
                 buf.append("<tr class=\"peerinfo ").append(snarkStatus).append(" volatile\">\n<td class=status title=\"")
@@ -3493,8 +3492,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<tr><td><input type=submit class=accept value=\"")
            .append(_t("Save configuration"))
            .append("\" name=foo></td></tr>\n")
-           .append(spacer)
-           .append("</table></div></div></form>");
+           .append(spacer).append("</table></div></div></form>");
         out.append(buf);
         out.flush();
         buf.setLength(0);
@@ -3510,7 +3508,7 @@ public class I2PSnarkServlet extends BasicServlet {
      */
     private void writeTorrentCreateFilterForm(PrintWriter out, HttpServletRequest req) throws IOException {
         StringBuilder buf = new StringBuilder(5*1024);
-        buf.append("<form action=\"").append(_contextPath).append("/configure#navbar\" method=POST>\n")
+        buf.append("<form id=createFilterForm action=\"").append(_contextPath).append("/configure\" method=POST>\n")
            .append("<div class=configPanel id=fileFilter>\n<div class=snarkConfig>\n");
         writeHiddenInputs(buf, req, "Save3");
         buf.append("<span id=filtersTitle class=\"configTitle expanded\">").append(_t("Torrent Create File Filtering")).append("</span><hr>\n")
@@ -3564,8 +3562,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append(spacer)
            .append("<tr id=addFileFilter>")
            .append("<td><b>").append(_t("Add")).append(":</b></td>").append(filterFormElements).append("</tr>")
-           .append(spacer).append(buttons).append(spacer)
-           .append("</table>\n</div>\n</div>\n</form>\n");
+           .append(spacer).append(buttons).append(spacer).append("</table>\n</div>\n</div>\n</form>\n");
         out.append(buf);
         out.flush();
         buf.setLength(0);
@@ -3581,7 +3578,7 @@ public class I2PSnarkServlet extends BasicServlet {
      */
     private void writeTrackerForm(PrintWriter out, HttpServletRequest req) throws IOException {
         StringBuilder buf = new StringBuilder(5*1024);
-        buf.append("<form action=\"").append(_contextPath).append("/configure#navbar\" method=POST>\n")
+        buf.append("<form id=trackerConfigForm action=\"" + _contextPath + "/configure\" method=POST>\n")
            .append("<div class=configPanel id=trackers><div class=snarkConfig>\n");
         writeHiddenInputs(buf, req, "Save2");
         buf.append("<span id=trackersTitle class=\"configTitle expanded\">").append(_t("Trackers")).append("</span><hr>\n")
@@ -3949,18 +3946,9 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         String theme = _manager.getTheme();
         buf.append("<script nonce=" + cspNonce + ">const theme = \"" + theme + "\";</script>");
-        // hide javascript-dependent buttons when js is unavailable
-        buf.append("<noscript><style>.script{display:none}</style></noscript>\n")
-           .append("<link rel=\"shortcut icon\" href=\"").append(_contextPath).append(WARBASE).append("icons/favicon.svg\">\n");
-
-        /*
-        TODO event delegation so it works with ajax refresh
-        if (showPriority)
-            buf.append("<script src=\"").append(_contextPath + WARBASE + "js/setPriority.js?" + CoreVersion.VERSION + "\"></script>\n");
-            buf.append("<script src=\"/themes/setPriority.js?" + CoreVersion.VERSION + "\"></script>\n"); // debugging
-        */
-
-        buf.append("</head>\n<body style=display:none;pointer-events:none class=\"").append(theme)
+        buf.append("<noscript><style>.script{display:none}</style></noscript>\n") // hide javascript-dependent buttons when js is unavailable
+           .append("<link rel=\"shortcut icon\" href=\"").append(_contextPath).append(WARBASE).append("icons/favicon.svg\">\n")
+           .append("</head>\n<body style=display:none;pointer-events:none class=\"").append(theme)
            .append(" lang_").append(lang).append("\">\n")
            .append("<div id=navbar><a href=\"").append(_contextPath).append("/\" title=").append(_t("Torrents"))
            .append(" class=\"snarkNav nav_main\">").append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName).append("</a>\n")
