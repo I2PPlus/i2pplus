@@ -2903,9 +2903,14 @@ public class I2PSnarkServlet extends BasicServlet {
     private String getShortTrackerLink(String announce, byte[] infohash) {
         StringBuilder buf = new StringBuilder(128);
         String trackerLinkUrl = getTrackerLinkUrl(announce, infohash);
+        boolean isUDP = false;
+
         if (announce.startsWith("http://")) {announce = announce.substring(7);}
         else if (announce.startsWith("https://")) {announce = announce.substring(8);}
-        else if (announce.startsWith("udp://")) {announce = announce.substring(6);}
+        else if (announce.startsWith("udp://")) {
+            announce = announce.substring(6);
+            isUDP = true;
+        }
 /**
         else if (announce.startsWith("udp://tracker.")) {
             announce = announce.substring(14) + " [ext]";
@@ -2929,7 +2934,7 @@ public class I2PSnarkServlet extends BasicServlet {
         int slsh = announce.indexOf('/');
         if (slsh > 0) {announce = announce.substring(0, slsh);}
         if (trackerLinkUrl != null) {buf.append(trackerLinkUrl);}
-        else {
+        else if (isUDP) {
             // browsers don't like a full b64 dest, so convert it to b32
             String host = announce;
             if (host.length() >= 516) {
@@ -2948,9 +2953,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             }
             int space = host.indexOf(" ");
-            if (!host.endsWith("[ext]") || host.contains(".i2p")) {
+            if ((!host.endsWith("[ext]") || host.contains(".i2p")) && !isUDP) {
                 buf.append("<a href=\"http://").append(urlEncode(host)).append("/\" target=_blank>");
-             } else {host = host.substring(0, space);}
+            } else {host = host.substring(0, space);}
         }
         // strip port
         int colon = announce.indexOf(':');
