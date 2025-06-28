@@ -235,10 +235,12 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (_receivedUnconfirmedIdentity != null) {throw new DataFormatException("Duplicate RouterInfo in SessionConfirmed");}
         _receivedUnconfirmedIdentity = ri.getIdentity();
         if (ri.getPublished() < 0) {
-            // see SSU2Payload: RI format error, signature was verified there, so we can take action
+            // See SSU2Payload: RI format error, signature was verified there, so we can take action
             _context.blocklist().add(_aliceIP);
             Hash h = _receivedUnconfirmedIdentity.calculateHash();
-            _context.banlist().banlistRouter(h, " <b>➜</b> Invalid publication date", null, null, _context.clock().now() + 4*24*60*60*1000);
+            // These really hammer the floodfills, so reduce the time on floodfills so the banlist doesn't get huge
+            long banDuration = _context.netDb().floodfillEnabled() ? 36*60*60*1000 : 4*24*60*60*1000;
+            _context.banlist().banlistRouter(h, " <b>➜</b> Invalid publication date", null, null, _context.clock().now() + banDuration);
             throw new RIException("Invalid publication date in RouterInfo " + h.toBase64(), REASON_BANNED);
         }
 
@@ -256,11 +258,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             if (host == null) {host = "";}
             String caps = addr.getOption(UDPAddress.PROP_CAPACITY);
             if (caps == null) {caps = "";}
-            if (isIPv6) {
-                if (!host.contains(":") && !caps.contains(TransportImpl.CAP_IPV6)) {continue;}
-            } else {
-                if (!host.contains(".") && !caps.contains(TransportImpl.CAP_IPV4)) {continue;}
-            }
+            if (isIPv6 && !host.contains(":") && !caps.contains(TransportImpl.CAP_IPV6)) {continue;}
+            else if (!host.contains(".") && !caps.contains(TransportImpl.CAP_IPV4)) {continue;}
             ra = addr;
             byte[] infoIP = ra.getIP();
             if (infoIP != null && infoIP.length == _aliceIP.length) {
