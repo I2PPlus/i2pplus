@@ -214,6 +214,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
        ,"DgTrack", "http://opentracker.dg2.i2p/a=http://opentracker.dg2.i2p/"
        ,"R4SAS", "http://opentracker.r4sas.i2p/a=http://opentracker.r4sas.i2p/stats"
        ,"Simp", "http://opentracker.simp.i2p/a=http://opentracker.simp.i2p/tracker"
+       ,"Simp[UDP]", "udp://wc4sciqgkceddn6twerzkfod6p2npm733p7z3zwsjfzhc4yulita.b32.i2p:6969/=http://opentracker.simp.i2p/tracker/"
        ,"Skank", "http://opentracker.skank.i2p/a=http://opentracker.skank.i2p/tracker"
 //       ,"OmiTracker", "http://omitracker.i2p/announce.php=http://omitracker.i2p/"
 //       ,"Lyoko", "http://lyoko.i2p/a=http://lyoko.i2p/tracker"
