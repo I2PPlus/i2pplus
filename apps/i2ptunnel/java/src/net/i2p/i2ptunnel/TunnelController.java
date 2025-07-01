@@ -434,8 +434,8 @@ public class TunnelController implements Logging {
         try {
             doStartTunnel();
         } catch (RuntimeException e) {
-            _log.error("Error starting tunnel [" + getName() + "]", e);
-            log("Error starting tunnel [" + getName() + "] \n* " + e.getMessage());
+            _log.error("Error starting tunnel [" + getName() + "] -> " + e.getMessage());
+            log("Error starting tunnel [" + getName() + "] -> " + e.getMessage());
             // if we don't acquire() then the release() in stopTunnel() won't work
             acquire();
             stopTunnel();
