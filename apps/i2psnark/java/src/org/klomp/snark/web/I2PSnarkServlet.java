@@ -205,7 +205,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private void doGetAndPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String method = req.getMethod(); // since we are not overriding handle*(), do this here
         String path = req.getServletPath(); // this is the part after /i2psnark
-        String csp = "default-src 'self'; base-uri 'self'; worker-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; ";
+        String csp = "default-src 'self'; base-uri 'self'; connect-src 'self'; worker-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; ";
         if (path.contains(".js")) {resp.setHeader("Content-Security-Policy", csp);}
 
         // in-war icons etc.
@@ -250,7 +250,7 @@ public class I2PSnarkServlet extends BasicServlet {
             return;
         }
 
-        boolean isConfigure = "/configure".equals(path);
+        boolean isConfigure = path.endsWith("/configure");
         // index.jsp doesn't work, it is grabbed by the war handler before here
         if (!(path == null || path.equals("/") || path.equals("/index.jsp") ||
             path.equals("/index.html") || path.equals("/_post") || isConfigure)) {
@@ -550,7 +550,7 @@ public class I2PSnarkServlet extends BasicServlet {
             mimeType.equals("text/css") || mimeType.contains("javascript"))) {
             headers.append("Cache-Control\t: private, max-age=2628000, immutable\r\n");
         } else {headers.append("Cache-Control\t: private, no-cache, max-age=2628000\r\n");}
-        StringBuilder csp = new StringBuilder("default-src 'self'; base-uri 'self'; worker-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; ");
+        StringBuilder csp = new StringBuilder("default-src 'self'; base-uri 'self'; connect-src 'self'; worker-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; ");
         csp.append("script-src 'self' 'nonce-").append(cspNonce).append("'; ");
         csp.append("object-src 'none'; media-src '").append(allowMedia ? "self" : "none").append("'");
         //if (mimeType != null && (mimeType.contains("html") || mimeType.contains("javascript"))) {
@@ -1829,10 +1829,10 @@ public class I2PSnarkServlet extends BasicServlet {
             // update servlet
             try {setResourceBase(_manager.getDataDir());}
             catch (ServletException se) {}
-        } else if ("Save2".equals(action)) {
+        } else if ("SaveTrackers".equals(action)) {
             String taction = req.getParameter("taction");
             if (taction != null) {processTrackerForm(taction, req);}
-        } else if ("Save3".equals(action)) {
+        } else if ("SaveCreateFilters".equals(action)) {
             String raction = req.getParameter("raction");
             if (raction != null) {processTorrentCreateFilterForm(raction, req);}
         } else if ("Create".equals(action)) {
@@ -2014,7 +2014,7 @@ public class I2PSnarkServlet extends BasicServlet {
         StringBuilder buf = new StringBuilder(128);
         if (url.endsWith("_post")) {url = url.substring(0, url.length() - 5);}
         buf.append(url);
-        if (p.length() > 0) {buf.append(p.replace("&amp;", "&"));}  // no you don't html escape the redirect header
+        if (p.length() > 0) {buf.append(p.replace("&amp;", "&"));} // no you don't html escape the redirect header
         resp.setHeader("Location", buf.toString());
         resp.setStatus(303);
         resp.getOutputStream().close();
@@ -2031,8 +2031,7 @@ public class I2PSnarkServlet extends BasicServlet {
             Enumeration<?> e = req.getParameterNames();
             while (e.hasMoreElements()) {
                  Object o = e.nextElement();
-                 if (!(o instanceof String))
-                     continue;
+                 if (!(o instanceof String)) {continue;}
                  String k = (String) o;
                  if (k.startsWith("delete_")) {
                      k = k.substring(7);
@@ -2045,22 +2044,17 @@ public class I2PSnarkServlet extends BasicServlet {
                 } else if (k.startsWith("ttype_")) {
                      String val = req.getParameter(k);
                      k = k.substring(6);
-                     if ("1".equals(val))
-                         open.add(k);
-                     else if ("2".equals(val))
-                         priv.add(k);
+                     if ("1".equals(val)) {open.add(k);}
+                     else if ("2".equals(val)) {priv.add(k);}
                 }
             }
-            if (changed) {
-                _manager.saveTrackerMap();
-            }
+            if (changed) {_manager.saveTrackerMap();}
 
             open.removeAll(removed);
             List<String> oldOpen = new ArrayList<String>(_manager.util().getOpenTrackers());
             Collections.sort(oldOpen);
             Collections.sort(open);
-            if (!open.equals(oldOpen))
-                _manager.saveOpenTrackers(open);
+            if (!open.equals(oldOpen)) {_manager.saveOpenTrackers(open);}
 
             priv.removeAll(removed);
             // open trumps private
@@ -2068,8 +2062,7 @@ public class I2PSnarkServlet extends BasicServlet {
             List<String> oldPriv = new ArrayList<String>(_manager.getPrivateTrackers());
             Collections.sort(oldPriv);
             Collections.sort(priv);
-            if (!priv.equals(oldPriv))
-                _manager.savePrivateTrackers(priv);
+            if (!priv.equals(oldPriv)) {_manager.savePrivateTrackers(priv);}
 
         } else if (action.equals(_t("Add tracker"))) {
             String name = req.getParameter("tname");
@@ -2095,19 +2088,13 @@ public class I2PSnarkServlet extends BasicServlet {
                         newPriv.add(aurl);
                         _manager.savePrivateTrackers(newPriv);
                     }
-                } else {
-                    _manager.addMessage(_t("Enter valid tracker name and URLs"));
-                }
-            } else {
-                _manager.addMessage(_t("Enter valid tracker name and URLs"));
-            }
+                } else {_manager.addMessage(_t("Enter valid tracker name and URLs"));}
+            } else {_manager.addMessage(_t("Enter valid tracker name and URLs"));}
         } else if (action.equals(_t("Restore defaults"))) {
             _manager.setDefaultTrackerMap();
             _manager.saveOpenTrackers(null);
             _manager.addMessage(_t("Restored default trackers"));
-        } else {
-            _manager.addMessage("Unknown POST action: \"" + action + '\"');
-        }
+        } else {_manager.addMessage("Unknown POST action: \"" + action + '\"');}
     }
 
     /** @since 0.9.62+ */
@@ -2120,8 +2107,7 @@ public class I2PSnarkServlet extends BasicServlet {
             ArrayList<TorrentCreateFilter> replaceFilters = new ArrayList<TorrentCreateFilter>();
             while (e.hasMoreElements()) {
                 Object o = e.nextElement();
-                if (!(o instanceof String))
-                    continue;
+                if (!(o instanceof String)) {continue;}
                 String k = (String) o;
                 if (k.startsWith("delete_")) {
                     k = k.substring(7);
@@ -2140,9 +2126,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 String oldFilterType = entry.getValue().filterType;
                 boolean newDefault = newDefaults.contains(filterName);
 
-                if (filterType == null) {
-                    filterType = oldFilterType;
-                }
+                if (filterType == null) {filterType = oldFilterType;}
 
                 TorrentCreateFilter oldFilter = torrentCreateFilters.remove(filterName);
                 TorrentCreateFilter newFilter = new TorrentCreateFilter(filterName, filterPattern, filterType, newDefault);
@@ -3516,7 +3500,7 @@ public class I2PSnarkServlet extends BasicServlet {
         StringBuilder buf = new StringBuilder(5*1024);
         buf.append("<form id=createFilterForm action=\"").append(_contextPath).append("/configure\" method=POST>\n")
            .append("<div class=configPanel id=fileFilter>\n<div class=snarkConfig>\n");
-        writeHiddenInputs(buf, req, "Save3");
+        writeHiddenInputs(buf, req, "SaveCreateFilters");
         buf.append("<span id=filtersTitle class=\"configTitle expanded\">").append(_t("Torrent Create File Filtering")).append("</span><hr>\n")
            .append("<table hidden>\n<tr>")
            .append("<th title=\"").append(_t("Mark filter for deletion")).append("\"></th>")
@@ -3586,7 +3570,7 @@ public class I2PSnarkServlet extends BasicServlet {
         StringBuilder buf = new StringBuilder(5*1024);
         buf.append("<form id=trackerConfigForm action=\"" + _contextPath + "/configure\" method=POST>\n")
            .append("<div class=configPanel id=trackers><div class=snarkConfig>\n");
-        writeHiddenInputs(buf, req, "Save2");
+        writeHiddenInputs(buf, req, "SaveTrackers");
         buf.append("<span id=trackersTitle class=\"configTitle expanded\">").append(_t("Trackers")).append("</span><hr>\n")
            .append("<table id=trackerconfig hidden>\n<tr>")
            .append("<th title=\"").append(_t("Select trackers for removal from I2PSnark's known list")).append("\"></th>")
