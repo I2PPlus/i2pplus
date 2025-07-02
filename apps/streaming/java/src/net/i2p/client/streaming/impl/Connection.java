@@ -108,7 +108,13 @@ class Connection {
 
     public static final int DEFAULT_CONNECT_TIMEOUT = 60*1000;
     private static final long MAX_CONNECT_TIMEOUT = 2*60*1000;
+
+    /**
+     *  This is the default maximum. See ConnectionOptions.setMaxWindowSize()
+     *  where the configured maximum is enforced.
+     */
     public static final int MAX_WINDOW_SIZE = 512;
+
     private static final int UNCHOKES_TO_SEND = 12;
 
     /** Maximum number of packets to retransmit when the timer hits */
