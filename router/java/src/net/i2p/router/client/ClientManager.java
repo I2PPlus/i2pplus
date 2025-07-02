@@ -739,7 +739,11 @@ class ClientManager {
 
         public void timeReached() {
             if (!_isStarted) {return;}
-            for (ClientConnectionRunner runner : _runners.values()) {
+            if (_runners.isEmpty()) {schedule(LOOP_TIME); return;}
+
+            // dedup subsessions
+            Set<ClientConnectionRunner> runners = new HashSet<ClientConnectionRunner>(_runners.values());
+            for (ClientConnectionRunner runner : runners) {
                 if (runner instanceof QueuedClientConnectionRunner) {continue;}
                 if (runner.isDead()) {continue;}
                 SessionConfig cfg = runner.getPrimaryConfig();
@@ -751,8 +755,9 @@ class ClientManager {
                     runner.doSend(new SetDateMessage(runner.getClientVersion() != null ?
                                                      CoreVersion.PUBLISHED_VERSION : null));
                 } catch (I2CPMessageException ime) {}
-                if (_isStarted) {schedule(LOOP_TIME);}
             }
+
+            if (_isStarted) {schedule(LOOP_TIME);}
         }
     }
 
