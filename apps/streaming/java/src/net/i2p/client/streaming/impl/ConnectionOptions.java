@@ -136,18 +136,14 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /** RFC 5681 sec. 3.1 */
     static final int INITIAL_WINDOW_SIZE = 3;
     static final int DEFAULT_MAX_SENDS = 8;
-//    public static final int DEFAULT_INITIAL_RTT = 8*1000;
-//    private static final int MAX_RTT = 60*1000;
-    public static final int DEFAULT_INITIAL_RTT = 4500;
-    private static final int MAX_RTT = 30*1000;
+    public static final int DEFAULT_INITIAL_RTT = 8*1000;
+    private static final int MAX_RTT = 60*1000;
     /**
      *  Ref: RFC 5681 sec. 4.3, RFC 1122 sec. 4.2.3.3, ticket #2706
      */
-//    private static final int DEFAULT_INITIAL_ACK_DELAY = 500;
-    private static final int DEFAULT_INITIAL_ACK_DELAY = 450;
+    private static final int DEFAULT_INITIAL_ACK_DELAY = 500;
     static final int MIN_WINDOW_SIZE = 1;
     private static final boolean DEFAULT_ANSWER_PINGS = true;
-//    private static final int DEFAULT_INACTIVITY_TIMEOUT = 90*1000;
     private static final int DEFAULT_INACTIVITY_TIMEOUT = 75*1000;
     private static final int DEFAULT_INACTIVITY_ACTION = INACTIVITY_ACTION_SEND;
     private static final int DEFAULT_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR = 1;
@@ -596,15 +592,12 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      */
     public int getWindowSize() {return _windowSize;}
     public void setWindowSize(int numMsgs) {
-        if (numMsgs <= 0)
-            numMsgs = 1;
-        if (numMsgs < MIN_WINDOW_SIZE)
-            numMsgs = MIN_WINDOW_SIZE;
+        if (numMsgs <= 0) {numMsgs = 1;}
+        if (numMsgs < MIN_WINDOW_SIZE) {numMsgs = MIN_WINDOW_SIZE;}
         // the stream's max window size may be less than the min window size, for
         // instance, with interactive streams of cwin=1.  This is why we test it here
         // after checking MIN_WINDOW_SIZE
-        if (numMsgs > _maxWindowSize)
-            numMsgs = _maxWindowSize;
+        if (numMsgs > _maxWindowSize) {numMsgs = _maxWindowSize;}
         _windowSize = numMsgs;
     }
 
@@ -633,23 +626,9 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      *  not public, use updateRTT()
      */
     private void setRTT(int ms) {
-/*
-        synchronized (_trend) {
-            _trend[0] = _trend[1];
-            _trend[1] = _trend[2];
-            if (ms > _rtt)
-                _trend[2] = 1;
-            else if (ms < _rtt)
-                _trend[2] = -1;
-            else
-                _trend[2] = 0;
-        }
-*/
-
         synchronized(this) {
             _rtt = ms;
-            if (_rtt > MAX_RTT)
-                _rtt = MAX_RTT;
+            if (_rtt > MAX_RTT) {_rtt = MAX_RTT;}
         }
     }
 
@@ -689,10 +668,8 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
             break;
         }
 
-        if (_rto < Connection.MIN_RESEND_DELAY)
-            _rto = Connection.MIN_RESEND_DELAY;
-        else if (_rto > Connection.MAX_RESEND_DELAY)
-            _rto = Connection.MAX_RESEND_DELAY;
+        if (_rto < Connection.MIN_RESEND_DELAY) {_rto = Connection.MIN_RESEND_DELAY;}
+        } else if (_rto > Connection.MAX_RESEND_DELAY) {_rto = Connection.MAX_RESEND_DELAY;}
     }
 
     /**
@@ -705,8 +682,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     synchronized int doubleRTO() {
         // we don't need to switch on _initState, _rto is set in constructor
         _rto *= 2;
-        if (_rto > Connection.MAX_RESEND_DELAY)
-            _rto = Connection.MAX_RESEND_DELAY;
+        if (_rto > Connection.MAX_RESEND_DELAY) {_rto = Connection.MAX_RESEND_DELAY;}
         return _rto;
     }
 
@@ -753,9 +729,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         computeRTO();
     }
 
-    public synchronized boolean receivedAck() {
-        return _initState != AckInit.INIT;
-    }
+    public synchronized boolean receivedAck() {return _initState != AckInit.INIT;}
 
     /** How long after sending a packet will we wait before resending?
      * @return delay for a retransmission in ms
@@ -822,9 +796,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
      * As of API 0.9.64, all values are saved.
      * Warning: unused.
      */
-    public void setProfile(int profile) {
-        _profile = profile;
-    }
+    public void setProfile(int profile) {_profile = profile;}
 
     /**
      * How many times will we try to send a message before giving up?
@@ -936,39 +908,31 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         // Don't think these would ever be accessed simultaneously,
         // but avoid concurrent modification just in case
         Set<Hash> accessList, blackList;
-        if (accessListEnabled)
-            accessList = new HashSet<Hash>();
-        else
-            accessList = Collections.emptySet();
-        if (blackListEnabled)
-            blackList = new HashSet<Hash>();
-        else
-            blackList = Collections.emptySet();
+        if (accessListEnabled) {accessList = new HashSet<Hash>();}
+        else {accessList = Collections.emptySet();}
+        if (blackListEnabled) {blackList = new HashSet<Hash>();}
+        else {blackList = Collections.emptySet();}
         if (accessListEnabled || blackListEnabled) {
             String hashes = opts.getProperty(PROP_ACCESS_LIST);
-            if (hashes == null)
-                return;
+            if (hashes == null) {return;}
             StringTokenizer tok = new StringTokenizer(hashes, ",; ");
             while (tok.hasMoreTokens()) {
                 String hashstr = tok.nextToken();
                 Hash h = ConvertToHash.getHash(hashstr);
-                if (h == null)
-//                    error("bad list hash: " + hashstr);
-                    error("Invalid entry in access list: " + hashstr);
-                else if (blackListEnabled)
-                    blackList.add(h);
-                else
-                    accessList.add(h);
+                if (h == null) {error("Invalid entry in access list: " + hashstr);}
+                else if (blackListEnabled) {blackList.add(h);}
+                else {accessList.add(h);}
             }
         }
         _accessList = accessList;
         _blackList = blackList;
         _accessListEnabled = accessListEnabled;
         _blackListEnabled = blackListEnabled;
-        if (_accessListEnabled && _accessList.isEmpty())
+        if (_accessListEnabled && _accessList.isEmpty()) {
             error("Connection access list enabled but no valid entries; no peers can connect");
-        else if (_blackListEnabled && _blackList.isEmpty())
+        } else if (_blackListEnabled && _blackList.isEmpty())
             error("Connection blacklist enabled but no valid entries; all peers can connect");
+        }
     }
 
     private static void error(String s) {
@@ -982,8 +946,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
         buf.append("\n*");
-        if (_connectDelay > 0)
-            buf.append(" conDelay=").append(_connectDelay);
+        if (_connectDelay > 0) {buf.append(" conDelay=").append(_connectDelay);}
         buf.append(" maxSize=").append(_maxMessageSize);
         buf.append(" rtt=").append(_rtt);
         buf.append(" rwin=").append(_receiveWindow);
@@ -993,10 +956,10 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         buf.append(" maxResends=").append(_maxResends);
         buf.append("\n* writeTimeout=").append(getWriteTimeout());
         buf.append(" readTimeout=").append(getReadTimeout());
-        if (_inactivityTimeout > 0)
-            buf.append(" inactivityTimeout=").append(_inactivityTimeout);
+        if (_inactivityTimeout > 0) {buf.append(" inactivityTimeout=").append(_inactivityTimeout);}
         buf.append(" inboundBuffer=").append(_inboundBufferSize);
         buf.append(" maxWindowSize=").append(_maxWindowSize);
+
 /** Unresolved NPE
         if (_blackListEnabled && !_blackList.isEmpty() || _accessList.size() > 0 || (_maxConnsPerMinute > 0
                                    || _maxConnsPerHour > 0 || _maxConnsPerDay > 0)
