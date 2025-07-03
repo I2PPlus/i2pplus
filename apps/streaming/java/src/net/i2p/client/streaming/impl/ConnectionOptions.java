@@ -669,7 +669,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         }
 
         if (_rto < Connection.MIN_RESEND_DELAY) {_rto = Connection.MIN_RESEND_DELAY;}
-        } else if (_rto > Connection.MAX_RESEND_DELAY) {_rto = Connection.MAX_RESEND_DELAY;}
+        else if (_rto > Connection.MAX_RESEND_DELAY) {_rto = Connection.MAX_RESEND_DELAY;}
     }
 
     /**
@@ -930,7 +930,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         _blackListEnabled = blackListEnabled;
         if (_accessListEnabled && _accessList.isEmpty()) {
             error("Connection access list enabled but no valid entries; no peers can connect");
-        } else if (_blackListEnabled && _blackList.isEmpty())
+        } else if (_blackListEnabled && _blackList.isEmpty()) {
             error("Connection blacklist enabled but no valid entries; all peers can connect");
         }
     }
