@@ -2071,9 +2071,9 @@ public class I2PSnarkServlet extends BasicServlet {
             if (name != null && hurl != null && aurl != null) {
                 name = DataHelper.stripHTML(name.trim());
                 hurl = DataHelper.stripHTML(hurl.trim());
-                if (!hurl.startsWith("http://")) {hurl = "http://" + hurl;} // Add http:// if not present
+                if (!hurl.startsWith("http://") && !hurl.startsWith("udp://")) {hurl = "http://" + hurl;} // Add http:// if not present
                 aurl = DataHelper.stripHTML(aurl.trim()).replace("=", "&#61;");
-                if (!aurl.startsWith("http://")) {aurl = "http://" + aurl;}  // Add http:// if not present
+                if (!aurl.startsWith("http://") && !aurl.startsWith("udp://")) {aurl = "http://" + aurl;}  // Add http:// if not present
                 if (name.length() > 0 && hurl.startsWith("http://") && TrackerClient.isValidAnnounce(aurl)) {
                     Map<String, Tracker> trackers = _manager.getTrackerMap();
                     trackers.put(name, new Tracker(name, aurl, hurl));
