@@ -1,3 +1,18 @@
+2025-07-04 zzz
+ * I2PSnark: UDP announce fixes
+ * SSU: Increase inbound ban time
+ * Util: Android Java version detection improvements
+
+2025-07-01 zzz
+ * Streaming: Allow configured max window size higher than default
+
+2025-06-30 zzz
+ * I2CP: Don't send multiple SetDate messages to sessions with subsessions
+
+2025-06-26 zzz
+ * I2PSnark: UDP announce fixes
+ * Router: Reduce and document the banlist-forever threshold
+
 2025-06-03 2.9.0+ released
 
 2025-05-30 dr|z3d
