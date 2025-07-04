@@ -70,6 +70,8 @@ public abstract class SystemVersion {
     private static final boolean _twenty;
     private static final boolean _twentyOne;
     private static final boolean _twentyTwo;
+    private static final boolean _twentyThree;
+    private static final boolean _twentyFour;
     private static final int _androidSDK;
 
     /** @since 0.9.55+ */
@@ -115,6 +117,7 @@ public abstract class SystemVersion {
 
         if (_isAndroid) {
             _oneDotSix = _androidSDK >= 9;
+            // java.nio.File not until 26
             _oneDotSeven = _androidSDK >= 19;
             // https://developer.android.com/studio/write/java8-support.html
             // some stuff in 24
@@ -133,6 +136,8 @@ public abstract class SystemVersion {
             _twenty = false;
             _twentyOne = false;
             _twentyTwo = false;
+            _twentyThree = false;
+            _twentyFour = false;
         } else {
             String version = System.getProperty("java.version");
             // handle versions like "8-ea" or "9-internal"
@@ -155,6 +160,8 @@ public abstract class SystemVersion {
             _twenty = _nineteen && VersionComparator.comp(version, "20.0") >= 0;
             _twentyOne = _twenty && VersionComparator.comp(version, "21.0") >= 0;
             _twentyTwo = _twentyOne && VersionComparator.comp(version, "22.0") >= 0;
+            _twentyThree = _twentyTwo && VersionComparator.comp(version, "23.0") >= 0;
+            _twentyFour = _twentyThree && VersionComparator.comp(version, "24.0") >= 0;
         }
     }
 
@@ -404,6 +411,11 @@ public abstract class SystemVersion {
         if (_isAndroid) {
             if (minVersion.startsWith("1.6")) {return _oneDotSix;}
             if (minVersion.startsWith("1.7")) {return _oneDotSeven;}
+            if (minVersion.startsWith("1.8")) {return _oneDotEight;}
+            if (minVersion.startsWith("1.9")) {return _oneDotNine;}
+            if (minVersion.startsWith("1.10")) {return _oneDotTen;}
+            if (minVersion.startsWith("1.11")) {return _oneDotEleven;}
+            if (minVersion.startsWith("1.17")) {return _androidSDK >= 34;}
             return false;
         }
         return VersionComparator.comp(version, minVersion) >= 0;
