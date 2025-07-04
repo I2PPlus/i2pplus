@@ -163,7 +163,7 @@ class EstablishmentManager {
     /** for the DSM and or netdb store */
     private static final int DATA_MESSAGE_TIMEOUT = SystemVersion.isSlow() ? 10*1000 : 8*1000;
 
-    private static final int IB_BAN_TIME = 15*60*1000;
+    private static final int IB_BAN_TIME = 60*60*1000;
 
     // SSU 2
     private static final int MIN_TOKENS = SystemVersion.isSlow() ? 128 : 512;
