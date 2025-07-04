@@ -87,6 +87,9 @@ certificates/www.cacert.org.crt
 # renamed to match the hostname
 certificates/ssl/i2pprojekt.de.crt
 # no longer used
+certificates/family/i2pd-dev.crt
+certificates/family/i2p-dev.crt
+certificates/family/volatile.crt
 certificates/news/ampernand_at_gmail.com.crt
 certificates/news/killyourtv_at_mail.i2p.crt
 certificates/news/str4d_at_mail.i2p.crt
