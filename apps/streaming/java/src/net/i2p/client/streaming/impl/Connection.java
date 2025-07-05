@@ -113,7 +113,7 @@ class Connection {
      *  This is the default maximum. See ConnectionOptions.setMaxWindowSize()
      *  where the configured maximum is enforced.
      */
-    public static final int MAX_WINDOW_SIZE = 512;
+    public static final int MAX_WINDOW_SIZE = 256;
 
     private static final int UNCHOKES_TO_SEND = 12;
 
@@ -438,18 +438,20 @@ class Connection {
                             iter.remove();
                         }
                     } else {
-                        // TODO
-                        // we do not currently do an "implicit nack" of the packets higher
-                        // than ackThrough, so those will not be fast retransmitted
-                        // we could incrementNACK them here... but we may need to set the fastRettransmit
-                        // threshold back to 3 for that.
-                        // this will do a fast retransmit if appropriate
-                        // This doesn't work because every packet has an ACK in it, so we hit the
-                        // FAST_TRANSMIT threshold in a heartbeat and retransmit everything,
-                        // even with the threshold at 3. (we never set the NO_ACK field in the header)
-                        // Also, we may need to track that we
-                        // have the same ackThrough for 3 or 4 consecutive times.
-                        // See https://secure.wikimedia.org/wikipedia/en/wiki/Fast_retransmit
+                        /*
+                         * TODO
+                         * we do not currently do an "implicit nack" of the packets higher
+                         * than ackThrough, so those will not be fast retransmitted
+                         * we could incrementNACK them here... but we may need to set the fastRettransmit
+                         * threshold back to 3 for that.
+                         * this will do a fast retransmit if appropriate
+                         * This doesn't work because every packet has an ACK in it, so we hit the
+                         * FAST_TRANSMIT threshold in a heartbeat and retransmit everything,
+                         * even with the threshold at 3. (we never set the NO_ACK field in the header)
+                         * Also, we may need to track that we
+                         * have the same ackThrough for 3 or 4 consecutive times.
+                         * See https: *secure.wikimedia.org/wikipedia/en/wiki/Fast_retransmit
+                         */
                         //if (_log.shouldInfo())
                         //    _log.info("ACK thru " + ackThrough + " implicitly NACKs " + id);
                         //PacketLocal nackedPacket = e.getValue();
@@ -981,16 +983,20 @@ class Connection {
         }
         if (on) {
             congestionOccurred();
-            // https://en.wikipedia.org/wiki/Transmission_Control_Protocol
-            // When a receiver advertises a window size of 0, the sender stops sending data and starts the persist timer.
-            // The persist timer is used to protect TCP from a deadlock situation that could arise
-            // if a subsequent window size update from the receiver is lost,
-            // and the sender cannot send more data until receiving a new window size update from the receiver.
-            // When the persist timer expires, the TCP sender attempts recovery by sending a small packet
-            // so that the receiver responds by sending another acknowledgement containing the new window size.
-            // ...
-            // We don't do any of that, but we set the window size to 1, and let the retransmission
-            // of packets do the "attempted recovery".
+            /*
+             * https: *en.wikipedia.org/wiki/Transmission_Control_Protocol
+             * When a receiver advertises a window size of 0, the sender stops sending data and starts the persist timer.
+             *
+             * The persist timer is used to protect TCP from a deadlock situation that could arise if a subsequent window
+             * size update from the receiver is lost, and the sender cannot send more data until receiving a new window
+             * size update from the receiver.
+             *
+             * When the persist timer expires, the TCP sender attempts recovery by sending a small packet
+             * so that the receiver responds by sending another acknowledgement containing the new window size.
+             * ...
+             * We don't do any of that, but we set the window size to 1, and let the retransmission
+             * of packets do the "attempted recovery".
+             */
             _options.setWindowSize(1);
         }
     }
@@ -1574,10 +1580,12 @@ class Connection {
                            _packet.getPayloadSize() <= 0 &&
                            _outboundPackets.size() <= 1 &&
                            getCloseReceivedOn() > 0) {
-                    // Bug workaround to prevent 5 minutes of retransmission
-                    // Routers before 0.9.9 have bugs, they won't ack anything after
-                    // they sent a close. Only send 3 CLOSE packets total, then
-                    // shut down normally.
+                    /*
+                     * Bug workaround to prevent 5 minutes of retransmission
+                     * Routers before 0.9.9 have bugs, they won't ack anything after
+                     * they sent a close. Only send 3 CLOSE packets total, then
+                     * shut down normally.
+                     */
                     if (_log.shouldInfo())
                         _log.info("Too many CLOSE resends, disconnecting: " + Connection.this.toString());
                     _packet.cancelled();

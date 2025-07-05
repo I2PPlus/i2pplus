@@ -87,8 +87,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private static final float TCP_KAPPA = 4;
 
     private static final String PROP_INITIAL_RTO = "i2p.streaming.initialRTO";
-//    private static final int INITIAL_RTO = 9000;
-    private static final int INITIAL_RTO = 5000;
+    private static final int INITIAL_RTO = 9000;
 
     public static final String PROP_CONNECT_DELAY = "i2p.streaming.connectDelay";
     public static final String PROP_MAX_MESSAGE_SIZE = "i2p.streaming.maxMessageSize";
@@ -144,7 +143,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private static final int DEFAULT_INITIAL_ACK_DELAY = 500;
     static final int MIN_WINDOW_SIZE = 1;
     private static final boolean DEFAULT_ANSWER_PINGS = true;
-    private static final int DEFAULT_INACTIVITY_TIMEOUT = 75*1000;
+    private static final int DEFAULT_INACTIVITY_TIMEOUT = 90*1000;
     private static final int DEFAULT_INACTIVITY_ACTION = INACTIVITY_ACTION_SEND;
     private static final int DEFAULT_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR = 1;
     private static final int DEFAULT_SLOW_START_GROWTH_RATE_FACTOR = 1;
@@ -347,8 +346,7 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     public ConnectionOptions(ConnectionOptions opts) {
         super(opts);
         cinit(System.getProperties());
-        if (opts != null)
-            update(opts);
+        if (opts != null) {update(opts);}
     }
 
     /**
@@ -389,10 +387,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
             setInboundBufferSize(opts.getInboundBufferSize());
             setCongestionAvoidanceGrowthRateFactor(opts.getCongestionAvoidanceGrowthRateFactor());
             setSlowStartGrowthRateFactor(opts.getSlowStartGrowthRateFactor());
-            // handled in super()
-            // not clear why added by jr 12/22/2005
-            //setWriteTimeout(opts.getWriteTimeout());
-            //setReadTimeout(opts.getReadTimeout());
             setAnswerPings(opts.getAnswerPings());
             setEnforceProtocol(opts.getEnforceProtocol());
             setDisableRejectLogging(opts.getDisableRejectLogging());
@@ -422,8 +416,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         setSendAckDelay(getInt(opts, PROP_INITIAL_ACK_DELAY, DEFAULT_INITIAL_ACK_DELAY));
         setWindowSize(getInt(opts, PROP_INITIAL_WINDOW_SIZE, INITIAL_WINDOW_SIZE));
         setMaxResends(getInt(opts, PROP_MAX_RESENDS, DEFAULT_MAX_SENDS));
-        // handled in super()
-        //setWriteTimeout(getInt(opts, PROP_WRITE_TIMEOUT, -1));
         setInactivityTimeout(getInt(opts, PROP_INACTIVITY_TIMEOUT, DEFAULT_INACTIVITY_TIMEOUT));
         setInactivityAction(getInt(opts, PROP_INACTIVITY_ACTION, DEFAULT_INACTIVITY_ACTION));
         setInboundBufferSize(getMaxMessageSize() * (getMaxWindowSize() + 2));
@@ -431,8 +423,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
                                                       DEFAULT_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR));
         setSlowStartGrowthRateFactor(getInt(opts, PROP_SLOW_START_GROWTH_RATE_FACTOR,
                                             DEFAULT_SLOW_START_GROWTH_RATE_FACTOR));
-        // overrides default in super()... why?
-        //setConnectTimeout(getInt(opts, PROP_CONNECT_TIMEOUT, Connection.DISCONNECT_TIMEOUT));
         setAnswerPings(getBool(opts, PROP_ANSWER_PINGS, DEFAULT_ANSWER_PINGS));
         setEnforceProtocol(getBool(opts, PROP_ENFORCE_PROTO, DEFAULT_ENFORCE_PROTO));
         setDisableRejectLogging(getBool(opts, PROP_DISABLE_REJ_LOG, false));
@@ -444,10 +434,8 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         _maxTotalConnsPerHour = getInt(opts, PROP_MAX_TOTAL_CONNS_HOUR, 0);
         _maxTotalConnsPerDay = getInt(opts, PROP_MAX_TOTAL_CONNS_DAY, 0);
         _maxConns = getInt(opts, PROP_MAX_STREAMS, 0);
-        if (opts != null)
-            _limitAction = opts.getProperty(PROP_LIMIT_ACTION, DEFAULT_LIMIT_ACTION);
-        else
-            _limitAction = DEFAULT_LIMIT_ACTION;
+        if (opts != null) {_limitAction = opts.getProperty(PROP_LIMIT_ACTION, DEFAULT_LIMIT_ACTION);}
+        else {_limitAction = DEFAULT_LIMIT_ACTION;}
 
         _rto = getInt(opts, PROP_INITIAL_RTO, INITIAL_RTO);
         _tagsToSend = getInt(opts, PROP_TAGS_TO_SEND, DEFAULT_TAGS_TO_SEND);
@@ -462,69 +450,93 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     @Override
     public void setProperties(Properties opts) {
         super.setProperties(opts);
-        if (opts == null) return;
-        if (opts.getProperty(PROP_MAX_WINDOW_SIZE) != null)
+        if (opts == null) {return;}
+        if (opts.getProperty(PROP_MAX_WINDOW_SIZE) != null) {
             setMaxWindowSize(getInt(opts, PROP_MAX_WINDOW_SIZE, Connection.MAX_WINDOW_SIZE));
-        if (opts.getProperty(PROP_CONNECT_DELAY) != null)
+        }
+        if (opts.getProperty(PROP_CONNECT_DELAY) != null) {
             setConnectDelay(getInt(opts, PROP_CONNECT_DELAY, -1));
-        if (opts.getProperty(PROP_PROFILE) != null)
+        }
+        if (opts.getProperty(PROP_PROFILE) != null) {
             setProfile(getInt(opts, PROP_PROFILE, PROFILE_BULK));
-        if (opts.getProperty(PROP_MAX_MESSAGE_SIZE) != null)
+        }
+        if (opts.getProperty(PROP_MAX_MESSAGE_SIZE) != null) {
             setMaxMessageSize(getInt(opts, PROP_MAX_MESSAGE_SIZE, Packet.MAX_PAYLOAD_SIZE));
-        if (opts.getProperty(PROP_INITIAL_RECEIVE_WINDOW) != null)
+        }
+        if (opts.getProperty(PROP_INITIAL_RECEIVE_WINDOW) != null) {
             setReceiveWindow(getInt(opts, PROP_INITIAL_RECEIVE_WINDOW, 1));
-        if (opts.getProperty(PROP_INITIAL_RESEND_DELAY) != null)
+        }
+        if (opts.getProperty(PROP_INITIAL_RESEND_DELAY) != null) {
             setResendDelay(getInt(opts, PROP_INITIAL_RESEND_DELAY, 1000));
-        if (opts.getProperty(PROP_INITIAL_ACK_DELAY) != null)
+        }
+        if (opts.getProperty(PROP_INITIAL_ACK_DELAY) != null) {
             setSendAckDelay(getInt(opts, PROP_INITIAL_ACK_DELAY, DEFAULT_INITIAL_ACK_DELAY));
-        if (opts.getProperty(PROP_INITIAL_WINDOW_SIZE) != null)
+        }
+        if (opts.getProperty(PROP_INITIAL_WINDOW_SIZE) != null) {
             setWindowSize(getInt(opts, PROP_INITIAL_WINDOW_SIZE, INITIAL_WINDOW_SIZE));
-        if (opts.getProperty(PROP_MAX_RESENDS) != null)
+        }
+        if (opts.getProperty(PROP_MAX_RESENDS) != null) {
             setMaxResends(getInt(opts, PROP_MAX_RESENDS, DEFAULT_MAX_SENDS));
-        // handled in super()
-        //if (opts.getProperty(PROP_WRITE_TIMEOUT))
-        //    setWriteTimeout(getInt(opts, PROP_WRITE_TIMEOUT, -1));
-        if (opts.getProperty(PROP_INACTIVITY_TIMEOUT) != null)
+        }
+        if (opts.getProperty(PROP_INACTIVITY_TIMEOUT) != null) {
             setInactivityTimeout(getInt(opts, PROP_INACTIVITY_TIMEOUT, DEFAULT_INACTIVITY_TIMEOUT));
-        if (opts.getProperty(PROP_INACTIVITY_ACTION) != null)
+        }
+        if (opts.getProperty(PROP_INACTIVITY_ACTION) != null) {
             setInactivityAction(getInt(opts, PROP_INACTIVITY_ACTION, DEFAULT_INACTIVITY_ACTION));
+        }
         setInboundBufferSize(getMaxMessageSize() * (getMaxWindowSize() + 2));
-        if (opts.getProperty(PROP_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR) != null)
+        if (opts.getProperty(PROP_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR) != null) {
             setCongestionAvoidanceGrowthRateFactor(getInt(opts, PROP_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR,
                                                           DEFAULT_CONGESTION_AVOIDANCE_GROWTH_RATE_FACTOR));
-        if (opts.getProperty(PROP_SLOW_START_GROWTH_RATE_FACTOR) != null)
+        }
+        if (opts.getProperty(PROP_SLOW_START_GROWTH_RATE_FACTOR) != null) {
             setSlowStartGrowthRateFactor(getInt(opts, PROP_SLOW_START_GROWTH_RATE_FACTOR,
                                                 DEFAULT_SLOW_START_GROWTH_RATE_FACTOR));
-        if (opts.getProperty(PROP_CONNECT_TIMEOUT) != null)
+        }
+        if (opts.getProperty(PROP_CONNECT_TIMEOUT) != null) {
             // overrides default in super()
             setConnectTimeout(getInt(opts, PROP_CONNECT_TIMEOUT, Connection.DEFAULT_CONNECT_TIMEOUT));
-        if (opts.getProperty(PROP_ANSWER_PINGS) != null)
+        }
+        if (opts.getProperty(PROP_ANSWER_PINGS) != null) {
             setAnswerPings(getBool(opts, PROP_ANSWER_PINGS, DEFAULT_ANSWER_PINGS));
-        if (opts.getProperty(PROP_ENFORCE_PROTO) != null)
+        }
+        if (opts.getProperty(PROP_ENFORCE_PROTO) != null) {
             setEnforceProtocol(getBool(opts, PROP_ENFORCE_PROTO, DEFAULT_ENFORCE_PROTO));
-        if (opts.getProperty(PROP_DISABLE_REJ_LOG) != null)
+        }
+        if (opts.getProperty(PROP_DISABLE_REJ_LOG) != null) {
             setDisableRejectLogging(getBool(opts, PROP_DISABLE_REJ_LOG, false));
+        }
         initLists(opts);
-        if (opts.getProperty(PROP_MAX_CONNS_MIN) != null)
+        if (opts.getProperty(PROP_MAX_CONNS_MIN) != null) {
             _maxConnsPerMinute = getInt(opts, PROP_MAX_CONNS_MIN, 0);
-        if (opts.getProperty(PROP_MAX_CONNS_HOUR) != null)
+        }
+        if (opts.getProperty(PROP_MAX_CONNS_HOUR) != null) {
             _maxConnsPerHour = getInt(opts, PROP_MAX_CONNS_HOUR, 0);
-        if (opts.getProperty(PROP_MAX_CONNS_DAY) != null)
+        }
+        if (opts.getProperty(PROP_MAX_CONNS_DAY) != null) {
             _maxConnsPerDay = getInt(opts, PROP_MAX_CONNS_DAY, 0);
-        if (opts.getProperty(PROP_MAX_TOTAL_CONNS_MIN) != null)
+        }
+        if (opts.getProperty(PROP_MAX_TOTAL_CONNS_MIN) != null) {
             _maxTotalConnsPerMinute = getInt(opts, PROP_MAX_TOTAL_CONNS_MIN, 0);
-        if (opts.getProperty(PROP_MAX_TOTAL_CONNS_HOUR) != null)
+        }
+        if (opts.getProperty(PROP_MAX_TOTAL_CONNS_HOUR) != null) {
             _maxTotalConnsPerHour = getInt(opts, PROP_MAX_TOTAL_CONNS_HOUR, 0);
-        if (opts.getProperty(PROP_MAX_TOTAL_CONNS_DAY) != null)
+        }
+        if (opts.getProperty(PROP_MAX_TOTAL_CONNS_DAY) != null) {
             _maxTotalConnsPerDay = getInt(opts, PROP_MAX_TOTAL_CONNS_DAY, 0);
-        if (opts.getProperty(PROP_MAX_STREAMS) != null)
+        }
+        if (opts.getProperty(PROP_MAX_STREAMS) != null) {
             _maxConns = getInt(opts, PROP_MAX_STREAMS, 0);
-        if (opts.getProperty(PROP_LIMIT_ACTION) != null)
+        }
+        if (opts.getProperty(PROP_LIMIT_ACTION) != null) {
             _limitAction = opts.getProperty(PROP_LIMIT_ACTION);
-        if (opts.getProperty(PROP_TAGS_TO_SEND) != null)
+        }
+        if (opts.getProperty(PROP_TAGS_TO_SEND) != null) {
             _tagsToSend = getInt(opts, PROP_TAGS_TO_SEND, DEFAULT_TAGS_TO_SEND);
-        if (opts.getProperty(PROP_TAG_THRESHOLD) != null)
+        }
+        if (opts.getProperty(PROP_TAG_THRESHOLD) != null) {
             _tagThreshold = getInt(opts, PROP_TAG_THRESHOLD, DEFAULT_TAG_THRESHOLD);
+        }
 
         _rto = getInt(opts, PROP_INITIAL_RTO, INITIAL_RTO);
     }
