@@ -1,3 +1,6 @@
+2025-07-06 dr|z3d
+ * Console: Use bars to display connections / limits on /peers
+
 2025-07-04 zzz
  * I2PSnark: UDP announce fixes
  * SSU: Increase inbound ban time
