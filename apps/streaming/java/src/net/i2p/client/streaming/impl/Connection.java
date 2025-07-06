@@ -1168,15 +1168,15 @@ class Connection {
             // bugger it, might as well do the hard work now
             switch (_options.getInactivityAction()) {
                 case ConnectionOptions.INACTIVITY_ACTION_NOOP:
-                    if (_log.shouldWarn()) {
-                        _log.warn("Inactivity timer expired on connection to " + getRemotePeerString() +
+                    if (_log.shouldInfo()) {
+                        _log.info("Inactivity timer expired on connection to " + getRemotePeerString() +
                                   " -> Not doing anything!");
                     }
                     break;
                 case ConnectionOptions.INACTIVITY_ACTION_SEND:
                     if (_closeSentOn.get() <= 0 && _closeReceivedOn.get() <= 0) {
-                        if (_log.shouldWarn()) {
-                            _log.warn("Sending some data to " + getRemotePeerString() + " due to inactivity...");
+                        if (_log.shouldInfo()) {
+                            _log.info("Sending some data to " + getRemotePeerString() + " due to inactivity...");
                         }
                         _receiver.send(null, 0, 0, true);
                         break;
@@ -1184,9 +1184,9 @@ class Connection {
                 case ConnectionOptions.INACTIVITY_ACTION_DISCONNECT:
                     // fall through
                 default:
-                    if (_log.shouldWarn()) {
+                    if (_log.shouldInfo()) {
                         int timeout = _options.getInactivityTimeout() / 1000;
-                        _log.warn("Closing INACTIVE connection to " + getRemotePeerString() + " -> " + timeout + "s timeout reached");
+                        _log.info("Closing INACTIVE connection to " + getRemotePeerString() + " -> " + timeout + "s timeout reached");
                     }
                     if (_log.shouldDebug()) {
                         StringBuilder buf = new StringBuilder(128);
@@ -1357,8 +1357,10 @@ class Connection {
                 }
 
                 toResend = new ArrayList<>(_outboundPackets.values());
-                // round down (RFC 5681 section 4.3 "MUST be no more than half")
-                // https://datatracker.ietf.org/doc/html/rfc5681#section-4.3
+                /*
+                 * Round down (RFC 5681 section 4.3 "MUST be no more than half")
+                 * https://datatracker.ietf.org/doc/html/rfc5681#section-4.3
+                 */
                 toResend = toResend.subList(0, Math.max(1, Math.min(MAX_RTX, toResend.size() / 2)));
             }
 
@@ -1381,51 +1383,49 @@ class Connection {
                     // Routers before 0.9.9 have bugs, they won't ack anything after
                     // they sent a close. Only send 3 CLOSE packets total, then
                     // shut down normally.
-                    if (_log.shouldDebug())
+                    if (_log.shouldDebug()) {
                         _log.debug(Connection.this + " too many close resends, closing...");
+                    }
                     packet.cancelled();
                     disconnect(false);
                     return;
                 } else {
 
                     if (_isChoking) {
-                        if (_log.shouldDebug())
+                        if (_log.shouldDebug()) {
                             _log.debug(Connection.this + " packet is choking " + packet);
+                        }
                         packet.setOptionalDelay(Packet.SEND_DELAY_CHOKE);
                         packet.setFlag(Packet.FLAG_DELAY_REQUESTED);
                     } else if (_unchokesToSend.decrementAndGet() > 0) {
-                        if (_log.shouldDebug())
+                        if (_log.shouldDebug()) {
                             _log.debug(Connection.this + " packet is unchoking " + packet);
-                        // don't worry about wrapping around
+                        }
+                        // Don't worry about wrapping around
                         packet.setOptionalDelay(0);
                         packet.setFlag(Packet.FLAG_DELAY_REQUESTED);
                     } else {
-                        if (_log.shouldDebug())
+                        if (_log.shouldDebug()) {
                             _log.debug(Connection.this + " packet clearing flag " + packet);
+                        }
                         // clear flag
                         packet.setFlag(Packet.FLAG_DELAY_REQUESTED, false);
                     }
 
-                    // this seems unnecessary to send the MSS again:
-                    //_packet.setOptionalMaxSize(_options.getMaxMessageSize());
-                    // bugfix release 0.7.8, we weren't dividing by 1000
                     packet.setResendDelay(_options.getResendDelay() / 1000);
-                    if (packet.getReceiveStreamId() <= 0)
-                        packet.setReceiveStreamId(_receiveStreamId.get());
-                    if (packet.getSendStreamId() <= 0)
-                        packet.setSendStreamId(_sendStreamId.get());
-
+                    if (packet.getReceiveStreamId() <= 0) {packet.setReceiveStreamId(_receiveStreamId.get());}
+                    if (packet.getSendStreamId() <= 0) {packet.setSendStreamId(_sendStreamId.get());}
                     packet.setTimeout(_options.getRTO());
 
-
                     if (_outboundQueue.enqueue(packet)) {
-                        if (_log.shouldInfo())
+                        if (_log.shouldInfo()) {
                             _log.info(Connection.this + " resent packet " + packet);
-                        if (nResends == 1)
-                            _activeResends.incrementAndGet();
+                        }
+                        if (nResends == 1) {_activeResends.incrementAndGet();}
                         sentAny = true;
-                    } else if (_log.shouldDebug())
+                    } else if (_log.shouldDebug()) {
                        _log.debug(Connection.this + " could not resend packet " + packet);
+                    }
                 }
             }
 
@@ -1434,24 +1434,15 @@ class Connection {
                 resetActivityTimer();
                 windowAdjusted();
             }
-
         }
     }
-
-
 
     /**
      * fired to reschedule event notification
      */
     class ConEvent implements SimpleTimer.TimedEvent {
-        public ConEvent() {
-            //_addedBy = new Exception("added by");
-        }
-        public void timeReached() {
-            //if (_log.shouldDebug())
-            //    _log.debug("firing event on " + _connection, _addedBy);
-            eventOccurred();
-        }
+        public ConEvent() {}
+        public void timeReached() {eventOccurred();}
         @Override
         public String toString() {return "event on connection to " + getRemotePeerString();}
     }
@@ -1459,7 +1450,6 @@ class Connection {
     /**
      * If we have been explicitly NACKed three times, retransmit the packet even if
      * there are other packets in flight.
-     *
      */
     static final int FAST_RETRANSMIT_THRESHOLD = 3;
 
@@ -1484,14 +1474,12 @@ class Connection {
             _packet = packet;
         }
 
-        public void timeReached() { retransmit();}
+        public void timeReached() {retransmit();}
 
         /**
          * @since 0.9.46
          */
-        void fastRetransmit() {
-            reschedule(0);
-        }
+        void fastRetransmit() {reschedule(0);}
 
         /**
          * Retransmit the packet if we need to.
@@ -1500,114 +1488,109 @@ class Connection {
          * we have to use forceReschedule() instead of schedule() below,
          * to prevent duplicates in the timer queue.
          *
-         * don't synchronize this, deadlock with ackPackets-&gt;ackReceived-&gt;SimpleTimer2.cancel
+         * Don't synchronize this, deadlock with ackPackets-&gt;ackReceived-&gt;SimpleTimer2.cancel
          *
          * @return true if the packet was sent, false if it was not
          */
         private boolean retransmit() {
-            if (_packet.getAckTime() > 0)
-                return false;
+            if (_packet.getAckTime() > 0) {return false;}
 
             if (_resetSentOn.get() > 0 || _resetReceived.get() || _finalDisconnect.get()) {
                 _packet.cancelled();
                 return false;
             }
 
-               _context.statManager().addRateData("stream.fastRetransmit", _packet.getLifetime(), _packet.getLifetime());
+            _context.statManager().addRateData("stream.fastRetransmit", _packet.getLifetime(), _packet.getLifetime());
 
-                // revamp various fields, in case we need to ack more, etc
-                // updateAcks done in enqueue()
-                //_inputStream.updateAcks(_packet);
-                if (_isChoking) {
-                    _packet.setOptionalDelay(Packet.SEND_DELAY_CHOKE);
-                    _packet.setFlag(Packet.FLAG_DELAY_REQUESTED);
-                } else if (_unchokesToSend.decrementAndGet() > 0) {
-                    // don't worry about wrapping around
-                    _packet.setOptionalDelay(0);
-                    _packet.setFlag(Packet.FLAG_DELAY_REQUESTED);
-                } else {
-                    // clear flag
-                    _packet.setFlag(Packet.FLAG_DELAY_REQUESTED, false);
-                }
-                _packet.setResendDelay(_options.getResendDelay() / 1000);
-                if (_packet.getReceiveStreamId() <= 0)
-                    _packet.setReceiveStreamId(_receiveStreamId.get());
-                if (_packet.getSendStreamId() <= 0)
-                    _packet.setSendStreamId(_sendStreamId.get());
+            // revamp various fields, in case we need to ack more, etc
+            // updateAcks done in enqueue()
+            //_inputStream.updateAcks(_packet);
+            if (_isChoking) {
+                _packet.setOptionalDelay(Packet.SEND_DELAY_CHOKE);
+                _packet.setFlag(Packet.FLAG_DELAY_REQUESTED);
+            } else if (_unchokesToSend.decrementAndGet() > 0) {
+                // don't worry about wrapping around
+                _packet.setOptionalDelay(0);
+                _packet.setFlag(Packet.FLAG_DELAY_REQUESTED);
+            } else {
+                _packet.setFlag(Packet.FLAG_DELAY_REQUESTED, false); // clear flag
+            }
 
-                int newWindowSize = _options.getWindowSize();
+            _packet.setResendDelay(_options.getResendDelay() / 1000);
+            if (_packet.getReceiveStreamId() <= 0) {_packet.setReceiveStreamId(_receiveStreamId.get());}
+            if (_packet.getSendStreamId() <= 0) {_packet.setSendStreamId(_sendStreamId.get());}
 
-                if (_isChoked) {
+            int newWindowSize = _options.getWindowSize();
+            if (_isChoked) {
+                congestionOccurred();
+                _options.setWindowSize(1);
+            } else if (_ackSinceCongestion.get()) {
+                // only shrink the window once per window
+                if (_packet.getSequenceNum() > _lastCongestionHighestUnacked) {
                     congestionOccurred();
-                    _options.setWindowSize(1);
-                } else if (_ackSinceCongestion.get()) {
-                    // only shrink the window once per window
-                    if (_packet.getSequenceNum() > _lastCongestionHighestUnacked) {
-                        congestionOccurred();
-                        _context.statManager().addRateData("stream.con.windowSizeAtCongestion", newWindowSize, _packet.getLifetime());
-                        // The timeout for _this_ packet will be doubled below, but we also
-                        // need to double the RTO for the _next_ packets.
-                        // See RFC 6298 section 5 item 5.5
-                        // This prevents being stuck at a window size of 1, retransmitting every packet,
-                        // never updating the RTT or RTO.
-                        _options.doubleRTO();
+                    _context.statManager().addRateData("stream.con.windowSizeAtCongestion", newWindowSize, _packet.getLifetime());
+                    /*
+                     * The timeout for _this_ packet will be doubled below, but we also need to double the RTO for the _next_ packets.
+                     * See RFC 6298 section 5 item 5.5
+                     * This prevents being stuck at a window size of 1, retransmitting every packet,
+                     * never updating the RTT or RTO.
+                     */
+                    _options.doubleRTO();
 
-                        if (_packet.getNumSends() == 1) {
-                            _ssthresh = Math.max((int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2 );
-                            _ssthresh = Math.min(ConnectionPacketHandler.MAX_SLOW_START_WINDOW, _ssthresh);
-                            int wsize = _options.getWindowSize();
-                            _options.setWindowSize(Math.min(_ssthresh, wsize));
-                        }
+                    if (_packet.getNumSends() == 1) {
+                        _ssthresh = Math.max((int)(_bwEstimator.getBandwidthEstimate() * _options.getMinRTT()), 2);
+                        _ssthresh = Math.min(ConnectionPacketHandler.MAX_SLOW_START_WINDOW, _ssthresh);
+                        int wsize = _options.getWindowSize();
+                        _options.setWindowSize(Math.min(_ssthresh, wsize));
+                    }
 
-                        if (_log.shouldInfo())
-                            _log.info("Network congestion: Resending packet [" + _packet.getSequenceNum() + "]"
+                    if (_log.shouldInfo()) {
+                        _log.info("Network congestion: Resending packet [" + _packet.getSequenceNum() + "]"
                                       + "\n* New Window Size: " + newWindowSize + "/" + _options.getWindowSize()
                                       + " for " + Connection.this.toString());
-
-                        windowAdjusted();
                     }
+                    windowAdjusted();
                 }
+            }
 
-                int numSends = _packet.getNumSends() + 1;
+            int numSends = _packet.getNumSends() + 1;
+            if (numSends - 1 > _options.getMaxResends()) {
+                if (_log.shouldDebug()) {_log.debug("Disconnecting, too many resends of " + _packet);}
+                _packet.cancelled();
+                disconnect(false);
+            } else if (numSends >= 3 &&
+                       _packet.isFlagSet(Packet.FLAG_CLOSE) &&
+                       _packet.getPayloadSize() <= 0 &&
+                       _outboundPackets.size() <= 1 &&
+                       getCloseReceivedOn() > 0) {
+                /*
+                 * Bug workaround to prevent 5 minutes of retransmission
+                 * Routers before 0.9.9 have bugs, they won't ack anything after
+                 * they sent a close. Only send 3 CLOSE packets total, then
+                 * shut down normally.
+                 */
+                if (_log.shouldInfo()) {
+                    _log.info("Too many CLOSE resends, disconnecting: " + Connection.this.toString());
+                }
+                _packet.cancelled();
+                disconnect(true);
+            } else {
+                //long timeout = _options.getResendDelay() << numSends;
+                int timeout = _options.getRTO();
+                if ((timeout > MAX_RESEND_DELAY) || (timeout <= 0)) {timeout = MAX_RESEND_DELAY;}
+                // set this before enqueue() as it passes it on to the router
+                _packet.setTimeout(timeout);
 
-                if (numSends - 1 > _options.getMaxResends()) {
-                    if (_log.shouldDebug())
-                        _log.debug("Disconnecting, too many resends of " + _packet);
-                    _packet.cancelled();
-                    disconnect(false);
-                } else if (numSends >= 3 &&
-                           _packet.isFlagSet(Packet.FLAG_CLOSE) &&
-                           _packet.getPayloadSize() <= 0 &&
-                           _outboundPackets.size() <= 1 &&
-                           getCloseReceivedOn() > 0) {
-                    /*
-                     * Bug workaround to prevent 5 minutes of retransmission
-                     * Routers before 0.9.9 have bugs, they won't ack anything after
-                     * they sent a close. Only send 3 CLOSE packets total, then
-                     * shut down normally.
-                     */
-                    if (_log.shouldInfo())
-                        _log.info("Too many CLOSE resends, disconnecting: " + Connection.this.toString());
-                    _packet.cancelled();
-                    disconnect(true);
-                } else {
-                    //long timeout = _options.getResendDelay() << numSends;
-                    int timeout = _options.getRTO();
-                    if ((timeout > MAX_RESEND_DELAY) || (timeout <= 0))
-                        timeout = MAX_RESEND_DELAY;
-                    // set this before enqueue() as it passes it on to the router
-                    _packet.setTimeout(timeout);
-
-                    if (_outboundQueue.enqueue(_packet)) {
-                        if (_retransmitEvent.scheduleIfNotRunning(timeout)) {
-                            if (_log.shouldDebug())
-                                _log.debug("[" + Connection.this + "] Fast retransmit and schedule timer");
+                if (_outboundQueue.enqueue(_packet)) {
+                    if (_retransmitEvent.scheduleIfNotRunning(timeout)) {
+                        if (_log.shouldDebug()) {
+                            _log.debug("[" + Connection.this + "] Fast retransmit and schedule timer");
                         }
+                    }
 
-                        // first resend for this packet ?
-                        if (numSends == 2)
-                            _activeResends.incrementAndGet();
-                        if (_log.shouldInfo())
+                    // first resend for this packet ?
+                    if (numSends == 2) {_activeResends.incrementAndGet();}
+                    if (_log.shouldInfo()) {
                             _log.info("Resent packet " + _packet +
                                   "(fast) " +
                                   "\n* Next resend in " + (timeout / 1000) + "s" +
@@ -1615,23 +1598,22 @@ class Connection {
                                   "; Window Size: "
                                   + newWindowSize + "; Lifetime: "
                                   + (_context.clock().now() - _packet.getCreatedOn()) + "ms");
-                        _unackedPacketsReceived.set(0);
-                        _lastSendTime = _context.clock().now();
-                        // timer reset added 0.9.1
-                        resetActivityTimer();
                     }
-
+                    _unackedPacketsReceived.set(0);
+                    _lastSendTime = _context.clock().now();
+                    resetActivityTimer(); // timer reset added 0.9.1
                 }
+            }
 
-                // acked during resending (... or somethin') ????????????
-                if ((_packet.getAckTime() > 0) && (_packet.getNumSends() > 1)) {
-                    _activeResends.decrementAndGet();
-                    synchronized (_outboundPackets) {
-                        _outboundPackets.notifyAll();
-                    }
+            // ACKed during resending (... or somethin') ????????????
+            if ((_packet.getAckTime() > 0) && (_packet.getNumSends() > 1)) {
+                _activeResends.decrementAndGet();
+                synchronized (_outboundPackets) {
+                    _outboundPackets.notifyAll();
                 }
-
-                return true;
+            }
+            return true;
         }
     }
+
 }
