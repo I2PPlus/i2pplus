@@ -795,10 +795,10 @@ td.ipv6{width:1%;max-width:24px}
 #transports:hover .script,#ntcpcon:hover .script,#udpcon:hover .script{display:inline-block;opacity:1;transition:ease .2s}
 #transports:hover span,#ntcpcon:hover .reachability,#udpcon:hover .reachability{display:none}
 #transports .script,#ntcpcon .script,#udpcon .script{margin:-4px 0 -6px;float:right;text-transform:capitalize;font-size:80%;font-weight:400;letter-spacing:normal;opacity:0;transition:ease .2s}
-#transportSummary th:first-child,#transportSummary td:first-child,#transportSummary .tablefooter td:first-child{width:30%}
+#transportSummary th,#transportSummary td,#transportSummary .tablefooter td{padding:8px;width:18%}
+#transportSummary th:last-child,#transportSummary td:last-child,#transportSummary .tablefooter td:last-child{padding:8px;width:46%}
 #transportSummary th.in span,#transportSummary th.out span{width:16px;height:12px;display:inline-block;vertical-align:text-top;font-size:0;background:var(--in) no-repeat center center/12px}
 #transportSummary th.out span{background:var(--out) no-repeat center center/12px}
-#transportSummary th,#transportSummary td,#transportSummary .tablefooter td{padding:8px;width:14%}
 #udpconnections .tablefooter:hover td{border-top:var(--border)}
 #udpconnections table i{font-weight:700;line-height:1.5;letter-spacing:.1em}
 #udpconnections table{overflow-x:auto}
