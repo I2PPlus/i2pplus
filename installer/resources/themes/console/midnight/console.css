@@ -1761,6 +1761,7 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 #peerdefs td{padding:3px}
 #peerdefs ul{margin:0;width:100%;display:inline-block;columns:500px auto;column-gap:0}
 #transportSummary td{text-align:center}
+#transportSummary td:last-child{width:30%}
 #peers .tablefooter td{font-weight:700;background:var(--th)}
 #transportSummary th.in span,#transportSummary th.out span{width:16px;height:12px;display:inline-block;vertical-align:text-top;font-size:0;background:var(--in) no-repeat center center/12px}
 #transportSummary th.out span{background:var(--out) no-repeat center center/12px}
@@ -1769,6 +1770,9 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 #transports:hover span,#ntcpcon:hover .reachability,#udpcon:hover .reachability{display:none}
 #peers #autorefresh{margin-right:4px}
 #peers .tab,#peers .tab2{min-width:96px}
+#peers .percentBarInner{height:16px;display:block}
+#peers .percentBarOuter{width:calc(100% - 4px);height:16px;display:inline-block;position:relative;vertical-align:middle;text-align:left}
+#peers .percentBarText{width:calc(100% - 2px);display:inline-block;position:absolute;top:2px;left:1px;bottom:1px;right:1px;text-align:center}
 
 /* peers - sort icons */
 #udpconnections th{vertical-align:top;text-align:center}

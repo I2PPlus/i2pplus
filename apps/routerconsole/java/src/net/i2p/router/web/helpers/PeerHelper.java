@@ -162,66 +162,89 @@ public class PeerHelper extends HelperBase {
         boolean showIPv6 = connected.contains(AddressType.IPV6) &&
                            (ntcpConfig != TransportUtil.IPv6Config.IPV6_DISABLED ||
                             ssuConfig != TransportUtil.IPv6Config.IPV6_DISABLED);
-        StringBuilder buf = new StringBuilder(512);
+
+        StringBuilder buf = new StringBuilder(6*1024);
         buf.append("<h3 id=transports>").append(_t("Peer Connections")).append("</h3>\n")
            .append("<table id=transportSummary>\n<thead><tr>")
-           .append("<th>").append(_t("Transport")).append("</th>")
-           .append("<th title=\"").append(_t("Active in the last minute")).append("\">").append(_t("Count")).append("</th>");
+           .append("<th>").append(_t("Transport")).append("</th>");
+
         if (showIPv4) {
-           buf.append("<th class=\"ipv4 in\">").append(_t("IPv4")).append("&nbsp;<span>").append(_t("Inbound")).append("</span></th>")
-              .append("<th class=\"ipv4 out\">").append(_t("IPv4")).append("&nbsp;<span>").append(_t("Outbound")).append("</span></th>");
+            buf.append("<th class=\"ipv4 in\">").append(_t("IPv4")).append("&nbsp;<span>").append(_t("Inbound")).append("</span></th>")
+               .append("<th class=\"ipv4 out\">").append(_t("IPv4")).append("&nbsp;<span>").append(_t("Outbound")).append("</span></th>");
         }
         if (showIPv6) {
             buf.append("<th class=\"ipv6 in\">").append(_t("IPv6")).append("&nbsp;<span>").append(_t("Inbound")).append("</span></th>")
                .append("<th class=\"ipv6 out\">").append(_t("IPv6")).append("&nbsp;<span>").append(_t("Outbound")).append("</span></th>");
         }
-        buf.append("<th title=\"").append(_t("Maximum permitted connections")).append("\">").append(_t("Limit")).append("</th>")
+
+        buf.append("<th title=\"").append(_t("Active connections / Max permitted")).append("\">")
+           .append(_t("Connections / Limit")).append("</th>")
            .append("</tr></thead>\n<tbody>\n");
+
         boolean warnInbound = !_context.router().isHidden() && _context.router().getUptime() > 15*60*1000;
         int[] totals = new int[5];
+        int totalLimits = 0;
         int rows = 0;
+
         SortedMap<String, Transport> transports = _context.commSystem().getTransports();
         for (Map.Entry<String, Transport> e : transports.entrySet()) {
             String style = e.getKey();
             Transport t = e.getValue();
             int[] counts = t.getPeerCounts();
+
             for (int idx = 0; idx < 8; idx += 4) {
                 if (style.equals("NTCP") && idx == 0) {continue;}
                 if (style.equals("SSU") && idx == 0) {continue;}
+
                 rows++;
-                buf.append("<tr><td><b>").append(style).append(1 + (idx / 4)).append("</b></td><td");
+                buf.append("<tr><td><b>").append(style).append(1 + (idx / 4)).append("</b></td>");
+
                 int total = 0;
                 for (int i = 0; i < 4; i++) {total += counts[idx + i];}
-                if (total <= 0) {buf.append(" class=warn");}
-                else {totals[0] += total;}
-                buf.append(">").append(total);
+
                 for (int i = 0; i < 4; i++) {
                     if (!showIPv4 && i < 2) {continue;}
                     if (!showIPv6 && i >= 2) {break;}
+
                     int cnt = counts[idx + i];
-                    buf.append("</td><td");
+                    buf.append("<td");
                     if (cnt <= 0 && ((i & 0x01) != 0 || warnInbound)) {buf.append(" class=notice");}
                     else {totals[i + 1] += cnt;}
                     buf.append(">").append(cnt);
                 }
-                buf.append("<td>").append(TransportImpl.getTransportMaxConnections(_context, style)).append("</td>");
-                buf.append("</tr>\n");
+
+                int limit = TransportImpl.getTransportMaxConnections(_context, style);
+                totalLimits += limit;
+
+                int percent = limit > 0 ? (int) Math.min(100L * total / limit, 100) : 0;
+
+                buf.append("<td><span class=\"percentBarOuter\">")
+                   .append("<span class=\"percentBarInner\" style=\"width:").append(percent).append("%\">")
+                   .append("<span class=\"percentBarText\">").append(total).append(" / ").append(limit).append("</span>")
+                   .append("</span></span></td></tr>\n");
             }
         }
+
         buf.append("</tbody>\n");
+
         if (rows > 1) {
             buf.append("<tfoot><tr class=tablefooter><td><b>").append(_t("Total")).append("</b>");
-            for (int i = 0; i < 5; i++) {
-                if (!showIPv4 && i > 0 && i < 3) {continue;}
-                if (!showIPv6 && i >= 3) {break;}
+
+            for (int i = 1; i < 5; i++) {
+                if (!showIPv4 && i > 0 && i < 3) { continue; }
+                if (!showIPv6 && i >= 3) { break; }
+
                 int cnt = totals[i];
                 buf.append("</td><td");
                 if (cnt <= 0 && ((i & 0x01) == 0 || warnInbound)) {buf.append(" class=warn");}
                 buf.append(">").append(cnt);
             }
-            int combinedLimit = TransportImpl.getTransportMaxConnections(_context, "NTCP") +
-                                TransportImpl.getTransportMaxConnections(_context, "SSU");
-            buf.append("<td>").append(combinedLimit).append("</td></tr></tfoot>\n");
+
+            int totalConnections = 0;
+            for (int i = 1; i < 5; i++) {totalConnections += totals[i];}
+            int percentTotal = totalLimits > 0 ? (int) Math.min(100L * totalConnections / totalLimits, 100) : 0;
+
+            buf.append("</td><td>").append(totalConnections).append(" / ").append(totalLimits).append("</td></tr></tfoot>\n");
         }
         buf.append("</table>\n");
         out.append(buf);

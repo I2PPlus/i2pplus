@@ -1918,6 +1918,9 @@ table[id*="connections"] .tablefooter td:first-child{text-align:left}
 #topCount td#u{background:linear-gradient(45deg,#000082%,rgba(192,0,0,.8)82%),var(--badge)}
 #peers .reachability{display:none}
 #ssuadv{margin-left:5px;letter-spacing:0;text-transform:none;font-size:80%}
+#peers .percentBarInner{height:16px;display:block}
+#peers .percentBarOuter{width:calc(100% - 4px);height:16px;display:inline-block;position:relative;vertical-align:middle;text-align:left}
+#peers .percentBarText{width:calc(100% - 2px);display:inline-block;position:absolute;top:1px;left:1px;bottom:1px;right:1px;text-align:center}
 
 /* routerinfo */
 #routerinfo p{padding:0;margin:-5px -5px 0;border:0;box-shadow:0 0 1px #ccf;filter:none}
