@@ -735,8 +735,8 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
 
         @Override
         public String toString() {
-            return "UDP Tracker " + host + ':' + port + " hasDest? " + (dest != null) +
-                   " valid? " + isConnValid() + " conn ID: " + (cid != null ? cid : "none") + ' ' + state;
+            return "UDP Tracker\n* Host: " + host + ':' + port + " hasDest? " + (dest != null) +
+                   " Valid? " + isConnValid() + " [ConnectionID " + (cid != null ? cid : "none") + "] " + state;
         }
     }
 
