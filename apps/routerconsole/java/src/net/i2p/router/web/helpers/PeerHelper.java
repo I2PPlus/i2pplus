@@ -292,11 +292,12 @@ public class PeerHelper extends HelperBase {
         long totalRecv = 0;
         int notEstablished = 0;
 
-        for (Iterator<NTCPConnection> iter = peers.iterator(); iter.hasNext(); ) {
+        for (Iterator<NTCPConnection> iter = peers.iterator(); iter.hasNext();) {
              // outbound conns get put in the map before they are established
-             if (!iter.next().isEstablished())
+             if (!iter.next().isEstablished()) {
                  iter.remove();
                  notEstablished++;
+             }
         }
 
         StringBuilder buf = new StringBuilder(4*1024);
