@@ -130,13 +130,40 @@ class ConfigParser {
      * use map instead, and write the result to where file should have been.
      *
      * @param file
-     *            A File to attempt to parse.
+     * A File to attempt to parse.
+     *
      * @param map
-     *            A Map containing values to use as defaults.
-     * @return A Map containing the key, value pairs from file, or if file
-     *         cannot be read, map.
+     * A Map containing values to use as defaults.
+     *
+     * @return A Map containing the key, value pairs from file, or if file cannot be read, map.
      */
     public static Map<String, String> parse(File file, Map<String, String> map) {
+        Map<String, String> result;
+        boolean fileParsedSuccessfully = false;
+
+        try {
+            result = parse(file);
+            fileParsedSuccessfully = true;
+        } catch (IOException exp) {result = new HashMap<>(map);} // Avoid modifying original map
+
+        try {
+            // Migrate "local_addressbook" to "master_addressbook"
+            String localBook = result.remove("local_addressbook");
+            if (localBook != null) {result.put("master_addressbook", localBook);}
+
+            // Merge map entries only if they don't exist in result
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                if (!result.containsKey(entry.getKey())) {
+                    result.put(entry.getKey(), entry.getValue());
+                }
+            }
+            // Only write back if we successfully parsed the file originally
+            if (!fileParsedSuccessfully) {write(result, file);}
+        } catch (IOException exp) {}
+        return result;
+    }
+
+/*    public static Map<String, String> parse(File file, Map<String, String> map) {
         Map<String, String> result;
         try {
             result = parse(file);
@@ -155,6 +182,7 @@ class ConfigParser {
         }
         return result;
     }
+*/
 
     /**
      * Return a List where each element is a line from the BufferedReader input.
