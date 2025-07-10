@@ -138,15 +138,14 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
     }
 
     /**
-     * Construct an AddressBook from the contents of the file at file. If the
-     * file cannot be read, construct an empty AddressBook.
+     * Construct an AddressBook from the contents of the file at file.
+     * If the file cannot be read, construct an empty AddressBook.
      * This reads the entire file into memory.
      * The resulting map is modifiable and may be a merge target.
      *
      * @param file
-     *            A File pointing at a file with lines in the format
-     *            "key=value", where key is a human readable name, and value is
-     *            a base64 i2p destination.
+     * A File pointing at a file with lines in the format "key=value",
+     * where key is a human readable name, and value is a base64 i2p destination.
      */
     public AddressBook(File file) {
         this.location = file.toString();
@@ -258,10 +257,11 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
     }
 
     /**
-     * Merge this AddressBook with AddressBook other, writing messages about new
-     * addresses or conflicts to log. Addresses in AddressBook other that are
-     * not in this AddressBook are added to this AddressBook. In case of a
-     * conflict, addresses in this AddressBook take precedence
+     * Merge this AddressBook with AddressBook other, writing messages about new addresses
+     * or conflicts to log. Addresses in AddressBook other that are not in this AddressBook
+     * are added to this AddressBook.
+     *
+     * In case of a conflict, addresses in this AddressBook take precedence
      *
      * @param other An AddressBook to merge with.
      * @param overwrite True to overwrite

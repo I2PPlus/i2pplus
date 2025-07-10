@@ -69,35 +69,29 @@ class Daemon {
      * subscribed address books listed in subscriptions.
      *
      * @param master
-     *            The master AddressBook. This address book is never
-     *            overwritten, so it is safe for the user to write to.
-     *            It is only merged to the published addressbook.
-     *            May be null.
+     * The master AddressBook. This address book is never overwritten, so it is safe
+     * for the user to write to. It is only merged to the published addressbook. May be null.
+     *
      * @param router
-     *            The router AddressBook. This is the address book read by
-     *            client applications.
+     * The router AddressBook. This is the address book read by client applications.
+     *
      * @param published
-     *            The published AddressBook. This address book is published on
-     *            the user's eepsite so that others may subscribe to it.
-     *            May be null.
-     *            If non-null, overwrite with the new addressbook.
+     * The published AddressBook. This address book is published on the user's eepsite
+     * so that others may subscribe to it. May be null. If non-null, overwrite with the
+     * new addressbook.
+     *
      * @param subscriptions
-     *            A SubscriptionList listing the remote address books to update
-     *            from.
+     * A SubscriptionList listing the remote address books to update from.
+     *
      * @param log
-     *            The log to write changes and conflicts to.
-     *            May be null.
+     * The log to write changes and conflicts to. May be null.
      */
     public static void update(AddressBook master, AddressBook router,
-            File published, SubscriptionList subscriptions, Log log) {
-        for (AddressBook book : subscriptions) {
-            // yes, the EepGet fetch() is done in next()
-            router.merge(book, false, log);
-        }
+        File published, SubscriptionList subscriptions, Log log) {
+        for (AddressBook book : subscriptions) {router.merge(book, false, log);} // yes, the EepGet fetch() is done in next()
         router.write();
         if (published != null) {
-            if (master != null)
-                router.merge(master, true, null);
+            if (master != null) {router.merge(master, true, null);}
             router.write(published);
         }
         subscriptions.write();
@@ -109,26 +103,28 @@ class Daemon {
      * Merging of the "master" addressbook is NOT supported.
      *
      * @param router
-     *            The NamingService to update, generally the root NamingService from the context.
+     * The NamingService to update, generally the root NamingService from the context.
+     *
      * @param published
-     *            The published AddressBook. This address book is published on
-     *            the user's eepsite so that others may subscribe to it.
-     *            May be null.
-     *            If non-null, overwrite with the new addressbook.
+     * The published AddressBook. This address book is published on the user's eepsite
+     * so that others may subscribe to it. May be null. If non-null, overwrite with the
+     * new addressbook.
+     *
      * @param subscriptions
-     *            A SubscriptionList listing the remote address books to update
-     *            from.
+     * A SubscriptionList listing the remote address books to update from.
+     *
      * @param log
-     *            The log to write changes and conflicts to.
-     *            May be null.
+     * The log to write changes and conflicts to. May be null.
      * @since 0.8.7
      */
     public static void update(NamingService router, File published, SubscriptionList subscriptions, Log log) {
-        // If the NamingService is a database, we look up as we go.
-        // If it is a text file, we do things differently, to avoid O(n**2) behavior
-        // when scanning large subscription results (i.e. those that return the whole file, not just the new entries) -
-        // we load all the known hostnames into a Set one time.
-        // This also has the advantage of not flushing the NamingService's LRU cache.
+        /*
+         * If the NamingService is a database, we look up as we go.
+         * If it is a text file, we do things differently, to avoid O(n**2) behavior
+         * when scanning large subscription results (i.e. those that return the whole file, not just the new entries) -
+         * we load all the known hostnames into a Set one time.
+         * This also has the advantage of not flushing the NamingService's LRU cache.
+         */
         String nsClass = router.getClass().getSimpleName();
         boolean isTextFile = nsClass.equals("HostsTxtNamingService") || nsClass.equals("SingleFileNamingService");
         Set<String> knownNames;
@@ -137,19 +133,14 @@ class Daemon {
             Properties opts = new Properties();
             opts.setProperty("file", "hosts.txt");
             knownNames = router.getNames(opts);
-        } else {
-            knownNames = null;
-        }
+        } else {knownNames = null;}
         NamingService publishedNS;
         if (published != null) {
             publishedNS = new SingleFileNamingService(I2PAppContext.getGlobalContext(), published.getAbsolutePath());
-        } else {
-            publishedNS = null;
-        }
+        } else {publishedNS = null;}
 
         Iterator<AddressBook> iter = subscriptions.iterator();
-        while (iter.hasNext()) {
-            // yes, the EepGet fetch() is done in next()
+        while (iter.hasNext()) { // yes, the EepGet fetch() is done in next()
             long start = System.currentTimeMillis();
             AddressBook addressbook = iter.next();
             // SubscriptionIterator puts in a dummy AddressBook with no location if no fetch is done
@@ -161,8 +152,7 @@ class Daemon {
             try {
                 update(router, knownNames, publishedNS, addressbook, iter2, log);
             } finally {
-                if (iter2 instanceof HostTxtIterator)
-                    ((HostTxtIterator) iter2).close();
+                if (iter2 instanceof HostTxtIterator) {((HostTxtIterator) iter2).close();}
                 addressbook.delete();
             }
         }  // subscriptions
@@ -712,9 +702,9 @@ class Daemon {
      * Run an update, using the Map settings to provide the parameters.
      *
      * @param settings
-     *            A Map containg the parameters needed by update.
+     * A Map containg the parameters needed by update.
      * @param home
-     *            The directory containing addressbook's configuration files.
+     * The directory containing addressbook's configuration files.
      */
     public static void update(Map<String, String> settings, String home) {
         File published = null;
@@ -735,9 +725,7 @@ class Daemon {
         delay *= 60 * 60 * 1000;
 
         List<String> defaultSubs = new ArrayList<String>(4);
-        // defaultSubs.add("http://i2p/NF2RLVUxVulR3IqK0sGJR0dHQcGXAzwa6rEO4WAWYXOHw-DoZhKnlbf1nzHXwMEJoex5nFTyiNMqxJMWlY54cvU~UenZdkyQQeUSBZXyuSweflUXFqKN-y8xIoK2w9Ylq1k8IcrAFDsITyOzjUKoOPfVq34rKNDo7fYyis4kT5bAHy~2N1EVMs34pi2RFabATIOBk38Qhab57Umpa6yEoE~rbyR~suDRvD7gjBvBiIKFqhFueXsR2uSrPB-yzwAGofTXuklofK3DdKspciclTVzqbDjsk5UXfu2nTrC1agkhLyqlOfjhyqC~t1IXm-Vs2o7911k7KKLGjB4lmH508YJ7G9fLAUyjuB-wwwhejoWqvg7oWvqo4oIok8LG6ECR71C3dzCvIjY2QcrhoaazA9G4zcGMm6NKND-H4XY6tUWhpB~5GefB3YczOqMbHq4wi0O9MzBFrOJEOs3X4hwboKWANf7DT5PZKJZ5KorQPsYRSq0E3wSOsFCSsdVCKUGsAAAA/i2p/hosts.txt");
         defaultSubs.add(DEFAULT_SUB);
-
         SubscriptionList subscriptions = new SubscriptionList(subscriptionFile,
                                                               etagsFile, lastModifiedFile, lastFetchedFile,
                                                               delay, defaultSubs, settings.get("proxy_host"),
@@ -765,25 +753,23 @@ class Daemon {
     }
 
     /** depth-first search */
-    private static NamingService searchNamingService(NamingService ns, String srch)
-    {
+    private static NamingService searchNamingService(NamingService ns, String srch) {
         String name = ns.getName();
-        if (name.equals(srch) || name.endsWith('/' + srch) || name.endsWith('\\' + srch))
+        if (name.equals(srch) || name.endsWith('/' + srch) || name.endsWith('\\' + srch)) {
             return ns;
+        }
         List<NamingService> list = ns.getNamingServices();
         if (list != null) {
             for (NamingService nss : list) {
                 NamingService rv = searchNamingService(nss, srch);
-                if (rv != null)
-                    return rv;
+                if (rv != null) {return rv;}
             }
         }
         return null;
     }
 
     /** @return the configured NamingService, or the root NamingService */
-    private static NamingService getNamingService(String srch)
-    {
+    private static NamingService getNamingService(String srch) {
         NamingService root = I2PAppContext.getGlobalContext().namingService();
         NamingService rv = searchNamingService(root, srch);
         return rv != null ? rv : root;
@@ -795,16 +781,14 @@ class Daemon {
      * hours, as configured in the settings file.
      *
      * @param args
-     *            Command line arguments. If there are any arguments provided,
-     *            the first is taken as addressbook's home directory, and the
-     *            others are ignored.
+     * Command line arguments. If there are any arguments provided,
+     * the first is taken as addressbook's home directory, and the
+     * others are ignored.
      */
     public static void main(String[] args) {
         Daemon daemon = new Daemon();
-        if (args.length > 0 && args[0].equals("test"))
-            daemon.test(args);
-        else
-            daemon.run(args);
+        if (args.length > 0 && args[0].equals("test")) {daemon.test(args);}
+        else {daemon.run(args);}
     }
 
     /** @since 0.9.26 */
@@ -830,11 +814,10 @@ class Daemon {
         File homeFile;
         if (args != null && args.length > 0) {
             homeFile = new SecureDirectory(args[0]);
-            if (!homeFile.isAbsolute())
+            if (!homeFile.isAbsolute()) {
                 homeFile = new SecureDirectory(I2PAppContext.getGlobalContext().getRouterDir(), args[0]);
-        } else {
-            homeFile = new SecureDirectory(System.getProperty("user.dir"));
-        }
+            }
+        } else {homeFile = new SecureDirectory(System.getProperty("user.dir"));}
 
         Map<String, String> defaultSettings = new HashMap<String, String>();
         defaultSettings.put("proxy_host", "127.0.0.1");
@@ -848,17 +831,15 @@ class Daemon {
         defaultSettings.put("etags", "etags");
         defaultSettings.put("last_modified", "last_modified");
         defaultSettings.put("last_fetched", "last_fetched");
-        //defaultSettings.put("update_delay", "12");
         defaultSettings.put("update_delay", "3");
         defaultSettings.put("update_direct", "false");
         defaultSettings.put("naming_service", "hosts.txt");
 
         if (!homeFile.exists()) {
             boolean created = homeFile.mkdirs();
-            if (!created)
+            if (!created) {
                 System.out.println("ERROR: Addressbook directory " + homeFile.getAbsolutePath() + " could not be created");
-            //else
-            //    System.out.println("INFO: Addressbook directory " + homeFile.getAbsolutePath() + " created");
+            }
         }
 
         File settingsFile = new File(homeFile, settingsLocation);
@@ -871,19 +852,13 @@ class Daemon {
 
         while (_running) {
             long delay = Long.parseLong(settings.get("update_delay"));
-            if (delay < 1) {
-                delay = 1;
-            }
+            if (delay < 1) {delay = 1;}
 
             update(settings, homeFile.getAbsolutePath());
             try {
-                synchronized (this) {
-                    wait(delay * 60 * 60 * 1000);
-                }
-            } catch (InterruptedException exp) {
-            }
-            if (!_running)
-                break;
+                synchronized (this) {wait(delay * 60 * 60 * 1000);}
+            } catch (InterruptedException exp) {}
+            if (!_running) {break;}
             settings = ConfigParser.parse(settingsFile, defaultSettings);
         }
     }
@@ -893,13 +868,12 @@ class Daemon {
      * refetch its subscriptions.
      */
     public void wakeup() {
-        synchronized (this) {
-            notifyAll();
-        }
+        synchronized (this) {notifyAll();}
     }
 
     public void stop() {
         _running = false;
         wakeup();
     }
+
 }
