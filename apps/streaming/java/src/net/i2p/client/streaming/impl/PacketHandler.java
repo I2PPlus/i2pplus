@@ -243,17 +243,21 @@ class PacketHandler {
             packet.releasePayload();
         } else {
             // this happens a lot
-            if (_log.shouldInfo() && !packet.isFlagSet(Packet.FLAG_SYNCHRONIZE))
+            if (_log.shouldInfo() && !packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
                 _log.info("Received packet on UNKNOWN stream (not ECHO / SYN) -> " + packet);
+            }
             if (sendId <= 0) {
                 Connection con = _manager.getConnectionByOutboundId(packet.getReceiveStreamId());
                 if (con != null) {
                     if ( (con.getHighestAckedThrough() <= 5) && (packet.getSequenceNum() <= 5) ) {
-                        if (_log.shouldInfo())
+                        if (_log.shouldInfo()) {
                             _log.info("Received additional packet without SendStreamID after the SYN -> " + packet + "\n* " + con);
+                        }
                     } else {
-                        if (_log.shouldWarn())
-                            _log.warn("hrmph, received while ACK of SYN was in flight\n* " + con + ": " + packet + " ACKed: " + con.getAckedPackets());
+                        if (_log.shouldWarn()) {
+                            _log.warn("hrmph, received while ACK of SYN was in flight\n* " + con + ": " + packet +
+                                      " ACKed: " + con.getAckedPackets());
+                        }
                         // allow unlimited packets without a SendStreamID for now
                     }
                     receiveKnownCon(con, packet);
