@@ -76,6 +76,7 @@ public class AddressbookBean extends BaseBean {
     */
     public String getBook() {
         if (book == null || (!book.equalsIgnoreCase("master") &&
+            !book.equalsIgnoreCase("local") &&
             !book.equalsIgnoreCase("router") &&
             !book.equalsIgnoreCase("private") &&
             !book.equalsIgnoreCase("published")))
@@ -333,7 +334,7 @@ public class AddressbookBean extends BaseBean {
     */
     public boolean isValidBook() {
         String s = getBook().toLowerCase(Locale.US);
-        return s.equals("router") || s.equals("master") || s.equals("published") || s.equals("private");
+        return s.equals("router") || s.equals("master") || s.equals("local") || s.equals("published") || s.equals("private");
     }
 
     public void setFilter(String filter) {
