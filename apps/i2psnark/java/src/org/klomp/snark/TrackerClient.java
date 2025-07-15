@@ -1020,8 +1020,7 @@ public class TrackerClient implements Runnable {
         int seenPeers;
 
         /**
-         *  @param a must be a valid http URL with a path,
-         *           or a udp URL (path is ignored)
+         *  @param a must be a valid http URL with a path, or a udp URL (path is ignored)
          *  @param p true if primary
          */
         public TCTracker(String a, boolean p) {
