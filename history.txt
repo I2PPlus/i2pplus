@@ -1,3 +1,6 @@
+2025-07-15 dr|z3d
+ * I2PSnark: Fix form submission on /configure
+
 2025-07-06 dr|z3d
  * Console: Use bars to display connections / limits on /peers
 
