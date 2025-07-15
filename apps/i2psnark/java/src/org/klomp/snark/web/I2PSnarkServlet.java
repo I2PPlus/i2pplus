@@ -2824,7 +2824,7 @@ public class I2PSnarkServlet extends BasicServlet {
     private static class PeerComparator implements Comparator<Peer>, Serializable {
 
         public int compare(Peer l, Peer r) {
-            int diff = r.completed() - l.completed();      // reverse
+            int diff = r.completed() - l.completed(); // reverse
             if (diff != 0) {return diff;}
             return l.toString().substring(5, 9).compareTo(r.toString().substring(5, 9));
         }
@@ -2894,7 +2894,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         if (announce.startsWith("http://")) {announce = announce.substring(7);}
         else if (announce.startsWith("https://")) {announce = announce.substring(8);}
-        else if (announce.startsWith("udp://")) {
+        else if (announce.startsWith("udp://") && announce.contains(".i2p")) {
             announce = announce.substring(6);
             isUDP = true;
         }
@@ -2959,7 +2959,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (announce.startsWith("opentracker.")) {announce = announce.substring(12, announce.length());}
         }
         buf.append(announce);
-        buf.append("</a>");
+        if (trackerLinkUrl != null) {buf.append("</a>");}
         return buf.toString();
     }
 
