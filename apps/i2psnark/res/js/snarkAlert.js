@@ -8,8 +8,8 @@ import { initSnarkRefresh, refreshTorrents, refreshScreenLog } from "./refreshTo
 
 const elements = {
   addNotify: document.getElementById("addNotify"),
-  createNotify: document.getElementById("createNotify"),
   addTorrent: document.getElementById("addForm"),
+  createNotify: document.getElementById("createNotify"),
   createTorrent: document.getElementById("createForm"),
   inputAddFile: document.getElementById("addTorrentURL"),
   inputNewFile: document.getElementById("createTorrentFile"),

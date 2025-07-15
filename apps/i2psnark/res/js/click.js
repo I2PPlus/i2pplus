@@ -6,9 +6,11 @@
 import {refreshScreenLog, refreshTorrents} from "./refreshTorrents.js";
 
 let eventListenerActive = false;
+const configPage = document.getElementById("mainconfig");
+const snarkInfo = document.getElementById("snarkInfo");
 
 document.addEventListener("DOMContentLoaded", () => {
-  if (eventListenerActive) {return;}
+  if (eventListenerActive || configPage !== null || snarkInfo !== null) {return;}
 
   const page = document.getElementById("page") || document.querySelector(".page");
   const htmlTag = document.documentElement;
