@@ -146,15 +146,17 @@ const advConfigInit = () => {
   };
 
   const addFilter = () => {
+    let filterValue = "";
     const advFilter = d.createElement("span");
     advFilter.id = "advfilter";
 
     const filterInput = d.createElement("input");
     filterInput.type = "text";
+    filterInput.id = "filterInput";
     advFilter.appendChild(filterInput);
 
     filterInput.addEventListener("input", event => {
-      const filterValue = event.target.value.toLowerCase();
+      filterValue = event.target.value.toLowerCase();
       const rows = table.queryAll(".configline");
       rows.forEach(row => {
         const key = row.query(".key").textContent.toLowerCase();
@@ -166,9 +168,11 @@ const advConfigInit = () => {
     const clearFilter = d.createElement("button");
     clearFilter.textContent = "X";
     clearFilter.addEventListener("click", () => {
-      filterValue = "";
-      table.queryAll(".configline").forEach(row => row.style.display = "table-row");
-      addNewRow.scrollIntoView();
+      const activeFilter = document.getElementById("filterInput");
+      activeFilter.value = "";
+      const event = new Event('input', { bubbles: true });
+      activeFilter.dispatchEvent(event);
+      window.scrollTo(0,0);
     });
 
     advFilter.appendChild(clearFilter);
@@ -226,7 +230,6 @@ const advConfigInit = () => {
 
   cancelButton.addEventListener("click", resetForm);
   saveButton.addEventListener("click", event => {
-    //event.preventDefault();
     doSave(event);
   });
 
