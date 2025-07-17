@@ -509,8 +509,13 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
     }
 
     private void handleDestroySession(DestroySessionMessage message) {
+        // spec says to respond with a SessionStatusMessage(destroyed)
+        // but we don't do that, we just close the session here,
+        // and disconnect if no sessions left.
+        // Our client-side code would not handle the response correctly,
+        // and unclear what other client libs would do.
         SessionId id = message.getSessionId();
-        if (id != null) {_runner.removeSession(id);}
+        if (id != null) {_runner.removeSession(id);} // if session is primary, this removes all subsessions also
         else if (_log.shouldWarn()) {_log.warn("Destroyed session with null ID");}
         int left = _runner.getSessionIds().size();
         if (left <= 0 || id == null) {_runner.stopRunning();}
