@@ -326,17 +326,13 @@ public class TestJob extends JobImpl {
                 if (skm != null) {
                     if (_encryptTag != null) {skm.consumeTag(_encryptTag);} // AES
                 } else {
-                        // ratchet
-                        RatchetSKM rskm;
-                        if (skm instanceof RatchetSKM) {
-                            rskm = (RatchetSKM) skm;
-                        } else if (skm instanceof MuxedSKM) {
-                            rskm = ((MuxedSKM) skm).getECSKM();
-                        } else if (skm instanceof MuxedPQSKM) {
-                            rskm = ((MuxedPQSKM) skm).getECSKM();
-                        } else {rskm = null;} // shouldn't happen
-                        if (rskm != null) {rskm.consumeTag(_ratchetEncryptTag);}
-                    }
+                    // ratchet
+                    RatchetSKM rskm;
+                    if (skm instanceof RatchetSKM) {rskm = (RatchetSKM) skm;}
+                    else if (skm instanceof MuxedSKM) {rskm = ((MuxedSKM) skm).getECSKM();}
+                    else if (skm instanceof MuxedPQSKM) {rskm = ((MuxedPQSKM) skm).getECSKM();}
+                    else {rskm = null;} // shouldn't happen
+                    if (rskm != null) {rskm.consumeTag(_ratchetEncryptTag);}
                 }
             }
             if (!_found) {testFailed(getContext().clock().now() - _started);}
