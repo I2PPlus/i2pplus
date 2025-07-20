@@ -1001,6 +1001,9 @@ class NetDbRenderer {
                         String enctype = "";
                         if (etype.toString().trim().equals("ECIES_X25519")) {enctype = "ECIES";}
                         else if (etype.toString().trim().equals("ELGAMAL_2048")) {enctype = "ElGamal";}
+                        else if (etype.toString().trim().equals("MLKEM512_X25519")) {enctype = "MLKEM512";}
+                        else if (etype.toString().trim().equals("MLKEM768_X25519")) {enctype = "MLKEM768";}
+                        else if (etype.toString().trim().equals("MLKEM1024_X25519")) {enctype = "MLKEM1024";}
                         buf.append("<span title=\"").append(etype).append("\">").append(enctype).append("</span>");
                     }
                     else {buf.append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode());}
