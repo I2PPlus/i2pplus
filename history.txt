@@ -1,3 +1,6 @@
+2025-07-20 dr|z3d
+ * I2PTunnel: Only show MLKEM768 option in UI, hide 512 and 1024
+
 2025-07-15 dr|z3d
  * I2PSnark: Fix form submission on /configure
 

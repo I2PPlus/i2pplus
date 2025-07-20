@@ -401,7 +401,8 @@
 <%            } else { %>
 <tr>
 <%        } %>
-<td colspan="2">
+<tr><td><b><%=intl._t("Legacy options")%></b></td><td><b><%=intl._t("Post Quantum")%></b></td></tr>
+<td>
 <span class="multiOption">
 <label><input value="0" type=radio name=encType <%=((has0 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;ElGamal-2048</label>
 </span>
@@ -411,27 +412,27 @@
 <span class="multiOption">
 <label><input value="4,0" type=radio name=encType <%=((has0 && has4) ? checked : edisabled)%> class=optbox>&nbsp;<%=intl._t("Both encryption types")%></label>
 </span>
-<%        if (editBean.isAdvanced()) { %>
+</td>
+<td>
 <br>
 <span class="multiOption experimental" hidden>
-<label><input value="5" type=radio name=encType <%=((has5 && !has4) ? checked : edisabled)%> class=optbox>MLKEM512-X25519</label>
+<label><input value="5" type=radio name=encType <%=((has5 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM512-X25519</label>
 </span>
 <span class="multiOption experimental">
-<label><input value="6" type=radio name=encType<%=((has6 && !has4) ? checked : edisabled)%> class=optbox>MLKEM768-X25519</label>
+<label><input value="6" type=radio name=encType<%=((has6 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM768-X25519</label>
 </span>
 <span class="multiOption experimental" hidden>
-<label><input value="7" type=radio name=encType <%=((has7 && !has4) ? checked : edisabled)%> class=optbox>MLKEM1024-X25519</label>
+<label><input value="7" type=radio name=encType <%=((has7 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM1024-X25519</label>
 </span>
 <span class="multiOption experimental" hidden>
-<label><input value="5,4" type=radio name=encType <%=((has5 && has4) ? checked : edisabled)%> class=optbox>MLKEM512-X25519 + ECIES-X25519</label>
+<label><input value="5,4" type=radio name=encType <%=((has5 && has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM512-X25519 + ECIES-X25519</label>
 </span>
 <span class="multiOption experimental">
-<label><input value="6,4" type=radio name=encType <%=((has6 && has4) ? checked : edisabled)%> class=optbox>MLKEM768-X25519 + ECIES-X25519</label>
+<label><input value="6,4" type=radio name=encType <%=((has6 && has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM768-X25519 + ECIES-X25519</label>
 </span>
 <span class="multiOption experimental" hidden>
-<label><input value="7,4" type=radio name=encType <%=((has7 && has4) ? checked : edisabled)%> class=optbox>MLKEM1024-X25519 + ECIES-X25519</label>
+<label><input value="7,4" type=radio name=encType <%=((has7 && has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM1024-X25519 + ECIES-X25519</label>
 </span>
-<%        } /* isAdvanced() */ %>
 </td>
 </tr>
 <tr><th colspan=2><%=intl._t("Tunnel Options")%></th></tr>
