@@ -163,7 +163,8 @@ a.control,input.control{white-space:nowrap;vertical-align:middle}
 #oldName::placeholder{color:#ee9;opacity:.5}
 #oldName{width:30%;min-width:280px}
 #serverTunnels .iconize,#clientTunnels .iconize{min-width:76px}
-#sigType[disabled]{padding:5px 0 5px 24px;width:fit-content;color:var(--ink);background:var(--crypto) no-repeat 4px center/16px,var(--badge)}
+#sigType[disabled]{padding:5px 8px 5px 24px;width:fit-content;min-width:unset;color:var(--ink);background:var(--crypto) no-repeat 4px center/16px,var(--badge)}
+#sigType[disabled] option:not([selected]){display:none}
 #targetHost,.host{width:30%;min-width:250px}
 #targetPort{margin-right:10px}
 #tunnelMessages{padding:0}
