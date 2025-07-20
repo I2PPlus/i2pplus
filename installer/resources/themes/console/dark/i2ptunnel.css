@@ -151,8 +151,6 @@ a.control,input.control{white-space:nowrap;vertical-align:middle}
 .tunnelDescriptionLabel,.tunnelDestinationLabel{margin-right:3px;min-width:150px;display:inline-block;white-space:nowrap;text-align:right}
 .username[type=text]{background:#000 var(--user) no-repeat 6px center/16px;background-size:16px}
 .username[type=text]:focus{background:var(--user) no-repeat 6px center/16px,var(--input_txt)}
-#clientAuth,#throttler{border:0}
-#clientAuth{margin-bottom:-1px}
 #clientHost{width:300px}
 #clientPort{width:100px}
 #customOptions{width:calc(100% - 10px)}
@@ -165,7 +163,7 @@ a.control,input.control{white-space:nowrap;vertical-align:middle}
 #oldName::placeholder{color:#ee9;opacity:.5}
 #oldName{width:30%;min-width:280px}
 #serverTunnels .iconize,#clientTunnels .iconize{min-width:76px}
-#sigType[disabled]{padding-left:14px;color:var(--ink);background:var(--crypto) no-repeat left center/16px}
+#sigType[disabled]{padding:5px 0 5px 24px;width:fit-content;color:var(--ink);background:var(--crypto) no-repeat 4px center/16px,var(--badge)}
 #targetHost,.host{width:30%;min-width:250px}
 #targetPort{margin-right:10px}
 #tunnelMessages{padding:0}
@@ -229,10 +227,15 @@ td>input{margin-left:0}
 #clientAuth td:last-child{width:1%;text-align:center}
 #clientAuth td:last-child b{margin:0;padding:0 8px}
 #clientAuth tr:first-child td{border-top:0}
+#clientAuth,#throttler{border:0}
+#clientAuth{margin-bottom:-1px}
+#clientAuth td:first-child{width:20%}
+#clientAuth .clientName,#clientAuth .clientKey{width:100%}
 #clientTunnels tr,#serverTunnels tr,.tunnelConfig tr{background:rgba(0,4,0,.4)}
 #clientTunnels th,#serverTunnels th{font-size:90%}
 #filter{vertical-align:top}
-#keyringManager{margin-right:4px;float:right}
+#keyringManager{height:18px;width:32px;float:right;color:#0000;background:url(/themes/console/images/keys.svg) no-repeat right center/18px;transition:ease .15s all}
+#keyringManager:hover{transform:scale(1.3);transition:ease .15s all}
 #serverTunnels tr:first-child,#clientTunnels tr:first-child{padding:7px 5px;background:#000;background:var(--heading),linear-gradient(180deg,#002000,#000 75%);background-size:100%,4px 100%,100%}
 #serverTunnels th:nth-child(n+2),#clientTunnels th:nth-child(n+2),.tunnelProperties td:nth-child(n+2){text-align:center}
 #serverTunnels tr:first-child th,#clientTunnels tr:first-child th{background:none}
