@@ -663,19 +663,18 @@ class NetDbRenderer {
             out.append(buf);
             return;
         }
+
         boolean noLeasesets = _context.netDb().getLeases().size() <= 0;
-        if (debug && !noLeasesets) {
-            buf.append("<p id=debugmode>").append(_t("Debug mode - Sorted by hash distance, closest first."))
-               .append("&nbsp;<a href=\"/netdb?l=1\">[").append(_t("Compact mode")).append("]</a></p>\n");
-        }
         Hash ourRKey;
         DecimalFormat fmt;
         NetworkDatabaseFacade netdb;
         Set<LeaseSet> leases;
         boolean notLocal = (client == null || debug);
+        int localLSCount = 0;
 
         if (client == null) {netdb = _context.netDb();}
         else {netdb = _context.clientNetDb(client);}
+
         if (notLocal) {
             ourRKey = _context.routerHash();
             leases = new TreeSet<LeaseSet>(new LeaseSetRoutingKeyComparator(ourRKey));
@@ -683,21 +682,14 @@ class NetDbRenderer {
         } else {
             ourRKey = null;
             leases = new TreeSet<LeaseSet>(new LeaseSetComparator());
-            //leases = new LinkedHashSet<LeaseSet>();
             fmt = null;
         }
 
         if (notLocal) {leases.addAll(netdb.getLeases());}
         else {
-            //if (netdb.getClientLeases().size() > 0) {
-            //    leases.addAll(netdb.getClientLeases());
-            //}
-            if (netdb.getPublishedLeases().size() > 0) {
-                leases.addAll(netdb.getPublishedLeases());
-            }
-            if (netdb.getUnpublishedLeases().size() > 0) {
-                leases.addAll(netdb.getUnpublishedLeases());
-            }
+            if (netdb.getPublishedLeases().size() > 0) {leases.addAll(netdb.getPublishedLeases());}
+            if (netdb.getUnpublishedLeases().size() > 0) {leases.addAll(netdb.getUnpublishedLeases());}
+            localLSCount = netdb.getPublishedLeases().size() + netdb.getUnpublishedLeases().size();
         }
         int medianCount = 0;
         int rapCount = 0;
@@ -705,17 +697,20 @@ class NetDbRenderer {
         int c = 0;
 
         /** Summary */
+        boolean ffEnabled = netdb.floodfillEnabled();
         if (debug) {buf.append("<table id=leasesetdebug>\n");}
         else if (client == null) {buf.append("<table id=leasesetsummary>\n");}
         if (notLocal) {
-            buf.append("<tr><th><b>").append(_t("Total Leasesets")).append(":</b></th>")
-               .append("<th colspan=3>").append(leases.size()).append("</th></tr>\n");
+            buf.append("<tr><th colspan=3>").append(_t("Total Leasesets")).append(": ").append(leases.size()).append("</th>");
+            if (debug) {buf.append("<th colspan=2 class=right><a href=\"/netdb?l=1\">").append(_t("Compact mode")).append("</a></th>");}
+            else {buf.append("<th class=right><a href=\"/netdb?l=2\">").append(_t("Debug Mode")).append("</a></th>");}
+            buf.append("</tr>\n");
         }
         if (debug) {
             RouterKeyGenerator gen = _context.routerKeyGenerator();
             if (leases.size() > 0) {
-                buf.append("<tr><td><b>").append(_t("Published (RAP) Leasesets")).append(":</b></td><td colspan=3>")
-                   .append(netdb.getKnownLeaseSets()).append("</td></tr>\n");
+                buf.append("<tr><td><b>").append(_t("Published (RAP) Leasesets")).append(":</b></td><td colspan=4>").append(netdb.getKnownLeaseSets())
+                   .append(" (").append(_t("Debug mode - Sorted by hash distance, closest first.")).append(")</td></tr>\n");
             }
             buf.append("<tr><td><b>").append(_t("Mod Data")).append(":</b></td><td>").append(DataHelper.getUTF8(gen.getModData())).append("</td>")
                .append("<td><b>").append(_t("Last Changed")).append(":</b></td><td>").append(DataHelper.formatTime(gen.getLastChanged())).append("</td></tr>\n")
@@ -725,8 +720,11 @@ class NetDbRenderer {
         int ff = 0;
         if (client == null) {
             ff = _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL).size();
-            buf.append("<tr><td><b>").append(_t("Known Floodfills")).append(":</b></td><td colspan=3>").append(ff).append("</td></tr>\n")
-               .append("<tr><td><b>").append(_t("Floodfill mode enabled")).append("</b></td><td>").append(netdb.floodfillEnabled() ? "yes" : "no");
+            buf.append("<tr>");
+            if (debug) {
+                buf.append("<td><b>").append(_t("Floodfill mode enabled")).append("</b></td><td>")
+                   .append(ffEnabled ? "<span class=yes>yes</span>" : "<span class=no>no</span>");
+            } else {buf.append("<td colspan=2>");}
         }
         if (debug) {buf.append("</td><td><b>").append(_t("Routing Key")).append(":</b></td><td>").append(ourRKey.toBase64());}
         else if (client == null) {buf.append("</td><td colspan=2>");}
@@ -866,6 +864,7 @@ class NetDbRenderer {
                 DecimalFormat fmt = new DecimalFormat("#0.00");
                 String distance = fmt.format(biLog2(dist));
                 long now = _context.clock().now();
+                buf.append("<span id=singleLS></span>");
                 renderLeaseSet(buf, ls, true, now, false, distance);
             } else {
                 buf.append("<div class=netdbnotfound>").append(_t("LeaseSet for {0} not found in network database", hostname)).append("</div>");

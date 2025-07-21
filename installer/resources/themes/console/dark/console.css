@@ -1347,9 +1347,9 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #leasesetdebug th a,#leasesetsummary a{word-spacing:normal;letter-spacing:normal;font-size:9pt;text-transform:capitalize}
 #leasesetdebug th,#leasesetsummary th{padding:8px 10px;word-spacing:.1em;letter-spacing:.08em;font-size:10pt;font-weight:700;text-transform:uppercase}
 #leasesetdebug th,#leasesetsummary th:first-child{white-space:nowrap;text-align:left}
-#leasesetdebug th:first-child{text-align:right}
 #leasesetsummary th:last-child{text-align:left}
 #leasesetsummary th:first-child{padding:8px 10px}
+#leasesetsummary td:empty{display:none}
 #leasesetsummary td:first-child{padding-left:10px;width:100px;white-space:nowrap}
 #leasesetsummary tr:last-child td:last-child{text-align:left}
 #netdb a[href$="i2p"]{margin-left:6px;display:inline-block}
@@ -1357,6 +1357,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #netdb .confignav{position:relative;z-index:9999}
 #netdb .netdbentry,#netdb .leaseset{margin-bottom:10px;width:100%;box-shadow:0 0 0 1px #000,0 0 0 3px #252}
 #netdb .netdbentry{margin:2px auto 14px;width:calc(100% - 6px)}
+#singleLS+.leaseset{margin-bottom:1px;column-span:all}
 #netdb .leasesets_container #debugmode,#netdb #leasesetdebug{box-shadow:0 0 0 1px #000,0 0 0 3px #252}
 #netdb #leasesetdebug{margin-bottom:12px}
 #netdb .confignav+.netdbentry{margin-top:15px}
@@ -1376,6 +1377,8 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .leaseset .ekey b,.leaseset .stype b,.leaseset .expiry b,.leaseset .ekey .bullet,.leaseset .expiry .bullet,.leaseset .stype .bullet{display:none}
 #netdb .leasesets_container p,#netdb .leasesets_container .confignav{column-span:all}
 #netdb .leasesets_container .confignav{margin-bottom:11px}
+#netdb .yes,#netdb .no{width:16px;height:16px;display:inline-block;vertical-align:middle;font-size:0;background:var(--yes) no-repeat center calc(50% - 1px)/14px}
+#netdb .no{background:var(--no) no-repeat center calc(50% - 1px)/12px}
 
 /* sybils */
 h3#threats.sybils{margin-bottom:10px}
@@ -3029,6 +3032,7 @@ th{font-size:8pt}
 #changelog pre span{width:calc(100% - 30px)}
 #jobstats tbody td:first-child{padding-left:28px;background:var(--yes) no-repeat 8px center;background-size:12px}
 #jobstats tbody td.updated:first-child{animation:updatingIcon .5s ease both}
+#singleLS+.leaseset>.ls_crypto{columns:4 380px}
 #terms{padding:5px 0 15px;columns:2 auto;column-gap:35px;column-rule:1px solid #020}
 #terms p{break-inside:avoid}
 #terms p:first-child{margin-top:0}

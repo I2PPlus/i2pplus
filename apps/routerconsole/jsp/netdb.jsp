@@ -12,33 +12,33 @@
 <body>
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="sidebar.jsi" %>
-<jsp:useBean class="net.i2p.router.web.helpers.NetDbHelper" id="formhandler" scope="request" />
-<jsp:setProperty name="formhandler" property="full" value="<%=request.getParameter(\"f\")%>" />
-<jsp:setProperty name="formhandler" property="router" value="<%=request.getParameter(\"r\")%>" />
-<jsp:setProperty name="formhandler" property="lease" value="<%=request.getParameter(\"l\")%>" />
-<jsp:setProperty name="formhandler" property="version" value="<%=request.getParameter(\"v\")%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.NetDbHelper" id="formhandler" scope="request"/>
+<jsp:setProperty name="formhandler" property="full" value="<%=request.getParameter(\"f\")%>"/>
+<jsp:setProperty name="formhandler" property="router" value="<%=request.getParameter(\"r\")%>"/>
+<jsp:setProperty name="formhandler" property="lease" value="<%=request.getParameter(\"l\")%>"/>
+<jsp:setProperty name="formhandler" property="version" value="<%=request.getParameter(\"v\")%>"/>
 <%  if (request.getParameter("cc") != null && !request.getParameter("cc").equals("")) { %>
-<jsp:setProperty name="formhandler" property="country" value="<%=request.getParameter(\"cc\")%>" />
+<jsp:setProperty name="formhandler" property="country" value="<%=request.getParameter(\"cc\")%>"/>
 <%  } else { %>
-<jsp:setProperty name="formhandler" property="country" value="<%=request.getParameter(\"c\")%>" />
+<jsp:setProperty name="formhandler" property="country" value="<%=request.getParameter(\"c\")%>"/>
 <%  } %>
-<jsp:setProperty name="formhandler" property="family" value="<%=request.getParameter(\"fam\")%>" />
-<jsp:setProperty name="formhandler" property="caps" value="<%=request.getParameter(\"caps\")%>" />
-<jsp:setProperty name="formhandler" property="ip" value="<%=request.getParameter(\"ip\")%>" />
-<jsp:setProperty name="formhandler" property="sybil" value="<%=request.getParameter(\"sybil\")%>" />
-<jsp:setProperty name="formhandler" property="sybil2" value="<%=request.getParameter(\"sybil2\")%>" />
-<jsp:setProperty name="formhandler" property="port" value="<%=request.getParameter(\"port\")%>" />
-<jsp:setProperty name="formhandler" property="type" value="<%=request.getParameter(\"type\")%>" />
-<jsp:setProperty name="formhandler" property="ipv6" value="<%=request.getParameter(\"ipv6\")%>" />
-<jsp:setProperty name="formhandler" property="cost" value="<%=request.getParameter(\"cost\")%>" />
-<jsp:setProperty name="formhandler" property="mtu" value="<%=request.getParameter(\"mtu\")%>" />
-<jsp:setProperty name="formhandler" property="ssucaps" value="<%=request.getParameter(\"ssucaps\")%>" />
-<jsp:setProperty name="formhandler" property="transport" value="<%=request.getParameter(\"tr\")%>" />
-<jsp:setProperty name="formhandler" property="limit" value="<%=request.getParameter(\"ps\")%>" />
-<jsp:setProperty name="formhandler" property="page" value="<%=request.getParameter(\"pg\")%>" />
-<jsp:setProperty name="formhandler" property="mode" value="<%=request.getParameter(\"m\")%>" />
-<jsp:setProperty name="formhandler" property="date" value="<%=request.getParameter(\"date\")%>" />
-<jsp:setProperty name="formhandler" property="leaseset" value="<%=request.getParameter(\"ls\")%>" />
+<jsp:setProperty name="formhandler" property="family" value="<%=request.getParameter(\"fam\")%>"/>
+<jsp:setProperty name="formhandler" property="caps" value="<%=request.getParameter(\"caps\")%>"/>
+<jsp:setProperty name="formhandler" property="ip" value="<%=request.getParameter(\"ip\")%>"/>
+<jsp:setProperty name="formhandler" property="sybil" value="<%=request.getParameter(\"sybil\")%>"/>
+<jsp:setProperty name="formhandler" property="sybil2" value="<%=request.getParameter(\"sybil2\")%>"/>
+<jsp:setProperty name="formhandler" property="port" value="<%=request.getParameter(\"port\")%>"/>
+<jsp:setProperty name="formhandler" property="type" value="<%=request.getParameter(\"type\")%>"/>
+<jsp:setProperty name="formhandler" property="ipv6" value="<%=request.getParameter(\"ipv6\")%>"/>
+<jsp:setProperty name="formhandler" property="cost" value="<%=request.getParameter(\"cost\")%>"/>
+<jsp:setProperty name="formhandler" property="mtu" value="<%=request.getParameter(\"mtu\")%>"/>
+<jsp:setProperty name="formhandler" property="ssucaps" value="<%=request.getParameter(\"ssucaps\")%>"/>
+<jsp:setProperty name="formhandler" property="transport" value="<%=request.getParameter(\"tr\")%>"/>
+<jsp:setProperty name="formhandler" property="limit" value="<%=request.getParameter(\"ps\")%>"/>
+<jsp:setProperty name="formhandler" property="page" value="<%=request.getParameter(\"pg\")%>"/>
+<jsp:setProperty name="formhandler" property="mode" value="<%=request.getParameter(\"m\")%>"/>
+<jsp:setProperty name="formhandler" property="date" value="<%=request.getParameter(\"date\")%>"/>
+<jsp:setProperty name="formhandler" property="leaseset" value="<%=request.getParameter(\"ls\")%>"/>
 <%
     String c = request.getParameter("c");
     String f = request.getParameter("f");
@@ -108,7 +108,7 @@
     if (allowIFrame) {formhandler.allowGraphical();}
 %>
 <%@include file="formhandler.jsi" %>
-<jsp:getProperty name="formhandler" property="floodfillNetDbSummary" />
+<jsp:getProperty name="formhandler" property="floodfillNetDbSummary"/>
 <%  if (r == null && ls != null || l != null) { %>
 </div>
 <%  } %>
@@ -116,6 +116,7 @@
 <%  if (delayLoad) { %>
 </div>
 <style>#netdbwrap{height:unset!important;opacity:1!important}#netdb::before{display:none}</style>
+<noscript><style>body:not(.ready) .lazy{display:table!important}</style></noscript>
 <%  } %>
 <script src=/js/lazyload.js></script>
 <script src=/js/tablesort/tablesort.js></script>
