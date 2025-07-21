@@ -729,9 +729,9 @@ class SidebarRenderer {
             //int lsCountLocal = _context.netDb().getClientLeases().size();
             int lsCount = _context.netDb().getLeases().size();
             if (lsCount > 0) {
-            buf.append(" <span id=lsCount class=\"badge volatile\" title=\"")
-               .append(_t("Total number of LeaseSets stored in our NetDb"))
-               .append("\">").append(lsCount).append("</span>");
+            buf.append(" <a href=\"/netdb?l=1\"><span id=lsCount class=\"badge volatile\" title=\"")
+               .append(_t("Total number of remote LeaseSets stored in our NetDb"))
+               .append("\">").append(lsCount).append("</span></a>");
             }
         }
         buf.append("</span></h4>\n");
