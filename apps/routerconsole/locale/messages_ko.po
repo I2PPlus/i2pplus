@@ -3974,7 +3974,7 @@ msgstr "메모리"
 msgid "Floodfill enabled"
 msgstr "플로드필 활성화"
 
-msgid "Total number of LeaseSets stored in our NetDb"
+msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr ""
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"

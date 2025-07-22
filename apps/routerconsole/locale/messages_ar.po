@@ -4054,7 +4054,7 @@ msgstr "الذاكرة"
 msgid "Floodfill enabled"
 msgstr "تم تمكين floodfill"
 
-msgid "Total number of LeaseSets stored in our NetDb"
+msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr ""
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"

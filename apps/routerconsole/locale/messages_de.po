@@ -3990,7 +3990,7 @@ msgstr "Speicher"
 msgid "Floodfill enabled"
 msgstr "Floodfill aktiviert"
 
-msgid "Total number of LeaseSets stored in our NetDb"
+msgid "Total number of remote LeaseSets stored in our NetDb"
 msgstr ""
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
