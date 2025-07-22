@@ -1375,7 +1375,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .leaseset .expiry{margin-left:4px;padding-left:15px;background:var(--clock) no-repeat left calc(50% + 1px)/12px}
 .leaseset .rkey{padding-left:15px;background:var(--routekey) no-repeat left center/15px}
 .leaseset .stype{background:var(--lock) no-repeat left center/12px}
-.leaseset .ekey b,.leaseset .stype b,.leaseset .expiry b,.leaseset .ekey .bullet,.leaseset .expiry .bullet,.leaseset .rkey .bullet,.leaseset .stype .bullet{display:none}
+.leaseset .ekey b,.leaseset .rkey b,.leaseset .stype b,.leaseset .expiry b,.leaseset .ekey .bullet,.leaseset .expiry .bullet,.leaseset .rkey .bullet,.leaseset .stype .bullet{display:none}
 #netdb .leasesets_container p,#netdb .leasesets_container .confignav{column-span:all}
 #netdb .leasesets_container .confignav{margin-bottom:11px}
 #netdb .yes,#netdb .no{width:16px;height:16px;display:inline-block;vertical-align:middle;font-size:0;background:var(--yes) no-repeat center calc(50% - 1px)/14px}
