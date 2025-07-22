@@ -751,14 +751,15 @@ class NetDbRenderer {
                 buf.setLength(0);
               } // for each
               if (debug && isFloodfill()) {
-                  buf.append("<table id=leasesetdebug><tr><td><b>").append(_t("Network data")).append(":</b></td><td colspan=3>");
-                  //buf.append("</b></p><p><b>Center of Key Space (router hash): " + ourRKey.toBase64());
+                  buf.append("<table id=leasesetKeyspace>");
+                     //.append("<tr><td><b>").append(_t("Network data")).append(":</b></td><td colspan=3>")
+                     //.append("</b></p><p><b>Center of Key Space (router hash): " + ourRKey.toBase64());
+                     //.append("</td></tr>\n")
                   if (median != null) {
                       double log2 = biLog2(median);
                       // 2 for 4 floodfills... -1 for median - this can be way off for unknown reasons
                       int total = (int) Math.round(Math.pow(2, 2 + 256 - 1 - log2));
-                      buf.append("</td></tr>\n")
-                         .append("<tr><td><b>").append(_t("Median distance (bits)")).append(":</b></td><td colspan=3>")
+                      buf.append("<tr><td><b>").append(_t("Median distance (bits)")).append(":</b></td><td colspan=3>")
                          .append(fmt.format(log2)).append("</td></tr>\n")
                          .append("<tr><td><b>").append(_t("Estimated total floodfills")).append(":</b></td><td colspan=3>")
                          .append(total).append("</td></tr>\n")
@@ -941,9 +942,11 @@ class NetDbRenderer {
             boolean asPublished = ls.getReceivedAsPublished();
             boolean asReply = ls.getReceivedAsReply();
             if (asPublished) {
-                buf.append(' ').append(bullet).append("<b title=\"").append(_t("Received as published")).append("\">RAP</b>");
+                buf.append(" <span class=\"nowrap rxAsPub\" title=\"").append(_t("Received as published")).append("\"> ").append(bullet)
+                   .append("<b>RAP</b></span>");
             } else if (asReply) {
-               buf.append(' ').append(bullet).append("<b title=\"").append(_t("Received as reply")).append("\">RAR</b>");
+                buf.append(" <span class=\"nowrap rxAsRep\" title=\"").append(_t("Received as reply")).append("\"> ").append(bullet)
+                   .append("<b>RAR</b></span>");
             }
             buf.append(' ').append(bullet).append("<b>").append(_t("Distance")).append(":</b> ").append(distance);
             if (type != DatabaseEntry.KEY_TYPE_LEASESET) {
