@@ -960,25 +960,29 @@ class NetDbRenderer {
                 }
             }
             buf.append("</td></tr>\n<tr><td colspan=2><span class=ls_crypto>")
-               .append("<span class=nowrap>").append(bullet).append("<b>").append(_t("Signature type")).append(":</b> ");
+               .append("<span class=\"nowrap stype\" title=\"").append(_t("Signature type")).append("\">")
+               .append(bullet).append("<b>").append(_t("Signature type")).append(":</b> ");
             if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
                 buf.append(dest.getSigningPublicKey().getType()).append("</span>");
             } else {buf.append(ls.getSigningKey().getType()).append("</span>");} // encrypted, show blinded key type
             if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
-                buf.append("<br><span class=nowrap>").append(bullet).append("<b>").append(_t("Encryption Key"))
+                buf.append("<br><span class=\"nowrap ekey\" title=\"").append(_t("Encryption Key")).append("\">")
+                   .append(bullet).append("<b>").append(_t("Encryption Key"))
                    .append(":</b> ELGAMAL_2048 [").append(ls.getEncryptionKey().toBase64().substring(0,8))
                    .append("&hellip;]</span>");
             } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
                 LeaseSet2 ls2 = (LeaseSet2) ls;
                 for (PublicKey pk : ls2.getEncryptionKeys()) {
-                    buf.append("<br><span class=nowrap>").append(bullet).append("<b>").append(_t("Encryption Key")).append(":</b> ");
+                    buf.append("<br><span class=\"nowrap ekey title=\"").append(_t("Encryption Key")).append("\">")
+                       .append(bullet).append("<b>").append(_t("Encryption Key")).append(":</b> ");
                     EncType etype = pk.getType();
                     if (etype != null) {buf.append(etype);}
                     else {buf.append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode());}
                     buf.append(" [").append(pk.toBase64().substring(0,8)).append("&hellip;]</span>");
                 }
             }
-            buf.append("<br><span class=nowrap>").append(bullet).append("<b>").append(_t("Routing Key"))
+            buf.append("<br><span class=\"nowrap rkey\" title=\"").append(_t("Routing Key").append("\>")
+               .append(bullet).append("<b>").append(_t("Routing Key"))
                .append(":</b> ").append(ls.getRoutingKey().toBase64().substring(0,16))
                .append("&hellip;</span></span></td></tr>\n");
         } else {
