@@ -981,7 +981,7 @@ class NetDbRenderer {
                     buf.append(" [").append(pk.toBase64().substring(0,8)).append("&hellip;]</span>");
                 }
             }
-            buf.append("<br><span class=\"nowrap rkey\" title=\"").append(_t("Routing Key").append("\>")
+            buf.append("<br><span class=\"nowrap rkey\" title=\"").append(_t("Routing Key")).append("\">")
                .append(bullet).append("<b>").append(_t("Routing Key"))
                .append(":</b> ").append(ls.getRoutingKey().toBase64().substring(0,16))
                .append("&hellip;</span></span></td></tr>\n");
