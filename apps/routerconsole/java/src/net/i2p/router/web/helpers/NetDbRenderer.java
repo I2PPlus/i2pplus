@@ -709,8 +709,8 @@ class NetDbRenderer {
         if (debug) {
             RouterKeyGenerator gen = _context.routerKeyGenerator();
             if (leases.size() > 0) {
-                buf.append("<tr><td><b>").append(_t("Published (RAP) Leasesets")).append(":</b></td><td colspan=4>").append(netdb.getKnownLeaseSets())
-                   .append(" (").append(_t("Debug mode - Sorted by hash distance, closest first.")).append(")</td></tr>\n");
+                buf.append("<tr id=rapLS><td><b>").append(_t("Published (RAP) Leasesets")).append(":</b></td><td colspan=4>").append(netdb.getKnownLeaseSets())
+                   .append(" (").append(_t("Sorted by hash distance, closest first.")).append(")</td></tr>\n");
             }
             buf.append("<tr><td><b>").append(_t("Mod Data")).append(":</b></td><td>").append(DataHelper.getUTF8(gen.getModData())).append("</td>")
                .append("<td><b>").append(_t("Last Changed")).append(":</b></td><td>").append(DataHelper.formatTime(gen.getLastChanged())).append("</td></tr>\n")
@@ -750,24 +750,22 @@ class NetDbRenderer {
                 out.append(buf);
                 buf.setLength(0);
               } // for each
+
               if (debug && isFloodfill()) {
-                  buf.append("<table id=leasesetKeyspace>");
-                     //.append("<tr><td><b>").append(_t("Network data")).append(":</b></td><td colspan=3>")
-                     //.append("</b></p><p><b>Center of Key Space (router hash): " + ourRKey.toBase64());
-                     //.append("</td></tr>\n")
                   if (median != null) {
                       double log2 = biLog2(median);
                       // 2 for 4 floodfills... -1 for median - this can be way off for unknown reasons
                       int total = (int) Math.round(Math.pow(2, 2 + 256 - 1 - log2));
-                      buf.append("<tr><td><b>").append(_t("Median distance (bits)")).append(":</b></td><td colspan=3>")
+                      buf.append("<table id=leasesetKeyspace>\n")
+                         .append("<tbody><tr id=medianDistance><td><b>").append(_t("Median distance (bits)")).append(":</b></td><td colspan=3>")
                          .append(fmt.format(log2)).append("</td></tr>\n")
-                         .append("<tr><td><b>").append(_t("Estimated total floodfills")).append(":</b></td><td colspan=3>")
+                         .append("<tr id=estimatedFF><td><b>").append(_t("Estimated total floodfills")).append(":</b></td><td colspan=3>")
                          .append(total).append("</td></tr>\n")
-                         .append("<tr><td><b>").append(_t("Estimated total leasesets")).append(":</b></td><td colspan=3>")
-                         .append(total * rapCount / 4);
-                  } else {buf.append("<i>No data available.</i>");}
-                  buf.append("</td></tr>\n</table>\n");
-              } // median table
+                         .append("<tr id=estimatedLS><td><b>").append(_t("Estimated total leasesets")).append(":</b></td><td colspan=3>")
+                         .append(total * rapCount / 4).append("</td></tr></tbody>\n</table>\n")
+                         .append("<script src=/js/lsDebug.js></script>\n");
+                  }
+              }
         } // !empty
         out.append(buf);
         out.flush();
@@ -948,18 +946,24 @@ class NetDbRenderer {
                 buf.append(" <span class=\"nowrap rxAsRep\" title=\"").append(_t("Received as reply")).append("\"> ").append(bullet)
                    .append("<b>RAR</b></span>");
             }
-            buf.append(' ').append(bullet).append("<b>").append(_t("Distance")).append(":</b> ").append(distance);
+            buf.append(' ').append(bullet).append("<b>").append(_t("Distance")).append(":</b> ").append(distance)
+               .append(" <span class=\"nowrap rkey\" title=\"").append(_t("Routing Key")).append("\">")
+               .append(bullet).append("<b>").append(_t("Routing Key"))
+               .append(":</b> ").append(ls.getRoutingKey().toBase64().substring(0,16))
+               .append("&hellip;</span>");
+
             if (type != DatabaseEntry.KEY_TYPE_LEASESET) {
                 LeaseSet2 ls2 = (LeaseSet2) ls;
                 if (ls2.isOffline()) {
-                    buf.append(' ').append(bullet).append("<b>").append(_t("Offline signed")).append(":</b> ");
+                    buf.append(" <span class=nowrap>").append(bullet).append("<b>").append(_t("Offline signed")).append(":</b> ");
                     exp = ls2.getTransientExpiration() - now;
                     if (exp > 0) {
                         buf.append(' ').append(bullet).append("<b>").append(_t("Expires{0}", ":</b> " + DataHelper.formatDuration2(exp)));
                     } else {
                         buf.append(' ').append(bullet).append("<b>").append(_t("Expired{0} ago", ":</b> " + DataHelper.formatDuration2(0-exp)));
                     }
-                    buf.append(' ').append(bullet).append("<b>").append(_t("Type")).append(":</b> ").append(ls2.getTransientSigningKey().getType());
+                    buf.append("</span> <span class=nowrap>").append(bullet).append("<b>").append(_t("Type")).append(":</b> ")
+                       .append(ls2.getTransientSigningKey().getType()).append("</span>");
                 }
             }
             buf.append("</td></tr>\n<tr><td colspan=2><span class=ls_crypto>")
@@ -976,7 +980,7 @@ class NetDbRenderer {
             } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
                 LeaseSet2 ls2 = (LeaseSet2) ls;
                 for (PublicKey pk : ls2.getEncryptionKeys()) {
-                    buf.append("<br><span class=\"nowrap ekey title=\"").append(_t("Encryption Key")).append("\">")
+                    buf.append("<br><span class=\"nowrap ekey\" title=\"").append(_t("Encryption Key")).append("\">")
                        .append(bullet).append("<b>").append(_t("Encryption Key")).append(":</b> ");
                     EncType etype = pk.getType();
                     if (etype != null) {buf.append(etype);}
@@ -984,10 +988,7 @@ class NetDbRenderer {
                     buf.append(" [").append(pk.toBase64().substring(0,8)).append("&hellip;]</span>");
                 }
             }
-            buf.append("<br><span class=\"nowrap rkey\" title=\"").append(_t("Routing Key")).append("\">")
-               .append(bullet).append("<b>").append(_t("Routing Key"))
-               .append(":</b> ").append(ls.getRoutingKey().toBase64().substring(0,16))
-               .append("&hellip;</span></span></td></tr>\n");
+            buf.append("</span></td></tr>\n");
         } else {
             buf.append(" <span class=\"nowrap stype\" title=\"").append(_t("Signature type")).append("\">").append(bullet)
                .append("<b>").append(_t("Signature type")).append(":</b> ");
@@ -1509,13 +1510,6 @@ class NetDbRenderer {
                     }
                 }
             }
-/*
-            boolean debug = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
-            if (debug) {
-                buf.append("<span class=netdb_info><b>").append(_t("Routing Key")).append(":</b> ")
-                   .append("<span class=rkey>").append(info.getRoutingKey().toBase64()).append("</span></span>&nbsp;&nbsp;");
-            }
-*/
          } else {
             // shouldn't happen
             buf.append("<td><b>").append(_t("Published")).append("</td><td>:</b> in ")
