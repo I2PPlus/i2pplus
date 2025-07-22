@@ -2841,7 +2841,7 @@ msgstr ""
 msgid "Not initialized"
 msgstr "Başlatılmamış"
 
-msgid "Debug mode - Sorted by hash distance, closest first."
+msgid "Sorted by hash distance, closest first."
 msgstr ""
 
 msgid "Compact mode"
