@@ -3032,7 +3032,7 @@ th{font-size:8pt}
 #changelog pre span{width:calc(100% - 30px)}
 #jobstats tbody td:first-child{padding-left:28px;background:var(--yes) no-repeat 8px center;background-size:12px}
 #jobstats tbody td.updated:first-child{animation:updatingIcon .5s ease both}
-#singleLS+.leaseset>.ls_crypto{columns:4 380px}
+#singleLS+.leaseset .ls_crypto{columns:4 380px}
 #terms{padding:5px 0 15px;columns:2 auto;column-gap:35px;column-rule:1px solid #020}
 #terms p{break-inside:avoid}
 #terms p:first-child{margin-top:0}
