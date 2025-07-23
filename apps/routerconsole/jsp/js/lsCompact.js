@@ -26,10 +26,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function refreshLeasesets() {
     if (!container) return;
+    progressx.show(theme);progressx.progress(.7);
     const url = window.location.href;
     fetch(url)
       .then(response => {
         if (!response.ok) throw new Error("Network response was not ok");
+        progressx.progress(.8);
         return response.text();
       })
       .then(html => {
@@ -41,8 +43,11 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!oldContainer) return;
         oldContainer.parentNode.replaceChild(newContainer, oldContainer);
         container = newContainer;
+        progressx.progress(.9)
         compact();
         lsDebug();
+        progressx.progress(1);
+        setTimeout(() => {progressx.hide();}, 100);
       })
       .catch(() => {});
   }
