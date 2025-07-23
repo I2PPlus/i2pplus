@@ -2,7 +2,7 @@
 /* Consolidate debug and keyspace tables on Leasesets debug page */
 /* License: AGPL3 or later */
 
-document.addEventListener("DOMContentLoaded", () => {
+function lsDebug() {
   const getById = id => document.getElementById(id);
   const sel = (el, sel) => el?.querySelector(sel);
   const text = el => el?.textContent.trim();
@@ -87,4 +87,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   leasesetKeyspace.style.display = "none";
-});
+};
+
+export {lsDebug};

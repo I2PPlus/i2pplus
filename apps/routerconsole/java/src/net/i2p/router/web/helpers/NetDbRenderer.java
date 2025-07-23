@@ -766,8 +766,7 @@ class NetDbRenderer {
                        .append("<tr id=estimatedFF><td><b>").append(_t("Estimated total floodfills")).append(":</b></td><td colspan=3>")
                        .append(total).append("</td></tr>\n")
                        .append("<tr id=estimatedLS><td><b>").append(_t("Estimated total leasesets")).append(":</b></td><td colspan=3>")
-                       .append(total * rapCount / 4).append("</td></tr></tbody>\n</table>\n")
-                       .append("<script src=/js/lsDebug.js></script>\n");
+                       .append(total * rapCount / 4).append("</td></tr></tbody>\n</table>\n");
                 }
             }
         } // !empty
@@ -978,13 +977,13 @@ class NetDbRenderer {
            .append("<b>").append(_t("Signature type")).append(":</b> ");
         if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {buf.append(dest.getSigningPublicKey().getType());}
         else {buf.append(ls.getSigningKey().getType());} // encrypted, show blinded key type
-        buf.append("</span>");
-        buf.append("</td></tr>\n<tr class=ekeys><td colspan=2>");
+        buf.append("</span></span></td></tr>\n<tr class=ekeys><td colspan=2>");
+
         if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
             buf.append("<span class=\"nowrap ekey\" title=\"").append(_t("Encryption Key")).append("\">").append(bullet)
                .append("<b>").append(_t("Encryption Key")).append(":</b> <span title=ELGAMAL_2048>ElGamal")
-               .append(debug ? " <span class=encKey>[" + ls.getEncryptionKey().toBase64().substring(0,8) + "&hellip;]<span>" : "")
-               .append("</span></span>");
+               .append(debug ? " <span class=encKey>[" + ls.getEncryptionKey().toBase64().substring(0,8) + "&hellip;]</span>" : "")
+               .append("</span>");
         } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
             LeaseSet2 ls2 = (LeaseSet2) ls;
             for (PublicKey pk : ls2.getEncryptionKeys()) {

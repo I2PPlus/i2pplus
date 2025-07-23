@@ -118,7 +118,7 @@
 <noscript><style>body:not(.ready) .lazy{display:table!important}</style></noscript>
 <%  } %>
 <script src=/js/lazyload.js></script>
-<script src=/js/lsCompact.js></script>
+<script src=/js/lsCompact.js type=module></script>
 <script src=/js/tablesort/tablesort.js></script>
 <script src=/js/tablesort/tablesort.number.js></script>
 <script src=/js/netdb.js></script>

@@ -1,26 +1,50 @@
 /* I2P+ lsCompact.js by dr|z3d */
-/* Compact non-debug Leaseset tables */
+/* Compact non-debug Leaseset tables and implement auto-refresh */
 /* License: AGPL3 or later */
 
+import {lsDebug} from "/static/lsDebug.js";
+
 document.addEventListener("DOMContentLoaded", () => {
-  const container = document.querySelector(".leasesets_container");
-  if (!container || document.getElementById("leasesetdebug")) {return;}
-  document.querySelectorAll("table.leaseset").forEach(table => {
-    const expiry = table.querySelector(".expiry");
-    const ekeys = table.querySelectorAll(".ekey");
+  let container = document.querySelector(".leasesets_container");
 
-    if (expiry && ekeys.length > 0) {
-      ekeys.forEach((ekey, index) => {
-        expiry.insertAdjacentElement("afterend", ekey);
-        if (index < ekeys.length - 1) {
-          const separator = document.createElement("span");
-          separator.textContent = " ";
-          expiry.insertAdjacentElement("afterend", separator);
-        }
-      });
+  function compact() {
+    if (!container || document.getElementById("leasesetdebug")) return;
+    document.querySelectorAll("table.leaseset").forEach(table => {
+      const expiry = table.querySelector(".expiry");
+      const ekeys = Array.from(table.querySelectorAll(".ekey"));
+      if (expiry && ekeys.length > 0) {
+        ekeys.forEach(el => el.remove());
+        ekeys.forEach(ekey => expiry.insertAdjacentElement("afterend", ekey));
+        const oldTr = table.querySelector("tr.ekeys");
+        if (oldTr) oldTr.remove();
+      }
+    });
+  }
 
-      const oldTr = table.querySelector("tr.ekeys");
-      if (oldTr !== null) {oldTr.remove();}
-    }
-  });
+  function refreshLeasesets() {
+    if (!container) return;
+    const url = window.location.href;
+    fetch(url)
+      .then(response => {
+        if (!response.ok) throw new Error("Network response was not ok");
+        return response.text();
+      })
+      .then(html => {
+        const temp = document.createElement("div");
+        temp.innerHTML = html;
+        const newContainer = temp.querySelector(".leasesets_container");
+        if (!newContainer) return;
+        const oldContainer = document.querySelector(".leasesets_container");
+        if (!oldContainer) return;
+        oldContainer.parentNode.replaceChild(newContainer, oldContainer);
+        container = newContainer;
+        compact();
+        lsDebug();
+      })
+      .catch(() => {});
+  }
+
+  compact();
+  lsDebug();
+  setInterval(() => {requestAnimationFrame(refreshLeasesets)}, 15000);
 });
