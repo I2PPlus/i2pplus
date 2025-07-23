@@ -1260,7 +1260,8 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #netdb .netdbentry th code::selection,#netdb .sybil_routerinfo th code::selection,.leaseset th code::selection{color:#fff;background:#070}
 #netdb .netdbStats b{margin-right:2px;margin-left:0;text-align:left;color:var(--ink)}
 #netdb_ram{margin:0 1px 0 0;padding:1.5px 8px;display:inline-block;line-height:1.5;background:var(--badge)}
-#netdb .sybil_routerinfo th code,#netdb .leaseset th code{margin:4px 6px 4px 4px}
+#netdb .sybil_routerinfo th code,#netdb .leaseset th code{margin:4px 0;display:inline-block;vertical-align:middle}
+#netdb .leaseset th code{margin-left:-3px}
 #netdb .version{margin:0 2px;padding:0 8px;vertical-align:middle}
 
 /* netdb routers pagenav */
@@ -1381,6 +1382,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .leaseset .rkey{padding-left:15px;background:var(--routekey) no-repeat left center/15px}
 .leaseset .stype{background:var(--lock) no-repeat left center/12px}
 .leaseset .ekey b,.leaseset .rkey b,.leaseset .rxAsPub b,.leaseset .rxAsRep b,.leaseset .stype b,.leaseset .expiry b, .leaseset .ekey .bullet,.leaseset .expiry .bullet,.leaseset .rkey .bullet,.leaseset .rxAsPub .bullet,.leaseset .rxAsRep .bullet,.leaseset .stype .bullet{display:none}
+.lskey{display:none}
 #netdb .leasesets_container p,#netdb .leasesets_container .confignav{column-span:all}
 #netdb .leasesets_container .confignav{margin-bottom:11px}
 #netdb .yes,#netdb .no{width:16px;height:16px;display:inline-block;vertical-align:middle;font-size:0;background:var(--yes) no-repeat center calc(50% - 1px)/14px}
