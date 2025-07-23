@@ -72,7 +72,7 @@ a{text-decoration:none}
 a:link,a:visited{color:var(--a);text-decoration:none;font-weight:700;word-wrap:break-word;outline:none}
 a:link:hover,a:hover,a:visited:hover,a:visited:focus{color:#f60;text-decoration:none;text-shadow:none}
 a:active,a:visited:active{color:#f30}
-input[type=file],input[type=submit],input[type=reset],button,label,select,.fakebutton,.optbox{font-family:var(--bodyfont);cursor:pointer}
+input[type=file],input[type=submit],input[type=reset],button,label,select,.fakebutton,.optbox{vertical-align:middle;font-family:var(--bodyfont);cursor:pointer}
 input,input:visited,button,button:visited,.fakebutton,.fakebutton:visited{margin:3px;padding:5px;display:inline-block;line-height:1.4;vertical-align:middle;font-size:9pt;color:var(--ink_light);text-decoration:none;text-shadow:var(--txt_shadow);border:var(--border_input);border-radius:2px;box-shadow:var(--btn_shadow);background:var(--btn);background-size:14px,100%;opacity:1;filter:var(--filter_shadow)}
 button a,button a:visited{font-weight:400;color:var(--ink_light)}
 button:hover,input[type=submit]:hover,input[type=reset]:hover,button:focus,input[type=submit]:focus,input[type=reset]:focus,.fakebutton:hover,.fakebutton:visited:hover,.fakebutton:focus,.fakebutton:visited:focus{color:var(--ink_dark);border:1px solid var(--hover);box-shadow:var(--btn_shadow_hover);background:var(--btn_hover);filter:saturate(100%) drop-shadow(0 0 1px rgba(204,204,204,.8));transition:ease border .7s}
@@ -100,7 +100,7 @@ input[type=password]:focus,input[type=text]:focus,.displayText:focus,.freetext:f
 input[type=text][disabled],label[disabled]{color:var(--ink_lighter)}
 label:not([disabled]):hover{color:var(--ink_dark)}
 label[disabled],label[disabled]:hover{opacity:.45}
-select,select[disabled]:hover,select[disabled]:focus{margin:5px;padding:6px 24px 6px 8px;min-width:120px;text-align:left;font:9pt var(--bodyfont);color:var(--ink_light);border:var(--border_input);border-radius:2px;box-shadow:var(--btn_shadow);background:var(--dropdown) no-repeat right 8px center/10px,var(--btn);appearance:none;filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
+select,select[disabled]:hover,select[disabled]:focus{margin:5px;padding:5px 24px 5px 8px;min-width:120px;text-align:left;font:9pt var(--bodyfont);color:var(--ink_light);border:var(--border_input);border-radius:2px;box-shadow:var(--btn_shadow);background:var(--dropdown) no-repeat right 8px center/10px,var(--btn);appearance:none;filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
 select:-moz-focusring{outline:1px solid #0000}
 select option{background:#fff}
 select:hover,select:focus,select:active{color:var(--ink_dark);border:1px solid #868bac}

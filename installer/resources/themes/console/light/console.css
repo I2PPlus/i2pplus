@@ -362,8 +362,7 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 .sb_netstatus.vmcomm::before{background:var(--net_vm) no-repeat center center}
 .sb_netstatus.clockskew::before{background:var(--net_clockskew) no-repeat center center}
 .sb_netstatus.running:not(:hover)::before,.sb_netstatus.hidden:not(:hover)::before,.sb_netstatus.firewalled:not(:hover)::before,.sb_netstatus.testing:not(:hover)::before{background-size:18px}
-.sb_netstatus.testing,.sb_netstatus.running,.sb_netstatus.hidden,.sb_netstatus.firewalled{font-size:0}
-.sb_netstatus.running:hover,.sb_netstatus.hidden:hover,.sb_netstatus.firewalled:hover,.sb_netstatus.testing:hover{font-size:inherit}
+.sb_netstatus::before{font-size:80%}
 #sidebar .firewalled{color:#676;background:repeating-linear-gradient(135deg,rgba(220,255,220,.3) 2px,rgba(255,255,220,.3) 3px,rgba(220,255,220,.3) 5px)}
 #sidebar .error,.tunnelBuildStatus.rejecting{color:#922;box-shadow:inset 0 0 0 1px rgba(200,0,0,.5),0 0 1px rgba(96,96,96,.5);background:repeating-linear-gradient(135deg,rgba(255,100,100,.05) 2px,rgba(255,200,200,.2) 3px,rgba(255,100,100,.05) 5px)}
 #sidebar .warn,#sidebar .clockskew{color:#773;background:rgba(255,255,200,.25);box-shadow:inset 0 0 0 1px #ff0,0 0 1px rgba(96,96,96,.5)}
@@ -1519,8 +1518,6 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 #netdb .netdbentry th{padding-top:2px;padding-bottom:2px}
 #netdb .netdbentry th code,#netdb .sybil_routerinfo th code,#netdb .leaseset th code{margin:2px 5px;padding:2px 6px 2px;width:150px;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;white-space:nowrap;font-weight:600;letter-spacing:.1em;color:#273;text-shadow:none;border:1px solid #bbc;box-shadow:var(--highlight),0 0 0 1px #eef;background:var(--row)}
 #netdb .netdbentry th code,#netdb .leaseset th code{margin-left:2px}
-#netdb .leaseset th code{margin-right:1px}
-#netdb .leaseset th:nth-child(2) code,#netdb .leaseset th:nth-child(2) code:hover{width:auto;letter-spacing:.1em}
 #netdb .netdbentry th code:hover,#netdb .netdbentry th code:active,.leaseset th code:hover,.leaseset th code:active,#netdb .sybil_routerinfo th code:hover,#netdb .sybil_routerinfo th code:active{width:auto;letter-spacing:0}
 #netdb .netdbentry th code::selection,#netdb .sybil_routerinfo th code::selection,.leaseset th code::selection{background:var(--ink_code);color:#fff}
 #netdb .netdbStats .hide,#netdb .netdbStats .cap_stat.hide,#netdb .netdbStats .cap_stat.hide+hr{display:none}
@@ -1601,12 +1598,18 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 .leasesets_container #notinitialized{margin-bottom:2px;column-span:all}
 .leaseset .ekey,.leaseset .rkey,.leaseset .rxAsPub,.leaseset .rxAsRep,.leaseset .stype{margin-left:6px;padding-left:14px;background:var(--crypto) no-repeat left center/12px}
 .leaseset .expiry{margin-left:4px;padding-left:15px;background:var(--clock) no-repeat left calc(50% + 1px)/12px}
-.leaseset .rxAsPub{padding:0 7px 0 17px;background:var(--rap) no-repeat left calc(50% + 1px)/16px}
-.leaseset .rxAsRep{padding:0 7px 0 17px;background:var(--rar) no-repeat left calc(50% + 1px)/16px}
+.leaseset .rxAsPub,.leaseset .rxAsRep{margin-left:2px;padding:0 0 0 17px}
+.leaseset .rxAsPub{background:var(--rap) no-repeat left calc(50% + 1px)/16px}
+.leaseset .rxAsRep{background:var(--rar) no-repeat left calc(50% + 1px)/16px}
 .leaseset .rxAsPub+.bullet,.leaseset .rxAsRep+.bullet{display:none}
+.leaseset .rxAsPub b,.leaseset .rxAsRep b{font-size:0}
 .leaseset .rkey{padding-left:15px;background:var(--routekey) no-repeat left center/15px}
 .leaseset .stype{background:var(--lock) no-repeat left center/12px}
 .leaseset .ekey b,.leaseset .rkey b,.leaseset .stype b,.leaseset .expiry b, .leaseset .ekey .bullet,.leaseset .expiry .bullet,.leaseset .rkey .bullet,.leaseset .rxAsPub .bullet,.leaseset .rxAsRep .bullet,.leaseset .stype .bullet{display:none}
+.lskey{display:none}
+#netdb .leaseset th code{margin:0 0 0 -2px}
+#netdb .leaseset th code:hover{width:fit-content}
+#netdb .leaseset th:nth-child(2) code,#netdb .leaseset th:nth-child(2) code:hover{width:auto;letter-spacing:.1em}
 
 /* highlight linked leaseset */
 .leaseset:target{border:1px solid #5a5}
