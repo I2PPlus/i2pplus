@@ -700,12 +700,14 @@ class NetDbRenderer {
         boolean ffEnabled = netdb.floodfillEnabled();
         if (debug) {buf.append("<table id=leasesetdebug>\n");}
         else if (client == null) {buf.append("<table id=leasesetsummary>\n");}
+
         if (notLocal) {
             buf.append("<tr><th colspan=3>").append(_t("Total Leasesets")).append(": ").append(leases.size()).append("</th>");
             if (debug) {buf.append("<th colspan=2 class=right><a href=\"/netdb?l=1\">").append(_t("Compact mode")).append("</a></th>");}
             else {buf.append("<th class=right><a href=\"/netdb?l=2\">").append(_t("Debug Mode")).append("</a></th>");}
             buf.append("</tr>\n");
         }
+
         if (debug) {
             RouterKeyGenerator gen = _context.routerKeyGenerator();
             if (leases.size() > 0) {
@@ -717,6 +719,7 @@ class NetDbRenderer {
                .append("<tr><td><b>").append(_t("Next Mod Data")).append(":</b></td><td>").append(DataHelper.getUTF8(gen.getNextModData())).append("</td>")
                .append("<td><b>").append(_t("Change in")).append(":</b></td><td>").append(DataHelper.formatDuration(gen.getTimeTillMidnight())).append("</td></tr>\n");
         }
+
         int ff = 0;
         if (client == null) {
             ff = _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL).size();
@@ -726,6 +729,7 @@ class NetDbRenderer {
                    .append(ffEnabled ? "<span class=yes>yes</span>" : "<span class=no>no</span>");
             } else {buf.append("<td colspan=2>");}
         }
+
         if (debug) {buf.append("</td><td><b>").append(_t("Routing Key")).append(":</b></td><td>").append(ourRKey.toBase64());}
         else if (client == null) {buf.append("</td><td colspan=2>");}
         if (notLocal) {buf.append("</td></tr>\n</table>\n");}
@@ -749,23 +753,23 @@ class NetDbRenderer {
                 renderLeaseSet(buf, ls, debug, now, linkSusi, distance);
                 out.append(buf);
                 buf.setLength(0);
-              } // for each
+            } // for each
 
-              if (debug && isFloodfill()) {
-                  if (median != null) {
-                      double log2 = biLog2(median);
-                      // 2 for 4 floodfills... -1 for median - this can be way off for unknown reasons
-                      int total = (int) Math.round(Math.pow(2, 2 + 256 - 1 - log2));
-                      buf.append("<table id=leasesetKeyspace>\n")
-                         .append("<tbody><tr id=medianDistance><td><b>").append(_t("Median distance (bits)")).append(":</b></td><td colspan=3>")
-                         .append(fmt.format(log2)).append("</td></tr>\n")
-                         .append("<tr id=estimatedFF><td><b>").append(_t("Estimated total floodfills")).append(":</b></td><td colspan=3>")
-                         .append(total).append("</td></tr>\n")
-                         .append("<tr id=estimatedLS><td><b>").append(_t("Estimated total leasesets")).append(":</b></td><td colspan=3>")
-                         .append(total * rapCount / 4).append("</td></tr></tbody>\n</table>\n")
-                         .append("<script src=/js/lsDebug.js></script>\n");
-                  }
-              }
+            if (debug && isFloodfill()) {
+                if (median != null) {
+                    double log2 = biLog2(median);
+                    // 2 for 4 floodfills... -1 for median - this can be way off for unknown reasons
+                    int total = (int) Math.round(Math.pow(2, 2 + 256 - 1 - log2));
+                    buf.append("<table id=leasesetKeyspace>\n")
+                       .append("<tbody><tr id=medianDistance><td><b>").append(_t("Median distance (bits)")).append(":</b></td><td colspan=3>")
+                       .append(fmt.format(log2)).append("</td></tr>\n")
+                       .append("<tr id=estimatedFF><td><b>").append(_t("Estimated total floodfills")).append(":</b></td><td colspan=3>")
+                       .append(total).append("</td></tr>\n")
+                       .append("<tr id=estimatedLS><td><b>").append(_t("Estimated total leasesets")).append(":</b></td><td colspan=3>")
+                       .append(total * rapCount / 4).append("</td></tr></tbody>\n</table>\n")
+                       .append("<script src=/js/lsDebug.js></script>\n");
+                }
+            }
         } // !empty
         out.append(buf);
         out.flush();
@@ -925,7 +929,7 @@ class NetDbRenderer {
 
         long exp;
         String bullet = "<span class=bullet>&nbsp; &bullet; &nbsp;</span>";
-        buf.append("<tr><td colspan=2>");
+        buf.append("<tr><td>");
         if (type == DatabaseEntry.KEY_TYPE_LEASESET) {exp = ls.getLatestLeaseDate() - now;}
         else {
             LeaseSet2 ls2 = (LeaseSet2) ls;
@@ -936,6 +940,7 @@ class NetDbRenderer {
         if (exp > 0) {buf.append(_t("Expires{0}", ":</b> " + DataHelper.formatDuration2(exp)).replace(" in", ""));}
         else {buf.append(_t("Expired{0} ago", ":</b> " + DataHelper.formatDuration2(0-exp)));}
         buf.append("</span>");
+
         if (debug) {
             boolean asPublished = ls.getReceivedAsPublished();
             boolean asReply = ls.getReceivedAsReply();
@@ -966,59 +971,43 @@ class NetDbRenderer {
                        .append(ls2.getTransientSigningKey().getType()).append("</span>");
                 }
             }
-            buf.append("</td></tr>\n<tr><td colspan=2><span class=ls_crypto>")
-               .append("<span class=\"nowrap stype\" title=\"").append(_t("Signature type")).append("\">")
-               .append(bullet).append("<b>").append(_t("Signature type")).append(":</b> ");
-            if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
-                buf.append(dest.getSigningPublicKey().getType()).append("</span>");
-            } else {buf.append(ls.getSigningKey().getType()).append("</span>");} // encrypted, show blinded key type
-            if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
-                buf.append("<br><span class=\"nowrap ekey\" title=\"").append(_t("Encryption Key")).append("\">")
-                   .append(bullet).append("<b>").append(_t("Encryption Key"))
-                   .append(":</b> ELGAMAL_2048 [").append(ls.getEncryptionKey().toBase64().substring(0,8))
-                   .append("&hellip;]</span>");
-            } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
-                LeaseSet2 ls2 = (LeaseSet2) ls;
-                for (PublicKey pk : ls2.getEncryptionKeys()) {
-                    buf.append("<br><span class=\"nowrap ekey\" title=\"").append(_t("Encryption Key")).append("\">")
-                       .append(bullet).append("<b>").append(_t("Encryption Key")).append(":</b> ");
-                    EncType etype = pk.getType();
-                    if (etype != null) {buf.append(etype);}
-                    else {buf.append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode());}
-                    buf.append(" [").append(pk.toBase64().substring(0,8)).append("&hellip;]</span>");
-                }
-            }
-            buf.append("</span></td></tr>\n");
-        } else {
-            buf.append(" <span class=\"nowrap stype\" title=\"").append(_t("Signature type")).append("\">").append(bullet)
-               .append("<b>").append(_t("Signature type")).append(":</b> ");
-            if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {buf.append(dest.getSigningPublicKey().getType());}
-            else {buf.append(ls.getSigningKey().getType());} // encrypted, show blinded key type
-            buf.append("</span> ");
-            if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
-                buf.append(" <span class=\"nowrap ekey\" title=\"").append(_t("Encryption Key")).append("\">").append(bullet)
-                   .append("<b>").append(_t("Encryption Key")).append(":</b> <span title=ELGAMAL_2048>ElGamal</span></span>");
-            } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
-                LeaseSet2 ls2 = (LeaseSet2) ls;
-                for (PublicKey pk : ls2.getEncryptionKeys()) {
-                    buf.append(" <span class=\"nowrap ekey\" title=\"").append(_t("Encryption Key")).append("\">").append(bullet)
-                       .append("<b>").append(_t("Encryption Key")).append(":</b> ");
-                    EncType etype = pk.getType();
-                    if (etype != null) {
-                        String enctype = "";
-                        if (etype.toString().trim().equals("ECIES_X25519")) {enctype = "ECIES";}
-                        else if (etype.toString().trim().equals("ELGAMAL_2048")) {enctype = "ElGamal";}
-                        else if (etype.toString().trim().equals("MLKEM512_X25519")) {enctype = "MLKEM512";}
-                        else if (etype.toString().trim().equals("MLKEM768_X25519")) {enctype = "MLKEM768";}
-                        else if (etype.toString().trim().equals("MLKEM1024_X25519")) {enctype = "MLKEM1024";}
-                        buf.append("<span title=\"").append(etype).append("\">").append(enctype).append("</span>");
-                    }
-                    else {buf.append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode());}
-                    buf.append("</span>");
-                }
-            }
-            buf.append("</td></tr>");
         }
+
+        buf.append("</td><td><span class=ls_crypto>")
+           .append("<span class=\"nowrap stype\" title=\"").append(_t("Signature type")).append("\">").append(bullet)
+           .append("<b>").append(_t("Signature type")).append(":</b> ");
+        if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {buf.append(dest.getSigningPublicKey().getType());}
+        else {buf.append(ls.getSigningKey().getType());} // encrypted, show blinded key type
+        buf.append("</span>");
+        buf.append("</td></tr>\n<tr class=ekeys><td colspan=2>");
+        if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
+            buf.append("<span class=\"nowrap ekey\" title=\"").append(_t("Encryption Key")).append("\">").append(bullet)
+               .append("<b>").append(_t("Encryption Key")).append(":</b> <span title=ELGAMAL_2048>ElGamal")
+               .append(debug ? " <span class=encKey>[" + ls.getEncryptionKey().toBase64().substring(0,8) + "&hellip;]<span>" : "")
+               .append("</span></span>");
+        } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
+            LeaseSet2 ls2 = (LeaseSet2) ls;
+            for (PublicKey pk : ls2.getEncryptionKeys()) {
+                EncType etype = pk.getType();
+                buf.append(" <span class=\"nowrap ekey\" title=\"").append(_t("Encryption Key")).append("\">").append(bullet)
+                   .append("<b>").append(_t("Encryption Key")).append(":</b> ");
+                if (etype != null) {
+                    String enctype = "";
+                    if (etype.toString().trim().equals("ECIES_X25519")) {enctype = "ECIES";}
+                    else if (etype.toString().trim().equals("ELGAMAL_2048")) {enctype = "ElGamal";}
+                    else if (etype.toString().trim().equals("MLKEM512_X25519")) {enctype = "MLKEM512";}
+                    else if (etype.toString().trim().equals("MLKEM768_X25519")) {enctype = "MLKEM768";}
+                    else if (etype.toString().trim().equals("MLKEM1024_X25519")) {enctype = "MLKEM1024";}
+                    buf.append("<span title=\"").append(etype).append("\">").append(enctype)
+                       .append(debug ? " <span class=encKey>[" + pk.toBase64().substring(0,8) + "&hellip;]</span>" : "")
+                       .append("</span>");
+                }
+                else {buf.append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode());}
+                buf.append("</span>");
+            }
+        }
+        buf.append("</td></tr>\n");
+
         buf.append("<tr");
         if (debug) {buf.append(" class=debugMode");}
         buf.append("><td colspan=2>\n<ul class=netdb_leases>\n");

@@ -1447,7 +1447,6 @@ span.tier,.netdbentry .ff,.netdbentry .hidden,.netdbentry .reachable,.netdbentry
 .i2pd{margin-right:2px;background:url(/themes/console/images/eepsites/i2pd.svg)}
 .javai2p{margin-right:2px;background:url(/themes/console/images/eepsites/i2p.svg)}
 .netdbentry img{margin:1px 0 0}
-.ls_crypto{display:inline-block;columns:360px 2}
 .netdb_addresses{line-height:1.35}
 .netdb_addresses br:first-child,.sybil_routerinfo tr:last-child td br:first-child{display:none}
 b.netdb_transport{margin-right:3px;display:inline-block}
@@ -1571,7 +1570,6 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 .lsdest.published{padding-left:38px;background:var(--hardhat) no-repeat 4px center/14px,var(--globe) no-repeat 21px center/14px,var(--row)}
 .main li .netdb_expiry{font-weight:400;text-transform:lowercase;font-style:italic}
 .netdb_gateway{margin-left:-3px;margin-right:-3px}
-.netdb_leases{columns:12 100px;column-gap:4px}
 .netdb_leases{margin:0}
 .netdb_leases li{margin:-1px 0;padding:0;display:inline-block;list-style:none}
 .netdb_leases li b:first-child{margin:0;padding:0;min-width:60px;display:inline-block;text-align:right}
@@ -1584,28 +1582,31 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 .addtobook a{vertical-align:middle;font-size:0}
 .addtobook a:hover{filter:drop-shadow(0 0 1px var(--hover))}
 .addtobook a::after{width:16px;height:16px;display:inline-block;vertical-align:middle;background:var(--abook_helper) no-repeat center center/16px;content:""}
-.debugMode .netdb_leases{columns:12 380px;column-gap:4px}
-.debugMode .netdb_leases li{min-width:380px}
 #netdb .leaseset{margin:0 auto 8px;width:calc(100% - 4px);box-shadow:0 0 0 1px #fff,0 0 0 2px #b6b6c9}
-#leasesetdebug{margin-bottom:14px}
-#leasesetdebug th a,table#leasesetsummary th a{font-size:0}
+#leasesetdebug{margin:0 2px 14px;width:calc(100% - 4px);column-span:all;box-shadow:0 0 0 1px #fff,0 0 0 2px #b6b6c9!important}
 #leasesetdebug th,#leasesetsummary th,#leasesetdebug td,#leasesetsummary td{white-space:nowrap}
 #leasesetdebug th,#leasesetsummary th{padding:8px;font-size:11pt;font-weight:700;text-align:left;text-transform:uppercase;letter-spacing:.08em;word-spacing:.1em}
+#leasesetdebug th:last-child,#leasesetsummary th:last-child{text-align:right;font-size:90%}
 #leasesetdebug td:not(.rif):not(.rih),.leaseset td:not(.rif):not(.rih),#leasesetsummary td{padding:5px}
 #leasesetdebug td:not(.rif):not(.rih){border-top:var(--border_inner);border-bottom:var(--border_inner)}
 #leasesetdebug td:not(.rif):not(.rih):nth-child(odd){width:200px;text-align:right;border-right:var(--border_soft);border-right:var(--border_inner)}
 #leasesetdebug td:not(.rif):not(.rih):nth-child(even){text-align:left}
 #leasesetdebug td:not(.rif):not(.rih):nth-child(2){width:1%}
 #leasesetdebug tr:nth-child(n+3) td:nth-child(3){border-left:0}
-#leasesetsummary{margin:11px 0 4px}
+#leasesetsummary{margin:11px 0 14px;column-span:all}
+#leasesetsummary td:empty{display:none}
 #leasesetsummary td:not(.rif):not(.rih):first-child{width:1%}
 #leasesetsummary td:not(.rif):not(.rih):last-child{text-align:left}
 #leasesetsummary td.infohelp{padding:15px 10px 15px 50px;white-space:normal}
 .leasesets_container #notinitialized{margin-bottom:2px;column-span:all}
-.leaseset .ekey,.leaseset .stype{margin-left:6px;padding-left:14px;background:var(--crypto) no-repeat left center/12px}
-.leaseset .expiry{margin-left:4px;padding-left:15px;background:var(--clock) no-repeat left center/12px}
+.leaseset .ekey,.leaseset .rkey,.leaseset .rxAsPub,.leaseset .rxAsRep,.leaseset .stype{margin-left:6px;padding-left:14px;background:var(--crypto) no-repeat left center/12px}
+.leaseset .expiry{margin-left:4px;padding-left:15px;background:var(--clock) no-repeat left calc(50% + 1px)/12px}
+.leaseset .rxAsPub{padding:0 7px 0 17px;background:var(--rap) no-repeat left calc(50% + 1px)/16px}
+.leaseset .rxAsRep{padding:0 7px 0 17px;background:var(--rar) no-repeat left calc(50% + 1px)/16px}
+.leaseset .rxAsPub+.bullet,.leaseset .rxAsRep+.bullet{display:none}
+.leaseset .rkey{padding-left:15px;background:var(--routekey) no-repeat left center/15px}
 .leaseset .stype{background:var(--lock) no-repeat left center/12px}
-.leaseset .ekey b,.leaseset .stype b,.leaseset .expiry b,.leaseset .ekey .bullet,.leaseset .expiry .bullet,.leaseset .stype .bullet{display:none}
+.leaseset .ekey b,.leaseset .rkey b,.leaseset .stype b,.leaseset .expiry b, .leaseset .ekey .bullet,.leaseset .expiry .bullet,.leaseset .rkey .bullet,.leaseset .rxAsPub .bullet,.leaseset .rxAsRep .bullet,.leaseset .stype .bullet{display:none}
 
 /* highlight linked leaseset */
 .leaseset:target{border:1px solid #5a5}

@@ -3033,7 +3033,6 @@ th{font-size:8pt}
 }
 
 @media (min-width:1200px){
-.ls_crypto{display:inline-block;columns:340px 4}
 .tab2{margin-bottom:-1px;padding:5px 12px 6px}
 #changelog pre span{width:calc(100% - 30px)}
 #jobstats tbody td:first-child{padding-left:28px;background:var(--yes) no-repeat 8px center;background-size:12px}

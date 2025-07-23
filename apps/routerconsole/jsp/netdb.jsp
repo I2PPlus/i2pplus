@@ -102,8 +102,7 @@
 <%  } %>
 <%  if (r == null && ls != null || l != null) { %>
 <div class=leasesets_container>
-<%  } %>
-<%
+<%  }
     formhandler.storeWriter(out);
     if (allowIFrame) {formhandler.allowGraphical();}
 %>
@@ -119,6 +118,7 @@
 <noscript><style>body:not(.ready) .lazy{display:table!important}</style></noscript>
 <%  } %>
 <script src=/js/lazyload.js></script>
+<script src=/js/lsCompact.js></script>
 <script src=/js/tablesort/tablesort.js></script>
 <script src=/js/tablesort/tablesort.number.js></script>
 <script src=/js/netdb.js></script>
