@@ -2,7 +2,7 @@
 /* Compact non-debug Leaseset tables and implement auto-refresh */
 /* License: AGPL3 or later */
 
-import {lsDebug} from "/static/lsDebug.js";
+import {lsDebug} from "/js/lsDebug.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   let container = document.querySelector(".leasesets_container");
