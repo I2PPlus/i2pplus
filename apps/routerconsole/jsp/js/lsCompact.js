@@ -3,9 +3,12 @@
 /* License: AGPL3 or later */
 
 import {lsDebug} from "/js/lsDebug.js";
+import {onVisible, onHidden} from "/js/onVisible.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   let container = document.querySelector(".leasesets_container");
+  let refreshInterval = null;
+  let isRefreshing = false;
 
   function compact() {
     if (!container || document.getElementById("leasesetdebug")) return;
@@ -44,7 +47,22 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch(() => {});
   }
 
+  function startRefresh() {
+    if (isRefreshing) {return;}
+    isRefreshing = true;
+    refreshInterval = setInterval(() => {requestAnimationFrame(refreshLeasesets);}, 15000);
+  }
+
+  function stopRefresh() {
+    if (!isRefreshing) {return;}
+    isRefreshing = false;
+    clearInterval(refreshInterval);
+    refreshInterval = null;
+  }
+
   compact();
   lsDebug();
-  setInterval(() => {requestAnimationFrame(refreshLeasesets)}, 15000);
+  onHidden(document.body, () => {stopRefresh();});
+  onVisible(document.body, () => {startRefresh();});
+
 });
