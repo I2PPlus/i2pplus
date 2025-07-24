@@ -973,12 +973,24 @@ class NetDbRenderer {
             }
         }
 
+        String sigtype = "";
+        boolean isLS2 = dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2;
+        String stype = isLS2 ? dest.getSigningPublicKey().getType().toString().trim() :
+                               ls.getSigningKey().getType().toString().trim(); // encrypted, show blinded key type
+        if (stype.equals("EdDSA_SHA512_Ed25519")) {sigtype = "Ed25519";}
+        else if (stype.equals("DSA_SHA1")) {sigtype = "SHA1";}
+        else if (stype.equals("RedDSA_SHA512_Ed25519")) {sigtype = "Red25519";}
+        else if (stype.equals("ECDSA_SHA256_P256")) {sigtype = "ECDSA/P256";}
+        else if (stype.equals("ECDSA_SHA384_P384")) {sigtype = "ECDSA/P384";}
+        else if (stype.equals("ECDSA_SHA512_P521")) {sigtype = "ECDSA/P521";}
+        else if (stype.equals("RSA_SHA256_2048")) {sigtype = "RSA/2048";}
+        else if (stype.equals("RSA_SHA384_3072")) {sigtype = "RSA/3072";}
+        else if (stype.equals("RSA_SHA512_4096")) {sigtype = "RSA/4096";}
+
         buf.append("</td><td><span class=ls_crypto>")
            .append("<span class=\"nowrap stype\" title=\"").append(_t("Signature type")).append("\">").append(bullet)
-           .append("<b>").append(_t("Signature type")).append(":</b> ");
-        if (dest != null && type != DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {buf.append(dest.getSigningPublicKey().getType());}
-        else {buf.append(ls.getSigningKey().getType());} // encrypted, show blinded key type
-        buf.append("</span></span></td></tr>\n<tr class=ekeys><td colspan=2>");
+           .append("<b>").append(_t("Signature type")).append(":</b> <span title=\"").append(stype).append("\">")
+           .append(sigtype).append("</span></span></span></td></tr>\n<tr class=ekeys><td colspan=2>");
 
         if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
             buf.append("<span class=\"nowrap ekey\" title=\"").append(_t("Encryption Key")).append("\">").append(bullet)
@@ -1037,9 +1049,7 @@ class NetDbRenderer {
      */
     public void renderStatusHTML(Writer out, int pageSize, int page, int mode) throws IOException {
         if (!_context.netDb().isInitialized()) {
-            out.write("<div id=notinitialized>");
-            out.write(_t("Not initialized"));
-            out.write("</div>");
+            out.write("<div id=notinitialized>" + _t("Not initialized") + "</div>\n");
             out.flush();
             return;
         }
