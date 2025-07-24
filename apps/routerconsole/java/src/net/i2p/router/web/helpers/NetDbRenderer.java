@@ -950,7 +950,7 @@ class NetDbRenderer {
                 buf.append(" <span class=\"nowrap rxAsRep\" title=\"").append(_t("Received as reply")).append("\"> ").append(bullet)
                    .append("<b>RAR</b></span>");
             }
-            buf.append(' ').append(bullet).append("<b class=distance title=\"").append(_t("Distance")).append("\>")
+            buf.append(' ').append(bullet).append("<b class=distance title=\"").append(_t("Distance")).append("\">")
                .append(_t("Distance")).append(":</b> ").append(distance)
                .append(" <span class=\"nowrap rkey\" title=\"").append(_t("Routing Key")).append("\">")
                .append(bullet).append("<b>").append(_t("Routing Key"))
@@ -983,8 +983,8 @@ class NetDbRenderer {
         if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
             buf.append("<span class=\"nowrap ekey\" title=\"").append(_t("Encryption Key")).append("\">").append(bullet)
                .append("<b>").append(_t("Encryption Key")).append(":</b> <span title=ELGAMAL_2048>ElGamal")
-               .append(debug ? " <span class=pubKey title=\"").append(_t("Public Key"))
-               .append("\">[" + ls.getEncryptionKey().toBase64().substring(0,8) + "&hellip;]</span>" : "")
+               .append(debug ? " <span class=pubKey title=\"" + _t("Public Key") + "\">[" +
+                       ls.getEncryptionKey().toBase64().substring(0,8) + "&hellip;]</span>" : "")
                .append("</span>");
         } else if (type == DatabaseEntry.KEY_TYPE_LS2) {
             LeaseSet2 ls2 = (LeaseSet2) ls;
@@ -1000,8 +1000,8 @@ class NetDbRenderer {
                     else if (etype.toString().trim().equals("MLKEM768_X25519")) {enctype = "MLKEM768";}
                     else if (etype.toString().trim().equals("MLKEM1024_X25519")) {enctype = "MLKEM1024";}
                     buf.append("<span title=\"").append(etype).append("\">").append(enctype)
-                       .append(debug ? " <span class=pubKey title=\"").append(_t("Public Key"))
-                       .append("\">[" + pk.toBase64().substring(0,8) + "&hellip;]</span>" : "")
+                       .append(debug ? " <span class=pubKey title=\"" + _t("Public Key") + "\">[" +
+                               pk.toBase64().substring(0,8) + "&hellip;]</span>" : "")
                        .append("</span>");
                 }
                 else {buf.append(_t("Unsupported type")).append(" ").append(pk.getUnknownTypeCode());}
