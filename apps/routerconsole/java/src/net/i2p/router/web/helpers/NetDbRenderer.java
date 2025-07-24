@@ -988,9 +988,10 @@ class NetDbRenderer {
         else if (stype.equals("RSA_SHA512_4096")) {sigtype = "RSA/4096";}
 
         buf.append("</td><td><span class=ls_crypto>")
-           .append("<span class=\"nowrap stype\" title=\"").append(_t("Signature type")).append("\">").append(bullet)
-           .append("<b>").append(_t("Signature type")).append(":</b> <span title=\"").append(stype).append("\">")
-           .append(sigtype).append("</span></span></span></td></tr>\n<tr class=ekeys><td colspan=2>");
+           .append("<span class=\"nowrap stype\" title=\"").append(_t("Signature type")).append(": ")
+           .append(stype).append("\">").append(bullet).append("<b>").append(_t("Signature type")).append(":</b> ")
+           .append("<span>").append(sigtype).append("</span></span></span></td></tr>\n")
+           .append("<tr class=ekeys><td colspan=2>");
 
         if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
             buf.append("<span class=\"nowrap ekey\" title=\"").append(_t("Encryption Key")).append("\">").append(bullet)
