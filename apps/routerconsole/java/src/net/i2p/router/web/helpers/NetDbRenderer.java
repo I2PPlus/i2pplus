@@ -1022,23 +1022,25 @@ class NetDbRenderer {
         }
         buf.append("</td></tr>\n");
 
-        buf.append("<tr");
-        if (debug) {buf.append(" class=debugMode");}
-        buf.append("><td colspan=2>\n<ul class=netdb_leases>\n");
-        boolean isMeta = ls.getType() == DatabaseEntry.KEY_TYPE_META_LS2;
-        for (int i = 0; i < ls.getLeaseCount(); i++) {
-            Lease lease = ls.getLease(i);
-            long exl = lease.getEndTime() - now;
-            boolean expired = exl <= 0;
-            String expiry = !expired ? _t("Expires in {0}", DataHelper.formatDuration2(exl))
-                                     : _t("Expired {0} ago", DataHelper.formatDuration2(0-exl));
-            buf.append("<li><b").append(" class=\"leaseNumber")
-               .append(expired ? " expired" : "").append("\" title=\"").append(expiry).append("\">")
-               .append(i + 1).append("</b> <span class=tunnel_peer title=Gateway>")
-               .append(_context.commSystem().renderPeerHTML(lease.getGateway(), false))
-               .append("</span></li>\n");
+        if (ls.getLeaseCount() > 0) {
+            buf.append("<tr").append(debug ? " class=debugMode" : "").append(">")
+               .append("<td colspan=2>\n<ul class=netdb_leases>\n");
+            boolean isMeta = ls.getType() == DatabaseEntry.KEY_TYPE_META_LS2;
+            for (int i = 0; i < ls.getLeaseCount(); i++) {
+                Lease lease = ls.getLease(i);
+                long exl = lease.getEndTime() - now;
+                boolean expired = exl <= 0;
+                String expiry = !expired ? _t("Expires in {0}", DataHelper.formatDuration2(exl))
+                                         : _t("Expired {0} ago", DataHelper.formatDuration2(0-exl));
+                buf.append("<li><b").append(" class=\"leaseNumber")
+                   .append(expired ? " expired" : "").append("\" title=\"").append(expiry).append("\">")
+                   .append(i + 1).append("</b> <span class=tunnel_peer title=Gateway>")
+                   .append(_context.commSystem().renderPeerHTML(lease.getGateway(), false))
+                   .append("</span></li>\n");
+            }
+            buf.append("</ul>\n</td></tr>\n");
         }
-        buf.append("</ul>\n</td></tr>\n</table>\n");
+        buf.append("</table>\n");
     }
 
     /**
