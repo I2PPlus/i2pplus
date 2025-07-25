@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -543,7 +544,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     public String getTime() {
-        SimpleDateFormat fmt = new SimpleDateFormat("dd/MM HH:mm:ss");
+        SimpleDateFormat fmt = new SimpleDateFormat("dd/MM HH:mm:ss", Locale.US);
         Long now = System.currentTimeMillis();
         fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
         String date = fmt.format(new Date(now));

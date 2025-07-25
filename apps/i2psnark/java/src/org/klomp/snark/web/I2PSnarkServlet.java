@@ -2465,7 +2465,7 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append("</div></div></div>");
             } else if (remaining == 0) {
                 // needs locale configured for automatic translation
-                SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMM yyyy");
+                SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMM yyyy", Locale.US);
                 fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
                 long[] dates = _manager.getSavedAddedAndCompleted(snark);
                 String date = fmt.format(new Date(dates[1]));
@@ -2507,7 +2507,7 @@ public class I2PSnarkServlet extends BasicServlet {
             } else if (uploaded > 0) {
                 buf.append("<span class=tx title=\"").append(_t("Upload ratio").replace("Upload", "Share"))
                    .append(": ").append(txPercent).append("&#8239;%");
-                SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMM yyyy");
+                SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMM yyyy", Locale.US);
                 fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
                 Storage storage = snark.getStorage();
                 long lastActive = storage.getActivity();
@@ -4042,7 +4042,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
                 long dat = meta.getCreationDate();
                 // needs locale configured for automatic translation
-                SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMMM yyyy");
+                SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMMM yyyy", Locale.US);
                 fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
                 long[] dates = _manager.getSavedAddedAndCompleted(snark);
                 buf.append("<tr id=torrentInfoStats>").append("<td colspan=3><span class=nowrap");
@@ -4908,7 +4908,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("</table>\n");
         int ccount = 0;
         if (iter != null) {
-            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US);
             fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
             buf.append("<table id=userComments>\n");
             while (iter.hasNext()) {
