@@ -702,7 +702,7 @@ class NetDbRenderer {
         else if (client == null) {buf.append("<table id=leasesetsummary>\n");}
 
         if (notLocal) {
-            buf.append("<tr><th colspan=3>").append(_t("Total Leasesets")).append(": ").append(leases.size()).append("</th>");
+            buf.append("<tr><th colspan=2>").append(_t("Total Leasesets")).append(": ").append(leases.size()).append("</th>");
             if (debug) {buf.append("<th colspan=2 class=right><a href=\"/netdb?l=1\">").append(_t("Compact mode")).append("</a></th>");}
             else {buf.append("<th class=right><a href=\"/netdb?l=2\">").append(_t("Debug Mode")).append("</a></th>");}
             buf.append("</tr>\n");
@@ -711,18 +711,17 @@ class NetDbRenderer {
         if (debug) {
             RouterKeyGenerator gen = _context.routerKeyGenerator();
             if (leases.size() > 0) {
-                buf.append("<tr id=rapLS><td><b>").append(_t("Published (RAP) Leasesets")).append(":</b></td><td colspan=4>").append(netdb.getKnownLeaseSets())
+                buf.append("<tr id=rapLS><td><b>").append(_t("Published (RAP) Leasesets")).append("</b></td><td colspan=4>").append(netdb.getKnownLeaseSets())
                    .append(" (").append(_t("Sorted by hash distance, closest first.")).append(")</td></tr>\n");
             }
-            buf.append("<tr><td><b>").append(_t("Mod Data")).append(":</b></td><td>").append(DataHelper.getUTF8(gen.getModData())).append("</td>")
-               .append("<td><b>").append(_t("Last Changed")).append(":</b></td><td>").append(DataHelper.formatTime(gen.getLastChanged())).append("</td></tr>\n")
-               .append("<tr><td><b>").append(_t("Next Mod Data")).append(":</b></td><td>").append(DataHelper.getUTF8(gen.getNextModData())).append("</td>")
-               .append("<td><b>").append(_t("Change in")).append(":</b></td><td>").append(DataHelper.formatDuration(gen.getTimeTillMidnight())).append("</td></tr>\n");
+            buf.append("<tr><td><b>").append(_t("Mod Data")).append("</b></td><td>").append(DataHelper.getUTF8(gen.getModData())).append("</td>")
+               .append("<td><b>").append(_t("Last Changed")).append("</b></td><td>").append(DataHelper.formatTime(gen.getLastChanged())).append("</td></tr>\n")
+               .append("<tr><td><b>").append(_t("Next Mod Data")).append("</b></td><td>").append(DataHelper.getUTF8(gen.getNextModData())).append("</td>")
+               .append("<td><b>").append(_t("Change in")).append("</b></td><td>").append(DataHelper.formatDuration(gen.getTimeTillMidnight())).append("</td></tr>\n");
         }
 
-        int ff = 0;
+
         if (client == null) {
-            ff = _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL).size();
             buf.append("<tr>");
             if (debug) {
                 buf.append("<td><b>").append(_t("Floodfill mode enabled")).append("</b></td><td>")
@@ -730,7 +729,7 @@ class NetDbRenderer {
             } else {buf.append("<td colspan=2>");}
         }
 
-        if (debug) {buf.append("</td><td><b>").append(_t("Routing Key")).append(":</b></td><td>").append(ourRKey.toBase64());}
+        if (debug) {buf.append("</td><td><b>").append(_t("Routing Key")).append("</b></td><td>").append(ourRKey.toBase64());}
         else if (client == null) {buf.append("</td><td colspan=2>");}
         if (notLocal) {buf.append("</td></tr>\n</table>\n");}
 
@@ -756,6 +755,8 @@ class NetDbRenderer {
             } // for each
 
             if (debug && isFloodfill()) {
+                int ffCount = _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL).size();
+                int ffEstimated = Math.max(ffCount*4, 6000);
                 if (median != null) {
                     double log2 = biLog2(median);
                     // 2 for 4 floodfills... -1 for median - this can be way off for unknown reasons
@@ -764,7 +765,7 @@ class NetDbRenderer {
                        .append("<tbody><tr id=medianDistance><td><b>").append(_t("Median distance (bits)")).append(":</b></td><td colspan=3>")
                        .append(fmt.format(log2)).append("</td></tr>\n")
                        .append("<tr id=estimatedFF><td><b>").append(_t("Estimated total floodfills")).append(":</b></td><td colspan=3>")
-                       .append(total).append("</td></tr>\n")
+                       .append(ffEstimated).append("</td></tr>\n")
                        .append("<tr id=estimatedLS><td><b>").append(_t("Estimated total leasesets")).append(":</b></td><td colspan=3>")
                        .append(total * rapCount / 4).append("</td></tr></tbody>\n</table>\n");
                 }
@@ -895,7 +896,7 @@ class NetDbRenderer {
         buf.append(_t("LeaseSet")).append(":</b> <code title =\"")
            .append(_t("LeaseSet Key")).append("\">").append(key.toBase64()).append("</code>");
         if (type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2 || _context.keyRing().get(key) != null) {
-            buf.append(" <b class=encls>(").append(_t("Encrypted")).append(")</b>");
+            buf.append(" <b class=encls>[").append(_t("Encrypted")).append("]</b>");
         }
         buf.append("</th>");
         if (_context.clientManager().isLocal(key)) {
@@ -941,6 +942,7 @@ class NetDbRenderer {
         buf.append("</span>");
 
         if (debug) {
+/*
             boolean asPublished = ls.getReceivedAsPublished();
             boolean asReply = ls.getReceivedAsReply();
             if (asPublished) {
@@ -950,6 +952,7 @@ class NetDbRenderer {
                 buf.append(" <span class=\"nowrap rxAsRep\" title=\"").append(_t("Received as reply")).append("\"> ").append(bullet)
                    .append("<b>RAR</b></span>");
             }
+*/
             buf.append(' ').append(bullet).append("<b class=distance title=\"").append(_t("Distance")).append("\">")
                .append(_t("Distance")).append(":</b> ").append(distance)
                .append(" <span class=\"nowrap rkey\" title=\"").append(_t("Routing Key")).append("\">")

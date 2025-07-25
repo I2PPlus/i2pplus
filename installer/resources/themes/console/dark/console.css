@@ -1340,7 +1340,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .netdb_name{text-transform:capitalize;font-weight:700;color:var(--ink)}
 .netdb_tunnel{margin:0 5px 0 -1px;padding:1px 4px;display:inline-block;border:var(--border_badge);border-radius:2px;box-shadow:var(--outline);background:#020}
 #leasesetsummary{margin:0 0 10px;column-span:all;box-shadow:0 0 0 1px #000,0 0 0 3px #252}
-#leasesetdebug td:nth-child(even){white-space:nowrap;text-align:left}
+#leasesetdebug td:nth-child(even){width:49%;word-break:break-all;text-align:left}
 #leasesetdebug td:nth-child(odd){padding-left:20px;width:1%;white-space:nowrap;text-align:right}
 #leasesetdebug td:not(:last-child){border-right:var(--border_softer)}
 #leasesetdebug th a,#leasesetsummary a{word-spacing:normal;letter-spacing:normal;font-size:9pt;text-transform:capitalize}
@@ -1377,6 +1377,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .distance{margin:0 0 0 4px;height:16px;width:16px;display:inline-block;vertical-align:text-top;font-size:0;background:var(--distance) no-repeat center center/16px}
 .leaseset .ekey,.leaseset .rkey,.leaseset .rxAsPub,.leaseset .rxAsRep,.leaseset .stype{margin-left:6px;padding-left:14px;background:var(--crypto) no-repeat left center/12px}
 .leaseset .expiry{margin-left:4px;padding-left:15px;background:var(--clock) no-repeat left calc(50% + 1px)/12px}
+.leaseset .expiry~.bullet,.lskey{display:none}
 .leaseset .rxAsPub{padding:0 7px 0 17px;background:var(--rap) no-repeat left calc(50% + 1px)/16px;display:none}
 .leaseset .rxAsRep{padding:0 7px 0 17px;background:var(--rar) no-repeat left calc(50% + 1px)/16px;display:none}
 .leaseset .rxAsPub+.bullet,.leaseset .rxAsRep+.bullet{display:none}
@@ -1384,7 +1385,6 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .leaseset .stype{background:var(--lock) no-repeat left center/12px}
 .leaseset .ekey b,.leaseset .rkey b,.leaseset .rxAsPub b,.leaseset .rxAsRep b,.leaseset .stype b,.leaseset .expiry b, .leaseset .ekey .bullet,.leaseset .expiry .bullet,.leaseset .rkey .bullet,.leaseset .rxAsPub .bullet,.leaseset .rxAsRep .bullet,.leaseset .stype .bullet{display:none}
 .leaseset .ekeys td:empty,.leaseset .netdb_leases:empty{display:none}
-.lskey{display:none}
 #netdb .leasesets_container p,#netdb .leasesets_container .confignav{column-span:all}
 #netdb .leasesets_container .confignav{margin-bottom:11px}
 #netdb .yes,#netdb .no{width:16px;height:16px;display:inline-block;vertical-align:middle;font-size:0;background:var(--yes) no-repeat center calc(50% - 1px)/14px}
