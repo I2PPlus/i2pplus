@@ -15,12 +15,16 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import net.i2p.data.DataHelper;
@@ -141,16 +145,17 @@ public class LogBean extends BaseBean
     }
 
     private boolean isToday(String dateStr) {
-        SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH)
+                                                        .withZone(ZoneOffset.UTC);
         try {
-            Date date = sdf.parse(dateStr);
-            LocalDate logDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            Instant instant = Instant.from(formatter.parse(dateStr));
+            LocalDate logDate = instant.atZone(ZoneId.systemDefault()).toLocalDate();
             LocalDate today = LocalDate.now(ZoneId.systemDefault());
             return logDate.equals(today);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        } catch (DateTimeParseException e) {
+            //e.printStackTrace();
             return false;
         }
     }
+
 }
