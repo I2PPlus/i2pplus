@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const sigText = Object.entries(signatureCounts)
       .sort()
-      .map(([type, count]) => `&bullet; ${type} (${count})`)
+      .map(([type, count]) => `&bullet; <span class=lsLabel>${type}</span> (${count})`)
       .join(" &nbsp;");
     const sigValueCell = document.createElement("td");
     sigValueCell.innerHTML = sigText;
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const encText = Object.entries(encryptionCounts)
       .sort()
-      .map(([type, count]) => `&bullet; ${type} (${count})`)
+      .map(([type, count]) => `&bullet; <span class=lsLabel>${type}</span> (${count})`)
       .join(" &nbsp;");
     const encValueCell = document.createElement("td");
     encValueCell.innerHTML = encText;
@@ -89,6 +89,13 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll("#leasesetdebug b").forEach(b => {
       b.textContent = b.textContent.replace(/:\s*$/g, "");
     });
+  }
+
+  function styleLabels() {
+    const style = document.createElement("style");
+    style.type = "text/css";
+    style.textContent = ".lsLabel {font-weight:500}";
+    document.head.appendChild(style);
   }
 
   function refreshLeasesets() {
@@ -114,6 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
         compact();
         lsDebug();
         countTypes();
+        styleLabels();
         progressx.progress(1);
         setTimeout(() => {progressx.hide();}, 100);
       })
@@ -136,6 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
   compact();
   lsDebug();
   countTypes();
+  styleLabels();
   onHidden(document.body, () => {stopRefresh();});
   onVisible(document.body, () => {startRefresh();});
 

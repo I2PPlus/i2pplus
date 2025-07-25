@@ -889,8 +889,8 @@ class NetDbRenderer {
         int type = ls.getType();
         NetworkDatabaseFacade subDbKey = key != null ? _context.clientNetDb(key): null;
         if (key != null) {
-            buf.append("<table class=\"leaseset lazy\" id=\"ls_").append(key.toBase32().substring(0,4)).append("\">");
-        } else {buf.append("<table class=\"leaseset lazy\">");}
+            buf.append("<table class=\"leaseset").append(!debug ? " lazy" : "").append("\" id=\"ls_").append(key.toBase32().substring(0,4)).append("\">");
+        } else {buf.append("<table class=\"leaseset").append(!debug ? " lazy" : "").append("\">");}
         buf.append("<tr><th><b class=lskey>");
         if (type == DatabaseEntry.KEY_TYPE_META_LS2) {buf.append(_t("Meta"));}
         buf.append(_t("LeaseSet")).append(":</b> <code title =\"")

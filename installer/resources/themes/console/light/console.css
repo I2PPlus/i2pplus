@@ -1610,6 +1610,8 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 #netdb .leaseset th code{margin:0 0 0 -2px}
 #netdb .leaseset th code:hover{width:fit-content}
 #netdb .leaseset th:nth-child(2) code,#netdb .leaseset th:nth-child(2) code:hover{width:auto;letter-spacing:.1em}
+.lsDebugLabel{margin:0 8px 0 0;padding:2px 6px 2px 4px;white-space:nowrap;box-shadow:var(--bevel);background:var(--badge)}
+.lsLabelType{font-weight:500}
 
 /* highlight linked leaseset */
 .leaseset:target{border:1px solid #5a5}

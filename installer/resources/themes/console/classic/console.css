@@ -1249,7 +1249,7 @@ p.family a{display:inline-block}
 .leaseset th{padding:5px;text-align:left;font-weight:400}
 .leaseset:last-child{margin-bottom:5px}
 .leaseset{margin:5px 0 10px;font-size:9pt}
-.leaseset:first-of-type{margin-top:0}
+#leasesetdebug+.leaseset,#leasesetsummary+.leaseset{margin-top:0}
 .lsdest,.leaseset a[href$="i2p/"],.leaseset a[href$="i2p"]{font-size:90%}
 .lsdest,.leaseset th:last-child a[href$="i2p/"]{margin-left:3px;padding:3px 4px;display:inline-block;vertical-align:text-top;border:1px solid var(--border_badge);border-radius:2px;background:var(--badge)}
 .lsdest{padding-left:22px;line-height:1;border-radius:0;border-left-width:4px;border-right-width:4px;background:var(--hardhat) no-repeat 4px center/14px,var(--badge)}
@@ -1264,18 +1264,19 @@ p.family a{display:inline-block}
 .netdb_leases .tunnel_peer{margin-bottom:2px}
 .netdb_leases .tunnel_peer tt{margin:0 3px 0 0}
 .netdb_tunnel{display:inline-block;vertical-align:middle}
-#leasesetdebug,#leasesetsummary{font-size:9pt}
+#leasesetdebug,#leasesetsummary{font-size:9pt;column-span:all}
 #leasesetsummary{margin-top:15px;margin-bottom:10px}
 #leasesetsummary td:first-child{width:50px;white-space:nowrap}
 #leasesetsummary tr:last-child td:last-child{text-align:left}
 #leasesetdebug{margin-bottom:10px}
 #leasesetdebug th,#leasesetsummary th{padding:8px 5px;text-align:left;font-weight:700}
 #leasesetdebug th:first-child,#leasesetsummary th:first-child{font-size:10pt}
-#leasesetdebug th a,#leasesetsummary th a{word-spacing:normal;letter-spacing:normal;text-transform:capitalize;font-size:0}
+#leasesetdebug th:last-child,#leasesetsummary th:last-child{text-align:right;font-size:85%;border-right:var(--border)}
+#leasesetdebug th a,#leasesetsummary th a{word-spacing:normal;letter-spacing:normal;text-transform:capitalize}
 #leasesetdebug td,#leaseset td{padding:5px}
-#leasesetdebug td:nth-child(even){white-space:nowrap;text-align:left}
-#leasesetdebug td:nth-child(odd){width:200px;white-space:nowrap;text-align:right;border-right:var(--border_softer)}
-#leasesetdebug td:nth-child(2){width:10px}
+#leasesetdebug td:nth-child(even){width:49%;word-break:break-word;text-align:left}
+#leasesetdebug td:nth-child(odd){width:1%;white-space:nowrap;text-align:right;border-right:var(--border_softer)}
+#leasesetsummary td:empty{display:none}
 #netdb .debugMode .netdb_leases{margin-right:12px;columns:auto 380px;column-gap:4px;break-inside:avoid}
 #netdb .leasesets_container .confignav{margin:-16px -16px 16px !important;column-span:all}
 #netdb .netdb_leases{margin-left:0;columns:8 104px;column-gap:2px}

@@ -423,14 +423,12 @@ p:empty+.sb_notice{margin-top:10px}
 .sb_netstatus.testing::before{background:var(--net_starting) no-repeat center center}
 .sb_netstatus.hidden::before{background:var(--net_hidden) no-repeat center center}
 .sb_netstatus.running::before{background:var(--net_ok) no-repeat center center}
-.sb_netstatus.running.floodfill::before{width:40px;background:var(--net_ok) no-repeat left center,var(--floodfill) no-repeat right center!important}
+.sb_netstatus.running.floodfill::before{width:40px;vertical-align:middle;background:var(--net_ok) no-repeat left center,var(--floodfill) no-repeat right center!important}
 .sb_netstatus.firewalled::before{background:var(--net_firewalled) no-repeat center center}
 .sb_netstatus.vmcomm::before{background:var(--net_vm) no-repeat center center}
 .sb_netstatus.clockskew::before{background:var(--net_clockskew) no-repeat center center}
 .sb_netstatus.running:not(:hover)::before,.sb_netstatus.hidden:not(:hover)::before,.sb_netstatus.firewalled:not(:hover)::before,.sb_netstatus.testing:not(:hover)::before{background-size:18px}
 .sb_netstatus.testing,.sb_netstatus.running,.sb_netstatus.hidden,.sb_netstatus.firewalled{font-size:0}
-.sb_netstatus.running:hover,.sb_netstatus.hidden:hover,.sb_netstatus.firewalled:hover,.sb_netstatus.testing:hover{font-size:inherit}
-.sb_netstatus:hover #ffenabled{margin:2px;padding:1px 3px;display:inline-block;white-space:nowrap;border-radius:1px;background:#020}
 
 /* tunnel build status */
 .tunnelBuildStatus{font-size:90%;color:#393}
@@ -458,7 +456,7 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 .sb_icon,#sb_internals.collapsed,#sb_services.collapsed,#sb_advanced.collapsed{display:none}
 #sb_updatesection.collapsed>*:not(h3){display:none}
 #sb_updatesection h3.collapsed a::after{content:"*"}
-#sidebar h3 a .badge,#tunnelCount,#newsCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;background:var(--badge);font-size:85%;padding:2px 5px 1px;display:inline-block;box-shadow:0 0 0 1px #26235c,0 0 0 1px #000 inset}
+#sidebar h3 a .badge,#lsCount,#tunnelCount,#newsCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;background:var(--badge);font-size:85%;padding:2px 5px 1px;display:inline-block;vertical-align:middle;box-shadow:0 0 0 1px #26235c,0 0 0 1px #000 inset}
 #sidebar h3 .badge:empty,#sidebar #newsCount:empty,#sidebar #tunnelCount:empty{display:none}
 #sidebar td .badge:empty::after{display:inline;content:"---"}
 #sidebar h3 a[href="/info"] .badge{text-transform:none}
@@ -1650,19 +1648,17 @@ span#distance{color:#d6fffd}
 .leaseset th:last-child,.leaseset td:nth-child(2){text-align:right;padding-right:5px}
 .leaseset td:first-child img{margin-left:3px;margin-right:2px;vertical-align:middle}
 .viewfullentry,.viewprofile,.configpeer{font-size:0}
-#leasesetdebug{margin:-4px 0 10px}
+#leasesetdebug,#leasesetsummary{margin:12px 0 10px;column-span:all}
 #netdb .netdbentry tr:nth-child(2) td:nth-child(2){border-right:0!important}
-.leaseset+#leasesetdebug{column-span:all;margin:10px 0 0}
 #leasesetdebug th,#leasesetsummary th{font-weight:700;text-transform:uppercase;font-size:10pt;letter-spacing:.08em;word-spacing:.1em;padding:8px 10px}
+#leasesetdebug th:last-child,#leasesetsummary th:last-child{border-right:var(--border)}
 #leasesetdebug th a,#leasesetsummary a{font-size:9pt;text-transform:capitalize;letter-spacing:normal;word-spacing:normal}
-#leasesetsummary td:first-child{width:100px;white-space:nowrap;padding-left:10px}
 #leasesetdebug th:first-child,#leasesetsummary th:first-child{text-align:left;white-space:nowrap}
-#leasesetdebug td:nth-child(odd){width:200px;white-space:nowrap;text-align:right;border-right:1px inset #120f35}
-#leasesetdebug td:nth-child(even){text-align:left;white-space:nowrap}
-#leasesetdebug td:nth-child(2){width:10px}
-#leasesetdebug th a,#leasesetsummary th a{font-size:0}
+#leasesetdebug td:nth-child(odd){width:1%;white-space:nowrap;text-align:right;border-right:1px inset #120f35}
+#leasesetdebug td:nth-child(even){width:24%;text-align:left;word-break:break-word}
+#leasesetsummary td:first-child{width:100px;white-space:nowrap;padding-left:10px}
+#leasesetsummary td:empty{display:none}
 #noleasesets,#notinitialized,.netdbnotfound{margin-top:-4px;margin-bottom:10px;padding:20px 25px 20px 55px;text-align:left;font-weight:700;border:var(--border_inner);background:#000 var(--infohelp) no-repeat 15px center/28px}
-#leasesetsummary{margin-top:-4px;margin-bottom:10px}
 
 /* infohelp/warn */
 .infohelp,#helptranslate,#consolepass tr:first-child td,#gatherstats{white-space:normal;line-height:1.4;box-shadow:var(--highlight),inset 0 0 2px 1px #606}

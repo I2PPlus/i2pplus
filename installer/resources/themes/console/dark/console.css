@@ -430,7 +430,7 @@ div[id^="config_"].main{padding-bottom:14px}
 /* top navigation */
 .confignav{margin:-1px -11px -1px;padding:7px 7px 8px;position:relative;font-weight:700;line-height:1.36;text-align:center;box-shadow:var(--bevel);background:var(--topnav);contain:none!important}
 .confignav::after{position:absolute;left:2px;bottom:-3px;width:calc(100% - 4px);height:1px;display:inline-block;background:#0c250c;content:""}
-.tab,.tab2{margin:0 -3px -1px -3px;padding:1px 0 2px;min-width:60px;display:inline-block;position:relative;box-sizing:border-box;vertical-align:middle;background:#000}
+.tab,.tab2{margin:0 -3px -1px -3px;padding:1px 0 2px;min-width:60px;display:inline-block;position:relative;box-sizing:border-box;vertical-align:middle;background:#000;transition:ease .15s all}
 .tab{box-shadow:var(--bevel_cell);background:var(--glow_top),linear-gradient(180deg,#002900,#000400)}
 .tab a{padding:4px 14px;display:inline-block;text-shadow:var(--textshadow)}
 .tab:hover,#sidebar h3:hover{background:radial-gradient(at center bottom,rgba(128,0,0,.5) 0,#0000 130%),var(--tab_hover);box-shadow:var(--highlight),inset 0 0 0 2px rgba(128,48,0,.6)}
@@ -1340,7 +1340,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .netdb_name{text-transform:capitalize;font-weight:700;color:var(--ink)}
 .netdb_tunnel{margin:0 5px 0 -1px;padding:1px 4px;display:inline-block;border:var(--border_badge);border-radius:2px;box-shadow:var(--outline);background:#020}
 #leasesetsummary{margin:0 0 10px;column-span:all;box-shadow:0 0 0 1px #000,0 0 0 3px #252}
-#leasesetdebug td:nth-child(even){width:49%;word-break:break-all;text-align:left}
+#leasesetdebug td:nth-child(even){width:24%;word-break:break-all;text-align:left}
 #leasesetdebug td:nth-child(odd){padding-left:20px;width:1%;white-space:nowrap;text-align:right}
 #leasesetdebug td:not(:last-child){border-right:var(--border_softer)}
 #leasesetdebug th a,#leasesetsummary a{word-spacing:normal;letter-spacing:normal;font-size:9pt;text-transform:capitalize}
@@ -1385,6 +1385,8 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .leaseset .stype{background:var(--lock) no-repeat left center/12px}
 .leaseset .ekey b,.leaseset .rkey b,.leaseset .rxAsPub b,.leaseset .rxAsRep b,.leaseset .stype b,.leaseset .expiry b, .leaseset .ekey .bullet,.leaseset .expiry .bullet,.leaseset .rkey .bullet,.leaseset .rxAsPub .bullet,.leaseset .rxAsRep .bullet,.leaseset .stype .bullet{display:none}
 .leaseset .ekeys td:empty,.leaseset .netdb_leases:empty{display:none}
+.lsDebugLabel{margin:0 8px 0 0;padding:2px 8px 2px 2px;white-space:nowrap;background:var(--badge)}
+.lsLabelType{font-weight:500}
 #netdb .leasesets_container p,#netdb .leasesets_container .confignav{column-span:all}
 #netdb .leasesets_container .confignav{margin-bottom:11px}
 #netdb .yes,#netdb .no{width:16px;height:16px;display:inline-block;vertical-align:middle;font-size:0;background:var(--yes) no-repeat center calc(50% - 1px)/14px}
