@@ -94,7 +94,8 @@ document.addEventListener("DOMContentLoaded", () => {
   function styleLabels() {
     const style = document.createElement("style");
     style.type = "text/css";
-    style.textContent = ".lsLabel {font-weight:500}";
+    style.id = "lsLabels";
+    style.textContent = ".lsLabel{font-weight:500}";
     document.head.appendChild(style);
   }
 
@@ -109,6 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return response.text();
       })
       .then(html => {
+        const lsLabels = document.getElementById("lsLabels");
         const temp = document.createElement("div");
         temp.innerHTML = html;
         const newContainer = temp.querySelector(".leasesets_container");
@@ -121,7 +123,7 @@ document.addEventListener("DOMContentLoaded", () => {
         compact();
         lsDebug();
         countTypes();
-        styleLabels();
+        if (!lsLabels) {styleLabels();}
         progressx.progress(1);
         setTimeout(() => {progressx.hide();}, 100);
       })
