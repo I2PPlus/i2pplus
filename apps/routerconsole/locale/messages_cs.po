@@ -2855,7 +2855,7 @@ msgstr ""
 msgid "Compact mode"
 msgstr ""
 
-msgid "Total Leasesets"
+msgid "Total Remote Leasesets"
 msgstr ""
 
 msgid "Published (RAP) Leasesets"

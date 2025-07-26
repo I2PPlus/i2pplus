@@ -165,7 +165,6 @@ p:empty+.sb_notice{margin-top:7px}
 #sidebar .hidden,#sidebar .vmcomm,.tunnelBuildStatus.hidden{background:rgba(220,220,220,.4)}
 #sidebar .firewalled{box-shadow:var(--highlight),inset 0 0 0 2px rgba(96,96,255,.2);background:repeating-linear-gradient(135deg,rgba(220,255,220,.3) 2px,rgba(255,255,220,.3) 3px,rgba(220,255,220,.3) 5px)}
 .sb_netstatus,.tunnelBuildStatus{margin:-6px 0 -3px;padding:6px 5px;width:calc(100% - 12px);display:inline-block;vertical-align:text-bottom;line-height:1.2;text-shadow:0 1px 1px var(--bg);border:var(--border);box-shadow:var(--highlight),0 0 1px rgba(96,96,96,.5)}
-.sb_netstatus.testing,.sb_netstatus.running,.sb_netstatus.hidden,.sb_netstatus.firewalled{font-size:0}
 .sb_netstatus.running:hover,.sb_netstatus.hidden:hover,.sb_netstatus.firewalled:hover,.sb_netstatus.testing:hover{font-size:inherit}
 .sb_netstatus::before{margin:0 4px 0 -4px;height:18px;width:18px;vertical-align:middle;display:inline-block;content:""}
 .sb_netstatus.error::before{background:var(--net_error) no-repeat center center}
@@ -183,7 +182,7 @@ p:empty+.sb_notice{margin-top:7px}
 
 /* netstatus tooltip */
 .sb_netstatus #netstatus{display:none;line-height:1}
-.sb_netstatus:hover #netstatus{margin:0 auto;padding:2px 5px;width:fit-content;display:block;position:absolute;z-index:999;top:-14px;left:0;right:0;box-shadow:var(--highlight),0 0 0 1px #bbc;background:var(--badge);animation:fade .15s ease .15s reverse both}
+.sb_netstatus:hover #netstatus{margin:0 auto;padding:2px 5px;width:fit-content;display:inline-block;position:absolute;z-index:999;top:-14px;left:0;right:0;box-shadow:var(--highlight),0 0 0 1px #bbc;background:var(--badge);animation:fade .15s ease .15s reverse both}
 .sb_netstatus:hover #netstatus::after{width:0;height:0;display:inline-block;position:absolute;bottom:-6px;left:calc(50% - 3px);border-style:solid;border-color:#bbc #0000 #0000;border-width:6px 6px 0;content:""}
 
 /* tunnel build status */
@@ -294,7 +293,7 @@ h3:hover .toggleSection{display:inline-block}
 #sb_services.collapsed td,#sb_internals.collapsed td,#sb_advanced.collapsed td{justify-content:space-evenly}
 #sidebar .sb_icon{margin:0 1px}
 #sidebar table.collapsed+hr{display:block}
-#lsCount,.sb_netstatus:hover #lsCount{margin:0;display:inline-block;vertical-align:middle;font-size:8pt!important;color:var(--ink)}
+#lsCount,.sb_netstatus:hover #lsCount{font-size:8pt!important;color:var(--ink)}
 
 /* buttons & inputs */
 button:hover,input[type=submit]:hover,input[type=reset]:hover{color:var(--ink);background:var(--btn_hover)}
@@ -1270,12 +1269,12 @@ p.family a{display:inline-block}
 #leasesetsummary tr:last-child td:last-child{text-align:left}
 #leasesetdebug{margin-bottom:10px}
 #leasesetdebug th,#leasesetsummary th{padding:8px 5px;text-align:left;font-weight:700}
-#leasesetdebug th:first-child,#leasesetsummary th:first-child{font-size:10pt}
+#leasesetdebug th:first-child,#leasesetsummary th:first-child{font-size:10pt;text-transform:uppercase;letter-spacing:.08em}
 #leasesetdebug th:last-child,#leasesetsummary th:last-child{text-align:right;font-size:85%;border-right:var(--border)}
 #leasesetdebug th a,#leasesetsummary th a{word-spacing:normal;letter-spacing:normal;text-transform:capitalize}
 #leasesetdebug td,#leaseset td{padding:5px}
-#leasesetdebug td:nth-child(even){width:49%;word-break:break-word;text-align:left}
-#leasesetdebug td:nth-child(odd){width:1%;white-space:nowrap;text-align:right;border-right:var(--border_softer)}
+#leasesetdebug td:nth-child(even),#leasesetsummary td:nth-child(even){width:49%;word-break:break-word;text-align:left}
+#leasesetdebug td:nth-child(odd),#leasesetsummary td:nth-child(odd){width:1%;white-space:nowrap;text-align:right;border-right:var(--border_softer)}
 #leasesetsummary td:empty{display:none}
 #netdb .debugMode .netdb_leases{margin-right:12px;columns:auto 380px;column-gap:4px;break-inside:avoid}
 #netdb .leasesets_container .confignav{margin:-16px -16px 16px !important;column-span:all}
@@ -2465,10 +2464,10 @@ a.graphstat{margin-right:2px;font-size:90%}
 #stats ul.statlist{margin-top:10px;padding-bottom:0;width:100%;border:0;background:none}
 }
 @media (min-width:1500px){
-body,.main,.main td,.news p,#news p,.tab,.tab2,.main li b,.joblog li,.themelabel,.ui_lang,.statusnotes,#sidebar button.download,#consolepass td,#peerdefs,#profile_defs,#thresholds,#configinfo,.infohelp,.infowarn,button,input,select,textarea,.configtable th,.netdbentry th,.sitemapLabel,.statlist a[name],.statlist b,.statlist li b,.statlist a[name]:hover,div.messages,th,label,input,input[type=submit],input[type=reset],button,.fakebutton{font-size:10pt}
+body,.main,.main td,.news p,#news p,.tab,.tab2,.main li b,.joblog li,.statusnotes,#sidebar button.download,#consolepass td,#peerdefs,#profile_defs,#thresholds,#configinfo,.infohelp,.infowarn,button,input,select,textarea,.configtable th,.netdbentry th,.statlist a[name],.statlist b,.statlist li b,.statlist a[name]:hover,div.messages,th,label,input,input[type=submit],input[type=reset],button,.fakebutton{font-size:10pt}
 body{overflow-x:hidden}
 button.control{padding:14px}
-code,pre,tt,tt a,.applabel a,.bucket,.tabletextarea textarea,#logs li,#routerlogs li,#servicelogs li,#updateAvailable{font-size:9.5pt}
+code,pre,tt,tt a,.applabel a,.bucket,.tabletextarea textarea,.sitemapLabel,.themelabel,.ui_lang,#logs li,#routerlogs li,#servicelogs li,#updateAvailable{font-size:9.5pt}
 div.news{padding-bottom:5px}
 div.news,.cells tt,.flag+tt,.footnote,.news #newsDisplay,.news #newsStatus,.sb_notice,.topness,#banlist li,#help code,#help tt,#profilelist tt,#sidebar a,#sidebar button,#sidebar h4,#sidebar h4 a,#sidebar td{font-size:9pt}
 h1,.main,.news,#warning{margin-left:252px}
@@ -2506,7 +2505,6 @@ h4#updateplugins{margin-top:-16px;padding:5px 10px;font-size:10pt}
 #jardump td{font-size:9pt}
 #jardump tt{font-size:8pt}
 #leasesetdebug th,#leasesetsummary th{font-size:11pt}
-#lsCount,.sb_netstatus:hover #lsCount{font-size:8.5pt!important}
 #netconfig label::before{min-height:36px}
 #netdb h3.tabletitle,h3.sybils{font-size:10.5pt}
 #netdb .netdb_leases img[src^="/flags"]{margin:-1px -2px 1px -7px}

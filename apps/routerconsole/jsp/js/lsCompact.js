@@ -26,8 +26,16 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function countTypes() {
-    const debugTable = document.getElementById("leasesetdebug");
-    if (!debugTable) return;
+    const summary = document.getElementById("leasesetdebug") || document.getElementById("leasesetsummary");
+    if (!summary) return;
+
+    const localSummary = document.querySelector("#leasesetsummary.local");
+    if (localSummary) {
+      localSummary.removeAttribute("hidden");
+      const lsLocalCount = document.getElementById("lsLocalCount");
+      const count = document.querySelectorAll(".leaseset").length;
+      lsLocalCount.textContent = count;
+    }
 
     const signatureCounts = {};
     document.querySelectorAll("span.nowrap.stype").forEach(span => {
@@ -53,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    const tbody = debugTable.querySelector("tbody") || debugTable;
+    const tbody = summary.querySelector("tbody") || summary;
     const existingRow = tbody.querySelector("#sigEncCount");
     if (existingRow) existingRow.remove();
 
@@ -85,10 +93,6 @@ document.addEventListener("DOMContentLoaded", () => {
     row.appendChild(encCell);
     row.appendChild(encValueCell);
     tbody.appendChild(row);
-
-    document.querySelectorAll("#leasesetdebug b").forEach(b => {
-      b.textContent = b.textContent.replace(/:\s*$/g, "");
-    });
   }
 
   function styleLabels() {

@@ -68,6 +68,7 @@ class NetDbRenderer {
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
     public static final int LOOKUP_WAIT = 8 * 1000;
     public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}
+    public int localLSCount;
 
     /**
      *  Inner class, can't be Serializable
@@ -670,7 +671,7 @@ class NetDbRenderer {
         NetworkDatabaseFacade netdb;
         Set<LeaseSet> leases;
         boolean notLocal = (client == null || debug);
-        int localLSCount = 0;
+        localLSCount = 0;
 
         if (client == null) {netdb = _context.netDb();}
         else {netdb = _context.clientNetDb(client);}
@@ -702,11 +703,16 @@ class NetDbRenderer {
         else if (client == null) {buf.append("<table id=leasesetsummary>\n");}
 
         if (notLocal) {
-            buf.append("<tr><th colspan=2>").append(_t("Total Leasesets")).append(": ").append(leases.size()).append("</th>");
-            if (debug) {buf.append("<th colspan=2 class=right><a href=\"/netdb?l=1\">").append(_t("Compact mode")).append("</a></th>");}
-            else {buf.append("<th class=right><a href=\"/netdb?l=2\">").append(_t("Debug Mode")).append("</a></th>");}
-            buf.append("</tr>\n");
-        }
+            buf.append("<tr><th colspan=2>").append(_t("Total Remote Leasesets")).append(": ").append(leases.size()).append("</th>");
+            if (debug) {
+                buf.append("<th colspan=2 class=right><a href=\"/netdb?l=1\">").append(_t("Compact mode"))
+                    .append("</a> | <a href=\"/netdb?l=3\">").append(_t("Local Leasesets")).append("</a>");
+            } else {
+                buf.append("<th colspan=2 class=right><a href=\"/netdb?l=2\">").append(_t("Debug Mode"))
+                   .append("</a> | <a href=\"/netdb?l=3\">").append(_t("Local Leasesets")).append("</a>");
+            }
+            buf.append("</th></tr>\n");
+        } else {renderLocalSummary(out);}
 
         if (debug) {
             RouterKeyGenerator gen = _context.routerKeyGenerator();
@@ -719,7 +725,6 @@ class NetDbRenderer {
                .append("<tr><td><b>").append(_t("Next Mod Data")).append("</b></td><td>").append(DataHelper.getUTF8(gen.getNextModData())).append("</td>")
                .append("<td><b>").append(_t("Change in")).append("</b></td><td>").append(DataHelper.formatDuration(gen.getTimeTillMidnight())).append("</td></tr>\n");
         }
-
 
         if (client == null) {
             buf.append("<tr>");
@@ -773,6 +778,19 @@ class NetDbRenderer {
         } // !empty
         out.append(buf);
         out.flush();
+    }
+
+    boolean isRendered = false;
+
+    public void renderLocalSummary(Writer out) throws IOException {
+        StringBuilder buf = new StringBuilder(1024);
+        if (isRendered) {return;}
+        buf.append("<table id=leasesetsummary class=local hidden>\n<tr><th colspan=2>").append(_t("Total Local Leasesets"))
+           .append(": <span id=lsLocalCount></span></th>")
+           .append("<th colspan=2 class=right><a href=\"/netdb?l=1\">").append(_t("Remote Leasesets")).append("</a></th></tr></table>\n");
+        out.append(buf);
+        out.flush();
+        isRendered = true;
     }
 
 /** WIP
@@ -831,6 +849,7 @@ class NetDbRenderer {
         return matchedLeases;
     }
 **/
+
     /**
      * Single LeaseSet
      * @since 0.9.57
@@ -1466,13 +1485,13 @@ class NetDbRenderer {
             buf.append("<a class=configpeer href=\"/configpeer?peer=").append(hash)
                .append("\" title=\"").append(_t("Configure peer"))
                .append("\">").append(_t("Edit")).append("</a>")
-               .append(_context.commSystem().renderPeerFlag(h));
+               .append(_context.commSystem().renderPeerFlag(h)).append("</span>");
         } else {
             long used = (long) _context.statManager().getRate("router.memoryUsed").getRate(60*1000).getAvgOrLifetimeAvg();
             used /= 1024*1024;
             buf.append("&nbsp;<span id=netdb_ram><b>").append(_t("Memory usage")).append(":</b> ").append(used).append("M</span>");
         }
-        buf.append("</span></th></tr>\n<tr>");
+        buf.append("</th></tr>\n<tr>");
         long age = _context.clock().now() - info.getPublished();
         if (isUs && _context.router().isHidden()) {
             buf.append("<td><b>").append(_t("Hidden")).append(", ").append(_t("Updated")).append(":</b></td>")
@@ -1485,7 +1504,6 @@ class NetDbRenderer {
                .append(_t("{0} ago", DataHelper.formatDuration2(age)))
                .append("</span>&nbsp;&nbsp;");
             String address = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info));
-            //String caps = DataHelper.stripHTML(info.getCapabilities());
             boolean isUnreachable = caps.contains("U") || caps.contains("H");
             long uptime = _context.router().getUptime();
             if (enableReverseLookups() && uptime > 30*1000 && !isUnreachable && address != null) {
@@ -1517,8 +1535,7 @@ class NetDbRenderer {
                     }
                 }
             }
-         } else {
-            // shouldn't happen
+         } else { // shouldn't happen
             buf.append("<td><b>").append(_t("Published")).append("</td><td>:</b> in ")
                .append(DataHelper.formatDuration2(0-age)).append("<span class=netdb_info>???</span>&nbsp;&nbsp;");
         }
@@ -1577,14 +1594,11 @@ class NetDbRenderer {
                 // Separate host, port, mtu, and caps from others
                 for (Map.Entry<Object, Object> e : p.entrySet()) {
                     String name = (String) e.getKey();
-                    if (name.equalsIgnoreCase("host") || name.equalsIgnoreCase("port") || name.equalsIgnoreCase("mtu") || name.equalsIgnoreCase("caps")) {
+                    if (name.equalsIgnoreCase("host") || name.equalsIgnoreCase("port") ||
+                        name.equalsIgnoreCase("mtu") || name.equalsIgnoreCase("caps")) {
                         netProps.add(e);
-                    } else {
-                        otherEntries.add(e);
-                    }
-                    if (!netProps.isEmpty() || !otherEntries.isEmpty()) {
-                        hasDetails = true;
-                    }
+                    } else {otherEntries.add(e);}
+                    if (!netProps.isEmpty() || !otherEntries.isEmpty()) {hasDetails = true;}
                 }
 
                 // Sort host, port, mtu, and caps alphabetically
@@ -1629,9 +1643,8 @@ class NetDbRenderer {
                         buf.append("<span class=nowrap><span class=netdb_name>")
                            .append(_t(DataHelper.stripHTML(name))).append(":</span> ")
                            .append("<span class=\"netdb_info host\">");
-                        if (DataHelper.stripHTML(val).equals("::")) {
-                            buf.append(_t("n/a")); // fix empty ipv6
-                        } else {
+                        if (DataHelper.stripHTML(val).equals("::")) {buf.append(_t("n/a"));} // fix empty ipv6
+                        else {
                             buf.append("<a title=\"").append(_t("Show all routers with this address in the NetDb")).append("\" ");
                             if (DataHelper.stripHTML(val).contains(":")) {buf.append(" href=\"/netdb?ipv6=");}
                             else {buf.append(" href=\"/netdb?ip=");}
@@ -1641,8 +1654,7 @@ class NetDbRenderer {
                             } else {buf.append(DataHelper.stripHTML(val));}
                             buf.append("\">").append(DataHelper.stripHTML(val)).append("</a>");
                         }
-                        buf.append("</span>");
-                        buf.append("</span> ");
+                        buf.append("</span></span> ");
                         hasHost = true;
                     } else if (name.equalsIgnoreCase("port")) {
                         buf.append("<span class=nowrap><span class=netdb_name>")
@@ -1693,23 +1705,6 @@ class NetDbRenderer {
                         .replace("knownRouters", "<li><b>" + _t("Routers"))
                         .replace("stat_", "")
                         .replace("uptime", "<li><b>" + _t("Uptime"));
-
-/**
-                        // TODO: place family entries underneath general network stats
-                        .replace("family.", "Family ")
-                        .replace("Family key", "<li class=\"longstat fam\"><b>" + _t("Family Key"))
-                        .replace("Family sig", "<li class=\"longstat fam\"><b>" + _t("Family Sig"))
-                        .replace("tunnel.buildExploratoryExpire.60m",  "<li class=longstat><b>" + _t("Exploratory tunnels expire (1h)"))
-                        .replace("tunnel.buildExploratoryReject.60m",  "<li class=longstat><b>" + _t("Exploratory tunnels reject (1h)"))
-                        .replace("tunnel.buildExploratorySuccess.60m", "<li class=longstat><b>" + _t("Exploratory tunnels build success (1h)"))
-                        .replace("tunnel.buildClientExpire.60m",       "<li class=longstat><b>" + _t("Client tunnels expire (1h)"))
-                        .replace("tunnel.buildClientReject.60m",       "<li class=longstat><b>" + _t("Client tunnels reject (1h)"))
-                        .replace("tunnel.buildClientSuccess.60m",      "<li class=longstat><b>" + _t("Client tunnels build success (1h)"))
-                        .replace("tunnel.participatingTunnels.60m",    "<li class=longstat><b>" + _t("Participating tunnels (1h)"))
-                        .replace("tunnel.participatingTunnels.60s",    "<li class=longstat><b>" + _t("Participating tunnels (60s)"))
-                        .replace("stat_bandwidthSendBps.60m",          "<li class=longstat><b>" + _t("Bandwidth send rate (1h)"))
-                        .replace("stat_bandwidthReceiveBps.60m",       "<li class=longstat><b>" + _t("Bandwidth receive rate (1h)"));
-**/
 
                     String val = (String) e.getValue();
                     String[] values = DataHelper.stripHTML(val).split(";");
@@ -1780,9 +1775,7 @@ class NetDbRenderer {
                                              _x("IPv6 NTCP"), _x("IPv6 NTCP, SSU"), _x("IPv6 Only NTCP, SSU, introducers"),
                                              _x("IPv6 NTCP, SSU, introducers")
                                            };
-    /**
-     *  what transport types
-     */
+    /**  Transport types */
     private static int classifyTransports(RouterInfo info) {
         int rv = 0;
         for (RouterAddress addr : info.getAddresses()) {

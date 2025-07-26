@@ -141,40 +141,34 @@ public abstract class NetworkDatabaseFacade implements Service {
      *  The last time we successfully published our RI.
      *  @since 0.9.9
      */
-    public long getLastRouterInfoPublishTime() { return 0; }
+    public long getLastRouterInfoPublishTime() {return 0;}
 
     public abstract Set<Hash> getAllRouters();
-    public int getKnownRouters() { return 0; }
-    public int getKnownLeaseSets() { return 0; }
-    public boolean isInitialized() { return true; }
+    public int getKnownRouters() {return 0;}
+    public int getKnownLeaseSets() {return 0;}
+    public boolean isInitialized() {return true;}
     public void rescan() {}
 
     /** Debug only - all user info moved to NetDbRenderer in router console */
     public void renderStatusHTML(Writer out) throws IOException {}
     /** public for NetDbRenderer in routerconsole */
-    public Set<LeaseSet> getLeases() { return Collections.emptySet(); }
+    public Set<LeaseSet> getLeases() {return Collections.emptySet();}
     /** public for NetDbRenderer in routerconsole */
-    public Set<RouterInfo> getRouters() { return Collections.emptySet(); }
-
-
+    public Set<RouterInfo> getRouters() {return Collections.emptySet();}
     /** public for NetDbRenderer in routerconsole */
     /* @since 0.9.64+ */
-    public Set<LeaseSet> getClientLeases() { return Collections.emptySet(); }
-
+    public Set<LeaseSet> getClientLeases() {return Collections.emptySet();}
     /** public for NetDbRenderer in routerconsole */
     /* @since 0.9.64+ */
-    public Set<LeaseSet> getPublishedLeases() { return Collections.emptySet(); }
-
+    public Set<LeaseSet> getPublishedLeases() {return Collections.emptySet();}
     /** public for NetDbRenderer in routerconsole */
     /* @since 0.9.64+ */
-    public Set<LeaseSet> getUnpublishedLeases() { return Collections.emptySet(); }
-
+    public Set<LeaseSet> getUnpublishedLeases() {return Collections.emptySet();}
     /** public for NetDbRenderer in routerconsole */
     /* @since 0.9.64+ */
-    public Set<LeaseSet> getFloodfillLeases() { return Collections.emptySet(); }
-
+    public Set<LeaseSet> getFloodfillLeases() {return Collections.emptySet();}
     /** @since 0.9 */
-    public ReseedChecker reseedChecker() { return null; };
+    public ReseedChecker reseedChecker() {return null;};
 
     /**
      *  For convenience, so users don't have to cast to FNDF, and unit tests using
@@ -183,7 +177,7 @@ public abstract class NetworkDatabaseFacade implements Service {
      *  @return false; FNDF overrides to return actual setting
      *  @since IPv6
      */
-    public boolean floodfillEnabled() { return false; };
+    public boolean floodfillEnabled() {return false;};
 
     /**
      *  Is it permanently negative cached?
@@ -191,7 +185,7 @@ public abstract class NetworkDatabaseFacade implements Service {
      *  @param key only for Destinations; for RouterIdentities, see Banlist
      *  @since 0.9.16
      */
-    public boolean isNegativeCachedForever(Hash key) { return false; }
+    public boolean isNegativeCachedForever(Hash key) {return false;}
 
     /**
      *  @param spk unblinded key
