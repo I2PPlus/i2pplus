@@ -48,15 +48,11 @@
 %>
 <div class=panel id=messages>
 <h2 id=screenlog><%=intl._t("Status Messages")%>
-<%
-      if (isInitialized) {
-%>
+<%    if (isInitialized) { %>
 <span>
 <a class="control clearlog iconize script" target=processForm href="list?action=Clear&amp;msgid=<%=lastID%>&amp;nonce=<%=nextNonce%>"><%=intl._t("Clear")%></a>
 </span>
-<%
-      }  // isInitialized
-%>
+<%    } /* isInitialized */ %>
 </h2>
 <table id=statusMessagesTable>
 <tr>
@@ -68,13 +64,9 @@
 <tr id=screenlog_buttons hidden>
 <td class=buttons>
 <a class="control refresh iconize" target=processForm href="list"><%=intl._t("Refresh")%></a>
-<%
-      if (isInitialized) {
-%>
+<%    if (isInitialized) { %>
 <a class="control clearlog iconize" target=processForm href="list?action=Clear&amp;msgid=<%=lastID%>&amp;nonce=<%=nextNonce%>"><%=intl._t("Clear")%></a>
-<%
-      }  // isInitialized
-%>
+<%    } /* isInitialized */ %>
 </td>
 </tr>
 </table>
@@ -152,9 +144,7 @@
                 hostname = hostname.substring(0, i2p + 4);
 %>
 <a class=helperLink href="http://<%=hostname%>?i2paddresshelper=<%=indexBean.getDestinationBase64(curServer)%>" target=_blank></a>
-<%
-            }
-%>
+<%          } %>
 </td>
 
 <td class=tunnelType><%=indexBean.getTunnelType(curServer)%></td>
@@ -165,16 +155,14 @@
 <a href="https://<%=indexBean.getServerTarget(curServer)%>/" title="<%=intl._t("Test HTTPS server, bypassing I2P")%>" target=_blank rel=noreferrer><%=indexBean.getServerTarget(curServer)%> SSL</a>
 <%              } else { %>
 <a href="http://<%=indexBean.getServerTarget(curServer)%>/" title="<%=intl._t("Test HTTP server, bypassing I2P")%>" target=_blank rel=noreferrer><%=indexBean.getServerTarget(curServer)%></a>
-<%
-                }
+<%              }
             } else {
 %>
 <%=indexBean.getServerTarget(curServer)%>
 <%
                 if (indexBean.isSSLEnabled(curServer)) { %>
 SSL
-<%
-                }
+<%              }
             }
 %>
 </td>
@@ -185,17 +173,11 @@ SSL
                 indexBean.getTunnelStatus(curServer) == IndexBean.RUNNING) {
 %>
 <a class="control preview iconize" title="<%=intl._t("Test HTTP server through I2P")%>" href="http://<%=indexBean.getDestHashBase32(curServer)%>" target=_blank rel=noreferrer><%=intl._t("Preview")%></a>
-<%
-            } else if (indexBean.getTunnelStatus(curServer) == IndexBean.RUNNING) {
-%>
+<%          } else if (indexBean.getTunnelStatus(curServer) == IndexBean.RUNNING) { %>
 <span class=base32 title="<%=intl._t("Base32 Address")%>"><%=indexBean.getDestHashBase32(curServer)%></span>
-<%
-            } else {
-%>
+<%          } else { %>
 <%=intl._t("No Preview")%>
-<%
-            }
-%>
+<%          } %>
 </td>
 <td class="tunnelStatus volatile">
 <%
@@ -257,23 +239,12 @@ SSL
             String tunnelType = editBean.getInternalType(curServer);
             String altDest = editBean.getAltDestinationBase64(curServer);
             int currentSigType = editBean.getSigType(curServer, tunnelType);
-            if (currentSigType == 7) {
 %>
-Ed25519-SHA-512
-<%
-            } else if (currentSigType == 3) {
-%>
-ECDSA-P521
-<%
-            } else if (currentSigType == 2) {
-%>
-ECDSA-P384
-<%
-            } else if (currentSigType == 1) {
-%>
-ECDSA-P256
-<%
-            } else if (currentSigType == 0) {
+<%          if (currentSigType == 7) { %>Ed25519-SHA-512<% } %>
+<%          else if (currentSigType == 3) { %>ECDSA-P521<% } %>
+<%          else if (currentSigType == 2) { %>ECDSA-P384<% } %>
+<%          else if (currentSigType == 1) { %>ECDSA-P256<% } %>
+<%          else if (currentSigType == 0) {
                 if (altDest == null || altDest.equals("")) {
 %>
 <span style=font-weight:600;color:red>DSA-SHA1</span>
@@ -281,8 +252,7 @@ ECDSA-P256
                 } else {
 %>
 DSA-SHA1 & Ed25519-SHA-512 (<%=intl._t("Alternate")%>)
-<%
-                }
+<%              }
             }
 %>
 </td>
@@ -297,54 +267,43 @@ DSA-SHA1 & Ed25519-SHA-512 (<%=intl._t("Alternate")%>)
 <span class=tunnelDestinationLabel><b><%=intl._t("Encrypted")%>:</b></span>
 <span class=selectAll><%=encName%></span>
 </td>
-<%
-            } else if (hasHostname) {
-%>
+<%          } else if (hasHostname) { %>
 <tr class=tunnelInfo style=display:none>
 <td class=tunnelDestinationEncrypted colspan=3>
 <span class=tunnelDestinationLabel><b><%=intl._t("Destination")%>:</b></span>
 <span class=selectAll><%=indexBean.getDestHashBase32(curServer)%></span>
 </td>
-<%
-            } else if (altDest != null && !altDest.equals("")) {
-%>
+<%          } else if (altDest != null && !altDest.equals("")) { %>
 <tr class=tunnelInfo style=display:none>
 <td class=tunnelDestinationEncrypted colspan=3>
 <span class=tunnelDestinationLabel><b><%=intl._t("Alt Destination")%>:</b></span>
 <span class=selectAll><%=altDestB32%></span>
 </td>
-<%
-            } else {
-%>
+<%          } else { %>
 <tr class=tunnelInfo style=display:none>
 <td class="tunnelDestinationEncrypted empty" colspan=3></td>
-<%
-            }
-%>
+<%          } %>
 <td class=tunnelEncryption colspan=4>
 <span class=tunnelDestinationLabel><b><%=intl._t("Encryption")%>:</b></span>
 <%
             boolean has0 = editBean.hasEncType(curServer, 0);
             boolean has4 = editBean.hasEncType(curServer, 4);
-            if (has0 && has4) {
+            boolean has5 = editBean.hasEncType(curServer, 5);
+            boolean has6 = editBean.hasEncType(curServer, 6);
+            boolean has7 = editBean.hasEncType(curServer, 7);
 %>
-ElGamal-2048 & ECIES-X25519
-<%
-            } else if (has4) {
-%>
-ECIES-X25519
-<%
-            } else if (has0) {
-%>
-ElGamal-2048
-<%
-            }
-%>
+<%          if (has0 && has4) { %>ECIES-X25519 & ElGamal-2048<% } %>
+<%          else if (has4 && has5) { %>MLKEM512_X25519 & ECIES-X25519<% } %> 
+<%          else if (has4 && has6) { %>MLKEM768_X25519 & ECIES-X25519<% } %>
+<%          else if (has4 && has7) { %>MLKEM1024_X25519 & ECIES-X25519<% } %> 
+<%          else if (has0) { %>ElGamal-2048<% } %>
+<%          else if (has4) { %>ECIES-X25519<% } %>
+<%          else if (has5) { %>MLKEM512_X25519<% } %>
+<%          else if (has6) { %>MLKEM768_X25519<% } %>
+<%          else if (has7) { %>MLKEM1024_X25519<% } %>
 </td>
 </tr>
-<%
-        } // for loop
-%>
+<%      } /* for loop */ %>
 <tr>
 <td class=newTunnel colspan=7>
 <form id=addNewServerTunnelForm action="edit">
@@ -388,28 +347,18 @@ ElGamal-2048
 %>
 <tr class=tunnelProperties>
 <td class=tunnelName>
-<%
-            if (clientDesc != null && clientDesc.length() != 0) {
-%>
+<%          if (clientDesc != null && clientDesc.length() != 0) { %>
 <a href="edit?tunnel=<%=curClient%>" title="<%=clientDesc%>"><%=indexBean.getTunnelName(curClient)%></a>
-<%
-            } else {
-%>
+<%          } else { %>
 <a href="edit?tunnel=<%=curClient%>" title="<%=intl._t("Edit Tunnel Settings for")%>&nbsp;<%=indexBean.getTunnelName(curClient)%>"><%=indexBean.getTunnelName(curClient)%></a>
-<%
-            }
-%>
+<%          } %>
 </td>
 <td class=tunnelHelper>
 </td>
 <td class=tunnelType><%=indexBean.getTunnelType(curClient)%>
-<%
-            if (isShared) {
-%>
+<%          if (isShared) { %>
             &nbsp;<span class=shared title="Tunnel is configured as a Shared Client">*</span>
-<%
-            } // isShared
-%>
+<%          } /* isShared */ %>
 </td>
 <td class=tunnelInterface>
 <%
@@ -419,17 +368,14 @@ ElGamal-2048
                    out.write("<span style=font-weight:600;color:red>");
                    out.write(intl._t("Host not set"));
                    out.write("</span>");
-               } else {
-                   out.write(cHost);
-               }
+               } else {out.write(cHost);}
 %>
 </td>
 <td class=tunnelPort>
 <%
                String cPort= indexBean.getClientPort2(curClient);
                out.write(cPort);
-               if (indexBean.isSSLEnabled(curClient))
-                   out.write(" SSL");
+               if (indexBean.isSSLEnabled(curClient)) {out.write(" SSL");}
 %>
 </td>
 <td class="tunnelStatus volatile">
@@ -480,13 +426,9 @@ ElGamal-2048
                    "sockstunnel".equals(indexBean.getInternalType(curClient)) || "socksirctunnel".equals(indexBean.getInternalType(curClient))) {
 %>
 <b><%=intl._t("Outproxy")%>:</b>
-<%
-               } else {
-%>
+<%             } else { %>
 <b><%=intl._t("Destination")%>:</b>
-<%
-               }
-%>
+<%             } %>
 </span>
 <%
                if (indexBean.getIsUsingOutproxyPlugin(curClient)) {
@@ -497,16 +439,11 @@ ElGamal-2048
                    if (cdest.length() > 70) { // Probably a B64 (a B32 is 60 chars) so truncate
 %>
 <span class=selectAll><%=cdest.substring(0, 45)%>&hellip;<%=cdest.substring(cdest.length() - 15, cdest.length())%></span>
-<%
-                   } else if (cdest.length() > 0) {
-%>
+<%                 } else if (cdest.length() > 0) { %>
 <span class=selectAll><%=cdest%></span>
-<%
-                   } else {
-%>
+<%                 } else { %>
 <span class=selectAll><i><%=intl._t("none")%></i></span>
-<%
-                   }
+<%                 }
                }
 %>
 </td>
@@ -515,28 +452,13 @@ ElGamal-2048
 <%
                String tunnelType = editBean.getInternalType(curClient);
                int currentSigType = editBean.getSigType(curClient, tunnelType);
-               if (currentSigType == 7) {
 %>
-Ed25519-SHA-512
-<%
-               } else if (currentSigType == 3) {
-%>
-ECDSA-P521
-<%
-               } else if (currentSigType == 2) {
-%>
-ECDSA-P384
-<%
-               } else if (currentSigType == 1) {
-%>
-ECDSA-P256
-<%
-               } else if (currentSigType == 0) {
-%>
-<span style=font-weight:600;color:red>DSA-SHA1</span>
-<%
-               }
-               String clientB32 = indexBean.getDestHashBase32(curClient);
+<%             if (currentSigType == 7) { %>Ed25519-SHA-512<% } %>
+<%             else if (currentSigType == 3) { %>ECDSA-P521<% } %>
+<%             else if (currentSigType == 2) { %>ECDSA-P384<% } %>
+<%             else if (currentSigType == 1) { %>ECDSA-P256<% } %>
+<%             else if (currentSigType == 0) { %><span style=font-weight:600;color:red>DSA-SHA1</span><% } %>
+<%             String clientB32 = indexBean.getDestHashBase32(curClient);
                if ((cdest.contains(".i2p") && !cdest.contains(".b32") || cdest.length() > 70) && clientB32.length() > 0) {
 %>
 <tr class=tunnelInfo style=display:none>
@@ -544,36 +466,29 @@ ECDSA-P256
 <span class=tunnelDestinationLabel><b>B32:</b></span>
 <span class=selectAll><%=clientB32%></span>
 </td>
-<%
-               } else {
-%>
+<%             } else { %>
 <tr class=tunnelInfo style=display:none>
 <td class=empty colspan=3></td>
-<%
-               }
-%>
+<%             } %>
 <td class=tunnelEncryption colspan=4>
 <span class=tunnelDestinationLabel><b><%=intl._t("Encryption")%>:</b></span>
 <%
-               boolean has0 = editBean.hasEncType(curClient, 0);
-               boolean has4 = editBean.hasEncType(curClient, 4);
-               if (has0 && has4) {
+            boolean has0 = editBean.hasEncType(curClient, 0);
+            boolean has4 = editBean.hasEncType(curClient, 4);
+            boolean has5 = editBean.hasEncType(curClient, 5);
+            boolean has6 = editBean.hasEncType(curClient, 6);
+            boolean has7 = editBean.hasEncType(curClient, 7);
 %>
-ElGamal-2048 & ECIES-X25519
-<%
-               } else if (has4) {
-%>
-ECIES-X25519
-<%
-               } else if (has0) {
-%>
-ElGamal-2048
-<%
-               }
-%>
-<%
-        } // for loop
-%>
+<%          if (has0 && has4) { %>ECIES-X25519 & ElGamal-2048<% } %>
+<%          else if (has4 && has5) { %>MLKEM512_X25519 & ECIES-X25519<% } %> 
+<%          else if (has4 && has6) { %>MLKEM768_X25519 & ECIES-X25519<% } %>
+<%          else if (has4 && has7) { %>MLKEM1024_X25519 & ECIES-X25519<% } %> 
+<%          else if (has0) { %>ElGamal-2048<% } %>
+<%          else if (has4) { %>ECIES-X25519<% } %>
+<%          else if (has5) { %>MLKEM512_X25519<% } %>
+<%          else if (has6) { %>MLKEM768_X25519<% } %>
+<%          else if (has7) { %>MLKEM1024_X25519<% } %>
+<%      } /* for loop */ %>
 </td>
 </tr>
 <tr>
@@ -596,9 +511,7 @@ ElGamal-2048
 </table>
 </div>
 <%
-
   }  // isInitialized()
-
   if (!indexBean.isInitialized()) {
 %>
 <div id=notReady class=notReady>

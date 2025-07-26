@@ -72,38 +72,6 @@ public class EditBean extends IndexBean {
         return _helper.getAltPrivateKeyFile(tunnel);
     }
 
-/****
-    public String getNameSignature(int tunnel) {
-        String spoof = getSpoofedHost(tunnel);
-        if (spoof.length() <= 0)
-            return "";
-        TunnelController tun = getController(tunnel);
-        if (tun == null)
-            return "";
-        String keyFile = tun.getPrivKeyFile();
-        if (keyFile != null && keyFile.trim().length() > 0) {
-            File f = new File(keyFile);
-            if (!f.isAbsolute())
-                f = new File(_context.getConfigDir(), keyFile);
-            PrivateKeyFile pkf = new PrivateKeyFile(f);
-            try {
-                Destination d = pkf.getDestination();
-                if (d == null)
-                    return "";
-                SigningPrivateKey privKey = pkf.getSigningPrivKey();
-                if (privKey == null)
-                    return "";
-                Signature sig = _context.dsa().sign(spoof.getBytes("UTF-8"), privKey);
-                if (sig == null)
-                    return "";
-                return Base64.encode(sig.getData());
-            } catch (I2PException e) {
-            } catch (IOException e) {}
-        }
-        return "";
-    }
-****/
-
     /**
      *  @since 0.9.26
      *  @return key or null
@@ -243,24 +211,20 @@ public class EditBean extends IndexBean {
 
     /** @since 0.9.33 */
     public boolean canChangeSigType(int tunnel) {
-        if (tunnel < 0)
-            return true;
-        if (getDestination(tunnel) != null)
-            return false;
+        if (tunnel < 0) {return true;}
+        if (getDestination(tunnel) != null) {return false;}
         return getTunnelStatus(tunnel) == GeneralHelper.NOT_RUNNING;
     }
 
     /** @since 0.9.46 */
     public boolean canChangeEncType(int tunnel) {
-        if (tunnel < 0)
-            return true;
+        if (tunnel < 0) {return true;}
         return getTunnelStatus(tunnel) == GeneralHelper.NOT_RUNNING;
     }
 
     /** @since 0.9.46 */
     public boolean canChangePort(int tunnel) {
-        if (tunnel < 0)
-            return true;
+        if (tunnel < 0) {return true;}
         return getTunnelStatus(tunnel) == GeneralHelper.NOT_RUNNING;
     }
 
@@ -489,23 +453,17 @@ public class EditBean extends IndexBean {
     }
 
     public String getI2CPHost(int tunnel) {
-        if (_context.isRouterContext())
-            return _t("internal");
+        if (_context.isRouterContext()) {return _t("internal");}
         TunnelController tun = getController(tunnel);
-        if (tun != null)
-            return tun.getI2CPHost();
-        else
-            return "127.0.0.1";
+        if (tun != null) {return tun.getI2CPHost();}
+        else {return "127.0.0.1";}
     }
 
     public String getI2CPPort(int tunnel) {
-        if (_context.isRouterContext())
-            return _t("internal");
+        if (_context.isRouterContext()) {return _t("internal");}
         TunnelController tun = getController(tunnel);
-        if (tun != null)
-            return tun.getI2CPPort();
-        else
-            return Integer.toString(I2PClient.DEFAULT_LISTEN_PORT);
+        if (tun != null) {return tun.getI2CPPort();}
+        else {return Integer.toString(I2PClient.DEFAULT_LISTEN_PORT);}
     }
 
     public String getCustomOptions(int tunnel) {
@@ -514,9 +472,7 @@ public class EditBean extends IndexBean {
 
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     private static final int DFLT_QUANTITY = 2;
-//    private static final int MAX_CLIENT_QUANTITY = 3;
     private static final int MAX_CLIENT_QUANTITY = 8;
-//    private static final int MAX_SERVER_QUANTITY = 6;
     private static final int MAX_SERVER_QUANTITY = 8;
     private static final int MAX_ADVANCED_QUANTITY = 16;
 
@@ -530,28 +486,20 @@ public class EditBean extends IndexBean {
         boolean adv = isAdvanced();
         int maxQuantity = adv ? MAX_ADVANCED_QUANTITY :
                                      (isClient(tunnel) ? MAX_CLIENT_QUANTITY : MAX_SERVER_QUANTITY);
-        if (tunnelQuantity > maxQuantity)
-            maxQuantity = tunnelQuantity;
+        if (tunnelQuantity > maxQuantity) {maxQuantity = tunnelQuantity;}
         StringBuilder buf = new StringBuilder(256);
         for (int i = 1; i <= maxQuantity; i++) {
              buf.append("<option value=\"").append(i).append('"');
-             if (i == tunnelQuantity)
-                 buf.append(" selected=selected");
+             if (i == tunnelQuantity) {buf.append(" selected=selected");}
              buf.append('>');
-             if (mode == 1)
-                 buf.append(ngettext("{0} inbound tunnel", "{0} inbound tunnels", i));
-             else if (mode == 2)
-                 buf.append(ngettext("{0} outbound tunnel", "{0} outbound tunnels", i));
-             else
-                 buf.append(ngettext("{0} inbound, {0} outbound tunnel", "{0} inbound, {0} outbound tunnels", i));
+             if (mode == 1) {buf.append(ngettext("{0} inbound tunnel", "{0} inbound tunnels", i));}
+             else if (mode == 2) {buf.append(ngettext("{0} outbound tunnel", "{0} outbound tunnels", i));}
+             else {buf.append(ngettext("{0} inbound, {0} outbound tunnel", "{0} inbound, {0} outbound tunnels", i));}
              if (i <= 3 && !adv) {
                  buf.append(" (");
-                 if (i == 1)
-                     buf.append(_t("lower bandwidth and reliability"));
-                 else if (i == 2)
-                     buf.append(_t("standard bandwidth and reliability"));
-                 else if (i == 3)
-                     buf.append(_t("higher bandwidth and reliability"));
+                 if (i == 1) {buf.append(_t("lower bandwidth and reliability"));}
+                 else if (i == 2) {buf.append(_t("standard bandwidth and reliability"));}
+                 else if (i == 3) {buf.append(_t("higher bandwidth and reliability"));}
                  buf.append(')');
              }
              buf.append("</option>\n");
@@ -564,8 +512,8 @@ public class EditBean extends IndexBean {
      *  @since 0.9.47
      */
     public String unlessAdvanced(String s) {
-        if (isAdvanced())
-            return "";
+        if (isAdvanced()) {return "";}
         return " (" + _t(s) + ')';
     }
+
 }
