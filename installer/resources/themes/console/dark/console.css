@@ -1314,6 +1314,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .leaseset th:last-child,.leaseset td:nth-child(2){padding-right:6px;white-space:nowrap;text-align:right}
 .leaseset th:last-child,.leaseset td:last-child,.sybil_routerinfo th:last-child,.sybil_routerinfo td:last-child{border-right:var(--border)}
 .lsdest,.leaseset th:last-child a[href$="i2p/"],.leaseset th:last-child a[href$="b32.i2p"]{padding:2px 4px 4px;display:inline-block;border:1px solid #020;border-radius:2px;box-shadow:var(--outline);background:var(--badge)}
+.leaseset th:last-child a.destlink{padding-left:20px;border-left-width:4px;border-right-width:4px;border-radius:0;background:var(--link) no-repeat 4px center/13px,var(--badge)}
 .lsdest{padding-left:22px;border-radius:0;border-left-width:4px;border-right-width:4px;background:var(--hardhat) no-repeat 4px center/14px,var(--badge)}
 .lsdest.published{padding-left:38px;background:var(--hardhat) no-repeat 4px center/14px,var(--globe) no-repeat 22px center/12px,var(--badge)}
 .main li .netdb_expiry{font-weight:400;text-transform:lowercase;font-style:italic}

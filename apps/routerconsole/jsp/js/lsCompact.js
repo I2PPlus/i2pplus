@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let container = document.querySelector(".leasesets_container");
   let refreshInterval = null;
   let isRefreshing = false;
+  const debug = document.getElementById("leasesetdebug");
 
   function compact() {
     if (!container || document.getElementById("leasesetdebug")) return;
@@ -103,6 +104,40 @@ document.addEventListener("DOMContentLoaded", () => {
     document.head.appendChild(style);
   }
 
+  function sortLeasesets() {
+    document.querySelectorAll("table.leaseset").forEach(table => {
+      const lastTh = table.querySelector("th:last-child");
+      let sortPriority = 4;
+      let sortText = "";
+      if (lastTh) {
+        sortText = lastTh.textContent.trim().toLowerCase();
+        const span = lastTh.querySelector("span.lsdest");
+        if (span) {
+          sortPriority = span.classList.contains("published") ? 0 : 1;
+        } else {
+          const a = lastTh.querySelector("a");
+          if (a) {
+            sortPriority = a.classList.contains("destlink") ? 2 : 3;
+          }
+        }
+      }
+      table.dataset.sortPriority = sortPriority;
+      table.dataset.sortText = sortText;
+    });
+    const tables = Array.from(document.querySelectorAll("table.leaseset"));
+    tables.sort((a, b) => {
+      const prioA = parseInt(a.dataset.sortPriority);
+      const prioB = parseInt(b.dataset.sortPriority);
+      if (prioA !== prioB) return prioA - prioB;
+      return a.dataset.sortText.localeCompare(b.dataset.sortText);
+    });
+    tables.forEach(table => {
+      if (table.parentNode) {
+        table.parentNode.appendChild(table);
+      }
+    });
+  }
+
   function refreshLeasesets() {
     if (!container) return;
     progressx.show(theme);progressx.progress(.7);
@@ -128,6 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
         lsDebug();
         countTypes();
         if (!lsLabels) {styleLabels();}
+        if (!debug) {sortLeasesets();}
         progressx.progress(1);
         setTimeout(() => {progressx.hide();}, 100);
       })
@@ -151,6 +187,7 @@ document.addEventListener("DOMContentLoaded", () => {
   lsDebug();
   countTypes();
   styleLabels();
+  if (!debug) {sortLeasesets();}
   onHidden(document.body, () => {stopRefresh();});
   onVisible(document.body, () => {startRefresh();});
 

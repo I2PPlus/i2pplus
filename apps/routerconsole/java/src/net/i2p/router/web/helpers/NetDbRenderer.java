@@ -95,12 +95,12 @@ class NetDbRenderer {
 
              if (publishedL && !publishedR) return -1;
              if (publishedR && !publishedL) return 1;
-             if (isClientL && !isClientR) return -1;
-             if (isClientR && !isClientL) return 1;
              if (nicknameL && !nicknameR) return -1;
              if (nicknameR && !nicknameL) return 1;
              if (nameL && !nameR) return -1;
              if (nameR && !nameL) return 1;
+             if (isClientL && !isClientR) return -1;
+             if (isClientR && !isClientL) return 1;
 
              return keyL.toBase32().compareTo(keyR.toBase32());
         }
