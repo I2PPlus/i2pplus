@@ -729,7 +729,7 @@ public class SidebarHelper extends HelperBase {
                .append("<table id=sb_localtunnels class=\"volatile notunnels\">\n<tr><td colspan=3 class=center><i>")
                .append(_t("none")).append("</i></td></tr>\n</table>\n");
         }
-        buf.append("<table id=localtunnelSummary class=volatile hidden>\n<tr id=localtunnelsActive><td>")
+        buf.append("<table id=localtunnelSummary hidden>\n<tr id=localtunnelsActive><td>")
            .append("<span id=snarkCount class=\"count_0\">0 x <img src=/themes/console/images/snark.svg></span>")
            .append("<span id=serverCount class=\"count_0\">0 x <img src=/themes/console/images/server.svg></span>")
            .append("<span id=clientCount class=\"count_0\">0 x <img src=/themes/console/images/client.svg></span>")

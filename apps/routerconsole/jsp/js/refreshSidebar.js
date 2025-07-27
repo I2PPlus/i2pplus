@@ -71,9 +71,7 @@ async function checkTimer() {
 
 async function doFetch(force = false) {
   checkTimer();
-  if (!refreshTimerActive.isActive) {
-    return;
-  }
+  if (!refreshTimerActive.isActive) {return;}
   try {
     worker.port.postMessage({ url: `/xhr1.jsp?requestURI=${uri}`, force });
     if (refreshTimeout) {
@@ -82,9 +80,7 @@ async function doFetch(force = false) {
     }
     noResponse = 0;
     if (force) await refreshSidebar();
-  } catch (error) {
-    noResponse++;
-  }
+  } catch (error) {noResponse++;}
 }
 
 async function refreshSidebar() {
@@ -98,7 +94,7 @@ async function refreshSidebar() {
       isDown = false;
       const responseElements = {
         volatileElements: responseDoc.querySelectorAll(".volatile:not(.badge)"),
-        badges: responseDoc.querySelectorAll(".badge:not(#newHosts)"),
+        badges: responseDoc.querySelectorAll(".badge:not(#newHosts)", "#localtunnelsActive span"),
       };
       const updateElement = (elem, respElem, property = "innerHTML") => {
         if (elem && respElem && elem[property] !== respElem[property]) {
@@ -113,11 +109,8 @@ async function refreshSidebar() {
       (function checkSections() {
         const updating = xhrContainer.querySelectorAll(".volatile");
         const updatingResponse = responseDoc.querySelectorAll(".volatile");
-        if (updating.length !== updatingResponse.length) {
-          refreshAll();
-        } else {
-          updateVolatile();
-        }
+        if (updating.length !== updatingResponse.length) {refreshAll();}
+        else {updateVolatile();}
       })();
       function updateVolatile() {
         Array.from(elements.volatileElements).forEach((elem, index) => {
@@ -125,6 +118,7 @@ async function refreshSidebar() {
           if (elem && respElem) {
             if (elem.classList.contains("statusDown")) {
               updates.push(() => { updateIfStatusDown(elem, respElem); });
+              refreshAll();
             } else {
               updates.push(() => { updateElement(elem, respElem); });
             }
