@@ -191,6 +191,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Cache-Control: no-cache\r\n" +
          "Connection: close\r\n" +
          "\r\n" +
+         "<!doctype html>\n" +
          "<html>\n" +
          "<head><title>404 Not Found</title><meta name=color-scheme content=\"light dark\"></head>\n" +
          "<body>\n" +
@@ -205,6 +206,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Cache-Control: no-cache\r\n" +
          "Connection: close\r\n" +
          "\r\n" +
+         "<!doctype html>\n" +
          "<html>\n" +
          "<head><title>503 Service Temporarily Unavailable</title><meta name=color-scheme content=\"light dark\"></head>\n" +
          "<body>\n" +
@@ -220,6 +222,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Cache-Control: no-cache\r\n" +
          "Connection: close\r\n" +
          "\r\n" +
+         "<!doctype html>\n" +
          "<html>\n" +
          "<head><title>429 Too Many Requests</title><meta name=color-scheme content=\"light dark\"></head>\n" +
          "<body>\n" +
@@ -236,6 +239,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Cache-Control: no-cache\r\n"+
          "Connection: close\r\n" +
          "\r\n" +
+         "<!doctype html>\n" +
          "<html>\n" +
          "<head><title>403 Forbidden</title><meta name=color-scheme content=\"light dark\"></head>\n" +
          "<body>\n" +
@@ -264,6 +268,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Cache-Control: no-cache\r\n" +
          "Connection: close\r\n" +
          "\r\n" +
+         "<!doctype html>\n" +
          "<html>\n<head><title>414 Request URI Too Long</title><meta name=color-scheme content=\"light dark\"></head>\n" +
          "<center><h1>414 Request URI too long</h1></center>\n" +
          "<hr>\n" +
@@ -277,6 +282,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Cache-Control: no-cache\r\n" +
          "Connection: close\r\n" +
          "\r\n" +
+         "<!doctype html>\n" +
          "<html>\n<head><title>431 Request Header Fields Too Large</title><meta name=color-scheme content=\"light dark\"></head>\n" +
          "<center><h1>431 Request header fields too large</h1></center>\n" +
          "<hr>\n" +
@@ -291,6 +297,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Cache-Control: no-cache\r\n" +
          "Connection: close\r\n" +
          "\r\n" +
+         "<!doctype html>\n" +
          "<html>\n" +
          "<head><meta http-equiv=\"refresh\" content=\"5\"></head>\n" +
          "</html>";
@@ -301,6 +308,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          "Cache-Control: no-cache\r\n" +
          "Connection: close\r\n" +
          "\r\n" +
+         "<!doctype html>\n" +
          "<html>\n<head><title>400 Bad Request</title><meta name=color-scheme content=\"light dark\"></head>\n" +
          "<center><h1>400 Bad request (malformed datastream)</h1></center>\n" +
          "<hr>\n" +
