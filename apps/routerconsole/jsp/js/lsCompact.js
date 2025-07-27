@@ -124,6 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
       table.dataset.sortPriority = sortPriority;
       table.dataset.sortText = sortText;
     });
+
     const tables = Array.from(document.querySelectorAll("table.leaseset"));
     tables.sort((a, b) => {
       const prioA = parseInt(a.dataset.sortPriority);
@@ -131,11 +132,42 @@ document.addEventListener("DOMContentLoaded", () => {
       if (prioA !== prioB) return prioA - prioB;
       return a.dataset.sortText.localeCompare(b.dataset.sortText);
     });
+
     tables.forEach(table => {
       if (table.parentNode) {
         table.parentNode.appendChild(table);
       }
     });
+
+    if (window.location.search.includes("l=3")) {
+      const summaryTable = document.getElementById("leasesetsummary");
+      const publishedCount = document.querySelectorAll("table.leaseset th:last-child span.lsdest.published").length;
+      const unpublishedCount = document.querySelectorAll("table.leaseset th:last-child span.lsdest:not(.published)").length;
+      const knownClientCount = document.querySelectorAll("table.leaseset th:last-child a.destlink").length;
+      const clientCount = document.querySelectorAll("table.leaseset th:last-child a:not(.destlink)").length;
+
+      if (summaryTable) {
+        const tbody = summaryTable.querySelector("tbody") || summaryTable;
+        const existingRow = tbody.querySelector("#leasesetCounts");
+        if (existingRow) existingRow.remove();
+
+        const row = document.createElement("tr");
+        row.id = "leasesetCounts";
+
+        const cell = document.createElement("td");
+        const cell_r = document.createElement("td");
+        cell.colSpan = 4;
+        cell.style.textAlign = "center";
+        cell.innerHTML = `
+          &bullet;&nbsp; <span class=lsLabel>Published:</span> ${publishedCount} &nbsp;
+          &bullet;&nbsp; <span class=lsLabel>Unpublished:</span> ${unpublishedCount} &nbsp;
+          &bullet;&nbsp; <span class=lsLabel>Client (hostname):</span> ${knownClientCount} &nbsp;
+          &bullet;&nbsp; <span class=lsLabel>Client (b32):</span> ${clientCount}
+        `;
+        row.appendChild(cell);
+        tbody.appendChild(row);
+      }
+    }
   }
 
   function refreshLeasesets() {

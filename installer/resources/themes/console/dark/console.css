@@ -1343,13 +1343,13 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #leasesetsummary{margin:0 0 10px;column-span:all;box-shadow:0 0 0 1px #000,0 0 0 3px #252}
 #leasesetdebug td:nth-child(even),#leasesetsummary td:nth-child(even){width:24%;word-break:break-all;text-align:left}
 #leasesetdebug td:nth-child(odd),#leasesetsummary td:nth-child(odd){padding-left:20px;width:1%;white-space:nowrap;text-align:right}
-#leasesetsummary td,#leasesetsummary td:nth-child(odd){padding:6px}
+#leasesetsummary td,#leasesetsummary td:nth-child(odd){padding:8px}
 #leasesetdebug td:not(:last-child),#leasesetsummary td:nth-child(even){border-right:var(--border_soft)}
 #leasesetdebug th a,#leasesetsummary a{word-spacing:normal;letter-spacing:normal;font-size:9pt;text-transform:capitalize}
 #leasesetdebug th,#leasesetsummary th{padding:8px 10px;word-spacing:.1em;letter-spacing:.08em;font-size:10pt;font-weight:700;text-transform:uppercase}
 #leasesetdebug th,#leasesetsummary th:first-child{white-space:nowrap;text-align:left}
 #leasesetdebug th:last-child,#leasesetsummary th:last-child{border-right:var(--border)}
-#leasesetsummary th:first-child{padding:8px 10px}
+#leasesetsummary th{padding:8px 10px}
 #leasesetsummary td:empty{display:none}
 #netdb a[href$="i2p"]{margin-left:6px;display:inline-block}
 #netdb code{font-weight:400}
@@ -1391,6 +1391,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #netdb .leasesets_container .confignav{margin-bottom:11px}
 #netdb .yes,#netdb .no{width:16px;height:16px;display:inline-block;vertical-align:middle;font-size:0;background:var(--yes) no-repeat center calc(50% - 1px)/14px}
 #netdb .no{background:var(--no) no-repeat center calc(50% - 1px)/12px}
+#leasesetsummary #leasesetCounts td{padding:10px;border-top:3px solid #252;background:var(--th)}
 
 /* sybils */
 h3#threats.sybils{margin-bottom:10px}
