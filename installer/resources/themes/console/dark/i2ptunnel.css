@@ -28,6 +28,8 @@ hr{display:none}
 .statusStarting{color:#393;background:var(--tunnelStarting)}
 div[class^="status"]{margin:0;padding:0;width:100%;height:16px;font-size:0;text-align:center;background-size:auto 16px;background-position:center center;background-repeat:no-repeat}
 .unbold{font-weight:400}
+.nopreview{display:none}
+.nopreview.offline{display:inline-block;vertical-align:middle;font-size:0;height:18px;width:18px;background:var(--poweroff) no-repeat center center/18px;opacity:.7}
 
 /* screenlog */
 #screenlog{position:relative;contain:paint}
