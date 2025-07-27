@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let container = document.querySelector(".leasesets_container");
   let refreshInterval = null;
   let isRefreshing = false;
+  let lsCount = 0;
   const debug = document.getElementById("leasesetdebug");
 
   function compact() {
@@ -70,21 +71,21 @@ document.addEventListener("DOMContentLoaded", () => {
     row.id = "sigEncCount";
 
     const sigCell = document.createElement("td");
-    sigCell.innerHTML = "<b>Signature types</b>";
+    sigCell.innerHTML = "<b>Signature types:</b>";
 
     const sigText = Object.entries(signatureCounts)
       .sort()
-      .map(([type, count]) => `&bullet; <span class=lsLabel>${type}</span> (${count})`)
+      .map(([type, count]) => `<span class=counterLS><span class="lsLabel sigType">${type}</span> (${count})</span>`)
       .join(" &nbsp;");
     const sigValueCell = document.createElement("td");
     sigValueCell.innerHTML = sigText;
 
     const encCell = document.createElement("td");
-    encCell.innerHTML = "<b>Encryption types</b>";
+    encCell.innerHTML = "<b>Encryption types:</b>";
 
     const encText = Object.entries(encryptionCounts)
       .sort()
-      .map(([type, count]) => `&bullet; <span class=lsLabel>${type}</span> (${count})`)
+      .map(([type, count]) => `<span class=counterLS><span class="lsLabel encType">${type}</span> (${count})</span>`)
       .join(" &nbsp;");
     const encValueCell = document.createElement("td");
     encValueCell.innerHTML = encText;
@@ -101,12 +102,14 @@ document.addEventListener("DOMContentLoaded", () => {
     style.type = "text/css";
     style.id = "lsLabels";
     style.textContent =
-      ".countLSType{padding:2px 8px 2px 2px;display:inline-block;border:var(--border_soft);box-shadow:var(--highlight);background:var(--badge)}" +
-      ".countLSType .published{background:var(--globe) no-repeat 4px center/14px}" +
-      ".countLSType .unpublished{background:var(--hardhat) no-repeat 4px center/14px}" +
-      ".countLSType .clientB32{background:var(--ping) no-repeat 4px center/14px}" +
-      ".countLSType .clientHostname{background:var(--link) no-repeat 4px center/14px}" +
-      ".lsLabel{padding:2px 4px 2px 22px;font-weight:500}";
+      ".counterLS{padding:2px 8px 2px 2px;display:inline-block;vertical-align:middle;border:var(--border_soft);box-shadow:var(--highlight);background:var(--badge)}" +
+      ".counterLS .published{background:var(--globe) no-repeat 4px center/14px}" +
+      ".counterLS .unpublished{background:var(--hardhat) no-repeat 4px center/14px}" +
+      ".counterLS .clientB32{background:var(--ping) no-repeat 4px center/14px}" +
+      ".counterLS .clientHostname{background:var(--link) no-repeat 4px center/14px}" +
+      ".lsLabel{padding:2px 4px 2px 22px;display:inline-block;font-weight:500}" +
+      ".lsLabel.encType{background:var(--crypto) no-repeat 4px center/14px}" +
+      ".lsLabel.sigType{background:var(--lock) no-repeat 4px center/14px}";
     document.head.appendChild(style);
   }
 
@@ -165,13 +168,15 @@ document.addEventListener("DOMContentLoaded", () => {
         cell.colSpan = 4;
         cell.style.textAlign = "center";
         cell.innerHTML = `
-          <span class=countLSType><span class="lsLabel published">Published:</span> ${publishedCount}</span> &nbsp;
-          <span class=countLSType><span class="lsLabel unpublished">Unpublished:</span> ${unpublishedCount}</span> &nbsp;
-          <span class=countLSType><span class="lsLabel clientHostname">Client (hostname):</span> ${knownClientCount}</span> &nbsp;
-          <span class=countLSType><span class="lsLabel clientB32">Client (b32):</span> ${clientCount}</span>
+          <span class=counterLS><span class="lsLabel published">Published:</span> <span class=lsCounter>${publishedCount}</span></span> &nbsp;
+          <span class=counterLS><span class="lsLabel unpublished">Unpublished:</span> <span class=lsCounter>${unpublishedCount}</span></span> &nbsp;
+          <span class=counterLS><span class="lsLabel clientHostname">Client (hostname):</span> <span class=lsCounter>${knownClientCount}</span></span> &nbsp;
+          <span class=counterLS><span class="lsLabel clientB32">Client (b32):</span> <span class=lsCounter>${clientCount}</span></span>
         `;
         row.appendChild(cell);
         tbody.appendChild(row);
+        lsCount = Array.from(document.querySelectorAll("span.lsCounter")).reduce((sum, el) => sum + parseInt(el.textContent) || 0, 0);
+        lsLocalCount.textContent = lsCount;
       }
     }
   }
@@ -219,9 +224,11 @@ document.addEventListener("DOMContentLoaded", () => {
     isRefreshing = false;
     clearInterval(refreshInterval);
     refreshInterval = null;
+    progressx.hide();
   }
 
   function initLSCompact() {
+    startRefresh();
     progressx.show();
     compact();
     lsDebug();
@@ -234,12 +241,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initLSCompact();
 
   document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "hidden") {
-      stopRefresh();
-    } else {
-      initLSCompact();
-      startRefresh();
-    }
+    if (document.visibilityState === "hidden") {stopRefresh();}
+    else {initLSCompact();}
   });
 
 });
