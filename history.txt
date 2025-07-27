@@ -1,4 +1,7 @@
-2025-07-25
+2025-07-25 dr|z3d
+ * Console: Implement leaseset sorting when not on debug page
+
+2025-07-25 dr|z3d
  * Console: Add auto-refresh for leaseset pages; add signature
    and encryption type counters on LS debug page
 
