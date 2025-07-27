@@ -100,7 +100,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const style = document.createElement("style");
     style.type = "text/css";
     style.id = "lsLabels";
-    style.textContent = ".lsLabel{font-weight:500}";
+    style.textContent =
+      ".countLSType{padding:2px 8px 2px 2px;display:inline-block;border:var(--border_soft);box-shadow:var(--highlight);background:var(--badge)}" +
+      ".countLSType .published{background:var(--globe) no-repeat 4px center/14px}" +
+      ".countLSType .unpublished{background:var(--hardhat) no-repeat 4px center/14px}" +
+      ".countLSType .clientB32{background:var(--ping) no-repeat 4px center/14px}" +
+      ".countLSType .clientHostname{background:var(--link) no-repeat 4px center/14px}" +
+      ".lsLabel{padding:2px 4px 2px 22px;font-weight:500}";
     document.head.appendChild(style);
   }
 
@@ -159,10 +165,10 @@ document.addEventListener("DOMContentLoaded", () => {
         cell.colSpan = 4;
         cell.style.textAlign = "center";
         cell.innerHTML = `
-          &bullet;&nbsp; <span class=lsLabel>Published:</span> ${publishedCount} &nbsp;
-          &bullet;&nbsp; <span class=lsLabel>Unpublished:</span> ${unpublishedCount} &nbsp;
-          &bullet;&nbsp; <span class=lsLabel>Client (hostname):</span> ${knownClientCount} &nbsp;
-          &bullet;&nbsp; <span class=lsLabel>Client (b32):</span> ${clientCount}
+          <span class=countLSType><span class="lsLabel published">Published:</span> ${publishedCount}</span> &nbsp;
+          <span class=countLSType><span class="lsLabel unpublished">Unpublished:</span> ${unpublishedCount}</span> &nbsp;
+          <span class=countLSType><span class="lsLabel clientHostname">Client (hostname):</span> ${knownClientCount}</span> &nbsp;
+          <span class=countLSType><span class="lsLabel clientB32">Client (b32):</span> ${clientCount}</span>
         `;
         row.appendChild(cell);
         tbody.appendChild(row);
@@ -215,12 +221,25 @@ document.addEventListener("DOMContentLoaded", () => {
     refreshInterval = null;
   }
 
-  compact();
-  lsDebug();
-  countTypes();
-  styleLabels();
-  if (!debug) {sortLeasesets();}
-  onHidden(document.body, () => {stopRefresh();});
-  onVisible(document.body, () => {startRefresh();});
+  function initLSCompact() {
+    progressx.show();
+    compact();
+    lsDebug();
+    countTypes();
+    styleLabels();
+    if (!debug) {sortLeasesets();}
+    progressx.hide();
+  }
+
+  initLSCompact();
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+      stopRefresh();
+    } else {
+      initLSCompact();
+      startRefresh();
+    }
+  });
 
 });
