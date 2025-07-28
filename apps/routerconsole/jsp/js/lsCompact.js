@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const sigText = Object.entries(signatureCounts)
       .sort()
-      .map(([type, count]) => `<span class=counterLS><span class="lsLabel sigType">${type}</span> <span class=lsBadge>${count}</span></span>`)
+      .map(([type, count]) => `<span class=counterLS><span class="lsLabel sigType">${type} <span class=lsCounter>${count}</span></span></span>`)
       .join(" &nbsp;");
     const sigValueCell = document.createElement("td");
     sigValueCell.innerHTML = sigText;
@@ -85,15 +85,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const encText = Object.entries(encryptionCounts)
       .sort()
-      .map(([type, count]) => `<span class=counterLS><span class="lsLabel encType">${type}</span> <span class=lsBadge>${count}</span></span>`)
+      .map(([type, count]) => `<span class=counterLS><span class="lsLabel encType">${type} <span class=lsCounter>${count}</span></span></span>`)
       .join(" &nbsp;");
     const encValueCell = document.createElement("td");
     encValueCell.innerHTML = encText;
 
-    row.appendChild(sigCell);
-    row.appendChild(sigValueCell);
-    row.appendChild(encCell);
-    row.appendChild(encValueCell);
+    if (!debug) {
+      const mergedCell = document.createElement("td");
+      mergedCell.colSpan = 4;
+      mergedCell.style.textAlign = "center";
+      mergedCell.innerHTML = `
+        ${sigValueCell.innerHTML}&nbsp;
+        ${encValueCell.innerHTML}
+      `;
+      row.appendChild(mergedCell);
+    } else {
+      row.appendChild(sigCell);
+      row.appendChild(sigValueCell);
+      row.appendChild(encCell);
+      row.appendChild(encValueCell);
+    }
+
     tbody.appendChild(row);
   }
 
@@ -109,6 +121,8 @@ document.addEventListener("DOMContentLoaded", () => {
       .counterLS .clientHostname{background:var(--link) no-repeat 4px center/14px}
       .lsCounter,.lsBadge{margin:-3px -1px -3px 0;padding:2px 6px;min-width:28px;display:inline-block;text-align:center;font-weight:700}
       .lsLabel{padding:1px 4px 1px 22px;display:inline-block;font-weight:500}
+      .lsLabel.encType,.lsLabel.sigType{margin-right:-4px}
+      .lsLabel.encType .lsCounter,.lsLabel.sigType .lsCounter{margin-left:4px}
       .lsLabel.encType{background:var(--crypto) no-repeat 4px center/14px}
       .lsLabel.sigType{background:var(--lock) no-repeat 4px center/14px}`;
     document.head.appendChild(style);
