@@ -3,8 +3,8 @@
 /* and implement auto-refresh */
 /* License: AGPL3 or later */
 
-import {lsDebug} from "/js/lsDebug.js";
-import {onVisible, onHidden} from "/js/onVisible.js";
+import { lsDebug } from "/js/lsDebug.js";
+import { onVisible, onHidden } from "/js/onVisible.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   let container = document.querySelector(".leasesets_container");
@@ -28,16 +28,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function countTypes() {
-    const summary = document.getElementById("leasesetdebug") || document.getElementById("leasesetsummary");
+    const summary = document.getElementById("leasesetsummary") || document.getElementById("leasesetdebug");
     if (!summary) return;
-
-    const localSummary = document.querySelector("#leasesetsummary.local");
-    if (localSummary) {
-      localSummary.removeAttribute("hidden");
-      const lsLocalCount = document.getElementById("lsLocalCount");
-      const count = document.querySelectorAll(".leaseset").length;
-      lsLocalCount.textContent = count;
-    }
 
     const signatureCounts = {};
     document.querySelectorAll("span.nowrap.stype").forEach(span => {
@@ -95,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
       mergedCell.colSpan = 4;
       mergedCell.style.textAlign = "center";
       mergedCell.innerHTML = `
-        ${sigValueCell.innerHTML}&nbsp;
+        ${sigValueCell.innerHTML} 
         ${encValueCell.innerHTML}
       `;
       row.appendChild(mergedCell);
@@ -107,6 +99,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     tbody.appendChild(row);
+
+    const lsLocalCount = document.getElementById("lsLocalCount");
+    if (lsLocalCount) {
+      const leaseCountsRow = document.getElementById("leasesetCounts");
+      if (leaseCountsRow) {
+        const counters = leaseCountsRow.querySelectorAll(".lsCounter.sets");
+        if (counters.length > 0) {
+          const totalCount = Array.from(counters).reduce((sum, el) => {
+            const val = parseInt(el.textContent);
+            return val ? sum + val : sum;
+          }, 0);
+          lsLocalCount.textContent = totalCount;
+        }
+      }
+    }
+    summary.removeAttribute("hidden");
   }
 
   function styleLabels() {
@@ -183,14 +191,14 @@ document.addEventListener("DOMContentLoaded", () => {
         cell.colSpan = 4;
         cell.style.textAlign = "center";
         cell.innerHTML = `
-          <span class=counterLS><span class="lsLabel published">Published</span> <span class=lsCounter>${publishedCount}</span></span> &nbsp;
-          <span class=counterLS><span class="lsLabel unpublished">Unpublished</span> <span class=lsCounter>${unpublishedCount}</span></span> &nbsp;
-          <span class=counterLS><span class="lsLabel clientHostname">Client (hostname)</span> <span class=lsCounter>${knownClientCount}</span></span> &nbsp;
-          <span class=counterLS><span class="lsLabel clientB32">Client (b32)</span> <span class=lsCounter>${clientCount}</span></span>
+          <span class=counterLS><span class="lsLabel published">Published</span> <span class="lsCounter sets">${publishedCount}</span></span> &nbsp;
+          <span class=counterLS><span class="lsLabel unpublished">Unpublished</span> <span class="lsCounter sets">${unpublishedCount}</span></span> &nbsp;
+          <span class=counterLS><span class="lsLabel clientHostname">Client (hostname)</span> <span class="lsCounter sets">${knownClientCount}</span></span> &nbsp;
+          <span class=counterLS><span class="lsLabel clientB32">Client (b32)</span> <span class="lsCounter sets">${clientCount}</span></span>
         `;
         row.appendChild(cell);
         tbody.appendChild(row);
-        lsCount = Array.from(document.querySelectorAll("span.lsCounter")).reduce((sum, el) => sum + parseInt(el.textContent) || 0, 0);
+        lsCount = Array.from(document.querySelectorAll("#leasesetCounts span.lsCounter")).reduce((sum, el) => sum + parseInt(el.textContent) || 0, 0);
         lsLocalCount.textContent = lsCount;
       }
     }
@@ -198,7 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function refreshLeasesets() {
     if (!container) return;
-    progressx.show(theme);progressx.progress(.7);
+    progressx.show(theme); progressx.progress(.7);
     const url = window.location.href;
     fetch(url)
       .then(response => {
@@ -220,22 +228,22 @@ document.addEventListener("DOMContentLoaded", () => {
         compact();
         lsDebug();
         countTypes();
-        if (!lsLabels) {styleLabels();}
-        if (!debug) {sortLeasesets();}
+        if (!lsLabels) { styleLabels(); }
+        if (!debug) { sortLeasesets(); }
         progressx.progress(1);
-        setTimeout(() => {progressx.hide();}, 100);
+        setTimeout(() => { progressx.hide(); }, 100);
       })
-      .catch(() => {});
+      .catch(() => { });
   }
 
   function startRefresh() {
-    if (isRefreshing) {return;}
+    if (isRefreshing) { return; }
     isRefreshing = true;
-    refreshInterval = setInterval(() => {requestAnimationFrame(refreshLeasesets);}, 15000);
+    refreshInterval = setInterval(() => { requestAnimationFrame(refreshLeasesets); }, 15000);
   }
 
   function stopRefresh() {
-    if (!isRefreshing) {return;}
+    if (!isRefreshing) { return; }
     isRefreshing = false;
     clearInterval(refreshInterval);
     refreshInterval = null;
@@ -249,15 +257,15 @@ document.addEventListener("DOMContentLoaded", () => {
     lsDebug();
     countTypes();
     styleLabels();
-    if (!debug) {sortLeasesets();}
+    if (!debug) { sortLeasesets(); }
     progressx.hide();
   }
 
   initLSCompact();
 
   document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "hidden") {stopRefresh();}
-    else {initLSCompact();}
+    if (document.visibilityState === "hidden") { stopRefresh(); }
+    else { initLSCompact(); }
   });
 
 });
