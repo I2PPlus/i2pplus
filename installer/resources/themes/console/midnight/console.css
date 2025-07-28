@@ -1650,15 +1650,18 @@ span#distance{color:#d6fffd}
 .viewfullentry,.viewprofile,.configpeer{font-size:0}
 #leasesetdebug,#leasesetsummary{margin:12px 0 10px;column-span:all}
 #netdb .netdbentry tr:nth-child(2) td:nth-child(2){border-right:0!important}
-#leasesetdebug th,#leasesetsummary th{font-weight:700;text-transform:uppercase;font-size:10pt;letter-spacing:.08em;word-spacing:.1em;padding:8px 10px}
+#leasesetdebug th,#leasesetsummary th{width:50%;font-weight:700;text-transform:uppercase;font-size:10pt;letter-spacing:.08em;word-spacing:.1em;padding:8px 10px}
 #leasesetdebug th:last-child,#leasesetsummary th:last-child{border-right:var(--border)}
 #leasesetdebug th a,#leasesetsummary a{font-size:9pt;text-transform:capitalize;letter-spacing:normal;word-spacing:normal}
-#leasesetdebug th:first-child,#leasesetsummary th:first-child{text-align:left;white-space:nowrap}
-#leasesetdebug td:nth-child(odd),#leasesetsummary td:nth-child(odd){width:1%;white-space:nowrap;text-align:right;border-right:1px inset #120f35}
-#leasesetdebug td:nth-child(even),#leasesetdebug td:nth-child(even){width:24%;text-align:left;word-break:break-word}
-#leasesetsummary td:first-child{width:100px;white-space:nowrap;padding-left:10px}
+#leasesetdebug th:first-child,#leasesetsummary th:first-child{text-align:left}
 #leasesetsummary td:empty{display:none}
 #noleasesets,#notinitialized,.netdbnotfound{margin-top:-4px;margin-bottom:10px;padding:20px 25px 20px 55px;text-align:left;font-weight:700;border:var(--border_inner);background:#000 var(--infohelp) no-repeat 15px center/28px}
+.lsCounter,.lsBadge{color:#var(--ink);text-shadow:1px 1px 1px #0008;text-shadow:1px 1px 1px #0008;background:#4048}
+
+#leasesetdebug td,#leasesetsummary td:nth-child(odd){padding:10px}
+#leasesetdebug td:nth-child(odd),#leasesetsummary td:nth-child(odd){width:1%;white-space:nowrap;text-align:right;border-right:0!important}
+#leasesetdebug td:nth-child(even),#leasesetdebug td:nth-child(even){width:24%;text-align:left;word-break:break-word}
+#leasesetdebug #sigEncCount td:nth-child(even),#leasesetsummary #sigEncCount td:nth-child(even){text-align:left}
 
 /* infohelp/warn */
 .infohelp,#helptranslate,#consolepass tr:first-child td,#gatherstats{white-space:normal;line-height:1.4;box-shadow:var(--highlight),inset 0 0 2px 1px #606}

@@ -1393,6 +1393,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #netdb .yes,#netdb .no{width:16px;height:16px;display:inline-block;vertical-align:middle;font-size:0;background:var(--yes) no-repeat center calc(50% - 1px)/14px}
 #netdb .no{background:var(--no) no-repeat center calc(50% - 1px)/12px}
 #leasesetsummary #leasesetCounts td{padding:10px;border-top:3px solid #252;background:var(--th)}
+.lsCounter,.lsBadge{color:var(--ink);text-shadow:1px 1px 1px #0008;background:#2529}
 
 /* sybils */
 h3#threats.sybils{margin-bottom:10px}

@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const sigText = Object.entries(signatureCounts)
       .sort()
-      .map(([type, count]) => `<span class=counterLS><span class="lsLabel sigType">${type}</span> (${count})</span>`)
+      .map(([type, count]) => `<span class=counterLS><span class="lsLabel sigType">${type}</span> <span class=lsBadge>${count}</span></span>`)
       .join(" &nbsp;");
     const sigValueCell = document.createElement("td");
     sigValueCell.innerHTML = sigText;
@@ -85,7 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const encText = Object.entries(encryptionCounts)
       .sort()
-      .map(([type, count]) => `<span class=counterLS><span class="lsLabel encType">${type}</span> (${count})</span>`)
+      .map(([type, count]) => `<span class=counterLS><span class="lsLabel encType">${type}</span> <span class=lsBadge>${count}</span></span>`)
       .join(" &nbsp;");
     const encValueCell = document.createElement("td");
     encValueCell.innerHTML = encText;
@@ -101,15 +101,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const style = document.createElement("style");
     style.type = "text/css";
     style.id = "lsLabels";
-    style.textContent =
-      ".counterLS{padding:2px 8px 2px 2px;display:inline-block;vertical-align:middle;border:var(--border_soft);box-shadow:var(--highlight);background:var(--badge)}" +
-      ".counterLS .published{background:var(--globe) no-repeat 4px center/14px}" +
-      ".counterLS .unpublished{background:var(--hardhat) no-repeat 4px center/14px}" +
-      ".counterLS .clientB32{background:var(--ping) no-repeat 4px center/14px}" +
-      ".counterLS .clientHostname{background:var(--link) no-repeat 4px center/14px}" +
-      ".lsLabel{padding:2px 4px 2px 22px;display:inline-block;font-weight:500}" +
-      ".lsLabel.encType{background:var(--crypto) no-repeat 4px center/14px}" +
-      ".lsLabel.sigType{background:var(--lock) no-repeat 4px center/14px}";
+    style.textContent = `
+      .counterLS{padding:2px;display:inline-block;vertical-align:middle;border:var(--border_soft);box-shadow:var(--highlight);background:var(--badge)}
+      .counterLS .published{background:var(--globe) no-repeat 4px center/14px}
+      .counterLS .unpublished{background:var(--hardhat) no-repeat 4px center/14px}
+      .counterLS .clientB32{background:var(--ping) no-repeat 4px center/14px}
+      .counterLS .clientHostname{background:var(--link) no-repeat 4px center/14px}
+      .lsCounter,.lsBadge{margin:-3px -1px -3px 0;padding:2px 6px;min-width:28px;display:inline-block;text-align:center;font-weight:700}
+      .lsLabel{padding:1px 4px 1px 22px;display:inline-block;font-weight:500}
+      .lsLabel.encType{background:var(--crypto) no-repeat 4px center/14px}
+      .lsLabel.sigType{background:var(--lock) no-repeat 4px center/14px}`;
     document.head.appendChild(style);
   }
 
@@ -168,10 +169,10 @@ document.addEventListener("DOMContentLoaded", () => {
         cell.colSpan = 4;
         cell.style.textAlign = "center";
         cell.innerHTML = `
-          <span class=counterLS><span class="lsLabel published">Published:</span> <span class=lsCounter>${publishedCount}</span></span> &nbsp;
-          <span class=counterLS><span class="lsLabel unpublished">Unpublished:</span> <span class=lsCounter>${unpublishedCount}</span></span> &nbsp;
-          <span class=counterLS><span class="lsLabel clientHostname">Client (hostname):</span> <span class=lsCounter>${knownClientCount}</span></span> &nbsp;
-          <span class=counterLS><span class="lsLabel clientB32">Client (b32):</span> <span class=lsCounter>${clientCount}</span></span>
+          <span class=counterLS><span class="lsLabel published">Published</span> <span class=lsCounter>${publishedCount}</span></span> &nbsp;
+          <span class=counterLS><span class="lsLabel unpublished">Unpublished</span> <span class=lsCounter>${unpublishedCount}</span></span> &nbsp;
+          <span class=counterLS><span class="lsLabel clientHostname">Client (hostname)</span> <span class=lsCounter>${knownClientCount}</span></span> &nbsp;
+          <span class=counterLS><span class="lsLabel clientB32">Client (b32)</span> <span class=lsCounter>${clientCount}</span></span>
         `;
         row.appendChild(cell);
         tbody.appendChild(row);
