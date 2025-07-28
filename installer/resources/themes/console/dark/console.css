@@ -1394,6 +1394,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #netdb .no{background:var(--no) no-repeat center calc(50% - 1px)/12px}
 #leasesetsummary #leasesetCounts td{padding:10px;border-top:3px solid #252;background:var(--th)}
 .lsCounter,.lsBadge{color:var(--ink);text-shadow:1px 1px 1px #0008;background:#2529}
+#leasesetsummary .vsep{margin:0 1px 0 4px;width:1px;height:26px;display:inline-block;vertical-align:middle;background:#252;}
 
 /* sybils */
 h3#threats.sybils{margin-bottom:10px}

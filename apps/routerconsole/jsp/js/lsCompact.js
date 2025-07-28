@@ -63,21 +63,21 @@ document.addEventListener("DOMContentLoaded", () => {
     row.id = "sigEncCount";
 
     const sigCell = document.createElement("td");
-    sigCell.innerHTML = "<b>Signature types:</b>";
+    sigCell.innerHTML = "<b>${translateSigTypes}:</b>";
 
     const sigText = Object.entries(signatureCounts)
       .sort()
-      .map(([type, count]) => `<span class=counterLS><span class="lsLabel sigType">${type} <span class=lsCounter>${count}</span></span></span>`)
+      .map(([type, count]) => `<span class=counterLS><span class="lsLabel sigType" title="${translateSigType}">${type} <span class=lsCounter>${count}</span></span></span>`)
       .join(" &nbsp;");
     const sigValueCell = document.createElement("td");
     sigValueCell.innerHTML = sigText;
 
     const encCell = document.createElement("td");
-    encCell.innerHTML = "<b>Encryption types:</b>";
+    encCell.innerHTML = "<b>${translateEncTypes}:</b>";
 
     const encText = Object.entries(encryptionCounts)
       .sort()
-      .map(([type, count]) => `<span class=counterLS><span class="lsLabel encType">${type} <span class=lsCounter>${count}</span></span></span>`)
+      .map(([type, count]) => `<span class=counterLS><span class="lsLabel encType"  title="${translateEncType}">${type} <span class=lsCounter>${count}</span></span></span>`)
       .join(" &nbsp;");
     const encValueCell = document.createElement("td");
     encValueCell.innerHTML = encText;
@@ -87,8 +87,9 @@ document.addEventListener("DOMContentLoaded", () => {
       mergedCell.colSpan = 4;
       mergedCell.style.textAlign = "center";
       mergedCell.innerHTML = `
-        ${sigValueCell.innerHTML} 
-        ${encValueCell.innerHTML}
+        ${sigValueCell.innerHTML}
+        <span class=vsep></span>
+        &nbsp;${encValueCell.innerHTML}
       `;
       row.appendChild(mergedCell);
     } else {
@@ -191,10 +192,10 @@ document.addEventListener("DOMContentLoaded", () => {
         cell.colSpan = 4;
         cell.style.textAlign = "center";
         cell.innerHTML = `
-          <span class=counterLS><span class="lsLabel published">Published</span> <span class="lsCounter sets">${publishedCount}</span></span> &nbsp;
-          <span class=counterLS><span class="lsLabel unpublished">Unpublished</span> <span class="lsCounter sets">${unpublishedCount}</span></span> &nbsp;
-          <span class=counterLS><span class="lsLabel clientHostname">Client (hostname)</span> <span class="lsCounter sets">${knownClientCount}</span></span> &nbsp;
-          <span class=counterLS><span class="lsLabel clientB32">Client (b32)</span> <span class="lsCounter sets">${clientCount}</span></span>
+          <span class=counterLS title="${translate_localPublic}"><span class="lsLabel published">Published</span> <span class="lsCounter sets">${publishedCount}</span></span> &nbsp;
+          <span class=counterLS title="${translate_localPrivate}"><span class="lsLabel unpublished">Unpublished</span> <span class="lsCounter sets">${unpublishedCount}</span></span> &nbsp;
+          <span class=counterLS title="${translate_requestedLS}"><span class="lsLabel clientHostname">Client (hostname)</span> <span class="lsCounter sets">${knownClientCount}</span></span> &nbsp;
+          <span class=counterLS title="${translate_requestedLS}"><span class="lsLabel clientB32">Client (b32)</span> <span class="lsCounter sets">${clientCount}</span></span>
         `;
         row.appendChild(cell);
         tbody.appendChild(row);
