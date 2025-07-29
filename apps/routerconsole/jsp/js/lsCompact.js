@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
     row.id = "sigEncCount";
 
     const sigCell = document.createElement("td");
-    sigCell.innerHTML = "<b>${translate_sigTypes}:</b>";
+    sigCell.innerHTML = `<b>${translate_sigTypes}:</b>`;
 
     const sigText = Object.entries(signatureCounts)
       .sort()
@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
     sigValueCell.innerHTML = sigText;
 
     const encCell = document.createElement("td");
-    encCell.innerHTML = "<b>${translate_encTypes}:</b>";
+    encCell.innerHTML = `<b>${translate_encTypes}:</b>`;
 
     const encText = Object.entries(encryptionCounts)
       .sort()
