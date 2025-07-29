@@ -1,4 +1,5 @@
-<%  boolean isAdvanced = editBean.isAdvanced();
+<%  String requiredSpan = " <span class=\"required\" style=\"font-weight:600;color:red\">(" + intl._t("required") + ")</span>";
+    boolean isAdvanced = editBean.isAdvanced();
     boolean isShared = editBean.isSharedClient(curTunnel);
     String aStopFirst = intl._t("Tunnel and all other shared client tunnels must be stopped to change this configuration");
     String bStopFirst = intl._t("Tunnel must be stopped to change this configuration");
@@ -18,8 +19,7 @@
         tunnelType = editBean.getInternalType(curTunnel);
 %>
 <h2><%=editBean.getTunnelName(curTunnel)%>&nbsp;<%=intl._t("Configuration")%>&nbsp;<span style="float:right;font-size:80%">Type: <%=tunnelTypeName%></span></h2>
-<%
-    } else {
+<%  } else {
         tunnelTypeName = editBean.getTypeName(request.getParameter("type"));
         tunnelType = net.i2p.data.DataHelper.stripHTML(request.getParameter("type"));
 %>
@@ -28,8 +28,7 @@
 <input type=hidden name="tunnel" value="<%=curTunnel%>">
 <input type=hidden name="nonce" value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>">
 <input type=hidden name="type" value="<%=tunnelType%>">
-<%
-    /*
+<%  /*
      * These are four keys that are generated automatically on first save, and we want to persist
      * in i2ptunnel.config, but don't want to show clogging up the custom options form.
      */
@@ -37,27 +36,22 @@
     if (key != null && key.length() > 0) {
 %>
 <input type=hidden name="key1" value="<%=key%>">
-<%
-    }
+<%  }
     key = editBean.getKey2(curTunnel);
     if (key != null && key.length() > 0) {
 %>
 <input type=hidden name="key2" value="<%=key%>">
-<%
-    }
+<%  }
     key = editBean.getKey3(curTunnel);
     if (key != null && key.length() > 0) {
 %>
 <input type=hidden name="key3" value="<%=key%>">
-<%
-    }
+<%  }
     key = editBean.getKey4(curTunnel);
     if (key != null && key.length() > 0) {
 %>
 <input type=hidden name="key4" value="<%=key%>">
-<%
-    }
-%>
+<%  } %>
 <input type=submit class=default name="action" value="Save changes">
 <table id=clientTunnelEdit class=tunnelConfig>
 <tr><th><%=intl._t("Name")%></th><th><%=intl._t("Auto Start Tunnel")%></th></tr>
@@ -67,9 +61,7 @@
 </tr>
 <tr><th><%=intl._t("Description")%></th>
 <th>
-<%
-    if (!"streamrclient".equals(tunnelType)) {
-%>
+<%  if (!"streamrclient".equals(tunnelType)) { %>
 <%=intl._t("Shared Client")%>
 <%  } /* !streamrclient */ %>
 </th>
@@ -77,8 +69,7 @@
 <tr>
 <td><input type=text size=60 maxlength=80 name="nofilter_description" title="<%=intl._t("Description of tunnel to be displayed on Tunnel Manager home page")%>" value="<%=editBean.getTunnelDescription(curTunnel)%>" class="freetext tunnelDescriptionText"></td>
 <td>
-<%
-    if (!"streamrclient".equals(tunnelType)) {
+<%  if (!"streamrclient".equals(tunnelType)) {
         // we don't actually disable the field for a new tunnel, but we provide a warning
         String shtitle = (canChangePort && isShared) ?
                          intl._t("Traffic from all clients with this feature enabled will be routed over the same set of tunnels. This will make profiling the tunnels by an adversary more difficult, but will link the clients together.") :
@@ -89,8 +80,7 @@
 <input value="true" type=checkbox name="shared" <%=(isShared ? checked : "")%> class="optbox slider" <%=shdisabled%>>
 <%=intl._t("Share tunnels with other configured clients")%>
 </label>
-<%
-        if (isShared && !canChangePort) {
+<%      if (isShared && !canChangePort) {
             // disabled checkbox won't come back in the form, stuff it in here
             // https://stackoverflow.com/questions/155291/can-html-checkboxes-be-set-to-readonly
 %>
@@ -102,23 +92,17 @@
 </tr>
 <tr>
 <th>
-<%
-    if ("streamrclient".equals(tunnelType)) {
-%>
+<%  if ("streamrclient".equals(tunnelType)) { %>
 <%=intl._t("Target")%>
-<%
-    } else {
-%>
+<%  } else { %>
 <%=intl._t("Access Point")%>
 <%  } /* streamrclient */ %>
 </th>
 <th>
-<%
-    if ("httpclient".equals(tunnelType) || "sockstunnel".equals(tunnelType)) {
+<%  if ("httpclient".equals(tunnelType) || "sockstunnel".equals(tunnelType)) {
 %>
 <%=intl._t("Use Outproxy Plugin")%>
-<%
-    }  else if ("ircclient".equals(tunnelType)) {
+<%  } else if ("ircclient".equals(tunnelType)) {
 %>
 <%=intl._t("Enable DCC")%>
 <%  } %>
@@ -127,60 +111,35 @@
 <tr>
 <td>
 <b><%=intl._t("Port")%>:</b>
-<%
-      String value = editBean.getClientPort(curTunnel);
-      if (value == null || "".equals(value.trim())) {
-          out.write(" <span class=required style=font-weight:600;color:red>(");
-          out.write(intl._t("required"));
-          out.write(")</span>");
-      }
+<%    String value = editBean.getClientPort(curTunnel);
+      if (value == null || "".equals(value.trim())) {out.write(requiredSpan);}
 %>
 <input type=text size=6 maxlength=5 name="port" title="<%=intl._t("Specify the local port this service should be accessible from")%>" value="<%=editBean.getClientPort(curTunnel)%>" class="freetext port"  placeholder="<%=intl._t("required")%>">
-<%
-      if ("streamrclient".equals(tunnelType)) {
-%>
+<%    if ("streamrclient".equals(tunnelType)) { %>
 <b><%=intl._t("Host")%>:</b>
-<%
-      String targetHost = editBean.getTargetHost(curTunnel);
-      if (targetHost == null || "".equals(targetHost.trim())) {
-          out.write(" <span class=required style=font-weight:600;color:red>(");
-          out.write(intl._t("required"));
-          out.write(")</span>");
-      }
+<%    String targetHost = editBean.getTargetHost(curTunnel);
+      if (targetHost == null || "".equals(targetHost.trim())) {out.write(requiredSpan);}
 %>
 <input type=text size=20 id=targetHost name="targetHost" title="<%=intl._t("Hostname or IP address of the target server")%>" value="<%=targetHost%>" class="freetext host"  placeholder="<%=intl._t("required")%>">
-<%
-      } else {
-%>
+<%    } else { %>
 <b><%=intl._t("Reachable by")%>:</b>
 <select id=reachableBy name="reachableBy" title="<%=intl._t("Local interface (ip address) the client tunnel will be reachable from")%>" class=selectbox>
-<%
-          String clientInterface = editBean.getClientInterface(curTunnel);
+<%        String clientInterface = editBean.getClientInterface(curTunnel);
           for (String ifc : editBean.interfaceSet()) {
-              out.write("<option value=\"");
-              out.write(ifc);
-              out.write('\"');
-              if (ifc.equals(clientInterface))
-                  out.write(selected);
-                  out.write('>');
-                  out.write(ifc);
-                  out.write("</option>\n");
-              }
+              out.write("<option value=\"" + ifc + "\"" + (ifc.equals(clientInterface) ? selected : "") + ">" + ifc + "</option>\n");
+          }
 %>
 </select>
 </td>
 <%        } /* streamrclient */ %>
 <td>
-<%
-          if ("httpclient".equals(tunnelType) || "sockstunnel".equals(tunnelType)) {
+<%        if ("httpclient".equals(tunnelType) || "sockstunnel".equals(tunnelType)) {
 %>
 <label title="<%=intl._t("If an outproxy plugin is installed (e.g. Orchid), use this instead of any configured outproxies to access websites outside of I2P")%>">
 <input value="1" type=checkbox name="useOutproxyPlugin" <%=(editBean.getUseOutproxyPlugin(curTunnel) ? checked : "")%> class="optbox slider">
 <%=intl._t("Use plugin instead of proxies listed below if available")%>
 </label>
-<%
-          } else if ("ircclient".equals(tunnelType)) {
-%>
+<%        } else if ("ircclient".equals(tunnelType)) { %>
 <label title="<%=intl._t("Enables direct chat and file transfers, bypassing I2P. Note that this will compromise your anonymity and is not recommended.")%>">
 <input value="1" type=checkbox name="DCC"<%=(editBean.getDCC(curTunnel) ? checked : "")%> class="optbox slider">
 <%=intl._t("Enable Direct Client-to-Client protocol")%>
@@ -188,33 +147,26 @@
 <%        } %>
 </td>
 </tr>
-<%
-          if ("httpclient".equals(tunnelType) || "connectclient".equals(tunnelType) || "sockstunnel".equals(tunnelType) || "socksirctunnel".equals(tunnelType)) {
-%>
+<%        if ("httpclient".equals(tunnelType) || "connectclient".equals(tunnelType) || "sockstunnel".equals(tunnelType) || "socksirctunnel".equals(tunnelType)) { %>
 <tr>
 <th><%=intl._t("Outproxies")%></th>
 <th>
-<%
-              if ("httpclient".equals(tunnelType) || "sockstunnel".equals(tunnelType)) {
-%>
+<%            if ("httpclient".equals(tunnelType) || "sockstunnel".equals(tunnelType)) { %>
 <%=intl._t("SSL Outproxies")%>
 <%            } /* httpclient */ %>
 </th>
 </tr>
 <tr>
 <td>
-<input type=text size=30 name="proxyList" title="<%=intl._t("Specify the .i2p address or destination (b32 or b64) of the outproxy here.")%>&nbsp;<%=intl._t("For a random selection from a pool, separate with commas e.g. server1.i2p,server2.i2p")%>" value="<%=editBean.getClientDestination(curTunnel)%>" class="freetext proxyList">
+<input type=text size=30 name=proxyList title="<%=intl._t("Specify the .i2p address or destination (b32 or b64) of the outproxy here.")%>&nbsp;<%=intl._t("For a random selection from a pool, separate with commas e.g. server1.i2p,server2.i2p")%>" value="<%=editBean.getClientDestination(curTunnel)%>" class="freetext proxyList">
 </td>
 <td>
-<%
-              if ("httpclient".equals(tunnelType) || "sockstunnel".equals(tunnelType)) {
-%>
+<%            if ("httpclient".equals(tunnelType) || "sockstunnel".equals(tunnelType)) { %>
 <input type=text size=30 name="sslProxies" title="<%=intl._t("Specify the .i2p address or destination (b32 or b64) of the outproxy here.")%>&nbsp;<%=intl._t("For a random selection from a pool, separate with commas e.g. server1.i2p,server2.i2p")%>" value="<%=editBean.getSslProxies(curTunnel)%>" class="freetext proxyList">
 <%            } /* httpclient */ %>
 </td>
 </tr>
-<%
-              if ("sockstunnel".equals(tunnelType) || "socksirctunnel".equals(tunnelType)) {
+<%            if ("sockstunnel".equals(tunnelType) || "socksirctunnel".equals(tunnelType)) {
                   boolean isHTTPS = editBean.getOutproxyType(curTunnel).equals("connect");
 %>
 <tr><th colspan=2><%=intl._t("Outproxy Type")%></th></tr>
@@ -240,54 +192,39 @@
 <tr>
 <td>
 <%            String value2 = editBean.getClientDestination(curTunnel);
-              if (value2 == null || "".equals(value2.trim())) {
-                  out.write(" <span class=required style=font-weight:600;color:red>(");
-                  out.write(intl._t("required"));
-                  out.write(")</span>");
-              }
+              if (value2 == null || "".equals(value2.trim())) {out.write(requiredSpan);}
 %>
 <input type=text size=30 id=targetDestination name="targetDestination" title="<%=intl._t("Specify the .i2p address or destination (b32 or b64) of the tunnel here.")%>&nbsp;<%=intl._t("For a random selection from a pool, separate with commas e.g. server1.i2p,server2.i2p")%>" value="<%=editBean.getClientDestination(curTunnel)%>" class="freetext destination" placeholder="<%=intl._t("name, name:port, or destination")%>">
 </td>
-<%
-              if ("client".equals(tunnelType) || "ircclient".equals(tunnelType)) {
-%>
+<%            if ("client".equals(tunnelType) || "ircclient".equals(tunnelType)) { %>
 <td>
 <label title="<%=intl._t("If you are accessing a service on a remote I2P router, you may wish to connect with SSL to avoid traffic interception. The client application should be also be configured to use SSL.")%>">
 <input value="1" type=checkbox name="useSSL" <%=(editBean.isSSLEnabled(curTunnel) ? checked : "")%> class="optbox slider">
 <%=intl._t("Clients use SSL to connect to tunnel")%>
 </label>
-<%
-              } else if ("streamrclient".equals(tunnelType)) {
-%>
+<%            } else if ("streamrclient".equals(tunnelType)) { %>
 <td class=infohelp>
 <%=intl._t("Please specify the full b64 destination.")%>
-<%
-              } else {
-%>
+<%            } else { %>
 <td>
 <%            } /* tunnel types */ %>
 </td>
 </tr>
-<%
-              }
+<%            }
               String destb64 = editBean.getDestinationBase64(curTunnel);
               if (destb64.length() > 0) {
 %>
 <tr><th><%=intl._t("Local destination")%></th><th><%=intl._t("Local Base32")%></th></tr>
 <tr>
-<td><input type=text class="freetext readonly resetScrollLeft" size=30 id=localDest title="<%=intl._t("Read Only: Local Destination (if known)")%>" value="<%=destb64%>" readonly=readonly></td>
+<td><input type=text class="freetext readonly resetScrollLeft" size=30 id=localDest title="<%=intl._t("Read Only: Local Destination (if known)")%>" value="<%=destb64%>" readonly></td>
 <td><span class="selectAll"><%=editBean.getDestHashBase32(curTunnel)%></span></td>
 </tr>
 <%            } /* if destb64 */ %>
 <tr>
 <td class=buttons colspan=2>
-<%
-              if (indexBean.getTunnelStatus(curTunnel) != indexBean.NOT_RUNNING) {
-%>
+<%            if (indexBean.getTunnelStatus(curTunnel) != indexBean.NOT_RUNNING) { %>
 <a style=display:none class="control stop" title="Stop this Tunnel" href="list?tunnel=<%=curTunnel%>&amp;nonce=<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>&amp;action=stop&amp;tunnel=<%=curTunnel%>"><%=intl._t("Stop")%></a>
-<%
-              } else {
-%>
+<%            } else { %>
 <a style=display:none class="control start" title="<%=intl._t("Start this Tunnel")%>" href="list?tunnel=<%=curTunnel%>&amp;nonce=<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>&amp;action=start&amp;tunnel=<%=curTunnel%>"><%=intl._t("Start")%></a>
 <%            } %>
 <input type=hidden value="true" name="removeConfirm">
@@ -299,13 +236,11 @@
 </table>
 <h3><%=intl._t("Advanced networking options")%></h3>
 <table class=tunnelConfig>
-<%
-              if (!"streamrclient".equals(tunnelType)) {
+<%            if (!"streamrclient".equals(tunnelType)) {
                   // no shared client tunnels for streamr
 %>
 <tr><td class=infohelp colspan=2><%=intl._t("Note: When this client is configured to share tunnels, these options apply to all clients configured to share tunnels.")%></td></tr>
-<%
-              } // !streamrclient
+<%            } // !streamrclient
               if ("client".equals(tunnelType)) {
 %>
 <tr><th><%=intl._t("Profile")%></th><th><%=intl._t("Delay Connect")%></th></tr>
@@ -323,8 +258,7 @@
 <% /* TODO: Convey to users: Where is the (1s) delay introduced? What is the difference between delay connect and delay open? */ %>
 </td>
 </tr>
-<%
-              } // client
+<%            } // client
               if (!editBean.isRouterContext()) {
 %>
 <tr>
@@ -339,8 +273,7 @@
 <input type=text name="clientport" size=20 title="<%=intl._t("I2CP Port Number")%>" value="<%=editBean.getI2CPPort(curTunnel)%>" class="freetext port">
 </td>
 </tr>
-<%
-              } // !isRouterContext
+<%            } // !isRouterContext
               if (!"streamrclient".equals(tunnelType)) {
                   // streamr client sends pings so it will never be idle
 %>
@@ -353,8 +286,7 @@
 <%            } else { %>
 <tr><th><%=intl._t("Signature type")%></th><th></th></tr>
 <tr>
-<%
-              } // !streamrclient
+<%            } // !streamrclient
               int currentSigType = editBean.getSigType(curTunnel, tunnelType);
               boolean canChangeSigType = editBean.canChangeSigType(curTunnel);
               String tstopFirst = " title=\"" + stopFirst + "\" ";
@@ -386,8 +318,7 @@
 <td></td>
 <%            } /* streamrclient */ %>
 </tr>
-<%
-              boolean has0 = editBean.hasEncType(curTunnel, 0);
+<%            boolean has0 = editBean.hasEncType(curTunnel, 0);
               boolean has4 = editBean.hasEncType(curTunnel, 4);
               boolean has5 = editBean.hasEncType(curTunnel, 5);
               boolean has6 = editBean.hasEncType(curTunnel, 6);
@@ -404,13 +335,13 @@
 <%        } %>
 <tr><td><b><%=intl._t("Legacy options")%></b></td><td><b><%=intl._t("Post Quantum")%></b></td></tr>
 <td>
-<span class="multiOption">
+<span class=multiOption>
 <label><input value="0" type=radio name=encType <%=((has0 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;ElGamal-2048</label>
 </span>
-<span class="multiOption">
+<span class=multiOption>
 <label><input value="4" type=radio name=encType <%=((has4 && !has0) ? checked : edisabled)%> class=optbox>&nbsp;ECIES-X25519</label>
 </span>
-<span class="multiOption">
+<span class=multiOption>
 <label><input value="4,0" type=radio name=encType <%=((has0 && has4) ? checked : edisabled)%> class=optbox>&nbsp;<%=intl._t("Both encryption types")%></label>
 </span>
 </td>
@@ -549,8 +480,7 @@ minutes</span>
 <input type=text size=30 id=privKeyFile name="privKeyFile" title="<%=intl._t("Path to Private Key File")%>" value="<%=editBean.getPrivateKeyFile(curTunnel)%>" class="freetext filemanager">
 </td>
 </tr>
-<%
-          }
+<%        }
           if ("httpclient".equals(tunnelType)) {
 %>
 <tr><th colspan=2><%=intl._t("HTTP Filtering")%></th></tr>
@@ -581,8 +511,7 @@ minutes</span>
 </label>
 </td>
 </tr>
-<%
-          } // if httpclient
+<%        } // if httpclient
           if ("httpclient".equals(tunnelType) || "connectclient".equals(tunnelType) || "sockstunnel".equals(tunnelType) || "socksirctunnel".equals(tunnelType)) {
 %>
 <tr><th><%=intl._t("Local Authorization")%></th><th><%=intl._t("Local Credentials")%></th></tr>
@@ -610,8 +539,7 @@ minutes</span>
 <input type="password" name="nofilter_outproxyPassword" title="<%=intl._t("Enter password required by outproxy")%>" value="<%=editBean.getOutproxyPassword(curTunnel)%>" class="freetext password" placeholder="<%=intl._t("Password")%>">
 </td>
 </tr>
-<%
-          } // httpclient || connect || socks || socksirc
+<%        } // httpclient || connect || socks || socksirc
           if ("httpclient".equals(tunnelType)) {
 %>
 <tr><th colspan=2><%=intl._t("Jump URL List")%></th></tr>

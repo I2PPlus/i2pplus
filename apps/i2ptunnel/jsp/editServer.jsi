@@ -1,4 +1,4 @@
-<%
+<%  String requiredSpan = " <span class=\"required\" style=\"font-weight:600;color:red\">(" + intl._t("required") + ")</span>";
     String tunnelTypeName;
     String tunnelType;
     if (curTunnel >= 0) {
@@ -6,8 +6,7 @@
         tunnelType = editBean.getInternalType(curTunnel);
 %>
 <h2><%=editBean.getTunnelName(curTunnel)%>&nbsp;<%=intl._t("Configuration")%>&nbsp;<span style="float: right; font-size: 80%">Type: <%=tunnelTypeName%></span></h2>
-<%
-    } else {
+<%  } else {
         tunnelTypeName = editBean.getTypeName(request.getParameter("type"));
         tunnelType = net.i2p.data.DataHelper.stripHTML(request.getParameter("type"));
 %>
@@ -17,7 +16,9 @@
 <input type=hidden name="nonce" value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>">
 <input type=hidden name="type" value="<%=tunnelType%>">
 
-<%
+<%  String checked = " checked ";
+    String isDisabled = " disabled";
+    String selected = " selected ";
     boolean has0 = editBean.hasEncType(curTunnel, 0);
     boolean has4 = editBean.hasEncType(curTunnel, 4);
     boolean has5 = editBean.hasEncType(curTunnel, 5);
@@ -25,12 +26,9 @@
     boolean has7 = editBean.hasEncType(curTunnel, 7);
     boolean isAdvanced = editBean.isAdvanced();
     boolean canChangeEncType = editBean.canChangeEncType(curTunnel);
-    String edisabled = canChangeEncType ? "" : " disabled=\"disabled\" ";
+    String edisabled = canChangeEncType ? "" : isDisabled;
     String stopFirst = intl._t("Tunnel must be stopped to change this configuration");
     String tstopFirst = " title=\"" + stopFirst + "\" ";
-    String checked = " checked ";
-    String isDisabled = " disabled";
-    String selected = " selected ";
 
     /*
      * These are four keys that are generated automatically on first save, and we want to persist
@@ -93,31 +91,22 @@
 <%  if ("streamrserver".equals(tunnelType)) { %>
 <%=intl._t("Access Point")%>
 </th>
-<th>
-</th>
+<th></th>
 <%  } else { %>
 <%=intl._t("Target")%>
 </th>
-<th>
-<%=intl._t("Use SSL")%>
-</th>
+<th><%=intl._t("Use SSL")%></th>
 <%  } /* is streamrserver */ %>
 </tr>
 <tr>
 <td>
-<%
-    if (!"streamrserver".equals(tunnelType)) {
-%>
+<%  if (!"streamrserver".equals(tunnelType)) { %>
 <b><%=intl._t("Host")%>:</b>
 <input type=text size=20 name="targetHost" title="<%=intl._t("Hostname or IP address of the target server")%>" value="<%=editBean.getTargetHost(curTunnel)%>" class="freetext host">
 <%  } /* !streamrserver */ %>
 <b><%=intl._t("Port")%>:</b>
 <%  String value = editBean.getTargetPort(curTunnel);
-    if (value == null || "".equals(value.trim())) {
-        out.write(" <span class=required style=font-weight:600;color:red>(");
-        out.write(intl._t("required"));
-        out.write(")</span>");
-    }
+    if (value == null || "".equals(value.trim())) {out.write(requiredSpan);}
 %>
 <input type=text size=6 maxlength=5 id=targetPort name="targetPort" title="<%=intl._t("Specify the port the server is running on")%>" value="<%=editBean.getTargetPort(curTunnel)%>" class="freetext port" placeholder="<%=intl._t("required")%>">
 
@@ -126,43 +115,28 @@
 <select id="reachableBy" name="reachableBy" title="<%=intl._t("Listening interface (IP address) for client access (normally 127.0.0.1)")%>" class=selectbox>
 <%  String clientInterface = editBean.getClientInterface(curTunnel);
     for (String ifc : editBean.interfaceSet()) {
-        out.write("<option value=\"");
-        out.write(ifc);
-        out.write('\"');
-        if (ifc.equals(clientInterface)) {out.write(selected);}
-        out.write('>');
-        out.write(ifc);
-        out.write("</option>\n");
+        out.write("<option value=\"" + ifc + "\"" + (ifc.equals(clientInterface) ? selected : "") + ">" + ifc + "</option>\n");
     }
 %>
 </select>
 <%  } /* httpbidirserver || streamrserver */ %>
 </td>
 <td>
-<%
-    if (!"streamrserver".equals(tunnelType)) {
-%>
+<%  if (!"streamrserver".equals(tunnelType)) { %>
 <label title="<%=intl._t("To avoid traffic sniffing if connecting to a remote server, you can enable an SSL connection. Note that the target server must be configured to accept SSL connections.")%>">
 <input value="1" type=checkbox name="useSSL"<%=(editBean.isSSLEnabled(curTunnel) ? checked : "")%> class="optbox slider">
 <%=intl._t("Use SSL to connect to target")%>
 </label>
 <%  } /* !streamrserver */ %>
 </td>
-<%
-    if ("httpbidirserver".equals(tunnelType)) {
-%>
+<%  if ("httpbidirserver".equals(tunnelType)) { %>
 </tr>
 <tr><th colspan=2><%=intl._t("Access Point")%></th></tr>
 <tr>
 <td colspan=2>
 <b><%=intl._t("Port")%>:</b>
-<%
-        String value4 = editBean.getClientPort(curTunnel);
-        if (value4 == null || "".equals(value4.trim())) {
-            out.write(" <span class=required style=font-weight:600;color:red>(");
-            out.write(intl._t("required"));
-            out.write(")</span>");
-        }
+<%      String value4 = editBean.getClientPort(curTunnel);
+        if (value4 == null || "".equals(value4.trim())) {out.write(requiredSpan);}
 %>
 <input type=text size=6 maxlength=5 name="port" title="<%=intl._t("Port required to access service (this can be a different port to the port the service is hosted on)")%>" value="<%=editBean.getClientPort(curTunnel)%>" class="freetext port" placeholder="<%=intl._t("required")%>">
 </td>
@@ -171,16 +145,11 @@
 <tr><th><%=intl._t("Local destination")%>&nbsp;(B64)</th><th><%=intl._t("Private key file")%></th></tr>
 <tr>
 <td>
-<input type=text size=30 id=localDest readonly="readonly" title="<%=intl._t("Read Only: Local Destination (if known)")%>" value="<%=editBean.getDestinationBase64(curTunnel)%>" wrap="off" class="freetext readonly resetScrollLeft">
+<input type=text size=30 id=localDest readonly title="<%=intl._t("Read Only: Local Destination (if known)")%>" value="<%=editBean.getDestinationBase64(curTunnel)%>" wrap="off" class="freetext readonly resetScrollLeft">
 </td>
 <td>
-<%
-    String value3 = editBean.getPrivateKeyFile(curTunnel);
-    if (value3 == null || "".equals(value3.trim())) {
-        out.write(" <span class=required style=font-weight:600;color:red>(");
-        out.write(intl._t("required"));
-        out.write(")</span>");
-    }
+<%  String value3 = editBean.getPrivateKeyFile(curTunnel);
+    if (value3 == null || "".equals(value3.trim())) {out.write(requiredSpan);}
 %>
 <input type=text size=30 id=privKeyFile name="privKeyFile" title="<%=intl._t("Path to Private Key File")%>" value="<%=editBean.getPrivateKeyFile(curTunnel)%>" class="freetext filemanager" placeholder="<%=intl._t("required")%>" required>
 </td>
@@ -227,65 +196,52 @@
 </td>
 <%      } /* name */ %>
 </tr>
-<%
-    }  // b64
+<%  }  // b64
     /* alternate dest, only if current dest is set and is DSA_SHA1 */
     int currentSigType = editBean.getSigType(curTunnel, tunnelType);
     String ab64 = editBean.getAltDestinationBase64(curTunnel);
     ab64 = ab64.replace("=", "%3d");
     String attitle = canChangeEncType ? "" : tstopFirst;
     String atitle = canChangeEncType ? intl._t("Absolute path to Private Key File (will be created if it does not exist)") : stopFirst;
-    String adisabled = canChangeEncType ? "" : " readonly=readonly ";
+    String adisabled = canChangeEncType ? "" : " readonly ";
     if (currentSigType == 0 && (!"".equals(b64) || b64 != null) && !"streamrserver".equals(tunnelType)) {
         if (currentSigType == 0 && ("".equals(ab64) || ab64 == null)) {
 %>
 <tr><th><%=intl._t("Alternate private key file")%> (Ed25519-SHA-512)</th><th></th></tr>
-<%
-        } else if (currentSigType == 0 && (!"".equals(ab64) || ab64 != null)) {
-%>
+<%      } else if (currentSigType == 0 && (!"".equals(ab64) || ab64 != null)) { %>
 <tr><th><%=intl._t("Alternate local destination")%></th><th><%=intl._t("Alternate private key file")%> (Ed25519-SHA-512)</th></tr>
 <%      } %>
 <tr>
-<%
-        if (currentSigType == 0 && ("".equals(ab64) || ab64 == null) && (!"".equals(b64) || b64 != null)) {
-%>
+<%      if (currentSigType == 0 && ("".equals(ab64) || ab64 == null) && (!"".equals(b64) || b64 != null)) { %>
 <td <%=attitle%>>
 <input type=text class="freetext filemanager" size=30 id="altPrivKeyFile" name="altPrivKeyFile" title="<%=atitle%>" placeholder="<%=intl._t("Absolute path for new key (will be created)")%>" <%=adisabled%> value="<%=editBean.getAltPrivateKeyFile(curTunnel)%>" required>
 </td>
 <td></td>
 </tr>
-<%
-        } else if (currentSigType == 0 && (!"".equals(ab64) || ab64 != null) && (!"".equals(b64) || b64 != null)) {
-%>
+<%      } else if (currentSigType == 0 && (!"".equals(ab64) || ab64 != null) && (!"".equals(b64) || b64 != null)) { %>
 <td>
-<input type=text size=30 id=altlocaldest readonly="readonly" title="<%=intl._t("Read Only: Alternate Local Destination")%>" value="<%=ab64%>" wrap="off" class="freetext readonly resetScrollLeft">
+<input type=text size=30 id=altlocaldest readonly title="<%=intl._t("Read Only: Alternate Local Destination")%>" value="<%=ab64%>" wrap="off" class="freetext readonly resetScrollLeft">
 </td>
 <td <%=attitle%>>
 <input type=text class="freetext filemanager" size=30 id=altPrivKeyFile name="altPrivKeyFile" title="<%=atitle%>" <%=adisabled%> placeholder="<%=intl._t("Specify filename or full path for new key")%>" value="<%=editBean.getAltPrivateKeyFile(curTunnel)%>" required>
 </td>
 <%      } %>
 </tr>
-<%
-        String name = editBean.getSpoofedHost(curTunnel);
-        if (name == null || name.equals(""))
-            name = editBean.getTunnelName(curTunnel);
+<%      String name = editBean.getSpoofedHost(curTunnel);
+        if (name == null || name.equals("")) {name = editBean.getTunnelName(curTunnel);}
         // mysite.i2p is set in the installed i2ptunnel.config
         if (currentSigType == 0 && (!"".equals(ab64) || ab64 != null)) {
             if (name != null && !name.equals("") && !name.equals("mysite.i2p") && !name.contains(" ") && name.endsWith(".i2p")) {
 %>
 <tr>
 <td class=buttons colspan=2>
-<%
-                if (hasImagegen) {
-%>
+<%              if (hasImagegen) { %>
 <a class=control title="<%=intl._t("Generate QR Code")%>" href="/imagegen/qr?s=320&amp;t=<%=name%>&amp;c=http%3a%2f%2f<%=name%>%2f%3fi2paddresshelper%3d<%=ab64%>" target=_blank><%=intl._t("Generate QR Code")%></a>
-<%
-                }
+<%              }
                 if (hasSusiDNS) {
 %>
 <a class=control title="<%=intl._t("Add to Private addressbook")%>" href="/susidns/addressbook.jsp?book=private&amp;hostname=<%=name%>&amp;destination=<%=ab64%>#add" target=_blank><%=intl._t("Add to local addressbook")%></a>
-<%
-                }
+<%              }
             }
         } // ab64
     } // currentSigType
@@ -301,16 +257,13 @@
 </table>
 <h3><%=intl._t("Advanced networking options")%></h3>
 <table id="#advancedServerTunnelOptions" class="tunnelConfig">
-<%
-    if (!"streamrserver".equals(tunnelType)) {
-%>
+<%  if (!"streamrserver".equals(tunnelType)) { %>
 <tr><th><%=intl._t("Profile")%></th>
-<%
-        String tooLate = intl._t("Configuration cannot be changed after destination is created");
+<%      String tooLate = intl._t("Configuration cannot be changed after destination is created");
         String tTooLate = " title=\"" + tooLate + "\" ";
         boolean canChangeSigType = editBean.canChangeSigType(curTunnel);
         String shdisabled = canChangeSigType ? "" : tTooLate;
-        String disabled = canChangeSigType ? "" : " disabled=\"disabled\" ";
+        String disabled = canChangeSigType ? "" : isDisabled;
 %>
 <th <%=shdisabled%>><%=intl._t("Signature type")%></th></tr>
 <tr>
@@ -321,34 +274,25 @@
 <option <%=(interactiveProfile == false ? selected : "")%>value="bulk"><%=intl._t("bulk connection (downloads/websites/BT)")%> </option>
 </select>
 </td>
-<%
-        if (!editBean.canChangeSigType(curTunnel)) {
-%>
+<%      if (!editBean.canChangeSigType(curTunnel)) { %>
 <td title="<%=intl._t("Configuration of signature type is only possible when the tunnel is first created. To change, you must create a new tunnel.")%>" colspan=2 class="editDisabled">
-<%
-        } else {
-%>
+<%      } else { %>
 <td colspan=2>
-<%
-        }
+<%      }
         if (editBean.canChangeSigType(curTunnel)) {
 %>
-<select id="sigType" name="sigType" class=selectbox>
-<%
-        } else {
+<select id=sigType name=sigType class=selectbox>
+<%      } else {
 %>
-<select id="sigType" name="sigType" class=selectbox disabled>
-<%
-    }
+<select id=sigType name=sigType class=selectbox disabled>
+<%  }
     if (!editBean.canChangeSigType(curTunnel) && (!"".equals(ab64) || ab64 != null)) {
 %>
 <option title="<%=intl._t("Legacy option, with alternate key configured")%>" value="0" <%=(currentSigType==0 ? selected : disabled)%>>DSA-SHA1 & Ed25519-SHA-512</option>
-<%
-    } else {
+<%  } else {
 %>
 <option title="<%=intl._t("Legacy option (deprecated), provided for backward compatibility")%>" value="0" <%=(currentSigType==0 ? selected : disabled)%>>DSA-SHA1</option>
-<%
-    }
+<%  }
     if (editBean.isSigTypeAvailable(1)) {
 %>
 <option title="<%=intl._t("Legacy option (deprecated), provided for backward compatibility")%>" value="1" <%=(currentSigType==1 ? selected : disabled)%>>ECDSA-P256</option>
@@ -356,18 +300,15 @@
     if (editBean.isSigTypeAvailable(2)) {
 %>
 <option title="<%=intl._t("Legacy option (deprecated), provided for backward compatibility")%>" value="2" <%=(currentSigType==2 ? selected : disabled)%>>ECDSA-P384</option>
-<%
-    }
+<%  }
     if (editBean.isSigTypeAvailable(3)) {
 %>
 <option title="<%=intl._t("Legacy option (deprecated), provided for backward compatibility")%>" value="3" <%=(currentSigType==3 ? selected : disabled)%>>ECDSA-P521</option>
-<%
-    }
+<%  }
     if (editBean.isSigTypeAvailable(7)) {
 %>
 <option title="<%=intl._t("This is the default, recommended option")%>" value="7" <%=(currentSigType==7 ? selected : disabled)%>>Ed25519-SHA-512</option>
-<%
-    }
+<%  }
     if (editBean.isSigTypeAvailable(11)) {
 %>
 <option title="<%=intl._t("Recommended for blinded and encrypted destinations")%>" value="11" <%=(currentSigType==11 ? selected : disabled)%>>Red25519-SHA-512</option>
@@ -381,9 +322,7 @@
     if (!editBean.canChangeEncType(curTunnel)) {
 %>
 <tr class="optionsDisabled" title="<%=intl._t("Tunnel must be stopped to change this configuration")%>">
-<%
-    } else {
-%>
+<%  } else { %>
 <tr>
 <%  } %>
 <tr><td><b><%=intl._t("Legacy options")%></b></td><td><b><%=intl._t("Post Quantum")%></b></td></tr>
@@ -617,8 +556,8 @@
         boolean allowBlinding = (curSigType == 7 || curSigType == 11);
         String curEncryptMode = editBean.getEncryptMode(curTunnel);
         String ehdisabled = canChangeEncType ? "" : tstopFirst;
-        String cdisabled = canChangeEncType ? "" : " disabled=\"disabled\" ";
-        String bdisabled = (allowBlinding && canChangeEncType) ? "" : " disabled=\"disabled\" ";
+        String cdisabled = canChangeEncType ? "" : isDisabled;
+        String bdisabled = (allowBlinding && canChangeEncType) ? "" : isDisabled;
         boolean showLookupPassword = curEncryptMode.equals("3") || curEncryptMode.equals("6") || curEncryptMode.equals("8") || curEncryptMode.equals("9");
         if (allowBlinding /* && isAdvanced */) {
             if (showLookupPassword) {
@@ -658,23 +597,20 @@
 <%=intl._t("Encrypted with per-user key")%> (DH)</option>
 <option title="<%=intl._t("Enter key from each user.") + ' '%> <%=intl._t("Send password to all users.")%>" value="9" <%=(curEncryptMode.equals("9") ? selected : bdisabled)%>>
 <%=intl._t("Encrypted with lookup password and per-user key")%> (DH)</option>
-<%
-            } // isAdvanced()
+<%          } // isAdvanced()
         } // allowBlinding
 %>
 </select>
 </td>
 <td>
-<%
-        if (allowBlinding /* && isAdvanced */ && showLookupPassword) {
+<%      if (allowBlinding /* && isAdvanced */ && showLookupPassword) {
             String pwTitle = "title=\"" + intl._t("Set password required to access this service") + (canChangeEncType ? "" : (" - " + stopFirst)) + '"';
 %>
-<input type="password" name="nofilter_blindedPassword" <%=pwTitle%> value="<%=editBean.getBlindedPassword(curTunnel)%>" class="freetext password readonly" <%=bdisabled%>>
+<input type=password name="nofilter_blindedPassword" <%=pwTitle%> value="<%=editBean.getBlindedPassword(curTunnel)%>" class="freetext password readonly" <%=bdisabled%>>
 <%      } /* allowBlinding */ %>
 </td>
 </tr>
-<%
-        boolean showSharedKey = curEncryptMode.equals("1") || curEncryptMode.equals("4") || curEncryptMode.equals("5");
+<%      boolean showSharedKey = curEncryptMode.equals("1") || curEncryptMode.equals("4") || curEncryptMode.equals("5");
         if (showSharedKey) {
 %>
 <tr>
@@ -694,14 +630,13 @@
 <tr style="display: none;">
 <%      } /* showSharedKey */ %>
 <td>
-<input type="<%=showSharedKey ? "text" : "hidden"%>" size=44 id="leasesetKey" name="encryptKey" title="<%=intl._t("Encryption key required to access this service")%>" readonly="readonly" value="<%=editBean.getEncryptKey(curTunnel)%>" class="freetext readonly">
+<input type="<%=showSharedKey ? "text" : "hidden"%>" size=44 id="leasesetKey" name="encryptKey" title="<%=intl._t("Encryption key required to access this service")%>" readonly value="<%=editBean.getEncryptKey(curTunnel)%>" class="freetext readonly">
 </td>
 <td>
 <button class=control type=submit name="action" value="Generate" title="<%=intl._t("Generate new encryption key")%>"><%=intl._t("Generate")%></button> (<%=intl._t("Tunnel must be stopped first")%>)
 </td>
 </tr>
-<%
-        if (allowBlinding /* && isAdvanced */) {
+<%      if (allowBlinding /* && isAdvanced */) {
             boolean pskClient = curEncryptMode.equals("6") || curEncryptMode.equals("7");
             boolean dhClient = curEncryptMode.equals("8") || curEncryptMode.equals("9");
             if (pskClient || dhClient) {
@@ -711,14 +646,12 @@
 <tr>
 <td colspan=2 id="clientAuthConfig">
 <table id="clientAuth">
-<%
-                java.util.List<String> clientAuths = editBean.getClientAuths(curTunnel, dhClient);
+<%              java.util.List<String> clientAuths = editBean.getClientAuths(curTunnel, dhClient);
                 if (!clientAuths.isEmpty()) {
                     if (pskClient || dhClient || showLookupPassword) {
 %>
 <tr><td><b><%=intl._t("Client Name")%></b></td><td><b><%=intl._t("Client Key")%></b></td><td><b><%=intl._t("Revoke")%></b></td></tr>
-<%
-                        int i = 0;
+<%                      int i = 0;
                         for (String clientAuth : clientAuths) {
                             String[] split = net.i2p.data.DataHelper.split(clientAuth, ":", 2);
                             String cname, ckey;
@@ -735,11 +668,10 @@
 %>
 <tr>
 <td><input type=text value="<%=cname%>" size=44 name="nofilter_clientName" class="freetext clientName"></td>
-<td><input type=text value="<%=ckey%>" size=44 name="clientKey readonly" readonly="readonly" class="freetext clientKey readonly"></td>
+<td><input type=text value="<%=ckey%>" size=44 name="clientKey readonly" readonly class="freetext clientKey readonly"></td>
 <td><input value="<%=i%>" type=checkbox name="revokeClient" class="optbox slider"></td>
 </tr>
-<%
-                            i++;
+<%                          i++;
                         } // for
                     } // pskClient || dhClient || showLookupPassword
                 } // isEmpty
@@ -770,22 +702,21 @@
 <tr>
 <td class=buttons colspan=2><button id="controlSave" class=control type=submit name="action" value="Save changes"><%=intl._t("Save")%></button></td>
 </tr>
-<%
-            } // pskClient || dhClient
+<%          } // pskClient || dhClient
         } // allowBlinding
     } // !isOffline
 %>
 <tr>
 <th><%=intl._t("Restricted Access List")%>&nbsp;
 <%      if (editBean.getAccessMode(curTunnel).equals("0")) { %>
-<span class="unbold">(<%=intl._t("Activate to enable editing")%>)</span>
+<span class=unbold>(<%=intl._t("Activate to enable editing")%>)</span>
 <%      } %>
 </th>
-<th><b><%=intl._t("Tunnel Filter")%></b>&nbsp;<a class="help" href="/help/tunnelfilter" target=_blank style="float:right" title="<%=intl._t("Help with defining tunnel filters")%>">Help</a></th>
+<th><b><%=intl._t("Tunnel Filter")%></b>&nbsp;<a class=help href=/help/tunnelfilter target=_blank style=float:right title="<%=intl._t("Help with defining tunnel filters")%>">Help</a></th>
 </tr>
 <tr>
 <td>
-<span class=multiOption <%=(editBean.getAccessMode(curTunnel).equals("0") ? " id=\"accesslistDisabled\"" : "")%>>
+<span class=multiOption <%=(editBean.getAccessMode(curTunnel).equals("0") ? " id=accesslistDisabled" : "")%>>
 <label title="<%=intl._t("Allow all clients to connect to this service")%>"><input value="0" type=radio name="accessMode"<%=(editBean.getAccessMode(curTunnel).equals("0") ? checked : "")%> class=optbox>&nbsp;<%=intl._t("Disable")%></label>
 </span>
 <span class=multiOption>
@@ -795,7 +726,7 @@
 <label title="<%=intl._t("Only allow listed clients to connect to this service")%>"><input value="1" type=radio name="accessMode"<%=(editBean.getAccessMode(curTunnel).equals("1") ? checked : "")%> class=optbox>&nbsp;<%=intl._t("Whitelist")%></label>
 </span>
 </td>
-<td id="filter"><input title="<%=intl._t("Absolute path to file containing filter definition")%>" type=text id="filterDefinition" class="freetext filemanager" name="filterDefinition" value="<%=editBean.getFilterDefinition(curTunnel)%>" placeholder="<%=intl._t("Absolute path to filter definition")%>" size=80></td>
+<td id=filter><input title="<%=intl._t("Absolute path to file containing filter definition")%>" type=text id=filterDefinition class="freetext filemanager" name="filterDefinition" value="<%=editBean.getFilterDefinition(curTunnel)%>" placeholder="<%=intl._t("Absolute path to filter definition")%>" size=80></td>
 </tr>
 <%      if (!editBean.getAccessMode(curTunnel).equals("0")) { %>
 <tr><td>
