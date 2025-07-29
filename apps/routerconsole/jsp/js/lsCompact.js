@@ -63,21 +63,21 @@ document.addEventListener("DOMContentLoaded", () => {
     row.id = "sigEncCount";
 
     const sigCell = document.createElement("td");
-    sigCell.innerHTML = "<b>${translateSigTypes}:</b>";
+    sigCell.innerHTML = "<b>${translate_sigTypes}:</b>";
 
     const sigText = Object.entries(signatureCounts)
       .sort()
-      .map(([type, count]) => `<span class=counterLS><span class="lsLabel sigType" title="${translateSigType}">${type} <span class=lsCounter>${count}</span></span></span>`)
+      .map(([type, count]) => `<span class=counterLS><span class="lsLabel sigType" title="${translate_sigType}">${type} <span class=lsCounter>${count}</span></span></span>`)
       .join(" &nbsp;");
     const sigValueCell = document.createElement("td");
     sigValueCell.innerHTML = sigText;
 
     const encCell = document.createElement("td");
-    encCell.innerHTML = "<b>${translateEncTypes}:</b>";
+    encCell.innerHTML = "<b>${translate_encTypes}:</b>";
 
     const encText = Object.entries(encryptionCounts)
       .sort()
-      .map(([type, count]) => `<span class=counterLS><span class="lsLabel encType"  title="${translateEncType}">${type} <span class=lsCounter>${count}</span></span></span>`)
+      .map(([type, count]) => `<span class=counterLS><span class="lsLabel encType"  title="${translate_encType}">${type} <span class=lsCounter>${count}</span></span></span>`)
       .join(" &nbsp;");
     const encValueCell = document.createElement("td");
     encValueCell.innerHTML = encText;
