@@ -1,4 +1,4 @@
-<%
+<%  boolean isAdvanced = editBean.isAdvanced();
     boolean isShared = editBean.isSharedClient(curTunnel);
     String aStopFirst = intl._t("Tunnel and all other shared client tunnels must be stopped to change this configuration");
     String bStopFirst = intl._t("Tunnel must be stopped to change this configuration");
@@ -415,24 +415,23 @@
 </span>
 </td>
 <td>
-<br>
-<span class="multiOption experimental" hidden>
-<label><input value="5" type=radio name=encType <%=((has5 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM512-X25519</label>
+<span class="multiOption experimental" (isAdvanced ? "" : hidden)>
+<label title="MLKEM512-X25519"><input value="5" type=radio name=encType <%=((has5 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM512</label>
 </span>
 <span class="multiOption experimental">
-<label><input value="6" type=radio name=encType<%=((has6 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM768-X25519</label>
+<label title="MLKEM768-X25519"><input value="6" type=radio name=encType<%=((has6 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM768</label>
 </span>
-<span class="multiOption experimental" hidden>
-<label><input value="7" type=radio name=encType <%=((has7 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM1024-X25519</label>
+<span class="multiOption experimental" (isAdvanced ? "" : hidden)>
+<label title="MLKEM1024-X25519"><input value="7" type=radio name=encType <%=((has7 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM1024</label>
 </span>
-<span class="multiOption experimental" hidden>
-<label><input value="5,4" type=radio name=encType <%=((has5 && has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM512-X25519 + ECIES-X25519</label>
+<span class="multiOption experimental" (isAdvanced ? "" : hidden)>
+<label title="MLKEM512-X25519 + ECIES-X25519"><input value="5,4" type=radio name=encType <%=((has5 && has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM512 + ECIES</label>
 </span>
 <span class="multiOption experimental">
-<label><input value="6,4" type=radio name=encType <%=((has6 && has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM768-X25519 + ECIES-X25519</label>
+<label title="MLKEM768-X25519 + ECIES-X25519"><input value="6,4" type=radio name=encType <%=((has6 && has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM768 + ECIES</label>
 </span>
-<span class="multiOption experimental" hidden>
-<label><input value="7,4" type=radio name=encType <%=((has7 && has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM1024-X25519 + ECIES-X25519</label>
+<span class="multiOption experimental" (isAdvanced ? "" : hidden)>
+<label title="MLKEM1024-X25519 + ECIES-X25519"><input value="7,4" type=radio name=encType <%=((has7 && has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM1024 + ECIES</label>
 </span>
 </td>
 </tr>
@@ -449,7 +448,7 @@
 <option value="1"<%=(tunnelDepth == 1 ? selected : "") %>><%=intl._t("1 hop tunnel (low anonymity)")%></option>
 <option value="2"<%=(tunnelDepth == 2 ? selected : "") %>><%=intl._t("2 hop tunnel (medium anonymity)")%></option>
 <option value="3"<%=(tunnelDepth == 3 ? selected : "") %>><%=intl._t("3 hop tunnel (high anonymity)")%></option>
-<%        if (editBean.isAdvanced()) { %>
+<%        if (isAdvanced) { %>
 <option value="4"<%=(tunnelDepth == 4 ? selected : "") %>><%=intl.ngettext("{0} hop tunnel", "{0} hop tunnel", 4)%></option>
 <option value="5"<%=(tunnelDepth == 5 ? selected : "") %>><%=intl.ngettext("{0} hop tunnel", "{0} hop tunnel", 5)%></option>
 <option value="6"<%=(tunnelDepth == 6 ? selected : "") %>><%=intl.ngettext("{0} hop tunnel", "{0} hop tunnel", 6)%></option>
@@ -463,7 +462,7 @@
 <select id=tunnelQuantity class=selectbox name="tunnelQuantity" title="<%=intl._t("Number of Tunnels in Group")%> <%=(tunnelDepth == 0 ? " (" + intl._t("Disabled for 0 hop tunnels") + ")" : "") %>" <%=(tunnelDepth == 0 ? isDisabled : "") %>><%=editBean.getQuantityOptions(curTunnel, 0)%></select>
 </td>
 </tr>
-<%        if (editBean.isAdvanced()) { %>
+<%        if (isAdvanced) { %>
 <tr>
 <td><b><%=intl._t("Variance")%></b></td><td><b><%=intl._t("Backup Count")%></b></td></tr>
 <tr>

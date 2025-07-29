@@ -23,6 +23,7 @@
     boolean has5 = editBean.hasEncType(curTunnel, 5);
     boolean has6 = editBean.hasEncType(curTunnel, 6);
     boolean has7 = editBean.hasEncType(curTunnel, 7);
+    boolean isAdvanced = editBean.isAdvanced();
     boolean canChangeEncType = editBean.canChangeEncType(curTunnel);
     String edisabled = canChangeEncType ? "" : " disabled=\"disabled\" ";
     String stopFirst = intl._t("Tunnel must be stopped to change this configuration");
@@ -387,30 +388,33 @@
 <%  } %>
 <tr><td><b><%=intl._t("Legacy options")%></b></td><td><b><%=intl._t("Post Quantum")%></b></td></tr>
 <td>
-<span class=multiOption><label title="<%=intl._t("Legacy option (deprecated), provided for backward compatibility")%>"><input value="0" type=radio id="ElGamal-2048" name="encType" <%=((has0 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;ElGamal-2048</label></span>
 <span class=multiOption>
-<label><input value="4" type=radio id="ECIES-X25519" name="encType" <%=((has4 && !has0) ? checked : edisabled)%> class=optbox>&nbsp;ECIES-X25519</label></span>
+<label title="<%=intl._t("Legacy option (deprecated), provided for backward compatibility")%>"><input value="0" type=radio id="ElGamal-2048" name="encType" <%=((has0 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;ElGamal-2048</label>
+</span>
 <span class=multiOption>
-<label><input value="4,0" type=radio id="ElG_ECIES" name="encType" <%=((has0 && has4) ? checked : edisabled)%> class=optbox>&nbsp;<%=intl._t("Both encryption types")%></label></span>
+<label><input value="4" type=radio name="encType" <%=((has4 && !has0) ? checked : edisabled)%> class=optbox>&nbsp;ECIES-X25519</label>
+</span>
+<span class=multiOption>
+<label><input value="4,0" type=radio name="encType" <%=((has0 && has4) ? checked : edisabled)%> class=optbox>&nbsp;<%=intl._t("Both encryption types")%></label></span>
 </td>
 <td>
-<span class="multiOption experimental" hidden>
-<label><input value="5" type=radio name="encType" <%=((has5 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM512-X25519</label>
+<span class="multiOption experimental" (isAdvanced ? "" : hidden)>
+<label title="MLKEM512-X25519"><input value="5" type=radio name="encType" <%=((has5 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM512</label>
 </span>
 <span class="multiOption experimental">
-<label><input value="6" type=radio name="encType"<%=((has6 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM768-X25519</label>
+<label title="MLKEM768-X25519"><input value="6" type=radio name="encType"<%=((has6 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM768</label>
 </span>
-<span class="multiOption experimental" hidden>
-<label><input value="7" type=radio name="encType" <%=((has7 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM1024-X25519</label>
+<span class="multiOption experimental" (isAdvanced ? "" : hidden)>
+<label title="MLKEM1024-X25519"><input value="7" type=radio name="encType" <%=((has7 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM1024</label>
 </span>
-<span class="multiOption experimental" hidden>
-<label><input value="5,4" type=radio name="encType" <%=((has5 && has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM512-X25519 + ECIES-X25519</label>
+<span class="multiOption experimental" (isAdvanced ? "" : hidden)>
+<label title="MLKEM512-X25519 + ECIES-X25519"><input value="5,4" type=radio name="encType" <%=((has5 && has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM512 + ECIES</label>
 </span>
 <span class="multiOption experimental">
-<label><input value="6,4" type=radio name="encType" <%=((has6 && has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM768-X25519 + ECIES-X25519</label>
+<label title="MLKEM768-X25519 + ECIES-X25519"><input value="6,4" type=radio name="encType" <%=((has6 && has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM768 + ECIES</label>
 </span>
-<span class="multiOption experimental" hidden>
-<label><input value="7,4" type=radio name="encType" <%=((has7 && has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM1024-X25519 + ECIES-X25519</label>
+<span class="multiOption experimental" (isAdvanced ? "" : hidden)>
+<label title="MLKEM1024-X25519 + ECIES-X25519"><input value="7,4" type=radio name="encType" <%=((has7 && has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM1024 + ECIES</label>
 </span>
 </td>
 </tr>
@@ -429,7 +433,7 @@
 <option title="<%=intl._t("low anonymity")%>" value="1"<%=(tunnelDepth == 1 ? selected : "") %>><%=intl.ngettext("{0} hop tunnel", "{0} hop tunnel", 1)%></option>
 <option title="<%=intl._t("medium anonymity")%>" value="2"<%=(tunnelDepth == 2 ? selected : "") %>><%=intl.ngettext("{0} hop tunnel", "{0} hop tunnel", 2)%></option>
 <option title="<%=intl._t("high anonymity")%>" value="3"<%=(tunnelDepth == 3 ? selected : "") %>><%=intl.ngettext("{0} hop tunnel", "{0} hop tunnel", 3)%></option>
-<%  if (editBean.isAdvanced()) { %>
+<%  if (isAdvanced) { %>
 <option value="4"<%=(tunnelDepth == 4 ? selected : "") %>><%=intl.ngettext("{0} hop tunnel", "{0} hop tunnel", 4)%></option>
 <option value="5"<%=(tunnelDepth == 5 ? selected : "") %>><%=intl.ngettext("{0} hop tunnel", "{0} hop tunnel", 5)%></option>
 <option value="6"<%=(tunnelDepth == 6 ? selected : "") %>><%=intl.ngettext("{0} hop tunnel", "{0} hop tunnel", 6)%></option>
@@ -440,7 +444,7 @@
 </select>
 </td>
 <td>
-<select id="tunnelQuantity" name="tunnelQuantity" title="<%=intl._t("Number of Tunnels in Group")%>" class=selectbox><%=editBean.getQuantityOptions(curTunnel, editBean.isAdvanced() ? 1 : 0)%></select>
+<select id="tunnelQuantity" name="tunnelQuantity" title="<%=intl._t("Number of Tunnels in Group")%>" class=selectbox><%=editBean.getQuantityOptions(curTunnel, isAdvanced ? 1 : 0)%></select>
 </td>
 <td>
 <select id="tunnelDepthOut" name="tunnelDepthOut" title="<%=intl._t("Length of each Tunnel")%>" class=selectbox>
@@ -461,7 +465,7 @@
 </select>
 </td>
 </tr>
-<%  if (editBean.isAdvanced()) { %>
+<%  if (isAdvanced) { %>
 <tr>
 <td><b><%=intl._t("Inbound")%>&nbsp;<%=intl._t("Variance")%></b></td>
 <td><b><%=intl._t("Inbound")%>&nbsp;<%=intl._t("Backup Count")%></b></td>
@@ -616,7 +620,7 @@
         String cdisabled = canChangeEncType ? "" : " disabled=\"disabled\" ";
         String bdisabled = (allowBlinding && canChangeEncType) ? "" : " disabled=\"disabled\" ";
         boolean showLookupPassword = curEncryptMode.equals("3") || curEncryptMode.equals("6") || curEncryptMode.equals("8") || curEncryptMode.equals("9");
-        if (allowBlinding /* && editBean.isAdvanced() */) {
+        if (allowBlinding /* && isAdvanced */) {
             if (showLookupPassword) {
 %>
 <%=intl._t("Optional Lookup Password")%>
@@ -639,7 +643,7 @@
 <%      if (allowBlinding) { %>
 <option title="<%=intl._t("Prevents server discovery by floodfills")%>" value="2" <%=(curEncryptMode.equals("2") ? selected : bdisabled)%>>
 <%=intl._t("Blinded")%></option>
-<%          if (true) { /* editBean.isAdvanced() */ %>
+<%          if (true) { /* isAdvanced */ %>
 <option title="<%=intl._t("Send password to all users.")%>" value="3" <%=(curEncryptMode.equals("3") ? selected : bdisabled)%>>
 <%=intl._t("Blinded with lookup password")%></option>
 <option title="<%=intl._t("Send key to all users.")%>" value="4" <%=(curEncryptMode.equals("4") ? selected : bdisabled)%>>
@@ -662,7 +666,7 @@
 </td>
 <td>
 <%
-        if (allowBlinding /* && editBean.isAdvanced() */ && showLookupPassword) {
+        if (allowBlinding /* && isAdvanced */ && showLookupPassword) {
             String pwTitle = "title=\"" + intl._t("Set password required to access this service") + (canChangeEncType ? "" : (" - " + stopFirst)) + '"';
 %>
 <input type="password" name="nofilter_blindedPassword" <%=pwTitle%> value="<%=editBean.getBlindedPassword(curTunnel)%>" class="freetext password readonly" <%=bdisabled%>>
@@ -697,7 +701,7 @@
 </td>
 </tr>
 <%
-        if (allowBlinding /* && editBean.isAdvanced() */) {
+        if (allowBlinding /* && isAdvanced */) {
             boolean pskClient = curEncryptMode.equals("6") || curEncryptMode.equals("7");
             boolean dhClient = curEncryptMode.equals("8") || curEncryptMode.equals("9");
             if (pskClient || dhClient) {
