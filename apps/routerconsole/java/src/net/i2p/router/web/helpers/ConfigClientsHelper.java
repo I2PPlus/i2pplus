@@ -384,7 +384,7 @@ public class ConfigClientsHelper extends HelperBase {
         buf.append("</td><td class=center><input type=checkbox class=\"optbox slider\" id=\"client_")
            .append(index).append("\" name=\"").append(index).append(".enabled\"");
         if (enabled) {buf.append(CHECKED);}
-        if (ro || preventDisable) {buf.append("disabled=disabled ");}
+        if (ro || preventDisable) {buf.append("disabled ");}
         buf.append("></td><td class=center>");
 
         if (showStartButton && (!ro) && !edit) {

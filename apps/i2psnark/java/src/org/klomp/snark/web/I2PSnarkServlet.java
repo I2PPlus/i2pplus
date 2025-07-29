@@ -3167,7 +3167,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(Integer.toString(times[i]))
                .append("\"");
             if (times[i] == delay) {
-                buf.append(" selected=selected");
+                buf.append(" selected");
             }
             buf.append(">");
             if (times[i] > 0)
@@ -3225,11 +3225,11 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("title=\"");
         if (noCollapse) {
             String ua = req.getHeader("user-agent");
-            buf.append(_t("Your browser does not support this feature.")).append("[" + ua + "]").append("\" disabled=\"disabled");
+            buf.append(_t("Your browser does not support this feature.")).append("[" + ua + "]").append("\" disabled");
         } else {
-            buf.append(_t("Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode"));
+            buf.append(_t("Allow the 'Add Torrent' and 'Create Torrent' panels to be collapsed, and collapse by default in non-embedded mode")).append("\"");
         }
-        buf.append("\"></span><br>\n")
+        buf.append("></span><br>\n")
            .append("<span class=configOption><label for=showStatusFilter><b>")
            .append(_t("Torrent filter bar"))
            .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
@@ -3723,8 +3723,8 @@ public class I2PSnarkServlet extends BasicServlet {
        }
        buf.append("\">\n");
        for (int i = min; i <= max; i++) {
-           buf.append("<option value=\"").append(i).append("\" ");
-           if (i == now) {buf.append("selected=selected ");}
+           buf.append("<option value=\"").append(i).append("\"");
+           if (i == now) {buf.append(" selected");}
            // constants to prevent tagging
            buf.append(">").append(ngettext(DUMMY1 + name, DUMMY0 + name + 's', i)).append("</option>\n");
        }
@@ -4853,8 +4853,8 @@ public class I2PSnarkServlet extends BasicServlet {
             if (er) {
                 buf.append("<td>\n<select name=myRating>\n");
                 for (int i = 5; i >= 0; i--) {
-                    buf.append("<option value=\"").append(i).append("\" ");
-                    if (i == myRating) {buf.append("selected=selected");}
+                    buf.append("<option value=\"").append(i).append("\"");
+                    if (i == myRating) {buf.append(" selected");}
                     buf.append('>');
                     if (i != 0) {
                         for (int j = 0; j < i; j++) {buf.append("★");}

@@ -11,7 +11,7 @@ import net.i2p.util.Translate;
  */
 public class ConfigUIHelper {
 
-    private static final String CHECKED = " selected=selected ";
+    private static final String CHECKED = " selected ";
     private static final String BUNDLE_NAME = "org.klomp.snark.web.messages";
     //private static final String COUNTRY_BUNDLE_NAME = "net.i2p.router.countries.messages";
 

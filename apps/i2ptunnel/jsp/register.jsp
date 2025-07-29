@@ -99,7 +99,7 @@
 </tr>
 <tr>
 <td>
-<textarea rows=1 style=height:3em cols=60 readonly=readonly id=localDestination title="Read Only: Local Destination (if known)" wrap=off spellcheck=false><%=editBean.getDestinationBase64(curTunnel)%></textarea>
+<textarea rows=1 style=height:3em cols=60 readonly id=localDestination title="Read Only: Local Destination (if known)" wrap=off spellcheck=false><%=editBean.getDestinationBase64(curTunnel)%></textarea>
 </td>
 </tr>
 -->

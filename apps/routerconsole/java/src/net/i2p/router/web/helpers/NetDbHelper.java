@@ -394,7 +394,7 @@ public class NetDbHelper extends FormHandler {
            .append("<tr><td><b>").append(_t("Capabilities")).append("</b></td><td><input type=text name=\"caps\" title=\"")
            .append(_t("e.g. f or XOfR")).append("\"></td>\n")
            .append("<td><b>").append(_t("Cost")).append("</b></td><td><input type=text name=\"cost\"></td></tr>\n")
-           .append("<tr><td><b>").append(_t("Country")).append("</b></td><td><select name=\"c\"><option value=\"\" selected=selected></option>");
+           .append("<tr><td><b>").append(_t("Country")).append("</b></td><td><select name=\"c\"><option value=\"\" selected></option>");
         Map<String, String> sorted = new TreeMap<String, String>(Collator.getInstance());
         for (Map.Entry<String, String> e : _context.commSystem().getCountries().entrySet()) {
             String tr = Messages.getString(e.getValue(), _context, Messages.COUNTRY_BUNDLE_NAME);
@@ -413,19 +413,19 @@ public class NetDbHelper extends FormHandler {
            .append("<tr><td><b>").append(_t("IPv6 Prefix")).append("</b></td><td><input type=text name=\"ipv6\"></td>\n")
            .append("<td><b>MTU</b></td><td><input type=text name=\"mtu\"></td></tr>\n")
            .append("<tr><td><b>").append(_t("Single port or range")).append("</b></td><td><input type=text name=\"port\"></td>\n")
-           .append("<td><b>").append(_t("Signature Type")).append("</b></td><td><select name=\"type\"><option value=\"\" selected=selected></option>");
+           .append("<td><b>").append(_t("Signature Type")).append("</b></td><td><select name=\"type\"><option value=\"\" selected></option>");
         for (SigType type : EnumSet.allOf(SigType.class)) {
             buf.append("<option value=\"").append(type).append("\">").append(type).append("</option>\n");
         }
         buf.append("</select></td></tr>\n")
            .append("<tr><td><b>").append(_t("SSU Capabilities")).append("</b></td><td><input type=text name=\"ssucaps\"></td>\n")
-           .append("<td><b>").append(_t("Encryption Type")).append("</b></td><td><select name=\"etype\"><option value=\"\" selected=selected></option>");
+           .append("<td><b>").append(_t("Encryption Type")).append("</b></td><td><select name=\"etype\"><option value=\"\" selected></option>");
         for (EncType type : EnumSet.allOf(EncType.class)) {
             buf.append("<option value=\"").append(type).append("\">").append(type).append("</option>\n");
         }
         buf.append("</select>");
         buf.append("<tr><td><b>").append(_t("Router Version")).append("</b></td><td><input type=text name=\"v\"></td>\n")
-           .append("<td><b>").append(_t("Transport")).append("</b></td><td><select name=\"tr\"><option value=\"\" selected=selected>")
+           .append("<td><b>").append(_t("Transport")).append("</b></td><td><select name=\"tr\"><option value=\"\" selected>")
            .append("<option value=\"NTCP\">NTCP</option>\n")
            .append("<option value=\"NTCP2\">NTCP2</option>\n")
            .append("<option value=\"SSU\">SSU</option>\n")

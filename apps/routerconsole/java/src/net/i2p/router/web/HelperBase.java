@@ -14,9 +14,9 @@ public abstract class HelperBase {
     /** @since public since 0.9.33, was package private */
     public static final String PROP_ADVANCED = "routerconsole.advanced";
     /** @since public since 0.9.33, was package private */
-    public static final String CHECKED = " checked=checked ";
+    public static final String CHECKED = " checked ";
     /** @since 0.9.43 */
-    public static final String SELECTED = " selected=selected ";
+    public static final String SELECTED = " selected ";
 
     /**
      * Configure this bean to query a particular router context
@@ -25,11 +25,8 @@ public abstract class HelperBase {
      *                  the first one we come across.
      */
     public void setContextId(String contextId) {
-        try {
-            _context = ContextHelper.getContext(contextId);
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
+        try {_context = ContextHelper.getContext(contextId);}
+        catch (Throwable t) {t.printStackTrace();}
     }
 
     /** @since 0.9.9 */
@@ -52,12 +49,11 @@ public abstract class HelperBase {
      *  Is a boolean property set to true?
      *
      *  @param prop must default to false
-     *  @return non-null, either "" or " checked=checked "
+     *  @return non-null, either "" or " checked "
      *  @since 0.9.24 consolidated from various helpers
      */
     protected String getChecked(String prop) {
-        if (_context.getBooleanProperty(prop))
-            return CHECKED;
+        if (_context.getBooleanProperty(prop)) {return CHECKED;}
         return "";
     }
 

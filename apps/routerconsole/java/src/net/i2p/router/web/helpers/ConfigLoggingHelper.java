@@ -139,7 +139,7 @@ public class ConfigLoggingHelper extends HelperBase {
 
         StringBuilder buf = new StringBuilder(65536);
         buf.append("<select name=\"newlogclass\">\n" +
-                   "<option value=\"\" selected=selected>")
+                   "<option value=\"\" selected>")
            .append(_t("Select a class to add"))
            .append("</option>\n");
 

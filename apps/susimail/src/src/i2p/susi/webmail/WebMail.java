@@ -3378,8 +3378,8 @@ public class WebMail extends HttpServlet {
             String dir = DIRS[i];
             if (currentName.equals(dir)) {continue;} // can't move or switch to self
             if (disableCurrent && DIR_DRAFTS.equals(dir)) {continue;} // can't move to drafts
-            out.print("<option value=\"" + dir + "\" ");
-            if (currentName.equals(dir)) {out.print("selected=selected ");}
+            out.print("<option value=\"" + dir + "\"");
+            if (currentName.equals(dir)) {out.print(" selected");}
             out.print('>' + _t(DISPLAY_DIRS[i]));
             out.print("</option>\n");
         }

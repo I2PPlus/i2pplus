@@ -98,11 +98,11 @@
 <!--
 <span class=nowrap>
 <b><%=intl._t("Host")%>:</b>
-<input name="shost" type=text property="shost" readonly=readonly />
+<input name="shost" type=text property="shost" readonly>
 </span><br>
 <span class=nowrap>
 <b><%=intl._t("Port")%>:</b>
-<input name="sport" type=text size=5 maxlength=5 property="sport" readonly=readonly />
+<input name="sport" type=text size=5 maxlength=5 property="sport" readonly>
 </span>
 -->
 <% } else { %>

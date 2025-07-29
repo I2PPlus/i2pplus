@@ -68,7 +68,7 @@ public class StatsGenerator {
             Set<String> stats = entry.getValue();
             buf.append("<input name=\"statgroup\" type=radio class=toggle_input id=\"toggle_")
                .append(group.replace(" ", "_").replace("[", "").replace("]", "")).append("\"");
-            if (group.equals(_t("Router"))) {buf.append(" checked=checked");}
+            if (group.equals(_t("Router"))) {buf.append(" checked");}
             buf.append(" hidden>\n");
             buf.append("<h3>").append(group).append("</h3>\n");
             buf.append("<ul class=statlist>");

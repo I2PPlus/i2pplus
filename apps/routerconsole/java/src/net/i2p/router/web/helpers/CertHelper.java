@@ -35,9 +35,11 @@ public class CertHelper extends HelperBase {
             _out.write("</p><h3>");
             _out.write(_t("Local SSL Certificates"));
             _out.write("</h3>\n");
+
             // console
-            output(_t("Router Console") + "<span style=\"float: right;\">" +
-                   _t("Location") + ": <span class=\"unbold\">" + configPath + slash + DIR + slash + "console" + slash + "</span></span>", new File(dir, CONSOLE));
+            output(_t("Router Console") + "<span style=float:right>" +
+                   _t("Location") + ": <span class=unbold>" + configPath + slash + DIR + slash + "console" + slash + "</span></span>", new File(dir, CONSOLE));
+
             // I2CP
             output(_t("I2CP"), new File(dir, I2CP));
 
@@ -50,13 +52,11 @@ public class CertHelper extends HelperBase {
                     File f = tunnels[i];
                     String name = f.getName();
                     String b32 = name.substring(10, name.length() - 10);
-                    output(_t("I2PTunnel") + ": <span class=\"unbold\">" + b32.substring(0,6) + "&hellip;</span><span style=\"float: right;\">" +
-                           _t("Location") + ": <span class=\"unbold\">" + configPath + slash + DIR + slash + "i2ptunnel" + slash + "</span></span>", f);
+                    output(_t("I2PTunnel") + ": <span class=unbold>" + b32.substring(0,6) + "&hellip;</span><span style=float:right>" +
+                           _t("Location") + ": <span class=unbold>" + configPath + slash + DIR + slash + "i2ptunnel" + slash + "</span></span>", f);
                     hasTunnels = true;
                 }
             }
-//            if (!hasTunnels)
-//                output(_t("I2PTunnel"), null);
 
             // SAM
             tunnelDir = new File(dir, SAM_DIR);
@@ -65,13 +65,11 @@ public class CertHelper extends HelperBase {
             if (tunnels != null) {
                 for (int i = 0; i < tunnels.length; i++) {
                     File f = tunnels[i];
-                    output(_t("SAM") + "<span style=\"float: right;\">" +
-                           _t("Location") + ": <span class=\"unbold\">" + configPath + slash + DIR + slash + "sam" + slash + "</span></span>", f);
+                    output(_t("SAM") + "<span style=float:right>" +
+                           _t("Location") + ": <span class=unbold>" + configPath + slash + DIR + slash + "sam" + slash + "</span></span>", f);
                     hasTunnels = true;
                 }
             }
-//            if (!hasTunnels)
-//                output(_t("SAM"), null);
 
             // Eepsite
             tunnelDir = new File(dir, EEPSITE_DIR);
@@ -81,13 +79,11 @@ public class CertHelper extends HelperBase {
                 for (int i = 0; i < tunnels.length; i++) {
                     File f = tunnels[i];
                     String name = f.getName();
-                    output(_t("Website") + ": <span class=\"unbold\">" + name.substring(0, name.length() - 4) + "</span><span style=\"float: right;\">" +
-                           _t("Location") + ": <span class=\"unbold\">" + configPath + slash + DIR + slash + "eepsite" + slash + "</span></span>", f);
+                    output(_t("Website") + ": <span class=unbold>" + name.substring(0, name.length() - 4) + "</span><span style=float:right>" +
+                           _t("Location") + ": <span class=unbold>" + configPath + slash + DIR + slash + "eepsite" + slash + "</span></span>", f);
                     hasTunnels = true;
                 }
             }
-//            if (!hasTunnels)
-//                output(_t("Website"), null);
 
             // Family
             String family = _context.getProperty(FamilyKeyCrypto.PROP_FAMILY_NAME);
@@ -97,19 +93,11 @@ public class CertHelper extends HelperBase {
                 _out.write("</h3>\n");
                 File f = new File(dir, "family");
                 f = new File(f, family + ".crt");
-                output(_t("Family") + ": <span class=\"unbold\">" + DataHelper.escapeHTML(family) + "</span><span style=\"float: right;\">" +
-                       _t("Location") + ": <span class=\"unbold\">" + configPath + slash + DIR + slash + "family" + slash + "</span></span>", f);
-//            } else {
-//                _out.write("<p>");
-//                _out.write(_t("none"));
-//                _out.write("</p>\n");
+                output(_t("Family") + ": <span class=unbold>" + DataHelper.escapeHTML(family) + "</span><span style=float:right>" +
+                       _t("Location") + ": <span class=unbold>" + configPath + slash + DIR + slash + "family" + slash + "</span></span>", f);
             }
-
             // anything else? plugins?
-
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+        } catch (IOException ioe) {ioe.printStackTrace();}
         return "";
     }
 
@@ -123,18 +111,14 @@ public class CertHelper extends HelperBase {
             _out.write("</h4>");
             String cert = FileUtil.readTextFile(file.toString(), -1, true);
             if (cert != null) {
-                _out.write("\n<textarea readonly=readonly>\n");
+                _out.write("\n<textarea readonly>\n");
                 _out.write(cert);
                 _out.write("</textarea>\n");
             } else {
-                _out.write("\n<textarea readonly=readonly>\n");
+                _out.write("\n<textarea readonly>\n");
                 _out.write("Error: Failed to read certificate.");
                 _out.write("</textarea>\n");
             }
-//        } else {
-//            _out.write("<p>");
-//            _out.write(_t("none"));
-//            _out.write("</p>\n");
         } else if (name.contains(_t("Console"))) {
             File configPath = _context.getConfigDir();
             _out.write("<h4>");

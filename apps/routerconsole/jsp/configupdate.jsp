@@ -146,7 +146,7 @@
 <div class=optionsingle>
 <span class=nowrap>
 <b><%=intl._t("News URL")%>:</b>
-<input type=text size=60 name="newsURL" <% if (!updatehelper.isAdvanced()) { %>readonly=readonly<% } %> value="<jsp:getProperty name="updatehelper" property="newsURL" />">
+<input type=text size=60 name="newsURL" <% if (!updatehelper.isAdvanced()) { %>readonly<% } %> value="<jsp:getProperty name="updatehelper" property="newsURL" />">
 </span>
 </div>
 </td>

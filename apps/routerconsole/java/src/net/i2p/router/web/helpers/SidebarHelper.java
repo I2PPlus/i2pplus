@@ -1332,7 +1332,7 @@ public class SidebarHelper extends HelperBase {
         }
         buf.append("<tr><td><input type=submit name=action class=delete value=\"")
            .append(_t("Delete selected")).append("\"></td><td>")
-           .append("<select name=\"name\">\n<option value=\"\" selected=selected>")
+           .append("<select name=\"name\">\n<option value=\"\" selected>")
            .append(_t("Select a section to add"))
            .append("</option>\n");
 
