@@ -10,9 +10,9 @@
 <%@include file="headers.jsi"%>
 <jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application"/>
 <jsp:useBean id="cfg" class="i2p.susi.dns.ConfigBean" scope="session"/>
-<jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session" />
-<jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application" />
-<jsp:setProperty name="cfg" property="*" />
+<jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session"/>
+<jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application"/>
+<jsp:setProperty name="cfg" property="*"/>
 <%
     cfg.storeMethod(request.getMethod());
     boolean overrideCssActive = base.isOverrideCssActive();
@@ -56,8 +56,8 @@
 <textarea name="config" rows=10 cols=80 spellcheck=false>${cfg.config}</textarea>
 </div>
 <div id=buttons>
-<input class=reload type=submit name=action value="<%=intl._t("Reload")%>" >
-<input class=accept type=submit name=action value="<%=intl._t("Save")%>" >
+<input class=reload type=submit name=action value="<%=intl._t("Reload")%>">
+<input class=accept type=submit name=action value="<%=intl._t("Save")%>">
 </div>
 </form>
 <div class=help id=helpconfig>

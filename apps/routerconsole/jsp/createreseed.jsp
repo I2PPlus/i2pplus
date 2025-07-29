@@ -3,7 +3,7 @@
    try {
        i2pcontextId = (String) session.getAttribute("i2p.contextId");
    } catch (IllegalStateException ise) {}
-%><jsp:useBean class="net.i2p.router.web.helpers.ReseedGenerator" id="gen" scope="request" /><jsp:setProperty name="gen" property="contextId" value="<%=i2pcontextId%>" /><%
+%><jsp:useBean class="net.i2p.router.web.helpers.ReseedGenerator" id="gen" scope="request"/><jsp:setProperty name="gen" property="contextId" value="<%=i2pcontextId%>"/><%
 /*
  * USE CAUTION WHEN EDITING
  * Trailing whitespace OR NEWLINE on the last line will cause

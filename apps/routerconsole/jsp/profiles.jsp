@@ -12,9 +12,9 @@
 <body>
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="sidebar.jsi" %>
-<jsp:useBean class="net.i2p.router.web.helpers.ProfilesHelper" id="profilesHelper" scope="request" />
-<jsp:setProperty name="profilesHelper" property="contextId" value="<%=i2pcontextId%>" />
-<jsp:setProperty name="profilesHelper" property="full" value="<%=request.getParameter(\"f\")%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.ProfilesHelper" id="profilesHelper" scope="request"/>
+<jsp:setProperty name="profilesHelper" property="contextId" value="<%=i2pcontextId%>"/>
+<jsp:setProperty name="profilesHelper" property="full" value="<%=request.getParameter(\"f\")%>"/>
 <%
     String req = request.getParameter("f");
     if (req == null) {
@@ -45,7 +45,7 @@
     profilesHelper.storeWriter(out);
     if (allowIFrame) {profilesHelper.allowGraphical();}
 %>
-<jsp:getProperty name="profilesHelper" property="summary" />
+<jsp:getProperty name="profilesHelper" property="summary"/>
 </div>
 </div>
 <script src=/js/tablesort/tablesort.js></script>

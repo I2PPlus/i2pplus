@@ -11,12 +11,12 @@
 <body>
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="sidebar.jsi" %>
-<jsp:useBean class="net.i2p.router.web.helpers.ConfigFamilyHelper" id="familyHelper" scope="request" />
-<jsp:setProperty name="familyHelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.ConfigFamilyHelper" id="familyHelper" scope="request"/>
+<jsp:setProperty name="familyHelper" property="contextId" value="<%=i2pcontextId%>"/>
 <h1 class=conf><%=intl._t("Router Family")%></h1>
 <div class=main id=config_family>
 <%@include file="confignav.jsi" %>
-<jsp:useBean class="net.i2p.router.web.helpers.ConfigFamilyHandler" id="formhandler" scope="request" />
+<jsp:useBean class="net.i2p.router.web.helpers.ConfigFamilyHandler" id="formhandler" scope="request"/>
 <%@include file="formhandler.jsi" %>
 <% if (!familyHelper.isAdvanced()) { %>
 <p class=infohelp><%=intl._t("Routers in the same family share a family key.")%>&nbsp;
@@ -30,7 +30,7 @@
        // no family yet
 %>
 <form method=POST enctype="multipart/form-data" accept-charset=utf-8>
-<input type=hidden name="nonce" value="<%=pageNonce%>" >
+<input type=hidden name="nonce" value="<%=pageNonce%>">
 <table class=configtable id=joinfamily>
 <tr><th colspan=2><%=intl._t("Join Existing Router Family")%></th></tr>
 <tr><td colspan=2 class="infohelp joinfamily"><%=intl._t("Import the secret family key that you exported from an existing router in the family.")%></td></tr>
@@ -40,10 +40,10 @@
 <table>
 <tr>
 <td>
-<input name="file" type="file" value="" />
+<input name="file" type="file" value="">
 </td>
 <td>
-<input type=submit name=action class=download value="<%=intl._t("Join Family")%>" />
+<input type=submit name=action class=download value="<%=intl._t("Join Family")%>"/>
 </td>
 </tr>
 </table>
@@ -53,7 +53,7 @@
 </table>
 </form>
 <form method=POST>
-<input type=hidden name="nonce" value="<%=pageNonce%>" >
+<input type=hidden name="nonce" value="<%=pageNonce%>">
 <table class=configtable id=newfamily>
 <tr><th colspan=2><%=intl._t("Create New Router Family")%></th></tr>
 <tr><td colspan=2 class="infohelp newfamily"><%=intl._t("You may create a new router family here. Once you have created the family, you may export the family key file and share with other routers in your nominated family.")%>&nbsp;
@@ -64,10 +64,10 @@
 <table>
 <tr>
 <td>
-<input name="family" type=text size=30 value="" />
+<input name="family" type=text size=30 value="">
 </td>
 <td>
-<input type=submit name=action class=accept value="<%=intl._t("Create Family")%>" />
+<input type=submit name=action class=accept value="<%=intl._t("Create Family")%>">
 </td>
 </tr>
 </table>
@@ -89,7 +89,7 @@
 <tr><td><%=intl._t("Export the secret family key to be imported into other routers you control.")%></td></tr>
 <tr>
 <td class=optionsave>
-<input type=submit name=action class=go value="<%=intl._t("Export Family Key")%>" />
+<input type=submit name=action class=go value="<%=intl._t("Export Family Key")%>">
 </td>
 </tr>
 </table>
@@ -104,12 +104,12 @@
        }
 %>
 <form method=POST>
-<input type=hidden name="nonce" value="<%=pageNonce%>" >
+<input type=hidden name="nonce" value="<%=pageNonce%>">
 <table class=configtable id=leavefamily>
 <tr><th colspan=2><%=intl._t("Leave Router Family")%></th></tr>
 <tr><td><%=intl._t("No longer be a member of the family {0}.", '"' + family + '"')%></td>
 <td class=optionsave>
-<input type=submit name=action class=delete value="<%=intl._t("Leave Family")%>" />
+<input type=submit name=action class=delete value="<%=intl._t("Leave Family")%>">
 </td>
 </tr>
 </table>

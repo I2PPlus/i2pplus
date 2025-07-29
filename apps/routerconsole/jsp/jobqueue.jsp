@@ -16,10 +16,10 @@
 <span class=tab title="<%=intl._t("Job statistics for this session")%>"><a href="/jobs"><%=intl._t("Job Stats")%></a></span>
 <span class=tab2 title="<%=intl._t("Active and scheduled jobs")%>"><%=intl._t("Job Queue")%></span>
 </div>
-<jsp:useBean class="net.i2p.router.web.helpers.JobQueueHelper" id="jobQueueHelper" scope="request" />
-<jsp:setProperty name="jobQueueHelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.JobQueueHelper" id="jobQueueHelper" scope="request"/>
+<jsp:setProperty name="jobQueueHelper" property="contextId" value="<%=i2pcontextId%>"/>
 <% jobQueueHelper.storeWriter(out); %>
-<jsp:getProperty name="jobQueueHelper" property="jobQueueSummary" />
+<jsp:getProperty name="jobQueueHelper" property="jobQueueSummary"/>
 </div>
 <script src="/js/refreshElements.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script nonce=<%=cspNonce%>>refreshElements("#jobs", "/jobqueue", 15000);</script>

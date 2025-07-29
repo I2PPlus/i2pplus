@@ -12,10 +12,10 @@
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="sidebar.jsi" %><h1 class="conf adv"><%=intl._t("Certificates")%></h1>
 <div class=main id=certs>
-<jsp:useBean class="net.i2p.router.web.helpers.CertHelper" id="certhelper" scope="request" />
-<jsp:setProperty name="certhelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.CertHelper" id="certhelper" scope="request"/>
+<jsp:setProperty name="certhelper" property="contextId" value="<%=i2pcontextId%>"/>
 <% certhelper.storeWriter(out); %>
-<jsp:getProperty name="certhelper" property="summary" />
+<jsp:getProperty name="certhelper" property="summary"/>
 <span id=end></span>
 </div>
 </body>

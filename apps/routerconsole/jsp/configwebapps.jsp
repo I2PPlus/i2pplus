@@ -12,13 +12,13 @@
 <body>
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="sidebar.jsi" %>
-<jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHelper" id="clientshelper" scope="request" />
-<jsp:setProperty name="clientshelper" property="contextId" value="<%=i2pcontextId%>" />
-<jsp:setProperty name="clientshelper" property="edit" value="<%=request.getParameter(\"edit\")%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHelper" id="clientshelper" scope="request"/>
+<jsp:setProperty name="clientshelper" property="contextId" value="<%=i2pcontextId%>"/>
+<jsp:setProperty name="clientshelper" property="edit" value="<%=request.getParameter(\"edit\")%>"/>
 <h1 class=conf><%=intl._t("Web Apps")%></h1>
 <div class=main id=config_webapps>
 <%@include file="confignav.jsi" %>
-<jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHandler" id="formhandler" scope="request" />
+<jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHandler" id="formhandler" scope="request"/>
 <%@include file="formhandler.jsi" %>
 <div class=configure>
 <h3 id=webappconfiguration><%=intl._t("WebApp Configuration")%>&nbsp;
@@ -32,11 +32,11 @@
 </p>
 <iframe name=processForm id=processForm hidden></iframe>
 <form id=form_webapps action="configwebapps" method=POST target=processForm>
-<input type=hidden name="nonce" value="<%=pageNonce%>" >
-<jsp:getProperty name="clientshelper" property="form2" />
+<input type=hidden name="nonce" value="<%=pageNonce%>">
+<jsp:getProperty name="clientshelper" property="form2"/>
 <div class=formaction id=webappconfigactions>
-<input type=submit class=cancel name=foo value="<%=intl._t("Cancel")%>" />
-<input type=submit name=action class=accept value="<%=intl._t("Save WebApp Configuration")%>" />
+<input type=submit class=cancel name=foo value="<%=intl._t("Cancel")%>"/>
+<input type=submit name=action class=accept value="<%=intl._t("Save WebApp Configuration")%>"/>
 </div>
 </form>
 </div>

@@ -14,12 +14,12 @@
   const msgKeyRemove = "<%=intl._t("Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key.")%>";
 </script>
 <%@include file="sidebar.jsi" %>
-<jsp:useBean class="net.i2p.router.web.helpers.ConfigAdvancedHelper" id="advancedhelper" scope="request" />
-<jsp:setProperty name="advancedhelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.ConfigAdvancedHelper" id="advancedhelper" scope="request"/>
+<jsp:setProperty name="advancedhelper" property="contextId" value="<%=i2pcontextId%>"/>
 <h1 class=conf><%=intl._t("Advanced Configuration")%></h1>
 <div class=main id=config_advanced>
 <%@include file="confignav.jsi" %>
-<jsp:useBean class="net.i2p.router.web.helpers.ConfigAdvancedHandler" id="formhandler" scope="request" />
+<jsp:useBean class="net.i2p.router.web.helpers.ConfigAdvancedHandler" id="formhandler" scope="request"/>
 <%@include file="formhandler.jsi" %>
 <div class=configure>
 <div class=wideload>

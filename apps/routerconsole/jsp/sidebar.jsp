@@ -43,11 +43,11 @@
 </head>
 <body style=margin:0>
 <div class=sb id=sidebar>
-<jsp:useBean class="net.i2p.router.web.NewsHelper" id="newshelper" scope="request" />
-<jsp:setProperty name="newshelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:useBean class="net.i2p.router.web.NewsHelper" id="newshelper" scope="request"/>
+<jsp:setProperty name="newshelper" property="contextId" value="<%=i2pcontextId%>"/>
 <% java.io.File newspath = new java.io.File(net.i2p.I2PAppContext.getGlobalContext().getRouterDir(), "docs/news.xml"); %>
-<jsp:setProperty name="newshelper" property="page" value="<%=newspath.getAbsolutePath()%>" />
-<jsp:setProperty name="newshelper" property="maxLines" value="300" />
+<jsp:setProperty name="newshelper" property="page" value="<%=newspath.getAbsolutePath()%>"/>
+<jsp:setProperty name="newshelper" property="maxLines" value="300"/>
 <%@include file="sidebar_noframe.jsi" %>
 </div>
 </body>

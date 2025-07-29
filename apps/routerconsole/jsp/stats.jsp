@@ -11,13 +11,13 @@
 <body>
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="sidebar.jsi" %>
-<jsp:useBean class="net.i2p.router.web.helpers.OldConsoleHelper" id="oldhelper" scope="request" />
-<jsp:setProperty name="oldhelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.OldConsoleHelper" id="oldhelper" scope="request"/>
+<jsp:setProperty name="oldhelper" property="contextId" value="<%=i2pcontextId%>"/>
 <% oldhelper.storeWriter(out); %>
-<jsp:setProperty name="oldhelper" property="full" value="<%=request.getParameter(\"f\")%>" />
+<jsp:setProperty name="oldhelper" property="full" value="<%=request.getParameter(\"f\")%>"/>
 <h1 class=perf><%=intl._t("Router Statistics")%></h1>
 <div class=main id=stats>
-<jsp:getProperty name="oldhelper" property="stats" />
+<jsp:getProperty name="oldhelper" property="stats"/>
 </div>
 <script src=/js/stats.js></script>
 </body>

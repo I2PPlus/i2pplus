@@ -12,7 +12,7 @@
 <%@include file="head.jsi" %>
 <%=intl.title("Peer Profile")%>
 <%  if (!isValid) { %>
-<meta http-equiv=refresh content="5;url=/profiles?f=1" />
+<meta http-equiv=refresh content="5;url=/profiles?f=1"/>
 <%  } %>
 </head>
 <body>
@@ -32,9 +32,9 @@
     if (!isValid) {out.print("<p class=infohelp id=nopeer>No peer specified</p>");}
     else {
 %>
-<jsp:useBean id="stathelper" class="net.i2p.router.web.helpers.StatHelper" />
-<jsp:setProperty name="stathelper" property="contextId" value="<%=i2pcontextId%>" />
-<jsp:setProperty name="stathelper" property="peer" value="<%=peerB64%>" />
+<jsp:useBean id="stathelper" class="net.i2p.router.web.helpers.StatHelper"/>
+<jsp:setProperty name="stathelper" property="contextId" value="<%=i2pcontextId%>"/>
+<jsp:setProperty name="stathelper" property="peer" value="<%=peerB64%>"/>
 <% stathelper.storeWriter(out); %>
 <h3><%=intl._t("Profile for peer")%>: <a href="/netdb?r=<%=peerB64%>" title="<%=intl._t("NetDb entry")%>"><%=peerB64%></a>&nbsp;&nbsp;
 <a class=configpeer href="/configpeer?peer=<%=peerB64%>" title="<%=intl._t("Configure peer")%>" style=float:right>
@@ -49,7 +49,7 @@
 <%      } %>
 </h3>
 <table id=viewprofile hidden>
-<tr><td><pre><jsp:getProperty name="stathelper" property="profile" /></pre>
+<tr><td><pre><jsp:getProperty name="stathelper" property="profile"/></pre>
 <%      if (peerB64 != null || peerB64.length() > 0) { %>
 <span><a href="#view_profile"><%=intl._t("Return to Top")%></a></span>
 <%      } %>

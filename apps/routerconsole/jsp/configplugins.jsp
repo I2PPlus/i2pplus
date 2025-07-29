@@ -7,23 +7,23 @@
 %>
 <%@include file="head.jsi" %>
 <%=intl.title("config plugins")%>
-<style>input.default{width: 1px; height: 1px; visibility: hidden;}</style>
+<style>input.default{width:1px;height:1px;visibility:hidden}</style>
 <script nonce=<%=cspNonce%>>var deleteMessage = "<%=intl._t("Are you sure you want to delete {0}?")%>";</script>
 <script src="/js/configclients.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </head>
 <body>
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="sidebar.jsi" %>
-<jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHelper" id="clientshelper" scope="request" />
-<jsp:setProperty name="clientshelper" property="contextId" value="<%=i2pcontextId%>" />
-<jsp:setProperty name="clientshelper" property="edit" value="<%=request.getParameter(\"edit\")%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHelper" id="clientshelper" scope="request"/>
+<jsp:setProperty name="clientshelper" property="contextId" value="<%=i2pcontextId%>"/>
+<jsp:setProperty name="clientshelper" property="edit" value="<%=request.getParameter(\"edit\")%>"/>
 <h1 class=conf><%=intl._t("Plugins")%></h1>
 <div class=main id=config_plugins>
 <%@include file="confignav.jsi" %>
 <%
    if (clientshelper.showPlugins()) {
 %>
-<jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHandler" id="formhandler" scope="request" />
+<jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHandler" id="formhandler" scope="request"/>
 <%@include file="formhandler.jsi" %>
 <div class=configure>
 <h3 id=pluginmanage><%=intl._t("Plugin Installation")%>&nbsp;
@@ -50,17 +50,17 @@
 <table>
 <tr id=url>
 <td>
-<input type=hidden name="nonce" value="<%=pageNonce%>" >
+<input type=hidden name="nonce" value="<%=pageNonce%>">
 <%
    String url = request.getParameter("pluginURL");
    String value = url != null ? "value=\"" + net.i2p.data.DataHelper.escapeHTML(url) + '"' : "";
 %>
-<input type=text size=60 name="pluginURL" required title="<%=intl._t("To install a plugin, enter the download URL:")%>" >
+<input type=text size=60 name="pluginURL" required title="<%=intl._t("To install a plugin, enter the download URL:")%>">
 </td>
 <td class=right>
-<input type=submit name=action class="default hideme" value="<%=intl._t("Install Plugin")%>" />
-<input type=submit class=cancel name=foo value="<%=intl._t("Cancel")%>" />
-<input type=submit name=action class=download value="<%=intl._t("Install Plugin")%>" />
+<input type=submit name=action class="default hideme" value="<%=intl._t("Install Plugin")%>">
+<input type=submit class=cancel name=foo value="<%=intl._t("Cancel")%>">
+<input type=submit name=action class=download value="<%=intl._t("Install Plugin")%>">
 </td>
 </tr>
 </table>
@@ -79,7 +79,7 @@
 <table>
 <tr id=file>
 <td>
-<input type=hidden name="nonce" value="<%=pageNonce%>" >
+<input type=hidden name="nonce" value="<%=pageNonce%>">
 <%
    String file = request.getParameter("pluginFile");
    if (file != null && file.length() > 0) {
@@ -88,13 +88,13 @@
 <%
    } else {
 %>
-<input type="file" name="pluginFile" accept=".xpi2p,.su3" >
+<input type="file" name="pluginFile" accept=".xpi2p,.su3">
 <%
    }
 %>
 </td>
 <td class=right>
-<input type=submit name=action class=download title="<%=intl._t("Please supply a valid plugin file")%>" value="<%=intl._t("Install Plugin from File")%>" />
+<input type=submit name=action class=download title="<%=intl._t("Please supply a valid plugin file")%>" value="<%=intl._t("Install Plugin from File")%>">
 </td>
 </tr>
 </table>
@@ -111,17 +111,17 @@
 <form action="configplugins" method=POST>
 <p id=pluginconfigtext>
 <%=intl._t("The plugins listed below are started by the webConsole client.")%>
-<input type=hidden name="nonce" value="<%=pageNonce%>" >
-<input type=submit name=action class=reload value="<%=intl._t("Update All Installed Plugins")%>" />
+<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=submit name=action class=reload value="<%=intl._t("Update All Installed Plugins")%>">
 </p>
 </form>
 <div class=wideload>
 <form method=POST>
-<input type=hidden name="nonce" value="<%=pageNonce%>" >
-<jsp:getProperty name="clientshelper" property="form3" />
+<input type=hidden name="nonce" value="<%=pageNonce%>">
+<jsp:getProperty name="clientshelper" property="form3"/>
 <div class=formaction id=pluginconfigactions>
-<input type=submit class=cancel name=foo value="<%=intl._t("Cancel")%>" />
-<input type=submit name=action class=accept value="<%=intl._t("Save Plugin Configuration")%>" />
+<input type=submit class=cancel name=foo value="<%=intl._t("Cancel")%>">
+<input type=submit name=action class=accept value="<%=intl._t("Save Plugin Configuration")%>">
 </div>
 </form>
 </div>

@@ -8,9 +8,9 @@
 %>
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
 <%@include file="headers.jsi"%>
-<jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
-<jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session" />
-<jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application" />
+<jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application"/>
+<jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session"/>
+<jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application"/>
 <%
     boolean overrideCssActive = base.isOverrideCssActive();
     String theme = base.getTheme().replace("/themes/susidns/", "").replace("/", "");
@@ -79,7 +79,7 @@
 <style>.illustrate{border:1px solid #111!important;box-shadow:none!important;background:#fff!important;background:rgba(255,255,255,0.3)!important;filter:invert(1) sepia(100%) hue-rotate(30deg)}</style>
 <%  } %>
 <object type="image/svg+xml" data="images/how.svg?<%=net.i2p.CoreVersion.VERSION%>">
-<img src="/themes/susidns/images/how.png" border="0" alt="How the address book works" title="How the address book works" />
+<img src="/themes/susidns/images/how.png" border="0" alt="How the address book works" title="How the address book works"/>
 </object>
 </noscript>
 </div>

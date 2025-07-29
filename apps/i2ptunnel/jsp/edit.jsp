@@ -18,10 +18,10 @@ if (tun != null) {
 }
 %>
 <!DOCTYPE html>
-<jsp:useBean class="net.i2p.i2ptunnel.web.EditBean" id="editBean" scope="request" />
-<jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request" />
-<jsp:useBean class="net.i2p.i2ptunnel.web.IndexBean" id="indexBean" scope="request" />
-<jsp:setProperty name="indexBean" property="*" />
+<jsp:useBean class="net.i2p.i2ptunnel.web.EditBean" id="editBean" scope="request"/>
+<jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request"/>
+<jsp:useBean class="net.i2p.i2ptunnel.web.IndexBean" id="indexBean" scope="request"/>
+<jsp:setProperty name="indexBean" property="*"/>
 <html id=tman>
 <head>
 <script src=/js/setupIframe.js></script>

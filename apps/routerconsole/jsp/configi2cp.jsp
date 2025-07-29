@@ -13,14 +13,14 @@
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="sidebar.jsi" %>
 
-<jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHelper" id="clientshelper" scope="request" />
-<jsp:setProperty name="clientshelper" property="contextId" value="<%=i2pcontextId%>" />
-<jsp:setProperty name="clientshelper" property="edit" value="<%=request.getParameter(\"edit\")%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHelper" id="clientshelper" scope="request"/>
+<jsp:setProperty name="clientshelper" property="contextId" value="<%=i2pcontextId%>"/>
+<jsp:setProperty name="clientshelper" property="edit" value="<%=request.getParameter(\"edit\")%>"/>
 <h1 class=conf><%=intl._t("External Client Access")%></h1>
 <div class=main id=config_i2cp>
 <%@include file="confignav.jsi" %>
 
- <jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHandler" id="formhandler" scope="request" />
+ <jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHandler" id="formhandler" scope="request"/>
 <%@include file="formhandler.jsi" %>
 <div class=configure>
 <p class=infowarn>
@@ -30,7 +30,7 @@
 <%=intl._t("All changes require restart to take effect.")%>
 </p>
 <form action="configi2cp" method=POST>
-<input type=hidden name="nonce" value="<%=pageNonce%>" >
+<input type=hidden name="nonce" value="<%=pageNonce%>">
 <table class=configtable id=externali2cp>
 <tr>
 <th>
@@ -69,7 +69,7 @@
            out.print(ips[i]);
            out.print('\"');
            if (clientshelper.isIFSelected(ips[i]))
-               out.print(" selected=\"selected\"");
+               out.print(" selected");
            out.print('>');
            out.print(ips[i]);
            out.print("</option>\n");
@@ -77,7 +77,7 @@
 %>
 </select>
 </span><br>
-<span class=nowrap><b><%=intl._t("I2CP Port")%>:</b><input name="port" type=text size=5 maxlength=5 value="<jsp:getProperty name="clientshelper" property="port" />" >
+<span class=nowrap><b><%=intl._t("I2CP Port")%>:</b><input name="port" type=text size=5 maxlength=5 value="<jsp:getProperty name="clientshelper" property="port"/>">
 </span>
 </div>
 </td>
@@ -86,14 +86,14 @@
 <tr>
 <td>
 <b class=suboption>
-<label><input type=checkbox class=class="optbox slider" name="auth" value=true <jsp:getProperty name="clientshelper" property="auth" /> >
+<label><input type=checkbox class=class="optbox slider" name="auth" value=true <jsp:getProperty name="clientshelper" property="auth"/>>
 <%=intl._t("Require username and password")%></label>
 </b><br>
 <div class=optionlist id=i2cp_userpass>
 <span class=nowrap><b><%=intl._t("Username")%>:</b>
-<input name="user" type=text value="" /></span><br>
+<input name="user" type=text value=""></span><br>
 <span class=nowrap><b><%=intl._t("Password")%>:</b>
-<input name="nofilter_pw" type=password value="" /></span>
+<input name="nofilter_pw" type=password value=""></span>
 </div>
 </td>
 </tr>
@@ -102,9 +102,9 @@
 %>
 <tr>
 <td class="optionsave right">
-<input type=submit class=default name=action value="<%=intl._t("Save Interface Configuration")%>" />
-<input type=submit class=cancel name=foo value="<%=intl._t("Cancel")%>" />
-<input type=submit class=accept name=action value="<%=intl._t("Save Interface Configuration")%>" />
+<input type=submit class=default name=action value="<%=intl._t("Save Interface Configuration")%>"/>
+<input type=submit class=cancel name=foo value="<%=intl._t("Cancel")%>"/>
+<input type=submit class=accept name=action value="<%=intl._t("Save Interface Configuration")%>"/>
 </td>
 </tr>
 </table>

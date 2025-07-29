@@ -28,11 +28,11 @@
 <div class=main id=sitemap>
 
 <div id=searchbar>
-<jsp:useBean class="net.i2p.router.web.helpers.SearchHelper" id="searchhelper" scope="request" />
-<jsp:setProperty name="searchhelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.SearchHelper" id="searchhelper" scope="request"/>
+<jsp:setProperty name="searchhelper" property="contextId" value="<%=i2pcontextId%>"/>
 <form action="/search.jsp" target=_blank rel=noreferrer method=POST>
 <table>
-<tr><td><div><jsp:getProperty name="searchhelper" property="selector" /><input size=40 type=text class=search name="query" required placeholder="<%=intl._t("Please enter a search query")%>" /><button type=submit value="search" class=search><%=intl._t("Search")%></button></div></td></tr>
+<tr><td><div><jsp:getProperty name="searchhelper" property="selector"/><input size=40 type=text class=search name="query" required placeholder="<%=intl._t("Please enter a search query")%>"/><button type=submit value="search" class=search><%=intl._t("Search")%></button></div></td></tr>
 </table>
 </form>
 </div>
@@ -465,9 +465,9 @@
     if (sitemapSites) {
 %>
 <h3><%=intl._t("Sites of Interest")%><a href="/confighome#configsites" style=float:right title="Customize"><img src="/themes/console/images/configure.svg" height="16" width="16" alt="Customize"></a></h3>
-<jsp:useBean class="net.i2p.router.web.helpers.HomeHelper" id="homehelper" scope="request" />
-<jsp:setProperty name="homehelper" property="contextId" value="<%=i2pcontextId%>" />
-<jsp:getProperty name="homehelper" property="favorites" />
+<jsp:useBean class="net.i2p.router.web.helpers.HomeHelper" id="homehelper" scope="request"/>
+<jsp:setProperty name="homehelper" property="contextId" value="<%=i2pcontextId%>"/>
+<jsp:getProperty name="homehelper" property="favorites"/>
 <% } %>
 
 </div>

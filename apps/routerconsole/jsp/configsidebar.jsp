@@ -15,18 +15,18 @@
 <h1 class=conf><%=intl._t("Customize Sidebar")%></h1>
 <div class=main id=config_summarybar>
 <%@include file="confignav.jsi" %>
-<jsp:useBean class="net.i2p.router.web.helpers.ConfigSidebarHandler" id="formhandler" scope="request" />
+<jsp:useBean class="net.i2p.router.web.helpers.ConfigSidebarHandler" id="formhandler" scope="request"/>
 <%@include file="formhandler.jsi" %>
 <% formhandler.setMovingAction(); %>
-<jsp:useBean class="net.i2p.router.web.helpers.SidebarHelper" id="sidebarhelper" scope="request" />
-<jsp:setProperty name="sidebarhelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.SidebarHelper" id="sidebarhelper" scope="request"/>
+<jsp:setProperty name="sidebarhelper" property="contextId" value="<%=i2pcontextId%>"/>
 <h3 class=tabletitle><%=intl._t("Refresh Interval")%></h3>
 <iframe name=processForm id=processForm hidden></iframe>
 <form method=POST target=processForm>
 <table class=configtable id=refreshsidebar>
 <tr>
 <td>
-<input type=hidden name="nonce" value="<%=pageNonce%>" >
+<input type=hidden name="nonce" value="<%=pageNonce%>">
 <input type=hidden name="group" value="0">
 <%
   String rval;
@@ -38,19 +38,19 @@
 <% if (!rval.equals("0")) {%>(<%=intl._t("0 to disable")%>)<% } %>
 </td>
 <td class=optionsave>
-<input type=submit name=action class=accept value="<%=intl._t("Save")%>" >
+<input type=submit name=action class=accept value="<%=intl._t("Save")%>">
 </td>
 </tr>
 </table>
 </form>
 <h3 class=tabletitle><%=intl._t("Customize Sidebar")%></h3>
 <form id=form_sidebar method=POST target=processForm>
-<input type=hidden name="nonce" value="<%=pageNonce%>" >
+<input type=hidden name="nonce" value="<%=pageNonce%>">
 <input type=hidden name="group" value="2">
-<jsp:getProperty name="sidebarhelper" property="configTable" />
+<jsp:getProperty name="sidebarhelper" property="configTable"/>
 <div class=formaction id=sidebardefaults>
-<input type=submit class=reload name=action value="<%=intl._t("Restore full default")%>" >
-<input type=submit class=reload name=action value="<%=intl._t("Restore minimal default")%>" >
+<input type=submit class=reload name=action value="<%=intl._t("Restore full default")%>">
+<input type=submit class=reload name=action value="<%=intl._t("Restore minimal default")%>">
 </div>
 </form>
 </div>

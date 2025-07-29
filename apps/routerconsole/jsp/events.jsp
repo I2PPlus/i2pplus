@@ -7,10 +7,10 @@
 %>
 <%@include file="head.jsi" %>
 <%=intl.title("events")%>
-<jsp:useBean class="net.i2p.router.web.helpers.EventLogHelper" id="eventHelper" scope="request" />
-<jsp:setProperty name="eventHelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.EventLogHelper" id="eventHelper" scope="request"/>
+<jsp:setProperty name="eventHelper" property="contextId" value="<%=i2pcontextId%>"/>
 <% /* GraphHelper sets the defaults in setContextId, so setting the properties must be after the context */ %>
- <jsp:setProperty name="eventHelper" property="*" />
+ <jsp:setProperty name="eventHelper" property="*"/>
 <%
     eventHelper.storeWriter(out);
     eventHelper.storeMethod(request.getMethod());
@@ -25,9 +25,9 @@
 <div class=main id=events>
 <div class=eventspanel>
 <div class=widepanel>
-<jsp:getProperty name="eventHelper" property="allMessages" />
-<jsp:getProperty name="eventHelper" property="form" />
-<jsp:getProperty name="eventHelper" property="events" />
+<jsp:getProperty name="eventHelper" property="allMessages"/>
+<jsp:getProperty name="eventHelper" property="form"/>
+<jsp:getProperty name="eventHelper" property="events"/>
 </div>
 </div>
 </div>

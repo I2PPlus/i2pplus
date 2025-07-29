@@ -32,12 +32,12 @@
 </div>
 <div id=changelog>
 <h2><%=intl._t("Recent I2P+ Changes")%></h2>
-<jsp:useBean class="net.i2p.router.web.ContentHelper" id="contenthelper" scope="request" />
+<jsp:useBean class="net.i2p.router.web.ContentHelper" id="contenthelper" scope="request"/>
 <% java.io.File fpath = new java.io.File(net.i2p.I2PAppContext.getGlobalContext().getBaseDir(), "history.txt"); %>
-<jsp:setProperty name="contenthelper" property="page" value="<%=fpath.getAbsolutePath()%>" />
-<jsp:setProperty name="contenthelper" property="maxLines" value="768" />
-<jsp:setProperty name="contenthelper" property="startAtBeginning" value="true" />
-<jsp:getProperty name="contenthelper" property="textContent" />
+<jsp:setProperty name="contenthelper" property="page" value="<%=fpath.getAbsolutePath()%>"/>
+<jsp:setProperty name="contenthelper" property="maxLines" value="768"/>
+<jsp:setProperty name="contenthelper" property="startAtBeginning" value="true"/>
+<jsp:getProperty name="contenthelper" property="textContent"/>
 <p id=fullhistory><a href="/history.txt" target="_blank" rel="noreferrer"><%=intl._t("View the full change log")%></a></p>
 </div>
 </div>

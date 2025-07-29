@@ -1,10 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" import="java.net.URL" import="java.net.URLConnection" import="java.io.IOException" import="net.i2p.i2ptunnel.web.IndexBean"%>
 <%@include file="headers.jsi"%>
-<jsp:useBean class="net.i2p.i2ptunnel.web.IndexBean" id="indexBean" scope="request" />
-<jsp:useBean class="net.i2p.i2ptunnel.web.EditBean" id="editBean" scope="request" />
-<jsp:setProperty name="indexBean" property="tunnel" /><%-- must be set before key1-4 --%>
-<jsp:setProperty name="indexBean" property="*" />
-<jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request" />
+<jsp:useBean class="net.i2p.i2ptunnel.web.IndexBean" id="indexBean" scope="request"/>
+<jsp:useBean class="net.i2p.i2ptunnel.web.EditBean" id="editBean" scope="request"/>
+<jsp:setProperty name="indexBean" property="tunnel"/><%-- must be set before key1-4 --%>
+<jsp:setProperty name="indexBean" property="*"/>
+<jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request"/>
 <% String activeTheme = indexBean.getTheme(); %>
 <!DOCTYPE html>
 <% if (activeTheme.contains("dark") || activeTheme.contains("midnight")) { %><html id=tman style=background:#000>
@@ -72,7 +72,7 @@
   if (isInitialized) {
 %>
 <div class=panel id=globalTunnelControl>
-<h2><%=intl._t("Global Tunnel Control")%>&nbsp;<button id=toggleInfo class=script style=float:right><img src="/themes/console/dark/images/expand_hover.svg" title="Show Tunnel Info"/></button></h2>
+<h2><%=intl._t("Global Tunnel Control")%>&nbsp;<button id=toggleInfo class=script style=float:right><img src="/themes/console/dark/images/expand_hover.svg" title="Show Tunnel Info"></button></h2>
 <table>
 <tr>
 <td class=buttons>
@@ -285,7 +285,7 @@ SSL
 <option value="ircserver">IRC</option>
 <option value="streamrserver">Streamr</option>
 </select>
-<input class="control create iconize" type=submit value="<%=intl._t("Create")%>" />
+<input class="control create iconize" type=submit value="<%=intl._t("Create")%>">
 </form>
 </td>
 </tr>
@@ -474,7 +474,7 @@ SSL
 <option value="connectclient">CONNECT</option>
 <option value="streamrclient">Streamr</option>
 </select>
-<input class="control create iconize" type=submit value="<%=intl._t("Create")%>" />
+<input class="control create iconize" type=submit value="<%=intl._t("Create")%>">
 </form>
 </td>
 </tr>

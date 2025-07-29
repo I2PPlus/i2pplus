@@ -59,11 +59,11 @@
 <b>I2P version:</b>&ensp;<%=net.i2p.router.RouterVersion.FULL_VERSION%><br>
 <b>API version:</b>&ensp;<%=net.i2p.CoreVersion.PUBLISHED_VERSION%><br>
 <b>Java version:</b>&ensp;<%=System.getProperty("java.vendor")%>&ensp;<%=System.getProperty("java.version")%>&ensp;(<%=System.getProperty("java.runtime.name")%> <%=System.getProperty("java.runtime.version")%>)<br>
-<jsp:useBean class="net.i2p.router.web.helpers.LogsHelper" id="logsHelper" scope="request" />
-<jsp:setProperty name="logsHelper" property="contextId" value="<%=i2pcontextId%>" />
-<jsp:getProperty name="logsHelper" property="unavailableCrypto" />
+<jsp:useBean class="net.i2p.router.web.helpers.LogsHelper" id="logsHelper" scope="request"/>
+<jsp:setProperty name="logsHelper" property="contextId" value="<%=i2pcontextId%>"/>
+<jsp:getProperty name="logsHelper" property="unavailableCrypto"/>
 <b>Wrapper version:</b>&ensp;<%=System.getProperty("wrapper.version", "none")%><br>
-<b>Server version:</b>&ensp;<jsp:getProperty name="logsHelper" property="jettyVersion" /><br>
+<b>Server version:</b>&ensp;<jsp:getProperty name="logsHelper" property="jettyVersion"/><br>
 <b>Servlet version:</b>&ensp;<%=getServletInfo()%> (<%=getServletConfig().getServletContext().getMajorVersion()%>.<%=getServletConfig().getServletContext().getMinorVersion()%>)<br>
 <b>Platform:</b>&ensp;<%=System.getProperty("os.name")%>&ensp;<%=System.getProperty("os.arch")%>&ensp;<%=System.getProperty("os.version")%><br>
 <b>Processor:</b>&ensp;<%=net.i2p.util.NativeBigInteger.cpuModel()%>&ensp;(<%=net.i2p.util.NativeBigInteger.cpuType().replace("zen2", "zen3 or later")%>)<br>

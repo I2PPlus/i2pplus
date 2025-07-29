@@ -9,11 +9,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@include file="headers.jsi"%>
-<jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session" />
-<jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application" />
-<jsp:useBean id="log" class="i2p.susi.dns.LogBean" scope="session" />
-<jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
-<jsp:setProperty name="log" property="*" />
+<jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session"/>
+<jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application"/>
+<jsp:useBean id="log" class="i2p.susi.dns.LogBean" scope="session"/>
+<jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application"/>
+<jsp:setProperty name="log" property="*"/>
 <%
     boolean overrideCssActive = base.isOverrideCssActive();
     String theme = base.getTheme().replace("/themes/susidns/", "").replace("/", "");

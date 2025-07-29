@@ -1,8 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="4kb" %>
-<jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session" />
-<jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application" />
-<jsp:useBean id="subs" class="i2p.susi.dns.SubscriptionsBean" scope="session" />
-<jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
+<jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session"/>
+<jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application"/>
+<jsp:useBean id="subs" class="i2p.susi.dns.SubscriptionsBean" scope="session"/>
+<jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application"/>
 <%@include file="headers.jsi"%>
 <!DOCTYPE html>
 <head>

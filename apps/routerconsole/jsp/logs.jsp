@@ -13,8 +13,8 @@
 <%@include file="sidebar.jsi" %>
 <h1 class=log><%=intl._t("Logs")%></h1>
 <div class=main id=logs>
-<jsp:useBean class="net.i2p.router.web.helpers.LogsHelper" id="logsHelper" scope="request" />
-<jsp:setProperty name="logsHelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.LogsHelper" id="logsHelper" scope="request"/>
+<jsp:setProperty name="logsHelper" property="contextId" value="<%=i2pcontextId%>"/>
 <%
     if (!logsHelper.isAdvanced()) {
 %>
@@ -30,7 +30,7 @@
 <h3 class=tabletitle id=version><%=intl._t("I2P Version and Running Environment")%>&ensp;<a href="/events?from=604800"><!-- 1 week --><%=intl._t("View event log")%></a></h3>
 <table id=enviro>
 <tbody>
-<tr><td><b>I2P:</b></td><td><%=net.i2p.router.RouterVersion.FULL_VERSION%>&ensp;<b>API:</b>&ensp;<%=net.i2p.CoreVersion.PUBLISHED_VERSION%>&ensp;<b>Wrapper:</b>&ensp;<%=System.getProperty("wrapper.version", "none")%> &ensp;<b>Built by:</b>&ensp;<jsp:getProperty name="logsHelper" property="builtBy" /></td></tr>
+<tr><td><b>I2P:</b></td><td><%=net.i2p.router.RouterVersion.FULL_VERSION%>&ensp;<b>API:</b>&ensp;<%=net.i2p.CoreVersion.PUBLISHED_VERSION%>&ensp;<b>Wrapper:</b>&ensp;<%=System.getProperty("wrapper.version", "none")%> &ensp;<b>Built by:</b>&ensp;<jsp:getProperty name="logsHelper" property="builtBy"/></td></tr>
 <tr><td><b>Platform:</b></td><td><%=System.getProperty("os.name")%>&ensp;<%=System.getProperty("os.arch")%>&ensp;<%=System.getProperty("os.version")%></td></tr>
 <tr><td><b>Processor:</b></td><td><span id=cputype><%=net.i2p.util.NativeBigInteger.cpuType().replace("zen2", "zen3 or later")%></span>
 <%      boolean isX86 = net.i2p.util.SystemVersion.isX86();
@@ -39,10 +39,10 @@
 <%      } %>
 &ensp;<span class=nowrap>[Jcpuid version: <%=freenet.support.CPUInformation.CPUID.getJcpuidVersion()%></span>]</td></tr>
 <tr><td><b>Java:</b></td><td><%=System.getProperty("java.vendor")%>&ensp;<%=System.getProperty("java.version")%>&ensp;(<%=System.getProperty("java.runtime.name")%>&ensp;<%=System.getProperty("java.runtime.version")%>)</td></tr>
-<jsp:getProperty name="logsHelper" property="unavailableCrypto" />
-<tr><td><b>Jetty:</b></td><td><jsp:getProperty name="logsHelper" property="jettyVersion" />&ensp;<b>Servlet:</b>&ensp;<%=getServletInfo()%> (<%=getServletConfig().getServletContext().getMajorVersion()%>.<%=getServletConfig().getServletContext().getMinorVersion()%>)</td></tr>
+<jsp:getProperty name="logsHelper" property="unavailableCrypto"/>
+<tr><td><b>Jetty:</b></td><td><jsp:getProperty name="logsHelper" property="jettyVersion"/>&ensp;<b>Servlet:</b>&ensp;<%=getServletInfo()%> (<%=getServletConfig().getServletContext().getMajorVersion()%>.<%=getServletConfig().getServletContext().getMinorVersion()%>)</td></tr>
 <tr><td><b>JBigI:</b></td><td><%=net.i2p.util.NativeBigInteger.loadStatus()%>&ensp;<span class=nowrap>[version: <%=net.i2p.util.NativeBigInteger.getJbigiVersion()%>]</span>&ensp;<span class=nowrap><b>GMP:</b>&ensp;<%=net.i2p.util.NativeBigInteger.getLibGMPVersion()%></span></td></tr>
-<tr><td><b>JSTL:</b></td><td><jsp:getProperty name="logsHelper" property="jstlVersion" />&ensp;<span class=nowrap><b>Encoding:</b>&ensp;<%=System.getProperty("file.encoding")%></span>&ensp;<span class=nowrap><b>Charset:</b>&ensp;<%=java.nio.charset.Charset.defaultCharset().name()%></span></td></tr>
+<tr><td><b>JSTL:</b></td><td><jsp:getProperty name="logsHelper" property="jstlVersion"/>&ensp;<span class=nowrap><b>Encoding:</b>&ensp;<%=System.getProperty("file.encoding")%></span>&ensp;<span class=nowrap><b>Charset:</b>&ensp;<%=java.nio.charset.Charset.defaultCharset().name()%></span></td></tr>
 </tbody>
 </table>
 <%
@@ -75,7 +75,7 @@
 %>
 &nbsp;<a id=clearCritical class=delete title="<%=intl._t("Clear logs")%>" href="logs?crit=<%=last%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a>
 </h3>
-<table id=criticallogs class=logtable><tbody><tr><td><jsp:getProperty name="logsHelper" property="criticalLogs" /></td></tr></tbody></table>
+<table id=criticallogs class=logtable><tbody><tr><td><jsp:getProperty name="logsHelper" property="criticalLogs"/></td></tr></tbody></table>
 <%
     }
 %>
@@ -93,7 +93,7 @@
 &nbsp;<span id=toggleRefresh></span>
 &nbsp;<span id=logFilter title="<%=intl._t("Filter Router log output")%>"><input type=text id=logFilterInput></span>
 </h3>
-<table id=routerlogs class=logtable><tbody><tr><td><jsp:getProperty name="logsHelper" property="logs" /></td></tr></tbody></table>
+<table id=routerlogs class=logtable><tbody><tr><td><jsp:getProperty name="logsHelper" property="logs"/></td></tr></tbody></table>
 <h3 class=tabletitle id=servicelogs><%=intl._t("Service (Wrapper) Logs")%>
 <%
     StringBuilder buf = new StringBuilder(24*1024);

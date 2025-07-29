@@ -21,10 +21,10 @@
 <span class=tab2 title="<%=intl._t("Top 50 peers by transit tunnel requests")%>"><%=intl._t("Transit by Peer")%></span>
 <span class=tab><a href="/tunnelpeercount"><%=intl._t("All Tunnels by Peer")%></a></span>
 </div>
-<jsp:useBean class="net.i2p.router.web.helpers.TransitSummaryHelper" id="transitSummaryHelper" scope="request" />
-<jsp:setProperty name="transitSummaryHelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.TransitSummaryHelper" id="transitSummaryHelper" scope="request"/>
+<jsp:setProperty name="transitSummaryHelper" property="contextId" value="<%=i2pcontextId%>"/>
 <% transitSummaryHelper.storeWriter(out); %>
-<jsp:getProperty name="transitSummaryHelper" property="transitSummary" />
+<jsp:getProperty name="transitSummaryHelper" property="transitSummary"/>
 </div>
 <script src=/js/lazyload.js></script>
 <script src=/js/convertKBtoMB.js></script>

@@ -1,6 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
-<jsp:useBean class="net.i2p.router.web.CSSHelper" id="tester" scope="request" />
-<jsp:setProperty name="tester" property="contextId" value="<%=(String)session.getAttribute(\"i2p.contextId\")%>" />
+<jsp:useBean class="net.i2p.router.web.CSSHelper" id="tester" scope="request"/>
+<jsp:setProperty name="tester" property="contextId" value="<%=(String)session.getAttribute(\"i2p.contextId\")%>"/>
 <% boolean embedApps = tester.embedApps(); %>
 <!DOCTYPE HTML>
 <%
@@ -18,10 +18,10 @@
 
 <div class=main id=config_service>
 <%@include file="confignav.jsi" %>
-<jsp:useBean class="net.i2p.router.web.ConfigServiceHandler" id="formhandler" scope="request" />
+<jsp:useBean class="net.i2p.router.web.ConfigServiceHandler" id="formhandler" scope="request"/>
 <%@include file="formhandler.jsi" %>
 <form method=POST>
-<input type=hidden name="nonce" value="<%=pageNonce%>" >
+<input type=hidden name="nonce" value="<%=pageNonce%>">
 
 <div class=service_container>
 <h3 class=ptitle id=shutdownrouter><%=intl._t("Shutdown the router")%></h3>
@@ -29,10 +29,10 @@
 <%=intl._t("Graceful mode allows your router to honor its participating tunnel commitments before shutting down or restarting.")%></p>
 <hr>
 <div class=formaction id=shutdown>
-<input type=submit class=stop name=action value="<%=intl._t("Shutdown gracefully")%>" >
-<input type=submit class=stop name=action value="<%=intl._t("Shutdown immediately")%>" >
+<input type=submit class=stop name=action value="<%=intl._t("Shutdown gracefully")%>">
+<input type=submit class=stop name=action value="<%=intl._t("Shutdown immediately")%>">
 <% if (formhandler.shouldShowCancelGraceful()) { %>
-<input type=submit class=cancel name=action value="<%=intl._t("Cancel graceful shutdown")%>" >
+<input type=submit class=cancel name=action value="<%=intl._t("Cancel graceful shutdown")%>">
 <% } %>
 </div>
 </div>
@@ -44,8 +44,8 @@
 <%=intl._t("A restart may be required to update the router, implement a configuration change, or complete installation of a plugin.")%></p>
 <hr>
 <div class=formaction id=restart>
-<input type=submit class=reload name=action value="<%=intl._t("Graceful restart")%>" >
-<input type=submit class=reload name=action value="<%=intl._t("Hard restart")%>" >
+<input type=submit class=reload name=action value="<%=intl._t("Graceful restart")%>">
+<input type=submit class=reload name=action value="<%=intl._t("Hard restart")%>">
 </div>
 </div>
 <% } %>
@@ -61,8 +61,8 @@
 <hr>
 <div class=formaction id=browserstart>
 <!-- TODO hide inert button -->
-<input type=submit class="hideconsole" name=action value="<%=intl._t("No console on startup")%>" >
-<input type=submit class="showconsole" name=action value="<%=intl._t("Open console on startup")%>" >
+<input type=submit class="hideconsole" name=action value="<%=intl._t("No console on startup")%>">
+<input type=submit class="showconsole" name=action value="<%=intl._t("Open console on startup")%>">
 </div>
 </div>
 <% } %>
@@ -78,9 +78,9 @@
 </p>
 <hr>
 <div class=formaction id=dumpthreads>
-<input type=submit class=reload name=action value="<%=intl._t("Force garbage collection")%>" >
+<input type=submit class=reload name=action value="<%=intl._t("Force garbage collection")%>">
 <% if (net.i2p.util.SystemVersion.hasWrapper()) { %>
-<input type=submit class=download name=action value="<%=intl._t("Dump threads")%>" >
+<input type=submit class=download name=action value="<%=intl._t("Dump threads")%>">
 <% } %>
 </div>
 </div>
@@ -95,9 +95,9 @@
 <hr>
 <div class=formaction id=systray>
 <%         if (!formhandler.isSystrayEnabled()) { %>
-<input type=submit name=action class=accept value="<%=intl._t("Show systray icon")%>" >
+<input type=submit name=action class=accept value="<%=intl._t("Show systray icon")%>">
 <%         } else { %>
-<input type=submit name=action class=cancel value="<%=intl._t("Hide systray icon")%>" >
+<input type=submit name=action class=cancel value="<%=intl._t("Hide systray icon")%>">
 <%         } %>
 </div>
 </div>
@@ -111,8 +111,8 @@
 <%=intl._t("Configure the status of the I2P service at system startup. If disabled, the service can be launched manually.").replace("I2P", "I2P+")%>
 <hr>
 <div class=formaction id=runonstart>
-<input type=submit name=action class=cancel value="<%=intl._t("Disable I2P service")%>" >
-<input type=submit name=action class=accept value="<%=intl._t("Enable I2P service")%>" >
+<input type=submit name=action class=cancel value="<%=intl._t("Disable I2P service")%>">
+<input type=submit name=action class=accept value="<%=intl._t("Enable I2P service")%>">
 </div>
 </div>
 
@@ -123,7 +123,7 @@
 <%=intl._t("Install the I2P system service. This is the recommended way to run I2P.").replace("I2P", "I2P+")%>
 <hr>
 <div class=formaction id=installservice>
-<input type=submit name=action class=accept value="<%=intl._t("Install I2P service")%>" >
+<input type=submit name=action class=accept value="<%=intl._t("Install I2P service")%>">
 </div>
 </div>
 <% } // is Windows? %>

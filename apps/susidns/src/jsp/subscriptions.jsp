@@ -8,11 +8,11 @@
 %>
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
 <%@include file="headers.jsi"%>
-<jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session" />
-<jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application" />
-<jsp:useBean id="subs" class="i2p.susi.dns.SubscriptionsBean" scope="session" />
-<jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
-<jsp:setProperty name="subs" property="*" />
+<jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session"/>
+<jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application"/>
+<jsp:useBean id="subs" class="i2p.susi.dns.SubscriptionsBean" scope="session"/>
+<jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application"/>
+<jsp:setProperty name="subs" property="*"/>
 <%
     subs.storeMethod(request.getMethod());
     boolean overrideCssActive = base.isOverrideCssActive();
@@ -56,8 +56,8 @@
 <textarea name="content" rows="10" cols="80">${subs.content}</textarea>
 </div>
 <div id=buttons>
-<input class=update style=float:left type=submit name=action value="<%=intl._t("Update")%>" >
-<input class=accept type=submit name=action value="<%=intl._t("Save")%>" >
+<input class=update style=float:left type=submit name=action value="<%=intl._t("Update")%>">
+<input class=accept type=submit name=action value="<%=intl._t("Save")%>">
 </div>
 </form>
 <div class=help id=helpsubs>

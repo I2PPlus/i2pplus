@@ -12,12 +12,12 @@
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="sidebar.jsi" %>
 
-<jsp:useBean class="net.i2p.router.web.helpers.ConfigTunnelsHelper" id="tunnelshelper" scope="request" />
-<jsp:setProperty name="tunnelshelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.ConfigTunnelsHelper" id="tunnelshelper" scope="request"/>
+<jsp:setProperty name="tunnelshelper" property="contextId" value="<%=i2pcontextId%>"/>
 <h1 class=conf><%=intl._t("Tunnel Options")%></h1>
 <div class=main id=config_tunnels>
 <%@include file="confignav.jsi" %>
-<jsp:useBean class="net.i2p.router.web.helpers.ConfigTunnelsHandler" id="formhandler" scope="request" />
+<jsp:useBean class="net.i2p.router.web.helpers.ConfigTunnelsHandler" id="formhandler" scope="request"/>
 <%@include file="formhandler.jsi" %>
 <% if (!tunnelshelper.isAdvanced()) { %>
 <!--
@@ -42,11 +42,11 @@
 <% } %>
 </p>
 <form method=POST>
-<input type=hidden name="nonce" value="<%=pageNonce%>" >
+<input type=hidden name="nonce" value="<%=pageNonce%>">
 <input type=hidden name=action value="blah" >
-<jsp:getProperty name="tunnelshelper" property="form" />
+<jsp:getProperty name="tunnelshelper" property="form"/>
 <hr><div class=formaction id=tunnelconfigsave>
-<input type=reset class=cancel value="<%=intl._t("Cancel")%>" >
+<input type=reset class=cancel value="<%=intl._t("Cancel")%>">
 <input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>">
 </div>
 </form>

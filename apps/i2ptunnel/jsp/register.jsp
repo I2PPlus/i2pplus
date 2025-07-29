@@ -6,9 +6,9 @@
   /* right now using EditBean instead of IndexBean for getSpoofedHost() */
   /* but might want to POST to it anyway ??? */
 %>
-<jsp:useBean class="net.i2p.i2ptunnel.web.EditBean" id="editBean" scope="request" />
-<jsp:useBean class="net.i2p.i2ptunnel.web.IndexBean" id="indexBean" scope="request" />
-<jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request" />
+<jsp:useBean class="net.i2p.i2ptunnel.web.EditBean" id="editBean" scope="request"/>
+<jsp:useBean class="net.i2p.i2ptunnel.web.IndexBean" id="indexBean" scope="request"/>
+<jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request"/>
 <%
    RequestWrapper wrequest = new RequestWrapper(request);
    String tun = wrequest.getParameter("tunnel");
@@ -66,10 +66,10 @@
     if (name == null || name.equals(""))
         name = editBean.getTunnelName(curTunnel);
 %>
-<input type=hidden name="tunnel" value="<%=curTunnel%>" />
-<input type=hidden name="nonce" value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>" />
-<input type=hidden name="type" value="<%=tunnelType%>" />
-<input type=submit class=default name=action value="Save changes" />
+<input type=hidden name="tunnel" value="<%=curTunnel%>">
+<input type=hidden name="nonce" value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>">
+<input type=hidden name="type" value="<%=tunnelType%>">
+<input type=submit class=default name=action value="Save changes">
 <%
     String curEncryptMode = editBean.getEncryptMode(curTunnel);
     if (!"0".equals(curEncryptMode)) {
@@ -304,10 +304,10 @@
                String oldname = wrequest.getParameter("oldname");
                if (oldname == null) oldname = "";
 %>
-<tr><td><b><%=intl._t("Old / parent hostname ")%>:</b><input type=text size=30 maxlength=50 name="oldname" id=oldName value="<%=oldname%>" class=freetext placeholder="old hostname or parent domain for sub-domain registration" /></td></tr>
-<tr><td><b><%=intl._t("Private key file for old destination / sub-domain parent")%>:</b><input type="file" name="olddestfile" id=oldDestFile value="" /></td></tr>
+<tr><td><b><%=intl._t("Old / parent hostname ")%>:</b><input type=text size=30 maxlength=50 name="oldname" id=oldName value="<%=oldname%>" class=freetext placeholder="old hostname or parent domain for sub-domain registration"></td></tr>
+<tr><td><b><%=intl._t("Private key file for old destination / sub-domain parent")%>:</b><input type="file" name="olddestfile" id=oldDestFile value=""></td></tr>
 <tr><td class=buttons>
-<input type=hidden value=true name="removeConfirm" />
+<input type=hidden value=true name="removeConfirm">
 <a class=control href="list"><%=intl._t("Cancel")%></a>
 <button id=controlSave class=control type=submit name=action value="authenticate"  title="<%=intl._t("Generate Authentication")%>"><%=intl._t("Generate")%></button>
 </td>

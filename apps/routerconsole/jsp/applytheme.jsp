@@ -10,18 +10,18 @@
 </head>
 <body>
 <%@include file="sidebar.jsi" %>
-<jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHelper" id="uihelper" scope="request" />
-<jsp:setProperty name="uihelper" property="contextId" value="<%=(String)session.getAttribute(\"i2p.contextId\")%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHelper" id="uihelper" scope="request"/>
+<jsp:setProperty name="uihelper" property="contextId" value="<%=(String)session.getAttribute(\"i2p.contextId\")%>"/>
 <h1 class=conf><%=uihelper._t("User Interface Configuration")%></h1>
 <div class=main id=config_ui>
 <%@include file="confignav.jsi" %>
 <p class=infohelp id=applytheme>Applying Console theme preferences&hellip; You should be returned to the <a href="/configui"><%=uihelper._t("User Interface Configuration")%></a> shortly.</a></p>
 <div style=display:none>
-<jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHandler" id="formhandler" scope="request" />
+<jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHandler" id="formhandler" scope="request"/>
 <%@include file="formhandler.jsi" %>
 <form method=POST>
-<input type=hidden name="consoleNonce" value="<%=net.i2p.router.web.CSSHelper.getNonce()%>" >
-<input type=hidden name="nonce" value="<%=pageNonce%>" >
+<input type=hidden name="consoleNonce" value="<%=net.i2p.router.web.CSSHelper.getNonce()%>">
+<input type=hidden name="nonce" value="<%=pageNonce%>">
 <input type=hidden name=action value="blah" >
 </div>
 </div>

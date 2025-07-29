@@ -1,11 +1,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
-<jsp:useBean class="net.i2p.router.web.CSSHelper" id="tester" scope="request" />
+<jsp:useBean class="net.i2p.router.web.CSSHelper" id="tester" scope="request"/>
 <%
    String i2pcontextId1 = null;
    try {i2pcontextId1 = (String) session.getAttribute("i2p.contextId");}
    catch (IllegalStateException ise) {}
 %>
-<jsp:setProperty name="tester" property="contextId" value="<%=i2pcontextId1%>" />
+<jsp:setProperty name="tester" property="contextId" value="<%=i2pcontextId1%>"/>
 <%
     // take /dns query params and pass to the iframe
     String requestURL;

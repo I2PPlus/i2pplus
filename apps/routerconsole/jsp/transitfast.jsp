@@ -21,10 +21,10 @@
 <span class=tab title="<%=intl._t("Top 50 peers by transit tunnel requests")%>"><a href="/transitsummary"><%=intl._t("Transit by Peer")%></a></span>
 <span class=tab><a href="/tunnelpeercount"><%=intl._t("All Tunnels by Peer")%></a></span>
 </div>
-<jsp:useBean class="net.i2p.router.web.helpers.TunnelParticipatingFastestHelper" id="tunnelParticipatingFastestHelper" scope="request" />
-<jsp:setProperty name="tunnelParticipatingFastestHelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.TunnelParticipatingFastestHelper" id="tunnelParticipatingFastestHelper" scope="request"/>
+<jsp:setProperty name="tunnelParticipatingFastestHelper" property="contextId" value="<%=i2pcontextId%>"/>
 <% tunnelParticipatingFastestHelper.storeWriter(out); %>
-<jsp:getProperty name="tunnelParticipatingFastestHelper" property="tunnelParticipatingFastest" />
+<jsp:getProperty name="tunnelParticipatingFastestHelper" property="tunnelParticipatingFastest"/>
 </div>
 <script src=/js/tablesort/tablesort.js></script>
 <script src=/js/tablesort/tablesort.number.js></script>

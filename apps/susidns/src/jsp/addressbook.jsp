@@ -9,11 +9,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" import="net.i2p.servlet.RequestWrapper" import="java.util.regex.Pattern" import="java.util.regex.Matcher" buffer="128kb"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@include file="headers.jsi"%>
-<jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session" />
-<jsp:useBean id="book" class="i2p.susi.dns.NamingServiceBean" scope="session" />
-<jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application" />
-<jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
-<jsp:setProperty name="book" property="*" />
+<jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session"/>
+<jsp:useBean id="book" class="i2p.susi.dns.NamingServiceBean" scope="session"/>
+<jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application"/>
+<jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application"/>
+<jsp:setProperty name="book" property="*"/>
 <% book.storeMethod(request.getMethod()); %>
 <jsp:setProperty name="book" property="resetDeletionMarks" value="1"/>
 <c:forEach items="${paramValues.checked}" var="checked">

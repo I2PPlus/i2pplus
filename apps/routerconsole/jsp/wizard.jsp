@@ -1,5 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
-<jsp:useBean class="net.i2p.router.web.helpers.WizardHelper" id="wizhelper" scope="session" />
+<jsp:useBean class="net.i2p.router.web.helpers.WizardHelper" id="wizhelper" scope="session"/>
 <%
     // note that for the helper we use a session scope, not a request scope,
     // so that we can access the NDT test results.
@@ -95,7 +95,7 @@
 %>
 <div class=main id=setupwizard>
 <div id=wizard>
-<jsp:useBean class="net.i2p.router.web.helpers.WizardHandler" id="formhandler" scope="request" />
+<jsp:useBean class="net.i2p.router.web.helpers.WizardHandler" id="formhandler" scope="request"/>
 <%
     // Bind the session-scope Helper to the request-scope Handler
     formhandler.setWizardHelper(wizhelper);
@@ -109,8 +109,8 @@
     if (ipg == 1) {
         // language selection
 %>
-<jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHelper" id="uihelper" scope="request" />
-<jsp:setProperty name="uihelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHelper" id="uihelper" scope="request"/>
+<jsp:setProperty name="uihelper" property="contextId" value="<%=i2pcontextId%>"/>
 <%-- needed for CSS: --%><div id=config_ui>
 <%-- needed for lang setting in head.jsi: --%><input type=hidden name="consoleNonce" value="<%=net.i2p.router.web.CSSHelper.getNonce()%>">
 <p class=infohelp id=flags>
@@ -118,7 +118,7 @@
 </p>
 <h3 id=langheading><%=uihelper._t("Router Console &amp; WebApps Display Language")%></h3>
 <div id=langsettings>
-<jsp:getProperty name="uihelper" property="langSettings" />
+<jsp:getProperty name="uihelper" property="langSettings"/>
 </div></div>
 <%
     } else if (ipg == 2) {
@@ -160,8 +160,8 @@
         // Bandwidth test results
         // and/or manual bw entry?
 %>
-<jsp:useBean class="net.i2p.router.web.helpers.ConfigNetHelper" id="nethelper" scope="request" />
-<jsp:setProperty name="nethelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.ConfigNetHelper" id="nethelper" scope="request"/>
+<jsp:setProperty name="nethelper" property="contextId" value="<%=i2pcontextId%>"/>
 <%
         if (request.getParameter("skipbw") == null) {
             // don't display this if we skipped the test
@@ -229,18 +229,18 @@
 <td>
 <div class="optionsingle bw_in">
 <span class=bw_title><%=intl._t("Download Speed")%></span>
-<input name="inboundrate" type=text size=5 maxlength=5 value="<jsp:getProperty name="nethelper" property="inboundBurstRate" />">
+<input name="inboundrate" type=text size=5 maxlength=5 value="<jsp:getProperty name="nethelper" property="inboundBurstRate"/>">
 <%=intl._t("KBps In")%>
 </div>
 </td>
 <td>
-<jsp:getProperty name="nethelper" property="inboundBurstRateBits" />
+<jsp:getProperty name="nethelper" property="inboundBurstRateBits"/>
 </td>
 <%--
 <!-- let's keep this simple...
 bursting up to
-<input name="inboundburstrate" type=text size=5 value="<jsp:getProperty name="nethelper" property="inboundBurstRate" />"> KBps for
-<jsp:getProperty name="nethelper" property="inboundBurstFactorBox" /><br>
+<input name="inboundburstrate" type=text size=5 value="<jsp:getProperty name="nethelper" property="inboundBurstRate"/>"> KBps for
+<jsp:getProperty name="nethelper" property="inboundBurstFactorBox"/><br>
 -->
 --%>
 </tr>
@@ -249,18 +249,18 @@ bursting up to
 <td>
 <div class="optionsingle bw_out">
 <span class=bw_title><%=intl._t("Upload Speed")%></span>
-<input name="outboundrate" type=text size=5 maxlength=5 value="<jsp:getProperty name="nethelper" property="outboundBurstRate" />">
+<input name="outboundrate" type=text size=5 maxlength=5 value="<jsp:getProperty name="nethelper" property="outboundBurstRate"/>">
 <%=intl._t("KBps Out")%>
 </div>
 </td>
 <td>
-<jsp:getProperty name="nethelper" property="outboundBurstRateBits" />
+<jsp:getProperty name="nethelper" property="outboundBurstRateBits"/>
 </td>
 <%--
 <!-- let's keep this simple...
  bursting up to
-<input name="outboundburstrate" type=text size=2 value="<jsp:getProperty name="nethelper" property="outboundBurstRate" />"> KBps for
-<jsp:getProperty name="nethelper" property="outboundBurstFactorBox" /><br>
+<input name="outboundburstrate" type=text size=2 value="<jsp:getProperty name="nethelper" property="outboundBurstRate"/>"> KBps for
+<jsp:getProperty name="nethelper" property="outboundBurstFactorBox"/><br>
 <i>KBps = kilobytes per second = 1024 bytes per second = 8192 bits per second.<br>
 A negative rate sets the default.</i><br>
 -->
@@ -269,12 +269,12 @@ A negative rate sets the default.</i><br>
 <tr>
 <td>
 <div class="optionsingle bw_share">
-<span class=bw_title><%=intl._t("Network Share")%></span><jsp:getProperty name="nethelper" property="sharePercentageBox" />
+<span class=bw_title><%=intl._t("Network Share")%></span><jsp:getProperty name="nethelper" property="sharePercentageBox"/>
 <%=intl._t("Share")%>
 </div>
 </td>
 <td>
-<jsp:getProperty name="nethelper" property="shareRateBits" />
+<jsp:getProperty name="nethelper" property="shareRateBits"/>
 </td>
 </tr>
 <tr>

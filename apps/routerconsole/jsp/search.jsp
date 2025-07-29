@@ -8,10 +8,10 @@
        i2pcontextId = (String) session.getAttribute("i2p.contextId");
    } catch (IllegalStateException ise) {}
 %>
-<jsp:useBean class="net.i2p.router.web.helpers.SearchHelper" id="searchhelper" scope="request" />
-<jsp:setProperty name="searchhelper" property="contextId" value="<%=i2pcontextId%>" />
-<jsp:setProperty name="searchhelper" property="engine" value="<%=request.getParameter(\"engine\")%>" />
-<jsp:setProperty name="searchhelper" property="query" value="<%=request.getParameter(\"query\")%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.SearchHelper" id="searchhelper" scope="request"/>
+<jsp:setProperty name="searchhelper" property="contextId" value="<%=i2pcontextId%>"/>
+<jsp:setProperty name="searchhelper" property="engine" value="<%=request.getParameter(\"engine\")%>"/>
+<jsp:setProperty name="searchhelper" property="query" value="<%=request.getParameter(\"query\")%>"/>
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";

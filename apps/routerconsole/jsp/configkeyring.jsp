@@ -14,16 +14,16 @@
 <h1 class=conf><%=intl._t("Keyring Manager")%></h1>
 <div class=main id=config_keyring>
 <%@include file="confignav.jsi" %>
-<jsp:useBean class="net.i2p.router.web.helpers.ConfigKeyringHandler" id="formhandler" scope="request" />
+<jsp:useBean class="net.i2p.router.web.helpers.ConfigKeyringHandler" id="formhandler" scope="request"/>
 <%@include file="formhandler.jsi" %>
-<jsp:useBean class="net.i2p.router.web.helpers.ConfigKeyringHelper" id="keyringhelper" scope="request" />
-<jsp:setProperty name="keyringhelper" property="contextId" value="<%=i2pcontextId%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.ConfigKeyringHelper" id="keyringhelper" scope="request"/>
+<jsp:setProperty name="keyringhelper" property="contextId" value="<%=i2pcontextId%>"/>
 <p id=keyringhelp class=infohelp>
 <%=intl._t("The router keyring is used to decrypt encrypted LeaseSets.")%>&nbsp;
 <%=intl._t("The keyring may contain keys for local or remote encrypted destinations.")%></p>
 <form method=POST>
-<input type=hidden name="nonce" value="<%=pageNonce%>" >
-<jsp:getProperty name="keyringhelper" property="summary" />
+<input type=hidden name="nonce" value="<%=pageNonce%>">
+<jsp:getProperty name="keyringhelper" property="summary"/>
 <h3 class=tabletitle><%=intl._t("Manual Keyring Addition")%></h3>
 <table id=addkeyring class=configtable>
 <tr>
@@ -68,12 +68,12 @@
 </tr>
 <tr>
 <td class=right><b><%=intl._t("Optional lookup password")%>:</b></td>
-<td><input type=password name="nofilter_blindedPassword" title="<%=intl._t("Set password required to access this service")%>" class="freetext password" /></td>
+<td><input type=password name="nofilter_blindedPassword" title="<%=intl._t("Set password required to access this service")%>" class="freetext password"/></td>
 </tr>
 <tr>
 <td colspan=2 class="optionsave right">
-<input type=reset class=cancel value="<%=intl._t("Cancel")%>" >
-<input type=submit name=action class=add value="<%=intl._t("Add key")%>" >
+<input type=reset class=cancel value="<%=intl._t("Cancel")%>">
+<input type=submit name=action class=add value="<%=intl._t("Add key")%>">
 </td>
 </tr>
 </table>

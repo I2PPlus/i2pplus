@@ -12,11 +12,11 @@
 <body>
 <script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="sidebar.jsi" %>
-<jsp:useBean class="net.i2p.router.web.helpers.PeerHelper" id="peerHelper" scope="request" />
-<jsp:setProperty name="peerHelper" property="contextId" value="<%=i2pcontextId%>" />
-<jsp:setProperty name="peerHelper" property="urlBase" value="peers.jsp" />
-<jsp:setProperty name="peerHelper" property="transport" value="<%=request.getParameter(\"transport\")%>" />
-<jsp:setProperty name="peerHelper" property="sort" value="<%=request.getParameter(\"sort\") != null ? request.getParameter(\"sort\") : \"\"%>" />
+<jsp:useBean class="net.i2p.router.web.helpers.PeerHelper" id="peerHelper" scope="request"/>
+<jsp:setProperty name="peerHelper" property="contextId" value="<%=i2pcontextId%>"/>
+<jsp:setProperty name="peerHelper" property="urlBase" value="peers.jsp"/>
+<jsp:setProperty name="peerHelper" property="transport" value="<%=request.getParameter(\"transport\")%>"/>
+<jsp:setProperty name="peerHelper" property="sort" value="<%=request.getParameter(\"sort\") != null ? request.getParameter(\"sort\") : \"\"%>"/>
 <%
     String req = request.getParameter("transport");
     if (req == null) {
@@ -42,7 +42,7 @@
     peerHelper.storeWriter(out);
     if (allowIFrame) {peerHelper.allowGraphical();}
 %>
-<jsp:getProperty name="peerHelper" property="peerSummary" />
+<jsp:getProperty name="peerHelper" property="peerSummary"/>
 </div>
 <script src=/js/tablesort/tablesort.js></script>
 <script src=/js/tablesort/tablesort.number.js></script>

@@ -7,11 +7,11 @@
 %>
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
 <%@include file="headers.jsi"%>
-<jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session" />
-<jsp:useBean id="book" class="i2p.susi.dns.NamingServiceBean" scope="session" />
-<jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application" />
-<jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application" />
-<jsp:setProperty name="book" property="*" />
+<jsp:useBean id="base" class="i2p.susi.dns.BaseBean" scope="session"/>
+<jsp:useBean id="book" class="i2p.susi.dns.NamingServiceBean" scope="session"/>
+<jsp:useBean id="intl" class="i2p.susi.dns.Messages" scope="application"/>
+<jsp:useBean id="version" class="i2p.susi.dns.VersionBean" scope="application"/>
+<jsp:setProperty name="book" property="*"/>
 <jsp:setProperty name="book" property="resetDeletionMarks" value="1"/>
 <%
     book.storeMethod(request.getMethod());
@@ -62,7 +62,7 @@
             boolean showNotes = !book.getBook().equals("published");
             for (i2p.susi.dns.AddressBean addr : addrs) {
                 String b32 = addr.getB32(); %>
-<jsp:setProperty name="book" property="trClass"	value="0" />
+<jsp:setProperty name="book" property="trClass"	value="0"/>
 <div class=headline>
 <h3><%=intl._t("Details")%>: <%=addr.getName()%></h3>
 </div>
@@ -136,7 +136,7 @@
 <input type=hidden name="end" value="99">
 <input type=hidden name="checked" value="<%=detail%>">
 <input type=hidden name="destination" value="<%=addr.getDestination()%>">
-<input class=delete type=submit name=action value="<%=intl._t("Delete Entry")%>" >
+<input class=delete type=submit name=action value="<%=intl._t("Delete Entry")%>">
 </p>
 </form>
 </div><%-- buttons --%>
