@@ -769,9 +769,9 @@ class NetDbRenderer {
                     buf.append("<table id=leasesetKeyspace>\n")
                        .append("<tbody><tr id=medianDistance><td><b>").append(_t("Median distance (bits)")).append(":</b></td><td colspan=3>")
                        .append(fmt.format(log2)).append("</td></tr>\n")
-                       .append("<tr id=estimatedFF><td><b>").append(_t("Estimated total floodfills")).append(":</b></td><td colspan=3>")
+                       .append("<tr id=estimatedFF><td><b>").append(_t("Estimated total floodfills")).append("</b></td><td colspan=3>")
                        .append(ffEstimated).append("</td></tr>\n")
-                       .append("<tr id=estimatedLS><td><b>").append(_t("Estimated total leasesets")).append(":</b></td><td colspan=3>")
+                       .append("<tr id=estimatedLS><td><b>").append(_t("Estimated total leasesets")).append("</b></td><td colspan=3>")
                        .append(total * rapCount / 4).append("</td></tr></tbody>\n</table>\n");
                 }
             }
