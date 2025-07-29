@@ -6,8 +6,9 @@
     boolean canChangePort = editBean.canChangePort(curTunnel);
     String tastopFirst = " title=\"" + aStopFirst + "\" ";
     String tbstopFirst = " title=\"" + bStopFirst + "\" ";
-    String checked = " checked=checked ";
-    String selected = " selected=selected ";
+    String checked = " checked ";
+    String isDisabled = " disabled";
+    String selected = " selected ";
     // We don't actually disable the fields for a new tunnel, but we provide a warning
     String phdisabled = (canChangePort && isShared) ? "" : (isShared ? tbstopFirst : tastopFirst);
     String tunnelTypeName;
@@ -82,7 +83,7 @@
         String shtitle = (canChangePort && isShared) ?
                          intl._t("Traffic from all clients with this feature enabled will be routed over the same set of tunnels. This will make profiling the tunnels by an adversary more difficult, but will link the clients together.") :
                          (isShared ? bStopFirst : aStopFirst);
-        String shdisabled = canChangePort ? "" : " disabled=disabled ";
+        String shdisabled = canChangePort ? "" : isDisabled;
 %>
 <label title="<%=shtitle%>" <%=shdisabled%>>
 <input value="true" type=checkbox name="shared" <%=(isShared ? checked : "")%> class="optbox slider" <%=shdisabled%>>
@@ -160,7 +161,7 @@
               out.write(ifc);
               out.write('\"');
               if (ifc.equals(clientInterface))
-                  out.write(" selected=selected");
+                  out.write(selected);
                   out.write('>');
                   out.write(ifc);
                   out.write("</option>\n");
@@ -358,7 +359,7 @@
               boolean canChangeSigType = editBean.canChangeSigType(curTunnel);
               String tstopFirst = " title=\"" + stopFirst + "\" ";
               String shdisabled = canChangeSigType ? "" : tstopFirst;
-              String disabled = canChangeSigType ? "" : " disabled=disabled ";
+              String disabled = canChangeSigType ? "" : isDisabled;
               String legacy = "Legacy option (deprecated), provided for backward compatibility";
 %>
 <td <%=shdisabled%>>
@@ -393,7 +394,7 @@
               boolean has7 = editBean.hasEncType(curTunnel, 7);
               boolean canChangeEncType = editBean.canChangeEncType(curTunnel);
               String ehdisabled = canChangeEncType ? "" : tstopFirst;
-              String edisabled = canChangeEncType ? "" : " disabled=disabled ";
+              String edisabled = canChangeEncType ? "" : isDisabled;
 %>
 <tr><th colspan=2><%=intl._t("Encryption types")%></th></tr>
 <%            if (!canChangeEncType) { %>
@@ -459,7 +460,7 @@
 </select>
 </td>
 <td>
-<select id=tunnelQuantity name="tunnelQuantity" title="<%=intl._t("Number of Tunnels in Group")%>" class=selectbox><%=editBean.getQuantityOptions(curTunnel, 0)%></select>
+<select id=tunnelQuantity class=selectbox name="tunnelQuantity" title="<%=intl._t("Number of Tunnels in Group")%> <%=(tunnelDepth == 0 ? " (" + intl._t("Disabled for 0 hop tunnels") + ")" : "") %>" <%=(tunnelDepth == 0 ? isDisabled : "") %>><%=editBean.getQuantityOptions(curTunnel, 0)%></select>
 </td>
 </tr>
 <%        if (editBean.isAdvanced()) { %>
@@ -472,15 +473,15 @@
 <option value="0"<%=(tunnelVariance  ==  0 ? selected : "") %>><%=intl._t("0 hop variance")%><%=editBean.unlessAdvanced("no randomization, consistent performance")%></option>
 <option value="1"<%=(tunnelVariance  ==  1 ? selected : "") %>><%=intl._t("+ 0-1 hop variance")%><%=editBean.unlessAdvanced("medium randomization, lower performance")%></option>
 <option value="2"<%=(tunnelVariance  ==  2 ? selected : "") %>><%=intl._t("+ 0-2 hop variance")%><%=editBean.unlessAdvanced("high randomization, very low performance")%></option>
-<option value="-1"<%=(tunnelVariance == -1 ? selected : "") %>><%=intl._t("+/- 0-1 hop variance")%><%=editBean.unlessAdvanced("standard randomization, standard performance")%></option>
-<option value="-2"<%=(tunnelVariance == -2 ? selected : "") %>><%=intl._t("+/- 0-2 hop variance")%><%=editBean.unlessAdvanced("not recommended")%></option>
+<option value="-1"<%=(tunnelVariance == -1 ? selected : "") %> <%=(tunnelDepth == 0 ? isDisabled : "") %>><%=intl._t("+/- 0-1 hop variance")%><%=editBean.unlessAdvanced("standard randomization, standard performance")%></option>
+<option value="-2"<%=(tunnelVariance == -2 ? selected : "") %> <%=(tunnelDepth < 2 ? isDisabled : "") %>><%=intl._t("+/- 0-2 hop variance")%><%=editBean.unlessAdvanced("not recommended")%></option>
 <%            if (tunnelVariance > 2 || tunnelVariance < -2) { %>
 <option value="<%=tunnelVariance%>" selected="selected"><%= (tunnelVariance > 2 ? "+ " : "+/- ") %>0-<%=tunnelVariance%> <%=intl._t("hop variance")%></option>
 <%            } %>
 </select>
 </td>
 <td>
-<select id=tunnelBackupQuantity name="tunnelBackupQuantity" title="<%=intl._t("Number of Reserve Tunnels")%>" class=selectbox>
+<select id=tunnelBackupQuantity class=selectbox name="tunnelBackupQuantity" title="<%=intl._t("Number of Reserve Tunnels")%>" <%=(tunnelDepth == 0 ? isDisabled : "") %>>
 <%            int tunnelBackupQuantity = editBean.getTunnelBackupQuantity(curTunnel, 0); %>
 <option value="0"<%=(tunnelBackupQuantity == 0 ? selected : "") %>><%=intl.ngettext("{0} backup tunnel", "{0} backup tunnels", 0)%><%=editBean.unlessAdvanced("no redundancy, no added resource usage")%></option>
 <option value="1"<%=(tunnelBackupQuantity == 1 ? selected : "") %>><%=intl.ngettext("{0} backup tunnel", "{0} backup tunnels", 1)%><%=editBean.unlessAdvanced("low redundancy, low resource usage")%></option>

@@ -39,16 +39,13 @@ public class EditBean extends IndexBean {
      */
     public static boolean staticIsClient(int tunnel) {
         TunnelControllerGroup group = TunnelControllerGroup.getInstance();
-        if (group == null)
-            return false;
+        if (group == null) {return false;}
         List<TunnelController> controllers = group.getControllers();
         if (controllers.size() > tunnel) {
             TunnelController cur = controllers.get(tunnel);
-            if (cur == null) return false;
+            if (cur == null) {return false;}
             return isClient(cur.getType());
-        } else {
-            return false;
-        }
+        } else {return false;}
     }
 
     public String getTargetHost(int tunnel) {
@@ -471,38 +468,53 @@ public class EditBean extends IndexBean {
     }
 
     private static final String PROP_ADVANCED = "routerconsole.advanced";
+    private static final int DFLT_LENGTH = 3;
     private static final int DFLT_QUANTITY = 2;
+    private static final int MAX_ADVANCED_QUANTITY = 16;
     private static final int MAX_CLIENT_QUANTITY = 8;
     private static final int MAX_SERVER_QUANTITY = 8;
-    private static final int MAX_ADVANCED_QUANTITY = 16;
 
     /**
      *  @param mode 0=both, 1=in, 2=out
      *  @since 0.9.7
      */
     public String getQuantityOptions(int tunnel, int mode) {
+        int tunnelDepth = getTunnelDepth(tunnel, DFLT_LENGTH);
+
+        // Special case: if tunnel depth is 0
+        if (tunnelDepth == 0) {
+            StringBuilder buf = new StringBuilder(64);
+            buf.append("<option value=\"1\" selected disabled>");
+            buf.append(ngettext("{0} inbound, {0} outbound tunnel", "{0} inbound, {0} outbound tunnels", 1));
+            buf.append("</option>\n");
+            return buf.toString();
+        }
+
         int tunnelQuantity = mode == 2 ? getTunnelQuantityOut(tunnel, DFLT_QUANTITY)
                                        : getTunnelQuantity(tunnel, DFLT_QUANTITY);
         boolean adv = isAdvanced();
         int maxQuantity = adv ? MAX_ADVANCED_QUANTITY :
-                                     (isClient(tunnel) ? MAX_CLIENT_QUANTITY : MAX_SERVER_QUANTITY);
-        if (tunnelQuantity > maxQuantity) {maxQuantity = tunnelQuantity;}
+                             (isClient(tunnel) ? MAX_CLIENT_QUANTITY : MAX_SERVER_QUANTITY);
+        if (tunnelQuantity > maxQuantity) {
+            maxQuantity = tunnelQuantity;
+        }
+
         StringBuilder buf = new StringBuilder(256);
         for (int i = 1; i <= maxQuantity; i++) {
-             buf.append("<option value=\"").append(i).append('"');
-             if (i == tunnelQuantity) {buf.append(" selected=selected");}
-             buf.append('>');
-             if (mode == 1) {buf.append(ngettext("{0} inbound tunnel", "{0} inbound tunnels", i));}
-             else if (mode == 2) {buf.append(ngettext("{0} outbound tunnel", "{0} outbound tunnels", i));}
-             else {buf.append(ngettext("{0} inbound, {0} outbound tunnel", "{0} inbound, {0} outbound tunnels", i));}
-             if (i <= 3 && !adv) {
-                 buf.append(" (");
-                 if (i == 1) {buf.append(_t("lower bandwidth and reliability"));}
-                 else if (i == 2) {buf.append(_t("standard bandwidth and reliability"));}
-                 else if (i == 3) {buf.append(_t("higher bandwidth and reliability"));}
-                 buf.append(')');
-             }
-             buf.append("</option>\n");
+            buf.append("<option value=\"").append(i).append('"');
+            if (i == tunnelQuantity) {buf.append(" selected");}
+            buf.append('>');
+            if (mode == 1) {buf.append(ngettext("{0} inbound tunnel", "{0} inbound tunnels", i));}
+            else if (mode == 2) {buf.append(ngettext("{0} outbound tunnel", "{0} outbound tunnels", i));}
+            else {buf.append(ngettext("{0} inbound, {0} outbound tunnel", "{0} inbound, {0} outbound tunnels", i));}
+            if (i <= 3 && !adv) {
+                buf.append(" (");
+                if (i == 1) {buf.append(_t("lower bandwidth and reliability"));}
+                else if (i == 2) {buf.append(_t("standard bandwidth and reliability"));}
+                else if (i == 3) {buf.append(_t("higher bandwidth and reliability"));}
+                buf.append(')');
+            }
+            buf.append("</option>\n");
         }
         return buf.toString();
     }
