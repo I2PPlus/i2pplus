@@ -96,7 +96,7 @@ th .help::after{width:16px;height:16px;display:inline-block;background:url(/them
 .tunnelPreview{text-align:left}
 .tunnelPreview,.tunnelPort{width:15%;text-align:center}
 .tunnelProperties{border-top:var(--border);background:#fcfcff}
-.tunnelProperties:hover,.tunnelProperties:hover+.tunnelInfo,.tunnelProperties:hover+.tunnelInfo+.tunnelInfo{background:#ffd;transition:ease background .3s}
+.tunnelBlock:hover td{background:#ffd;transition:ease background .3s}
 .tunnelStatus{width:10%;min-width:48px;float:none;text-align:center}
 .tunnelStatus div{position:relative}
 .tunnelStatus div span{pointer-events:none}
@@ -113,6 +113,10 @@ th .help::after{width:16px;height:16px;display:inline-block;background:url(/them
 #toggleInfo img{height:8px;width:12px;mix-blend-mode:luminosity}
 #tunnelEditPage td#throttle,#clientAuthConfig{padding:0}
 #tunnelMessages{padding:0}
+.encType,.sigType{padding:1px 8px 1px 20px;display:inline-block;text-align:left;vertical-align:middle;font-weight:500;border:var(--border_soft);border-radius:1px;box-shadow:var(--bevel);background:var(--lock) no-repeat 5px center/12px,var(--badge)}
+.sigType{background-image:var(--crypto),var(--badge)}
+.tunnelEncryption,.tunnelSig{text-align:center}
+.tunnelEncryption .tunnelDestinationLabel,.tunnelSig .tunnelDestinationLabel{display:none}
 
 /* throttler */
 #throttler th{padding-left:20px}

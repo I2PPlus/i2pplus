@@ -7,8 +7,8 @@
 <jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request"/>
 <% String activeTheme = indexBean.getTheme(); %>
 <!DOCTYPE html>
-<%   if (activeTheme.contains("dark") || activeTheme.contains("midnight")) { %><html id=tman style=background:#000>
-<%   } else { %><html id=tman><% } %>
+<%  if (activeTheme.contains("dark") || activeTheme.contains("midnight")) { %><html id=tman style=background:#000> <% } %>
+<%  else { %><html id=tman><% } %>
 <head>
 <meta charset=utf-8>
 <title><%=intl._t("Tunnel Manager")%></title>
@@ -16,10 +16,9 @@
 <link href="<%=activeTheme%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <link href="<%=activeTheme%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <link href="<%=activeTheme%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
-<%   if (indexBean.useSoraFont()) { %><link href="<%=activeTheme%>../../fonts/Sora.css" rel=stylesheet><% } %>
-<%   else { %><link href="<%=activeTheme%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
-<%
-    String overrideURL = activeTheme + "override.css";
+<%  if (indexBean.useSoraFont()) { %><link href="<%=activeTheme%>../../fonts/Sora.css" rel=stylesheet><% } %>
+<%  else { %><link href="<%=activeTheme%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
+<%  String overrideURL = activeTheme + "override.css";
     boolean overrideEnabled = false;
     try {
         URL url = new URL(overrideURL);
@@ -28,7 +27,7 @@
         overrideEnabled = true;
     } catch (IOException e) {overrideEnabled = false;}
 %>
-<%   if (overrideEnabled) { %><link href="<%=activeTheme%>override.css" rel=stylesheet><% } %>
+<%  if (overrideEnabled) { %><link href="<%=activeTheme%>override.css" rel=stylesheet><% } %>
 <link rel=icon href="<%=activeTheme%>images/favicon.svg">
 <style>body{display:none;pointer-events:none}</style>
 </head>
@@ -103,6 +102,7 @@
 <th class="tunnelControl volatile"><%=intl._t("Control")%></th>
 </tr>
 <%      for (int curServer : indexBean.getControllerNumbers(false)) { %>
+<tbody class=tunnelBlock>
 <tr class=tunnelProperties>
 <td class=tunnelName>
 <%          String serverDesc = indexBean.getTunnelDescription(curServer);
@@ -206,21 +206,22 @@ SSL
             }
 %>
 </td>
-<td class=tunnelSig colspan=4>
+<td class=tunnelSig>
 <span class=tunnelDestinationLabel><b><%=intl._t("Signature")%>:</b></span>
 <%          String tunnelType = editBean.getInternalType(curServer);
             String altDest = editBean.getAltDestinationBase64(curServer);
             int currentSigType = editBean.getSigType(curServer, tunnelType);
 %>
-<%          if (currentSigType == 7) { %><span class=sigType>Ed25519-SHA-512</span><% } %>
-<%          else if (currentSigType == 3) { %><span class=sigType>ECDSA-P521</span><% } %>
-<%          else if (currentSigType == 2) { %><span class=sigType>ECDSA-P384</span><% } %>
-<%          else if (currentSigType == 1) { %><span class=sigType>ECDSA-P256</span><% } %>
+<%          if (currentSigType == 7) { %><span class=sigType title="<%=intl._t("Signature type")%>: Ed25519-SHA-512">Ed25519</span><% } %>
+<%          else if (currentSigType == 3) { %><span class=sigType title="<%=intl._t("Signature type")%>">ECDSA-P521</span><% } %>
+<%          else if (currentSigType == 2) { %><span class=sigType title="<%=intl._t("Signature type")%>">ECDSA-P384</span><% } %>
+<%          else if (currentSigType == 1) { %><span class=sigType title="<%=intl._t("Signature type")%>">ECDSA-P256</span><% } %>
 <%          else if (currentSigType == 0) {
                 if (altDest == null || altDest.equals("")) { %><span class=sigType style=font-weight:600;color:red>DSA-SHA1</span><% } %>
-<%              else { %><span class=sigType>DSA-SHA1 & Ed25519-SHA-512 (<%=intl._t("Alternate")%>)</span><% } %>
+<%              else { %><span class=sigType title="<%=intl._t("Signature type")%>: DSA-SHA1 & Ed25519-SHA-512">DSA-SHA1 & Ed25519(<%=intl._t("Alternate")%>)</span><% } %>
 <%          } %>
 </td>
+<td colspan=3></td>
 </tr>
 <%          String encName = indexBean.getEncryptedBase32(curServer);
             String altDestB32 = editBean.getAltDestHashBase32(curServer);
@@ -247,7 +248,7 @@ SSL
 <tr class=tunnelInfo style=display:none>
 <td class="tunnelDestinationEncrypted empty" colspan=3></td>
 <%          } %>
-<td class=tunnelEncryption colspan=4>
+<td class=tunnelEncryption>
 <span class=tunnelDestinationLabel><b><%=intl._t("Encryption")%>:</b></span>
 <%          boolean has0 = editBean.hasEncType(curServer, 0);
             boolean has4 = editBean.hasEncType(curServer, 4);
@@ -255,17 +256,19 @@ SSL
             boolean has6 = editBean.hasEncType(curServer, 6);
             boolean has7 = editBean.hasEncType(curServer, 7);
 %>
-<%          if (has0 && has4) { %><span class=encType title="ECIES-X25519 & ElGamal-2048">ECIES & ElGamal</span><% } %>
-<%          else if (has4 && has5) { %><span class=encType title="MLKEM512-X25519 & ECIES-X25519">MLKEM512 & ECIES</span><% } %> 
-<%          else if (has4 && has6) { %><span class=encType title="MLKEM768-X25519 & ECIES-X25519">MLKEM768 & ECIES</span><% } %>
-<%          else if (has4 && has7) { %><span class=encType title="MLKEM1024-X25519 & ECIES-X25519">MLKEM1024 & ECIES</span><% } %> 
-<%          else if (has0) { %><span class=encType title="ElGamal-2048">ElGamal</span><% } %>
-<%          else if (has4) { %><span class=encType title="ECIES-X25519 (Ratchet)">ECIES</span><% } %>
-<%          else if (has5) { %><span class=encType title="MLKEM512-X25519">MLKEM512</span><% } %>
-<%          else if (has6) { %><span class=encType title="MLKEM768-X25519">MLKEM768</span><% } %>
-<%          else if (has7) { %><span class=encType title="MLKEM1024-X25519">MLKEM1024</span><% } %>
+<%          if (has0 && has4) { %><span class=encType title="<%=intl._t("Supported encryption")%>: ECIES-X25519 & ElGamal-2048">ECIES & ElGamal</span><% } %>
+<%          else if (has4 && has5) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM512-X25519 & ECIES-X25519">MLKEM512 & ECIES</span><% } %> 
+<%          else if (has4 && has6) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM768-X25519 & ECIES-X25519">MLKEM768 & ECIES</span><% } %>
+<%          else if (has4 && has7) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM1024-X25519 & ECIES-X25519">MLKEM1024 & ECIES</span><% } %> 
+<%          else if (has0) { %><span class=encType title="<%=intl._t("Supported encryption")%>: ElGamal-2048">ElGamal</span><% } %>
+<%          else if (has4) { %><span class=encType title="<%=intl._t("Supported encryption")%>: ECIES-X25519 (Ratchet)">ECIES</span><% } %>
+<%          else if (has5) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM512-X25519">MLKEM512</span><% } %>
+<%          else if (has6) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM768-X25519">MLKEM768</span><% } %>
+<%          else if (has7) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM1024-X25519">MLKEM1024</span><% } %>
 </td>
+<td colspan=3></td>
 </tr>
+</tbody>
 <%      } /* for loop */ %>
 <tr>
 <td class=newTunnel colspan=7>
@@ -307,6 +310,7 @@ SSL
             boolean isShared = indexBean.isSharedClient(curClient);
             String clientDesc = indexBean.getTunnelDescription(curClient);
 %>
+<tbody class=tunnelBlock>
 <tr class=tunnelProperties>
 <td class=tunnelName>
 <%          if (clientDesc != null && clientDesc.length() != 0) { %>
@@ -398,16 +402,19 @@ SSL
             }
 %>
 </td>
-<td class=tunnelSig colspan=4>
+<td class=tunnelSig>
 <span class=tunnelDestinationLabel><b><%=intl._t("Signature")%>:</b></span>
 <%          String tunnelType = editBean.getInternalType(curClient);
             int currentSigType = editBean.getSigType(curClient, tunnelType);
 %>
-<%          if (currentSigType == 7) { %><span class=sigType>Ed25519-SHA-512</span><% } %>
-<%          else if (currentSigType == 3) { %><span class=sigType>ECDSA-P521<% } %>
-<%          else if (currentSigType == 2) { %><span class=sigType>ECDSA-P384<% } %>
-<%          else if (currentSigType == 1) { %><span class=sigType>ECDSA-P256<% } %>
+<%          if (currentSigType == 7) { %><span class=sigType title="<%=intl._t("Signature type")%>: Ed25519-SHA-512">Ed25519</span><% } %>
+<%          else if (currentSigType == 3) { %><span class=sigType title="<%=intl._t("Signature type")%>">ECDSA-P521<% } %>
+<%          else if (currentSigType == 2) { %><span class=sigType title="<%=intl._t("Signature type")%>">ECDSA-P384<% } %>
+<%          else if (currentSigType == 1) { %><span class=sigType title="<%=intl._t("Signature type")%>">ECDSA-P256<% } %>
 <%          else if (currentSigType == 0) { %><span class=sigType style=font-weight:600;color:red>DSA-SHA1</span><% } %>
+</td>
+<td colspan=3></td>
+</tr>
 <%          String clientB32 = indexBean.getDestHashBase32(curClient);
             if ((cdest.contains(".i2p") && !cdest.contains(".b32") || cdest.length() > 70) && clientB32.length() > 0) {
 %>
@@ -420,7 +427,7 @@ SSL
 <tr class=tunnelInfo style=display:none>
 <td class=empty colspan=3></td>
 <%          } %>
-<td class=tunnelEncryption colspan=4>
+<td class=tunnelEncryption>
 <span class=tunnelDestinationLabel><b><%=intl._t("Encryption")%>:</b></span>
 <%
             boolean has0 = editBean.hasEncType(curClient, 0);
@@ -429,18 +436,20 @@ SSL
             boolean has6 = editBean.hasEncType(curClient, 6);
             boolean has7 = editBean.hasEncType(curClient, 7);
 %>
-<%          if (has0 && has4) { %><span class=encType title="ECIES-X25519 & ElGamal-2048">ECIES & ElGamal</span><% } %>
-<%          else if (has4 && has5) { %><span class=encType title="MLKEM512-X25519 & ECIES-X25519">MLKEM512 & ECIES</span><% } %> 
-<%          else if (has4 && has6) { %><span class=encType title="MLKEM768-X25519 & ECIES-X25519">MLKEM768 & ECIES</span><% } %>
-<%          else if (has4 && has7) { %><span class=encType title="MLKEM1024-X25519 & ECIES-X25519">MLKEM1024 & ECIES</span><% } %> 
-<%          else if (has0) { %><span class=encType title="ElGamal-2048">ElGamal</span><% } %>
-<%          else if (has4) { %><span class=encType title="ECIES-X25519 (Ratchet)">ECIES</span><% } %>
-<%          else if (has5) { %><span class=encType title="MLKEM512-X25519">MLKEM512</span><% } %>
-<%          else if (has6) { %><span class=encType title="MLKEM768-X25519">MLKEM768</span><% } %>
-<%          else if (has7) { %><span class=encType title="MLKEM1024-X25519">MLKEM1024</span><% } %>
-<%      } /* for loop */ %>
+<%          if (has0 && has4) { %><span class=encType title="<%=intl._t("Supported encryption")%>: ECIES-X25519 & ElGamal-2048">ECIES & ElGamal</span><% } %>
+<%          else if (has4 && has5) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM512-X25519 & ECIES-X25519">MLKEM512 & ECIES</span><% } %> 
+<%          else if (has4 && has6) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM768-X25519 & ECIES-X25519">MLKEM768 & ECIES</span><% } %>
+<%          else if (has4 && has7) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM1024-X25519 & ECIES-X25519">MLKEM1024 & ECIES</span><% } %> 
+<%          else if (has0) { %><span class=encType title="<%=intl._t("Supported encryption")%>: ElGamal-2048">ElGamal</span><% } %>
+<%          else if (has4) { %><span class=encType title="<%=intl._t("Supported encryption")%>: ECIES-X25519 (Ratchet)">ECIES</span><% } %>
+<%          else if (has5) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM512-X25519">MLKEM512</span><% } %>
+<%          else if (has6) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM768-X25519">MLKEM768</span><% } %>
+<%          else if (has7) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM1024-X25519">MLKEM1024</span><% } %>
 </td>
+<td colspan=3></td>
 </tr>
+</tbody>
+<%      } /* for loop */ %>
 <tr>
 <td class=newTunnel colspan=7>
 <form id=addNewClientTunnelForm action="edit">

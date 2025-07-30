@@ -112,7 +112,7 @@ th.tunnelLocation{text-transform:none}
 .tunnelProperties{overflow:hidden;text-align:left;border:var(--border);border-bottom:var(--border);background:#000}
 .tunnelProperties td{border-top:var(--border)}
 #serverTunnels{margin:-1px 0 10px}
-.tunnelProperties:hover,.tunnelProperties:hover+.tunnelInfo,.tunnelProperties:hover+.tunnelInfo+.tunnelInfo{background:#140014}
+.tunnelBlock:hover td{background:#140014}
 .newTunnel{text-align:right;border-top:var(--border);padding:5px;background:#fff}
 .newTunnel select,.newTunnel input,.newTunnel .control{margin:2px}
 .newtunnel form{width:100%;text-align:right}
@@ -135,6 +135,10 @@ th.tunnelLocation{text-transform:none}
 .tunnelStatus div .tooltip hr{margin:2px 0 4px;height:0;display:block;border:0;border-top:1px solid #000;border-bottom:1px solid #33334d;opacity:.8}
 .tunnelControl{width:5%;text-align:right;white-space:nowrap}
 th.tunnelControl,.tunnelType,.tunnelLocation,.tunnelInterface{text-align:center}
+.encType,.sigType{padding:1px 8px 1px 20px;display:inline-block;text-align:left;vertical-align:middle;font-weight:500;border:var(--border_soft);border-radius:1px;box-shadow:var(--bevel);background:var(--lock) no-repeat 5px center/12px,var(--badge)}
+.sigType{background-image:var(--crypto),var(--badge)}
+.tunnelEncryption,.tunnelSig{text-align:center}
+.tunnelEncryption .tunnelDestinationLabel,.tunnelSig .tunnelDestinationLabel{display:none}
 
 /* inputs */
 input[type="hidden"],input.default{display:none}

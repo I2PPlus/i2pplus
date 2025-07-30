@@ -185,7 +185,7 @@ th.tunnelControl{text-align:center}
 .tunnelProperties td{border-top:var(--border_softer)}
 .tunnelProperties+tr td{border-top:var(--border_inner)}
 .tunnelProperties+tr+tr td{border-bottom:var(--border_inner)}
-.tunnelProperties:hover,.tunnelProperties:hover+.tunnelInfo,.tunnelProperties:hover+.tunnelInfo+.tunnelInfo{background:#ffd;transition:ease background .05s}
+.tunnelBlock:hover td{background:#ffd;transition:ease background .05s}
 .tunnelProperties:hover+.tunnelInfo+.tunnelInfo td{border-top:1px solid #ffd}
 .tunnelStatus{text-align:center;width:10%;min-width:48px}
 .tunnelStatus div{position:relative}
@@ -198,6 +198,10 @@ th.tunnelControl{text-align:center}
 #toggleInfo img{height:8px;width:12px;mix-blend-mode:luminosity}
 #toggleInfo:hover img,#toggleInfo:focus img{mix-blend-mode:normal}
 #tunnelListPage th:nth-child(n+2),.tunnelProperties td:nth-child(n+2){text-align:center}
+.encType,.sigType{padding:3px 8px 3px 20px;display:inline-block;text-align:left;vertical-align:middle;font-weight:500;border-radius:1px;box-shadow:var(--bevel);background:var(--lock) no-repeat 5px center/12px,var(--badge)}
+.sigType{background-image:var(--crypto),var(--badge)}
+.tunnelEncryption,.tunnelSig{text-align:center}
+.tunnelEncryption .tunnelDestinationLabel,.tunnelSig .tunnelDestinationLabel{display:none}
 
 /* screenlog */
 #screenlog{position:relative;contain:paint}
