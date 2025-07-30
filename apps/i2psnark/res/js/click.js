@@ -22,25 +22,25 @@ document.addEventListener("DOMContentLoaded", () => {
     const css = document.createElement("style");
     css.id = "modalCss";
     css.textContent =
-      ".modal{overflow:hidden;contain:paint}" +
-      "#confirmDialog:not(.cancelled):not(.postMsg){animation:slide-up .8s ease-out .2s both reverse}" +
-      "#confirmButtons{margin:0 -14px -20px;padding:15px;text-align:center}" +
-      "#confirmYes,#confirmNo{margin:4px 12px;padding:6px 8px;width:120px;font-weight:700;cursor:pointer}" +
-      "#confirmButtons button:hover{opacity:1}" +
-      "#confirmYes:active,#confirmNo:active{transform:scale(0.9)}" +
-      "#confirmDialog{padding:10px 15px 21px;width:480px;position:absolute;left:50%;z-index:100000;" +
-      "user-select:none;animation:fade .3s ease .8s both;transform:translate(-50%,-50%)}" +
-      "#confirmDialog.postMsg{animation:slide-down 5s ease-in 3s both reverse}" +
-      "#confirmDialog.cancelled{animation:slide-down 5s ease-in .2s both reverse}" +
-      "#confirmOverlay{width:100%;height:100%;position:fixed;left:0;bottom:0;right:0;z-index:99999}" +
-      "#confirmOverlay.cancelled{animation:fade .3s ease .2s both reverse}" +
-      "#confirmOverlay.done{animation:fade .3s ease 3s both reverse}" +
-      "#msg{margin:-9px -14px 0;padding:30px 20px 30px 88px;text-align:left;font-size:110%}" +
-      "#msg b{max-width:384px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:bottom}" +
-      "#msg .hr{margin:11px 0 10px;height:0;width:100%;display:block}" +
-      "#msg.deleting{margin-bottom:-20px}" +
-      "@keyframes slide-down{0%{transform:translate(-50%, -3000px)}100%{transform:translate(-50%, -50%)}}" +
-      "@keyframes slide-up{0%{transform:translate(-50%, -50%)}100%{transform:translate(-50%, -500px)}}";
+      `.modal{overflow:hidden;contain:paint}
+      #confirmDialog:not(.cancelled):not(.postMsg){animation:slide-up .8s ease-out .2s both reverse}
+      #confirmButtons{margin:0 -14px -20px;padding:15px;text-align:center}
+      #confirmYes,#confirmNo{margin:4px 12px;padding:6px 8px;width:120px;font-weight:700;cursor:pointer}
+      #confirmButtons button:hover{opacity:1}
+      #confirmYes:active,#confirmNo:active{transform:scale(0.9)}
+      #confirmDialog{padding:10px 15px 21px;width:480px;position:absolute;left:50%;z-index:100000;
+      user-select:none;animation:fade .3s ease .8s both;transform:translate(-50%,-50%)}
+      #confirmDialog.postMsg{animation:slide-down 5s ease-in 3s both reverse}
+      #confirmDialog.cancelled{animation:slide-down 5s ease-in .2s both reverse}
+      #confirmOverlay{width:100%;height:100%;position:fixed;left:0;bottom:0;right:0;z-index:99999}
+      #confirmOverlay.cancelled{animation:fade .3s ease .2s both reverse}
+      #confirmOverlay.done{animation:fade .3s ease 3s both reverse}
+      #msg{margin:-9px -14px 0;padding:30px 20px 30px 88px;text-align:left;font-size:110%}
+      #msg b{max-width:384px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:bottom}
+      #msg .hr{margin:11px 0 10px;height:0;width:100%;display:block}
+      #msg.deleting{margin-bottom:-20px}
+      @keyframes slide-down{0%{transform:translate(-50%, -3000px)}100%{transform:translate(-50%, -50%)}}
+      @keyframes slide-up{0%{transform:translate(-50%, -50%)}100%{transform:translate(-50%, -500px)}};`
     fragment.appendChild(css);
     const snarkTheme = head.querySelector("#snarkTheme");
     if (snarkTheme) head.insertBefore(css, snarkTheme);
@@ -117,8 +117,10 @@ document.addEventListener("DOMContentLoaded", () => {
       const action = clickTarget.dataset.action;
 
       const confirmed = await showConfirmationDialog(clickTarget, msg.replace("{0}", `<b>${torrent}</b>`), name, value, action);
-      if (confirmed) {
+      if (form && confirmed) {
+        const existingHiddenInputs = form.querySelectorAll("input[type=hidden]");
         const hiddenInput = document.createElement("input");
+        existingHiddenInputs.forEach(input => input.remove());
         hiddenInput.type = "hidden";
         hiddenInput.name = name;
         hiddenInput.value = value;
