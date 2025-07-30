@@ -132,6 +132,7 @@ a.control:hover{color:var(--ink)}
 .freetext,.tunnelConfig textarea,#customOptions,#userAgents,#hostField{margin:5px}
 .freetext[type=text].filemanager{width:calc(100% - 50px)}
 .multiOption{margin:5px 10px 5px 5px;display:inline-block;vertical-align:middle}
+.multiOption.experimental{margin:0}
 .optbox{margin:5px 3px 5px 5px;vertical-align:middle}
 .optbox,.optbox::before{will-change:transform}
 .optionsDisabled{cursor:not-allowed}

@@ -169,6 +169,7 @@ textarea[name="accessList"],.clientKey,.clientName,.proxyList,#customOptions,#de
 .freetext[readonly],.freetext[readonly]:focus{color:#757a8a;box-shadow:inset 1px 1px 1px #ddd;background:#eff0ff}
 .freetext:focus{color:var(--ink);box-shadow:var(--btn_shadow_hover),var(--btn_shadow_active)}
 .multiOption{margin:5px 10px 5px 0;display:inline-block;font-size:0}
+.multiOption.experimental{margin:0}
 .multiOption input{vertical-align:middle}
 .multiOption#isClient,.multiOption#isServer{padding-left:28px;background:url(/themes/console/images/client.svg) no-repeat 4px center/22px}
 .multiOption#isServer{background-image:url(/themes/console/images/server.svg)}

@@ -172,6 +172,7 @@ textarea:focus{color:var(--ink);border:1px solid #6466a5;box-shadow:0 0 0 1px rg
 .editDisabled input[type=radio]:not(:checked){opacity:.4}
 .editDisabled .optbox:checked+span{font-weight:700;text-decoration:underline}
 .multiOption{margin:2px 10px 2px 0;padding:0;display:inline-block}
+.multiOption.experimental{margin:0}
 
 .buttons,.newTunnel{padding:7px 5px;text-align:right;border-top:var(--border);box-shadow:var(--bevel);background:var(--panel)}
 .tunnelDestinationLabel{margin-right:3px;min-width:150px;display:inline-block;white-space:nowrap;text-align:right}

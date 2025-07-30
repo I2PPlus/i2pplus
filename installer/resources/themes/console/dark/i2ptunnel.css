@@ -137,7 +137,7 @@ a.control,input.control{white-space:nowrap;vertical-align:middle}
 .freetext{width:150px;font:600 8.5pt var(--monospaced)}
 .freetext[readonly],.freetext[readonly]:focus{background:#000;box-shadow:inset 2px 2px 1px #000;color:#885;cursor:default;border:var(--border_hard);opacity:.8}
 .multiOption{margin:5px 10px 5px 0;display:inline-block}
-.multiOption.experimental{margin:0 3px}
+.multiOption.experimental{margin:0}
 .multiOption#isServer{padding-left:28px;background:var(--server) no-repeat 4px center;background-size:22px}
 .multiOption#isClient{padding-left:28px;background:var(--client) no-repeat 4px center;background-size:22px}
 .newTunnel select,.newTunnel input,.newTunnel .control{margin:2px}
