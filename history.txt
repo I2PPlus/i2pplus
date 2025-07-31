@@ -1,5 +1,8 @@
 2025-07-31 dr|z3d
- * I2PTunnel: Modify Restart All button to only restart running tunnels
+ * I2PTunnel:
+   - Modify Restart All button to only restart running tunnels
+     and add Restart buttons for individual tunnels
+   - Add timestamps to screen log events
 
 2025-07-25 dr|z3d
  * Console: Implement leaseset sorting when not on debug page
