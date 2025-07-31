@@ -124,6 +124,7 @@ a.control,input.control{white-space:nowrap;vertical-align:middle}
 .control.stop:active{background:var(--hover) var(--stop_active) no-repeat center center/14px}
 .control.preview:active{background:var(--hover) var(--eye_active) no-repeat center center/19px}
 .control.create:active{background:var(--hover) var(--create_active) no-repeat center center/14px}
+.control.wizard.iconize{float:left}
 .displayText,.displayText:empty:hover,.displayText:empty:focus{margin:5px;padding:6px;width:290px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;word-break:break-all;font-family:var(--monospaced);fonr-weight:600;border:var(--border_hard);border-radius:1px;box-shadow:var(--highlight);background:linear-gradient(180deg,#000,#010);user-select:all}
 .displayText:empty,.displayText:empty:hover,.displayText:empty:focus{color:#885;box-shadow:var(--highlight);background:#000;opacity:.8}
 .displayText:hover,.displayText:focus{margin:.5px 5px;padding:3px;overflow:auto;text-overflow:clip;color:#ff0;box-shadow:0 0 1px #494;background:#000;outline:none}
