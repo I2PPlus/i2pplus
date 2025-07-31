@@ -4,7 +4,8 @@
 <jsp:useBean class="net.i2p.i2ptunnel.web.EditBean" id="editBean" scope="request"/>
 <jsp:useBean class="net.i2p.i2ptunnel.web.IndexBean" id="indexBean" scope="request"/>
 <jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request"/>
-<% String pageStr = request.getParameter("page");
+<% String themeName = indexBean.getThemeName();
+   String pageStr = request.getParameter("page");
    /* Get the number of the page we came from */
    int lastPage = 0;
    if (pageStr != null) {
@@ -47,6 +48,7 @@
 <link href="<%=editBean.getTheme()%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
 <link href="<%=editBean.getTheme()%>override.css" rel=stylesheet>
 <style>body{display:none;pointer-events:none}</style>
+<script nonce="<%=cspNonce%>">const theme = "<%=themeName%>";</script>
 </head>
 <body id=tunnelWizardPage>
 <form method=POST action="<%=(curPage == 7 ? "list" : "wizard") %>">

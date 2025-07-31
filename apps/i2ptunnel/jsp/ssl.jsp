@@ -8,7 +8,7 @@
 <jsp:useBean class="net.i2p.i2ptunnel.web.EditBean" id="editBean" scope="request"/>
 <jsp:useBean class="net.i2p.i2ptunnel.web.IndexBean" id="indexBean" scope="request"/>
 <jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request"/>
-<%
+<% String themeName = indexBean.getThemeName();
    String tun = request.getParameter("tunnel");
    int curTunnel = -1;
    if (tun != null) {
@@ -36,6 +36,7 @@
 <link href="<%=editBean.getTheme()%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
 <link href="<%=editBean.getTheme()%>override.css" rel=stylesheet>
 <style>body{display:none;pointer-events:none}input.default{width:1px;height:1px;visibility:hidden}</style>
+<script nonce="<%=cspNonce%>">const theme = "<%=themeName%>";</script>
 </head>
 <body id=tunnelSSL>
 <%

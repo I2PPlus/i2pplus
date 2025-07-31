@@ -1,27 +1,25 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" import="net.i2p.i2ptunnel.web.EditBean"%>
 <%@include file="headers.jsi"%>
-<%
-boolean __isClient = false;
-boolean __invalid = false;
-int curTunnel = -1;
-String tun = request.getParameter("tunnel");
-if (tun != null) {
-  try {
-    curTunnel = Integer.parseInt(tun);
-    __isClient = EditBean.staticIsClient(curTunnel);
-  } catch (NumberFormatException nfe) {
-    __invalid = true;
-  }
-} else {
-  String type = request.getParameter("type");
-  __isClient = EditBean.isClient(type);
-}
-%>
-<!DOCTYPE html>
 <jsp:useBean class="net.i2p.i2ptunnel.web.EditBean" id="editBean" scope="request"/>
 <jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request"/>
 <jsp:useBean class="net.i2p.i2ptunnel.web.IndexBean" id="indexBean" scope="request"/>
 <jsp:setProperty name="indexBean" property="*"/>
+<%  boolean __isClient = false;
+    boolean __invalid = false;
+    int curTunnel = -1;
+    String tun = request.getParameter("tunnel");
+    String themeName = indexBean.getThemeName();
+    if (tun != null) {
+        try {
+            curTunnel = Integer.parseInt(tun);
+            __isClient = EditBean.staticIsClient(curTunnel);
+        } catch (NumberFormatException nfe) {__invalid = true;}
+    } else {
+        String type = request.getParameter("type");
+        __isClient = EditBean.isClient(type);
+    }
+%>
+<!DOCTYPE html>
 <html id=tman>
 <head>
 <script src=/js/setupIframe.js></script>
@@ -34,7 +32,7 @@ if (tun != null) {
 <link href="<%=editBean.getTheme()%>../images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <link href="<%=editBean.getTheme()%>images/images.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <link href="<%=editBean.getTheme()%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
-<% if (indexBean.useSoraFont()) { %><link href="<%=editBean.getTheme()%>../../fonts/Sora.css" rel=stylesheet> <% } else { %>
+<%  if (indexBean.useSoraFont()) { %><link href="<%=editBean.getTheme()%>../../fonts/Sora.css" rel=stylesheet> <% } else { %>
 <link href="<%=editBean.getTheme()%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
 <link href="<%=editBean.getTheme()%>override.css" rel=stylesheet>
 <script src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
@@ -42,34 +40,23 @@ if (tun != null) {
 <script nonce="<%=cspNonce%>">var deleteMessage = "<%=intl._t("Are you sure you want to delete?")%>";</script>
 <script src="js/delete.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <style>body{display:none;pointer-events:none}input.default{width:1px;height:1px;visibility:hidden}</style>
+<script nonce="<%=cspNonce%>">const theme = "<%=themeName%>";</script>
 </head>
 <body id=tunnelEditPage>
-<%
-if (__invalid) {
-%>
-<div id=notReady>Invalid tunnel parameter</div>
-<%
-} else {
-    if (editBean.isInitialized()) {
+<%  if (__invalid) { %><div id=notReady>Invalid tunnel parameter</div><% } %>
+<%  else {
+        if (editBean.isInitialized()) {
 %>
 <form method=POST action="list">
 <div class=panel>
-<%
-        if (__isClient) {
-%>
+<%          if (__isClient) { %>
 <%@include file="editClient.jsi" %>
-<%
-        } else {
-%>
+<%          } else { %>
 <%@include file="editServer.jsi" %>
-<%
-        }
-%>
+<%          } %>
 </div>
 </form>
-<%
-    } else {
-%>
+<%      } else { %>
 <div id=notReady><%=intl._t("Initializing Tunnel Manager{0}", "&hellip;")%><noscript><%=intl._t("Tunnels not initialized yet; please retry in a few moments.").replace("yet;", "yet&hellip;<br>")%></noscript></div>
 <script nonce="<%=cspNonce%>">
   setInterval(function() {
@@ -84,9 +71,8 @@ if (__invalid) {
     xhrtunnman.send();
   }, 5000);
 </script>
-<%
-    }  // isInitialized()
-}
+<%      }  // isInitialized()
+    }
 %>
 <span data-iframe-height></span>
 <style>body{display:block;pointer-events:auto}</style>

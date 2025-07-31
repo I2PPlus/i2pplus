@@ -5,7 +5,8 @@
 <jsp:setProperty name="indexBean" property="tunnel"/><%-- must be set before key1-4 --%>
 <jsp:setProperty name="indexBean" property="*"/>
 <jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request"/>
-<% String activeTheme = indexBean.getTheme(); %>
+<% String activeTheme = indexBean.getTheme();
+   String themeName = indexBean.getThemeName(); %>
 <!DOCTYPE html>
 <%  if (activeTheme.contains("dark") || activeTheme.contains("midnight")) { %><html id=tman style=background:#000> <% } %>
 <%  else { %><html id=tman><% } %>
@@ -30,6 +31,7 @@
 <%  if (overrideEnabled) { %><link href="<%=activeTheme%>override.css" rel=stylesheet><% } %>
 <link rel=icon href="<%=activeTheme%>images/favicon.svg">
 <style>body{display:none;pointer-events:none}</style>
+<script nonce="<%=cspNonce%>">const theme = "<%=themeName%>";</script>
 </head>
 <body id=tunnelListPage style=display:none;pointer-events:none>
 <iframe name=processForm id=processForm hidden></iframe>
