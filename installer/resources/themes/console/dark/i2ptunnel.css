@@ -112,19 +112,23 @@ textarea[name="accessList"]{padding:4px 8px;height:32px}
 textarea[name="accessList"]:focus{padding:4px 8px;height:80px}
 a.control,input.control{white-space:nowrap;vertical-align:middle}
 .control{margin:2px;padding:7px 12px 7px;min-width:92px;display:inline-block;float:none;overflow:hidden;white-space:nowrap;vertical-align:middle;text-align:center;box-sizing:border-box;font-size:8.5pt}
-.control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:#0000!important;text-shadow:none;background:var(--start) no-repeat center center/16px,var(--btn),var(--start_hover),var(--start_active)}
-.control.stop{background:var(--stop) no-repeat center center/15px,var(--btn),var(--stop_hover),var(--start_active)}
-.control.preview{background:var(--eye) no-repeat center center/20px,var(--btn),var(--eye_hover),var(--eye_active)}
+.control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.restart,.control.restart:hover,.control.restart:focus,.control.restart:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:#0000!important;text-shadow:none;background:var(--start) no-repeat center center/16px,var(--btn),var(--start_hover),var(--start_active)}
 .control.create{background:var(--create) no-repeat center center/15px,var(--btn),var(--create_hover),var(--create_active)}
-.control.start:hover,.control.start:focus{background:var(--start_hover) no-repeat center center/16px,var(--btn_hover_radial)}
-.control.stop:hover,.control.stop:focus{background:var(--stop_hover) no-repeat center center/15px,var(--btn_hover_radial)}
-.control.preview:hover,.control.preview:focus{background:var(--eye_hover) no-repeat center center/20px,var(--btn_hover_radial)}
 .control.create:hover,.control.create:focus{background:var(--create_hover) no-repeat center center/15px,var(--btn_hover_radial)}
-.control.start:active{background:var(--hover) var(--start_active) no-repeat center center/15px}
-.control.stop:active{background:var(--hover) var(--stop_active) no-repeat center center/14px}
-.control.preview:active{background:var(--hover) var(--eye_active) no-repeat center center/19px}
 .control.create:active{background:var(--hover) var(--create_active) no-repeat center center/14px}
+.control.preview{background:var(--eye) no-repeat center center/20px,var(--btn),var(--eye_hover),var(--eye_active)}
+.control.preview:hover,.control.preview:focus{background:var(--eye_hover) no-repeat center center/20px,var(--btn_hover_radial)}
+.control.preview:active{background:var(--hover) var(--eye_active) no-repeat center center/19px}
+.control.restart{background:var(--restart) no-repeat center center/15px,var(--btn),var(--restart_hover),var(--restart_active)}
+.control.restart:hover,.control.restart:focus{background:var(--restart_hover) no-repeat center center/15px,var(--btn_hover_radial)}
+.control.restart:active{background:var(--hover) var(--restart_active) no-repeat center center/14px}
+.control.start:hover,.control.start:focus{background:var(--start_hover) no-repeat center center/16px,var(--btn_hover_radial)}
+.control.start:active{background:var(--hover) var(--start_active) no-repeat center center/15px}
+.control.stop{background:var(--stop) no-repeat center center/15px,var(--btn),var(--stop_hover),var(--start_active)}
+.control.stop:hover,.control.stop:focus{background:var(--stop_hover) no-repeat center center/15px,var(--btn_hover_radial)}
+.control.stop:active{background:var(--hover) var(--stop_active) no-repeat center center/14px}
 .control.wizard.iconize{float:left}
+.advancedmode .control.stopall,.advancedmode .control.startall{float:left}
 .displayText,.displayText:empty:hover,.displayText:empty:focus{margin:5px;padding:6px;width:290px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;word-break:break-all;font-family:var(--monospaced);fonr-weight:600;border:var(--border_hard);border-radius:1px;box-shadow:var(--highlight);background:linear-gradient(180deg,#000,#010);user-select:all}
 .displayText:empty,.displayText:empty:hover,.displayText:empty:focus{color:#885;box-shadow:var(--highlight);background:#000;opacity:.8}
 .displayText:hover,.displayText:focus{margin:.5px 5px;padding:3px;overflow:auto;text-overflow:clip;color:#ff0;box-shadow:0 0 1px #494;background:#000;outline:none}
@@ -170,7 +174,7 @@ a.control,input.control{white-space:nowrap;vertical-align:middle}
 #oldName:focus::placeholder{opacity:0}
 #oldName::placeholder{color:#ee9;opacity:.5}
 #oldName{width:30%;min-width:280px}
-#serverTunnels .iconize,#clientTunnels .iconize{min-width:76px}
+#serverTunnels .iconize,#clientTunnels .iconize{max-width:68px;min-width:68px}
 #sigType[disabled]{padding:5px 8px 5px 24px;width:fit-content;min-width:unset;color:var(--ink);background:var(--crypto) no-repeat 4px center/16px,var(--badge)}
 #sigType[disabled] option:not([selected]){display:none}
 #targetHost,.host{width:30%;min-width:250px}
@@ -413,7 +417,7 @@ th .help::after,th .help:hover::after,th .help:focus::after{width:20px;height:20
 .control.iconize{padding:9px 12px 9px;line-height:1.1}
 .displayText,.displayText:empty:hover,.displayText:empty:focus{width:552px}
 .tunnelControl{padding-right:9px}
-.tunnelControl .control{margin:3px -3px 3px 0}
+.tunnelControl .control{margin:3px -3px 3px 3px}
 .tunnelInfo .selectAll{max-width:none}
 #clients h2,#globalTunnelControl h2,#messages h2,#registration h2,#registration h3,#servers h2,#ssl h2,#tunnelEditPage h2,#tunnelEditPage h3,#wizardPanel h2{padding:10.5px 10px 9.5px 40px;background-position:10px center;background-size:22px auto,4px 100%,100%}
 #globalTunnelControl #toggleInfo{margin:-5px -4px 0 0;background-size:10px}

@@ -5,10 +5,19 @@
 <jsp:setProperty name="indexBean" property="tunnel"/><%-- must be set before key1-4 --%>
 <jsp:setProperty name="indexBean" property="*"/>
 <jsp:useBean class="net.i2p.i2ptunnel.ui.Messages" id="intl" scope="request"/>
-<% String activeTheme = indexBean.getTheme();
-   String themeName = indexBean.getThemeName(); %>
+<%  String activeTheme = indexBean.getTheme();
+    String themeName = indexBean.getThemeName();
+    boolean isAdvanced = editBean.isAdvanced();
+    boolean isDarkTheme = activeTheme.contains("dark") || activeTheme.contains("midnight");
+    boolean isInitialized = indexBean.isInitialized();
+    String nextNonce = isInitialized ? net.i2p.i2ptunnel.web.IndexBean.getNextNonce() : null;
+    int lastID = indexBean.getLastMessageID(); // not synced, oh well
+    String msgs = indexBean.getMessages();
+    String overrideURL = activeTheme + "override.css";
+    boolean overrideEnabled = false;
+%>
 <!DOCTYPE html>
-<%  if (activeTheme.contains("dark") || activeTheme.contains("midnight")) { %><html id=tman style=background:#000> <% } %>
+<%  if (isDarkTheme) { %><html id=tman style=background:#000> <% } %>
 <%  else { %><html id=tman><% } %>
 <head>
 <meta charset=utf-8>
@@ -19,9 +28,7 @@
 <link href="<%=activeTheme%>../images/i2ptunnel.css?<%=net.i2p.CoreVersion.VERSION%>" rel=stylesheet>
 <%  if (indexBean.useSoraFont()) { %><link href="<%=activeTheme%>../../fonts/Sora.css" rel=stylesheet><% } %>
 <%  else { %><link href="<%=activeTheme%>../../fonts/OpenSans.css" rel=stylesheet><% } %>
-<%  String overrideURL = activeTheme + "override.css";
-    boolean overrideEnabled = false;
-    try {
+<%  try {
         URL url = new URL(overrideURL);
         URLConnection connection = url.openConnection();
         connection.connect();
@@ -30,18 +37,12 @@
 %>
 <%  if (overrideEnabled) { %><link href="<%=activeTheme%>override.css" rel=stylesheet><% } %>
 <link rel=icon href="<%=activeTheme%>images/favicon.svg">
-<style>body{display:none;pointer-events:none}</style>
 <script nonce="<%=cspNonce%>">const theme = "<%=themeName%>";</script>
 </head>
-<body id=tunnelListPage style=display:none;pointer-events:none>
+<body id=tunnelListPage style=display:none;pointer-events:none <% if (isAdvanced) { %>class=advancedmode<% } %>>
 <iframe name=processForm id=processForm hidden></iframe>
 <div id=page>
-<%  boolean isInitialized = indexBean.isInitialized();
-    String nextNonce = isInitialized ? net.i2p.i2ptunnel.web.IndexBean.getNextNonce() : null;
-    int lastID = indexBean.getLastMessageID(); // not synced, oh well
-    String msgs = indexBean.getMessages();
-    if (msgs.length() > 0) {
-%>
+<%  if (msgs.length() > 0) { %>
 <div class=panel id=messages>
 <h2 id=screenlog><%=intl._t("Status Messages")%>
 <%      if (isInitialized) { %>
@@ -53,8 +54,7 @@
 <table id=statusMessagesTable>
 <tr>
 <td id=tunnelMessages>
-<textarea id=statusMessages rows=4 cols=60 readonly>
-<%=msgs%></textarea>
+<textarea id=statusMessages rows=4 cols=60 readonly><%=msgs%></textarea>
 </td>
 </tr>
 <tr id=screenlog_buttons hidden>
@@ -67,8 +67,7 @@
 </tr>
 </table>
 </div>
-<%
-    } // !msgs.isEmpty()
+<%  } // !msgs.isEmpty()
     if (isInitialized) {
 %>
 <div class=panel id=globalTunnelControl>
@@ -76,12 +75,12 @@
 <table>
 <tr>
 <td class=buttons>
-<a class="control wizard iconize" href="wizard"><%=intl._t("Tunnel Wizard")%></a>
+<%  if (!isAdvanced) { %><a class="control wizard iconize" href="wizard"><%=intl._t("Tunnel Wizard")%></a><% } %>
 <a class="control stopall iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Stop%20all"><%=intl._t("Stop All")%></a>
 <a class="control startall iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Start%20all"><%=intl._t("Start All")%></a>
 <a class="control restartall iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Restart%20all" title="<%=intl._t("Restart all running tunnels")%>"><%=intl._t("Restart All")%></a>
-<a class="control restartall iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Restart%20all%20servers" title="<%=intl._t("Restart all running server tunnels")%>"><%=intl._t("Restart All Servers")%></a>
-<a class="control restartall iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Restart%20all%20clients" title="<%=intl._t("Restart all running client tunnels")%>"><%=intl._t("Restart All Clients")%></a>
+<a class="control restartall servers iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Restart%20all%20servers" title="<%=intl._t("Restart all running server tunnels")%>"><%=intl._t("Restart All Servers")%></a>
+<a class="control restartall clients iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Restart%20all%20clients" title="<%=intl._t("Restart all running client tunnels")%>"><%=intl._t("Restart All Clients")%></a>
 </td>
 </tr>
 </table>
@@ -176,6 +175,7 @@ SSL
 </td>
 <td class="tunnelControl volatile">
 <a class="control stop iconize" title="<%=intl._t("Stop this Tunnel")%>" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curServer%>"><%=intl._t("Stop")%></a>
+<a class="control restart iconize" title="<%=intl._t("Restart this Tunnel")%>" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=restart&amp;tunnel=<%=curServer%>"><%=intl._t("Restart")%></a>
 <%              break;
                 case IndexBean.NOT_RUNNING:
 %>
@@ -361,6 +361,7 @@ SSL
 </td>
 <td class="tunnelControl volatile">
 <a class="control stop iconize" title="Stop this Tunnel" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
+<a class="control restart iconize" title="Restart this Tunnel" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=restart&amp;tunnel=<%=curClient%>"><%=intl._t("Restart")%></a>
 <%              break;
                 case IndexBean.RUNNING:
 %>
@@ -368,6 +369,7 @@ SSL
 </td>
 <td class="tunnelControl volatile">
 <a class="control stop iconize" title="Stop this Tunnel" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=stop&amp;tunnel=<%=curClient%>"><%=intl._t("Stop")%></a>
+<a class="control restart iconize" title="Restart this Tunnel" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=restart&amp;tunnel=<%=curClient%>"><%=intl._t("Restart")%></a>
 <%              break;
                 case IndexBean.NOT_RUNNING:
 %>

@@ -121,7 +121,7 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
                                   ", you must add it to your addressbook for it to work.");
                     }
                 } catch (IllegalArgumentException iae) {
-                     l.log("[IRC Client] Bad destination " + destination + " - " + iae);
+                     l.log("✖ [IRC Client] Bad destination " + destination + " - " + iae);
                 }
             }
         }

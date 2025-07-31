@@ -149,21 +149,25 @@ select{text-align:left;font-weight:700}
 select[disabled],select[disabled]:hover,select[disabled]:focus,select[disabled]:active{margin:0 5px;padding:0;font-weight:400;color:var(--ink);border:0;box-shadow:none;background:none;cursor:default}
 a.control,input.control{white-space:nowrap;vertical-align:middle}
 .control,.control:link,.control:visited,button{margin:2px;padding:5px 12px;min-width:80px;box-sizing:border-box;overflow:hidden;white-space:nowrap;text-decoration:none;text-align:center;font-weight:700;background:var(--btn)}
+.advancedmode .control.stopall,.advancedmode .control.startall{float:left}
 .control:hover,.control:focus,button:hover,button:focus{text-decoration:none;color:var(--a_hover);background:var(--btn_hover)}
 .control:active,button:active{text-decoration:none;background:var(--hover)}
 #serverTunnels .iconize,#clientTunnels .iconize{min-width:80px}
-.control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:#0000;text-shadow:none;background:var(--start) no-repeat center center/15px,var(--btn),var(--start_hover),var(--start_active)}
-.control.stop{background:var(--stop) no-repeat center center/14px,var(--btn),var(--stop_hover),var(--start_active)}
-.control.preview{background:var(--eye) no-repeat center center/19px,var(--btn),var(--eye_hover),var(--eye_active)}
+.control.restart,.control.restart:hover,.control.restart:focus,.control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:#0000;text-shadow:none;background:var(--start) no-repeat center center/15px,var(--btn),var(--start_hover),var(--start_active)}
 .control.create{background:var(--create) no-repeat center center/15px,var(--btn),var(--create_hover),var(--create_active)}
-.control.start:hover,.control.start:focus{background:var(--start_hover) no-repeat center center/15px,var(--btn_hover)}
-.control.stop:hover,.control.stop:focus{background:var(--stop_hover) no-repeat center center/14px,var(--btn_hover)}
-.control.preview:hover,.control.preview:focus{background:var(--eye_hover) no-repeat center center/19px,var(--btn_hover)}
 .control.create:hover,.control.create:focus{background:var(--create_hover) no-repeat center center/15px,var(--btn_hover)}
-.control.start:active{background:var(--hover) var(--start_active) no-repeat center center/14px}
-.control.stop:active{background:var(--hover) var(--stop_active) no-repeat center center/13px}
-.control.preview:active{background:var(--hover) var(--eye_active) no-repeat center center/18px}
 .control.create:active{background:var(--hover) var(--create_active) no-repeat center center/14px}
+.control.preview{background:var(--eye) no-repeat center center/19px,var(--btn),var(--eye_hover),var(--eye_active)}
+.control.preview:hover,.control.preview:focus{background:var(--eye_hover) no-repeat center center/19px,var(--btn_hover)}
+.control.preview:active{background:var(--hover) var(--eye_active) no-repeat center center/18px}
+.control.start:hover,.control.start:focus{background:var(--start_hover) no-repeat center center/15px,var(--btn_hover)}
+.control.start:active{background:var(--hover) var(--start_active) no-repeat center center/14px}
+.control.stop{background:var(--stop) no-repeat center center/14px,var(--btn),var(--stop_hover),var(--start_active)}
+.control.stop:hover,.control.stop:focus{background:var(--stop_hover) no-repeat center center/14px,var(--btn_hover)}
+.control.stop:active{background:var(--hover) var(--stop_active) no-repeat center center/13px}
+.control.restart{background:var(--restart) no-repeat center center/14px,var(--btn),var(--restart_hover)}
+.control.restart:hover,.control.restart:focus{background:var(--restart_hover) no-repeat center center/14px,var(--btn_hover)}
+.control.restart:active{background:var(--hover) var(--restart_hover) no-repeat center center/13px;background-blend-mode:luminosity}
 a.control{display:inline-block}
 input[type=text],input[type=password],textarea{font-weight:700;color:var(--ink_darker)}
 input[type=text]:focus,textarea:focus{color:var(--ink)}

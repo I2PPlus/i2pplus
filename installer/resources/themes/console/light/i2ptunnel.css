@@ -106,15 +106,18 @@ a.control:link,a.control:visited{color:var(--ink_light)}
 a:link:hover,a:hover,a:visited:hover,a:visited:focus{color:#f60;text-decoration:none;text-shadow:none}
 a.control:hover{color:var(--ink)}
 .control,.control:link,.control:visited,button{margin:2px 4px;padding:5px 8px;min-width:100px;text-align:center;white-space:nowrap;box-sizing:border-box;text-decoration:none;font-style:normal;font-weight:400;color:var(--ink_light);border:var(--border_input);border-radius:2px;box-shadow:var(--btn_shadow);background:linear-gradient(180deg,#fff,#efefff);filter:drop-shadow(0 0 1px rgba(220,220,255,.7))}
+.advancedmode .control.stopall,.advancedmode .control.startall{float:left}
 .control:hover,.control:focus,button:hover,button:focus{text-decoration:none;color:var(--ink);border:1px solid #f60;box-shadow:var(--btn_shadow_hover);background:linear-gradient(180deg,#eee,#fff);filter:drop-shadow(0 0 1px rgba(204,204,204,.8));transition:ease border .7s}
 .control:active,button:active{box-shadow:var(--highlight),inset 2px 2px 2px #555;color:#4c526f}
 .control.iconize:active{background-blend-mode:luminosity}
-.control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:#0000!important;text-shadow:none;background:var(--start) no-repeat center center/15px,var(--btn),var(--start_hover)}
+.control.restart,.control.restart:hover,.control.restart:focus,.control.restart:active,.control.start,.control.start:hover,.control.start:focus,.control.start:active,.control.stop,.control.stop:hover,.control.stop:focus,.control.stop:active,.control.preview,.control.preview:hover,.control.preview:focus,.control.preview:active,.control.create,.control.create:hover,.control.create:focus,.control.create:active{color:#0000!important;text-shadow:none;background:var(--start) no-repeat center center/15px,var(--btn),var(--start_hover)}
 .control.create{background:var(--create) no-repeat center center/15px,var(--btn),var(--create_hover)}
 .control.create:hover,.control.create:focus{background:var(--create_hover) no-repeat center center/15px,var(--btn_hover)}
 .control.start:hover,.control.start:focus{background:var(--start_hover) no-repeat center center/15px,var(--btn_hover)}
 .control.stop{background:var(--stop) no-repeat center center/14px,var(--btn),var(--stop_hover)}
 .control.stop:hover,.control.stop:focus{background:var(--stop_hover) no-repeat center center/14px,var(--btn_hover)}
+.control.restart{background:var(--restart) no-repeat center center/14px,var(--btn),var(--restart_hover)}
+.control.restart:hover,.control.restart:focus{background:var(--restart_hover) no-repeat center center/14px,var(--btn_hover)}
 .control.preview{background:var(--eye) no-repeat center center/19px,var(--btn),var(--eye_hover)}
 .control.preview:hover,.control.preview:focus{background:var(--eye_hover) no-repeat center center/19px,var(--btn_hover)}
 .displayText,.displayText:empty:hover,.displayText:empty:focus{margin:5px;padding:4px;width:calc(100% - 10px);width:290px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;word-break:break-all;font-family:var(--monospaced);border:var(--border_input);border-radius:2px;box-shadow:inset 1px 1px 1px #e4e4ee;background:#fafaff;user-select:all}

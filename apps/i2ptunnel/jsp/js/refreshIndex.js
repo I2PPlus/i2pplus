@@ -45,6 +45,7 @@ function handleDownState() {
     const styles = {position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)"};
     Object.assign(downElement.style, styles);
     tunnelIndex.replaceWith(downElement);
+    resizeIframe();
   }
 }
 
@@ -113,6 +114,8 @@ function refreshAll(responseDoc) {
   updateElementContent(tunnelIndex, tunnelIndexResponse);
   initTunnelControl();
   bindToggle();
+  countServices();
+  resizeIframe();
 }
 
 function reloadPage() {location.reload(true);}
@@ -155,7 +158,36 @@ function initTunnelControl() {
   }
 }
 
+function resizeIframe() {
+  const isIframed = document.documentElement.classList.contains("iframed") || window.self != window.top;
+  if (isIframed) {
+      parent.postMessage({ action: 'resize', iframeId: 'i2ptunnelframe' }, location.origin);
+  }
+}
+
 if (toggle) bindToggle();
 if (control) initTunnelControl();
 setInterval(refreshIndex, 5000);
 document.addEventListener("DOMContentLoaded", countServices);
+
+document.querySelector("form").addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const formData = new FormData(this);
+  await fetch(this.action, {
+    method: this.method,
+    body: formData,
+    headers: {
+      "Cache-Control": "no-cache"
+    }
+  });
+
+  await refreshTunnelStatus();
+  resizeIframe();
+});
+
+window.addEventListener("load", function () {
+  if (window.parentIFrame) {
+    window.parentIFrame.size();
+  }
+});

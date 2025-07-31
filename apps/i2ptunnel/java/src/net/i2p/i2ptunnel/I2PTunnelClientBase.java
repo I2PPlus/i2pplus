@@ -47,7 +47,6 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     protected final I2PAppContext _context;
     protected final Logging l;
 
-//    static final long DEFAULT_CONNECT_TIMEOUT = 60 * 1000;
     static final long DEFAULT_CONNECT_TIMEOUT = 90*1000;
 
     private static final AtomicLong __clientId = new AtomicLong();
@@ -65,25 +64,14 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      *  Protected for I2Ping since 0.9.11. Not for use outside package.
      */
     protected boolean listenerReady;
-
     protected ServerSocket ss;
-
     private final Object startLock = new Object();
     private boolean startRunning;
     private volatile boolean _buildingTunnels;
     private volatile Thread _tunnelBuilder;
-
-    // private Object closeLock = new Object();
-
-    // private byte[] pubkey;
-
     private String privKeyFile;
-
-    // true if we are chained from a server.
-    private boolean chained;
-
+    private boolean chained; // true if we are chained from a server.
     private volatile ThreadPoolExecutor _executor;
-
     /** this is ONLY for shared clients */
     private static I2PSocketManager socketManager;
 
@@ -93,7 +81,6 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      */
     private enum SocketManagerState { INIT, CONNECTED }
     private static SocketManagerState _socketManagerState = SocketManagerState.INIT;
-
     public static final String PROP_USE_SSL = I2PTunnelServer.PROP_USE_SSL;
 
     /**
@@ -555,37 +542,24 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 verifySocketManager();
                 if (sockMgr == null) {
                     _log.error("Unable to connect to router and build tunnels for [" + _handlerName + "]");
-                    // FIXME there is a loop in buildSocketManager(), do we really need another one here?
-                    // no matter, buildSocketManager() now throws an IllegalArgumentException
                     try { Thread.sleep(10*1000); } catch (InterruptedException ie) { return; }
                 }
             }
-            // can't be null unless we limit the loop above
-            //if (sockMgr == null) {
-            //    l.log("Invalid I2CP configuration");
-            //    throw new IllegalArgumentException("Socket manager could not be created");
-            //}
-
         } // else delay creating session until createI2PSocket() is called
         startup();
     }
 
     private void startup() {
-        if (_log.shouldDebug())
-            _log.debug("Startup [ClientID " + _clientId + "]");
-        // prevent JVM exit when running outside the router
-        boolean isDaemon = getTunnel().getContext().isRouterContext();
+        if (_log.shouldDebug()) {_log.debug("Startup [ClientID " + _clientId + "]");}
+        boolean isDaemon = getTunnel().getContext().isRouterContext(); // prevent JVM exit when running outside the router
         open = true;
         Thread t = new I2PAppThread(this, "I2PTunnel Client " + getTunnel().listenHost + ':' + localPort, isDaemon);
         t.setPriority(Thread.MAX_PRIORITY);
         t.start();
         synchronized (this) {
             while (!listenerReady && open) {
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    // ignore
-                }
+                try {wait();}
+                catch (InterruptedException e) {} // ignore
             }
         }
 
@@ -594,15 +568,15 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 boolean openNow = !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty("i2cp.delayOpen"));
                 if (openNow || chained) {
                     if (!_handlerName.contains("Ping")) {
-                        l.log("Tunnels ready for client [" + _handlerName + "]");
-                        l.log("Client ready -> Listening on " + getTunnel().listenHost + ':' + localPort);
+                        l.log("• Tunnels ready for client" + " [" + _handlerName + "]");
+                        l.log("• Client ready -> Listening on " + getTunnel().listenHost + ':' + localPort);
                     }
                 } else {
-                    l.log("Client ready -> Listening on " + getTunnel().listenHost + ':' + localPort + " (standby mode)");
+                    l.log("• Client ready -> Listening on " + getTunnel().listenHost + ':' + localPort + " (standby mode)");
             }
             notifyEvent("openBaseClientResult", "ok");
             } else {
-                l.log("Client error for " + getTunnel().listenHost + ':' + localPort + " - Check logs");
+                l.log("• Client error for " + getTunnel().listenHost + ':' + localPort + " -> Check logs");
                 notifyEvent("openBaseClientResult", "error");
             }
             synchronized (startLock) {
