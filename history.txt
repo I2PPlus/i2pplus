@@ -1,3 +1,6 @@
+2025-07-31 dr|z3d
+ * I2PTunnel: Modify Restart All button to only restart running tunnels
+
 2025-07-25 dr|z3d
  * Console: Implement leaseset sorting when not on debug page
 
