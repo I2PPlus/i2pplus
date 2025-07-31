@@ -11,9 +11,11 @@ package net.i2p.i2ptunnel.web;
 import java.io.File;
 import java.io.IOException;
 import java.text.Collator;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -57,12 +59,8 @@ public class IndexBean {
     private final String _fatalError;
     private String _action;
     private int _tunnel;
-    //private long _prevNonce;
-    //private long _prevNonce2;
     private String _curNonce;
-    //private long _nextNonce;
     private int _msgID = -1;
-
     private final TunnelConfig _config;
     private boolean _removeConfirmed;
     private int _hashCashValue;
@@ -73,16 +71,13 @@ public class IndexBean {
     public static final int STARTING = GeneralHelper.STARTING;
     public static final int NOT_RUNNING = GeneralHelper.NOT_RUNNING;
     public static final int STANDBY = GeneralHelper.STANDBY;
-
-    //static final String PROP_NONCE = IndexBean.class.getName() + ".nonce";
-    //static final String PROP_NONCE_OLD = PROP_NONCE + '2';
     /** 3 wasn't enough for some browsers. They are reloading the page for some reason - maybe HEAD? @since 0.8.1 */
     private static final int MAX_NONCES = 8;
     /** store nonces in a static FIFO instead of in System Properties @since 0.8.1 */
     private static final List<String> _nonces = new ArrayList<String>(MAX_NONCES + 1);
-    private static final UIMessages _messages = new UIMessages(100);
     private static final Map<Integer, SessionKey> _formKeys = new HashMap<Integer, SessionKey>();
-
+    private static final UIMessages _messages = new UIMessages(100);
+    private static final List<TimestampedMessage> _timestampedMessages = new ArrayList<>(100);
     private static final String PROP_THEME_NAME = "routerconsole.theme";
     private static final String DEFAULT_THEME = "dark";
     /** From CSSHelper */
@@ -164,7 +159,7 @@ public class IndexBean {
     /** @return non-null */
     private String processAction() {
         if ((_action == null) || (_action.trim().length() <= 0) || ("Cancel".equals(_action))) {return "";}
-        if (_group == null) {return "Error - tunnels are not initialized yet";}
+        if (_group == null) {return _t("Error - tunnels are not initialized yet");}
 
 /**     // Disabled for now, doesn't work correctly with js auto-refresh
         // If passwords are turned on, all is assumed good
@@ -173,12 +168,12 @@ public class IndexBean {
                    ' ' + _t("If the problem persists, verify that you have cookies enabled in your browser.");
 **/
 
-        /* For any of these that call getMessage(msgs), we return "",
-           as getMessage() will add them to the returned string.
-         */
+        /* For any of these that call getMessage(msgs), we return "", as getMessage() will add them to the returned string. */
         if ("Stop all".equals(_action)) {stopAll();}
         else if ("Start all".equals(_action)) {startAll();}
         else if ("Restart all".equals(_action)) {restartAll();}
+        else if ("Restart all clients".equals(_action)) {restartAllClients();}
+        else if ("Restart all servers".equals(_action)) {restartAllServers();}
         else if ("Save changes".equals(_action)) {saveChanges();}
         else if ("Delete this tunnel".equals(_action)) {deleteTunnel();}
         else if ("Clear".equals(_action)) {_messages.clearThrough(_msgID);}
@@ -205,33 +200,114 @@ public class IndexBean {
         return getMessages(msgs);
     }
 
-    //private String restartAll() {
-    //    List<String> msgs = _group.restartAllControllers();
-    //    return getMessages(msgs);
-    //}
-
     /**
      *  Restart all running tunnels only, stopped tunnels will remain stopped
      *  @since 0.9.67+
      */
     private String restartAll() {
-        List<String> msgs = new ArrayList<>();
         List<TunnelController> controllers = _group.getControllers();
         int runningCount = 0;
-        for (TunnelController controller : controllers) {
-            if (controller.getIsRunning()) {runningCount++;}
-        }
-        if (runningCount == 0) {return "• " + _t("No running tunnels to restart");}
+        boolean msgSent = false;
+
         for (TunnelController controller : controllers) {
             if (controller.getIsRunning()) {
+                runningCount++;
+                String name = controller.getName();
+                String stoppingMsg = "• " + _t("Stopping tunnel") + ": " + name;
+                _timestampedMessages.add(new TimestampedMessage(stoppingMsg));
+
                 try {
                     controller.stopTunnel();
                     Thread.sleep(500); // short delay to ensure clean stop
+                    String startingMsg = "• " + _t("Starting tunnel") + ": " + name;
+                    _timestampedMessages.add(new TimestampedMessage(startingMsg));
                     controller.startTunnelBackground();
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                    _log.error("Error restarting tunnel" + name + " - " + e.getMessage());
+                    String errorMsg = "• " + _t("Error restarting tunnel") + ": " + name + " - " + e.getMessage();
+                    _timestampedMessages.add(new TimestampedMessage(errorMsg));
+                }
             }
         }
-        return "• " + _t("All running tunnels restarted") + "...";
+
+        String doneMsg = "• " + (runningCount > 0 ? _t("Restarted all running tunnels") :
+                                                    _t("No running tunnels to restart"));
+        _timestampedMessages.add(new TimestampedMessage(doneMsg));
+        return doneMsg;
+    }
+
+    /**
+     *  Restart all running client tunnels only, stopped tunnels will remain stopped
+     *  @since 0.9.67+
+     */
+    private String restartAllClients() {
+        List<TunnelController> controllers = _group.getControllers();
+        int running = 0;
+
+        for (TunnelController controller : controllers) {
+            if (controller.isClient() && controller.getIsRunning()) {
+                running++;
+                String name = controller.getName();
+                String stoppingMsg = "• " + _t("Stopping tunnel") + ": " + name;
+                _timestampedMessages.add(new TimestampedMessage(stoppingMsg));
+
+                try {
+                    controller.stopTunnel();
+                    Thread.sleep(500); // short delay to ensure clean stop
+
+                    String startingMsg = "• " + _t("Starting tunnel") + ": " + name;
+                    _timestampedMessages.add(new TimestampedMessage(startingMsg));
+
+                    controller.startTunnelBackground();
+                } catch (Exception e) {
+                    _log.error("Error restarting client tunnel: " + name + " - " + e.getMessage());
+                    String errorMsg = "• " + _t("Error restarting tunnel") + ": " + name  + " - " + e.getMessage();
+                    _timestampedMessages.add(new TimestampedMessage(errorMsg));
+                }
+            }
+        }
+
+        String doneMsg = "• " + (running > 0 ?_t("Restarted all running client tunnels") :
+                                              _t("No running client tunnels to restart"));
+        _timestampedMessages.add(new TimestampedMessage(doneMsg));
+        return doneMsg;
+    }
+
+    /**
+     *  Restart all running server tunnels only, stopped tunnels will remain stopped
+     *  @since 0.9.67+
+     */
+    private String restartAllServers() {
+        List<TunnelController> controllers = _group.getControllers();
+        int running = 0;
+
+        for (TunnelController controller : controllers) {
+            if (!controller.isClient() && controller.getIsRunning()) {
+                running++;
+                String name = controller.getName();
+                String stoppingMsg = "• " + _t("Stopping tunnel") + ": " + name;
+                _timestampedMessages.add(new TimestampedMessage(stoppingMsg));
+
+                try {
+                    controller.stopTunnel();
+                    Thread.sleep(500); // short delay to ensure clean stop
+
+                    String startingMsg = "• " + _t("Starting tunnel") + ": " + name;
+                    _timestampedMessages.add(new TimestampedMessage(startingMsg));
+
+                    controller.startTunnelBackground();
+                } catch (Exception e) {
+                    _log.error("Error restarting server tunnel: " + name + " - " + e.getMessage());
+                    String errorMsg = "• " + _t("Error restarting tunnel") + ": " + name + " - " + e.getMessage();
+                    _timestampedMessages.add(new TimestampedMessage(errorMsg));
+                }
+            }
+        }
+
+        String doneMsg = "• " + (running > 0 ? _t("Restarted all running server tunnels") :
+                                               _t("No running server tunnels to restart"));
+        _timestampedMessages.add(new TimestampedMessage(doneMsg));
+        return doneMsg;
     }
 
     private String reloadConfig() {
@@ -240,7 +316,7 @@ public class IndexBean {
     }
 
     private String start() {
-        if (_tunnel < 0) return "Invalid tunnel";
+        if (_tunnel < 0) {return "• " + _t("Invalid tunnel");}
 
         List<TunnelController> controllers = _group.getControllers();
         if (_tunnel >= controllers.size()) return "Invalid tunnel";
@@ -254,7 +330,7 @@ public class IndexBean {
     }
 
     private String stop() {
-        if (_tunnel < 0) return "Invalid tunnel";
+        if (_tunnel < 0) {return "• " + _t("Invalid tunnel");}
 
         List<TunnelController> controllers = _group.getControllers();
         if (_tunnel >= controllers.size()) return "Invalid tunnel";
@@ -268,10 +344,10 @@ public class IndexBean {
     }
 
     private String restart() {
-        if (_tunnel < 0) return "Invalid tunnel";
+        if (_tunnel < 0) {return "• " + _t("Invalid tunnel");}
 
         List<TunnelController> controllers = _group.getControllers();
-        if (_tunnel >= controllers.size()) return "Invalid tunnel";
+        if (_tunnel >= controllers.size()) {return "• " + _t("Invalid tunnel");}
         TunnelController controller = controllers.get(_tunnel);
         controller.stopTunnel();
         try {Thread.sleep(1000);} // Allow time for tunnel to stop
@@ -299,6 +375,21 @@ public class IndexBean {
         return getMessages(_helper.deleteTunnel(_tunnel, _config.getPrivKeyFile()));
     }
 
+    private static class TimestampedMessage {
+        final long timestamp;
+        final String message;
+
+        public TimestampedMessage(String message) {
+            this.message = message;
+            this.timestamp = I2PAppContext.getGlobalContext().clock().now();
+        }
+
+        public String getFormattedTimestamp() {
+            return new SimpleDateFormat("dd/MM HH:mm:ss", Locale.US).format(new Date(timestamp));
+        }
+    }
+
+
     /**
      * Executes any action requested (start/stop/etc) and dump out the
      * messages.
@@ -308,26 +399,53 @@ public class IndexBean {
      * @return HTML escaped or "" if empty
      */
     public String getMessages() {
-        if (_group == null) {return _fatalError;}
+        if (_group == null) return _fatalError;
 
         StringBuilder buf = new StringBuilder(512);
+
         if (_action != null) {
             try {
                 String result = processAction();
-                if (result.length() > 0) {buf.append(result).append('\n');}
+                if (!result.isEmpty()) {
+                    _timestampedMessages.add(new TimestampedMessage(result));
+                }
             } catch (RuntimeException e) {
                 _log.log(Log.CRIT, "Error processing " + _action, e);
-                buf.append("Error: ").append(e.toString()).append('\n');
+                String msg = "Error: " + e.toString();
+                _timestampedMessages.add(new TimestampedMessage(msg));
             }
         }
-        List<UIMessages.Message> msgs = _messages.getMessages();
-        if (!msgs.isEmpty()) {
-            Collections.reverse(msgs);
-            for (UIMessages.Message msg : msgs) {
-                buf.append("• ").append(msg.message.replace("->", "➜")).append("\n");
+
+        List<UIMessages.Message> oldMessages = _messages.getMessages();
+        if (!oldMessages.isEmpty()) {
+            for (UIMessages.Message msg : oldMessages) {
+                _timestampedMessages.add(new TimestampedMessage(msg.message));
+            }
+            _messages.clearThrough(_msgID); // Prevent duplication
+        }
+
+        List<String> groupMessages = _group.clearAllMessages();
+        if (groupMessages != null && !groupMessages.isEmpty()) {
+            for (String msg : groupMessages) {
+                _timestampedMessages.add(new TimestampedMessage(msg));
             }
         }
-        getMessages(_group.clearAllMessages(), buf);
+
+        List<TimestampedMessage> stored = new ArrayList<>(_timestampedMessages);
+        stored.sort((a, b) -> Long.compare(b.timestamp, a.timestamp));
+
+        while (stored.size() > 100) {
+            stored.remove(stored.size() - 1);
+        }
+
+        for (TimestampedMessage tm : stored) {
+            buf.append("• ").append(tm.getFormattedTimestamp()).append(' ')
+               .append(tm.message.replace("->", "➜")).append('\n');
+        }
+
+        _timestampedMessages.clear();
+        _timestampedMessages.addAll(stored);
+
         return DataHelper.escapeHTML(buf.toString());
     }
 
@@ -1443,10 +1561,8 @@ public class IndexBean {
     private static void getMessages(List<String> msgs, StringBuilder buf) {
         if (msgs == null) return;
         for (int i = 0; i < msgs.size(); i++) {
-// most recent message at the top -- overwrites top entry :(
-//        for (int i = msgs.size() - 1; i >= 0; i--) {
             String msg = msgs.get(i);
-            _messages.addMessageNoEscape(msg);
+            _timestampedMessages.add(new TimestampedMessage(msg));
             buf.append("• ").append(msg.replace("->", "➜")).append("\n");
         }
     }

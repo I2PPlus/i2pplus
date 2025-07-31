@@ -80,6 +80,8 @@
 <a class="control stopall iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Stop%20all"><%=intl._t("Stop All")%></a>
 <a class="control startall iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Start%20all"><%=intl._t("Start All")%></a>
 <a class="control restartall iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Restart%20all" title="<%=intl._t("Restart all running tunnels")%>"><%=intl._t("Restart All")%></a>
+<a class="control restartall iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Restart%20all%20servers" title="<%=intl._t("Restart all running server tunnels")%>"><%=intl._t("Restart All Servers")%></a>
+<a class="control restartall iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Restart%20all%20clients" title="<%=intl._t("Restart all running client tunnels")%>"><%=intl._t("Restart All Clients")%></a>
 </td>
 </tr>
 </table>
@@ -487,5 +489,6 @@ SSL
 <script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src=/js/setupIframe.js></script>
 <noscript><style>.script{display:none!important}.tunnelInfo{display:table-row!important}#screenlog_buttons{display:table-row!important}</style></noscript>
+<style>body{display:block!important;pointer-events:auto!important}</style>
 </body>
 </html>
