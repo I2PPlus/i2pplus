@@ -114,18 +114,14 @@ public class IndexBean {
     /**
      *  @since 0.9.4
      */
-    public boolean isInitialized() {
-        return _group != null;
-    }
+    public boolean isInitialized() {return _group != null;}
 
     public static String getNextNonce() {
-        synchronized (_nonces) {
-            return _nonces.get(0);
-        }
+        synchronized (_nonces) {return _nonces.get(0);}
     }
 
     public void setNonce(String nonce) {
-        if ( (nonce == null) || (nonce.trim().length() <= 0) ) return;
+        if ((nonce == null) || (nonce.trim().length() <= 0)) return;
         _curNonce = nonce;
     }
 
@@ -135,8 +131,7 @@ public class IndexBean {
         synchronized (_nonces) {
             _nonces.add(0, nextNonce);
             int sz = _nonces.size();
-            if (sz > MAX_NONCES)
-                _nonces.remove(sz - 1);
+            if (sz > MAX_NONCES) {_nonces.remove(sz - 1);}
         }
     }
 
@@ -145,84 +140,59 @@ public class IndexBean {
       * @since 0.8.1 public since 0.9.35
       */
     public static boolean haveNonce(String nonce) {
-        synchronized (_nonces) {
-            return _nonces.contains(nonce);
-        }
+        synchronized (_nonces) {return _nonces.contains(nonce);}
     }
 
     public void setAction(String action) {
-        if ( (action == null) || (action.trim().length() <= 0) ) return;
+        if ((action == null) || (action.trim().length() <= 0)) return;
         _action = action;
     }
 
     public void setTunnel(String tunnel) {
-        if ( (tunnel == null) || (tunnel.trim().length() <= 0) ) return;
-        try {
-            _tunnel = Integer.parseInt(tunnel);
-        } catch (NumberFormatException nfe) {
-            _tunnel = -1;
-        }
+        if ((tunnel == null) || (tunnel.trim().length() <= 0)) return;
+        try {_tunnel = Integer.parseInt(tunnel);}
+        catch (NumberFormatException nfe) {_tunnel = -1;}
     }
 
     /** @since 0.9.33 */
     public void setMsgid(String id) {
         if (id == null) return;
-        try {
-            _msgID = Integer.parseInt(id);
-        } catch (NumberFormatException nfe) {
-            _msgID = -1;
-        }
+        try {_msgID = Integer.parseInt(id);}
+        catch (NumberFormatException nfe) {_msgID = -1;}
     }
 
     /** @return non-null */
     private String processAction() {
-        if ( (_action == null) || (_action.trim().length() <= 0) || ("Cancel".equals(_action)))
-            return "";
-        if (_group == null)
-            return "Error - tunnels are not initialized yet";
+        if ((_action == null) || (_action.trim().length() <= 0) || ("Cancel".equals(_action))) {return "";}
+        if (_group == null) {return "Error - tunnels are not initialized yet";}
+
+/**     // Disabled for now, doesn't work correctly with js auto-refresh
         // If passwords are turned on, all is assumed good
-/**
         if (!_context.getBooleanProperty(PROP_PW_ENABLE) && !haveNonce(_curNonce))
             return "• " + _t("Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit.") +
                    ' ' + _t("If the problem persists, verify that you have cookies enabled in your browser.");
 **/
-        // for any of these that call getMessage(msgs),
-        // we return "", as getMessage() will add them to the returned string.
-        if ("Stop all".equals(_action)) {
-            stopAll();
-            return "";
-        } else if ("Start all".equals(_action)) {
-            startAll();
-            return "";
-        } else if ("Restart all".equals(_action)) {
-            restartAll();
-            return "";
-        } else if ("Reload configuration".equals(_action)) {
-            return reloadConfig();
-        } else if ("stop".equals(_action)) {
-            return stop();
-        } else if ("start".equals(_action)) {
-            return start();
-        } else if ("Save changes".equals(_action) || // IE workaround:
-                (_action.toLowerCase(Locale.US).indexOf("s</span>ave") >= 0)) {
-            saveChanges();
-            return "";
-        } else if ("Delete this tunnel".equals(_action) || "delete".equals(_action) || // IE workaround:
-                (_action.toLowerCase(Locale.US).indexOf("d</span>elete") >= 0)) {
-            deleteTunnel();
-            return "";
-        } else if ("Estimate".equals(_action)) {
-            return PrivateKeyFile.estimateHashCashTime(_hashCashValue);
-        } else if ("Modify".equals(_action)) {
-            return modifyDestination();
-        } else if ("Generate".equals(_action)) {
-            return generateNewEncryptionKey();
-        } else if ("Clear".equals(_action)) {
-            _messages.clearThrough(_msgID);
-            return "";
-        } else {
-            return "Action " + _action + " unknown";
+
+        /* For any of these that call getMessage(msgs), we return "",
+           as getMessage() will add them to the returned string.
+         */
+        if ("Stop all".equals(_action)) {stopAll();}
+        else if ("Start all".equals(_action)) {startAll();}
+        else if ("Restart all".equals(_action)) {restartAll();}
+        else if ("Save changes".equals(_action)) {saveChanges();}
+        else if ("Delete this tunnel".equals(_action)) {deleteTunnel();}
+        else if ("Clear".equals(_action)) {_messages.clearThrough(_msgID);}
+        else {
+            if ("Reload configuration".equals(_action)) {return reloadConfig();}
+            else if ("stop".equals(_action)) {return stop();}
+            else if ("start".equals(_action)) {return start();}
+            else if ("restart".equals(_action)) {return restart();}
+            else if ("Estimate".equals(_action)) {return PrivateKeyFile.estimateHashCashTime(_hashCashValue);}
+            else if ("Modify".equals(_action)) {return modifyDestination();}
+            else if ("Generate".equals(_action)) {return generateNewEncryptionKey();}
+            else {return "Action " + _action + " unknown";}
         }
+        return "";
     }
 
     private String stopAll() {
@@ -235,9 +205,33 @@ public class IndexBean {
         return getMessages(msgs);
     }
 
+    //private String restartAll() {
+    //    List<String> msgs = _group.restartAllControllers();
+    //    return getMessages(msgs);
+    //}
+
+    /**
+     *  Restart all running tunnels only, stopped tunnels will remain stopped
+     *  @since 0.9.67+
+     */
     private String restartAll() {
-        List<String> msgs = _group.restartAllControllers();
-        return getMessages(msgs);
+        List<String> msgs = new ArrayList<>();
+        List<TunnelController> controllers = _group.getControllers();
+        int runningCount = 0;
+        for (TunnelController controller : controllers) {
+            if (controller.getIsRunning()) {runningCount++;}
+        }
+        if (runningCount == 0) {return "• " + _t("No running tunnels to restart");}
+        for (TunnelController controller : controllers) {
+            if (controller.getIsRunning()) {
+                try {
+                    controller.stopTunnel();
+                    Thread.sleep(500); // short delay to ensure clean stop
+                    controller.startTunnelBackground();
+                } catch (Exception e) {}
+            }
+        }
+        return "• " + _t("All running tunnels restarted") + "...";
     }
 
     private String reloadConfig() {
@@ -252,7 +246,7 @@ public class IndexBean {
         if (_tunnel >= controllers.size()) return "Invalid tunnel";
         TunnelController controller = controllers.get(_tunnel);
         controller.startTunnelBackground();
-        // give the messages a chance to make it to the window
+        // Give the messages a chance to make it to the window
         try { Thread.sleep(1000); } catch (InterruptedException ie) {}
         // and give them something to look at in any case
         // FIXME name will be HTML escaped twice
@@ -266,11 +260,24 @@ public class IndexBean {
         if (_tunnel >= controllers.size()) return "Invalid tunnel";
         TunnelController controller = controllers.get(_tunnel);
         controller.stopTunnel();
-        // give the messages a chance to make it to the window
+        // Give the messages a chance to make it to the window
         try { Thread.sleep(1000); } catch (InterruptedException ie) {}
         // and give them something to look at in any case
         // FIXME name will be HTML escaped twice
         return "• " + _t("Stopping tunnel") + ": " + getTunnelName(_tunnel) + "...";
+    }
+
+    private String restart() {
+        if (_tunnel < 0) return "Invalid tunnel";
+
+        List<TunnelController> controllers = _group.getControllers();
+        if (_tunnel >= controllers.size()) return "Invalid tunnel";
+        TunnelController controller = controllers.get(_tunnel);
+        controller.stopTunnel();
+        try {Thread.sleep(1000);} // Allow time for tunnel to stop
+        catch (InterruptedException ie) {}
+        controller.startTunnelBackground();
+        return "• " + _t("Restarting tunnel") + ": " + getTunnelName(_tunnel) + "...";
     }
 
     /**
@@ -288,9 +295,7 @@ public class IndexBean {
      *  rename the private key file if in the default directory
      */
     private String deleteTunnel() {
-        if (!_removeConfirmed)
-            return "Please confirm removal";
-
+        if (!_removeConfirmed) {return _t("Please confirm removal");}
         return getMessages(_helper.deleteTunnel(_tunnel, _config.getPrivKeyFile()));
     }
 
@@ -303,15 +308,13 @@ public class IndexBean {
      * @return HTML escaped or "" if empty
      */
     public String getMessages() {
-        if (_group == null)
-            return _fatalError;
+        if (_group == null) {return _fatalError;}
 
         StringBuilder buf = new StringBuilder(512);
         if (_action != null) {
             try {
                 String result = processAction();
-                if (result.length() > 0)
-                    buf.append(result).append('\n');
+                if (result.length() > 0) {buf.append(result).append('\n');}
             } catch (RuntimeException e) {
                 _log.log(Log.CRIT, "Error processing " + _action, e);
                 buf.append("Error: ").append(e.toString()).append('\n');
@@ -333,9 +336,7 @@ public class IndexBean {
      *
      * @since 0.9.33
      */
-    public int getLastMessageID() {
-        return _messages.getLastMessageID();
-    }
+    public int getLastMessageID() {return _messages.getLastMessageID();}
 
     ////
     // The remaining methods are simple bean props for the jsp to query
@@ -344,6 +345,11 @@ public class IndexBean {
     public String getTheme() {
         String theme = _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME);
         return "/themes/console/" + theme + "/";
+    }
+
+    public String getThemeName() {
+        String theme = _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME);
+        return theme;
     }
 
     /** @since 0.9.59+ */
@@ -363,17 +369,14 @@ public class IndexBean {
      *  @since 0.9.57
      */
     public List<Integer> getControllerNumbers(boolean isClient) {
-        if (_group == null)
-            return Collections.emptyList();
+        if (_group == null) {return Collections.emptyList();}
         List<TunnelController> all = _group.getControllers();
         List<Integer> rv = new ArrayList<Integer>(all.size());
         for (int i = 0; i < all.size(); i++) {
             TunnelController tc = all.get(i);
-            if (tc.isClient() == isClient)
-                rv.add(Integer.valueOf(i));
+            if (tc.isClient() == isClient) {rv.add(Integer.valueOf(i));}
         }
-        if (rv.size() > 1)
-            Collections.sort(rv, new TCComparator());
+        if (rv.size() > 1) {Collections.sort(rv, new TCComparator());}
         return rv;
     }
 
@@ -385,8 +388,7 @@ public class IndexBean {
          private final Collator _comp = Collator.getInstance();
          public int compare(Integer l, Integer r) {
              int rv = _comp.compare(getTunnelName(l), getTunnelName(r));
-             if (rv != 0)
-                 return rv;
+             if (rv != 0) {return rv;}
              return l.compareTo(r);
         }
     }
@@ -420,10 +422,8 @@ public class IndexBean {
 
     public String getTunnelName(int tunnel) {
         String name = _helper.getTunnelName(tunnel);
-        if (name != null && name.length() > 0)
-            return DataHelper.escapeHTML(name);
-        else
-            return _t("New Tunnel");
+        if (name != null && name.length() > 0) {return DataHelper.escapeHTML(name);}
+        else {return _t("New Tunnel");}
     }
 
     /**
@@ -453,8 +453,7 @@ public class IndexBean {
             List<TunnelController> controllers = _group.getControllers();
             String ifc = tun.getListenOnInterface();
             for (int i = 0; i < controllers.size(); i++) {
-                if (i == tunnel)
-                    continue;
+                if (i == tunnel) {continue;}
                 TunnelController tc = controllers.get(i);
                 if (port.equals(tc.getListenPort())) {
                     String ifc2 = tc.getListenOnInterface();
@@ -476,26 +475,24 @@ public class IndexBean {
 
     public String getTunnelType(int tunnel) {
         TunnelController tun = getController(tunnel);
-        if (tun != null)
-            return getTypeName(tun.getType());
-        else
-            return "";
+        if (tun != null) {return getTypeName(tun.getType());}
+        else {return "";}
     }
 
     public String getTypeName(String internalType) {
-        if (TunnelController.TYPE_STD_CLIENT.equals(internalType)) return _t("Standard client").replace(" client", "");
-        else if (TunnelController.TYPE_HTTP_CLIENT.equals(internalType)) return _t("HTTP/HTTPS client").replace(" client", "");
-        else if (TunnelController.TYPE_IRC_CLIENT.equals(internalType)) return _t("IRC client").replace(" client", "");
-        else if (TunnelController.TYPE_STD_SERVER.equals(internalType)) return _t("Standard server").replace(" server", "");
-        else if (TunnelController.TYPE_HTTP_SERVER.equals(internalType)) return _t("HTTP server").replace(" server", "");
-        else if (TunnelController.TYPE_SOCKS.equals(internalType)) return _t("SOCKS 4/4a/5 proxy").replace(" proxy", "");
-        else if (TunnelController.TYPE_SOCKS_IRC.equals(internalType)) return _t("SOCKS IRC proxy").replace(" proxy", "");
-        else if (TunnelController.TYPE_CONNECT.equals(internalType)) return _t("CONNECT/SSL/HTTPS proxy").replace(" proxy", "");
-        else if (TunnelController.TYPE_IRC_SERVER.equals(internalType)) return _t("IRC server").replace(" server", "");
-        else if (TunnelController.TYPE_STREAMR_CLIENT.equals(internalType)) return _t("Streamr client") .replace(" client", "");
-        else if (TunnelController.TYPE_STREAMR_SERVER.equals(internalType)) return _t("Streamr server").replace(" server", "");
-        else if (TunnelController.TYPE_HTTP_BIDIR_SERVER.equals(internalType)) return _t("HTTP bidir").replace("bidir", "bidirectional");
-        else return internalType;
+        if (TunnelController.TYPE_STD_CLIENT.equals(internalType)) {return _t("Standard client").replace(" client", "");}
+        else if (TunnelController.TYPE_HTTP_CLIENT.equals(internalType)) {return _t("HTTP/HTTPS client").replace(" client", "");}
+        else if (TunnelController.TYPE_IRC_CLIENT.equals(internalType)) {return _t("IRC client").replace(" client", "");}
+        else if (TunnelController.TYPE_STD_SERVER.equals(internalType)) {return _t("Standard server").replace(" server", "");}
+        else if (TunnelController.TYPE_HTTP_SERVER.equals(internalType)) {return _t("HTTP server").replace(" server", "");}
+        else if (TunnelController.TYPE_SOCKS.equals(internalType)) {return _t("SOCKS 4/4a/5 proxy").replace(" proxy", "");}
+        else if (TunnelController.TYPE_SOCKS_IRC.equals(internalType)) {return _t("SOCKS IRC proxy").replace(" proxy", "");}
+        else if (TunnelController.TYPE_CONNECT.equals(internalType)) {return _t("CONNECT/SSL/HTTPS proxy").replace(" proxy", "");}
+        else if (TunnelController.TYPE_IRC_SERVER.equals(internalType)) {return _t("IRC server").replace(" server", "");}
+        else if (TunnelController.TYPE_STREAMR_CLIENT.equals(internalType)) {return _t("Streamr client") .replace(" client", "");}
+        else if (TunnelController.TYPE_STREAMR_SERVER.equals(internalType)) {return _t("Streamr server").replace(" server", "");}
+        else if (TunnelController.TYPE_HTTP_BIDIR_SERVER.equals(internalType)) {return _t("HTTP bidir").replace("bidir", "bidirectional");}
+        else {return internalType;}
     }
 
     public String getInternalType(int tunnel) {
@@ -516,10 +513,8 @@ public class IndexBean {
 
     public String getSharedClient(int tunnel) {
         TunnelController tun = getController(tunnel);
-        if (tun != null)
-            return tun.getSharedClient();
-        else
-            return "";
+        if (tun != null) {return tun.getSharedClient();}
+        else {return "";}
     }
 
     public String getClientDestination(int tunnel) {
@@ -545,24 +540,16 @@ public class IndexBean {
         TunnelController tun = getController(tunnel);
         if (tun != null) {
             String host;
-            if ("streamrserver".equals(tun.getType()))
-                host = tun.getListenOnInterface();
-            else
-                host = tun.getTargetHost();
+            if ("streamrserver".equals(tun.getType())) {host = tun.getListenOnInterface();}
+            else {host = tun.getTargetHost();}
             String port = tun.getTargetPort();
-            if (host == null || host.length() == 0)
-                host = "<span class=ink_warn>" + _t("Host not set") + "</span>";
-            else if (Addresses.getIP(host) == null)
-                host = "<span class=ink_warn>" + _t("Invalid address") + ' ' + host + "</span>";
-            else if (host.indexOf(':') >= 0)
-                host = '[' + host + ']';
-            if (port == null || port.length() == 0)
-                port = "<span class=ink_warn>" + _t("Port not set") + "</span>";
-            else if (Addresses.getPort(port) == 0)
-                port = "<span class=ink_warn>" + _t("Invalid port") + ' ' + port + "</span>";
+            if (host == null || host.length() == 0) {host = "<span class=ink_warn>" + _t("Host not set") + "</span>";}
+            else if (Addresses.getIP(host) == null) {host = "<span class=ink_warn>" + _t("Invalid address") + ' ' + host + "</span>";}
+            else if (host.indexOf(':') >= 0) {host = '[' + host + ']';}
+            if (port == null || port.length() == 0) {port = "<span class=ink_warn>" + _t("Port not set") + "</span>";}
+            else if (Addresses.getPort(port) == 0) {port = "<span class=ink_warn>" + _t("Invalid port") + ' ' + port + "</span>";}
             return host + ':' + port;
-       }  else
-            return "";
+       }  else {return "";}
     }
 
     /**
@@ -580,8 +567,7 @@ public class IndexBean {
      */
     public String getDestinationBase64(int tunnel) {
         Destination d = getDestination(tunnel);
-        if (d != null)
-            return d.toBase64();
+        if (d != null) {return d.toBase64();}
         return "";
     }
 
@@ -591,8 +577,7 @@ public class IndexBean {
      */
     public String getDestHashBase32(int tunnel) {
         Destination d = getDestination(tunnel);
-        if (d != null)
-            return d.toBase32();
+        if (d != null) {return d.toBase32();}
         return "";
     }
 
@@ -634,8 +619,7 @@ public class IndexBean {
      */
     public String getAltDestinationBase64(int tunnel) {
         Destination d = getAltDestination(tunnel);
-        if (d != null)
-            return d.toBase64();
+        if (d != null) {return d.toBase64();}
         return "";
     }
 
@@ -646,8 +630,7 @@ public class IndexBean {
      */
     public String getAltDestHashBase32(int tunnel) {
         Destination d = getAltDestination(tunnel);
-        if (d != null)
-            return d.toBase32();
+        if (d != null) {return d.toBase32();}
         return "";
     }
 
@@ -672,8 +655,7 @@ public class IndexBean {
                 Properties opts = tun.getClientOptionProps();
                 if (Boolean.parseBoolean(opts.getProperty(I2PTunnelHTTPClientBase.PROP_USE_OUTPROXY_PLUGIN, "true"))) {
                     ClientAppManager mgr = _context.clientAppManager();
-                    if (mgr != null)
-                        return mgr.getRegisteredApp(Outproxy.NAME) != null;
+                    if (mgr != null) {return mgr.getRegisteredApp(Outproxy.NAME) != null;}
                 }
             }
         }
@@ -692,9 +674,8 @@ public class IndexBean {
     ///
 
     /**
-     * What type of tunnel (httpclient, ircclient, client, or server).  This is
-     * required when adding a new tunnel.
-     *
+     * What type of tunnel (httpclient, ircclient, client, or server).
+     * This is required when adding a new tunnel.
      */
     public void setType(String type) {
         _config.setType(type);
@@ -705,104 +686,99 @@ public class IndexBean {
     public void setNofilter_name(String name) {
         _config.setName(name);
     }
-    /** one line description */
+
+    /** One line host description */
     public void setNofilter_description(String description) {
         _config.setDescription(description);
     }
+
     /** I2CP host the router is on, ignored when in router context */
     public void setClientHost(String host) {
         _config.setClientHost(host);
     }
+
     /** I2CP port the router is on, ignored when in router context */
     public void setClientport(String port) {
         _config.setClientPort(port);
     }
 
-    /** how many hops to use for inbound tunnels
+    /** How many hops to use for inbound tunnels
      *  In or both in/out
      */
     public void setTunnelDepth(String tunnelDepth) {
         if (tunnelDepth != null) {
-            try {
-                _config.setTunnelDepth(Integer.parseInt(tunnelDepth.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setTunnelDepth(Integer.parseInt(tunnelDepth.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
 
-    /** how many parallel inbound tunnels to use
+    /** How many parallel inbound tunnels to use
      *  In or both in/out
      */
     public void setTunnelQuantity(String tunnelQuantity) {
         if (tunnelQuantity != null) {
-            try {
-                _config.setTunnelQuantity(Integer.parseInt(tunnelQuantity.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setTunnelQuantity(Integer.parseInt(tunnelQuantity.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
 
-    /** how much randomisation to apply to the depth of tunnels
+    /** How much randomisation to apply to the depth of tunnels
      *  In or both in/out
      */
     public void setTunnelVariance(String tunnelVariance) {
         if (tunnelVariance != null) {
-            try {
-                _config.setTunnelVariance(Integer.parseInt(tunnelVariance.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setTunnelVariance(Integer.parseInt(tunnelVariance.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
 
-    /** how many tunnels to hold in reserve to guard against failures
+    /** How many tunnels to hold in reserve to guard against failures
      *  In or both in/out
      */
     public void setTunnelBackupQuantity(String tunnelBackupQuantity) {
         if (tunnelBackupQuantity != null) {
-            try {
-                _config.setTunnelBackupQuantity(Integer.parseInt(tunnelBackupQuantity.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setTunnelBackupQuantity(Integer.parseInt(tunnelBackupQuantity.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
 
-    /** how many hops to use for outbound tunnels
+    /** How many hops to use for outbound tunnels
      *  @since 0.9.33
      */
     public void setTunnelDepthOut(String tunnelDepth) {
         if (tunnelDepth != null) {
-            try {
-                _config.setTunnelDepthOut(Integer.parseInt(tunnelDepth.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setTunnelDepthOut(Integer.parseInt(tunnelDepth.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
 
-    /** how many parallel outbound tunnels to use
+    /** How many parallel outbound tunnels to use
      *  @since 0.9.33
      */
     public void setTunnelQuantityOut(String tunnelQuantity) {
         if (tunnelQuantity != null) {
-            try {
-                _config.setTunnelQuantityOut(Integer.parseInt(tunnelQuantity.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setTunnelQuantityOut(Integer.parseInt(tunnelQuantity.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
 
-    /** how much randomisation to apply to the depth of outbound tunnels
+    /** How much randomisation to apply to the depth of outbound tunnels
      *  @since 0.9.33
      */
     public void setTunnelVarianceOut(String tunnelVariance) {
         if (tunnelVariance != null) {
-            try {
-                _config.setTunnelVarianceOut(Integer.parseInt(tunnelVariance.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setTunnelVarianceOut(Integer.parseInt(tunnelVariance.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
 
-    /** how many outbound tunnels to hold in reserve to guard against failures
+    /** How many outbound tunnels to hold in reserve to guard against failures
      *  @since 0.9.33
      */
     public void setTunnelBackupQuantityOut(String tunnelBackupQuantity) {
         if (tunnelBackupQuantity != null) {
-            try {
-                _config.setTunnelBackupQuantityOut(Integer.parseInt(tunnelBackupQuantity.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setTunnelBackupQuantityOut(Integer.parseInt(tunnelBackupQuantity.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
 
@@ -817,8 +793,7 @@ public class IndexBean {
     /** what port should this client/httpclient/ircclient listen on */
     public void setPort(String port) {
         if (port != null) {
-            try {
-                _config.setPort(Integer.parseInt(port.trim()));
+            try {_config.setPort(Integer.parseInt(port.trim()));
             } catch (NumberFormatException nfe) {}
         }
     }
@@ -839,8 +814,7 @@ public class IndexBean {
     /** What port does this server tunnel point at */
     public void setTargetPort(String port) {
         if (port != null) {
-            try {
-                _config.setTargetPort(Integer.parseInt(port.trim()));
+            try {_config.setTargetPort(Integer.parseInt(port.trim()));
             } catch (NumberFormatException nfe) {}
         }
     }
@@ -876,15 +850,19 @@ public class IndexBean {
     public void setStartOnLoad(String moo) {
         _config.setStartOnLoad(true);
     }
+
     public void setShared(String moo) {
         _config.setShared(true);
     }
+
     public void setShared(boolean val) {
         _config.setShared(val);
     }
+
     public void setConnectDelay(String moo) {
         _config.setConnectDelay(true);
     }
+
     public void setProfile(String profile) {
         _config.setProfile(profile);
     }
@@ -892,9 +870,11 @@ public class IndexBean {
     public void setReduce(String moo) {
         _config.setReduce(true);
     }
+
     public void setClose(String moo) {
         _config.setClose(true);
     }
+
     public void setEncrypt(String moo) {
         _config.setEncrypt(true);
     }
@@ -902,8 +882,7 @@ public class IndexBean {
     /** @since 0.9.40 */
     public void setEncryptMode(String val) {
         if (val != null) {
-            try {
-                _config.setEncryptMode(Integer.parseInt(val.trim()));
+            try {_config.setEncryptMode(Integer.parseInt(val.trim()));
             } catch (NumberFormatException nfe) {}
         }
     }
@@ -918,9 +897,7 @@ public class IndexBean {
      * @since 0.9.41
      */
     public void setNofilter_clientName(String[] s) {
-        if (s != null) {
-            _config.addClientNames(s);
-        }
+        if (s != null) {_config.addClientNames(s);}
     }
 
 
@@ -929,9 +906,7 @@ public class IndexBean {
      * @since 0.9.41
      */
     public void setclientKey(String[] s) {
-        if (s != null) {
-            _config.addClientKeys(s);
-        }
+        if (s != null) {_config.addClientKeys(s);}
     }
 
     /**
@@ -940,27 +915,21 @@ public class IndexBean {
      * @since 0.9.41
      */
     public void setRevokeClient(String[] s) {
-        if (s != null) {
-            _config.revokeClients(s);
-        }
+        if (s != null) {_config.revokeClients(s);}
     }
 
     /**
      * @since 0.9.41
      */
     public void setNofilter_newClientName(String s) {
-        if (s != null) {
-            _config.newClientName(s.trim());
-        }
+        if (s != null) {_config.newClientName(s.trim());}
     }
 
     /**
      * @since 0.9.41
      */
     public void setNewClientKey(String s) {
-        if (s != null) {
-            _config.newClientKey(s.trim());
-        }
+        if (s != null) {_config.newClientKey(s.trim());}
     }
 
     /**
@@ -1021,15 +990,12 @@ public class IndexBean {
     }
 
     /** @since 0.9.13 */
-    public void setUniqueLocal(String moo) {
-        _config.setUniqueLocal(true);
-    }
+    public void setUniqueLocal(String moo) {_config.setUniqueLocal(true);}
 
     public void setAccessMode(String val) {
         if (val != null) {
-            try {
-                _config.setAccessMode(Integer.parseInt(val.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setAccessMode(Integer.parseInt(val.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
 
@@ -1037,33 +1003,28 @@ public class IndexBean {
      *  @since 0.9.40
      */
     public void setFilterDefinition(String val) {
-        if (val != null)
-            _config.setFilterDefinition(val);
+        if (val != null) {_config.setFilterDefinition(val);}
     }
 
-    public void setDelayOpen(String moo) {
-        _config.setDelayOpen(true);
-    }
+    public void setDelayOpen(String moo) {_config.setDelayOpen(true);}
+
     public void setNewDest(String val) {
         if (val != null) {
-            try {
-                _config.setNewDest(Integer.parseInt(val.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setNewDest(Integer.parseInt(val.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
 
     public void setReduceTime(String val) {
         if (val != null) {
-            try {
-                _config.setReduceTime(Integer.parseInt(val.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setReduceTime(Integer.parseInt(val.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
     public void setReduceCount(String val) {
         if (val != null) {
-            try {
-                _config.setReduceCount(Integer.parseInt(val.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setReduceCount(Integer.parseInt(val.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
     public void setEncryptKey(String val) {
@@ -1080,8 +1041,7 @@ public class IndexBean {
 
     public void setCloseTime(String val) {
         if (val != null) {
-            try {
-                _config.setCloseTime(Integer.parseInt(val.trim()));
+            try {_config.setCloseTime(Integer.parseInt(val.trim()));
             } catch (NumberFormatException nfe) {}
         }
     }
@@ -1160,57 +1120,50 @@ public class IndexBean {
 
     public void setLimitMinute(String s) {
         if (s != null) {
-            try {
-                _config.setLimitMinute(Integer.parseInt(s.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setLimitMinute(Integer.parseInt(s.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
 
     public void setLimitHour(String s) {
         if (s != null) {
-            try {
-                _config.setLimitHour(Integer.parseInt(s.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setLimitHour(Integer.parseInt(s.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
 
     public void setLimitDay(String s) {
         if (s != null) {
-            try {
-                _config.setLimitDay(Integer.parseInt(s.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setLimitDay(Integer.parseInt(s.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
 
     public void setTotalMinute(String s) {
         if (s != null) {
-            try {
-                _config.setTotalMinute(Integer.parseInt(s.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setTotalMinute(Integer.parseInt(s.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
 
     public void setTotalHour(String s) {
         if (s != null) {
-            try {
-                _config.setTotalHour(Integer.parseInt(s.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setTotalHour(Integer.parseInt(s.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
 
     public void setTotalDay(String s) {
         if (s != null) {
-            try {
-                _config.setTotalDay(Integer.parseInt(s.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setTotalDay(Integer.parseInt(s.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
 
     public void setMaxStreams(String s) {
         if (s != null) {
-            try {
-                _config.setMaxStreams(Integer.parseInt(s.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setMaxStreams(Integer.parseInt(s.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
 
@@ -1220,73 +1173,62 @@ public class IndexBean {
      */
     public void setPostMax(String s) {
         if (s != null) {
-            try {
-                _config.setPostMax(Integer.parseInt(s.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setPostMax(Integer.parseInt(s.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
 
     public void setPostTotalMax(String s) {
         if (s != null) {
-            try {
-                _config.setPostTotalMax(Integer.parseInt(s.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setPostTotalMax(Integer.parseInt(s.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
 
     public void setPostCheckTime(String s) {
         if (s != null) {
-            try {
-                _config.setPostCheckTime(Integer.parseInt(s.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setPostCheckTime(Integer.parseInt(s.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
 
     public void setPostBanTime(String s) {
         if (s != null) {
-            try {
-                _config.setPostBanTime(Integer.parseInt(s.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setPostBanTime(Integer.parseInt(s.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
 
     public void setPostTotalBanTime(String s) {
         if (s != null) {
-            try {
-                _config.setPostTotalBanTime(Integer.parseInt(s.trim()));
-            } catch (NumberFormatException nfe) {}
+            try {_config.setPostTotalBanTime(Integer.parseInt(s.trim()));}
+            catch (NumberFormatException nfe) {}
         }
     }
 
     /** params needed for hashcash and dest modification */
     public void setEffort(String val) {
         if (val != null) {
-            try {
-                _hashCashValue = Integer.parseInt(val.trim());
-            } catch (NumberFormatException nfe) {}
+            try {_hashCashValue = Integer.parseInt(val.trim());}
+            catch (NumberFormatException nfe) {}
         }
     }
 
     public void setCert(String val) {
         if (val != null) {
-            try {
-                _certType = Integer.parseInt(val.trim());
-            } catch (NumberFormatException nfe) {}
+            try {_certType = Integer.parseInt(val.trim());}
+            catch (NumberFormatException nfe) {}
         }
     }
 
-    public void setSigner(String val) {
-        _certSigner = val;
-    }
+    public void setSigner(String val) {_certSigner = val;}
 
     /** @since 0.9.12 */
     public void setSigType(String val) {
         if (val != null) {
             _config.setSigType(val);
-            if (val.equals("0"))
-                _certType = 0;
-            else
-                _certType = 5;
+            if (val.equals("0")) {_certType = 0;}
+            else {_certType = 5;}
         }
         // TODO: Call modifyDestination??
         // Otherwise this only works on a new tunnel...
@@ -1296,9 +1238,7 @@ public class IndexBean {
      * Adds to existing, comma separated
      * @since 0.9.44
      */
-    public void setEncType(String s) {
-        _config.setEncType(s);
-    }
+    public void setEncType(String s) {_config.setEncType(s);}
 
     /**
      *  Random keys, hidden in forms
@@ -1338,17 +1278,12 @@ public class IndexBean {
      *  @since 0.9.46
      */
     private String decrypt(String k, String v) {
-        if (v == null || v.length() <= 0)
-            return v;
+        if (v == null || v.length() <= 0) {return v;}
         byte[] enc = Base64.decode(v);
-        if (enc == null)
-            return null;
+        if (enc == null) {return null;}
         SessionKey key;
-        synchronized(_formKeys) {
-            key = _formKeys.get(Integer.valueOf(_tunnel));
-        }
-        if (key == null)
-            return null;
+        synchronized(_formKeys) {key = _formKeys.get(Integer.valueOf(_tunnel));}
+        if (key == null) {return null;}
         byte[] kb = DataHelper.getUTF8(k);
         byte[] iv = new byte[32];
         _context.sha().calculateHash(kb, 0, kb.length, iv, 0);
@@ -1494,10 +1429,6 @@ public class IndexBean {
         _config.setDestination(getDestination(_tunnel));
         return _config.getConfig();
     }
-
-    ///
-    ///
-    ///
 
     protected TunnelController getController(int tunnel) {
         return _helper.getController(tunnel);

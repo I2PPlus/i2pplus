@@ -79,7 +79,7 @@
 <a class="control wizard iconize" href="wizard"><%=intl._t("Tunnel Wizard")%></a>
 <a class="control stopall iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Stop%20all"><%=intl._t("Stop All")%></a>
 <a class="control startall iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Start%20all"><%=intl._t("Start All")%></a>
-<a class="control restartall iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Restart%20all"><%=intl._t("Restart All")%></a>
+<a class="control restartall iconize" target=processForm href="list?nonce=<%=nextNonce%>&amp;action=Restart%20all" title="<%=intl._t("Restart all running tunnels")%>"><%=intl._t("Restart All")%></a>
 </td>
 </tr>
 </table>
