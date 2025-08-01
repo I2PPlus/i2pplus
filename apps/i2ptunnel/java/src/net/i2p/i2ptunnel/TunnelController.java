@@ -299,12 +299,12 @@ public class TunnelController implements Logging {
         } catch (I2PException ie) {
             if (_log.shouldError())
                 _log.error("Error creating new destination", ie);
-            log("Error creating new destination: " + ie.getMessage());
+            log("✖ Error creating new destination: " + ie.getMessage());
             return false;
         } catch (IOException ioe) {
             if (_log.shouldError())
                 _log.error("Error creating writing the destination to " + keyFile.getAbsolutePath(), ioe);
-            log("Error writing the keys to " + keyFile.getAbsolutePath());
+            log("✖ Error writing the keys to " + keyFile.getAbsolutePath());
             return false;
         } finally {
             if (fos != null) try { fos.close(); } catch (IOException ioe) {}
@@ -372,35 +372,35 @@ public class TunnelController implements Logging {
             try { out.close(); } catch (IOException ioe) {}
 
             String destStr = d.toBase64();
-            log("Alternate private key created and saved in " + altFile.getAbsolutePath());
-            log("You should backup this file in a secure place.");
-            log("New alternate destination: " + destStr);
+            log("✔ Alternate private key created and saved in " + altFile.getAbsolutePath());
+            log("• You should backup this file in a secure place.");
+            log("• New alternate destination: " + destStr);
             String b32 = d.toBase32();
-            log("Base32: " + b32);
+            log("• Base32: " + b32);
             File backupDir = new SecureFile(I2PAppContext.getGlobalContext().getConfigDir(), KEY_BACKUP_DIR);
             if (backupDir.isDirectory() || backupDir.mkdir()) {
                 String name = b32 + '-' + I2PAppContext.getGlobalContext().clock().now() + ".dat";
                 File backup = new File(backupDir, name);
                 if (FileUtil.copy(altFile, backup, false, true)) {
                     SecureFileOutputStream.setPerms(backup);
-                    log("Alternate private key backup saved to " + backup.getAbsolutePath());
+                    log("✔ Alternate private key backup saved to " + backup.getAbsolutePath());
                 }
             }
             return true;
         } catch (GeneralSecurityException e) {
-            log("Error creating keys " + e);
+            log("✖ Error creating keys " + e);
             return false;
         } catch (I2PSessionException e) {
-            log("Error creating keys " + e);
+            log("✖ Error creating keys " + e);
             return false;
         } catch (I2PException e) {
-            log("Error creating keys " + e);
+            log("✖ Error creating keys " + e);
             return false;
         } catch (IOException e) {
-            log("Error creating keys " + e);
+            log("✖ Error creating keys " + e);
             return false;
         } catch (RuntimeException e) {
-            log("Error creating keys " + e);
+            log("✖ Error creating keys " + e);
             return false;
         } finally {
             if (out != null) try { out.close(); } catch (IOException ioe) {}
@@ -423,9 +423,8 @@ public class TunnelController implements Logging {
         synchronized (this) {
             if (_state != TunnelState.STOPPED && _state != TunnelState.START_ON_LOAD) {
                 if (_state == TunnelState.RUNNING) {
-                    if (_log.shouldInfo())
-                        _log.info("Already running");
-                    log("Tunnel " + getName() + " is already running");
+                    if (_log.shouldInfo()) {_log.info("Already running");}
+                    log("✖ Tunnel " + getName() + " is already running");
                 }
                 return;
             }
@@ -435,7 +434,7 @@ public class TunnelController implements Logging {
             doStartTunnel();
         } catch (RuntimeException e) {
             _log.error("Error starting tunnel [" + getName() + "] -> " + e.getMessage());
-            log("Error starting tunnel [" + getName() + "] -> " + e.getMessage());
+            log("✖ Error starting tunnel [" + getName() + "] -> " + e.getMessage());
             // if we don't acquire() then the release() in stopTunnel() won't work
             acquire();
             stopTunnel();
@@ -447,15 +446,13 @@ public class TunnelController implements Logging {
      */
     private void doStartTunnel() {
         synchronized (this) {
-            if (_state != TunnelState.STARTING)
-                return;
+            if (_state != TunnelState.STARTING) {return;}
         }
 
         String type = getType();
         if ( (type == null) || (type.length() <= 0) ) {
             changeState(TunnelState.STOPPED);
-            if (_log.shouldError())
-                _log.error("Cannot start tunnel - no type specified");
+            if (_log.shouldError()) {_log.error("Cannot start tunnel - no type specified");}
             return;
         }
         // Config options may have changed since instantiation, so do this again.
@@ -464,44 +461,28 @@ public class TunnelController implements Logging {
             boolean ok = createPrivateKey();
             if (!ok) {
                 changeState(TunnelState.STOPPED);
-                log("Failed to start tunnel [" + getName() + "] as private key file could not be created");
+                log("✖ Failed to start tunnel [" + getName() + "] as private key file could not be created");
                 return;
             }
-            if (!isClient() && !getType().equals(TYPE_STREAMR_SERVER)) {
-                // check rv?
-                createAltPrivateKey();
-            }
+            if (!isClient() && !getType().equals(TYPE_STREAMR_SERVER)) {createAltPrivateKey();} // check rv?
         }
         setI2CPOptions();
         setSessionOptions();
-        if (TYPE_HTTP_CLIENT.equals(type)) {
-            startHttpClient();
-        } else if(TYPE_IRC_CLIENT.equals(type)) {
-            startIrcClient();
-        } else if(TYPE_SOCKS.equals(type)) {
-            startSocksClient();
-        } else if(TYPE_SOCKS_IRC.equals(type)) {
-            startSocksIRCClient();
-        } else if(TYPE_CONNECT.equals(type)) {
-            startConnectClient();
-        } else if (TYPE_STD_CLIENT.equals(type)) {
-            startClient();
-        } else if (TYPE_STREAMR_CLIENT.equals(type)) {
-            startStreamrClient();
-        } else if (TYPE_STD_SERVER.equals(type)) {
-            startServer();
-        } else if (TYPE_HTTP_SERVER.equals(type)) {
-            startHttpServer();
-        } else if (TYPE_HTTP_BIDIR_SERVER.equals(type)) {
-            startHttpBidirServer();
-        } else if (TYPE_IRC_SERVER.equals(type)) {
-            startIrcServer();
-        } else if (TYPE_STREAMR_SERVER.equals(type)) {
-            startStreamrServer();
-        } else {
+        if (TYPE_HTTP_CLIENT.equals(type)) {startHttpClient();}
+        else if(TYPE_IRC_CLIENT.equals(type)) {startIrcClient();}
+        else if(TYPE_SOCKS.equals(type)) {startSocksClient();}
+        else if(TYPE_SOCKS_IRC.equals(type)) {startSocksIRCClient();}
+        else if(TYPE_CONNECT.equals(type)) {startConnectClient();}
+        else if (TYPE_STD_CLIENT.equals(type)) {startClient();}
+        else if (TYPE_STREAMR_CLIENT.equals(type)) {startStreamrClient();}
+        else if (TYPE_STD_SERVER.equals(type)) {startServer();}
+        else if (TYPE_HTTP_SERVER.equals(type)) {startHttpServer();}
+        else if (TYPE_HTTP_BIDIR_SERVER.equals(type)) {startHttpBidirServer();}
+        else if (TYPE_IRC_SERVER.equals(type)) {startIrcServer();}
+        else if (TYPE_STREAMR_SERVER.equals(type)) {startStreamrServer();}
+        else {
             changeState(TunnelState.STOPPED);
-            if (_log.shouldError())
-                _log.error("Cannot start tunnel - unknown type [" + type + "]");
+            if (_log.shouldError()) {_log.error("Cannot start tunnel - unknown type [" + type + "]");}
             return;
         }
         acquire();
@@ -1504,7 +1485,7 @@ public class TunnelController implements Logging {
                     if (remaining < 30*24*60*60*1000L) {
                         String msg = "Offline signature in private key file " + f + " for tunnel expires in " + DataHelper.formatDuration(remaining);
                         _log.logAlways(Log.WARN, msg);
-                        _tunnel.log("WARNING: " + msg);
+                        _tunnel.log("▲ WARNING: " + msg);
                     }
                     if (d < delay)
                         delay = d;

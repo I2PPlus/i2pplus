@@ -216,25 +216,25 @@ public class IndexBean {
             if (controller.getIsRunning()) {
                 runningCount++;
                 String name = controller.getName();
-                String stoppingMsg = "• " + _t("Stopping tunnel") + ": " + name;
+                String stoppingMsg = "‣ " + _t("Stopping tunnel") + ": " + name;
                 _timestampedMessages.add(new TimestampedMessage(stoppingMsg));
 
                 try {
                     controller.stopTunnel();
                     Thread.sleep(500); // short delay to ensure clean stop
-                    String startingMsg = "• " + _t("Starting tunnel") + ": " + name;
+                    String startingMsg = "‣ " + _t("Starting tunnel") + ": " + name;
                     _timestampedMessages.add(new TimestampedMessage(startingMsg));
                     controller.startTunnelBackground();
                 } catch (Exception e) {
                     _log.error("Error restarting tunnel" + name + " - " + e.getMessage());
-                    String errorMsg = "• " + _t("Error restarting tunnel") + ": " + name + " - " + e.getMessage();
+                    String errorMsg = "! " + _t("Error restarting tunnel") + ": " + name + " - " + e.getMessage();
                     _timestampedMessages.add(new TimestampedMessage(errorMsg));
                 }
             }
         }
 
-        String doneMsg = "• " + (runningCount > 0 ? _t("Restarted all running tunnels") :
-                                                    _t("No running tunnels to restart"));
+        String doneMsg = (runningCount > 0 ? "✔ " +_t("Restarted all running tunnels") :
+                                             "! " + _t("No running tunnels to restart"));
         _timestampedMessages.add(new TimestampedMessage(doneMsg));
         return doneMsg;
     }
@@ -264,14 +264,14 @@ public class IndexBean {
                     controller.startTunnelBackground();
                 } catch (Exception e) {
                     _log.error("Error restarting client tunnel: " + name + " - " + e.getMessage());
-                    String errorMsg = "• " + _t("Error restarting tunnel") + ": " + name  + " - " + e.getMessage();
+                    String errorMsg = "✖ " + _t("Error restarting tunnel") + ": " + name  + " - " + e.getMessage();
                     _timestampedMessages.add(new TimestampedMessage(errorMsg));
                 }
             }
         }
 
-        String doneMsg = "• " + (running > 0 ?_t("Restarted all running client tunnels") :
-                                              _t("No running client tunnels to restart"));
+        String doneMsg = (running > 0 ? "✔ " + _t("Restarted all running client tunnels") :
+                                        "✖ " + _t("No running client tunnels to restart"));
         _timestampedMessages.add(new TimestampedMessage(doneMsg));
         return doneMsg;
     }
@@ -295,31 +295,31 @@ public class IndexBean {
                     controller.stopTunnel();
                     Thread.sleep(500); // short delay to ensure clean stop
 
-                    String startingMsg = "• " + _t("Starting tunnel") + ": " + name;
+                    String startingMsg = "‣ " + _t("Starting tunnel") + ": " + name;
                     _timestampedMessages.add(new TimestampedMessage(startingMsg));
 
                     controller.startTunnelBackground();
                 } catch (Exception e) {
                     _log.error("Error restarting server tunnel: " + name + " - " + e.getMessage());
-                    String errorMsg = "• " + _t("Error restarting tunnel") + ": " + name + " - " + e.getMessage();
+                    String errorMsg = "✖ " + _t("Error restarting tunnel") + ": " + name + " - " + e.getMessage();
                     _timestampedMessages.add(new TimestampedMessage(errorMsg));
                 }
             }
         }
 
-        String doneMsg = "• " + (running > 0 ? _t("Restarted all running server tunnels") :
-                                               _t("No running server tunnels to restart"));
+        String doneMsg = (running > 0 ? "✔ " + _t("Restarted all running server tunnels") :
+                                        "✖ " + _t("No running server tunnels to restart"));
         _timestampedMessages.add(new TimestampedMessage(doneMsg));
         return doneMsg;
     }
 
     private String reloadConfig() {
         _group.reloadControllers();
-        return "• " + _t("Configuration reloaded for all tunnels");
+        return "✔ " + _t("Configuration reloaded for all tunnels");
     }
 
     private String start() {
-        if (_tunnel < 0) {return "• " + _t("Invalid tunnel");}
+        if (_tunnel < 0) {return "✖ " + _t("Invalid tunnel");}
 
         List<TunnelController> controllers = _group.getControllers();
         if (_tunnel >= controllers.size()) return "Invalid tunnel";
@@ -329,11 +329,11 @@ public class IndexBean {
         try { Thread.sleep(1000); } catch (InterruptedException ie) {}
         // and give them something to look at in any case
         // FIXME name will be HTML escaped twice
-        return "• " + _t("Starting tunnel") + ": " + getTunnelName(_tunnel) + "...";
+        return "‣ " + _t("Starting tunnel") + ": " + getTunnelName(_tunnel) + "...";
     }
 
     private String stop() {
-        if (_tunnel < 0) {return "• " + _t("Invalid tunnel");}
+        if (_tunnel < 0) {return "✖ " + _t("Invalid tunnel");}
 
         List<TunnelController> controllers = _group.getControllers();
         if (_tunnel >= controllers.size()) return "Invalid tunnel";
@@ -343,20 +343,20 @@ public class IndexBean {
         try { Thread.sleep(1000); } catch (InterruptedException ie) {}
         // and give them something to look at in any case
         // FIXME name will be HTML escaped twice
-        return "• " + _t("Stopping tunnel") + ": " + getTunnelName(_tunnel) + "...";
+        return "‣ " + _t("Stopping tunnel") + ": " + getTunnelName(_tunnel) + "...";
     }
 
     private String restart() {
-        if (_tunnel < 0) {return "• " + _t("Invalid tunnel");}
+        if (_tunnel < 0) {return "✖ " + _t("Invalid tunnel");}
 
         List<TunnelController> controllers = _group.getControllers();
-        if (_tunnel >= controllers.size()) {return "• " + _t("Invalid tunnel");}
+        if (_tunnel >= controllers.size()) {return "✖ " + _t("Invalid tunnel");}
         TunnelController controller = controllers.get(_tunnel);
         controller.stopTunnel();
         try {Thread.sleep(1000);} // Allow time for tunnel to stop
         catch (InterruptedException ie) {}
         controller.startTunnelBackground();
-        return "• " + _t("Restarting tunnel") + ": " + getTunnelName(_tunnel) + "...";
+        return "‣ " + _t("Restarting tunnel") + ": " + getTunnelName(_tunnel) + "...";
     }
 
     /**
@@ -414,7 +414,7 @@ public class IndexBean {
                 }
             } catch (RuntimeException e) {
                 _log.log(Log.CRIT, "Error processing " + _action, e);
-                String msg = "Error: " + e.toString();
+                String msg = "✖ Error: " + e.toString();
                 addUniqueMessage(msg);
             }
         }
@@ -460,61 +460,6 @@ public class IndexBean {
             }
         }
     }
-
-
-
-/*
-    public String getMessages() {
-        if (_group == null) return _fatalError;
-
-        StringBuilder buf = new StringBuilder(512);
-
-        if (_action != null) {
-            try {
-                String result = processAction();
-                if (!result.isEmpty()) {
-                    _timestampedMessages.add(new TimestampedMessage(result));
-                }
-            } catch (RuntimeException e) {
-                _log.log(Log.CRIT, "Error processing " + _action, e);
-                String msg = "Error: " + e.toString();
-                _timestampedMessages.add(new TimestampedMessage(msg));
-            }
-        }
-
-        List<UIMessages.Message> oldMessages = _messages.getMessages();
-        if (!oldMessages.isEmpty()) {
-            for (UIMessages.Message msg : oldMessages) {
-                _timestampedMessages.add(new TimestampedMessage(msg.message));
-            }
-            _messages.clearThrough(_msgID); // Prevent duplication
-        }
-
-        List<String> groupMessages = _group.clearAllMessages();
-        if (groupMessages != null && !groupMessages.isEmpty()) {
-            for (String msg : groupMessages) {
-                _timestampedMessages.add(new TimestampedMessage(msg));
-            }
-        }
-
-        List<TimestampedMessage> stored = new ArrayList<>(_timestampedMessages);
-        stored.sort((a, b) -> Long.compare(b.timestamp, a.timestamp));
-
-        while (stored.size() > 100) {
-            stored.remove(stored.size() - 1);
-        }
-
-        for (TimestampedMessage tm : stored) {
-            buf.append("• ").append(tm.getFormattedTimestamp()).append(' ')
-               .append(tm.message.replace("->", "➜")).append('\n');
-        }
-
-        _timestampedMessages.clear();
-        _timestampedMessages.addAll(stored);
-
-        return DataHelper.escapeHTML(buf.toString());
-    }
-*/
 
     /**
      * The last stored message ID
@@ -680,21 +625,10 @@ public class IndexBean {
         else {return internalType;}
     }
 
-    public String getInternalType(int tunnel) {
-        return _helper.getTunnelType(tunnel);
-    }
-
-    public String getClientInterface(int tunnel) {
-        return _helper.getClientInterface(tunnel);
-    }
-
-    public int getTunnelStatus(int tunnel) {
-        return _helper.getTunnelStatus(tunnel);
-    }
-
-    public String getTunnelDescription(int tunnel) {
-        return DataHelper.escapeHTML(_helper.getTunnelDescription(tunnel));
-    }
+    public String getInternalType(int tunnel) {return _helper.getTunnelType(tunnel);}
+    public String getClientInterface(int tunnel) {return _helper.getClientInterface(tunnel);}
+    public int getTunnelStatus(int tunnel) {return _helper.getTunnelStatus(tunnel);}
+    public String getTunnelDescription(int tunnel) {return DataHelper.escapeHTML(_helper.getTunnelDescription(tunnel));}
 
     public String getSharedClient(int tunnel) {
         TunnelController tun = getController(tunnel);
@@ -702,9 +636,7 @@ public class IndexBean {
         else {return "";}
     }
 
-    public String getClientDestination(int tunnel) {
-        return _helper.getClientDestination(tunnel);
-    }
+    public String getClientDestination(int tunnel) {return _helper.getClientDestination(tunnel);}
 
     /**
      * Call this to see if it is ok to linkify getServerTarget()
@@ -734,7 +666,7 @@ public class IndexBean {
             if (port == null || port.length() == 0) {port = "<span class=ink_warn>" + _t("Port not set") + "</span>";}
             else if (Addresses.getPort(port) == 0) {port = "<span class=ink_warn>" + _t("Invalid port") + ' ' + port + "</span>";}
             return host + ':' + port;
-       }  else {return "";}
+        } else {return "";}
     }
 
     /**
@@ -742,9 +674,7 @@ public class IndexBean {
      *  @return Destination or null
      *  @since 0.9.17
      */
-    protected Destination getDestination(int tunnel) {
-        return _helper.getDestination(tunnel);
-    }
+    protected Destination getDestination(int tunnel) {return _helper.getDestination(tunnel);}
 
     /**
      *  Works even if tunnel is not running.
@@ -793,9 +723,7 @@ public class IndexBean {
      *  @return Destination or null
      *  @since 0.9.30
      */
-    protected Destination getAltDestination(int tunnel) {
-        return _helper.getAltDestination(tunnel);
-    }
+    protected Destination getAltDestination(int tunnel) {return _helper.getAltDestination(tunnel);}
 
     /**
      *  Works even if tunnel is not running.
@@ -824,9 +752,7 @@ public class IndexBean {
      *  @return true if offline keys
      *  @since 0.9.40
      */
-    public boolean getIsOfflineKeys(int tunnel) {
-        return _helper.isOfflineKeys(tunnel);
-    }
+    public boolean getIsOfflineKeys(int tunnel) {return _helper.isOfflineKeys(tunnel);}
 
     /**
      *  For index.jsp
@@ -850,9 +776,7 @@ public class IndexBean {
     /**
      * @since 0.9.32 moved from EditBean
      */
-    public String getSpoofedHost(int tunnel) {
-        return DataHelper.escapeHTML(_helper.getSpoofedHost(tunnel));
-    }
+    public String getSpoofedHost(int tunnel) {return DataHelper.escapeHTML(_helper.getSpoofedHost(tunnel));}
 
     ///
     /// bean props for form submission
@@ -862,32 +786,24 @@ public class IndexBean {
      * What type of tunnel (httpclient, ircclient, client, or server).
      * This is required when adding a new tunnel.
      */
-    public void setType(String type) {
-        _config.setType(type);
-    }
+    public void setType(String type) {_config.setType(type);}
+
     String getType() { return _config.getType(); }
 
     /** Short name of the tunnel */
-    public void setNofilter_name(String name) {
-        _config.setName(name);
-    }
+    public void setNofilter_name(String name) {_config.setName(name);}
 
     /** One line host description */
-    public void setNofilter_description(String description) {
-        _config.setDescription(description);
-    }
+    public void setNofilter_description(String description) {_config.setDescription(description);}
 
     /** I2CP host the router is on, ignored when in router context */
-    public void setClientHost(String host) {
-        _config.setClientHost(host);
-    }
+    public void setClientHost(String host) {_config.setClientHost(host);}
 
     /** I2CP port the router is on, ignored when in router context */
-    public void setClientport(String port) {
-        _config.setClientPort(port);
-    }
+    public void setClientport(String port) {_config.setClientPort(port);}
 
-    /** How many hops to use for inbound tunnels
+    /**
+     *  How many hops to use for inbound tunnels
      *  In or both in/out
      */
     public void setTunnelDepth(String tunnelDepth) {
@@ -897,7 +813,8 @@ public class IndexBean {
         }
     }
 
-    /** How many parallel inbound tunnels to use
+    /**
+     *  How many parallel inbound tunnels to use
      *  In or both in/out
      */
     public void setTunnelQuantity(String tunnelQuantity) {

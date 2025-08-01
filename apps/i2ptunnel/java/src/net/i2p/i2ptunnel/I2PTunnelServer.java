@@ -357,7 +357,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             if (remaining < 60*24*60*60*1000L) {
                 String msg = "Offline signature for tunnel " + name + " expires in " + DataHelper.formatDuration(remaining);
                 _log.logAlways(Log.WARN, msg);
-                l.log("WARNING: " + msg);
+                l.log("▲ WARNING: " + msg);
             }
         }
         while (session.isClosed()) {
@@ -575,9 +575,9 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 if (port > 0 && port <= 65535)
                     remotePort = port;
                 else
-                    l.log("Bad port: " + port);
+                    l.log("✖ Bad port: " + port);
             } catch (NumberFormatException nfe) {
-                l.log("Bad port: " + p);
+                l.log("✖ Bad port: " + p);
             }
         }
         buildSocketMap(props);
@@ -602,12 +602,12 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                     host = host.substring(0, colon);
                     InetSocketAddress isa = new InetSocketAddress(host, port);
                     if (isa.isUnresolved())
-                        l.log("Warning - cannot resolve address for port " + key + ": " + host);
+                        l.log("▲ Warning - cannot resolve address for port " + key + ": " + host);
                     _socketMap.put(Integer.valueOf(myPort), isa);
                 } catch (NumberFormatException nfe) {
-                    l.log("Bad socket spec for port " + key + ": " + e.getValue());
+                    l.log("✖ Bad socket spec for port " + key + ": " + e.getValue());
                 } catch (IndexOutOfBoundsException ioobe) {
-                    l.log("Bad socket spec for port " + key + ": " + e.getValue());
+                    l.log("✖ Bad socket spec for port " + key + ": " + e.getValue());
                 }
             }
         }

@@ -101,7 +101,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
                         dests.add(addr.getAddress());
                     }
                 } catch (IllegalArgumentException iae) {
-                     l.log("Bad destination " + destination + " - " + iae);
+                     l.log("✖ Bad destination " + destination + " - " + iae);
                 }
             }
         }
@@ -143,11 +143,9 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
         I2PSocket i2ps = null;
         try {
             I2PSocketAddress addr = pickDestination();
-            if (addr == null)
-                throw new UnknownHostException("No valid destination configured");
+            if (addr == null) {throw new UnknownHostException("No valid destination configured");}
             Destination clientDest = addr.getAddress();
-            if (clientDest == null)
-                throw new UnknownHostException("Could not resolve " + addr.getHostName());
+            if (clientDest == null) {throw new UnknownHostException("Could not resolve " + addr.getHostName());}
             int port = addr.getPort();
             i2ps = createI2PSocket(clientDest, port);
             i2ps.setReadTimeout(readTimeout);
@@ -158,19 +156,16 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
             t.setPriority(Thread.MAX_PRIORITY);
             t.run();
         } catch (IOException ex) {
-            if (_log.shouldWarn())
-                _log.warn("Error connecting: " + ex.getMessage());
+            if (_log.shouldWarn()) {_log.warn("Error connecting: " + ex.getMessage());}
         } catch (I2PException ex) {
-            if (_log.shouldWarn())
-                _log.warn("Error connecting: " + ex.getMessage());
+            if (_log.shouldWarn()) {_log.warn("Error connecting: " + ex.getMessage());}
         } finally {
             // only because we are running it inline
             closeSocket(s);
             if (i2ps != null) {
-                try { i2ps.close(); } catch (IOException ioe) {}
-                synchronized (sockLock) {
-                    mySockets.remove(i2ps);
-                }
+                try {i2ps.close();}
+                catch (IOException ioe) {}
+                synchronized (sockLock) {mySockets.remove(i2ps);}
             }
         }
     }
@@ -179,12 +174,10 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
         synchronized(_addrs) {
             int size = _addrs.size();
             if (size <= 0) {
-                if (_log.shouldError())
-                    _log.error("No client targets?!");
+                if (_log.shouldError()) {_log.error("No client targets?!");}
                 return null;
             }
-            if (size == 1) // skip the rand in the most common case
-                return _addrs.get(0);
+            if (size == 1) {return _addrs.get(0);}  // skip the rand in the most common case
             int index = _context.random().nextInt(size);
             return _addrs.get(index);
         }
@@ -197,8 +190,7 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
      */
     @Override
     public void optionsUpdated(I2PTunnel tunnel) {
-        if (getTunnel() != tunnel)
-            return;
+        if (getTunnel() != tunnel) {return;}
         Properties props = tunnel.getClientOptions();
         // see TunnelController.setSessionOptions()
         String targets = props.getProperty("targetDestination");
@@ -220,11 +212,8 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
             if (addr != null) {
                 String svc = null;
                 String hostname = addr.getHostName();
-                if ("smtp.postman.i2p".equals(hostname)) {
-                    svc = PortMapper.SVC_SMTP;
-                } else if ("pop.postman.i2p".equals(hostname)) {
-                    svc = PortMapper.SVC_POP;
-                }
+                if ("smtp.postman.i2p".equals(hostname)) {svc = PortMapper.SVC_SMTP;}
+                else if ("pop.postman.i2p".equals(hostname)) {svc = PortMapper.SVC_POP;}
                 if (svc != null) {
                     _isr = new InternalSocketRunner(this);
                     _isr.start();
