@@ -72,7 +72,7 @@ div[class^="status"]{margin:0;padding:0;width:100%;height:16px;float:none;font-s
 .host,#privKeyFile,#targetHost,#websiteName{min-width:250px}
 .tunnelConfig td{width:50%}
 .tunnelConfig tr:last-child td{border-top:var(--border)}
-.tunnelControl{padding-right:3px;width:5%;white-space:nowrap;text-align:right}
+.tunnelControl{padding-right:3px;width:5%;min-width:180px;white-space:nowrap;text-align:right}
 .tunnelControl>*{vertical-align:middle}
 th.tunnelControl{text-align:center}
 td.tunnelDescription,.tunnelInfo+.tunnelInfo .tunnelDestination{padding-top:1px}
@@ -291,7 +291,9 @@ span.stopped:not([hidden]){background-image:var(--local_down),var(--badge)}
 
 /* responsive layout */
 @media (max-width:1300px){
+.encType,.sigType{white-space:nowrap;font-size:95%}
 .running:not([hidden]),.standby:not([hidden]),.starting:not([hidden]),.stopped:not([hidden]){margin-left:5px}
+.tunnelControl{max-width:160px}
 #countClient,#countServer{right:5px;line-height:1.185}
 #serverTunnels .iconize,#clientTunnels .iconize{padding:12.5px 7px;min-width:48px;vertical-align:middle;font-size:0;background-size:12px,100%}
 #serverTunnels .preview.iconize,#clientTunnels .preview.iconize{min-width:64px;background-size:16px,100%}

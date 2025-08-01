@@ -165,7 +165,7 @@ a.control:hover{color:var(--ink)}
 .newTunnel{padding:0;text-align:right;background:#fff}
 .newTunnel form{margin-top:-1px;padding:8px 5px;width:100%;position:relative;box-sizing:border-box;text-align:right;border-top:var(--border_inner)}
 .newTunnel input,.newTunnel select,.newTunnel .control{margin:2px 4px 2px 2px}
-.tunnelControl{width:5%;white-space:nowrap;text-align:right}
+.tunnelControl{width:5%;min-width:180px;white-space:nowrap;text-align:right}
 th.tunnelControl{text-align:center}
 .tunnelDestination b,.tunnelDescription b{color:var(--ink_light)}
 .tunnelHelper{min-width:8px}
@@ -344,7 +344,9 @@ span.stopped:not([hidden]){background-image:var(--local_down),var(--badge)}
 }
 
 @media (max-width:1300px){
+.encType,.sigType{white-space:nowrap;font-size:95%}
 .running:not([hidden]),.standby:not([hidden]),.starting:not([hidden]),.stopped:not([hidden]){padding-left:26px}
+.tunnelControl{max-width:160px}
 #countClient,#countServer{margin:-5px 0 0 0;top:5px;right:6px;line-height:1.5}
 #serverTunnels .iconize,#clientTunnels .iconize{padding:12.5px 7px;min-width:48px;vertical-align:middle;font-size:0;background-size:12px,100%}
 #serverTunnels .preview.iconize,#clientTunnels .preview.iconize{min-width:64px;background-size:16px,100%}

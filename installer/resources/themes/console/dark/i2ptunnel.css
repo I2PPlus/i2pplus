@@ -207,7 +207,7 @@ td>input{margin-left:0}
 .tunnelConfig th:last-child,.tunnelConfig td:last-child{border-right:var(--border)}
 .tunnelConfig td{width:50%}
 .tunnelConfig td>b{margin-left:5px;min-width:30px;display:inline-block}
-.tunnelControl{width:5%;text-align:right;white-space:nowrap}
+.tunnelControl{width:5%;min-width:120px;text-align:right;white-space:nowrap}
 .tunnelHelper{min-width:8px}
 .tunnelHelper a{width:20px;height:20px;display:inline-block;vertical-align:middle;background:var(--ahelp) no-repeat center center/20px}
 .tunnelHelper a:hover{transform:scale(1.2)}
@@ -369,6 +369,10 @@ h2,h3{font-size:11.5pt}
 }
 
 @media (max-width:1200px){
+.encType,.sigType{margin:0;padding:4px 6px 4px 18px;white-space:nowrap;line-height:1.2;font-size:95%;background-position:4px center,center}
+.encType{margin-top: -2px}
+.sigType{margin-bottom: -2px}
+.tunnelBlock td,.tunnelInfo .tunnelDestination, .tunnelInfo .tunnelSig,.tunnelInfo td:not(.infohelp){padding:2px 6px}
 .tunnelName a,.tunnelName a:hover,.tunnelName a:focus{background-position:5px center;background-size:13px,0}
 }
 
@@ -416,7 +420,7 @@ th .help::after,th .help:hover::after,th .help:focus::after{width:20px;height:20
 .control{padding:8px 12px 8px}
 .control.iconize{padding:9px 12px 9px;line-height:1.1}
 .displayText,.displayText:empty:hover,.displayText:empty:focus{width:552px}
-.tunnelControl{padding-right:9px}
+.tunnelControl{padding-right:9px;min-width:160px}
 .tunnelControl .control{margin:3px -3px 3px 3px}
 .tunnelInfo .selectAll{max-width:none}
 #clients h2,#globalTunnelControl h2,#messages h2,#registration h2,#registration h3,#servers h2,#ssl h2,#tunnelEditPage h2,#tunnelEditPage h3,#wizardPanel h2{padding:10.5px 10px 9.5px 40px;background-position:10px center;background-size:22px auto,4px 100%,100%}
