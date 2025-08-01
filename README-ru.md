@@ -77,7 +77,7 @@ API: http://docs.i2p-projekt.de/javadoc/
 
 Нужна помощь? Смотрите канал IRC #saltR в сети I2P IRC.
 
-Сообщения об ошибках: https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues или https://gitlab.com/i2p.plus/I2P.Plus/issues
+Сообщения об ошибках: https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues или https://github.com/I2PPlus/i2pplus/issues
 
 ## Лицензии
 

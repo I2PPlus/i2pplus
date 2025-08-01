@@ -69,7 +69,7 @@ I2P को डॉकर में चलाने के अधिक जान�
 
 क्या आपको मदद चाहिए? I2P IRC नेटवर्क पर IRC चैनल #saltR देखें।
 
-बग रिपोर्ट: [https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues](https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues) या [https://gitlab.com/i2p.plus/I2P.Plus/issues](https://gitlab.com/i2p.plus/I2P.Plus/issues)
+बग रिपोर्ट: [https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues](https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues) या [https://github.com/I2PPlus/i2pplus/issues](https://github.com/I2PPlus/i2pplus/issues)
 
 ## अनुमतियाँ
 

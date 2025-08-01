@@ -76,7 +76,7 @@ I2PをDockerで実行する方法の詳細については、[Docker.md](Docker.m
 
 ヘルプが必要ですか？I2P IRCネットワークのIRCチャンネル＃saltRをご覧ください。
 
-バグ報告：https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues または https://gitlab.com/i2p.plus/I2P.Plus/issues
+バグ報告：https://i2pgit.org/i2p-hackers/i2p.i2p/-/issues または https://github.com/I2PPlus/i2pplus/issues
 
 ## ライセンス
 
