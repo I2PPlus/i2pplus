@@ -268,11 +268,11 @@ public class GeneralHelper {
         List<String> rv = tcg.clearAllMessages();
         try {
             tcg.saveConfig(cur);
-            rv.add(0, _t("Configuration changes saved", context));
+            rv.add(0, "• " + _t("Configuration changes saved", context));
         } catch (IOException ioe) {
             Log log = context.logManager().getLog(GeneralHelper.class);
             log.error("Failed to save config file", ioe);
-            rv.add(0, _t("Failed to save configuration", context) + ": " + ioe.toString());
+            rv.add(0, "• " + _t("Failed to save configuration", context) + ": " + ioe.toString());
         }
         return rv;
     }
@@ -293,7 +293,7 @@ public class GeneralHelper {
         TunnelController cur = getController(tcg, tunnel);
         if (cur == null) {
             msgs = new ArrayList<String>();
-            msgs.add("Invalid tunnel number");
+            msgs.add("• Invalid tunnel number");
             return msgs;
         }
 
@@ -328,7 +328,7 @@ public class GeneralHelper {
                 else {to = new File(context.getConfigDir(), name);}
                 boolean success = FileUtil.rename(pkf, to);
                 if (success)
-                    msgs.add("Private key file " + pkf.getAbsolutePath() + " renamed to " + to.getAbsolutePath());
+                    msgs.add("• Private key file " + pkf.getAbsolutePath() + " renamed to " + to.getAbsolutePath());
             }
         }
         return msgs;

@@ -17,10 +17,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
@@ -78,6 +80,7 @@ public class IndexBean {
     private static final Map<Integer, SessionKey> _formKeys = new HashMap<Integer, SessionKey>();
     private static final UIMessages _messages = new UIMessages(100);
     private static final List<TimestampedMessage> _timestampedMessages = new ArrayList<>(100);
+    private static final Set<String> _seenMessages = new LinkedHashSet<>(100);
     private static final String PROP_THEME_NAME = "routerconsole.theme";
     private static final String DEFAULT_THEME = "dark";
     /** From CSSHelper */
@@ -407,6 +410,69 @@ public class IndexBean {
             try {
                 String result = processAction();
                 if (!result.isEmpty()) {
+                    addUniqueMessage(result);
+                }
+            } catch (RuntimeException e) {
+                _log.log(Log.CRIT, "Error processing " + _action, e);
+                String msg = "Error: " + e.toString();
+                addUniqueMessage(msg);
+            }
+        }
+
+        List<UIMessages.Message> oldMessages = _messages.getMessages();
+        if (!oldMessages.isEmpty()) {
+            for (UIMessages.Message msg : oldMessages) {
+                addUniqueMessage(msg.message);
+            }
+            _messages.clearThrough(_msgID); // Prevent duplication
+        }
+
+        List<String> groupMessages = _group.clearAllMessages();
+        if (groupMessages != null && !groupMessages.isEmpty()) {
+            for (String msg : groupMessages) {
+                addUniqueMessage(msg);
+            }
+        }
+
+        List<TimestampedMessage> stored = new ArrayList<>(_timestampedMessages);
+        stored.sort((a, b) -> Long.compare(b.timestamp, a.timestamp));
+
+        while (stored.size() > 100) {
+            stored.remove(stored.size() - 1);
+        }
+
+        for (TimestampedMessage tm : stored) {
+            buf.append("• ").append(tm.getFormattedTimestamp()).append(' ')
+               .append(tm.message.replace("->", "➜")).append('\n');
+        }
+
+        _timestampedMessages.clear();
+        _timestampedMessages.addAll(stored);
+
+        return DataHelper.escapeHTML(buf.toString());
+    }
+
+    private void addUniqueMessage(String message) {
+        synchronized (_seenMessages) {
+            if (!_seenMessages.contains(message)) {
+                _seenMessages.add(message);
+                _timestampedMessages.add(new TimestampedMessage(message));
+            }
+        }
+    }
+
+
+
+/*
+    public String getMessages() {
+        if (_group == null) return _fatalError;
+
+        StringBuilder buf = new StringBuilder(512);
+
+        if (_action != null) {
+            try {
+                String result = processAction();
+                if (!result.isEmpty()) {
                     _timestampedMessages.add(new TimestampedMessage(result));
                 }
             } catch (RuntimeException e) {
@@ -448,6 +514,7 @@ public class IndexBean {
 
         return DataHelper.escapeHTML(buf.toString());
     }
+*/
 
     /**
      * The last stored message ID

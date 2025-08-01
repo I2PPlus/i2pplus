@@ -308,7 +308,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 if (remaining < 60*24*60*60*1000L) {
                     String msg = "Offline signature for tunnel " + name + " alternate destination expires in " + DataHelper.formatDuration(remaining);
                     _log.logAlways(Log.WARN, msg);
-                    l.log("• WARNING: " + msg);
+                    l.log("▲ WARNING: " + msg);
                 }
             }
             return rv;
@@ -406,7 +406,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             }
         }
 
-        l.log("Tunnels ready for server at " + remoteHost.getHostAddress() + ':' + remotePort);
+        l.log("• Tunnels ready for server at " + remoteHost.getHostAddress() + ':' + remotePort);
         notifyEvent("openServerResult", "ok");
         open = true;
     }
