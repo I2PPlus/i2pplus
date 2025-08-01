@@ -450,8 +450,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                     String portNum = getTunnel().port;
                     if (portNum == null) {portNum = Integer.toString(I2PClient.DEFAULT_LISTEN_PORT);}
                     String msg;
-                    if (getTunnel().getContext().isRouterContext()) {msg = "• Unable to build tunnels for client";}
-                    else {msg = "• Cannot build client tunnels: No connection to router at " + getTunnel().host + ':' + portNum;}
+                    if (getTunnel().getContext().isRouterContext()) {msg = "✖ Unable to build tunnels for client";}
+                    else {msg = "✖ Cannot build client tunnels: No connection to router at " + getTunnel().host + ':' + portNum;}
                     String exmsg = ise.getMessage();
                     boolean fail = !_buildingTunnels || (exmsg != null && exmsg.contains("session limit exceeded"));
                     if (!fail && ++retries < MAX_RETRIES) {
@@ -480,7 +480,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     protected final InetAddress getListenHost(Logging l) {
         try {return InetAddress.getByName(getTunnel().listenHost);}
         catch (UnknownHostException uhe) {
-            l.log("• Could not find listen host to bind to [" + getTunnel().host + "]");
+            l.log("✖ Could not find listen host to bind to [" + getTunnel().host + "]");
             _log.error("Error finding host to bind", uhe);
             notifyEvent("openBaseClientResult", "error");
             return null;
@@ -507,7 +507,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 verifySocketManager();
                 if (sockMgr == null) {
                     _log.error("Unable to connect to router and build tunnels for [" + _handlerName + "]");
-                    try { Thread.sleep(10*1000); } catch (InterruptedException ie) { return; }
+                    try {Thread.sleep(10*1000);}
+                    catch (InterruptedException ie) {return;}
                 }
             }
         } // else delay creating session until createI2PSocket() is called
@@ -533,15 +534,15 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 boolean openNow = !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty("i2cp.delayOpen"));
                 if (openNow || chained) {
                     if (!_handlerName.contains("Ping")) {
-                        l.log("• Tunnels ready for client" + " [" + _handlerName + "]");
-                        l.log("• Client ready -> Listening on " + getTunnel().listenHost + ':' + localPort);
+                        l.log("✔ Tunnels ready for client" + " [" + _handlerName + "]");
+                        l.log("✔ Client ready -> Listening on " + getTunnel().listenHost + ':' + localPort);
                     }
                 } else {
-                    l.log("• Client ready -> Listening on " + getTunnel().listenHost + ':' + localPort + " (standby mode)");
+                    l.log("✔ Client ready -> Listening on " + getTunnel().listenHost + ':' + localPort + " (standby mode)");
             }
             notifyEvent("openBaseClientResult", "ok");
             } else {
-                l.log("• Client error for " + getTunnel().listenHost + ':' + localPort + " -> Check logs");
+                l.log("✖ Client error for " + getTunnel().listenHost + ':' + localPort + " -> Check router logs");
                 notifyEvent("openBaseClientResult", "error");
             }
             synchronized (startLock) {
@@ -725,7 +726,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             synchronized (sockLock) {mySockets.clear();}
             if (open) {
                 _log.error("Error listening for connections on " + addr + " port " + localPort + " -> " + ex.getMessage());
-                l.log("• Error listening for connections on " + addr + " port " + localPort + " -> " + ex.getMessage());
+                l.log("✖ Error listening for connections on " + addr + " port " + localPort + " -> " + ex.getMessage());
                 notifyEvent("openBaseClientResult", "error");
                 close(true);
             }

@@ -406,31 +406,10 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             }
         }
 
-        l.log("• Tunnels ready for server at " + remoteHost.getHostAddress() + ':' + remotePort);
+        l.log("✔ Tunnels ready for server at " + remoteHost.getHostAddress() + ':' + remotePort);
         notifyEvent("openServerResult", "ok");
         open = true;
     }
-
-    /**
-     *  Copy input stream to a byte array, so we can retry
-     *  @since 0.7.10
-     */
-/****
-    private static ByteArrayInputStream copyOfInputStream(InputStream is) throws IOException {
-        byte[] buf = new byte[128];
-        ByteArrayOutputStream os = new ByteArrayOutputStream(768);
-        try {
-            int read;
-            while ((read = is.read(buf)) >= 0) {
-                os.write(buf, 0, read);
-            }
-        } finally {
-             try { is.close(); } catch (IOException ioe) {}
-             // don't need to close BAOS
-        }
-        return new ByteArrayInputStream(os.toByteArray());
-    }
-****/
 
     /**
      * Start running the I2PTunnelServer.
@@ -565,7 +544,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             try {
                 remoteHost = InetAddress.getByName(h);
             } catch (UnknownHostException uhe) {
-                l.log("Unknown host: " + h);
+                l.log("✖ Unknown host: " + h);
             }
         }
         String p = props.getProperty(TunnelController.PROP_TARGET_PORT);
@@ -700,7 +679,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             } catch (I2PException ipe) {
                 String s = "Error accepting server socket connection - KILLING THE TUNNEL SERVER!";
                 _log.log(Log.CRIT, s, ipe);
-                l.log(s + ": " + ipe);
+                l.log("✖ " + s + ": " + ipe.getMessage());
                 // Tell TunnelController so it will change state
                 TunnelController tc = getTunnel().getController();
                 if (tc != null)
@@ -714,7 +693,6 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 if (!open)
                     break;
                 if (_log.shouldError())
-//                    _log.error("Error accepting", ce);
                     _log.error("Error accepting server socket connection \n* " + ce.getMessage());
                 try {
                     Thread.sleep(2*60*1000);
