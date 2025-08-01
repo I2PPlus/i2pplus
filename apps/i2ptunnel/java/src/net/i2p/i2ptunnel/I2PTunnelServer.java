@@ -486,7 +486,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 }
                 return false;
             }
-            l.log("• Stopping tunnels for server at " + this.remoteHost + ':' + this.remotePort);
+            l.log("‣ Stopping tunnels for server at " + this.remoteHost.toString().replace("/", "") + ':' + this.remotePort);
             open = false;
             try {
                 if (i2pss != null) {

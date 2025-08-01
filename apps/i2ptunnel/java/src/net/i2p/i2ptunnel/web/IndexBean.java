@@ -322,28 +322,30 @@ public class IndexBean {
         if (_tunnel < 0) {return "✖ " + _t("Invalid tunnel");}
 
         List<TunnelController> controllers = _group.getControllers();
-        if (_tunnel >= controllers.size()) return "Invalid tunnel";
+        if (_tunnel >= controllers.size()) {return "✖ Invalid tunnel";}
         TunnelController controller = controllers.get(_tunnel);
         controller.startTunnelBackground();
         // Give the messages a chance to make it to the window
-        try { Thread.sleep(1000); } catch (InterruptedException ie) {}
+        try {Thread.sleep(1000);}
+        catch (InterruptedException ie) {}
         // and give them something to look at in any case
         // FIXME name will be HTML escaped twice
-        return "‣ " + _t("Starting tunnel") + ": " + getTunnelName(_tunnel) + "...";
+        return "✔ " + _t("Started tunnel") + ": " + getTunnelName(_tunnel);
     }
 
     private String stop() {
         if (_tunnel < 0) {return "✖ " + _t("Invalid tunnel");}
 
         List<TunnelController> controllers = _group.getControllers();
-        if (_tunnel >= controllers.size()) return "Invalid tunnel";
+        if (_tunnel >= controllers.size()) {return "✖ Invalid tunnel";}
         TunnelController controller = controllers.get(_tunnel);
         controller.stopTunnel();
         // Give the messages a chance to make it to the window
-        try { Thread.sleep(1000); } catch (InterruptedException ie) {}
+        try {Thread.sleep(1000);}
+        catch (InterruptedException ie) {}
         // and give them something to look at in any case
         // FIXME name will be HTML escaped twice
-        return "‣ " + _t("Stopping tunnel") + ": " + getTunnelName(_tunnel) + "...";
+        return "✔ " + _t("Stopped tunnel") + ": " + getTunnelName(_tunnel);
     }
 
     private String restart() {
