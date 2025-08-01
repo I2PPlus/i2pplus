@@ -61,6 +61,7 @@ td.infohelp{padding:10px 10px 10px 34px;box-shadow:var(--highlight),inset 0 0 1p
 .statusStandby{color:#d30;background:var(--tunnelStandby)}
 .statusStarting{color:#ff3;background:var(--tunnelStarting)}
 .statusNotRunning,.statusRunning,.statusStandby,.statusStarting{margin:0;padding:0;width:100%;height:24px;overflow:hidden;text-align:center;font-size:0;background-size:auto 16px;background-position:center center;background-repeat:no-repeat;filter:drop-shadow(0 0 1px rgba(220,220,255,.7));will-change:transform}
+.nopreview.offline{height:18px;width:18px;display:inline-block;vertical-align:middle;font-size:0;background:var(--poweroff);opacity:.7}
 
 /* headings */
 h2.error{padding-left:40px;background:var(--err) no-repeat left 5px center/24px,var(--h2) #fff;background-position:8px center,center center,center center}
@@ -345,6 +346,7 @@ span.stopped:not([hidden]){background-image:var(--local_down),var(--badge)}
 
 @media (max-width:1300px){
 .encType,.sigType{white-space:nowrap;font-size:95%}
+.nopreview.offline{height:16px;width:16px}
 .running:not([hidden]),.standby:not([hidden]),.starting:not([hidden]),.stopped:not([hidden]){padding-left:26px}
 .tunnelControl{max-width:160px}
 #countClient,#countServer{margin:-5px 0 0 0;top:5px;right:6px;line-height:1.5}

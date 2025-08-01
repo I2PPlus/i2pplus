@@ -364,6 +364,7 @@ h2,h3{font-size:11.5pt}
 
 @media (max-width:1300px){
 .iframed .buttons,.iframed .newTunnel{padding:5px 6px}
+.nopreview.offline{height:16px;width:16px;background-size:16px}
 #serverTunnels .control.iconize,#clientTunnels .control.iconize{padding:14px 7px;min-width:48px;vertical-align:middle;font-size:0;background-size:12px,100%}
 #serverTunnels .preview.iconize,#clientTunnels .preview.iconize{min-width:48px;background-size:16px,100%}
 }

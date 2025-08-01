@@ -117,6 +117,7 @@ th .help::after{width:16px;height:16px;display:inline-block;background:url(/them
 .sigType{background-image:var(--crypto),var(--badge)}
 .tunnelEncryption,.tunnelSig{text-align:center}
 .tunnelEncryption .tunnelDestinationLabel,.tunnelSig .tunnelDestinationLabel{display:none}
+.nopreview.offline{height:18px;width:18px;display:inline-block;vertical-align:middle;font-size:0;background:var(--poweroff);opacity:.7}
 
 /* throttler */
 #throttler th{padding-left:20px}
@@ -292,6 +293,7 @@ span.stopped:not([hidden]){background-image:var(--local_down),var(--badge)}
 /* responsive layout */
 @media (max-width:1300px){
 .encType,.sigType{white-space:nowrap;font-size:95%}
+.nopreview.offline{height:16px;width:16px}
 .running:not([hidden]),.standby:not([hidden]),.starting:not([hidden]),.stopped:not([hidden]){margin-left:5px}
 .tunnelControl{max-width:160px}
 #countClient,#countServer{right:5px;line-height:1.185}
