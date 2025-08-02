@@ -25,28 +25,38 @@ async function refreshTunnelStatus() {
     const response = await fetch(url, { method: "GET", headers: { "Cache-Control": "no-cache" } });
     if (response.ok) {
       const doc = new DOMParser().parseFromString(await response.text(), "text/html");
-      if (isDown && doc.getElementById("globalTunnelControl")) reloadPage();
+      const downElement = document.getElementById("down");
+      if (downElement) {
+        downElement.remove();
+        const pageFromResponse = doc.getElementById("page");
+        if (pageFromResponse) { document.body.appendChild(pageFromResponse); }
+      }
+
+      if (isDown && doc.getElementById("globalTunnelControl")) { reloadPage(); }
       if (notReady) {
         const notReadyResponse = doc.getElementById("notReady");
-        if (notReadyResponse) {refreshAll(doc);}
-        else {reloadPage();}
-      } else {updateVolatile(doc);}
-    } else {handleDownState();}
-  } catch (error) {handleDownState();}
-  countServices();
+        if (notReadyResponse) { refreshAll(doc); }
+        else { reloadPage(); }
+      } else { updateVolatile(doc); }
+
+      countServices();
+      resizeIframe();
+    } else { handleDownState(); }
+  } catch (error) { handleDownState(); }
 }
 
 function handleDownState() {
-  if (!isDown) {
+  if (!document.getElementById("down")) {
     const downElement = document.createElement("div");
     downElement.id = "down";
     downElement.className = "notReady";
     downElement.innerHTML = "<b><span>Router is down</span></b>";
-    const styles = {position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)"};
+    const styles = { position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" };
     Object.assign(downElement.style, styles);
-    tunnelIndex.replaceWith(downElement);
+    const tunnelIndex = document.getElementById("page");
+    if (tunnelIndex) {tunnelIndex.replaceWith(downElement);}
     resizeIframe();
-  }
+  } else { reloadPage(); }
 }
 
 function countServices() {
@@ -159,9 +169,11 @@ function initTunnelControl() {
 }
 
 function resizeIframe() {
-  const isIframed = document.documentElement.classList.contains("iframed") || window.self != window.top;
+  const isIframed = document.documentElement.classList.contains("iframed") || window.self !== window.top;
   if (isIframed) {
+    setTimeout(() => {
       parent.postMessage({ action: 'resize', iframeId: 'i2ptunnelframe' }, location.origin);
+    }, 100);
   }
 }
 

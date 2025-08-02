@@ -213,7 +213,7 @@ td>input{margin-left:0}
 .tunnelHelper a:hover{transform:scale(1.2)}
 .tunnelHelper a:active{transform:scale(.95)}
 .tunnelInfo b,.tunnelInfo .selectAll{display:inline-block;vertical-align:text-bottom}
-.tunnelInfo .selectAll{max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tunnelInfo .selectAll{padding:4px 8px;max-width:200px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:var(--bevel);background:var(--badge)}
 .tunnelInfo td:not(.infohelp){border-top:0;background:none;padding-top:4px;padding-bottom:4px}
 .tunnelInfo .tunnelDestinationEncrypted,.tunnelInfo .tunnelEncryption{padding-top:0;padding-bottom:8px}
 .tunnelInfo .tunnelDestination,.tunnelInfo .tunnelSig{padding-top:8px}

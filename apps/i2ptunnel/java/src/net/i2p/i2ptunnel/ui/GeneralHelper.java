@@ -250,7 +250,7 @@ public class GeneralHelper {
         TunnelController cur = getController(tcg, tunnel);
         if (cur == null) {
             List<String> rv = tcg.clearAllMessages();
-            rv.add("Invalid tunnel number");
+            rv.add("✖ Invalid tunnel number");
             return rv;
         }
         return saveConfig(tcg, cur);
@@ -268,11 +268,11 @@ public class GeneralHelper {
         List<String> rv = tcg.clearAllMessages();
         try {
             tcg.saveConfig(cur);
-            rv.add(0, "• " + _t("Configuration changes saved", context));
+            rv.add(0, "✔ " + _t("Configuration changes saved", context));
         } catch (IOException ioe) {
             Log log = context.logManager().getLog(GeneralHelper.class);
             log.error("Failed to save config file", ioe);
-            rv.add(0, "• " + _t("Failed to save configuration", context) + ": " + ioe.toString());
+            rv.add(0, "✖ " + _t("Failed to save configuration", context) + ": " + ioe.toString());
         }
         return rv;
     }
@@ -293,7 +293,7 @@ public class GeneralHelper {
         TunnelController cur = getController(tcg, tunnel);
         if (cur == null) {
             msgs = new ArrayList<String>();
-            msgs.add("• Invalid tunnel number");
+            msgs.add("✖ Invalid tunnel number");
             return msgs;
         }
 
@@ -327,8 +327,7 @@ public class GeneralHelper {
                 if (backupDir.isDirectory() || backupDir.mkdir()) {to = new File(backupDir, name);}
                 else {to = new File(context.getConfigDir(), name);}
                 boolean success = FileUtil.rename(pkf, to);
-                if (success)
-                    msgs.add("• Private key file " + pkf.getAbsolutePath() + " renamed to " + to.getAbsolutePath());
+                if (success) {msgs.add("✔ Private key file " + pkf.getAbsolutePath() + " renamed to " + to.getAbsolutePath());}
             }
         }
         return msgs;
@@ -867,8 +866,7 @@ public class GeneralHelper {
      */
     public String getOutproxyType(int tunnel) {
         String type = getTunnelType(tunnel);
-        if (!type.equals("sockstunnel") && !type.equals("socksirctunnel"))
-            return "connect";
+        if (!type.equals("sockstunnel") && !type.equals("socksirctunnel")) {return "connect";}
         return getProperty(tunnel, I2PSOCKSTunnel.PROP_OUTPROXY_TYPE, "socks");
     }
 
@@ -952,7 +950,7 @@ public class GeneralHelper {
         TunnelController tun = getController(tunnel);
         if (tun != null) {
             Properties opts = tun.getClientOptionProps();
-            if (opts == null) return "";
+            if (opts == null) {return "";}
             boolean isMD5Proxy = TunnelController.TYPE_HTTP_CLIENT.equals(tun.getType()) ||
                                  TunnelController.TYPE_CONNECT.equals(tun.getType());
             Map<String, String> sorted = new TreeMap<String, String>();
@@ -963,9 +961,7 @@ public class GeneralHelper {
                 // Leave in for HTTP and Connect so it can get migrated to MD5,
                 // hide for SOCKS until migrated to MD5
                 if (((!isMD5Proxy) && TunnelConfig._nonProxyNoShowSet.contains(key)) ||
-                    key.startsWith("i2cp.leaseSetClient.")) {
-                    continue;
-                }
+                    key.startsWith("i2cp.leaseSetClient.")) {continue;}
                 sorted.put(key, (String)e.getValue());
             }
             if (sorted.isEmpty()) {return "";}
@@ -996,9 +992,8 @@ public class GeneralHelper {
             if (opts != null) {
                 String s = opts.getProperty(prop);
                 if (s == null) return def;
-                try {
-                    return Integer.parseInt(s);
-                } catch (NumberFormatException nfe) {}
+                try {return Integer.parseInt(s);}
+                catch (NumberFormatException nfe) {}
             }
         }
         return def;
@@ -1010,8 +1005,7 @@ public class GeneralHelper {
             Properties opts = tun.getClientOptionProps();
             if (opts != null) {
                 String rv = opts.getProperty(prop);
-                if (rv != null)
-                    return DataHelper.escapeHTML(rv);
+                if (rv != null) {return DataHelper.escapeHTML(rv);}
             }
         }
         return def;
@@ -1026,8 +1020,7 @@ public class GeneralHelper {
         TunnelController tun = getController(tunnel);
         if (tun != null) {
             Properties opts = tun.getClientOptionProps();
-            if (opts != null)
-                return Boolean.parseBoolean(opts.getProperty(prop));
+            if (opts != null) {return Boolean.parseBoolean(opts.getProperty(prop));}
         }
         return def;
     }
