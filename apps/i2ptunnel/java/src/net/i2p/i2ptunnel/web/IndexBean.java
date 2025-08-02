@@ -209,6 +209,7 @@ public class IndexBean {
      */
     private String restartAll() {
         List<TunnelController> controllers = _group.getControllers();
+        if (controllers == null) {return "✖ " + _t("No services configured, cannot restart!");}
         int runningCount = 0;
         boolean msgSent = false;
 
@@ -221,7 +222,7 @@ public class IndexBean {
 
                 try {
                     controller.stopTunnel();
-                    Thread.sleep(500); // short delay to ensure clean stop
+                    Thread.sleep(1000); // short delay to ensure clean stop
                     String startingMsg = "‣ " + _t("Starting tunnel") + ": " + name;
                     _timestampedMessages.add(new TimestampedMessage(startingMsg));
                     controller.startTunnelBackground();
@@ -245,6 +246,7 @@ public class IndexBean {
      */
     private String restartAllClients() {
         List<TunnelController> controllers = _group.getControllers();
+        if (controllers == null) {return "✖ " + _t("No clients configured, cannot restart!");}
         int running = 0;
 
         for (TunnelController controller : controllers) {
@@ -256,7 +258,7 @@ public class IndexBean {
 
                 try {
                     controller.stopTunnel();
-                    Thread.sleep(500); // short delay to ensure clean stop
+                    Thread.sleep(1000); // short delay to ensure clean stop
 
                     String startingMsg = "• " + _t("Starting tunnel") + ": " + name;
                     _timestampedMessages.add(new TimestampedMessage(startingMsg));
@@ -282,6 +284,7 @@ public class IndexBean {
      */
     private String restartAllServers() {
         List<TunnelController> controllers = _group.getControllers();
+        if (controllers == null) {return "✖ " + _t("No servers configured, cannot restart!");}
         int running = 0;
 
         for (TunnelController controller : controllers) {
@@ -293,7 +296,7 @@ public class IndexBean {
 
                 try {
                     controller.stopTunnel();
-                    Thread.sleep(500); // short delay to ensure clean stop
+                    Thread.sleep(1000); // short delay to ensure clean stop
 
                     String startingMsg = "‣ " + _t("Starting tunnel") + ": " + name;
                     _timestampedMessages.add(new TimestampedMessage(startingMsg));
@@ -320,13 +323,11 @@ public class IndexBean {
 
     private String start() {
         if (_tunnel < 0) {return "✖ " + _t("Invalid tunnel");}
-
         List<TunnelController> controllers = _group.getControllers();
         if (_tunnel >= controllers.size()) {return "✖ Invalid tunnel";}
         TunnelController controller = controllers.get(_tunnel);
         controller.startTunnelBackground();
-        // Give the messages a chance to make it to the window
-        try {Thread.sleep(1000);}
+        try {Thread.sleep(1000);} // Give the messages a chance to make it to the window
         catch (InterruptedException ie) {}
         // and give them something to look at in any case
         // FIXME name will be HTML escaped twice
@@ -335,13 +336,11 @@ public class IndexBean {
 
     private String stop() {
         if (_tunnel < 0) {return "✖ " + _t("Invalid tunnel");}
-
         List<TunnelController> controllers = _group.getControllers();
-        if (_tunnel >= controllers.size()) {return "✖ Invalid tunnel";}
+        if (controllers == null || _tunnel >= controllers.size()) {return "✖ Invalid tunnel";}
         TunnelController controller = controllers.get(_tunnel);
         controller.stopTunnel();
-        // Give the messages a chance to make it to the window
-        try {Thread.sleep(1000);}
+        try {Thread.sleep(1000);} // Give the messages a chance to make it to the window
         catch (InterruptedException ie) {}
         // and give them something to look at in any case
         // FIXME name will be HTML escaped twice
@@ -350,7 +349,6 @@ public class IndexBean {
 
     private String restart() {
         if (_tunnel < 0) {return "✖ " + _t("Invalid tunnel");}
-
         List<TunnelController> controllers = _group.getControllers();
         if (_tunnel >= controllers.size()) {return "✖ " + _t("Invalid tunnel");}
         TunnelController controller = controllers.get(_tunnel);
@@ -1459,16 +1457,12 @@ public class IndexBean {
         }
 
         File keyFile = new File(privKeyFile);
-        if (!keyFile.isAbsolute())
-            keyFile = new File(_context.getConfigDir(), privKeyFile);
+        if (!keyFile.isAbsolute()) {keyFile = new File(_context.getConfigDir(), privKeyFile);}
         PrivateKeyFile pkf = new PrivateKeyFile(keyFile);
         try {
             pkf.createIfAbsent();
-        } catch (I2PException e) {
-            return "Create private key file failed: " + e;
-        } catch (IOException e) {
-            return "Create private key file failed: " + e;
-        }
+        } catch (I2PException e) {return "Create private key file failed: " + e;}
+        catch (IOException e) {return "Create private key file failed: " + e;}
         switch (_certType) {
             case Certificate.CERTIFICATE_TYPE_NULL:
             case Certificate.CERTIFICATE_TYPE_HIDDEN:
@@ -1490,13 +1484,16 @@ public class IndexBean {
                         break;
                     }
                 }
-                if (signerPKF == null || signerPKF.length() <= 0)
+                if (signerPKF == null || signerPKF.length() <= 0) {
                     return "Signing destination " + _certSigner + " not found";
-                if (privKeyFile.equals(signerPKF))
+                }
+                if (privKeyFile.equals(signerPKF)) {
                     return "Self-signed destinations not allowed";
+                }
                 Certificate c = pkf.setSignedCert(new PrivateKeyFile(signerPKF));
-                if (c == null)
+                if (c == null) {
                     return "Signing failed - does signer destination exist?";
+                }
                 break;
             default:
                 return "Unknown certificate type";
@@ -1505,11 +1502,8 @@ public class IndexBean {
         try {
             pkf.write();
             newdest = pkf.getDestination();
-        } catch (I2PException e) {
-            return "Modification failed: " + e;
-        } catch (IOException e) {
-            return "Modification failed: " + e;
-        }
+        } catch (I2PException e) {return "Modification failed: " + e;}
+        catch (IOException e) {return "Modification failed: " + e;}
         return "Destination modified - " +
                "New Base32 is " + newdest.toBase32() +
                "New Destination is " + newdest.toBase64();
@@ -1518,9 +1512,8 @@ public class IndexBean {
     /** New key */
     private String generateNewEncryptionKey() {
         TunnelController tun = getController(_tunnel);
-        if (tun == null) {
-            // creating new
-        } else if (tun.getIsRunning() || tun.getIsStarting()) {
+        if (tun == null) {} // creating new
+        else if (tun.getIsRunning() || tun.getIsStarting()) {
             return "Tunnel must be stopped before modifying LeaseSet encryption key";
         }
         byte[] data = new byte[SessionKey.KEYSIZE_BYTES];

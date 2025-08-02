@@ -818,12 +818,12 @@ public class TunnelController implements Logging {
         TunnelState oldState;
         synchronized (this) {
             oldState = _state;
-            if (oldState != TunnelState.STOPPED)
-                stopTunnel();
+            if (oldState != TunnelState.STOPPED) {stopTunnel();}
         }
         if (oldState != TunnelState.STOPPED) {
-            long ms = _tunnel.getContext().isRouterContext() ? 100 : 500;
-            try { Thread.sleep(ms); } catch (InterruptedException ie) {}
+            long ms = _tunnel.getContext().isRouterContext() ? 1000 : 500;
+            try {Thread.sleep(ms);}
+            catch (InterruptedException ie) {}
         }
         startTunnel();
     }

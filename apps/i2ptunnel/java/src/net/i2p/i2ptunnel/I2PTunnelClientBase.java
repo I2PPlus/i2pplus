@@ -353,7 +353,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     }
 
     private static final int RETRY_DELAY = 15*1000;
-    private static final int MAX_RETRIES = 30;
+    private static final int MAX_RETRIES = 50;
 
     /**
      * As of 0.9.20 this is fast, and does NOT connect the manager to the router.
@@ -455,14 +455,18 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                     String exmsg = ise.getMessage();
                     boolean fail = !_buildingTunnels || (exmsg != null && exmsg.contains("session limit exceeded"));
                     if (!fail && ++retries < MAX_RETRIES) {
-                        if (log != null) {log.log(msg + "; retrying in " + (RETRY_DELAY / 1000) + "s...");}
-                        _log.error(msg + "; retrying in " + (RETRY_DELAY / 1000) + "s... (" + ise.getMessage() + ")");
+                        String retryMsg = msg + " -> Retrying in " + (RETRY_DELAY / 1000) + "s [" +
+                                                  retries + " / " + MAX_RETRIES + "]";
+                        if (log != null) {log.log(retryMsg);}
+                        if (_log.shouldError()) {_log.error(retryMsg);}
                     } else {
-                        if (log != null) {log.log(msg + "; giving up.");}
-                        _log.log(Log.CRIT, msg + "; giving up.", ise);
+                        String failMsg = msg + " -> All attempts failed";
+                        if (log != null) {log.log(failMsg);}
+                        _log.log(Log.CRIT, failMsg, ise);
                         throw new IllegalArgumentException(msg, ise);
                     }
-                    try { Thread.sleep(RETRY_DELAY); } catch (InterruptedException ie) { break; }
+                    try {Thread.sleep(RETRY_DELAY);}
+                    catch (InterruptedException ie) {break;}
                 }
                 // _buildingTunnels set to false by close()
                closed = _buildingTunnels && sockMgr.getSession().isClosed();
