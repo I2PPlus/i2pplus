@@ -647,9 +647,20 @@ public class IndexBean {
     public boolean isServerTargetLinkValid(int tunnel) {
         TunnelController tun = getController(tunnel);
         return tun != null &&
-               TunnelController.TYPE_HTTP_SERVER.equals(tun.getType()) &&
-               tun.getTargetHost() != null &&
-               tun.getTargetPort() != null;
+               (TunnelController.TYPE_HTTP_SERVER.equals(tun.getType()) ||
+                TunnelController.TYPE_IRC_SERVER.equals(tun.getType())) &&
+               tun.getTargetHost() != null && tun.getTargetPort() != null;
+    }
+
+    /**
+     * Is this an IRC server? Call to establish if we should provide irc://
+     * link on index page
+     * @since 0.9.67+
+     */
+    public boolean isValidIRCServer(int tunnel) {
+        TunnelController tun = getController(tunnel);
+        return tun != null && tun.getTargetHost() != null && tun.getTargetPort() != null &&
+                      TunnelController.TYPE_IRC_SERVER.equals(tun.getType());
     }
 
     /**

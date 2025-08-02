@@ -134,10 +134,13 @@
 <td class=tunnelType><%=indexBean.getTunnelType(curServer)%></td>
 <td class=tunnelLocation>
 <%          if (indexBean.isServerTargetLinkValid(curServer)) {
-                if (indexBean.isSSLEnabled(curServer)) { %>
-<a href="https://<%=indexBean.getServerTarget(curServer)%>/" title="<%=intl._t("Test HTTPS server, bypassing I2P")%>" target=_blank rel=noreferrer><%=indexBean.getServerTarget(curServer)%> SSL</a>
+                if (indexBean.isValidIRCServer(curServer)) {
+%>
+<a class=ircserver href="irc://<%=indexBean.getServerTarget(curServer)%>/" title="<%=intl._t("Test IRC server, bypassing I2P")%>" target=_blank rel=noreferrer><%=indexBean.getServerTarget(curServer)%></a>
+<%              } else if (indexBean.isSSLEnabled(curServer)) { %>
+<a class="httpserver ssl" href="https://<%=indexBean.getServerTarget(curServer)%>/" title="<%=intl._t("Test HTTPS server, bypassing I2P")%>" target=_blank rel=noreferrer><%=indexBean.getServerTarget(curServer)%> SSL</a>
 <%              } else { %>
-<a href="http://<%=indexBean.getServerTarget(curServer)%>/" title="<%=intl._t("Test HTTP server, bypassing I2P")%>" target=_blank rel=noreferrer><%=indexBean.getServerTarget(curServer)%></a>
+<a class=httpserver href="http://<%=indexBean.getServerTarget(curServer)%>/" title="<%=intl._t("Test HTTP server, bypassing I2P")%>" target=_blank rel=noreferrer><%=indexBean.getServerTarget(curServer)%></a>
 <%              }
             } else {
 %>
@@ -222,7 +225,7 @@ SSL
 <%          else if (currentSigType == 1) { %><span class=sigType title="<%=intl._t("Signature type")%>">ECDSA-P256</span><% } %>
 <%          else if (currentSigType == 0) {
                 if (altDest == null || altDest.equals("")) { %><span class=sigType style=font-weight:600;color:red>DSA-SHA1</span><% } %>
-<%              else { %><span class=sigType title="<%=intl._t("Signature type")%>: DSA-SHA1 & Ed25519-SHA-512">DSA-SHA1 & Ed25519(<%=intl._t("Alternate")%>)</span><% } %>
+<%              else { %><span class=sigType title="<%=intl._t("Signature type")%>: DSA-SHA1 & Ed25519-SHA-512">SHA1 & Ed25519(<%=intl._t("Alternate")%>)</span><% } %>
 <%          } %>
 </td>
 <td colspan=3></td>
