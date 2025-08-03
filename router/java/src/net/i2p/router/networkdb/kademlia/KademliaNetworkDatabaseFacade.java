@@ -730,9 +730,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (onFindJob != null) {_context.jobQueue().addJob(onFindJob);}
 
             if (shouldBanlistBasedOnCountry(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
-            else if (shouldBanlistBlockedCountry(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
             else if (shouldBanlistXGUnreachable(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
-            else if (shouldBanlistLUUnreachableOld(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
+            else if (shouldBanlistLUM(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
             else if (isPermanentlyBlocklisted(key)) {handlePermanentBlocklist(ri, key, onFailedLookupJob);}
             else if (isHostileBlocklisted(key)) {handleHostileBlocklist(ri, key, onFailedLookupJob);}
             else if (isNegativeCached(key)) {handleNegativeCache(ri, key, onFailedLookupJob);}
@@ -740,42 +739,66 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
     }
 
+    /**
+     * Should we banlist this router based on country restrictions?
+     * Checks if:
+     * - we are in strict country mode and router is in same country
+     * - blockMyCountry is enabled
+     * - router is in our country (strict country mode)
+     *
+     * @since 0.9.67+
+     */
     private boolean shouldBanlistBasedOnCountry(RouterInfo ri, Hash key) {
-        boolean isFF = ri.getCapabilities().contains("F");
-        String country = _context.commSystem().getCountry(key);
-        String myCountry = _context.getProperty(PROP_IP_COUNTRY);
-        boolean blockMyCountry = _context.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
         boolean isStrict = _context.commSystem().isInStrictCountry(key);
-
-        return isStrict || blockMyCountry || _context.commSystem().isInStrictCountry(key);
+        return isStrict || _context.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
     }
 
-    private boolean shouldBanlistBlockedCountry(RouterInfo ri, Hash key) {
-        String country = _context.commSystem().getCountry(key);
-        Set<String> blockedCountries = getBlockedCountries();
-        return blockedCountries.contains(country) && !_context.banlist().isBanlisted(key);
-    }
-
+    /**
+     * Determine whether the given router should be banlisted due to being an XG router
+     * that is neither reachable nor unreachable and the XG banlist option is enabled.
+     *
+     * @param ri the router info to evaluate
+     * @param key the hash of the router (unused in this method, but kept for consistency)
+     * @return true if the router matches the XG banlist criteria
+     *
+     * @since 0.9.67+
+     */
     private boolean shouldBanlistXGUnreachable(RouterInfo ri, Hash key) {
         boolean isG = containsCapability(ri, Router.CAPABILITY_NO_TUNNELS);
         boolean isNotRorU = !containsCapability(ri, Router.CAPABILITY_UNREACHABLE) &&
                             !containsCapability(ri, Router.CAPABILITY_REACHABLE);
         boolean isXTier = containsCapability(ri, Router.CAPABILITY_BW_UNLIMITED);
         boolean blockXG = _context.getBooleanProperty(PROP_BLOCK_XG);
-        Hash us = _context.routerHash();
-        boolean isUs = us.equals(ri.getIdentity().getHash());
+        boolean isUs = _context.routerHash().equals(ri.getIdentity().getHash());
+
         return !isUs && isG && isNotRorU && isXTier && blockXG;
     }
 
-    private boolean shouldBanlistLUUnreachableOld(RouterInfo ri, Hash key) {
+    /**
+     * Determine whether the given router should be banlisted due to being:
+     * - an L-tier or M-tier router (CAPABILITY_BW12 or CAPABILITY_BW32),
+     * - currently unreachable (or lacking a 'R' capability),
+     * - and running an outdated version (older than MIN_VERSION).
+     *
+     * This is typically used to filter out low-performing routers.
+     *
+     * @param ri the router info to evaluate
+     * @param key the hash of the router (unused in this method, but kept for consistency)
+     * @return true if the router matches the LU banlist criteria
+     *
+     * @since 0.9.67+
+     */
+    private boolean shouldBanlistLUM(RouterInfo ri, Hash key) {
         boolean isLTier = containsCapability(ri, Router.CAPABILITY_BW12) ||
                           containsCapability(ri, Router.CAPABILITY_BW32);
+
         boolean isUnreachable = containsCapability(ri, Router.CAPABILITY_UNREACHABLE) ||
                                 !containsCapability(ri, Router.CAPABILITY_REACHABLE);
-        String v = ri.getVersion();
-        boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
-        Hash us = _context.routerHash();
-        return !us.equals(ri.getIdentity().getHash()) && isLTier && isUnreachable && isOld;
+
+        boolean isOld = VersionComparator.comp(ri.getVersion(), MIN_VERSION) < 0;
+        boolean isUs = _context.routerHash().equals(ri.getIdentity().getHash());
+
+        return !isUs && isLTier && isUnreachable && isOld;
     }
 
     private boolean isPermanentlyBlocklisted(Hash key) {
