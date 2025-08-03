@@ -89,6 +89,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private final static String PROP_BLOCK_COUNTRIES = "router.blockCountries";
     private final static String DEFAULT_BLOCK_COUNTRIES = "";
     public static final String PROP_BLOCK_XG = "i2np.blockXG";
+    public String minRouterVersion = "0.9.20";
+    public String MIN_VERSION = "0.9.63";
+    public String CURRENT_VERSION = "0.9.66";
 
     /**
      * Map of Hash to RepublishLeaseSetJob for leases we're already managing.
@@ -714,122 +717,127 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return null;
     }
 
+    private boolean containsCapability(RouterInfo ri, char capability) {
+        String caps = ri.getCapabilities();
+        return caps != null && caps.indexOf(capability) >= 0;
+    }
+
     public void lookupRouterInfo(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs) {
-        if (!_initialized) {return;}
+        if (!_initialized) return;
+
         RouterInfo ri = lookupRouterInfoLocally(key);
         if (ri != null) {
             if (onFindJob != null) {_context.jobQueue().addJob(onFindJob);}
 
-            boolean isHidden = _context.router().isHidden() || _context.getBooleanProperty("router.hiddenMode");
-            String v = ri.getVersion();
-            String MIN_VERSION = "0.9.60";
-            String CURRENT_VERSION = "0.9.63";
-            long uptime = _context.router().getUptime();
-            boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
-            boolean isOlderThanCurrent = VersionComparator.comp(v, CURRENT_VERSION) < 0;
-            Hash us = _context.routerHash();
-            boolean isUs = us.equals(ri.getIdentity().getHash());
-            String caps = ri.getCapabilities().toUpperCase();
-            boolean uninteresting = (ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
-                                     ri.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0 ||
-                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                                     ri.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0) &&
-                                     isOld && (uptime > 15*60*1000 ||
-                                     _context.netDb().getKnownRouters() > 2000) && !isUs;
-            boolean isLTier = ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                              ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0;
-            boolean isXTier = ri.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0;
-            boolean isUnreachable = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
-                                    ri.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0;
-            boolean isNotRorU = ri.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) < 0 &&
-                                ri.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0;
-            boolean isFF = false;
-            boolean isG = ri.getCapabilities().indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0;
-            boolean noCountry = true;
-            String country = "unknown";
-            if (caps != null && !caps.isEmpty() && caps.contains("F")) {isFF = true;}
-            country = _context.commSystem().getCountry(key);
-            if (country != null && country != "unknown") {noCountry = false;}
-            String myCountry = _context.getProperty(PROP_IP_COUNTRY);
-            boolean blockMyCountry = _context.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
-            Set<String> blockedCountries = getBlockedCountries();
-            boolean blockXG = _context.getBooleanProperty(PROP_BLOCK_XG);
-            boolean isStrict = _context.commSystem().isInStrictCountry(); // us
-            boolean shouldRemove = false;
-
-            if (_context.commSystem().isInStrictCountry(key)) {
-                if (!_context.banlist().isBanlisted(key)) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> " +
-                                  (isHidden ? "Hidden mode active and router is in same country" :
-                                  blockMyCountry ? "i2np.hideMyCountry=true" : "Our router is in a strict country"));
-                    }
-                    if (_log.shouldWarn()) {
-                        _log.warn("Banning " + (caps != null && !caps.isEmpty() ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
-                                  " [" + key.toBase64().substring(0,6) + "] for duration of session -> Router is in our country");
-                    }
-                    if (blockMyCountry) {
-                        _context.banlist().banlistRouterForever(key, " <b>➜</b> In our country (banned via config)");
-                    } else {
-                        _context.banlist().banlistRouterForever(key, " <b>➜</b> In our country (we are in a strict country)");
-                    }
-                }
-            } else if (blockedCountries.contains(country) && !_context.banlist().isBanlisted(key)) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Banning and disconnecting from [" + key.toBase64().substring(0,6) + "] -> Blocked country: " + country);
-                }
-                _context.banlist().banlistRouter(key, " <b>➜</b> Blocked country: " + country, null, null, _context.clock().now() + 8*60*60*1000);
-                _context.simpleTimer2().addEvent(new Disconnector(key), 3*1000);
-                shouldRemove = true;
-            } else if (!isUs && isG && isNotRorU && isXTier && blockXG && !_context.banlist().isBanlisted(key)) {
-                if (!_context.banlist().isBanlisted(key)) {
-                    if (_log.shouldInfo()) {
-                        _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> X tier and G Cap, neither R nor U");
-                    }
-                    if (_log.shouldWarn() && !_context.banlist().isBanlisted(key)) {
-                        _log.warn("Banning " + (caps != null && !caps.isEmpty() ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
-                                  " [" + key.toBase64().substring(0,6) + "] for 4h -> XG and older than 0.9.61 (using proxy?)");
-                    }
-                    _context.banlist().banlistRouter(key, " <b>➜</b> XG Router, neither R nor U (proxied?)", null, null, _context.clock().now() + 4*60*60*1000);
-                    shouldRemove = false;
-                }
-            } else if (!isUs && isLTier && isUnreachable && isOld) {
-                if (!_context.banlist().isBanlisted(key)) {
-                    if (_log.shouldInfo()) {
-                        _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> LU and older than 0.9.61");
-                    }
-                    if (_log.shouldWarn() && !_context.banlist().isBanlisted(key)) {
-                        String capsMessage = (caps == null || caps.isEmpty()) ? "" : caps;
-                        _log.warn("Banning " + capsMessage + ' ' + (isFF ? "Floodfill" : "Router") +
-                                  " [" + key.toBase64().substring(0,6) + "] for 4h -> LU and older than 0.9.61");
-                    }
-                    _context.banlist().banlistRouter(key, " <b>➜</b> LU and older than 0.9.61", null, null, _context.clock().now() + 4*60*60*1000);
-                    shouldRemove = true;
-                }
-            } else if (key != null && _context.banlist().isBanlistedForever(key)) {
-                if (_log.shouldInfo()) {
-                    _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Permanently blocklisted");
-                }
-                shouldRemove = true;
-            } else if (key != null && _context.banlist().isBanlistedHostile(key)) {
-                if (_log.shouldInfo()) {
-                    _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Blocklisted (tagged as hostile)");
-                }
-                shouldRemove = true;
-            } else if (key != null && isNegativeCached(key)) {
-                if (_log.shouldInfo())
-                    _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Negatively cached");
-                if (onFailedLookupJob != null)
-                    _context.jobQueue().addJob(onFailedLookupJob);
-            } else {
-                search(key, onFindJob, onFailedLookupJob, timeoutMs, false);
-            }
-            if (shouldRemove) {
-                _ds.remove(key);
-                _kb.remove(key);
-            }
+            if (shouldBanlistBasedOnCountry(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
+            else if (shouldBanlistBlockedCountry(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
+            else if (shouldBanlistXGUnreachable(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
+            else if (shouldBanlistLUUnreachableOld(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
+            else if (isPermanentlyBlocklisted(key)) {handlePermanentBlocklist(ri, key, onFailedLookupJob);}
+            else if (isHostileBlocklisted(key)) {handleHostileBlocklist(ri, key, onFailedLookupJob);}
+            else if (isNegativeCached(key)) {handleNegativeCache(ri, key, onFailedLookupJob);}
+            else {search(key, onFindJob, onFailedLookupJob, timeoutMs, false);}
         }
+    }
+
+    private boolean shouldBanlistBasedOnCountry(RouterInfo ri, Hash key) {
+        boolean isFF = ri.getCapabilities().contains("F");
+        String country = _context.commSystem().getCountry(key);
+        String myCountry = _context.getProperty(PROP_IP_COUNTRY);
+        boolean blockMyCountry = _context.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
+        boolean isStrict = _context.commSystem().isInStrictCountry(key);
+
+        return isStrict || blockMyCountry || _context.commSystem().isInStrictCountry(key);
+    }
+
+    private boolean shouldBanlistBlockedCountry(RouterInfo ri, Hash key) {
+        String country = _context.commSystem().getCountry(key);
+        Set<String> blockedCountries = getBlockedCountries();
+        return blockedCountries.contains(country) && !_context.banlist().isBanlisted(key);
+    }
+
+    private boolean shouldBanlistXGUnreachable(RouterInfo ri, Hash key) {
+        boolean isG = containsCapability(ri, Router.CAPABILITY_NO_TUNNELS);
+        boolean isNotRorU = !containsCapability(ri, Router.CAPABILITY_UNREACHABLE) &&
+                            !containsCapability(ri, Router.CAPABILITY_REACHABLE);
+        boolean isXTier = containsCapability(ri, Router.CAPABILITY_BW_UNLIMITED);
+        boolean blockXG = _context.getBooleanProperty(PROP_BLOCK_XG);
+        Hash us = _context.routerHash();
+        boolean isUs = us.equals(ri.getIdentity().getHash());
+        return !isUs && isG && isNotRorU && isXTier && blockXG;
+    }
+
+    private boolean shouldBanlistLUUnreachableOld(RouterInfo ri, Hash key) {
+        boolean isLTier = containsCapability(ri, Router.CAPABILITY_BW12) ||
+                          containsCapability(ri, Router.CAPABILITY_BW32);
+        boolean isUnreachable = containsCapability(ri, Router.CAPABILITY_UNREACHABLE) ||
+                                !containsCapability(ri, Router.CAPABILITY_REACHABLE);
+        String v = ri.getVersion();
+        boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
+        Hash us = _context.routerHash();
+        return !us.equals(ri.getIdentity().getHash()) && isLTier && isUnreachable && isOld;
+    }
+
+    private boolean isPermanentlyBlocklisted(Hash key) {
+        return _context.banlist().isBanlistedForever(key);
+    }
+
+    private boolean isHostileBlocklisted(Hash key) {
+        return _context.banlist().isBanlistedHostile(key);
+    }
+
+    private void handleBanlistAndRemove(RouterInfo ri, Hash key, Job onFailedLookupJob) {
+        String caps = ri.getCapabilities();
+        String routerId = key.toBase64().substring(0, 6);
+        boolean isFF = ri.getCapabilities().contains("F");
+
+        if (_log.shouldWarn()) {
+            _log.warn("Banning " + (!caps.isEmpty() ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
+                      " [" + routerId + "] for 4h -> LU and older than " + MIN_VERSION);
+        }
+
+        _context.banlist().banlistRouter(key, "➜ LU and older than " + MIN_VERSION, null, null,
+                                         _context.clock().now() + 4 * 60 * 60 * 1000);
+        _ds.remove(key);
+        _kb.remove(key);
+
+        if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
+    }
+
+    private void handlePermanentBlocklist(RouterInfo ri, Hash key, Job onFailedLookupJob) {
+        if (_log.shouldInfo()) {
+            _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Permanently blocklisted");
+        }
+        _ds.remove(key);
+        _kb.remove(key);
+
+        if (onFailedLookupJob != null) {
+            _context.jobQueue().addJob(onFailedLookupJob);
+        }
+    }
+
+    private void handleHostileBlocklist(RouterInfo ri, Hash key, Job onFailedLookupJob) {
+        if (_log.shouldInfo()) {
+            _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Blocklisted (tagged as hostile)");
+        }
+
+        // Remove from data store and KBucket
+        _ds.remove(key);
+        _kb.remove(key);
+
+        // Trigger the failed job callback if present
+        if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
+    }
+
+    private void handleNegativeCache(RouterInfo ri, Hash key, Job onFailedLookupJob) {
+        if (_log.shouldInfo()) {
+            _log.info("Dropping RouterInfo [" + key.toBase64().substring(0,6) + "] -> Negatively cached");
+        }
+
+        _ds.remove(key);
+        _kb.remove(key);
+
+        if (onFailedLookupJob != null) {_context.jobQueue().addJob(onFailedLookupJob);}
     }
 
     /**
@@ -1240,9 +1248,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         String expireRI = _context.getProperty("router.expireRouterInfo");
         String routerId = "";
         String v = routerInfo.getVersion();
-        String minRouterVersion = "0.9.20";
-        String MIN_VERSION = "0.9.62";
-        String CURRENT_VERSION = "0.9.63";
         String minVersionAllowed = _context.getProperty("router.minVersionAllowed");
         boolean isSlow = routerInfo != null && (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                                                 routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
@@ -1333,7 +1338,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                     }
                     if (_log.shouldWarn() && !_context.banlist().isBanlisted(h)) {
                         _log.warn("Banning " + (!caps.isEmpty() ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
-                                  " [" + h.toBase64().substring(0,6) + "] for 4h -> XG and older than 0.9.61 (using proxy?)");
+                                  " [" + h.toBase64().substring(0,6) + "] for 4h -> XG and older than " + MIN_VERSION + " (using proxy?)");
                     }
                     _context.banlist().banlistRouter(h, " <b>➜</b> XG Router, neither R nor U (proxied?)", null, null, _context.clock().now() + 4*60*60*1000);
                 }
@@ -1366,10 +1371,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 if (!isBanned) {
                     if (_log.shouldWarn() && !_context.banlist().isBanlisted(h)) {
                         _log.warn("Banning " + (!caps.isEmpty() ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
-                                  " [" + routerId + "] for 4h -> LU and older than 0.9.61");
+                                  " [" + routerId + "] for 4h -> LU and older than " + MIN_VERSION);
                     }
                 }
-                _context.banlist().banlistRouter(h, " <b>➜</b> LU and older than 0.9.61", null, null, _context.clock().now() + 4*60*60*1000);
+                _context.banlist().banlistRouter(h, " <b>➜</b> LU and older than " + MIN_VERSION, null, null, _context.clock().now() + 4*60*60*1000);
             } else if (minVersionAllowed != null) {
                 if (VersionComparator.comp(v, minVersionAllowed) < 0) {
                     _context.banlist().banlistRouterForever(h, " <b>➜</b> Router too old (" + v + ")");
@@ -1825,7 +1830,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @param key only for Destinations; for RouterIdentities, see Banlist
      *  @since 0.9.16
      */
-    public boolean isNegativeCachedForever(Hash key) {return _negativeCache.getBadDest(key) != null;}
+    public boolean isNegativeCachedForever(Hash key) {return key != null && isNegativeCached(key);}
 
     /**
      * Debug info, HTML formatted
