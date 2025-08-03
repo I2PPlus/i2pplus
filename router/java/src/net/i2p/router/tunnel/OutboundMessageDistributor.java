@@ -15,6 +15,7 @@ import net.i2p.router.JobImpl;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
+import net.i2p.util.SyntheticREDQueue;
 import net.i2p.util.SystemVersion;
 
 /**
@@ -27,13 +28,12 @@ class OutboundMessageDistributor {
     private final Log _log;
     // following only for somebody else's OBEP, not for zero-hop
     private final Set<Hash> _toRouters;
+    private final SyntheticREDQueue _partBWE;
     private int _newRouterCount;
     private long _newRouterTime;
 
     private static final long MAX_DISTRIBUTE_TIME = 15*1000;
     // This is probably too high, to be reduced later
-//    private static final int MAX_ROUTERS_PER_PERIOD = 60;
-//    private static final long NEW_ROUTER_PERIOD = 30*1000;
     private static final int coreCount = SystemVersion.getCores();
     private static final int MAX_ROUTERS_PER_PERIOD = SystemVersion.isSlow() ? 32 : 64;
     private static final long NEW_ROUTER_PERIOD = SystemVersion.isSlow() ? 30*1000 : 15*1000;
@@ -43,6 +43,16 @@ class OutboundMessageDistributor {
      *                  OutNetMessage.PRIORITY_MY_DATA for our own zero-hop OBGW/EP
      */
     public OutboundMessageDistributor(RouterContext ctx, int priority) {
+        this(ctx, priority, null);
+    }
+
+    /**
+     *  @param priority OutNetMessage.PRIORITY_PARTICIPATING for somebody else's OBEP, or
+     *                  OutNetMessage.PRIORITY_MY_DATA for our own zero-hop OBGW/EP
+     *  @param bwe null for none
+     *  @since 0.9.68
+     */
+    public OutboundMessageDistributor(RouterContext ctx, int priority, SyntheticREDQueue bwe) {
         _context = ctx;
         _priority = priority;
         _log = ctx.logManager().getLog(OutboundMessageDistributor.class);
@@ -50,6 +60,7 @@ class OutboundMessageDistributor {
             _toRouters = new HashSet<Hash>(4);
             _toRouters.add(ctx.routerHash());
         } else {_toRouters = null;}
+        _partBWE = bwe;
         // all createRateStat() in TunnelDispatcher
     }
 
@@ -82,7 +93,7 @@ class OutboundMessageDistributor {
             if (_toRouters != null) {
                 // only if not zero-hop
                 // credit our lookup message as part. traffic
-                if (_context.tunnelDispatcher().shouldDropParticipatingMessage(TunnelDispatcher.Location.OBEP, DatabaseLookupMessage.MESSAGE_TYPE, 1024)) {
+                if (_context.tunnelDispatcher().shouldDropParticipatingMessage(TunnelDispatcher.Location.OBEP, DatabaseLookupMessage.MESSAGE_TYPE, 1024, _partBWE)) {
                     if (_log.shouldWarn()) {
                         _log.warn("Dropping I2NPMessage (" + msg.getType() + ") to [" + target.toBase64().substring(0,6) + "] " +
                                   "at Outbound Endpoint -> Lookup bandwidth throttle");

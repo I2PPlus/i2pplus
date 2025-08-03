@@ -367,6 +367,14 @@ public class FIFOBandwidthRefiller implements Runnable {
     }
 
     /**
+     *  In Bytes per second
+     *  @since 0.9.68
+     */
+    int getMaxShareBandwidth() {
+        return _partBWE != null ? _partBWE.getMaxBandwidth() : DEFAULT_OUTBOUND_BANDWIDTH;
+    }
+
+    /**
      *  Call a few times a minute to update the stats
      *
      *  @since 0.8.12

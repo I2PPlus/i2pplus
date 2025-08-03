@@ -23,10 +23,12 @@ import net.i2p.data.i2np.VariableTunnelBuildReplyMessage;
 import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.RouterThrottleImpl;
 import net.i2p.router.Service;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig;
 import net.i2p.util.Log;
+import net.i2p.util.SyntheticREDQueue;
 
 /**
  * Handle the actual processing and forwarding of messages through the
@@ -537,7 +539,7 @@ public class TunnelDispatcher implements Service {
             throw new IllegalArgumentException("TGM message is null");
         if (gw != null) {
             if (_log.shouldDebug())
-                _log.debug("Dispatch where we are the Inbound gateway:\n* " + gw + ": " + msg);
+                _log.debug("Dispatch where we are the Inbound gateway [" + gw + "]" + msg);
             long minTime = before - Router.CLOCK_FUDGE_FACTOR;
             long maxTime = before + MAX_FUTURE_EXPIRATION;
             long exp = msg.getMessageExpiration();
@@ -718,10 +720,10 @@ public class TunnelDispatcher implements Service {
      * @param loc message hop location
      * @param type I2NP message type
      * @param length the length of the message
+     * @param bwe a per-tunnel bandwidth estimator to be checked first, or null
      */
-    public boolean shouldDropParticipatingMessage(Location loc, int type, int length) {
-        if (length <= 0)
-            return false;
+    boolean shouldDropParticipatingMessage(Location loc, int type, int length, SyntheticREDQueue bwe) {
+        if (length <= 0) {return false;}
 
         // increase the drop probability for OBEP,
         // (except lower it for tunnel build messages type 21/22/23/24),
@@ -744,80 +746,52 @@ public class TunnelDispatcher implements Service {
         } else {
             factor = 1.0f;
         }
-        boolean reject = ! _context.bandwidthLimiter().sentParticipatingMessage(length, factor);
+
+        // Convert factor to a percentage probability of dropping (for logging clarity)
+        int dropProbabilityPercent = Math.round((factor - 1.0f) * 100.0f);
+
+        if (bwe != null) {
+            if (!bwe.offer(length, factor)) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Dropping participating message (per-tunnel limit) -> " +
+                              "Drop probability: " + dropProbabilityPercent + "%, " +
+                              "\n* Location: " + loc + ", Type: " + type + ", Length: " + length + ", BWE: " + bwe);
+                }
+                return true;
+            }
+        }
+
+        boolean reject = !_context.bandwidthLimiter().sentParticipatingMessage(length, factor);
         if (reject) {
             if (_log.shouldWarn()) {
-                _log.warn("Dropping Participating message [factor=" + factor
-                          + ' ' + loc + ' ' + type + ' ' + length + "]");
+                _log.warn("Dropping participating message (global bandwidth limit) -> " +
+                          "Drop probability: " + dropProbabilityPercent + "%, " +
+                          "\n* Location: " + loc + ", Type: " + type + ", Length: " + length);
             }
             _context.statManager().addRateData("tunnel.participatingMessageDropped", 1);
         }
         return reject;
     }
 
-    //private static final int DROP_BASE_INTERVAL = 40 * 1000;
-    //private static final int DROP_RANDOM_BOOST = 10 * 1000;
-
     /**
-     * If a router is too overloaded to build its own tunnels,
-     * the build executor may call this.
+     * The maximum bandwidth for a single tunnel in Bps
+     *
+     * @param loc unused for now
+     * @since 0.9.68
      */
-/*******
-    public void dropBiggestParticipating() {
-
-       List<HopConfig> partTunnels = listParticipatingTunnels();
-       if ((partTunnels == null) || (partTunnels.isEmpty())) {
-           if (_log.shouldError())
-               _log.error("Not dropping tunnel, since partTunnels was null or had 0 items!");
-           return;
-       }
-
-       long periodWithoutDrop = _context.clock().now() - _lastDropTime;
-       if (periodWithoutDrop < DROP_BASE_INTERVAL) {
-           if (_log.shouldWarn())
-               _log.warn("Not dropping tunnel, since last drop was " + periodWithoutDrop + " ms ago!");
-           return;
-       }
-
-       HopConfig biggest = null;
-       HopConfig current = null;
-
-       long biggestMessages = 0;
-       long biggestAge = -1;
-       double biggestRate = 0;
-
-       for (int i=0; i<partTunnels.size(); i++) {
-
-           current = partTunnels.get(i);
-
-           long currentMessages = current.getProcessedMessagesCount();
-           long currentAge = (_context.clock().now() - current.getCreation());
-           double currentRate = ((double) currentMessages / (currentAge / 1000));
-
-           // Determine if this is the biggest, but don't include tunnels
-           // with less than 20 messages (unpredictable rates)
-           if ((currentMessages > 20) && ((biggest == null) || (currentRate > biggestRate))) {
-               // Update our profile of the biggest
-               biggest = current;
-               biggestMessages = currentMessages;
-               biggestAge = currentAge;
-               biggestRate = currentRate;
-           }
-       }
-
-       if (biggest == null) {
-           if (_log.shouldError())
-               _log.error("Not dropping tunnel, since no suitable tunnel was found.");
-           return;
-       }
-
-       if (_log.shouldWarn())
-           _log.warn("Dropping tunnel with " + biggestRate + " messages/s and " + biggestMessages +
-                      " messages, last drop was " + (periodWithoutDrop / 1000) + " s ago.");
-       remove(biggest);
-       _lastDropTime = _context.clock().now() + _context.random().nextInt(DROP_RANDOM_BOOST);
+    int getMaxPerTunnelBandwidth(Location loc) {
+        int max = _context.bandwidthLimiter().getMaxShareBandwidth();
+        int maxTunnels = _context.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl.DEFAULT_MAX_TUNNELS);
+        if (maxTunnels > 25) {
+            if (max >= 128*1024)      // O/P/X
+                max /= 16;
+            else if (max <= 48*1024)  // K/L
+                max /= 4;
+            else
+                max = (12*1024) + ((max - (48*1024)) / 8);  // M/N
+        }
+        return max;
     }
-******/
 
     /** startup */
     public synchronized void startup() {
