@@ -1853,7 +1853,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @param key only for Destinations; for RouterIdentities, see Banlist
      *  @since 0.9.16
      */
-    public boolean isNegativeCachedForever(Hash key) {return key != null && isNegativeCached(key);}
+    public boolean isNegativeCachedForever(Hash key) {return key != null && _negativeCache.getBadDest(key) != null;}
 
     /**
      * Debug info, HTML formatted
