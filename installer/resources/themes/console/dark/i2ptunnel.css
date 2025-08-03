@@ -34,6 +34,7 @@ div[class^="status"]{margin:0;padding:0;width:100%;height:16px;font-size:0;text-
 .sigType{margin:2px 0 -2px;background-image:var(--crypto),var(--badge)}
 .tunnelEncryption,.tunnelSig{text-align:center}
 .tunnelEncryption .tunnelDestinationLabel,.tunnelSig .tunnelDestinationLabel{display:none}
+.tunnelOptions{text-align:center}
 
 /* screenlog */
 #screenlog{position:relative;contain:paint}

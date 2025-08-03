@@ -182,6 +182,7 @@ th.tunnelControl{text-align:center}
 .tunnelName a{padding:3px 3px 3px 18px;background:var(--settings) no-repeat left center/14px}
 .tunnelName a:hover{background:var(--settings_hover) no-repeat left center/14px}
 .tunnelName a{font-weight:700}
+.tunnelOptions{text-align:center}
 .tunnelType{width:25%}
 .tunnelLocation font[color="red"]{margin-left:2px}
 .tunnelPort,.tunnelPreview{width:15%;text-align:center}

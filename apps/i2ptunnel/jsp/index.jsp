@@ -228,7 +228,14 @@ SSL
 <%              else { %><span class=sigType title="<%=intl._t("Signature type")%>: DSA-SHA1 & Ed25519-SHA-512">SHA1 & Ed25519(<%=intl._t("Alternate")%>)</span><% } %>
 <%          } %>
 </td>
-<td colspan=3></td>
+<td class=tunnelOptions colspan=3>
+<span class=optionsLabel><b><%=intl._t("Hops")%>:</span></b></span>&nbsp;
+<span><%=editBean.getTunnelDepth(curServer, 3)%>&nbsp;<%=intl._t("in")%> / <%=editBean.getTunnelDepthOut(curServer, 3)%>&nbsp;<%=intl._t("out")%></span>
+<%          if (editBean.getTunnelVariance(curServer,0) != 0) { %>
+&nbsp;(<span class=optionsLabel><b><%=intl._t("Variance")%>:</span></b>
+<span><%=editBean.getTunnelVariance(curServer,0)%>&nbsp;<%=intl._t("in")%> / <%=editBean.getTunnelVarianceOut(curServer,0)%>&nbsp;<%=intl._t("out")%></span>)
+<%          } %>
+</td>
 </tr>
 <%          String encName = indexBean.getEncryptedBase32(curServer);
             String altDestB32 = editBean.getAltDestHashBase32(curServer);
@@ -273,7 +280,10 @@ SSL
 <%          else if (has6) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM768-X25519">MLKEM768</span><% } %>
 <%          else if (has7) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM1024-X25519">MLKEM1024</span><% } %>
 </td>
-<td colspan=3></td>
+<td colspan=3 class=tunnelOptions>
+<span class=optionsLabel><b><%=intl._t("Count")%>:</span></b></span>&nbsp;
+<span><%=editBean.getTunnelQuantity(curServer, 2)%>&nbsp;<%=intl._t("in")%> / <%=editBean.getTunnelQuantityOut(curServer, 2)%>&nbsp;<%=intl._t("out")%></span>
+</td>
 </tr>
 </tbody>
 <%      } /* for loop */ %>
@@ -422,7 +432,14 @@ SSL
 <%          else if (currentSigType == 1) { %><span class=sigType title="<%=intl._t("Signature type")%>">ECDSA-P256<% } %>
 <%          else if (currentSigType == 0) { %><span class=sigType style=font-weight:600;color:red>DSA-SHA1</span><% } %>
 </td>
-<td colspan=3></td>
+<td class=tunnelOptions colspan=3>
+<span class=optionsLabel><b><%=intl._t("Hops")%>:</span></b></span>&nbsp;
+<span><%=editBean.getTunnelDepth(curClient, 3)%>&nbsp;<%=intl._t("in")%> / <%=editBean.getTunnelDepthOut(curClient, 3)%>&nbsp;<%=intl._t("out")%></span>
+<%          if (editBean.getTunnelVariance(curClient,0) != 0) { %>
+&nbsp;(<span class=optionsLabel><b><%=intl._t("Variance")%>:</span></b>
+<span><%=editBean.getTunnelVariance(curClient,0)%>&nbsp;<%=intl._t("in")%> / <%=editBean.getTunnelVarianceOut(curClient,0)%>&nbsp;<%=intl._t("out")%></span>)
+<%          } %>
+</td>
 </tr>
 <%          String clientB32 = indexBean.getDestHashBase32(curClient);
             if ((cdest.contains(".i2p") && !cdest.contains(".b32") || cdest.length() > 70) && clientB32.length() > 0) {
@@ -455,7 +472,10 @@ SSL
 <%          else if (has6) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM768-X25519">MLKEM768</span><% } %>
 <%          else if (has7) { %><span class=encType title="<%=intl._t("Supported encryption")%>: MLKEM1024-X25519">MLKEM1024</span><% } %>
 </td>
-<td colspan=3></td>
+<td colspan=3 class=tunnelOptions>
+<span class=optionsLabel><b><%=intl._t("Count")%>:</span></b></span>&nbsp;
+<span><%=editBean.getTunnelQuantity(curClient, 2)%>&nbsp;<%=intl._t("in")%> / <%=editBean.getTunnelQuantityOut(curClient, 2)%>&nbsp;<%=intl._t("out")%></span>
+</td>
 </tr>
 </tbody>
 <%      } /* for loop */ %>

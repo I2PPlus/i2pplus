@@ -93,6 +93,7 @@ th .help::after{width:16px;height:16px;display:inline-block;background:url(/them
 .tunnelName{width:25%;min-width:150px}
 .tunnelName a{padding:3px 3px 3px 17px;font-weight:700;background:var(--settings) no-repeat 2px center/13px}
 .tunnelName a:hover{background:var(--settings_hover) no-repeat 2px center/13px}
+.tunnelOptions{text-align:center}
 .tunnelPreview{text-align:left}
 .tunnelPreview,.tunnelPort{width:15%;text-align:center}
 .tunnelProperties{border-top:var(--border);background:#fcfcff}
