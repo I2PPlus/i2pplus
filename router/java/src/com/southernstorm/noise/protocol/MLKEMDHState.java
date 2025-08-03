@@ -157,7 +157,7 @@ class MLKEMDHState implements DHState, Cloneable {
 	public void setPrivateKey(byte[] key, int offset) {
         	throw new UnsupportedOperationException();
 	}
-	
+
 	/**
 	 * @deprecated
 	 */
@@ -245,7 +245,7 @@ class MLKEMDHState implements DHState, Cloneable {
 			} else {
 				throw new IllegalStateException();
 			}
-			System.out.println("Calculated shared PQ key: " + net.i2p.data.Base64.encode(sharedKey, offset, 32));
+			//System.out.println("Calculated shared PQ key: " + net.i2p.data.Base64.encode(sharedKey, offset, 32));
 		} catch (GeneralSecurityException gse) {
 			throw new IllegalArgumentException(gse);
 		}
