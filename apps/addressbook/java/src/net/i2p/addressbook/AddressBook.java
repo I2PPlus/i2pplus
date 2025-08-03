@@ -123,7 +123,8 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
                 subscription.setLastModified(get.getLastModified());
                 subscription.setLastFetched(I2PAppContext.getGlobalContext().clock().now());
                 subf = tmp;
-                System.out.println("[" + loc + "] Last modified: " + get.getLastModified());
+                String lastMod = (get.getLastModified() != null ? get.getLastModified() : "unknown (no Last-Modified headers)");
+                System.out.println("[" + loc + "] Last modified: " + lastMod);
             } else {
                 a = Collections.emptyMap();
                 tmp.delete();
