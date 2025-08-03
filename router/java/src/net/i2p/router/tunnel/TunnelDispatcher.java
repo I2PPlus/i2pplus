@@ -748,13 +748,13 @@ public class TunnelDispatcher implements Service {
         }
 
         // Convert factor to a percentage probability of dropping (for logging clarity)
-        int dropProbabilityPercent = Math.round((factor - 1.0f) * 100.0f);
+        int percentage = Math.round((factor - 1.0f) * 100.0f);
 
         if (bwe != null) {
             if (!bwe.offer(length, factor)) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Dropping participating message (per-tunnel limit) -> " +
-                              "Drop probability: " + dropProbabilityPercent + "%, " +
+                    _log.warn("Dropping participating message (per-tunnel limit)" +
+                              (percentage > 0 ? " -> Drop probability: " + percentage + "%" : "") +
                               "\n* Location: " + loc + ", Type: " + type + ", Length: " + length + ", BWE: " + bwe);
                 }
                 return true;
@@ -764,8 +764,8 @@ public class TunnelDispatcher implements Service {
         boolean reject = !_context.bandwidthLimiter().sentParticipatingMessage(length, factor);
         if (reject) {
             if (_log.shouldWarn()) {
-                _log.warn("Dropping participating message (global bandwidth limit) -> " +
-                          "Drop probability: " + dropProbabilityPercent + "%, " +
+                _log.warn("Dropping participating message (global bandwidth limit)" +
+                          (percentage > 0 ? " -> Drop probability: " + percentage + "%" : "") +
                           "\n* Location: " + loc + ", Type: " + type + ", Length: " + length);
             }
             _context.statManager().addRateData("tunnel.participatingMessageDropped", 1);
