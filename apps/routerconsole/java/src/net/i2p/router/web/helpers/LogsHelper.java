@@ -336,6 +336,7 @@ public class LogsHelper extends HelperBase {
             // replace \n so that exception stack traces will format correctly and will paste nicely into pastebin
             msg = msg.replace("\n", "<br>&nbsp;&nbsp;\n");
             if (msg.contains("Sending client")) {msg = msg.replace("<br>&nbsp;&nbsp;\n", "");} // SAM client
+            if (msg.contains("org.eclipse.jetty") && msg.contains(_c("WARN"))) {continue;} // hide jetty warn level logging
             String level;
             String color;
             if (msg.contains(_c("CRIT"))) {level = "log_critical";}
