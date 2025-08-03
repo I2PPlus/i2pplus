@@ -15,7 +15,7 @@ progressx.show(theme);progressx.progress(0.1);
 const translate_encType = "<%=intl._t("Encryption type")%>";
 const translate_encTypes = "<%=intl._t("Encryption types")%>";
 const translate_sigType = "<%=intl._t("Signature type")%>";
-const translate_sigTypes = "<%=intl._t("Signature type")%>";
+const translate_sigTypes = "<%=intl._t("Signature types")%>";
 const translate_localPrivate = "<%=intl._t("Locally hosted private service")%>";
 const translate_localPublic = "<%=intl._t("Locally hosted public service")%>";
 const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
