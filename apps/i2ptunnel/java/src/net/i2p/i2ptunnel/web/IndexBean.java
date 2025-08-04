@@ -322,9 +322,9 @@ public class IndexBean {
     }
 
     private String start() {
-        if (_tunnel < 0) {return "✖ " + _t("Invalid tunnel");}
+        if (_tunnel < 0) {return "✖ " + _t("Error: Invalid tunnel");}
         List<TunnelController> controllers = _group.getControllers();
-        if (_tunnel >= controllers.size()) {return "✖ Invalid tunnel";}
+        if (_tunnel >= controllers.size()) {return "✖ Error: Invalid tunnel";}
         TunnelController controller = controllers.get(_tunnel);
         controller.startTunnelBackground();
         try {Thread.sleep(1000);} // Give the messages a chance to make it to the window
@@ -335,9 +335,9 @@ public class IndexBean {
     }
 
     private String stop() {
-        if (_tunnel < 0) {return "✖ " + _t("Invalid tunnel");}
+        if (_tunnel < 0) {return "✖ " + _t("Error: Invalid tunnel");}
         List<TunnelController> controllers = _group.getControllers();
-        if (controllers == null || _tunnel >= controllers.size()) {return "✖ Invalid tunnel";}
+        if (controllers == null || _tunnel >= controllers.size()) {return "✖ Error: Invalid tunnel";}
         TunnelController controller = controllers.get(_tunnel);
         controller.stopTunnel();
         try {Thread.sleep(1000);} // Give the messages a chance to make it to the window
@@ -348,9 +348,9 @@ public class IndexBean {
     }
 
     private String restart() {
-        if (_tunnel < 0) {return "✖ " + _t("Invalid tunnel");}
+        if (_tunnel < 0) {return "✖ " + _t("Error: Invalid tunnel");}
         List<TunnelController> controllers = _group.getControllers();
-        if (_tunnel >= controllers.size()) {return "✖ " + _t("Invalid tunnel");}
+        if (_tunnel >= controllers.size()) {return "✖ " + _t("Error: Invalid tunnel");}
         TunnelController controller = controllers.get(_tunnel);
         controller.stopTunnel();
         try {Thread.sleep(1000);} // Allow time for tunnel to stop
@@ -434,7 +434,8 @@ public class IndexBean {
         for (TimestampedMessage tm : stored) {
             String escapedMessage = DataHelper.escapeHTML(tm.message.replace("->", "➜"));
             String formattedMessage = "• " + tm.getFormattedTimestamp() + ' ' + escapedMessage;
-            String li = (tm.message.contains("Error") ? "<li class=error>" : tm.message.contains("Warn") ? "<li class=warn>" : "<li>");
+            String li = (tm.message.contains("Error") || tm.message.contains("✖") ? "<li class=error>" :
+                         tm.message.contains("Warn") || tm.message.contains("▲") ? "<li class=warn>" : "<li>");
             buf.append(li).append(formattedMessage).append("</li>\n");
         }
 
