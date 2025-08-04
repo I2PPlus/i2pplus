@@ -539,7 +539,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                         l.log("✔ Client ready -> Listening on " + getTunnel().listenHost + ':' + localPort);
                     }
                 } else {
-                    l.log("✔ Client ready -> Listening on " + getTunnel().listenHost + ':' + localPort + " (standby mode)");
+                    l.log("✔ Client ready -> Listening on " + getTunnel().listenHost + ':' + localPort + " [Standby mode]");
             }
             notifyEvent("openBaseClientResult", "ok");
             } else {

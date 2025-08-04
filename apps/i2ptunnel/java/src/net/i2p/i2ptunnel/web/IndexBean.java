@@ -394,9 +394,7 @@ public class IndexBean {
 
 
     /**
-     * Executes any action requested (start/stop/etc) and dump out the
-     * messages.
-     *
+     * Executes any action requested (start/stop/etc) and dump out the messages.
      * Only call this ONCE! Or you will get duplicate tunnels on save.
      *
      * @return HTML escaped or "" if empty
@@ -446,6 +444,7 @@ public class IndexBean {
         return buf.toString();
     }
 
+    /* @since 0.9.67+ */
     private void addUniqueMessage(String message) {
         synchronized (_seenMessages) {
             if (!_seenMessages.contains(message)) {
@@ -471,6 +470,7 @@ public class IndexBean {
         return "/themes/console/" + theme + "/";
     }
 
+    /* @since 0.9.67+ */
     public String getThemeName() {
         String theme = _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME);
         return theme;
@@ -566,13 +566,13 @@ public class IndexBean {
         TunnelController tun = getController(tunnel);
         if (tun != null && tun.getListenPort() != null) {
             String port = tun.getListenPort();
-            if (port.length() == 0)
-                return "<span class=ink_warn>" + _t("Port not set") + "</span>";
+            if (port.length() == 0) {return "<span class=ink_warn>" + _t("Port not set") + "</span>";}
             int iport = Addresses.getPort(port);
-            if (iport == 0)
-                return "<span class=ink_warn>" + _t("Invalid port") + ' ' + port + "</span>";
-            if (iport < 1024)
-                return "<span class=ink_warn title=\"" + _t("Warning - ports less than 1024 are not recommended") + "\">" + port + "</span>";
+            if (iport == 0) {return "<span class=ink_warn>" + _t("Invalid port") + ' ' + port + "</span>";}
+            if (iport < 1024) {
+                return "<span class=ink_warn title=\"" + _t("Warning - ports less than 1024 are not recommended") +
+                       "\">" + port + "</span>";
+            }
             // dup check, O(n**2)
             List<TunnelController> controllers = _group.getControllers();
             String ifc = tun.getListenOnInterface();
@@ -586,9 +586,7 @@ public class IndexBean {
                         "0.0.0.0".equals(ifc2) ||
                         "0:0:0:0:0:0:0:0".equals(ifc) ||
                         "0:0:0:0:0:0:0:0".equals(ifc2)) {
-                        return "<span class=ink_warn>" +
-                               _t("Warning - duplicate port") +
-                               ": " + port + "</span>";
+                        return "<span class=ink_warn>" + _t("Warning - duplicate port") + ": " + port + "</span>";
                     }
                 }
             }

@@ -600,16 +600,15 @@ public class TunnelController implements Logging {
         if (!sessions.isEmpty()) {
             for (int i = 0; i < sessions.size(); i++) {
                 I2PSession session = sessions.get(i);
-                if (_log.shouldInfo())
-                    _log.info("Acquiring session " + session);
+                if (_log.shouldInfo()) {_log.info("Acquiring session " + session);}
                 TunnelControllerGroup group = TunnelControllerGroup.getInstance();
-                if (group != null)
-                    group.acquire(this, session);
+                if (group != null) {group.acquire(this, session);}
             }
             _sessions = sessions;
         } else {
-            if (_log.shouldInfo())
-                _log.info("No sessions to acquire for " + getName() + " (standby mode)");
+            if (_log.shouldInfo()) {
+                _log.info("No sessions to acquire for " + getName() + " [Standby mode]");
+            }
         }
     }
 
@@ -620,16 +619,13 @@ public class TunnelController implements Logging {
     private void release(Collection<I2PSession> sessions) {
         if (!sessions.isEmpty()) {
             for (I2PSession s : sessions) {
-                if (_log.shouldInfo())
-                    _log.info("Releasing session " + s);
+                if (_log.shouldInfo()) {_log.info("Releasing session " + s);}
                 TunnelControllerGroup group = TunnelControllerGroup.getInstance();
-                if (group != null)
-                    group.release(this, s);
+                if (group != null) {group.release(this, s);}
             }
             // _sessions.clear() ????
         } else {
-            if (_log.shouldInfo())
-                _log.info("No sessions to release for " + getName());
+            if (_log.shouldInfo()) {_log.info("No sessions to release for " + getName());}
         }
     }
 
@@ -644,8 +640,7 @@ public class TunnelController implements Logging {
         // _sessions will be null for delay-open tunnels - see acquire().
         // We want the current sessions.
         Set<I2PSession> sessions = new HashSet<I2PSession>(_tunnel.getSessions());
-        if (_sessions != null)
-            sessions.addAll(_sessions);
+        if (_sessions != null) {sessions.addAll(_sessions);}
         return sessions;
     }
 
@@ -657,9 +652,7 @@ public class TunnelController implements Logging {
         if (getPersistentClientKey()) {
             String privKeyFile = getPrivKeyFile();
             _tunnel.runClient(new String[] { listenPort, dest, sharedClient, privKeyFile }, this);
-        } else {
-            _tunnel.runClient(new String[] { listenPort, dest, sharedClient }, this);
-        }
+        } else {_tunnel.runClient(new String[] { listenPort, dest, sharedClient }, this);}
     }
 
     private void startServer() {

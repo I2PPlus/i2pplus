@@ -45,15 +45,16 @@ div[class^="status"]{margin:0;padding:0;width:100%;height:16px;font-size:0;text-
 #screenlog .clearlog{border-left:var(--border);background:rgba(0,0,0,.3) var(--close) no-repeat center center/14px}
 #screenlog .clearlog:hover{background:var(--close_hover) no-repeat center center/16px,var(--btnAction)}
 #screenlog .clearlog:active{background:var(--close) no-repeat center center/12px,linear-gradient(180deg,#010,#020)}
-#statusMessages{margin:0;padding:2px 4px 2px 8px;width:calc(100% - 14px);height:80px;display:block;overflow-y:auto;list-style:none;font-size:8.5pt;font-weight:600;color:#69f;border:0;border-radius:0;box-shadow:var(--highlight),0 0 1px 2px rgba(16,96,16,.4) inset;background:url(images/chimp.webp) no-repeat right bottom/auto 95%,linear-gradient(180deg,#000,#010);scrollbar-color:#252 #000}
+#statusMessages{margin:0;padding:2px 4px 2px 8px;width:calc(100% - 12px);height:80px;display:block;overflow-y:auto;list-style:none;font-size:8.5pt;font-weight:600;color:#69f;border:0;border-radius:0;box-shadow:var(--highlight),0 0 1px 2px rgba(16,96,16,.4) inset;background:url(images/chimp.webp) no-repeat right 4px bottom 2px/auto 95%,linear-gradient(180deg,#000,#010)}
 #statusMessages::selection{background:#69f;color:#fff}
 #statusMessagesTable{position:relative}
 #statusMessagesTable td{overflow:hidden;contain:paint}
 #statusMessagesTable::after{width:calc(100% - 4px);height:1px;display:inline-block;position:absolute;left:2px;bottom:1px;background:#000;content:""}
-#statusMessages li{margin:0 0 0 -5px;padding:2px 2px 2px 4px;font-family:var(--monospaced);background:#0008}
-#statusMessages li:nth-child(odd) {background:#0208}
+#statusMessages li{margin:0 0 0 -5px;padding:2px 5px;font-family:var(--monospaced);background:#0006;user-select:all}
+#statusMessages li:nth-child(odd) {background:#0206}
 #statusMessages li.warn{color:#841}
 #statusMessages li.error{color:#a00}
+#statusMessages li::selection{background:#aa0;color:#000}
 
 /* panels */
 .panel{margin:8px auto;padding:5px 3px 5px 1px;width:calc(100% - 14px);min-width:660px;max-width:1800px;overflow:hidden;text-align:left;color:#ee9;background:none}
