@@ -189,28 +189,26 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     protected void verifySocketManager() {
         synchronized(sockLock) {
             boolean newManager = false;
-            // other shared client could have destroyed it
+            // Other shared client could have destroyed it
             if (this.sockMgr == null || this.sockMgr.isDestroyed()) {newManager = true;}
             else {
                 I2PSession sess = sockMgr.getSession();
                 if (sess.isClosed() &&
                            Boolean.parseBoolean(getTunnel().getClientOptions().getProperty("i2cp.closeOnIdle")) &&
                            Boolean.parseBoolean(getTunnel().getClientOptions().getProperty("i2cp.newDestOnResume"))) {
-                    // build a new socket manager and a new dest if the session is closed.
+                    // Build a new socket manager and a new dest if the session is closed.
                     getTunnel().removeSession(sess);
-                    if (_log.shouldInfo()) {
-                        _log.info("[" + getTunnel().getClientOptions().getProperty("inbound.nickname") +
-                                  "] Built new destination for client tunnel on resume");
-                    }
-                    // make sure the old one is closed
-                    // if it's shared client, it will be destroyed in getSocketManager()
-                    // with the correct locking
+                    String msg = "Opening tunnels for: " + getTunnel().getClientOptions().getProperty("inbound.nickname") +
+                                 " -> Activity detected on listening port";
+                    if (_log.shouldInfo()) {_log.info(msg);}
+                    l.log("‣ " + msg);
+                    /*
+                     * Make sure the old one is closed - if it's shared client,
+                     * it will be destroyed in getSocketManager() with the correct locking
+                     */
                     boolean shouldDestroy;
-                    synchronized(I2PTunnelClientBase.class) {
-                        shouldDestroy = sockMgr != socketManager;
-                    }
-                    if (shouldDestroy)
-                        sockMgr.destroySocketManager();
+                    synchronized(I2PTunnelClientBase.class) {shouldDestroy = sockMgr != socketManager;}
+                    if (shouldDestroy) {sockMgr.destroySocketManager();}
                     newManager = true;
                 }  // else the old socket manager will reconnect the old session if necessary
             }
@@ -392,6 +390,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
 
         I2PSocketManager sockManager = null;
         FileInputStream fis = null;
+        String nickname = tunnel.getClientOptions().getProperty("inbound.nickname");
         try {
             if (pkf != null) {
                 // Persistent client dest
@@ -403,8 +402,9 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         } catch (I2PSessionException ise) {
             throw new IllegalArgumentException("Can't create socket manager", ise);
         } catch (IOException ioe) {
-            if (log != null) {log.log("• Error opening key file -> Please review console logs for more info");}
-            _log.error("Error opening key file", ioe);
+            String failMsg = "Error opening key file for " + nickname + " -> ";
+            if (log != null) {log.log("✖ " + failMsg + " -> Please review console logs for more info");}
+            _log.error(failMsg + ioe.getMessage());
             throw new IllegalArgumentException("Error opening key file", ioe);
         } finally {
             if (fis != null) {
@@ -413,9 +413,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             }
         }
         sockManager.setName("Client");
-        if (_log.shouldInfo()) {
-            _log.info("[" + tunnel.getClientOptions().getProperty("inbound.nickname") + "] Built a new socket manager: " + sockManager.getSession());
-        }
+        if (_log.shouldInfo()) {_log.info("[" + nickname + "] Built a new socket manager: " + sockManager.getSession());}
         tunnel.addSession(sockManager.getSession());
         return sockManager;
     }
@@ -531,25 +529,22 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         }
 
         if (open && listenerReady) {
-            if (localPort > 0) {  // -1 for I2Ping
+            if (localPort > 0) { // -1 for I2Ping
                 boolean openNow = !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty("i2cp.delayOpen"));
-                if (openNow || chained) {
-                    if (!_handlerName.contains("Ping")) {
-                        l.log("✔ Tunnels ready for client" + " [" + _handlerName + "]");
-                        l.log("✔ Client ready -> Listening on " + getTunnel().listenHost + ':' + localPort);
-                    }
-                } else {
-                    l.log("✔ Client ready -> Listening on " + getTunnel().listenHost + ':' + localPort + " [Standby mode]");
+                String nickname = tunnel.getClientOptions().getProperty("inbound.nickname");
+                String readyMsg = "✔ Tunnels ready for: " + nickname + " [" + _handlerName + "]";
+                if ((openNow || chained) && !_handlerName.contains("Ping")) {l.log(readyMsg);}
+                else if (!_handlerName.contains("Ping")) {l.log(readyMsg + " -> [Standby mode]");}
             }
             notifyEvent("openBaseClientResult", "ok");
-            } else {
-                l.log("✖ Client error for " + getTunnel().listenHost + ':' + localPort + " -> Check router logs");
-                notifyEvent("openBaseClientResult", "error");
-            }
-            synchronized (startLock) {
-                startRunning = true;
-                startLock.notify();
-            }
+        } else {
+            l.log("✖ Client error for " + getTunnel().listenHost + ':' + localPort + " -> Check router logs");
+            notifyEvent("openBaseClientResult", "error");
+        }
+
+        synchronized (startLock) {
+            startRunning = true;
+            startLock.notify();
         }
     }
 
