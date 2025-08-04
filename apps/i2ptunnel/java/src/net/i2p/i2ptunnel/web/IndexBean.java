@@ -409,9 +409,7 @@ public class IndexBean {
         if (_action != null) {
             try {
                 String result = processAction();
-                if (!result.isEmpty()) {
-                    addUniqueMessage(result);
-                }
+                if (!result.isEmpty()) {addUniqueMessage(result);}
             } catch (RuntimeException e) {
                 _log.log(Log.CRIT, "Error processing " + _action, e);
                 String msg = "✖ Error: " + e.toString();
@@ -421,35 +419,31 @@ public class IndexBean {
 
         List<UIMessages.Message> oldMessages = _messages.getMessages();
         if (!oldMessages.isEmpty()) {
-            for (UIMessages.Message msg : oldMessages) {
-                addUniqueMessage(msg.message);
-            }
+            for (UIMessages.Message msg : oldMessages) {addUniqueMessage(msg.message);}
             _messages.clearThrough(_msgID); // Prevent duplication
         }
 
         List<String> groupMessages = _group.clearAllMessages();
         if (groupMessages != null && !groupMessages.isEmpty()) {
-            for (String msg : groupMessages) {
-                addUniqueMessage(msg);
-            }
+            for (String msg : groupMessages) {addUniqueMessage(msg);}
         }
 
         List<TimestampedMessage> stored = new ArrayList<>(_timestampedMessages);
         stored.sort((a, b) -> Long.compare(b.timestamp, a.timestamp));
 
-        while (stored.size() > 100) {
-            stored.remove(stored.size() - 1);
-        }
+        while (stored.size() > 100) {stored.remove(stored.size() - 1);}
 
         for (TimestampedMessage tm : stored) {
-            buf.append("• ").append(tm.getFormattedTimestamp()).append(' ')
-               .append(tm.message.replace("->", "➜")).append('\n');
+            String escapedMessage = DataHelper.escapeHTML(tm.message.replace("->", "➜"));
+            String formattedMessage = "• " + tm.getFormattedTimestamp() + ' ' + escapedMessage;
+            String li = (tm.message.contains("Error") ? "<li class=error>" : tm.message.contains("Warn") ? "<li class=warn>" : "<li>");
+            buf.append(li).append(formattedMessage).append("</li>\n");
         }
 
         _timestampedMessages.clear();
         _timestampedMessages.addAll(stored);
 
-        return DataHelper.escapeHTML(buf.toString());
+        return buf.toString();
     }
 
     private void addUniqueMessage(String message) {

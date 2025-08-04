@@ -1,3 +1,8 @@
+2025-08-04 dr|z3d
+ * I2PTunnel:
+   - Display hop and tunnel count on index page in expanded view
+   - Migrate screenlogs to a <ul> and colorize warnings and errors
+
 2025-07-31 dr|z3d
  * I2PTunnel:
    - Modify Restart All button to only restart running tunnels

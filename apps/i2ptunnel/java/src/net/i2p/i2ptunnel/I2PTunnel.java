@@ -283,8 +283,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         if (remaining == 1) {
             String f = args[g.getOptind()];
             File file = new File(f);
-            // This is probably just a problem with the options, so
-            // throw from here
+            // This is probably just a problem with the options, so throw from here
             if (!file.exists()) {
                 System.err.println(usage());
                 throw new IllegalArgumentException("Command file does not exist: " + f);
@@ -293,14 +292,11 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         }
 
         if (gui) {
-            // removed from source, now in i2p.scripts
-            //new I2PTunnelGUI(this);
             try {
                 Class<?> cls = Class.forName("net.i2p.i2ptunnel.I2PTunnelGUI");
                 Constructor<?> con = cls.getConstructor(I2PTunnel.class);
                 con.newInstance(this);
             } catch (Throwable t) {
-//                throw new UnsupportedOperationException("GUI is not available, try -cli", t);
                 System.err.println(" • GUI is not available, run with -cli");
                 System.exit(1);
             }
@@ -313,34 +309,25 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                     String cmd = r.readLine();
                     if (cmd == null) break;
                     if (cmd.length() <= 0) continue;
-                    try {
-                        runCommand(cmd, this);
-                    } catch (Throwable t) {
-                        t.printStackTrace();
-                    }
+                    try {runCommand(cmd, this);}
+                    catch (Throwable t) {t.printStackTrace();}
                 }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+            } catch (IOException ex) {ex.printStackTrace();}
         } else if (eargs == null && remaining == 0 && dontDie) {
             System.err.println(usage());
-//            throw new IllegalArgumentException("Waiting for nothing! Specify gui, cli, command, command file, or die");
-                System.err.println(" • Waiting for nothing! Specify cli, command, command file, or die");
-                System.exit(1);
+            System.err.println(" • Waiting for nothing! Specify cli, command, command file, or die");
+            System.exit(1);
         }
 
         while (dontDie) {
             synchronized (this) {
-                try {
-                    wait();
-                } catch (InterruptedException ie) {
-                    break;
-                }
+                try {wait();}
+                catch (InterruptedException ie) {break;}
             }
         }
     }
 
-    /** with newlines except for last line */
+    /** With newlines except for last line */
     private static String usage() {
         // not sure this all makes sense, just documenting what's above
         return
@@ -362,8 +349,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      *  @since public since 0.9.53 for advanced plugin usage, was package private
      */
     public List<I2PSession> getSessions() {
-        if (_sessions.isEmpty())
-            return Collections.emptyList();
+        if (_sessions.isEmpty()) {return Collections.emptyList();}
         return new ArrayList<I2PSession>(_sessions);
     }
 
@@ -373,9 +359,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     void addSession(I2PSession session) {
         if (session == null) return;
         boolean added = _sessions.add(session);
-        if (added && _log.shouldInfo())
-//            _log.info(getPrefix() + " Session added: " + session, new Exception());
-            _log.info("Session added: " + session);
+        if (added && _log.shouldInfo()) {_log.info("Session added: " + session);}
     }
 
     /**
@@ -384,9 +368,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     void removeSession(I2PSession session) {
         if (session == null) return;
         boolean removed = _sessions.remove(session);
-        if (removed && _log.shouldInfo())
-//            _log.info(getPrefix() + " Session removed: " + session, new Exception());
-            _log.info("Session removed: " + session);
+        if (removed && _log.shouldInfo()) {_log.info("Session removed: " + session);}
     }
 
     /**
@@ -409,13 +391,9 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             tsk.setId(next_task_id);
             next_task_id++;
             tasks.add(tsk);
-            if (_log.shouldInfo())
-//                _log.info(getPrefix().replace("]:", "]") + " Adding task: " + tsk);
-                _log.info("Adding task: " + tsk);
+            if (_log.shouldInfo()) {_log.info("Adding task: " + tsk);}
         } else {
-            if (_log.shouldInfo())
-//                _log.info(getPrefix().replace("]:", "]") + " Not adding task that isn't open: " + tsk);
-                _log.info("Not adding task that isn't open: " + tsk);
+            if (_log.shouldInfo()) {_log.info("Not adding task that isn't open: " + tsk);}
         }
     }
 
@@ -424,8 +402,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     private static String[] split(String src, String delim) {
         StringTokenizer tok = new StringTokenizer(src, delim);
         String vals[] = new String[tok.countTokens()];
-        for (int i = 0; i < vals.length; i++)
-            vals[i] = tok.nextToken();
+        for (int i = 0; i < vals.length; i++) {vals[i] = tok.nextToken();}
         return vals;
     }
 
@@ -436,67 +413,36 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         String allargs = cmd.substring(iii + 1);
         String[] args = split(allargs, " "); // .split(" "); // java 1.4
 
-        if ("help".equals(cmdname)) {
-            runHelp(l);
-        } else if ("clientoptions".equals(cmdname)) {
-            runClientOptions(args, l);
-        } else if ("server".equals(cmdname)) {
-            runServer(args, l);
-        } else if ("httpserver".equals(cmdname)) {
-            runHttpServer(args, l);
-        } else if ("httpbidirserver".equals(cmdname)) {
-            runHttpBidirServer(args, l);
-        } else if ("ircserver".equals(cmdname)) {
-            runIrcServer(args, l);
-        } else if ("textserver".equals(cmdname)) {
-            runTextServer(args, l);
-        } else if ("client".equals(cmdname)) {
-            runClient(args, l);
-        } else if ("httpclient".equals(cmdname)) {
-            runHttpClient(args, l);
-        } else if ("ircclient".equals(cmdname)) {
-            runIrcClient(args, l);
-        } else if ("sockstunnel".equals(cmdname)) {
-            runSOCKSTunnel(args, l);
-        } else if ("socksirctunnel".equals(cmdname)) {
-            runSOCKSIRCTunnel(args, l);
-        } else if ("connectclient".equals(cmdname)) {
-            runConnectClient(args, l);
-        } else if ("streamrclient".equals(cmdname)) {
-            runStreamrClient(args, l);
-        } else if ("streamrserver".equals(cmdname)) {
-            runStreamrServer(args, l);
-        } else if ("config".equals(cmdname)) {
-            runConfig(args, l);
-        } else if ("listen_on".equals(cmdname)) {
-            runListenOn(args, l);
-        } else if ("read_timeout".equals(cmdname)) {
-            runReadTimeout(args, l);
-        } else if ("genkeys".equals(cmdname)) {
-            runGenKeys(args, l);
-        } else if ("gentextkeys".equals(cmdname)) {
-            runGenTextKeys(l);
-        } else if (cmdname.equals("quit")) {
-            runQuit(l);
-        } else if (cmdname.equals("list")) {
-            runList(l);
-        } else if (cmdname.equals("close")) {
-            runClose(args, l);
-        } else if (cmdname.equals("run")) {
-            runRun(args, l);
-        } else if (cmdname.equals("lookup")) {
-            runLookup(args, l);
-        } else if (cmdname.equals("ping")) {
-            runPing(allargs, l);
-        } else if (cmdname.equals("owndest")) {
-            runOwnDest(args, l);
-        } else if (cmdname.equals("auth")) {
-            runAuth(args, l);
-        } else if (cmdname.equals("blinding")) {
-            runBlinding(args, l);
-        } else {
-            l.log("Unknown command [" + cmdname + "]");
-        }
+        if ("help".equals(cmdname)) {runHelp(l);}
+        else if ("clientoptions".equals(cmdname)) {runClientOptions(args, l);}
+        else if ("server".equals(cmdname)) {runServer(args, l);}
+        else if ("httpserver".equals(cmdname)) {runHttpServer(args, l);}
+        else if ("httpbidirserver".equals(cmdname)) {runHttpBidirServer(args, l);}
+        else if ("ircserver".equals(cmdname)) {runIrcServer(args, l);}
+        else if ("textserver".equals(cmdname)) {runTextServer(args, l);}
+        else if ("client".equals(cmdname)) {runClient(args, l);}
+        else if ("httpclient".equals(cmdname)) {runHttpClient(args, l);}
+        else if ("ircclient".equals(cmdname)) {runIrcClient(args, l);}
+        else if ("sockstunnel".equals(cmdname)) {runSOCKSTunnel(args, l);}
+        else if ("socksirctunnel".equals(cmdname)) {runSOCKSIRCTunnel(args, l);}
+        else if ("connectclient".equals(cmdname)) {runConnectClient(args, l);}
+        else if ("streamrclient".equals(cmdname)) {runStreamrClient(args, l);}
+        else if ("streamrserver".equals(cmdname)) {runStreamrServer(args, l);}
+        else if ("config".equals(cmdname)) {runConfig(args, l);}
+        else if ("listen_on".equals(cmdname)) {runListenOn(args, l);}
+        else if ("read_timeout".equals(cmdname)) {runReadTimeout(args, l);}
+        else if ("genkeys".equals(cmdname)) {runGenKeys(args, l);}
+        else if ("gentextkeys".equals(cmdname)) {runGenTextKeys(l);}
+        else if (cmdname.equals("quit")) {runQuit(l);}
+        else if (cmdname.equals("list")) {runList(l);}
+        else if (cmdname.equals("close")) {runClose(args, l);}
+        else if (cmdname.equals("run")) {runRun(args, l);}
+        else if (cmdname.equals("lookup")) {runLookup(args, l);}
+        else if (cmdname.equals("ping")) {runPing(allargs, l);}
+        else if (cmdname.equals("owndest")) {runOwnDest(args, l);}
+        else if (cmdname.equals("auth")) {runAuth(args, l);}
+        else if (cmdname.equals("blinding")) {runBlinding(args, l);}
+        else {l.log("Unknown command [" + cmdname + "]");}
     }
 
     /**
@@ -554,23 +500,19 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     public void runClientOptions(String args[], Logging l) {
         if (args != null && args.length > 0) {
             int i = 0;
-            if (args[0].equals("-a")) {
-                i++;
-            } else if (args[0].equals("-c")) {
+            if (args[0].equals("-a")) {i++;}
+            else if (args[0].equals("-c")) {
                 _clientOptions.clear();
                 l.log("Client options cleared");
                 return;
             } else if (args[0].equals("-x")) {
                 i++;
-                for ( ; i < args.length; i++) {
-                     if (_clientOptions.remove(args[i]) != null)
-                        l.log("Removed " + args[i]);
+                for (; i < args.length; i++) {
+                     if (_clientOptions.remove(args[i]) != null) {l.log("Removed " + args[i]);}
                 }
                 return;
-            } else {
-                _clientOptions.clear();
-            }
-            for ( ; i < args.length; i++) {
+            } else {_clientOptions.clear();}
+            for (; i < args.length; i++) {
                 int index = args[i].indexOf('=');
                 if (index <= 0) continue;
                 String key = args[i].substring(0, index);
@@ -607,13 +549,10 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     public void setClientOptions(Properties opts) {
         for (Iterator<Object> iter = _clientOptions.keySet().iterator(); iter.hasNext();) {
             Object key = iter.next();
-            if (!opts.containsKey(key))
-                iter.remove();
+            if (!opts.containsKey(key)) {iter.remove();}
         }
         _clientOptions.putAll(opts);
-        for (I2PTunnelTask task : tasks) {
-            task.optionsUpdated(this);
-        }
+        for (I2PTunnelTask task : tasks) {task.optionsUpdated(this);}
         notifyEvent("clientoptions_onResult", "ok");
     }
 
@@ -634,28 +573,26 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             InetAddress serverHost = null;
             int portNum = -1;
             File privKeyFile = null;
-            try {
-                serverHost = InetAddress.getByName(args[0]);
-            } catch (UnknownHostException uhe) {
+            try {serverHost = InetAddress.getByName(args[0]);}
+            catch (UnknownHostException uhe) {
                 l.log("unknown host");
                 _log.error(getPrefix() + "Error resolving " + args[0], uhe);
                 notifyEvent("serverTaskId", Integer.valueOf(-1));
                 throw new IllegalArgumentException(getPrefix() + "Error resolving " + args[0] + uhe.getMessage());
             }
 
-            try {
-                portNum = Integer.parseInt(args[1]);
-            } catch (NumberFormatException nfe) {
+            try {portNum = Integer.parseInt(args[1]);}
+            catch (NumberFormatException nfe) {
                 l.log("invalid port");
                 _log.error(getPrefix() + "Port specified is not valid: " + args[1], nfe);
                 notifyEvent("serverTaskId", Integer.valueOf(-1));
             }
-            if (portNum <= 0)
+            if (portNum <= 0) {
                 throw new IllegalArgumentException(getPrefix() + "Bad port " + args[1]);
+            }
 
             privKeyFile = new File(args[2]);
-            if (!privKeyFile.isAbsolute())
-                privKeyFile = new File(_context.getConfigDir(), args[2]);
+            if (!privKeyFile.isAbsolute()) {privKeyFile = new File(_context.getConfigDir(), args[2]);}
             if (!privKeyFile.canRead()) {
                 l.log(getPrefix() + "Private key file does not exist or is not readable: " + args[2]);
                 _log.error(getPrefix() + "Private key file does not exist or is not readable: " + args[2]);
@@ -670,7 +607,8 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             return;
         } else {
             l.log("server <host> <port> <privkeyfile>\n" +
-                  "  creates a server that sends all incoming data\n" + "  of its destination to host:port.");
+                  "  Creates a server that sends all incoming data\n" +
+                  "  of its destination to host:port.");
             notifyEvent("serverTaskId", Integer.valueOf(-1));
         }
     }
@@ -685,28 +623,26 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             InetAddress serverHost = null;
             int portNum = -1;
             File privKeyFile = null;
-            try {
-                serverHost = InetAddress.getByName(args[0]);
-            } catch (UnknownHostException uhe) {
+            try {serverHost = InetAddress.getByName(args[0]);}
+            catch (UnknownHostException uhe) {
                 l.log("unknown host");
                 _log.error(getPrefix() + "Error resolving " + args[0], uhe);
                 notifyEvent("serverTaskId", Integer.valueOf(-1));
                 throw new IllegalArgumentException(getPrefix() + "Error resolving " + args[0] + uhe.getMessage());
             }
 
-            try {
-                portNum = Integer.parseInt(args[1]);
-            } catch (NumberFormatException nfe) {
+            try {portNum = Integer.parseInt(args[1]);}
+            catch (NumberFormatException nfe) {
                 l.log("invalid port");
                 _log.error(getPrefix() + "Port specified is not valid: " + args[1], nfe);
                 notifyEvent("serverTaskId", Integer.valueOf(-1));
             }
-            if (portNum <= 0)
+            if (portNum <= 0) {
                 throw new IllegalArgumentException(getPrefix() + "Bad port " + args[1]);
+            }
 
             privKeyFile = new File(args[2]);
-            if (!privKeyFile.isAbsolute())
-                privKeyFile = new File(_context.getConfigDir(), args[2]);
+            if (!privKeyFile.isAbsolute()) {privKeyFile = new File(_context.getConfigDir(), args[2]);}
             if (!privKeyFile.canRead()) {
                 l.log(getPrefix() + "Private key file does not exist or is not readable: " + args[2]);
                 _log.error(getPrefix() + "Private key file does not exist or is not readable: " + args[2]);
@@ -721,7 +657,8 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             return;
         } else {
             l.log("server <host> <port> <privkeyfile>\n" +
-                  "  creates a server that sends all incoming data\n" + "  of its destination to host:port.");
+                  "  Creates a server that sends all incoming data\n" +
+                  "  of its destination to host:port.");
             notifyEvent("serverTaskId", Integer.valueOf(-1));
         }
     }
@@ -744,30 +681,28 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             InetAddress serverHost = null;
             int portNum = -1;
             File privKeyFile = null;
-            try {
-                serverHost = InetAddress.getByName(args[0]);
-            } catch (UnknownHostException uhe) {
+            try {serverHost = InetAddress.getByName(args[0]);}
+            catch (UnknownHostException uhe) {
                 l.log("unknown host");
                 _log.error(getPrefix() + "Error resolving " + args[0], uhe);
                 notifyEvent("serverTaskId", Integer.valueOf(-1));
                 throw new IllegalArgumentException(getPrefix() + "Error resolving " + args[0] + uhe.getMessage());
             }
 
-            try {
-                portNum = Integer.parseInt(args[1]);
-            } catch (NumberFormatException nfe) {
+            try {portNum = Integer.parseInt(args[1]);}
+            catch (NumberFormatException nfe) {
                 l.log("invalid port");
                 _log.error(getPrefix() + "Port specified is not valid: " + args[1], nfe);
                 notifyEvent("serverTaskId", Integer.valueOf(-1));
             }
-            if (portNum <= 0)
+            if (portNum <= 0) {
                 throw new IllegalArgumentException(getPrefix() + "Bad port " + args[1]);
+            }
 
             String spoofedHost = args[2];
 
             privKeyFile = new File(args[3]);
-            if (!privKeyFile.isAbsolute())
-                privKeyFile = new File(_context.getConfigDir(), args[3]);
+            if (!privKeyFile.isAbsolute()) {privKeyFile = new File(_context.getConfigDir(), args[3]);}
             if (!privKeyFile.canRead()) {
                 l.log(getPrefix() + "Private key file does not exist or is not readable: " + args[3]);
                 _log.error(getPrefix() + "Private key file does not exist or is not readable: " + args[3]);
@@ -782,7 +717,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             return;
         } else {
             l.log("httpserver <host> <port> <spoofedhost> <privkeyfile>\n" +
-                  "  creates an HTTP server that sends all incoming data\n"
+                  "  Creates an HTTP server that sends all incoming data\n"
                   + "  of its destination to host:port., filtering the HTTP\n"
                   + "  headers so it looks like the request is to the spoofed host.");
             notifyEvent("serverTaskId", Integer.valueOf(-1));
@@ -809,18 +744,16 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             int portNum = -1;
             int port2Num = -1;
             File privKeyFile = null;
-            try {
-                serverHost = InetAddress.getByName(args[0]);
-            } catch (UnknownHostException uhe) {
+            try {serverHost = InetAddress.getByName(args[0]);}
+            catch (UnknownHostException uhe) {
                 l.log("unknown host");
                 _log.error(getPrefix() + "Error resolving " + args[0], uhe);
                 notifyEvent("serverTaskId", Integer.valueOf(-1));
                 throw new IllegalArgumentException(getPrefix() + "Error resolving " + args[0] + uhe.getMessage());
             }
 
-            try {
-                portNum = Integer.parseInt(args[1]);
-            } catch (NumberFormatException nfe) {
+            try {portNum = Integer.parseInt(args[1]);}
+            catch (NumberFormatException nfe) {
                 l.log("invalid port");
                 _log.error(getPrefix() + "Port specified is not valid: " + args[1], nfe);
                 notifyEvent("serverTaskId", Integer.valueOf(-1));

@@ -222,10 +222,14 @@ th.tunnelControl{text-align:center}
 #screenlog .clearlog:hover{background:rgba(255,255,255.5) var(--close_hover) no-repeat center center/16px}
 #screenlog .clearlog:active{background:#f2f2f2 var(--close) no-repeat center center/14px}
 #statusMessages,#statusMessages:active{margin:0;height:80px;border:0;box-shadow:none}
-#statusMessages{padding:2px 4px;width:calc(100% - 5px);font:500 8.5pt var(--monospaced);color:#070;border:0;border-radius:0;box-shadow:none;background:none;filter:none}
+#statusMessages{padding:2px 4px;width:calc(100% - 8px);overflow-y:auto;font:500 8.5pt var(--monospaced);color:#070;border:0;border-radius:0;box-shadow:none;background:none;filter:none}
 #statusMessages:focus{background:#fafaff;box-shadow:none}
 #statusMessages::selection{color:#fff;background:#070}
 #tunnelMessages{padding:0;box-shadow:var(--highlight),0 0 2px 1px rgba(220,220,255,.5) inset;background:#fff url(/themes/snark/ubergine/images/hat.webp) no-repeat right bottom/auto 95%}
+#statusMessages li{margin:0 0 0 -2px;width:calc(100% + 2px);background:#fff8}
+#statusMessages li:nth-child(odd){background:#ddfa}
+#statusMessages li.warn{color:#841}
+#statusMessages li.error{color:#a00}
 
 /* edit */
 input[type=text].filemanager{background:#fafaff var(--files) no-repeat 8px center/15px}

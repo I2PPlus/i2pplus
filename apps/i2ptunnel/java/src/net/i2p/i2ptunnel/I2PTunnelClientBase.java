@@ -420,7 +420,6 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         return sockManager;
     }
 
-
     /**
      * Warning, blocks while connecting to router and building tunnels;
      * This may take a LONG time.
@@ -492,9 +491,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     }
 
     /**
-     * Actually open the local socket and start working on incoming connections.  *Must* be
-     * called by derived classes after initialization.
-     *
+     * Actually open the local socket and start working on incoming connections.
+     * *Must* be called by derived classes after initialization.
      * (this wasn't actually true until 0.9.20)
      *
      * This will be fast if i2cp.delayOpen is true, but could take
@@ -502,7 +500,6 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
      *
      * Extending classes must check the value of boolean open after calling
      * super.startRunning(), if false then something went wrong.
-     *
      */
     public void startRunning() {
         boolean openNow = !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty("i2cp.delayOpen"));
@@ -670,9 +667,9 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             Properties opts = getTunnel().getClientOptions();
             boolean useSSL = Boolean.parseBoolean(opts.getProperty(PROP_USE_SSL));
             if (useSSL) {
-                // was already done in GeneralHelper.updateTunnelConfig() when saving the config
-                // we should never be generating the cert here.
-                // add the local interface and all targets to the cert
+                // Was already done in GeneralHelper.updateTunnelConfig() when saving the config.
+                // We should never be generating the cert here.
+                // Add the local interface and all targets to the cert.
                 Set<String> altNames = new HashSet<String>(4);
                 String intfc = getTunnel().listenHost;
                 if (intfc != null && !intfc.equals("0.0.0.0") && !intfc.equals("::") &&
@@ -685,10 +682,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 boolean wasCreated = SSLClientUtil.verifyKeyStore(opts, "", altNames);
                 if (wasCreated) {
                     // From here, we can't save the config.
-                    // We shouldn't get here, as SSL isn't the default, so it would
-                    // be enabled via the GUI only.
-                    // If it was done manually, the keys will be regenerated at every startup,
-                    // which is bad.
+                    // We shouldn't get here, as SSL isn't the default, so it would be enabled via the GUI only.
+                    // If it was done manually, the keys will be regenerated at every startup, which is bad.
                     _log.logAlways(Log.WARN, "Created new I2PTunnel SSL keys but can't save the config -> Disable and enable via I2PTunnel GUI");
                 }
                 SSLServerSocketFactory fact = SSLClientUtil.initializeFactory(opts);

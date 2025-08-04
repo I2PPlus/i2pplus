@@ -77,6 +77,11 @@ div[class^="status"]{margin:0;padding:0;width:100%;height:24px;font-size:0;text-
 #screenlog .clearlog{border-left:var(--border);background:rgba(0,0,0,.3) var(--close) no-repeat center center/16px}
 #screenlog .clearlog:hover{background:rgba(0,0,32,.5) var(--close_hover) no-repeat center center/16px}
 #screenlog .clearlog:active{box-shadow:var(--btn_shadow_active);background:#113 var(--close) no-repeat center center/14px}
+#statusMessages{margin:0;padding:2px 4px;width:calc(100% - 10px);height:80px;overflow:hidden;overflow-y:auto;list-style:none;font-family:var(--monospaced);font-size:8.5pt;font-weight:700;color:#69f;border:0;border-radius:0;box-shadow:var(--highlight),0 0 1px 2px rgba(16,16,96,.4) inset;background:url(../dark/images/chimp.webp) no-repeat right bottom/auto 95%,linear-gradient(180deg,#000,#001);contain:paint}
+#statusMessages li{margin:0;padding:1px 0 1px 4px;width:calc(100% + 6px);white-space:normal;word-break:break-word;background:#0018}
+#statusMessages li:nth-child(odd){background:#0038}
+#statusMessages li.warn{color:#841}
+#statusMessages li.error{color:#a00}
 
 .base32{max-width:120px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:text-bottom}
 .tunnelInfo{display:none}
@@ -175,7 +180,6 @@ input[type=text],input[type=password],textarea{font-weight:700;color:var(--ink_d
 input[type=text]:focus,textarea:focus{color:var(--ink)}
 textarea{margin-left:4px;margin-right:4px;resize:none;box-sizing:border-box;font:700 9pt var(--monospaced);border:1px solid #302b74;background:#001}
 textarea:focus{color:var(--ink);border:1px solid #6466a5;box-shadow:0 0 0 1px rgba(101,39,135,.5),0 0 2px 2px #202;background:#000;transition:ease filter .3s 0s}
-#statusMessages,#statusMessages:active,#statusMessages:focus{margin:0;padding:2px 4px;width:100%;height:80px;font-size:8.5pt;font-weight:700;color:#69f;border:0;border-radius:0;box-shadow:var(--highlight),0 0 1px 2px rgba(16,16,96,.4) inset;background:url(../dark/images/chimp.webp) no-repeat right bottom/auto 95%,linear-gradient(180deg,#000,#001)}
 .freetext[type=text][readonly],.freetext[type=text][readonly]:focus{color:#669;opacity:.8;cursor:default;border:1px solid #302b74;box-shadow:inset 2px 2px 1px #000;background:#000}
 .editDisabled input[type=radio],.editDisabled label{cursor:not-allowed}
 .editDisabled input[type=radio]:checked{opacity:1}
@@ -391,7 +395,8 @@ select,.newTunnel select{margin:4px 8px 4px 4px;padding:6px 20px 6px 7px;min-wid
 #messages h2,#globalTunnelControl h2,#servers h2,#clients h2,#ssl h2,#wizardPanel h2,#tunnelEditPage h2,#tunnelEditPage h3,#registration h2,#registration h3{padding-left:36px;background-position:10px center,center center;background-size:20px,4px 100%,100%}
 #registration .displayText:hover,#registration .displayText:focus{padding:4.5px 0}
 #registration .displayText{width:800px}
-#statusMessages{padding:4px 8px;height:84px;line-height:1.3}
+#statusMessages{margin:-2px 0 0 0;padding:4px 8px;height:84px;width:calc(100% - 16px);line-height:1.3}
+#statusMessages li{margin-left:-5px;width:calc(100% + 8px)}
 textarea[name="accessList"],#hostField,#localDestination,.authentication{margin:6px}
 textarea[name="accessList"],#hostField,#localDestination,.authentication{width:calc(100% - 11px)}
 td#throttle,td#tunnelMessages{padding:0}
