@@ -137,9 +137,9 @@ th .help::after{width:16px;height:16px;display:inline-block;background:url(/them
 #throttleHeader.isDisplayed #toggleThrottler{right:7px;transform:none}
 
 /* screenlog */
-#statusMessages{margin:0;padding:2px 4px 2px 8px;height:80px;overflow:hidden;overflow-y:auto;list-style:none;font-family:var(--monospaced);font-size:9pt;border:0;box-shadow:none;word-break:break-all;color:#070;border:0;border-radius:0;box-shadow:var(--highlight),0 0 1px 1px rgba(220,220,255,.4) inset;background:url(../../snark/ubergine/images/hat.webp) no-repeat right bottom/auto 95%,linear-gradient(180deg,#f2f2ff,#fff);contain:paint}
-#statusMessages li{margin:0 0 0 -6px;padding-left:4px;width:calc(100% + 4px);white-space:normal;word-break:break-word;background:#fff8}
-#statusMessages li:nth-child(odd){background:#ddfa}
+#statusMessages{margin:0;padding:2px 4px 2px 8px;height:80px;overflow:hidden;overflow-y:auto;list-style:none;font-family:var(--monospaced);font-size:9pt;border:0;box-shadow:none;word-break:break-all;color:#070;border:0;border-radius:0;box-shadow:var(--highlight),0 0 1px 1px rgba(220,220,255,.4) inset;background:url(../../snark/ubergine/images/hat.webp) no-repeat right bottom/auto 95%,linear-gradient(180deg,#f2f2ff,#fff),#eefa;contain:paint}
+#statusMessages li{margin:0 0 0 -6px;padding-left:4px;width:calc(100% + 4px);white-space:normal;word-break:break-word;background:linear-gradient(90deg,#fff8,#fff8 calc(100% - 130px),#0000 calc(100% - 70px))}
+#statusMessages li:nth-child(odd){background:linear-gradient(90deg,#eefa,#eefa calc(100% - 130px),#0000 calc(100% - 70px))}
 #statusMessages li.warn{color:#841}
 #statusMessages li.error{color:#a00}
 

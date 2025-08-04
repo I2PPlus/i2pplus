@@ -221,15 +221,13 @@ th.tunnelControl{text-align:center}
 #screenlog .clearlog{border-left:var(--border_inner);background:rgba(255,255,255,.3) var(--close) no-repeat center center/16px}
 #screenlog .clearlog:hover{background:rgba(255,255,255.5) var(--close_hover) no-repeat center center/16px}
 #screenlog .clearlog:active{background:#f2f2f2 var(--close) no-repeat center center/14px}
-#statusMessages,#statusMessages:active{margin:0;height:80px;border:0;box-shadow:none}
-#statusMessages{padding:2px 4px;width:calc(100% - 8px);overflow-y:auto;font:500 8.5pt var(--monospaced);color:#070;border:0;border-radius:0;box-shadow:none;background:none;filter:none}
-#statusMessages:focus{background:#fafaff;box-shadow:none}
+#statusMessages{margin:0;padding:2px 4px;height:88px;width:calc(100% - 8px);overflow-y:auto;font:500 8.5pt var(--monospaced);color:#070;scrollbar-color:#99f #0000}
 #statusMessages::selection{color:#fff;background:#070}
-#tunnelMessages{padding:0;box-shadow:var(--highlight),0 0 2px 1px rgba(220,220,255,.5) inset;background:#fff url(/themes/snark/ubergine/images/hat.webp) no-repeat right bottom/auto 95%}
-#statusMessages li{margin:0 0 0 -2px;width:calc(100% + 2px);background:#fff8}
-#statusMessages li:nth-child(odd){background:#ddfa}
+#statusMessages li{margin:0 0 0 -2px;padding:1px 0 1px 4px;width:calc(100% - 2px);background:linear-gradient(90deg,#fff8,#fff8 calc(100% - 130px),#0000 calc(100% - 70px))}
+#statusMessages li:nth-child(odd){background:linear-gradient(90deg,#eefa,#eefa calc(100% - 130px),#0000 calc(100% - 70px))}
 #statusMessages li.warn{color:#841}
 #statusMessages li.error{color:#a00}
+#tunnelMessages{padding:0;box-shadow:var(--highlight),0 0 2px 1px rgba(220,220,255,.5) inset;background:#eefa url(/themes/snark/ubergine/images/hat.webp) no-repeat right bottom/auto 95%}
 
 /* edit */
 input[type=text].filemanager{background:#fafaff var(--files) no-repeat 8px center/15px}
