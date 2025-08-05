@@ -329,12 +329,12 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         boolean warnedAboutConnection = false;
         boolean warnedAboutSubsession = false;
         boolean tunnelsReadyLogged = false;
+        Properties props = getTunnel().getClientOptions();
 
         I2PSession session = sockMgr.getSession();
         if (session.isOffline()) {
             long exp = session.getOfflineExpiration();
             long remaining = exp - getTunnel().getContext().clock().now();
-            Properties props = getTunnel().getClientOptions();
             String name = props.getProperty("inbound.nickname");
             if (name == null) {
                 name = props.getProperty("outbound.nickname");
@@ -409,8 +409,9 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
         if (!tunnelsReadyLogged) {
             String nickname = tunnel.getClientOptions().getProperty("inbound.nickname");
-            String type = tunnel.getClientOptions().getProperty("type");
-            String readyMsg = "✔ Tunnels ready for: " + nickname + " [" + type + " server on " + remoteHost.getHostAddress() + ':' + remotePort + "]";
+            String type = props.getProperty("type");
+            String readyMsg = "✔ Tunnels ready for: " + nickname + " [" + (type != null ? type + " server" : "Server") +
+                              " on " + remoteHost.getHostAddress() + ':' + remotePort + "]";
             l.log(readyMsg);
             tunnelsReadyLogged = true;
         }
