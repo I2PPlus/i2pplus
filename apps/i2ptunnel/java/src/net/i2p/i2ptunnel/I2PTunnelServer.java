@@ -325,6 +325,11 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      */
     private void connectManager() {
         int retries = 0;
+        boolean warnedAboutExpiry = false;
+        boolean warnedAboutConnection = false;
+        boolean warnedAboutSubsession = false;
+        boolean tunnelsReadyLogged = false;
+
         I2PSession session = sockMgr.getSession();
         if (session.isOffline()) {
             long exp = session.getOfflineExpiration();
@@ -346,10 +351,11 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 _log.log(Log.CRIT, msg);
                 throw new IllegalArgumentException(msg);
             }
-            if (remaining < 60*24*60*60*1000L) {
+            if (remaining < 60*24*60*60*1000L && !warnedAboutExpiry) {
                 String msg = "Offline signature for tunnel " + name + " expires in " + DataHelper.formatDuration(remaining);
                 _log.logAlways(Log.WARN, msg);
                 l.log("▲ WARNING: " + msg);
+                warnedAboutExpiry = true;
             }
         }
         while (session.isClosed()) {
@@ -363,42 +369,51 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                             sub.connect();
                             if (_log.shouldInfo()) {_log.info("Connected sub-session " + sub);}
                         } catch (I2PSessionException ise) {
-                            // not fatal?
-                            String msg = "Unable to connect sub-session " + sub;
-                            this.l.log("▲ WARNING: " + msg);
-                            _log.error(msg, ise);
+                            if (!warnedAboutSubsession) {
+                                String msg = "Unable to connect sub-session " + sub;
+                                this.l.log("▲ WARNING: " + msg);
+                                _log.error(msg, ise);
+                                warnedAboutSubsession = true;
+                            }
                         }
                     }
                 }
             } catch (I2PSessionException ise) {
-                // try to make this error sensible as it will happen...
-                String portNum = getTunnel().port;
-                if (portNum == null) {portNum = Integer.toString(I2PClient.DEFAULT_LISTEN_PORT);}
-                String msg;
-                if (getTunnel().getContext().isRouterContext()) {
-                    msg = "✖ Unable to build tunnels for server at " + remoteHost.getHostAddress() + ':' + remotePort;
-                } else {
-                    msg = "✖ Unable to connect to the router at " + getTunnel().host + ':' + portNum +
-                          " and build tunnels for server at " + remoteHost.getHostAddress() + ':' + remotePort;
+                if (!warnedAboutConnection) {
+                    // try to make this error sensible as it will happen...
+                    String portNum = getTunnel().port;
+                    if (portNum == null) {portNum = Integer.toString(I2PClient.DEFAULT_LISTEN_PORT);}
+                    String msg;
+                    if (getTunnel().getContext().isRouterContext()) {
+                        msg = "✖ Unable to build tunnels for server at " + remoteHost.getHostAddress() + ':' + remotePort;
+                    } else {
+                        msg = "✖ Unable to connect to the router at " + getTunnel().host + ':' + portNum +
+                              " and build tunnels for server at " + remoteHost.getHostAddress() + ':' + remotePort;
+                    }
+                    String exmsg = ise.getMessage();
+                    boolean fail = exmsg != null && exmsg.contains("session limit exceeded");
+                    if (!fail && ++retries < MAX_RETRIES) {
+                        msg += ", retrying in " + (RETRY_DELAY / 1000) + " seconds";
+                        this.l.log(msg);
+                        _log.error(msg);
+                    } else {
+                        msg += ", giving up";
+                        this.l.log(msg);
+                        _log.log(Log.CRIT, msg, ise);
+                        throw new IllegalArgumentException(msg, ise);
+                    }
+                    warnedAboutConnection = true;
                 }
-                String exmsg = ise.getMessage();
-                boolean fail = exmsg != null && exmsg.contains("session limit exceeded");
-                if (!fail && ++retries < MAX_RETRIES) {
-                    msg += ", retrying in " + (RETRY_DELAY / 1000) + " seconds";
-                    this.l.log(msg);
-                    _log.error(msg);
-                } else {
-                    msg += ", giving up";
-                    this.l.log(msg);
-                    _log.log(Log.CRIT, msg, ise);
-                    throw new IllegalArgumentException(msg, ise);
-                }
-                try {Thread.sleep(RETRY_DELAY);}
-                catch (InterruptedException ie) {}
             }
         }
 
-        l.log("✔ Tunnels ready for server at " + remoteHost.getHostAddress() + ':' + remotePort);
+        if (!tunnelsReadyLogged) {
+            String nickname = tunnel.getClientOptions().getProperty("inbound.nickname");
+            String type = tunnel.getClientOptions().getProperty("type");
+            String readyMsg = "✔ Tunnels ready for: " + nickname + " [" + type + " server on " + remoteHost.getHostAddress() + ':' + remotePort + "]";
+            l.log(readyMsg);
+            tunnelsReadyLogged = true;
+        }
         notifyEvent("openServerResult", "ok");
         open = true;
     }

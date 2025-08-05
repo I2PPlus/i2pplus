@@ -234,9 +234,12 @@ public class IndexBean {
             }
         }
 
-        String doneMsg = (runningCount > 0 ? "✔ " +_t("Restarted all running tunnels") :
-                                             "! " + _t("No running tunnels to restart"));
-        _timestampedMessages.add(new TimestampedMessage(doneMsg));
+        if (!msgSent) {
+            String doneMsg = (runningCount > 0 ? "✔ " +_t("Restarted all running tunnels") :
+                                                 "! " + _t("No running tunnels to restart"));
+            _timestampedMessages.add(new TimestampedMessage(doneMsg));
+            msgSent = true;
+        }
         return "";
     }
 
@@ -248,6 +251,7 @@ public class IndexBean {
         List<TunnelController> controllers = _group.getControllers();
         if (controllers == null) {return "✖ " + _t("No clients configured, cannot restart!");}
         int running = 0;
+        boolean msgSent = false;
 
         for (TunnelController controller : controllers) {
             if (controller.isClient() && controller.getIsRunning()) {
@@ -272,9 +276,12 @@ public class IndexBean {
             }
         }
 
-        String doneMsg = (running > 0 ? "✔ " + _t("Restarted all running client tunnels") :
-                                        "✖ " + _t("No running client tunnels to restart"));
-        _timestampedMessages.add(new TimestampedMessage(doneMsg));
+        if (!msgSent) {
+            String doneMsg = (running > 0 ? "✔ " + _t("Restarted all running client tunnels") :
+                                            "✖ " + _t("No running client tunnels to restart"));
+            _timestampedMessages.add(new TimestampedMessage(doneMsg));
+            msgSent = true;
+        }
         return "";
     }
 
@@ -292,6 +299,7 @@ public class IndexBean {
 
         int restarted = 0;
         boolean noRunningServers = true;
+        boolean msgSent = false;
 
         for (TunnelController controller : controllers) {
             if (!controller.isClient() && controller.getIsRunning()) {
@@ -320,13 +328,19 @@ public class IndexBean {
             }
         }
 
+        // Reset the noRunningServers flag after the loop
+        noRunningServers = (restarted == 0);
+
         String doneMsg;
         String count = String.valueOf(restarted);
-        if (restarted > 0) {doneMsg = "✔ Restarted " + count + " running server " + (restarted > 1 ? "tunnels" : "tunnel");}
-        else if (noRunningServers) {doneMsg = "✖ " + _t("No running server tunnels to restart");}
-        else {doneMsg = "✖ " + _t("No servers configured, cannot restart!");}
 
-        _timestampedMessages.add(new TimestampedMessage(doneMsg));
+        if (!msgSent) {
+            if (restarted > 0) {doneMsg = "✔ Restarted " + count + " running server " + (restarted > 1 ? "tunnels" : "tunnel");}
+            else if (noRunningServers) {doneMsg = "✖ " + _t("No running server tunnels to restart");}
+            else {doneMsg = "✖ " + _t("No servers configured, cannot restart!");}
+            _timestampedMessages.add(new TimestampedMessage(doneMsg));
+            msgSent = true;
+        }
         return "";
     }
 
