@@ -2940,6 +2940,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             }
             int space = host.indexOf(" ");
+            if (space == -1) {space = host.length();}
             if ((!host.endsWith("[ext]") || host.contains(".i2p")) && !isUDP) {
                 buf.append("<a href=\"http://").append(urlEncode(host)).append("/\" target=_blank>");
             } else {host = host.substring(0, space);}
@@ -2948,9 +2949,10 @@ public class I2PSnarkServlet extends BasicServlet {
         int colon = announce.indexOf(':');
         if (colon > 0) {announce = announce.substring(0, colon);}
         if (isUDP) {announce = "UDP " + announce;}
+        int end = Math.max(0, announce.length() - 8); // Ensure the end index is not negative
         if (announce.length() > 67) {
             announce = DataHelper.escapeHTML(announce.substring(0, 40)) + "&hellip;" +
-                       DataHelper.escapeHTML(announce.substring(announce.length() - 8));
+                       DataHelper.escapeHTML(announce.substring(end));
         }
         if (announce.endsWith(".i2p") && !announce.endsWith(".b32.i2p")) {
             announce = announce.replace(".i2p", "");
