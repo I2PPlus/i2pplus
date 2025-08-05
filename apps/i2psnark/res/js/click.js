@@ -28,13 +28,12 @@ document.addEventListener("DOMContentLoaded", () => {
       #confirmYes,#confirmNo{margin:4px 12px;padding:6px 8px;width:120px;font-weight:700;cursor:pointer}
       #confirmButtons button:hover{opacity:1}
       #confirmYes:active,#confirmNo:active{transform:scale(0.9)}
-      #confirmDialog{padding:10px 15px 21px;width:480px;position:absolute;left:50%;z-index:100000;
-      user-select:none;animation:fade .3s ease .8s both;transform:translate(-50%,-50%)}
-      #confirmDialog.postMsg{animation:slide-down 5s ease-in 3s both reverse}
-      #confirmDialog.cancelled{animation:slide-down 5s ease-in .2s both reverse}
+      #confirmDialog{padding:10px 15px 21px;width:480px;position:absolute;left:50%;z-index:100000;user-select:none;transform:translate(-50%,-50%)}
+      #confirmDialog.postMsg{animation:slide-down .2s ease-in .1s both reverse,fade .1s ease 0s both}
+      #confirmDialog.cancelled{animation:slide-down .2s ease-in .1s both reverse,fade .1s ease 0s both}
       #confirmOverlay{width:100%;height:100%;position:fixed;left:0;bottom:0;right:0;z-index:99999}
       #confirmOverlay.cancelled{animation:fade .3s ease .2s both reverse}
-      #confirmOverlay.done{animation:fade .3s ease 3s both reverse}
+      #confirmOverlay.done{animation:fade .3s ease 0s both reverse}
       #msg{margin:-9px -14px 0;padding:30px 20px 30px 88px;text-align:left;font-size:110%}
       #msg b{max-width:384px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:bottom}
       #msg .hr{margin:11px 0 10px;height:0;width:100%;display:block}
@@ -118,7 +117,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const confirmed = await showConfirmationDialog(clickTarget, msg.replace("{0}", `<b>${torrent}</b>`), name, value, action);
       if (form && confirmed) {
-        const existingHiddenInputs = form.querySelectorAll("input[type=hidden]");
+        const existingHiddenInputs = form.querySelectorAll("input[type=hidden]:not([name=nonce]):not([name=sort])");
         const hiddenInput = document.createElement("input");
         existingHiddenInputs.forEach(input => input.remove());
         hiddenInput.type = "hidden";

@@ -3960,8 +3960,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<form action=\"").append(base).append("\" method=POST>\n")
                .append("<input type=hidden name=nonce value=\"").append(_nonce).append("\">\n");
             if (sortParam != null) {
-                buf.append("<input type=hidden name=sort value=\"")
-                   .append(DataHelper.stripHTML(sortParam)).append("\">\n");
+                buf.append("<input type=hidden name=sort value=\"").append(DataHelper.stripHTML(sortParam)).append("\">\n");
             }
         }
 
