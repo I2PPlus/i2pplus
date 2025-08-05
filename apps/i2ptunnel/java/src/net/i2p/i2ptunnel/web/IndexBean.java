@@ -236,8 +236,8 @@ public class IndexBean {
 
         String doneMsg = (runningCount > 0 ? "✔ " +_t("Restarted all running tunnels") :
                                              "! " + _t("No running tunnels to restart"));
-        //_timestampedMessages.add(new TimestampedMessage(doneMsg));
-        return doneMsg;
+        _timestampedMessages.add(new TimestampedMessage(doneMsg));
+        return "";
     }
 
     /**

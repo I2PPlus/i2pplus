@@ -200,7 +200,8 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                     String msg = "Opening tunnels for: " + getTunnel().getClientOptions().getProperty("inbound.nickname") +
                                  " -> Activity detected on listening port";
                     if (_log.shouldInfo()) {_log.info(msg);}
-                    l.log("‣ " + msg);
+                    // TODO: ensure we can also display the close on idle event before we show these
+                    //l.log("‣ " + msg);
                     /*
                      * Make sure the old one is closed - if it's shared client,
                      * it will be destroyed in getSocketManager() with the correct locking
