@@ -1785,48 +1785,34 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         }
     }
 
-    /**
-     * Helper method to actually close the given task number (optionally forcing
-     * closure)
-     *
-     */
+    /** Helper method to actually close the given task number (optionally forcing closure) */
     private boolean closetask(int num, CloseMode mode, Logging l) {
         boolean closed = false;
 
         _log.debug(getPrefix() + "closetask(): looking for task " + num);
-            for (I2PTunnelTask t : tasks) {
-                int id = t.getId();
-                if (_log.shouldDebug())
-                    _log.debug(getPrefix() + "closetask(): parsing task " + id + " (" + t.toString() + ")");
-                if (id == num) {
-                    closed = closetask(t, mode, l);
-                    break;
-                } else if (id > num) {
-                    break;
-                }
+        for (I2PTunnelTask t : tasks) {
+            int id = t.getId();
+            if (_log.shouldDebug()) {
+                _log.debug(getPrefix() + "closetask(): parsing task " + id + " (" + t.toString() + ")");
+            }
+            if (id == num) {
+                closed = closetask(t, mode, l);
+                break;
+            } else if (id > num) {break;}
         }
         return closed;
     }
 
-    /**
-     * Helper method to actually close the given task number
-     * (optionally forcing closure)
-     *
-     */
+    /** Helper method to actually close the given task number (optionally forcing closure) */
     private boolean closetask(I2PTunnelTask t, CloseMode mode, Logging l) {
-        if (_log.shouldInfo())
-            _log.info("Closing task " + t.getId() + " mode: " + mode);
+        if (_log.shouldInfo()) {_log.info("Closing task " + t.getId() + " mode: " + mode);}
         //l.log("Closing task " + t.getId() + (forced ? " forced..." : "..."));
         boolean success;
-        if (mode == CloseMode.NORMAL)
-            success = t.close(false);
-        else if (mode == CloseMode.FORCED)
-            success = t.close(true);
-        else  // DESTROY
-            success = t.destroy();
+        if (mode == CloseMode.NORMAL) {success = t.close(false);}
+        else if (mode == CloseMode.FORCED) {success = t.close(true);}
+        else {success = t.destroy();} // DESTROY
         if (success) {
-            if (_log.shouldInfo())
-                _log.info("Task " + t.getId() + " closed.");
+            if (_log.shouldInfo()) {_log.info("Task " + t.getId() + " closed.");}
             //l.log("Task " + t.getId() + " closed.");
         }
         return success;
@@ -1837,14 +1823,14 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      *
      */
     private void purgetasks(Logging l) {
-            List<I2PTunnelTask> removed = new ArrayList<I2PTunnelTask>();
-            for (I2PTunnelTask t : tasks) {
-                if (!t.isOpen()) {
-                    _log.debug(getPrefix() + "Purging inactive tunnel: [" + t.getId() + "] " + t.toString());
-                    removed.add(t);
-                }
+        List<I2PTunnelTask> removed = new ArrayList<I2PTunnelTask>();
+        for (I2PTunnelTask t : tasks) {
+            if (!t.isOpen()) {
+                _log.debug(getPrefix() + "Purging inactive tunnel: [" + t.getId() + "] " + t.toString());
+                removed.add(t);
             }
-            tasks.removeAll(removed);
+        }
+        tasks.removeAll(removed);
     }
 
     /**
@@ -1858,8 +1844,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     }
 
     /**
-     * Create a new destination, storing the destination and its private keys where
-     * instructed.
+     * Create a new destination, storing the destination and its private keys where instructed.
      * Does NOT support non-default sig types.
      * Deprecated - only used by CLI
      *
@@ -1876,11 +1861,8 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             writeTo.flush();
             writeTo.close();
             writePubKey(d, pubDest, l);
-        } catch (I2PException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        } catch (I2PException ex) {ex.printStackTrace();}
+        catch (IOException ex) {ex.printStackTrace();}
     }
 
     /**
@@ -1898,11 +1880,8 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
             l.log("Destination: " + d.toBase32());
             readFrom.close();
             writePubKey(d, pubDest, l);
-        } catch (I2PException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        } catch (I2PException ex) {ex.printStackTrace();}
+        catch (IOException ex) {ex.printStackTrace();}
     }
 
     /**
@@ -1914,17 +1893,16 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
      * @param l logger to send messages to
      */
     private static void writePubKey(Destination d, OutputStream o, Logging l) throws I2PException, IOException {
-        if (o == null) return;
+        if (o == null) {return;}
         d.writeBytes(o);
         l.log("Public key saved.");
     }
 
     /**
-     * Generates a Destination from a name. Now only supports base64
-     * names - may support naming servers later. "file:&lt;filename&gt;" is
-     * also supported, where filename is a file that either contains a
-     * binary Destination structure or the Base64 encoding of that
-     * structure.
+     * Generates a Destination from a name. Now only supports base64 names -
+     * may support naming servers later. "file:&lt;filename&gt;" is also supported,
+     * where filename is a file that either contains a binary Destination structure,
+     * or the Base64 encoding of that structure.
      *
      * Since file:&lt;filename&gt; isn't really used, this method is deprecated,
      * just call context.namingService.lookup() directly.

@@ -236,7 +236,7 @@ public class IndexBean {
 
         String doneMsg = (runningCount > 0 ? "✔ " +_t("Restarted all running tunnels") :
                                              "! " + _t("No running tunnels to restart"));
-        _timestampedMessages.add(new TimestampedMessage(doneMsg));
+        //_timestampedMessages.add(new TimestampedMessage(doneMsg));
         return doneMsg;
     }
 
@@ -253,14 +253,14 @@ public class IndexBean {
             if (controller.isClient() && controller.getIsRunning()) {
                 running++;
                 String name = controller.getName();
-                String stoppingMsg = "• " + _t("Stopping tunnel") + ": " + name;
+                String stoppingMsg = "‣ " + _t("Stopping tunnel") + ": " + name;
                 _timestampedMessages.add(new TimestampedMessage(stoppingMsg));
 
                 try {
                     controller.stopTunnel();
                     Thread.sleep(1000); // short delay to ensure clean stop
 
-                    String startingMsg = "• " + _t("Starting tunnel") + ": " + name;
+                    String startingMsg = "‣ " + _t("Starting tunnel") + ": " + name;
                     _timestampedMessages.add(new TimestampedMessage(startingMsg));
 
                     controller.startTunnelBackground();
@@ -275,7 +275,7 @@ public class IndexBean {
         String doneMsg = (running > 0 ? "✔ " + _t("Restarted all running client tunnels") :
                                         "✖ " + _t("No running client tunnels to restart"));
         _timestampedMessages.add(new TimestampedMessage(doneMsg));
-        return doneMsg;
+        return "";
     }
 
     /**
@@ -284,13 +284,20 @@ public class IndexBean {
      */
     private String restartAllServers() {
         List<TunnelController> controllers = _group.getControllers();
-        if (controllers == null) {return "✖ " + _t("No servers configured, cannot restart!");}
-        int running = 0;
+        if (controllers == null || controllers.isEmpty()) {
+            String msg = "✖ " + _t("No servers configured, cannot restart!");
+            _timestampedMessages.add(new TimestampedMessage(msg));
+            return "";
+        }
+
+        int restarted = 0;
+        boolean noRunningServers = true;
 
         for (TunnelController controller : controllers) {
             if (!controller.isClient() && controller.getIsRunning()) {
-                running++;
+                noRunningServers = false;
                 String name = controller.getName();
+
                 String stoppingMsg = "• " + _t("Stopping tunnel") + ": " + name;
                 _timestampedMessages.add(new TimestampedMessage(stoppingMsg));
 
@@ -302,18 +309,25 @@ public class IndexBean {
                     _timestampedMessages.add(new TimestampedMessage(startingMsg));
 
                     controller.startTunnelBackground();
+                    restarted++;
+
                 } catch (Exception e) {
-                    _log.error("Error restarting server tunnel: " + name + " - " + e.getMessage());
-                    String errorMsg = "✖ " + _t("Error restarting tunnel") + ": " + name + " - " + e.getMessage();
+                    String failMsg = "Error restarting server tunnel";
+                    _log.error(failMsg + ": " + name + " - " + e.getMessage());
+                    String errorMsg = "✖ " + _t(failMsg) + ": " + name + " - " + e.getMessage();
                     _timestampedMessages.add(new TimestampedMessage(errorMsg));
                 }
             }
         }
 
-        String doneMsg = (running > 0 ? "✔ " + _t("Restarted all running server tunnels") :
-                                        "✖ " + _t("No running server tunnels to restart"));
+        String doneMsg;
+        String count = String.valueOf(restarted);
+        if (restarted > 0) {doneMsg = "✔ Restarted " + count + " running server " + (restarted > 1 ? "tunnels" : "tunnel");}
+        else if (noRunningServers) {doneMsg = "✖ " + _t("No running server tunnels to restart");}
+        else {doneMsg = "✖ " + _t("No servers configured, cannot restart!");}
+
         _timestampedMessages.add(new TimestampedMessage(doneMsg));
-        return doneMsg;
+        return "";
     }
 
     private String reloadConfig() {
@@ -392,7 +406,6 @@ public class IndexBean {
         }
     }
 
-
     /**
      * Executes any action requested (start/stop/etc) and dump out the messages.
      * Only call this ONCE! Or you will get duplicate tunnels on save.
@@ -400,7 +413,7 @@ public class IndexBean {
      * @return HTML escaped or "" if empty
      */
     public String getMessages() {
-        if (_group == null) return _fatalError;
+        if (_group == null) {return _fatalError;}
 
         StringBuilder buf = new StringBuilder(512);
 
@@ -1006,7 +1019,6 @@ public class IndexBean {
         if (s != null) {_config.addClientNames(s);}
     }
 
-
     /**
      * Multiple entries in form
      * @since 0.9.41
@@ -1223,7 +1235,6 @@ public class IndexBean {
         _config.setOutproxyType(s);
     }
 
-
     public void setLimitMinute(String s) {
         if (s != null) {
             try {_config.setLimitMinute(Integer.parseInt(s.trim()));}
@@ -1398,13 +1409,11 @@ public class IndexBean {
     }
 
     /**
-     *  Encrypt a property using an in-memory key, for
-     *  interaction with the UI only, using ChaCha20.
-     *  IV is SHA256(k).
+     *  Encrypt a property using an in-memory key, for interaction with the UI only,
+     *  using ChaCha20. IV is SHA256(k).
      *
-     *  These are transient keys by design, but are persisted
-     *  to hide restarts. They are hidden inputs in the edit form.
-     *  Storage in config files is not encrypted.
+     *  These are transient keys by design, but are persisted to hide restarts.
+     *  They are hidden inputs in the edit form. Storage in config files is not encrypted.
      *
      *  @param k non-null
      *  @param v may be empty or null
@@ -1412,8 +1421,7 @@ public class IndexBean {
      *  @since 0.9.46
      */
     protected String encrypt(int tunnel, String k, String v) {
-        if (v == null || v.length() <= 0)
-            return v;
+        if (v == null || v.length() <= 0) {return v;}
         byte[] dec = DataHelper.getUTF8(v);
         SessionKey key;
         synchronized(_formKeys) {
@@ -1435,14 +1443,12 @@ public class IndexBean {
     /** Modify or create a destination */
     private String modifyDestination() {
         String privKeyFile = _config.getPrivKeyFile();
-        if (privKeyFile == null)
-            return "Private Key File not specified";
+        if (privKeyFile == null) {return "Private Key File not specified";}
 
         TunnelController tun = getController(_tunnel);
         Properties config = getConfig();
         if (tun == null) {
-            // creating new
-            tun = new TunnelController(config, "", true);
+            tun = new TunnelController(config, "", true); // creating new
             _group.addController(tun);
             saveChanges();
         } else if (tun.getIsRunning() || tun.getIsStarting()) {
@@ -1452,9 +1458,8 @@ public class IndexBean {
         File keyFile = new File(privKeyFile);
         if (!keyFile.isAbsolute()) {keyFile = new File(_context.getConfigDir(), privKeyFile);}
         PrivateKeyFile pkf = new PrivateKeyFile(keyFile);
-        try {
-            pkf.createIfAbsent();
-        } catch (I2PException e) {return "Create private key file failed: " + e;}
+        try {pkf.createIfAbsent();}
+        catch (I2PException e) {return "Create private key file failed: " + e;}
         catch (IOException e) {return "Create private key file failed: " + e;}
         switch (_certType) {
             case Certificate.CERTIFICATE_TYPE_NULL:
@@ -1465,9 +1470,10 @@ public class IndexBean {
                 pkf.setHashCashCert(_hashCashValue);
                 break;
             case Certificate.CERTIFICATE_TYPE_SIGNED:
-                if (_certSigner == null || _certSigner.trim().length() <= 0)
+                if (_certSigner == null || _certSigner.trim().length() <= 0) {
                     return "No signing destination specified";
-                // find the signer's key file...
+                }
+                // Find the signer's key file...
                 String signerPKF = null;
                 for (int i = 0; i < getTunnelCount(); i++) {
                     TunnelController c = getController(i);
@@ -1560,4 +1566,5 @@ public class IndexBean {
     protected String ngettext(String s, String p, int n) {
         return Messages.ngettext(s, p, n, _context);
     }
+
 }

@@ -176,8 +176,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
     private void initStats() {}
 
     /**
-     * Create the manager if it doesn't exist, AND connect it to the router and
-     * build tunnels.
+     * Create the manager if it doesn't exist, AND connect it to the router and build tunnels.
      *
      * Sets the this.sockMgr field if it is null, or if we want a new one.
      * This may take a LONG time if building a new manager.
@@ -534,7 +533,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                 String nickname = tunnel.getClientOptions().getProperty("inbound.nickname");
                 String readyMsg = "✔ Tunnels ready for: " + nickname + " [" + _handlerName + "]";
                 if ((openNow || chained) && !_handlerName.contains("Ping")) {l.log(readyMsg);}
-                else if (!_handlerName.contains("Ping")) {l.log(readyMsg + " -> [Standby mode]");}
+                else if (!_handlerName.contains("Ping")) {l.log(readyMsg + " -> Standby mode");}
             }
             notifyEvent("openBaseClientResult", "ok");
         } else {

@@ -621,12 +621,19 @@ public class TunnelController implements Logging {
             for (I2PSession s : sessions) {
                 if (_log.shouldInfo()) {_log.info("Releasing session " + s);}
                 TunnelControllerGroup group = TunnelControllerGroup.getInstance();
-                if (group != null) {group.release(this, s);}
+                if (group != null) {
+                    String idleTimeout = "";
+                    if (getClientOptionProps().getProperty("i2cp.closeIdleTime") != null) {
+                        idleTimeout = getClientOptionProps().getProperty("i2cp.closeIdleTime") + "m";
+                    }
+                    group.release(this, s);
+                    if (_log.shouldInfo()) {
+                        _log.info("Closing tunnels for: " + getName() + (!idleTimeout.equals("") ? " -> No activity detected for " + idleTimeout : ""));
+                    }
+                }
             }
             // _sessions.clear() ????
-        } else {
-            if (_log.shouldInfo()) {_log.info("No sessions to release for " + getName());}
-        }
+        } else if (_log.shouldInfo()) {_log.info("No sessions to release for " + getName());}
     }
 
     /**
