@@ -799,12 +799,15 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         // might risk to create an orphan socket. Would be better
         // to return with an error in that situation quickly.
         synchronized (sockLock) {
+            String nickname = tunnel.getClientOptions().getProperty("inbound.nickname");
+
             if (sockMgr != null) {
                 mySockets.retainAll(sockMgr.listSockets());
                 if ((!forced) && (!mySockets.isEmpty())) {
-                    l.log("Not closing tunnel, there are still active connections!");
-                    _log.debug("Can't close tunnel: there are still active connections!");
-                    for (I2PSocket s : mySockets) {l.log("  -> " + s.toString());}
+                    String noCloseMsg = "Not closing " + nickname + " tunnel -> Active connections remain...";
+                    l.log(noCloseMsg);
+                    _log.debug(noCloseMsg);
+                    for (I2PSocket s : mySockets) {l.log(" -> " + s.toString());}
                     return false;
                 }
                 if (!chained) {
@@ -817,11 +820,12 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                     // TCG will try to destroy it too
                 } // else the app chaining to this one closes it!
             }
-            if (!toString().contains("-1")) {l.log("‣ Stopping client " + toString() + "…");} // hide from i2ping
+            //if (!toString().contains("-1")) {l.log("‣ Stopping client " + toString() + "…");} // hide from i2ping
+            if (!toString().contains("-1")) {l.log("‣ Stopping client tunnel: " + nickname + "…");} // hide from i2ping
             open = false;
             try {if (ss != null) ss.close();}
             catch (IOException ex) {
-                if (_log.shouldDebug()) {_log.debug("Error closing", ex);}
+                if (_log.shouldDebug()) {_log.debug("Error closing tunnel " + nickname + " -> " + ex.getMessage());}
                 return false;
             }
             //l.log("Client closed.");

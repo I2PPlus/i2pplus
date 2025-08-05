@@ -210,20 +210,20 @@ public class IndexBean {
     private String restartAll() {
         List<TunnelController> controllers = _group.getControllers();
         if (controllers == null) {return "✖ " + _t("No services configured, cannot restart!");}
-        int runningCount = 0;
+        int running = 0;
         boolean msgSent = false;
 
         for (TunnelController controller : controllers) {
             if (controller.getIsRunning()) {
-                runningCount++;
+                running++;
                 String name = controller.getName();
-                String stoppingMsg = "‣ " + _t("Stopping tunnel") + ": " + name;
+                String stoppingMsg = "‣ " + _t("Stopping tunnel") + ": " + name + "...";
                 _timestampedMessages.add(new TimestampedMessage(stoppingMsg));
 
                 try {
                     controller.stopTunnel();
                     Thread.sleep(1000); // short delay to ensure clean stop
-                    String startingMsg = "‣ " + _t("Starting tunnel") + ": " + name;
+                    String startingMsg = "‣ " + _t("Starting tunnel") + ": " + name + "...";
                     _timestampedMessages.add(new TimestampedMessage(startingMsg));
                     controller.startTunnelBackground();
                 } catch (Exception e) {
@@ -235,8 +235,8 @@ public class IndexBean {
         }
 
         if (!msgSent) {
-            String doneMsg = (runningCount > 0 ? "✔ " +_t("Restarted all running tunnels") :
-                                                 "! " + _t("No running tunnels to restart"));
+            if (running < 1) {return "";}
+            String doneMsg = "✔ " +_t("Restarted all running tunnels");
             _timestampedMessages.add(new TimestampedMessage(doneMsg));
             msgSent = true;
         }
@@ -257,14 +257,14 @@ public class IndexBean {
             if (controller.isClient() && controller.getIsRunning()) {
                 running++;
                 String name = controller.getName();
-                String stoppingMsg = "‣ " + _t("Stopping tunnel") + ": " + name;
+                String stoppingMsg = "‣ " + _t("Stopping tunnel") + ": " + name + "...";
                 _timestampedMessages.add(new TimestampedMessage(stoppingMsg));
 
                 try {
                     controller.stopTunnel();
                     Thread.sleep(1000); // short delay to ensure clean stop
 
-                    String startingMsg = "‣ " + _t("Starting tunnel") + ": " + name;
+                    String startingMsg = "‣ " + _t("Starting tunnel") + ": " + name + "...";
                     _timestampedMessages.add(new TimestampedMessage(startingMsg));
 
                     controller.startTunnelBackground();
@@ -277,8 +277,8 @@ public class IndexBean {
         }
 
         if (!msgSent) {
-            String doneMsg = (running > 0 ? "✔ " + _t("Restarted all running client tunnels") :
-                                            "✖ " + _t("No running client tunnels to restart"));
+            if (running < 1) {return "";}
+            String doneMsg = ("✔ " + _t("Restarted all running client tunnels"));
             _timestampedMessages.add(new TimestampedMessage(doneMsg));
             msgSent = true;
         }
@@ -291,11 +291,7 @@ public class IndexBean {
      */
     private String restartAllServers() {
         List<TunnelController> controllers = _group.getControllers();
-        if (controllers == null || controllers.isEmpty()) {
-            String msg = "✖ " + _t("No servers configured, cannot restart!");
-            _timestampedMessages.add(new TimestampedMessage(msg));
-            return "";
-        }
+        if (controllers == null || controllers.isEmpty()) {return "";}
 
         int restarted = 0;
         boolean noRunningServers = true;
@@ -306,14 +302,14 @@ public class IndexBean {
                 noRunningServers = false;
                 String name = controller.getName();
 
-                String stoppingMsg = "• " + _t("Stopping tunnel") + ": " + name;
+                String stoppingMsg = "• " + _t("Stopping tunnel") + ": " + name + "...";
                 _timestampedMessages.add(new TimestampedMessage(stoppingMsg));
 
                 try {
                     controller.stopTunnel();
                     Thread.sleep(1000); // short delay to ensure clean stop
 
-                    String startingMsg = "‣ " + _t("Starting tunnel") + ": " + name;
+                    String startingMsg = "‣ " + _t("Starting tunnel") + ": " + name + "...";
                     _timestampedMessages.add(new TimestampedMessage(startingMsg));
 
                     controller.startTunnelBackground();
@@ -330,14 +326,12 @@ public class IndexBean {
 
         // Reset the noRunningServers flag after the loop
         noRunningServers = (restarted == 0);
-
-        String doneMsg;
         String count = String.valueOf(restarted);
+        String doneMsg = "";
 
         if (!msgSent) {
-            if (restarted > 0) {doneMsg = "✔ Restarted " + count + " running server " + (restarted > 1 ? "tunnels" : "tunnel");}
-            else if (noRunningServers) {doneMsg = "✖ " + _t("No running server tunnels to restart");}
-            else {doneMsg = "✖ " + _t("No servers configured, cannot restart!");}
+            if (restarted < 1) {return "";}
+            else {doneMsg = "✔ Restarted " + count + " running server " + (restarted > 1 ? "tunnels" : "tunnel");}
             _timestampedMessages.add(new TimestampedMessage(doneMsg));
             msgSent = true;
         }
@@ -679,6 +673,20 @@ public class IndexBean {
         TunnelController tun = getController(tunnel);
         return tun != null && tun.getTargetHost() != null && tun.getTargetPort() != null &&
                       TunnelController.TYPE_IRC_SERVER.equals(tun.getType());
+    }
+
+    /**
+     * Is this a server tunnel?
+     * @since 0.9.67+
+     */
+    public boolean isServer(int tunnel) {
+        TunnelController tun = getController(tunnel);
+        return tun != null &&
+            (TunnelController.TYPE_HTTP_SERVER.equals(tun.getType()) ||
+            TunnelController.TYPE_HTTP_BIDIR_SERVER.equals(tun.getType()) ||
+            TunnelController.TYPE_IRC_SERVER.equals(tun.getType()) ||
+            TunnelController.TYPE_STD_SERVER.equals(tun.getType()) ||
+            TunnelController.TYPE_STREAMR_SERVER.equals(tun.getType()));
     }
 
     /**
