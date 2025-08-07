@@ -421,7 +421,7 @@ msgid "Finished recheck of torrent {0}, unchanged"
 msgstr "已完成对种子 {0} 的重新检查，未变更"
 
 #, java-format
-msgid "Error checking the torrent {0}"
+msgid "Error checking torrent {0}"
 msgstr "检查种子 {0} 时出错"
 
 msgid "Data partition"

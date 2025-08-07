@@ -421,7 +421,7 @@ msgid "Finished recheck of torrent {0}, unchanged"
 msgstr "A(z) {0} torrent újraellenőrzése befejeződött, változatlan"
 
 #, java-format
-msgid "Error checking the torrent {0}"
+msgid "Error checking torrent {0}"
 msgstr "Hiba a torrent ellenőrzése során {0}"
 
 msgid "Data partition"
@@ -916,13 +916,13 @@ msgstr "Utolsó aktivitás"
 msgid "Stop"
 msgstr "Leállítás"
 
-msgid "Stop the torrent"
+msgid "Stop torrent"
 msgstr "Torrent leállítása"
 
 msgid "Start"
 msgstr "Indítás"
 
-msgid "Start the torrent"
+msgid "Start torrent"
 msgstr "Torrent indítása"
 
 msgid "Remove"

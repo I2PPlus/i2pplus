@@ -420,7 +420,7 @@ msgid "Finished recheck of torrent {0}, unchanged"
 msgstr "Fin de la vérification du torrent {0}, inchangé"
 
 #, java-format
-msgid "Error checking the torrent {0}"
+msgid "Error checking torrent {0}"
 msgstr "Erreur de vérification du torrent {0}"
 
 msgid "Data partition"
@@ -915,13 +915,13 @@ msgstr "Dernière activité"
 msgid "Stop"
 msgstr "Arrêter"
 
-msgid "Stop the torrent"
+msgid "Stop torrent"
 msgstr "Arrêter le torrent"
 
 msgid "Start"
 msgstr "Démarrer"
 
-msgid "Start the torrent"
+msgid "Start torrent"
 msgstr "Démarrer le torrent"
 
 msgid "Remove"

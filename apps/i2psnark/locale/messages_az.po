@@ -420,7 +420,7 @@ msgid "Finished recheck of torrent {0}, unchanged"
 msgstr "Torrent {0} yenidən yoxlandı, dəyişməmiş"
 
 #, java-format
-msgid "Error checking the torrent {0}"
+msgid "Error checking torrent {0}"
 msgstr "Torrent {0} yoxlama xətası"
 
 msgid "Data partition"
@@ -915,13 +915,13 @@ msgstr "Son Fəaliyyət"
 msgid "Stop"
 msgstr "Dayandır"
 
-msgid "Stop the torrent"
+msgid "Stop torrent"
 msgstr "Torrenti Dayandır"
 
 msgid "Start"
 msgstr "Başla"
 
-msgid "Start the torrent"
+msgid "Start torrent"
 msgstr "Torrenti Başla"
 
 msgid "Remove"

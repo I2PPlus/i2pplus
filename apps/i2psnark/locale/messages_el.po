@@ -421,7 +421,7 @@ msgid "Finished recheck of torrent {0}, unchanged"
 msgstr "Ολοκληρώθηκε ο επανέλεγχος του torrent {0}, αμετάβλητος"
 
 #, java-format
-msgid "Error checking the torrent {0}"
+msgid "Error checking torrent {0}"
 msgstr "Σφάλμα κατά τον έλεγχο του torrent {0}"
 
 msgid "Data partition"
@@ -916,13 +916,13 @@ msgstr "Τελευταία δραστηριότητα"
 msgid "Stop"
 msgstr "Σταμάτα"
 
-msgid "Stop the torrent"
+msgid "Stop torrent"
 msgstr "Σταματήστε το torrent"
 
 msgid "Start"
 msgstr "Έναρξη"
 
-msgid "Start the torrent"
+msgid "Start torrent"
 msgstr "Ξεκινήστε το torrent"
 
 msgid "Remove"

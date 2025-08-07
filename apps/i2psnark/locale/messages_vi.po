@@ -421,7 +421,7 @@ msgid "Finished recheck of torrent {0}, unchanged"
 msgstr "Đã hoàn tất kiểm tra lại torrent {0}, không thay đổi"
 
 #, java-format
-msgid "Error checking the torrent {0}"
+msgid "Error checking torrent {0}"
 msgstr "Lỗi kiểm tra torrent {0}"
 
 msgid "Data partition"
@@ -912,13 +912,13 @@ msgstr "Hoạt động cuối cùng"
 msgid "Stop"
 msgstr "Ngưng"
 
-msgid "Stop the torrent"
+msgid "Stop torrent"
 msgstr "Dừng torrent"
 
 msgid "Start"
 msgstr "Bắt đầu"
 
-msgid "Start the torrent"
+msgid "Start torrent"
 msgstr "Bắt đầu torrent"
 
 msgid "Remove"

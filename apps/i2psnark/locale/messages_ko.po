@@ -421,7 +421,7 @@ msgid "Finished recheck of torrent {0}, unchanged"
 msgstr "토렌트 {0}를 재확인하는것을 마쳤습니다, 변경사항 없음"
 
 #, java-format
-msgid "Error checking the torrent {0}"
+msgid "Error checking torrent {0}"
 msgstr "토렌트 {0}를 확인하는데 오류가 있습니다"
 
 msgid "Data partition"
@@ -912,13 +912,13 @@ msgstr "마지막 활동"
 msgid "Stop"
 msgstr "정지"
 
-msgid "Stop the torrent"
+msgid "Stop torrent"
 msgstr "토렌트 정지"
 
 msgid "Start"
 msgstr "시작"
 
-msgid "Start the torrent"
+msgid "Start torrent"
 msgstr "토렌트 시작"
 
 msgid "Remove"

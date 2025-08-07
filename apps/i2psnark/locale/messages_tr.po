@@ -421,7 +421,7 @@ msgid "Finished recheck of torrent {0}, unchanged"
 msgstr "{0} torrentinin yeniden kontrolü tamamlandı, değişmedi{0} torrentinin yeniden denetlenmesi tamamlandı, herhangi bir değişiklik yok"
 
 #, java-format
-msgid "Error checking the torrent {0}"
+msgid "Error checking torrent {0}"
 msgstr "{0} torrenti denetlenirken bir sorun çıktı"
 
 msgid "Data partition"
@@ -916,13 +916,13 @@ msgstr "Son işlem"
 msgid "Stop"
 msgstr "Durdur"
 
-msgid "Stop the torrent"
+msgid "Stop torrent"
 msgstr "Torrenti durdur"
 
 msgid "Start"
 msgstr "Başlat"
 
-msgid "Start the torrent"
+msgid "Start torrent"
 msgstr "Torrenti başlat"
 
 msgid "Remove"

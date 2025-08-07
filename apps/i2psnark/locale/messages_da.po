@@ -421,7 +421,7 @@ msgid "Finished recheck of torrent {0}, unchanged"
 msgstr "Færdig genkontrol af torrent {0}, uændret"
 
 #, java-format
-msgid "Error checking the torrent {0}"
+msgid "Error checking torrent {0}"
 msgstr "Fejl ved kontrol af torrenten {0}"
 
 msgid "Data partition"
@@ -916,13 +916,13 @@ msgstr "Sidste aktivitet"
 msgid "Stop"
 msgstr "Stop"
 
-msgid "Stop the torrent"
+msgid "Stop torrent"
 msgstr "Stop torrenten"
 
 msgid "Start"
 msgstr "Start"
 
-msgid "Start the torrent"
+msgid "Start torrent"
 msgstr "Start torrent"
 
 msgid "Remove"
