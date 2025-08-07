@@ -54,12 +54,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const targetElement = clickTarget.matches(clickable) ? clickTarget : clickTarget.closest(clickable);
     if (!targetElement) {return;}
 
-    let delay = 360;
     const isAction = targetElement.matches("input[class^='action'], input[id^='action']");
     const isDeleteOrRemoved = targetElement.matches("input[class='actionDelete'], input[class='actionRemove']");
     const isFormButton = targetElement.matches("input[type=submit]");
-    const currentForm = targetElement.closest("form");
     const isUIElement = targetElement.closest(".toggleview, .snarkNav, .filter");
+
+    let currentForm = targetElement.closest("form");
+    let delay = 360;
 
     targetElement.classList.add("depress");
 
@@ -71,10 +72,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (isAction) {
       const iframe = document.getElementById("processForm");
+      currentForm = document.getElementById("torrentlist");
+      if (!currentForm) {return;}
       if (iframe) {
         const formTarget = targetElement.form.target;
         if (formTarget === "processForm" && isAction) {delay = 4000;}
-      }
+      } else {return;}
       const nonClickedActionButtons = currentForm.querySelectorAll("input[type=submit][class^='action']:not(.depress), input[type=submit][id^='action']:not(.depress)");
       nonClickedActionButtons.forEach((el) => el.classList.add("tempDisabled"));
       currentForm.onsubmit = async (event) => {
