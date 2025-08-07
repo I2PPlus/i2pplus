@@ -100,6 +100,9 @@ public class URIUtil {
                 case '?':
                     buf.append("%3F");
                     continue;
+                case '!':
+                    buf.append("%21");
+                    continue;
                 case ';':
                     buf.append("%3B");
                     continue;
@@ -159,6 +162,9 @@ public class URIUtil {
                         continue;
                     case '?':
                         buf.append("%3F");
+                        continue;
+                    case '!':
+                        buf.append("%21");
                         continue;
                     case ';':
                         buf.append("%3B");

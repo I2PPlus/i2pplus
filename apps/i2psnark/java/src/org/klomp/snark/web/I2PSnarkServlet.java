@@ -2434,7 +2434,7 @@ public class I2PSnarkServlet extends BasicServlet {
             // Torrent name column
             buf.append("</td><td class=tName>");
             if (remaining == 0 || isMultiFile) {
-                buf.append("<a href=\"").append(torrentPath);
+                buf.append("<a href=\"").append(DataHelper.escapeHTML(torrentPath));
                 if (isMultiFile) {buf.append('/');}
                 buf.append("\" title=\"");
                 if (isMultiFile) {buf.append(_t("View files"));}
@@ -3335,9 +3335,9 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("\"></span><br>\n")
            .append("<span class=configOption><label for=autoStart><b>")
            .append(_t("Auto start torrents"))
-           .append("</b> </label><input type=checkbox class=\"optbox slider\" name=autoStart id=autoStart ")
-           .append(autoStart ? "checked " : "")
-           .append("title=\"")
+           .append("</b> </label><input type=checkbox class=\"optbox slider\" name=autoStart id=autoStart")
+           .append(autoStart ? " checked" : "")
+           .append(" title=\"")
            .append(_t("Automatically start torrents when added and restart torrents when I2PSnark starts"))
            .append("\"></span>");
 
@@ -3853,8 +3853,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String decodedBase = decodePath(base);
         String title = decodedBase;
         String cpath = _contextPath + '/';
-        if (title.startsWith(cpath))
-            title = title.substring(cpath.length());
+        if (title.startsWith(cpath)) {title = title.substring(cpath.length());}
 
         // Get the snark associated with this directory
         String tName;
@@ -3915,8 +3914,7 @@ public class I2PSnarkServlet extends BasicServlet {
         final boolean isTopLevel = dirSlash <= 0;
         title = _t("I2PSnark") + " - [" + _t("Torrent") + ": " + DataHelper.escapeHTML(title) + "]";
         buf.append(title).append("</title>\n").append(HEADER_A).append(_themePath).append(HEADER_B).append("\n");
-        // uncollapse panels
-        boolean collapsePanels = _manager.util().collapsePanels();
+        boolean collapsePanels = _manager.util().collapsePanels(); // uncollapse panels
         if (!collapsePanels) {buf.append(HEADER_A + _themePath + HEADER_C).append("\n");}
         String lang = (Translate.getLanguage(_manager.util().getContext()));
         if (lang.equals("zh") || lang.equals("ja") || lang.equals("ko")) {

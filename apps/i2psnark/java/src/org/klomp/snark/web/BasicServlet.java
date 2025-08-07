@@ -591,22 +591,13 @@ class BasicServlet extends HttpServlet
      *  @param path may be null
      */
     protected static String addPaths(String base, String path) {
-        if (path == null)
-            return base;
+        if (path == null) {return base;}
         if (path.equals("/")) {
-            // Java 17 and below:
-            // (new File("foo", "/")).toString() = "foo/"
-            // (new File("foo/", "/")).toString() = "foo/"
-            // Java 21:
-            // (new File("foo", "/")).toString() = "foo"
-            // (new File("foo/", "/")).toString() = "foo"
-            if (base.endsWith("/"))
-                return base;
+            if (base.endsWith("/")) {return base;}
             return base + path;
         }
         String rv = (new File(base, path)).toString();
-        if (SystemVersion.isWindows())
-            rv = rv.replace("\\", "/");
+        if (SystemVersion.isWindows()) {rv = rv.replace("\\", "/");}
         return rv;
     }
 
@@ -614,10 +605,9 @@ class BasicServlet extends HttpServlet
      *  Simple version of URIUtil.decodePath()
      */
     protected static String decodePath(String path) throws MalformedURLException {
-        if (!path.contains("%"))
-            return path;
+        if (!path.contains("%")) {return path;}
         try {
-            URI uri = new URI(path);
+            URI uri = new URI(path.replace("[", "%5B").replace("]", "%5D"));
             return uri.getPath();
         } catch (URISyntaxException use) {
             // for ease of use, since a USE is not an IOE but a MUE is...
