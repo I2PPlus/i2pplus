@@ -70,33 +70,22 @@
 <a href=#add id=addNewDest class=fakebutton title="<%=intl._t("Add new destination")%>" style=display:none!important hidden></a><a href=#import id=importFromFile class=fakebutton title="<%=intl._t("Import from hosts.txt file")%>" style=display:none!important hidden></a>
 <c:if test="${book.isEmpty}"><input form="exportlist" type=submit class=export id=exporthosts <c:if test="${book.isEmpty}">disabled</c:if>></c:if><c:if test="${book.isEmpty}"></span></c:if>
 <c:if test="${book.notEmpty}">
-<%
-    if (book.getEntries().length > 0) { /* Don't show if no results. Can't figure out how to do this with c:if */
-%>
+<%  if (book.getEntries().length > 0) { /* Don't show if no results. Can't figure out how to do this with c:if */ %>
 <input form="exportlist" type=hidden name="book" value="${book.book}">
 <c:if test="${book.search} != null && ${book.search}.length() > 0"><input form="exportlist" type=hidden name="search" value="${book.search}"></c:if>
 <c:if test="${book.hasFilter}">
 <input form="exportlist" type=hidden name="filter" value="${book.filter}">
-<%
-    String filter = book.getFilter();
-    if ("latest".equals(filter)) {filter = intl._t(filter);}
-    else if ("xn--".equals(filter)) {filter = intl._t("other");}
+<%      String filter = book.getFilter();
+        if ("latest".equals(filter)) {filter = intl._t(filter);}
+        else if ("xn--".equals(filter)) {filter = intl._t("other");}
 %>
 </c:if>
-<%
-        if (book.isHasFilter() || book.getSearch() != null) {
-%>
+<%      if (book.isHasFilter() || book.getSearch() != null) { %>
 <input form="exportlist" type=submit class=export id=exporthosts value="<%=intl._t("Export in hosts.txt format")%>" name="export" title="<%=intl._t("Export results in hosts.txt format")%>">
-<%
-        } else {
-%>
+<%      } else { %>
 <input form="exportlist" type=submit class=export id=exporthosts value="<%=intl._t("Export in hosts.txt format")%>" name="export" title="<%=intl._t("Export book in hosts.txt format")%>">
-<%
-        }
-%>
-<%
-    } else { /* book.getEntries().length() > 0 */ }
-%>
+<%      } %>
+<%  } else { /* book.getEntries().length() > 0 */ } %>
 </span></h3></div>
 <% /* need this whether book is empty or not to display the form messages */ %>
 <div id=messages class=canClose><%=formMessages%>
@@ -109,15 +98,20 @@
 <input type=hidden name="end" value="99">
 <input type=hidden name="filter" value="${book.filter}">
 <div id=booksearch>
-<% if (book.getSearch() == null) { %><input class=search type=text name="search" value="" size=20>
-<% } else { %><input class=search type=text name="search" value="${book.search}" size=20><% } %>
+<span id=searchInput>
+<% if (book.getSearch() == null) { %>
+<input class=search type=text name="search" value="" size=20>
+<% } else { %>
+<input class=search type=text name="search" value="${book.search}" size=20>
+<% } %>
+<a id=clearSearch target=_top></a>
 <input class=search type=submit name="submitsearch" value="<%=intl._t("Search")%>">
+</span>
 </div>
 </form>
 </div>
 <div id=filter>
-<%
-    String[][] filters = {
+<%  String[][] filters = {
         {"a", "A"}, {"b", "B"}, {"c", "C"}, {"d", "D"},
         {"e", "E"}, {"f", "F"}, {"g", "G"}, {"h", "H"},
         {"i", "I"}, {"j", "J"}, {"k", "K"}, {"l", "L"},
@@ -163,8 +157,7 @@
 <c:forEach items="${book.entries}" var="addr" begin="${book.resultBegin}" end="${book.resultEnd}">
 <tr class=lazy>
 <td class=info>
-<%
-        boolean haveImagegen = book.haveImagegen();
+<%      boolean haveImagegen = book.haveImagegen();
         if (haveImagegen) {
 %>
 <a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><svg width="24" height="24" class=identicon data-jdenticon-value="${addr.b32}" xmlns="http://www.w3.org/2000/svg"></svg><noscript><img src="/imagegen/id?s=24&amp;c=${addr.b32}" loading=lazy><style>.identicon{display:none!important}</style></noscript></a>
@@ -242,12 +235,13 @@
 <script src=/js/lazyload.js></script>
 <script src=/susidns/js/togglePanels.js></script>
 <script src=/js/setupIframe.js></script>
-<script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src=/js/iframeResizer/iframeResizer.contentWindow.js></script>
+<script src=/js/iframeResizer/updatedEvent.js></script>
 <script src="/js/resetScroll.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/scrollTo.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/clickToClose.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
-<script nonce="<%=cspNonce%>">window.jdenticon_config = { padding: 0, saturation: {color: 1, grayscale: 0} };</script>
-<script nonce="<%=cspNonce%>" src="/js/jdenticon.js"></script>
+<script src=/js/jdenticon.js></script>
+<script src=/susidns/js/clearSearch.js></script>
+<script nonce=<%=cspNonce%>>window.jdenticon_config = { padding: 0, saturation: {color: 1, grayscale: 0} };</script>
 </body>
 </html>
