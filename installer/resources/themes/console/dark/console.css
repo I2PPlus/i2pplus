@@ -2621,11 +2621,11 @@ p+.twocol{margin:10px 25px}
 .twocol li{break-inside:avoid}
 ul#upnphelp li:last-child,#legal ul li:last-child{padding-bottom:0}
 #advancedsettings,#browserconfig,#configurationhelp,#faq,#filterlist,#glossary,#legal,#newuserguide,#reachabilityhelp,#reseedhelp,#sidebarhelp,#themeoverride,#troubleshoot,#tunnman,#volunteer,#webhosting{border:var(--border);padding:0 20px;margin:9px 0;background:#000}
-#changelog{position:relative}
+#changelog{height:calc(100vh - 129px);position:relative}
 #changelog::after,#service_logs::after{height:228px;width:180px;display:inline-block;position:absolute;z-index:0;bottom:10px;right:16px;background:var(--tank) no-repeat center center/180px auto;opacity:.4;content:""}
 #service_logs::after{height:274px;width:258px;bottom:-45px;right:8px;z-index:-1;background-size:256px auto}
 #changelog h2{margin:0 0 -11px;padding:10px;word-spacing:.1em;letter-spacing:.08em;text-align:left;text-transform:uppercase;font-size:11pt;border-radius:0}
-#changelog pre{margin-top:11px;padding:10px 10px 10px 20px;width:calc(100% - 32px);max-height:600px;position:relative;z-index:10;overflow-y:scroll;font-size:10pt;text-shadow:1px 1px 1px rgba(0,0,0,.9);border-left:var(--border);border-right:var(--border);will-change:transform}
+#changelog pre{margin-top:11px;padding:10px 10px 10px 20px;width:calc(100% - 32px);height:calc(100vh - 275px);position:relative;z-index:10;overflow-y:scroll;font-size:10pt;text-shadow:1px 1px 1px rgba(0,0,0,.9);border-left:var(--border);border-right:var(--border);will-change:transform}
 #changelog pre span{margin-bottom:-10px;padding:0 10px 10px;width:calc(100% - 34px);display:inline-block;position:relative;font-weight:500;border-bottom:1px dotted #252}
 #changelog pre span:last-of-type{display:none}
 #changelog pre span::first-line{padding-left:12px;line-height:1.75;font-weight:700}
@@ -2840,6 +2840,7 @@ iframe.iframed{margin:15px 0 0}
 
 /* responsive layout */
 @media (max-width:1599px){
+#changelog pre{height:calc(100vh - 254px)}
 #reseedproxytype{columns:250px 3}#reseed_urlselection.optionsingle{columns:1 auto}
 }
 
@@ -2872,6 +2873,8 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #advancedconfig{padding-right:6px}
 #applinks a::after{margin-top:-3px}
 #banlist+h3{margin-bottom:-2px}
+#changelog{height:calc(100vh - 120px)}
+#changelog pre{height:calc(100vh - 240px)}
 #clock{padding-top:9px;font-size:16pt}
 #help h3,#faq h3{font-size:10.5pt}
 #i2pclientconfig a,#pluginmanage a{transform:translateY(-1px)}
