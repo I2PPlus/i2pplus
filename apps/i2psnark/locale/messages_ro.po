@@ -339,7 +339,7 @@ msgid "Torrent stopped: {0}"
 msgstr "Torrent oprit: {0}"
 
 #, java-format
-msgid "Torrent removed: \"{0}\""
+msgid "Torrent removed: {0}"
 msgstr "Torrent sters: \"{0}\""
 
 #, java-format

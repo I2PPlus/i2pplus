@@ -1661,14 +1661,17 @@ public class I2PSnarkServlet extends BasicServlet {
             } else {_manager.addMessage(_t("Enter URL or select torrent file"));} // no file or URL specified
         } else if (action.startsWith("Stop_")) {
             String torrent = action.substring(5).replace("%3D", "=");
+            int stopped = 0;
             if (torrent != null) {
                 byte[] infoHash = Base64.decode(torrent);
                 boolean validHash = infoHash != null && infoHash.length == 20; // valid sha1
                 if (validHash) {
                     Snark snark = _manager.getTorrentByInfoHash(infoHash);
-                    if (snark != null && DataHelper.eq(infoHash, snark.getInfoHash())) {_manager.stopTorrent(snark, false);}
-                    else {return;}
-                }
+                    if (snark != null && DataHelper.eq(infoHash, snark.getInfoHash()) && stopped == 0) {
+                        _manager.stopTorrent(snark);
+                        stopped++;
+                    } else {return;}
+                } else {return;}
             }
         } else if (action.startsWith("Start_")) {
             String torrent = action.substring(6).replace("%3D", "=");

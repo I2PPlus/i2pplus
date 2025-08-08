@@ -339,7 +339,7 @@ msgid "Torrent stopped: {0}"
 msgstr "Vertaisverkko pysäytetty: {0}"
 
 #, java-format
-msgid "Torrent removed: \"{0}\""
+msgid "Torrent removed: {0}"
 msgstr "Vertaisverkko poistettu: \"{0}\""
 
 #, java-format

@@ -873,7 +873,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         File com = commentFile(_configDir, snark.getInfoHash());
         try {comments.save(com);}
         catch (IOException ioe) {
-            if (_log.shouldWarn()) {_log.warn("Comment save error", ioe);}
+            if (_log.shouldWarn()) {_log.warn("Comment save error -> " + ioe.getMessage());}
         }
     }
 
@@ -2673,13 +2673,35 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      * @since 0.8.4
      */
     public void stopTorrent(Snark torrent, boolean shouldRemove) {
-        if (shouldRemove) {synchronized (_snarks) {removeSnark(torrent);}}
-        boolean wasStopped = torrent.isStopped();
-        torrent.stopTorrent();
-        if (!wasStopped) {
-            addMessageNoEscape(_t("Torrent stopped: {0}", linkify(torrent).replace("Magnet ", "")));
+        if (torrent != null) {
+            if (shouldRemove) {synchronized (_snarks) {removeSnark(torrent);}}
+            boolean wasStopped = torrent.isStopped();
+            if (!wasStopped) {
+                addMessageNoEscape(_t("Torrent stopped: {0}", linkify(torrent).replace("Magnet ", "")));
+                if (!_context.isRouterContext()) {
+                    System.out.println(" • " + _t("Torrent stopped: {0}", getSnarkName(torrent)));
+                }
+                torrent.stopTorrent();
+            }
+            if (shouldRemove) {removeTorrentStatus(torrent);}
         }
-        if (shouldRemove) {removeTorrentStatus(torrent);}
+    }
+
+    /**
+     * Stop the torrent only, leaving it on the list of torrents.
+     * @since 0.9.67+
+     */
+    public void stopTorrent(Snark torrent) {
+        if (torrent != null) {
+            boolean wasStopped = torrent.isStopped();
+            if (!wasStopped) {
+                addMessageNoEscape(_t("Torrent stopped: {0}", linkify(torrent).replace("Magnet ", "")));
+                if (!_context.isRouterContext()) {
+                    System.out.println(" • " + _t("Torrent stopped: {0}", getSnarkName(torrent)));
+                }
+                stopTorrent(torrent, false);
+            }
+        }
     }
 
     /**
@@ -2696,7 +2718,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             File torrentFile = new File(filename);
             torrentFile.delete();
         }
-        addMessage(_t("Torrent removed: \"{0}\"", torrent.getBaseName()));
+        addMessage(_t("Torrent removed: {0}", torrent.getBaseName()));
+        if (!_context.isRouterContext()) {
+            System.out.println(" • " + _t("Torrent removed: {0}", getSnarkName(torrent)));
+        }
     }
 
     /**
@@ -2719,7 +2744,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 _messages.clearThrough(id); // Remove that first message
             } else if (_context.isRouterContext()) {
                 // to wait for client manager to be up so we can get bandwidth limits
-                try {Thread.sleep(3000);} catch (InterruptedException ie) {}
+                try {Thread.sleep(3000);}
+                catch (InterruptedException ie) {}
             }
             // here because we need to delay until I2CP is up
             // although the user will see the default until then
@@ -3435,7 +3461,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     }
                     count++;
                     if (finalShutdown) {snark.stopTorrent(true);}
-                    else {stopTorrent(snark, false);}
+                    else {snark.stopTorrent(false);}
                     if (count % 8 == 0) {
                         try {Thread.sleep(20);}
                         catch (InterruptedException ie) {}
@@ -3453,7 +3479,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 }
                 count++;
                 if (finalShutdown) {snark.stopTorrent(true);}
-                else {stopTorrent(snark, false);}
+                else {snark.stopTorrent(false);}
                 // Throttle since every unannounce is now threaded.
                 // How to do this without creating a ton of threads?
                 if (count % 8 == 0) {
@@ -3472,18 +3498,13 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (_util.connected()) {
             if (count > 0) {
                 DHT dht = _util.getDHT();
-                if (dht != null) {
-                    dht.stop();
-                }
-                String msg = _t("Closing I2P tunnel after notifying trackers.");
+                if (dht != null) {dht.stop();}
+                String msg = _t("Closing I2P tunnel after notifying trackers.") + "..";
                 addMessage(msg);
-                if (!_context.isRouterContext()) {
-                    System.out.println(" • " + msg);
-                }
+                if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 if (finalShutdown) {
                     long toWait = 5*1000;
-                    if (SystemVersion.isARM())
-                        toWait *= 2;
+                    if (SystemVersion.isARM()) {toWait *= 2;}
                     try {Thread.sleep(toWait);} catch (InterruptedException ie) {}
                     _util.disconnect();
                     _stopping = false;
@@ -3516,12 +3537,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public void recheckTorrent(Snark snark) {
         if (snark.isStarting() || !snark.isStopped()) {
-            addMessage("Cannot check " + snark.getBaseName() + ", torrent already started");
+            addMessage((_t("Cannot check {0}", snark.getBaseName()) + " -> " + _t("Torrent already started")));
             return;
         }
         Storage storage = snark.getStorage();
         if (storage == null) {
-            addMessage("Cannot check " + snark.getBaseName() + ", no storage");
+            addMessage((_t("Cannot check {0}", snark.getBaseName()) + " -> " + _t("No storage")));
             return;
         }
         (new I2PAppThread(new ThreadedRechecker(snark), "TorrentRechecker", true)).start();
@@ -3538,7 +3559,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         public ThreadedRechecker(Snark s) {snark = s;}
         public void run() {
             try {
-                if (_log.shouldWarn()) {_log.warn("Starting recheck of " + snark.getBaseName());}
+                if (_log.shouldWarn()) {_log.warn("Starting recheck of " + snark.getBaseName() + "...");}
+                if (!_context.isRouterContext()) {
+                    System.out.println(" • " + (_t("Starting recheck of {}", getSnarkName(snark))) + "...");
+                }
                 boolean changed = snark.getStorage().recheck();
                 if (changed) {updateStatus(snark);}
                 if (_log.shouldWarn()) {
@@ -3598,9 +3622,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         try {
             File dir = getDataDir();
             if (dir == null || !dir.exists()) {
-                if (_log.shouldError()) {
-                    _log.error("[I2PSnark] Data directory does not exist, cannot create diskspace bar");
-                }
+                String msg = _t("Data directory does not exist") + " -> " + _t("Cannot create diskspace bar");
+                if (_log.shouldError()) {_log.error("[I2PSnark] " + msg);}
+                if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 return "";
             }
 
