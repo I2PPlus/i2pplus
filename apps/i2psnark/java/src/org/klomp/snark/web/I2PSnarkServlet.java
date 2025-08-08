@@ -391,7 +391,9 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("  const totalSnarks = ").append(_manager.listTorrentFiles().size()).append(";\n")
                .append("  window.snarkPageSize = snarkPageSize;\n")
                .append("  window.snarkRefreshDelay = snarkRefreshDelay;\n")
-               .append("  window.totalSnarks = totalSnarks;\n</script>\n");
+               .append("  window.totalSnarks = totalSnarks;\n</script>\n")
+               .append("<script src=").append(_resourcePath).append("js/snarkWork.js type=module></script>\n")
+               .append("<script src=").append(_resourcePath).append("js/messageTypes.js type=module></script>\n");
             if (!isStandalone()) {
                 buf.append("<script src=").append(_resourcePath).append("js/tunnelCounter.js type=module></script>\n");
             }
@@ -550,8 +552,9 @@ public class I2PSnarkServlet extends BasicServlet {
             mimeType.equals("text/css") || mimeType.contains("javascript"))) {
             headers.append("Cache-Control\t: private, max-age=2628000, immutable\r\n");
         } else {headers.append("Cache-Control\t: private, no-cache, max-age=2628000\r\n");}
+        String nonceString = "nonce-" + cspNonce;
         StringBuilder csp = new StringBuilder("default-src 'self'; base-uri 'self'; connect-src 'self'; worker-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; ");
-        csp.append("script-src 'self' 'nonce-").append(cspNonce).append("'; ");
+        csp.append("script-src-elem 'self' '").append(nonceString).append("'; script-src 'self' '").append(nonceString).append("'; ");
         csp.append("object-src 'none'; media-src '").append(allowMedia ? "self" : "none").append("'");
         //if (mimeType != null && (mimeType.contains("html") || mimeType.contains("javascript"))) {
         if (mimeType == null || mimeType.contains("text") || mimeType.contains("script") || mimeType.contains("application")) {
@@ -1647,7 +1650,8 @@ public class I2PSnarkServlet extends BasicServlet {
                             _manager.addMessageNoEscape(_t("ERROR - Out of memory, cannot create torrent from {0}",
                             DataHelper.escapeHTML(newURL)) + ": " + DataHelper.stripHTML(oom.getMessage()));
                         } finally {
-                            try { if (in != null) in.close(); } catch (IOException ioe) {}
+                            try {if (in != null) in.close();}
+                            catch (IOException ioe) {}
                         }
                     } else {
                         _manager.addMessage(_t("Invalid URL: Must start with \"{0}\" or \"{1}\"",
@@ -1656,24 +1660,22 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             } else {_manager.addMessage(_t("Enter URL or select torrent file"));} // no file or URL specified
         } else if (action.startsWith("Stop_")) {
-            String torrent = action.substring(5);
+            String torrent = action.substring(5).replace("%3D", "=");
             if (torrent != null) {
-                byte infoHash[] = Base64.decode(torrent);
-                if ((infoHash != null) && (infoHash.length == 20)) { // valid sha1
-                    for (String name : _manager.listTorrentFiles()) {
-                        Snark snark = _manager.getTorrent(name);
-                        if ((snark != null) && (DataHelper.eq(infoHash, snark.getInfoHash()))) {
-                            _manager.stopTorrent(snark, false);
-                            break;
-                        }
-                    }
+                byte[] infoHash = Base64.decode(torrent);
+                boolean validHash = infoHash != null && infoHash.length == 20; // valid sha1
+                if (validHash) {
+                    Snark snark = _manager.getTorrentByInfoHash(infoHash);
+                    if (snark != null && DataHelper.eq(infoHash, snark.getInfoHash())) {_manager.stopTorrent(snark, false);}
+                    else {return;}
                 }
             }
         } else if (action.startsWith("Start_")) {
             String torrent = action.substring(6).replace("%3D", "=");
             if (torrent != null) {
                 byte infoHash[] = Base64.decode(torrent);
-                if ((infoHash != null) && (infoHash.length == 20)) {_manager.startTorrent(infoHash);} // valid sha1
+                boolean validHash = infoHash != null && infoHash.length == 20; // valid sha1
+                if (validHash) {_manager.startTorrent(infoHash);}
             }
         } else if (action.startsWith("Remove_")) {
             String torrent = action.substring(7);
@@ -2542,12 +2544,12 @@ public class I2PSnarkServlet extends BasicServlet {
         else if (isRunning) {
             // Stop Button
             buf.append("<input type=submit class=actionStop name=\"action_Stop_").append(b64).append("\" value=\"")
-               .append(_t("Stop")).append("\" title=\"").append(_t("Stop the torrent").replace(" the", "")).append("\">");
+               .append(_t("Stop")).append("\" title=\"").append(_t("Stop torrent")).append("\">");
         } else if (!snark.isStarting()) {
             if (!_manager.isStopping()) {
                 // Start Button
                 buf.append("<input type=submit class=actionStart name=\"action_Start_").append(b64).append("\" value=\"")
-                   .append(_t("Start")).append("\" title=\"").append(_t("Start the torrent").replace(" the", "")).append("\">");
+                   .append(_t("Start")).append("\" title=\"").append(_t("Start torrent")).append("\">");
             }
             if (isValid && canWrite) {
                 // Remove Button

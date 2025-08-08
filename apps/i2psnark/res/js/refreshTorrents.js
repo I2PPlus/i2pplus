@@ -1,5 +1,5 @@
 /* I2P+ I2PSnark refreshTorrents.js by dr|z3d */
-/* Selective refresh torrents and other volatile elements in the I2PSnark UI */
+/* Selectively refresh torrents and other volatile elements in the I2PSnark UI */
 /* License: AGPL3 or later */
 
 import {MESSAGE_TYPES} from "./messageTypes.js";

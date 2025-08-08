@@ -912,13 +912,13 @@ msgstr "上次活动"
 msgid "Stop"
 msgstr "停止"
 
-msgid "Stop the torrent"
+msgid "Stop torrent"
 msgstr "停止种子"
 
 msgid "Start"
 msgstr "启动"
 
-msgid "Start the torrent"
+msgid "Start torrent"
 msgstr "启动种子"
 
 msgid "Remove"

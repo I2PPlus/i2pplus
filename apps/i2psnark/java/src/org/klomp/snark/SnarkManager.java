@@ -430,7 +430,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /*
      *  Called by the webapp at Jetty shutdown.
      *  Stops all torrents. Does not close the tunnel, so the announces have a chance.
-     *  Fix this so an individual webaapp stop will close the tunnel.
+     *  Fix this so an individual webapp stop will close the tunnel.
      *  Runs inline.
      */
     public void stop() {
@@ -527,7 +527,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (_log.shouldInfo()) {_log.info(message);}
     }
 
-        /**
+    /**
      * Use if it includes a link.
      * Does not escape '&lt;' and '&gt;' before queueing
      * @since 0.9.14.1
@@ -2973,6 +2973,20 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         return buf.toString();
     }
 
+
+    /**
+     * Returns the Snark name with URL-encoded spaces replaced by regular spaces.
+     * This method is intended for use when sending the Snark name to a terminal log (standalone)
+     *
+     * @param snark The Snark object to retrieve the name from.
+     * @return The Snark name suitable for display in a terminal log.
+     */
+    private String getSnarkName(Snark snark) {
+        String baseName = snark.getBaseName();
+        String snarkName = baseName.replace("%20", " ");
+        return snarkName;
+    }
+
     /**
      * Add all magnets from the config file
      *
@@ -3323,15 +3337,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (snark.isStarting() || !snark.isStopped()) {
             addMessageNoEscape(_t("Torrent already running: {0}", linkify(snark)));
             if (!_context.isRouterContext()) {
-                System.out.println(" • " + _t("Torrent already running: {0}", snark));
+                System.out.println(" • " + _t("Torrent already running: {0}", getSnarkName(snark)));
             }
             return;
         }
         boolean connected = _util.connected();
-        if ((!connected) && !_util.isConnecting()) {addMessage(_t("Opening the I2P tunnel"));}
+        if ((!connected) && !_util.isConnecting()) {addMessage(_t("Opening the I2P tunnel") + "...");}
         addMessageNoEscape(_t("Starting torrent: {0}", linkify(snark)).replace("Magnet ", ""));
         if (!_context.isRouterContext()) {
-            System.out.println(" • " + _t("Starting torrent: {0}", snark).replace("Magnet ", ""));
+            System.out.println(" • " + _t("Starting torrent: {0}", getSnarkName(snark)).replace("Magnet ", ""));
         }
         if (connected) {snark.startTorrent();}
         else {
@@ -3347,7 +3361,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public void startAllTorrents() {
         if (!_util.connected()) {
-            String msg = _t("Opening the I2P tunnel and starting all torrents.");
+            String msg = _t("Opening the I2P tunnel and starting all torrents.") + "..";
             addMessage(msg);
             if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
             for (Snark snark : _snarks.values()) {snark.setStarting();} // mark it for the UI
@@ -3392,11 +3406,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /**
-     * Stop all running torrents, and close the tunnel after a delay
-     * to allow for announces.
+     * Stop all running torrents, and close the tunnel after a delay to allow for announces.
      * If called at router shutdown via Jetty shutdown hook -&gt; webapp destroy() -&gt; stop(),
-     * the tunnel won't actually be closed as the SimpleTimer2 is already shutdown
-     * or will be soon, so we delay a few seconds inline.
+     * the tunnel won't actually be closed as the SimpleTimer2 is already shutdown or will be soon,
+     * so we delay a few seconds inline.
+     *
      * @param finalShutdown if true, sleep at the end if any torrents were running
      * @since 0.9.1
      */
@@ -3405,15 +3419,17 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (finalShutdown && _log.shouldWarn()) {_log.warn("SnarkManager final shutdown");}
         int count = 0;
         Collection<Snark> snarks = _snarks.values();
-        // We do two passes so we shutdown the high-priority snarks first.
-        // Pass 1: All running, incomplete torrents,
-        // to make sure the status gets saved so there will be no recheck on restart.
+        /*
+         * We do two passes so we shutdown the high-priority snarks first.
+         * Pass 1: All running, incomplete torrents, to make sure the status
+         * gets saved so there will be no recheck on restart.
+         */
         for (Snark snark : snarks) {
             if (!snark.isStopped()) {
                 Storage storage = snark.getStorage();
                 if (storage != null && !storage.complete()) {
                     if (count == 0) {
-                        String msg = _t("Stopping all torrents and closing the I2P tunnel.");
+                        String msg = _t("Stopping all torrents and closing the I2P tunnel.") + "..";
                         addMessage(msg);
                         if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                     }
@@ -3431,7 +3447,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         for (Snark snark : snarks) {
             if (!snark.isStopped()) {
                 if (count == 0) {
-                    String msg = _t("Stopping all torrents and closing the I2P tunnel.");
+                    String msg = _t("Stopping all torrents and closing the I2P tunnel.") + "..";
                     addMessage(msg);
                     if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 }
@@ -3534,12 +3550,23 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     double completion = (pieces - snark.getNeeded()) / (double) pieces;
                     String complete = (new DecimalFormat("0.00%")).format(completion);
                     addMessageNoEscape(_t("Finished recheck of torrent {0}, now {1} complete", link, complete));
+                    if (!_context.isRouterContext()) {
+                        System.out.println(" • " + _t("Finished recheck of torrent {0}, now {1} complete", getSnarkName(snark), complete));
+                    }
                 } else {
+                    String msg = _t("Finished recheck of torrent {0}, unchanged", link);
                     addMessageNoEscape(_t("Finished recheck of torrent {0}, unchanged", link));
+                    if (!_context.isRouterContext()) {
+                        System.out.println(" • " + _t("Finished recheck of torrent {0}, unchanged", getSnarkName(snark)));
+                    }
                 }
             } catch (IOException e) {
                 _log.error("Error rechecking " + snark.getBaseName(), e);
-                addMessage(_t("Error checking the torrent {0}", snark.getBaseName()) + " (" + e.getMessage() + ")");
+                String msg = _t("Error checking torrent {0}", snark.getBaseName()) + " -> " + e.getMessage();
+                addMessage(msg);
+                if (!_context.isRouterContext()) {
+                    System.out.println(" • " + _t("Error checking torrent {0}", getSnarkName(snark)) + " -> " + e.getMessage());
+                }
             }
         }
     }

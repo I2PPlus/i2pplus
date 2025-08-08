@@ -463,102 +463,99 @@ public class TrackerClient implements Runnable {
      *  @return max peers seen
      */
     private int getPeersFromTrackers(List<TCTracker> trckrs) {
-              long left = coordinator.getLeft();   // -1 in magnet mode
+        long left = coordinator.getLeft();   // -1 in magnet mode
 
-              // First time we got a complete download?
-              boolean newlyCompleted;
-              if (!completed && left == 0) {
-                  completed = true;
-                  newlyCompleted = true;
-              } else {newlyCompleted = false;}
+        // First time we got a complete download?
+        boolean newlyCompleted;
+        if (!completed && left == 0) {
+            completed = true;
+            newlyCompleted = true;
+        } else {newlyCompleted = false;}
 
-              // *** loop once for each tracker
-              int maxSeenPeers = 0;
-              for (TCTracker tr : trckrs) {
-                  if ((!stop) && (!tr.stop) && (completed || coordinator.needOutboundPeers() || !tr.started) &&
-                      (newlyCompleted || System.currentTimeMillis() > tr.lastRequestTime + tr.interval)) {
-                      try {
-                          long uploaded = coordinator.getUploaded();
-                          long downloaded = coordinator.getDownloaded();
-                          long len = snark.getTotalLength();
-                          if (len > 0 && downloaded > len) {downloaded = len;}
-                          left = coordinator.getLeft();
-                          TrackerInfo info;
-                          if (tr.isUDP) {
-                              int event;
-                              if (!tr.started) {event = UDPTrackerClient.EVENT_STARTED;}
-                              else if (newlyCompleted) {event = UDPTrackerClient.EVENT_COMPLETED;}
-                              else {event = UDPTrackerClient.EVENT_NONE;}
-                              info = doRequest(tr, uploaded, downloaded, left, event);
-                          } else {
-                              String event;
-                              if (!tr.started) {event = STARTED_EVENT;}
-                              else if (newlyCompleted) {event = COMPLETED_EVENT;}
-                              else {event = NO_EVENT;}
-                              info = doRequest(tr, infoHash, peerID, uploaded, downloaded, left, event);
-                          }
-                          snark.setTrackerProblems(null);
-                          tr.trackerProblems = null;
-                          tr.registerFails = 0;
-                          tr.consecutiveFails = 0;
-                          if (tr.isPrimary) {consecutiveFails = 0;}
-                          runStarted = true;
-                          tr.started = true;
-                          tr.seenPeers = info.getPeerCount();
-                          // update rising number quickly
-                          if (snark.getTrackerSeenPeers() < tr.seenPeers) {snark.setTrackerSeenPeers(tr.seenPeers);}
+        // *** loop once for each tracker
+        int maxSeenPeers = 0;
+        for (TCTracker tr : trckrs) {
+            if ((!stop) && (!tr.stop) && (completed || coordinator.needOutboundPeers() || !tr.started) &&
+                (newlyCompleted || System.currentTimeMillis() > tr.lastRequestTime + tr.interval)) {
+                try {
+                    long uploaded = coordinator.getUploaded();
+                    long downloaded = coordinator.getDownloaded();
+                    long len = snark.getTotalLength();
+                    if (len > 0 && downloaded > len) {downloaded = len;}
+                    left = coordinator.getLeft();
+                    TrackerInfo info;
+                    if (tr.isUDP) {
+                        int event;
+                        if (!tr.started) {event = UDPTrackerClient.EVENT_STARTED;}
+                        else if (newlyCompleted) {event = UDPTrackerClient.EVENT_COMPLETED;}
+                        else {event = UDPTrackerClient.EVENT_NONE;}
+                        info = doRequest(tr, uploaded, downloaded, left, event);
+                    } else {
+                        String event;
+                        if (!tr.started) {event = STARTED_EVENT;}
+                        else if (newlyCompleted) {event = COMPLETED_EVENT;}
+                        else {event = NO_EVENT;}
+                        info = doRequest(tr, infoHash, peerID, uploaded, downloaded, left, event);
+                    }
+                    snark.setTrackerProblems(null);
+                    tr.trackerProblems = null;
+                    tr.registerFails = 0;
+                    tr.consecutiveFails = 0;
+                    if (tr.isPrimary) {consecutiveFails = 0;}
+                    runStarted = true;
+                    tr.started = true;
+                    tr.seenPeers = info.getPeerCount();
+                    // update rising number quickly
+                    if (snark.getTrackerSeenPeers() < tr.seenPeers) {snark.setTrackerSeenPeers(tr.seenPeers);}
+                    // auto stop
+                    // These are very high thresholds for now, not configurable, just for update torrent
+                    if (completed &&
+                        tr.isPrimary &&
+                        snark.isAutoStoppable() &&
+                        !snark.isChecking() &&
+                        info.getSeedCount() > 100 &&
+                        coordinator.getPeerCount() <= 0 &&
+                        _util.getContext().clock().now() > _startedOn + 30*60*1000 &&
+                        snark.getTotalLength() > 0 &&
+                        uploaded >= snark.getTotalLength() / 2) {
 
-                          // auto stop
-                          // These are very high thresholds for now, not configurable,
-                          // just for update torrent
-                          if (completed &&
-                          tr.isPrimary &&
-                          snark.isAutoStoppable() &&
-                          !snark.isChecking() &&
-                          info.getSeedCount() > 100 &&
-                          coordinator.getPeerCount() <= 0 &&
-                          _util.getContext().clock().now() > _startedOn + 30*60*1000 &&
-                          snark.getTotalLength() > 0 &&
-                          uploaded >= snark.getTotalLength() / 2) {
-                          if (_log.shouldWarn()) {_log.warn("Auto stopping " + snark.getBaseName());}
-                          snark.setAutoStoppable(false);
-                          snark.stopTorrent();
-                          return tr.seenPeers;
-                      }
+                        if (_log.shouldWarn()) {_log.warn("Auto stopping " + snark.getBaseName());}
+                        snark.setAutoStoppable(false);
+                        snark.stopTorrent();
+                        return tr.seenPeers;
+                    }
 
-                      Set<Peer> peers = info.getPeers();
+                    Set<Peer> peers = info.getPeers();
+                    // Pass everybody over to our tracker
+                    DHT dht = _util.getDHT();
+                    if (dht != null) {
+                        for (Peer peer : peers) {
+                            dht.announce(snark.getInfoHash(), peer.getPeerID().getDestHash(), false); // TODO actual seed/leech status
+                        }
+                    }
 
-                      // pass everybody over to our tracker
-                      DHT dht = _util.getDHT();
-                      if (dht != null) {
-                          for (Peer peer : peers) {
-                              dht.announce(snark.getInfoHash(), peer.getPeerID().getDestHash(),
-                                           false);  // TODO actual seed/leech status
-                          }
-                      }
-
-                      if (coordinator.needOutboundPeers()) {
-                          // we only want to talk to new people if we need things
-                          // from them (duh)
-                          List<Peer> ordered = new ArrayList<Peer>(peers);
-                          Random r = _util.getContext().random();
-                          Collections.shuffle(ordered, r);
-                          Iterator<Peer> it = ordered.iterator();
-                          while ((!stop) && it.hasNext() && coordinator.needOutboundPeers()) {
+                    if (coordinator.needOutboundPeers()) {
+                        // We only want to talk to new people if we need things
+                        // from them (duh)
+                        List<Peer> ordered = new ArrayList<Peer>(peers);
+                        Random r = _util.getContext().random();
+                        Collections.shuffle(ordered, r);
+                        Iterator<Peer> it = ordered.iterator();
+                        while ((!stop) && it.hasNext() && coordinator.needOutboundPeers()) {
                             Peer cur = it.next();
                             // FIXME if id == us || dest == us continue;
                             // only delay if we actually make an attempt to add peer
-                            if(coordinator.addPeer(cur) && it.hasNext()) {
-                              int delay = r.nextInt(DELAY_RAND) + DELAY_MIN;
-                              try { Thread.sleep(delay); } catch (InterruptedException ie) {}
+                            if (coordinator.addPeer(cur) && it.hasNext()) {
+                                int delay = r.nextInt(DELAY_RAND) + DELAY_MIN;
+                                try {Thread.sleep(delay);}
+                                catch (InterruptedException ie) {}
                             }
-                          }
-                      }
+                        }
                     }
-                  catch (IOException ioe)
-                    {
+                  }
+                  catch (IOException ioe) {
                       // Probably not fatal (if it doesn't last too long...)
-                      if (_log.shouldWarn())
+                      if (_log.shouldWarn()) {
                           _log.warn("Error communicating with tracker [" + tr.announce
                                     .replace("ahsplxkbhemefwvvml7qovzl5a2b5xo5i7lyai7ntdunvcyfdtna.b32.i2p", "tracker2.postman.i2p")
                                     .replace("lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICkEbKUqJ9mPYQlTSujhNxiRIW-oLwMtvayCFci99oX8MvazPS7~97x0Gsm-onEK1Td9nBdmq30OqDxpRtXBimbzkLbR1IKObbg9HvrKs3L-kSyGwTUmHG9rSQSoZEvFMA-S0EXO~o4g21q1oikmxPMhkeVwQ22VHB0-LZJfmLr4SAAAA.i2p", "tracker2.postman.i2p")
@@ -569,141 +566,123 @@ public class TrackerClient implements Runnable {
                                     .replace("by7luzwhx733fhc5ug2o75dcaunblq2ztlshzd7qvptaoa73nqua.b32.i2p", "opentracker.skank.i2p")
                                     .replace("punzipidirfqspstvzpj6gb4tkuykqp6quurj6e23bgxcxhdoe7q.b32.i2p", "opentracker.r4sas.i2p")
                                     .replace("http://", "") + "]");
-  //                                  "]\n* " + ioe.getMessage());
+                      }
                       tr.trackerProblems = ioe.getMessage();
-                      // don't show secondary tracker problems to the user
+                      // Don't show secondary tracker problems to the user
                       // ... and only if we don't have any peers at all. Otherwise, PEX/DHT will save us.
                       if (tr.isPrimary && coordinator.getPeers() <= 0 &&
-                          (!completed || _util.getDHT() == null || _util.getDHT().size() <= 0))
-                        snark.setTrackerProblems(tr.trackerProblems);
+                          (!completed || _util.getDHT() == null || _util.getDHT().size() <= 0)) {
+                          snark.setTrackerProblems(tr.trackerProblems);
+                      }
                       String tplc = tr.trackerProblems.toLowerCase(Locale.US);
                       if (tplc.startsWith(NOT_REGISTERED) || tplc.startsWith(NOT_REGISTERED_2) ||
                           tplc.startsWith(NOT_REGISTERED_3) || tplc.startsWith(ERROR_GOT_HTML)) {
-                        // Give a guy some time to register it if using opentrackers too
-                        //if (trckrs.size() == 1) {
-                        //  stop = true;
-                        //  snark.stopTorrent();
-                        //} else { // hopefully each on the opentrackers list is really open
+                          // Give a guy some time to register it if using opentrackers too
                           if (tr.registerFails++ > MAX_REGISTER_FAILS ||
-                              !completed ||              // no use retrying if we aren't seeding
-                              tplc.startsWith(ERROR_GOT_HTML) ||   // fake msg from doRequest()
-                              (!tr.isPrimary && tr.registerFails > MAX_REGISTER_FAILS / 2))
-                            if (_log.shouldWarn())
+                              !completed /* no use retrying if we aren't seeding */ ||
+                              tplc.startsWith(ERROR_GOT_HTML) /* fake msg from doRequest() */ ||
+                              (!tr.isPrimary && tr.registerFails > MAX_REGISTER_FAILS / 2)) {
+                              if (_log.shouldWarn()) {
                                 _log.warn("No longer announcing to " + tr.announce + " : " +
                                           tr.trackerProblems + " after " + tr.registerFails + " failures");
-                            tr.stop = true;
-                        //
+                              }
+                              tr.stop = true;
+                          }
                       }
                       if (++tr.consecutiveFails == MAX_CONSEC_FAILS) {
                           tr.seenPeers = 0;
-                          if (tr.interval < LONG_SLEEP)
-                              tr.interval = LONG_SLEEP;  // slow down
+                          if (tr.interval < LONG_SLEEP) {tr.interval = LONG_SLEEP;} // slow down
                       }
-                    }
-                } else {
-                    if (_log.shouldInfo())
-                        _log.info("Not announcing to " + tr.announce + "\n* Last announce: " +
-                                 new Date(tr.lastRequestTime) + " (interval: " + DataHelper.formatDuration(tr.interval) + ")");
+                  }
+              } else {
+                  if (_log.shouldInfo()) {
+                      _log.info("Not announcing to " + tr.announce + "\n* Last announce: " +
+                                new Date(tr.lastRequestTime) +
+                                " (interval: " + DataHelper.formatDuration(tr.interval) + ")");
                 }
-                if ((!tr.stop) && maxSeenPeers < tr.seenPeers)
-                    maxSeenPeers = tr.seenPeers;
-              }  // *** end of trackers loop here
-
-              return maxSeenPeers;
+            }
+            if ((!tr.stop) && maxSeenPeers < tr.seenPeers) {maxSeenPeers = tr.seenPeers;}
+        }  // End of trackers loop here
+        return maxSeenPeers;
     }
 
     /**
      *  @return max peers seen
      */
     private int getPeersFromPEX() {
-              // Get peers from PEX
-              int rv = 0;
-              if (coordinator.needOutboundPeers() && (meta == null || !meta.isPrivate()) && !stop) {
-                  Set<PeerID> pids = coordinator.getPEXPeers();
-                  if (!pids.isEmpty()) {
-                      if (_log.shouldInfo())
-                          _log.info("Received " + pids.size() + " from PEX");
-                      List<Peer> peers = new ArrayList<Peer>(pids.size());
-                      for (PeerID pID : pids) {
-                          peers.add(new Peer(pID, snark.getID(), snark.getInfoHash(), snark.getMetaInfo()));
-                      }
-                      Random r = _util.getContext().random();
-                      Collections.shuffle(peers, r);
-                      Iterator<Peer> it = peers.iterator();
-                      while ((!stop) && it.hasNext() && coordinator.needOutboundPeers()) {
-                          Peer cur = it.next();
-                          if (coordinator.addPeer(cur) && it.hasNext()) {
-                              int delay = r.nextInt(DELAY_RAND) + DELAY_MIN;
-                              try { Thread.sleep(delay); } catch (InterruptedException ie) {}
-                           }
-                      }
-                      rv = pids.size();
-                      pids.clear();
-                  }
-              } else {
-                  if (_log.shouldInfo())
-                      _log.info("Not requesting PEX peers for [" + infoHash + "]");
-              }
-              return rv;
-      }
+        // Get peers from PEX
+        int rv = 0;
+        if (coordinator.needOutboundPeers() && (meta == null || !meta.isPrivate()) && !stop) {
+            Set<PeerID> pids = coordinator.getPEXPeers();
+            if (!pids.isEmpty()) {
+                if (_log.shouldInfo()) {_log.info("Received " + pids.size() + " from PEX");}
+                List<Peer> peers = new ArrayList<Peer>(pids.size());
+                for (PeerID pID : pids) {
+                    peers.add(new Peer(pID, snark.getID(), snark.getInfoHash(), snark.getMetaInfo()));
+                }
+                Random r = _util.getContext().random();
+                Collections.shuffle(peers, r);
+                Iterator<Peer> it = peers.iterator();
+                while ((!stop) && it.hasNext() && coordinator.needOutboundPeers()) {
+                    Peer cur = it.next();
+                    if (coordinator.addPeer(cur) && it.hasNext()) {
+                        int delay = r.nextInt(DELAY_RAND) + DELAY_MIN;
+                        try {Thread.sleep(delay);}
+                        catch (InterruptedException ie) {}
+                    }
+                }
+                rv = pids.size();
+                pids.clear();
+            }
+        } else if (_log.shouldInfo()) {_log.info("Not requesting PEX peers for [" + infoHash + "]");}
+        return rv;
+    }
 
     /**
      *  @return max peers seen
      */
     private int getPeersFromDHT() {
-              // Get peers from DHT
-              // FIXME this needs to be in its own thread
-              int rv = 0;
-              DHT dht = _util.getDHT();
-              if (dht != null &&
-                  (meta == null || !meta.isPrivate()) &&
-                  (!stop) &&
-                  (meta == null || _util.getContext().clock().now() >  lastDHTAnnounce + MIN_DHT_ANNOUNCE_INTERVAL)) {
-                  int numwant;
-                  if (!coordinator.needOutboundPeers())
-                      numwant = 1;
-                  else
-                      numwant = _util.getMaxConnections();
-                  Collection<Hash> hashes = dht.getPeersAndAnnounce(snark.getInfoHash(), numwant,
-                                                                    5*60*1000, DHT_ANNOUNCE_PEERS, 3*60*1000,
-                                                                    coordinator.completed(), numwant <= 1);
-                  if (!hashes.isEmpty()) {
-                      runStarted = true;
-                      lastDHTAnnounce = _util.getContext().clock().now();
-                      rv = hashes.size();
-                  } else {
-                      lastDHTAnnounce = 0;
-                  }
-                  if (_log.shouldInfo())
-                      _log.info("Received " + hashes.size() + " peer hashes from DHT");
-                  if (_log.shouldDebug())
-                      _log.debug("DHT Peers: " + hashes);
+        // Get peers from DHT
+        // FIXME this needs to be in its own thread
+        int rv = 0;
+        DHT dht = _util.getDHT();
+        if (dht != null && (meta == null || !meta.isPrivate()) &&
+            (!stop) && (meta == null || _util.getContext().clock().now() >  lastDHTAnnounce + MIN_DHT_ANNOUNCE_INTERVAL)) {
+            int numwant;
+            if (!coordinator.needOutboundPeers()) {numwant = 1;}
+            else {numwant = _util.getMaxConnections();}
+            Collection<Hash> hashes = dht.getPeersAndAnnounce(snark.getInfoHash(), numwant,
+                                                              5*60*1000, DHT_ANNOUNCE_PEERS, 3*60*1000,
+                                                              coordinator.completed(), numwant <= 1);
+            if (!hashes.isEmpty()) {
+                runStarted = true;
+                lastDHTAnnounce = _util.getContext().clock().now();
+                rv = hashes.size();
+            } else {lastDHTAnnounce = 0;}
+            if (_log.shouldInfo()) {_log.info("Received " + hashes.size() + " peer hashes from DHT" + (_log.shouldDebug() ? "\n* DHT Peers: " + hashes : ""));}
 
-                  // now try these peers
-                  if ((!stop) && !hashes.isEmpty()) {
-                      List<Peer> peers = new ArrayList<Peer>(hashes.size());
-                      for (Hash h : hashes) {
-                          try {
-                              PeerID pID = new PeerID(h.getData(), _util);
-                              peers.add(new Peer(pID, snark.getID(), snark.getInfoHash(), snark.getMetaInfo()));
-                          } catch (InvalidBEncodingException ibe) {}
-                      }
-                      Random r = _util.getContext().random();
-                      Collections.shuffle(peers, r);
-                      Iterator<Peer> it = peers.iterator();
-                      while ((!stop) && it.hasNext() && coordinator.needOutboundPeers()) {
-                          Peer cur = it.next();
-                          if (coordinator.addPeer(cur) && it.hasNext()) {
-                              int delay = r.nextInt(DELAY_RAND) + DELAY_MIN;
-                              try { Thread.sleep(delay); } catch (InterruptedException ie) {}
-                           }
-                      }
-                  }
-              } else {
-                  if (_log.shouldInfo())
-                      _log.info("Not getting DHT peers");
-              }
-              return rv;
+            // Now try these peers
+            if ((!stop) && !hashes.isEmpty()) {
+                List<Peer> peers = new ArrayList<Peer>(hashes.size());
+                for (Hash h : hashes) {
+                    try {
+                        PeerID pID = new PeerID(h.getData(), _util);
+                        peers.add(new Peer(pID, snark.getID(), snark.getInfoHash(), snark.getMetaInfo()));
+                    } catch (InvalidBEncodingException ibe) {}
+                }
+                Random r = _util.getContext().random();
+                Collections.shuffle(peers, r);
+                Iterator<Peer> it = peers.iterator();
+                while ((!stop) && it.hasNext() && coordinator.needOutboundPeers()) {
+                    Peer cur = it.next();
+                    if (coordinator.addPeer(cur) && it.hasNext()) {
+                        int delay = r.nextInt(DELAY_RAND) + DELAY_MIN;
+                        try { Thread.sleep(delay); } catch (InterruptedException ie) {}
+                     }
+                }
+            }
+        } else if (_log.shouldInfo()) {_log.info("Not getting DHT peers");}
+        return rv;
     }
 
     /**
@@ -711,22 +690,14 @@ public class TrackerClient implements Runnable {
      *  @since 0.9.49
      */
     private int getWebPeers() {
-        if (meta == null)
-            return 0;
-        // prevent connecting out to a webseed for comments only
-        if (coordinator.getNeededLength() <= 0)
-            return 0;
+        if (meta == null) {return 0;}
+        if (coordinator.getNeededLength() <= 0) {return 0;} // Prevent connecting out to a webseed for comments only
         List<String> urls = meta.getWebSeedURLs();
-        if (urls == null || urls.isEmpty())
-            return 0;
-        // Uncomment to skip multifile torrents
-        //if (meta.getLengths() != null)
-        //    return 0;
+        if (urls == null || urls.isEmpty()) {return 0;}
         List<Peer> peers = new ArrayList<Peer>(urls.size());
         for (String url : urls) {
             Hash h = getHostHash(url);
-            if (h == null)
-                continue;
+            if (h == null) {continue;}
             try {
                 PeerID pID = new PeerID(h.getData(), _util);
                 byte[] id = new byte[20];
@@ -735,29 +706,26 @@ public class TrackerClient implements Runnable {
                 pID.setID(id);
                 URI uri = new URI(url);
                 String host = uri.getHost();
-                if (host == null)
-                    continue;
+                if (host == null) {continue;}
                 if (coordinator.isWebPeerBanned(host)) {
-                    if (_log.shouldWarn())
-                        _log.warn("Skipping banned webseed " + url);
+                    if (_log.shouldWarn()) {_log.warn("Skipping banned webseed " + url + "...");}
                     continue;
                 }
                 peers.add(new WebPeer(coordinator, uri, pID, snark.getMetaInfo()));
-            } catch (InvalidBEncodingException ibe) {
-            } catch (URISyntaxException use) {
-            }
+            } catch (InvalidBEncodingException ibe) {}
+            catch (URISyntaxException use) {}
         }
-        if (peers.isEmpty())
-            return 0;
+
+        if (peers.isEmpty()) {return 0;}
         Random r = _util.getContext().random();
-        if (peers.size() > 1)
-            Collections.shuffle(peers, r);
+        if (peers.size() > 1) {Collections.shuffle(peers, r);}
         Iterator<Peer> it = peers.iterator();
         while ((!stop) && it.hasNext() && coordinator.needOutboundPeers()) {
             Peer cur = it.next();
             if (coordinator.addPeer(cur) && it.hasNext()) {
                 int delay = r.nextInt(DELAY_RAND) + DELAY_MIN;
-                try { Thread.sleep(delay); } catch (InterruptedException ie) {}
+                try {Thread.sleep(delay);}
+                catch (InterruptedException ie) {}
             }
         }
         return peers.size();
@@ -768,23 +736,14 @@ public class TrackerClient implements Runnable {
      *  @since 0.9.1
      */
     private void unannounce() {
-        // Local DHT tracker unannounce
-        DHT dht = _util.getDHT();
-        if (dht != null)
-            dht.unannounce(snark.getInfoHash());
+        DHT dht = _util.getDHT(); // Local DHT tracker unannounce
+        if (dht != null) {dht.unannounce(snark.getInfoHash());}
         int i = 0;
         for (TCTracker tr : trackers) {
-            if (_util.connected() &&
-                tr.started && (!tr.stop) && tr.trackerProblems == null) {
-                try {
-                    (new I2PAppThread(new Unannouncer(tr), _threadName + " U" + (++i), true)).start();
-                } catch (OutOfMemoryError oom) {
-                    // probably ran out of threads, ignore
-                    tr.reset();
-                }
-            } else {
-                tr.reset();
-            }
+            if (_util.connected() && tr.started && (!tr.stop) && tr.trackerProblems == null) {
+                try {(new I2PAppThread(new Unannouncer(tr), _threadName + " U" + (++i), true)).start();}
+                catch (OutOfMemoryError oom) {tr.reset();} // probably ran out of threads, ignore
+            } else {tr.reset();}
         }
     }
 
