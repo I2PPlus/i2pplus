@@ -14,6 +14,7 @@
   String themePath = intl.getTheme(UA);
   String theme = intl.getTheme(UA).replace("/themes/console/", "").replace("/", "");
   String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
+  request.setAttribute("cspNonce", cspNonce);
   String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() +
                      java.io.File.separatorChar + "docs" + java.io.File.separatorChar + "themes" +
                      java.io.File.separatorChar + "console" + java.io.File.separatorChar + theme +

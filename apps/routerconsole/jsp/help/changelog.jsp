@@ -42,18 +42,6 @@
 </div>
 </div>
 <script src=/js/lazyload.js></script>
-<script nonce=<%=cspNonce%>>
-  (function spanify() {
-    const content = document.querySelector("#changelog pre");
-    if (!content) {return;}
-    const blocks = content.textContent.trim().split("\n\n");
-    const wrappedBlocks = blocks.map(function(block) {
-      let transformedBlock = block.replace(/ \* /g, "<b class=star>*</b> ").replace(/   - /g, "<b class=bullet>-</b> ");
-      return "<span class=lazy>" + transformedBlock + "</span>";
-    });
-    const wrappedContent = wrappedBlocks.join("\n\n");
-    content.innerHTML = wrappedContent;
-  })();
-</script>
+<script src=/js/changelog.js></script>
 </body>
 </html>

@@ -4,7 +4,7 @@
 
 (function initLazyload() {
 
-  const parentSelectors = [ ".leasesets_container", ".main", ".tunneldisplay", "#ffProfiles", "#host_list", "#profilelist" ];
+  const parentSelectors = [ ".leasesets_container", ".main", ".tunneldisplay", "#ffProfiles", "#host_list", "#profilelist", "#changelog pre" ];
   const parentSelector = parentSelectors.join(", ");
   const lazyElementsSet = new Set();
 
