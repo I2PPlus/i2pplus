@@ -3257,3 +3257,7 @@ body.isDown{margin:0;height:100vh;overflow:hidden;contain:paint}
 body.isDown::after,body.isDown::before{height:100vh;width:100%;display:block;position:absolute;top:0;left:0;bottom:0;right:0;overflow:hidden;content:"";contain:paint}
 body.isDown::before{background:linear-gradient(90deg,#000c,#000,#000c);backdrop-filter:saturate(.3) blur(5px);z-index:9998}
 body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 40px);z-index:9999;background:var(--update) var(--center)/80px;content:"";transform:rotate(0);animation:linear spin 3s forwards infinite;will-change:transform}
+
+/* LS search */
+#netdb #singleLS~.leaseset {margin-bottom:1px;column-span:all;width:100%}
+#searchLS {margin-bottom:13px;display:block;column-span:all;text-align:center;box-shadow:0 0 0 1px #000,0 0 0 3px #252,var(--highlight);background:var(--th)}
