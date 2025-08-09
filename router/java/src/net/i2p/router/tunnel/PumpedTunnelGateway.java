@@ -52,9 +52,9 @@ class PumpedTunnelGateway extends TunnelGateway {
     private static final int INITIAL_OB_QUEUE = 64;
     private static final int MAX_IB_QUEUE = 1024;
 */
-    private static final int MAX_OB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 256 : 1024;
-    private static final int MAX_IB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 128 : 512;
-    private static final int INITIAL_OB_QUEUE = SystemVersion.isSlow() ? 128 : 512;
+    private static final int MAX_OB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 64 : 256;
+    private static final int MAX_IB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 24 : 96;
+    private static final int INITIAL_OB_QUEUE = SystemVersion.isSlow() ? 64 : 256;
     private static final int MAX_IB_QUEUE = SystemVersion.isSlow() ? 1024 : 4096;
 
     public static final String PROP_MAX_OB_MSGS_PER_PUMP = "router.pumpMaxOutboundMsgs";
@@ -74,11 +74,11 @@ class PumpedTunnelGateway extends TunnelGateway {
         super(context, preprocessor, sender, receiver);
         if (getClass() == PumpedTunnelGateway.class) {
             // Unbounded priority queue for outbound
-            // fixme lint PendingGatewayMessage is not a CDPQEntry
+            // FIXME: lint PendingGatewayMessage is not a CDPQEntry
             _prequeue = new CoDelPriorityBlockingQueue(context, "OBGW", context.getProperty(PROP_INITIAL_OB_QUEUE, INITIAL_OB_QUEUE));
             _nextHop = receiver.getSendTo();
             _isInbound = false;
-        } else {  // extended by ThrottledPTG for IB
+        } else { // Extended by ThrottledPTG for IB
             // Bounded non-priority queue for inbound
             _prequeue = new CoDelBlockingQueue<PendingGatewayMessage>(context, "IBGW", context.getProperty(PROP_MAX_IB_QUEUE, MAX_IB_QUEUE));
             _nextHop = receiver.getSendTo();
