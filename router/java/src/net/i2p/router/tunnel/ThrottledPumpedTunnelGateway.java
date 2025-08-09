@@ -24,6 +24,7 @@ class ThrottledPumpedTunnelGateway extends PumpedTunnelGateway {
         int max = _config.getAllocatedBW();
         if (max <= TunnelParticipant.DEFAULT_BW_PER_TUNNEL_ESTIMATE) {
             max = _context.tunnelDispatcher().getMaxPerTunnelBandwidth(TunnelDispatcher.Location.IBGW);
+            _config.setAllocatedBW(max);
         }
         _partBWE = new SyntheticREDQueue(_context, max);
     }

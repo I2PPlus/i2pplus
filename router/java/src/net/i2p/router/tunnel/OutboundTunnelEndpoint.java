@@ -14,9 +14,8 @@ import net.i2p.util.SyntheticREDQueue;
 import net.i2p.util.Log;
 
 /**
- * We are the end of an outbound tunnel that we did not create.  Gather fragments
- * and honor the instructions as received.
- *
+ * We are the end of an outbound tunnel that we did not create.
+ * Gather fragments and honor the instructions as received.
  */
 class OutboundTunnelEndpoint {
     private final RouterContext _context;
@@ -37,6 +36,7 @@ class OutboundTunnelEndpoint {
         int max = _config.getAllocatedBW();
         if (max <= TunnelParticipant.DEFAULT_BW_PER_TUNNEL_ESTIMATE) {
             max = _context.tunnelDispatcher().getMaxPerTunnelBandwidth(TunnelDispatcher.Location.OBEP);
+            _config.setAllocatedBW(max);
         }
         _partBWE = new SyntheticREDQueue(_context, max);
         _outDistributor = new OutboundMessageDistributor(ctx, OutNetMessage.PRIORITY_PARTICIPATING, _partBWE);

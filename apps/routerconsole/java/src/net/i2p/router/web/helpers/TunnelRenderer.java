@@ -155,7 +155,7 @@ class TunnelRenderer {
             sb.append("<h3 class=tabletitle id=participating>");
             if (bySpeed) {sb.append(_t("Fastest Active Transit Tunnels"));}
             else {sb.append(_t("Most Recent Active Transit Tunnels"));}
-            sb.append("&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=\"/transit\">")
+            sb.append("&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=/transit>")
               .append(_t("Refresh")).append("</a></h3>\n");
             int bwShare = getShareBandwidth();
             if (bwShare > 12) {
@@ -167,11 +167,15 @@ class TunnelRenderer {
                     sb.append(">").append(_t("Expiry")).append("</th>").append("<th title=\"").append(_t("Data transferred"))
                       .append("\" data-sortable data-sort-method=dotsep>").append(_t("Data")).append("</th>").append("<th data-sortable");
                     if (bySpeed) {sb.append(" data-sort-default");}
-                    sb.append(">").append(_t("Speed")).append("</th>").append("<th data-sortable>");
-                    if (isAdvanced) {sb.append(_t("Receive on")).append("</th>").append("<th data-sortable data-sort-method=number>");}
-                    sb.append(_t("From")).append("</th><th data-sortable>");
-                    if (isAdvanced) {sb.append(_t("Send on")).append("</th><th data-sortable data-sort-method=number>");}
-                    sb.append(_t("To")).append("</th></tr></thead>\n<tbody id=transitPeers>\n");
+                    sb.append(">").append(_t("Speed")).append("</th>");
+                    if (isAdvanced) {
+                      sb.append("<th class=limit data-sortable data-sort-method=number>").append(_t("Limit")).append("</th>");
+                      sb.append("<th data-sortable>").append(_t("Receive on")).append("</th>");
+                    }
+                    sb.append("<th data-sortable data-sort-method=number>").append(_t("From")).append("</th>");
+                    if (isAdvanced) {sb.append("<th data-sortable>").append(_t("Send on")).append("</th>");}
+                    sb.append("<th data-sortable data-sort-method=number>").append(_t("To")).append("</th></tr>\n")
+                      .append("</thead>\n<tbody id=transitPeers>\n");
                 }
                 long processed = 0;
                 RateStat rs = _context.statManager().getRate("tunnel.participatingMessageCount");
@@ -222,13 +226,14 @@ class TunnelRenderer {
                       .append("<span class=left>KB/s</span></td>");
 
                     long recv = cfg.getReceiveTunnelId();
-                    if (isAdvanced) {
+                    if (isAdvanced && !participating.isEmpty()) {
+                        sb.append("<td class=\"cells limit\">");
+                        if (cfg.getAllocatedBW() > 0) {sb.append(DataHelper.formatSize2Decimal(cfg.getAllocatedBW())).append("B/s");}
+                        sb.append("</td>");
                         if (recv != 0) {
                             sb.append("<td title=\"").append(_t("Tunnel identity")).append("\"><span class=tunnel_id>")
                               .append(recv).append("</span></td>");
-                        } else {
-                            sb.append("<td><span hidden>&ndash;</span></td>");
-                        }
+                        } else {sb.append("<td><span hidden>&ndash;</span></td>");}
                     }
                     if (from != null) {sb.append("<td><div class=tunnel_peer>").append(netDbLink(from)).append("</div></td>");}
                     else {sb.append("<td><span hidden>&ndash;</span></td>");}

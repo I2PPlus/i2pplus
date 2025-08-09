@@ -74,8 +74,10 @@ class TunnelParticipant {
         }
         if (inEndProc == null) {
             int max = _config.getAllocatedBW();
-            if (max <= DEFAULT_BW_PER_TUNNEL_ESTIMATE)
+            if (max <= DEFAULT_BW_PER_TUNNEL_ESTIMATE) {
                 max = _context.tunnelDispatcher().getMaxPerTunnelBandwidth(TunnelDispatcher.Location.PARTICIPANT);
+                _config.setAllocatedBW(max);
+            }
             _partBWE = new SyntheticREDQueue(_context, max);
         } else {
             _partBWE = null;

@@ -914,31 +914,32 @@ class BuildHandler implements Runnable {
         int avail = 0;
         if (response == 0) {
             Properties props = req.readOptions();
-            if (props != null) {
+            if (props != null && !props.isEmpty()) {
                 int min = 0;
                 int rqu = 0;
+                int ibgwmax = 0;
                 String smin = props.getProperty(BuildRequestor.PROP_MIN_BW);
                 if (smin != null) {
-                    try {
-                        min = 1000 * Integer.parseInt(smin);
-                    } catch (NumberFormatException nfe) {
-                        response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
-                    }
+                    try {min = 1000 * Integer.parseInt(smin);}
+                    catch (NumberFormatException nfe) {response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;}
                 }
                 String sreq = props.getProperty(BuildRequestor.PROP_REQ_BW);
                 if (sreq != null) {
-                    try {
-                        rqu = 1000 * Integer.parseInt(sreq);
-                    } catch (NumberFormatException nfe) {
-                        response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
+                    try {rqu = 1000 * Integer.parseInt(sreq);}
+                    catch (NumberFormatException nfe) {response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;}
+                }
+                if (isInGW) {
+                    String smax = props.getProperty(BuildRequestor.PROP_MAX_BW);
+                    if (smax != null) {
+                        try {ibgwmax = 1000 * Integer.parseInt(smax);}
+                        catch (NumberFormatException nfe) {response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;}
                     }
                 }
-                if ((min > 0 || rqu > 0) && response == 0) {
+                if ((min > 0 || rqu > 0 || ibgwmax > 0) && response == 0) {
                     int share = 1000 * TunnelDispatcher.getShareBandwidth(_context);
                     int max = share / 20;
-                    if (min > max) {
-                        response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
-                    } else {
+                    if (min > max) {response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;}
+                    else {
                         RateStat stat = _context.statManager().getRate("tunnel.participatingBandwidth");
                         if (stat != null) {
                             Rate rate = stat.getRate(10*60*1000);
@@ -950,12 +951,14 @@ class BuildHandler implements Runnable {
                                         _log.warn("REJECT Part tunnel: min: " + min + " req: " + rqu + " avail: " + avail);
                                     response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
                                 } else {
-                                    if (_log.shouldWarn())
-                                        _log.warn("ACCEPT Part tunnel: min: " + min + " req: " + rqu + " avail: " + avail);
                                     if (min > 0 && rqu > 4 * min)
                                         rqu = 4 * min;
                                     if (rqu > 0 && rqu < avail)
                                         avail = rqu;
+                                    if (ibgwmax > 0 && ibgwmax < avail)
+                                        avail = ibgwmax;
+                                    if (_log.shouldWarn())
+                                        _log.warn("ACCEPT Part tunnel: min: " + min + " req: " + rqu + " max: " + ibgwmax + " avail: " + avail);
                                 }
                             }
                         }
