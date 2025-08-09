@@ -5,6 +5,9 @@
 
 import { lsDebug } from "/js/lsDebug.js";
 import { onVisible, onHidden } from "/js/onVisible.js";
+import { searchLS } from "/js/searchLS.js";
+
+const isSingleLS = document.getElementById("singleLS") !== null;
 
 document.addEventListener("DOMContentLoaded", () => {
   let container = document.querySelector(".leasesets_container");
@@ -231,6 +234,7 @@ document.addEventListener("DOMContentLoaded", () => {
         countTypes();
         if (!lsLabels) { styleLabels(); }
         if (!debug) { sortLeasesets(); }
+        if (isSingleLS) { searchLS(); }
         progressx.progress(1);
         setTimeout(() => { progressx.hide(); }, 100);
       })
@@ -259,6 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
     countTypes();
     styleLabels();
     if (!debug) { sortLeasesets(); }
+    if (isSingleLS) { searchLS(); }
     progressx.hide();
   }
 
