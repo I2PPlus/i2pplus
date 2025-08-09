@@ -104,7 +104,7 @@
 <% } else { %>
 <input class=search type=text name="search" value="${book.search}" size=20>
 <% } %>
-<a id=clearSearch target=_top></a>
+<a id=clearSearch></a>
 <input class=search type=submit name="submitsearch" value="<%=intl._t("Search")%>">
 </span>
 </div>
