@@ -1,5 +1,4 @@
-<%
-   if (request.getCharacterEncoding() == null) {request.setCharacterEncoding("UTF-8");}
+<% if (request.getCharacterEncoding() == null) {request.setCharacterEncoding("UTF-8");}
    String i2pcontextId = request.getParameter("i2p.contextId");
    try {
      if (i2pcontextId != null) {session.setAttribute("i2p.contextId", i2pcontextId);}

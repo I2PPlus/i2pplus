@@ -388,8 +388,8 @@ public class NetDbHelper extends FormHandler {
      */
     private void renderLookupForm() throws IOException {
         StringBuilder buf = new StringBuilder(16*1024);
-        buf.append("<form action=\"/netdb\" method=GET id=netdbSearch>\n")
-           .append("<input type=hidden name=\"nonce\" value=\"").append(_newNonce).append("\" >\n")
+        buf.append("<form action=/netdb method=GET id=netdbSearch>\n")
+           .append("<input type=hidden name=nonce value=").append(_newNonce).append(">\n")
            .append("<table id=netdblookup><tr><th colspan=4>").append(_t("Network Database Search")).append("</th></tr>\n")
            .append("<tr><td><b>").append(_t("Capabilities")).append("</b></td><td><input type=text name=\"caps\" title=\"")
            .append(_t("e.g. f or XOfR")).append("\"></td>\n")
