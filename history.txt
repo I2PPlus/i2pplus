@@ -1,3 +1,7 @@
+2025-08-09 dr|z3d
+ * Console: Add leaseset search on single leaseset page
+   (dark theme only, others to follow)
+
 2025-08-08 dr|z3d
  * SusiDNS: Add clear filter / search button to search input
 
