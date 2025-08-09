@@ -349,11 +349,11 @@ public class IndexBean {
         if (_tunnel >= controllers.size()) {return "✖ Error: Invalid tunnel";}
         TunnelController controller = controllers.get(_tunnel);
         controller.startTunnelBackground();
-        try {Thread.sleep(1000);} // Give the messages a chance to make it to the window
+        try {Thread.sleep(1000);} // Allow time for tunnel to start
         catch (InterruptedException ie) {}
-        // and give them something to look at in any case
-        // FIXME name will be HTML escaped twice
-        return "✔ " + _t("Started tunnel") + ": " + getTunnelName(_tunnel);
+        String msg =  "✔ " + _t("Started tunnel") + ": " + getTunnelName(_tunnel);
+        _timestampedMessages.add(new TimestampedMessage(msg));
+        return "";
     }
 
     private String stop() {
@@ -362,11 +362,11 @@ public class IndexBean {
         if (controllers == null || _tunnel >= controllers.size()) {return "✖ Error: Invalid tunnel";}
         TunnelController controller = controllers.get(_tunnel);
         controller.stopTunnel();
-        try {Thread.sleep(1000);} // Give the messages a chance to make it to the window
+        try {Thread.sleep(1000);} // Allow time for tunnel to stop
         catch (InterruptedException ie) {}
-        // and give them something to look at in any case
-        // FIXME name will be HTML escaped twice
-        return "✔ " + _t("Stopped tunnel") + ": " + getTunnelName(_tunnel);
+        String msg = "✔ " + _t("Stopped tunnel") + ": " + getTunnelName(_tunnel);
+        _timestampedMessages.add(new TimestampedMessage(msg));
+        return "";
     }
 
     private String restart() {
@@ -378,7 +378,9 @@ public class IndexBean {
         try {Thread.sleep(1000);} // Allow time for tunnel to stop
         catch (InterruptedException ie) {}
         controller.startTunnelBackground();
-        return "‣ " + _t("Restarting tunnel") + ": " + getTunnelName(_tunnel) + "...";
+        String msg = "‣ " + _t("Restarting tunnel") + ": " + getTunnelName(_tunnel) + "...";
+        _timestampedMessages.add(new TimestampedMessage(msg));
+        return "";
     }
 
     /**
