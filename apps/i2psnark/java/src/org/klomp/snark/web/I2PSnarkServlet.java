@@ -991,21 +991,22 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         }
         hbuf.append("</th>").append("<th class=tAction>");
-        if (_manager.isStopping()) {hbuf.append("");}
-        else if (_manager.util().connected()) {
-            hbuf.append("<input type=submit id=actionStopAll name=action_StopAll value=\"")
-                .append(_t("Stop All")).append("\" title=\"").append(_t("Stop all torrents and the I2P tunnel")).append("\">");
+        if (_manager.util().connected() && !snarks.isEmpty()) {
+            hbuf.append("<input type=submit id=actionStopAll name=action_StopAll value=\"").append(_t("Stop All"))
+                .append("\" title=\"").append(_t("Stop all torrents and the I2P tunnel")).append("\">");
             for (Snark s : snarks) {
                 if (s.isStopped()) {
-                    // show startall too
+                    // Show startall too
                     hbuf.append("<input type=submit id=actionStartAll name=action_StartAll value=\"")
-                        .append(_t("Start All")).append("\" title=\"").append(_t("Start all stopped torrents")).append("\">");
+                       .append(_t("Start All")).append("\" title=\"").append(_t("Start all stopped torrents")).append("\">");
                     break;
                 }
             }
-        } else if ((!_manager.util().isConnecting()) && !snarks.isEmpty()) {
+        } else if (!snarks.isEmpty()) {
+            boolean shouldDisable = _manager.util().isConnecting();
             hbuf.append("<input type=submit id=actionStartAll name=action_StartAll value=\"")
-                .append(_t("Start All")).append("\" title=\"").append(_t("Start all torrents and the I2P tunnel")).append("\">");
+                .append(_t("Start All")).append("\" title=\"").append(_t("Start all torrents and the I2P tunnel")).append("\"")
+                .append(shouldDisable ? " disabled" : "").append(">");
         }
         hbuf.append("</th></tr></thead>\n<tbody id=snarkTbody>");
         out.write(hbuf.toString());
@@ -2543,17 +2544,18 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("/s</span>");
         }
         buf.append("</td>").append("<td class=tAction>");
-        if (snark.isChecking()) {buf.append("<span class=isChecking></span>");} // show no buttons
-        else if (isRunning) {
+        boolean shouldDisable = snark.isChecking();
+        if (isRunning) {
             // Stop Button
             buf.append("<input type=submit class=actionStop name=\"action_Stop_").append(b64).append("\" value=\"")
-               .append(_t("Stop")).append("\" title=\"").append(_t("Stop torrent")).append("\">");
+               .append(_t("Stop")).append("\" title=\"").append(_t("Stop torrent")).append("\"")
+               .append(shouldDisable ? " disabled" : "").append(">");
         } else if (!snark.isStarting()) {
-            if (!_manager.isStopping()) {
-                // Start Button
-                buf.append("<input type=submit class=actionStart name=\"action_Start_").append(b64).append("\" value=\"")
-                   .append(_t("Start")).append("\" title=\"").append(_t("Start torrent")).append("\">");
-            }
+            // Start Button
+            buf.append("<input type=submit class=actionStart name=\"action_Start_").append(b64).append("\" value=\"")
+               .append(_t("Start")).append("\" title=\"").append(_t("Start torrent")).append("\"")
+               .append(shouldDisable ? " disabled" : "").append(">");
+
             if (isValid && canWrite) {
                 // Remove Button
                 buf.append("<input type=submit class=actionRemove name=\"action_Remove_").append(b64).append("\" value=\"")
@@ -2594,13 +2596,13 @@ public class I2PSnarkServlet extends BasicServlet {
                 String ch = pid != null ? pid.toString() : "????";
                 if (ch.startsWith("WebSeed@")) {buf.append(ch);}
                 else {
-                    // most clients start -xx, see
-                    // BT spec or libtorrent identify_client.cpp
-                    // Base64 encode -xx
-                    // Anything starting with L is -xx and has an Az version
-                    // snark is 9 nulls followed by 3 3 3 (binary), see Snark
-                    // PeerID.toString() skips nulls
-                    // Base64 encode '\3\3\3' = AwMD
+                    /* Most clients start -xx - see BT spec or libtorrent identify_client.cpp
+                     * Base64 encode -xx
+                     * Anything starting with L is -xx and has an Az version
+                     * I2PSnark is 9 nulls followed by 3 3 3 (binary), see Snark
+                     * PeerID.toString() skips nulls
+                     * Base64 encode '\3\3\3' = AwMD
+                     */
                     boolean addVersion = true;
                     ch = ch.substring(0, 4);
                     String version = ("ZV".equals(ch.substring(2,4)) || "VUZP".equals(ch) ? getRobtVersion(pid.getID()) : getAzVersion(pid.getID()));
@@ -2645,7 +2647,7 @@ public class I2PSnarkServlet extends BasicServlet {
                          }
                          if (client == null) {client = ch;}
                     }
-                    buf.append(client + "</span></span>");
+                    buf.append(client).append("</span></span>");
                 }
                 if (t >= 5000) {
                     buf.append("<span class=inactivity style=\"width:").append(t / 2000)
@@ -2682,15 +2684,11 @@ public class I2PSnarkServlet extends BasicServlet {
                                                   .replace("M", "</span><span class=left>M")
                                                   .replace("G", "</span><span class=left>G"));
                         buf.append("/s</span></span>");
-                    } else if (peer.isInteresting() && !peer.isChoked()) {
-                        buf.append("<span class=\"unchoked idle\"></span>");
-                    } else {
+                    } else if (peer.isInteresting() && !peer.isChoked()) {buf.append("<span class=\"unchoked idle\"></span>");}
+                    else {
                         buf.append("<span class=choked title=\"");
-                        if (!peer.isInteresting()) {
-                            buf.append(_t("Uninteresting (The peer has no pieces we need)"));
-                        } else {
-                            buf.append(_t("Choked (The peer is not allowing us to request pieces)"));
-                        }
+                        if (!peer.isInteresting()) {buf.append(_t("Uninteresting (The peer has no pieces we need)"));}
+                        else {buf.append(_t("Choked (The peer is not allowing us to request pieces)"));}
                         buf.append("\"><span class=right>");
                         buf.append(formatSize(peer.getDownloadRate())
                                                   .replace("iB","")

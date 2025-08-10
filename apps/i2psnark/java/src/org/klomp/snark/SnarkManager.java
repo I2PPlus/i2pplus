@@ -318,6 +318,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public void start() {
         _running = true;
+        _stopping = false;
         ClientAppManager cmgr = _context.clientAppManager();
         if ("i2psnark".equals(_contextName)) { // Register with the ClientAppManager so rpc plugin can find us (only if default instance)
             if (cmgr != null) {cmgr.register(this);}
@@ -399,6 +400,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             _umgr.unregister(_uhandler, UpdateType.ROUTER_SIGNED_SU3, UpdateMethod.TORRENT);
         }
         _running = false;
+        _stopping = true;
         _monitor.interrupt();
         _connectionAcceptor.halt();
         _idleChecker.cancel();
@@ -3346,6 +3348,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             addMessage(msg);
             if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
             for (Snark snark : _snarks.values()) {snark.setStarting();} // mark it for the UI
+            _stopping = false;
         }
         (new I2PAppThread(new ThreadedStarter(null), "TorrentStarterAll", true)).start();
         try {Thread.sleep(200);} catch (InterruptedException ie) {}
