@@ -404,7 +404,7 @@ public class Reseeder {
             for (Long sample : _bandwidths) {tot += sample.longValue();}
             long avg = tot / _bandwidths.size();
             if (_log.shouldInfo()) {
-                _log.info("Bandwidth average: " + avg + " KBps from " + _bandwidths.size() + " samples");
+                _log.info("Bandwidth average: " + avg + " KB/s from " + _bandwidths.size() + " samples");
             }
             // TODO _context.bandwidthLimiter().....
         }
@@ -416,12 +416,15 @@ public class Reseeder {
              * attemptFailed() instead of transferFailed() which has the benefit of providing
              * cause of failure, which helps resolve issues.
              */
-            if (_log.shouldWarn())
-                _log.warn("EepGet failed on " + url + "\n* " + cause);
-            else
-                _log.logAlways(Log.WARN, "EepGet failed on " + url + "\n* " + cause);
-            if (cause != null && cause.getMessage() != null)
+            String truncatedURL = url.replace("https://", "");
+            int slashIndex = truncatedURL.indexOf('/');
+            String hostname = slashIndex > 0 ? truncatedURL.substring(0, slashIndex) : truncatedURL;
+            String msg = "Reseeding failed from host: " + hostname + " -> " + cause.getMessage();
+            if (_log.shouldWarn()) {_log.warn(msg);}
+            else {_log.logAlways(Log.WARN, msg);}
+            if (cause != null && cause.getMessage() != null) {
                 _checker.setError(DataHelper.escapeHTML(cause.getMessage()));
+            }
         }
 
         public void bytesTransferred(long alreadyTransferred, int currentWrite, long bytesTransferred, long bytesRemaining, String url) {}
@@ -1125,8 +1128,7 @@ public class Reseeder {
          *  @since 0.9.33
          */
         private String getDisplayString(URI url) {
-            if (url == null)
-                return "";
+            if (url == null) {return "";}
             return getDisplayString(url.toString());
         }
 
@@ -1139,29 +1141,20 @@ public class Reseeder {
          *  @since 0.9.33
          */
         private String getDisplayString(String url) {
-            if (url == null)
-                return "";
+            if (url == null) {return "";}
             StringBuilder buf = new StringBuilder(64);
             buf.append("from ").append(url);
             boolean ssl = url.startsWith("https://");
             if (ssl && _shouldProxySSL) {
-                buf.append(" (");
-                buf.append(getDisplayString(_sproxyType));
-                buf.append(" proxy ");
-                if (_sproxyHost.contains(":"))
-                    buf.append('[').append(_sproxyHost).append(']');
-                else
-                    buf.append(_sproxyHost);
-                buf.append(':').append(_sproxyPort);
-                buf.append(')');
+                buf.append(" (").append(getDisplayString(_sproxyType)).append(" proxy ");
+                if (_sproxyHost.contains(":")) {buf.append('[').append(_sproxyHost).append(']');}
+                else {buf.append(_sproxyHost);}
+                buf.append(':').append(_sproxyPort).append(')');
             } else if (!ssl && _shouldProxyHTTP) {
                 buf.append(" (HTTP proxy ");
-                if (_proxyHost.contains(":"))
-                    buf.append('[').append(_proxyHost).append(']');
-                else
-                    buf.append(_proxyHost);
-                buf.append(':').append(_proxyPort);
-                buf.append(')');
+                if (_proxyHost.contains(":")) {buf.append('[').append(_proxyHost).append(']');}
+                else {buf.append(_proxyHost);}
+                buf.append(':').append(_proxyPort).append(')');
             }
             return buf.toString();
         }
