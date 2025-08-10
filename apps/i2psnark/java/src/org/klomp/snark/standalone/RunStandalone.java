@@ -6,8 +6,14 @@ import java.net.URL;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 import java.util.Properties;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.jetty.util.log.Log;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 
 import net.i2p.CoreVersion;
 import net.i2p.I2PAppContext;
@@ -23,17 +29,19 @@ public class RunStandalone {
 
     private final JettyStart _jettyStart;
     private final I2PAppContext _context;
-    private int _port = 8002;
-    private String _host = "127.0.0.1";
+    private String _host;
+    private int _port;
     private static RunStandalone _instance;
     static final File APP_CONFIG_FILE = new File("i2psnark-appctx.config");
 
     private RunStandalone(String args[]) throws Exception {
         Properties p = new Properties();
+
         if (APP_CONFIG_FILE.exists()) {
             try {DataHelper.loadProps(p, APP_CONFIG_FILE);}
             catch (IOException ioe) {}
         }
+
         _context = new I2PAppContext(p);
         // Do this after we have a context
         // To take effect, must be set before any Jetty classes are loaded
@@ -44,6 +52,9 @@ public class RunStandalone {
         File base = _context.getBaseDir();
         File xml = new File(base, "jetty-i2psnark.xml");
         _jettyStart = new JettyStart(_context, null, new String[] { xml.getAbsolutePath() } );
+        _host = getHostFromJettyConfig();
+        _port = getPortFromJettyConfig();
+
         if (args.length > 1) {_port = Integer.parseInt(args[1]);}
         if (args.length > 0) {_host = args[0];}
     }
@@ -88,6 +99,7 @@ public class RunStandalone {
         System.exit(1);
     }
 
+    /** @since 0.9.67+ */
     public String getSnarkRevision() {
         File base = _context.getBaseDir();
         File jar = new File(base, "i2psnark.jar");
@@ -99,6 +111,52 @@ public class RunStandalone {
             date = att.getValue("Build-Date");
         } catch (IOException e) {}
         return rev.isEmpty() ? "unknown" : rev + " (Built: " + date + ")";
+    }
+
+    /** @since 0.9.67+ */
+    public String getHostFromJettyConfig() {
+        try {
+            File base = _context.getBaseDir();
+            File xml = new File(base, "jetty-i2psnark.xml");
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(xml);
+            doc.getDocumentElement().normalize();
+
+            NodeList nList = doc.getElementsByTagName("Set");
+            for (int temp = 0; temp < nList.getLength(); temp++) {
+                Node nNode = nList.item(temp);
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    if ("host".equals(nNode.getAttributes().getNamedItem("name").getNodeValue())) {
+                        return nNode.getTextContent();
+                    }
+                }
+            }
+        } catch (Exception e) {}
+        return "127.0.0.1";
+    }
+
+    /** @since 0.9.67+ */
+    public int getPortFromJettyConfig() {
+        try {
+            File base = _context.getBaseDir();
+            File xml = new File(base, "jetty-i2psnark.xml");
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+            Document doc = dBuilder.parse(xml);
+            doc.getDocumentElement().normalize();
+
+            NodeList nList = doc.getElementsByTagName("Set");
+            for (int temp = 0; temp < nList.getLength(); temp++) {
+                Node nNode = nList.item(temp);
+                if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+                    if ("port".equals(nNode.getAttributes().getNamedItem("name").getNodeValue())) {
+                        return Integer.parseInt(nNode.getTextContent());
+                    }
+                }
+            }
+        } catch (Exception e) {}
+        return 8002;
     }
 
 }
