@@ -218,20 +218,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
        ,"Simp [UDP]", "udp://opentracker.simp.i2p:6969/=http://opentracker.simp.i2p/tracker/"
        ,"Skank", "http://opentracker.skank.i2p/a=http://opentracker.skank.i2p/tracker"
        ,"Skank [UDP]", "udp://opentracker.skank.i2p:6969/=http://opentracker.skank.i2p/tracker/"
-//       ,"OmiTracker", "http://omitracker.i2p/announce.php=http://omitracker.i2p/"
-//       ,"Lyoko", "http://lyoko.i2p/a=http://lyoko.i2p/tracker"
-//       ,"Chudo", "http://tracker.chudo.i2p/a=http://tracker.chudo.i2p/"
-//       ,"Lodikon", "http://tracker.lodikon.i2p/announce=http://tracker.lodikon.i2p/"
-//       ,"Freedom", "http://torrfreedom.i2p/announce.php=http://torrfreedom.i2p/"
-//       ,"PTT", "http://5m3pd32zx43xk3uz6hvrdksj6tlg7abnjsc3j5kkd2yzctet4nmq.b32.i2p/announce=http://ptt.i2p/index_eng.html"
-//       ,"TheBland", "http://tracker.thebland.i2p/a=http://tracker.thebland.i2p/tracker/" // ECDSA_SHA256_P256
-//       ,"PsiOpenTracker", "http://tracker.psi.i2p/a=http://tracker.psi.i2p/stats"
-//       ,"Chihaya", "http://uajd4nctepxpac4c4bdyrdw7qvja2a5u3x25otfhkptcjgd53ioq.b32.i2p/announce=http://uajd4nctepxpac4c4bdyrdw7qvja2a5u3x25otfhkptcjgd53ioq.b32.i2p/"
-//       ,"DifTracker", "http://diftracker.i2p/announce.php=http://diftracker.i2p/"
-//       ,"PsiTracker", "http://psi.i2p/tracker/a=http://psi.i2p/tracker/"
-//       ,"Crypthost", "http://tracker.crypthost.i2p/announce=http://tracker.crypthost.i2p/tracker/"
-//       ,"OpenDifTracker", "http://opendiftracker.i2p/announce.php=http://opendiftracker.i2p/"
-//       ,"ICU812", "http://tracker.icu812.i2p/a=http://tracker.icu812.i2p/torrents/"
     };
 
     /** URL. This is our equivalent to router.utorrent.com for bootstrap */
@@ -243,18 +229,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         "http://opentracker.r4sas.i2p/a," +
         "http://opentracker.simp.i2p/a," +
         "http://opentracker.skank.i2p/a,";
-//        "http://omitracker.i2p/announce.php," +
-//        "http://lyoko.i2p/a," +
-//        "http://tracker.lodikon.i2p/announce," +
-//        "http://tracker.chudo.i2p/a";
-//        (SigType.ECDSA_SHA256_P256.isAvailable() ? "http://tracker.thebland.i2p/a" : "");
-//        "http://5m3pd32zx43xk3uz6hvrdksj6tlg7abnjsc3j5kkd2yzctet4nmq.b32.i2p/announce," +
-//        "http://tracker.psi.i2p/a," +
-//        "http://uajd4nctepxpac4c4bdyrdw7qvja2a5u3x25otfhkptcjgd53ioq.b32.i2p/announce," +
-//        "http://psi.i2p/tracker/a," +
-//        "http://opendiftracker.i2p/announce.php," +
-//        "http://tracker.crypthost.i2p/announce," +
-//        "http://tracker.icu812.i2p/a," +
 
     public static final Set<String> DEFAULT_TRACKER_ANNOUNCES;
 
@@ -264,20 +238,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         "opentracker.r4sas.i2p", "punzipidirfqspstvzpj6gb4tkuykqp6quurj6e23bgxcxhdoe7q.b32.i2p",
         "opentracker.simp.i2p", "wc4sciqgkceddn6twerzkfod6p2npm733p7z3zwsjfzhc4yulita.b32.i2p",
         "opentracker.skank.i2p", "by7luzwhx733fhc5ug2o75dcaunblq2ztlshzd7qvptaoa73nqua.b32.i2p",
-//        "omitracker.i2p", "a5ruhsktpdhfk5w46i6yf6oqovgdlyzty7ku6t5yrrpf4qedznjq.b32.i2p",
-//        "lyoko.i2p", "afuuortfaqejkesne272krqvmafn65mhls6nvcwv3t7l2ic2p4kq.b32.i2p",
-//        "tracker.chudo.i2p", "swhb5i7wcjcohmus3gbt3w6du6pmvl3isdvxvepuhdxxkfbzao6q.b32.i2p",
-//        "tracker.lodikon.i2p", "q2a7tqlyddbyhxhtuia4bmtqpohpp266wsnrkm6cgoahdqrjo3ra.b32.i2p",
-//        "tracker.thebland.i2p", "s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p",
-//        "ptt.i2p", "5m3pd32zx43xk3uz6hvrdksj6tlg7abnjsc3j5kkd2yzctet4nmq.b32.i2p",
-//        "tracker.psi.i2p", "vmow3h54yljn7zvzbqepdddt5fmygijujycod2q6yznpy2rrzuwa.b32.i2p",
-//        "Chihaya", "uajd4nctepxpac4c4bdyrdw7qvja2a5u3x25otfhkptcjgd53ioq.b32.i2p",
-//        "opendiftracker.i2p", "bikpeyxci4zuyy36eau5ycw665dplun4yxamn7vmsastejdqtfoq.b32.i2p",
-//        "psi.i2p", "avviiexdngd32ccoy4kuckvc3mkf53ycvzbz6vz75vzhv4tbpk5a.b32.i2p",
-//        "tracker.crypthost.i2p", "ri5a27ioqd4vkik72fawbcryglkmwyy4726uu5j3eg6zqh2jswfq.b32.i2p",
-//        "tracker.icu812.i2p", "h77hk3pr622mx5c6qmybvbtrdo5la7pxo6my4kzr47x2mlpnvm2a.b32.i2p",
-//        "uajd4nctepxpac4c4bdyrdw7qvja2a5u3x25otfhkptcjgd53ioq.b32.i2p", // psi go - unregistered
-//        "crs2nugpvoqygnpabqbopwyjqettwszth6ubr2fh7whstlos3a6q.b32.i2p" // Vuze - unregistered
     }));
 
     private static final String DEFAULT_TORRENT_CREATE_FILTERS[] = {
@@ -2562,9 +2522,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 }
             }
         }
-        if (_log.shouldInfo()) {
-            _log.info("Cleanup found " + torrents.size() + " torrents and " + found +
-                      " configs, deleted " + totalDeleted + " old configs");
+        if (totalDeleted > 0) {
+            String msg = "Metadata cleaner removed " + totalDeleted + " orphaned torrent config " + (totalDeleted > 1 ? "folders" : "folder");
+            if (_log.shouldInfo()) {_log.info(msg);}
+            if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
         }
     }
 
@@ -2676,13 +2637,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (torrent != null) {
             if (shouldRemove) {synchronized (_snarks) {removeSnark(torrent);}}
             boolean wasStopped = torrent.isStopped();
-            if (!wasStopped) {
-                addMessageNoEscape(_t("Torrent stopped: {0}", linkify(torrent).replace("Magnet ", "")));
-                if (!_context.isRouterContext()) {
-                    System.out.println(" • " + _t("Torrent stopped: {0}", getSnarkName(torrent)));
-                }
-                torrent.stopTorrent();
-            }
+            if (!wasStopped) {torrent.stopTorrent();}
             if (shouldRemove) {removeTorrentStatus(torrent);}
         }
     }
@@ -2740,7 +2695,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             if (delay > 30000 && autostart) {
                 int id = _messages.addMessageNoEscape(getTime() + "&nbsp; " +
                          _t("Adding torrents in {0}" + "&hellip;", DataHelper.formatDuration2(delay)));
-                try {Thread.sleep(delay);} catch (InterruptedException ie) {}
+                try {Thread.sleep(delay);}
+                catch (InterruptedException ie) {}
                 _messages.clearThrough(id); // Remove that first message
             } else if (_context.isRouterContext()) {
                 // to wait for client manager to be up so we can get bandwidth limits
@@ -2752,6 +2708,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             boolean routerOK = false;
             boolean doMagnets = true;
             while (_running) {
+                String i2cpConnectMsg = " • " + _t("Connecting to I2CP port on I2P instance at {0}", _util.getI2CPHost() + ':' + _util.getI2CPPort() + "...");
                 File dir = getDataDir();
                 if (_log.shouldDebug()) {_log.debug("DirectoryMonitor scanning I2PSnark data dir: " + dir.getAbsolutePath());}
                 if (routerOK && (_context.isRouterContext() || _util.connected() || _util.isConnecting())) {
@@ -2761,9 +2718,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     // For standalone, this will probe the router every 60 seconds if not connected
                     boolean oldOK = routerOK;
                     // standalone, first time only
-                    if (doMagnets && !_context.isRouterContext()) {
-                        System.out.println(" • " + _t("Connecting to I2P") + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort() + "...");
-                    }
+                    if (doMagnets && !_context.isRouterContext()) {System.out.println(i2cpConnectMsg);}
                     routerOK = getBWLimit();
                     if (routerOK) {
                         autostart = shouldAutoStart();
@@ -2777,7 +2732,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                         String msg = _t("Connecting to I2P") + "...";
                                         addMessage(msg);
                                         if (!_context.isRouterContext()) {
-                                            System.out.println(" • " + msg + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort() + "...");
+                                            System.out.println(i2cpConnectMsg);
                                         }
                                         // getBWLimit() was successful so this should work
                                         boolean ok = _util.connect();
@@ -2825,20 +2780,19 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         addMagnets(autostart);
                         doMagnets = false;
                     } catch (RuntimeException e) {_log.error("Error in the DirectoryMonitor", e);}
-                    if (!_context.isRouterContext()) {
-                        String msg = _t("I2P+ I2PSnark standalone version {0} started", CoreVersion.VERSION);
-                        //msg += " (Revision: ###commitid###)";
-                        addMessage(msg);
-                        if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
-                    }
+
                     if (routerOK && !_snarks.isEmpty()) {
-                        addMessage(_t("Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers.", _util.getMaxUpBW(), _util.getMaxUploaders()));
+                        addMessage(_t("Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers.",
+                                   _util.getMaxUpBW(), _util.getMaxUploaders()));
                     }
-                    // To fix bug where files were left behind,
-                    // but also good for when user removes snarks when i2p is not running
-                    // Don't run if there was an error, as we would delete the torrent config
-                    // file(s) and we don't want to do that. We'll do the cleanup the next
-                    // time i2psnark starts. See ticket #1658.
+                    /*
+                     * To fix bug where files were left behind, but also good for when user
+                     * removes snarks when i2p is not running
+                     *
+                     * Don't run if there was an error, as we would delete the torrent config
+                     * file(s) and we don't want to do that.
+                     * We'll do the cleanup the next time i2psnark starts. See ticket #1658.
+                     */
                     if (ok) {
                         cleanupTorrentStatus();
                         long freeSpace = dir.getUsableSpace();
@@ -2862,8 +2816,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         }
                     }
                 }
-                // polling period for scanning data dir for new content
-                try {Thread.sleep(30*1000);}
+                try {Thread.sleep(30*1000);} // Polling period for scanning data dir for new content
                 catch (InterruptedException ie) {}
             }
         }
@@ -2877,11 +2830,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public void torrentComplete(Snark snark) {
         MetaInfo meta = snark.getMetaInfo();
         Storage storage = snark.getStorage();
-        if (meta == null || storage == null) {return;}
-        // TODO: fix this so it's not showing Download finished for incomplete files, disable it in the meantime
-/**
-        if (snark.getDownloaded() > 0 && !snark.isNotificationSent()) {
+        if (meta == null || storage == null || snark == null) {return;}
+
+        if (snark.isStorageCompleted() && !snark.isNotificationSent()) {
             addMessageNoEscape(_t("Download finished: {0}", linkify(snark)));
+            if (!_context.isRouterContext()) {
+                String msg = _t("Download finished: {0}", getSnarkName(snark));
+                System.out.println(" • " + msg);
+            }
             snark.setNotificationSent(true);
             ClientAppManager cmgr = _context.clientAppManager();
             if (cmgr != null) {
@@ -2893,7 +2849,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 }
             }
         }
-**/
         updateStatus(snark);
     }
 
@@ -2951,7 +2906,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 return name;
             } catch (IOException ioe) {
                 addMessage(_t("Failed to copy torrent file to {0}", name));
-                _log.error("Failed to write torrent file", ioe);
+                _log.error("Failed to write torrent file -> " + ioe.getMessage());
             }
         }
         return null;

@@ -25,6 +25,7 @@ class PeerConnectionIn implements Runnable {
 
     private volatile Thread thread;
     private volatile boolean quit;
+    private final boolean isStandalone = !I2PAppContext.getGlobalContext().isRouterContext();
 
     long lastRcvd;
 
@@ -228,10 +229,12 @@ class PeerConnectionIn implements Runnable {
         } catch (IOException ioe) {
             // Ignore, probably the other side closed connection.
             if (_log.shouldInfo()) {
-                _log.info("IOError communicating with [" + peer + "] \n* Reason: " + ioe.getMessage());
+                _log.info("Error communicating with [" + peer + "] -> " + ioe.getMessage());
             }
         } catch (RuntimeException t) {
-            _log.error("Error communicating with [" + peer + "] \n* " + t.getMessage());
+            if (!isStandalone && _log.shouldInfo()) {
+                _log.error("Error communicating with [" + peer + "] -> " + t.getMessage());
+            }
         } finally {peer.disconnect();}
     }
 

@@ -3124,63 +3124,47 @@ public class I2PSnarkServlet extends BasicServlet {
 
 /* user interface */
 
-        buf.append("<tr><th class=suboption>")
-           .append(_t("User Interface"));
+        buf.append("<tr><th class=suboption>").append(_t("User Interface"));
         if (_context.isRouterContext()) {
             buf.append("&nbsp;&nbsp;<a href=\"/torrents?configure\" target=_top class=script id=embed>")
                .append(_t("Switch to Embedded Mode")).append("</a>")
                .append("<a href=\"").append(_contextPath).append("/configure\" target=_top class=script id=fullscreen>")
                .append(_t("Switch to Fullscreen Mode")).append("</a>");
         }
-        buf.append("</th></tr>\n<tr><td>\n<div class=optionlist>\n")
-           .append("<span class=configOption><b>")
-           .append(_t("Theme"))
-           .append("</b> \n");
+        buf.append("</th></tr>\n<tr><td>\n<div class=optionlist>\n").append("<span class=configOption><b>")
+           .append(_t("Theme")).append("</b> \n");
         if (_manager.getUniversalTheming()) {
             buf.append("<select id=themeSelect name=theme disabled title=\"")
                .append(_t("To change themes manually, disable universal theming"))
-               .append("\"><option>")
-               .append(_manager.getTheme())
-               .append("</option></select> <span id=bwHoverHelp>")
+               .append("\"><option>").append(_manager.getTheme()).append("</option></select> <span id=bwHoverHelp>")
                .append(toThemeSVG("details", "", ""))
-               .append("<span id=bwHelp>")
-               .append(_t("Universal theming is enabled."))
-               .append("</span></span>")
-               .append(" <a href=\"/configui\" target=_blank>[")
-               .append(_t("Configure"))
-               .append("]</a></span><br>");
+               .append("<span id=bwHelp>").append(_t("Universal theming is enabled.")).append("</span></span>")
+               .append(" <a href=\"/configui\" target=_blank>[").append(_t("Configure")).append("]</a></span><br>");
         } else {
             buf.append("<select id=themeSelect name=theme>");
             String theme = _manager.getTheme();
             String[] themes = _manager.getThemes();
             Arrays.sort(themes);
             for (int i = 0; i < themes.length; i++) {
-                if(themes[i].equals(theme))
+                if (themes[i].equals(theme)) {
                     buf.append("\n<OPTION value=\"").append(themes[i]).append("\" SELECTED>").append(themes[i]);
-                else
+                } else {
                     buf.append("\n<OPTION value=\"").append(themes[i]).append("\">").append(themes[i]);
+                }
             }
             buf.append("</select>\n</span><br>\n");
         }
 
-        buf.append("<span class=configOption><b>")
-           .append(_t("Refresh time"))
+        buf.append("<span class=configOption><b>").append(_t("Refresh time"))
            .append("</b> \n<select name=refreshDelay title=\"")
-           .append(_t("How frequently torrent status is updated on the main page"))
-           .append("\">");
+           .append(_t("How frequently torrent status is updated on the main page")).append("\">");
         int delay = _manager.getRefreshDelaySeconds();
         for (int i = 0; i < times.length; i++) {
-            buf.append("<option value=\"")
-               .append(Integer.toString(times[i]))
-               .append("\"");
-            if (times[i] == delay) {
-                buf.append(" selected");
-            }
+            buf.append("<option value=\"").append(Integer.toString(times[i])).append("\"");
+            if (times[i] == delay) {buf.append(" selected");}
             buf.append(">");
-            if (times[i] > 0)
-                buf.append(DataHelper.formatDuration2(times[i] * 1000));
-            else
-                buf.append(_t("Never"));
+            if (times[i] > 0) {buf.append(DataHelper.formatDuration2(times[i] * 1000));}
+            else {buf.append(_t("Never"));}
             buf.append("</option>\n");
         }
         buf.append("</select>\n</span><br>\n")
@@ -3213,7 +3197,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("</span><br>\n");
         }
 
-/**
+/*
         buf.append("<span class=configOption><label for=smartSort><b>")
            .append(_t("Smart torrent sorting"))
            .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
@@ -3222,7 +3206,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("title=\"")
            .append(_t("Ignore words such as 'a' and 'the' when sorting"))
            .append("\"></span><br>\n")
-**/
+*/
 
         buf.append("<span class=configOption><label for=collapsePanels><b>")
            .append(_t("Collapsible panels"))
@@ -3297,7 +3281,6 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<tr><th class=suboption>")
            .append(_t("Torrent Options"))
            .append("</th></tr>\n<tr><td>\n<div class=optionlist>\n")
-
            .append("<span id=bwAllocation class=configOption title=\"").append(_t("Half available bandwidth recommended.")).append("\">")
            .append("<b>").append(_t("Bandwidth limit")).append("</b> ")
            .append("<span id=bwDown></span><input type=text name=downBW class=\"r numeric\" value=\"")

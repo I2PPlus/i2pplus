@@ -44,8 +44,6 @@ import net.i2p.util.SystemVersion;
 
 import org.klomp.snark.URIUtil;
 
-
-/* ------------------------------------------------------------ */
 /**
  * Based on DefaultServlet from Jetty 6.1.26, heavily simplified
  * and modified to remove all dependencies on Jetty libs.
@@ -72,22 +70,19 @@ import org.klomp.snark.URIUtil;
  * content, OPTION and TRACE methods for the context.
  * The following initParameters are supported, these can be set
  * on the servlet itself:
- * <PRE>
+ * <pre>
  *
- *  resourceBase      Set to replace the context resource base
-
+ *  resourceBase  Set to replace the context resource base
  *  warBase      Path allowed for resource in war
  *
- * </PRE>
- *
+ * </pre>
  *
  * @author Greg Wilkins (gregw)
  * @author Nigel Canonizado
  *
  * @since Jetty 7
  */
-class BasicServlet extends HttpServlet
-{
+class BasicServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     protected transient final I2PAppContext _context;
     protected transient final Log _log;
@@ -110,18 +105,15 @@ class BasicServlet extends HttpServlet
         _mimeTypes = new MimeTypes();
     }
 
-    /* ------------------------------------------------------------ */
     public void init(ServletConfig cfg) throws ServletException {
         super.init(cfg);
         String rb=getInitParameter("resourceBase");
-        if (rb!=null)
-        {
+        if (rb != null) {
             File f = new SecureFile(rb);
             setResourceBase(f);
         }
         String wb = getInitParameter("warBase");
-        if (wb != null)
-            setWarBase(wb);
+        if (wb != null) {setWarBase(wb);}
     }
 
     /**
@@ -130,59 +122,49 @@ class BasicServlet extends HttpServlet
     protected synchronized void setResourceBase(File base) throws UnavailableException {
         if (!base.isDirectory()) {
             _log.error("Configured I2PSnark data directory " + base + " does not exist");
-            //throw new UnavailableException("Resource base does not exist: " + base);
         }
         _resourceBase = base;
-        if (_log.shouldInfo())
-            _log.info("I2PSnark data directory: " + _resourceBase);
+        if (_log.shouldInfo()) {_log.info("I2PSnark data directory: " + _resourceBase);}
     }
 
     /**
      *  Only paths starting with this in the path are served
      */
     protected void setWarBase(String base) {
-        if (!base.startsWith("/"))
-            base = '/' + base;
-        if (!base.endsWith("/"))
-            base = base + '/';
+        if (!base.startsWith("/")) {base = '/' + base;}
+        if (!base.endsWith("/")) {base = base + '/';}
         _warBase = base;
-        if (_log.shouldDebug())
-            _log.debug("War base directory: " + _warBase);
+        if (_log.shouldDebug()) {_log.debug("War base directory: " + _warBase);}
     }
 
-    /** get Resource to serve.
-     * Map a path to a resource. The default implementation calls
-     * HttpContext.getResource but derived servlets may provide
-     * their own mapping.
+    /** Get Resource to serve.
+     * Map a path to a resource. The default implementation calls HttpContext.getResource
+     * but derived servlets may provide their own mapping.
+     *
      * @param pathInContext The path to find a resource for.
      * @return The resource to serve or null if not existing
      */
-    public File getResource(String pathInContext)
-    {
+    public File getResource(String pathInContext) {
         File r = null;
-        if (!pathInContext.contains("..") &&
-                   !pathInContext.endsWith("/")) {
+        if (!pathInContext.contains("..") && !pathInContext.endsWith("/")) {
             File f;
             synchronized (this) {
-                if (_resourceBase==null)
-                    return null;
+                if (_resourceBase==null) {return null;}
                 f = new File(_resourceBase, pathInContext);
             }
-            if (f.exists())
-                r = f;
+            if (f.exists()) {r = f;}
         }
         return r;
     }
 
-    /** get Resource to serve.
-     * Map a path to a resource. The default implementation calls
-     * HttpContext.getResource but derived servlets may provide
-     * their own mapping.
+    /** Get Resource to serve.
+     * Map a path to a resource. The default implementation calls HttpContext.getResource
+     * but derived servlets may provide their own mapping.
+     *
      * @param pathInContext The path to find a resource for.
      * @return The resource to serve or null. Returns null for directories
      */
-    public HttpContent getContent(String pathInContext, long limit)
-    {
+    public HttpContent getContent(String pathInContext, long limit) {
         HttpContent r = null;
         if (_warBase != null && pathInContext.startsWith(_warBase)) {
             r = new JarContent(pathInContext);
@@ -190,19 +172,14 @@ class BasicServlet extends HttpServlet
             File f = getResource(pathInContext);
             // exists && !directory
             if (f != null && f.isFile()) {
-                if (limit > 0)
-                    r = new LimitFileContent(f, limit);
-                else
-                    r = new FileContent(f);
+                if (limit > 0) {r = new LimitFileContent(f, limit);}
+                else {r = new FileContent(f);}
             }
         }
         return r;
     }
 
-    /* ------------------------------------------------------------ */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException
-    {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // always starts with a '/'
         String servletpath = request.getServletPath();
         String pathInfo = request.getPathInfo();
@@ -211,9 +188,8 @@ class BasicServlet extends HttpServlet
         long limit = 0;
         String slimit = request.getParameter("limit");
         if (slimit != null) {
-            try {
-                limit = Long.parseLong(slimit);
-            } catch (NumberFormatException nfe) {}
+            try {limit = Long.parseLong(slimit);}
+            catch (NumberFormatException nfe) {}
         }
 
         // Find the resource and content
@@ -222,88 +198,57 @@ class BasicServlet extends HttpServlet
 
             // Handle resource
             if (content == null) {
-                if (_log.shouldWarn())
-                    _log.warn("Not found: " + pathInContext);
+                if (_log.shouldWarn()) {_log.warn("Not found: " + pathInContext);}
                 response.sendError(404);
             } else {
                 if (passConditionalHeaders(request, response, content)) {
-                    if (_log.shouldDebug())
-                        _log.debug("Sending: " + content);
+                    if (_log.shouldDebug()) {_log.debug("Sending: " + content);}
                     sendData(request, response, content);
-                } else {
-                    if (_log.shouldDebug())
-                        _log.debug("Not modified: " + content);
-                }
+                } else if (_log.shouldDebug()) {_log.debug("Not modified: " + content);}
             }
         }
-        catch(IllegalArgumentException e)
-        {
-            if (_log.shouldWarn())
-                _log.warn("Error sending " + pathInContext, e);
-            if(!response.isCommitted())
-                response.sendError(500, e.getMessage());
+        catch(IllegalArgumentException e) {
+            if (_log.shouldWarn()) {_log.warn("Error sending " + pathInContext, e);}
+            if (!response.isCommitted()) {response.sendError(500, e.getMessage());}
         }
-        catch(IOException e)
-        {
-            if (_log.shouldWarn())
-                // typical browser abort
-                //_log.warn("Error sending", e);
-                _log.warn("Error sending " + pathInContext + ": " + e);
+        catch(IOException e) { // typical browser abort
+            if (_log.shouldWarn()) {
+                _log.warn("Error sending " + pathInContext + " -> " + e.getMessage());
+            }
             throw e;
         }
     }
 
-    /* ------------------------------------------------------------ */
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException
-    {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.sendError(405);
     }
 
-    /* ------------------------------------------------------------ */
     /* (non-Javadoc)
      * @see javax.servlet.http.HttpServlet#doTrace(javax.servlet.http.HttpServletRequest, javax.servlet.http.HttpServletResponse)
      */
-    protected void doTrace(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException
-    {
+    protected void doTrace(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.sendError(405);
     }
 
-    protected void doOptions(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException
-    {
+    protected void doOptions(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.sendError(405);
     }
 
-    protected void doDelete(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException
-    {
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.sendError(405);
     }
 
-
-    /* ------------------------------------------------------------ */
     /** Check modification date headers.
      *  @return true to keep going, false if handled here
      */
-    protected boolean passConditionalHeaders(HttpServletRequest request,HttpServletResponse response, HttpContent content)
-    throws IOException
-    {
-        try
-        {
+    protected boolean passConditionalHeaders(HttpServletRequest request,HttpServletResponse response, HttpContent content) throws IOException {
+        try {
             if (!request.getMethod().equals("HEAD") ) {
                 long ifmsl=request.getDateHeader("If-Modified-Since");
-                if (ifmsl!=-1)
-                {
-                    if (content.getLastModified()/1000 <= ifmsl/1000)
-                    {
-                        try {
-                            response.reset();
-                        } catch (IllegalStateException ise) {
-                            // committed
-                            return true;
-                        }
+                if (ifmsl!=-1) {
+                    if (content.getLastModified()/1000 <= ifmsl/1000) {
+                        try {response.reset();}
+                        catch (IllegalStateException ise) {return true;} // committed
                         response.setStatus(304);
                         response.getOutputStream().close();
                         return false;
@@ -311,64 +256,45 @@ class BasicServlet extends HttpServlet
                 }
             }
         }
-        catch(IllegalArgumentException iae)
-        {
-            if(!response.isCommitted())
-                response.sendError(400, iae.getMessage());
+        catch(IllegalArgumentException iae) {
+            if (!response.isCommitted()) {response.sendError(400, iae.getMessage());}
             throw iae;
         }
         return true;
     }
 
-
-    /* ------------------------------------------------------------ */
-    protected void sendData(HttpServletRequest request,
-                            HttpServletResponse response,
-                            HttpContent content)
-    throws IOException
-    {
+    protected void sendData(HttpServletRequest request, HttpServletResponse response, HttpContent content) throws IOException {
         InputStream in =null;
-        try {
-            in = content.getInputStream();
-        } catch (IOException e) {
-            if (_log.shouldWarn())
-                _log.warn("Not found: " + content);
+        try {in = content.getInputStream();}
+        catch (IOException e) {
+            if (_log.shouldWarn()) {_log.warn("Not found: " + content);}
             response.sendError(404);
             return;
         }
 
         OutputStream out =null;
-        try {
-            out = response.getOutputStream();
-        } catch (IllegalStateException e) {
-            out = new WriterOutputStream(response.getWriter());
-        }
+        try {out = response.getOutputStream();}
+        catch (IllegalStateException e) {out = new WriterOutputStream(response.getWriter());}
 
         long content_length = content.getContentLength();
 
-        // see if there are any range headers
+        // See if there are any range headers
         Enumeration<?> reqRanges = request.getHeaders("Range");
 
         if (reqRanges == null || !reqRanges.hasMoreElements()) {
-            // if there were no ranges, send entire entity
-            // Write content normally
+            // If there were no ranges, send entire entity - write content normally
             writeHeaders(response,content,content_length);
             if (content_length >= 0  && request.getMethod().equals("HEAD")) {
-                // if we know the content length, don't send it to be counted
-                if (_log.shouldInfo())
-                    _log.info("HEAD: " + content);
-            } else {
-                // GET or unknown size for HEAD
-                copy(in, out);
-            }
+                // If we know the content length, don't send it to be counted
+                if (_log.shouldInfo()) {_log.info("HEAD: " + content);}
+            } else {copy(in, out);} // GET or unknown size for HEAD
             return;
         }
-
 
         // Parse the satisfiable ranges
         List<InclusiveByteRange> ranges = InclusiveByteRange.satisfiableRanges(reqRanges, content_length);
 
-        // if there are no satisfiable ranges, send 416 response
+        // If there are no satisfiable ranges, send 416 response
         // Completely punt on multiple ranges (unlike Default)
         if (ranges == null || ranges.size() != 1) {
             writeHeaders(response, content, content_length);
@@ -378,8 +304,8 @@ class BasicServlet extends HttpServlet
             return;
         }
 
-        // if there is only a single valid range (must be satisfiable
-        // since were here now), send that range with a 216 response
+        // If there is only a single valid range (must be satisfiable since were here now),
+        // send that range with a 216 response
         InclusiveByteRange singleSatisfiableRange = ranges.get(0);
         long singleLength = singleSatisfiableRange.getSize(content_length);
         writeHeaders(response, content, singleLength);
@@ -388,55 +314,36 @@ class BasicServlet extends HttpServlet
         copy(in, singleSatisfiableRange.getFirst(content_length), out, singleLength);
     }
 
-    /* ------------------------------------------------------------ */
-    protected void writeHeaders(HttpServletResponse response,HttpContent content,long count)
-        throws IOException
-    {
+    protected void writeHeaders(HttpServletResponse response,HttpContent content,long count) throws IOException {
         String rtype = response.getContentType();
         String ctype = content.getContentType();
-        if (rtype != null) {
-            if (rtype.contains("javascript"))
-                response.setCharacterEncoding("utf-8");
-        } else if (ctype != null) {
+        if (rtype != null && rtype.contains("javascript")) {response.setCharacterEncoding("utf-8");}
+        else if (ctype != null) {
             response.setContentType(ctype);
-            if (ctype.contains("javascript"))
-                response.setCharacterEncoding("utf-8");
+            if (ctype.contains("javascript")) {response.setCharacterEncoding("utf-8");}
         }
         response.setHeader("X-Content-Type-Options", "nosniff");
         long lml = content.getLastModified();
-        if (lml > 0)
-            response.setDateHeader("Last-Modified",lml);
+        if (lml > 0) {response.setDateHeader("Last-Modified",lml);}
 
         if (count != -1) {
-            if (count <= Integer.MAX_VALUE)
-                response.setContentLength((int)count);
-            else
-                response.setHeader("Content-Length", Long.toString(count));
+            if (count <= Integer.MAX_VALUE) {response.setContentLength((int)count);}
+            else {response.setHeader("Content-Length", Long.toString(count));}
             response.setHeader("Accept-Ranges", "bytes");
-        } else {
-            response.setHeader("Accept-Ranges", "none");
-        }
+        } else {response.setHeader("Accept-Ranges", "none");}
 
         long ct = content.getCacheTime();
         if (ct >= 0) {
-            if (ctype != null && (ctype.contains("javascript") || ctype.contains("text/") || ctype.contains("image/") ||
-                ctype.contains("font")))
+            if (ctype != null && (ctype.contains("javascript") || ctype.contains("text/") || ctype.contains("image/") ||ctype.contains("font"))) {
                 response.setHeader("Cache-Control", "private, max-age=" + ct + ", immutable");
-            else
-                response.setHeader("Cache-Control", "no-cache, private, max-age=" + ct);
-        } else {
-            response.setHeader("Cache-Control", "private, max-age=" + ct + ", immutable");
-        }
+            } else {response.setHeader("Cache-Control", "no-cache, private, max-age=" + ct);}
+        } else {response.setHeader("Cache-Control", "private, max-age=" + ct + ", immutable");}
     }
 
-    /* ------------------------------------------------------------ */
-    /* ------------------------------------------------------------ */
-    /* ------------------------------------------------------------ */
     /* I2P additions below here */
 
     /** from Jetty HttpContent.java */
-    public interface HttpContent
-    {
+    public interface HttpContent {
         String getContentType();
         long getLastModified();
         /** in seconds */
@@ -445,44 +352,18 @@ class BasicServlet extends HttpServlet
         InputStream getInputStream() throws IOException;
     }
 
-    private class FileContent implements HttpContent
-    {
+    private class FileContent implements HttpContent {
         private final File _file;
+        public FileContent(File file) {_file = file;}
+        public String getContentType() {return getMimeType(_file.toString());}
+        public long getLastModified() {return _file.lastModified();}
+        public int getCacheTime() {return FILE_CACHE_CONTROL_SECS;}
+        public long getContentLength() {return _file.length();}
 
-        public FileContent(File file)
-        {
-            _file = file;
-        }
-
-        /* ------------------------------------------------------------ */
-        public String getContentType()
-        {
-            //return _mimeTypes.getMimeByExtension(_file.toString());
-            return getMimeType(_file.toString());
-        }
-
-        /* ------------------------------------------------------------ */
-        public long getLastModified()
-        {
-            return _file.lastModified();
-        }
-
-        public int getCacheTime()
-        {
-            return FILE_CACHE_CONTROL_SECS;
-        }
-
-        /* ------------------------------------------------------------ */
-        public long getContentLength()
-        {
-            return _file.length();
-        }
-
-        /* ------------------------------------------------------------ */
-        public InputStream getInputStream() throws IOException
-        {
-            if (getContentLength() > 4*1024*1024)
+        public InputStream getInputStream() throws IOException {
+            if (getContentLength() > 4*1024*1024) {
                 return new BufferedInputStream(new FileInputStream(_file), 64*1024);
+            }
             return new BufferedInputStream(new FileInputStream(_file));
         }
 
@@ -493,74 +374,44 @@ class BasicServlet extends HttpServlet
     /**
      *  @since 0.9.45
      */
-    private class LimitFileContent extends FileContent
-    {
+    private class LimitFileContent extends FileContent {
         private final long _limit;
 
         /**
          *  @param limit must be less than file length
          */
-        public LimitFileContent(File file, long limit)
-        {
+        public LimitFileContent(File file, long limit) {
             super(file);
             _limit = Math.min(limit, file.length());
         }
 
         @Override
-        public long getContentLength()
-        {
-            return _limit;
-        }
+        public long getContentLength() {return _limit;}
     }
 
-    private class JarContent implements HttpContent
-    {
+    private class JarContent implements HttpContent {
         private final String _path;
+        public JarContent(String path) {_path = path;}
+        public String getContentType() {return getMimeType(_path);}
 
-        public JarContent(String path)
-        {
-            _path = path;
-        }
-
-        /* ------------------------------------------------------------ */
-        public String getContentType()
-        {
-            return getMimeType(_path);
-        }
-
-        /* ------------------------------------------------------------ */
-        public long getLastModified()
-        {
+        public long getLastModified() {
             String cpath = getServletContext().getContextPath();
-            // this won't work if we aren't at top level
-            String cname = "".equals(cpath) ? "i2psnark" : cpath.substring(1).replace("/", "_");
+            String cname = "".equals(cpath) ? "i2psnark" : cpath.substring(1).replace("/", "_"); // This won't work if we aren't at top level
             return (new File(_context.getBaseDir(), "webapps/" + cname + ".war")).lastModified();
         }
 
-        public int getCacheTime()
-        {
-            return WAR_CACHE_CONTROL_SECS;
-        }
+        public int getCacheTime() {return WAR_CACHE_CONTROL_SECS;}
+        public long getContentLength() {return -1;}
 
-        /* ------------------------------------------------------------ */
-        public long getContentLength()
-        {
-            return -1;
-        }
-
-        /* ------------------------------------------------------------ */
-        public InputStream getInputStream() throws IOException
-        {
+        public InputStream getInputStream() throws IOException {
             InputStream rv = getServletContext().getResourceAsStream(_path);
-            if (rv == null)
-                throw new IOException("Not found");
+            if (rv == null) {throw new IOException("Not found");}
             return rv;
         }
 
         @Override
-        public String toString() { return "Jar resource: " + _path; }
+        public String toString() {return "Jar resource: " + _path;}
     }
-
 
     /**
      * @param resourcePath in the classpath, without ".properties" extension
@@ -569,7 +420,6 @@ class BasicServlet extends HttpServlet
         _mimeTypes.loadMimeMap(resourcePath);
     }
 
-    /* ------------------------------------------------------------ */
     /** Get the MIME type by filename extension.
      * @param filename A file name
      * @return MIME type matching the longest dot extension of the
@@ -577,8 +427,7 @@ class BasicServlet extends HttpServlet
      */
     protected String getMimeType(String filename) {
         String rv = _mimeTypes.getMimeByExtension(filename);
-        if (rv != null)
-            return rv;
+        if (rv != null) {return rv;}
         return getServletContext().getMimeType(filename);
     }
 
@@ -618,16 +467,7 @@ class BasicServlet extends HttpServlet
     /**
      *  Simple version of URIUtil.encodePath()
      */
-    protected static String encodePath(String path) /* throws MalformedURLException */ {
-        // Does NOT handle a ':' correctly, throws MUE.
-        // Can't convert to %3a before hand or the % gets escaped
-        //try {
-        //    URI uri = new URI(null, null, path, null);
-        //    return uri.toString();
-        //} catch (URISyntaxException use) {
-        //    // for ease of use, since a USE is not an IOE but a MUE is...
-        //    throw new MalformedURLException(use.getMessage());
-        //}
+    protected static String encodePath(String path) {
         return URIUtil.encodePath(path);
     }
 
@@ -645,8 +485,7 @@ class BasicServlet extends HttpServlet
         ByteArray ba = _cache.acquire();
         byte[] buf = ba.getData();
         try {
-            if (skip > 0)
-                DataHelper.skip(in, skip);
+            if (skip > 0) {DataHelper.skip(in, skip);}
             int read = 0;
             long tot = 0;
             boolean done = false;
@@ -662,10 +501,15 @@ class BasicServlet extends HttpServlet
             }
         } finally {
             _cache.release(ba, false);
-            if (in != null)
-                try { in.close(); } catch (IOException ioe) {}
-            if (out != null)
-                try { out.close(); } catch (IOException ioe) {}
+            if (in != null) {
+                try {in.close();}
+                catch (IOException ioe) {}
+            }
+            if (out != null) {
+                try {out.close();}
+                catch (IOException ioe) {}
+            }
         }
     }
+
 }

@@ -362,7 +362,6 @@ public class I2PSnarkUtil implements DisconnectListener {
      */
     public DHT getDHT() {return _dht;}
 
-
     /**
      * @return null if disabled or not started
      * @since 0.9.14

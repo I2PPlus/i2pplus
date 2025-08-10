@@ -826,19 +826,19 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         }
     }
 
+    public boolean storageCompleted;
+
     public void storageCompleted(Storage storage) {
-        if (_log.shouldInfo()) {
-            _log.info("Completely downloaded " + torrent);
-        }
-        // storage.close();
-        // System.out.println("Completely received: " + torrent);
+        if (_log.shouldInfo()) {_log.info("Torrent " + torrent + " completed");}
         if (completeListener != null) {
             completeListener.torrentComplete(this);
-            // this saved the status, so reset the variables
-            savedUploaded = getUploaded();
+            savedUploaded = getUploaded(); // This saves the status, so reset the variables
             storage.clearChanged();
+            storageCompleted = true;
         }
     }
+
+    public boolean isStorageCompleted() {return storageCompleted;}
 
     public void setWantedPieces(Storage storage) {
         if (coordinator != null) {coordinator.setWantedPieces();}
@@ -858,10 +858,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
         if (completeListener != null) {completeListener.addMessage(this, message);}
     }
 
-    /**
-     * Maintain a configurable total uploader cap
-     * coordinatorListener
-     */
+    /** Maintain a configurable total uploader cap CoordinatorListener */
     final static int MIN_TOTAL_UPLOADERS = 10;
     final static int MAX_TOTAL_UPLOADERS = 50;
 
@@ -923,9 +920,7 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
                 _comments = new CommentSet(comments);
                 return true;
             } else {
-                synchronized (_comments) {
-                    return _comments.addAll(comments);
-                }
+                synchronized (_comments) {return _comments.addAll(comments);}
             }
         }
     }
