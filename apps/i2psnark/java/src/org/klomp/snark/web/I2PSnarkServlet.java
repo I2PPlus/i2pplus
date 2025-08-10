@@ -1663,14 +1663,15 @@ public class I2PSnarkServlet extends BasicServlet {
         } else if (action.startsWith("Stop_")) {
             String torrent = action.substring(5).replace("%3D", "=");
             int stopped = 0;
-            if (torrent != null) {
+            if (torrent != null && stopped == 0) {
                 byte[] infoHash = Base64.decode(torrent);
                 boolean validHash = infoHash != null && infoHash.length == 20; // valid sha1
                 if (validHash) {
                     Snark snark = _manager.getTorrentByInfoHash(infoHash);
-                    if (snark != null && DataHelper.eq(infoHash, snark.getInfoHash()) && stopped == 0) {
+                    if (snark != null && DataHelper.eq(infoHash, snark.getInfoHash())) {
                         _manager.stopTorrent(snark);
                         stopped++;
+                        return;
                     } else {return;}
                 } else {return;}
             }

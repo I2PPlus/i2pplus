@@ -362,9 +362,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         public void timeReached() {
             if (!_running) {return;}
             ClientAppManager cmgr = _context.clientAppManager();
-            if (cmgr != null) {
-                _umgr = (UpdateManager) cmgr.getRegisteredApp(UpdateManager.APP_NAME);
-            }
+            if (cmgr != null) {_umgr = (UpdateManager) cmgr.getRegisteredApp(UpdateManager.APP_NAME);}
             if (_umgr != null) {
                 _uhandler = new UpdateHandler(_context, _umgr, SnarkManager.this);
                 _umgr.register(_uhandler, UpdateType.ROUTER_SIGNED, UpdateMethod.TORRENT, 10);
@@ -382,9 +380,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      */
     public void sessionDisconnected() {
         if (!_context.isRouterContext()) {
-            addMessage(_t("Unable to connect to I2P"));
-            stopAllTorrents(true);
-            _stopping = false;
+            //addMessage(_t("Unable to connect to I2P"));
+            //stopAllTorrents(true);
+            _stopping = true;
         }
     }
 
@@ -2741,7 +2739,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                         if (!ok) {
                                             if (_context.isRouterContext()) {addMessage(_t("Unable to connect to I2P"));}
                                             else {
-                                                msg = _t("Error connecting to I2P - check your I2CP settings!") + ' ' + _util.getI2CPHost() + ':' + _util.getI2CPPort();
+                                                msg = _t("Error connecting to I2P - check your I2CP settings!") + ' ' +
+                                                         _util.getI2CPHost() + ':' + _util.getI2CPPort();
                                                 addMessage(msg);
                                                 System.out.println(" • " + msg);
                                             }
@@ -2832,9 +2831,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public void torrentComplete(Snark snark) {
         MetaInfo meta = snark.getMetaInfo();
         Storage storage = snark.getStorage();
-        if (meta == null || storage == null || snark == null) {return;}
+        int pieces = snark.getPieces();
+        boolean isComplete = pieces >= snark.getNeeded() && snark.getRemainingLength() == 0;
+        if (meta == null || storage == null || snark == null || !isComplete) {return;}
 
-        if (snark.isStorageCompleted() && !snark.isNotificationSent()) {
+        if (snark.isStorageCompleted() && !isComplete && !snark.isNotificationSent()) {
             addMessageNoEscape(_t("Download finished: {0}", linkify(snark)));
             if (!_context.isRouterContext()) {
                 String msg = _t("Download finished: {0}", getSnarkName(snark));
