@@ -364,7 +364,7 @@ public class Reseeder {
                 _checker.setStatus("");
             } else {
                 if (total == 0 && !_context.router().gracefulShutdownInProgress()) {
-                    System.out.println("Reseed failed " + getDisplayString(_url) + " - check network connection");
+                    System.out.println("Reseed failed " + getDisplayString(_url) + " -> Check network connection!");
                     System.out.println("Ensure that nothing blocks outbound HTTP or HTTPS, check the logs, " +
                                        "and if nothing helps, read the FAQ about reseeding manually.");
                     if (_url == null || "https".equals(_url.getScheme())) {
@@ -419,7 +419,8 @@ public class Reseeder {
             String truncatedURL = url.replace("https://", "");
             int slashIndex = truncatedURL.indexOf('/');
             String hostname = slashIndex > 0 ? truncatedURL.substring(0, slashIndex) : truncatedURL;
-            String msg = "Reseeding failed from host: " + hostname + " -> " + cause.getMessage();
+            String reason = cause.getMessage().replaceAll("SSL certificate verification failed for .*", "SSL certificate verification failed");
+            String msg = "Reseeding failed [" + hostname + "] -> " + reason;
             if (_log.shouldWarn()) {_log.warn(msg);}
             else {_log.logAlways(Log.WARN, msg);}
             if (cause != null && cause.getMessage() != null) {
@@ -636,10 +637,7 @@ public class Reseeder {
                 System.err.println("Reseeding from " + s);
                 byte contentRaw[] = readURL(seedURL);
                 if (contentRaw == null) {
-                    // Logging deprecated here since attemptFailed() provides better info
-                    if (_log.shouldWarn())
-                        _log.warn("Failed to download RouterInfos from: " + trimmed);
-                    System.err.println("No RouterInfos received from: " + s);
+                    System.err.println("No RouterInfos received from: " + trimmed);
                     return 0;
                 }
                 String content = DataHelper.getUTF8(contentRaw);
@@ -653,31 +651,26 @@ public class Reseeder {
                     int start = content.indexOf("href=\"" + ROUTERINFO_PREFIX, cur);
                     if (start < 0) {
                         start = content.indexOf("HREF=\"" + ROUTERINFO_PREFIX, cur);
-                        if (start < 0)
-                            break;
+                        if (start < 0) {break;}
                     }
 
                     int end = content.indexOf(ROUTERINFO_SUFFIX + "\">", start);
-                    if (end < 0)
-                        break;
+                    if (end < 0) {break;}
                     if (start - end > 200) {  // 17 + 3*44 for % encoding + just to be sure
                         cur = end + 1;
                         continue;
                     }
                     String name = content.substring(start + ("href=\"" + ROUTERINFO_PREFIX).length(), end);
                     // never load our own RI
-                    if (ourB64 == null || !name.contains(ourB64)) {
-                        urls.add(name);
-                    } else {
-                        if (_log.shouldInfo())
-                            _log.info("Skipping our own RI");
-                    }
+                    if (ourB64 == null || !name.contains(ourB64)) {urls.add(name);}
+                    else if (_log.shouldInfo()) {_log.info("Skipping our own RI");}
                     cur = end + 1;
                 }
                 if (total <= 0) {
-                    if (_log.shouldWarn())
-                        _log.warn("Read " + contentRaw.length + " bytes from reseed server " + s + " but found no RouterInfo URLs");
-                    System.err.println("No RouterInfos received from: " + s);
+                    if (_log.shouldWarn()) {
+                        _log.warn("Read " + contentRaw.length + " bytes from reseed server " + trimmed + " but found no RouterInfo URLs");
+                    }
+                    System.err.println("No RouterInfos received from: " + trimmed);
                     return 0;
                 }
 
@@ -691,31 +684,25 @@ public class Reseeder {
                     try {
                         _checker.setStatus(_t("Reseeding: fetching router info from seed URL ({0} successful, {1} errors).", fetched, errors));
 
-                        if (!fetchSeed(seedURL.toString(), iter.next()))
-                            continue;
+                        if (!fetchSeed(seedURL.toString(), iter.next())) {continue;}
                         fetched++;
                         if (echoStatus) {
                             System.out.print(".");
-                            if (fetched % 60 == 0)
-                                System.out.println();
+                            if (fetched % 60 == 0) {System.out.println();}
                         }
                     } catch (RuntimeException e) {
-                        if (_log.shouldInfo())
-                            _log.info("Failed fetch", e);
+                        if (_log.shouldInfo()) {_log.info("Failed fetch", e);}
                         errors++;
                     }
                     // Give up on this host after lots of errors, or 10 with only 0 or 1 good
-                    if (errors >= 50 || (errors >= 10 && fetched <= 1))
-                        break;
+                    if (errors >= 50 || (errors >= 10 && fetched <= 1)) {break;}
                 }
-                System.err.println("Reseed acquired " + fetched + " router infos with " + errors + " errors " + s);
+                System.err.println("Reseed acquired " + fetched + " router infos with " + errors + " errors [" + trimmed + "]");
 
-                if (fetched > 0)
-                    _context.netDb().rescan();
+                if (fetched > 0) {_context.netDb().rescan();}
                 return fetched;
             } catch (Throwable t) {
-                if (_log.shouldWarn())
-                    _log.warn("Error reseeding (" + t.getMessage() + ")");
+                if (_log.shouldWarn()) {_log.warn("Error reseeding -> " + t.getMessage());}
                 System.err.println("No router infos " + s);
                 return 0;
             }
@@ -763,10 +750,10 @@ public class Reseeder {
             int fetched = 0;
             int errors = 0;
             File contentRaw = null;
+            String s = getDisplayString(seedURL);
+            String trimmed = s.replace("http://","").replace("https://","").replace("netDb/","").replace("/i2pseeds.su3","")
+                              .replace("from ","").replace("netid=2", "").replaceAll("\\(.*\\)", "").replaceAll("\\?", "");
             try {
-                String s = getDisplayString(seedURL);
-                String trimmed = s.replace("http://","").replace("https://","").replace("netDb/","").replace("/i2pseeds.su3","")
-                                  .replace("from ","").replace("netid=2", "").replaceAll("\\(.*\\)", "").replaceAll("\\?", "");
                 _checker.setStatus(_t("Contacting reseed host") + ":<br>" + trimmed);
                 System.err.println("Reseeding " + s);
                 // don't use context time, as we may be step-changing it
@@ -774,13 +761,7 @@ public class Reseeder {
                 long startTime = System.currentTimeMillis();
                 contentRaw = fetchURL(seedURL);
                 long totalTime = System.currentTimeMillis() - startTime;
-                if (contentRaw == null) {
-                    // Logging deprecated here since attemptFailed() provides better info
-                    if (_log.shouldWarn())
-                        _log.warn("Failed reading " + s);
-                    System.err.println("No router infos " + s);
-                    return 0;
-                }
+                if (contentRaw == null) {return 0;}
                 if (totalTime > 0) {
                     long sz = contentRaw.length();
                     long bw = 1000 * sz / totalTime;
@@ -789,34 +770,25 @@ public class Reseeder {
                         _log.debug("Received " + sz + " bytes in " + totalTime + " ms " + getDisplayString(seedURL));
                 }
                 int[] stats;
-                if (isSU3)
-                    stats = extractSU3(contentRaw);
-                else
-                    stats = extractZip(contentRaw);
+                if (isSU3) {stats = extractSU3(contentRaw);}
+                else {stats = extractZip(contentRaw);}
                 fetched = stats[0];
                 errors = stats[1];
-                if (fetched == 0) {
-                    s = "Reseed got no router infos " + s;
-                    System.err.println(s);
-                    _log.error(s);
-                }
             } catch (Throwable t) {
-                String s = getDisplayString(seedURL);
-                System.err.println("Error reseeding " + s + "(" + t.getMessage() + ")");
-                _log.error("Error reseeding " + s + " (" + t.getMessage() + ")");
+                s = getDisplayString(seedURL);
+                System.err.println("Error reseeding from " + s + " -> " + t.getMessage());
+                _log.error("Error reseeding from " + s + " -> " + t.getMessage());
                 errors++;
             } finally {
-                if (contentRaw != null)
-                    contentRaw.delete();
+                if (contentRaw != null) {contentRaw.delete();}
             }
             if (errors <= 0) {
                 _checker.setStatus(_t("Acquired {0} router infos from reseed hosts", fetched));
-                System.out.println("Acquired " + fetched + " router infos from " + getDisplayString(seedURL));
+                System.out.println("Acquired " + fetched + " router infos from " + trimmed);
 
             } else {
                 _checker.setStatus(_t("Acquired {0} router infos from reseed hosts ({1} errors)", fetched, errors));
-                System.err.println("Acquired " + fetched + " router infos from " + getDisplayString(seedURL)
-                                   .replace("/i2pseeds.su3?netid=2", "") + " (" + errors + " errors)");
+                System.err.println("Acquired " + fetched + " router infos from " + trimmed + " -> " + errors + " errors");
             }
             return fetched;
         }
@@ -835,8 +807,7 @@ public class Reseeder {
                 zip = new File(_context.getTempDir(), "reseed-" + _context.random().nextInt() + ".zip");
                 su3.verifyAndMigrate(zip);
                 int type = su3.getContentType();
-                if (type != SU3File.CONTENT_RESEED)
-                    throw new IOException("Bad content type " + type);
+                if (type != SU3File.CONTENT_RESEED) {throw new IOException("Bad content type (" + type + ")");}
                 String version = su3.getVersionString();
                 try {
                     Long ver = Long.parseLong(version.trim());
@@ -844,8 +815,9 @@ public class Reseeder {
                         // preliminary code was using "3"
                         // new format is date +%s
                         ver *= 1000;
-                        if (ver < _context.clock().now() - MAX_FILE_AGE)
-                            throw new IOException("su3 file too old");
+                        if (ver < _context.clock().now() - MAX_FILE_AGE) {
+                            throw new IOException("su3 file is too old");
+                        }
                     }
                 } catch (NumberFormatException nfe) {}
 
@@ -853,13 +825,13 @@ public class Reseeder {
                 fetched = stats[0];
                 errors = stats[1];
             } catch (Throwable t) {
-                System.err.println("Error reseeding: " + t);
-                _log.error("Error reseeding (" + t.getMessage() + ")");
+                String msg = "Error with downloaded reseed bundle -> " + t.getMessage();
+                System.err.println(msg);
+                _log.error(msg);
                 errors++;
             } finally {
                 contentRaw.delete();
-                if (zip != null)
-                    zip.delete();
+                if (zip != null) {zip.delete();}
             }
 
             int[] rv = new int[2];

@@ -330,10 +330,7 @@ public class I2PSSLSocketFactory {
         // Verify that the certicate hostname is for mail.google.com
         // This is due to lack of SNI support in the current SSLSocket.
         if (!hv.verify(host, sess)) {
-//            throw new SSLHandshakeException("SSL hostname certificate verify failed; expected " + host +
-            throw new SSLHandshakeException("Could not verify SSL certificate for " + host);
-//                                            "\n* Set " + PROP_DISABLE +
-//                                            "=true to disable verification (dangerous!)");
+            throw new SSLHandshakeException("SSL certificate verification failed for " + host);
         }
         // At this point SSLSocket performed certificate verificaiton and
         // we have performed hostname verification, so it is safe to proceed.
