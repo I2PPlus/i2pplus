@@ -357,11 +357,11 @@ msgid "Starting up torrent {0}"
 msgstr "토렌트 시작: {0}"
 
 #, java-format
-msgid "Down bandwidth limit is {0} KBps"
+msgid "Down bandwidth limit is {0} KB/s"
 msgstr "다운로드 대역폭 제한은 {0} KBps입니다"
 
 #, java-format
-msgid "Up bandwidth limit is {0} KBps"
+msgid "Up bandwidth limit is {0} KB/s"
 msgstr "최대 대역폭 제한은 {0}KBps입니다"
 
 #, java-format

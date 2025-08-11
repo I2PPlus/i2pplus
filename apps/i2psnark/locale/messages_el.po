@@ -357,11 +357,11 @@ msgid "Starting up torrent {0}"
 msgstr "Εκκίνηση torrent {0}"
 
 #, java-format
-msgid "Down bandwidth limit is {0} KBps"
+msgid "Down bandwidth limit is {0} KB/s"
 msgstr "Το όριο κατεβαίνουσας ρυθμισμένης μετάδοσης είναι {0} KBps"
 
 #, java-format
-msgid "Up bandwidth limit is {0} KBps"
+msgid "Up bandwidth limit is {0} KB/s"
 msgstr "Το ανώτατο όριο εύρους ζώνης είναι {0} KBps"
 
 #, java-format

@@ -357,11 +357,11 @@ msgid "Starting up torrent {0}"
 msgstr "Iniciando torrent {0}"
 
 #, java-format
-msgid "Down bandwidth limit is {0} KBps"
+msgid "Down bandwidth limit is {0} KB/s"
 msgstr "Limite de largura de banda para download é {0} KBps"
 
 #, java-format
-msgid "Up bandwidth limit is {0} KBps"
+msgid "Up bandwidth limit is {0} KB/s"
 msgstr "O limite de largura de banda é de {0} KBps"
 
 #, java-format

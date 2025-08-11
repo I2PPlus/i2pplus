@@ -357,11 +357,11 @@ msgid "Starting up torrent {0}"
 msgstr "Spouštění torrentu {0}"
 
 #, java-format
-msgid "Down bandwidth limit is {0} KBps"
+msgid "Down bandwidth limit is {0} KB/s"
 msgstr "Dolní limit propustnosti je {0} KB/s"
 
 #, java-format
-msgid "Up bandwidth limit is {0} KBps"
+msgid "Up bandwidth limit is {0} KB/s"
 msgstr "Limit vyšší šířky pásma je {0} kB/s"
 
 #, java-format

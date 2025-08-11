@@ -2705,11 +2705,20 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             // Here because we need to delay until I2CP is up although the user will see the default until then
             boolean routerOK = false;
             boolean doMagnets = true;
+
+            String bwMsg = _t("Down bandwidth limit is {0} KB/s", _bwManager.getUpBWLimit() / 1024) + "; " +
+                           _t("Up bandwidth limit is {0} KB/s", _util.getMaxUpBW());
+            addMessage(bwMsg);
+            if (!_context.isRouterContext()) {System.out.println(" • " + bwMsg);}
+
             while (_running) {
-                String i2cpConnectMsg = " • " + _t("Connecting to I2CP port on I2P instance at {0}", _util.getI2CPHost() + ':' + _util.getI2CPPort() + "...");
+                String i2cpConnectMsg = " • " + _t("Connecting to I2CP port on I2P instance at {0}",
+                                                   _util.getI2CPHost() + ':' + _util.getI2CPPort() + "...");
                 if (_log.shouldDebug()) {_log.debug("DirectoryMonitor scanning I2PSnark data dir: " + dir.getAbsolutePath());}
-                if (routerOK && (_context.isRouterContext() || _util.connected() || _util.isConnecting())) {
-                    autostart = shouldAutoStart();
+                if (routerOK) {
+                   if (_context.isRouterContext() || _util.connected() || _util.isConnecting()) {
+                        autostart = shouldAutoStart();
+                   }
                 } else {
                     // Test if the router is there
                     // For standalone, this will probe the router every 60 seconds if not connected
@@ -2756,10 +2765,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                     catch (Snark.RouterException re) {break;} // Snark.fatal() will log and call fatal() here for user message before throwing
                                     catch (RuntimeException re) {} // Snark.fatal() will log and call fatal() here for user message before throwing
                                 }
-                            }
-                            if (routerOK) {
-                                addMessage(_t("Down bandwidth limit is {0} KBps", _bwManager.getUpBWLimit() / 1024) + "; " +
-                                           _t("Up bandwidth limit is {0} KBps", _util.getMaxUpBW()));
                             }
                         }
                     } else {autostart = false;}

@@ -357,11 +357,11 @@ msgid "Starting up torrent {0}"
 msgstr "راه اندازی تورنت {0}"
 
 #, java-format
-msgid "Down bandwidth limit is {0} KBps"
+msgid "Down bandwidth limit is {0} KB/s"
 msgstr "محدودیت باند پهن زیرین {0} کیلوبایت در ثانیه است"
 
 #, java-format
-msgid "Up bandwidth limit is {0} KBps"
+msgid "Up bandwidth limit is {0} KB/s"
 msgstr "حداکثر پهنای باند حداکثر {0} کیلوبایت بر ثانیه است"
 
 #, java-format
