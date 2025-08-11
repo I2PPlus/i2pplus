@@ -2976,3 +2976,6 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #netdb.main{position:relative;contain:paint}
 #pagenav{margin:0 -11px -5px;padding:12px;position:sticky;bottom:0;left:-11px;right:-11px;z-index:999999;text-align:center;border:var(--border_inner);box-shadow:var(--bevel);border:var(--border);background:linear-gradient(to bottom,rgba(0,0,64,.15),rgba(0,0,48,.15) 50%,rgba(0,0,32,.15) 50%,rgba(0,0,16,.15)),var(--th);background-size:100%,100% 4px,4px 100%}
 #results{margin:3px auto;width:100%;display:block;font-weight:600}
+
+#netdb #singleLS~.leaseset {margin-bottom:1px;column-span:all;width:100%}
+#searchLS {margin:10px auto 0;display:block;column-span:all;text-align:center;border:var(--border_inner);box-shadow:var(--highlight);background:var(--th)}

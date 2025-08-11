@@ -2999,3 +2999,6 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #pagenav{margin:0 -16px -11px;padding:12px 12px 10px;position:sticky;bottom:-4px;left:-16px;right:-16px;z-index:99999;text-align:center;border:var(--border_inner);border-top:var(--border);border-radius:0 0 1px 1px;box-shadow:var(--bevel),0 -1px 5px #0002;background:var(--nav)}
 #results{margin:2px auto 4px;width:100%;display:block;font-size:115%;font-weight:600}
 #results.more{margin:-12px auto 8px;padding:4px 5%;width:fit-content;border:var(--border);border-top:0;border-radius:0 0 3px 3px;box-shadow:var(--bevel),0 1px 2px 2px #0001;background:var(--row)}
+
+#netdb #singleLS~.leaseset {margin-bottom:1px;column-span:all;width:100%}
+#searchLS {margin:18px auto 0;display:block;column-span:all;text-align:center;border:var(--border_soft);box-shadow:0 0 0 1px #fff,0 0 0 2px #b6b6c9;background:var(--th)}

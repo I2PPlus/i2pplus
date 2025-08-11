@@ -71,7 +71,7 @@ a:active{color:var(--active)}
 .right{text-align:right}
 .center{text-align:center}
 input,button{cursor:pointer}
-input[type=text],textarea{cursor:text}
+input[type=text],textarea,.fakeTextInput{cursor:text}
 input[disabled]{pointer-events:none}
 ::placeholder,input::placeholder{font-size:90%;font-weight:700;font-style:italic;color:#aaf;opacity:.4}
 :focus::placeholder{opacity:0}
@@ -79,17 +79,17 @@ input{margin:3px;font:700 9pt var(--bodyfont)}
 input[type=hidden]{display:none}
 input[type=image]{min-width:0}
 label{cursor:pointer}
-input[type=text],input[type=number],input[type=password],textarea{padding:6px 8px;box-sizing:border-box;color:var(--ink_darker);border:1px solid #27235c;box-shadow:var(--highlight),0 0 0 1px #000;background:#000;cursor:text}
-input[type=text],input[type=number],input[type=password]{margin:5px 10px;padding:6px 8px;text-decoration:none;font:700 9pt var(--bodyfont);border:var(--border_input)}
+input[type=text],input[type=number],input[type=password],textarea,.fakeTextInput{padding:6px 8px;box-sizing:border-box;color:var(--ink_darker);border:1px solid #27235c;box-shadow:var(--highlight),0 0 0 1px #000;background:#000;cursor:text}
+input[type=text],input[type=number],input[type=password],.fakeTextInput{margin:5px 10px;padding:6px 8px;text-decoration:none;font:700 9pt var(--bodyfont);border:var(--border_input)}
 textarea{margin:10px;padding:3px 8px;width:calc(100% - 15px);min-height:100px;text-align:left;font:9pt var(--monospaced);box-shadow:inset 1px 1px 1px 0 #000;resize:none;scrollbar-color:rgba(24,24,80,.8) #0000;scrollbar-width:thin;will-change:transform}
 input[type=number]{appearance:textfield}
-input[type=text]:focus,input[type=number]:focus,input[type=password]:focus,textarea:focus{color:var(--ink);border:1px solid #6466a5;box-shadow:var(--outline),0 0 0 2px var(--a_hover),var(--btn_shadow_active);background:var(--text_focus);transition:ease all .3s}
+input[type=text]:focus,input[type=number]:focus,input[type=password]:focus,textarea:focus,.fakeTextInput:focus{color:var(--ink);border:1px solid #6466a5;box-shadow:var(--outline),0 0 0 2px var(--a_hover),var(--btn_shadow_active);background:var(--text_focus);transition:ease all .3s}
 textarea:focus{box-shadow:inset 0 0 0 1px var(--a_hover),var(--btn_shadow_active);scrollbar-width:auto}
 input[type=text]:disabled,input[readonly],input[readonly]:focus{color:#26235c;border:var(--border_inner);box-shadow:none;background:linear-gradient(180deg,#000,#000019);filter:none;cursor:not-allowed}
 button::-moz-focus-inner,input[type=submit]::-moz-focus-inner,input[type=reset]::-moz-focus-inner{outline:none;border:0}
 input[type="file"]{margin:5px 10px;padding:0;font-weight:400;color:var(--ink);border:0;box-shadow:none;background:none;cursor:pointer}
 input[type="file"]:hover,input[type="file"]:active{color:var(--hover)}
-button,input[type=submit],input[type=reset],select,.control,.fakebutton,.fakebutton:visited{font-weight:700;border-radius:1px;box-shadow:var(--highlight),inset 0 0 2px 0 #559,inset 0 0 1px 1px rgba(85,85,153,.5);background:8px 5px no-repeat,var(--btn);cursor:pointer}
+button,input[type=submit],input[type=reset],select,.control,.fakebutton,.fakebutton:visited{font-weight:700;border-radius:1px;box-shadow:var(--highlight),inset 0 0 2px 0 #559,inset 0 0 1px 1px rgba(85,85,153,.5);background:8px 5px no-repeat,var(--btn);cursor:pointer;user-select:none}
 input[type=submit],input[type=reset],button{min-width:0;background-size:12px,100%}
 button,button:visited,input[type=submit],input[type=reset],.fakebutton,.control{margin:2px 3px;padding:5px 4px;font:700 9pt var(--bodyfont);color:var(--a);text-decoration:none;text-align:center;text-shadow:0 1px 1px #000;vertical-align:middle;border:1px solid #27235c;background:var(--btn)}
 input[type=submit]:hover,input[type=reset]:hover,button:hover,button:focus,input[type=submit]:focus,input[type=reset]:focus,select:hover,select:focus,.control:hover,.control:focus,.control:visited:hover,.control:visited:focus,.fakebutton:hover,.fakebutton:focus,.fakebutton:visited:hover,.fakebutton:visited:focus,#settings:hover,#settings:focus{color:var(--a_hover);border:1px solid var(--a_hover);box-shadow:var(--highlight),inset 0 0 2px 1px #757,inset 0 0 2px 2px rgba(119,85,119,.5);background:var(--btn_hover_radial),var(--btn_hover);cursor:pointer}
@@ -106,6 +106,7 @@ select option:hover,select option:focus,select option:checked{box-shadow:inset 0
 select:hover,select:focus,select:active{color:var(--a_hover);text-shadow:0 1px 1px #000;border:1px solid var(--a_hover);background:var(--dropdown_hover) center right 10px no-repeat,var(--btn_hover);background-size:10px auto,100%,100%}
 select[disabled],select[disabled]:hover,select[disabled]:focus,select[disabled]:active{opacity:.7;pointer-events:none}
 table{border-spacing:0}
+.fakebutton{display:inline-block;padding-left:10px;padding-right:10px}
 .optbox{width:21px;height:21px;position:relative;vertical-align:middle;box-sizing:border-box;outline:none;border:1px solid #27235c;box-shadow:var(--btn_shadow_active);background:var(--optbox);appearance:none;filter:drop-shadow(0 0 1px #000);will-change:transform}
 .optbox[type=radio]{border-radius:50%}
 .optbox[type=checkbox]::before{position:absolute;transition:linear transform .1s;transform:scale(1)}

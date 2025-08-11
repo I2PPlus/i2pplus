@@ -72,7 +72,7 @@ a{text-decoration:none}
 a:link,a:visited{color:var(--a);text-decoration:none;font-weight:700;word-wrap:break-word;outline:none}
 a:link:hover,a:hover,a:visited:hover,a:visited:focus{color:#f60;text-decoration:none;text-shadow:none}
 a:active,a:visited:active{color:#f30}
-input[type=file],input[type=submit],input[type=reset],button,label,select,.fakebutton,.optbox{vertical-align:middle;font-family:var(--bodyfont);cursor:pointer}
+input[type=file],input[type=submit],input[type=reset],button,label,select,.fakebutton,.optbox{vertical-align:middle;font-family:var(--bodyfont);cursor:pointer;user-select:none}
 input,input:visited,button,button:visited,.fakebutton,.fakebutton:visited{margin:3px;padding:5px;display:inline-block;line-height:1.4;vertical-align:middle;font-size:9pt;color:var(--ink_light);text-decoration:none;text-shadow:var(--txt_shadow);border:var(--border_input);border-radius:2px;box-shadow:var(--btn_shadow);background:var(--btn);background-size:14px,100%;opacity:1;filter:var(--filter_shadow)}
 button a,button a:visited{font-weight:400;color:var(--ink_light)}
 button:hover,input[type=submit]:hover,input[type=reset]:hover,button:focus,input[type=submit]:focus,input[type=reset]:focus,.fakebutton:hover,.fakebutton:visited:hover,.fakebutton:focus,.fakebutton:visited:focus{color:var(--ink_dark);border:1px solid var(--hover);box-shadow:var(--btn_shadow_hover);background:var(--btn_hover);filter:saturate(100%) drop-shadow(0 0 1px rgba(204,204,204,.8));transition:ease border .7s}
@@ -93,10 +93,10 @@ input[type=radio],input[type=radio]:checked,input[type=radio][disabled],input[ty
 input[type=radio]:checked::before{left:4px;top:4px;width:9px;height:9px;border-radius:50%;box-shadow:inset 1px 1px 1px 1px #6389cf,inset -1px -1px 1px 1px #3c6bc3,0 0 0 1px #7698d5}
 input[type=radio]:not(:checked){box-shadow:inset 0 0 0 2px #f8f8ff,inset 3px 3px 3px #aad}
 input[type=radio]:not(:checked)::before{border-radius:50%}
-input[type=password],input[type=text],select,textarea{box-sizing:border-box;line-height:1.3}
-input[type=password],input[type=text]{padding:6px 8px;color:var(--ink);box-shadow:var(--input_shadow);border:var(--border_input);background:var(--txtinput);transition:ease all .1s}
+input[type=password],input[type=text],select,textarea,.fakeTextInput{box-sizing:border-box;line-height:1.3}
+input[type=password],input[type=text],.fakeTextInput{padding:6px 8px;color:var(--ink);box-shadow:var(--input_shadow);border:var(--border_input);background:var(--txtinput);transition:ease all .1s}
 input[type=text],select{min-width:120px}
-input[type=password]:focus,input[type=text]:focus,.displayText:focus,.freetext:focus{color:var(--ink_darker);box-shadow:var(--txtinput_shadow_focus);border:var(--border_inner);background:#fff;transition:ease border .15s}
+input[type=password]:focus,input[type=text]:focus,.displayText:focus,.fakeTextInput:focus,.freetext:focus{color:var(--ink_darker);box-shadow:var(--txtinput_shadow_focus);border:var(--border_inner);background:#fff;transition:ease border .15s}
 input[type=text][disabled],label[disabled]{color:var(--ink_lighter)}
 label:not([disabled]):hover{color:var(--ink_dark)}
 label[disabled],label[disabled]:hover{opacity:.45}

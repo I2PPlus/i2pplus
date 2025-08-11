@@ -2569,3 +2569,6 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #netdb.main{position:relative;contain:paint}
 #pagenav{margin:0 -16px -2px;padding:12px;position:sticky;bottom:0;left:-16px;right:-16px;text-align:center;border:var(--border);border-radius:0 0 3px 3px;background:var(--bg)}
 #results{margin:3px auto;width:100%;display:block;font-weight:600}
+
+#netdb #singleLS~.leaseset {margin-bottom:1px;column-span:all;width:100%}
+#searchLS {margin:10px 2px;display:block;column-span:all;text-align:center;border:var(--border_soft);box-shadow:0 0 0 1px #fff,0 0 0 2px #b6b6c9;background:var(--th)}

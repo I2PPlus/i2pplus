@@ -1373,7 +1373,8 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #netdb .leaseset th:first-child{padding-left:10px}
 #netdb .leaseset tr,#netdb .leaseset td{box-shadow:none}
 #netdb .sybil_addresses .netdb_transport{width:auto;text-align:right}
-#noleasesets,#notinitialized,.netdbnotfound{margin:12px auto 10px;padding:20px 24px 20px 58px;text-align:left;border:var(--border);background:#000 var(--infohelp) no-repeat 15px center/28px}
+#noleasesets,#notinitialized,.netdbnotfound{margin:12px auto 10px;padding:20px 24px 20px 58px;column-span:all;text-align:left;border:var(--border);background:#000 var(--infohelp) no-repeat 15px center/28px}
+.netdbnotfound{margin-bottom:2px}
 .leasesets_container #notinitialized,.leasesets_container #noleasesets{margin-bottom:10px;column-span:all}
 .distance{margin:0 0 0 4px;height:16px;width:16px;display:inline-block;vertical-align:text-top;font-size:0;background:var(--distance) no-repeat center center/16px}
 .leaseset .ekey,.leaseset .rkey,.leaseset .rxAsPub,.leaseset .rxAsRep,.leaseset .stype{margin-left:6px;padding-left:14px;background:var(--crypto) no-repeat left center/12px}
@@ -3260,4 +3261,4 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 
 /* LS search */
 #netdb #singleLS~.leaseset {margin-bottom:1px;column-span:all;width:100%}
-#searchLS {margin-bottom:13px;display:block;column-span:all;text-align:center;box-shadow:0 0 0 1px #000,0 0 0 3px #252,var(--highlight);background:var(--th)}
+#searchLS {margin-bottom:10px auto -1px;display:block;column-span:all;text-align:center;box-shadow:0 0 0 1px #000,0 0 0 3px #252,var(--highlight);background:var(--th)}

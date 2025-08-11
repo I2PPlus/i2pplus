@@ -88,15 +88,15 @@ code,pre,textarea,tt{font-weight:500}
 img{font-size:0;border:0}
 button::-moz-focus-inner,input::-moz-focus-inner{outline:none;border:0}
 button,input,label,select,textarea{font-size:9pt}
-button,input,label,select,.fakebutton{text-decoration:none;font:9pt/130% var(--bodyfont);outline:none;cursor:pointer}
+button,input,label,select,.fakebutton{text-decoration:none;font:9pt/130% var(--bodyfont);outline:none;cursor:pointer;user-select:none}
 button,input,select,.fakebutton,.fakebutton:visited{color:var(--ink_light)}
 input,label{vertical-align:middle}
-button,input[type=submit],input[type=reset],.fakebutton,.fakebutton:visited{margin:3px 8px 3px 0;padding:4px 5px;display:inline-block;vertical-align:middle;text-decoration:none;font:9pt var(--bodyfont);color:var(--ink_light);border:var(--border);border-radius:3px;box-shadow:var(--btn_shadow);background:var(--btn);background-size:14px,100%}
+button,input[type=submit],input[type=reset],.fakebutton,.fakebutton:visited,.fakeTextInput{margin:3px 8px 3px 0;padding:4px 5px;display:inline-block;vertical-align:middle;text-decoration:none;font:9pt var(--bodyfont);color:var(--ink_light);border:var(--border);border-radius:3px;box-shadow:var(--btn_shadow);background:var(--btn);background-size:14px,100%}
 button:hover,input[type=submit]:hover,input[type=reset]:hover,button:focus,input[type=submit]:focus,input[type=reset]:focus,.fakebutton:hover,.fakebutton:visited:hover,.fakebutton:focus,.fakebutton:visited:focus{color:var(--ink);border:var(--border);box-shadow:var(--btn_shadow_hover);background:var(--btn_hover)}
 button:active,input[type=submit]:active,input[type=reset]:active,.fakebutton:active,.fakebutton:visited:active{color:#555;border:1px solid #999;box-shadow:var(--btn_shadow_active);background-color:#ddd;background-blend-mode:luminosity}
-input[type=text],input[type=password],textarea{box-sizing:border-box}
-input[type=text],input[type=password]{padding:5px 7px;min-width:120px;vertical-align:middle;color:var(--ink_light);border:var(--border);border-radius:2px;box-shadow:var(--shadow_input);background-color:var(--bg2);cursor:text}
-input[type=text]:focus,input[type=password]:focus{padding:5px 5px 5px 9px;color:var(--ink);border-radius:0;box-shadow:var(--shadow_input_focus),0 0 0 1px rgba(255,96,0,.6);background-color:var(--bg)}
+input[type=text],input[type=password],textarea,.fakeTextInput{box-sizing:border-box}
+input[type=text],input[type=password],.fakeTextInput{padding:5px 7px;min-width:120px;vertical-align:middle;color:var(--ink_light);border:var(--border);border-radius:2px;box-shadow:var(--shadow_input);background-color:var(--bg2);cursor:text}
+input[type=text]:focus,input[type=password]:focus,.fakeTextInput:focus{padding:5px 5px 5px 9px;color:var(--ink);border-radius:0;box-shadow:var(--shadow_input_focus),0 0 0 1px rgba(255,96,0,.6);background-color:var(--bg)}
 input[type=text][readonly],input[type=text][readonly]:focus,input[type=text][disabled]{color:var(--disabled);box-shadow:var(--shadow_input);background:var(--bg3)}
 input[type=file],input[type=file]::file-selector-button{cursor:pointer}
 input[type=file]::file-selector-button{padding:4px 8px;text-decoration:none;font:9pt var(--bodyfont);color:var(--ink_light);border:var(--border);border-radius:2px;box-shadow:var(--highlight),0 0 1px #ddd;background:var(--btn)}

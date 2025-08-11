@@ -3,10 +3,10 @@
 /* License: AGPL3 or later */
 
 function searchLS() {
-  if (theme !== "dark") {return;}
-  const leasesetsContainer = document.querySelector(".leasesets_container");
+  const container = document.querySelector(".leasesets_container");
   const fragment = document.createDocumentFragment();
   const lsSearchDiv = document.createElement("div");
+  container.style.columnCount = "1";
   lsSearchDiv.id = "searchLS";
 
   const searchInputDiv = document.createElement("div");
@@ -27,12 +27,10 @@ function searchLS() {
   const styleBlock = document.createElement("style");
   styleBlock.innerHTML = `
     #searchLS {
-      margin: 13px 0 1px;
       padding: 8px;
       display: block;
       vertical-align: middle;
       text-align: center;
-      box-shadow: 0 0 0 1px #000, 0 0 0 3px #252;
     }
 
     #searchLS div[contenteditable] {
@@ -79,7 +77,7 @@ function searchLS() {
   fragment.appendChild(styleBlock);
   fragment.appendChild(lsSearchDiv);
   if (document.getElementById("searchLS") === null) {
-    leasesetsContainer.appendChild(fragment);
+    container.appendChild(fragment);
   }
 
 }
