@@ -100,9 +100,9 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
      */
     private void reduceTunnels() {
         _isIdle = true;
+        boolean isStandalone = !_util.getContext().isRouterContext();
         int ibtunnels = Integer.parseInt(_util.getI2CPOptions().get("inbound.quantity"));
         int obtunnels = Integer.parseInt(_util.getI2CPOptions().get("outbound.quantity"));
-        boolean isStandalone = !_util.getContext().isRouterContext();
         int minTunnels = isStandalone ? 2 : 1;
         if (ibtunnels > minTunnels || obtunnels > minTunnels) {
             String msg = "Connection is idle -> Reducing inbound/outbound tunnel count to " + minTunnels + "...";
@@ -119,35 +119,23 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
      *  @param peerCount greater than zero
      */
     private void restoreTunnels(int peerCount) {
-        if (_isIdle && _log.shouldInfo())
-            _log.info("Restoring tunnels on activity");
         _isIdle = false;
+        boolean isStandalone = !_util.getContext().isRouterContext();
         Map<String, String> opts = _util.getI2CPOptions();
         String i = opts.get("inbound.quantity");
-        if (i == null)
-            i = Integer.toString(SnarkManager.DEFAULT_TUNNEL_QUANTITY);
+        if (i == null) {i = Integer.toString(SnarkManager.DEFAULT_TUNNEL_QUANTITY);}
         String o = opts.get("outbound.quantity");
-        if (o == null)
-            o = Integer.toString(SnarkManager.DEFAULT_TUNNEL_QUANTITY);
+        if (o == null) {o = Integer.toString(SnarkManager.DEFAULT_TUNNEL_QUANTITY);}
         String ib = opts.get("inbound.backupQuantity");
-        if (ib == null)
-            ib = "0";
+        if (ib == null) {ib = "0";}
         String ob= opts.get("outbound.backupQuantity");
-        if (ob == null)
-            ob = "0";
-        // we don't need more tunnels than we have peers, reduce if so
-        // reduce to max(peerCount / 2, 2)
+        if (ob == null) {ob = "0";}
+        // We don't need more tunnels than we have peers, reduce if so reduce to max(peerCount / 2, 2)
         int in, out;
-        try {
-            in = Integer.parseInt(i);
-        } catch (NumberFormatException nfe) {
-            in = 3;
-        }
-        try {
-            out = Integer.parseInt(o);
-        } catch (NumberFormatException nfe) {
-            out = 3;
-        }
+        try {in = Integer.parseInt(i);}
+        catch (NumberFormatException nfe) {in = 3;}
+        try {out = Integer.parseInt(o);}
+        catch (NumberFormatException nfe) {out = 3;}
         int target = Math.max(peerCount / 2, 2);
         if (target < in && in > 2) {
             in = target;
@@ -157,8 +145,12 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
             out = target;
             o = Integer.toString(out);
         }
-        if (!(_lastIn.equals(i) && _lastOut.equals(o)))
+        if (!(_lastIn.equals(i) && _lastOut.equals(o))) {
             setTunnels(i, o, ib, ob);
+            String msg = "Peer activity detected -> Increasing tunnel count to " + i + "inbound / " + o + " outbound";
+            if (_log.shouldInfo()) {_log.info(msg);}
+            if (isStandalone) {System.out.println(" • " + msg);}
+        }
     }
 
     /**
