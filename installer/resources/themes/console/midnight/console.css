@@ -1333,6 +1333,8 @@ table[cellspacing="30"]>tbody>tr>th[colspan="3"]{padding:10px;word-spacing:.1em;
 #leasesetsummary+.leasesets_container .nowrap{max-width:inherit}
 #leasesetsummary tr:nth-child(n+3) td:nth-child(2n+1){width:200px;white-space:nowrap;text-align:right;border-right:1px inset #120f35}
 #leasesetsummary tr:nth-child(n+3) td:last-child{text-align:left}
+#singleLS~.leaseset .netdb_leases{column-count:1}
+#singleLS~.leaseset .netdb_leases li{min-width:auto}
 .leaseset .ekey,.leaseset .stype{margin-left:6px;padding-left:14px;background:var(--crypto) no-repeat left center/12px}
 .leaseset .expiry{margin-left:4px;padding-left:15px;background:var(--clock) no-repeat left center/12px}
 .leaseset .stype{background:var(--lock) no-repeat left center/12px}
