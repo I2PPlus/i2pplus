@@ -76,7 +76,7 @@ public class RunStandalone {
     public void start() {
         try {
             String url = "http://" + _host + ':' + _port + "/i2psnark/";
-            System.out.println(" • Starting I2P+ I2PSnark Standalone " + CoreVersion.VERSION + " at: " + url);
+            System.out.println(" • Starting I2P+ I2PSnark Standalone " + CoreVersion.VERSION + " at " + url);
             System.out.println(" • Revision: " + getSnarkRevision());
             _jettyStart.startup();
             try {Thread.sleep(1000);}

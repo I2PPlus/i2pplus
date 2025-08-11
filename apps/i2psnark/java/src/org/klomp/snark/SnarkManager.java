@@ -2684,12 +2684,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
      *  It also gets the bandwidth limits and loads magnets on first run.
      *  For standalone, it also handles checking that the external router is there,
      *  and restarting torrents once the router appears.
-     *
      */
     private class DirMonitor implements Runnable {
         public void run() {
-            // don't bother delaying if auto start is false
-            long delay = (60L * 1000) * getStartupDelayMinutes();
+            File dir = getDataDir();
+            getStorageSpace(dir);
+            long delay = (60L * 1000) * getStartupDelayMinutes(); // Don't bother delaying if auto start is false
             boolean autostart = shouldAutoStart();
             if (delay == 0) {delay = 30000;}
             if (delay > 30000 && autostart) {
@@ -2699,17 +2699,14 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 catch (InterruptedException ie) {}
                 _messages.clearThrough(id); // Remove that first message
             } else if (_context.isRouterContext()) {
-                // to wait for client manager to be up so we can get bandwidth limits
-                try {Thread.sleep(3000);}
+                try {Thread.sleep(3000);} // Wait for client manager to be up so we can get bandwidth limits
                 catch (InterruptedException ie) {}
             }
-            // here because we need to delay until I2CP is up
-            // although the user will see the default until then
+            // Here because we need to delay until I2CP is up although the user will see the default until then
             boolean routerOK = false;
             boolean doMagnets = true;
             while (_running) {
                 String i2cpConnectMsg = " • " + _t("Connecting to I2CP port on I2P instance at {0}", _util.getI2CPHost() + ':' + _util.getI2CPPort() + "...");
-                File dir = getDataDir();
                 if (_log.shouldDebug()) {_log.debug("DirectoryMonitor scanning I2PSnark data dir: " + dir.getAbsolutePath());}
                 if (routerOK && (_context.isRouterContext() || _util.connected() || _util.isConnecting())) {
                     autostart = shouldAutoStart();
@@ -2787,27 +2784,12 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                                    _util.getMaxUpBW(), _util.getMaxUploaders()));
                     }
                     /*
-                     * To fix bug where files were left behind, but also good for when user
-                     * removes snarks when i2p is not running
+                     * To fix bug where files were left behind, but also good for when user removes snarks when i2p is not running
                      *
-                     * Don't run if there was an error, as we would delete the torrent config
-                     * file(s) and we don't want to do that.
+                     * Don't run if there was an error, as we would delete the torrent config file(s) and we don't want to do that.
                      * We'll do the cleanup the next time i2psnark starts. See ticket #1658.
                      */
-                    if (ok) {
-                        cleanupTorrentStatus();
-                        long freeSpace = dir.getUsableSpace();
-                        int freeSpaceMB = (int) (freeSpace / (1024 * 1024));
-                        String msg = _t("Storage: {0}MB currently available for downloads on configured data partition", freeSpaceMB);
-                        if (freeSpaceMB < 100) {
-                            msg = _t("Warning - Only {0}MB available for downloads on configured data partition", freeSpaceMB);
-                            if (_log.shouldWarn()) {
-                                _log.warn("[I2PSnark] Partition containing data directory only has " + freeSpaceMB + "MB free");
-                            }
-                         }
-                         addMessage(msg);
-                         if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
-                    }
+                    if (ok) {cleanupTorrentStatus();}
                     if (!routerOK) {
                         if (_context.isRouterContext()) {addMessage(_t("Unable to connect to I2P"));}
                         else {
@@ -2821,6 +2803,30 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 catch (InterruptedException ie) {}
             }
         }
+    }
+
+    private void getStorageSpace(File dir) {
+        long freeSpace = dir.getUsableSpace();
+        double freeSpaceGB = freeSpace / (1024.0 * 1024 * 1024);
+        int freeSpaceMB = (int) (freeSpace / (1024 * 1024));
+
+        DecimalFormat df = new DecimalFormat("#.#");
+        String msg;
+        if (freeSpaceMB > 1024) {
+            msg = _t("Storage: {0}GB currently available for downloads on configured data partition", df.format(freeSpaceGB));
+        } else {
+            msg = _t("Storage: {0}MB currently available for downloads on configured data partition", freeSpaceMB);
+        }
+
+        if (freeSpaceMB < 100) {
+            msg = _t("Warning - Only {0}MB available for downloads on configured data partition", freeSpaceMB);
+            if (_log.shouldWarn()) {
+                _log.warn("[I2PSnark] Partition containing data directory only has " + freeSpaceMB + "MB free");
+            }
+        }
+
+        addMessage(msg);
+        if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
     }
 
     // Begin Snark.CompleteListeners
