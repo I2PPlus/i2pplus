@@ -812,8 +812,8 @@ public class Reseeder {
                 try {
                     Long ver = Long.parseLong(version.trim());
                     if (ver >= 1400000000L) {
-                        // preliminary code was using "3"
-                        // new format is date +%s
+                        // Preliminary code was using "3"
+                        // New format is date +%s
                         ver *= 1000;
                         if (ver < _context.clock().now() - MAX_FILE_AGE) {
                             throw new IOException("su3 file is too old");
@@ -850,21 +850,18 @@ public class Reseeder {
             File tmpDir = null;
             try {
                 tmpDir = new File(_context.getTempDir(), "reseeds-" + _context.random().nextInt());
-                if (!FileUtil.extractZip(zip, tmpDir))
-                    throw new IOException("Bad zip file");
+                if (!FileUtil.extractZip(zip, tmpDir)) {throw new IOException("Bad zip file");}
 
                 Hash ourHash = _context.routerHash();
                 String ourB64 = ourHash != null ? ROUTERINFO_PREFIX + ourHash.toBase64() + ROUTERINFO_SUFFIX : "";
 
                 File[] files = tmpDir.listFiles();
-                if (files == null || files.length == 0)
-                    throw new IOException("No files in zip");
+                if (files == null || files.length == 0) {throw new IOException("No files in zip");}
                 List<File> fList = Arrays.asList(files);
                 Collections.shuffle(fList, _context.random());
                 long minTime = _context.clock().now() - MAX_FILE_AGE;
                 File netDbDir = new SecureDirectory(_context.getRouterDir(), "netDb");
-                if (!netDbDir.exists())
-                    netDbDir.mkdirs();
+                if (!netDbDir.exists()) {netDbDir.mkdirs();}
 
                 // 1000 max from one reseed file
                 for (Iterator<File> iter = fList.iterator(); iter.hasNext() && fetched < 1000; ) {
@@ -877,30 +874,25 @@ public class Reseeder {
                         !name.startsWith(ROUTERINFO_PREFIX) ||
                         !name.endsWith(ROUTERINFO_SUFFIX) ||
                         !f.isFile()) {
-                        if (_log.shouldWarn())
-                            _log.warn("Skipping " + f);
+                        if (_log.shouldWarn()) {_log.warn("Skipping " + f);}
                         f.delete();
                         errors++;
                         continue;
                     }
                     File to = new File(netDbDir, name);
-                    if (FileUtil.rename(f, to)) {
-                        fetched++;
-                    } else {
+                    if (FileUtil.rename(f, to)) {fetched++;}
+                    else {
                         f.delete();
                         errors++;
                     }
                     // Give up on this host after lots of errors
-                    if (errors >= 5)
-                        break;
+                    if (errors >= 5) {break;}
                 }
             } finally {
-                if (tmpDir != null)
-                    FileUtil.rmdir(tmpDir, false);
+                if (tmpDir != null) {FileUtil.rmdir(tmpDir, false);}
             }
 
-            if (fetched > 0)
-                _context.netDb().rescan();
+            if (fetched > 0) {_context.netDb().rescan();}
             int[] rv = new int[2];
             rv[0] = fetched;
             rv[1] = errors;
@@ -915,25 +907,21 @@ public class Reseeder {
          *  @return true on success, false if skipped
          */
         private boolean fetchSeed(String seedURL, String peer) throws IOException, URISyntaxException {
-            // Use URI to do % decoding of the B64 hash (some servers escape ~ and =)
-            // Also do basic hash validation. This prevents stuff like
-            // .. or / in the file name
+            /* Use URI to do % decoding of the B64 hash (some servers escape ~ and =)
+             * Also do basic hash validation. This prevents stuff like * .. or / in the file name
+             */
             URI uri = new URI(peer);
             String b64 = uri.getPath();
-            if (b64 == null)
-                throw new IOException("bad hash " + peer);
+            if (b64 == null) {throw new IOException("Bad hash " + peer);}
             byte[] hash = Base64.decode(b64);
-            if (hash == null || hash.length != Hash.HASH_LENGTH)
-                throw new IOException("bad hash " + peer);
+            if (hash == null || hash.length != Hash.HASH_LENGTH) {throw new IOException("Bad hash " + peer);}
             Hash ourHash = _context.routerHash();
-            if (ourHash != null && DataHelper.eq(hash, ourHash.getData()))
-                return false;
+            if (ourHash != null && DataHelper.eq(hash, ourHash.getData())) {return false;}
 
             URI url = new URI(seedURL + (seedURL.endsWith("/") ? "" : "/") + ROUTERINFO_PREFIX + peer + ROUTERINFO_SUFFIX);
 
             byte data[] = readURL(url);
-            if (data == null || data.length <= 0)
-                throw new IOException("Failed fetch of " + url);
+            if (data == null || data.length <= 0) {throw new IOException("Failed fetch of " + url);}
             return writeSeed(b64, data);
         }
 
@@ -945,19 +933,18 @@ public class Reseeder {
             if (ssl) {
                 SSLEepGet sslget;
                 if (_sslState == null) {
-                    if (_shouldProxySSL)
+                    if (_shouldProxySSL) {
                         sslget = new SSLEepGet(_context, _sproxyType, _sproxyHost, _sproxyPort,
                                                baos, url.toString());
-                    else
-                        sslget = new SSLEepGet(_context, baos, url.toString());
-                    // save state for next time
-                    _sslState = sslget.getSSLState();
+                    } else {sslget = new SSLEepGet(_context, baos, url.toString());}
+                    _sslState = sslget.getSSLState(); // Save state for next time
                 } else {
-                    if (_shouldProxySSL)
+                    if (_shouldProxySSL) {
                         sslget = new SSLEepGet(_context, _sproxyType, _sproxyHost, _sproxyPort,
                                                baos, url.toString(), _sslState);
-                    else
+                    } else {
                         sslget = new SSLEepGet(_context, baos, url.toString(), _sslState);
+                    }
                 }
                 get = sslget;
                 if (_shouldProxySSL && _context.getBooleanProperty(PROP_SPROXY_AUTH_ENABLE)) {
@@ -969,7 +956,6 @@ public class Reseeder {
                 }
             } else {
                 // Do a (probably) non-proxied eepget into our ByteArrayOutputStream with 0 retries
-//                get = new EepGet(_context, _shouldProxyHTTP, _proxyHost, _proxyPort, 0, 0, MAX_RESEED_RESPONSE_SIZE,
                 get = new EepGet(_context, _shouldProxyHTTP, _proxyHost, _proxyPort, 3, 0, MAX_RESEED_RESPONSE_SIZE,
                                  null, baos, url.toString(), false, null, null);
                 if (_shouldProxyHTTP && _context.getBooleanProperty(PROP_PROXY_AUTH_ENABLE)) {
@@ -985,8 +971,7 @@ public class Reseeder {
                 get.addHeader("If-Modified-Since", minLastMod);
             }
             get.addStatusListener(ReseedRunner.this);
-            if (get.fetch() && get.getStatusCode() == 200)
-                return baos.toByteArray();
+            if (get.fetch() && get.getStatusCode() == 200) {return baos.toByteArray();}
             return null;
         }
 
@@ -1003,20 +988,16 @@ public class Reseeder {
             if (ssl) {
                 SSLEepGet sslget;
                 if (_sslState == null) {
-                    if (_shouldProxySSL)
+                    if (_shouldProxySSL) {
                         sslget = new SSLEepGet(_context, _sproxyType, _sproxyHost, _sproxyPort,
                                                out.getPath(), url.toString());
-                    else
-                        sslget = new SSLEepGet(_context, out.getPath(), url.toString());
-                    // save state for next time
-                    _sslState = sslget.getSSLState();
-                } else {
-                    if (_shouldProxySSL)
+                    } else {sslget = new SSLEepGet(_context, out.getPath(), url.toString());}
+                    _sslState = sslget.getSSLState(); // Save state for next time
+                } else if (_shouldProxySSL) {
                         sslget = new SSLEepGet(_context, _sproxyType, _sproxyHost, _sproxyPort,
                                                out.getPath(), url.toString(), _sslState);
-                    else
-                        sslget = new SSLEepGet(_context, out.getPath(), url.toString(), _sslState);
-                }
+                } else {sslget = new SSLEepGet(_context, out.getPath(), url.toString(), _sslState);}
+
                 get = sslget;
                 if (_shouldProxySSL && _context.getBooleanProperty(PROP_SPROXY_AUTH_ENABLE)) {
                     String user = _context.getProperty(PROP_SPROXY_USERNAME);
@@ -1026,16 +1007,16 @@ public class Reseeder {
                         get.addAuthorization(user, pass);
                 }
             } else {
-                // Do a (probably) non-proxied eepget into file with 0 retries
-//                get = new EepGet(_context, _shouldProxyHTTP, _proxyHost, _proxyPort, 0, 0, MAX_SU3_RESPONSE_SIZE,
+                // Do a (probably) non-proxied eepget into file with 3 retries
                 get = new EepGet(_context, _shouldProxyHTTP, _proxyHost, _proxyPort, 3, 0, MAX_SU3_RESPONSE_SIZE,
                                  out.getPath(), null, url.toString(), false, null, null);
                 if (_shouldProxyHTTP && _context.getBooleanProperty(PROP_PROXY_AUTH_ENABLE)) {
                     String user = _context.getProperty(PROP_PROXY_USERNAME);
                     String pass = _context.getProperty(PROP_PROXY_PASSWORD);
                     if (user != null && user.length() > 0 &&
-                        pass != null && pass.length() > 0)
+                        pass != null && pass.length() > 0) {
                         get.addAuthorization(user, pass);
+                    }
                 }
             }
             if (!url.toString().endsWith("/")) {
@@ -1043,8 +1024,7 @@ public class Reseeder {
                 get.addHeader("If-Modified-Since", minLastMod);
             }
             get.addStatusListener(ReseedRunner.this);
-            if (get.fetch() && get.getStatusCode() == 200)
-                return out;
+            if (get.fetch() && get.getStatusCode() == 200) {return out;}
             out.delete();
             return null;
         }
@@ -1056,26 +1036,26 @@ public class Reseeder {
         private boolean writeSeed(String name, byte data[]) throws IOException {
             String dirName = "netDb"; // _context.getProperty("router.networkDatabase.dbDir", "netDb");
             File netDbDir = new SecureDirectory(_context.getRouterDir(), dirName);
-            if (!netDbDir.exists()) {
-                netDbDir.mkdirs();
-            }
+            if (!netDbDir.exists()) {netDbDir.mkdirs();}
             File file = new File(netDbDir, ROUTERINFO_PREFIX + name + ROUTERINFO_SUFFIX);
-            // don't overwrite recent file
+            // Don't overwrite recent file
             // TODO: even better would be to compare to last-mod date from eepget
             if (file.exists() && file.lastModified() > _context.clock().now() - 60*60*1000) {
-                if (_log.shouldDebug())
+                if (_log.shouldDebug()) {
                     _log.debug("Skipping RouterInfo; local copy is more recent: " + file);
+                }
                 return false;
             }
             FileOutputStream fos = null;
             try {
                 fos = new SecureFileOutputStream(file);
                 fos.write(data);
-                if (_log.shouldInfo())
+                if (_log.shouldInfo()) {
                     _log.info("Saved RouterInfo (" + data.length + " bytes) to " + file);
+                }
             } finally {
                 try {
-                    if (fos != null) fos.close();
+                    if (fos != null) {fos.close();}
                 } catch (IOException ioe) {}
             }
             return true;
@@ -1181,7 +1161,6 @@ public class Reseeder {
      */
     public static void main(String args[]) throws Exception {
         if (args.length == 1 && args[0].equals("help")) {
-            //System.out.println("Usage: reseeder [https://hostname/ ...]");
             System.out.println("Usage: reseeder [-6] [https://hostname/ ...]");
             System.exit(0);
         }
@@ -1214,6 +1193,7 @@ public class Reseeder {
                     get = new SSLEepGet(ctx, su3.getPath(), url);
                     sslState = get.getSSLState();
                 } else {get = new SSLEepGet(ctx, su3.getPath(), url, sslState);}
+
                 if (ipV6) {get.forceDNSOverHTTPS(true);}
                 long start = System.currentTimeMillis();
                 if (get.fetch()) {
@@ -1227,8 +1207,7 @@ public class Reseeder {
                         String version = su3f.getVersionString();
                         long ver = Long.parseLong(version.trim()) * 1000;
                         long cutoff = System.currentTimeMillis() - MAX_FILE_AGE / 4;
-                        if (ver < cutoff)
-                            throw new IOException("su3 file too old");
+                        if (ver < cutoff) {throw new IOException("su3 file is too old");}
                         java.util.zip.ZipFile zipf = new java.util.zip.ZipFile(zip);
                         java.util.Enumeration<? extends java.util.zip.ZipEntry> entries = zipf.entries();
                         int ri = 0, old = 0, bad = 0;
@@ -1279,11 +1258,9 @@ public class Reseeder {
                 }
             } catch (Exception ioe) {
                 System.out.println("Failure:  " + ioe.getMessage() + "\n");
-                //ioe.printStackTrace();
                 if (su3.exists()) {
-                    try {
-                        SU3File.main(new String[] {"showversion", su3.getPath()});
-                    } catch (Exception e) {}
+                    try {SU3File.main(new String[] {"showversion", su3.getPath()});}
+                    catch (Exception e) {}
                     su3.delete();
                 }
                 fail++;
@@ -1293,4 +1270,5 @@ public class Reseeder {
         System.out.println("Test complete: " + (pass + fail) + " reseed hosts tested - " + pass + " passed, " + warn + " slow, " + fail + " failed");
         if (fail > 0) {System.exit(0);}
     }
+
 }
