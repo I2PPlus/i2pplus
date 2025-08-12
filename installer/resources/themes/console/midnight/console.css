@@ -2996,3 +2996,11 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 
 #netdb #singleLS~.leaseset {margin-bottom:1px;column-span:all;width:100%}
 #searchLS {margin:10px auto 0;display:block;column-span:all;text-align:center;border:var(--border_inner);box-shadow:var(--highlight);background:var(--th)}
+
+#changelog h2{margin:0 0 -11px;padding:10px;word-spacing:.1em;letter-spacing:.08em;text-align:left;text-transform:uppercase;font-size:11pt;border-radius:0}
+#changelog pre{margin-top:11px;padding:10px 10px 10px 20px;width:calc(100% - 32px);height:calc(100vh - 275px);position:relative;z-index:10;overflow-y:scroll;font-size:10pt;text-shadow:1px 1px 1px rgba(0,0,0,.9);border-left:var(--border);border-right:var(--border);will-change:transform}
+#changelog pre span{margin-bottom:-10px;padding:0 10px 10px;width:calc(100% - 34px);display:inline-block;position:relative;font-weight:500;border-bottom:1px dotted #225}
+#changelog pre span:last-of-type{display:none}
+#changelog pre span::first-line{padding-left:12px;line-height:1.75;font-weight:700}
+#changelog .bullet,#changelog .star{font-size:0}
+#changelog .bullet::before,#changelog .star::before{margin:-4px -5px 0 10px;width:11px;height:11px;display:inline-block;background:var(--star) no-repeat center center/contain;content:""}#changelog .bullet::before{margin:-8px -2px 0 29px;width:7px;height:7px;vertical-align:text-top;background:var(--tunn_active) no-repeat center center/contain}
