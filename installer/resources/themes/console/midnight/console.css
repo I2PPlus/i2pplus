@@ -24,6 +24,7 @@ html{background:var(--bodybg)}
 body{margin:2px 0 0;padding:0;text-align:center;font:8.5pt/130% var(--bodyfont)}
 a[name="chelp"],a[name="help"]{pointer-events:none}
 code{text-align:left;font:9pt var(--monospaced);color:#393}
+.infohelp code{font-weight:600}
 div[id^="config_"] td:not(.infohelp):not(.infowarn){padding-left:10px;padding-right:10px}
 form>table{font-size:9pt}
 h1,.confignav,.main,.news{box-shadow:var(--bevel_h1)}
@@ -97,10 +98,10 @@ ul{margin:0;padding:0}
 .toggle{position:relative;cursor:pointer}
 .toggle:not(.expanded){margin-bottom:10px}
 .toggle:hover{color:var(--hover)}
-.toggle::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
-.toggle:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
-.toggle.expanded::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:none}
-.toggle.expanded:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:none}
+.toggle::after,#configinfo .toggle th::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
+.toggle:hover::after,#configinfo .toggle:hover th::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
+.toggle.expanded::after,#configinfo .toggle.expanded th::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:none}
+.toggle.expanded:hover::after,#configinfo .toggle.expanded:hover th::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:none}
 
 /* standard buttons and inputs */
 input[name="refreshInterval"]{margin-right:3px;margin-left:0;width:80px;text-align:right}
@@ -2367,7 +2368,12 @@ h1::first-letter{font-size:107%}
 
 /* help */
 #configinfo td{padding:7px 10px;text-align:justify}
-#configinfo th{padding:8px 10px;text-align:left;font-family:var(--monospaced);color:#393;background:linear-gradient(90deg,#000,#000016)}
+#configinfo tr:not(.section) th{padding:8px 10px;text-align:left;font-family:var(--monospaced);color:#393;background:linear-gradient(90deg,#000,#000016)}
+#configinfo .toggle{position:static}
+#configinfo .toggle th{position:relative}
+#configinfo .toggle::after{display:none}
+#configinfo .toggle .plus{margin-right:8px;height:16px;width:16px;display:inline-block;float:left;font-size:0;background:url(images/favicon.svg)}
+#configinfo .section th {padding:10px;text-align:left;text-transform:uppercase;letter-spacing:0.08em;font-size:120%}
 #glossary b{font-size:110%}
 #help #configinfo .infowarn{padding:7px 10px 7px 40px;border:0;border-bottom:1px inset #010008;box-shadow:none;background-size:20px 20px}
 #help .confignav .tab:hover a,#help .confignav .tab a:hover{background-color:#0000}
