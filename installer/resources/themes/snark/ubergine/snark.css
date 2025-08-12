@@ -1453,10 +1453,11 @@ th.radio{width:96px}
 .iframed #navbar{padding:12px 10px 10px}
 #navbar a{font-size:12pt}
 #pagenavbottom img{width:16px;height:16px}
-#screenlog{margin-top:0;height:60px;min-height:60px}
+#screenlog{margin-top:0;min-height:64px!important}
 #screenlog li,#screenlog li a{font-size:9.5pt}
 #screenlog li::before{width:14px;height:12px;background-size:10px}
-#screenlog li .date{min-width:92px}
+#screenlog li .date{margin-right:1px;min-width:100px;word-spacing:-.1em;font-family:var(--monospaced);font-weight:800!important}
+#screenlog li .date::after{margin:0 0 0 6px;width:8px;height:8px;display:inline-block;vertical-align:text-top;font-size:110%;text-shadow:1px 1px 1px #0008;content:"‣"}
 #filterBar .filter{padding:4px 16px;min-width:110px}
 #torrentEdit #add,#torrentEdit #remove{background-position:25% center}
 #torrentEdit th:nth-child(4),#torrentEdit td:nth-child(4){padding-right:10%}
