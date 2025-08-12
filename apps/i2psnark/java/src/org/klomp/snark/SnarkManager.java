@@ -1777,10 +1777,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (dataDir == null) {dataDir = getDataDir();}
         Snark torrent;
         synchronized (_snarks) {torrent = _snarks.get(filename);}
-        // don't hold the _snarks lock while verifying the torrent
+        // Don't hold the _snarks lock while verifying the torrent
         if (torrent == null) {
-            synchronized (_addSnarkLock) {
-                // double-check
+            synchronized (_addSnarkLock) { // Double-check
                 synchronized (_snarks) {
                     if(_snarks.get(filename) != null) {
                         msg = _t("Torrent already running: {0}", filename);
@@ -2101,7 +2100,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             if (bitfield != null) {
                 saveTorrentStatus(metainfo, bitfield, null, false, baseFile, true, 0, 0, true); // no file priorities
             }
-            // so addTorrent won't recheck
+            // Prevent addTorrent from rechecking
             if (filename == null) {
                 File f = new File(getDataDir(), filtered + ".torrent");
                 if (f.exists()) {
@@ -2113,8 +2112,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 filename = f.getAbsolutePath();
             }
             try {
-                locked_writeMetaInfo(metainfo, filename, areFilesPublic());
-                // hold the lock for a long time
+                locked_writeMetaInfo(metainfo, filename, areFilesPublic()); // hold the lock for a long time
                 return addTorrent(filename, baseFile, dontAutoStart);
             } catch (IOException ioe) {
                 msg = _t("Failed to copy torrent file to {0}", filename);
