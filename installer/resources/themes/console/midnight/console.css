@@ -98,10 +98,10 @@ ul{margin:0;padding:0}
 .toggle{position:relative;cursor:pointer}
 .toggle:not(.expanded){margin-bottom:10px}
 .toggle:hover{color:var(--hover)}
-.toggle::after,#configinfo .toggle th::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
-.toggle:hover::after,#configinfo .toggle:hover th::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
-.toggle.expanded::after,#configinfo .toggle.expanded th::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:none}
-.toggle.expanded:hover::after,#configinfo .toggle.expanded:hover th::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:none}
+.toggle::after,.statgroup.toggle th::after,#configinfo .toggle th::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
+.toggle:hover::after,.statgroup.toggle:hover th::after,#configinfo .toggle:hover th::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
+.toggle.expanded::after,.statgroup.toggle.expanded th::after,#configinfo .toggle.expanded th::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:none}
+.toggle.expanded:hover::after,.statgroup.toggle.expanded:hover th::after,#configinfo .toggle.expanded:hover th::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:none}
 
 /* standard buttons and inputs */
 input[name="refreshInterval"]{margin-right:3px;margin-left:0;width:80px;text-align:right}
@@ -1133,6 +1133,12 @@ tr:nth-child(4) .net_bwrate::before{width:22px;background:var(--share) left top 
 /* stats */
 #configstats .graphableStat td{padding:4px 6px;white-space:normal}
 #config_stats .script{font-size:8.5pt}
+#config_stats .statcount{position:absolute;top:10px;right:32px}
+#config_stats .statgroup th{position:relative}
+#config_stats .statgroup.toggle{position:static}
+#config_stats .statgroup.toggle:not(.expanded)+tr{display:none}
+#config_stats .statgroup.toggle::after{display:none}
+#config_stats .statgroup.toggle th::after{display:absolute}
 #config_stats #graphchoice{margin-bottom:-2px}
 #configstats label::after{padding:4px 8px;content:attr(data-tooltip);display:none;position:absolute;top:-26px;left:0;white-space:nowrap;z-index:10;font-size:110%;color:#000;border-radius:1px;box-shadow:0 0 0 1px #113;background:#ddf}
 #configstats label:hover::after{display:inline-block}
@@ -2605,6 +2611,7 @@ input.check[value$="updates"],input.check[value$="updates"]:hover,input.check[va
 #clock{margin:-7px -10px -9px;padding:12px 0 9px;font-size:16pt}
 #config_bandwidth .h3navlinks a{margin:-4px 0 0 -16px;background-size:19px}
 #config_logging h3 a::before,#webappconfiguration a::before,#i2pclientconfig a::before,#pluginmanage a::before{margin-top:-2px}
+#config_stats .statcount{position:absolute;top:9px}
 #config_update .messages i{line-height:2}
 #iptransport a::after,#advancedconfig a::after,#reseedsetup a::after,.h3navlinks a[href="/help/faq#alternative_browser"]::after{width:16px;height:16px;background-size:16px}
 #logs a.configure::after{background-size:14px}
