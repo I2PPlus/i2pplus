@@ -457,10 +457,10 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 .sb_icon,#sb_internals.collapsed,#sb_services.collapsed,#sb_advanced.collapsed{display:none}
 #sb_updatesection.collapsed>*:not(h3){display:none}
 #sb_updatesection h3.collapsed a::after{content:"*"}
-#sidebar h3 a .badge,#lsCount,#tunnelCount,#newsCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;background:var(--badge);font-size:85%;padding:2px 5px 1px;display:inline-block;vertical-align:middle;box-shadow:0 0 0 1px #26235c,0 0 0 1px #000 inset}
+#sidebar h3 a .badge,#lsCount,#tunnelCount,#newsCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;background:var(--badge);font-size:85%;padding:2px 5px 1px;display:inline-block;vertical-align:bottom;box-shadow:0 0 0 1px #26235c,0 0 0 1px #000 inset}
 #sidebar h3 .badge:empty,#sidebar #newsCount:empty,#sidebar #tunnelCount:empty{display:none}
 #sidebar td .badge:empty::after{display:inline;content:"---"}
-#sidebar h3 a[href="/info"] .badge{text-transform:none}
+#sidebar h3 a[href="/info"] .badge{vertical-align:text-top;text-transform:none}
 #sidebar h3:hover a .badge,h3:hover #tunnelCount,h3:hover #newsCount{color:var(--hover);box-shadow:0 0 0 1px var(--hover),0 0 0 1px #000 inset}
 #sidebar h3{position:relative}
 #sidebar #localtunnelsActive img{width:16px;height:16px;line-height:16px;margin:0 0 0 -2px;vertical-align:middle;display:inline-block}
@@ -2908,7 +2908,10 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 #sidebar #sb_localtunnels td:last-child{padding-right:5px}
 #sb_tunnels_condensed td,#sb_peers_condensed td{width:257px}
 #sb_logo img{margin-top:-1px;margin-left:-6px;width:244px;height:auto!important;transform:none}
-#sidebar #sb_advanced.collapsed td,#sidebar #sb_internals.collapsed td,#sidebar #sb_services.collapsed td{width:257px}
+#sidebar #sb_advanced.collapsed td,#sidebar #sb_internals.collapsed td{width:257px}
+#sidebar #sb_internals.collapsed .sb_icon{margin:0 0 -2px}
+#sidebar #sb_services.collapsed td{width:260px}
+#sidebar #sb_services.collapsed .sb_icon{margin:0 0 -4px}
 #tunnels h3 a:not(.lsview),#criticallogs+h3.tabletitle a,#iptransport a,#advancedconfig a,#reseedsetup a{font-size:0}
 #updateHelper .nowrap::after,#updateProxyHostPort .nowrap::after,#config_update .nowrap::after{min-height:60px}
 #warning h3{padding:10px 15px 9px;font-size:12pt}

@@ -116,6 +116,8 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 #toast b{color:#dd0}
 
 /* screenlog */
+.logshim{margin-top:10px}
+.iframed .logshim{margin-top:20px}
 #screenlog{margin:0;padding:2px 5px;width:auto;height:56px;overflow:hidden;text-align:left;font:700 8.5pt var(--bodyfont);color:#778;border-spacing:0;border-bottom:var(--border);background:repeating-linear-gradient(180deg,rgba(0,0,16,.7) 2px,rgba(0,0,48,.5) 4px) center center/4px,url(images/chimp.webp) no-repeat right -6px bottom -16px/96px auto,var(--snarkGraph) no-repeat right 80px bottom/cover,linear-gradient(180deg,#001,#000008);scrollbar-color:#225 #001;scrollbar-width:thin;contain:paint}
 .iframed #screenlog{margin-top:-5px}
 #screenlog:hover,#screenlog:focus{overflow:auto}
@@ -131,8 +133,8 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 #closelog img,#expand img,#shrink img{margin:-3px -5px 4px 5px;padding:5px;opacity:.8;background:#001;border:var(--border);border-top:0;border-right:0;width:12px;mix-blend-mode:luminosity;z-index:1}
 #closeLog img:hover,#closeLog img:focus,#expand img:hover,#expand img:focus,#shrink img:hover,#shrink img:focus{box-shadow:var(--highlight);background:#404;mix-blend-mode:normal}
 #closelog:active img,#expand:active img,#shrink:active img{box-shadow:var(--btn_shadow_active)}
-.logshim{margin-top:10px}
-.iframed .logshim{margin-top:20px}
+#screenlog li .date{margin-right:1px;min-width:100px;word-spacing:-.1em;font-family:var(--monospaced);font-weight:800!important}
+#screenlog li .date::after{margin:0 0 0 6px;width:8px;height:8px;display:inline-block;vertical-align:text-top;font-size:110%;text-shadow:1px 1px 1px #0008;content:"‣"}
 
 /* torrents */
 .active td.tAction{background:linear-gradient(to left,#0000 1px,#b3b 2px,#0000 2px);animation:ease active 2s forwards}
@@ -906,6 +908,7 @@ body.textview{height:100vh}
 #torrents,#addSection{margin-top:0}
 #torrents .tAction input{padding:11px;background-size:13px}
 #filterBar{border-left:0;border-right:0}
+#screenlog li .date{margin-right:2px;min-width:88px}
 }
 
 @media (max-width:1199px){
@@ -1021,9 +1024,9 @@ thead img,thead img:hover{max-height:22px}
 #pagenavcontrols{transform:translateX(70px)}
 .pagenavcontrols img{height:16px}
 #screenlog+form{margin-top:9px}
-#screenlog{height:60px;min-height:60px}
+#screenlog{min-height:66px!important}
 #screenlog li::before{margin:0 1px 0 1px;width:15px;background-size:10px 10px}
-#screenlog li,#screenlog li a{font-size:9.5pt}
+#screenlog li,#screenlog li a{font-size:10pt}
 #screenlog{margin-bottom:-10px}
 #torrents{margin-top:9px}
 .iframed #torrents{margin-top:0}
