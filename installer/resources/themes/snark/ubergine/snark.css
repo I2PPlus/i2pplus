@@ -180,6 +180,7 @@ html:not(.iframed) #navbar{transition:width .5s ease-in-out .5s;will-change:tran
 #screenlog ul{margin:-1px 0 0 -1px;padding:0 0 0 14px;list-style:none}
 #screenlog li{margin-left:-18px;padding-left:10px;padding-right:10px;line-height:1.28}
 #screenlog li::before{margin:1px 1px -1px -6px;width:12px;height:11px;display:inline-block;background:var(--bullet)no-repeat left bottom/9px;content:""}
+#screenlog li .date{min-width:84px;display:inline-block}
 #closelog,#expand,#shrink{position:sticky;top:2px;z-index:500;float:right;font-size:0;cursor:pointer}
 #closelog img,#expand img,#shrink img{margin:-3px -4px 4px 4px;padding:4px 5px;max-width:11px;width:11px;height:11px;opacity:.8;border:var(--border_hard);border-radius:0 0 0 3px;background:rgba(34,0,34,.8);mix-blend-mode:luminosity;filter:sepia(100%) hue-rotate(210deg)}
 #expand img,#shrink img{margin-right:-5px}
@@ -1455,6 +1456,7 @@ th.radio{width:96px}
 #screenlog{margin-top:0;height:60px;min-height:60px}
 #screenlog li,#screenlog li a{font-size:9.5pt}
 #screenlog li::before{width:14px;height:12px;background-size:10px}
+#screenlog li .date{min-width:92px}
 #filterBar .filter{padding:4px 16px;min-width:110px}
 #torrentEdit #add,#torrentEdit #remove{background-position:25% center}
 #torrentEdit th:nth-child(4),#torrentEdit td:nth-child(4){padding-right:10%}

@@ -465,7 +465,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
 
     /* @since 0.9.64+ */
     private long lastAddedMessageTimestamp;
-    /* @since 0.9.64+ */
     private String lastAddedMessage;
 
     /**
@@ -475,9 +474,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     public void addMessage(String message) {
         long currentTime = System.currentTimeMillis() / 1000;
         if (lastAddedMessageTimestamp != currentTime || !lastAddedMessage.equals(message)) {
-            addMessageNoEscape(message.replace("&", "&amp;").replace("<", "<").replace(">", ">")
+            addMessageNoEscape(message.replace("&", "&amp;").replace("&lt;", "<").replace("&gt;", ">")
                                       .replace("&amp;nbsp", "&nbsp;"));
-                                      //.replaceAll("(?<!href=[\"'][^>\"]{0,1024})(%20)(?![^<]*>|[^<>]*</a>)", " "));
         } else if (lastAddedMessage.startsWith(_t("Download already running: ")) &&
                    lastAddedMessage.contains(_t("Downloading"))) {
             lastAddedMessage = lastAddedMessage.replace(_t("Download already running: "), "");
@@ -496,7 +494,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         long currentTime = System.currentTimeMillis() / 1000;
         if (lastAddedMessageTimestamp != currentTime || !lastAddedMessage.equals(message)) {
             _messages.addMessageNoEscape(getTime() + "&nbsp; " + message);
-            //message.replaceAll("(?<!href=[\"'][^>]*)(%20)(?![^<]*>|[^<>]*</a>)", " "));
         }
         lastAddedMessageTimestamp = currentTime;
         lastAddedMessage = message;
@@ -508,7 +505,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         Long now = System.currentTimeMillis();
         fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
         String date = fmt.format(new Date(now));
-        return date;
+        return "<b class=date>" + date + "</b>";
     }
 
     /** newest last */
@@ -1832,21 +1829,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         return false;
                     }
 
-                    if (!TrackerClient.isValidAnnounce(info.getAnnounce())) {
-                        if (info.isPrivate()) {
-                            msg = _t("ERROR - No I2P trackers in private torrent \"{0}\"", info.getName());
-                        } else if (!_util.getOpenTrackers().isEmpty()) {
-                            msg = _t("Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only.", info.getName());
-                        } else if (_util.shouldUseDHT()) {
-                            msg = _t("Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only.", info.getName());
-                        } else {
-                            msg = _t("Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent.",
-                            info.getName());
-                            dontAutoStart = true;
-                        }
-                        addMessage(msg);
-                        if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
-                    }
                     String rejectMessage = validateTorrent(info);
                     if (rejectMessage != null) {throw new IOException(rejectMessage);}
 
@@ -1928,6 +1910,25 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 System.out.println(" • " + _t("Torrent added: {0}", torrent.getBaseName()));
             }
         }
+
+        MetaInfo info = torrent.getMetaInfo();
+        String warnMsg;
+        if (!TrackerClient.isValidAnnounce(info.getAnnounce())) {
+            if (info.isPrivate()) {
+                warnMsg = _t("ERROR - No I2P trackers in private torrent \"{0}\"", info.getName());
+            } else if (!_util.getOpenTrackers().isEmpty()) {
+                warnMsg = _t("Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only.", info.getName());
+            } else if (_util.shouldUseDHT()) {
+                warnMsg = _t("Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only.", info.getName());
+            } else {
+                warnMsg = _t("Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent.",
+                info.getName());
+                dontAutoStart = true;
+            }
+            addMessage(warnMsg);
+            if (!_context.isRouterContext()) {System.out.println(" • " + warnMsg);}
+        }
+
         return true;
     }
 
@@ -2846,7 +2847,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         boolean isComplete = pieces >= snark.getNeeded() && snark.getRemainingLength() == 0;
         if (meta == null || storage == null || snark == null || !isComplete) {return;}
 
-        if (snark.isStorageCompleted() && !isComplete && !snark.isNotificationSent()) {
+        if (snark.isStorageCompleted() && isComplete && !snark.isNotificationSent()) {
             addMessageNoEscape(_t("Download finished: {0}", linkify(snark)));
             if (!_context.isRouterContext()) {
                 String msg = _t("Download finished: {0}", getSnarkName(snark));
