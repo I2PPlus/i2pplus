@@ -209,6 +209,8 @@ input[type=submit]:active,input[type=submit].depress,a.control:active,a.control.
 #screenlog.xpanded{height:auto}
 #screenlog:hover{overflow-y:auto}
 #screenlog:empty{display:none}
+#screenlog .date{word-spacing:-.1em;font-family:var(--monospaced);font-weight:700!important}
+#screenlog li .date::after{margin:0 0 0 6px;width:8px;height:8px;display:inline-block;vertical-align:text-top;font-size:110%;content:"‣"}
 #screenlog ul{margin:1px 20px 0 -37px;list-style:none;color:#384;font-weight:700}
 #screenlog li,#screenlog li a{line-height:1.2}
 #screenlog li::before{margin:-2px 3px 0 0;width:10px;height:10px;content:"";display:inline-block;vertical-align:middle;background:var(--bullet) no-repeat left center/10px}
