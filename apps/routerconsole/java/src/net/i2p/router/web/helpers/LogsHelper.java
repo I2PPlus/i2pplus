@@ -190,6 +190,10 @@ public class LogsHelper extends HelperBase {
                         !line.contains("If you would like to submit a bug report") &&
                         !line.contains("Problematic frame:") &&
                         !line.contains("INFO | #   Unknown") &&
+                        !line.contains("Unable to build") &&
+                        !line.contains("HTTPServer") &&
+                        !line.contains("Incrementing failed invocation") &&
+                        !line.contains("than the successful invocation time") &&
                         !line.matches("^.*[^\\n]#\\s*$") &&
                         !line.matches(".*#$") &&
                         !line.matches(".*\\* $") &&
