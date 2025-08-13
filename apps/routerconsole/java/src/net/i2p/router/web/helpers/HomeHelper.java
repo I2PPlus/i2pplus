@@ -152,11 +152,11 @@ public class HomeHelper extends HelperBase {
 // search engines
         "ahmia.i2p" + S +_x("Tor-focused Search Engine") + S + "http://ahmia.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
         "binternet" + S +_x("Pinterest Image Search Engine") + S + "http://binternet.lostskunk-dnr.i2p/" + S + I + "eepsites/binternet.svg" + S +
-        "btdigg.i2p" + S +_x("Clearnet BitTorrent DHT search engine") + S + "http://btdigg.i2p/" + S + I + "eepsites/torrentsearch.svg" + S +
         "DuckDuckGo" + S +_x("DuckDuckGo Search Engine (no javascript)") + S + "http://duckduckgo.i2p/" + S + I + "eepsites/duckduckgo.svg" + S +
         "Mojeek" + S +_x("Privacy-focused Clearnet Search Engine") + S + "http://mojeek.i2p/" + S + I + "search.svg" + S +
         "Shinobi" + S +_x("I2P Web Search Engine") + S + "http://shinobi.i2p/" + S + I + "eepsites/shinobi.png" + S +
-        "torch.i2p" + S +_x("Tor-focused Search Engine") + S + "http://torch.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
+        //"btdigg.i2p" + S +_x("Clearnet BitTorrent DHT search engine") + S + "http://btdigg.i2p/" + S + I + "eepsites/torrentsearch.svg" + S +
+        //"torch.i2p" + S +_x("Tor-focused Search Engine") + S + "http://torch.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
 
 // wikis & reference
         "hiddenwiki.i2p" + S + _x("Tor .onion site links") + S + "http://hiddenwiki.i2p/" + S + I + "wiki.svg" + S +
@@ -183,8 +183,6 @@ public class HomeHelper extends HelperBase {
         "EFF" + S + _x("Defending your rights in the digital world") + S + "http://eff.i2p/" + S + I + "eepsites/eff.svg" + S +
         "EllipticNews" + S + _x("The Elliptic Curve Cryptography Blog") + S + "http://ellipticnews.i2p/" + S + I + "news.svg" + S +
         _x("ForeignPolicy") + S + _x("The Global Magazine of News &amp; Ideas") + S + "http://foreignpolicy.i2p/" + S + I + "news.svg" + S +
-        _x("FrontLineDefenders") + S + _x("Human rights activism") + S + "http://frontlinedefenders.i2p/" + S + I + "news.svg" + S +
-        _x("HumanRightsWatch") + S + _x("Defending Human Rights Worldwide") + S + "http://humanrightswatch.i2p/" + S + I + "news.svg" + S +
         "Hackaday" + S + _x("Fresh hacks every day") + S + "http://hackaday.i2p/" + S + I + "eepsites/hackaday.svg" + S +
         _x("HackerNews") + S + _x("Computer related news aggregation") + S + "http://hackernews.i2p/" + S + I + "news.svg" + S +
         _x("HongKongFreePress") + S + _x("Independent &amp; impartial news for Hong Kong") + S + "http://hongkongfreepress.i2p/" + S + I + "eepsites/hkfp.svg" + S +
@@ -216,6 +214,8 @@ public class HomeHelper extends HelperBase {
         //"bellingcat.i2p" + S + _x("Independent investigative journalism") + S + "http://bellingcat.i2p/" + S + I + "eepsites/bellingcat.svg" + S +
         //_x("CultureMagazine") + S + _x("Cannabis-related magazine") + S + "http://culturemagazine.i2p/" + S + I + "eepsites/cannabis.svg" + S +
         //"DarknetLive" + S + _x("Darknet related news site") + S + "http://darknetlive.i2p/" + S + I + "news.svg" + S +
+        //_x("FrontLineDefenders") + S + _x("Human rights activism") + S + "http://frontlinedefenders.i2p/" + S + I + "news.svg" + S +
+        //_x("HumanRightsWatch") + S + _x("Defending Human Rights Worldwide") + S + "http://humanrightswatch.i2p/" + S + I + "news.svg" + S +
         //"intpolicydigest.i2p" + S + _x("Politics &amp; Current Affairs Journal") + S + "http://intpolicydigest.i2p/" + S + I + "news.svg" + S +
         //_x("JapanToday") + S + _x("English language Japanese News") + S + "http://japantoday.i2p/" + S + I + "eepsites/japantoday.svg" + S +
         //_x("Planeta") + S + _x("News and blog feeds on I2P") + S + "http://planeta.i2p/" + S + I + "planet.svg" + S +
