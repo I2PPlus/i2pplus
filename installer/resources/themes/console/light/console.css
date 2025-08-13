@@ -1721,7 +1721,6 @@ p.threatpoints{margin-top:10px;padding-left:33px;background:var(--eye_static) no
 #netdblookup select{margin-left:3px;width:calc(100% - 5px)}
 #netdblookup button.search{padding-left:22px;background:var(--search) no-repeat 6px center/12px,var(--btn)}
 #netdblookup button.search:hover{background:var(--search) no-repeat 6px center/12px,var(--btn_hover)}
-
 .homelinkedit th,.homelinkedit td{padding-left:10px;padding-right:10px}
 .homelinkedit th:first-child,#sidebarconf th:first-child,#consolepass th:first-child{width:5%;text-align:center;font-size:0;background:var(--nuke) no-repeat center center/16px,linear-gradient(180deg,#fcfcff 51%,#fafaff 51%,#f6f6ff 100%)}
 .homelinkedit tr:nth-last-child(n+2) td:nth-child(2){width:1%;max-width:32px;min-width:32px;text-align:center}
@@ -2220,10 +2219,10 @@ select[name="newlogclass"]{margin-left:3px}
 #themesettings{margin-bottom:12px;width:calc(100% - 12px);float:left}
 
 /* console password */
+#consolepass th:first-child{width:2%}
 #consolepass th:nth-child(2){text-align:left}
-#consolepass td:not([colspan]):first-child{width:100px;white-space:nowrap}
 #consolepass td{padding:5px 10px}
-#consolepass input{margin:5px;width:200px}
+#consolepass input[type=password],#consolepass input[type=text]{margin:5px;width:200px}
 #consolepass td#pw_adduser{padding:5px 10px;border-top:var(--border_inner)}
 td#pw_adduser input{margin:5px 20px 5px 5px}
 #consolepass input[name="name"]{margin-right:20px;padding-left:26px}
@@ -2831,6 +2830,7 @@ pre,.footnote,div.news,.news,.links code,.main[id^="config_"] .encDests th,.sb_n
 form[action="configplugins"] input.reload{margin-top:1px;margin-right:4px}
 h1[class],#wizardpage h1{padding:20px 15px 17px 55px;font-size:19pt;background-size:38px auto,4px,100%,100%,100%}
 .homelinkedit th:first-child,#sidebarconf th:first-child,#consolepass th:first-child{font-size:0}
+.langselect,.themechoice{width:140px}
 .log_level{margin:-2px -3px 0;min-width:40px;max-width:40px}
 .log_omitted{margin-right:1px}
 .leasesets_container{margin-bottom:7px}
