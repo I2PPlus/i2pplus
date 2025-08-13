@@ -35,7 +35,6 @@ a:link,a:visited{color:#3b6bbf;color:rgba(59,107,191,.85);text-decoration:none;f
 a:hover,a:focus,.trackerName a:visited:hover,.trackerName a:visited:focus{color:var(--hover)}
 a:active{color:#f30}
 a:focus img{filter:drop-shadow(0 0 1px var(--hover))}
-b{color:var(--ink_light)}
 button::-moz-focus-inner,input::-moz-focus-inner{outline:none;border:0}
 code{font-size:8.5pt;color:#070;font-weight:600;font-family:var(--monospaced)}
 form{margin-bottom:0}
@@ -129,17 +128,6 @@ td{padding:3px 4px;color:var(--ink_light);opacity:1;font-size:9pt}
 #toast b{color:#373}
 
 /* screenlog */
-#screenlog{margin:-2px 0 0;padding:3px 5px 3px 5px;min-width:810px;height:56px;width:auto;font-size:8.5pt;text-align:left;overflow:hidden;color:#6e6eb7;border-top:var(--border_soft);border-bottom:var(--border_soft);border-spacing:0;box-shadow:var(--highlight);background:url(images/kitty.png) no-repeat right center,repeating-linear-gradient(180deg,#fffa 2px,#ddda 4px),var(--snarkGraph) no-repeat,var(--th);background-size:60px auto,100%,cover!important;background-position:right bottom,center center,calc(100% - 72px) bottom,center center!important;background-blend-mode:multiply,overlay,luminosity,normal;transition:ease all .15s;scrollbar-color:#779 #0000;contain:paint}
-#screenlog .infohash{font-weight:700}
-#screenlog:empty{display:none}
-#screenlog:hover,#screenlog:focus{overflow-y:auto}
-#screenlog:focus{box-shadow:inset 0 0 0 1px #f90}
-#screenlog a:link,#screenlog a:visited{color:#3b77bf;font-size:8.5pt}
-#screenlog a:hover{color:var(--hover)}
-#screenlog ul{margin:0;padding:0 0 0 14px;list-style:none}
-#screenlog li{margin-left:-18px;margin-right:-5px;padding:0 20px 2px 5px;display:block;word-break:break-all;font-weight:700;mix-blend-mode:multiply;background:rgba(255,255,255,.25);letter-spacing:0;word-spacing:0}
-#screenlog li,#screenlog li a{line-height:1.1;font-size:8.5pt}
-#screenlog li::before{margin:-1px 0 1px;display:inline-block;width:14px;height:10px;vertical-align:middle;background:var(--bullet) no-repeat left bottom/9px;content:""}
 #closelog,#expand,#shrink{margin:0;padding:0;display:block;position:sticky;top:0;z-index:999;float:right;cursor:pointer}
 #closelog{margin-right:-2px}
 #expand,#shrink{display:inline-block}
@@ -147,6 +135,21 @@ td{padding:3px 4px;color:var(--ink_light);opacity:1;font-size:9pt}
 #closelog img,#expand img,#shrink img{margin:0;padding:3px;width:12px;opacity:.8;border:1px solid #77b;background:linear-gradient(180deg,rgba(255,255,255,.8) 50%,rgba(220,220,255,.8) 50%)}
 #expand img,#shrink img{margin-right:-1px}
 #closelog img:hover,#expand img:hover,#shrink img:hover{border:1px solid #77b;background:#fff;opacity:1}
+#screenlog{margin:-2px 0 0;padding:3px 5px 3px 5px;min-width:810px;height:56px;width:auto;font-size:8.5pt;text-align:left;overflow:hidden;color:#6e6eb7;border-top:var(--border_soft);border-bottom:var(--border_soft);border-spacing:0;box-shadow:var(--highlight);background:url(images/kitty.png) no-repeat right center,repeating-linear-gradient(180deg,#fffa 2px,#ddda 4px),var(--snarkGraph) no-repeat,var(--th);background-size:60px auto,100%,cover!important;background-position:right bottom,center center,calc(100% - 72px) bottom,center center!important;background-blend-mode:multiply,overlay,luminosity,normal;transition:ease all .15s;scrollbar-color:#779 #0000;contain:paint}
+#screenlog .infohash{font-weight:700}
+#screenlog:empty{display:none}
+#page #screenlog.xpanded{min-height:303px!important}
+#screenlog:hover,#screenlog:focus{overflow-y:auto}
+#screenlog:focus{box-shadow:inset 0 0 0 1px #f90}
+#screenlog a:link,#screenlog a:visited{color:#3b77bf;font-size:8.5pt}
+#screenlog a:hover{color:var(--hover)}
+#screenlog li{margin-left:-18px;margin-right:-5px;padding:0 20px 2px 5px;display:block;word-break:break-all;font-weight:700;mix-blend-mode:multiply;background:rgba(255,255,255,.25);letter-spacing:0;word-spacing:0}
+#screenlog li,#screenlog li a{line-height:1.1;font-size:8.5pt}
+#screenlog li::before{margin:-1px 0 1px;display:inline-block;width:14px;height:10px;vertical-align:middle;background:var(--bullet) no-repeat left bottom/9px;content:""}
+#screenlog ul{margin:-1px 0 0;padding:0 0 0 14px;list-style:none}
+#screenlog.xpanded ul{margin:-1px 0 1px}
+#screenlog .date{display:inline-block;word-spacing:-.1em;font-family:var(--monospaced);font-weight:700!important;color:#6e6eb7}
+#screenlog .date::after{margin:2px 0 0 6px;width:8px;height:8px;display:inline-block;vertical-align:text-top;content:"‣"}
 #screenlog .infohash{font-size:90%;font-weight:700;color:#151}
 #screenlog .infohash:hover{color:#070}
 
@@ -1015,6 +1018,7 @@ th.rateDown,th.rateUp,th.rxd,th.ETA,th.txd,td.rateDown,td.rateUp,td.rxd,td.ETA,t
 .toggleview{padding:4px 1px 3px;min-width:400px}
 .trackerLink img{height:18px}
 #screenlog{height:60px;min-height:60px}
+#screenlog.collapsed{min-height:69px!important}
 #screenlog li,#screenlog li a,#screenlog li a:visited{font-size:9.5pt!important}
 #screenlog li::before{width:15px;height:11px;background-size:10px}
 #snarkFiles .ParentDir a{font-size:90%}
