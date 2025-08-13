@@ -490,8 +490,7 @@ public class NTCPTransport extends TransportImpl {
     }
 
     public TransportBid bid(RouterInfo toAddress, int dataSize) {
-        if (!isAlive())
-            return null;
+        if (!isAlive()) {return null;}
         // passed in dataSize assumes 16 byte header, if NTCP2 then
         // we have a 9-byte header so there's 7 to spare
         if (dataSize > NTCPConnection.NTCP2_MAX_MSG_SIZE + 7) {
@@ -759,19 +758,11 @@ public class NTCPTransport extends TransportImpl {
         final long now = _context.clock().now();
         int active = 0;
         for (NTCPConnection con : _conByIdent.values()) {
-            // con initializes times at construction,
-            // so check message count also
+            // con initializes times at construction, so check message count also
             if ((con.getMessagesSent() > 0 && con.getTimeSinceSend(now) <= 60*1000) ||
                 (con.getMessagesReceived() > 0 && con.getTimeSinceReceive(now) <= 60*1000)) {
                 active++;
             }
-/*
-
-            if ((con.getMessagesSent() > 0 && con.getTimeSinceSend(now) <= 5*60*1000) ||
-                (con.getMessagesReceived() > 0 && con.getTimeSinceReceive(now) <= 5*60*1000)) {
-                active++;
-            }
-*/
         }
         return active;
     }
@@ -783,11 +774,8 @@ public class NTCPTransport extends TransportImpl {
         final long now = _context.clock().now();
         int active = 0;
         for (NTCPConnection con : _conByIdent.values()) {
-            // con initializes times at construction,
-            // so check message count also
-            if (con.getMessagesSent() > 0 && con.getTimeSinceSend(now) <= 60*1000) {
-                active++;
-            }
+            // con initializes times at construction, so check message count also
+            if (con.getMessagesSent() > 0 && con.getTimeSinceSend(now) <= 60*1000) {active++;}
         }
         return active;
     }
@@ -797,9 +785,7 @@ public class NTCPTransport extends TransportImpl {
      *
      *  @param skew in seconds
      */
-    void setLastBadSkew(long skew) {
-        _lastBadSkew = skew;
-    }
+    void setLastBadSkew(long skew) {_lastBadSkew = skew;}
 
     /**
      * Return our peer clock skews on this transport.
@@ -816,17 +802,14 @@ public class NTCPTransport extends TransportImpl {
 
         for (NTCPConnection con : _conByIdent.values()) {
             // TODO skip isEstablished() check?
-            if (con.isEstablished() && con.getCreated() > tooOld)
+            if (con.isEstablished() && con.getCreated() > tooOld) {
                 skews.add(Long.valueOf(con.getClockSkew()));
+            }
         }
 
         // If we don't have many peers, maybe it is because of a bad clock, so
         // return the last bad skew we got
-        if (skews.size() < 5 && _lastBadSkew != 0)
-            skews.add(Long.valueOf(_lastBadSkew));
-
-        //if (_log.shouldDebug())
-        //    _log.debug("NTCP transport returning " + skews.size() + " peer clock skews.");
+        if (skews.size() < 5 && _lastBadSkew != 0) {skews.add(Long.valueOf(_lastBadSkew));}
         return skews;
     }
 
@@ -845,10 +828,7 @@ public class NTCPTransport extends TransportImpl {
 
     private static final int MIN_CONCURRENT_READERS = 2;  // unless < 32MB
     private static final int MIN_CONCURRENT_WRITERS = 2;  // unless < 32MB
-//    private static final int MAX_CONCURRENT_READERS = 4;
-//    private static final int MAX_CONCURRENT_WRITERS = 4;
-    private static final int MAX_CONCURRENT_READERS = (SystemVersion.isSlow() || SystemVersion.getCores() <= 4 || SystemVersion.getMaxMemory() < 512*1024*1024) ? 3 :
-                                                       SystemVersion.getCores() >= 10 ? 8 : 6;
+    private static final int MAX_CONCURRENT_READERS = (SystemVersion.isSlow() ? 4 : SystemVersion.getCores() >= 12 ? 8 : 6);
     private static final int MAX_CONCURRENT_WRITERS = MAX_CONCURRENT_READERS;
     /**
      *  Called by TransportManager.
@@ -889,10 +869,8 @@ public class NTCPTransport extends TransportImpl {
                     boolean ipv6 = ia instanceof Inet6Address;
                     if ((ipv6 && (isIPv6Firewalled() || (_context.getBooleanProperty(PROP_IPV6_FIREWALLED) && !ssuDisabled))) ||
                         (!ipv6 && isIPv4Firewalled())) {
-                        if (ipv6)
-                            skipv6 = true;
-                        else
-                            skipv4 = true;
+                        if (ipv6) {skipv6 = true;}
+                        else {skipv4 = true;}
                         continue;
                     }
                     OrderedProperties props = new OrderedProperties();
@@ -904,19 +882,11 @@ public class NTCPTransport extends TransportImpl {
                     replaceAddress(myAddress);
                     count++;
                 }
-                if (count <= 0) {
-                    setOutboundNTCP2Address();
-                } else if (skipv6) {
-                    setOutboundNTCP2Address(true);
-                } else if (skipv4) {
-                    setOutboundNTCP2Address(false);
-                }
-            } else {
-                setOutboundNTCP2Address();
-            }
-        } else {
-            setOutboundNTCP2Address();
-        }
+                if (count <= 0) {setOutboundNTCP2Address();}
+                else if (skipv6) {setOutboundNTCP2Address(true);}
+                else if (skipv4) {setOutboundNTCP2Address(false);}
+            } else {setOutboundNTCP2Address();}
+        } else {setOutboundNTCP2Address();}
         if (ssuDisabled) {
             // Since we don't have peer testing, start out reachable,
             // so peers will attempt to connect to us
@@ -948,12 +918,10 @@ public class NTCPTransport extends TransportImpl {
         String caps;
         TransportUtil.IPv6Config config = getIPv6Config();
         if (ipv6) {
-            if (config == IPV6_DISABLED)
-                return;
+            if (config == IPV6_DISABLED) {return;}
             caps = CAP_IPV6;
         } else {
-            if (config == IPV6_ONLY)
-                return;
+            if (config == IPV6_ONLY) {return;}
             caps = CAP_IPV4;
         }
         OrderedProperties props = new OrderedProperties();
@@ -981,17 +949,13 @@ public class NTCPTransport extends TransportImpl {
     private synchronized void restartListening(RouterAddress addr, boolean ipv6) {
         if (addr != null) {
             RouterAddress myAddress = bindAddress(addr.getPort());
-            if (myAddress != null)
-                replaceAddress(myAddress);
-            else
-                replaceAddress(addr);
+            if (myAddress != null) {replaceAddress(myAddress);}
+            else {replaceAddress(addr);}
             // UDPTransport.rebuildExternalAddress() calls router.rebuildRouterInfo()
         } else {
             removeAddress(ipv6);
-            if (ipv6)
-                _lastInboundIPv6 = 0;
-            else
-                _lastInboundIPv4 = 0;
+            if (ipv6) {_lastInboundIPv6 = 0;}
+            else {_lastInboundIPv4 = 0;}
         }
     }
 
@@ -1002,16 +966,13 @@ public class NTCPTransport extends TransportImpl {
     private void startIt() {
         _finisher.start();
         _pumper.startPumping();
-
-        int threads = SystemVersion.isSlow() ? 2 : 4;
+        int threads = SystemVersion.isSlow() ? 2 : SystemVersion.getCores() >= 12 ? 6 : 4;
         long maxMemory = SystemVersion.getMaxMemory();
         _reader.startReading(threads);
         _writer.startWriting(threads);
     }
 
-    public boolean isAlive() {
-        return _pumper.isAlive();
-    }
+    public boolean isAlive() {return _pumper.isAlive();}
 
     /**
      *  Only does something if myPort > 0 and myPort != current bound port
