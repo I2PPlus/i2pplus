@@ -156,6 +156,8 @@ select{margin:2px 4px 2px 0;padding:7px 24px 7px 12px;min-width:120px;font-size:
 #closelog:active img,#expand:active img,#shrink:active img{box-shadow:var(--btn_shadow_active);background:var(--hover)}
 .logshim{margin-top:-10px}
 #screenlog+.logshim{margin-top:10px}
+#screenlog .date{word-spacing:-.1em;font-family:var(--monospaced);font-weight:700!important}
+#screenlog li .date::after{margin:0 0 0 6px;width:8px;height:8px;display:inline-block;vertical-align:text-top;font-size:110%;content:"‣"}
 
 /* filter bar*/
 #torrents .noneLoaded,#torrents .noneLoaded:hover{font-size:10pt;font-weight:700;border-bottom:var(--border);background:#000}

@@ -154,6 +154,8 @@ th a:hover,th a:visited:hover,th a:focus,th a:visited:focus,td a:hover,td a:visi
 #expand[hidden],#shrink[hidden]{display:none}
 #closelog img,#expand img,#shrink img{margin:-1px -3px 4px 4px;padding:4px 3px 3px;width:12px;background:#cfbda8;opacity:.8}
 #closelog img:hover,#closelog img:focus,#expand img:hover,#expand img:focus,#shrink img:hover,#shrink img:focus{opacity:1;filter:none}
+#screenlog .date{word-spacing:-.1em;font-family:var(--monospaced);font-weight:700!important}
+#screenlog li .date::after{margin:0 0 0 6px;width:8px;height:8px;display:inline-block;vertical-align:text-top;font-size:110%;content:"‣"}
 
 /* torrent filter bar */
 #filterBar{margin:-3px 0 -1px;padding:0;display:block;position:relative;z-index:100;white-space:nowrap;border:var(--border_hard);background:var(--th)}

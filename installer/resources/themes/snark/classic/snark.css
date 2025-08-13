@@ -166,6 +166,8 @@ a.controld{display:none}
 #expand,#shrink{display:inline-block}
 #expand[hidden],#shrink[hidden]{display:none}
 .logshim{margin-top:1px}
+#screenlog .date{word-spacing:-.1em;font-family:var(--monospaced);font-weight:700!important;color:#4b4b76!important}
+#screenlog li .date::after{margin:0 0 0 6px;width:8px;height:8px;display:inline-block;vertical-align:text-top;font-size:110%;content:"‣"}
 
 /* pagenav */
 .pagenavcontrols{padding:2px 10px;display:inline-block;line-height:1.2;font-weight:700;transform:none}
