@@ -150,11 +150,11 @@ public class HomeHelper extends HelperBase {
         //_x("speedtest") + S + _x("Outproxy bandwidth test") + S + "http://outproxy.purokishi.i2p/speedtest/" + S + I + "speedometer.svg" + S +
 
 // search engines
-        "ahmia.i2p" + S +_x("Tor-focused Search Engine") + S + "http://ahmia.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
-        "binternet" + S +_x("Pinterest Image Search Engine") + S + "http://binternet.lostskunk-dnr.i2p/" + S + I + "eepsites/binternet.svg" + S +
         "DuckDuckGo" + S +_x("DuckDuckGo Search Engine (no javascript)") + S + "http://duckduckgo.i2p/" + S + I + "eepsites/duckduckgo.svg" + S +
         "Mojeek" + S +_x("Privacy-focused Clearnet Search Engine") + S + "http://mojeek.i2p/" + S + I + "search.svg" + S +
         "Shinobi" + S +_x("I2P Web Search Engine") + S + "http://shinobi.i2p/" + S + I + "eepsites/shinobi.png" + S +
+        //"ahmia.i2p" + S +_x("Tor-focused Search Engine") + S + "http://ahmia.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
+        //"binternet" + S +_x("Pinterest Image Search Engine") + S + "http://binternet.lostskunk-dnr.i2p/" + S + I + "eepsites/binternet.svg" + S +
         //"btdigg.i2p" + S +_x("Clearnet BitTorrent DHT search engine") + S + "http://btdigg.i2p/" + S + I + "eepsites/torrentsearch.svg" + S +
         //"torch.i2p" + S +_x("Tor-focused Search Engine") + S + "http://torch.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
 
