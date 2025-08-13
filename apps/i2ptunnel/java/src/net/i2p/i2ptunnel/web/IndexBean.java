@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -347,12 +348,15 @@ public class IndexBean {
         if (_tunnel < 0) {return "✖ " + _t("Error: Invalid tunnel");}
         List<TunnelController> controllers = _group.getControllers();
         if (_tunnel >= controllers.size()) {return "✖ Error: Invalid tunnel";}
+
+        boolean sentMessage = false;
         TunnelController controller = controllers.get(_tunnel);
         controller.startTunnelBackground();
-        try {Thread.sleep(1000);} // Allow time for tunnel to start
-        catch (InterruptedException ie) {}
-        String msg =  "✔ " + _t("Started tunnel") + ": " + getTunnelName(_tunnel);
-        _timestampedMessages.add(new TimestampedMessage(msg));
+        if (!sentMessage) {
+            String msg =  "✔ " + _t("Started tunnel") + ": " + getTunnelName(_tunnel);
+            _timestampedMessages.add(new TimestampedMessage(msg));
+            sentMessage = true;
+        }
         return "";
     }
 
@@ -360,12 +364,15 @@ public class IndexBean {
         if (_tunnel < 0) {return "✖ " + _t("Error: Invalid tunnel");}
         List<TunnelController> controllers = _group.getControllers();
         if (controllers == null || _tunnel >= controllers.size()) {return "✖ Error: Invalid tunnel";}
+
+        boolean sentMessage = false;
         TunnelController controller = controllers.get(_tunnel);
         controller.stopTunnel();
-        try {Thread.sleep(1000);} // Allow time for tunnel to stop
-        catch (InterruptedException ie) {}
-        String msg = "✔ " + _t("Stopped tunnel") + ": " + getTunnelName(_tunnel);
-        _timestampedMessages.add(new TimestampedMessage(msg));
+        if (!sentMessage) {
+            String msg = "✔ " + _t("Stopped tunnel") + ": " + getTunnelName(_tunnel);
+            _timestampedMessages.add(new TimestampedMessage(msg));
+            sentMessage = true;
+        }
         return "";
     }
 
@@ -373,13 +380,16 @@ public class IndexBean {
         if (_tunnel < 0) {return "✖ " + _t("Error: Invalid tunnel");}
         List<TunnelController> controllers = _group.getControllers();
         if (_tunnel >= controllers.size()) {return "✖ " + _t("Error: Invalid tunnel");}
+
+        boolean sentMessage = false;
         TunnelController controller = controllers.get(_tunnel);
         controller.stopTunnel();
-        try {Thread.sleep(1000);} // Allow time for tunnel to stop
-        catch (InterruptedException ie) {}
         controller.startTunnelBackground();
-        String msg = "‣ " + _t("Restarting tunnel") + ": " + getTunnelName(_tunnel) + "...";
-        _timestampedMessages.add(new TimestampedMessage(msg));
+        if (!sentMessage) {
+            String msg = "‣ " + _t("Restarting tunnel") + ": " + getTunnelName(_tunnel) + "...";
+            _timestampedMessages.add(new TimestampedMessage(msg));
+            sentMessage = true;
+        }
         return "";
     }
 
@@ -454,12 +464,16 @@ public class IndexBean {
 
         while (stored.size() > 100) {stored.remove(stored.size() - 1);}
 
+        Set<String> addedMessages = new HashSet<>();
         for (TimestampedMessage tm : stored) {
-            String escapedMessage = DataHelper.escapeHTML(tm.message.replace("->", "➜"));
-            String formattedMessage = "• " + tm.getFormattedTimestamp() + ' ' + escapedMessage;
-            String li = (tm.message.contains("Error") || tm.message.contains("✖") ? "<li class=error>" :
-                         tm.message.contains("Warn") || tm.message.contains("▲") ? "<li class=warn>" : "<li>");
-            buf.append(li).append(formattedMessage).append("</li>\n");
+            String originalMessage = tm.message;
+            if (!addedMessages.contains(originalMessage)) {
+                String escapedMessage = DataHelper.escapeHTML(tm.message.replace("->", "➜"));
+                String formattedMessage = "• " + tm.getFormattedTimestamp() + ' ' + escapedMessage;
+                String li = (tm.message.contains("Error") || tm.message.contains("✖") ? "<li class=error>" :
+                             tm.message.contains("Warn") || tm.message.contains("▲") ? "<li class=warn>" : "<li>");
+                buf.append(li).append(formattedMessage).append("</li>\n");
+            }
         }
 
         _timestampedMessages.clear();
