@@ -155,7 +155,7 @@ th a:hover,th a:visited:hover,th a:focus,th a:visited:focus,td a:hover,td a:visi
 #closelog img,#expand img,#shrink img{margin:-1px -3px 4px 4px;padding:4px 3px 3px;width:12px;background:#cfbda8;opacity:.8}
 #closelog img:hover,#closelog img:focus,#expand img:hover,#expand img:focus,#shrink img:hover,#shrink img:focus{opacity:1;filter:none}
 #screenlog .date{word-spacing:-.1em;font-family:var(--monospaced);font-weight:700!important}
-#screenlog li .date::after{margin:0 0 0 6px;width:8px;height:8px;display:inline-block;vertical-align:text-top;font-size:110%;content:"‣"}
+#screenlog li .date::after{margin:-1px 0 0 6px;width:8px;height:8px;display:inline-block;vertical-align:text-top;font-size:110%;content:"‣"}
 
 /* torrent filter bar */
 #filterBar{margin:-3px 0 -1px;padding:0;display:block;position:relative;z-index:100;white-space:nowrap;border:var(--border_hard);background:var(--th)}
@@ -947,9 +947,10 @@ body.textview{height:100vh}
 .commented{top:-3px}
 .tAction input[type=submit]{padding:11px;background-size:13px,100%,13px}
 .tAction input[type=submit]:active{background-size:11px,100%}
-#actionStopAll,#actionStartAll{padding:11px 18px}
-#totals code{line-height:1.5}
 tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before,tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{margin-top:3px}
+#actionStopAll,#actionStartAll{padding:11px 18px}
+#screenlog li .date::after{margin-top:0}
+#totals code{line-height:1.5}
 }
 
 @media (max-width:1200px){
