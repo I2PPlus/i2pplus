@@ -203,6 +203,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private static final String B64 = Base64.ALPHABET_I2P;
     private static final int DEFAULT_MAX_MESSAGES = 50;
 
+    /** @since 0.9.67+ */
+    private long lastUpBwChange = 0;
+    private long lastDownBwChange = 0;
+
     /**
      *  "name", "announceURL=websiteURL" pairs
      *  '=' in announceURL must be escaped as &#44;
@@ -1097,6 +1101,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
         }
         if (upBW != null) {
+            long now = System.currentTimeMillis();
+            if (now - lastUpBwChange < 10 * 60 * 1000) {return;} // don't change more than once every 10m
             int limit = _util.getMaxUpBW();
             try {limit = Integer.parseInt(upBW.trim());} catch (NumberFormatException nfe) {}
             if (limit != _util.getMaxUpBW()) {
@@ -1108,6 +1114,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     String msg = _t("Up BW limit changed to {0}KBps", limit);
                     addMessage(msg);
                     if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
+                    lastUpBwChange = now;
                 } else {
                     String msg = _t("Minimum up bandwidth limit is {0}KBps", MIN_UP_BW);
                     addMessage(msg);
@@ -1116,6 +1123,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
         }
         if (downBW != null) {
+            long now = System.currentTimeMillis();
+            if (now - lastDownBwChange < 10 * 60 * 1000) {return;}  // don't change more than once every 10m
             int limit = (int) (_bwManager.getDownBWLimit() / 1024);
             try {limit = Integer.parseInt(downBW.trim());} catch (NumberFormatException nfe) {}
             if (limit != _bwManager.getDownBWLimit()) {
@@ -1126,6 +1135,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     String msg = _t("Maximum download speed changed to {0}KB/s", limit);
                     addMessage(msg);
                     if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
+                    lastDownBwChange = now;
                 } else {
                     String msg = _t("Download speed limit is {0}KB/s", MIN_DOWN_BW);
                     addMessage(msg);
