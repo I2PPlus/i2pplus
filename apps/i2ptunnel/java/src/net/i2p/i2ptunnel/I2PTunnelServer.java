@@ -478,7 +478,8 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 for (I2PSocket skt : sockMgr.listSockets()) {l.log("->" + skt);}
                 return false;
             }
-            l.log("‣ Stopping tunnels for server at " + this.remoteHost.toString().replace("/", "") + ':' + this.remotePort);
+            // logged in IndexBean
+            //l.log("‣ Stopping tunnels for server at " + this.remoteHost.toString().replace("/", "") + ':' + this.remotePort);
             open = false;
             try {
                 if (i2pss != null) {

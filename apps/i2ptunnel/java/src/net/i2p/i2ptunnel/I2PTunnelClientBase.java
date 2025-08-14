@@ -453,7 +453,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                     boolean fail = !_buildingTunnels || (exmsg != null && exmsg.contains("session limit exceeded"));
                     if (!fail && ++retries < MAX_RETRIES) {
                         String retryMsg = msg + " -> Retrying in " + (RETRY_DELAY / 1000) + "s [" +
-                                                  retries + " / " + MAX_RETRIES + "]";
+                                          retries + " / " + MAX_RETRIES + "]";
                         if (log != null) {log.log(retryMsg);}
                         if (_log.shouldError()) {_log.error(retryMsg);}
                     } else {
@@ -482,7 +482,7 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
         try {return InetAddress.getByName(getTunnel().listenHost);}
         catch (UnknownHostException uhe) {
             l.log("✖ Could not find listen host to bind to [" + getTunnel().host + "]");
-            _log.error("Error finding host to bind", uhe);
+            if (_log.shouldError()) {_log.error("Error finding host to bind to -> " + uhe.getMessage());}
             notifyEvent("openBaseClientResult", "error");
             return null;
         }
@@ -706,10 +706,10 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
             if (tcg != null) {_executor = tcg.getClientExecutor();}
             else {
-                // Fallback in case TCG.getInstance() is null, never instantiated
-                // and we were not started by TCG.
-                // Maybe a plugin loaded before TCG? Should be rare.
-                // Never shut down.
+                /* Fallback in case TCG.getInstance() is null, never instantiated and we were not started by TCG.
+                 * Maybe a plugin loaded before TCG? Should be rare.
+                 * Never shut down.
+                 */
                 _executor = new TunnelControllerGroup.CustomThreadPoolExecutor();
             }
             while (open) {

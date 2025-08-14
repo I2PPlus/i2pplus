@@ -295,11 +295,13 @@ public class IndexBean {
         if (controllers == null || controllers.isEmpty()) {return "";}
 
         int restarted = 0;
+        int serversToRestart = 0;
         boolean noRunningServers = true;
         boolean msgSent = false;
 
         for (TunnelController controller : controllers) {
             if (!controller.isClient() && controller.getIsRunning()) {
+                serversToRestart++;
                 noRunningServers = false;
                 String name = controller.getName();
 
@@ -308,11 +310,12 @@ public class IndexBean {
 
                 try {
                     controller.stopTunnel();
-                    Thread.sleep(1000); // short delay to ensure clean stop
+                    Thread.sleep(100); // short delay to ensure clean stop
 
                     String startingMsg = "‣ " + _t("Starting tunnel") + ": " + name + "...";
                     _timestampedMessages.add(new TimestampedMessage(startingMsg));
 
+                    Thread.sleep(50); // additional delay before restart
                     controller.startTunnelBackground();
                     restarted++;
 
@@ -330,9 +333,8 @@ public class IndexBean {
         String count = String.valueOf(restarted);
         String doneMsg = "";
 
-        if (!msgSent) {
-            if (restarted < 1) {return "";}
-            else {doneMsg = "✔ Restarted " + count + " running server " + (restarted > 1 ? "tunnels" : "tunnel");}
+        if (!msgSent && serversToRestart == restarted && restarted >= 1) {
+            doneMsg = "✔ Restarted " + count + " running server " + (restarted > 1 ? "tunnels" : "tunnel");
             _timestampedMessages.add(new TimestampedMessage(doneMsg));
             msgSent = true;
         }
@@ -466,8 +468,11 @@ public class IndexBean {
 
         Set<String> addedMessages = new HashSet<>();
         for (TimestampedMessage tm : stored) {
-            String originalMessage = tm.message;
-            if (!addedMessages.contains(originalMessage)) {
+            // Combine the message and the formatted timestamp to create a unique key
+            String messageKey = tm.message + "|" + tm.getFormattedTimestamp();
+
+            if (!addedMessages.contains(messageKey)) {
+                addedMessages.add(messageKey);
                 String escapedMessage = DataHelper.escapeHTML(tm.message.replace("->", "➜"));
                 String formattedMessage = "• " + tm.getFormattedTimestamp() + ' ' + escapedMessage;
                 String li = (tm.message.contains("Error") || tm.message.contains("✖") ? "<li class=error>" :
