@@ -192,7 +192,6 @@ a.control,input.control{white-space:nowrap;vertical-align:middle}
 
 /* tables */
 table{background:#000 url(images/camotile2.png);background:linear-gradient(180deg,rgba(0,0,0,.5),rgba(0,0,0,.7)),url(images/camotile2.png)}
-tr{box-shadow:var(--highlight),inset 0 -1px 0 1px #000,inset -1px 0 0 1px #000,inset 0 0 1px 1px #030,inset 0 -1px 1px 1px #030,inset -1px 0 1px 1px #030}
 th{padding:7px 10px;word-spacing:.1em;letter-spacing:.08em;text-align:left;text-transform:uppercase;font-size:9pt;color:#ee9;border-top:var(--border);border-bottom:var(--border);background:#000;background:linear-gradient(180deg,#001400,#000 75%)}
 th span{text-transform:none;letter-spacing:0;word-spacing:0}
 th .help{font-size:0}
@@ -234,7 +233,9 @@ td>input{margin-left:0}
 .tunnelName a:active{color:#f60;background-size:14px;opacity:.65}
 .tunnelPreview,.tunnelPort{width:15%;text-align:center}
 .tunnelProperties{background:#000;overflow:hidden;text-align:left;border:var(--border)}
-.tunnelBlock:hover td{background:#002000;box-shadow:none}
+.tunnelBlock:hover td{background:#020;text-shadow:1px 1px 1px #000a}
+.tunnelBlock:hover td:first-child{background:linear-gradient(90deg,#020 1px,#ff0 1px,#020 2px)}
+.tunnelBlock:hover td:last-child{background:linear-gradient(-90deg,#020 1px,#ff0 1px,#020 2px)}
 .tunnelProperties+.tunnelInfo td{border-top:var(--border)}
 .tunnelStatus{text-align:center;width:10%;min-width:48px}
 .tunnelStatus div{position:relative}

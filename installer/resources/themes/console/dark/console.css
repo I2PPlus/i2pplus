@@ -636,7 +636,7 @@ h3[id*="jobs"]{clear:both;margin-top:25px}
 #jobstats tbody td:nth-child(odd){background:rgba(255,255,255,.01)}
 #jobstats tbody td:nth-last-child(n+2){border-right:var(--border_softer)}
 #jobstats tbody tr{border-top:var(--border_softer)}
-#jobstats td{padding-top:6px;padding-bottom:6px;border-bottom:0}
+#jobstats td{padding-top:6px;padding-bottom:6px;border-bottom:0;box-shadow:var(--highlight)}
 #jobstats td.updated:nth-child(n+2){padding-top:6px;padding-bottom:6px;animation:updatingTd .1s ease both}
 #jobstats thead th{font-size:85%}
 #jobstats thead th,#jobstats tfoot td{font-weight:700;background:var(--th)}
@@ -807,7 +807,7 @@ td.ipv6{width:1%;max-width:24px}
 #udpconnections td,#ntcpconnections td,.tunneldisplay td{color:#bb7}
 #udpconnections tfoot td:not(last-child),#ntcpconnections tfoot td:not(last-child){border-right:0}
 #udpconnections th{padding:5px 2px;vertical-align:top;text-align:center}
-#udpconnections tr:hover,#ntcpconnections tr:hover,#transportSummary tr:hover,#jobstats tr:hover,#schedjobs tr:hover,#netdboverview table tr:hover,#portfaq tr:hover,.tunneldisplay tr:hover,#tunnels tr:hover,.tx tr:hover td{background:#020}
+#udpconnections tr:hover,#ntcpconnections tr:hover,#transportSummary tr:hover,#jobstats tr:hover,#schedjobs tr:hover,#netdboverview table tr:hover,#portfaq tr:hover,.tunneldisplay tr:hover,#tunnels tr:hover,.tx tr:hover td{background:var(--row_hover)}
 #udpconnections tr:hover td,#ntcpconnections tr:hover td,.tunneldisplay tr:hover td{color:var(--ink)}
 #peers .percentBarInner{height:16px;display:inline-block}
 #peers .percentBarOuter{width:calc(100% - 4px);margin:0;height:16px;display:inline-block;position:relative;vertical-align:middle;text-align:left}
@@ -2333,7 +2333,7 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 .tunneldisplay td,#enviro td,#floodfills td:not(.rid td),#profilelist td:not([colspan]),#routerinformation td{box-shadow:var(--highlight),inset 0 0 2px 0 #040}
 #jobs h3,#logs .tabletitle,#tunnels h3[id]{position:relative;overflow:hidden}
 #jobs h3::after,#logs #enviro~.tabletitle::after,#tunnels h3[id]::after{width:0;height:1px;display:inline-block;position:absolute;bottom:0;left:0;background:linear-gradient(90deg,#d30,var(--hover));content:"";animation:ease-out reloader 1s forwards;opacity:.4}
-#netdboverview tr:hover,#logs #enviro:hover td,.tunneldisplay tr:hover td,#profilelist tr:hover td,#graphs .formaction,#events tr:hover,#config_peers #bannedips td{box-shadow:none}
+#netdboverview tr:hover,#logs #enviro:hover td,#profilelist tr:hover td,#graphs .formaction,#events tr:hover,#config_peers #bannedips td{box-shadow:none}
 #routerinformation td:first-child{border-right:var(--border_soft)}
 
 /* debug */
