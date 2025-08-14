@@ -179,7 +179,8 @@ public class LogsHelper extends HelperBase {
                                     .replace("INFO   | WARNING:", "WARN   |")
                                     .replace("   |", " |")
                                     .replace("| ERROR  |", "| ERR  |")
-                                    .replace("| INFO | # V  [", "| INFO | # Source: [");
+                                    .replace("| INFO | # V  [", "| INFO | # Source: [")
+                                    .replace("->", "➜");
                 // Remove lines containing unwanted strings
                 StringBuilder filtered = new StringBuilder();
                 String[] logLines = str.split("\n");

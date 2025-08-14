@@ -1894,7 +1894,7 @@ public class Router implements RouterClock.ClockShiftListener {
                 if (downtime > 0 && _downtime < 0) {_downtime = downtime;}
             }
             if (downtime > LIVELINESS_DELAY) {
-                System.err.println("WARN: Old router was not shut down gracefully; deleting " + f);
+                System.err.println("WARN: Old router was not shut down gracefully -> Deleting " + f + "...");
                 f.delete();
                 if (lastWritten > 0) {
                     _eventLog.addEvent(EventLog.CRASHED, Translate.getString("{0} ago",
