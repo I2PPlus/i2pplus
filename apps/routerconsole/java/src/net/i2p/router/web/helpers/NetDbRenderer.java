@@ -378,8 +378,7 @@ class NetDbRenderer {
         for (RouterInfo ri : routers) {
             String caps = ri.getCapabilities();
             Hash key = ri.getIdentity().getHash();
-            if (_context.commSystem().getCountry(key).equalsIgnoreCase(countryCode.trim()) &&
-                caps.indexOf("f") >=0) {
+            if (_context.commSystem().getCountry(key).equalsIgnoreCase(countryCode.trim()) && caps.indexOf("f") >=0) {
                 count++;
             }
         }
@@ -395,8 +394,7 @@ class NetDbRenderer {
         for (RouterInfo ri : routers) {
             String caps = ri.getCapabilities();
             Hash key = ri.getIdentity().getHash();
-            if (_context.commSystem().getCountry(key).equalsIgnoreCase(countryCode.trim()) &&
-                caps.indexOf("X") >=0) {
+            if (_context.commSystem().getCountry(key).equalsIgnoreCase(countryCode.trim()) && caps.indexOf("X") >=0) {
                 count++;
             }
         }
@@ -921,15 +919,12 @@ class NetDbRenderer {
         if (_context.clientManager().isLocal(key)) {
             buf.append("<th>");
             boolean published = _context.clientManager().shouldPublishLeaseSet(key);
-            TunnelPoolSettings in = _context.tunnelManager().getInboundSettings(key);
             buf.append("<a href=\"tunnels#").append(key.toBase64().substring(0,4)).append("\"><span class=\"lsdest");
             if (published) {buf.append(" published");}
             buf.append("\" title=\"").append(_t("View local tunnels for destination"));
             if (published) {buf.append(" (").append(_t("published")).append(")");}
             buf.append("\">");
-            if (in != null && in.getDestinationNickname() != null) {
-                buf.append(DataHelper.escapeHTML(in.getDestinationNickname()));
-            } else {buf.append(dest.toBase64().substring(0,6));}
+            buf.append(getLocalClientNickname(key));
             buf.append("</span></a></th></tr>\n");
         } else {
             buf.append("<th>");
@@ -961,17 +956,6 @@ class NetDbRenderer {
         buf.append("</span>");
 
         if (debug) {
-/*
-            boolean asPublished = ls.getReceivedAsPublished();
-            boolean asReply = ls.getReceivedAsReply();
-            if (asPublished) {
-                buf.append(" <span class=\"nowrap rxAsPub\" title=\"").append(_t("Received as published")).append("\"> ").append(bullet)
-                   .append("<b>RAP</b></span>");
-            } else if (asReply) {
-                buf.append(" <span class=\"nowrap rxAsRep\" title=\"").append(_t("Received as reply")).append("\"> ").append(bullet)
-                   .append("<b>RAR</b></span>");
-            }
-*/
             buf.append(' ').append(bullet).append("<b class=distance title=\"").append(_t("Distance")).append("\">")
                .append(_t("Distance")).append(":</b> ").append(distance)
                .append(" <span class=\"nowrap rkey\" title=\"").append(_t("Routing Key")).append("\">")
@@ -1064,6 +1048,19 @@ class NetDbRenderer {
             buf.append("</ul>\n</td></tr>\n");
         }
         buf.append("</table>\n");
+    }
+
+    /** @since 0.9.67+ */
+    private String getLocalClientNickname(Hash key) {
+        if (key == null) {return _t("Unknown");}
+        TunnelPoolSettings in = _context.tunnelManager().getInboundSettings(key);
+        TunnelPoolSettings out = _context.tunnelManager().getOutboundSettings(key);
+        if (in != null && in.getDestinationNickname() != null) {
+            return in.getDestinationNickname();
+        } else if (out != null && out.getDestinationNickname() != null) {
+            return out.getDestinationNickname();
+        }
+        return key.toBase64().substring(0,6);
     }
 
     /**
