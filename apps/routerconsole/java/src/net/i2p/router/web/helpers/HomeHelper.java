@@ -128,14 +128,14 @@ public class HomeHelper extends HelperBase {
 // forums + social
         _x("I2P Forum") + S + _x("I2P-related community forums") + S + "http://i2pforum.i2p/" + S + I + "eepsites/forum.svg" + S +
         "discuss.i2p" + S + _x("File-sharing forum") + S + "http://discuss.i2p/" + S + I + "eepsites/forum.svg" + S +
-        "novabbs.i2p" + S + _x("Rocksolid forums for the darknets") + S + "http://novabbs.i2p/" + S + I + "eepsites/forum.svg" + S +
         "ramble.i2p" + S + _x("Cross-network micro-blogging &amp; forums &amp; wiki") + S + "http://ramble.i2p/" + S + I + "eepsites/ramble.svg" + S +
         "shreddit" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://shreddit.i2p/" + S + I + "eepsites/shreddit.svg" + S +
-        //"teddit" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://teddit.ls.i2p/" + S + I + "eepsites/teddit.svg" + S +
         //"Natter" + S + _x("Alternative front-end for Twitter") + S + "http://natter.i2p/" + S + I + "eepsites/twitter.svg" + S +
+        //"novabbs.i2p" + S + _x("Rocksolid forums for the darknets") + S + "http://novabbs.i2p/" + S + I + "eepsites/forum.svg" + S +
+        //"teddit" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://teddit.ls.i2p/" + S + I + "eepsites/teddit.svg" + S +
 
 // hosting + other services
-        "base64-image.i2p" + S + _x("Base64 Image Encoder") + S + "http://base64-image.i2p/" + S + I + "eepsites/base64-image.svg" + S +
+        //"base64-image.i2p" + S + _x("Base64 Image Encoder") + S + "http://base64-image.i2p/" + S + I + "eepsites/base64-image.svg" + S +
         //"imageproxy.i2p" + S + _x("An image cache and resize service") + S + "http://imageproxy.i2p/" + S + I + "eepsites/imageproxy.svg" + S +
         "major.i2p" + S + _x("IRC Logs for multiple networks") + S + "http://major.i2p/" + S + I + "eepsites/major.svg" + S +
         _x("Pastebin") + S + _x("Encrypted I2P Pastebin") + S + "http://paste.r4sas.i2p/" + S + I + "paste.svg" + S +
@@ -159,7 +159,6 @@ public class HomeHelper extends HelperBase {
         //"torch.i2p" + S +_x("Tor-focused Search Engine") + S + "http://torch.i2p/" + S + I + "eepsites/onionsearch.svg" + S +
 
 // wikis & reference
-        "hiddenwiki.i2p" + S + _x("Tor .onion site links") + S + "http://hiddenwiki.i2p/" + S + I + "wiki.svg" + S +
         "I2P Wiki" + S + _x("I2P-related Wiki") + S + "http://wiki.i2p-projekt.i2p/" + S + I + "wiki.svg" + S +
         "mathworld.i2p" + S + _x("Wolfram's Online Math Reference") + S + "http://mathworld.i2p/" + S + I + "eepsites/mathworld.svg" + S +
         "mdn.i2p" + S + _x("Mozilla Developer Network") + S + "http://mdn.i2p/" + S + I + "eepsites/mdn.svg" + S +
@@ -169,8 +168,9 @@ public class HomeHelper extends HelperBase {
         "w3schools.i2p" + S + _x("Web technology reference and learning site") + S + "http://w3schools.i2p/" + S + I + "eepsites/w3schools.svg" + S +
         "wikiless.i2p" + S + _x("Alternative Wikipedia front-end focused on privacy") + S + "http://wikiless.i2p/" + S + I + "wiki.svg" + S +
         _x("WorldAtlas") + S + _x("World atlas including geography facts &amp; flags") + S + "http://worldatlas.i2p/" + S + I + "planet.svg" + S +
-        //"freehaven.i2p" + S + _x("Selected Papers in Anonymity") + S + "http://freehaven.i2p/" + S + I + "eepsites/books.svg" + S +
         //"ddosecrets.i2p" + S + _x("Enabling the free transmission of data in the public interest") + S + "http://ddosecrets.i2p/" + S + I + "wiki.svg" + S +
+        //"freehaven.i2p" + S + _x("Selected Papers in Anonymity") + S + "http://freehaven.i2p/" + S + I + "eepsites/books.svg" + S +
+        //"hiddenwiki.i2p" + S + _x("Tor .onion site links") + S + "http://hiddenwiki.i2p/" + S + I + "wiki.svg" + S +
         //_x("HTMLColors") + S + _x("HTML Color Reference") + S + "http://htmlcolors.i2p/" + S + I + "help.svg" + S +
         //_x("Psychonaut") + S + _x("Wiki relating to altered states of consciousness") + S + "http://psychonaut.i2p/" + S + I + "eepsites/psy.svg" + S +
         //"vuldb.i2p" + S + _x("Vulnerability Database") + S + "http://vuldb.i2p/" + S + I + "eepsites/vuldb.svg" + S +
