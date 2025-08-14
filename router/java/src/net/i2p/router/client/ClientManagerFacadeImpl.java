@@ -40,10 +40,10 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     private final Log _log;
     private ClientManager _manager;
     private final RouterContext _context;
-    /** note that this is different than the property the client side uses, i2cp.tcp.port */
+    /** Note that this is different than the property the client side uses, i2cp.tcp.port */
     public final static String PROP_CLIENT_PORT = "i2cp.port";
     public final static int DEFAULT_PORT = I2PClient.DEFAULT_LISTEN_PORT;
-    /** note that this is different than the property the client side uses, i2cp.tcp.host */
+    /** Note that this is different than the property the client side uses, i2cp.tcp.host */
     public final static String PROP_CLIENT_HOST = "i2cp.hostname";
     public final static String DEFAULT_HOST = "127.0.0.1";
 
@@ -85,7 +85,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
         boolean lively = true;
         for (Destination dest : _manager.getRunnerDestinations()) {
             ClientConnectionRunner runner = _manager.getRunner(dest);
-            if ((runner == null) || (runner.getIsDead())) continue;
+            if ((runner == null) || (runner.getIsDead())) {continue;}
             LeaseSet ls = runner.getLeaseSet(dest.calculateHash());
             if (ls == null) {continue;} // still building
             long howLongAgo = _context.clock().now() - ls.getEarliestLeaseDate();
@@ -101,10 +101,9 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     }
 
     /**
-     * Request that a particular client authorize the Leases contained in the
-     * LeaseSet, after which the onCreateJob is queued up.  If that doesn't occur
-     * within the timeout specified, queue up the onFailedJob.  This call does not
-     * block.
+     * Request that a particular client authorize the Leases contained in the LeaseSet,
+     * after which the onCreateJob is queued up.  If that doesn't occur within the timeout
+     * specified, queue up the onFailedJob.  This call does not block.
      *
      * UNUSED, the call below without jobs is always used.
      *
@@ -122,8 +121,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
     }
 
     /**
-     * Request that a particular client authorize the Leases contained in the
-     * LeaseSet.
+     * Request that a particular client authorize the Leases contained in the LeaseSet.
      *
      * @param dest Destination from which the LeaseSet's authorization should be requested
      * @param set LeaseSet with requested leases - this object must be updated to contain the
@@ -136,8 +134,7 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
 
 
     /**
-     * Instruct the client (or all clients) that they are under attack.  This call
-     * does not block.
+     * Instruct the client (or all clients) that they are under attack.  This call does not block.
      *
      * @param dest Destination under attack, or null if all destinations are affected
      * @param reason Why the router thinks that there is abusive behavior
@@ -145,34 +142,29 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      */
     public void reportAbuse(Destination dest, String reason, int severity) {
         if (_manager != null) {_manager.reportAbuse(dest, reason, severity);}
-        else {_log.error("Null manager on reportAbuse!");}
+        else if (_log.shouldError()) {_log.error("Null manager on reportAbuse!");}
     }
+
     /**
-     * Determine if the destination specified is managed locally.  This call
-     * DOES block.
+     * Determine if the destination specified is managed locally.  This call DOES block.
      *
      * @param dest Destination to be checked
      */
     public boolean isLocal(Destination dest) {
         if (_manager != null) {return _manager.isLocal(dest);}
-        else {
-            _log.debug("Null manager on isLocal(dest)!");
-            return false;
-        }
+        else if (_log.shouldDebug()) {_log.debug("Null manager on isLocal(dest)!");}
+        return false;
     }
 
     /**
-     * Determine if the destination specified is managed locally.  This call
-     * DOES block.
+     * Determine if the destination specified is managed locally.  This call DOES block.
      *
      * @param destHash Hash of Destination to be checked
      */
     public boolean isLocal(Hash destHash) {
         if (_manager != null) {return _manager.isLocal(destHash);}
-        else {
-            _log.debug("Null manager on isLocal(hash)!");
-            return false;
-        }
+        else if (_log.shouldDebug()) {_log.debug("Null manager on isLocal(hash)!");}
+        return false;
     }
 
     @Override
@@ -187,12 +179,12 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      */
     public void messageDeliveryStatusUpdate(Destination fromDest, MessageId id, long messageNonce, int status) {
         if (_manager != null) {_manager.messageDeliveryStatusUpdate(fromDest, id, messageNonce, status);}
-        else {_log.error("Null manager on messageDeliveryStatusUpdate!");}
+        else if (_log.shouldError()) {_log.error("Null manager on messageDeliveryStatusUpdate!");}
     }
 
     public void messageReceived(ClientMessage msg) {
         if (_manager != null) {_manager.messageReceived(msg);}
-        else {_log.error("Null manager on messageReceived!");}
+        else if (_log.shouldError()) {_log.error("Null manager on messageReceived!");}
     }
 
     /**
@@ -201,10 +193,8 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      */
     public SessionConfig getClientSessionConfig(Destination dest) {
         if (_manager != null) {return _manager.getClientSessionConfig(dest);}
-        else {
-            _log.error("Null manager on getClientSessionConfig!");
-            return null;
-        }
+        else if (_log.shouldError()) {_log.error("Null manager on getClientSessionConfig!");}
+        return null;
     }
 
     /**
@@ -213,10 +203,8 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
      */
     public SessionKeyManager getClientSessionKeyManager(Hash dest) {
         if (_manager != null) {return _manager.getClientSessionKeyManager(dest);}
-        else {
-            _log.error("Null manager on getClientSessionKeyManager!");
-            return null;
-        }
+        else if (_log.shouldError()) {_log.error("Null manager on getClientSessionKeyManager!");}
+        return null;
     }
 
     /** @deprecated unused */
