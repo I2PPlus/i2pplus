@@ -239,7 +239,7 @@ td.blankColumn{width:20%}
 #throttleHeader:hover #toggleThrottler{background-image:var(--dropdown_hover)}
 #throttleHeader.isDisplayed #toggleThrottler{right:8px;transform:none}
 
-#notReady,#down{margin:55px auto 50px;padding:30px;width:400px;text-align:center;font-weight:700;font-size:11pt;border:1px solid #005;box-shadow:var(--highlight),inset 0 0 4px 4px #0006,0 0 0 1px #000,0 0 0 2px #001,0 0 0 6px #002,0 0 0 8px #003;background:repeating-linear-gradient(180deg,#002 2px,#001 4px)}
+#notReady,#down{padding:30px;width:400px;text-align:center;font-weight:700;font-size:11pt;border:1px solid #005;box-shadow:var(--highlight),inset 0 0 4px 4px #0006,0 0 0 1px #000,0 0 0 2px #001,0 0 0 6px #002,0 0 0 8px #003;background:repeating-linear-gradient(180deg,#002 2px,#001 4px)}
 #down{font-size:0;border:1px solid #414}
 #down::after{width:32px;height:32px;display:inline-block;vertical-align:middle;background:var(--update) no-repeat center center/32px;content:"";mix-blend-mode:luminosity;animation:linear spin 5s forwards infinite}
 

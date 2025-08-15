@@ -4,15 +4,21 @@
 
 import { initToggleInfo } from "/i2ptunnel/js/toggleTunnelInfo.js";
 
+const container = document.querySelector('#page');
 const control = document.getElementById("globalTunnelControl");
 const countClient = document.getElementById("countClient");
 const countServer = document.getElementById("countServer");
-const isDown = document.getElementById("down");
+const iframe = window.parent.document.querySelector(".main#tunnelmgr");
+const isDownElement = document.getElementById("down");
 const messages = document.getElementById("tunnelMessages");
 const notReady = document.getElementById("notReady");
+const tempStylesheet = document.head.querySelector("#isDownOverlay");
 const toggle = document.getElementById("toggleInfo");
 const tunnelIndex = document.getElementById("page");
 const url = window.location.pathname;
+
+let isDownClassAdded = false;
+let isDownTimeoutId;
 
 function updateElementContent(element, responseElement) {
   if (responseElement && element.innerHTML !== responseElement.innerHTML) {
@@ -24,15 +30,19 @@ async function refreshTunnelStatus() {
   try {
     const response = await fetch(url, { method: "GET", headers: { "Cache-Control": "no-cache" } });
     if (response.ok) {
-      const doc = new DOMParser().parseFromString(await response.text(), "text/html");
-      const downElement = document.getElementById("down");
-      if (downElement) {
-        downElement.remove();
-        const pageFromResponse = doc.getElementById("page");
-        if (pageFromResponse) { document.body.appendChild(pageFromResponse); }
-      }
+      clearTimeout(isDownTimeoutId);
+      if (isDownElement) { isDownElement.remove(); }
+      if (tempStylesheet) { tempStylesheet.remove(); }
 
-      if (isDown && doc.getElementById("globalTunnelControl")) { reloadPage(); }
+      const doc = new DOMParser().parseFromString(await response.text(), "text/html");
+
+      requestAnimationFrame(() => { resizeIframe(); });
+
+      if (isDownClassAdded && doc.getElementById("globalTunnelControl")) { reloadPage(); }
+      document.body.classList.remove("isDown");
+      container.style = "";
+      iframe.style.padding = "";
+
       if (notReady) {
         const notReadyResponse = doc.getElementById("notReady");
         if (notReadyResponse) { refreshAll(doc); }
@@ -41,22 +51,49 @@ async function refreshTunnelStatus() {
 
       countServices();
       resizeIframe();
-    } else { handleDownState(); }
-  } catch (error) { handleDownState(); }
+      isDownClassAdded = false;
+    } else {
+      isDownTimeoutId = setTimeout(handleDownState, 5000);
+    }
+  } catch (error) {
+    isDownTimeoutId = setTimeout(handleDownState, 5000);
+  }
 }
 
 function handleDownState() {
-  if (!document.getElementById("down")) {
+  const viewportHeight = window.innerHeight;
+  if (!document.body.classList.contains("isDown") && !document.getElementById("down")) {
+    document.body.classList.add("isDown");
+    container.style.height = `${viewportHeight}px`;
+    container.style.overflow = 'hidden';
     const downElement = document.createElement("div");
     downElement.id = "down";
     downElement.className = "notReady";
     downElement.innerHTML = "<b><span>Router is down</span></b>";
-    const styles = { position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" };
-    Object.assign(downElement.style, styles);
-    const tunnelIndex = document.getElementById("page");
-    if (tunnelIndex) {tunnelIndex.replaceWith(downElement);}
-    resizeIframe();
-  } else { reloadPage(); }
+    downElement.style.position = "absolute";
+    downElement.style.top = "50%";
+    downElement.style.left = "50%";
+    downElement.style.transform = "translate(-50%, -50%)";
+    downElement.style.zIndex = "9999";
+    document.body.appendChild(downElement);
+    if (!tempStylesheet) {
+      const styleSheet = document.createElement("style");
+      styleSheet.id = "isDownOverlay";
+      const bg = (theme === "light" || theme === "classic" ? "#f2f2ff" : "#000");
+      const styles =
+        ".isDown::after{width:calc(100% + 16px);height:100vh;display:block;position:fixed;top:0;right:0;bottom:0;left:0;z-index:999;background:" + bg +
+        ";overflow:hidden;contain:paint;content:''}" +
+        ".isDown #page{display:inline-block;max-height:600px}";
+      styleSheet.appendChild(document.createTextNode(styles));
+      document.head.appendChild(styleSheet);
+    }
+    if (iframe) {
+      iframe.style.padding = "0";
+      requestAnimationFrame(() => {resizeIframe();});
+    }
+  }
+  refreshTunnelStatus();
+  isDownClassAdded = true;
 }
 
 function countServices() {
@@ -189,9 +226,7 @@ document.querySelector("form").addEventListener("submit", async function (e) {
   await fetch(this.action, {
     method: this.method,
     body: formData,
-    headers: {
-      "Cache-Control": "no-cache"
-    }
+    headers: {"Cache-Control": "no-cache"}
   });
 
   await refreshTunnelStatus();
@@ -199,7 +234,7 @@ document.querySelector("form").addEventListener("submit", async function (e) {
 });
 
 window.addEventListener("load", function () {
-  if (window.parentIFrame) {
-    window.parentIFrame.size();
+  if (window.self !== window.top) {
+    resizeIframe();
   }
 });

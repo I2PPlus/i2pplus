@@ -248,10 +248,10 @@ SSL
 </td>
 
 <td class=tunnelOptions colspan=3>
-<span class=optionsLabel><b><%=intl._t("Hops")%>:</span></b></span>&nbsp;
+<span class=optionsLabel><b><%=intl._t("Hops")%>:</b></span>&nbsp;
 <span><%=editBean.getTunnelDepth(curServer, 3)%>&nbsp;<%=intl._t("in")%> / <%=editBean.getTunnelDepthOut(curServer, 3)%>&nbsp;<%=intl._t("out")%></span>
 <%          if (editBean.getTunnelVariance(curServer,0) != 0) { %>
-&nbsp;(<span class=optionsLabel><b><%=intl._t("Variance")%>:</span></b>
+&nbsp;(<span class=optionsLabel><b><%=intl._t("Variance")%>:</b></span>
 <span><%=editBean.getTunnelVariance(curServer,0)%>&nbsp;<%=intl._t("in")%> / <%=editBean.getTunnelVarianceOut(curServer,0)%>&nbsp;<%=intl._t("out")%></span>)
 <%          } %>
 </td>
@@ -306,7 +306,7 @@ SSL
 </td>
 
 <td colspan=3 class=tunnelOptions>
-<span class=optionsLabel><b><%=intl._t("Count")%>:</span></b></span>&nbsp;
+<span class=optionsLabel><b><%=intl._t("Count")%>:</b></span>&nbsp;
 <span><%=editBean.getTunnelQuantity(curServer, 2)%>&nbsp;<%=intl._t("in")%> / <%=editBean.getTunnelQuantityOut(curServer, 2)%>&nbsp;<%=intl._t("out")%></span>
 </td>
 </tr>
@@ -472,10 +472,10 @@ SSL
 </td>
 
 <td class=tunnelOptions colspan=3>
-<span class=optionsLabel><b><%=intl._t("Hops")%>:</span></b></span>&nbsp;
+<span class=optionsLabel><b><%=intl._t("Hops")%>:</b></span>&nbsp;
 <span><%=editBean.getTunnelDepth(curClient, 3)%>&nbsp;<%=intl._t("in")%> / <%=editBean.getTunnelDepthOut(curClient, 3)%>&nbsp;<%=intl._t("out")%></span>
 <%          if (editBean.getTunnelVariance(curClient,0) != 0) { %>
-&nbsp;(<span class=optionsLabel><b><%=intl._t("Variance")%>:</span></b>
+&nbsp;(<span class=optionsLabel><b><%=intl._t("Variance")%>:</b></span>
 <span><%=editBean.getTunnelVariance(curClient,0)%>&nbsp;<%=intl._t("in")%> / <%=editBean.getTunnelVarianceOut(curClient,0)%>&nbsp;<%=intl._t("out")%></span>)
 <%          } %>
 </td>
@@ -516,7 +516,7 @@ SSL
 </td>
 
 <td colspan=3 class=tunnelOptions>
-<span class=optionsLabel><b><%=intl._t("Count")%>:</span></b></span>&nbsp;
+<span class=optionsLabel><b><%=intl._t("Count")%>:</b></span>&nbsp;
 <span><%=editBean.getTunnelQuantity(curClient, 2)%>&nbsp;<%=intl._t("in")%> / <%=editBean.getTunnelQuantityOut(curClient, 2)%>&nbsp;<%=intl._t("out")%></span>
 </td>
 </tr>

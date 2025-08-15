@@ -35,7 +35,7 @@ td.infohelp{padding:10px 10px 10px 38px;text-align:justify;background:var(--info
 .selectAll{user-select:all}
 .selectAll:hover{background:#eef}
 .unbold{font-weight:400}
-#down,#notReady{margin:50px auto 36px;padding:30px;width:400px;text-align:center;font-weight:700;font-size:11pt;border:var(--border);border-radius:2px;box-shadow:0 0 0 1px #fff,0 0 0 2px #ddf,0 0 0 5px #779;background:repeating-linear-gradient(135deg,#e2e2ff,#e2e2ff 10%,#f2f2ff 10%,#f2f2ff 20%)}
+#down,#notReady{padding:30px;width:400px;text-align:center;font-weight:700;font-size:11pt;border:var(--border);border-radius:2px;box-shadow:0 0 0 1px #fff,0 0 0 2px #ddf,0 0 0 5px #779;background:repeating-linear-gradient(135deg,#e2e2ff,#e2e2ff 10%,#f2f2ff 10%,#f2f2ff 20%)}
 #sigType[disabled]{padding-left:18px;background:var(--crypto) no-repeat left center/16px}
 #tunnelEditPage td:not(.buttons):not(.infohelp):not(.infowarn){padding:2px 5px}
 .iframed h2,.iframed h3{margin-top:12px}

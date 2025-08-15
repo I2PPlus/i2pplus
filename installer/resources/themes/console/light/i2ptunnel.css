@@ -335,10 +335,17 @@ span.starting:not([hidden]){background-image:var(--local_inprogress),var(--badge
 span.stopped:not([hidden]){background-image:var(--local_down),var(--badge)}
 
 /* initializing */
-#notReady,#notFound,#down{margin:60px auto 25px;padding:30px;width:400px;text-align:center;font-size:11pt;font-weight:700;border:5px solid #900;border-image:repeating-linear-gradient(135deg,#dd0 0px,#dd0 20px,#900 20px,#900 40px,#dd0 40px) 5 repeat repeat;border-image-width:5px;border-image-outset:1px;box-shadow:inset 0 0 0 1px #113,inset 0 0 2px 2px #0006,0 0 0 2px #113,0 0 3px 3px #0006;background:#ffd;background:repeating-linear-gradient(180deg,#dd9 2px,#eeb 4px)}
+.notReady,#notFound,#down{padding:30px;width:400px;text-align:center;font-size:11pt;font-weight:700;border:5px solid #900;border-image:repeating-linear-gradient(135deg,#dd0 0px,#dd0 20px,#900 20px,#900 40px,#dd0 40px) 5 repeat repeat;border-image-width:5px;border-image-outset:1px;box-shadow:inset 0 0 0 1px #113,inset 0 0 2px 2px #0006,0 0 0 2px #113,0 0 3px 3px #0006;background:#ffd;background:repeating-linear-gradient(180deg,#dd9 2px,#eeb 4px);animation:borderControl 2s linear 0s infinite}
+.notReady{border-image:repeating-linear-gradient(135deg,#ee9 0px,#ee9 20px,#d50 20px,#d50 40px,#ee9 40px) 5 repeat repeat;border-image-width:5px;border-image-outset:1px;background:repeating-linear-gradient(180deg,#ffd 2px,#eeb 4px)}
+.notReady b{color:#733}
 #down b{color:#500}
-#notReady{border-image:repeating-linear-gradient(135deg,#ee9 0px,#ee9 20px,#d50 20px,#d50 40px,#ee9 40px) 5 repeat repeat;border-image-width:5px;border-image-outset:1px;background:repeating-linear-gradient(180deg,#ffd 2px,#eeb 4px)}
-#notReady b{color:#733}
+
+@keyframes borderControl {
+  0%,100% {border-image-source: repeating-linear-gradient(135deg,#dd0 0px,#dd0 20px,#900 20px,#900 40px,#dd0 40px)}
+  25% {border-image-source: repeating-linear-gradient(135deg,#dd0 0px,#dd0 20px,#dd0 20px,#900 20px,#900 40px,#dd0 40px)}
+  50% {border-image-source: repeating-linear-gradient(135deg,#900 0px,#900 20px,#dd0 20px,#dd0 40px,#900 40px)}
+  75% {border-image-source: repeating-linear-gradient(135deg,#900 0px,#900 20px,#900 20px,#dd0 20px,#dd0 40px,#900 40px)}
+}
 
 @keyframes showToggle{from{transform:scale(0)}to{transform:scale(1)}}
 
