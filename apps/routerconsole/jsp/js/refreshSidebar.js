@@ -94,7 +94,7 @@ async function refreshSidebar() {
       isDown = false;
       const responseElements = {
         volatileElements: responseDoc.querySelectorAll(".volatile:not(.badge)"),
-        badges: responseDoc.querySelectorAll(".badge:not(#newHosts)", "#localtunnelsActive span"),
+        badges: responseDoc.querySelectorAll(".badge:not(#newHosts)"),
       };
       const updateElement = (elem, respElem, property = "innerHTML") => {
         if (elem && respElem && elem[property] !== respElem[property]) {
@@ -138,6 +138,7 @@ async function refreshSidebar() {
         updates.length = 0;
         countNewsItems();
         newHosts();
+        sectionToggler();
       });
       function refreshAll() {
         if (sb && responseDoc) {
@@ -145,7 +146,6 @@ async function refreshSidebar() {
           if (sbResponse && sb.innerHTML !== sbResponse.innerHTML) {
             xhrContainer.innerHTML = sbResponse.innerHTML;
           }
-          sectionToggler();
         } else {
           noResponse++;
           checkIfDown();
