@@ -1,6 +1,11 @@
+2025-08-15 dr|z3d
+ * Console: Ensure local services sidebar section correctly updates
+   when service tunnel status changes
+ * I2PTunnel: Ensure isDown status is correctly displayed and page
+   is correctly restored when router is detected
+
 2025-08-09 dr|z3d
  * Console: Add leaseset search on single leaseset page
-   (dark theme only, others to follow)
 
 2025-08-08 dr|z3d
  * SusiDNS: Add clear filter / search button to search input
