@@ -553,6 +553,7 @@ SSL
 </div>
 <span data-iframe-height></span>
 <script src="js/refreshIndex.js?<%=net.i2p.CoreVersion.VERSION%>" type=module></script>
+<script src="js/filterTunnels.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/iframeResizer/iframeResizer.contentWindow.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src="/js/iframeResizer/updatedEvent.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <script src=/js/setupIframe.js></script>
