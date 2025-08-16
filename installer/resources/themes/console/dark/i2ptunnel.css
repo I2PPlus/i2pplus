@@ -5,6 +5,7 @@
 @import url(images/images.css);
 
 :root{
+--buttons:linear-gradient(-135deg,#000,#0000 40%),repeating-linear-gradient(90deg,rgba(0,0,0,.5) 1px,rgba(0,0,0,.5) 2px,rgba(0,16,0,.5) 3px),linear-gradient(180deg,#020,#000 75%);
 --create:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23373' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");
 --create_hover:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23f60' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");
 --create_active:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%23ee9' d='M37.6 1C37 .4 36 0 35.2 0h-6.4a3.4 3.4 0 00-3.4 3.4l.1 22.1H3.3A3.4 3.4 0 000 28.8v6.4c0 1.8 1.5 3.4 3.3 3.4h22.2v22c0 1.8 1.5 3.4 3.3 3.4h6.4a3.4 3.4 0 003.4-3.4v-22h22c1.9 0 3.4-1.6 3.4-3.5v-6.3c0-1.8-1.6-3.4-3.4-3.4l-22 .1V3.3a3.4 3.4 0 00-1-2.3z'/%3E%3C/svg%3E%0A");
@@ -65,6 +66,8 @@ html:not(.iframed) .panel,html:not(.iframed) .panel#clients{margin:24px auto 22p
 html:not(.iframed) #serverTunnels{margin-bottom:0}
 html:not(.iframed) body#tunnelEditPage .panel,html:not(.iframed) body#tunnelRegistration .panel,html:not(.iframed) body#tunnelWizardPage .panel{margin-top:24px;margin-bottom:24px}
 html:not(.iframed) #globalTunnelControl{margin:1px auto -1px}
+#searchFilter{padding:9px 8px;text-align:center;border:var(--border);box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:var(--buttons);background-size:100%,4px 100%,100%}
+#searchFilter input[type=text]{width:30%;min-width:300px}
 #globalTunnelControl{margin:-13px auto -13px}
 #serverTunnels{margin:0 0 8px}
 .iframed .panel.iframed{margin:0 auto -8px}
@@ -126,9 +129,9 @@ a.control,input.control{white-space:nowrap;vertical-align:middle}
 .control.preview{background:var(--eye) no-repeat center center/20px,var(--btn),var(--eye_hover),var(--eye_active)}
 .control.preview:hover,.control.preview:focus{background:var(--eye_hover) no-repeat center center/20px,var(--btn_hover_radial)}
 .control.preview:active{background:var(--hover) var(--eye_active) no-repeat center center/19px}
-.control.restart{background:var(--restart) no-repeat center center/15px,var(--btn),var(--restart_hover),var(--restart_active)}
-.control.restart:hover,.control.restart:focus{background:var(--restart_hover) no-repeat center center/15px,var(--btn_hover_radial)}
-.control.restart:active{background:var(--hover) var(--restart_active) no-repeat center center/14px}
+.control.restart{background:var(--restartTunnel) no-repeat center center/20px,var(--btn),var(--restartTunnel_hover),var(--restartTunnel_active)}
+.control.restart:hover,.control.restart:focus{background:var(--restartTunnel_hover) no-repeat center center/20px,var(--btn_hover_radial)}
+.control.restart:active{background:var(--hover) var(--restartTunnel_active) no-repeat center center/18px}
 .control.start:hover,.control.start:focus{background:var(--start_hover) no-repeat center center/16px,var(--btn_hover_radial)}
 .control.start:active{background:var(--hover) var(--start_active) no-repeat center center/15px}
 .control.stop{background:var(--stop) no-repeat center center/15px,var(--btn),var(--stop_hover),var(--start_active)}
@@ -202,7 +205,7 @@ td{border-top:var(--border);vertical-align:middle;padding:5px;font-size:9pt}
 td>b{margin-right:5px;display:inline-block;min-width:30px}
 td>input{margin-left:0}
 .base32{max-width:120px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:text-bottom;user-select:all}
-.buttons,.newTunnel{padding:9px 8px;text-align:right;background:linear-gradient(-135deg,#000,#0000 40%),repeating-linear-gradient(90deg,rgba(0,0,0,.5) 1px,rgba(0,0,0,.5) 2px,rgba(0,16,0,.5) 3px),linear-gradient(180deg,#020,#000 75%);box-shadow:var(--highlight),inset 0 0 2px 1px #030;background-size:100%,4px 100%,100%}
+.buttons,.newTunnel,#filter{padding:9px 8px;text-align:right;background:var(--buttons);box-shadow:var(--highlight),inset 0 0 2px 1px #030;background-size:100%,4px 100%,100%}
 .infohelp,.tunnelConfig .infohelp{background:var(--infohelp) no-repeat 10px center;background-size:20px;padding:15px 10px 15px 38px}
 .newTunnel{padding:5px;text-align:right;border-top:var(--border)}
 .nowrap,.nowrap>*{vertical-align:middle}
@@ -254,6 +257,7 @@ td>input{margin-left:0}
 #clientAuth{margin-bottom:-1px}
 #clientAuth td:first-child{width:20%}
 #clientAuth .clientName,#clientAuth .clientKey{width:100%}
+#clientTunnels{margin-bottom:3px}
 #clientTunnels tr,#serverTunnels tr,.tunnelConfig tr{background:rgba(0,4,0,.4)}
 #clientTunnels th,#serverTunnels th{font-size:90%}
 #filter{vertical-align:top}
@@ -376,6 +380,8 @@ h2,h3{font-size:11.5pt}
 .nopreview.offline{height:16px;width:16px;background-size:16px}
 #serverTunnels .control.iconize,#clientTunnels .control.iconize{padding:14px 7px;min-width:48px;vertical-align:middle;font-size:0;background-size:12px,100%}
 #serverTunnels .preview.iconize,#clientTunnels .preview.iconize{min-width:48px;background-size:16px,100%}
+#clientTunnels .control.restart,#clientTunnels .control.restart:hover,#clientTunnels .control.restart:focus,#serverTunnels .control.restart,#serverTunnels .control.restart:hover,#serverTunnels .control.restart:focus{background-size:16px}
+#clientTunnels .control.restart:active,#serverTunnels .control.restart:active{background-size:15px}
 }
 
 @media (max-width:1200px){
@@ -434,6 +440,7 @@ th .help::after,th .help:hover::after,th .help:focus::after{width:20px;height:20
 .tunnelControl .control{margin:3px -3px 3px 3px}
 .tunnelInfo .selectAll{max-width:none}
 #clients h2,#globalTunnelControl h2,#messages h2,#registration h2,#registration h3,#servers h2,#ssl h2,#tunnelEditPage h2,#tunnelEditPage h3,#wizardPanel h2{padding:10.5px 10px 9.5px 40px;background-position:10px center;background-size:22px auto,4px 100%,100%}
+#clientTunnels{margin-bottom:4px}
 #globalTunnelControl #toggleInfo{margin:-5px -4px 0 0;background-size:10px}
 #globalTunnelControl #toggleInfo img{width:17px;height:17px}
 #registration .displayText{width:800px}
