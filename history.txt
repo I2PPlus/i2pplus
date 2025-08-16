@@ -1,3 +1,6 @@
+2025-08-16 dr|z3d
+ * I2PTunnel: Add javascript tunnel search/filter feature to index
+
 2025-08-15 dr|z3d
  * Console: Ensure local services sidebar section correctly updates
    when service tunnel status changes

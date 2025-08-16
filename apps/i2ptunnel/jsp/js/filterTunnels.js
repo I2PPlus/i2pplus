@@ -18,8 +18,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     searchContainer.appendChild(searchInput);
     searchContainer.appendChild(clearFilterButton);
-    const serverPanel = document.getElementById("servers");
-    serverPanel.insertBefore(searchContainer, serverPanel.firstChild);
+    const globalH2 = document.querySelector("#globalTunnelControl h2");
+    globalH2.insertBefore(searchContainer, globalH2.firstChild);
     searchInput.addEventListener("input", function () {
         const filterText = searchInput.value.trim().toLowerCase(),
               tunnelBlocks = document.querySelectorAll(".tunnelBlock");
