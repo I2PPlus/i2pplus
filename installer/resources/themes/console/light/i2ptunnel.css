@@ -55,6 +55,11 @@ td.infohelp{padding:10px 10px 10px 34px;box-shadow:var(--highlight),inset 0 0 1p
 .iframed #messages.panel+#globalTunnelControl.panel{padding-top:0}
 .iframed .panel:last-of-type{padding-bottom:4px}
 .panel table{margin:0;width:100%;border-collapse:collapse;border:var(--border_inner);background:repeating-linear-gradient(135deg,rgba(255,255,255,.5) 2px,rgba(240,240,255,.3) 3px,#fff 5px) #fff}
+#searchFilter{margin:0 0 -8px;padding:4px 20px 5px 0;position:absolute;top:0;right:41px;border-right:var(--border_inner)}
+#searchFilter button,#searchFilter input[type=text]{padding-top:4px;padding-bottom:4px}
+#searchFilter input[type=text]{width:180px}
+#searchFilter button{margin:-1px 0 0 -30px;width:16px;height:23px;min-width:0;display:inline-block;position:relative;z-index:999;background:var(--no) no-repeat center center/12px;border:0;box-shadow:none;font-size:0}
+#searchFilter:not(:hover) button{opacity:.4}
 
 /* status */
 .statusNotRunning{color:#d00;background:var(--tunnelStopped)}
@@ -71,7 +76,7 @@ h2,h3{margin:10px 0 -1px;padding:9px 10px 7px 36px;position:relative;font-size:1
 #clients h2,#servers h2{position:relative}
 #clients h2{background:var(--client) no-repeat left 10px center/18px,var(--h2) #fff}
 #clientTunnels th,#serverTunnels th{font-size:90%}
-#globalTunnelControl h2{background:var(--mouse) no-repeat left 10px center/18px,var(--h2) #fff}
+#globalTunnelControl h2{background:var(--mouse) no-repeat left 10px center/18px,var(--h2) #fff;contain:paint}
 #messages h2{background:var(--logs) no-repeat left 10px center/18px,var(--h2) #fff}
 #servers h2{background:var(--server) no-repeat left 10px center/18px,var(--h2) #fff}
 #tunnelEditPage h2,#tunnelEditPage h3,#registration h2,#registration h3{background:var(--settings_inert) no-repeat left 10px center/18px,var(--h2) #fff}
@@ -357,6 +362,9 @@ span.stopped:not([hidden]){background-image:var(--local_down),var(--badge)}
 #regDisabled{margin-bottom:4px}
 #toggleThrottler{top:5px;right:3px}
 #throttleHeader.isDisplayed #toggleThrottler{right:4px;transform:none}
+#searchFilter{margin:-2px 0 -8px;padding-right:16px;right:38px}
+#searchFilter input[type=text]{}
+#searchFilter button{margin:-1px 0 0 -28px}
 }
 
 @media (max-width:1300px){

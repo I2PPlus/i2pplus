@@ -3,7 +3,7 @@
 /* License: AGPL3 or later */
 
 document.addEventListener("DOMContentLoaded", function () {
-    if (theme !== "dark") return;
+    if (theme !== "dark" && theme !== "light") return;
     const searchContainer = document.createElement("div"),
           searchInput = document.createElement("input"),
           clearFilterButton = document.createElement("button");

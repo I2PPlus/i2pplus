@@ -66,8 +66,11 @@ html:not(.iframed) .panel,html:not(.iframed) .panel#clients{margin:24px auto 22p
 html:not(.iframed) #serverTunnels{margin-bottom:0}
 html:not(.iframed) body#tunnelEditPage .panel,html:not(.iframed) body#tunnelRegistration .panel,html:not(.iframed) body#tunnelWizardPage .panel{margin-top:24px;margin-bottom:24px}
 html:not(.iframed) #globalTunnelControl{margin:1px auto -1px}
-#searchFilter{padding:9px 8px;text-align:center;border:var(--border);box-shadow:var(--highlight),inset 0 0 2px 1px #030;background:var(--buttons);background-size:100%,4px 100%,100%}
-#searchFilter input[type=text]{width:30%;min-width:300px}
+#searchFilter{margin:0 0 -8px;padding:4px 8px 5px 0;position:absolute;top:0;right:41px;border-right:var(--border)}
+#searchFilter button,#searchFilter input[type=text]{padding-top:4px;padding-bottom:4px}
+#searchFilter input[type=text]{width:180px}
+#searchFilter button{margin:-1px 0 0 -30px;width:16px;height:23px;min-width:0;display:inline-block;position:relative;z-index:999;background:var(--no) no-repeat center center/12px;border:0;box-shadow:none;font-size:0}
+#searchFilter:not(:hover) button{opacity:.4}
 #globalTunnelControl{margin:-13px auto -13px}
 #serverTunnels{margin:0 0 8px}
 .iframed .panel.iframed{margin:0 auto -8px}
@@ -85,7 +88,7 @@ h3{margin-top:12px;border-radius:0}
 h2 span{margin-top:2px}
 html:not(.iframed) .panel h2{margin-top:0}
 #messages h2{background:var(--logs) no-repeat left 8px center,var(--h2);background-size:20px auto,4px 100%,100%}
-#globalTunnelControl h2{background:var(--mouse) no-repeat left 8px center,var(--h2);background-size:20px auto,4px 100%,100%}
+#globalTunnelControl h2{position:relative;background:var(--mouse) no-repeat left 8px center,var(--h2);background-size:20px auto,4px 100%,100%;contain:paint}
 #clients h2,#servers h2{position:relative}
 #clients h2{background:var(--client) no-repeat left 8px center,var(--h2);background-size:20px auto,4px 100%,100%}
 #servers h2{background:var(--server) no-repeat left 8px center,var(--h2);background-size:20px auto,4px 100%,100%}
@@ -272,7 +275,7 @@ td>input{margin-left:0}
 .tunnelInfo{display:none}
 .tunnelInfo{background:linear-gradient(90deg,#000 50%,#010);box-shadow:none}
 .tunnelInfo b{color:#bb7}
-#toggleInfo{margin:-1px -2px 0 0;padding:3px 5px;min-width:0;vertical-align:middle;background:url(images/expand.svg) no-repeat center center/8px,var(--btn)}
+#toggleInfo{padding:3px 5px;min-width:0;position:absolute;top:1px;right:4px;background:url(images/expand.svg) no-repeat center center/8px,var(--btn)}
 #toggleInfo.collapse{background:url(images/collapse.svg) no-repeat center center/8px,var(--btn)}
 #toggleInfo:hover,#toggleInfo:focus{background:url(images/expand_hover.svg) no-repeat center center/8px,var(--btn_hover)}
 #toggleInfo.collapse:hover,#toggleInfo.collapse:focus{background:url(images/collapse_hover.svg) no-repeat center center/8px,var(--btn_hover)}
@@ -372,6 +375,9 @@ tr.configerror{box-shadow:var(--highlight),inset 0 -1px 0 1px #000,inset -1px 0 
 h2,h3{font-size:11.5pt}
 .running:not([hidden]),.standby:not([hidden]),.starting:not([hidden]),.stopped:not([hidden]){margin-left:5px}
 #countClient,#countServer{margin:-5px -5px 0 0;top:5px;right:11px;line-height:1.185}
+#searchFilter{padding:1px 8px 1px 0;position:absolute;top:0;right:37px}
+#searchFilter input[type="text"]{padding-top:3px;padding-bottom:3px}
+#toggleInfo{top:2px;right:5px}
 #toggleThrottler{top:4px}
 }
 
@@ -441,8 +447,9 @@ th .help::after,th .help:hover::after,th .help:focus::after{width:20px;height:20
 .tunnelInfo .selectAll{max-width:none}
 #clients h2,#globalTunnelControl h2,#messages h2,#registration h2,#registration h3,#servers h2,#ssl h2,#tunnelEditPage h2,#tunnelEditPage h3,#wizardPanel h2{padding:10.5px 10px 9.5px 40px;background-position:10px center;background-size:22px auto,4px 100%,100%}
 #clientTunnels{margin-bottom:4px}
-#globalTunnelControl #toggleInfo{margin:-5px -4px 0 0;background-size:10px}
-#globalTunnelControl #toggleInfo img{width:17px;height:17px}
+#toggleInfo{background-size:10px}
+#toggleInfo img{width:17px;height:17px}
 #registration .displayText{width:800px}
+#searchFilter input[type=text]{margin:3.25px 5px 4px}
 #statusMessages,#statusMessages:active,#statusMessages:focus{font-size:9pt}
 }
