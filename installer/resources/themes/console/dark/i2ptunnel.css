@@ -67,9 +67,11 @@ html:not(.iframed) #serverTunnels{margin-bottom:0}
 html:not(.iframed) body#tunnelEditPage .panel,html:not(.iframed) body#tunnelRegistration .panel,html:not(.iframed) body#tunnelWizardPage .panel{margin-top:24px;margin-bottom:24px}
 html:not(.iframed) #globalTunnelControl{margin:1px auto -1px}
 #searchFilter{margin:0 0 -8px;padding:4px 8px 5px 0;position:absolute;top:0;right:41px;border-right:var(--border)}
-#searchFilter button,#searchFilter input[type=text]{padding-top:4px;padding-bottom:4px}
-#searchFilter input[type=text]{width:180px}
-#searchFilter button{margin:-1px 0 0 -30px;width:16px;height:23px;min-width:0;display:inline-block;position:relative;z-index:999;background:var(--no) no-repeat center center/12px;border:0;box-shadow:none;font-size:0}
+#searchFilter button,#searchFilter input[type=text]{padding:4px 24px}
+#searchFilter input[type=text]{width:200px;background:#000 var(--filter) no-repeat 7px center/12px;background-blend-mode:luminosity}
+#searchFilter input[type=text]:focus{background-blend-mode:normal}
+#searchFilter input[type=text]::placeholder{opacity:0}
+#searchFilter button{margin:-1px -12px 0 -42px;width:16px;height:23px;min-width:0;display:inline-block;position:relative;z-index:999;background:var(--no) no-repeat center center/12px;border:0;box-shadow:none;font-size:0}
 #searchFilter:not(:hover) button{opacity:.4}
 #globalTunnelControl{margin:-13px auto -13px}
 #serverTunnels{margin:0 0 8px}
