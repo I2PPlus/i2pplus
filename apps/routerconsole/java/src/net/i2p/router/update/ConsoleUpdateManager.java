@@ -85,9 +85,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
     private volatile boolean _externalRestartPending;
 
     private static final long DEFAULT_MAX_TIME = 3*60*60*1000L;
-//    private static final long DEFAULT_CHECK_TIME = 60*1000;
     private static final long DEFAULT_CHECK_TIME = 90*1000;
-    //private static final long STATUS_CLEAN_TIME = 20*60*1000;
     private static final long STATUS_CLEAN_TIME = 5*60*1000; // 5 minutes sidebar notification persistence ?
     private static final long TASK_CLEANER_TIME = 15*60*1000;
     private static final String PROP_UNSIGNED_AVAILABLE = "router.updateUnsignedAvailable";
@@ -171,15 +169,7 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         if (ConfigUpdateHandler.USE_SU3_UPDATE) {
             register(c, ROUTER_SIGNED_SU3, HTTP, 0);
             register(u, ROUTER_SIGNED_SU3, HTTP, 0);
-            // todo
-            //register(c, ROUTER_SIGNED_SU3, HTTPS_CLEARNET, 0);
-            //register(u, ROUTER_SIGNED_SU3, HTTPS_CLEARNET, -10);
-            //register(c, ROUTER_SIGNED_SU3, HTTP_CLEARNET, 0);
-            //register(u, ROUTER_SIGNED_SU3, HTTP_CLEARNET, -20);
         }
-        // TODO see NewsFetcher
-        //register(u, ROUTER_SIGNED, HTTPS_CLEARNET, -5);
-        //register(u, ROUTER_SIGNED, HTTP_CLEARNET, -10);
 
         UnsignedUpdateHandler uuh = new UnsignedUpdateHandler(_context, this);
         register((Checker)uuh, ROUTER_UNSIGNED, HTTP, 0);
@@ -213,9 +203,6 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         register((Checker)puh, PLUGIN, HTTP, 0);
         register((Updater)puh, PLUGIN, HTTP, 0);
         register((Updater)puh, PLUGIN, FILE, 0);
-        // Don't do this until we can prevent it from retrying the same thing again...
-        // handled inside P.U.H. for now
-        //register((Updater)puh, PLUGIN, FILE, 0);
         new NewsTimerTask(_context, this);
         _context.simpleTimer2().addPeriodicEvent(new TaskCleaner(), TASK_CLEANER_TIME);
         changeState(RUNNING);
