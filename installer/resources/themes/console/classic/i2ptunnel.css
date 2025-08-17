@@ -60,7 +60,7 @@ td.infohelp{padding:10px 10px 10px 38px;text-align:justify;background:var(--info
 div[class^="status"]{margin:0;padding:0;width:100%;height:16px;float:none;font-size:0;text-align:center;background-size:auto 16px;background-position:center center;background-repeat:no-repeat;filter:drop-shadow(0 0 1px rgba(192,192,192,.5))}
 
 /* title images */
-#globalTunnelControl h2{background:var(--mouse) no-repeat 5px center/20px,var(--h2)}
+#globalTunnelControl h2{position:relative;background:var(--mouse) no-repeat 5px center/20px,var(--h2);contain:paint}
 #clients h2,#servers h2{position:relative}
 #clients h2{background:var(--client) no-repeat 5px center/20px,var(--h2)}
 #servers h2{background:var(--server) no-repeat 5px center/20px,var(--h2)}
@@ -119,6 +119,11 @@ th .help::after{width:16px;height:16px;display:inline-block;background:url(/them
 .tunnelEncryption,.tunnelSig{text-align:center}
 .tunnelEncryption .tunnelDestinationLabel,.tunnelSig .tunnelDestinationLabel{display:none}
 .nopreview.offline{height:18px;width:18px;display:inline-block;vertical-align:middle;font-size:0;background:var(--poweroff);opacity:.7}
+#searchFilter{margin:-5px 0 -8px;padding:4px 18px 5px 0;position:absolute;top:0;right:41px;border-right:var(--border_soft)}
+#searchFilter button,#searchFilter input[type=text]{padding-top:4px;padding-bottom:4px}
+#searchFilter input[type=text]{width:200px}
+#searchFilter button{margin:0 -7px 0 -25px;width:16px;height:23px;min-width:0;display:inline-block;position:relative;z-index:999;background:var(--no) no-repeat center center/12px;border:0;box-shadow:none;font-size:0}
+#searchFilter:not(:hover) button{opacity:.4}
 
 /* throttler */
 #throttler th{padding-left:20px}
@@ -294,6 +299,13 @@ span.stopped:not([hidden]){background-image:var(--local_down),var(--badge)}
 @supports not (-moz-appearance:none){select{white-space:normal}}
 
 /* responsive layout */
+
+@media (max-width:1499px){
+#searchFilter{margin:-7px -10px -8px 0;padding-right:14px;right:46px}
+#searchFilter button{margin:0 -6px 0 -24px}
+#searchFilter input[type=text]{padding-top:3px;padding-bottom:3px}
+}
+
 @media (max-width:1300px){
 .encType,.sigType{white-space:nowrap;font-size:95%}
 .nopreview.offline{height:16px;width:16px}

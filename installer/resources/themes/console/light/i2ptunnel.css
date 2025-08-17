@@ -363,7 +363,6 @@ span.stopped:not([hidden]){background-image:var(--local_down),var(--badge)}
 #toggleThrottler{top:5px;right:3px}
 #throttleHeader.isDisplayed #toggleThrottler{right:4px;transform:none}
 #searchFilter{margin:-2px 0 -8px;padding-right:16px;right:38px}
-#searchFilter input[type=text]{}
 #searchFilter button{margin:-1px -4px 0 -24px}
 }
 
