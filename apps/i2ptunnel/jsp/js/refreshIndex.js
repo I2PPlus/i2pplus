@@ -214,10 +214,21 @@ function resizeIframe() {
   }
 }
 
+function preloadImage(url) {
+  const img = new Image();
+  img.src = url;
+}
+
 if (toggle) bindToggle();
 if (control) initTunnelControl();
 setInterval(refreshIndex, 5000);
-document.addEventListener("DOMContentLoaded", countServices);
+
+document.addEventListener("DOMContentLoaded", () => {
+  countServices();
+  if (theme === "dark") {
+    preloadImage("/themes/console/dark/images/tunnelmanager.webp");
+  }
+});
 
 document.querySelector("form").addEventListener("submit", async function (e) {
   e.preventDefault();

@@ -247,7 +247,7 @@ function countNewsItems() {
   if (!sbNewsHeadings || !newsBadge) return;
   if (doubleCount) doubleCount.remove();
   const newsCount = sbNewsHeadings.querySelectorAll("table tr").length;
-  newsBadge.hidden = newsCount <= 0;
+  newsBadge.hidden = newsCount <= 0 || !sbNewsHeadings.classList.contains("collapsed");
   if (newsCount > 0 && newsBadge.innerHTML !== newsCount.toString()) {newsBadge.innerHTML = newsCount;}
 }
 
