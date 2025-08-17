@@ -58,7 +58,7 @@ td.infohelp{padding:10px 10px 10px 34px;box-shadow:var(--highlight),inset 0 0 1p
 #searchFilter{margin:0 0 -8px;padding:4px 20px 5px 0;position:absolute;top:0;right:41px;border-right:var(--border_inner)}
 #searchFilter button,#searchFilter input[type=text]{padding-top:4px;padding-bottom:4px}
 #searchFilter input[type=text]{width:180px}
-#searchFilter button{margin:-1px 0 0 -30px;width:16px;height:23px;min-width:0;display:inline-block;position:relative;z-index:999;background:var(--no) no-repeat center center/12px;border:0;box-shadow:none;font-size:0}
+#searchFilter button{margin:1px -8px 0 -24px;width:16px;height:23px;min-width:0;display:inline-block;position:relative;z-index:999;background:var(--no) no-repeat center center/12px;border:0;box-shadow:none;font-size:0}
 #searchFilter:not(:hover) button{opacity:.4}
 
 /* status */
@@ -364,7 +364,7 @@ span.stopped:not([hidden]){background-image:var(--local_down),var(--badge)}
 #throttleHeader.isDisplayed #toggleThrottler{right:4px;transform:none}
 #searchFilter{margin:-2px 0 -8px;padding-right:16px;right:38px}
 #searchFilter input[type=text]{}
-#searchFilter button{margin:-1px 0 0 -28px}
+#searchFilter button{margin:-1px -4px 0 -24px}
 }
 
 @media (max-width:1300px){
