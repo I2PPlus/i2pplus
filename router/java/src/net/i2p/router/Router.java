@@ -160,8 +160,6 @@ public class Router implements RouterClock.ClockShiftListener {
         if (System.getProperty("I2P_DISABLE_DNS_CACHE_OVERRIDE") == null) {
             // grumble about sun's java caching DNS entries *forever* by default
             // so let's just keep 'em for a short time
-//            String DNS_CACHE_TIME = Integer.toString(2*60*60);
-//            String DNS_NEG_CACHE_TIME = Integer.toString(30*60);
             String DNS_CACHE_TIME = Integer.toString(60*60*60);
             String DNS_NEG_CACHE_TIME = Integer.toString(15*60*60);
             System.setProperty("sun.net.inetaddr.ttl", DNS_CACHE_TIME);
@@ -1790,10 +1788,8 @@ public class Router implements RouterClock.ClockShiftListener {
     }
 
     /**
-     *  A "soft" restart, primarily of the comm system, after
-     *  a port change or large step-change in system time.
-     *  Does not stop the whole JVM, so it is safe even in the absence
-     *  of the wrapper.
+     *  A "soft" restart, primarily of the comm system, after a port change or large step-change in system time.
+     *  Does not stop the whole JVM, so it is safe even in the absence of the wrapper.
      *  This is not a graceful restart - all peer connections are dropped immediately.
      *
      *  As of 0.8.8, this returns immediately and does the actual restart in a separate thread.
