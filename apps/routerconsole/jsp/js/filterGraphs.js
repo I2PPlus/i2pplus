@@ -3,7 +3,8 @@
 /* License: AGPLv3 or later */
 
 document.addEventListener("DOMContentLoaded", function () {
-  if (theme !== "dark") {return;}
+  if (theme !== "dark") return;
+
   const searchContainer = document.createElement("div"),
     searchInput = document.createElement("input"),
     clearFilterButton = document.createElement("button");
@@ -11,6 +12,7 @@ document.addEventListener("DOMContentLoaded", function () {
   searchContainer.id = "graphFilter";
   searchInput.type = "text";
   searchInput.id = "searchInput";
+  searchInput.placeholder = "Search by alt text...";
   clearFilterButton.textContent = "Clear Filter";
 
   clearFilterButton.addEventListener("click", () => {
@@ -27,19 +29,27 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function applyFilter() {
     const filterText = searchInput.value.trim().toLowerCase(),
+      aliasMap = { transit: "participating" },
+      resolvedFilter = aliasMap[filterText] || filterText,
       graphContainers = document.querySelectorAll(".graphContainer");
 
     graphContainers.forEach((container) => {
       const img = container.querySelector("img");
-      if (!img) return (container.style.display = "none");
+      if (!img) return void (container.style.display = "none");
 
       const checkDisplay = () => {
-        const altText = img.alt.toLowerCase();
-        container.style.display = filterText === "" || altText.includes(filterText) ? "" : "none";
+        const altText = (img.alt || "").toLowerCase();
+        container.style.display = filterText === "" || altText.includes(resolvedFilter) ? "" : "none";
       };
 
       if (!img.complete) {
-        img.onload = img.onerror = checkDisplay;
+        img.onload = () => {
+          checkDisplay();
+          img.onerror = null;
+        };
+        img.onerror = () => {
+          container.style.display = "none";
+        };
         return;
       }
 
@@ -56,14 +66,34 @@ document.addEventListener("DOMContentLoaded", function () {
     applyFilter();
   });
 
+  let filterTimeout;
+  function debounceFilter(delay = 200) {
+    clearTimeout(filterTimeout);
+    filterTimeout = setTimeout(applyFilter, delay);
+  }
+
   applyFilter();
-  setTimeout(applyFilter, 500);
-  setTimeout(applyFilter, 1000);
-  setTimeout(applyFilter, 2000);
+  debounceFilter(100);
 
   const targetNode = document.getElementById("allgraphs");
   if (targetNode) {
-    const observer = new MutationObserver(() => setTimeout(applyFilter, 100));
+    const observer = new MutationObserver(debounceFilter);
     observer.observe(targetNode, { childList: true, subtree: true });
   }
+
+  const imgObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          debounceFilter(100);
+          imgObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { rootMargin: "0px 0px 200px 0px" }
+  );
+
+  document.querySelectorAll(".graphContainer img").forEach((img) => {
+    imgObserver.observe(img);
+  });
 });
