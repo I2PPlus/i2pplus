@@ -39,7 +39,6 @@
 </div>
 <script src=/js/lazyload.js></script>
 <script src="/js/graphs.js?<%=net.i2p.CoreVersion.VERSION%>" type=module></script>
-<script src="/js/filterGraphs.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 <noscript><style>#allgraphs,#gform,#graphConfigs{display:block!important}#graphdisplay{margin-bottom:15px!important;color:var(--ink)!important;cursor:default!important}</style></noscript>
 </body>
 </html>

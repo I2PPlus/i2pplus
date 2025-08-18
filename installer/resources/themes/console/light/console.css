@@ -324,9 +324,7 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 /* ajax router down */
 #down{margin:-4px -6px -5px;width:100%;display:inline-block;line-height:32px;font-size:0;color:#770;box-shadow:0 0 0 1px #800,var(--btn_shadow_active);background:repeating-linear-gradient(135deg,#fffff2,#fffff2 10px,#ddddd2 10px,#ddddd2 20px);background-size:300%;animation:down linear 9s reverse infinite}
 #nographs{font-size:0;text-align:center}
-#graphs #nographs.widepanel{margin:28px 0 20px;width:100%;display:block}
-#down::after,#nographs::after{width:26px;height:26px;vertical-align:middle;display:inline-block;background:var(--update) no-repeat center center/24px;content:"";mix-blend-mode:luminosity;animation:linear spin 3s forwards infinite}
-#nographs::after{margin-top:2px;width:36px;height:36px;background-size:36px}
+#down::after{width:26px;height:26px;vertical-align:middle;display:inline-block;background:var(--update) no-repeat center center/24px;content:"";mix-blend-mode:luminosity;animation:linear spin 3s forwards infinite}
 
 /* webapps and plugins */
 #sb_services{margin:-15px -9px -13px -7px;width:206px}
@@ -546,6 +544,7 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 .graphContainer{margin:4px 3px;padding:0;position:relative;display:inline-block;min-width:140px;min-height:60px;max-width:calc(100% - 18px);overflow:hidden;vertical-align:middle;text-align:center;border:var(--border_inner);box-shadow:var(--highlight),0 0 1px 1px #ddf;animation:ease grid-fade 1s forwards;background:#fff;box-sizing:border-box}
 .graphContainer:hover{border:1px solid var(--hover);box-shadow:var(--highlight),inset 0 0 1px 1px var(--hover);box-shadow:none}
 .graphContainer>*{vertical-align:middle;position:relative}
+.loaded .graphspanel,.loaded #graphConfigs{display:block}
 .graphspanel h3{text-transform:capitalize;letter-spacing:0;word-spacing:0}
 .graphspanel img{margin:6px 5px;padding:1px;vertical-align:top;text-align:center;max-width:98%;background:#fff}
 .graphspanel a{font-size:0}
@@ -554,16 +553,17 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 .graphspanel a img:active{box-shadow:inset 0 0 1px 1px #f90;border:1px solid #f90}
 .graphspanel form{text-align:left}
 .graphspanel{text-align:center;margin:15px 0 -15px}
+.ready .graphspanel,.ready #graphConfigs{display:block}
 .singlegraph img:hover{cursor:zoom-out}
 #graphContainer img{box-shadow:none;border:0;filter:none}
-#graphdisplay{border-radius:0;border-width:1px;box-shadow:none;filter:none}
+#graphdisplay{border-radius:0;border-width:1px;box-shadow:none;filter:none;animation:fade .15s ease 1s reverse both}
 #graphdisplay a{margin-top:-9px}
 #graphdisplay a:hover{color:#f70}
 #graph_single #graphinfo a{margin-top:-8px}
 #graphing{margin:8px -11px -11px}
+#graphopts{margin:30px -14px -9px;padding:10px 0 9px;text-align:center;text-transform:capitalize;border-top:1px solid #77789f;box-shadow:var(--highlight);background:repeating-linear-gradient(135deg,rgba(248,248,255,.6) 2px,rgba(220,220,255,.3) 3px,#f8f8ff 5px),#f8f8ff;filter:drop-shadow(0 0 1px #ccc);animation:fade .15s ease 1s reverse both}
 #graphopts a{margin:3px -2px;padding:1px 10px;display:inline-block;line-height:1.4}
 #graphopts a:empty{display:none}
-#graphopts{margin:30px -14px -9px;padding:10px 0 9px;text-align:center;text-transform:capitalize;border-top:1px solid #77789f;box-shadow:var(--highlight);background:repeating-linear-gradient(135deg,rgba(248,248,255,.6) 2px,rgba(220,220,255,.3) 3px,#f8f8ff 5px),#f8f8ff;filter:drop-shadow(0 0 1px #ccc)}
 #gform{margin:-16px 0 5px;padding:0;border:var(--border_inner)}
 #gform hr{margin:0 -1px 8px}
 #gform table{border:0;margin:0}
@@ -590,6 +590,15 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 #graphdisplay:hover,#graphdisplay:focus{color:var(--hover)}
 #toggleSettings{display:none}
 #updategraphs .messages{margin-bottom:4px}
+
+/* graphs filter */
+#graphFilter{margin:0;position:absolute;right:16px;top:15px;animation:fade .15s ease 1s reverse both}
+#graphFilter button,#graphFilter input[type=text]{padding:5px 24px;vertical-align: middle;}
+#graphFilter button{margin:-2px -8px 0 -42px;width:16px;height:23px;min-width:0;display:inline-block;position:relative;z-index:999;background:var(--no) no-repeat center center/12px;border:0;box-shadow:none;font-size:0}
+#graphFilter:not(:hover) button{opacity:.4}
+#graphFilter input[type=text]{width:200px;background:#fff var(--filter) no-repeat 7px center/12px;background-blend-mode:luminosity}
+#graphFilter input[type=text]:focus{background-blend-mode:normal}
+#graphFilter input[type=text]::placeholder{opacity:0}
 
 /* notifications */
 .messages{margin:15px 0;padding:15px;font-weight:700;line-height:1.3;box-shadow:var(--highlight);border:var(--border_inner);border-radius:2px;background:url(/themes/snark/ubergine/images/hat.webp) no-repeat bottom right/auto 100%,linear-gradient(90deg,#fafaff,#eef);filter:var(--filter_shadow)}
@@ -2627,6 +2636,7 @@ hr[hidden]+#sb_graphcontainer{margin-top:-9px}
 #consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"],#reseedconfig input[type="password"]{width:184px}
 #enablefull label{margin-top:4px}
 #graphdisplay a{margin-top:-5px}
+#graphFilter{right:12px;top:11px}
 #graph_single #graphinfo a{margin-top:-6px}
 #help h2,#help #newuserguide h2{padding:9px 8px 7px 34px;font-size:12pt;background-size:20px,100%,100%,100%}
 #home h4 a::after{margin:-2px 10px 3px -6px}

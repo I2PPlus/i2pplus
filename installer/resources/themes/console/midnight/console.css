@@ -662,8 +662,18 @@ form[action="graphs"],form[action="/updategraphs"]{margin-top:-11px;margin-botto
 #graph_single .graphContainer{padding-top:5px}
 #updategraphs .messages{margin-bottom:10px}
 #graphing{border-top:0!important}
+#graphdisplay{animation:fade .15s ease 1s reverse both}
 #graphdisplay:not(.visible){margin-bottom:10px}
 #graphdisplay:hover,#graphdisplay:focus{color:var(--hover)}
+
+/* graphs filter */
+#graphFilter{margin:0;position:absolute;right:16px;top:15px;animation:fade .15s ease 1s reverse both}
+#graphFilter button,#graphFilter input[type=text]{padding:5px 24px;vertical-align: middle;}
+#graphFilter button{margin:-2px -2px 0 -48px;width:16px;height:23px;min-width:0;display:inline-block;position:relative;z-index:999;background:var(--no) no-repeat center center/12px;border:0;box-shadow:none;font-size:0}
+#graphFilter:not(:hover) button{opacity:.4}
+#graphFilter input[type=text]{width:200px;background:#001 var(--filter) no-repeat 7px center/12px;background-blend-mode:luminosity}
+#graphFilter input[type=text]:focus{background-blend-mode:normal}
+#graphFilter input[type=text]::placeholder{opacity:0}
 
 .smallhead th,#ntcpconnections th{font-size:8pt}
 .smallhead th a:hover{text-decoration:none}
@@ -2613,6 +2623,7 @@ input.check[value$="updates"],input.check[value$="updates"]:hover,input.check[va
 #config_logging h3 a::before,#webappconfiguration a::before,#i2pclientconfig a::before,#pluginmanage a::before{margin-top:-2px}
 #config_stats .statcount{position:absolute;top:9px}
 #config_update .messages i{line-height:2}
+#graphFilter{right:6px;top:9px}
 #iptransport a::after,#advancedconfig a::after,#reseedsetup a::after,.h3navlinks a[href="/help/faq#alternative_browser"]::after{width:16px;height:16px;background-size:16px}
 #logs a.configure::after{background-size:14px}
 #logs h3.tabletitle a.delete{padding-right:16px}

@@ -1,3 +1,6 @@
+2025-08-18 dr|z3d
+ * Console: Add javascript graphs search/filter feature
+
 2025-08-16 dr|z3d
  * I2PTunnel: Add javascript tunnel search/filter feature to index
 

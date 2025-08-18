@@ -43,7 +43,7 @@ tr:hover th{color:var(--ink)}
 .refreshpage:hover,.refreshpage:focus{background:var(--refresh_hover) no-repeat center center/16px}
 .refreshpage:active{box-shadow:var(--btn_shadow_refresh)}
 .widescroll{overflow:auto}
-#down::after,#nographs::after{width:26px;height:26px;vertical-align:middle;display:inline-block;background:url(/themes/console/images/update.svg) no-repeat center center/24px;content:"";transform:rotate(0);filter:sepia(1);animation:linear spin 3s forwards infinite}
+#down::after{width:26px;height:26px;vertical-align:middle;display:inline-block;background:url(/themes/console/images/update.svg) no-repeat center center/24px;content:"";transform:rotate(0);filter:sepia(1);animation:linear spin 3s forwards infinite}
 #down{margin:-6px -6px -3px;width:100%;display:inline-block;line-height:32px;font-size:0;color:#770;box-shadow:var(--down_shadow);background:var(--down);background-size:300%;animation:down linear 10s reverse infinite}
 #newtabimg:hover{filter:drop-shadow(0 0 1px var(--hover))}
 #newtab{text-align:right;font-size:8pt;float:right;letter-spacing:0}
@@ -1139,6 +1139,7 @@ p.infohelp+hr,p.infohelp+p+hr,#tunnelconfig+hr{display:none}
 .graphspanel a{font-size:0}
 .graphspanel hr{margin:10px 0}
 .graphspanel form:last-child{text-align:left;margin:0 20px}
+.ready .graphspanel,.ready #graphConfigs{display:block}
 #gform .fakebutton{padding:5px 9px 5px 24px}
 #gform .fakebutton::before{margin:-2px 4px 0 -16px;width:14px;height:14px;display:inline-block;vertical-align:middle;background:var(--configure) no-repeat center center/14px;content:""}
 #graphdisplay{margin:12px -16px 10px;padding:8px 10px;line-height:1}
@@ -1149,8 +1150,17 @@ p.infohelp+hr,p.infohelp+p+hr,#tunnelconfig+hr{display:none}
 #updategraphs .messages{margin-bottom:-11px}
 #nographs{font-size:0;text-align:center}
 #graphs #nographs.widepanel{margin:28px 0;width:100%;display:block}
-#graphs #nographs::after{width:36px;height:36px;background-size:32px;mix-blend-mode:luminosity}
+#graphdisplay{animation:fade .15s ease 1s reverse both}
 #graphdisplay a{margin-top:2px}
+
+/* graphs filter */
+#graphFilter{margin:0;position:absolute;right:16px;top:15px;animation:fade .15s ease 1s reverse both}
+#graphFilter button,#graphFilter input[type=text]{padding:5px 24px;vertical-align: middle;}
+#graphFilter button{margin:-2px -8px 0 -42px;width:16px;height:23px;min-width:0;display:inline-block;position:relative;z-index:999;background:var(--no) no-repeat center center/12px;border:0;box-shadow:none;font-size:0}
+#graphFilter:not(:hover) button{opacity:.4}
+#graphFilter input[type=text]{width:200px;background:#fff var(--filter) no-repeat 7px center/12px;background-blend-mode:luminosity}
+#graphFilter input[type=text]:focus{background-blend-mode:normal}
+#graphFilter input[type=text]::placeholder{opacity:0}
 
 /* graph options */
 #gform{margin:-11px -16px;padding:0;border:var(--border);background:var(--bg3)}
@@ -2270,6 +2280,7 @@ select{padding:5px 20px 5px 8px}
 #advconf.readonly .section th::after{margin-top:3px}
 #clock{font-size:16pt}
 #config_logging h3 a::before,#webappconfiguration a::before,#i2pclientconfig a::before,#pluginmanage a::before{margin-top:-2px}
+#graphFilter{right:12px;top:11px}
 #help h3,#faq h3{font-size:10.5pt}
 #sb_tunnelstatus .tunnelBuildStatus::before{margin:-1px 0 0;background-size:12px}
 #sb_localtunnels td:first-child{padding-right:3px}
