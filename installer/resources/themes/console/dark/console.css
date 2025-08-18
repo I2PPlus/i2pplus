@@ -322,6 +322,7 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 .sb_icon#transit:active{background:var(--share) no-repeat 25% center/19px,var(--badge_active)}
 .sb_icon#tcount:active{background:var(--hardhat) no-repeat 25% center/19px,var(--badge_active)}
 #lsCount.badge,#newsCount,#newHosts:not([hidden]),#sidebar h3 a .badge,#tunnelCount{padding:2px 5px 1px;display:inline-block;position:relative;z-index:999;white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;font-size:80%;font-weight:700;box-shadow:0 0 0 1px #141,var(--highlight);background:var(--badge);animation:fade .2s ease .1s reverse both}
+/*#newsCount[hiden]{display:none;animation:none}*/
 #lsCount.badge,#newHosts{animation:none}
 #sidebar #sb_status #lsCount.badge,#sidebar .net_status:hover #sb_status #lsCount.badge{padding:2px 3px 1px;margin:0 0 0 3px;line-height:1;vertical-align:middle;color:#494}
 #lsCount.badge{margin-top:1px;font-size:8pt!important}
@@ -1374,7 +1375,6 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #netdb .leaseset tr,#netdb .leaseset td{box-shadow:none}
 #netdb .sybil_addresses .netdb_transport{width:auto;text-align:right}
 #noleasesets,#notinitialized,.netdbnotfound{margin:12px auto 10px;padding:20px 24px 20px 58px;column-span:all;text-align:left;border:var(--border);background:#000 var(--infohelp) no-repeat 15px center/28px}
-.netdbnotfound{margin-bottom:2px}
 .leasesets_container #notinitialized,.leasesets_container #noleasesets{margin-bottom:10px;column-span:all}
 .distance{margin:0 0 0 4px;height:16px;width:16px;display:inline-block;vertical-align:text-top;font-size:0;background:var(--distance) no-repeat center center/16px}
 .leaseset .ekey,.leaseset .rkey,.leaseset .rxAsPub,.leaseset .rxAsRep,.leaseset .stype{margin-left:6px;padding-left:14px;background:var(--crypto) no-repeat left center/12px}
@@ -2759,7 +2759,7 @@ body.hasExpandedElement #configinfo tr.config:not(.expanded) th{color:#770;trans
 #webhosting #guides li a{padding-left:22px}
 
 /* lazy loading */
-body:not(#homepage):not(.ready) .lazy{display:none}
+body:not(#homepage):not(.loaded) .lazy{display:none}
 .lazy.lazyhide,.lazy.lazyhide td{opacity:0;contain:strict}
 .newsentry.lazyhide{contain:none}
 .newsentry.lazyshow{transition:ease opacity .15s}
@@ -2877,6 +2877,7 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #changelog{height:calc(100vh - 120px)}
 #changelog pre{height:calc(100vh - 240px)}
 #clock{padding-top:9px;font-size:16pt}
+#graphFilter{top:9px}
 #help h3,#faq h3{font-size:10.5pt}
 #i2pclientconfig a,#pluginmanage a{transform:translateY(-1px)}
 #jardump a[href^="http://git.skank.i2p/i2pplus"]{padding-left:11px;background-size:8px;background-position:left top}
@@ -3262,3 +3263,12 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 /* LS search */
 #netdb #singleLS~.leaseset {margin-bottom:1px;column-span:all;width:100%}
 #searchLS {margin-bottom:10px auto -1px;display:block;column-span:all;text-align:center;box-shadow:0 0 0 1px #000,0 0 0 3px #252,var(--highlight);background:var(--th)}
+
+/* graphs filter */
+#graphFilter{margin:0;position:absolute;right:16px;top:13px;animation:fade .15s ease 1s reverse both}
+#graphFilter button,#graphFilter input[type=text]{padding:5px 24px;vertical-align: middle;}
+#graphFilter button{margin:-2px -14px 0 -46px;width:16px;height:23px;min-width:0;display:inline-block;position:relative;z-index:999;background:var(--no) no-repeat center center/12px;border:0;box-shadow:none;font-size:0}
+#graphFilter:not(:hover) button{opacity:.4}
+#graphFilter input[type=text]{width:200px;background:#000 var(--filter) no-repeat 7px center/12px;background-blend-mode:luminosity}
+#graphFilter input[type=text]:focus{background-blend-mode:normal}
+#graphFilter input[type=text]::placeholder{opacity:0}
