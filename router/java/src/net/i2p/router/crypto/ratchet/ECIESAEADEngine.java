@@ -1077,10 +1077,9 @@ public final class ECIESAEADEngine {
             if (_log.shouldWarn())
                 _log.warn("ECIES ExistingSession encryption failure");
         } else if (_log.shouldDebug())
-            _log.debug("Encrypting as ExistingSession to " + target + " with key " + re.key + " and tag " + re.tag.toBase64() +
-                       " fwd key: " + re.nextForwardKey +
-                       " rev key: " + re.nextReverseKey +
-                       "; " + rv.length + " bytes");
+            _log.debug("Encrypting as ExistingSession\n * To: " + target + "\n* Key " + re.key + "\n* Tag: " + re.tag.toBase64() +
+                       (re.nextForwardKey != null ? " fwd key: " + re.nextForwardKey : "") +
+                       (re.nextReverseKey != null ? " rev key: " + re.nextReverseKey : "") + " -> " + rv.length + " bytes");
         return rv;
     }
 
@@ -1717,78 +1716,4 @@ public final class ECIESAEADEngine {
         }
     }
 
-
-/****
-    public static void main(String args[]) throws Exception {
-        java.util.Properties props = new java.util.Properties();
-        props.setProperty("i2p.dummyClientFacade", "true");
-        props.setProperty("i2p.dummyNetDb", "true");
-        props.setProperty("i2p.vmCommSystem", "true");
-        props.setProperty("i2p.dummyPeerManager", "true");
-        props.setProperty("i2p.dummyTunnelManager", "true");
-        RouterContext ctx = new RouterContext(null, props);
-        ctx.initAll();
-        ECIESAEADEngine e = new ECIESAEADEngine(ctx);
-        RatchetSKM rskm = new RatchetSKM(ctx, new Destination());
-        net.i2p.crypto.KeyPair kp = ctx.keyGenerator().generatePKIKeys(EncType.ECIES_X25519);
-        PublicKey pubKey = kp.getPublic();
-        PrivateKey privKey = kp.getPrivate();
-        kp = ctx.keyGenerator().generatePKIKeys(EncType.ECIES_X25519);
-        PublicKey pubKey2 = kp.getPublic();
-        PrivateKey privKey2 = kp.getPrivate();
-
-        Destination dest = new Destination();
-        GarlicClove clove = new GarlicClove(ctx);
-        net.i2p.data.i2np.DataMessage msg = new net.i2p.data.i2np.DataMessage(ctx);
-        byte[] orig = DataHelper.getUTF8("blahblahblah");
-        msg.setData(orig);
-        clove.setData(msg);
-        clove.setCertificate(Certificate.NULL_CERT);
-        clove.setCloveId(0);
-        clove.setExpiration(System.currentTimeMillis() + 10000);
-        clove.setInstructions(net.i2p.data.i2np.DeliveryInstructions.LOCAL);
-        GarlicClove[] arr = new GarlicClove[1];
-        arr[0] = clove;
-        CloveSet cs = new CloveSet(arr, Certificate.NULL_CERT, clove.getCloveId(), clove.getExpiration());
-
-        // IK test
-        byte[] encrypted = e.encrypt(cs, pubKey, dest, privKey2, rskm, null);
-        System.out.println("IK Encrypted:\n" + net.i2p.util.HexDump.dump(encrypted));
-
-        CloveSet cs2 = e.decrypt(encrypted, privKey, rskm);
-        if (cs2 == null) {
-            System.out.println("IK DECRYPT FAIL");
-            return;
-        }
-        System.out.println("IK Decrypted: " + cs);
-        GarlicClove clove2 = cs2.getClove(0);
-        net.i2p.data.i2np.DataMessage msg2 = (net.i2p.data.i2np.DataMessage) clove2.getData();
-        byte[] decrypted = msg2.getData();
-        if (Arrays.equals(orig, decrypted)) {
-            System.out.println("IK Test passed");
-        } else {
-            System.out.println("IK Test FAILED: " + new String(decrypted));
-        }
-
-        // N test
-        rskm = new RatchetSKM(ctx);
-        encrypted = e.encrypt(cs, pubKey);
-        System.out.println("N Encrypted:\n" + net.i2p.util.HexDump.dump(encrypted));
-
-        cs2 = e.decrypt(encrypted, privKey, rskm);
-        if (cs2 == null) {
-            System.out.println("N DECRYPT FAIL");
-            return;
-        }
-        System.out.println("N Decrypted: " + cs);
-        clove2 = cs2.getClove(0);
-        msg2 = (net.i2p.data.i2np.DataMessage) clove2.getData();
-        decrypted = msg2.getData();
-        if (Arrays.equals(orig, decrypted)) {
-            System.out.println("N Test passed");
-        } else {
-            System.out.println("N Test FAILED: " + new String(decrypted));
-        }
-    }
-****/
 }

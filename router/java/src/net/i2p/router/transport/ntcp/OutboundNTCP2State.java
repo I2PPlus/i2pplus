@@ -483,17 +483,12 @@ class OutboundNTCP2State implements EstablishState {
      *  @param e may be null
      *  @since 0.9.16
      */
-    public synchronized void close(String reason, Exception e) {
-        fail(reason, e);
-    }
-
-    protected void fail(String reason) { fail(reason, null); }
-
-    protected void fail(String reason, Exception e) { fail(reason, e, false); }
+    public synchronized void close(String reason, Exception e) {fail(reason, e);}
+    protected void fail(String reason) {fail(reason, null);}
+    protected void fail(String reason, Exception e) {fail(reason, e, false);}
 
     protected synchronized void fail(String reason, Exception e, boolean bySkew) {
-        if (_state == State.CORRUPT || _state == State.VERIFIED)
-            return;
+        if (_state == State.CORRUPT || _state == State.VERIFIED) {return;}
         changeState(State.CORRUPT);
         if (_log.shouldDebug()) {
             _log.warn("[NTCP2] Outbound Handshake failure " + _handshakeState.toString());
@@ -502,8 +497,9 @@ class OutboundNTCP2State implements EstablishState {
             _log.warn(this + "\n* Outbound Handshake failure: " + reason);
         }
         _handshakeState.destroy();
-        if (!bySkew)
+        if (!bySkew) {
             _context.statManager().addRateData("ntcp.receiveCorruptEstablishment", 1);
+        }
         releaseBufs(false);
     }
 
