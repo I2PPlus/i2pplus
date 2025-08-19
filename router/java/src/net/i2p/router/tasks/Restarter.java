@@ -12,9 +12,7 @@ import net.i2p.util.Log;
 public class Restarter implements Runnable {
     private final RouterContext _context;
 
-    public Restarter(RouterContext ctx) {
-        _context = ctx;
-    }
+    public Restarter(RouterContext ctx) {_context = ctx;}
 
     public void run() {
         Long start = System.currentTimeMillis();
@@ -23,25 +21,27 @@ public class Restarter implements Runnable {
         log.error("Performing a soft restart...");
         log.logAlways(Log.WARN, "Stopping the Client Manager...");
         // NOTE: DisconnectMessageHandler keys off "restart"
-        try { _context.clientManager().shutdown("Router restart"); } catch (Throwable t) { log.log(Log.CRIT, "Error stopping the client manager", t); }
+        try {_context.clientManager().shutdown("Router restart");}
+        catch (Throwable t) {log.log(Log.CRIT, "Error stopping the Client Manager -> " + t.getMessage());}
         log.logAlways(Log.WARN, "Stopping the Comm system...");
         _context.bandwidthLimiter().reinitialize();
-        try { _context.messageRegistry().restart(); } catch (Throwable t) { log.log(Log.CRIT, "Error restarting the message registry", t); }
-        try { _context.commSystem().restart(); } catch (Throwable t) { log.log(Log.CRIT, "Error restarting the comm system", t); }
+        try {_context.messageRegistry().restart();}
+        catch (Throwable t) {log.log(Log.CRIT, "Error restarting the Message Registry -> " + t.getMessage());}
+        try {_context.commSystem().restart();}
+        catch (Throwable t) {log.log(Log.CRIT, "Error restarting the Comm System -> " + t.getMessage());}
         log.logAlways(Log.WARN, "Stopping the Tunnel Manager...");
-        try { _context.tunnelManager().restart(); } catch (Throwable t) { log.log(Log.CRIT, "Error restarting the tunnel manager", t); }
+        try {_context.tunnelManager().restart();}
+        catch (Throwable t) {log.log(Log.CRIT, "Error restarting the Tunnel Manager -> " + t.getMessage());}
         log.logAlways(Log.WARN, "Restarted the tunnel manager");
 
-        //try { _context.peerManager().restart(); } catch (Throwable t) { log.log(Log.CRIT, "Error restarting the peer manager", t); }
-        //try { _context.netDb().restart(); } catch (Throwable t) { log.log(Log.CRIT, "Error restarting the networkDb", t); }
-        //try { _context.jobQueue().restart(); } catch (Throwable t) { log.log(Log.CRIT, "Error restarting the job queue", t); }
-
-        try { Thread.sleep(10*1000); } catch (InterruptedException ie) {}
+        try {Thread.sleep(10*1000);} catch (InterruptedException ie) {}
         _context.router().setEstimatedDowntime(System.currentTimeMillis() - start);
 
-        log.logAlways(Log.WARN, "Restarting the client manager...");
-        try { _context.clientMessagePool().restart(); } catch (Throwable t) { log.log(Log.CRIT, "Error restarting the CMP", t); }
-        try { _context.clientManager().startup(); } catch (Throwable t) { log.log(Log.CRIT, "Error starting the client manager", t); }
+        log.logAlways(Log.WARN, "Restarting the Client Manager...");
+        try {_context.clientMessagePool().restart();}
+        catch (Throwable t) {log.log(Log.CRIT, "Error restarting the ClientMessagePool -> " + t.getMessage());}
+        try {_context.clientManager().startup();}
+        catch (Throwable t) {log.log(Log.CRIT, "Error starting the Client Manager -> " + t.getMessage());}
 
         _context.router().setIsAlive();
         _context.router().rebuildRouterInfo();
@@ -49,5 +49,5 @@ public class Restarter implements Runnable {
         log.logAlways(Log.WARN, "Restart complete");
         ((RouterClock) _context.clock()).addShiftListener(_context.router());
     }
-}
 
+}
