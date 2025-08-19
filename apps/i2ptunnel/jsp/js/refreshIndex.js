@@ -230,22 +230,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-document.querySelector("form").addEventListener("submit", async function (e) {
-  e.preventDefault();
-
-  const formData = new FormData(this);
-  await fetch(this.action, {
-    method: this.method,
-    body: formData,
-    headers: {"Cache-Control": "no-cache"}
-  });
-
-  await refreshTunnelStatus();
-  resizeIframe();
-});
-
 window.addEventListener("load", function () {
-  if (window.self !== window.top) {
-    resizeIframe();
-  }
+  if (window.self !== window.top) { resizeIframe(); }
 });
