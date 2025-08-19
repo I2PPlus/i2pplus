@@ -183,8 +183,9 @@ public class LogsHelper extends HelperBase {
                                     .replace("->", "➜")
                                     .replaceAll("\\|.*\\[.*hutd.*\\].*?:", "|")
                                     .replaceAll("\\|.*\\[.*date.*\\].*?:", "|")
-                                    .replaceAll("\\|.*\\[.*Read.*\\].*?:", "|")
-                                    .replaceAll("\\|.*\\[.*#1\\].*?:", "|");
+                                    .replaceAll("\\|.*\\[.*-Connection].*?:", "|")
+                                    .replaceAll("\\|.*\\[.*Restart].*?:", "|")
+                                    .replaceAll("\\|.*\\[.*Read.*\\].*?:", "|");
                 // Remove lines containing unwanted strings
                 StringBuilder filtered = new StringBuilder();
                 String[] logLines = str.split("\n");
@@ -199,7 +200,10 @@ public class LogsHelper extends HelperBase {
                         !line.contains("HTTPServer") &&
                         !line.contains("Incrementing failed invocation") &&
                         !line.contains("than the successful invocation time") &&
+                        !line.contains("Disconnect Message received") &&
                         !line.contains("Cannot send to TunnelGateway") &&
+                        !line.contains("at net.i2p") &&
+                        !line.contains("at java.base") &&
                         !line.matches("^.*[^\\n]#\\s*$") &&
                         !line.matches(".*#$") &&
                         !line.matches(".*\\* $") &&

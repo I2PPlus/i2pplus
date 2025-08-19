@@ -18,7 +18,7 @@ public class Restarter implements Runnable {
         Long start = System.currentTimeMillis();
         _context.router().eventLog().addEvent(EventLog.SOFT_RESTART);
         Log log = _context.logManager().getLog(Router.class);
-        log.error("Performing a soft restart...");
+        log.warn("Performing a soft restart...");
         log.logAlways(Log.WARN, "Stopping the Client Manager...");
         // NOTE: DisconnectMessageHandler keys off "restart"
         try {_context.clientManager().shutdown("Router restart");}
