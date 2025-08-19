@@ -123,19 +123,19 @@ class EstablishmentManager {
     private final Object _activityLock;
     private int _activity;
 
-    /** max outbound in progress - max inbound is half of this */
+    /** Max outbound in progress - max inbound is half of this */
     private final int DEFAULT_MAX_CONCURRENT_ESTABLISH;
-    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 32 : 96;
-    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 128 : 384;
+    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 64 : 192;
+    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 256 : 768;
     private static final String PROP_MAX_CONCURRENT_ESTABLISH = "i2np.udp.maxConcurrentEstablish";
     private static final float DEFAULT_THROTTLE_FACTOR = SystemVersion.isSlow() ? 1.5f : 3f;
     private static final String PROP_THROTTLE_FACTOR = "router.throttleFactor";
 
-    /** max pending outbound connections (waiting because we are at MAX_CONCURRENT_ESTABLISH) */
-    private static final int MAX_QUEUED_OUTBOUND = SystemVersion.isSlow() ? 32 : 64;
+    /** Max pending outbound connections (waiting because we are at MAX_CONCURRENT_ESTABLISH) */
+    private static final int MAX_QUEUED_OUTBOUND = SystemVersion.isSlow() ? 48 : 96;
 
-    /** max queued msgs per peer while the peer connection is queued */
-    private static final int MAX_QUEUED_PER_PEER = SystemVersion.isSlow() ? 16 : 32;
+    /** Max queued msgs per peer while the peer connection is queued */
+    private static final int MAX_QUEUED_PER_PEER = SystemVersion.isSlow() ? 32 : 64;
 
     private static final long MAX_NONCE = 0xFFFFFFFFl;
 
@@ -155,23 +155,23 @@ class EstablishmentManager {
      * One round trip (Created-Confirmed)
      * Note: could be two round trips for SSU2 with retry
      */
-    public static final int MAX_IB_ESTABLISH_TIME = SystemVersion.isSlow() ? 12*1000 : 10*1000;
+    public static final int MAX_IB_ESTABLISH_TIME = 15*1000;
 
-    /** max wait before receiving a response to a single message during outbound establishment */
+    /** Max wait before receiving a response to a single message during outbound establishment */
     public static final int OB_MESSAGE_TIMEOUT = SystemVersion.isSlow() ? 15*1000 : 12*1000;
 
     /** for the DSM and or netdb store */
-    private static final int DATA_MESSAGE_TIMEOUT = SystemVersion.isSlow() ? 10*1000 : 8*1000;
+    private static final int DATA_MESSAGE_TIMEOUT = SystemVersion.isSlow() ? 12*1000 : 10*1000;
 
     private static final int IB_BAN_TIME = 60*60*1000;
 
     // SSU 2
-    private static final int MIN_TOKENS = SystemVersion.isSlow() ? 128 : 512;
-    private static final int MAX_TOKENS = SystemVersion.isSlow() ? 1024 : 4096;
+    private static final int MIN_TOKENS = SystemVersion.isSlow() ? 256 : 1024;
+    private static final int MAX_TOKENS = SystemVersion.isSlow() ? 2048 : 8192;
     public static final long IB_TOKEN_EXPIRATION = 60*60*1000L;
     private static final long MAX_SKEW = 2*60*1000;
     private static final String TOKEN_FILE = "ssu2tokens.txt";
-    // max immediate terminations to send to a peer every FAILSAFE_INTERVAL
+    /** Max immediate terminations to send to a peer every FAILSAFE_INTERVAL */
     private static final int MAX_TERMINATIONS = 2;
 
     public EstablishmentManager(RouterContext ctx, UDPTransport transport) {
