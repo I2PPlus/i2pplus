@@ -53,19 +53,19 @@ class UnsignedUpdateHandler implements Checker, Updater {
     @Override
     public UpdateTask check(UpdateType type, UpdateMethod method,
                             String id, String currentVersion, long maxTime) {
-        if (type != UpdateType.ROUTER_UNSIGNED || method != UpdateMethod.HTTP)
-            return null;
+        if (type != UpdateType.ROUTER_UNSIGNED || method != UpdateMethod.HTTP) {return null;}
+
 
         List<URI> updateSources = getUpdateSources();
-        if (updateSources == null)
-            return null;
+        if (updateSources == null) {return null;}
 
         long ms = _context.getProperty(NewsHelper.PROP_LAST_UPDATE_TIME, 0L);
+        long now = _context.clock().now();
+        _context.router().saveConfig(NewsHelper.PROP_LAST_UPDATE_TIME, Long.toString(now));
+
         if (ms <= 0) {
-            // we don't know what version you have, so stamp it with the current time,
-            // and we'll look for something newer next time around.
-            _context.router().saveConfig(NewsHelper.PROP_LAST_UPDATE_TIME,
-                                               Long.toString(_context.clock().now()));
+            // We don't know what version you have, so stamp it with the current time, and we'll look
+            // for something newer next time around.
             return null;
         }
 
@@ -84,8 +84,9 @@ class UnsignedUpdateHandler implements Checker, Updater {
     @Override
     public UpdateTask update(UpdateType type, UpdateMethod method, List<URI> updateSources,
                              String id, String newVersion, long maxTime) {
-        if (type != ROUTER_UNSIGNED || method != HTTP || updateSources.isEmpty() || NewsHelper.isUpdateInProgress())
+        if (type != ROUTER_UNSIGNED || method != HTTP || updateSources.isEmpty() || NewsHelper.isUpdateInProgress()) {
             return null;
+        }
         UpdateRunner update = new UnsignedUpdateRunner(_context, _mgr, updateSources);
         // set status before thread to ensure UI feedback
         if (updateSources.toString().contains("skank") && type == ROUTER_UNSIGNED) {
@@ -97,4 +98,5 @@ class UnsignedUpdateHandler implements Checker, Updater {
         }
         return update;
     }
+
 }

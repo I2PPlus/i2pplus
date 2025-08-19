@@ -102,19 +102,16 @@ class NewsFetcher extends UpdateRunner {
         _showStatus = timeout < DEFAULT_TIMEOUT;
         if (!langChanged()) {
             long lastMod = NewsHelper.lastUpdated(ctx);
-            if (lastMod > 0)
-                _lastModified = RFC822Date.to822Date(lastMod);
+            if (lastMod > 0) {_lastModified = RFC822Date.to822Date(lastMod);}
         }
     }
 
     @Override
     public void run() {
         _isRunning = true;
-        try {
-            fetchNews();
-        } catch (Throwable t) {
-            _mgr.notifyTaskFailed(this, "", t);
-        } finally {
+        try {fetchNews();}
+        catch (Throwable t) {_mgr.notifyTaskFailed(this, "", t);}
+        finally {
             _mgr.notifyCheckComplete(this, _isNewer, _success);
             _isRunning = false;
         }
@@ -127,13 +124,11 @@ class NewsFetcher extends UpdateRunner {
         if (shouldProxy && proxyPort == ConfigUpdateHandler.DEFAULT_PROXY_PORT_INT &&
             proxyHost.equals(ConfigUpdateHandler.DEFAULT_PROXY_HOST) &&
             _context.portMapper().getPort(PortMapper.SVC_HTTP_PROXY) < 0) {
-            if (_log.shouldWarn())
-                _log.warn("Cannot fetch news -> HTTP proxy tunnel not running");
+            if (_log.shouldWarn()) {_log.warn("News fetch failed -> HTTP proxy tunnel not running");}
             return;
         }
         if (shouldProxy && _context.commSystem().isDummy()) {
-            if (_log.shouldWarn())
-                _log.warn("Cannot fetch news -> VM Comm system is enabled");
+            if (_log.shouldWarn()) {_log.warn("Cannot fetch news -> VM Comm system is enabled");}
             return;
         }
 
@@ -146,17 +141,16 @@ class NewsFetcher extends UpdateRunner {
 
             try {
                 EepGet get;
-                if (shouldProxy)
+                if (shouldProxy) {
                     get = new EepGet(_context, true, proxyHost, proxyPort, 0, _tempFile.getAbsolutePath(), newsURL, true, null, _lastModified);
-                else if ("https".equals(uri.getScheme()))
-                    // no constructor w/ last mod check
-                    get = new SSLEepGet(_context, _tempFile.getAbsolutePath(), newsURL);
-                else
+                } else if ("https".equals(uri.getScheme())) {
+                    get = new SSLEepGet(_context, _tempFile.getAbsolutePath(), newsURL); // no constructor w/ last mod check
+                } else {
                     get = new EepGet(_context, false, null, 0, 0, _tempFile.getAbsolutePath(), newsURL, true, null, _lastModified);
+                }
                 get.addStatusListener(this);
                 long start = _context.clock().now();
-                // will be adjusted in headerReceived() below
-                _newLastModified = start;
+                _newLastModified = start; // will be adjusted in headerReceived() below
                 if (get.fetch(_timeout)) {
                     int status = get.getStatusCode();
                     if (status == 200 || status == 304) {
@@ -167,14 +161,11 @@ class NewsFetcher extends UpdateRunner {
                             opts.put(NewsHelper.PROP_LAST_UPDATED, lastMod);
                             String lang = Translate.getLanguage(_context);
                             opts.put(NewsHelper.PROP_LAST_LANG, lang);
-                            if (_gotNewEntry)
-                                opts.put(NewsHelper.PROP_LAST_NEW_ENTRY, lastMod);
+                            if (_gotNewEntry) {opts.put(NewsHelper.PROP_LAST_NEW_ENTRY, lastMod);}
                         }
                         _context.router().saveConfig(opts, null);
-                        if (_failMsg != null) {
-                            // from checkForUpdates()
-                            _mgr.notifyComplete(this, "<b>" + _failMsg + "</b>");
-                        } else if (_showStatus) {
+                        if (_failMsg != null) {_mgr.notifyComplete(this, "<b>" + _failMsg + "</b>");} // from checkForUpdates()
+                        else if (_showStatus) {
                             if (status == 200) {_mgr.notifyComplete(this, "News updated from " + newsHost);}
                             else {_mgr.notifyComplete(this, "No news updates from " + newsHost);}
                         }
@@ -184,11 +175,12 @@ class NewsFetcher extends UpdateRunner {
                     int status = get.getStatusCode();
                     String msg;
                     if (status == 504 || status <= 0) {msg = "Unable to connect to news server " + newsHost;}
-                    else if (status == 500) {msg = "News server " + _currentURI.getHost() + " not found in address book";}
-                    else if (status == 404) {msg = "News file not found on news server at " + newsURL;}
+                    else if (status == 500) {msg = "News: " + _currentURI.getHost() + " not found in address book";}
+                    else if (status == 403) {msg = "News: Connection Reset";}
+                    else if (status == 404) {msg = "News: 404 from " + newsURL.replace("http://", "");}
+                    else if (status == 429) {msg = "News: Too Many Requests";}
                     else {msg = status + " " + DataHelper.stripHTML(get.getStatusText());}
-                    // only display if manually initiated
-                    if (_showStatus) {updateStatus("<b>" + msg + "</b>");}
+                    if (_showStatus) {updateStatus("<b>" + msg + "</b>");} // only display if manually initiated
                     if (_log.shouldWarn()) {_log.warn(msg);}
                 }
             } catch (Throwable t) {_log.error("Error fetching the news", t);}
@@ -209,9 +201,7 @@ class NewsFetcher extends UpdateRunner {
         String lang = Translate.getLanguage(_context);
         if (lang.equals("en")) {return uri;}
         String query = uri.getRawQuery();
-        if (query != null && (query.startsWith("lang=") || query.contains("&lang="))) {
-            return uri;
-        }
+        if (query != null && (query.startsWith("lang=") || query.contains("&lang="))) {return uri;}
         String url = uri.toString();
         StringBuilder buf = new StringBuilder();
         buf.append(url);
@@ -280,8 +270,7 @@ class NewsFetcher extends UpdateRunner {
                     Map<String, String> args = parseArgs(buf.substring(index+VERSION_PREFIX.length()));
                     String ver = args.get(VERSION_KEY);
                     if (ver != null) {
-                        if (_log.shouldDebug())
-                            _log.debug("Router is running version: " + ver);
+                        if (_log.shouldDebug()) {_log.debug("Router is running version: " + ver);}
                         if (TrustedUpdate.needsUpdate(RouterVersion.VERSION, ver)) {
                             if (NewsHelper.isUpdateDisabled(_context)) {
                                 String msg = _mgr._t("In-network updates disabled. Check package manager.");

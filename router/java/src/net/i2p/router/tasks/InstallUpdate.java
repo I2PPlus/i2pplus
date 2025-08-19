@@ -51,7 +51,7 @@ public class InstallUpdate {
                 // carry on
                 return;
             }
-            System.out.println("INFO: Update file exists: " + updateFile + " - installing...");
+            System.out.println("INFO: Update file exists: " + updateFile + " -> Installing...");
             // verify the whole thing first
             // we could remember this fails, and not bother restarting, but who cares...
             boolean ok = FileUtil.verifyZip(updateFile);
@@ -101,7 +101,7 @@ public class InstallUpdate {
                 if (context.hasWrapper())
                     System.out.println("INFO: Restarting after update...");
                 else
-                    System.out.println("WARNING: Exiting after update, restart I2P");
+                    System.out.println("WARNING: Exiting after update (no service manager) -> Restart I2P+ manually!");
             } catch (Throwable t) {
                 // hide the NCDFE
                 // hopefully the update file got deleted or we will loop
@@ -132,8 +132,7 @@ public class InstallUpdate {
         boolean isWin = SystemVersion.isWindows();
         boolean isMac = SystemVersion.isMac();
         // only do this on these OSes
-        boolean goodOS = isWin || isMac ||
-                         osName.contains("linux") || osName.contains("freebsd");
+        boolean goodOS = isWin || isMac || osName.contains("linux") || osName.contains("freebsd");
 
         File jbigiJar = new File(context.getLibDir(), "jbigi.jar");
         if (goodOS && jbigiJar.exists()) {
@@ -148,8 +147,7 @@ public class InstallUpdate {
                     if (success) {
                         boolean success2 = jcpuidLib.delete();
                         if (success2) {
-                            System.out.println("New jbigi.jar detected, moved jcpuid library to " +
-                                               path + ".bak");
+                            System.out.println("New jbigi.jar detected -> Moved jcpuid library to " + path + ".bak");
                             System.out.println("Check logs for successful installation of new library");
                         }
                     }
@@ -164,8 +162,7 @@ public class InstallUpdate {
                     if (success) {
                         boolean success2 = jbigiLib.delete();
                         if (success2) {
-                            System.out.println("New jbigi.jar detected, moved jbigi library to " +
-                                               path + ".bak");
+                            System.out.println("New jbigi.jar detected -> Moved jbigi library to " + path + ".bak");
                             System.out.println("Check logs for successful installation of new library");
                         }
                     }
