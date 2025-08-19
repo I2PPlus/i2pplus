@@ -478,7 +478,7 @@ public class Rate {
         PersistenceHelper.add(buf, addComments, prefix, ".lastTotalValue", "Total value of data points in most recent period (coalesced): " + _lastTotalValue, _lastTotalValue);
         PersistenceHelper.add(buf, addComments, prefix, ".extremeTotalValue", "Total value of data points in most extreme period: " + _extremeTotalValue, _extremeTotalValue);
         PersistenceHelper.add(buf, addComments, prefix, ".lifetimeTotalValue", "Total value of data points since this stat was created: " + _lifetimeTotalValue, _lifetimeTotalValue);
-        PersistenceHelper.add(buf, addComments, prefix, ".tunnelCreateResponseTime", "Time for tunnel create response from peer (ms): " + _currentTotalValue, _currentTotalValue);
+        //PersistenceHelper.add(buf, addComments, prefix, ".tunnelCreateResponseTime", "Time for tunnel create response from peer (ms): " + _currentTotalValue, _currentTotalValue);
     }
 
     /**
