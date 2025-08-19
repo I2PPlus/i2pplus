@@ -18,6 +18,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.util.CachedIteratorCollection;
 import net.i2p.router.util.PriBlockingQueue;
 import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
 
 /**
  * Contain all of the state about a UDP connection to a peer.
@@ -115,7 +116,7 @@ public class PeerState {
     private int _rto;
 
     /** how many packets will be considered within the retransmission rate calculation */
-    static final long RETRANSMISSION_PERIOD_WIDTH = 100;
+    static final long RETRANSMISSION_PERIOD_WIDTH = SystemVersion.isSlow() ? 100 : 400;
 
     private int _messagesReceived;
     private int _messagesSent;
@@ -155,9 +156,9 @@ public class PeerState {
     protected volatile boolean _dead;
 
     /** The minimum number of outstanding messages (NOT fragments/packets) */
-    private static final int MIN_CONCURRENT_MSGS = 16;
+    private static final int MIN_CONCURRENT_MSGS = SystemVersion.isSlow() ? 16 : 64;
     /** @since 0.9.42 */
-    private static final int INIT_CONCURRENT_MSGS = 64;
+    private static final int INIT_CONCURRENT_MSGS = SystemVersion.isSlow() ? 64 : 256;
     /** how many concurrent outbound messages do we allow OutboundMessageFragments to send
         This counts full messages, NOT fragments (UDP packets)
      */
@@ -169,15 +170,14 @@ public class PeerState {
     /** Last time it was made an introducer **/
     private long _lastIntroducerTime;
 
-//    private static final int MAX_SEND_WINDOW_BYTES = 1024*1024;
-    private static final int MAX_SEND_WINDOW_BYTES = 16*1024*1024;
+    private static final int MAX_SEND_WINDOW_BYTES = SystemVersion.isSlow() ? 1024*1024 : 4*1024*1024;
 
     /**
      *  Was 32 before 0.9.2, but since the streaming lib goes up to 128,
      *  we would just drop our own msgs right away during slow start.
      *  May need to adjust based on memory.
      */
-    private static final int MAX_SEND_MSGS_PENDING = 128;
+    private static final int MAX_SEND_MSGS_PENDING = SystemVersion.isSlow() ? 96 : 128;
 
     /**
      * IPv4 Min MTU
