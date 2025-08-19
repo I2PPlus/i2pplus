@@ -57,26 +57,17 @@ class Log {
     public void append(String entry) {
         BufferedWriter bw = null;
         try {
-            bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.file,
-                    true), "UTF-8"));
+            bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(this.file, true), "UTF-8"));
             String timestamp = new Date().toString();
             bw.write(timestamp + " -- " + entry);
             bw.newLine();
-        } catch (IOException exp) {
-        } finally {
-            if (bw != null)
-                try { bw.close(); } catch (IOException ioe) {}
+        } catch (IOException exp) {}
+        finally {
+            if (bw != null) {
+                try {bw.close();}
+                catch (IOException ioe) {}
+            }
         }
     }
 
-    /**
-     * Return the File that the Log is writing to.
-     *
-     * @return The File that the log is writing to.
-     */
-/****
-    public File getFile() {
-        return this.file;
-    }
-****/
 }

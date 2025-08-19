@@ -102,29 +102,33 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      * @param proxyPort port number of proxy
      */
     public AddressBook(Subscription subscription, String proxyHost, int proxyPort) {
-        Map<String, HostTxtEntry> a = null;
+        Map<String, HostTxtEntry> a = Collections.emptyMap(); // initialize to avoid null
         File subf = null;
         File tmp = null;
         try {
             tmp = SecureFile.createTempFile("addressbook", null, I2PAppContext.getGlobalContext().getTempDir());
-            // Apache 2.4 mod_deflate etag bug workaround
-            // strip -gzip from the etag
-            // Gitlab #454
+            // Apache 2.4 mod_deflate etag bug workaround (Gitlab #454)
             String loc = subscription.getLocation();
             String etag = subscription.getEtag();
             if (loc.startsWith("http://i2p-projekt.i2p/") && etag != null && etag.endsWith("-gzip\"")) {
-                etag = etag.substring(0, etag.length() - 6) + '"';
+                etag = etag.substring(0, etag.length() - 6) + '"'; // Strip -gzip from the etag
             }
-
-            EepGet get = new EepGet(I2PAppContext.getGlobalContext(), true, proxyHost, proxyPort, 10, -1l, MAX_SUB_SIZE,
+            EepGet get = new EepGet(I2PAppContext.getGlobalContext(), true, proxyHost, proxyPort, 10, -1L, MAX_SUB_SIZE,
                                     tmp.getAbsolutePath(), null, loc, true, etag, subscription.getLastModified(), null);
             if (get.fetch()) {
                 subscription.setEtag(get.getEtag());
                 subscription.setLastModified(get.getLastModified());
                 subscription.setLastFetched(I2PAppContext.getGlobalContext().clock().now());
                 subf = tmp;
-                String lastMod = (get.getLastModified() != null ? get.getLastModified() : "unknown (no Last-Modified headers)");
-                System.out.println("[" + loc + "] Last modified: " + lastMod);
+                String lastMod = (get.getLastModified() != null ? get.getLastModified() : "n/a");
+                String eTag = get.getEtag();
+                boolean hasLastMod = get.getLastModified() != null;
+                boolean hasEtag = get.getEtag() != null;
+                System.out.println("Checking [" + loc.replace("http://", "") + "] -> " + (
+                                   hasLastMod ? "Last modified: " + lastMod :
+                                   hasEtag ? "ETag: " + eTag :
+                                   "No ETag or Last Modified headers"));
+                a = Collections.emptyMap(); // Addresses not loaded here, so keep empty map
             } else {
                 a = Collections.emptyMap();
                 tmp.delete();
@@ -214,47 +218,63 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
     }
 
     /**
-     * Do basic validation of the hostname
-     * hostname was already converted to lower case by HostTxtParser.parse()
+     * Basic validation of the hostname.
+     * Already converted to lower case by HostTxtParser.parse()
      */
     public static boolean isValidKey(String host) {
-        return
-            host.endsWith(".i2p") &&
-            host.length() > 4 &&
-            host.length() <= 67 &&          // 63 + ".i2p"
-            (! host.startsWith(".")) &&
-            (! host.startsWith("-")) &&
-            host.indexOf(".-") < 0 &&
-            host.indexOf("-.") < 0 &&
-            host.indexOf("..") < 0 &&
-            // IDN - basic check, not complete validation
-            (host.indexOf("--") < 0 || host.startsWith("xn--") || host.indexOf(".xn--") > 0) &&
-            HOST_PATTERN.matcher(host).matches() &&
-            // Base32 spoofing (52chars.i2p)
-            // We didn't do it this way, we use a .b32.i2p suffix, but let's prohibit it anyway
-            (! (host.length() == 56 && B32_PATTERN.matcher(host.substring(0,52)).matches())) &&
-            // ... or maybe we do Base32 this way ...
-            (! host.equals("b32.i2p")) &&
-            (! host.endsWith(".b32.i2p")) &&
-            // some reserved names that may be used for local configuration someday
-            (! host.equals("proxy.i2p")) &&
-            (! host.equals("router.i2p")) &&
-            (! host.equals("console.i2p")) &&
-            (! host.endsWith(".proxy.i2p")) &&
-            (! host.endsWith(".router.i2p")) &&
-            (! host.endsWith(".console.i2p"));
+        final int len = host.length();
+
+        // Basic suffix & length checks
+        if (!host.endsWith(".i2p")) return false;
+        if (len <= 4 || len > 67) return false; // max 63 chars + ".i2p"
+
+        if (host.startsWith(".") || host.startsWith("-")) return false;
+        if (host.contains("..") || host.contains(".-") || host.contains("-.")) return false;
+
+        // IDN check: '--' allowed only in punycode prefix/suffix
+        if (host.contains("--") && !host.startsWith("xn--") && host.indexOf(".xn--") < 0) return false;
+
+        // Check reserved exact names and reserved suffixes
+        String[] reservedExact = { "proxy.i2p", "router.i2p", "console.i2p", "b32.i2p" };
+        for (String res : reservedExact) {
+            if (host.equals(res)) return false;
+        }
+
+        String[] reservedSuffixes = { ".proxy.i2p", ".router.i2p", ".console.i2p", ".b32.i2p" };
+        for (String suffix : reservedSuffixes) {
+            if (host.endsWith(suffix)) return false;
+        }
+
+        if (!HOST_PATTERN.matcher(host).matches()) return false;
+
+        // Base32 special check: only if length == 56
+        if (len == 56 && B32_PATTERN.matcher(host.substring(0, 52)).matches()) return false;
+
+        return true;
     }
 
     /**
      * Do basic validation of the b64 dest, without bothering to instantiate it
      */
     private static boolean isValidDest(String dest) {
-        return
-            // null cert ends with AAAA but other zero-length certs would be AA
-            ((dest.length() == MIN_DEST_LENGTH && dest.endsWith("AA")) ||
-            (dest.length() > MIN_DEST_LENGTH && dest.length() <= MAX_DEST_LENGTH)) &&
-            // B64 comes in groups of 2, 3, or 4 chars, but never 1
-            ((dest.length() % 4) != 1) && B64_PATTERN.matcher(dest).matches();
+        if (dest == null) return false;  // Defensive null check
+
+        final int len = dest.length();
+
+        // null cert special case: must be exactly MIN_DEST_LENGTH and end with "AA"
+        if (len == MIN_DEST_LENGTH) {
+            if (!dest.endsWith("AA")) return false;
+        } else {
+            // Must be larger than MIN_DEST_LENGTH and no greater than MAX_DEST_LENGTH
+            if (len <= MIN_DEST_LENGTH || len > MAX_DEST_LENGTH) return false;
+        }
+
+        // Base64 strings never have length mod 4 == 1
+        int mod = len % 4;
+        if (mod == 1) return false;
+
+        // Regex check for valid base64 characters (fast fail if invalid)
+        return B64_PATTERN.matcher(dest).matches();
     }
 
     /**
