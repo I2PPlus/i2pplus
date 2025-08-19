@@ -544,7 +544,6 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 .graphContainer{margin:4px 3px;padding:0;position:relative;display:inline-block;min-width:140px;min-height:60px;max-width:calc(100% - 18px);overflow:hidden;vertical-align:middle;text-align:center;border:var(--border_inner);box-shadow:var(--highlight),0 0 1px 1px #ddf;animation:ease grid-fade 1s forwards;background:#fff;box-sizing:border-box}
 .graphContainer:hover{border:1px solid var(--hover);box-shadow:var(--highlight),inset 0 0 1px 1px var(--hover);box-shadow:none}
 .graphContainer>*{vertical-align:middle;position:relative}
-.loaded .graphspanel,.loaded #graphConfigs{display:block}
 .graphspanel h3{text-transform:capitalize;letter-spacing:0;word-spacing:0}
 .graphspanel img{margin:6px 5px;padding:1px;vertical-align:top;text-align:center;max-width:98%;background:#fff}
 .graphspanel a{font-size:0}
@@ -553,7 +552,7 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 .graphspanel a img:active{box-shadow:inset 0 0 1px 1px #f90;border:1px solid #f90}
 .graphspanel form{text-align:left}
 .graphspanel{text-align:center;margin:15px 0 -15px}
-.ready .graphspanel,.ready #graphConfigs{display:block}
+.ready .graphspanel,.ready #graphConfigs{display:block;animation:fade .15s ease .5s reverse both}
 .singlegraph img:hover{cursor:zoom-out}
 #graphContainer img{box-shadow:none;border:0;filter:none}
 #graphdisplay{border-radius:0;border-width:1px;box-shadow:none;filter:none;animation:fade .15s ease 1s reverse both}

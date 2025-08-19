@@ -42,21 +42,40 @@ import { onVisible, onHidden } from "/js/onVisible.js";
 
   function applyFilter(input) {
     const text = input.value.trim().toLowerCase(),
-      aliasMap = { transit: "participating" },
-      resolved = aliasMap[text] || text;
+      aliasMap = {
+        bandwidth: { include: ["bw", "bps", "bandwidth", "combined"], exclude: ["jobwait"] },
+        count: { include: ["count", "participatingtunnels"], exclude: [] },
+        ssu: { include: ["udp", "ssu"], exclude: [] },
+        tco: { include: ["ntcp", "tcp"], exclude: [] },
+        transit: { include: ["participating", "transit"], exclude: [] },
+      },
+      entry = aliasMap[text];
+
     d.querySelectorAll(".graphContainer").forEach((container) => {
       const img = container.querySelector("img");
-      if (!img) return (container.style.display = "none");
+      if (!img) {
+        container.style.display = "none";
+        return;
+      }
       const alt = (img.alt || "").toLowerCase();
       if (!text) {
         container.style.display = "";
         container.classList.remove("loading");
-      } else {
-        const matched = alt.includes(resolved);
+        return;
+      }
+      if (!entry) {
+        const matched = alt.includes(text);
         container.style.display = matched ? "" : "none";
         if (matched) container.classList.remove("loading");
+        return;
       }
+      const includesAny = entry.include.some((inc) => alt.includes(inc)),
+        excludesAny = entry.exclude.some((exc) => alt.includes(exc)),
+        matched = includesAny && !excludesAny;
+      container.style.display = matched ? "" : "none";
+      if (matched) container.classList.remove("loading");
     });
+
     localStorage.setItem("graphsFilter", input.value.trim());
   }
 
@@ -140,7 +159,6 @@ import { onVisible, onHidden } from "/js/onVisible.js";
       lazyImgs = images.filter((img) => img.classList.contains("lazyhide")),
       start = Date.now();
     try {
-      progressx.show(.5);
       await Promise.all(
         visibleImgs.map(
           (img) =>
@@ -153,6 +171,7 @@ import { onVisible, onHidden } from "/js/onVisible.js";
               };
               pre.onerror = rej;
               pre.src = src;
+              progressx.show();
             })
         )
       );
