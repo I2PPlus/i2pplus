@@ -195,9 +195,7 @@ class NewsFetcher extends UpdateRunner {
      *  @since 0.9.21
      */
     private URI addLang(URI uri) {
-        if (!_context.getBooleanPropertyDefaultTrue(NewsHelper.PROP_TRANSLATE)) {
-            return uri;
-        }
+        if (!_context.getBooleanPropertyDefaultTrue(NewsHelper.PROP_TRANSLATE)) {return uri;}
         String lang = Translate.getLanguage(_context);
         if (lang.equals("en")) {return uri;}
         String query = uri.getRawQuery();
@@ -344,8 +342,8 @@ class NewsFetcher extends UpdateRunner {
                 buf.setLength(0);
             }
         } catch (IOException ioe) {
-            if (_log.shouldWarn()) {_log.warn("Error checking the news for an update", ioe);}
-            _failMsg = "Error checking the news for an update: " + ioe;
+            _failMsg = "Error checking the news for an update -> " + ioe.getMessage();
+            if (_log.shouldWarn()) {_log.warn(_failMsg);}
             return;
         } finally {
             if (in != null) {
