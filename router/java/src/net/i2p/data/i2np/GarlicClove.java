@@ -73,7 +73,7 @@ public class GarlicClove extends DataStructureImpl {
             cur += handler.readMessage(source, cur);
             _msg = handler.lastRead();
         } catch (I2NPMessageException ime) {
-            throw new DataFormatException("Unable to read the message from a garlic clove", ime);
+            throw new DataFormatException("Unable to read message from garlic clove", ime);
         }
         _cloveId = DataHelper.fromLong(source, cur, 4);
         cur += 4;
@@ -100,7 +100,7 @@ public class GarlicClove extends DataStructureImpl {
             _expiration = _msg.getMessageExpiration();
             _certificate = Certificate.NULL_CERT;
         } catch (I2NPMessageException ime) {
-            throw new DataFormatException("Unable to read the message from a garlic clove", ime);
+            throw new DataFormatException("Unable to read message from garlic clove", ime);
         }
     }
 
