@@ -582,8 +582,14 @@ input[type=file]::file-selector-button{font-size:8.5pt}
 #graph_single{animation:grid-fade .15s ease .4s forwards both}
 #graph_single .graphspanel{margin-top:16px}
 #graphs .nowrap{text-align:left;line-height:3}
-#graphdisplay:not(.visible){margin-bottom:-18px;border-radius:0 0 4px 4px}
-#graphdisplay:hover,#graphdisplay:focus{color:var(--hover)}
+#graphdisplay{text-shadow:none;transition:ease all .2s}
+#graphdisplay::before{margin-right:6px;width:20px;height:20px;display:inline-block;vertical-align:middle;background:var(--configure);content:"";opacity:.6}
+#graphdisplay:not(.visible){margin-bottom:-18px;color:#0000;border-radius:0 0 4px 4px}
+#graphdisplay:hover,#graphdisplay:focus{color:var(--hover);transition:ease all .2s}
+#graphdisplay.visible:focus{color:var(--ink)}
+#graphdisplay.visible:active{color:var(--active)}
+#graphdisplay:not(.visible):focus{color:#0000}
+#graphdisplay:hover::before{opacity:1}
 
 /* graphs filter */
 #graphFilter{margin:0;position:absolute;right:16px;top:13px;animation:fade .15s ease 1s reverse both}
