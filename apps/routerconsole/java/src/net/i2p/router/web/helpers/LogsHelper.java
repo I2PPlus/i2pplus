@@ -202,6 +202,10 @@ public class LogsHelper extends HelperBase {
                         !line.contains("than the successful invocation time") &&
                         !line.contains("Disconnect Message received") &&
                         !line.contains("Cannot send to TunnelGateway") &&
+                        !line.contains("ContextHandler") &&
+                        !line.contains("AbstractConnector") &&
+                        !line.contains("I2PSessionException") &&
+                        !line.contains("\.\.\..*?more\n") &&
                         !line.contains("at net.i2p") &&
                         !line.contains("at java.base") &&
                         !line.matches("^.*[^\\n]#\\s*$") &&
