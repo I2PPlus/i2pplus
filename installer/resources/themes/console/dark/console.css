@@ -586,8 +586,8 @@ input[type=file]::file-selector-button{font-size:8.5pt}
 #graphdisplay::before{margin-right:6px;width:20px;height:20px;display:inline-block;vertical-align:middle;background:var(--configure);content:"";opacity:.6}
 #graphdisplay:not(.visible){margin-bottom:-18px;color:#0000;border-radius:0 0 4px 4px}
 #graphdisplay:hover,#graphdisplay:focus{color:var(--hover);transition:ease all .2s}
-h3.toggle{transition: ease all .2s}
-#graphdisplay:active,h3.toggle:active{box-shadow:var(--bevel),var(--btn_shadow_active);transition: ease all .2s}
+h3.toggle,#graphdisplay:active,#i2pupdates~.tabletitle:active,#miscConfig+label.tabletitle{transition: ease all .2s}
+h3.toggle:active,#graphdisplay:active,#i2pupdates~.tabletitle:active,#miscConfig+label.tabletitle:active{box-shadow:var(--bevel),var(--btn_shadow_active);transition: ease all .2s}
 #graphdisplay.visible:focus{color:var(--ink)}
 #graphdisplay.visible:active{color:var(--active)}
 #graphdisplay:not(.visible):focus{color:#0000}
