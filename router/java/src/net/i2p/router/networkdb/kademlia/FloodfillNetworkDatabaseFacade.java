@@ -73,7 +73,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     static final long NEXT_RKEY_RI_ADVANCE_TIME = 45*60*1000;
     private static final long NEXT_RKEY_LS_ADVANCE_TIME = 10*60*1000;
     private static final int NEXT_FLOOD_QTY = MAX_TO_FLOOD / 2;
-    private static final int MAX_LAG_BEFORE_SKIP_SEARCH = SystemVersion.isSlow() ? 600 : 300;
+    private static final int MAX_LAG_BEFORE_SKIP_SEARCH = SystemVersion.isSlow() ? 500 : 200;
     private static final int PUBLISH_JOB_DELAY = 15*1000;
     /** @since 0.9.66 moved from FloodfillMonitorJob */
     public static final String PROP_FLOODFILL_PARTICIPANT = "router.floodfillParticipant";

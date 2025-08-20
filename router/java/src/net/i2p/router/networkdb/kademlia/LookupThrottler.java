@@ -6,6 +6,11 @@ import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+
 /**
  * Count how often we have recently received a lookup request with
  * the reply specified to go to a peer/TunnelId pair.
@@ -13,19 +18,25 @@ import net.i2p.util.SimpleTimer2;
  * The reply peer/tunnel could be spoofed, for example.
  * And a requestor could have up to 6 reply tunnels.
  *
+ * Added burst detection throttle within 1s window.
+ *
  * @since 0.7.11
  */
 class LookupThrottler {
     private final ObjectCounter<ReplyTunnel> counter;
+    // Map to track timestamps of recent requests per ReplyTunnel for burst detection
+    private final Map<ReplyTunnel, Deque<Long>> burstTimestamps;
+
     /** the id of this is -1 */
     private static final TunnelId DUMMY_ID = new TunnelId();
     /** this seems like plenty */
-//    private static final int DEFAULT_MAX_LOOKUPS = 14;
-//    private static final int DEFAULT_MAX_NON_FF_LOOKUPS = 3;
-//    private static final long DEFAULT_CLEAN_TIME = 2*60*1000;
-    private static final int DEFAULT_MAX_LOOKUPS = 60;
-    private static final int DEFAULT_MAX_NON_FF_LOOKUPS = 15;
-    private static final long DEFAULT_CLEAN_TIME = 90*1000;
+    private static final int DEFAULT_MAX_LOOKUPS = 30;
+    private static final int DEFAULT_MAX_NON_FF_LOOKUPS = 10;
+    private static final long DEFAULT_CLEAN_TIME = 3*60*1000;
+    // Max requests allowed in 1-second burst window
+    private static final int BURST_THRESHOLD = 5;
+    private static final long BURST_WINDOW_MS = 1000L;
+
     private final int MAX_LOOKUPS;
     private final int MAX_NON_FF_LOOKUPS;
     private final long CLEAN_TIME;
@@ -37,9 +48,9 @@ class LookupThrottler {
     }
 
     /**
-     *  @param maxlookups when floodfill
-     *  @param maxnonfflookups when not floodfill
-     *  @since 0.9.61
+     * @param maxlookups when floodfill
+     * @param maxnonfflookups when not floodfill
+     * @since 0.9.61
      */
     LookupThrottler(FloodfillNetworkDatabaseFacade facade, int maxlookups, int maxnonfflookups, long cleanTime) {
         _facade = facade;
@@ -47,21 +58,48 @@ class LookupThrottler {
         MAX_NON_FF_LOOKUPS = maxnonfflookups;
         CLEAN_TIME = cleanTime;
         this.counter = new ObjectCounter<ReplyTunnel>();
+        this.burstTimestamps = new HashMap<>();
         SimpleTimer2.getInstance().addPeriodicEvent(new Cleaner(), CLEAN_TIME);
+        _max = _facade.floodfillEnabled() ? MAX_LOOKUPS : MAX_NON_FF_LOOKUPS;
     }
 
     /**
-     * increments before checking
+     * increments and checks throttling
      * @param key non-null
      * @param id null if for direct lookups
+     * @return true if throttled
      */
     boolean shouldThrottle(Hash key, TunnelId id) {
-        return this.counter.increment(new ReplyTunnel(key, id)) > _max;
+        ReplyTunnel rt = new ReplyTunnel(key, id);
+
+        // Update burst timestamps
+        long now = System.currentTimeMillis();
+        synchronized (burstTimestamps) {
+            Deque<Long> deque = burstTimestamps.get(rt);
+            if (deque == null) {
+                deque = new LinkedList<>();
+                burstTimestamps.put(rt, deque);
+            }
+            // Remove timestamps older than BURST_WINDOW_MS
+            while (!deque.isEmpty() && (now - deque.peekFirst() > BURST_WINDOW_MS)) {
+                deque.pollFirst();
+            }
+            deque.addLast(now);
+            if (deque.size() > BURST_THRESHOLD) {
+                return true; // Throttle burst requests
+            }
+        }
+
+        // Existing counting throttle
+        return this.counter.increment(rt) > _max;
     }
 
     private class Cleaner implements SimpleTimer.TimedEvent {
         public void timeReached() {
             LookupThrottler.this.counter.clear();
+            synchronized (burstTimestamps) {
+                burstTimestamps.clear();
+            }
             _max = _facade.floodfillEnabled() ? MAX_LOOKUPS : MAX_NON_FF_LOOKUPS;
         }
     }
@@ -73,18 +111,20 @@ class LookupThrottler {
 
         ReplyTunnel(Hash h, TunnelId id) {
             this.h = h;
-            if (id != null)
+            if (id != null) {
                 this.id = id;
-            else
+            } else {
                 this.id = DUMMY_ID;
+            }
         }
 
         @Override
         public boolean equals(Object obj) {
-            if (obj == null || !(obj instanceof ReplyTunnel))
+            if (obj == null || !(obj instanceof ReplyTunnel)) {
                 return false;
-            return this.h.equals(((ReplyTunnel)obj).h) &&
-                   this.id.equals(((ReplyTunnel)obj).id);
+            }
+            ReplyTunnel other = (ReplyTunnel) obj;
+            return this.h.equals(other.h) && this.id.equals(other.id);
         }
 
         @Override
