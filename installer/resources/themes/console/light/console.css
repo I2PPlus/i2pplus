@@ -2927,9 +2927,10 @@ h4#updateplugins,#news p{font-size:10pt}
 #sidebar hr[hidden]~h4{margin-bottom:-4px}
 #sidebar hr[hidden]~#sb_advanced:not([hidden])~h3{margin-top:-9px}
 #sidebar hr[hidden]+#sb_CPUBar{margin-top:-9px}
+#sidebar hr[hidden]~#sb_memoryBar{margin-bottom:-1px}
 #sidebar hr[hidden]~#sb_memoryBar{margin-bottom:-4px}
+#homepage #sidebar hr[hidden]~#sb_memoryBar{margin-bottom:-1px}
 #sidebar hr:not([hidden])+iframe+#sb_routerControl{margin-top:-2px}
-#homepage #sb_advancedgeneral:not([hidden])~#sb_memoryBar{margin-bottom:-4px}
 #sidebar{margin-bottom:5px;width:228px}
 #sidebar .reload,#sidebar .stop{margin:0 3px -5px;padding-top:6px;padding-bottom:6px;min-width:110px}
 #sidebar .reload[value="restartImmediate"]{margin-top:2px}
@@ -2940,7 +2941,7 @@ h4#updateplugins,#news p{font-size:10pt}
 #sidebar #sb_advanced.collapsed,#sidebar #sb_internals.collapsed{margin-bottom:-8px}
 #sidebar #sb_peers_condensed{margin-bottom:-7px}
 #sidebar #sb_services.collapsed{margin-bottom:-9px}
-body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_internals.collapsed,body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_advanced.collapsed{margin-bottom:-5px}
+#sidebar #sb_advancedgeneral:not([hidden])~#sb_internals.collapsed,#sidebar #sb_advancedgeneral:not([hidden])~#sb_advanced.collapsed{margin-bottom:-5px}
 #sb_advancedgeneral:not([hidden])~#sb_peers_condensed{margin-bottom:-4px}
 #sidebar #sb_shutdownStatus{padding:8px 4px 9px;line-height:1.2}
 #sidebar table[id^="sb_"],#sidebar #localtunnelSummary{width:238px}

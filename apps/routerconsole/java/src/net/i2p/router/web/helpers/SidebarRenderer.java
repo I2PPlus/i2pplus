@@ -74,6 +74,7 @@ class SidebarRenderer {
     private final RouterContext _context;
     private final SidebarHelper _helper;
     private static final String PROP_ADVANCED = "routerconsole.advanced";
+    private static final String PROP_UNIFIED_SIDEBAR = "routerconsole.unifiedSidebar";
 
     public SidebarRenderer(RouterContext context, SidebarHelper helper) {
         _context = context;
@@ -81,11 +82,12 @@ class SidebarRenderer {
     }
 
     public boolean isAdvanced() {return _context.getBooleanProperty(PROP_ADVANCED);}
+    public boolean unifiedSidebar() {return _context.getBooleanProperty(PROP_UNIFIED_SIDEBAR);}
     public boolean floodfillEnabled() {return _context.netDb().floodfillEnabled();}
 
     /**
-     *  Note - ensure all links in here are absolute, as the summary bar may be displayed
-     *         on lower-level directory errors.
+     *  Note - Ensure all links in here are absolute, as the summary bar may be displayed
+     *  on lower-level directory errors.
      */
     public void renderSummaryHTML(Writer out) throws IOException {
         String requestURI = _helper.getRequestURI();
@@ -93,7 +95,7 @@ class SidebarRenderer {
         String page = requestURI.replace("/", "").replace(".jsp", "");
         List<String> sections = _helper.getSummaryBarSections(page);
 
-        // regardless of section order, we want to process the restart buttons first,
+        // Regardless of section order, we want to process the restart buttons first,
         // so other sections reflect the current restart state
         String restartStatus = sections.contains("RestartStatus") ? renderRestartStatusHTML() : null;
 
@@ -102,13 +104,13 @@ class SidebarRenderer {
             buf.setLength(0);
 
             buf.append("<hr>\n");
-            if ("HelpAndFAQ".equals(section) && (!requestURI.contains("sitemap") || !requestURI.contains("help")))
+            if ("HelpAndFAQ".equals(section) && (unifiedSidebar() || (!requestURI.contains("sitemap") && !requestURI.contains("help"))))
                 buf.append(renderHelpAndFAQHTML());
             else if ("I2PServices".equals(section))
                 buf.append(renderI2PServicesHTML());
-            else if ("I2PInternals".equals(section) && !requestURI.contains("sitemap"))
+            else if ("I2PInternals".equals(section) && (unifiedSidebar() || !requestURI.contains("sitemap")))
                 buf.append(renderI2PInternalsHTML());
-            else if ("Advanced".equals(section) && !requestURI.contains("sitemap"))
+            else if ("Advanced".equals(section) && (unifiedSidebar() || !requestURI.contains("sitemap")))
                 buf.append(renderAdvancedHTML());
             else if ("RouterInfo".equals(section) || "General".equals(section)) // Backwards-compatibility
                 buf.append(renderRouterInfoHTML());
@@ -142,7 +144,7 @@ class SidebarRenderer {
                 buf.append(renderTunnelStatusHTML());
             else if ("Destinations".equals(section))
                 buf.append(renderDestinationsHTML());
-            else if ("NewsHeadings".equals(section) && requestURI.contains("home")) // only render on homepage
+            else if ("NewsHeadings".equals(section) && (unifiedSidebar() || requestURI.contains("home")))
                 buf.append(renderNewsHeadingsHTML());
             else if ("Clock".equals(section))
                 buf.append(renderClockHTML());

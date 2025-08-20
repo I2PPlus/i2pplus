@@ -48,12 +48,14 @@ public class SidebarHelper extends HelperBase {
 
     static final String THINSP = " / ";
     private static final char S = ',';
-    static final String PROP_SUMMARYBAR = "routerconsole.summaryBar.";
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    private static final String PROP_ADVANCED = "routerconsole.advanced";
+    private static final String PROP_UNIFIED_SIDEBAR = "routerconsole.unifiedSidebar";
+    public boolean isAdvanced() {return ctx.getBooleanProperty(PROP_ADVANCED);}
+    public boolean unifiedSidebar() {return _context.getBooleanProperty(PROP_UNIFIED_SIDEBAR);}
+    static final String PROP_SUMMARYBAR = "routerconsole.summaryBar.";
     String firstVersion = ctx.getProperty("router.firstVersion");
     String version = net.i2p.CoreVersion.VERSION;
-    private static final String PROP_ADVANCED = "routerconsole.advanced";
-    public boolean isAdvanced() {return ctx.getBooleanProperty(PROP_ADVANCED);}
 
     static final String DEFAULT_FULL_NEWUSER =
         "RouterInfo" + S +
@@ -70,6 +72,7 @@ public class SidebarHelper extends HelperBase {
         "Peers" + S +
         "Tunnels" + S +
         "TunnelStatus" + S +
+        "NewsHeadings" + S +
         "RestartStatus" + S +
         "Destinations" + S +
         "";
@@ -88,6 +91,7 @@ public class SidebarHelper extends HelperBase {
         "Peers" + S +
         "Tunnels" + S +
         "TunnelStatus" + S +
+        "NewsHeadings" + S +
         "RestartStatus" + S +
         "Destinations" + S +
         "";
@@ -108,6 +112,7 @@ public class SidebarHelper extends HelperBase {
         "Tunnels" + S +
         "TunnelStatus" + S +
         "Congestion" + S +
+        "NewsHeadings" + S +
         "RestartStatus" + S +
         "Destinations" + S +
         "";
@@ -123,6 +128,7 @@ public class SidebarHelper extends HelperBase {
         "FirewallAndReseedStatus" + S +
         "Peers" + S +
         "Tunnels" + S +
+        "TunnelStatus" + S +
         "NewsHeadings" + S +
         "RestartStatus" + S +
         "Destinations" + S +
@@ -140,6 +146,7 @@ public class SidebarHelper extends HelperBase {
         "FirewallAndReseedStatus" + S +
         "Peers" + S +
         "Tunnels" + S +
+        "TunnelStatus" + S +
         "Congestion" + S +
         "NewsHeadings" + S +
         "RestartStatus" + S +
@@ -154,7 +161,7 @@ public class SidebarHelper extends HelperBase {
     public String getIdent() {
         if (_context == null) {return "[no router]";}
         if (_context.routerHash() != null) {return _context.routerHash().toBase64().substring(0, 4);}
-        else {return "[unknown]";}
+        return "[unknown]";
     }
 
     /**
@@ -168,11 +175,10 @@ public class SidebarHelper extends HelperBase {
      *
      */
     public String getUptime() {
-        if (_context == null) return "[no router]";
-
+        if (_context == null) {return "[no router]";}
         Router router = _context.router();
         if (router == null) {return "[not up]";}
-        else {return DataHelper.formatDuration2(router.getUptime());}
+        return DataHelper.formatDuration2(router.getUptime());
     }
 
     /** allowReseed */
@@ -206,9 +212,7 @@ public class SidebarHelper extends HelperBase {
         private NetworkState state;
         private String msg;
 
-        NetworkStateMessage(NetworkState state, String msg) {
-            setMessage(state, msg);
-        }
+        NetworkStateMessage(NetworkState state, String msg) {setMessage(state, msg);}
 
         public void setMessage(NetworkState state, String msg) {
             this.state = state;
@@ -223,13 +227,7 @@ public class SidebarHelper extends HelperBase {
         public String toString() {return "(" + state + "; " + msg + ')';}
     }
 
-    public NetworkStateMessage getReachability() {
-        return reachability(); // + timeSkew();
-        // testing
-        //return reachability() +
-        //       " Offset: " + DataHelper.formatDuration(_context.clock().getOffset()) +
-        //       " Slew: " + DataHelper.formatDuration(((RouterClock)_context.clock()).getDeltaOffset());
-    }
+    public NetworkStateMessage getReachability() {return reachability();}
 
     private NetworkStateMessage reachability() {
         if (_context.commSystem().isDummy()) {return new NetworkStateMessage(NetworkState.VMCOMM, "VM Comm System");}
@@ -353,9 +351,6 @@ public class SidebarHelper extends HelperBase {
         used /= 1024*1024;
         long total = tot / (1024*1024);
         if (used > total) {used = total;}
-        // long free = Runtime.getRuntime().freeMemory()/1024/1024;
-        // return integerFormatter.format(used) + "MB (" + usedPc + "%)";
-        // return integerFormatter.format(used) + "MB / " + free + " MB";
         return integerFormatter.format(used) + " / " + total + " MiB";
     }
 
@@ -365,7 +360,6 @@ public class SidebarHelper extends HelperBase {
         long tot = SystemVersion.getMaxMemory();
         // This reads much higher than the graph, possibly because it's right in
         // the middle of a console refresh... so get it from the Rate instead.
-        //long free = Runtime.getRuntime().freeMemory();
         long used = (long) _context.statManager().getRate("router.memoryUsed").getRate(60*1000).getAvgOrLifetimeAvg();
         long usedPc;
         if (used <= 0) {
@@ -379,13 +373,10 @@ public class SidebarHelper extends HelperBase {
         long total = tot / (1024*1024);
         if (used > total) {used = total;}
         if (usedPc > 100) {usedPc = 100;}
-        // long free = Runtime.getRuntime().freeMemory()/1024/1024;
-        // return integerFormatter.format(used) + "MB (" + usedPc + "%)";
-        // return integerFormatter.format(used) + "MB / " + free + " MB";
-        return "<div class=\"percentBarOuter volatile\" id=sb_memoryBar><div class=percentBarText>RAM: " +
-               integerFormatter.format(used) + " / " + total + " M" +
-               "</div><div class=percentBarInner style=\"width: " + integerFormatter.format(usedPc) +
-               "%;\"></div></div>";
+        String bar = "<div class=\"percentBarOuter volatile\" id=sb_memoryBar><div class=percentBarText>RAM: " +
+                      integerFormatter.format(used) + " / " + total + " M</div><div class=percentBarInner style=width:" +
+                      integerFormatter.format(usedPc) + "%></div></div>";
+        return bar;
     }
 
     /**
@@ -394,7 +385,7 @@ public class SidebarHelper extends HelperBase {
      */
     public int getCPULoad() {
         if (_context == null) {return 0;}
-        else {return SystemVersion.getCPULoad();}
+        return SystemVersion.getCPULoad();
     }
 
     /**
@@ -403,7 +394,7 @@ public class SidebarHelper extends HelperBase {
      */
     public int getCPULoadAvg() {
         if (_context == null) {return 0;}
-        else {return SystemVersion.getCPULoadAvg();}
+        return SystemVersion.getCPULoadAvg();
     }
 
     /**
@@ -412,7 +403,7 @@ public class SidebarHelper extends HelperBase {
      */
     public int getSystemLoad() {
         if (_context == null) {return 0;}
-        else {return SystemVersion.getSystemLoad();}
+        return SystemVersion.getSystemLoad();
     }
 
     /**
@@ -420,10 +411,10 @@ public class SidebarHelper extends HelperBase {
      * @since 0.9.58+
      */
     public String getCPUBar() {
-        return "<div class=\"percentBarOuter volatile\" id=sb_CPUBar><div class=percentBarText>CPU: " +
-               getCPULoadAvg() + "%" + (getSystemLoad() > 0 ? " | Sys Load Avg: " + getSystemLoad() + "%" : "") +
-               "</div><div class=percentBarInner style=\"width:" + getCPULoadAvg() +
-               "%\"></div></div>";
+        String bar = "<div class=\"percentBarOuter volatile\" id=sb_CPUBar><div class=percentBarText>CPU: " +
+                      getCPULoadAvg() + "%" + (getSystemLoad() > 0 ? " | Sys Load Avg: " + getSystemLoad() + "%" : "") +
+                      "</div><div class=percentBarInner style=width:" + getCPULoadAvg() + "%></div></div>";
+        return bar;
     }
 
     /**
@@ -533,9 +524,8 @@ public class SidebarHelper extends HelperBase {
         else if (_context.bandwidthLimiter().getReceiveBps() < 1024 * 1024 || _context.bandwidthLimiter().getSendBps() < 1024 * 1024) {
             return formatPair(Math.round(_context.bandwidthLimiter().getReceiveBps() * 10.0 / 10.0),
                               Math.round(_context.bandwidthLimiter().getSendBps() * 10.0 / 10.0));
-        } else {
-            return formatPair(_context.bandwidthLimiter().getReceiveBps(), _context.bandwidthLimiter().getSendBps());
         }
+        return formatPair(_context.bandwidthLimiter().getReceiveBps(), _context.bandwidthLimiter().getSendBps());
     }
 
     /**
@@ -558,7 +548,8 @@ public class SidebarHelper extends HelperBase {
         }
         if (in < 1024 * 1024 || out < 1024 * 1024) {
             return formatPair(Math.round(in) * 10.0 / 10.0, Math.round(out) * 10.0 / 10.0);
-        } else {return formatPair(in, out);}
+        }
+        return formatPair(in, out);
     }
 
     /**
@@ -730,10 +721,10 @@ public class SidebarHelper extends HelperBase {
                .append(_t("none")).append("</i></td></tr>\n</table>\n");
         }
         buf.append("<table id=localtunnelSummary hidden>\n<tr id=localtunnelsActive><td>")
-           .append("<span id=snarkCount class=\"count_0\">0 x <img src=/themes/console/images/snark.svg></span>")
-           .append("<span id=serverCount class=\"count_0\">0 x <img src=/themes/console/images/server.svg></span>")
-           .append("<span id=clientCount class=\"count_0\">0 x <img src=/themes/console/images/client.svg></span>")
-           .append("<span id=pingCount class=\"count_0\">0 x <img src=/themes/console/images/ping.svg></span>")
+           .append("<span id=snarkCount class=count_0>0 x <img src=/themes/console/images/snark.svg></span>")
+           .append("<span id=serverCount class=count_0>0 x <img src=/themes/console/images/server.svg></span>")
+           .append("<span id=clientCount class=count_0>0 x <img src=/themes/console/images/client.svg></span>")
+           .append("<span id=pingCount class=count_0>0 x <img src=/themes/console/images/ping.svg></span>")
            .append("</td></tr>\n</table>\n");
         return buf.toString();
     }
@@ -1184,7 +1175,7 @@ public class SidebarHelper extends HelperBase {
 
     public List<String> getSummaryBarSections(String page) {
         String config;
-        if ("home".equals(page)) {
+        if ("home".equals(page) && !unifiedSidebar()) {
             config = _context.getProperty(PROP_SUMMARYBAR + page, isAdvanced() ? DEFAULT_MINIMAL_ADVANCED : DEFAULT_MINIMAL);
         } else {
             config = _context.getProperty(PROP_SUMMARYBAR + page);

@@ -185,7 +185,8 @@ public class LogsHelper extends HelperBase {
                                     .replaceAll("\\|.*\\[.*date.*\\].*?:", "|")
                                     .replaceAll("\\|.*\\[.*-Connection].*?:", "|")
                                     .replaceAll("\\|.*\\[.*Restart].*?:", "|")
-                                    .replaceAll("\\|.*\\[.*Read.*\\].*?:", "|");
+                                    .replaceAll("\\|.*\\[.*Read.*\\].*?:", "|")
+                                    .replaceAll("\\|.*\\[.*DirMon.*\\].*?:", "|");
                 // Remove lines containing unwanted strings
                 StringBuilder filtered = new StringBuilder();
                 String[] logLines = str.split("\n");
@@ -202,6 +203,9 @@ public class LogsHelper extends HelperBase {
                         !line.contains("than the successful invocation time") &&
                         !line.contains("Disconnect Message received") &&
                         !line.contains("Cannot send to TunnelGateway") &&
+                        !line.contains("Unable to connect to I2P") &&
+                        !line.contains("Unable to add torrent") &&
+                        !line.contains("Error creating session") &&
                         !line.contains("ContextHandler") &&
                         !line.contains("AbstractConnector") &&
                         !line.contains("I2PSessionException") &&

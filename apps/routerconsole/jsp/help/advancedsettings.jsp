@@ -70,6 +70,9 @@
 <tr class=config><th>routerconsole.sitemapSites={true|false} <span class=plus>I2P+</span></th></tr>
 <tr><td><%=intl._t("This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]")%></td></tr>
 
+<tr class=config><th>routerconsole.unifiedSidebar={true|false} <span class=plus>I2P+</span></th></tr>
+<tr><td><%=intl._t("This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]")%></td></tr>
+
 <tr class=section><th>router</th></tr>
 
 <tr class=config><th>router.blocklist.enable={true|false}</th></tr>
