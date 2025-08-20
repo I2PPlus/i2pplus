@@ -71,8 +71,8 @@
     <echo message=" i2psnark_nozip                               Build standalone I2PSnark install, no zip file &#10140; ./dist/i2psnark-standalone"/>
     <echo message=" installer / installer5                       Build GUI installer (IzPack4 / IzPack5) &#10140; ./dist/i2pinstall.exe"/>
     <echo message=" installer-freebsd                            Build FreeBSD GUI installer &#10140; ./dist/i2pinstall&#8230;freebsd-only.jar"/>
-    <echo message=" installer-linux / installer5-linux           Build Linux GUI installer (IzPack4 / Izpack5) &#10140; i2pinstall&#8230;linux-only.jar"/>
-    <echo message=" installer-nowindows / installer5-nowindows   Build GUI installer without Windows support (IzPack4 / IzPack5) &#10140; i2pinstall&#8230;.jar"/>
+    <echo message=" installer-linux / installer5-linux           Build Linux GUI installer (IzPack4 / Izpack5) &#10140; ./dist/i2pinstall&#8230;linux-only.jar"/>
+    <echo message=" installer-nowindows / installer5-nowindows   Build GUI installer without Windows support (IzPack4 / IzPack5) &#10140; ./dist/i2pinstall&#8230;.jar"/>
     <echo message=" installer-osx                                Build OS X GUI installer &#10140; ./dist/i2pinstall&#8230;osx.tar.bz2"/>
     <echo message=" installer-windows / installer5-windows       Build Windows GUI installer (IzPack4 / IzPack5) &#10140; ./dist/i2pinstall&#8230;windows.exe"/>
     <echo message=" javadoc                                      Create javadocs for project &#10140; ./dist/javadoc"/>
