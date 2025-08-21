@@ -346,22 +346,22 @@
 </span>
 </td>
 <td>
-<span class="multiOption experimental" (isAdvanced ? "" : hidden)>
+<span class="multiOption experimental"<%= (isAdvanced ? "" : "hidden")%>>
 <label title="MLKEM512-X25519"><input value="5" type=radio name=encType <%=((has5 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM512</label>
 </span>
 <span class="multiOption experimental">
 <label title="MLKEM768-X25519"><input value="6" type=radio name=encType<%=((has6 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM768</label>
 </span>
-<span class="multiOption experimental" (isAdvanced ? "" : hidden)>
+<span class="multiOption experimental"<%= (isAdvanced ? "" : "hidden")%>>
 <label title="MLKEM1024-X25519"><input value="7" type=radio name=encType <%=((has7 && !has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM1024</label>
 </span>
-<span class="multiOption experimental" (isAdvanced ? "" : hidden)>
+<span class="multiOption experimental"<%= (isAdvanced ? "" : "hidden")%>>
 <label title="MLKEM512-X25519 + ECIES-X25519"><input value="5,4" type=radio name=encType <%=((has5 && has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM512 + ECIES</label>
 </span>
 <span class="multiOption experimental">
 <label title="MLKEM768-X25519 + ECIES-X25519"><input value="6,4" type=radio name=encType <%=((has6 && has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM768 + ECIES</label>
 </span>
-<span class="multiOption experimental" (isAdvanced ? "" : hidden)>
+<span class="multiOption experimental"<%= (isAdvanced ? "" : "hidden")%>>
 <label title="MLKEM1024-X25519 + ECIES-X25519"><input value="7,4" type=radio name=encType <%=((has7 && has4) ? checked : edisabled)%> class=optbox>&nbsp;MLKEM1024 + ECIES</label>
 </span>
 </td>
