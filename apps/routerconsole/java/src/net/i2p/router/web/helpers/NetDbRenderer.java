@@ -240,7 +240,7 @@ class NetDbRenderer {
                 if (version != null) {buf.append("[").append(_t("Version")).append(' ').append(version).append("] ");}
                 if (country != null) {buf.append("[").append(_t("Country")).append(' ').append(country).append("] ");}
                 if (family != null) {buf.append("[").append(_t("Family")).append(' ').append(family).append("] ");}
-                if (ip != null) {buf.append("[").append("IPv4 address ").append(ip).append("] ");}
+                if (ip != null) {buf.append("[").append("IPv4 address ").append(ipArg).append("] ");}
                 if (ipv6 != null) {buf.append("[").append("IPv6 address ").append(ipv6).append("] ");}
                 if (port != 0) {
                     buf.append("[").append(_t("Port")).append(' ').append(port);
@@ -312,7 +312,6 @@ class NetDbRenderer {
                     buf.append("<span id=nextPage class=\"pageLink disabled\">").append("⏵").append("</span>\n");
                 }
             }
-            //renderPageSizeInput(buf);
             buf.append("</div>\n");
         }
     }
