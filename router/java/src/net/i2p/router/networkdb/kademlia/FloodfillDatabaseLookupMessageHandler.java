@@ -56,19 +56,11 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         String searchType = type != null ? type.toString().replace("EXPL", "Exploratory").replace("RI", "RouterInfo") : "";
         boolean isRISearch = searchType.equals("RouterInfo");
         int keyLength = isRISearch ? 6 : 8;
+        RouterInfo info = (RouterInfo) _context.netDb().lookupLocally(dlm.getFrom());
+        String caps = info != null ? info.getCapabilities() : "";
+        boolean isFF = info != null && !caps.equals("") && caps.indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0;
 
-        if ((!_facade.shouldThrottleLookup(dlm.getFrom(), dlm.getReplyTunnel()) &&
-             !_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel()) &&
-             (ffMode || ourRI || type != DatabaseLookupMessage.Type.EXPL)) ||
-             _context.routerHash().equals(dlm.getSearchKey()) || dlm.getFrom() == us) {
-            if (_log.shouldInfo()) {
-                _log.info("Replying to " + searchType.replace("LS", "LeaseSet") +
-                          " Lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
-                          "for [" + dlm.getSearchKey().toBase64().substring(0,keyLength) + "] via [TunnelId " + dlm.getReplyTunnel() + "]");
-            }
-            Job j = new HandleFloodfillDatabaseLookupMessageJob(_context, dlm, from, fromHash, _msgIDBloomXor);
-            return j;
-        } else if (!ffMode && (type == DatabaseLookupMessage.Type.EXPL || type == DatabaseLookupMessage.Type.ANY)) {
+        if (!ffMode && (type == DatabaseLookupMessage.Type.EXPL || type == DatabaseLookupMessage.Type.ANY)) {
             if (_log.shouldInfo()) {
                 _log.warn("Dropping " + searchType.replace("LS", "LeaseSet") +
                           " Lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
@@ -80,6 +72,19 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
                           "for [" + dlm.getSearchKey().toBase64().substring(0,keyLength) + "] -> We are not a floodfill");
             }
             _context.statManager().addRateData("netDb.nonFFLookupsDropped", 1);
+            return null;
+        } else if (isFF && dlm.getReplyTunnel() == null && (type == DatabaseLookupMessage.Type.EXPL || type == DatabaseLookupMessage.Type.ANY)) {
+            if (_log.shouldInfo()) {
+                _log.warn("Dropping" + searchType.replace("LS", "LeaseSet") +
+                          " Lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
+                          "for [" + dlm.getSearchKey().toBase64().substring(0,keyLength) + "] -> " +
+                          "Direct Exploratory search from floodfill [TunnelId " + dlm.getReplyTunnel() + "]");
+            } else if (_log.shouldWarn()) {
+                _log.warn("Dropping" + searchType.replace("LS", "LeaseSet") +
+                          " Lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
+                          "for [" + dlm.getSearchKey().toBase64().substring(0,keyLength) + "] -> " +
+                          "Direct Exploratory search from floodfill");}
+            _context.statManager().addRateData("netDb.lookupsDropped", 1);
             return null;
         } else if (!ffMode && !_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel())) {
             if (_log.shouldInfo()) {
@@ -95,9 +100,6 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             _context.statManager().addRateData("netDb.lookupsDropped", 1);
             return null;
         } else if (_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel())) {
-            RouterInfo info = (RouterInfo) _context.netDb().lookupLocally(dlm.getFrom());
-            String caps = info != null ? info.getCapabilities() : "";
-            boolean isFF = caps != null && caps.indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0;
             if (_log.shouldInfo()) {
                 _log.warn("Dropping " + searchType.replace("LS", "LeaseSet") +
                           " Lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
@@ -115,10 +117,18 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             }
             _context.statManager().addRateData("netDb.lookupsDropped", 1);
             return null;
+        } else if ((!_facade.shouldThrottleLookup(dlm.getFrom(), dlm.getReplyTunnel()) &&
+             !_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel()) &&
+             (ffMode || ourRI || type != DatabaseLookupMessage.Type.EXPL)) ||
+             _context.routerHash().equals(dlm.getSearchKey()) || dlm.getFrom() == us) {
+            if (_log.shouldInfo()) {
+                _log.info("Replying to " + searchType.replace("LS", "LeaseSet") +
+                          " Lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
+                          "for [" + dlm.getSearchKey().toBase64().substring(0,keyLength) + "] via [TunnelId " + dlm.getReplyTunnel() + "]");
+            }
+            Job j = new HandleFloodfillDatabaseLookupMessageJob(_context, dlm, from, fromHash, _msgIDBloomXor);
+            return j;
         } else {
-            RouterInfo info = (RouterInfo) _context.netDb().lookupLocally(dlm.getFrom());
-            String caps = info != null ? info.getCapabilities() : "";
-            boolean isFF = caps != null && caps.indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0;
             if (_log.shouldInfo()) {
                 _log.warn("Dropping " + searchType.replace("LS", "LeaseSet") +
                           " Lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
