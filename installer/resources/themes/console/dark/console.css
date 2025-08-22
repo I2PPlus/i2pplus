@@ -3282,3 +3282,13 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 /* LS search */
 #netdb #singleLS~.leaseset {margin-bottom:1px;column-span:all;width:100%}
 #searchLS {margin-bottom:10px auto -1px;display:block;column-span:all;text-align:center;box-shadow:0 0 0 1px #000,0 0 0 3px #252,var(--highlight);background:var(--th)}
+
+/* session bans */
+#banSummary h2 {margin:2px -10px 0}
+#banSummary li{margin:2px 0;padding:0;min-width:300px;display:inline-block}
+#banSummary ul{margin:-1px -10px -16px;padding:5px 8px 4px;columns:300px 5;list-style-type:none;border:var(--border)}
+#banSummary .badge{margin:0 4px 0 0;padding:2px 4px;min-width:48px;display:inline-block;text-align:center;letter-spacing:0.05em;font-weight:600;box-shadow:var(--bevel);background:var(--badge)}
+@media (max-width:1499px) {
+#banSummary h2{margin:-8px -10px -1px}
+#banSummary ul{margin:-1px -10px -19px}
+}
