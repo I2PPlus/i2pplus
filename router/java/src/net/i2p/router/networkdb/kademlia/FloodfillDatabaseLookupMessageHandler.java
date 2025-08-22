@@ -20,8 +20,15 @@ import net.i2p.util.Log;
 import net.i2p.util.RandomSource;
 
 /**
- * Build a HandleDatabaseLookupMessageJob whenever a DatabaseLookupMessage arrives
- *
+ * Handler for DatabaseLookupMessage received on floodfill network nodes.
+ * &lt;p&gt;
+ * This class verifies incoming lookup messages, applies throttling and banning policies,
+ * and builds appropriate jobs for accepted lookups. Unacceptable lookups are logged and dropped.
+ * &lt;p&gt;
+ * It tracks lookup statistics such as received, dropped, handled, and matched lookups via the statManager.
+ * &lt;p&gt;
+ * Supports floodfill and non-floodfill router modes, with special handling for floodfill peers and
+ * exploratory lookups.
  */
 public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder {
     private RouterContext _context;
@@ -29,6 +36,13 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
     private Log _log;
     private final long _msgIDBloomXor = RandomSource.getInstance().nextLong(I2NPMessage.MAX_ID_VALUE);
 
+
+    /**
+     * Constructs a new handler for floodfill DatabaseLookupMessages.
+     *
+     * @param context the router context providing system state and utilities
+     * @param facade the network database facade used for lookup management and throttling
+     */
     public FloodfillDatabaseLookupMessageHandler(RouterContext context, FloodfillNetworkDatabaseFacade facade) {
         _context = context;
         _facade = facade;
@@ -45,6 +59,19 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         _context.statManager().createRateStat("netDb.lookupsMatchedRemoteNotClosest", "NetDb lookups received for remote data (not closest peer)", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
     }
 
+    /**
+     * Creates a job to handle an incoming DatabaseLookupMessage, or returns null if the lookup should be dropped.
+     *
+     * &lt;p&gt;This method performs several checks, including: floodfill participation, sender identity,
+     * whether the lookup is for this router, throttling, banning, and lookup type compatibility.
+     * Logs details about accepted or dropped lookups and updates statistics.
+     *
+     * @param receivedMessage the incoming message, expected to be a DatabaseLookupMessage
+     * @param from the identity of the sender router
+     * @param fromHash the hash of the sender router
+     * @return a Job to handle the lookup if accepted, or null if dropped
+     * @throws ClassCastException if receivedMessage is not a DatabaseLookupMessage
+     */
     public Job createJob(I2NPMessage receivedMessage, RouterIdentity from, Hash fromHash) {
         _context.statManager().addRateData("netDb.lookupsReceived", 1);
 
@@ -124,6 +151,20 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         return null;
     }
 
+    /**
+     * Logs warning messages when a lookup is dropped due to throttling, banning, or mode restrictions.
+     * Does nothing if warning logs are disabled or the sender is already banned.
+     *
+     * @param searchType the type string of the lookup (e.g., "Exploratory", "RouterInfo")
+     * @param fromBase64 the base64 representation of the sender router hash (truncated to 6 chars)
+     * @param searchKeyBase64 the base64 representation of the lookup search key (truncated)
+     * @param keyLength the length of key substring to log (6 if RouterInfo or 8 chars otherwise)
+     * @param isFF true if the sender router is a floodfill node
+     * @param floodfillMode true if the local router is participating as floodfill
+     * @param isDirect true if the lookup is being sent directly (no tunnel)
+     * @param isBanned true if the sender router is banned
+     * @param maxLookups max allowed lookups in time window for floodfill or non-floodfill
+     */
     private void logDroppedLookup(String searchType, String fromBase64, String searchKeyBase64, int keyLength, boolean isFF,
                                   boolean floodfillMode, boolean isDirect, boolean isBanned, int maxLookups) {
         if (!_log.shouldWarn() || isBanned) {return;}
@@ -142,7 +183,18 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
     }
 
     /**
-     * Determines whether the lookup should be accepted based on various criteria.
+     * Determines whether a lookup request should be accepted based on sender identity,
+     * throttling and banning status, router participation mode, and type of lookup.
+     *
+     * @param isSenderUs true if the sender is the local router itself (loopback)
+     * @param shouldThrottle true if the lookup request should be throttled (rate limited)
+     * @param shouldBan true if the lookup request should be banned (blocked)
+     * @param ourRI true if the lookup is for this router's identity
+     * @param floodfillMode true if the local router participates as floodfill
+     * @param isFF true if the sender router is a floodfill node
+     * @param type the type of the lookup message
+     * @return true if the lookup is accepted, false if dropped
+     *
      * @since 0.9.67+
      */
     private boolean shouldAcceptLookup(boolean isSenderUs, boolean shouldThrottle, boolean shouldBan,
@@ -152,6 +204,12 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
                (floodfillMode && isFF && type != DatabaseLookupMessage.Type.EXPL && type != DatabaseLookupMessage.Type.ANY)));
     }
 
+    /**
+     * Converts a DatabaseLookupMessage.Type enum to a human-readable string.
+     *
+     * @param type the lookup message type
+     * @return a descriptive string representation of the type
+     */
     private static String typeToString(DatabaseLookupMessage.Type type) {
         switch (type) {
             case EXPL:
