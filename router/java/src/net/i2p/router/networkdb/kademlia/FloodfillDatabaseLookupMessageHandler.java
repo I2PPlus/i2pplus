@@ -69,28 +69,9 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         final boolean isFF = info != null && caps != null && caps.indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0;
         final boolean shouldThrottle = !isSenderUs && _facade.shouldThrottleLookup(dlm.getFrom(), dlm.getReplyTunnel());
         final boolean shouldBan = !isBanned && _facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel());
-        final boolean shouldAccept = isSenderUs || (!shouldThrottle && !shouldBan && (ourRI || (floodfillMode && !isFF) ||
-                               (floodfillMode && isFF && type != DatabaseLookupMessage.Type.EXPL && type != DatabaseLookupMessage.Type.ANY)));
+        final boolean shouldAccept = shouldAcceptLookup(isSenderUs, shouldThrottle, shouldBan, ourRI, floodfillMode, isFF, type);
         final boolean isSelfLookup = ourRouter.equals(dlm.getSearchKey()) || dlm.getFrom().equals(ourRouter);
         final int maxLookups = isFF ? 30 : 10;
-
-        if ((!isSelfLookup && !floodfillMode) || !shouldAccept) {
-            logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
-            _context.statManager().addRateData("netDb.nonFFLookupsDropped", 1);
-            return null;
-        }
-
-        if (!isSenderUs && isFF && isDirect && (type == DatabaseLookupMessage.Type.EXPL || type == DatabaseLookupMessage.Type.ANY)) {
-            logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
-            _context.statManager().addRateData("netDb.lookupsDropped", 1);
-            return null;
-        }
-
-        if (!floodfillMode && !shouldBan) {
-            logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
-            _context.statManager().addRateData("netDb.lookupsDropped", 1);
-            return null;
-        }
 
         if (shouldBan) {
             if (dlm.getFrom() != null) {
@@ -109,6 +90,24 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
                 message.append(" and banning for 1h -> Max 60 requests in 30s or 10/s exceeded");
                 _log.warn(message.toString());
             }
+            return null;
+        }
+
+        if ((!isSelfLookup && !floodfillMode) || !shouldAccept) {
+            logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
+            _context.statManager().addRateData("netDb.nonFFLookupsDropped", 1);
+            return null;
+        }
+
+        if (!isSenderUs && isFF && isDirect && (type == DatabaseLookupMessage.Type.EXPL || type == DatabaseLookupMessage.Type.ANY)) {
+            logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
+            _context.statManager().addRateData("netDb.lookupsDropped", 1);
+            return null;
+        }
+
+        if (!floodfillMode && !shouldBan) {
+            logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
+            _context.statManager().addRateData("netDb.lookupsDropped", 1);
             return null;
         }
 
@@ -140,6 +139,17 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             msg.append(" -> Direct search for Exploratory or Any from floodfill");
         }
         _log.warn(msg.toString());
+    }
+
+    /**
+     * Determines whether the lookup should be accepted based on various criteria.
+     * @since 0.9.67+
+     */
+    private boolean shouldAcceptLookup(boolean isSenderUs, boolean shouldThrottle, boolean shouldBan,
+                                      boolean ourRI, boolean floodfillMode, boolean isFF,
+                                      DatabaseLookupMessage.Type type) {
+        return isSenderUs || (!shouldThrottle && !shouldBan && (ourRI || (floodfillMode && !isFF) ||
+               (floodfillMode && isFF && type != DatabaseLookupMessage.Type.EXPL && type != DatabaseLookupMessage.Type.ANY)));
     }
 
     private static String typeToString(DatabaseLookupMessage.Type type) {
