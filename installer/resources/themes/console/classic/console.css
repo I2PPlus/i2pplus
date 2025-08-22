@@ -1590,6 +1590,7 @@ img.unknownflag{opacity:.8}
 #logs li a[href^="/netdb?l="]::before{margin:0 1px 0 -3px;background:var(--key) no-repeat center center/12px}
 #logs li a[href^="/netdb?l="]{white-space:nowrap}
 #logs li a[href^="/netdb?r="]::before{background:var(--client) no-repeat center center/16px}
+#logs li a.isFF[href^="/netdb?r="]::before{background:var(--floodfill) no-repeat center center/16px}
 #logs ul{margin-left:-5px;margin-bottom:-3px;padding-left:0;padding-right:0;width:calc(100% + 10px);margin-right:-20px}
 #logs ul{margin-left:-22px;margin-right:-28px;margin:-4px 0 0 -20px;display:inline-block;word-break:break-all}
 #refreshPeriod,#logFilter{width:auto;display:none;float:right;transform:scale(80%)}

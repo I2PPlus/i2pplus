@@ -168,10 +168,14 @@ function start() {
       const matches = li.textContent.match(pattern);
 
       if (matches) {
-        matches.forEach((match) => {
-          const linkText = match.replace(/\[|\]/g, ""); // Remove square brackets
-          const linkHref = linkFormatter(linkText);
-          newHTML = newHTML.replace(match, `<a href="${linkHref}">${linkText}</a>`);
+        matches.forEach((match) => {const linkText = match.replace(/\[|\]/g, ""); // Remove square brackets
+        // Check if the match is preceded by "floodfill "
+        const precedingText = newHTML.slice(0, newHTML.indexOf(match)).slice(-"floodfill ".length);
+        const isFloodfill = precedingText === "floodfill ";
+        const linkHref = linkFormatter(linkText);
+        const classAttr = isFloodfill ? ' class="isFF"' : '';
+        if (isFloodfill) {newHTML = newHTML.replace("floodfill " + match, match);}
+        newHTML = newHTML.replace(match, `<a href="${linkHref}"${classAttr}>${linkText}</a>`);
         });
         li.innerHTML = newHTML; // Update only once
       }

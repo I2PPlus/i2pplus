@@ -2570,6 +2570,7 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #logs li a[href^="/netdb?ip"]::before{width:14px;background:url(/themes/console/images/globe.svg) no-repeat center center/14px}
 #logs li a[href^="/netdb?l="]::before{margin:0 1px 0 -3px;white-space:nowrap;background:var(--key) no-repeat center center/12px}
 #logs li a[href^="/netdb?r="]::before{background:var(--client) no-repeat center center/16px}
+#logs li a.isFF[href^="/netdb?r="]::before{background:var(--floodfill) no-repeat center center/16px}
 #logs li:hover span{text-shadow:none;box-shadow:none}
 #logs li a::before{margin:0 3px 0 0;width:16px;height:16px;display:inline-block;vertical-align:text-bottom;content:"";mix-blend-mode:luminosity}
 #logs .nologs{padding:5px 10px 7px}
