@@ -62,14 +62,19 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         final boolean isRISearch = type == DatabaseLookupMessage.Type.RI;
         final int keyLength = isRISearch ? 6 : 8;
         final boolean isDirect = dlm.getReplyTunnel() == null;
-        final boolean isBanned =  dlm.getFrom() != null && _context.banlist().isBanlisted(dlm.getFrom());
+        final boolean isBanned = dlm.getFrom() != null && _context.banlist().isBanlisted(dlm.getFrom());
 
         RouterInfo info = (RouterInfo) _context.netDb().lookupLocally(dlm.getFrom());
-        String caps = info != null ? info.getCapabilities() : "";
-        boolean isFF = info != null && caps != null && caps.indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0;
+        final String caps = info != null ? info.getCapabilities() : "";
+        final boolean isFF = info != null && caps != null && caps.indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0;
+        final boolean shouldThrottle = !isSenderUs && _facade.shouldThrottleLookup(dlm.getFrom(), dlm.getReplyTunnel());
+        final boolean shouldBan = !isBanned && _facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel());
+        final boolean shouldAccept = isSenderUs || (!shouldThrottle && !shouldBan && (ourRI || (floodfillMode && !isFF) ||
+                               (floodfillMode && isFF && type != DatabaseLookupMessage.Type.EXPL && type != DatabaseLookupMessage.Type.ANY)));
+        final boolean isSelfLookup = ourRouter.equals(dlm.getSearchKey()) || dlm.getFrom().equals(ourRouter);
         final int maxLookups = isFF ? 30 : 10;
 
-        if (!isSenderUs && !floodfillMode && (type == DatabaseLookupMessage.Type.EXPL || type == DatabaseLookupMessage.Type.ANY)) {
+        if ((!isSelfLookup && !floodfillMode) || !shouldAccept) {
             logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
             _context.statManager().addRateData("netDb.nonFFLookupsDropped", 1);
             return null;
@@ -81,7 +86,6 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             return null;
         }
 
-        boolean shouldBan = !isBanned && _facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel());
         if (!floodfillMode && !shouldBan) {
             logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
             _context.statManager().addRateData("netDb.lookupsDropped", 1);
@@ -108,11 +112,6 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             return null;
         }
 
-        boolean shouldThrottle = !isSenderUs && _facade.shouldThrottleLookup(dlm.getFrom(), dlm.getReplyTunnel());
-        boolean shouldAccept = isSenderUs || (!shouldThrottle && !shouldBan && (ourRI || (floodfillMode && !isFF) ||
-                               (isFF && type != DatabaseLookupMessage.Type.EXPL && type != DatabaseLookupMessage.Type.ANY)));
-        boolean isSelfLookup = ourRouter.equals(dlm.getSearchKey()) || dlm.getFrom().equals(ourRouter);
-
         if (shouldAccept || isSelfLookup) {
             if (_log.shouldInfo()) {
                 _log.info("Replying to " + searchType + " lookup from [" + fromBase64.substring(0,6) + "] for [" +
@@ -134,7 +133,12 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
            .append(" lookup from ").append(isFF? "floodfill " : "").append("[").append(fromBase64.substring(0,6)).append("]")
            .append(" for [").append(searchKeyBase64, 0, keyLength).append("]");
         if (!floodfillMode) {msg.append(" -> We are not a floodfill");}
-        else if (!isDirect && !isFF) {msg.append(" -> Max ").append(maxLookups).append(" requests in 3m or 5/s exceeded");}
+        else if (!isFF) {msg.append(" -> Max ").append(maxLookups).append(" requests in 3m or 5/s exceeded");}
+        else if (isFF && !isDirect) {
+            msg.append(" -> Max ").append(maxLookups).append(" requests in 3m or 5/s exceeded");
+        } else if (isFF && isDirect && (searchType.equals("ANY") || searchType.equals("EXPL"))) {
+            msg.append(" -> Direct search for Exploratory or Any from floodfill");
+        }
         _log.warn(msg.toString());
     }
 
