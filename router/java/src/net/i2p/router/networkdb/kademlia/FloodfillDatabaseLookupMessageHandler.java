@@ -102,7 +102,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
                        .append(isFF ? "floodfill ": "").append("[").append(fromBase64.substring(0,6)).append("]");
 
                 if (!isDirect && _log.shouldInfo()) {message.append(" via [TunnelId ").append(dlm.getReplyTunnel()).append("]");}
-                message.append(" and banning for 5m -> Max ").append(maxLookups).append(" requests in 3m or 10/s exceeded");
+                message.append(" and banning for 5m -> Max 60 requests in 30s or 10/s exceeded");
                 _log.warn(message.toString());
             }
             return null;
@@ -134,7 +134,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
            .append(" lookup from ").append(isFF? "floodfill " : "").append("[").append(fromBase64.substring(0,6)).append("]")
            .append(" for [").append(searchKeyBase64, 0, keyLength).append("]");
         if (!floodfillMode) {msg.append(" -> We are not a floodfill");}
-        else if (!isDirect && !isFF) {msg.append(" -> Max ").append(maxLookups).append(" requests in 3m or 10/s exceeded");}
+        else if (!isDirect && !isFF) {msg.append(" -> Max ").append(maxLookups).append(" requests in 3m or 5/s exceeded");}
         _log.warn(msg.toString());
     }
 
