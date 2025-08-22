@@ -48,100 +48,109 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
     public Job createJob(I2NPMessage receivedMessage, RouterIdentity from, Hash fromHash) {
         _context.statManager().addRateData("netDb.lookupsReceived", 1);
 
-        DatabaseLookupMessage dlm = (DatabaseLookupMessage)receivedMessage;
-        boolean ourRI = dlm.getSearchKey() != null && dlm.getSearchKey().equals(_context.routerHash());
-        Hash us = _context.routerHash();
-        boolean ffMode = _context.netDb().floodfillEnabled() || _context.getBooleanProperty("router.floodfillParticipant");
-        DatabaseLookupMessage.Type type = dlm.getSearchType();
-        String searchType = type != null ? type.toString().replace("EXPL", "Exploratory").replace("RI", "RouterInfo") : "";
-        boolean isRISearch = searchType.equals("RouterInfo");
-        int keyLength = isRISearch ? 6 : 8;
+        DatabaseLookupMessage dlm = (DatabaseLookupMessage) receivedMessage;
+        final Hash ourRouter = _context.routerHash();
+        final boolean isSenderUs = ourRouter != null && ourRouter.equals(dlm.getFrom());
+        final boolean shouldLog = _log.shouldWarn() || _log.shouldInfo();
+        final String fromBase64 = shouldLog ? dlm.getFrom().toBase64() : "";
+        final String searchKeyBase64 = shouldLog && dlm.getSearchKey() != null ? dlm.getSearchKey().toBase64() : "";
+        final DatabaseLookupMessage.Type type = dlm.getSearchType();
+
+        final boolean floodfillMode = _context.netDb().floodfillEnabled() || _context.getBooleanProperty("router.floodfillParticipant");
+        final boolean ourRI = dlm.getSearchKey() != null && dlm.getSearchKey().equals(ourRouter);
+        final String searchType = typeToString(type);
+        final boolean isRISearch = type == DatabaseLookupMessage.Type.RI;
+        final int keyLength = isRISearch ? 6 : 8;
+        final boolean isDirect = dlm.getReplyTunnel() == null;
+        final boolean isBanned =  dlm.getFrom() != null && _context.banlist().isBanlisted(dlm.getFrom());
+
         RouterInfo info = (RouterInfo) _context.netDb().lookupLocally(dlm.getFrom());
         String caps = info != null ? info.getCapabilities() : "";
-        boolean isFF = info != null && !caps.equals("") && caps.indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0;
+        boolean isFF = info != null && caps != null && caps.indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0;
+        final int maxLookups = isFF ? 30 : 10;
 
-        if (!ffMode && (type == DatabaseLookupMessage.Type.EXPL || type == DatabaseLookupMessage.Type.ANY)) {
-            if (_log.shouldInfo()) {
-                _log.warn("Dropping " + searchType.replace("LS", "LeaseSet") +
-                          " Lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
-                          "for [" + dlm.getSearchKey().toBase64().substring(0,keyLength) + "] -> " +
-                          "We are not a floodfill [TunnelId " + dlm.getReplyTunnel() + "]");
-            } else if (_log.shouldWarn()) {
-                _log.warn("Dropping " + searchType.replace("LS", "LeaseSet") +
-                          " Lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
-                          "for [" + dlm.getSearchKey().toBase64().substring(0,keyLength) + "] -> We are not a floodfill");
-            }
+        if (!isSenderUs && !floodfillMode && (type == DatabaseLookupMessage.Type.EXPL || type == DatabaseLookupMessage.Type.ANY)) {
+            logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
             _context.statManager().addRateData("netDb.nonFFLookupsDropped", 1);
             return null;
-        } else if (isFF && dlm.getReplyTunnel() == null && (type == DatabaseLookupMessage.Type.EXPL || type == DatabaseLookupMessage.Type.ANY)) {
-            if (_log.shouldInfo()) {
-                _log.warn("Dropping" + searchType.replace("LS", "LeaseSet") +
-                          " Lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
-                          "for [" + dlm.getSearchKey().toBase64().substring(0,keyLength) + "] -> " +
-                          "Direct Exploratory search from floodfill [TunnelId " + dlm.getReplyTunnel() + "]");
-            } else if (_log.shouldWarn()) {
-                _log.warn("Dropping" + searchType.replace("LS", "LeaseSet") +
-                          " Lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
-                          "for [" + dlm.getSearchKey().toBase64().substring(0,keyLength) + "] -> " +
-                          "Direct Exploratory search from floodfill");}
-            _context.statManager().addRateData("netDb.lookupsDropped", 1);
-            return null;
-        } else if (!ffMode && !_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel())) {
-            if (_log.shouldInfo()) {
-                _log.warn("Dropping " + searchType.replace("LS", "LeaseSet") +
-                          " Lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
-                          "for [" + dlm.getSearchKey().toBase64().substring(0,keyLength) + "] -> " +
-                          "We are not a floodfill [TunnelId " + dlm.getReplyTunnel() + "]");
-            } else if (_log.shouldWarn()) {
-                _log.warn("Dropping " + searchType.replace("LS", "LeaseSet") +
-                          " Lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
-                          "for [" + dlm.getSearchKey().toBase64().substring(0,keyLength) + "] -> We are not a floodfill");
-            }
-            _context.statManager().addRateData("netDb.lookupsDropped", 1);
-            return null;
-        } else if (_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel())) {
-            if (_log.shouldInfo()) {
-                _log.warn("Dropping " + searchType.replace("LS", "LeaseSet") +
-                          " Lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
-                          "for [" + dlm.getSearchKey().toBase64().substring(0,keyLength) + "] and banning for 5m -> " +
-                          "Max 60 requests in 30s or 10/s exceeded [TunnelId " + dlm.getReplyTunnel() + "]");
-            } else if (_log.shouldWarn()) {
-                _log.warn("Dropping " + searchType.replace("LS", "LeaseSet") +
-                          " Lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
-                          "for [" + dlm.getSearchKey().toBase64().substring(0,keyLength) + "] and banning for 5m -> " +
-                          "Max 60 requests in 30s or 10/s exceeded");
-            }
-            if (dlm.getFrom() != null) {
-                _context.banlist().banlistRouter(dlm.getFrom(), " <b>➜</b> Excessive lookup requests", null, null, _context.clock().now() + 5*60*1000);
-                _context.commSystem().mayDisconnect(dlm.getFrom());
-            }
-            _context.statManager().addRateData("netDb.lookupsDropped", 1);
-            return null;
-        } else if ((!_facade.shouldThrottleLookup(dlm.getFrom(), dlm.getReplyTunnel()) &&
-             !_facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel()) &&
-             (ffMode || ourRI || type != DatabaseLookupMessage.Type.EXPL)) ||
-             _context.routerHash().equals(dlm.getSearchKey()) || dlm.getFrom() == us) {
-            if (_log.shouldInfo()) {
-                _log.info("Replying to " + searchType.replace("LS", "LeaseSet") +
-                          " Lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
-                          "for [" + dlm.getSearchKey().toBase64().substring(0,keyLength) + "] via [TunnelId " + dlm.getReplyTunnel() + "]");
-            }
-            Job j = new HandleFloodfillDatabaseLookupMessageJob(_context, dlm, from, fromHash, _msgIDBloomXor);
-            return j;
-        } else {
-            if (_log.shouldInfo()) {
-                _log.warn("Dropping " + searchType.replace("LS", "LeaseSet") +
-                          " Lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
-                          "for [" + dlm.getSearchKey().toBase64().substring(0,8) + "] -> " +
-                          "Max " + (isFF ? "30" : "10") + " requests in 3m or 5/s exceeded [TunnelId " + dlm.getReplyTunnel() + "]" + (isFF ? " (Floodfill)" : ""));
-            } else if (_log.shouldWarn()) {
-                _log.warn("Dropping " + searchType.replace("LS", "LeaseSet") +
-                          " Lookup from [" + dlm.getFrom().toBase64().substring(0,6) + "] " +
-                          "for [" + dlm.getSearchKey().toBase64().substring(0,8) + "] -> Max " +
-                          (isFF ? "30" : "10") + " requests in 3m or 5/s exceeded" + (isFF ? " (Floodfill)" : ""));
-            }
+        }
+
+        if (!isSenderUs && isFF && isDirect && (type == DatabaseLookupMessage.Type.EXPL || type == DatabaseLookupMessage.Type.ANY)) {
+            logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
             _context.statManager().addRateData("netDb.lookupsDropped", 1);
             return null;
         }
+
+        boolean shouldBan = !isBanned && _facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel());
+        if (!floodfillMode && !shouldBan) {
+            logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
+            _context.statManager().addRateData("netDb.lookupsDropped", 1);
+            return null;
+        }
+
+        if (shouldBan) {
+            if (dlm.getFrom() != null) {
+                _context.banlist().banlistRouter(dlm.getFrom(), " <b>➜</b> Excessive lookup requests",
+                                                 null, null, _context.clock().now() + 5 * 60 * 1000);
+                _context.commSystem().mayDisconnect(dlm.getFrom());
+            }
+            _context.statManager().addRateData("netDb.lookupsDropped", 1);
+
+            if (_log.shouldWarn()) {
+                StringBuilder message = new StringBuilder(128);
+                message.append("Dropping ").append(isDirect ? "direct " : "").append(searchType).append(" lookup from ")
+                       .append(isFF ? "floodfill ": "").append("[").append(fromBase64.substring(0,6)).append("]");
+
+                if (!isDirect && _log.shouldInfo()) {message.append(" via [TunnelId ").append(dlm.getReplyTunnel()).append("]");}
+                message.append(" and banning for 5m -> Max ").append(maxLookups).append(" requests in 3m or 10/s exceeded");
+                _log.warn(message.toString());
+            }
+            return null;
+        }
+
+        boolean shouldThrottle = !isSenderUs && _facade.shouldThrottleLookup(dlm.getFrom(), dlm.getReplyTunnel());
+        boolean shouldAccept = isSenderUs || (!shouldThrottle && !shouldBan && (ourRI || (floodfillMode && !isFF) ||
+                               (isFF && type != DatabaseLookupMessage.Type.EXPL && type != DatabaseLookupMessage.Type.ANY)));
+        boolean isSelfLookup = ourRouter.equals(dlm.getSearchKey()) || dlm.getFrom().equals(ourRouter);
+
+        if (shouldAccept || isSelfLookup) {
+            if (_log.shouldInfo()) {
+                _log.info("Replying to " + searchType + " lookup from [" + fromBase64.substring(0,6) + "] for [" +
+                          searchKeyBase64.substring(0, keyLength) + "] via [TunnelId " + dlm.getReplyTunnel() + "]");
+            }
+            return new HandleFloodfillDatabaseLookupMessageJob(_context, dlm, from, fromHash, _msgIDBloomXor);
+        }
+
+        logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
+        _context.statManager().addRateData("netDb.lookupsDropped", 1);
+        return null;
     }
+
+    private void logDroppedLookup(String searchType, String fromBase64, String searchKeyBase64, int keyLength, boolean isFF,
+                                  boolean floodfillMode, boolean isDirect, boolean isBanned, int maxLookups) {
+        if (!_log.shouldWarn() || isBanned) {return;}
+        StringBuilder msg = new StringBuilder(128);
+        msg.append("Dropping ").append(isDirect ? "direct " : "").append(searchType)
+           .append(" lookup from ").append(isFF? "floodfill " : "").append("[").append(fromBase64.substring(0,6)).append("]")
+           .append(" for [").append(searchKeyBase64, 0, keyLength).append("]");
+        if (!floodfillMode) {msg.append(" -> We are not a floodfill");}
+        else if (!isDirect && !isFF) {msg.append(" -> Max ").append(maxLookups).append(" requests in 3m or 10/s exceeded");}
+        _log.warn(msg.toString());
+    }
+
+    private static String typeToString(DatabaseLookupMessage.Type type) {
+        switch (type) {
+            case EXPL:
+                return "Exploratory";
+            case RI:
+                return "RouterInfo";
+            case LS:
+                return "LeaseSet";
+            case ANY:
+                return "Any";
+            default:
+                return "";
+        }
+    }
+
 }
