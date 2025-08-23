@@ -402,7 +402,7 @@ public class I2PSocketManagerFull implements I2PSocketManager {
      */
     public boolean ping(Destination peer, long timeoutMs) {
         if (timeoutMs <= 0)
-            throw new IllegalArgumentException("bad timeout");
+            throw new IllegalArgumentException("Bad timeout");
         return _connectionManager.ping(peer, _defaultOptions.getLocalPort(),
                                        _defaultOptions.getPort(), timeoutMs);
     }
@@ -426,9 +426,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     public boolean ping(Destination peer, int localPort, int remotePort, long timeoutMs) {
         if (localPort < 0 || localPort > 65535 ||
             remotePort < 0 || remotePort > 65535)
-            throw new IllegalArgumentException("bad port");
+            throw new IllegalArgumentException("Bad port");
         if (timeoutMs <= 0)
-            throw new IllegalArgumentException("bad timeout");
+            throw new IllegalArgumentException("Bad timeout");
         return _connectionManager.ping(peer, localPort, remotePort, timeoutMs);
     }
 
@@ -452,9 +452,9 @@ public class I2PSocketManagerFull implements I2PSocketManager {
     public byte[] ping(Destination peer, int localPort, int remotePort, long timeoutMs, byte[] payload) {
         if (localPort < 0 || localPort > 65535 ||
             remotePort < 0 || remotePort > 65535)
-            throw new IllegalArgumentException("bad port");
+            throw new IllegalArgumentException("Bad port");
         if (timeoutMs <= 0)
-            throw new IllegalArgumentException("bad timeout");
+            throw new IllegalArgumentException("Bad timeout");
         return _connectionManager.ping(peer, localPort, remotePort, timeoutMs, payload);
     }
 

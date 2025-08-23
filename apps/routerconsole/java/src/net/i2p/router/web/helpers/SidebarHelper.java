@@ -494,7 +494,6 @@ public class SidebarHelper extends HelperBase {
      */
     public int getWellIntegratedPeers() {
         if (_context == null) {return 0;}
-        //return _context.profileOrganizer().countWellIntegratedPeers();
         return _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL).size();
     }
 

@@ -238,7 +238,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      */
     public void setPort(int port) {
         if (port < 0 || port > 65535)
-            throw new IllegalArgumentException("bad port");
+            throw new IllegalArgumentException("Bad port");
         _remotePort = port;
     }
 
@@ -262,7 +262,7 @@ class I2PSocketOptionsImpl implements I2PSocketOptions {
      */
     public void setLocalPort(int port) {
         if (port < 0 || port > 65535)
-            throw new IllegalArgumentException("bad port");
+            throw new IllegalArgumentException("Bad port");
         _localPort = port;
     }
 }

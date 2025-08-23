@@ -333,9 +333,9 @@ class PluginUpdateRunner extends UpdateRunner {
             try {
                 su3.verifyAndMigrate(to);
                 if (su3.getFileType() != SU3File.TYPE_ZIP)
-                    throw new IOException("bad file type");
+                    throw new IOException("Bad file type");
                 if (su3.getContentType() != SU3File.CONTENT_PLUGIN)
-                    throw new IOException("bad content type");
+                    throw new IOException("Bad content type");
                 sudVersion = su3.getVersionString();
                 signingKeyName = su3.getSignerString();
             } catch (IOException ioe) {

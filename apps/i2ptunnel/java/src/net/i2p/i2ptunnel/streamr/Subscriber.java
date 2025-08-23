@@ -45,7 +45,7 @@ public class Subscriber implements Sink {
         if(dest == null || data.length < 1) {
             // invalid packet
             if (log.shouldWarn())
-                log.warn("bad subscription from " + dest.toBase32() + ':' + fromPort);
+                log.warn("Bad subscription from " + dest.toBase32() + ':' + fromPort);
         } else {
             // swap fromPort and toPort for the replies
             MultiSource.MSink ms = new MultiSource.MSink(dest, toPort, fromPort);
@@ -79,7 +79,7 @@ public class Subscriber implements Sink {
             } else {
                 // invalid packet
                 if (log.shouldWarn())
-                    log.warn("bad subscription flag " + ctrl + " from " + ms);
+                    log.warn("Bad subscription flag " + ctrl + " from " + ms);
             }
         }
     }

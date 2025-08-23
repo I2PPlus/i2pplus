@@ -875,7 +875,7 @@ public class PluginStarter implements Runnable {
                 else if (action.equals("uninstall"))
                     args = app.uninstallargs;
                 else
-                    throw new IllegalArgumentException("bad action");
+                    throw new IllegalArgumentException("Bad action");
                 // args must be present
                 if (args == null || args.length() <= 0)
                     continue;

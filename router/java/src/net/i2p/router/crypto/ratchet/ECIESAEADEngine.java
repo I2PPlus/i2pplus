@@ -532,7 +532,7 @@ public final class ECIESAEADEngine {
             //state = new HandshakeState(pattern, HandshakeState.RESPONDER, _edhThread, getHybridKeyFactory(type));
             state = new HandshakeState(pattern, HandshakeState.RESPONDER, _edhThread);
         } catch (GeneralSecurityException gse) {
-            throw new IllegalStateException("bad proto", gse);
+            throw new IllegalStateException("Bad protocol", gse);
         }
         state.getLocalKeyPair().setKeys(targetPrivateKey.getData(), 0,
                                         targetPrivateKey.toPublic().getData(), 0);
@@ -655,7 +655,7 @@ public final class ECIESAEADEngine {
         try {
             state = new HandshakeState(HandshakeState.PATTERN_ID_N_NO_RESPONSE, HandshakeState.RESPONDER, _context.commSystem().getXDHFactory());
         } catch (GeneralSecurityException gse) {
-            throw new IllegalStateException("bad proto", gse);
+            throw new IllegalStateException("Bad protocol", gse);
         }
         state.getLocalKeyPair().setKeys(targetPrivateKey.getData(), 0,
                                         targetPrivateKey.toPublic().getData(), 0);
@@ -1187,7 +1187,7 @@ public final class ECIESAEADEngine {
         try {
             state = new HandshakeState(HandshakeState.PATTERN_ID_N_NO_RESPONSE, HandshakeState.INITIATOR, _context.commSystem().getXDHFactory());
         } catch (GeneralSecurityException gse) {
-            throw new IllegalStateException("bad proto", gse);
+            throw new IllegalStateException("Bad protocol", gse);
         }
         state.getRemotePublicKey().setPublicKey(target.getData(), 0);
         state.start();

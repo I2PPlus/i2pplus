@@ -366,7 +366,7 @@ class BlindCache {
     private BlindData fromPersistentString(String line) throws DataFormatException {
         String[] ss = DataHelper.split(line, ",", 8);
         if (ss.length != 8)
-            throw new DataFormatException("bad format");
+            throw new DataFormatException("Bad format");
         int ist1, ist2, auth;
         long time;
         try {
@@ -375,19 +375,19 @@ class BlindCache {
             auth = Integer.parseInt(ss[2]);
             time = Long.parseLong(ss[3]);
         } catch (NumberFormatException nfe) {
-            throw new DataFormatException("bad codes", nfe);
+            throw new DataFormatException("Bad codes", nfe);
         }
         SigType st1 = SigType.getByCode(ist1);
         SigType st2 = SigType.getByCode(ist2);
         if (st1 == null || !st1.isAvailable() || st2 == null || !st2.isAvailable())
-            throw new DataFormatException("bad codes");
+            throw new DataFormatException("Bad codes");
         SigningPublicKey spk = new SigningPublicKey(st1);
         spk.fromBase64(ss[4]);
         String secret;
         if (ss[5].length() > 0) {
             byte[] b = Base64.decode(ss[5]);
             if (b == null)
-                throw new DataFormatException("bad secret");
+                throw new DataFormatException("Bad secret");
             secret = DataHelper.getUTF8(b);
         } else {
             secret = null;
@@ -396,7 +396,7 @@ class BlindCache {
         if (ss[6].length() > 0) {
             byte[] b = Base64.decode(ss[6]);
             if (b == null)
-                throw new DataFormatException("bad privkey");
+                throw new DataFormatException("Bad privkey");
             privkey = new PrivateKey(EncType.ECIES_X25519, b);
         } else {
             privkey = null;
@@ -405,7 +405,7 @@ class BlindCache {
         if (ss[7].length() > 0) {
             Destination dest = new Destination(ss[7]);
             if (!spk.equals(dest.getSigningPublicKey()))
-                throw new DataFormatException("spk mismatch");
+                throw new DataFormatException("SigningPublickKey mismatch");
             rv = new BlindData(_context, dest, st2, secret, auth, privkey);
         } else {
             rv = new BlindData(_context, spk, st2, secret, auth, privkey);
