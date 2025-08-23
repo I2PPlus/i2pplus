@@ -67,82 +67,101 @@ class StartExplorersJob extends JobImpl {
     public String getName() { return "Start NetDb Explorers"; }
 
     public void runJob() {
+        RouterContext ctx = getContext();
         int count = _facade.getDataStore().size();
-        boolean forceExplore = getContext().getBooleanProperty(PROP_FORCE_EXPLORE);
-        boolean isFF = _facade.floodfillEnabled();
-        long lag = getContext().jobQueue().getMaxLag();
-        boolean highload = SystemVersion.getCPULoadAvg() > 90 && lag > 1000;
+        final boolean forceExplore = ctx.getBooleanProperty(PROP_FORCE_EXPLORE);
+        final boolean isFF = _facade.floodfillEnabled();
+        long lag = ctx.jobQueue().getMaxLag();
+        long msgDelay = ctx.throttle().getMessageDelay();
+        boolean highLoad = SystemVersion.getCPULoadAvg() > 95 && lag > 1000;
+
+        // Helper method to check if we can proceed exploring
         if (!isFF || forceExplore) {
-            if (!(getContext().jobQueue().getMaxLag() > MAX_LAG ||
-                  getContext().throttle().getMessageDelay() > MAX_MSG_DELAY ||
-                  getContext().commSystem().getStatus() == Status.DISCONNECTED)) {
-                int num = MAX_PER_RUN;
-                String exploreBuckets = getContext().getProperty(PROP_EXPLORE_BUCKETS);
-                if (exploreBuckets == null) {
-                    if (count < MIN_ROUTERS)
-                        num *= 8;  // at less than 3x MIN_RESEED, explore extremely aggressively
-                    else if (count < LOW_ROUTERS)
-                        num *= 5;  // 3x was not sufficient to keep hidden routers from losing peers
-                    if (getContext().router().getUptime() < STARTUP_TIME && count < MAX_ROUTERS)
-                        num *= 2;
-                    if (count < MAX_ROUTERS)
-                        num += 1;
-                    if (getContext().router().isHidden() && count < MIN_ROUTERS)
-                        num += 2;
-                    if (getContext().jobQueue().getMaxLag() > 250 || getContext().throttle().getMessageDelay() > 500)
-                        num = 2;
-                    if (getContext().jobQueue().getMaxLag() > 500 || getContext().throttle().getMessageDelay() > 1000 || highload)
-                        num = 1;
-                } else {
-                    num = Integer.parseInt(exploreBuckets);
-                }
+            if (shouldExplore(lag, msgDelay, ctx.commSystem().getStatus())) {
+
+                int num = determineNumExplorations(ctx, count, lag, msgDelay, highLoad);
                 Set<Hash> toExplore = selectKeysToExplore(num);
-                if (_log.shouldInfo())
-                    _log.info("Exploring " + num + " buckets during this run");
+
+                if (_log.shouldInfo()) {_log.info("Exploring " + num + " buckets during this run");}
+
                 _facade.removeFromExploreKeys(toExplore);
+
+                int ffs = ctx.peerManager().countPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL);
+                boolean needFFs = ffs < MIN_FFS;
+                boolean lowFFs = ffs < LOW_FFS;
+
+                Random random = ctx.random();
                 long delay = 0;
-
-                // If we're below about 30 ffs, standard exploration stops working well.
-                // A non-exploratory "exploration" finds us floodfills quickly.
-                // This is vital when in hidden mode, where this is our primary method
-                // of maintaining sufficient peers and avoiding repeated reseeding.
-                int ffs = getContext().peerManager().countPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL);
-                boolean needffs = ffs < MIN_FFS;
-                boolean lowffs = ffs < LOW_FFS;
                 for (Hash key : toExplore) {
-                    // Last param false means get floodfills (non-explore)
-                    // This is very effective so we don't need to do it often
-                    boolean realexpl = !((needffs && getContext().random().nextInt(2) == 0) ||
-                                        (lowffs && getContext().random().nextInt(3) == 0));
-                    ExploreJob j = new ExploreJob(getContext(), _facade, key, realexpl, _msgIDBloomXor);
-                    Random random = getContext().random();
-                    delay += 500 + (random.nextInt(500)); // spread them out
-                    if (delay > 0) {
-                        j.getTiming().setStartAfter(getContext().clock().now() + delay);
-                        getContext().jobQueue().addJob(j);
-                    }
+                    boolean realExploration = !((needFFs && random.nextInt(2) == 0) ||
+                                                (lowFFs && random.nextInt(3) == 0));
+                    ExploreJob job = new ExploreJob(ctx, _facade, key, realExploration, _msgIDBloomXor);
+                    delay += 500 + random.nextInt(500); // spread start times by 500-1000 ms
+                    job.getTiming().setStartAfter(ctx.clock().now() + delay);
+                    ctx.jobQueue().addJob(job);
 
-                    if (_log.shouldInfo() && realexpl) {_log.info("Exploring for new peers in " + delay + "ms");}
-                    else if (_log.shouldInfo()) {_log.info("Acquiring new floodfills in " + delay + "ms");}
+                    if (_log.shouldInfo()) {
+                        if (realExploration) {_log.info("Exploring for new peers in " + delay + "ms");}
+                        else {_log.info("Acquiring new floodfills in " + delay + "ms");}
+                    }
                 }
             }
-            String exploreDelay = getContext().getProperty(PROP_EXPLORE_DELAY);
-            long delay = getNextRunDelay();
-            long laggedDelay = 3*60*1000;
-            if (exploreDelay != null && !highload) {
-                if (_log.shouldInfo()) {_log.info("Next Peer Exploration run in " + Integer.valueOf(exploreDelay) + "s");}
-                requeue(Integer.parseInt(exploreDelay) * 1000);
-            } else if (getContext().jobQueue().getMaxLag() > 500 || getContext().throttle().getMessageDelay() > 750 || highload) {
-                if (_log.shouldInfo()) {_log.info("Next Peer Exploration run in " + (laggedDelay / 1000) + "s (router is under load)");}
-                requeue(laggedDelay);
-            } else {
-                if (_log.shouldInfo()) {_log.info("Next Peer Exploration run in " + (delay / 1000) + "s");}
-                requeue(delay);
+
+            // Schedule next job run delay
+            scheduleNextRun(ctx, lag, msgDelay, highLoad);
+
+        } else if (_log.shouldInfo()) {_log.info("Not initiating Peer Exploration -> We are a floodfill");}
+    }
+
+    private boolean shouldExplore(long lag, long msgDelay, Status commStatus) {
+        return !(lag > MAX_LAG || msgDelay > MAX_MSG_DELAY || commStatus == Status.DISCONNECTED);
+    }
+
+    private int determineNumExplorations(RouterContext ctx, int datastoreSize, long lag, long msgDelay, boolean highLoad) {
+        int num = MAX_PER_RUN;
+        String exploreBuckets = ctx.getProperty(PROP_EXPLORE_BUCKETS);
+        if (exploreBuckets != null) {
+            try {return Integer.parseInt(exploreBuckets);}
+            catch (NumberFormatException nfe) {_log.warn("Invalid value for exploreBuckets: " + exploreBuckets);}
+            // fallback to dynamic calculation below
+        }
+
+        if (datastoreSize < MIN_ROUTERS) {num *= 8;} // extremely aggressive if very few routers
+        else if (datastoreSize < LOW_ROUTERS) {num *= 5;} // moderate aggression
+        if (ctx.router().getUptime() < STARTUP_TIME && datastoreSize < MAX_ROUTERS) {num *= 2;}
+        if (datastoreSize < MAX_ROUTERS) {num += 1;}
+        if (ctx.router().isHidden() && datastoreSize < MIN_ROUTERS) {num += 2;}
+        if (lag > 500 || msgDelay > 1000 || highLoad) {num = 1;}
+        else if (lag > 250 || msgDelay > 500) {num = 2;}
+        return num;
+    }
+
+    private void scheduleNextRun(RouterContext ctx, long lag, long msgDelay, boolean highLoad) {
+        String exploreDelay = ctx.getProperty(PROP_EXPLORE_DELAY);
+        long defaultDelay = getNextRunDelay();
+        long laggedDelay = 3 * 60 * 1000L; // 3 minutes
+
+        if (exploreDelay != null && !highLoad) {
+            if (_log.shouldInfo()) {_log.info("Next Peer Exploration run in " + exploreDelay + "s");}
+            try {
+                requeue(Integer.parseInt(exploreDelay) * 1000L);
+                return;
+            } catch (NumberFormatException nfe) {
+                _log.warn("Invalid explorer delay property: " + exploreDelay);
+                // fallback below
             }
+        }
+
+        if (lag > 500 || msgDelay > 750 || highLoad && !needFFs) {
+            if (_log.shouldInfo()) {
+                _log.info("Next Peer Exploration run in " + (laggedDelay / 1000) + "s (router is under load)");
+            }
+            requeue(laggedDelay);
         } else {
             if (_log.shouldInfo()) {
-                _log.info("Not initiating Peer Exploration -> We are a floodfill (router.exploreWhenFloodfill=true to override)");
+                _log.info("Next Peer Exploration run in " + (defaultDelay / 1000) + "s");
             }
+            requeue(defaultDelay);
         }
     }
 
@@ -152,21 +171,21 @@ class StartExplorersJob extends JobImpl {
      *  with exceptions.
      */
     private long getNextRunDelay() {
-        String exploreDelay = getContext().getProperty("router.explorePeersDelay");
-        String exploreWhenFloodfill = getContext().getProperty("router.exploreWhenFloodfill");
+        RouterContext ctx = getContext();
+        String exploreDelay = ctx.getProperty("router.explorePeersDelay");
+        String exploreWhenFloodfill = ctx.getProperty("router.exploreWhenFloodfill");
         boolean isFloodfill = _facade.floodfillEnabled();
-        boolean isHidden =  getContext().router().isHidden();
-        RouterInfo ri = getContext().router().getRouterInfo();
+        boolean isHidden =  ctx.router().isHidden();
+        RouterInfo ri = ctx.router().getRouterInfo();
         String caps = ri != null ? ri.getCapabilities() : "";
         boolean isSlow = ri != null && !caps.equals("") && (caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 ||
                          caps.indexOf(Router.CAPABILITY_BW12) >= 0 || caps.indexOf(Router.CAPABILITY_BW32) >= 0);
-//        int netDbSize = _facade.getDataStore().size();
-        int netDbSize = getContext().netDb().getKnownRouters();
-        long uptime = getContext().router().getUptime();
-        long delay = getContext().clock().now() - _facade.getLastExploreNewDate();
+        int netDbSize = ctx.netDb().getKnownRouters();
+        long uptime = ctx.router().getUptime();
+        long delay = ctx.clock().now() - _facade.getLastExploreNewDate();
         if (exploreDelay == null) {
             if (delay > MAX_RERUN_DELAY_MS && !isFloodfill) {return MAX_RERUN_DELAY_MS;} // we don't explore if floodfill
-            else if (isFloodfill && (exploreWhenFloodfill == null || exploreWhenFloodfill == "false") && uptime > STARTUP_TIME ||
+            else if (isFloodfill && (exploreWhenFloodfill == null || "false".equals(exploreWhenFloodfill)) && uptime > STARTUP_TIME ||
                      netDbSize > MAX_ROUTERS) {return MAX_RERUN_DELAY_MS * 2;} // every 20mins
             // If we don't know too many peers, or just started, explore aggressively
             // Also if hidden or K/L/U, as nobody will be connecting to us
@@ -195,8 +214,8 @@ class StartExplorersJob extends JobImpl {
             Hash key = new Hash(hash);
             rv.add(key);
         }
-        if (_log.shouldInfo())
-            _log.info("Keys waiting for exploration: " + queued.size());
+        if (_log.shouldInfo()) {_log.info("Keys waiting for exploration: " + queued.size());}
         return rv;
     }
+
 }
