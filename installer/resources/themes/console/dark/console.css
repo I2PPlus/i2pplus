@@ -3199,6 +3199,7 @@ span#newtab{margin-top:4px}
 #sidebar button.download{margin-bottom:5px;line-height:1.4}
 #sidebar button.reload,#sidebar button.stop{margin:4px 2px 3px;width:calc(50% - 8px)}
 #sidebar button.reload,#sidebar button.stop,#sidebar button.cancel{padding-top:10px;padding-bottom:10px}
+#sidebar button.reload#sb_manualReseed{padding:8px 12px 8px 26px;font-weight:600!important;background-size:15px;background-position-x:8px}
 #sidebar h3::after{min-height:20px}
 #sidebar #sb_localtunnels a{max-width:200px}
 #sidebar #sb_localtunnels td:nth-child(2) a{padding-left:2px}
