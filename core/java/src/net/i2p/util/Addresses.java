@@ -416,7 +416,7 @@ public abstract class Addresses {
         try {
             return InetAddress.getByAddress(addr).getHostAddress();
         } catch (UnknownHostException uhe) {
-            return "bad IP length " + addr.length;
+            return "Bad IP length " + addr.length;
         }
     }
 
@@ -435,7 +435,7 @@ public abstract class Addresses {
                 return ip + ':' + port;
             return '[' + ip + "]:" + port;
         } catch (UnknownHostException uhe) {
-            return "(bad IP length " + addr.length + "):" + port;
+            return "(Bad IP length " + addr.length + "):" + port;
         }
     }
 

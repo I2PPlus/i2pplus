@@ -136,12 +136,12 @@ public class HostLookupMessage extends I2CPMessageImpl {
             } else if (_lookupType == LOOKUP_HOST) {
                 _host = DataHelper.readString(in);
                 if (_host.length() == 0)
-                    throw new I2CPMessageException("bad host");
+                    throw new I2CPMessageException("Bad host");
             } else {
-                throw new I2CPMessageException("bad type");
+                throw new I2CPMessageException("Bad type");
             }
         } catch (DataFormatException dfe) {
-            throw new I2CPMessageException("bad data", dfe);
+            throw new I2CPMessageException("Bad data", dfe);
         }
     }
 
@@ -156,7 +156,7 @@ public class HostLookupMessage extends I2CPMessageImpl {
                 throw new I2CPMessageException("Unable to write out the message as there is not enough data");
             len = 12 + _host.length();
         } else {
-            throw new I2CPMessageException("bad type");
+            throw new I2CPMessageException("Bad type");
         }
         ByteArrayStream os = new ByteArrayStream(len);
         try {
@@ -170,7 +170,7 @@ public class HostLookupMessage extends I2CPMessageImpl {
                 DataHelper.writeString(os, _host);
             }
         } catch (DataFormatException dfe) {
-            throw new I2CPMessageException("bad data", dfe);
+            throw new I2CPMessageException("Bad data", dfe);
         }
         return os.toByteArray();
     }

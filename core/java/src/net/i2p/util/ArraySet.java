@@ -128,7 +128,7 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
      */
     public ArraySet(int capacity, boolean throwOnFull) {
         if (capacity <= 0)
-            throw new IllegalArgumentException("bad capacity");
+            throw new IllegalArgumentException("Bad capacity");
         _entries = new Object[capacity];
         _throwOnFull = throwOnFull;
     }

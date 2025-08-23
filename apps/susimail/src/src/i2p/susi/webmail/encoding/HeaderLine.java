@@ -140,7 +140,7 @@ public class HeaderLine extends Encoding {
 		str = str.trim();
 		int l = str.indexOf(": ");
 		if (l <= 0 || l >= 64)
-			throw new EncodingException("bad field-name: " + str);
+			throw new EncodingException("Bad field-name: " + str);
 		l += 2;
 		boolean quote = false;
 		if (str.length() > 76) {

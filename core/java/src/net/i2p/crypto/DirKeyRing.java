@@ -43,7 +43,7 @@ public class DirKeyRing implements KeyRing {
         String fileName = keyName.replace("@", "_at_").replace("<", "_").replace(">", "_");
         File test = new File(fileName);
         if (test.getParent() != null)
-            throw new IOException("bad key name");
+            throw new IOException("Bad key name");
         File sd = new File(_base, scope);
         //File td = new File(sd, Integer.toString(type.getCode()));
         File kd = new File(sd, fileName + ".crt");

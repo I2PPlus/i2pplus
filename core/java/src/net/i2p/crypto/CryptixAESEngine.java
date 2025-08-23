@@ -151,11 +151,11 @@ public final class CryptixAESEngine extends AESEngine {
     @Override
     public void decrypt(byte payload[], int payloadIndex, byte out[], int outIndex, SessionKey sessionKey, byte iv[], int ivOffset, int length) {
         if ((iv== null) || (payload == null) || (payload.length <= 0) || (sessionKey == null) )
-            throw new IllegalArgumentException("bad setup");
+            throw new IllegalArgumentException("Bad setup");
         else if (out == null)
-            throw new IllegalArgumentException("out is null");
+            throw new IllegalArgumentException("Out is null");
         else if (out.length - outIndex < length)
-            throw new IllegalArgumentException("out is too small (out.length=" + out.length
+            throw new IllegalArgumentException("Out is too small (out.length=" + out.length
                                                + " outIndex=" + outIndex + " length=" + length);
 
         if (USE_SYSTEM_AES && length >= MIN_SYSTEM_AES_LENGTH) {
@@ -178,7 +178,7 @@ public final class CryptixAESEngine extends AESEngine {
             // may not work, it will overrun payload length and could AIOOBE
             numblock++;
             if (_log.shouldWarn())
-                _log.warn("not %16 " + length, new Exception());
+                _log.warn("Not %16 " + length, new Exception());
         }
 
         byte prev[] = SimpleByteCache.acquire(16);
@@ -243,7 +243,7 @@ public final class CryptixAESEngine extends AESEngine {
         //if ( (payload == null) || (rv == null) )
         //    throw new IllegalArgumentException("null block args");
         //if (payload.length - inIndex > rv.length - outIndex)
-        //    throw new IllegalArgumentException("bad block args [payload.len=" + payload.length
+        //    throw new IllegalArgumentException("Bad block args [payload.len=" + payload.length
         //                                       + " inIndex=" + inIndex + " rv.len=" + rv.length
         //                                       + " outIndex="+outIndex);
         Object pkey = sessionKey.getPreparedKey();
@@ -253,7 +253,7 @@ public final class CryptixAESEngine extends AESEngine {
                 sessionKey.setPreparedKey(pkey);
             } catch (InvalidKeyException ike) {
                 _log.log(Log.CRIT, "Invalid key", ike);
-                throw new IllegalArgumentException("invalid key?  " + ike.getMessage());
+                throw new IllegalArgumentException("Invalid key?  " + ike.getMessage());
             }
         }
 

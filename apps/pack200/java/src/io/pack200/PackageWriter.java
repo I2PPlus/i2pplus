@@ -1596,7 +1596,7 @@ class PackageWriter extends BandStructure {
                     default:
                         // CONSTANT_MethodHandle, etc.
                         if (getHighestClassVersion().lessThan(JAVA7_MAX_CLASS_VERSION)) {
-                            throw new IOException("bad class file major version for Java 7 ldc");
+                            throw new IOException("Bad class file major version for Java 7 ldc");
                         }
                         bc_which = bc_loadablevalueref;
                         switch (bc) {
@@ -1654,7 +1654,7 @@ class PackageWriter extends BandStructure {
                     assert(i.getConstant() == (1+((MemberEntry)ref).descRef.typeRef.computeSize(true)) << 8);
                 } else if (bc == _invokedynamic) {
                     if (getHighestClassVersion().lessThan(JAVA7_MAX_CLASS_VERSION)) {
-                        throw new IOException("bad class major version for Java 7 invokedynamic");
+                        throw new IOException("Bad class major version for Java 7 invokedynamic");
                     }
                     assert(i.getLength() == 5);
                     assert(i.getConstant() == 0);  // last 2 bytes MBZ

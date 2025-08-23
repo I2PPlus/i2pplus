@@ -370,19 +370,19 @@ public final class CertUtil {
             List<X509Certificate> rv = new ArrayList<X509Certificate>(certs.size());
             for (Certificate cert : certs) {
                 if (!(cert instanceof X509Certificate)) {
-                    throw new GeneralSecurityException("not a X.509 cert");
+                    throw new GeneralSecurityException("Not a X.509 cert");
                 }
                 X509Certificate xcert = (X509Certificate) cert;
                 xcert.checkValidity();
                 rv.add(xcert);
             }
-            if (rv.isEmpty()) {throw new IOException("no certs found");}
+            if (rv.isEmpty()) {throw new IOException("No certs found");}
             return rv;
         } catch (IllegalArgumentException iae) {
             // java 1.8.0_40-b10, openSUSE
             // Exception in thread "main" java.lang.IllegalArgumentException: Input byte array has wrong 4-byte ending unit
             // at java.util.Base64$Decoder.decode0(Base64.java:704)
-            throw new GeneralSecurityException("cert error", iae);
+            throw new GeneralSecurityException("Certificate error", iae);
         } finally {
             try {in.close();}
             catch (IOException foo) {}

@@ -98,7 +98,7 @@ class TimeoutPipedInputStream extends PipedInputStream {
             if (a == 'a')
                 System.out.println("got 1 (pass)");
             else
-                System.out.println("bad data (fail)");
+                System.out.println("Bad data (fail)");
             in.read();
             System.out.println("got 2 (fail)");
         } catch (IOException ioe) {

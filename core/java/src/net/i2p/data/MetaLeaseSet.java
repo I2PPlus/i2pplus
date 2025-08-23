@@ -88,7 +88,7 @@ public class MetaLeaseSet extends LeaseSet2 {
         if (isOffline()) {rv += 6 + _transientSigningPublicKey.length() + _offlineSignature.length();}
         if (_options != null && !_options.isEmpty()) {
             try {rv += DataHelper.toProperties(_options).length;}
-            catch (DataFormatException dfe) {throw new IllegalStateException("bad options", dfe);}
+            catch (DataFormatException dfe) {throw new IllegalStateException("Bad options", dfe);}
         } else {rv += 2;}
         return rv;
     }

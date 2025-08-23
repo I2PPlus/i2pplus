@@ -55,7 +55,7 @@ public class TunnelId {
      */
     public void setTunnelId(long id) {
         if (id <= 0 || id > MAX_ID_VALUE)
-            throw new IllegalArgumentException("bad id " + id);
+            throw new IllegalArgumentException("Bad Id " + id);
         _tunnelId = id;
     }
 

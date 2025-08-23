@@ -124,14 +124,14 @@ public class AddressesTest {
     @Test
     public void testToString__badLength() {
         byte[] address = {1};
-        assertTrue(Addresses.toString(address).startsWith("bad IP length"));
+        assertTrue(Addresses.toString(address).startsWith("Bad IP length"));
     }
 
     @Test
     public void testToString__badLengthWithPort() {
         byte[] address = {1};
         String string = Addresses.toString(address, 80);
-        String expectedStartString = "(bad IP length";
+        String expectedStartString = "(Bad IP length";
         assertTrue(
             String.format("%s doesn't start with: %s", string, expectedStartString),
             string.startsWith(expectedStartString)

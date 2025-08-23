@@ -106,7 +106,7 @@ public class HostReplyMessage extends I2CPMessageImpl {
             _code = in.read();
             if (_code < 0) {throw new EOFException();}
             if (_code == RESULT_SUCCESS) {_dest = Destination.create(in);}
-        } catch (DataFormatException dfe) {throw new I2CPMessageException("bad data", dfe);}
+        } catch (DataFormatException dfe) {throw new I2CPMessageException("BAD data", dfe);}
     }
 
     protected byte[] doWriteMessage() throws I2CPMessageException, IOException {

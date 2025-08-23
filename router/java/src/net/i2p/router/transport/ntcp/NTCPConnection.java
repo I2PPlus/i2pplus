@@ -237,13 +237,13 @@ public class NTCPConnection implements Closeable {
         _remotePeer = remotePeer;
         _version = version;
         if (version != 2) {
-            throw new IllegalArgumentException("bad version " + version);
+            throw new IllegalArgumentException("Bad version " + version);
             //_establishState = new OutboundEstablishState(ctx, transport, this);
         } else {
             try {
                 _establishState = new OutboundNTCP2State(ctx, transport, this);
             } catch (IllegalArgumentException iae) {
-                throw new DataFormatException("bad address? " + remAddr, iae);
+                throw new DataFormatException("Bad address? " + remAddr, iae);
             }
         }
     }

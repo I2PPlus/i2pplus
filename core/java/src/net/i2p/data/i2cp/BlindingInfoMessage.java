@@ -288,7 +288,7 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
             } else if (_endpointType == TYPE_HOST) {
                 _host = DataHelper.readString(in);
                 if (_host.length() == 0)
-                    throw new I2CPMessageException("bad host");
+                    throw new I2CPMessageException("Bad host");
             } else if (_endpointType == TYPE_DEST) {
                 _dest = Destination.create(in);
             } else if (_endpointType == TYPE_KEY) {
@@ -301,19 +301,19 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
                 DataHelper.read(in, key);
                 _pubkey = new SigningPublicKey(sigt, key);
             } else {
-                throw new I2CPMessageException("bad type");
+                throw new I2CPMessageException("Bad type");
             }
             if (_authType == BlindData.AUTH_DH || _authType == BlindData.AUTH_PSK) {
                 byte[] key = new byte[32];
                 DataHelper.read(in, key);
                 _privkey = new PrivateKey(EncType.ECIES_X25519, key);
             } else if (_authType != BlindData.AUTH_NONE) {
-                throw new I2CPMessageException("bad auth type " + _authType);
+                throw new I2CPMessageException("Bad auth type " + _authType);
             }
             if (hasSecret)
                 _secret = DataHelper.readString(in);
         } catch (DataFormatException dfe) {
-            throw new I2CPMessageException("bad data", dfe);
+            throw new I2CPMessageException("Bad data", dfe);
         }
     }
 
@@ -331,7 +331,7 @@ public class BlindingInfoMessage extends I2CPMessageImpl {
             if (_pubkey == null)
                 throw new I2CPMessageException("Unable to write out the message as there is not enough data");
         } else {
-            throw new I2CPMessageException("bad type");
+            throw new I2CPMessageException("Bad type");
         }
         ByteArrayOutputStream os = new ByteArrayOutputStream(512);
         try {

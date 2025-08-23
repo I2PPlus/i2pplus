@@ -331,7 +331,7 @@ class ConstantPool {
         if (value instanceof Float)    return CONSTANT_Float;
         if (value instanceof Long)     return CONSTANT_Long;
         if (value instanceof Double)   return CONSTANT_Double;
-        throw new RuntimeException("bad literal value "+value);
+        throw new RuntimeException("Bad literal value "+value);
     }
 
     static boolean isRefKind(byte refKind) {
@@ -1406,13 +1406,13 @@ class ConstantPool {
                 // This one does not have any fixed index, since it is context-specific.
                 return null;
             }
-            throw new AssertionError("bad tag group "+tag);
+            throw new AssertionError("Bad tag group "+tag);
         }
 
         /** Index of all CP entries of a given tag and class. */
         public Index getMemberIndex(byte tag, ClassEntry classRef) {
             if (classRef == null)
-                throw new RuntimeException("missing class reference for " + tagName(tag));
+                throw new RuntimeException("Missing class reference for " + tagName(tag));
             if (indexByTagAndClass == null)
                 indexByTagAndClass = new Index[CONSTANT_Limit][];
             Index allClasses =  getIndexByTag(CONSTANT_Class);

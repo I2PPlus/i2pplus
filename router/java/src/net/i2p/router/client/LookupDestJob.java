@@ -66,7 +66,7 @@ class LookupDestJob extends JobImpl {
             (h != null && name != null) ||
             (reqID >= 0 && sessID == null) ||
             (reqID < 0 && name != null)) {
-            _log.warn("bad args");
+            _log.warn("Bad arguments");
             throw new IllegalArgumentException();
         }
         _runner = runner;

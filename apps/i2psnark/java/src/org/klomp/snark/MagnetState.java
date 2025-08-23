@@ -60,7 +60,7 @@ class MagnetState {
      */
     public void initialize(int size) {
         if (isInitialized)
-            throw new IllegalArgumentException("already set");
+            throw new IllegalArgumentException("Already set");
         isInitialized = true;
         metaSize = size;
         totalChunks = (size + (CHUNK_SIZE - 1)) / CHUNK_SIZE;
@@ -87,7 +87,7 @@ class MagnetState {
      */
     public MetaInfo getMetaInfo() {
         if (!complete)
-            throw new IllegalArgumentException("not complete");
+            throw new IllegalArgumentException("Not complete");
         return metainfo;
     }
 
@@ -96,7 +96,7 @@ class MagnetState {
      */
     public int getSize() {
         if (!isInitialized)
-            throw new IllegalArgumentException("not initialized");
+            throw new IllegalArgumentException("Not initialized");
         return metaSize;
     }
 
@@ -115,7 +115,7 @@ class MagnetState {
     /** @return chunk count */
     public int chunksRemaining() {
         if (!isInitialized)
-            throw new IllegalArgumentException("not initialized");
+            throw new IllegalArgumentException("Not initialized");
         if (complete)
             return 0;
         return totalChunks - have.count();
@@ -124,9 +124,9 @@ class MagnetState {
     /** @return chunk number */
     public int getNextRequest() {
         if (!isInitialized)
-            throw new IllegalArgumentException("not initialized");
+            throw new IllegalArgumentException("Not initialized");
         if (complete)
-            throw new IllegalArgumentException("complete");
+            throw new IllegalArgumentException("Complete");
         int rand = RandomSource.getInstance().nextInt(totalChunks);
         for (int i = 0; i < totalChunks; i++) {
             int chk = (i + rand) % totalChunks;
@@ -141,7 +141,7 @@ class MagnetState {
             if (!have.get(chk))
                 return chk;
         }
-        throw new IllegalArgumentException("complete");
+        throw new IllegalArgumentException("Complete");
     }
 
     /**
@@ -149,9 +149,9 @@ class MagnetState {
      */
     public byte[] getChunk(int chunk) {
         if (!complete)
-            throw new IllegalArgumentException("not complete");
+            throw new IllegalArgumentException("Not complete");
         if (chunk < 0 || chunk >= totalChunks)
-            throw new IllegalArgumentException("bad chunk number");
+            throw new IllegalArgumentException("Bad chunk number");
         int size = chunkSize(chunk);
         byte[] rv = new byte[size];
         System.arraycopy(metainfoBytes, chunk * CHUNK_SIZE, rv, 0, size);
@@ -165,14 +165,14 @@ class MagnetState {
      */
     public boolean saveChunk(int chunk, byte[] data, int off, int length) throws Exception {
         if (!isInitialized)
-            throw new IllegalArgumentException("not initialized");
+            throw new IllegalArgumentException("Not initialized");
         if (chunk < 0 || chunk >= totalChunks)
             throw new IllegalArgumentException("bad chunk number");
         if (have.get(chunk))
             return false;  // shouldn't happen if synced
         int size = chunkSize(chunk);
         if (size != length)
-            throw new IllegalArgumentException("bad chunk length");
+            throw new IllegalArgumentException("Bad chunk length");
         System.arraycopy(data, off, metainfoBytes, chunk * CHUNK_SIZE, size);
         have.set(chunk);
         boolean done = have.complete();
@@ -202,7 +202,7 @@ class MagnetState {
             // TODO: Count fails and give up eventually
             have = new BitField(totalChunks);
             requested = new BitField(totalChunks);
-            throw new IOException("info hash mismatch");
+            throw new IOException("Info hash mismatch");
         }
         return newmeta;
     }

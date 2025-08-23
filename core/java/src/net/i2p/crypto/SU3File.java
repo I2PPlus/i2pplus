@@ -269,7 +269,7 @@ public class SU3File {
         skip(in, 1);
         int foo = in.read();
         if (foo != FILE_VERSION)
-            throw new IOException("bad file version");
+            throw new IOException("Bad file version");
         int sigTypeCode = (int) DataHelper.readLong(in, 2);
         _sigType = SigType.getByCode(sigTypeCode);
         // In verifyAndMigrate it reads this far then rewinds, but we don't need to here
@@ -277,23 +277,23 @@ public class SU3File {
             throw new IOException("Unknown signature type: " + sigTypeCode);
         _signatureLength = (int) DataHelper.readLong(in, 2);
         if (_signatureLength != _sigType.getSigLen())
-            throw new IOException("bad sig length");
+            throw new IOException("Bad signature length");
         skip(in, 1);
         int _versionLength = in.read();
         if (_versionLength < MIN_VERSION_BYTES)
-            throw new IOException("bad version length");
+            throw new IOException("Bad version length");
         skip(in, 1);
         _signerLength = in.read();
         if (_signerLength <= 0)
-            throw new IOException("bad signer length");
+            throw new IOException("Bad signer length");
         _contentLength = DataHelper.readLong(in, 8);
         if (_contentLength <= 0)
-            throw new IOException("bad content length");
+            throw new IOException("Bad content length");
         skip(in, 1);
         _fileType = in.read();
         // Allow any file type
         //if (_fileType != TYPE_ZIP && _fileType != TYPE_XML)
-        //    throw new IOException("bad file type");
+        //    throw new IOException("Bad file type");
         skip(in, 1);
         int cType = in.read();
         _contentType = BY_CODE.get(Integer.valueOf(cType));
@@ -500,13 +500,13 @@ public class SU3File {
             out.write((byte) 0);
             byte[] verBytes = DataHelper.getUTF8(version);
             if (verBytes.length == 0 || verBytes.length > 255)
-                throw new IllegalArgumentException("bad version length");
+                throw new IllegalArgumentException("Bad version length");
             int verLen = Math.max(verBytes.length, MIN_VERSION_BYTES);
             out.write((byte) verLen);
             out.write((byte) 0);
             byte[] signerBytes = DataHelper.getUTF8(signer);
             if (signerBytes.length == 0 || signerBytes.length > 255)
-                throw new IllegalArgumentException("bad signer length");
+                throw new IllegalArgumentException("Bad signer length");
             out.write((byte) signerBytes.length);
             long contentLength = content.length();
             if (contentLength <= 0)
@@ -514,11 +514,11 @@ public class SU3File {
             DataHelper.writeLong(out, 8, contentLength);
             out.write((byte) 0);
             if (fileType < 0 || fileType > 255)
-                throw new IllegalArgumentException("bad content type");
+                throw new IllegalArgumentException("Bad content type");
             out.write((byte) fileType);
             out.write((byte) 0);
             if (contentType < 0 || contentType > 255)
-                throw new IllegalArgumentException("bad content type");
+                throw new IllegalArgumentException("Bad content type");
             out.write((byte) contentType);
             out.write(new byte[12]);
             out.write(verBytes);

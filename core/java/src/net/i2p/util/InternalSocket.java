@@ -34,7 +34,7 @@ public class InternalSocket extends Socket {
      */
     public InternalSocket(int port) throws IOException {
          if (port <= 0)
-             throw new IOException("bad port number");
+             throw new IOException("Bad port number");
          _port = port;
          InternalServerSocket.internalConnect(port, this);
     }

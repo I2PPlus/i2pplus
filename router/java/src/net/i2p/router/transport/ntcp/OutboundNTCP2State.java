@@ -103,12 +103,12 @@ class OutboundNTCP2State implements EstablishState {
         try {
             _handshakeState = new HandshakeState(HandshakeState.PATTERN_ID_XK, HandshakeState.INITIATOR, _transport.getXDHFactory());
         } catch (GeneralSecurityException gse) {
-            throw new IllegalStateException("bad proto", gse);
+            throw new IllegalStateException("Bad protocol", gse);
         }
         // save because we must know length
         _aliceRI = ctx.router().getRouterInfo();
         if (_aliceRI == null)
-            throw new IllegalStateException("no RouterInfo yet");
+            throw new IllegalStateException("No RouterInfo yet");
         _aliceRISize = _aliceRI.toByteArray().length;
         _padlen3 = _context.random().nextInt(PADDING3_MAX);
 
@@ -116,11 +116,11 @@ class OutboundNTCP2State implements EstablishState {
         _bobHash = new SessionKey(h.getData());
         String s = _con.getRemoteAddress().getOption("i");
         if (s == null)
-            throw new IllegalArgumentException("no NTCP2 IV");
+            throw new IllegalArgumentException("No NTCP2 IV");
         _bobIV = Base64.decode(s);
         if (_bobIV == null || _bobIV.length != IV_SIZE ||
             DataHelper.eq(_bobIV, 0, ZEROKEY, 0, IV_SIZE))
-            throw new IllegalArgumentException("bad NTCP2 IV");
+            throw new IllegalArgumentException("Bad NTCP2 IV");
     }
 
     private void changeState(State state) {
@@ -205,14 +205,14 @@ class OutboundNTCP2State implements EstablishState {
         // set keys
         String s = _con.getRemoteAddress().getOption("s");
         if (s == null) {
-            fail("no NTCP2 S");
+            fail("No NTCP2 S");
             return;
         }
         byte[] bk = Base64.decode(s);
         if (bk == null || bk.length != KEY_SIZE ||
             (bk[KEY_SIZE - 1] & 0x80) != 0 ||
             DataHelper.eq(bk, 0, ZEROKEY, 0, KEY_SIZE)) {
-            fail("bad NTCP2 S: " + s);
+            fail("Bad NTCP2 S: " + s);
             return;
         }
         _handshakeState.getRemotePublicKey().setPublicKey(bk, 0);
@@ -395,7 +395,7 @@ class OutboundNTCP2State implements EstablishState {
         int newoff = NTCP2Payload.writePayload(tmp, MSG3P1_SIZE, blocks);
         int expect = MSG3P1_SIZE + msg3p2len;
         if (newoff != expect)
-            throw new IllegalStateException("message #3 size mismatch -> expected " + expect + "bytes, got " + newoff);
+            throw new IllegalStateException("Message #3 size mismatch -> expected " + expect + "bytes, got " + newoff);
         try {
             _handshakeState.writeMessage(tmp, 0, tmp, MSG3P1_SIZE, msg3p2len);
         } catch (GeneralSecurityException gse) {

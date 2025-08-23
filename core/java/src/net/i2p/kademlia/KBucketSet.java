@@ -584,7 +584,7 @@ public class KBucketSet<T extends SimpleDataStructure> {
         int len = _us.length();
         int dlen = data.length;
         if (dlen > len + 1 || (dlen == len + 1 && data[0] != 0)) {
-            throw new IllegalArgumentException("bad length " + dlen + " > " + len);
+            throw new IllegalArgumentException("Bad length " + dlen + " > " + len);
         }
         T rv;
         try {rv = (T) _us.getClass().getDeclaredConstructor().newInstance();}

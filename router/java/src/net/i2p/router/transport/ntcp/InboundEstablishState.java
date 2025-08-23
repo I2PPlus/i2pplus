@@ -318,7 +318,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             }
 
             try {_handshakeState = new HandshakeState(HandshakeState.PATTERN_ID_XK, HandshakeState.RESPONDER, _transport.getXDHFactory());}
-            catch (GeneralSecurityException gse) {throw new IllegalStateException("bad proto", gse);}
+            catch (GeneralSecurityException gse) {throw new IllegalStateException("Bad protocol", gse);}
             _handshakeState.getLocalKeyPair().setKeys(_transport.getNTCP2StaticPrivkey(), 0,
                                                       _transport.getNTCP2StaticPubkey(), 0);
             byte options[] = new byte[OPTIONS1_SIZE];

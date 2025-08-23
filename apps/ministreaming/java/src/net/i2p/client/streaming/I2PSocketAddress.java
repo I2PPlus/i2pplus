@@ -37,11 +37,11 @@ public class I2PSocketAddress extends SocketAddress {
                 port = Integer.parseInt(host.substring(colon + 1));
                 host = host.substring(0, colon);
                 if (port < 0 || port > 65535)
-                    throw new IllegalArgumentException("bad port " + port);
+                    throw new IllegalArgumentException("Bad port " + port);
             } catch (IndexOutOfBoundsException ioobe) {
-                throw new IllegalArgumentException("bad port " + host);
+                throw new IllegalArgumentException("Bad port " + host);
             } catch (NumberFormatException nfe) {
-                throw new IllegalArgumentException("bad port " + host);
+                throw new IllegalArgumentException("Bad port " + host);
             }
         }
         _port = port;
@@ -57,7 +57,7 @@ public class I2PSocketAddress extends SocketAddress {
         if (dest == null)
             throw new NullPointerException();
         if (port < 0 || port > 65535)
-            throw new IllegalArgumentException("bad port " + port);
+            throw new IllegalArgumentException("Bad port " + port);
         _port = port;
         _dest = dest;
         _host = null;
@@ -70,7 +70,7 @@ public class I2PSocketAddress extends SocketAddress {
      */
     public I2PSocketAddress(String host, int port) {
         if (port < 0 || port > 65535)
-            throw new IllegalArgumentException("bad port " + port);
+            throw new IllegalArgumentException("Bad port " + port);
         _port = port;
         _dest = I2PAppContext.getGlobalContext().namingService().lookup(host);
         _host = host;
@@ -86,7 +86,7 @@ public class I2PSocketAddress extends SocketAddress {
     /** unresolved */
     private I2PSocketAddress(int port, String host) {
         if (port < 0 || port > 65535)
-            throw new IllegalArgumentException("bad port " + port);
+            throw new IllegalArgumentException("Bad port " + port);
         _port = port;
         _dest = null;
         _host = host;

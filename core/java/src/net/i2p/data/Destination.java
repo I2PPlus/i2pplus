@@ -105,7 +105,7 @@ public class Destination extends KeysAndCert {
         if (padding != null) {
             int sz = pk.length() + sk.length() + padding.length;
             if (sz != 384)
-                throw new IllegalArgumentException("bad total length " + sz);
+                throw new IllegalArgumentException("Bad total length " + sz);
         }
         _publicKey = pk;
         _signingKey = sk;

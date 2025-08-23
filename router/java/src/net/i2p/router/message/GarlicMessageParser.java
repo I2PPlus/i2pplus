@@ -191,7 +191,7 @@ public class GarlicMessageParser {
         //if (_log.shouldDebug())
         //    _log.debug("Numer of cloves to read: " + numCloves);
         if (numCloves <= 0 || numCloves > MAX_CLOVES)
-            throw new DataFormatException("bad clove count " + numCloves);
+            throw new DataFormatException("Bad clove count " + numCloves);
         GarlicClove[] cloves = new GarlicClove[numCloves];
         for (int i = 0; i < numCloves; i++) {
             //if (_log.shouldDebug())

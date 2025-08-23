@@ -2026,7 +2026,7 @@ public class BlockfileNamingService extends DummyNamingService {
             try {
                 int sz = bais.read() & 0xff;
                 if (sz <= 0)
-                    throw new DataFormatException("bad dest count " + sz);
+                    throw new DataFormatException("Bad dest count " + sz);
                 rv.props = readProperties(bais);
                 rv.dest = Destination.create(bais);
                 if (sz > 1) {

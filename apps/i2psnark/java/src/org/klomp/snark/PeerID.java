@@ -94,7 +94,7 @@ public class PeerID implements Comparable<PeerID>
     // id and address remain null
     port = TrackerClient.PORT;
     if (dest_hash.length != 32)
-        throw new InvalidBEncodingException("bad hash length");
+        throw new InvalidBEncodingException("Bad hash length");
     destHash = dest_hash;
     hash = DataHelper.hashCode(dest_hash);
     this.util = util;

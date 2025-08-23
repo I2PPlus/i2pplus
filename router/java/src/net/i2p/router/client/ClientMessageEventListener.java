@@ -327,11 +327,11 @@ class ClientMessageEventListener implements I2CPMessageReader.I2CPMessageEventLi
             // For now, we do NOT send a SessionStatusMessage - see javadoc above
             if (_log.shouldError()) {_log.error("Session establish failed: code = " + status);}
             String msg;
-            if (status == SessionStatusMessage.STATUS_DUP_DEST) {msg = "duplicate destination";}
+            if (status == SessionStatusMessage.STATUS_DUP_DEST) {msg = "Duplicate destination";}
             // not in spec, change to INVALID if we send it
             // status = SessionStatusMessage.STATUS_INVALID
-            else if (status == SessionStatusMessage.STATUS_INVALID) {msg = "bad session configuration parameters";}
-            else if (status == SessionStatusMessage.STATUS_REFUSED) {msg = "session limit exceeded";}
+            else if (status == SessionStatusMessage.STATUS_INVALID) {msg = "Bad session configuration parameters";}
+            else if (status == SessionStatusMessage.STATUS_REFUSED) {msg = "Session limit exceeded";}
             else {msg = "unknown error";}
             _runner.disconnectClient(msg);
             return;
