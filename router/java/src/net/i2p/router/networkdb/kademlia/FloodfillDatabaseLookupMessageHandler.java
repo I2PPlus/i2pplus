@@ -20,7 +20,7 @@ import net.i2p.util.Log;
 import net.i2p.util.RandomSource;
 
 /**
- * Handler for DatabaseLookupMessage received on floodfill network nodes.
+ * Handler for DatabaseLookupMessage received on floodfills.
  * &lt;p&gt;
  * This class verifies incoming lookup messages, applies throttling and banning policies,
  * and builds appropriate jobs for accepted lookups. Unacceptable lookups are logged and dropped.
@@ -35,7 +35,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
     private FloodfillNetworkDatabaseFacade _facade;
     private Log _log;
     private final long _msgIDBloomXor = RandomSource.getInstance().nextLong(I2NPMessage.MAX_ID_VALUE);
-
+    private static final long[] RATES = { 60*1000, 60*60*1000l };
 
     /**
      * Constructs a new handler for floodfill DatabaseLookupMessages.
@@ -47,16 +47,16 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         _context = context;
         _facade = facade;
         _log = context.logManager().getLog(FloodfillDatabaseLookupMessageHandler.class);
-        _context.statManager().createRateStat("netDb.lookupsReceived", "NetDb lookups we have received", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        _context.statManager().createRateStat("netDb.lookupsDropped", "NetDb lookups we dropped (throttled)", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+        _context.statManager().createRateStat("netDb.lookupsReceived", "NetDb lookups we have received", "NetworkDatabase", RATES);
+        _context.statManager().createRateStat("netDb.lookupsDropped", "NetDb lookups we dropped (throttled)", "NetworkDatabase", RATES);
         // following are for ../HDLMJ
-        _context.statManager().createRateStat("netDb.lookupsHandled", "NetDb lookups we have handled", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        _context.statManager().createRateStat("netDb.lookupsMatched", "Successful NetDb lookups", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        _context.statManager().createRateStat("netDb.lookupsMatchedLeaseSet", "Successful NetDb LeaseSet lookups", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        _context.statManager().createRateStat("netDb.lookupsMatchedReceivedPublished", "Successful NetDb lookups (published to us)", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        _context.statManager().createRateStat("netDb.lookupsMatchedLocalClosest", "NetDb lookups received for local data (closest peer)", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        _context.statManager().createRateStat("netDb.lookupsMatchedLocalNotClosest", "NetDb lookups received for local data (not closest peer)", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        _context.statManager().createRateStat("netDb.lookupsMatchedRemoteNotClosest", "NetDb lookups received for remote data (not closest peer)", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+        _context.statManager().createRateStat("netDb.lookupsHandled", "NetDb lookups we have handled", "NetworkDatabase", RATES);
+        _context.statManager().createRateStat("netDb.lookupsMatched", "Successful NetDb lookups", "NetworkDatabase", RATES);
+        _context.statManager().createRateStat("netDb.lookupsMatchedLeaseSet", "Successful NetDb LeaseSet lookups", "NetworkDatabase", RATES);
+        _context.statManager().createRateStat("netDb.lookupsMatchedReceivedPublished", "Successful NetDb lookups (published to us)", "NetworkDatabase", RATES);
+        _context.statManager().createRateStat("netDb.lookupsMatchedLocalClosest", "NetDb lookups received for local data (closest peer)", "NetworkDatabase", RATES);
+        _context.statManager().createRateStat("netDb.lookupsMatchedLocalNotClosest", "NetDb lookups received for local data (not closest peer)", "NetworkDatabase", RATES);
+        _context.statManager().createRateStat("netDb.lookupsMatchedRemoteNotClosest", "NetDb lookups received for remote data (not closest peer)", "NetworkDatabase", RATES);
     }
 
     /**
@@ -139,9 +139,15 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         }
 
         if (shouldAccept || isSelfLookup) {
+
             if (_log.shouldInfo()) {
-                _log.info("Replying to " + searchType + " lookup from [" + fromBase64.substring(0,6) + "] for [" +
-                          searchKeyBase64.substring(0, keyLength) + "] via [TunnelId " + dlm.getReplyTunnel() + "]");
+                if (dlm.getReplyTunnel() != null) {
+                    _log.info("Replying to " + searchType + " lookup from [" + fromBase64.substring(0,6) + "] for [" +
+                              searchKeyBase64.substring(0, keyLength) + "] via [TunnelId " + dlm.getReplyTunnel() + "]");
+                } else {
+                    _log.info("Replying to direct " + searchType + " lookup from [" + fromBase64.substring(0,6) + "] for [" +
+                              searchKeyBase64.substring(0, keyLength) + "]");
+                }
             }
             return new HandleFloodfillDatabaseLookupMessageJob(_context, dlm, from, fromHash, _msgIDBloomXor);
         }
@@ -155,11 +161,11 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
      * Logs warning messages when a lookup is dropped due to throttling, banning, or mode restrictions.
      * Does nothing if warning logs are disabled or the sender is already banned.
      *
-     * @param searchType the type string of the lookup (e.g., "Exploratory", "RouterInfo")
+     * @param searchType the type string of the lookup (e.g. "Exploratory", "RouterInfo")
      * @param fromBase64 the base64 representation of the sender router hash (truncated to 6 chars)
      * @param searchKeyBase64 the base64 representation of the lookup search key (truncated)
      * @param keyLength the length of key substring to log (6 if RouterInfo or 8 chars otherwise)
-     * @param isFF true if the sender router is a floodfill node
+     * @param isFF true if the sender router is a floodfill
      * @param floodfillMode true if the local router is participating as floodfill
      * @param isDirect true if the lookup is being sent directly (no tunnel)
      * @param isBanned true if the sender router is banned
@@ -191,7 +197,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
      * @param shouldBan true if the lookup request should be banned (blocked)
      * @param ourRI true if the lookup is for this router's identity
      * @param floodfillMode true if the local router participates as floodfill
-     * @param isFF true if the sender router is a floodfill node
+     * @param isFF true if the sender router is a floodfill
      * @param type the type of the lookup message
      * @return true if the lookup is accepted, false if dropped
      *
