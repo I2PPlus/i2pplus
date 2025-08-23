@@ -1,3 +1,6 @@
+2025-08-23 dr|z3d
+* Console: Add summary section and autorefresh to session bans page
+
 2025-08-20 dr|z3d
 * Console: Add routerconsole.unifiedSidebar={true|false}
   configuration option to present the standard sidebar on /home
