@@ -186,7 +186,8 @@ public class LogsHelper extends HelperBase {
                                     .replaceAll("\\|.*\\[.*-Connection].*?:", "|")
                                     .replaceAll("\\|.*\\[.*Restart].*?:", "|")
                                     .replaceAll("\\|.*\\[.*Read.*\\].*?:", "|")
-                                    .replaceAll("\\|.*\\[.*DirMon.*\\].*?:", "|");
+                                    .replaceAll("\\|.*\\[.*DirMon.*\\].*?:", "|")
+                                    .replaceAll("\\|.*\\[.*Queue.*\\].*?:", "|");
                 // Remove lines containing unwanted strings
                 StringBuilder filtered = new StringBuilder();
                 String[] logLines = str.split("\n");
@@ -209,6 +210,7 @@ public class LogsHelper extends HelperBase {
                         !line.contains("ContextHandler") &&
                         !line.contains("AbstractConnector") &&
                         !line.contains("I2PSessionException") &&
+                        !line.contains("info_hash") &&
                         !line.contains("\\.\\.\\..*?more\n") &&
                         !line.contains("at net.i2p") &&
                         !line.contains("at java.base") &&
