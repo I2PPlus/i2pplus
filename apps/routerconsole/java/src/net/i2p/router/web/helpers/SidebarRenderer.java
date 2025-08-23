@@ -156,7 +156,7 @@ class SidebarRenderer {
 
     public String renderHelpAndFAQHTML() {
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<h3 id=helpfaq><a href=\"/help/\" target=_top title=\"")
+        buf.append("<h3 id=helpfaq><a href=/help/ target=_top title=\"")
            .append(_t("I2P Router Help &amp; FAQ")).append("\">")
            .append(_t("Help &amp; FAQ")).append("</a>")
            .append("<input type=checkbox id=toggle_sb_help class=\"toggleSection script\" checked hidden></h3><hr class=b>\n")
@@ -167,63 +167,63 @@ class SidebarRenderer {
         StringBuilder rbuf = new StringBuilder(128);
 
         String tx = _t("Advanced Settings");
-        rbuf.append("<a href=\"/help/advancedsettings\" target=_top title=\"")
+        rbuf.append("<a href=/help/advancedsettings target=_top title=\"")
             .append(_t("A guide to some of the less-used configuration settings"))
             .append("\">").append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Changelog");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/help/changelog\" target=_top title=\"")
+        rbuf.append("<a href=/help/changelog target=_top title=\"")
             .append(_t("Recent development changes to the router"))
             .append("\">").append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Configuration");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/help/configuration\" target=_top title=\"")
+        rbuf.append("<a href=/help/configuration target=_top title=\"")
             .append(_t("An introduction to configuring your router"))
             .append("\">").append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("FAQ");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/help/faq\" target=_top title=\"")
+        rbuf.append("<a href=/help/faq target=_top title=\"")
             .append(_t("A shortened version of the official Frequently Asked Questions"))
             .append("\">").append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("New Users");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/help/newusers\" target=_top title=\"")
+        rbuf.append("<a href=/help/newusers target=_top title=\"")
             .append(_t("A gentle introduction to I2P"))
             .append("\">").append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Reseeding");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/help/reseed\" target=_top title=\"")
+        rbuf.append("<a href=/help/reseed target=_top title=\"")
             .append(_t("A guide to reseeding the router"))
             .append("\">").append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Troubleshoot");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/help/troubleshoot\" target=_top title=\"")
+        rbuf.append("<a href=/help/troubleshoot target=_top title=\"")
             .append(_t("Troubleshooting &amp; Further Assistance"))
             .append("\">").append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("UI");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/help/ui\" target=_top title=\"")
+        rbuf.append("<a href=/help/ui target=_top title=\"")
             .append(_t("Information about the sidebar and network status messages"))
             .append("\">").append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Webhosting");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/help/webhosting\" target=_top title=\"")
+        rbuf.append("<a href=/help/webhosting target=_top title=\"")
             .append(_t("An introduction to hosting websites on the I2P network"))
             .append("\">").append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
@@ -242,7 +242,7 @@ class SidebarRenderer {
         PortMapper pm = _context.portMapper();
         if (pm.isRegistered(PortMapper.SVC_SUSIDNS)) {
             String tx = _t("Addressbook");
-            rbuf.append("<a href=\"/dns\" target=_top title=\"")
+            rbuf.append("<a href=/dns target=_top title=\"")
                 .append(_t("Manage your I2P hosts file here (I2P domain name resolution)"))
                 .append("\">").append(nbsp(tx)).append("</a>\n")
                 .append("<a class=sb_icon target=_top href=/dns title=\"").append(tx)
@@ -255,7 +255,7 @@ class SidebarRenderer {
         if (pm.isRegistered(PortMapper.SVC_SUSIMAIL)) {
             String tx = _t("I2PMail");
             rbuf.setLength(0);
-            rbuf.append("<a href=\"/webmail\" ");
+            rbuf.append("<a href=/webmail ");
             if (embedApps) {rbuf.append("target=_top ");}
             else {rbuf.append("target=_blank ");}
             rbuf.append("title=\"").append(_t("Anonymous webmail client"))
@@ -268,7 +268,7 @@ class SidebarRenderer {
         if (pm.isRegistered(PortMapper.SVC_JSONRPC)) {
             String tx = _t("I2PControl");
             rbuf.setLength(0);
-            rbuf.append("<a href=\"/jsonrpc/\" target=_blank title=\"").append(_t("RPC Service")).append("\">")
+            rbuf.append("<a href=/jsonrpc/ target=_blank title=\"").append(_t("RPC Service")).append("\">")
                 .append(nbsp(tx)).append("</a>\n")
                 .append("<a class=sb_icon target=_top href=/jsonrpc/ title=\"").append(tx)
                 .append("\" hidden><span><img src=/themes/console/images/i2cp.svg></span></a>\n");
@@ -278,7 +278,7 @@ class SidebarRenderer {
         if (pm.isRegistered(PortMapper.SVC_I2PSNARK)) {
             String tx = _t("Torrents");
             rbuf.setLength(0);
-            rbuf.append("<a href=\"/torrents\" ");
+            rbuf.append("<a href=/torrents ");
             if (embedApps) {rbuf.append("target=_top ");}
             else {rbuf.append("target=_blank ");}
             rbuf.append("title=\"").append(_t("Built-in anonymous BitTorrent Client"))
@@ -291,7 +291,7 @@ class SidebarRenderer {
         if (_helper.isI2PTunnelRunning()) {
             String tx = _t("Tunnel Manager");
             rbuf.setLength(0);
-            rbuf.append("<a href=\"/tunnelmanager\" target=_top title=\"")
+            rbuf.append("<a href=/tunnelmanager target=_top title=\"")
                 .append(_t("Manage I2P client and server tunnels to access or provide network services"))
                 .append("\">").append(nbsp(tx)).append("</a>\n")
                 .append("<a class=sb_icon target=_top href=/tunnelmanager title=\"").append(tx)
@@ -320,7 +320,7 @@ class SidebarRenderer {
         if (apps != null) {svcs.putAll(apps);}
         if (!svcs.isEmpty()) {
             StringBuilder buf = new StringBuilder(128 * svcs.size());
-            buf.append("<h3><a href=\"/configwebapps\" target=_top title=\"")
+            buf.append("<h3><a href=/configwebapps target=_top title=\"")
                .append(_t("Configure startup of clients and webapps (services); manually start dormant services"))
                .append("\">")
                .append(_t("Services"))
@@ -370,7 +370,7 @@ class SidebarRenderer {
 
     public String renderI2PInternalsHTML() {
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<h3><a href=\"/sitemap\" target=_top title=\"").append(_t("I2P+ Router Sitemap"))
+        buf.append("<h3><a href=/sitemap target=_top title=\"").append(_t("I2P+ Router Sitemap"))
            .append("\">").append(_t("Internals")).append("</a>")
            .append("<input type=checkbox id=toggle_sb_internals class=\"toggleSection script\" checked hidden>")
            .append("</h3>\n<hr class=b>\n")
@@ -382,7 +382,7 @@ class SidebarRenderer {
 
         String tx = _t("Certs");
         rbuf.append("<a target=_top title=\"").append(_t("Review active encryption certificates used in console"))
-            .append("\" href=\"/certs\">").append(nbsp(tx)).append("</a>\n");
+            .append("\" href=/certs>").append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Events");
@@ -395,7 +395,7 @@ class SidebarRenderer {
         if (!GraphGenerator.isDisabled(_context)) {
             tx = _t("Graphs");
             rbuf.setLength(0);
-            rbuf.append("<a href=\"/graphs\" target=_top title=\"").append(_t("Graph router performance")).append("\">")
+            rbuf.append("<a href=/graphs target=_top title=\"").append(_t("Graph router performance")).append("\">")
                 .append(nbsp(tx)).append("</a>\n")
                 .append("<a class=sb_icon target=_top href=/graphs title=\"").append(tx)
                 .append("\" hidden><span><img src=/themes/console/images/graphs.svg></span></a>\n");
@@ -404,20 +404,20 @@ class SidebarRenderer {
 
         tx = _t("Help");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/help/\" target=_top title=\"").append(_t("Router Help and FAQ")).append("\">")
+        rbuf.append("<a href=/help/ target=_top title=\"").append(_t("Router Help and FAQ")).append("\">")
             .append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Info");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/info\" target=_top title=\"")
+        rbuf.append("<a href=/info target=_top title=\"")
             .append(_t("Router information including transport addresses and UPnP scan")).append("\">")
             .append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Jobs");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/jobs\" target=_top title=\"").append(_t("Show the router's workload, and how it's performing"))
+        rbuf.append("<a href=/jobs target=_top title=\"").append(_t("Show the router's workload, and how it's performing"))
             .append("\">").append(nbsp(tx)).append("</a>\n")
             .append("<a class=sb_icon target=_top href=/jobs title=\"").append(tx)
             .append("\" hidden><span><img src=/themes/console/images/jobs.svg></span></a>\n");
@@ -425,14 +425,14 @@ class SidebarRenderer {
 
         tx = _t("Logs");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/logs\" target=_top title=\"").append(_t("Health Report")).append("\">")
+        rbuf.append("<a href=/logs target=_top title=\"").append(_t("Health Report")).append("\">")
             .append(nbsp(tx)).append("</a>\n").append("<a class=sb_icon target=_top href=/logs title=\"").append(tx)
             .append("\" hidden><span><img src=/themes/console/images/logs.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("NetDb");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/netdb\" target=_top title=\"").append(_t("Show list of all known I2P routers")).append("\">")
+        rbuf.append("<a href=/netdb target=_top title=\"").append(_t("Show list of all known I2P routers")).append("\">")
             .append(nbsp(tx)).append("</a>\n")
             .append("<a class=sb_icon target=_top href=/netdb title=\"").append(tx)
             .append("\" hidden><span><img src=/themes/console/images/globe.svg></span></a>\n");
@@ -440,7 +440,7 @@ class SidebarRenderer {
 
         tx = _t("Peers");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/peers\" target=_top title=\"").append(_t("Show all current peer connections")).append("\">")
+        rbuf.append("<a href=/peers target=_top title=\"").append(_t("Show all current peer connections")).append("\">")
             .append(nbsp(tx)).append("</a>\n").append("<a class=sb_icon target=_top href=/peers title=\"").append(tx)
             .append("\" hidden><span><img src=/themes/console/images/peers.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
@@ -458,7 +458,7 @@ class SidebarRenderer {
 
         tx = _t("Tunnels");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/tunnels\" target=_top title=\"")
+        rbuf.append("<a href=/tunnels target=_top title=\"")
             .append(_t("View existing tunnels and tunnel build status"))
             .append("\">")
             .append(nbsp(tx))
@@ -476,7 +476,7 @@ class SidebarRenderer {
         StringBuilder buf = new StringBuilder(512);
 
         buf.append("<h3 id=advanced><a title=\"").append(_t("Advanced Configuration"))
-           .append("\" href=\"/configadvanced\" target=_top>").append(_t("Advanced"))
+           .append("\" href=/configadvanced target=_top>").append(_t("Advanced"))
            .append("</a><input type=checkbox id=toggle_sb_advanced class=\"toggleSection script\" checked hidden></h3>\n")
            .append("<hr class=b>\n<table id=sb_advanced class=collapse>\n<tr><td>");
 
@@ -488,7 +488,7 @@ class SidebarRenderer {
         if (javadoc.exists()) {
             String tx = _t("API");
             rbuf.append("<a title=\"").append(_t("Documentation for the I2P API"))
-                .append("\" href=\"/javadoc/index.html\" target=_blank>").append(nbsp(tx)).append("</a>\n")
+                .append("\" href=/javadoc/index.html target=_blank>").append(nbsp(tx)).append("</a>\n")
                 .append("<a class=sb_icon target=_blank href=/javadoc/index.html title=\"").append(tx)
                 .append("\" hidden><span><img src=/themes/console/images/help.svg></span></a>\n");
             svcs.put(tx, rbuf.toString());
@@ -497,7 +497,7 @@ class SidebarRenderer {
         String tx = _t("Debug");
         rbuf.setLength(0);
         rbuf.append("<a title=\"").append(_t("View router debug information"))
-            .append("\" href=\"/debug\" target=_top>").append(nbsp(tx)).append("</a>\n")
+            .append("\" href=/debug target=_top>").append(nbsp(tx)).append("</a>\n")
             .append("<a class=sb_icon target=_top href=/debug title=\"").append(tx)
             .append("\" hidden><span><img src=/themes/console/images/bug.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
@@ -505,7 +505,7 @@ class SidebarRenderer {
         tx = _t("Jars");
         rbuf.setLength(0);
         rbuf.append("<a title=\"").append(_t("Review extended info about installed .jar and .war files"))
-            .append("\" href=\"/jars\" target=_top>").append(nbsp(tx)).append("</a>\n")
+            .append("\" href=/jars target=_top>").append(nbsp(tx)).append("</a>\n")
             .append("<a class=sb_icon target=_top href=/jars title=\"").append(tx)
             .append("\" hidden><span><img src=/themes/console/images/package.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
@@ -520,7 +520,7 @@ class SidebarRenderer {
 
         tx = _t("Stats");
         rbuf.setLength(0);
-        rbuf.append("<a href=\"/stats\" target=_top title=\"").append(_t("Textual router performance statistics"))
+        rbuf.append("<a href=/stats target=_top title=\"").append(_t("Textual router performance statistics"))
             .append("\">").append(nbsp(tx)).append("</a>\n")
             .append("<a class=sb_icon target=_top href=/stats title=\"").append(tx)
             .append("\" hidden><span><img src=/themes/console/images/stats.svg></span></a>\n");
@@ -542,7 +542,7 @@ class SidebarRenderer {
     public String renderRouterInfoHTML() {
         if (_helper == null) {return "";}
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<h3><a href=\"/info\" target=_top title=\"")
+        buf.append("<h3><a href=/info target=_top title=\"")
            .append(_t("Your Local Identity [{0}] is your unique I2P router identity, similar to an IP address but tailored to I2P. ", _helper.getIdent()))
            .append(_t("Never disclose this to anyone, as it can reveal your real world IP."))
            .append("\">")
@@ -554,7 +554,7 @@ class SidebarRenderer {
            .append("<tr title=\"")
            .append(_t("The version of the I2P software we are running"))
            .append("\">")
-           .append("<td><a href=\"/configupdate\"><b>")
+           .append("<td><a href=/configupdate><b>")
            .append(_t("Version"))
            .append("</b></a></td>")
            .append("<td class=digits><span>")
@@ -613,7 +613,7 @@ class SidebarRenderer {
            .append("<tr title=\"")
            .append(_t("The version of the I2P software we are running"))
            .append("\">")
-           .append("<td><a href=\"/configupdate\"><b>")
+           .append("<td><a href=/configupdate><b>")
            .append(_t("Version"))
            .append("</b></a></td>")
            .append("<td class=digits><span>")
@@ -727,8 +727,6 @@ class SidebarRenderer {
            .append(floodfillEnabled() ? " <span id=ffenabled>(" + _t("Floodfill enabled") + ")</span>" : "");
         buf.append("</span>");
         if (floodfillEnabled() && !reachability.getMessage().contains(_t("Floodfill"))) {
-            //int lsCountFF = _context.netDb().getFloodfillLeases().size();
-            //int lsCountLocal = _context.netDb().getClientLeases().size();
             int lsCount = _context.netDb().getLeases().size();
             if (lsCount > 0) {
             buf.append(" <a href=\"/netdb?l=1\"><span id=lsCount class=\"badge volatile\" title=\"")
@@ -751,7 +749,7 @@ class SidebarRenderer {
         if (_helper == null || updateStatus.isEmpty()) {return "";}
         else {
             buf.append("<div id=sb_updatesection class=\"collapse\">")
-               .append("<h3><a href=\"/configupdate\" target=_top title=\"")
+               .append("<h3><a href=/configupdate target=_top title=\"")
                .append(_t("Configure I2P Updates")).append("\">").append(_t("Update Status")).append("</a>")
                .append("<input type=checkbox id=toggle_sb_updatesection class=\"toggleSection script\" checked hidden>")
                .append("</h3><hr class=b>").append(updateStatus).append("</div>\n");
@@ -768,7 +766,7 @@ class SidebarRenderer {
         if (_helper == null) {return "";}
         StringBuilder buf = new StringBuilder(512);
         int active = _helper.getActivePeers();
-        buf.append("<h3><a href=\"/peers\" target=_top title=\"").append(_t("Show all current peer connections")).append("\">")
+        buf.append("<h3><a href=/peers target=_top title=\"").append(_t("Show all current peer connections")).append("\">")
            .append(_t("Peers")).append(" <span class=\"badge volatile\" hidden title=\"")
            .append(_t("Peers active in the last minute")).append(" / ")
            .append(_t("Total peers in NetDb")).append("\">").append(active).append (" / ").append(_helper.getAllPeers()).append("</span>")
@@ -783,7 +781,7 @@ class SidebarRenderer {
                .replace("last few minutes/last hour", "last minute"));
         }
         buf.append("\">")
-           .append("<td><a href=\"/peers\"><b>")
+           .append("<td><a href=/peers><b>")
            .append(_t("Active"))
            .append("</b></a></td><td class=digits><span class=volatile>");
         buf.append(active);
@@ -838,7 +836,7 @@ class SidebarRenderer {
     public String renderBandwidthHTML() {
         if (_helper == null) {return "";}
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<h3><a href=\"/config\" title=\"")
+        buf.append("<h3><a href=/config title=\"")
            .append(_t("Configure router bandwidth allocation"))
            .append("\" target=_top>")
            .append(_t("Bandwidth in/out"))
@@ -899,13 +897,13 @@ class SidebarRenderer {
            .append("\">\n<span id=sb_graphstats class=volatile>")
            .append(_helper.getSecondKBps())
            .append("Bps</span>\n")
-           .append("<a href=\"/graphs\">\n")
+           .append("<a href=/graphs>\n")
            .append("<canvas id=minigraph width=245 height=50>\n")
-           .append("<div id=minigraphcontainer style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
+           .append("<div id=minigraphcontainer style=\"background-image:url(/viewstat.jsp?stat=bw.combined")
            .append("&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;")
            .append("hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append(")\"></div>")
            .append("</canvas>\n")
-           .append("<noscript><div id=minigraphcontainer_noscript style=\"background-image: url(/viewstat.jsp?stat=bw.combined")
+           .append("<noscript><div id=minigraphcontainer_noscript style=\"background-image:url(/viewstat.jsp?stat=bw.combined")
            .append("&amp;periodCount=20&amp;width=250&amp;height=50&amp;hideLegend=true&amp;hideGrid=true&amp;")
            .append("hideTitle=true&amp;time=").append(_context.clock().now() / 1000).append(")\"></div></noscript>")
            .append("</a>\n</div>\n");
@@ -920,7 +918,7 @@ class SidebarRenderer {
         int totalTunnels =_helper.getInboundTunnels() + _helper.getOutboundTunnels() + _helper.getInboundClientTunnels() +
                           _helper.getOutboundClientTunnels() + partTunnels;
         RouterInfo ri = _context.router().getRouterInfo();
-        buf.append("<h3><a href=\"/tunnels\" target=_top title=\"")
+        buf.append("<h3><a href=/tunnels target=_top title=\"")
            .append(_t("View existing tunnels and tunnel build status")).append("\">").append(_t("Tunnels"))
            .append(" <span class=\"badge volatile\" hidden title=\"").append(_t("Total number of tunnels in use"));
        if (_helper.getTunnelBuildSuccess() > 0) {
@@ -936,7 +934,7 @@ class SidebarRenderer {
             buf.append("<tr title=\"")
                .append(_t("Tunnels we are using to provide or access services on the network"))
                .append(" (").append(_t("inbound / outbound")).append(")").append("\">")
-               .append("<td><a href=\"/tunnels#client_tunnels\"><b>").append(_t("Service"))
+               .append("<td><a href=/tunnels#client_tunnels><b>").append(_t("Service"))
                .append("</b></a></td><td class=digits><span class=volatile>")
                .append(_helper.getInboundClientTunnels()).append(" / ").append(_helper.getOutboundClientTunnels())
                .append("</span></td></tr>\n");
@@ -945,7 +943,7 @@ class SidebarRenderer {
         buf.append("<tr title=\"")
            .append(_t("Used for building and testing tunnels, and communicating with floodfill peers"))
            .append(" (").append(_t("inbound / outbound")).append(")").append("\">")
-           .append("<td><a href=\"/tunnels#exploratory\"><b>").append(_t("Utility"))
+           .append("<td><a href=/tunnels#exploratory><b>").append(_t("Utility"))
            .append("</b></a></td><td class=digits><span class=volatile>")
            .append(_helper.getInboundTunnels()).append(" / ").append(_helper.getOutboundTunnels())
            .append("</span></td></tr>\n");
@@ -955,12 +953,13 @@ class SidebarRenderer {
                 buf.append("<tr title=\"")
                    .append(_t("Tunnels we are participating in, directly contributing bandwidth to the network"))
                    .append(" (").append(_t("Current / Maximum")).append(")").append("\">")
-                   .append("<td><a href=\"/transit\"><b>").append(_t("Transit")).append("</b></a></td><td class=digits><span class=volatile>")
+                   .append("<td><a href=/transit><b>").append(_t("Transit"))
+                   .append("</b></a></td><td class=digits><span class=volatile>")
                    .append(partTunnels).append(" / ").append(maxTunnels).append("</span></td></tr>\n");
             }
             buf.append("<tr title=\"")
                .append(_t("Total number of tunnels in use")).append("\">")
-               .append("<td><a href=\"/tunnelpeercount\"><b>").append(_t("Total")).append("</b></a></td><td class=digits><span class=volatile>")
+               .append("<td><a href=/tunnelpeercount><b>").append(_t("Total")).append("</b></a></td><td class=digits><span class=volatile>")
                .append(totalTunnels).append("</span></td></tr>\n")
                .append("<tr title=\"").append(_t("Concurrent tunnel builds (averaged over a minute) / single tunnel build time"))
                .append("\"><td><b>").append(_t("Concurrency")).append("</b></td><td class=digits><span class=volatile>")
@@ -1004,7 +1003,7 @@ class SidebarRenderer {
         if (_helper == null) {return "";}
         long maxLag = _context.jobQueue().getMaxLag();
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<h3><a href=\"/jobs\" target=_top title=\"")
+        buf.append("<h3><a href=/jobs target=_top title=\"")
            .append(_t("What's in the router's job queue?")).append("\">").append(_t("Congestion"));
         if (_context.router().getUptime() > 2*60*1000) {
            buf.append(" <span class=\"badge volatile\" hidden title=\"").append(_t("Job lag")).append(" / ")
@@ -1037,7 +1036,7 @@ class SidebarRenderer {
         if (_context.getBooleanPropertyDefaultTrue("routerconsole.showPeerTestAvg")) {
             buf.append("<tr title=\"")
                .append(_t("Average time to test a peer (successful / total)"))
-               .append("\"><td><a href=\"/profiles\"><b>")
+               .append("\"><td><a href=/profiles><b>")
                .append(_t("Peer test average"))
                .append("</b></a></td><td class=digits><span class=volatile>")
                .append(_helper.getAvgPeerTestTimeGood()).append(" / " )

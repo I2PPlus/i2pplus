@@ -170,7 +170,7 @@ function newHosts() {
   }
 
   let lastUpdated = JSON.parse(localStorage.getItem("newHostsData"))?.lastUpdated || 0;
-  const period = 300000;
+  const period = 60 * 10000;
   let now = Date.now();
 
   if (lastUpdated && (now - lastUpdated) < period) {return;}
@@ -222,11 +222,8 @@ function newHosts() {
       const count = sortedHostnames.length;
       localStorage.setItem("newHostsData", JSON.stringify({ count, lastUpdated: Date.now(), hostnames: limitedHostnames }));
 
-      if (count > 0) {
-        if (count > 10) { newHostsBadge.textContent = "10+"; }
-        else { newHostsBadge.textContent = count; }
-        newHostsBadge.hidden = false;
-      } else { newHostsBadge.hidden = true; }
+      if (count > 10) { newHostsBadge.textContent = "10+"; }
+      else { newHostsBadge.textContent = count; }
       if (sortedHostnames !== null) { updateTooltip(sortedHostnames); }
     }).catch(() => {});
   }
