@@ -152,6 +152,9 @@ class StartExplorersJob extends JobImpl {
             }
         }
 
+        int ffs = ctx.peerManager().countPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL);
+        boolean needFFs = ffs < MIN_FFS;
+
         if (lag > 500 || msgDelay > 750 || highLoad && !needFFs) {
             if (_log.shouldInfo()) {
                 _log.info("Next Peer Exploration run in " + (laggedDelay / 1000) + "s (router is under load)");
