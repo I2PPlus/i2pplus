@@ -130,12 +130,103 @@
       }
     }
     summaryDiv.innerHTML = html;
+    const footer = document.getElementById("sessionBanlistFooter");
+    if (footer) {footer.remove();}
+  }
+
+  function refreshSessionBans(bbody, refreshInterval = 30000) {
+    let refreshTimer = null;
+    let isVisible = true;
+
+    function startRefresh() {
+      if (refreshTimer) return;
+      refreshTimer = setInterval(() => {
+        progressx.show(theme);
+        fetch(location.href)
+          .then(response => response.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, "text/html");
+
+            const updatedBanTbody = doc.querySelector("#sessionBanned tbody");
+            const currentBanTbody = document.querySelector("#sessionBanned tbody");
+            const sessionBansTable = document.getElementById("sessionBanned");
+
+            let currentSortColumn = null;
+            let isDescending = false;
+
+            if (sessionBansTable && sessionBansTable.tHead) {
+              const headers = sessionBansTable.tHead.rows[0].cells;
+              for (let i = 0; i < headers.length; i++) {
+                const ariaSort = headers[i].getAttribute("aria-sort");
+                if (ariaSort === "descending") {
+                  currentSortColumn = i;
+                  isDescending = true;
+                  break;
+                } else if (ariaSort === "ascending") {
+                  currentSortColumn = i;
+                  isDescending = false;
+                  break;
+                }
+              }
+            }
+
+            if (updatedBanTbody && currentBanTbody && sessionBansTable) {
+              currentBanTbody.innerHTML = updatedBanTbody.innerHTML;
+              updateBanSummary(currentBanTbody);
+
+              if (currentSortColumn !== null && sorterBans) {
+                const headers = sessionBansTable.tHead.rows[0].cells;
+                const sortedHeader = headers[currentSortColumn];
+
+                for (let i = 0; i < headers.length; i++) {
+                  headers[i].removeAttribute("aria-sort");
+                  headers[i].classList.remove("sort-asc", "sort-desc");
+                }
+
+                sortedHeader.setAttribute("aria-sort", isDescending ? "descending" : "ascending");
+                sortedHeader.classList.add(isDescending ? "sort-desc" : "sort-asc");
+
+                sorterBans.current = sortedHeader;
+                sorterBans.sortColumn = currentSortColumn;
+                sorterBans.descending = isDescending;
+
+                sorterBans.sortTable(sortedHeader, true);
+              }
+            }
+          })
+          .catch()
+          .finally(() => progressx.hide());
+      }, refreshInterval);
+    }
+
+    function stopRefresh() {
+      if (refreshTimer) {
+        clearInterval(refreshTimer);
+        refreshTimer = null;
+      }
+    }
+
+    function handleVisibilityChange() {
+      if (document.hidden) {
+        stopRefresh();
+        isVisible = false;
+      } else {
+        isVisible = true;
+        startRefresh();
+      }
+    }
+    startRefresh();
+    document.addEventListener("visibilitychange", handleVisibilityChange, false);
   }
 
   document.addEventListener("DOMContentLoaded", () => {
     initRefresh();
     progressx.hide();
     const bbody = document.getElementById("sessionBanlist");
-    if (bbody) { updateBanSummary(bbody); }
+    if (bbody) {
+      updateBanSummary(bbody);
+      refreshSessionBans(bbody);
+    }
  });
 })();
