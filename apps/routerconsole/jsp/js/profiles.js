@@ -96,7 +96,6 @@
   }
 
   function updateBanSummary(banBody) {
-    if (theme !== "dark") {return;}
     const rows = banBody.querySelectorAll("tr");
     const reasonCounts = {};
     const total = rows.length;

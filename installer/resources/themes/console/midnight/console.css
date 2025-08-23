@@ -3019,3 +3019,15 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #changelog pre span::first-line{padding-left:12px;line-height:1.75;font-weight:700}
 #changelog .bullet,#changelog .star{font-size:0}
 #changelog .bullet::before,#changelog .star::before{margin:-4px -5px 0 10px;width:11px;height:11px;display:inline-block;background:var(--star) no-repeat center center/contain;content:""}#changelog .bullet::before{margin:-8px -2px 0 29px;width:7px;height:7px;vertical-align:text-top;background:var(--tunn_active) no-repeat center center/contain}
+
+/* session bans */
+#banSummary h2 {margin:-13px -10px 0}
+#banSummary li{margin:2px 0;padding:0;min-width:300px;display:inline-block}
+#banSummary ul{margin:-1px -10px -14px;padding:5px 8px;columns:300px 5;list-style-type:none;border:var(--border_inner);background:var(--th)}
+#banSummary .badge{margin:0 4px 0 0;padding:2px 4px;min-width:48px;display:inline-block;text-align:center;letter-spacing:0.05em;font-weight:600;box-shadow:var(--bevel);background:var(--badge)}
+#sessionBanned{margin-bottom:10px}
+@media (max-width:1499px) {
+#banSummary h2{margin:-15px -10px -1px}
+#banSummary ul{margin:-1px -10px -16px}
+#sessionBanned{margin-bottom:9px}
+}

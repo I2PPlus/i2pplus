@@ -252,7 +252,7 @@ h3:hover .toggleSection{display:inline-block}
 .toggleSection:checked{transform:scaleY(-1);background-position:center calc(50% + 2px)}
 .toggleSection:not(:checked){padding-top:6px}
 #sidebar h3,#sidebar h3 a{position:relative;z-index:10}
-#lsCount,#sidebar h3 a .badge,#tunnelCount,#newsCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;padding:2px 5px 0;display:inline-block;font-size:80%;box-shadow:0 0 0 1px #ccd,0 0 0 1px #fff inset;background:#eef}
+#lsCount,#sidebar h3 a .badge,#tunnelCount,#newsCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;padding:2px 5px 0;display:inline-block;font-size:80%;box-shadow:var(--badge_bevel);background:#eef}
 #sidebar h3 .badge:empty,#sidebar #newsCount:empty,#sidebar #tunnelCount:empty{display:none}
 #sidebar h3:active .badge{display:none}
 #sidebar td .badge:empty::after{display:inline;content:"---"}
@@ -2584,3 +2584,15 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 
 #netdb #singleLS~.leaseset {margin-bottom:1px;column-span:all;width:100%}
 #searchLS {margin:10px 2px;display:block;column-span:all;text-align:center;border:var(--border_soft);box-shadow:0 0 0 1px #fff,0 0 0 2px #b6b6c9;background:var(--th)}
+
+/* session bans */
+#banSummary h2 {margin:0 -10px}
+#banSummary li{margin:2px 0;padding:0;min-width:300px;display:inline-block}
+#banSummary ul{margin:-1px -10px -14px;padding:5px 8px;columns:300px 5;list-style-type:none;border:var(--border);background:var(--th)}
+#banSummary .badge{margin:0 4px 0 0;padding:2px 4px;min-width:48px;display:inline-block;text-align:center;letter-spacing:0.05em;font-weight:600;box-shadow:var(--badge_bevel);background:var(--badge)}
+#sessionBanned{margin-bottom:5px}
+@media (max-width:1499px) {
+#banSummary h2{margin:-1px -10px -1px}
+#banSummary ul{margin:-1px -10px -16px}
+#sessionBanned{margin-bottom:2px}
+}
