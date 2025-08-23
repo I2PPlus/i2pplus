@@ -13,6 +13,9 @@ import java.io.Writer;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -89,30 +92,32 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private final static String PROP_BLOCK_COUNTRIES = "router.blockCountries";
     private final static String DEFAULT_BLOCK_COUNTRIES = "";
     public static final String PROP_BLOCK_XG = "i2np.blockXG";
-    public String minRouterVersion = "0.9.20";
-    public String MIN_VERSION = "0.9.63";
-    public String CURRENT_VERSION = "0.9.66";
+    public static String minRouterVersion = "0.9.20";
+    public static String MIN_VERSION = "0.9.63";
+    public static String CURRENT_VERSION = "0.9.66";
+    private final Object kbInitLock = new Object();
+    private final AtomicInteger knownLeaseSetsCount = new AtomicInteger(0);
 
     /**
      * Map of Hash to RepublishLeaseSetJob for leases we're already managing.
      * This is added to when we create a new RepublishLeaseSetJob, and the values are
      * removed when the job decides to stop running.
      */
-    private final Map<Hash, RepublishLeaseSetJob> _publishingLeaseSets;
+    private final ConcurrentMap<Hash, RepublishLeaseSetJob> _publishingLeaseSets = new ConcurrentHashMap<>(8);
 
     /**
      * Hash of the key currently being searched for, pointing the SearchJob that
      * is currently operating.  Subsequent requests for that same key are simply
      * added on to the list of jobs fired on success/failure
      */
-    private final Map<Hash, SearchJob> _activeRequests;
+    private final Set<Hash> _activeRequests = new ConcurrentHashSet<>(64);
 
     /**
      * The search for the given key is no longer active
      */
     void searchComplete(Hash key) {
         if (_log.shouldDebug()) {_log.debug("Search for key [" + key.toBase64().substring(0,6) + "] finished");}
-        synchronized (_activeRequests) {_activeRequests.remove(key);}
+        _activeRequests.remove(key);
     }
 
     /**
@@ -191,8 +196,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _dbid = dbid;
         _log = _context.logManager().getLog(getClass());
         _networkID = context.router().getNetworkID();
-        _publishingLeaseSets = new HashMap<Hash, RepublishLeaseSetJob>(8);
-        _activeRequests = new HashMap<Hash, SearchJob>(8);
 
         if (isClientDb()) {
             _reseedChecker = null;
@@ -338,7 +341,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     @Override
     public void rescan() {
-        if (isInitialized()) {_ds.rescan();}
+        if (isInitialized()) {
+            _ds.rescan();
+            knownLeaseSetsCount.set(0);
+            for (DatabaseEntry entry : _ds.getEntries()) {
+                if (entry.isLeaseSet()) {knownLeaseSetsCount.incrementAndGet();}
+            }
+        }
     }
 
     /**
@@ -368,20 +377,27 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         boolean initMessage = false;
         if (isClientDb()) {_kb = ((FloodfillNetworkDatabaseFacade) _context.netDb()).getKBuckets();}
         else {
-            synchronized (this) {
+            synchronized (kbInitLock) {
                 _kb = new KBucketSet<Hash>(_context, ri.getIdentity().getHash(),
                                            BUCKET_SIZE, KAD_B, new RejectTrimmer<Hash>());
             }
         }
+
         if (_log.shouldInfo() && _context.router().getUptime() < 60*1000 && !initMessage) {
             _log.info("Initializing the Kademlia Network Database...\n" +
                       "BucketSize: " + BUCKET_SIZE + "; B Value: " + KAD_B);
             initMessage = true;
         }
+
         try {
             if (!isClientDb()) {_ds = new PersistentDataStore(_context, dbDir, this);}
             else {_ds = new TransientDataStore(_context);}
         } catch (IOException ioe) {throw new RuntimeException("Unable to initialize NetDb storage", ioe);}
+
+        for (DatabaseEntry entry : _ds.getEntries()) {
+            if (entry.isLeaseSet()) {knownLeaseSetsCount.incrementAndGet();}
+        }
+
         _dbDir = dbDir;
         _negativeCache = new NegativeLookupCache(_context);
         if (!isClientDb()) {blindCache().startup();}
@@ -415,13 +431,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (_exploreJob == null) {_exploreJob = new StartExplorersJob(_context, this);}
 
             /**
-             *  Fire off a group of searches from the explore pool
-             *  Don't start it right away, so we don't send searches for random keys
-             *  out our 0-hop exploratory tunnels (generating direct connections to
-             *  one or more floodfill peers within seconds of startup).
-             *  We're trying to minimize the ff connections to lessen the load on the
-             *  floodfills, and in any case let's try to build some real expl. tunnels first.
-             *  No rush, it only runs every 30m.
+             *  Fire off a group of searches from the explore pool.
+             *  Don't start it right away, so we don't send searches for random keys out our 0-hop exploratory
+             *  tunnels (generating direct connections to one or more floodfill peers within seconds of startup).
+             *  We're trying to minimize the ff connections to lessen the load on the floodfills, and in any case,
+             * let's try to build some real expl. tunnels first. No rush, it only runs every 30m.
              */
             _exploreJob.getTiming().setStartAfter(now + EXPLORE_JOB_DELAY);
             _context.jobQueue().addJob(_exploreJob);
@@ -451,13 +465,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     /** get the hashes for all known routers */
     public Set<Hash> getAllRouters() {
-        if (isClientDb()) {return Collections.emptySet();}
-        if (!_initialized) {return Collections.emptySet();}
-        Collection<DatabaseEntry> entries = _ds.getEntries();
-        return entries.stream()
-                      .filter(e -> e.isRouterInfo())
-                      .map(e -> e.getHash())
-                      .collect(Collectors.toSet());
+        if (isClientDb() || !_initialized) {return Collections.emptySet();}
+        Set<Hash> result = new HashSet<>();
+        for (DatabaseEntry entry : _ds.getEntries()) {
+            if (entry.isRouterInfo()) {result.add(entry.getHash());}
+        }
+        return result;
     }
 
     /**
@@ -485,21 +498,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     @Override
     public int getKnownLeaseSets() {
-        if (_ds == null) {return 0;}
-        //return _ds.countLeaseSets();
-        int rv = 0;
-        for (DatabaseEntry ds : _ds.getEntries()) {
-            if (ds.isLeaseSet() && ((LeaseSet)ds).getReceivedAsPublished()) {rv++;}
-        }
-        return rv;
+        return isClientDb() ? 0 : knownLeaseSetsCount.get();
     }
 
     /**
      *  The KBucketSet contains RIs only.
      */
     protected int getKBucketSetSize() {
-        if (_kb == null) {return 0;}
-        return _kb.size();
+        return _kb == null ? 0 : _kb.size();
     }
 
     /**
@@ -658,19 +664,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public LeaseSet lookupLeaseSetLocally(Hash key) {
         if (!_initialized) {return null;}
         DatabaseEntry ds = _ds.get(key);
-        if (ds != null) {
-            if (ds.isLeaseSet()) {
-                LeaseSet ls = (LeaseSet)ds;
-                if (ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {return ls;}
-                else {
-                    key = blindCache().getHash(key);
-                    fail(key);
-                    // this was an interesting key, so either refetch it or simply explore with it
-                    if (_exploreKeys != null) {_exploreKeys.add(key);}
-                    return null;
-                }
-            } else {return null;}
-        } else {return null;}
+        if (ds == null || !ds.isLeaseSet()) {return null;}
+        LeaseSet ls = (LeaseSet) ds;
+        if (ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {return ls;}
+        key = blindCache().getHash(key);
+        fail(key);
+        // Interesting key, so either refetch it or simply explore with it
+        if (_exploreKeys != null) {_exploreKeys.add(key);}
+        return null;
     }
 
     /**
@@ -724,19 +725,16 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     public void lookupRouterInfo(Hash key, Job onFindJob, Job onFailedLookupJob, long timeoutMs) {
         if (!_initialized) return;
-
         RouterInfo ri = lookupRouterInfoLocally(key);
-        if (ri != null) {
-            if (onFindJob != null) {_context.jobQueue().addJob(onFindJob);}
-
-            if (shouldBanlistBasedOnCountry(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
-            else if (shouldBanlistXGUnreachable(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
-            else if (shouldBanlistLUM(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
-            else if (isPermanentlyBlocklisted(key)) {handlePermanentBlocklist(ri, key, onFailedLookupJob);}
-            else if (isHostileBlocklisted(key)) {handleHostileBlocklist(ri, key, onFailedLookupJob);}
-            else if (isNegativeCached(key)) {handleNegativeCache(ri, key, onFailedLookupJob);}
-            else {search(key, onFindJob, onFailedLookupJob, timeoutMs, false);}
-        }
+        if (ri == null) {return;}
+        if (onFindJob != null) {_context.jobQueue().addJob(onFindJob);}
+        if (shouldBanlistBasedOnCountry(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
+        else if (shouldBanlistXGUnreachable(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
+        else if (shouldBanlistLUM(ri, key)) {handleBanlistAndRemove(ri, key, onFailedLookupJob);}
+        else if (isPermanentlyBlocklisted(key)) {handlePermanentBlocklist(ri, key, onFailedLookupJob);}
+        else if (isHostileBlocklisted(key)) {handleHostileBlocklist(ri, key, onFailedLookupJob);}
+        else if (isNegativeCached(key)) {handleNegativeCache(ri, key, onFailedLookupJob);}
+        else {search(key, onFindJob, onFailedLookupJob, timeoutMs, false);}
     }
 
     /**
@@ -872,25 +870,15 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @return null always for client dbs
      */
     public RouterInfo lookupRouterInfoLocally(Hash key) {
-        if (!_initialized) {return null;}
-        // Client netDb shouldn't have RI, search for RI in the floodfill netDb.
-        if (isClientDb()) {return null;}
+        if (!_initialized || isClientDb()) {return null;}
         DatabaseEntry ds = _ds.get(key);
-        if (ds != null) {
-            if (ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
-                // more aggressive than perhaps is necessary, but makes sure we
-                // drop old references that we had accepted on startup (since
-                // startup allows some lax rules).
-                boolean valid = true;
-                try {valid = (null == validate((RouterInfo) ds));}
-                catch (IllegalArgumentException iae) {valid = false;}
-                if (!valid) {
-                    fail(key);
-                    return null;
-                }
-                return (RouterInfo) ds;
-            } else {return null;}
-        } else {return null;}
+        if (ds == null || ds.getType() != DatabaseEntry.KEY_TYPE_ROUTERINFO) {return null;}
+        RouterInfo ri = (RouterInfo) ds;
+        boolean valid = true;
+        try {valid = (null == validate(ri));}
+        catch (IllegalArgumentException iae) {valid = false;}
+        if (!valid) {fail(key); return null;}
+        return ri;
     }
 
     private static final long PUBLISH_DELAY = 1000;
@@ -907,13 +895,17 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             }
             return;
         }
+
         Hash h = localLeaseSet.getHash();
-        try {store(h, localLeaseSet, true);} // force overwrite of previous entry
-        catch (IllegalArgumentException iae) {
+        try {
+            store(h, localLeaseSet, true); // force overwrite
+        } catch (IllegalArgumentException iae) {
             _log.error("Locally published LeaseSet is not valid", iae);
             throw iae;
         }
+
         if (!_context.clientManager().shouldPublishLeaseSet(h)) {return;}
+
         // If we're shutting down, don't publish.
         // If we're restarting, keep publishing to minimize the downtime.
         if (_context.router().gracefulShutdownInProgress()) {
@@ -921,29 +913,25 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             if (code == Router.EXIT_GRACEFUL || code == Router.EXIT_HARD) {return;}
         }
 
-        RepublishLeaseSetJob j;
-        synchronized (_publishingLeaseSets) {
-            j = _publishingLeaseSets.get(h);
-            if (j == null) {
-                j = new RepublishLeaseSetJob(_context, this, h);
-                _publishingLeaseSets.put(h, j);
-            }
-        }
+        RepublishLeaseSetJob j = _publishingLeaseSets.computeIfAbsent(h, key -> new RepublishLeaseSetJob(_context, this, key));
+
         // Don't spam the floodfills. In addition, always delay a few seconds since there may
         // be another leaseset change coming along momentarily.
-        long nextTime = Math.max(j.lastPublished() + RepublishLeaseSetJob.REPUBLISH_LEASESET_TIMEOUT, _context.clock().now() + PUBLISH_DELAY);
-        _context.jobQueue().removeJob(j); // remove first since queue is a TreeSet now...
+        long nextTime = Math.max(j.lastPublished() + RepublishLeaseSetJob.REPUBLISH_LEASESET_TIMEOUT,
+                                 _context.clock().now() + PUBLISH_DELAY);
+
+        _context.jobQueue().removeJob(j);
         j.getTiming().setStartAfter(nextTime);
+
         if (_log.shouldInfo()) {
             _log.info("Queueing LOCAL LeaseSet [" + h.toBase32().substring(0,8) + "] for publication..." +
-                      "\n* Publication time: "  + (new Date(nextTime)));
+                      "\n* Publication time: " + (new Date(nextTime)));
         }
+
         _context.jobQueue().addJob(j);
     }
 
-    void stopPublishing(Hash target) {
-        synchronized (_publishingLeaseSets) {_publishingLeaseSets.remove(target);}
-    }
+    void stopPublishing(Hash target) {_publishingLeaseSets.remove(target);}
 
     /**
      * Stores to local db only.
@@ -1074,10 +1062,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         try {
             rv = (LeaseSet)_ds.get(key);
             if (rv != null && !force && !isNewer(leaseSet, rv)) {
-                if (_log.shouldDebug())
+                if (_log.shouldDebug()) {
                     _log.debug("Not storing LeaseSet [" + key.toBase32().substring(0,8) + "] -> Local copy is newer");
-                // if it hasn't changed, no need to do anything
-                // except copy over the flags
+                }
+                // Copy over relevant metadata flags without re-storing
                 Hash to = leaseSet.getReceivedBy();
                 if (to != null) {rv.setReceivedBy(to);}
                 else if (leaseSet.getReceivedAsReply()) {rv.setReceivedAsReply();}
@@ -1085,7 +1073,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                 return rv;
             }
         } catch (ClassCastException cce) {
-            throw new IllegalArgumentException("Attempt to replace RouterInfo with " + leaseSet);
+            throw new IllegalArgumentException("Attempt to replace RouterInfo with LeaseSet: " + leaseSet, cce);
         }
 
         // spoof / hash collision detection
@@ -1175,13 +1163,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private static final int MIN_ROUTERS = 2000;
 
     /**
-     * Determine whether this routerInfo will be accepted as valid and current
-     * given what we know now.
+     * Determine whether this routerInfo will be accepted as valid and current given what we know now.
+     * Call this only on first store, to check the key and signature once.
      *
-     * Call this only on first store, to check the key and signature once
-     *
-     * If the store fails due to unsupported crypto, it will banlist
-     * the router hash until restart and then throw UnsupportedCrytpoException.
+     * If the store fails due to unsupported crypto, it will banlist the router hash until restart
+     * and then throw UnsupportedCrytpoException.
      *
      * @throws UnsupportedCryptoException if that's why it failed.
      * @return reason why the entry is not valid, or null if it is valid
@@ -1250,229 +1236,291 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @since 0.9.7
      */
     String validate(RouterInfo routerInfo) throws IllegalArgumentException {
-        if (!isInitialized() || _context.commSystem().isDummy()) {return null;}
+        if (shouldSkipValidation() || routerInfo == null) return null;
+
         long now = _context.clock().now();
-        String validateUptime = _context.getProperty("router.validateRoutersAfter");
-        Hash us = _context.routerHash();
-        boolean isUs = us.equals(routerInfo.getIdentity().getHash());
-        long uptime = _context.router().getUptime();
-        boolean upLongEnough = uptime > 20*60*1000;
-        boolean dontFail = _context.router().getUptime() < DONT_FAIL_PERIOD;
-        if (validateUptime != null) {upLongEnough = _context.router().getUptime() > Integer.parseInt(validateUptime)*60*1000;}
-        // Once we're over MIN_ROUTERS routers, reduce the expiration time down from the default,
-        // as a crude way of limiting memory usage.
-        // i.e. at 2*MIN_ROUTERS routers the expiration time will be about half the default, etc.
-        // And if we're floodfill, we can keep the expiration really short, since
-        // we are always getting the latest published to us.
-        // As the net grows this won't be sufficient, and we'll have to implement
-        // flushing some from memory, while keeping all on disk.
-        long adjustedExpiration;
+        String routerId = getRouterId(routerInfo);
+        String caps = routerInfo.getCapabilities() != null ? routerInfo.getCapabilities().toUpperCase() : "";
+        Hash h = routerInfo.getIdentity().getHash();
+        boolean isUs = h.equals(_context.routerHash());
         int existing = _kb.size();
+
+        if (banInvalidNTCPAddresses(routerInfo, now, caps, routerId)) return "Invalid NTCP address";
+        if (_context.banlist().isBanlisted(h)) return null;
+
+        long uptime = _context.router().getUptime();
+        boolean upLongEnough = isUptimeLongEnough(uptime);
+        long adjustedExpiration = computeAdjustedExpiration(existing);
+        boolean dontFail = uptime < DONT_FAIL_PERIOD;
+
+        if (checkCountryBlocking(routerInfo, caps, routerId, h)) return null;
+
+        String futureBanReason = checkFutureRouterInfo(routerInfo, now, caps, routerId, h, isUs);
+        if (futureBanReason != null) return futureBanReason;
+
+        String oldVersionBan = checkRouterVersion(routerInfo, caps, routerId, h);
+        if (oldVersionBan != null) return oldVersionBan;
+
+        String slowDrop = dropSlowRouter(routerInfo, now, existing, caps, routerId);
+        if (slowDrop != null) return slowDrop;
+
+        String addrCheckDrop = checkAddressesAndIntroducers(routerInfo, now, caps, routerId, isUs, dontFail);
+        if (addrCheckDrop != null) return addrCheckDrop;
+
+        String expirationDrop = checkExpirationBasedDrop(routerInfo, upLongEnough, adjustedExpiration, now, caps, routerId, isUs);
+        if (expirationDrop != null) return expirationDrop;
+
+        String shortExpireDrop = checkShortExpiration(routerInfo, caps, routerId, isUs);
+        if (shortExpireDrop != null) return shortExpireDrop;
+
+        String staleDropReason = checkStaleRouterInfo(routerInfo, upLongEnough, existing, caps, routerId, isUs);
+        if (staleDropReason != null) return staleDropReason;
+
+        return null;
+    }
+
+    private boolean shouldSkipValidation() {
+        return !isInitialized() || _context.commSystem().isDummy();
+    }
+
+    private String getRouterId(RouterInfo routerInfo) {
+        return routerInfo.getIdentity().getHash().toBase64().substring(0, 6);
+    }
+
+    private boolean banInvalidNTCPAddresses(RouterInfo routerInfo, long now, String caps, String routerId) {
+        for (RouterAddress ra : routerInfo.getTargetAddresses("NTCP2")) {
+            String i = ra.getOption("i");
+            if (i != null && i.length() != 24) {
+                Hash h = routerInfo.getIdentity().calculateHash();
+                _context.banlist().banlistRouter(h, " <b>➜</b> Invalid NTCP address", null, null, now + 24*60*60*1000L);
+                if (_log.shouldWarn()) {
+                    _log.warn("Banning " + (caps.isEmpty() ? "" : caps + " ") + "Router [" + routerId + "] for 24h -> Invalid NTCP address");
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isUptimeLongEnough(long uptime) {
+        String validateUptime = _context.getProperty("router.validateRoutersAfter");
+        if (validateUptime != null) {
+            try {
+                int mins = Integer.parseInt(validateUptime);
+                return uptime > mins*60*1000;
+            } catch (NumberFormatException ignored) {}
+        }
+        return uptime > 20*60*1000;
+    }
+
+    private long computeAdjustedExpiration(int existingRouters) {
         String expireRI = _context.getProperty("router.expireRouterInfo");
-        String routerId = "";
+        if (expireRI != null) {
+            try {
+                return Integer.parseInt(expireRI)*60*60*1000L;
+            } catch (NumberFormatException ignored) {}
+        }
+        if (floodfillEnabled())
+            return ROUTER_INFO_EXPIRATION_FLOODFILL;
+        if (existingRouters > 4000)
+            return ROUTER_INFO_EXPIRATION / 3;
+        if (existingRouters > 3000)
+            return ROUTER_INFO_EXPIRATION / 2;
+        if (existingRouters > 2000)
+            return ROUTER_INFO_EXPIRATION * 2 / 3;
+        return ROUTER_INFO_EXPIRATION;
+    }
+
+    private boolean checkCountryBlocking(RouterInfo routerInfo, String caps, String routerId, Hash h) {
+        String country = _context.commSystem().getCountry(h);
+        if (country == null) country = "unknown";
+        boolean isFF = caps.contains("F");
+        boolean isStrict = _context.commSystem().isInStrictCountry();
+        boolean isHidden = _context.router().isHidden();
+        boolean blockMyCountry = _context.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
+        boolean blockXG = _context.getBooleanProperty(PROP_BLOCK_XG);
+        Set<String> blockedCountries = getBlockedCountries();
+        String myCountry = _context.getProperty(PROP_IP_COUNTRY);
+        boolean isBanned = _context.banlist().isBanlisted(h);
+
+        if ((isStrict || isHidden || blockMyCountry) && myCountry != null && myCountry.equals(country) && !isBanned) {
+            if (_log.shouldWarn()) {
+                String reason = isHidden ? "Hidden mode active and router is in same country" :
+                                isStrict ? "We are in a strict country and so is this router" :
+                                "i2np.hideMyCountry=true";
+                _log.warn("Dropping RouterInfo [" + getRouterId(routerInfo) + "] -> " + reason);
+                _log.warn("Banning " + (caps.isEmpty() ? "" : caps + " ") + (isFF ? "Floodfill" : "Router") + " [" + routerId + "] for duration of session -> Router is in our country");
+            }
+            if (blockMyCountry) {
+                _context.banlist().banlistRouterForever(h, " <b>➜</b> In our country (banned via config)");
+            } else if (isHidden) {
+                _context.banlist().banlistRouterForever(h, " <b>➜</b> In our country (we are in Hidden mode)");
+            } else if (isStrict) {
+                _context.banlist().banlistRouterForever(h, " <b>➜</b> In our country (we are in a strict country)");
+            }
+            return true;
+        }
+        if (blockedCountries.contains(country) && !isBanned) {
+            if (_log.shouldWarn()) {
+                _log.warn("Banning and disconnecting from [" + routerId + "] -> Blocked country: " + country);
+            }
+            _context.banlist().banlistRouter(h, " <b>➜</b> Blocked country: " + country, null, null, _context.clock().now() + 8*60*60*1000);
+            _context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            return true;
+        }
+        if (blockXG && isRouterBlockXG(routerInfo, h.equals(_context.routerHash()))) {
+            if (!_context.banlist().isBanlisted(h)) {
+                if (_log.shouldInfo()) {
+                    _log.info("Dropping RouterInfo [" + routerId + "] -> X tier and G Cap, neither R nor U");
+                }
+                if (_log.shouldWarn()) {
+                    _log.warn("Banning " + (caps.isEmpty() ? "" : caps + " ") + (isFF ? "Floodfill" : "Router") + " [" + routerId + "] for 4h -> XG and older than minVersion (using proxy?)");
+                }
+                _context.banlist().banlistRouter(h, " <b>➜</b> XG Router, neither R nor U (proxied?)", null, null, _context.clock().now() + 4*60*60*1000);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isRouterBlockXG(RouterInfo routerInfo, boolean isUs) {
+        String caps = routerInfo.getCapabilities();
+        return !isUs && caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0 &&
+               caps.indexOf(Router.CAPABILITY_UNREACHABLE) < 0 &&
+               caps.indexOf(Router.CAPABILITY_REACHABLE) < 0 &&
+               caps.indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0;
+    }
+
+    private String checkFutureRouterInfo(RouterInfo routerInfo, long now, String caps, String routerId, Hash h, boolean isUs) {
+        if (routerInfo.getPublished() > now + 2*Router.CLOCK_FUDGE_FACTOR && !isUs) {
+            long age = routerInfo.getPublished() - now;
+            if (!_context.banlist().isBanlisted(h) && _log.shouldWarn()) {
+                _log.warn("Banning [" + routerId + "] for 4h -> RouterInfo from the future!\n* Published: " + new Date(routerInfo.getPublished()));
+                _context.banlist().banlistRouter(h, " <b>➜</b> RouterInfo from the future (" + new Date(routerInfo.getPublished()) + ")", null, null, 4*60*60*1000);
+            }
+            return caps + " Router [" + routerId + "] -> Published " + DataHelper.formatDuration(age) + " in the future";
+        }
+        return null;
+    }
+
+    private String checkRouterVersion(RouterInfo routerInfo, String caps, String routerId, Hash h) {
         String v = routerInfo.getVersion();
         String minVersionAllowed = _context.getProperty("router.minVersionAllowed");
-        boolean isSlow = routerInfo != null && (routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                                                routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0 ||
-                                                routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW64) >= 0) && !isUs;
-        boolean isUnreachable = routerInfo != null && routerInfo.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0;
-        boolean isLTier =  routerInfo != null && routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
-                           routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0;
-        boolean isBanned = routerInfo != null && _context.banlist().isBanlisted(routerInfo.getIdentity().getHash());
-
-        boolean isFF = false;
-        String caps = "";
-        boolean noCountry = true;
-        String country = "unknown";
-        Hash h = null;
-        boolean isOld = routerInfo != null && !isUs && VersionComparator.comp(v, MIN_VERSION) < 0;
-        boolean isOlderThanCurrent = routerInfo != null && !isUs && VersionComparator.comp(v, CURRENT_VERSION) < 0;
-        if (routerInfo != null) {
-            routerId = routerInfo.getIdentity().getHash().toBase64().substring(0,6);
-            caps = routerInfo.getCapabilities().toUpperCase();
-            h = routerInfo.getIdentity().getHash();
-            if (caps != null && caps.contains("F")) {isFF = true;}
-            country = _context.commSystem().getCountry(h);
-            if (country != null && country != "unknown") {noCountry = false;}
-
-            for (RouterAddress ra : routerInfo.getTargetAddresses("NTCP2")) {
-                String i = ra.getOption("i");
-                if (i != null && i.length() != 24) {
-                    _context.banlist().banlistRouter(routerInfo.getIdentity().calculateHash(), " <b>➜</b> Invalid NTCP address", null, null, now + 24*60*60*1000L);
-                    if (_log.shouldWarn() && !isBanned) {
-                        _log.warn("Banning " + (!caps.isEmpty() ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
-                                  " [" + routerId + "] for 24h -> Invalid NTCP address");
-                    }
-                    return "Invalid NTCP address";
-                }
+        if (minVersionAllowed != null) {
+            if (VersionComparator.comp(v, minVersionAllowed) < 0) {
+                _context.banlist().banlistRouterForever(h, " <b>➜</b> Router too old (" + v + ")");
+                return caps + " Router [" + routerId + "] -> Too old (" + v + ") - banned until restart";
             }
-            if (expireRI != null) {adjustedExpiration = Integer.parseInt(expireRI)*60*60*1000;}
-            else if (floodfillEnabled()) {adjustedExpiration = ROUTER_INFO_EXPIRATION_FLOODFILL;}
-            else {
-                adjustedExpiration = existing > 4000 ? ROUTER_INFO_EXPIRATION / 3 :
-                                     existing > 3000 ? ROUTER_INFO_EXPIRATION / 2 :
-                                     existing > 2000 ? ROUTER_INFO_EXPIRATION / 3 * 2 :
-                                     ROUTER_INFO_EXPIRATION;
+        } else {
+            if (VersionComparator.comp(v, minRouterVersion) < 0) {
+                _context.banlist().banlistRouterForever(h, " <b>➜</b> Router too old (" + v + ")");
+                return caps + " Router [" + routerId + "] -> Too old (" + v + ") - banned until restart";
             }
+        }
+        return null;
+    }
 
-            boolean blockMyCountry = _context.getBooleanProperty(PROP_BLOCK_MY_COUNTRY);
-            boolean blockXG = _context.getBooleanProperty(PROP_BLOCK_XG);
-            boolean isHidden = _context.router().isHidden();
-            boolean isStrict = _context.commSystem().isInStrictCountry();
-            boolean isXTier = routerInfo.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0;
-            boolean isNotRorU = routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) < 0 &&
-                                routerInfo.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0;
-            boolean isG = routerInfo.getCapabilities().indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0;
-            Set<String> blockedCountries = getBlockedCountries();
+    private String dropSlowRouter(RouterInfo routerInfo, long now, int existing, String caps, String routerId) {
+        long uptime = _context.router().getUptime();
+        boolean isUs = routerInfo.getIdentity().getHash().equals(_context.routerHash());
+        String capsStr = routerInfo.getCapabilities() != null ? routerInfo.getCapabilities() : "";
+        boolean isSlow = (capsStr.indexOf(Router.CAPABILITY_BW12) >= 0 ||
+                          capsStr.indexOf(Router.CAPABILITY_BW32) >= 0 ||
+                          capsStr.indexOf(Router.CAPABILITY_BW64) >= 0) && !isUs;
 
-            if (isStrict || isHidden || blockMyCountry) {
-                String myCountry = _context.getProperty(PROP_IP_COUNTRY);
-                if (myCountry != null && myCountry == country && !_context.banlist().isBanlisted(h)) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Dropping RouterInfo [" + h.toBase64().substring(0,6) + "] -> " +
-                        (isHidden ? "Hidden mode active and router is in same country" :
-                         isStrict ? "We are in a strict country and so is this router" :
-                         "i2np.hideMyCountry=true"));
-                    }
-                    if (_log.shouldWarn()) {
-                        _log.warn("Banning " + (!caps.isEmpty() ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
-                                  " [" + h.toBase64().substring(0,6) + "] for duration of session -> Router is in our country");
-                    }
-                    if (blockMyCountry) {
-                        _context.banlist().banlistRouterForever(h, " <b>➜</b> In our country (banned via config)");
-                    } else if (isHidden) {
-                        _context.banlist().banlistRouterForever(h, " <b>➜</b> In our country (we are in Hidden mode)");
-                    } else if (isStrict) {
-                        _context.banlist().banlistRouterForever(h, " <b>➜</b> In our country (we are in a strict country)");
-                    }
-                    //_ds.remove(key);
-                    //_kb.remove(key);
-                }
-            } else if (blockedCountries.contains(country) && !_context.banlist().isBanlisted(h)) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Banning and disconnecting from [" + h.toBase64().substring(0,6) + "] -> Blocked country: " + country);
-                }
-                _context.banlist().banlistRouter(h, " <b>➜</b> Blocked country: " + country, null, null, _context.clock().now() + 8*60*60*1000);
-                _context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
-            } else if (!isUs && isG && isNotRorU && isXTier && blockXG) {
-                if (!_context.banlist().isBanlisted(h)) {
-                    if (_log.shouldInfo()) {
-                        _log.info("Dropping RouterInfo [" + h.toBase64().substring(0,6) + "] -> X tier and G Cap, neither R nor U");
-                    }
-                    if (_log.shouldWarn() && !_context.banlist().isBanlisted(h)) {
-                        _log.warn("Banning " + (!caps.isEmpty() ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
-                                  " [" + h.toBase64().substring(0,6) + "] for 4h -> XG and older than " + MIN_VERSION + " (using proxy?)");
-                    }
-                    _context.banlist().banlistRouter(h, " <b>➜</b> XG Router, neither R nor U (proxied?)", null, null, _context.clock().now() + 4*60*60*1000);
-                }
-            } else if (upLongEnough && !isUs && !routerInfo.isCurrent(adjustedExpiration)) {
-                long age = now - routerInfo.getPublished();
-                if (existing >= MIN_REMAINING_ROUTERS) {
-                    if (_log.shouldInfo()) {
-                        _log.info("Dropping RouterInfo [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) + "] -> " +
-                                  "Published " + DataHelper.formatDuration(age) + " ago");
-                    }
-                    return "Published " + DataHelper.formatDuration(age) + " ago";
-                } else {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Even though RouterInfo [" + routerInfo.getIdentity().getHash().toBase64().substring(0,6) +
-                                  "] is STALE, we have only " + existing + " peers left - not dropping...");
-                    }
-                }
+        if (uptime > 10*60*1000 && existing > 500 && isSlow && routerInfo.getPublished() < now - (ROUTER_INFO_EXPIRATION_MIN / 8)) {
+            if (_log.shouldInfo()) {
+                _log.info("Dropping RouterInfo [" + routerId + "] -> K, L or M tier and published over 1h ago");
             }
-
-            if (routerInfo.getPublished() > now + 2*Router.CLOCK_FUDGE_FACTOR && !isUs) {
-                long age = routerInfo.getPublished() - now;
-                if (_log.shouldWarn() && !isBanned) {
-                    _log.warn("Banning [" + routerId + "] for 4h -> RouterInfo from the future!" +
-                              "\n* Published: " + new Date(routerInfo.getPublished()));
-                }
-                _context.banlist().banlistRouter(h, " <b>➜</b> RouterInfo from the future (" +
-                                                 new Date(routerInfo.getPublished()) + ")", null, null, 4*60*60*1000);
-                return caps + " Router [" + routerId + "] -> Published " + DataHelper.formatDuration(age) + " in the future";
-            } else if (isLTier && isUnreachable && isOld) {
-                if (!isBanned) {
-                    if (_log.shouldWarn() && !_context.banlist().isBanlisted(h)) {
-                        _log.warn("Banning " + (!caps.isEmpty() ? caps : "") + ' ' + (isFF ? "Floodfill" : "Router") +
-                                  " [" + routerId + "] for 4h -> LU and older than " + MIN_VERSION);
-                    }
-                }
-                _context.banlist().banlistRouter(h, " <b>➜</b> LU and older than " + MIN_VERSION, null, null, _context.clock().now() + 4*60*60*1000);
-            } else if (minVersionAllowed != null) {
-                if (VersionComparator.comp(v, minVersionAllowed) < 0) {
-                    _context.banlist().banlistRouterForever(h, " <b>➜</b> Router too old (" + v + ")");
-                    return caps + " Router [" + routerId + "] -> Too old (" + v + ") - banned until restart";
-                }
-            } else {
-                if (VersionComparator.comp(v, minRouterVersion) < 0) {
-                    _context.banlist().banlistRouterForever(h, " <b>➜</b> Router too old (" + v + ")");
-                    return caps + " Router [" + routerId + "] -> Too old (" + v + ") - banned until restart";
-                }
+            return caps + " Router [" + routerId + "] -> Slow and published over 1h ago";
+        }
+        if (isSlow && routerInfo.getPublished() < now - (ROUTER_INFO_EXPIRATION_MIN / 4)) {
+            if (_log.shouldInfo()) {
+                _log.info("Dropping RouterInfo [" + routerId + "] -> K, L or M tier and published over 2h ago");
             }
+            return caps + " Router [" + routerId + "] -> Slow and published over 2h ago";
+        }
+        return null;
+    }
 
-            if (uptime > 10*60*1000 && existing > 500 && isSlow && routerInfo.getPublished() < now - (ROUTER_INFO_EXPIRATION_MIN / 8)) {
+    private String checkAddressesAndIntroducers(RouterInfo routerInfo, long now, String caps, String routerId, boolean isUs, boolean dontFail) {
+        if (!dontFail && !routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_INTRODUCED) && !isUs) {
+            if (routerInfo.getAddresses().isEmpty()) {
                 if (_log.shouldInfo()) {
-                    _log.info("Dropping RouterInfo [" + routerId + "] -> K, L or M tier and published over 1h ago");
+                    _log.info("Dropping RouterInfo [" + routerId + "] -> No addresses and published over 54m ago");
                 }
-                return caps + " Router [" + routerId + "] -> Slow and published over 1h ago";
-            } else if (isSlow && routerInfo.getPublished() < now - (ROUTER_INFO_EXPIRATION_MIN / 4)) {
+                return caps + " Router [" + routerId + "] -> No addresses and published over 54m ago";
+            }
+            boolean unreachable = routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
+            if (unreachable || routerInfo.getAddresses().isEmpty()) {
                 if (_log.shouldInfo()) {
-                    _log.info("Dropping RouterInfo [" + routerId + "] -> K, L or M tier and published over 2h ago");
+                    _log.info("Dropping RouterInfo [" + routerId + "] -> Unreachable and published over 54m ago");
                 }
-                return caps + " Router [" + routerId + "] -> Slow and published over 2h ago";
-            } else if (!dontFail && !routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_INTRODUCED) && !isUs) {
-                if (routerInfo.getAddresses().isEmpty()) {
+                return caps + " Router [" + routerId + "] -> Unreachable and published over 54m ago";
+            }
+            for (RouterAddress ra : routerInfo.getAddresses()) {
+                if (ra.getOption("itag0") != null) {
                     if (_log.shouldInfo()) {
-                        _log.info("Dropping RouterInfo [" + routerId + "] -> No addresses and published over 54m ago");
+                        _log.info("Dropping RouterInfo [" + routerId + "] -> SSU Introducers and published over 54m ago");
                     }
-                    return caps + " Router [" + routerId + "] -> No addresses and published over 54m ago";
-                }
-                // This should cover the introducers case below too
-                // And even better, catches the case where the router is unreachable but knows no introducers
-                if (!isUs && routerInfo.getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0 || routerInfo.getAddresses().isEmpty()) {
-                    if (_log.shouldInfo()) {
-                        _log.info("Dropping RouterInfo [" + routerId + "] -> Unreachable and published over 54m ago");
-                    }
-                    return caps + " Router [" + routerId + "] -> Unreachable and published over 54m ago";
-                }
-                // Just check all the addresses, faster than getting just the SSU ones
-                for (RouterAddress ra : routerInfo.getAddresses()) {
-                    // Introducers change often, introducee will ping introducer for 2 hours
-                    if (ra.getOption("itag0") != null) {
-                        if (_log.shouldInfo()) {
-                            _log.info("Dropping RouterInfo [" + routerId + "] -> SSU Introducers and published over 54m ago");
-                        }
-                        return caps + " Router [" + routerId + "] -> SSU Introducers and published over 54m ago";
-                    }
+                    return caps + " Router [" + routerId + "] -> SSU Introducers and published over 54m ago";
                 }
             }
+        }
+        return null;
+    }
 
-            if (expireRI != null && !isUs) {
-                if (upLongEnough && (routerInfo.getPublished() < now - Long.parseLong(expireRI)*60*60*1000l) ) {
+    private String checkExpirationBasedDrop(RouterInfo routerInfo, boolean upLongEnough, long adjustedExpiration, long now, String caps, String routerId, boolean isUs) {
+        String expireRI = _context.getProperty("router.expireRouterInfo");
+        if (expireRI != null && !isUs) {
+            try {
+                long expireRI_ms = Long.parseLong(expireRI)*60*60*1000L;
+                if (upLongEnough && routerInfo.getPublished() < now - expireRI_ms) {
                     long age = now - routerInfo.getPublished();
                     return caps + " Router [" + routerId + "] -> Published " + DataHelper.formatDuration(age) + " ago";
                 }
-            } else {
-                if (upLongEnough && (routerInfo.getPublished() < now - ROUTER_INFO_EXPIRATION) && !isUs) {
-                    long age = _context.clock().now() - routerInfo.getPublished();
-                    return caps + " Router [" + routerId + "] -> Published " + DataHelper.formatDuration(age) + " ago";
-                }
+            } catch (NumberFormatException ignored) {}
+        } else {
+            if (upLongEnough && routerInfo.getPublished() < now - adjustedExpiration && !isUs) {
+                long age = now - routerInfo.getPublished();
+                return caps + " Router [" + routerId + "] -> Published " + DataHelper.formatDuration(age) + " ago";
             }
+        }
+        return null;
+    }
 
-            if (!routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_SHORT)) {
-                for (RouterAddress ra : routerInfo.getAddresses()) {
-                    if (routerInfo.getTargetAddresses("NTCP", "NTCP2").isEmpty() && ra.getOption("ihost0") == null && !isUs) {
-                        return caps + " Router [" + routerId + "] -> SSU only without Introducers and published over 15m ago";
-                    } else {
-                        if (isUnreachable && !isUs) {
-                            return caps + " Router [" + routerId + "] -> Unreachable on any transport and published over 15m ago";
-                        }
+    private String checkShortExpiration(RouterInfo routerInfo, String caps, String routerId, boolean isUs) {
+        if (!routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_SHORT)) {
+            for (RouterAddress ra : routerInfo.getAddresses()) {
+                if (routerInfo.getTargetAddresses("NTCP", "NTCP2").isEmpty() && ra.getOption("ihost0") == null && !isUs) {
+                    return caps + " Router [" + routerId + "] -> SSU only without Introducers and published over 15m ago";
+                } else {
+                    boolean isUnreachable = routerInfo.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0;
+                    if (isUnreachable && !isUs) {
+                        return caps + " Router [" + routerId + "] -> Unreachable on any transport and published over 15m ago";
                     }
                 }
             }
         }
         return null;
     }
+
+    private String checkStaleRouterInfo(RouterInfo routerInfo, boolean upLongEnough, int existing, String caps, String routerId, boolean isUs) {
+        if (upLongEnough && !isUs && !routerInfo.isCurrent(computeAdjustedExpiration(existing))) {
+            long age = _context.clock().now() - routerInfo.getPublished();
+            if (existing >= MIN_REMAINING_ROUTERS) {
+                if (_log.shouldInfo()) {
+                    _log.info("Dropping RouterInfo [" + routerId + "] -> Published " + DataHelper.formatDuration(age) + " ago");
+                }
+                return "Published " + DataHelper.formatDuration(age) + " ago";
+            }
+            if (_log.shouldWarn()) {
+                _log.warn("Even though RouterInfo [" + routerId + "] is STALE, we have only " + existing + " peers left - not dropping...");
+            }
+        }
+        return null;
+    }
+
 
     /**
      * Store the routerInfo.
@@ -1605,7 +1653,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
 
         if (o.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO) {
-            lookupBeforeDropping(dbEntry, (RouterInfo)o);
+            lookupBeforeDropping(dbEntry, (RouterInfo) o);
             return;
         }
 
@@ -1616,15 +1664,15 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
          */
         if (_log.shouldInfo()) {
             _log.info("Dropping LeaseSet [" + dbEntry.toBase32().substring(0,8) + "] -> Lookup / tunnel failure");
-         }
-        if (!isClientDb()) {_ds.remove(dbEntry, false);}
-        else {
-            /*
-             * If this happens, it's because we're a TransientDataStore instead,
-             * so just call remove without the persist option.
-             */
-            _ds.remove(dbEntry);
         }
+
+        knownLeaseSetsCount.decrementAndGet();
+
+        if (!isClientDb()) {_ds.remove(dbEntry, false);}
+        /* If this happens, it's because we're a TransientDataStore instead,
+         * so just call remove without the persist option.
+         */
+        else {_ds.remove(dbEntry);}
     }
 
     /** Don't use directly - see F.N.D.F. override */
@@ -1660,6 +1708,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         DatabaseEntry data = _ds.remove(h);
 
         if (data == null) {
+            knownLeaseSetsCount.decrementAndGet();
             if (_log.shouldWarn()) {
                 _log.warn("Unpublishing UNKNOWN LOCAL LeaseSet [" + h.toBase32().substring(0,8) + "]");
             }
@@ -1698,7 +1747,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     @Override
     public Set<LeaseSet> getLeases() {
         if (!_initialized) {return null;}
-        Set<LeaseSet> leases = new HashSet<LeaseSet>();
+        Set<LeaseSet> leases = new ConcurrentHashSet<>();
         for (DatabaseEntry o : getDataStore().getEntries()) {
             if (o.isLeaseSet()) {leases.add((LeaseSet)o);}
         }
@@ -1710,7 +1759,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     @Override
     public Set<LeaseSet> getClientLeases() {
         if (!_initialized) {return null;}
-        Set<LeaseSet> leases = new HashSet<LeaseSet>();
+        Set<LeaseSet> leases = new ConcurrentHashSet<>();
         for (DatabaseEntry o : getDataStore().getEntries()) {
             if (o.isLeaseSet()) {
                 Hash key = o.getHash();
@@ -1726,7 +1775,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     @Override
     public Set<LeaseSet> getPublishedLeases() {
         if (!_initialized) {return null;}
-        Set<LeaseSet> leases = new HashSet<LeaseSet>();
+        Set<LeaseSet> leases = new ConcurrentHashSet<>();
         for (DatabaseEntry o : getDataStore().getEntries()) {
             if (o.isLeaseSet()) {
                 Hash key = o.getHash();
@@ -1743,7 +1792,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     @Override
     public Set<LeaseSet> getUnpublishedLeases() {
         if (!_initialized) {return null;}
-        Set<LeaseSet> leases = new HashSet<LeaseSet>();
+        Set<LeaseSet> leases = new ConcurrentHashSet<>();
         for (DatabaseEntry o : getDataStore().getEntries()) {
             if (o.isLeaseSet()) {
                 Hash key = o.getHash();
@@ -1762,7 +1811,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     @Override
     public Set<LeaseSet> getFloodfillLeases() {
         if (!_initialized) {return null;}
-        Set<LeaseSet> leases = new HashSet<LeaseSet>();
+        Set<LeaseSet> leases = new ConcurrentHashSet<>();
         for (DatabaseEntry o : getDataStore().getEntries()) {
             if (o.isLeaseSet() && !isClientDb()) {leases.add((LeaseSet)o);}
         }
@@ -1777,7 +1826,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public Set<RouterInfo> getRouters() {
         if (isClientDb()) {return Collections.emptySet();}
         if (!_initialized) {return null;}
-        Set<RouterInfo> routers = new HashSet<RouterInfo>();
+        Set<RouterInfo> routers = new ConcurrentHashSet<>();
         for (DatabaseEntry o : getDataStore().getEntries()) {
             if (o.isRouterInfo()) {routers.add((RouterInfo)o);}
         }
@@ -1878,7 +1927,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private Set<String> getBlockedCountries() {
         String blockCountries = _context.getProperty(PROP_BLOCK_COUNTRIES, DEFAULT_BLOCK_COUNTRIES);
         if (blockCountries.isEmpty()) {return Collections.emptySet();}
-        return new HashSet<>(Arrays.asList(blockCountries.toLowerCase().split(",")));
+        return Arrays.stream(blockCountries.trim().toLowerCase().split("\\s*,\\s*"))
+                     .filter(s -> !s.isEmpty())
+                     .collect(Collectors.toSet());
     }
 
     /** @since 0.9.52 */
