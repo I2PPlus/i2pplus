@@ -73,26 +73,20 @@ public class LogManager implements Flushable {
     public final static String PROP_RECORD_PREFIX = "logger.record.";
 
     public final static String DEFAULT_FORMAT = DATE + " " + PRIORITY + "[" + THREAD + "] " + CLASS + ": " + MESSAGE;
-    //public final static String DEFAULT_DATEFORMAT = "HH:mm:ss.SSS";
     /** blank means default short date and medium time for the locale - see DateFormat */
     // TODO: Sync time format for router and wrapper logs and dates in router log messages (currently 3 different formats)
     public final static String DEFAULT_DATEFORMAT = "yyyy/MM/dd HH:mm:ss.SSS";
     public final static String DEFAULT_FILENAME = "logs/log-@.txt";
-//    public final static String DEFAULT_FILESIZE = "10m";
     public final static String DEFAULT_FILESIZE = "5m";
     public final static boolean DEFAULT_DISPLAYONSCREEN = true;
     // number of entries to display for router logs?? doesn't appear to work or is being overriden elsewhere
-    //public final static int DEFAULT_CONSOLEBUFFERSIZE = 20;
     public final static int DEFAULT_CONSOLEBUFFERSIZE = 25;
-//    public final static String DEFAULT_ROTATIONLIMIT = "2";
     public final static String DEFAULT_ROTATIONLIMIT = "3";
     public final static String DEFAULT_DEFAULTLEVEL = Log.STR_ERROR;
-//    public final static String DEFAULT_ONSCREENLEVEL = Log.STR_CRIT;
     public final static String DEFAULT_ONSCREENLEVEL = Log.STR_ERROR;
     private static final int MIN_FILESIZE_LIMIT = 16*1024;
     private final static boolean DEFAULT_GZIP = false;
     private static final int DEFAULT_MIN_GZIP_SIZE = 64*1024;
-
 
     private final I2PAppContext _context;
     private final Log _log;
@@ -168,43 +162,33 @@ public class LogManager implements Flushable {
         // so it doesn't create a log directory and log files unless there is output.
         // In the router context, we have to rotate to a new log file at startup or the logs.jsp
         // page will display the old log.
-        if (context.isRouterContext()) {
-            // FIXME don't start thread in constructor
-            startLogWriter();
-        } else {
+        if (context.isRouterContext()) {startLogWriter();} // FIXME don't start thread in constructor
+        else {
             // Only in App Context.
             // In Router Context, the router has its own shutdown hook,
             // and will call our shutdown() from Router.finalShutdown()
-            try {
-                Runtime.getRuntime().addShutdownHook(new ShutdownHook());
-            } catch (IllegalStateException ise) {
-                // shutdown in progress
-            }
+            try {Runtime.getRuntime().addShutdownHook(new ShutdownHook());}
+            catch (IllegalStateException ise) {} // shutdown in progress
         }
     }
 
     /** @since 0.8.2 */
     private synchronized void startLogWriter() {
         // yeah, this doesn't always work, _writer should be volatile
-        if (_writer != null)
-            return;
+        if (_writer != null) {return;}
         if (SystemVersion.isAndroid()) {
             try {
-                Class<? extends LogWriter> clazz = Class.forName(
-                        "net.i2p.util.AndroidLogWriter"
-                    ).asSubclass(LogWriter.class);
+                Class<? extends LogWriter> clazz = Class.forName("net.i2p.util.AndroidLogWriter").asSubclass(LogWriter.class);
                 Constructor<? extends LogWriter> ctor = clazz.getDeclaredConstructor(LogManager.class);
                 _writer = ctor.newInstance(this);
-            } catch (ClassNotFoundException e) {
-            } catch (InstantiationException e) {
-            } catch (IllegalAccessException e) {
-            } catch (InvocationTargetException e) {
-            } catch (NoSuchMethodException e) {
-            }
+            } catch (ClassNotFoundException e) {}
+            catch (InstantiationException e) {}
+            catch (IllegalAccessException e) {}
+            catch (InvocationTargetException e) {}
+            catch (NoSuchMethodException e) {}
         }
         // Default writer
-        if (_writer == null)
-            _writer = new FileLogWriter(this);
+        if (_writer == null) {_writer = new FileLogWriter(this);}
         _writer.setFlushInterval(_flushInterval * 1000);
         // if you enable logging in I2PThread again, you MUST change this back to Thread
         Thread t = new I2PThread(_writer, "LogWriter");
@@ -222,11 +206,9 @@ public class LogManager implements Flushable {
             rv = new Log(this, cls, name);
             Log old = _logs.putIfAbsent(scope, rv);
             isNew = old == null;
-            if (!isNew)
-                rv = old;
+            if (!isNew) {rv = old;}
         }
-        if (isNew)
-            updateLimit(rv);
+        if (isNew) {updateLimit(rv);}
         return rv;
     }
 
@@ -243,42 +225,14 @@ public class LogManager implements Flushable {
         Log old = _logs.putIfAbsent(log.getScope(), log);
         updateLimit(log);
         if (old != null) {
-            if (_log.shouldInfo())
-                _log.info("Duplicate log for " + log.getName());
+            if (_log.shouldDebug()) {_log.debug("Duplicate log for " + log.getName());}
         }
     }
 
     public LogConsoleBuffer getBuffer() { return _consoleBuffer; }
-
-    /** @deprecated unused */
-    @Deprecated
-    public void setDisplayOnScreen(boolean yes) {
-        _displayOnScreen = yes;
-    }
-
-    public boolean displayOnScreen() {
-        return _displayOnScreen;
-    }
-
-    public int getDisplayOnScreenLevel() {
-        return _onScreenLimit;
-    }
-
-    /** @deprecated unused */
-    @Deprecated
-    public void setDisplayOnScreenLevel(int level) {
-        _onScreenLimit = level;
-    }
-
-    public int getConsoleBufferSize() {
-        return _consoleBufferSize;
-    }
-
-    /** @deprecated unused */
-    @Deprecated
-    public void setConsoleBufferSize(int numRecords) {
-        _consoleBufferSize = numRecords;
-    }
+    public boolean displayOnScreen() {return _displayOnScreen;}
+    public int getDisplayOnScreenLevel() {return _onScreenLimit;}
+    public int getConsoleBufferSize() {return _consoleBufferSize;}
 
     public void setConfig(String filename) {
         _locationFile = new File(filename);
@@ -345,19 +299,12 @@ public class LogManager implements Flushable {
      * Called periodically by the log writer's thread
      * Do not log here, deadlock of LogWriter
      */
-    void rereadConfig() {
-        // perhaps check modification time
-        //if (_log.shouldDebug())
-        //    _log.debug("Rereading configuration file");
-        loadConfig();
-    }
+    void rereadConfig() {loadConfig();}
 
     /**
      *  @since 0.9.3
      */
-    boolean shouldDropDuplicates() {
-        return _dropDuplicates;
-    }
+    boolean shouldDropDuplicates() {return _dropDuplicates;}
 
     /**
      * Do not log here, deadlock of LogWriter via rereadConfig().
@@ -365,24 +312,14 @@ public class LogManager implements Flushable {
     private synchronized void loadConfig() {
         File cfgFile = _locationFile;
         if (!cfgFile.exists()) {
-            if (!_alreadyNoticedMissingConfig) {
-                //if (_log.shouldWarn())
-                //    _log.warn("Log file " + _locationFile.getAbsolutePath() + " does not exist");
-                _alreadyNoticedMissingConfig = true;
-            }
+            if (!_alreadyNoticedMissingConfig) {_alreadyNoticedMissingConfig = true;}
             parseConfig(new Properties());
             updateLimits();
             return;
         }
         _alreadyNoticedMissingConfig = false;
 
-        if ((_configLastRead > 0) && (_configLastRead >= cfgFile.lastModified())) {
-            //if (_log.shouldInfo())
-            //    _log.info("Short circuiting config read (last read: "
-            //               + (_context.clock().now() - _configLastRead) + "ms ago, config file modified "
-            //               + (_context.clock().now() - cfgFile.lastModified()) + "ms ago");
-            return;
-        }
+        if ((_configLastRead > 0) && (_configLastRead >= cfgFile.lastModified())) {return;}
 
         Properties p = new Properties();
         try {
@@ -478,10 +415,6 @@ public class LogManager implements Flushable {
                     _minGzipSize = Long.parseLong(str);
             } catch (NumberFormatException nfe) {}
         }
-
-        //if (_log.shouldDebug())
-        //    _log.debug("Log set to use the base log file as " + _baseLogfilename);
-
         parseLimits(config);
     }
 
@@ -513,9 +446,7 @@ public class LogManager implements Flushable {
 
                 String val = (String) e.getValue();
                 LogLimit lim = new LogLimit(key, Log.getLevel(val));
-                //_log.debug("Limit found for " + name + " as " + val);
-                if (!_limits.contains(lim))
-                    _limits.add(lim);
+                if (!_limits.contains(lim)) {_limits.add(lim);}
             }
         }
         updateLimits();
@@ -546,25 +477,20 @@ public class LogManager implements Flushable {
 
         try {
             SimpleDateFormat fmt = (SimpleDateFormat) DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.MEDIUM);
-            if (!format.equals(""))
-                fmt.applyPattern(format);
+            if (!format.equals("")) {fmt.applyPattern(format);}
             // the router sets the JVM time zone to UTC but saves the original here so we can get it
             fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
             _dateFormatPattern = format;
             _dateFormat = fmt;
             return true;
-        } catch (IllegalArgumentException iae) {
-            //getLog(LogManager.class).error("Date format is invalid [" + format + "]", iae);
-            return false;
-        }
+        } catch (IllegalArgumentException iae) {return false;}
     }
 
     /**
      * Update the log file size limit
      */
     public void setFileSize(int numBytes) {
-        if (numBytes > 0)
-            _fileSize = Math.max(MIN_FILESIZE_LIMIT, numBytes);
+        if (numBytes > 0) {_fileSize = Math.max(MIN_FILESIZE_LIMIT, numBytes);}
     }
 
     public String getDefaultLimit() { return Log.toLevelString(_defaultLimit); }
@@ -655,13 +581,8 @@ public class LogManager implements Flushable {
                 }
             }
         }
-        if (max != null) {
-            log.setMinimumPriority(max.getLimit());
-        } else {
-            //if (_log != null)
-            //    _log.debug("The log for " + log.getClass() + " has no matching limits");
-            log.setMinimumPriority(_defaultLimit);
-        }
+        if (max != null) {log.setMinimumPriority(max.getLimit());}
+        else {log.setMinimumPriority(_defaultLimit);}
     }
 
     /**
@@ -798,29 +719,6 @@ public class LogManager implements Flushable {
         return _dateFormatPattern;
     }
 
-/*****
-    public static void main(String args[]) {
-        I2PAppContext ctx = new I2PAppContext();
-        Log l1 = ctx.logManager().getLog("test.1");
-        Log l2 = ctx.logManager().getLog("test.2");
-        Log l21 = ctx.logManager().getLog("test.2.1");
-        Log l = ctx.logManager().getLog("test");
-        l.debug("this should fail");
-        l.info("this should pass");
-        l1.warn("this should pass");
-        l1.info("this should fail");
-        l2.error("this should fail");
-        l21.debug("this should pass");
-        l1.error("test exception", new Exception("test"));
-        l1.error("test exception", new Exception("test"));
-        try {
-            Thread.sleep(2 * 1000);
-        } catch (Throwable t) { // nop
-        }
-        System.exit(0);
-    }
-*****/
-
     /**
      *  Flush any pending records to disk.
      *  Blocking up to 250 ms.
@@ -843,18 +741,13 @@ public class LogManager implements Flushable {
     public synchronized void shutdown() {
         _shutdown = true;
         if (_writer != null) {
-            //_log.log(Log.WARN, "Shutting down logger");
-            // try to prevent out-of-order logging at shutdown
-            flush();
+            flush(); // try to prevent out-of-order logging at shutdown
             // this could generate out-of-order messages
             // Gitlab #363 Mac hangs in DTG displaying the popup
             // after right-clicking the dock icon and selecting Quit
-            if (!SystemVersion.isMac())
-                _writer.flushRecords(false);
+            if (!SystemVersion.isMac()) {_writer.flushRecords(false);}
             _writer.stopWriting();
-            synchronized (_writer) {
-                _writer.notifyAll();
-            }
+            synchronized (_writer) {_writer.notifyAll();}
         }
         _records.clear();
         _limits.clear();
@@ -874,7 +767,6 @@ public class LogManager implements Flushable {
      *  Convenience method for LogRecordFormatter
      *  @since 0.7.14
      */
-    I2PAppContext getContext() {
-        return _context;
-    }
+    I2PAppContext getContext() {return _context;}
+
 }
