@@ -14,16 +14,14 @@
     else {ERROR_URI = "";}
     if (ERROR_MESSAGE != null) {ERROR_MESSAGE = net.i2p.data.DataHelper.escapeHTML(ERROR_MESSAGE);}
     else {ERROR_MESSAGE = "Not Found";}
-%>
-<%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
     if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
 %>
 <%@include file="head.jsi" %>
 <link rel=stylesheet href="<%=intl.getTheme(request.getHeader("User-Agent"))%>proxy.css">
-<% if (useSoraFont) { %><link href=/themes/fonts/Sora.css rel=stylesheet>
-<% } else { %><link href=/themes/fonts/OpenSans.css rel=stylesheet><% } %>
+<%  if (useSoraFont) { %><link href=/themes/fonts/Sora.css rel=stylesheet>
+<%  } else { %><link href=/themes/fonts/OpenSans.css rel=stylesheet><% } %>
 <%=intl.title("Page Not Found")%>
 <script nonce=<%=cspNonce%>>if (top.location.href !== location.href) top.location.href = location.href;</script>
 </head>
@@ -36,5 +34,6 @@
 <hr>
 <%=intl._t("Error 404")%>: <%=ERROR_URI%>&nbsp;<%=intl._t("not found")%>.
 </div>
+<style>#xhr{opacity:1!important;animation:none!important}</style>
 </body>
 </html>

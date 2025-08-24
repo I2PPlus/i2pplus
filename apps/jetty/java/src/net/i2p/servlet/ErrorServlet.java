@@ -169,63 +169,82 @@ public class ErrorServlet extends HttpServlet {
      */
     protected void outputMessage(PrintWriter out, int errorCode, String errorMsg, String errorURI, Throwable errorCause) {
         String themePath = BASE_THEME_PATH + _context.getProperty(PROP_THEME_NAME, DEFAULT_THEME) + "/";
-        if (errorCode == 404) {
-            out.println("<link href=\"" + themePath + PROXY_CSS + "\" rel=stylesheet>\n");
-            // TODO: if service is available but not started, provide a link to /configclients or /configwebapps and explain the error
-            out.println("<p>" + _t("Sorry! You appear to be requesting a non-existent Router Console page or resource.") + "</p>");
-            out.println("<hr>");
-            out.println("<p><b>" + _t("Error {0}", 404) + ": " + errorURI + "&nbsp;" + _t("not found") + "</b></p>");
-        } else if (errorCode == 403 || errorCode >= 500 || errorCause != null) {
-            out.println("<link href=\"" + themePath + PROXY_CSS + "\" rel=stylesheet>\n");
-            out.println("<p><b>" + _t("Sorry! There has been an internal error.") + "</b></p>");
-            out.println("<hr>");
-            out.println("<p>");
-            out.println(_t("Please report bugs on {0} or {1}",
-                           "<a href=\"https://github.com/I2PPlus/i2pplus/issues\">github.com</a>",
-                           "<a href=\"http://git.idk.i2p/I2P_Developers/i2p.i2p/issues\">git.idk.i2p</a>"));
-            out.print(".</p>");
-            out.println("<p>" + _t("Please include this information in bug reports") + ":</p>\n");
-            out.print("</div>\n<div class=sorry id=warning2>\n<h3>");
-            out.print(_t("Error Details"));
-            out.print("</h3>\n<div id=stacktrace>\n<p>");
-            out.print(_t("Error {0}", errorCode) + ": " + errorURI + "&nbsp;" + errorMsg);
-            out.print("</p>\n<p>");
-            if (errorCause != null) {
-                StringWriter sw = new StringWriter(2048);
-                PrintWriter pw = new PrintWriter(sw);
-                errorCause.printStackTrace(pw);
-                pw.flush();
-                String trace = sw.toString();
-                trace = trace.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
-                trace = trace.replace("\n", "<br>&nbsp;&nbsp;&nbsp;&nbsp;\n");
-                out.print(trace);
-            }
-            out.print("</p>\n</div>\n<h3>");
-            out.print(_t("I2P Version and Running Environment"));
-            out.print("</h3>\n<p id=sysinfo>");
-            // router puts its version here
-            String version = System.getProperty("router.version", CoreVersion.VERSION);
-            out.println("<b>I2P version:</b> " + version + "<br>");
-            out.println("<b>Java version:</b> " + System.getProperty("java.vendor") + ' ' + System.getProperty("java.version") +
-                        " (" + System.getProperty("java.runtime.name") + ' ' + System.getProperty("java.runtime.version") + ")<br>");
-            out.println("<b>Wrapper version:</b> " + System.getProperty("wrapper.version", "none") + "<br>");
-            try {out.println("<b>Server version:</b> " + Server.getVersion() + "<br>");} // wrap in case not running on Jetty
-            catch (Throwable t) {}
-            out.println("<b>Platform:</b> " + System.getProperty("os.name") + ' ' + System.getProperty("os.arch") +
-                        ' ' + System.getProperty("os.version") + "<br>");
-            out.println("<b>Processor:</b> " + NativeBigInteger.cpuModel() + " (" + NativeBigInteger.cpuType() + ")<br>");
-            out.println("<b>Jbigi:</b> " + NativeBigInteger.loadStatus() + "<br>");
-            out.println("<b>Encoding:</b> " + System.getProperty("file.encoding") + "<br>");
-            out.println("<b>Charset:</b> " + Charset.defaultCharset().name());
-            out.println("</p><p>");
-            out.println(_t("Note that system information, log timestamps, and log messages may provide clues to your location; please review everything you include in a bug report."));
-            out.println("</p>");
-        } else {
-            out.println("<link href=\"" + themePath + PROXY_CSS + "\" rel=stylesheet>");
-            out.println("<p>Unsupported error " + errorCode + "</p>");
-        }
-        out.println("<style>#xhr{opacity:1!important}</style>");
+        printStylesheet(out, themePath);
+        if (errorCode == 404) {print404Error(out, errorURI);}
+        else if (errorCode == 403 || errorCode >= 500 || errorCause != null) {printInternalError(out, errorCode, errorMsg, errorURI, errorCause);}
+        else {printUnsupportedError(out, errorCode);}
     }
+
+    private void printStylesheet(PrintWriter out, String themePath) {
+        out.print("<link href=\"" + themePath + PROXY_CSS + "\" rel=stylesheet>\n");
+        out.print("<style>#xhr{opacity:1!important;animation:none!important}</style>\n");
+    }
+
+    private void print404Error(PrintWriter out, String errorURI) {
+        out.print("<p>" + _t("Sorry! You appear to be requesting a non-existent Router Console page or resource.") + "</p>\n");
+        out.print("<hr>\n");
+        out.print("<p><b>" + _t("Error {0}", 404) + ": " + errorURI + "&nbsp;" + _t("not found") + "</b></p>\n");
+    }
+
+    private void printInternalError(PrintWriter out, int errorCode, String errorMsg, String errorURI, Throwable errorCause) {
+        out.print("<p><b>" + _t("Sorry! There has been an internal error.") + "</b></p>\n");
+        out.print("<hr>\n");
+        out.print("<p>");
+        out.print(_t("Please report bugs on {0} or {1}",
+                       "<a href=\"https://github.com/I2PPlus/i2pplus/issues\">github.com</a>",
+                       "<a href=\"http://git.idk.i2p/I2P_Developers/i2p.i2p/issues\">git.idk.i2p</a>"));
+        out.print(".</p>\n");
+        out.print("<p>" + _t("Please include this information in bug reports") + ":</p>\n");
+        out.print("</div>\n");
+        out.print("<div class=sorry id=warning2>\n");
+        out.print("<h3>" + _t("Error Details") + "</h3>\n");
+        out.print("<div id=stacktrace>\n");
+        out.print("<p>" + _t("Error {0}", errorCode) + ": " + errorURI + "&nbsp;" + errorMsg + "</p>\n");
+        if (errorCause != null) {out.print("<p>" + getSanitizedStackTrace(errorCause) + "</p>\n");}
+        out.print("</div>\n");
+        out.print("<h3>" + _t("I2P Version and Running Environment").replace("I2P", "I2P+") + "</h3>\n");
+        printSystemInfo(out);
+        out.print("<p>" + _t("Note that system information, log timestamps, and log messages may provide clues to your location; please review everything you include in a bug report.") + "</p>\n");
+    }
+
+    private void printUnsupportedError(PrintWriter out, int errorCode) {
+        out.print("<p>" + _t("Unsupported error") + " " + errorCode + "</p>\n");
+    }
+
+    private String getSanitizedStackTrace(Throwable errorCause) {
+        StringWriter sw = new StringWriter(2048);
+        PrintWriter pw = new PrintWriter(sw);
+        errorCause.printStackTrace(pw);
+        pw.flush();
+        String trace = sw.toString();
+        trace = trace.replace("&", "&amp;")
+                     .replace("<", "&lt;")
+                     .replace(">", "&gt;")
+                     .replace("\n", "<br>&nbsp;&nbsp;&nbsp;&nbsp;\n");
+        return trace;
+    }
+
+    private void printSystemInfo(PrintWriter out) {
+        String version = System.getProperty("router.version", CoreVersion.VERSION);
+        out.print("<p id=sysinfo>");
+        out.print("<b>" + _t("I2P version") + ":</b> " + version + "<br>");
+        out.print("<b>" + _t("Java version") + ":</b> " + System.getProperty("java.vendor") + ' ' + System.getProperty("java.version") +
+                    " (" + System.getProperty("java.runtime.name") + ' ' + System.getProperty("java.runtime.version") + ")<br>");
+        out.print("<b>" + _t("Wrapper version") + ":</b> " + System.getProperty("wrapper.version", "none") + "<br>");
+        try {
+            out.print("<b>" + _t("Server version") + ":</b> " + Server.getVersion() + "<br>");
+        } catch (Throwable t) {
+            // ignore
+        }
+        out.print("<b>" + _t("Platform") + ":</b> " + System.getProperty("os.name") + ' ' + System.getProperty("os.arch") +
+                    ' ' + System.getProperty("os.version") + "<br>");
+        out.print("<b>" + _t("Processor") + ":</b> " + NativeBigInteger.cpuModel() + " (" + NativeBigInteger.cpuType() + ")<br>");
+        out.print("<b>Jbigi:</b> " + NativeBigInteger.loadStatus() + "<br>");
+        out.print("<b>" + _t("Encoding") + ":</b> " + System.getProperty("file.encoding") + "<br>");
+        out.print("<b>" + _t("Charset") + ":</b> " + Charset.defaultCharset().name());
+        out.print("</p>\n");
+    }
+
 
     /** translate a string, with webapp bundle */
     protected String _w(String s) {return Translate.getString(s, _context, _defaultBundle);}
