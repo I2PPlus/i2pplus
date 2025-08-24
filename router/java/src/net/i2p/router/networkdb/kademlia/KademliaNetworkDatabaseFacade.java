@@ -47,6 +47,7 @@ import net.i2p.kademlia.RejectTrimmer;
 import net.i2p.router.Banlist;
 import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.Job;
+import net.i2p.router.JobImpl;
 import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.networkdb.PublishLocalRouterInfoJob;
 import net.i2p.router.networkdb.reseed.ReseedChecker;
@@ -938,18 +939,20 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
         // Don't spam the floodfills. In addition, always delay a few seconds since there may
         // be another leaseset change coming along momentarily.
+        long now = _context.clock().now();
         long nextTime = Math.max(j.lastPublished() + RepublishLeaseSetJob.REPUBLISH_LEASESET_TIMEOUT,
-                                 _context.clock().now() + PUBLISH_DELAY);
-
-        _context.jobQueue().removeJob(j);
-        j.getTiming().setStartAfter(nextTime);
+                                 now + PUBLISH_DELAY);
+        j.getTiming().setStartAfter(Math.max(now, nextTime));
 
         if (_log.shouldInfo()) {
             _log.info("Queueing LOCAL LeaseSet [" + h.toBase32().substring(0,8) + "] for publication..." +
                       "\n* Publication time: " + (new Date(nextTime)));
         }
 
-        _context.jobQueue().addJob(j);
+        if (j instanceof JobImpl) {
+            ((JobImpl) j).madeReady(_context.clock().now());
+        }
+        _context.jobQueue().addJobToTop(j);
     }
 
     void stopPublishing(Hash target) {_publishingLeaseSets.remove(target);}

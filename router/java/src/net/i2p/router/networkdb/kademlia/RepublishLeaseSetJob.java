@@ -15,6 +15,8 @@ import net.i2p.util.Log;
  * Run periodically for each locally created leaseSet to cause it to be republished
  * if the client is still connected.
  *
+ * This job is used to ensure that local LeaseSets are periodically republished to the network.
+ * Failed republish attempts are requeued with high priority to ensure faster retries.
  */
 class RepublishLeaseSetJob extends JobImpl {
     private final Log _log;
@@ -26,6 +28,13 @@ class RepublishLeaseSetJob extends JobImpl {
     private final AtomicInteger failCount = new AtomicInteger(0);
     private String tunnelName = "";
 
+    /**
+     * Create a new RepublishLeaseSetJob for the given destination.
+     *
+     * @param ctx the router context
+     * @param facade the network database facade used to publish the lease set
+     * @param destHash the hash of the destination whose LeaseSet should be republished
+     */
     public RepublishLeaseSetJob(RouterContext ctx, KademliaNetworkDatabaseFacade facade, Hash destHash) {
         super(ctx);
         _log = ctx.logManager().getLog(RepublishLeaseSetJob.class);
@@ -33,11 +42,21 @@ class RepublishLeaseSetJob extends JobImpl {
         _dest = destHash;
     }
 
-    public String getName() {return "Republish Local LeaseSet";}
+    /**
+     * Get the name of this job.
+     */
+    public String getName() {
+        return "Republish Local LeaseSet";
+    }
 
+    /**
+     * Main job logic: checks if the LeaseSet should be republished and publishes it if necessary.
+     */
     public void runJob() {
         long uptime = getContext().router().getUptime();
-        if (!getContext().clientManager().shouldPublishLeaseSet(_dest) || uptime < 5*60*1000) {return;}
+        if (!getContext().clientManager().shouldPublishLeaseSet(_dest) || uptime < 5 * 60 * 1000) {
+            return;
+        }
 
         try {
             if (getContext().clientManager().isLocal(_dest)) {
@@ -79,6 +98,10 @@ class RepublishLeaseSetJob extends JobImpl {
         }
     }
 
+    /**
+     * Requeues this job to retry the republish attempt.
+     * Uses high priority to ensure faster retry on failure.
+     */
     void requeueRepublish() {
         failCount.incrementAndGet();
         String count = failCount.get() > 1 ? " (Attempt: " + failCount.get() + ")" : "";
@@ -87,15 +110,34 @@ class RepublishLeaseSetJob extends JobImpl {
         }
         getContext().statManager().addRateData("netDb.republishLeaseSetFail", 1);
         getContext().jobQueue().removeJob(this);
-        requeue(RETRY_DELAY);
+        requeue(RETRY_DELAY, true); // Prioritized requeue
+    }
+
+    /**
+     * Requeues the job after a delay.
+     *
+     * @param delayMs delay in milliseconds before the job is run
+     * @param highPriority if true, adds the job to the front of the queue
+     */
+    private void requeue(long delayMs, boolean highPriority) {
+        requeue(delayMs);
+        if (highPriority) {
+            getContext().jobQueue().addJobToTop(this);
+        } else {
+            getContext().jobQueue().addJob(this);
+        }
     }
 
     /**
      * @return last attempted publish time, or 0 if never
      */
-    public long lastPublished() {return _lastPublished;}
+    public long lastPublished() {
+        return _lastPublished;
+    }
 
-    /** requeue */
+    /**
+     * Callback job executed if the lease set publication fails.
+     */
     private class OnRepublishFailure extends JobImpl {
         private final LeaseSet _ls;
 
@@ -104,13 +146,18 @@ class RepublishLeaseSetJob extends JobImpl {
             _ls = ls;
         }
 
-        public String getName() {return "Timeout LeaseSet Publication";}
+        public String getName() {
+            return "Timeout LeaseSet Publication";
+        }
 
         public void runJob() {
             LeaseSet ls = _facade.lookupLeaseSetLocally(_ls.getHash());
-            if (ls != null) {tunnelName = getTunnelName(_ls.getDestination());}
-            if (ls != null && !KademliaNetworkDatabaseFacade.isNewer(ls, _ls)) {requeueRepublish();}
-            else {
+            if (ls != null) {
+                tunnelName = getTunnelName(_ls.getDestination());
+            }
+            if (ls != null && !KademliaNetworkDatabaseFacade.isNewer(ls, _ls)) {
+                requeueRepublish();
+            } else {
                 if (_log.shouldInfo()) {
                     String name = !tunnelName.equals("") ? " for \'" + tunnelName + "\'" : "";
                     _log.info("Not requeueing failed publication of LeaseSet" + name + " [" +
@@ -120,6 +167,12 @@ class RepublishLeaseSetJob extends JobImpl {
         }
     }
 
+    /**
+     * Attempts to get a human-readable tunnel name for the given destination.
+     *
+     * @param d destination to look up
+     * @return nickname if available, otherwise null
+     */
     public String getTunnelName(Destination d) {
         TunnelPoolSettings in = getContext().tunnelManager().getInboundSettings(d.calculateHash());
         String name = (in != null ? in.getDestinationNickname() : null);
@@ -127,8 +180,9 @@ class RepublishLeaseSetJob extends JobImpl {
             TunnelPoolSettings out = getContext().tunnelManager().getOutboundSettings(d.calculateHash());
             name = (out != null ? out.getDestinationNickname() : null);
         }
-        if (name == null) {return "";}
+        if (name == null) {
+            return "";
+        }
         return name;
     }
-
 }
