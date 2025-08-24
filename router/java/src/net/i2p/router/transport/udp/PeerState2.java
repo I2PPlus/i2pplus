@@ -437,19 +437,22 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         byte[] data = dpacket.getData();
         int off = dpacket.getOffset();
         int len = dpacket.getLength();
+        boolean shouldLog = _log.shouldInfo() || _log.shouldWarn();
+        String fromPeer = (shouldLog && from != null ? " from: " + from : "");
         try {
             SSU2Header.Header header = SSU2Header.trialDecryptShortHeader(packet, _rcvHeaderEncryptKey1, _rcvHeaderEncryptKey2);
             if (header == null) {
                 // Java I2P thru 0.9.55 would send 35-39 byte ping packets
                 // Java I2P thru 0.9.56 retransmits session confirmed with 1-2 byte packets
-                if (len > 2 && len < 35 && _log.shouldWarn()) {
-                    _log.warn("[SSU2] Inbound packet too short [" + len + " bytes] " + this);
+                if (len > 2 && len < 35 && shouldLog) {
+                    _log.warn("[SSU2] Inbound packet" + fromPeer + " too short [" + len + " bytes] " + (_log.shouldInfo() ? this : ""));
                 }
                 return;
             }
             if (header.getDestConnID() != _rcvConnID) {
-                if (_log.shouldWarn()) {
-                    _log.warn("[SSU2] BAD Destination ConnectionID \n* " + header + " -> Size: " + len + " bytes " + this);
+                if (shouldLog) {
+                    _log.warn("[SSU2] BAD Destination ConnectionID" + fromPeer + "\n* " + header + " -> Size: " + len + " bytes " +
+                              (_log.shouldInfo() ? this : ""));
                 }
                 if (!_isInbound && _ackedMessages.getOffset() == 0 && !_ackedMessages.get(0)) {
                     // This was probably a retransmitted session created, sent with k_header_1 = bob's intro key,
@@ -461,8 +464,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                 return;
             }
             if (header.getType() != DATA_FLAG_BYTE) {
-                if (_log.shouldWarn()) {
-                    _log.warn("[SSU2] BAD " + len + " byte data packet [Type " + (header.getType() & 0xff) + "] received " + this);
+                if (shouldLog) {
+                    _log.warn("[SSU2] BAD " + len + " byte data packet" + fromPeer + " [Type " + (header.getType() & 0xff) + "] received " +
+                              (_log.shouldInfo() ? this : ""));
                 }
                 // TODO if it's early:
                 // If inbound, could be a retransmitted Session Confirmed, ack it again.
@@ -480,12 +484,14 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             }
             if (_receivedMessages.set(n)) {
                 synchronized(this) {_packetsReceivedDuplicate++;}
-                if (_log.shouldWarn()) {_log.warn("[SSU2] Duplicate packet received [#" + n + "] " + this);}
+                if (shouldLog) {
+                    _log.warn("[SSU2] Duplicate packet [#" + n + "]" + fromPeer + " received " + (_log.shouldInfo() ? this : ""));
+                }
                 return;
             }
 
             int payloadLen = len - (SHORT_HEADER_SIZE + MAC_LEN);
-            if (_log.shouldDebug()) {_log.debug("[SSU2] New " + len + " byte packet [#" + n + "] received " + this);}
+            if (_log.shouldDebug()) {_log.debug("[SSU2] New " + len + " byte packet [#" + n + "]" + fromPeer + " received " + this);}
             SSU2Payload.processPayload(_context, this, data, off + SHORT_HEADER_SIZE, payloadLen, false, from);
             packetReceived(payloadLen);
 
@@ -539,7 +545,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
                                     _pathChallengeSendCount > MAX_PATH_CHALLENGE_SENDS) {
                                     // time exceeded
                                     _migrationState = MigrationState.MIGRATION_STATE_NONE;
-                                    if (_log.shouldWarn()) {_log.warn("[SSU2] Connection migration failed " + this);}
+                                    if (shouldLog) {_log.warn("[SSU2] Connection migration failed " + this);}
                                 } else if (from.equals(_pendingRemoteHostId)) {
                                     if (_log.shouldInfo()) {
                                         _log.info("[SSU2] Connection migration pending, received another packet from " + from + this);
@@ -572,8 +578,10 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             }
 
         } catch (Exception e) {
-            if (_log.shouldWarn()) {
-                _log.warn("[SSU2] Received BAD encrypted packet from: " + this + '\n' + HexDump.dump(data, off, len), e);
+            if (_log.shouldInfo()) {
+                _log.warn("[SSU2] Received BAD encrypted packet" + fromPeer + this + '\n' + HexDump.dump(data, off, len), e);
+            } else if (_log.shouldWarn()) {
+                _log.warn("[SSU2] Received BAD encrypted packet" + fromPeer);
             }
         }
     }
@@ -622,24 +630,25 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         try {
             Hash h = ri.getHash();
             if (h.equals(_context.routerHash())) {return;}
+            String hash = h.toBase64().substring(0,6);
             RouterInfo old = _context.netDb().store(h, ri);
             if (flood && !ri.equals(old)) {
                 FloodfillNetworkDatabaseFacade fndf = (FloodfillNetworkDatabaseFacade) _context.netDb();
                 if ((old == null || ri.getPublished() > old.getPublished()) &&
                     fndf.floodConditional(ri)) {
                     if (_log.shouldDebug()) {
-                        _log.debug("Flooded RouterInfo [" + h.toBase64().substring(0,6) + "]");
+                        _log.debug("Flooded RouterInfo [" + hash + "]");
                     }
                 } else {
                     if (_log.shouldInfo()) {
-                        _log.info("Declined flooding RouterInfo [" + h.toBase64().substring(0,6) + "]");
+                        _log.info("Declined flooding RouterInfo [" + hash + "]");
                     }
                 }
             }
         } catch (IllegalArgumentException iae) {
             if (_log.shouldDebug()) {_log.debug("RouterInfo store failure: " + ri, iae);}
             else if (_log.shouldWarn()) {
-                _log.warn("Failed NetDBStore of RouterInfo [" + ri.getHash().toBase64().substring(0,6) + "] \n* " + iae.getMessage());
+                _log.warn("Failed NetDBStore of RouterInfo [" + ri.getHash().toBase64().substring(0,6) + "] -> " + iae.getMessage());
             }
         }
     }
@@ -994,11 +1003,11 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         long highest = -1;
         for (PacketBuilder.Fragment f : fragments) {
             OutboundMessageState state = f.state;
-            if (acked(f)) {
-                if (_log.shouldDebug()) {_log.debug("[SSU2] New ACK of fragment " + f.num + state);}
-            } else {
+            boolean shouldLog = _log.shouldDebug() || _log.shouldInfo();
+            if (shouldLog) {
+                if (acked(f) && _log.shouldDebug()) {_log.debug("[SSU2] New ACK of fragment " + f.num + state);}
                 // will happen with retransmission as a different packet number
-                if (_log.shouldInfo()) {_log.info("[SSU2] Duplicate ACK of fragment " + f.num + state);}
+                else if (_log.shouldInfo()) {_log.info("[SSU2] Duplicate ACK of fragment " + f.num + state);}
             }
             long sn = state.getSeqNum();
             if (sn > highest) {highest = sn;}

@@ -688,28 +688,29 @@ class BuildHandler implements Runnable {
         Hash from = state.fromHash;
         if (from == null && state.from != null) {from = state.from.calculateHash();}
 
+        final boolean shouldThrottle = _context.getBooleanPropertyDefaultTrue(PROP_SHOULD_THROTTLE);
+        final boolean shouldLog = _log.shouldDebug() || _log.shouldInfo() || _log.shouldWarn();
+        String fromPeer = (shouldLog && from != null ? from.toBase64().substring(0,6) : "");
+        String nextHop = (shouldLog && nextPeer != null ? nextPeer.toBase64().substring(0,6) : "");
+
         // Warning! from could be null, but should only happen if we will be IBGW and it came from us as OBEP
         if (isInGW && isOutEnd) {
             _context.statManager().addRateData("tunnel.rejectHostile", 1);
-            if (_log.shouldWarn()) {_log.warn("Dropping HOSTILE Tunnel Request -> IBGW+OBEP " + req);}
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b>➜</b> Hostile Tunnel Request (IBGW+OBEP)", null, null, _context.clock().now() + bantime);
-                _log.warn("Banning [" + from.toBase64().substring(0,6) + "] for " + period +
-                          "m -> Hostile Tunnel Request (Inbound Gateway & Outbound Endpoint)");
-            }
+                if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (Inbound Gateway & Outbound Endpoint)");}
+            } else if (shouldLog) {_log.warn("Dropping HOSTILE Tunnel Request from UNKNOWN -> IBGW+OBEP");}
             return;
         }
 
         if (ourId <= 0 || ourId > TunnelId.MAX_ID_VALUE || nextId <= 0 || nextId > TunnelId.MAX_ID_VALUE) {
             _context.statManager().addRateData("tunnel.rejectHostile", 1);
-            if (_log.shouldWarn()) {_log.warn("Dropping HOSTILE Tunnel Request -> BAD Tunnel ID " + req);}
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b>➜</b> Hostile Tunnel Request (BAD Tunnel ID)", null, null, _context.clock().now() + bantime);
-                _log.warn("Banning [" + from.toBase64().substring(0,6) + "] for " + period +
-                          "m -> Hostile Tunnel Request (BAD TunnelID)");
-            }
+                if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (BAD TunnelID)");}
+            } else if (shouldLog) {_log.warn("Dropping HOSTILE Tunnel Request from UNKNOWN -> BAD Tunnel ID");}
             return;
         }
 
@@ -719,13 +720,11 @@ class BuildHandler implements Runnable {
             // We are 2 hops in a row? Drop it without a reply.
             // No way to recognize if we are every other hop, but see below
             // old i2pd
-            if (_log.shouldWarn()) {_log.warn("Dropping HOSTILE Tunnel Request -> We are the next hop " + req);}
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b>➜</b> Hostile Tunnel Request (double hop)", null, null, _context.clock().now() + bantime);
-                _log.warn("Banning [" + from.toBase64().substring(0,6) + "] for " + period +
-                          "m -> Hostile Tunnel Request (We are 2 hops in a row!)");
-            }
+                _log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (We are 2 hops in a row!)");
+            } else if (shouldLog) {_log.warn("Dropping HOSTILE Tunnel Request from UNKNOWN -> We are the next hop");}
             return;
         }
         if (!isInGW) {
@@ -734,13 +733,11 @@ class BuildHandler implements Runnable {
             // but if not, something is seriously wrong here.
             if (from == null || _context.routerHash().equals(from)) {
                 _context.statManager().addRateData("tunnel.rejectHostile", 1);
-                if (_log.shouldWarn()) {_log.warn("Dropping HOSTILE Tunnel Request -> We are the previous hop " + req);}
                 if (from != null) {
                     _context.commSystem().mayDisconnect(from);
                     _context.banlist().banlistRouter(from, " <b>➜</b> Hostile Tunnel Request (previous hop)", null, null, _context.clock().now() + bantime);
-                    _log.warn("Banning [" + from.toBase64().substring(0,6) + "] for " + period +
-                              "m -> Hostile Tunnel Request (We are the previous hop!)");
-                }
+                    if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (We are the previous hop!)");}
+                } else if (shouldLog) {_log.warn("Dropping HOSTILE Tunnel Request from UNKNOWN -> We are the previous hop");}
                 return;
             }
         }
@@ -750,15 +747,11 @@ class BuildHandler implements Runnable {
             if (nextPeer.equals(from)) {
                 // i2pd does this
                 _context.statManager().addRateData("tunnel.rejectHostile", 1);
-                if (_log.shouldWarn()) {
-                    _log.warn("Dropping HOSTILE Tunnel Request -> Previous and next hop are the same " + req);
-                }
                 if (from != null) {
                     _context.commSystem().mayDisconnect(from);
                     _context.banlist().banlistRouter(from, " <b>➜</b> Hostile Tunnel Request (duplicate hops in chain)", null, null, _context.clock().now() + bantime);
-                    _log.warn("Banning [" + from.toBase64().substring(0,6) + "] for " + period +
-                              "m -> Hostile Tunnel Request (duplicate hops in chain)");
-                }
+                    if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (duplicate hops in chain)");}
+                } else if (shouldLog) {_log.warn("Dropping HOSTILE Tunnel Request from UNKNOWN -> Previous and next hop are the same");}
                 return;
             }
         }
@@ -783,27 +776,25 @@ class BuildHandler implements Runnable {
         }
         if (timeDiff > maxAge) {
             _context.statManager().addRateData("tunnel.rejectTooOld", 1);
-            if (_log.shouldWarn()) {
+            if (_log.shouldInfo()) {
                 _log.warn("Dropping HOSTILE Tunnel Request -> Too old... replay attack? " + DataHelper.formatDuration(timeDiff) + " " + req);
             }
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b>➜</b> Hostile Tunnel Request (possible replay attack)", null, null, _context.clock().now() + bantime);
-                _log.warn("Banning [" + from.toBase64().substring(0,6) + "] for " + period +
-                          "m -> Hostile Tunnel Request (too old, replay attack?)");
+                if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (too old, replay attack?)");}
             }
             return;
         }
         if (timeDiff < 0 - MAX_REQUEST_FUTURE) {
             _context.statManager().addRateData("tunnel.rejectFuture", 1);
-            if (_log.shouldWarn()) {
+            if (_log.shouldInfo()) {
                 _log.warn("Dropping HOSTILE Tunnel Request -> Too far in future " + DataHelper.formatDuration(0 - timeDiff) + " " + req);
             }
             if (from != null) {
                 _context.commSystem().mayDisconnect(from);
                 _context.banlist().banlistRouter(from, " <b>➜</b> Hostile Tunnel Request (too far in future)", null, null, _context.clock().now() + bantime);
-                _log.warn("Banning [" + from.toBase64().substring(0,6) + "] for " + period +
-                          "m -> Hostile Tunnel Request (too far in future)");
+                if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (too far in future)");}
             }
             return;
         }
@@ -817,7 +808,7 @@ class BuildHandler implements Runnable {
         if (response == 0) {
             int type = req.readLayerEncryptionType(); // only in short build request, otherwise 0
             if (type != 0) {
-                if (_log.shouldWarn()) {_log.warn("Unsupported layer encryption type: " + type);}
+                if (shouldLog) {_log.warn("Unsupported layer encryption type: " + type);}
                 response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
             }
         }
@@ -863,13 +854,11 @@ class BuildHandler implements Runnable {
         // This is at the end as it compares to a percentage of created tunnels.
         // We may need another counter above for requests.
 
-        boolean shouldThrottle = _context.getBooleanPropertyDefaultTrue(PROP_SHOULD_THROTTLE);
-
         if (response == 0 && !isInGW && _throttler != null && from != null && shouldThrottle) {
             ParticipatingThrottler.Result result = _throttler.shouldThrottle(from);
             if (result == ParticipatingThrottler.Result.DROP) {
-                if (_log.shouldWarn() && from != null && req != null) {
-                    _log.warn("Dropping Tunnel Request (hop throttle), previous hop -> [" + from.toBase64().substring(0,6) + "] " + req);
+                if (shouldLog && from != null && req != null) {
+                    _log.warn("Dropping Tunnel Request (hop throttle), previous hop -> [" + fromPeer + "] " + (_log.shouldInfo() ? req : ""));
                 }
                 _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
                 _context.commSystem().mayDisconnect(from);
@@ -878,8 +867,8 @@ class BuildHandler implements Runnable {
                 return;
             }
             if (result == ParticipatingThrottler.Result.REJECT) {
-                if (_log.shouldWarn() && from != null && req != null) {
-                    _log.warn("Rejecting Tunnel Request (hop throttle), previous hop -> [" + from.toBase64().substring(0,6) + "] " + req);
+                if (shouldLog && from != null && req != null) {
+                    _log.warn("Rejecting Tunnel Request (hop throttle), previous hop -> [" + fromPeer + "] " + (_log.shouldInfo() ? req : ""));
                 }
                 _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
                 response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
@@ -890,8 +879,8 @@ class BuildHandler implements Runnable {
         if (response == 0 && (!isOutEnd) && _throttler != null && shouldThrottle) {
             ParticipatingThrottler.Result result = _throttler.shouldThrottle(nextPeer);
             if (result == ParticipatingThrottler.Result.DROP) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Dropping Tunnel Request (hop throttle), next hop -> [" + nextPeer.toBase64().substring(0,6) + "] " + req);
+                if (shouldLog) {
+                    _log.warn("Dropping Tunnel Request (hop throttle), next hop -> [" + nextHop + "] " + (_log.shouldInfo() ? req : ""));
                 }
                 _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
                 if (from != null) {_context.commSystem().mayDisconnect(from);}
@@ -900,8 +889,8 @@ class BuildHandler implements Runnable {
                  return;
             }
             if (result == ParticipatingThrottler.Result.REJECT) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Rejecting Tunnel Request (hop throttle), next hop -> [" + nextPeer.toBase64().substring(0,6) + "] " + req);
+                if (shouldLog) {
+                    _log.warn("Rejecting Tunnel Request (hop throttle), next hop -> [" + nextHop + "] " + (_log.shouldInfo() ? req : ""));
                 }
                 _context.statManager().addRateData("tunnel.rejectHopThrottle", 1);
                 response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
@@ -947,7 +936,7 @@ class BuildHandler implements Runnable {
                                 int used = (int) rate.getAvgOrLifetimeAvg();
                                 avail = Math.min(max, (share - used) / 4);
                                 if (min > avail) {
-                                    if (_log.shouldWarn())
+                                    if (shouldLog)
                                         _log.warn("REJECT Part tunnel: min: " + min + " req: " + rqu + " avail: " + avail);
                                     response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
                                 } else {
@@ -957,7 +946,7 @@ class BuildHandler implements Runnable {
                                         avail = rqu;
                                     if (ibgwmax > 0 && ibgwmax < avail)
                                         avail = ibgwmax;
-                                    if (_log.shouldWarn())
+                                    if (shouldLog)
                                         _log.warn("ACCEPT Part tunnel: min: " + min + " req: " + rqu + " max: " + ibgwmax + " avail: " + avail);
                                 }
                             }
@@ -1006,7 +995,7 @@ class BuildHandler implements Runnable {
                 // 0.1% for 2900 tunnels; 1% for 9300 tunnels
                 response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
                 _context.statManager().addRateData("tunnel.rejectDupID", 1);
-                if (_log.shouldWarn()) {_log.warn("Duplicate TunnelID failure " + req);}
+                if (shouldLog) {_log.warn("Duplicate TunnelID failure " + req);}
             }
         }
 
@@ -1024,7 +1013,7 @@ class BuildHandler implements Runnable {
                 (!_context.commSystem().haveOutboundCapacity(90)) &&
                 (!_context.commSystem().isEstablished(nextPeer))) {
                 _context.statManager().addRateData("tunnel.dropConnLimits", 1);
-                if (_log.shouldWarn()) {_log.warn("Dropping Tunnel Request -> Congestion control enabled (close to our limit) " + req);}
+                if (shouldLog) {_log.warn("Dropping Tunnel Request -> Congestion control enabled (close to our limit) " + (_log.shouldInfo() ? req : ""));}
                 return;
             }
         } else if (isInGW && from != null) {_context.commSystem().mayDisconnect(from);} // we're the start of the tunnel, no use staying connected
@@ -1032,7 +1021,7 @@ class BuildHandler implements Runnable {
         if (_log.shouldDebug()) {
             _log.debug("Responding to [MsgID " + state.msg.getUniqueId()
                        + "] after " + recvDelay + "ms with response [" + response
-                       + "] from " + (from != null ? "[" + from.toBase64().substring(0,6) + "]" : "tunnel") + req);
+                       + "] from " + (from != null ? "[" + fromPeer + "]" : "tunnel") + req);
         }
 
         int records = state.msg.getRecordCount();
@@ -1094,7 +1083,7 @@ class BuildHandler implements Runnable {
             if (!replyGwIsUs && state.msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE) {
                 outMessage = MessageWrapper.wrap(_context, replyMsg, req.readGarlicKeys()); // garlic encrypt
                 if (outMessage == null) {
-                    if (_log.shouldWarn()) {_log.warn("OutboundTunnelBuildReplyMessage encryption failure");}
+                    if (shouldLog) {_log.warn("OutboundTunnelBuildReplyMessage encryption failure");}
                     return;
                 }
             } else {outMessage = replyMsg;}

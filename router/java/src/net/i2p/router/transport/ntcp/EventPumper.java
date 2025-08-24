@@ -226,9 +226,8 @@ class EventPumper implements Runnable {
                         selected.clear();
                     }
                     runDelayedEvents();
-                } catch (ClosedSelectorException cse) {
-                    continue;
-                } catch (IOException ioe) {
+                } catch (ClosedSelectorException cse) {continue;}
+                catch (IOException ioe) {
                     if (_log.shouldWarn()) {_log.warn("Error selecting", ioe);}
                     continue;
                 } catch (CancelledKeyException cke) {
@@ -294,8 +293,7 @@ class EventPumper implements Runnable {
                                 if ((!key.isValid()) &&
                                     (!((SocketChannel)key.channel()).isConnectionPending()) &&
                                     con.getTimeSinceCreated(now) > 2 * NTCPTransport.ESTABLISH_TIMEOUT) {
-                                    if (_log.shouldInfo())
-                                        _log.info("Removing invalid key for: " + con);
+                                    if (_log.shouldInfo()) {_log.info("Removing invalid key for: " + con);}
                                     // this will cancel the key, and it will then be removed from the keyset
                                     con.close();
                                     key.cancel();
@@ -486,7 +484,8 @@ class EventPumper implements Runnable {
 
             byte[] ip = chan.socket().getInetAddress().getAddress();
             String ba = Addresses.toString(ip).replace("/", "");
-            if (_context.blocklist().isBlocklisted(ip)) {
+            boolean isBanned = _context.blocklist().isBlocklisted(ip);
+            if (isBanned) {
                 if (_log.shouldLog(Log.WARN)) {
                     _log.warn("Refusing Session Request from blocklisted IP address " + ba);
                 }
@@ -497,7 +496,7 @@ class EventPumper implements Runnable {
             if (!_context.commSystem().isExemptIncoming(Addresses.toCanonicalString(ba))) {
                 if (!_transport.allowConnection()) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Refusing Session Request from " + ba + " -> NTCP connection limit reached");
+                        _log.warn("Refusing Session Request from: " + ba + " -> NTCP connection limit reached");
                     }
                     try {chan.close();}
                     catch (IOException ioe) {}
@@ -508,11 +507,12 @@ class EventPumper implements Runnable {
                 if (count > 0) {
                     count = _blockedIPs.increment(ba);
                     if (_log.shouldWarn()) {
-                        _log.warn("Blocking NTCP connection attempt from: " + ba + " (Count: " + count + ")");
+                        _log.warn("Blocking NTCP connection attempt from" + (isBanned ? "banned IP address" : "") +
+                                  ": " + ba + " (Count: " + count + ")");
                     }
-                    _context.statManager().addRateData("ntcp.dropInboundNoMessage", count);
                     if (count >= 30 && _log.shouldWarn()) {
-                        _log.warn("WARNING! IP Address " + ba + " is making excessive inbound NTCP connection attempts (Count: " + count + ")");
+                        _log.warn("WARNING! " +  (isBanned ? "Banned " : "")  + "IP Address " + ba +
+                                  " is making excessive inbound NTCP connection attempts (Count: " + count + ")");
                     }
                     try {chan.close();}
                     catch (IOException ioe) {}
