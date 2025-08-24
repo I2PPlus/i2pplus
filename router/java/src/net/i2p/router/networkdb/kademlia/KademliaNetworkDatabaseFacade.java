@@ -67,15 +67,15 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     protected final Log _log;
     private KBucketSet<Hash> _kb; // peer hashes sorted into kbuckets, but within kbuckets, unsorted
     private DataStore _ds; // hash to DataStructure mapping, persisted when necessary
-    /** where the data store is pushing the data */
+    /** Where the data store is pushing the data */
     private String _dbDir;
-    // set of Hash objects that we should search on (to fill up a bucket, not to get data)
+    /** Set of Hash objects that we should search on (to fill up a bucket, not to get data) */
     private final Set<Hash> _exploreKeys;
     private boolean _initialized;
     /** Clock independent time of when we started up */
     private long _started;
     private StartExplorersJob _exploreJob;
-    /** when was the last time an exploration found something new? */
+    /** When was the last time an exploration found something new? */
     private long _lastExploreNew;
     protected final PeerSelector _peerSelector;
     protected final RouterContext _context;
@@ -166,17 +166,16 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private static final long MAX_LEASE_FUTURE = 15*60*1000;
     private static final long MAX_META_LEASE_FUTURE = 65535*1000;
 
-    /** This needs to be long enough to give us time to start up,
-        but less than 20m (when we start accepting tunnels and could be a IBGW)
-        Actually no, we need this soon if we are a new router or
-        other routers have forgotten about us, else
-        we can't build IB exploratory tunnels.
-        Unused.
+    /**
+     *  This needs to be long enough to give us time to start up, but less than 20m
+     *  (when we start accepting tunnels and could be a IBGW)
+     *  Actually no, we need this soon if we are a new router or other routers have
+     *  forgotten about us, else we can't build IB exploratory tunnels.
+     *  Unused.
      */
     protected final static long PUBLISH_JOB_DELAY = 3*60*1000l;
 
-    /** Maximum number of peers to place in the queue to explore
-     */
+    /** Maximum number of peers to place in the queue to explore */
     static final int MAX_EXPLORE_QUEUE = SystemVersion.isSlow() ? 128 : 256;
     static final String PROP_EXPLORE_QUEUE = "router.exploreQueue";
 
@@ -191,6 +190,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     private static final long[] RATES = {60*1000, 60*60*1000, 24*60*60*1000 };
 
+    /**
+     * Initializes the Kademlia-based network database facade.
+     *
+     * @param context the router context
+     * @param dbid the unique identifier for this network database
+     */
     public KademliaNetworkDatabaseFacade(RouterContext context, Hash dbid) {
         _context = context;
         _dbid = dbid;
@@ -233,11 +238,19 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         context.statManager().createRateStat("netDb.storeRouterInfoSent", "Sent RouterInfo store messages", "NetworkDatabase", RATES);
     }
 
+    /**
+     * Checks whether the network database has been fully initialized.
+     *
+     * @return true if the database is initialized and ready for use, false otherwise
+     */
     @Override
     public boolean isInitialized() {return _initialized && _ds != null && _ds.isInitialized();}
 
     /**
-     *  Only for main DB
+     * Creates a peer selector for the network database. Only applicable for the main database.
+     *
+     * @return a new PeerSelector instance
+     * @throws IllegalStateException if called on a client database
      */
     protected PeerSelector createPeerSelector() {
        if (isClientDb()) {throw new IllegalStateException();}
@@ -245,11 +258,18 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
-     *  @return the main DB's peer selector. Client DBs do not have their own.
+     * Returns the main database's peer selector.
+     *
+     * @return the PeerSelector instance, or null if this is a client database
      */
     public PeerSelector getPeerSelector() {return _peerSelector;}
 
-    /** @since 0.9 */
+    /**
+     * Returns the reseed checker for this database.
+     *
+     * @return the ReseedChecker instance, or null if this is a client database
+     * @since 0.9
+     */
     @Override
     public ReseedChecker reseedChecker() {
         if (isClientDb()) {return null;}
@@ -257,12 +277,14 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     /**
+     * Returns the blind data cache used by this database.
+     *
      * We still always use a single blind cache in the main Db(for now),
      * see issue #421 on i2pgit.org/i2p-hackers/i2p.i2p for details.
      * This checks if we're the main DB already and returns our blind
      * cache if we are. If not, it looks up the main Db and gets it.
      *
-     * @return non-null
+     * @return the BlindCache instance, never null
      * @since 0.9.61
      */
     protected BlindCache blindCache() {
@@ -303,7 +325,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             return;
         }
         // TODO: make sure exploreQueue isn't null before assigning
-        //for (Iterator<Hash> iter = keys.iterator(); iter.hasNext() && _exploreKeys.size() < Integer.valueOf(exploreQueue);) {
         for (Iterator<Hash> iter = keys.iterator(); iter.hasNext() && _exploreKeys.size() < MAX_EXPLORE_QUEUE;) {
             _exploreKeys.add(iter.next());
          }
@@ -1279,14 +1300,37 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return null;
     }
 
+    /**
+     * Determines whether validation should be skipped based on initialization status or dummy communication system.
+     *
+     * @return true if validation should be skipped, false otherwise
+     * @since 0.9.67+
+     */
     private boolean shouldSkipValidation() {
         return !isInitialized() || _context.commSystem().isDummy();
     }
 
+    /**
+     * Generates a short identifier for a router based on its hash.
+     *
+     * @param routerInfo the RouterInfo to extract the ID from
+     * @return the first 6 characters of the base64-encoded router hash
+     * @since 0.9.67+
+     */
     private String getRouterId(RouterInfo routerInfo) {
         return routerInfo.getIdentity().getHash().toBase64().substring(0, 6);
     }
 
+    /**
+     * Checks for invalid NTCP2 addresses in the given RouterInfo and bans the router if any are found.
+     *
+     * @param routerInfo the RouterInfo to validate
+     * @param now current timestamp in milliseconds
+     * @param caps the capabilities string of the router
+     * @param routerId the short ID of the router
+     * @return true if the router has invalid NTCP addresses and was banned, false otherwise
+     * @since 0.9.67+
+     */
     private boolean banInvalidNTCPAddresses(RouterInfo routerInfo, long now, String caps, String routerId) {
         for (RouterAddress ra : routerInfo.getTargetAddresses("NTCP2")) {
             String i = ra.getOption("i");
@@ -1302,6 +1346,16 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return false;
     }
 
+    /**
+     * Checks if the router's uptime is long enough to begin validating other routers.
+     *
+     * The minimum uptime is determined by the property "router.validateRoutersAfter" (in minutes),
+     * or defaults to 20 minutes.
+     *
+     * @param uptime the uptime of the local router in milliseconds
+     * @return true if the uptime is sufficient, false otherwise
+     * @since 0.9.67+
+     */
     private boolean isUptimeLongEnough(long uptime) {
         String validateUptime = _context.getProperty("router.validateRoutersAfter");
         if (validateUptime != null) {
@@ -1313,24 +1367,45 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return uptime > 20*60*1000;
     }
 
+    /**
+     * Computes the expiration time for a RouterInfo based on current network conditions.
+     *
+     * The expiration time can be customized via the "router.expireRouterInfo" property (in hours),
+     * or defaults based on the number of existing routers or whether this is a floodfill.
+     *
+     * @param existing the number of routers currently in the KBucket
+     * @return the adjusted expiration time in milliseconds
+     * @since 0.9.67+
+     */
     private long computeAdjustedExpiration(int existingRouters) {
         String expireRI = _context.getProperty("router.expireRouterInfo");
         if (expireRI != null) {
-            try {
-                return Integer.parseInt(expireRI)*60*60*1000L;
-            } catch (NumberFormatException ignored) {}
+            try {return Integer.parseInt(expireRI)*60*60*1000L;}
+            catch (NumberFormatException ignored) {}
         }
-        if (floodfillEnabled())
-            return ROUTER_INFO_EXPIRATION_FLOODFILL;
-        if (existingRouters > 4000)
-            return ROUTER_INFO_EXPIRATION / 3;
-        if (existingRouters > 3000)
-            return ROUTER_INFO_EXPIRATION / 2;
-        if (existingRouters > 2000)
-            return ROUTER_INFO_EXPIRATION * 2 / 3;
+        if (floodfillEnabled()) {return ROUTER_INFO_EXPIRATION_FLOODFILL;}
+        if (existingRouters > 4000) {return ROUTER_INFO_EXPIRATION / 3;}
+        if (existingRouters > 3000) {return ROUTER_INFO_EXPIRATION / 2;}
+        if (existingRouters > 2000) {return ROUTER_INFO_EXPIRATION * 2 / 3;}
         return ROUTER_INFO_EXPIRATION;
     }
 
+    /**
+     * Checks if the given router should be blocked due to country restrictions.
+     *
+     * This includes:
+     * - Strict country mode
+     * - Hidden mode
+     * - Configuration-based country bans
+     * - XG router bans
+     *
+     * @param routerInfo the RouterInfo to evaluate
+     * @param caps the capabilities string of the router
+     * @param routerId the short ID of the router
+     * @param h the Hash of the router
+     * @return true if the router should be blocked, false otherwise
+     * @since 0.9.67+
+     */
     private boolean checkCountryBlocking(RouterInfo routerInfo, String caps, String routerId, Hash h) {
         String country = _context.commSystem().getCountry(h);
         if (country == null) country = "unknown";
@@ -1383,6 +1458,19 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return false;
     }
 
+    /**
+     * Determines whether the given router qualifies as an XG router that should be blocked.
+     *
+     * An XG router is defined as:
+     * - Has the G capability (no tunnels)
+     * - Is not reachable or unreachable
+     * - Has the X (unlimited bandwidth) capability
+     *
+     * @param routerInfo the RouterInfo to evaluate
+     * @param isUs true if the router is the local router
+     * @return true if the router is an XG router and should be blocked
+     * @since 0.9.67+
+     */
     private boolean isRouterBlockXG(RouterInfo routerInfo, boolean isUs) {
         String caps = routerInfo.getCapabilities();
         return !isUs && caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0 &&
@@ -1391,6 +1479,18 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                caps.indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0;
     }
 
+    /**
+     * Checks if the given router info was published in the future and bans it if so.
+     *
+     * @param routerInfo the RouterInfo to evaluate
+     * @param now current timestamp in milliseconds
+     * @param caps the capabilities string of the router
+     * @param routerId the short ID of the router
+     * @param h the Hash of the router
+     * @param isUs true if the router is the local router
+     * @return a descriptive string if the router is from the future, null otherwise
+     * @since 0.9.67+
+     */
     private String checkFutureRouterInfo(RouterInfo routerInfo, long now, String caps, String routerId, Hash h, boolean isUs) {
         if (routerInfo.getPublished() > now + 2*Router.CLOCK_FUDGE_FACTOR && !isUs) {
             long age = routerInfo.getPublished() - now;
@@ -1403,6 +1503,18 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return null;
     }
 
+    /**
+     * Checks if the given router is running a version older than the minimum allowed.
+     *
+     * If so, it bans the router until restart.
+     *
+     * @param routerInfo the RouterInfo to evaluate
+     * @param caps the capabilities string of the router
+     * @param routerId the short ID of the router
+     * @param h the Hash of the router
+     * @return a descriptive string if the router is too old, null otherwise
+     * @since 0.9.67+
+     */
     private String checkRouterVersion(RouterInfo routerInfo, String caps, String routerId, Hash h) {
         String v = routerInfo.getVersion();
         String minVersionAllowed = _context.getProperty("router.minVersionAllowed");
@@ -1420,6 +1532,17 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return null;
     }
 
+    /**
+     * Checks if the given router should be dropped due to being a slow tier (K, L, or M) and outdated.
+     *
+     * @param routerInfo the RouterInfo to evaluate
+     * @param now current timestamp in milliseconds
+     * @param existing number of existing routers
+     * @param caps the capabilities string of the router
+     * @param routerId the short ID of the router
+     * @return a descriptive string if the router should be dropped, null otherwise
+     * @since 0.9.67
+     */
     private String dropSlowRouter(RouterInfo routerInfo, long now, int existing, String caps, String routerId) {
         long uptime = _context.router().getUptime();
         boolean isUs = routerInfo.getIdentity().getHash().equals(_context.routerHash());
@@ -1443,6 +1566,18 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return null;
     }
 
+    /**
+     * Checks if the router has no valid addresses or introducers and has been published too long ago.
+     *
+     * @param routerInfo the RouterInfo to evaluate
+     * @param now current timestamp in milliseconds
+     * @param caps the capabilities string of the router
+     * @param routerId the short ID of the router
+     * @param isUs true if the router is the local router
+     * @param dontFail whether to skip failure checks
+     * @return a descriptive string if the router should be dropped, null otherwise
+     * @since 0.9.67+
+     */
     private String checkAddressesAndIntroducers(RouterInfo routerInfo, long now, String caps, String routerId, boolean isUs, boolean dontFail) {
         if (!dontFail && !routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_INTRODUCED) && !isUs) {
             if (routerInfo.getAddresses().isEmpty()) {
@@ -1470,6 +1605,19 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return null;
     }
 
+    /**
+     * Checks if the router has expired based on configured expiration time.
+     *
+     * @param routerInfo the RouterInfo to evaluate
+     * @param upLongEnough true if the local router has been up long enough
+     * @param adjustedExpiration the computed expiration time in milliseconds
+     * @param now current timestamp in milliseconds
+     * @param caps the capabilities string of the router
+     * @param routerId the short ID of the router
+     * @param isUs true if the router is the local router
+     * @return a descriptive string if the router should be dropped, null otherwise
+     * @since 0.9.67+
+     */
     private String checkExpirationBasedDrop(RouterInfo routerInfo, boolean upLongEnough, long adjustedExpiration, long now, String caps, String routerId, boolean isUs) {
         String expireRI = _context.getProperty("router.expireRouterInfo");
         if (expireRI != null && !isUs) {
@@ -1505,6 +1653,16 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return null;
     }
 
+    /**
+     * Checks if the router has expired within a short time window and lacks valid transports.
+     *
+     * @param routerInfo the RouterInfo to evaluate
+     * @param caps the capabilities string of the router
+     * @param routerId the short ID of the router
+     * @param isUs true if the router is the local router
+     * @return a descriptive string if the router should be dropped, null otherwise
+     * @since 0.9.67+
+     */
     private String checkStaleRouterInfo(RouterInfo routerInfo, boolean upLongEnough, int existing, String caps, String routerId, boolean isUs) {
         if (upLongEnough && !isUs && !routerInfo.isCurrent(computeAdjustedExpiration(existing))) {
             long age = _context.clock().now() - routerInfo.getPublished();
@@ -1520,7 +1678,6 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
         return null;
     }
-
 
     /**
      * Store the routerInfo.
