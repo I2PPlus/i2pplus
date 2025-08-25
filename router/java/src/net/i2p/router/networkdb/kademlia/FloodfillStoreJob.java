@@ -18,30 +18,37 @@ import net.i2p.router.Job;
 import net.i2p.router.RouterContext;
 
 /**
- *  This extends StoreJob to fire off a FloodfillVerifyStoreJob after success.
+ * This class extends StoreJob to fire off a FloodfillVerifyStoreJob after a successful store.
  *
- *  Stores through this class always request a reply.
- *
+ * Stores through this class always request a reply.
  */
 class FloodfillStoreJob extends StoreJob {
-    private final FloodfillNetworkDatabaseFacade _facade;
     private static final String PROP_RI_VERIFY = "router.verifyRouterInfoStore";
-    private static final long RI_VERIFY_STARTUP_TIME = 90*60*1000L;
+    private static final long RI_VERIFY_STARTUP_TIME = 90 * 60 * 1000L;
+
+    /** Length of Base32 key prefix for logging */
+    private static final int LOG_KEY_B32_LENGTH = 8;
+    /** Length of Base64 key prefix for logging */
+    private static final int LOG_KEY_B64_LENGTH = 6;
+
+    private final FloodfillNetworkDatabaseFacade _facade;
 
     /**
-     * Send a data structure to the floodfills
-     *
+     * Create a new FloodfillStoreJob to send data to floodfills.
      */
-    public FloodfillStoreJob(RouterContext context, FloodfillNetworkDatabaseFacade facade, Hash key, DatabaseEntry data, Job onSuccess, Job onFailure, long timeoutMs) {
+    public FloodfillStoreJob(RouterContext context, FloodfillNetworkDatabaseFacade facade,
+                             Hash key, DatabaseEntry data, Job onSuccess, Job onFailure, long timeoutMs) {
         this(context, facade, key, data, onSuccess, onFailure, timeoutMs, null);
     }
 
     /**
-     * @param toSkip set of peer hashes of people we don't want to send the data to (e.g. we
-     *               already know they have it).  This can be null.
+     * Create a new FloodfillStoreJob to send data to floodfills.
+     *
+     * @param toSkip set of peer hashes to skip (e.g., already have the data), may be null
      */
-    public FloodfillStoreJob(RouterContext context, FloodfillNetworkDatabaseFacade facade, Hash key, DatabaseEntry data,
-                             Job onSuccess, Job onFailure, long timeoutMs, Set<Hash> toSkip) {
+    public FloodfillStoreJob(RouterContext context, FloodfillNetworkDatabaseFacade facade,
+                             Hash key, DatabaseEntry data, Job onSuccess, Job onFailure,
+                             long timeoutMs, Set<Hash> toSkip) {
         super(context, facade, key, data, onSuccess, onFailure, timeoutMs, toSkip);
         _facade = facade;
     }
@@ -52,58 +59,107 @@ class FloodfillStoreJob extends StoreJob {
     @Override
     protected int getRedundancy() {return 1;}
 
-    /**
-     * Send was totally successful
-     */
     @Override
     protected void succeed() {
         super.succeed();
 
-        final boolean shouldLog = _log.shouldInfo();
         final Hash key = _state.getTarget();
+        final String keyB32 = key.toBase32().substring(0, LOG_KEY_B32_LENGTH);
+        final String keyB64 = key.toBase64().substring(0, LOG_KEY_B64_LENGTH);
+        final boolean shouldLog = _log.shouldInfo();
 
-            if (_facade.isVerifyInProgress(key)) {
-                if (shouldLog) {
-                    _log.info("Skipping verify, one already in progress for: [" + key.toBase64().substring(0,6) + "]");
-                }
-                return;
-            }
-            RouterContext ctx = getContext();
-            if (ctx.router().gracefulShutdownInProgress()) {
-                if (shouldLog) {
-                    _log.info("Skipping verify of [" + key.toBase64().substring(0,6) + "] -> Shutdown/Restart in progress...");
-                }
-                return;
-            }
-            // Get the time stamp from the data we sent, so the Verify job can make sure that
-            // it finds something stamped with that time or newer.
-            DatabaseEntry data = _state.getData();
-            final int type = data.getType();
-            final boolean isRouterInfo = type == DatabaseEntry.KEY_TYPE_ROUTERINFO;
-            // default false since 0.9.7.1
-            // verify for a while after startup until we've vetted the floodfills
-            if (isRouterInfo && !ctx.getBooleanProperty(PROP_RI_VERIFY) && ctx.router().getUptime() > RI_VERIFY_STARTUP_TIME) {
-                _facade.routerInfoPublishSuccessful();
-                return;
-            }
+        if (shouldSkipVerify(key, keyB64, shouldLog)) {return;}
 
-            final boolean isls2 = data.isLeaseSet() && type != DatabaseEntry.KEY_TYPE_LEASESET;
-            long published;
-            if (isls2) {
-                LeaseSet2 ls2 = (LeaseSet2) data;
-                published = ls2.getPublished();
-            } else {published = data.getDate();}
-            Hash sentTo = _state.getSuccessful(); // we should always have exactly one successful entry
-            Hash client;
-            if (type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {client = ((LeaseSet)data).getDestination().calculateHash();} // get the real client hash
-            else {client = key;}
-            Job fvsj = new FloodfillVerifyStoreJob(ctx, key, client, published, type, sentTo, _state.getAttempted(), _facade);
+        RouterContext ctx = getContext();
+
+        if (shouldSkipVerifyForStartup(ctx, keyB64)) {return;}
+
+        DatabaseEntry data = _state.getData();
+        if (data == null) {
             if (shouldLog) {
-                _log.info("Succeeded sending key [" + key.toBase32().substring(0,8) + "] -> Queueing Verify Store Job...");
+                _log.info("No data available for verify after store of [" + keyB64 + "]");
             }
-            ctx.jobQueue().addJob(fvsj);
+            return;
+        }
+
+        final int type = data.getType();
+        final boolean isRouterInfo = type == DatabaseEntry.KEY_TYPE_ROUTERINFO;
+
+        // Skip verify if router info and condition met
+        if (isRouterInfo && !ctx.getBooleanProperty(PROP_RI_VERIFY)
+            && ctx.router().getUptime() > RI_VERIFY_STARTUP_TIME) {
+            _facade.routerInfoPublishSuccessful();
+            return;
+        }
+
+        long published = getPublishedTimestamp(data);
+        Hash sentTo = _state.getSuccessful(); // should always have exactly one
+        Hash client = getClientHash(data, key);
+
+        if (sentTo == null || client == null) {
+            if (shouldLog) {
+                _log.info("Skipping verify: missing sentTo or client hash for [" + keyB64 + "]");
+            }
+            return;
+        }
+
+        Set<Hash> attempted = _state.getAttempted();
+        Job verifyJob = new FloodfillVerifyStoreJob(ctx, key, client, published, type, sentTo, attempted, _facade);
+
+        if (shouldLog) {_log.info("Succeeded sending key [" + keyB32 + "] -> Queueing Verify Store Job...");}
+
+        ctx.jobQueue().addJob(verifyJob);
+    }
+
+    /**
+     * Check if verify should be skipped due to existing verify or shutdown.
+     */
+    private boolean shouldSkipVerify(Hash key, String keyB64, boolean shouldLog) {
+        if (_facade.isVerifyInProgress(key)) {
+            if (shouldLog) {_log.info("Skipping verify, one already in progress for: [" + keyB64 + "]");}
+            return true;
+        }
+
+        RouterContext ctx = getContext();
+        if (ctx.router().gracefulShutdownInProgress()) {
+            if (shouldLog) {_log.info("Skipping verify of [" + keyB64 + "] -> Shutdown/Restart in progress...");}
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if verify should be skipped due to startup verification delay.
+     */
+    private boolean shouldSkipVerifyForStartup(RouterContext ctx, String keyB64) {
+        if (!ctx.getBooleanProperty(PROP_RI_VERIFY) && ctx.router().getUptime() > RI_VERIFY_STARTUP_TIME) {
+            if (_log.shouldInfo()) {_log.info("Skipping verify of [" + keyB64 + "] -> Startup period not yet complete.");}
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get the published timestamp from the data.
+     */
+    private long getPublishedTimestamp(DatabaseEntry data) {
+        if (data instanceof LeaseSet2) {return ((LeaseSet2) data).getPublished();}
+        else {return data.getDate();}
+    }
+
+    /**
+     * Get the client hash from the data or key if not available.
+     */
+    private Hash getClientHash(DatabaseEntry data, Hash key) {
+        if (data.getType() == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
+            LeaseSet ls = (LeaseSet) data;
+            return ls.getDestination().calculateHash();
+        }
+        return key;
     }
 
     @Override
     public String getName() {return "Verify Floodfill Store";}
+
 }
