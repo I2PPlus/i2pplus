@@ -399,10 +399,10 @@ public class TunnelPoolManager implements TunnelManagerFacade {
      */
     public boolean addAlias(Destination dest, ClientTunnelSettings settings, Destination existingClient) {
         if (dest.getSigningPublicKey().equals(existingClient.getSigningPublicKey())) {
-            throw new IllegalArgumentException("signing key must differ");
+            throw new IllegalArgumentException("Signing key must differ");
         }
         if (!dest.getPublicKey().equals(existingClient.getPublicKey())) {
-            throw new IllegalArgumentException("encryption key mismatch");
+            throw new IllegalArgumentException("Encryption key mismatch");
         }
         Hash h = dest.calculateHash();
         Hash e = existingClient.calculateHash();
