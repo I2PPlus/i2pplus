@@ -1517,24 +1517,26 @@ public class PeerState {
         if (_lastSendFullyTime != 0) {buf.append("\n* Last successful send: ").append(new Date(_lastSendFullyTime));}
         if (_lastSendTime != 0) {buf.append("\n* Last attempted send: ").append(new Date(_lastSendTime));}
         if (_lastACKSend != 0) {buf.append("\n* Last ACK sent: ").append(new Date(_lastACKSend));}
-        int txQueue = _outboundQueue.size();
-        boolean isQueued = _inboundMessages.size() > 0 || _outboundMessages.size() > 0;
-        buf.append("\n* Lifetime: ").append(now-_keyEstablishedTime).append("ms")
-           .append("; RTT: ").append(_rtt).append("ms")
-           .append("; RTTdev: ").append(_rttDeviation).append("ms")
-           .append("; RTO: ").append(_rto).append("ms")
-           .append("; MTU: ").append(_mtu).append(" bytes")
-           .append("; Large MTU: ").append(_largeMTU).append(" bytes")
-           .append("\n* Congestion window: ").append(_sendWindowBytes).append(" bytes")
-           .append("; Active window: ").append(_sendWindowBytesRemaining).append(" bytes")
-           .append("; SST: ").append(_slowStartThreshold).append(" bytes")
-           .append("; FastRetransmit? ").append(_fastRetransmit)
-           .append("\n*").append(_consecutiveFailedSends > 0 ? " Consecutive fails: " + _consecutiveFailedSends + ";" : "")
-           .append(" Messages (received/sent): ").append(_messagesReceived).append("/").append(_messagesSent)
-           .append(isQueued ? "; Messages (in/out): " + _inboundMessages.size() + "/" + _outboundMessages.size() : "")
-           .append(txQueue > 0 ? "; Outbound queue: " + txQueue : "")
-           .append("\n* Packets received (OK/Duplicate): ").append(_packetsReceived).append('/').append(_packetsReceivedDuplicate)
-           .append("\n* Packets sent (OK/Duplicate): ").append(_packetsTransmitted).append('/').append(_packetsRetransmitted);
+        if (_log.shouldInfo()) {
+            int txQueue = _outboundQueue.size();
+            boolean isQueued = _inboundMessages.size() > 0 || _outboundMessages.size() > 0;
+            buf.append("\n* Lifetime: ").append(now-_keyEstablishedTime).append("ms")
+               .append("; RTT: ").append(_rtt).append("ms")
+               .append("; RTTdev: ").append(_rttDeviation).append("ms")
+               .append("; RTO: ").append(_rto).append("ms")
+               .append("; MTU: ").append(_mtu).append(" bytes")
+               .append("; Large MTU: ").append(_largeMTU).append(" bytes")
+               .append("\n* Congestion window: ").append(_sendWindowBytes).append(" bytes")
+               .append("; Active window: ").append(_sendWindowBytesRemaining).append(" bytes")
+               .append("; SST: ").append(_slowStartThreshold).append(" bytes")
+               .append("; FastRetransmit? ").append(_fastRetransmit)
+               .append("\n*").append(_consecutiveFailedSends > 0 ? " Consecutive fails: " + _consecutiveFailedSends + ";" : "")
+               .append(" Messages (received / sent): ").append(_messagesReceived).append(" / ").append(_messagesSent)
+               .append(isQueued ? "; Messages (in / out): " + _inboundMessages.size() + " / " + _outboundMessages.size() : "")
+               .append(txQueue > 0 ? "; Outbound queue: " + txQueue : "")
+               .append("\n* Packets received (OK / Duplicate): ").append(_packetsReceived).append(" / ").append(_packetsReceivedDuplicate)
+               .append("\n* Packets sent (OK / Duplicate): ").append(_packetsTransmitted).append(" / ").append(_packetsRetransmitted);
+        }
         return buf.toString();
     }
 
