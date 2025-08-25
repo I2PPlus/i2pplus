@@ -185,8 +185,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /** Send the message out */
     public void processMessage(OutNetMessage msg) {
-        if (isDummy()) {
-            // testing
+        if (msg == null) {return;}
+        if (isDummy()) { // testing
             GetBidsJob.fail(_context, msg);
             return;
         }
