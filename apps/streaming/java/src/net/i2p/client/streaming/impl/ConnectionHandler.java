@@ -30,7 +30,6 @@ class ConnectionHandler {
     private final ByteCache _cache = ByteCache.getInstance(32, 4*1024);
     private final ConnectionManager _manager;
     private final LinkedBlockingDeque<Packet> _synQueue;
-    //private final LinkedBlockingQueue<Packet> _synQueue;
     private final SimpleTimer2 _timer;
     private volatile boolean _active;
     private int _acceptTimeout;
@@ -44,7 +43,7 @@ class ConnectionHandler {
      *  this is a backlog of 5 to 64 Syns, which seems like plenty for now
      *  Don't make this too big because the removal by all the TimeoutSyns is O(n**2) - sortof.
      */
-    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 64 : 128;
+    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 128 : 512;
 
     /** Creates a new instance of ConnectionHandler */
     public ConnectionHandler(I2PAppContext context, ConnectionManager mgr, SimpleTimer2 timer) {
@@ -52,7 +51,6 @@ class ConnectionHandler {
         _log = context.logManager().getLog(ConnectionHandler.class);
         _manager = mgr;
         _timer = timer;
-        //_synQueue = new LinkedBlockingQueue<Packet>(MAX_QUEUE_SIZE);
         _synQueue = new LinkedBlockingDeque<>(MAX_QUEUE_SIZE);
         _acceptTimeout = DEFAULT_ACCEPT_TIMEOUT;
     }
@@ -202,7 +200,7 @@ class ConnectionHandler {
                     // a good place to check for dup SYNs and drop them
                     Destination from = syn.getOptionalFrom();
                     if (from == null) {
-                        if (_log.shouldWarn()) {_log.warn("Dropping SYN packet with no FROM: " + syn);}
+                        if (_log.shouldWarn() && syn != null) {_log.warn("Dropping SYN packet with no FROM: " + syn);}
                         continue; // drop it
                     }
                     Connection oldcon = _manager.getConnectionByOutboundId(syn.getReceiveStreamId());
@@ -210,7 +208,7 @@ class ConnectionHandler {
                         // His ID not guaranteed to be unique to us, but probably is...
                         // only drop it on a destination match too
                         if (from.equals(oldcon.getRemotePeer())) {
-                            if (_log.shouldWarn()) {_log.warn("Dropping duplicate SYN packet: " + syn);}
+                            if (_log.shouldInfo() && syn != null) {_log.warn("Dropping duplicate SYN packet: " + syn);}
                             continue;
                         }
                     }
@@ -315,4 +313,5 @@ class ConnectionHandler {
         @Override
         public String toString() {return "POISON";}
     }
+
 }
