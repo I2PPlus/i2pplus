@@ -290,7 +290,7 @@ public class Banlist {
     public boolean isBanlisted(Hash peer) {return isBanlisted(peer, null);}
 
     public boolean isBanlisted(Hash peer, String transport) {
-        if (peer == null) {return false;}
+        if (peer == null || transport == null) {return false;}
 
         boolean rv = false;
         boolean unbanlist = false;
