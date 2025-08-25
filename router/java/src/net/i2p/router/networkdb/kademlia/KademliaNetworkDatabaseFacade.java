@@ -831,7 +831,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
 
     private void handleBanlistAndRemove(RouterInfo ri, Hash key, Job onFailedLookupJob) {
         String caps = ri.getCapabilities();
-        String routerId = key.toBase64().substring(0, 6);
+        String routerId = key.toBase64().substring(0,6);
         boolean isFF = ri.getCapabilities().contains("F");
 
         if (_log.shouldWarn()) {
@@ -1260,45 +1260,46 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @since 0.9.7
      */
     String validate(RouterInfo routerInfo) throws IllegalArgumentException {
-        if (shouldSkipValidation() || routerInfo == null) return null;
+        if (shouldSkipValidation() || routerInfo == null) {return null;}
 
         long now = _context.clock().now();
         String routerId = getRouterId(routerInfo);
         String caps = routerInfo.getCapabilities() != null ? routerInfo.getCapabilities().toUpperCase() : "";
         Hash h = routerInfo.getIdentity().getHash();
+        if (h == null) {return null;}
         boolean isUs = h.equals(_context.routerHash());
         int existing = _kb.size();
 
-        if (banInvalidNTCPAddresses(routerInfo, now, caps, routerId)) return "Invalid NTCP address";
-        if (_context.banlist().isBanlisted(h)) return null;
+        if (banInvalidNTCPAddresses(routerInfo, now, caps, routerId)) {return "Invalid NTCP address";}
+        if (_context.banlist().isBanlisted(h)) {return null;}
 
         long uptime = _context.router().getUptime();
         boolean upLongEnough = isUptimeLongEnough(uptime);
         long adjustedExpiration = computeAdjustedExpiration(existing);
         boolean dontFail = uptime < DONT_FAIL_PERIOD;
 
-        if (checkCountryBlocking(routerInfo, caps, routerId, h)) return null;
+        if (checkCountryBlocking(routerInfo, caps, routerId, h)) {return null;}
 
         String futureBanReason = checkFutureRouterInfo(routerInfo, now, caps, routerId, h, isUs);
-        if (futureBanReason != null) return futureBanReason;
+        if (futureBanReason != null) {return futureBanReason;}
 
         String oldVersionBan = checkRouterVersion(routerInfo, caps, routerId, h);
-        if (oldVersionBan != null) return oldVersionBan;
+        if (oldVersionBan != null) {return oldVersionBan;}
 
         String slowDrop = dropSlowRouter(routerInfo, now, existing, caps, routerId);
-        if (slowDrop != null) return slowDrop;
+        if (slowDrop != null) {return slowDrop;}
 
         String addrCheckDrop = checkAddressesAndIntroducers(routerInfo, now, caps, routerId, isUs, dontFail);
-        if (addrCheckDrop != null) return addrCheckDrop;
+        if (addrCheckDrop != null) {return addrCheckDrop;}
 
         String expirationDrop = checkExpirationBasedDrop(routerInfo, upLongEnough, adjustedExpiration, now, caps, routerId, isUs);
-        if (expirationDrop != null) return expirationDrop;
+        if (expirationDrop != null) {return expirationDrop;}
 
         String shortExpireDrop = checkShortExpiration(routerInfo, caps, routerId, isUs);
-        if (shortExpireDrop != null) return shortExpireDrop;
+        if (shortExpireDrop != null) {return shortExpireDrop;}
 
         String staleDropReason = checkStaleRouterInfo(routerInfo, upLongEnough, existing, caps, routerId, isUs);
-        if (staleDropReason != null) return staleDropReason;
+        if (staleDropReason != null) {return staleDropReason;}
 
         return null;
     }
@@ -1321,7 +1322,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @since 0.9.67+
      */
     private String getRouterId(RouterInfo routerInfo) {
-        return routerInfo.getIdentity().getHash().toBase64().substring(0, 6);
+        return routerInfo.getIdentity().getHash().toBase64().substring(0,6);
     }
 
     /**
@@ -1427,15 +1428,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
                                 isStrict ? "We are in a strict country and so is this router" :
                                 "i2np.hideMyCountry=true";
                 _log.warn("Dropping RouterInfo [" + getRouterId(routerInfo) + "] -> " + reason);
-                _log.warn("Banning " + (caps.isEmpty() ? "" : caps + " ") + (isFF ? "Floodfill" : "Router") + " [" + routerId + "] for duration of session -> Router is in our country");
+                _log.warn("Banning " + (caps.isEmpty() ? "" : caps + " ") + (isFF ? "Floodfill" : "Router") +
+                          " [" + routerId + "] for duration of session -> Router is in our country");
             }
-            if (blockMyCountry) {
-                _context.banlist().banlistRouterForever(h, " <b>➜</b> In our country (banned via config)");
-            } else if (isHidden) {
-                _context.banlist().banlistRouterForever(h, " <b>➜</b> In our country (we are in Hidden mode)");
-            } else if (isStrict) {
-                _context.banlist().banlistRouterForever(h, " <b>➜</b> In our country (we are in a strict country)");
-            }
+            if (blockMyCountry) {_context.banlist().banlistRouterForever(h, " <b>➜</b> In our country (banned via config)");}
+            else if (isHidden) {_context.banlist().banlistRouterForever(h, " <b>➜</b> In our country (we are in Hidden mode)");}
+            else if (isStrict) {_context.banlist().banlistRouterForever(h, " <b>➜</b> In our country (we are in a strict country)");}
             return true;
         }
         if (blockedCountries.contains(country) && !isBanned) {
@@ -1519,6 +1517,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @since 0.9.67+
      */
     private String checkRouterVersion(RouterInfo routerInfo, String caps, String routerId, Hash h) {
+        if (routerInfo == null) {return null;}
         String v = routerInfo.getVersion();
         String minVersionAllowed = _context.getProperty("router.minVersionAllowed");
         if (minVersionAllowed != null) {
@@ -1547,6 +1546,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @since 0.9.67
      */
     private String dropSlowRouter(RouterInfo routerInfo, long now, int existing, String caps, String routerId) {
+        if (routerInfo == null) {return null;}
         long uptime = _context.router().getUptime();
         boolean isUs = routerInfo.getIdentity().getHash().equals(_context.routerHash());
         String capsStr = routerInfo.getCapabilities() != null ? routerInfo.getCapabilities() : "";
@@ -1582,6 +1582,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @since 0.9.67+
      */
     private String checkAddressesAndIntroducers(RouterInfo routerInfo, long now, String caps, String routerId, boolean isUs, boolean dontFail) {
+        if (routerInfo == null) {return null;}
         if (!dontFail && !routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_INTRODUCED) && !isUs) {
             if (routerInfo.getAddresses().isEmpty()) {
                 if (_log.shouldInfo()) {
@@ -1622,6 +1623,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @since 0.9.67+
      */
     private String checkExpirationBasedDrop(RouterInfo routerInfo, boolean upLongEnough, long adjustedExpiration, long now, String caps, String routerId, boolean isUs) {
+        if (routerInfo == null) {return null;}
         String expireRI = _context.getProperty("router.expireRouterInfo");
         if (expireRI != null && !isUs) {
             try {
@@ -1641,6 +1643,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     }
 
     private String checkShortExpiration(RouterInfo routerInfo, String caps, String routerId, boolean isUs) {
+        if (routerInfo == null) {return null;}
         if (!routerInfo.isCurrent(ROUTER_INFO_EXPIRATION_SHORT)) {
             for (RouterAddress ra : routerInfo.getAddresses()) {
                 if (routerInfo.getTargetAddresses("NTCP", "NTCP2").isEmpty() && ra.getOption("ihost0") == null && !isUs) {
@@ -1667,6 +1670,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @since 0.9.67+
      */
     private String checkStaleRouterInfo(RouterInfo routerInfo, boolean upLongEnough, int existing, String caps, String routerId, boolean isUs) {
+        if (routerInfo == null) {return null;}
         if (upLongEnough && !isUs && !routerInfo.isCurrent(computeAdjustedExpiration(existing))) {
             long age = _context.clock().now() - routerInfo.getPublished();
             if (existing >= MIN_REMAINING_ROUTERS) {
@@ -1707,7 +1711,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * @return previous entry or null
      */
     RouterInfo store(Hash key, RouterInfo routerInfo, boolean persist) throws IllegalArgumentException {
-        if (!_initialized) {return null;}
+        if (!_initialized || key == null || routerInfo == null) {return null;}
         if (isClientDb()) {throw new IllegalArgumentException("RI store to client DB");}
 
         RouterInfo rv;
@@ -1750,7 +1754,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  @since 0.9.16
      */
     private void processStoreFailure(Hash h, DatabaseEntry entry) throws UnsupportedCryptoException {
-        if (entry.getHash().equals(h)) {
+        if (h != null && entry.getHash().equals(h)) {
             int etype = entry.getType();
             if (DatabaseEntry.isLeaseSet(etype)) {
                 LeaseSet ls = (LeaseSet) entry;
