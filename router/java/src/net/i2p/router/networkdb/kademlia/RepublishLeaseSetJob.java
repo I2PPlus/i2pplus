@@ -20,8 +20,8 @@ import net.i2p.util.Log;
  */
 class RepublishLeaseSetJob extends JobImpl {
     private final Log _log;
-    public final static long REPUBLISH_LEASESET_TIMEOUT = 90 * 1000;
-    private final static int RETRY_DELAY = 5 * 1000;
+    public final static long REPUBLISH_LEASESET_TIMEOUT = 30 * 1000;
+    private final static int RETRY_DELAY = 500;
     private final Hash _dest;
     private final KademliaNetworkDatabaseFacade _facade;
     private long _lastPublished; // this is actually last attempted publish
@@ -45,16 +45,14 @@ class RepublishLeaseSetJob extends JobImpl {
     /**
      * Get the name of this job.
      */
-    public String getName() {
-        return "Republish Local LeaseSet";
-    }
+    public String getName() {return "Republish Local LeaseSet";}
 
     /**
      * Main job logic: checks if the LeaseSet should be republished and publishes it if necessary.
      */
     public void runJob() {
         long uptime = getContext().router().getUptime();
-        if (!getContext().clientManager().shouldPublishLeaseSet(_dest) || uptime < 5 * 60 * 1000) {
+        if (!getContext().clientManager().shouldPublishLeaseSet(_dest) || uptime < 4 * 60 * 1000) {
             return;
         }
 
@@ -90,9 +88,7 @@ class RepublishLeaseSetJob extends JobImpl {
             }
             _facade.stopPublishing(_dest);
         } catch (RuntimeException re) {
-            if (_log.shouldError()) {
-                _log.error("Uncaught error republishing the LeaseSet", re);
-            }
+            if (_log.shouldError()) {_log.error("Uncaught error republishing the LeaseSet", re);}
             _facade.stopPublishing(_dest);
             throw re;
         }
@@ -121,19 +117,14 @@ class RepublishLeaseSetJob extends JobImpl {
      */
     private void requeue(long delayMs, boolean highPriority) {
         requeue(delayMs);
-        if (highPriority) {
-            getContext().jobQueue().addJobToTop(this);
-        } else {
-            getContext().jobQueue().addJob(this);
-        }
+        if (highPriority) {getContext().jobQueue().addJobToTop(this);}
+        else {getContext().jobQueue().addJob(this);}
     }
 
     /**
      * @return last attempted publish time, or 0 if never
      */
-    public long lastPublished() {
-        return _lastPublished;
-    }
+    public long lastPublished() {return _lastPublished;}
 
     /**
      * Callback job executed if the lease set publication fails.
@@ -152,12 +143,9 @@ class RepublishLeaseSetJob extends JobImpl {
 
         public void runJob() {
             LeaseSet ls = _facade.lookupLeaseSetLocally(_ls.getHash());
-            if (ls != null) {
-                tunnelName = getTunnelName(_ls.getDestination());
-            }
-            if (ls != null && !KademliaNetworkDatabaseFacade.isNewer(ls, _ls)) {
-                requeueRepublish();
-            } else {
+            if (ls != null) {tunnelName = getTunnelName(_ls.getDestination());}
+            if (ls != null && !KademliaNetworkDatabaseFacade.isNewer(ls, _ls)) {requeueRepublish();}
+            else {
                 if (_log.shouldInfo()) {
                     String name = !tunnelName.equals("") ? " for \'" + tunnelName + "\'" : "";
                     _log.info("Not requeueing failed publication of LeaseSet" + name + " [" +
@@ -180,9 +168,8 @@ class RepublishLeaseSetJob extends JobImpl {
             TunnelPoolSettings out = getContext().tunnelManager().getOutboundSettings(d.calculateHash());
             name = (out != null ? out.getDestinationNickname() : null);
         }
-        if (name == null) {
-            return "";
-        }
+        if (name == null) {return "";}
         return name;
     }
+
 }
