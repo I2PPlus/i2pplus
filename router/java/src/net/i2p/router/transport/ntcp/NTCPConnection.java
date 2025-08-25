@@ -109,14 +109,11 @@ public class NTCPConnection implements Closeable {
     // prevent sending meta before established
     private long _nextMetaTime = Long.MAX_VALUE;
     private final AtomicInteger _consecutiveZeroReads = new AtomicInteger();
-    // This lock covers:
-    // _curReadState
+    // This lock covers: _curReadState
     private final Object _readLock = new Object();
-    // This lock covers:
-    // _writeBufs, _currentOutbound, _outbound, _sendSipk1, _sendSipk2, _sendSipIV, _sender
+    // This lock covers: _writeBufs, _currentOutbound, _outbound, _sendSipk1, _sendSipk2, _sendSipIV, _sender
     private final Object _writeLock = new Object();
-    // This lock covers:
-    // _bytesReceived, _bytesSent, _lastBytesReceived, _lastBytesSent, _sendBps, _recvBps
+    // This lock covers: _bytesReceived, _bytesSent, _lastBytesReceived, _lastBytesSent, _sendBps, _recvBps
     private final Object _statLock = new Object();
 
     private static final int BLOCK_SIZE = 16;
@@ -148,11 +145,12 @@ public class NTCPConnection implements Closeable {
      *  Needs to be fixed. But SSU can handle it?
      *  In the meantime, don't let the transport bid on big messages.
      */
-    static final int BUFFER_SIZE = 16*1024;
-    //static final int BUFFER_SIZE = SystemVersion.isSlow() ? 16*1024: 32*1024;
-//    private static final int MAX_DATA_READ_BUFS = 16;
-    private static final int MAX_DATA_READ_BUFS = SystemVersion.isSlow() ? 16 : 48;
+    //static final int BUFFER_SIZE = 16*1024;
+    static final int BUFFER_SIZE = SystemVersion.isSlow() ? 16*1024: 32*1024;
+    //private static final int MAX_DATA_READ_BUFS = 16;
+    private static final int MAX_DATA_READ_BUFS = SystemVersion.isSlow() ? 16 : 64;
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
+    private static final int MAX_BACKLOG_BEFORE_DROP = SystemVersion.isSlow() ? 8 : 32;
 
     private static final int INFO_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE_LOW;
     private static final String FIXED_RI_VERSION = "0.9.12";
@@ -567,9 +565,16 @@ public class NTCPConnection implements Closeable {
      * toss the message onto the connection's send queue
      */
     public void send(OutNetMessage msg) {
+        int outboundSize = _outbound.size();
+        if (outboundSize > MAX_BACKLOG_BEFORE_DROP) {
+            if (_log.shouldWarn()) {
+                _log.warn("Dropping message: Outbound queue too full (" + outboundSize + ") on " + this + msg);
+            }
+            _transport.afterSend(msg, false, false, msg.getLifetime());
+            return;
+        }
         if (!_outbound.offer(msg)) {
-            if (_log.shouldWarn())
-                _log.warn("Dropping message: Outbound queue full on " + this + msg);
+            if (_log.shouldWarn()) {_log.warn("Dropping message: Outbound queue full on " + this + msg);}
             _transport.afterSend(msg, false, false, msg.getLifetime());
             return;
         }
@@ -580,12 +585,9 @@ public class NTCPConnection implements Closeable {
     public boolean isBacklogged() { return _outbound.isBacklogged(); }
 
     public boolean tooBacklogged() {
-        // perhaps we could take into account the size of the queued messages too, our
-        // current transmission rate, and how much time is left before the new message's expiration?
-        // ok, maybe later...
-//        if (getUptime() < 10*1000) // allow some slack just after establishment
-        if (getUptime() < 15*1000) // allow some slack just after establishment
-            return false;
+        // Perhaps we could take into account the size of the queued messages too, our current transmission rate,
+        // and how much time is left before the new message's expiration?
+        if (getUptime() < 15*1000) {return false;} // allow some slack just after establishment
         if (_outbound.isBacklogged()) { // bloody arbitrary.  well, it's half the average message lifetime...
             int size = _outbound.size();
             if (_log.shouldWarn()) {
@@ -604,9 +606,7 @@ public class NTCPConnection implements Closeable {
                 } catch (RuntimeException e) {}  // java.nio.channels.CancelledKeyException
             }
             return true;
-        } else {
-            return false;
-        }
+        } else {return false;}
     }
 
     /**
@@ -619,11 +619,9 @@ public class NTCPConnection implements Closeable {
      *  con is established, so we know what the version is.
      */
     void enqueueInfoMessage() {
-        if (_isInbound) {
-            // TODO or if outbound and it's not right at the beginning
-            // TODO flood
-            sendOurRouterInfo(false);
-        }
+        // TODO or if outbound and it's not right at the beginning
+        // TODO flood
+        if (_isInbound) {sendOurRouterInfo(false);}
         // don't need to send for NTCP 2 outbound, it's in msg 3
     }
 
@@ -637,34 +635,20 @@ public class NTCPConnection implements Closeable {
      *
      */
     void prepareNextWrite(PrepBuffer prep) {
-        if (_closed.get())
-            return;
-        // Must be established or else session key is null and we can't encrypt
-        // This is normal for OB conns but can happen rarely for IB also.
-        // wantsWrite() is called at end of OB establishment, and
-        // enqueueInfoMessage() is called at end of IB establishment.
-        if (!isEstablished()) {
-            return;
-        }
-
-        synchronized(_writeLock) {
-            prepareNextWriteNTCP2(prep);
-        }
+        /*
+         * Must be established or else session key is null and we can't encrypt
+         * This is normal for OB conns but can happen rarely for IB also.
+         * wantsWrite() is called at end of OB establishment, and
+         * enqueueInfoMessage() is called at end of IB establishment.
+         */
+        if (_closed.get() || !isEstablished()) {return;}
+        synchronized(_writeLock) {prepareNextWriteNTCP2(prep);}
     }
 
     static class PrepBuffer {
         final byte unencrypted[];
-        //int unencryptedLength;
-        //byte encrypted[];
-
-        public PrepBuffer() {
-            unencrypted = new byte[BUFFER_SIZE];
-        }
-
-        public void init() {
-            //unencryptedLength = 0;
-            //encrypted = null;
-        }
+        public PrepBuffer() {unencrypted = new byte[BUFFER_SIZE];}
+        public void init() {}
     }
 
     /**
@@ -680,88 +664,83 @@ public class NTCPConnection implements Closeable {
         int size = OutboundNTCP2State.MAC_SIZE;
         List<Block> blocks = new ArrayList<Block>(4);
         long now = _context.clock().now();
-        /* synchronized (_currentOutbound) */  {
-            if (!_currentOutbound.isEmpty()) {
-                if (_log.shouldInfo())
-                    _log.info("Attempting to send multiple outbound messages with " + _currentOutbound.size() +
-                              " already waiting and " + _outbound.size() + " queued");
-                return;
+        if (!_currentOutbound.isEmpty()) {
+            if (_log.shouldInfo()) {
+                _log.info("Attempting to send multiple outbound messages with " + _currentOutbound.size() +
+                          " already waiting and " + _outbound.size() + " queued");
             }
-            OutNetMessage msg;
+            return;
+        }
+        OutNetMessage msg;
+        while (true) {
+            msg = _outbound.poll();
+            if (msg == null) {return;}
+            if (msg.getExpiration() >= now) {break;}
+            if (_log.shouldWarn()) {
+                _log.warn("Message expired while waiting in send queue, dropping..." + msg + " on " + this);
+            }
+            _transport.afterSend(msg, false, false, msg.getLifetime());
+        }
+        _currentOutbound.add(msg);
+        I2NPMessage m = msg.getMessage();
+        Block block = new NTCP2Payload.I2NPBlock(m);
+        blocks.add(block);
+        size += block.getTotalLength();
+        // now add more (maybe)
+        if (size < NTCP2_PREFERRED_PAYLOAD_MAX) {
+            // keep adding as long as we will be under 5 KB
             while (true) {
-                msg = _outbound.poll();
-                if (msg == null)
-                    return;
-                if (msg.getExpiration() >= now)
+                msg = _outbound.peek();
+                if (msg == null) {break;}
+                m = msg.getMessage();
+                int msz = m.getMessageSize() - 7;
+                if (size + msz > NTCP2_PREFERRED_PAYLOAD_MAX) {break;}
+                OutNetMessage msg2 = _outbound.poll();
+                if (msg2 == null) {break;}
+                if (msg2 != msg) {
+                    _outbound.offer(msg2); // if it wasn't the one we sized, put it back
                     break;
-                if (_log.shouldWarn())
-                    _log.warn("Message expired while waiting in send queue, dropping..." + msg + " on " + this);
-                _transport.afterSend(msg, false, false, msg.getLifetime());
-            }
-            _currentOutbound.add(msg);
-            I2NPMessage m = msg.getMessage();
-            Block block = new NTCP2Payload.I2NPBlock(m);
-            blocks.add(block);
-            size += block.getTotalLength();
-            // now add more (maybe)
-            if (size < NTCP2_PREFERRED_PAYLOAD_MAX) {
-                // keep adding as long as we will be under 5 KB
-                while (true) {
-                    msg = _outbound.peek();
-                    if (msg == null)
-                        break;
-                    m = msg.getMessage();
-                    int msz = m.getMessageSize() - 7;
-                    if (size + msz > NTCP2_PREFERRED_PAYLOAD_MAX)
-                        break;
-                    OutNetMessage msg2 = _outbound.poll();
-                    if (msg2 == null)
-                        break;
-                    if (msg2 != msg) {
-                        // if it wasn't the one we sized, put it back
-                        _outbound.offer(msg2);
-                        break;
+                }
+                if (msg.getExpiration() >= now) {
+                    _currentOutbound.add(msg);
+                    block = new NTCP2Payload.I2NPBlock(m);
+                    blocks.add(block);
+                    size += NTCP2Payload.BLOCK_HEADER_SIZE + msz;
+                } else {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Message expired while waiting in send queue, dropping..." + msg + " on " + this);
                     }
-                    if (msg.getExpiration() >= now) {
-                        _currentOutbound.add(msg);
-                        block = new NTCP2Payload.I2NPBlock(m);
-                        blocks.add(block);
-                        size += NTCP2Payload.BLOCK_HEADER_SIZE + msz;
-                    } else {
-                        if (_log.shouldWarn())
-                            _log.warn("Message expired while waiting in send queue, dropping..." + msg + " on " + this);
-                        _transport.afterSend(msg, false, false, msg.getLifetime());
-                    }
+                    _transport.afterSend(msg, false, false, msg.getLifetime());
                 }
             }
         }
+
         if (_nextMetaTime <= now && size + (NTCP2Payload.BLOCK_HEADER_SIZE + 4) <= BUFFER_SIZE) {
-            Block block = new NTCP2Payload.DateTimeBlock(_context);
+            block = new NTCP2Payload.DateTimeBlock(_context);
             blocks.add(block);
             size += block.getTotalLength();
             _nextMetaTime = now + (META_FREQUENCY / 2) + _context.random().nextInt(META_FREQUENCY / 2);
-            if (_log.shouldDebug())
-                _log.debug("Sending NTCP2 datetime block...");
+            if (_log.shouldDebug()) {_log.debug("Sending NTCP2 datetime block...");}
         }
+
         // 1024 is an estimate, do final check below
         if (_nextInfoTime <= now && size + 1024 <= BUFFER_SIZE) {
             RouterInfo ri = _context.router().getRouterInfo();
-            Block block = new NTCP2Payload.RIBlock(ri, false);
+            block = new NTCP2Payload.RIBlock(ri, false);
             int sz = block.getTotalLength();
             if (size + sz <= BUFFER_SIZE) {
                 blocks.add(block);
                 size += sz;
                 _nextInfoTime = now + (INFO_FREQUENCY / 2) + _context.random().nextInt(INFO_FREQUENCY);
-                if (_log.shouldDebug())
-                    _log.debug("Sending NTCP2 RouterInfo block...");
+                if (_log.shouldDebug()) {_log.debug("Sending NTCP2 RouterInfo block...");}
             } // else wait until next time
         }
+
         int availForPad = BUFFER_SIZE - (size + NTCP2Payload.BLOCK_HEADER_SIZE);
         if (availForPad > 0) {
             int padlen = getPaddingSize(size, availForPad);
-            // all zeros is fine here
-            //Block block = new NTCP2Payload.PaddingBlock(_context, padlen);
-            Block block = new NTCP2Payload.PaddingBlock(padlen);
+            // All zeros is fine here
+            block = new NTCP2Payload.PaddingBlock(padlen);
             blocks.add(block);
             size += block.getTotalLength();
         }
@@ -779,30 +758,25 @@ public class NTCPConnection implements Closeable {
      *  @since 0.9.36
      */
     private int getPaddingSize(int dataSize, int availForPad) {
-        // since we're calculating with percentages, get at least a
-        // 0-16 range with the default 0% min 6% max,
-        // even for small dataSize.
-        if (dataSize < 256)
-            dataSize = 256;
-        // what we want to send, calculated in proportion to data size
+        /* Since we're calculating with percentages, get at least a 0-16 range
+         * with the default 0% min 6% max, even for small dataSize.
+         */
+        if (dataSize < 256) {dataSize = 256;}
+        // What we want to send, calculated in proportion to data size
         int minSend = (int) (dataSize * _paddingConfig.getSendMin());
         int maxSend = (int) (dataSize * _paddingConfig.getSendMax());
-        // the absolute min and max we can send
+        // The absolute min and max we can send
         int min = Math.min(minSend, availForPad);
         int max = Math.min(maxSend, availForPad);
         int range = max - min;
         if (range < MIN_PADDING_RANGE) {
-            // reduce min to enforce minimum range if possible
+            // Reduce min to enforce minimum range if possible
             min = Math.max(0, min - (MIN_PADDING_RANGE - range));
             range = max - min;
-        } else if (range > MAX_PADDING_RANGE) {
-            // Don't send too much, no matter what the config says
-            range = MAX_PADDING_RANGE;
-        }
+        } else if (range > MAX_PADDING_RANGE) {range = MAX_PADDING_RANGE;} // Don't send too much, no matter what the config says
         int padlen = min;
-        if (range > 0)
-            padlen += _context.random().nextInt(1 + range);
-        if (_log.shouldDebug())
+        if (range > 0) {padlen += _context.random().nextInt(1 + range);}
+        if (_log.shouldDebug()) {
             _log.debug("Padding params:" +
                       " Data size: " + dataSize + "b" +
                       "; Avail: " + availForPad + "b" +
@@ -812,6 +786,7 @@ public class NTCPConnection implements Closeable {
                       "; Max: " + max +
                       "; Range: " + range +
                       "; Padlen: " + padlen + "b");
+        }
         return padlen;
     }
 
@@ -822,8 +797,7 @@ public class NTCPConnection implements Closeable {
      */
     void sendOurRouterInfo(boolean shouldFlood) {
         RouterInfo ri = _context.router().getRouterInfo();
-        if (ri == null)
-            return;
+        if (ri == null) {return;}
         sendRouterInfo(ri, shouldFlood);
     }
 
@@ -833,28 +807,29 @@ public class NTCPConnection implements Closeable {
      *  @since 0.9.36
      */
     private void sendRouterInfo(RouterInfo ri, boolean shouldFlood) {
-        // no synch needed, sendNTCP2() is synched
-        if (_log.shouldDebug())
+        // No sync needed, sendNTCP2() is synched
+        if (_log.shouldDebug()) {
             _log.debug("Sending router info for: " + ri.getHash() + " flood? " + shouldFlood);
+        }
         List<Block> blocks = new ArrayList<Block>(2);
         Block block = new NTCP2Payload.RIBlock(ri, shouldFlood);
         int size = block.getTotalLength();
         if (size + NTCP2Payload.BLOCK_HEADER_SIZE > BUFFER_SIZE) {
-            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
                 _log.warn("RouterInfo [" + ri + "] is too big for buffer (Size: " +
                           (size + NTCP2Payload.BLOCK_HEADER_SIZE) + " / Max: " + BUFFER_SIZE + ")");
+            }
             return;
         }
         blocks.add(block);
         int availForPad = BUFFER_SIZE - (size + NTCP2Payload.BLOCK_HEADER_SIZE);
         if (availForPad > 0) {
             int padlen = getPaddingSize(size, availForPad);
-            // all zeros is fine here
-            //block = new NTCP2Payload.PaddingBlock(_context, padlen);
+            // All zeros is fine here
             block = new NTCP2Payload.PaddingBlock(padlen);
             blocks.add(block);
         }
-        // use a "read buf" for the temp array
+        // Use a read buffer for the temp array
         ByteArray dataBuf = acquireReadBuf();
         sendNTCP2(dataBuf.getData(), blocks);
         releaseReadBuf(dataBuf);
@@ -870,14 +845,10 @@ public class NTCPConnection implements Closeable {
     void sendTerminationAndClose() {
         ReadState rs = null;
         if (_version == 2 && isEstablished()) {
-            synchronized (_readLock) {
-                rs = _curReadState;
-            }
+            synchronized (_readLock) {rs = _curReadState;}
         }
-        if (rs != null)
-            sendTermination(REASON_TIMEOUT, rs.getFramesReceived());
-        else
-            close();
+        if (rs != null) {sendTermination(REASON_TIMEOUT, rs.getFramesReceived());}
+        else {close();}
     }
 
     /**
@@ -890,20 +861,20 @@ public class NTCPConnection implements Closeable {
         _lastSendTime = _context.clock().now();
         // TODO add param to clear queues?
         // no synch needed, sendNTCP2() is synched
-        if (_log.shouldInfo())
+        if (_log.shouldInfo()) {
             _log.info("Sending termination, reason: " + reason + "; Valid frames received: " + validFramesRcvd + " on " + this);
+        }
         List<Block> blocks = new ArrayList<Block>(2);
         Block block = new NTCP2Payload.TerminationBlock(reason, validFramesRcvd);
         int plen = block.getTotalLength();
         blocks.add(block);
         int padlen = getPaddingSize(plen, PADDING_MAX);
         if (padlen > 0) {
-            // all zeros is fine here
-            //block = new NTCP2Payload.PaddingBlock(_context, padlen);
+            // All zeros is fine here
             block = new NTCP2Payload.PaddingBlock(padlen);
             blocks.add(block);
         }
-        // use a "read buf" for the temp array
+        // Use a read buffer for the temp array
         ByteArray dataBuf = acquireReadBuf();
         synchronized(_writeLock) {
             if (_sender != null) {
@@ -911,8 +882,7 @@ public class NTCPConnection implements Closeable {
                 // sendNTCP2() -> wantsWrite() -> pumper.processWrite() -> fail -> close() -> NPE
                 if (_sender != null) {
                     _sender.destroy();
-                    // this "plugs" the NTCP2 sender, so sendNTCP2()
-                    // won't send any more after the termination.
+                    // This "plugs" the NTCP2 sender, so sendNTCP2() won't send any more after the termination.
                     _sender = null;
                     new DelayedCloser();
                 }
@@ -937,23 +907,21 @@ public class NTCPConnection implements Closeable {
         byte[] enc = new byte[2 + framelen];
 
         synchronized(_writeLock) {
-        if (_sender == null) {
-            if (_log.shouldInfo())
-                _log.info("Sender has disappeared", new Exception());
-            return;
-        }
-        try {
-            _sender.encryptWithAd(null, tmp, 0, enc, 2, payloadlen);
-        } catch (GeneralSecurityException gse) {
-            // TODO anything else?
-            _log.error("Data encryption error", gse);
-            return;
-        }
-        // siphash ^ len
-        long sipIV = SipHashInline.hash24(_sendSipk1, _sendSipk2, _sendSipIV);
+            if (_sender == null) {
+                if (_log.shouldInfo()) {_log.info("Sender has disappeared", new Exception());}
+                return;
+            }
+            try {_sender.encryptWithAd(null, tmp, 0, enc, 2, payloadlen);}
+            catch (GeneralSecurityException gse) {
+                // TODO anything else?
+                _log.error("Data encryption error", gse);
+                return;
+            }
+            // siphash ^ len
+            long sipIV = SipHashInline.hash24(_sendSipk1, _sendSipk2, _sendSipIV);
             toLong8LE(_sendSipIV, 0, sipIV);
-        enc[0] = (byte) ((framelen >> 8) ^ (sipIV >> 8));
-        enc[1] = (byte) (framelen ^ sipIV);
+            enc[0] = (byte) ((framelen >> 8) ^ (sipIV >> 8));
+            enc[1] = (byte) (framelen ^ sipIV);
             wantsWrite(enc);
         }
 
@@ -976,17 +944,18 @@ public class NTCPConnection implements Closeable {
     synchronized void outboundConnected() {
         if (_establishState == EstablishBase.FAILED) {
             _conKey.cancel();
-            try {_chan.close(); } catch (IOException ignored) {}
+            try {_chan.close();}
+            catch (IOException ignored) {}
             return;
         }
-        try {
-            EventPumper.setInterest(_conKey, SelectionKey.OP_READ);
-        } catch (CancelledKeyException cke) {
-            try {_chan.close(); } catch (IOException ignored) {}
+        try {EventPumper.setInterest(_conKey, SelectionKey.OP_READ);}
+        catch (CancelledKeyException cke) {
+            try {_chan.close();}
+            catch (IOException ignored) {}
             return;
         }
-        // schedule up the beginning of our handshaking by calling prepareNextWrite on the
-        // writer thread pool
+        // Schedule up the beginning of our handshaking by calling
+        // prepareNextWrite on the writer thread pool
         _transport.getWriter().wantsWrite(this, "outbound connected");
     }
 
@@ -1004,7 +973,7 @@ public class NTCPConnection implements Closeable {
             }
             _context.statManager().addRateData("ntcp.throttledReadComplete", (_context.clock().now()-req.getRequestTime()));
             recv(buf);
-            // our reads used to be bw throttled (during which time we were no
+            // Our reads used to be bw throttled (during which time we were no
             // longer interested in reading from the network), but we aren't
             // throttled anymore, so we should resume being interested in reading
             _transport.getPumper().wantsRead(NTCPConnection.this);
