@@ -717,7 +717,7 @@ class ConnectionManager {
             }
         }
         if (hashes.length() > 0 && _globalBlacklist.contains(h))
-            return new Reason("blacklisted globally", MAX_TIME);
+            return new Reason("Blacklisted globally", MAX_TIME);
 
         if (_defaultOptions.isAccessListEnabled() &&
             !_defaultOptions.getAccessList().contains(h))
@@ -729,13 +729,13 @@ class ConnectionManager {
         if (_dayThrottler != null && _dayThrottler.shouldThrottle(h)) {
             _context.statManager().addRateData("stream.con.throttledDay", 1);
             if (_defaultOptions.getMaxConnsPerDay() <= 0)
-                return new Reason("total daily limit of " + _defaultOptions.getMaxTotalConnsPerDay() +
+                return new Reason("Total daily limit of " + _defaultOptions.getMaxTotalConnsPerDay() +
                         " connections reached", 86400);
             else if (_defaultOptions.getMaxTotalConnsPerDay() <= 0)
-                return new Reason("per-peer daily limit of " + _defaultOptions.getMaxConnsPerDay() +
+                return new Reason("Per-peer daily limit of " + _defaultOptions.getMaxConnsPerDay() +
                         " connections reached", 86400);
             else
-                return new Reason("per-peer limit of " + _defaultOptions.getMaxConnsPerDay() +
+                return new Reason("Per-peer limit of " + _defaultOptions.getMaxConnsPerDay() +
                         " or total daily limit of " + _defaultOptions.getMaxTotalConnsPerDay() +
                         " connections reached", 86400);
         }
@@ -745,23 +745,23 @@ class ConnectionManager {
                 return new Reason("total hourly limit of " + _defaultOptions.getMaxTotalConnsPerHour() +
                         " reached", 3600);
             else if (_defaultOptions.getMaxTotalConnsPerHour() <= 0)
-                return new Reason("per-peer hourly limit of " + _defaultOptions.getMaxConnsPerHour() +
+                return new Reason("Per-peer hourly limit of " + _defaultOptions.getMaxConnsPerHour() +
                         " connections", 3600);
             else
-                return new Reason("per-peer hourly limit of " + _defaultOptions.getMaxConnsPerHour() +
+                return new Reason("Per-peer hourly limit of " + _defaultOptions.getMaxConnsPerHour() +
                         " or total hourly limit of " + _defaultOptions.getMaxTotalConnsPerHour() +
                         " connections reached", 3600);
         }
         if (_minuteThrottler != null && _minuteThrottler.shouldThrottle(h)) {
             _context.statManager().addRateData("stream.con.throttledMinute", 1);
             if (_defaultOptions.getMaxConnsPerMinute() <= 0)
-                return new Reason("total limit of " + _defaultOptions.getMaxTotalConnsPerMinute() +
+                return new Reason("Total limit of " + _defaultOptions.getMaxTotalConnsPerMinute() +
                         " connections per minute reached", 60);
             else if (_defaultOptions.getMaxTotalConnsPerMinute() <= 0)
-                return new Reason("per-peer limit of " + _defaultOptions.getMaxConnsPerMinute() +
+                return new Reason("Per-peer limit of " + _defaultOptions.getMaxConnsPerMinute() +
                         " connections per minute reached", 60);
             else
-                return new Reason("per-peer limit of " + _defaultOptions.getMaxConnsPerMinute() +
+                return new Reason("Per-peer limit of " + _defaultOptions.getMaxConnsPerMinute() +
                         " connections per minute or total limit of " + _defaultOptions.getMaxTotalConnsPerMinute() +
                         " connections per minute reached", 60);
         }
