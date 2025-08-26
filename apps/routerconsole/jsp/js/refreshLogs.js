@@ -108,9 +108,11 @@ function start() {
     const storedFilterValue = localStorage.getItem("logFilter");
     let filterValue = encodeURIComponent(filterInput.value.trim().toLowerCase()).replace(/%20/g, " ");
     if (storedFilterValue) { filterValue = storedFilterValue; }
+    progressx.show(theme);
     worker.port.postMessage({ url: "/logs" });
     updateInterval();
     addFilterInput();
+    progressx.hide();
   }
 
   function updateInterval() {
