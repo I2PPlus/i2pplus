@@ -4,7 +4,7 @@
 If you just want to give I2P+ a quick try or are using it on a home network, follow these steps:
 
 1. Install git, docker-io and docker-compose via your package manager
-2. Download the I2P+ git repository with the command: `git pull https://github.com/I2PPlus/i2pplus.git`
+2. Download the I2P+ git repository with the command: `git clone https://github.com/I2PPlus/i2pplus.git`
 3. Rename `docker-compose.example.yml` to `docker-compose.yml` in the root directory of your local I2P+ git workspace
 4. As root, cd to the i2pplus git workspace you just downloaded and then execute `docker-compose up --build`
 5. Start a browser and go to `http://127.0.0.1:7667` and then hit the Wizard link to configure your router
