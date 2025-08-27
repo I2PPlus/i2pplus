@@ -83,13 +83,11 @@ async function doFetch(force = false) {
   } catch (error) {noResponse++;}
 }
 
-async function refreshSidebar() {
+export async function refreshSidebar() {
   const xhrContainer = document.getElementById("xhr");
   const updates = [];
   try {
     await doFetch();
-    if (refreshTimeout) clearTimeout(refreshTimeout);
-    refreshTimeout = setTimeout(refreshSidebar, refreshInterval);
     if (responseDoc) {
       isDown = false;
       const responseElements = {
@@ -158,6 +156,10 @@ async function refreshSidebar() {
   } catch (error) {
     noResponse++;
     checkIfDown();
+  } finally {
+    if (refreshTimeout) {clearTimeout(refreshTimeout);}
+    await checkTimer();
+    if (refreshTimerActive?.isActive) {refreshTimeout = setTimeout(refreshSidebar, refreshInterval);}
   }
 }
 
@@ -338,5 +340,3 @@ const ready = async () => {
 onVisible(sb, ready);
 document.addEventListener("DOMContentLoaded", initSidebar);
 document.addEventListener("DOMContentLoaded", newHosts);
-
-export {refreshSidebar};
