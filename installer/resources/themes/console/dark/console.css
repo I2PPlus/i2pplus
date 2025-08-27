@@ -1702,14 +1702,34 @@ td.optionsave,.buckets,.formaction,#certs h4,#certs p,#certs textarea,#config_ad
 #updatehelper .optionlist:hover,#updateProxyHostPort.optionlist:hover{background:#000;transition:ease box-shadow .2s;box-shadow:var(--option_highlight)}
 #bandwidthconfig .optionsave .accept,#config_advanced .optionsave .accept{margin-right:0}
 
-/* configpeers */
-#ipbans.toggle{position:relative;cursor:pointer}
-#ipbans.toggle:not(.expanded){margin-bottom:-3px}
-#ipbans.toggle:hover{color:var(--hover)}
-#ipbans.toggle::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
-#ipbans.toggle:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
-#ipbans.toggle.expanded::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:none}
-#ipbans.toggle.expanded:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:none}
+/* console password */
+#passwordheading{margin-top:13px;margin-bottom:-3px}
+#consolepass th:nth-child(2){text-align:left}
+#consolepass td:first-child{width:100px;white-space:nowrap}
+#consolepass th{padding:5px}
+#consolepass td{padding:2px 3px}
+#consolepass td{padding:5px 10px;border-bottom:var(--border)}
+#consolepass tr:nth-child(n+2) td:not(#pw_adduser):first-child{text-align:center}
+#consolepass input{margin:5px}
+#consolepass input[name="name"],#externali2cp input[name="user"]{padding:6px 5px 6px 24px;background:#000800 var(--user) no-repeat 5px center/16px}
+#consolepass input[name="name"]{margin-right:20px}
+#consolepass input[name="name"]:focus,#externali2cp input[name="user"]:focus{background:var(--user) no-repeat 5px center/16px,var(--input_txt)}
+#consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"]{padding:6px 5px 6px 24px;background:#000800 var(--key) no-repeat 3px center/16px}#consolepass input[name="nofilter_pw"]:focus,#externali2cp input[name="nofilter_pw"]:focus{background:var(--key) no-repeat 3px center/16px,var(--input_txt)}
+#consolepass input[type=password]{width:200px}
+#pw_adduser input{margin:5px 20px 5px 5px}
+#consolepass #pw_adduser{padding:5px 10px;background:#000}
+#submitconsolepass{margin-bottom:-1px;margin-top:-2px;padding:5px;border:var(--border);background:#000}
+#consolepass .delete{float:left}
+
+/* section toggles for configpeers, configui */
+#ipbans.toggle,#passwordheading.toggle{position:relative;cursor:pointer}
+#ipbans.toggle:not(.expanded),#passwordheading.toggle:not(.expanded){margin-bottom:-3px}
+.toggleElementsActive #passwordheading.toggle:not(.expanded){margin-bottom:0}
+#ipbans.toggle:hover,#passwordheading.toggle:hover{color:var(--hover)}
+#ipbans.toggle::after,#passwordheading.toggle::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
+#ipbans.toggle:hover::after,#passwordheading.toggle:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
+#ipbans.toggle.expanded::after,#passwordheading.toggle.expanded::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:none}
+#ipbans.toggle.expanded:hover::after,#passwordheading.toggle.expanded:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:none}
 
 /* configstats */
 #configstats{margin-bottom:-2px;contain:paint}
@@ -1948,25 +1968,6 @@ tr.addnew,tr.addnew:hover{border-top:var(--border);background:#000800}
 #themesettings,#consolepass,#langsettings,#pw_adduser{background:var(--bg_dots)}
 #themesettings{clear:both;border:var(--border);padding:8px 7px 0;margin:-1px 0;background:#000}
 #themesettings hr{display:none}
-
-/* console password */
-#config_ui #passwordheading{margin-top:13px;margin-bottom:-3px}
-#consolepass th:nth-child(2){text-align:left}
-#consolepass td:first-child{width:100px;white-space:nowrap}
-#consolepass th{padding:5px}
-#consolepass td{padding:2px 3px}
-#consolepass td{padding:5px 10px;border-bottom:var(--border)}
-#consolepass tr:nth-child(n+2) td:not(#pw_adduser):first-child{text-align:center}
-#consolepass input{margin:5px}
-#consolepass input[name="name"],#externali2cp input[name="user"]{padding:6px 5px 6px 24px;background:#000800 var(--user) no-repeat 5px center/16px}
-#consolepass input[name="name"]{margin-right:20px}
-#consolepass input[name="name"]:focus,#externali2cp input[name="user"]:focus{background:var(--user) no-repeat 5px center/16px,var(--input_txt)}
-#consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"]{padding:6px 5px 6px 24px;background:#000800 var(--key) no-repeat 3px center/16px}#consolepass input[name="nofilter_pw"]:focus,#externali2cp input[name="nofilter_pw"]:focus{background:var(--key) no-repeat 3px center/16px,var(--input_txt)}
-#consolepass input[type=password]{width:200px}
-#pw_adduser input{margin:5px 20px 5px 5px}
-#consolepass #pw_adduser{padding:5px 10px;background:#000}
-#submitconsolepass{margin-bottom:-1px;margin-top:-2px;padding:5px;border:var(--border);background:#000}
-#consolepass .delete{float:left}
 
 /* family */
 #netconfig th,#config_family th{padding:10px}

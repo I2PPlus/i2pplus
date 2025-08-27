@@ -12,7 +12,7 @@ import net.i2p.router.web.RouterConsoleRunner;
 import net.i2p.router.web.FormHandler;
 
 
-/** set the theme */
+/** Set the theme */
 public class ConfigUIHandler extends FormHandler {
     private boolean _shouldSave;
     private boolean _universalTheming;
@@ -23,33 +23,21 @@ public class ConfigUIHandler extends FormHandler {
 
     @Override
     protected void processForm() {
-        if (_shouldSave) {
-            saveChanges();
-        } else if (_action.equals(_t("Delete selected"))) {
-            delUser();
-        } else if (_action.equals(_t("Add user"))) {
-            addUser();
-        }
+        if (_shouldSave) {saveChanges();}
+        else if (_action.equals(_t("Delete selected"))) {delUser();}
+        else if (_action.equals(_t("Add user"))) {addUser();}
     }
 
-    public void setShouldsave(String moo) { _shouldSave = true; }
+    public void setShouldsave(String moo) {_shouldSave = true;}
+    public void setUniversalTheming(String baa) {_universalTheming = true;}
+    public void setForceMobileConsole(String baa) {_forceMobileConsole = true;}
+    public void setEmbedApps(String baa) {_embedApps = true;}
+    public void setUseSoraFont(String baa) {_useSoraFont = true;}
+    public void setTheme(String val) {_config = val;}
 
-    public void setUniversalTheming(String baa) { _universalTheming = true; }
-
-    public void setForceMobileConsole(String baa) { _forceMobileConsole = true; }
-
-    public void setEmbedApps(String baa) { _embedApps = true; }
-
-    public void setUseSoraFont(String baa) { _useSoraFont = true; }
-
-    public void setTheme(String val) {
-        _config = val;
-    }
-
-    /** note - lang change is handled in CSSHelper but we still need to save it here */
+    /** Note - lang change is handled in CSSHelper but we still need to save it here */
     private void saveChanges() {
-        if (_config == null || _config.length() <= 0)
-            return;
+        if (_config == null || _config.length() <= 0) {return;}
         if (_config.replaceAll("[a-zA-Z0-9_-]", "").length() != 0) {
             addFormError(_t("Cannot save theme choice, theme name has illegal characters"), true);
             return;
@@ -58,32 +46,26 @@ public class ConfigUIHandler extends FormHandler {
         List<String> removes = new ArrayList<String>();
         String oldTheme = _context.getProperty(CSSHelper.PROP_THEME_NAME, CSSHelper.DEFAULT_THEME);
         boolean oldForceMobileConsole = _context.getBooleanProperty(CSSHelper.PROP_FORCE_MOBILE_CONSOLE);
-        if (_config.equals("default")) // obsolete
-            removes.add(CSSHelper.PROP_THEME_NAME);
-        else
-            changes.put(CSSHelper.PROP_THEME_NAME, _config);
-        if (_universalTheming)
-            changes.put(CSSHelper.PROP_UNIVERSAL_THEMING, "true");
-        else
-            removes.add(CSSHelper.PROP_UNIVERSAL_THEMING);
-        if (_forceMobileConsole)
-            changes.put(CSSHelper.PROP_FORCE_MOBILE_CONSOLE, "true");
-        else
-            removes.add(CSSHelper.PROP_FORCE_MOBILE_CONSOLE);
-        if (_embedApps)
-            changes.put(CSSHelper.PROP_EMBED_APPS, "true");
-        else
-            removes.add(CSSHelper.PROP_EMBED_APPS);
-        if (_useSoraFont)
-            changes.put(CSSHelper.PROP_ENABLE_SORA_FONT, "true");
-        else
-            removes.add(CSSHelper.PROP_ENABLE_SORA_FONT);
+
+        if (_config.equals("default")) {removes.add(CSSHelper.PROP_THEME_NAME);} // obsolete
+        else {changes.put(CSSHelper.PROP_THEME_NAME, _config);}
+
+        if (_universalTheming) {changes.put(CSSHelper.PROP_UNIVERSAL_THEMING, "true");}
+        else {removes.add(CSSHelper.PROP_UNIVERSAL_THEMING);}
+
+        if (_forceMobileConsole) {changes.put(CSSHelper.PROP_FORCE_MOBILE_CONSOLE, "true");}
+        else {removes.add(CSSHelper.PROP_FORCE_MOBILE_CONSOLE);}
+
+        if (_embedApps) {changes.put(CSSHelper.PROP_EMBED_APPS, "true");}
+        else {removes.add(CSSHelper.PROP_EMBED_APPS);}
+
+        if (_useSoraFont) {changes.put(CSSHelper.PROP_ENABLE_SORA_FONT, "true");}
+        else {removes.add(CSSHelper.PROP_ENABLE_SORA_FONT);}
+
         boolean ok = _context.router().saveConfig(changes, removes);
         if (ok) {
-            if (!oldTheme.equals(_config))
-                addFormNoticeNoEscape(_t("Theme change saved."), true);
-            if (oldForceMobileConsole != _forceMobileConsole)
-                addFormNoticeNoEscape(_t("Mobile console option saved."), true);
+            if (!oldTheme.equals(_config)) {addFormNoticeNoEscape(_t("Theme change saved."), true);}
+            if (oldForceMobileConsole != _forceMobileConsole) {addFormNoticeNoEscape(_t("Mobile console option saved."), true);}
         } else {
             addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs."), true);
         }
@@ -103,8 +85,9 @@ public class ConfigUIHandler extends FormHandler {
         }
         byte[] b1 = DataHelper.getUTF8(name);
         byte[] b2 = DataHelper.getASCII(name);
-        if (!DataHelper.eq(b1, b2))
+        if (!DataHelper.eq(b1, b2)) {
             addFormError(_t("Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."), true);
+        }
         String pw = getJettyString("nofilter_pw");
         if (pw == null || pw.length() <= 0) {
             addFormError(_t("No password entered"), true);
@@ -128,11 +111,9 @@ public class ConfigUIHandler extends FormHandler {
         ConsolePasswordManager mgr = new ConsolePasswordManager(_context);
         boolean success = false;
         for (Object o : _settings.keySet()) {
-            if (!(o instanceof String))
-                continue;
+            if (!(o instanceof String)) {continue;}
             String k = (String) o;
-            if (!k.startsWith("delete_"))
-                continue;
+            if (!k.startsWith("delete_")) {continue;}
             k = k.substring(7);
             if (mgr.remove(RouterConsoleRunner.PROP_CONSOLE_PW, k)) {
                 addFormNotice(_t("Removed user {0}", k), true);
@@ -141,7 +122,7 @@ public class ConfigUIHandler extends FormHandler {
                 addFormError(_t("Error saving the configuration (applied but not saved) - please see the error logs."), true);
             }
         }
-        if (success)
-            addFormError(_t("Restart required to take effect"), true);
+        if (success) {addFormError(_t("Restart required to take effect"), true);}
     }
+
 }

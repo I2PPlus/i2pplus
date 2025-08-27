@@ -2564,14 +2564,15 @@ body.isDown::after,body.isDown::before{height:100vh;width:100%;display:block;pos
 body.isDown::before{background:linear-gradient(90deg,rgba(220,220,255,.8),#eef,rgba(220,220,255,.8));backdrop-filter:saturate(.3) blur(5px);z-index:9998}
 body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 40px);background:var(--update) center center/80px;content:"";transform:rotate(0);animation:linear spin 3s forwards infinite;z-index:9999}
 
-/* configpeers */
-#ipbans.toggle{position:relative;cursor:pointer}
+/* section toggle for configpeers / configui */
+#ipbans.toggle,#passwordheading.toggle{position:relative;cursor:pointer}
 #ipbans.toggle:not(.expanded){margin-bottom:6px}
-#ipbans.toggle:hover{color:var(--hover)}
-#ipbans.toggle::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
-#ipbans.toggle:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
-#ipbans.toggle.expanded::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:none}
-#ipbans.toggle.expanded:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:none}
+#passwordheading.toggle:not(.expanded){margin-bottom:-6px}
+#ipbans.toggle:hover,#passwordheading.toggle:hover{color:var(--hover)}
+#ipbans.toggle::after,#passwordheading.toggle::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:rotate(-90deg)}
+#ipbans.toggle:hover::after,#passwordheading.toggle:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:rotate(-90deg)}
+#ipbans.toggle.expanded::after,#passwordheading.toggle.expanded::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:"";transform:none}
+#ipbans.toggle.expanded:hover::after,#passwordheading.toggle.expanded:hover::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown_hover);content:"";transform:none}
 
 /* netdb routers pagenav */
 .pageLink{margin:3px 1px 1px;padding:3px 8px 4px;min-width:20px;display:inline-block;vertical-align:middle;white-space:nowrap;line-height:1;letter-spacing:.01em;box-shadow:var(--box_border_badge);background:var(--badge);font-size:120%}
