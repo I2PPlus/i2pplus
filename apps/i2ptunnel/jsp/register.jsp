@@ -68,7 +68,7 @@
         name = editBean.getTunnelName(curTunnel);
 %>
 <input type=hidden name="tunnel" value="<%=curTunnel%>">
-<input type=hidden name="nonce" value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>">
+<input type=hidden name=nonce value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>">
 <input type=hidden name="type" value="<%=tunnelType%>">
 <input type=submit class=default name=action value="Save changes">
 <%

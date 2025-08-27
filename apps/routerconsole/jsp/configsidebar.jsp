@@ -26,7 +26,7 @@
 <table class=configtable id=refreshsidebar>
 <tr>
 <td>
-<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=hidden name=nonce value="<%=pageNonce%>">
 <input type=hidden name="group" value="0">
 <%
   String rval;
@@ -45,7 +45,7 @@
 </form>
 <h3 class=tabletitle><%=intl._t("Customize Sidebar")%></h3>
 <form id=form_sidebar method=POST target=processForm>
-<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=hidden name=nonce value="<%=pageNonce%>">
 <input type=hidden name="group" value="2">
 <jsp:getProperty name="sidebarhelper" property="configTable"/>
 <div class=formaction id=sidebardefaults>

@@ -39,7 +39,7 @@
     }
  %>
  <form action="configpeer" method=POST>
- <input type=hidden name="nonce" value="<%=pageNonce%>">
+ <input type=hidden name=nonce value="<%=pageNonce%>">
  <h3 class=tabletitle><%=intl._t("Manual Peer Controls")%></h3>
  <table id=configpeer class=configtable>
  <tr><td colspan=2><b><%=intl._t("Router Hash")%>:</b> <input type=text size=44 name="peer" value="<%=peer%>"></td></tr>

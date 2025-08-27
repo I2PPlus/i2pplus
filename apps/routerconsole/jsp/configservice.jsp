@@ -21,7 +21,7 @@
 <jsp:useBean class="net.i2p.router.web.ConfigServiceHandler" id="formhandler" scope="request"/>
 <%@include file="formhandler.jsi" %>
 <form method=POST>
-<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=hidden name=nonce value="<%=pageNonce%>">
 
 <div class=service_container>
 <h3 class=ptitle id=shutdownrouter><%=intl._t("Shutdown the router")%></h3>

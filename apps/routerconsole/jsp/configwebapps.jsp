@@ -32,7 +32,7 @@
 </p>
 <iframe name=processForm id=processForm hidden></iframe>
 <form id=form_webapps action="configwebapps" method=POST target=processForm>
-<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=hidden name=nonce value="<%=pageNonce%>">
 <jsp:getProperty name="clientshelper" property="form2"/>
 <div class=formaction id=webappconfigactions>
 <input type=submit class=cancel name=foo value="<%=intl._t("Cancel")%>"/>

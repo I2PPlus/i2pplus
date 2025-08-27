@@ -22,7 +22,7 @@
 <div class=configure>
 <form id=statsForm name="statsForm" method=POST>
 <input type=hidden name=action value="foo" >
-<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=hidden name=nonce value="<%=pageNonce%>">
 <h3 class=tabletitle><%=intl._t("Configure I2P Stat Collection")%></h3>
 <table id=statconfig class=configtable>
 <tr><td class=infohelp id=enablefullstats colspan=2><%=intl._t("A limited selection of stats is enabled by default, required for monitoring router performance. Only stats that have an optional graph are listed here; for a full list of enabled stats, view the <a href=\"/stats\">stats page</a>.")%></td></tr>

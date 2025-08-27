@@ -30,7 +30,7 @@
        // no family yet
 %>
 <form method=POST enctype="multipart/form-data" accept-charset=utf-8>
-<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=hidden name=nonce value="<%=pageNonce%>">
 <table class=configtable id=joinfamily>
 <tr><th colspan=2><%=intl._t("Join Existing Router Family")%></th></tr>
 <tr><td colspan=2 class="infohelp joinfamily"><%=intl._t("Import the secret family key that you exported from an existing router in the family.")%></td></tr>
@@ -53,7 +53,7 @@
 </table>
 </form>
 <form method=POST>
-<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=hidden name=nonce value="<%=pageNonce%>">
 <table class=configtable id=newfamily>
 <tr><th colspan=2><%=intl._t("Create New Router Family")%></th></tr>
 <tr><td colspan=2 class="infohelp newfamily"><%=intl._t("You may create a new router family here. Once you have created the family, you may export the family key file and share with other routers in your nominated family.")%>&nbsp;
@@ -104,7 +104,7 @@
        }
 %>
 <form method=POST>
-<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=hidden name=nonce value="<%=pageNonce%>">
 <table class=configtable id=leavefamily>
 <tr><th colspan=2><%=intl._t("Leave Router Family")%></th></tr>
 <tr><td><%=intl._t("No longer be a member of the family {0}.", '"' + family + '"')%></td>

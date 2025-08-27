@@ -30,7 +30,7 @@
 <%=intl._t("All changes require restart to take effect.")%>
 </p>
 <form action="configi2cp" method=POST>
-<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=hidden name=nonce value="<%=pageNonce%>">
 <table class=configtable id=externali2cp>
 <tr>
 <th>

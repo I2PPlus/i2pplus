@@ -492,7 +492,7 @@
 <h2><%=intl._t("SSL Wizard")%> (<%=editBean.getTunnelName(curTunnel)%>)</h2>
 <form method=POST action="ssl" accept-charset=utf-8>
 <input type=hidden name="tunnel" value="<%=curTunnel%>"/>
-<input type=hidden name="nonce" value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>"/>
+<input type=hidden name=nonce value="<%=net.i2p.i2ptunnel.web.IndexBean.getNextNonce()%>"/>
 <input type=hidden name="type" value="<%=tunnelType%>"/>
 <input type=submit class=default name=action value="Save changes"/>
 <table>

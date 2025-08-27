@@ -43,7 +43,7 @@
 <%    } %>
 <div class=wideload>
 <form id=form_clients method=POST>
-<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=hidden name=nonce value="<%=pageNonce%>">
 <jsp:getProperty name="clientshelper" property="form1"/>
 <div class=formaction id=clientsconfig>
 <input type=submit class=cancel name=foo value="<%=intl._t("Cancel")%>"/>

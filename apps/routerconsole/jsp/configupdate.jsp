@@ -23,7 +23,7 @@
 </div>
 <iframe name=processForm id=processForm hidden></iframe>
 <form id=form_updates method=POST target=processForm>
-<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=hidden name=nonce value="<%=pageNonce%>">
 <% /* set hidden default */ %>
 <input type=submit name=action value="" style=display:none>
 <%

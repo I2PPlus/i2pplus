@@ -50,7 +50,7 @@
 <table>
 <tr id=url>
 <td>
-<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=hidden name=nonce value="<%=pageNonce%>">
 <%
    String url = request.getParameter("pluginURL");
    String value = url != null ? "value=\"" + net.i2p.data.DataHelper.escapeHTML(url) + '"' : "";
@@ -79,7 +79,7 @@
 <table>
 <tr id=file>
 <td>
-<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=hidden name=nonce value="<%=pageNonce%>">
 <%
    String file = request.getParameter("pluginFile");
    if (file != null && file.length() > 0) {
@@ -111,13 +111,13 @@
 <form action="configplugins" method=POST>
 <p id=pluginconfigtext>
 <%=intl._t("The plugins listed below are started by the webConsole client.")%>
-<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=hidden name=nonce value="<%=pageNonce%>">
 <input type=submit name=action class=reload value="<%=intl._t("Update All Installed Plugins")%>">
 </p>
 </form>
 <div class=wideload>
 <form method=POST>
-<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=hidden name=nonce value="<%=pageNonce%>">
 <jsp:getProperty name="clientshelper" property="form3"/>
 <div class=formaction id=pluginconfigactions>
 <input type=submit class=cancel name=foo value="<%=intl._t("Cancel")%>">

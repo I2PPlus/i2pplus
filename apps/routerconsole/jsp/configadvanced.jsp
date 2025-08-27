@@ -35,7 +35,7 @@
 </tr>
 <tr>
 <td>
-<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=hidden name=nonce value="<%=pageNonce%>">
 <input type=hidden name=action value="ff">
 <b><%=intl._t("Enrollment")%>:</b>
 <label><input type=radio class=optbox name="ff" value=auto <%=advancedhelper.getFFChecked(2) %> >
@@ -56,8 +56,8 @@
     if (isAdvanced) {
 %>
 <form id=advConfigForm method=POST>
-<input type=hidden name="nonce" value="<%=pageNonce%>">
-<input type=hidden name="action" value="blah">
+<input type=hidden name=nonce value="<%=pageNonce%>">
+<input type=hidden name="action" value=blah>
 <input type=hidden name="nofilter_oldConfig" value="<%=advConfig%>">
 <div id=advconfwrapper>
 <table class=configtable id=advconf>

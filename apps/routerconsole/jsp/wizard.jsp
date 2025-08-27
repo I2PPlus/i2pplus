@@ -102,8 +102,8 @@
 %>
 <%@include file="formhandler.jsi" %>
 <form method=POST>
-<input type=hidden name="nonce" value="<%=pageNonce%>">
-<input type=hidden name=action value="blah" >
+<input type=hidden name=nonce value="<%=pageNonce%>">
+<input type=hidden name=action value=blah >
 <input type=hidden name="page" value="<%=(ipg + 1)%>">
 <%
     if (ipg == 1) {

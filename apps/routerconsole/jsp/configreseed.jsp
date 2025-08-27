@@ -18,15 +18,15 @@
 <%@include file="confignav.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigReseedHandler" id="formhandler" scope="request"/>
 <%@include file="formhandler.jsi" %>
-<% if (!reseedHelper.isAdvanced()) { %>
+<%  if (!reseedHelper.isAdvanced()) { %>
 <p class=infohelp>
 <%=intl._t("Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining.")%>&nbsp;<wbr>
 <%=intl._t("To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>.")%>
 </p>
-<% }  // !isAdvanced %>
+<%  } // !isAdvanced %>
 <iframe name=processForm id=processForm hidden></iframe>
 <form id=form_reseed method=POST target=processForm>
-<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=hidden name=nonce value="<%=pageNonce%>">
 <h3 class=tabletitle id=reseedsetup><%=intl._t("Reseeding Configuration")%>&nbsp;<span class=h3navlinks><a title="<%=intl._t("Help with reseeding")%>" href="/help/reseed">[<%=intl._t("Reseeding Help")%>]</a></span></h3>
 <table id=reseedconfig class=configtable>
 <!--
@@ -37,7 +37,7 @@
 </td>
 </tr>
 -->
-<% if (reseedHelper.isAdvanced()) { %>
+<%  if (reseedHelper.isAdvanced()) { %>
 <tr>
 <td colspan=2>
 <b class=suboption><%=intl._t("Reseed URLs")%></b><br>
@@ -47,7 +47,7 @@
 </textarea>
 </div>
 </td>
-<% }  // isAdvanced %>
+<%  } // isAdvanced %>
 </tr>
 <% if (reseedHelper.shouldShowSelect()) { %>
 <tr>
@@ -65,16 +65,16 @@
 </div>
 </td>
 </tr>
-<% } // shouldShowSelect %>
-<% if (reseedHelper.shouldShowHTTPSProxy()) { %>
+<%  } // shouldShowSelect %>
+<%  if (reseedHelper.shouldShowHTTPSProxy()) { %>
 <tr>
 <td colspan=2>
 <b class=suboption>
-<% if (reseedHelper.shouldShowHTTPProxy()) { %>
+<%      if (reseedHelper.shouldShowHTTPProxy()) { %>
 <%=intl._t("Use Proxy for HTTPS Reseed Hosts")%>
-<% } else { %>
+<%      } else { %>
 <%=intl._t("Use Proxy to Reseed")%>
-<% } // shouldShowHTTPProxy %>
+<%      } // shouldShowHTTPProxy %>
 </b>
 <div id=reseedssl>
 <div id=reseedproxytype>
@@ -94,7 +94,7 @@
 <%=intl._t("I2P Outproxy")%></label>
 </div>
 <div class=optionlist id=reseedproxysslhostport>
-<% if (!reseedHelper.getEnable().equals(reseedHelper.pmodeChecked(4)) || !reseedHelper.getEnable().equals(reseedHelper.pmodeChecked(0))) { %>
+<%  if (!reseedHelper.getEnable().equals(reseedHelper.pmodeChecked(4)) || !reseedHelper.getEnable().equals(reseedHelper.pmodeChecked(0))) { %>
 <!--
 <span class=nowrap>
 <b><%=intl._t("Host")%>:</b>
@@ -105,7 +105,7 @@
 <input name="sport" type=text size=5 maxlength=5 property="sport" readonly>
 </span>
 -->
-<% } else { %>
+<%  } else { %>
 <span class=nowrap>
 <b><%=intl._t("Host")%>:</b>
 <input name="shost" type=text required value="<jsp:getProperty name="reseedHelper" property="shost"/>">
@@ -114,13 +114,13 @@
 <b><%=intl._t("Port")%>:</b>
 <input name="sport" type=text size=5 maxlength=5 pattern="[0-9]{1,5}" value="<jsp:getProperty name="reseedHelper" property="sport"/>">
 </span>
-<% } // conditionally enable host/port fields %>
+<%  } // conditionally enable host/port fields %>
 </div>
 </div>
 </td>
 </tr>
-<% } // shouldShowHTTPSProxy %>
-<% if (reseedHelper.shouldShowHTTPProxy()) { %>
+<%  } // shouldShowHTTPSProxy %>
+<%  if (reseedHelper.shouldShowHTTPProxy()) { %>
 <tr>
 <td colspan=2>
 <b class=suboption>
@@ -149,7 +149,7 @@
 </div>
 </td>
 </tr>
-<% } // shouldShowHTTPProxy %>
+<%  } // shouldShowHTTPProxy %>
 <tr>
 <td class=optionsave colspan=2>
 <input type=submit name=action class=reload value="<%=intl._t("Reset URL list")%>">
@@ -173,13 +173,12 @@
 <b class=suboption><%=intl._t("Enter zip or su3 URL")%></b>
 <div class=optionsingle id=reseedurl>
 <form method=POST>
-<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=hidden name=nonce value="<%=pageNonce%>">
 <table>
 <tr>
 <td>
-<%
-   String url = request.getParameter("url");
-   String value = url != null ? "value=\"" + net.i2p.data.DataHelper.escapeHTML(url) + '"' : "";
+<%  String url = request.getParameter("url");
+    String value = url != null ? "value=\"" + net.i2p.data.DataHelper.escapeHTML(url) + '"' : "";
 %>
 <input name="url" type=text size=60 value="" title="<%=intl._t("Please supply a valid reseed URL")%>">
 </td>
@@ -197,22 +196,17 @@
 <b class=suboption><%=intl._t("Select zip or su3 file")%></b>
 <div class=optionsingle id=reseedzip>
 <form method=POST enctype="multipart/form-data" accept-charset=utf-8>
-<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=hidden name=nonce value="<%=pageNonce%>">
 <table>
 <tr id=file>
 <td>
-<%
-   String file = request.getParameter("file");
-   if (file != null && file.length() > 0) {
+<%  String file = request.getParameter("file");
+    if (file != null && file.length() > 0) {
 %>
 <input type=text size=60 name="file" value="<%=net.i2p.data.DataHelper.escapeHTML(file)%>">
-<%
-   } else {
-%>
+<%  } else { %>
 <input name="file" type="file" accept=".zip,.su3" value="" required>
-<%
-   }
-%>
+<%  } %>
 </td>
 <td>
 <input type=submit name=action class=download value="<%=intl._t("Reseed from file")%>">

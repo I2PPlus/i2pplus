@@ -22,7 +22,7 @@
 <%=intl._t("The router keyring is used to decrypt encrypted LeaseSets.")%>&nbsp;
 <%=intl._t("The keyring may contain keys for local or remote encrypted destinations.")%></p>
 <form method=POST>
-<input type=hidden name="nonce" value="<%=pageNonce%>">
+<input type=hidden name=nonce value="<%=pageNonce%>">
 <jsp:getProperty name="keyringhelper" property="summary"/>
 <h3 class=tabletitle><%=intl._t("Manual Keyring Addition")%></h3>
 <table id=addkeyring class=configtable>
