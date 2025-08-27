@@ -419,15 +419,14 @@ class SearchJob extends JobImpl {
         getContext().tunnelDispatcher().dispatchOutbound(msg, outTunnelId, to);
     }
 
-    /** we're searching for a router, so we can just send direct */
+    /** We're searching for a router, so we can just send direct */
     protected void sendRouterSearch(RouterInfo router) {
         Hash to = router.getIdentity().getHash();
         int timeout = _facade.getPeerTimeout(to);
         long expiration = getContext().clock().now() + timeout;
 
-        // use the 4-arg one so we pick up the override in ExploreJob
-        //I2NPMessage msg = buildMessage(expiration);
-        I2NPMessage msg = buildMessage(null, to, expiration, router);
+        // Use the 4-arg one so we pick up the override in ExploreJob
+        I2NPMessage msg = buildMessage(null, getContext().routerHash(), expiration, router);
         if (msg == null) {
             if (_log.shouldWarn()) {_log.warn("Failed to create DatabaseLookupMessage to: " + router);}
             getContext().jobQueue().addJob(new FailedJob(getContext(), router));
@@ -448,12 +447,9 @@ class SearchJob extends JobImpl {
         SendMessageDirectJob j = new SendMessageDirectJob(getContext(), msg, to,
                                                           reply, new FailedJob(getContext(), router), sel, timeout,
                                                           OutNetMessage.PRIORITY_EXPLORATORY, _msgIDBloomXor);
-        if (FloodfillNetworkDatabaseFacade.isFloodfill(router))
-            _floodfillSearchesOutstanding++;
+        if (FloodfillNetworkDatabaseFacade.isFloodfill(router)) {_floodfillSearchesOutstanding++;}
         j.runJob();
-        //getContext().jobQueue().addJob(j);
     }
-
 
     /**
      * Build the database search message

@@ -18,6 +18,7 @@ import net.i2p.router.Job;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.RandomSource;
+import java.util.Set;
 
 /**
  * Handler for DatabaseLookupMessage received on floodfills.
@@ -100,9 +101,12 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         final boolean isSelfLookup = ourRouter.equals(dlm.getSearchKey()) || dlm.getFrom().equals(ourRouter);
         final int maxLookups = isFF ? 30 : 10;
 
+        DatabaseLookupMessage processedDLM = preProcessDatabaseLookup(dlm, fromHash);
+        if (processedDLM == null) {return null;}
+
         if (shouldBan) {
             if (dlm.getFrom() != null) {
-                _context.banlist().banlistRouter(dlm.getFrom(), " <b>➜</b> Excessive lookup requests",
+                _context.banlist().banlistRouter(dlm.getFrom(), " <b>➜</b> Excessive lookup requests" + (isFF ? "[Floodfill]" : ""),
                                                  null, null, _context.clock().now() + 60 * 60 * 1000);
                 _context.commSystem().mayDisconnect(dlm.getFrom());
             }
@@ -155,6 +159,57 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
         _context.statManager().addRateData("netDb.lookupsDropped", 1);
         return null;
+    }
+
+    /**
+     * Handle special cases:
+     * - Fix loopback DLM bug (pre-0.9.67) where from was set to self
+     * - Reject direct floodfill-to-floodfill lookups of type EXPL or ANY
+     *
+     * @return the corrected DLM, or null to drop the message
+     */
+    private DatabaseLookupMessage preProcessDatabaseLookup(DatabaseLookupMessage dlm, Hash fromHash) {
+        final DatabaseLookupMessage.Type type = dlm.getSearchType();
+        final String searchType = typeToString(type);
+
+        if (dlm.getReplyTunnel() == null) {
+            // Fix loopback bug (pre-0.9.67)
+            if (dlm.getFrom().equals(_context.routerHash())) {
+                if (fromHash != null) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Fixing direct " + searchType + " lookup request from us, actually from: " + fromHash);
+                    }
+                    DatabaseLookupMessage newdlm = new DatabaseLookupMessage(_context);
+                    newdlm.setFrom(fromHash);
+                    newdlm.setSearchType(dlm.getSearchType());
+                    newdlm.setSearchKey(dlm.getSearchKey());
+                    Set<Hash> dont = dlm.getDontIncludePeers();
+                    if (dont != null)
+                        newdlm.setDontIncludePeers(dont);
+                    return newdlm;
+                } else {
+                    if (_log.shouldWarn())
+                        _log.warn("Dropping direct " + searchType + " lookup request from us");
+                    _context.statManager().addRateData("netDb.lookupsDropped", 1);
+                    return null;
+                }
+            }
+
+            // Block direct EXPL/ANY lookups from floodfills
+            if (dlm.getSearchType() == DatabaseLookupMessage.Type.EXPL ||
+                dlm.getSearchType() == DatabaseLookupMessage.Type.ANY) {
+                RouterInfo to = _facade.lookupRouterInfoLocally(dlm.getFrom());
+                if (to != null && to.getCapabilities().indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Dropping direct" + searchType + " lookup request from floodfill " + dlm.getFrom());
+                    }
+                    _context.statManager().addRateData("netDb.lookupsDropped", 1);
+                    return null;
+                }
+            }
+        }
+
+        return dlm;
     }
 
     /**
