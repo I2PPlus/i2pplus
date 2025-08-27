@@ -36,14 +36,14 @@ class ConnectionHandler {
     private boolean _restartPending;
 
     /** max time after receiveNewSyn() and before the matched accept() */
-    private static final int DEFAULT_ACCEPT_TIMEOUT = 3*1000;
+    private static final int DEFAULT_ACCEPT_TIMEOUT = 4*1000;
 
     /**
      *  This is both SYNs and subsequent packets, and with an initial window size of 12,
      *  this is a backlog of 5 to 64 Syns, which seems like plenty for now
      *  Don't make this too big because the removal by all the TimeoutSyns is O(n**2) - sortof.
      */
-    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 128 : 512;
+    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 48 : 80;
 
     /** Creates a new instance of ConnectionHandler */
     public ConnectionHandler(I2PAppContext context, ConnectionManager mgr, SimpleTimer2 timer) {
