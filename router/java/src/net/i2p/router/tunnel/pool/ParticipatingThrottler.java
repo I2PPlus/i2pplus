@@ -103,7 +103,7 @@ class ParticipatingThrottler {
     private void handleNoVersion(boolean shouldDisconnect, Hash h, boolean isBanned, String caps, int bantime) {
         if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);}
         if (!isBanned && _log.shouldWarn()) {
-            _log.warn("Banning Router [" + h.toBase64().substring(0, 6) + "] for " + (bantime / 60000) + "m -> No router version in RouterInfo");
+            _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for " + (bantime / 60000) + "m -> No router version in RouterInfo");
         }
         context.banlist().banlistRouter(h, " <b>➜</b> No version in RouterInfo", null, null, context.clock().now() + bantime);
     }
@@ -112,7 +112,7 @@ class ParticipatingThrottler {
         if (VersionComparator.comp(version, "0.9.57") < 0 && isCompressible) {
             if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);}
             if (!isBanned && _log.shouldWarn()) {
-                _log.warn("Banning Router [" + h.toBase64().substring(0, 6) + "] for 24h -> Compressible RouterInfo / " + version);
+                _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for 24h -> Compressible RouterInfo / " + version);
             }
             context.banlist().banlistRouter(h, " <b>➜</b> Compressible RouterInfo & older than 0.9.57", null, null, context.clock().now() + 24*60*60*1000);
             return true;
@@ -126,11 +126,11 @@ class ParticipatingThrottler {
             if (shouldDisconnect) {
                 context.commSystem().forceDisconnect(h);
                 if (!isBanned && _log.shouldWarn()) {
-                    _log.warn("Banning Router [" + h.toBase64().substring(0, 6) + "] for " + (bantime * 3 / 60000) +
+                    _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for " + (bantime * 3 / 60000) +
                               "m -> " + version + (caps.isEmpty() ? "" : " / " + caps));
                 }
             }
-            context.banlist().banlistRouter(h, " <b>➜</b> LU and older than current version", null, null, context.clock().now() + (bantime * 3));
+            context.banlist().banlistRouter(h, " <b>➜</b> Old and slow (" + version + " / LU)", null, null, context.clock().now() + (bantime * 3));
             return true;
         }
         return false;
@@ -141,7 +141,7 @@ class ParticipatingThrottler {
         if (VersionComparator.comp(version, MIN_VERSION) < 0 && isUnreachable && shouldBlockOldRouters && !isFast) {
             if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);}
             if (_log.shouldWarn()) {
-                _log.warn("Ignoring Tunnel Request from Router [" + h.toBase64().substring(0, 6) + "] -> " + version + (caps.isEmpty() ? "" : " / " + caps));
+                _log.warn("Ignoring Tunnel Request from Router [" + h.toBase64().substring(0,6) + "] -> " + version + (caps.isEmpty() ? "" : " / " + caps));
             }
             return true;
         }
@@ -176,7 +176,7 @@ class ParticipatingThrottler {
         context.banlist().banlistRouter(h, " <b>➜</b> Excessive tunnel requests", null, null, context.clock().now() + bantime);
         context.simpleTimer2().addEvent(new Disconnector(h), 11 * 60 * 1000);
         if (_log.shouldWarn()) {
-            _log.warn("Banning Router [" + h.toBase64().substring(0, 6) + "] for " + (bantime / 60000) +
+            _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for " + (bantime / 60000) +
                       "m -> Excessive tunnel requests -> Count / Limit: " +
                       count + " / " + limit + " in " + 11 * 60 / LIFETIME_PORTION + "s");
         }
