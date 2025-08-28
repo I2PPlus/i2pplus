@@ -5462,7 +5462,7 @@ msgstr "Cài đặt dịch vụ hệ thống I2P+. Đây là cách được khuy
 msgid "config sidebar"
 msgstr "thanh bên cấu hình"
 
-msgid "Refresh Interval"
+msgid "Refresh interval"
 msgstr "Khoảng thời gian làm mới"
 
 msgid "seconds"

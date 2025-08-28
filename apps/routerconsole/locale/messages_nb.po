@@ -5480,7 +5480,7 @@ msgstr "Installer I2P -systemtjenesten. Dette er den anbefalte måten å kjøre 
 msgid "config sidebar"
 msgstr "config sidefelt"
 
-msgid "Refresh Interval"
+msgid "Refresh interval"
 msgstr "Oppdateringsintervall"
 
 msgid "seconds"

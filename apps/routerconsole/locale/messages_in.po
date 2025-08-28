@@ -5462,7 +5462,7 @@ msgstr "Instal layanan sistem I2P. "
 msgid "config sidebar"
 msgstr "bilah sisi konfigurasi"
 
-msgid "Refresh Interval"
+msgid "Refresh interval"
 msgstr "Refresh Interval "
 
 msgid "seconds"

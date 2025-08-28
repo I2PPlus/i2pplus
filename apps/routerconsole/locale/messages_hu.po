@@ -5480,7 +5480,7 @@ msgstr "Telepítse az I2P rendszerszolgáltatást. "
 msgid "config sidebar"
 msgstr "Konfigurálja az oldalsávot"
 
-msgid "Refresh Interval"
+msgid "Refresh interval"
 msgstr "Frissítési időköz"
 
 msgid "seconds"

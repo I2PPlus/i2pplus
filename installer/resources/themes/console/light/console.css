@@ -2069,8 +2069,10 @@ select[name="newlogclass"]{margin-left:3px}
 .buttonDown:active{background:var(--mv_down_active) no-repeat center center}
 .buttonBottom:active{background:var(--mv_bottom_active) no-repeat center center}
 .buttonTop,.buttonBottom,.buttonUp,.buttonDown,.buttonTop,.buttonTop:hover,.buttonBottom:hover,.buttonUp:hover,.buttonDown:hover,.buttonTop:focus,.buttonBottom:focus,.buttonUp:focus,.buttonDown:focus,.buttonTop:active,.buttonBottom:active,.buttonUp:active,.buttonDown:active{background-size:11px,100%}
-#refreshsidebar tr:first-child td{padding-left:50px;background:var(--timer) no-repeat 15px center/28px,var(--th)}
-#refreshsidebar tr:first-child td:last-child{background:var(--th)}
+#refreshsidebar tr:first-child td{padding:4px 4px 4px 10px;background:var(--th)}
+#refreshsidebar input[type=checkbox]{margin-right:3px}
+#refreshsidebar label{margin:2px 0;min-width:400px;display:inline-block}
+#refreshsidebar label b{min-width:40px;display:inline-block;text-align:right}
 #sidebarconf label{display:inline-block;width:100%}
 #sidebarconf tr:hover label{color:var(--hover)}
 #sidebarconf button{margin:2px;padding:2px 3px;width:22px;height:22px;min-width:0}

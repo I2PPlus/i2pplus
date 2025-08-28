@@ -5462,7 +5462,7 @@ msgstr "I2Pシステムサービスをインストールします。"
 msgid "config sidebar"
 msgstr "設定サイドバー"
 
-msgid "Refresh Interval"
+msgid "Refresh interval"
 msgstr "リフレッシュ間隔"
 
 msgid "seconds"

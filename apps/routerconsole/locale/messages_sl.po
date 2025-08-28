@@ -5516,7 +5516,7 @@ msgstr "Namesti sistemsko storitev I2P. To je priporočen način za izvajanje I2
 msgid "config sidebar"
 msgstr "konfig stranica"
 
-msgid "Refresh Interval"
+msgid "Refresh interval"
 msgstr "Interval osveževanja"
 
 msgid "seconds"

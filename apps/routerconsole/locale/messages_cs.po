@@ -5498,7 +5498,7 @@ msgstr "Nainstalujte službu I2P systému. Toto je doporučený způsob spuště
 msgid "config sidebar"
 msgstr "postranní panel konfigurace"
 
-msgid "Refresh Interval"
+msgid "Refresh interval"
 msgstr "Interval Obnovení"
 
 msgid "seconds"

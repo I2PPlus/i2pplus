@@ -5480,7 +5480,7 @@ msgstr "Installieren Sie den I2P-Systemdienst. "
 msgid "config sidebar"
 msgstr "Seitenleiste einrichten"
 
-msgid "Refresh Interval"
+msgid "Refresh interval"
 msgstr "Auffrischungsverzögerung"
 
 msgid "seconds"

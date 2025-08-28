@@ -5498,7 +5498,7 @@ msgstr "Instalați serviciul de sistem I2P. Acesta este modalitatea recomandată
 msgid "config sidebar"
 msgstr "configurați bara laterală"
 
-msgid "Refresh Interval"
+msgid "Refresh interval"
 msgstr "Interval de Actualizare"
 
 msgid "seconds"

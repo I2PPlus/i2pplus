@@ -5480,7 +5480,7 @@ msgstr "Asenna I2P-järjestelmäpalvelu. "
 msgid "config sidebar"
 msgstr "config-sivupalkki"
 
-msgid "Refresh Interval"
+msgid "Refresh interval"
 msgstr "Päivitysväli"
 
 msgid "seconds"

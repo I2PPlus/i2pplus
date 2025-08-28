@@ -1,4 +1,4 @@
-/* I2P+ Theme:Classic */
+/* I2P+ Theme: Classic */
 /* Light blue "classic" I2P theme;optimized for less capable browsers and system specifications. */
 /* Author: dr|z3d */
 
@@ -441,7 +441,6 @@ button::-moz-focus-inner,input[type=submit]::-moz-focus-inner,input[type=reset]:
 #config_update .optionsave{border-bottom:var(--border)}
 #manualreseed .optionsave{padding-left:0}
 #manualreseed .optionsave input{min-width:110px}
-#refreshsidebar .optionsave{padding:0 10px 0 0}
 
 /* tables */
 table{margin:0 0 5px;font-size:9pt;border-collapse:collapse;border:var(--border)}
@@ -1111,7 +1110,9 @@ p.infohelp+hr,p.infohelp+p+hr,#tunnelconfig+hr{display:none}
 #config_ui p.infohelp{margin-bottom:-5px;background:var(--bg) var(--ui) var(--bgpos_info)}
 #enablefullstats{line-height:1.2;text-align:left;background:var(--bg)}
 #profiles_overview,#themeheading{margin-top:15px}
-#refreshsidebar td:not(.optionsave){padding:var(--pad_info);background:var(--bg) var(--timer) var(--bgpos_info)}
+#refreshsidebar td{padding:6px 8px 6px 12px;background:var(--bg)}
+#refreshsidebar label{min-width:400px;display:inline-block;vertical-align:middle}
+#refreshsidebar label b{min-width:130px;display:inline-block;text-align:right}
 #webappconfigtext{margin:11px 0 -1px}
 #config_stats .tablefooter td,#enablefull td{padding:10px}
 #netconfig tr,#externali2cp tr{background:var(--bg)}

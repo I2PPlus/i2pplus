@@ -5552,7 +5552,7 @@ msgstr "تثبيت خدمة نظام I2P. "
 msgid "config sidebar"
 msgstr "الشريط الجانبي للتكوين"
 
-msgid "Refresh Interval"
+msgid "Refresh interval"
 msgstr "الفاصل الزمني للتحديث"
 
 msgid "seconds"

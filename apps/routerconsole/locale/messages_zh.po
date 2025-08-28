@@ -5462,7 +5462,7 @@ msgstr "安装 I2P 系统服务，这是运行 I2P 的推荐方法。"
 msgid "config sidebar"
 msgstr "设置侧栏"
 
-msgid "Refresh Interval"
+msgid "Refresh interval"
 msgstr "刷新间隔"
 
 msgid "seconds"

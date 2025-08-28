@@ -5480,7 +5480,7 @@ msgstr ""
 msgid "config sidebar"
 msgstr ""
 
-msgid "Refresh Interval"
+msgid "Refresh interval"
 msgstr ""
 
 msgid "seconds"

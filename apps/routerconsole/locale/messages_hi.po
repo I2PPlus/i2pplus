@@ -5480,7 +5480,7 @@ msgstr "I2P सिस्टम सेवा स्थापित करें�
 msgid "config sidebar"
 msgstr "साइडबार की सेटिंग करें"
 
-msgid "Refresh Interval"
+msgid "Refresh interval"
 msgstr "ताज़ा करने का अंतराल"
 
 msgid "seconds"

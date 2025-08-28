@@ -5481,7 +5481,7 @@ msgstr "Installige I2P-süsteemi teenus. "
 msgid "config sidebar"
 msgstr "config külgriba"
 
-msgid "Refresh Interval"
+msgid "Refresh interval"
 msgstr "Värskendusintervall"
 
 msgid "seconds"

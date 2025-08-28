@@ -5498,7 +5498,7 @@ msgstr "Установіть системну службу I2P. "
 msgid "config sidebar"
 msgstr "бічна панель конфігурації"
 
-msgid "Refresh Interval"
+msgid "Refresh interval"
 msgstr "Інтервал оновлення"
 
 msgid "seconds"

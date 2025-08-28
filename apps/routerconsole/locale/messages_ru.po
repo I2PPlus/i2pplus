@@ -5498,7 +5498,7 @@ msgstr "Установите службу системы I2P+. Это реком
 msgid "config sidebar"
 msgstr "настроить боковую панель"
 
-msgid "Refresh Interval"
+msgid "Refresh interval"
 msgstr "Интервал обновления"
 
 msgid "seconds"

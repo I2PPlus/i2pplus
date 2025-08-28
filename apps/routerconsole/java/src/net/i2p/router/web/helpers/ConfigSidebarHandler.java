@@ -21,29 +21,36 @@ public class ConfigSidebarHandler extends FormHandler {
 
     @Override
     protected void processForm() {
-        if (_action == null) return;
+        if (_action == null) {return;}
         net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
         String group = getJettyString("group");
         boolean deleting = _action.equals(_t("Delete selected"));
         boolean adding = _action.equals(_t("Add item"));
         boolean saving = _action.equals(_t("Save order"));
         boolean moving = _action.startsWith("move_");
+        boolean unifiedSidebar = ctx.getBooleanProperty("routerconsole.unifiedSidebar");
         if (_action.equals(_t("Save")) && "0".equals(group)) {
             try {
                 int refreshInterval = Integer.parseInt(getJettyString("refreshInterval"));
                 if (refreshInterval < 0) {refreshInterval = 0;}
                 else if (refreshInterval < CSSHelper.MIN_REFRESH) {refreshInterval = CSSHelper.MIN_REFRESH;}
-                Map<String, String> toAdd = new HashMap<String, String>(2);
+                Map<String, String> toAdd = new HashMap<String, String>(3);
                 if (refreshInterval == 0) {
                     toAdd.put(CSSHelper.PROP_DISABLE_REFRESH, "true");
                     toAdd.put(CSSHelper.PROP_REFRESH, CSSHelper.DEFAULT_REFRESH);
-                    _context.router().saveConfig(toAdd, null);
-                    addFormNotice(_t("Sidebar refresh disabled"), true);
                 } else {
                     toAdd.put(CSSHelper.PROP_DISABLE_REFRESH, "false");
                     toAdd.put(CSSHelper.PROP_REFRESH, Integer.toString(refreshInterval));
+                }
+                String unifiedSidebarStr = getJettyString("unifiedSidebar");
+                if (unifiedSidebarStr == null) {unifiedSidebarStr = "false";}
+                boolean submittedUnifiedSidebar = "true".equals(unifiedSidebarStr);
+                if (submittedUnifiedSidebar != unifiedSidebar) {
+                    toAdd.put("routerconsole.unifiedSidebar", Boolean.toString(submittedUnifiedSidebar));
+                }
+                if (!toAdd.isEmpty()) {
+                    addFormNotice(_t("Sidebar preferences updated"), true);
                     _context.router().saveConfig(toAdd, null);
-                    addFormNotice(_t("Sidebar refresh interval changed"), true);
                 }
             } catch (java.lang.NumberFormatException e) {
                 addFormError(_t("Refresh interval must be a number"), true);
@@ -58,11 +65,9 @@ public class ConfigSidebarHandler extends FormHandler {
         } else if (adding || deleting || saving || moving) {
             Map<Integer, String> sections = new TreeMap<Integer, String>();
             for (Object o : _settings.keySet()) {
-                if (!(o instanceof String))
-                    continue;
+                if (!(o instanceof String)) {continue;}
                 String k = (String) o;
-                if (!k.startsWith("order_"))
-                    continue;
+                if (!k.startsWith("order_")) {continue;}
                 String v = getJettyString(k);
                 k = k.substring(6);
                 k = k.substring(k.indexOf('_') + 1);
@@ -152,8 +157,7 @@ public class ConfigSidebarHandler extends FormHandler {
 
     public void setMovingAction() {
         for (Object o : _settings.keySet()) {
-            if (!(o instanceof String))
-                continue;
+            if (!(o instanceof String)) {continue;}
             String k = (String) o;
             if (k.startsWith("move_") && k.endsWith(".x") && _settings.get(k) != null) {
                 _action = k.substring(0, k.length() - 2);
@@ -161,4 +165,5 @@ public class ConfigSidebarHandler extends FormHandler {
             }
         }
     }
+
 }

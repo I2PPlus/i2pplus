@@ -35,6 +35,9 @@ public class CSSHelper extends HelperBase {
     public static final String PROP_ENABLE_SORA_FONT = "routerconsole.displayFontSora";
     public static final boolean DEFAULT_ENABLE_SORA_FONT = false;
     private static final String _consoleNonce = Long.toString(RandomSource.getInstance().nextLong());
+    /** @since 0.9.67+ */
+    public static final String PROP_UNIFIED_SIDEBAR = "routerconsole.unifiedSidebar";
+    public static final boolean DEFAULT_UNIFIED_SIDEBAR = false;
 
     /**
      *  formerly stored in System.getProperty("router.consoleNonce")
@@ -78,6 +81,12 @@ public class CSSHelper extends HelperBase {
         if (PROP_ENABLE_SORA_FONT != null && PROP_ENABLE_SORA_FONT.toLowerCase().equals("true"))
             _context.router().saveConfig(PROP_ENABLE_SORA_FONT, "true");
     }
+
+    /**
+     * Returns whether we should use a unified sidebar
+     * @since 0.9.67+
+     */
+    public boolean useUnifiedSidebar() {return _context.getBooleanProperty(PROP_UNIFIED_SIDEBAR);}
 
     /**
      * change default language for the router AND save it

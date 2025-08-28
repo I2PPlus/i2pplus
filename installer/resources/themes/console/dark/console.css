@@ -2182,8 +2182,12 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 .buttonDown:active{background:var(--hover) var(--mv_down_active) var(--center)}
 .buttonBottom:active{background:var(--hover) var(--mv_bottom_active) var(--center)}
 .buttonTop,.buttonBottom,.buttonUp,.buttonDown{background-size:11px,100%!important}
-#refreshsidebar td{padding-left:45px;background:#000 var(--timer) no-repeat 15px center/32px}
-#refreshsidebar td:last-child{background:#000}
+#refreshsidebar input[type=text] {margin:0 3px 0 5px}
+#refreshsidebar input[type=checkbox] {margin:6px 3px 6px 5px}
+#refreshsidebar label{margin:4px 0 4px 6px;padding:10px 16px 10px 12px;min-width:400px;display:inline-block;white-space:nowrap;vertical-align:middle;border-radius:4px;box-shadow:var(--bevel);background:var(--tr)}
+#refreshsidebar label b{min-width:120px;display:inline-block;text-align:right}
+#refreshsidebar td{padding:6px 4px;background:var(--th)}
+#refreshsidebar td:last-child{padding-right:10px;background:var(--th)}
 #sidebarconf{margin-top:-1px}
 #sidebarconf tr:hover,.homelinkedit tr:hover{background:#002000}
 #sidebarconf+.formaction{margin-bottom:-3px}

@@ -5480,7 +5480,7 @@ msgstr "Installeer de I2P-systeemservice. Dit is de aanbevolen manier om I2P uit
 msgid "config sidebar"
 msgstr "config zijbalk"
 
-msgid "Refresh Interval"
+msgid "Refresh interval"
 msgstr "Hernieuw interval"
 
 msgid "seconds"

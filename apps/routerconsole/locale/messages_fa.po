@@ -5480,7 +5480,7 @@ msgstr "نصب سرویس سیستمی I2P. این روش توصیه‌شده ب
 msgid "config sidebar"
 msgstr "نوار کناری پیکربندی"
 
-msgid "Refresh Interval"
+msgid "Refresh interval"
 msgstr "فاصله بازخوانی"
 
 msgid "seconds"

@@ -5480,7 +5480,7 @@ msgstr "Instale o serviço do sistema I2P. "
 msgid "config sidebar"
 msgstr "barra lateral de configuração"
 
-msgid "Refresh Interval"
+msgid "Refresh interval"
 msgstr "Intervalo de atualização"
 
 msgid "seconds"

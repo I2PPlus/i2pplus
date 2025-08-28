@@ -5481,7 +5481,7 @@ msgstr "Installa il servizio di sistema I2P. Questo è il modo raccomandato di e
 msgid "config sidebar"
 msgstr "configura barra laterale"
 
-msgid "Refresh Interval"
+msgid "Refresh interval"
 msgstr "Intervallo di aggiornamento"
 
 msgid "seconds"
