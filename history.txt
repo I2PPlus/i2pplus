@@ -1,3 +1,6 @@
+2025-08-28 dr|z3d
+ * Console: Add UI option to toggle unified sidebar on /configsidebar
+
 2025-08-23 dr|z3d
  * Console: Ensure configuration changes to sidebar display immediately
 
