@@ -269,7 +269,7 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sidebar #sb_internals.collapsed .sb_icon:hover img,#sidebar #sb_advanced.collapsed .sb_icon:hover img,#sidebar #sb_services.collapsed .sb_icon:hover img{transform:scale(1.1);mix-blend-mode:normal}
 #sidebar #sb_internals.collapsed .sb_icon:active,#sidebar #sb_advanced.collapsed .sb_icon:active,#sidebar #sb_services.collapsed .sb_icon:active{box-shadow:0 0 0 1px #f60 inset,0 0 0 2px #fff inset,4px 4px 4px rgba(0,0,0,.7) inset;background:var(--badge_active)}
 #sidebar #sb_internals.collapsed .sb_icon:active img,#sidebar #sb_advanced.collapsed .sb_icon:active img,#sidebar #sb_services.collapsed .sb_icon:active img{transform:scale(.9) translateY(2px);mix-blend-mode:luminosity}
-#sidebar #sb_internals .sb_icon span,#sidebar #sb_advanced .sb_icon span,#sidebar #sb_services .sb_icon span{margin:0;display:inline-block;text-align:center;width:100%;height:auto;text-align:center}
+#sidebar #sb_internals .sb_icon span,#sidebar #sb_advanced .sb_icon span,#sidebar #sb_services .sb_icon span:not(#newHosts){margin:0;display:inline-block;text-align:center;width:100%;height:auto;text-align:center}
 #sidebar #sb_services.collapsed a::before,#sidebar #sb_internals.collapsed a::before,#sidebar #sb_advanced.collapsed a::before{display:none}
 #sb_services.collapsed,#sb_internals.collapsed,#sb_advanced.collapsed{margin:-11px -11px -9px -6px}
 #sb_services.collapsed{margin-bottom:-10px}
@@ -3024,3 +3024,20 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #banSummary ul{margin:-1px -10px -16px}
 #sessionBanned{margin-bottom:2px}
 }
+
+/* new hosts count */
+.sb_icon[target^="/dns"]{position:relative}
+#newHosts{margin:2px 0 0 1px;padding:2px 3px;min-width:12px;min-height:10px;display:inline-block;position:relative;z-index:999;vertical-align:middle;line-height:1;word-spacing:-.02em;text-transform:lowercase;font-size:80%;color:var(--ink);box-shadow:0 0 0 1px #bbc,0 0 0 1px #fff inset;background:#eef;transform:translateY(-1px);animation:none!important}
+#newHosts[hidden],#newHostsList[hidden]{display:none;z-index:-1;pointer-events:none}
+#newHosts:empty{display:none!important}
+#newHosts:not([hidden]):hover::after,#sb_services.tooltipped #newHosts:not([hidden])::after{margin:0 0 0 2px;height:10px;width:10px;display:inline-block;vertical-align:middle;background:var(--dropdown) no-repeat center calc(50% - 1px)/8px;content:"";}
+#newHostsList{display:none;box-shadow:var(--bevel);background:var(--badge)}
+#newHostsList:not([hidden]),#newHostsList:hover,#newHostsList[hidden]:hover{display:table-row;pointer-events:all}
+#newHostsList a{margin:0 6px 0 -3px;padding:0 2px;display:inline-block!important;line-height:1;text-transform:none}
+#newHostsList a::before{margin:-1px 3px 0 0;width:10px;height:10px;display:inline-block;vertical-align:middle;background:var(--globe) no-repeat left center/10px;mix-blend-mode:luminosity;content:""}
+#newHostsList a:hover::before{mix-blend-mode:normal}
+#newHostsList br{display:none}
+#newHostsList td{padding:8px 5px!important;justify-content:center!important;align-items:center!important;flex-wrap:wrap}
+#newHostsList td:empty{display:none!important}
+#sb_services.tooltipped{margin-bottom:-11px}
+#sb_services.tooltipped tr:first-child td{margin-bottom:-3px}

@@ -367,7 +367,7 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 #tunnelCount+#tunnelCount,#newsCount+#newsCount{display:none}
 
 /* new hosts count */
-#newHosts{margin:2px 0 0 1px!important;padding:1px 3px;min-width:12px;min-height:10px;display:inline-block;position:relative;z-index:999;vertical-align:middle;line-height:1;font-size:8pt!important;color:#494;animation:none!important}
+#newHosts{margin:1px 0 0 1px!important;padding:3px 3px 2px;min-width:12px;min-height:10px;display:inline-block;position:relative;z-index:999;vertical-align:middle;line-height:1;font-size:8pt!important;color:#494;animation:none!important}
 #newHosts[hidden],#newHostsList[hidden]{display:none;z-index:-1;pointer-events:none}
 #newHosts:empty{display:none!important}
 #newHosts:not([hidden]):hover::after,#sb_services.tooltipped #newHosts:not([hidden])::after{margin:0 0 0 2px;height:10px;width:10px;display:inline-block;vertical-align:middle;background:var(--dropdown) no-repeat center calc(50% - 1px)/8px;content:"";}
@@ -1962,7 +1962,7 @@ tr.addnew,tr.addnew:hover{border-top:var(--border);background:#000800}
 #themeoptions{margin:0 -7px 5px;padding:8px 10px 8px 5px;position:relative;top:8px;clear:both;border-top:var(--border);border-bottom:var(--border);background:#000800}
 #themeoptions br{display:none}
 #themeoptions input,#enablefull input{margin:1px 10px 1px 2px}
-#themeoptions label,#enablefull label{margin:4px 0 4px 6px;padding:10px;min-width:calc(50% - 28px);display:inline-block;white-space:nowrap;border-radius:4px;box-shadow:var(--bevel);background:var(--tr)}
+#themeoptions label,#enablefull label{margin:4px 0 4px 6px;padding:10px;width:calc(50% - 28px);min-width:400px;display:inline-block;white-space:nowrap;border-radius:4px;box-shadow:var(--bevel);background:var(--tr)}
 #themeoptions label:hover,#enablefull label:hover{box-shadow:var(--outline),var(--highlight),0 0 2px 1px #f60}
 #themeselect{margin:-1px 0;padding:8px 7px 0;clear:both;border:var(--border)}
 #themesettings,#consolepass,#langsettings,#pw_adduser{background:var(--bg_dots)}

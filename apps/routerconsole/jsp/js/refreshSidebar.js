@@ -165,109 +165,163 @@ export async function refreshSidebar() {
 
 function newHosts() {
   const newHostsBadge = document.getElementById("newHosts");
-  if (!newHostsBadge) {return;}
+  if (!newHostsBadge) return;
   if (theme !== "dark") {
     newHostsBadge.style.display = "none";
     return;
   }
 
-  let lastUpdated = JSON.parse(localStorage.getItem("newHostsData"))?.lastUpdated || 0;
-  const period = 60 * 10000;
-  let now = Date.now();
-
-  if (lastUpdated && (now - lastUpdated) < period) {return;}
-
+  const period = 30 * 60 * 1000;
   let newHostsInterval;
+  let tooltipInitialized = false;
+
+  function getStoredData() {
+    const key = "newHostsData";
+    const rawData = localStorage.getItem(key);
+
+    if (!rawData) {
+      return { hostnames: [], count: 0, lastUpdated: null };
+    }
+
+    try {
+      const parsed = JSON.parse(rawData);
+      if (typeof parsed === "object" && !Array.isArray(parsed) && parsed !== null) {
+        return parsed;
+      } else {
+        throw new Error("Data is not an object");
+      }
+    } catch (e) {
+      console.warn("Invalid JSON in localStorage, clearing:", key);
+      localStorage.removeItem(key);
+      return { hostnames: [], count: 0, lastUpdated: null };
+    }
+  }
+
   function fetchNewHosts() {
-    fetch("/susidns/log.jsp").then(response => response.text()).then(html => {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, "text/html");
-      const now = new Date();
-      const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-      const entries = Array.from(doc.querySelectorAll("li"));
-      const recentEntries = entries.filter(entry => {
-        const dateText = entry.querySelector(".date").textContent;
-        const entryDate = new Date(dateText);
-        return entryDate >= oneDayAgo;
-      });
+    localStorage.setItem("newHostsLastFetch", Date.now());
 
-      const newHostnames = recentEntries.flatMap(entry => {
-        const dateText = entry.querySelector(".date").textContent;
-        const entryDate = new Date(dateText);
-        const links = entry.querySelectorAll("a");
-        return Array.from(links).map(a => ({
-          hostname: new URL(a.href).hostname,
-          timestamp: entryDate.getTime()
-        }));
-      });
+    fetch("/susidns/log.jsp")
+      .then(response => response.text())
+      .then(html => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, "text/html");
 
-      const storedData = JSON.parse(localStorage.getItem("newHostsData") || "{}");
-      const storedHostnames = storedData.hostnames || [];
+        const now = new Date();
+        const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 
-      // Combine new and stored hostnames
-      const allHostnames = [...new Set([...newHostnames, ...storedHostnames].map(h => h.hostname))]
-        .map(hostname => {
-          const newEntry = newHostnames.find(h => h.hostname === hostname);
-          const storedEntry = storedHostnames.find(h => h.hostname === hostname);
-          return newEntry || storedEntry;
+        const entries = Array.from(doc.querySelectorAll("li"));
+        const newHostnames = entries.flatMap(entry => {
+          const dateText = entry.querySelector(".date")?.textContent;
+          if (!dateText) return [];
+
+          const entryDate = new Date(dateText);
+          if (entryDate < oneDayAgo) return [];
+
+          const links = entry.querySelectorAll("a");
+          return Array.from(links).map(a => ({
+            hostname: new URL(a.href).hostname,
+            timestamp: entryDate.getTime()
+          }));
         });
 
-      // Filter out old hostnames
-      const recentHostnames = allHostnames.filter(hostname => {
-        const timestamp = new Date(hostname.timestamp);
-        return timestamp >= oneDayAgo;
-      });
+        const storedData = getStoredData();
+        const storedHostnames = storedData.hostnames || [];
 
-      recentHostnames.sort((a, b) => b.timestamp - a.timestamp); // Sort by timestamp (newest first)
-      const limitedHostnames = recentHostnames.slice(0, 10); // Keep only the 10 most recent (added in last 24h)
-      const sortedHostnames = limitedHostnames.map(item => item.hostname).sort(); // Sort alphabetically
-      const count = sortedHostnames.length;
-      localStorage.setItem("newHostsData", JSON.stringify({ count, lastUpdated: Date.now(), hostnames: limitedHostnames }));
+        const hostnameMap = new Map();
+        [...storedHostnames, ...newHostnames].forEach(h => {
+          if (!hostnameMap.has(h.hostname) || h.timestamp > hostnameMap.get(h.hostname)?.timestamp) {
+            hostnameMap.set(h.hostname, h);
+          }
+        });
 
-      if (count > 10) { newHostsBadge.textContent = "10+"; }
-      else { newHostsBadge.textContent = count; }
-      if (sortedHostnames !== null) { updateTooltip(sortedHostnames); }
-    }).catch(() => {});
+        const allHostnames = Array.from(hostnameMap.values())
+          .filter(h => h.timestamp >= oneDayAgo.getTime())
+          .sort((a, b) => b.timestamp - a.timestamp);
+
+        const limitedHostnames = allHostnames.slice(0, 10);
+        const sortedHostnames = limitedHostnames.map(h => h.hostname).sort();
+
+        const count = sortedHostnames.length;
+        localStorage.setItem("newHostsData", JSON.stringify({
+          count,
+          lastUpdated: Date.now(),
+          hostnames: limitedHostnames
+        }));
+
+        if (count > 10) {
+          newHostsBadge.textContent = "10+";
+        } else {
+          newHostsBadge.textContent = count || "";
+        }
+
+        updateTooltip(sortedHostnames);
+      })
+      .catch(err => console.error("Failed to fetch new hosts:", err));
   }
 
   function getNewHosts() {
-    if (!newHostsBadge) { return; }
     const now = Date.now();
-    const storedData = JSON.parse(localStorage.getItem("newHostsData") || "{}");
-    const { count, lastUpdated, hostnames } = storedData;
-    if (lastUpdated && count && (now - lastUpdated < 60000)) {
+    const storedData = getStoredData();
+    const lastFetch = parseInt(localStorage.getItem("newHostsLastFetch") || "0");
+
+    if (
+      storedData.lastUpdated &&
+      now - storedData.lastUpdated < 60000 &&
+      now - lastFetch < 30000
+    ) {
+      const { count, hostnames } = storedData;
       if (count > 0) {
-        if (count > 10) { newHostsBadge.textContent = "10+"; }
-        else { newHostsBadge.textContent = count; }
-        newHostsBadge.hidden = false;
+        if (count > 10) newHostsBadge.textContent = "10+";
+        else newHostsBadge.textContent = count;
         updateTooltip(hostnames.map(h => h.hostname));
-      } else { newHostsBadge.hidden = true; }
-    } else { fetchNewHosts(); }
+      } else {
+        newHostsBadge.textContent = "";
+      }
+    } else {
+      fetchNewHosts();
+    }
   }
 
   function updateTooltip(hostnames) {
-    if (!newHostsBadge) {return;}
-    const services = document.getElementById("sb_services");
-    const servicesTd = services?.querySelector("tr:first-child td");
+    if (!newHostsBadge) return;
+
     const newHosts = document.getElementById("newHostsList");
     const newHostsTd = newHosts?.querySelector("td");
-    const newHostsList = hostnames.map(hostname => `<a href="http://${hostname}" target=_blank>${hostname.replace(".i2p", "")}</a>`).join("");
+
+    if (!hostnames.length) {
+      newHosts.hidden = true;
+      if (newHostsTd) newHostsTd.innerHTML = "";
+      return;
+    }
+
+    const newHostsList = hostnames.map(hostname => {
+      const shortName = hostname.replace(".i2p", "");
+      return `<a href="http://${hostname}" target="_blank">${shortName}</a>`;
+    }).join("<br>");
+
+    if (newHostsTd) newHostsTd.innerHTML = newHostsList;
+
     newHosts.hidden = true;
 
-    if (hostnames.length > 0) { newHostsTd.innerHTML = newHostsList; }
-    newHostsBadge?.addEventListener("mouseenter", () => {
-      newHosts.hidden = false;
-      services.classList.add("tooltipped");
-    }, {passive: true});
-    services?.addEventListener("mouseleave", () => {
-      newHosts.hidden = true;
-      services.classList.remove("tooltipped");
-    }, {passive: true});
+    if (!tooltipInitialized) {
+      newHostsBadge.addEventListener("mouseenter", () => {
+        newHosts.hidden = false;
+        const services = document.getElementById("sb_services");
+        services?.classList.add("tooltipped");
+      }, { passive: true });
+
+      const services = document.getElementById("sb_services");
+      services?.addEventListener("mouseleave", () => {
+        newHosts.hidden = true;
+        services.classList.remove("tooltipped");
+      }, { passive: true });
+
+      tooltipInitialized = true;
+    }
   }
 
-  if (newHostsInterval) { clearInterval(newHostsInterval); }
+  if (newHostsInterval) clearInterval(newHostsInterval);
   getNewHosts();
-  lastUpdated = now;
   newHostsInterval = setInterval(fetchNewHosts, period);
 }
 

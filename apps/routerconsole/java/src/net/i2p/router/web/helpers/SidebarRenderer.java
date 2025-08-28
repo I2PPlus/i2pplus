@@ -242,7 +242,7 @@ class SidebarRenderer {
         PortMapper pm = _context.portMapper();
         if (pm.isRegistered(PortMapper.SVC_SUSIDNS)) {
             String tx = _t("Addressbook");
-            rbuf.append("<a href=/dns target=_top title=\"")
+            rbuf.append("<a href=\"/dns?book=router&filter=latest\" target=_top title=\"")
                 .append(_t("Manage your I2P hosts file here (I2P domain name resolution)"))
                 .append("\">").append(nbsp(tx)).append("</a>\n")
                 .append("<a class=sb_icon target=_top href=/dns title=\"").append(tx)
