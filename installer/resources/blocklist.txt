@@ -86,6 +86,8 @@ Connection Abuse:46.188.0.0-46.188.63.255
 Connection Abuse:92.124.128.0-92.124.143.255
 Public Web Proxy:93.157.12.0/24
 Russian Sybil:37.228.88.0-37.228.93.255
+Excessive lookups:91.198.115.0/24
+Excessive lookups:162.218.65.0/24
 Sybil:103.149.170.0/23
 Sybil:104.156.254.54
 Sybil:104.207.153.96

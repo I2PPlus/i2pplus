@@ -1,4 +1,7 @@
 2025-08-23 dr|z3d
+ * Console: Ensure configuration changes to sidebar display immediately
+
+2025-08-23 dr|z3d
  * Router: New addJobToTop method in JobQueue to send job to head of
    of job queue and use when publishing leasesets
 
