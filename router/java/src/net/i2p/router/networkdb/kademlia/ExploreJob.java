@@ -15,6 +15,7 @@ import java.util.Set;
 import net.i2p.crypto.EncType;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.DatabaseLookupMessage;
+import net.i2p.data.i2np.DatabaseSearchReplyMessage;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
@@ -37,6 +38,7 @@ class ExploreJob extends SearchJob {
 
     private final FloodfillPeerSelector _peerSelector;
     private final boolean _isRealExplore;
+    private volatile Hash _lastReplyFrom;
 
     /**
      * Maximum duration for each exploration in milliseconds.
@@ -180,7 +182,12 @@ class ExploreJob extends SearchJob {
                 _log.debug("Encrypted Exploratory DbLookupMessage for [" + getState().getTarget().toBase64().substring(0, 6) +
                            "] sent to [" + hash + "]");
             }
-        } else {outMsg = msg;}
+        } else {
+            if (_log.shouldDebug()) {
+                _log.debug("Direct exploratory DbLookupMessage to [" + ident.calculateHash().toBase64().substring(0, 6) + "]\n*" + msg);
+            }
+            outMsg = msg;
+        }
         return outMsg;
     }
 
@@ -247,6 +254,37 @@ class ExploreJob extends SearchJob {
             } else {_log.info("Found no new peers via Exploratory Search");}
         }
         _facade.setLastExploreNewDate(getContext().clock().now());
+    }
+
+    /**
+     * @since 0.9.67
+     */
+    @Override
+    void replyFound(DatabaseSearchReplyMessage message, Hash peer) {
+        _lastReplyFrom = peer;
+        super.replyFound(message, peer); // This starts a SearchReplyJob
+    }
+    /**
+     * This is called from SearchReplyJob
+     * @return true if peer was new
+     * @since 0.9.67
+     */
+    @Override
+    boolean add(Hash peer) {
+        Hash from = _lastReplyFrom;
+        if (from != null) {
+            final RouterContext ctx = getContext();
+            if (ctx.commSystem().isEstablished(from)) {
+                RouterInfo ri = _facade.lookupRouterInfoLocally(from);
+                if (ri != null) {
+                    if (_log.shouldDebug()) {_log.debug("Direct followup to " + from + " for " + peer);}
+                    DirectLookupJob j = new DirectLookupJob(getContext(), (FloodfillNetworkDatabaseFacade) _facade, peer, ri, null, null);
+                    j.runJob(); // inline (SearchReplyJob thread)
+                    return true;
+                }
+            }
+        }
+        return super.add(peer);
     }
 
     /*
