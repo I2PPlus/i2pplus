@@ -43,6 +43,16 @@ worker.port.addEventListener("message", async function(event) {
   }
 });
 
+worker.port.addEventListener("error", (event) => {
+  noResponse++;
+  checkIfDown();
+});
+
+worker.port.addEventListener("messageerror", (event) => {
+  noResponse++;
+  checkIfDown();
+});
+
 async function initSidebar() {
   sectionToggler();
   handleFormSubmit();
@@ -55,9 +65,20 @@ async function checkIfDown() {
   if (noResponse > 5) {
     isDown = true;
     document.body.classList.add("isDown");
+    attemptReconnect();
   } else {
     document.body.classList.remove("isDown");
   }
+}
+
+function attemptReconnect() {
+  if (refreshTimeout) clearTimeout(refreshTimeout);
+  refreshTimeout = setTimeout(() => {
+    if (isDown) {
+      doFetch();
+      attemptReconnect();
+    }
+  }, Math.min(5000, refreshInterval));
 }
 
 async function checkTimer() {
@@ -90,6 +111,7 @@ export async function refreshSidebar() {
     await doFetch();
     if (responseDoc) {
       isDown = false;
+      noResponse = 0;
       const responseElements = {
         volatileElements: responseDoc.querySelectorAll(".volatile:not(.badge)"),
         badges: responseDoc.querySelectorAll(".badge:not(#newHosts)"),
@@ -392,5 +414,7 @@ const ready = async () => {
 }
 
 onVisible(sb, ready);
+onHidden(sb, () => { if (refreshTimeout) clearTimeout(refreshTimeout); });
 document.addEventListener("DOMContentLoaded", initSidebar);
 document.addEventListener("DOMContentLoaded", newHosts);
+window.addEventListener("beforeunload", () => { if (refreshTimeout) clearTimeout(refreshTimeout); });
