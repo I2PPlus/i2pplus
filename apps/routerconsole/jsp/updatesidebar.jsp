@@ -2,7 +2,8 @@
 <!DOCTYPE HTML>
 <%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");} %>
+    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+%>
 <%@include file="head.jsi" %>
 <%=intl.title("config sidebar")%>
 <meta http-equiv="Refresh" content= "0;URL=/configsidebar">
@@ -21,7 +22,7 @@
 <form method=POST>
 <input type=hidden name="consoleNonce" value="<%=net.i2p.router.web.CSSHelper.getNonce()%>">
 <input type=hidden name=nonce value="<%=pageNonce%>">
-<input type=hidden name=action value=blah >
+<input type=hidden name=action value=blah>
 </div>
 </div>
 </body>
