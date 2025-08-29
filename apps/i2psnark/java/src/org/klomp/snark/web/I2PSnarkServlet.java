@@ -106,7 +106,7 @@ public class I2PSnarkServlet extends BasicServlet {
         _contextPath = cpath == "" ? "/" : cpath;
         _contextName = cpath == "" ? DEFAULT_NAME : cpath.substring(1).replace("/", "_");
         _nonce = _context.random().nextLong();
-        // limited protection against overwriting other config files or directories
+        // Limited protection against overwriting other config files or directories
         // in case you named your war "router.war"
         // We don't handle bad characters in the context path. Don't do that.
         String configName = _contextName;
@@ -251,9 +251,9 @@ public class I2PSnarkServlet extends BasicServlet {
         }
 
         boolean isConfigure = path.endsWith("/configure");
+        boolean isIndex = (path.isEmpty() || "/".equals(path) || path.equals("index.jsp"));
         // index.jsp doesn't work, it is grabbed by the war handler before here
-        if (!(path == null || path.equals("/") || path.equals("/index.jsp") ||
-            path.equals("/index.html") || path.equals("/_post") || isConfigure)) {
+        if (!(isIndex || path.equals("/index.html") || path.equals("/_post") || isConfigure)) {
             if (path.endsWith("/")) {
                 // Listing of a torrent (torrent detail page)
                 // bypass the horrid Resource.getListHTML()
@@ -338,9 +338,7 @@ public class I2PSnarkServlet extends BasicServlet {
         if (!isConfigure) {
             preload =
                 "<link rel=modulepreload href=" + _resourcePath + "js/refreshTorrents.js>\n" +
-                "<link rel=modulepreload href=" + _resourcePath + "js/snarkAlert.js>\n" +
                 "<link rel=modulepreload href=" + _resourcePath + "js/snarkSort.js>\n" +
-                "<link rel=modulepreload href=" + _resourcePath + "js/click.js>\n" +
                 "<link rel=modulepreload href=" + _resourcePath + "js/toggleLinks.js>\n" +
                 "<link rel=modulepreload href=" + _resourcePath + "js/toggleLog.js>\n";
             buf.append(preload);
@@ -349,6 +347,10 @@ public class I2PSnarkServlet extends BasicServlet {
                     "<link rel=modulepreload href=" + _resourcePath + "js/filterBar.js>\n" +
                     "<link rel=modulepreload href=" + _resourcePath + "js/setFilterQuery.js>\n";
                 buf.append(preload);
+            }
+            if (isIndex) {
+                buf.append("<script src=/i2psnark/.res/js/click.js type=module></script>\n");
+                buf.append("<script src=/i2psnark/.res/js/snarkAlert.js type=module></script>\n");
             }
         }
 
@@ -373,41 +375,44 @@ public class I2PSnarkServlet extends BasicServlet {
 
         int delay = _manager.getRefreshDelaySeconds();
         String pageSize = String.valueOf(_manager.getPageSize());
+        String script;
 
         if (!isConfigure) {
-            buf.append("<script nonce=").append(cspNonce).append(">\n")
-               .append("  const deleteMsg = \"")
-               .append(_t("Are you sure you want to delete {0} and all downloaded data?")).append("\";\n")
-               .append("  const postDeleteMsg = \"")
-               .append(_t("Deleting <b>{0}</b> and all associated data...")).append("\";\n")
-               .append("  const removeMsg = \"")
-               .append(_t("Are you sure you want to delete torrent file {0} and associated metadata?")).append("\";\n")
-               .append("  const removeMsg2 = \"")
-               .append(_t("Note: Downloaded data will not be deleted.")).append("\";\n")
-               .append("  const postRemoveMsg = \"")
-               .append(_t("Deleting {0} and associated metadata only...")).append("\";\n")
-               .append("  const snarkPageSize = ").append(pageSize).append(";\n")
-               .append("  const snarkRefreshDelay = ").append(delay).append(";\n")
-               .append("  const totalSnarks = ").append(_manager.listTorrentFiles().size()).append(";\n")
-               .append("  window.snarkPageSize = snarkPageSize;\n")
-               .append("  window.snarkRefreshDelay = snarkRefreshDelay;\n")
-               .append("  window.totalSnarks = totalSnarks;\n</script>\n")
-               .append("<script src=").append(_resourcePath).append("js/snarkWork.js type=module></script>\n")
-               .append("<script src=").append(_resourcePath).append("js/messageTypes.js type=module></script>\n");
+            script =
+                "<script nonce=" + cspNonce + ">\n" +
+                "  const deleteMsg = \"" + _t("Are you sure you want to delete {0} and all downloaded data?") + "\";\n" +
+                "  const postDeleteMsg = \"" + _t("Deleting <b>{0}</b> and all associated data...") + "\";\n" +
+                "  const removeMsg = \"" + _t("Are you sure you want to delete torrent file {0} and associated metadata?") + "\";\n" +
+                "  const removeMsg2 = \"" + _t("Note: Downloaded data will not be deleted.") + "\";\n" +
+                "  const postRemoveMsg = \"" + _t("Deleting {0} and associated metadata only...") + "\";\n" +
+                "  const snarkPageSize = " +  pageSize + ";\n" +
+                "  const snarkRefreshDelay = " + delay + ";\n" +
+                "  const totalSnarks = " + _manager.listTorrentFiles().size() + ";\n" +
+                "  window.snarkPageSize = snarkPageSize;\n" +
+                "  window.snarkRefreshDelay = snarkRefreshDelay;\n" +
+                "  window.totalSnarks = totalSnarks;\n</script>\n" +
+                "<script src=" + _resourcePath + "js/snarkWork.js type=module></script>\n" +
+                "<script src=" + _resourcePath + "js/messageTypes.js type=module></script>\n";
+            buf.append(script);
+
             if (!isStandalone()) {
-                buf.append("<script src=").append(_resourcePath).append("js/tunnelCounter.js type=module></script>\n");
+                script = "<script src=" + _resourcePath + "js/tunnelCounter.js type=module></script>\n";
+                buf.append(script);
             }
-            String initScript =
+
+            script =
                 "<script nonce=" + cspNonce + " type=module>\n" +
                 "  import {initSnarkRefresh} from \"" + _resourcePath + "js/refreshTorrents.js\";\n" +
                 "  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n";
-            buf.append(initScript);
+            buf.append(script);
 
             if (delay > 0) {
                 String downMsg = _context.isRouterContext() ? _t("Router is down") : _t("I2PSnark has stopped");
                 // fallback to metarefresh when javascript is disabled
-                buf.append("<noscript><meta http-equiv=refresh content=\"").append(delay < 60 ? 60 : delay).append(";")
-                   .append(_contextPath).append("/").append(peerString).append("\"></noscript>\n");
+                script =
+                    "<noscript><meta http-equiv=refresh content=\"" + (delay < 60 ? 60 : delay) + ";" +
+                    _contextPath + "/" + peerString + "\"></noscript>\n";
+                buf.append(script);
             }
         } else {delay = 0;}
 
@@ -420,10 +425,11 @@ public class I2PSnarkServlet extends BasicServlet {
         File override = new File(themeBase + "override.css");
         int rnd = _context.random().nextInt(3);
         if (!isStandalone() && rnd == 0 && _manager.getTheme().equals("light")) {
-            buf.append("<style>#screenlog{background:url(/themes/snark/light/images/k2.webp) no-repeat right bottom,")
-               .append("repeating-linear-gradient(180deg,rgba(255,255,255,.5) 2px,rgba(220,220,255,.5) 4px),var(--snarkGraph) no-repeat,")
-               .append("var(--th);background-size:72px auto,100%,calc(100% - 80px) calc(100% - 4px),100%;background-position:right bottom,")
-               .append("center center,left bottom,center center;background-blend-mode:multiply,overlay,luminosity,normal}</style>\n");
+            String css = "<style>#screenlog{background:url(/themes/snark/light/images/k2.webp) no-repeat right bottom," +
+                         "repeating-linear-gradient(180deg,rgba(255,255,255,.5) 2px,rgba(220,220,255,.5) 4px),var(--snarkGraph) no-repeat," +
+                         "var(--th);background-size:72px auto,100%,calc(100% - 80px) calc(100% - 4px),100%;background-position:right bottom," +
+                         "center center,left bottom,center center;background-blend-mode:multiply,overlay,luminosity,normal}</style>\n";
+            buf.append(css);
         }
         if (!isStandalone() && override.exists()) {
             buf.append(HEADER_A).append(_themePath).append(HEADER_Z).append("\n"); // optional override.css for version-persistent user edits
@@ -439,58 +445,59 @@ public class I2PSnarkServlet extends BasicServlet {
         //  ...and inject CSS to display panels uncollapsed
         if (noCollapse || !collapsePanels) {buf.append(HEADER_A).append(_themePath).append(HEADER_C).append("\n");}
         // add placeholders for filterbar, toggleLog css
-        buf.append("<style id=cssfilter></style>\n").append("<style id=toggleLogCss></style>\n");
+        buf.append("<style id=cssfilter></style>\n<style id=toggleLogCss></style>\n");
 
         if (!isStandalone()) {
-            buf.append("<style id=graphcss>:root{--snarkGraph:url('/viewstat.jsp")
-               .append("?stat=[I2PSnark] InBps&showEvents=false&period=60000&periodCount=1440&end=0&width=2000&height=160")
-               .append("&hideLegend=true&hideTitle=true&hideGrid=true&t=").append(now).append("\')}\"</style>\n");
+            String graph = "<style id=graphcss>:root{--snarkGraph:url('/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false" +
+                           "&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true" +
+                           "&hideGrid=true&t=" + now + "\')}\"</style>\n";
+            buf.append(graph);
         }
-        buf.append("</head>\n<body style=display:none;pointer-events:none id=snarkxhr class=\"").append(theme)
-           .append(" lang_").append(lang).append("\">\n")
-           .append("<span id=toast hidden></span>\n").append(IFRAME_FORM);
+        buf.append("</head>\n");
+
+        String bodyTag = "<body style=display:none;pointer-events:none id=snarkxhr class=\"" + theme + " lang_" + lang + "\">\n";
+        buf.append(bodyTag);
+
+        if (isIndex) {buf.append("<span id=toast hidden></span>\n").append(IFRAME_FORM);}
         List<Tracker> sortedTrackers = null;
         List<TorrentCreateFilter> sortedFilters = null;
+        String navLink;
         buf.append("<div id=navbar>\n");
         if (isConfigure) {
-            buf.append("<a href=\"").append(_contextPath).append("/\" title=\"").append(_t("Torrents"))
-               .append("\" class=\"snarkNav nav_main\">");
-            if (_contextName.equals(DEFAULT_NAME)) {buf.append(_t("I2PSnark"));}
-            else {buf.append(_contextName);}
-            buf.append("</a>\n");
+            navLink = "<a href=\"" + _contextPath + "/\" title=\"" + _t("Torrents") + "\" class=\"snarkNav nav_main\">" +
+                      (_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName) + "</a>\n";
+            buf.append(navLink);
         } else {
-            buf.append("<a href=\"").append(_contextPath).append('/').append(peerString)
-               .append("\" title=\"").append(_t("Refresh page")).append("\" class=\"snarkNav nav_main\">");
-            if (_contextName.equals(DEFAULT_NAME)) {buf.append(_t("I2PSnark"));}
-            else {buf.append(_contextName);}
-            buf.append("</a>\n");
-            buf.append("<a href=\"").append(_contextPath).append("/configure\" class=\"snarkNav nav_config\">")
-               .append(_t("Configure")).append("</a>");
+            navLink = "<a href=\"" + _contextPath + '/' + peerString + "\" title=\"" + _t("Refresh page") +
+                      "\" class=\"snarkNav nav_main\">" + (_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName) + "</a>\n";
+            buf.append(navLink);
+            navLink = "<a href=\"" + _contextPath + "/configure\" class=\"snarkNav nav_config\">" + _t("Configure") + "</a>";
+            buf.append(navLink);
             sortedTrackers = _manager.getSortedTrackers();
             sortedFilters = _manager.getSortedTorrentCreateFilterStrings();
-            buf.append("<a href=http://discuss.i2p/ class=\"snarkNav nav_forum\" target=_blank title=\"")
-               .append(_t("Torrent &amp; filesharing forum")).append("\">").append(_t("Forum")).append("</a>");
+            navLink = "<a href=http://discuss.i2p/ class=\"snarkNav nav_forum\" target=_blank title=\"" +
+                      _t("Torrent &amp; filesharing forum") + "\">" + _t("Forum") + "</a>";
+            buf.append(navLink);
             for (Tracker t : sortedTrackers) {
                 if (t.baseURL == null || !t.baseURL.startsWith("http")) {continue;}
                 if (_manager.util().isKnownOpenTracker(t.announceURL)) {continue;}
-                buf.append("\n<a href=\"").append(t.baseURL).append("\" class=\"snarkNav nav_tracker\" target=_blank>").append(t.name).append("</a>");
+                navLink = "\n<a href=\"" + t.baseURL + "\" class=\"snarkNav nav_tracker\" target=_blank>" + t.name + "</a>";
+                buf.append(navLink);
             }
-            buf.append("\n<a href=http://btdigg.i2p/ class=\"snarkNav nav_search\" target=_blank title=\"")
-               .append(_t("I2P-based search engine for clearnet-hosted torrents")).append("\">").append(_t("BTDigg")).append("</a>");
+            navLink = "\n<a href=http://btdigg.i2p/ class=\"snarkNav nav_search\" target=_blank title=\"" +
+                      _t("I2P-based search engine for clearnet-hosted torrents") + "\">" + _t("BTDigg") + "</a>";
+            buf.append(navLink);
         }
+
         if (_manager.getTorrents().size() > 1) {
             String s = req.getParameter("search");
             boolean searchActive = (s != null && !s.equals(""));
-            buf.append("<form id=snarkSearch action=\"").append(_contextPath).append("\" method=GET hidden>\n")
-               .append("<span id=searchwrap><input id=searchInput type=search required name=search size=20 placeholder=\"")
-               .append(_t("Search torrents"))
-               .append("\"");
-            if (searchActive) {
-                buf.append(" value=\"").append(DataHelper.escapeHTML(s).trim()).append('"');
-            }
-            buf.append("><a href=").append(_contextPath).append(" title=\"").append(_t("Clear search"))
-               .append("\" hidden>x</a></span><input type=submit value=\"Search\">\n").append("</form>\n");
-            //buf.append("<script src=\"").append(_resourcePath).append("js/search.js?").append(CoreVersion.VERSION).append("\"></script>");
+            String form = "<form id=snarkSearch action=\"" + _contextPath + "\" method=GET hidden>\n" +
+                          "<span id=searchwrap><input id=searchInput type=search required name=search size=20 placeholder=\"" +
+                          _t("Search torrents") + "\"" + (searchActive ? " value=\"" + DataHelper.escapeHTML(s).trim() + '"' : "") +
+                          "><a href=" + _contextPath + " title=\"" + _t("Clear search") +
+                          "\" hidden>x</a></span><input type=submit value=\"Search\">\n" + "</form>\n";
+            buf.append(form);
         }
         buf.append("</div>\n");
         String newURL = req.getParameter("newURL");
@@ -1797,9 +1804,7 @@ public class I2PSnarkServlet extends BasicServlet {
         } else if ("Save".equals(action)) {
             String dataDir = req.getParameter("nofilter_dataDir");
             boolean filesPublic = req.getParameter("filesPublic") != null;
-            boolean preallocateFiles = req.getParameter("preallocateFiles") != null;
             boolean autoStart = req.getParameter("autoStart") != null;
-            boolean smartSort = req.getParameter("smartSort") != null;
             String seedPct = req.getParameter("seedPct");
             String eepHost = req.getParameter("eepHost");
             String eepPort = req.getParameter("eepPort");
@@ -1829,10 +1834,10 @@ public class I2PSnarkServlet extends BasicServlet {
             boolean enableVaryOutboundHops = req.getParameter("varyOutbound") != null;
             String apiTarget = req.getParameter("apiTarget");
             String apiKey = req.getParameter("apiKey");
-            _manager.updateConfig(dataDir, filesPublic, autoStart, smartSort, refreshDel, startupDel, pageSize, seedPct, eepHost, eepPort,
+            _manager.updateConfig(dataDir, filesPublic, autoStart, refreshDel, startupDel, pageSize, seedPct, eepHost, eepPort,
                                   i2cpHost, i2cpPort, i2cpOpts, upLimit, upBW, downBW, useOpenTrackers, useDHT, theme, lang, ratings, comments,
                                   commentsName, collapsePanels, showStatusFilter, enableLightbox, enableAddCreate, enableVaryInboundHops,
-                                  enableVaryOutboundHops, preallocateFiles, apiTarget, apiKey);
+                                  enableVaryOutboundHops, apiTarget, apiKey);
             // update servlet
             try {setResourceBase(_manager.getDataDir());}
             catch (ServletException se) {}
@@ -3095,9 +3100,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String dataDir = _manager.getDataDir().getAbsolutePath();
         String lang = (Translate.getLanguage(_manager.util().getContext()));
         boolean filesPublic = _manager.areFilesPublic();
-        boolean preallocateFiles = _manager.shouldPreallocateFiles();
         boolean autoStart = _manager.shouldAutoStart();
-        boolean smartSort = _manager.isSmartSortEnabled();
         boolean useOpenTrackers = _manager.util().shouldUseOpenTrackers();
         boolean useDHT = _manager.util().shouldUseDHT();
         boolean useRatings = _manager.util().ratingsEnabled();
@@ -3195,17 +3198,6 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("<a href=\"/configui#langheading\" target=_blank>").append("[").append(_t("Configure")).append("]</a>")
                .append("</span><br>\n");
         }
-
-/*
-        buf.append("<span class=configOption><label for=smartSort><b>")
-           .append(_t("Smart torrent sorting"))
-           .append("</b> </label><input type=checkbox class=\"optbox slider\" ")
-           .append("name=smartSort id=smartSort ")
-           .append((smartSort ? "checked " : ""))
-           .append("title=\"")
-           .append(_t("Ignore words such as 'a' and 'the' when sorting"))
-           .append("\"></span><br>\n")
-*/
 
         buf.append("<span class=configOption><label for=collapsePanels><b>")
            .append(_t("Collapsible panels"))
@@ -3358,18 +3350,8 @@ public class I2PSnarkServlet extends BasicServlet {
            .append("</b> </label><input type=checkbox class=\"optbox slider\" name=filesPublic id=filesPublic ")
            .append(filesPublic ? "checked " : "").append("title=\"")
            .append(_t("Set file permissions to allow other local users to access the downloaded files"))
-           .append("\"></span>\n");
-/* TODO: Make sure this functions as intended
-        if (!isWindows && !isARM) {
-            buf.append("<span class=configOption><label for=preallocateFiles><b>")
-               .append(_t("Pre-allocate files"))
-               .append("</b> </label><input type=checkbox class=\"optbox slider\" name=preallocateFiles id=preallocateFiles ")
-               .append(preallocateFiles ? "checked " : "").append("title=\"")
-               .append(_t("Pre-allocate files on disk to avoid fragmentation on non-solid state storage"))
-               .append("\"></span>\n");
-        }
-*/
-        buf.append("<span class=configOption><label for=maxFiles><b>")
+           .append("\"></span>\n")
+           .append("<span class=configOption><label for=maxFiles><b>")
            .append(_t("Max files per torrent"))
            .append("</b> <input type=text name=maxFiles size=5 maxlength=5 pattern=\"[0-9]{1,5}\" class=\"r numeric\"").append(" title=\"")
            .append(_t("Maximum number of files permitted per torrent - note that trackers may set their own limits, and your OS may limit the number of open files, preventing torrents with many files (and subsequent torrents) from loading"))
@@ -3802,13 +3784,10 @@ public class I2PSnarkServlet extends BasicServlet {
         "<script src=/js/iframeResizer/iframeResizer.contentWindow.js id=iframeResizer type=module></script>\n" +
         "<script src=/js/iframeResizer/updatedEvent.js type=module></script>\n" +
         "<script src=/js/setupIframe.js type=module></script>\n" +
-        "<script src=/i2psnark/.res/js/click.js type=module></script>\n" +
-        "<script src=/i2psnark/.res/js/snarkAlert.js type=module></script>\n" +
         "<script src=/js/detectPageZoom.js type=module></script>\n" +
         "<link rel=stylesheet href=/i2psnark/.res/snarkAlert.css>\n" +
         "</body>\n</html>";
-    private static final String FOOTER_STANDALONE = "</div>\n<script src=/i2psnark/.res/js/click.js type=module></script>\n" +
-        "<script src=/i2psnark/.res/js/snarkAlert.js type=module></script>\n" +
+    private static final String FOOTER_STANDALONE = "</div>\n" +
         "<script src=/i2psnark/.res/js/detectPageZoom.js type=module></script>\n" +
         "<link rel=stylesheet href=/i2psnark/.res/snarkAlert.css>\n" + "</body>\n</html>";
     private static final String IFRAME_FORM = "<iframe name=processForm id=processForm hidden></iframe>\n";
