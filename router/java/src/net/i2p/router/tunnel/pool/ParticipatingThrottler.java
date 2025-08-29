@@ -126,11 +126,11 @@ class ParticipatingThrottler {
             if (shouldDisconnect) {
                 context.commSystem().forceDisconnect(h);
                 if (!isBanned && _log.shouldWarn()) {
-                    _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for " + (bantime * 3 / 60000) +
+                    _log.warn("Banning Router [" + h.toBase64().substring(0,6) + "] for " + (bantime / 60000) +
                               "m -> " + version + (caps.isEmpty() ? "" : " / " + caps));
                 }
             }
-            context.banlist().banlistRouter(h, " <b>➜</b> Old and slow (" + version + " / LU)", null, null, context.clock().now() + (bantime * 3));
+            context.banlist().banlistRouter(h, " <b>➜</b> Old and slow (" + version + " / LU)", null, null, context.clock().now() + bantime);
             return true;
         }
         return false;
