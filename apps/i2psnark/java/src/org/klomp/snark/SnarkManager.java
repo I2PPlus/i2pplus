@@ -1058,26 +1058,26 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     /**
      *  all params may be null or need trimming
      */
-    public void updateConfig(String dataDir, boolean filesPublic, boolean autoStart, boolean smartSort, String refreshDelay,
+    public void updateConfig(String dataDir, boolean filesPublic, boolean autoStart, String refreshDelay,
                              String startDelay, String pageSize, String seedPct, String eepHost, String eepPort, String i2cpHost,
                              String i2cpPort, String i2cpOpts, String upLimit, String upBW, String downBW, boolean useOpenTrackers,
                              boolean useDHT, String theme, String lang, boolean enableRatings, boolean enableComments, String commentName,
                              boolean collapsePanels, boolean showStatusFilter, boolean enableLightbox, boolean enableAddCreate,
-                             boolean enableVaryInboundHops, boolean enableVaryOutboundHops, boolean preallocateFiles, String apiTarget, String apiKey) {
+                             boolean enableVaryInboundHops, boolean enableVaryOutboundHops, String apiTarget, String apiKey) {
         synchronized(_configLock) {
-            locked_updateConfig(dataDir, filesPublic, autoStart, smartSort, refreshDelay, startDelay, pageSize, seedPct, eepHost, eepPort,
+            locked_updateConfig(dataDir, filesPublic, autoStart, refreshDelay, startDelay, pageSize, seedPct, eepHost, eepPort,
                                 i2cpHost, i2cpPort, i2cpOpts, upLimit, upBW, downBW, useOpenTrackers, useDHT, theme, lang, enableRatings,
                                 enableComments, commentName, collapsePanels, showStatusFilter, enableLightbox, enableAddCreate,
-                                enableVaryInboundHops, enableVaryOutboundHops, preallocateFiles, apiTarget, apiKey);
+                                enableVaryInboundHops, enableVaryOutboundHops, apiTarget, apiKey);
         }
     }
 
-    private void locked_updateConfig(String dataDir, boolean filesPublic, boolean autoStart, boolean smartSort, String refreshDelay,
+    private void locked_updateConfig(String dataDir, boolean filesPublic, boolean autoStart, String refreshDelay,
                              String startDelay, String pageSize, String seedPct, String eepHost, String eepPort, String i2cpHost,
                              String i2cpPort, String i2cpOpts, String upLimit, String upBW, String downBW, boolean useOpenTrackers,
                              boolean useDHT, String theme, String lang, boolean enableRatings, boolean enableComments, String commentName,
                              boolean collapsePanels, boolean showStatusFilter, boolean enableLightbox, boolean enableAddCreate,
-                             boolean enableVaryInboundHops, boolean enableVaryOutboundHops, boolean preallocateFiles, String apiTarget, String apiKey) {
+                             boolean enableVaryInboundHops, boolean enableVaryOutboundHops, String apiTarget, String apiKey) {
         boolean changed = false;
         boolean interruptMonitor = false;
 
@@ -1101,20 +1101,16 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
         }
         if (upBW != null) {
-            long now = System.currentTimeMillis();
-            if (now - lastUpBwChange < 10 * 60 * 1000) {return;} // don't change more than once every 10m
             int limit = _util.getMaxUpBW();
             try {limit = Integer.parseInt(upBW.trim());} catch (NumberFormatException nfe) {}
             if (limit != _util.getMaxUpBW()) {
                 if (limit >= MIN_UP_BW) {
                     _util.setMaxUpBW(limit);
                     _bwManager.setUpBWLimit(limit * 1000L);
-                    changed = true;
                     _config.setProperty(PROP_UPBW_MAX, Integer.toString(limit));
                     String msg = _t("Up BW limit changed to {0}KBps", limit);
                     addMessage(msg);
                     if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
-                    lastUpBwChange = now;
                 } else {
                     String msg = _t("Minimum up bandwidth limit is {0}KBps", MIN_UP_BW);
                     addMessage(msg);
@@ -1123,19 +1119,15 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             }
         }
         if (downBW != null) {
-            long now = System.currentTimeMillis();
-            if (now - lastDownBwChange < 10 * 60 * 1000) {return;}  // don't change more than once every 10m
             int limit = (int) (_bwManager.getDownBWLimit() / 1024);
             try {limit = Integer.parseInt(downBW.trim());} catch (NumberFormatException nfe) {}
             if (limit != _bwManager.getDownBWLimit()) {
                 if (limit >= MIN_DOWN_BW) {
                     _bwManager.setDownBWLimit(limit * 1000L);
-                    changed = true;
                     _config.setProperty(PROP_DOWNBW_MAX, Integer.toString(limit));
                     String msg = _t("Maximum download speed changed to {0}KB/s", limit);
                     addMessage(msg);
                     if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
-                    lastDownBwChange = now;
                 } else {
                     String msg = _t("Download speed limit is {0}KB/s", MIN_DOWN_BW);
                     addMessage(msg);
@@ -1220,21 +1212,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
            } else {
                String msg = _t("New files will not be publicly readable");
-               addMessage(msg);
-               if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
-           }
-           changed = true;
-       }
-
-       if (shouldPreallocateFiles() != preallocateFiles) {
-           _config.setProperty(PROP_PREALLOCATE_FILES, Boolean.toString(preallocateFiles));
-           _util.setPreallocateFiles(preallocateFiles);
-           if (preallocateFiles) {
-               String msg = _t("Files will be pre-allocated on disk before downloading starts.");
-               addMessage(msg);
-               if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
-           } else {
-               String msg = _t("Files will not be pre-allocated on disk before downloading starts.");
                addMessage(msg);
                if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
            }
@@ -1425,13 +1402,6 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             changed = true;
         }
 
-        if (isSmartSortEnabled() != smartSort) {
-            _config.setProperty(PROP_SMART_SORT, Boolean.toString(smartSort));
-            if (smartSort) {addMessage(_t("Enabled smart sort") + ".");}
-            else {addMessage(_t("Disabled smart sort") + ".");}
-            changed = true;
-        }
-
         if (_util.shouldUseOpenTrackers() != useOpenTrackers) {
             _config.setProperty(PROP_USE_OPENTRACKERS, useOpenTrackers + "");
             String msg;
@@ -1549,7 +1519,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             saveConfig();
             // Data dir changed. This will stop and remove all old torrents, and add the new ones
             if (interruptMonitor) {_monitor.interrupt();}
-        } else {addMessage(_t("Configuration unchanged."));}
+        }
     }
 
     /**
