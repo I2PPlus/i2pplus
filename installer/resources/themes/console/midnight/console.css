@@ -610,6 +610,9 @@ p#upnpconfig,p#ipchange,p#ipv6config,p#tcpconfig,p#confignotes,p#defaultswork{ma
 #netconfig label,#externali2cp .optionlist label,#externali2cp .nowrap,#reseedconfig .nowrap,#updatehelper .nowrap,#updateProxyHostPort .nowrap,#config_update .nowrap,#manualreseed .nowrap,#graphs .nowrap{margin:1px 0;padding:2px 5px 0;min-width:480px;width:calc(100% - 10px);display:inline-block;line-height:1;background:var(--panel)}
 #externali2cp .optionlist label::before,#externali2cp .optionlist .nowrap::before,#netconfig label::before,#reseedconfig .nowrap::before,#manualreseed .nowrap::before,#graphs .nowrap::before{min-height:40px}
 
+#applinks a#configbandwidth::after{background-image:url(/themes/console/images/speedometer.svg)}
+#applinks a#chooselang::after{margin-left:10px;background-image:url(/themes/console/images/flags.png)}
+
 /* notifications */
 .messages{padding:20px 10px;margin:-4px 0 11px;font-weight:700;font-size:9.5pt;color:var(--ink);border:var(--border_inner);box-shadow:var(--highlight),inset 0 0 2px 1px #808;background:#000 var(--infohelp) no-repeat 15px center/28px}
 .messages i{padding-left:45px;display:inline-block;float:none;text-align:left;line-height:2}
@@ -2789,6 +2792,7 @@ select,.main input[type=submit],.main input[type=reset],.main input[type=submit]
 .percentBarText{margin-top:-2px;width:230px;font-size:10pt}
 .sb td,#sidebar a,#sidebar button,.smallhead,pre,#newsStatus,#newsDisplay{font-size:9pt}
 .sb_notice{margin-bottom:-8px}
+#applinks a::after,#sitelinks a::after{margin-top:1px}
 #bandwidthconfig .bw_out,#bandwidthconfig .bw_in,#bandwidthconfig .bw_share{padding-left:60px;padding-right:15px;min-width:240px;background-position:20px calc(50% + 14px)}
 #banlist{padding:3px}
 #banlist li{width:calc(100% - 18px)}
