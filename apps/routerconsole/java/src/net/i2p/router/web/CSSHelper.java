@@ -206,6 +206,10 @@ public class CSSHelper extends HelperBase {
         return !ServletUtil.isSmallBrowser(ua);
     }
 
+    public boolean isAdvancedMode() {
+        return _context.getBooleanProperty("routerconsole.advanced");
+    }
+
     /** Capitalize first letter of each word of string
      * https://www.javatpoint.com/java-program-to-capitalize-each-word-in-string
      */

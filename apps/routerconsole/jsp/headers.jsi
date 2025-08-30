@@ -23,6 +23,7 @@
   boolean useSoraFont = intl.useSoraDisplayFont();
   String type = request.getContentType();
   boolean needsCSP = true;
+  boolean isAdvancedMode = intl.isAdvancedMode();
   if (type != null) {
       if (type.startsWith("image/") || type.startsWith("font/") || type.startsWith("video/") ||
           type.startsWith("audio/") || type.equals("text/plain") || type.equals("text/csv") ||

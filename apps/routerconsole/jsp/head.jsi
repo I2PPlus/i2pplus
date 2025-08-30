@@ -9,7 +9,7 @@ boolean isConfigPage = uri.contains("config") && !uri.contains("/help/");
 boolean isHelpPage = uri.contains("/help/") && !uri.endsWith("/");
 boolean isWizardPage = uri.endsWith("wizard") || uri.endsWith("wizard.jsp");
 %>
-<html lang="<%=lang%>" <%= useSoraFont ? "class=sora" : "class=opensans" %> <%= theme.equals("dark") || theme.equals("midnight") ? " style=\"background:var(--bodybg,#000)\"" : "" %>>
+<html lang="<%=lang%>" class="<%= isAdvancedMode ? "advmode " : "" %><%= useSoraFont ? "sora" : "opensans" %>" <%= theme.equals("dark") || theme.equals("midnight") ? " style=\"background:var(--bodybg,#000)\"" : "" %>>
 <head>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width, initial-scale=1">
