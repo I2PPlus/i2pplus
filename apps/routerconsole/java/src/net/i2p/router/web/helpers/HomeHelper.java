@@ -329,7 +329,7 @@ public class HomeHelper extends HelperBase {
                 else {url = app.url + "\" target=_blank class=\"extlink";}
             } else if ((!embedApps && (app.url.contains("webmail") || app.url.contains("torrents") || app.url.contains("outproxy") ||
                        app.url.contains("bote") || app.url.contains("orchid") || app.url.contains("BwSchedule"))) ||
-                       app.url.contains(".i2p") || app.url.contains("history.txt")) {
+                       app.url.contains(".i2p") || app.url.contains("history.txt") || app.url.contains("prometheus/status.html")) {
                 url = app.url + "\" target=_blank class=\"extlink";
             } else {
                 url = app.url;
@@ -347,7 +347,7 @@ public class HomeHelper extends HelperBase {
             }
             buf.append("\n<div class=\"applink");
                 if (url.contains("i2pmetrics") || url.contains("paste.r4sas") || url.contains("speedtest") ||
-                url.contains("vuldb") || url.contains("meduza") || url.contains("mdn") ||
+                url.contains("vuldb") || url.contains("meduza") || url.contains("mdn") || url.contains("ardullm") ||
                 url.contains("w3schools") || url.contains("translate.idk")) {
                 buf.append(" js");
             }
