@@ -32,42 +32,39 @@ import net.i2p.router.web.GraphGenerator;
 import net.i2p.util.PortMapper;
 import net.i2p.util.SystemVersion;
 
-/**
- *  Refactored from sidebar_noframe.jsp to save ~100KB
- *
- */
 class SidebarRenderer {
 
     static final String ALL_SECTIONS[] =
-        {"HelpAndFAQ", "I2PServices", "I2PInternals", "RouterInfo", "ShortRouterInfo", "AdvancedRouterInfo", "MemoryBar", "NetworkReachability",
-        "UpdateStatus", "RestartStatus", "Peers", "FirewallAndReseedStatus", "Bandwidth", "BandwidthGraph", "Tunnels",
-        "Congestion", "TunnelStatus", "Destinations", "NewsHeadings", "Advanced", "Clock", "CPUBar"};
+        {"Advanced", "AdvancedRouterInfo", "Bandwidth", "BandwidthGraph", "Clock", "Congestion", "CPUBar",
+         "Destinations", "FirewallAndReseedStatus", "HelpAndFAQ", "I2PInternals", "I2PServices", "MemoryBar",
+         "NetworkReachability", "NewsHeadings", "Peers", "RestartStatus", "RouterInfo", "ShortRouterInfo",
+         "Tunnels", "TunnelStatus", "UpdateStatus"};
     static final Map<String, String> SECTION_NAMES;
 
     static {
         Map<String, String> aMap = new HashMap<String, String>();
-        aMap.put("HelpAndFAQ", _x("Help &amp; FAQ"));
-        aMap.put("I2PServices", _x("I2P Services"));
-        aMap.put("I2PInternals", _x("I2P Internals"));
-        aMap.put("RouterInfo", _x("Router Information"));
-        aMap.put("ShortRouterInfo", _x("Router Information (brief)"));
         aMap.put("AdvancedRouterInfo", _x("Router Information (advanced)"));
+        aMap.put("Advanced", _x("Advanced Links"));
+        aMap.put("BandwidthGraph", _x("Bandwidth Graph"));
+        aMap.put("Bandwidth", _x("Bandwidth"));
+        aMap.put("Clock", _x("UTC Clock"));
+        aMap.put("Congestion", _x("Congestion"));
+        aMap.put("CPUBar", _x("CPU Load"));
+        aMap.put("Destinations", _x("Service Tunnels"));
+        aMap.put("FirewallAndReseedStatus", _x("Firewall &amp; Reseed Status"));
+        aMap.put("HelpAndFAQ", _x("Help &amp; FAQ"));
+        aMap.put("I2PInternals", _x("I2P Internals"));
+        aMap.put("I2PServices", _x("I2P Services"));
         aMap.put("MemoryBar", _x("Memory Usage Bar"));
         aMap.put("NetworkReachability", _x("Network Reachability"));
-        aMap.put("UpdateStatus", _x("Update Status"));
-        aMap.put("RestartStatus", _x("Restart Status"));
-        aMap.put("Peers", _x("Peers"));
-        aMap.put("FirewallAndReseedStatus", _x("Firewall &amp; Reseed Status"));
-        aMap.put("Bandwidth", _x("Bandwidth"));
-        aMap.put("BandwidthGraph", _x("Bandwidth Graph"));
-        aMap.put("Tunnels", _x("Tunnels"));
-        aMap.put("Congestion", _x("Congestion"));
-        aMap.put("TunnelStatus", _x("Tunnel Status"));
-        aMap.put("Destinations", _x("Service Tunnels"));
         aMap.put("NewsHeadings", _x("News &amp; Updates"));
-        aMap.put("Advanced", _x("Advanced Links"));
-        aMap.put("Clock", _x("UTC Clock"));
-        aMap.put("CPUBar", _x("CPU Load"));
+        aMap.put("Peers", _x("Peers"));
+        aMap.put("RestartStatus", _x("Restart Status"));
+        aMap.put("RouterInfo", _x("Router Information"));
+        aMap.put("ShortRouterInfo", _x("Router Information (brief)"));
+        aMap.put("TunnelStatus", _x("Tunnel Status"));
+        aMap.put("Tunnels", _x("Tunnels"));
+        aMap.put("UpdateStatus", _x("Update Status"));
         SECTION_NAMES = Collections.unmodifiableMap(aMap);
     }
 
@@ -242,7 +239,7 @@ class SidebarRenderer {
         PortMapper pm = _context.portMapper();
         if (pm.isRegistered(PortMapper.SVC_SUSIDNS)) {
             String tx = _t("Addressbook");
-            rbuf.append("<a href=\"/dns?book=router&filter=latest\" target=_top title=\"")
+            rbuf.append("<a href=/dns target=_top title=\"")
                 .append(_t("Manage your I2P hosts file here (I2P domain name resolution)"))
                 .append("\">").append(nbsp(tx)).append("</a>\n")
                 .append("<a class=sb_icon target=_top href=/dns title=\"").append(tx)
