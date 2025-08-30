@@ -2957,26 +2957,16 @@ public class I2PSnarkServlet extends BasicServlet {
         if (newURL.length() > 0) {buf.append(" checked>");} // force toggle open
         else {buf.append('>');}
         buf.append("<label id=tab_addtorrent class=toggleview for=toggle_addtorrent><span class=tab_label>")
-           .append(_t("Add Torrent")).append("</span></label>")
-           .append("<hr>\n<table border=0><tr>")
-           .append("<td class=right>").append("<span>").append(_t("From URL")).append("</span>:</td>")
-           .append("<td class=left><input id=addTorrentURL type=text name=nofilter_newURL size=85 value=\"")
-           .append(newURL).append("\" spellcheck=false")
-           .append(" title=\"").append(_t("Enter the torrent file download URL (I2P only), magnet link, or info hash"))
+           .append(_t("Add Torrent")).append("</span></label><hr>\n<table border=0><tr><td class=right><span>")
+           .append(_t("From URL")).append("</span>:</td><td class=left><input id=addTorrentURL type=text name=nofilter_newURL size=85 value=\"")
+           .append(newURL).append("\" spellcheck=false title=\"").append(_t("Enter the torrent file download URL (I2P only), magnet link, or info hash"))
            .append("\" required>\n").append("<input type=submit class=add value=\"").append(_t("Add torrent"))
-           .append("\" name=foo></td>\n")
-           .append("<tr hidden><td class=right>").append(_t("Torrent file")).append(":</td>")
-           .append("<td class=left><input type=file name=newFile accept=\".torrent\"/></td>")
-           .append("<tr><td class=right><span>").append(_t("Data dir")).append("</span>:</td>")
-           .append("<td class=left><input type=text name=nofilter_newDir size=85 value=\"")
-           .append(_manager.getDataDir().getAbsolutePath()).append("\" spellcheck=false").append(" title=\"")
-           .append(_t("Enter the directory to save the data in (default {0})", _manager.getDataDir().getAbsolutePath()));
-
-        String addBottom =
-            "\"></td></tr>\n</table>\n" +
-            "<div id=addNotify class=notify hidden><table><tr><td></td></tr></table></div>\n" +
-            "</div>\n</form>\n</div>\n";
-        buf.append(addBottom);
+           .append("\" name=foo></td>\n<tr hidden><td class=right>").append(_t("Torrent file"))
+           .append(":</td><td class=left><input type=file name=newFile accept=\".torrent\"/></td><tr><td class=right><span>")
+           .append(_t("Data dir")).append("</span>:</td><td class=left><input type=text name=nofilter_newDir size=85 value=\"")
+           .append(_manager.getDataDir().getAbsolutePath()).append("\" spellcheck=false title=\"")
+           .append(_t("Enter the directory to save the data in (default {0})", _manager.getDataDir().getAbsolutePath()))
+           .append("\"></td></tr>\n</table>\n<div id=addNotify class=notify hidden><table><tr><td></td></tr></table></div>\n</div>\n</form>\n</div>\n");
 
         out.append(buf);
         out.flush();
@@ -2986,23 +2976,16 @@ public class I2PSnarkServlet extends BasicServlet {
     private void writeSeedForm(PrintWriter out, HttpServletRequest req, List<Tracker> sortedTrackers, List<TorrentCreateFilter> sortedFilters) throws IOException {
         StringBuilder buf = new StringBuilder(3*1024);
         _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
-        String createTop =
-            "<div class=sectionPanel id=createSection>\n<div>\n" +
-            // *not* enctype="multipart/form-data", so input type=file sends filename, not the file
-            "<form id=createForm action=_post method=POST target=processForm>\n";
-        buf.append(createTop);
+        buf.append("<div class=sectionPanel id=createSection>\n<div>\n<form id=createForm action=_post method=POST target=processForm>\n");
         writeHiddenInputs(buf, req, "Create");
         buf.append("<input hidden class=toggle_input id=toggle_createtorrent type=checkbox>")
-           .append("<label id=tab_newtorrent class=toggleview for=toggle_createtorrent><span class=tab_label>")
-           .append(_t("Create Torrent")).append("</span></label><hr>\n<table border=0>")
-           //.append("From file: <input type=file name=newFile size=50 value=\"" + newFile + "\" /><br>\n");
-           .append("<tr><td class=right><span>").append(_t("Data to seed")).append("</span>:</td>")
-           .append("<td class=left><input id=createTorrentFile type=text name=nofilter_baseFile size=85 value=\"").append("\" spellcheck=false title=\"")
+           .append("<label id=tab_newtorrent class=toggleview for=toggle_createtorrent><span class=tab_label>").append(_t("Create Torrent"))
+           .append("</span></label><hr>\n<table border=0><tr><td class=right><span>").append(_t("Data to seed"))
+           .append("</span>:</td><td class=left><input id=createTorrentFile type=text name=nofilter_baseFile size=85 value=\"\" spellcheck=false title=\"")
            .append(_t("File or directory to seed (full path or within the directory {0} )", _manager.getDataDir().getAbsolutePath() + File.separatorChar))
-           .append("\" required> <input type=submit class=create value=\"").append(_t("Create torrent")).append("\" name=foo>").append("</td></tr>\n")
+           .append("\" required> <input type=submit class=create value=\"").append(_t("Create torrent")).append("\" name=foo></td></tr>\n")
            .append("<tr id=createTorrentFilters title=\"").append(_t("Exclude files from the torrent if they reside in the torrent folder")).append("\">")
-           .append("<td class=right><span>").append(_t("Content Filters")).append("</span>:</td>")
-           .append("<td class=left><div id=contentFilter>");
+           .append("<td class=right><span>").append(_t("Content Filters")).append("</span>:</td><td class=left><div id=contentFilter>");
 
         for (TorrentCreateFilter f : sortedFilters) {
            String name = f.name;
@@ -3011,18 +2994,16 @@ public class I2PSnarkServlet extends BasicServlet {
            String type = f.filterType;
            String filterTypeLabel = type.replace("_", " ");
            boolean isDefault = f.isDefault;
-           buf.append("<input type=checkbox id=").append(nameUnderscore).append(" name=filters")
-              .append(" value=\"").append(name).append("\"").append(isDefault ? " checked" : "").append(" hidden>")
-              .append("<label for=").append(nameUnderscore).append(" class=\"createFilterToggle ").append(type)
-              .append("\" title=\"Filter pattern: (").append(filterTypeLabel).append(") ").append(pattern).append("\">")
-              .append(name).append("</label>");
+           buf.append("<input type=checkbox id=").append(nameUnderscore).append(" name=filters value=\"").append(name)
+              .append("\"").append(isDefault ? " checked" : "").append(" hidden><label for=").append(nameUnderscore)
+              .append(" class=\"createFilterToggle ").append(type).append("\" title=\"Filter pattern: (")
+              .append(filterTypeLabel).append(") ").append(pattern).append("\">").append(name).append("</label>");
         }
 
-        buf.append("</div></td></tr>\n")
-           .append("<tr><td><span>").append(_t("Trackers")).append("</span>:</td>")
-           .append("<td>\n<table id=trackerselect>\n")
-           .append("<tr><td>Name</td><td>").append(_t("Primary")).append("</td><td>")
-           .append(_t("Alternates")).append("</td><td>").append(_t("Tracker Type")).append("</td></tr>\n");
+        buf.append("</div></td></tr>\n<tr><td><span>").append(_t("Trackers"))
+           .append("</span>:</td><td>\n<table id=trackerselect>\n<tr><td>Name</td><td>")
+           .append(_t("Primary")).append("</td><td>").append(_t("Alternates")).append("</td><td>")
+           .append(_t("Tracker Type")).append("</td></tr>\n");
 
         for (Tracker t : sortedTrackers) {
             List<String> openTrackers = _manager.util().getOpenTrackers();
