@@ -501,6 +501,9 @@ document.addEventListener("visibilitychange", () => {
   else {stopSnarkRefresh();}
 });
 
-document.addEventListener("DOMContentLoaded", convertEncodedSpaces);
+document.addEventListener("DOMContentLoaded", () => {
+  convertEncodedSpaces();
+  document.body.removeAttribute("style");
+});
 
 export { doRefresh, getURL, initSnarkRefresh, refreshScreenLog, refreshTorrents, snarkRefreshIntervalId, isDocumentVisible };

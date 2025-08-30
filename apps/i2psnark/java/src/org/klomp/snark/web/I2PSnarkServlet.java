@@ -777,14 +777,16 @@ public class I2PSnarkServlet extends BasicServlet {
         hbuf.append("<tr><th class=status>");
         // show incomplete torrents at top on first click
         String sort = ("-2".equals(currentSort)) ? "2" : "-2";
+        String ascending = "<span class=ascending></span>";
+        String descending = "<span class=descending></span>";
         if (showSort) {
             hbuf.append("<span class=sortIcon>");
             if (currentSort == null || "-2".equals(currentSort)) {
                 sort = "2";
-                if ( "-2".equals(currentSort)) {hbuf.append("<span class=ascending></span>");}
+                if ( "-2".equals(currentSort)) {hbuf.append(ascending);}
             } else if ("2".equals(currentSort)) {
                 sort = "-2";
-                hbuf.append("<span class=descending></span>");
+                hbuf.append(descending);
             } else {sort = "2";}
             hbuf.append("<a class=sorter href=\"").append(_contextPath).append('/').append(getQueryString(req, null, null, sort))
                 .append(separator).append(filterQuery).append("\">");
@@ -826,15 +828,15 @@ public class I2PSnarkServlet extends BasicServlet {
             hbuf.append("<span class=sortIcon>");
             if (currentSort == null || "0".equals(currentSort) || "1".equals(currentSort)) {
                 sort = "-1";
-                if ("1".equals(currentSort) || currentSort == null) {hbuf.append("<span class=ascending></span>");}
+                if ("1".equals(currentSort) || currentSort == null) {hbuf.append(ascending);}
             } else if ("-1".equals(currentSort)) {
                 sort = "12";
                 isTypeSort = true;
-                hbuf.append("<span class=descending></span>");
+                hbuf.append(descending);
             } else if ("12".equals(currentSort)) {
                 sort = "-12";
                 isTypeSort = true;
-                hbuf.append("<span class=ascending></span>");
+                hbuf.append(ascending);
             } else {sort = "1";}
             hbuf.append("<a class=sorter href=\"").append(_contextPath).append('/').append(getQueryString(req, null, null, sort));
             hbuf.append(separator).append(filterQuery);
@@ -861,10 +863,10 @@ public class I2PSnarkServlet extends BasicServlet {
                     hbuf.append("<span class=sortIcon>");
                     if (currentSort == null || "-4".equals(currentSort)) {
                         sort = "4";
-                        if ("-4".equals(currentSort)) {hbuf.append("<span class=descending></span>");}
+                        if ("-4".equals(currentSort)) {hbuf.append(descending);}
                     } else if ("4".equals(currentSort)) {
                         sort = "-4";
-                        hbuf.append("<span class=ascending></span>");
+                        hbuf.append(ascending);
                     }
                     hbuf.append("<a class=sorter href=\"").append(_contextPath).append('/').append(getQueryString(req, null, null, sort));
                     hbuf.append(separator).append(filterQuery);
@@ -883,19 +885,19 @@ public class I2PSnarkServlet extends BasicServlet {
                 hbuf.append("<span class=sortIcon>");
                 if ("-5".equals(currentSort)) {
                     sort = "5";
-                    hbuf.append("<span class=descending></span>");
+                    hbuf.append(descending);
                 } else if ("5".equals(currentSort)) {
                     sort = "-6";
                     isDlSort = true;
-                    hbuf.append("<span class=ascending></span>");
+                    hbuf.append(ascending);
                 } else if ("-6".equals(currentSort)) {
                     sort = "6";
                     isDlSort = true;
-                    hbuf.append("<span class=descending></span>");
+                    hbuf.append(descending);
                 } else if ("6".equals(currentSort)) {
                     sort = "-5";
                     isDlSort = true;
-                    hbuf.append("<span class=ascending></span>");
+                    hbuf.append(ascending);
                 } else {sort = "-5";}
                 hbuf.append("<a class=sorter href=\"").append(_contextPath).append('/').append(getQueryString(req, null, null, sort))
                     .append(separator).append(filterQuery).append("\">");
@@ -921,10 +923,10 @@ public class I2PSnarkServlet extends BasicServlet {
                     hbuf.append("<span class=sortIcon>");
                     if (currentSort == null || "8".equals(currentSort)) {
                         sort = "-8";
-                        if ("8".equals(currentSort)) {hbuf.append("<span class=descending></span>");}
+                        if ("8".equals(currentSort)) {hbuf.append(descending);}
                     } else if ("-8".equals(currentSort)) {
                         sort = "8";
-                        hbuf.append("<span class=ascending></span>");
+                        hbuf.append(ascending);
                     } else {sort = "-8";}
                     if (peerParam != null) {
                         hbuf.append("<a class=sorter href=\"").append(_contextPath).append('/').append(getQueryString(req, "1", sort, filter, null));
@@ -947,20 +949,20 @@ public class I2PSnarkServlet extends BasicServlet {
             hbuf.append("<span class=sortIcon>");
             if ("-7".equals(currentSort)) {
                 sort = "7";
-                hbuf.append("<span class=descending></span>");
+                hbuf.append(descending);
             } else if ("7".equals(currentSort)) {
                 sort = "-11";
                 nextRatSort = true;
-                hbuf.append("<span class=ascending></span>");
+                hbuf.append(ascending);
             } else if ("-11".equals(currentSort)) {
                 sort = "11";
                 nextRatSort = true;
                 isRatSort = true;
-                hbuf.append("<span class=descending></span>");
+                hbuf.append(descending);
             } else if ("11".equals(currentSort)) {
                 sort = "-7";
                 isRatSort = true;
-                hbuf.append("<span class=ascending></span>");
+                hbuf.append(ascending);
             } else {sort = "-7";}
             hbuf.append("<a class=sorter href=\"").append(_contextPath).append('/').append(getQueryString(req, null, null, sort))
                 .append(separator).append(filterQuery).append("\">");
@@ -984,10 +986,10 @@ public class I2PSnarkServlet extends BasicServlet {
                     hbuf.append("<span class=sortIcon>");
                     if (currentSort == null || "9".equals(currentSort)) {
                         sort = "-9";
-                        if ("9".equals(currentSort)) {hbuf.append("<span class=ascending></span>");}
+                        if ("9".equals(currentSort)) {hbuf.append(ascending);}
                     } else if ("-9".equals(currentSort)) {
                         sort = "9";
-                        hbuf.append("<span class=descending></span>");
+                        hbuf.append(descending);
                     } else {sort = "-9";}
                     hbuf.append("<a class=sorter href=\"").append(_contextPath).append('/').append(getQueryString(req, null, null, sort))
                         .append(separator).append(filterQuery).append("\">");
@@ -1123,15 +1125,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 toThemeSVG(ftr, "outbound", "", "");
                 ftr.append("<span class=badge>").append("</span></span>");
             }
-/*
-            _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
-            ftr.append("<span id=tnlInCount class=counter title=\"").append(_t("Active Inbound tunnels")).append("\" hidden>");
-            toThemeSVG(ftr, "inbound", "", "");
-            ftr.append("<span class=badge>").append(getActiveInboundCount()).append("</span></span>")
-               .append("<span id=tnlOutCount class=counter title=\"").append(_t("Active Outbound tunnels")).append("\" hidden>");
-            toThemeSVG(ftr, "outbound", "", "");
-            ftr.append("<span class=badge>").append(getActiveOutboundCount()).append("</span></span>");
-*/
+
             ftr.append("</span></th>");
 
             if (_manager.util().connected() && total > 0) {
@@ -1257,23 +1251,24 @@ public class I2PSnarkServlet extends BasicServlet {
         if (Math.max(pageSizeConf, 10) < total) {
             buf.append(Math.max(pageSizeConf, 10)).append(" / ").append(total);
         } else {buf.append(total);}
+        String badge = "<span class=badge></span>";
         buf.append("</span></span></a>")
            .append("<a class=filter id=active href=\"").append(buttonUrl).append("active\"><span>")
-           .append(_t("Active")).append("<span class=badge></span></span></a>")
+           .append(_t("Active")).append(badge).append("</span></a>")
            .append("<a class=filter id=inactive href=\"").append(buttonUrl).append("inactive\"><span>")
-           .append(_t("Inactive")).append("<span class=badge></span></span></a>")
+           .append(_t("Inactive")).append(badge).append("</span></a>")
            .append("<a class=filter id=connected href=\"").append(buttonUrl).append("connected\"><span>")
-           .append(_t("Connected")).append("<span class=badge></span></span></a>")
+           .append(_t("Connected")).append(badge).append("</span></a>")
            .append("<a class=filter id=downloading href=\"").append(buttonUrl).append("downloading\"><span>")
-           .append(_t("Downloading")).append("<span class=badge></span></span></a>")
+           .append(_t("Downloading")).append(badge).append("</span></a>")
            .append("<a class=filter id=seeding href=\"").append(buttonUrl).append("seeding\"><span>")
-           .append(_t("Seeding")).append("<span class=badge></span></span></a>")
+           .append(_t("Seeding")).append(badge).append("</span></a>")
            .append("<a class=filter id=complete href=\"").append(buttonUrl).append("complete\"><span>")
-           .append(_t("Complete")).append("<span class=badge></span></span></a>")
+           .append(_t("Complete")).append(badge).append("</span></a>")
            .append("<a class=filter id=incomplete href=\"").append(buttonUrl).append("incomplete\"><span>")
-           .append(_t("Incomplete")).append("<span class=badge></span></span></a>")
+           .append(_t("Incomplete")).append(badge).append("</span></a>")
            .append("<a class=filter id=stopped href=\"").append(buttonUrl).append("stopped\"><span>")
-           .append(_t("Stopped")).append("<span class=badge></span></span></a>")
+           .append(_t("Stopped")).append(badge).append("</span></a>")
            .append("</div>\n");
         if (!reqURL.contains("/.ajax")) {
             buf.append("<script src=/i2psnark/.res/js/filterBar.js type=module></script>\n");
@@ -1307,11 +1302,6 @@ public class I2PSnarkServlet extends BasicServlet {
             String lcname = Normalizer.normalize(snark.getBaseName().toLowerCase(Locale.US), Normalizer.Form.NFKD);
             for (int j = 0; j < searchList.size(); j++) {
                 String term = searchList.get(j);
-                // search for any term (OR)
-                //if (lcname.contains(term)) {
-                //    matches.add(snark);
-                //    break;
-                //}
                 // search for all terms (AND)
                 if (!lcname.contains(term)) {continue loop;}
             }
@@ -1581,8 +1571,7 @@ public class I2PSnarkServlet extends BasicServlet {
                             if (storage == null) {continue;}
                             File sbase = storage.getBase();
                             if (isParentOf(sbase, dir)) {
-                                _manager.addMessage(_t("Cannot add torrent {0} inside another torrent: {1}",
-                                                      dir.getAbsolutePath(), sbase));
+                                _manager.addMessage(_t("Cannot add torrent {0} inside another torrent: {1}", dir.getAbsolutePath(), sbase));
                                 return;
                             }
                         }
@@ -1619,8 +1608,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         }
                         FileInputStream in = null;
                         try {
-                            // This is all copied from FetchAndAdd
-                            // test that it's a valid torrent file, and get the hash to check for dups
+                            // This is all copied from FetchAndAdd - test that it's a valid torrent file, and get the hash to check for dups
                             in = new FileInputStream(file);
                             byte[] fileInfoHash = new byte[20];
                             String name = MetaInfo.getNameAndInfoHash(in, fileInfoHash);
@@ -1673,14 +1661,15 @@ public class I2PSnarkServlet extends BasicServlet {
             if (torrent != null && stopped == 0) {
                 byte[] infoHash = Base64.decode(torrent);
                 boolean validHash = infoHash != null && infoHash.length == 20; // valid sha1
-                if (validHash) {
+                if (!validHash) {return;}
+                else {
                     Snark snark = _manager.getTorrentByInfoHash(infoHash);
                     if (snark != null && DataHelper.eq(infoHash, snark.getInfoHash())) {
                         _manager.stopTorrent(snark);
                         stopped++;
-                        return;
-                    } else {return;}
-                } else {return;}
+                    }
+                    return;
+                }
             }
         } else if (action.startsWith("Start_")) {
             String torrent = action.substring(6).replace("%3D", "=");
@@ -1802,6 +1791,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             }
         } else if ("Save".equals(action)) {
+            boolean userInitiated = true;
             String dataDir = req.getParameter("nofilter_dataDir");
             boolean filesPublic = req.getParameter("filesPublic") != null;
             boolean autoStart = req.getParameter("autoStart") != null;
