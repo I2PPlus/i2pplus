@@ -591,7 +591,7 @@ msgstr "下载速度"
 msgid "TX"
 msgstr "已发送"
 
-msgid "Upload ratio"
+msgid "Share ratio"
 msgstr "上传率"
 
 msgid "Uploaded"
@@ -924,13 +924,13 @@ msgstr "启动种子"
 msgid "Remove"
 msgstr "移除"
 
-msgid "Remove the torrent from the active list, deleting the .torrent file"
+msgid "Remove and delete torrent, retaining downloaded files"
 msgstr "取消下载任务并删除对应种子文件"
 
 msgid "Delete"
 msgstr "删除"
 
-msgid "Delete the .torrent file and the associated data files"
+msgid "Delete .torrent file and associated data files"
 msgstr "删除.torrent文件并删除数据文件"
 
 msgid "Peer attached to swarm"

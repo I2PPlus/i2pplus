@@ -591,7 +591,7 @@ msgstr "Nerhastighet"
 msgid "TX"
 msgstr "TX"
 
-msgid "Upload ratio"
+msgid "Share ratio"
 msgstr "Sändningsförhållande"
 
 msgid "Uploaded"
@@ -928,13 +928,13 @@ msgstr "Starta torrenten"
 msgid "Remove"
 msgstr "Ta bort"
 
-msgid "Remove the torrent from the active list, deleting the .torrent file"
+msgid "Remove and delete torrent, retaining downloaded files"
 msgstr "Ta bort torrenten från den aktiva listan, tar bort .torrent filen"
 
 msgid "Delete"
 msgstr "Ta bort"
 
-msgid "Delete the .torrent file and the associated data files"
+msgid "Delete .torrent file and associated data files"
 msgstr "Ta bort .torrent-filen och tillhörande datafiler"
 
 msgid "Peer attached to swarm"

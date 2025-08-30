@@ -591,7 +591,7 @@ msgstr "Tasa de descarga"
 msgid "TX"
 msgstr "Transmisor"
 
-msgid "Upload ratio"
+msgid "Share ratio"
 msgstr "Tasa de subida"
 
 msgid "Uploaded"
@@ -928,13 +928,13 @@ msgstr "Iniciar el torrent"
 msgid "Remove"
 msgstr "Eliminar"
 
-msgid "Remove the torrent from the active list, deleting the .torrent file"
+msgid "Remove and delete torrent, retaining downloaded files"
 msgstr "Eliminar el torrent de la lista activa, eliminando el archivo .torrentEliminar el torrent de la lista de torrents activos, borrando el fichero .torrent"
 
 msgid "Delete"
 msgstr "Borrar"
 
-msgid "Delete the .torrent file and the associated data files"
+msgid "Delete .torrent file and associated data files"
 msgstr "Eliminar el archivo .torrent y los archivos de datos asociados"
 
 msgid "Peer attached to swarm"

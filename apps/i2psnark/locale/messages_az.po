@@ -590,7 +590,7 @@ msgstr "Yuxarı sürəti"
 msgid "TX"
 msgstr "TX"
 
-msgid "Upload ratio"
+msgid "Share ratio"
 msgstr "Yükləmə nisbəti"
 
 msgid "Uploaded"
@@ -927,13 +927,13 @@ msgstr "Torrenti Başla"
 msgid "Remove"
 msgstr "Sil"
 
-msgid "Remove the torrent from the active list, deleting the .torrent file"
+msgid "Remove and delete torrent, retaining downloaded files"
 msgstr ".torrent faylı və aktiv siyahıdan torrenti sil"
 
 msgid "Delete"
 msgstr "Sil"
 
-msgid "Delete the .torrent file and the associated data files"
+msgid "Delete .torrent file and associated data files"
 msgstr ".torrent faylı və əlaqəli verilənlər fayllarını sil"
 
 msgid "Peer attached to swarm"

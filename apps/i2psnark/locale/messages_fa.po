@@ -591,7 +591,7 @@ msgstr "نرخ پایین"
 msgid "TX"
 msgstr "TX"
 
-msgid "Upload ratio"
+msgid "Share ratio"
 msgstr "نسبت آپلود"
 
 msgid "Uploaded"
@@ -928,13 +928,13 @@ msgstr "شروع تورنت"
 msgid "Remove"
 msgstr "حذف"
 
-msgid "Remove the torrent from the active list, deleting the .torrent file"
+msgid "Remove and delete torrent, retaining downloaded files"
 msgstr "تورنت را از لیست فعال حذف کنید و فایل .torrent را حذف کنید"
 
 msgid "Delete"
 msgstr "پاک کردن"
 
-msgid "Delete the .torrent file and the associated data files"
+msgid "Delete .torrent file and associated data files"
 msgstr "فایل تورنت و فایل های داده مرتبط را حذف کنید"
 
 msgid "Peer attached to swarm"

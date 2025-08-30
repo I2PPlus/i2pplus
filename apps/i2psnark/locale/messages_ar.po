@@ -591,7 +591,7 @@ msgstr "معدل التحميل"
 msgid "TX"
 msgstr "تكس"
 
-msgid "Upload ratio"
+msgid "Share ratio"
 msgstr "نسبة التحميل"
 
 msgid "Uploaded"
@@ -944,13 +944,13 @@ msgstr "ابدأ التورنت"
 msgid "Remove"
 msgstr "حذف"
 
-msgid "Remove the torrent from the active list, deleting the .torrent file"
+msgid "Remove and delete torrent, retaining downloaded files"
 msgstr "حذف التورنت من القائمة، حذف ملف .torrent"
 
 msgid "Delete"
 msgstr "حذف"
 
-msgid "Delete the .torrent file and the associated data files"
+msgid "Delete .torrent file and associated data files"
 msgstr "احذف ملف .torrent وملفات البيانات المرتبطة به"
 
 msgid "Peer attached to swarm"

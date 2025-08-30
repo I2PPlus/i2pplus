@@ -591,7 +591,7 @@ msgstr "Alla hinnang"
 msgid "TX"
 msgstr "TX"
 
-msgid "Upload ratio"
+msgid "Share ratio"
 msgstr "Üleslaadimise suhe"
 
 msgid "Uploaded"
@@ -928,13 +928,13 @@ msgstr "Alusta torrent"
 msgid "Remove"
 msgstr "Eemalda"
 
-msgid "Remove the torrent from the active list, deleting the .torrent file"
+msgid "Remove and delete torrent, retaining downloaded files"
 msgstr "Eemalda torrent aktiivsest loetlusest, kustutades .torrent faili"
 
 msgid "Delete"
 msgstr "Kustuta"
 
-msgid "Delete the .torrent file and the associated data files"
+msgid "Delete .torrent file and associated data files"
 msgstr "Kustuta .torrent fail ja seotud andmefailid"
 
 msgid "Peer attached to swarm"

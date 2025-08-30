@@ -591,7 +591,7 @@ msgstr "Down Snelheid"
 msgid "TX"
 msgstr "TX"
 
-msgid "Upload ratio"
+msgid "Share ratio"
 msgstr "Upload-ratio"
 
 msgid "Uploaded"
@@ -928,13 +928,13 @@ msgstr "Start de torrent"
 msgid "Remove"
 msgstr "Verwijderen"
 
-msgid "Remove the torrent from the active list, deleting the .torrent file"
+msgid "Remove and delete torrent, retaining downloaded files"
 msgstr "Verwijder de torrent uit de actieve lijst en verwijder het .torrent-bestandVerwijder de torrent van de actieve lijst, het .torrent bestand wordt verwijderd"
 
 msgid "Delete"
 msgstr "Verwijderen"
 
-msgid "Delete the .torrent file and the associated data files"
+msgid "Delete .torrent file and associated data files"
 msgstr "Verwijder het .torrent-bestand en de bijbehorende gegevensbestanden"
 
 msgid "Peer attached to swarm"

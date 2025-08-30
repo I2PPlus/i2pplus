@@ -591,7 +591,7 @@ msgstr "다운로드 비율"
 msgid "TX"
 msgstr "TX"
 
-msgid "Upload ratio"
+msgid "Share ratio"
 msgstr "업로드 비율"
 
 msgid "Uploaded"
@@ -924,13 +924,13 @@ msgstr "토렌트 시작"
 msgid "Remove"
 msgstr "삭제"
 
-msgid "Remove the torrent from the active list, deleting the .torrent file"
+msgid "Remove and delete torrent, retaining downloaded files"
 msgstr "토렌트 리스트에서 삭제 및 .torrent 파일도 지우기"
 
 msgid "Delete"
 msgstr "삭제"
 
-msgid "Delete the .torrent file and the associated data files"
+msgid "Delete .torrent file and associated data files"
 msgstr "Torrent 파일 및 관련 데이터 파일을 삭제합니다"
 
 msgid "Peer attached to swarm"

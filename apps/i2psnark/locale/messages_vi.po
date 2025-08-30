@@ -591,7 +591,7 @@ msgstr "Tỷ lệ giảm"
 msgid "TX"
 msgstr "TX"
 
-msgid "Upload ratio"
+msgid "Share ratio"
 msgstr "Tỷ lệ tải lên"
 
 msgid "Uploaded"
@@ -924,13 +924,13 @@ msgstr "Bắt đầu torrent"
 msgid "Remove"
 msgstr "Bỏ"
 
-msgid "Remove the torrent from the active list, deleting the .torrent file"
+msgid "Remove and delete torrent, retaining downloaded files"
 msgstr "Xóa torrent khỏi danh sách hoạt động, xóa file .torrent"
 
 msgid "Delete"
 msgstr "Xóa"
 
-msgid "Delete the .torrent file and the associated data files"
+msgid "Delete .torrent file and associated data files"
 msgstr "Xóa file .torrent và các file dữ liệu liên quan"
 
 msgid "Peer attached to swarm"

@@ -591,7 +591,7 @@ msgstr ""
 msgid "TX"
 msgstr ""
 
-msgid "Upload ratio"
+msgid "Share ratio"
 msgstr ""
 
 msgid "Uploaded"
@@ -934,13 +934,13 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-msgid "Remove the torrent from the active list, deleting the .torrent file"
+msgid "Remove and delete torrent, retaining downloaded files"
 msgstr ""
 
 msgid "Delete"
 msgstr ""
 
-msgid "Delete the .torrent file and the associated data files"
+msgid "Delete .torrent file and associated data files"
 msgstr ""
 
 msgid "Peer attached to swarm"

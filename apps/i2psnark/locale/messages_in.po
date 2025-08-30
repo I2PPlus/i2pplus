@@ -591,7 +591,7 @@ msgstr "Kecepatan download"
 msgid "TX"
 msgstr "TX"
 
-msgid "Upload ratio"
+msgid "Share ratio"
 msgstr "Rasio upload"
 
 msgid "Uploaded"
@@ -924,13 +924,13 @@ msgstr "Mulai torrent ini"
 msgid "Remove"
 msgstr "Hapus"
 
-msgid "Remove the torrent from the active list, deleting the .torrent file"
+msgid "Remove and delete torrent, retaining downloaded files"
 msgstr "Hapus torrent dari daftar aktif, hapus .torrent file"
 
 msgid "Delete"
 msgstr "Hapus"
 
-msgid "Delete the .torrent file and the associated data files"
+msgid "Delete .torrent file and associated data files"
 msgstr "Hapus file .torrent dan file data terkait"
 
 msgid "Peer attached to swarm"
