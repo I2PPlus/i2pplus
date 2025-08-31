@@ -106,7 +106,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
 
         if (shouldBan) {
             if (dlm.getFrom() != null) {
-                _context.banlist().banlistRouter(dlm.getFrom(), " <b>➜</b> Excessive lookup requests" + (isFF ? "[Floodfill]" : ""),
+                _context.banlist().banlistRouter(dlm.getFrom(), " <b>➜</b> Excessive lookup requests" + (isFF ? " (Floodfill)" : ""),
                                                  null, null, _context.clock().now() + 60 * 60 * 1000);
                 _context.commSystem().mayDisconnect(dlm.getFrom());
             }
@@ -184,8 +184,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
                     newdlm.setSearchType(dlm.getSearchType());
                     newdlm.setSearchKey(dlm.getSearchKey());
                     Set<Hash> dont = dlm.getDontIncludePeers();
-                    if (dont != null)
-                        newdlm.setDontIncludePeers(dont);
+                    if (dont != null) {newdlm.setDontIncludePeers(dont);}
                     return newdlm;
                 } else {
                     if (_log.shouldWarn())
@@ -259,8 +258,8 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
      * @since 0.9.67+
      */
     private boolean shouldAcceptLookup(boolean isSenderUs, boolean shouldThrottle, boolean shouldBan,
-                                      boolean ourRI, boolean floodfillMode, boolean isFF,
-                                      DatabaseLookupMessage.Type type) {
+                                       boolean ourRI, boolean floodfillMode, boolean isFF,
+                                       DatabaseLookupMessage.Type type) {
         return isSenderUs || (!shouldThrottle && !shouldBan && (ourRI || (floodfillMode && !isFF) ||
                (floodfillMode && isFF && type != DatabaseLookupMessage.Type.EXPL && type != DatabaseLookupMessage.Type.ANY)));
     }
@@ -270,6 +269,8 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
      *
      * @param type the lookup message type
      * @return a descriptive string representation of the type
+     *
+     * @since 0.9.67+
      */
     private static String typeToString(DatabaseLookupMessage.Type type) {
         switch (type) {
