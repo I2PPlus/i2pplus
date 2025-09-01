@@ -13,7 +13,6 @@ boolean isWizardPage = uri.endsWith("wizard") || uri.endsWith("wizard.jsp");
 <head>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width, initial-scale=1">
-<link rel=modulepreload href=/js/initSidebar.js>
 <link rel=modulepreload href=/js/refreshSidebar.js>
 <link rel=modulepreload href=/js/sectionToggle.js>
 <link rel=modulepreload href=/js/miniGraph.js>
@@ -44,5 +43,5 @@ else if (lang.equals("ar") || lang.equals("fa")) { %> <link rel=stylesheet href=
 </script>
 <script src=/js/progressx.js></script>
 <script src=/js/detectPageZoom.js></script>
-<% if (!isWizardPage) { %> <script src=/js/initSidebar.js type=module></script> <% } %>
+<% if (!isWizardPage) { %> <script src=/js/refreshSidebar.js type=module></script> <% } %>
 <noscript><style>.script{display:none!important}</style></noscript>
