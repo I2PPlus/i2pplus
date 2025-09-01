@@ -5,7 +5,7 @@
 const MAX_CONCURRENT_REQUESTS = 8;
 const MAX_QUEUE_SIZE = 16;
 const MIN_INTERVAL = 950;
-const DEBOUNCE_DELAY = 500;
+const DEBOUNCE_DELAY = 50;
 const responseCountMap = new Map();
 const clientId = Math.random().toString(36).substr(2, 9);
 
@@ -28,7 +28,8 @@ function handleClientMessage(event, clientData) {
 
   if (!force && (now - lastRequestTime < MIN_INTERVAL)) return;
   if (fetchQueue.length >= MAX_QUEUE_SIZE) {return;}
-  if (debounceTimeouts.has(url)) {clearTimeout(debounceTimeouts.get(url));}
+  if (force) {enqueueFetchRequest(url, now, clientData);}
+  else if (debounceTimeouts.has(url)) {clearTimeout(debounceTimeouts.get(url));}
 
   debounceTimeouts.set(url, setTimeout(() => {
     enqueueFetchRequest(url, now, clientData);

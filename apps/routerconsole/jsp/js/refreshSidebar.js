@@ -38,6 +38,7 @@ worker.port.addEventListener("message", ({ data }) => {
       isDown = workerIsDown;
       noResponse = workerNoResponse;
       document.body.classList.remove("isDown");
+      requestAnimationFrame(startAutoRefresh);
     } else noResponse++;
   } catch {
     noResponse++;
@@ -185,6 +186,7 @@ function handleFormSubmit() {
     }, { once: true });
 
     form.dispatchEvent(new Event("submit"));
+    updateCachedElements();
     refreshSidebar(true);
   });
 }
@@ -195,12 +197,14 @@ window.addEventListener("visibilitychange", () => {
     clearTimeout(refreshTimeout);
   } else if (isPaused) {
     isPaused = false;
-    refreshSidebar(true);
+    updateCachedElements();
+    requestAnimationFrame(() => { refreshSidebar(true); });
   }
 });
 
 document.addEventListener("DOMContentLoaded", () => {
   initSidebar();
   newHosts();
+  refreshSidebar(true);
   start();
 });

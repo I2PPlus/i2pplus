@@ -104,8 +104,8 @@ export function newHosts() {
 
     if (
       storedData.lastUpdated &&
-      now - storedData.lastUpdated < 60000 &&
-      now - lastFetch < 30000
+      now - storedData.lastUpdated < 15*60*1000 &&
+      now - lastFetch < 10*60*1000
     ) {
       const { count, hostnames } = storedData;
       if (count > 0) {
