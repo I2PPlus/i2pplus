@@ -3,6 +3,8 @@
 /* License: AGPL3 or later */
 
 document.addEventListener("DOMContentLoaded", function () {
+    const globalH2 = document.querySelector("#globalTunnelControl h2");
+    if (!globalH2) {return;}
     const searchContainer = document.createElement("div"),
           searchInput = document.createElement("input"),
           clearFilterButton = document.createElement("button");
@@ -17,7 +19,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     searchContainer.appendChild(searchInput);
     searchContainer.appendChild(clearFilterButton);
-    const globalH2 = document.querySelector("#globalTunnelControl h2");
     globalH2.insertBefore(searchContainer, globalH2.firstChild);
     searchInput.addEventListener("input", function () {
         const filterText = searchInput.value.trim().toLowerCase(),
