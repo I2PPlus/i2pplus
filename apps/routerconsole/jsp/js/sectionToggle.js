@@ -2,10 +2,11 @@
 /* Sidebar section toggler for the I2P+ web console */
 /* License: AGPLv3 or later */
 
+const sb = document.getElementById("sidebar");
+
 function sectionToggler() {
-  const sb = document.getElementById("sidebar");
-  const jobBadge = sb.querySelector("h3 a[href=\"/jobs\"] .badge");
-  const tunnelsBadge = sb.querySelector("h3 a[href=\"/tunnels\"] .badge");
+  const jobBadge = sb.querySelector('h3 a[href="/jobs"] .badge');
+  const tunnelsBadge = sb.querySelector('h3 a[href="/tunnels"] .badge');
   const localtunnelSummary = document.getElementById("localtunnelSummary");
   const sb_advanced = document.getElementById("sb_advanced");
   const sb_advancedgeneral = document.getElementById("sb_advancedgeneral");
@@ -28,22 +29,22 @@ function sectionToggler() {
   const sb_wrap = document.getElementById("sb_wrap") || sb;
   const xhr = document.getElementById("xhr");
   const savedConfigs = localStorage.getItem("sidebarSections");
-  const sidebarSections = savedConfigs !== null ? JSON.parse(localStorage.getItem("sidebarSections")) : null;
+  const sidebarSections = savedConfigs !== null ? JSON.parse(savedConfigs) : null;
 
   const toggleElements = {
-    "toggle_sb_advancedgeneral": sb_advancedgeneral,
-    "toggle_sb_advanced": sb_advanced,
-    "toggle_sb_bandwidth": sb_bandwidth,
-    "toggle_sb_general": sb_general,
-    "toggle_sb_help": sb_help,
-    "toggle_sb_internals": sb_internals,
-    "toggle_sb_localtunnels": sb_localtunnels,
-    "toggle_sb_newsheadings": sb_newsheadings,
-    "toggle_sb_peers": sb_peers,
-    "toggle_sb_queue": sb_queue,
-    "toggle_sb_services": sb_services,
-    "toggle_sb_tunnels": sb_tunnels,
-    "toggle_sb_updatesection": sb_updatesection
+    toggle_sb_advancedgeneral: sb_advancedgeneral,
+    toggle_sb_advanced: sb_advanced,
+    toggle_sb_bandwidth: sb_bandwidth,
+    toggle_sb_general: sb_general,
+    toggle_sb_help: sb_help,
+    toggle_sb_internals: sb_internals,
+    toggle_sb_localtunnels: sb_localtunnels,
+    toggle_sb_newsheadings: sb_newsheadings,
+    toggle_sb_peers: sb_peers,
+    toggle_sb_queue: sb_queue,
+    toggle_sb_services: sb_services,
+    toggle_sb_tunnels: sb_tunnels,
+    toggle_sb_updatesection: sb_updatesection,
   };
 
   let listenersAdded = false;
@@ -63,7 +64,7 @@ function sectionToggler() {
         queue: false,
         services: false,
         tunnels: false,
-        updatesection: false
+        updatesection: false,
       };
       localStorage.setItem("sidebarSections", JSON.stringify(defaultState));
       resolve(defaultState);
@@ -74,7 +75,9 @@ function sectionToggler() {
     const toggleInput = document.activeElement;
     if (toggleInput && toggleInput.id.startsWith("toggle_sb_")) {
       const key = toggleInput.id.replace("toggle_sb_", "");
-      if (!savedConfigs) {await initializeLocalStorage();}
+      if (!savedConfigs) {
+        await initializeLocalStorage();
+      }
       sidebarSections[key] = toggleInput.checked;
       localStorage.setItem("sidebarSections", JSON.stringify(sidebarSections));
     }
@@ -93,11 +96,16 @@ function sectionToggler() {
           if (h3Element) {
             if (checked) {
               h3Element.classList.remove("collapsed");
-              if (badge) {requestAnimationFrame(() => { badge.hidden = true;} )};
-            }
-            else {
+              if (badge) {
+                requestAnimationFrame(() => {
+                  badge.hidden = true;
+                });
+              }
+            } else {
               h3Element.classList.add("collapsed");
-              if (badge) {badge.removeAttribute("hidden");}
+              if (badge) {
+                badge.removeAttribute("hidden");
+              }
             }
           }
         }
@@ -106,20 +114,23 @@ function sectionToggler() {
   }
 
   function addToggleListeners() {
-    if (listenersAdded) {return;}
-    sb_wrap.addEventListener("click", function (event) {
-      if (event.target.id in toggleElements) {
-        const currentState = event.target.checked;
-        toggleElementVisibility(event.target, currentState);
-        saveToggleStates();
-      }
-    });
+    if (listenersAdded) return;
+    const handleToggle = (event) => {
+      const id = event.target.id;
+      if (!(id in toggleElements)) return;
+      const currentState = event.target.checked;
+      toggleElementVisibility(event.target, currentState);
+      saveToggleStates();
+    };
+    sb_wrap.addEventListener("click", handleToggle);
     listenersAdded = true;
   }
 
   function toggleElementVisibility(toggleInput, isVisible) {
     const element = toggleElements[toggleInput.id];
-    if (!element) { return; }
+    if (!element) {
+      return;
+    }
 
     if (element.parentElement) {
       const titleH3 = element.parentElement.querySelector("h3");
@@ -127,9 +138,11 @@ function sectionToggler() {
       element.hidden = !isVisible;
       const hr = sb.querySelector(`#${element.id}+hr`);
 
-      if (element === sb_updatesection) { handleUpdateSectionVisibility(isVisible); }
-      else if (element === sb_services) { handleServicesVisibility(isVisible); }
-      else if (isVisible) {
+      if (element === sb_updatesection) {
+        handleUpdateSectionVisibility(isVisible);
+      } else if (element === sb_services) {
+        handleServicesVisibility(isVisible);
+      } else if (isVisible) {
         if (hr) {
           hr.hidden = false;
           hr.style.display = null;
@@ -145,9 +158,13 @@ function sectionToggler() {
         if (element.classList) element.classList.add("collapsed");
       }
 
-      if (toggleInput.id === "toggle_sb_localtunnels") { handleLocalTunnelsVisibility(isVisible); }
-      else if (toggleInput.id === "toggle_sb_queue") { handleQueueVisibility(isVisible); }
-      else if (toggleInput.id === "toggle_sb_tunnels") { handleTunnelsVisibility(isVisible); }
+      if (toggleInput.id === "toggle_sb_localtunnels") {
+        handleLocalTunnelsVisibility(isVisible);
+      } else if (toggleInput.id === "toggle_sb_queue") {
+        handleQueueVisibility(isVisible);
+      } else if (toggleInput.id === "toggle_sb_tunnels") {
+        handleTunnelsVisibility(isVisible);
+      }
 
       if (element === sb_bandwidth && sb_graphstats) {
         sb_graphstats.style.opacity = sb_bandwidth.hidden ? "1" : null;
@@ -167,19 +184,31 @@ function sectionToggler() {
       const icons = sb_services.querySelectorAll(".sb_icon");
       const textLinks = sb_services.querySelectorAll("a:not(.sb_icon)");
       if (isVisible) {
-        icons.forEach(icon => { icon.hidden = true });
-        textLinks.forEach(link => { link.hidden = null });
+        icons.forEach((icon) => {
+          icon.hidden = true;
+        });
+        textLinks.forEach((link) => {
+          link.hidden = null;
+        });
         toggleInput.checked = true;
         sb_services.classList.remove("collapsed");
         toggleInput.closest("h3").classList.remove("collapsed");
-        if (hr !== null) { hr.hidden = null; }
+        if (hr !== null) {
+          hr.hidden = null;
+        }
       } else {
-        icons.forEach(icon => { icon.hidden = null });
-        textLinks.forEach(link => { link.hidden = true })
+        icons.forEach((icon) => {
+          icon.hidden = null;
+        });
+        textLinks.forEach((link) => {
+          link.hidden = true;
+        });
         toggleInput.checked = false;
         sb_services.classList.add("collapsed");
         toggleInput.closest("h3").classList.add("collapsed");
-        if (hr !== null) { hr.hidden = true; }
+        if (hr !== null) {
+          hr.hidden = true;
+        }
       }
     }
   }
@@ -200,47 +229,80 @@ function sectionToggler() {
     }
   }
 
+  const iconTypes = {
+    server: "/themes/console/images/server.svg",
+    client: "/themes/console/images/client.svg",
+    snark: "/themes/console/images/snark.svg",
+    i2pchat: "/themes/console/images/i2pchat.svg",
+    ping: "/themes/console/images/ping.svg",
+  };
+
+  let cachedCounts = null;
+
   function handleLocalTunnelsVisibility(isVisible) {
-    const clients = document.querySelectorAll("#sb_localtunnels img[src='/themes/console/images/client.svg']").length;
-    const clientSpan = `<span id="clientCount" class="count_${clients}">${clients} x <img src='/themes/console/images/client.svg'></span>`;
-    const i2pchats = document.querySelectorAll("#sb_localtunnels img[src='/themes/console/images/i2pchat.svg']").length;
-    const i2pchatSpan = `<span id="i2pchatCount" class="count_${i2pchats}">${i2pchats} x <img src='/themes/console/images/i2pchat.svg'></span>`;
-    const pings = document.querySelectorAll("#sb_localtunnels img[src='/themes/console/images/ping.svg']").length;
-    const pingSpan = `<span id="pingCount" class="count_${pings}">${pings} x <img src='/themes/console/images/ping.svg'></span>`;
-    const servers = document.querySelectorAll("#sb_localtunnels img[src='/themes/console/images/server.svg']").length;
-    const serverSpan = `<span id="serverCount" class="count_${servers}">${servers} x <img src='/themes/console/images/server.svg'></span>`;
-    const snarks = document.querySelectorAll("#sb_localtunnels img[src='/themes/console/images/snark.svg']").length;
-    const snarkSpan = `<span id="snarkCount" class="count_${snarks}">${snarks} x <img src='/themes/console/images/snark.svg'></span>`;
-    const summary = `${serverSpan} ${clientSpan} ${snarkSpan} ${i2pchatSpan} ${pingSpan}`;
-    const summaryTable = `<table id="localtunnelSummary"><tr id="localtunnelsActive"><td>${summary}</td></tr></table>`;
-    if (localtunnelSummary !== null) {
-      if (isVisible) { localtunnelSummary.hidden = true; }
-      else {
-        localtunnelSummary.hidden = false;
-        localtunnelSummary.outerHTML = summaryTable;
-      }
+    if (!localtunnelSummary) return;
+    if (isVisible) {
+      if (!localtunnelSummary.hidden) localtunnelSummary.hidden = true;
+      return;
     }
+
+    const container = sb_localtunnels;
+    const newCounts = {};
+    for (const key in iconTypes) {
+      newCounts[key] = container.querySelectorAll(`img[src='${iconTypes[key]}']`).length;
+    }
+
+    if (cachedCounts && Object.entries(newCounts).every(([key, val]) => cachedCounts[key] === val)) {
+      if (localtunnelSummary.hidden) localtunnelSummary.hidden = false;
+      return;
+    }
+
+    cachedCounts = newCounts;
+    const row = localtunnelSummary.querySelector("tr#localtunnelsActive");
+    if (!row) return;
+    const cell = row.querySelector("td");
+    if (!cell) return;
+
+    const fragment = document.createDocumentFragment();
+    for (const [type, count] of Object.entries(newCounts)) {
+      if (count === 0) continue;
+      const span = document.createElement("span");
+      span.className = `count_${count}`;
+      const img = document.createElement("img");
+      img.src = iconTypes[type];
+      img.alt = `${type} tunnel icon`;
+      span.appendChild(document.createTextNode(`${count} x `));
+      span.appendChild(img);
+      fragment.appendChild(span);
+    }
+    cell.innerHTML = "";
+    cell.appendChild(fragment);
+    if (localtunnelSummary.hidden) localtunnelSummary.hidden = false;
   }
 
   function handleQueueVisibility(isVisible) {
-    if (jobBadge) { jobBadge.hidden = isVisible; }
+    if (jobBadge) {
+      jobBadge.hidden = isVisible;
+    }
   }
 
   function handleTunnelsVisibility(isVisible) {
-    if (tunnelsBadge) { tunnelsBadge.hidden = isVisible; }
+    if (tunnelsBadge) {
+      tunnelsBadge.hidden = isVisible;
+    }
   }
   restoreToggleStates();
   addToggleListeners();
 
   document.addEventListener("DOMContentLoaded", () => {
     xhr.classList.add("fadein");
-    setTimeout(() => { xhr.classList.remove("fadein"); }, 120);
+    setTimeout(() => {
+      xhr.classList.remove("fadein");
+    }, 120);
   });
-
 }
 
 function countNewsItems() {
-  const sb = document.getElementById("sidebar");
   const sbNewsHeadings = document.getElementById("sb_newsheadings");
   const newsBadge = document.getElementById("newsCount");
   const doubleCount = sb.querySelector("#newsCount+#newsCount");
@@ -248,7 +310,9 @@ function countNewsItems() {
   if (doubleCount) doubleCount.remove();
   const newsCount = sbNewsHeadings.querySelectorAll("table tr").length;
   newsBadge.hidden = newsCount <= 0 || !sbNewsHeadings.classList.contains("collapsed");
-  if (newsCount > 0 && newsBadge.innerHTML !== newsCount.toString()) {newsBadge.innerHTML = newsCount;}
+  if (newsCount > 0 && newsBadge.innerHTML !== newsCount.toString()) {
+    newsBadge.innerHTML = newsCount;
+  }
 }
 
 export { sectionToggler, countNewsItems };
