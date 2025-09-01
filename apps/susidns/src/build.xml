@@ -179,7 +179,7 @@
       <isset property="uglifyjs.present"/>
       <then>
         <parallel>
-          <foreach target="compressJavascript" param="file">
+          <foreach target="compressJavascript" param="file" parallel="true">
             <fileset dir="build/js" includes="*.js"/>
           </foreach>
         </parallel>
