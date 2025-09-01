@@ -23,7 +23,7 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#041804}
 </head>
 <body id=sitesearch>
 <table><tr>
-<%  if (url != null) { %><td id=inprogress><% else { %><td><% } %>
+<%  if (url != null) { %><td id=inprogress><% } else { %><td><% } %>
 <%  if (url == null) {
         response.setStatus(403);
         String query = request.getParameter("query");
