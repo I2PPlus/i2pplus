@@ -1117,9 +1117,7 @@ public class SidebarHelper extends HelperBase {
         StringBuilder buf = new StringBuilder(256);
         if (showFirewallWarning()) {
             buf.append("<h4 id=sb_warning class=volatile><span><a href=\"/help#configurationhelp\" target=_top title=\"")
-               .append(_t("Help with firewall configuration"))
-               .append("\">")
-               .append(_t("Check network connection and NAT/firewall!"))
+               .append(_t("Help with firewall configuration")).append("\">").append(_t("Check network connection and NAT/firewall!"))
                .append("</a></span></h4>");
         } else {buf.append("<h4 id=sb_warning class=\"volatile hide\" hidden></h4>");} // Hide warn but retain h4 so ajax refresh picks it up
 

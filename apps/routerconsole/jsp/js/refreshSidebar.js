@@ -6,8 +6,9 @@ import { stickySidebar } from "/js/stickySidebar.js";
 import { newHosts } from "/js/newHosts.js";
 import { miniGraph } from "/js/miniGraph.js";
 
-let refreshInterval = refresh * 1000;
 let refreshActive = true, isPaused = false, isDown = false, noResponse = 0, refreshTimeout = null, responseDoc = null;
+let lastRefreshTime = 0;
+let isRefreshing = false;
 let xhrContainer = document.getElementById("xhr");
 const parser = new DOMParser(), sb = document.querySelector("#sidebar"), uri = location.pathname;
 const worker = new SharedWorker("/js/fetchWorker.js");
@@ -29,6 +30,11 @@ function initSidebar() {
   window.addEventListener("resize", stickySidebar, { passive: true });
 }
 
+function getRefreshInterval() {
+  if (document.hidden) {return 15*60*1000;}
+  return refresh * 1000;
+}
+
 worker.port.start();
 worker.port.addEventListener("message", ({ data }) => {
   try {
@@ -47,21 +53,36 @@ worker.port.addEventListener("message", ({ data }) => {
 });
 
 async function start() {
-  sectionToggler(); countNewsItems(); handleFormSubmit(); startAutoRefresh(); checkIfDown();
+  checkIfDown(); sectionToggler(); countNewsItems(); handleFormSubmit(); startAutoRefresh();
 }
 
 function startAutoRefresh() {
+  isRefreshing = false;
   clearTimeout(refreshTimeout);
-  refreshTimeout = setTimeout(refreshSidebar, refreshInterval);
+  const now = Date.now();
+  const interval = getRefreshInterval();
+  if (lastRefreshTime === 0) {lastRefreshTime = now;}
+  else {
+    const timeSinceLast = now - lastRefreshTime;
+    const timeUntilNext = interval - (timeSinceLast % interval);
+    refreshTimeout = setTimeout(() => {
+      lastRefreshTime = Date.now();
+      refreshSidebar();
+    }, timeUntilNext);
+    return;
+  }
+  lastRefreshTime = now;
+  refreshTimeout = setTimeout(refreshSidebar, interval);
 }
 
 export async function refreshSidebar(force = false) {
-  if (!refreshActive) return;
+  if (!refreshActive || isRefreshing) return;
+  isRefreshing = true;
   try {
     worker.port.postMessage({ url: `/xhr1.jsp?requestURI=${uri}`, force });
     noResponse = 0;
 
-    if (!responseDoc) return noResponse++ && checkIfDown();
+    if (!responseDoc) return noResponse++;
     if (!xhrContainer) return;
 
     const responseElements = {
@@ -83,7 +104,6 @@ export async function refreshSidebar(force = false) {
       if (elem.classList.contains("statusDown") && elem.outerHTML !== respElem.outerHTML) {
         updates.push(() => {
           elem.outerHTML = respElem.outerHTML;
-          updateCachedElements();
           refreshAll();
         });
       } else if (elem.innerHTML !== respElem.innerHTML) {
@@ -110,21 +130,27 @@ export async function refreshSidebar(force = false) {
     noResponse++;
   } finally {
     checkIfDown();
-    startAutoRefresh();
+    isRefreshing = false;
   }
 }
 
 function refreshAll() {
   if (!(sb && responseDoc)) return noResponse++;
+  updateCachedElements();
   const sbResponse = responseDoc.getElementById("sb");
   if (sbResponse && xhrContainer && sb.innerHTML !== sbResponse.innerHTML) {
     xhrContainer.innerHTML = sbResponse.innerHTML;
-    updateCachedElements();
-  } else { noResponse++; }
+  }
+  noResponse = 0;
 }
 
 function checkIfDown() {
-  document.body.classList.toggle("isDown", noResponse > 5);
+  isDown = noResponse > 2;
+  document.body.classList.toggle("isDown", isDown);
+  if (isDown) {
+    refreshAll();
+    startAutoRefresh();
+  }
 }
 
 function handleFormSubmit() {
@@ -139,6 +165,7 @@ function handleFormSubmit() {
       if (!formResponse) return;
 
       if (form.id !== "form_sidebar") {
+        updateCachedElements();
         form.innerHTML = formResponse.innerHTML;
         form.classList.add("activated");
 
@@ -186,25 +213,26 @@ function handleFormSubmit() {
     }, { once: true });
 
     form.dispatchEvent(new Event("submit"));
-    updateCachedElements();
     refreshSidebar(true);
   });
 }
 
 window.addEventListener("visibilitychange", () => {
-  if (document.hidden) {
-    isPaused = true;
-    clearTimeout(refreshTimeout);
-  } else if (isPaused) {
-    isPaused = false;
-    updateCachedElements();
-    requestAnimationFrame(() => { refreshSidebar(true); });
+  if (!document.hidden) {
+    requestAnimationFrame(() => {
+      isRefreshing = false;
+      lastRefreshTime = 0;
+      requestAnimationFrame(() => { refreshSidebar(true); });
+      startAutoRefresh();
+    });
+  } else {
+    isRefreshing = false;
+    startAutoRefresh();
   }
 });
 
 document.addEventListener("DOMContentLoaded", () => {
   initSidebar();
   newHosts();
-  refreshSidebar(true);
   start();
 });

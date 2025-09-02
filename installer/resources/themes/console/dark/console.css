@@ -179,6 +179,7 @@ p:empty+.sb_notice{margin-top:9px}
 #sidebar #sb_localtunnels a{margin-top:-1px;padding:3px 0;width:100%;max-width:156px;display:inline-block;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;line-height:1;border-radius:0 10px 10px 0;box-shadow:none}
 #sidebar #sb_peers a:not(:hover):not(:focus):not(:active),#sidebar #sb_peersadvanced a:not(:hover):not(:focus):not(:active),#sidebar #sb_tunnels a:not(:hover):not(:focus):not(:active),#sidebar #sb_general a:not(:hover):not(:focus):not(:active),#sidebar #sb_shortgeneral a:not(:hover):not(:focus):not(:active),#sidebar #sb_advancedgeneral a:not(:hover):not(:focus):not(:active),#sidebar #sb_queue a:not(:hover):not(:focus):not(:active){color:var(--ink)}
 #sidebar #sb_shutdownStatus{margin-top:-7px;width:calc(100% - 1px)}
+#sidebar #sb_shutdownStatus #imminent{padding:5px;display:inline-block;font-size:110%;color:#58ce3a}
 #xhr{margin:0 auto 0 -9px;display:block;width:calc(100% + 19px)}
 #xhr,#xhr.fadein{animation:fade .1s ease 0s reverse both}
 .iframed #sb_wrap{display:none}

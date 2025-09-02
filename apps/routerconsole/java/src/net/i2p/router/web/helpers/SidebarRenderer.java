@@ -153,11 +153,11 @@ class SidebarRenderer {
 
     public String renderHelpAndFAQHTML() {
         StringBuilder buf = new StringBuilder(512);
+        String toggle = "<input type=checkbox id=toggle_sb_help class=\"toggleSection script\" checked hidden>";
         buf.append("<h3 id=helpfaq><a href=/help/ target=_top title=\"")
            .append(_t("I2P Router Help &amp; FAQ")).append("\">")
-           .append(_t("Help &amp; FAQ")).append("</a>")
-           .append("<input type=checkbox id=toggle_sb_help class=\"toggleSection script\" checked hidden></h3><hr class=b>\n")
-           .append("<table id=sb_help>\n<tr><td>");
+           .append(_t("Help &amp; FAQ")).append("</a>").append(toggle)
+           .append("</h3><hr class=b>\n<table id=sb_help>\n<tr><td>");
 
         // Store all items in map so they are sorted by translated name, then output
         Map<String, String> svcs = new TreeMap<String, String>(Collator.getInstance());
@@ -165,64 +165,64 @@ class SidebarRenderer {
 
         String tx = _t("Advanced Settings");
         rbuf.append("<a href=/help/advancedsettings target=_top title=\"")
-            .append(_t("A guide to some of the less-used configuration settings"))
-            .append("\">").append(nbsp(tx)).append("</a>\n");
+            .append(_t("A guide to some of the less-used configuration settings")).append("\">")
+            .append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Changelog");
         rbuf.setLength(0);
         rbuf.append("<a href=/help/changelog target=_top title=\"")
-            .append(_t("Recent development changes to the router"))
-            .append("\">").append(nbsp(tx)).append("</a>\n");
+            .append(_t("Recent development changes to the router")).append("\">")
+            .append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Configuration");
         rbuf.setLength(0);
         rbuf.append("<a href=/help/configuration target=_top title=\"")
-            .append(_t("An introduction to configuring your router"))
-            .append("\">").append(nbsp(tx)).append("</a>\n");
+            .append(_t("An introduction to configuring your router")).append("\">")
+            .append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("FAQ");
         rbuf.setLength(0);
         rbuf.append("<a href=/help/faq target=_top title=\"")
-            .append(_t("A shortened version of the official Frequently Asked Questions"))
-            .append("\">").append(nbsp(tx)).append("</a>\n");
+            .append(_t("A shortened version of the official Frequently Asked Questions")).append("\">")
+            .append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("New Users");
         rbuf.setLength(0);
         rbuf.append("<a href=/help/newusers target=_top title=\"")
-            .append(_t("A gentle introduction to I2P"))
-            .append("\">").append(nbsp(tx)).append("</a>\n");
+            .append(_t("A gentle introduction to I2P")).append("\">")
+            .append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Reseeding");
         rbuf.setLength(0);
         rbuf.append("<a href=/help/reseed target=_top title=\"")
-            .append(_t("A guide to reseeding the router"))
-            .append("\">").append(nbsp(tx)).append("</a>\n");
+            .append(_t("A guide to reseeding the router")).append("\">")
+            .append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Troubleshoot");
         rbuf.setLength(0);
         rbuf.append("<a href=/help/troubleshoot target=_top title=\"")
-            .append(_t("Troubleshooting &amp; Further Assistance"))
-            .append("\">").append(nbsp(tx)).append("</a>\n");
+            .append(_t("Troubleshooting &amp; Further Assistance")).append("\">")
+            .append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("UI");
         rbuf.setLength(0);
         rbuf.append("<a href=/help/ui target=_top title=\"")
-            .append(_t("Information about the sidebar and network status messages"))
-            .append("\">").append(nbsp(tx)).append("</a>\n");
+            .append(_t("Information about the sidebar and network status messages")).append("\">")
+            .append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Webhosting");
         rbuf.setLength(0);
         rbuf.append("<a href=/help/webhosting target=_top title=\"")
-            .append(_t("An introduction to hosting websites on the I2P network"))
-            .append("\">").append(nbsp(tx)).append("</a>\n");
+            .append(_t("An introduction to hosting websites on the I2P network")).append("\">")
+            .append(nbsp(tx)).append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         for (String row : svcs.values()) {buf.append(row);}
@@ -240,11 +240,9 @@ class SidebarRenderer {
         if (pm.isRegistered(PortMapper.SVC_SUSIDNS)) {
             String tx = _t("Addressbook");
             rbuf.append("<a href=/dns target=_top title=\"")
-                .append(_t("Manage your I2P hosts file here (I2P domain name resolution)"))
-                .append("\">").append(nbsp(tx)).append("</a>\n")
-                .append("<a class=sb_icon target=_top href=/dns title=\"").append(tx)
-                .append("\" hidden><span><img src=/themes/console/images/addressbook.svg>")
-                .append(" <span id=newHosts class=\"badge volatile\" title=\"")
+                .append(_t("Manage your I2P hosts file here (I2P domain name resolution)")).append("\">")
+                .append(nbsp(tx)).append("</a>\n<a class=sb_icon target=_top href=/dns title=\"").append(tx)
+                .append("\" hidden><span><img src=/themes/console/images/addressbook.svg> <span id=newHosts class=\"badge volatile\" title=\"")
                 .append(_t("New hosts in last 24 hours")).append("\"></span></span></a>");
             svcs.put(tx, rbuf.toString());
         }
@@ -255,10 +253,9 @@ class SidebarRenderer {
             rbuf.append("<a href=/webmail ");
             if (embedApps) {rbuf.append("target=_top ");}
             else {rbuf.append("target=_blank ");}
-            rbuf.append("title=\"").append(_t("Anonymous webmail client"))
-                .append("\">").append(nbsp(tx)).append("</a>\n")
-                .append("<a class=sb_icon target=_top href=/webmail title=\"").append(tx)
-                .append("\" hidden><span><img src=/themes/console/images/mail.svg></span></a>\n");
+            rbuf.append("title=\"").append(_t("Anonymous webmail client")).append("\">")
+                .append(nbsp(tx)).append("</a>\n<a class=sb_icon target=_top href=/webmail title=\"")
+                .append(tx).append("\" hidden><span><img src=/themes/console/images/mail.svg></span></a>\n");
             svcs.put(tx, rbuf.toString());
         }
 
@@ -266,9 +263,8 @@ class SidebarRenderer {
             String tx = _t("I2PControl");
             rbuf.setLength(0);
             rbuf.append("<a href=/jsonrpc/ target=_blank title=\"").append(_t("RPC Service")).append("\">")
-                .append(nbsp(tx)).append("</a>\n")
-                .append("<a class=sb_icon target=_top href=/jsonrpc/ title=\"").append(tx)
-                .append("\" hidden><span><img src=/themes/console/images/i2cp.svg></span></a>\n");
+                .append(nbsp(tx)).append("</a>\n<a class=sb_icon target=_top href=/jsonrpc/ title=\"")
+                .append(tx).append("\" hidden><span><img src=/themes/console/images/i2cp.svg></span></a>\n");
             svcs.put(tx, rbuf.toString());
         }
 
@@ -278,10 +274,9 @@ class SidebarRenderer {
             rbuf.append("<a href=/torrents ");
             if (embedApps) {rbuf.append("target=_top ");}
             else {rbuf.append("target=_blank ");}
-            rbuf.append("title=\"").append(_t("Built-in anonymous BitTorrent Client"))
-                .append("\">").append(nbsp(tx)).append("</a>\n")
-                .append("<a class=sb_icon target=_top href=/torrents title=\"").append(tx)
-                .append("\" hidden><span><img src=/themes/console/images/snark.svg></span></a>\n");
+            rbuf.append("title=\"").append(_t("Built-in anonymous BitTorrent Client")).append("\">")
+                .append(nbsp(tx)).append("</a>\n<a class=sb_icon target=_top href=/torrents title=\"")
+                .append(tx).append("\" hidden><span><img src=/themes/console/images/snark.svg></span></a>\n");
             svcs.put(tx, rbuf.toString());
         }
 
@@ -289,10 +284,9 @@ class SidebarRenderer {
             String tx = _t("Tunnel Manager");
             rbuf.setLength(0);
             rbuf.append("<a href=/tunnelmanager target=_top title=\"")
-                .append(_t("Manage I2P client and server tunnels to access or provide network services"))
-                .append("\">").append(nbsp(tx)).append("</a>\n")
-                .append("<a class=sb_icon target=_top href=/tunnelmanager title=\"").append(tx)
-                .append("\" hidden><span><img src=/themes/console/images/tunnelmanager.svg></span></a>\n");
+                .append(_t("Manage I2P client and server tunnels to access or provide network services")).append("\">")
+                .append(nbsp(tx)).append("</a>\n<a class=sb_icon target=_top href=/tunnelmanager title=\"")
+                .append(tx).append("\" hidden><span><img src=/themes/console/images/tunnelmanager.svg></span></a>\n");
             svcs.put(tx, rbuf.toString());
         }
 
