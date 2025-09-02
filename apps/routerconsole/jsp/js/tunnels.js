@@ -11,6 +11,7 @@ const toggleIds = document.getElementById("toggleTunnelIds");
 const toggleTunnels = document.getElementById("toggleTunnels");
 const tunnelIdsHidden = document.querySelector(".idsHidden");
 const tunnelsHidden = document.querySelector(".tunnelsHidden");
+const isAdvancedMode = document.documentElement.classList.contains("advmode");
 let tunnelTableVisibility = localStorage.getItem("tunnelTableVisibility");
 let tunnelIdVisibility = localStorage.getItem("tunnelIdVisibility");
 
@@ -27,7 +28,10 @@ nav.addEventListener("click", function(event) {
       localStorage.setItem("tunnelTableVisibility", "hidden");
     }
   }
-  if (event.target.id === "toggleTunnelIds") {
+  if (!isAdvancedMode) {
+    toggleIds.remove();
+    return;
+  } else if (event.target.id === "toggleTunnelIds") {
     const isHidden = document.querySelector("body").classList.contains("idsHidden");
     if (isHidden) {
       bodyTag.classList.remove("idsHidden");
@@ -55,6 +59,7 @@ function persistTunnelTableVisibility() {
 }
 
 function persistTunnelIdVisibility() {
+  if (!isAdvancedMode) {return;}
   if (tunnelIdVisibility) {
     if (!tunnelIdsHidden) {
       document.querySelector("body").classList.add("idsHidden");
