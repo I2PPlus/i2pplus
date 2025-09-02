@@ -77,15 +77,9 @@ const advConfigInit = () => {
   const newDelCell = d.createElement("td");
 
   addNewRow.append(newKeyCell, newValueCell, newDelCell);
-  Object.assign(newKeyCell, {
-    className: "newKey",
-    contentEditable: true,
-    spellcheck: "false"
-  });
-  Object.assign(newValueCell, {
-    className: "newValue",
-    contentEditable: true,
-    spellcheck: "false"
+  [newKeyCell, newValueCell].forEach(cell => {
+    cell.contentEditable = true;
+    cell.setAttribute("spellcheck", "false");
   });
   newDelCell.className = "delete";
 
