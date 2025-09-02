@@ -114,7 +114,6 @@ public class Reseeder {
         // ----------------------------------                 ---------------------------------    ------------------------------    --------------------------
         "https://coconut.incognet.io/"              + ',' +   // rambler_at_mail.i2p.crt           CA
         "https://cubicchaos.net:8443/"              + ',' +   // unixeno_at_cubicchaos.net.crt     cubicchaos.net.crt
-        "https://i2p.ghativega.in/"                 + ',' +   // arnavbhatt288_at_mail.i2p.crt     CA
         "https://i2p.novg.net/"                     + ',' +   // igor_at_novg.net.crt              CA                                Java 8+
         "https://i2pseed.creativecowpat.net:8443/"  + ',' +   // creativecowpat_at_mail.i2p.crt    i2pseed.creativecowpat.net.crt    Java 7+
         "https://reseed2.i2p.net/"                  + ',' +   // echelon3_at_mail.i2p.crt          CA
@@ -126,6 +125,7 @@ public class Reseeder {
         "https://reseed.stormycloud.org/"           + ',' +   // admin_at_stormycloud.org.crt      CA
         "https://www2.mk16.de/";                              // i2p-reseed_at_mk16.de.crt         CA
 
+        //"https://i2p.ghativega.in/"                 + ',' +   // arnavbhatt288_at_mail.i2p.crt     CA
         //"https://banana.incognet.io/"               + ',' +   // rambler_at_mail.i2p.crt           CA
         //"https://reseed.memcpy.io/"                 + ',' +   // hottuna_at_mail.i2p.crt           CA                                SNI required
 
