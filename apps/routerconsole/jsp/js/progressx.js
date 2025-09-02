@@ -179,7 +179,7 @@ function initProgressX(window, document) {
       if (progressxProgress("+0.1", false) >= 1) {
         opacity -= 0.045;
         canvas.style.opacity = opacity.toString();
-        if (opacity <= 0.25) {
+        if (opacity <= 0.2) {
           canvas.style.display = "none";
           fadeTimer = null;
           window.removeEventListener("resize", onResized);
@@ -257,14 +257,7 @@ function initProgressX(window, document) {
     }
     options.barColors.current = options.barColors[currentColorSetName] || options.barColors.default;
   }
-
-  if (typeof module === "object" && typeof module.exports === "object") {
-    module.exports = { config: progressxConfig, show: progressxShow, progress: progressxProgress, hide: progressxHide };
-  } else if (typeof define === "function" && define.amd) {
-    define(() => ({ config: progressxConfig, show: progressxShow, progress: progressxProgress, hide: progressxHide }));
-  } else {
-    window.progressx = { config: progressxConfig, show: progressxShow, progress: progressxProgress, hide: progressxHide };
-  }
+  window.progressx = { config: progressxConfig, show: progressxShow, progress: progressxProgress, hide: progressxHide };
 }
 
 initProgressX(window, document);
