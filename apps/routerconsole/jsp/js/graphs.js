@@ -171,7 +171,7 @@ import { onVisible, onHidden } from "/js/onVisible.js";
               };
               pre.onerror = rej;
               pre.src = src;
-              progressx.show();
+              progressx.show(theme);
             })
         )
       );

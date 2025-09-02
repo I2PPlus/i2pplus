@@ -45,7 +45,7 @@
 <script nonce=<%=cspNonce%>>
   const webappsForm = document.getElementById("form_webapps");
   const processForm = document.getElementById("processForm");
-  webappsForm.addEventListener("submit", progressx.show);
+  webappsForm.addEventListener("submit", () => {progressx.show(theme)});
   processForm.addEventListener("load", progressx.hide);
   refreshOnClick("#webappconfig button.control", ".main");
 </script>

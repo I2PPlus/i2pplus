@@ -2,147 +2,251 @@
  * https://github.com/ryadpasha/progressx
  * Copyright (c) 2018 Ryad Pasha
  * Licensed under the MIT License
- * Optimizations and theme support by dr|z3d, 2024 */
+ * Optimizations and theme support by dr|z3d, 2024-2025 */
 
 function initProgressX(window, document) {
   "use strict";
 
   let lastTime = 0;
-
   if (!window.requestAnimationFrame) {
     window.requestAnimationFrame = function(callback) {
-      const currTime = Date.now();
-      const timeToCall = Math.max(0, 16 - (currTime - lastTime));
-      const id = window.setTimeout(() => callback(currTime + timeToCall), timeToCall);
-      lastTime = currTime + timeToCall;
+      const now = performance.now();
+      const delay = Math.max(0, 16 - (now - lastTime));
+      const id = setTimeout(() => callback(now + delay), delay);
+      lastTime = now + delay;
       return id;
     };
   }
-
   if (!window.cancelAnimationFrame) {
-    window.cancelAnimationFrame = function(id) { clearTimeout(id); };
+    window.cancelAnimationFrame = id => clearTimeout(id);
   }
 
-  let canvas, context, progressTimerId, fadeTimerId, currentProgress = 0, showing = false, options = {
+  let canvas, context, gradient = null;
+  let progressTimer = null, fadeTimer = null;
+  let currentProgress = 0, isVisible = false;
+  let lastColors = null;
+  let frameRequested = false;
+  let animationFrameId = null;
+  let animationLocked = false;
+
+  const defaultColors = {"0.0": "rgba(220,48,16,.8)", "1.0": "rgba(255,96,0,.8)"};
+
+  const options = {
     autoRun: true,
     barThickness: 3,
     barColors: {
-      default: {
-        "0.0": "rgba(220, 48, 16, .8)",
-        "1.0": "rgba(255, 96, 0, .8)"
-      },
-      classic: {
-        "0.0": "rgba(48, 64, 192, .7)",
-        "1.0": "rgba(48, 64, 255, .7)"
-      },
-      midnight: {
-        "0.0": "rgba(72, 0, 72, .8)",
-        "1.0": "rgba(160, 0, 160, .8)"
-      }
+      default: defaultColors,
+      classic: {"0.0": "rgba(48,64,192,.7)", "1.0": "rgba(48,64,255,.7)"},
+      midnight: {"0.0": "rgba(72,0,72,.8)", "1.0": "rgba(160,0,160,.8)"},
+      current: defaultColors
     }
   };
 
+  let currentColorSetName = "default";
+
   function createCanvas() {
+    if (canvas) return;
     canvas = document.createElement("canvas");
     canvas.id = "pageloader";
-    canvas.style.position = "fixed";
-    canvas.style.top = canvas.style.left = canvas.style.right = canvas.style.margin = canvas.style.padding = 0;
-    canvas.style.zIndex = 100001;
-    canvas.style.display = "none";
+    Object.assign(canvas.style, {
+      position: "fixed",
+      top: "0",
+      left: "0",
+      right: "0",
+      margin: "0",
+      padding: "0",
+      zIndex: "100001",
+      display: "none",
+      opacity: "1"
+    });
     document.body.appendChild(canvas);
     context = canvas.getContext("2d");
-    window.addEventListener("resize", repaint, {passive: true});
+    window.addEventListener("resize", onResized, { passive: true });
   }
 
-  function repaint() {
-    if (!canvas) return;
-    const { barThickness, barColors: { current: lineColors } } = options;
-    const width = window.innerWidth;
-    const height = barThickness;
-
-    canvas.width = width;
-    canvas.height = height;
-
-    if (lineColors) {
-      const lineGradient = context.createLinearGradient(0, 0, width, 0);
-      for (const stop in lineColors) {
-        lineGradient.addColorStop(parseFloat(stop), lineColors[stop]);
-      }
-
-      context.clearRect(0, 0, width, height);
-      context.lineWidth = height;
-      context.beginPath();
-      context.moveTo(0, height / 2);
-      context.lineTo(Math.ceil(currentProgress * width), height / 2);
-      context.strokeStyle = lineGradient;
-      context.stroke();
+  let ticking = false;
+  function onResized() {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        draw();
+        ticking = false;
+      });
+      ticking = true;
     }
   }
 
-  function addEvent(elem, type, handler) {
-    elem.addEventListener(type, handler);
+  function colorsEqual(a, b) {
+    if (!a || !b) return false;
+    const keysA = Object.keys(a), keysB = Object.keys(b);
+    if (keysA.length !== keysB.length) return false;
+    for (let key of keysA) {
+      if (a[key] !== b[key]) return false;
+    }
+    return true;
   }
 
-  function progressxConfig(opts) {
-    options = {
-      ...options,
-      ...opts,
-      barColors: {
-        ...options.barColors,
-        ...(opts.barColors || {})
+  function draw() {
+    if (!canvas || !context) return;
+    const width = window.innerWidth;
+    const height = options.barThickness;
+    const colors = options.barColors[currentColorSetName] || options.barColors.default;
+    options.barColors.current = colors;
+
+    if (canvas.width !== width) canvas.width = width;
+    if (canvas.height !== height) canvas.height = height;
+
+    if (!colorsEqual(colors, lastColors)) {
+      gradient = context.createLinearGradient(0, 0, width, 0);
+      for (const stop in colors) {
+        gradient.addColorStop(parseFloat(stop), colors[stop]);
       }
-    };
+      lastColors = { ...colors };
+    }
+
+    context.clearRect(0, 0, width, height);
+    context.lineWidth = height;
+    context.beginPath();
+    context.moveTo(0, height / 2);
+    context.lineTo(Math.ceil(currentProgress * width), height / 2);
+    context.strokeStyle = gradient;
+    context.stroke();
   }
 
   function runProgressLoop() {
-    progressTimerId = window.requestAnimationFrame(() => {
-      progressxProgress("+" + (0.05 * Math.pow(1 - Math.sqrt(currentProgress), 2)));
-      runProgressLoop();
-    });
+    if (animationLocked) return;
+    animationLocked = true;
+
+    function animate() {
+      const increment = 0.05 * Math.pow(1 - Math.sqrt(currentProgress), 2);
+      if (currentProgress < 1) {
+        progressxProgress(currentProgress + increment, false);
+        requestAnimationFrame(animate);
+      } else {
+        animationLocked = false;
+      }
+    }
+
+    requestAnimationFrame(animate);
   }
 
   function progressxShow(colorSet) {
-    if (showing) return;
-    showing = true;
-    if (fadeTimerId !== null) window.cancelAnimationFrame(fadeTimerId);
+    if (isVisible) return;
+    if (animationLocked) return;
+    isVisible = true;
+
+    if (fadeTimer) {
+      cancelAnimationFrame(fadeTimer);
+      fadeTimer = null;
+    }
+
+    if (animationFrameId !== null) {
+      cancelAnimationFrame(animationFrameId);
+      animationFrameId = null;
+    }
+
     if (!canvas) createCanvas();
-    canvas.style.opacity = 1;
+    canvas.style.opacity = "1";
     canvas.style.display = "block";
     currentProgress = 0;
-    options.barColors.current = options.barColors[colorSet] || options.barColors.default;
-    if (options.autoRun) {
-      runProgressLoop();
-    }
-  }
+    currentColorSetName = colorSet || "default";
+    requestAnimationFrame(draw);
+    animationLocked = true;
 
-  function progressxProgress(to) {
-    if (typeof to === "string") {
-      to = (to.startsWith("+") || to.startsWith("-") ? currentProgress : 0) + parseFloat(to);
-    }
-    currentProgress = Math.min(1, Math.max(0, to));
-    requestAnimationFrame(repaint);
-    return currentProgress;
+    if (options.autoRun) runProgressLoop();
   }
 
   function progressxHide() {
-    if (!showing) return;
-    showing = false;
-    if (progressTimerId !== null) {
-      window.cancelAnimationFrame(progressTimerId);
-      progressTimerId = null;
+    if (!isVisible) return;
+    isVisible = false;
+
+    if (progressTimer) {
+      cancelAnimationFrame(progressTimer);
+      progressTimer = null;
     }
-    (function loop() {
-      if (progressxProgress("+0.1") >= 1) {
-        canvas.style.opacity -= 0.25;
-        if (canvas.style.opacity <= 0.25) {
+
+    let opacity = 1;
+
+    function fadeLoop() {
+      if (progressxProgress("+0.1", false) >= 1) {
+        opacity -= 0.25;
+        canvas.style.opacity = opacity.toString();
+        if (opacity <= 0.25) {
           canvas.style.display = "none";
-          fadeTimerId = null;
-          window.removeEventListener("resize", repaint);
+          fadeTimer = null;
+          window.removeEventListener("resize", onResized);
+          animationLocked = false;
           return;
         }
       }
-      fadeTimerId = window.requestAnimationFrame(loop);
-    })();
+      fadeTimer = requestAnimationFrame(fadeLoop);
+    }
+
+    fadeLoop();
+  }
+
+  function progressxProgress(value, animate = true) {
+    if (!canvas || !context) return currentProgress;
+
+    let oldValue = currentProgress;
+
+    if (typeof value === "string") {
+      const op = value[0], num = parseFloat(value.slice(1));
+      value = op === "+" ? currentProgress + num : op === "-" ? currentProgress - num : num;
+    }
+
+    const target = Math.min(1, Math.max(0, value));
+
+    if (!animate || target === oldValue) {
+      currentProgress = target;
+      if (!frameRequested) {
+        frameRequested = true;
+        requestAnimationFrame(() => {
+          draw();
+          frameRequested = false;
+        });
+      }
+      return currentProgress;
+    }
+
+    if (animationLocked) return currentProgress;
+
+    animationLocked = true;
+
+    if (animationFrameId !== null) {
+      cancelAnimationFrame(animationFrameId);
+    }
+
+    const duration = 300;
+    const start = performance.now();
+
+    const animateProgress = (now) => {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const easeOut = 1 - Math.pow(1 - progress, 3);
+      currentProgress = oldValue + (target - oldValue) * easeOut;
+      draw();
+
+      if (progress < 1) {
+        animationFrameId = requestAnimationFrame(animateProgress);
+      } else {
+        currentProgress = target;
+        animationLocked = false;
+        animationFrameId = null;
+        draw();
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(animateProgress);
+    return currentProgress;
+  }
+
+  function progressxConfig(opts) {
+    if (!opts) return;
+    Object.assign(options, opts);
+    if (opts.barColors) {
+      Object.assign(options.barColors, opts.barColors);
+    }
+    options.barColors.current = options.barColors[currentColorSetName] || options.barColors.default;
   }
 
   if (typeof module === "object" && typeof module.exports === "object") {

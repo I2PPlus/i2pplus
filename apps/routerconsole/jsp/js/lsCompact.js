@@ -257,7 +257,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function initLSCompact() {
     startRefresh();
-    progressx.show();
+    progressx.show(theme);
     compact();
     lsDebug();
     countTypes();
