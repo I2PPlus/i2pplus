@@ -109,11 +109,11 @@ public class UDPTransport extends TransportImpl {
     private final int _min_peers;
     private final int _min_v6_peers;
 
-    /** do we need to rebuild our external router address asap? */
+    /** Do we need to rebuild our external router address asap? */
     private boolean _needsRebuild;
     private final Object _rebuildLock = new Object();
 
-    /** introduction key */
+    /** Introduction key */
     private SessionKey _introKey;
 
     /**
@@ -124,13 +124,12 @@ public class UDPTransport extends TransportImpl {
 
     private volatile long _expireTimeout;
 
-    /** last report from a peer of our IP */
+    /** Last report from a peer of our IP */
     private Hash _lastFromv4, _lastFromv6;
     private byte[] _lastOurIPv4, _lastOurIPv6;
     private int _lastOurPortv4, _lastOurPortv6;
     private boolean _haveUPnP;
-    /** since we don't publish our IP/port if introduced anymore, we need
-        to store it somewhere. */
+    /** We don't publish our IP/port if introduced, so we need to store it somewhere. */
     private RouterAddress _currentOurV4Address;
     private RouterAddress _currentOurV6Address;
 
@@ -157,26 +156,17 @@ public class UDPTransport extends TransportImpl {
     private static final int DROPLIST_PERIOD = 10*60*1000;
     public static final String STYLE = "SSU";
     public static final String PROP_INTERNAL_PORT = "i2np.udp.internalPort";
-
-    /** now unused, we pick a random port
-     *  @deprecated unused
-     */
-    @Deprecated
-    public static final int DEFAULT_INTERNAL_PORT = 8887;
-
     /** define this to explicitly set an external IP address */
     public static final String PROP_EXTERNAL_HOST = "i2np.udp.host";
     /** define this to explicitly set an external port */
     public static final String PROP_EXTERNAL_PORT = "i2np.udp.port";
     /**
-     * If i2np.udp.preferred is set to "always", the UDP bids will always be under
-     * the bid from the TCP transport - even if a TCP connection already
-     * exists.  If it is set to "true",
-     * it will prefer UDP unless no UDP session exists and a TCP connection
+     * If i2np.udp.preferred is set to "always", UDP bids will always be under the bid from
+     * the TCP transport - even if a TCP connection already exists.
+     * If set to "true", UDP is preferred unless no UDP session exists and a TCP connection
      * already exists.
-     * If it is set to "false" (the default),
-     * it will prefer TCP unless no TCP session exists and a UDP connection
-     * already exists.
+     * If it is set to "false" (the default), it will prefer TCP unless no TCP session exists
+     * and a UDP connection already exists.
      */
     public static final String PROP_PREFER_UDP = "i2np.udp.preferred";
     private static final String DEFAULT_PREFER_UDP = "false";
@@ -198,13 +188,13 @@ public class UDPTransport extends TransportImpl {
     /** @since 0.9.43 */
     public static final String PROP_IPV6 = "i2np.lastIPv6";
 
-    /** do we require introducers, regardless of our status? */
+    /** Do we require introducers, regardless of our status? */
     public static final String PROP_FORCE_INTRODUCERS = "i2np.udp.forceIntroducers";
-    /** do we allow direct SSU connections, sans introducers?  */
+    /** Do we allow direct SSU connections, sans introducers?  */
     public static final String PROP_ALLOW_DIRECT = "i2np.udp.allowDirect";
-    /** this is rarely if ever used, default is to bind to wildcard address */
+    /** This is rarely if ever used, default is to bind to wildcard address */
     public static final String PROP_BIND_INTERFACE = "i2np.udp.bindInterface";
-    /** override the "large" (max) MTU, default is PeerState.LARGE_MTU */
+    /** Override the "large" (max) MTU, default is PeerState.LARGE_MTU */
     private static final String PROP_DEFAULT_MTU = "i2np.udp.mtu";
     private static final String PROP_ADVANCED = "routerconsole.advanced";
     /** @since 0.9.48 */
@@ -215,22 +205,22 @@ public class UDPTransport extends TransportImpl {
     private static final String CAP_TESTING_4 = CAP_TESTING + CAP_IPV4;
     private static final String CAP_TESTING_6 = CAP_TESTING + CAP_IPV6;
 
-    /** how many relays offered to us will we use at a time? */
+    /** How many relays offered to us will we use at a time? */
     public static final int PUBLIC_RELAY_COUNT = 3;
 
-    /** configure the priority queue with the given split points */
+    /** Configure the priority queue with the given split points */
     private static final int PRIORITY_LIMITS[] = new int[] { 100, 200, 300, 400, 500, 1000 };
-    /** configure the priority queue with the given weighting per priority group */
+    /** Configure the priority queue with the given weighting per priority group */
     private static final int PRIORITY_WEIGHT[] = new int[] { 1, 1, 1, 1, 1, 2 };
     private static final int MAX_CONSECUTIVE_FAILED = 3;
 
     public static final int DEFAULT_COST = 5;
     private static final int SSU_OUTBOUND_COST = 14;
     static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
-    /** minimum active peers to maintain IP detection, etc. */
+    /** Minimum active peers to maintain IP detection, etc. */
     private static final int MIN_PEERS = 10;
     private static final int MIN_PEERS_IF_HAVE_V6 = 30;
-    /** minimum peers volunteering to be introducers if we need that */
+    /** Minimum peers volunteering to be introducers if we need that */
     private static final int MIN_INTRODUCER_POOL = 10;
     static final long INTRODUCER_EXPIRATION_MARGIN = 20*60*1000L;
     private static final long MIN_DOWNTIME_TO_REKEY = 30*24*60*60*1000L;
@@ -247,8 +237,6 @@ public class UDPTransport extends TransportImpl {
     private static final int TRANSIENT_FAIL_BID = 8;
     private final TransportBid[] _cachedBid;
 
-    // Opera doesn't have the char, TODO check UA
-    //private static final String THINSP = "&thinsp;/&thinsp;";
     private static final String THINSP = " / ";
 
     /**
@@ -407,7 +395,7 @@ public class UDPTransport extends TransportImpl {
         _mtu_ssu2 = PeerState2.MIN_MTU;
         _mtu_ssu2_ipv6 = PeerState2.MIN_MTU;
 
-        // if any ipv4 address is lower than 1280 MTU, disable
+        // If any ipv4 address is lower than 1280 MTU, disable
         Set<String> ipset = Addresses.getAddresses(true, false, false);
         for (String ips : ipset) {
             try {
@@ -424,7 +412,7 @@ public class UDPTransport extends TransportImpl {
         byte[] priv = null;
         boolean shouldSave = false;
         String s = null;
-        // try to determine if we've been down for 30 days or more
+        // Try to determine if we've been down for 30 days or more
         long minDowntime = _context.router().isHidden() ? MIN_DOWNTIME_TO_REKEY_HIDDEN : MIN_DOWNTIME_TO_REKEY;
         boolean shouldRekey = !allowLocal() && _context.getEstimatedDowntime() >= minDowntime;
         if (!shouldRekey) {
@@ -3903,8 +3891,6 @@ public class UDPTransport extends TransportImpl {
             if (_log.shouldWarn())
                 _log.warn("Old status: " + old + " New status: " + status +
                           "\n* Caused by update: " + newStatus);
-//                          " from: ", new Exception("traceback"));
-//                          " from: ");
             if (old != Status.UNKNOWN && _context.router().getUptime() > 5*60*1000L) {
                 _context.router().eventLog().addEvent(EventLog.REACHABILITY,
                 _t(old.toStatusString()) + " ➜ " +  _t(status.toStatusString()));
@@ -3986,16 +3972,6 @@ public class UDPTransport extends TransportImpl {
         if (ipv6)
             return !STATUS_IPV6_NO_TEST.contains(status);
         return !STATUS_IPV4_NO_TEST.contains(status);
-    }
-
-    /**
-     * @deprecated unused
-     */
-    @Override
-    @Deprecated
-    public void recheckReachability() {
-        // FIXME locking if we do this again
-        //_testEvent.runTest();
     }
 
     /**
@@ -4101,8 +4077,8 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Periodically ping the introducers, split out since we need to
-     *  do it faster than we rebuild our address.
+     *  Periodically ping the introducers, split out since we need to do it faster
+     *  than we rebuild our address.
      *  @since 0.8.11
      */
     private class PingIntroducers implements SimpleTimer.TimedEvent {
@@ -4113,10 +4089,8 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * For PeerStateDestroyed, to kill the timers on overflow,
-     * else the memory won't be freed.
-     *
-     * @since 0.9.57
+     *  For PeerStateDestroyed, to kill the timers on overflow, else the memory won't be freed.
+     *  @since 0.9.57
      */
     private static class DestroyedCache extends LHMCache<Long, PeerStateDestroyed> {
 
@@ -4134,24 +4108,4 @@ public class UDPTransport extends TransportImpl {
         }
     }
 
-/*******
-    private static final String BADIPS[] = new String[] { "192.168.0.1", "127.0.0.1", "10.3.4.5", "172.16.3.4", "224.5.6.7" };
-    private static final String GOODIPS[] = new String[] { "192.167.0.1", "126.0.0.1", "11.3.4.5", "172.15.3.4", "223.5.6.7" };
-    public static void main(String args[]) {
-        for (int i = 0; i < BADIPS.length; i++) {
-            try {
-                InetAddress addr = InetAddress.getByName(BADIPS[i]);
-                boolean routable = isPubliclyRoutable(addr.getAddress());
-                System.out.println("Routable: " + routable + " (" + BADIPS[i] + ")");
-            } catch (Exception e) { e.printStackTrace(); }
-        }
-        for (int i = 0; i < GOODIPS.length; i++) {
-            try {
-                InetAddress addr = InetAddress.getByName(GOODIPS[i]);
-                boolean routable = isPubliclyRoutable(addr.getAddress());
-                System.out.println("Routable: " + routable + " (" + GOODIPS[i] + ")");
-            } catch (Exception e) { e.printStackTrace(); }
-        }
-    }
-*******/
 }
