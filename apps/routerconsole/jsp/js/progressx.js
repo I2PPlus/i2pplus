@@ -59,9 +59,18 @@ function initProgressX(window, document) {
       display: "none",
       opacity: "1"
     });
-    document.body.appendChild(canvas);
+    injectCanvas();
     context = canvas.getContext("2d");
     window.addEventListener("resize", onResized, { passive: true });
+  }
+
+  function injectCanvas() {
+    const interval = setInterval(() => {
+      if (document.body) {
+        clearInterval(interval);
+        document.body.appendChild(canvas);
+      }
+    }, 10);
   }
 
   let ticking = false;
@@ -168,7 +177,7 @@ function initProgressX(window, document) {
 
     function fadeLoop() {
       if (progressxProgress("+0.1", false) >= 1) {
-        opacity -= 0.25;
+        opacity -= 0.045;
         canvas.style.opacity = opacity.toString();
         if (opacity <= 0.25) {
           canvas.style.display = "none";
