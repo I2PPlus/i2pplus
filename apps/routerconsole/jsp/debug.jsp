@@ -16,7 +16,6 @@
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="sidebar.jsi" %>
 <h1 class="conf adv debug">Debug</h1>
 <div class=main id=debug>

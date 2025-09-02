@@ -9,7 +9,6 @@
 <%=intl.title("News")%>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="sidebar.jsi" %>
 <h1 class=newspage><%=intl._t("Latest News")%></h1>
 <div class=main id=news>

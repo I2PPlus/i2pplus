@@ -10,7 +10,6 @@
 <style>button span.hide{display:none}input.default{width:1px;height:1px;visibility:hidden}</style>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="sidebar.jsi" %>
 
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigClientsHelper" id="clientshelper" scope="request"/>

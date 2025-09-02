@@ -11,7 +11,7 @@
 <body id=homepage>
 <jsp:useBean class="net.i2p.router.web.ConfigUpdateHelper" id="updatehelper" scope="request"/>
 <jsp:setProperty name="updatehelper" property="contextId" value="<%=i2pcontextId%>"/>
-<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
+
 <%@include file="sidebar.jsi" %>
 <h1 class=home><%=intl._t("Router Console")%></h1>
 <% if (newshelper.shouldShowNews()) { %>

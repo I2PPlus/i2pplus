@@ -11,7 +11,6 @@
 <%=intl.title("config networking")%>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="sidebar.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigNetHelper" id="nethelper" scope="request"/>
 <jsp:setProperty name="nethelper" property="contextId" value="<%=i2pcontextId%>"/>

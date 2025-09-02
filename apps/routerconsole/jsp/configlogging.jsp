@@ -11,7 +11,7 @@
 <body>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigLoggingHelper" id="logginghelper" scope="request"/>
 <jsp:setProperty name="logginghelper" property="contextId" value="<%=i2pcontextId%>"/>
-<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
+
 <%@include file="sidebar.jsi" %>
 <h1 class=conf><%=intl._t("Logging")%></h1>
 <div class=main id=config_logging>

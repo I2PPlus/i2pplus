@@ -37,7 +37,6 @@
 <link rel=stylesheet href=/i2psnark/.res/fullscreen.css>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="sidebar.jsi" %>
 <h1 class=snark><%=intl._t("Torrent Manager")%> <a href="<%=requestURL%>" target=_blank title="<%=intl._t("Open in new tab")%>"><span id=newtab><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>../images/newtab.svg" alt="<%=intl._t("Open in new tab")%>"></span></a></h1>
 <div class=main id=torrents>

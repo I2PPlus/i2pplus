@@ -9,7 +9,7 @@
 <%=intl.title("logs")%>
 </head>
 <body id=i2plogs>
-<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
+
 <%@include file="sidebar.jsi" %>
 <h1 class=log><%=intl._t("Logs")%></h1>
 <div class=main id=logs>

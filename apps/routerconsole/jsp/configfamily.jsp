@@ -9,7 +9,6 @@
 <%=intl.title("config router family")%>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="sidebar.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigFamilyHelper" id="familyHelper" scope="request"/>
 <jsp:setProperty name="familyHelper" property="contextId" value="<%=i2pcontextId%>"/>

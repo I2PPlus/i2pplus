@@ -10,7 +10,7 @@
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body id=routerjobs>
-<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
+
 <%@include file="sidebar.jsi" %><h1 class=sched><%=intl._t("Job Queue Stats")%></h1>
 <div class=main id=jobs>
 <div class=confignav>

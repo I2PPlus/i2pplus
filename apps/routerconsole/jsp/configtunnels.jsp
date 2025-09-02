@@ -9,9 +9,7 @@
 <%=intl.title("config tunnels")%>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="sidebar.jsi" %>
-
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigTunnelsHelper" id="tunnelshelper" scope="request"/>
 <jsp:setProperty name="tunnelshelper" property="contextId" value="<%=i2pcontextId%>"/>
 <h1 class=conf><%=intl._t("Tunnel Options")%></h1>

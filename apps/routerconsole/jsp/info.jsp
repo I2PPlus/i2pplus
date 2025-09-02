@@ -9,7 +9,6 @@
 <%=intl.title("router information")%>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="sidebar.jsi" %>
 <h1 class=nfo><%=intl._t("Router Summary")%></h1>
 <div class=main id=routerinformation>

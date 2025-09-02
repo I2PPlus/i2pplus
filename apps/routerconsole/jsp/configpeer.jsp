@@ -10,7 +10,6 @@
 <script src=/js/lazyload.js></script>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="sidebar.jsi" %>
 <h1 class=conf><%=intl._t("Peer Manager")%></h1>
 <div class=main id=config_peers>

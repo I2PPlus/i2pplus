@@ -10,7 +10,7 @@
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body id=routertunnels>
-<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
+
 <%@include file="sidebar.jsi" %>
 <h1 class=netwrk><%=intl._t("Tunnel Count by Peer")%></h1>
 <div class=main id=tunnels>

@@ -22,7 +22,7 @@
 <script nonce="<%=cspNonce%>" src="/js/graphSingle.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
 </head>
 <body id=perfgraphs>
-<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
+
 <%@include file="sidebar.jsi" %>
 <%
     // needs to be after the summary bar is rendered, so that the restart button is processed

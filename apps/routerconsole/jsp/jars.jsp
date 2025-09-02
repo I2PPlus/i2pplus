@@ -9,7 +9,6 @@
 <%=intl.title("Jar File Dump")%>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="sidebar.jsi" %><h1 class="conf adv debug">Jar File Dump</h1>
 <div class=main id=jardump>
 <jsp:useBean class="net.i2p.router.web.helpers.FileDumpHelper" id="dumpHelper" scope="request"/>

@@ -9,7 +9,6 @@
 <%=intl.title("config reseeding")%>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="sidebar.jsi" %>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigReseedHelper" id="reseedHelper" scope="request"/>
 <jsp:setProperty name="reseedHelper" property="contextId" value="<%=i2pcontextId%>"/>

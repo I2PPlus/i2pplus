@@ -13,7 +13,7 @@
 <title><%=pageTitlePrefix%> Sitemap - I2P+</title>
 </head>
 <body class="<%=lang%>" id=map>
-<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
+
 <%@include file="sidebar.jsi" %>
 
 <% String consoleNonce = net.i2p.router.web.CSSHelper.getNonce(); %>

@@ -9,7 +9,6 @@
 <%=intl.title("config update")%>
 </head>
 <body>
-<script nonce=<%=cspNonce%>>progressx.show(theme);progressx.progress(0.1);</script>
 <%@include file="sidebar.jsi" %>
 <h1 class=conf><%=intl._t("Router Updates")%></h1>
 <div class=main id=config_update>
