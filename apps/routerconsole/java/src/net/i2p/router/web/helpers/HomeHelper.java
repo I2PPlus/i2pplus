@@ -328,7 +328,7 @@ public class HomeHelper extends HelperBase {
                 if (url == null) {continue;}
                 else {url = app.url + "\" target=_blank class=\"extlink";}
             } else if ((!embedApps && (app.url.contains("webmail") || app.url.contains("torrents") || app.url.contains("outproxy") ||
-                       app.url.contains("bote") || app.url.contains("orchid") || app.url.contains("BwSchedule"))) ||
+                       app.url.contains("bote") || app.url.contains("orchid") || app.url.contains("BwSchedule"))) || app.url.endsWith("tracker/") ||
                        app.url.contains(".i2p") || app.url.contains("history.txt") || app.url.contains("prometheus/status.html")) {
                 url = app.url + "\" target=_blank class=\"extlink";
             } else {
@@ -351,9 +351,8 @@ public class HomeHelper extends HelperBase {
                 url.contains("w3schools") || url.contains("translate.idk")) {
                 buf.append(" js");
             }
-            buf.append("\" style=display:inline-block;text-align:center>")
-               .append("<div class=appicon>").append("<a href=\"").append(url).append("\" tabindex=\"-1\">")
-               .append("<img alt=\"\" title=\"").append(app.desc).append("\" src=\"").append(app.icon)
+            buf.append("\" style=display:inline-block;text-align:center><div class=appicon><a href=\"").append(url)
+               .append("\" tabindex=-1><img alt=\"\" title=\"").append(app.desc).append("\" src=\"").append(app.icon)
                .append("\" width=32 height=32></a></div><table><tr><td><div class=applabel><a href=\"")
                .append(url).append("\" title=\"").append(app.desc).append("\">").append(app.name)
                .append("</a></div></td></tr></table></div>");
@@ -364,10 +363,9 @@ public class HomeHelper extends HelperBase {
 
     private String renderConfig(Collection<App> apps) {
         StringBuilder buf = new StringBuilder(64*1024);
-        buf.append("<table class=homelinkedit>")
-           .append("<tr><th class=center title=\"").append(_t("Mark for deletion")).append("\">").append(_t("Remove")).append("</th>")
-           .append("<th></th><th>").append(_t("Name")).append("</th>")
-           .append("<th>").append(_t("URL")).append("</th></tr>\n");
+        buf.append("<table class=homelinkedit><tr><th class=center title=\"").append(_t("Mark for deletion")).append("\">")
+           .append(_t("Remove")).append("</th><th></th><th>").append(_t("Name")).append("</th><th>")
+           .append(_t("URL")).append("</th></tr>\n");
         for (App app : apps) {
             String url = DataHelper.escapeHTML(app.url);
             buf.append("<tr><td class=center><input type=checkbox class=optbox name=\"delete_")
@@ -382,16 +380,14 @@ public class HomeHelper extends HelperBase {
             buf.append(app.name.replace(" ", "_").replace("\'", ""))
                .append("\">").append(DataHelper.escapeHTML(app.name))
                .append("</label></td><td><a href=\"").append(url).append("\">");
-                String urltext = DataHelper.escapeHTML(app.url).replace("&amp;ref=console", "");
+            String urltext = DataHelper.escapeHTML(app.url).replace("&amp;ref=console", "");
             if (app.url.length() > 72) {buf.append(urltext.substring(0, 70)).append("&hellip;");}
             else {buf.append(urltext);}
             buf.append("</a></td></tr>\n");
         }
         buf.append("<tr class=addnew><td colspan=2><b>")
-           .append(_t("Add")).append(":</b>")
-           .append("</td><td><input type=text name=\"nofilter_name\"></td>")
-           .append("<td><input type=text size=40 name=\"nofilter_url\"></td></tr>")
-           .append("</table>\n");
+           .append(_t("Add")).append(":</b></td><td><input type=text name=\"nofilter_name\"></td>")
+           .append("<td><input type=text size=40 name=\"nofilter_url\"></td></tr></table>\n");
         return buf.toString();
     }
 

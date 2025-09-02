@@ -90,8 +90,8 @@ class ProfileOrganizerRenderer {
         StringBuilder buf = new StringBuilder(32*1024);
 
         if (mode < 2) {
-            buf.append("<p id=profiles_overview class=infohelp>");
-            buf.append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.", order.size())).append('\n');
+            buf.append("<p id=profiles_overview class=infohelp>")
+               .append(ngettext("Showing {0} recent profile.", "Showing {0} recent profiles.", order.size())).append('\n');
             if (older > 0) {
                 buf.append(ngettext("Hiding {0} older profile.", "Hiding {0} older profiles.", older)).append('\n');
             }
@@ -172,9 +172,8 @@ class ProfileOrganizerRenderer {
                     if (rl != null && rl != "null" && rl.length() != 0 && !ip.toString().equals(rl)) {
                         buf.append("<span hidden>[XHost]</span><span class=rlookup title=\"").append(rl).append("\">");
                         buf.append(CommSystemFacadeImpl.getDomain(rl.replace("null", "unknown")));
-                    } else if (ip == "null" || ip == null) {
-                        buf.append("<span>").append(_t("unknown"));
-                    } else {
+                    } else if (ip == "null" || ip == null) {buf.append("<span>").append(_t("unknown"));}
+                    else {
                         if (ip != null && ip.contains(":")) {buf.append("<span hidden>[IPv6]</span>");}
                         buf.append("<span class=host_ipv6>").append(ip);
                     }
@@ -208,9 +207,7 @@ class ProfileOrganizerRenderer {
                            .append(total).append(' ').append(_t("Test Fails"));
                     }
                 } else {buf.append("<span>&ensp;</span>");}
-                buf.append("</td>");
-                buf.append("<td class=groups>");
-                buf.append("<span class=\"");
+                buf.append("</td><td class=groups><span class=\"");
                 if (isIntegrated) buf.append("integrated ");
                 switch (tier) {
                     case 1: buf.append("fast\">").append(_t("Fast, High Capacity")); break;
@@ -243,14 +240,12 @@ class ProfileOrganizerRenderer {
                     }
                     buf.append("</span>");
                 } else {
-                    buf.append("<span hidden>0</span>");
-                    buf.append("<span class=\"");
+                    buf.append("<span hidden>0</span><span class=\"");
                     if (bonus >= 9999999) {buf.append("testOK ");}
                     else if (capBonus <= -30) {buf.append("testFail ");}
                     buf.append("nospeed\">&ensp;</span>");
                 }
-                buf.append("</td>");
-                buf.append("<td class=latency>");
+                buf.append("</td><td class=latency>");
                 if (bonus >= 9999999) {buf.append("<span class=lowlatency>✔</span>");}
                 else if (capBonus == -30) {buf.append("<span class=highlatency>✖</span>");}
                 else {buf.append("<span>&ensp;</span>");}
@@ -296,66 +291,49 @@ class ProfileOrganizerRenderer {
                     buf.append("<span hidden>[").append(prof.getFirstHeardAbout()).append("]</span>")
                        .append(formatInterval(now, prof.getFirstHeardAbout()));
                 }
-                buf.append("</td><td>")
-                   .append("<span hidden>[").append(prof.getLastHeardFrom() - now).append("]</span>")
-                   .append(formatInterval(now, prof.getLastHeardFrom()))
-                   .append("</td><td nowrap class=viewedit>");
+                buf.append("</td><td><span hidden>[").append(prof.getLastHeardFrom() - now).append("]</span>")
+                   .append(formatInterval(now, prof.getLastHeardFrom())).append("</td><td nowrap class=viewedit>");
                 if (prof != null) {
-                    buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(peer.toBase64()).append("\" title=\"").append(_t("View profile"))
-                       .append("\" alt=\"[").append(_t("View profile")).append("]\">").append(_t("Profile")).append("</a>");
+                    buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(peer.toBase64())
+                       .append("\" title=\"").append(_t("View profile")).append("\" alt=\"[").append(_t("View profile"))
+                       .append("]\">").append(_t("Profile")).append("</a>");
                 }
-                buf.append("<br><a class=configpeer href=\"/configpeer?peer=").append(peer.toBase64()).append("\" title=\"").append(_t("Configure peer"))
-                   .append("\" alt=\"[").append(_t("Configure peer")).append("]\">").append(_t("Edit")).append("</a>")
-                   .append("</td></tr>\n");
-                // let's not build the whole page in memory (~500 bytes per peer)
-                // let's try rendering to ram and seeing if page load times are less janky
-                //out.append(buf);
-                //buf.setLength(0);
+                buf.append("<br><a class=configpeer href=\"/configpeer?peer=").append(peer.toBase64())
+                   .append("\" title=\"").append(_t("Configure peer")).append("\" alt=\"[").append(_t("Configure peer"))
+                   .append("]\">").append(_t("Edit")).append("</a></td></tr>\n");
             }
             buf.append("</tbody>\n</table>\n");
 
-            buf.append("<div id=peer_thresholds>\n")
-               .append("<h3 class=tabletitle>").append(_t("Thresholds")).append("</h3>\n")
-               .append("<table id=thresholds>\n")
-               .append("<thead><tr><th><b>").append(_t("Speed")).append(": </b>");
+            buf.append("<div id=peer_thresholds>\n<h3 class=tabletitle>").append(_t("Thresholds")).append("</h3>\n")
+               .append("<table id=thresholds>\n<thead><tr><th><b>").append(_t("Speed")).append(": </b>");
             double speed = Math.max(1, _organizer.getSpeedThreshold());
             //String speedApprox = spd.substring(0, spd.indexOf("."));
             //int speed = Integer.parseInt(speedApprox);
-            if (speed < -10240)
-                speed += 10240;
-            else if (speed < 0)
-                speed = 0;
+            if (speed < -10240) {speed += 10240;}
+            else if (speed < 0) {speed = 0;}
             if (speed > 1025) {
                 speed = speed / 1024;
                 buf.append((int)speed).append(' ' ).append("KB");
-            } else {
-                buf.append((int)speed).append(' ' ).append("B");
-            }
+            } else {buf.append((int)speed).append(' ' ).append("B");}
             buf.append("ps</th><th><b>").append(_t("Capacity")).append(": </b>");
 
             double capThresh = Math.max(1, Math.round(_organizer.getCapacityThreshold()));
             double integThresh = Math.max(1, _organizer.getIntegrationThreshold());
             buf.append((int)Math.round(capThresh)).append(' ').append(_t("tunnels per hour")).append("</th><th><b>")
                .append(_t("Integration")).append(": </b>").append((int)Math.round(integThresh)).append(' ');
-            if (capThresh > 0 && capThresh < 2)
-                buf.append(_t("peer"));
-            else
-                buf.append(_t("peers"));
-            buf.append("</th></tr></thead>\n")
-               .append("<tbody>\n<tr><td>")
+            if (capThresh > 0 && capThresh < 2) {buf.append(_t("peer"));}
+            else {buf.append(_t("peers"));}
+            buf.append("</th></tr></thead>\n<tbody>\n<tr><td>")
                .append(ngettext("{0} fast peer", "{0} fast peers", fast))
                .append("</td><td>")
                .append(ngettext("{0} high capacity peer", "{0} high capacity peers", reliable))
                .append("</td><td>")
                .append(ngettext("{0} integrated peer", "{0} integrated peers", integrated))
-               .append("</td></tr>\n")
-               .append("</tbody>\n</table>\n</div>\n"); // thresholds
-            buf.append("</div>\n");
+               .append("</td></tr>\n</tbody>\n</table>\n</div>\n</div>\n"); // thresholds
 
         } else if (mode == 2) {
 
-            buf.append("<div class=widescroll id=ff>\n")
-               .append("<table id=floodfills data-sortable>\n")
+            buf.append("<div class=widescroll id=ff>\n<table id=floodfills data-sortable>\n")
                .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
                .append("<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=good></colgroup>")
                .append("<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=bad></colgroup>")
@@ -396,104 +374,108 @@ class ProfileOrganizerRenderer {
                     String integration = num(prof.getIntegrationValue()).replace(".00", "");
                     String hourfail = davg(dbh, 60*60*1000l, ra);
                     String dayfail = davg(dbh, 24*60*60*1000l, ra);
-                    buf.append("<td><span class=\"percentBarOuter");
-                    if (hourfail.equals("0%")) {buf.append(" nofail");}
-                    buf.append("\"><span class=percentBarInner style=\"width:").append(hourfail).append("\">")
-                       .append("<span class=percentBarText>").append(hourfail).append("</span></span></span>")
-                       .append("</td>")
-                       .append("<td><span hidden>[").append(avg(prof, 60*60*1000l, ra)).append("]</span>")
-                       .append(avg(prof, 60*60*1000l, ra))
-                       .append("</td>");
                     now = _context.clock().now();
                     long heard = prof.getFirstHeardAbout();
-                    buf.append("<td><span hidden>[").append(heard).append("]</span>")
-                       .append(formatInterval(now, heard)).append("</td>")
-                       .append("<td><span hidden>[").append(prof.getLastHeardFrom()).append(".]</span>")
-                       .append(formatInterval(now, prof.getLastHeardFrom())).append("</td>")
-                       .append("<td><span hidden>[").append(dbh.getSuccessfulLookups()).append("]</span>")
-                       .append(dbh.getSuccessfulLookups()).append("</td>")
-                       .append("<td><span hidden>[").append(dbh.getLastLookupSuccessful()).append("]</span>")
-                       .append(formatInterval(now, dbh.getLastLookupSuccessful())).append("</td>")
-                       .append("<td><span hidden>[").append(prof.getLastSendSuccessful()).append("]</span>")
-                       .append(formatInterval(now, prof.getLastSendSuccessful())).append("</td>")
-                       .append("<td><span hidden>[").append(dbh.getLastStoreSuccessful()).append("]</span>")
-                       .append(formatInterval(now, dbh.getLastStoreSuccessful())).append("</td>")
-                       .append("<td><span hidden>[").append(dbh.getFailedLookups()).append("]</span>")
-                       .append(dbh.getFailedLookups()).append("</td>")
-                       .append("<td><span hidden>[").append(dbh.getLastLookupFailed()).append("]</span>")
-                       .append(formatInterval(now, dbh.getLastLookupFailed())).append("</td>")
-                       .append("<td><span hidden>[").append(prof.getLastSendFailed()).append("]</span>")
-                       .append(formatInterval(now, prof.getLastSendFailed())).append("</td>")
-                       .append("<td><span hidden>[").append(dbh.getLastStoreFailed()).append("]</span>")
-                       .append(formatInterval(now, dbh.getLastStoreFailed())).append("</td>")
-                       .append("</tr>\n");
+                    buf.append("<td><span class=\"percentBarOuter");
+                    if (hourfail.equals("0%")) {buf.append(" nofail");}
+                    buf.append("\"><span class=percentBarInner style=\"width:").append(hourfail)
+                       .append("\"><span class=percentBarText>").append(hourfail).append("</span></span></span></td>")
+                       .append("<td><span hidden>[").append(avg(prof, 60*60*1000l, ra)).append("]</span>")
+                       .append(avg(prof, 60*60*1000l, ra))
+                       .append("</td><td><span hidden>[").append(heard).append("]</span>")
+                       .append(formatInterval(now, heard)).append("</td><td><span hidden>[")
+                       .append(prof.getLastHeardFrom()).append(".]</span>")
+                       .append(formatInterval(now, prof.getLastHeardFrom())).append("</td><td><span hidden>[")
+                       .append(dbh.getSuccessfulLookups()).append("]</span>")
+                       .append(dbh.getSuccessfulLookups()).append("</td><td><span hidden>[")
+                       .append(dbh.getLastLookupSuccessful()).append("]</span>")
+                       .append(formatInterval(now, dbh.getLastLookupSuccessful())).append("</td><td><span hidden>[")
+                       .append(prof.getLastSendSuccessful()).append("]</span>")
+                       .append(formatInterval(now, prof.getLastSendSuccessful())).append("</td><td><span hidden>[")
+                       .append(dbh.getLastStoreSuccessful()).append("]</span>")
+                       .append(formatInterval(now, dbh.getLastStoreSuccessful())).append("</td><td><span hidden>[")
+                       .append(dbh.getFailedLookups()).append("]</span>")
+                       .append(dbh.getFailedLookups()).append("</td><td><span hidden>[")
+                       .append(dbh.getLastLookupFailed()).append("]</span>")
+                       .append(formatInterval(now, dbh.getLastLookupFailed())).append("</td><td><span hidden>[")
+                       .append(prof.getLastSendFailed()).append("]</span>")
+                       .append(formatInterval(now, prof.getLastSendFailed())).append("</td><td><span hidden>[")
+                       .append(dbh.getLastStoreFailed()).append("]</span>")
+                       .append(formatInterval(now, dbh.getLastStoreFailed())).append("</td></tr>\n");
                 }
             }
-            buf.append("</tbody>\n</table>\n")
-               .append("</div>\n");
+            buf.append("</tbody>\n</table>\n</div>\n");
         }
         if (mode == 0 && !isAdvanced) {
-            buf.append("<h3 class=tabletitle>").append(_t("Definitions")).append("</h3>\n")
-               .append("<table id=profile_defs>\n<tbody>\n")
-               .append("<tr><td><b>")
+            buf.append("<h3 class=tabletitle>").append(_t("Definitions")).append("</h3>\n<table id=profile_defs>\n<tbody>\n<tr><td><b>")
                .append(_t("caps")).append(":</b></td><td>").append(_t("Capabilities in the NetDb, not used to determine profiles"))
-               .append("</td></tr>\n")
-               .append("<tr id=capabilities_key><td></td><td><table><tbody>")
-               .append("<tr>").append("<td><a href=\"/netdb?caps=f\" title=\"").append(_t("Show all routers with this capability in the NetDb"))
-               .append("\"><b class=ff>F</b></a></td><td>").append(_t("Floodfill")).append("</td>")
-               .append("<td><a href=\"/netdb?caps=R\" title=\"").append(_t("Show all routers with this capability in the NetDb"))
-               .append("\"><b class=reachable>R</b></a></td><td>").append(_t("Reachable")).append("</td>").append("</tr>\n")
-               .append("<tr>").append("<td><a href=\"/netdb?caps=N\" title=\"").append(_t("Show all routers with this capability in the NetDb"))
-               .append("\"><b>N</b></a></td><td>").append(_t("{0} shared bandwidth", range(Router.MIN_BW_N, Router.MIN_BW_O))).append("</td>")
-               .append("<td><a href=\"/netdb?caps=O\" title=\"").append(_t("Show all routers with this capability in the NetDb"))
-               .append("\"><b>O</b></a></td><td>").append(_t("{0} shared bandwidth", range(Router.MIN_BW_O, Router.MIN_BW_P))).append("</td>")
-               .append("</tr>\n")
-               .append("<tr>").append("<td><a href=\"/netdb?caps=P\" title=\"").append(_t("Show all routers with this capability in the NetDb"))
-               .append("\"><b>P</b></a></td><td>").append(_t("{0} shared bandwidth", range(Router.MIN_BW_P, Router.MIN_BW_X))).append("</td>")
-               .append("<td><a href=\"/netdb?caps=X\" title=\"").append(_t("Show all routers with this capability in the NetDb"))
-               .append("\"><b>X</b></a></td><td>").append(_t("Over {0} KB/s shared bandwidth", Math.round(Router.MIN_BW_X * 1.024f))).append("</td>")
-               .append("</tr>\n")
-               .append("</tbody>\n</table>\n</td></tr>\n") // profile_defs
-               .append("<tr><td><b>")
+               .append("</td></tr>\n<tr id=capabilities_key><td></td><td><table><tbody>")
+               .append("<tr>").append("<td><a href=\"/netdb?caps=f\" title=\"")
+               .append(_t("Show all routers with this capability in the NetDb"))
+               .append("\"><b class=ff>F</b></a></td><td>")
+               .append(_t("Floodfill"))
+               .append("</td><td><a href=\"/netdb?caps=R\" title=\"")
+               .append(_t("Show all routers with this capability in the NetDb"))
+               .append("\"><b class=reachable>R</b></a></td><td>")
+               .append(_t("Reachable"))
+               .append("</td>").append("</tr>\n<tr><td><a href=\"/netdb?caps=N\" title=\"")
+               .append(_t("Show all routers with this capability in the NetDb"))
+               .append("\"><b>N</b></a></td><td>")
+               .append(_t("{0} shared bandwidth", range(Router.MIN_BW_N, Router.MIN_BW_O)))
+               .append("</td><td><a href=\"/netdb?caps=O\" title=\"")
+               .append(_t("Show all routers with this capability in the NetDb"))
+               .append("\"><b>O</b></a></td><td>")
+               .append(_t("{0} shared bandwidth", range(Router.MIN_BW_O, Router.MIN_BW_P)))
+               .append("</td></tr>\n<tr><td><a href=\"/netdb?caps=P\" title=\"")
+               .append(_t("Show all routers with this capability in the NetDb"))
+               .append("\"><b>P</b></a></td><td>")
+               .append(_t("{0} shared bandwidth", range(Router.MIN_BW_P, Router.MIN_BW_X)))
+               .append("</td><td><a href=\"/netdb?caps=X\" title=\"")
+               .append(_t("Show all routers with this capability in the NetDb"))
+               .append("\"><b>X</b></a></td><td>")
+               .append(_t("Over {0} KB/s shared bandwidth", Math.round(Router.MIN_BW_X * 1.024f)))
+               .append("</td></tr>\n</tbody>\n</table>\n</td></tr>\n<tr><td><b>")
                .append(_t("status"))
                .append(":</b></td><td>")
                .append(_t("is the peer banned, or unreachable, or failing tunnel tests?"))
-               .append("</td></tr>\n")
-               .append("<tr><td><b>")
-               .append(_t("groups")).append(":</b></td><td>")
-               .append(_t("Note: Peers are categorized by the profile organizer based on observable performance, " +
-                          "not from capabilities they advertise in the NetDB.")).append("<br>")
-               .append("<span class=\"profilegroup fast\"><b>").append(_t("Fast")).append(":</b>&nbsp; ")
-               .append(_t("Peers marked as high capacity that also meet or exceed speed average for all profiled peers.")).append("</span><br>")
-               .append("<span class=\"profilegroup highcap\"><b>").append(_t("High Capacity")).append(":</b>&nbsp; ")
-               .append(_t("Peers that meet or exceed tunnel build rate average for all profiled peers.")).append("</span><br>")
-               .append("<span class=\"profilegroup integrated\"><b>").append(_t("Integrated")).append(":</b>&nbsp; ")
-               .append(_t("Floodfill peers currently available for NetDb inquiries.")).append("</span><br>")
-               .append("<span class=\"profilegroup standard\"><b>").append(_t("Standard")).append(":</b>&nbsp; ")
-               .append(_t("Peers not profiled as high capacity (lower build rate than average peer).")).append("</span>")
-               .append("</td></tr>\n")
-               .append("<tr><td><b>")
+               .append("</td></tr>\n<tr><td><b>")
+               .append(_t("groups"))
+               .append(":</b></td><td>")
+               .append(_t("Note: Peers are categorized by the profile organizer based on observable performance, not from capabilities they advertise in the NetDB."))
+               .append("<br><span class=\"profilegroup fast\"><b>")
+               .append(_t("Fast"))
+               .append(":</b>&nbsp; ")
+               .append(_t("Peers marked as high capacity that also meet or exceed speed average for all profiled peers."))
+               .append("</span><br><span class=\"profilegroup highcap\"><b>")
+               .append(_t("High Capacity"))
+               .append(":</b>&nbsp; ")
+               .append(_t("Peers that meet or exceed tunnel build rate average for all profiled peers."))
+               .append("</span><br><span class=\"profilegroup integrated\"><b>")
+               .append(_t("Integrated"))
+               .append(":</b>&nbsp; ")
+               .append(_t("Floodfill peers currently available for NetDb inquiries."))
+               .append("</span><br><span class=\"profilegroup standard\"><b>")
+               .append(_t("Standard"))
+               .append(":</b>&nbsp; ")
+               .append(_t("Peers not profiled as high capacity (lower build rate than average peer)."))
+               .append("</span></td></tr>\n<tr><td><b>")
                .append(_t("speed"))
                .append(":</b></td><td>")
                .append(_t("Peak throughput (bytes per second) over a 1 minute period that the peer has sustained in a single tunnel."))
-               .append("</td></tr>\n")
-               .append("<tr><td><b>")
+               .append("</td></tr>\n<tr><td><b>")
                .append(_t("latency"))
                .append(":</b></td><td>")
                .append(_t("Is the peer responding to tests in a timely fashion? To configure the timeout value: " +
                           "<code>router.peerTestTimeout={n}</code> (value is milliseconds, default 1000ms)"))
-               .append("</td></tr>\n")
-               .append("<tr><td><b>")
+               .append("</td></tr>\n<tr><td><b>")
                .append(_t("capacity"))
                .append(":</b></td><td>")
                .append(_t("how many tunnels can we ask them to join in an hour?"))
-               .append("</td></tr>\n")
-               .append("<tr><td><b>")
+               .append("</td></tr>\n<tr><td><b>")
                .append(_t("integration"))
                .append(":</b></td><td>")
                .append(_t("how many new peers have they told us about lately?"))
-               .append("</td></tr>\n")
-               .append("</tbody>\n</table>\n");
+               .append("</td></tr>\n</tbody>\n</table>\n");
         }  // mode < 2
         out.append(buf);
         out.flush();
@@ -555,22 +537,16 @@ class ProfileOrganizerRenderer {
 
     /** @since 0.9.21 */
     private String formatInterval(long now, long then) {
-        if (then <= 0)
-            return _t(NA);
+        if (then <= 0) {return _t(NA);}
         // avoid 0 or negative
-        if (now <= then)
-            return DataHelper.formatDuration2(1);
+        if (now <= then) {return DataHelper.formatDuration2(1);}
         return DataHelper.formatDuration2(now - then);
     }
 
     /** translate a string */
-    private String _t(String s) {
-        return Messages.getString(s, _context);
-    }
+    private String _t(String s) {return Messages.getString(s, _context);}
 
-    private String _t(String s, Object o) {
-        return Messages.getString(s, o, _context);
-    }
+    private String _t(String s, Object o) {return Messages.getString(s, o, _context);}
 
     /** translate (ngettext) @since 0.8.5 */
     public String ngettext(String s, String p, int n) {
