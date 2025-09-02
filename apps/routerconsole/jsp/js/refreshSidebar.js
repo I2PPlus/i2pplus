@@ -217,19 +217,16 @@ function handleFormSubmit() {
   });
 }
 
-window.addEventListener("visibilitychange", () => {
+document.onvisibilitychange = () => {
+  isRefreshing = false;
+  lastRefreshTime = 0;
   if (!document.hidden) {
     requestAnimationFrame(() => {
-      isRefreshing = false;
-      lastRefreshTime = 0;
       requestAnimationFrame(() => { refreshSidebar(true); });
-      startAutoRefresh();
     });
-  } else {
-    isRefreshing = false;
-    startAutoRefresh();
   }
-});
+  startAutoRefresh();
+};
 
 document.addEventListener("DOMContentLoaded", () => {
   initSidebar();
