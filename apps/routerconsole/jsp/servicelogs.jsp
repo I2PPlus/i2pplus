@@ -23,35 +23,6 @@
 
 <jsp:useBean class="net.i2p.router.web.helpers.LogsHelper" id="logsHelper" scope="request"/>
 <jsp:setProperty name="logsHelper" property="contextId" value="<%=i2pcontextId%>"/>
-<%  if (!logsHelper.isAdvanced()) { %>
-<table id=bugreports>
-<tbody>
-<tr><td class=infohelp>
-<%=intl._t("Please include your I2P version and running environment information in bug reports")%>.
-<%=intl._t("Note that system information, log timestamps, and log messages may provide clues to your location; please review everything you include in a bug report.")%>
-<%=intl._t("Please report bugs on {0} or {1}.", "<a href=\"http://git.idk.i2p/I2P_Developers/i2p.i2p/issues\">git.idk.i2p</a>", "<a href=\"https://gitlab.com/i2pplus/I2P.Plus/-/issues\">I2P+ Gitlab</a>")%>
-</td></tr>
-</tbody>
-</table>
-<h3 class=tabletitle id=version><%=intl._t("I2P Version and Running Environment")%>&ensp;<a href="/events?from=604800"><%=intl._t("View event log")%></a></h3>
-<table id=enviro>
-<tbody>
-<tr><td><b>I2P:</b></td><td><%=net.i2p.router.RouterVersion.FULL_VERSION%>&ensp;<b>API:</b>&ensp;<%=net.i2p.CoreVersion.PUBLISHED_VERSION%>&ensp;<b>Wrapper:</b>&ensp;<%=System.getProperty("wrapper.version", "none")%> &ensp;<b>Built by:</b>&ensp;<jsp:getProperty name="logsHelper" property="builtBy"/></td></tr>
-<tr><td><b>Platform:</b></td><td><%=System.getProperty("os.name")%>&ensp;<%=System.getProperty("os.arch")%>&ensp;<%=System.getProperty("os.version")%></td></tr>
-<tr><td><b>Processor:</b></td><td><span id=cputype><%=net.i2p.util.NativeBigInteger.cpuType().replace("zen2", "zen3 or later")%></span>
-<%      if (isX86) { %>
-&ensp;<%=net.i2p.util.NativeBigInteger.cpuModel()%>
-<%      } %>
-&ensp;<span class=nowrap>[Jcpuid version: <%=freenet.support.CPUInformation.CPUID.getJcpuidVersion()%></span>]</td></tr>
-<tr><td><b>Java:</b></td><td><%=System.getProperty("java.vendor")%>&ensp;<%=System.getProperty("java.version")%>&ensp;(<%=System.getProperty("java.runtime.name")%>&ensp;<%=System.getProperty("java.runtime.version")%>)</td></tr>
-<jsp:getProperty name="logsHelper" property="unavailableCrypto"/>
-<tr><td><b>Jetty:</b></td><td><jsp:getProperty name="logsHelper" property="jettyVersion"/>&ensp;<b>Servlet:</b>&ensp;<%=getServletInfo()%> (<%=getServletConfig().getServletContext().getMajorVersion()%>.<%=getServletConfig().getServletContext().getMinorVersion()%>)</td></tr>
-<tr><td><b>JBigI:</b></td><td><%=net.i2p.util.NativeBigInteger.loadStatus()%>&ensp;<span class=nowrap>[version: <%=net.i2p.util.NativeBigInteger.getJbigiVersion()%>]</span>&ensp;<span class=nowrap><b>GMP:</b>&ensp;<%=net.i2p.util.NativeBigInteger.getLibGMPVersion()%></span></td></tr>
-<tr><td><b>JSTL:</b></td><td><jsp:getProperty name="logsHelper" property="jstlVersion"/>&ensp;<span class=nowrap><b>Encoding:</b>&ensp;<%=System.getProperty("file.encoding")%></span>&ensp;<span class=nowrap><b>Charset:</b>&ensp;<%=java.nio.charset.Charset.defaultCharset().name()%></span></td></tr>
-</tbody>
-</table>
-<%  } %>
-
 <h3 class=tabletitle id=servicelogs><%=intl._t("Service (Wrapper) Logs")%>
 <%  StringBuilder buf = new StringBuilder(24*1024);
     // timestamp, last line number, escaped filename

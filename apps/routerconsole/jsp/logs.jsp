@@ -14,7 +14,7 @@
 <h1 class=log><%=intl._t("Logs")%></h1>
 <div class=main id=logs>
 <div class=confignav>
-<span class=tab><a href=/servicelogs><%=intl._t("Router")%></a></span>
+<span class=tab><a href=/routerlogs><%=intl._t("Router")%></a></span>
 <span class=tab><a href=/servicelogs><%=intl._t("Service")%></a></span>
 <span class=tab2><span><%=intl._t("Combined")%></span></span>
 <span class=tab><a href="/events?from=604800"><%=intl._t("Events")%></a></span>
@@ -27,7 +27,7 @@
 <tr><td class=infohelp>
 <%=intl._t("Please include your I2P version and running environment information in bug reports")%>.
 <%=intl._t("Note that system information, log timestamps, and log messages may provide clues to your location; please review everything you include in a bug report.")%>
-<%=intl._t("Please report bugs on {0} or {1}.", "<a href=\"http://git.idk.i2p/I2P_Developers/i2p.i2p/issues\">git.idk.i2p</a>", "<a href=\"https://gitlab.com/i2pplus/I2P.Plus/-/issues\">I2P+ Gitlab</a>")%>
+<%=intl._t("Please report bugs on {0} or {1}.", "<a href=\"http://git.idk.i2p/I2P_Developers/i2p.i2p/issues\">git.idk.i2p</a>", "<a href=\"https://github.com/I2PPlus/i2pplus/issues\">I2P+ Gitlab</a>")%>
 </td></tr>
 </tbody>
 </table>
