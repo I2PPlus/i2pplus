@@ -1391,7 +1391,7 @@ table[id$="logs"] ul{margin:1px 17px -6px -12px}
 #logs h3.tabletitle a.delete:active::after{background:var(--close_active) no-repeat center center;transform:scale(.85)}
 #logs h3.tabletitle a.delete::after{margin:0 8px;background:var(--close) no-repeat center center/14px}
 #logs h3.tabletitle a.delete:hover::after,#logs a.delete:focus::after{background:var(--close_hover) no-repeat center center/16px}
-#logs #eventlogLink{padding:12px 4px 8px 9px;float:right;font-size:0;border-bottom:0;background:none}
+#logs #eventlogLink{padding:12px 4px 8px 9px;display:none;float:right;font-size:0;border-bottom:0;background:none}
 #logs #eventlogLink::after{margin:-2px 12px 0 8px;width:16px;height:20px;display:inline-block;vertical-align:middle;background:url(/themes/console/images/logs.svg) no-repeat center center/14px;content:"";filter:drop-shadow(0 0 1px #000) drop-shadow(0 0 2px #000)}
 #logs #eventlogLink:hover::after{transform:scale(1.2)}
 #logs li{margin:0 5px 0 13px;padding:2px 2px 2px 7px;width:calc(100% - 9px);word-break:break-all;list-style:none;text-align:left;font:8.5pt/1.5 var(--monospaced);border-top:1px solid rgba(64,64,80,.2);border-right:1px solid rgba(40,40,48,.2);border-bottom:1px solid #000;border-left:2px solid #224;background:rgba(10,10,34,.6);opacity:.8}
@@ -1409,6 +1409,7 @@ table[id$="logs"] ul{margin:1px 17px -6px -12px}
 #criticallogs tr:first-child{display:none}
 #criticallogs tr:last-child td{padding-bottom:0}
 #enviro,#criticallogs,#routerlogs,#eventlogs,#wrapperlogs{margin-top:-11px}
+#logs #criticallogs[hidden]+#routerlogs_h3{margin-top:-4px}
 #enviro td:last-child b{margin:0 2px 0 6px}
 #enviro td{padding:8px 10px;font-weight:400}
 #routerlogs td p,#wrapperlogs td p{margin:0;padding:2px 10px}
@@ -2262,7 +2263,7 @@ h3[id*="jobs"]{margin-top:25px;clear:both}
 .eventspanel th{text-align:left;padding-left:10px}
 .eventspanel table{font-size:9pt}
 .eventspanel table td{padding:5px 10px}
-#events h3{margin-top:6px;box-shadow:var(--highlight)}
+#displayevents{margin-top:-8px;box-shadow:var(--highlight)}
 #events table{background:#001}
 #events tr{line-height:1.4;box-shadow:none}
 #events td:first-child span{margin:1px 0 0 -2px;display:inline-block;vertical-align:top;font-size:80%;text-transform:lowercase}
@@ -2800,6 +2801,7 @@ button.control[class],button.control[class]:hover,button.control[class]:focus{pa
 #clientconf.infohelp{margin:12px 0 -13px}
 #clientconfig{margin-top:14px}
 #debug #tx_summary button{top:7px!important}
+#displayevents{margin-top:-11px;
 #externali2cp .optionlist label::before,#externali2cp .optionlist .nowrap::before,#netconfig label::before,#reseedconfig .nowrap::before,#manualreseed .nowrap::before,#graphs .nowrap::before{min-height:50px}
 #i2pclientconfig,#pconfig,#pluginfromurl,#pluginfromfile,#clientconf.infohelp,#webappconfiguration{margin:-4px 0 -15px}
 #i2pclientconfig{margin-bottom:3px}

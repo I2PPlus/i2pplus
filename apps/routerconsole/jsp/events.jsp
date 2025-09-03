@@ -22,6 +22,12 @@
 <%@include file="sidebar.jsi" %>
 <h1 class=log><%=intl._t("Event Log")%></h1>
 <div class=main id=events>
+<div class=confignav>
+<span class=tab><a href=/routerlogs><%=intl._t("Router")%></a></span>
+<span class=tab><a href=/servicelogs><%=intl._t("Service")%></a></span>
+<span class=tab><a href=/logs><%=intl._t("Combined")%></a></span>
+<span class=tab2><span><%=intl._t("Events")%></span></span>
+</div>
 <div class=eventspanel>
 <div class=widepanel>
 <jsp:getProperty name="eventHelper" property="allMessages"/>

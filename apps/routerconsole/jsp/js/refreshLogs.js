@@ -12,8 +12,8 @@ function start() {
   const critLogsHead = document.getElementById("critLogsHead");
   const noCritLogs = criticallogs?.querySelector(".nologs");
   const routerlogs = document.getElementById("routerlogs");
-  const routerlogsList = routerlogs.querySelector("td ul");
-  const routerlogsFileInfo = routerlogs.querySelector("tr:first-child td p");
+  const routerlogsList = routerlogs?.querySelector("td ul");
+  const routerlogsFileInfo = routerlogs?.querySelector("tr:first-child td p");
   const servicelogs = document.getElementById("wrapperlogs");
   const refreshSpan = document.getElementById("refreshPeriod");
   const refreshInput = document.getElementById("logRefreshInterval");
@@ -45,7 +45,7 @@ function start() {
         criticallogs?.remove();
       }
 
-      if (routerlogsList) {
+      if (routerlogs && routerlogsList) {
         const routerlogsListResponse = doc.querySelector("#routerlogs td ul");
         const routerlogsFileInfoResponse = doc.querySelector("#routerlogs tr:first-child td p");
         const fragment = document.createDocumentFragment();
@@ -77,7 +77,7 @@ function start() {
         }
       }
 
-      if (routerlogsList) {
+      if (routerlogs && routerlogsList) {
         const liElements = routerlogsList.querySelectorAll("li");
         liElements.forEach(li => {
           li.style.display = li.textContent.toLowerCase().includes(filterValue) ? "block" : "none";
@@ -106,7 +106,7 @@ function start() {
   function refreshLogs() {
     const filterInput = document.getElementById("logFilterInput");
     const storedFilterValue = localStorage.getItem("logFilter");
-    let filterValue = encodeURIComponent(filterInput.value.trim().toLowerCase()).replace(/%20/g, " ");
+    let filterValue = encodeURIComponent(filterInput?.value.trim().toLowerCase()).replace(/%20/g, " ");
     if (storedFilterValue) { filterValue = storedFilterValue; }
     progressx.show(theme);
     worker.port.postMessage({ url: "/logs" });
@@ -116,15 +116,18 @@ function start() {
   }
 
   function updateInterval() {
-    refreshInput.min = 0;
-    refreshInput.max = 3600;
     intervalValue = localStorage.getItem("logsRefresh") || "30"; // default value in seconds
-    refreshInput.value = intervalValue;
 
-    if (!refreshSpan.classList.contains("listening")) {
-      refreshInput.addEventListener("input", () => {
+    if (routerlogs) {
+      refreshInput.min = 0;
+      refreshInput.max = 3600;
+      refreshInput.value = intervalValue;
+    }
+
+    if (routerlogs && !refreshSpan.classList.contains("listening")) {
+      refreshInput?.addEventListener("input", () => {
         refreshSpan.classList.add("listening");
-        intervalValue = refreshInput.value; // update intervalValue with input value
+        intervalValue = refreshInput?.value; // update intervalValue with input value
         if (!Number.isNaN(intervalValue)) {
           if (intervalValue === 0) {
             clearInterval(logsRefreshId);
@@ -144,6 +147,9 @@ function start() {
           }
         }
       });
+    } else {
+      clearInterval(logsRefreshId);
+      logsRefreshId = setInterval(refreshLogs, intervalValue * 1000);
     }
   }
 
@@ -244,6 +250,7 @@ function start() {
   let filterListener = false;
 
   function addFilterInput() {
+    if (!routerlogs) return;
     const filterSpan = document.getElementById("logFilter");
     const debounce = (func, delay) => {
       let timeoutId;
@@ -259,6 +266,7 @@ function start() {
   }
 
   function applyFilter() {
+    if (!routerlogs) return;
     const filterValue = filterInput.value.toLowerCase();
     if (routerlogsList) {
       const liElements = routerlogsList.querySelectorAll("li");

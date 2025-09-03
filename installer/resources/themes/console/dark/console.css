@@ -21,7 +21,7 @@
 html{background:var(--bodybg),#000800}
 body{margin:5px 0 0 0;padding:0;text-align:center;font:8.5pt/1.3 var(--bodyfont);background:none}
 code{text-align:left;font:500 9pt var(--monospaced);color:#dd0}
-h1,#applinks,#sitelinks,#news h3,.main h3,label.tabletitle{position:relative;z-index:10;text-shadow:var(--textshadow);box-shadow:var(--highlight);background:var(--h1);background-size:2px,100% 4px,100%,256px;background-repeat:repeat,repeat,no-repeat,repeat}
+h1,#applinks,#sitelinks,#news h3,.main h3,label.tabletitle,#displayevents{position:relative;z-index:10;text-shadow:var(--textshadow);box-shadow:var(--highlight);background:var(--h1);background-size:2px,100% 4px,100%,256px;background-repeat:repeat,repeat,no-repeat,repeat}
 h1,.main h2,.main h3,label.tabletitle,#applinks,#sitelinks{box-shadow:var(--bevel)}
 h1,.sb,#sb_wrap{contain:layout}
 h2 a:hover{color:var(--hover)}
@@ -2483,7 +2483,8 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 #countdown{min-width:120px;display:inline-block;letter-spacing:.1em;text-align:center;font-size:10pt;text-shadow:var(--textshadow);background:#020;background:linear-gradient(90deg,#010,#000,#010);box-shadow:var(--highlight)}
 
 /* events */
-#eventlog{border-bottom:2px solid #242;background:#010}#events h3{box-shadow:var(--highlight)}
+#displayevents{margin-top:9px;box-shadow:var(--bevel)}
+#eventlog{border-bottom:2px solid #242;background:#010}
 #events tr{line-height:1.4;box-shadow:inset 0 0 0 1px rgba(0,0,0,.3),inset 0 0 2px 0 rgba(96,96,96,.5)}
 #events tr:nth-child(n+1):hover td{background:rgba(255,255,255,.15)}
 #events td{padding-top:5px;padding-bottom:5px;border-top:1px solid #000;border-bottom:1px solid #000}
@@ -2559,8 +2560,8 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #logs #enviro td{padding:7px 10px;font-weight:400;border-right:1px inset #131;box-shadow:var(--highlight)}
 #logs #enviro td:first-child{width:1%;white-space:nowrap;text-align:right}
 #logs #enviro:hover td{color:#9d0;border-top:1px inset #0000;border-bottom:1px inset #0000;border-right:1px inset #0000;box-shadow:none;background:#010}
-#logs #eventlogLink{margin-right:7px;display:inline-block;font-size:0;border-bottom:0;background:none}
-#logs #eventlogLink::after{width:18px;height:16px;float:right;background:url(/themes/console/images/logs.svg) var(--center)/14px;content:"";filter:drop-shadow(0 0 1px #000) drop-shadow(0 0 2px #000)}
+#logs #eventlogLink{margin-right:7px;display:none;font-size:0;border-bottom:0;background:none}
+#logs #eventlogLink::after{width:18px;height:16px;display:none;float:right;background:url(/themes/console/images/logs.svg) var(--center)/14px;content:"";filter:drop-shadow(0 0 1px #000) drop-shadow(0 0 2px #000)}
 #logs #eventlogLink:hover::after{transform:scale(1.2)}
 #logs h3 a{margin:-8px 0;padding:10px 2px 9px 10px;border-left:var(--border)}
 #logs h3 a:first-of-type::after{margin-right:-3px}
@@ -2584,6 +2585,7 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #logs table{position:relative}
 #logs table::before{width:calc(100% - 16px);transform:scaleX(0);height:2px;position:absolute;top:1px;left:8px;z-index:999;display:block;background:linear-gradient(to right,rgba(255,96,0,.3),#f50,rgba(255,96,0,.3));content:"";animation:bar .01s steps(2) reverse;backface-visibility:hidden;will-change:transform}
 #logs #wrapperlogs .nologs{padding:7px 18px}
+#routerlogs.single{margin-bottom:10px}
 #routerlogs li,#criticallogs li{margin:0 -11px 0 -9px;padding:0 10px;line-height:1.7;width:calc(100% - 5px)}
 #routerlogs li::after,#criticallogs li::after{display:none}
 #routerlogs li:hover,#criticallogs li:hover{filter:saturate(200%)}
@@ -2903,10 +2905,13 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #changelog{height:calc(100vh - 120px)}
 #changelog pre{height:calc(100vh - 240px)}
 #clock{padding-top:9px;font-size:16pt}
+#displayevents{margin-top:9px}
 #graphFilter{top:9px}
 #help h3,#faq h3{font-size:10.5pt}
 #i2pclientconfig a,#pluginmanage a{transform:translateY(-1px)}
 #jardump a[href^="http://git.skank.i2p/i2pplus"]{padding-left:11px;background-size:8px;background-position:left top}
+#logs h3{margin-top:11px}
+#logRefreshInterval{margin:3px -3px -3px 0}
 #netdboverview th[colspan="3"]{font-size:11pt}
 #netdb .version{line-height:1.45}
 #netdb th .version{padding:2px 8px}
@@ -3216,7 +3221,7 @@ span#newtab{margin-top:4px}
 #sitemap h3{font-size:12pt}
 #stacktrace p:first-of-type::first-line{font-size:110%;font-weight:700;font-variant:super;text-decoration:underline}
 #tunnels #exploratory a,#tunnels h3.server a,#tunnels h3.client a{margin:-8px 0 -8px 0;padding:7px 2px 14px 0}
-#tunnels .tab,#tunnels .tab2{line-height:1.3}
+#events .tab,#events .tab2,#logs .tab,#logs .tab2,#tunnels .tab,#tunnels .tab2{line-height:1.3}
 #tunnels h3 a::after{margin:-8px -8px -8px 0;padding:9px 8px 9px 16px}
 #udpconnections .cells td:first-child,#ntcpconnections .cells td:first-child{padding-right:8px;width:55px}
 }

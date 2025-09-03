@@ -485,6 +485,7 @@ td{padding:3px 5px}
 
 /* top navigation */
 .confignav{margin:-16px -16px 5px -16px!important;padding:5px 7px 6px;border:var(--border);font-size:9pt;text-align:center;font-weight:700;background:var(--th);display:flex;justify-content:center;flex-wrap:wrap}
+#logs .confgnav{padding:6px 7px}
 .tab,.tab2{margin:-1px -2px -1px!important;padding:1px 0;min-width:60px;position:relative;display:inline-block;font-weight:700;border:var(--border);background:var(--bg);box-sizing:border-box}
 .tab a{display:inline-block;padding:5px 15px}
 div[id^="config"] .tab a{padding-right:18px}
@@ -958,6 +959,7 @@ h4#updateplugins{margin-top:-13px}
 #logs #enviro~.tabletitle::after,#jobs h3::after,#tunnels h3[id]::after{width:0;height:1px;display:inline-block;position:absolute;bottom:0;left:0;background:var(--reload);opacity:.6;content:"";animation:ease-out reloader 1s forwards}
 #logs .tabletitle:first-of-type{margin-top:0}
 #logs .tabletitle,#jobs h3,#tunnels h3[id]{position:relative;overflow:hidden}
+#logs .confignav+#servicelogs{margin-top:15px}
 #pconfig{margin-top:20px}
 #pluginmanage{margin-bottom:-1px}
 #webappconfiguration{margin-bottom:-13px;margin-top:15px}
@@ -1503,10 +1505,10 @@ img.unknownflag{opacity:.8}
 #statsWrap h3{margin:12px 0 6px;border-width:1px}
 
 .eventspanel br{display:none}
-.eventspanel h3{margin-top:0}
 .eventspanel form{margin-top:-11px;padding:10px 10px 10px 50px;border:var(--border);background:var(--bg) var(--logs) var(--bgpos_info)}
 .eventspanel select{margin-right:15px}
 .eventspanel th{text-align:left}
+#displayevents{margin-top:14px}
 
 /* informational images */
 #bugreports td.infohelp{padding:var(--pad_info);background:var(--bg) var(--bug) var(--bgpos_info)}
@@ -1571,7 +1573,7 @@ img.unknownflag{opacity:.8}
 #logs #enviro{user-select:all;cursor:text}
 #logs #eventlogLink::after{width:19px;height:16px;padding:12px 8px 8px 4px;display:inline-block;background:url(/themes/console/images/logs.svg) no-repeat center center/16px;content:""}
 #logs #eventlogLink:hover::after{transform:scale(1.2)}
-#logs #eventlogLink{margin:-9px 0 -14px;float:right;font-size:0;border-bottom:0;background:none}
+#logs #eventlogLink{margin:-9px 0 -14px;display:none;float:right;font-size:0;border-bottom:0;background:none}
 #logs code{font-size:8pt}
 #logs h3 a.delete::after{margin-left:9px;background:var(--close) no-repeat center center/16px}
 #logs h3 a.delete::before{margin:-6px 0 -6px 6px;width:1px;height:32px;display:inline-block;vertical-align:middle;background:var(--border_color);content:""}
@@ -1601,7 +1603,7 @@ img.unknownflag{opacity:.8}
 #toggleRefresh:hover{background:var(--pause_hover) no-repeat center center/16px}
 #toggleRefresh:hover{cursor:pointer}
 #toggleRefresh.disabled{background:var(--start) no-repeat center center/16px}
-#toggleRefresh{margin:-5px -3px -10px 0;width:24px;height:32px;float:right;border-left:var(--border_inner);background:var(--pause) no-repeat center center/14px}
+#toggleRefresh{margin:-6px -1px -10px 0;width:24px;height:32px;float:right;border-left:var(--border_inner);background:var(--pause) no-repeat center center/14px}
 #wrapperlogs tr:last-child td{padding:0 0 0 2px}
 
 /* debug */
@@ -2316,7 +2318,7 @@ table[id*="connections"] td,#floodfills td:not(.rif):not(.rih):not(.rbw),#jobsta
 .profilegroup::before{width:18px;height:14px}
 .sitemapLink{margin:0 -11px 6px 14px}
 .statusnotes:last-child{margin-bottom:0}
-.tab,.tab2{padding:1px 0;min-width:50px}
+.tab,.tab2{padding:1px 0;min-width:50px;line-height:1.6}
 .tab2{padding:6px 10px 4px}
 .tab a{padding:2px 12px}
 .tunnel_id{display:none}

@@ -500,7 +500,7 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 .rid .rbw.isU.isE{background:var(--isE),var(--isU),var(--badge)}
 .rid .rbw.isU.isG{background:var(--isG),var(--isU),var(--badge)}
 #topCount .rbw#ff{background:linear-gradient(135deg,#0000 90%,rgba(192,80,0,.8)90%),var(--badge)}
-#topCount .rbw#u{background:linear-gradient(45deg,#000087%,rgba(192,0,0,.8)87%),var(--badge)}
+#topCount .rbw#u{background:linear-gradient(45deg,#0000 87%,rgba(192,0,0,.8)87%),var(--badge)}
 #banlist li .rid{margin-right:5px;margin-left:-2px;float:left}
 
 /* info */
@@ -648,7 +648,7 @@ td.infowarn,#help tr:hover td.infowarn{background:var(--infowarn) no-repeat 15px
 #logs a.configure::after{padding-left:23px;padding-right:6px}
 #logs a.delete:hover::after{background:var(--close_hover) no-repeat center center/14px}
 #logs a.delete::after{width:19px;height:16px;display:inline-block;background:var(--close) no-repeat center center/14px;content:""}
-#logs #eventlogLink{margin:-8px 4px -14px 4px;float:right;font-size:0;border-bottom:0;background:none}
+#logs #eventlogLink{margin:-8px 4px -14px 4px;display:none;float:right;font-size:0;border-bottom:0;background:none}
 #logs #eventlogLink::after{width:19px;height:16px;padding:12px 8px 8px 4px;display:inline-block;border-left:0;background:url(/themes/console/images/logs.svg) no-repeat center center/16px;content:""}
 #logs #eventlogLink:hover::after{transform:scale(1.2)}
 #logs #enviro{user-select:all;cursor:text}
@@ -1167,8 +1167,8 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 #topCount table{display:table;width:auto;margin:0!important;border-collapse:separate;border-spacing:2px;border:0}
 #topCount td{padding:4px 2px 3px 6px;min-width:32px;position:relative;line-height:1;border:var(--border_soft);text-align:left;box-shadow:var(--highlight);background:var(--badge)}
 #topCount td span{padding:2px 4px 1px;min-width:16px;display:inline-block;position:absolute;right:1px;top:1px;text-align:center;font-size:80%;letter-spacing:-.01em;font-weight:400;border-radius:0 0 0 2px;background:rgba(248,248,255,.2)}
-#topCount td#ff{background:linear-gradient(135deg,#000082%,rgba(192,80,0,.8)82%),var(--badge)}
-#topCount td#u{background:linear-gradient(45deg,#000082%,rgba(192,0,0,.8)82%),var(--badge)}
+#topCount td#ff{background:linear-gradient(135deg,#0000 82%,rgba(192,80,0,.8)82%),var(--badge)}
+#topCount td#u{background:linear-gradient(45deg,#0000 82%,rgba(192,0,0,.8)82%),var(--badge)}
 #peers .percentBarInner{height:16px;display:block}
 #peers .percentBarOuter{width:calc(100% - 4px);height:16px;display:inline-block;position:relative;vertical-align:middle;text-align:left}
 #peers .percentBarText{width:calc(100% - 2px);display:inline-block;position:absolute;top:1px;left:1px;bottom:1px;right:1px;text-align:center}
@@ -1755,7 +1755,6 @@ p.threatpoints{margin-top:10px;padding-left:33px;background:var(--eye_static) no
 h4#updateplugins{margin:-15px 0 14px;padding:5px;letter-spacing:0;text-transform:none;font-size:10pt;color:var(--ink_light);border:var(--border_inner);background:linear-gradient(180deg,#fff 50%,rgba(238,238,255,.2) 50%,#eef 100%) #fff}
 table#permabanned,table#i2pupdates{margin-bottom:10px}
 #pluginconfigactions{margin-top:-6px}
-h3#displayevents{border-width:1px;filter:none;border-radius:0;margin-top:0}
 .main form[action="events"]{margin:-16px 0 -2px;padding:10px 10px 10px 50px;border:var(--border_inner);box-shadow:var(--highlight);background:#f2f2ff var(--logs) no-repeat 15px center;background-size:28px}
 .main form[action="events"] select+b,.main form[action="events"] input[type=submit]{margin-left:8px}
 #newfamily{margin-top:-6px;margin-bottom:10px}
@@ -2353,7 +2352,7 @@ td#pw_adduser input{margin:5px 20px 5px 5px}
 *:target+p,*:target+div,*:target>h2~p,*:target>h2~p+ul li,*:target+ul li,*:target>*,*:target>h3+p+ul li,*:target>h2~p~ul li,*:target>h2~p~table td,*:target tbody>tr,*:target>h2+pre,*:target>h2+p+h3+ul li,*:target>h2~h3~p,*:target>*+ul li,*:target>h2+p+ul li{animation:highlight ease-out 1s}
 
 /* events */
-#events h3{box-shadow:var(--highlight)}
+#displayevents{margin-top:-7px;border-width:1px;filter:none;border-radius:0;box-shadow:var(--highlight)}
 #events tr{line-height:1.4}
 #events td:first-child span{margin:1px 0 0 -2px;display:inline-block;vertical-align:top;font-size:80%;text-transform:lowercase}
 #events tr:not(:last-child) td,#profilelist tr:not(:last-child) td,#profile_defs tr:not(:last-child) td,#profiles tr:not(:last-child) td{border-top:var(--border_soft);border-bottom:var(--border_soft)}
@@ -2622,6 +2621,7 @@ hr[hidden]+#sb_graphcontainer{margin-top:-9px}
 .netdbStats li{margin:0;min-width:240px}
 .sitemapLink,.sitemapLabel,#sitemap .applink,#sitemap .applabel{width:160px;min-width:160px;font-size:8pt}
 .statsLongName{margin-bottom:0}
+.tab2{padding:4px 12px}
 .tunnelBuildStatus{font-size:90%}
 .tunnels_client th:first-child::after{vertical-align:middle;line-height:0;letter-spacing:-.25em;font-family:sans-serif;font-size:12pt;content:"\21E9\21E7"}
 .tunnels_client th:first-child{font-size:0}
@@ -2636,6 +2636,7 @@ hr[hidden]+#sb_graphcontainer{margin-top:-9px}
 #config_logging h3 a::before,#webappconfiguration a::before,#i2pclientconfig a::before,#pluginmanage a::before{margin-top:-2px}
 #confignav .tab2{margin-top:1px}
 #consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"],#reseedconfig input[type="password"]{width:184px}
+#displayevents{margin-top:-5px}
 #enablefull label{margin-top:4px}
 #graphdisplay a{margin-top:-5px}
 #graphFilter{right:12px;top:11px}
