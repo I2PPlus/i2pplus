@@ -128,6 +128,7 @@ export async function refreshSidebar(force = false) {
 
   } catch {
     noResponse++;
+    startAutoRefresh();
   } finally {
     checkIfDown();
     isRefreshing = false;
@@ -147,10 +148,7 @@ function refreshAll() {
 function checkIfDown() {
   isDown = noResponse > 2;
   document.body.classList.toggle("isDown", isDown);
-  if (isDown) {
-    refreshAll();
-    startAutoRefresh();
-  }
+  if (isDown) {refreshAll();}
 }
 
 function handleFormSubmit() {
