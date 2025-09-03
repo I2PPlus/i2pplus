@@ -6,7 +6,7 @@
     if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
 %>
 <%@include file="head.jsi" %>
-<%=intl.title("logs")%>
+<%=intl.title("router logs")%>
 </head>
 <body id=i2plogs>
 
