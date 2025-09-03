@@ -2913,6 +2913,7 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #jardump a[href^="http://git.skank.i2p/i2pplus"]{padding-left:11px;background-size:8px;background-position:left top}
 #logs h3{margin-top:11px}
 #logRefreshInterval{margin:3px -3px -3px 0}
+#logs .tab,#logs .tab2{min-width:100px}
 #netdboverview th[colspan="3"]{font-size:11pt}
 #netdb .version{line-height:1.45}
 #netdb th .version{padding:2px 8px}
@@ -3184,6 +3185,7 @@ span#newtab{margin-top:4px}
 #iptransport a:hover::after,#advancedconfig a:hover::after,#reseedsetup a:hover::after{background-size:20px}
 #jobs h2{margin-bottom:3px}
 #logs li,#service_logs{font-size:10pt}
+#logs .tab,#logs .tab2{min-width:130px}
 #loggingoptions input[type=text],#loggingoptions select{min-width:240px}
 #manualreseed input[type=submit]{min-width:140px}
 #minigraph{margin-top:-16px;width:254px;height:43px}
