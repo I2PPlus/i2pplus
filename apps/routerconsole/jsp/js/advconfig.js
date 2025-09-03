@@ -81,6 +81,8 @@ const advConfigInit = () => {
     cell.contentEditable = true;
     cell.setAttribute("spellcheck", "false");
   });
+  newKeyCell.className = "newKey";
+  newValueCell.className = "newValue";
   newDelCell.className = "delete";
 
   const firstConfigRow = table.query(".configline");
