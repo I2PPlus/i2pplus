@@ -1,7 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String lang = "en";
     if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
 %>
@@ -21,23 +20,17 @@
 <tr><td><b>Revision:</b></td><td><jsp:getProperty name="logsHelper" property="revision"/></td></tr>
 <tr><td><b>Platform:</b></td><td><%=System.getProperty("os.name")%>&ensp;<%=System.getProperty("os.arch")%>&ensp;<%=System.getProperty("os.version")%></td></tr>
 <tr><td><b>Processor:</b></td><td><span id=cputype><%=net.i2p.util.NativeBigInteger.cpuType().replace("zen2", "zen3 or later")%></span>
-<%
-   boolean isX86 = net.i2p.util.SystemVersion.isX86();
-   if (isX86) {
+<%  boolean isX86 = net.i2p.util.SystemVersion.isX86();
+    if (isX86) {
 %>&ensp;<%=net.i2p.util.NativeBigInteger.cpuModel()%>
-<%
-   }
-%>
-&ensp;<span class=nowrap>[Jcpuid version: <%=freenet.support.CPUInformation.CPUID.getJcpuidVersion()%></span>]</td></tr>
+<%  } %>
+</td></tr>
 <tr><td><b>Java:</b></td><td><%=System.getProperty("java.vendor")%>&ensp;<%=System.getProperty("java.version")%>&ensp;(<%=System.getProperty("java.runtime.name")%>&ensp;<%=System.getProperty("java.runtime.version")%>)
-<%
-   boolean recentJavaVersion = net.i2p.util.SystemVersion.isJava(17);
-   if (!recentJavaVersion) {
+<%  boolean recentJavaVersion = net.i2p.util.SystemVersion.isJava(17);
+    if (!recentJavaVersion) {
 %>
 <br><span style=color:red>Warning: You are running an older version of Java that will soon no longer be supported. Please update to Java 17 or later to receive future router updates.</span>
-<%
-   }
-%>
+<%  } %>
 </td></tr>
 <jsp:getProperty name="logsHelper" property="unavailableCrypto"/>
 <tr><td><b>Jetty:</b></td><td><jsp:getProperty name="logsHelper" property="jettyVersion"/>&ensp;<b>Servlet:</b>&ensp;<%=getServletInfo()%></td></tr>
@@ -51,7 +44,7 @@
 <h3 class=tabletitle><%=intl._t("Router Information")%></h3>
 <jsp:getProperty name="infohelper" property="console"/>
 </div>
-<script src="/js/refreshElements.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src=/js/refreshElements.js></script>
 <script nonce=<%=cspNonce%>>refreshElements(".ajax", "/info", 30000);</script>
 </body>
 </html>
