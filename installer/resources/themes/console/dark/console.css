@@ -221,6 +221,7 @@ p:empty+.sb_notice{margin-top:9px}
 #sidebar .sb_update{padding:3px 5px 5px;position:relative}
 #sidebar .sb_update.inProgress{padding-bottom:22px;width:calc(100% - 1px)}
 #sidebar #shutdownInProgress{padding:5px 5px 8px}
+.sb_info.sb_update.volatile+#shutdownInProgress{margin-top:8px}
 #sidebar .sb_info .percentBarOuter{margin:0!important;width:calc(100% - 12px);display:inline-block;position:absolute;left:1px;right:1px;bottom:1px;box-shadow:none;background:var(--download_bar);animation:downloadbar 3s infinite alternate}
 #restartRequired.sb_info.sb_update{margin-top:-7px;padding:4px 5px 5px;width:calc(100% - 9px);box-shadow:var(--bevel_hard),inset 0 0 0 3px #000,inset 0 0 5px 5px rgba(0,0,0,.5)}
 #contactserver{margin-bottom:-19px;display:block}
