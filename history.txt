@@ -1,4 +1,7 @@
 2025-09-02 dr|z3d
+ * Console: Add navigation bar to /logs with additional links
+
+2025-09-02 dr|z3d
  * Console: Optimize and enhance page loader bar
 
 2025-08-28 dr|z3d
