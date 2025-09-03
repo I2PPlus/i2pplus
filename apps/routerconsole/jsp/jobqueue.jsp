@@ -21,7 +21,7 @@
 <% jobQueueHelper.storeWriter(out); %>
 <jsp:getProperty name="jobQueueHelper" property="jobQueueSummary"/>
 </div>
-<script src="/js/refreshElements.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src=/js/refreshElements.js></script>
 <script nonce=<%=cspNonce%>>refreshElements("#jobs", "/jobqueue", 15000);</script>
 </body>
 </html>

@@ -191,7 +191,7 @@
 </form>
 </div>
 <script src=/js/formsubmit.js></script>
-<script src="/js/refreshElements.js?<%=net.i2p.CoreVersion.VERSION%>"></script>
+<script src=/js/refreshElements.js></script>
 <script nonce=<%=cspNonce%>>refreshElements("#statusNews", "/configupdate", 10000);</script>
 </body>
 </html>
