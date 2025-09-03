@@ -142,6 +142,7 @@ import { onVisible, onHidden } from "/js/onVisible.js";
 
   async function updateGraphs(input, debouncedFunc) {
     if (typeof graphRefreshInterval === "undefined" || graphRefreshInterval <= 0) return;
+    progressx.show(theme);
     clearInterval(graphsTimerId);
     graphsTimerId = setInterval(() => updateGraphs(input, debouncedFunc), graphRefreshInterval);
     const images = Array.from(d.querySelectorAll(".statimage"));
@@ -171,7 +172,6 @@ import { onVisible, onHidden } from "/js/onVisible.js";
               };
               pre.onerror = rej;
               pre.src = src;
-              progressx.show(theme);
             })
         )
       );
