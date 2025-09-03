@@ -214,6 +214,7 @@ function handleFormSubmit() {
 
     form.dispatchEvent(new Event("submit"));
     refreshSidebar(true);
+    startAutoRefresh();
   });
 }
 
