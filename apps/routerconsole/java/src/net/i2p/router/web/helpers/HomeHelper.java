@@ -44,7 +44,7 @@ public class HomeHelper extends HelperBase {
         _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "globe.svg" + S +
         _x("Peer Profiles") + S + _x("List of recently connected peers with profiling info") + S + "/profiles?f=1" + S + I + "profile.svg" + S +
         _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info.svg" + S +
-        _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "logs.svg" + S +
+        _x("Router Logs") + S + _x("Health Report") + S + "/routerlogs" + S + I + "logs.svg" + S +
         _x("Router Updates") + S + _x("Configure update URLs and policy") + S + "/configupdate" + S + I + "update.svg" + S +
         _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "sitemap.svg" + S +
         _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "snark.svg" + S +
@@ -65,7 +65,7 @@ public class HomeHelper extends HelperBase {
         _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "globe.svg" + S +
         _x("Peer Profiles") + S + _x("List of recently connected peers with profiling info") + S + "/profiles?f=1" + S + I + "profile.svg" + S +
         _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info.svg" + S +
-        _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "logs.svg" + S +
+        _x("Router Logs") + S + _x("Health Report") + S + "/routerlogs" + S + I + "logs.svg" + S +
         _x("Router Updates") + S + _x("Configure update URLs and policy") + S + "/configupdate" + S + I + "update.svg" + S +
         _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "sitemap.svg" + S +
         _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "snark.svg" + S +
@@ -87,7 +87,7 @@ public class HomeHelper extends HelperBase {
         _x("Network Database") + S + _x("Show list of all known I2P routers") + S + "/netdb" + S + I + "globe.svg" + S +
         _x("Peer Profiles") + S + _x("List of recently connected peers with profiling info") + S + "/profiles?f=1" + S + I + "profile.svg" + S +
         _x("Router Info") + S + _x("Summary of router properties") + S + "/info" + S + I + "info.svg" + S +
-        _x("Router Logs") + S + _x("Health Report") + S + "/logs" + S + I + "logs.svg" + S +
+        _x("Router Logs") + S + _x("Health Report") + S + "/routerlogs" + S + I + "logs.svg" + S +
         _x("Router Updates") + S + _x("Configure update URLs and policy") + S + "/configupdate" + S + I + "update.svg" + S +
         _x("Sitemap") + S + _x("Router Sitemap") + S + "/sitemap" + S + I + "sitemap.svg" + S +
         _x("Torrents") + S + _x("Built-in anonymous BitTorrent Client") + S + "/torrents" + S + I + "snark.svg" + S +

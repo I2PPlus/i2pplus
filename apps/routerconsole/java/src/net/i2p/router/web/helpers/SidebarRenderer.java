@@ -416,8 +416,8 @@ class SidebarRenderer {
 
         tx = _t("Logs");
         rbuf.setLength(0);
-        rbuf.append("<a href=/logs target=_top title=\"").append(_t("Health Report")).append("\">")
-            .append(nbsp(tx)).append("</a>\n").append("<a class=sb_icon target=_top href=/logs title=\"").append(tx)
+        rbuf.append("<a href=/routerlogs target=_top title=\"").append(_t("Health Report")).append("\">")
+            .append(nbsp(tx)).append("</a>\n").append("<a class=sb_icon target=_top href=/routerlogs title=\"").append(tx)
             .append("\" hidden><span><img src=/themes/console/images/logs.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
 
