@@ -1340,6 +1340,7 @@ class NetDbRenderer {
      */
     private void renderRouterInfo(StringBuilder buf, RouterInfo info, boolean isUs, boolean full) {
         RouterIdentity ident = info.getIdentity();
+        long uptime = _context.router().getUptime();
         Hash h = info.getHash();
         String hash = h.toBase64();
         String family = info.getOption("family");
@@ -1501,7 +1502,6 @@ class NetDbRenderer {
                .append("</span>&nbsp;&nbsp;");
             String address = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info));
             boolean isUnreachable = caps.contains("U") || caps.contains("H");
-            long uptime = _context.router().getUptime();
             if (enableReverseLookups() && uptime > 30*1000 && !isUnreachable && address != null) {
                 String rdns = _context.commSystem().getCanonicalHostName(address);
                 if (rdns != null && !rdns.equals(address) && !rdns.equals("unknown")) {
@@ -1689,24 +1689,26 @@ class NetDbRenderer {
             String spoofedLeasesets = "";
             String knownRouters = "";
             if (prof != null || isUs) {
-                if (!isUs) {
-                    buf.append("<tr><td><b>" + _t("Stats") + ":</b><td colspan=2>\n<ul class=netdbStats>");
-                }
+                buf.append("<tr><td><b>" + _t("Stats") + ":</b><td colspan=2>\n<ul class=netdbStats>");
                 Map<Object, Object> p = info.getOptionsMap();
                 for (Map.Entry<Object, Object> e : p.entrySet()) {
                     String key = (String) e.getKey();
                     if (isUs) {
-                        if (key.equals("knownLeaseSets")) {
+                        if (key.contains("knownLeaseSets")) {
                             spoofedLeasesets = DataHelper.stripHTML((String) e.getValue());
-                        } else if (key.equals("knownRouters")) {
+                        } else if (key.contains("knownRouters")) {
                             knownRouters = DataHelper.stripHTML((String) e.getValue());
                         } else if (key.equals("netId")) {
                             networkId = DataHelper.stripHTML((String) e.getValue());
                         }
                     }
-                    if (key.toLowerCase().contains("caps") || key.toLowerCase().contains("version") ||
-                        key.toLowerCase().equals("family") || key.toLowerCase().contains("tunnel.") ||
-                        key.toLowerCase().contains("stat_") || key.equals("netId")) {continue;}
+
+                    String keyLower = key.toLowerCase();
+                    boolean skip = keyLower.contains("caps") || keyLower.contains("version") ||
+                                   keyLower.equals("family") || keyLower.contains("tunnel.") ||
+                                   keyLower.contains("stat_") || key.equals("netId");
+                    if (isUs && (key.equals("knownLeaseSets") || key.equals("knownRouters"))) {continue;}
+                    if (skip) {continue;}
 
                     String netDbKey = DataHelper.stripHTML(key)
                         .replace("netdb.", "")
@@ -1734,6 +1736,7 @@ class NetDbRenderer {
                     );
 
                     if (!stats.contains(key) && !key.toLowerCase().contains("family")) {
+                        if (isUs && (netDbKey.contains("Routers") || netDbKey.contains("LeaseSets"))) {continue;}
                         buf.append(netDbKey);
                         String netDbValue = DataHelper.stripHTML(val)
                                                       .replace("XO", "X")
@@ -1768,10 +1771,19 @@ class NetDbRenderer {
                            .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>");
                     }
                 } else {
-                    buf.append("<tr><td><b>" + _t("Stats") + ":</b><td colspan=2>\n<ul class=netdbStats><li><b>")
-                       .append(_t("Network Id")).append(":</b> ").append(networkId).append("</li>");
+                    buf.append("<li><b>").append(_t("Network Id")).append(":</b> ").append(networkId).append("</li>");
                     if (isFF) {
-                        buf.append("<li><b>").append(_t("LeaseSets")).append(":</b> ").append(spoofedLeasesets).append("</li>");
+                        buf.append("<li");
+                        if (uptime < 30*60*1000) {
+                            buf.append(" title=\"")
+                              .append(_t("Count is spoofed for the first 30 minutes of router uptime"))
+                              .append("\"");
+                        }
+                        buf.append("><b>")
+                           .append(_t("LeaseSets"))
+                           .append(":</b> ")
+                           .append(spoofedLeasesets)
+                           .append("</li>");
                     }
                     buf.append("<li><b>").append(_t("Routers")).append(":</b> ")
                        .append(Math.max(_context.netDb().getKnownRouters() - 1, 0)).append("</li>");
