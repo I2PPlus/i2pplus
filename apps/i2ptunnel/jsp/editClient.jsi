@@ -102,8 +102,7 @@
 <%  if ("httpclient".equals(tunnelType) || "sockstunnel".equals(tunnelType)) {
 %>
 <%=intl._t("Use Outproxy Plugin")%>
-<%  } else if ("ircclient".equals(tunnelType)) {
-%>
+<%  } else if ("ircclient".equals(tunnelType)) { %>
 <%=intl._t("Enable DCC")%>
 <%  } %>
 </th>
@@ -117,17 +116,17 @@
 <input type=text size=6 maxlength=5 name="port" title="<%=intl._t("Specify the local port this service should be accessible from")%>" value="<%=editBean.getClientPort(curTunnel)%>" class="freetext port"  placeholder="<%=intl._t("required")%>">
 <%    if ("streamrclient".equals(tunnelType)) { %>
 <b><%=intl._t("Host")%>:</b>
-<%    String targetHost = editBean.getTargetHost(curTunnel);
-      if (targetHost == null || "".equals(targetHost.trim())) {out.write(requiredSpan);}
+<%        String targetHost = editBean.getTargetHost(curTunnel);
+          if (targetHost == null || "".equals(targetHost.trim())) {out.write(requiredSpan);}
 %>
 <input type=text size=20 id=targetHost name="targetHost" title="<%=intl._t("Hostname or IP address of the target server")%>" value="<%=targetHost%>" class="freetext host"  placeholder="<%=intl._t("required")%>">
-<%    } else { %>
+<%        } else { %>
 <b><%=intl._t("Reachable by")%>:</b>
 <select id=reachableBy name="reachableBy" title="<%=intl._t("Local interface (ip address) the client tunnel will be reachable from")%>" class=selectbox>
-<%        String clientInterface = editBean.getClientInterface(curTunnel);
-          for (String ifc : editBean.interfaceSet()) {
-              out.write("<option value=\"" + ifc + "\"" + (ifc.equals(clientInterface) ? selected : "") + ">" + ifc + "</option>\n");
-          }
+<%            String clientInterface = editBean.getClientInterface(curTunnel);
+              for (String ifc : editBean.interfaceSet()) {
+                  out.write("<option value=\"" + ifc + "\"" + (ifc.equals(clientInterface) ? selected : "") + ">" + ifc + "</option>\n");
+              }
 %>
 </select>
 </td>
@@ -182,9 +181,7 @@
 <tr>
 <th><%=intl._t("Tunnel Destination")%></th>
 <th>
-<%
-              if ("client".equals(tunnelType) || "ircclient".equals(tunnelType)) {
-%>
+<%            if ("client".equals(tunnelType) || "ircclient".equals(tunnelType)) { %>
 <%=intl._t("Use SSL")%>
 <%            } /* tunnel types */ %>
 </th>
@@ -217,7 +214,7 @@
 <tr><th><%=intl._t("Local destination")%></th><th><%=intl._t("Local Base32")%></th></tr>
 <tr>
 <td><input type=text class="freetext readonly resetScrollLeft" size=30 id=localDest title="<%=intl._t("Read Only: Local Destination (if known)")%>" value="<%=destb64%>" readonly></td>
-<td><span class="selectAll"><%=editBean.getDestHashBase32(curTunnel)%></span></td>
+<td><span class=selectAll><%=editBean.getDestHashBase32(curTunnel)%></span></td>
 </tr>
 <%            } /* if destb64 */ %>
 <tr>
@@ -236,9 +233,7 @@
 </table>
 <h3><%=intl._t("Advanced networking options")%></h3>
 <table class=tunnelConfig>
-<%            if (!"streamrclient".equals(tunnelType)) {
-                  // no shared client tunnels for streamr
-%>
+<%            if (!"streamrclient".equals(tunnelType)) { /* no shared client tunnels for streamr */ %>
 <tr><td class=infohelp colspan=2><%=intl._t("Note: When this client is configured to share tunnels, these options apply to all clients configured to share tunnels.")%></td></tr>
 <%            } // !streamrclient
               if ("client".equals(tunnelType)) {
