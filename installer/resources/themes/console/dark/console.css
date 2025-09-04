@@ -3185,7 +3185,7 @@ span#newtab{margin-top:4px}
 #iptransport a:hover::after,#advancedconfig a:hover::after,#reseedsetup a:hover::after{background-size:20px}
 #jobs h2{margin-bottom:3px}
 #logs li,#service_logs{font-size:10pt}
-#logs .tab,#logs .tab2{min-width:130px}
+#events .tab,#events .tab2,#logs .tab,#logs .tab2{min-width:130px}
 #loggingoptions input[type=text],#loggingoptions select{min-width:240px}
 #manualreseed input[type=submit]{min-width:140px}
 #minigraph{margin-top:-16px;width:254px;height:43px}
