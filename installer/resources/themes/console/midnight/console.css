@@ -457,8 +457,9 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 .sb_icon,#sb_internals.collapsed,#sb_services.collapsed,#sb_advanced.collapsed{display:none}
 #sb_updatesection.collapsed>*:not(h3){display:none}
 #sb_updatesection h3.collapsed a::after{content:"*"}
-#sidebar h3 a .badge,#lsCount,#tunnelCount,#newsCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;background:var(--badge);font-size:85%;padding:2px 5px 1px;display:inline-block;vertical-align:bottom;box-shadow:0 0 0 1px #26235c,0 0 0 1px #000 inset}
-#sidebar h3 .badge:empty,#sidebar #newsCount:empty,#sidebar #tunnelCount:empty{display:none}
+#lsCount,#newsCount,#sidebar h3 a .badge,#tunnelCount{white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;background:var(--badge);font-size:85%;padding:2px 5px 1px;display:inline-block;vertical-align:bottom;box-shadow:0 0 0 1px #26235c,0 0 0 1px #000 inset}
+#lsCount:empty,#sidebar h3 .badge:empty,#sidebar #newsCount:empty,#sidebar #tunnelCount:empty{display:none}
+#sidebar h4 a #lsCount{display:inline-block;line-height:1;font-size:9pt}
 #sidebar td .badge:empty::after{display:inline;content:"---"}
 #sidebar h3 a[href="/info"] .badge{vertical-align:text-top;text-transform:none}
 #sidebar h3:hover a .badge,h3:hover #tunnelCount,h3:hover #newsCount{color:var(--hover);box-shadow:0 0 0 1px var(--hover),0 0 0 1px #000 inset}
@@ -2649,6 +2650,7 @@ input.check[value$="updates"],input.check[value$="updates"]:hover,input.check[va
 #sidebarconf button img{width:10px;height:10px}
 #sidebar h3::before{height:14px}
 #sidebar h3{margin-bottom:-9px;padding:5px 0}
+#sidebar h4 a #lsCount{font-size:8.5pt}
 #sidebar #sb_services.collapsed td .sb_icon{margin-bottom:1px}
 #sitelinks+.linkgroup .applink:last-child{margin-bottom:8px}
 #sitemap .applink img{padding-left:62px;padding-right:62px}

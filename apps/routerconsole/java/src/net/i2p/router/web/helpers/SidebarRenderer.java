@@ -794,15 +794,20 @@ class SidebarRenderer {
         if (floodfillEnabled()) {buf.append(" floodfill");}
         if (shuttingDown) {buf.append(" shuttingDown");}
         else if (restarting) {buf.append(" restarting");}
-        buf.append("\"><span id=netstatus>").append(_t("Status")).append(": ").append(reachability.getMessage())
-           .append(floodfillEnabled() ? " <span id=ffenabled>(" + _t("Floodfill enabled") + ")</span>" : "");
-        buf.append("</span>");
+        buf.append("\"><span id=netstatus>")
+           .append(_t("Status"))
+           .append(": ")
+           .append(reachability.getMessage())
+           .append(floodfillEnabled() ? " <span id=ffenabled>(" + _t("Floodfill enabled") + ")</span>" : "")
+           .append("</span>");
         if (floodfillEnabled() && !reachability.getMessage().contains(_t("Floodfill"))) {
             int lsCount = _context.netDb().getLeases().size();
             if (lsCount > 0) {
             buf.append(" <a href=\"/netdb?l=1\"><span id=lsCount class=\"badge volatile\" title=\"")
                .append(_t("Total number of remote LeaseSets stored in our NetDb"))
-               .append("\">").append(lsCount).append("</span></a>");
+               .append("\">")
+               .append(lsCount)
+               .append("</span></a>");
             }
         }
         buf.append("</span></h4>\n");
