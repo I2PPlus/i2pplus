@@ -3986,7 +3986,7 @@ msgstr "Định cấu hình cập nhật I2P"
 msgid "Total peers in NetDb"
 msgstr "Tổng số đồng nghiệp trong NetDb"
 
-msgid "Peers we've been talking to in the last few minutes/last hour"
+msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Những người bạn mà chúng ta đã nói chuyện trong vài phút qua/giờ qua"
 
 msgid "The number of peers available for building client tunnels"

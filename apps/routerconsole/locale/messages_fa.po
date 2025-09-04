@@ -4002,7 +4002,7 @@ msgstr "پیکربندی به روز رسانی های I2P"
 msgid "Total peers in NetDb"
 msgstr "مجموع همتایان در NetDb"
 
-msgid "Peers we've been talking to in the last few minutes/last hour"
+msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "همسالانی که در چند دقیقه گذشته/ساعت آخر با آنها صحبت کرده ایم"
 
 msgid "The number of peers available for building client tunnels"

@@ -3986,7 +3986,7 @@ msgstr "设置 I2P 更新"
 msgid "Total peers in NetDb"
 msgstr "NETDB的总同行"
 
-msgid "Peers we've been talking to in the last few minutes/last hour"
+msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "路由连接过的对等节点数量 过去数分钟/过去一小时"
 
 msgid "The number of peers available for building client tunnels"

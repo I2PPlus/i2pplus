@@ -4003,7 +4003,7 @@ msgstr "Configura aggiornamenti I2P"
 msgid "Total peers in NetDb"
 msgstr "Coetanei totali in NetDb"
 
-msgid "Peers we've been talking to in the last few minutes/last hour"
+msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Peers con i quali abbiamo comunicato negli ultimi minuti/ultima ora"
 
 msgid "The number of peers available for building client tunnels"

@@ -4018,7 +4018,7 @@ msgstr "Configurați Actualizările I2P"
 msgid "Total peers in NetDb"
 msgstr "Numărul total de colegi în NetDb"
 
-msgid "Peers we've been talking to in the last few minutes/last hour"
+msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Utilizatorii ce au convorbit în ultimele câteva minute/ultima ora"
 
 msgid "The number of peers available for building client tunnels"

@@ -3986,7 +3986,7 @@ msgstr "I2P のアップデートを構成"
 msgid "Total peers in NetDb"
 msgstr "NetDBの合計仲間"
 
-msgid "Peers we've been talking to in the last few minutes/last hour"
+msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "過去数分/数時間内に通信したピア"
 
 msgid "The number of peers available for building client tunnels"

@@ -3986,7 +3986,7 @@ msgstr "Konfigurasi update I2P"
 msgid "Total peers in NetDb"
 msgstr "Total rekan di NetDb"
 
-msgid "Peers we've been talking to in the last few minutes/last hour"
+msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Peer yang kami sudah bicara dalam beberapa menit/jam terakhir"
 
 msgid "The number of peers available for building client tunnels"

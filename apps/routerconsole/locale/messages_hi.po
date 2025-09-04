@@ -4002,7 +4002,7 @@ msgstr "I2P अपडेट का सेटिंग करें"
 msgid "Total peers in NetDb"
 msgstr "NetDb में कुल पीयर"
 
-msgid "Peers we've been talking to in the last few minutes/last hour"
+msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "अभी तक कुछ मिनटों/अंतिम घंटे में हमारे साथ बातचीत कर रहे पीयर"
 
 msgid "The number of peers available for building client tunnels"

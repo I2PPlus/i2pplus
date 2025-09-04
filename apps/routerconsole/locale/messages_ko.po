@@ -3986,7 +3986,7 @@ msgstr "I2P 업데이트 설정"
 msgid "Total peers in NetDb"
 msgstr "NetDb의 총 피어"
 
-msgid "Peers we've been talking to in the last few minutes/last hour"
+msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "지난 몇 분/시간 동안 교류한 피어"
 
 msgid "The number of peers available for building client tunnels"

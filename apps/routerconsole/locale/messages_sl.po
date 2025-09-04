@@ -4034,7 +4034,7 @@ msgstr "Nastavi posodobljanja I2P"
 msgid "Total peers in NetDb"
 msgstr "Skupaj parterjev v NetDb"
 
-msgid "Peers we've been talking to in the last few minutes/last hour"
+msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Parterji, z njimi smo razgovarjali v zadnjih minutah/zadnjo uro"
 
 msgid "The number of peers available for building client tunnels"

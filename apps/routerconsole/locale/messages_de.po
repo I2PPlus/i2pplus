@@ -4002,7 +4002,7 @@ msgstr "Einstellungen zur Aktualisierung"
 msgid "Total peers in NetDb"
 msgstr "Gesamtanzahl der Peers in NetDb"
 
-msgid "Peers we've been talking to in the last few minutes/last hour"
+msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Teilnehmer mit denen wir in den letzen Minuten / Stunden kommuniziert haben"
 
 msgid "The number of peers available for building client tunnels"
