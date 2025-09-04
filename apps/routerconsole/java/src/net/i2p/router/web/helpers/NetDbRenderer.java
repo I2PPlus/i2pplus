@@ -1682,21 +1682,34 @@ class NetDbRenderer {
             buf.append("</ul>").append("</td></tr>\n");
         }
 
-        if (full) {
+        if (full || isUs) {
             PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(info.getHash());
             boolean isFF = info.getCapabilities().indexOf("f") >= 0;
+            String networkId = "2"; // default
+            String spoofedLeasesets = "";
+            String knownRouters = "";
             if (prof != null || isUs) {
-            buf.append("<tr><td><b>" + _t("Stats") + ":</b><td colspan=2>\n<ul class=netdbStats>");
+                if (!isUs) {
+                    buf.append("<tr><td><b>" + _t("Stats") + ":</b><td colspan=2>\n<ul class=netdbStats>");
+                }
                 Map<Object, Object> p = info.getOptionsMap();
                 for (Map.Entry<Object, Object> e : p.entrySet()) {
                     String key = (String) e.getKey();
+                    if (isUs) {
+                        if (key.equals("knownLeaseSets")) {
+                            spoofedLeasesets = DataHelper.stripHTML((String) e.getValue());
+                        } else if (key.equals("knownRouters")) {
+                            knownRouters = DataHelper.stripHTML((String) e.getValue());
+                        } else if (key.equals("netId")) {
+                            networkId = DataHelper.stripHTML((String) e.getValue());
+                        }
+                    }
                     if (key.toLowerCase().contains("caps") || key.toLowerCase().contains("version") ||
                         key.toLowerCase().equals("family") || key.toLowerCase().contains("tunnel.") ||
-                        key.toLowerCase().contains("stat_") || (key.equals("netId") && !isUs)) {continue;}
+                        key.toLowerCase().contains("stat_") || key.equals("netId")) {continue;}
 
                     String netDbKey = DataHelper.stripHTML(key)
                         .replace("netdb.", "")
-                        .replace("netId", "<li><b>" + _t("Network ID")) // only shown for our own routerinfo
                         .replace("knownLeaseSets", "<li><b>" + _t("LeaseSets"))
                         .replace("knownRouters", "<li><b>" + _t("Routers"))
                         .replace("stat_", "")
@@ -1733,7 +1746,7 @@ class NetDbRenderer {
                     }
                 }
 
-                if (!isUs && prof != null) {
+                if (!isUs) {
                     long now = _context.clock().now();
                     long heard = prof.getFirstHeardAbout();
                     if (heard > 0) {
@@ -1754,6 +1767,14 @@ class NetDbRenderer {
                         buf.append("<li><b>").append(_t("Last heard from")).append(":</b> ")
                            .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>");
                     }
+                } else {
+                    buf.append("<tr><td><b>" + _t("Stats") + ":</b><td colspan=2>\n<ul class=netdbStats><li><b>")
+                       .append(_t("Network Id")).append(":</b> ").append(networkId).append("</li>");
+                    if (isFF) {
+                        buf.append("<li><b>").append(_t("LeaseSets")).append(":</b> ").append(spoofedLeasesets).append("</li>");
+                    }
+                    buf.append("<li><b>").append(_t("Routers")).append(":</b> ")
+                       .append(Math.max(_context.netDb().getKnownRouters() - 1, 0)).append("</li>");
                 }
                 buf.append("</ul></td></tr>\n");
             }

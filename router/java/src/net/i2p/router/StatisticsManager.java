@@ -92,11 +92,11 @@ public class StatisticsManager {
         if (isFF) {
             int ri = _context.router().getUptime() > 30*60*1000 ?
                      _context.netDb().getKnownRouters() :
-                     3000 + _context.random().nextInt(1000);   // so it isn't obvious we restarted
+                     3000 + _context.random().nextInt(1000); // so it isn't obvious we restarted
             stats.setProperty("netdb.knownRouters", String.valueOf(ri));
             int ls = _context.router().getUptime() > 30*60*1000 ?
                      _context.netDb().getKnownLeaseSets() :
-                     30 + _context.random().nextInt(40);   // so it isn't obvious we restarted
+                     (150 + _context.random().nextInt(100)); // so it isn't obvious we restarted
             stats.setProperty("netdb.knownLeaseSets", String.valueOf(ls));
         }
 
