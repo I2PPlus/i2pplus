@@ -46,16 +46,15 @@ public class EepPost extends EepGet {
     }
 
     /**
-     * Submit an HTTP POST to the given URL (using the proxy if specified),
-     * uploading the given fields.  If the field's value is a File object, then
-     * that file is uploaded, and if the field's value is a String object, the
-     * value is posted for that particular field.  Multiple values for one
-     * field name is not currently supported.
+     * Submit an HTTP POST to the given URL (using the proxy if specified), uploading the given fields.
+     * If the field's value is a File object, then that file is uploaded, and if the field's value is
+     * a String object, the value is posted for that particular field.
+     * Multiple values for one field name is not currently supported.
      *
      * Large files will be copied to a temp file.
      * For large String content, consider the post(File) method.
      *
-     * @param field values must be String or File.
+     * Note: param field values must be String or File.
      */
     public boolean post(Map<String, Object> fields, long headerTimeout, long totalTimeout, long inactivityTimeout) {
         if (fields.isEmpty())
