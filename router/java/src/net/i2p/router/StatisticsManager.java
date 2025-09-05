@@ -95,9 +95,9 @@ public class StatisticsManager {
                      _context.netDb().getKnownRouters() :
                      3000 + _context.random().nextInt(1000); // so it isn't obvious we restarted
             stats.setProperty("netdb.knownRouters", String.valueOf(ri));
-            int ls = uptime > 4*60*60*1000 ? (250 + _context.random().nextInt(50)) :
-                     uptime > 30*60*1000 ? (200 + _context.random().nextInt(100)) :
-                     (150 + _context.random().nextInt(150));
+            int ls = uptime > 4*60*60*1000 ? (250 + _context.random().nextInt(100)) :
+                     uptime > 30*60*1000 ? (200 + _context.random().nextInt(150)) :
+                     (250 + _context.random().nextInt(100));
             stats.setProperty("netdb.knownLeaseSets", String.valueOf(ls));
         }
 
