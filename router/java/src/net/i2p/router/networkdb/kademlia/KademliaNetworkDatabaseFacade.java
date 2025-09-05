@@ -362,7 +362,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public synchronized void restart() {throw new UnsupportedOperationException();}
 
     @Override
-    public void rescan() {
+    public synchronized void rescan() {
         if (isInitialized()) {
             _ds.rescan();
             knownLeaseSetsCount.set(0);
@@ -1830,7 +1830,16 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _log.info("Dropping LeaseSet [" + dbEntry.toBase32().substring(0,8) + "] -> Lookup / tunnel failure");
         }
 
-        knownLeaseSetsCount.decrementAndGet();
+       if (knownLeaseSetsCount.get() <= 0) {
+            if (_log.shouldWarn()) {
+                _log.warn("Attempted to decrement LeaseSet count when already at " + knownLeaseSetsCount.get());
+            }
+            return;
+        }
+
+        if (knownLeaseSetsCount.get() > 0) {
+            knownLeaseSetsCount.decrementAndGet();
+        }
 
         if (!isClientDb()) {_ds.remove(dbEntry, false);}
         /* If this happens, it's because we're a TransientDataStore instead,
@@ -1872,7 +1881,13 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         DatabaseEntry data = _ds.remove(h);
 
         if (data == null) {
-            knownLeaseSetsCount.decrementAndGet();
+            if (knownLeaseSetsCount.get() > 0) {
+                knownLeaseSetsCount.decrementAndGet();
+            } else {
+                if (_log.shouldWarn()) {
+                    _log.warn("Attempted to decrement LeaseSet count when already at " + knownLeaseSetsCount.get());
+                }
+            }
             if (_log.shouldWarn()) {
                 _log.warn("Unpublishing UNKNOWN LOCAL LeaseSet [" + h.toBase32().substring(0,8) + "]");
             }
