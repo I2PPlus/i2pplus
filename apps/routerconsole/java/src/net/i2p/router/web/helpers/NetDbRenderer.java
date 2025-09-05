@@ -1773,13 +1773,9 @@ class NetDbRenderer {
                 } else {
                     buf.append("<li><b>").append(_t("Network Id")).append(":</b> ").append(networkId).append("</li>");
                     if (isFF) {
-                        buf.append("<li");
-                        if (uptime < 30*60*1000) {
-                            buf.append(" title=\"")
-                              .append(_t("Count is spoofed for the first 30 minutes of router uptime"))
-                              .append("\"");
-                        }
-                        buf.append("><b>")
+                        buf.append("<li title=\"")
+                           .append(_t("Count is always spoofed to avoid indicating router restarts"))
+                           .append("\"><b>")
                            .append(_t("LeaseSets"))
                            .append(":</b> ")
                            .append(spoofedLeasesets)
