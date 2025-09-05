@@ -167,7 +167,7 @@
 </span>
 </a>
 
-<a href="/logs">
+<a href="/routerlogs">
 <span class=sitemapLink title="<%=intl._t("View router logs")%>">
 <img src="/themes/console/images/logs.svg">
 <span class=sitemapLabel><%=intl._t("Router Logs")%></span>
