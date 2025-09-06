@@ -801,7 +801,7 @@ class SidebarRenderer {
            .append(floodfillEnabled() ? " <span id=ffenabled>(" + _t("Floodfill enabled") + ")</span>" : "")
            .append("</span>");
         if (floodfillEnabled() && !reachability.getMessage().contains(_t("Floodfill"))) {
-            int lsCount = _context.netDb().getLeases().size();
+            int lsCount = _context.netDb().getFloodfillLeases().size();
             if (lsCount > 0) {
             buf.append(" <a href=\"/netdb?l=1\"><span id=lsCount class=\"badge volatile\" title=\"")
                .append(_t("Total number of remote LeaseSets stored in our NetDb"))
