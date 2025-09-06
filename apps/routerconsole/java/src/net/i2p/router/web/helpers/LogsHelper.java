@@ -341,6 +341,7 @@ public class LogsHelper extends HelperBase {
             msg = msg.replace("=[&#10008;]", "=false");
             msg = msg.replace("[IRC Client] Inbound message", "[IRC Client] &#11167;");
             msg = msg.replace("[IRC Client] Outbound message", "[IRC Client] &#11165;");
+            msg = msg.replace("not publishing old one: RouterInfo:", "not publishing old one:");
             msg = msg.replace(":  ", ": ");
             msg = msg.replace("\n* ", "\n&bullet; ");
             msg = msg.replace("\n\t* ", "\n\t&bullet; ");
@@ -351,6 +352,7 @@ public class LogsHelper extends HelperBase {
             msg = msg.replace("&lt;b&gt;", "");
             msg = msg.replace("&lt;/b&gt;", "");
             msg = msg.replace("...", "&hellip;");
+            msg = msg.replace("]]", "]");
             // highlight log level indicators
             msg = msg.replace("| DEBUG", " <span class=log_level>DEBUG</span> ");
             msg = msg.replace("| INFO ", " <span class=log_level>INFO</span> ");
