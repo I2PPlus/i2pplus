@@ -35,7 +35,7 @@ public class HomeHelper extends HelperBase {
 
     // No commas allowed in text strings!
     static final String DEFAULT_SERVICES =
-        _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns" + S + I + "addressbook.svg" + S +
+        _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns?book=router&filter=latest" + S + I + "addressbook.svg" + S +
         _x("Graphs") + S + _x("Graph Router Performance") + S + "/graphs" + S + I + "graphs.svg" + S +
         _x("Help") + S + _x("I2P Router Help") + S + "/help/" + S + I + "help.svg" + S +
         _x("I2PMail") + S + _x("Anonymous webmail client") + S + "/webmail" + S + I + "mail.svg" + S +
@@ -54,7 +54,7 @@ public class HomeHelper extends HelperBase {
         "";
 
     static final String NEWINSTALL_SERVICES =
-        _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns" + S + I + "addressbook.svg" + S +
+        _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns?book=router&filter=latest" + S + I + "addressbook.svg" + S +
         _x("Configure Bandwidth") + S + _x("I2P Bandwidth Configuration") + S + "/config" + S + I + "speedometer.svg" + S +
         _x("Configure UI") + S + _x("Select console theme &amp; language &amp; set optional console password") + S + "/configui" + S + I + "ui.svg" + S +
         _x("Customize Sidebar") + S + _x("Customize the sidebar by adding or removing or repositioning elements") + S + "/configsidebar" + S + I + "sidebar.svg" + S +
@@ -76,7 +76,7 @@ public class HomeHelper extends HelperBase {
         "";
 
     static final String ADVANCED_SERVICES =
-        _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns" + S + I + "addressbook.svg" + S +
+        _x("Addressbook") + S + _x("Manage your I2P hosts file here (I2P domain name resolution)") + S + "/dns?book=router&filter=latest" + S + I + "addressbook.svg" + S +
         _x("Advanced Config") + S + _x("Advanced router configuration") + S + "/configadvanced" + S + I + "configure.svg" + S +
         _x("Changelog") + S + _x("Recent changes") + S + "/changelog" + S + I + "changelog.svg" + S +
         _x("Clients") + S + _x("Start or stop Router clients") + S + "/configclients" + S + I + "editclient.svg" + S +
@@ -333,7 +333,7 @@ public class HomeHelper extends HelperBase {
                 url = app.url + "\" target=_blank class=\"extlink";
             } else {
                 url = app.url;
-                if (url.equals("/dns")) {
+                if (url.contains("/dns")) {
                     if (!pm.isRegistered(PortMapper.SVC_SUSIDNS)) {continue;}
                 } else if (url.equals("/webmail")) {
                     if (!pm.isRegistered(PortMapper.SVC_SUSIMAIL)) {continue;}
@@ -351,10 +351,18 @@ public class HomeHelper extends HelperBase {
                 url.contains("w3schools") || url.contains("translate.idk")) {
                 buf.append(" js");
             }
-            buf.append("\" style=display:inline-block;text-align:center><div class=appicon><a href=\"").append(url)
-               .append("\" tabindex=-1><img alt=\"\" title=\"").append(app.desc).append("\" src=\"").append(app.icon)
+            buf.append("\" style=display:inline-block;text-align:center><div class=appicon><a href=\"")
+               .append(url)
+               .append("\" tabindex=-1><img alt=\"\" title=\"")
+               .append(app.desc)
+               .append("\" src=\"")
+               .append(app.icon)
                .append("\" width=32 height=32></a></div><table><tr><td><div class=applabel><a href=\"")
-               .append(url).append("\" title=\"").append(app.desc).append("\">").append(app.name)
+               .append(url)
+               .append("\" title=\"")
+               .append(app.desc)
+               .append("\">")
+               .append(app.name)
                .append("</a></div></td></tr></table></div>");
             }
             buf.append("</div>\n");
@@ -363,31 +371,42 @@ public class HomeHelper extends HelperBase {
 
     private String renderConfig(Collection<App> apps) {
         StringBuilder buf = new StringBuilder(64*1024);
-        buf.append("<table class=homelinkedit><tr><th class=center title=\"").append(_t("Mark for deletion")).append("\">")
-           .append(_t("Remove")).append("</th><th></th><th>").append(_t("Name")).append("</th><th>")
-           .append(_t("URL")).append("</th></tr>\n");
+        buf.append("<table class=homelinkedit><tr><th class=center title=\"")
+           .append(_t("Mark for deletion"))
+           .append("\">")
+           .append(_t("Remove"))
+           .append("</th><th></th><th>")
+           .append(_t("Name"))
+           .append("</th><th>")
+           .append(_t("URL"))
+           .append("</th></tr>\n");
         for (App app : apps) {
             String url = DataHelper.escapeHTML(app.url);
             buf.append("<tr><td class=center><input type=checkbox class=optbox name=\"delete_")
                .append(app.name).append("\" id=\"");
             if (url.contains("%s")) {buf.append("search_");}
-            buf.append(app.name.replace(" ", "_").replace("\'", "")).append("\"></td>");
+            buf.append(app.name.replace(" ", "_").replace("\'", ""))
+               .append("\"></td>");
             if (app.icon != null) {
-                buf.append("<td><img width=20 height=20 alt=\"\" src=\"").append(app.icon).append("\">");
+                buf.append("<td><img width=20 height=20 alt=\"\" src=\"")
+                   .append(app.icon)
+                   .append("\">");
             } else {buf.append("<td class=noicon>");}
             buf.append("</td><td><label for=\"");
             if (url.contains("%s")) {buf.append("search_");}
             buf.append(app.name.replace(" ", "_").replace("\'", ""))
-               .append("\">").append(DataHelper.escapeHTML(app.name))
-               .append("</label></td><td><a href=\"").append(url).append("\">");
+               .append("\">")
+               .append(DataHelper.escapeHTML(app.name))
+               .append("</label></td><td><a href=\"")
+               .append(url).append("\">");
             String urltext = DataHelper.escapeHTML(app.url).replace("&amp;ref=console", "");
             if (app.url.length() > 72) {buf.append(urltext.substring(0, 70)).append("&hellip;");}
             else {buf.append(urltext);}
             buf.append("</a></td></tr>\n");
         }
         buf.append("<tr class=addnew><td colspan=2><b>")
-           .append(_t("Add")).append(":</b></td><td><input type=text name=\"nofilter_name\"></td>")
-           .append("<td><input type=text size=40 name=\"nofilter_url\"></td></tr></table>\n");
+           .append(_t("Add"))
+           .append(":</b></td><td><input type=text name=nofilter_name></td><td><input type=text size=40 name=nofilter_url></td></tr></table>\n");
         return buf.toString();
     }
 

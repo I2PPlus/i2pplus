@@ -266,11 +266,11 @@ class SidebarRenderer {
         PortMapper pm = _context.portMapper();
         if (pm.isRegistered(PortMapper.SVC_SUSIDNS)) {
             String tx = _t("Addressbook");
-            rbuf.append("<a href=/dns target=_top title=\"")
+            rbuf.append("<a href=\"/dns?book=router&amp;filter=latest\" target=_top title=\"")
                 .append(_t("Manage your I2P hosts file here (I2P domain name resolution)"))
                 .append("\">")
                 .append(nbsp(tx))
-                .append("</a>\n<a class=sb_icon target=_top href=/dns title=\"")
+                .append("</a>\n<a class=sb_icon target=_top href=\"/dns?book=router&amp;filter=latest\" title=\"")
                 .append(tx)
                 .append("\" hidden><span><img src=/themes/console/images/addressbook.svg> <span id=newHosts class=\"badge volatile\" title=\"")
                 .append(_t("New hosts in last 24 hours"))
@@ -370,8 +370,9 @@ class SidebarRenderer {
                .append(_t("Configure startup of clients and webapps (services); manually start dormant services"))
                .append("\">")
                .append(_t("Services"))
-               .append("</a>").append(getToggle()).append("</h3>\n<hr class=b>\n")
-               .append("<table id=sb_services class=collapse><tbody>\n<tr><td class=volatile>");
+               .append("</a>")
+               .append(getToggle())
+               .append("</h3>\n<hr class=b>\n<table id=sb_services class=collapse><tbody>\n<tr><td class=volatile>");
             for (String row : svcs.values()) {buf.append(row);}
             buf.append("</td></tr>\n<tr id=newHostsList class=script><td></td></tr>\n</tbody></table>\n");
             return buf.toString();
@@ -463,44 +464,64 @@ class SidebarRenderer {
 
         tx = _t("Help");
         rbuf.setLength(0);
-        rbuf.append("<a href=/help/ target=_top title=\"").append(_t("Router Help and FAQ")).append("\">")
-            .append(nbsp(tx)).append("</a>\n");
+        rbuf.append("<a href=/help/ target=_top title=\"")
+            .append(_t("Router Help and FAQ"))
+            .append("\">")
+            .append(nbsp(tx))
+            .append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Info");
         rbuf.setLength(0);
         rbuf.append("<a href=/info target=_top title=\"")
-            .append(_t("Router information including transport addresses and UPnP scan")).append("\">")
-            .append(nbsp(tx)).append("</a>\n");
+            .append(_t("Router information including transport addresses and UPnP scan"))
+            .append("\">")
+            .append(nbsp(tx))
+            .append("</a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Jobs");
         rbuf.setLength(0);
-        rbuf.append("<a href=/jobs target=_top title=\"").append(_t("Show the router's workload, and how it's performing"))
-            .append("\">").append(nbsp(tx)).append("</a>\n")
-            .append("<a class=sb_icon target=_top href=/jobs title=\"").append(tx)
+        rbuf.append("<a href=/jobs target=_top title=\"")
+            .append(_t("Show the router's workload, and how it's performing"))
+            .append("\">")
+            .append(nbsp(tx))
+            .append("</a>\n<a class=sb_icon target=_top href=/jobs title=\"")
+            .append(tx)
             .append("\" hidden><span><img src=/themes/console/images/jobs.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Logs");
         rbuf.setLength(0);
-        rbuf.append("<a href=/routerlogs target=_top title=\"").append(_t("Health Report")).append("\">")
-            .append(nbsp(tx)).append("</a>\n").append("<a class=sb_icon target=_top href=/routerlogs title=\"").append(tx)
+        rbuf.append("<a href=/routerlogs target=_top title=\"")
+            .append(_t("Health Report"))
+            .append("\">")
+            .append(nbsp(tx))
+            .append("</a>\n<a class=sb_icon target=_top href=/routerlogs title=\"")
+            .append(tx)
             .append("\" hidden><span><img src=/themes/console/images/logs.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("NetDb");
         rbuf.setLength(0);
-        rbuf.append("<a href=/netdb target=_top title=\"").append(_t("Show list of all known I2P routers")).append("\">")
-            .append(nbsp(tx)).append("</a>\n")
-            .append("<a class=sb_icon target=_top href=/netdb title=\"").append(tx)
+        rbuf.append("<a href=/netdb target=_top title=\"")
+            .append(_t("Show list of all known I2P routers"))
+            .append("\">")
+            .append(nbsp(tx))
+            .append("</a>\n")
+            .append("<a class=sb_icon target=_top href=/netdb title=\"")
+            .append(tx)
             .append("\" hidden><span><img src=/themes/console/images/globe.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("Peers");
         rbuf.setLength(0);
-        rbuf.append("<a href=/peers target=_top title=\"").append(_t("Show all current peer connections")).append("\">")
-            .append(nbsp(tx)).append("</a>\n").append("<a class=sb_icon target=_top href=/peers title=\"").append(tx)
+        rbuf.append("<a href=/peers target=_top title=\"")
+            .append(_t("Show all current peer connections"))
+            .append("\">")
+            .append(nbsp(tx))
+            .append("</a>\n<a class=sb_icon target=_top href=/peers title=\"")
+            .append(tx)
             .append("\" hidden><span><img src=/themes/console/images/peers.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
 
@@ -510,8 +531,8 @@ class SidebarRenderer {
             .append(_t("Show recent peer performance profiles"))
             .append("\">")
             .append(nbsp(tx))
-            .append("</a>\n")
-            .append("<a class=sb_icon target=_top href=\"/profiles?f=1\" title=\"").append(tx)
+            .append("</a>\n<a class=sb_icon target=_top href=\"/profiles?f=1\" title=\"")
+            .append(tx)
             .append("\" hidden><span><img src=/themes/console/images/profile.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
 
@@ -521,8 +542,8 @@ class SidebarRenderer {
             .append(_t("View existing tunnels and tunnel build status"))
             .append("\">")
             .append(nbsp(tx))
-            .append("</a>\n")
-            .append("<a class=sb_icon target=_top href=/tunnels title=\"").append(tx)
+            .append("</a>\n<a class=sb_icon target=_top href=/tunnels title=\"")
+            .append(tx)
             .append("\" hidden><span><img src=/themes/console/images/hardhat.svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
 
@@ -690,8 +711,7 @@ class SidebarRenderer {
            .append("\">")
            .append(_t("Up"))
            .append(" ").append(_helper.getUptime())
-           .append("</span>")
-           .append("</a>")
+           .append("</span></a>")
            .append(getToggle())
            .append("</h3>\n<hr class=b>\n<table id=sb_advancedgeneral>\n<tr title=\"")
            .append(_t("The version of the I2P software we are running"))
@@ -919,8 +939,7 @@ class SidebarRenderer {
            .append(_t("Known"))
            .append("</b></a></td><td class=digits><span class=volatile>")
            .append(allPeers)
-           .append("</span></td></tr>\n</table>\n")
-           .append("<table id=sb_peers_condensed hidden>\n<tr><td><a class=sb_icon id=floodfill href=\"/profiles?f=2\" title=\"")
+           .append("</span></td></tr>\n</table>\n<table id=sb_peers_condensed hidden>\n<tr><td><a class=sb_icon id=floodfill href=\"/profiles?f=2\" title=\"")
            .append(_t("Floodfill"))
            .append("\"><span><span class=\"badge volatile\">")
            .append(_helper.getWellIntegratedPeers())
@@ -1013,8 +1032,7 @@ class SidebarRenderer {
            .append(_t("Our inbound &amp; outbound traffic for the last 20 minutes"))
            .append("\">\n<span id=sb_graphstats class=volatile>")
            .append(_helper.getSecondKBps())
-           .append("Bps</span>\n<a href=/graphs>\n<canvas id=minigraph width=245 height=50>\n")
-           .append("<div id=minigraphcontainer ")
+           .append("Bps</span>\n<a href=/graphs>\n<canvas id=minigraph width=245 height=50>\n<div id=minigraphcontainer ")
            .append(g)
            .append("></div></canvas>\n<noscript><div id=minigraphcontainer_noscript ")
            .append(g)
@@ -1132,7 +1150,7 @@ class SidebarRenderer {
                .append(_t("tunnels"))
                .append("\"><span><span class=\"badge volatile\">")
                .append(_helper.getInboundClientTunnels() + _helper.getOutboundClientTunnels())
-               .append("</span></span></a>\n<a class=sb_icon id=transit href=\"/transit\" title=\"")
+               .append("</span></span></a>\n<a class=sb_icon id=transit href=/transit title=\"")
                .append(_t("Transit"))
                .append(' ')
                .append(_t("tunnels"))
@@ -1147,7 +1165,8 @@ class SidebarRenderer {
                .append("</span></span></a>\n<a class=sb_icon id=tcount href=/tunnelpeercount title=\"")
                .append(_t("Tunnel Count by Peer"))
                .append("\"><span><span class=\"badge volatile\">")
-               .append(totalTunnels).append("</span></span></a>\n</td></tr>\n</table>\n");
+               .append(totalTunnels)
+               .append("</span></span></a>\n</td></tr>\n</table>\n");
 
         return buf.toString();
     }
