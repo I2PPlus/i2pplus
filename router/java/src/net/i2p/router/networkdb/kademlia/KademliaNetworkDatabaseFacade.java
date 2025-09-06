@@ -174,7 +174,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  forgotten about us, else we can't build IB exploratory tunnels.
      *  Unused.
      */
-    protected final static long PUBLISH_JOB_DELAY = 3*60*1000l;
+    protected final static long PUBLISH_JOB_DELAY = 60*1000l;
 
     /** Maximum number of peers to place in the queue to explore */
     static final int MAX_EXPLORE_QUEUE = SystemVersion.isSlow() ? 128 : 256;
@@ -427,7 +427,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _initialized = true;
         _started = System.currentTimeMillis();
         long now = _context.clock().now();
-        _elj.getTiming().setStartAfter(now + 9*60*1000);
+        _elj.getTiming().setStartAfter(now + 90*1000);
         _context.jobQueue().addJob(_elj); // expire old leases
 
         // expire some routers
@@ -1830,16 +1830,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _log.info("Dropping LeaseSet [" + dbEntry.toBase32().substring(0,8) + "] -> Lookup / tunnel failure");
         }
 
-       if (knownLeaseSetsCount.get() <= 0) {
-            if (_log.shouldWarn()) {
-                _log.warn("Attempted to decrement LeaseSet count when already at " + knownLeaseSetsCount.get());
-            }
-            return;
+       if (knownLeaseSetsCount.get() <= 0 && _log.shouldWarn()) {
+           _log.warn("Attempted to decrement LeaseSet count when already at " + knownLeaseSetsCount.get());
         }
-
-        if (knownLeaseSetsCount.get() > 0) {
-            knownLeaseSetsCount.decrementAndGet();
-        }
+        knownLeaseSetsCount.decrementAndGet();
 
         if (!isClientDb()) {_ds.remove(dbEntry, false);}
         /* If this happens, it's because we're a TransientDataStore instead,
@@ -1881,15 +1875,12 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         DatabaseEntry data = _ds.remove(h);
 
         if (data == null) {
-            if (knownLeaseSetsCount.get() > 0) {
-                knownLeaseSetsCount.decrementAndGet();
-            } else {
-                if (_log.shouldWarn()) {
-                    _log.warn("Attempted to decrement LeaseSet count when already at " + knownLeaseSetsCount.get());
-                }
-            }
+            knownLeaseSetsCount.decrementAndGet();
             if (_log.shouldWarn()) {
                 _log.warn("Unpublishing UNKNOWN LOCAL LeaseSet [" + h.toBase32().substring(0,8) + "]");
+                if (knownLeaseSetsCount.get() <= 0) {
+                    _log.warn("Attempted to decrement LeaseSet count when already at " + knownLeaseSetsCount.get());
+                }
             }
         } else {
             if (_log.shouldInfo()) {

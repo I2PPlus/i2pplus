@@ -36,7 +36,7 @@ import net.i2p.util.SystemVersion;
 class ExpireLeasesJob extends JobImpl {
     private final Log _log;
     private final KademliaNetworkDatabaseFacade _facade;
-    private final static long RERUN_DELAY_MS = 3*60*1000;
+    private final static long RERUN_DELAY_MS = 45*1000;
     private static final int LIMIT_LEASES_FF = 1250;
     private static final int LIMIT_LEASES_CLIENT = SystemVersion.isSlow() ? 300 : 750;
 
@@ -51,7 +51,7 @@ class ExpireLeasesJob extends JobImpl {
     public void runJob() {
         long uptime = getContext().router().getUptime();
         List<Hash> toExpire = selectKeysToExpire();
-        if (!toExpire.isEmpty() && uptime >= 10*60*1000) {
+        if (!toExpire.isEmpty() && uptime >= 90*1000) {
             for (Hash key : toExpire) {_facade.fail(key);}
             if (_log.shouldInfo()) {_log.info("Leases expired: " + toExpire.size());}
         }
@@ -86,9 +86,9 @@ class ExpireLeasesJob extends JobImpl {
                                      " for \'" + getTunnelName(ls.getDestination()) + "\'" : "";
                         _log.logAlways(Log.ERROR, "LOCAL LeaseSet" + tunnelName + " [" + h.toBase32().substring(0,8) + "] has expired");
                     }
-                } else if (!isLocal) { // do not aggressively expire RAR LS but still count them
+                } else if (!isLocal) {
                     sz++;
-                    if (!ls.getReceivedAsReply()) {current.add(ls);}
+                    current.add(ls);
                 }
             }
         }
