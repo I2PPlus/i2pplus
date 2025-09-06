@@ -1830,7 +1830,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             _log.info("Dropping LeaseSet [" + dbEntry.toBase32().substring(0,8) + "] -> Lookup / tunnel failure");
         }
 
-       if (knownLeaseSetsCount.get() <= 0 && _log.shouldWarn()) {
+       if (knownLeaseSetsCount.get() <= 0 && _log.shouldInfo()) {
            _log.warn("Attempted to decrement LeaseSet count when already at " + knownLeaseSetsCount.get());
         }
         knownLeaseSetsCount.decrementAndGet();
@@ -1878,9 +1878,9 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             knownLeaseSetsCount.decrementAndGet();
             if (_log.shouldWarn()) {
                 _log.warn("Unpublishing UNKNOWN LOCAL LeaseSet [" + h.toBase32().substring(0,8) + "]");
-                if (knownLeaseSetsCount.get() <= 0) {
-                    _log.warn("Attempted to decrement LeaseSet count when already at " + knownLeaseSetsCount.get());
-                }
+            }
+            if (_log.shouldInfo() && knownLeaseSetsCount.get() <= 0) {
+                _log.warn("Attempted to decrement LeaseSet count when already at " + knownLeaseSetsCount.get());
             }
         } else {
             if (_log.shouldInfo()) {

@@ -49,7 +49,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
     // Must be lower than LIMIT_ROUTERS in StartExplorersJob because exploration does not register a reply job
     private static final int LIMIT_ROUTERS = SystemVersion.isSlow() ? 1000 : 4000;
     private final long _msgIDBloomXor;
-    private static final int RESEND_DELAY = 2*1000;
+    private static final int RESEND_DELAY = 300;
 
     /**
      * @param receivedMessage must never have reply token set if it came down a tunnel

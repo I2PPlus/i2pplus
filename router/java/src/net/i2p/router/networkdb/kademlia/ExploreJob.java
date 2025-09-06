@@ -34,7 +34,7 @@ import net.i2p.util.SystemVersion;
  * The concurrency level ("bredth") for this search is calculated once during construction based
  * on system and network conditions, and does not change during the lifetime of the job.
  */
-class ExploreJob extends SearchJob {
+public class ExploreJob extends SearchJob {
 
     private final FloodfillPeerSelector _peerSelector;
     private final boolean _isRealExplore;

@@ -17,14 +17,16 @@ import java.util.concurrent.TimeUnit;
 
 import net.i2p.data.DataHelper;
 import net.i2p.router.message.HandleGarlicMessageJob;
+import net.i2p.router.networkdb.kademlia.ExploreJob;
 import net.i2p.router.networkdb.kademlia.HandleFloodfillDatabaseLookupMessageJob;
 import net.i2p.router.networkdb.kademlia.IterativeSearchJob;
+import net.i2p.router.networkdb.kademlia.RepublishLeaseSetJob;
+import net.i2p.router.peermanager.PeerTestJob;
+import net.i2p.router.tunnel.pool.TestJob;
 import net.i2p.util.Clock;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
-
-import net.i2p.router.tunnel.pool.TestJob;
 
 /**
  * Manage the pending jobs according to whatever algorithm is appropriate, giving
@@ -241,10 +243,14 @@ public class JobQueue {
             boolean disableTunnelTests = _context.getBooleanProperty("router.disableTunnelTesting");
             boolean shouldDrop = getMaxLag() >= MIN_LAG_TO_DROP;
             if (shouldDrop) {
-                if (!disableTunnelTests && cls == TestJob.class) {
+                if (cls == RepublishLeaseSetJob.class) {return false;}
+                if ((!disableTunnelTests && cls == TestJob.class) || cls == PeerTestJob.class) {
                     return true;
                 }
-                if (cls == HandleFloodfillDatabaseLookupMessageJob.class ||
+                if ((!disableTunnelTests && cls == TestJob.class) ||
+                    cls == PeerTestJob.class ||
+                    cls == ExploreJob.class ||
+                    cls == HandleFloodfillDatabaseLookupMessageJob.class ||
                     cls == HandleGarlicMessageJob.class ||
                     cls == IterativeSearchJob.class) {
                     return true;

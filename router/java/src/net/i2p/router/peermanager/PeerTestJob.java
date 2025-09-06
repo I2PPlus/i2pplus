@@ -34,7 +34,7 @@ import net.i2p.router.Router;
  * TODO - What's the point? Disable this? See also notes in PeerManager.selectPeers().
  * TODO - Use something besides sending the peer's RI to itself?
  */
-class PeerTestJob extends JobImpl {
+public class PeerTestJob extends JobImpl {
     private final Log _log;
     private PeerManager _manager;
     private boolean _keepTesting;
