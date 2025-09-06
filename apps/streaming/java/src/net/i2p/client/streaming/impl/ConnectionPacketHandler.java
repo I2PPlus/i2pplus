@@ -605,7 +605,7 @@ class ConnectionPacketHandler {
         } else {
             if (_log.shouldWarn())
                 _log.warn("Received a RESET packet for the WRONG connection? "
-                          + con + " / " + packet);
+                          + con + (packet != null ? " / " + packet : ""));
             return;
         }
     }
