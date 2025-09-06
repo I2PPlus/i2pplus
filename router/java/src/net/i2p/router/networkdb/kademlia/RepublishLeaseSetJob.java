@@ -52,7 +52,7 @@ class RepublishLeaseSetJob extends JobImpl {
      */
     public void runJob() {
         long uptime = getContext().router().getUptime();
-        if (!getContext().clientManager().shouldPublishLeaseSet(_dest) || uptime < 4 * 60 * 1000) {
+        if (!getContext().clientManager().shouldPublishLeaseSet(_dest) || uptime < 90 * 1000) {
             return;
         }
 
