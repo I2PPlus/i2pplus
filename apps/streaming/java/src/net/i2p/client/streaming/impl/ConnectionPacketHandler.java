@@ -579,7 +579,7 @@ class ConnectionPacketHandler {
             Destination d2 = packet.getOptionalFrom();
             if (d1 != null && d2 != null && !d1.equals(d2)) {
                 if (_log.shouldWarn())
-                    _log.warn("Received RESET packet from WRONG destination on: " + con);
+                    _log.warn("Received RESET packet from WRONG destination -> " + con);
                 return;
             }
             SigningPublicKey spk = con.getRemoteSPK();
@@ -587,10 +587,10 @@ class ConnectionPacketHandler {
             boolean ok = packet.verifySignature(_context, spk, ba.getData());
             _cache.release(ba);
             if (!ok) {
-                if (_log.shouldWarn()) {_log.warn("Received UNSIGNED or FORGED RESET packet on: " + con);}
+                if (_log.shouldWarn()) {_log.warn("Received UNSIGNED or FORGED RESET packet -> " + con);}
                 return;
             } else {
-                if (_log.shouldWarn()) {_log.warn("Received RESET packet on: " + con);}
+                if (_log.shouldWarn()) {_log.warn("Received RESET packet -> " + con);}
                 // ok, valid RST
                 con.resetReceived();
                 con.eventOccurred();
@@ -601,7 +601,7 @@ class ConnectionPacketHandler {
                 return;
             }
         } else {
-            if (_log.shouldWarn()) {_log.warn("Received RESET packet for the WRONG connection on: " + con);}
+            if (_log.shouldWarn()) {_log.warn("Received RESET packet for the WRONG connection -> " + con);}
             return;
         }
     }
