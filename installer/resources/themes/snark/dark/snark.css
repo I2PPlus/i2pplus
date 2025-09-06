@@ -465,10 +465,11 @@ td .commentAuthorName{margin:0 0 0 4px;padding:0 4px 0 22px;min-width:120px;max-
 .commentText:empty+.commentDelete{background:none}
 .commentWrapper{margin:2px 0;padding:8px 12px;height:38px;max-height:300px;overflow:auto;resize:vertical;border:var(--border_soft);box-shadow:var(--bevel);background:#010}
 #commentInfo,#userComments,#mediaContainer{margin:10px 0 0;border:var(--border);border-left:0;border-right:0;background:#010 url(/themes/console/dark/images/camotile2.png) repeat scroll center bottom;filter:drop-shadow(0px 0 1px rgba(16,8,16,.7))}
-#commentInfo #addCommentText{padding:0}
+#commentInfo #addCommentText{padding:0 0 3px}
 #commentInfo input.accept{margin-right:5px;float:right}
 #commentInfo #newRating{background:var(--th)}
 #commentInfo #newRating td{border-left:var(--border);box-shadow:var(--bevel)}
+.iframed #commentInfo #newRating td{border-left:0;box-shadow:var(--bevel)}
 #commentInfo tr:nth-child(even),#userComments tr:nth-child(odd){background:rgba(0,16,0,.9)}
 #commentInfo tr:nth-child(odd),#userComments tr:nth-child(even){border-top:1px solid #000;background:rgba(0,32,0,.9)}
 #commentInfo th input[type=checkbox]{margin-left:4px;margin-right:4px}
@@ -756,7 +757,7 @@ input.trackerhome,input.trackerannounce{width:210px}
 .page #snarkInfo~#commentSection{margin-bottom:0}
 .iframed .page #snarkInfo~#snarkFiles,.iframed .page #snarkInfo~#commentSection{margin:-11px 0 10px;border-bottom:var(--border)}
 .iframed #trackers,.iframed .mainsection#snarkInfo{margin-bottom:-9px}
-.iframed .page #snarkInfo~#commentSection{margin-bottom:-10px}
+.iframed .page #snarkInfo~#commentSection{margin-bottom:-1px}
 .iframed #createSection{margin-bottom:-6px;border-radius:0 0 4px 4px}
 .iframed #mainsection+#lowersection{margin-top:-11px}
 #navbar,#createSection,#addSection,.configPanel,.optionlist{box-shadow:var(--highlight),0 0 2px 1px #252 inset}
