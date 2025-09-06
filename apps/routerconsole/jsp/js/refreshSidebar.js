@@ -113,8 +113,11 @@ export async function refreshSidebar(force = false) {
 
     elements.badges.forEach((elem, i) => {
       const respElem = responseElements.badges[i];
-      if (respElem && elem.textContent !== respElem.textContent) {
-        updates.push(() => elem.textContent = respElem.textContent);
+      if ((respElem && elem.textContent !== respElem.textContent) ||
+        elem.id === "lsCount" ||
+        elem.id === "sb_updateform" ||
+        elem.id === "sb_shutdownStatus") {
+        updates.push(() => elem.textContent = respElem?.textContent);
       }
     });
 
