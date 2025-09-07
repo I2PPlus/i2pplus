@@ -298,6 +298,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     private Set<Hash> selectFloodfillParticipants(Set<Hash> toIgnore, KBucketSet<Hash> kbuckets, int concurrent) {
         Set<Hash> set = _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL);
         List<Hash> rv = new ArrayList<>(set.size());
+        if (set.size() <= 0) {return null;}
         for (Hash h : set) {
             RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(h);
             String caps = ri != null ? ri.getCapabilities() : "";
