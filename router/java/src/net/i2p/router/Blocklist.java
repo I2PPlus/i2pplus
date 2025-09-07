@@ -194,10 +194,8 @@ public class Blocklist {
         boolean blocklistEnabled = _context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_ENABLED);
         boolean blocklistTorEnabled =  blocklistEnabled && _context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_TOR_ENABLED);
         boolean blocklistFeedEnabled = blocklistEnabled && _context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_FEEDLIST_ENABLED);
-        boolean blocklistCountryEnabled = blocklistEnabled &&
-                                          (_context.router().isHidden() ||
-                                          _context.getBooleanProperty(GeoIP.PROP_BLOCK_MY_COUNTRY) ||
-                                          _context.getBooleanProperty(PROP_BLOCKLIST_COUNTRIES_ENABLED));
+        boolean blocklistCountryEnabled = (_context.router().isHidden() && _context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_COUNTRIES_ENABLED)) ||
+                                          _context.getBooleanProperty(GeoIP.PROP_BLOCK_MY_COUNTRY);
 
         if (!blocklistEnabled) {
             _log.warn("All blocklists disabled -> \'router.blocklist.enable=false\' is configured");
@@ -209,16 +207,16 @@ public class Blocklist {
         File blFile = new File(_context.getBaseDir(), BLOCKLIST_FILE_DEFAULT); // install dir
         files.add(new BLFile(blFile, ID_SYSTEM));
 
-        if (blocklistEnabled && blocklistTorEnabled) {
+        if (blocklistTorEnabled) {
             blFile = new File(_context.getBaseDir(), BLOCKLIST_FILE_TOR_EXITS);
             files.add(new BLFile(blFile, ID_TOR));
         } else {_log.warn("Tor blocklist disabled -> \'router.blocklistTor.enable=false\' is configured");}
 
-        if (blocklistEnabled && blocklistFeedEnabled) {
+        if (blocklistFeedEnabled) {
             files.add(new BLFile(_blocklistFeedFile, ID_FEED));
         } else {_log.warn("Feed blocklist disabled -> \'router.blocklistFeed.enable=false\' is configured");}
 
-        if (blocklistEnabled && blocklistCountryEnabled) {
+        if (blocklistCountryEnabled) {
             blFile = new File(_context.getConfigDir(), BLOCKLIST_COUNTRY_FILE);
             files.add(new BLFile(blFile, ID_COUNTRY));
             if (_context.getBooleanProperty(PROP_BLOCKLIST_COUNTRIES_ENABLED)) {
