@@ -191,42 +191,56 @@ public class Blocklist {
     public synchronized void startup() {
         if (_started) {return;}
         _started = true;
-        if (!_context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_ENABLED)) {
-            _log.warn("All blocklists disabled (router.blocklist.enable=false)");
+        boolean blocklistEnabled = _context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_ENABLED);
+        boolean blocklistTorEnabled =  blocklistEnabled && _context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_TOR_ENABLED);
+        boolean blocklistFeedEnabled = blocklistEnabled && _context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_FEEDLIST_ENABLED);
+        boolean blocklistCountryEnabled = blocklistEnabled &&
+                                          (_context.router().isHidden() ||
+                                          _context.getBooleanProperty(GeoIP.PROP_BLOCK_MY_COUNTRY) ||
+                                          _context.getBooleanProperty(PROP_BLOCKLIST_COUNTRIES_ENABLED));
+
+        if (!blocklistEnabled) {
+            _log.warn("All blocklists disabled -> \'router.blocklist.enable=false\' is configured");
+            disable();
             return;
         }
-        List<BLFile> files = new ArrayList<BLFile>(5);
 
+        List<BLFile> files = new ArrayList<BLFile>(5);
         File blFile = new File(_context.getBaseDir(), BLOCKLIST_FILE_DEFAULT); // install dir
         files.add(new BLFile(blFile, ID_SYSTEM));
-        if (_context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_TOR_ENABLED)) {
+
+        if (blocklistEnabled && blocklistTorEnabled) {
             blFile = new File(_context.getBaseDir(), BLOCKLIST_FILE_TOR_EXITS);
             files.add(new BLFile(blFile, ID_TOR));
-        } else {_log.warn("Tor blocklist disabled (router.blocklistTor.enable=false)");}
-        if (!_context.getConfigDir().equals(_context.getBaseDir())) {
-            blFile = new File(_context.getConfigDir(), BLOCKLIST_FILE_DEFAULT); // config dir
-            files.add(new BLFile(blFile, ID_LOCAL));
-        }
-        if (_context.getBooleanPropertyDefaultTrue(PROP_BLOCKLIST_FEEDLIST_ENABLED)) {
+        } else {_log.warn("Tor blocklist disabled -> \'router.blocklistTor.enable=false\' is configured");}
+
+        if (blocklistEnabled && blocklistFeedEnabled) {
             files.add(new BLFile(_blocklistFeedFile, ID_FEED));
-        } else {_log.warn("Feed blocklist disabled (router.blocklistFeed.enable=false)");}
-        if (_context.router().isHidden() || _context.getBooleanProperty(GeoIP.PROP_BLOCK_MY_COUNTRY) ||
-            _context.getBooleanProperty(PROP_BLOCKLIST_COUNTRIES_ENABLED)) {
+        } else {_log.warn("Feed blocklist disabled -> \'router.blocklistFeed.enable=false\' is configured");}
+
+        if (blocklistEnabled && blocklistCountryEnabled) {
             blFile = new File(_context.getConfigDir(), BLOCKLIST_COUNTRY_FILE);
             files.add(new BLFile(blFile, ID_COUNTRY));
             if (_context.getBooleanProperty(PROP_BLOCKLIST_COUNTRIES_ENABLED)) {
-                _log.warn("Countries blocklist enabled (router.blocklistCountries.enable=true)");
+                _log.warn("Countries blocklist enabled -> \'router.blocklistCountries.enable=true\' is configured");
             } else if (_context.router().isHidden()) {
-                _log.warn("Countries blocklist enabled (Router is operating in hidden mode)");
+                _log.warn("Countries blocklist enabled -> Router is operating in hidden mode");
             }
         }
+
+        if (blocklistEnabled && !_context.getConfigDir().equals(_context.getBaseDir())) {
+            blFile = new File(_context.getConfigDir(), BLOCKLIST_FILE_DEFAULT); // config dir
+            files.add(new BLFile(blFile, ID_LOCAL));
+        }
+
         // user specified
         String file = _context.getProperty(PROP_BLOCKLIST_FILE);
-        if (file != null && !file.equals(BLOCKLIST_FILE_DEFAULT)) {
+        if (blocklistEnabled && file != null && !file.equals(BLOCKLIST_FILE_DEFAULT)) {
             blFile = new File(file);
             if (!blFile.isAbsolute()) {blFile = new File(_context.getConfigDir(), file);}
             files.add(new BLFile(blFile, ID_USER));
         }
+
         Job job = new ReadinJob(files);
         // Run immediately, so it's initialized before netdb. As this is called by Router.runRouter()
         // before job queue parallel operation, this will block StartupJob, and will complete before
