@@ -36,12 +36,9 @@ public class ReseedChecker {
     private volatile boolean _networkLogged;
     private volatile boolean _alreadyRun;
 
-    //public static final int MINIMUM = 50;
     public static final int MINIMUM = 100; // minimum number of router infos before automatic reseed attempted
-    //private static final long STATUS_CLEAN_TIME = 20*60*1000;
     private static final long STATUS_CLEAN_TIME = 3*60*1000; // sidebar notification persistence
-    // if down this long, reseed at startup
-    private static final long RESEED_MIN_DOWNTIME = 7*24*60*60*1000L;
+    private static final long RESEED_MIN_DOWNTIME = 7*24*60*60*1000L; // if down this long, reseed at startup
 
     /**
      *  All reseeding must be done through this instance.
@@ -118,21 +115,23 @@ public class ReseedChecker {
                 return false;
             }
             _networkLogged = false;
-            if (known <= 1)
+            if (known <= 1) {
                 _log.logAlways(Log.INFO, "Downloading peer router information for a new I2P installation...");
-            else if (_context.router().getUptime() > 5*60*1000 && _context.getEstimatedDowntime() > RESEED_MIN_DOWNTIME)
+            } else if (_context.router().getUptime() > 5*60*1000 && _context.getEstimatedDowntime() > RESEED_MIN_DOWNTIME)
                 _log.logAlways(Log.WARN, "Router has been offline for a while - refreshing NetDb...");
-            else
+            } else {
                 _log.logAlways(Log.WARN, "Less than " + MINIMUM + " peers in our NetDb - reseeding...");
+            }
             return requestReseed();
         } else {
             int x = known - 1;  // us
             // no ngettext, this is rare
             String s;
-            if (x > 0)
+            if (x > 0) {
                 s = "Only " + x + " peers remaining but reseed disabled by config file";
-            else
+            } else {
                 s = "No peers remaining but reseed disabled by config file";
+            }
             if (!s.equals(_lastError)) {
                 _lastError = s;
                 _log.logAlways(Log.WARN, s);
@@ -161,7 +160,7 @@ public class ReseedChecker {
             }
         } else {
             if (_log.shouldWarn())
-                _log.warn("Reseed already in progress");
+                _log.warn("Reseed already in progress...");
             return false;
         }
     }
@@ -217,7 +216,7 @@ public class ReseedChecker {
                 done();
             }
         } else {
-            throw new IOException("Reseed already in progress");
+            throw new IOException("Reseed already in progress...");
         }
     }
 
