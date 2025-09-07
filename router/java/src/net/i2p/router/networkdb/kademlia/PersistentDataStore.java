@@ -790,7 +790,7 @@ public class PersistentDataStore extends TransientDataStore {
         if (!f.canWrite())
             throw new IOException("NetDb directory [" + f.getAbsolutePath() + "] is not writable!");
         if (_flat) {unmigrate(f);}
-        } else {
+        else {
             for (int j = 0; j < B64.length(); j++) {
                 File subdir = new SecureDirectory(f, DIR_PREFIX + B64.charAt(j));
                 if (!subdir.exists()) {subdir.mkdir();}
