@@ -67,12 +67,14 @@ public class PersistentDataStore extends TransientDataStore {
     private static final String PROP_FLAT = "router.networkDatabase.flat";
     static final String DIR_PREFIX = "r";
     private static final String B64 = Base64.ALPHABET_I2P;
-    private static final int MAX_ROUTERS_INIT = 5000;
+    private static final int MAX_ROUTERS_INIT = 6000;
 
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
     private final static boolean DEFAULT_SHOULD_DISCONNECT = false;
     private final static String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
+
+    private static final long[] RATES = {60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l};
 
     /**
      *  @param dbDir relative path
@@ -85,15 +87,12 @@ public class PersistentDataStore extends TransientDataStore {
         _facade = facade;
         _readJob = new ReadJob();
         _context.jobQueue().addJob(_readJob);
-        ctx.statManager().createRateStat("netDb.writeClobber", "How often we clobber a pending NetDb write", "NetworkDatabase", new long[] {20*60*1000 });
-        ctx.statManager().createRateStat("netDb.writePending", "Number of pending NetDb writes", "NetworkDatabase", new long[] {60*1000 });
-        ctx.statManager().createRateStat("netDb.writeOut", "Total number of NetDb writes", "NetworkDatabase", new long[] {20*60*1000 });
-        ctx.statManager().createRateStat("netDb.writeTime", "Total time used for NetDb writes ", "NetworkDatabase", new long[] {20*60*1000 });
-        //ctx.statManager().createRateStat("netDb.readTime", "How long one took", "NetworkDatabase", new long[] {20*60*1000 });
+        ctx.statManager().createRateStat("netDb.writeClobber", "How often we clobber a pending NetDb write", "NetworkDatabase", RATES);
+        ctx.statManager().createRateStat("netDb.writeOut", "Total number of NetDb writes", "NetworkDatabase", RATES);
+        ctx.statManager().createRateStat("netDb.writePending", "Number of pending NetDb writes", "NetworkDatabase", RATES);
+        ctx.statManager().createRateStat("netDb.writeTime", "Total time used for NetDb writes ", "NetworkDatabase", RATES);
         _writer = new Writer();
         I2PThread writer = new I2PThread(_writer, "DBWriter");
-        // stop() must be called to flush data to disk
-        //writer.setDaemon(true);
         writer.start();
     }
 
@@ -333,8 +332,8 @@ public class PersistentDataStore extends TransientDataStore {
             }
         }
 
-        boolean isSlow = ri != null && (caps != null && caps != "unknown") && bw.equals("K") || bw.equals("L") || bw.equals("M");
         boolean isLTier = bw.equals("L");
+        boolean isSlow = ri != null && (caps != null && caps != "unknown") && bw.equals("K") || isLTier || bw.equals("M");
         boolean isBanned = ri != null && (_context.banlist().isBanlistedForever(key) || _context.banlist().isBanlisted(key) ||
                                           _context.banlist().isBanlistedHostile(key));
 
@@ -462,8 +461,7 @@ public class PersistentDataStore extends TransientDataStore {
 
         public void runJob() {
             if (getContext().router().gracefulShutdownInProgress()) {
-                // don't cause more disk I/O while saving,
-                // or start a reseed
+                // Don't cause more disk I/O while saving, or start a reseed
                 requeue(READ_DELAY);
                 return;
             }
@@ -791,17 +789,14 @@ public class PersistentDataStore extends TransientDataStore {
             throw new IOException("NetDb directory [" + f.getAbsolutePath() + "] is not readable!");
         if (!f.canWrite())
             throw new IOException("NetDb directory [" + f.getAbsolutePath() + "] is not writable!");
-        if (_flat) {
-            unmigrate(f);
+        if (_flat) {unmigrate(f);}
         } else {
             for (int j = 0; j < B64.length(); j++) {
                 File subdir = new SecureDirectory(f, DIR_PREFIX + B64.charAt(j));
-                if (!subdir.exists())
-                    subdir.mkdir();
+                if (!subdir.exists()) {subdir.mkdir();}
             }
             File routerInfoFiles[] = f.listFiles(RI_FILTER);
-            if (routerInfoFiles != null)
-                migrate(f, routerInfoFiles);
+            if (routerInfoFiles != null) {migrate(f, routerInfoFiles);}
         }
         return f;
     }
@@ -814,8 +809,7 @@ public class PersistentDataStore extends TransientDataStore {
         for (int j = 0; j < B64.length(); j++) {
             File subdir = new File(dbdir, DIR_PREFIX + B64.charAt(j));
             File[] files = subdir.listFiles(RI_FILTER);
-            if (files == null)
-                continue;
+            if (files == null) {continue;}
             for (int i = 0; i < files.length; i++) {
                 File from = files[i];
                 File to = new File(dbdir, from.getName());
@@ -831,8 +825,7 @@ public class PersistentDataStore extends TransientDataStore {
     private static void migrate(File dbdir, File[] files) {
         for (int i = 0; i < files.length; i++) {
             File from = files[i];
-            if (!from.isFile())
-                continue;
+            if (!from.isFile()) {continue;}
             File dir = new File(dbdir, DIR_PREFIX + from.getName().charAt(ROUTERINFO_PREFIX.length()));
             File to = new File(dir, from.getName());
             FileUtil.rename(from, to);
@@ -862,7 +855,6 @@ public class PersistentDataStore extends TransientDataStore {
     public static File getRouterInfoFile(RouterContext ctx, Hash hash) {
         String b64 = hash.toBase64();
         File dir = new File(ctx.getRouterDir(), ctx.getProperty(KademliaNetworkDatabaseFacade.PROP_DB_DIR, KademliaNetworkDatabaseFacade.DEFAULT_DB_DIR));
-//        if (ctx.getBooleanPropertyDefaultTrue(PROP_FLAT))
         if (ctx.getBooleanProperty(PROP_FLAT))
             return new File(dir, ROUTERINFO_PREFIX + b64 + ROUTERINFO_SUFFIX);
         return new File(dir, DIR_PREFIX + b64.charAt(0) + File.separatorChar + ROUTERINFO_PREFIX + b64 + ROUTERINFO_SUFFIX);
@@ -879,18 +871,11 @@ public class PersistentDataStore extends TransientDataStore {
         try {
             String key = filename.substring(prefix.length());
             key = key.substring(0, key.length() - suffix.length());
-            //Hash h = new Hash();
-            //h.fromBase64(key);
             byte[] b = Base64.decode(key);
-            if (b == null)
-                return null;
+            if (b == null) {return null;}
             Hash h = Hash.create(b);
             return h;
-        } catch (RuntimeException e) {
-            // static
-            //_log.warn("Unable to fetch the key from [" + filename + "]", e);
-            return null;
-        }
+        } catch (RuntimeException e) {return null;}
     }
 
     private void removeFile(Hash key, File dir) throws IOException {
@@ -899,7 +884,6 @@ public class PersistentDataStore extends TransientDataStore {
         if (f.exists()) {
             boolean removed = f.delete();
             if (!removed && f.exists()) {
-                // change from warn to debug as we're likely to see only when failing to delete a previously deleted RI
                 if (_log.shouldDebug()) {_log.debug("Unable to delete " + f.getAbsolutePath() + " -> Previously deleted?");}
             } else if (_log.shouldDebug()) {_log.debug("Deleted " + f.getAbsolutePath());}
             return;
@@ -909,8 +893,7 @@ public class PersistentDataStore extends TransientDataStore {
     private class Disconnector implements SimpleTimer.TimedEvent {
         private final Hash h;
         public Disconnector(Hash h) {this.h = h;}
-        public void timeReached() {
-            _context.commSystem().forceDisconnect(h);
-        }
+        public void timeReached() {_context.commSystem().forceDisconnect(h);}
     }
+
 }
