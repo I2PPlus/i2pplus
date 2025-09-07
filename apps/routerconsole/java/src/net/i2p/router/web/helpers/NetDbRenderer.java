@@ -949,8 +949,11 @@ class NetDbRenderer {
             long pub = now - ls2.getPublished();
             exp = ((LeaseSet2)ls).getExpires() - now;
         }
-        buf.append("<span class=\"nowrap expiry\" title=\"").append(_t("Expiry")).append("\">").append(bullet).append("<b>");
-        if (exp > 0) {buf.append(_t("Expires{0}", ":</b> " + DataHelper.formatDuration2(exp)).replace(" in", ""));}
+        boolean isExpired = exp <= 0;
+
+        buf.append("<span class=\"nowrap expiry").append(isExpired ? " expired" : "").append("\" title=\"")
+           .append(_t("Expiry")).append("\">").append(bullet).append("<b>");
+        if (!isExpired) {buf.append(_t("Expires{0}", ":</b> " + DataHelper.formatDuration2(exp)).replace(" in", ""));}
         else {buf.append(_t("Expired{0} ago", ":</b> " + DataHelper.formatDuration2(0-exp)));}
         buf.append("</span>");
 
@@ -967,7 +970,7 @@ class NetDbRenderer {
                 if (ls2.isOffline()) {
                     buf.append(" <span class=nowrap>").append(bullet).append("<b>").append(_t("Offline signed")).append(":</b> ");
                     exp = ls2.getTransientExpiration() - now;
-                    if (exp > 0) {
+                    if (!isExpired) {
                         buf.append(' ').append(bullet).append("<b>").append(_t("Expires{0}", ":</b> " + DataHelper.formatDuration2(exp)));
                     } else {
                         buf.append(' ').append(bullet).append("<b>").append(_t("Expired{0} ago", ":</b> " + DataHelper.formatDuration2(0-exp)));
@@ -992,15 +995,26 @@ class NetDbRenderer {
         else if (stype.equals("RSA_SHA384_3072")) {sigtype = "RSA/3072";}
         else if (stype.equals("RSA_SHA512_4096")) {sigtype = "RSA/4096";}
 
-        buf.append("</td><td><span class=ls_crypto>")
-           .append("<span class=\"nowrap stype\" title=\"").append(_t("Signature type")).append(": ")
-           .append(stype).append("\">").append(bullet).append("<b>").append(_t("Signature type")).append(":</b> ")
-           .append("<span>").append(sigtype).append("</span></span></span></td></tr>\n")
-           .append("<tr class=ekeys><td colspan=2>");
+        buf.append("</td><td><span class=ls_crypto><span class=\"nowrap stype\" title=\"")
+           .append(_t("Signature type"))
+           .append(": ")
+           .append(stype)
+           .append("\">")
+           .append(bullet)
+           .append("<b>")
+           .append(_t("Signature type"))
+           .append(":</b> <span>")
+           .append(sigtype)
+           .append("</span></span></span></td></tr>\n<tr class=ekeys><td colspan=2>");
 
         if (type == DatabaseEntry.KEY_TYPE_LEASESET) {
-            buf.append("<span class=\"nowrap ekey\" title=\"").append(_t("Encryption Key")).append("\">").append(bullet)
-               .append("<b>").append(_t("Encryption Key")).append(":</b> <span title=ELGAMAL_2048>ElGamal")
+            buf.append("<span class=\"nowrap ekey\" title=\"")
+               .append(_t("Encryption Key"))
+               .append("\">")
+               .append(bullet)
+               .append("<b>")
+               .append(_t("Encryption Key"))
+               .append(":</b> <span title=ELGAMAL_2048>ElGamal")
                .append(debug ? " <span class=pubKey title=\"" + _t("Public Key") + "\">[" +
                        ls.getEncryptionKey().toBase64().substring(0,8) + "&hellip;]</span>" : "")
                .append("</span>");
@@ -1008,8 +1022,13 @@ class NetDbRenderer {
             LeaseSet2 ls2 = (LeaseSet2) ls;
             for (PublicKey pk : ls2.getEncryptionKeys()) {
                 EncType etype = pk.getType();
-                buf.append(" <span class=\"nowrap ekey\" title=\"").append(_t("Encryption Key")).append("\">").append(bullet)
-                   .append("<b>").append(_t("Encryption Key")).append(":</b> ");
+                buf.append(" <span class=\"nowrap ekey\" title=\"")
+                   .append(_t("Encryption Key"))
+                   .append("\">")
+                   .append(bullet)
+                   .append("<b>")
+                   .append(_t("Encryption Key"))
+                   .append(":</b> ");
                 if (etype != null) {
                     String enctype = "";
                     if (etype.toString().trim().equals("ECIES_X25519")) {enctype = "ECIES";}
@@ -1017,7 +1036,10 @@ class NetDbRenderer {
                     else if (etype.toString().trim().equals("MLKEM512_X25519")) {enctype = "MLKEM512";}
                     else if (etype.toString().trim().equals("MLKEM768_X25519")) {enctype = "MLKEM768";}
                     else if (etype.toString().trim().equals("MLKEM1024_X25519")) {enctype = "MLKEM1024";}
-                    buf.append("<span title=\"").append(etype).append("\">").append(enctype)
+                    buf.append("<span title=\"")
+                       .append(etype)
+                       .append("\">")
+                       .append(enctype)
                        .append(debug ? " <span class=pubKey title=\"" + _t("Public Key") + "\">[" +
                                pk.toBase64().substring(0,8) + "&hellip;]</span>" : "")
                        .append("</span>");
