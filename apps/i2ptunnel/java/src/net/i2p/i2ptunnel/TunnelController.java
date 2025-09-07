@@ -958,7 +958,7 @@ public class TunnelController implements Logging {
             if (configChanged(_config, oldConfig, PROP_FILE) ||
                 configChanged(_config, oldConfig, OPT_ALT_PKF) ||
                 configChanged(_config, oldConfig, OPT_SIG_TYPE)) {
-                log("Tunnel must be stopped and restarted for private key file changes to take effect");
+                log("‣ Tunnel must be stopped and restarted for private key file changes to take effect");
             }
         }
 
