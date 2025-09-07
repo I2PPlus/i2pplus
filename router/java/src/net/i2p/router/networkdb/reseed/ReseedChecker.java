@@ -15,19 +15,16 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
 
 /**
- *  Moved from RouterConsoleRunner.java
+ * Checks whether reseeding of the network database is necessary and initiates reseed requests.
+ * This class manages reseed triggers based on network status, router uptime/downtime,
+ * peer count, and configuration flags.
  *
- *  Reseeding is not strictly a router function, it used to be
- *  in the routerconsole app, but this made it impossible to
- *  bootstrap an embedded router lacking a routerconsole,
- *  in iMule or android for example, without additional modifications.
+ * All reseeding must be done through this instance.
+ * Access through {@code context.netDb().reseedChecker()}, others should not instantiate this class directly.
  *
- *  Also, as this is now called from PersistentDataStore, not from the
- *  routerconsole, we can get started as soon as the netdb has read
- *  the netDb/ directory, not when the console starts.
+ * @since 0.9
  */
 public class ReseedChecker {
-
     private final RouterContext _context;
     private final Log _log;
     private final AtomicBoolean _inProgress = new AtomicBoolean();
@@ -36,15 +33,19 @@ public class ReseedChecker {
     private volatile boolean _networkLogged;
     private volatile boolean _alreadyRun;
 
-    public static final int MINIMUM = 100; // minimum number of router infos before automatic reseed attempted
-    private static final long STATUS_CLEAN_TIME = 3*60*1000; // sidebar notification persistence
-    private static final long RESEED_MIN_DOWNTIME = 7*24*60*60*1000L; // if down this long, reseed at startup
+    /** Minimum number of router infos before automatic reseed attempted */
+    public static final int MINIMUM = 100;
+
+    /** Sidebar notification persistence (3 minutes) */
+    private static final long STATUS_CLEAN_TIME = 3*60*1000;
+
+    /** Downtime threshold for forced reseed at startup (7 days) */
+    private static final long RESEED_MIN_DOWNTIME = 7*24*60*60*1000L;
 
     /**
-     *  All reseeding must be done through this instance.
-     *  Access through context.netDb().reseedChecker(), others should not instantiate
+     * Constructor.
      *
-     *  @since 0.9
+     * @param context the router context
      */
     public ReseedChecker(RouterContext context) {
         _context = context;
@@ -52,106 +53,114 @@ public class ReseedChecker {
     }
 
     /**
-     *  Check if a reseed is needed, and start it
+     * Checks if a reseed is needed based on the current number of known routers, uptime,
+     * downtime, and system flags, and starts it if needed.
      *
-     *  @param known current number of known routers, includes us
-     *  @return true if a reseed was started
+     * @param known current number of known routers (includes this router)
+     * @return true if a reseed was started; false otherwise
      */
     public boolean checkReseed(int known) {
+        int peers = known - 1;
         boolean isHidden = _context.router().isHidden();
-        if (_context.router().getUptime() < 10*60*1000 && known > 1 && !isHidden) {return false;}
-        else if (_alreadyRun) {
-            if (known >= MINIMUM) {return false;}
+        long uptime = _context.router().getUptime();
+        long downtime = _context.getEstimatedDowntime();
+
+        // Early conditions preventing reseed
+        if (_context.getBooleanProperty(Reseeder.PROP_DISABLE) || _context.getBooleanProperty("i2p.vmCommSystem")) {
+            logOnceWarning(peers, "disabled by configuration");
+            return false;
+        }
+        if (_context.router().gracefulShutdownInProgress()) {
+            logOnceWarning(peers, "prevented by router shutdown");
+            return false;
+        }
+        if (!_hasNetworkConnection()) {
+            if (!_networkLogged) {
+                _log.logAlways(Log.WARN, "Cannot reseed - no network connection");
+                _networkLogged = true;
+            }
+            return false;
+        }
+        _networkLogged = false;
+
+        // Prevent reseed too early or under hidden mode except when no/minimal peers
+        if (uptime < 10*60*1000 && known > 1 && !isHidden)
+            return false;
+
+        // Logic to decide whether to reseed
+        if (_alreadyRun) {
+            if (known >= MINIMUM)
+                return false;
         } else {
             _alreadyRun = true;
-            if (known >= MINIMUM && _context.getEstimatedDowntime() < RESEED_MIN_DOWNTIME) {return false;}
-        }
-
-        if (_context.getBooleanProperty(Reseeder.PROP_DISABLE) ||
-            _context.getBooleanProperty("i2p.vmCommSystem")) {
-            int x = known - 1;  // us
-            // no ngettext, this is rare
-            String s;
-            if (x > 0)
-                s = "Only " + x + " peers remaining but reseed disabled by configuration";
-            else
-                s = "No peers remaining but reseed disabled by configuration";
-            if (!s.equals(_lastError)) {
-                _lastError = s;
-                _log.logAlways(Log.WARN, s);
-            }
-            return false;
-        }
-
-        if (_context.router().gracefulShutdownInProgress()) {
-            int x = known - 1;
-            // no ngettext, this is rare
-            String s;
-            if (x > 0)
-                s = "Only " + x + " peers remaining but reseed prevented by router shutdown";
-            else
-                s = "No peers remaining but reseed prevented by router shutdown";
-            if (!s.equals(_lastError)) {
-                _lastError = s;
-                _log.logAlways(Log.WARN, s);
-            }
-            return false;
-        }
-
-        // we check the i2p installation directory for a flag telling us not to reseed,
-        // but also check the home directory for that flag too, since new users installing i2p
-        // don't have an installation directory that they can put the flag in yet.
-        File noReseedFile = new File(new File(System.getProperty("user.home")), ".i2pnoreseed");
-        File noReseedFileAlt1 = new File(new File(System.getProperty("user.home")), "noreseed.i2p");
-        File noReseedFileAlt2 = new File(_context.getConfigDir(), ".i2pnoreseed");
-        File noReseedFileAlt3 = new File(_context.getConfigDir(), "noreseed.i2p");
-        if (!noReseedFile.exists() && !noReseedFileAlt1.exists() && !noReseedFileAlt2.exists() && !noReseedFileAlt3.exists()) {
-            Set<AddressType> addrs = Addresses.getConnectedAddressTypes();
-            if (!addrs.contains(AddressType.IPV4) && !addrs.contains(AddressType.IPV6)) {
-                if (!_networkLogged) {
-                    _log.logAlways(Log.WARN, "Cannot reseed - no network connection");
-                    _networkLogged = true;
-                }
+            if (known >= MINIMUM && downtime < RESEED_MIN_DOWNTIME)
                 return false;
-            }
-            _networkLogged = false;
-            if (known <= 1) {
-                _log.logAlways(Log.INFO, "Downloading peer router information for a new I2P installation...");
-            } else if (_context.router().getUptime() > 5*60*1000 && _context.getEstimatedDowntime() > RESEED_MIN_DOWNTIME)
+        }
+
+        // Logging reseed reason
+        if (known <= 1) {
+            _log.logAlways(Log.INFO, "Downloading peer router information for a new I2P installation...");
+        } else if (uptime > 10*60*1000) {
+            if (downtime > RESEED_MIN_DOWNTIME) {
                 _log.logAlways(Log.WARN, "Router has been offline for a while - refreshing NetDb...");
-            } else {
-                _log.logAlways(Log.WARN, "Less than " + MINIMUM + " peers in our NetDb - reseeding...");
+            } else if (known < MINIMUM) {
+                _log.logAlways(Log.WARN, "Less than " + MINIMUM + " RouterInfos stored on disk -> Initiating reseed...");
             }
-            return requestReseed();
-        } else {
-            int x = known - 1;  // us
-            // no ngettext, this is rare
-            String s;
-            if (x > 0) {
-                s = "Only " + x + " peers remaining but reseed disabled by config file";
-            } else {
-                s = "No peers remaining but reseed disabled by config file";
-            }
-            if (!s.equals(_lastError)) {
-                _lastError = s;
-                _log.logAlways(Log.WARN, s);
-            }
-            return false;
+        }
+
+        return requestReseed();
+    }
+
+    /**
+     * Logs a warning message once for reseed prevention reason based on peer count.
+     *
+     * @param peers number of known peers excluding this router
+     * @param reason reason why reseed is disabled or prevented
+     */
+    private void logOnceWarning(int peers, String reason) {
+        String s = (peers > 0)
+            ? "Only " + peers + " peers remaining but reseed " + reason
+            : "No peers remaining but reseed " + reason;
+        if (!s.equals(_lastError)) {
+            _lastError = s;
+            _log.logAlways(Log.WARN, s);
         }
     }
 
     /**
-     *  Start a reseed
+     * Checks for network connection and reseed disable config files.
      *
-     *  @return true if a reseed was started, false if already in progress
-     *  @since 0.9
+     * @return true if network is connected and no config disables reseed; false otherwise
+     */
+    private boolean _hasNetworkConnection() {
+        File userHome = new File(System.getProperty("user.home"));
+        File configDir = _context.getConfigDir();
+        File[] noReseedFiles = {
+            new File(userHome, ".i2pnoreseed"),
+            new File(userHome, "noreseed.i2p"),
+            new File(configDir, ".i2pnoreseed"),
+            new File(configDir, "noreseed.i2p")
+        };
+        for (File f : noReseedFiles) {
+            if (f.exists()) {
+                logOnceWarning(0, "disabled by config file");
+                return false;
+            }
+        }
+        Set<AddressType> addrs = Addresses.getConnectedAddressTypes();
+        return addrs.contains(AddressType.IPV4) || addrs.contains(AddressType.IPV6);
+    }
+
+    /**
+     * Starts a reseed if one is not already in progress.
+     *
+     * @return true if reseed was started; false if already in progress or failed to start
      */
     public boolean requestReseed() {
         if (_inProgress.compareAndSet(false, true)) {
             _alreadyRun = true;
             try {
-                Reseeder reseeder = new Reseeder(_context, this);
-                reseeder.requestReseed();
+                new Reseeder(_context, this).requestReseed();
                 return true;
             } catch (Throwable t) {
                 _log.error("Reseed failed to start", t);
@@ -166,11 +175,11 @@ public class ReseedChecker {
     }
 
     /**
-     *  Start a reseed from a zip or su3 URI.
+     * Starts a reseed from a zip or su3 URI if one is not already in progress.
      *
-     *  @return true if a reseed was started, false if already in progress
-     *  @throws IllegalArgumentException if it doesn't end with zip or su3
-     *  @since 0.9.19
+     * @param url URI to the reseed data file (zip/su3)
+     * @return true if reseed was started; false if already in progress or failed to start
+     * @throws IllegalArgumentException if URI is invalid or unsupported format
      */
     public boolean requestReseed(URI url) throws IllegalArgumentException {
         if (_inProgress.compareAndSet(false, true)) {
@@ -196,18 +205,16 @@ public class ReseedChecker {
     }
 
     /**
-     *  Reseed from a zip or su3 input stream. Blocking.
+     * Performs a blocking reseed from a zip or su3 InputStream.
      *
-     *  @return true if a reseed was started, false if already in progress
-     *  @throws IOException if already in progress or on most other errors
-     *  @since 0.9.19
+     * @param in InputStream of reseed data
+     * @return number of routers imported
+     * @throws IOException if reseed is already in progress or an IO error occurs
      */
     public int requestReseed(InputStream in) throws IOException {
-        // don't really need to check for in progress here
         if (_inProgress.compareAndSet(false, true)) {
             try {
-                Reseeder reseeder = new Reseeder(_context, this);
-                return reseeder.requestReseed(in);
+                return new Reseeder(_context, this).requestReseed(in);
             } catch (IOException ioe) {
                 if (ioe.getMessage() != null)
                     setError(DataHelper.escapeHTML(ioe.getMessage()));
@@ -220,19 +227,17 @@ public class ReseedChecker {
         }
     }
 
-    /**         .
-     *  Is a reseed in progress?
+    /**
+     * Checks whether a reseed is currently in progress.
      *
-     *  @since 0.9
+     * @return true if reseed in progress; false otherwise
      */
     public boolean inProgress() {
         return _inProgress.get();
     }
 
     /**
-     *  The reseed is complete
-     *
-     *  @since 0.9
+     * Marks reseed complete, resetting internal state and scheduling status clearance.
      */
     void done() {
         _inProgress.set(false);
@@ -240,50 +245,45 @@ public class ReseedChecker {
     }
 
     /**
-     *  Status from current reseed attempt,
-     *  probably empty if no reseed in progress.
-     *  May include HTML.
+     * Gets the status message from the current reseed attempt.
      *
-     *  @return non-null, may be empty
-     *  @since 0.9
+     * @return status message (may contain HTML), never null
      */
     public String getStatus() {
         return _lastStatus;
     }
 
     /**
-     *  Status from current reseed attempt
+     * Sets the status message for the current reseed attempt.
      *
-     *  @param s non-null, may be empty
-     *  @since 0.9
+     * @param s status message, non-null but may be empty
      */
     void setStatus(String s) {
         _lastStatus = s;
     }
 
     /**
-     *  Error from last or current reseed attempt.
-     *  May include HTML.
+     * Gets the error message from the last or current reseed attempt.
      *
-     *  @return non-null, may be empty
-     *  @since 0.9
+     * @return error message (may contain HTML), never null
      */
     public String getError() {
         return _lastError;
     }
 
     /**
-     *  Status from last or current reseed attempt
+     * Sets the error message for the last or current reseed attempt.
      *
-     *  @param s non-null, may be empty
-     *  @since 0.9
+     * @param s error message, non-null but may be empty
      */
     void setError(String s) {
         _lastError = s;
     }
 
     /**
-     *  @since 0.9.19
+     * Timer event to clear stale status and error messages after a timeout.
+     *
+     * @since 0.9
      */
     private class StatusCleaner implements SimpleTimer.TimedEvent {
         private final String _status, _error;
@@ -293,6 +293,7 @@ public class ReseedChecker {
             _error = error;
         }
 
+        @Override
         public void timeReached() {
             if (_status.equals(getStatus()))
                 setStatus("");
