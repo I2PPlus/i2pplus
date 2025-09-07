@@ -514,6 +514,7 @@ public class PersistentDataStore extends TransientDataStore {
                             (new ReadRouterJob(routerInfoFiles[i], key)).runJob();
                             //_context.statManager().addRateData("netDb.readTime", System.currentTimeMillis() - start);
                         }
+                        routerCount = i;
                     }
                 }
             } else {
@@ -531,7 +532,10 @@ public class PersistentDataStore extends TransientDataStore {
                     if (routerCount >= MIN_ROUTERS && lastMod <= _lastModified) {continue;}
                     routerCount += files.length;
                     if (lastMod <= _lastModified) {continue;}
-                    for (int i = 0; i < files.length; i++) {toRead.add(files[i]);}
+                    for (int i = 0; i < files.length; i++) {
+                        toRead.add(files[i]);
+                        routerCount = i;
+                    }
                 }
                 Collections.shuffle(toRead, _context.random());
                 int i = 0;
