@@ -193,7 +193,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
         if (!from.equals(_remoteHostId)) {
             // TODO, QUIC says we can respond, or not...
             if (_log.shouldWarn())
-                //_log.warn("Inbound packet from [" + from + "] on " + this);
+                //_log.warn("Inbound packet from [" + from + "] from " + this);
                 _log.warn("Dropping irregular packet from " + from + " -> Host/packet ID mimsmatch");
         }
         DatagramPacket dpacket = packet.getPacket();
@@ -204,18 +204,18 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
             SSU2Header.Header header = SSU2Header.trialDecryptShortHeader(packet, _rcvHeaderEncryptKey1, _rcvHeaderEncryptKey2);
             if (header == null) {
                 if (_log.shouldWarn())
-                    _log.warn("Inbound packet too short (" + len + " bytes) on " + this);
+                    _log.warn("Inbound packet too short (" + len + " bytes) from " + this);
                 return;
             }
             if (header.getDestConnID() != _rcvConnID) {
                 if (_log.shouldWarn())
-                    _log.warn("BAD " + len + "byte Destination ConnectionID " + header + " on " + this);
+                    _log.warn("BAD " + len + "byte Destination ConnectionID " + header + " from " + this);
                 return;
             }
             if (header.getType() != DATA_FLAG_BYTE) {
                 // for direct from IES2, these could be retransmitted session confirmed
                 if (_log.shouldWarn())
-                    _log.warn("BAD " + len + " byte data packet (Type: " + header.getType() + ") on " + this);
+                    _log.warn("BAD " + len + " byte data packet (Type: " + header.getType() + ") from " + this);
                 return;
             }
             long n = header.getPacketNumber();
@@ -236,11 +236,11 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
 
             int payloadLen = len - (SHORT_HEADER_SIZE + MAC_LEN);
             if (_log.shouldDebug())
-                _log.debug("New " + len + " byte packet [#" + n + "] received on " + this);
+                _log.debug("New " + len + " byte packet [#" + n + "] received from " + this);
             SSU2Payload.processPayload(_context, this, data, off + SHORT_HEADER_SIZE, payloadLen, false, from);
         } catch (Exception e) {
             if (_log.shouldWarn())
-                _log.warn("BAD encrypted packet on: " + this + " (" + e.getMessage() + ")");
+                _log.warn("BAD encrypted packet from " + this + " -> " + e.getMessage());
         }
     }
 
@@ -253,13 +253,13 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
 
     public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) {
         if (_log.shouldDebug())
-            _log.debug("Received RouterInfo block on " + this);
+            _log.debug("Received RouterInfo block from " + this);
         messagePartiallyReceived();
     }
 
     public void gotRIFragment(byte[] data, boolean isHandshake, boolean flood, boolean isGzipped, int frag, int totalFrags) {
         if (_log.shouldDebug())
-            _log.debug("Received RouterInfo FRAGMENT block on " + this);
+            _log.debug("Received RouterInfo FRAGMENT block from " + this);
         messagePartiallyReceived();
     }
 
@@ -269,31 +269,31 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
 
     public void gotRelayRequest(byte[] data) {
         if (_log.shouldDebug())
-            _log.debug("Received RELAY block on " + this);
+            _log.debug("Received RELAY block from " + this);
         messagePartiallyReceived();
     }
 
     public void gotRelayResponse(int status, byte[] data) {
         if (_log.shouldDebug())
-            _log.debug("Received RELAY block on " + this);
+            _log.debug("Received RELAY block from " + this);
         messagePartiallyReceived();
     }
 
     public void gotRelayIntro(Hash aliceHash, byte[] data) {
         if (_log.shouldDebug())
-            _log.debug("Received RELAY block on " + this);
+            _log.debug("Received RELAY block from " + this);
         messagePartiallyReceived();
     }
 
     public void gotPeerTest(int msg, int status, Hash h, byte[] data) {
         if (_log.shouldDebug())
-            _log.debug("Received PEER TEST block on " + this);
+            _log.debug("Received PEER TEST block from " + this);
         messagePartiallyReceived();
     }
 
     public void gotToken(long token, long expires) {
         if (_log.shouldDebug())
-            _log.debug("Received TOKEN: " + token + " expires " + DataHelper.formatTime(expires) + " on " + this);
+            _log.debug("Received TOKEN: " + token + " expires " + DataHelper.formatTime(expires) + " from " + this);
         _transport.getEstablisher().addOutboundToken(_remoteHostId, token, expires);
         // do NOT send an ACK for this, as it is likely to be in with the termination ack.
         // gotTermination() will request ack if necessary
@@ -301,13 +301,13 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
 
     public void gotI2NP(I2NPMessage msg) {
         if (_log.shouldDebug())
-            _log.debug("Received I2NP block: " + msg + " on " + this);
+            _log.debug("Received I2NP block: " + msg + " from " + this);
             messagePartiallyReceived();
     }
 
     public void gotFragment(byte[] data, int off, int len, long messageId, int frag, boolean isLast) {
         if (_log.shouldDebug())
-            _log.debug("Received FRAGMENT block on " + this);
+            _log.debug("Received FRAGMENT block from " + this);
         messagePartiallyReceived();
     }
 
@@ -315,7 +315,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
 
     public void gotTermination(int reason, long count) {
         if (_log.shouldInfo())
-            _log.info("Received TERMINATION block -> Reason: " + reason + " (Our reason: " + _destroyReason + ") on " + this);
+            _log.info("Received TERMINATION block -> Reason: " + reason + " (Our reason: " + _destroyReason + ") from " + this);
         if (reason == SSU2Util.REASON_TERMINATION) {
             // prevent any additional tranmissions if other packets come in
             // i2pd has a bug and may send I2NP after termination ack
@@ -408,6 +408,6 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
 
     @Override
     public String toString() {
-        return "peer destroyed " + DataHelper.formatDuration(_context.clock().now() - _destroyedOn) + " ago: " + _remoteHostId;
+        return "[" + _remoteHostId + "] destroyed " + DataHelper.formatDuration(_context.clock().now() - _destroyedOn) + " ago";
     }
 }
