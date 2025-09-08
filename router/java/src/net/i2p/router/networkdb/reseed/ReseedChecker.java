@@ -53,54 +53,60 @@ public class ReseedChecker {
     }
 
     /**
-     * Checks if a reseed is needed based on the current number of known routers, uptime,
-     * downtime, and system flags, and starts it if needed.
+     * Checks if a reseed is needed based on peers, uptime, downtime, and system flags.
+     * Starts reseed if conditions are met.
      *
      * @param known current number of known routers (includes this router)
-     * @return true if a reseed was started; false otherwise
+     * @return true if reseed started; false otherwise
      */
     public boolean checkReseed(int known) {
-        int peers = known - 1;
+        int currentCount = Math.max(_context.netDb().getKnownRouters() - 1, 0);
+        int peers = Math.max(known - 1, currentCount);
         boolean isHidden = _context.router().isHidden();
         long uptime = _context.router().getUptime();
         long downtime = _context.getEstimatedDowntime();
+        boolean disabled = _context.getBooleanProperty(Reseeder.PROP_DISABLE);
+        boolean vmCommSystem = _context.getBooleanProperty("i2p.vmCommSystem");
+        boolean shuttingDown = _context.router().gracefulShutdownInProgress();
+        boolean networkConnected = _hasNetworkConnection();
 
-        // Early conditions preventing reseed
-        if (_context.getBooleanProperty(Reseeder.PROP_DISABLE) || _context.getBooleanProperty("i2p.vmCommSystem")) {
-            logOnceWarning(peers, "disabled by configuration");
-            return false;
-        }
-        if (_context.router().gracefulShutdownInProgress()) {
-            logOnceWarning(peers, "prevented by router shutdown");
-            return false;
-        }
-        if (!_hasNetworkConnection()) {
-            if (!_networkLogged) {
-                _log.logAlways(Log.WARN, "Cannot reseed - no network connection");
-                _networkLogged = true;
+        // Determine if reseed is allowed
+        boolean shouldReseed = (peers < MINIMUM && networkConnected && !shuttingDown && !disabled) || !vmCommSystem;
+
+        if (!shouldReseed) {
+            if (disabled || vmCommSystem) {
+                logOnceWarning(peers, "disabled by configuration");
+            } else if (shuttingDown) {
+                logOnceWarning(peers, "prevented by router shutdown");
+            } else if (!networkConnected) {
+                if (!_networkLogged) {
+                    _log.logAlways(Log.WARN, "Cannot reseed - no network connection");
+                    _networkLogged = true;
+               }
+            } else {
+                _networkLogged = false;
             }
             return false;
         }
-        _networkLogged = false;
 
-        // Prevent reseed too early or under hidden mode except when no/minimal peers
-        if (uptime < 10*60*1000 && known > 1 && !isHidden)
-            return false;
+        // Prevent reseed if uptime less than 10 minutes (except hidden routers or minimal peers)
+        if (uptime < 10 * 60_000 && known > 1 && !isHidden) {return false;}
 
-        // Logic to decide whether to reseed
-        if (_alreadyRun) {
-            if (known >= MINIMUM)
+        // Control reseed frequency when enough peers are known
+        if (known >= MINIMUM) {
+            if (_alreadyRun || downtime < RESEED_MIN_DOWNTIME) {
+                if (!_alreadyRun) {
+                    _alreadyRun = true;
+                }
                 return false;
-        } else {
+            }
             _alreadyRun = true;
-            if (known >= MINIMUM && downtime < RESEED_MIN_DOWNTIME)
-                return false;
         }
 
         // Logging reseed reason
         if (known <= 1) {
             _log.logAlways(Log.INFO, "Downloading peer router information for a new I2P installation...");
-        } else if (uptime > 10*60*1000) {
+        } else if (uptime > 10 * 60_000) {
             if (downtime > RESEED_MIN_DOWNTIME) {
                 _log.logAlways(Log.WARN, "Router has been offline for a while - refreshing NetDb...");
             } else if (known < MINIMUM) {
