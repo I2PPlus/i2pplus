@@ -26,7 +26,7 @@ function start() {
 
   if ("SharedWorker" in window) {
     worker.port.onmessage = (event) => {
-    const { responseText, isDown, noResponse } = event.data;
+      const { responseText, isDown, noResponse } = event.data;
       if (isDown) {return;}
 
       const parser = new DOMParser();
@@ -35,10 +35,10 @@ function start() {
       const criticallogsResponse = criticallogs ? doc.getElementById("criticallogs") : null;
 
       if (!criticallogs && criticallogsResponse) {
-        mainLogs.innerHTML = mainLogsResponse.innerHTML;
-      } else if (criticallogs && criticallogsResponse) {
+        mainLogs.innerHTML = mainLogsResponse?.innerHTML;
+      } else if (criticallogs && criticallogsResponse && !criticallogs.querySelector(".nologs")) {
         if (criticallogsResponse.innerHTML !== criticallogs.innerHTML) {
-          updates.push(() => { criticallogs.innerHTML = criticallogsResponse.innerHTML; });
+          updates.push(() => {criticallogs.innerHTML = criticallogsResponse.innerHTML;});
         }
       } else {
         critLogsHead?.remove();
