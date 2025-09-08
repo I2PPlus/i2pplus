@@ -342,6 +342,7 @@ public class LogsHelper extends HelperBase {
             msg = msg.replace("[IRC Client] Inbound message", "[IRC Client] &#11167;");
             msg = msg.replace("[IRC Client] Outbound message", "[IRC Client] &#11165;");
             msg = msg.replace("not publishing old one: RouterInfo:", "not publishing old one:");
+            msg = msg.replace("Publishing our RouterInfo after delay: RouterInfo:", "Publishing our RouterInfo after delay:");
             msg = msg.replace(":  ", ": ");
             msg = msg.replace("\n* ", "\n&bullet; ");
             msg = msg.replace("\n\t* ", "\n\t&bullet; ");
