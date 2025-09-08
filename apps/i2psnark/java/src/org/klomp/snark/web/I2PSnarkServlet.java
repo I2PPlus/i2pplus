@@ -2474,11 +2474,7 @@ public class I2PSnarkServlet extends BasicServlet {
             // we may only be uploading to peers, so hide when downrate <= 0
             if (isRunning && needed > 0 && downBps > 0 && curPeers > 0) {
                 buf.append("<span class=right>")
-                   .append(formatSize(downBps).replaceAll("iB", "")
-                   .replace("B", "</span><span class=left>B")
-                   .replace("K", "</span><span class=left>K")
-                   .replace("M", "</span><span class=left>M")
-                   .replace("G", "</span><span class=left>G"))
+                   .append(formatSizeSpans(formatSize(downBps), false))
                    .append("/s</span>");
             }
             buf.append("</td>").append("<td class=txd>");
@@ -2505,13 +2501,9 @@ public class I2PSnarkServlet extends BasicServlet {
                     String date = fmt.format(new Date(lastActive));
                     if (storage != null) {buf.append(" &bullet; ").append(_t("Last activity")).append(": ").append(date);}
                     buf.append("\"><span class=txBarText><span class=right>")
-                       .append(formatSize(uploaded).replaceAll("iB","")
-                       .replace("B", "</span><span class=left>B</span>")
-                       .replace("K", "</span><span class=left>K</span>")
-                       .replace("M", "</span><span class=left>M</span>")
-                       .replace("G", "</span><span class=left>G</span>")
-                       .replace("T", "</span><span class=left>T</span>"))
-                       .append("</span> <span class=txBarInner style=\"width:calc(").append(txPercentBar)
+                       .append(formatSizeSpans(formatSize(uploaded), true))
+                       .append("</span> <span class=txBarInner style=\"width:calc(")
+                       .append(txPercentBar)
                        .append(" - 2px)\"></span></span>");
                 }
             }
@@ -2521,11 +2513,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("\">");
             if (isRunning && isValid && upBps > 0 && curPeers > 0) {
                 buf.append("<span class=right>")
-                   .append(formatSize(upBps).replaceAll("iB","")
-                   .replace("B", "</span><span class=left>B")
-                   .replace("K", "</span><span class=left>K")
-                   .replace("M", "</span><span class=left>M")
-                   .replace("G", "</span><span class=left>G"))
+                   .append(formatSizeSpans(formatSize(upBps), false))
                    .append("/s</span>");
             }
             buf.append("</td>").append("<td class=tAction>");
@@ -2635,8 +2623,8 @@ public class I2PSnarkServlet extends BasicServlet {
                         buf.append(client).append("</span></span>");
                     }
                     if (t >= 5000) {
-                        buf.append("<span class=inactivity style=\"width:").append(t / 2000)
-                           .append("px\" title=\"").append(_t("Inactive")).append(": ")
+                        buf.append("<span class=inactivity style=width:").append(t / 2000)
+                           .append("px title=\"").append(_t("Inactive")).append(": ")
                            .append(t / 1000).append(' ').append(_t("seconds")).append("\"></span>");
                     }
                     buf.append("</td>").append("<td class=ETA></td>").append("<td class=rxd>");
@@ -2644,12 +2632,13 @@ public class I2PSnarkServlet extends BasicServlet {
                     if (isValid) {
                         pct = (float) (100.0 * peer.completed() / meta.getPieces());
                         if (pct >= 100.0) {
-                            buf.append("<span class=\"peerSeed\" title=\"").append(_t("Seed")).append("\">")
+                            buf.append("<span class=peerSeed title=\"").append(_t("Seed")).append("\">")
                                .append(toSVG("peerseed", _t("Seed"), "")).append("</span>");
                         } else {
                             String ps = String.valueOf(pct);
                             if (ps.length() > 5) {ps = ps.substring(0, 5);}
-                            buf.append("<div class=barOuter title=\"").append(ps).append("%\"><div class=barInner style=\"width:")
+                            buf.append("<div class=barOuter title=\"").append(ps)
+                               .append("%\"><div class=barInner style=\"width:")
                                .append(ps).append("%;\"></div></div>");
                         }
                     } else {pct = (float) 101.0;} // until we get the metainfo we don't know how many pieces there are
@@ -2661,12 +2650,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     if (needed > 0) {
                         if (peer.isInteresting() && !peer.isChoked() && peer.getDownloadRate() > 0) {
                             buf.append("<span class=unchoked><span class=right>")
-                               .append(formatSize(peer.getDownloadRate())
-                               .replace("iB","")
-                               .replace("B", "</span><span class=left>B")
-                               .replace("K", "</span><span class=left>K")
-                               .replace("M", "</span><span class=left>M")
-                               .replace("G", "</span><span class=left>G"))
+                               .append(formatSizeSpans(formatSize(peer.getDownloadRate()), false))
                                .append("/s</span></span>");
                         } else if (peer.isInteresting() && !peer.isChoked()) {buf.append("<span class=\"unchoked idle\"></span>");}
                         else {
@@ -2674,22 +2658,12 @@ public class I2PSnarkServlet extends BasicServlet {
                             if (!peer.isInteresting()) {buf.append(_t("Uninteresting (The peer has no pieces we need)"));}
                             else {buf.append(_t("Choked (The peer is not allowing us to request pieces)"));}
                             buf.append("\"><span class=right>")
-                               .append(formatSize(peer.getDownloadRate())
-                               .replace("iB","")
-                               .replace("B", "</span><span class=left>B")
-                               .replace("K", "</span><span class=left>K")
-                               .replace("M", "</span><span class=left>M")
-                               .replace("G", "</span><span class=left>G"))
+                               .append(formatSizeSpans(formatSize(peer.getDownloadRate()), false))
                                .append("/s</span></span>");
                         }
                     } else if (!isValid) {
                             buf.append("<span class=unchoked><span class=right>")
-                               .append(formatSize(peer.getDownloadRate())
-                               .replace("iB","")
-                               .replace("B", "</span><span class=left>B")
-                               .replace("K", "</span><span class=left>K")
-                               .replace("M", "</span><span class=left>M")
-                               .replace("G", "</span><span class=left>G"))
+                               .append(formatSizeSpans(formatSize(peer.getDownloadRate()), false))
                                .append("/s</span></span>");
                     }
                     buf.append("</td>").append("<td class=txd>").append("</td>").append("<td class=\"rateUp");
@@ -2699,12 +2673,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     if (isValid && pct < 100.0) {
                         if (peer.isInterested() && !peer.isChoking() && peer.getUploadRate() > 0) {
                             buf.append("<span class=unchoked><span class=right>")
-                               .append(formatSize(peer.getUploadRate())
-                               .replace("iB","")
-                               .replace("B", "</span><span class=left>B")
-                               .replace("K", "</span><span class=left>K")
-                               .replace("M", "</span><span class=left>M")
-                               .replace("G", "</span><span class=left>G"))
+                               .append(formatSizeSpans(formatSize(peer.getUploadRate()), false))
                                .append("/s</span></span>");
                         } else if (peer.isInterested() && !peer.isChoking()) {
                             buf.append("<span class=\"unchoked idle\" title=\"")
@@ -2717,14 +2686,8 @@ public class I2PSnarkServlet extends BasicServlet {
                             } else {
                                 buf.append(_t("Choking (We are not allowing the peer to request pieces)"));
                             }
-                            buf.append("\">")
-                               .append("<span class=unchoked><span class=right>")
-                               .append(formatSize(peer.getUploadRate())
-                               .replace("iB","")
-                               .replace("B", "</span><span class=left>B")
-                               .replace("K", "</span><span class=left>K")
-                               .replace("M", "</span><span class=left>M")
-                               .replace("G", "</span><span class=left>G"))
+                            buf.append("\"><span class=unchoked><span class=right>")
+                               .append(formatSizeSpans(formatSize(peer.getUploadRate()), false))
                                .append("/s</span></span>");
                         }
                     }
@@ -2735,6 +2698,30 @@ public class I2PSnarkServlet extends BasicServlet {
             out.flush();
             buf.setLength(0);
         }
+    }
+
+    /**
+     * Formats a human-readable size string by wrapping unit characters (B, K, M, G, T)
+     * in HTML span tags with CSS classes for styling.
+     * &lt;p&gt;
+     * This method removes any "iB" substring and replaces each unit character with a
+     * corresponding closing and opening span tag sequence. The caller controls whether
+     * the left span is closed immediately by the {@code closeLeftSpan} flag.
+     *
+     * @param formattedSize the size string already formatted (e.g. "123.4 MiB")
+     * @param closeLeftSpan whether to append a closing </span> tag after each unit
+     * @return the formatted string with added HTML span tags for styling unit characters
+     *
+     * @since 0.9.67+
+     */
+    private String formatSizeSpans(String formattedSize, boolean closeLeftSpan) {
+        String closingTag = closeLeftSpan ? "</span>" : "";
+        return formattedSize.replaceAll("iB", "")
+                            .replace("B", "</span><span class=left>B" + closingTag)
+                            .replace("K", "</span><span class=left>K" + closingTag)
+                            .replace("M", "</span><span class=left>M" + closingTag)
+                            .replace("G", "</span><span class=left>G" + closingTag)
+                            .replace("T", "</span><span class=left>T" + closingTag);
     }
 
     /**
@@ -4472,13 +4459,13 @@ public class I2PSnarkServlet extends BasicServlet {
                     // thumbnail
                     buf.append("<img alt=\"\" border=0 class=thumb src=\"")
                        .append(ppath).append("\" data-lb data-lb-caption=\"")
-                       .append(item.getName()).append("\" data-lb-group=\"allInDir\"></a>");
+                       .append(item.getName()).append("\" data-lb-group=allInDir></a>");
                    imgCount++;
                 } else if (mime.startsWith("image/") && ppath.endsWith(".ico")) {
                     // favicon without scaling
                     buf.append("<img alt=\"\" width=16 height=16 class=favicon border=0 src=\"")
                        .append(ppath).append("\" data-lb data-lb-caption=\"")
-                       .append(item.getName()).append("\" data-lb-group=\"allInDir\"></a>");
+                       .append(item.getName()).append("\" data-lb-group=allInDir></a>");
                 } else {buf.append(toSVG(icon, _t("Open"))).append("</a>");}
                 if (isAudio) {buf.append("</audio>");}
                 else if (isVideo) {buf.append("</video>");}
