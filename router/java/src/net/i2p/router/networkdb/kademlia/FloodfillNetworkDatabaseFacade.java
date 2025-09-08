@@ -235,16 +235,17 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
         public void timeReached() {
             RouterInfo latest = _context.router().getRouterInfo();
+            boolean shouldLog = _log.shouldWarn() || _log.shouldInfo();
             // Clock may skew during startup so we do an exact == check, not <=
             if (latest.getDate() == localRouterInfo.getDate()) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Publishing our RouterInfo after delay: " + localRouterInfo);
+                if (shouldLog) {
+                    _log.warn("Publishing our RouterInfo after delay" + (_log.shouldInfo() ? ": " + localRouterInfo : "..."));
                 }
                 sendStore(localRouterInfo.getIdentity().calculateHash(), localRouterInfo, null, null, PUBLISH_TIMEOUT, null);
             } else {
                 // Do nothing, there's another one of these right behind us
-                if (_log.shouldWarn()) {
-                    _log.warn("RouterInfo changed, not publishing old one: " + localRouterInfo);
+                if (shouldLog) {
+                    _log.warn("RouterInfo changed, not publishing old one" + (_log.shouldInfo() ? ": " + localRouterInfo : "..."));
                 }
             }
         }
