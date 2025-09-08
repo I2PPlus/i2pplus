@@ -1,5 +1,4 @@
 package net.i2p.router.transport.udp;
-
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Hash;
@@ -8,45 +7,27 @@ import net.i2p.router.util.CDQEntry;
 import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
 
-/**
- * Hold the raw data fragments of an inbound message.
- *
- * Warning - there is no synchronization in this class, take care in
- * InboundMessageFragments to avoid use-after-release, etc.
- */
 class InboundMessageState implements CDQEntry {
     private final RouterContext _context;
     private final Log _log;
     private final long _messageId;
     private final Hash _from;
-    /**
-     * indexed array of fragments for the message, where not yet
-     * received fragments are null.
-     */
     private final ByteArray _fragments[];
-
-    /**
-     * what is the last fragment in the message (or -1 if not yet known)
-     * Fragment count is _lastFragment + 1
-     */
     private int _lastFragment;
     private final long _receiveBegin;
     private long _enqueueTime;
     private int _completeSize;
-    private boolean _released;
+    private volatile boolean _released;
+    private int _receivedCount;
+    private final Object lock = new Object();
 
-    /** expire after 10s */
     private static final long MAX_RECEIVE_TIME = 10*1000;
     public static final int MAX_FRAGMENTS = 64;
-
-    /** 10 */
-    public static final int MAX_PARTIAL_BITFIELD_BYTES = (MAX_FRAGMENTS / 7) + 1;
-
     private static final int MAX_FRAGMENT_SIZE = UDPPacket.MAX_PACKET_SIZE;
     private static final ByteCache _fragmentCache = ByteCache.getInstance(64, MAX_FRAGMENT_SIZE);
 
     /**
-     * Only for Poison right now.
+     * Constructs a new InboundMessageState with no fragments.
      */
     public InboundMessageState(RouterContext ctx, long messageId, Hash from) {
         _context = ctx;
@@ -56,20 +37,13 @@ class InboundMessageState implements CDQEntry {
         _fragments = new ByteArray[MAX_FRAGMENTS];
         _lastFragment = -1;
         _completeSize = -1;
+        _receivedCount = 0;
         _receiveBegin = ctx.clock().now();
     }
 
     /**
-     * Create a new IMS and read in the data from the fragment.
-     * Do NOT call receiveFragment for the same fragment afterwards.
-     * This is more efficient if the fragment is the last (and probably only) fragment.
-     * The main savings is not allocating ByteArray[64].
-     *
-     * SSU 2 only.
-     *
-     * @param fragmentNum the fragment number
-     * @throws DataFormatException if the fragment was corrupt
-     * @since 0.9.54
+     * Constructs and initializes by receiving one fragment.
+     * @throws DataFormatException if fragment is invalid
      */
     public InboundMessageState(RouterContext ctx, long messageId, Hash from,
                                byte[] data, int off, int len, int fragmentNum, boolean isLast)
@@ -87,178 +61,168 @@ class InboundMessageState implements CDQEntry {
         }
         _lastFragment = -1;
         _completeSize = -1;
+        _receivedCount = 0;
         _receiveBegin = ctx.clock().now();
         if (!receiveFragment(data, off, len, fragmentNum, isLast))
             throw new DataFormatException("corrupt");
     }
 
     /**
-     * Read in the data from the fragment.
-     * Caller should synchronize.
-     *
-     * SSU 2 only.
-     *
-     * @param fragmentNum the fragment number
-     * @return true if the data was ok, false if it was corrupt
-     * @since 0.9.54
+     * Receives and stores a fragment.
+     * @return true if successful, false if corrupt or invalid
      */
     public boolean receiveFragment(byte[] data, int off, int len, int fragmentNum, boolean isLast) throws DataFormatException {
-        if (fragmentNum >= _fragments.length) {
-            if (_log.shouldWarn())
-                _log.warn("Invalid fragment " + fragmentNum + '/' + _fragments.length);
-            return false;
-        }
-        if (_fragments[fragmentNum] == null) {
-            // new fragment, read it
-            ByteArray message = _fragmentCache.acquire();
-            System.arraycopy(data, off, message.getData(), 0, len);
-            message.setValid(len);
-            _fragments[fragmentNum] = message;
-            if (isLast) {
-                // don't allow _lastFragment to be set twice
-                if (_lastFragment >= 0) {
-                    if (_log.shouldWarn())
-                        _log.warn("Multiple last fragments for message " + _messageId + " from " + _from);
-                    return false;
-                }
-                // TODO - check for non-last fragments after this one?
-                _lastFragment = fragmentNum;
-            } else if (_lastFragment >= 0 && fragmentNum >= _lastFragment) {
-                // don't allow non-last after last
+        synchronized(lock) {
+            if (fragmentNum >= _fragments.length) {
                 if (_log.shouldWarn())
-                    _log.warn("Non-last fragment " + fragmentNum + " when last is " + _lastFragment + " for message " + _messageId + " from " + _from);
+                    _log.warn("Invalid fragment " + fragmentNum + '/' + _fragments.length);
                 return false;
             }
-            if (_log.shouldDebug())
-                _log.debug("New fragment " + fragmentNum + " for message " + _messageId
-                           + ", size=" + len
-                           + ", isLast=" + isLast
-                      /*   + ", data=" + Base64.encode(message.getData(), 0, size)   */  );
-        } else {
-            if (_log.shouldDebug())
-                _log.debug("Received fragment " + fragmentNum + " for message " + _messageId
-                           + " again, old size=" + _fragments[fragmentNum].getValid()
-                           + " and new size=" + len);
+            if (_fragments[fragmentNum] == null) {
+                ByteArray message = _fragmentCache.acquire();
+                System.arraycopy(data, off, message.getData(), 0, len);
+                message.setValid(len);
+                _fragments[fragmentNum] = message;
+                _receivedCount++;
+                if (isLast) {
+                    if (_lastFragment >= 0) {
+                        if (_log.shouldWarn())
+                            _log.warn("Multiple last fragments for message " + _messageId + " from " + _from);
+                        return false;
+                    }
+                    _lastFragment = fragmentNum;
+                } else if (_lastFragment >= 0 && fragmentNum >= _lastFragment) {
+                    if (_log.shouldWarn())
+                        _log.warn("Non-last fragment " + fragmentNum + " when last is " + _lastFragment + " for message " + _messageId + " from " + _from);
+                    return false;
+                }
+                if (_log.shouldDebug())
+                    _log.debug("New fragment " + fragmentNum + " for message " + _messageId
+                               + ", size=" + len
+                               + ", isLast=" + isLast);
+            } else {
+                if (_log.shouldDebug())
+                    _log.debug("Received fragment " + fragmentNum + " for message " + _messageId
+                               + " again, old size=" + _fragments[fragmentNum].getValid()
+                               + " and new size=" + len);
+            }
+            return true;
         }
-        return true;
     }
 
     /**
-     * Do we have this fragment?
-     *
-     * SSU 2 only.
-     *
-     * @param fragmentNum the fragment number
-     * @return true if we have the fragment
-     * @since 0.9.54
+     * Returns whether the specified fragment has been received.
      */
     public boolean hasFragment(int fragmentNum) {
-        if (fragmentNum >= _fragments.length)
-            return false;
-        return _fragments[fragmentNum] != null;
+        synchronized(lock) {
+            if (fragmentNum >= _fragments.length)
+                return false;
+            return _fragments[fragmentNum] != null;
+        }
     }
 
     /**
-     *  May not be valid after released.
-     *  Probably doesn't need to be synced by caller, given the order of
-     *  events in receiveFragment() above, but you might want to anyway
-     *  to be safe.
+     * Returns true if all fragments up to last have been received.
      */
     public boolean isComplete() {
-        int last = _lastFragment;
-        if (last < 0) return false;
-        for (int i = 0; i <= last; i++)
-            if (_fragments[i] == null)
-                return false;
-        return true;
+        synchronized(lock) {
+            int last = _lastFragment;
+            if (last < 0) return false;
+            return _receivedCount == (last + 1);
+        }
     }
 
+    /**
+     * Returns true if message has expired (received more than 10s ago).
+     */
     public boolean isExpired() {
         return _context.clock().now() > _receiveBegin + MAX_RECEIVE_TIME;
     }
 
+    /**
+     * Returns the message lifetime in milliseconds.
+     */
     public long getLifetime() {
         return _context.clock().now() - _receiveBegin;
     }
 
     /**
-     *  For CDQ
-     *  @since 0.9.3
+     * Sets enqueue time for queueing.
      */
     public void setEnqueueTime(long now) {
-        _enqueueTime = now;
+        synchronized(lock) {
+            _enqueueTime = now;
+        }
     }
 
     /**
-     *  For CDQ
-     *  @since 0.9.3
+     * Gets the enqueue time.
      */
     public long getEnqueueTime() {
-        return _enqueueTime;
+        synchronized(lock) {
+            return _enqueueTime;
+        }
     }
 
     /**
-     *  For CDQ
-     *  @since 0.9.3
+     * Drops and releases resources.
      */
     public void drop() {
         releaseResources();
     }
 
+    /**
+     * Returns the Hash of the sender.
+     */
     public Hash getFrom() { return _from; }
 
+    /**
+     * Returns the message ID.
+     */
     public long getMessageId() { return _messageId; }
 
     /**
-     *  @throws IllegalStateException if released or not isComplete()
+     * Returns the total size of the complete message in bytes.
+     * @throws IllegalStateException if message incomplete or released
      */
     public int getCompleteSize() {
-        if (_completeSize < 0) {
-            if (_lastFragment < 0)
-                throw new IllegalStateException("Last fragment not set");
-            if (_released)
-                throw new IllegalStateException("SSU IMS 2 Use after free");
-            int size = 0;
-            for (int i = 0; i <= _lastFragment; i++) {
-                ByteArray frag = _fragments[i];
-                if (frag == null)
-                    throw new IllegalStateException("null fragment " + i + '/' + _lastFragment);
-                size += frag.getValid();
+        synchronized(lock) {
+            if (_completeSize < 0) {
+                if (_lastFragment < 0)
+                    throw new IllegalStateException("Last fragment not set");
+                if (_released)
+                    throw new IllegalStateException("SSU IMS 2 Use after free");
+                int size = 0;
+                for (int i = 0; i <= _lastFragment; i++) {
+                    ByteArray frag = _fragments[i];
+                    if (frag == null)
+                        throw new IllegalStateException("null fragment " + i + '/' + _lastFragment);
+                    size += frag.getValid();
+                }
+                _completeSize = size;
             }
-            _completeSize = size;
+            return _completeSize;
         }
-        return _completeSize;
     }
 
     /**
-     *  Only call this if not complete.
-     *  TODO remove this, have InboundMessageState implement ACKBitfield.
-     *  FIXME synch here or PeerState.fetchPartialACKs()
+     * Creates a bitfield representing received fragments.
      */
     public ACKBitfield createACKBitfield() {
-        int last = _lastFragment;
-        int sz = (last >= 0) ? last + 1 : _fragments.length;
-        return new PartialBitfield(_messageId, _fragments, sz);
+        synchronized(lock) {
+            int last = _lastFragment;
+            int sz = (last >= 0) ? last + 1 : _fragments.length;
+            return new PartialBitfield(_messageId, _fragments, sz);
+        }
     }
 
-    /**
-     *  A true partial bitfield that is probably not complete.
-     *  fragmentCount() will return 64 if unknown.
-     *
-     *  TODO remove this, have InboundMessageState implement ACKBitfield.
-     */
     private static final class PartialBitfield implements ACKBitfield {
         private final long _bitfieldMessageId;
         private final int _fragmentCount;
         private final int _ackCount;
         private final int _highestReceived;
-        // bitfield, 1 for acked
         private final long _fragmentAcks;
 
-        /**
-         *  @param data each element is non-null or null for received or not
-         *  @param size size of data to use
-         */
         public PartialBitfield(long messageId, Object data[], int size) {
             if (size > MAX_FRAGMENTS)
                 throw new IllegalArgumentException();
@@ -279,24 +243,13 @@ class InboundMessageState implements CDQEntry {
             _highestReceived = highestReceived;
         }
 
-        /**
-         *  @param fragment 0-63
-         */
         private static long mask(int fragment) {
             return 1L << fragment;
         }
 
-        /**
-         *  Don't use for serialization since it may be unknown;
-         *  use highestReceived() instead.
-         *  @return 64 if unknown
-         */
         public int fragmentCount() { return _fragmentCount; }
-
         public int ackCount() { return _ackCount; }
-
         public int highestReceived() { return _highestReceived; }
-
         public long getMessageId() { return _bitfieldMessageId; }
 
         public boolean received(int fragmentNum) {
@@ -305,9 +258,6 @@ class InboundMessageState implements CDQEntry {
             return (_fragmentAcks & mask(fragmentNum)) != 0;
         }
 
-        /**
-         *  @return should always be false
-         */
         public boolean receivedComplete() { return _ackCount == _fragmentCount; }
 
         @Override
@@ -326,55 +276,69 @@ class InboundMessageState implements CDQEntry {
         }
     }
 
+    /**
+     * Releases all cached fragments and marks this state as released.
+     */
     public void releaseResources() {
-        _released = true;
-        for (int i = 0; i < _fragments.length; i++) {
-            if (_fragments[i] != null) {
-                _fragmentCache.release(_fragments[i]);
-                _fragments[i] = null;
+        synchronized(lock) {
+            _released = true;
+            for (int i = 0; i < _fragments.length; i++) {
+                if (_fragments[i] != null) {
+                    _fragmentCache.release(_fragments[i]);
+                    _fragments[i] = null;
+                }
             }
         }
     }
 
     /**
-     *  @throws IllegalStateException if released
+     * Returns the array of fragments, throws if already released.
      */
     public ByteArray[] getFragments() {
-        if (_released) {
-            RuntimeException e = new IllegalStateException("Use after free: " + _messageId);
-            _log.error("SSU IMS", e);
-            throw e;
+        synchronized(lock) {
+            if (_released) {
+                RuntimeException e = new IllegalStateException("Use after free: " + _messageId);
+                _log.error("SSU IMS", e);
+                throw e;
+            }
+            return _fragments;
         }
-        return _fragments;
     }
 
-    public int getFragmentCount() { return _lastFragment+1; }
+    /**
+     * Returns number of fragments received or expected.
+     */
+    public int getFragmentCount() {
+        synchronized(lock) {
+            return _lastFragment + 1;
+        }
+    }
 
     /**
-     *  May not be valid if released, or may NPE on race with release, use with care in exception text
+     * Returns a string summary of this message state.
      */
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder(256);
-        buf.append("\n* Inbound Message: ").append(_messageId);
-        buf.append(" from [").append(_from.toString().substring(0,6)).append("]");
-        if (isComplete()) {
-            buf.append(" completely received with ");
-            //buf.append(getCompleteSize()).append(" bytes");
-            // may display -1 but avoid cascaded exceptions after release
-            buf.append(_completeSize).append(" bytes in ");
-            buf.append(_lastFragment + 1).append(" fragments");
-        } else {
-            for (int i = 0; i <= _lastFragment; i++) {
-                buf.append(" fragment ").append(i);
-                ByteArray ba = _fragments[i];
-                if (ba != null)
-                    buf.append(": known at size ").append(ba.getValid());
-                else
-                    buf.append(": unknown");
+        synchronized(lock) {
+            StringBuilder buf = new StringBuilder(256);
+            buf.append("\n* Inbound Message: ").append(_messageId);
+            buf.append(" from [").append(_from.toString().substring(0,6)).append("]");
+            if (isComplete()) {
+                buf.append(" completely received with ");
+                buf.append(_completeSize).append(" bytes in ");
+                buf.append(_lastFragment + 1).append(" fragments");
+            } else {
+                for (int i = 0; i <= _lastFragment; i++) {
+                    buf.append(" fragment ").append(i);
+                    ByteArray ba = _fragments[i];
+                    if (ba != null)
+                        buf.append(": known at size ").append(ba.getValid());
+                    else
+                        buf.append(": unknown");
+                }
             }
+            buf.append(" (Lifetime: ").append(getLifetime()).append("ms)");
+            return buf.toString();
         }
-        buf.append(" (Lifetime: ").append(getLifetime()).append("ms)");
-        return buf.toString();
     }
 }
