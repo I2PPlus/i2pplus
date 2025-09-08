@@ -512,7 +512,7 @@ public class PersistentDataStore extends TransientDataStore {
                             (new ReadRouterJob(routerInfoFiles[i], key)).runJob();
                             //_context.statManager().addRateData("netDb.readTime", System.currentTimeMillis() - start);
                         }
-                        routerCount = i;
+                        routerCount = Math.max(_context.netDb().getKnownRouters() - 1, i);
                     }
                 }
             } else {
@@ -532,13 +532,13 @@ public class PersistentDataStore extends TransientDataStore {
                     if (lastMod <= _lastModified) {continue;}
                     for (int i = 0; i < files.length; i++) {
                         toRead.add(files[i]);
-                        routerCount = i;
+                        routerCount = Math.max(_context.netDb().getKnownRouters() - 1, i);
                     }
                 }
                 Collections.shuffle(toRead, _context.random());
                 int i = 0;
                 for (File file : toRead) {
-                    // Take the first 4000 good ones, delete the rest
+                    // Take the first 6000 good ones, delete the rest
                     if (i >= MAX_ROUTERS_INIT && !_initialized) {
                         file.delete();
                         continue;
@@ -574,7 +574,7 @@ public class PersistentDataStore extends TransientDataStore {
                     _context.router().setNetDbReady();
                 }
             } else if (_lastReseed < _context.clock().now() - MIN_RESEED_INTERVAL) {
-                int count = Math.min(routerCount, size());
+                int count = Math.max(routerCount, size());
                 if (count < MIN_ROUTERS) {
                     if (_facade.reseedChecker().checkReseed(count))
                         _lastReseed = _context.clock().now();
@@ -588,7 +588,7 @@ public class PersistentDataStore extends TransientDataStore {
             } else {
                 // second time through, reseed called wakeup()
                 if (!_setNetDbReady) {
-                    int count = Math.min(routerCount, size());
+                    int count = Math.max(routerCount, size());
                     if (count >= MIN_ROUTERS) {
                         _setNetDbReady = true;
                         _context.router().setNetDbReady();

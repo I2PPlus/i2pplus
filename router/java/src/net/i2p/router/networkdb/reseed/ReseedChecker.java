@@ -34,7 +34,7 @@ public class ReseedChecker {
     private volatile boolean _alreadyRun;
 
     /** Minimum number of router infos before automatic reseed attempted */
-    public static final int MINIMUM = 100;
+    public static final int MINIMUM = 50;
 
     /** Sidebar notification persistence (3 minutes) */
     private static final long STATUS_CLEAN_TIME = 3*60*1000;
@@ -69,35 +69,30 @@ public class ReseedChecker {
         boolean vmCommSystem = _context.getBooleanProperty("i2p.vmCommSystem");
         boolean shuttingDown = _context.router().gracefulShutdownInProgress();
         boolean networkConnected = _hasNetworkConnection();
+        long tenMinutes = 10*60*1000L;
 
         // Determine if reseed is allowed
         boolean shouldReseed = (peers < MINIMUM && networkConnected && !shuttingDown && !disabled) || !vmCommSystem;
 
         if (!shouldReseed) {
-            if (disabled || vmCommSystem) {
-                logOnceWarning(peers, "disabled by configuration");
-            } else if (shuttingDown) {
-                logOnceWarning(peers, "prevented by router shutdown");
-            } else if (!networkConnected) {
+            if (disabled || vmCommSystem) {logOnceWarning(peers, "disabled by configuration");}
+            else if (shuttingDown) {logOnceWarning(peers, "prevented by router shutdown");}
+            else if (!networkConnected) {
                 if (!_networkLogged) {
                     _log.logAlways(Log.WARN, "Cannot reseed - no network connection");
                     _networkLogged = true;
                }
-            } else {
-                _networkLogged = false;
-            }
+            } else {_networkLogged = false;}
             return false;
         }
 
         // Prevent reseed if uptime less than 10 minutes (except hidden routers or minimal peers)
-        if (uptime < 10 * 60_000 && known > 1 && !isHidden) {return false;}
+        if (uptime < tenMinutes && known > 1 && !isHidden) {return false;}
 
         // Control reseed frequency when enough peers are known
         if (known >= MINIMUM) {
             if (_alreadyRun || downtime < RESEED_MIN_DOWNTIME) {
-                if (!_alreadyRun) {
-                    _alreadyRun = true;
-                }
+                if (!_alreadyRun) {_alreadyRun = true;}
                 return false;
             }
             _alreadyRun = true;
@@ -106,7 +101,7 @@ public class ReseedChecker {
         // Logging reseed reason
         if (known <= 1) {
             _log.logAlways(Log.INFO, "Downloading peer router information for a new I2P installation...");
-        } else if (uptime > 10 * 60_000) {
+        } else if (uptime > tenMinutes) {
             if (downtime > RESEED_MIN_DOWNTIME) {
                 _log.logAlways(Log.WARN, "Router has been offline for a while - refreshing NetDb...");
             } else if (known < MINIMUM) {
