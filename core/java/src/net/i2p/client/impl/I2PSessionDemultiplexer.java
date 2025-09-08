@@ -58,14 +58,20 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
         }
     }
 
-    public String protocolNumberToString(int proto) {
+    public static String protocolNumberToString(int proto) {
         switch (proto) {
+            case 0:
+                return "ANY (0)";
             case 6:
-                return "TCP (6)";
+                return "STREAMING (6)";
             case 17:
-                return "UDP (17)";
+                return "DATAGRAM1 (17)";
             case 18:
-                return "MUX (18)";
+                return "DATAGRAM_RAW (18)";
+            case 19:
+                return "DATAGRAM2 (19)";
+            case 20:
+                return "DATAGRAM3 (20)";
             default:
                 return "Unknown (" + proto + ")";
         }
