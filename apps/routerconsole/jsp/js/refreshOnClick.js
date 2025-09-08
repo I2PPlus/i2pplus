@@ -24,7 +24,7 @@ function refreshOnClick(triggerSelectors, updateSelectors, interval = 500, maxAt
         const newEl = doc.querySelector(sel);
         if (newEl) el.innerHTML = newEl.innerHTML;
       });
-      catch (e) { progressx.hide(); }
+    } catch (e) { progressx.hide(); }
   };
 
   document.documentElement.addEventListener("click", e => {
