@@ -434,7 +434,7 @@ div[id^="config_"].main{padding-bottom:14px}
 .confignav::after{position:absolute;left:2px;bottom:-3px;width:calc(100% - 4px);height:1px;display:inline-block;background:#0c250c;content:""}
 .tab,.tab2{margin:0 -3px -1px -3px;padding:1px 0 2px;min-width:60px;display:inline-block;position:relative;box-sizing:border-box;vertical-align:middle;background:#000;transition:ease .15s all}
 .tab{box-shadow:var(--bevel_cell);background:var(--glow_top),linear-gradient(180deg,#002900,#000400)}
-.tab a{padding:4px 14px;display:inline-block;text-shadow:var(--textshadow)}
+.tab a{padding:4px 14px;width:calc(100% - 28px);display:inline-block;text-shadow:var(--textshadow)}
 .tab:hover,#sidebar h3:hover{background:radial-gradient(at center bottom,rgba(128,0,0,.5) 0,#0000 130%),var(--tab_hover);box-shadow:var(--highlight),inset 0 0 0 2px rgba(128,48,0,.6)}
 .tab:hover{z-index:20}
 .tab:hover a{color:var(--hover)}
@@ -622,6 +622,7 @@ h3.toggle:active,#graphdisplay:active,#i2pupdates~.tabletitle:active,#miscConfig
 .joblog th:first-child{padding-left:6px;text-align:left}
 #jobs .jobqueue{padding:5px 12px 5px 0;display:inline-block;columns:4 400px;column-gap:4px}
 #jobs .jobqueue:first-of-type{padding-bottom:4px}
+#jobs .tab,#jobs .tab2{min-width:120px}
 
 h3[id*="job"]{margin:12px 0 10px 0;padding:8px 10px;letter-spacing:.08em;text-transform:uppercase;border:var(--border);border-radius:0}
 h3[id*="jobs"]{clear:both;margin-top:25px}
@@ -784,7 +785,7 @@ td.ipv6{width:1%;max-width:24px}
 #peers .rx .right,#peers .tx .right{width:1%;min-width:30px}
 #peers .spacer{display:none}
 #peers table:not(.rid){margin-bottom:9px}
-#peers .tab,#peers .tab2{min-width:96px}
+#peers .tab,#peers .tab2{min-width:120px}
 #peers .tab,#peers .tab2,#profiles .tab,#profiles .tab2{margin-top:-1px}
 #peers .tablefooter{box-shadow:var(--highlight),inset -1px -1px 0 1px #000}
 #peers td.direction i{margin:3px -3px -4px;width:100%;display:inline-block;text-align:center;font-size:85%;font-style:normal;color:#990;border-top:var(--border_badge);border-radius:2px}
@@ -2408,6 +2409,7 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 #debug ul,#debug li{margin:0;text-align:left}
 #debug ul,.debug_targetinfo{columns:400px 2;column-rule:var(--border_soft);column-gap:30px}
 #debug .tx_header th::before{background:url(images/favicon.svg) no-repeat center center/20px}
+#debug .tab a{width:unset}
 #debug #tx_summary .infohelp{margin:15px auto 5px}
 #portmapper th:last-child,#portmapper td:last-child,#sockets td:last-child{text-align:left}
 #portmapper td:first-child,#sockets td:first-child{font-weight:700}
@@ -3170,6 +3172,7 @@ span#newtab{margin-top:4px}
 #contactserver{margin-bottom:-17px}
 #debug .confignav,#netdb .confignav{padding:0}
 #debug .tab,#debug .tab2,#netdb .tab,#netdb .tab2{margin-top:-1px}
+#netdb .tab,#netdb .tab2{min-width:120px}
 #error500 #sb_logo img{margin-bottom:-5px}
 #error500 #warning2.sorry{margin-top:-1px}
 #floodfills th:first-child,#floodfills td:first-child{padding-right:3px;width:58px}
