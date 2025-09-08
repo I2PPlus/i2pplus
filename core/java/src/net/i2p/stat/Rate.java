@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Properties;
 
 import net.i2p.data.DataHelper;
+import net.i2p.I2PAppContext;
+import net.i2p.util.Log;
 
 /**
  * Simple rate calculator for periodically sampled data points - determining an
@@ -509,7 +511,13 @@ public class Rate {
 
         if (treatAsCurrent) {_lastCoalesceDate = now();}
 
-        if (_period <= 0) {throw new IllegalArgumentException("Period for " + prefix + " is invalid");}
+        if (_period <= 0) {
+            _period = prefix.contains("tunnelCreateResponse") ? 60*60*1000 : 60*1000;
+            Log _log = I2PAppContext.getGlobalContext().logManager().getLog(Rate.class);
+            if (_log.shouldInfo()) {
+                _log.warn("Period for " + prefix + " is invalid -> Setting a default value of " + _period / 60 / 1000 + "m");
+            }
+        }
         coalesce();
     }
 
