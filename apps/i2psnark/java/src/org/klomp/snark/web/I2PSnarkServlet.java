@@ -484,9 +484,11 @@ public class I2PSnarkServlet extends BasicServlet {
                 navLink = "\n<a href=\"" + t.baseURL + "\" class=\"snarkNav nav_tracker\" target=_blank>" + t.name + "</a>";
                 buf.append(navLink);
             }
+            /*
             navLink = "\n<a href=http://btdigg.i2p/ class=\"snarkNav nav_search\" target=_blank title=\"" +
                       _t("I2P-based search engine for clearnet-hosted torrents") + "\">" + _t("BTDigg") + "</a>";
             buf.append(navLink);
+            */
         }
 
         if (_manager.getTorrents().size() > 1) {
