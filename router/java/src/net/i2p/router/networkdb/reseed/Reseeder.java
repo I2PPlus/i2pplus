@@ -62,9 +62,7 @@ public class Reseeder {
     private static final long MAX_RESEED_RESPONSE_SIZE = 2 * 1024 * 1024;
     private static final long MAX_SU3_RESPONSE_SIZE = 1024 * 1024;
     /** limit to spend on a single host, to avoid getting stuck on one that is seriously overloaded */
-    //private static final int MAX_TIME_PER_HOST = 7 * 60 * 1000;
     private static final int MAX_TIME_PER_HOST = 10 * 1000;
-    //private static final long MAX_FILE_AGE = 30*24*60*60*1000L;
     private static final long MAX_FILE_AGE = 3*24*60*60*1000L;
     /** Don't disable this! */
     private static final boolean ENABLE_SU3 = true;
@@ -108,12 +106,10 @@ public class Reseeder {
      * @since 0.8.2
      */
     public static final String DEFAULT_SSL_SEED_URL =
-        // newest first, please add new ones at the top
         //
         // https url:port, ending with "/"                    certificates/reseed/                 certificates/ssl/                 notes
         // ----------------------------------                 ---------------------------------    ------------------------------    --------------------------
         "https://coconut.incognet.io/"              + ',' +   // rambler_at_mail.i2p.crt           CA
-        "https://cubicchaos.net:8443/"              + ',' +   // unixeno_at_cubicchaos.net.crt     cubicchaos.net.crt
         "https://i2p.novg.net/"                     + ',' +   // igor_at_novg.net.crt              CA                                Java 8+
         "https://i2pseed.creativecowpat.net:8443/"  + ',' +   // creativecowpat_at_mail.i2p.crt    i2pseed.creativecowpat.net.crt    Java 7+
         "https://reseed2.i2p.net/"                  + ',' +   // echelon3_at_mail.i2p.crt          CA
@@ -125,6 +121,7 @@ public class Reseeder {
         "https://reseed.stormycloud.org/"           + ',' +   // admin_at_stormycloud.org.crt      CA
         "https://www2.mk16.de/";                              // i2p-reseed_at_mk16.de.crt         CA
 
+        //"https://cubicchaos.net:8443/"              + ',' +   // unixeno_at_cubicchaos.net.crt     cubicchaos.net.crt
         //"https://i2p.ghativega.in/"                 + ',' +   // arnavbhatt288_at_mail.i2p.crt     CA
         //"https://banana.incognet.io/"               + ',' +   // rambler_at_mail.i2p.crt           CA
         //"https://reseed.memcpy.io/"                 + ',' +   // hottuna_at_mail.i2p.crt           CA                                SNI required
