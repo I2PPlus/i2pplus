@@ -42,21 +42,32 @@ public class I2PSessionDemultiplexer implements I2PSessionMuxedListener {
 
     public void messageAvailable(I2PSession session, int msgId, long size, int proto, int fromport, int toport ) {
         I2PSessionMuxedListener l = findListener(proto, toport);
-        if (l != null) {
-            l.messageAvailable(session, msgId, size, proto, fromport, toport);
-        } else {
+        if (l != null) {l.messageAvailable(session, msgId, size, proto, fromport, toport);}
+        else {
             // no listener, throw it out
             if (_listeners.isEmpty()) {
-                if (_log.shouldWarn())
-                    _log.warn("No listeners for incoming message");
+                if (_log.shouldWarn()) {_log.warn("No listeners for incoming message");}
             } else {
-                if (_log.shouldWarn())
-                    _log.warn("No listener found for protocol: " + proto + " on port: " + toport + "[MsgId: " + msgId +
-                           "] from pool of " + _listeners.size() + " listeners");
+                if (_log.shouldWarn()) {
+                    _log.warn("No listener for protocol " + protocolNumberToString(proto) + " on port: " + toport +
+                              " from pool of " + _listeners.size() + " listeners");
+                }
             }
-            try {
-                session.receiveMessage(msgId);
-            } catch (I2PSessionException ise) {}
+            try {session.receiveMessage(msgId);}
+            catch (I2PSessionException ise) {}
+        }
+    }
+
+    public String protocolNumberToString(int proto) {
+        switch (proto) {
+            case 6:
+                return "TCP (6)";
+            case 17:
+                return "UDP (17)";
+            case 18:
+                return "MUX (18)";
+            default:
+                return "Unknown (" + proto + ")";
         }
     }
 
