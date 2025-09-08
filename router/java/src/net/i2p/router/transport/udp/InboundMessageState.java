@@ -7,6 +7,9 @@ import net.i2p.router.util.CDQEntry;
 import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
 
+/**
+ * Hold the raw data fragments of an inbound message.
+ */
 class InboundMessageState implements CDQEntry {
     private final RouterContext _context;
     private final Log _log;
