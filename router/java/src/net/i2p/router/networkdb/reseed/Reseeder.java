@@ -281,27 +281,18 @@ public class Reseeder {
          *  @since 0.9.19
          */
         public ReseedRunner(URI url) throws IllegalArgumentException {
-            if (url != null) {
-                String lc = url.getPath().toLowerCase(Locale.US);
-                if (!(lc.endsWith(".zip") || lc.endsWith(".su3"))) {
-                    throw new IllegalArgumentException("Reseed URL must end with .zip or .su3");
-                }
-            }
+            validateUrl(url);
             _url = url;
-            _bandwidths = new ArrayList<Long>(4);
-            if (_context.getBooleanProperty(PROP_PROXY_ENABLE)) {
-                _proxyHost = _context.getProperty(PROP_PROXY_HOST);
-                _proxyPort = _context.getProperty(PROP_PROXY_PORT, -1);
-            } else {
-                _proxyHost = null;
-                _proxyPort = -1;
-            }
-            _shouldProxyHTTP = _proxyHost != null && _proxyHost.length() > 0 && _proxyPort > 0;
+            _bandwidths = new ArrayList<>(4);
+
+            boolean proxyEnabled = _context.getBooleanProperty(PROP_PROXY_ENABLE);
+            _proxyHost = proxyEnabled ? _context.getProperty(PROP_PROXY_HOST) : null;
+            _proxyPort = proxyEnabled ? _context.getProperty(PROP_PROXY_PORT, -1) : -1;
+            _shouldProxyHTTP = isValidHostPort(_proxyHost, _proxyPort);
 
             boolean shouldProxySSL = _context.getBooleanProperty(PROP_SPROXY_ENABLE);
-            SSLEepGet.ProxyType sproxyType;
             if (shouldProxySSL) {
-                sproxyType = getProxyType();
+                SSLEepGet.ProxyType sproxyType = getProxyType();
                 if (sproxyType == SSLEepGet.ProxyType.INTERNAL) {
                     _sproxyHost = "localhost";
                     _sproxyPort = _context.portMapper().getPort(PortMapper.SVC_HTTP_PROXY, 4444);
@@ -309,13 +300,26 @@ public class Reseeder {
                     _sproxyHost = _context.getProperty(PROP_SPROXY_HOST);
                     _sproxyPort = _context.getProperty(PROP_SPROXY_PORT, -1);
                 }
+                _shouldProxySSL = isValidHostPort(_sproxyHost, _sproxyPort);
+                _sproxyType = _shouldProxySSL ? sproxyType : SSLEepGet.ProxyType.NONE;
             } else {
-                sproxyType = SSLEepGet.ProxyType.NONE;
                 _sproxyHost = null;
                 _sproxyPort = -1;
+                _shouldProxySSL = false;
+                _sproxyType = SSLEepGet.ProxyType.NONE;
             }
-            _shouldProxySSL = shouldProxySSL && _sproxyHost != null && _sproxyHost.length() > 0 && _sproxyPort > 0;
-            _sproxyType = _shouldProxySSL ? sproxyType : SSLEepGet.ProxyType.NONE;
+        }
+
+        private void validateUrl(URI url) {
+            if (url == null) return;
+            String path = url.getPath();
+            if (path == null || !(path.toLowerCase(Locale.US).endsWith(".zip") || path.toLowerCase(Locale.US).endsWith(".su3"))) {
+                throw new IllegalArgumentException("Reseed URL must end with .zip or .su3");
+            }
+        }
+
+        private boolean isValidHostPort(String host, int port) {
+            return host != null && !host.isEmpty() && port > 0;
         }
 
         /*
@@ -473,127 +477,169 @@ public class Reseeder {
         // End of EepGet status listeners
 
         /**
-        * Reseed has been requested, so lets go ahead and do it.  Fetch all of
-        * the routerInfo-*.dat files from the specified URL (or the default) and
-        * save them into this router's netDb dir.
-        *
-        * - If list specified in the properties, use it randomly, without regard to http/https
-        * - If SSL not disabled, use the https randomly then
-        *   the http randomly
-        * - Otherwise just the http randomly.
-        *
-        * @param echoStatus apparently always false
-        * @return count of routerinfos successfully fetched, or -1 if no valid URLs
-        */
+         * Performs reseed operation using configured URLs or defaults.
+         *
+         * &lt;p&gt;Builds a list of URIs to use for reseeding based on current
+         * configuration and SSL settings, then delegates to the reseed method
+         * that accepts a URI list.
+         *
+         * @param echoStatus Whether to echo status messages (typically false)
+         * @return count of routerinfos successfully fetched, or -1 if no valid URLs
+         */
         private int reseed(boolean echoStatus) {
-            List<URI> URLList = new ArrayList<URI>();
-            String URLs = _context.getProperty(PROP_RESEED_URL);
-            boolean defaulted = URLs == null;
-            boolean SSLDisable = _context.getBooleanProperty(PROP_SSL_DISABLE);
-            boolean SSLRequired = _context.getBooleanPropertyDefaultTrue(PROP_SSL_REQUIRED);
-
-            if (defaulted) {
-                if (SSLDisable) {URLs = DEFAULT_SEED_URL;}
-                else {URLs = DEFAULT_SSL_SEED_URL;}
-                StringTokenizer tok = new StringTokenizer(URLs, " ,");
-                while (tok.hasMoreTokens()) {
-                    String u = tok.nextToken().trim();
-                    if (!u.endsWith("/")) {u = u + '/';}
-                    try {URLList.add(new URI(u));}
-                    catch (URISyntaxException mue) {}
-                }
-                Collections.shuffle(URLList, _context.random());
-                if (!SSLDisable && !SSLRequired) {
-                    // put the non-SSL at the end of the SSL
-                    List<URI> URLList2 = new ArrayList<URI>();
-                    tok = new StringTokenizer(DEFAULT_SEED_URL, " ,");
-                    while (tok.hasMoreTokens()) {
-                        String u = tok.nextToken().trim();
-                        if (!u.endsWith("/")) {u = u + '/';}
-                        try {URLList2.add(new URI(u));}
-                        catch (URISyntaxException mue) {}
-                    }
-                    Collections.shuffle(URLList2, _context.random());
-                    URLList.addAll(URLList2);
-                }
-            } else {
-                // custom list given
-                List<URI> SSLList = new ArrayList<URI>();
-                List<URI> nonSSLList = new ArrayList<URI>();
-                StringTokenizer tok = new StringTokenizer(URLs, " ,");
-                while (tok.hasMoreTokens()) {
-                    String u = tok.nextToken().trim(); // format tokens
-                    if (!u.endsWith("/")) {u = u + '/';}
-                    if (u.startsWith("https")) { // check if ssl or not then add to respective list
-                        try {SSLList.add(new URI(u));}
-                        catch (URISyntaxException mue) {}
-                    } else {
-                        try {nonSSLList.add(new URI(u));}
-                        catch (URISyntaxException mue) {}
-                    }
-                }
-                // shuffle lists
-                // depending on preferences, add lists to URLList
-                if (!SSLDisable) {
-                    Collections.shuffle(SSLList,_context.random());
-                    URLList.addAll(SSLList);
-                }
-                if (SSLDisable || !SSLRequired) {
-                    Collections.shuffle(nonSSLList, _context.random());
-                    URLList.addAll(nonSSLList);
-                }
-            }
-            if (!isSNISupported()) {
-                try {
-                    URLList.remove(new URI("https://netdb.i2p2.no/"));
-                    URLList.remove(new URI("https://reseed.i2p2.no/"));
-                    URLList.remove(new URI("https://reseed2.i2p2.no/"));
-                } catch (URISyntaxException mue) {}
-            }
-            if (URLList.isEmpty()) {
+            List<URI> urlList = buildUrlList();
+            if (urlList.isEmpty()) {
                 System.out.println("No valid reseed URLs");
                 _checker.setError("No valid reseed URLs");
                 return -1;
             }
-            return reseed(URLList, echoStatus);
+            return reseed(urlList, echoStatus);
         }
 
         /**
-        * Reseed has been requested, so lets go ahead and do it.  Fetch all of
-        * the routerInfo-*.dat files from the specified URLs
-        * save them into this router's netDb dir.
-        *
-        * @param echoStatus apparently always false
-        * @return count of routerinfos successfully fetched
-        */
-        private int reseed(List<URI> URLList, boolean echoStatus) {
-            // network ID cross-check, proposal 147, as of 0.9.42
+         * Builds the list of URIs to use for reseed based on configured properties and defaults.
+         *
+         * &lt;p&gt;Handles default URLs, SSL enablement/disablement, shuffling,
+         * and filtering based on SNI support.
+         *
+         * @return list of URIs to attempt reseed from
+         */
+        private List<URI> buildUrlList() {
+            String urls = _context.getProperty(PROP_RESEED_URL);
+            boolean defaulted = urls == null;
+            boolean sslDisable = _context.getBooleanProperty(PROP_SSL_DISABLE);
+            boolean sslRequired = _context.getBooleanPropertyDefaultTrue(PROP_SSL_REQUIRED);
+
+            List<URI> urlList;
+
+            if (defaulted) {
+                urls = sslDisable ? DEFAULT_SEED_URL : DEFAULT_SSL_SEED_URL;
+                urlList = parseUrlsWithTrailingSlash(urls);
+                Collections.shuffle(urlList, _context.random());
+
+                if (!sslDisable && !sslRequired) {
+                    List<URI> fallbackList = parseUrlsWithTrailingSlash(DEFAULT_SEED_URL);
+                    Collections.shuffle(fallbackList, _context.random());
+                    urlList.addAll(fallbackList);
+                }
+            } else {
+                List<URI> sslList = new ArrayList<>();
+                List<URI> nonSslList = new ArrayList<>();
+
+                for (String u : urls.split("[ ,]+")) {
+                    u = u.trim();
+                    if (!u.endsWith("/")) u += "/";
+                    URI uri = safeUri(u);
+                    if (uri == null) continue;
+                    if (u.startsWith("https")) sslList.add(uri);
+                    else nonSslList.add(uri);
+                }
+
+                urlList = new ArrayList<>();
+                if (!sslDisable) {
+                    Collections.shuffle(sslList, _context.random());
+                    urlList.addAll(sslList);
+                }
+                if (sslDisable || !sslRequired) {
+                    Collections.shuffle(nonSslList, _context.random());
+                    urlList.addAll(nonSslList);
+                }
+            }
+
+            filterUrlsIfNoSNI(urlList);
+            return urlList;
+        }
+
+        /**
+         * Parses a comma/space separated list of URLs into a list of URIs,
+         * ensuring each ends with a trailing slash.
+         *
+         * @param urls String containing the URLs to parse
+         * @return list of URIs, excluding invalid ones
+         */
+        private List<URI> parseUrlsWithTrailingSlash(String urls) {
+            List<URI> list = new ArrayList<>();
+            for (String u : urls.split("[ ,]+")) {
+                u = u.trim();
+                if (!u.endsWith("/")) u += "/";
+                URI uri = safeUri(u);
+                if (uri != null) list.add(uri);
+            }
+            return list;
+        }
+
+        /**
+         * Safely converts a string to a URI, returning null if invalid.
+         *
+         * @param u URL string to convert
+         * @return corresponding URI, or null if syntax invalid
+         */
+        private URI safeUri(String u) {
+            try {
+                return new URI(u);
+            } catch (URISyntaxException e) {
+                return null;
+            }
+        }
+
+        /**
+         * Removes specific URLs from the list if Server Name Indication (SNI) is not supported.
+         *
+         * @param urlList list of URIs to filter
+         */
+        private void filterUrlsIfNoSNI(List<URI> urlList) {
+            if (!isSNISupported()) {
+                List<String> toRemove = Arrays.asList(
+                    "https://netdb.i2p2.no/",
+                    "https://reseed.i2p2.no/",
+                    "https://reseed2.i2p2.no/",
+                    "https://reseed.memcpy.io"
+                );
+                urlList.removeIf(uri -> uri != null && toRemove.contains(uri.toString()));
+            }
+        }
+
+        /**
+         * Attempts to fetch router information files from the specified list of URIs.
+         *
+         * &lt;p&gt;Tracks the number of routerinfos successfully fetched and stops
+         * when minimum targets are met or when shutdown in progress.
+         *
+         * @param urlList the list of URIs to fetch reseed data from
+         * @param echoStatus Whether to echo status messages (typically false)
+         * @return count of routerinfos successfully fetched
+         */
+        private int reseed(List<URI> urlList, boolean echoStatus) {
             String query = NETID_PARAM + _context.router().getNetworkID();
             int total = 0;
-            int fetched_reseed_servers = 0;
-            for (int i = 0; i < URLList.size() && _isRunning; i++) {
+            int fetchedReseedServers = 0;
+
+            for (int i = 0; i < urlList.size() && _isRunning; i++) {
                 if (_context.router().gracefulShutdownInProgress()) {
                     System.out.println("Reseed aborted, shutdown in progress...");
                     return total;
                 }
-                URI url = URLList.get(i);
+                URI url = urlList.get(i);
                 int dl = 0;
                 if (ENABLE_SU3) {
-                    try {dl = reseedSU3(new URI(url.toString() + SU3_FILENAME + query), echoStatus);}
-                    catch (URISyntaxException mue) {}
+                    try {
+                        dl = reseedSU3(new URI(url.toString() + SU3_FILENAME + query), echoStatus);
+                    } catch (URISyntaxException ignored) {}
                 }
-                if (ENABLE_NON_SU3) {
-                    if (dl <= 0) {dl = reseedOne(url, echoStatus);}
+                if (ENABLE_NON_SU3 && dl <= 0) {
+                    dl = reseedOne(url, echoStatus);
                 }
                 if (dl > 0) {
                     total += dl;
-                    fetched_reseed_servers++;
-                    // Don't go on to the next URL if we have enough
-                    if (total >= MIN_RI_WANTED && fetched_reseed_servers >= MIN_RESEED_SERVERS) {break;}
-                    // remove alternate versions if we haven't tried them yet
-                    for (int j = i + 1; j < URLList.size();) {
-                        if (url.getHost().equals(URLList.get(j).getHost())) {URLList.remove(j);}
-                        else {j++;}
+                    fetchedReseedServers++;
+                    if (total >= MIN_RI_WANTED && fetchedReseedServers >= MIN_RESEED_SERVERS) break;
+
+                    for (int j = i + 1; j < urlList.size();) {
+                        if (url.getHost().equals(urlList.get(j).getHost())) {
+                            urlList.remove(j);
+                        } else {
+                            j++;
+                        }
                     }
                 }
             }
@@ -601,68 +647,61 @@ public class Reseeder {
         }
 
         /**
-         *  Fetch a directory listing and then up to 200 routerInfo files in the listing.
-         *  The listing must contain (exactly) strings that match:
-         *           href="routerInfo-{hash}.dat">
-         *  OR
-         *           HREF="routerInfo-{hash}.dat">
-         * and then it fetches the files
-         *           {seedURL}routerInfo-{hash}.dat
-         * after appending a '/' to seedURL if it doesn't have one.
-         * Essentially this means that the seedURL must be a directory, it
-         * can't end with 'index.html', for example.
+         * Attempts to reseed by fetching router info files from a single reseed URL.
          *
-         * Jetty directory listings are not compatible, as they look like
-         * HREF="/full/path/to/routerInfo-...
+         * Downloads, extracts router info URLs from content, filters own router info,
+         * and attempts to fetch up to 250 router infos with error handling,
+         * respecting a time limit and error thresholds.
          *
-         * We update the status here.
-         *
-         * @param seedURL the URL of the directory, must end in '/'
-         * @param echoStatus apparently always false
-         * @return count of routerinfos successfully fetched
-         *
+         * @param seedURL the reseed URI to fetch data from
+         * @param echoStatus flag indicating if progress should be printed
+         * @return number of router infos successfully fetched
          */
         private int reseedOne(URI seedURL, boolean echoStatus) {
-            String s = getDisplayString(seedURL);
-            String trimmed = s.replace("http://", "").replace("https://", "").replace("netDb/", "").replace("/i2pseeds.su3", "")
-                              .replace("from ","").replace("?", "").replace("netid=2", "").replaceAll("\\(.*\\)", "");
+            String display = getDisplayString(seedURL);
+            String trimmed = cleanDisplayString(display);
+
             try {
-                // Don't use context clock as we may be adjusting the time
                 final long timeLimit = System.currentTimeMillis() + MAX_TIME_PER_HOST;
                 _checker.setStatus(_t("Contacting reseed host") + ":<br>" + trimmed);
-                System.err.println("Reseeding from " + s);
-                byte contentRaw[] = readURL(seedURL);
+                System.err.println("Reseeding from " + display);
+
+                byte[] contentRaw = readURL(seedURL);
                 if (contentRaw == null) {
                     System.err.println("No RouterInfos received from: " + trimmed);
                     return 0;
                 }
+
                 String content = DataHelper.getUTF8(contentRaw);
-                // This isn't really URLs, but Base64 hashes but they may include % encoding
-                Set<String> urls = new HashSet<String>(1024);
+                Set<String> urls = new HashSet<>(1024);
                 Hash ourHash = _context.routerHash();
-                String ourB64 = ourHash != null ? ourHash.toBase64() : null;
+                String ourB64 = (ourHash != null) ? ourHash.toBase64() : null;
+
                 int cur = 0;
                 int total = 0;
                 while (total++ < 1000) {
-                    int start = content.indexOf("href=\"" + ROUTERINFO_PREFIX, cur);
-                    if (start < 0) {
-                        start = content.indexOf("HREF=\"" + ROUTERINFO_PREFIX, cur);
-                        if (start < 0) {break;}
-                    }
+                    int start = indexOfIgnoreCase(content, "href=\"" + ROUTERINFO_PREFIX, cur);
+                    if (start < 0) break;
 
                     int end = content.indexOf(ROUTERINFO_SUFFIX + "\">", start);
-                    if (end < 0) {break;}
-                    if (start - end > 200) {  // 17 + 3*44 for % encoding + just to be sure
+                    if (end < 0) break;
+
+                    if (start - end > 200) {
                         cur = end + 1;
                         continue;
                     }
+
                     String name = content.substring(start + ("href=\"" + ROUTERINFO_PREFIX).length(), end);
-                    // never load our own RI
-                    if (ourB64 == null || !name.contains(ourB64)) {urls.add(name);}
-                    else if (_log.shouldInfo()) {_log.info("Skipping our own RI");}
+
+                    if (ourB64 == null || !name.contains(ourB64)) {
+                        urls.add(name);
+                    } else if (_log.shouldInfo()) {
+                        _log.info("Skipping our own RI");
+                    }
                     cur = end + 1;
                 }
-                if (total <= 0) {
+
+                if (urls.isEmpty()) {
                     if (_log.shouldWarn()) {
                         _log.warn("Read " + contentRaw.length + " bytes from reseed server " + trimmed + " but found no RouterInfo URLs");
                     }
@@ -670,38 +709,59 @@ public class Reseeder {
                     return 0;
                 }
 
-                List<String> urlList = new ArrayList<String>(urls);
+                List<String> urlList = new ArrayList<>(urls);
                 Collections.shuffle(urlList, _context.random());
+
                 int fetched = 0;
                 int errors = 0;
-                // 250 max from one URL
                 for (Iterator<String> iter = urlList.iterator();
                      iter.hasNext() && fetched < 250 && System.currentTimeMillis() < timeLimit; ) {
+                    String routerInfoName = iter.next();
                     try {
                         _checker.setStatus(_t("Reseeding: fetching router info from seed URL ({0} successful, {1} errors).", fetched, errors));
-
-                        if (!fetchSeed(seedURL.toString(), iter.next())) {continue;}
+                        if (!fetchSeed(seedURL.toString(), routerInfoName)) {
+                            continue;
+                        }
                         fetched++;
                         if (echoStatus) {
                             System.out.print(".");
-                            if (fetched % 60 == 0) {System.out.println();}
+                            if (fetched % 60 == 0) System.out.println();
                         }
                     } catch (RuntimeException e) {
-                        if (_log.shouldInfo()) {_log.info("Failed fetch", e);}
+                        if (_log.shouldInfo()) _log.info("Failed fetch", e);
                         errors++;
                     }
-                    // Give up on this host after lots of errors, or 10 with only 0 or 1 good
-                    if (errors >= 50 || (errors >= 10 && fetched <= 1)) {break;}
+                    if (errors >= 50 || (errors >= 10 && fetched <= 1)) break;
                 }
-                System.err.println("Reseed acquired " + fetched + " router infos with " + errors + " errors [" + trimmed + "]");
 
-                if (fetched > 0) {_context.netDb().rescan();}
+                System.err.println("Reseed acquired " + fetched + " router infos with " + errors + " errors [" + trimmed + "]");
+                if (fetched > 0) _context.netDb().rescan();
                 return fetched;
+
             } catch (Throwable t) {
-                if (_log.shouldWarn()) {_log.warn("Error reseeding -> " + t.getMessage());}
-                System.err.println("No router infos " + s);
+                if (_log.shouldWarn()) _log.warn("Error reseeding -> " + t.getMessage());
+                System.err.println("No router infos " + display);
                 return 0;
             }
+        }
+
+        /** Cleans the display string for logging by removing unwanted parts. */
+        private String cleanDisplayString(String s) {
+            return s.replace("http://", "")
+                    .replace("https://", "")
+                    .replace("netDb/", "")
+                    .replace("/i2pseeds.su3", "")
+                    .replace("from ", "")
+                    .replace("?", "")
+                    .replace("netid=2", "")
+                    .replaceAll("\\(.*\\)", "");
+        }
+
+        /** Case insensitive indexOf for content parsing, returns -1 if not found */
+        private int indexOfIgnoreCase(String str, String search, int fromIndex) {
+            final String lowerStr = str.toLowerCase(Locale.US);
+            final String lowerSearch = search.toLowerCase(Locale.US);
+            return lowerStr.indexOf(lowerSearch, fromIndex);
         }
 
         /**
