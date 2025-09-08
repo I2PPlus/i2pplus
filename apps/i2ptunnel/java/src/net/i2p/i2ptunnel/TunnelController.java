@@ -747,8 +747,7 @@ public class TunnelController implements Logging {
         if ( (host != null) && (host.length() > 0) )
             _tunnel.host = host;
         // woohah, special casing for people with ipv6/etc
-        if ("localhost".equals(_tunnel.host))
-            _tunnel.host = "127.0.0.1";
+        if ("localhost".equals(_tunnel.host)) {_tunnel.host = "127.0.0.1";}
         String port = getI2CPPort();
         if ( (port != null) && (port.length() > 0) ) {
             try {
@@ -769,8 +768,7 @@ public class TunnelController implements Logging {
      */
     public void stopTunnel() {
         synchronized (this) {
-            if (_state != TunnelState.STARTING && _state != TunnelState.RUNNING)
-                return;
+            if (_state != TunnelState.STARTING && _state != TunnelState.RUNNING) {return;}
             changeState(TunnelState.STOPPING);
         }
         if (_pkfc != null) {
