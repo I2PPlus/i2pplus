@@ -40,7 +40,7 @@ class ParticipatingThrottler {
     private static final int MAX_LIMIT = (isSlow ? 1200 : 1800) / LIFETIME_PORTION;
     private static final int PERCENT_LIMIT = 15 / LIFETIME_PORTION;
     private static final long CLEAN_TIME = 11 * 60 * 1000 / LIFETIME_PORTION;
-    private static final String MIN_VERSION = "0.9.63";
+    private static final String MIN_VERSION = "0.9.64";
 
     public enum Result { ACCEPT, REJECT, DROP }
 

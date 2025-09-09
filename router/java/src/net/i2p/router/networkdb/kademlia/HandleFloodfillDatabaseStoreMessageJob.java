@@ -221,7 +221,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     prevNetDb = (RouterInfo) _facade.lookupLocallyWithoutValidation(key);
                     boolean isUnreachable = cap.indexOf(Router.CAPABILITY_REACHABLE) < 0;
                     boolean isSlow = cap.contains("K") || cap.contains("L") || cap.contains("M") || cap.contains("N");
-                    String MIN_VERSION = "0.9.60";
+                    String MIN_VERSION = "0.9.64";
                     String v = ri.getVersion();
                     boolean noSSU = true;
                     boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;

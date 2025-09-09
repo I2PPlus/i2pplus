@@ -120,7 +120,7 @@ class RefreshRoutersJob extends JobImpl {
                 String refreshTimeout = getContext().getProperty("router.refreshTimeout");
                 int routerAge = 15*60*1000;
                 String v = ri.getVersion();
-                String MIN_VERSION = "0.9.61";
+                String MIN_VERSION = "0.9.64";
                 Hash us = getContext().routerHash();
                 boolean isUs = us.equals(ri.getIdentity().getHash());
                 boolean weAreFF = getContext().netDb().floodfillEnabled();
