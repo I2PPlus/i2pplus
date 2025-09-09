@@ -5,7 +5,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.crypto.SessionKeyManager;
 import net.i2p.data.SessionTag;
 import net.i2p.data.i2np.DeliveryStatusMessage;
-import net.i2p.data.i2np.GarlicMessage;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.router.JobImpl;
 import net.i2p.router.MessageSelector;

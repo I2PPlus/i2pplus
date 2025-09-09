@@ -1,6 +1,5 @@
 package net.i2p.router.transport.udp;
 
-import net.i2p.router.OutNetMessage;
 
 /**
  *

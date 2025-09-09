@@ -48,7 +48,6 @@ import java.io.Serializable;
 import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Map;
 
 import net.i2p.crypto.CryptixAESKeyCache;

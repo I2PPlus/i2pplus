@@ -37,7 +37,6 @@ import net.i2p.router.RouterThrottleImpl;
 import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.router.util.CDQEntry;
-import net.i2p.router.util.CoDelBlockingQueue;
 import net.i2p.util.Log;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;

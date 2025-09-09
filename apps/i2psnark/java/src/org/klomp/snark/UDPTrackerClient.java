@@ -20,8 +20,6 @@ import net.i2p.data.Hash;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
-import org.klomp.snark.I2PSnarkUtil;
-import org.klomp.snark.TrackerClient;
 
 /**
  *  One of these for all trackers and info hashes.

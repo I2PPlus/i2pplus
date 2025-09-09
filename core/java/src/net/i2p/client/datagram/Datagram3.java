@@ -3,21 +3,13 @@ package net.i2p.client.datagram;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Properties;
 
 import net.i2p.I2PAppContext;
-import net.i2p.client.I2PClient;
-import net.i2p.client.I2PClientFactory;
 import net.i2p.client.I2PSession;
-import net.i2p.crypto.KeyGenerator;
-import net.i2p.crypto.SigType;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
-import net.i2p.data.Destination;
 import net.i2p.data.Hash;
-import net.i2p.util.ByteArrayStream;
-import net.i2p.util.HexDump;
 
 /**
  * Class for creating and loading I2P repliable datagrams version 3.

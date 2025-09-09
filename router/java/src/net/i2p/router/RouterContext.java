@@ -13,7 +13,6 @@ import net.i2p.crypto.EncType;
 import net.i2p.data.Hash;
 import net.i2p.data.PublicKey;
 import net.i2p.data.RoutingKeyGenerator;
-import net.i2p.data.router.RouterInfo;
 import net.i2p.data.router.RouterKeyGenerator;
 import net.i2p.internal.InternalClientManager;
 import net.i2p.router.client.ClientManagerFacadeImpl;
@@ -36,7 +35,6 @@ import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.router.tunnel.pool.TunnelPoolManager;
 import net.i2p.util.KeyRing;
 import net.i2p.util.I2PProperties.I2PPropertyCallback;
-import net.i2p.util.SystemVersion;
 
 /**
  * Build off the core I2P context to provide a root for a router instance to

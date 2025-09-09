@@ -5,7 +5,6 @@ import java.io.Writer;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.TagSetHandle;
 import net.i2p.crypto.SessionKeyManager;

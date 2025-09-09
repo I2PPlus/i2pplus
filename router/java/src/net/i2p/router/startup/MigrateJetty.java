@@ -6,19 +6,12 @@ package net.i2p.router.startup;
  */
 
 import java.io.File;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.OutputStreamWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.List;
 
-import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.util.FileUtil;
-import net.i2p.util.I2PSSLSocketFactory;
-import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.VersionComparator;
 
 /**

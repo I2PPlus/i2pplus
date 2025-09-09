@@ -1,10 +1,7 @@
 package net.i2p.router.web.helpers;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import net.i2p.router.web.FormHandler;
 import net.i2p.stat.StatManager;

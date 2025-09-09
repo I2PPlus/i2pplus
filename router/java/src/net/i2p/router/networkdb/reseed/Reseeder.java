@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.*;
 import java.util.Set;
-import java.util.StringTokenizer;
 
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.SU3File;
