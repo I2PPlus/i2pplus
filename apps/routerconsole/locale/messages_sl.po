@@ -1566,10 +1566,7 @@ msgstr "Ponovni zagon v {0}"
 msgid "Save order"
 msgstr "Shrani vrstni red"
 
-msgid "Sidebar refresh disabled"
-msgstr ""
-
-msgid "Sidebar refresh interval changed"
+msgid "Sidebar preferences updated"
 msgstr ""
 
 msgid "Refresh interval must be a number"
@@ -1604,9 +1601,6 @@ msgstr "Premik"
 
 msgid "Saved order of sections."
 msgstr "Shrani vrstni red sekcij."
-
-msgid "Stat filter and location updated successfully to"
-msgstr "Filter statistike in lokacija uspešno posodobljena na"
 
 msgid "Full statistics enabled"
 msgstr "Polna statistika je omogočena"
@@ -2198,23 +2192,14 @@ msgstr "Forum skupnosti povezanih z I2P"
 msgid "File-sharing forum"
 msgstr "Forum za deljenje datotek"
 
-msgid "Alternative front-end for Twitter"
-msgstr "Alternativni frontalni del za Twitter"
-
-msgid "Rocksolid forums for the darknets"
-msgstr "Forsolni forumi za temne omreže"
-
 msgid "Cross-network micro-blogging &amp; forums &amp; wiki"
 msgstr "Presežni mikroblogging, forumi in wiki"
 
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Alternativni frontalni del Reddit, usmerjen na zasebnost"
 
-msgid "Base64 Image Encoder"
-msgstr "Kodač slike Base64"
-
-msgid "An image cache and resize service"
-msgstr "Služba za predpomnilnik slik in spremembo velikosti"
+msgid "AI Image generation & Chat hub"
+msgstr ""
 
 msgid "IRC Logs for multiple networks"
 msgstr "Dnevniki IRC za več omrežij"
@@ -2231,17 +2216,8 @@ msgstr "Domovska stran za različne storitve"
 msgid "Streaming radio service"
 msgstr "Streaming storitev radija"
 
-msgid "Alternative frontend for Imgur"
-msgstr "Alternativni frontalni del za Imgur"
-
 msgid "Privacy-focused not-for-profit organization"
 msgstr "Organizacija brez dobička, usmerjena na zasebnost"
-
-msgid "Outproxy bandwidth test"
-msgstr "Test širine pasma izhodnega proxyja"
-
-msgid "speedtest"
-msgstr "Speedtest"
 
 msgid "Text translation engine"
 msgstr "Motor za prevoz besedila"
@@ -2249,20 +2225,8 @@ msgstr "Motor za prevoz besedila"
 msgid "translate"
 msgstr "Prevajanje"
 
-msgid "Alternative front-end to Youtube"
-msgstr "Alternativni frontalni del za Youtube"
-
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "Davatelj storitev za gostiteljstvo spletne strani in storitev VPN, ki spoštuje zasebnost"
-
-msgid "Tor-focused Search Engine"
-msgstr "Iskalnik usmerjen na Tor"
-
-msgid "Pinterest Image Search Engine"
-msgstr "Iskalnik slik Pinterest"
-
-msgid "Clearnet BitTorrent DHT search engine"
-msgstr "Iskalnik Clearnet BitTorrent DHT"
 
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "Iskalnik DuckDuckGo (brez javascript)"
@@ -2272,21 +2236,6 @@ msgstr "Iskalnik Clearnet usmerjen na zasebnost"
 
 msgid "I2P Web Search Engine"
 msgstr "Iskalnik spleta I2P"
-
-msgid "Enabling the free transmission of data in the public interest"
-msgstr "Omogočanje svobodnega prenašanja podatkov v javnem interesu"
-
-msgid "Selected Papers in Anonymity"
-msgstr "Izbrana dela v anonimnosti"
-
-msgid "Tor .onion site links"
-msgstr "Povezave spletnih strani Tor .onion"
-
-msgid "HTML Color Reference"
-msgstr "Ogled HTML barv"
-
-msgid "HTMLColors"
-msgstr "HTML barve"
 
 msgid "I2P-related Wiki"
 msgstr "Vikipedija povezana z I2P"
@@ -2303,29 +2252,17 @@ msgstr "Internet enciklopedija filozofije"
 msgid "Standford Encyclopedia of Philosophy"
 msgstr "Enciklopedija filozofije Stanforda"
 
-msgid "Psychonaut"
-msgstr "Psihonaut"
-
-msgid "Wiki relating to altered states of consciousness"
-msgstr "Vikipedija o spremenjenih stanjih zavedanja"
-
 msgid "Computing-related tutorials"
 msgstr "Naučilnice povezane z računalništvom"
 
 msgid "SimplifiedGuide"
 msgstr "Poenostavljena navodila"
 
-msgid "Vulnerability Database"
-msgstr "Baza ranljivosti"
-
 msgid "Web technology reference and learning site"
 msgstr "Referenčna in učna spletna stran o tehnologiji splet"
 
 msgid "Alternative Wikipedia front-end focused on privacy"
 msgstr "Alternativni frontalni del Wikipedia, usmerjen na zasebnost"
-
-msgid "The biggest online English dictionary"
-msgstr "Največji spletne slovar angleščine"
 
 msgid "World atlas including geography facts &amp; flags"
 msgstr "Svetovni atlas, ki vključuje dejstva o geografiji in zastave"
@@ -2336,14 +2273,8 @@ msgstr "Svetovni atlas"
 msgid "Technology News &amp; more..."
 msgstr "Vest o tehnologiji in več..."
 
-msgid "Independent investigative journalism"
-msgstr "Neodvisno istrževalno novinarstvo"
-
 msgid "Information Security Research &amp; Education"
 msgstr "Istrževanje in izobraževanje v področju varnosti informacij"
-
-msgid "Darknet related news site"
-msgstr "Spletna stran z novicami, povezanimi z temnim omrežjem"
 
 msgid "DigitalTrends"
 msgstr "Digitalni trendi"
@@ -2356,24 +2287,6 @@ msgstr "Brane vaše pravice v digitalnem svetu"
 
 msgid "The Elliptic Curve Cryptography Blog"
 msgstr "Blog o eliptičnih krivuljah kriptografije"
-
-msgid "ForeignPolicy"
-msgstr "Zunanja politika"
-
-msgid "The Global Magazine of News &amp; Ideas"
-msgstr "Globalni časopis novic in idej"
-
-msgid "FrontLineDefenders"
-msgstr "FrontLineDefenders"
-
-msgid "Human rights activism"
-msgstr "Aktivizem za človekove pravice"
-
-msgid "Defending Human Rights Worldwide"
-msgstr "Brane človekove pravice po vsem svetu"
-
-msgid "HumanRightsWatch"
-msgstr "HumanRightsWatch"
 
 msgid "Fresh hacks every day"
 msgstr "Vsak dan novi hak"
@@ -2389,12 +2302,6 @@ msgstr "HongKongFreePress"
 
 msgid "Independent &amp; impartial news for Hong Kong"
 msgstr "Neodvisne in nepristranske novice za Hong Kong"
-
-msgid "HongKongWatch"
-msgstr "HongKongWatch"
-
-msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr "Ogleda grožnje svobodam in pravicam v Hong Kongu"
 
 msgid "JStorDaily"
 msgstr "JStorDaily"
@@ -2432,11 +2339,11 @@ msgstr "Neodvisna mednarodna medien platforma"
 msgid "OpenDemocracy"
 msgstr "OpenDemocracy"
 
-msgid "News and blog feeds on I2P"
-msgstr "Novice in vire blogov na I2P"
+msgid "Online privacy &amp; tech blog"
+msgstr ""
 
-msgid "Planeta"
-msgstr "Planeta"
+msgid "RightToPrivacy"
+msgstr ""
 
 msgid "Lifestyle magazine"
 msgstr "Časopis o življenjskem slogu"
@@ -2465,20 +2372,11 @@ msgstr "Vesti za nerde"
 msgid "Technology news &amp; reviews"
 msgstr "Vesti o tehnologiji in pregledi"
 
-msgid "Reporting on China without fear or favor"
-msgstr "Porocanje o Kitajski brez strahu ali pristranskosti"
-
 msgid "News from the Taiwan Capital"
 msgstr "Vesti iz glavnega mesta Tajvana"
 
 msgid "TaipeiTimes"
 msgstr "TaipeiTimes"
-
-msgid "TechXplore"
-msgstr "TechXplore"
-
-msgid "Technology and engineering news"
-msgstr "Vesti o tehnologiji in strojništvu"
 
 msgid "TechMeme"
 msgstr "TechMeme"
@@ -2521,12 +2419,6 @@ msgstr "TheNewRepublic"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "Deljenje datotek &amp; novice o avtorskih pravicah"
-
-msgid "A magazine about human rights and social justice"
-msgstr "Časopis o človekovih pravicah in socialni pravičnosti"
-
-msgid "UpstreamJournal"
-msgstr "UpstreamJournal"
 
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
 msgstr "Napredek uravnoteženega in realističnega razumevanja ameriških interesov na Bliskem vzhodu"
@@ -2857,16 +2749,22 @@ msgstr ""
 msgid "Not initialized"
 msgstr "Ni inicializirano"
 
-msgid "Sorted by hash distance, closest first."
+msgid "Total Remote Leasesets"
 msgstr ""
 
 msgid "Compact mode"
 msgstr ""
 
-msgid "Total Remote Leasesets"
+msgid "Local Leasesets"
+msgstr ""
+
+msgid "Debug Mode"
 msgstr ""
 
 msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Sorted by hash distance, closest first."
 msgstr ""
 
 msgid "Mod Data"
@@ -2881,17 +2779,11 @@ msgstr ""
 msgid "Change in"
 msgstr ""
 
-msgid "Known Floodfills"
-msgstr "Znane zalivne"
-
 msgid "Floodfill mode enabled"
 msgstr ""
 
 msgid "Routing Key"
 msgstr "Ključ usmerjanja"
-
-msgid "Network data"
-msgstr "Omrežna podatka"
 
 msgid "Median distance (bits)"
 msgstr "Srednja razdalja (biti)"
@@ -2901,6 +2793,12 @@ msgstr "Ocena skupaj zalivnih"
 
 msgid "Estimated total leasesets"
 msgstr "Ocena skupaj leaseSet"
+
+msgid "Total Local Leasesets"
+msgstr ""
+
+msgid "Remote Leasesets"
+msgstr ""
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2933,12 +2831,6 @@ msgstr "Isteka{0}"
 msgid "Expired{0} ago"
 msgstr "Isteklo{0} pred tem"
 
-msgid "Received as published"
-msgstr "Prejeto kot objavljeno?"
-
-msgid "Received as reply"
-msgstr "Prejeto kot odgovor?"
-
 msgid "Distance"
 msgstr "Razdalja"
 
@@ -2947,6 +2839,9 @@ msgstr "Podpisano offline"
 
 msgid "Signature type"
 msgstr "Vrsta podpisa"
+
+msgid "Public Key"
+msgstr ""
 
 msgid "Unsupported type"
 msgstr "Nepodprta vrsta"
@@ -2958,6 +2853,9 @@ msgstr "Isteka v {0}"
 #, java-format
 msgid "Expired {0} ago"
 msgstr "Isteklo {0} pred tem"
+
+msgid "Unknown"
+msgstr "Neznano"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
 msgstr ""
@@ -2994,9 +2892,6 @@ msgstr "Floodfills"
 
 msgid "Total"
 msgstr "Skupaj"
-
-msgid "Unknown"
-msgstr "Neznano"
 
 msgid "Initializing"
 msgstr "Zagon"
@@ -3071,9 +2966,6 @@ msgstr "Prikaži vse usmerjevalnike z tem naslovom v NetDb"
 msgid "Show all routers with this port in the NetDb"
 msgstr "Prikaži vse usmerjevalnike z tem vratom v NetDb"
 
-msgid "Network ID"
-msgstr "ID omrežja"
-
 msgid "Routers"
 msgstr "Usmerjevalniki"
 
@@ -3085,6 +2977,12 @@ msgstr "Zadnjič sem slišal o"
 
 msgid "Last heard from"
 msgstr "Zadnjič sem slišal od"
+
+msgid "Network Id"
+msgstr ""
+
+msgid "Count is always spoofed to avoid indicating router restarts"
+msgstr ""
 
 msgid "Hidden or starting up"
 msgstr "Skrito ali se zagonja"
@@ -3145,19 +3043,16 @@ msgstr "v datoteko router.config."
 msgid "Peer Connections"
 msgstr "Povezave partnerja"
 
-msgid "Active in the last minute"
-msgstr "Aktiven v zadnjem minutu"
-
 msgid "IPv4"
 msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
 
-msgid "Limit"
+msgid "Active connections / Max permitted"
 msgstr ""
 
-msgid "Maximum permitted connections"
+msgid "Connections / Limit"
 msgstr ""
 
 msgid "Current / maximum permitted"
@@ -3166,23 +3061,23 @@ msgstr "Trenutno / največja dovoljena"
 msgid "NTCP connections"
 msgstr "NTCP povezave"
 
-msgid "Caps"
-msgstr "Kepi"
-
 msgid "Peer capabilities"
 msgstr "Zmožnosti partnerja"
 
-msgid "Dir"
-msgstr "Dir"
+msgid "Caps"
+msgstr "Kepi"
 
 msgid "Direction/Introduction"
 msgstr "Smer/Vstop"
 
-msgid "Idle"
-msgstr "Neaktivno"
+msgid "Dir"
+msgstr "Dir"
 
 msgid "Peer inactivity"
 msgstr "Neaktivnost partnerja"
+
+msgid "Idle"
+msgstr "Neaktivno"
 
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Povprečna vhodna/izhodna stopnja (KBps)"
@@ -3214,11 +3109,11 @@ msgstr "Sporočila prejeta"
 msgid "RX"
 msgstr "RX"
 
-msgid "Out Queue"
-msgstr "Izhodna vrsta"
-
 msgid "Queued messages to send to peer"
 msgstr "Sporočila v vrsti za pošiljanje partnerju"
+
+msgid "Out Queue"
+msgstr "Izhodna vrsta"
 
 msgid "Connection is backlogged"
 msgstr "Povezava je v nizu"
@@ -3760,11 +3655,11 @@ msgstr "Prenesi posodobitev I2P"
 msgid "Unsigned update available"
 msgstr "Na voljo je neoznačena posodobitev"
 
-msgid "Help with firewall configuration"
-msgstr "Pomoč pri konfiguraciji firewalla"
-
 msgid "Check network connection and NAT/firewall!"
 msgstr "Preverite omrežno povezavo in NAT/firewall!"
+
+msgid "Help with firewall configuration"
+msgstr "Pomoč pri konfiguraciji firewalla"
 
 msgid "Attempt to download router reference files (if automatic reseed has failed)"
 msgstr "Poskus prenosa datotek za referenco usmerjevalnika (če je avtomatsko ponovno semenjenje spodletelo)"
@@ -3799,23 +3694,35 @@ msgstr "Premakni na dno"
 msgid "Select a section to add"
 msgstr "Izberite sekcijo za dodajanje"
 
+msgid "Router Information (advanced)"
+msgstr "Informacije o usmerjevalniku (napredno)"
+
+msgid "Advanced Links"
+msgstr "Napredne povezave"
+
+msgid "Bandwidth Graph"
+msgstr "Graf širine pasma"
+
+msgid "UTC Clock"
+msgstr "UTC uro"
+
+msgid "Congestion"
+msgstr "Zastoj"
+
+msgid "CPU Load"
+msgstr "Obremenitev CPU"
+
+msgid "Firewall &amp; Reseed Status"
+msgstr "Stanje firewall &amp; status ponovnega semenjenja"
+
 msgid "Help &amp; FAQ"
 msgstr "Pomoč &amp; ČPP"
-
-msgid "I2P Services"
-msgstr "Storitve I2P"
 
 msgid "I2P Internals"
 msgstr "Notranji deli I2P"
 
-msgid "Router Information"
-msgstr "Informacije o usmerjevalniku"
-
-msgid "Router Information (brief)"
-msgstr "Informacije o usmerjevalniku (kratko)"
-
-msgid "Router Information (advanced)"
-msgstr "Informacije o usmerjevalniku (napredno)"
+msgid "I2P Services"
+msgstr "Storitve I2P"
 
 msgid "Memory Usage Bar"
 msgstr "Črtica uporabe pomnilnika"
@@ -3823,35 +3730,23 @@ msgstr "Črtica uporabe pomnilnika"
 msgid "Network Reachability"
 msgstr "Dosegljivost omrežja"
 
-msgid "Update Status"
-msgstr "Stanje posodabljanja"
+msgid "News &amp; Updates"
+msgstr "Novice &amp; posodobitve"
 
 msgid "Restart Status"
 msgstr "Stanje ponovnega zagona"
 
-msgid "Firewall &amp; Reseed Status"
-msgstr "Stanje firewall &amp; status ponovnega semenjenja"
+msgid "Router Information"
+msgstr "Informacije o usmerjevalniku"
 
-msgid "Bandwidth Graph"
-msgstr "Graf širine pasma"
-
-msgid "Congestion"
-msgstr "Zastoj"
+msgid "Router Information (brief)"
+msgstr "Informacije o usmerjevalniku (kratko)"
 
 msgid "Tunnel Status"
 msgstr "Stanje tunelja"
 
-msgid "News &amp; Updates"
-msgstr "Novice &amp; posodobitve"
-
-msgid "Advanced Links"
-msgstr "Napredne povezave"
-
-msgid "UTC Clock"
-msgstr "UTC uro"
-
-msgid "CPU Load"
-msgstr "Obremenitev CPU"
+msgid "Update Status"
+msgstr "Stanje posodabljanja"
 
 msgid "I2P Router Help &amp; FAQ"
 msgstr "Pomoč &amp; ČPP za usmerjevalnik I2P"
@@ -4036,6 +3931,9 @@ msgstr "Skupaj parterjev v NetDb"
 
 msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Parterji, z njimi smo razgovarjali v zadnjih minutah/zadnjo uro"
+
+msgid "Peers we've been talking to in the last minute"
+msgstr ""
 
 msgid "The number of peers available for building client tunnels"
 msgstr "Število parterjev, na voljo za izgradnjo klientovih tuneljev"
@@ -4373,6 +4271,9 @@ msgstr "Nadaljuj blokiranje za"
 msgid "days"
 msgstr "dni"
 
+msgid "Known Floodfills"
+msgstr "Znane zalivne"
+
 msgid "Average closest floodfill distance"
 msgstr "Povprečna najbližja razdalja do zalivnega"
 
@@ -4543,6 +4444,9 @@ msgstr "Prenešeni podatki"
 
 msgid "Data"
 msgstr "Podatki"
+
+msgid "Limit"
+msgstr ""
 
 msgid "Receive on"
 msgstr "Prejmi na"
@@ -5516,6 +5420,9 @@ msgstr "Namesti sistemsko storitev I2P. To je priporočen način za izvajanje I2
 msgid "config sidebar"
 msgstr "konfig stranica"
 
+msgid "Sidebar Options"
+msgstr ""
+
 msgid "Refresh interval"
 msgstr "Interval osveževanja"
 
@@ -5524,6 +5431,12 @@ msgstr "sekunde"
 
 msgid "0 to disable"
 msgstr "0 za onemogočanje"
+
+msgid "Unified sidebar"
+msgstr ""
+
+msgid "Use the same sidebar on all pages"
+msgstr ""
 
 msgid "config stats"
 msgstr "konfig statistika"
@@ -5724,6 +5637,9 @@ msgstr "dogodki"
 msgid "Event Log"
 msgstr "Dnevnik dogodkov"
 
+msgid "Combined"
+msgstr ""
+
 msgid "graph"
 msgstr "graf"
 
@@ -5801,6 +5717,9 @@ msgstr "Ta nastavitev, ko je nastavljeno na true, bo prikazala povprečje testa 
 
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Ta nastavitev, ko je nastavljeno na true, bo prikazala povezave <i>Spletne strani, ki vam zanimajo</i> na <a href=/sitemap>spletne mapi</a>. [Privzeto je false]"
+
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
+msgstr ""
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Ta nastavitev določa, ali naj usmerjevalnik uporablja podano datoteko <i>blocklist.txt</i> in kakršne koli konfigurirane črne listice uporabnika za omogočanje prepovedi usmerjevalnikov po diju ali IP naslovu. Omrežni razponi in maski so podprti za IPv4, vendar ne za IPv6. Za dodatne informacije glejte <i>blocklist.txt</i> v imeniku aplikacije I2P+. [Omogočeno privzeto, potreben je ponovni zagon]"
@@ -6615,8 +6534,8 @@ msgstr "Če je zahtevana niz <i>Registracijska overitev</i>, ga lahko najdete na
 msgid "If you are in a hurry and can't wait a few hours, you can tell people to use a \"jump\" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is working, you can tell others to use it."
 msgstr "Če ste v teku in ne morete počakati nekaj ur, ljudem lahko sporočite, da uporabljajo storitev usmerjanja pomočnika naslova \"skok\". To običajno deluje znotraj nekaj minut po registraciji vašega imena gostitelja na istem mestu. Najprej se sami preizkusite, vnesite <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>izbranoimegostitelja.i2p</i></code> v brskalnik. Ko to deluje, lahko drugim sporočite, da to uporabljajo."
 
-msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skanki2p</a>, and paste the link where it's required to share it with others."
-msgstr "Alternativno, lahko kopirate <i>povezavo pomočnika naslova</i> za vašo domeno, navedeno na strani z naslovnikom, ali pa na strani z podrobnostmi o vaši domeni, npr. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>podrobnosti o i2p-projekt.i2p</a>, in prilepite povezavo tam, kjer je to potrebno, da jo podelite z drugimi."
+msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
+msgstr ""
 
 msgid "Backup your private key!"
 msgstr "Naredite varnostno kopijo svojega zasebnega ključa!"
@@ -6852,8 +6771,8 @@ msgstr "Odpri <a href=/confignet#udpconfig>vrate I2P+</a> na vašem modem, stre�
 msgid "Getting Support Online"
 msgstr "Pridobivanje podpore online"
 
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "Morda bi tudi rad preglejali informacije na <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>spletni strani I2P</a>, objavili sporočila na <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>foruma za razprave I2P</a> ali bi obiskal <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> ali <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> na notranjem IRC omrežju I2P."
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
+msgstr ""
 
 msgid "Reporting Bugs"
 msgstr "Porocanje o napakah"
@@ -7392,6 +7311,9 @@ msgstr "Prilagodba povezav"
 msgid "Configure display language, theme and optional console password"
 msgstr "Konfiguriraj jezik prikaza, temo in nepovrzeno geslo konzole"
 
+msgid "Language"
+msgstr ""
+
 msgid "Configure router bandwidth"
 msgstr "Konfigurirajte širino pasma strežnika"
 
@@ -7456,6 +7378,24 @@ msgstr "Dnevniki storitve (Omotnik)"
 msgid "network database"
 msgstr "baza podatkov omrežja"
 
+msgid "Encryption type"
+msgstr ""
+
+msgid "Encryption types"
+msgstr ""
+
+msgid "Signature types"
+msgstr ""
+
+msgid "Locally hosted private service"
+msgstr ""
+
+msgid "Locally hosted public service"
+msgstr ""
+
+msgid "Requested client leaseset"
+msgstr ""
+
 msgid "network database router map"
 msgstr "karta strežnika baze podatkov omrežja"
 
@@ -7498,6 +7438,12 @@ msgstr "Prepovedani parterji"
 
 msgid "Fast / High Capacity"
 msgstr "Hitro / Visoka zmogljivost"
+
+msgid "router logs"
+msgstr ""
+
+msgid "service logs"
+msgstr ""
 
 msgid "Manage I2P addresses"
 msgstr "Upravljanje naslovov I2P"
@@ -7703,6 +7649,9 @@ msgstr "Preklopi ID-jev tunela"
 msgid "Toggle Tunnels"
 msgstr "Preklopi tunele"
 
+msgid "Updating sidebar sections"
+msgstr ""
+
 msgid "Peer Profile"
 msgstr "Profil sosednjega strežnika"
 
@@ -7848,7 +7797,15 @@ msgstr "Končano"
 
 
 
-#, java-format
+
+
+
+
+
+
+
+
+
 
 
 

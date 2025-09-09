@@ -50,6 +50,9 @@ msgstr "Πληκτρολογήστε {0}"
 msgid "DSA 1024 bit"
 msgstr "DSA 1024 bit"
 
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal 2048 bit"
+
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
 msgstr[0] "Αναζήτηση για <span class=active>"
@@ -270,6 +273,9 @@ msgstr "Προσθήκη νέου προορισμού"
 msgid "Import from hosts.txt file"
 msgstr "Εισαγωγή από αρχείο hosts.txt"
 
+msgid "other"
+msgstr "άλλο"
+
 msgid "Export in hosts.txt format"
 msgstr "Εξαγωγή σε μορφή hosts.txt"
 
@@ -282,8 +288,8 @@ msgstr "Εξαγωγή βιβλίου σε μορφή hosts.txt"
 msgid "Search"
 msgstr "Αναζήτηση"
 
-msgid "other"
-msgstr "άλλο"
+msgid "latest"
+msgstr ""
 
 msgid "all"
 msgstr "εκκαθάριση φίλτρου"
@@ -425,9 +431,6 @@ msgstr "Βάση 64 Hash"
 
 msgid "Public Key"
 msgstr "Δημόσιο κλειδί"
-
-msgid "ElGamal 2048 bit"
-msgstr "ElGamal 2048 bit"
 
 msgid "Signing Key"
 msgstr "Κλειδί υπογραφής"
@@ -596,5 +599,3 @@ msgstr "Οι διευθύνσεις που προστέθηκαν χειροκί
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Οι κεντρικοί υπολογιστές που λαμβάνετε από τις συνδρομές σας θα συγχωνευθούν με το βιβλίο διευθύνσεων του δρομολογητή σας."
-
-

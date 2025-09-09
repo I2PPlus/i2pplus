@@ -54,6 +54,14 @@ msgstr "Üst bant genişliği sınırı {0}KBps olarak değiştirildi"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "En düşük bant genişliği sınırı {0}KBps"
 
+#, java-format
+msgid "Maximum download speed changed to {0}KB/s"
+msgstr ""
+
+#, java-format
+msgid "Download speed limit is {0}KB/s"
+msgstr ""
+
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
 msgstr ""
 
@@ -138,12 +146,6 @@ msgstr "Otomatik başlatma etkin"
 msgid "Disabled autostart"
 msgstr "Otomatik başlatma devre dışı"
 
-msgid "Enabled smart sort"
-msgstr "Akıllı sıralama etkin"
-
-msgid "Disabled smart sort"
-msgstr "Akıllı sıralama devre dışı"
-
 msgid "Enabled open trackers - torrent restart required to take effect."
 msgstr "Açık izleyiciler etkinleştirildi - etkili olması için torrentin yeniden başlatılması gerekiyor.Açık izleyiciler etkinleştirildi - etkili olması için torrentin yeniden başlatılması gerekiyor.Açık izleyiciler etkinleştirildi - etkili olması için torrentin yeniden başlatılması gerekiyor.Açık izleyiciler etkinleştirildi - değişikliklerin etkili olması için torrenti yeniden başlatmalısınız."
 
@@ -199,8 +201,8 @@ msgstr "Tüm torrent listeleme sayfalarında etkinleştirilmiş bölümler Ekle 
 msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
 msgstr "Çok sayfalı torrent listeleme sayfalarının yalnızca ilk sayfasında görüntülenecek bölümler ekleme ve oluşturma."
 
-msgid "Configuration unchanged."
-msgstr "Yapılandırma değiştirilmedi."
+msgid "API key updated."
+msgstr ""
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Açık İzleyici listesi değiştirildi - etkili olması için torrentin yeniden başlatılması gerekiyor.Açık İzleyici listesi değiştirildi - etkili olması için torrentin yeniden başlatılması gerekiyor.Açık İzleyici listesi değiştirildi - etkili olması için torrentin yeniden başlatılması gerekiyor.Açık İzleyiciler listesi değiştirildi - değişikliklerin etkili olması için torrenti yeniden başlatmalısınız."
@@ -241,22 +243,6 @@ msgid "Torrent with the same data location is already running: {0}"
 msgstr "Zaten aynı veri konumundan alınan bir Torrent var: {0}"
 
 #, java-format
-msgid "ERROR - No I2P trackers in private torrent \"{0}\""
-msgstr "HATA - \"{0}\" kişisel torrenti içinde herhangi bir I2P izleyicisi yok"
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "Uyarı - \"{0}\" içinde I2P izleyici yok, yalnızca I2P açık izleyicilere ve DHT'ye duyurulacak.Uyarı - \"{0}\" içinde I2P izleyici yok, yalnızca I2P açık izleyicilere ve DHT'ye duyurulacak.Uyarı - \"{0}\" içinde I2P izleyici yok, yalnızca I2P açık izleyicilere ve DHT'ye duyurulacak.Uyarı - \"{0}\" içinde herhangi bir I2P izleyici yok. Yalnız I2P açık izleyicileri ve DHT üzerinde duyurulacak."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "Uyarı - \"{0}\" içinde I2P izleyici yok ve açık izleyiciler devre dışı, yalnızca DHT'ye duyurulacak.Uyarı - \"{0}\" içinde I2P izleyici yok ve açık izleyiciler devre dışı, yalnızca DHT'ye duyurulacak.Uyarı - \"{0}\" içinde I2P izleyici yok ve açık izleyiciler devre dışı, yalnızca DHT'ye duyurulacak.Uyarı - \"{0}\" içinde herhangi bir I2P izleyici yok ve I2P açık izleyicileri devre dışı bırakılmış. Yalnız DHT üzerinde duyurulacak."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "Uyarı - \"{0}\" içinde I2P izleyici yok ve DHT ile açık izleyiciler devre dışı, torrenti başlatmadan önce açık izleyicileri veya DHT'yi etkinleştirmelisiniz.Uyarı - \"{0}\" içinde I2P izleyici yok ve DHT ile açık izleyiciler devre dışı, torrenti başlatmadan önce açık izleyicileri veya DHT'yi etkinleştirmelisiniz.Uyarı - \"{0}\" içinde I2P izleyici yok ve DHT ile açık izleyiciler devre dışı, torrenti başlatmadan önce açık izleyicileri veya DHT'yi etkinleştirmelisiniz.Uyarı - \"{0}\" içinde herhangi bir I2P izleyici yok. I2P açık izleyicileri ve DHT devre dışı bırakılmış. Torrenti başlatmadan önce açık izleyicileri ya da DHT özelliğini etkinleştirin."
-
-#, java-format
 msgid "Torrent in \"{0}\" is invalid"
 msgstr "\"{0}\" içindeki torrent geçersiz"
 
@@ -274,6 +260,22 @@ msgstr "Torrent eklendi ve başlatıldı: {0}"
 #, java-format
 msgid "Torrent added: {0}"
 msgstr "Torrent eklendi: {0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "HATA - \"{0}\" kişisel torrenti içinde herhangi bir I2P izleyicisi yok"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "Uyarı - \"{0}\" içinde I2P izleyici yok, yalnızca I2P açık izleyicilere ve DHT'ye duyurulacak.Uyarı - \"{0}\" içinde I2P izleyici yok, yalnızca I2P açık izleyicilere ve DHT'ye duyurulacak.Uyarı - \"{0}\" içinde I2P izleyici yok, yalnızca I2P açık izleyicilere ve DHT'ye duyurulacak.Uyarı - \"{0}\" içinde herhangi bir I2P izleyici yok. Yalnız I2P açık izleyicileri ve DHT üzerinde duyurulacak."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "Uyarı - \"{0}\" içinde I2P izleyici yok ve açık izleyiciler devre dışı, yalnızca DHT'ye duyurulacak.Uyarı - \"{0}\" içinde I2P izleyici yok ve açık izleyiciler devre dışı, yalnızca DHT'ye duyurulacak.Uyarı - \"{0}\" içinde I2P izleyici yok ve açık izleyiciler devre dışı, yalnızca DHT'ye duyurulacak.Uyarı - \"{0}\" içinde herhangi bir I2P izleyici yok ve I2P açık izleyicileri devre dışı bırakılmış. Yalnız DHT üzerinde duyurulacak."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "Uyarı - \"{0}\" içinde I2P izleyici yok ve DHT ile açık izleyiciler devre dışı, torrenti başlatmadan önce açık izleyicileri veya DHT'yi etkinleştirmelisiniz.Uyarı - \"{0}\" içinde I2P izleyici yok ve DHT ile açık izleyiciler devre dışı, torrenti başlatmadan önce açık izleyicileri veya DHT'yi etkinleştirmelisiniz.Uyarı - \"{0}\" içinde I2P izleyici yok ve DHT ile açık izleyiciler devre dışı, torrenti başlatmadan önce açık izleyicileri veya DHT'yi etkinleştirmelisiniz.Uyarı - \"{0}\" içinde herhangi bir I2P izleyici yok. I2P açık izleyicileri ve DHT devre dışı bırakılmış. Torrenti başlatmadan önce açık izleyicileri ya da DHT özelliğini etkinleştirin."
 
 #, java-format
 msgid "Fetching {0}"
@@ -346,6 +348,18 @@ msgstr "Torrent silindi: \"{0}\""
 msgid "Adding torrents in {0}&hellip;"
 msgstr "{0} 'a torrent ekleme ..."
 
+#, java-format
+msgid "Down bandwidth limit is {0} KB/s"
+msgstr "İndirme bant genişliği sınırı {0} KBps"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KB/s"
+msgstr "Yukarı bant genişliği sınırı {0} KBps"
+
+#, java-format
+msgid "Connecting to I2CP port on I2P instance at {0}"
+msgstr ""
+
 msgid "Connecting to I2P"
 msgstr "I2P bağlantısı kuruluyor"
 
@@ -357,20 +371,12 @@ msgid "Starting up torrent {0}"
 msgstr "Torrent başlatılıyor {0}"
 
 #, java-format
-msgid "Down bandwidth limit is {0} KB/s"
-msgstr "İndirme bant genişliği sınırı {0} KBps"
-
-#, java-format
-msgid "Up bandwidth limit is {0} KB/s"
-msgstr "Yukarı bant genişliği sınırı {0} KBps"
-
-#, java-format
-msgid "I2P+ I2PSnark standalone version {0} started"
-msgstr "I2P I2PSnark bağımsız sürümü {0} başlatıldı"
-
-#, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
 msgstr "Yükleme bant genişliği sınırı, maksimum {1} eşzamanlı eşe yönelik {0} KBps'tir."
+
+#, java-format
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
+msgstr ""
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -413,6 +419,19 @@ msgid "Closing I2P tunnel after notifying trackers."
 msgstr "İzleyiciler bilgilendirilerek I2P tüneli kapatılıyor."
 
 #, java-format
+msgid "Cannot check {0}"
+msgstr ""
+
+msgid "Torrent already started"
+msgstr ""
+
+msgid "No storage"
+msgstr ""
+
+msgid "Starting recheck of {}"
+msgstr ""
+
+#, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
 msgstr "{0} torrentinin yeniden denetlenmesi tamamlandı, şimdi {1} tamamlandı"
 
@@ -423,6 +442,9 @@ msgstr "{0} torrentinin yeniden kontrolü tamamlandı, değişmedi{0} torrentini
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "{0} torrenti denetlenirken bir sorun çıktı"
+
+msgid "Cannot create diskspace bar"
+msgstr ""
 
 msgid "Data partition"
 msgstr ""
@@ -464,9 +486,6 @@ msgstr "{0} üzerindeki torrent geçersiz"
 
 msgid "Configuration"
 msgstr "Yapılandırma"
-
-msgid "Debug Mode"
-msgstr "Hata Ayıklama Modu"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "Anonim BitTorrent İstemcisi"
@@ -510,12 +529,6 @@ msgstr "Forum"
 
 msgid "Torrent &amp; filesharing forum"
 msgstr "Torrent"
-
-msgid "BTDigg"
-msgstr "BTDigg"
-
-msgid "I2P-based search engine for clearnet-hosted torrents"
-msgstr "clearnet tarafından barındırılan torrentler için I2P tabanlı arama motoru"
 
 msgid "Search torrents"
 msgstr "Torrentleri ara"
@@ -591,8 +604,8 @@ msgstr "İndirme Hızı"
 msgid "TX"
 msgstr "GÖN"
 
-msgid "Share ratio"
-msgstr "Yükleme oranı"
+msgid "Upload ratio"
+msgstr ""
 
 msgid "Uploaded"
 msgstr "Yüklendi"
@@ -634,6 +647,12 @@ msgid "Total size of loaded torrents"
 msgstr ""
 
 #, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] ""
+msgstr[1] ""
+
+#, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
 msgstr[0] "{0} DHT eş"
@@ -666,8 +685,8 @@ msgstr "Yüklenen toplam veri (listelenen torrentler için)"
 msgid "Total upload speed"
 msgstr "Toplam yükleme hızı"
 
-msgid "Toggle Debug Mode"
-msgstr ""
+msgid "Debug Mode"
+msgstr "Hata Ayıklama Modu"
 
 msgid "Normal Mode"
 msgstr "Normal Mod"
@@ -910,6 +929,9 @@ msgstr "kalan"
 msgid "Completed"
 msgstr "Tamamlandı"
 
+msgid "Share ratio"
+msgstr "Yükleme oranı"
+
 msgid "Last activity"
 msgstr "Son işlem"
 
@@ -1018,11 +1040,11 @@ msgstr "İçerik Filtreleri"
 msgid "Trackers"
 msgstr "İzleyiciler"
 
-msgid "Primary"
-msgstr "Birincil"
-
 msgid "Alternates"
 msgstr "Alternatifler"
+
+msgid "Primary"
+msgstr "Birincil"
 
 msgid "Tracker Type"
 msgstr "İzleyici Türü"
@@ -1334,6 +1356,12 @@ msgstr "Eklendi"
 msgid "Pieces"
 msgstr "Parçalar"
 
+msgid "Average download speed for torrent"
+msgstr ""
+
+msgid "Download speed"
+msgstr ""
+
 msgid "Completion"
 msgstr "Tamamlanma"
 
@@ -1481,6 +1509,9 @@ msgstr "Silmek üzere işaretleyin"
 msgid "Delete Selected"
 msgstr "Seçilmişleri Sil"
 
+msgid "File downloading priorities updated for torrent "
+msgstr ""
+
 msgid "Edit Torrent"
 msgstr "Torrent'i Düzenle"
 
@@ -1502,13 +1533,9 @@ msgstr "Değişiklikleri Kaydet"
 msgid "Torrent must be stopped"
 msgstr "Torrent durdurulmalı"
 
+
+
+
 #, java-format
-
-
-
-
-
-
-
 
 

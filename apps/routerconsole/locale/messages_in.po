@@ -1548,10 +1548,7 @@ msgstr "Restart dalam {0}"
 msgid "Save order"
 msgstr "Simpan urutan"
 
-msgid "Sidebar refresh disabled"
-msgstr ""
-
-msgid "Sidebar refresh interval changed"
+msgid "Sidebar preferences updated"
 msgstr ""
 
 msgid "Refresh interval must be a number"
@@ -1586,9 +1583,6 @@ msgstr "Dipindahkan"
 
 msgid "Saved order of sections."
 msgstr "Urutan dari bagian telah tersimpan."
-
-msgid "Stat filter and location updated successfully to"
-msgstr "Stat filter dan lokasi berhasil diperbarui ke"
 
 msgid "Full statistics enabled"
 msgstr "Statistik penuh diaktifkan"
@@ -2174,23 +2168,14 @@ msgstr "Forum komunitas terkait I2P"
 msgid "File-sharing forum"
 msgstr "Forum berbagi file"
 
-msgid "Alternative front-end for Twitter"
-msgstr "Front-end alternatif untuk Twitter"
-
-msgid "Rocksolid forums for the darknets"
-msgstr "Forum yang kokoh untuk darknet"
-
 msgid "Cross-network micro-blogging &amp; forums &amp; wiki"
 msgstr "Mikro-blogging lintas jaringan"
 
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Front-end alternatif yang berfokus pada privasi untuk Reddit"
 
-msgid "Base64 Image Encoder"
-msgstr "Enkoder Gambar Base64"
-
-msgid "An image cache and resize service"
-msgstr "Layanan cache dan pengubahan ukuran gambar"
+msgid "AI Image generation & Chat hub"
+msgstr ""
 
 msgid "IRC Logs for multiple networks"
 msgstr "Log IRC untuk beberapa jaringan"
@@ -2207,17 +2192,8 @@ msgstr "Landing page for various services"
 msgid "Streaming radio service"
 msgstr "Layanan radio streaming"
 
-msgid "Alternative frontend for Imgur"
-msgstr "Front-end alternatif untuk Imgur"
-
 msgid "Privacy-focused not-for-profit organization"
 msgstr "Organisasi nirlaba yang berfokus pada privasi"
-
-msgid "Outproxy bandwidth test"
-msgstr "Tes bandwidth keluar"
-
-msgid "speedtest"
-msgstr "tes kecepatan"
 
 msgid "Text translation engine"
 msgstr "Mesin terjemahan teks"
@@ -2225,20 +2201,8 @@ msgstr "Mesin terjemahan teks"
 msgid "translate"
 msgstr "menerjemahkan"
 
-msgid "Alternative front-end to Youtube"
-msgstr "Front-end alternatif untuk Youtube"
-
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "Penyedia privasi sehubungan dengan hosting web dan layanan VPN"
-
-msgid "Tor-focused Search Engine"
-msgstr "Mesin Pencari yang berfokus pada Tor"
-
-msgid "Pinterest Image Search Engine"
-msgstr "Mesin Pencarian Gambar Pinterest"
-
-msgid "Clearnet BitTorrent DHT search engine"
-msgstr "Mesin pencari Clearnet BitTorrent DHT"
 
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "Mesin Pencari DuckDuckGo (tanpa javascript)"
@@ -2248,21 +2212,6 @@ msgstr "Mesin Pencari Clearnet yang berfokus pada privasi"
 
 msgid "I2P Web Search Engine"
 msgstr "Mesin Pencari Web I2P"
-
-msgid "Enabling the free transmission of data in the public interest"
-msgstr "Memungkinkan transmisi data gratis untuk kepentingan umum"
-
-msgid "Selected Papers in Anonymity"
-msgstr "Makalah Terpilih dalam Anonimitas"
-
-msgid "Tor .onion site links"
-msgstr "Tautan situs Tor .onion"
-
-msgid "HTML Color Reference"
-msgstr "Referensi Warna HTML"
-
-msgid "HTMLColors"
-msgstr "HTMLWarna"
 
 msgid "I2P-related Wiki"
 msgstr "Wiki terkait I2P"
@@ -2279,29 +2228,17 @@ msgstr "Ensiklopedia Filsafat Internet"
 msgid "Standford Encyclopedia of Philosophy"
 msgstr "Ensiklopedia Filsafat Stanford"
 
-msgid "Psychonaut"
-msgstr "Psikonot"
-
-msgid "Wiki relating to altered states of consciousness"
-msgstr "Wiki yang berkaitan dengan kondisi kesadaran yang berubah"
-
 msgid "Computing-related tutorials"
 msgstr "Tutorial yang berhubungan dengan komputasi"
 
 msgid "SimplifiedGuide"
 msgstr "Panduan Sederhana"
 
-msgid "Vulnerability Database"
-msgstr "Basis Data Kerentanan"
-
 msgid "Web technology reference and learning site"
 msgstr "Referensi teknologi web dan situs pembelajaran"
 
 msgid "Alternative Wikipedia front-end focused on privacy"
 msgstr "Front-end Wikipedia alternatif berfokus pada privasi"
-
-msgid "The biggest online English dictionary"
-msgstr "Kamus bahasa Inggris online terbesar"
 
 msgid "World atlas including geography facts &amp; flags"
 msgstr "Atlas dunia termasuk fakta dan bendera geografi"
@@ -2312,14 +2249,8 @@ msgstr "Atlas Dunia"
 msgid "Technology News &amp; more..."
 msgstr "Berita teknologi dan banyak lagi ..."
 
-msgid "Independent investigative journalism"
-msgstr "Jurnalisme investigatif independen"
-
 msgid "Information Security Research &amp; Education"
 msgstr "Penelitian dan Pendidikan Keamanan Informasi"
-
-msgid "Darknet related news site"
-msgstr "Situs berita terkait jaringan gelap"
 
 msgid "DigitalTrends"
 msgstr "TrenDigital"
@@ -2332,24 +2263,6 @@ msgstr "Mempertahankan hak Anda di dunia digital"
 
 msgid "The Elliptic Curve Cryptography Blog"
 msgstr "Blog Kriptografi Kurva Elips"
-
-msgid "ForeignPolicy"
-msgstr "KebijakanLuarNegeri"
-
-msgid "The Global Magazine of News &amp; Ideas"
-msgstr "Majalah Global Berita dan Ide"
-
-msgid "FrontLineDefenders"
-msgstr "FrontLineDefenders"
-
-msgid "Human rights activism"
-msgstr "Aktivisme hak asasi manusia"
-
-msgid "Defending Human Rights Worldwide"
-msgstr "Membela Hak Asasi Manusia di Seluruh Dunia"
-
-msgid "HumanRightsWatch"
-msgstr "HumanRightsWatch"
 
 msgid "Fresh hacks every day"
 msgstr "Peretasan baru setiap hari"
@@ -2365,12 +2278,6 @@ msgstr "HongKongFreePress"
 
 msgid "Independent &amp; impartial news for Hong Kong"
 msgstr "Berita independen dan netral untuk Hong Kong"
-
-msgid "HongKongWatch"
-msgstr "HongKongWatch"
-
-msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr "Memantau ancaman terhadap kebebasan dan hak asasi di Hong Kong"
 
 msgid "JStorDaily"
 msgstr "JStorDaily"
@@ -2408,11 +2315,11 @@ msgstr "Platform Media Internasional Independen"
 msgid "OpenDemocracy"
 msgstr "Demokrasi Terbuka"
 
-msgid "News and blog feeds on I2P"
-msgstr "Berita dan feed blog di I2P"
+msgid "Online privacy &amp; tech blog"
+msgstr ""
 
-msgid "Planeta"
-msgstr "Planeta"
+msgid "RightToPrivacy"
+msgstr ""
 
 msgid "Lifestyle magazine"
 msgstr "Majalah gaya hidup"
@@ -2441,20 +2348,11 @@ msgstr "Berita untuk para kutu buku"
 msgid "Technology news &amp; reviews"
 msgstr "Berita dan ulasan teknologi"
 
-msgid "Reporting on China without fear or favor"
-msgstr "Melaporkan Tiongkok tanpa rasa takut atau bantuan"
-
 msgid "News from the Taiwan Capital"
 msgstr "Berita dari Ibu Kota Taiwan"
 
 msgid "TaipeiTimes"
 msgstr "Waktu Taipei"
-
-msgid "TechXplore"
-msgstr "TeknologiXplore"
-
-msgid "Technology and engineering news"
-msgstr "Berita teknologi dan teknik"
 
 msgid "TechMeme"
 msgstr "TeknologiMeme"
@@ -2497,12 +2395,6 @@ msgstr "Republik Baru"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "Berita berbagi file dan hak cipta"
-
-msgid "A magazine about human rights and social justice"
-msgstr "Majalah tentang hak asasi manusia dan keadilan sosial"
-
-msgid "UpstreamJournal"
-msgstr "UpstreamJournal"
 
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
 msgstr "Memajukan pemahaman yang seimbang dan realistik tentang kepentingan Amerika di Timur Tengah"
@@ -2833,16 +2725,22 @@ msgstr ""
 msgid "Not initialized"
 msgstr "Tidak diaktifkan"
 
-msgid "Sorted by hash distance, closest first."
+msgid "Total Remote Leasesets"
 msgstr ""
 
 msgid "Compact mode"
 msgstr ""
 
-msgid "Total Remote Leasesets"
+msgid "Local Leasesets"
+msgstr ""
+
+msgid "Debug Mode"
 msgstr ""
 
 msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Sorted by hash distance, closest first."
 msgstr ""
 
 msgid "Mod Data"
@@ -2857,17 +2755,11 @@ msgstr ""
 msgid "Change in"
 msgstr ""
 
-msgid "Known Floodfills"
-msgstr "Timbunan Banjir yang Diketahui"
-
 msgid "Floodfill mode enabled"
 msgstr ""
 
 msgid "Routing Key"
 msgstr "Kunci Perutean"
-
-msgid "Network data"
-msgstr "Data jaringan"
 
 msgid "Median distance (bits)"
 msgstr "Jarak median (bit)"
@@ -2877,6 +2769,12 @@ msgstr "Perkiraan total timbunan banjir"
 
 msgid "Estimated total leasesets"
 msgstr "Perkiraan total sewa"
+
+msgid "Total Local Leasesets"
+msgstr ""
+
+msgid "Remote Leasesets"
+msgstr ""
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2909,12 +2807,6 @@ msgstr "Kedaluwarsa{0}"
 msgid "Expired{0} ago"
 msgstr "Kedaluwarsa{0} yang lalu"
 
-msgid "Received as published"
-msgstr "Diterima sebagai diterbitkan?"
-
-msgid "Received as reply"
-msgstr "Diterima sebagai balasan?"
-
 msgid "Distance"
 msgstr "Jarak"
 
@@ -2923,6 +2815,9 @@ msgstr "Offline ditandatangani"
 
 msgid "Signature type"
 msgstr "Jenis tanda tangan"
+
+msgid "Public Key"
+msgstr ""
 
 msgid "Unsupported type"
 msgstr "Tipe tidak didukung"
@@ -2934,6 +2829,9 @@ msgstr "Kedaluwarsa dalam {0}"
 #, java-format
 msgid "Expired {0} ago"
 msgstr "Kadaluarsa dalam {0} yang lalu"
+
+msgid "Unknown"
+msgstr "Tidak Diketahui"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
 msgstr ""
@@ -2970,9 +2868,6 @@ msgstr "Timbunan Banjir"
 
 msgid "Total"
 msgstr "Total "
-
-msgid "Unknown"
-msgstr "Tidak Diketahui"
 
 msgid "Initializing"
 msgstr "Inisialisasi"
@@ -3047,9 +2942,6 @@ msgstr "Tampilkan semua router dengan alamat ini di NetDb"
 msgid "Show all routers with this port in the NetDb"
 msgstr "Tampilkan semua router dengan port ini di NetDb"
 
-msgid "Network ID"
-msgstr "ID Jaringan"
-
 msgid "Routers"
 msgstr "Router"
 
@@ -3061,6 +2953,12 @@ msgstr "Terakhir dengar"
 
 msgid "Last heard from"
 msgstr "Terakhir terdengar kabarnya"
+
+msgid "Network Id"
+msgstr ""
+
+msgid "Count is always spoofed to avoid indicating router restarts"
+msgstr ""
 
 msgid "Hidden or starting up"
 msgstr "Tersembunyi atau sedang diaktifkan"
@@ -3121,19 +3019,16 @@ msgstr "ke file router.config Anda."
 msgid "Peer Connections"
 msgstr "Koneksi Rekan"
 
-msgid "Active in the last minute"
-msgstr "Aktif di menit terakhir"
-
 msgid "IPv4"
 msgstr "IPV4"
 
 msgid "IPv6"
 msgstr "IPv6 "
 
-msgid "Limit"
+msgid "Active connections / Max permitted"
 msgstr ""
 
-msgid "Maximum permitted connections"
+msgid "Connections / Limit"
 msgstr ""
 
 msgid "Current / maximum permitted"
@@ -3142,23 +3037,23 @@ msgstr "Saat ini / maksimum yang diizinkan"
 msgid "NTCP connections"
 msgstr "Koneksi NTCP"
 
-msgid "Caps"
-msgstr "Cap"
-
 msgid "Peer capabilities"
 msgstr "Kemampuan rekan"
 
-msgid "Dir"
-msgstr "Dir "
+msgid "Caps"
+msgstr "Cap"
 
 msgid "Direction/Introduction"
 msgstr "Pengarahan/pengenalan"
 
-msgid "Idle"
-msgstr "Tidak aktif"
+msgid "Dir"
+msgstr "Dir "
 
 msgid "Peer inactivity"
 msgstr "Ketidakaktifan teman sebaya"
+
+msgid "Idle"
+msgstr "Tidak aktif"
 
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Rata-rata tarif masuk/keluar (KBps)"
@@ -3190,11 +3085,11 @@ msgstr "Pesan diterima"
 msgid "RX"
 msgstr "RX "
 
-msgid "Out Queue"
-msgstr "Antrian keluar"
-
 msgid "Queued messages to send to peer"
 msgstr "Pesan antri untuk dikirim ke rekan"
+
+msgid "Out Queue"
+msgstr "Antrian keluar"
 
 msgid "Connection is backlogged"
 msgstr "Koneksi terhambat"
@@ -3712,11 +3607,11 @@ msgstr "Unduh Pembaruan I2P"
 msgid "Unsigned update available"
 msgstr "Pembaruan yang tidak ditandatangani tersedia"
 
-msgid "Help with firewall configuration"
-msgstr "Bantuan untuk konfigurasi firewall"
-
 msgid "Check network connection and NAT/firewall!"
 msgstr "Periksa koneksi jaringan dan NAT/firewall!"
+
+msgid "Help with firewall configuration"
+msgstr "Bantuan untuk konfigurasi firewall"
 
 msgid "Attempt to download router reference files (if automatic reseed has failed)"
 msgstr "Coba untuk men-download file reference router (jika reseed otomatis telah gagal)"
@@ -3751,23 +3646,35 @@ msgstr "Pindah ke paling bawah"
 msgid "Select a section to add"
 msgstr "Pilih bagian untuk ditambahkan"
 
+msgid "Router Information (advanced)"
+msgstr "Informasi Router (lengkap)"
+
+msgid "Advanced Links"
+msgstr "Tautan Lanjutan"
+
+msgid "Bandwidth Graph"
+msgstr "Grafik Bandwidth"
+
+msgid "UTC Clock"
+msgstr "Jam UTC"
+
+msgid "Congestion"
+msgstr "Kemacetan"
+
+msgid "CPU Load"
+msgstr "Beban CPU"
+
+msgid "Firewall &amp; Reseed Status"
+msgstr "Status Firewall &amp; Reseed "
+
 msgid "Help &amp; FAQ"
 msgstr "Bantuan dan FAQ"
-
-msgid "I2P Services"
-msgstr "I2P Service"
 
 msgid "I2P Internals"
 msgstr "I2P Internal"
 
-msgid "Router Information"
-msgstr "Informasi Router"
-
-msgid "Router Information (brief)"
-msgstr "Informasi Router (singkat)"
-
-msgid "Router Information (advanced)"
-msgstr "Informasi Router (lengkap)"
+msgid "I2P Services"
+msgstr "I2P Service"
 
 msgid "Memory Usage Bar"
 msgstr "Memory Usage Bar "
@@ -3775,35 +3682,23 @@ msgstr "Memory Usage Bar "
 msgid "Network Reachability"
 msgstr "Jangkauan Jaringan"
 
-msgid "Update Status"
-msgstr "Status Update"
+msgid "News &amp; Updates"
+msgstr "Berita &amp; Update"
 
 msgid "Restart Status"
 msgstr "Status Restart"
 
-msgid "Firewall &amp; Reseed Status"
-msgstr "Status Firewall &amp; Reseed "
+msgid "Router Information"
+msgstr "Informasi Router"
 
-msgid "Bandwidth Graph"
-msgstr "Grafik Bandwidth"
-
-msgid "Congestion"
-msgstr "Kemacetan"
+msgid "Router Information (brief)"
+msgstr "Informasi Router (singkat)"
 
 msgid "Tunnel Status"
 msgstr "Status Terowongan"
 
-msgid "News &amp; Updates"
-msgstr "Berita &amp; Update"
-
-msgid "Advanced Links"
-msgstr "Tautan Lanjutan"
-
-msgid "UTC Clock"
-msgstr "Jam UTC"
-
-msgid "CPU Load"
-msgstr "Beban CPU"
+msgid "Update Status"
+msgstr "Status Update"
 
 msgid "I2P Router Help &amp; FAQ"
 msgstr "Bantuan dan FAQ router I2P"
@@ -3988,6 +3883,9 @@ msgstr "Total rekan di NetDb"
 
 msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Peer yang kami sudah bicara dalam beberapa menit/jam terakhir"
+
+msgid "Peers we've been talking to in the last minute"
+msgstr ""
 
 msgid "The number of peers available for building client tunnels"
 msgstr "Jumlah peer yang tersedia untuk membangun client tunnels"
@@ -4319,6 +4217,9 @@ msgstr "Terapkan blok untuk"
 msgid "days"
 msgstr "hari"
 
+msgid "Known Floodfills"
+msgstr "Timbunan Banjir yang Diketahui"
+
 msgid "Average closest floodfill distance"
 msgstr "Rata-rata jarak timbunan banjir terdekat"
 
@@ -4489,6 +4390,9 @@ msgstr "Data ditransfer"
 
 msgid "Data"
 msgstr "Data"
+
+msgid "Limit"
+msgstr ""
 
 msgid "Receive on"
 msgstr "Diterima pada"
@@ -5462,6 +5366,9 @@ msgstr "Instal layanan sistem I2P. "
 msgid "config sidebar"
 msgstr "bilah sisi konfigurasi"
 
+msgid "Sidebar Options"
+msgstr ""
+
 msgid "Refresh interval"
 msgstr "Refresh Interval "
 
@@ -5470,6 +5377,12 @@ msgstr "detik"
 
 msgid "0 to disable"
 msgstr "0 untuk menonaktifkan"
+
+msgid "Unified sidebar"
+msgstr ""
+
+msgid "Use the same sidebar on all pages"
+msgstr ""
 
 msgid "config stats"
 msgstr "statistik konfigurasi"
@@ -5670,6 +5583,9 @@ msgstr "event"
 msgid "Event Log"
 msgstr "Catatan Peristiwa"
 
+msgid "Combined"
+msgstr ""
+
 msgid "graph"
 msgstr "Grafik"
 
@@ -5747,6 +5663,9 @@ msgstr "Pengaturan ini, ketika diatur menjadi true, akan menampilkan pembacaan R
 
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Pengaturan ini, ketika diatur menjadi true, akan menampilkan tautan <i>Situs Penting</i> pada <a href=/sitemap>peta situs</a>. [Default adalah false]"
+
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
+msgstr ""
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Pengaturan ini menentukan apakah router harus menggunakan file <i>blocklist.txt</i> yang disediakan dan daftar blokir apa pun yang dikonfigurasi pengguna untuk mengaktifkan pemblokiran router berdasarkan hash atau alamat IP. Rentang dan netmask didukung untuk IPv4 tetapi tidak untuk IPv6. Lihat file <i>blocklist.txt</i> di direktori aplikasi I2P Anda untuk informasi lebih lanjut. [Diaktifkan secara default, restart diperlukan]"
@@ -6561,8 +6480,8 @@ msgstr "Jika diminta <i>Otentikasi Pendaftaran</i>, Anda dapat menemukannya di h
 msgid "If you are in a hurry and can't wait a few hours, you can tell people to use a \"jump\" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is working, you can tell others to use it."
 msgstr "Jika Anda dalam keadaan terburu-buru dan tidak bisa menunggu beberapa jam, Anda dapat memberitahu orang lain untuk menggunakan layanan bantuan alamat \"lompat\" atau redireksi. Biasanya ini akan berfungsi dalam beberapa menit sejak Anda mendaftarkan hostname di situs yang sama. Cobalah terlebih dahulu dengan memasukkan <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> ke browser Anda. Sekali ini berfungsi, Anda dapat memberitahu orang lain untuk menggunakannya."
 
-msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skanki2p</a>, and paste the link where it's required to share it with others."
-msgstr "Sebagai alternatif, Anda dapat menyalin tautan <i>bantuan alamat</i> untuk domain Anda, yang ditunjukkan baik di halaman daftar alamat buku atau di halaman rincian untuk domain Anda misalnya <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>rincian untuk i2p-projekt.i2p</a>, dan tempel tautan tersebut dimana diperlukan untuk berbagi dengan orang lain."
+msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
+msgstr ""
 
 msgid "Backup your private key!"
 msgstr "Cadangkan kunci pribadi Anda!"
@@ -6798,8 +6717,8 @@ msgstr "Buka <a href=/confignet#udpconfig>port I2P+</a> di modem, router dan/ata
 msgid "Getting Support Online"
 msgstr "Mendapatkan Dukungan Secara Online"
 
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "Anda juga mungkin ingin meninjau informasi di <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>situs web I2P</a>, mengirimkan pesan ke <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>forum diskusi I2P</a> atau berkunjung ke <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> atau <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> di jaringan IRC internal I2P."
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
+msgstr ""
 
 msgid "Reporting Bugs"
 msgstr "Memporting Bug"
@@ -7338,6 +7257,9 @@ msgstr "Sesuaikan tautan"
 msgid "Configure display language, theme and optional console password"
 msgstr "Konfigurasikan bahasa tampilan, tema, dan kata sandi konsol opsional"
 
+msgid "Language"
+msgstr ""
+
 msgid "Configure router bandwidth"
 msgstr "Konfigurasikan bandwidth router"
 
@@ -7402,6 +7324,24 @@ msgstr "Service (Wrapper) Logs "
 msgid "network database"
 msgstr "database jaringan"
 
+msgid "Encryption type"
+msgstr ""
+
+msgid "Encryption types"
+msgstr ""
+
+msgid "Signature types"
+msgstr ""
+
+msgid "Locally hosted private service"
+msgstr ""
+
+msgid "Locally hosted public service"
+msgstr ""
+
+msgid "Requested client leaseset"
+msgstr ""
+
 msgid "network database router map"
 msgstr "Peta router basis data jaringan"
 
@@ -7444,6 +7384,12 @@ msgstr "Peers yang Diblokir"
 
 msgid "Fast / High Capacity"
 msgstr "Cepat / Kapasitas Tinggi"
+
+msgid "router logs"
+msgstr ""
+
+msgid "service logs"
+msgstr ""
 
 msgid "Manage I2P addresses"
 msgstr "Kelola alamat I2P"
@@ -7649,6 +7595,9 @@ msgstr "Beralih ID Terowongan"
 msgid "Toggle Tunnels"
 msgstr "Beralih Terowongan"
 
+msgid "Updating sidebar sections"
+msgstr ""
+
 msgid "Peer Profile"
 msgstr "Peer Profile "
 
@@ -7794,7 +7743,15 @@ msgstr "Selesai"
 
 
 
-#, java-format
+
+
+
+
+
+
+
+
+
 
 
 

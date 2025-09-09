@@ -1548,10 +1548,7 @@ msgstr "Khởi động lại sau {0}"
 msgid "Save order"
 msgstr "Lưu đơn hàng"
 
-msgid "Sidebar refresh disabled"
-msgstr ""
-
-msgid "Sidebar refresh interval changed"
+msgid "Sidebar preferences updated"
 msgstr ""
 
 msgid "Refresh interval must be a number"
@@ -1586,9 +1583,6 @@ msgstr "Đã di chuyển"
 
 msgid "Saved order of sections."
 msgstr "Đã lưu thứ tự các phần."
-
-msgid "Stat filter and location updated successfully to"
-msgstr "Bộ lọc thống kê và vị trí được cập nhật thành công vào"
 
 msgid "Full statistics enabled"
 msgstr "Đã bật thống kê đầy đủ"
@@ -2174,23 +2168,14 @@ msgstr "Diễn đàn cộng đồng liên quan đến I2P"
 msgid "File-sharing forum"
 msgstr "Diễn đàn chia sẻ file"
 
-msgid "Alternative front-end for Twitter"
-msgstr "Giao diện người dùng thay thế cho Twitter"
-
-msgid "Rocksolid forums for the darknets"
-msgstr "Diễn đàn Rocksolid dành cho darknet"
-
 msgid "Cross-network micro-blogging &amp; forums &amp; wiki"
 msgstr "Vi blog xuyên mạng"
 
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Giao diện người dùng thay thế tập trung vào quyền riêng tư dành cho Reddit"
 
-msgid "Base64 Image Encoder"
-msgstr "Bộ mã hóa hình ảnh Base64"
-
-msgid "An image cache and resize service"
-msgstr "Dịch vụ lưu trữ hình ảnh và thay đổi kích thước"
+msgid "AI Image generation & Chat hub"
+msgstr ""
 
 msgid "IRC Logs for multiple networks"
 msgstr "Nhật ký IRC cho nhiều mạng"
@@ -2207,17 +2192,8 @@ msgstr "Trang đích cho các dịch vụ khác nhau"
 msgid "Streaming radio service"
 msgstr "Dịch vụ phát thanh trực tuyến"
 
-msgid "Alternative frontend for Imgur"
-msgstr "Giao diện người dùng thay thế cho Imgur"
-
 msgid "Privacy-focused not-for-profit organization"
 msgstr "Tổ chức phi lợi nhuận tập trung vào quyền riêng tư"
-
-msgid "Outproxy bandwidth test"
-msgstr "Kiểm tra băng thông bên ngoài"
-
-msgid "speedtest"
-msgstr "kiểm tra tốc độ"
 
 msgid "Text translation engine"
 msgstr "Công cụ dịch văn bản"
@@ -2225,20 +2201,8 @@ msgstr "Công cụ dịch văn bản"
 msgid "translate"
 msgstr "dịch"
 
-msgid "Alternative front-end to Youtube"
-msgstr "Giao diện người dùng thay thế cho Youtube"
-
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "Nhà cung cấp dịch vụ lưu trữ web và dịch vụ VPN tôn trọng quyền riêng tư"
-
-msgid "Tor-focused Search Engine"
-msgstr "Công cụ tìm kiếm tập trung vào Tor"
-
-msgid "Pinterest Image Search Engine"
-msgstr "Máy tìm hình ảnh Pinterest"
-
-msgid "Clearnet BitTorrent DHT search engine"
-msgstr "Công cụ tìm kiếm Clearnet BitTorrent DHT"
 
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "Công cụ tìm kiếm DuckDuckGo (không có javascript)"
@@ -2248,21 +2212,6 @@ msgstr "Công cụ tìm kiếm Clearnet tập trung vào quyền riêng tư"
 
 msgid "I2P Web Search Engine"
 msgstr "Công cụ tìm kiếm web I2P"
-
-msgid "Enabling the free transmission of data in the public interest"
-msgstr "Cho phép truyền dữ liệu miễn phí vì lợi ích công cộng"
-
-msgid "Selected Papers in Anonymity"
-msgstr "Các bài viết được chọn ẩn danh"
-
-msgid "Tor .onion site links"
-msgstr "Liên kết trang web Tor .onion"
-
-msgid "HTML Color Reference"
-msgstr "Tham chiếu màu HTML"
-
-msgid "HTMLColors"
-msgstr "HTMLMàu sắc"
 
 msgid "I2P-related Wiki"
 msgstr "Wiki liên quan đến I2P"
@@ -2279,29 +2228,17 @@ msgstr "Bách khoa toàn thư Internet về triết học"
 msgid "Standford Encyclopedia of Philosophy"
 msgstr "Bách khoa toàn thư Stanford về triết học"
 
-msgid "Psychonaut"
-msgstr "Nhà du hành tâm lý"
-
-msgid "Wiki relating to altered states of consciousness"
-msgstr "Wiki liên quan đến các trạng thái ý thức bị thay đổi"
-
 msgid "Computing-related tutorials"
 msgstr "Bài giảng liên quan đến máy tính"
 
 msgid "SimplifiedGuide"
 msgstr "Hướng dẫn đơn giản hóa"
 
-msgid "Vulnerability Database"
-msgstr "Cơ sở dữ liệu dễ bị tổn thương"
-
 msgid "Web technology reference and learning site"
 msgstr "Trang web học tập và tham khảo công nghệ web"
 
 msgid "Alternative Wikipedia front-end focused on privacy"
 msgstr "Giao diện người dùng Wikipedia thay thế tập trung vào quyền riêng tư"
-
-msgid "The biggest online English dictionary"
-msgstr "Từ điển tiếng Anh trực tuyến lớn nhất"
 
 msgid "World atlas including geography facts &amp; flags"
 msgstr "Bản đồ thế giới bao gồm thông tin địa lý"
@@ -2312,14 +2249,8 @@ msgstr "Atlas thế giới"
 msgid "Technology News &amp; more..."
 msgstr "Tin tức công nghệ và nhiều hơn nữa..."
 
-msgid "Independent investigative journalism"
-msgstr "Báo chí điều tra độc lập"
-
 msgid "Information Security Research &amp; Education"
 msgstr "Nghiên cứu và giáo dục bảo mật thông tin"
-
-msgid "Darknet related news site"
-msgstr "Trang tin tức liên quan đến Darknet"
 
 msgid "DigitalTrends"
 msgstr "Xu hướng kỹ thuật số"
@@ -2332,24 +2263,6 @@ msgstr "Bảo vệ quyền lợi của bạn trong thế giới kỹ thuật s�
 
 msgid "The Elliptic Curve Cryptography Blog"
 msgstr "Blog mật mã đường cong Elliptic"
-
-msgid "ForeignPolicy"
-msgstr "Chính sách đối ngoại"
-
-msgid "The Global Magazine of News &amp; Ideas"
-msgstr "Tạp chí tin tức toàn cầu"
-
-msgid "FrontLineDefenders"
-msgstr "Tiền tuyếnHậu vệ"
-
-msgid "Human rights activism"
-msgstr "Hoạt động nhân quyền"
-
-msgid "Defending Human Rights Worldwide"
-msgstr "Bảo vệ nhân quyền trên toàn thế giới"
-
-msgid "HumanRightsWatch"
-msgstr "Theo dõi nhân quyền"
 
 msgid "Fresh hacks every day"
 msgstr "Những mẹo mới mỗi ngày"
@@ -2365,12 +2278,6 @@ msgstr "HongKongFreePress"
 
 msgid "Independent &amp; impartial news for Hong Kong"
 msgstr "Độc lập"
-
-msgid "HongKongWatch"
-msgstr "Theo dõi Hồng Kông"
-
-msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr "Giám sát các mối đe dọa đối với quyền tự do và quyền ở Hồng Kông"
 
 msgid "JStorDaily"
 msgstr "JStorDaily"
@@ -2408,11 +2315,11 @@ msgstr "Nền tảng truyền thông quốc tế độc lập"
 msgid "OpenDemocracy"
 msgstr "Dân chủ mở"
 
-msgid "News and blog feeds on I2P"
-msgstr "Tin tức và nguồn cấp dữ liệu blog trên I2P"
+msgid "Online privacy &amp; tech blog"
+msgstr ""
 
-msgid "Planeta"
-msgstr "Hành tinh"
+msgid "RightToPrivacy"
+msgstr ""
 
 msgid "Lifestyle magazine"
 msgstr "Tạp chí phong cách sống"
@@ -2441,20 +2348,11 @@ msgstr "Tin tức dành cho người mọt sách"
 msgid "Technology news &amp; reviews"
 msgstr "Tin tức công nghệ"
 
-msgid "Reporting on China without fear or favor"
-msgstr "Đưa tin về Trung Quốc mà không hề sợ hãi hay ưu ái"
-
 msgid "News from the Taiwan Capital"
 msgstr "Tin tức từ thủ đô Đài Loan"
 
 msgid "TaipeiTimes"
 msgstr "Thời báo Đài Bắc"
-
-msgid "TechXplore"
-msgstr "TechXplore"
-
-msgid "Technology and engineering news"
-msgstr "Tin công nghệ và kỹ thuật"
 
 msgid "TechMeme"
 msgstr "TechMeme"
@@ -2497,12 +2395,6 @@ msgstr "TheNewRepublic"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "Chia sẻ tập tin"
-
-msgid "A magazine about human rights and social justice"
-msgstr "Một tạp chí về nhân quyền và công bằng xã hội"
-
-msgid "UpstreamJournal"
-msgstr "Nhật ký thượng nguồn"
 
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
 msgstr "Tiến tới sự cân bằng"
@@ -2833,16 +2725,22 @@ msgstr ""
 msgid "Not initialized"
 msgstr "Chưa được khởi tạo"
 
-msgid "Sorted by hash distance, closest first."
+msgid "Total Remote Leasesets"
 msgstr ""
 
 msgid "Compact mode"
 msgstr ""
 
-msgid "Total Remote Leasesets"
+msgid "Local Leasesets"
+msgstr ""
+
+msgid "Debug Mode"
 msgstr ""
 
 msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Sorted by hash distance, closest first."
 msgstr ""
 
 msgid "Mod Data"
@@ -2857,17 +2755,11 @@ msgstr ""
 msgid "Change in"
 msgstr ""
 
-msgid "Known Floodfills"
-msgstr "Lũ lụt đã biết"
-
 msgid "Floodfill mode enabled"
 msgstr ""
 
 msgid "Routing Key"
 msgstr "Khóa định tuyến"
-
-msgid "Network data"
-msgstr "Dữ liệu mạng"
 
 msgid "Median distance (bits)"
 msgstr "Khoảng cách trung bình (bit)"
@@ -2877,6 +2769,12 @@ msgstr "Tổng lượng lũ ước tính"
 
 msgid "Estimated total leasesets"
 msgstr "Tổng số tiền thuê ước tính"
+
+msgid "Total Local Leasesets"
+msgstr ""
+
+msgid "Remote Leasesets"
+msgstr ""
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2909,12 +2807,6 @@ msgstr "Hết hạn{0}"
 msgid "Expired{0} ago"
 msgstr "Đã hết hạn{0} trước"
 
-msgid "Received as published"
-msgstr "Nhận được như đã xuất bản?"
-
-msgid "Received as reply"
-msgstr "Đã nhận được thư trả lời?"
-
 msgid "Distance"
 msgstr "Khoảng cách"
 
@@ -2923,6 +2815,9 @@ msgstr "Đã ký ngoại tuyến"
 
 msgid "Signature type"
 msgstr "Loại chữ ký"
+
+msgid "Public Key"
+msgstr ""
 
 msgid "Unsupported type"
 msgstr "Loại không được hỗ trợ"
@@ -2934,6 +2829,9 @@ msgstr "Hết hạn sau {0}"
 #, java-format
 msgid "Expired {0} ago"
 msgstr "Đã hết hạn {0} trước"
+
+msgid "Unknown"
+msgstr "Không rõ"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
 msgstr ""
@@ -2970,9 +2868,6 @@ msgstr "Floodfills"
 
 msgid "Total"
 msgstr "Tổng cộng"
-
-msgid "Unknown"
-msgstr "Không rõ"
 
 msgid "Initializing"
 msgstr "Đang khởi tạo"
@@ -3047,9 +2942,6 @@ msgstr "Hiển thị tất cả các bộ định tuyến có địa chỉ này 
 msgid "Show all routers with this port in the NetDb"
 msgstr "Hiển thị tất cả các bộ định tuyến có cổng này trong NetDb"
 
-msgid "Network ID"
-msgstr "ID mạng"
-
 msgid "Routers"
 msgstr "Bộ định tuyến"
 
@@ -3061,6 +2953,12 @@ msgstr "Lần cuối nghe nói về"
 
 msgid "Last heard from"
 msgstr "Nghe tin lần cuối từ"
+
+msgid "Network Id"
+msgstr ""
+
+msgid "Count is always spoofed to avoid indicating router restarts"
+msgstr ""
 
 msgid "Hidden or starting up"
 msgstr "Ẩn hoặc khởi động"
@@ -3121,19 +3019,16 @@ msgstr "vào tệp router.config của bạn."
 msgid "Peer Connections"
 msgstr "Kết nối ngang hàng"
 
-msgid "Active in the last minute"
-msgstr "Hoạt động vào phút cuối"
-
 msgid "IPv4"
 msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
 
-msgid "Limit"
+msgid "Active connections / Max permitted"
 msgstr ""
 
-msgid "Maximum permitted connections"
+msgid "Connections / Limit"
 msgstr ""
 
 msgid "Current / maximum permitted"
@@ -3142,23 +3037,23 @@ msgstr "Hiện tại / tối đa được phép"
 msgid "NTCP connections"
 msgstr "Kết nối NTCP"
 
-msgid "Caps"
-msgstr "Mũ"
-
 msgid "Peer capabilities"
 msgstr "Khả năng ngang hàng"
 
-msgid "Dir"
-msgstr "Thư mục"
+msgid "Caps"
+msgstr "Mũ"
 
 msgid "Direction/Introduction"
 msgstr "Hướng/Giới thiệu"
 
-msgid "Idle"
-msgstr "Trạng thái nghỉ"
+msgid "Dir"
+msgstr "Thư mục"
 
 msgid "Peer inactivity"
 msgstr "Không hoạt động ngang hàng"
+
+msgid "Idle"
+msgstr "Trạng thái nghỉ"
 
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Tốc độ vào/ra trung bình (KBps)"
@@ -3190,11 +3085,11 @@ msgstr "Tin nhắn nhận được"
 msgid "RX"
 msgstr "RX"
 
-msgid "Out Queue"
-msgstr "Bên ngoài hàng đợi"
-
 msgid "Queued messages to send to peer"
 msgstr "Tin nhắn được xếp hàng đợi để gửi tới ngang hàng"
+
+msgid "Out Queue"
+msgstr "Bên ngoài hàng đợi"
 
 msgid "Connection is backlogged"
 msgstr "Kết nối bị tồn đọng"
@@ -3712,11 +3607,11 @@ msgstr "Tải xuống bản cập nhật I2P"
 msgid "Unsigned update available"
 msgstr "Cập nhật không dấu có sẵn"
 
-msgid "Help with firewall configuration"
-msgstr "Trợ giúp về cấu hình tường lửa"
-
 msgid "Check network connection and NAT/firewall!"
 msgstr "Kiểm tra kết nối mạng và Nat/tường lửa!"
+
+msgid "Help with firewall configuration"
+msgstr "Trợ giúp về cấu hình tường lửa"
 
 msgid "Attempt to download router reference files (if automatic reseed has failed)"
 msgstr "Cố gắng tải xuống các tệp tham chiếu bộ định tuyến (nếu tự động reseed không thành công)"
@@ -3751,23 +3646,35 @@ msgstr "Di chuyển xuống dưới cùng"
 msgid "Select a section to add"
 msgstr "Chọn phần cần thêm"
 
+msgid "Router Information (advanced)"
+msgstr "Thông tin bộ định tuyến (Nâng cao)"
+
+msgid "Advanced Links"
+msgstr "Liên kết nâng cao"
+
+msgid "Bandwidth Graph"
+msgstr "Đồ thị Băng thông"
+
+msgid "UTC Clock"
+msgstr "Đồng hồ UTC"
+
+msgid "Congestion"
+msgstr "Sự tắc nghẽn"
+
+msgid "CPU Load"
+msgstr "Tải CPU"
+
+msgid "Firewall &amp; Reseed Status"
+msgstr "Tường lửa và trạng thái Reseed"
+
 msgid "Help &amp; FAQ"
 msgstr "Phần trợ giúp"
-
-msgid "I2P Services"
-msgstr "Dịch vụ I2P"
 
 msgid "I2P Internals"
 msgstr "Nội bộ I2P"
 
-msgid "Router Information"
-msgstr "Thông tin bộ định tuyến"
-
-msgid "Router Information (brief)"
-msgstr "Thông tin bộ định tuyến (Tóm tắt)"
-
-msgid "Router Information (advanced)"
-msgstr "Thông tin bộ định tuyến (Nâng cao)"
+msgid "I2P Services"
+msgstr "Dịch vụ I2P"
 
 msgid "Memory Usage Bar"
 msgstr "Thanh sử dụng bộ nhớ"
@@ -3775,35 +3682,23 @@ msgstr "Thanh sử dụng bộ nhớ"
 msgid "Network Reachability"
 msgstr "Khả năng tiếp cận mạng"
 
-msgid "Update Status"
-msgstr "Cập nhật trạng thái"
+msgid "News &amp; Updates"
+msgstr "Tin tức và cập nhật"
 
 msgid "Restart Status"
 msgstr "Khởi động lại trạng thái"
 
-msgid "Firewall &amp; Reseed Status"
-msgstr "Tường lửa và trạng thái Reseed"
+msgid "Router Information"
+msgstr "Thông tin bộ định tuyến"
 
-msgid "Bandwidth Graph"
-msgstr "Đồ thị Băng thông"
-
-msgid "Congestion"
-msgstr "Sự tắc nghẽn"
+msgid "Router Information (brief)"
+msgstr "Thông tin bộ định tuyến (Tóm tắt)"
 
 msgid "Tunnel Status"
 msgstr "Tình trạng đường hầm"
 
-msgid "News &amp; Updates"
-msgstr "Tin tức và cập nhật"
-
-msgid "Advanced Links"
-msgstr "Liên kết nâng cao"
-
-msgid "UTC Clock"
-msgstr "Đồng hồ UTC"
-
-msgid "CPU Load"
-msgstr "Tải CPU"
+msgid "Update Status"
+msgstr "Cập nhật trạng thái"
 
 msgid "I2P Router Help &amp; FAQ"
 msgstr "Trợ giúp và Câu hỏi thường gặp"
@@ -3988,6 +3883,9 @@ msgstr "Tổng số đồng nghiệp trong NetDb"
 
 msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Những người bạn mà chúng ta đã nói chuyện trong vài phút qua/giờ qua"
+
+msgid "Peers we've been talking to in the last minute"
+msgstr ""
 
 msgid "The number of peers available for building client tunnels"
 msgstr "Số lượng đồng nghiệp có sẵn để xây dựng đường hầm máy khách"
@@ -4319,6 +4217,9 @@ msgstr "Thực thi chặn cho"
 msgid "days"
 msgstr "ngày"
 
+msgid "Known Floodfills"
+msgstr "Lũ lụt đã biết"
+
 msgid "Average closest floodfill distance"
 msgstr "Khoảng cách lấp lũ trung bình gần nhất"
 
@@ -4489,6 +4390,9 @@ msgstr "Dữ liệu được truyền"
 
 msgid "Data"
 msgstr "Dữ liệu"
+
+msgid "Limit"
+msgstr ""
 
 msgid "Receive on"
 msgstr "Bật nhận"
@@ -5462,6 +5366,9 @@ msgstr "Cài đặt dịch vụ hệ thống I2P+. Đây là cách được khuy
 msgid "config sidebar"
 msgstr "thanh bên cấu hình"
 
+msgid "Sidebar Options"
+msgstr ""
+
 msgid "Refresh interval"
 msgstr "Khoảng thời gian làm mới"
 
@@ -5470,6 +5377,12 @@ msgstr "giây"
 
 msgid "0 to disable"
 msgstr "0 để vô hiệu hóa"
+
+msgid "Unified sidebar"
+msgstr ""
+
+msgid "Use the same sidebar on all pages"
+msgstr ""
 
 msgid "config stats"
 msgstr "Cấu hình thống kê"
@@ -5670,6 +5583,9 @@ msgstr "sự kiện"
 msgid "Event Log"
 msgstr "Nhật ký sự kiện"
 
+msgid "Combined"
+msgstr ""
+
 msgid "graph"
 msgstr "Biểu đồ"
 
@@ -5747,6 +5663,9 @@ msgstr "Cài đặt này, khi được đặt thành True, sẽ hiển thị đ�
 
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Cài đặt này, khi được đặt thành True, sẽ hiển thị các liên kết <i>Các trang quan tâm</i> trên <a href=/sitemap>bản đồ trang</a>. [Mặc định là sai]"
+
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
+msgstr ""
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Cài đặt này xác định liệu bộ định tuyến có nên sử dụng tệp <i>blocklist.txt</i> được cung cấp và bất kỳ danh sách chặn được cấu hình bởi người dùng hay không để cho phép cấm các bộ định tuyến bằng hàm định danh hoặc địa chỉ IP. Phạm vi và mặt nạ mạng được hỗ trợ cho IPv4 nhưng không phải IPv6. Xem tệp <i>blocklist.txt</i> trong thư mục ứng dụng I2P+ của bạn để biết thêm thông tin. [Được bật theo mặc định, bắt buộc khởi động lại]"
@@ -6561,8 +6480,8 @@ msgstr "Nếu yêu cầu một chuỗi <i>Xác thực Đăng ký</i>, bạn có 
 msgid "If you are in a hurry and can't wait a few hours, you can tell people to use a \"jump\" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is working, you can tell others to use it."
 msgstr "Nếu bạn vội vàng không thể đợi vài giờ, bạn có thể bảo mọi người sử dụng dịch vụ định hướng lại địa chỉ trợ giúp \"nhảy\". Thường dịch vụ này sẽ hoạt động trong vài phút kể từ khi bạn đăng ký tên miền của mình trên cùng một trang. Hãy kiểm tra trước bằng cách nhập <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> vào trình duyệt của bạn. Khi đã hoạt động, bạn có thể bảo mọi người sử dụng dịch vụ này."
 
-msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skanki2p</a>, and paste the link where it's required to share it with others."
-msgstr "Ngoài ra, bạn có thể sao chép liên kết trợ giúp địa chỉ <i>của tên miền mình</i>, được chỉ ra trên trang danh sách sổ địa chỉ hoặc trang chi tiết của tên miền, ví dụ <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>chi tiết của i2p-projekt.i2p</a>, và dán liên kết đó vào nơi yêu cầu chia sẻ với người khác."
+msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
+msgstr ""
 
 msgid "Backup your private key!"
 msgstr "Sao lưu chìa khóa riêng của bạn!"
@@ -6798,8 +6717,8 @@ msgstr "Mở cổng <a href=/confignet#udpconfig>của I2P+</a> trên modem, rou
 msgid "Getting Support Online"
 msgstr "Nhận hỗ trợ trực tuyến"
 
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "Bạn cũng có thể muốn xem lại thông tin trên <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>trang web I2P</a>, đăng thông báo lên <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>Diễn đàn thảo luận I2P</a> hoặc truy cập <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> hoặc <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> trên mạng IRC nội bộ của I2P."
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
+msgstr ""
 
 msgid "Reporting Bugs"
 msgstr "Báo cáo lỗi"
@@ -7338,6 +7257,9 @@ msgstr "Tùy chỉnh liên kết"
 msgid "Configure display language, theme and optional console password"
 msgstr "Cấu hình ngôn ngữ hiển thị, chủ đề và mật khẩu bảng điều khiển tùy chọn"
 
+msgid "Language"
+msgstr ""
+
 msgid "Configure router bandwidth"
 msgstr "Cấu hình băng thông bộ định tuyến"
 
@@ -7402,6 +7324,24 @@ msgstr "Nhật ký dịch vụ (Trình bao bọc)"
 msgid "network database"
 msgstr "cơ sở dữ liệu mạng"
 
+msgid "Encryption type"
+msgstr ""
+
+msgid "Encryption types"
+msgstr ""
+
+msgid "Signature types"
+msgstr ""
+
+msgid "Locally hosted private service"
+msgstr ""
+
+msgid "Locally hosted public service"
+msgstr ""
+
+msgid "Requested client leaseset"
+msgstr ""
+
 msgid "network database router map"
 msgstr "Bản đồ router cơ sở dữ liệu mạng"
 
@@ -7444,6 +7384,12 @@ msgstr "Đồng nghiệp bị cấm"
 
 msgid "Fast / High Capacity"
 msgstr "Nhanh / Dung lượng lớn"
+
+msgid "router logs"
+msgstr ""
+
+msgid "service logs"
+msgstr ""
 
 msgid "Manage I2P addresses"
 msgstr "Quản lý địa chỉ I2P"
@@ -7649,6 +7595,9 @@ msgstr "Bật/Tắt ID đường đào"
 msgid "Toggle Tunnels"
 msgstr "Bật/Tắt Đường đào"
 
+msgid "Updating sidebar sections"
+msgstr ""
+
 msgid "Peer Profile"
 msgstr "Hồ sơ ngang hàng"
 
@@ -7794,7 +7743,15 @@ msgstr "Đã kết thúc"
 
 
 
-#, java-format
+
+
+
+
+
+
+
+
+
 
 
 

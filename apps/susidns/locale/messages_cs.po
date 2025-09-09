@@ -50,6 +50,9 @@ msgstr "Typ {0}"
 msgid "DSA 1024 bit"
 msgstr "DSA 1024 bit"
 
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal 2048 bit"
+
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
 msgstr[0] "Vyhledejte <span class=active>"
@@ -277,6 +280,9 @@ msgstr "Přidat nový cíl"
 msgid "Import from hosts.txt file"
 msgstr "Import ze souboru hosts.txt"
 
+msgid "other"
+msgstr "ostatní"
+
 msgid "Export in hosts.txt format"
 msgstr "Export ve formátu hosts.txt"
 
@@ -289,8 +295,8 @@ msgstr "Exportujte knihu ve formátu hosts.txt"
 msgid "Search"
 msgstr "Hledat"
 
-msgid "other"
-msgstr "ostatní"
+msgid "latest"
+msgstr ""
 
 msgid "all"
 msgstr "průhledný filtr"
@@ -432,9 +438,6 @@ msgstr "Základ 64 Hash"
 
 msgid "Public Key"
 msgstr "Veřejný klíč"
-
-msgid "ElGamal 2048 bit"
-msgstr "ElGamal 2048 bit"
 
 msgid "Signing Key"
 msgstr "Podpisový klíč"
@@ -603,5 +606,3 @@ msgstr "Adresy ručně přidané do hlavního adresáře se sloučí s adresář
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Hostitelé, které obdržíte z vašich předplatných, se sloučí s vaším adresářem routeru."
-
-

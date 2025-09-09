@@ -54,6 +54,14 @@ msgstr "حولت سرعة الرفع الى {0}KBps"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "اقل سرعة رفع هي{0}KBps"
 
+#, java-format
+msgid "Maximum download speed changed to {0}KB/s"
+msgstr ""
+
+#, java-format
+msgid "Download speed limit is {0}KB/s"
+msgstr ""
+
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
 msgstr ""
 
@@ -138,12 +146,6 @@ msgstr "تشغيل عند البداية"
 msgid "Disabled autostart"
 msgstr "الغاء التشغيل عند البداية"
 
-msgid "Enabled smart sort"
-msgstr "تمكين الفرز الذكي"
-
-msgid "Disabled smart sort"
-msgstr "معطل الفرز الذكي"
-
 msgid "Enabled open trackers - torrent restart required to take effect."
 msgstr "تفعيل open trackers - يجب اعادة تشغيل التورنت لتفعيل التغيير."
 
@@ -199,8 +201,8 @@ msgstr "تم تمكين إضافة وإنشاء أقسام في جميع صفح�
 msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
 msgstr "إضافة وإنشاء أقسام لعرضها فقط على الصفحة الأولى من صفحات قائمة التورنت متعددة الصفحات."
 
-msgid "Configuration unchanged."
-msgstr "لم تتغير الاعدادات."
+msgid "API key updated."
+msgstr ""
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "تغيير open trackers - يجب اعادة تشغيل التورنت لتفعيل التغيير."
@@ -241,22 +243,6 @@ msgid "Torrent with the same data location is already running: {0}"
 msgstr "السيل بنفس موقع البيانات قيد التشغيل بالفعل: {0}"
 
 #, java-format
-msgid "ERROR - No I2P trackers in private torrent \"{0}\""
-msgstr "خطأ - لا يوجد متتبعات I2P في التورنت الخاص \"{0}\""
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "تحذير - لن يتم الإعلان عن أي متتبعات I2P في \"{0}\"، لمتتبعات I2P المفتوحة وDHT فقط."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "تحذير - لا توجد متتبعات I2P في \"{0}\"، وتم تعطيل المتتبعات المفتوحة، سيتم الإعلان عن ذلك إلى DHT فقط."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "تحذير - لا توجد أدوات تعقب I2P في \"{0}\"، وتم تعطيل أدوات التتبع المفتوحة وDHT، يجب عليك تمكين أدوات التتبع المفتوحة أو DHT قبل بدء تشغيل التورنت."
-
-#, java-format
 msgid "Torrent in \"{0}\" is invalid"
 msgstr "تورنت في \"{0}\"غير صحيح"
 
@@ -274,6 +260,22 @@ msgstr "تم إضافة التورنت وبدأ: {0}"
 #, java-format
 msgid "Torrent added: {0}"
 msgstr "تم إضافة تورنت: {0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "خطأ - لا يوجد متتبعات I2P في التورنت الخاص \"{0}\""
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "تحذير - لن يتم الإعلان عن أي متتبعات I2P في \"{0}\"، لمتتبعات I2P المفتوحة وDHT فقط."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "تحذير - لا توجد متتبعات I2P في \"{0}\"، وتم تعطيل المتتبعات المفتوحة، سيتم الإعلان عن ذلك إلى DHT فقط."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "تحذير - لا توجد أدوات تعقب I2P في \"{0}\"، وتم تعطيل أدوات التتبع المفتوحة وDHT، يجب عليك تمكين أدوات التتبع المفتوحة أو DHT قبل بدء تشغيل التورنت."
 
 #, java-format
 msgid "Fetching {0}"
@@ -346,6 +348,18 @@ msgstr "تورنت محذوف: \"{0}\""
 msgid "Adding torrents in {0}&hellip;"
 msgstr "اضافة السيول في {0}"
 
+#, java-format
+msgid "Down bandwidth limit is {0} KB/s"
+msgstr "حد السرعة للتحميل هو {0} كيلوبايت في الثانية"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KB/s"
+msgstr "الحد الأقصى لعرض النطاق الترددي هو {0} كيلو بايت في الثانية"
+
+#, java-format
+msgid "Connecting to I2CP port on I2P instance at {0}"
+msgstr ""
+
 msgid "Connecting to I2P"
 msgstr "جاري الاتصال بشبكة I2P"
 
@@ -357,20 +371,12 @@ msgid "Starting up torrent {0}"
 msgstr "بدء تشغيل السيل {0}"
 
 #, java-format
-msgid "Down bandwidth limit is {0} KB/s"
-msgstr "حد السرعة للتحميل هو {0} كيلوبايت في الثانية"
-
-#, java-format
-msgid "Up bandwidth limit is {0} KB/s"
-msgstr "الحد الأقصى لعرض النطاق الترددي هو {0} كيلو بايت في الثانية"
-
-#, java-format
-msgid "I2P+ I2PSnark standalone version {0} started"
-msgstr "بدأ الإصدار المستقل I2P I2PSnark {0}"
-
-#, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
 msgstr "حد النطاق الترددي للتحميل هو {0} كيلو بايت في الثانية بحد أقصى {1} من النظراء المتزامنين."
+
+#, java-format
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
+msgstr ""
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -413,6 +419,19 @@ msgid "Closing I2P tunnel after notifying trackers."
 msgstr "إغلاق نفق I2P بعد إخطار المتتبعين."
 
 #, java-format
+msgid "Cannot check {0}"
+msgstr ""
+
+msgid "Torrent already started"
+msgstr ""
+
+msgid "No storage"
+msgstr ""
+
+msgid "Starting recheck of {}"
+msgstr ""
+
+#, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
 msgstr "تم الانتهاء من إعادة فحص التورنت {0}، والآن اكتمل {1}"
 
@@ -423,6 +442,9 @@ msgstr "تم الانتهاء من إعادة فحص التورنت {0}، بدو
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "خطأ في فحص السيل {0}"
+
+msgid "Cannot create diskspace bar"
+msgstr ""
 
 msgid "Data partition"
 msgstr ""
@@ -464,9 +486,6 @@ msgstr "تورنت غير صحيح {0}"
 
 msgid "Configuration"
 msgstr "اعدادات"
-
-msgid "Debug Mode"
-msgstr "وضع التصحيح"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "عميل تورنت مجهول"
@@ -510,12 +529,6 @@ msgstr "المنتدى"
 
 msgid "Torrent &amp; filesharing forum"
 msgstr "سيل"
-
-msgid "BTDigg"
-msgstr "بتيغ"
-
-msgid "I2P-based search engine for clearnet-hosted torrents"
-msgstr "محرك بحث قائم على I2P للسيول المستضافة على Clearnet"
 
 msgid "Search torrents"
 msgstr "ابحث عن السيول"
@@ -591,8 +604,8 @@ msgstr "معدل التحميل"
 msgid "TX"
 msgstr "تكس"
 
-msgid "Share ratio"
-msgstr "نسبة التحميل"
+msgid "Upload ratio"
+msgstr ""
 
 msgid "Uploaded"
 msgstr "رفع"
@@ -638,6 +651,16 @@ msgid "Total size of loaded torrents"
 msgstr ""
 
 #, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+msgstr[4] ""
+msgstr[5] ""
+
+#, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
 msgstr[0] "DHT نظير"
@@ -674,8 +697,8 @@ msgstr "إجمالي البيانات التي تم تحميلها (للسيول
 msgid "Total upload speed"
 msgstr "سرعة التحميل الكلية"
 
-msgid "Toggle Debug Mode"
-msgstr ""
+msgid "Debug Mode"
+msgstr "وضع التصحيح"
 
 msgid "Normal Mode"
 msgstr "الوضع العادي"
@@ -926,6 +949,9 @@ msgstr "باقي"
 msgid "Completed"
 msgstr "اكتمل"
 
+msgid "Share ratio"
+msgstr "نسبة التحميل"
+
 msgid "Last activity"
 msgstr "آخر نشاط"
 
@@ -1034,11 +1060,11 @@ msgstr "فلاتر المحتوى"
 msgid "Trackers"
 msgstr "أجهزة التتبع"
 
-msgid "Primary"
-msgstr "الأولي"
-
 msgid "Alternates"
 msgstr "البدائل"
+
+msgid "Primary"
+msgstr "الأولي"
 
 msgid "Tracker Type"
 msgstr "نوع المقتفي"
@@ -1358,6 +1384,12 @@ msgstr "أضيفت"
 msgid "Pieces"
 msgstr "القطع"
 
+msgid "Average download speed for torrent"
+msgstr ""
+
+msgid "Download speed"
+msgstr ""
+
 msgid "Completion"
 msgstr "انتهاء"
 
@@ -1509,6 +1541,9 @@ msgstr "اختر للحذف"
 msgid "Delete Selected"
 msgstr "حذف"
 
+msgid "File downloading priorities updated for torrent "
+msgstr ""
+
 msgid "Edit Torrent"
 msgstr "تحرير تورنت"
 
@@ -1530,13 +1565,9 @@ msgstr "حفظ التغييرات"
 msgid "Torrent must be stopped"
 msgstr "يجب إيقاف السيل"
 
+
+
+
 #, java-format
-
-
-
-
-
-
-
 
 

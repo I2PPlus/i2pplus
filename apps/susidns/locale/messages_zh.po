@@ -50,6 +50,9 @@ msgstr "类型{0}"
 msgid "DSA 1024 bit"
 msgstr "DSA 1024位"
 
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal 2048位"
+
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
 msgstr[0] "搜索<span class=active>"
@@ -263,6 +266,9 @@ msgstr "添加新目标"
 msgid "Import from hosts.txt file"
 msgstr "从 hosts.txt 文件导入"
 
+msgid "other"
+msgstr "其他"
+
 msgid "Export in hosts.txt format"
 msgstr "导出 hosts.txt 格式"
 
@@ -275,8 +281,8 @@ msgstr "以hosts.txt格式导出书籍"
 msgid "Search"
 msgstr "搜索"
 
-msgid "other"
-msgstr "其他"
+msgid "latest"
+msgstr ""
 
 msgid "all"
 msgstr "清除过滤器"
@@ -418,9 +424,6 @@ msgstr "Base64 散列值"
 
 msgid "Public Key"
 msgstr "公钥"
-
-msgid "ElGamal 2048 bit"
-msgstr "ElGamal 2048位"
 
 msgid "Signing Key"
 msgstr "签名密钥"
@@ -589,5 +592,3 @@ msgstr "手动添加到您的主地址簿中的地址将与您的路由器地址
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "您从订阅中取得的主机将与路由器地址簿合并。"
-
-

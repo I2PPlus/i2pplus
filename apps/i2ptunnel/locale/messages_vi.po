@@ -12,6 +12,11 @@ msgid "internal"
 msgstr "nội bộ"
 
 #, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "{0} Inbound, {0} đường hầm bên ngoài"
+
+#, java-format
 msgid "{0} inbound tunnel"
 msgid_plural "{0} inbound tunnels"
 msgstr[0] "{0} đường hầm trong nước"
@@ -20,11 +25,6 @@ msgstr[0] "{0} đường hầm trong nước"
 msgid "{0} outbound tunnel"
 msgid_plural "{0} outbound tunnels"
 msgstr[0] "{0} đường hầm bên ngoài"
-
-#, java-format
-msgid "{0} inbound, {0} outbound tunnel"
-msgid_plural "{0} inbound, {0} outbound tunnels"
-msgstr[0] "{0} Inbound, {0} đường hầm bên ngoài"
 
 msgid "lower bandwidth and reliability"
 msgstr "băng thông và độ tin cậy thấp hơn"
@@ -35,14 +35,47 @@ msgstr "băng thông tiêu chuẩn và độ tin cậy"
 msgid "higher bandwidth and reliability"
 msgstr "băng thông và độ tin cậy cao hơn"
 
-msgid "Configuration reloaded for all tunnels"
-msgstr "Nạp lại cấu hình cho mọi đường hầm"
+msgid "Error - tunnels are not initialized yet"
+msgstr ""
+
+msgid "No services configured, cannot restart!"
+msgstr ""
+
+msgid "Stopping tunnel"
+msgstr "Ngưng đường hầm"
 
 msgid "Starting tunnel"
 msgstr "Bắt đầu đường hầm"
 
-msgid "Stopping tunnel"
-msgstr "Ngưng đường hầm"
+msgid "Error restarting tunnel"
+msgstr ""
+
+msgid "Restarted all running tunnels"
+msgstr ""
+
+msgid "No clients configured, cannot restart!"
+msgstr ""
+
+msgid "Restarted all running client tunnels"
+msgstr ""
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "Nạp lại cấu hình cho mọi đường hầm"
+
+msgid "Error: Invalid tunnel"
+msgstr ""
+
+msgid "Started tunnel"
+msgstr ""
+
+msgid "Stopped tunnel"
+msgstr ""
+
+msgid "Restarting tunnel"
+msgstr ""
+
+msgid "Please confirm removal"
+msgstr ""
 
 msgid "New Tunnel"
 msgstr "Đường Hầm Mới"
@@ -113,6 +146,9 @@ msgstr "Chỉnh sửa đường hầm máy chủ"
 msgid "Are you sure you want to delete?"
 msgstr "Bạn có chắc là muốn xóa không?"
 
+msgid "required"
+msgstr "cần có"
+
 msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
 msgstr "Đường hầm và tất cả các đường hầm máy khách dùng chung khác phải bị dừng để thay đổi cấu hình này"
 
@@ -169,9 +205,6 @@ msgstr "Bật DCC"
 
 msgid "Port"
 msgstr "Cổng"
-
-msgid "required"
-msgstr "cần có"
 
 msgid "Specify the local port this service should be accessible from"
 msgstr "Chỉ định cổng cục bộ mà dịch vụ này có thể truy cập được từ"
@@ -317,11 +350,14 @@ msgstr "Không mở đường hầm cho đến khi phát hiện hoạt động t
 msgid "This is the default, recommended option"
 msgstr "Đây là tùy chọn mặc định, được khuyến nghị"
 
-msgid "Legacy option (deprecated), provided for backward compatibility"
-msgstr "Tùy chọn kế thừa (không được dùng nữa), được cung cấp để tương thích ngược"
-
 msgid "Encryption types"
 msgstr "Các loại mã hóa"
+
+msgid "Legacy options"
+msgstr ""
+
+msgid "Post Quantum"
+msgstr ""
 
 msgid "Both encryption types"
 msgstr "Cả hai loại mã hóa"
@@ -357,6 +393,9 @@ msgstr[0] "{0} đường hầm hop"
 
 msgid "Number of Tunnels in Group"
 msgstr "Số đường hầm trong nhóm"
+
+msgid "Disabled for 0 hop tunnels"
+msgstr ""
 
 msgid "Variance"
 msgstr "Độ khác biệt"
@@ -522,17 +561,17 @@ msgstr "Bật yêu cầu tên người dùng và mật khẩu để truy cập d
 msgid "Require local authorization for this service"
 msgstr "Yêu cầu ủy quyền địa phương cho dịch vụ này"
 
-msgid "Username"
-msgstr "Tên đăng nhập"
-
 msgid "Set username required to access this service"
 msgstr "Đặt tên người dùng cần thiết để truy cập dịch vụ này"
 
-msgid "Password"
-msgstr "Mật khẩu"
+msgid "Username"
+msgstr "Tên đăng nhập"
 
 msgid "Set password required to access this service"
 msgstr "Đặt mật khẩu cần thiết để truy cập dịch vụ này"
+
+msgid "Password"
+msgstr "Mật khẩu"
 
 msgid "Outproxy Authorization"
 msgstr "Cho phép Outproxy"
@@ -647,6 +686,9 @@ msgstr "Chỉ có thể cấu hình loại chữ ký khi đường hầm đượ
 
 msgid "Legacy option, with alternate key configured"
 msgstr "Tùy chọn kế thừa, với khóa thay thế được định cấu hình"
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "Tùy chọn kế thừa (không được dùng nữa), được cung cấp để tương thích ngược"
 
 msgid "Recommended for blinded and encrypted destinations"
 msgstr "Được khuyến nghị cho các điểm đến bị mù và được mã hóa"
@@ -982,8 +1024,23 @@ msgstr "Ngưng tất cả"
 msgid "Start All"
 msgstr "Bắt đầu tất cả"
 
+msgid "Restart all running tunnels"
+msgstr ""
+
 msgid "Restart All"
 msgstr "Khởi động lại tất cả"
+
+msgid "Restart all running server tunnels"
+msgstr ""
+
+msgid "Restart All Servers"
+msgstr ""
+
+msgid "Restart all running client tunnels"
+msgstr ""
+
+msgid "Restart All Clients"
+msgstr ""
 
 msgid "I2P Server Tunnels"
 msgstr "Đường hầm máy chủ I2P"
@@ -1009,6 +1066,9 @@ msgstr "Control"
 msgid "Edit Server Tunnel Settings for"
 msgstr "Chỉnh sửa cài đặt đường hầm máy chủ cho"
 
+msgid "Test IRC server, bypassing I2P"
+msgstr ""
+
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "Kiểm tra máy chủ HTTPS, bỏ qua I2P"
 
@@ -1020,6 +1080,9 @@ msgstr "Kiểm tra máy chủ HTTP thông qua I2P"
 
 msgid "Base32 Address"
 msgstr "Địa chỉ Base32"
+
+msgid "Offline"
+msgstr ""
 
 msgid "No Preview"
 msgstr "Không xem trước"
@@ -1042,6 +1105,12 @@ msgstr "trong"
 msgid "out"
 msgstr "ra ngoài"
 
+msgid "Restart this Tunnel"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
 msgid "Stopped"
 msgstr "Đã ngưng"
 
@@ -1059,6 +1128,9 @@ msgstr "Đích Alt"
 
 msgid "Encryption"
 msgstr "Mã hóa"
+
+msgid "Supported encryption"
+msgstr ""
 
 msgid "New server tunnel"
 msgstr "Đường hầm máy chủ mới"

@@ -50,6 +50,9 @@ msgstr "نوع {0}"
 msgid "DSA 1024 bit"
 msgstr "DSA 1024 bit"
 
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal 2048 bit"
+
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
 msgstr[0] "جستجو برای <span class=active>"
@@ -270,6 +273,9 @@ msgstr "افزودن مقصد جدید"
 msgid "Import from hosts.txt file"
 msgstr "درون برد از فایل hosts.txt"
 
+msgid "other"
+msgstr "سایر"
+
 msgid "Export in hosts.txt format"
 msgstr "برون برد در فرمت hosts.txt"
 
@@ -282,8 +288,8 @@ msgstr "صادرات کتاب در قالب hosts.txt"
 msgid "Search"
 msgstr "جستجو"
 
-msgid "other"
-msgstr "سایر"
+msgid "latest"
+msgstr ""
 
 msgid "all"
 msgstr "پاکسازی فیلتر"
@@ -425,9 +431,6 @@ msgstr "پایه 64 هش"
 
 msgid "Public Key"
 msgstr "کلید عمومی"
-
-msgid "ElGamal 2048 bit"
-msgstr "ElGamal 2048 bit"
 
 msgid "Signing Key"
 msgstr "امضا کلید"
@@ -596,5 +599,3 @@ msgstr "آدرس هایی که به صورت دستی به دفترچه آدرس
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "میزبان هایی که از اشتراک های خود دریافت می کنید با دفترچه آدرس روتر شما ادغام می شوند."
-
-

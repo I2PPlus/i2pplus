@@ -1554,10 +1554,7 @@ msgstr "Reinicio en {0}"
 msgid "Save order"
 msgstr "Guardar orden"
 
-msgid "Sidebar refresh disabled"
-msgstr ""
-
-msgid "Sidebar refresh interval changed"
+msgid "Sidebar preferences updated"
 msgstr ""
 
 msgid "Refresh interval must be a number"
@@ -1592,9 +1589,6 @@ msgstr "Se ha movido"
 
 msgid "Saved order of sections."
 msgstr "Se ha guardado el orden de las secciones."
-
-msgid "Stat filter and location updated successfully to"
-msgstr "El filtro de estadísticas y la ubicación se han actualizado con éxito a"
 
 msgid "Full statistics enabled"
 msgstr "Se han habilitado las estadísticas completas"
@@ -2182,23 +2176,14 @@ msgstr "Foros comunales relacionados con I2P"
 msgid "File-sharing forum"
 msgstr "Foro para compartir archivos"
 
-msgid "Alternative front-end for Twitter"
-msgstr "Interfaz alternativa para Twitter"
-
-msgid "Rocksolid forums for the darknets"
-msgstr "Foros Rocksolid para las darknets"
-
 msgid "Cross-network micro-blogging &amp; forums &amp; wiki"
 msgstr "Microblogging entre redes"
 
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Front-end alternativo centrado en la privacidad para Reddit"
 
-msgid "Base64 Image Encoder"
-msgstr "Codificador de imágenes Base64"
-
-msgid "An image cache and resize service"
-msgstr "Un servicio de cambio de tamaño y caché de imágenes"
+msgid "AI Image generation & Chat hub"
+msgstr ""
 
 msgid "IRC Logs for multiple networks"
 msgstr "Registros de IRC para múltiples redes"
@@ -2215,17 +2200,8 @@ msgstr "Landing page for various services"
 msgid "Streaming radio service"
 msgstr "Servicio de radio en streaming"
 
-msgid "Alternative frontend for Imgur"
-msgstr "Interfaz alternativa para Imgur"
-
 msgid "Privacy-focused not-for-profit organization"
 msgstr "Organización sin fines de lucro centrada en la privacidad"
-
-msgid "Outproxy bandwidth test"
-msgstr "Prueba de ancho de banda de proxy superior"
-
-msgid "speedtest"
-msgstr "prueba de velocidad"
 
 msgid "Text translation engine"
 msgstr "Motor de traducción de textos"
@@ -2233,20 +2209,8 @@ msgstr "Motor de traducción de textos"
 msgid "translate"
 msgstr "traducir"
 
-msgid "Alternative front-end to Youtube"
-msgstr "Interfaz alternativa para Youtube"
-
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "Proveedor de privacidad respetando alojamiento web y servicios VPN"
-
-msgid "Tor-focused Search Engine"
-msgstr "Motor de búsqueda centrado en Tor"
-
-msgid "Pinterest Image Search Engine"
-msgstr "Motor de búsqueda de imágenes de Pinterest"
-
-msgid "Clearnet BitTorrent DHT search engine"
-msgstr "Motor de búsqueda Clearnet BitTorrent DHT"
 
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "Motor de búsqueda DuckDuckGo (sin javascript)"
@@ -2256,21 +2220,6 @@ msgstr "Motor de búsqueda Clearnet centrado en la privacidad"
 
 msgid "I2P Web Search Engine"
 msgstr "Motor de búsqueda de I2P"
-
-msgid "Enabling the free transmission of data in the public interest"
-msgstr "Permitir la libre transmisión de datos en interés público"
-
-msgid "Selected Papers in Anonymity"
-msgstr "Artículos seleccionados en el anonimato"
-
-msgid "Tor .onion site links"
-msgstr "Enlaces a sitios Tor .onion"
-
-msgid "HTML Color Reference"
-msgstr "Referencia de color HTML"
-
-msgid "HTMLColors"
-msgstr "HTMLColores"
 
 msgid "I2P-related Wiki"
 msgstr "Wiki relacionado con I2P"
@@ -2287,29 +2236,17 @@ msgstr "Enciclopedia de Filosofía de Internet"
 msgid "Standford Encyclopedia of Philosophy"
 msgstr "Enciclopedia de Filosofía de Standford"
 
-msgid "Psychonaut"
-msgstr "Psiconauta"
-
-msgid "Wiki relating to altered states of consciousness"
-msgstr "Wiki relacionado con estados alterados de conciencia"
-
 msgid "Computing-related tutorials"
 msgstr "Tutoriales relacionados con la informática"
 
 msgid "SimplifiedGuide"
 msgstr "Guía simplificada"
 
-msgid "Vulnerability Database"
-msgstr "Base de datos de vulnerabilidades"
-
 msgid "Web technology reference and learning site"
 msgstr "Sitio de aprendizaje y referencia de tecnología web"
 
 msgid "Alternative Wikipedia front-end focused on privacy"
 msgstr "Front-end alternativo de Wikipedia centrado en la privacidad"
-
-msgid "The biggest online English dictionary"
-msgstr "El diccionario de inglés en línea más grande"
 
 msgid "World atlas including geography facts &amp; flags"
 msgstr "Atlas mundial, incluidos hechos de geografía y banderas"
@@ -2320,14 +2257,8 @@ msgstr "Atlas Mundial"
 msgid "Technology News &amp; more..."
 msgstr "Noticias tecnológicas y más..."
 
-msgid "Independent investigative journalism"
-msgstr "Periodismo de investigación independiente"
-
 msgid "Information Security Research &amp; Education"
 msgstr "Investigación y educación sobre seguridad de la información"
-
-msgid "Darknet related news site"
-msgstr "Sitio de noticias relacionado con Darknet"
 
 msgid "DigitalTrends"
 msgstr "Tendencias digitales"
@@ -2340,24 +2271,6 @@ msgstr "Defender tus derechos en el mundo digital"
 
 msgid "The Elliptic Curve Cryptography Blog"
 msgstr "Blog de criptografía de curva elíptica"
-
-msgid "ForeignPolicy"
-msgstr "PolíticaExterior"
-
-msgid "The Global Magazine of News &amp; Ideas"
-msgstr "La revista global de noticias e ideas"
-
-msgid "FrontLineDefenders"
-msgstr "Defensores de primera línea"
-
-msgid "Human rights activism"
-msgstr "Activismo por los derechos humanos"
-
-msgid "Defending Human Rights Worldwide"
-msgstr "Defender los derechos humanos en todo el mundo"
-
-msgid "HumanRightsWatch"
-msgstr "Vigilancia de los Derechos Humanos"
 
 msgid "Fresh hacks every day"
 msgstr "Trucos nuevos todos los días"
@@ -2373,12 +2286,6 @@ msgstr "Prensa libre de Hong Kong"
 
 msgid "Independent &amp; impartial news for Hong Kong"
 msgstr "Noticias independientes e imparciales para Hong Kong"
-
-msgid "HongKongWatch"
-msgstr "Reloj de Hong Kong"
-
-msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr "Supervisa las amenazas a las libertades y los derechos en Hong Kong"
 
 msgid "JStorDaily"
 msgstr "JStorDaily"
@@ -2416,11 +2323,11 @@ msgstr "Plataforma de medios internacionales independientes"
 msgid "OpenDemocracy"
 msgstr "Democracia Abierta"
 
-msgid "News and blog feeds on I2P"
-msgstr "Noticias y blogs en I2P"
+msgid "Online privacy &amp; tech blog"
+msgstr ""
 
-msgid "Planeta"
-msgstr "Planeta"
+msgid "RightToPrivacy"
+msgstr ""
 
 msgid "Lifestyle magazine"
 msgstr "Revista de estilo de vida"
@@ -2449,20 +2356,11 @@ msgstr "Noticias para nerds"
 msgid "Technology news &amp; reviews"
 msgstr "Noticias y reseñas de tecnología"
 
-msgid "Reporting on China without fear or favor"
-msgstr "Informar sobre China sin miedo ni favoritismo"
-
 msgid "News from the Taiwan Capital"
 msgstr "Noticias de la capital de Taiwán"
 
 msgid "TaipeiTimes"
 msgstr "TaipeiTimes"
-
-msgid "TechXplore"
-msgstr "TechXplore"
-
-msgid "Technology and engineering news"
-msgstr "Noticias de tecnología e ingeniería"
 
 msgid "TechMeme"
 msgstr "Meme Tecnológico"
@@ -2505,12 +2403,6 @@ msgstr "La Nueva República"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "Noticias para el intercambio de archivos y derechos de autor"
-
-msgid "A magazine about human rights and social justice"
-msgstr "Una revista sobre derechos humanos y justicia social"
-
-msgid "UpstreamJournal"
-msgstr "Diario ascendente"
 
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
 msgstr "Avanzar en una comprensión equilibrada y realista de los intereses estadounidenses en el Medio Oriente"
@@ -2841,16 +2733,22 @@ msgstr ""
 msgid "Not initialized"
 msgstr "No inicializado"
 
-msgid "Sorted by hash distance, closest first."
+msgid "Total Remote Leasesets"
 msgstr ""
 
 msgid "Compact mode"
 msgstr ""
 
-msgid "Total Remote Leasesets"
+msgid "Local Leasesets"
+msgstr ""
+
+msgid "Debug Mode"
 msgstr ""
 
 msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Sorted by hash distance, closest first."
 msgstr ""
 
 msgid "Mod Data"
@@ -2865,17 +2763,11 @@ msgstr ""
 msgid "Change in"
 msgstr ""
 
-msgid "Known Floodfills"
-msgstr "Floodfills conocidos"
-
 msgid "Floodfill mode enabled"
 msgstr ""
 
 msgid "Routing Key"
 msgstr "Clave de enrutado"
-
-msgid "Network data"
-msgstr "Datos de red"
 
 msgid "Median distance (bits)"
 msgstr "Distancia promedio (bits)"
@@ -2885,6 +2777,12 @@ msgstr "Total estimado de floodfills"
 
 msgid "Estimated total leasesets"
 msgstr "Leasesets totales estimado"
+
+msgid "Total Local Leasesets"
+msgstr ""
+
+msgid "Remote Leasesets"
+msgstr ""
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2917,12 +2815,6 @@ msgstr "Caduca{0}"
 msgid "Expired{0} ago"
 msgstr "Hace caducado{0}"
 
-msgid "Received as published"
-msgstr "¿Recibido cómo publicado?"
-
-msgid "Received as reply"
-msgstr "¿Recibido como respuesta?"
-
 msgid "Distance"
 msgstr "Distancia"
 
@@ -2931,6 +2823,9 @@ msgstr "Firmado sin conexión"
 
 msgid "Signature type"
 msgstr "Tipo de firma"
+
+msgid "Public Key"
+msgstr ""
 
 msgid "Unsupported type"
 msgstr "Tipo no admitido"
@@ -2942,6 +2837,9 @@ msgstr "Caduca en {0}"
 #, java-format
 msgid "Expired {0} ago"
 msgstr "Caducó hace {0}"
+
+msgid "Unknown"
+msgstr "Desconocido"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
 msgstr ""
@@ -2978,9 +2876,6 @@ msgstr "Floodfills"
 
 msgid "Total"
 msgstr "Total"
-
-msgid "Unknown"
-msgstr "Desconocido"
 
 msgid "Initializing"
 msgstr "Inicializando"
@@ -3055,9 +2950,6 @@ msgstr "Mostrar todos los enrutadores con esta dirección en NetDb"
 msgid "Show all routers with this port in the NetDb"
 msgstr "Mostrar todos los enrutadores con este puerto en NetDb"
 
-msgid "Network ID"
-msgstr "ID de red"
-
 msgid "Routers"
 msgstr "Routers"
 
@@ -3069,6 +2961,12 @@ msgstr "Última constancia"
 
 msgid "Last heard from"
 msgstr "Última constancia de"
+
+msgid "Network Id"
+msgstr ""
+
+msgid "Count is always spoofed to avoid indicating router restarts"
+msgstr ""
 
 msgid "Hidden or starting up"
 msgstr "Oculto o iniciándose"
@@ -3129,19 +3027,16 @@ msgstr "a tu archivo de configuración router.config."
 msgid "Peer Connections"
 msgstr "Conexiones entre pares"
 
-msgid "Active in the last minute"
-msgstr "Activo en el último minuto"
-
 msgid "IPv4"
 msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
 
-msgid "Limit"
+msgid "Active connections / Max permitted"
 msgstr ""
 
-msgid "Maximum permitted connections"
+msgid "Connections / Limit"
 msgstr ""
 
 msgid "Current / maximum permitted"
@@ -3150,23 +3045,23 @@ msgstr "Actual / máximo permitido"
 msgid "NTCP connections"
 msgstr "Conexiones NTCP"
 
-msgid "Caps"
-msgstr "Capacidades"
-
 msgid "Peer capabilities"
 msgstr "Capacidades de pares"
 
-msgid "Dir"
-msgstr "Dir"
+msgid "Caps"
+msgstr "Capacidades"
 
 msgid "Direction/Introduction"
 msgstr "Dirección/Introducción"
 
-msgid "Idle"
-msgstr "Desocupado"
+msgid "Dir"
+msgstr "Dir"
 
 msgid "Peer inactivity"
 msgstr "Inactividad del par"
+
+msgid "Idle"
+msgstr "Desocupado"
 
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "La tasa de transferencia media de entrada / salida"
@@ -3198,11 +3093,11 @@ msgstr "Mensajes recibidos"
 msgid "RX"
 msgstr "Rec"
 
-msgid "Out Queue"
-msgstr "Cola de salida"
-
 msgid "Queued messages to send to peer"
 msgstr "El número total de mensajes enviados al par"
+
+msgid "Out Queue"
+msgstr "Cola de salida"
 
 msgid "Connection is backlogged"
 msgstr "La conexión está atrasada"
@@ -3728,11 +3623,11 @@ msgstr "Descargar la actualización I2P"
 msgid "Unsigned update available"
 msgstr "Actualización sin firmar disponible"
 
-msgid "Help with firewall configuration"
-msgstr "Ayuda con la configuración del cortafuegos"
-
 msgid "Check network connection and NAT/firewall!"
 msgstr "Comprobar la conexión de red y el NAT / cortafuegos"
+
+msgid "Help with firewall configuration"
+msgstr "Ayuda con la configuración del cortafuegos"
 
 msgid "Attempt to download router reference files (if automatic reseed has failed)"
 msgstr "Intenta descargar los ficheros de referencia del router (si el resembrado automático ha fallado)"
@@ -3767,23 +3662,35 @@ msgstr "Mover a la parte inferior"
 msgid "Select a section to add"
 msgstr "Seleccione una sección a añadir"
 
+msgid "Router Information (advanced)"
+msgstr "Info del router (avanzado)"
+
+msgid "Advanced Links"
+msgstr "Enlaces avanados"
+
+msgid "Bandwidth Graph"
+msgstr "Gráfica del ancho de banda"
+
+msgid "UTC Clock"
+msgstr "Reloj UTC"
+
+msgid "Congestion"
+msgstr "Congestión"
+
+msgid "CPU Load"
+msgstr "Carga de CPU"
+
+msgid "Firewall &amp; Reseed Status"
+msgstr "Cortafuegos & Estado de resembrado"
+
 msgid "Help &amp; FAQ"
 msgstr "Ayuda y PUF"
-
-msgid "I2P Services"
-msgstr "Servicios I2P"
 
 msgid "I2P Internals"
 msgstr "Configuración interna de I2P"
 
-msgid "Router Information"
-msgstr "Info del router"
-
-msgid "Router Information (brief)"
-msgstr "Info del router (resumen)"
-
-msgid "Router Information (advanced)"
-msgstr "Info del router (avanzado)"
+msgid "I2P Services"
+msgstr "Servicios I2P"
 
 msgid "Memory Usage Bar"
 msgstr "Barra de uso de memoria"
@@ -3791,35 +3698,23 @@ msgstr "Barra de uso de memoria"
 msgid "Network Reachability"
 msgstr "Disponibilidad de la red"
 
-msgid "Update Status"
-msgstr "Estado de actualización"
+msgid "News &amp; Updates"
+msgstr "Noticias y actualizaciones"
 
 msgid "Restart Status"
 msgstr "Estado del reinicio"
 
-msgid "Firewall &amp; Reseed Status"
-msgstr "Cortafuegos & Estado de resembrado"
+msgid "Router Information"
+msgstr "Info del router"
 
-msgid "Bandwidth Graph"
-msgstr "Gráfica del ancho de banda"
-
-msgid "Congestion"
-msgstr "Congestión"
+msgid "Router Information (brief)"
+msgstr "Info del router (resumen)"
 
 msgid "Tunnel Status"
 msgstr "Estado de los Túneles"
 
-msgid "News &amp; Updates"
-msgstr "Noticias y actualizaciones"
-
-msgid "Advanced Links"
-msgstr "Enlaces avanados"
-
-msgid "UTC Clock"
-msgstr "Reloj UTC"
-
-msgid "CPU Load"
-msgstr "Carga de CPU"
+msgid "Update Status"
+msgstr "Estado de actualización"
 
 msgid "I2P Router Help &amp; FAQ"
 msgstr "Ayuda del router I2P y preguntas frecuentes"
@@ -4004,6 +3899,9 @@ msgstr "Pares totales en NetDb"
 
 msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Pares con los que nos hemos comunicado en los últimos minutos / última hora"
+
+msgid "Peers we've been talking to in the last minute"
+msgstr ""
 
 msgid "The number of peers available for building client tunnels"
 msgstr "El número de pares disponibles para crear túneles cliente"
@@ -4337,6 +4235,9 @@ msgstr "Hacer cumplir el bloqueo para"
 msgid "days"
 msgstr "días"
 
+msgid "Known Floodfills"
+msgstr "Floodfills conocidos"
+
 msgid "Average closest floodfill distance"
 msgstr "Distancia media más cercana de floodfill"
 
@@ -4507,6 +4408,9 @@ msgstr "Datos transferidos"
 
 msgid "Data"
 msgstr "Datos"
+
+msgid "Limit"
+msgstr ""
 
 msgid "Receive on"
 msgstr "Recibir en"
@@ -5480,6 +5384,9 @@ msgstr "Instale el servicio del sistema I2P. Esta es la forma recomendada de eje
 msgid "config sidebar"
 msgstr "barra lateral de configuración"
 
+msgid "Sidebar Options"
+msgstr ""
+
 msgid "Refresh interval"
 msgstr "Intervalo de refresco"
 
@@ -5488,6 +5395,12 @@ msgstr "segundos"
 
 msgid "0 to disable"
 msgstr "0 para desactivar"
+
+msgid "Unified sidebar"
+msgstr ""
+
+msgid "Use the same sidebar on all pages"
+msgstr ""
 
 msgid "config stats"
 msgstr "configuración de estadísticas"
@@ -5688,6 +5601,9 @@ msgstr "eventos"
 msgid "Event Log"
 msgstr "Registro de eventos"
 
+msgid "Combined"
+msgstr ""
+
 msgid "graph"
 msgstr "Gráfico"
 
@@ -5765,6 +5681,9 @@ msgstr "Esta configuración, cuando se establece en true, mostrará una lectura 
 
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Esta configuración, cuando se establece en true, mostrará los enlaces de <i>Sitios de interés</i> en <a href=/sitemap>el mapa del sitio</a>. [Predeterminado es false]"
+
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
+msgstr ""
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Esta configuración determina si el enrutador debe usar el archivo <i>blocklist.txt</i> proporcionado y cualquier lista de bloqueo configurada por el usuario para habilitar el bloqueo de enrutadores por hash o dirección IP. Se admiten rangos y máscaras de red para IPv4 pero no para IPv6. Consulta el archivo <i>blocklist.txt</i> en el directorio de tu aplicación I2P+ para más información. [Habilitado de forma predeterminada, se requiere reinicio]"
@@ -6579,8 +6498,8 @@ msgstr "Si se solicita una cadena de <i>Autenticación de Registro</i>, se puede
 msgid "If you are in a hurry and can't wait a few hours, you can tell people to use a \"jump\" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is working, you can tell others to use it."
 msgstr "Si estás apurado y no puedes esperar algunas horas, puedes decirle a la gente que use un servicio de redirección de \"salto\" de ayuda de dirección. Generalmente funcionará en unos pocos minutos después de registrar tu nombre de host en el mismo sitio. Primero pruébalo tú mismo ingresando <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>tumismombrdecost.i2p</i></code> en tu navegador. Una vez que funcione, puedes decirles a otros que lo usen."
 
-msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skanki2p</a>, and paste the link where it's required to share it with others."
-msgstr "Alternativamente, puedes copiar el enlace <i>de ayuda de dirección</i> de tu dominio, indicado ya sea en la página de lista de la libreta de direcciones o en la página de detalles de tu dominio por ejemplo <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>detalles para i2p-projekt.i2p</a>, y pegar el enlace donde sea necesario para compartirlo con otros."
+msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
+msgstr ""
 
 msgid "Backup your private key!"
 msgstr "¡Haz una copia de respaldo de tu clave privada!"
@@ -6816,8 +6735,8 @@ msgstr "Abre el <a href=/confignet#udpconfig>puerto de I2P+</a> en tu módem, en
 msgid "Getting Support Online"
 msgstr "Obteniendo Soporte en Línea"
 
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "También podrías revisar la información en la <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>página web de I2P</a>, enviar mensajes al <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>foro de discusión de I2P</a> o pasarte por <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> o <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> en la red interna de IRC de I2P."
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
+msgstr ""
 
 msgid "Reporting Bugs"
 msgstr "Reportando Errores"
@@ -7356,6 +7275,9 @@ msgstr "Personalizar enlaces"
 msgid "Configure display language, theme and optional console password"
 msgstr "Configurar idioma, tema y contraseña opcional de consola"
 
+msgid "Language"
+msgstr ""
+
 msgid "Configure router bandwidth"
 msgstr "Configurar ancho de banda del enrutador"
 
@@ -7420,6 +7342,24 @@ msgstr "Registros del servicio (wrapper)"
 msgid "network database"
 msgstr "base de datos de red"
 
+msgid "Encryption type"
+msgstr ""
+
+msgid "Encryption types"
+msgstr ""
+
+msgid "Signature types"
+msgstr ""
+
+msgid "Locally hosted private service"
+msgstr ""
+
+msgid "Locally hosted public service"
+msgstr ""
+
+msgid "Requested client leaseset"
+msgstr ""
+
 msgid "network database router map"
 msgstr "Mapa del enrutador de la base de datos de red"
 
@@ -7462,6 +7402,12 @@ msgstr "Pares excluidos"
 
 msgid "Fast / High Capacity"
 msgstr "Rápidos / de alta capacidad"
+
+msgid "router logs"
+msgstr ""
+
+msgid "service logs"
+msgstr ""
 
 msgid "Manage I2P addresses"
 msgstr "Administrar direcciones I2P"
@@ -7667,6 +7613,9 @@ msgstr "Alternar Identificadores de túnel"
 msgid "Toggle Tunnels"
 msgstr "Alternar túneles"
 
+msgid "Updating sidebar sections"
+msgstr ""
+
 msgid "Peer Profile"
 msgstr "Perfil del par"
 
@@ -7812,7 +7761,15 @@ msgstr "Terminado"
 
 
 
-#, java-format
+
+
+
+
+
+
+
+
+
 
 
 

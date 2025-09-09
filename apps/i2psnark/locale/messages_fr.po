@@ -53,6 +53,14 @@ msgstr "La limite de bande passante en amont a été changée à {0} ko/s"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "La limite de bande passante minimale en amont est de {0} ko/s"
 
+#, java-format
+msgid "Maximum download speed changed to {0}KB/s"
+msgstr ""
+
+#, java-format
+msgid "Download speed limit is {0}KB/s"
+msgstr ""
+
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
 msgstr ""
 
@@ -137,12 +145,6 @@ msgstr "Le démarrage automatique a été activé"
 msgid "Disabled autostart"
 msgstr "Le démarrage automatique a été désactivé"
 
-msgid "Enabled smart sort"
-msgstr "Le tri automatique a été activé"
-
-msgid "Disabled smart sort"
-msgstr "Le tri automatique a été désactivé"
-
 msgid "Enabled open trackers - torrent restart required to take effect."
 msgstr "Activation des trackers ouverts - redémarrage du torrent requis pour prendre effet.Activation des trackers ouverts - redémarrage du torrent requis pour prendre effet.Les traqueurs ouverts ont été activés. Les torrents doivent être redémarrés pour qu’ils prennent effet."
 
@@ -198,8 +200,8 @@ msgstr "Ajouter et créer des sections activées sur toutes les pages de liste d
 msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
 msgstr "Ajouter et créer des sections à afficher uniquement sur la première page des pages de liste de torrent multipages."
 
-msgid "Configuration unchanged."
-msgstr "La configuration est inchangée."
+msgid "API key updated."
+msgstr ""
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "La liste des traqueurs ouverts a été modifiée. Les torrents doivent être redémarrés pour qu’elle prenne effet."
@@ -240,22 +242,6 @@ msgid "Torrent with the same data location is already running: {0}"
 msgstr "Torrent avec le même emplacement de données est déjà en cours d'exécution: {0}"
 
 #, java-format
-msgid "ERROR - No I2P trackers in private torrent \"{0}\""
-msgstr "ERREUR: Il n’y a pas de traqueur I2P dans le torrent privé «{0}»"
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "Avertissement: il n’y a pas de traqueur I2P dans «{0}». L’annonce ne se fera qu’aux traqueurs ouverts d’I2P et à la table de hachage distribuée."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "Avertissement: il n’y a pas de traqueur I2P dans «{0}» et les traqueurs ouverts sont désactivés. L’annonce ne se fera qu’à la table de hachage distribuée."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "Avertissement: il n’y a pas de traqueur I2P dans «{0}», et la table de hachage distribuée et les traqueurs ouverts sont désactivés. Vous devriez activer les traqueurs ouverts ou la table de hachage distribuée avant de démarrer le torrent."
-
-#, java-format
 msgid "Torrent in \"{0}\" is invalid"
 msgstr "Le torrent situé dans «{0}» est invalide"
 
@@ -273,6 +259,22 @@ msgstr "Torrent ajouté et démarré: {0}"
 #, java-format
 msgid "Torrent added: {0}"
 msgstr "Torrent ajouté: {0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "ERREUR: Il n’y a pas de traqueur I2P dans le torrent privé «{0}»"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "Avertissement: il n’y a pas de traqueur I2P dans «{0}». L’annonce ne se fera qu’aux traqueurs ouverts d’I2P et à la table de hachage distribuée."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "Avertissement: il n’y a pas de traqueur I2P dans «{0}» et les traqueurs ouverts sont désactivés. L’annonce ne se fera qu’à la table de hachage distribuée."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "Avertissement: il n’y a pas de traqueur I2P dans «{0}», et la table de hachage distribuée et les traqueurs ouverts sont désactivés. Vous devriez activer les traqueurs ouverts ou la table de hachage distribuée avant de démarrer le torrent."
 
 #, java-format
 msgid "Fetching {0}"
@@ -345,6 +347,18 @@ msgstr "Torrent supprimé: «{0}»"
 msgid "Adding torrents in {0}&hellip;"
 msgstr "Ajout de torrents dans {0}"
 
+#, java-format
+msgid "Down bandwidth limit is {0} KB/s"
+msgstr "La limite de bande passante en téléchargement est de {0} Ko/s"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KB/s"
+msgstr "La limite de bande passante supérieure est de {0} Ko/s"
+
+#, java-format
+msgid "Connecting to I2CP port on I2P instance at {0}"
+msgstr ""
+
 msgid "Connecting to I2P"
 msgstr "Connexion à I2P"
 
@@ -356,20 +370,12 @@ msgid "Starting up torrent {0}"
 msgstr "Démarrage du torrent {0}"
 
 #, java-format
-msgid "Down bandwidth limit is {0} KB/s"
-msgstr "La limite de bande passante en téléchargement est de {0} Ko/s"
-
-#, java-format
-msgid "Up bandwidth limit is {0} KB/s"
-msgstr "La limite de bande passante supérieure est de {0} Ko/s"
-
-#, java-format
-msgid "I2P+ I2PSnark standalone version {0} started"
-msgstr "I2P+ I2PSnark Version autonome {0} a commencé"
-
-#, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
 msgstr "La limite de bande passante de téléchargement est de {0} Ko/s jusqu'à un maximum de {1} homologues simultanés."
+
+#, java-format
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
+msgstr ""
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -412,6 +418,19 @@ msgid "Closing I2P tunnel after notifying trackers."
 msgstr "Fermeture du tunnel I2P après notification aux traqueurs."
 
 #, java-format
+msgid "Cannot check {0}"
+msgstr ""
+
+msgid "Torrent already started"
+msgstr ""
+
+msgid "No storage"
+msgstr ""
+
+msgid "Starting recheck of {}"
+msgstr ""
+
+#, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
 msgstr "Fin de la vérification du torrent {0}, maintenant {1} terminé"
 
@@ -422,6 +441,9 @@ msgstr "Fin de la vérification du torrent {0}, inchangé"
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "Erreur de vérification du torrent {0}"
+
+msgid "Cannot create diskspace bar"
+msgstr ""
 
 msgid "Data partition"
 msgstr ""
@@ -463,9 +485,6 @@ msgstr "Le torrent {0} n’était pas valide"
 
 msgid "Configuration"
 msgstr "Configuration"
-
-msgid "Debug Mode"
-msgstr "Mode débogage"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "Client BitTorrent anonyme"
@@ -509,12 +528,6 @@ msgstr "Forum"
 
 msgid "Torrent &amp; filesharing forum"
 msgstr "Forum torrent et partage de fichiers"
-
-msgid "BTDigg"
-msgstr "BTDigg"
-
-msgid "I2P-based search engine for clearnet-hosted torrents"
-msgstr "moteur de recherche basé sur I2P pour les torrents hébergés sur Clearnet"
 
 msgid "Search torrents"
 msgstr "Rechercher des torrents"
@@ -590,8 +603,8 @@ msgstr "Débit aval"
 msgid "TX"
 msgstr "Trans."
 
-msgid "Share ratio"
-msgstr "Ratio de téléversement"
+msgid "Upload ratio"
+msgstr ""
 
 msgid "Uploaded"
 msgstr "Téléversé"
@@ -633,6 +646,12 @@ msgid "Total size of loaded torrents"
 msgstr ""
 
 #, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] ""
+msgstr[1] ""
+
+#, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
 msgstr[0] "1 pair de la table de hachage distribuée"
@@ -665,8 +684,8 @@ msgstr "Données totales téléchargées (pour les torrents répertoriés)"
 msgid "Total upload speed"
 msgstr "Vitesse de téléchargement totale"
 
-msgid "Toggle Debug Mode"
-msgstr ""
+msgid "Debug Mode"
+msgstr "Mode débogage"
 
 msgid "Normal Mode"
 msgstr "Mode normal"
@@ -909,6 +928,9 @@ msgstr "restant"
 msgid "Completed"
 msgstr "Terminé"
 
+msgid "Share ratio"
+msgstr "Ratio de téléversement"
+
 msgid "Last activity"
 msgstr "Dernière activité"
 
@@ -1017,11 +1039,11 @@ msgstr "Filtres de contenu"
 msgid "Trackers"
 msgstr "Traqueurs"
 
-msgid "Primary"
-msgstr "Primaire"
-
 msgid "Alternates"
 msgstr "De remplacement"
+
+msgid "Primary"
+msgstr "Primaire"
 
 msgid "Tracker Type"
 msgstr "Type de traqueur"
@@ -1333,6 +1355,12 @@ msgstr "Ajouté"
 msgid "Pieces"
 msgstr "Morceaux"
 
+msgid "Average download speed for torrent"
+msgstr ""
+
+msgid "Download speed"
+msgstr ""
+
 msgid "Completion"
 msgstr "Achèvement"
 
@@ -1480,6 +1508,9 @@ msgstr "Marquer pour suppression"
 msgid "Delete Selected"
 msgstr "Supprimer les éléments sélectionnés"
 
+msgid "File downloading priorities updated for torrent "
+msgstr ""
+
 msgid "Edit Torrent"
 msgstr "Editer Torrent"
 
@@ -1501,13 +1532,9 @@ msgstr "Enregistrer les modifications"
 msgid "Torrent must be stopped"
 msgstr "Le torrent doit être arrêté"
 
+
+
+
 #, java-format
-
-
-
-
-
-
-
 
 

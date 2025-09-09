@@ -54,6 +54,14 @@ msgstr "上传带宽限制改为 {0} KB/s"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "最小上传带宽限制为 {0} KB/s"
 
+#, java-format
+msgid "Maximum download speed changed to {0}KB/s"
+msgstr ""
+
+#, java-format
+msgid "Download speed limit is {0}KB/s"
+msgstr ""
+
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
 msgstr ""
 
@@ -138,12 +146,6 @@ msgstr "启用自动启动"
 msgid "Disabled autostart"
 msgstr "禁用自动启动"
 
-msgid "Enabled smart sort"
-msgstr "已启用智能排序"
-
-msgid "Disabled smart sort"
-msgstr "已禁用智能排序"
-
 msgid "Enabled open trackers - torrent restart required to take effect."
 msgstr "启用OpenTracker-重新启动种子后生效."
 
@@ -199,8 +201,8 @@ msgstr "在所有洪流列表页上启用了添加和创建部分。"
 msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
 msgstr "添加和创建部分，只在多页洪流列表页的第一页显示。"
 
-msgid "Configuration unchanged."
-msgstr "设置未改变."
+msgid "API key updated."
+msgstr ""
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "OpenTracker列表已改变 - 重新启动种子后生效."
@@ -241,22 +243,6 @@ msgid "Torrent with the same data location is already running: {0}"
 msgstr "具有相同数据存储位置的种子已在下载中:{0}"
 
 #, java-format
-msgid "ERROR - No I2P trackers in private torrent \"{0}\""
-msgstr "错误 - 私有种子\"{0}\"中缺少 I2P Tracker"
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "警告 - “{0}”中没有 I2P 跟踪器，将仅向 I2P 开放跟踪器和 DHT 通告。警告 - \"{0}\"中缺少 I2P Tracker，程序将仅通过 I2P 中的OpenTracker 和 DHT 下载。"
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "警告 - “{0}”中没有 I2P 跟踪器，并且开放跟踪器被禁用，将仅向 DHT 通告。警告 - \"{0}\"中缺少 I2P Tracker，已禁用 I2P  Open Tracker，程序将仅通过 DHT 下载。"
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "警告 - “{0}”中没有 I2P 跟踪器，并且 DHT 和开放式跟踪器被禁用，您应该在启动 torrent 之前启用开放式跟踪器或 DHT。警告 - \"{0}\"中缺少 I2P Tracker，已禁用 I2P  Open Tracker 和 DHT，下载先您需要先启用  OpenTracker 或 DHT 。"
-
-#, java-format
 msgid "Torrent in \"{0}\" is invalid"
 msgstr "无效种子 \"{0}\""
 
@@ -274,6 +260,22 @@ msgstr "种子已添加并开始：{0}"
 #, java-format
 msgid "Torrent added: {0}"
 msgstr "种子已添加：{0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "错误 - 私有种子\"{0}\"中缺少 I2P Tracker"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "警告 - “{0}”中没有 I2P 跟踪器，将仅向 I2P 开放跟踪器和 DHT 通告。警告 - \"{0}\"中缺少 I2P Tracker，程序将仅通过 I2P 中的OpenTracker 和 DHT 下载。"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "警告 - “{0}”中没有 I2P 跟踪器，并且开放跟踪器被禁用，将仅向 DHT 通告。警告 - \"{0}\"中缺少 I2P Tracker，已禁用 I2P  Open Tracker，程序将仅通过 DHT 下载。"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "警告 - “{0}”中没有 I2P 跟踪器，并且 DHT 和开放式跟踪器被禁用，您应该在启动 torrent 之前启用开放式跟踪器或 DHT。警告 - \"{0}\"中缺少 I2P Tracker，已禁用 I2P  Open Tracker 和 DHT，下载先您需要先启用  OpenTracker 或 DHT 。"
 
 #, java-format
 msgid "Fetching {0}"
@@ -346,6 +348,18 @@ msgstr "种子已删除:\"{0}\""
 msgid "Adding torrents in {0}&hellip;"
 msgstr "从 {0}添加了种子&hellip;"
 
+#, java-format
+msgid "Down bandwidth limit is {0} KB/s"
+msgstr "下载带宽限制为 {0} KBps"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KB/s"
+msgstr "最小上传带宽限制为 {0} KB/s"
+
+#, java-format
+msgid "Connecting to I2CP port on I2P instance at {0}"
+msgstr ""
+
 msgid "Connecting to I2P"
 msgstr "正在连接到I2P"
 
@@ -357,20 +371,12 @@ msgid "Starting up torrent {0}"
 msgstr "正在启动种子{0}"
 
 #, java-format
-msgid "Down bandwidth limit is {0} KB/s"
-msgstr "下载带宽限制为 {0} KBps"
-
-#, java-format
-msgid "Up bandwidth limit is {0} KB/s"
-msgstr "最小上传带宽限制为 {0} KB/s"
-
-#, java-format
-msgid "I2P+ I2PSnark standalone version {0} started"
-msgstr "I2P+ I2PSnark单机版{0}启动"
-
-#, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
 msgstr "上传带宽限制为{0}KBps，最多{1}个对等节点。"
+
+#, java-format
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
+msgstr ""
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -413,6 +419,19 @@ msgid "Closing I2P tunnel after notifying trackers."
 msgstr "正在关闭 I2P 隧道，已通知 Tracker。"
 
 #, java-format
+msgid "Cannot check {0}"
+msgstr ""
+
+msgid "Torrent already started"
+msgstr ""
+
+msgid "No storage"
+msgstr ""
+
+msgid "Starting recheck of {}"
+msgstr ""
+
+#, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
 msgstr "已完成对种子 {0} 的重新检查，现在 {1} 已完成"
 
@@ -423,6 +442,9 @@ msgstr "已完成对种子 {0} 的重新检查，未变更"
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "检查种子 {0} 时出错"
+
+msgid "Cannot create diskspace bar"
+msgstr ""
 
 msgid "Data partition"
 msgstr ""
@@ -464,9 +486,6 @@ msgstr "{0}的种子中有错误"
 
 msgid "Configuration"
 msgstr "设置"
-
-msgid "Debug Mode"
-msgstr "调试模式"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "匿名的 BitTorrent 客户端"
@@ -510,12 +529,6 @@ msgstr "论坛"
 
 msgid "Torrent &amp; filesharing forum"
 msgstr "Torrent &amp; 文件共享论坛"
-
-msgid "BTDigg"
-msgstr "搜索"
-
-msgid "I2P-based search engine for clearnet-hosted torrents"
-msgstr "基于I2P的搜索引擎，用于查找网上的种子资源"
 
 msgid "Search torrents"
 msgstr "搜索种子"
@@ -591,8 +604,8 @@ msgstr "下载速度"
 msgid "TX"
 msgstr "已发送"
 
-msgid "Share ratio"
-msgstr "上传率"
+msgid "Upload ratio"
+msgstr ""
 
 msgid "Uploaded"
 msgstr "已上传"
@@ -633,6 +646,11 @@ msgid "Total size of loaded torrents"
 msgstr ""
 
 #, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] ""
+
+#, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
 msgstr[0] "{0}个DHT节点"
@@ -664,8 +682,8 @@ msgstr "上传的总数据（对于列出的种子）。"
 msgid "Total upload speed"
 msgstr "限制总上传速度为"
 
-msgid "Toggle Debug Mode"
-msgstr ""
+msgid "Debug Mode"
+msgstr "调试模式"
 
 msgid "Normal Mode"
 msgstr "正常模式"
@@ -906,6 +924,9 @@ msgstr "剩余"
 msgid "Completed"
 msgstr "已完成"
 
+msgid "Share ratio"
+msgstr "上传率"
+
 msgid "Last activity"
 msgstr "上次活动"
 
@@ -1014,11 +1035,11 @@ msgstr "内容过滤器"
 msgid "Trackers"
 msgstr "Tracker"
 
-msgid "Primary"
-msgstr "主 Tracker"
-
 msgid "Alternates"
 msgstr "备选 Tracker"
+
+msgid "Primary"
+msgstr "主 Tracker"
 
 msgid "Tracker Type"
 msgstr "追踪器类型"
@@ -1328,6 +1349,12 @@ msgstr "已添加"
 msgid "Pieces"
 msgstr "分块数量"
 
+msgid "Average download speed for torrent"
+msgstr ""
+
+msgid "Download speed"
+msgstr ""
+
 msgid "Completion"
 msgstr "完成"
 
@@ -1474,6 +1501,9 @@ msgstr "标记为删除"
 msgid "Delete Selected"
 msgstr "删除所选"
 
+msgid "File downloading priorities updated for torrent "
+msgstr ""
+
 msgid "Edit Torrent"
 msgstr "编辑种子"
 
@@ -1495,13 +1525,9 @@ msgstr "保存更改"
 msgid "Torrent must be stopped"
 msgstr "必须停止洪流"
 
+
+
+
 #, java-format
-
-
-
-
-
-
-
 
 

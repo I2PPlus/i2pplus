@@ -54,6 +54,14 @@ msgstr "Omejitev zgornjega BW spremenjena na {0}KBps"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Minimalna omejitev zgornjega prenosnega širinevja je {0}KBps"
 
+#, java-format
+msgid "Maximum download speed changed to {0}KB/s"
+msgstr ""
+
+#, java-format
+msgid "Download speed limit is {0}KB/s"
+msgstr ""
+
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
 msgstr ""
 
@@ -138,12 +146,6 @@ msgstr "Samodejni zagon omogočen"
 msgid "Disabled autostart"
 msgstr "Samodejni zagon onemogočen"
 
-msgid "Enabled smart sort"
-msgstr "Pametno urejanje omogočeno"
-
-msgid "Disabled smart sort"
-msgstr "Pametno urejanje onemogočeno"
-
 msgid "Enabled open trackers - torrent restart required to take effect."
 msgstr "Odpri trackerji omogočeni - za uveljavitev je potrebno ponovno zagon torrenta."
 
@@ -199,8 +201,8 @@ msgstr "Dodaj in Ustvari sekcije omogočene na vseh straneh zoznamov torrentov."
 msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
 msgstr "Dodaj in Ustvari sekcije se bodo prikazale le na prvi strani večstranih strani zoznamov torrentov."
 
-msgid "Configuration unchanged."
-msgstr "Konfiguracija nespremenjena."
+msgid "API key updated."
+msgstr ""
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Seznam Odprih trackerjev spremenjen - za uveljavitev je potrebno ponovno zagon torrenta."
@@ -241,22 +243,6 @@ msgid "Torrent with the same data location is already running: {0}"
 msgstr "Torrent z istim lokacijo podatkov že deluje: {0}"
 
 #, java-format
-msgid "ERROR - No I2P trackers in private torrent \"{0}\""
-msgstr "NAPAKA - V zasebnem torrentu \"{0}\" ni I2P trackerjev"
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "Opozorilo - V \"{0}\" ni I2P trackerjev, bodo obvestila poslana samo na I2P odpri trackerje in DHT."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "Opozorilo - V \"{0}\" ni I2P trackerjev, in so odpri trackerji onemogočeni, bodo obvestila poslana samo na DHT."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "Opozorilo - V \"{0}\" ni I2P trackerjev, in so DHT in odpri trackerji onemogočeni, pred zagonom torrenta bi morali omogočiti odpri trackerje ali DHT."
-
-#, java-format
 msgid "Torrent in \"{0}\" is invalid"
 msgstr "Torrent v \"{0}\" je neveljaven"
 
@@ -274,6 +260,22 @@ msgstr "Torrent dodan in zagnan: {0}"
 #, java-format
 msgid "Torrent added: {0}"
 msgstr "Torrent dodan: {0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "NAPAKA - V zasebnem torrentu \"{0}\" ni I2P trackerjev"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "Opozorilo - V \"{0}\" ni I2P trackerjev, bodo obvestila poslana samo na I2P odpri trackerje in DHT."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "Opozorilo - V \"{0}\" ni I2P trackerjev, in so odpri trackerji onemogočeni, bodo obvestila poslana samo na DHT."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "Opozorilo - V \"{0}\" ni I2P trackerjev, in so DHT in odpri trackerji onemogočeni, pred zagonom torrenta bi morali omogočiti odpri trackerje ali DHT."
 
 #, java-format
 msgid "Fetching {0}"
@@ -346,6 +348,18 @@ msgstr "Torrent odstranjen: \"{0}\""
 msgid "Adding torrents in {0}&hellip;"
 msgstr "Dodajanje torrentov v {0}…"
 
+#, java-format
+msgid "Down bandwidth limit is {0} KB/s"
+msgstr "Omejitev dolavnega širinevja je {0} KBps"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KB/s"
+msgstr "Omejitev zgornjega širinevja je {0} KBps"
+
+#, java-format
+msgid "Connecting to I2CP port on I2P instance at {0}"
+msgstr ""
+
 msgid "Connecting to I2P"
 msgstr "Povezovanje z I2P"
 
@@ -357,20 +371,12 @@ msgid "Starting up torrent {0}"
 msgstr "Zagon torrenta {0}"
 
 #, java-format
-msgid "Down bandwidth limit is {0} KB/s"
-msgstr "Omejitev dolavnega širinevja je {0} KBps"
-
-#, java-format
-msgid "Up bandwidth limit is {0} KB/s"
-msgstr "Omejitev zgornjega širinevja je {0} KBps"
-
-#, java-format
-msgid "I2P+ I2PSnark standalone version {0} started"
-msgstr "Začetek samostojne različice I2P+ I2PSnark {0}"
-
-#, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
 msgstr "Omejitev zgornjega širinevja je {0} KBps do maksimuma {1} hkrasnega sosedov."
+
+#, java-format
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
+msgstr ""
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -413,6 +419,19 @@ msgid "Closing I2P tunnel after notifying trackers."
 msgstr "Zapiranje tunela I2P po obvestitvi trackerjev."
 
 #, java-format
+msgid "Cannot check {0}"
+msgstr ""
+
+msgid "Torrent already started"
+msgstr ""
+
+msgid "No storage"
+msgstr ""
+
+msgid "Starting recheck of {}"
+msgstr ""
+
+#, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
 msgstr "Preverjanje torrenta {0} končano, zdaj je {1} popolnoma preneseno"
 
@@ -423,6 +442,9 @@ msgstr "Preverjanje torrenta {0} končano, ne spremenjeno"
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "Napaka pri preverjanju torrenta {0}"
+
+msgid "Cannot create diskspace bar"
+msgstr ""
 
 msgid "Data partition"
 msgstr ""
@@ -464,9 +486,6 @@ msgstr "Torrent v {0} ni bil veljaven"
 
 msgid "Configuration"
 msgstr "Nastavitve"
-
-msgid "Debug Mode"
-msgstr "Način razhroščanja"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "Nepoznat BitTorrent odjemalnik"
@@ -510,12 +529,6 @@ msgstr "Foruma"
 
 msgid "Torrent &amp; filesharing forum"
 msgstr "Forum za deljenje datotek s pomočjo torrentov"
-
-msgid "BTDigg"
-msgstr "BTDigg"
-
-msgid "I2P-based search engine for clearnet-hosted torrents"
-msgstr "Iskanje na podlagi I2P za torrente gostiteljev clearnet"
 
 msgid "Search torrents"
 msgstr "Iskanje torrentov"
@@ -591,8 +604,8 @@ msgstr "Dolavna hitrost"
 msgid "TX"
 msgstr "TX"
 
-msgid "Share ratio"
-msgstr "Odnos pošiljanja"
+msgid "Upload ratio"
+msgstr ""
 
 msgid "Uploaded"
 msgstr "Pošiljano"
@@ -636,6 +649,14 @@ msgid "Total size of loaded torrents"
 msgstr ""
 
 #, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
 msgstr[0] "{0} DHT sosed"
@@ -670,8 +691,8 @@ msgstr "Skupni podatki, ki so bili pošiljani (za navedene torrente)"
 msgid "Total upload speed"
 msgstr "Skupna hitrost pošiljanja"
 
-msgid "Toggle Debug Mode"
-msgstr ""
+msgid "Debug Mode"
+msgstr "Način razhroščanja"
 
 msgid "Normal Mode"
 msgstr "Normalni način"
@@ -918,6 +939,9 @@ msgstr "preostalo"
 msgid "Completed"
 msgstr "Končano"
 
+msgid "Share ratio"
+msgstr "Odnos pošiljanja"
+
 msgid "Last activity"
 msgstr "Zadnja dejavnost"
 
@@ -1026,11 +1050,11 @@ msgstr "Filtriraj vsebino"
 msgid "Trackers"
 msgstr "Trackerji"
 
-msgid "Primary"
-msgstr "Glavni"
-
 msgid "Alternates"
 msgstr "Nadomestni"
+
+msgid "Primary"
+msgstr "Glavni"
 
 msgid "Tracker Type"
 msgstr "Vrsta trackerja"
@@ -1346,6 +1370,12 @@ msgstr "Dodano"
 msgid "Pieces"
 msgstr "Delci"
 
+msgid "Average download speed for torrent"
+msgstr ""
+
+msgid "Download speed"
+msgstr ""
+
 msgid "Completion"
 msgstr "Končanje"
 
@@ -1495,6 +1525,9 @@ msgstr "Označi za izbris"
 msgid "Delete Selected"
 msgstr "Izbriši izbrane"
 
+msgid "File downloading priorities updated for torrent "
+msgstr ""
+
 msgid "Edit Torrent"
 msgstr "Uredi torrent"
 
@@ -1516,13 +1549,9 @@ msgstr "Shrani spremembe"
 msgid "Torrent must be stopped"
 msgstr "Torrent mora biti ustavljen"
 
+
+
+
 #, java-format
-
-
-
-
-
-
-
 
 

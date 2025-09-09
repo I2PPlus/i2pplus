@@ -12,6 +12,11 @@ msgid "internal"
 msgstr "内部"
 
 #, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "{0}個の入力,{0}個の出力トンネル"
+
+#, java-format
 msgid "{0} inbound tunnel"
 msgid_plural "{0} inbound tunnels"
 msgstr[0] "{0}インバウンドトンネル"
@@ -20,11 +25,6 @@ msgstr[0] "{0}インバウンドトンネル"
 msgid "{0} outbound tunnel"
 msgid_plural "{0} outbound tunnels"
 msgstr[0] "{0}アウトバウンドトンネル"
-
-#, java-format
-msgid "{0} inbound, {0} outbound tunnel"
-msgid_plural "{0} inbound, {0} outbound tunnels"
-msgstr[0] "{0}個の入力,{0}個の出力トンネル"
 
 msgid "lower bandwidth and reliability"
 msgstr "低い転送量だが低い信頼性"
@@ -35,14 +35,47 @@ msgstr "標準的な転送量と信頼性"
 msgid "higher bandwidth and reliability"
 msgstr "高い転送量だが高い信頼性"
 
-msgid "Configuration reloaded for all tunnels"
-msgstr "すべてのトンネルの設定が再読込されました"
+msgid "Error - tunnels are not initialized yet"
+msgstr ""
+
+msgid "No services configured, cannot restart!"
+msgstr ""
+
+msgid "Stopping tunnel"
+msgstr "トンネルを停止中"
 
 msgid "Starting tunnel"
 msgstr "トンネルを開始中"
 
-msgid "Stopping tunnel"
-msgstr "トンネルを停止中"
+msgid "Error restarting tunnel"
+msgstr ""
+
+msgid "Restarted all running tunnels"
+msgstr ""
+
+msgid "No clients configured, cannot restart!"
+msgstr ""
+
+msgid "Restarted all running client tunnels"
+msgstr ""
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "すべてのトンネルの設定が再読込されました"
+
+msgid "Error: Invalid tunnel"
+msgstr ""
+
+msgid "Started tunnel"
+msgstr ""
+
+msgid "Stopped tunnel"
+msgstr ""
+
+msgid "Restarting tunnel"
+msgstr ""
+
+msgid "Please confirm removal"
+msgstr ""
 
 msgid "New Tunnel"
 msgstr "新しいトンネル"
@@ -113,6 +146,9 @@ msgstr "サーバートンネルの編集"
 msgid "Are you sure you want to delete?"
 msgstr "削除してもよろしいですか?"
 
+msgid "required"
+msgstr "必須"
+
 msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
 msgstr "この設定を変更するには、トンネルと他のすべての共有クライアント トンネルを停止する必要があります"
 
@@ -169,9 +205,6 @@ msgstr "DCCを有効にする"
 
 msgid "Port"
 msgstr "ポート"
-
-msgid "required"
-msgstr "必須"
 
 msgid "Specify the local port this service should be accessible from"
 msgstr "このサービスにアクセスできるローカル ポートを指定します"
@@ -317,11 +350,14 @@ msgstr "ポートでアクティビティが検出されるまでトンネルを
 msgid "This is the default, recommended option"
 msgstr "これはデフォルトの推奨オプションです"
 
-msgid "Legacy option (deprecated), provided for backward compatibility"
-msgstr "レガシー オプション (非推奨)、下位互換性のために提供されています"
-
 msgid "Encryption types"
 msgstr "暗号化の種類"
+
+msgid "Legacy options"
+msgstr ""
+
+msgid "Post Quantum"
+msgstr ""
 
 msgid "Both encryption types"
 msgstr "両方の暗号化タイプ"
@@ -357,6 +393,9 @@ msgstr[0] "{0}ホップトンネル"
 
 msgid "Number of Tunnels in Group"
 msgstr "グループ内のトンネルの数"
+
+msgid "Disabled for 0 hop tunnels"
+msgstr ""
 
 msgid "Variance"
 msgstr "分散"
@@ -522,17 +561,17 @@ msgstr "このローカル サービスにアクセスするためにユーザ�
 msgid "Require local authorization for this service"
 msgstr "このサービスにはローカル認証が必要です"
 
-msgid "Username"
-msgstr "ユーザー名"
-
 msgid "Set username required to access this service"
 msgstr "このサービスにアクセスするために必要なユーザー名を設定します"
 
-msgid "Password"
-msgstr "パスワード"
+msgid "Username"
+msgstr "ユーザー名"
 
 msgid "Set password required to access this service"
 msgstr "このサービスにアクセスするために必要なパスワードを設定してください"
+
+msgid "Password"
+msgstr "パスワード"
 
 msgid "Outproxy Authorization"
 msgstr "アプトプロキシの認証"
@@ -647,6 +686,9 @@ msgstr "署名タイプの設定は、トンネルが最初に作成されたと
 
 msgid "Legacy option, with alternate key configured"
 msgstr "代替キーが設定されたレガシー オプション"
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "レガシー オプション (非推奨)、下位互換性のために提供されています"
 
 msgid "Recommended for blinded and encrypted destinations"
 msgstr "ブラインド化および暗号化された宛先に推奨"
@@ -982,8 +1024,23 @@ msgstr "全て停止"
 msgid "Start All"
 msgstr "全て開始"
 
+msgid "Restart all running tunnels"
+msgstr ""
+
 msgid "Restart All"
 msgstr "全て再起動"
+
+msgid "Restart all running server tunnels"
+msgstr ""
+
+msgid "Restart All Servers"
+msgstr ""
+
+msgid "Restart all running client tunnels"
+msgstr ""
+
+msgid "Restart All Clients"
+msgstr ""
 
 msgid "I2P Server Tunnels"
 msgstr "I2P サーバー トンネル"
@@ -1009,6 +1066,9 @@ msgstr "操作"
 msgid "Edit Server Tunnel Settings for"
 msgstr "サーバートンネル設定の編集"
 
+msgid "Test IRC server, bypassing I2P"
+msgstr ""
+
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "I2P をバイパスする HTTPS サーバーのテスト"
 
@@ -1020,6 +1080,9 @@ msgstr "I2P を介した HTTP サーバーのテスト"
 
 msgid "Base32 Address"
 msgstr "Base32 アドレス"
+
+msgid "Offline"
+msgstr ""
 
 msgid "No Preview"
 msgstr "プレビューなし"
@@ -1042,6 +1105,12 @@ msgstr "で"
 msgid "out"
 msgstr "アウト"
 
+msgid "Restart this Tunnel"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
 msgid "Stopped"
 msgstr "停止しました"
 
@@ -1059,6 +1128,9 @@ msgstr "代替目的地"
 
 msgid "Encryption"
 msgstr "暗号化"
+
+msgid "Supported encryption"
+msgstr ""
 
 msgid "New server tunnel"
 msgstr "新しいサーバートンネル"

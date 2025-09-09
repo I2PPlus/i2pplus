@@ -1554,10 +1554,7 @@ msgstr "Újraindítás: {0}"
 msgid "Save order"
 msgstr "Megrendelés mentése"
 
-msgid "Sidebar refresh disabled"
-msgstr ""
-
-msgid "Sidebar refresh interval changed"
+msgid "Sidebar preferences updated"
 msgstr ""
 
 msgid "Refresh interval must be a number"
@@ -1592,9 +1589,6 @@ msgstr "Áthelyezve"
 
 msgid "Saved order of sections."
 msgstr "A szakaszok elmentett sorrendje."
-
-msgid "Stat filter and location updated successfully to"
-msgstr "Állapot szűrő és hely sikeresen frissítve a következőre"
 
 msgid "Full statistics enabled"
 msgstr "Teljes statisztika engedélyezve"
@@ -2182,23 +2176,14 @@ msgstr "I2P-vel kapcsolatos közösségi fórumok"
 msgid "File-sharing forum"
 msgstr "Fájlmegosztó fórum"
 
-msgid "Alternative front-end for Twitter"
-msgstr "Alternatív kezelőfelület a Twitterhez"
-
-msgid "Rocksolid forums for the darknets"
-msgstr "Rocksolid fórumok a darknetekhez"
-
 msgid "Cross-network micro-blogging &amp; forums &amp; wiki"
 msgstr "Hálózatokon átívelő mikroblog"
 
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Alternatív adatvédelemre összpontosító előtér a Reddithez"
 
-msgid "Base64 Image Encoder"
-msgstr "Base64 képkódoló"
-
-msgid "An image cache and resize service"
-msgstr "Képgyorsítótár és átméretező szolgáltatás"
+msgid "AI Image generation & Chat hub"
+msgstr ""
 
 msgid "IRC Logs for multiple networks"
 msgstr "IRC naplók több hálózathoz"
@@ -2215,17 +2200,8 @@ msgstr "Különféle szolgáltatások nyitóoldala"
 msgid "Streaming radio service"
 msgstr "Streaming rádiószolgáltatás"
 
-msgid "Alternative frontend for Imgur"
-msgstr "Alternatív kezelőfelület a Imgur"
-
 msgid "Privacy-focused not-for-profit organization"
 msgstr "Az adatvédelemre összpontosító non-profit szervezet"
-
-msgid "Outproxy bandwidth test"
-msgstr "Outproxy sávszélesség teszt"
-
-msgid "speedtest"
-msgstr "sebességteszt"
 
 msgid "Text translation engine"
 msgstr "Szövegfordító motor"
@@ -2233,20 +2209,8 @@ msgstr "Szövegfordító motor"
 msgid "translate"
 msgstr "fordít"
 
-msgid "Alternative front-end to Youtube"
-msgstr "Alternatív kezelőfelület a Youtube"
-
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "Adatvédelmi szolgáltató, tiszteletben tartva a webtárhely- és VPN-szolgáltatásokat"
-
-msgid "Tor-focused Search Engine"
-msgstr "Tor-központú keresőmotor"
-
-msgid "Pinterest Image Search Engine"
-msgstr "Pinterest képesítő motor"
-
-msgid "Clearnet BitTorrent DHT search engine"
-msgstr "Clearnet BitTorrent DHT kereső"
 
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "DuckDuckGo keresőmotor (javascript nélkül)"
@@ -2256,21 +2220,6 @@ msgstr "Adatvédelemre összpontosító Clearnet keresőmotor"
 
 msgid "I2P Web Search Engine"
 msgstr "I2P webes keresőmotor"
-
-msgid "Enabling the free transmission of data in the public interest"
-msgstr "A közérdekű adatok ingyenes továbbításának lehetővé tétele"
-
-msgid "Selected Papers in Anonymity"
-msgstr "Válogatott iratok névtelenségben"
-
-msgid "Tor .onion site links"
-msgstr "Tor .onion webhely linkjei"
-
-msgid "HTML Color Reference"
-msgstr "HTML színreferencia"
-
-msgid "HTMLColors"
-msgstr "HTMLColors"
 
 msgid "I2P-related Wiki"
 msgstr "I2P-vel kapcsolatos Wiki"
@@ -2287,29 +2236,17 @@ msgstr "A filozófia internetes enciklopédia"
 msgid "Standford Encyclopedia of Philosophy"
 msgstr "Stanford filozófia enciklopédia"
 
-msgid "Psychonaut"
-msgstr "Pszichonaut"
-
-msgid "Wiki relating to altered states of consciousness"
-msgstr "Wiki a megváltozott tudatállapotokkal kapcsolatban"
-
 msgid "Computing-related tutorials"
 msgstr "Számítástechnikával kapcsolatos oktatóanyagok"
 
 msgid "SimplifiedGuide"
 msgstr "Egyszerűsített útmutató"
 
-msgid "Vulnerability Database"
-msgstr "Sebezhetőségi adatbázis"
-
 msgid "Web technology reference and learning site"
 msgstr "Webtechnológiai referencia- és tanulási oldal"
 
 msgid "Alternative Wikipedia front-end focused on privacy"
 msgstr "Alternatív Wikipédia-kezelőfelület, amely a magánéletre összpontosít"
-
-msgid "The biggest online English dictionary"
-msgstr "A legnagyobb online angol szótár"
 
 msgid "World atlas including geography facts &amp; flags"
 msgstr "Világatlasz, beleértve a földrajzi tényeket és zászlókat"
@@ -2320,14 +2257,8 @@ msgstr "Világatlasz"
 msgid "Technology News &amp; more..."
 msgstr "Technológiai hírek és egyebek..."
 
-msgid "Independent investigative journalism"
-msgstr "Független oknyomozó újságírás"
-
 msgid "Information Security Research &amp; Education"
 msgstr "Információbiztonsági kutatás és oktatás"
-
-msgid "Darknet related news site"
-msgstr "Darknet kapcsolódó híroldal"
 
 msgid "DigitalTrends"
 msgstr "DigitalTrends"
@@ -2340,24 +2271,6 @@ msgstr "Jogainak védelme a digitális világban"
 
 msgid "The Elliptic Curve Cryptography Blog"
 msgstr "Az elliptikus görbe kriptográfia blog"
-
-msgid "ForeignPolicy"
-msgstr "Külpolitika"
-
-msgid "The Global Magazine of News &amp; Ideas"
-msgstr "A hírek és ötletek globális magazinja"
-
-msgid "FrontLineDefenders"
-msgstr "FrontLineDefenders"
-
-msgid "Human rights activism"
-msgstr "Emberi jogi aktivizmus"
-
-msgid "Defending Human Rights Worldwide"
-msgstr "Az emberi jogok védelme világszerte"
-
-msgid "HumanRightsWatch"
-msgstr "Human RightsWatch"
 
 msgid "Fresh hacks every day"
 msgstr "Friss hackek minden nap"
@@ -2373,12 +2286,6 @@ msgstr "HongKongFreePress"
 
 msgid "Independent &amp; impartial news for Hong Kong"
 msgstr "Független és pártatlan hírek Hongkong számára"
-
-msgid "HongKongWatch"
-msgstr "HongKongWatch"
-
-msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr "Figyelemmel kíséri a szabadságjogokat és jogokat fenyegető veszélyeket Hongkongban"
 
 msgid "JStorDaily"
 msgstr "JStorDaily"
@@ -2416,11 +2323,11 @@ msgstr "Független nemzetközi médiaplatform"
 msgid "OpenDemocracy"
 msgstr "Nyílt demokrácia"
 
-msgid "News and blog feeds on I2P"
-msgstr "Hírek és blogok az I2P-ről"
+msgid "Online privacy &amp; tech blog"
+msgstr ""
 
-msgid "Planeta"
-msgstr "Planeta"
+msgid "RightToPrivacy"
+msgstr ""
 
 msgid "Lifestyle magazine"
 msgstr "Életmód magazin"
@@ -2449,20 +2356,11 @@ msgstr "Hírek nebulóknak"
 msgid "Technology news &amp; reviews"
 msgstr "Technológiai hírek és ismertetők"
 
-msgid "Reporting on China without fear or favor"
-msgstr "Jelentés Kínáról félelem és szívesség nélkül"
-
 msgid "News from the Taiwan Capital"
 msgstr "Hírek a tajvani fővárosból"
 
 msgid "TaipeiTimes"
 msgstr "TaipeiTimes"
-
-msgid "TechXplore"
-msgstr "TechXplore"
-
-msgid "Technology and engineering news"
-msgstr "Technológiai és mérnöki hírek"
 
 msgid "TechMeme"
 msgstr "TechMeme"
@@ -2505,12 +2403,6 @@ msgstr "Az Új Köztársaság"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "Fájlmegosztás és szerzői jogi hírek"
-
-msgid "A magazine about human rights and social justice"
-msgstr "Magazin az emberi jogokról és a társadalmi igazságosságról"
-
-msgid "UpstreamJournal"
-msgstr "UpstreamJournal"
 
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
 msgstr "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
@@ -2841,16 +2733,22 @@ msgstr ""
 msgid "Not initialized"
 msgstr "Nincs inicializálva"
 
-msgid "Sorted by hash distance, closest first."
+msgid "Total Remote Leasesets"
 msgstr ""
 
 msgid "Compact mode"
 msgstr ""
 
-msgid "Total Remote Leasesets"
+msgid "Local Leasesets"
+msgstr ""
+
+msgid "Debug Mode"
 msgstr ""
 
 msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Sorted by hash distance, closest first."
 msgstr ""
 
 msgid "Mod Data"
@@ -2865,17 +2763,11 @@ msgstr ""
 msgid "Change in"
 msgstr ""
 
-msgid "Known Floodfills"
-msgstr "Ismert Floodfills"
-
 msgid "Floodfill mode enabled"
 msgstr ""
 
 msgid "Routing Key"
 msgstr "Útválasztó kulcs"
-
-msgid "Network data"
-msgstr "Hálózati adatok"
 
 msgid "Median distance (bits)"
 msgstr "Medián távolság (bit)"
@@ -2885,6 +2777,12 @@ msgstr "Becsült teljes árvízkitöltés"
 
 msgid "Estimated total leasesets"
 msgstr "Becsült összes bérleti szerződés"
+
+msgid "Total Local Leasesets"
+msgstr ""
+
+msgid "Remote Leasesets"
+msgstr ""
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2917,12 +2815,6 @@ msgstr "Lejár{0}"
 msgid "Expired{0} ago"
 msgstr "Lejárt{0}"
 
-msgid "Received as published"
-msgstr "Megjelenés szerint érkezett?"
-
-msgid "Received as reply"
-msgstr "Válaszként érkezett?"
-
 msgid "Distance"
 msgstr "Távolság"
 
@@ -2931,6 +2823,9 @@ msgstr "Offline aláírva"
 
 msgid "Signature type"
 msgstr "Aláírás típusa"
+
+msgid "Public Key"
+msgstr ""
 
 msgid "Unsupported type"
 msgstr "Nem támogatott típus"
@@ -2942,6 +2837,9 @@ msgstr "Lejár {0} belül"
 #, java-format
 msgid "Expired {0} ago"
 msgstr "Lejárt {0} ezelőtt"
+
+msgid "Unknown"
+msgstr "Ismeretlen"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
 msgstr ""
@@ -2978,9 +2876,6 @@ msgstr "Árvizek"
 
 msgid "Total"
 msgstr "Összes"
-
-msgid "Unknown"
-msgstr "Ismeretlen"
 
 msgid "Initializing"
 msgstr "Inicializálás"
@@ -3055,9 +2950,6 @@ msgstr "Az összes ezzel a címmel rendelkező útválasztó megjelenítése a N
 msgid "Show all routers with this port in the NetDb"
 msgstr "Az ezzel a porttal rendelkező összes útválasztó megjelenítése a NetDb-ben"
 
-msgid "Network ID"
-msgstr "Hálózati azonosító"
-
 msgid "Routers"
 msgstr "Routerek"
 
@@ -3069,6 +2961,12 @@ msgstr "Utoljára hallottam róla"
 
 msgid "Last heard from"
 msgstr "Utolsó hír"
+
+msgid "Network Id"
+msgstr ""
+
+msgid "Count is always spoofed to avoid indicating router restarts"
+msgstr ""
 
 msgid "Hidden or starting up"
 msgstr "Rejtett vagy indul"
@@ -3129,19 +3027,16 @@ msgstr "a router.config fájlba."
 msgid "Peer Connections"
 msgstr "Távoli csatlakozások"
 
-msgid "Active in the last minute"
-msgstr "Aktív az utolsó pillanatban"
-
 msgid "IPv4"
 msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
 
-msgid "Limit"
+msgid "Active connections / Max permitted"
 msgstr ""
 
-msgid "Maximum permitted connections"
+msgid "Connections / Limit"
 msgstr ""
 
 msgid "Current / maximum permitted"
@@ -3150,23 +3045,23 @@ msgstr "Áram / maximálisan megengedett"
 msgid "NTCP connections"
 msgstr "NTCP kapcsolatok"
 
-msgid "Caps"
-msgstr "Tető"
-
 msgid "Peer capabilities"
 msgstr "Peer képességek"
 
-msgid "Dir"
-msgstr "Könyvtár"
+msgid "Caps"
+msgstr "Tető"
 
 msgid "Direction/Introduction"
 msgstr "Irány/Bemutató"
 
-msgid "Idle"
-msgstr "Üres"
+msgid "Dir"
+msgstr "Könyvtár"
 
 msgid "Peer inactivity"
 msgstr "Peer inaktivitás"
+
+msgid "Idle"
+msgstr "Üres"
 
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Átlagos bejövő/kimenő sebesség (KB/s)"
@@ -3198,11 +3093,11 @@ msgstr "Üzenetek érkeztek"
 msgid "RX"
 msgstr "Fogadott"
 
-msgid "Out Queue"
-msgstr "Kimenő Sor"
-
 msgid "Queued messages to send to peer"
 msgstr "Sorba állított üzenetek küldendő partnernek"
+
+msgid "Out Queue"
+msgstr "Kimenő Sor"
 
 msgid "Connection is backlogged"
 msgstr "A kapcsolat lemaradt"
@@ -3728,11 +3623,11 @@ msgstr "I2P frissítés letöltése"
 msgid "Unsigned update available"
 msgstr "Aláíratlan frissítés elérhető"
 
-msgid "Help with firewall configuration"
-msgstr "Segítség a tűzfal beállításához"
-
 msgid "Check network connection and NAT/firewall!"
 msgstr "Ellenőrizze a hálózati kapcsolatot és a NAT/tűzfalat!"
+
+msgid "Help with firewall configuration"
+msgstr "Segítség a tűzfal beállításához"
 
 msgid "Attempt to download router reference files (if automatic reseed has failed)"
 msgstr "Kísérlet az útválasztó referenciafájljainak letöltésére (ha az automatikus újraküldés sikertelen)"
@@ -3767,23 +3662,35 @@ msgstr "Mozgatás alulra"
 msgid "Select a section to add"
 msgstr "Válassza ki a hozzáadni kívánt szakaszt"
 
+msgid "Router Information (advanced)"
+msgstr "Útválasztó információ (speciális)"
+
+msgid "Advanced Links"
+msgstr "Speciális linkek"
+
+msgid "Bandwidth Graph"
+msgstr "Sávszélesség grafikon"
+
+msgid "UTC Clock"
+msgstr "UTC óra"
+
+msgid "Congestion"
+msgstr "Torlódás"
+
+msgid "CPU Load"
+msgstr "CPU terhelés"
+
+msgid "Firewall &amp; Reseed Status"
+msgstr "Firewall and Reseed Status"
+
 msgid "Help &amp; FAQ"
 msgstr "Segítség és GYIK"
-
-msgid "I2P Services"
-msgstr "I2P Szolgáltatások"
 
 msgid "I2P Internals"
 msgstr "I2P Belső"
 
-msgid "Router Information"
-msgstr "Útválasztó információ"
-
-msgid "Router Information (brief)"
-msgstr "Router információ (rövid)"
-
-msgid "Router Information (advanced)"
-msgstr "Útválasztó információ (speciális)"
+msgid "I2P Services"
+msgstr "I2P Szolgáltatások"
 
 msgid "Memory Usage Bar"
 msgstr "Memóriahasználati sáv"
@@ -3791,35 +3698,23 @@ msgstr "Memóriahasználati sáv"
 msgid "Network Reachability"
 msgstr "Hálózati elérhetőség"
 
-msgid "Update Status"
-msgstr "Frissítés állapota"
+msgid "News &amp; Updates"
+msgstr "Hírek &amp; Frissítések"
 
 msgid "Restart Status"
 msgstr "Újraindítás állapota"
 
-msgid "Firewall &amp; Reseed Status"
-msgstr "Firewall and Reseed Status"
+msgid "Router Information"
+msgstr "Útválasztó információ"
 
-msgid "Bandwidth Graph"
-msgstr "Sávszélesség grafikon"
-
-msgid "Congestion"
-msgstr "Torlódás"
+msgid "Router Information (brief)"
+msgstr "Router információ (rövid)"
 
 msgid "Tunnel Status"
 msgstr "Alagút állapota"
 
-msgid "News &amp; Updates"
-msgstr "Hírek &amp; Frissítések"
-
-msgid "Advanced Links"
-msgstr "Speciális linkek"
-
-msgid "UTC Clock"
-msgstr "UTC óra"
-
-msgid "CPU Load"
-msgstr "CPU terhelés"
+msgid "Update Status"
+msgstr "Frissítés állapota"
 
 msgid "I2P Router Help &amp; FAQ"
 msgstr "I2P Router Segítség és GYIK"
@@ -4004,6 +3899,9 @@ msgstr "Összes társ a NetDb-ben"
 
 msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Utóbbi percek/óra kapcsolatai"
+
+msgid "Peers we've been talking to in the last minute"
+msgstr ""
 
 msgid "The number of peers available for building client tunnels"
 msgstr "A kliens csatornát létrehozó kapcsolatok száma"
@@ -4337,6 +4235,9 @@ msgstr "Blokkolás kikényszerítése"
 msgid "days"
 msgstr "napok"
 
+msgid "Known Floodfills"
+msgstr "Ismert Floodfills"
+
 msgid "Average closest floodfill distance"
 msgstr "Átlagos legközelebbi elárasztási távolság"
 
@@ -4507,6 +4408,9 @@ msgstr "Adatátvitel"
 
 msgid "Data"
 msgstr "Adatok"
+
+msgid "Limit"
+msgstr ""
 
 msgid "Receive on"
 msgstr "Fogadás a következőn"
@@ -5480,6 +5384,9 @@ msgstr "Telepítse az I2P rendszerszolgáltatást. "
 msgid "config sidebar"
 msgstr "Konfigurálja az oldalsávot"
 
+msgid "Sidebar Options"
+msgstr ""
+
 msgid "Refresh interval"
 msgstr "Frissítési időköz"
 
@@ -5488,6 +5395,12 @@ msgstr "másodpercek"
 
 msgid "0 to disable"
 msgstr "0 a letiltáshoz"
+
+msgid "Unified sidebar"
+msgstr ""
+
+msgid "Use the same sidebar on all pages"
+msgstr ""
 
 msgid "config stats"
 msgstr "státusz beállításai"
@@ -5688,6 +5601,9 @@ msgstr "események"
 msgid "Event Log"
 msgstr "Eseménynapló"
 
+msgid "Combined"
+msgstr ""
+
 msgid "graph"
 msgstr "Grafikon"
 
@@ -5765,6 +5681,9 @@ msgstr "Ez a beállítás, ha igazra van állítva, megjelenít egy Peer Test á
 
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Ez a beállítás, amikor igazra van állítva, megjeleníti az érdekes oldalak linkeit a <a href=/sitemap>webhelytérképen</a>. [Az alapértelmezett érték hamis]"
+
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
+msgstr ""
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Ezt a beállítástól függ, használja-e a router a rendelkezésre bocsátott <i>blocklist.txt</i> fájlt és a felhasználó által konfigurált tilalmi listákat a routerek tiltásához hash vagy IP cím alapján. Az IPv4 esetében tartományok és hálózati maszkok támogatottak, de az IPv6 esetében nem. További információkért tekintse meg az I2P+ alkalmazás könyvtárában található <i>blocklist.txt</i> fájlt. [Elsődlegesen engedélyezve, újraindítás szükséges]"
@@ -6579,8 +6498,8 @@ msgstr "Ha a <i>Regisztrációs hitelesítési</i> karaktersorozatra van szüks�
 msgid "If you are in a hurry and can't wait a few hours, you can tell people to use a \"jump\" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is working, you can tell others to use it."
 msgstr "Ha siettetsz, és nem tudsz pár órát várni, akkor elmondhatod az embereknek, hogy használják az „ugrás” címsegítő átirányító szolgáltatást. Ez általában néhány percen belül működni fog miután regisztráltad a hosztnévét ugyanazon az oldalon. Előbb teszteld le magad a böngésződben ennek a beírásával: <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>a választott menedékod.i2p</i></code>. Ha működik, akkor másoknak is elmondhatod, hogy használják."
 
-msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skanki2p</a>, and paste the link where it's required to share it with others."
-msgstr "Vagy másolhatod <i>a címsegítő hivatkozást</i> a tartományodhoz, amelyet fel lehet tüntetni az elérhetőségjegyzék címjegyzék-lista oldalán vagy a tartományod részletes oldalán. Példa: <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>i2p-projekt részletek</a>. Illessz be vagy küld el a szükséges helyre a hivatkozást, hogy megadhassd másoknak."
+msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
+msgstr ""
 
 msgid "Backup your private key!"
 msgstr "Készíts biztonsági másolatot a privát kulcsodról!"
@@ -6816,8 +6735,8 @@ msgstr "A jobb kapcsolattartás érdekében nyissa meg az I2P portot a modemén,
 msgid "Getting Support Online"
 msgstr "Online támogatás igénylése"
 
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "Érdemes áttekinteni az információkat az <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P weboldalon</a>, üzeneteket küldeni az <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P fórumon</a>, vagy betérni az I2P belső IRC hálózatára a <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> vagy <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> csatornákra."
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
+msgstr ""
 
 msgid "Reporting Bugs"
 msgstr "Hibák bejelentése"
@@ -7356,6 +7275,9 @@ msgstr "A linkek testreszabása"
 msgid "Configure display language, theme and optional console password"
 msgstr "A megjelenítési nyelv, a téma és az opcionális konzoljelszó konfigurálása"
 
+msgid "Language"
+msgstr ""
+
 msgid "Configure router bandwidth"
 msgstr "Az útválasztó sávszélességének konfigurálása"
 
@@ -7420,6 +7342,24 @@ msgstr "Szolgáltatás (Wrapper) Napló"
 msgid "network database"
 msgstr "hálózati adatbázis"
 
+msgid "Encryption type"
+msgstr ""
+
+msgid "Encryption types"
+msgstr ""
+
+msgid "Signature types"
+msgstr ""
+
+msgid "Locally hosted private service"
+msgstr ""
+
+msgid "Locally hosted public service"
+msgstr ""
+
+msgid "Requested client leaseset"
+msgstr ""
+
 msgid "network database router map"
 msgstr "Hálózati adatbázis router térképe"
 
@@ -7462,6 +7402,12 @@ msgstr "Kitiltott Társak"
 
 msgid "Fast / High Capacity"
 msgstr "Gyors / Nagy kapacitás"
+
+msgid "router logs"
+msgstr ""
+
+msgid "service logs"
+msgstr ""
 
 msgid "Manage I2P addresses"
 msgstr "I2P-címek kezelése"
@@ -7667,6 +7613,9 @@ msgstr "Alagútazonosítók váltása"
 msgid "Toggle Tunnels"
 msgstr "Alagutak váltása"
 
+msgid "Updating sidebar sections"
+msgstr ""
+
 msgid "Peer Profile"
 msgstr "Társ Profil"
 
@@ -7812,7 +7761,15 @@ msgstr "Befejeződött"
 
 
 
-#, java-format
+
+
+
+
+
+
+
+
+
 
 
 

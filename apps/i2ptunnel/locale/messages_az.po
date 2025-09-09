@@ -12,6 +12,12 @@ msgid "internal"
 msgstr "daxili"
 
 #, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "{0} gəlinən, {0} çıxış tünəli"
+msgstr[1] "{0} gəlinən, {0} çıxış tünəlləri"
+
+#, java-format
 msgid "{0} inbound tunnel"
 msgid_plural "{0} inbound tunnels"
 msgstr[0] "{0} gəlinən tünəl"
@@ -23,12 +29,6 @@ msgid_plural "{0} outbound tunnels"
 msgstr[0] "{0} çıxış tünəli"
 msgstr[1] "{0} çıxış tünəlləri"
 
-#, java-format
-msgid "{0} inbound, {0} outbound tunnel"
-msgid_plural "{0} inbound, {0} outbound tunnels"
-msgstr[0] "{0} gəlinən, {0} çıxış tünəli"
-msgstr[1] "{0} gəlinən, {0} çıxış tünəlləri"
-
 msgid "lower bandwidth and reliability"
 msgstr "aşağı səbət və mənbəyin azalması"
 
@@ -38,14 +38,47 @@ msgstr "standart səbət və mənbə"
 msgid "higher bandwidth and reliability"
 msgstr "yüksək səbət və mənbə"
 
-msgid "Configuration reloaded for all tunnels"
-msgstr "Bütün tünəllər üçün konfigurasiya yenidən yükləndi"
+msgid "Error - tunnels are not initialized yet"
+msgstr ""
+
+msgid "No services configured, cannot restart!"
+msgstr ""
+
+msgid "Stopping tunnel"
+msgstr "Tünəlin dayandırılması"
 
 msgid "Starting tunnel"
 msgstr "Tünəl başlamaqdadır"
 
-msgid "Stopping tunnel"
-msgstr "Tünəlin dayandırılması"
+msgid "Error restarting tunnel"
+msgstr ""
+
+msgid "Restarted all running tunnels"
+msgstr ""
+
+msgid "No clients configured, cannot restart!"
+msgstr ""
+
+msgid "Restarted all running client tunnels"
+msgstr ""
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "Bütün tünəllər üçün konfigurasiya yenidən yükləndi"
+
+msgid "Error: Invalid tunnel"
+msgstr ""
+
+msgid "Started tunnel"
+msgstr ""
+
+msgid "Stopped tunnel"
+msgstr ""
+
+msgid "Restarting tunnel"
+msgstr ""
+
+msgid "Please confirm removal"
+msgstr ""
 
 msgid "New Tunnel"
 msgstr "Yeni Tünəl"
@@ -116,6 +149,9 @@ msgstr "Server Tünəlini Redaktə Et"
 msgid "Are you sure you want to delete?"
 msgstr "Siz silmək istədiyinizə əminsiniz?"
 
+msgid "required"
+msgstr "tələb olunur"
+
 msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
 msgstr "Bu konfigurasiyanı dəyişmək üçün tünəl və bütün digər paylaşılan müştəri tünəlləri dayandırılmalıdır"
 
@@ -172,9 +208,6 @@ msgstr "DCC Aktiv Edin"
 
 msgid "Port"
 msgstr "Port"
-
-msgid "required"
-msgstr "tələb olunur"
 
 msgid "Specify the local port this service should be accessible from"
 msgstr "Bu xidmətin hansı yerli porta erişilə biləcəyini göstərin"
@@ -320,11 +353,14 @@ msgstr "Portda fəaliyyət aşkarlandıqdan əvvəl tünəlin açılmasına icaz
 msgid "This is the default, recommended option"
 msgstr "Bu standart, tövsiyə olunan seçimdir"
 
-msgid "Legacy option (deprecated), provided for backward compatibility"
-msgstr "Eski seçim (istifadədən çıxarılmış), geri təsirlilik üçün təqdim edilmişdir"
-
 msgid "Encryption types"
 msgstr "Şifrələmə növləri"
+
+msgid "Legacy options"
+msgstr ""
+
+msgid "Post Quantum"
+msgstr ""
 
 msgid "Both encryption types"
 msgstr "Hər iki şifrələmə növü"
@@ -361,6 +397,9 @@ msgstr[1] "{0} hop tüneli"
 
 msgid "Number of Tunnels in Group"
 msgstr "Qrupdakı tünəllərin sayı"
+
+msgid "Disabled for 0 hop tunnels"
+msgstr ""
 
 msgid "Variance"
 msgstr "Fərq"
@@ -527,17 +566,17 @@ msgstr "LAN-da məzmunlaşdırmaq kimi yerli xidməti istifadə etmək üçün i
 msgid "Require local authorization for this service"
 msgstr "Bu xidmət üçün yerli rəhbərlik tələb edin"
 
-msgid "Username"
-msgstr "İstifadəçi adı"
-
 msgid "Set username required to access this service"
 msgstr "Bu xidməti istifadə etmək üçün tələb olunan istifadəçi adını təyin edin"
 
-msgid "Password"
-msgstr "Şifrə"
+msgid "Username"
+msgstr "İstifadəçi adı"
 
 msgid "Set password required to access this service"
 msgstr "Bu xidməti istifadə etmək üçün tələb olunan şifrəni təyin edin"
+
+msgid "Password"
+msgstr "Şifrə"
 
 msgid "Outproxy Authorization"
 msgstr "Dışarıdan rəhbərlik"
@@ -652,6 +691,9 @@ msgstr "İmza növünün konfigurasiyası yalnız tünəl ilk yaradıldığında
 
 msgid "Legacy option, with alternate key configured"
 msgstr "Eski seçim, alternativ açar konfiqurasiya edilmiş"
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "Eski seçim (istifadədən çıxarılmış), geri təsirlilik üçün təqdim edilmişdir"
 
 msgid "Recommended for blinded and encrypted destinations"
 msgstr "Körpələnmiş və şifrələnmiş mərhələlər üçün tövsiyə olunur"
@@ -987,8 +1029,23 @@ msgstr "Hamısını Dayandır"
 msgid "Start All"
 msgstr "Hamısını Başlat"
 
+msgid "Restart all running tunnels"
+msgstr ""
+
 msgid "Restart All"
 msgstr "Hamısını Yenidən Başlat"
+
+msgid "Restart all running server tunnels"
+msgstr ""
+
+msgid "Restart All Servers"
+msgstr ""
+
+msgid "Restart all running client tunnels"
+msgstr ""
+
+msgid "Restart All Clients"
+msgstr ""
 
 msgid "I2P Server Tunnels"
 msgstr "I2P Servis Tünəlləri"
@@ -1014,6 +1071,9 @@ msgstr "İdarəetmə"
 msgid "Edit Server Tunnel Settings for"
 msgstr "Servis Tünəl Ayarlarını Düzəltmək Üçün"
 
+msgid "Test IRC server, bypassing I2P"
+msgstr ""
+
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "I2P-ni əməl olmaz qıymalı HTTPS test servisi"
 
@@ -1025,6 +1085,9 @@ msgstr "I2P vasitəsilə HTTP test servisi"
 
 msgid "Base32 Address"
 msgstr "Base32 Ünvanı"
+
+msgid "Offline"
+msgstr ""
 
 msgid "No Preview"
 msgstr "Ön izləmə yoxdur"
@@ -1047,6 +1110,12 @@ msgstr "daxil"
 msgid "out"
 msgstr "çıxış"
 
+msgid "Restart this Tunnel"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
 msgid "Stopped"
 msgstr "Dayandırıldı"
 
@@ -1064,6 +1133,9 @@ msgstr "Alternativ mərhələ"
 
 msgid "Encryption"
 msgstr "Şifrələmə"
+
+msgid "Supported encryption"
+msgstr ""
 
 msgid "New server tunnel"
 msgstr "Yeni servis tünəli"

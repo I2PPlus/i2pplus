@@ -12,6 +12,12 @@ msgid "internal"
 msgstr "εσωτερικό"
 
 #, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "{0} εισερχόμενος, {0} εξερχόμενος διάδρομος"
+msgstr[1] "{0} εισερχόμενοι, {0} εξερχόμενοι διαδρόμοι"
+
+#, java-format
 msgid "{0} inbound tunnel"
 msgid_plural "{0} inbound tunnels"
 msgstr[0] "{0} εισερχόμενος διάδρομος"
@@ -23,12 +29,6 @@ msgid_plural "{0} outbound tunnels"
 msgstr[0] "{0} εξερχόμενος διάδρομος"
 msgstr[1] "{0} εξερχόμενοι διαδρόμοι"
 
-#, java-format
-msgid "{0} inbound, {0} outbound tunnel"
-msgid_plural "{0} inbound, {0} outbound tunnels"
-msgstr[0] "{0} εισερχόμενος, {0} εξερχόμενος διάδρομος"
-msgstr[1] "{0} εισερχόμενοι, {0} εξερχόμενοι διαδρόμοι"
-
 msgid "lower bandwidth and reliability"
 msgstr "μικρότερη ρυθμικότητα και αξιοπιστία"
 
@@ -38,14 +38,47 @@ msgstr "τυποποιημένη ρυθμικότητα και αξιοπιστ�
 msgid "higher bandwidth and reliability"
 msgstr "μεγαλύτερη ρυθμικότητα και αξιοπιστία"
 
-msgid "Configuration reloaded for all tunnels"
-msgstr "Η διαμόρφωση μεταφόρτωση για όλους τους διαδρόμους"
+msgid "Error - tunnels are not initialized yet"
+msgstr ""
+
+msgid "No services configured, cannot restart!"
+msgstr ""
+
+msgid "Stopping tunnel"
+msgstr "Σταμάτημα διαδρόμου"
 
 msgid "Starting tunnel"
 msgstr "Έναρξη διαδρόμου"
 
-msgid "Stopping tunnel"
-msgstr "Σταμάτημα διαδρόμου"
+msgid "Error restarting tunnel"
+msgstr ""
+
+msgid "Restarted all running tunnels"
+msgstr ""
+
+msgid "No clients configured, cannot restart!"
+msgstr ""
+
+msgid "Restarted all running client tunnels"
+msgstr ""
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "Η διαμόρφωση μεταφόρτωση για όλους τους διαδρόμους"
+
+msgid "Error: Invalid tunnel"
+msgstr ""
+
+msgid "Started tunnel"
+msgstr ""
+
+msgid "Stopped tunnel"
+msgstr ""
+
+msgid "Restarting tunnel"
+msgstr ""
+
+msgid "Please confirm removal"
+msgstr ""
 
 msgid "New Tunnel"
 msgstr "Νέος Διάδρομος"
@@ -116,6 +149,9 @@ msgstr "Επεξεργασία Διαδρόμου Διακομιστή"
 msgid "Are you sure you want to delete?"
 msgstr "Είστε βέβαιοι ότι θέλετε να διαγράψετε?"
 
+msgid "required"
+msgstr "χρειάζεται"
+
 msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
 msgstr "Ο διάδρομος και όλοι οι άλλοι κοινοί διαδρόμοι πελάτη πρέπει να σταματήσουν για να αλλάξετε αυτή τη διαμόρφωση"
 
@@ -172,9 +208,6 @@ msgstr "Ενεργοποιήστε DCC"
 
 msgid "Port"
 msgstr "Λιμάνι"
-
-msgid "required"
-msgstr "χρειάζεται"
 
 msgid "Specify the local port this service should be accessible from"
 msgstr "Διαθέστε το τοπικό λιμάνι από το οποίο θα πρέπει να είναι προσβάσιμη η υπηρεσία αυτή"
@@ -320,11 +353,14 @@ msgstr "Μην ανοίξετε τον διάδρομο μέχρι να ανιχ
 msgid "This is the default, recommended option"
 msgstr "Αυτή είναι η προεπιλεγμένη, συνιστώμενη επιλογή"
 
-msgid "Legacy option (deprecated), provided for backward compatibility"
-msgstr "Παλιότερη επιλογή (εξαίρεση), παρέχεται για προς τα πίσω συμβατότητα"
-
 msgid "Encryption types"
 msgstr "Τύποι κρυπτογράφησης"
+
+msgid "Legacy options"
+msgstr ""
+
+msgid "Post Quantum"
+msgstr ""
 
 msgid "Both encryption types"
 msgstr "Και οι δύο τύποι κρυπτογράφησης"
@@ -361,6 +397,9 @@ msgstr[1] "{0} κλίσματα διαδρόμου"
 
 msgid "Number of Tunnels in Group"
 msgstr "Αριθμός Διαδρόμων στη Γραμμή"
+
+msgid "Disabled for 0 hop tunnels"
+msgstr ""
 
 msgid "Variance"
 msgstr "Διακύμανση"
@@ -527,17 +566,17 @@ msgstr "Ενεργοποιήστε για να απαιτείται ονοματ
 msgid "Require local authorization for this service"
 msgstr "Απαιτείται τοπική άδεια για αυτή την υπηρεσία"
 
-msgid "Username"
-msgstr "Όνομα χρήστη"
-
 msgid "Set username required to access this service"
 msgstr "Ορίστε το όνομα χρήστη που απαιτείται για να προσχωρήσετε σε αυτή την υπηρεσία"
 
-msgid "Password"
-msgstr "Κωδικός"
+msgid "Username"
+msgstr "Όνομα χρήστη"
 
 msgid "Set password required to access this service"
 msgstr "Ορίστε τον κωδικό που απαιτείται για να προσχωρήσετε σε αυτή την υπηρεσία"
+
+msgid "Password"
+msgstr "Κωδικός"
 
 msgid "Outproxy Authorization"
 msgstr "Αυθεντικοποίηση Outproxy"
@@ -652,6 +691,9 @@ msgstr "Η διαμόρφωση τύπου υπογραφής είναι δυν�
 
 msgid "Legacy option, with alternate key configured"
 msgstr "Παλιά επιλογή, με εναλλακτικό κλειδί ρυθμισμένο"
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "Παλιότερη επιλογή (εξαίρεση), παρέχεται για προς τα πίσω συμβατότητα"
 
 msgid "Recommended for blinded and encrypted destinations"
 msgstr "Συνιστάται για τους προορισμούς που τυπικά κρυπτογραφούνται και τυπικά παραλαμβάνονται"
@@ -987,8 +1029,23 @@ msgstr "Σταμάτηση Όλων"
 msgid "Start All"
 msgstr "Έναρξη Όλων"
 
+msgid "Restart all running tunnels"
+msgstr ""
+
 msgid "Restart All"
 msgstr "Επανεκκίνηση Όλων"
+
+msgid "Restart all running server tunnels"
+msgstr ""
+
+msgid "Restart All Servers"
+msgstr ""
+
+msgid "Restart all running client tunnels"
+msgstr ""
+
+msgid "Restart All Clients"
+msgstr ""
 
 msgid "I2P Server Tunnels"
 msgstr "Διαδρόμοι Διακομιστή I2P"
@@ -1014,6 +1071,9 @@ msgstr "Έλεγχος"
 msgid "Edit Server Tunnel Settings for"
 msgstr "Επεξεργασία Ρυθμίσεων Διαδρόμου Διακομιστή για"
 
+msgid "Test IRC server, bypassing I2P"
+msgstr ""
+
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "Δοκιμή HTTPS διακομιστή, παρακάμνοντας το I2P"
 
@@ -1025,6 +1085,9 @@ msgstr "Δοκιμή HTTP διακομιστή μέσω I2P"
 
 msgid "Base32 Address"
 msgstr "Διεύθυνση Base32"
+
+msgid "Offline"
+msgstr ""
 
 msgid "No Preview"
 msgstr "Δεν υπάρχει Προεπισκόπηση"
@@ -1047,6 +1110,12 @@ msgstr "εντός"
 msgid "out"
 msgstr "εκτός"
 
+msgid "Restart this Tunnel"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
 msgid "Stopped"
 msgstr "Σταματημένος"
 
@@ -1064,6 +1133,9 @@ msgstr "Εναλλακτικός Προορισμός"
 
 msgid "Encryption"
 msgstr "Κρυπτογράφηση"
+
+msgid "Supported encryption"
+msgstr ""
 
 msgid "New server tunnel"
 msgstr "Νέος διάδρομος διακομιστή"

@@ -1548,10 +1548,7 @@ msgstr "{0} で再起動"
 msgid "Save order"
 msgstr "順番を保存"
 
-msgid "Sidebar refresh disabled"
-msgstr ""
-
-msgid "Sidebar refresh interval changed"
+msgid "Sidebar preferences updated"
 msgstr ""
 
 msgid "Refresh interval must be a number"
@@ -1586,9 +1583,6 @@ msgstr "移動しました"
 
 msgid "Saved order of sections."
 msgstr "セクションの順番が保存されました。"
-
-msgid "Stat filter and location updated successfully to"
-msgstr "統計フィルタとロケーションが正常に更新されました:"
 
 msgid "Full statistics enabled"
 msgstr "完全な統計が有効になりました"
@@ -2174,23 +2168,14 @@ msgstr "I2P関連のコミュニティフォーラム"
 msgid "File-sharing forum"
 msgstr "ファイル共有フォーラム"
 
-msgid "Alternative front-end for Twitter"
-msgstr "Twitterの代替フロントエンド"
-
-msgid "Rocksolid forums for the darknets"
-msgstr "ダークネット向けの堅牢なフォーラム"
-
 msgid "Cross-network micro-blogging &amp; forums &amp; wiki"
 msgstr "クロスネットワークのマイクロブログとフォーラムとウィキ"
 
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Reddit向けのプライバシー重視の代替フロントエンド"
 
-msgid "Base64 Image Encoder"
-msgstr "Base64画像エンコーダー"
-
-msgid "An image cache and resize service"
-msgstr "画像キャッシュとリサイズサービス"
+msgid "AI Image generation & Chat hub"
+msgstr ""
 
 msgid "IRC Logs for multiple networks"
 msgstr "複数のネットワークの IRC ログ"
@@ -2207,17 +2192,8 @@ msgstr "Landing page for various services"
 msgid "Streaming radio service"
 msgstr "ストリーミングラジオサービス"
 
-msgid "Alternative frontend for Imgur"
-msgstr "Imgurの代替フロントエンド"
-
 msgid "Privacy-focused not-for-profit organization"
 msgstr "プライバシーを重視した非営利団体"
-
-msgid "Outproxy bandwidth test"
-msgstr "アウトプロキシ帯域幅テスト"
-
-msgid "speedtest"
-msgstr "スピードテスト"
 
 msgid "Text translation engine"
 msgstr "テキスト翻訳エンジン"
@@ -2225,20 +2201,8 @@ msgstr "テキスト翻訳エンジン"
 msgid "translate"
 msgstr "translate"
 
-msgid "Alternative front-end to Youtube"
-msgstr "Youtubeの代替フロントエンド"
-
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "ウェブホスティングおよびVPNサービスに関するプライバシーのプロバイダー"
-
-msgid "Tor-focused Search Engine"
-msgstr "Tor中心の検索エンジン"
-
-msgid "Pinterest Image Search Engine"
-msgstr "Pinterest画像検索エンジン"
-
-msgid "Clearnet BitTorrent DHT search engine"
-msgstr "Clearnet BitTorrent DHT検索エンジン"
 
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "DuckDuckGo検索エンジン(JavaScriptなし)"
@@ -2248,21 +2212,6 @@ msgstr "プライバシー重視のクリアネット検索エンジン"
 
 msgid "I2P Web Search Engine"
 msgstr "I2P Web検索エンジン"
-
-msgid "Enabling the free transmission of data in the public interest"
-msgstr "公益のためにデータの自由送信を可能にする"
-
-msgid "Selected Papers in Anonymity"
-msgstr "匿名論文厳選"
-
-msgid "Tor .onion site links"
-msgstr "Tor .onion サイトのリンク"
-
-msgid "HTML Color Reference"
-msgstr "HTMLカラーリファレンス"
-
-msgid "HTMLColors"
-msgstr "HTMLカラー"
 
 msgid "I2P-related Wiki"
 msgstr "I2P関連Wiki"
@@ -2279,29 +2228,17 @@ msgstr "インターネット哲学百科事典"
 msgid "Standford Encyclopedia of Philosophy"
 msgstr "スタンフォード哲学百科事典"
 
-msgid "Psychonaut"
-msgstr "サイコノート"
-
-msgid "Wiki relating to altered states of consciousness"
-msgstr "変性意識状態に関するWiki"
-
 msgid "Computing-related tutorials"
 msgstr "コンピューティング関連のチュートリアル"
 
 msgid "SimplifiedGuide"
 msgstr "簡易ガイド"
 
-msgid "Vulnerability Database"
-msgstr "脆弱性データベース"
-
 msgid "Web technology reference and learning site"
 msgstr "Web技術のリファレンス・学習サイト"
 
 msgid "Alternative Wikipedia front-end focused on privacy"
 msgstr "プライバシーに重点を置いた代替ウィキペディア フロントエンド"
-
-msgid "The biggest online English dictionary"
-msgstr "最大のオンライン英語辞書"
 
 msgid "World atlas including geography facts &amp; flags"
 msgstr "地理の事実と旗を含む世界のアトラス"
@@ -2312,14 +2249,8 @@ msgstr "ワールドアトラス"
 msgid "Technology News &amp; more..."
 msgstr "テクノロジーニュースなど..."
 
-msgid "Independent investigative journalism"
-msgstr "独立系調査報道"
-
 msgid "Information Security Research &amp; Education"
 msgstr "情報セキュリティ調査と教育"
-
-msgid "Darknet related news site"
-msgstr "Darknet関連ニュースサイト"
 
 msgid "DigitalTrends"
 msgstr "デジタルトレンド"
@@ -2332,24 +2263,6 @@ msgstr "デジタルの世界であなたの権利を擁護します"
 
 msgid "The Elliptic Curve Cryptography Blog"
 msgstr "楕円曲線暗号化ブログ"
-
-msgid "ForeignPolicy"
-msgstr "外交政策"
-
-msgid "The Global Magazine of News &amp; Ideas"
-msgstr "ニュースとアイデアのグローバル雑誌"
-
-msgid "FrontLineDefenders"
-msgstr "最前線のディフェンダー"
-
-msgid "Human rights activism"
-msgstr "人権活動"
-
-msgid "Defending Human Rights Worldwide"
-msgstr "世界中の人権を擁護しています"
-
-msgid "HumanRightsWatch"
-msgstr "ヒューマンライツウォッチ"
 
 msgid "Fresh hacks every day"
 msgstr "毎日新鮮なハック"
@@ -2365,12 +2278,6 @@ msgstr "香港フリープレス"
 
 msgid "Independent &amp; impartial news for Hong Kong"
 msgstr "香港の独立した公平なニュース"
-
-msgid "HongKongWatch"
-msgstr "香港の時計"
-
-msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr "香港の自由と権利に対する脅威を監視します"
 
 msgid "JStorDaily"
 msgstr "JSTOR毎日"
@@ -2408,11 +2315,11 @@ msgstr "独立した国際メディアプラットフォーム"
 msgid "OpenDemocracy"
 msgstr "オープンな民主主義"
 
-msgid "News and blog feeds on I2P"
-msgstr "I2Pのニュースやブログのフィード"
+msgid "Online privacy &amp; tech blog"
+msgstr ""
 
-msgid "Planeta"
-msgstr "惑星a"
+msgid "RightToPrivacy"
+msgstr ""
 
 msgid "Lifestyle magazine"
 msgstr "ライフスタイルマガジン"
@@ -2441,20 +2348,11 @@ msgstr "オタク向けニュース"
 msgid "Technology news &amp; reviews"
 msgstr "テクノロジーニュース"
 
-msgid "Reporting on China without fear or favor"
-msgstr "恐れや好意なしに中国に関する報告"
-
 msgid "News from the Taiwan Capital"
 msgstr "台湾の首都からのニュース"
 
 msgid "TaipeiTimes"
 msgstr "台北時間"
-
-msgid "TechXplore"
-msgstr "技術探検"
-
-msgid "Technology and engineering news"
-msgstr "テクノロジーおよびエンジニアリングニュース"
 
 msgid "TechMeme"
 msgstr "技術ミーム"
@@ -2497,12 +2395,6 @@ msgstr "新しい共和国"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "ファイル共有と著作権ニュース"
-
-msgid "A magazine about human rights and social justice"
-msgstr "人権と社会正義に関する雑誌"
-
-msgid "UpstreamJournal"
-msgstr "上流のジャーナル"
 
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
 msgstr "中東におけるアメリカの利益に対するバランスのとれた現実的な理解を進める"
@@ -2833,16 +2725,22 @@ msgstr ""
 msgid "Not initialized"
 msgstr "未初期化"
 
-msgid "Sorted by hash distance, closest first."
+msgid "Total Remote Leasesets"
 msgstr ""
 
 msgid "Compact mode"
 msgstr ""
 
-msgid "Total Remote Leasesets"
+msgid "Local Leasesets"
+msgstr ""
+
+msgid "Debug Mode"
 msgstr ""
 
 msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Sorted by hash distance, closest first."
 msgstr ""
 
 msgid "Mod Data"
@@ -2857,17 +2755,11 @@ msgstr ""
 msgid "Change in"
 msgstr ""
 
-msgid "Known Floodfills"
-msgstr "既知の洪水地帯"
-
 msgid "Floodfill mode enabled"
 msgstr ""
 
 msgid "Routing Key"
 msgstr "ルーティングキー"
-
-msgid "Network data"
-msgstr "ネットワークデータ"
 
 msgid "Median distance (bits)"
 msgstr "中央距離(ビット)"
@@ -2877,6 +2769,12 @@ msgstr "推定総氾濫水量"
 
 msgid "Estimated total leasesets"
 msgstr "リースセットの推定合計数"
+
+msgid "Total Local Leasesets"
+msgstr ""
+
+msgid "Remote Leasesets"
+msgstr ""
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2909,12 +2807,6 @@ msgstr "期限切れ{0}"
 msgid "Expired{0} ago"
 msgstr "{0}前に期限切れになりました"
 
-msgid "Received as published"
-msgstr "出版物として受け取りましたか?"
-
-msgid "Received as reply"
-msgstr "返信を受け取りましたか?"
-
 msgid "Distance"
 msgstr "距離"
 
@@ -2923,6 +2815,9 @@ msgstr "オフライン署名"
 
 msgid "Signature type"
 msgstr "署名の種類"
+
+msgid "Public Key"
+msgstr ""
 
 msgid "Unsupported type"
 msgstr "サポートされていないタイプ"
@@ -2934,6 +2829,9 @@ msgstr "{0} に期限切れ"
 #, java-format
 msgid "Expired {0} ago"
 msgstr "{0} 前に期限切れ"
+
+msgid "Unknown"
+msgstr "不明"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
 msgstr ""
@@ -2970,9 +2868,6 @@ msgstr "埋め立て地"
 
 msgid "Total"
 msgstr "合計"
-
-msgid "Unknown"
-msgstr "不明"
 
 msgid "Initializing"
 msgstr "初期化"
@@ -3047,9 +2942,6 @@ msgstr "NetDb 内のこのアドレスを持つすべてのルーターを表示
 msgid "Show all routers with this port in the NetDb"
 msgstr "NetDb 内のこのポートを持つすべてのルーターを表示します"
 
-msgid "Network ID"
-msgstr "ネットワークID"
-
 msgid "Routers"
 msgstr "ルーター"
 
@@ -3061,6 +2953,12 @@ msgstr "最後に聞いた話"
 
 msgid "Last heard from"
 msgstr "最後に聞いたのは"
+
+msgid "Network Id"
+msgstr ""
+
+msgid "Count is always spoofed to avoid indicating router restarts"
+msgstr ""
 
 msgid "Hidden or starting up"
 msgstr "隠すか起動中"
@@ -3121,19 +3019,16 @@ msgstr "router.config ファイルに追加します。"
 msgid "Peer Connections"
 msgstr "ピア接続"
 
-msgid "Active in the last minute"
-msgstr "最後の瞬間にアクティブ"
-
 msgid "IPv4"
 msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
 
-msgid "Limit"
+msgid "Active connections / Max permitted"
 msgstr ""
 
-msgid "Maximum permitted connections"
+msgid "Connections / Limit"
 msgstr ""
 
 msgid "Current / maximum permitted"
@@ -3142,23 +3037,23 @@ msgstr "現在 / 最大許可"
 msgid "NTCP connections"
 msgstr "NTCP 接続"
 
-msgid "Caps"
-msgstr "大文字"
-
 msgid "Peer capabilities"
 msgstr "ピア機能"
 
-msgid "Dir"
-msgstr "ディレクトリ"
+msgid "Caps"
+msgstr "大文字"
 
 msgid "Direction/Introduction"
 msgstr "説明/指示"
 
-msgid "Idle"
-msgstr "アイドル"
+msgid "Dir"
+msgstr "ディレクトリ"
 
 msgid "Peer inactivity"
 msgstr "ピアの非アクティブ"
+
+msgid "Idle"
+msgstr "アイドル"
 
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "平均インバウンド/アウトバウンド率（KB/S）"
@@ -3190,11 +3085,11 @@ msgstr "受信したメッセージ"
 msgid "RX"
 msgstr "RX"
 
-msgid "Out Queue"
-msgstr "キュー外"
-
 msgid "Queued messages to send to peer"
 msgstr "ピアに送信するキューに入れられたメッセージ"
+
+msgid "Out Queue"
+msgstr "キュー外"
 
 msgid "Connection is backlogged"
 msgstr "接続が滞っている"
@@ -3712,11 +3607,11 @@ msgstr "I2Pアップデートをダウンロード"
 msgid "Unsigned update available"
 msgstr "無署名のアップデートが利用可能"
 
-msgid "Help with firewall configuration"
-msgstr "ファイアーウォールの構成に役立ちます"
-
 msgid "Check network connection and NAT/firewall!"
 msgstr "ネットワーク接続とNAT/ファイアウォールを確認してください!"
+
+msgid "Help with firewall configuration"
+msgstr "ファイアーウォールの構成に役立ちます"
 
 msgid "Attempt to download router reference files (if automatic reseed has failed)"
 msgstr "ルーター参照ファイルのダウンロードを試みます(自動再シードが失敗した場合)"
@@ -3751,23 +3646,35 @@ msgstr "下部に移動"
 msgid "Select a section to add"
 msgstr "追加するセクションを選択"
 
+msgid "Router Information (advanced)"
+msgstr "ルーター情報(詳細)"
+
+msgid "Advanced Links"
+msgstr "高度なリンク"
+
+msgid "Bandwidth Graph"
+msgstr "帯域幅グラフ"
+
+msgid "UTC Clock"
+msgstr "UTCクロック"
+
+msgid "Congestion"
+msgstr "混雑状態"
+
+msgid "CPU Load"
+msgstr "CPU負荷"
+
+msgid "Firewall &amp; Reseed Status"
+msgstr "ファイアウォールとリセッドステータス"
+
 msgid "Help &amp; FAQ"
 msgstr "ヘルプと FAQ"
-
-msgid "I2P Services"
-msgstr "I2P サービス"
 
 msgid "I2P Internals"
 msgstr "I2P 内部"
 
-msgid "Router Information"
-msgstr "ルーター情報"
-
-msgid "Router Information (brief)"
-msgstr "ルーター情報(簡単)"
-
-msgid "Router Information (advanced)"
-msgstr "ルーター情報(詳細)"
+msgid "I2P Services"
+msgstr "I2P サービス"
 
 msgid "Memory Usage Bar"
 msgstr "メモリ使用量バー"
@@ -3775,35 +3682,23 @@ msgstr "メモリ使用量バー"
 msgid "Network Reachability"
 msgstr "ネットワーク到達可能性"
 
-msgid "Update Status"
-msgstr "ステータス更新"
+msgid "News &amp; Updates"
+msgstr "ニュースとアップデート"
 
 msgid "Restart Status"
 msgstr "再起動ステータス"
 
-msgid "Firewall &amp; Reseed Status"
-msgstr "ファイアウォールとリセッドステータス"
+msgid "Router Information"
+msgstr "ルーター情報"
 
-msgid "Bandwidth Graph"
-msgstr "帯域幅グラフ"
-
-msgid "Congestion"
-msgstr "混雑状態"
+msgid "Router Information (brief)"
+msgstr "ルーター情報(簡単)"
 
 msgid "Tunnel Status"
 msgstr "トンネルステータス"
 
-msgid "News &amp; Updates"
-msgstr "ニュースとアップデート"
-
-msgid "Advanced Links"
-msgstr "高度なリンク"
-
-msgid "UTC Clock"
-msgstr "UTCクロック"
-
-msgid "CPU Load"
-msgstr "CPU負荷"
+msgid "Update Status"
+msgstr "ステータス更新"
 
 msgid "I2P Router Help &amp; FAQ"
 msgstr "I2P ルーターヘルプ &amp; FAQ"
@@ -3988,6 +3883,9 @@ msgstr "NetDBの合計仲間"
 
 msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "過去数分/数時間内に通信したピア"
+
+msgid "Peers we've been talking to in the last minute"
+msgstr ""
 
 msgid "The number of peers available for building client tunnels"
 msgstr "クライアントトンネルのビルドに利用できるピアノ数"
@@ -4319,6 +4217,9 @@ msgstr "ブロックを強制する"
 msgid "days"
 msgstr "日"
 
+msgid "Known Floodfills"
+msgstr "既知の洪水地帯"
+
 msgid "Average closest floodfill distance"
 msgstr "平均最も近い洪水埋め立て距離"
 
@@ -4489,6 +4390,9 @@ msgstr "データ転送"
 
 msgid "Data"
 msgstr "データ"
+
+msgid "Limit"
+msgstr ""
 
 msgid "Receive on"
 msgstr "受信時間:"
@@ -5462,6 +5366,9 @@ msgstr "I2Pシステムサービスをインストールします。"
 msgid "config sidebar"
 msgstr "設定サイドバー"
 
+msgid "Sidebar Options"
+msgstr ""
+
 msgid "Refresh interval"
 msgstr "リフレッシュ間隔"
 
@@ -5470,6 +5377,12 @@ msgstr "秒"
 
 msgid "0 to disable"
 msgstr "0 無効にする"
+
+msgid "Unified sidebar"
+msgstr ""
+
+msgid "Use the same sidebar on all pages"
+msgstr ""
 
 msgid "config stats"
 msgstr "構成統計"
@@ -5670,6 +5583,9 @@ msgstr "イベント"
 msgid "Event Log"
 msgstr "イベントログ"
 
+msgid "Combined"
+msgstr ""
+
 msgid "graph"
 msgstr "グラフ"
 
@@ -5747,6 +5663,9 @@ msgstr "この設定をtrueにすると、サイドバーの混雑セクショ�
 
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "この設定をtrueにすると、<a href=/sitemap>サイトマップ</a>に<i>興味のあるサイト</i>のリンクが表示されます。[デフォルトはfalse]"
+
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
+msgstr ""
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "この設定は、ルーターが提供された<i>blocklist.txt</i>ファイルとユーザーが設定したブロックリストを使用して、ハッシュまたはIPアドレスによるルーターの禁止を有効にするかどうかを決定します。IPv4では範囲やネットマスクがサポートされていますが、IPv6ではサポートされていません。詳細については、I2P+アプリケーションディレクトリの<i>blocklist.txt</i>を参照してください。[デフォルトで有効、再起動が必要]"
@@ -6561,8 +6480,8 @@ msgstr "もし<i>登録認証</i>文字列が要求された場合は、<a href=
 msgid "If you are in a hurry and can't wait a few hours, you can tell people to use a \"jump\" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is working, you can tell others to use it."
 msgstr "急いでいて数時間待つことができない場合は、「ジャンプ」アドレスヘルパーのリダイレクトサービスを使用するよう他の人に伝えることができます。これは、同じサイトでホスト名を登録した後数分以内に通常動作します。まず、ブラウザに<code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code>を入力してテストしてください。動作するようになったら、他の人に使うよう伝えることができます。"
 
-msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skanki2p</a>, and paste the link where it's required to share it with others."
-msgstr "また、ドメインの<i>アドレスヘルパーリンク</i>をコピーして、アドレス帳リストページまたはドメインの詳細ページ（例：<a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>i2p-projekt.i2pの詳細</a>）で示されている場所に貼り付けることもできます。それによって、他の人と共有する必要がある場所にリンクを貼り付けることができます。"
+msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
+msgstr ""
 
 msgid "Backup your private key!"
 msgstr "秘密鍵をバックアップしてください。"
@@ -6798,8 +6717,8 @@ msgstr "モデム、ルーター、および/またはファイアウォール�
 msgid "Getting Support Online"
 msgstr "オンラインでのサポートを受ける"
 
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "<a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2Pウェブサイト</a>の情報を確認する、<a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2Pディスカッションフォーラム</a>にメッセージを投稿する、またはI2Pの内部IRCネットワークの<a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a>または<a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a>に立ち寄ることもできます。"
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
+msgstr ""
 
 msgid "Reporting Bugs"
 msgstr "バグ報告"
@@ -7338,6 +7257,9 @@ msgstr "リンクをカスタマイズする"
 msgid "Configure display language, theme and optional console password"
 msgstr "表示言語、テーマ、およびオプションのコンソールパスワードを設定します"
 
+msgid "Language"
+msgstr ""
+
 msgid "Configure router bandwidth"
 msgstr "ルーターの帯域幅を設定する"
 
@@ -7402,6 +7324,24 @@ msgstr "サービス(ラッパー)ログ"
 msgid "network database"
 msgstr "ネットワークデータベース"
 
+msgid "Encryption type"
+msgstr ""
+
+msgid "Encryption types"
+msgstr ""
+
+msgid "Signature types"
+msgstr ""
+
+msgid "Locally hosted private service"
+msgstr ""
+
+msgid "Locally hosted public service"
+msgstr ""
+
+msgid "Requested client leaseset"
+msgstr ""
+
 msgid "network database router map"
 msgstr "ネットワークデータベースルータマップ"
 
@@ -7444,6 +7384,12 @@ msgstr "禁止されているピア"
 
 msgid "Fast / High Capacity"
 msgstr "高速/大容量"
+
+msgid "router logs"
+msgstr ""
+
+msgid "service logs"
+msgstr ""
 
 msgid "Manage I2P addresses"
 msgstr "I2Pアドレスの管理"
@@ -7649,6 +7595,9 @@ msgstr "トンネルIDを切り替え"
 msgid "Toggle Tunnels"
 msgstr "トンネルを切り替え"
 
+msgid "Updating sidebar sections"
+msgstr ""
+
 msgid "Peer Profile"
 msgstr "ピアプロフィール"
 
@@ -7794,7 +7743,15 @@ msgstr "完了"
 
 
 
-#, java-format
+
+
+
+
+
+
+
+
+
 
 
 

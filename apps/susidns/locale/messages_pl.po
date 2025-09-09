@@ -50,6 +50,9 @@ msgstr "Typ {0}"
 msgid "DSA 1024 bit"
 msgstr "DSA 1024 bity"
 
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal 2048 bitów"
+
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
 msgstr[0] "Wyszukaj <can class=active>"
@@ -277,6 +280,9 @@ msgstr "Dodaj nowe miejsce przeznaczenia"
 msgid "Import from hosts.txt file"
 msgstr "Importuj z pliku hosts.txt"
 
+msgid "other"
+msgstr "inne"
+
 msgid "Export in hosts.txt format"
 msgstr "Eksportuj w formacie hosts.txt"
 
@@ -289,8 +295,8 @@ msgstr "Eksportuj książkę w formacie hosts.txt"
 msgid "Search"
 msgstr "Szukaj"
 
-msgid "other"
-msgstr "inne"
+msgid "latest"
+msgstr ""
 
 msgid "all"
 msgstr "wyczyść filtr"
@@ -432,9 +438,6 @@ msgstr "Hash Base 64"
 
 msgid "Public Key"
 msgstr "Klucz publiczny"
-
-msgid "ElGamal 2048 bit"
-msgstr "ElGamal 2048 bitów"
 
 msgid "Signing Key"
 msgstr "Klucz Podpisywania"
@@ -603,5 +606,3 @@ msgstr "Adresy ręcznie dodane do Twojej głównej książki adresowej zostaną 
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Adresy pobrane z subskrypcji zostaną scalone do Twojej książki adresowej węzła."
-
-

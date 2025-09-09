@@ -54,6 +54,14 @@ msgstr "Το ανώτατο όριο BW άλλαξε σε {0}KBps"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Το ελάχιστο ανώτατο όριο εύρους ζώνης είναι {0}KBps"
 
+#, java-format
+msgid "Maximum download speed changed to {0}KB/s"
+msgstr ""
+
+#, java-format
+msgid "Download speed limit is {0}KB/s"
+msgstr ""
+
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
 msgstr ""
 
@@ -138,12 +146,6 @@ msgstr "Ενεργοποιημένη αυτόματη εκκίνηση"
 msgid "Disabled autostart"
 msgstr "Απενεργοποιημένη αυτόματη εκκίνηση"
 
-msgid "Enabled smart sort"
-msgstr "Ενεργοποιημένη έξυπνη ταξινόμηση"
-
-msgid "Disabled smart sort"
-msgstr "Απενεργοποιημένη έξυπνη ταξινόμηση"
-
 msgid "Enabled open trackers - torrent restart required to take effect."
 msgstr "Ενεργοποιημένοι ανοιχτοί ιχνηλάτες - απαιτείται επανεκκίνηση torrent για να τεθεί σε ισχύ."
 
@@ -199,8 +201,8 @@ msgstr "Προσθήκη και Δημιουργία ενοτήτων ενεργ
 msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
 msgstr "Προσθήκη και Δημιουργία ενοτήτων για εμφάνιση μόνο στην πρώτη σελίδα των σελίδων καταχώρισης torrent πολλών σελίδων."
 
-msgid "Configuration unchanged."
-msgstr "Η διαμόρφωση δεν άλλαξε."
+msgid "API key updated."
+msgstr ""
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Άνοιγμα λίστας παρακολούθησης άλλαξε - απαιτείται επανεκκίνηση torrent για να τεθεί σε ισχύ."
@@ -241,22 +243,6 @@ msgid "Torrent with the same data location is already running: {0}"
 msgstr "Το torrent με την ίδια τοποθεσία δεδομένων εκτελείται ήδη: {0}"
 
 #, java-format
-msgid "ERROR - No I2P trackers in private torrent \"{0}\""
-msgstr "ΣΦΑΛΜΑ - Δεν υπάρχουν ανιχνευτές I2P σε ιδιωτικό torrent \"{0}\""
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "Προειδοποίηση - Δεν υπάρχουν ανιχνευτές I2P στο \"{0}\", θα ανακοινωθεί σε ανοιχτούς ιχνηλάτες I2P και μόνο DHT."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "Προειδοποίηση - Δεν υπάρχουν ανιχνευτές I2P στο \"{0}\", και οι ανοιχτοί ιχνηλάτες είναι απενεργοποιημένοι, θα ανακοινωθούν μόνο στο DHT."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "Προειδοποίηση - Δεν υπάρχουν ιχνηλάτες I2P στο \"{0}\", και DHT και ανοιχτοί ιχνηλάτες είναι απενεργοποιημένοι, θα πρέπει να ενεργοποιήσετε τους ανοιχτούς ιχνηλάτες ή το DHT πριν ξεκινήσετε το torrent."
-
-#, java-format
 msgid "Torrent in \"{0}\" is invalid"
 msgstr "Το torrent στο \"{0}\" δεν είναι έγκυρο"
 
@@ -274,6 +260,22 @@ msgstr "Το torrent προστέθηκε και ξεκίνησε: {0}"
 #, java-format
 msgid "Torrent added: {0}"
 msgstr "Προστέθηκε torrent: {0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "ΣΦΑΛΜΑ - Δεν υπάρχουν ανιχνευτές I2P σε ιδιωτικό torrent \"{0}\""
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "Προειδοποίηση - Δεν υπάρχουν ανιχνευτές I2P στο \"{0}\", θα ανακοινωθεί σε ανοιχτούς ιχνηλάτες I2P και μόνο DHT."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "Προειδοποίηση - Δεν υπάρχουν ανιχνευτές I2P στο \"{0}\", και οι ανοιχτοί ιχνηλάτες είναι απενεργοποιημένοι, θα ανακοινωθούν μόνο στο DHT."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "Προειδοποίηση - Δεν υπάρχουν ιχνηλάτες I2P στο \"{0}\", και DHT και ανοιχτοί ιχνηλάτες είναι απενεργοποιημένοι, θα πρέπει να ενεργοποιήσετε τους ανοιχτούς ιχνηλάτες ή το DHT πριν ξεκινήσετε το torrent."
 
 #, java-format
 msgid "Fetching {0}"
@@ -346,6 +348,18 @@ msgstr "Το torrent καταργήθηκε: \"{0}\""
 msgid "Adding torrents in {0}&hellip;"
 msgstr "Προσθήκη torrent στο {0}"
 
+#, java-format
+msgid "Down bandwidth limit is {0} KB/s"
+msgstr "Το όριο κατεβαίνουσας ρυθμισμένης μετάδοσης είναι {0} KBps"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KB/s"
+msgstr "Το ανώτατο όριο εύρους ζώνης είναι {0} KBps"
+
+#, java-format
+msgid "Connecting to I2CP port on I2P instance at {0}"
+msgstr ""
+
 msgid "Connecting to I2P"
 msgstr "Σύνδεση σε I2P"
 
@@ -357,20 +371,12 @@ msgid "Starting up torrent {0}"
 msgstr "Εκκίνηση torrent {0}"
 
 #, java-format
-msgid "Down bandwidth limit is {0} KB/s"
-msgstr "Το όριο κατεβαίνουσας ρυθμισμένης μετάδοσης είναι {0} KBps"
-
-#, java-format
-msgid "Up bandwidth limit is {0} KB/s"
-msgstr "Το ανώτατο όριο εύρους ζώνης είναι {0} KBps"
-
-#, java-format
-msgid "I2P+ I2PSnark standalone version {0} started"
-msgstr "I2P+ I2PSNARK Standalone έκδοση {0} ξεκίνησε"
-
-#, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
 msgstr "Το όριο εύρους ζώνης μεταφόρτωσης είναι {0} KBps σε μέγιστο αριθμό {1} ταυτόχρονων ομότιμων."
+
+#, java-format
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
+msgstr ""
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -413,6 +419,19 @@ msgid "Closing I2P tunnel after notifying trackers."
 msgstr "Κλείσιμο της σήραγγας I2P μετά την ειδοποίηση των ιχνηλατών."
 
 #, java-format
+msgid "Cannot check {0}"
+msgstr ""
+
+msgid "Torrent already started"
+msgstr ""
+
+msgid "No storage"
+msgstr ""
+
+msgid "Starting recheck of {}"
+msgstr ""
+
+#, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
 msgstr "Ολοκληρώθηκε ο επανέλεγχος του torrent {0}, τώρα ολοκληρώθηκε το {1}"
 
@@ -423,6 +442,9 @@ msgstr "Ολοκληρώθηκε ο επανέλεγχος του torrent {0}, �
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "Σφάλμα κατά τον έλεγχο του torrent {0}"
+
+msgid "Cannot create diskspace bar"
+msgstr ""
 
 msgid "Data partition"
 msgstr ""
@@ -464,9 +486,6 @@ msgstr "Το torrent στο {0} δεν ήταν έγκυρο"
 
 msgid "Configuration"
 msgstr "Ρυθμίσεις"
-
-msgid "Debug Mode"
-msgstr "Λειτουργία εντοπισμού σφαλμάτων"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "Ανώνυμος πελάτης BitTorrent"
@@ -510,12 +529,6 @@ msgstr "Φόρουμ"
 
 msgid "Torrent &amp; filesharing forum"
 msgstr "Torrent"
-
-msgid "BTDigg"
-msgstr "BTDigg"
-
-msgid "I2P-based search engine for clearnet-hosted torrents"
-msgstr "Μηχανή αναζήτησης βασισμένη σε I2P για torrent που φιλοξενούνται στο clearnet"
 
 msgid "Search torrents"
 msgstr "Αναζήτηση torrents"
@@ -591,8 +604,8 @@ msgstr "Μείωση ποσοστού"
 msgid "TX"
 msgstr "Αποστολή"
 
-msgid "Share ratio"
-msgstr "Αναλογία μεταφόρτωσης"
+msgid "Upload ratio"
+msgstr ""
 
 msgid "Uploaded"
 msgstr "Μεταφορτώθηκε"
@@ -634,6 +647,12 @@ msgid "Total size of loaded torrents"
 msgstr ""
 
 #, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] ""
+msgstr[1] ""
+
+#, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
 msgstr[0] "1 ομότιμος DHT"
@@ -666,8 +685,8 @@ msgstr "Συνολικά μεταφορτωμένα δεδομένα (για κ�
 msgid "Total upload speed"
 msgstr "Συνολική ταχύτητα μεταφόρτωσης"
 
-msgid "Toggle Debug Mode"
-msgstr ""
+msgid "Debug Mode"
+msgstr "Λειτουργία εντοπισμού σφαλμάτων"
 
 msgid "Normal Mode"
 msgstr "Κανονική λειτουργία"
@@ -910,6 +929,9 @@ msgstr "απομένουν"
 msgid "Completed"
 msgstr "Ολοκληρώθηκε"
 
+msgid "Share ratio"
+msgstr "Αναλογία μεταφόρτωσης"
+
 msgid "Last activity"
 msgstr "Τελευταία δραστηριότητα"
 
@@ -1018,11 +1040,11 @@ msgstr "Φίλτρα Περιεχομένου"
 msgid "Trackers"
 msgstr "Ιχνηλάτες"
 
-msgid "Primary"
-msgstr "Δημοτικό"
-
 msgid "Alternates"
 msgstr "Αναπληρωματικοί"
+
+msgid "Primary"
+msgstr "Δημοτικό"
 
 msgid "Tracker Type"
 msgstr "Τύπος ιχνηλάτη"
@@ -1334,6 +1356,12 @@ msgstr "Προστέθηκε"
 msgid "Pieces"
 msgstr "Κομμάτια"
 
+msgid "Average download speed for torrent"
+msgstr ""
+
+msgid "Download speed"
+msgstr ""
+
 msgid "Completion"
 msgstr "Ολοκλήρωση"
 
@@ -1481,6 +1509,9 @@ msgstr "Επιλογή προς διαγραφή"
 msgid "Delete Selected"
 msgstr "Διαγραφή Επιλεγμένων"
 
+msgid "File downloading priorities updated for torrent "
+msgstr ""
+
 msgid "Edit Torrent"
 msgstr "Επεξεργασία Torrent"
 
@@ -1502,13 +1533,9 @@ msgstr "Αποθήκευση αλλαγών"
 msgid "Torrent must be stopped"
 msgstr "Το torrent πρέπει να σταματήσει"
 
+
+
+
 #, java-format
-
-
-
-
-
-
-
 
 

@@ -12,6 +12,12 @@ msgid "internal"
 msgstr "داخلی"
 
 #, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "{0} تونل ورودی، و {0} تونل خارجی"
+msgstr[1] "{0} تونل ورودی، و {0} تونل خارجی"
+
+#, java-format
 msgid "{0} inbound tunnel"
 msgid_plural "{0} inbound tunnels"
 msgstr[0] "{0} تونل های ورودی{0} تونل های ورودی"
@@ -23,12 +29,6 @@ msgid_plural "{0} outbound tunnels"
 msgstr[0] "{0} تونل های خروجی"
 msgstr[1] "{0} تونل خروجی"
 
-#, java-format
-msgid "{0} inbound, {0} outbound tunnel"
-msgid_plural "{0} inbound, {0} outbound tunnels"
-msgstr[0] "{0} تونل ورودی، و {0} تونل خارجی"
-msgstr[1] "{0} تونل ورودی، و {0} تونل خارجی"
-
 msgid "lower bandwidth and reliability"
 msgstr "قابلیت اطمینان و پهنای باند پایین"
 
@@ -38,14 +38,47 @@ msgstr "قابلیت اطمینان و پهنای باند استاندارد"
 msgid "higher bandwidth and reliability"
 msgstr "قابلیت اطمینان و پهنای باند بالا"
 
-msgid "Configuration reloaded for all tunnels"
-msgstr "پیکربندی برای تمامی تونل ها مجددا بارگذاری شد"
+msgid "Error - tunnels are not initialized yet"
+msgstr ""
+
+msgid "No services configured, cannot restart!"
+msgstr ""
+
+msgid "Stopping tunnel"
+msgstr "توقف تونل"
 
 msgid "Starting tunnel"
 msgstr "شروع تونل"
 
-msgid "Stopping tunnel"
-msgstr "توقف تونل"
+msgid "Error restarting tunnel"
+msgstr ""
+
+msgid "Restarted all running tunnels"
+msgstr ""
+
+msgid "No clients configured, cannot restart!"
+msgstr ""
+
+msgid "Restarted all running client tunnels"
+msgstr ""
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "پیکربندی برای تمامی تونل ها مجددا بارگذاری شد"
+
+msgid "Error: Invalid tunnel"
+msgstr ""
+
+msgid "Started tunnel"
+msgstr ""
+
+msgid "Stopped tunnel"
+msgstr ""
+
+msgid "Restarting tunnel"
+msgstr ""
+
+msgid "Please confirm removal"
+msgstr ""
 
 msgid "New Tunnel"
 msgstr "تونل جدید"
@@ -116,6 +149,9 @@ msgstr "ویرایش تونل سرور"
 msgid "Are you sure you want to delete?"
 msgstr "مطمئنید می خواهید حذف کنید؟"
 
+msgid "required"
+msgstr "ضروری"
+
 msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
 msgstr "برای تغییر این پیکربندی، تونل و سایر تونل های مشتری مشترک باید متوقف شوند"
 
@@ -172,9 +208,6 @@ msgstr "فعال سازی DCC"
 
 msgid "Port"
 msgstr "پورت"
-
-msgid "required"
-msgstr "ضروری"
 
 msgid "Specify the local port this service should be accessible from"
 msgstr "پورت محلی را مشخص کنید که این سرویس باید از آن قابل دسترسی باشد"
@@ -320,11 +353,14 @@ msgstr "تا زمانی که فعالیت در پورت شناسایی نشود 
 msgid "This is the default, recommended option"
 msgstr "این گزینه پیش فرض توصیه شده است"
 
-msgid "Legacy option (deprecated), provided for backward compatibility"
-msgstr "گزینه Legacy (منسوخ شده)، برای سازگاری با عقب ارائه شده است"
-
 msgid "Encryption types"
 msgstr "انواع رمزگذاری"
+
+msgid "Legacy options"
+msgstr ""
+
+msgid "Post Quantum"
+msgstr ""
 
 msgid "Both encryption types"
 msgstr "هر دو نوع رمزگذاری"
@@ -361,6 +397,9 @@ msgstr[1] "{0} تونل هاپ"
 
 msgid "Number of Tunnels in Group"
 msgstr "تعداد تونل در گروه"
+
+msgid "Disabled for 0 hop tunnels"
+msgstr ""
 
 msgid "Variance"
 msgstr "واریانس"
@@ -527,17 +566,17 @@ msgstr "فعال کردن نیاز به نام کاربری و رمز عبور �
 msgid "Require local authorization for this service"
 msgstr "برای این سرویس به مجوز محلی نیاز دارید"
 
-msgid "Username"
-msgstr "نام کاربری"
-
 msgid "Set username required to access this service"
 msgstr "نام کاربری مورد نیاز برای دسترسی به این سرویس را تنظیم کنید"
 
-msgid "Password"
-msgstr "رمز عبور"
+msgid "Username"
+msgstr "نام کاربری"
 
 msgid "Set password required to access this service"
 msgstr "رمز عبور مورد نیاز برای دسترسی به این سرویس را تنظیم کنید"
+
+msgid "Password"
+msgstr "رمز عبور"
 
 msgid "Outproxy Authorization"
 msgstr "مجوز Outproxy"
@@ -652,6 +691,9 @@ msgstr "پیکربندی نوع امضا فقط در صورت ایجاد تون�
 
 msgid "Legacy option, with alternate key configured"
 msgstr "گزینه Legacy، با کلید جایگزین پیکربندی شده است"
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "گزینه Legacy (منسوخ شده)، برای سازگاری با عقب ارائه شده است"
 
 msgid "Recommended for blinded and encrypted destinations"
 msgstr "برای مقاصد کور و رمزگذاری شده توصیه می شود"
@@ -987,8 +1029,23 @@ msgstr "توقف سازی همه"
 msgid "Start All"
 msgstr "شروع همه"
 
+msgid "Restart all running tunnels"
+msgstr ""
+
 msgid "Restart All"
 msgstr "راه اندازی مجدد همه"
+
+msgid "Restart all running server tunnels"
+msgstr ""
+
+msgid "Restart All Servers"
+msgstr ""
+
+msgid "Restart all running client tunnels"
+msgstr ""
+
+msgid "Restart All Clients"
+msgstr ""
 
 msgid "I2P Server Tunnels"
 msgstr "تونل های سرور I2P"
@@ -1014,6 +1071,9 @@ msgstr "کنترل"
 msgid "Edit Server Tunnel Settings for"
 msgstr "ویرایش تنظیمات تونل سرور برای"
 
+msgid "Test IRC server, bypassing I2P"
+msgstr ""
+
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "سرور HTTPS را با دور زدن I2P آزمایش کنید"
 
@@ -1025,6 +1085,9 @@ msgstr "سرور HTTP را از طریق I2P آزمایش کنید"
 
 msgid "Base32 Address"
 msgstr "آدرس Base32"
+
+msgid "Offline"
+msgstr ""
 
 msgid "No Preview"
 msgstr "بدون پیش نمایش"
@@ -1047,6 +1110,12 @@ msgstr "در"
 msgid "out"
 msgstr "خارج"
 
+msgid "Restart this Tunnel"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
 msgid "Stopped"
 msgstr "متوقف شد"
 
@@ -1064,6 +1133,9 @@ msgstr "مقصد جایگزین"
 
 msgid "Encryption"
 msgstr "رمزگذاری"
+
+msgid "Supported encryption"
+msgstr ""
 
 msgid "New server tunnel"
 msgstr "تونل سرور جدید"

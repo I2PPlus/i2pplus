@@ -12,6 +12,13 @@ msgid "internal"
 msgstr "внутренний"
 
 #, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "{0} входящий, {0} исходящий туннель"
+msgstr[1] "{0} входящих, {0} исходящих туннеля"
+msgstr[2] "{0} входящих, {0} исходящих туннелей"
+
+#, java-format
 msgid "{0} inbound tunnel"
 msgid_plural "{0} inbound tunnels"
 msgstr[0] "{0} входящий туннель"
@@ -25,13 +32,6 @@ msgstr[0] "{0} исходящий туннель"
 msgstr[1] "{0} исходящих туннелей"
 msgstr[2] "{0} исходящих туннелей"
 
-#, java-format
-msgid "{0} inbound, {0} outbound tunnel"
-msgid_plural "{0} inbound, {0} outbound tunnels"
-msgstr[0] "{0} входящий, {0} исходящий туннель"
-msgstr[1] "{0} входящих, {0} исходящих туннеля"
-msgstr[2] "{0} входящих, {0} исходящих туннелей"
-
 msgid "lower bandwidth and reliability"
 msgstr "меньшая пропускная способность и надёжность"
 
@@ -41,14 +41,47 @@ msgstr "обычная пропускная способность и надёж
 msgid "higher bandwidth and reliability"
 msgstr "более высокая пропускная способность и надёжность"
 
-msgid "Configuration reloaded for all tunnels"
-msgstr "Конфигурация для всех туннелей перечитана"
+msgid "Error - tunnels are not initialized yet"
+msgstr ""
+
+msgid "No services configured, cannot restart!"
+msgstr ""
+
+msgid "Stopping tunnel"
+msgstr "Остановка туннеля"
 
 msgid "Starting tunnel"
 msgstr "Запуск туннеля"
 
-msgid "Stopping tunnel"
-msgstr "Остановка туннеля"
+msgid "Error restarting tunnel"
+msgstr ""
+
+msgid "Restarted all running tunnels"
+msgstr ""
+
+msgid "No clients configured, cannot restart!"
+msgstr ""
+
+msgid "Restarted all running client tunnels"
+msgstr ""
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "Конфигурация для всех туннелей перечитана"
+
+msgid "Error: Invalid tunnel"
+msgstr ""
+
+msgid "Started tunnel"
+msgstr ""
+
+msgid "Stopped tunnel"
+msgstr ""
+
+msgid "Restarting tunnel"
+msgstr ""
+
+msgid "Please confirm removal"
+msgstr ""
 
 msgid "New Tunnel"
 msgstr "Новый туннель"
@@ -119,6 +152,9 @@ msgstr "Редактировать туннель сервера"
 msgid "Are you sure you want to delete?"
 msgstr "Вы уверены, что хотите удалить?"
 
+msgid "required"
+msgstr "*"
+
 msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
 msgstr "Туннель и все другие общие клиентские туннели должны быть остановлены, чтобы изменить эту конфигурацию."
 
@@ -175,9 +211,6 @@ msgstr "Включить DCC"
 
 msgid "Port"
 msgstr "Порт"
-
-msgid "required"
-msgstr "*"
 
 msgid "Specify the local port this service should be accessible from"
 msgstr "Укажите локальный порт, через который этот сервис должен быть доступен"
@@ -323,11 +356,14 @@ msgstr "Не открывать туннель, пока на порту не б
 msgid "This is the default, recommended option"
 msgstr "Эта опция рекомендована и включена по умолчанию"
 
-msgid "Legacy option (deprecated), provided for backward compatibility"
-msgstr "Устаревшая опция, сохранена для обратной совместимости"
-
 msgid "Encryption types"
 msgstr "Типы шифрования"
+
+msgid "Legacy options"
+msgstr ""
+
+msgid "Post Quantum"
+msgstr ""
 
 msgid "Both encryption types"
 msgstr "Оба типа шифрования"
@@ -365,6 +401,9 @@ msgstr[2] "{0} хоп -туннель"
 
 msgid "Number of Tunnels in Group"
 msgstr "Число туннелей в группе"
+
+msgid "Disabled for 0 hop tunnels"
+msgstr ""
 
 msgid "Variance"
 msgstr "Разброс"
@@ -532,17 +571,17 @@ msgstr "Включите, если хотите использовать лог�
 msgid "Require local authorization for this service"
 msgstr "Требовать локальную авторизацию для доступа на этот сервис"
 
-msgid "Username"
-msgstr "Имя пользователя"
-
 msgid "Set username required to access this service"
 msgstr "Установить имя пользователя для доступа к сервису"
 
-msgid "Password"
-msgstr "Пароль"
+msgid "Username"
+msgstr "Имя пользователя"
 
 msgid "Set password required to access this service"
 msgstr "Установить пароль для доступа к сервису"
+
+msgid "Password"
+msgstr "Пароль"
 
 msgid "Outproxy Authorization"
 msgstr "Авторизация outproxy"
@@ -657,6 +696,9 @@ msgstr "Настройка типа подписи возможна только
 
 msgid "Legacy option, with alternate key configured"
 msgstr "Устаревшая опция, с настроенным альтернативным ключом."
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "Устаревшая опция, сохранена для обратной совместимости"
 
 msgid "Recommended for blinded and encrypted destinations"
 msgstr "Рекомендуется для слепых и зашифрованных направлений"
@@ -992,8 +1034,23 @@ msgstr "Остановить все"
 msgid "Start All"
 msgstr "Запустить все"
 
+msgid "Restart all running tunnels"
+msgstr ""
+
 msgid "Restart All"
 msgstr "Перезапустить все"
+
+msgid "Restart all running server tunnels"
+msgstr ""
+
+msgid "Restart All Servers"
+msgstr ""
+
+msgid "Restart all running client tunnels"
+msgstr ""
+
+msgid "Restart All Clients"
+msgstr ""
 
 msgid "I2P Server Tunnels"
 msgstr "Туннели I2P-серверов"
@@ -1019,6 +1076,9 @@ msgstr "Управление"
 msgid "Edit Server Tunnel Settings for"
 msgstr "Изменение настроек серверного туннеля для"
 
+msgid "Test IRC server, bypassing I2P"
+msgstr ""
+
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "Тестирование HTTPS-сервера в обход I2P"
 
@@ -1030,6 +1090,9 @@ msgstr "Тестирование HTTP-сервера через I2P"
 
 msgid "Base32 Address"
 msgstr "Base32-адрес"
+
+msgid "Offline"
+msgstr ""
 
 msgid "No Preview"
 msgstr "Предпросмотр недоступен"
@@ -1052,6 +1115,12 @@ msgstr "в"
 msgid "out"
 msgstr "выход"
 
+msgid "Restart this Tunnel"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
 msgid "Stopped"
 msgstr "Остановлен"
 
@@ -1069,6 +1138,9 @@ msgstr "Альтернативный пункт назначения"
 
 msgid "Encryption"
 msgstr "Шифрование"
+
+msgid "Supported encryption"
+msgstr ""
 
 msgid "New server tunnel"
 msgstr "Новый серверный туннель"

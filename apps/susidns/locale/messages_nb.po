@@ -50,6 +50,9 @@ msgstr "Type {0}"
 msgid "DSA 1024 bit"
 msgstr "DSA 1024 bit"
 
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal 2048 bit"
+
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
 msgstr[0] "Søk etter <span class=active>"
@@ -270,6 +273,9 @@ msgstr "Legg til ny destinasjon"
 msgid "Import from hosts.txt file"
 msgstr "Importer fra hosts.txt-fil"
 
+msgid "other"
+msgstr "andre"
+
 msgid "Export in hosts.txt format"
 msgstr "Eksporter i hosts.txt format"
 
@@ -282,8 +288,8 @@ msgstr "Eksporter bok i hosts.txt format"
 msgid "Search"
 msgstr "Søk"
 
-msgid "other"
-msgstr "andre"
+msgid "latest"
+msgstr ""
 
 msgid "all"
 msgstr "fjern filter"
@@ -425,9 +431,6 @@ msgstr "Base 64 Hash"
 
 msgid "Public Key"
 msgstr "Offentlig nøkkel"
-
-msgid "ElGamal 2048 bit"
-msgstr "ElGamal 2048 bit"
 
 msgid "Signing Key"
 msgstr "Signeringsnøkkel"
@@ -596,5 +599,3 @@ msgstr "Adresser som legges til manuelt i din Hoved adressebok vil bli slått sa
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Vertene du mottar fra dine abonnementer vil bli slått sammen med din Ruter adressebok."
-
-

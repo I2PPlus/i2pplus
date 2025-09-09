@@ -54,6 +54,14 @@ msgstr "Limita de incărcare BW schimbată la {0} Kbps"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Limita de lățime de bandă minima la incărcarea este {0} Kbps"
 
+#, java-format
+msgid "Maximum download speed changed to {0}KB/s"
+msgstr ""
+
+#, java-format
+msgid "Download speed limit is {0}KB/s"
+msgstr ""
+
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
 msgstr ""
 
@@ -138,12 +146,6 @@ msgstr "Autopornire activată"
 msgid "Disabled autostart"
 msgstr "Autopornire dezactivată"
 
-msgid "Enabled smart sort"
-msgstr "Sortarea inteligentă activată"
-
-msgid "Disabled smart sort"
-msgstr "Sortarea inteligentă dezactivată"
-
 msgid "Enabled open trackers - torrent restart required to take effect."
 msgstr "Trackere deschise activate - este necesară repornirea torrentului pentru a intra în vigoare.Trackere deschise activate - repornirea torrentui este necesara pentru a avea efect."
 
@@ -199,8 +201,8 @@ msgstr "Adăugați și creați secțiuni activate pe toate paginile de listare t
 msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
 msgstr "Adăugați și creați secțiuni pentru a fi afișate numai pe prima pagină a paginilor cu listare torrent cu mai multe pagini."
 
-msgid "Configuration unchanged."
-msgstr "Configuraţie neschimbată."
+msgid "API key updated."
+msgstr ""
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Lista Open Tracker a fost schimbată - este necesară repornirea torrentului pentru a intra în vigoare.Lista trackerelor deschise s-a schimbat - repornirea torrentui este necesara pentru a avea efect."
@@ -241,22 +243,6 @@ msgid "Torrent with the same data location is already running: {0}"
 msgstr "Torrent cu aceeași locație de date rulează deja: {0}"
 
 #, java-format
-msgid "ERROR - No I2P trackers in private torrent \"{0}\""
-msgstr "EROARE - Nu sunt trackere I2P in torrent privat \"{0}\""
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "Avertisment - Nu există dispozitive de urmărire I2P în \"{0}\", vor anunța numai dispozitivele de urmărire deschise I2P și DHT.Avertisment - Nu sunt trackere I2P în \"{0}\", se va anunța numai la trackerele deschise I2P și DHT."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "Avertisment - Nu există dispozitive de urmărire I2P în \"{0}\", iar dispozitivele de urmărire deschise sunt dezactivate, vor anunța numai DHT.Avertisment - Nu există dispozitive de urmărire I2P în \"{0}\", iar dispozitivele de urmărire deschise sunt dezactivate, vor anunța numai DHT.Avertisment - Nu sunt trackere I2P în \"{0}\", și trackerele deschise sunt dezactivate, se va anunța numai prin DHT."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "Avertisment - Nu există dispozitive de urmărire I2P în \"{0}\", iar DHT și trackerele deschise sunt dezactivate, ar trebui să activați trackerele deschise sau DHT înainte de a porni torrentul.Avertisment - Nu există dispozitive de urmărire I2P în \"{0}\", iar DHT și trackerele deschise sunt dezactivate, ar trebui să activați trackerele deschise sau DHT înainte de a porni torrentul.Avertisment - Nu sunt trackere I2P în \"{0}\", și DHT și trackerele deschise sunt dezactivate,  ar trebui să permiteți trackere deschise sau DHT înainte de a porni torrentul."
-
-#, java-format
 msgid "Torrent in \"{0}\" is invalid"
 msgstr "Torrent în \"{0}\" este invalid"
 
@@ -274,6 +260,22 @@ msgstr "Torrent adăugat și pornit: {0}"
 #, java-format
 msgid "Torrent added: {0}"
 msgstr "Torrent adăugat: {0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "EROARE - Nu sunt trackere I2P in torrent privat \"{0}\""
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "Avertisment - Nu există dispozitive de urmărire I2P în \"{0}\", vor anunța numai dispozitivele de urmărire deschise I2P și DHT.Avertisment - Nu sunt trackere I2P în \"{0}\", se va anunța numai la trackerele deschise I2P și DHT."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "Avertisment - Nu există dispozitive de urmărire I2P în \"{0}\", iar dispozitivele de urmărire deschise sunt dezactivate, vor anunța numai DHT.Avertisment - Nu există dispozitive de urmărire I2P în \"{0}\", iar dispozitivele de urmărire deschise sunt dezactivate, vor anunța numai DHT.Avertisment - Nu sunt trackere I2P în \"{0}\", și trackerele deschise sunt dezactivate, se va anunța numai prin DHT."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "Avertisment - Nu există dispozitive de urmărire I2P în \"{0}\", iar DHT și trackerele deschise sunt dezactivate, ar trebui să activați trackerele deschise sau DHT înainte de a porni torrentul.Avertisment - Nu există dispozitive de urmărire I2P în \"{0}\", iar DHT și trackerele deschise sunt dezactivate, ar trebui să activați trackerele deschise sau DHT înainte de a porni torrentul.Avertisment - Nu sunt trackere I2P în \"{0}\", și DHT și trackerele deschise sunt dezactivate,  ar trebui să permiteți trackere deschise sau DHT înainte de a porni torrentul."
 
 #, java-format
 msgid "Fetching {0}"
@@ -346,6 +348,18 @@ msgstr "Torrent sters: \"{0}\""
 msgid "Adding torrents in {0}&hellip;"
 msgstr "Adăugarea de torrente în {0}"
 
+#, java-format
+msgid "Down bandwidth limit is {0} KB/s"
+msgstr "Limita de bandă descărcare este de {0} KBps"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KB/s"
+msgstr "Limita maximă de lățime de bandă este de {0} KBps"
+
+#, java-format
+msgid "Connecting to I2CP port on I2P instance at {0}"
+msgstr ""
+
 msgid "Connecting to I2P"
 msgstr "Se conectează la I2P"
 
@@ -357,20 +371,12 @@ msgid "Starting up torrent {0}"
 msgstr "Pornirea torrentului {0}"
 
 #, java-format
-msgid "Down bandwidth limit is {0} KB/s"
-msgstr "Limita de bandă descărcare este de {0} KBps"
-
-#, java-format
-msgid "Up bandwidth limit is {0} KB/s"
-msgstr "Limita maximă de lățime de bandă este de {0} KBps"
-
-#, java-format
-msgid "I2P+ I2PSnark standalone version {0} started"
-msgstr "Versiunea independentă I2P I2PSnark {0} a început"
-
-#, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
 msgstr "Limita lățimii de bandă de încărcare este de {0} KBps până la maximum {1} peer-uri simultane."
+
+#, java-format
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
+msgstr ""
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -413,6 +419,19 @@ msgid "Closing I2P tunnel after notifying trackers."
 msgstr "Închiderea tunelului I2P după notificarea trackerelor."
 
 #, java-format
+msgid "Cannot check {0}"
+msgstr ""
+
+msgid "Torrent already started"
+msgstr ""
+
+msgid "No storage"
+msgstr ""
+
+msgid "Starting recheck of {}"
+msgstr ""
+
+#, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
 msgstr "S-a terminat reverificarea torrentului {0}, acum {1} este finalizat"
 
@@ -423,6 +442,9 @@ msgstr "S-a terminat reverificarea torrentului {0}, este nemodificat"
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "Eroare la verificarea torrentului {0}"
+
+msgid "Cannot create diskspace bar"
+msgstr ""
 
 msgid "Data partition"
 msgstr ""
@@ -464,9 +486,6 @@ msgstr "Torrentul la {0} nu a fost valid"
 
 msgid "Configuration"
 msgstr "Configurație"
-
-msgid "Debug Mode"
-msgstr "Mod de depanare"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "Client BitTorrent Anonim"
@@ -510,12 +529,6 @@ msgstr "Forum"
 
 msgid "Torrent &amp; filesharing forum"
 msgstr "Torent"
-
-msgid "BTDigg"
-msgstr "BTDigg"
-
-msgid "I2P-based search engine for clearnet-hosted torrents"
-msgstr "Motor de căutare bazat pe I2P pentru torrente găzduite de Clearnet"
 
 msgid "Search torrents"
 msgstr "Căutați torente"
@@ -591,8 +604,8 @@ msgstr "Rată de descărcare"
 msgid "TX"
 msgstr "TX"
 
-msgid "Share ratio"
-msgstr "Rată de încărcare"
+msgid "Upload ratio"
+msgstr ""
 
 msgid "Uploaded"
 msgstr "Încărcat"
@@ -635,6 +648,13 @@ msgid "Total size of loaded torrents"
 msgstr ""
 
 #, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
 msgstr[0] "1 partener DHT"
@@ -668,8 +688,8 @@ msgstr "Datele totale încărcate (pentru torentele listate)"
 msgid "Total upload speed"
 msgstr "Viteza totală a încărcării"
 
-msgid "Toggle Debug Mode"
-msgstr ""
+msgid "Debug Mode"
+msgstr "Mod de depanare"
 
 msgid "Normal Mode"
 msgstr "Mod normal"
@@ -914,6 +934,9 @@ msgstr "rămas"
 msgid "Completed"
 msgstr "Complet"
 
+msgid "Share ratio"
+msgstr "Rată de încărcare"
+
 msgid "Last activity"
 msgstr "Ultima activitate"
 
@@ -1022,11 +1045,11 @@ msgstr "Filtre Conținut"
 msgid "Trackers"
 msgstr "Trackere"
 
-msgid "Primary"
-msgstr "Primar"
-
 msgid "Alternates"
 msgstr "Alternativă"
+
+msgid "Primary"
+msgstr "Primar"
 
 msgid "Tracker Type"
 msgstr "Tip Tracker"
@@ -1340,6 +1363,12 @@ msgstr "Adăugat"
 msgid "Pieces"
 msgstr "Bucăți"
 
+msgid "Average download speed for torrent"
+msgstr ""
+
+msgid "Download speed"
+msgstr ""
+
 msgid "Completion"
 msgstr "Completare"
 
@@ -1488,6 +1517,9 @@ msgstr "Marcați pentru ștergere"
 msgid "Delete Selected"
 msgstr "Ștergeți selectate"
 
+msgid "File downloading priorities updated for torrent "
+msgstr ""
+
 msgid "Edit Torrent"
 msgstr "Editează torrent"
 
@@ -1509,13 +1541,9 @@ msgstr "Salvați modificările"
 msgid "Torrent must be stopped"
 msgstr "Torentul trebuie oprit"
 
+
+
+
 #, java-format
-
-
-
-
-
-
-
 
 

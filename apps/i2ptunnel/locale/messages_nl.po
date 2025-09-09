@@ -12,6 +12,12 @@ msgid "internal"
 msgstr "intern"
 
 #, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "{0} inkomende, {0} uitgaande tunnel"
+msgstr[1] "{0} inkomende, {0} uitgaande tunnels"
+
+#, java-format
 msgid "{0} inbound tunnel"
 msgid_plural "{0} inbound tunnels"
 msgstr[0] "{0} inkomende tunnel"
@@ -23,12 +29,6 @@ msgid_plural "{0} outbound tunnels"
 msgstr[0] "{0} uitgaande tunnel"
 msgstr[1] "{0} uitgaande tunnel"
 
-#, java-format
-msgid "{0} inbound, {0} outbound tunnel"
-msgid_plural "{0} inbound, {0} outbound tunnels"
-msgstr[0] "{0} inkomende, {0} uitgaande tunnel"
-msgstr[1] "{0} inkomende, {0} uitgaande tunnels"
-
 msgid "lower bandwidth and reliability"
 msgstr "verlaag bandbreedte en betrouwbaarheid"
 
@@ -38,14 +38,47 @@ msgstr "standaard bandbreedte en betrouwbaarheid"
 msgid "higher bandwidth and reliability"
 msgstr "hogere bandbreedte en betrouwbaarheid"
 
-msgid "Configuration reloaded for all tunnels"
-msgstr "Configuratie van alle tunnels opnieuw geladen"
+msgid "Error - tunnels are not initialized yet"
+msgstr ""
+
+msgid "No services configured, cannot restart!"
+msgstr ""
+
+msgid "Stopping tunnel"
+msgstr "Stoppen van tunnel"
 
 msgid "Starting tunnel"
 msgstr "Opstarten van tunnel"
 
-msgid "Stopping tunnel"
-msgstr "Stoppen van tunnel"
+msgid "Error restarting tunnel"
+msgstr ""
+
+msgid "Restarted all running tunnels"
+msgstr ""
+
+msgid "No clients configured, cannot restart!"
+msgstr ""
+
+msgid "Restarted all running client tunnels"
+msgstr ""
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "Configuratie van alle tunnels opnieuw geladen"
+
+msgid "Error: Invalid tunnel"
+msgstr ""
+
+msgid "Started tunnel"
+msgstr ""
+
+msgid "Stopped tunnel"
+msgstr ""
+
+msgid "Restarting tunnel"
+msgstr ""
+
+msgid "Please confirm removal"
+msgstr ""
 
 msgid "New Tunnel"
 msgstr "Nieuwe tunnel"
@@ -116,6 +149,9 @@ msgstr "Servertunnel bewerken"
 msgid "Are you sure you want to delete?"
 msgstr "Weet u zeker dat u wilt verwijderen?"
 
+msgid "required"
+msgstr "vereist"
+
 msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
 msgstr "Tunnel en alle andere gedeelde clienttunnels moeten worden gestopt om deze configuratie te wijzigen"
 
@@ -172,9 +208,6 @@ msgstr "DCC inschakelen"
 
 msgid "Port"
 msgstr "Poort"
-
-msgid "required"
-msgstr "vereist"
 
 msgid "Specify the local port this service should be accessible from"
 msgstr "Geef de lokale poort op vanaf waar deze service toegankelijk moet zijn"
@@ -320,11 +353,14 @@ msgstr "Open de tunnel niet voordat er activiteit op de poort wordt gedetecteerd
 msgid "This is the default, recommended option"
 msgstr "Dit is de standaard, aanbevolen optie"
 
-msgid "Legacy option (deprecated), provided for backward compatibility"
-msgstr "Legacy-optie (verouderd), bedoeld voor achterwaartse compatibiliteit"
-
 msgid "Encryption types"
 msgstr "Versleutelingstypen"
+
+msgid "Legacy options"
+msgstr ""
+
+msgid "Post Quantum"
+msgstr ""
 
 msgid "Both encryption types"
 msgstr "Beide coderingstypen"
@@ -361,6 +397,9 @@ msgstr[1] "{0} hoptunnel"
 
 msgid "Number of Tunnels in Group"
 msgstr "Aantal tunnels in groep"
+
+msgid "Disabled for 0 hop tunnels"
+msgstr ""
 
 msgid "Variance"
 msgstr "Variantie"
@@ -527,17 +566,17 @@ msgstr "Inschakelen om een ​​gebruikersnaam en wachtwoord te vereisen voor t
 msgid "Require local authorization for this service"
 msgstr "Lokale autorisatie vereist voor deze service"
 
-msgid "Username"
-msgstr "Gebruikersnaam"
-
 msgid "Set username required to access this service"
 msgstr "Stel de gebruikersnaam in die vereist is om toegang te krijgen tot deze service"
 
-msgid "Password"
-msgstr "Wachtwoord"
+msgid "Username"
+msgstr "Gebruikersnaam"
 
 msgid "Set password required to access this service"
 msgstr "Wachtwoord instellen vereist voor toegang tot deze service"
+
+msgid "Password"
+msgstr "Wachtwoord"
 
 msgid "Outproxy Authorization"
 msgstr "Uitgaande proxy-autorisatie"
@@ -652,6 +691,9 @@ msgstr "Configuratie van het handtekeningtype is alleen mogelijk wanneer de tunn
 
 msgid "Legacy option, with alternate key configured"
 msgstr "Legacy-optie, met alternatieve sleutel geconfigureerd"
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "Legacy-optie (verouderd), bedoeld voor achterwaartse compatibiliteit"
 
 msgid "Recommended for blinded and encrypted destinations"
 msgstr "Aanbevolen voor geblindeerde en gecodeerde bestemmingen"
@@ -987,8 +1029,23 @@ msgstr "Alles stoppen"
 msgid "Start All"
 msgstr "Alles starten"
 
+msgid "Restart all running tunnels"
+msgstr ""
+
 msgid "Restart All"
 msgstr "Alles herstarten"
+
+msgid "Restart all running server tunnels"
+msgstr ""
+
+msgid "Restart All Servers"
+msgstr ""
+
+msgid "Restart all running client tunnels"
+msgstr ""
+
+msgid "Restart All Clients"
+msgstr ""
 
 msgid "I2P Server Tunnels"
 msgstr "I2P-servertunnels"
@@ -1014,6 +1071,9 @@ msgstr "Controlle"
 msgid "Edit Server Tunnel Settings for"
 msgstr "Servertunnelinstellingen bewerken voor"
 
+msgid "Test IRC server, bypassing I2P"
+msgstr ""
+
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "Test HTTPS-server, waarbij I2P wordt omzeild"
 
@@ -1025,6 +1085,9 @@ msgstr "Test HTTP-server via I2P"
 
 msgid "Base32 Address"
 msgstr "Base32-adres"
+
+msgid "Offline"
+msgstr ""
 
 msgid "No Preview"
 msgstr "Geen voorbeeld"
@@ -1047,6 +1110,12 @@ msgstr "in"
 msgid "out"
 msgstr "uit"
 
+msgid "Restart this Tunnel"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
 msgid "Stopped"
 msgstr "Gestopt"
 
@@ -1064,6 +1133,9 @@ msgstr "Alt-bestemming"
 
 msgid "Encryption"
 msgstr "Codering"
+
+msgid "Supported encryption"
+msgstr ""
 
 msgid "New server tunnel"
 msgstr "Nieuwe servertunnel"

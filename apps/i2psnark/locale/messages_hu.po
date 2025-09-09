@@ -54,6 +54,14 @@ msgstr "Felső súlykorlát {0} KB/s-ra módosultFeltöltési sávszélesség ko
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "A minimum feltöltési sávszélesség korlátja {0} KBps"
 
+#, java-format
+msgid "Maximum download speed changed to {0}KB/s"
+msgstr ""
+
+#, java-format
+msgid "Download speed limit is {0}KB/s"
+msgstr ""
+
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
 msgstr ""
 
@@ -138,12 +146,6 @@ msgstr "Automatikus indítás engedélyezve"
 msgid "Disabled autostart"
 msgstr "Automatikus indítás kikapcsolva"
 
-msgid "Enabled smart sort"
-msgstr "Intelligens rendezés engedélyezve"
-
-msgid "Disabled smart sort"
-msgstr "Letiltott intelligens rendezés"
-
 msgid "Enabled open trackers - torrent restart required to take effect."
 msgstr "Engedélyezett nyitott nyomkövetők – a torrent újraindítása szükséges a hatálybalépéshez.Nyílt követők (tracker) engedélyezve - az érvénybe lépéshez a torrent újraindítása szükséges."
 
@@ -199,8 +201,8 @@ msgstr "A szakaszok hozzáadása és létrehozása engedélyezve van az összes 
 msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
 msgstr "Szakaszok hozzáadása és létrehozása, hogy csak a többoldalas torrentlista oldalak első oldalán jelenjenek meg."
 
-msgid "Configuration unchanged."
-msgstr "Beállítások nem lettek megváltoztatva."
+msgid "API key updated."
+msgstr ""
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Az Open Tracker lista megváltozott – a torrent újraindítása szükséges a hatálybalépéshez.Az Open Tracker lista megváltozott – a torrent újraindítása szükséges a hatálybalépéshez.Az Open Tracker lista megváltozott – a torrent újraindítása szükséges a hatálybalépéshez.Az Open Tracker lista megváltozott – a torrent újraindítása szükséges a hatálybalépéshez.Az Open Tracker lista megváltozott – a torrent újraindítása szükséges a hatálybalépéshez.Nyílt Követők (tracker) listája megváltozott - az érvénybe lépéshez a torrent újraindítása szükséges."
@@ -241,22 +243,6 @@ msgid "Torrent with the same data location is already running: {0}"
 msgstr "A Torrent ugyanazzal az adathellyel már fut: {0}"
 
 #, java-format
-msgid "ERROR - No I2P trackers in private torrent \"{0}\""
-msgstr "HIBA – Nincsenek I2P-követők a privát torrentben \"{0}\"HIBA - Nincsenek I2P követők (trackerek) a következő privát torrentben: \"{0}\""
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "Figyelmeztetés – Nincsenek I2P-követők a \"{0}\"-ban, csak az I2P nyílt nyomkövetőknek és a DHT-nak jelentenek be."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "Figyelmeztetés – A \"{0}\" mappában nincsenek I2P-követők, és a nyílt nyomkövetők le vannak tiltva. Csak a DHT-nak ad hírt."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "Figyelem! Nincsenek I2P-követők a \"{0}\" mappában, és a DHT és a nyílt nyomkövetők le vannak tiltva. A torrent elindítása előtt engedélyeznie kell a nyílt nyomkövetőket vagy a DHT-t."
-
-#, java-format
 msgid "Torrent in \"{0}\" is invalid"
 msgstr "Érvénytelen torrent a következőben: \"{0}\""
 
@@ -274,6 +260,22 @@ msgstr "Torrent hozzáadva és elindítva: {0}"
 #, java-format
 msgid "Torrent added: {0}"
 msgstr "Torrent hozzáadva: {0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "HIBA – Nincsenek I2P-követők a privát torrentben \"{0}\"HIBA - Nincsenek I2P követők (trackerek) a következő privát torrentben: \"{0}\""
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "Figyelmeztetés – Nincsenek I2P-követők a \"{0}\"-ban, csak az I2P nyílt nyomkövetőknek és a DHT-nak jelentenek be."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "Figyelmeztetés – A \"{0}\" mappában nincsenek I2P-követők, és a nyílt nyomkövetők le vannak tiltva. Csak a DHT-nak ad hírt."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "Figyelem! Nincsenek I2P-követők a \"{0}\" mappában, és a DHT és a nyílt nyomkövetők le vannak tiltva. A torrent elindítása előtt engedélyeznie kell a nyílt nyomkövetőket vagy a DHT-t."
 
 #, java-format
 msgid "Fetching {0}"
@@ -346,6 +348,18 @@ msgstr "Torrent eltávolítva: \"{0}\""
 msgid "Adding torrents in {0}&hellip;"
 msgstr "Torrentek hozzáadása itt: {0}"
 
+#, java-format
+msgid "Down bandwidth limit is {0} KB/s"
+msgstr "A letöltési sávszélesség korlátozása {0} KBps"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KB/s"
+msgstr "A felfelé irányuló sávszélesség korlátja {0} KB/s"
+
+#, java-format
+msgid "Connecting to I2CP port on I2P instance at {0}"
+msgstr ""
+
 msgid "Connecting to I2P"
 msgstr "Kapcsolódás az I2P-hez"
 
@@ -357,20 +371,12 @@ msgid "Starting up torrent {0}"
 msgstr "A torrent indítása {0}"
 
 #, java-format
-msgid "Down bandwidth limit is {0} KB/s"
-msgstr "A letöltési sávszélesség korlátozása {0} KBps"
-
-#, java-format
-msgid "Up bandwidth limit is {0} KB/s"
-msgstr "A felfelé irányuló sávszélesség korlátja {0} KB/s"
-
-#, java-format
-msgid "I2P+ I2PSnark standalone version {0} started"
-msgstr "I2P Az I2PSnark önálló verziója ({0}) elindult"
-
-#, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
 msgstr "A feltöltési sávszélesség korlátja {0} KB/s, maximum {1} egyidejűleg használható társ."
+
+#, java-format
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
+msgstr ""
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -413,6 +419,19 @@ msgid "Closing I2P tunnel after notifying trackers."
 msgstr "I2P alagút bezárása a nyomkövetők értesítése után."
 
 #, java-format
+msgid "Cannot check {0}"
+msgstr ""
+
+msgid "Torrent already started"
+msgstr ""
+
+msgid "No storage"
+msgstr ""
+
+msgid "Starting recheck of {}"
+msgstr ""
+
+#, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
 msgstr "A(z) {0} torrent újraellenőrzése befejeződött, most {1} kész"
 
@@ -423,6 +442,9 @@ msgstr "A(z) {0} torrent újraellenőrzése befejeződött, változatlan"
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "Hiba a torrent ellenőrzése során {0}"
+
+msgid "Cannot create diskspace bar"
+msgstr ""
 
 msgid "Data partition"
 msgstr ""
@@ -464,9 +486,6 @@ msgstr "Érvénytelen torrent a következő helyen: {0}"
 
 msgid "Configuration"
 msgstr "Beállítások"
-
-msgid "Debug Mode"
-msgstr "Hibakeresés mód"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "Anonymous BitTorrent kliens"
@@ -510,12 +529,6 @@ msgstr "Fórum"
 
 msgid "Torrent &amp; filesharing forum"
 msgstr "Torrent"
-
-msgid "BTDigg"
-msgstr "BTDigg"
-
-msgid "I2P-based search engine for clearnet-hosted torrents"
-msgstr "I2P alapú keresőmotor clearnet által üzemeltetett torrentekhez"
 
 msgid "Search torrents"
 msgstr "Keresés torrentekben"
@@ -591,8 +604,8 @@ msgstr "Letöltési Sebesség"
 msgid "TX"
 msgstr "Ki"
 
-msgid "Share ratio"
-msgstr "Feltöltési arány"
+msgid "Upload ratio"
+msgstr ""
 
 msgid "Uploaded"
 msgstr "Feltöltött"
@@ -634,6 +647,12 @@ msgid "Total size of loaded torrents"
 msgstr ""
 
 #, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] ""
+msgstr[1] ""
+
+#, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
 msgstr[0] "1 DHT peer"
@@ -666,8 +685,8 @@ msgstr "Összes feltöltött adat (a listázott torrentekhez)"
 msgid "Total upload speed"
 msgstr "Teljes feltöltési sebesség"
 
-msgid "Toggle Debug Mode"
-msgstr ""
+msgid "Debug Mode"
+msgstr "Hibakeresés mód"
 
 msgid "Normal Mode"
 msgstr "Normál mód"
@@ -910,6 +929,9 @@ msgstr "hátralévő"
 msgid "Completed"
 msgstr "Befejezve"
 
+msgid "Share ratio"
+msgstr "Feltöltési arány"
+
 msgid "Last activity"
 msgstr "Utolsó aktivitás"
 
@@ -1018,11 +1040,11 @@ msgstr "Tartalom szűrők"
 msgid "Trackers"
 msgstr "Követők (trackerek)"
 
-msgid "Primary"
-msgstr "Elsődleges"
-
 msgid "Alternates"
 msgstr "Helyettesek"
+
+msgid "Primary"
+msgstr "Elsődleges"
 
 msgid "Tracker Type"
 msgstr "Nyomkövető típusa"
@@ -1334,6 +1356,12 @@ msgstr "Hozzáadva"
 msgid "Pieces"
 msgstr "Részek"
 
+msgid "Average download speed for torrent"
+msgstr ""
+
+msgid "Download speed"
+msgstr ""
+
 msgid "Completion"
 msgstr "Befejezés"
 
@@ -1481,6 +1509,9 @@ msgstr "Törlésre kijelöl"
 msgid "Delete Selected"
 msgstr "Kiválasztottak Törlése"
 
+msgid "File downloading priorities updated for torrent "
+msgstr ""
+
 msgid "Edit Torrent"
 msgstr "Torrent szerkesztése"
 
@@ -1502,13 +1533,9 @@ msgstr "Módosítások mentése"
 msgid "Torrent must be stopped"
 msgstr "A torrentet le kell állítani"
 
+
+
+
 #, java-format
-
-
-
-
-
-
-
 
 

@@ -12,6 +12,12 @@ msgid "internal"
 msgstr "belső"
 
 #, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "{0} bejövő, {0} kimenő alagút"
+msgstr[1] "{0} bejövő, {0} kimenő alagút"
+
+#, java-format
 msgid "{0} inbound tunnel"
 msgid_plural "{0} inbound tunnels"
 msgstr[0] "{0} bejövő alagút"
@@ -23,12 +29,6 @@ msgid_plural "{0} outbound tunnels"
 msgstr[0] "{0} kimenő alagút"
 msgstr[1] "{0} kimenő alagút"
 
-#, java-format
-msgid "{0} inbound, {0} outbound tunnel"
-msgid_plural "{0} inbound, {0} outbound tunnels"
-msgstr[0] "{0} bejövő, {0} kimenő alagút"
-msgstr[1] "{0} bejövő, {0} kimenő alagút"
-
 msgid "lower bandwidth and reliability"
 msgstr "kisebb sávszélesség és megbízhatóság"
 
@@ -38,14 +38,47 @@ msgstr "szabványos sávszélesség és megbízhatóság"
 msgid "higher bandwidth and reliability"
 msgstr "nagyobb sávszélesség és megbízhatóság"
 
-msgid "Configuration reloaded for all tunnels"
-msgstr "Az összes alagútra vonatkozó beállítás újratöltve"
+msgid "Error - tunnels are not initialized yet"
+msgstr ""
+
+msgid "No services configured, cannot restart!"
+msgstr ""
+
+msgid "Stopping tunnel"
+msgstr "Alagút leállítása"
 
 msgid "Starting tunnel"
 msgstr "Alagút indítása"
 
-msgid "Stopping tunnel"
-msgstr "Alagút leállítása"
+msgid "Error restarting tunnel"
+msgstr ""
+
+msgid "Restarted all running tunnels"
+msgstr ""
+
+msgid "No clients configured, cannot restart!"
+msgstr ""
+
+msgid "Restarted all running client tunnels"
+msgstr ""
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "Az összes alagútra vonatkozó beállítás újratöltve"
+
+msgid "Error: Invalid tunnel"
+msgstr ""
+
+msgid "Started tunnel"
+msgstr ""
+
+msgid "Stopped tunnel"
+msgstr ""
+
+msgid "Restarting tunnel"
+msgstr ""
+
+msgid "Please confirm removal"
+msgstr ""
 
 msgid "New Tunnel"
 msgstr "Új Alagút"
@@ -116,6 +149,9 @@ msgstr "Szerveralagút szerkesztése"
 msgid "Are you sure you want to delete?"
 msgstr "Biztosan törölni akarod?"
 
+msgid "required"
+msgstr "szükséges"
+
 msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
 msgstr "Az alagutat és az összes többi megosztott kliens alagutat le kell állítani a konfiguráció módosításához"
 
@@ -172,9 +208,6 @@ msgstr "DCC Engedélyezése"
 
 msgid "Port"
 msgstr "Port"
-
-msgid "required"
-msgstr "szükséges"
 
 msgid "Specify the local port this service should be accessible from"
 msgstr "Adja meg azt a helyi portot, amelyről a szolgáltatásnak elérhetőnek kell lennie"
@@ -320,11 +353,14 @@ msgstr "Ne nyissa meg az alagutat, amíg tevékenységet nem észlel a porton"
 msgid "This is the default, recommended option"
 msgstr "Ez az alapértelmezett, ajánlott beállítás"
 
-msgid "Legacy option (deprecated), provided for backward compatibility"
-msgstr "Legacy opció (elavult), a visszafelé kompatibilitás érdekében"
-
 msgid "Encryption types"
 msgstr "Titkosítási típusok"
+
+msgid "Legacy options"
+msgstr ""
+
+msgid "Post Quantum"
+msgstr ""
 
 msgid "Both encryption types"
 msgstr "Mindkét titkosítási típus"
@@ -361,6 +397,9 @@ msgstr[1] "{0} hop alagút"
 
 msgid "Number of Tunnels in Group"
 msgstr "Alagutak száma a csoportban"
+
+msgid "Disabled for 0 hop tunnels"
+msgstr ""
 
 msgid "Variance"
 msgstr "Szórás"
@@ -527,17 +566,17 @@ msgstr "Engedélyezi, hogy a helyi szolgáltatás eléréséhez felhasználóné
 msgid "Require local authorization for this service"
 msgstr "Helyi engedély szükséges ehhez a szolgáltatáshoz"
 
-msgid "Username"
-msgstr "Felhasználónév"
-
 msgid "Set username required to access this service"
 msgstr "A szolgáltatás eléréséhez szükséges felhasználónév beállítása"
 
-msgid "Password"
-msgstr "Jelszó"
+msgid "Username"
+msgstr "Felhasználónév"
 
 msgid "Set password required to access this service"
 msgstr "Állítsa be a szolgáltatás eléréséhez szükséges jelszót"
+
+msgid "Password"
+msgstr "Jelszó"
 
 msgid "Outproxy Authorization"
 msgstr "Kimenő proxy Hitelesítés"
@@ -652,6 +691,9 @@ msgstr "A Signature Type konfigurációja csak akkor lehetséges, ha az alagút 
 
 msgid "Legacy option, with alternate key configured"
 msgstr "Hagyományos opció, konfigurált alternatív kulccsal"
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "Legacy opció (elavult), a visszafelé kompatibilitás érdekében"
 
 msgid "Recommended for blinded and encrypted destinations"
 msgstr "Vakított és titkosított célállomásokhoz ajánlott"
@@ -987,8 +1029,23 @@ msgstr "Mindet Leállít"
 msgid "Start All"
 msgstr "Mindet Indít"
 
+msgid "Restart all running tunnels"
+msgstr ""
+
 msgid "Restart All"
 msgstr "Mindet Újraindít"
+
+msgid "Restart all running server tunnels"
+msgstr ""
+
+msgid "Restart All Servers"
+msgstr ""
+
+msgid "Restart all running client tunnels"
+msgstr ""
+
+msgid "Restart All Clients"
+msgstr ""
 
 msgid "I2P Server Tunnels"
 msgstr "I2P szerveralagutak"
@@ -1014,6 +1071,9 @@ msgstr "Vezérlés"
 msgid "Edit Server Tunnel Settings for"
 msgstr "Szerveralagút-beállítások szerkesztése ehhez"
 
+msgid "Test IRC server, bypassing I2P"
+msgstr ""
+
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "HTTPS-kiszolgáló tesztelése az I2P megkerülésével"
 
@@ -1025,6 +1085,9 @@ msgstr "A HTTP-kiszolgáló tesztelése I2P-n keresztül"
 
 msgid "Base32 Address"
 msgstr "Base32 Cím"
+
+msgid "Offline"
+msgstr ""
 
 msgid "No Preview"
 msgstr "Nincs Előnézet"
@@ -1047,6 +1110,12 @@ msgstr "ban"
 msgid "out"
 msgstr "ki"
 
+msgid "Restart this Tunnel"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
 msgid "Stopped"
 msgstr "Leállt"
 
@@ -1064,6 +1133,9 @@ msgstr "Alt rendeltetési hely"
 
 msgid "Encryption"
 msgstr "Titkosítás"
+
+msgid "Supported encryption"
+msgstr ""
 
 msgid "New server tunnel"
 msgstr "Új szerveralagút"

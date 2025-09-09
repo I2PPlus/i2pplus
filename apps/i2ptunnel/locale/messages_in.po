@@ -12,6 +12,11 @@ msgid "internal"
 msgstr "internal "
 
 #, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "tunnel {0} inbound, outbound {0}"
+
+#, java-format
 msgid "{0} inbound tunnel"
 msgid_plural "{0} inbound tunnels"
 msgstr[0] "{0} tunnel masuk"
@@ -20,11 +25,6 @@ msgstr[0] "{0} tunnel masuk"
 msgid "{0} outbound tunnel"
 msgid_plural "{0} outbound tunnels"
 msgstr[0] "{0}  tunnel keluar"
-
-#, java-format
-msgid "{0} inbound, {0} outbound tunnel"
-msgid_plural "{0} inbound, {0} outbound tunnels"
-msgstr[0] "tunnel {0} inbound, outbound {0}"
 
 msgid "lower bandwidth and reliability"
 msgstr "bandwidth dan keandalan rendah"
@@ -35,14 +35,47 @@ msgstr "bandwidth dan keandalan standar"
 msgid "higher bandwidth and reliability"
 msgstr "bandwidth dan kehandalan yang lebih tinggi"
 
-msgid "Configuration reloaded for all tunnels"
-msgstr "Konfigurasi dimuat ulang untuk semua tunnel"
+msgid "Error - tunnels are not initialized yet"
+msgstr ""
+
+msgid "No services configured, cannot restart!"
+msgstr ""
+
+msgid "Stopping tunnel"
+msgstr "Menghentikan tunnel"
 
 msgid "Starting tunnel"
 msgstr "Memulai tunnel"
 
-msgid "Stopping tunnel"
-msgstr "Menghentikan tunnel"
+msgid "Error restarting tunnel"
+msgstr ""
+
+msgid "Restarted all running tunnels"
+msgstr ""
+
+msgid "No clients configured, cannot restart!"
+msgstr ""
+
+msgid "Restarted all running client tunnels"
+msgstr ""
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "Konfigurasi dimuat ulang untuk semua tunnel"
+
+msgid "Error: Invalid tunnel"
+msgstr ""
+
+msgid "Started tunnel"
+msgstr ""
+
+msgid "Stopped tunnel"
+msgstr ""
+
+msgid "Restarting tunnel"
+msgstr ""
+
+msgid "Please confirm removal"
+msgstr ""
 
 msgid "New Tunnel"
 msgstr "Tunnel Baru"
@@ -113,6 +146,9 @@ msgstr "Edit Terowongan Server"
 msgid "Are you sure you want to delete?"
 msgstr "Apakah Anda yakin hendak menghapus?"
 
+msgid "required"
+msgstr "diperlukan"
+
 msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
 msgstr "Terowongan dan semua terowongan klien bersama lainnya harus dihentikan untuk mengubah konfigurasi ini"
 
@@ -169,9 +205,6 @@ msgstr "Aktifkan DCC"
 
 msgid "Port"
 msgstr "Port "
-
-msgid "required"
-msgstr "diperlukan"
 
 msgid "Specify the local port this service should be accessible from"
 msgstr "Tentukan port lokal yang harus dapat diakses oleh layanan ini"
@@ -317,11 +350,14 @@ msgstr "Jangan buka terowongan sampai aktivitas terdeteksi di port"
 msgid "This is the default, recommended option"
 msgstr "Ini adalah opsi default dan yang disarankan"
 
-msgid "Legacy option (deprecated), provided for backward compatibility"
-msgstr "Pilihan legacy (deprecated), disediakan untuk kompatibilitas ke belakang"
-
 msgid "Encryption types"
 msgstr "Jenis enkripsi"
+
+msgid "Legacy options"
+msgstr ""
+
+msgid "Post Quantum"
+msgstr ""
 
 msgid "Both encryption types"
 msgstr "Kedua jenis enkripsi"
@@ -357,6 +393,9 @@ msgstr[0] "{0} hop Tunnel"
 
 msgid "Number of Tunnels in Group"
 msgstr "Jumlah Tunnel di dalam Grup"
+
+msgid "Disabled for 0 hop tunnels"
+msgstr ""
 
 msgid "Variance"
 msgstr "Variance "
@@ -522,17 +561,17 @@ msgstr "Aktifkan untuk membutuhkan username dan password untuk mengakses layanan
 msgid "Require local authorization for this service"
 msgstr "Mewajibkan otorisasi lokal untuk layanan ini"
 
-msgid "Username"
-msgstr "Username "
-
 msgid "Set username required to access this service"
 msgstr "Atur username yang diperlukan untuk mengakses layanan ini"
 
-msgid "Password"
-msgstr "Password "
+msgid "Username"
+msgstr "Username "
 
 msgid "Set password required to access this service"
 msgstr "Atur password yang diperlukan untuk mengakses layanan ini"
+
+msgid "Password"
+msgstr "Password "
 
 msgid "Outproxy Authorization"
 msgstr "Otorisasi Outproxy"
@@ -647,6 +686,9 @@ msgstr "Konfigurasi tipe tanda tangan hanya dimungkinkan ketika terowongan perta
 
 msgid "Legacy option, with alternate key configured"
 msgstr "Opsi lama, dengan kunci alternatif dikonfigurasi"
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "Pilihan legacy (deprecated), disediakan untuk kompatibilitas ke belakang"
 
 msgid "Recommended for blinded and encrypted destinations"
 msgstr "Direkomendasikan untuk tujuan yang dibutakan dan dienkripsi"
@@ -982,8 +1024,23 @@ msgstr "Hentikan semua"
 msgid "Start All"
 msgstr "Mulai semua"
 
+msgid "Restart all running tunnels"
+msgstr ""
+
 msgid "Restart All"
 msgstr "Restart semua"
+
+msgid "Restart all running server tunnels"
+msgstr ""
+
+msgid "Restart All Servers"
+msgstr ""
+
+msgid "Restart all running client tunnels"
+msgstr ""
+
+msgid "Restart All Clients"
+msgstr ""
 
 msgid "I2P Server Tunnels"
 msgstr "Terowongan Server I2P"
@@ -1009,6 +1066,9 @@ msgstr "Kontrol"
 msgid "Edit Server Tunnel Settings for"
 msgstr "Edit Setting Tunnel Server untuk"
 
+msgid "Test IRC server, bypassing I2P"
+msgstr ""
+
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "Uji server HTTPS, tidak menggunakan I2P"
 
@@ -1020,6 +1080,9 @@ msgstr "Uji server HTTP, menggunakan I2P"
 
 msgid "Base32 Address"
 msgstr "Alamat Base32"
+
+msgid "Offline"
+msgstr ""
 
 msgid "No Preview"
 msgstr "Tidak Ada Preview "
@@ -1042,6 +1105,12 @@ msgstr "masuk"
 msgid "out"
 msgstr "keluar"
 
+msgid "Restart this Tunnel"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
 msgid "Stopped"
 msgstr "dihentikan"
 
@@ -1059,6 +1128,9 @@ msgstr "Tujuan Alternatif"
 
 msgid "Encryption"
 msgstr "Enkripsi"
+
+msgid "Supported encryption"
+msgstr ""
 
 msgid "New server tunnel"
 msgstr "Terowongan server baru"

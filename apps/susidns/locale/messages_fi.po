@@ -50,6 +50,9 @@ msgstr "Tyyppi {0}"
 msgid "DSA 1024 bit"
 msgstr "DSA 1024-bittinen"
 
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal 2048-bittinen"
+
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
 msgstr[0] "Hae <span class=active>"
@@ -270,6 +273,9 @@ msgstr "Lisää uusi kohde"
 msgid "Import from hosts.txt file"
 msgstr "Tuo hosts.txt-tiedostosta"
 
+msgid "other"
+msgstr "muut"
+
 msgid "Export in hosts.txt format"
 msgstr "Vie hosts.txt-muodossa"
 
@@ -282,8 +288,8 @@ msgstr "Vie kirja hosts.txt-muodossa"
 msgid "Search"
 msgstr "Haku"
 
-msgid "other"
-msgstr "muut"
+msgid "latest"
+msgstr ""
 
 msgid "all"
 msgstr "kirkas suodatin"
@@ -425,9 +431,6 @@ msgstr "Base64 Hash"
 
 msgid "Public Key"
 msgstr "Julkinen avain"
-
-msgid "ElGamal 2048 bit"
-msgstr "ElGamal 2048-bittinen"
 
 msgid "Signing Key"
 msgstr "Allekirjoitusavain"
@@ -596,5 +599,3 @@ msgstr "Pääosoitekirjaasi manuaalisesti lisätyt osoitteet yhdistetään reiti
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Tilauksistasi saamasi isännät yhdistetään reitittimen osoitekirjaasi."
-
-

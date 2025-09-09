@@ -1554,10 +1554,7 @@ msgstr "{0} içinde yeniden başlatılıyor"
 msgid "Save order"
 msgstr "Sıralamayı kaydet"
 
-msgid "Sidebar refresh disabled"
-msgstr ""
-
-msgid "Sidebar refresh interval changed"
+msgid "Sidebar preferences updated"
 msgstr ""
 
 msgid "Refresh interval must be a number"
@@ -1592,9 +1589,6 @@ msgstr "Taşındı"
 
 msgid "Saved order of sections."
 msgstr "Bölüm sıralaması kaydedildi."
-
-msgid "Stat filter and location updated successfully to"
-msgstr "İstatistik süzgeci ve konum şuna güncellendi"
 
 msgid "Full statistics enabled"
 msgstr "Tam istatistikler etkinleştirildi"
@@ -2182,23 +2176,14 @@ msgstr "I2P ile ilgili topluluk forumları"
 msgid "File-sharing forum"
 msgstr "Dosya paylaşım forumu"
 
-msgid "Alternative front-end for Twitter"
-msgstr "Twitter için alternatif kullanıcı arayüzü"
-
-msgid "Rocksolid forums for the darknets"
-msgstr "Karanlık ağlar için rocksolid forumlar"
-
 msgid "Cross-network micro-blogging &amp; forums &amp; wiki"
 msgstr "Net işçiliği mikro blog ve forumlar"
 
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Reddit için alternatif gizlilik odaklı ön uç"
 
-msgid "Base64 Image Encoder"
-msgstr "Base64 Görüntü Kodlayıcı"
-
-msgid "An image cache and resize service"
-msgstr "Bir görüntü önbelleği ve yeniden boyutlandırma hizmeti"
+msgid "AI Image generation & Chat hub"
+msgstr ""
 
 msgid "IRC Logs for multiple networks"
 msgstr "Birden fazla ağ için IRC Günlükleri"
@@ -2215,17 +2200,8 @@ msgstr "Çeşitli hizmetler için açılış sayfası"
 msgid "Streaming radio service"
 msgstr "Radyo hizmeti yayını"
 
-msgid "Alternative frontend for Imgur"
-msgstr "Imgur için alternatif kullanıcı arayüzü"
-
 msgid "Privacy-focused not-for-profit organization"
 msgstr "Gizlilik odaklı kar amacı gütmeyen kuruluş"
-
-msgid "Outproxy bandwidth test"
-msgstr "Outproxy bant genişliği testi"
-
-msgid "speedtest"
-msgstr "hız testi"
 
 msgid "Text translation engine"
 msgstr "Text translation engine"
@@ -2233,20 +2209,8 @@ msgstr "Text translation engine"
 msgid "translate"
 msgstr "Çevirmek"
 
-msgid "Alternative front-end to Youtube"
-msgstr "Youtube için alternatif kullanıcı arayüzü"
-
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "Web barındırma ve VPN hizmetlerine ilişkin gizlilik sağlayıcısı"
-
-msgid "Tor-focused Search Engine"
-msgstr "Tor Odaklı Arama Motoru"
-
-msgid "Pinterest Image Search Engine"
-msgstr "Pinterest Görsel Arama Motoru"
-
-msgid "Clearnet BitTorrent DHT search engine"
-msgstr "Clearnet BitTorrent DHT arama motoru"
 
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "DuckDuckGo Arama Motoru (javascript yok)"
@@ -2256,21 +2220,6 @@ msgstr "Gizlilik Odaklı Clearnet Arama Motoru"
 
 msgid "I2P Web Search Engine"
 msgstr "I2P Web Arama Motoru"
-
-msgid "Enabling the free transmission of data in the public interest"
-msgstr "Kamu yararına olan verilerin serbestçe iletilmesinin sağlanması"
-
-msgid "Selected Papers in Anonymity"
-msgstr "Anonim Olarak Seçilmiş Makaleler"
-
-msgid "Tor .onion site links"
-msgstr "Tor .onion sitesi bağlantıları"
-
-msgid "HTML Color Reference"
-msgstr "HTML Renk Referansı"
-
-msgid "HTMLColors"
-msgstr "HTMLRenkler"
 
 msgid "I2P-related Wiki"
 msgstr "I2P ile ilgili Wiki"
@@ -2287,29 +2236,17 @@ msgstr "İnternet Felsefe Ansiklopedisi"
 msgid "Standford Encyclopedia of Philosophy"
 msgstr "Standford Felsefe Ansiklopedisi"
 
-msgid "Psychonaut"
-msgstr "Psikonot"
-
-msgid "Wiki relating to altered states of consciousness"
-msgstr "Değişen bilinç durumlarıyla ilgili Wiki"
-
 msgid "Computing-related tutorials"
 msgstr "Bilgisayarla ilgili eğitimler"
 
 msgid "SimplifiedGuide"
 msgstr "BasitleştirilmişKılavuz"
 
-msgid "Vulnerability Database"
-msgstr "Güvenlik Açığı Veritabanı"
-
 msgid "Web technology reference and learning site"
 msgstr "Web teknolojisi referans ve öğrenme sitesi"
 
 msgid "Alternative Wikipedia front-end focused on privacy"
 msgstr "Gizliliğe odaklanan alternatif Vikipedi ön ucu"
-
-msgid "The biggest online English dictionary"
-msgstr "En büyük çevrimiçi İngilizce sözlük"
 
 msgid "World atlas including geography facts &amp; flags"
 msgstr "Coğrafya gerçekleri ve bayrakları içeren dünya atlası"
@@ -2320,14 +2257,8 @@ msgstr "Dünya Atlası"
 msgid "Technology News &amp; more..."
 msgstr "Teknoloji haberleri ve daha fazlası..."
 
-msgid "Independent investigative journalism"
-msgstr "Bağımsız araştırmacı gazetecilik"
-
 msgid "Information Security Research &amp; Education"
 msgstr "Bilgi Güvenliği Araştırma ve Eğitim"
-
-msgid "Darknet related news site"
-msgstr "Darknet ile ilgili haber sitesi"
 
 msgid "DigitalTrends"
 msgstr "DigitalTrends"
@@ -2340,24 +2271,6 @@ msgstr "Dijital dünyada haklarınızı savunmak"
 
 msgid "The Elliptic Curve Cryptography Blog"
 msgstr "Eliptik Eğri Şifreleme Blogu"
-
-msgid "ForeignPolicy"
-msgstr "Dış Politika"
-
-msgid "The Global Magazine of News &amp; Ideas"
-msgstr "Küresel Haber ve Fikirler Dergisi"
-
-msgid "FrontLineDefenders"
-msgstr "Ön Cephe Savunucuları"
-
-msgid "Human rights activism"
-msgstr "İnsan hakları aktivizmi"
-
-msgid "Defending Human Rights Worldwide"
-msgstr "Dünya Çapında İnsan Haklarını Savunmak"
-
-msgid "HumanRightsWatch"
-msgstr "İnsan Hakları İzleme Örgütü"
 
 msgid "Fresh hacks every day"
 msgstr "Her gün yeni tüyolar"
@@ -2373,12 +2286,6 @@ msgstr "HongKongÜcretsizBasın"
 
 msgid "Independent &amp; impartial news for Hong Kong"
 msgstr "Hong Kong için Bağımsız ve Tarafsız Haberler"
-
-msgid "HongKongWatch"
-msgstr "HongKongİzle"
-
-msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr "Hong Kong'daki özgürlüklere ve haklara yönelik tehditleri izliyor"
 
 msgid "JStorDaily"
 msgstr "JStorGünlük"
@@ -2416,11 +2323,11 @@ msgstr "Bağımsız Uluslararası Medya Platformu"
 msgid "OpenDemocracy"
 msgstr "OpenDemocracy"
 
-msgid "News and blog feeds on I2P"
-msgstr "I2P ile ilgili haberler ve blog beslemeleri"
+msgid "Online privacy &amp; tech blog"
+msgstr ""
 
-msgid "Planeta"
-msgstr "Planeta"
+msgid "RightToPrivacy"
+msgstr ""
 
 msgid "Lifestyle magazine"
 msgstr "Yaşam tarzı dergisi"
@@ -2449,20 +2356,11 @@ msgstr "İnekler için haberler"
 msgid "Technology news &amp; reviews"
 msgstr "Teknoloji Haberleri ve İncelemeleri"
 
-msgid "Reporting on China without fear or favor"
-msgstr "Korkmadan ve iltifat etmeden Çin hakkında haber yapmak"
-
 msgid "News from the Taiwan Capital"
 msgstr "Tayvan Başkentinden Haberler"
 
 msgid "TaipeiTimes"
 msgstr "TaipeiTimes"
-
-msgid "TechXplore"
-msgstr "TechXplore"
-
-msgid "Technology and engineering news"
-msgstr "Teknoloji ve mühendislik haberleri"
 
 msgid "TechMeme"
 msgstr "Teknik Meme"
@@ -2505,12 +2403,6 @@ msgstr "Yeni Cumhuriyet"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "Dosya paylaşımı ve telif hakkı haberleri"
-
-msgid "A magazine about human rights and social justice"
-msgstr "İnsan hakları ve sosyal adaletle ilgili bir dergi"
-
-msgid "UpstreamJournal"
-msgstr "Upstream Dergisi"
 
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
 msgstr "Orta Doğu'daki Amerikan çıkarlarının dengeli ve gerçekçi bir anlayışını geliştirmek"
@@ -2841,16 +2733,22 @@ msgstr ""
 msgid "Not initialized"
 msgstr "Başlatılmamış"
 
-msgid "Sorted by hash distance, closest first."
+msgid "Total Remote Leasesets"
 msgstr ""
 
 msgid "Compact mode"
 msgstr ""
 
-msgid "Total Remote Leasesets"
+msgid "Local Leasesets"
+msgstr ""
+
+msgid "Debug Mode"
 msgstr ""
 
 msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Sorted by hash distance, closest first."
 msgstr ""
 
 msgid "Mod Data"
@@ -2865,17 +2763,11 @@ msgstr ""
 msgid "Change in"
 msgstr ""
 
-msgid "Known Floodfills"
-msgstr "Bilinen Taşkınlar"
-
 msgid "Floodfill mode enabled"
 msgstr ""
 
 msgid "Routing Key"
 msgstr "Yönlendirme Anahtarı"
-
-msgid "Network data"
-msgstr "Ağ verileri"
 
 msgid "Median distance (bits)"
 msgstr "Ortalama mesafe (bit)"
@@ -2885,6 +2777,12 @@ msgstr "Tahmini toplam taşkın dolguları"
 
 msgid "Estimated total leasesets"
 msgstr "Tahmini toplam kiralama setleri"
+
+msgid "Total Local Leasesets"
+msgstr ""
+
+msgid "Remote Leasesets"
+msgstr ""
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2917,12 +2815,6 @@ msgstr "Süresi doluyor{0}"
 msgid "Expired{0} ago"
 msgstr "Süresi{0} önce doldu"
 
-msgid "Received as published"
-msgstr "Yayınlandığı gibi mi alındı?"
-
-msgid "Received as reply"
-msgstr "Cevap olarak mı aldınız?"
-
 msgid "Distance"
 msgstr "Mesafe"
 
@@ -2931,6 +2823,9 @@ msgstr "Çevrimdışı imzalandı"
 
 msgid "Signature type"
 msgstr "İmza türü"
+
+msgid "Public Key"
+msgstr ""
 
 msgid "Unsupported type"
 msgstr "Desteklenmeyen tip"
@@ -2942,6 +2837,9 @@ msgstr "{0} içinde bitecek"
 #, java-format
 msgid "Expired {0} ago"
 msgstr "{0} önce bitti"
+
+msgid "Unknown"
+msgstr "Bilinmiyor"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
 msgstr ""
@@ -2978,9 +2876,6 @@ msgstr "Taşkınlar"
 
 msgid "Total"
 msgstr "Toplam"
-
-msgid "Unknown"
-msgstr "Bilinmiyor"
 
 msgid "Initializing"
 msgstr "Başlatılıyor"
@@ -3055,9 +2950,6 @@ msgstr "NetDb'de bu adrese sahip tüm yönlendiricileri göster"
 msgid "Show all routers with this port in the NetDb"
 msgstr "NetDb'de bu bağlantı noktasına sahip tüm yönlendiricileri göster"
 
-msgid "Network ID"
-msgstr "Ağ Kimliği"
-
 msgid "Routers"
 msgstr "Yönlendiriciler"
 
@@ -3069,6 +2961,12 @@ msgstr "En son duyulanlar"
 
 msgid "Last heard from"
 msgstr "Son haber"
+
+msgid "Network Id"
+msgstr ""
+
+msgid "Count is always spoofed to avoid indicating router restarts"
+msgstr ""
 
 msgid "Hidden or starting up"
 msgstr "Gizli ya da başlatılıyor"
@@ -3129,19 +3027,16 @@ msgstr "router.config dosyanıza."
 msgid "Peer Connections"
 msgstr "Eş Bağlantıları"
 
-msgid "Active in the last minute"
-msgstr "Son dakikada aktif"
-
 msgid "IPv4"
 msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
 
-msgid "Limit"
+msgid "Active connections / Max permitted"
 msgstr ""
 
-msgid "Maximum permitted connections"
+msgid "Connections / Limit"
 msgstr ""
 
 msgid "Current / maximum permitted"
@@ -3150,23 +3045,23 @@ msgstr "Akım / izin verilen maksimum"
 msgid "NTCP connections"
 msgstr "NTCP bağlantıları"
 
-msgid "Caps"
-msgstr "Kapasiteler"
-
 msgid "Peer capabilities"
 msgstr "Eş yetenekler"
 
-msgid "Dir"
-msgstr "Klasör"
+msgid "Caps"
+msgstr "Kapasiteler"
 
 msgid "Direction/Introduction"
 msgstr "Yön/Rehberlik"
 
-msgid "Idle"
-msgstr "Boşta"
+msgid "Dir"
+msgstr "Klasör"
 
 msgid "Peer inactivity"
 msgstr "Akran hareketsizliği"
+
+msgid "Idle"
+msgstr "Boşta"
 
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Ortalama gelen/giden hızı (KBps)"
@@ -3198,11 +3093,11 @@ msgstr "Alınan mesajlar"
 msgid "RX"
 msgstr "RX"
 
-msgid "Out Queue"
-msgstr "Çıkış Kuyruğu"
-
 msgid "Queued messages to send to peer"
 msgstr "Eşe gönderilecek sıraya alınmış mesajlar"
+
+msgid "Out Queue"
+msgstr "Çıkış Kuyruğu"
 
 msgid "Connection is backlogged"
 msgstr "Bağlantı birikmiş"
@@ -3728,11 +3623,11 @@ msgstr "I2P Güncellemesini İndirin"
 msgid "Unsigned update available"
 msgstr "İmzasız güncelleme mevcut"
 
-msgid "Help with firewall configuration"
-msgstr "Güvenlik duvarı yapılandırma yardımı"
-
 msgid "Check network connection and NAT/firewall!"
 msgstr "Ağ bağlantısını ve NAT/güvenlik duvarını kontrol edin!"
+
+msgid "Help with firewall configuration"
+msgstr "Güvenlik duvarı yapılandırma yardımı"
 
 msgid "Attempt to download router reference files (if automatic reseed has failed)"
 msgstr "Yöneltici referans dosyalarını indirmeyi dene (otomatik yeniden tohumlama yapılamaz ise)"
@@ -3767,23 +3662,35 @@ msgstr "En Alta Taşı"
 msgid "Select a section to add"
 msgstr "Eklenecek bölümü seçin"
 
+msgid "Router Information (advanced)"
+msgstr "Yöneltici Bilgileri (gelişmiş)"
+
+msgid "Advanced Links"
+msgstr "Gelişmiş Bağlantılar"
+
+msgid "Bandwidth Graph"
+msgstr "Bant Genişliği Çizelgesi"
+
+msgid "UTC Clock"
+msgstr "UTC Saati"
+
+msgid "Congestion"
+msgstr "Sıkışıklık"
+
+msgid "CPU Load"
+msgstr "CPU Yükü"
+
+msgid "Firewall &amp; Reseed Status"
+msgstr "Güvenlik Duvarı ve Yeniden Tohumlama Durumu"
+
 msgid "Help &amp; FAQ"
 msgstr "Yardım ve SSS"
-
-msgid "I2P Services"
-msgstr "I2P Hizmetleri"
 
 msgid "I2P Internals"
 msgstr "I2P Bilgileri"
 
-msgid "Router Information"
-msgstr "Yöneltici bilgileri"
-
-msgid "Router Information (brief)"
-msgstr "Yöneltici Bilgileri (temel)"
-
-msgid "Router Information (advanced)"
-msgstr "Yöneltici Bilgileri (gelişmiş)"
+msgid "I2P Services"
+msgstr "I2P Hizmetleri"
 
 msgid "Memory Usage Bar"
 msgstr "Bellek Kullanımı Çubuğu"
@@ -3791,35 +3698,23 @@ msgstr "Bellek Kullanımı Çubuğu"
 msgid "Network Reachability"
 msgstr "Ağ Erişilebilirliği"
 
-msgid "Update Status"
-msgstr "Güncelleme Durumu"
+msgid "News &amp; Updates"
+msgstr "Haberler ve Güncellemeler"
 
 msgid "Restart Status"
 msgstr "Yeniden Başlatma Durumu"
 
-msgid "Firewall &amp; Reseed Status"
-msgstr "Güvenlik Duvarı ve Yeniden Tohumlama Durumu"
+msgid "Router Information"
+msgstr "Yöneltici bilgileri"
 
-msgid "Bandwidth Graph"
-msgstr "Bant Genişliği Çizelgesi"
-
-msgid "Congestion"
-msgstr "Sıkışıklık"
+msgid "Router Information (brief)"
+msgstr "Yöneltici Bilgileri (temel)"
 
 msgid "Tunnel Status"
 msgstr "Tünel Durumu"
 
-msgid "News &amp; Updates"
-msgstr "Haberler ve Güncellemeler"
-
-msgid "Advanced Links"
-msgstr "Gelişmiş Bağlantılar"
-
-msgid "UTC Clock"
-msgstr "UTC Saati"
-
-msgid "CPU Load"
-msgstr "CPU Yükü"
+msgid "Update Status"
+msgstr "Güncelleme Durumu"
 
 msgid "I2P Router Help &amp; FAQ"
 msgstr "I2P Yöneltici Yardımı ve SSS"
@@ -4004,6 +3899,9 @@ msgstr "Netdb'deki toplam akranlar"
 
 msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Son bir kaç dakika ya da son saat içinde iletişim kurulan eşler"
+
+msgid "Peers we've been talking to in the last minute"
+msgstr ""
 
 msgid "The number of peers available for building client tunnels"
 msgstr "İstemci tünellerini oluşturmak için kullanılabilecek eş sayısı"
@@ -4337,6 +4235,9 @@ msgstr "Bloğu uygula"
 msgid "days"
 msgstr "gün"
 
+msgid "Known Floodfills"
+msgstr "Bilinen Taşkınlar"
+
 msgid "Average closest floodfill distance"
 msgstr "Ortalama en yakın taşkın dolgu mesafesi"
 
@@ -4507,6 +4408,9 @@ msgstr "Veri aktarıldı"
 
 msgid "Data"
 msgstr "Veri"
+
+msgid "Limit"
+msgstr ""
 
 msgid "Receive on"
 msgstr "Alınma zamanı"
@@ -5480,6 +5384,9 @@ msgstr "I2P sistem hizmetini yükleyin. "
 msgid "config sidebar"
 msgstr "yan çubuk yapılandırması"
 
+msgid "Sidebar Options"
+msgstr ""
+
 msgid "Refresh interval"
 msgstr "Yenileme Sıklığı"
 
@@ -5488,6 +5395,12 @@ msgstr "saniye"
 
 msgid "0 to disable"
 msgstr "Devre dışı bırakmak için 0"
+
+msgid "Unified sidebar"
+msgstr ""
+
+msgid "Use the same sidebar on all pages"
+msgstr ""
 
 msgid "config stats"
 msgstr "istatistik yapılandırması"
@@ -5688,6 +5601,9 @@ msgstr "işlemler"
 msgid "Event Log"
 msgstr "Olay Günlüğü"
 
+msgid "Combined"
+msgstr ""
+
 msgid "graph"
 msgstr "grafik"
 
@@ -5765,6 +5681,9 @@ msgstr "Bu ayar, true olarak ayarlandığında, başarılı akran testi ortalama
 
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Bu ayar, true olarak ayarlandığında, <a href=/sitemap>site haritasında</a> <i>İlgili Siteler</i> bağlantılarını gösterecektir. [Varsayılan değer false]"
+
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
+msgstr ""
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Bu ayar, yönlendiricinin <i>blocklist.txt</i> dosyasını ve kullanıcı yapılandırmalı engelleme listelerini kullanarak yönlendiricilerin hash veya IP adresine göre yasaklanmasını etkinleştirip etkinleştirmeyeceğini belirler. IPv4 için aralıklar ve ağ maskeleri desteklenir, ancak IPv6 için desteklenmez. Daha fazla bilgi için I2P+ uygulama dizininizdeki <i>blocklist.txt</i>'yi görüntüleyin. [Varsayılan olarak etkin, yeniden başlatma gereklidir]"
@@ -6579,8 +6498,8 @@ msgstr "Eğer bir <i>Kayıt Yetkilendirme</i> dizesi istenirse, onu <a href='htt
 msgid "If you are in a hurry and can't wait a few hours, you can tell people to use a \"jump\" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is working, you can tell others to use it."
 msgstr "Eğer acele ediyorsanız ve birkaç saat bekleyemiyorsanız, insanlara \"jump\" adres yardımcı yönlendirme hizmetini kullanmalarını söyleyebilirsiniz. Bu, genellikle kendi alan adınızı aynı sitede kaydettikten birkaç dakika sonra çalışmaya başlayacaktır. Tarayıcınıza <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> adresini girerek önce kendiniz test edebilirsiniz. Çalıştığında, diğer insanlara kullanmalarını söyleyebilirsiniz."
 
-msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skanki2p</a>, and paste the link where it's required to share it with others."
-msgstr "Alternatif olarak, alan adınız için <i>adres yardımcı bağlantı</i>yı kopyalayabilirsiniz. Bu bağlantı, adres defteri listesi sayfasında veya alan adınızın ayrıntıları sayfasında (örneğin <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>i2p-projekt.i2p için ayrıntılar</a> gibi) belirtilmiştir. Bağlantıyı, diğerleriyle paylaşılması gereken yere yapıştırabilirsiniz."
+msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
+msgstr ""
 
 msgid "Backup your private key!"
 msgstr "Özel anahtarınızı yedekleyin!"
@@ -6816,8 +6735,8 @@ msgstr "Daha iyi bağlantı için modeminizde, yönlendiricinizde ve/veya güven
 msgid "Getting Support Online"
 msgstr "Çevrimiçi Destek Almak"
 
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "Ayrıca <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P web sitesinde</a>ki bilgileri gözden geçirebilir, mesajlarınızı <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P tartışma forumuna</a> gönderebilir veya I2P'nin dahili IRC ağındaki <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> veya <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> kanallarına uğrayabilirsiniz."
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
+msgstr ""
 
 msgid "Reporting Bugs"
 msgstr "Hataları Bildirme"
@@ -7356,6 +7275,9 @@ msgstr "Bağlantıları özelleştirin"
 msgid "Configure display language, theme and optional console password"
 msgstr "Ekran dilini, temayı ve isteğe bağlı konsol şifresini yapılandırın"
 
+msgid "Language"
+msgstr ""
+
 msgid "Configure router bandwidth"
 msgstr "Yönlendirici bant genişliğini yapılandırın"
 
@@ -7420,6 +7342,24 @@ msgstr "Hizmet (Kapsayıcı) Günlükleri"
 msgid "network database"
 msgstr "ağ veritabanı"
 
+msgid "Encryption type"
+msgstr ""
+
+msgid "Encryption types"
+msgstr ""
+
+msgid "Signature types"
+msgstr ""
+
+msgid "Locally hosted private service"
+msgstr ""
+
+msgid "Locally hosted public service"
+msgstr ""
+
+msgid "Requested client leaseset"
+msgstr ""
+
 msgid "network database router map"
 msgstr "ağ veritabanı router haritası"
 
@@ -7462,6 +7402,12 @@ msgstr "Engellenmiş Eşler"
 
 msgid "Fast / High Capacity"
 msgstr "Hızlı / Yüksek Kapasite"
+
+msgid "router logs"
+msgstr ""
+
+msgid "service logs"
+msgstr ""
 
 msgid "Manage I2P addresses"
 msgstr "I2P adreslerini yönet"
@@ -7667,6 +7613,9 @@ msgstr "Tunnel İD'lerini Değiştir"
 msgid "Toggle Tunnels"
 msgstr "Tünelleri Değiştir"
 
+msgid "Updating sidebar sections"
+msgstr ""
+
 msgid "Peer Profile"
 msgstr "Eş Profili"
 
@@ -7812,7 +7761,15 @@ msgstr "Tamamlandı"
 
 
 
-#, java-format
+
+
+
+
+
+
+
+
+
 
 
 

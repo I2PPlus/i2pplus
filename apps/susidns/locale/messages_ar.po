@@ -50,6 +50,9 @@ msgstr "نوع {0}"
 msgid "DSA 1024 bit"
 msgstr "DSA 1024 بت"
 
+msgid "ElGamal 2048 bit"
+msgstr "الجمل 2048 بت"
+
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
 msgstr[0] "ابحث عن <span class=active>"
@@ -298,6 +301,9 @@ msgstr "أضف وجهة جديدة"
 msgid "Import from hosts.txt file"
 msgstr "استيراد من ملف hosts.txt"
 
+msgid "other"
+msgstr "أخر"
+
 msgid "Export in hosts.txt format"
 msgstr "التصدير بتنسيق hosts.txt"
 
@@ -310,8 +316,8 @@ msgstr "تصدير الكتاب بصيغة hosts.txt"
 msgid "Search"
 msgstr "بحث"
 
-msgid "other"
-msgstr "أخر"
+msgid "latest"
+msgstr ""
 
 msgid "all"
 msgstr "الغاء الترشيح"
@@ -453,9 +459,6 @@ msgstr "قاعدة 64 تجزئة"
 
 msgid "Public Key"
 msgstr "مفتاح علني"
-
-msgid "ElGamal 2048 bit"
-msgstr "الجمل 2048 بت"
 
 msgid "Signing Key"
 msgstr "مفتاح التوقيع"
@@ -624,5 +627,3 @@ msgstr "العناوين التي تمت إضافتها يدويًا إلى دف
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "سيتم دمج المضيفين الذين تستقبلهم من اشتراكاتك مع دفتر عناوين جهاز التوجيه الخاص بك."
-
-

@@ -54,6 +54,14 @@ msgstr "최대 속도가 {0}KBps로 변경되었습니다"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "최소 속도는 {0}KBps입니다"
 
+#, java-format
+msgid "Maximum download speed changed to {0}KB/s"
+msgstr ""
+
+#, java-format
+msgid "Download speed limit is {0}KB/s"
+msgstr ""
+
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
 msgstr ""
 
@@ -138,12 +146,6 @@ msgstr "자동시작 켜기"
 msgid "Disabled autostart"
 msgstr "자동시작 끄기"
 
-msgid "Enabled smart sort"
-msgstr "스마트 정렬 켜기"
-
-msgid "Disabled smart sort"
-msgstr "스마트 정렬 끄기"
-
 msgid "Enabled open trackers - torrent restart required to take effect."
 msgstr "오픈 트래커 활성화 - 토렌트를 재시작해야 적용됩니다."
 
@@ -199,8 +201,8 @@ msgstr "모든 토렌트 목록 페이지에서 섹션 추가 및 생성이 활�
 msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
 msgstr "여러 페이지로 구성된 토렌트 목록 페이지의 첫 번째 페이지에만 표시할 섹션을 추가하고 생성하세요."
 
-msgid "Configuration unchanged."
-msgstr "설정이 바뀌지 않았습니다."
+msgid "API key updated."
+msgstr ""
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "오픈 트래커 리스트가 변경되었습니다 - 토렌트를 재시작해야 적용됩니다."
@@ -241,22 +243,6 @@ msgid "Torrent with the same data location is already running: {0}"
 msgstr "동일한 데이터 위치의 Torrent가 이미 실행 중입니다: {0}"
 
 #, java-format
-msgid "ERROR - No I2P trackers in private torrent \"{0}\""
-msgstr "오류 - Private 토렌트 \"{0}\"에 I2P 트래커가 없습니다"
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "경고 - \"{0}\"에 I2P 추적기가 없습니다. I2P 공개 추적기와 DHT에만 알립니다.경고 - \"{0}\"에 I2P 추적기가 없습니다. I2P 공개 추적기와 DHT에만 알립니다.경고 - \"{0}\"에 I2P 추적기가 없습니다. I2P 공개 추적기와 DHT에만 알립니다.경고- \"{0}\"에 I2P 트래커가 없습니다. I2P 오픈 트래커와 DHT에게만 전달할 것입니다."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "경고 - \"{0}\"에 I2P 추적기가 없으며 공개 추적기가 비활성화되어 DHT에만 알립니다.경고 - \"{0}\"에 I2P 추적기가 없으며 공개 추적기가 비활성화되어 DHT에만 알립니다.경고 - \"{0}\"에 I2P 추적기가 없으며 공개 추적기가 비활성화되어 DHT에만 알립니다.경고- \"{0}\"에 I2P 트래커가 없습니다, 오픈트래커 역시 비활성화 되었으며, DHT에게만 전달합니다."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "경고 - \"{0}\"에 I2P 추적기가 없으며 DHT 및 공개 추적기가 비활성화되어 있습니다. 토렌트를 시작하기 전에 공개 추적기 또는 DHT를 활성화해야 합니다.경고 - \"{0}\"에 I2P 추적기가 없으며 DHT 및 공개 추적기가 비활성화되어 있습니다. 토렌트를 시작하기 전에 공개 추적기 또는 DHT를 활성화해야 합니다.경고 - \"{0}\"에 I2P 추적기가 없으며 DHT 및 공개 추적기가 비활성화되어 있습니다. 토렌트를 시작하기 전에 공개 추적기 또는 DHT를 활성화해야 합니다.경고- \"{0}\"에 I2P 트래커가 없습니다, 오픈트래커와 DHT도 비활성화 되었으며, 토렌트를 시작하려면 이를 활성화해야 합니다."
-
-#, java-format
 msgid "Torrent in \"{0}\" is invalid"
 msgstr "토렌트 \"{0}\"가 올바르지 않습니다"
 
@@ -274,6 +260,22 @@ msgstr "토렌트를 추가 및 시작합니다: {0}"
 #, java-format
 msgid "Torrent added: {0}"
 msgstr "토렌트 추가됨: {0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "오류 - Private 토렌트 \"{0}\"에 I2P 트래커가 없습니다"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "경고 - \"{0}\"에 I2P 추적기가 없습니다. I2P 공개 추적기와 DHT에만 알립니다.경고 - \"{0}\"에 I2P 추적기가 없습니다. I2P 공개 추적기와 DHT에만 알립니다.경고 - \"{0}\"에 I2P 추적기가 없습니다. I2P 공개 추적기와 DHT에만 알립니다.경고- \"{0}\"에 I2P 트래커가 없습니다. I2P 오픈 트래커와 DHT에게만 전달할 것입니다."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "경고 - \"{0}\"에 I2P 추적기가 없으며 공개 추적기가 비활성화되어 DHT에만 알립니다.경고 - \"{0}\"에 I2P 추적기가 없으며 공개 추적기가 비활성화되어 DHT에만 알립니다.경고 - \"{0}\"에 I2P 추적기가 없으며 공개 추적기가 비활성화되어 DHT에만 알립니다.경고- \"{0}\"에 I2P 트래커가 없습니다, 오픈트래커 역시 비활성화 되었으며, DHT에게만 전달합니다."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "경고 - \"{0}\"에 I2P 추적기가 없으며 DHT 및 공개 추적기가 비활성화되어 있습니다. 토렌트를 시작하기 전에 공개 추적기 또는 DHT를 활성화해야 합니다.경고 - \"{0}\"에 I2P 추적기가 없으며 DHT 및 공개 추적기가 비활성화되어 있습니다. 토렌트를 시작하기 전에 공개 추적기 또는 DHT를 활성화해야 합니다.경고 - \"{0}\"에 I2P 추적기가 없으며 DHT 및 공개 추적기가 비활성화되어 있습니다. 토렌트를 시작하기 전에 공개 추적기 또는 DHT를 활성화해야 합니다.경고- \"{0}\"에 I2P 트래커가 없습니다, 오픈트래커와 DHT도 비활성화 되었으며, 토렌트를 시작하려면 이를 활성화해야 합니다."
 
 #, java-format
 msgid "Fetching {0}"
@@ -346,6 +348,18 @@ msgstr "토렌트 제거됨: \"{0}\""
 msgid "Adding torrents in {0}&hellip;"
 msgstr "{0}에 급류 추가 ..."
 
+#, java-format
+msgid "Down bandwidth limit is {0} KB/s"
+msgstr "다운로드 대역폭 제한은 {0} KBps입니다"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KB/s"
+msgstr "최대 대역폭 제한은 {0}KBps입니다"
+
+#, java-format
+msgid "Connecting to I2CP port on I2P instance at {0}"
+msgstr ""
+
 msgid "Connecting to I2P"
 msgstr "I2P에 연결중"
 
@@ -357,20 +371,12 @@ msgid "Starting up torrent {0}"
 msgstr "토렌트 시작: {0}"
 
 #, java-format
-msgid "Down bandwidth limit is {0} KB/s"
-msgstr "다운로드 대역폭 제한은 {0} KBps입니다"
-
-#, java-format
-msgid "Up bandwidth limit is {0} KB/s"
-msgstr "최대 대역폭 제한은 {0}KBps입니다"
-
-#, java-format
-msgid "I2P+ I2PSnark standalone version {0} started"
-msgstr "I2P I2PSnark 독립형 버전 {0}이(가) 시작되었습니다"
-
-#, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
 msgstr "업로드 대역폭 제한은 최대 {1}개의 동시 피어에 대해 {0}KBps입니다."
+
+#, java-format
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
+msgstr ""
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -413,6 +419,19 @@ msgid "Closing I2P tunnel after notifying trackers."
 msgstr "트래커에게 알린 후 I2P 터널을 닫는 중입니다."
 
 #, java-format
+msgid "Cannot check {0}"
+msgstr ""
+
+msgid "Torrent already started"
+msgstr ""
+
+msgid "No storage"
+msgstr ""
+
+msgid "Starting recheck of {}"
+msgstr ""
+
+#, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
 msgstr "토렌트 {0}를 재확인하는것을 마쳤습니다, {1}가 완료되었습니다"
 
@@ -423,6 +442,9 @@ msgstr "토렌트 {0}를 재확인하는것을 마쳤습니다, 변경사항 없
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "토렌트 {0}를 확인하는데 오류가 있습니다"
+
+msgid "Cannot create diskspace bar"
+msgstr ""
 
 msgid "Data partition"
 msgstr ""
@@ -464,9 +486,6 @@ msgstr "토렌트 {0}이 올바로지 않습니다"
 
 msgid "Configuration"
 msgstr "설정"
-
-msgid "Debug Mode"
-msgstr "디버그 모드"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "익명 비트토렌트 클라이언트"
@@ -510,12 +529,6 @@ msgstr "포럼"
 
 msgid "Torrent &amp; filesharing forum"
 msgstr "토렌트 및 파일 공유 포럼"
-
-msgid "BTDigg"
-msgstr "BTDigg"
-
-msgid "I2P-based search engine for clearnet-hosted torrents"
-msgstr "Clearnet 호스팅 급류를위한 I2P 기반 검색 엔진"
 
 msgid "Search torrents"
 msgstr "토렌트 검색"
@@ -591,8 +604,8 @@ msgstr "다운로드 비율"
 msgid "TX"
 msgstr "TX"
 
-msgid "Share ratio"
-msgstr "업로드 비율"
+msgid "Upload ratio"
+msgstr ""
 
 msgid "Uploaded"
 msgstr "완료된 업로드"
@@ -633,6 +646,11 @@ msgid "Total size of loaded torrents"
 msgstr ""
 
 #, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] ""
+
+#, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
 msgstr[0] "DHT 피어: {0}"
@@ -664,8 +682,8 @@ msgstr "업로드된 총 데이터(나열된 토렌트의 경우)"
 msgid "Total upload speed"
 msgstr "총 업로드 속도"
 
-msgid "Toggle Debug Mode"
-msgstr ""
+msgid "Debug Mode"
+msgstr "디버그 모드"
 
 msgid "Normal Mode"
 msgstr "일반 모드"
@@ -906,6 +924,9 @@ msgstr "남은"
 msgid "Completed"
 msgstr "완료된"
 
+msgid "Share ratio"
+msgstr "업로드 비율"
+
 msgid "Last activity"
 msgstr "마지막 활동"
 
@@ -1014,11 +1035,11 @@ msgstr "콘텐츠 필터"
 msgid "Trackers"
 msgstr "트래커"
 
-msgid "Primary"
-msgstr "기본"
-
 msgid "Alternates"
 msgstr "대체"
+
+msgid "Primary"
+msgstr "기본"
 
 msgid "Tracker Type"
 msgstr "트래커 유형"
@@ -1328,6 +1349,12 @@ msgstr "추가된"
 msgid "Pieces"
 msgstr "조각"
 
+msgid "Average download speed for torrent"
+msgstr ""
+
+msgid "Download speed"
+msgstr ""
+
 msgid "Completion"
 msgstr "완료"
 
@@ -1474,6 +1501,9 @@ msgstr "삭제표시"
 msgid "Delete Selected"
 msgstr "선택된 것 삭제"
 
+msgid "File downloading priorities updated for torrent "
+msgstr ""
+
 msgid "Edit Torrent"
 msgstr "토렌트 편집"
 
@@ -1495,13 +1525,9 @@ msgstr "변경 사항 저장"
 msgid "Torrent must be stopped"
 msgstr "토렌트를 중지해야 합니다"
 
+
+
+
 #, java-format
-
-
-
-
-
-
-
 
 

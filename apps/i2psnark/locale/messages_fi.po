@@ -54,6 +54,14 @@ msgstr "BW:n yläraja muutettu arvoon {0}KBpsKaistanleveyden enimmäisraja palve
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Kaistanleveyden vähimmäisraja on {0}KBpsKaistanleveyden vähimmäisraja palvelimelle kopioinnissa on {0} kilotavua sekunnissa"
 
+#, java-format
+msgid "Maximum download speed changed to {0}KB/s"
+msgstr ""
+
+#, java-format
+msgid "Download speed limit is {0}KB/s"
+msgstr ""
+
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
 msgstr ""
 
@@ -138,12 +146,6 @@ msgstr "Automaattikäynnistys otettu käyttöön"
 msgid "Disabled autostart"
 msgstr "Automaattikäynnistys otettu pois käytöstä"
 
-msgid "Enabled smart sort"
-msgstr "Älykäs lajittelu otettu käyttöön"
-
-msgid "Disabled smart sort"
-msgstr "Älykäs lajittelu otettu pois käytöstä"
-
 msgid "Enabled open trackers - torrent restart required to take effect."
 msgstr "Avoimet seurantalaitteet käytössä – torrentin uudelleenkäynnistys vaaditaan voimaantuloa varten.Otettu käyttöön avoimet seuraajat - vertaisverkon uudelleenkäynnistys vaaditaan asetuksen käyttöönottamiseksi."
 
@@ -199,8 +201,8 @@ msgstr "Lisää ja luo osiot käytössä kaikilla torrent-listaussivuilla."
 msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
 msgstr "Lisää ja luo osioita, jotka näkyvät vain monisivuisten torrent-luettelosivujen ensimmäisellä sivulla."
 
-msgid "Configuration unchanged."
-msgstr "Asetuksia ei muutettu."
+msgid "API key updated."
+msgstr ""
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Open Tracker -luettelo muutettu - torrentin uudelleenkäynnistys vaaditaan voimaantuloa varten.Avoin seuraaja-luettelo muuttunut - verkkoseuraajan uudelleenkäynnistys vaadittu muutosten voimaansaattamiseksi."
@@ -241,22 +243,6 @@ msgid "Torrent with the same data location is already running: {0}"
 msgstr "Torrent, jolla on sama tietosijainti, on jo käynnissä: {0}"
 
 #, java-format
-msgid "ERROR - No I2P trackers in private torrent \"{0}\""
-msgstr "VIRHE - Ei I2P-seuraajia yksityisessä vertaisverkossa \"{0}\""
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "Varoitus - Ei I2P-seurantalaitteita kohteessa \"{0}\", ilmoittaa vain avoimille I2P-seurantajärjestelmille ja DHT:lle.Varoitus - Ei I2P-seuraajia vertaisverkossa \"{0}\", ilmoittaa I2P:hen vain avoimista seuraajista ja DHT:sta."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "Varoitus - Ei I2P-seurantalaitteita kohteessa \"{0}\", ja avoimet seurantalaitteet on poistettu käytöstä, ilmoittaa vain DHT:lle.Varoitus - Ei I2P-seurantalaitteita kohteessa \"{0}\", ja avoimet seurantalaitteet on poistettu käytöstä, ilmoittaa vain DHT:lle.Varoitus - Ei I2P-seurantalaitteita kohteessa \"{0}\", ja avoimet seurantalaitteet on poistettu käytöstä, ilmoittaa vain DHT:lle.Varoitus - Ei I2P-seurantalaitteita kohteessa \"{0}\", ja avoimet seurantalaitteet on poistettu käytöstä, ilmoittaa vain DHT:lle.Varoitus - Ei I2P-seuraajia vertaisverkossa \"{0}\", ja avoimet seuraajat ovat poissa käytöstä, ilmoitta vain DHT:hen."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "Varoitus - Ei I2P-seurantalaitteita kohteessa \"{0}\", ja DHT ja avoimet seurantalaitteet on poistettu käytöstä. Ota avoimet seurantalaitteet tai DHT käyttöön ennen torrentin käynnistämistä.Varoitus - Ei I2P-seurantalaitteita kohteessa \"{0}\", ja DHT ja avoimet seurantalaitteet on poistettu käytöstä. Ota avoimet seurantalaitteet tai DHT käyttöön ennen torrentin käynnistämistä.Varoitus - Ei I2P-seurantalaitteita kohteessa \"{0}\", ja DHT ja avoimet seurantalaitteet on poistettu käytöstä. Ota avoimet seurantalaitteet tai DHT käyttöön ennen torrentin käynnistämistä.Varoitus - Ei I2P-seurantalaitteita kohteessa \"{0}\", ja DHT ja avoimet seurantalaitteet on poistettu käytöstä. Ota avoimet seurantalaitteet tai DHT käyttöön ennen torrentin käynnistämistä.Varoitus - Ei I2P-seuraajia vertaisverkossa \"{0}\", ja DHT sekä avoimet seuraajat ovat poissa käytöstä, sinun pitäisi ottaa käyttöön avoimet seuraajat tai DHT ennen vertaisverkon käynnistämistä."
-
-#, java-format
 msgid "Torrent in \"{0}\" is invalid"
 msgstr "Vertaiverkko kohteessa \"{0}\" on virheellinen"
 
@@ -274,6 +260,22 @@ msgstr "Vertaisverkko lisätty ja käynnistetty: {0}"
 #, java-format
 msgid "Torrent added: {0}"
 msgstr "Vertaisverkko lisätty: {0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "VIRHE - Ei I2P-seuraajia yksityisessä vertaisverkossa \"{0}\""
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "Varoitus - Ei I2P-seurantalaitteita kohteessa \"{0}\", ilmoittaa vain avoimille I2P-seurantajärjestelmille ja DHT:lle.Varoitus - Ei I2P-seuraajia vertaisverkossa \"{0}\", ilmoittaa I2P:hen vain avoimista seuraajista ja DHT:sta."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "Varoitus - Ei I2P-seurantalaitteita kohteessa \"{0}\", ja avoimet seurantalaitteet on poistettu käytöstä, ilmoittaa vain DHT:lle.Varoitus - Ei I2P-seurantalaitteita kohteessa \"{0}\", ja avoimet seurantalaitteet on poistettu käytöstä, ilmoittaa vain DHT:lle.Varoitus - Ei I2P-seurantalaitteita kohteessa \"{0}\", ja avoimet seurantalaitteet on poistettu käytöstä, ilmoittaa vain DHT:lle.Varoitus - Ei I2P-seurantalaitteita kohteessa \"{0}\", ja avoimet seurantalaitteet on poistettu käytöstä, ilmoittaa vain DHT:lle.Varoitus - Ei I2P-seuraajia vertaisverkossa \"{0}\", ja avoimet seuraajat ovat poissa käytöstä, ilmoitta vain DHT:hen."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "Varoitus - Ei I2P-seurantalaitteita kohteessa \"{0}\", ja DHT ja avoimet seurantalaitteet on poistettu käytöstä. Ota avoimet seurantalaitteet tai DHT käyttöön ennen torrentin käynnistämistä.Varoitus - Ei I2P-seurantalaitteita kohteessa \"{0}\", ja DHT ja avoimet seurantalaitteet on poistettu käytöstä. Ota avoimet seurantalaitteet tai DHT käyttöön ennen torrentin käynnistämistä.Varoitus - Ei I2P-seurantalaitteita kohteessa \"{0}\", ja DHT ja avoimet seurantalaitteet on poistettu käytöstä. Ota avoimet seurantalaitteet tai DHT käyttöön ennen torrentin käynnistämistä.Varoitus - Ei I2P-seurantalaitteita kohteessa \"{0}\", ja DHT ja avoimet seurantalaitteet on poistettu käytöstä. Ota avoimet seurantalaitteet tai DHT käyttöön ennen torrentin käynnistämistä.Varoitus - Ei I2P-seuraajia vertaisverkossa \"{0}\", ja DHT sekä avoimet seuraajat ovat poissa käytöstä, sinun pitäisi ottaa käyttöön avoimet seuraajat tai DHT ennen vertaisverkon käynnistämistä."
 
 #, java-format
 msgid "Fetching {0}"
@@ -346,6 +348,18 @@ msgstr "Vertaisverkko poistettu: \"{0}\""
 msgid "Adding torrents in {0}&hellip;"
 msgstr "Torrentien lisääminen kohteeseen {0}..."
 
+#, java-format
+msgid "Down bandwidth limit is {0} KB/s"
+msgstr "Latauksen bändyyn limittaus on {0} KBps"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KB/s"
+msgstr "Yläkaistanleveyden raja on {0} kt/s"
+
+#, java-format
+msgid "Connecting to I2CP port on I2P instance at {0}"
+msgstr ""
+
 msgid "Connecting to I2P"
 msgstr "Yhdistetään I2P:hen"
 
@@ -357,20 +371,12 @@ msgid "Starting up torrent {0}"
 msgstr "Torrentin käynnistys {0}"
 
 #, java-format
-msgid "Down bandwidth limit is {0} KB/s"
-msgstr "Latauksen bändyyn limittaus on {0} KBps"
-
-#, java-format
-msgid "Up bandwidth limit is {0} KB/s"
-msgstr "Yläkaistanleveyden raja on {0} kt/s"
-
-#, java-format
-msgid "I2P+ I2PSnark standalone version {0} started"
-msgstr "I2P I2PSnarkin erillinen versio {0} aloitettu"
-
-#, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
 msgstr "Latauksen kaistanleveysrajoitus on {0} kt/s ja enintään {1} samanaikaista vertaista."
+
+#, java-format
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
+msgstr ""
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -413,6 +419,19 @@ msgid "Closing I2P tunnel after notifying trackers."
 msgstr "Suljetaan I2P-tunneli sen jälkeen kun seuraajille on ilmoitettu."
 
 #, java-format
+msgid "Cannot check {0}"
+msgstr ""
+
+msgid "Torrent already started"
+msgstr ""
+
+msgid "No storage"
+msgstr ""
+
+msgid "Starting recheck of {}"
+msgstr ""
+
+#, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
 msgstr "Torrentin {0} uudelleentarkistus valmis, nyt {1} valmis"
 
@@ -423,6 +442,9 @@ msgstr "Torrentin {0} uudelleentarkistus valmis, ei muutoksia"
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "Virheentarkistus vertaisverkossa {0}"
+
+msgid "Cannot create diskspace bar"
+msgstr ""
 
 msgid "Data partition"
 msgstr ""
@@ -464,9 +486,6 @@ msgstr "Vertaisverkko osoitteessa {0} ei ollut kelvollinen"
 
 msgid "Configuration"
 msgstr "Asetukset"
-
-msgid "Debug Mode"
-msgstr "Debug-tilassa"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "Anonyymi BitTorrent-asiakas"
@@ -510,12 +529,6 @@ msgstr "Foorumi"
 
 msgid "Torrent &amp; filesharing forum"
 msgstr "Torrent"
-
-msgid "BTDigg"
-msgstr "BTDigg"
-
-msgid "I2P-based search engine for clearnet-hosted torrents"
-msgstr "I2P-pohjainen hakukone clearnet-isännöimille torrenteille"
 
 msgid "Search torrents"
 msgstr "Etsi torrentteja"
@@ -591,8 +604,8 @@ msgstr "Latausnopeus"
 msgid "TX"
 msgstr "TX"
 
-msgid "Share ratio"
-msgstr "Lataussuhde"
+msgid "Upload ratio"
+msgstr ""
 
 msgid "Uploaded"
 msgstr "Kopioitu palvelimelle"
@@ -634,6 +647,12 @@ msgid "Total size of loaded torrents"
 msgstr ""
 
 #, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] ""
+msgstr[1] ""
+
+#, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
 msgstr[0] "1 DHT-vertainen"
@@ -666,8 +685,8 @@ msgstr "Lähetetyt tiedot yhteensä (luetteloiduille torrenteille)"
 msgid "Total upload speed"
 msgstr "Kokonaislatausnopeus"
 
-msgid "Toggle Debug Mode"
-msgstr ""
+msgid "Debug Mode"
+msgstr "Debug-tilassa"
 
 msgid "Normal Mode"
 msgstr "Normaali tila"
@@ -910,6 +929,9 @@ msgstr "jäljellä"
 msgid "Completed"
 msgstr "Valmistunut"
 
+msgid "Share ratio"
+msgstr "Lataussuhde"
+
 msgid "Last activity"
 msgstr "Viimeinen toiminta"
 
@@ -1018,11 +1040,11 @@ msgstr "Sisältösuoja"
 msgid "Trackers"
 msgstr "Seuraajat"
 
-msgid "Primary"
-msgstr "Ensisijainen"
-
 msgid "Alternates"
 msgstr "Vaihtoehdot"
+
+msgid "Primary"
+msgstr "Ensisijainen"
 
 msgid "Tracker Type"
 msgstr "Seurantatyyppi"
@@ -1334,6 +1356,12 @@ msgstr "Lisätty"
 msgid "Pieces"
 msgstr "Kappaletta"
 
+msgid "Average download speed for torrent"
+msgstr ""
+
+msgid "Download speed"
+msgstr ""
+
 msgid "Completion"
 msgstr "Valmistui"
 
@@ -1481,6 +1509,9 @@ msgstr "Merkitse poistettavaksi"
 msgid "Delete Selected"
 msgstr "Poista valitut"
 
+msgid "File downloading priorities updated for torrent "
+msgstr ""
+
 msgid "Edit Torrent"
 msgstr "Muokkaa torrentia"
 
@@ -1502,13 +1533,9 @@ msgstr "Tallenna muutokset"
 msgid "Torrent must be stopped"
 msgstr "Torrent on pysäytettävä"
 
+
+
+
 #, java-format
-
-
-
-
-
-
-
 
 

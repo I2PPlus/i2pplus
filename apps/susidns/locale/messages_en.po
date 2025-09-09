@@ -50,6 +50,9 @@ msgstr ""
 msgid "DSA 1024 bit"
 msgstr ""
 
+msgid "ElGamal 2048 bit"
+msgstr ""
+
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
 msgstr[0] ""
@@ -270,6 +273,9 @@ msgstr ""
 msgid "Import from hosts.txt file"
 msgstr ""
 
+msgid "other"
+msgstr ""
+
 msgid "Export in hosts.txt format"
 msgstr ""
 
@@ -282,7 +288,7 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-msgid "other"
+msgid "latest"
 msgstr ""
 
 msgid "all"
@@ -424,9 +430,6 @@ msgid "Base 64 Hash"
 msgstr ""
 
 msgid "Public Key"
-msgstr ""
-
-msgid "ElGamal 2048 bit"
 msgstr ""
 
 msgid "Signing Key"

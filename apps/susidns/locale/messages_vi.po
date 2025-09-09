@@ -50,6 +50,9 @@ msgstr "Nhập {0}"
 msgid "DSA 1024 bit"
 msgstr "DSA 1024bit"
 
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal 2048bit"
+
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
 msgstr[0] "Tìm kiếm <span class=active>"
@@ -263,6 +266,9 @@ msgstr "Thêm điểm đến mới"
 msgid "Import from hosts.txt file"
 msgstr "Nhập từ tệp Host.txt"
 
+msgid "other"
+msgstr "khác"
+
 msgid "Export in hosts.txt format"
 msgstr "Xuất ở định dạng Host.txt"
 
@@ -275,8 +281,8 @@ msgstr "Xuất sách ở định dạng Host.txt"
 msgid "Search"
 msgstr "Tìm"
 
-msgid "other"
-msgstr "khác"
+msgid "latest"
+msgstr ""
 
 msgid "all"
 msgstr "bộ lọc rõ ràng"
@@ -418,9 +424,6 @@ msgstr "Hàm băm cơ sở 64"
 
 msgid "Public Key"
 msgstr "Khóa công khai"
-
-msgid "ElGamal 2048 bit"
-msgstr "ElGamal 2048bit"
 
 msgid "Signing Key"
 msgstr "Khóa ký"
@@ -589,5 +592,3 @@ msgstr "Các địa chỉ được thêm thủ công vào sổ địa chỉ Chí
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Máy chủ bạn nhận được từ đăng ký của mình sẽ hợp nhất với sổ địa chỉ Bộ định tuyến của bạn."
-
-

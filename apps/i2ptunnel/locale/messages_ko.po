@@ -12,6 +12,11 @@ msgid "internal"
 msgstr "내부"
 
 #, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "{0} 인바운드, {0} 아웃바운드 터널"
+
+#, java-format
 msgid "{0} inbound tunnel"
 msgid_plural "{0} inbound tunnels"
 msgstr[0] "{0} 인바운드 터널"
@@ -20,11 +25,6 @@ msgstr[0] "{0} 인바운드 터널"
 msgid "{0} outbound tunnel"
 msgid_plural "{0} outbound tunnels"
 msgstr[0] "{0} 아웃바운드 터널"
-
-#, java-format
-msgid "{0} inbound, {0} outbound tunnel"
-msgid_plural "{0} inbound, {0} outbound tunnels"
-msgstr[0] "{0} 인바운드, {0} 아웃바운드 터널"
 
 msgid "lower bandwidth and reliability"
 msgstr "낮은 대역폭과 신뢰도"
@@ -35,14 +35,47 @@ msgstr "보통 대역폭과 신뢰도"
 msgid "higher bandwidth and reliability"
 msgstr "높은 대역폭과 신뢰도"
 
-msgid "Configuration reloaded for all tunnels"
-msgstr "모든 터널에 설정 다시 로드함"
+msgid "Error - tunnels are not initialized yet"
+msgstr ""
+
+msgid "No services configured, cannot restart!"
+msgstr ""
+
+msgid "Stopping tunnel"
+msgstr "터널 중지중"
 
 msgid "Starting tunnel"
 msgstr "터널 시작중"
 
-msgid "Stopping tunnel"
-msgstr "터널 중지중"
+msgid "Error restarting tunnel"
+msgstr ""
+
+msgid "Restarted all running tunnels"
+msgstr ""
+
+msgid "No clients configured, cannot restart!"
+msgstr ""
+
+msgid "Restarted all running client tunnels"
+msgstr ""
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "모든 터널에 설정 다시 로드함"
+
+msgid "Error: Invalid tunnel"
+msgstr ""
+
+msgid "Started tunnel"
+msgstr ""
+
+msgid "Stopped tunnel"
+msgstr ""
+
+msgid "Restarting tunnel"
+msgstr ""
+
+msgid "Please confirm removal"
+msgstr ""
 
 msgid "New Tunnel"
 msgstr "새 터널"
@@ -113,6 +146,9 @@ msgstr "서버 터널 편집"
 msgid "Are you sure you want to delete?"
 msgstr "정말 삭제하시겠습니까?"
 
+msgid "required"
+msgstr "요구됨"
+
 msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
 msgstr "이 구성을 변경하려면 터널 및 기타 모든 공유 클라이언트 터널을 중지해야 합니다"
 
@@ -169,9 +205,6 @@ msgstr "DCC 활성화"
 
 msgid "Port"
 msgstr "포트"
-
-msgid "required"
-msgstr "요구됨"
 
 msgid "Specify the local port this service should be accessible from"
 msgstr "이 서비스가 접근 가능한 로컬 포트를 지정하세요"
@@ -317,11 +350,14 @@ msgstr "포트에서 활동이 감지될 때까지 터널을 열지 않습니다
 msgid "This is the default, recommended option"
 msgstr "이것은 기본값이며 권장되는 옵션입니다"
 
-msgid "Legacy option (deprecated), provided for backward compatibility"
-msgstr "후방 호환성을 위해 제공되는 구식 옵션(미사용)"
-
 msgid "Encryption types"
 msgstr "암호화 유형"
+
+msgid "Legacy options"
+msgstr ""
+
+msgid "Post Quantum"
+msgstr ""
 
 msgid "Both encryption types"
 msgstr "양쪽 암호화 유형"
@@ -357,6 +393,9 @@ msgstr[0] "{0} 홉 터널"
 
 msgid "Number of Tunnels in Group"
 msgstr "그룹의 터널 개수"
+
+msgid "Disabled for 0 hop tunnels"
+msgstr ""
 
 msgid "Variance"
 msgstr "변동"
@@ -522,17 +561,17 @@ msgstr "LAN에서 호스팅하는 경우와 같이 로컬 서비스에 액세스
 msgid "Require local authorization for this service"
 msgstr "이 서비스에 대한 로컬 권한 부여 필요"
 
-msgid "Username"
-msgstr "사용자 이름"
-
 msgid "Set username required to access this service"
 msgstr "이 서비스에 액세스하려면 필요한 사용자 이름 설정"
 
-msgid "Password"
-msgstr "비밀번호"
+msgid "Username"
+msgstr "사용자 이름"
 
 msgid "Set password required to access this service"
 msgstr "이 서비스에 액세스하려면 필요한 비밀번호 설정"
+
+msgid "Password"
+msgstr "비밀번호"
 
 msgid "Outproxy Authorization"
 msgstr "외부 프록시 권한 부여"
@@ -647,6 +686,9 @@ msgstr "서명 유형의 구성은 터널이 처음 생성될 때만 가능합�
 
 msgid "Legacy option, with alternate key configured"
 msgstr "대체 키가 구성된 구식 옵션"
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "후방 호환성을 위해 제공되는 구식 옵션(미사용)"
 
 msgid "Recommended for blinded and encrypted destinations"
 msgstr "눈 가린 상태와 암호화된 목적지에 권장"
@@ -982,8 +1024,23 @@ msgstr "모두 중지"
 msgid "Start All"
 msgstr "모두 시작"
 
+msgid "Restart all running tunnels"
+msgstr ""
+
 msgid "Restart All"
 msgstr "모두 재시작"
+
+msgid "Restart all running server tunnels"
+msgstr ""
+
+msgid "Restart All Servers"
+msgstr ""
+
+msgid "Restart all running client tunnels"
+msgstr ""
+
+msgid "Restart All Clients"
+msgstr ""
 
 msgid "I2P Server Tunnels"
 msgstr "I2P 서버 터널"
@@ -1009,6 +1066,9 @@ msgstr "제어"
 msgid "Edit Server Tunnel Settings for"
 msgstr "서버 터널 설정 편집"
 
+msgid "Test IRC server, bypassing I2P"
+msgstr ""
+
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "I2P를 우회하는 HTTPS 서버 테스트"
 
@@ -1020,6 +1080,9 @@ msgstr "I2P를 통해 HTTP 서버 테스트"
 
 msgid "Base32 Address"
 msgstr "Base32 주소"
+
+msgid "Offline"
+msgstr ""
 
 msgid "No Preview"
 msgstr "미리보기 없음"
@@ -1042,6 +1105,12 @@ msgstr "내부"
 msgid "out"
 msgstr "외부"
 
+msgid "Restart this Tunnel"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
 msgid "Stopped"
 msgstr "중지됨"
 
@@ -1059,6 +1128,9 @@ msgstr "대체 목적지"
 
 msgid "Encryption"
 msgstr "암호화"
+
+msgid "Supported encryption"
+msgstr ""
 
 msgid "New server tunnel"
 msgstr "새로운 서버 터널"

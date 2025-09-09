@@ -12,6 +12,13 @@ msgid "internal"
 msgstr "intern"
 
 #, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "{0} de intrare, {0} tuneluri de ieșire"
+msgstr[1] "{0} de intrare, {0} tuneluri de ieșire"
+msgstr[2] "{0} de intrare, {0} tuneluri de ieșire"
+
+#, java-format
 msgid "{0} inbound tunnel"
 msgid_plural "{0} inbound tunnels"
 msgstr[0] "{0} tunel de intrare"
@@ -25,13 +32,6 @@ msgstr[0] "{0} tunel de ieșire"
 msgstr[1] "{0} tuneluri de ieșire"
 msgstr[2] "{0} tuneluri de ieșire"
 
-#, java-format
-msgid "{0} inbound, {0} outbound tunnel"
-msgid_plural "{0} inbound, {0} outbound tunnels"
-msgstr[0] "{0} de intrare, {0} tuneluri de ieșire"
-msgstr[1] "{0} de intrare, {0} tuneluri de ieșire"
-msgstr[2] "{0} de intrare, {0} tuneluri de ieșire"
-
 msgid "lower bandwidth and reliability"
 msgstr "lățime de bandă și fiabilitate joasa"
 
@@ -41,14 +41,47 @@ msgstr "lățime de bandă și fiabilitate standarda"
 msgid "higher bandwidth and reliability"
 msgstr "lățime de bandă și fiabilitate inalta"
 
-msgid "Configuration reloaded for all tunnels"
-msgstr "Configurare reîncărcata pentru toate tunelurile"
+msgid "Error - tunnels are not initialized yet"
+msgstr ""
+
+msgid "No services configured, cannot restart!"
+msgstr ""
+
+msgid "Stopping tunnel"
+msgstr "Oprirea tunelului"
 
 msgid "Starting tunnel"
 msgstr "Pornirea tunelului"
 
-msgid "Stopping tunnel"
-msgstr "Oprirea tunelului"
+msgid "Error restarting tunnel"
+msgstr ""
+
+msgid "Restarted all running tunnels"
+msgstr ""
+
+msgid "No clients configured, cannot restart!"
+msgstr ""
+
+msgid "Restarted all running client tunnels"
+msgstr ""
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "Configurare reîncărcata pentru toate tunelurile"
+
+msgid "Error: Invalid tunnel"
+msgstr ""
+
+msgid "Started tunnel"
+msgstr ""
+
+msgid "Stopped tunnel"
+msgstr ""
+
+msgid "Restarting tunnel"
+msgstr ""
+
+msgid "Please confirm removal"
+msgstr ""
 
 msgid "New Tunnel"
 msgstr "Tunel nou"
@@ -119,6 +152,9 @@ msgstr "Editați tunelul serverului"
 msgid "Are you sure you want to delete?"
 msgstr "Sigur doriți să ștergeți?"
 
+msgid "required"
+msgstr "necesar"
+
 msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
 msgstr "Tunnelul și toate celelalte tuneluri client partajate trebuie oprite pentru a schimba această configurație"
 
@@ -175,9 +211,6 @@ msgstr "Activează DCC"
 
 msgid "Port"
 msgstr "Port"
-
-msgid "required"
-msgstr "necesar"
 
 msgid "Specify the local port this service should be accessible from"
 msgstr "Specificați portul local din care ar trebui accesat acest serviciu"
@@ -323,11 +356,14 @@ msgstr "Nu deschideți tunelul până când nu este detectată activitate în po
 msgid "This is the default, recommended option"
 msgstr "Aceasta este opțiunea implicită, recomandată"
 
-msgid "Legacy option (deprecated), provided for backward compatibility"
-msgstr "Opțiunea moștenire (învechită), furnizată pentru o compatibilitate înapoi"
-
 msgid "Encryption types"
 msgstr "Tipuri de criptare"
+
+msgid "Legacy options"
+msgstr ""
+
+msgid "Post Quantum"
+msgstr ""
 
 msgid "Both encryption types"
 msgstr "Ambele tipuri de criptare"
@@ -365,6 +401,9 @@ msgstr[2] "{0} tunel de hop"
 
 msgid "Number of Tunnels in Group"
 msgstr "Numărul de tuneluri în grup"
+
+msgid "Disabled for 0 hop tunnels"
+msgstr ""
 
 msgid "Variance"
 msgstr "Varianță"
@@ -532,17 +571,17 @@ msgstr "Puteți solicita un nume de utilizator și o parolă pentru a accesa ace
 msgid "Require local authorization for this service"
 msgstr "Necesită autorizare locală pentru acest serviciu"
 
-msgid "Username"
-msgstr "Numele utilizatorului"
-
 msgid "Set username required to access this service"
 msgstr "Setați numele de utilizator necesar pentru a accesa acest serviciu"
 
-msgid "Password"
-msgstr "Parolă"
+msgid "Username"
+msgstr "Numele utilizatorului"
 
 msgid "Set password required to access this service"
 msgstr "Setați parola necesară pentru a accesa acest serviciu"
+
+msgid "Password"
+msgstr "Parolă"
 
 msgid "Outproxy Authorization"
 msgstr "Outproxy Autorizare"
@@ -657,6 +696,9 @@ msgstr "Configurarea tipului de semnătură este posibilă numai când tunelul e
 
 msgid "Legacy option, with alternate key configured"
 msgstr "Opțiune moștenită, cu cheie alternativă configurată"
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "Opțiunea moștenire (învechită), furnizată pentru o compatibilitate înapoi"
 
 msgid "Recommended for blinded and encrypted destinations"
 msgstr "Recomandat pentru destinații orbite și criptate"
@@ -992,8 +1034,23 @@ msgstr "Oprește toate"
 msgid "Start All"
 msgstr "Pornește toate"
 
+msgid "Restart all running tunnels"
+msgstr ""
+
 msgid "Restart All"
 msgstr "Repornește toate"
+
+msgid "Restart all running server tunnels"
+msgstr ""
+
+msgid "Restart All Servers"
+msgstr ""
+
+msgid "Restart all running client tunnels"
+msgstr ""
+
+msgid "Restart All Clients"
+msgstr ""
 
 msgid "I2P Server Tunnels"
 msgstr "Tunele de server I2P"
@@ -1019,6 +1076,9 @@ msgstr "Control"
 msgid "Edit Server Tunnel Settings for"
 msgstr "Editați Setările tunelului serverului pentru"
 
+msgid "Test IRC server, bypassing I2P"
+msgstr ""
+
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "Testați serverul HTTPS, ocolind I2P"
 
@@ -1030,6 +1090,9 @@ msgstr "Testați serverul HTTP prin I2P"
 
 msgid "Base32 Address"
 msgstr "Adresa Base32"
+
+msgid "Offline"
+msgstr ""
 
 msgid "No Preview"
 msgstr "Nici o previzualizare"
@@ -1052,6 +1115,12 @@ msgstr "în"
 msgid "out"
 msgstr "afară"
 
+msgid "Restart this Tunnel"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
 msgid "Stopped"
 msgstr "Oprit"
 
@@ -1069,6 +1138,9 @@ msgstr "Destinație alternativă"
 
 msgid "Encryption"
 msgstr "Criptare"
+
+msgid "Supported encryption"
+msgstr ""
 
 msgid "New server tunnel"
 msgstr "Noul tunel de server"

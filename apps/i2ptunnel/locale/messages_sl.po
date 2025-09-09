@@ -12,6 +12,14 @@ msgid "internal"
 msgstr "notranji"
 
 #, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "{0} notranji, {0} izhodni tunelj"
+msgstr[1] "{0} notranji, {0} izhodni tunelja"
+msgstr[2] "{0} notranji, {0} izhodni tunelje"
+msgstr[3] "{0} notranjih, {0} izhodnih tuneljev"
+
+#, java-format
 msgid "{0} inbound tunnel"
 msgid_plural "{0} inbound tunnels"
 msgstr[0] "{0} vhodnih tunelov"
@@ -27,14 +35,6 @@ msgstr[1] "{0} odhodni tunel"
 msgstr[2] "{0} odhodnih tunelov"
 msgstr[3] "{0} odhodnih tunelov"
 
-#, java-format
-msgid "{0} inbound, {0} outbound tunnel"
-msgid_plural "{0} inbound, {0} outbound tunnels"
-msgstr[0] "{0} notranji, {0} izhodni tunelj"
-msgstr[1] "{0} notranji, {0} izhodni tunelja"
-msgstr[2] "{0} notranji, {0} izhodni tunelje"
-msgstr[3] "{0} notranjih, {0} izhodnih tuneljev"
-
 msgid "lower bandwidth and reliability"
 msgstr "manjša širina pasma in pouzdanost"
 
@@ -44,14 +44,47 @@ msgstr "standardna širina pasma in pouzdanost"
 msgid "higher bandwidth and reliability"
 msgstr "višja širina pasma in pouzdanost"
 
-msgid "Configuration reloaded for all tunnels"
-msgstr "Nastavitve ponovno naložene za vse tunelje"
+msgid "Error - tunnels are not initialized yet"
+msgstr ""
+
+msgid "No services configured, cannot restart!"
+msgstr ""
+
+msgid "Stopping tunnel"
+msgstr "Ustavitev tunelja"
 
 msgid "Starting tunnel"
 msgstr "Zagon tunelja"
 
-msgid "Stopping tunnel"
-msgstr "Ustavitev tunelja"
+msgid "Error restarting tunnel"
+msgstr ""
+
+msgid "Restarted all running tunnels"
+msgstr ""
+
+msgid "No clients configured, cannot restart!"
+msgstr ""
+
+msgid "Restarted all running client tunnels"
+msgstr ""
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "Nastavitve ponovno naložene za vse tunelje"
+
+msgid "Error: Invalid tunnel"
+msgstr ""
+
+msgid "Started tunnel"
+msgstr ""
+
+msgid "Stopped tunnel"
+msgstr ""
+
+msgid "Restarting tunnel"
+msgstr ""
+
+msgid "Please confirm removal"
+msgstr ""
 
 msgid "New Tunnel"
 msgstr "Nov tunelj"
@@ -122,6 +155,9 @@ msgstr "Uredi strežniški tunelj"
 msgid "Are you sure you want to delete?"
 msgstr "Ste prepričani, da želite izbrisati?"
 
+msgid "required"
+msgstr "potrebno"
+
 msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
 msgstr "Tunelj in vse druge deljene odjemalniške tunelje morajo biti ustavljeni za spremembo tega nastavitve"
 
@@ -178,9 +214,6 @@ msgstr "Omogoči DCC"
 
 msgid "Port"
 msgstr "Vrata"
-
-msgid "required"
-msgstr "potrebno"
 
 msgid "Specify the local port this service should be accessible from"
 msgstr "Določite lokalna vrata, od kjer bi ta storitev morala biti dostopna"
@@ -326,11 +359,14 @@ msgstr "Ne odpirajte tunelja, dokler na vratah ni zaznane dejavnosti"
 msgid "This is the default, recommended option"
 msgstr "To je privzeto, priporočeno možnost"
 
-msgid "Legacy option (deprecated), provided for backward compatibility"
-msgstr "Starodavna možnost (prestopana), zagotovljena za obratno združljivost"
-
 msgid "Encryption types"
 msgstr "Vrste šifriranja"
+
+msgid "Legacy options"
+msgstr ""
+
+msgid "Post Quantum"
+msgstr ""
 
 msgid "Both encryption types"
 msgstr "Oba tipa šifriranja"
@@ -369,6 +405,9 @@ msgstr[3] "{0} hopa tunela"
 
 msgid "Number of Tunnels in Group"
 msgstr "Število tuneljev v skupini"
+
+msgid "Disabled for 0 hop tunnels"
+msgstr ""
 
 msgid "Variance"
 msgstr "Razlika"
@@ -537,17 +576,17 @@ msgstr "Omogoči zahtevanje uporabniškega imena in gesla za dostop do tega loka
 msgid "Require local authorization for this service"
 msgstr "Zahtevaj lokalno avtentikacijo za ta servis"
 
-msgid "Username"
-msgstr "Uporabniško ime"
-
 msgid "Set username required to access this service"
 msgstr "Nastavi uporabniško ime, potrebno za dostop do tega servisa"
 
-msgid "Password"
-msgstr "Geslo"
+msgid "Username"
+msgstr "Uporabniško ime"
 
 msgid "Set password required to access this service"
 msgstr "Nastavi geslo, potrebno za dostop do tega servisa"
+
+msgid "Password"
+msgstr "Geslo"
 
 msgid "Outproxy Authorization"
 msgstr "Avtentikacija outproxy"
@@ -662,6 +701,9 @@ msgstr "Nastavitev vrste podpisa je mogoča le ob prvotnem ustvarjanju tunelja. 
 
 msgid "Legacy option, with alternate key configured"
 msgstr "Starodavna možnost, z namerjeno ključem nastavljen"
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "Starodavna možnost (prestopana), zagotovljena za obratno združljivost"
 
 msgid "Recommended for blinded and encrypted destinations"
 msgstr "Priporočeno za zavarovane in šifrirane destinacije"
@@ -997,8 +1039,23 @@ msgstr "Ustavi vse"
 msgid "Start All"
 msgstr "Zaženi vse"
 
+msgid "Restart all running tunnels"
+msgstr ""
+
 msgid "Restart All"
 msgstr "Znova zaženi vse"
+
+msgid "Restart all running server tunnels"
+msgstr ""
+
+msgid "Restart All Servers"
+msgstr ""
+
+msgid "Restart all running client tunnels"
+msgstr ""
+
+msgid "Restart All Clients"
+msgstr ""
 
 msgid "I2P Server Tunnels"
 msgstr "Tunelji strežnika I2P"
@@ -1024,6 +1081,9 @@ msgstr "Nadzor"
 msgid "Edit Server Tunnel Settings for"
 msgstr "Uredi nastavitve strežniškega tunelja za"
 
+msgid "Test IRC server, bypassing I2P"
+msgstr ""
+
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "Test HTTPS strežnika, izhajajoč iz I2P"
 
@@ -1035,6 +1095,9 @@ msgstr "Test HTTP strežnika skozi I2P"
 
 msgid "Base32 Address"
 msgstr "Naslov Base32"
+
+msgid "Offline"
+msgstr ""
 
 msgid "No Preview"
 msgstr "Brez predogleda"
@@ -1057,6 +1120,12 @@ msgstr "v"
 msgid "out"
 msgstr "iz"
 
+msgid "Restart this Tunnel"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
 msgid "Stopped"
 msgstr "Ustavljen"
 
@@ -1074,6 +1143,9 @@ msgstr "Namenjena destinacija"
 
 msgid "Encryption"
 msgstr "Šifriranje"
+
+msgid "Supported encryption"
+msgstr ""
 
 msgid "New server tunnel"
 msgstr "Nov strežniški tunelj"

@@ -53,6 +53,14 @@ msgstr "Yükləmə BW limiti {0}KBps olaraq dəyişdirildi"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Yükləmə band genişliyinin minimum limiti {0}KBpsdir"
 
+#, java-format
+msgid "Maximum download speed changed to {0}KB/s"
+msgstr ""
+
+#, java-format
+msgid "Download speed limit is {0}KB/s"
+msgstr ""
+
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
 msgstr ""
 
@@ -137,12 +145,6 @@ msgstr "Avto-başlama aktivləşdirildi"
 msgid "Disabled autostart"
 msgstr "Avto-başlama söndürüldü"
 
-msgid "Enabled smart sort"
-msgstr "Ağıllı sıralama aktivləşdirildi"
-
-msgid "Disabled smart sort"
-msgstr "Ağıllı sıralama söndürüldü"
-
 msgid "Enabled open trackers - torrent restart required to take effect."
 msgstr "Açıq trackerlər aktivləşdirildi - effekt göstərmək üçün torrent yenidən başlamaq lazımdır."
 
@@ -198,8 +200,8 @@ msgstr "Bütün torrent siyahı səhifələrində Əlavə Et və Yarat bölməl�
 msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
 msgstr "Çoxsayfəli torrent siyahı səhifələrinin ilk səhifəsində yalnız Əlavə Et və Yarat bölmələri göstərilsin."
 
-msgid "Configuration unchanged."
-msgstr "Tənzimləmə dəyişməmişdir."
+msgid "API key updated."
+msgstr ""
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Açıq Tracker siyahısı dəyişdi - effekt göstərmək üçün torrent yenidən başlamaq lazımdır."
@@ -240,22 +242,6 @@ msgid "Torrent with the same data location is already running: {0}"
 msgstr "Birbaşa verilənlər yerindəki torrent artıq işləyir: {0}"
 
 #, java-format
-msgid "ERROR - No I2P trackers in private torrent \"{0}\""
-msgstr "XƏTA - Özgül torrent \"{0}\"də I2P trackerləri yoxdur"
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "Uyarı - \"{0}\"də I2P trackerləri yoxdur, yalnız I2P açıq trackerləri və DHT-a bildiriləcək."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "Uyarı - \"{0}\"də I2P trackerləri yoxdur və açıq trackerlər söndürülmüşdür, yalnız DHT-a bildiriləcək."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "Uyarı - \"{0}\"də I2P trackerləri yoxdur və DHT və açıq trackerlər söndürülmüşdür, torrenti başlamaqdan əvvəl açıq trackerləri və ya DHT aktivləşdirməlisiniz."
-
-#, java-format
 msgid "Torrent in \"{0}\" is invalid"
 msgstr "\"{0}\"dəki torrent səhvdir"
 
@@ -273,6 +259,22 @@ msgstr "Torrent əlavə edilib və başlandı: {0}"
 #, java-format
 msgid "Torrent added: {0}"
 msgstr "Torrent əlavə edildi: {0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "XƏTA - Özgül torrent \"{0}\"də I2P trackerləri yoxdur"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "Uyarı - \"{0}\"də I2P trackerləri yoxdur, yalnız I2P açıq trackerləri və DHT-a bildiriləcək."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "Uyarı - \"{0}\"də I2P trackerləri yoxdur və açıq trackerlər söndürülmüşdür, yalnız DHT-a bildiriləcək."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "Uyarı - \"{0}\"də I2P trackerləri yoxdur və DHT və açıq trackerlər söndürülmüşdür, torrenti başlamaqdan əvvəl açıq trackerləri və ya DHT aktivləşdirməlisiniz."
 
 #, java-format
 msgid "Fetching {0}"
@@ -345,6 +347,18 @@ msgstr "Torrent silindi: \"{0}\""
 msgid "Adding torrents in {0}&hellip;"
 msgstr "{0}də torrentlər əlavə olunur&hellip;"
 
+#, java-format
+msgid "Down bandwidth limit is {0} KB/s"
+msgstr "Endirmə band genişliyinin limiti {0} KBps"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KB/s"
+msgstr "Yükləmə band genişliyinin limiti {0} KBps"
+
+#, java-format
+msgid "Connecting to I2CP port on I2P instance at {0}"
+msgstr ""
+
 msgid "Connecting to I2P"
 msgstr "I2P ilə əlaqə qurmaq"
 
@@ -356,20 +370,12 @@ msgid "Starting up torrent {0}"
 msgstr "Torrent {0}-i başlamaq"
 
 #, java-format
-msgid "Down bandwidth limit is {0} KB/s"
-msgstr "Endirmə band genişliyinin limiti {0} KBps"
-
-#, java-format
-msgid "Up bandwidth limit is {0} KB/s"
-msgstr "Yükləmə band genişliyinin limiti {0} KBps"
-
-#, java-format
-msgid "I2P+ I2PSnark standalone version {0} started"
-msgstr "I2P+ I2PSnark avtonom versiya {0} başlandı"
-
-#, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
 msgstr "Yükləmə band genişliyinin limiti {0} KBpsdir, maksimum {1} simultan partnerə qədər."
+
+#, java-format
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
+msgstr ""
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -412,6 +418,19 @@ msgid "Closing I2P tunnel after notifying trackers."
 msgstr "Trackerləri xəbərdar etməkdən sonra I2P tünelini bağlamaq."
 
 #, java-format
+msgid "Cannot check {0}"
+msgstr ""
+
+msgid "Torrent already started"
+msgstr ""
+
+msgid "No storage"
+msgstr ""
+
+msgid "Starting recheck of {}"
+msgstr ""
+
+#, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
 msgstr "Torrent {0} yenidən yoxlanıldı, indi {1} tamamlandı"
 
@@ -422,6 +441,9 @@ msgstr "Torrent {0} yenidən yoxlandı, dəyişməmiş"
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "Torrent {0} yoxlama xətası"
+
+msgid "Cannot create diskspace bar"
+msgstr ""
 
 msgid "Data partition"
 msgstr ""
@@ -463,9 +485,6 @@ msgstr "{0}-dakı torrent səhv idi"
 
 msgid "Configuration"
 msgstr "Tənzimləmə"
-
-msgid "Debug Mode"
-msgstr "Debug rejimi"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "Anonim BitTorrent Mütəxəssisi"
@@ -509,12 +528,6 @@ msgstr "Forum"
 
 msgid "Torrent &amp; filesharing forum"
 msgstr "Torrent və fayl paylaşma forumu"
-
-msgid "BTDigg"
-msgstr "BTDigg"
-
-msgid "I2P-based search engine for clearnet-hosted torrents"
-msgstr "Açığa çıxarılmış torrentləri axtarmaq üçün I2P-ə əsaslanmış axtarış motoru"
 
 msgid "Search torrents"
 msgstr "Torrentləri axtar"
@@ -590,8 +603,8 @@ msgstr "Yuxarı sürəti"
 msgid "TX"
 msgstr "TX"
 
-msgid "Share ratio"
-msgstr "Yükləmə nisbəti"
+msgid "Upload ratio"
+msgstr ""
 
 msgid "Uploaded"
 msgstr "Yükləndi"
@@ -633,6 +646,12 @@ msgid "Total size of loaded torrents"
 msgstr ""
 
 #, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] ""
+msgstr[1] ""
+
+#, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
 msgstr[0] "1 DHT qarşılıqlı"
@@ -665,8 +684,8 @@ msgstr "Ümumi yüklənmiş məlumatlar (siyahıda olan torrentlər üçün)"
 msgid "Total upload speed"
 msgstr "Ümumi yükləmə sürəti"
 
-msgid "Toggle Debug Mode"
-msgstr ""
+msgid "Debug Mode"
+msgstr "Debug rejimi"
 
 msgid "Normal Mode"
 msgstr "Normal rejim"
@@ -909,6 +928,9 @@ msgstr "Qalıq"
 msgid "Completed"
 msgstr "Tamamlanan"
 
+msgid "Share ratio"
+msgstr "Yükləmə nisbəti"
+
 msgid "Last activity"
 msgstr "Son Fəaliyyət"
 
@@ -1017,11 +1039,11 @@ msgstr "Məzmun Filtrləri"
 msgid "Trackers"
 msgstr "Trackerlər"
 
-msgid "Primary"
-msgstr "Əsas"
-
 msgid "Alternates"
 msgstr "Alternativlər"
+
+msgid "Primary"
+msgstr "Əsas"
 
 msgid "Tracker Type"
 msgstr "Tracker Növü"
@@ -1333,6 +1355,12 @@ msgstr "Əlavə edilmiş"
 msgid "Pieces"
 msgstr "Hissələr"
 
+msgid "Average download speed for torrent"
+msgstr ""
+
+msgid "Download speed"
+msgstr ""
+
 msgid "Completion"
 msgstr "Tamamlanma"
 
@@ -1480,6 +1508,9 @@ msgstr "Silinmək üçün işarələyin"
 msgid "Delete Selected"
 msgstr "Seçilmişləri Sil"
 
+msgid "File downloading priorities updated for torrent "
+msgstr ""
+
 msgid "Edit Torrent"
 msgstr "Torrenti Redaktə Et"
 
@@ -1501,13 +1532,9 @@ msgstr "Dəyişiklikləri Saxla"
 msgid "Torrent must be stopped"
 msgstr "Torrent dayandırılmalıdır"
 
+
+
+
 #, java-format
-
-
-
-
-
-
-
 
 

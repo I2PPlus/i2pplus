@@ -1560,10 +1560,7 @@ msgstr "Repornire în {0}"
 msgid "Save order"
 msgstr "Ordinea salvarii"
 
-msgid "Sidebar refresh disabled"
-msgstr ""
-
-msgid "Sidebar refresh interval changed"
+msgid "Sidebar preferences updated"
 msgstr ""
 
 msgid "Refresh interval must be a number"
@@ -1598,9 +1595,6 @@ msgstr "Mutat"
 
 msgid "Saved order of sections."
 msgstr "Ordinea sectiunilor este salvata"
-
-msgid "Stat filter and location updated successfully to"
-msgstr "Statistica filtru și locația actualizată cu succes a"
 
 msgid "Full statistics enabled"
 msgstr "Statistici complete activate"
@@ -2190,23 +2184,14 @@ msgstr "Forumuri comunitare legate de I2P"
 msgid "File-sharing forum"
 msgstr "Forum de partajare a fișierelor"
 
-msgid "Alternative front-end for Twitter"
-msgstr "Front-end alternativ pentru Twitter"
-
-msgid "Rocksolid forums for the darknets"
-msgstr "Forumuri Rocksolid pentru rețelele întunecate"
-
 msgid "Cross-network micro-blogging &amp; forums &amp; wiki"
 msgstr "Micro-blogging și forumuri încrucișate"
 
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Front-end alternativ centrat pe confidențialitate pentru Reddit"
 
-msgid "Base64 Image Encoder"
-msgstr "Codificator de imagine Base64"
-
-msgid "An image cache and resize service"
-msgstr "Un serviciu de cache de imagini și redimensionare"
+msgid "AI Image generation & Chat hub"
+msgstr ""
 
 msgid "IRC Logs for multiple networks"
 msgstr "Jurnalele IRC pentru mai multe rețele"
@@ -2223,17 +2208,8 @@ msgstr "Pagina de destinație pentru diverse servicii"
 msgid "Streaming radio service"
 msgstr "Serviciu radio de streaming"
 
-msgid "Alternative frontend for Imgur"
-msgstr "Front-end alternativ pentru Imgur"
-
 msgid "Privacy-focused not-for-profit organization"
 msgstr "Organizație non-profit axată pe confidențialitate"
-
-msgid "Outproxy bandwidth test"
-msgstr "Test de lățime de bandă Outproxy"
-
-msgid "speedtest"
-msgstr "test de viteză"
 
 msgid "Text translation engine"
 msgstr "Motor de traducere a textului"
@@ -2241,20 +2217,8 @@ msgstr "Motor de traducere a textului"
 msgid "translate"
 msgstr "traduceți"
 
-msgid "Alternative front-end to Youtube"
-msgstr "Front-end alternativ pentru Youtube"
-
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "Furnizor de confidențialitate în ceea ce privește găzduirea web și serviciile VPN"
-
-msgid "Tor-focused Search Engine"
-msgstr "Motor de căutare axat pe Tor"
-
-msgid "Pinterest Image Search Engine"
-msgstr "Motor de căutare de imagini Pinterest"
-
-msgid "Clearnet BitTorrent DHT search engine"
-msgstr "Motorul de căutare Clearnet BitTorrent DHT"
 
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "Motor de căutare DuckDuckGo (fără javascript)"
@@ -2264,21 +2228,6 @@ msgstr "Motorul de căutare Clearnet axat pe confidențialitate"
 
 msgid "I2P Web Search Engine"
 msgstr "Motor de căutare web I2P"
-
-msgid "Enabling the free transmission of data in the public interest"
-msgstr "Permiterea transmiterii gratuite a datelor în interes public"
-
-msgid "Selected Papers in Anonymity"
-msgstr "Lucrări selectate în anonimat"
-
-msgid "Tor .onion site links"
-msgstr "Tor .onion site-uri link-uri"
-
-msgid "HTML Color Reference"
-msgstr "Referință color HTML"
-
-msgid "HTMLColors"
-msgstr "HTMLCulori"
 
 msgid "I2P-related Wiki"
 msgstr "Wiki legat de I2P"
@@ -2295,29 +2244,17 @@ msgstr "Internet Encyclopedia of Philosophy"
 msgid "Standford Encyclopedia of Philosophy"
 msgstr "Enciclopedia de filozofie Standford"
 
-msgid "Psychonaut"
-msgstr "Psihonautul"
-
-msgid "Wiki relating to altered states of consciousness"
-msgstr "Wiki referitor la stările modificate ale conștiinței"
-
 msgid "Computing-related tutorials"
 msgstr "Tutoriale legate de calculatoare"
 
 msgid "SimplifiedGuide"
 msgstr "Ghid simplificat"
 
-msgid "Vulnerability Database"
-msgstr "Baza de date despre vulnerabilități"
-
 msgid "Web technology reference and learning site"
 msgstr "Referință de tehnologie web și site de învățare"
 
 msgid "Alternative Wikipedia front-end focused on privacy"
 msgstr "Front-end alternativ Wikipedia axat pe confidențialitate"
-
-msgid "The biggest online English dictionary"
-msgstr "Cel mai mare dicționar de engleză online"
 
 msgid "World atlas including geography facts &amp; flags"
 msgstr "Atlas mondial, inclusiv fapte și steaguri de geografie"
@@ -2328,14 +2265,8 @@ msgstr "Atlas Mondial"
 msgid "Technology News &amp; more..."
 msgstr "Știri tehnologice"
 
-msgid "Independent investigative journalism"
-msgstr "Jurnalism de investigație independent"
-
 msgid "Information Security Research &amp; Education"
 msgstr "Cercetare privind securitatea informațiilor"
-
-msgid "Darknet related news site"
-msgstr "Site de știri legate de Darknet"
 
 msgid "DigitalTrends"
 msgstr "DigitalTrends"
@@ -2348,24 +2279,6 @@ msgstr "Apărarea drepturilor dumneavoastră în lumea digitală"
 
 msgid "The Elliptic Curve Cryptography Blog"
 msgstr "Blogul Criptografiei cu curbe eliptice"
-
-msgid "ForeignPolicy"
-msgstr "Politică externă"
-
-msgid "The Global Magazine of News &amp; Ideas"
-msgstr "Revista globală de știri"
-
-msgid "FrontLineDefenders"
-msgstr "FrontLineDefenders"
-
-msgid "Human rights activism"
-msgstr "Activismul pentru drepturile omului"
-
-msgid "Defending Human Rights Worldwide"
-msgstr "Apărarea drepturilor omului la nivel mondial"
-
-msgid "HumanRightsWatch"
-msgstr "HumanRightsWatch"
 
 msgid "Fresh hacks every day"
 msgstr "Hack-uri proaspete în fiecare zi"
@@ -2381,12 +2294,6 @@ msgstr "HongKongFreePress"
 
 msgid "Independent &amp; impartial news for Hong Kong"
 msgstr "Știri independente și imparțiale pentru Hong Kong"
-
-msgid "HongKongWatch"
-msgstr "HongKongWatch"
-
-msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr "Monitorizează amenințările la adresa libertăților și drepturilor din Hong Kong"
 
 msgid "JStorDaily"
 msgstr "JStorDaily"
@@ -2424,11 +2331,11 @@ msgstr "Platformă media internațională independentă"
 msgid "OpenDemocracy"
 msgstr "Democrație deschisă"
 
-msgid "News and blog feeds on I2P"
-msgstr "Știri și bloguri pe I2P"
+msgid "Online privacy &amp; tech blog"
+msgstr ""
 
-msgid "Planeta"
-msgstr "Planeta"
+msgid "RightToPrivacy"
+msgstr ""
 
 msgid "Lifestyle magazine"
 msgstr "Revista Lifestyle"
@@ -2457,20 +2364,11 @@ msgstr "Știri pentru tocilari"
 msgid "Technology news &amp; reviews"
 msgstr "Știri despre tehnologie"
 
-msgid "Reporting on China without fear or favor"
-msgstr "Raportarea despre China fără teamă sau favor"
-
 msgid "News from the Taiwan Capital"
 msgstr "Știri din capitala Taiwanului"
 
 msgid "TaipeiTimes"
 msgstr "TaipeiTimes"
-
-msgid "TechXplore"
-msgstr "TechXplore"
-
-msgid "Technology and engineering news"
-msgstr "Știri despre tehnologie și inginerie"
 
 msgid "TechMeme"
 msgstr "TechMeme"
@@ -2513,12 +2411,6 @@ msgstr "TheNewRepublic"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "Partajarea fișierelor și știri privind drepturile de autor"
-
-msgid "A magazine about human rights and social justice"
-msgstr "O revistă despre drepturile omului și justiția socială"
-
-msgid "UpstreamJournal"
-msgstr "UpstreamJournal"
 
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
 msgstr "Avansarea unei înțelegeri echilibrate și realiste a intereselor americane în Orientul Mijlociu"
@@ -2849,16 +2741,22 @@ msgstr ""
 msgid "Not initialized"
 msgstr "Nu este inițializat"
 
-msgid "Sorted by hash distance, closest first."
+msgid "Total Remote Leasesets"
 msgstr ""
 
 msgid "Compact mode"
 msgstr ""
 
-msgid "Total Remote Leasesets"
+msgid "Local Leasesets"
+msgstr ""
+
+msgid "Debug Mode"
 msgstr ""
 
 msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Sorted by hash distance, closest first."
 msgstr ""
 
 msgid "Mod Data"
@@ -2873,17 +2771,11 @@ msgstr ""
 msgid "Change in"
 msgstr ""
 
-msgid "Known Floodfills"
-msgstr "inundații cunoscute"
-
 msgid "Floodfill mode enabled"
 msgstr ""
 
 msgid "Routing Key"
 msgstr "Cheie de rutare"
-
-msgid "Network data"
-msgstr "Date de rețea"
 
 msgid "Median distance (bits)"
 msgstr "Distanța medie (biți)"
@@ -2893,6 +2785,12 @@ msgstr "inundații totale estimate"
 
 msgid "Estimated total leasesets"
 msgstr "Seturi totale estimate de leasing"
+
+msgid "Total Local Leasesets"
+msgstr ""
+
+msgid "Remote Leasesets"
+msgstr ""
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2925,12 +2823,6 @@ msgstr "Expiră{0}"
 msgid "Expired{0} ago"
 msgstr "A expirat{0} în urmă"
 
-msgid "Received as published"
-msgstr "Primit ca publicat?"
-
-msgid "Received as reply"
-msgstr "Primit ca răspuns?"
-
 msgid "Distance"
 msgstr "Distanța"
 
@@ -2939,6 +2831,9 @@ msgstr "Semnat offline"
 
 msgid "Signature type"
 msgstr "Tipul semnăturii"
+
+msgid "Public Key"
+msgstr ""
 
 msgid "Unsupported type"
 msgstr "Tip neacceptat"
@@ -2950,6 +2845,9 @@ msgstr "Expiră in {0}"
 #, java-format
 msgid "Expired {0} ago"
 msgstr "Expirat în urmă cu {0}"
+
+msgid "Unknown"
+msgstr "Necunoscut"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
 msgstr ""
@@ -2986,9 +2884,6 @@ msgstr "Inundații"
 
 msgid "Total"
 msgstr "Total"
-
-msgid "Unknown"
-msgstr "Necunoscut"
 
 msgid "Initializing"
 msgstr "Inițializarea"
@@ -3063,9 +2958,6 @@ msgstr "Afișați toate routerele cu această adresă în NetDb"
 msgid "Show all routers with this port in the NetDb"
 msgstr "Afișați toate routerele cu acest port în NetDb"
 
-msgid "Network ID"
-msgstr "ID rețea"
-
 msgid "Routers"
 msgstr "Routere"
 
@@ -3077,6 +2969,12 @@ msgstr "Ultima dată despre"
 
 msgid "Last heard from"
 msgstr "Ultimul auzit"
+
+msgid "Network Id"
+msgstr ""
+
+msgid "Count is always spoofed to avoid indicating router restarts"
+msgstr ""
 
 msgid "Hidden or starting up"
 msgstr "Ascuns sau pentru pornire"
@@ -3137,19 +3035,16 @@ msgstr "în fișierul router.config."
 msgid "Peer Connections"
 msgstr "Conexiuni de la egal la egal"
 
-msgid "Active in the last minute"
-msgstr "Activ în ultimul minut"
-
 msgid "IPv4"
 msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
 
-msgid "Limit"
+msgid "Active connections / Max permitted"
 msgstr ""
 
-msgid "Maximum permitted connections"
+msgid "Connections / Limit"
 msgstr ""
 
 msgid "Current / maximum permitted"
@@ -3158,23 +3053,23 @@ msgstr "Curent / maxim permis"
 msgid "NTCP connections"
 msgstr "Conexiune NTCP"
 
-msgid "Caps"
-msgstr "Majuscule"
-
 msgid "Peer capabilities"
 msgstr "Capacitățile de la egal la egal"
 
-msgid "Dir"
-msgstr "Dir"
+msgid "Caps"
+msgstr "Majuscule"
 
 msgid "Direction/Introduction"
 msgstr "Direcție/Introducere"
 
-msgid "Idle"
-msgstr "Inactiv"
+msgid "Dir"
+msgstr "Dir"
 
 msgid "Peer inactivity"
 msgstr "Inactivitate de la egal la egal"
+
+msgid "Idle"
+msgstr "Inactiv"
 
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Rata medie de intrare/ieșire (KBps)"
@@ -3206,11 +3101,11 @@ msgstr "Mesaje primite"
 msgid "RX"
 msgstr "RX"
 
-msgid "Out Queue"
-msgstr "În lista de așteptare"
-
 msgid "Queued messages to send to peer"
 msgstr "Mesaje puse în coadă de trimis către peer"
+
+msgid "Out Queue"
+msgstr "În lista de așteptare"
 
 msgid "Connection is backlogged"
 msgstr "Conexiunea este întârziată"
@@ -3744,11 +3639,11 @@ msgstr "Descărcați actualizarea I2P"
 msgid "Unsigned update available"
 msgstr "Actualizare nesemnată disponibilă"
 
-msgid "Help with firewall configuration"
-msgstr "Ajutor cu configurarea firewall-ului"
-
 msgid "Check network connection and NAT/firewall!"
 msgstr "Verificați conexiunea la rețea și NAT/firewall!"
+
+msgid "Help with firewall configuration"
+msgstr "Ajutor cu configurarea firewall-ului"
 
 msgid "Attempt to download router reference files (if automatic reseed has failed)"
 msgstr "Încercare de a descărca fișierele de referință ale ruterului (dacă reținerea automată a eșuat)"
@@ -3783,23 +3678,35 @@ msgstr "Mută dedesubt"
 msgid "Select a section to add"
 msgstr "Selectați o secțiune pentru adăugare"
 
+msgid "Router Information (advanced)"
+msgstr "Informații despre router (avansat)"
+
+msgid "Advanced Links"
+msgstr "Linkuri avansate"
+
+msgid "Bandwidth Graph"
+msgstr "Informaţii trafic"
+
+msgid "UTC Clock"
+msgstr "UTC Ceas"
+
+msgid "Congestion"
+msgstr "Congestie"
+
+msgid "CPU Load"
+msgstr "Încărcare CPU"
+
+msgid "Firewall &amp; Reseed Status"
+msgstr "Firewall &amp; Status Reseed"
+
 msgid "Help &amp; FAQ"
 msgstr "Ajutor &amp; FAQ"
-
-msgid "I2P Services"
-msgstr "Servicii I2P"
 
 msgid "I2P Internals"
 msgstr "Structurile interne I2P "
 
-msgid "Router Information"
-msgstr "Informații despre router"
-
-msgid "Router Information (brief)"
-msgstr "Informații despre router (sumar)"
-
-msgid "Router Information (advanced)"
-msgstr "Informații despre router (avansat)"
+msgid "I2P Services"
+msgstr "Servicii I2P"
 
 msgid "Memory Usage Bar"
 msgstr "Bara de utilizare a memoriei"
@@ -3807,35 +3714,23 @@ msgstr "Bara de utilizare a memoriei"
 msgid "Network Reachability"
 msgstr "Accesibilitatea rețelei"
 
-msgid "Update Status"
-msgstr "Starea de actualizare"
+msgid "News &amp; Updates"
+msgstr "Noutăți &amp; Actualizări "
 
 msgid "Restart Status"
 msgstr "Starea repornirii "
 
-msgid "Firewall &amp; Reseed Status"
-msgstr "Firewall &amp; Status Reseed"
+msgid "Router Information"
+msgstr "Informații despre router"
 
-msgid "Bandwidth Graph"
-msgstr "Informaţii trafic"
-
-msgid "Congestion"
-msgstr "Congestie"
+msgid "Router Information (brief)"
+msgstr "Informații despre router (sumar)"
 
 msgid "Tunnel Status"
 msgstr "Starea tunelului"
 
-msgid "News &amp; Updates"
-msgstr "Noutăți &amp; Actualizări "
-
-msgid "Advanced Links"
-msgstr "Linkuri avansate"
-
-msgid "UTC Clock"
-msgstr "UTC Ceas"
-
-msgid "CPU Load"
-msgstr "Încărcare CPU"
+msgid "Update Status"
+msgstr "Starea de actualizare"
 
 msgid "I2P Router Help &amp; FAQ"
 msgstr "I2P router-ajutor &amp;FAQ  "
@@ -4020,6 +3915,9 @@ msgstr "Numărul total de colegi în NetDb"
 
 msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Utilizatorii ce au convorbit în ultimele câteva minute/ultima ora"
+
+msgid "Peers we've been talking to in the last minute"
+msgstr ""
 
 msgid "The number of peers available for building client tunnels"
 msgstr "Numărul de parteneri disponibili pentru construirea de tuneluri client"
@@ -4355,6 +4253,9 @@ msgstr "Aplicați blocarea pentru"
 msgid "days"
 msgstr "zile"
 
+msgid "Known Floodfills"
+msgstr "inundații cunoscute"
+
 msgid "Average closest floodfill distance"
 msgstr "Cea mai apropiată distanță medie de inundare"
 
@@ -4525,6 +4426,9 @@ msgstr "Datele transferate"
 
 msgid "Data"
 msgstr "Date"
+
+msgid "Limit"
+msgstr ""
 
 msgid "Receive on"
 msgstr "Primite în "
@@ -5498,6 +5402,9 @@ msgstr "Instalați serviciul de sistem I2P. Acesta este modalitatea recomandată
 msgid "config sidebar"
 msgstr "configurați bara laterală"
 
+msgid "Sidebar Options"
+msgstr ""
+
 msgid "Refresh interval"
 msgstr "Interval de Actualizare"
 
@@ -5506,6 +5413,12 @@ msgstr "secunde"
 
 msgid "0 to disable"
 msgstr "0 pentru a dezactiva"
+
+msgid "Unified sidebar"
+msgstr ""
+
+msgid "Use the same sidebar on all pages"
+msgstr ""
 
 msgid "config stats"
 msgstr "config statistici"
@@ -5706,6 +5619,9 @@ msgstr "evenimente"
 msgid "Event Log"
 msgstr "Jurnal de evenimente"
 
+msgid "Combined"
+msgstr ""
+
 msgid "graph"
 msgstr "grafic"
 
@@ -5783,6 +5699,9 @@ msgstr "Această setare, când este setată la adevărat, va afișa un rezumat a
 
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Această setare, când este setată la adevărat, va afișa linkurile <i>Sites of Interest</i> în <a href=/sitemap>harta site-ului</a>. [Implicit este fals]"
+
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
+msgstr ""
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Această setare determină dacă routerul ar trebui să utilizeze fișierul <i>blocklist.txt</i> furnizat și orice listă de blocare configurată de utilizator pentru a permite interzicerea routerelor după hash sau adresă IP. Gama de adrese și măștile de rețea sunt acceptate pentru IPv4, dar nu pentru IPv6. Consultați fișierul <i>blocklist.txt</i> din directorul aplicației I2P+ pentru mai multe informații. [Activat în mod implicit, necesită repornire]"
@@ -6597,8 +6516,8 @@ msgstr "Dacă se solicită un șir de <i>autentificare la înregistrare</i>, îl
 msgid "If you are in a hurry and can't wait a few hours, you can tell people to use a \"jump\" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is working, you can tell others to use it."
 msgstr "Dacă vă grăbiți și nu puteți aștepta câteva ore, puteți le puteți spune oamenilor să utilizeze un serviciu de redirecționare ajutatoare a adresei „jump”. Aceasta de obicei va funcționa în câteva minute de la înregistrarea numelui de gazdă pe același site. Testați mai întâi pătrunzând <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> în browser. Odată ce funcționează, puteți spune și altora să îl utilizeze."
 
-msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skanki2p</a>, and paste the link where it's required to share it with others."
-msgstr "Alternativ, puteți copia <i>adresa ajudatoare de link</i> pentru domeniul dvs., indicată fie pe pagina listei din agenda de adrese, fie pe pagina de detali pentru domeniul dvs., de ex. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>detalii pentru i2p-projekt.i2p</a>, și plasați legătura acolo unde este necesar să o distribuiți celorlalți."
+msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
+msgstr ""
 
 msgid "Backup your private key!"
 msgstr "Efectuați o copie de siguranță a cheii private!"
@@ -6834,8 +6753,8 @@ msgstr "Deschideți <a href=/confignet#udpconfig>portul I2P+</a> pe modemul, rou
 msgid "Getting Support Online"
 msgstr "Obținerea suportului online"
 
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "Poate doriți să revizuiți informațiile de pe <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>site-ul I2P</a>, să postați mesaje pe <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>forumul de discuții I2P</a> sau să treceți pe la canalul <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> sau <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> din rețeaua IRC internă a I2P-ului."
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
+msgstr ""
 
 msgid "Reporting Bugs"
 msgstr "Raportarea erorilor"
@@ -7374,6 +7293,9 @@ msgstr "Personalizați link-urile"
 msgid "Configure display language, theme and optional console password"
 msgstr "Configurare limbaj de afișare, temă și parolă opțională a consolei"
 
+msgid "Language"
+msgstr ""
+
 msgid "Configure router bandwidth"
 msgstr "Configurare lățime de bandă a routerului"
 
@@ -7438,6 +7360,24 @@ msgstr "Servicii (Wrapper) jurnale"
 msgid "network database"
 msgstr "baza de date a rețelei"
 
+msgid "Encryption type"
+msgstr ""
+
+msgid "Encryption types"
+msgstr ""
+
+msgid "Signature types"
+msgstr ""
+
+msgid "Locally hosted private service"
+msgstr ""
+
+msgid "Locally hosted public service"
+msgstr ""
+
+msgid "Requested client leaseset"
+msgstr ""
+
 msgid "network database router map"
 msgstr "Harta routerului din bază de date de rețea"
 
@@ -7480,6 +7420,12 @@ msgstr "Parteneri blocați"
 
 msgid "Fast / High Capacity"
 msgstr "Rapid / Capacitate mare"
+
+msgid "router logs"
+msgstr ""
+
+msgid "service logs"
+msgstr ""
 
 msgid "Manage I2P addresses"
 msgstr "Gestionați adresele I2P"
@@ -7685,6 +7631,9 @@ msgstr "Comută identificatorii tunelurilor"
 msgid "Toggle Tunnels"
 msgstr "Comută tunelurile"
 
+msgid "Updating sidebar sections"
+msgstr ""
+
 msgid "Peer Profile"
 msgstr "Profil partener"
 
@@ -7830,7 +7779,15 @@ msgstr "Finalizat"
 
 
 
-#, java-format
+
+
+
+
+
+
+
+
+
 
 
 

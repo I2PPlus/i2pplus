@@ -1548,10 +1548,7 @@ msgstr "{0} 后重启"
 msgid "Save order"
 msgstr "保存顺序"
 
-msgid "Sidebar refresh disabled"
-msgstr ""
-
-msgid "Sidebar refresh interval changed"
+msgid "Sidebar preferences updated"
 msgstr ""
 
 msgid "Refresh interval must be a number"
@@ -1586,9 +1583,6 @@ msgstr "已移动"
 
 msgid "Saved order of sections."
 msgstr "已保存的各部分顺序。"
-
-msgid "Stat filter and location updated successfully to"
-msgstr "统计数据过滤器及位置成功更新至"
 
 msgid "Full statistics enabled"
 msgstr "统计已全部启用"
@@ -2174,23 +2168,14 @@ msgstr "I2P社区论坛"
 msgid "File-sharing forum"
 msgstr "文件共享论坛"
 
-msgid "Alternative front-end for Twitter"
-msgstr "Twitter 的替代前端"
-
-msgid "Rocksolid forums for the darknets"
-msgstr "暗网的 Rocksolid 论坛"
-
 msgid "Cross-network micro-blogging &amp; forums &amp; wiki"
 msgstr "跨网络微博和论坛和维基"
 
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Reddit的另类隐私前端"
 
-msgid "Base64 Image Encoder"
-msgstr "BASE64图像编码器"
-
-msgid "An image cache and resize service"
-msgstr "图像缓存和调整大小的服务"
+msgid "AI Image generation & Chat hub"
+msgstr ""
 
 msgid "IRC Logs for multiple networks"
 msgstr "多个网络的 IRC 日志"
@@ -2207,17 +2192,8 @@ msgstr "各种服务的登陆页面"
 msgid "Streaming radio service"
 msgstr "流媒体广播服务"
 
-msgid "Alternative frontend for Imgur"
-msgstr "Imgur 的替代前端"
-
 msgid "Privacy-focused not-for-profit organization"
 msgstr "以隐私为中心的非营利组织"
-
-msgid "Outproxy bandwidth test"
-msgstr "出口代理带宽测试"
-
-msgid "speedtest"
-msgstr "speedtest"
 
 msgid "Text translation engine"
 msgstr "文本翻译引擎"
@@ -2225,20 +2201,8 @@ msgstr "文本翻译引擎"
 msgid "translate"
 msgstr "翻译"
 
-msgid "Alternative front-end to Youtube"
-msgstr "Youtube 的替代前端"
-
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "尊重隐私的网络托管和VPN服务提供商"
-
-msgid "Tor-focused Search Engine"
-msgstr "以.Onion网站为中心的搜索引擎"
-
-msgid "Pinterest Image Search Engine"
-msgstr "Pinterest 图像搜索引擎"
-
-msgid "Clearnet BitTorrent DHT search engine"
-msgstr "表网种子搜索引擎"
 
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "DuckDuckGo搜索引擎（无JavaScript）"
@@ -2248,21 +2212,6 @@ msgstr "注重隐私的表网搜索引擎"
 
 msgid "I2P Web Search Engine"
 msgstr "I2P搜索引擎"
-
-msgid "Enabling the free transmission of data in the public interest"
-msgstr "为了公共利益而实现数据的自由传输"
-
-msgid "Selected Papers in Anonymity"
-msgstr "匿名网络论文选"
-
-msgid "Tor .onion site links"
-msgstr "Tor .onion 网站链接"
-
-msgid "HTML Color Reference"
-msgstr "颜色参考"
-
-msgid "HTMLColors"
-msgstr "HTMLColors"
 
 msgid "I2P-related Wiki"
 msgstr "与I2P相关的维基"
@@ -2279,29 +2228,17 @@ msgstr "互联网哲学百科全书"
 msgid "Standford Encyclopedia of Philosophy"
 msgstr "斯坦福大学哲学百科全书"
 
-msgid "Psychonaut"
-msgstr "Psychonaut"
-
-msgid "Wiki relating to altered states of consciousness"
-msgstr "关于意识状态改变的维基"
-
 msgid "Computing-related tutorials"
 msgstr "计算相关教程"
 
 msgid "SimplifiedGuide"
 msgstr "简易指南"
 
-msgid "Vulnerability Database"
-msgstr "漏洞资料库"
-
 msgid "Web technology reference and learning site"
 msgstr "网络技术参考和学习网站"
 
 msgid "Alternative Wikipedia front-end focused on privacy"
 msgstr "专注于隐私的维基百科替代前端"
-
-msgid "The biggest online English dictionary"
-msgstr "最大的在线英语词典"
 
 msgid "World atlas including geography facts &amp; flags"
 msgstr "世界地图集，包括地理知识和 和国旗"
@@ -2312,14 +2249,8 @@ msgstr "世界地图集"
 msgid "Technology News &amp; more..."
 msgstr "技术新闻和 和更多..."
 
-msgid "Independent investigative journalism"
-msgstr "独立调查性新闻"
-
 msgid "Information Security Research &amp; Education"
 msgstr "信息安全研究与教育"
-
-msgid "Darknet related news site"
-msgstr "暗网相关新闻网站"
 
 msgid "DigitalTrends"
 msgstr "DigitalTrends"
@@ -2332,24 +2263,6 @@ msgstr "在数字世界中捍卫您的权利"
 
 msgid "The Elliptic Curve Cryptography Blog"
 msgstr "椭圆曲线密码学博客"
-
-msgid "ForeignPolicy"
-msgstr "外交政策"
-
-msgid "The Global Magazine of News &amp; Ideas"
-msgstr "全球新闻和思考"
-
-msgid "FrontLineDefenders"
-msgstr "前线捍卫者"
-
-msgid "Human rights activism"
-msgstr "人权行动主义"
-
-msgid "Defending Human Rights Worldwide"
-msgstr "捍卫全球人权"
-
-msgid "HumanRightsWatch"
-msgstr "人权观察"
 
 msgid "Fresh hacks every day"
 msgstr "每天都有新鲜的黑客攻击"
@@ -2365,12 +2278,6 @@ msgstr "香港自由报"
 
 msgid "Independent &amp; impartial news for Hong Kong"
 msgstr "为香港提供独立和公正的新闻"
-
-msgid "HongKongWatch"
-msgstr "香港观察"
-
-msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr "监察香港的自由和权利受到的威胁"
 
 msgid "JStorDaily"
 msgstr "JStorDaily"
@@ -2408,11 +2315,11 @@ msgstr "独立新闻平台"
 msgid "OpenDemocracy"
 msgstr "OpenDemocracy"
 
-msgid "News and blog feeds on I2P"
-msgstr "I2P的新闻和博客订阅"
+msgid "Online privacy &amp; tech blog"
+msgstr ""
 
-msgid "Planeta"
-msgstr "Planeta I2P"
+msgid "RightToPrivacy"
+msgstr ""
 
 msgid "Lifestyle magazine"
 msgstr "生活方式杂志"
@@ -2441,20 +2348,11 @@ msgstr "书呆子新闻"
 msgid "Technology news &amp; reviews"
 msgstr "技术新闻和 与评论"
 
-msgid "Reporting on China without fear or favor"
-msgstr "无所偏袒地报道中国"
-
 msgid "News from the Taiwan Capital"
 msgstr "来自台湾首都的新闻"
 
 msgid "TaipeiTimes"
 msgstr "台北时报"
-
-msgid "TechXplore"
-msgstr "Tech Xplore"
-
-msgid "Technology and engineering news"
-msgstr "技术和工程新闻"
 
 msgid "TechMeme"
 msgstr "TechMeme"
@@ -2497,12 +2395,6 @@ msgstr "TheNewRepublic"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "文件共享和 著作权新闻"
-
-msgid "A magazine about human rights and social justice"
-msgstr "一本关于人权和社会正义的杂志"
-
-msgid "UpstreamJournal"
-msgstr "UpstreamJournal"
 
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
 msgstr "促进对美国对中东利益的平衡和现实的理解"
@@ -2833,16 +2725,22 @@ msgstr ""
 msgid "Not initialized"
 msgstr "未初始化"
 
-msgid "Sorted by hash distance, closest first."
+msgid "Total Remote Leasesets"
 msgstr ""
 
 msgid "Compact mode"
 msgstr ""
 
-msgid "Total Remote Leasesets"
+msgid "Local Leasesets"
+msgstr ""
+
+msgid "Debug Mode"
 msgstr ""
 
 msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Sorted by hash distance, closest first."
 msgstr ""
 
 msgid "Mod Data"
@@ -2857,17 +2755,11 @@ msgstr ""
 msgid "Change in"
 msgstr ""
 
-msgid "Known Floodfills"
-msgstr "已知的播种节点"
-
 msgid "Floodfill mode enabled"
 msgstr ""
 
 msgid "Routing Key"
 msgstr "路由器密钥"
-
-msgid "Network data"
-msgstr "网络数据"
 
 msgid "Median distance (bits)"
 msgstr "中位数距离（bits）"
@@ -2877,6 +2769,12 @@ msgstr "估算的洪泛节点总数"
 
 msgid "Estimated total leasesets"
 msgstr "估计的租约集总数"
+
+msgid "Total Local Leasesets"
+msgstr ""
+
+msgid "Remote Leasesets"
+msgstr ""
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2909,12 +2807,6 @@ msgstr "{0} 后过期"
 msgid "Expired{0} ago"
 msgstr "{0} 前过期"
 
-msgid "Received as published"
-msgstr "接收已发布？"
-
-msgid "Received as reply"
-msgstr "收到的答复是什么？"
-
 msgid "Distance"
 msgstr "距离"
 
@@ -2923,6 +2815,9 @@ msgstr "离线登录"
 
 msgid "Signature type"
 msgstr "签名类型"
+
+msgid "Public Key"
+msgstr ""
 
 msgid "Unsupported type"
 msgstr "不支持的类型"
@@ -2934,6 +2829,9 @@ msgstr "{0} 后过期"
 #, java-format
 msgid "Expired {0} ago"
 msgstr "{0} 前过期"
+
+msgid "Unknown"
+msgstr "未知"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
 msgstr ""
@@ -2970,9 +2868,6 @@ msgstr "洪水填充"
 
 msgid "Total"
 msgstr "总计"
-
-msgid "Unknown"
-msgstr "未知"
 
 msgid "Initializing"
 msgstr "初始化"
@@ -3047,9 +2942,6 @@ msgstr "在NetDb中显示有此地址的所有路由器"
 msgid "Show all routers with this port in the NetDb"
 msgstr "显示NetDb中具有此端口的所有路由器"
 
-msgid "Network ID"
-msgstr "网络ID"
-
 msgid "Routers"
 msgstr "包括非泛洪路由器"
 
@@ -3061,6 +2953,12 @@ msgstr "上一次接收"
 
 msgid "Last heard from"
 msgstr "上一次接收来自"
+
+msgid "Network Id"
+msgstr ""
+
+msgid "Count is always spoofed to avoid indicating router restarts"
+msgstr ""
 
 msgid "Hidden or starting up"
 msgstr "隐身或正在启动"
@@ -3121,19 +3019,16 @@ msgstr "到您的路由器.config 文件。"
 msgid "Peer Connections"
 msgstr "对等节点连接"
 
-msgid "Active in the last minute"
-msgstr "在最后一刻活跃"
-
 msgid "IPv4"
 msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
 
-msgid "Limit"
+msgid "Active connections / Max permitted"
 msgstr ""
 
-msgid "Maximum permitted connections"
+msgid "Connections / Limit"
 msgstr ""
 
 msgid "Current / maximum permitted"
@@ -3142,23 +3037,23 @@ msgstr "当前/最大允许传输单元"
 msgid "NTCP connections"
 msgstr "NTCP 连接"
 
-msgid "Caps"
-msgstr "容量"
-
 msgid "Peer capabilities"
 msgstr "同行功能"
 
-msgid "Dir"
-msgstr "类别"
+msgid "Caps"
+msgstr "容量"
 
 msgid "Direction/Introduction"
 msgstr "按方向"
 
-msgid "Idle"
-msgstr "空闲"
+msgid "Dir"
+msgstr "类别"
 
 msgid "Peer inactivity"
 msgstr "不活跃的对等节点"
+
+msgid "Idle"
+msgstr "空闲"
 
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "平均入站/出站速率率（KBps）"
@@ -3190,11 +3085,11 @@ msgstr "信息已接收"
 msgid "RX"
 msgstr "接包"
 
-msgid "Out Queue"
-msgstr "出队"
-
 msgid "Queued messages to send to peer"
 msgstr "给对等节点的消息队列"
+
+msgid "Out Queue"
+msgstr "出队"
 
 msgid "Connection is backlogged"
 msgstr "积压"
@@ -3712,11 +3607,11 @@ msgstr "有更新可用，正在尝试下载"
 msgid "Unsigned update available"
 msgstr "未签署的开发版本更新已就绪"
 
-msgid "Help with firewall configuration"
-msgstr "如何配置防火墙"
-
 msgid "Check network connection and NAT/firewall!"
 msgstr "检查网络连接和 NAT/防火墙！"
+
+msgid "Help with firewall configuration"
+msgstr "如何配置防火墙"
 
 msgid "Attempt to download router reference files (if automatic reseed has failed)"
 msgstr "尝试下载补种文件（如果自动补种失败）"
@@ -3751,23 +3646,35 @@ msgstr "移动到底部"
 msgid "Select a section to add"
 msgstr "选择要添加的部分"
 
+msgid "Router Information (advanced)"
+msgstr "路由信息（高级）"
+
+msgid "Advanced Links"
+msgstr "高级连接"
+
+msgid "Bandwidth Graph"
+msgstr "带宽图形"
+
+msgid "UTC Clock"
+msgstr "协调世界时"
+
+msgid "Congestion"
+msgstr "拥堵"
+
+msgid "CPU Load"
+msgstr "CPU负载"
+
+msgid "Firewall &amp; Reseed Status"
+msgstr "防火墙 和 补种状态"
+
 msgid "Help &amp; FAQ"
 msgstr "帮助与常见问答"
-
-msgid "I2P Services"
-msgstr "I2P 服务"
 
 msgid "I2P Internals"
 msgstr "I2P 内部设置"
 
-msgid "Router Information"
-msgstr "路由信息"
-
-msgid "Router Information (brief)"
-msgstr "路由信息（简要）"
-
-msgid "Router Information (advanced)"
-msgstr "路由信息（高级）"
+msgid "I2P Services"
+msgstr "I2P 服务"
 
 msgid "Memory Usage Bar"
 msgstr "内存使用栏"
@@ -3775,35 +3682,23 @@ msgstr "内存使用栏"
 msgid "Network Reachability"
 msgstr "网络可达性"
 
-msgid "Update Status"
-msgstr "更新状态"
+msgid "News &amp; Updates"
+msgstr "新闻和更新"
 
 msgid "Restart Status"
 msgstr "重启状态"
 
-msgid "Firewall &amp; Reseed Status"
-msgstr "防火墙 和 补种状态"
+msgid "Router Information"
+msgstr "路由信息"
 
-msgid "Bandwidth Graph"
-msgstr "带宽图形"
-
-msgid "Congestion"
-msgstr "拥堵"
+msgid "Router Information (brief)"
+msgstr "路由信息（简要）"
 
 msgid "Tunnel Status"
 msgstr "隧道状态"
 
-msgid "News &amp; Updates"
-msgstr "新闻和更新"
-
-msgid "Advanced Links"
-msgstr "高级连接"
-
-msgid "UTC Clock"
-msgstr "协调世界时"
-
-msgid "CPU Load"
-msgstr "CPU负载"
+msgid "Update Status"
+msgstr "更新状态"
 
 msgid "I2P Router Help &amp; FAQ"
 msgstr "I2P 使用帮助与常见问答"
@@ -3988,6 +3883,9 @@ msgstr "NETDB的总同行"
 
 msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "路由连接过的对等节点数量 过去数分钟/过去一小时"
+
+msgid "Peers we've been talking to in the last minute"
+msgstr ""
 
 msgid "The number of peers available for building client tunnels"
 msgstr "可用来建立客户端隧道的对等节点数量"
@@ -4319,6 +4217,9 @@ msgstr "强制阻止"
 msgid "days"
 msgstr "日"
 
+msgid "Known Floodfills"
+msgstr "已知的播种节点"
+
 msgid "Average closest floodfill distance"
 msgstr "平均最近洪泛节点距离"
 
@@ -4489,6 +4390,9 @@ msgstr "转移数据"
 
 msgid "Data"
 msgstr "数据"
+
+msgid "Limit"
+msgstr ""
 
 msgid "Receive on"
 msgstr "接收"
@@ -5462,6 +5366,9 @@ msgstr "安装 I2P 系统服务，这是运行 I2P 的推荐方法。"
 msgid "config sidebar"
 msgstr "设置侧栏"
 
+msgid "Sidebar Options"
+msgstr ""
+
 msgid "Refresh interval"
 msgstr "刷新间隔"
 
@@ -5470,6 +5377,12 @@ msgstr "秒"
 
 msgid "0 to disable"
 msgstr "0个可禁用"
+
+msgid "Unified sidebar"
+msgstr ""
+
+msgid "Use the same sidebar on all pages"
+msgstr ""
 
 msgid "config stats"
 msgstr "设置统计"
@@ -5670,6 +5583,9 @@ msgstr "事件"
 msgid "Event Log"
 msgstr "事件日志"
 
+msgid "Combined"
+msgstr ""
+
 msgid "graph"
 msgstr "图表"
 
@@ -5747,6 +5663,9 @@ msgstr "此设置设置为 true 时，将为图形页面上的图形启用 hiDPI
 
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "此设置设置为 true 时，将在边栏的“拥塞”部分显示“对等测试平均值”读数，该读数的计算方法是将成功的对等测试平均值和失败的测试所花费的平均超额时间相加。平均值可以用作确定最佳<code>路由器.peerTestTimeout</code> 值的指南。[默认值为假]"
+
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
+msgstr ""
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "此设置决定路由器是否应使用提供的 <i>blocklist.txt</i> 文件和任何用户配置的封禁清单,以通过哈希或 IP 地址禁止路由器。对 IPv4 支持范围和网络掩码,但不支持 IPv6。有关更多信息,请参阅您的 I2P+ 应用程序目录中的 <i>blocklist.txt</i> 文件。[默认启用,需要重启]"
@@ -6561,8 +6480,8 @@ msgstr "如果需要<i>注册认证</i>，你可以在<a href='http://127.0.0.1:
 msgid "If you are in a hurry and can't wait a few hours, you can tell people to use a \"jump\" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is working, you can tell others to use it."
 msgstr "如果你很着急，等不了几个小时，你可以告诉人们使用 \"跳转\"服务帮助重定向。这通常会在你在同一网站上注册你的域名后几分钟内起作用。先自己在浏览器中输入测试 <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>你的域名.i2p</i></code>。一旦一切顺利，你就可以告诉其他人使用它。"
 
-msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skanki2p</a>, and paste the link where it's required to share it with others."
-msgstr "另外，您可以复制您的<i>地址助手</i>链接，位于地址簿列表页或您的域名的详细信息页，例如：<a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>i2p-projekt.i2p的详细信息</a>，并将该链接粘贴在需要与他人分享的地方。"
+msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
+msgstr ""
 
 msgid "Backup your private key!"
 msgstr "备份你的私钥！"
@@ -6798,8 +6717,8 @@ msgstr "在调制解调器、路由器和/或防火墙上打开<a href=/configne
 msgid "Getting Support Online"
 msgstr "寻找在线帮助"
 
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "您也可以查看<a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P 官网</a>上的信息，在<a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P 论坛</a>上发帖，或在I2P的内部IRC网络上浏览<a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> 和 <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a>。"
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
+msgstr ""
 
 msgid "Reporting Bugs"
 msgstr "报告Bugs"
@@ -7338,6 +7257,9 @@ msgstr "自定义连接"
 msgid "Configure display language, theme and optional console password"
 msgstr "请输入搜索查询"
 
+msgid "Language"
+msgstr ""
+
 msgid "Configure router bandwidth"
 msgstr "设置路由的带宽配额"
 
@@ -7402,6 +7324,24 @@ msgstr "服务（封装）日志"
 msgid "network database"
 msgstr "网络数据库"
 
+msgid "Encryption type"
+msgstr ""
+
+msgid "Encryption types"
+msgstr ""
+
+msgid "Signature types"
+msgstr ""
+
+msgid "Locally hosted private service"
+msgstr ""
+
+msgid "Locally hosted public service"
+msgstr ""
+
+msgid "Requested client leaseset"
+msgstr ""
+
 msgid "network database router map"
 msgstr "网络数据库路由器映射"
 
@@ -7444,6 +7384,12 @@ msgstr "已封禁对等节点"
 
 msgid "Fast / High Capacity"
 msgstr "快速/高容量"
+
+msgid "router logs"
+msgstr ""
+
+msgid "service logs"
+msgstr ""
 
 msgid "Manage I2P addresses"
 msgstr "地址"
@@ -7649,6 +7595,9 @@ msgstr "切换隧道ID"
 msgid "Toggle Tunnels"
 msgstr "切换隧道"
 
+msgid "Updating sidebar sections"
+msgstr ""
+
 msgid "Peer Profile"
 msgstr "对等节点摘要"
 
@@ -7794,7 +7743,15 @@ msgstr "完成"
 
 
 
-#, java-format
+
+
+
+
+
+
+
+
+
 
 
 

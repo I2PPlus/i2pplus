@@ -1548,10 +1548,7 @@ msgstr "{0} 안에 재시작"
 msgid "Save order"
 msgstr "순서 저장"
 
-msgid "Sidebar refresh disabled"
-msgstr ""
-
-msgid "Sidebar refresh interval changed"
+msgid "Sidebar preferences updated"
 msgstr ""
 
 msgid "Refresh interval must be a number"
@@ -1586,9 +1583,6 @@ msgstr "옮겨짐"
 
 msgid "Saved order of sections."
 msgstr "섹션 순서 저장됨."
-
-msgid "Stat filter and location updated successfully to"
-msgstr "상태 필터와 위치가 성공적으로 업데이트됨:"
 
 msgid "Full statistics enabled"
 msgstr "완전판 상태 활성화"
@@ -2174,23 +2168,14 @@ msgstr "I2P 관련 커뮤니티 포럼"
 msgid "File-sharing forum"
 msgstr "파일 공유 포럼"
 
-msgid "Alternative front-end for Twitter"
-msgstr "트위터를 위한 대체 프런트엔드"
-
-msgid "Rocksolid forums for the darknets"
-msgstr "다크넷을 위한 Rocksolid 포럼"
-
 msgid "Cross-network micro-blogging &amp; forums &amp; wiki"
 msgstr "교차 네트워크 마이크로 블로깅"
 
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Reddit의 대체 개인 정보 중심 프론트 엔드"
 
-msgid "Base64 Image Encoder"
-msgstr "Base64 이미지 인코더"
-
-msgid "An image cache and resize service"
-msgstr "이미지 캐시 및 서비스 크기 조정"
+msgid "AI Image generation & Chat hub"
+msgstr ""
 
 msgid "IRC Logs for multiple networks"
 msgstr "여러 네트워크의 IRC 로그"
@@ -2207,17 +2192,8 @@ msgstr "Landing page for various services"
 msgid "Streaming radio service"
 msgstr "스트리밍 라디오 서비스"
 
-msgid "Alternative frontend for Imgur"
-msgstr "Alternative frontend for Imgur"
-
 msgid "Privacy-focused not-for-profit organization"
 msgstr "개인정보 보호에 중점을 둔 비영리 단체"
-
-msgid "Outproxy bandwidth test"
-msgstr "아웃 프록시 대역폭 테스트"
-
-msgid "speedtest"
-msgstr "속도 테스트"
 
 msgid "Text translation engine"
 msgstr "텍스트 번역 엔진"
@@ -2225,20 +2201,8 @@ msgstr "텍스트 번역 엔진"
 msgid "translate"
 msgstr "번역하다"
 
-msgid "Alternative front-end to Youtube"
-msgstr "YouTube의 대체 프런트엔드"
-
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "웹 호스팅 및 VPN 서비스와 관련한 개인 정보 보호 제공자"
-
-msgid "Tor-focused Search Engine"
-msgstr "Tor 중심 검색 엔진"
-
-msgid "Pinterest Image Search Engine"
-msgstr "핀테레스트 이미지 검색 엔진"
-
-msgid "Clearnet BitTorrent DHT search engine"
-msgstr "Clearnet BitTorrent DHT 검색 엔진"
 
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "Duckduckgo 검색 엔진 (JavaScript 없음)"
@@ -2248,21 +2212,6 @@ msgstr "개인정보 보호에 초점을 맞춘 Clearnet 검색 엔진"
 
 msgid "I2P Web Search Engine"
 msgstr "I2P 웹 검색 엔진"
-
-msgid "Enabling the free transmission of data in the public interest"
-msgstr "공익에서 데이터의 자유 전송 가능"
-
-msgid "Selected Papers in Anonymity"
-msgstr "익명으로 선택된 논문"
-
-msgid "Tor .onion site links"
-msgstr "Tor .onion 사이트 링크"
-
-msgid "HTML Color Reference"
-msgstr "HTML 색상 참조"
-
-msgid "HTMLColors"
-msgstr "HTML 색상"
 
 msgid "I2P-related Wiki"
 msgstr "I2P 관련 위키"
@@ -2279,29 +2228,17 @@ msgstr "철학의 인터넷 백과 사전"
 msgid "Standford Encyclopedia of Philosophy"
 msgstr "스탠포드 철학 백과 사전"
 
-msgid "Psychonaut"
-msgstr "사이코넛"
-
-msgid "Wiki relating to altered states of consciousness"
-msgstr "변경된 의식 상태와 관련된 위키"
-
 msgid "Computing-related tutorials"
 msgstr "컴퓨팅 관련 튜토리얼"
 
 msgid "SimplifiedGuide"
 msgstr "단순화 된 가이드"
 
-msgid "Vulnerability Database"
-msgstr "취약성 데이터베이스"
-
 msgid "Web technology reference and learning site"
 msgstr "웹 기술 참조 및 학습 사이트"
 
 msgid "Alternative Wikipedia front-end focused on privacy"
 msgstr "대체 Wikipedia 프론트 엔드는 프라이버시에 중점을 두었습니다"
-
-msgid "The biggest online English dictionary"
-msgstr "가장 큰 온라인 영어 사전"
 
 msgid "World atlas including geography facts &amp; flags"
 msgstr "지리적 사실과 깃발을 포함한 세계 아틀라스"
@@ -2312,14 +2249,8 @@ msgstr "세계 아틀라스"
 msgid "Technology News &amp; more..."
 msgstr "기술 뉴스 등..."
 
-msgid "Independent investigative journalism"
-msgstr "독립탐사저널리즘"
-
 msgid "Information Security Research &amp; Education"
 msgstr "정보보호연구"
-
-msgid "Darknet related news site"
-msgstr "DarkNet 관련 뉴스 사이트"
 
 msgid "DigitalTrends"
 msgstr "디지털 트렌드"
@@ -2332,24 +2263,6 @@ msgstr "디지털 세계에서 귀하의 권리를 보호하세요"
 
 msgid "The Elliptic Curve Cryptography Blog"
 msgstr "타원 곡선 암호화 블로그"
-
-msgid "ForeignPolicy"
-msgstr "외교 정책"
-
-msgid "The Global Magazine of News &amp; Ideas"
-msgstr "뉴스와 아이디어의 글로벌 잡지"
-
-msgid "FrontLineDefenders"
-msgstr "최전선 수비수"
-
-msgid "Human rights activism"
-msgstr "인권 운동"
-
-msgid "Defending Human Rights Worldwide"
-msgstr "전 세계적으로 인권을 방어합니다"
-
-msgid "HumanRightsWatch"
-msgstr "인권위원회"
 
 msgid "Fresh hacks every day"
 msgstr "매일 신선한 해킹"
@@ -2365,12 +2278,6 @@ msgstr "홍콩 자유 언론"
 
 msgid "Independent &amp; impartial news for Hong Kong"
 msgstr "홍콩에 대한 독립적이고 공정한 뉴스"
-
-msgid "HongKongWatch"
-msgstr "홍콩 시계"
-
-msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr "홍콩의 자유와 권리에 대한 위협을 모니터링합니다"
 
 msgid "JStorDaily"
 msgstr "JStorDaily"
@@ -2408,11 +2315,11 @@ msgstr "독립적인 국제 미디어 플랫폼"
 msgid "OpenDemocracy"
 msgstr "열린 민주주의"
 
-msgid "News and blog feeds on I2P"
-msgstr "뉴스 및 블로그는 I2P에 제공됩니다"
+msgid "Online privacy &amp; tech blog"
+msgstr ""
 
-msgid "Planeta"
-msgstr "행성 A"
+msgid "RightToPrivacy"
+msgstr ""
 
 msgid "Lifestyle magazine"
 msgstr "라이프스타일 매거진"
@@ -2441,20 +2348,11 @@ msgstr "너드를 위한 뉴스"
 msgid "Technology news &amp; reviews"
 msgstr "기술 뉴스"
 
-msgid "Reporting on China without fear or favor"
-msgstr "두려움이나 호의 없이 중국에 대해 보도"
-
 msgid "News from the Taiwan Capital"
 msgstr "대만 수도에서 온 소식"
 
 msgid "TaipeiTimes"
 msgstr "타이페이 타임즈"
-
-msgid "TechXplore"
-msgstr "기술 탐구"
-
-msgid "Technology and engineering news"
-msgstr "기술 및 엔지니어링 뉴스"
 
 msgid "TechMeme"
 msgstr "기술 밈"
@@ -2497,12 +2395,6 @@ msgstr "신공화국"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "파일 공유 및 저작권 뉴스"
-
-msgid "A magazine about human rights and social justice"
-msgstr "인권과 사회 정의에 관한 잡지"
-
-msgid "UpstreamJournal"
-msgstr "업스트림 저널"
 
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
 msgstr "중동에 대한 미국의 이해관계에 대한 균형있고 현실적인 이해 증진"
@@ -2833,16 +2725,22 @@ msgstr ""
 msgid "Not initialized"
 msgstr "초기화 안됨"
 
-msgid "Sorted by hash distance, closest first."
+msgid "Total Remote Leasesets"
 msgstr ""
 
 msgid "Compact mode"
 msgstr ""
 
-msgid "Total Remote Leasesets"
+msgid "Local Leasesets"
+msgstr ""
+
+msgid "Debug Mode"
 msgstr ""
 
 msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Sorted by hash distance, closest first."
 msgstr ""
 
 msgid "Mod Data"
@@ -2857,17 +2755,11 @@ msgstr ""
 msgid "Change in"
 msgstr ""
 
-msgid "Known Floodfills"
-msgstr "알려진 홍수"
-
 msgid "Floodfill mode enabled"
 msgstr ""
 
 msgid "Routing Key"
 msgstr "라우팅 키"
-
-msgid "Network data"
-msgstr "네트워크 데이터"
 
 msgid "Median distance (bits)"
 msgstr "중심 거리 (비트)"
@@ -2877,6 +2769,12 @@ msgstr "전체 플러드필 예상값"
 
 msgid "Estimated total leasesets"
 msgstr "전체 리즈셋 예상값"
+
+msgid "Total Local Leasesets"
+msgstr ""
+
+msgid "Remote Leasesets"
+msgstr ""
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2909,12 +2807,6 @@ msgstr "만료{0}"
 msgid "Expired{0} ago"
 msgstr "{0} 전 만료됨"
 
-msgid "Received as published"
-msgstr "게시된 대로 받았나요?"
-
-msgid "Received as reply"
-msgstr "답장을 받았나요?"
-
 msgid "Distance"
 msgstr "거리"
 
@@ -2923,6 +2815,9 @@ msgstr "오프라인 서명됨"
 
 msgid "Signature type"
 msgstr "시그니처 유형"
+
+msgid "Public Key"
+msgstr ""
 
 msgid "Unsupported type"
 msgstr "지원되지 않는 유형"
@@ -2934,6 +2829,9 @@ msgstr "{0}에 만료"
 #, java-format
 msgid "Expired {0} ago"
 msgstr "{0} 전에 만료됨"
+
+msgid "Unknown"
+msgstr "알 수 없음"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
 msgstr ""
@@ -2970,9 +2868,6 @@ msgstr "홍수"
 
 msgid "Total"
 msgstr "총"
-
-msgid "Unknown"
-msgstr "알 수 없음"
 
 msgid "Initializing"
 msgstr "초기화 중"
@@ -3047,9 +2942,6 @@ msgstr "NetDb에서 이 주소를 가진 모든 라우터를 표시합니다."
 msgid "Show all routers with this port in the NetDb"
 msgstr "NetDb에서 이 포트가 있는 모든 라우터를 표시합니다."
 
-msgid "Network ID"
-msgstr "네트워크 ID"
-
 msgid "Routers"
 msgstr "라우터"
 
@@ -3061,6 +2953,12 @@ msgstr "마지막으로 들은 이야기"
 
 msgid "Last heard from"
 msgstr "마지막으로 들은 말"
+
+msgid "Network Id"
+msgstr ""
+
+msgid "Count is always spoofed to avoid indicating router restarts"
+msgstr ""
 
 msgid "Hidden or starting up"
 msgstr "숨겨짐 혹은 시작중"
@@ -3121,19 +3019,16 @@ msgstr "router.config 파일에."
 msgid "Peer Connections"
 msgstr "피어 연결"
 
-msgid "Active in the last minute"
-msgstr "마지막 순간에 활성"
-
 msgid "IPv4"
 msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
 
-msgid "Limit"
+msgid "Active connections / Max permitted"
 msgstr ""
 
-msgid "Maximum permitted connections"
+msgid "Connections / Limit"
 msgstr ""
 
 msgid "Current / maximum permitted"
@@ -3142,23 +3037,23 @@ msgstr "현재/최대 허용"
 msgid "NTCP connections"
 msgstr "NTCP 연결"
 
-msgid "Caps"
-msgstr "대문자"
-
 msgid "Peer capabilities"
 msgstr "동료 능력"
 
-msgid "Dir"
-msgstr "디렉토리"
+msgid "Caps"
+msgstr "대문자"
 
 msgid "Direction/Introduction"
 msgstr "방향/소개"
 
-msgid "Idle"
-msgstr "대기"
+msgid "Dir"
+msgstr "디렉토리"
 
 msgid "Peer inactivity"
 msgstr "동료 비활성"
+
+msgid "Idle"
+msgstr "대기"
 
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "평균 인바운드/아웃바운드 속도(KBps)"
@@ -3190,11 +3085,11 @@ msgstr "메시지 수신됨"
 msgid "RX"
 msgstr "RX"
 
-msgid "Out Queue"
-msgstr "대기열 밖"
-
 msgid "Queued messages to send to peer"
 msgstr "피어에게 보내기 위해 대기 중인 메시지"
+
+msgid "Out Queue"
+msgstr "대기열 밖"
 
 msgid "Connection is backlogged"
 msgstr "연결이 백로그링됩니다"
@@ -3712,11 +3607,11 @@ msgstr "I2P 업데이트 다운로드"
 msgid "Unsigned update available"
 msgstr "서명되지 않은 업데이트 가능"
 
-msgid "Help with firewall configuration"
-msgstr "방화벽 설정 도움"
-
 msgid "Check network connection and NAT/firewall!"
 msgstr "네트워크 연결과 NAT/방화벽을 확인하세요!"
+
+msgid "Help with firewall configuration"
+msgstr "방화벽 설정 도움"
 
 msgid "Attempt to download router reference files (if automatic reseed has failed)"
 msgstr "라우터 참조 파일 다운로드 시도(자동 재시드에 실패한 경우)"
@@ -3751,23 +3646,35 @@ msgstr "밑으로 이동"
 msgid "Select a section to add"
 msgstr "추가할 섹션 선택"
 
+msgid "Router Information (advanced)"
+msgstr "라우터 정보 (고급)"
+
+msgid "Advanced Links"
+msgstr "고급 링크"
+
+msgid "Bandwidth Graph"
+msgstr "대역폭 그래프"
+
+msgid "UTC Clock"
+msgstr "UTC 시계"
+
+msgid "Congestion"
+msgstr "혼잡"
+
+msgid "CPU Load"
+msgstr "CPU로드"
+
+msgid "Firewall &amp; Reseed Status"
+msgstr "방화벽 및 RESEED 상태"
+
 msgid "Help &amp; FAQ"
 msgstr "도움말 &amp; FAQ"
-
-msgid "I2P Services"
-msgstr "I2P 서비스"
 
 msgid "I2P Internals"
 msgstr "I2P 내부"
 
-msgid "Router Information"
-msgstr "라우터 정보"
-
-msgid "Router Information (brief)"
-msgstr "라우터 정보 (브리프)"
-
-msgid "Router Information (advanced)"
-msgstr "라우터 정보 (고급)"
+msgid "I2P Services"
+msgstr "I2P 서비스"
 
 msgid "Memory Usage Bar"
 msgstr "메모리 사용 막대"
@@ -3775,35 +3682,23 @@ msgstr "메모리 사용 막대"
 msgid "Network Reachability"
 msgstr "네트워크 접속성"
 
-msgid "Update Status"
-msgstr "업데이트 상태"
+msgid "News &amp; Updates"
+msgstr "뉴스 &amp; 업데이트"
 
 msgid "Restart Status"
 msgstr "상태를 다시 시작하십시오"
 
-msgid "Firewall &amp; Reseed Status"
-msgstr "방화벽 및 RESEED 상태"
+msgid "Router Information"
+msgstr "라우터 정보"
 
-msgid "Bandwidth Graph"
-msgstr "대역폭 그래프"
-
-msgid "Congestion"
-msgstr "혼잡"
+msgid "Router Information (brief)"
+msgstr "라우터 정보 (브리프)"
 
 msgid "Tunnel Status"
 msgstr "터널 상태"
 
-msgid "News &amp; Updates"
-msgstr "뉴스 &amp; 업데이트"
-
-msgid "Advanced Links"
-msgstr "고급 링크"
-
-msgid "UTC Clock"
-msgstr "UTC 시계"
-
-msgid "CPU Load"
-msgstr "CPU로드"
+msgid "Update Status"
+msgstr "업데이트 상태"
 
 msgid "I2P Router Help &amp; FAQ"
 msgstr "I2P 라우터 도움말 &amp; FAQ"
@@ -3988,6 +3883,9 @@ msgstr "NetDb의 총 피어"
 
 msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "지난 몇 분/시간 동안 교류한 피어"
+
+msgid "Peers we've been talking to in the last minute"
+msgstr ""
 
 msgid "The number of peers available for building client tunnels"
 msgstr "클라이언트 터널 구축에 가용가능한 피어들의 수"
@@ -4319,6 +4217,9 @@ msgstr "다음에 대한 차단 시행"
 msgid "days"
 msgstr "일"
 
+msgid "Known Floodfills"
+msgstr "알려진 홍수"
+
 msgid "Average closest floodfill distance"
 msgstr "평균 가장 가까운 홍수 거리"
 
@@ -4489,6 +4390,9 @@ msgstr "데이터 전송됨"
 
 msgid "Data"
 msgstr "데이터"
+
+msgid "Limit"
+msgstr ""
 
 msgid "Receive on"
 msgstr "받음:"
@@ -5462,6 +5366,9 @@ msgstr "I2P 시스템 서비스를 설치합니다. "
 msgid "config sidebar"
 msgstr "구성 사이드바"
 
+msgid "Sidebar Options"
+msgstr ""
+
 msgid "Refresh interval"
 msgstr "새로고침 간격"
 
@@ -5470,6 +5377,12 @@ msgstr "초"
 
 msgid "0 to disable"
 msgstr "0 비활성화"
+
+msgid "Unified sidebar"
+msgstr ""
+
+msgid "Use the same sidebar on all pages"
+msgstr ""
 
 msgid "config stats"
 msgstr "통계 설정"
@@ -5670,6 +5583,9 @@ msgstr "이벤트"
 msgid "Event Log"
 msgstr "이벤트 로그"
 
+msgid "Combined"
+msgstr ""
+
 msgid "graph"
 msgstr "그래프"
 
@@ -5747,6 +5663,9 @@ msgstr "이 설정을 true로 설정할 경우, 사이드바의 혼잡 섹션에
 
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "이 설정을 true로 설정할 경우, <a href=/sitemap>사이트맵</a>에 <i>관심 있는 사이트</i> 링크를 표시합니다. [기본값은 false]"
+
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
+msgstr ""
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "이 설정은 라우터가 제공된 <i>blocklist.txt</i> 파일과 사용자가 구성한 블록 목록을 사용하여 해시 또는 IP 주소에 따른 라우터 차단을 활성화할지 여부를 결정합니다. IPv4의 경우 범위와 넷 마스크를 지원하지만 IPv6는 지원하지 않습니다. 자세한 정보는 I2P+ 응용 프로그램 디렉터리에 있는 <i>blocklist.txt</i>를 참조하십시오. [기본적으로 활성화되어 있으며, 재시작이 필요합니다]"
@@ -6561,8 +6480,8 @@ msgstr "<i>등록 인증</i> 문자열을 요청하는 경우, <a href='http://1
 msgid "If you are in a hurry and can't wait a few hours, you can tell people to use a \"jump\" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is working, you can tell others to use it."
 msgstr "급하게 시간을 기다릴 수 없다면, 사람들에게 \"점프\" 주소 도우미 리다이렉션 서비스를 사용하도록 알릴 수 있습니다. 이는 주소를 등록한 후 일반적으로 몇 분 내에 작동할 것입니다. 우선 브라우저에 <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code>를 입력하여 테스트해보세요. 작동할 때 다른 사람들에게 알릴 수 있습니다."
 
-msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skanki2p</a>, and paste the link where it's required to share it with others."
-msgstr "또는 도메인에 대한 <i>주소 도우미 링크</i>를 복사하여 다른 사람들과 공유해야 하는 위치에 붙여넣을 수 있습니다.이 링크는 주소록 목록 페이지나 도메인의 세부 사항 페이지에 표시됩니다. 예를 들어, <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>i2p-projekt.i2p에 대한 세부 정보</a>."
+msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
+msgstr ""
 
 msgid "Backup your private key!"
 msgstr "개인 키를 백업하세요!"
@@ -6798,8 +6717,8 @@ msgstr "더 나은 연결성을 위해 모뎀, 라우터 및/또는 방화벽에
 msgid "Getting Support Online"
 msgstr "온라인 지원"
 
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "또한 <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P 웹 사이트</a>의 정보를 확인하거나 <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P 토론 포럼</a>에 메시지를 게시하거나 I2P의 내부 IRC 네트워크인 <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> 또는 <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a>에 들러 볼 수도 있습니다."
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
+msgstr ""
 
 msgid "Reporting Bugs"
 msgstr "버그 보고"
@@ -7338,6 +7257,9 @@ msgstr "링크 수정"
 msgid "Configure display language, theme and optional console password"
 msgstr "표시 언어, 테마 및 선택적 콘솔 비밀번호 설정"
 
+msgid "Language"
+msgstr ""
+
 msgid "Configure router bandwidth"
 msgstr "라우터 대역폭 설정"
 
@@ -7402,6 +7324,24 @@ msgstr "서비스 (Wrapper) 로그"
 msgid "network database"
 msgstr "네트워크 데이터베이스"
 
+msgid "Encryption type"
+msgstr ""
+
+msgid "Encryption types"
+msgstr ""
+
+msgid "Signature types"
+msgstr ""
+
+msgid "Locally hosted private service"
+msgstr ""
+
+msgid "Locally hosted public service"
+msgstr ""
+
+msgid "Requested client leaseset"
+msgstr ""
+
 msgid "network database router map"
 msgstr "네트워크 데이터베이스 라우터 지도"
 
@@ -7444,6 +7384,12 @@ msgstr "차단된 피어"
 
 msgid "Fast / High Capacity"
 msgstr "빠른/고용량"
+
+msgid "router logs"
+msgstr ""
+
+msgid "service logs"
+msgstr ""
 
 msgid "Manage I2P addresses"
 msgstr "I2P 주소 관리"
@@ -7649,6 +7595,9 @@ msgstr "터널 ID 전환"
 msgid "Toggle Tunnels"
 msgstr "터널 전환"
 
+msgid "Updating sidebar sections"
+msgstr ""
+
 msgid "Peer Profile"
 msgstr "피어 프로필"
 
@@ -7794,7 +7743,15 @@ msgstr "완료됨"
 
 
 
-#, java-format
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1554,10 +1554,7 @@ msgstr "Uudelleenkäynnistykseen aikaa  {0}"
 msgid "Save order"
 msgstr "Tallenna tilaus"
 
-msgid "Sidebar refresh disabled"
-msgstr ""
-
-msgid "Sidebar refresh interval changed"
+msgid "Sidebar preferences updated"
 msgstr ""
 
 msgid "Refresh interval must be a number"
@@ -1592,9 +1589,6 @@ msgstr "Siirretty"
 
 msgid "Saved order of sections."
 msgstr "Tallennettu osioiden järjestys."
-
-msgid "Stat filter and location updated successfully to"
-msgstr "Tilastosuodatin ja sijainti päivitetty onnistuneesti"
 
 msgid "Full statistics enabled"
 msgstr "Täysi tilastot käytössä"
@@ -2182,23 +2176,14 @@ msgstr "I2P:hen liittyvät yhteisön foorumit"
 msgid "File-sharing forum"
 msgstr "Tiedostonjakofoorumi"
 
-msgid "Alternative front-end for Twitter"
-msgstr "Vaihtoehtoinen käyttöliittymä Twitterille"
-
-msgid "Rocksolid forums for the darknets"
-msgstr "Rocksolid-foorumit darkneteille"
-
 msgid "Cross-network micro-blogging &amp; forums &amp; wiki"
 msgstr "Verkkojen välinen mikrobloggaaminen"
 
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Vaihtoehtoinen yksityisyyteen keskittyvä käyttöliittymä Redditille"
 
-msgid "Base64 Image Encoder"
-msgstr "Base64 Image Encoder"
-
-msgid "An image cache and resize service"
-msgstr "Kuvavälimuisti ja koonmuutospalvelu"
+msgid "AI Image generation & Chat hub"
+msgstr ""
 
 msgid "IRC Logs for multiple networks"
 msgstr "IRC-lokit useille verkoille"
@@ -2215,17 +2200,8 @@ msgstr "Aloitussivu erilaisille palveluille"
 msgid "Streaming radio service"
 msgstr "Suoratoistoradiopalvelu"
 
-msgid "Alternative frontend for Imgur"
-msgstr "Vaihtoehtoinen käyttöliittymä Imgur"
-
 msgid "Privacy-focused not-for-profit organization"
 msgstr "Yksityisyyteen keskittyvä voittoa tavoittelematon organisaatio"
-
-msgid "Outproxy bandwidth test"
-msgstr "Välityspalvelimen kaistanleveyden testi"
-
-msgid "speedtest"
-msgstr "nopeustesti"
 
 msgid "Text translation engine"
 msgstr "Tekstin käännöskone"
@@ -2233,20 +2209,8 @@ msgstr "Tekstin käännöskone"
 msgid "translate"
 msgstr "Kääntää"
 
-msgid "Alternative front-end to Youtube"
-msgstr "Vaihtoehtoinen käyttöliittymä Youtube"
-
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "Yksityisyyden tarjoaja, joka kunnioittaa web-isännöinti- ja VPN-palveluita"
-
-msgid "Tor-focused Search Engine"
-msgstr "Toriin keskittyvä hakukone"
-
-msgid "Pinterest Image Search Engine"
-msgstr "Pinterestin kuva-hakuohjelma"
-
-msgid "Clearnet BitTorrent DHT search engine"
-msgstr "Clearnet BitTorrent DHT -hakukone"
 
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "DuckDuckGo-hakukone (ei javascriptiä)"
@@ -2256,21 +2220,6 @@ msgstr "Yksityisyyteen keskittyvä Clearnet-hakukone"
 
 msgid "I2P Web Search Engine"
 msgstr "I2P-verkkohakukone"
-
-msgid "Enabling the free transmission of data in the public interest"
-msgstr "Tietojen ilmaisen siirron mahdollistaminen yleisen edun vuoksi"
-
-msgid "Selected Papers in Anonymity"
-msgstr "Valitut paperit nimettömänä"
-
-msgid "Tor .onion site links"
-msgstr "Tor .onion -sivustolinkit"
-
-msgid "HTML Color Reference"
-msgstr "HTML-väriviittaus"
-
-msgid "HTMLColors"
-msgstr "HTML Värit"
 
 msgid "I2P-related Wiki"
 msgstr "I2P:hen liittyvä Wiki"
@@ -2287,29 +2236,17 @@ msgstr "Internetin Filosofian Tietosanakirja"
 msgid "Standford Encyclopedia of Philosophy"
 msgstr "Stanfordin Filosofian Tietosanakirja"
 
-msgid "Psychonaut"
-msgstr "Psychonaut"
-
-msgid "Wiki relating to altered states of consciousness"
-msgstr "Wiki, joka liittyy muuttuneisiin tietoisuuden tiloihin"
-
 msgid "Computing-related tutorials"
 msgstr "Tietojenkäsittelyyn liittyviä opetusohjelmia"
 
 msgid "SimplifiedGuide"
 msgstr "Yksinkertaistettu opas"
 
-msgid "Vulnerability Database"
-msgstr "Haavoittuvuustietokanta"
-
 msgid "Web technology reference and learning site"
 msgstr "Verkkoteknologian viite- ja oppimissivusto"
 
 msgid "Alternative Wikipedia front-end focused on privacy"
 msgstr "Vaihtoehtoinen Wikipedian käyttöliittymä keskittyy yksityisyyteen"
-
-msgid "The biggest online English dictionary"
-msgstr "Suurin englannin online-sanakirja"
 
 msgid "World atlas including geography facts &amp; flags"
 msgstr "Maailman atlas, mukaan lukien maantieteelliset tiedot"
@@ -2320,14 +2257,8 @@ msgstr "Maailman Atlas"
 msgid "Technology News &amp; more..."
 msgstr "Teknologiauutiset"
 
-msgid "Independent investigative journalism"
-msgstr "Riippumaton tutkiva journalismi"
-
 msgid "Information Security Research &amp; Education"
 msgstr "Tietoturvatutkimus"
-
-msgid "Darknet related news site"
-msgstr "Darknetiin liittyvä uutissivusto"
 
 msgid "DigitalTrends"
 msgstr "DigitalTrends"
@@ -2340,24 +2271,6 @@ msgstr "Oikeuksien puolustaminen digitaalisessa maailmassa"
 
 msgid "The Elliptic Curve Cryptography Blog"
 msgstr "Elliptisen käyrän salausblogi"
-
-msgid "ForeignPolicy"
-msgstr "Ulkopolitiikka"
-
-msgid "The Global Magazine of News &amp; Ideas"
-msgstr "Hän globaali uutislehti ja ideoita"
-
-msgid "FrontLineDefenders"
-msgstr "FrontLineDefenders"
-
-msgid "Human rights activism"
-msgstr "Ihmisoikeusaktivismi"
-
-msgid "Defending Human Rights Worldwide"
-msgstr "Ihmisoikeuksien puolustaminen maailmanlaajuisesti"
-
-msgid "HumanRightsWatch"
-msgstr "Human RightsWatch"
 
 msgid "Fresh hacks every day"
 msgstr "Tuoreita hakkereita joka päivä"
@@ -2373,12 +2286,6 @@ msgstr "HongKongFreePress"
 
 msgid "Independent &amp; impartial news for Hong Kong"
 msgstr "Hongkongille riippumattomat ja puolueettomat uutiset"
-
-msgid "HongKongWatch"
-msgstr "HongKongWatch"
-
-msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr "Tarkkailee vapauksia ja oikeuksia koskevia uhkia Hongkongissa"
 
 msgid "JStorDaily"
 msgstr "JStorDaily"
@@ -2416,11 +2323,11 @@ msgstr "Riippumaton kansainvälinen media-alusta"
 msgid "OpenDemocracy"
 msgstr "Avoin Demokratia"
 
-msgid "News and blog feeds on I2P"
-msgstr "Uutis- ja blogisyötteet I2P:stä"
+msgid "Online privacy &amp; tech blog"
+msgstr ""
 
-msgid "Planeta"
-msgstr "Planeta"
+msgid "RightToPrivacy"
+msgstr ""
 
 msgid "Lifestyle magazine"
 msgstr "Lifestyle-lehti"
@@ -2449,20 +2356,11 @@ msgstr "Uutisia nörteille"
 msgid "Technology news &amp; reviews"
 msgstr "Teknologiauutiset"
 
-msgid "Reporting on China without fear or favor"
-msgstr "Raportointi Kiinasta ilman pelkoa tai suosiota"
-
 msgid "News from the Taiwan Capital"
 msgstr "Uutisia Taiwanin pääkaupungista"
 
 msgid "TaipeiTimes"
 msgstr "TaipeiTimes"
-
-msgid "TechXplore"
-msgstr "TechXplore"
-
-msgid "Technology and engineering news"
-msgstr "Tekniikka ja tekniikan uutiset"
 
 msgid "TechMeme"
 msgstr "TechMeme"
@@ -2505,12 +2403,6 @@ msgstr "TheNew Republic"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "Tiedostojen jakaminen"
-
-msgid "A magazine about human rights and social justice"
-msgstr "Aikakauslehti ihmisoikeuksista ja sosiaalisesta oikeudenmukaisuudesta"
-
-msgid "UpstreamJournal"
-msgstr "UpstreamJournal"
 
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
 msgstr "Tasapainoinen andrealistinen ymmärrys Lähi -idän amerikkalaisista intresseistä"
@@ -2841,16 +2733,22 @@ msgstr ""
 msgid "Not initialized"
 msgstr "Ei alustettu"
 
-msgid "Sorted by hash distance, closest first."
+msgid "Total Remote Leasesets"
 msgstr ""
 
 msgid "Compact mode"
 msgstr ""
 
-msgid "Total Remote Leasesets"
+msgid "Local Leasesets"
+msgstr ""
+
+msgid "Debug Mode"
 msgstr ""
 
 msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Sorted by hash distance, closest first."
 msgstr ""
 
 msgid "Mod Data"
@@ -2865,17 +2763,11 @@ msgstr ""
 msgid "Change in"
 msgstr ""
 
-msgid "Known Floodfills"
-msgstr "Tunnetut tulvatytöt"
-
 msgid "Floodfill mode enabled"
 msgstr ""
 
 msgid "Routing Key"
 msgstr "Reititysavain"
-
-msgid "Network data"
-msgstr "Verkkotiedot"
 
 msgid "Median distance (bits)"
 msgstr "Mediaanietäisyys (bittiä)"
@@ -2885,6 +2777,12 @@ msgstr "Arvioidut tulvatytöt yhteensä"
 
 msgid "Estimated total leasesets"
 msgstr "Arvioitu vuokrasopimusten kokonaismäärä"
+
+msgid "Total Local Leasesets"
+msgstr ""
+
+msgid "Remote Leasesets"
+msgstr ""
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2917,12 +2815,6 @@ msgstr "Vanhenee{0}"
 msgid "Expired{0} ago"
 msgstr "Vanhentunut{0} sitten"
 
-msgid "Received as published"
-msgstr "vastaanotettu sellaisena kuin se on julkaistu?"
-
-msgid "Received as reply"
-msgstr "Saitko vastauksena?"
-
 msgid "Distance"
 msgstr "Etäisyys"
 
@@ -2931,6 +2823,9 @@ msgstr "Offline allekirjoitettu"
 
 msgid "Signature type"
 msgstr "Allekirjoituksen tyyppi"
+
+msgid "Public Key"
+msgstr ""
 
 msgid "Unsupported type"
 msgstr "Tyyppiä ei tueta"
@@ -2942,6 +2837,9 @@ msgstr "Vanhenee {0}"
 #, java-format
 msgid "Expired {0} ago"
 msgstr "Vanhentunut {0} sitten"
+
+msgid "Unknown"
+msgstr "Tuntematon"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
 msgstr ""
@@ -2978,9 +2876,6 @@ msgstr "Tulvat"
 
 msgid "Total"
 msgstr "Yhteensä"
-
-msgid "Unknown"
-msgstr "Tuntematon"
 
 msgid "Initializing"
 msgstr "Alustus"
@@ -3055,9 +2950,6 @@ msgstr "Näytä kaikki tällä osoitteella varustetut reitittimet NetDb:ssä"
 msgid "Show all routers with this port in the NetDb"
 msgstr "Näytä kaikki tällä portilla varustetut reitittimet NetDb:ssä"
 
-msgid "Network ID"
-msgstr "Verkon tunnus"
-
 msgid "Routers"
 msgstr "Reitittimet"
 
@@ -3069,6 +2961,12 @@ msgstr "Viimeksi kuultu"
 
 msgid "Last heard from"
 msgstr "Viimeksi kuultu"
+
+msgid "Network Id"
+msgstr ""
+
+msgid "Count is always spoofed to avoid indicating router restarts"
+msgstr ""
 
 msgid "Hidden or starting up"
 msgstr "Piilotettu tai käynnistynyt"
@@ -3129,19 +3027,16 @@ msgstr "router.config-tiedostoon."
 msgid "Peer Connections"
 msgstr "Vertaisyhteydet"
 
-msgid "Active in the last minute"
-msgstr "Aktiivinen viime hetkellä"
-
 msgid "IPv4"
 msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
 
-msgid "Limit"
+msgid "Active connections / Max permitted"
 msgstr ""
 
-msgid "Maximum permitted connections"
+msgid "Connections / Limit"
 msgstr ""
 
 msgid "Current / maximum permitted"
@@ -3150,23 +3045,23 @@ msgstr "Nykyinen / suurin sallittu"
 msgid "NTCP connections"
 msgstr "NTCP-yhteydet"
 
-msgid "Caps"
-msgstr "Caps"
-
 msgid "Peer capabilities"
 msgstr "Peer-ominaisuudet"
 
-msgid "Dir"
-msgstr "Ohjaus"
+msgid "Caps"
+msgstr "Caps"
 
 msgid "Direction/Introduction"
 msgstr "Suunta/Esittely"
 
-msgid "Idle"
-msgstr "Tyhjäkäynti"
+msgid "Dir"
+msgstr "Ohjaus"
 
 msgid "Peer inactivity"
 msgstr "Kavereiden epäaktiivisuus"
+
+msgid "Idle"
+msgstr "Tyhjäkäynti"
 
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Keskimääräinen saapuva/lähtönopeus (kt/s)"
@@ -3198,11 +3093,11 @@ msgstr "Viestit vastaanotettu"
 msgid "RX"
 msgstr "RX"
 
-msgid "Out Queue"
-msgstr "Jono ulos"
-
 msgid "Queued messages to send to peer"
 msgstr "Jonossa olevat viestit lähetettäväksi vertaiselle"
+
+msgid "Out Queue"
+msgstr "Jono ulos"
 
 msgid "Connection is backlogged"
 msgstr "Yhteys on ruuhkautunut"
@@ -3728,11 +3623,11 @@ msgstr "Lataa I2P-päivitys"
 msgid "Unsigned update available"
 msgstr "Allekirjoittamaton päivitys saatavilla"
 
-msgid "Help with firewall configuration"
-msgstr "Apua palomuurin määrittämiseen"
-
 msgid "Check network connection and NAT/firewall!"
 msgstr "Tarkista verkkoyhteys ja NAT/palomuuri!"
+
+msgid "Help with firewall configuration"
+msgstr "Apua palomuurin määrittämiseen"
 
 msgid "Attempt to download router reference files (if automatic reseed has failed)"
 msgstr "Yritä ladata reitittimen viitetiedostoja (jos automaattinen uudelleensyöttö epäonnistui)"
@@ -3767,23 +3662,35 @@ msgstr "Siirry alas"
 msgid "Select a section to add"
 msgstr "Valitse lisättävä osio"
 
+msgid "Router Information (advanced)"
+msgstr "Reitittimen tiedot (lisäasetukset)"
+
+msgid "Advanced Links"
+msgstr "Lisälinkit"
+
+msgid "Bandwidth Graph"
+msgstr "Siirtomäärän kuvaaja"
+
+msgid "UTC Clock"
+msgstr "UTC Kello"
+
+msgid "Congestion"
+msgstr "Tungos"
+
+msgid "CPU Load"
+msgstr "CPU kuormitus"
+
+msgid "Firewall &amp; Reseed Status"
+msgstr "Palomuuri"
+
 msgid "Help &amp; FAQ"
 msgstr "Ohje &amp; UKK"
-
-msgid "I2P Services"
-msgstr "I2P Palvelut"
 
 msgid "I2P Internals"
 msgstr "I2P sisälmykset"
 
-msgid "Router Information"
-msgstr "Reitittimen tiedot"
-
-msgid "Router Information (brief)"
-msgstr "Reitittimen tiedot (lyhyt)"
-
-msgid "Router Information (advanced)"
-msgstr "Reitittimen tiedot (lisäasetukset)"
+msgid "I2P Services"
+msgstr "I2P Palvelut"
 
 msgid "Memory Usage Bar"
 msgstr "Muistin käyttöpalkki"
@@ -3791,35 +3698,23 @@ msgstr "Muistin käyttöpalkki"
 msgid "Network Reachability"
 msgstr "Verkon saavutettavuus"
 
-msgid "Update Status"
-msgstr "Päivitä tila"
+msgid "News &amp; Updates"
+msgstr "Uutiset &amp; Päivitykset"
 
 msgid "Restart Status"
 msgstr "Uudelleenkäynnistyksen tila"
 
-msgid "Firewall &amp; Reseed Status"
-msgstr "Palomuuri"
+msgid "Router Information"
+msgstr "Reitittimen tiedot"
 
-msgid "Bandwidth Graph"
-msgstr "Siirtomäärän kuvaaja"
-
-msgid "Congestion"
-msgstr "Tungos"
+msgid "Router Information (brief)"
+msgstr "Reitittimen tiedot (lyhyt)"
 
 msgid "Tunnel Status"
 msgstr "Tunnelin tila"
 
-msgid "News &amp; Updates"
-msgstr "Uutiset &amp; Päivitykset"
-
-msgid "Advanced Links"
-msgstr "Lisälinkit"
-
-msgid "UTC Clock"
-msgstr "UTC Kello"
-
-msgid "CPU Load"
-msgstr "CPU kuormitus"
+msgid "Update Status"
+msgstr "Päivitä tila"
 
 msgid "I2P Router Help &amp; FAQ"
 msgstr "I2P Reitittimen ohje &amp; UKK"
@@ -4004,6 +3899,9 @@ msgstr "Vertailevat käyttäjät yhteensä NetDb:ssä"
 
 msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Kaverit, joiden kanssa olemme keskustelleet viime minuuttien/viime tunnin aikana"
+
+msgid "Peers we've been talking to in the last minute"
+msgstr ""
 
 msgid "The number of peers available for building client tunnels"
 msgstr "Asiakastunnelien rakentamiseen käytettävissä olevien vertaislaitteiden määrä"
@@ -4337,6 +4235,9 @@ msgstr "Pakota esto"
 msgid "days"
 msgstr "päivää"
 
+msgid "Known Floodfills"
+msgstr "Tunnetut tulvatytöt"
+
 msgid "Average closest floodfill distance"
 msgstr "Keskimääräinen lähin täyttöetäisyys"
 
@@ -4507,6 +4408,9 @@ msgstr "Tiedot siirretty"
 
 msgid "Data"
 msgstr "Data"
+
+msgid "Limit"
+msgstr ""
 
 msgid "Receive on"
 msgstr "Vastaanota"
@@ -5480,6 +5384,9 @@ msgstr "Asenna I2P-järjestelmäpalvelu. "
 msgid "config sidebar"
 msgstr "config-sivupalkki"
 
+msgid "Sidebar Options"
+msgstr ""
+
 msgid "Refresh interval"
 msgstr "Päivitysväli"
 
@@ -5488,6 +5395,12 @@ msgstr "sekuntia"
 
 msgid "0 to disable"
 msgstr "0 poistaa käytöstä"
+
+msgid "Unified sidebar"
+msgstr ""
+
+msgid "Use the same sidebar on all pages"
+msgstr ""
 
 msgid "config stats"
 msgstr "tilastoasetukset"
@@ -5688,6 +5601,9 @@ msgstr "tapahtumat"
 msgid "Event Log"
 msgstr "Tapahtumaloki"
 
+msgid "Combined"
+msgstr ""
+
 msgid "graph"
 msgstr "Grafiikki"
 
@@ -5765,6 +5681,9 @@ msgstr "Tämän asetuksen asettaminen todeksi näyttää vertaisen testituloituk
 
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Tämän asetuksen asettaminen todeksi näyttää <i>Kiinnostuksen kohteet</i> -linkit <a href=/sitemap>sivukartassa</a>. [Oletuksena false]"
+
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
+msgstr ""
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Tämä asetus määrittää, tulisiko reitittimen käyttää annettua <i>blocklist.txt</i> -tiedostoa ja käyttäjän määrittämiä estolistoja reitittimen estämiseksi hajosiin tai ip-osoitteilla. Ipv4:lle tuetaan alueita ja verkkoasettimia, mutta Ipv6 ei. Lisätietoja on <i>blocklist.txt</i> -tiedostossa I2P+ sovelluskansiossa. [Oletusarvoisesti päällä, uudelleenkäynnistys vaaditaan]"
@@ -6579,8 +6498,8 @@ msgstr "Jos pyydetään <i>rekisteröintitunnistautumismerkkijonoa</i>, voit lö
 msgid "If you are in a hurry and can't wait a few hours, you can tell people to use a \"jump\" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is working, you can tell others to use it."
 msgstr "Jos olet kiireinen etkä voi odottaa muutamaa tuntia, voit kehottaa ihmisiä käyttämään \"hyppy\"-osoitteen avustavaa uudelleenohjauspalvelua. Tämä toimii yleensä muutamassa minuutissa oman verkkosivun osoitteen rekisteröimisen jälkeen samalla sivustolla. Testaa se ensin itse syöttämällä <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>valitsemasiomain.nimi.i2p</i></code> selaimessasi. Kun se toimii, voit kertoa muille käyttää sitä."
 
-msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skanki2p</a>, and paste the link where it's required to share it with others."
-msgstr "Vaihtoehtoisesti voit kopioida <i>osoiteavustajan linkin</i> antamalla verkkotunnukselle, joka näkyy joko osoitekirjan sivulla tai verkkotunnuksen yksityiskohtaisella sivulla, esim. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer> lisätietoja i2p-projekt.i2p: stä</a>, ja liitä linkki sinne, missä sitä tarvitaan jaettavaksi muille."
+msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
+msgstr ""
 
 msgid "Backup your private key!"
 msgstr "Varmuuskopioi yksityinen avain!"
@@ -6816,8 +6735,8 @@ msgstr "Avaa <a href=/confignet#udpconfig>I2P+:n portti</a> modeemissasi, reitit
 msgid "Getting Support Online"
 msgstr "Tuen hakeminen verkosta"
 
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "Voit myös tarkastella tietoja <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P-verkkosivustolla</a>, lähettää viestejä <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P-keskustelufoorumiin</a> tai tulla käymään kanavalla <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> tai <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> I2P:n sisäisessä IRC-verkossa."
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
+msgstr ""
 
 msgid "Reporting Bugs"
 msgstr "Bugiraportointi"
@@ -7356,6 +7275,9 @@ msgstr "Mukauta linkkejä"
 msgid "Configure display language, theme and optional console password"
 msgstr "Määritä näytön kieli, teema ja valinnainen konsolin salasana"
 
+msgid "Language"
+msgstr ""
+
 msgid "Configure router bandwidth"
 msgstr "Määritä reitittimen kaistanleveys"
 
@@ -7420,6 +7342,24 @@ msgstr "Palvelus (Wrapper) lokit"
 msgid "network database"
 msgstr "verkkotietokanta"
 
+msgid "Encryption type"
+msgstr ""
+
+msgid "Encryption types"
+msgstr ""
+
+msgid "Signature types"
+msgstr ""
+
+msgid "Locally hosted private service"
+msgstr ""
+
+msgid "Locally hosted public service"
+msgstr ""
+
+msgid "Requested client leaseset"
+msgstr ""
+
 msgid "network database router map"
 msgstr "Verkkotietokanta-reittikartta"
 
@@ -7462,6 +7402,12 @@ msgstr "Estetyt vertaissolmut"
 
 msgid "Fast / High Capacity"
 msgstr "Nopea / suuri kapasiteetti"
+
+msgid "router logs"
+msgstr ""
+
+msgid "service logs"
+msgstr ""
 
 msgid "Manage I2P addresses"
 msgstr "Hallitse I2P-osoitteita"
@@ -7667,6 +7613,9 @@ msgstr "Käytä/loptaa tunneltunnisteita"
 msgid "Toggle Tunnels"
 msgstr "Käytä/loptaa tuneleja"
 
+msgid "Updating sidebar sections"
+msgstr ""
+
 msgid "Peer Profile"
 msgstr "Vertaisprofiili"
 
@@ -7812,7 +7761,15 @@ msgstr "Valmistunut"
 
 
 
-#, java-format
+
+
+
+
+
+
+
+
+
 
 
 

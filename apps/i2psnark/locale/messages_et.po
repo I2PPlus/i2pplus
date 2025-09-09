@@ -54,6 +54,14 @@ msgstr "Üleslaadimise BW piir vahetatud {0}KBps"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Üleslaadimise bändivõrgu piiri minimaalne väärtus on {0}KBps"
 
+#, java-format
+msgid "Maximum download speed changed to {0}KB/s"
+msgstr ""
+
+#, java-format
+msgid "Download speed limit is {0}KB/s"
+msgstr ""
+
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
 msgstr ""
 
@@ -138,12 +146,6 @@ msgstr "Autostart sisse lülitatud"
 msgid "Disabled autostart"
 msgstr "Autostart välja lülitatud"
 
-msgid "Enabled smart sort"
-msgstr "Tark sorteerimine sisse lülitatud"
-
-msgid "Disabled smart sort"
-msgstr "Tark sorteerimine välja lülitatud"
-
 msgid "Enabled open trackers - torrent restart required to take effect."
 msgstr "Avalikud trackerid sisse lülitatud - torrenti tuleb taaskäivitada, et muudatus jõustuks."
 
@@ -199,8 +201,8 @@ msgstr "Lisa ja Looge seadmed on kõigil torrenti loetelu lehtedel sisse lülita
 msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
 msgstr "Lisa ja Looge seadmed kuvatakse ainult mitmelehe torrenti loetelu lehtede esimesel lehel."
 
-msgid "Configuration unchanged."
-msgstr "Seaded pole muutunud."
+msgid "API key updated."
+msgstr ""
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Avalike trackerite loetelu on muutunud - torrenti tuleb taaskäivitada, et muudatus jõustuks."
@@ -241,22 +243,6 @@ msgid "Torrent with the same data location is already running: {0}"
 msgstr "Torrent sama andmekoha abil töötab juba: {0}"
 
 #, java-format
-msgid "ERROR - No I2P trackers in private torrent \"{0}\""
-msgstr "VIGA - Privaatse torrenti \"{0}\" pole I2P trackeritega"
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "Hoiatus - \"{0}\" pole I2P trackeritega, teavitatakse ainult I2P avalike trackerite ja DHT poolt."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "Hoiatus - \"{0}\" pole I2P trackeritega, samuti on avalikud trackerid keelatud, teavitatakse ainult DHT poolt."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "Hoiatus - \"{0}\" pole I2P trackeritega, samuti on DHT ja avalikud trackerid keelatud, torrenti käivitamisel peaksid sisse lülitama avalikud trackerid või DHT."
-
-#, java-format
 msgid "Torrent in \"{0}\" is invalid"
 msgstr "Torrent \"{0}\" on vigane"
 
@@ -274,6 +260,22 @@ msgstr "Torrent lisatud ja käivitatud: {0}"
 #, java-format
 msgid "Torrent added: {0}"
 msgstr "Torrent lisatud: {0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "VIGA - Privaatse torrenti \"{0}\" pole I2P trackeritega"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "Hoiatus - \"{0}\" pole I2P trackeritega, teavitatakse ainult I2P avalike trackerite ja DHT poolt."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "Hoiatus - \"{0}\" pole I2P trackeritega, samuti on avalikud trackerid keelatud, teavitatakse ainult DHT poolt."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "Hoiatus - \"{0}\" pole I2P trackeritega, samuti on DHT ja avalikud trackerid keelatud, torrenti käivitamisel peaksid sisse lülitama avalikud trackerid või DHT."
 
 #, java-format
 msgid "Fetching {0}"
@@ -346,6 +348,18 @@ msgstr "Torrent eemaldatud: \"{0}\""
 msgid "Adding torrents in {0}&hellip;"
 msgstr "Torrente lisamine {0}..."
 
+#, java-format
+msgid "Down bandwidth limit is {0} KB/s"
+msgstr "Allaandvõrgu piir on {0} KBps"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KB/s"
+msgstr "Üleslaadimise bändivõrgu piir on {0} KBps"
+
+#, java-format
+msgid "Connecting to I2CP port on I2P instance at {0}"
+msgstr ""
+
 msgid "Connecting to I2P"
 msgstr "Ühendamine I2P-ga"
 
@@ -357,20 +371,12 @@ msgid "Starting up torrent {0}"
 msgstr "Torrenti käivitamine {0}"
 
 #, java-format
-msgid "Down bandwidth limit is {0} KB/s"
-msgstr "Allaandvõrgu piir on {0} KBps"
-
-#, java-format
-msgid "Up bandwidth limit is {0} KB/s"
-msgstr "Üleslaadimise bändivõrgu piir on {0} KBps"
-
-#, java-format
-msgid "I2P+ I2PSnark standalone version {0} started"
-msgstr "I2P+ I2PSnarki eraldiseisv versioon {0} käivitatud"
-
-#, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
 msgstr "Üleslaadimise bändivõrgu piir on {0} KBps maksimaalselt {1} kooslaadiva partnerit."
+
+#, java-format
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
+msgstr ""
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -413,6 +419,19 @@ msgid "Closing I2P tunnel after notifying trackers."
 msgstr "Trackerite teavitamise järel I2P tünneli sulgemine."
 
 #, java-format
+msgid "Cannot check {0}"
+msgstr ""
+
+msgid "Torrent already started"
+msgstr ""
+
+msgid "No storage"
+msgstr ""
+
+msgid "Starting recheck of {}"
+msgstr ""
+
+#, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
 msgstr "Torrenti {0} kontroll lõpetatud, nüüd on {1} täielikult"
 
@@ -423,6 +442,9 @@ msgstr "Torrenti {0} kontroll lõpetatud, mitte muutunud"
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "Torrenti {0} kontrollimisel tekkis viga"
+
+msgid "Cannot create diskspace bar"
+msgstr ""
 
 msgid "Data partition"
 msgstr ""
@@ -464,9 +486,6 @@ msgstr "Torrent asukohalt {0} ei olnud kehtiv"
 
 msgid "Configuration"
 msgstr "Seaded"
-
-msgid "Debug Mode"
-msgstr "Silumisrežiim"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "Anonüümne BitTorrent klient"
@@ -510,12 +529,6 @@ msgstr "Foorum"
 
 msgid "Torrent &amp; filesharing forum"
 msgstr "Torrenti ja failide jagamise foorum"
-
-msgid "BTDigg"
-msgstr "BTDigg"
-
-msgid "I2P-based search engine for clearnet-hosted torrents"
-msgstr "I2P-põhine otsingumootor, mis otsib clearnetis asuvaid torrente"
 
 msgid "Search torrents"
 msgstr "Otsi torrente"
@@ -591,8 +604,8 @@ msgstr "Alla hinnang"
 msgid "TX"
 msgstr "TX"
 
-msgid "Share ratio"
-msgstr "Üleslaadimise suhe"
+msgid "Upload ratio"
+msgstr ""
 
 msgid "Uploaded"
 msgstr "Üleslaaditud"
@@ -634,6 +647,12 @@ msgid "Total size of loaded torrents"
 msgstr ""
 
 #, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] ""
+msgstr[1] ""
+
+#, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
 msgstr[0] "1 DHT peer"
@@ -666,8 +685,8 @@ msgstr "Koguüleslaaditud andmed (nimekirjas olevate torrentide jaoks)"
 msgid "Total upload speed"
 msgstr "Kogüleslaadimise kiirus"
 
-msgid "Toggle Debug Mode"
-msgstr ""
+msgid "Debug Mode"
+msgstr "Silumisrežiim"
 
 msgid "Normal Mode"
 msgstr "Tavaline režiim"
@@ -910,6 +929,9 @@ msgstr "jäänud"
 msgid "Completed"
 msgstr "Lõpetatud"
 
+msgid "Share ratio"
+msgstr "Üleslaadimise suhe"
+
 msgid "Last activity"
 msgstr "Viimane tegevus"
 
@@ -1018,11 +1040,11 @@ msgstr "Sisu filtre"
 msgid "Trackers"
 msgstr "Trackerid"
 
-msgid "Primary"
-msgstr "Peamine"
-
 msgid "Alternates"
 msgstr "Vahelikud"
+
+msgid "Primary"
+msgstr "Peamine"
 
 msgid "Tracker Type"
 msgstr "Trackeri tüüp"
@@ -1334,6 +1356,12 @@ msgstr "Lisa"
 msgid "Pieces"
 msgstr "Osad"
 
+msgid "Average download speed for torrent"
+msgstr ""
+
+msgid "Download speed"
+msgstr ""
+
 msgid "Completion"
 msgstr "Lõpetamine"
 
@@ -1481,6 +1509,9 @@ msgstr "Märgi kustutamiseks"
 msgid "Delete Selected"
 msgstr "Kustuta valitud"
 
+msgid "File downloading priorities updated for torrent "
+msgstr ""
+
 msgid "Edit Torrent"
 msgstr "Muuda torrent"
 
@@ -1502,13 +1533,9 @@ msgstr "Salvesta muudatused"
 msgid "Torrent must be stopped"
 msgstr "Torrent peab olema peatatud"
 
+
+
+
 #, java-format
-
-
-
-
-
-
-
 
 

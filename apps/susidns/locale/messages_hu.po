@@ -50,6 +50,9 @@ msgstr "Típus {0}"
 msgid "DSA 1024 bit"
 msgstr "1024 bites DSA"
 
+msgid "ElGamal 2048 bit"
+msgstr "2048 bitest ElGamal"
+
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
 msgstr[0] "Keresse meg a következőt: <span class=active>"
@@ -270,6 +273,9 @@ msgstr "Új célállomás hozzáadása"
 msgid "Import from hosts.txt file"
 msgstr "Importálás a hosts.txt fájlból"
 
+msgid "other"
+msgstr "egyéb"
+
 msgid "Export in hosts.txt format"
 msgstr "Exportálás hosts.txt formátumba"
 
@@ -282,8 +288,8 @@ msgstr "Könyv exportálása hosts.txt formátumban"
 msgid "Search"
 msgstr "Keresés"
 
-msgid "other"
-msgstr "egyéb"
+msgid "latest"
+msgstr ""
 
 msgid "all"
 msgstr "szűrő törlése"
@@ -425,9 +431,6 @@ msgstr "Bázis 64 Hash"
 
 msgid "Public Key"
 msgstr "Nyilvános Kulcs"
-
-msgid "ElGamal 2048 bit"
-msgstr "2048 bitest ElGamal"
 
 msgid "Signing Key"
 msgstr "Aláíró Kulcs"
@@ -596,5 +599,3 @@ msgstr "A fő címjegyzékbe kézzel hozzáadott címek egyesülnek az útválas
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Az előfizetésekből kapott gazdagépek egyesülnek az útválasztó címjegyzékével."
-
-

@@ -1560,10 +1560,7 @@ msgstr "Перезапуск в {0}"
 msgid "Save order"
 msgstr "Порядок збереження"
 
-msgid "Sidebar refresh disabled"
-msgstr ""
-
-msgid "Sidebar refresh interval changed"
+msgid "Sidebar preferences updated"
 msgstr ""
 
 msgid "Refresh interval must be a number"
@@ -1598,9 +1595,6 @@ msgstr "Переміщено"
 
 msgid "Saved order of sections."
 msgstr "Порядок секцій збережено."
-
-msgid "Stat filter and location updated successfully to"
-msgstr "Фільтр статистики та місцезнаходження успішно оновлено"
 
 msgid "Full statistics enabled"
 msgstr "Повну статистику ввімкнено"
@@ -2190,23 +2184,14 @@ msgstr "Форуми спільноти, пов’язані з I2P"
 msgid "File-sharing forum"
 msgstr "Форум обміну файлами"
 
-msgid "Alternative front-end for Twitter"
-msgstr "Альтернативний інтерфейс для Twitter"
-
-msgid "Rocksolid forums for the darknets"
-msgstr "Надійні форуми для даркнетів"
-
 msgid "Cross-network micro-blogging &amp; forums &amp; wiki"
 msgstr "Мікромережеве ведення блогів"
 
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Альтернативний зовнішній інтерфейс Reddit, орієнтований на конфіденційність"
 
-msgid "Base64 Image Encoder"
-msgstr "Кодер зображень Base64"
-
-msgid "An image cache and resize service"
-msgstr "Служба кешування зображень і зміни розміру"
+msgid "AI Image generation & Chat hub"
+msgstr ""
 
 msgid "IRC Logs for multiple networks"
 msgstr "Журнали IRC для кількох мереж"
@@ -2223,17 +2208,8 @@ msgstr "Цільова сторінка для різних сервісів"
 msgid "Streaming radio service"
 msgstr "Сервіс потокового радіо"
 
-msgid "Alternative frontend for Imgur"
-msgstr "Альтернативний інтерфейс для Imgur"
-
 msgid "Privacy-focused not-for-profit organization"
 msgstr "Некомерційна організація, яка займається конфіденційністю"
-
-msgid "Outproxy bandwidth test"
-msgstr "Тест пропускної здатності вихідного проксі"
-
-msgid "speedtest"
-msgstr "тест швидкості"
 
 msgid "Text translation engine"
 msgstr "Механізм перекладу тексту"
@@ -2241,20 +2217,8 @@ msgstr "Механізм перекладу тексту"
 msgid "translate"
 msgstr "перекладати"
 
-msgid "Alternative front-end to Youtube"
-msgstr "Альтернативний інтерфейс для Youtube"
-
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "Постачальник конфіденційності щодо послуг веб-хостингу та VPN"
-
-msgid "Tor-focused Search Engine"
-msgstr "Пошукова система, орієнтована на Tor"
-
-msgid "Pinterest Image Search Engine"
-msgstr "Пошуковик зображень Pinterest"
-
-msgid "Clearnet BitTorrent DHT search engine"
-msgstr "Пошукова система Clearnet BitTorrent DHT"
 
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "Пошукова система DuckDuckGo (без javascript)"
@@ -2264,21 +2228,6 @@ msgstr "Пошукова система Clearnet, орієнтована на к
 
 msgid "I2P Web Search Engine"
 msgstr "Система веб-пошуку I2P"
-
-msgid "Enabling the free transmission of data in the public interest"
-msgstr "Забезпечення вільної передачі даних в суспільних інтересах"
-
-msgid "Selected Papers in Anonymity"
-msgstr "Вибрані статті в анонімності"
-
-msgid "Tor .onion site links"
-msgstr "Посилання на сайт Tor .onion"
-
-msgid "HTML Color Reference"
-msgstr "Довідник кольорів HTML"
-
-msgid "HTMLColors"
-msgstr "Кольори HTML"
 
 msgid "I2P-related Wiki"
 msgstr "Вікі, пов’язана з I2P"
@@ -2295,29 +2244,17 @@ msgstr "Інтернет-енциклопедія філософії"
 msgid "Standford Encyclopedia of Philosophy"
 msgstr "Стендфордська енциклопедія філософії"
 
-msgid "Psychonaut"
-msgstr "Психонавт"
-
-msgid "Wiki relating to altered states of consciousness"
-msgstr "Вікі, що стосується змінених станів свідомості"
-
 msgid "Computing-related tutorials"
 msgstr "Навчальні посібники з обчислювальної техніки"
 
 msgid "SimplifiedGuide"
 msgstr "Спрощений посібник"
 
-msgid "Vulnerability Database"
-msgstr "База даних уразливостей"
-
 msgid "Web technology reference and learning site"
 msgstr "Веб-довідковий і навчальний сайт технологій"
 
 msgid "Alternative Wikipedia front-end focused on privacy"
 msgstr "Альтернативний інтерфейс Вікіпедії, зосереджений на конфіденційності"
-
-msgid "The biggest online English dictionary"
-msgstr "Найбільший онлайн-словник англійської мови"
 
 msgid "World atlas including geography facts &amp; flags"
 msgstr "Атлас світу з географічними фактами"
@@ -2328,14 +2265,8 @@ msgstr "Атлас світу"
 msgid "Technology News &amp; more..."
 msgstr "Technology News &amp; more..."
 
-msgid "Independent investigative journalism"
-msgstr "Незалежне журналістське розслідування"
-
 msgid "Information Security Research &amp; Education"
 msgstr "Дослідження інформаційної безпеки"
-
-msgid "Darknet related news site"
-msgstr "Сайт новин, пов’язаний з Darknet"
 
 msgid "DigitalTrends"
 msgstr "DigitalTrends"
@@ -2348,24 +2279,6 @@ msgstr "Захист своїх прав у цифровому світі"
 
 msgid "The Elliptic Curve Cryptography Blog"
 msgstr "Блог криптографії еліптичної кривої"
-
-msgid "ForeignPolicy"
-msgstr "Зовнішня політика"
-
-msgid "The Global Magazine of News &amp; Ideas"
-msgstr "Він глобальний журнал новин та ідей"
-
-msgid "FrontLineDefenders"
-msgstr "FrontLineDefenders"
-
-msgid "Human rights activism"
-msgstr "Правозахисна діяльність"
-
-msgid "Defending Human Rights Worldwide"
-msgstr "Захист прав людини у всьому світі"
-
-msgid "HumanRightsWatch"
-msgstr "HumanRightsWatch"
 
 msgid "Fresh hacks every day"
 msgstr "Щодня нові хаки"
@@ -2381,12 +2294,6 @@ msgstr "HongKongFreePress"
 
 msgid "Independent &amp; impartial news for Hong Kong"
 msgstr "Незалежні та неупереджені новини для Гонконгу"
-
-msgid "HongKongWatch"
-msgstr "HongKongWatch"
-
-msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr "Відстежує загрози свободам і правам у Гонконзі"
 
 msgid "JStorDaily"
 msgstr "JStorDaily"
@@ -2424,11 +2331,11 @@ msgstr "Незалежна міжнародна медіа платформа"
 msgid "OpenDemocracy"
 msgstr "Відкрита демократія"
 
-msgid "News and blog feeds on I2P"
-msgstr "Стрічки новин і блогів на I2P"
+msgid "Online privacy &amp; tech blog"
+msgstr ""
 
-msgid "Planeta"
-msgstr "Planeta"
+msgid "RightToPrivacy"
+msgstr ""
 
 msgid "Lifestyle magazine"
 msgstr "Журнал Lifestyle"
@@ -2457,20 +2364,11 @@ msgstr "Новини для ботанів"
 msgid "Technology news &amp; reviews"
 msgstr "Новини технологій"
 
-msgid "Reporting on China without fear or favor"
-msgstr "Звітувати про Китай без страху чи ласки"
-
 msgid "News from the Taiwan Capital"
 msgstr "Новини зі столиці Тайваню"
 
 msgid "TaipeiTimes"
 msgstr "TaipeiTimes"
-
-msgid "TechXplore"
-msgstr "TechXplore"
-
-msgid "Technology and engineering news"
-msgstr "Новини техніки та техніки"
 
 msgid "TechMeme"
 msgstr "TechMeme"
@@ -2513,12 +2411,6 @@ msgstr "TheNewRepublic"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "Обмін файлами"
-
-msgid "A magazine about human rights and social justice"
-msgstr "Журнал про права людини та соціальну справедливість"
-
-msgid "UpstreamJournal"
-msgstr "Журнал Upstream"
 
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
 msgstr "Просування збалансоване"
@@ -2849,16 +2741,22 @@ msgstr ""
 msgid "Not initialized"
 msgstr "Не ініціалізовано"
 
-msgid "Sorted by hash distance, closest first."
+msgid "Total Remote Leasesets"
 msgstr ""
 
 msgid "Compact mode"
 msgstr ""
 
-msgid "Total Remote Leasesets"
+msgid "Local Leasesets"
+msgstr ""
+
+msgid "Debug Mode"
 msgstr ""
 
 msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Sorted by hash distance, closest first."
 msgstr ""
 
 msgid "Mod Data"
@@ -2873,17 +2771,11 @@ msgstr ""
 msgid "Change in"
 msgstr ""
 
-msgid "Known Floodfills"
-msgstr "Відомі затоплення"
-
 msgid "Floodfill mode enabled"
 msgstr ""
 
 msgid "Routing Key"
 msgstr "Ключ маршрутизації"
-
-msgid "Network data"
-msgstr "Мережеві дані"
 
 msgid "Median distance (bits)"
 msgstr "Середня відстань (біт)"
@@ -2893,6 +2785,12 @@ msgstr "Розрахункові загальні затоплення"
 
 msgid "Estimated total leasesets"
 msgstr "Розрахункова загальна сума орендованих наборів"
+
+msgid "Total Local Leasesets"
+msgstr ""
+
+msgid "Remote Leasesets"
+msgstr ""
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2925,12 +2823,6 @@ msgstr "Закінчується{0}"
 msgid "Expired{0} ago"
 msgstr "Термін дії минув{0} тому"
 
-msgid "Received as published"
-msgstr "Отримано як опубліковано?"
-
-msgid "Received as reply"
-msgstr "Отримано як відповідь?"
-
 msgid "Distance"
 msgstr "Відстань"
 
@@ -2939,6 +2831,9 @@ msgstr "Підписано офлайн"
 
 msgid "Signature type"
 msgstr "Тип підпису"
+
+msgid "Public Key"
+msgstr ""
 
 msgid "Unsupported type"
 msgstr "Тип не підтримується"
@@ -2950,6 +2845,9 @@ msgstr "Термін дії закінчується через {0}"
 #, java-format
 msgid "Expired {0} ago"
 msgstr "Термін дії минув {0} тому"
+
+msgid "Unknown"
+msgstr "Невідомо"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
 msgstr ""
@@ -2986,9 +2884,6 @@ msgstr "Затоплення"
 
 msgid "Total"
 msgstr "Загалом"
-
-msgid "Unknown"
-msgstr "Невідомо"
 
 msgid "Initializing"
 msgstr "Ініціалізація"
@@ -3063,9 +2958,6 @@ msgstr "Показати всі маршрутизатори з цією адр�
 msgid "Show all routers with this port in the NetDb"
 msgstr "Показати всі маршрутизатори з цим портом у NetDb"
 
-msgid "Network ID"
-msgstr "Ідентифікатор мережі"
-
 msgid "Routers"
 msgstr "Маршрутизатори"
 
@@ -3077,6 +2969,12 @@ msgstr "Востаннє чув про"
 
 msgid "Last heard from"
 msgstr "Востаннє чув"
+
+msgid "Network Id"
+msgstr ""
+
+msgid "Count is always spoofed to avoid indicating router restarts"
+msgstr ""
 
 msgid "Hidden or starting up"
 msgstr "Прихований або ще запускається"
@@ -3137,19 +3035,16 @@ msgstr "у файл router.config."
 msgid "Peer Connections"
 msgstr "Однорангові з'єднання"
 
-msgid "Active in the last minute"
-msgstr "Активність на останній хвилині"
-
 msgid "IPv4"
 msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
 
-msgid "Limit"
+msgid "Active connections / Max permitted"
 msgstr ""
 
-msgid "Maximum permitted connections"
+msgid "Connections / Limit"
 msgstr ""
 
 msgid "Current / maximum permitted"
@@ -3158,23 +3053,23 @@ msgstr "Поточний / максимально допустимий"
 msgid "NTCP connections"
 msgstr "NTCP підключення"
 
-msgid "Caps"
-msgstr "Шапки"
-
 msgid "Peer capabilities"
 msgstr "Можливості однолітків"
 
-msgid "Dir"
-msgstr "Напрямок"
+msgid "Caps"
+msgstr "Шапки"
 
 msgid "Direction/Introduction"
 msgstr "Напрямок/Введення"
 
-msgid "Idle"
-msgstr "Неактивний"
+msgid "Dir"
+msgstr "Напрямок"
 
 msgid "Peer inactivity"
 msgstr "Бездіяльність"
+
+msgid "Idle"
+msgstr "Неактивний"
 
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Середня швидкість вхідної/вихідної (КБ/с)"
@@ -3206,11 +3101,11 @@ msgstr "Отримані повідомлення"
 msgid "RX"
 msgstr "Прийнято"
 
-msgid "Out Queue"
-msgstr "Вихідна Черга"
-
 msgid "Queued messages to send to peer"
 msgstr "Повідомлення в черзі для надсилання Peer"
+
+msgid "Out Queue"
+msgstr "Вихідна Черга"
 
 msgid "Connection is backlogged"
 msgstr "З'єднання відставається"
@@ -3744,11 +3639,11 @@ msgstr "Завантажити оновлення I2P"
 msgid "Unsigned update available"
 msgstr "Доступне непідписане оновлення"
 
-msgid "Help with firewall configuration"
-msgstr "Допомога з конфігурацією брандмауера"
-
 msgid "Check network connection and NAT/firewall!"
 msgstr "Перевірте підключення до мережі та NAT/брандмауер!"
+
+msgid "Help with firewall configuration"
+msgstr "Допомога з конфігурацією брандмауера"
 
 msgid "Attempt to download router reference files (if automatic reseed has failed)"
 msgstr "Спроба завантажити довідкові файли маршрутизатора (якщо автоматичне повторне завантаження не вдалось)"
@@ -3783,23 +3678,35 @@ msgstr "Перейти вниз"
 msgid "Select a section to add"
 msgstr "Виберіть розділ для додавання"
 
+msgid "Router Information (advanced)"
+msgstr "Інформація про маршрутизатор (розширений)"
+
+msgid "Advanced Links"
+msgstr "Розширені посилання"
+
+msgid "Bandwidth Graph"
+msgstr "Графік пропускної здатності"
+
+msgid "UTC Clock"
+msgstr "Годинник UTC"
+
+msgid "Congestion"
+msgstr "Затори"
+
+msgid "CPU Load"
+msgstr "Завантаження ЦП"
+
+msgid "Firewall &amp; Reseed Status"
+msgstr "Брандмауер"
+
 msgid "Help &amp; FAQ"
 msgstr "Допоможіть"
-
-msgid "I2P Services"
-msgstr "Послуги I2P"
 
 msgid "I2P Internals"
 msgstr "Внутрішні пристрої I2P"
 
-msgid "Router Information"
-msgstr "Інформація про маршрутизатор"
-
-msgid "Router Information (brief)"
-msgstr "Інформація про маршрутизатор (стисло)"
-
-msgid "Router Information (advanced)"
-msgstr "Інформація про маршрутизатор (розширений)"
+msgid "I2P Services"
+msgstr "Послуги I2P"
 
 msgid "Memory Usage Bar"
 msgstr "Панель використання пам'яті"
@@ -3807,35 +3714,23 @@ msgstr "Панель використання пам'яті"
 msgid "Network Reachability"
 msgstr "Досяжність мережі"
 
-msgid "Update Status"
-msgstr "Статус оновлення"
+msgid "News &amp; Updates"
+msgstr "Новини &amp; оновлення"
 
 msgid "Restart Status"
 msgstr "Статус перезапуску"
 
-msgid "Firewall &amp; Reseed Status"
-msgstr "Брандмауер"
+msgid "Router Information"
+msgstr "Інформація про маршрутизатор"
 
-msgid "Bandwidth Graph"
-msgstr "Графік пропускної здатності"
-
-msgid "Congestion"
-msgstr "Затори"
+msgid "Router Information (brief)"
+msgstr "Інформація про маршрутизатор (стисло)"
 
 msgid "Tunnel Status"
 msgstr "Статус тунелю"
 
-msgid "News &amp; Updates"
-msgstr "Новини &amp; оновлення"
-
-msgid "Advanced Links"
-msgstr "Розширені посилання"
-
-msgid "UTC Clock"
-msgstr "Годинник UTC"
-
-msgid "CPU Load"
-msgstr "Завантаження ЦП"
+msgid "Update Status"
+msgstr "Статус оновлення"
 
 msgid "I2P Router Help &amp; FAQ"
 msgstr "Допомога i2p маршрутизатора та поширені запитання"
@@ -4020,6 +3915,9 @@ msgstr "Загальна кількість однорангових мереж 
 
 msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Колеги, з якими ми спілкувалися протягом останніх кількох хвилин/останньої години"
+
+msgid "Peers we've been talking to in the last minute"
+msgstr ""
 
 msgid "The number of peers available for building client tunnels"
 msgstr "Кількість однорангових вузлів, доступних для створення клієнтських тунелів"
@@ -4355,6 +4253,9 @@ msgstr "Застосувати блок для"
 msgid "days"
 msgstr "днів"
 
+msgid "Known Floodfills"
+msgstr "Відомі затоплення"
+
 msgid "Average closest floodfill distance"
 msgstr "Середня найближча відстань до затоплення"
 
@@ -4525,6 +4426,9 @@ msgstr "Дані передано"
 
 msgid "Data"
 msgstr "Дані"
+
+msgid "Limit"
+msgstr ""
 
 msgid "Receive on"
 msgstr "Отримати далі"
@@ -5498,6 +5402,9 @@ msgstr "Установіть системну службу I2P. "
 msgid "config sidebar"
 msgstr "бічна панель конфігурації"
 
+msgid "Sidebar Options"
+msgstr ""
+
 msgid "Refresh interval"
 msgstr "Інтервал оновлення"
 
@@ -5506,6 +5413,12 @@ msgstr "секунд"
 
 msgid "0 to disable"
 msgstr "0, щоб вимкнути"
+
+msgid "Unified sidebar"
+msgstr ""
+
+msgid "Use the same sidebar on all pages"
+msgstr ""
 
 msgid "config stats"
 msgstr "статистика конфігурації"
@@ -5706,6 +5619,9 @@ msgstr "події"
 msgid "Event Log"
 msgstr "Журнал подій"
 
+msgid "Combined"
+msgstr ""
+
 msgid "graph"
 msgstr "графік"
 
@@ -5783,6 +5699,9 @@ msgstr "Це налаштування, коли встановлено true, б�
 
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Це налаштування, коли встановлено true, буде відображати посилання <i>Цікаві сайти</i> на сторінці <a href=/sitemap>карти сайту</a>. [За замовчуванням false]"
+
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
+msgstr ""
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Цей параметр визначає, чи слід маршрутизатор використовувати наданий файл <i> blocklist.txt </i> та будь -які списки, налаштовані користувачем, щоб дозволити заборону маршрутизаторів за допомогою хеш або IP+ -адреси. Діапазони та мережеві маски підтримуються для IPv4, але не IPv6. Для отримання додаткової інформації див. [Увімкнено за замовчуванням, перезапуск потрібно]"
@@ -6597,8 +6516,8 @@ msgstr "Якщо запитують <i>Строку аутентифікації
 msgid "If you are in a hurry and can't wait a few hours, you can tell people to use a \"jump\" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is working, you can tell others to use it."
 msgstr "Якщо вам терміново і декілька годин чекати не можна, ви можете повідомити людей користуватися службою «переходу» адресної допомоги. Зазвичай це спрацює протягом декількох хвилин після реєстрації вашої доменної назви на тому ж сайті. Випробуйте це самі, введши <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>вашаобранадоменна назва.i2p</i></code> у браузер. Коли це спрацює, ви можете сказати іншим це використовувати."
 
-msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skanki2p</a>, and paste the link where it's required to share it with others."
-msgstr "Або можна скопіювати посилання на <i>адресну допомогу</i> для вашого домену, яке вказано або на сторінці зі списком адресної книги, або на сторінці деталей для вашого домену, наприклад <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>деталі для i2p-projekt.i2p</a>, і вставити посилання там, де це необхідно, щоб його поділитися з іншими."
+msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
+msgstr ""
 
 msgid "Backup your private key!"
 msgstr "Резервна копія приватного ключа!"
@@ -6834,8 +6753,8 @@ msgstr "Відкрийте <a href=/confignet#udpconfig>порт I2P+</a> на �
 msgid "Getting Support Online"
 msgstr "Отримання підтримки онлайн"
 
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "Ви також можете переглянути інформацію на сайті <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P</a>, опублікувати повідомлення на <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>форумі обговорень I2P</a> або зайти на канали <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> чи <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> внутрішньої мережі IRC I2P."
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
+msgstr ""
 
 msgid "Reporting Bugs"
 msgstr "Повідомлення про помилки"
@@ -7374,6 +7293,9 @@ msgstr "Налаштуйте посилання"
 msgid "Configure display language, theme and optional console password"
 msgstr "Налаштуйте мову відображення, тему та додатковий пароль консолі"
 
+msgid "Language"
+msgstr ""
+
 msgid "Configure router bandwidth"
 msgstr "Налаштуйте пропускну здатність маршрутизатора"
 
@@ -7438,6 +7360,24 @@ msgstr "Журнали служби (обгортка)."
 msgid "network database"
 msgstr "база даних мережі"
 
+msgid "Encryption type"
+msgstr ""
+
+msgid "Encryption types"
+msgstr ""
+
+msgid "Signature types"
+msgstr ""
+
+msgid "Locally hosted private service"
+msgstr ""
+
+msgid "Locally hosted public service"
+msgstr ""
+
+msgid "Requested client leaseset"
+msgstr ""
+
 msgid "network database router map"
 msgstr "Мапа роутерів бази даних мережі"
 
@@ -7480,6 +7420,12 @@ msgstr "Забанені однолітки"
 
 msgid "Fast / High Capacity"
 msgstr "Швидкий / Висока місткість"
+
+msgid "router logs"
+msgstr ""
+
+msgid "service logs"
+msgstr ""
 
 msgid "Manage I2P addresses"
 msgstr "Керування адресами I2P"
@@ -7685,6 +7631,9 @@ msgstr "Перемикання ID тунелів"
 msgid "Toggle Tunnels"
 msgstr "Перемикання Тунелів"
 
+msgid "Updating sidebar sections"
+msgstr ""
+
 msgid "Peer Profile"
 msgstr "Профіль однолітка"
 
@@ -7830,7 +7779,15 @@ msgstr "Готово"
 
 
 
-#, java-format
+
+
+
+
+
+
+
+
+
 
 
 

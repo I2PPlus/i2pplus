@@ -12,6 +12,12 @@ msgid "internal"
 msgstr ""
 
 #, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] ""
+msgstr[1] ""
+
+#, java-format
 msgid "{0} inbound tunnel"
 msgid_plural "{0} inbound tunnels"
 msgstr[0] ""
@@ -20,12 +26,6 @@ msgstr[1] ""
 #, java-format
 msgid "{0} outbound tunnel"
 msgid_plural "{0} outbound tunnels"
-msgstr[0] ""
-msgstr[1] ""
-
-#, java-format
-msgid "{0} inbound, {0} outbound tunnel"
-msgid_plural "{0} inbound, {0} outbound tunnels"
 msgstr[0] ""
 msgstr[1] ""
 
@@ -38,13 +38,46 @@ msgstr ""
 msgid "higher bandwidth and reliability"
 msgstr ""
 
-msgid "Configuration reloaded for all tunnels"
+msgid "Error - tunnels are not initialized yet"
+msgstr ""
+
+msgid "No services configured, cannot restart!"
+msgstr ""
+
+msgid "Stopping tunnel"
 msgstr ""
 
 msgid "Starting tunnel"
 msgstr ""
 
-msgid "Stopping tunnel"
+msgid "Error restarting tunnel"
+msgstr ""
+
+msgid "Restarted all running tunnels"
+msgstr ""
+
+msgid "No clients configured, cannot restart!"
+msgstr ""
+
+msgid "Restarted all running client tunnels"
+msgstr ""
+
+msgid "Configuration reloaded for all tunnels"
+msgstr ""
+
+msgid "Error: Invalid tunnel"
+msgstr ""
+
+msgid "Started tunnel"
+msgstr ""
+
+msgid "Stopped tunnel"
+msgstr ""
+
+msgid "Restarting tunnel"
+msgstr ""
+
+msgid "Please confirm removal"
 msgstr ""
 
 msgid "New Tunnel"
@@ -116,6 +149,9 @@ msgstr ""
 msgid "Are you sure you want to delete?"
 msgstr ""
 
+msgid "required"
+msgstr ""
+
 msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
 msgstr ""
 
@@ -171,9 +207,6 @@ msgid "Enable DCC"
 msgstr ""
 
 msgid "Port"
-msgstr ""
-
-msgid "required"
 msgstr ""
 
 msgid "Specify the local port this service should be accessible from"
@@ -320,10 +353,13 @@ msgstr ""
 msgid "This is the default, recommended option"
 msgstr ""
 
-msgid "Legacy option (deprecated), provided for backward compatibility"
+msgid "Encryption types"
 msgstr ""
 
-msgid "Encryption types"
+msgid "Legacy options"
+msgstr ""
+
+msgid "Post Quantum"
 msgstr ""
 
 msgid "Both encryption types"
@@ -360,6 +396,9 @@ msgstr[0] ""
 msgstr[1] ""
 
 msgid "Number of Tunnels in Group"
+msgstr ""
+
+msgid "Disabled for 0 hop tunnels"
 msgstr ""
 
 msgid "Variance"
@@ -527,16 +566,16 @@ msgstr ""
 msgid "Require local authorization for this service"
 msgstr ""
 
-msgid "Username"
-msgstr ""
-
 msgid "Set username required to access this service"
 msgstr ""
 
-msgid "Password"
+msgid "Username"
 msgstr ""
 
 msgid "Set password required to access this service"
+msgstr ""
+
+msgid "Password"
 msgstr ""
 
 msgid "Outproxy Authorization"
@@ -651,6 +690,9 @@ msgid "Configuration of signature type is only possible when the tunnel is first
 msgstr ""
 
 msgid "Legacy option, with alternate key configured"
+msgstr ""
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
 msgstr ""
 
 msgid "Recommended for blinded and encrypted destinations"
@@ -987,7 +1029,22 @@ msgstr ""
 msgid "Start All"
 msgstr ""
 
+msgid "Restart all running tunnels"
+msgstr ""
+
 msgid "Restart All"
+msgstr ""
+
+msgid "Restart all running server tunnels"
+msgstr ""
+
+msgid "Restart All Servers"
+msgstr ""
+
+msgid "Restart all running client tunnels"
+msgstr ""
+
+msgid "Restart All Clients"
 msgstr ""
 
 msgid "I2P Server Tunnels"
@@ -1014,6 +1071,9 @@ msgstr ""
 msgid "Edit Server Tunnel Settings for"
 msgstr ""
 
+msgid "Test IRC server, bypassing I2P"
+msgstr ""
+
 msgid "Test HTTPS server, bypassing I2P"
 msgstr ""
 
@@ -1024,6 +1084,9 @@ msgid "Test HTTP server through I2P"
 msgstr ""
 
 msgid "Base32 Address"
+msgstr ""
+
+msgid "Offline"
 msgstr ""
 
 msgid "No Preview"
@@ -1047,6 +1110,12 @@ msgstr ""
 msgid "out"
 msgstr ""
 
+msgid "Restart this Tunnel"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
 msgid "Stopped"
 msgstr ""
 
@@ -1063,6 +1132,9 @@ msgid "Alt Destination"
 msgstr ""
 
 msgid "Encryption"
+msgstr ""
+
+msgid "Supported encryption"
 msgstr ""
 
 msgid "New server tunnel"

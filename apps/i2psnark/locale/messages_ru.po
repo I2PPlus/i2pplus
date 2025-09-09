@@ -54,6 +54,14 @@ msgstr "Новое значение лимита скорости отдачи: 
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Минимально допустимое значение для лимита скорости отдачи: {0} КБ/с"
 
+#, java-format
+msgid "Maximum download speed changed to {0}KB/s"
+msgstr ""
+
+#, java-format
+msgid "Download speed limit is {0}KB/s"
+msgstr ""
+
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
 msgstr ""
 
@@ -138,12 +146,6 @@ msgstr "Автостарт включен"
 msgid "Disabled autostart"
 msgstr "Автостарт выключен"
 
-msgid "Enabled smart sort"
-msgstr "Включена \"умная\" сортировка"
-
-msgid "Disabled smart sort"
-msgstr "Отключена \"умная\" сортировка"
-
 msgid "Enabled open trackers - torrent restart required to take effect."
 msgstr "Включено использование открытых трекеров. Требуется перезапуск торрента, чтобы изменения вступили в силу."
 
@@ -199,8 +201,8 @@ msgstr "Отображать доп.функции на всех страниц�
 msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
 msgstr "Отображать доп.опции только на первой странице списка торрентов."
 
-msgid "Configuration unchanged."
-msgstr "Настройки не изменились."
+msgid "API key updated."
+msgstr ""
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Изменен список открытых трекеров. Требуется перезапуск торрентов, чтобы изменения вступили в силу."
@@ -241,22 +243,6 @@ msgid "Torrent with the same data location is already running: {0}"
 msgstr "Торрент с таким же расположением данных уже запущен: {0}"
 
 #, java-format
-msgid "ERROR - No I2P trackers in private torrent \"{0}\""
-msgstr "ОШИБКА - нет I2P-трекеров в частном торренте \"{0}\""
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "Предупреждение - Нет I2P трекеров в \"{0}\", анонсирование будет выполняться только на открытых трекерах и в DHT."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "Предупреждение - Нет I2P трекеров в \"{0}\" и использование открытых трекеров запрещено, анонсирование будет выполняться только в DHT."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "Предупреждение - Нет I2P трекеров в \"{0}\" и использование открытых трекеров и DHT запрещено. Следует разрешить их использование перед запуском торрента."
-
-#, java-format
 msgid "Torrent in \"{0}\" is invalid"
 msgstr "Торрент в \"{0}\" некорректен"
 
@@ -274,6 +260,22 @@ msgstr "Торрент добавлен и запущен: {0}"
 #, java-format
 msgid "Torrent added: {0}"
 msgstr "Добавлен торрент: {0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "ОШИБКА - нет I2P-трекеров в частном торренте \"{0}\""
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "Предупреждение - Нет I2P трекеров в \"{0}\", анонсирование будет выполняться только на открытых трекерах и в DHT."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "Предупреждение - Нет I2P трекеров в \"{0}\" и использование открытых трекеров запрещено, анонсирование будет выполняться только в DHT."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "Предупреждение - Нет I2P трекеров в \"{0}\" и использование открытых трекеров и DHT запрещено. Следует разрешить их использование перед запуском торрента."
 
 #, java-format
 msgid "Fetching {0}"
@@ -346,6 +348,18 @@ msgstr "Торрент удален: \"{0}\""
 msgid "Adding torrents in {0}&hellip;"
 msgstr "Добавление торрентов в {0}&hellip;"
 
+#, java-format
+msgid "Down bandwidth limit is {0} KB/s"
+msgstr "Ограничение скорости загрузки: {0} KBps"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KB/s"
+msgstr "Максимальное значение для скорости отдачи: {0} КБ/с"
+
+#, java-format
+msgid "Connecting to I2CP port on I2P instance at {0}"
+msgstr ""
+
 msgid "Connecting to I2P"
 msgstr "Устанавливается соединение с I2P"
 
@@ -357,20 +371,12 @@ msgid "Starting up torrent {0}"
 msgstr "Торрент запускается: {0}"
 
 #, java-format
-msgid "Down bandwidth limit is {0} KB/s"
-msgstr "Ограничение скорости загрузки: {0} KBps"
-
-#, java-format
-msgid "Up bandwidth limit is {0} KB/s"
-msgstr "Максимальное значение для скорости отдачи: {0} КБ/с"
-
-#, java-format
-msgid "I2P+ I2PSnark standalone version {0} started"
-msgstr "I2P+ I2PSnark standalone version {0} started"
-
-#, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
 msgstr "Лимит отдачи {0} КБ/с для максимального количества пиров {1}"
+
+#, java-format
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
+msgstr ""
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -413,6 +419,19 @@ msgid "Closing I2P tunnel after notifying trackers."
 msgstr "Закрытие туннеля I2P после уведомления трекеров."
 
 #, java-format
+msgid "Cannot check {0}"
+msgstr ""
+
+msgid "Torrent already started"
+msgstr ""
+
+msgid "No storage"
+msgstr ""
+
+msgid "Starting recheck of {}"
+msgstr ""
+
+#, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
 msgstr "Закончена перепроверка торрента {0}, теперь {1} завершен"
 
@@ -423,6 +442,9 @@ msgstr "Закончена перепроверка торрента {0}, без
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "Ошибка проверки торрента {0}"
+
+msgid "Cannot create diskspace bar"
+msgstr ""
 
 msgid "Data partition"
 msgstr ""
@@ -464,9 +486,6 @@ msgstr "Торрент полученный из {0} некорректен"
 
 msgid "Configuration"
 msgstr "Настройки"
-
-msgid "Debug Mode"
-msgstr "Отладка"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "Анонимный BitTorrent клиент"
@@ -510,12 +529,6 @@ msgstr "Форум"
 
 msgid "Torrent &amp; filesharing forum"
 msgstr "Торрент и филиализация"
-
-msgid "BTDigg"
-msgstr "BTDigg"
-
-msgid "I2P-based search engine for clearnet-hosted torrents"
-msgstr "Поисковая система на основе I2P для торрентов с пропорциональными торрентами"
 
 msgid "Search torrents"
 msgstr "Поиск потоков"
@@ -591,8 +604,8 @@ msgstr "Скорость загрузки"
 msgid "TX"
 msgstr "Отдано"
 
-msgid "Share ratio"
-msgstr "Коэффициент отдачи"
+msgid "Upload ratio"
+msgstr ""
 
 msgid "Uploaded"
 msgstr "Отдано"
@@ -635,6 +648,13 @@ msgid "Total size of loaded torrents"
 msgstr ""
 
 #, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
 msgstr[0] "{0} DHT пир"
@@ -668,8 +688,8 @@ msgstr "Всего отдано (для торрентов из списка)"
 msgid "Total upload speed"
 msgstr "Общая скорость отдачи"
 
-msgid "Toggle Debug Mode"
-msgstr ""
+msgid "Debug Mode"
+msgstr "Отладка"
 
 msgid "Normal Mode"
 msgstr "Нормальный"
@@ -914,6 +934,9 @@ msgstr "осталось"
 msgid "Completed"
 msgstr "Завершено"
 
+msgid "Share ratio"
+msgstr "Коэффициент отдачи"
+
 msgid "Last activity"
 msgstr "Последняя активность"
 
@@ -1022,11 +1045,11 @@ msgstr "Фильтры контента"
 msgid "Trackers"
 msgstr "Трекеры"
 
-msgid "Primary"
-msgstr "Основной"
-
 msgid "Alternates"
 msgstr "Альтернативный"
+
+msgid "Primary"
+msgstr "Основной"
 
 msgid "Tracker Type"
 msgstr "Тип трекера"
@@ -1340,6 +1363,12 @@ msgstr "Добавлено"
 msgid "Pieces"
 msgstr "Части"
 
+msgid "Average download speed for torrent"
+msgstr ""
+
+msgid "Download speed"
+msgstr ""
+
 msgid "Completion"
 msgstr "Загружено"
 
@@ -1488,6 +1517,9 @@ msgstr "Пометить для удаления"
 msgid "Delete Selected"
 msgstr "Удалить выбранное"
 
+msgid "File downloading priorities updated for torrent "
+msgstr ""
+
 msgid "Edit Torrent"
 msgstr "Изменить Торрент"
 
@@ -1509,13 +1541,9 @@ msgstr "Сохранить изменения"
 msgid "Torrent must be stopped"
 msgstr "Торрент остановлен {0}"
 
+
+
+
 #, java-format
-
-
-
-
-
-
-
 
 

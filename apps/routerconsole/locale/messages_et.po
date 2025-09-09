@@ -1555,10 +1555,7 @@ msgstr "Uuesti käivitumiseni {0}"
 msgid "Save order"
 msgstr "Salvesta tellimus"
 
-msgid "Sidebar refresh disabled"
-msgstr ""
-
-msgid "Sidebar refresh interval changed"
+msgid "Sidebar preferences updated"
 msgstr ""
 
 msgid "Refresh interval must be a number"
@@ -1593,9 +1590,6 @@ msgstr "liigutatud"
 
 msgid "Saved order of sections."
 msgstr "Sektsioonide järjekord on salvestatud."
-
-msgid "Stat filter and location updated successfully to"
-msgstr "Statistikafilter ja asukoht uuendatud väärtusele"
 
 msgid "Full statistics enabled"
 msgstr "täielik statistika on lubatud"
@@ -2183,23 +2177,14 @@ msgstr "I2P-ga seotud kogukonnafoorumid"
 msgid "File-sharing forum"
 msgstr "failijagamise foorum"
 
-msgid "Alternative front-end for Twitter"
-msgstr "Twitteri alternatiivne kasutajaliides"
-
-msgid "Rocksolid forums for the darknets"
-msgstr "Rocksolidi foorumid pimedate võrkude jaoks"
-
 msgid "Cross-network micro-blogging &amp; forums &amp; wiki"
 msgstr "Võrkudevaheline mikroblogimine"
 
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Redditi alternatiivne privaatsusele keskendunud kasutajaliides"
 
-msgid "Base64 Image Encoder"
-msgstr "Base64 pildi kodeerija"
-
-msgid "An image cache and resize service"
-msgstr "Piltide vahemälu ja suuruse muutmise teenus"
+msgid "AI Image generation & Chat hub"
+msgstr ""
 
 msgid "IRC Logs for multiple networks"
 msgstr "IRC logid mitme võrgu jaoks"
@@ -2216,17 +2201,8 @@ msgstr "Erinevate teenuste sihtleht"
 msgid "Streaming radio service"
 msgstr "Voogesitusraadioteenus"
 
-msgid "Alternative frontend for Imgur"
-msgstr "Imgur alternatiivne kasutajaliides"
-
 msgid "Privacy-focused not-for-profit organization"
 msgstr "privaatsusele keskendunud mittetulundusorganisatsioon"
-
-msgid "Outproxy bandwidth test"
-msgstr "puhverserveri ribalaiuse test"
-
-msgid "speedtest"
-msgstr "kiiruskatse"
 
 msgid "Text translation engine"
 msgstr "Tekstitõlke mootor"
@@ -2234,20 +2210,8 @@ msgstr "Tekstitõlke mootor"
 msgid "translate"
 msgstr "Tõlgi"
 
-msgid "Alternative front-end to Youtube"
-msgstr "Youtube alternatiivne kasutajaliides"
-
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "privaatsuse pakkuja, mis austab veebimajutust ja VPN-teenuseid"
-
-msgid "Tor-focused Search Engine"
-msgstr "Torile keskendunud otsingumootor"
-
-msgid "Pinterest Image Search Engine"
-msgstr "Pinteresti pildisõitmismootor"
-
-msgid "Clearnet BitTorrent DHT search engine"
-msgstr "Clearnet BitTorrent DHT otsingumootor"
 
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "DuckDuckGo otsingumootor (javascripti pole)"
@@ -2257,21 +2221,6 @@ msgstr "privaatsusele keskendunud Clearneti otsingumootor"
 
 msgid "I2P Web Search Engine"
 msgstr "I2P veebiotsingumootor"
-
-msgid "Enabling the free transmission of data in the public interest"
-msgstr "Andmete tasuta edastamise võimaldamine avalikes huvides"
-
-msgid "Selected Papers in Anonymity"
-msgstr "Anonüümsuses valitud paberid"
-
-msgid "Tor .onion site links"
-msgstr "Tor .onion saidi lingid"
-
-msgid "HTML Color Reference"
-msgstr "HTML-i värviviide"
-
-msgid "HTMLColors"
-msgstr "HTML Värvid"
 
 msgid "I2P-related Wiki"
 msgstr "I2P-ga seotud Wiki"
@@ -2288,29 +2237,17 @@ msgstr "Interneti -entsüklopeedia filosoofiast"
 msgid "Standford Encyclopedia of Philosophy"
 msgstr "Stanfordi filosoofia entsüklopeedia"
 
-msgid "Psychonaut"
-msgstr "Psühhonaut"
-
-msgid "Wiki relating to altered states of consciousness"
-msgstr "Wiki, mis käsitleb muutunud teadvuseseisundeid"
-
 msgid "Computing-related tutorials"
 msgstr "Arvutustehnikaga seotud õpetused"
 
 msgid "SimplifiedGuide"
 msgstr "Lihtsustatud juhend"
 
-msgid "Vulnerability Database"
-msgstr "haavatavuse andmebaas"
-
 msgid "Web technology reference and learning site"
 msgstr "Veebitehnoloogia viide- ja õppesait"
 
 msgid "Alternative Wikipedia front-end focused on privacy"
 msgstr "Privaatsusele keskendunud alternatiivne Wikipedia kasutajaliides"
-
-msgid "The biggest online English dictionary"
-msgstr "suurim inglise keele veebisõnastik"
 
 msgid "World atlas including geography facts &amp; flags"
 msgstr "Maailma atlas, sealhulgas geograafia faktid ja lipud"
@@ -2321,14 +2258,8 @@ msgstr "Maailma Atlas"
 msgid "Technology News &amp; more..."
 msgstr "Tehnoloogiauudised ja palju muud..."
 
-msgid "Independent investigative journalism"
-msgstr "Sõltumatu uuriv ajakirjandus"
-
 msgid "Information Security Research &amp; Education"
 msgstr "Infoturbe uurimine ja haridus"
-
-msgid "Darknet related news site"
-msgstr "Darknetiga seotud uudiste sait"
 
 msgid "DigitalTrends"
 msgstr "Digital Trends"
@@ -2341,24 +2272,6 @@ msgstr "oma õiguste kaitsmine digitaalses maailmas"
 
 msgid "The Elliptic Curve Cryptography Blog"
 msgstr "Elliptilise kõvera krüptograafia ajaveeb"
-
-msgid "ForeignPolicy"
-msgstr "Välispoliitika"
-
-msgid "The Global Magazine of News &amp; Ideas"
-msgstr "Ülemaailmne ajakiri uudiste ja ideede ajakiri"
-
-msgid "FrontLineDefenders"
-msgstr "FrontLineDefenders"
-
-msgid "Human rights activism"
-msgstr "Inimõiguste aktivism"
-
-msgid "Defending Human Rights Worldwide"
-msgstr "Inimõiguste kaitsmine kogu maailmas"
-
-msgid "HumanRightsWatch"
-msgstr "Human RightsWatch"
 
 msgid "Fresh hacks every day"
 msgstr "Värskeid häkke iga päev"
@@ -2374,12 +2287,6 @@ msgstr "HongKongFreePress"
 
 msgid "Independent &amp; impartial news for Hong Kong"
 msgstr "Iseseisvad ja erapooletu uudised Hongkongile"
-
-msgid "HongKongWatch"
-msgstr "HongKongWatch"
-
-msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr "Jälgib vabadusi ja õigusi ähvardavaid ohte Hongkongis"
 
 msgid "JStorDaily"
 msgstr "JStorDaily"
@@ -2417,11 +2324,11 @@ msgstr "Sõltumatu rahvusvaheline meediaplatvorm"
 msgid "OpenDemocracy"
 msgstr "AvatudDemokraatia"
 
-msgid "News and blog feeds on I2P"
-msgstr "I2P uudiste ja ajaveebi kanalid"
+msgid "Online privacy &amp; tech blog"
+msgstr ""
 
-msgid "Planeta"
-msgstr "Planeta"
+msgid "RightToPrivacy"
+msgstr ""
 
 msgid "Lifestyle magazine"
 msgstr "Elustiili ajakiri"
@@ -2450,20 +2357,11 @@ msgstr "Uudised nohikutele"
 msgid "Technology news &amp; reviews"
 msgstr "Tehnoloogiauudised"
 
-msgid "Reporting on China without fear or favor"
-msgstr "Aruandlus Hiinast ilma hirmu ja poolehoiuta"
-
 msgid "News from the Taiwan Capital"
 msgstr "Uudised Taiwani pealinnast"
 
 msgid "TaipeiTimes"
 msgstr "TaipeiTimes"
-
-msgid "TechXplore"
-msgstr "TechXplore"
-
-msgid "Technology and engineering news"
-msgstr "Tehnoloogia- ja inseneriuudised"
 
 msgid "TechMeme"
 msgstr "TechMeme"
@@ -2506,12 +2404,6 @@ msgstr "Uus Vabariik"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "Filesharimise ja autoriõiguse uudised"
-
-msgid "A magazine about human rights and social justice"
-msgstr "inimõiguste ja sotsiaalse õigluse ajakiri"
-
-msgid "UpstreamJournal"
-msgstr "UpstreamJournal"
 
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
 msgstr "Lähis -Idas Ameerika huvide tasakaalustatud ja realistliku mõistmise edendamine"
@@ -2842,16 +2734,22 @@ msgstr ""
 msgid "Not initialized"
 msgstr "Lähtestamata"
 
-msgid "Sorted by hash distance, closest first."
+msgid "Total Remote Leasesets"
 msgstr ""
 
 msgid "Compact mode"
 msgstr ""
 
-msgid "Total Remote Leasesets"
+msgid "Local Leasesets"
+msgstr ""
+
+msgid "Debug Mode"
 msgstr ""
 
 msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Sorted by hash distance, closest first."
 msgstr ""
 
 msgid "Mod Data"
@@ -2866,17 +2764,11 @@ msgstr ""
 msgid "Change in"
 msgstr ""
 
-msgid "Known Floodfills"
-msgstr "Tuntud üleujutused"
-
 msgid "Floodfill mode enabled"
 msgstr ""
 
 msgid "Routing Key"
 msgstr "Marsruutimisvõti"
-
-msgid "Network data"
-msgstr "Võrguandmed"
 
 msgid "Median distance (bits)"
 msgstr "Keskmine kaugus (bitti)"
@@ -2886,6 +2778,12 @@ msgstr "hinnanguline üleujutuste koguarv"
 
 msgid "Estimated total leasesets"
 msgstr "hinnanguline rendisumma kokku"
+
+msgid "Total Local Leasesets"
+msgstr ""
+
+msgid "Remote Leasesets"
+msgstr ""
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2918,12 +2816,6 @@ msgstr "Aegub{0}"
 msgid "Expired{0} ago"
 msgstr "Aegunud{0} tagasi"
 
-msgid "Received as published"
-msgstr "vastu võetud avaldatud kujul?"
-
-msgid "Received as reply"
-msgstr "Kas saite vastuseks?"
-
 msgid "Distance"
 msgstr "Kaugus"
 
@@ -2932,6 +2824,9 @@ msgstr "Võrguühenduseta allkirjastatud"
 
 msgid "Signature type"
 msgstr "Allkirja tüüp"
+
+msgid "Public Key"
+msgstr ""
 
 msgid "Unsupported type"
 msgstr "Toetamata tüüp"
@@ -2943,6 +2838,9 @@ msgstr "Aegub {0} pärast"
 #, java-format
 msgid "Expired {0} ago"
 msgstr "Aegus {0} eest"
+
+msgid "Unknown"
+msgstr "Teadmatu"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
 msgstr ""
@@ -2979,9 +2877,6 @@ msgstr "Üleujutused"
 
 msgid "Total"
 msgstr "Kokku"
-
-msgid "Unknown"
-msgstr "Teadmatu"
 
 msgid "Initializing"
 msgstr "Initsialiseerimine"
@@ -3056,9 +2951,6 @@ msgstr "Kuva kõik selle aadressiga ruuterid NetDb-s"
 msgid "Show all routers with this port in the NetDb"
 msgstr "Kuva NetDb-s kõik selle pordiga ruuterid"
 
-msgid "Network ID"
-msgstr "Võrgu ID"
-
 msgid "Routers"
 msgstr "ruuterid"
 
@@ -3070,6 +2962,12 @@ msgstr "Viimati kuulnud"
 
 msgid "Last heard from"
 msgstr "viimati kuulnud"
+
+msgid "Network Id"
+msgstr ""
+
+msgid "Count is always spoofed to avoid indicating router restarts"
+msgstr ""
 
 msgid "Hidden or starting up"
 msgstr "Peidetud või alles käivitub"
@@ -3130,19 +3028,16 @@ msgstr "faili ruuter.config."
 msgid "Peer Connections"
 msgstr "Vastastikused ühendused"
 
-msgid "Active in the last minute"
-msgstr "Aktiivne viimasel minutil"
-
 msgid "IPv4"
 msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
 
-msgid "Limit"
+msgid "Active connections / Max permitted"
 msgstr ""
 
-msgid "Maximum permitted connections"
+msgid "Connections / Limit"
 msgstr ""
 
 msgid "Current / maximum permitted"
@@ -3151,23 +3046,23 @@ msgstr "vool / maksimaalne lubatud"
 msgid "NTCP connections"
 msgstr "NTCP ühendusi"
 
-msgid "Caps"
-msgstr "Võimekused"
-
 msgid "Peer capabilities"
 msgstr "kaaslaste võimalused"
 
-msgid "Dir"
-msgstr "Suund"
+msgid "Caps"
+msgstr "Võimekused"
 
 msgid "Direction/Introduction"
 msgstr "Suund/Tutvustamine"
 
-msgid "Idle"
-msgstr "Jõude"
+msgid "Dir"
+msgstr "Suund"
 
 msgid "Peer inactivity"
 msgstr "kaaslaste passiivsus"
+
+msgid "Idle"
+msgstr "Jõude"
 
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Keskmine sissetulemise/väljamineku kiirus (KB/s)"
@@ -3199,11 +3094,11 @@ msgstr "Sõnumid vastu võetud"
 msgid "RX"
 msgstr "RX"
 
-msgid "Out Queue"
-msgstr "Väljuv järjek."
-
 msgid "Queued messages to send to peer"
 msgstr "järjekorras olevad sõnumid, mis saadetakse kaaslasele"
+
+msgid "Out Queue"
+msgstr "Väljuv järjek."
 
 msgid "Connection is backlogged"
 msgstr "Ühendus on mahajäänud"
@@ -3729,11 +3624,11 @@ msgstr "Laadige alla I2P värskendus"
 msgid "Unsigned update available"
 msgstr "Saadaval on allkirjastamata värskendus"
 
-msgid "Help with firewall configuration"
-msgstr "Abi tulemüüri häälestamisel"
-
 msgid "Check network connection and NAT/firewall!"
 msgstr "Kontrollige võrguühendust ja NAT-i/tulemüüri!"
+
+msgid "Help with firewall configuration"
+msgstr "Abi tulemüüri häälestamisel"
 
 msgid "Attempt to download router reference files (if automatic reseed has failed)"
 msgstr "Proovige alla laadida ruuteri viitefaile (kui automaatne uuesti esitamine ebaõnnestus)"
@@ -3768,23 +3663,35 @@ msgstr "Liigu alla"
 msgid "Select a section to add"
 msgstr "valige lisamiseks jaotis"
 
+msgid "Router Information (advanced)"
+msgstr "ruuteri teave (täpsem)"
+
+msgid "Advanced Links"
+msgstr "Täpsemad lingid"
+
+msgid "Bandwidth Graph"
+msgstr "Ribalaiuse graafik"
+
+msgid "UTC Clock"
+msgstr "UTC kell"
+
+msgid "Congestion"
+msgstr "Ummik"
+
+msgid "CPU Load"
+msgstr "CPU koormus"
+
+msgid "Firewall &amp; Reseed Status"
+msgstr "Tulemüüri ja Alglaadimistaatus"
+
 msgid "Help &amp; FAQ"
 msgstr "Abi &amp; KKK"
-
-msgid "I2P Services"
-msgstr "I2P teenused"
 
 msgid "I2P Internals"
 msgstr "I2P sisemus"
 
-msgid "Router Information"
-msgstr "ruuteri teave"
-
-msgid "Router Information (brief)"
-msgstr "ruuteri teave (lühike)"
-
-msgid "Router Information (advanced)"
-msgstr "ruuteri teave (täpsem)"
+msgid "I2P Services"
+msgstr "I2P teenused"
 
 msgid "Memory Usage Bar"
 msgstr "mälukasutusriba"
@@ -3792,35 +3699,23 @@ msgstr "mälukasutusriba"
 msgid "Network Reachability"
 msgstr "Võrgu juurdepääsetavus"
 
-msgid "Update Status"
-msgstr "Värskenda olekut"
+msgid "News &amp; Updates"
+msgstr "Uudised ja värskendused"
 
 msgid "Restart Status"
 msgstr "Taaskäivitamise olek"
 
-msgid "Firewall &amp; Reseed Status"
-msgstr "Tulemüüri ja Alglaadimistaatus"
+msgid "Router Information"
+msgstr "ruuteri teave"
 
-msgid "Bandwidth Graph"
-msgstr "Ribalaiuse graafik"
-
-msgid "Congestion"
-msgstr "Ummik"
+msgid "Router Information (brief)"
+msgstr "ruuteri teave (lühike)"
 
 msgid "Tunnel Status"
 msgstr "Tunneli olek"
 
-msgid "News &amp; Updates"
-msgstr "Uudised ja värskendused"
-
-msgid "Advanced Links"
-msgstr "Täpsemad lingid"
-
-msgid "UTC Clock"
-msgstr "UTC kell"
-
-msgid "CPU Load"
-msgstr "CPU koormus"
+msgid "Update Status"
+msgstr "Värskenda olekut"
 
 msgid "I2P Router Help &amp; FAQ"
 msgstr "I2P Ruuteri Abi &amp; KKK"
@@ -4005,6 +3900,9 @@ msgstr "NetDb partnerite arv kokku"
 
 msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Eakaaslased, kellega oleme viimastel minutitel/viimasel tunnil vestelnud"
+
+msgid "Peers we've been talking to in the last minute"
+msgstr ""
 
 msgid "The number of peers available for building client tunnels"
 msgstr "klienditunnelite ehitamiseks saadaolevate partnerite arv"
@@ -4338,6 +4236,9 @@ msgstr "Jõustab blokeering"
 msgid "days"
 msgstr "päeva"
 
+msgid "Known Floodfills"
+msgstr "Tuntud üleujutused"
+
 msgid "Average closest floodfill distance"
 msgstr "Keskmine lähim üleujutuse täituvus"
 
@@ -4508,6 +4409,9 @@ msgstr "Andmed edastatud"
 
 msgid "Data"
 msgstr "Andmed"
+
+msgid "Limit"
+msgstr ""
 
 msgid "Receive on"
 msgstr "Kuulan tag'il"
@@ -5481,6 +5385,9 @@ msgstr "Installige I2P-süsteemi teenus. "
 msgid "config sidebar"
 msgstr "config külgriba"
 
+msgid "Sidebar Options"
+msgstr ""
+
 msgid "Refresh interval"
 msgstr "Värskendusintervall"
 
@@ -5489,6 +5396,12 @@ msgstr "sekundit"
 
 msgid "0 to disable"
 msgstr "0 keelamiseks"
+
+msgid "Unified sidebar"
+msgstr ""
+
+msgid "Use the same sidebar on all pages"
+msgstr ""
 
 msgid "config stats"
 msgstr "konfiguratsioonistatistika"
@@ -5689,6 +5602,9 @@ msgstr "sündmused"
 msgid "Event Log"
 msgstr "Sündmuste logi"
 
+msgid "Combined"
+msgstr ""
+
 msgid "graph"
 msgstr "Gráfik"
 
@@ -5766,6 +5682,9 @@ msgstr "Selle seadistuse märkimisel tõeks kuvatakse kongestiooniosa kõrvalrib
 
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Selle seadistuse märkimisel tõeks kuvatakse <i>Huvipakkuva saidi</i> lingid <a href=/sitemap>saidikaardil</a>. [Vaikimisi on väär]"
+
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
+msgstr ""
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "See on seade, mis määrab, kas ruuter peaks kasutama pakutud <i>blocklist.txt</i> faili ja kasutajate poolt seadistatud blokeeringunimekirju või keelama marsruuterid vastavalt täissumma või IP-aadressi järgi. IPv4 jaoks toetatakse vahemikke ja netimaske, kuid seda ei tehta IPv6 jaoks. Rohkem teavet leiate I2P+ rakenduse kataloogi failist <i>blocklist.txt</i>. [Vaikimisi on lubatud, taaskäivitamine on vajalik]"
@@ -6580,8 +6499,8 @@ msgstr "Kui küsitakse <i>Registreerimisautentimise</i> stringi, leiate selle <a
 msgid "If you are in a hurry and can't wait a few hours, you can tell people to use a \"jump\" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is working, you can tell others to use it."
 msgstr "Kui olete kiirustanud ja ei saa mõnda tundi oodata, võite inimestele öelda, et nad saavad kasutada \"jump\" aadressiabistavaid ümbersuunamisteenuseid. Seda tavaliselt töötavad juba mõne minuti pärast pärast teie domeeni registreerimist samal saidil. Testige seda kõigepealt ise, sisestades oma veebibrauserisse <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code>. Kui see töötab, võite öelda teistele seda kasutada."
 
-msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skanki2p</a>, and paste the link where it's required to share it with others."
-msgstr "Teise võimalusena saate kopeerida <i>aadressiabistava lingi</i> oma domeenile, mis on näidatud kas aadressiraamatu loendilehel või domeeni üksikasjalikul lehel, näiteks <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>i2p-projekt.i2p detailid</a> ja kleepige link kuhu see on vajalik, et seda teistega jagada."
+msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
+msgstr ""
 
 msgid "Backup your private key!"
 msgstr "Varundage oma privaatvõti!"
@@ -6817,8 +6736,8 @@ msgstr "Parema ühenduvuse tagamiseks avage port <a href=/confignet#udpconfig>I2
 msgid "Getting Support Online"
 msgstr "Veebitugi"
 
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "Samuti võite vaadata teavet <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P veebisaidil</a>, postitada teateid <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P arutelufoorumisse</a> või astuda läbi I2P sisemisse IRC-võrgustikku <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> või <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a>."
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
+msgstr ""
 
 msgid "Reporting Bugs"
 msgstr "Vigade teatamine"
@@ -7357,6 +7276,9 @@ msgstr "Kohandage linke"
 msgid "Configure display language, theme and optional console password"
 msgstr "seadistage kuvakeel, teema ja valikuline konsooli parool"
 
+msgid "Language"
+msgstr ""
+
 msgid "Configure router bandwidth"
 msgstr "ruuteri ribalaiuse konfigureerimine"
 
@@ -7421,6 +7343,24 @@ msgstr "Teenuse (ümbrise) logid"
 msgid "network database"
 msgstr "võrgu andmebaas"
 
+msgid "Encryption type"
+msgstr ""
+
+msgid "Encryption types"
+msgstr ""
+
+msgid "Signature types"
+msgstr ""
+
+msgid "Locally hosted private service"
+msgstr ""
+
+msgid "Locally hosted public service"
+msgstr ""
+
+msgid "Requested client leaseset"
+msgstr ""
+
 msgid "network database router map"
 msgstr "Võrguandmebaasi routteri kaart"
 
@@ -7463,6 +7403,12 @@ msgstr "Bännitud ruuterid"
 
 msgid "Fast / High Capacity"
 msgstr "Kiire / suur võimsus"
+
+msgid "router logs"
+msgstr ""
+
+msgid "service logs"
+msgstr ""
 
 msgid "Manage I2P addresses"
 msgstr "I2P-aadresside haldamine"
@@ -7668,6 +7614,9 @@ msgstr "Läbi- ja väljutünnelite ID-d"
 msgid "Toggle Tunnels"
 msgstr "Läbi- ja väljutunneleid"
 
+msgid "Updating sidebar sections"
+msgstr ""
+
 msgid "Peer Profile"
 msgstr "Ruuteri profiil"
 
@@ -7813,7 +7762,15 @@ msgstr "Lõppenud"
 
 
 
-#, java-format
+
+
+
+
+
+
+
+
+
 
 
 

@@ -50,6 +50,9 @@ msgstr "{0} 타입"
 msgid "DSA 1024 bit"
 msgstr "DSA 1024 bit"
 
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal 2048 bit"
+
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
 msgstr[0] "를 검색하십시오<span class=active>"
@@ -263,6 +266,9 @@ msgstr "새 목적지 축"
 msgid "Import from hosts.txt file"
 msgstr "hosts.txt 파일에서 가져오기"
 
+msgid "other"
+msgstr "그 외"
+
 msgid "Export in hosts.txt format"
 msgstr "hosts.txt 포맷으로 내보내기"
 
@@ -275,8 +281,8 @@ msgstr "hosts.txt 형식으로 책 내보내기"
 msgid "Search"
 msgstr "검색"
 
-msgid "other"
-msgstr "그 외"
+msgid "latest"
+msgstr ""
 
 msgid "all"
 msgstr "필터 소거"
@@ -418,9 +424,6 @@ msgstr "Base64 해시"
 
 msgid "Public Key"
 msgstr "공개키"
-
-msgid "ElGamal 2048 bit"
-msgstr "ElGamal 2048 bit"
 
 msgid "Signing Key"
 msgstr "키 사인"
@@ -589,5 +592,3 @@ msgstr "마스터 주소록에 수동으로 추가된 주소는 라우터 주소
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "구독을 통해 받은 호스트는 라우터 주소록과 병합됩니다."
-
-

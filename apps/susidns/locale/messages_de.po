@@ -50,6 +50,9 @@ msgstr "Typ {0}"
 msgid "DSA 1024 bit"
 msgstr "DSA 1024 bit"
 
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal 2048 bit"
+
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
 msgstr[0] "Suche nach <span class=active>"
@@ -270,6 +273,9 @@ msgstr "Füge neues Ziel hinzu"
 msgid "Import from hosts.txt file"
 msgstr "Import aus hosts.txt Datei"
 
+msgid "other"
+msgstr "andere"
+
 msgid "Export in hosts.txt format"
 msgstr "Im hosts.txt-Format exportieren"
 
@@ -282,8 +288,8 @@ msgstr "Buch im hosts.txt-Format exportieren"
 msgid "Search"
 msgstr "Suche"
 
-msgid "other"
-msgstr "andere"
+msgid "latest"
+msgstr ""
 
 msgid "all"
 msgstr "Filter löschen"
@@ -425,9 +431,6 @@ msgstr "Base 64 Hash"
 
 msgid "Public Key"
 msgstr "Öffentlicher Schlüssel"
-
-msgid "ElGamal 2048 bit"
-msgstr "ElGamal 2048 bit"
 
 msgid "Signing Key"
 msgstr "Authentifizierungsschlüssel"
@@ -596,5 +599,3 @@ msgstr "Manuell ins Master Adressbuch hinzugefügte Einträge werden mit ins Rou
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Einträge aus den Subskriptionen werden mit ins Router Adressbuch eingetragen."
-
-

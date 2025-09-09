@@ -50,6 +50,9 @@ msgstr "Тип {0}"
 msgid "DSA 1024 bit"
 msgstr "DSA 1024 бит"
 
+msgid "ElGamal 2048 bit"
+msgstr "2048-битное шифрование Эль-Гамаля"
+
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
 msgstr[0] "Поиск <span class=active>"
@@ -277,6 +280,9 @@ msgstr "Добавить новый адрес"
 msgid "Import from hosts.txt file"
 msgstr "Импорт из файла hosts.txt"
 
+msgid "other"
+msgstr "прочее"
+
 msgid "Export in hosts.txt format"
 msgstr "Экспортировать в формате hosts.txt"
 
@@ -289,8 +295,8 @@ msgstr "Экспортировать книгу в формате hosts.txt."
 msgid "Search"
 msgstr "Поиск"
 
-msgid "other"
-msgstr "прочее"
+msgid "latest"
+msgstr ""
 
 msgid "all"
 msgstr "сбросить фильтр"
@@ -432,9 +438,6 @@ msgstr "Base 64 Hash"
 
 msgid "Public Key"
 msgstr "Публичный ключ"
-
-msgid "ElGamal 2048 bit"
-msgstr "2048-битное шифрование Эль-Гамаля"
 
 msgid "Signing Key"
 msgstr "Подписывающий ключ (Signing Key)"
@@ -603,5 +606,3 @@ msgstr "Адреса, добавленные в основную адресну�
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Узлы из подписок будут объединены с адресной книгой маршрутизатора."
-
-

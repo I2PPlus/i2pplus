@@ -1554,10 +1554,7 @@ msgstr "Herstart in {0}"
 msgid "Save order"
 msgstr "Volgorde van opslaan"
 
-msgid "Sidebar refresh disabled"
-msgstr ""
-
-msgid "Sidebar refresh interval changed"
+msgid "Sidebar preferences updated"
 msgstr ""
 
 msgid "Refresh interval must be a number"
@@ -1592,9 +1589,6 @@ msgstr "Verplaatst"
 
 msgid "Saved order of sections."
 msgstr "Volgorde van onderdelen opgeslagen."
-
-msgid "Stat filter and location updated successfully to"
-msgstr "Statistiek filter en lokatie gesuccesvol geupdate in"
 
 msgid "Full statistics enabled"
 msgstr "Volledige statistieken ingeschakeld"
@@ -2182,23 +2176,14 @@ msgstr "I2P-gerelateerde communityforums"
 msgid "File-sharing forum"
 msgstr "Forum voor het delen van bestanden"
 
-msgid "Alternative front-end for Twitter"
-msgstr "Alternatieve front-end voor Twitter"
-
-msgid "Rocksolid forums for the darknets"
-msgstr "Ook solide forums voor de darknets"
-
 msgid "Cross-network micro-blogging &amp; forums &amp; wiki"
 msgstr "Cross-netwerk microblogging en forums"
 
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Alternatieve privacygerichte front-end voor Reddit"
 
-msgid "Base64 Image Encoder"
-msgstr "Base64-beeldencoder"
-
-msgid "An image cache and resize service"
-msgstr "Een service voor het cachen van afbeeldingen en het wijzigen van de grootte"
+msgid "AI Image generation & Chat hub"
+msgstr ""
 
 msgid "IRC Logs for multiple networks"
 msgstr "IRC-logboeken voor meerdere netwerken"
@@ -2215,17 +2200,8 @@ msgstr "Landing page for various services"
 msgid "Streaming radio service"
 msgstr "Radiostreamingservice"
 
-msgid "Alternative frontend for Imgur"
-msgstr "Alternatieve front-end voor Imgur"
-
 msgid "Privacy-focused not-for-profit organization"
 msgstr "Privacygerichte non-profitorganisatie"
-
-msgid "Outproxy bandwidth test"
-msgstr "Outproxy-bandbreedtetest"
-
-msgid "speedtest"
-msgstr "snelheidstest"
 
 msgid "Text translation engine"
 msgstr "Tekstvertaalmachine"
@@ -2233,20 +2209,8 @@ msgstr "Tekstvertaalmachine"
 msgid "translate"
 msgstr "vertalen"
 
-msgid "Alternative front-end to Youtube"
-msgstr "Alternatieve front-end voor Youtube"
-
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "Aanbieder van privacy met respect voor webhosting- en VPN-diensten"
-
-msgid "Tor-focused Search Engine"
-msgstr "Tor-gerichte zoekmachine"
-
-msgid "Pinterest Image Search Engine"
-msgstr "Pinterest-beeldzoekmachine"
-
-msgid "Clearnet BitTorrent DHT search engine"
-msgstr "Clearnet BitTorrent DHT-zoekmachine"
 
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "DuckDuckGo-zoekmachine (geen javascript)"
@@ -2256,21 +2220,6 @@ msgstr "Privacygerichte Clearnet-zoekmachine"
 
 msgid "I2P Web Search Engine"
 msgstr "I2P-webzoekmachine"
-
-msgid "Enabling the free transmission of data in the public interest"
-msgstr "Het mogelijk maken van de vrije overdracht van gegevens in het algemeen belang"
-
-msgid "Selected Papers in Anonymity"
-msgstr "Geselecteerde artikelen in anonimiteit"
-
-msgid "Tor .onion site links"
-msgstr "Tor .onion-sitelinks"
-
-msgid "HTML Color Reference"
-msgstr "HTML-kleurreferentie"
-
-msgid "HTMLColors"
-msgstr "HTML-kleuren"
 
 msgid "I2P-related Wiki"
 msgstr "I2P-gerelateerde wiki"
@@ -2287,29 +2236,17 @@ msgstr "Internet-encyclopedie van de filosofie"
 msgid "Standford Encyclopedia of Philosophy"
 msgstr "Standford Encyclopedie van de filosofie"
 
-msgid "Psychonaut"
-msgstr "Psychonaut"
-
-msgid "Wiki relating to altered states of consciousness"
-msgstr "Wiki met betrekking tot veranderde bewustzijnstoestanden"
-
 msgid "Computing-related tutorials"
 msgstr "Computergerelateerde tutorials"
 
 msgid "SimplifiedGuide"
 msgstr "Vereenvoudigde gids"
 
-msgid "Vulnerability Database"
-msgstr "Database met kwetsbaarheden"
-
 msgid "Web technology reference and learning site"
 msgstr "Referentie- en leersite voor webtechnologie"
 
 msgid "Alternative Wikipedia front-end focused on privacy"
 msgstr "Alternatieve Wikipedia-front-end gericht op privacy"
-
-msgid "The biggest online English dictionary"
-msgstr "Het grootste online Engelse woordenboek"
 
 msgid "World atlas including geography facts &amp; flags"
 msgstr "Wereldatlas inclusief aardrijkskundige feiten en vlaggen"
@@ -2320,14 +2257,8 @@ msgstr "WereldAtlas"
 msgid "Technology News &amp; more..."
 msgstr "Technologisch nieuws en meer..."
 
-msgid "Independent investigative journalism"
-msgstr "Onafhankelijke onderzoeksjournalistiek"
-
 msgid "Information Security Research &amp; Education"
 msgstr "Onderzoek en onderwijs voor informatiebeveiliging"
-
-msgid "Darknet related news site"
-msgstr "Darknet-gerelateerde nieuwssite"
 
 msgid "DigitalTrends"
 msgstr "DigitalTrends"
@@ -2340,24 +2271,6 @@ msgstr "Het verdedigen van uw rechten in de digitale wereld"
 
 msgid "The Elliptic Curve Cryptography Blog"
 msgstr "De Elliptic Curve-cryptografieblog"
-
-msgid "ForeignPolicy"
-msgstr "Buitenlands beleid"
-
-msgid "The Global Magazine of News &amp; Ideas"
-msgstr "Het wereldwijde tijdschrift van nieuws en ideeën"
-
-msgid "FrontLineDefenders"
-msgstr "FrontLineDefenders"
-
-msgid "Human rights activism"
-msgstr "Mensenrechtenactivisme"
-
-msgid "Defending Human Rights Worldwide"
-msgstr "Wereldwijd verdedigen van de mensenrechten"
-
-msgid "HumanRightsWatch"
-msgstr "MensenrechtenKijk"
 
 msgid "Fresh hacks every day"
 msgstr "Elke dag nieuwe hacks"
@@ -2373,12 +2286,6 @@ msgstr "HongKongGratisPers"
 
 msgid "Independent &amp; impartial news for Hong Kong"
 msgstr "Onafhankelijk en onpartijdig nieuws voor Hong Kong"
-
-msgid "HongKongWatch"
-msgstr "HongKongKijk"
-
-msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr "Houdt toezicht op bedreigingen voor de vrijheden en rechten in Hong Kong"
 
 msgid "JStorDaily"
 msgstr "JStorDagelijks"
@@ -2416,11 +2323,11 @@ msgstr "Onafhankelijk internationaal mediaplatform"
 msgid "OpenDemocracy"
 msgstr "Opendemocratie"
 
-msgid "News and blog feeds on I2P"
-msgstr "Nieuws- en blogfeeds over I2P"
+msgid "Online privacy &amp; tech blog"
+msgstr ""
 
-msgid "Planeta"
-msgstr "Planeet"
+msgid "RightToPrivacy"
+msgstr ""
 
 msgid "Lifestyle magazine"
 msgstr "Lifestyle-tijdschrift"
@@ -2449,20 +2356,11 @@ msgstr "Nieuws voor nerds"
 msgid "Technology news &amp; reviews"
 msgstr "Technologisch nieuws en beoordelingen"
 
-msgid "Reporting on China without fear or favor"
-msgstr "Rapporteren over China zonder angst of gunst"
-
 msgid "News from the Taiwan Capital"
 msgstr "Nieuws uit de hoofdstad van Taiwan"
 
 msgid "TaipeiTimes"
 msgstr "TaipeiTijden"
-
-msgid "TechXplore"
-msgstr "TechXplore"
-
-msgid "Technology and engineering news"
-msgstr "Technologie- en engineeringnieuws"
 
 msgid "TechMeme"
 msgstr "TechMeme"
@@ -2505,12 +2403,6 @@ msgstr "DeNieuweRepubliek"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "File delen en auteursrecht nieuws"
-
-msgid "A magazine about human rights and social justice"
-msgstr "Een tijdschrift over mensenrechten en sociale rechtvaardigheid"
-
-msgid "UpstreamJournal"
-msgstr "UpstreamJournal"
 
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
 msgstr "Een evenwichtig en realistisch begrip van de Amerikaanse belangen in het Midden -Oosten bevorderen"
@@ -2841,16 +2733,22 @@ msgstr ""
 msgid "Not initialized"
 msgstr "Niet geïnitialiseerd"
 
-msgid "Sorted by hash distance, closest first."
+msgid "Total Remote Leasesets"
 msgstr ""
 
 msgid "Compact mode"
 msgstr ""
 
-msgid "Total Remote Leasesets"
+msgid "Local Leasesets"
+msgstr ""
+
+msgid "Debug Mode"
 msgstr ""
 
 msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Sorted by hash distance, closest first."
 msgstr ""
 
 msgid "Mod Data"
@@ -2865,17 +2763,11 @@ msgstr ""
 msgid "Change in"
 msgstr ""
 
-msgid "Known Floodfills"
-msgstr "Bekende overstromingen"
-
 msgid "Floodfill mode enabled"
 msgstr ""
 
 msgid "Routing Key"
 msgstr "Routeringssleutel"
-
-msgid "Network data"
-msgstr "Netwerkgegevens"
 
 msgid "Median distance (bits)"
 msgstr "Mediaan afstand (bits)"
@@ -2885,6 +2777,12 @@ msgstr "Geschatte totale overstromingen"
 
 msgid "Estimated total leasesets"
 msgstr "Geschat totaal aantal leasesets"
+
+msgid "Total Local Leasesets"
+msgstr ""
+
+msgid "Remote Leasesets"
+msgstr ""
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2917,12 +2815,6 @@ msgstr "Verloopt{0}"
 msgid "Expired{0} ago"
 msgstr "Verlopen{0} geleden"
 
-msgid "Received as published"
-msgstr "Ontvangen zoals gepubliceerd?"
-
-msgid "Received as reply"
-msgstr "Als antwoord ontvangen?"
-
 msgid "Distance"
 msgstr "Afstand"
 
@@ -2931,6 +2823,9 @@ msgstr "Offline ondertekend"
 
 msgid "Signature type"
 msgstr "Handtekeningtype"
+
+msgid "Public Key"
+msgstr ""
 
 msgid "Unsupported type"
 msgstr "Niet-ondersteund type"
@@ -2942,6 +2837,9 @@ msgstr "Verloopt in {0}"
 #, java-format
 msgid "Expired {0} ago"
 msgstr "Verliep {0} geleden"
+
+msgid "Unknown"
+msgstr "Onbekend"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
 msgstr ""
@@ -2978,9 +2876,6 @@ msgstr "Overstromingen"
 
 msgid "Total"
 msgstr "Totaal"
-
-msgid "Unknown"
-msgstr "Onbekend"
 
 msgid "Initializing"
 msgstr "Initialiseren"
@@ -3055,9 +2950,6 @@ msgstr "Toon alle routers met dit adres in de NetDb"
 msgid "Show all routers with this port in the NetDb"
 msgstr "Toon alle routers met deze poort in de NetDb"
 
-msgid "Network ID"
-msgstr "Netwerk-ID"
-
 msgid "Routers"
 msgstr "Routers"
 
@@ -3069,6 +2961,12 @@ msgstr "Laatst van gehoord"
 
 msgid "Last heard from"
 msgstr "Laatst gehoord van"
+
+msgid "Network Id"
+msgstr ""
+
+msgid "Count is always spoofed to avoid indicating router restarts"
+msgstr ""
 
 msgid "Hidden or starting up"
 msgstr "Verborgen of aan het opstarten"
@@ -3129,19 +3027,16 @@ msgstr "naar uw router.config-bestand."
 msgid "Peer Connections"
 msgstr "Peer-verbindingen"
 
-msgid "Active in the last minute"
-msgstr "Actief in de laatste minuut"
-
 msgid "IPv4"
 msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
 
-msgid "Limit"
+msgid "Active connections / Max permitted"
 msgstr ""
 
-msgid "Maximum permitted connections"
+msgid "Connections / Limit"
 msgstr ""
 
 msgid "Current / maximum permitted"
@@ -3150,23 +3045,23 @@ msgstr "Stroom / maximaal toegestaan"
 msgid "NTCP connections"
 msgstr "NTCP connecties"
 
-msgid "Caps"
-msgstr "Caps"
-
 msgid "Peer capabilities"
 msgstr "Peer-mogelijkheden"
 
-msgid "Dir"
-msgstr "Richting"
+msgid "Caps"
+msgstr "Caps"
 
 msgid "Direction/Introduction"
 msgstr "Richting/Introductie"
 
-msgid "Idle"
-msgstr "Idle"
+msgid "Dir"
+msgstr "Richting"
 
 msgid "Peer inactivity"
 msgstr "Peer-inactiviteit"
+
+msgid "Idle"
+msgstr "Idle"
 
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Gemiddelde snelheid voor inkomend/uitgaand verkeer (KBps)"
@@ -3198,11 +3093,11 @@ msgstr "Berichten ontvangen"
 msgid "RX"
 msgstr "RX"
 
-msgid "Out Queue"
-msgstr "Uitgaande wachtrij"
-
 msgid "Queued messages to send to peer"
 msgstr "In de wachtrij geplaatste berichten om naar peer te sturen"
+
+msgid "Out Queue"
+msgstr "Uitgaande wachtrij"
 
 msgid "Connection is backlogged"
 msgstr "Verbinding heeft achterstand"
@@ -3728,11 +3623,11 @@ msgstr "I2P-update downloaden"
 msgid "Unsigned update available"
 msgstr "Niet-ondertekende update beschikbaar"
 
-msgid "Help with firewall configuration"
-msgstr "Hulp met firewall configuratie"
-
 msgid "Check network connection and NAT/firewall!"
 msgstr "Controleer netwerkverbinding en NAT/firewall!"
+
+msgid "Help with firewall configuration"
+msgstr "Hulp met firewall configuratie"
 
 msgid "Attempt to download router reference files (if automatic reseed has failed)"
 msgstr "Poging om routerreferentiebestanden te downloaden (als automatisch opnieuw plaatsen is mislukt)"
@@ -3767,23 +3662,35 @@ msgstr "Verplaats naar eind"
 msgid "Select a section to add"
 msgstr "Selecteer een sectie om toe te voegen"
 
+msgid "Router Information (advanced)"
+msgstr "Routerinformatie (geavanceerd)"
+
+msgid "Advanced Links"
+msgstr "Geavanceerde koppelingen"
+
+msgid "Bandwidth Graph"
+msgstr "Bandbreedtegrafiek"
+
+msgid "UTC Clock"
+msgstr "UTC-klok"
+
+msgid "Congestion"
+msgstr "Verstopping"
+
+msgid "CPU Load"
+msgstr "CPU-belasting"
+
+msgid "Firewall &amp; Reseed Status"
+msgstr "Firewall en Reseed -status"
+
 msgid "Help &amp; FAQ"
 msgstr "Hulp &amp; FAQ"
-
-msgid "I2P Services"
-msgstr "I2P Services"
 
 msgid "I2P Internals"
 msgstr "I2P Intern"
 
-msgid "Router Information"
-msgstr "Routerinformatie"
-
-msgid "Router Information (brief)"
-msgstr "Routerinformatie (kort)"
-
-msgid "Router Information (advanced)"
-msgstr "Routerinformatie (geavanceerd)"
+msgid "I2P Services"
+msgstr "I2P Services"
 
 msgid "Memory Usage Bar"
 msgstr "Geheugengebruikbalk"
@@ -3791,35 +3698,23 @@ msgstr "Geheugengebruikbalk"
 msgid "Network Reachability"
 msgstr "Netwerkbereikbaarheid"
 
-msgid "Update Status"
-msgstr "Updatestatus"
+msgid "News &amp; Updates"
+msgstr "Nieuws &amp; Updates"
 
 msgid "Restart Status"
 msgstr "Herstartstatus"
 
-msgid "Firewall &amp; Reseed Status"
-msgstr "Firewall en Reseed -status"
+msgid "Router Information"
+msgstr "Routerinformatie"
 
-msgid "Bandwidth Graph"
-msgstr "Bandbreedtegrafiek"
-
-msgid "Congestion"
-msgstr "Verstopping"
+msgid "Router Information (brief)"
+msgstr "Routerinformatie (kort)"
 
 msgid "Tunnel Status"
 msgstr "Tunnelstatus"
 
-msgid "News &amp; Updates"
-msgstr "Nieuws &amp; Updates"
-
-msgid "Advanced Links"
-msgstr "Geavanceerde koppelingen"
-
-msgid "UTC Clock"
-msgstr "UTC-klok"
-
-msgid "CPU Load"
-msgstr "CPU-belasting"
+msgid "Update Status"
+msgstr "Updatestatus"
 
 msgid "I2P Router Help &amp; FAQ"
 msgstr "I2P Router Hulp &amp; FAQ"
@@ -4004,6 +3899,9 @@ msgstr "Totaal aantal peers in NetDb"
 
 msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Peers waarmee wij in de laatste minuten/het laatste uur gecommuniceerd hebben."
+
+msgid "Peers we've been talking to in the last minute"
+msgstr ""
 
 msgid "The number of peers available for building client tunnels"
 msgstr "Het aantal peers beschikbaar voor het bouwen van client tunnels."
@@ -4337,6 +4235,9 @@ msgstr "Blokkering afdwingen voor"
 msgid "days"
 msgstr "dagen"
 
+msgid "Known Floodfills"
+msgstr "Bekende overstromingen"
+
 msgid "Average closest floodfill distance"
 msgstr "Gemiddelde dichtstbijzijnde overstromingsafstand"
 
@@ -4507,6 +4408,9 @@ msgstr "Gegevens overgedragen"
 
 msgid "Data"
 msgstr "Gegevens"
+
+msgid "Limit"
+msgstr ""
 
 msgid "Receive on"
 msgstr "Ontvangen op"
@@ -5480,6 +5384,9 @@ msgstr "Installeer de I2P-systeemservice. Dit is de aanbevolen manier om I2P uit
 msgid "config sidebar"
 msgstr "config zijbalk"
 
+msgid "Sidebar Options"
+msgstr ""
+
 msgid "Refresh interval"
 msgstr "Hernieuw interval"
 
@@ -5488,6 +5395,12 @@ msgstr "seconden"
 
 msgid "0 to disable"
 msgstr "0 om uit te schakelen"
+
+msgid "Unified sidebar"
+msgstr ""
+
+msgid "Use the same sidebar on all pages"
+msgstr ""
 
 msgid "config stats"
 msgstr "configureer statistieken"
@@ -5688,6 +5601,9 @@ msgstr "gebeurtenissen"
 msgid "Event Log"
 msgstr "Evenementenlogboek"
 
+msgid "Combined"
+msgstr ""
+
 msgid "graph"
 msgstr "grafiek"
 
@@ -5765,6 +5681,9 @@ msgstr "Deze instelling, wanneer ingesteld op true, toont een gemiddelde meetwaa
 
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Deze instelling, wanneer ingesteld op true, toont de links <i>Interessante sites</i> op <a href=/sitemap>de sitemap-pagina</a>. [Standaard is false]"
+
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
+msgstr ""
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Deze instelling bepaalt of de router al dan niet het geleverde <i>blocklist.txt</i> bestand en elke door de gebruiker geconfigureerde blocklist moet gebruiken om het blokkeren van routers mogelijk te maken op basis van hash of IP-adres. Bereiken en netmaskers worden ondersteund voor IPv4, maar niet voor IPv6. Zie <i>blocklist.txt</i> in de I2P+ toepassingsmap voor meer informatie. [Standaard ingeschakeld, herstart vereist]"
@@ -6579,8 +6498,8 @@ msgstr "Als een <i>Registratie Authenticatie</i> string wordt aangevraagd, kunt 
 msgid "If you are in a hurry and can't wait a few hours, you can tell people to use a \"jump\" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is working, you can tell others to use it."
 msgstr "Als u haast heeft en niet enkele uren kunt wachten, kunt u mensen vertellen om een \"jump\" adres helper doorverwijzingsservice te gebruiken. Dit zal meestal binnen enkele minuten werken nadat u uw hostname op dezelfde site hebt geregistreerd. Test het eerst zelf door <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>uwgekozenhostname.i2p</i></code> in uw browser in te voeren. Zodra het werkt, kunt u anderen vertellen om het te gebruiken."
 
-msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skanki2p</a>, and paste the link where it's required to share it with others."
-msgstr "U kunt ook de <i>adres helper link</i> voor uw domein kopiëren, zoals aangegeven op de adressenlijst pagina, of op de details pagina van uw domein bijv. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details voor i2p-projekt.i2p</a>, en plak de link waar het nodig is om deze met anderen te delen."
+msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
+msgstr ""
 
 msgid "Backup your private key!"
 msgstr "Maak een back-up van uw privésleutel!"
@@ -6816,8 +6735,8 @@ msgstr "Open de <a href=/confignet#udpconfig>poort van I2P</a> op uw modem, rout
 msgid "Getting Support Online"
 msgstr "Online ondersteuning krijgen"
 
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "U kunt ook de informatie op de <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P-website</a> bekijken, berichten posten op het <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P-discussieforum</a> of langskomen bij <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> of <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> op I2P's interne IRC-netwerk."
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
+msgstr ""
 
 msgid "Reporting Bugs"
 msgstr "Bugs melden"
@@ -7356,6 +7275,9 @@ msgstr "Koppelingen aanpassen"
 msgid "Configure display language, theme and optional console password"
 msgstr "Configureer de weergavetaal, het thema en het optionele consolewachtwoord"
 
+msgid "Language"
+msgstr ""
+
 msgid "Configure router bandwidth"
 msgstr "Routerbandbreedte configureren"
 
@@ -7420,6 +7342,24 @@ msgstr "Service (Wrapper) Logs"
 msgid "network database"
 msgstr "netwerk database"
 
+msgid "Encryption type"
+msgstr ""
+
+msgid "Encryption types"
+msgstr ""
+
+msgid "Signature types"
+msgstr ""
+
+msgid "Locally hosted private service"
+msgstr ""
+
+msgid "Locally hosted public service"
+msgstr ""
+
+msgid "Requested client leaseset"
+msgstr ""
+
 msgid "network database router map"
 msgstr "Netwerkdatabase-routerkaart"
 
@@ -7462,6 +7402,12 @@ msgstr "Verbannen Peers"
 
 msgid "Fast / High Capacity"
 msgstr "Snel / Hoge capaciteit"
+
+msgid "router logs"
+msgstr ""
+
+msgid "service logs"
+msgstr ""
 
 msgid "Manage I2P addresses"
 msgstr "Beheer I2P-adressen"
@@ -7667,6 +7613,9 @@ msgstr "Tunnel-Ids wisselen"
 msgid "Toggle Tunnels"
 msgstr "Tunnels wisselen"
 
+msgid "Updating sidebar sections"
+msgstr ""
+
 msgid "Peer Profile"
 msgstr "Peer Profiel"
 
@@ -7812,7 +7761,15 @@ msgstr "Klaar"
 
 
 
-#, java-format
+
+
+
+
+
+
+
+
+
 
 
 

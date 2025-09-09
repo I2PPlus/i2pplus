@@ -50,6 +50,9 @@ msgstr "Tüüp {0}"
 msgid "DSA 1024 bit"
 msgstr "DSA 1024 bitt"
 
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal 2048 bitt"
+
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
 msgstr[0] "Otsi <span class=active>"
@@ -270,6 +273,9 @@ msgstr "Lisa uus sihtkoht"
 msgid "Import from hosts.txt file"
 msgstr "Impordi hosts.txt failist"
 
+msgid "other"
+msgstr "muu"
+
 msgid "Export in hosts.txt format"
 msgstr "Ekspordi hosts.txt formaadis"
 
@@ -282,8 +288,8 @@ msgstr "Ekspordi raamat hosts.txt formaadis"
 msgid "Search"
 msgstr "Otsi"
 
-msgid "other"
-msgstr "muu"
+msgid "latest"
+msgstr ""
 
 msgid "all"
 msgstr "puhasta filtr"
@@ -425,9 +431,6 @@ msgstr "Basis 64 krüptsumma"
 
 msgid "Public Key"
 msgstr "Avalik võti"
-
-msgid "ElGamal 2048 bit"
-msgstr "ElGamal 2048 bitt"
 
 msgid "Signing Key"
 msgstr "Allkirjastamise võti"
@@ -596,5 +599,3 @@ msgstr "Käsitselt põhi aadressiraamatusse lisatud aadressid ühendatakse sinu 
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Tellimuste kaudu saadud hostid ühendatakse sinu Rooteri aadressiraamatusse."
-
-

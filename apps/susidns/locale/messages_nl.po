@@ -50,6 +50,9 @@ msgstr "Type {0}"
 msgid "DSA 1024 bit"
 msgstr "DSA 1024-bits"
 
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal 2048-bits"
+
 msgid "Search for <span class=active>"
 msgid_plural "Search for <span class=active>"
 msgstr[0] "Zoeken naar <span class=active>"
@@ -270,6 +273,9 @@ msgstr "Nieuwe destination toevoegen"
 msgid "Import from hosts.txt file"
 msgstr "Importeren uit hosts.txt-bestand"
 
+msgid "other"
+msgstr "andere"
+
 msgid "Export in hosts.txt format"
 msgstr "Exporteren in hosts.txt-formaat"
 
@@ -282,8 +288,8 @@ msgstr "Exporteer boek in hosts.txt-formaat"
 msgid "Search"
 msgstr "Zoek"
 
-msgid "other"
-msgstr "andere"
+msgid "latest"
+msgstr ""
 
 msgid "all"
 msgstr "wis filter"
@@ -425,9 +431,6 @@ msgstr "Base-64 hash"
 
 msgid "Public Key"
 msgstr "Publieke sleutel"
-
-msgid "ElGamal 2048 bit"
-msgstr "ElGamal 2048-bits"
 
 msgid "Signing Key"
 msgstr "Ondertekeningssleutel"
@@ -596,5 +599,3 @@ msgstr "Adressen die handmatig aan uw masteradresboek zijn toegevoegd, worden sa
 
 msgid "Hosts you receive from your subscriptions will merge with your Router address book."
 msgstr "Hosts die u via uw abonnementen ontvangt, worden samengevoegd met het adresboek van uw router."
-
-

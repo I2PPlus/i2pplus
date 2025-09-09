@@ -1554,10 +1554,7 @@ msgstr "{0} में पुनः शुरू होने की संभा
 msgid "Save order"
 msgstr "राज़ी बनाएं"
 
-msgid "Sidebar refresh disabled"
-msgstr ""
-
-msgid "Sidebar refresh interval changed"
+msgid "Sidebar preferences updated"
 msgstr ""
 
 msgid "Refresh interval must be a number"
@@ -1592,9 +1589,6 @@ msgstr "चलाया गया"
 
 msgid "Saved order of sections."
 msgstr "खंडों की राज़ी सहेजी गई।"
-
-msgid "Stat filter and location updated successfully to"
-msgstr "स्टैट फ़िल्टर और स्थान सफलतापूर्वक अपडेट किया गया है"
 
 msgid "Full statistics enabled"
 msgstr "पूर्ण स्टैटिस्टिक्स सक्षम किए गए"
@@ -2182,23 +2176,14 @@ msgstr "I2P से संबंधित समुदाय फ़ोरम"
 msgid "File-sharing forum"
 msgstr "फ़ाइल शेयरिंग फ़ोरम"
 
-msgid "Alternative front-end for Twitter"
-msgstr "Twitter के लिए विकल्पी फ्रंट-एंड"
-
-msgid "Rocksolid forums for the darknets"
-msgstr "डार्कनेट्स के लिए रॉकसॉलिड फ़ोरम"
-
 msgid "Cross-network micro-blogging &amp; forums &amp; wiki"
 msgstr "क्रॉस-नेटवर्क माइक्रोब्लॉगिंग और फ़ोरम &amp; विकी"
 
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Reddit के लिए गोपनीयता पर ध्यान केंद्रित विकल्पी फ्रंट-एंड"
 
-msgid "Base64 Image Encoder"
-msgstr "Base64 छवि एन्कोडर"
-
-msgid "An image cache and resize service"
-msgstr "एक छवि कैश और आकार बदलने की सेवा"
+msgid "AI Image generation & Chat hub"
+msgstr ""
 
 msgid "IRC Logs for multiple networks"
 msgstr "विभिन्न नेटवर्क के लिए IRC लॉग"
@@ -2215,17 +2200,8 @@ msgstr "विभिन्न सेवाओं के लिए लैंड�
 msgid "Streaming radio service"
 msgstr "स्ट्रीमिंग रेडियो सेवा"
 
-msgid "Alternative frontend for Imgur"
-msgstr "Imgur के लिए विकल्पी फ्रंट-एंड"
-
 msgid "Privacy-focused not-for-profit organization"
 msgstr "गोपनीयता केंद्रित लाभार्थी संगठन"
-
-msgid "Outproxy bandwidth test"
-msgstr "ऑटप्रॉक्सी बैंडविड्थ परीक्षण"
-
-msgid "speedtest"
-msgstr "स्पीड टेस्ट"
 
 msgid "Text translation engine"
 msgstr "tek्स्ट अनुवाद इंजन"
@@ -2233,20 +2209,8 @@ msgstr "tek्स्ट अनुवाद इंजन"
 msgid "translate"
 msgstr "अनुवाद करें"
 
-msgid "Alternative front-end to Youtube"
-msgstr "Youtube के लिए विकल्पित फ्रंट-एंड"
-
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "गोपनीयता सम्मान करने वाली वेब होस्टिंग और वीपीएन सेवाओं का प्रदाता"
-
-msgid "Tor-focused Search Engine"
-msgstr "Tor केंद्रित सर्च इंजन"
-
-msgid "Pinterest Image Search Engine"
-msgstr "Pinterest छवि सर्च इंजन"
-
-msgid "Clearnet BitTorrent DHT search engine"
-msgstr "स्पष्टनेट बिटटॉरेंट DHT सर्च इंजन"
 
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "DuckDuckGo सर्च इंजन (जावास्क्रिप्ट नहीं)"
@@ -2256,21 +2220,6 @@ msgstr "गोपनीयता पर ध्यान केंद्रित
 
 msgid "I2P Web Search Engine"
 msgstr "I2P वेब सर्च इंजन"
-
-msgid "Enabling the free transmission of data in the public interest"
-msgstr "जनहित में डेटा के मुक्त प्रसार को सक्षम करना"
-
-msgid "Selected Papers in Anonymity"
-msgstr "गुप्तता में चुनी गई पेपर्स"
-
-msgid "Tor .onion site links"
-msgstr "Tor .onion साइट लिंक"
-
-msgid "HTML Color Reference"
-msgstr "HTML रंग संदर्भ"
-
-msgid "HTMLColors"
-msgstr "HTML रंग"
 
 msgid "I2P-related Wiki"
 msgstr "I2P से संबंधित विकी"
@@ -2287,29 +2236,17 @@ msgstr "इंटरनेट दर्शन की एंकीक्लोप
 msgid "Standford Encyclopedia of Philosophy"
 msgstr "स्टैनफोर्ड दर्शन की एंकीक्लोपीडिया"
 
-msgid "Psychonaut"
-msgstr "मनोवैज्ञानिक"
-
-msgid "Wiki relating to altered states of consciousness"
-msgstr "चेतना के बदले हुए स्थितियों से संबंधित विकी"
-
 msgid "Computing-related tutorials"
 msgstr "गणित संबंधी ट्यूटोरियल"
 
 msgid "SimplifiedGuide"
 msgstr "सरलीकृत गाइड"
 
-msgid "Vulnerability Database"
-msgstr "संवेदनशीलता डेटाबेस"
-
 msgid "Web technology reference and learning site"
 msgstr "वेब तकनीक का संदर्भ और शिक्षण साइट"
 
 msgid "Alternative Wikipedia front-end focused on privacy"
 msgstr "गोपनीयता पर ध्यान केंद्रित विकिपीडिया का विकल्पी फ्रंट-एंड"
-
-msgid "The biggest online English dictionary"
-msgstr "सबसे बड़ा ऑनलाइन अंग्रेज़ी शब्दकोश"
 
 msgid "World atlas including geography facts &amp; flags"
 msgstr "दुनिया का अटलास जिसमें भूगोलीय तथ्य और झंडे शामिल हैं"
@@ -2320,14 +2257,8 @@ msgstr "वर्ल्ड एटलास"
 msgid "Technology News &amp; more..."
 msgstr "तकनीकी समाचार और अधिक..."
 
-msgid "Independent investigative journalism"
-msgstr "स्वतंत्र अन्वेषणी पत्रकारिता"
-
 msgid "Information Security Research &amp; Education"
 msgstr "जानकारी सुरक्षा अनुसंधान और शिक्षा"
-
-msgid "Darknet related news site"
-msgstr "डार्कनेट से संबंधित समाचार साइट"
 
 msgid "DigitalTrends"
 msgstr "डिजिटल ट्रेंड्स"
@@ -2340,24 +2271,6 @@ msgstr "डिजिटल दुनिया में आपके अधि�
 
 msgid "The Elliptic Curve Cryptography Blog"
 msgstr "एलिप्टिक कर्व क्रिप्टोग्राफी ब्लॉग"
-
-msgid "ForeignPolicy"
-msgstr "विदेश नीति"
-
-msgid "The Global Magazine of News &amp; Ideas"
-msgstr "वैश्विक समाचार और विचारों का मैगज़ीन"
-
-msgid "FrontLineDefenders"
-msgstr "FrontLine Defenders"
-
-msgid "Human rights activism"
-msgstr "मानवाधिकार के लिए गतिविधियाँ"
-
-msgid "Defending Human Rights Worldwide"
-msgstr "विश्व भर में मानवाधिकारों की रक्षा"
-
-msgid "HumanRightsWatch"
-msgstr "मानवाधिकार निगरानी"
 
 msgid "Fresh hacks every day"
 msgstr "हर दिन ताजा हैक्स"
@@ -2373,12 +2286,6 @@ msgstr "होंग कॉंग फ्री प्रेस"
 
 msgid "Independent &amp; impartial news for Hong Kong"
 msgstr "हंगकांग के लिए स्वतंत्र और निष्पक्ष समाचार"
-
-msgid "HongKongWatch"
-msgstr "हंगकांग वॉच"
-
-msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr "हंगकांग में स्वतंत्रता और अधिकारों के खतरों की निगरानी करता है"
 
 msgid "JStorDaily"
 msgstr "JStorDaily"
@@ -2416,11 +2323,11 @@ msgstr "स्वतंत्र अंतरराष्ट्रीय मी�
 msgid "OpenDemocracy"
 msgstr "ऑपन डेमोक्रेसी"
 
-msgid "News and blog feeds on I2P"
-msgstr "I2P पर समाचार और ब्लॉग फीड"
+msgid "Online privacy &amp; tech blog"
+msgstr ""
 
-msgid "Planeta"
-msgstr "प्लानेटा"
+msgid "RightToPrivacy"
+msgstr ""
 
 msgid "Lifestyle magazine"
 msgstr "जीवनशैली मैगज़ीन"
@@ -2449,20 +2356,11 @@ msgstr "नर्ड्स के लिए समाचार"
 msgid "Technology news &amp; reviews"
 msgstr "टेक्नोलॉजी समाचार और समीक्षाएँ"
 
-msgid "Reporting on China without fear or favor"
-msgstr "चीन पर डर या प्रीमियम के बिना रिपोर्टिंग"
-
 msgid "News from the Taiwan Capital"
 msgstr "ताइवान की राजधानी से समाचार"
 
 msgid "TaipeiTimes"
 msgstr "ताइपे समय"
-
-msgid "TechXplore"
-msgstr "टेकएक्सप्लोर"
-
-msgid "Technology and engineering news"
-msgstr "तकनीकी और प्रकृति विज्ञान समाचार"
 
 msgid "TechMeme"
 msgstr "टेकमीम"
@@ -2505,12 +2403,6 @@ msgstr "द न्यू रिपब्लिक"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "फ़ाइल शेयरिंग &amp; कॉपीराइट समाचार"
-
-msgid "A magazine about human rights and social justice"
-msgstr "मानव अधिकारों और सामाजिक न्याय के बारे में एक मैगजीन"
-
-msgid "UpstreamJournal"
-msgstr "अपस्ट्रीम जर्नल"
 
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
 msgstr "मध्य पूर्व में अमेरिकी हितों की संतुलित और वास्तविकिता से समझ को आगे बढ़ाना"
@@ -2841,16 +2733,22 @@ msgstr ""
 msgid "Not initialized"
 msgstr "इनिशियलाइज़ेशन नहीं किया"
 
-msgid "Sorted by hash distance, closest first."
+msgid "Total Remote Leasesets"
 msgstr ""
 
 msgid "Compact mode"
 msgstr ""
 
-msgid "Total Remote Leasesets"
+msgid "Local Leasesets"
+msgstr ""
+
+msgid "Debug Mode"
 msgstr ""
 
 msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Sorted by hash distance, closest first."
 msgstr ""
 
 msgid "Mod Data"
@@ -2865,17 +2763,11 @@ msgstr ""
 msgid "Change in"
 msgstr ""
 
-msgid "Known Floodfills"
-msgstr "परिचित Floodfills"
-
 msgid "Floodfill mode enabled"
 msgstr ""
 
 msgid "Routing Key"
 msgstr "रूटिंग की"
-
-msgid "Network data"
-msgstr "नेटवर्क डेटा"
 
 msgid "Median distance (bits)"
 msgstr "मीडियन दूरी (बिट)"
@@ -2885,6 +2777,12 @@ msgstr "अनुमानित कुल फ्लूडफिल्स"
 
 msgid "Estimated total leasesets"
 msgstr "अनुमानित कुल लीज़ सेट्स"
+
+msgid "Total Local Leasesets"
+msgstr ""
+
+msgid "Remote Leasesets"
+msgstr ""
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2917,12 +2815,6 @@ msgstr "{0} पर समाप्त"
 msgid "Expired{0} ago"
 msgstr "{0} पहले समाप्त हो गया"
 
-msgid "Received as published"
-msgstr "प्रकाशित के रूप में प्राप्त?"
-
-msgid "Received as reply"
-msgstr "जवाब के रूप में प्राप्त?"
-
 msgid "Distance"
 msgstr "दूरी"
 
@@ -2931,6 +2823,9 @@ msgstr "ऑफ़लाइन साइन किया"
 
 msgid "Signature type"
 msgstr "साइनेचर तरीका"
+
+msgid "Public Key"
+msgstr ""
 
 msgid "Unsupported type"
 msgstr "समर्थन नहीं किया जाता"
@@ -2942,6 +2837,9 @@ msgstr "{0} में समाप्त हो जाएगा"
 #, java-format
 msgid "Expired {0} ago"
 msgstr "{0} पहले समाप्त हो गया"
+
+msgid "Unknown"
+msgstr "अज्ञात"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
 msgstr ""
@@ -2978,9 +2876,6 @@ msgstr "Floodfills"
 
 msgid "Total"
 msgstr "कुल"
-
-msgid "Unknown"
-msgstr "अज्ञात"
 
 msgid "Initializing"
 msgstr "इनिशियलाइज़ेशन हो रहा है"
@@ -3055,9 +2950,6 @@ msgstr "NetDb में इस पते के साथ सभी राउट
 msgid "Show all routers with this port in the NetDb"
 msgstr "NetDb में इस पोर्ट के साथ सभी राउटर दिखाएं"
 
-msgid "Network ID"
-msgstr "नेटवर्क ID"
-
 msgid "Routers"
 msgstr "राउटर"
 
@@ -3069,6 +2961,12 @@ msgstr "अंतिम बार सुना"
 
 msgid "Last heard from"
 msgstr "अंतिम बार से सुना"
+
+msgid "Network Id"
+msgstr ""
+
+msgid "Count is always spoofed to avoid indicating router restarts"
+msgstr ""
 
 msgid "Hidden or starting up"
 msgstr "छिपा हुआ या शुरू हो रहा"
@@ -3129,19 +3027,16 @@ msgstr "अपनी router.config फ़ाइल में।"
 msgid "Peer Connections"
 msgstr "समकक्ष कनेक्शन"
 
-msgid "Active in the last minute"
-msgstr "अंतिम मिनट में सक्रिय"
-
 msgid "IPv4"
 msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
 
-msgid "Limit"
+msgid "Active connections / Max permitted"
 msgstr ""
 
-msgid "Maximum permitted connections"
+msgid "Connections / Limit"
 msgstr ""
 
 msgid "Current / maximum permitted"
@@ -3150,23 +3045,23 @@ msgstr "वर्तमान / अनुमतित की अधिकतम 
 msgid "NTCP connections"
 msgstr "NTCP कनेक्शन"
 
-msgid "Caps"
-msgstr "कैप्स"
-
 msgid "Peer capabilities"
 msgstr "समकक्ष क्षमताएं"
 
-msgid "Dir"
-msgstr "दिशा"
+msgid "Caps"
+msgstr "कैप्स"
 
 msgid "Direction/Introduction"
 msgstr "दिशा/परिचय"
 
-msgid "Idle"
-msgstr "अक्रिय"
+msgid "Dir"
+msgstr "दिशा"
 
 msgid "Peer inactivity"
 msgstr "समकक्ष की गौणता"
+
+msgid "Idle"
+msgstr "अक्रिय"
 
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "औसत आगामी/निर्गमी गति (KBps)"
@@ -3198,11 +3093,11 @@ msgstr "प्राप्त संदेश"
 msgid "RX"
 msgstr "प्राप्ति"
 
-msgid "Out Queue"
-msgstr "निर्गमन की टिकी"
-
 msgid "Queued messages to send to peer"
 msgstr "समकक्ष को भेजने के लिए टिकी में संदेश"
+
+msgid "Out Queue"
+msgstr "निर्गमन की टिकी"
 
 msgid "Connection is backlogged"
 msgstr "कनेक्शन बैकलॉग हो गया है"
@@ -3728,11 +3623,11 @@ msgstr "I2P अपडेट डाउनलोड करें"
 msgid "Unsigned update available"
 msgstr "अनुमानित अपडेट उपलब्ध है"
 
-msgid "Help with firewall configuration"
-msgstr "फायरवॉल के सेटिंग के साथ मदद"
-
 msgid "Check network connection and NAT/firewall!"
 msgstr "नेटवर्क कनेक्शन और NAT/फायरवॉल की जांच करें!"
+
+msgid "Help with firewall configuration"
+msgstr "फायरवॉल के सेटिंग के साथ मदद"
 
 msgid "Attempt to download router reference files (if automatic reseed has failed)"
 msgstr "ऑटोमैटिक रीसीड के विफल होने पर रूटर संदर्भ फ़ाइलों को डाउनलोड करने का प्रयास करें"
@@ -3767,23 +3662,35 @@ msgstr "नीची सीमा तक ले जाएं"
 msgid "Select a section to add"
 msgstr "जोड़ने के लिए एक सेक्शन चुनें"
 
+msgid "Router Information (advanced)"
+msgstr "रूटर जानकारी (विस्तृत)"
+
+msgid "Advanced Links"
+msgstr "विस्तृत लिंक"
+
+msgid "Bandwidth Graph"
+msgstr "बैंडविड्थ ग्राफ़"
+
+msgid "UTC Clock"
+msgstr "UTC घड़ी"
+
+msgid "Congestion"
+msgstr "भीड़"
+
+msgid "CPU Load"
+msgstr "CPU बोर्ड"
+
+msgid "Firewall &amp; Reseed Status"
+msgstr "फायरवॉल &amp; फिर से बीजी प्रक्रिया की स्थिति"
+
 msgid "Help &amp; FAQ"
 msgstr "मदद &amp; सामान्य प्रश्न"
-
-msgid "I2P Services"
-msgstr "I2P सेवाएँ"
 
 msgid "I2P Internals"
 msgstr "I2P आंतरिक"
 
-msgid "Router Information"
-msgstr "रूटर जानकारी"
-
-msgid "Router Information (brief)"
-msgstr "रूटर जानकारी (संक्षिप्त)"
-
-msgid "Router Information (advanced)"
-msgstr "रूटर जानकारी (विस्तृत)"
+msgid "I2P Services"
+msgstr "I2P सेवाएँ"
 
 msgid "Memory Usage Bar"
 msgstr "मेमोरी उपयोग बार"
@@ -3791,35 +3698,23 @@ msgstr "मेमोरी उपयोग बार"
 msgid "Network Reachability"
 msgstr "नेटवर्क पहुँच"
 
-msgid "Update Status"
-msgstr "अपडेट स्थिति"
+msgid "News &amp; Updates"
+msgstr "समाचार &amp; अपडेट"
 
 msgid "Restart Status"
 msgstr "पुनः शुरू करने की स्थिति"
 
-msgid "Firewall &amp; Reseed Status"
-msgstr "फायरवॉल &amp; फिर से बीजी प्रक्रिया की स्थिति"
+msgid "Router Information"
+msgstr "रूटर जानकारी"
 
-msgid "Bandwidth Graph"
-msgstr "बैंडविड्थ ग्राफ़"
-
-msgid "Congestion"
-msgstr "भीड़"
+msgid "Router Information (brief)"
+msgstr "रूटर जानकारी (संक्षिप्त)"
 
 msgid "Tunnel Status"
 msgstr "टनल स्थिति"
 
-msgid "News &amp; Updates"
-msgstr "समाचार &amp; अपडेट"
-
-msgid "Advanced Links"
-msgstr "विस्तृत लिंक"
-
-msgid "UTC Clock"
-msgstr "UTC घड़ी"
-
-msgid "CPU Load"
-msgstr "CPU बोर्ड"
+msgid "Update Status"
+msgstr "अपडेट स्थिति"
 
 msgid "I2P Router Help &amp; FAQ"
 msgstr "I2P रूटर मदद &amp; सामान्य प्रश्न"
@@ -4004,6 +3899,9 @@ msgstr "NetDb में कुल पीयर"
 
 msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "अभी तक कुछ मिनटों/अंतिम घंटे में हमारे साथ बातचीत कर रहे पीयर"
+
+msgid "Peers we've been talking to in the last minute"
+msgstr ""
 
 msgid "The number of peers available for building client tunnels"
 msgstr "ग्राहक टनल बनाने के लिए उपलब्ध पीयर की संख्या"
@@ -4337,6 +4235,9 @@ msgstr "ब्लॉक को लागू करें के लिए"
 msgid "days"
 msgstr "दिन"
 
+msgid "Known Floodfills"
+msgstr "परिचित Floodfills"
+
 msgid "Average closest floodfill distance"
 msgstr "औसत सबसे निकट floodfill दूरी"
 
@@ -4507,6 +4408,9 @@ msgstr "डेटा स्थानांतरित किया गया"
 
 msgid "Data"
 msgstr "डेटा"
+
+msgid "Limit"
+msgstr ""
 
 msgid "Receive on"
 msgstr "प्राप्त करें"
@@ -5480,6 +5384,9 @@ msgstr "I2P सिस्टम सेवा स्थापित करें�
 msgid "config sidebar"
 msgstr "साइडबार की सेटिंग करें"
 
+msgid "Sidebar Options"
+msgstr ""
+
 msgid "Refresh interval"
 msgstr "ताज़ा करने का अंतराल"
 
@@ -5488,6 +5395,12 @@ msgstr "सेकंड"
 
 msgid "0 to disable"
 msgstr "0 को डिसेबल करें"
+
+msgid "Unified sidebar"
+msgstr ""
+
+msgid "Use the same sidebar on all pages"
+msgstr ""
 
 msgid "config stats"
 msgstr "स्टैट्स की सेटिंग करें"
@@ -5688,6 +5601,9 @@ msgstr "घटनाएं"
 msgid "Event Log"
 msgstr "घटना लॉग"
 
+msgid "Combined"
+msgstr ""
+
 msgid "graph"
 msgstr "ग्राफ़"
 
@@ -5765,6 +5681,9 @@ msgstr "जब यह सेटिंग सत्य कर दी जाती
 
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "जब यह सेटिंग सत्य की जाती है, तो इंटरेस्टिंग साइट्स के लिंक साइटमैप पर प्रदर्शित किए जाएंगे। [डिफ़ॉल्ट तर्क है false]"
+
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
+msgstr ""
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "यह सेटिंग तय करती है कि राउटर को प्रदान की गई <i>blocklist.txt</i> फ़ाइल और किसी भी उपयोगकर्ता निर्धारित ब्लॉकलिस्ट का उपयोग करना चाहिए या नहीं, जिससे हैश या IP पते के माध्यम से राउटर को प्रतिबंधित करने की अनुमति हो। IPv4 के लिए संचार क्षेत्र और नेटमास्क समर्थित हैं, लेकिन IPv6 के लिए नहीं। अपने I2P+ ऐप्लिकेशन डिरेक्टरी में <i>blocklist.txt</i> को देखें जानकारी के लिए। [द्वारा सक्षम होने वाला, रीस्टार्ट की आवश्यकता है]"
@@ -6579,8 +6498,8 @@ msgstr "यदि पंजीकरण प्रमाणन स्ट्रि
 msgid "If you are in a hurry and can't wait a few hours, you can tell people to use a \"jump\" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is working, you can tell others to use it."
 msgstr "यदि आप तत्पर हैं और कुछ घंटों की प्रतीक्षा नहीं कर सकते, तो आप लोगों को 'जंप' एड्रेस हेल्पर रेडिरेक्टिव सर्विस का उपयोग करने के लिए कह सकते हैं। यह आमतौर पर आपके होस्टनाम को उसी साइट पर पंजीकृत करने के कुछ मिनटों के भीतर कार्य करने लगेगा। इसे अपने आप को पहले ही परीक्षण करें, अपने ब्राउज़र में http://stats.i2p/cgi-bin/jump.cgi?a=yourchosenhostname.i2p प्रविष्ट करके। एक बार यह कार्यरत हो जाता है, आप दूसरों को इसका उपयोग करने के लिए बता सकते हैं।"
 
-msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skanki2p</a>, and paste the link where it's required to share it with others."
-msgstr "अन्यथा, आप अपने डोमेन के लिए 'एड्रेस हेल्पर लिंक' की प्रतिलिपि कर सकते हैं, जो एड्रेसबुक सूची पेज पर या अपने डोमेन के विवरण पेज पर दिखाई देता है, उदाहरण के लिए i2p-projekt.i2p के विवरण, और इस लिंक को शेयर करने के लिए आवश्यक स्थान पर पेस्ट कर सकते हैं।"
+msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
+msgstr ""
 
 msgid "Backup your private key!"
 msgstr "अपना निजी कुंजी बैकअप करें!"
@@ -6816,8 +6735,8 @@ msgstr "बेहतर कनेक्टिविटी के लिए अ�
 msgid "Getting Support Online"
 msgstr "ऑनलाइन सहायता प्राप्त करें"
 
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "आप शायद <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P वेबसाइट</a> पर जानकारी की जांच करना चाहेंगे, <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P वार्तालाप फ़ोरम</a> में संदेश पोस्ट करें, या I2P के आंतरिक IRC नेटवर्क पर <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> या <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> पर घूमें।"
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
+msgstr ""
 
 msgid "Reporting Bugs"
 msgstr "गुमावशी की रिपोर्ट करना"
@@ -7356,6 +7275,9 @@ msgstr "लिंक कस्टमाइज़ करें"
 msgid "Configure display language, theme and optional console password"
 msgstr "दिखावा भाषा, थीम और वैलेंट कंसोल पासवर्ड को सेट करें"
 
+msgid "Language"
+msgstr ""
+
 msgid "Configure router bandwidth"
 msgstr "राउटर बैंडविड्थ को सेट करें"
 
@@ -7420,6 +7342,24 @@ msgstr "सेवा (Wrapper) लॉग"
 msgid "network database"
 msgstr "नेटवर्क डेटाबेस"
 
+msgid "Encryption type"
+msgstr ""
+
+msgid "Encryption types"
+msgstr ""
+
+msgid "Signature types"
+msgstr ""
+
+msgid "Locally hosted private service"
+msgstr ""
+
+msgid "Locally hosted public service"
+msgstr ""
+
+msgid "Requested client leaseset"
+msgstr ""
+
 msgid "network database router map"
 msgstr "नेटवर्क डेटाबेस राउटर मानचित्र"
 
@@ -7462,6 +7402,12 @@ msgstr "बैन किए गए समकक्ष"
 
 msgid "Fast / High Capacity"
 msgstr "तेज़ / उच्च क्षमता"
+
+msgid "router logs"
+msgstr ""
+
+msgid "service logs"
+msgstr ""
 
 msgid "Manage I2P addresses"
 msgstr "I2P पताओं का प्रबंधन करें"
@@ -7667,6 +7613,9 @@ msgstr "टंनल आईडी को स्विच करें"
 msgid "Toggle Tunnels"
 msgstr "टंनल स्विच करें"
 
+msgid "Updating sidebar sections"
+msgstr ""
+
 msgid "Peer Profile"
 msgstr "पीयर प्रोफ़ाइल"
 
@@ -7812,7 +7761,15 @@ msgstr "समाप्त"
 
 
 
-#, java-format
+
+
+
+
+
+
+
+
+
 
 
 

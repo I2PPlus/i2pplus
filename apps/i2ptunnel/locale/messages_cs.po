@@ -12,6 +12,13 @@ msgid "internal"
 msgstr "vnitřní"
 
 #, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "{0} příchozí, {0} odchozí tunel"
+msgstr[1] "{0} příchozí, {0} odchozí tunely"
+msgstr[2] "{0} příchozí, {0} odchozí tunely"
+
+#, java-format
 msgid "{0} inbound tunnel"
 msgid_plural "{0} inbound tunnels"
 msgstr[0] "{0} příchozí tunel"
@@ -25,13 +32,6 @@ msgstr[0] "{0} odchozí tunel"
 msgstr[1] "{0} odchozí tunely"
 msgstr[2] "{0} odchozí tunely"
 
-#, java-format
-msgid "{0} inbound, {0} outbound tunnel"
-msgid_plural "{0} inbound, {0} outbound tunnels"
-msgstr[0] "{0} příchozí, {0} odchozí tunel"
-msgstr[1] "{0} příchozí, {0} odchozí tunely"
-msgstr[2] "{0} příchozí, {0} odchozí tunely"
-
 msgid "lower bandwidth and reliability"
 msgstr "snížit šířku pásma a spolehlivost"
 
@@ -41,14 +41,47 @@ msgstr "standartní šířka pásma a spolehlivost"
 msgid "higher bandwidth and reliability"
 msgstr "vyšší šířka pásma a spolehlivost"
 
-msgid "Configuration reloaded for all tunnels"
-msgstr "Nastavení pro všechny tunely bylo opětovně nahráno"
+msgid "Error - tunnels are not initialized yet"
+msgstr ""
+
+msgid "No services configured, cannot restart!"
+msgstr ""
+
+msgid "Stopping tunnel"
+msgstr "Zastavuji tunel"
 
 msgid "Starting tunnel"
 msgstr "Startuji tunel"
 
-msgid "Stopping tunnel"
-msgstr "Zastavuji tunel"
+msgid "Error restarting tunnel"
+msgstr ""
+
+msgid "Restarted all running tunnels"
+msgstr ""
+
+msgid "No clients configured, cannot restart!"
+msgstr ""
+
+msgid "Restarted all running client tunnels"
+msgstr ""
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "Nastavení pro všechny tunely bylo opětovně nahráno"
+
+msgid "Error: Invalid tunnel"
+msgstr ""
+
+msgid "Started tunnel"
+msgstr ""
+
+msgid "Stopped tunnel"
+msgstr ""
+
+msgid "Restarting tunnel"
+msgstr ""
+
+msgid "Please confirm removal"
+msgstr ""
 
 msgid "New Tunnel"
 msgstr "Nový tunel"
@@ -119,6 +152,9 @@ msgstr "Upravit tunel serveru"
 msgid "Are you sure you want to delete?"
 msgstr "Opravdu chcete smazat?"
 
+msgid "required"
+msgstr "požadováno"
+
 msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
 msgstr "Tunnel a všechny ostatní sdílené klientské tunely musí být zastaveny, aby bylo možné tuto konfiguraci změnit"
 
@@ -175,9 +211,6 @@ msgstr "Povolte DCC"
 
 msgid "Port"
 msgstr "Port"
-
-msgid "required"
-msgstr "požadováno"
 
 msgid "Specify the local port this service should be accessible from"
 msgstr "Uveďte místní port, ze kterého má být tato služba přístupná"
@@ -323,11 +356,14 @@ msgstr "Neotvírejte tunel, dokud nebude detekována aktivita na portu"
 msgid "This is the default, recommended option"
 msgstr "Toto je výchozí, doporučená možnost"
 
-msgid "Legacy option (deprecated), provided for backward compatibility"
-msgstr "Legacy opce (zastaralá), poskytovaná pro zpětnou kompatibilitu"
-
 msgid "Encryption types"
 msgstr "Typy šifrování"
+
+msgid "Legacy options"
+msgstr ""
+
+msgid "Post Quantum"
+msgstr ""
 
 msgid "Both encryption types"
 msgstr "Oba typy šifrování"
@@ -365,6 +401,9 @@ msgstr[2] "{0} hop tunel"
 
 msgid "Number of Tunnels in Group"
 msgstr "Počet tunelů ve skupině"
+
+msgid "Disabled for 0 hop tunnels"
+msgstr ""
 
 msgid "Variance"
 msgstr "Rozptyl"
@@ -532,17 +571,17 @@ msgstr "Povolit pro přístup k této místní službě vyžadovat uživatelské
 msgid "Require local authorization for this service"
 msgstr "Vyžadovat místní autorizaci pro tuto službu"
 
-msgid "Username"
-msgstr "Uživatelské jméno"
-
 msgid "Set username required to access this service"
 msgstr "Nastavte uživatelské jméno požadované pro přístup k této službě"
 
-msgid "Password"
-msgstr "Heslo"
+msgid "Username"
+msgstr "Uživatelské jméno"
 
 msgid "Set password required to access this service"
 msgstr "Nastavte heslo požadované pro přístup k této službě"
+
+msgid "Password"
+msgstr "Heslo"
 
 msgid "Outproxy Authorization"
 msgstr "Outproxy Autorizace"
@@ -657,6 +696,9 @@ msgstr "Konfigurace typu podpisu je možná pouze při prvním vytvoření tunel
 
 msgid "Legacy option, with alternate key configured"
 msgstr "Legacy volba s nakonfigurovaným alternativním klíčem"
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "Legacy opce (zastaralá), poskytovaná pro zpětnou kompatibilitu"
 
 msgid "Recommended for blinded and encrypted destinations"
 msgstr "Doporučeno pro zaslepené a šifrované cíle"
@@ -992,8 +1034,23 @@ msgstr "Zastavit vše"
 msgid "Start All"
 msgstr "Spustit vše"
 
+msgid "Restart all running tunnels"
+msgstr ""
+
 msgid "Restart All"
 msgstr "Spustit vše znovu (restartovat)"
+
+msgid "Restart all running server tunnels"
+msgstr ""
+
+msgid "Restart All Servers"
+msgstr ""
+
+msgid "Restart all running client tunnels"
+msgstr ""
+
+msgid "Restart All Clients"
+msgstr ""
 
 msgid "I2P Server Tunnels"
 msgstr "I2P serverové tunely"
@@ -1019,6 +1076,9 @@ msgstr "Control"
 msgid "Edit Server Tunnel Settings for"
 msgstr "Upravit nastavení tunelu serveru pro"
 
+msgid "Test IRC server, bypassing I2P"
+msgstr ""
+
 msgid "Test HTTPS server, bypassing I2P"
 msgstr "Test HTTPS server, obcházení I2P"
 
@@ -1030,6 +1090,9 @@ msgstr "Otestujte HTTP server přes I2P"
 
 msgid "Base32 Address"
 msgstr "Base32 adresa"
+
+msgid "Offline"
+msgstr ""
 
 msgid "No Preview"
 msgstr "Bez náhledu"
@@ -1052,6 +1115,12 @@ msgstr "v"
 msgid "out"
 msgstr "ven"
 
+msgid "Restart this Tunnel"
+msgstr ""
+
+msgid "Restart"
+msgstr ""
+
 msgid "Stopped"
 msgstr "Zastaveno"
 
@@ -1069,6 +1138,9 @@ msgstr "Alternativní Cíl"
 
 msgid "Encryption"
 msgstr "Šifrování"
+
+msgid "Supported encryption"
+msgstr ""
 
 msgid "New server tunnel"
 msgstr "Nový tunel serveru"

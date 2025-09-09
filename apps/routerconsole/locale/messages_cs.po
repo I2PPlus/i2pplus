@@ -1560,10 +1560,7 @@ msgstr "Restartujte za {0}"
 msgid "Save order"
 msgstr "Uložte objednávku"
 
-msgid "Sidebar refresh disabled"
-msgstr ""
-
-msgid "Sidebar refresh interval changed"
+msgid "Sidebar preferences updated"
 msgstr ""
 
 msgid "Refresh interval must be a number"
@@ -1598,9 +1595,6 @@ msgstr "Přesunuto"
 
 msgid "Saved order of sections."
 msgstr "Uložené pořadí sekcí."
-
-msgid "Stat filter and location updated successfully to"
-msgstr "Statistický filtr a umístění byly úspěšně aktualizovány na"
 
 msgid "Full statistics enabled"
 msgstr "Úplná statistika povolena"
@@ -2190,23 +2184,14 @@ msgstr "Komunitní fóra související s I2P"
 msgid "File-sharing forum"
 msgstr "Fórum pro sdílení souborů"
 
-msgid "Alternative front-end for Twitter"
-msgstr "Alternativní front-end pro Twitter"
-
-msgid "Rocksolid forums for the darknets"
-msgstr "Skalní fóra pro darknety"
-
 msgid "Cross-network micro-blogging &amp; forums &amp; wiki"
 msgstr "Mikroblogování napříč sítěmi"
 
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Alternativní front-end zaměřený na soukromí pro Reddit"
 
-msgid "Base64 Image Encoder"
-msgstr "Base64 Image Encoder"
-
-msgid "An image cache and resize service"
-msgstr "Služba mezipaměti obrázků a změny velikosti"
+msgid "AI Image generation & Chat hub"
+msgstr ""
 
 msgid "IRC Logs for multiple networks"
 msgstr "IRC Záznamy pro více sítí"
@@ -2223,17 +2208,8 @@ msgstr "Landing page for various services"
 msgid "Streaming radio service"
 msgstr "Streamování rádiové služby"
 
-msgid "Alternative frontend for Imgur"
-msgstr "Alternativní front-end pro Imgur"
-
 msgid "Privacy-focused not-for-profit organization"
 msgstr "Nezisková organizace zaměřená na ochranu soukromí"
-
-msgid "Outproxy bandwidth test"
-msgstr "Test šířky pásma outproxy"
-
-msgid "speedtest"
-msgstr "test rychlosti"
 
 msgid "Text translation engine"
 msgstr "Motor pro překlad textu"
@@ -2241,20 +2217,8 @@ msgstr "Motor pro překlad textu"
 msgid "translate"
 msgstr "přeložit"
 
-msgid "Alternative front-end to Youtube"
-msgstr "Alternativní front-end pro Youtube"
-
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "Poskytovatel soukromí s ohledem na webhosting a služby VPN"
-
-msgid "Tor-focused Search Engine"
-msgstr "Vyhledávač zaměřený na Tor"
-
-msgid "Pinterest Image Search Engine"
-msgstr "Vyhledávač obrázků Pinterest"
-
-msgid "Clearnet BitTorrent DHT search engine"
-msgstr "Vyhledávač Clearnet BitTorrent DHT"
 
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "Vyhledávač DuckDuckGo (bez javascriptu)"
@@ -2264,21 +2228,6 @@ msgstr "Vyhledávač Clearnet zaměřený na soukromí"
 
 msgid "I2P Web Search Engine"
 msgstr "I2P webový vyhledávač"
-
-msgid "Enabling the free transmission of data in the public interest"
-msgstr "Umožnění volného přenosu dat ve veřejném zájmu"
-
-msgid "Selected Papers in Anonymity"
-msgstr "Vybrané příspěvky v anonymitě"
-
-msgid "Tor .onion site links"
-msgstr "Odkazy na stránky Tor .onion"
-
-msgid "HTML Color Reference"
-msgstr "Referenční barva HTML"
-
-msgid "HTMLColors"
-msgstr "HTMLBarvy"
 
 msgid "I2P-related Wiki"
 msgstr "Wiki související s I2P"
@@ -2295,29 +2244,17 @@ msgstr "Internetová encyklopedie filozofie"
 msgid "Standford Encyclopedia of Philosophy"
 msgstr "Standfordská encyklopedie filozofie"
 
-msgid "Psychonaut"
-msgstr "Psychonaut"
-
-msgid "Wiki relating to altered states of consciousness"
-msgstr "Wiki týkající se změněných stavů vědomí"
-
 msgid "Computing-related tutorials"
 msgstr "Výukové programy související s počítačem"
 
 msgid "SimplifiedGuide"
 msgstr "Zjednodušený průvodce"
 
-msgid "Vulnerability Database"
-msgstr "Databáze zranitelnosti"
-
 msgid "Web technology reference and learning site"
 msgstr "Referenční a výukové stránky webových technologií"
 
 msgid "Alternative Wikipedia front-end focused on privacy"
 msgstr "Alternativní front-end Wikipedie zaměřený na soukromí"
-
-msgid "The biggest online English dictionary"
-msgstr "Největší online anglický slovník"
 
 msgid "World atlas including geography facts &amp; flags"
 msgstr "Atlas světa včetně geografických faktů a vlajek"
@@ -2328,14 +2265,8 @@ msgstr "Atlas Světa"
 msgid "Technology News &amp; more..."
 msgstr "Technologické novinky a další..."
 
-msgid "Independent investigative journalism"
-msgstr "Nezávislá investigativní žurnalistika"
-
 msgid "Information Security Research &amp; Education"
 msgstr "Výzkum a vzdělávání v oblasti informační bezpečnosti"
-
-msgid "Darknet related news site"
-msgstr "Zpravodajské stránky související s Darknetem"
 
 msgid "DigitalTrends"
 msgstr "DigitalTrends"
@@ -2348,24 +2279,6 @@ msgstr "Obrana vašich práv v digitálním světě"
 
 msgid "The Elliptic Curve Cryptography Blog"
 msgstr "Blog o kryptografii Elliptic Curve"
-
-msgid "ForeignPolicy"
-msgstr "Zahraniční politika"
-
-msgid "The Global Magazine of News &amp; Ideas"
-msgstr "The Global Magazine of News"
-
-msgid "FrontLineDefenders"
-msgstr "Obránci FrontLine"
-
-msgid "Human rights activism"
-msgstr "Aktivismus v oblasti lidských práv"
-
-msgid "Defending Human Rights Worldwide"
-msgstr "Obrana lidských práv ve světě"
-
-msgid "HumanRightsWatch"
-msgstr "Hodinky HumanRights"
 
 msgid "Fresh hacks every day"
 msgstr "Každý den čerstvé hacky"
@@ -2381,12 +2294,6 @@ msgstr "HongKongFreePress"
 
 msgid "Independent &amp; impartial news for Hong Kong"
 msgstr "Nezávislé a nestranné zprávy pro Hong Kong"
-
-msgid "HongKongWatch"
-msgstr "HongKongWatch"
-
-msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr "Monitoruje ohrožení svobod a práv v Hongkongu"
 
 msgid "JStorDaily"
 msgstr "JStorDaily"
@@ -2424,11 +2331,11 @@ msgstr "Nezávislá mezinárodní mediální platforma"
 msgid "OpenDemocracy"
 msgstr "Otevřená demokracie"
 
-msgid "News and blog feeds on I2P"
-msgstr "Zprávy a blogy na I2P"
+msgid "Online privacy &amp; tech blog"
+msgstr ""
 
-msgid "Planeta"
-msgstr "Planeta"
+msgid "RightToPrivacy"
+msgstr ""
 
 msgid "Lifestyle magazine"
 msgstr "Časopis o životním stylu"
@@ -2457,20 +2364,11 @@ msgstr "Novinky pro nerdy"
 msgid "Technology news &amp; reviews"
 msgstr "Technologické novinky a recenze"
 
-msgid "Reporting on China without fear or favor"
-msgstr "Podávání zpráv o Číně beze strachu a laskavosti"
-
 msgid "News from the Taiwan Capital"
 msgstr "Zprávy z hlavního města Tchaj-wanu"
 
 msgid "TaipeiTimes"
 msgstr "TaipeiTimes"
-
-msgid "TechXplore"
-msgstr "TechXplore"
-
-msgid "Technology and engineering news"
-msgstr "Technologické a inženýrské novinky"
 
 msgid "TechMeme"
 msgstr "TechMeme"
@@ -2513,12 +2411,6 @@ msgstr "Nová republika"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "Sdílení souborů a novinky o autorských právech"
-
-msgid "A magazine about human rights and social justice"
-msgstr "Časopis o lidských právech a sociální spravedlnosti"
-
-msgid "UpstreamJournal"
-msgstr "UpstreamJournal"
 
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
 msgstr "Prosazování vyváženého a realistického chápání amerických zájmů na Blízkém východě"
@@ -2849,16 +2741,22 @@ msgstr ""
 msgid "Not initialized"
 msgstr "Neinicializováno"
 
-msgid "Sorted by hash distance, closest first."
+msgid "Total Remote Leasesets"
 msgstr ""
 
 msgid "Compact mode"
 msgstr ""
 
-msgid "Total Remote Leasesets"
+msgid "Local Leasesets"
+msgstr ""
+
+msgid "Debug Mode"
 msgstr ""
 
 msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Sorted by hash distance, closest first."
 msgstr ""
 
 msgid "Mod Data"
@@ -2873,17 +2771,11 @@ msgstr ""
 msgid "Change in"
 msgstr ""
 
-msgid "Known Floodfills"
-msgstr "Známé záplavy"
-
 msgid "Floodfill mode enabled"
 msgstr ""
 
 msgid "Routing Key"
 msgstr "Směrovací klíč"
-
-msgid "Network data"
-msgstr "Síťová data"
 
 msgid "Median distance (bits)"
 msgstr "Střední vzdálenost (bity)"
@@ -2893,6 +2785,12 @@ msgstr "Odhadované celkové zaplavení"
 
 msgid "Estimated total leasesets"
 msgstr "Odhadovaný celkový počet pronájmů"
+
+msgid "Total Local Leasesets"
+msgstr ""
+
+msgid "Remote Leasesets"
+msgstr ""
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2925,12 +2823,6 @@ msgstr "Platnost vyprší{0}"
 msgid "Expired{0} ago"
 msgstr "Platnost vypršela{0}"
 
-msgid "Received as published"
-msgstr "Přijato tak, jak bylo zveřejněno?"
-
-msgid "Received as reply"
-msgstr "Přijato jako odpověď?"
-
 msgid "Distance"
 msgstr "Vzdálenost"
 
@@ -2939,6 +2831,9 @@ msgstr "Podepsáno offline"
 
 msgid "Signature type"
 msgstr "Typ podpisu"
+
+msgid "Public Key"
+msgstr ""
 
 msgid "Unsupported type"
 msgstr "Nepodporovaný typ"
@@ -2950,6 +2845,9 @@ msgstr "Platnost vyprší za {0}"
 #, java-format
 msgid "Expired {0} ago"
 msgstr "Platnost vypršela před {0}"
+
+msgid "Unknown"
+msgstr "Neznámý"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
 msgstr ""
@@ -2986,9 +2884,6 @@ msgstr "Záplavy"
 
 msgid "Total"
 msgstr "Celkově"
-
-msgid "Unknown"
-msgstr "Neznámý"
 
 msgid "Initializing"
 msgstr "Inicializace"
@@ -3063,9 +2958,6 @@ msgstr "Zobrazit všechny routery s touto adresou v NetDb"
 msgid "Show all routers with this port in the NetDb"
 msgstr "Zobrazit všechny routery s tímto portem v NetDb"
 
-msgid "Network ID"
-msgstr "ID sítě"
-
 msgid "Routers"
 msgstr "Směrovače"
 
@@ -3077,6 +2969,12 @@ msgstr "Naposledy slyšel o"
 
 msgid "Last heard from"
 msgstr "Naposledy slyšel od"
+
+msgid "Network Id"
+msgstr ""
+
+msgid "Count is always spoofed to avoid indicating router restarts"
+msgstr ""
 
 msgid "Hidden or starting up"
 msgstr "Skryto nebo spouštění"
@@ -3137,19 +3035,16 @@ msgstr "do souboru router.config."
 msgid "Peer Connections"
 msgstr "Peer Connections"
 
-msgid "Active in the last minute"
-msgstr "Aktivní v poslední minutě"
-
 msgid "IPv4"
 msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
 
-msgid "Limit"
+msgid "Active connections / Max permitted"
 msgstr ""
 
-msgid "Maximum permitted connections"
+msgid "Connections / Limit"
 msgstr ""
 
 msgid "Current / maximum permitted"
@@ -3158,23 +3053,23 @@ msgstr "Aktuální / maximální povolený"
 msgid "NTCP connections"
 msgstr "NTCP připojení"
 
-msgid "Caps"
-msgstr "Čepice"
-
 msgid "Peer capabilities"
 msgstr "Schopnosti vrstevníků"
 
-msgid "Dir"
-msgstr "Adresář"
+msgid "Caps"
+msgstr "Čepice"
 
 msgid "Direction/Introduction"
 msgstr "Směr / Úvod"
 
-msgid "Idle"
-msgstr "Nečinný"
+msgid "Dir"
+msgstr "Adresář"
 
 msgid "Peer inactivity"
 msgstr "Nečinnost vrstevníků"
+
+msgid "Idle"
+msgstr "Nečinný"
 
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Průměrná příchozí/odchozí rychlost (kB/s)"
@@ -3206,11 +3101,11 @@ msgstr "Přijaté zprávy"
 msgid "RX"
 msgstr "RX"
 
-msgid "Out Queue"
-msgstr "Z fronty"
-
 msgid "Queued messages to send to peer"
 msgstr "Zprávy ve frontě k odeslání partnerovi"
+
+msgid "Out Queue"
+msgstr "Z fronty"
 
 msgid "Connection is backlogged"
 msgstr "Spojení je zablokováno"
@@ -3744,11 +3639,11 @@ msgstr "Stáhněte si aktualizaci I2P"
 msgid "Unsigned update available"
 msgstr "K dispozici nepodepsaná aktualizace"
 
-msgid "Help with firewall configuration"
-msgstr "Pomoc s konfigurací firewallu"
-
 msgid "Check network connection and NAT/firewall!"
 msgstr "Zkontrolujte síťové připojení a NAT/firewall!"
+
+msgid "Help with firewall configuration"
+msgstr "Pomoc s konfigurací firewallu"
 
 msgid "Attempt to download router reference files (if automatic reseed has failed)"
 msgstr "Pokus o stažení referenčních souborů routeru (pokud selhal automatický reseed)"
@@ -3783,23 +3678,35 @@ msgstr "Přesuňte se dolů"
 msgid "Select a section to add"
 msgstr "Vyberte sekci, kterou chcete přidat"
 
+msgid "Router Information (advanced)"
+msgstr "Informace o směrovači (pokročilé)"
+
+msgid "Advanced Links"
+msgstr "Pokročilé odkazy"
+
+msgid "Bandwidth Graph"
+msgstr "Graf připojení"
+
+msgid "UTC Clock"
+msgstr "Hodiny UTC"
+
+msgid "Congestion"
+msgstr "Přetížení"
+
+msgid "CPU Load"
+msgstr "Zatížení CPU"
+
+msgid "Firewall &amp; Reseed Status"
+msgstr "Stav brány firewall a bootstrapu"
+
 msgid "Help &amp; FAQ"
 msgstr "Nápověda a časté dotazy"
-
-msgid "I2P Services"
-msgstr "Služby I2P"
 
 msgid "I2P Internals"
 msgstr "Vnitřní zařízení I2P"
 
-msgid "Router Information"
-msgstr "Informace o směrovači"
-
-msgid "Router Information (brief)"
-msgstr "Informace o směrovači (stručné)"
-
-msgid "Router Information (advanced)"
-msgstr "Informace o směrovači (pokročilé)"
+msgid "I2P Services"
+msgstr "Služby I2P"
 
 msgid "Memory Usage Bar"
 msgstr "Lišta využití paměti"
@@ -3807,35 +3714,23 @@ msgstr "Lišta využití paměti"
 msgid "Network Reachability"
 msgstr "Dosah sítě"
 
-msgid "Update Status"
-msgstr "Stav aktualizace"
+msgid "News &amp; Updates"
+msgstr "Novinky a Aktualizace"
 
 msgid "Restart Status"
 msgstr "Stav restartu"
 
-msgid "Firewall &amp; Reseed Status"
-msgstr "Stav brány firewall a bootstrapu"
+msgid "Router Information"
+msgstr "Informace o směrovači"
 
-msgid "Bandwidth Graph"
-msgstr "Graf připojení"
-
-msgid "Congestion"
-msgstr "Přetížení"
+msgid "Router Information (brief)"
+msgstr "Informace o směrovači (stručné)"
 
 msgid "Tunnel Status"
 msgstr "Stav tunelu"
 
-msgid "News &amp; Updates"
-msgstr "Novinky a Aktualizace"
-
-msgid "Advanced Links"
-msgstr "Pokročilé odkazy"
-
-msgid "UTC Clock"
-msgstr "Hodiny UTC"
-
-msgid "CPU Load"
-msgstr "Zatížení CPU"
+msgid "Update Status"
+msgstr "Stav aktualizace"
 
 msgid "I2P Router Help &amp; FAQ"
 msgstr "Nápověda a časté dotazy k I2P Routeru"
@@ -4020,6 +3915,9 @@ msgstr "Celkový počet kolegů v NetDb"
 
 msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Vrstovníci, se kterými jsme mluvili v posledních minutách/poslední hodině"
+
+msgid "Peers we've been talking to in the last minute"
+msgstr ""
 
 msgid "The number of peers available for building client tunnels"
 msgstr "Počet partnerů dostupných pro vytváření klientských tunelů"
@@ -4355,6 +4253,9 @@ msgstr "Vynutit blokování pro"
 msgid "days"
 msgstr "dní"
 
+msgid "Known Floodfills"
+msgstr "Známé záplavy"
+
 msgid "Average closest floodfill distance"
 msgstr "Průměrná nejbližší zaplavovací vzdálenost"
 
@@ -4525,6 +4426,9 @@ msgstr "Data přenesena"
 
 msgid "Data"
 msgstr "Data"
+
+msgid "Limit"
+msgstr ""
 
 msgid "Receive on"
 msgstr "Příjem na"
@@ -5498,6 +5402,9 @@ msgstr "Nainstalujte službu I2P systému. Toto je doporučený způsob spuště
 msgid "config sidebar"
 msgstr "postranní panel konfigurace"
 
+msgid "Sidebar Options"
+msgstr ""
+
 msgid "Refresh interval"
 msgstr "Interval Obnovení"
 
@@ -5506,6 +5413,12 @@ msgstr "sekund"
 
 msgid "0 to disable"
 msgstr "0 zakázat"
+
+msgid "Unified sidebar"
+msgstr ""
+
+msgid "Use the same sidebar on all pages"
+msgstr ""
 
 msgid "config stats"
 msgstr "config statistiky"
@@ -5706,6 +5619,9 @@ msgstr "události"
 msgid "Event Log"
 msgstr "Záznam událostí"
 
+msgid "Combined"
+msgstr ""
+
 msgid "graph"
 msgstr "Graf"
 
@@ -5783,6 +5699,9 @@ msgstr "Toto nastavení, když je nastaveno na true, zobrazí průměrnou hodnot
 
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "Toto nastavení, když je nastaveno na true, zobrazí odkazy na <i>Sites of Interest</i> na <a href=/sitemap>mapě stránek</a>. [Výchozí hodnota je false]"
+
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
+msgstr ""
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Toto nastavení určuje, zda router používá poskytnutý soubor <i>blocklist.txt</i> a jakékoli uživatelsky nastavené blokovací seznamy, aby umožnil zákazy routerů podle hash nebo IP adresy. Rozsahy a síťové masky jsou podporovány pro IPv4, ale ne pro IPv6. Další informace naleznete v souboru <i>blocklist.txt</i> ve vašem adresáři aplikace I2P+. [Výchozí hodnota je zapnuta, je potřeba restartovat]"
@@ -6603,8 +6522,8 @@ msgstr "Pokud je požadován řetězec <i>Registration Authentication</i>, můž
 msgid "If you are in a hurry and can't wait a few hours, you can tell people to use a \"jump\" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is working, you can tell others to use it."
 msgstr "Pokud máte náhodou náhle a nemůžete počkat pár hodin, můžete lidem říct, aby použili službu přesměrování pomocných adres \"jump\". Obvykle to funguje do několika minut poté, co zaregistrujete svůj hostname na stejném webu. Nejdříve to otestujte sami tím, že zadáte <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>vášvolenýhostname.i2p</i></code> do svého prohlížeče. Jakmile to funguje, můžete říct ostatním, aby to také používali."
 
-msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skanki2p</a>, and paste the link where it's required to share it with others."
-msgstr "Alternativně můžete zkopírovat <i>adresářový odkaz</i> pro vaší doménu, který je uveden buď na stránce seznamu adresářů nebo na stránce podrobností o vaší doméně např. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>podrobnosti o i2p-projekt.i2p</a>, a vložte odkaz tam, kde je třeba ji sdílet s ostatními."
+msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
+msgstr ""
 
 msgid "Backup your private key!"
 msgstr "Zálohujte si svůj soukromý klíč!"
@@ -6840,8 +6759,8 @@ msgstr "Otevřete port <a href=/confignet#udpconfig>I2P+</a> na svém modemu, ro
 msgid "Getting Support Online"
 msgstr "Získat online podporu"
 
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "Případně si můžete prohlédnout informace na <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P webové stránce</a>, posílat zprávy na <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P fórum</a> nebo se stavte na <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> nebo <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> na I2P vnitřním IRC síti."
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
+msgstr ""
 
 msgid "Reporting Bugs"
 msgstr "Hlášení chyb"
@@ -7380,6 +7299,9 @@ msgstr "Přizpůsobte odkazy"
 msgid "Configure display language, theme and optional console password"
 msgstr "Nakonfigurujte jazyk zobrazení, téma a volitelné heslo konzoly"
 
+msgid "Language"
+msgstr ""
+
 msgid "Configure router bandwidth"
 msgstr "Nakonfigurujte šířku pásma routeru"
 
@@ -7444,6 +7366,24 @@ msgstr "Protokoly služby (Wrapper)."
 msgid "network database"
 msgstr "síťová databáze"
 
+msgid "Encryption type"
+msgstr ""
+
+msgid "Encryption types"
+msgstr ""
+
+msgid "Signature types"
+msgstr ""
+
+msgid "Locally hosted private service"
+msgstr ""
+
+msgid "Locally hosted public service"
+msgstr ""
+
+msgid "Requested client leaseset"
+msgstr ""
+
 msgid "network database router map"
 msgstr "Mapa routeru v síťové databázi"
 
@@ -7486,6 +7426,12 @@ msgstr "Zakázaní vrstevníci"
 
 msgid "Fast / High Capacity"
 msgstr "Rychlý / Vysoká kapacita"
+
+msgid "router logs"
+msgstr ""
+
+msgid "service logs"
+msgstr ""
 
 msgid "Manage I2P addresses"
 msgstr "Správa I2P adres"
@@ -7691,6 +7637,9 @@ msgstr "Přepnout ID tunelů"
 msgid "Toggle Tunnels"
 msgstr "Přepnout tunely"
 
+msgid "Updating sidebar sections"
+msgstr ""
+
 msgid "Peer Profile"
 msgstr "Profil peeru"
 
@@ -7836,7 +7785,15 @@ msgstr "Hotové"
 
 
 
-#, java-format
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1554,10 +1554,7 @@ msgstr "راه اندازی مجدد در {0}"
 msgid "Save order"
 msgstr "ذخیره ترتیب"
 
-msgid "Sidebar refresh disabled"
-msgstr ""
-
-msgid "Sidebar refresh interval changed"
+msgid "Sidebar preferences updated"
 msgstr ""
 
 msgid "Refresh interval must be a number"
@@ -1592,9 +1589,6 @@ msgstr "نقل مکان کرد"
 
 msgid "Saved order of sections."
 msgstr "ترتیب بخش ها ذخیره شده است."
-
-msgid "Stat filter and location updated successfully to"
-msgstr "فیلتر آمار و مکان با موفقیت به روز شد"
 
 msgid "Full statistics enabled"
 msgstr "آمار کامل فعال شد"
@@ -2182,23 +2176,14 @@ msgstr "انجمن های انجمن مرتبط با I2P"
 msgid "File-sharing forum"
 msgstr "انجمن به اشتراک گذاری فایل"
 
-msgid "Alternative front-end for Twitter"
-msgstr "فرانت اند جایگزین برای توییتر"
-
-msgid "Rocksolid forums for the darknets"
-msgstr "انجمن های سنگی برای تاریک نت ها"
-
 msgid "Cross-network micro-blogging &amp; forums &amp; wiki"
 msgstr "میکرو وبلاگ نویسی بین شبکه ای"
 
 msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "بخش جلویی مبتنی بر حریم خصوصی جایگزین برای Reddit"
 
-msgid "Base64 Image Encoder"
-msgstr "رمزگذار تصویر Base64"
-
-msgid "An image cache and resize service"
-msgstr "یک سرویس کش تصویر و تغییر اندازه"
+msgid "AI Image generation & Chat hub"
+msgstr ""
 
 msgid "IRC Logs for multiple networks"
 msgstr "ثبت‌های IRC برای چندین شبکه"
@@ -2215,17 +2200,8 @@ msgstr "صفحه فرود برای خدمات مختلف"
 msgid "Streaming radio service"
 msgstr "سرویس رادیویی جریانی"
 
-msgid "Alternative frontend for Imgur"
-msgstr "ظاهر جایگزین برای Imgur"
-
 msgid "Privacy-focused not-for-profit organization"
 msgstr "سازمان غیرانتفاعی متمرکز بر حریم خصوصی"
-
-msgid "Outproxy bandwidth test"
-msgstr "تست پهنای باند Outproxy"
-
-msgid "speedtest"
-msgstr "تست سرعت"
 
 msgid "Text translation engine"
 msgstr "موتور ترجمه متن"
@@ -2233,20 +2209,8 @@ msgstr "موتور ترجمه متن"
 msgid "translate"
 msgstr "ترجمه کردن"
 
-msgid "Alternative front-end to Youtube"
-msgstr "جایگزین جایگزین برای یوتیوب"
-
 msgid "Provider of privacy respecting web hosting and VPN services"
 msgstr "ارائه دهنده حریم خصوصی با توجه به میزبانی وب و خدمات VPN"
-
-msgid "Tor-focused Search Engine"
-msgstr "موتور جستجوی Tor-focused"
-
-msgid "Pinterest Image Search Engine"
-msgstr "موتور جستجو تصاویر پینترست"
-
-msgid "Clearnet BitTorrent DHT search engine"
-msgstr "موتور جستجوی Clearnet BitTorrent DHT"
 
 msgid "DuckDuckGo Search Engine (no javascript)"
 msgstr "موتور جستجو DuckDuckGo (بدون جاوا اسکریپت)"
@@ -2256,21 +2220,6 @@ msgstr "موتور جستجوی Clearnet متمرکز بر حریم خصوصی"
 
 msgid "I2P Web Search Engine"
 msgstr "موتور جستجوی وب I2P"
-
-msgid "Enabling the free transmission of data in the public interest"
-msgstr "امکان انتقال رایگان داده ها در جهت منافع عمومی"
-
-msgid "Selected Papers in Anonymity"
-msgstr "مقالات منتخب در ناشناس"
-
-msgid "Tor .onion site links"
-msgstr "لینک های سایت Tor .onion"
-
-msgid "HTML Color Reference"
-msgstr "HTML مرجع رنگ"
-
-msgid "HTMLColors"
-msgstr "رنگهای HTML"
 
 msgid "I2P-related Wiki"
 msgstr "ویکی مرتبط با I2P"
@@ -2287,29 +2236,17 @@ msgstr "دایره المعارف اینترنتی فلسفه"
 msgid "Standford Encyclopedia of Philosophy"
 msgstr "دایره المعارف فلسفه استندفورد"
 
-msgid "Psychonaut"
-msgstr "روان‌نورد"
-
-msgid "Wiki relating to altered states of consciousness"
-msgstr "ویکی مربوط به حالات تغییر یافته آگاهی"
-
 msgid "Computing-related tutorials"
 msgstr "آموزش های مرتبط با محاسبات"
 
 msgid "SimplifiedGuide"
 msgstr "راهنمای ساده"
 
-msgid "Vulnerability Database"
-msgstr "پایگاه داده آسیب پذیری"
-
 msgid "Web technology reference and learning site"
 msgstr "سایت مرجع و یادگیری فناوری وب"
 
 msgid "Alternative Wikipedia front-end focused on privacy"
 msgstr "گزینه جایگزین ویکی‌پدیا با تمرکز بر حریم خصوصی"
-
-msgid "The biggest online English dictionary"
-msgstr "بزرگترین فرهنگ لغت انگلیسی آنلاین"
 
 msgid "World atlas including geography facts &amp; flags"
 msgstr "اطلس جهانی شامل حقایق جغرافیایی"
@@ -2320,14 +2257,8 @@ msgstr "اطلس جهانی"
 msgid "Technology News &amp; more..."
 msgstr "اخبار فناوری و موارد دیگر..."
 
-msgid "Independent investigative journalism"
-msgstr "روزنامه نگاری تحقیقی مستقل"
-
 msgid "Information Security Research &amp; Education"
 msgstr "تحقیقات و آموزش امنیت اطلاعات"
-
-msgid "Darknet related news site"
-msgstr "سایت خبری مرتبط با دارک نت"
 
 msgid "DigitalTrends"
 msgstr "Digital Trends"
@@ -2340,24 +2271,6 @@ msgstr "دفاع از حقوق خود در دنیای دیجیتال"
 
 msgid "The Elliptic Curve Cryptography Blog"
 msgstr "وبلاگ رمزنگاری منحنی بیضوی"
-
-msgid "ForeignPolicy"
-msgstr "سیاست خارجی"
-
-msgid "The Global Magazine of News &amp; Ideas"
-msgstr "مجله جهانی اخبار و ایده ها"
-
-msgid "FrontLineDefenders"
-msgstr "FrontLine Defenders"
-
-msgid "Human rights activism"
-msgstr "فعالیت حقوق بشر"
-
-msgid "Defending Human Rights Worldwide"
-msgstr "دفاع از حقوق بشر در سراسر جهان"
-
-msgid "HumanRightsWatch"
-msgstr "دیده بان حقوق بشر"
 
 msgid "Fresh hacks every day"
 msgstr "هک های تازه هر روز"
@@ -2373,12 +2286,6 @@ msgstr "مطبوعات آزاد هنگ کنگ"
 
 msgid "Independent &amp; impartial news for Hong Kong"
 msgstr "اخبار مستقل و بی طرفانه برای هنگ کنگ"
-
-msgid "HongKongWatch"
-msgstr "ساعت هنگ کنگ"
-
-msgid "Monitors threats to freedoms and rights in Hong Kong"
-msgstr "تهدیدات علیه آزادی ها و حقوق در هنگ کنگ را زیر نظر دارد"
 
 msgid "JStorDaily"
 msgstr "JStorDaily"
@@ -2416,11 +2323,11 @@ msgstr "بستر رسانه ای بین المللی مستقل"
 msgid "OpenDemocracy"
 msgstr "دموکراسی باز"
 
-msgid "News and blog feeds on I2P"
-msgstr "اخبار و فیدهای وبلاگ در I2P"
+msgid "Online privacy &amp; tech blog"
+msgstr ""
 
-msgid "Planeta"
-msgstr "سیاره"
+msgid "RightToPrivacy"
+msgstr ""
 
 msgid "Lifestyle magazine"
 msgstr "مجله سبک زندگی"
@@ -2449,20 +2356,11 @@ msgstr "اخبار برای نردها"
 msgid "Technology news &amp; reviews"
 msgstr "اخبار فناوری"
 
-msgid "Reporting on China without fear or favor"
-msgstr "گزارش از چین بدون ترس یا لطف"
-
 msgid "News from the Taiwan Capital"
 msgstr "اخبار از پایتخت تایوان"
 
 msgid "TaipeiTimes"
 msgstr "تایپه تایمز"
-
-msgid "TechXplore"
-msgstr "TechXplor"
-
-msgid "Technology and engineering news"
-msgstr "اخبار فنی و مهندسی"
 
 msgid "TechMeme"
 msgstr "TechMeme"
@@ -2505,12 +2403,6 @@ msgstr "TheNewRepublic"
 
 msgid "Filesharing &amp; copyright news"
 msgstr "اخبار پرونده سازی و حق چاپ"
-
-msgid "A magazine about human rights and social justice"
-msgstr "مجله ای در مورد حقوق بشر و عدالت اجتماعی"
-
-msgid "UpstreamJournal"
-msgstr "UpstreamJournal"
 
 msgid "Advancing a balanced &amp; realistic understanding of American interests in the Middle East"
 msgstr "پیشبرد درک متعادل و واقع بینانه از منافع آمریکایی در خاورمیانه"
@@ -2841,16 +2733,22 @@ msgstr ""
 msgid "Not initialized"
 msgstr "مقداردهی اولیه نشده است"
 
-msgid "Sorted by hash distance, closest first."
+msgid "Total Remote Leasesets"
 msgstr ""
 
 msgid "Compact mode"
 msgstr ""
 
-msgid "Total Remote Leasesets"
+msgid "Local Leasesets"
+msgstr ""
+
+msgid "Debug Mode"
 msgstr ""
 
 msgid "Published (RAP) Leasesets"
+msgstr ""
+
+msgid "Sorted by hash distance, closest first."
 msgstr ""
 
 msgid "Mod Data"
@@ -2865,17 +2763,11 @@ msgstr ""
 msgid "Change in"
 msgstr ""
 
-msgid "Known Floodfills"
-msgstr "سیلاب های شناخته شده"
-
 msgid "Floodfill mode enabled"
 msgstr ""
 
 msgid "Routing Key"
 msgstr "کلید مسیریابی"
-
-msgid "Network data"
-msgstr "داده های شبکه"
 
 msgid "Median distance (bits)"
 msgstr "فاصله میانه (بیت)"
@@ -2885,6 +2777,12 @@ msgstr "برآورد کل سیل"
 
 msgid "Estimated total leasesets"
 msgstr "برآورد کل اجاره"
+
+msgid "Total Local Leasesets"
+msgstr ""
+
+msgid "Remote Leasesets"
+msgstr ""
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2917,12 +2815,6 @@ msgstr "انقضا{0}"
 msgid "Expired{0} ago"
 msgstr "منقضی شده{0} پیش"
 
-msgid "Received as published"
-msgstr "به عنوان منتشر شده دریافت شد؟"
-
-msgid "Received as reply"
-msgstr "به عنوان پاسخ دریافت شد؟"
-
 msgid "Distance"
 msgstr "فاصله"
 
@@ -2931,6 +2823,9 @@ msgstr "آفلاین امضا شد"
 
 msgid "Signature type"
 msgstr "نوع امضا"
+
+msgid "Public Key"
+msgstr ""
 
 msgid "Unsupported type"
 msgstr "نوع پشتیبانی نشده"
@@ -2942,6 +2837,9 @@ msgstr "در {0} منقضی می شود"
 #, java-format
 msgid "Expired {0} ago"
 msgstr "{0} پیش منقضی شده است"
+
+msgid "Unknown"
+msgstr "ناشناس"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
 msgstr ""
@@ -2978,9 +2876,6 @@ msgstr "سیل"
 
 msgid "Total"
 msgstr "مجموع"
-
-msgid "Unknown"
-msgstr "ناشناس"
 
 msgid "Initializing"
 msgstr "مقدار دهی اولیه"
@@ -3055,9 +2950,6 @@ msgstr "نمایش همه روترها با این آدرس در NetDb"
 msgid "Show all routers with this port in the NetDb"
 msgstr "نمایش تمام روترهای دارای این پورت در NetDb"
 
-msgid "Network ID"
-msgstr "شناسه شبکه"
-
 msgid "Routers"
 msgstr "روترها"
 
@@ -3069,6 +2961,12 @@ msgstr "آخرین شنیده شدن در مورد"
 
 msgid "Last heard from"
 msgstr "آخرین خبر از"
+
+msgid "Network Id"
+msgstr ""
+
+msgid "Count is always spoofed to avoid indicating router restarts"
+msgstr ""
 
 msgid "Hidden or starting up"
 msgstr "پنهان یا راه اندازی"
@@ -3129,19 +3027,16 @@ msgstr "به فایل router.config شما."
 msgid "Peer Connections"
 msgstr "اتصالات همتا"
 
-msgid "Active in the last minute"
-msgstr "فعال در آخرین دقیقه"
-
 msgid "IPv4"
 msgstr "IPv4"
 
 msgid "IPv6"
 msgstr "IPv6"
 
-msgid "Limit"
+msgid "Active connections / Max permitted"
 msgstr ""
 
-msgid "Maximum permitted connections"
+msgid "Connections / Limit"
 msgstr ""
 
 msgid "Current / maximum permitted"
@@ -3150,23 +3045,23 @@ msgstr "فعلی / حداکثر مجاز"
 msgid "NTCP connections"
 msgstr "اتصالات NTCP"
 
-msgid "Caps"
-msgstr "کلاه"
-
 msgid "Peer capabilities"
 msgstr "قابلیت های همتا"
 
-msgid "Dir"
-msgstr "کارگردان"
+msgid "Caps"
+msgstr "کلاه"
 
 msgid "Direction/Introduction"
 msgstr "جهت/مقدمه"
 
-msgid "Idle"
-msgstr "وقت تلف کردن"
+msgid "Dir"
+msgstr "کارگردان"
 
 msgid "Peer inactivity"
 msgstr "عدم فعالیت همتایان"
+
+msgid "Idle"
+msgstr "وقت تلف کردن"
 
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "میانگین نرخ ورودی/خروجی (KBps)"
@@ -3198,11 +3093,11 @@ msgstr "پیام ها دریافت شد"
 msgid "RX"
 msgstr "RX"
 
-msgid "Out Queue"
-msgstr "صف بیرون"
-
 msgid "Queued messages to send to peer"
 msgstr "پیام‌های در صف برای ارسال به همتایان"
+
+msgid "Out Queue"
+msgstr "صف بیرون"
 
 msgid "Connection is backlogged"
 msgstr "اتصال عقب افتاده است"
@@ -3728,11 +3623,11 @@ msgstr "آپدیت I2P را دانلود کنید"
 msgid "Unsigned update available"
 msgstr "به روزرسانی بدون امضا در دسترس است"
 
-msgid "Help with firewall configuration"
-msgstr "در پیکربندی فایروال کمک کنید"
-
 msgid "Check network connection and NAT/firewall!"
 msgstr "اتصال شبکه و NAT/فایروال را بررسی کنید!"
+
+msgid "Help with firewall configuration"
+msgstr "در پیکربندی فایروال کمک کنید"
 
 msgid "Attempt to download router reference files (if automatic reseed has failed)"
 msgstr "سعی کنید فایل های مرجع روتر را دانلود کنید (اگر reseed خودکار ناموفق بود)"
@@ -3767,23 +3662,35 @@ msgstr "به پایین حرکت کنید"
 msgid "Select a section to add"
 msgstr "بخشی را برای افزودن انتخاب کنید"
 
+msgid "Router Information (advanced)"
+msgstr "اطلاعات روتر (پیشرفته)"
+
+msgid "Advanced Links"
+msgstr "پیوند های پیشرفته"
+
+msgid "Bandwidth Graph"
+msgstr "نمودار پهنای باند"
+
+msgid "UTC Clock"
+msgstr "ساعت UTC"
+
+msgid "Congestion"
+msgstr "ازدحام"
+
+msgid "CPU Load"
+msgstr "بار CPU"
+
+msgid "Firewall &amp; Reseed Status"
+msgstr "وضعیت آتش‌بسه و بازذریت"
+
 msgid "Help &amp; FAQ"
 msgstr "کمک و متداول"
-
-msgid "I2P Services"
-msgstr "سرویس های I2P"
 
 msgid "I2P Internals"
 msgstr "داخلی I2P"
 
-msgid "Router Information"
-msgstr "اطلاعات روتر"
-
-msgid "Router Information (brief)"
-msgstr "اطلاعات روتر (مختصر)"
-
-msgid "Router Information (advanced)"
-msgstr "اطلاعات روتر (پیشرفته)"
+msgid "I2P Services"
+msgstr "سرویس های I2P"
 
 msgid "Memory Usage Bar"
 msgstr "نمودار مصرف حافظه"
@@ -3791,35 +3698,23 @@ msgstr "نمودار مصرف حافظه"
 msgid "Network Reachability"
 msgstr "دسترس پذیری شبکه"
 
-msgid "Update Status"
-msgstr "وضعیت به روز رسانی"
+msgid "News &amp; Updates"
+msgstr "اخبار و آپدیت ها"
 
 msgid "Restart Status"
 msgstr "وضعیت ریستارت"
 
-msgid "Firewall &amp; Reseed Status"
-msgstr "وضعیت آتش‌بسه و بازذریت"
+msgid "Router Information"
+msgstr "اطلاعات روتر"
 
-msgid "Bandwidth Graph"
-msgstr "نمودار پهنای باند"
-
-msgid "Congestion"
-msgstr "ازدحام"
+msgid "Router Information (brief)"
+msgstr "اطلاعات روتر (مختصر)"
 
 msgid "Tunnel Status"
 msgstr "وضعیت تونل"
 
-msgid "News &amp; Updates"
-msgstr "اخبار و آپدیت ها"
-
-msgid "Advanced Links"
-msgstr "پیوند های پیشرفته"
-
-msgid "UTC Clock"
-msgstr "ساعت UTC"
-
-msgid "CPU Load"
-msgstr "بار CPU"
+msgid "Update Status"
+msgstr "وضعیت به روز رسانی"
 
 msgid "I2P Router Help &amp; FAQ"
 msgstr "کمک روتر I2P و سؤالات متداول"
@@ -4004,6 +3899,9 @@ msgstr "مجموع همتایان در NetDb"
 
 msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "همسالانی که در چند دقیقه گذشته/ساعت آخر با آنها صحبت کرده ایم"
+
+msgid "Peers we've been talking to in the last minute"
+msgstr ""
 
 msgid "The number of peers available for building client tunnels"
 msgstr "تعداد همتاهای موجود برای ساخت تونل های مشتری"
@@ -4337,6 +4235,9 @@ msgstr "اجرای بلوک برای"
 msgid "days"
 msgstr "روز"
 
+msgid "Known Floodfills"
+msgstr "سیلاب های شناخته شده"
+
 msgid "Average closest floodfill distance"
 msgstr "میانگین نزدیکترین فاصله سیلابی"
 
@@ -4507,6 +4408,9 @@ msgstr "داده ها منتقل شده است"
 
 msgid "Data"
 msgstr "داده ها"
+
+msgid "Limit"
+msgstr ""
 
 msgid "Receive on"
 msgstr "دریافت کنید"
@@ -5480,6 +5384,9 @@ msgstr "نصب سرویس سیستمی I2P. این روش توصیه‌شده ب
 msgid "config sidebar"
 msgstr "نوار کناری پیکربندی"
 
+msgid "Sidebar Options"
+msgstr ""
+
 msgid "Refresh interval"
 msgstr "فاصله بازخوانی"
 
@@ -5488,6 +5395,12 @@ msgstr "ثانیه"
 
 msgid "0 to disable"
 msgstr "0 برای غیرفعال کردن"
+
+msgid "Unified sidebar"
+msgstr ""
+
+msgid "Use the same sidebar on all pages"
+msgstr ""
 
 msgid "config stats"
 msgstr "آمار پیکربندی"
@@ -5688,6 +5601,9 @@ msgstr "رویدادها"
 msgid "Event Log"
 msgstr "گزارش رویداد"
 
+msgid "Combined"
+msgstr ""
+
 msgid "graph"
 msgstr "گراف"
 
@@ -5765,6 +5681,9 @@ msgstr "این تنظیم، هنگامی که روی true تنظیم شود، ی
 
 msgid "This setting, when set to true, will display the <i>Sites of Interest</i> links on <a href=/sitemap>the sitemap</a>. [Default is false]"
 msgstr "این تنظیم، وقتی روی true تنظیم شود، پیوندهای <i>سایت های مورد علاقه</i> را در <a href=/sitemap>نقشه سایت</a> نمایش می دهد. "
+
+msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
+msgstr ""
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "این تنظیم تعیین می کند که آیا روتر باید از فایل <i>blocklist.txt</i> ارائه شده و هر لیست بلاک پیکربندی شده توسط کاربر برای فعال کردن ممنوعیت روترها توسط آدرس هش یا IP استفاده کند یا خیر. "
@@ -6579,8 +6498,8 @@ msgstr "اگر به رشته «تایید ثبت‌نام» نیاز باشد، 
 msgid "If you are in a hurry and can't wait a few hours, you can tell people to use a \"jump\" address helper redirection service. This will usually work within a few minutes of your registering your hostname on the same site. Test it yourself first by entering <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> into your browser. Once it is working, you can tell others to use it."
 msgstr "اگر شما عجله دارید و نمی‌توانید چند ساعت صبر کنید، می‌توانید به مردم بگویید از سرویس هدایت بازآدرسی \"پرش\" استفاده کنند. این سرویس معمولاً در عرض چند دقیقه پس از ثبت نام نام میزبان خود در همان سایت کار می‌کند. ابتدا با وارد کردن <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> در مرورگر خود آن را تست کنید. پس از آن که کار می‌کند، می‌توانید به دیگران بگویید از آن استفاده کنند."
 
-msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skanki2p</a>, and paste the link where it's required to share it with others."
-msgstr "به جای آن، می‌توانید پیوند «کمک‌رسان آدرس» مربوط به دامنه‌تان را که بر روی صفحه لیست دفترچه‌آدرس یا صفحه جزئیات دامنه‌تان مثلا <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>جزئیات برای i2p-projekt.i2p</a> مشخص شده است کپی و در جایی که لازم است آن را با دیگران به اشتراک بگذارید، جابجا کنید."
+msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
+msgstr ""
 
 msgid "Backup your private key!"
 msgstr "پشتیبان‌گیری کلید خصوصی‌تان کنید!"
@@ -6816,8 +6735,8 @@ msgstr "درگاه <a href=/confignet#udpconfig>I2P+</a> را روی مودم، 
 msgid "Getting Support Online"
 msgstr "دریافت پشتیبانی آنلاین"
 
-msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> on I2P's internal IRC network."
-msgstr "شاید بخواهید اطلاعات روی سایت <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P</a> را نیز مرور کنید، پیام‌هایی را در <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>فروم بحث I2P</a> منتشر کنید یا به کانال‌های <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> یا <a href=irc://127.0.0.1:6668/i2p-dev class=chatlink>#i2p</a> در شبکه IRC داخلی I2P سر بزنید."
+msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
+msgstr ""
 
 msgid "Reporting Bugs"
 msgstr "گزارش خطاها"
@@ -7356,6 +7275,9 @@ msgstr "پیوندها را سفارشی کنید"
 msgid "Configure display language, theme and optional console password"
 msgstr "پیکربندی زبان نمایش، تم و رمز عبور اختیاری کنسول"
 
+msgid "Language"
+msgstr ""
+
 msgid "Configure router bandwidth"
 msgstr "پهنای باند روتر را پیکربندی کنید"
 
@@ -7420,6 +7342,24 @@ msgstr "سیاهههای مربوط به سرویس (Wrapper)"
 msgid "network database"
 msgstr "پایگاه داده شبکه"
 
+msgid "Encryption type"
+msgstr ""
+
+msgid "Encryption types"
+msgstr ""
+
+msgid "Signature types"
+msgstr ""
+
+msgid "Locally hosted private service"
+msgstr ""
+
+msgid "Locally hosted public service"
+msgstr ""
+
+msgid "Requested client leaseset"
+msgstr ""
+
 msgid "network database router map"
 msgstr "نقشه روتر بانک اطلاعاتی شبکه"
 
@@ -7462,6 +7402,12 @@ msgstr "همتایان ممنوع"
 
 msgid "Fast / High Capacity"
 msgstr "سریع / ظرفیت بالا"
+
+msgid "router logs"
+msgstr ""
+
+msgid "service logs"
+msgstr ""
 
 msgid "Manage I2P addresses"
 msgstr "آدرس های I2P را مدیریت کنید"
@@ -7667,6 +7613,9 @@ msgstr "باز و بستن شناسه‌های تونل"
 msgid "Toggle Tunnels"
 msgstr "باز و بستن تونل‌ها"
 
+msgid "Updating sidebar sections"
+msgstr ""
+
 msgid "Peer Profile"
 msgstr "پروفایل همتا"
 
@@ -7812,7 +7761,15 @@ msgstr "به پایان رسیده"
 
 
 
-#, java-format
+
+
+
+
+
+
+
+
+
 
 
 

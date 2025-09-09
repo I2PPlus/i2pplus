@@ -54,6 +54,14 @@ msgstr "Horní BW limit změněn na {0}KBps"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Nejmenší horní limit přenosové rychlist je {0}KBps"
 
+#, java-format
+msgid "Maximum download speed changed to {0}KB/s"
+msgstr ""
+
+#, java-format
+msgid "Download speed limit is {0}KB/s"
+msgstr ""
+
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
 msgstr ""
 
@@ -138,12 +146,6 @@ msgstr "Automatické spuštění zapnuto"
 msgid "Disabled autostart"
 msgstr "Automatické spuštění vypnuto"
 
-msgid "Enabled smart sort"
-msgstr "Povoleno chytré třídění"
-
-msgid "Disabled smart sort"
-msgstr "Zakázáno chytré řazení"
-
 msgid "Enabled open trackers - torrent restart required to take effect."
 msgstr "Povoleno otevřené sledovače - Restart torrent je nutný k tomu, aby se projevilo."
 
@@ -199,8 +201,8 @@ msgstr "Přidávání a vytváření sekcí povoleno na všech stránkách se se
 msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
 msgstr "Přidat a vytvořit sekce, které se mají zobrazit pouze na první stránce vícestránkových stránek se seznamem torrentů."
 
-msgid "Configuration unchanged."
-msgstr "Nastavení nebylo změněno."
+msgid "API key updated."
+msgstr ""
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Open Tracker list změněn - aby se projevil restart torrentu.Seznam otevřených trackerů změněn - aby se změna projevila je nutné restartovat všechny torrenty."
@@ -241,22 +243,6 @@ msgid "Torrent with the same data location is already running: {0}"
 msgstr "Torrent se stejným umístěním dat již běží: {0}"
 
 #, java-format
-msgid "ERROR - No I2P trackers in private torrent \"{0}\""
-msgstr "ERROR – Žádné I2P sledovače v soukromém torrentu \"{0}\""
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "Warning - Žádné I2P trackery v \"{0}\", oznámí I2P open trackery a pouze DHT."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "Warning - Žádné I2P trackery v \"{0}\" a otevřené trackery jsou zakázány, oznámí to pouze DHT."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "Varování - V \"{0}\" nejsou žádné I2P sledovače a DHT a otevřené sledovače jsou zakázány. Před spuštěním torrentu byste měli povolit otevřené sledovače nebo DHT."
-
-#, java-format
 msgid "Torrent in \"{0}\" is invalid"
 msgstr "Torrent v \"{0}\" je chybný"
 
@@ -274,6 +260,22 @@ msgstr "Torrent přidán a spuštěn: {0}"
 #, java-format
 msgid "Torrent added: {0}"
 msgstr "Přidán torrent: {0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "ERROR – Žádné I2P sledovače v soukromém torrentu \"{0}\""
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "Warning - Žádné I2P trackery v \"{0}\", oznámí I2P open trackery a pouze DHT."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "Warning - Žádné I2P trackery v \"{0}\" a otevřené trackery jsou zakázány, oznámí to pouze DHT."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "Varování - V \"{0}\" nejsou žádné I2P sledovače a DHT a otevřené sledovače jsou zakázány. Před spuštěním torrentu byste měli povolit otevřené sledovače nebo DHT."
 
 #, java-format
 msgid "Fetching {0}"
@@ -346,6 +348,18 @@ msgstr "Torrent smazán: \"{0}\""
 msgid "Adding torrents in {0}&hellip;"
 msgstr "Přidávání torrentů v {0}"
 
+#, java-format
+msgid "Down bandwidth limit is {0} KB/s"
+msgstr "Dolní limit propustnosti je {0} KB/s"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KB/s"
+msgstr "Limit vyšší šířky pásma je {0} kB/s"
+
+#, java-format
+msgid "Connecting to I2CP port on I2P instance at {0}"
+msgstr ""
+
 msgid "Connecting to I2P"
 msgstr "Připojuji se k I2P"
 
@@ -357,20 +371,12 @@ msgid "Starting up torrent {0}"
 msgstr "Spouštění torrentu {0}"
 
 #, java-format
-msgid "Down bandwidth limit is {0} KB/s"
-msgstr "Dolní limit propustnosti je {0} KB/s"
-
-#, java-format
-msgid "Up bandwidth limit is {0} KB/s"
-msgstr "Limit vyšší šířky pásma je {0} kB/s"
-
-#, java-format
-msgid "I2P+ I2PSnark standalone version {0} started"
-msgstr "I2p+ I2PSnark samostatná verze {0} spuštěna"
-
-#, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
 msgstr "Omezení šířky pásma za nahrávání je {0} KB/s s maximálním počtem současných súparů {1}."
+
+#, java-format
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
+msgstr ""
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -413,6 +419,19 @@ msgid "Closing I2P tunnel after notifying trackers."
 msgstr "Uzavření I2P tunelu po upozornění sledovačů."
 
 #, java-format
+msgid "Cannot check {0}"
+msgstr ""
+
+msgid "Torrent already started"
+msgstr ""
+
+msgid "No storage"
+msgstr ""
+
+msgid "Starting recheck of {}"
+msgstr ""
+
+#, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
 msgstr "Dokončeno překontrolování torrentu {0}, nyní je dokončeno {1}"
 
@@ -423,6 +442,9 @@ msgstr "Dokončeno překontrolování torrentu {0}, nezměněno"
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "Chyba při kontrole torrentu {0}"
+
+msgid "Cannot create diskspace bar"
+msgstr ""
 
 msgid "Data partition"
 msgstr ""
@@ -464,9 +486,6 @@ msgstr "Torrent na adrese {0} nebyl platný"
 
 msgid "Configuration"
 msgstr "Konfigurace"
-
-msgid "Debug Mode"
-msgstr "Režim ladění"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "Anonymní klient BitTorrent"
@@ -510,12 +529,6 @@ msgstr "Fórum"
 
 msgid "Torrent &amp; filesharing forum"
 msgstr "Torrent"
-
-msgid "BTDigg"
-msgstr "BTDigg"
-
-msgid "I2P-based search engine for clearnet-hosted torrents"
-msgstr "Vyhledávací stroj založený na I2P pro torrenty hostované v clearnetu"
 
 msgid "Search torrents"
 msgstr "Vyhledávejte torrenty"
@@ -591,8 +604,8 @@ msgstr "Snížení rychlosti"
 msgid "TX"
 msgstr "TX"
 
-msgid "Share ratio"
-msgstr "Poměr nahrávání"
+msgid "Upload ratio"
+msgstr ""
 
 msgid "Uploaded"
 msgstr "Nahráno"
@@ -635,6 +648,13 @@ msgid "Total size of loaded torrents"
 msgstr ""
 
 #, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
 msgstr[0] "1 DHT peer"
@@ -668,8 +688,8 @@ msgstr "Celková nahraná data (pro uvedené torrenty)"
 msgid "Total upload speed"
 msgstr "Celková rychlost odesílání"
 
-msgid "Toggle Debug Mode"
-msgstr ""
+msgid "Debug Mode"
+msgstr "Režim ladění"
 
 msgid "Normal Mode"
 msgstr "Normální režim"
@@ -914,6 +934,9 @@ msgstr "zbývá"
 msgid "Completed"
 msgstr "Dokončeno"
 
+msgid "Share ratio"
+msgstr "Poměr nahrávání"
+
 msgid "Last activity"
 msgstr "Poslední aktivita"
 
@@ -1022,11 +1045,11 @@ msgstr "Filtrování obsahu"
 msgid "Trackers"
 msgstr "Trackery"
 
-msgid "Primary"
-msgstr "Hlavní"
-
 msgid "Alternates"
 msgstr "Náhradníci"
+
+msgid "Primary"
+msgstr "Hlavní"
 
 msgid "Tracker Type"
 msgstr "Typ sledování"
@@ -1340,6 +1363,12 @@ msgstr "Přidáno"
 msgid "Pieces"
 msgstr "Kusy"
 
+msgid "Average download speed for torrent"
+msgstr ""
+
+msgid "Download speed"
+msgstr ""
+
 msgid "Completion"
 msgstr "Dokončení"
 
@@ -1488,6 +1517,9 @@ msgstr "Označit pro smazání"
 msgid "Delete Selected"
 msgstr "Smazat vybrané"
 
+msgid "File downloading priorities updated for torrent "
+msgstr ""
+
 msgid "Edit Torrent"
 msgstr "Upravit Torrent"
 
@@ -1509,13 +1541,9 @@ msgstr "Uložit změny"
 msgid "Torrent must be stopped"
 msgstr "Torrent musí být zastaven"
 
+
+
+
 #, java-format
-
-
-
-
-
-
-
 
 

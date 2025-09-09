@@ -54,6 +54,14 @@ msgstr "Giới hạn băng thông lên đổi thành {0}KBps"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "Tối thiểu băng thông lên là {0}KBps"
 
+#, java-format
+msgid "Maximum download speed changed to {0}KB/s"
+msgstr ""
+
+#, java-format
+msgid "Download speed limit is {0}KB/s"
+msgstr ""
+
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
 msgstr ""
 
@@ -138,12 +146,6 @@ msgstr "Đã bật tính năng tự khởi động"
 msgid "Disabled autostart"
 msgstr "Tự động khởi động bị vô hiệu hóa"
 
-msgid "Enabled smart sort"
-msgstr "Đã bật sắp xếp thông minh"
-
-msgid "Disabled smart sort"
-msgstr "Sắp xếp thông minh bị vô hiệu hóa"
-
 msgid "Enabled open trackers - torrent restart required to take effect."
 msgstr "Đã bật trình theo dõi mở - cần phải khởi động lại torrent để có hiệu lực."
 
@@ -199,8 +201,8 @@ msgstr "Thêm và Tạo các phần được bật trên tất cả các trang d
 msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
 msgstr "Thêm và Tạo các phần để chỉ hiển thị trên trang đầu tiên của các trang liệt kê torrent nhiều trang."
 
-msgid "Configuration unchanged."
-msgstr "Cấu hình không thay đổi."
+msgid "API key updated."
+msgstr ""
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "Danh sách Trình theo dõi mở đã thay đổi - cần phải khởi động lại torrent để có hiệu lực."
@@ -241,22 +243,6 @@ msgid "Torrent with the same data location is already running: {0}"
 msgstr "Torrent có cùng vị trí dữ liệu đang chạy: {0}"
 
 #, java-format
-msgid "ERROR - No I2P trackers in private torrent \"{0}\""
-msgstr "LỖI - Không có trình theo dõi I2P trong torrent riêng tư \"{0}\""
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "Cảnh báo - Không có trình theo dõi I2P nào trong \"{0}\", sẽ chỉ thông báo cho các trình theo dõi mở I2P và DHT."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "Cảnh báo - Không có trình theo dõi I2P nào trong \"{0}\" và trình theo dõi mở bị tắt, sẽ chỉ thông báo cho DHT."
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "Cảnh báo - Không có trình theo dõi I2P nào trong \"{0}\", đồng thời DHT và trình theo dõi mở bị tắt, bạn nên bật trình theo dõi mở hoặc DHT trước khi bắt đầu torrent."
-
-#, java-format
 msgid "Torrent in \"{0}\" is invalid"
 msgstr "Torrent trong \"{0}\" không hợp lệ"
 
@@ -274,6 +260,22 @@ msgstr "Torrent đã được thêm và bắt đầu: {0}"
 #, java-format
 msgid "Torrent added: {0}"
 msgstr "Torrent đã thêm: {0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "LỖI - Không có trình theo dõi I2P trong torrent riêng tư \"{0}\""
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "Cảnh báo - Không có trình theo dõi I2P nào trong \"{0}\", sẽ chỉ thông báo cho các trình theo dõi mở I2P và DHT."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "Cảnh báo - Không có trình theo dõi I2P nào trong \"{0}\" và trình theo dõi mở bị tắt, sẽ chỉ thông báo cho DHT."
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "Cảnh báo - Không có trình theo dõi I2P nào trong \"{0}\", đồng thời DHT và trình theo dõi mở bị tắt, bạn nên bật trình theo dõi mở hoặc DHT trước khi bắt đầu torrent."
 
 #, java-format
 msgid "Fetching {0}"
@@ -346,6 +348,18 @@ msgstr "Đã xóa torrent: \"{0}\""
 msgid "Adding torrents in {0}&hellip;"
 msgstr "Thêm torrent trong {0}"
 
+#, java-format
+msgid "Down bandwidth limit is {0} KB/s"
+msgstr "Hạn chế tốc độ tải xuống là {0} KBps"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KB/s"
+msgstr "Giới hạn băng thông tối đa là {0} KBps"
+
+#, java-format
+msgid "Connecting to I2CP port on I2P instance at {0}"
+msgstr ""
+
 msgid "Connecting to I2P"
 msgstr "Nối kết vào I2P"
 
@@ -357,20 +371,12 @@ msgid "Starting up torrent {0}"
 msgstr "Đang khởi động torrent {0}"
 
 #, java-format
-msgid "Down bandwidth limit is {0} KB/s"
-msgstr "Hạn chế tốc độ tải xuống là {0} KBps"
-
-#, java-format
-msgid "Up bandwidth limit is {0} KB/s"
-msgstr "Giới hạn băng thông tối đa là {0} KBps"
-
-#, java-format
-msgid "I2P+ I2PSnark standalone version {0} started"
-msgstr "I2P I2PSnark phiên bản độc lập {0} đã bắt đầu"
-
-#, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
 msgstr "Giới hạn băng thông tải lên là {0} KBps cho tối đa {1} thiết bị ngang hàng đồng thời."
+
+#, java-format
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
+msgstr ""
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -413,6 +419,19 @@ msgid "Closing I2P tunnel after notifying trackers."
 msgstr "Đóng đường hầm I2P sau khi thông báo cho người theo dõi."
 
 #, java-format
+msgid "Cannot check {0}"
+msgstr ""
+
+msgid "Torrent already started"
+msgstr ""
+
+msgid "No storage"
+msgstr ""
+
+msgid "Starting recheck of {}"
+msgstr ""
+
+#, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
 msgstr "Đã hoàn tất việc kiểm tra lại torrent {0}, hiện đã hoàn tất {1}"
 
@@ -423,6 +442,9 @@ msgstr "Đã hoàn tất kiểm tra lại torrent {0}, không thay đổi"
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "Lỗi kiểm tra torrent {0}"
+
+msgid "Cannot create diskspace bar"
+msgstr ""
 
 msgid "Data partition"
 msgstr ""
@@ -464,9 +486,6 @@ msgstr "Torrent tại {0} không hợp lệ"
 
 msgid "Configuration"
 msgstr "Cấu hình"
-
-msgid "Debug Mode"
-msgstr "Chế độ gỡ lỗi"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "Ứng dụng khách BitTorrent ẩn danh"
@@ -510,12 +529,6 @@ msgstr "Diễn đàn"
 
 msgid "Torrent &amp; filesharing forum"
 msgstr "Torrent"
-
-msgid "BTDigg"
-msgstr "BTDigg"
-
-msgid "I2P-based search engine for clearnet-hosted torrents"
-msgstr "Công cụ tìm kiếm dựa trên I2P cho torrent được lưu trữ trên Clearnet"
 
 msgid "Search torrents"
 msgstr "Tìm kiếm torrent"
@@ -591,8 +604,8 @@ msgstr "Tỷ lệ giảm"
 msgid "TX"
 msgstr "TX"
 
-msgid "Share ratio"
-msgstr "Tỷ lệ tải lên"
+msgid "Upload ratio"
+msgstr ""
 
 msgid "Uploaded"
 msgstr "Đã tải lên"
@@ -633,6 +646,11 @@ msgid "Total size of loaded torrents"
 msgstr ""
 
 #, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] ""
+
+#, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
 msgstr[0] "{0} DHT Peers"
@@ -664,8 +682,8 @@ msgstr "Tổng dữ liệu được tải lên (đối với các torrent đư�
 msgid "Total upload speed"
 msgstr "Tổng tốc độ tải lên"
 
-msgid "Toggle Debug Mode"
-msgstr ""
+msgid "Debug Mode"
+msgstr "Chế độ gỡ lỗi"
 
 msgid "Normal Mode"
 msgstr "Chế độ bình thường"
@@ -906,6 +924,9 @@ msgstr "còn lại"
 msgid "Completed"
 msgstr "Đã hoàn thành"
 
+msgid "Share ratio"
+msgstr "Tỷ lệ tải lên"
+
 msgid "Last activity"
 msgstr "Hoạt động cuối cùng"
 
@@ -1014,11 +1035,11 @@ msgstr "Bộ lọc Nội dung"
 msgid "Trackers"
 msgstr "Máy theo dõi"
 
-msgid "Primary"
-msgstr "Tiểu học"
-
 msgid "Alternates"
 msgstr "Thay thế"
+
+msgid "Primary"
+msgstr "Tiểu học"
 
 msgid "Tracker Type"
 msgstr "Loại máy theo dõi"
@@ -1328,6 +1349,12 @@ msgstr "Đã thêm"
 msgid "Pieces"
 msgstr "Mảnh"
 
+msgid "Average download speed for torrent"
+msgstr ""
+
+msgid "Download speed"
+msgstr ""
+
 msgid "Completion"
 msgstr "Hoàn thành"
 
@@ -1474,6 +1501,9 @@ msgstr "Đánh dấu xóa"
 msgid "Delete Selected"
 msgstr "Xóa lựa chọn"
 
+msgid "File downloading priorities updated for torrent "
+msgstr ""
+
 msgid "Edit Torrent"
 msgstr "Chỉnh sửa Torrent"
 
@@ -1495,13 +1525,9 @@ msgstr "Lưu thay đổi"
 msgid "Torrent must be stopped"
 msgstr "Torrent phải dừng lại"
 
+
+
+
 #, java-format
-
-
-
-
-
-
-
 
 

@@ -54,6 +54,14 @@ msgstr "アップロード帯域制限は{0}Kbpsに変更されました"
 msgid "Minimum up bandwidth limit is {0}KBps"
 msgstr "最低アップロード帯域は{0}KBpsです"
 
+#, java-format
+msgid "Maximum download speed changed to {0}KB/s"
+msgstr ""
+
+#, java-format
+msgid "Download speed limit is {0}KB/s"
+msgstr ""
+
 msgid "Note: You may need to stop and restart your torrents or restart I2PSnark in order to effect this change."
 msgstr ""
 
@@ -138,12 +146,6 @@ msgstr "自動開始を有効化"
 msgid "Disabled autostart"
 msgstr "自動開始を無効化"
 
-msgid "Enabled smart sort"
-msgstr "スマートソートを有効にしました"
-
-msgid "Disabled smart sort"
-msgstr "スマートソートを無効にしました"
-
 msgid "Enabled open trackers - torrent restart required to take effect."
 msgstr "オープントラッカーを有効化 - このオプションは再起動が必要です。"
 
@@ -199,8 +201,8 @@ msgstr "すべての torrent リスト ページでセクションの追加と�
 msgid "Add and Create sections to display only on first page of multipage torrent listing pages."
 msgstr "複数ページの torrent リスト ページの最初のページにのみ表示されるセクションを追加および作成します。"
 
-msgid "Configuration unchanged."
-msgstr "設定は変更されませんでした。"
+msgid "API key updated."
+msgstr ""
 
 msgid "Open Tracker list changed - torrent restart required to take effect."
 msgstr "オープン トラッカー リストが変更されました - 有効にするには torrent を再起動する必要があります。オープン トラッカー リストが変更されました - 有効にするにはトレントの再起動が必要です。オープントラッカーリストが変更されました - このオプションは再起動が必要です。"
@@ -241,22 +243,6 @@ msgid "Torrent with the same data location is already running: {0}"
 msgstr "同じデータの場所を持つ Torrent がすでに実行されています: {0}"
 
 #, java-format
-msgid "ERROR - No I2P trackers in private torrent \"{0}\""
-msgstr "エラー - プライベート トレント \"{0}\" に I2P トラッカーがありません"
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
-msgstr "警告 - \"{0}\" には I2P トラッカーがありません。I2P オープン トラッカーと DHT のみにアナウンスされます。"
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
-msgstr "警告 - \"{0}\" には I2P トラッカーがなく、オープン トラッカーが無効になっているため、DHT のみにアナウンスされます。"
-
-#, java-format
-msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
-msgstr "警告 - \"{0}\" には I2P トラッカーがなく、DHT とオープン トラッカーが無効になっています。トレントを開始する前にオープン トラッカーまたは DHT を有効にする必要があります。警告 - \"{0}\" には I2P トラッカーがなく、DHT とオープン トラッカーが無効になっています。トレントを開始する前にオープン トラッカーまたは DHT を有効にする必要があります。"
-
-#, java-format
 msgid "Torrent in \"{0}\" is invalid"
 msgstr "「{0}」のトレントが無効です"
 
@@ -274,6 +260,22 @@ msgstr "Torrent が追加され開始されました: {0}"
 #, java-format
 msgid "Torrent added: {0}"
 msgstr "トレントを追加しました: {0}"
+
+#, java-format
+msgid "ERROR - No I2P trackers in private torrent \"{0}\""
+msgstr "エラー - プライベート トレント \"{0}\" に I2P トラッカーがありません"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", will announce to I2P open trackers and DHT only."
+msgstr "警告 - \"{0}\" には I2P トラッカーがありません。I2P オープン トラッカーと DHT のみにアナウンスされます。"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and open trackers are disabled, will announce to DHT only."
+msgstr "警告 - \"{0}\" には I2P トラッカーがなく、オープン トラッカーが無効になっているため、DHT のみにアナウンスされます。"
+
+#, java-format
+msgid "Warning - No I2P trackers in \"{0}\", and DHT and open trackers are disabled, you should enable open trackers or DHT before starting the torrent."
+msgstr "警告 - \"{0}\" には I2P トラッカーがなく、DHT とオープン トラッカーが無効になっています。トレントを開始する前にオープン トラッカーまたは DHT を有効にする必要があります。警告 - \"{0}\" には I2P トラッカーがなく、DHT とオープン トラッカーが無効になっています。トレントを開始する前にオープン トラッカーまたは DHT を有効にする必要があります。"
 
 #, java-format
 msgid "Fetching {0}"
@@ -346,6 +348,18 @@ msgstr "トレントが削除されました: \"{0}\""
 msgid "Adding torrents in {0}&hellip;"
 msgstr "{0} にトレントを追加しています..."
 
+#, java-format
+msgid "Down bandwidth limit is {0} KB/s"
+msgstr "ダウンロード帯域制限は {0} KBpsです"
+
+#, java-format
+msgid "Up bandwidth limit is {0} KB/s"
+msgstr "上り帯域幅制限は {0} KBps です"
+
+#, java-format
+msgid "Connecting to I2CP port on I2P instance at {0}"
+msgstr ""
+
 msgid "Connecting to I2P"
 msgstr "I2Pに接続しています"
 
@@ -357,20 +371,12 @@ msgid "Starting up torrent {0}"
 msgstr "トレント {0} の起動"
 
 #, java-format
-msgid "Down bandwidth limit is {0} KB/s"
-msgstr "ダウンロード帯域制限は {0} KBpsです"
-
-#, java-format
-msgid "Up bandwidth limit is {0} KB/s"
-msgstr "上り帯域幅制限は {0} KBps です"
-
-#, java-format
-msgid "I2P+ I2PSnark standalone version {0} started"
-msgstr "I2P I2PSnark スタンドアロン バージョン {0} が開始されました"
-
-#, java-format
 msgid "Upload bandwidth limit is {0} KBps to a maximum of {1} concurrent peers."
 msgstr "アップロード帯域幅制限は、最大 {1} 個の同時ピアに対して {0} KBps です。"
+
+#, java-format
+msgid "Storage: {0}GB currently available for downloads on configured data partition"
+msgstr ""
 
 #, java-format
 msgid "Storage: {0}MB currently available for downloads on configured data partition"
@@ -413,6 +419,19 @@ msgid "Closing I2P tunnel after notifying trackers."
 msgstr "トラッカーに通知した後、I2P トンネルを閉じます。"
 
 #, java-format
+msgid "Cannot check {0}"
+msgstr ""
+
+msgid "Torrent already started"
+msgstr ""
+
+msgid "No storage"
+msgstr ""
+
+msgid "Starting recheck of {}"
+msgstr ""
+
+#, java-format
 msgid "Finished recheck of torrent {0}, now {1} complete"
 msgstr "トレント {0} の再チェックが完了し、{1} が完了しました"
 
@@ -423,6 +442,9 @@ msgstr "トレント {0} の再チェックが終了しました。変更はあ�
 #, java-format
 msgid "Error checking torrent {0}"
 msgstr "トレント {0} のチェック中にエラーが発生しました"
+
+msgid "Cannot create diskspace bar"
+msgstr ""
 
 msgid "Data partition"
 msgstr ""
@@ -464,9 +486,6 @@ msgstr "{0} のトレントは無効でした"
 
 msgid "Configuration"
 msgstr "設定"
-
-msgid "Debug Mode"
-msgstr "デバッグモード"
 
 msgid "Anonymous BitTorrent Client"
 msgstr "匿名の BitTorrent クライアント"
@@ -510,12 +529,6 @@ msgstr "フォーラム"
 
 msgid "Torrent &amp; filesharing forum"
 msgstr "トレント"
-
-msgid "BTDigg"
-msgstr "BTディッグ"
-
-msgid "I2P-based search engine for clearnet-hosted torrents"
-msgstr "クリアネットがホストするトレントのためのI2Pベースの検索エンジン"
 
 msgid "Search torrents"
 msgstr "トレントの検索"
@@ -591,8 +604,8 @@ msgstr "ダウン率"
 msgid "TX"
 msgstr "TX"
 
-msgid "Share ratio"
-msgstr "アップロード率"
+msgid "Upload ratio"
+msgstr ""
 
 msgid "Uploaded"
 msgstr "アップロードされました"
@@ -633,6 +646,11 @@ msgid "Total size of loaded torrents"
 msgstr ""
 
 #, java-format
+msgid "1 connected peer"
+msgid_plural "{0} peer connections"
+msgstr[0] ""
+
+#, java-format
 msgid "1 DHT peer"
 msgid_plural "{0} DHT peers"
 msgstr[0] "{0} DHTピア"
@@ -664,8 +682,8 @@ msgstr "アップロードされた合計データ (リストされたトレン�
 msgid "Total upload speed"
 msgstr "総アップロード速度"
 
-msgid "Toggle Debug Mode"
-msgstr ""
+msgid "Debug Mode"
+msgstr "デバッグモード"
 
 msgid "Normal Mode"
 msgstr "ノーマルモード"
@@ -906,6 +924,9 @@ msgstr "残り"
 msgid "Completed"
 msgstr "完了しました"
 
+msgid "Share ratio"
+msgstr "アップロード率"
+
 msgid "Last activity"
 msgstr "最後の活動"
 
@@ -1014,11 +1035,11 @@ msgstr "コンテンツフィルター"
 msgid "Trackers"
 msgstr "トラッカー"
 
-msgid "Primary"
-msgstr "主鍵"
-
 msgid "Alternates"
 msgstr "代替品"
+
+msgid "Primary"
+msgstr "主鍵"
 
 msgid "Tracker Type"
 msgstr "トラッカータイプ"
@@ -1328,6 +1349,12 @@ msgstr "追加されました"
 msgid "Pieces"
 msgstr "作品"
 
+msgid "Average download speed for torrent"
+msgstr ""
+
+msgid "Download speed"
+msgstr ""
+
 msgid "Completion"
 msgstr "完成"
 
@@ -1474,6 +1501,9 @@ msgstr "削除にマーク"
 msgid "Delete Selected"
 msgstr "マークされたメッセージを削除しました"
 
+msgid "File downloading priorities updated for torrent "
+msgstr ""
+
 msgid "Edit Torrent"
 msgstr "トレントの編集"
 
@@ -1495,13 +1525,9 @@ msgstr "変更を保存"
 msgid "Torrent must be stopped"
 msgstr "Torrent を停止する必要があります"
 
+
+
+
 #, java-format
-
-
-
-
-
-
-
 
 
