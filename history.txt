@@ -1,3 +1,5 @@
+2025-09-09 2.10.0+ (API 0.9.67) released
+
 2025-09-02 dr|z3d
  * Console: Add navigation bar to /logs with additional links
 
