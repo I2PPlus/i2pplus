@@ -95,7 +95,7 @@ function initProgressX(window, document) {
   }
 
   function draw() {
-    if (!canvas || !context || document.visibilityState === "hidden") return;
+    if (!canvas || !context || document.hidden || !navigator.onLine) return;
     const width = window.innerWidth;
     const height = options.barThickness;
     const colors = options.barColors[currentColorSetName] || options.barColors.default;
