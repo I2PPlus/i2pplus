@@ -1039,17 +1039,25 @@ public class SidebarHelper extends HelperBase {
             !_context.router().gracefulShutdownInProgress()) {
             if (needSpace) {buf.append("<hr>");}
             else {needSpace = true;}
-            buf.append("<h4 class=\"sb_info sb_update volatile\"><b>").append(_t("Update available")).append(":<br>")
-               .append(_t("Version {0}", getUnsignedUpdateVersion())).append("<br>")
-               .append(unsignedConstraint).append("</b></h4>");
+            buf.append("<h4 class=\"sb_info sb_update volatile\"><b>")
+               .append(_t("Update available"))
+               .append(":<br>")
+               .append(_t("Version {0}", getUnsignedUpdateVersion()))
+               .append("<br>")
+               .append(unsignedConstraint)
+               .append("</b></h4>");
             unsignedAvail = false;
         }
         if (devSU3Avail && devSU3Constraint != null && !NewsHelper.isUpdateInProgress() && !_context.router().gracefulShutdownInProgress()) {
             if (needSpace) {buf.append("<hr>");}
             else {needSpace = true;}
-            buf.append("<h4 class=\"sb_info sb_update volatile\"><b>").append(_t("Update available")).append(":<br>")
-               .append(_t("Version {0}", getDevSU3UpdateVersion())).append("<br>")
-               .append(devSU3Constraint).append("</b></h4>");
+            buf.append("<h4 class=\"sb_info sb_update volatile\"><b>")
+               .append(_t("Update available"))
+               .append(":<br>")
+               .append(_t("Version {0}", getDevSU3UpdateVersion()))
+               .append("<br>")
+               .append(devSU3Constraint)
+               .append("</b></h4>");
             devSU3Avail = false;
         }
         if ((avail || unsignedAvail || devSU3Avail) && !NewsHelper.isUpdateInProgress() &&
@@ -1065,8 +1073,11 @@ public class SidebarHelper extends HelperBase {
                 }
                 System.setProperty("net.i2p.router.web.UpdateHandler.nonce", nonce + "");
                 String uri = getRequestURI();
-                buf.append("<form id=sb_updateform action=\"").append(uri).append("\" method=POST class=volatile target=processSidebarForm>\n")
-                   .append("<input type=hidden name=\"updateNonce\" value=\"").append(nonce).append("\">\n");
+                buf.append("<form id=sb_updateform action=\"")
+                   .append(uri)
+                   .append("\" method=POST class=volatile target=processSidebarForm>\n<input type=hidden name=updateNonce value=\"")
+                   .append(nonce)
+                   .append("\">\n");
 /*
                 if (avail) {
                     buf.append("<span id=updateAvailable class=volatile>").append(_t("Release update available")).append("<br><i>")
@@ -1079,8 +1090,12 @@ public class SidebarHelper extends HelperBase {
                 }
 */
                 if (devSU3Avail) {
-                    buf.append("<span id=updateAvailable class=volatile>").append(_t("Signed development update available")).append("<br><i>")
-                       .append(_t("Version")).append(": ").append(getDevSU3UpdateVersion())
+                    buf.append("<span id=updateAvailable class=volatile>")
+                       .append(_t("Signed development update available"))
+                       .append("<br><i>")
+                       .append(_t("Version"))
+                       .append(": ")
+                       .append(getDevSU3UpdateVersion())
                        .append("</i></span><br><button type=submit id=sb_downloadSignedDevUpdate class=download name=updateAction value=\"DevSU3\" >")
                        .append(_t("Download I2P Update"))
                        .append("</button><br>\n");
