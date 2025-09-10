@@ -1062,7 +1062,7 @@ public class SidebarHelper extends HelperBase {
         }
         if ((avail || unsignedAvail || devSU3Avail) && !NewsHelper.isUpdateInProgress() &&
             !_context.router().gracefulShutdownInProgress() && !_context.commSystem().isDummy() &&
-            _context.portMapper().isRegistered(PortMapper.SVC_HTTP_PROXY) &&  // assume using proxy for now
+            _context.portMapper().isRegistered(PortMapper.SVC_HTTP_PROXY) && // assume using proxy for now
             getAction() == null && getUpdateNonce() == null) {
                 if (needSpace) {buf.append("<hr>");}
                 // else {needSpace = true;} // needed ?
@@ -1075,14 +1075,14 @@ public class SidebarHelper extends HelperBase {
                 String uri = getRequestURI();
                 buf.append("<form id=sb_updateform action=\"")
                    .append(uri)
-                   .append("\" method=POST class=volatile target=processSidebarForm>\n<input type=hidden name=updateNonce value=\"")
+                   .append("\" method=POST class=volatile>\n<input type=hidden name=updateNonce value=")
                    .append(nonce)
-                   .append("\">\n");
+                   .append(">\n");
 /*
                 if (avail) {
                     buf.append("<span id=updateAvailable class=volatile>").append(_t("Release update available")).append("<br><i>")
                        .append(_t("Version")).append(": ").append(getUpdateVersion())
-                       .append("</i></span><br><button type=submit id=sb_downloadReleaseUpdate class=download name=updateAction value=\"signed\" >")
+                       .append("</i></span><br><button type=submit id=sb_downloadReleaseUpdate class=download name=updateAction value=signed>")
                        // Note to translators: parameter is a version, e.g. "0.8.4"
                        .append(_t("Download {0} Update", getUpdateVersion()))
                        .append(_t("Download I2P Update"))
@@ -1096,7 +1096,7 @@ public class SidebarHelper extends HelperBase {
                        .append(_t("Version"))
                        .append(": ")
                        .append(getDevSU3UpdateVersion())
-                       .append("</i></span><br><button type=submit id=sb_downloadSignedDevUpdate class=download name=updateAction value=\"DevSU3\" >")
+                       .append("</i></span><br><button type=submit id=sb_downloadSignedDevUpdate class=download name=updateAction value=DevSU3>")
                        .append(_t("Download I2P Update"))
                        .append("</button><br>\n");
                 }
@@ -1106,7 +1106,7 @@ public class SidebarHelper extends HelperBase {
                     if (source.contains("skank")) {buf.append(_t("Unsigned update available").replace("update", "I2P+ update"));}
                     else {buf.append(_t("Unsigned update available").replace("update", "I2P update"));}
                     buf.append("<br><i>").append(getUnsignedUpdateVersion())
-                       .append("</i></span><br><button type=submit id=sb_downloadUnsignedDevUpdate class=download name=updateAction value=\"Unsigned\" >");
+                       .append("</i></span><br><button type=submit id=sb_downloadUnsignedDevUpdate class=download name=updateAction value=Unsigned>");
                     if (source != null && source.contains("skank")) {buf.append(_t("Download I2P Update").replace("I2P", "I2P+"));}
                     else {buf.append(_t("Download I2P Update"));}
                     buf.append("</button><br>\n");
@@ -1170,9 +1170,9 @@ public class SidebarHelper extends HelperBase {
                 System.setProperty("net.i2p.router.web.ReseedHandler.nonce", nonce+"");
                 String uri = getRequestURI();
                 buf.append("<p class=volatile><form action=\"").append(uri).append("\" method=POST>\n");
-                buf.append("<input type=hidden name=\"reseedNonce\" value=\"").append(nonce).append("\">\n");
+                buf.append("<input type=hidden name=reseedNonce value=").append(nonce).append(">\n");
                 buf.append("<button type=submit title=\"").append(_t("Attempt to download router reference files (if automatic reseed has failed)"));
-                buf.append("\" id=sb_manualReseed class=reload value=\"Reseed\" >").append(_t("Reseed")).append("</button></form></p>\n");
+                buf.append("\" id=sb_manualReseed class=reload value=Reseed>").append(_t("Reseed")).append("</button></form></p>\n");
             }
         }
         if (buf.length() <= 0) {return "";}
@@ -1335,7 +1335,7 @@ public class SidebarHelper extends HelperBase {
         }
         buf.append("<tr><td><input type=submit name=action class=delete value=\"")
            .append(_t("Delete selected")).append("\"></td><td>")
-           .append("<select name=\"name\">\n<option value=\"\" selected>")
+           .append("<select name=name>\n<option value=\"\" selected>")
            .append(_t("Select a section to add"))
            .append("</option>\n");
 
@@ -1345,9 +1345,9 @@ public class SidebarHelper extends HelperBase {
             buf.append("<option value=\"").append(s).append("\">").append(name).append("</option>\n");
         }
 
-        buf.append("</select>\n<input type=hidden name=\"order\" value=\"")
+        buf.append("</select>\n<input type=hidden name=order value=\"")
            .append(sections.size()).append("\"></td><td colspan=2>")
-           .append("<input type=submit name=action class=\"add\" value=\"")
+           .append("<input type=submit name=action class=add value=\"")
            .append(_t("Add item")).append("\"></td></tr>\n").append("</table>\n");
         return buf.toString();
     }

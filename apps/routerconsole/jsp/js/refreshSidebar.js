@@ -6,41 +6,40 @@ import { stickySidebar } from "/js/stickySidebar.js";
 import { newHosts } from "/js/newHosts.js";
 import { miniGraph } from "/js/miniGraph.js";
 
-let refreshActive = true;
-let isPaused = false;
+let alwaysUpdate = new Set();
+let autoRefreshScheduled = false;
+let connectionStatusTimeout;
+let debounceTimeoutId = null;
 let isDown = false;
+let isPaused = false;
+let isRefreshing = false;
+let lastRefreshTime = 0;
 let noResponse = 0;
+let refreshActive = true;
 let refreshTimeout = null;
 let responseDoc = null;
-let lastRefreshTime = 0;
-let isRefreshing = false;
 let xhrContainer = document.getElementById("xhr");
+
 const parser = new DOMParser();
 const sb = document.querySelector("#sidebar");
 const uri = location.pathname;
 const worker = new SharedWorker("/js/fetchWorker.js");
-let elements = {
-  badges: sb ? Array.from(sb.querySelectorAll(".badge:not(#newHosts), #tunnelCount, #newsCount")) : [],
-  volatileElements: sb ? Array.from(sb.querySelectorAll(".volatile:not(.badge)")) : [],
-};
+const elements = { badges: [], volatileElements: [] };
+const alwaysUpdateIds = ["lsCount", "sb_updateform", "sb_shutdownStatus"];
 
 function updateCachedElements() {
-  elements.badges = sb ? Array.from(sb.querySelectorAll(".badge:not(#newHosts), #tunnelCount, #newsCount")) : [];
-  elements.volatileElements = sb ? Array.from(sb.querySelectorAll(".volatile:not(.badge)")) : [];
-  xhrContainer = document.getElementById("xhr");
+  if (sb) {
+    elements.badges = Array.from(sb.querySelectorAll(".badge:not(#newHosts), #tunnelCount, #newsCount"));
+    elements.volatileElements = Array.from(sb.querySelectorAll(".volatile:not(.badge)"));
+    xhrContainer = document.getElementById("xhr");
+    const existingIds = new Set(elements.badges.map(badge => badge.id));
+    alwaysUpdate = new Set(alwaysUpdateIds.filter(id => existingIds.has(id)));
+  }
 }
 
-function initSidebar() {
-  const setup = () => {
-    sectionToggler();
-    stickySidebar();
-    miniGraph();
-  };
-  document.addEventListener("DOMContentLoaded", setup);
-  window.addEventListener("resize", stickySidebar, { passive: true });
+function getRefreshInterval() {
+  return refresh * 1000;
 }
-
-function getRefreshInterval() { return refresh * 1000; }
 
 worker.port.start();
 worker.port.addEventListener("message", ({ data }) => {
@@ -50,28 +49,44 @@ worker.port.addEventListener("message", ({ data }) => {
       responseDoc = parser.parseFromString(responseText, "text/html");
       requestAnimationFrame(startAutoRefresh);
       noResponse = 0;
-    } else {noResponse++;}
-  } catch {noResponse++;}
+    } else {
+      noResponse = Math.min(noResponse + 1, 10);
+    }
+  } catch {
+    noResponse = Math.min(noResponse + 1, 10);
+  }
   checkConnectionStatus();
 });
 
 async function start() {
-  checkConnectionStatus();
-  sectionToggler();
+  isSidebarVisible();
+  updateCachedElements();
+  newHosts();
   countNewsItems();
-  handleFormSubmit();
+  sectionToggler();
   startAutoRefresh();
+  checkConnectionStatus();
+  window.addEventListener("resize", stickySidebar, { passive: true });
 }
 
-export function startAutoRefresh() {
+function startAutoRefresh() {
+  if (autoRefreshScheduled) return;
+  autoRefreshScheduled = true;
+  setTimeout(() => {
+    autoRefreshScheduled = false;
+    scheduleNextAutoRefresh();
+  }, 200);
+}
+
+function scheduleNextAutoRefresh() {
   clearTimeout(refreshTimeout);
   const now = Date.now();
   const interval = getRefreshInterval();
   if (lastRefreshTime === 0) {
     lastRefreshTime = now;
   } else {
-    const timeSinceLast = now - lastRefreshTime;
-    const timeUntilNext = interval - (timeSinceLast % interval);
+    const elapsed = now - lastRefreshTime;
+    const timeUntilNext = interval - (elapsed % interval);
     refreshTimeout = setTimeout(() => {
       lastRefreshTime = Date.now();
       refreshSidebar();
@@ -86,8 +101,10 @@ export async function refreshSidebar(force = false) {
   if (!refreshActive || document.hidden || !navigator.onLine) return;
   try {
     worker.port.postMessage({ url: `/xhr1.jsp?requestURI=${uri}`, force });
-    if (!responseDoc) return noResponse++;
-    if (!xhrContainer) return;
+    if (!responseDoc || !xhrContainer) {
+      noResponse = Math.min(noResponse + 1, 10);
+      return;
+    }
     const responseElements = {
       volatileElements: Array.from(responseDoc.querySelectorAll(".volatile:not(.badge)")),
       badges: Array.from(responseDoc.querySelectorAll(".badge:not(#newHosts)")),
@@ -105,34 +122,40 @@ export async function refreshSidebar(force = false) {
           refreshAll();
         });
       } else if (elem.innerHTML !== respElem.innerHTML) {
-        updates.push(() => (elem.innerHTML = respElem.innerHTML));
+        updates.push(() => {
+          elem.innerHTML = respElem.innerHTML;
+        });
       }
     });
     elements.badges.forEach((elem, i) => {
       const respElem = responseElements.badges[i];
-      if ((respElem && elem.textContent !== respElem.textContent) ||
-          elem.id === "lsCount" ||
-          elem.id === "sb_updateform" ||
-          elem.id === "sb_shutdownStatus") {
-        updates.push(() => (elem.textContent = respElem?.textContent));
+      if ((respElem && elem.textContent !== respElem.textContent) || alwaysUpdate.has(elem.id)) {
+        updates.push(() => {
+          if (respElem) {
+            elem.textContent = respElem.textContent;
+          }
+        });
       }
     });
-    requestAnimationFrame(() => {
-      updates.forEach((fn) => fn());
-      countNewsItems();
-      newHosts();
-      sectionToggler();
-      updates.length = 0;
-    });
+    if (updates.length > 0) {
+      requestAnimationFrame(() => {
+        updates.forEach(fn => fn());
+        countNewsItems();
+        newHosts();
+        sectionToggler();
+      });
+    }
     noResponse = 0;
   } catch {
-    noResponse++;
+    noResponse = Math.min(noResponse + 1, 10);
+  } finally {
+    checkConnectionStatus();
     startAutoRefresh();
-  } finally { checkConnectionStatus(); }
+  }
 }
 
 function refreshAll() {
-  if (!(sb && responseDoc)) return noResponse++;
+  if (!sb || !responseDoc) return noResponse = Math.min(noResponse + 1, 10);
   updateCachedElements();
   const sbResponse = responseDoc.getElementById("sb");
   if (sbResponse && xhrContainer && sb.innerHTML !== sbResponse.innerHTML) {
@@ -142,142 +165,80 @@ function refreshAll() {
   noResponse = 0;
 }
 
-function handleFormSubmit() {
-  document.addEventListener("submit", (event) => {
-    const form = event.target.closest("form"),
-      clickTarget = event.submitter;
-    if (!form || !clickTarget) return;
-    const formId = form.id, iframe = document.getElementById("processSidebarForm");
-    iframe?.addEventListener("load", () => {
-        const formResponse = responseDoc?.querySelector(`#${formId}`);
-        if (!formResponse) return;
-        if (form.id !== "form_sidebar") {
-          updateCachedElements();
-          form.innerHTML = formResponse.innerHTML;
-          form.classList.add("activated");
-          const shutdownNotice = document.getElementById("sb_shutdownStatus");
-          const shutdownNoticeHR = sb?.querySelector("#sb_shutdownStatus+hr");
-          const shutdownNoticeResponse = responseDoc?.getElementById("sb_shutdownStatus");
-          if (shutdownNotice && shutdownNoticeResponse) {
-            if (shutdownNoticeResponse.classList.contains("inactive")) {
-              shutdownNotice.hidden = true;
-              shutdownNoticeHR.hidden = true;
-            } else if (shutdownNotice.innerHTML !== shutdownNoticeResponse.innerHTML) {
-              shutdownNotice.hidden = false;
-              shutdownNoticeHR.hidden = false;
-              shutdownNotice.outerHTML = shutdownNoticeResponse.outerHTML;
-            }
-          }
-          const updateForm = document.getElementById("sb_updateform");
-          const updateFormResponse = responseDoc?.getElementById("sb_updateform");
-          if (updateForm && updateFormResponse) {
-            if (updateFormResponse.classList.contains("inactive")) {
-              updateForm.hidden = true;
-            } else if (updateForm.innerHTML !== updateFormResponse.innerHTML) {
-              updateForm.outerHTML = updateFormResponse.outerHTML;
-            }
-          }
-          if (form.id === "sb_routerControl") {
-            const tunnelStatus = document.getElementById("sb_tunnelstatus");
-            const tunnelStatusResponse = responseDoc?.getElementById("sb_tunnelstatus");
-            if (tunnelStatus && tunnelStatusResponse && tunnelStatus.innerHTML !== tunnelStatusResponse.innerHTML) {
-              tunnelStatus.outerHTML = tunnelStatusResponse.outerHTML;
-            }
-          }
-          form.querySelectorAll("button").forEach((btn) => {
-            btn.style.opacity = ".5";
-            btn.style.pointerEvents = "none";
-          });
-        } else refreshAll();
-      },
-      { once: true }
-    );
-    form.dispatchEvent(new Event("submit"));
-    refreshSidebar(true);
-    startAutoRefresh();
-  });
-}
-
 async function isOnline() {
-  if (!navigator.onLine) return false;
-  try {
-    const response = await fetch("/js/progressx.js", { method: "HEAD", cache: "no-store" });
-    return response.ok;
-  } catch {return false;}
+  return navigator.onLine;
 }
 
 async function updateConnectionStatus() {
-  const online = await isOnline();
-  const currentlyDown = noResponse > 1 || !online;
-  if (currentlyDown && !isDown) {
-    isDown = true;
-    document.body.classList.add("isDown");
-    refreshAll();
-  } else if (!currentlyDown && isDown) {
-    isDown = false;
-    noResponse = 0;
-    document.body.classList.remove("isDown");
-    refreshSidebar(true);
-    startAutoRefresh();
-  }
+  clearTimeout(connectionStatusTimeout);
+  connectionStatusTimeout = setTimeout(async() => {
+    const online = await isOnline();
+    const currentlyDown = noResponse > 3 || !online;
+    if (currentlyDown && !isDown) {
+      isDown = true;
+      document.body.classList.add("isDown");
+      refreshAll();
+    } else if (!currentlyDown && isDown) {
+      isDown = false;
+      noResponse = 0;
+      document.body.classList.remove("isDown");
+      refreshSidebar(true);
+      scheduleNextAutoRefresh();
+    }
+  }, 500);
 }
 
-function checkConnectionStatus() { updateConnectionStatus(); }
+function checkConnectionStatus() {
+  updateConnectionStatus();
+}
 
 window.addEventListener("online", updateConnectionStatus);
 window.addEventListener("offline", updateConnectionStatus);
 setInterval(updateConnectionStatus, 15000);
 
 window.addEventListener("message", (event) => {
-  if (event.data === "iframeLoaded") { startAutoRefresh(); }
+  if (event.origin !== window.location.origin) return;
+  if (event.data === "iframeLoaded") {
+    startAutoRefresh();
+  }
 });
 
 function isSidebarVisible() {
   const target = document.getElementById("xhr");
   if (!target) return;
-
-  let debounceTimeout = null;
-
-  const observerCallback = () => {
+  const observer = new MutationObserver(() => {
     if (document.hidden) return;
     const now = Date.now();
-    const interval = getRefreshInterval();
     const elapsed = now - lastRefreshTime;
+    const interval = getRefreshInterval();
     if (elapsed < interval) {
-      if (debounceTimeout) clearTimeout(debounceTimeout);
-      debounceTimeout = setTimeout(() => {
+      if (debounceTimeoutId) clearTimeout(debounceTimeoutId);
+      debounceTimeoutId = setTimeout(() => {
         lastRefreshTime = Date.now();
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
             refreshSidebar(true);
           });
         });
-        startAutoRefresh();
+        scheduleNextAutoRefresh();
       }, interval - elapsed);
     } else {
       lastRefreshTime = now;
       requestAnimationFrame(() => {
-        refreshSidebar(true);
+        requestAnimationFrame(() => {
+          refreshSidebar(true);
+        });
       });
-      startAutoRefresh();
+      scheduleNextAutoRefresh();
     }
-  };
-
-  const observer = new MutationObserver(() => {
-    observerCallback();
   });
-
-  observer.observe(target, { childList: true, subtree: true, });
+  observer.observe(target, {
+    childList: true,
+    subtree: true,
+  });
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  isSidebarVisible();
-  initSidebar();
-  newHosts();
-  start();
-});
-
-document.onvisibilitychange = () => {
+function handleStatus() {
   lastRefreshTime = 0;
   if (!document.hidden) {
     requestAnimationFrame(() => {
@@ -287,24 +248,9 @@ document.onvisibilitychange = () => {
     });
   }
   startAutoRefresh();
-};
+}
 
-window.addEventListener("online", () => {
-  lastRefreshTime = 0;
-  if (!document.hidden) {
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        refreshSidebar(true);
-      });
-    });
-  }
-  startAutoRefresh();
-});
-
-window.addEventListener("offline", () => { checkConnectionStatus(); });
-
-document.addEventListener("DOMContentLoaded", () => {
-  initSidebar();
-  newHosts();
-  start();
-});
+window.addEventListener("online", handleStatus);
+window.addEventListener("offline", checkConnectionStatus);
+document.addEventListener("visibilitychange", handleStatus);
+document.addEventListener("DOMContentLoaded", start);

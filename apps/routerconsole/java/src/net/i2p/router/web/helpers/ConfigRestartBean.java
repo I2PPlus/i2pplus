@@ -60,7 +60,7 @@ public class ConfigRestartBean {
         long timeRemaining = ctx.router().getShutdownTimeRemaining();
         StringBuilder buf = new StringBuilder(128);
         if ((shuttingDown || restarting) && timeRemaining <= 45*1000) {
-            buf.append("<h4 id=sb_shutdownStatus class=\"volatile\"><span id=imminent><b>");
+            buf.append("<h4 id=sb_shutdownStatus class=volatile><span id=imminent><b>");
             if (restarting) {buf.append(_t("Restart imminent", ctx));}
             else {buf.append(_t("Shutdown imminent", ctx));}
             buf.append("&hellip;</b></span></h4>");
@@ -104,16 +104,16 @@ public class ConfigRestartBean {
 
     /** @param s value,class,label,... triplets */
     private static void buttons(RouterContext ctx, StringBuilder buf, String url, String nonce, String[] s) {
-        buf.append("<iframe name=processSidebarForm id=processSidebarForm hidden></iframe>\n<form id=sb_routerControl class=\"volatile collapse\" action=\"")
+        buf.append("<form id=sb_routerControl class=\"volatile collapse\" action=\"")
            .append(url)
-           .append("\" method=POST target=processSidebarForm>\n<input type=hidden name=consoleNonce value=\"")
+           .append("\" method=POST>\n<input type=hidden name=consoleNonce value=")
            .append(nonce)
-           .append("\" >\n");
+           .append(">\n");
         for (int i = 0; i < s.length; i+= 3) {
             buf.append("<button type=submit name=action value=\"")
                .append(s[i]).append("\" class=\"")
                .append(s[i+1]).append("\" title=\"")
-               .append(_t(s[i+2], ctx)).append("\" >")
+               .append(_t(s[i+2], ctx)).append("\">")
                .append(_t(s[i+2], ctx)).append("</button>\n");
         }
         buf.append("</form>\n");
