@@ -104,6 +104,7 @@ function start() {
   }
 
   function refreshLogs() {
+    if (document.hidden || !navigator.onLine) {return;}
     const filterInput = document.getElementById("logFilterInput");
     const storedFilterValue = localStorage.getItem("logFilter");
     let filterValue = encodeURIComponent(filterInput?.value.trim().toLowerCase()).replace(/%20/g, " ");
@@ -154,6 +155,7 @@ function start() {
   }
 
   function doUpdates() {
+    if (document.hidden || !navigator.onLine) {return;}
     requestAnimationFrame(() => {
       updates.forEach(update => update());
       linkifyRouterIds();
