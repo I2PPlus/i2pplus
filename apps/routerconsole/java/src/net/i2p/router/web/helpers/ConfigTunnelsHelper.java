@@ -25,7 +25,7 @@ public class ConfigTunnelsHelper extends HelperBase {
     public String getForm() {
         StringBuilder buf = new StringBuilder(1024);
         // HTML: <input> cannot be inside a <table>
-        buf.append("<input type=hidden name=\"pool.0\" value=\"exploratory\" >\n");
+        buf.append("<input type=hidden name=\"pool.0\" value=\"exploratory\">\n");
         int cur = 1;
         int snarkInCount = 0;
         int snarkInHops = 0;
@@ -46,7 +46,7 @@ public class ConfigTunnelsHelper extends HelperBase {
             DataHelper.sort(sorted, new TPComparator());
         for (TunnelPoolSettings in : sorted) {
             buf.append("<input type=hidden name=\"pool.").append(cur).append("\" value=\"")
-               .append(in.getDestination().toBase64()).append("\" >\n");
+               .append(in.getDestination().toBase64()).append("\">\n");
             cur++;
         }
 

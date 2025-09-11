@@ -366,7 +366,7 @@ public class GraphHelper extends FormHandler {
            .append("<label for=toggleSettings><h3 id=graphdisplay tabindex=0>").append(_t("Configure Graph Display")).append("</h3></label>")
            .append("<form id=gform action=\"/updategraphs\" method=POST>\n")
            .append("<table>\n<tr><td><div class=optionlist>\n<input type=hidden name=action value=Save>\n")
-           .append("<input type=hidden name=\"nonce\" value=\"").append(nonce).append("\" >\n")
+           .append("<input type=hidden name=\"nonce\" value=\"").append(nonce).append("\">\n")
            .append("<span class=nowrap title=\"")
            .append(_t("Note: Dimensions are for graph only (excludes title, labels and legend).")).append("\"><b>")
            .append(_t("Graph size")).append(":</b>&nbsp; <input id=gwidth size=4 type=text name=\"width\" value=\"").append(_width).append("\">")

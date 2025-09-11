@@ -103,7 +103,7 @@ class TunnelRenderer {
                     out.write("ping ");
                 } else {out.write("client ");}
                 out.write("tabletitle\" ");
-                out.write("id=\"" + client.toBase64().substring(0,4) + "\" >");
+                out.write("id=\"" + client.toBase64().substring(0,4) + "\">");
                 out.write(getTunnelName(in));
                 // links are set to float:right in CSS so they will be displayed in reverse order
                 if (isAdvanced) {
@@ -129,7 +129,7 @@ class TunnelRenderer {
                             String ab64 = a.toBase64().substring(0, 4);
                             if (aname == null) {aname = ab64;}
                             out.write("<h3 class=tabletitle ");
-                            out.write("id=\"" + ab64 + "\" >");
+                            out.write("id=\"" + ab64 + "\">");
                             out.write(DataHelper.escapeHTML(_t(aname)));
                             if (isAdvanced) {
                                 out.write(" <a href=\"/configtunnels#" + b64 +"\" title=\"" +

@@ -246,7 +246,7 @@ public class SybilRenderer {
             PersistSybil persistSybil = new PersistSybil(_context);
             persistSybil.deleteBlocklistFile();
             out.write("<div class=infohelp id=sybilanalysis>\n<b><i>");
-            out.write("A restart is required to fully purge the sybil blocklist.");
+            out.write("A restart is required to fully purge the Sybil blocklist.");
             out.write("</i></b></div>\n");
         } else {
             out.write("<div class=infohelp id=sybilanalysis>\n<b><i>");
@@ -275,9 +275,10 @@ public class SybilRenderer {
             out.write("</b></i></div>");
         } else {
             buf.append("\n<form action=\"netdb\" method=POST>\n" +
-                       "<input type=hidden name=\"f\" value=3>\n" +
-                       "<input type=hidden name=\"m\" value=12>\n" +
-                       "<input type=hidden name=\"nonce\" value=\"").append(nonce).append("\" >\n<b>")
+                       "<input type=hidden name=f value=3>\n" +
+                       "<input type=hidden name=m value=12>\n" +
+                       "<input type=hidden name=nonce value=\"")
+               .append(nonce).append("\">\n<b>")
                .append(_t("Select stored analysis")).append(":</b> \n" +
                        "<select name=\"date\">\n");
             boolean first = true;
@@ -289,11 +290,10 @@ public class SybilRenderer {
                 }
                 buf.append('>').append(DataHelper.formatTime(date.longValue()).replace("-", " ")).append("</option>\n");
             }
-            buf.append("</select>\n" +
-                       "<input type=submit name=action class=\"go\" value=\"Review\" />\n" +
-                       "</form>\n</div>\n");
+            buf.append("</select>\n<input type=submit name=action class=go value=")
+               .append(_t("Review"))
+               .append(">\n</form>\n</div>\n");
         }
-//        renderRunForm(out, buf, nonce);
         writeBuf(out, buf);
     }
 
@@ -301,22 +301,24 @@ public class SybilRenderer {
      *  @since 0.9.38
      */
     private static void renderRunForm(Writer out, StringBuilder buf, String nonce) throws IOException {
-        buf.append("<form class=sybilScan action=\"netdb\" method=POST>\n" +
-                   "<input type=hidden name=\"f\" value=3>\n" +
-                   "<input type=hidden name=\"m\" value=13>\n" +
-                   "<input type=hidden name=\"nonce\" value=\"").append(nonce).append("\" >\n" +
-                   "<table>\n<tr><td><b>")
+        buf.append("<form class=sybilScan action=/netdb method=POST>\n<input type=hidden name=f value=3>\n" +
+                   "<input type=hidden name=m value=13>\n<input type=hidden name=nonce value=\"")
+           .append(nonce)
+           .append("\">\n<table>\n<tr><td><b>")
            .append(_x("Run analysis on Floodfills only"))
-           .append(":</b></td><td><input type=submit name=action class=\"go\" value=\"Start Scan\" /> "+
-                   "</td></tr>\n</table>\n</form>\n<hr>\n");
-        buf.append("<form class=\"sybilScan\" action=\"netdb\" method=POST>\n" +
-                   "<input type=hidden name=\"f\" value=3>\n" +
-                   "<input type=hidden name=\"m\" value=\"16\">\n" +
-                   "<input type=hidden name=\"nonce\" value=\"").append(nonce).append("\" >\n" +
-                   "<table><tr><td><b>")
+           .append(":</b></td><td><input type=submit name=action class=go value=\"")
+           .append(_x("Start Scan"))
+           .append("\"></td></tr>\n</table>\n</form>\n<hr>\n");
+        buf.append("<form class=sybilScan action=/netdb method=POST>\n" +
+                   "<input type=hidden name=f value=3>\n" +
+                   "<input type=hidden name=m value=\"16\">\n" +
+                   "<input type=hidden name=nonce value=\"")
+           .append(nonce)
+           .append("\">\n<table><tr><td><b>")
            .append(_x("Run analysis on all routers in NetDb"))
-           .append(":</b></td><td><input type=submit name=action class=\"go\" value=\"Start Scan\" />" +
-                   "</td></tr>\n</table>\n</form>\n");
+           .append(":</b></td><td><input type=submit name=action class=go value=\"")
+           .append(_x("Start Scan"))
+           .append("\"></td></tr>\n</table>\n</form>\n");
         writeBuf(out, buf);
     }
 
@@ -326,9 +328,9 @@ public class SybilRenderer {
     private void renderBackgroundForm(Writer out, StringBuilder buf, String nonce) throws IOException {
         long freq = _context.getProperty(Analysis.PROP_FREQUENCY, Analysis.DEFAULT_FREQUENCY);
         buf.append("<form action=\"netdb\" method=POST>\n" +
-                   "<input type=hidden name=\"f\" value=3>\n" +
-                   "<input type=hidden name=\"m\" value=\"15\">\n" +
-                   "<input type=hidden name=\"nonce\" value=\"").append(nonce).append("\" >\n<p class=sybilinfo><b>")
+                   "<input type=hidden name=f value=3>\n" +
+                   "<input type=hidden name=m value=\"15\">\n" +
+                   "<input type=hidden name=nonce value=\"").append(nonce).append("\">\n<p class=sybilinfo><b>")
            .append(_t("The sybil detection routine can be configured to scan the Network Database on a regular interval, " +
                       "with the option to block peers meeting the configured threshold. " +
                       "Blocking peers prevents your router from building tunnels with them for the duration configured, or until the router is restarted."))
@@ -386,7 +388,8 @@ public class SybilRenderer {
            .append(thresh).append("\">").append(_t("threat points")).append("</span><br>\n<span class=nowrap><b>")
            .append(_t("Enforce block for")).append(":</b><input type=text name=\"days\" pattern=\"^[0-9]{1,4}$\" value=\"")
            .append(days).append("\">").append(_t("days")).append("</span><br>\n</td></tr>\n")
-           .append("<tr><td class=optionsave><input type=submit name=action class=accept value=Save />\n</div>\n</td></tr>\n</table>\n</form>\n");
+           .append("<tr><td class=optionsave><input type=submit name=action class=accept value=")
+           .append(_t("Save")).append(">\n</div>\n</td></tr>\n</table>\n</form>\n");
         writeBuf(out, buf);
     }
 
@@ -398,10 +401,7 @@ public class SybilRenderer {
         buf.append("<h3 id=known class=sybils>").append(_t("Known Floodfills")).append(": ").append(ris.size()).append("</h3>\n");
         buf.append("<div id=sybils_summary>\n" +
                    "<b>").append(_t("Average closest floodfill distance")).append(":</b> ").append(fmt.format(avgMinDist)).append("<br>\n" +
-//                   "<b>").append(_t("Routing Data")).append(":</b> \"").append(DataHelper.getUTF8(_context.routerKeyGenerator().getModData()))
                    "<b>").append(_t("Routing Data")).append(":</b> ").append(DataHelper.formatTime(_context.routerKeyGenerator().getLastChanged())).append("<br>\n" +
-//           .append("\"<br>\n<b>").append(_t("Last Changed")).append(":</b> ").append(DataHelper.formatTime(_context.routerKeyGenerator().getLastChanged())).append("<br>\n" +
-//                   "<b>").append(_t("Next Routing Data")).append(":</b> \"").append(DataHelper.getUTF8(_context.routerKeyGenerator().getNextModData()))
                    "<b>").append(_t("Rotates in")).append(":</b> ").append(DataHelper.formatDuration(_context.routerKeyGenerator().getTimeTillMidnight())).append("\n" +
                    "</div>\n");
         writeBuf(out, buf);

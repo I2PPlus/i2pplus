@@ -2953,7 +2953,7 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(newURL).append("\" spellcheck=false title=\"").append(_t("Enter the torrent file download URL (I2P only), magnet link, or info hash"))
            .append("\" required>\n").append("<input type=submit class=add value=\"").append(_t("Add torrent"))
            .append("\" name=foo></td>\n<tr hidden><td class=right>").append(_t("Torrent file"))
-           .append(":</td><td class=left><input type=file name=newFile accept=\".torrent\"/></td><tr><td class=right><span>")
+           .append(":</td><td class=left><input type=file name=newFile accept=\".torrent\"></td><tr><td class=right><span>")
            .append(_t("Data dir")).append("</span>:</td><td class=left><input type=text name=nofilter_newDir size=85 value=\"")
            .append(_manager.getDataDir().getAbsolutePath()).append("\" spellcheck=false title=\"")
            .append(_t("Enter the directory to save the data in (default {0})", _manager.getDataDir().getAbsolutePath()))
@@ -3343,7 +3343,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("<span class=configOption><label><b>")
                .append(_t("I2CP port"))
                .append("</b> <input type=text name=i2cpPort value=\"")
-               .append(_manager.util().getI2CPPort()).append("\" class=numeric size=5 maxlength=5 pattern=\"[0-9]{1,5}\" ></label></span><br>\n");
+               .append(_manager.util().getI2CPPort()).append("\" class=numeric size=5 maxlength=5 pattern=\"[0-9]{1,5}\"></label></span><br>\n");
         }
 
         options.remove(I2PSnarkUtil.PROP_MAX_BW);
