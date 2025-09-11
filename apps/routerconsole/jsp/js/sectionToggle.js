@@ -2,6 +2,8 @@
 /* Sidebar section toggler for the I2P+ web console */
 /* License: AGPLv3 or later */
 
+import { stickySidebar } from "/js/stickySidebar.js";
+
 const sb = document.getElementById("sidebar");
 
 function sectionToggler() {
@@ -121,6 +123,7 @@ function sectionToggler() {
       const currentState = event.target.checked;
       toggleElementVisibility(event.target, currentState);
       saveToggleStates();
+      stickySidebar();
     };
     sb_wrap.addEventListener("click", handleToggle);
     listenersAdded = true;
