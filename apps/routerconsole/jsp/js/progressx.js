@@ -1,8 +1,9 @@
-/* ProgressX 1.1, 2024-04-15
+/* ProgressX 1.1, 2025-09-09
  * https://github.com/ryadpasha/progressx
  * Copyright (c) 2018 Ryad Pasha
  * Licensed under the MIT License
- * Optimizations and theme support by dr|z3d, 2024-2025 */
+ * Optimizations and theme support by dr|z3d, 2024-2025
+ */
 
 function initProgressX(window, document) {
   "use strict";

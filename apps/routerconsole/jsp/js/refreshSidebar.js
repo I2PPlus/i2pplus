@@ -250,7 +250,17 @@ function handleStatus() {
   startAutoRefresh();
 }
 
+function initSidebar() {
+  const interval = setInterval(() => {
+    if (xhrContainer) {
+      clearInterval(interval);
+      start();
+    }
+  }, 10);
+}
+
+initSidebar();
+
 window.addEventListener("online", handleStatus);
 window.addEventListener("offline", checkConnectionStatus);
 document.addEventListener("visibilitychange", handleStatus);
-document.addEventListener("DOMContentLoaded", start);
