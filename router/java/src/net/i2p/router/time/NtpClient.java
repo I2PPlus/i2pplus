@@ -254,4 +254,43 @@ public class NtpClient {
             }
         }
     }
+
+    /**
+     * Main entry point for the NtpClient program.
+     *
+     * Usage:
+     *   java -jar i2p/lib/router.jar NtpClient [-6] [servers...]
+     *
+     * The optional "-6" flag forces IPv6 DNS lookups.
+     * If no servers are specified, the default "pool.ntp.org" is used.
+     *
+     * This program queries the specified NTP servers and prints the current time along with stratum and offset information.
+     *
+     * @param args command-line arguments; optionally "-6" followed by list of NTP servers
+     * @throws IOException if a network error occurs
+     */
+    public static void main(String[] args) throws IOException {
+        boolean ipv6 = false;
+        if (args.length > 0 && args[0].equals("-6")) {
+            ipv6 = true;
+            if (args.length == 1) {
+                args = new String[0];
+            } else {
+                args = Arrays.copyOfRange(args, 1, args.length);
+            }
+        }
+        if (args.length <= 0) {
+            args = new String[] { "pool.ntp.org" };
+        }
+        System.out.println("Querying " + Arrays.toString(args));
+        Log log = new Log(NtpClient.class);
+        try {
+            long[] rv = currentTimeAndStratum(args, DEFAULT_TIMEOUT, ipv6, log);
+            System.out.println("Current time: " + new java.util.Date(rv[0]) + " (stratum " + rv[1] +
+                               ") offset " + (rv[0] - System.currentTimeMillis()) + "ms");
+        } catch (IllegalArgumentException iae) {
+            System.out.println("Failed: " + iae.getMessage());
+        }
+    }
+
 }
