@@ -36,8 +36,6 @@ boolean isWizardPage = uri.endsWith("wizard") || uri.endsWith("wizard.jsp");
 <% if (lang.equals("zh")) { %> <link href="<%=themePath%>console_big.css?version=<%=v%>" rel=stylesheet> <% }
 else if (lang.equals("ar") || lang.equals("fa")) { %> <link rel=stylesheet href="<%=themePath%>console_ar.css?version=<%=v%>"> <% } %>
 <% if (hasOverride) { %> <link href=<%=themePath%>override.css rel=stylesheet> <% } %>
-<script src=/js/progressx.js></script>
-<script src=/js/detectPageZoom.js></script>
 <script nonce=<%=cspNonce%>>
   if (top.location.href !== location.href) top.location.href = location.href;
   const refresh = parseInt(<%=intl.getRefresh()%>, 10);
@@ -46,4 +44,6 @@ else if (lang.equals("ar") || lang.equals("fa")) { %> <link rel=stylesheet href=
   progressx.show(theme);progressx.progress(0.1);
 </script>
 <% if (!isWizardPage) { %> <script src=/js/refreshSidebar.js type=module></script> <% } %>
+<script src=/js/progressx.js></script>
+<script src=/js/detectPageZoom.js></script>
 <noscript><style>.script{display:none!important}</style></noscript>
