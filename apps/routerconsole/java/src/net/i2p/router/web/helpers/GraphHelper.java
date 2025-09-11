@@ -142,6 +142,7 @@ public class GraphHelper extends FormHandler {
         TreeSet<GraphListener> ordered = new TreeSet<GraphListener>(new AlphaComparator());
         ordered.addAll(listeners);
         StringBuilder buf = new StringBuilder(512*listeners.size());
+        long now = System.currentTimeMillis();
 
         // go to some trouble to see if we have the data for the combined bw graph
         boolean hasTx = false;
@@ -174,7 +175,8 @@ public class GraphHelper extends FormHandler {
                 // no legend, no height difference needed
                 buf.append("&amp;height=").append(_height);
             }
-            buf.append("&amp;hideLegend=" + hideLegend).append("&amp;time=").append(System.currentTimeMillis())
+            title = title.replace("&nbsp;", "");
+            buf.append("&amp;hideLegend=" + hideLegend).append("&amp;time=").append(now)
                .append("\" alt=\"").append(title).append("\" title=\"").append(title).append("\"></a></span>\n");
         }
 
@@ -182,6 +184,7 @@ public class GraphHelper extends FormHandler {
             Rate r = lsnr.getRate();
             // e.g. "statname for 60m"
             String title = _t("{0} for {1}", r.getRateStat().getName(), DataHelper.formatDuration2(_periodCount * r.getPeriod()));
+            title = title.replace("&nbsp;", "");
             buf.append("<span class=graphContainer>");
             buf.append("<a href=\"/graph?stat=").append(r.getRateStat().getName().replace(" ", "%20")).append(".")
                .append(r.getPeriod()).append("&amp;c=").append(3 * _periodCount);
@@ -192,7 +195,7 @@ public class GraphHelper extends FormHandler {
                .append("&amp;showEvents=").append(_showEvents).append("&amp;period=").append(r.getPeriod())
                .append("&amp;periodCount=").append(_periodCount);
             buf.append("&amp;width=").append(_width).append("&amp;height=").append(_height);
-            buf.append("&amp;hideLegend=").append(hideLegend).append("&amp;time=").append(System.currentTimeMillis())
+            buf.append("&amp;hideLegend=").append(hideLegend).append("&amp;time=").append(now)
                .append("\" alt=\"").append(title).append("\" title=\"").append(title).append("\"></a></span>\n");
         }
         return buf.toString();
@@ -362,19 +365,17 @@ public class GraphHelper extends FormHandler {
         boolean persistent = _context.getBooleanPropertyDefaultTrue(GraphListener.PROP_PERSISTENT);
         StringBuilder buf = new StringBuilder(3*1024);
 
-        buf.append("<br><input type=checkbox id=toggleSettings hidden>")
-           .append("<label for=toggleSettings><h3 id=graphdisplay tabindex=0>").append(_t("Configure Graph Display")).append("</h3></label>")
-           .append("<form id=gform action=\"/updategraphs\" method=POST>\n")
-           .append("<table>\n<tr><td><div class=optionlist>\n<input type=hidden name=action value=Save>\n")
-           .append("<input type=hidden name=\"nonce\" value=\"").append(nonce).append("\">\n")
-           .append("<span class=nowrap title=\"")
+        buf.append("<br><input type=checkbox id=toggleSettings hidden><label for=toggleSettings><h3 id=graphdisplay tabindex=0>")
+           .append(_t("Configure Graph Display"))
+           .append("</h3></label><form id=gform action=/updategraphs method=POST>\n<table>\n<tr><td><div class=optionlist>\n<input type=hidden name=action value=Save>\n")
+           .append("<input type=hidden name=nonce value=").append(nonce).append(">\n<span class=nowrap title=\"")
            .append(_t("Note: Dimensions are for graph only (excludes title, labels and legend).")).append("\"><b>")
-           .append(_t("Graph size")).append(":</b>&nbsp; <input id=gwidth size=4 type=text name=\"width\" value=\"").append(_width).append("\">")
-           .append(_t("pixels wide")).append("&nbsp;&nbsp;&nbsp;<input size=4 type=text name=\"height\" value=\"").append(_height).append("\">")
+           .append(_t("Graph size")).append(":</b>&nbsp; <input id=gwidth size=4 type=text name=width value=\"").append(_width).append("\">")
+           .append(_t("pixels wide")).append("&nbsp;&nbsp;&nbsp;<input size=4 type=text name=height value=\"").append(_height).append("\">")
            .append(_t("pixels high")).append("</span><br>\n<span class=nowrap>\n<b>")
-           .append(_t("Display period")).append(":</b> <input size=5 type=text name=\"periodCount\" value=\"").append(_periodCount).append("\">")
+           .append(_t("Display period")).append(":</b> <input size=5 type=text name=periodCount value=\"").append(_periodCount).append("\">")
            .append(_t("minutes")).append("</span><br>\n<span class=nowrap>\n<b>")
-           .append(_t("Refresh delay")).append(":</b> <select name=\"refreshDelay\">");
+           .append(_t("Refresh delay")).append(":</b> <select name=refreshDelay>");
         for (int i = 0; i < times.length; i++) {
             buf.append("<option value=\"");
             buf.append(Integer.toString(times[i]));
@@ -387,16 +388,16 @@ public class GraphHelper extends FormHandler {
         }
         buf.append("</select></span><br>\n<span class=nowrap>\n<b>")
            .append(_t("Plot type")).append(":</b> ")
-           .append("<label><input type=radio class=optbox name=\"showEvents\" value=\"false\" ")
+           .append("<label><input type=radio class=optbox name=\"showEvents\" value=false ")
            .append((_showEvents ? "" : HelperBase.CHECKED)).append(">").append(_t("Averages")).append("</label>&nbsp;&nbsp;&nbsp;")
            .append("<label><input type=radio class=optbox name=\"showEvents\" value=true ")
            .append((_showEvents ? HelperBase.CHECKED : "")).append(">").append(_t("Events"))
            .append("</label></span><br>\n<span class=nowrap>\n<b>")
            .append(_t("Hide legend")).append(":</b> ")
-           .append("<label><input type=checkbox class=\"optbox slider\" value=true name=\"hideLegend\"");
+           .append("<label><input type=checkbox class=\"optbox slider\" value=true name=hideLegend");
         if (hideLegend) {buf.append(HelperBase.CHECKED);}
         buf.append(">").append(_t("Do not show legend on graphs")).append("</label></span><br><span class=nowrap>\n<b>")
-           .append(_t("Persistence")).append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=\"persistent\"");
+           .append(_t("Persistence")).append(":</b> <label><input type=checkbox class=\"optbox slider\" value=true name=persistent");
         if (persistent) {buf.append(HelperBase.CHECKED);}
         buf.append(">").append(_t("Store graph data on disk")).append("</label></span>\n</div>\n</td></tr>\n</table>\n")
            .append("<hr>\n<div class=formaction id=graphing>")
