@@ -39,7 +39,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.DNSOverHTTPS;
@@ -66,39 +65,20 @@ import net.i2p.util.Log;
  */
 public class NtpClient {
     /** difference between the unix epoch and jan 1 1900 (NTP uses that) */
-    final static double SECONDS_1900_TO_EPOCH = 2208988800.0;
-    private final static int NTP_PORT = 123;
-    private static final int DEFAULT_TIMEOUT = 10*1000;
+    static final double SECONDS_1900_TO_EPOCH = 2208988800.0;
+    private static final int NTP_PORT = 123;
+    private static final int DEFAULT_TIMEOUT = 10 * 1000;
     private static final int OFF_ORIGTIME = 24;
     private static final int OFF_TXTIME = 40;
     private static final int MIN_PKT_LEN = 48;
-    // IP:reason for servers that sent us a kiss of death
-    private static final Map<String, String> kisses = new ConcurrentHashMap<String, String>(2);
-    private static final String PROP_USE_DNS_OVER_HTTPS = "time.useDNSOverHTTPS";
-    private static final boolean DEFAULT_USE_DNS_OVER_HTTPS = false;
 
     /**
-     * Query the ntp servers, returning the current time from first one we find
-     *
-     * @return milliseconds since january 1, 1970 (UTC)
-     * @throws IllegalArgumentException if none of the servers are reachable
+     * Map of server IPs to reasons for receiving a "Kiss of Death" (KoD) message.
+     * KoD is a special NTP stratum 0 response indicating the server requests the client to stop querying temporarily.
      */
-/****
-    public static long currentTime(String serverNames[]) {
-        if (serverNames == null)
-            throw new IllegalArgumentException("No NTP servers specified");
-        ArrayList<String> names = new ArrayList<String>(serverNames.length);
-        for (int i = 0; i < serverNames.length; i++)
-            names.add(serverNames[i]);
-        Collections.shuffle(names);
-        for (int i = 0; i < names.size(); i++) {
-            long now = currentTime(names.get(i));
-            if (now > 0)
-                return now;
-        }
-        throw new IllegalArgumentException("No reachable NTP servers specified");
-    }
-****/
+    private static final Map<String, String> kisses = new ConcurrentHashMap<>(2);
+    private static final String PROP_USE_DNS_OVER_HTTPS = "time.useDNSOverHTTPS";
+    private static final boolean DEFAULT_USE_DNS_OVER_HTTPS = false;
 
     /**
      * Query the ntp servers, returning the current time from first one we find
@@ -110,36 +90,23 @@ public class NtpClient {
      * @since 0.7.12
      */
     static long[] currentTimeAndStratum(String serverNames[], int perServerTimeout, boolean preferIPv6, Log log) {
-        if (serverNames == null)
+        if (serverNames == null) {
             throw new IllegalArgumentException("No NTP servers specified");
-        ArrayList<String> names = new ArrayList<String>(serverNames.length);
-        for (int i = 0; i < serverNames.length; i++)
-            names.add(serverNames[i]);
+        }
+        ArrayList<String> names = new ArrayList<>(serverNames.length);
+        Collections.addAll(names, serverNames);
         Collections.shuffle(names);
-        for (int i = 0; i < names.size(); i++) {
-            long[] rv = currentTimeAndStratum(names.get(i), perServerTimeout, preferIPv6, log);
-            if (rv != null && rv[0] > 0)
+        for (String server : names) {
+            long[] rv = currentTimeAndStratum(server, perServerTimeout, preferIPv6, log);
+            if (rv != null && rv[0] > 0) {
                 return rv;
+            }
         }
         throw new IllegalArgumentException("No reachable NTP servers specified");
     }
 
     /**
-     * Query the given NTP server, returning the current internet time
-     *
-     * @return milliseconds since january 1, 1970 (UTC), or -1 on error
-     */
-/****
-    public static long currentTime(String serverName) {
-         long[] la = currentTimeAndStratum(serverName, DEFAULT_TIMEOUT);
-         if (la != null)
-             return la[0];
-         return -1;
-    }
-****/
-
-    /**
-     * Hack to return time and stratum
+     * Query the given NTP server, returning the current internet time and stratum
      *
      * @param log may be null
      * @return time in rv[0] and stratum in rv[1], or null for error
@@ -150,7 +117,6 @@ public class NtpClient {
         I2PAppContext ctx = I2PAppContext.getGlobalContext();
         boolean useDNSOverHTTPS = ctx.getProperty(PROP_USE_DNS_OVER_HTTPS, DEFAULT_USE_DNS_OVER_HTTPS);
         try {
-            // Send request
             InetAddress address;
             if (preferIPv6) {
                 String ip = null;
@@ -161,198 +127,131 @@ public class NtpClient {
                 if (ip != null) {
                     address = InetAddress.getByName(ip);
                 } else {
-                    // fallback to regular DNS
                     InetAddress[] addrs = InetAddress.getAllByName(serverName);
-                    if (addrs == null || addrs.length == 0)
-                        throw new UnknownHostException();
+                    if (addrs == null || addrs.length == 0) {
+                        throw new UnknownHostException("No IP addresses found for " + serverName);
+                    }
                     address = null;
-                    for (int i = 0; i < addrs.length; i++) {
-                        if (addrs[i] instanceof Inet6Address) {
-                            address = addrs[i];
+                    for (InetAddress inet : addrs) {
+                        if (inet instanceof Inet6Address) {
+                            address = inet;
                             break;
                         }
-                        if (address == null)
-                            address = addrs[0];
+                        if (address == null) {
+                            address = inet;
+                        }
                     }
                 }
             } else {
                 if (useDNSOverHTTPS) {
                     DNSOverHTTPS doh = new DNSOverHTTPS(ctx);
                     String ip = doh.lookup(serverName, DNSOverHTTPS.Type.V4_ONLY);
-                    if (ip != null)
+                    if (ip != null) {
                         serverName = ip;
+                    }
                 }
-                // fallback to regular DNS
                 address = InetAddress.getByName(serverName);
             }
-            String who = address.getHostAddress();
-            String why = kisses.get(who);
-            if (why != null) {
-                if (log != null)
-                    log.warn("Not querying, previous KoD from NTP server " + serverName + " (" + who + ") " + why);
+            String ipAddress = address.getHostAddress();
+            String koDReason = kisses.get(ipAddress);
+            if (koDReason != null) {
+                if (log != null) {
+                    log.warn("Skipping NTP query to " + serverName + " (" + ipAddress + ") due to previous Kiss of Death (KoD) response: " + koDReason);
+                }
                 return null;
             }
             byte[] buf = new NtpMessage().toByteArray();
             DatagramPacket packet = new DatagramPacket(buf, buf.length, address, NTP_PORT);
-            byte[] txtime = new byte[8];
-
+            byte[] transmitTimestampBytes = new byte[8];
             socket = new DatagramSocket();
-            // Set the transmit timestamp *just* before sending the packet
-            // ToDo: Does this actually improve performance or not?
+            // Set transmit timestamp just before sending for accuracy
             NtpMessage.encodeTimestamp(packet.getData(), OFF_TXTIME,
-                                       (System.currentTimeMillis()/1000.0)
-                                       + SECONDS_1900_TO_EPOCH);
-
+                    (System.currentTimeMillis() / 1000.0) + SECONDS_1900_TO_EPOCH);
             socket.send(packet);
-            // save for check
-            System.arraycopy(packet.getData(), OFF_TXTIME, txtime, 0, 8);
-            if (log != null && log.shouldDebug())
-                log.debug("Sent to " + serverName + " (" + who + ")\n" + HexDump.dump(buf));
-
-            // Get response
+            System.arraycopy(packet.getData(), OFF_TXTIME, transmitTimestampBytes, 0, 8);
+            if (log != null && log.shouldDebug()) {
+                log.debug("Sent NTP request to " + serverName + " (" + ipAddress + ")\n" + HexDump.dump(buf));
+            }
             packet = new DatagramPacket(buf, buf.length);
             socket.setSoTimeout(timeout);
             socket.receive(packet);
-
-            // Immediately record the incoming timestamp
-            double destinationTimestamp = (System.currentTimeMillis()/1000.0) + SECONDS_1900_TO_EPOCH;
-
+            double destinationTimestamp = (System.currentTimeMillis() / 1000.0) + SECONDS_1900_TO_EPOCH;
             if (packet.getLength() < MIN_PKT_LEN) {
-                if (log != null && log.shouldWarn())
-                    log.warn("Short packet length " + packet.getLength());
+                if (log != null && log.shouldWarn()) {
+                    log.warn("Received NTP response from " + serverName + " (" + ipAddress + ") with insufficient length: " + packet.getLength() + " bytes");
+                }
                 return null;
             }
-
-            // Process response
             NtpMessage msg = new NtpMessage(packet.getData());
-
-            String from = packet.getAddress().getHostAddress();
-            int port = packet.getPort();
-            if (log != null && log.shouldDebug())
-                log.debug("Received from: " + from + " port " + port +
-                          '\n' + msg + '\n' + HexDump.dump(packet.getData()));
-
-            // spoof check
-            if (port != NTP_PORT || !who.equals(from)) {
-                if (log != null && log.shouldWarn())
-                    log.warn("Sent to " + who + " port " + NTP_PORT+ " but received from " + packet.getSocketAddress());
+            String fromIP = packet.getAddress().getHostAddress();
+            int fromPort = packet.getPort();
+            if (log != null && log.shouldDebug()) {
+                log.debug("Received NTP response from " + fromIP + ":" + fromPort + "\n" +
+                          msg + "\n" + HexDump.dump(packet.getData()));
+            }
+            // Spoofing check: confirm response from expected host and port
+            if (fromPort != NTP_PORT || !ipAddress.equals(fromIP)) {
+                if (log != null && log.shouldWarn()) {
+                    log.warn("Potential spoof detected: Sent request to " + ipAddress + ":" + NTP_PORT +
+                             " but received response from " + packet.getSocketAddress());
+                }
                 return null;
             }
-
-            // Stratum must be between 1 (atomic) and 15 (maximum defined value)
-            // Anything else is right out, treat such responses like errors
-            // KoD (stratum 0) processing is below, after origin time check
+            // Stratum check: valid strata are between 1 and 15 for servers, 0 for KoD special message
             if (msg.stratum > 15) {
-                if (log != null && log.shouldWarn())
-                    log.warn("NTP server " + serverName + " bad stratum " + msg.stratum);
+                if (log != null && log.shouldWarn()) {
+                    log.warn("Received NTP response from " + serverName + " (" + ipAddress + ") with invalid stratum: " + msg.stratum);
+                }
                 return null;
             }
-
-            // spoof check
-            if (!DataHelper.eq(txtime, 0, packet.getData(), OFF_ORIGTIME, 8)) {
-                if (log != null && log.shouldWarn())
-                    log.warn("Origin time mismatch sent:\n" + HexDump.dump(txtime) +
-                             "rcvd:\n" + HexDump.dump(packet.getData(), OFF_ORIGTIME, 8));
+            // Origin timestamp check for spoofing protection
+            if (!DataHelper.eq(transmitTimestampBytes, 0, packet.getData(), OFF_ORIGTIME, 8)) {
+                if (log != null && log.shouldWarn()) {
+                    log.warn("Origin timestamp mismatch between sent and received NTP packets:\nSent:\n" +
+                             HexDump.dump(transmitTimestampBytes) + "Received:\n" + HexDump.dump(packet.getData(), OFF_ORIGTIME, 8));
+                }
                 return null;
             }
-
-            // More sanity checks
-            // See http://doolittle.icarus.com/ntpclient/README
-            // See RFC 4330 Sec. 5
-            if (msg.leapIndicator == 3 ||
-                msg.version < 3 ||
-                // 4 for server. Above reference is wrong, it says 3 which is client.
-                msg.mode != 4 ||
-                msg.transmitTimestamp <= 0 ||
-                // following values are in seconds, vs. 1/65536 seconds in above reference
-                Math.abs(msg.rootDelay) > 1.0d ||
+            // Sanity checks - leapIndicator, version, mode, timestamps, delays
+            if (msg.leapIndicator == 3 || msg.version < 3 || msg.mode != 4 ||
+                msg.transmitTimestamp <= 0 || Math.abs(msg.rootDelay) > 1.0d ||
                 Math.abs(msg.rootDispersion) > 1.0d) {
-                if (log != null && log.shouldWarn())
-                    log.warn("Failed sanity checks:\n" + msg);
+                if (log != null && log.shouldWarn()) {
+                    log.warn("Sanity check failed for NTP response from " + serverName + " (" + ipAddress + "):\n" + msg);
+                }
                 return null;
             }
-
-            // KoD check (AFTER spoof checks)
+            // KoD (Kiss of Death) check - server telling client to stop requests temporarily
             if (msg.stratum == 0) {
-                why = msg.referenceIdentifierToString();
-                // Remember the specific IP, not the server name, although RFC 4330
-                // probably wants us to block the name
-                kisses.put(who, why);
-                if (log != null)
-                    log.logAlways(Log.WARN, "KoD from NTP server " + serverName + " (" + who + ") " + why);
+                String koDDetails = msg.referenceIdentifierToString();
+                kisses.put(ipAddress, koDDetails);
+                if (log != null) {
+                    log.logAlways(Log.WARN, "Received Kiss of Death (KoD) from NTP server " + serverName + " (" + ipAddress + "). Reason: " + koDDetails);
+                }
                 return null;
             }
-
-
+            // Calculate local clock offset relative to received NTP time
             double localClockOffset = ((msg.receiveTimestamp - msg.originateTimestamp) +
                                        (msg.transmitTimestamp - destinationTimestamp)) / 2;
-
-            long[] rv = new long[2];
-            rv[0] = (long)(System.currentTimeMillis() + localClockOffset*1000);
-            rv[1] = msg.stratum;
+            long[] result = new long[2];
+            result[0] = (long)(System.currentTimeMillis() + localClockOffset * 1000);
+            result[1] = msg.stratum;
             if (log != null && log.shouldInfo()) {
-                double roundTripDelay = (destinationTimestamp-msg.originateTimestamp) -
-                                        (msg.receiveTimestamp-msg.transmitTimestamp);
-                log.info("host: " + packet.getAddress().getHostAddress() + " rtt: " +
-                         roundTripDelay + " offset: " + localClockOffset + " seconds");
+                double roundTripDelay = (destinationTimestamp - msg.originateTimestamp) -
+                                        (msg.receiveTimestamp - msg.transmitTimestamp);
+                log.info(String.format("NTP time synchronization info from %s - RTT: %.3f sec, Local clock offset: %.6f sec",
+                        packet.getAddress().getHostAddress(), roundTripDelay, localClockOffset));
             }
-            return rv;
+            return result;
         } catch (IOException ioe) {
-            if (log != null && log.shouldWarn())
-                log.warn("NTP failure from " + serverName, ioe);
+            if (log != null && log.shouldWarn()) {
+                log.warn("IOException during NTP query to server " + serverName + ": " + ioe);
+            }
             return null;
         } finally {
-            if (socket != null)
+            if (socket != null) {
                 socket.close();
+            }
         }
     }
-
-    /**
-     * Usage: NtpClient [-6] [servers...]
-     * default pool.ntp.org
-     */
-    public static void main(String[] args) throws IOException {
-        boolean ipv6 = false;
-        if (args.length > 0 && args[0].equals("-6")) {
-            ipv6 = true;
-            if (args.length == 1)
-                args = new String[0];
-            else
-                args = Arrays.copyOfRange(args, 1, args.length);
-        }
-        if (args.length <= 0) {
-           args = new String[] { "pool.ntp.org" };
-        }
-        System.out.println("Querying " + Arrays.toString(args));
-
-        Log log = new Log(NtpClient.class);
-        try {
-            long[] rv = currentTimeAndStratum(args, DEFAULT_TIMEOUT, ipv6, log);
-            System.out.println("Current time: " + new java.util.Date(rv[0]) + " (stratum " + rv[1] +
-                               ") offset " + (rv[0] - System.currentTimeMillis()) + "ms");
-        } catch (IllegalArgumentException iae) {
-            System.out.println("Failed: " + iae.getMessage());
-        }
-    }
-
-/****
-    private static void printUsage() {
-        System.out.println(
-        "NtpClient - an NTP client for Java.\n" +
-        "\n" +
-        "This program connects to an NTP server and prints the current time to the console.\n" +
-        "\n" +
-        "\n" +
-        "Usage: java NtpClient server[ server]*\n" +
-        "\n" +
-        "\n" +
-        "This program is copyright (c) Adam Buckley 2004 and distributed under the terms\n" +
-        "of the GNU General Public License.  This program is distributed in the hope\n" +
-        "that it will be useful, but WITHOUT ANY WARRANTY; without even the implied\n" +
-        "warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU\n" +
-        "General Public License available at http://www.gnu.org/licenses/gpl.html for\n" +
-        "more details.");
-
-    }
-****/
 }
