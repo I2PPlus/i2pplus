@@ -1089,9 +1089,9 @@ input[name="logfilename"],input[name="logformat"],input[name="logdateformat"],in
 #config_summarybar h3.tabletitle:first-of-type{margin-top:-4px}
 #refreshsidebar{margin-bottom:12px}
 #refreshsidebar td{padding:10px 16px;border:0;background:var(--th)}
-#refreshsidebar label{padding:8px 16px;min-width:440px;display:inline-block;vertical-align:text-top;box-shadow:var(--bevel);background:var(--badge)}
+#refreshsidebar label{padding:8px 16px;display:inline-block;vertical-align:text-top;box-shadow:var(--bevel);background:var(--badge)}
 #refreshsidebar label#unifiedSidebar{padding:6px 16px}
-#refreshsidebar label b{min-width:140px;display:inline-block;text-align:right}
+#refreshsidebar label b{display:inline-block;text-align:right}
 #refreshsidebar .optbox{margin:12px 6px}
 #sidebarconf{margin-top:-1px}
 #sidebarconf+.formaction{margin-bottom:-3px}

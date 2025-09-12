@@ -1113,8 +1113,8 @@ p.infohelp+hr,p.infohelp+p+hr,#tunnelconfig+hr{display:none}
 #enablefullstats{line-height:1.2;text-align:left;background:var(--bg)}
 #profiles_overview,#themeheading{margin-top:15px}
 #refreshsidebar td{padding:6px 8px 6px 12px;background:var(--bg)}
-#refreshsidebar label{min-width:400px;display:inline-block;vertical-align:middle}
-#refreshsidebar label b{min-width:130px;display:inline-block;text-align:right}
+#refreshsidebar label{display:inline-block;vertical-align:middle}
+#refreshsidebar label b{display:inline-block;text-align:right}
 #webappconfigtext{margin:11px 0 -1px}
 #config_stats .tablefooter td,#enablefull td{padding:10px}
 #netconfig tr,#externali2cp tr{background:var(--bg)}
