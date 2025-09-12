@@ -67,6 +67,7 @@ async function start() {
   startAutoRefresh();
   checkConnectionStatus();
   window.addEventListener("resize", stickySidebar, { passive: true });
+  stickySidebar();
 }
 
 function startAutoRefresh() {

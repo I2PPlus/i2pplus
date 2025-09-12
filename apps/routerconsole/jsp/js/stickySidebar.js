@@ -2,15 +2,15 @@
 /* License: AGPLv3 or later */
 
 function stickySidebar() {
-  var html = document.querySelector("html");
-  var htmlHeight = html.getBoundingClientRect().height;
-  var sb = document.getElementById("sidebar");
-  var sbHeight = sb.getBoundingClientRect().height;
-  var sbWrap = document.getElementById("sb_wrap");
-  var viewportHeight = window.visualViewport.height;
-  var viewportWidth = window.visualViewport.width;
-  var sectionToggle = document.querySelector("toggleSection");
-  var iframe = document.querySelector(".embed");
+  const html = document.querySelector("html");
+  const htmlHeight = html.getBoundingClientRect().height;
+  const sb = document.getElementById("sidebar");
+  const sbHeight = sb.getBoundingClientRect().height;
+  const sbWrap = document.getElementById("sb_wrap");
+  const viewportHeight = window.visualViewport.height;
+  const viewportWidth = window.visualViewport.width;
+  const sectionToggle = document.querySelector("toggleSection");
+  const iframe = document.querySelector(".embed");
   let debug = false;
 
   if (!sbWrap) {return;}
@@ -34,9 +34,14 @@ function stickySidebar() {
   }
   calcHeight();
 
+  if (iframe) { setTimeout(() => { calcHeight(); }, 1000); }
+  else {calcHeight();}
+
   sbWrap.addEventListener("click", function(element) {
     if (element.target.className === "toggleSection") {calcHeight();}
   });
+
+  window.addEventListener("resize", () => { calcHeight(); });
 
 }
 

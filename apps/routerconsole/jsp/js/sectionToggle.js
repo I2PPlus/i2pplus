@@ -298,10 +298,10 @@ function sectionToggler() {
   addToggleListeners();
 
   document.addEventListener("DOMContentLoaded", () => {
+    const wrap = document.getElementById("sb_wrap");
+    wrap.removeAttribute("style");
     xhr.classList.add("fadein");
-    setTimeout(() => {
-      xhr.classList.remove("fadein");
-    }, 120);
+    setTimeout(() => { xhr.classList.remove("fadein"); }, 120);
   });
 }
 
