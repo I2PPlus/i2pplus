@@ -1,6 +1,8 @@
 /* I2P+ StickySidebar by dr|z3d */
 /* License: AGPLv3 or later */
 function stickySidebar() {
+  if (stickySidebarEnabled === false) return;
+
   const sbWrap = document.getElementById("sb_wrap");
   const sb = document.getElementById("sidebar");
   const iframe = document.querySelector(".embed");

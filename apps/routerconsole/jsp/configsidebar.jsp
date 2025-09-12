@@ -6,7 +6,6 @@
 %>
 <%@include file="head.jsi" %>
 <%=intl.title("config sidebar")%>
-<style>input.default {width: 1px; height: 1px; visibility: hidden;}</style>
 </head>
 <body>
 <%@include file="sidebar.jsi" %>
@@ -36,6 +35,10 @@
 <label id=unifiedSidebar><b><%=intl._t("Unified sidebar")%>:</b>
 <input type=checkbox class="optbox slider" name=unifiedSidebar value=true <%=(intl.useUnifiedSidebar() ? "checked" : "")%>>
 <%=intl._t("Use the same sidebar on all pages")%></label>
+<input type=hidden name=unifiedSidebar value=false>
+<label id=stickySidebar><b><%=intl._t("Sticky sidebar")%>:</b>
+<input type=checkbox class="optbox slider" name=stickySidebar value=true <%=(intl.useStickySidebar() ? "checked" : "")%>>
+<%=intl._t("Enable conditional fixed sidebar")%></label>
 <input type=hidden name=unifiedSidebar value=false>
 </td>
 <td class=right><input type=submit name=action class=accept value="<%=intl._t("Save")%>"></td>

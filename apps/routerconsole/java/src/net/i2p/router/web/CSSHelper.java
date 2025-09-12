@@ -38,6 +38,9 @@ public class CSSHelper extends HelperBase {
     /** @since 0.9.67+ */
     public static final String PROP_UNIFIED_SIDEBAR = "routerconsole.unifiedSidebar";
     public static final boolean DEFAULT_UNIFIED_SIDEBAR = false;
+    /** @since 0.9.68+ */
+    public static final String PROP_STICKY_SIDEBAR = "routerconsole.stickySidebar";
+    public static final boolean DEFAULT_STICKY_SIDEBAR = true;
 
     /**
      *  formerly stored in System.getProperty("router.consoleNonce")
@@ -87,6 +90,24 @@ public class CSSHelper extends HelperBase {
      * @since 0.9.67+
      */
     public boolean useUnifiedSidebar() {return _context.getBooleanProperty(PROP_UNIFIED_SIDEBAR);}
+
+    /**
+     * Returns whether we should use a unified sidebar
+     * @since 0.9.67+
+     */
+    public boolean enableUnifiedSidebar() {return _context.getBooleanPropertyDefaultTrue(PROP_UNIFIED_SIDEBAR);}
+
+    /**
+     * Returns whether we should use a sticky sidebar when the sidebar height is less than the height of the viewport
+     * @since 0.9.68+
+     */
+    public boolean useStickySidebar() {return _context.getBooleanProperty(PROP_STICKY_SIDEBAR);}
+
+    /**
+     * Returns whether we should use a unified sidebar
+     * @since 0.9.68+
+     */
+    public boolean enableStickySidebar() {return _context.getBooleanPropertyDefaultTrue(PROP_STICKY_SIDEBAR);}
 
     /**
      * change default language for the router AND save it

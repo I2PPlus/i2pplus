@@ -21,6 +21,7 @@
   java.io.File themeOverride = new java.io.File(themeBase + "override.css");
   boolean hasOverride = themeOverride.exists();
   boolean useSoraFont = intl.useSoraDisplayFont();
+  boolean useStickySidebar = intl.useStickySidebar();
   String type = request.getContentType();
   boolean needsCSP = true;
   boolean isAdvancedMode = intl.isAdvancedMode();
