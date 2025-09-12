@@ -323,7 +323,6 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 .sb_icon#transit:active{background:var(--share) no-repeat 25% center/19px,var(--badge_active)}
 .sb_icon#tcount:active{background:var(--hardhat) no-repeat 25% center/19px,var(--badge_active)}
 #lsCount.badge,#newsCount,#newHosts:not([hidden]),#sidebar h3 a .badge,#tunnelCount{padding:2px 5px 1px;display:inline-block;position:relative;z-index:999;white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;font-size:80%;font-weight:700;box-shadow:0 0 0 1px #141,var(--highlight);background:var(--badge);animation:fade .2s ease .1s reverse both}
-/*#newsCount[hiden]{display:none;animation:none}*/
 #lsCount.badge,#newHosts{animation:none}
 #sidebar #sb_status #lsCount.badge,#sidebar .net_status:hover #sb_status #lsCount.badge{padding:2px 3px 1px;margin:0 0 0 3px;line-height:1;vertical-align:middle;color:#494}
 #lsCount.badge{margin-top:1px;font-size:8pt!important}
@@ -2030,7 +2029,7 @@ form[action="/createreseed"]>h3{margin-bottom:-13px;padding:10px;word-spacing:.1
 /* confignet */
 #iptransport{margin-bottom:11px}
 #defaultswork{margin-bottom:11px;padding:15px 10px 15px 45px}
-#upnpconfig,#ipchange,#ipv6config,#tcpconfig,#confignotes,#defaultswork{margin-top:-12px;margin-bottom:-13px;padding:10px/*;border:var(--border)*/}
+#upnpconfig,#ipchange,#ipv6config,#tcpconfig,#confignotes,#defaultswork{margin-top:-12px;margin-bottom:-13px;padding:10px}
 #confignotes{margin-bottom:-21px;padding:20px 24px 20px 58px;background:var(--infohelp) no-repeat 15px center}
 #netconfig tr:first-child td.infohelp{background-image:url(/themes/console/images/networkconfig.svg)}
 #netconfig .optbox{margin:8px 6px;display:inline-block}
