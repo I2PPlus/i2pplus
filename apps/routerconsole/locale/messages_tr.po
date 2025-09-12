@@ -4608,9 +4608,6 @@ msgstr "I2P web sunucusu (eepsitesi)"
 msgid "Browser launch at startup"
 msgstr "Başlangıçta açılacak tarayıcı"
 
-msgid "I2P+ Router Console"
-msgstr "I2P+ Yönlendirici Konsolu"
-
 msgid "Open Router Console in web browser at startup"
 msgstr "Yöneltici panosu başlangıçta web tarayıcı içinde açılsın"
 

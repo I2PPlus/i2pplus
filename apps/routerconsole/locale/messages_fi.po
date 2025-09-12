@@ -993,7 +993,7 @@ msgid "Description"
 msgstr "Kuvaus"
 
 msgid "I2P+ Router Console"
-msgstr "I2P+ reitittimen ohjauspaneeli"
+msgstr "I2P+ RreititinKonsoli"
 
 msgid "Torrents"
 msgstr "Torrentit"
@@ -4607,9 +4607,6 @@ msgstr "I2P-verkkopalvelin (eepsite)"
 
 msgid "Browser launch at startup"
 msgstr "Selain käynnistyy käynnistyksen yhteydessä"
-
-msgid "I2P+ Router Console"
-msgstr "I2P-reititinkonsoli"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "Avaa Router Console verkkoselaimessa käynnistyksen yhteydessä"

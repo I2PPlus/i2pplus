@@ -4590,9 +4590,6 @@ msgstr "I2P ウェブサーバー (eepsite)"
 msgid "Browser launch at startup"
 msgstr "スタートアップ時にブラウザーが起動"
 
-msgid "I2P+ Router Console"
-msgstr "I2P+ルーターコンソール"
-
 msgid "Open Router Console in web browser at startup"
 msgstr "スタートアップ時にウェブブラウザでルーターコンソールを開く"
 

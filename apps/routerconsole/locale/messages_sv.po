@@ -993,7 +993,7 @@ msgid "Description"
 msgstr "Beskrivning"
 
 msgid "I2P+ Router Console"
-msgstr "I2P+ Routerkonsol"
+msgstr "I2P+ RouterKonsol"
 
 msgid "Torrents"
 msgstr "Torrenter"
@@ -4607,9 +4607,6 @@ msgstr "I2P-webbserver (eepsida)"
 
 msgid "Browser launch at startup"
 msgstr "Starta webbläsare vid uppstart"
-
-msgid "I2P+ Router Console"
-msgstr "I2P+ RouterKonsol"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "Öppna routerkonsolen i webbläsare vid uppstart"

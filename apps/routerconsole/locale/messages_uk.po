@@ -996,7 +996,7 @@ msgid "Description"
 msgstr "Опис"
 
 msgid "I2P+ Router Console"
-msgstr "Консоль роутера I2P"
+msgstr "Консоль роутера I2P+"
 
 msgid "Torrents"
 msgstr "Торренти"
@@ -4625,9 +4625,6 @@ msgstr "Веб сервер I2P (eepsite)"
 
 msgid "Browser launch at startup"
 msgstr "Запуск браузера під час запуску"
-
-msgid "I2P+ Router Console"
-msgstr "Консоль маршрутизатора I2P"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "Відкрийте консоль маршрутизатора у веб-браузері під час запуску"

@@ -993,7 +993,7 @@ msgid "Description"
 msgstr "Περιγραφή"
 
 msgid "I2P+ Router Console"
-msgstr "Κονσόλα I2P Router"
+msgstr "Κονσόλα δρομολογητή I2P+"
 
 msgid "Torrents"
 msgstr "Torrents"
@@ -4607,9 +4607,6 @@ msgstr "Διακομιστής I2P (eepsite)"
 
 msgid "Browser launch at startup"
 msgstr "Εκκίνηση περιηγητή κατά την εκκίνηση"
-
-msgid "I2P+ Router Console"
-msgstr "Κονσόλα δρομολογητή I2P+"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "Άνοιγμα κονσόλας δρομολογητή στον περιηγητή κατά την εκκίνηση"

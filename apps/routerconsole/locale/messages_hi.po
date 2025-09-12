@@ -4608,9 +4608,6 @@ msgstr "I2P वेब सर्वर (eepsite)"
 msgid "Browser launch at startup"
 msgstr "ब्राउज़र को शुरुआत के समय लॉन्च करें"
 
-msgid "I2P+ Router Console"
-msgstr "I2P+ रूटर कंसोल"
-
 msgid "Open Router Console in web browser at startup"
 msgstr "शुरुआत के समय वेब ब्राउज़र में रूटर कंसोल खोलें"
 

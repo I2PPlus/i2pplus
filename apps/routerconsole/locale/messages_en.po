@@ -4608,9 +4608,6 @@ msgstr ""
 msgid "Browser launch at startup"
 msgstr ""
 
-msgid "I2P+ Router Console"
-msgstr ""
-
 msgid "Open Router Console in web browser at startup"
 msgstr ""
 

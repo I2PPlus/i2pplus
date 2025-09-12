@@ -999,13 +999,13 @@ msgid "Description"
 msgstr "Opis"
 
 msgid "I2P+ Router Console"
-msgstr "Konzola usmerjevalnika I2P"
+msgstr "Konzola Usmerjevalnika I2P+"
 
 msgid "Torrents"
 msgstr "Torrenti"
 
 msgid "Tunnel Manager"
-msgstr "Upravitelj tuneljev"
+msgstr "Upravitelj Tuneljev"
 
 msgid "Identification Image Generator"
 msgstr "Generator slike za prepoznavanje"
@@ -4643,9 +4643,6 @@ msgstr "Spletni strežnik I2P (eepsite)"
 
 msgid "Browser launch at startup"
 msgstr "Zagon brskalnika pri zagonu"
-
-msgid "I2P+ Router Console"
-msgstr "Konzola usmerjevalnika I2P+"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "Odpri konzolo usmerjevalnika v spletnem brskalniku pri zagonu"

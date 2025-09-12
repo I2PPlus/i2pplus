@@ -4590,9 +4590,6 @@ msgstr "匿名网站服务"
 msgid "Browser launch at startup"
 msgstr "路由器启动时启动浏览器"
 
-msgid "I2P+ Router Console"
-msgstr "I2P+ 路由控制台"
-
 msgid "Open Router Console in web browser at startup"
 msgstr "路由启动时打开网页版路由控制台"
 

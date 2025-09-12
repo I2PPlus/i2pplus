@@ -4608,9 +4608,6 @@ msgstr "Serveur Web I2P (eepsite)"
 msgid "Browser launch at startup"
 msgstr "Lancement du navigateur au démarrage"
 
-msgid "I2P+ Router Console"
-msgstr "Console I2P+ Router"
-
 msgid "Open Router Console in web browser at startup"
 msgstr "Ouvrir la console du routeur dans le navigateur Web au démarrage"
 

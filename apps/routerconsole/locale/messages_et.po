@@ -994,7 +994,7 @@ msgid "Description"
 msgstr "Kirjeldus"
 
 msgid "I2P+ Router Console"
-msgstr "I2P+ ruuteri konsool"
+msgstr "I2P+ Ruuteri Konsool"
 
 msgid "Torrents"
 msgstr "Torrentid"
@@ -4608,9 +4608,6 @@ msgstr "I2P veebiserver (eepsite)"
 
 msgid "Browser launch at startup"
 msgstr "Brauseri käivitamine koos ruuteriga"
-
-msgid "I2P+ Router Console"
-msgstr "I2P+ ruuteri konsool"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "Ava ruuteri konsool brauseris ruuteri käivitumisel"

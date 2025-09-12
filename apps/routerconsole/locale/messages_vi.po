@@ -990,7 +990,7 @@ msgid "Description"
 msgstr "Mô tả"
 
 msgid "I2P+ Router Console"
-msgstr "Bảng điều khiển bộ định tuyến I2P"
+msgstr "Bảng điều khiển bộ định tuyến I2P+"
 
 msgid "Torrents"
 msgstr "Torrent"
@@ -4589,9 +4589,6 @@ msgstr "Máy chủ Web I2P (trang web trực tuyến)"
 
 msgid "Browser launch at startup"
 msgstr "Khởi chạy trình duyệt khi khởi động"
-
-msgid "I2P+ Router Console"
-msgstr "Bảng điều khiển bộ định tuyến I2P"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "Mở Bảng điều khiển Bộ định tuyến trong trình duyệt web khi khởi động"

@@ -996,7 +996,7 @@ msgid "Description"
 msgstr "Popis"
 
 msgid "I2P+ Router Console"
-msgstr "I2P+ konzole routeru"
+msgstr "I2P+ Konzole Routeru"
 
 msgid "Torrents"
 msgstr "Torrenty"
@@ -4625,9 +4625,6 @@ msgstr "Webový server I2P (eepsite)"
 
 msgid "Browser launch at startup"
 msgstr "Spuštění prohlížeče při spuštění"
-
-msgid "I2P+ Router Console"
-msgstr "Konzola směrovače I2P"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "Otevřete Router Console ve webovém prohlížeči při spuštění"

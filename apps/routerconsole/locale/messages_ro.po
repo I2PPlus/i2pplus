@@ -996,7 +996,7 @@ msgid "Description"
 msgstr "Descriere"
 
 msgid "I2P+ Router Console"
-msgstr "Consola de Router I2P"
+msgstr "I2P+ Consolă de Router"
 
 msgid "Torrents"
 msgstr "Torente"
@@ -4625,9 +4625,6 @@ msgstr "I2P Webserver (eepsite)"
 
 msgid "Browser launch at startup"
 msgstr "Lansează browser-ul la pornire"
-
-msgid "I2P+ Router Console"
-msgstr "I2P+ Consolă de Router"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "Deschideți consola router în browser-ul web la pornire"

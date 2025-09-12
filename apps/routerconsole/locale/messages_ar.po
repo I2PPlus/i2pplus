@@ -1005,7 +1005,7 @@ msgid "Description"
 msgstr "وصف"
 
 msgid "I2P+ Router Console"
-msgstr "مركز تحكم I2P"
+msgstr "مركز تحكم I2P+"
 
 msgid "Torrents"
 msgstr "تورنت"
@@ -4679,9 +4679,6 @@ msgstr "خادم الويب I2P (eepsite)"
 
 msgid "Browser launch at startup"
 msgstr "اطلاق المتصفح عند البداية"
-
-msgid "I2P+ Router Console"
-msgstr "وحدة التوجيه I2P+"
 
 msgid "Open Router Console in web browser at startup"
 msgstr "فتح شاشة التحكم في المتصفح عند البداية"
