@@ -7,7 +7,6 @@
 %>
 <%@include file="head.jsi" %>
 <%=intl.title("config UI")%>
-<style>input.default {width: 1px; height: 1px; visibility: hidden;}</style>
 </head>
 <body>
 <%@include file="sidebar.jsi" %>
