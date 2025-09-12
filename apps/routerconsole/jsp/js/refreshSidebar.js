@@ -61,9 +61,9 @@ worker.port.addEventListener("message", ({ data }) => {
 async function start() {
   isSidebarVisible();
   updateCachedElements();
+  sectionToggler();
   newHosts();
   countNewsItems();
-  sectionToggler();
   startAutoRefresh();
   checkConnectionStatus();
   window.addEventListener("resize", stickySidebar, { passive: true });
@@ -256,7 +256,7 @@ function initSidebar() {
       clearInterval(interval);
       start();
     }
-  }, 10);
+  }, 5);
 }
 
 initSidebar();
