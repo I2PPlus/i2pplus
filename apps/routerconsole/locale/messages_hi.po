@@ -992,8 +992,8 @@ msgstr "क्लास और तर्क"
 msgid "Description"
 msgstr "विवरण"
 
-msgid "I2P Router Console"
-msgstr "I2P राउटर कंसोल"
+msgid "I2P+ Router Console"
+msgstr "I2P+ राउटर कंसोल"
 
 msgid "Torrents"
 msgstr "टॉरेंट्स"

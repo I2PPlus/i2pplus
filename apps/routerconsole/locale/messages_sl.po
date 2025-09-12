@@ -998,7 +998,7 @@ msgstr "Razred in argumenti"
 msgid "Description"
 msgstr "Opis"
 
-msgid "I2P Router Console"
+msgid "I2P+ Router Console"
 msgstr "Konzola usmerjevalnika I2P"
 
 msgid "Torrents"

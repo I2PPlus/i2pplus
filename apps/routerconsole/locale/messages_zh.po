@@ -989,8 +989,8 @@ msgstr "类与参数"
 msgid "Description"
 msgstr "描述"
 
-msgid "I2P Router Console"
-msgstr "I2P 路由控制台"
+msgid "I2P+ Router Console"
+msgstr "I2P+ 路由控制台"
 
 msgid "Torrents"
 msgstr "Torrents"

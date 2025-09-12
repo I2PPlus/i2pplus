@@ -992,7 +992,7 @@ msgstr "Clase y argumentos"
 msgid "Description"
 msgstr "Descripción"
 
-msgid "I2P Router Console"
+msgid "I2P+ Router Console"
 msgstr "Consola del router"
 
 msgid "Torrents"

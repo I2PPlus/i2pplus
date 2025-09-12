@@ -992,8 +992,8 @@ msgstr "Osztály és argumentumok"
 msgid "Description"
 msgstr "Leírás"
 
-msgid "I2P Router Console"
-msgstr "I2P Router Konzol"
+msgid "I2P+ Router Console"
+msgstr "I2P+ Router Konzol"
 
 msgid "Torrents"
 msgstr "Torrent"

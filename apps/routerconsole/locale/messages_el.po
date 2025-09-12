@@ -992,7 +992,7 @@ msgstr "Κλάση και ορίσματα"
 msgid "Description"
 msgstr "Περιγραφή"
 
-msgid "I2P Router Console"
+msgid "I2P+ Router Console"
 msgstr "Κονσόλα I2P Router"
 
 msgid "Torrents"

@@ -1004,7 +1004,7 @@ msgstr "الفئة"
 msgid "Description"
 msgstr "وصف"
 
-msgid "I2P Router Console"
+msgid "I2P+ Router Console"
 msgstr "مركز تحكم I2P"
 
 msgid "Torrents"

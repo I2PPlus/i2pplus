@@ -989,8 +989,8 @@ msgstr "クラスと引数"
 msgid "Description"
 msgstr "説明"
 
-msgid "I2P Router Console"
-msgstr "I2P ルータコンソール"
+msgid "I2P+ Router Console"
+msgstr "I2P+ ルータコンソール"
 
 msgid "Torrents"
 msgstr "トレントマネージャー"

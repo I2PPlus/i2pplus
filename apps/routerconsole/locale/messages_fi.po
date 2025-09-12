@@ -992,8 +992,8 @@ msgstr "Luokka ja argumentit"
 msgid "Description"
 msgstr "Kuvaus"
 
-msgid "I2P Router Console"
-msgstr "I2P reitittimen ohjauspaneeli"
+msgid "I2P+ Router Console"
+msgstr "I2P+ reitittimen ohjauspaneeli"
 
 msgid "Torrents"
 msgstr "Torrentit"

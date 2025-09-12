@@ -989,8 +989,8 @@ msgstr "클래스, 매개변수"
 msgid "Description"
 msgstr "설명"
 
-msgid "I2P Router Console"
-msgstr "I2P 라우터 콘솔"
+msgid "I2P+ Router Console"
+msgstr "I2P+ 라우터 콘솔"
 
 msgid "Torrents"
 msgstr "토렌트"

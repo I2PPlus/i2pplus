@@ -989,7 +989,7 @@ msgstr "Lớp và đối số"
 msgid "Description"
 msgstr "Mô tả"
 
-msgid "I2P Router Console"
+msgid "I2P+ Router Console"
 msgstr "Bảng điều khiển bộ định tuyến I2P"
 
 msgid "Torrents"

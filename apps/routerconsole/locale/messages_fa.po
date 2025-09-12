@@ -992,7 +992,7 @@ msgstr "کلاس و استدلال"
 msgid "Description"
 msgstr "شرح"
 
-msgid "I2P Router Console"
+msgid "I2P+ Router Console"
 msgstr "کنسول روتر I2P"
 
 msgid "Torrents"

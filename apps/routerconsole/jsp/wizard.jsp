@@ -1,8 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
 <jsp:useBean class="net.i2p.router.web.helpers.WizardHelper" id="wizhelper" scope="session"/>
 <%
-    // note that for the helper we use a session scope, not a request scope,
-    // so that we can access the NDT test results.
+    // Note that for the helper we use a session scope, not a request scope, so that we can access the NDT test results.
     // The MLabHelper singleton will prevent multiple simultaneous tests, even across sessions.
 
     // page ID
@@ -57,21 +56,15 @@
     wizhelper.setContextId(i2pcontextId);
 %>
 </head>
-<%
-    if (ipg == 3) {
-%>
+<%  if (ipg == 3) { %>
 <body id=wizardpage>
-<%
-    } else {
-%>
+<%  } else { %>
 <body id=wizardpage class=bandwidthtester>
-<%
-    }
-%>
+<%  } %>
 <div id=sb_wrap class="" style=width:200px;float:left;margin-right:20px>
 <div class=sb id=sidebar>
 <div id=sb_logo style=height:36px;pointer-events:none>
-<img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/i2plogo.png" alt="<%=intl._t("I2P Router Console").replace("I2P", "I2P+")%>" title="<%=intl._t("I2P Router Console").replace("I2P", "I2P+")%>" width="200">
+<img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/i2plogo.png" alt="<%=intl._t("I2P+ Router Console")%>" title="<%=intl._t("I2P+ Router Console")%>" width="200">
 </div>
 <hr>
 <h3>Setup Wizard</h3>
@@ -81,18 +74,11 @@
 </form>
 </div>
 </div>
-<%
-    if (ipg > 0 && ipg < 5 || ipg == LAST_PAGE) {
-        // language selection
-%>
+<%  if (ipg > 0 && ipg < 5 || ipg == LAST_PAGE) { /* language selection */ %>
 <h1>New Install Wizard <span id=pagecount style=float:right><%=ipg%>/<%=LAST_PAGE%></span></h1>
-<%
-    } else {
-%>
+<%  } else { %>
 <h1>Unknown Wizard page <span id=pagecount style=float:right><%=ipg%>/<%=LAST_PAGE%></span></h1>
-<%
-    }
-%>
+<%  } %>
 <div class=main id=setupwizard>
 <div id=wizard>
 <jsp:useBean class="net.i2p.router.web.helpers.WizardHandler" id="formhandler" scope="request"/>

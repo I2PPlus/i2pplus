@@ -995,8 +995,8 @@ msgstr "Třída a argumenty"
 msgid "Description"
 msgstr "Popis"
 
-msgid "I2P Router Console"
-msgstr "I2P konzole routeru"
+msgid "I2P+ Router Console"
+msgstr "I2P+ konzole routeru"
 
 msgid "Torrents"
 msgstr "Torrenty"

@@ -239,7 +239,7 @@ public class ConfigClientsHelper extends HelperBase {
                 String desc;
                 // use descriptions already tagged elsewhere
                 if (app.equals("routerconsole"))
-                    desc = _t("I2P Router Console");
+                    desc = _t("I2P+ Router Console");
                 else if (app.equals("i2psnark"))
                     desc = _t("Torrents");
                 else if (app.equals("i2ptunnel"))
