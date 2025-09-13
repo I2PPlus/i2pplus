@@ -13,8 +13,8 @@ function stickySidebar() {
     const sbHeight = sb.getBoundingClientRect().height;
     const viewportHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
 
-    if (((sbHeight + 5 < viewportHeight) && (htmlHeight > viewportHeight) && (viewportHeight > 700)) ||
-        (iframe && iframe.getBoundingClientRect().height > viewportHeight && viewportHeight > 700)) {
+    if (((sbHeight + 5 < viewportHeight) && (htmlHeight > viewportHeight)) ||
+        (iframe && iframe.getBoundingClientRect().height > viewportHeight)) {
       sbWrap.style.position = "sticky";
       sbWrap.style.top = "5px";
       sbWrap.classList.add("sticky");
