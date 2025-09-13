@@ -575,9 +575,7 @@ public class PeerHelper extends HelperBase {
                .append(_t("Dir"));
             if (debugmode) {
                 buf.append("</th><th class=ipv6>")
-                   .append(_t("IPv6"))
-                   .append("</th><th class=ssuversion>")
-                   .append(_t("Version"));
+                   .append(_t("IPv6"));
             }
             buf.append("</th><th class=idle title=\"")
                .append(_t("Peer inactivity"))
@@ -727,9 +725,7 @@ public class PeerHelper extends HelperBase {
                 buf.append("<td class=ipv6>");
                 if (peer.isIPv6()) {buf.append("&#x2713;");}
                 else {buf.append("");}
-                buf.append("</td><td class=ssuversion>")
-                   .append(peer.getVersion())
-                   .append("</td>");
+                buf.append("</td>");
             }
 
             long idleIn = Math.max(now-peer.getLastReceiveTime(), 0);
@@ -851,7 +847,7 @@ public class PeerHelper extends HelperBase {
             String bwout = formatKBps(bpsOut).replace(".00", "");
             buf.append("<tfoot><tr class=tablefooter><td class=peer colspan=");
             long x = uptimeMsTotal/numPeers;
-            if (debugmode) {buf.append("6");}
+            if (debugmode) {buf.append("5");}
             else {buf.append("4");}
             buf.append("><b>")
                .append(ngettext("{0} peer", "{0} peers", ut.countActivePeers()))
