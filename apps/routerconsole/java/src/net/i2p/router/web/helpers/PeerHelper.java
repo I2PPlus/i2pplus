@@ -281,6 +281,8 @@ public class PeerHelper extends HelperBase {
      *  @since 0.9.31 moved from NTCPTransport
      */
     private void render(NTCPTransport nt, Writer out, String urlBase, int sortFlags) throws IOException {
+        boolean IPv6Enabled = _context.getBooleanProperty("i2np.ntcp.ipv6") != false ||
+                              _context.getBooleanProperty("i2np.udp.ipv6") != false;
         TreeSet<NTCPConnection> peers = new TreeSet<NTCPConnection>(getNTCPComparator(sortFlags));
         peers.addAll(nt.getPeers());
 
@@ -321,9 +323,13 @@ public class PeerHelper extends HelperBase {
                .append(_t("Direction/Introduction"))
                .append("\">")
                .append(_t("Dir"))
-               .append("</th><th class=ipv6>")
-               .append(_t("IPv6"))
-               .append("</th><th class=idle title=\"")
+               .append("</th>");
+            if (IPv6Enabled) {
+                buf.append("<th class=ipv6>")
+                   .append(_t("IPv6"))
+                   .append("</th>");
+            }
+            buf.append("<th class=idle title=\"")
                .append(_t("Peer inactivity"))
                .append("\">")
                .append(_t("Idle"))
@@ -384,10 +390,14 @@ public class PeerHelper extends HelperBase {
                    .append(_t("Outbound"))
                    .append("\"/></span>");
             }
-            buf.append("</td><td class=ipv6>");
-            if (con.isIPv6()) {buf.append("<span class=isIPv6>&#x2713;</span>");}
-            else {buf.append("");}
-            buf.append("</td><td class=idle><span class=right>")
+            buf.append("</td>");
+            if (IPv6Enabled) {
+                buf.append("<td class=ipv6>");
+                if (con.isIPv6()) {buf.append("<span class=isIPv6>&#x2713;</span>");}
+                else {buf.append("");}
+                buf.append("</td>");
+            }
+            buf.append("<td class=idle><span class=right>")
                .append(DataHelper.formatDuration2(con.getTimeSinceReceive(now)))
                .append("</span>")
                .append(THINSP)
@@ -464,7 +474,9 @@ public class PeerHelper extends HelperBase {
         if (!peers.isEmpty()) {
             String rx = formatRate(bpsRecv/1000).replace(".00", "");
             String tx = formatRate(bpsSend/1000).replace(".00", "");
-            buf.append("<tfoot><tr class=tablefooter><td class=peer colspan=5><b>")
+            buf.append("<tfoot><tr class=tablefooter><td class=peer colspan=")
+               .append(IPv6Enabled ? "5" : "4")
+               .append("><b>")
                .append(ngettext("{0} peer", "{0} peers", nt.countActivePeers()))
                .append("</b></td><td class=inout nowrap><span class=right><b>")
                .append(rx)
