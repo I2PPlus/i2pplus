@@ -6,178 +6,219 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-
 import net.i2p.data.DataHelper;
 import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.FormHandler;
 
-
 /**
- *  Simple sidebar configuration.
+ * Simple sidebar configuration handler.
  *
- *  @since 0.9.1
+ * @since 0.9.1
  */
 public class ConfigSidebarHandler extends FormHandler {
 
+    private static final String ORDER_PREFIX = "order_";
+    private static final String DELETE_PREFIX = "delete_";
+    private static final String MOVE_PREFIX = "move_";
+
+    /**
+     * Processes the form submission from the sidebar configuration page.
+     * Handles add, delete, move, save order, and restore defaults actions.
+     * Delegates to helper methods as appropriate.
+     */
     @Override
     protected void processForm() {
-        if (_action == null) {return;}
+        if (_action == null) {
+            return;
+        }
         net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
         String group = getJettyString("group");
+
         boolean adding = _action.equals(_t("Add item"));
         boolean deleting = _action.equals(_t("Delete selected"));
-        boolean moving = _action.startsWith("move_");
+        boolean moving = _action.startsWith(MOVE_PREFIX);
         boolean saving = _action.equals(_t("Save order"));
         boolean editing = adding || deleting || moving || saving;
+
         boolean unifiedSidebar = ctx.getBooleanProperty("routerconsole.unifiedSidebar");
         boolean stickySidebar = ctx.getBooleanProperty("routerconsole.stickySidebar");
-        if (_action.equals(_t("Save")) && "0".equals(group)) {
-            try {
-                Map<String, String> toAdd = new HashMap<String, String>(4);
 
-                int refreshInterval = Integer.parseInt(getJettyString("refreshInterval"));
-                if (refreshInterval < 0) {refreshInterval = 0;}
-                else if (refreshInterval < CSSHelper.MIN_REFRESH) {refreshInterval = CSSHelper.MIN_REFRESH;}
-                if (refreshInterval == 0) {
-                    toAdd.put(CSSHelper.PROP_DISABLE_REFRESH, "true");
-                    toAdd.put(CSSHelper.PROP_REFRESH, CSSHelper.DEFAULT_REFRESH);
-                } else {
-                    toAdd.put(CSSHelper.PROP_DISABLE_REFRESH, "false");
-                    toAdd.put(CSSHelper.PROP_REFRESH, Integer.toString(refreshInterval));
-                }
-
-                String unifiedSidebarStr = getJettyString("unifiedSidebar");
-                if (unifiedSidebarStr == null) {unifiedSidebarStr = "false";}
-                boolean submittedUnifiedSidebar = "true".equals(unifiedSidebarStr);
-                if (submittedUnifiedSidebar != unifiedSidebar) {
-                    toAdd.put("routerconsole.unifiedSidebar", Boolean.toString(submittedUnifiedSidebar));
-                }
-
-                String stickySidebarStr = getJettyString("stickySidebar");
-                boolean submittedStickySidebar = "true".equals(stickySidebarStr);
-                if (submittedStickySidebar != stickySidebar) {
-                    toAdd.put("routerconsole.stickySidebar", Boolean.toString(submittedStickySidebar));
-                }
-
-                if (!toAdd.isEmpty()) {
-                    addFormNotice(_t("Sidebar preferences updated"), true);
-                    _context.router().saveConfig(toAdd, null);
-                }
-            } catch (java.lang.NumberFormatException e) {
-                addFormError(_t("Refresh interval must be a number"), true);
-                return;
-            }
-        } else if (_action.equals(_t("Restore full default"))) {
-            _context.router().saveConfig(SidebarHelper.PROP_SUMMARYBAR + "default", isAdvanced() ? SidebarHelper.DEFAULT_FULL_ADVANCED : SidebarHelper.DEFAULT_FULL);
-            addFormNotice(_t("Full sidebar defaults restored.") + " " + _t("Sidebar will refresh shortly."), true);
-        } else if (_action.equals(_t("Restore minimal default"))) {
-            _context.router().saveConfig(SidebarHelper.PROP_SUMMARYBAR + "default", isAdvanced() ? SidebarHelper.DEFAULT_MINIMAL_ADVANCED : SidebarHelper.DEFAULT_MINIMAL);
-            addFormNotice(_t("Minimal sidebar defaults restored.") + " " + _t("Sidebar will refresh shortly."), true);
-        } else if (editing) {moveSection();}
+        if (_action.equals(_t("Save")) && "0".equals(group)) {handleSave(unifiedSidebar, stickySidebar);}
+        else if (_action.equals(_t("Restore full default"))) {restoreDefault(true);}
+        else if (_action.equals(_t("Restore minimal default"))) {restoreDefault(false);}
+        else if (editing) {moveSection();}
     }
 
-    public void moveSection() {
-        boolean deleting = _action.equals(_t("Delete selected"));
-        boolean adding = _action.equals(_t("Add item"));
-        boolean saving = _action.equals(_t("Save order"));
-        boolean moving = _action.startsWith("move_");
+    private void handleSave(boolean currentUnifiedSidebar, boolean currentStickySidebar) {
+        Map<String, String> toAdd = new HashMap<>(4);
+        try {
+            int refreshInterval = parseRefreshInterval(getJettyString("refreshInterval"));
+            if (refreshInterval == 0) {
+                toAdd.put(CSSHelper.PROP_DISABLE_REFRESH, "true");
+                toAdd.put(CSSHelper.PROP_REFRESH, CSSHelper.DEFAULT_REFRESH);
+            } else {
+                toAdd.put(CSSHelper.PROP_DISABLE_REFRESH, "false");
+                toAdd.put(CSSHelper.PROP_REFRESH, Integer.toString(refreshInterval));
+            }
 
-        Map<Integer, String> sections = new TreeMap<Integer, String>();
+            boolean submittedUnifiedSidebar = "true".equals(getJettyStringOrDefault("unifiedSidebar", "false"));
+            if (submittedUnifiedSidebar != currentUnifiedSidebar) {
+                toAdd.put("routerconsole.unifiedSidebar", Boolean.toString(submittedUnifiedSidebar));
+            }
+
+            boolean submittedStickySidebar = "true".equals(getJettyStringOrDefault("stickySidebar", "false"));
+            if (submittedStickySidebar != currentStickySidebar) {
+                toAdd.put("routerconsole.stickySidebar", Boolean.toString(submittedStickySidebar));
+            }
+
+            if (!toAdd.isEmpty()) {
+                addFormNotice(_t("Sidebar preferences updated"), true);
+                _context.router().saveConfig(toAdd, null);
+            }
+        } catch (NumberFormatException e) {
+            addFormError(_t("Refresh interval must be a number"), true);
+        }
+    }
+
+    private int parseRefreshInterval(String refreshStr) throws NumberFormatException {
+        int refresh = Integer.parseInt(refreshStr);
+        if (refresh < 0) {return 0;}
+        return (refresh < CSSHelper.MIN_REFRESH) ? CSSHelper.MIN_REFRESH : refresh;
+    }
+
+    private String getJettyStringOrDefault(String key, String defaultVal) {
+        String val = getJettyString(key);
+        return val != null ? val : defaultVal;
+    }
+
+    private void restoreDefault(boolean full) {
+        String prop = SidebarHelper.PROP_SUMMARYBAR + "default";
+        String value = isAdvanced() ? (full ? SidebarHelper.DEFAULT_FULL_ADVANCED : SidebarHelper.DEFAULT_MINIMAL_ADVANCED)
+                                    : (full ? SidebarHelper.DEFAULT_FULL : SidebarHelper.DEFAULT_MINIMAL);
+        _context.router().saveConfig(prop, value);
+        addFormNotice(_t(full ? "Full sidebar defaults restored." : "Minimal sidebar defaults restored."), true);
+    }
+
+    /**
+     * Moves, adds, deletes, or saves sidebar sections ordering based on the current _action.
+     * Updates the sidebar sections order and persists the changes.
+     */
+    public void moveSection() {
+        boolean adding = _action.equals(_t("Add item"));
+        boolean deleting = _action.equals(_t("Delete selected"));
+        boolean moving = _action.startsWith(MOVE_PREFIX);
+
+        Map<Integer, String> sections = new TreeMap<>();
+
         for (Object o : _settings.keySet()) {
             if (!(o instanceof String)) {continue;}
             String k = (String) o;
-            if (!k.startsWith("order_")) {continue;}
+            if (!k.startsWith(ORDER_PREFIX)) {continue;}
             String v = getJettyString(k);
-            k = k.substring(6);
-            k = k.substring(k.indexOf('_') + 1);
+            String keyTrimmed = k.substring(ORDER_PREFIX.length());
+            int underscoreIndex = keyTrimmed.indexOf('_');
+            if (underscoreIndex == -1) {continue;}
+            k = keyTrimmed.substring(underscoreIndex + 1);
             try {
                 int order = Integer.parseInt(v);
                 sections.put(order, k);
-            } catch (java.lang.NumberFormatException e) {
+            } catch (NumberFormatException e) {
                 addFormError(_t("Order must be an integer"), true);
                 return;
             }
         }
-        if (adding) {
-            String name = getJettyString("name");
-            if (name == null || name.length() <= 0) {
-                addFormError(_t("No section selected"), true);
-                return;
-            }
-            String order = getJettyString("order");
-            if (order == null || order.length() <= 0) {
-                addFormError(_t("No order entered"), true);
-                return;
-            }
-            name = DataHelper.escapeHTML(name).replace(",", "&#44;");
-            order = DataHelper.escapeHTML(order).replace(",", "&#44;");
-            try {
-                int ki = Integer.parseInt(order);
-                sections.put(ki, name);
-                addFormNotice(_t("Added") + ": " + name);
-            } catch (java.lang.NumberFormatException e) {
-                addFormError(_t("Order must be an integer"), true);
-                return;
-            }
-        } else if (deleting) {
-            Set<Integer> toDelete = new HashSet<Integer>();
-            for (Object o : _settings.keySet()) {
-                if (!(o instanceof String))
-                    continue;
-                String k = (String) o;
-                if (!k.startsWith("delete_"))
-                    continue;
-                k = k.substring(7);
-                try {
-                    int ki = Integer.parseInt(k);
-                    toDelete.add(ki);
-                } catch (java.lang.NumberFormatException e) {
-                    continue;
-                }
-            }
-            for (Iterator<Map.Entry<Integer, String>> iter = sections.entrySet().iterator(); iter.hasNext(); ) {
-                Map.Entry<Integer, String> e = iter.next();
-                Integer i = e.getKey();
-                if (toDelete.contains(i)) {
-                    String removedName = e.getValue();
-                    iter.remove();
-                    addFormNotice(_t("Removed") + ": " + removedName, true);
-                }
-            }
-        } else if (moving) {
-            String parts[] = DataHelper.split(_action, "_");
-            try {
-                int from = Integer.parseInt(parts[1]);
-                int to = 0;
-                if ("up".equals(parts[2]))
-                    to = from - 1;
-                if ("down".equals(parts[2]))
-                    to = from + 1;
-                if ("bottom".equals(parts[2]))
-                    to = sections.size() - 1;
-                int n = -1;
-                if ("down".equals(parts[2]) || "bottom".equals(parts[2]))
-                    n = 1;
-                for (int i = from; n * i < n * to; i += n) {
-                    String temp = sections.get(i + n);
-                    sections.put(i + n, sections.get(i));
-                    sections.put(i, temp);
-                }
-                addFormNotice(_t("Moved") + ": " + sections.get(to), true);
-            } catch (java.lang.NumberFormatException e) {
-                addFormError(_t("Order must be an integer"), true);
-                return;
-            }
-        }
+
+        if (adding) {handleAddSection(sections);}
+        else if (deleting) {handleDeleteSections(sections);}
+        else if (moving) {handleMoveSection(sections);}
+
         SidebarHelper.saveSummaryBarSections(_context, "default", sections);
         addFormNotice(_t("Saved order of sections.") + " " + _t("Sidebar will refresh shortly."), true);
     }
 
+    private void handleAddSection(Map<Integer, String> sections) {
+        String name = getJettyString("name");
+        if (name == null || name.isEmpty()) {
+            addFormError(_t("No section selected"), true);
+            return;
+        }
+        String orderStr = getJettyString("order");
+        if (orderStr == null || orderStr.isEmpty()) {
+            addFormError(_t("No order entered"), true);
+            return;
+        }
+        name = DataHelper.escapeHTML(name);
+        orderStr = DataHelper.escapeHTML(orderStr);
+        try {
+            int order = Integer.parseInt(orderStr);
+            sections.put(order, name);
+            addFormNotice(_t("Added") + ": " + name);
+        } catch (NumberFormatException e) {
+            addFormError(_t("Order must be an integer"), true);
+        }
+    }
+
+    private void handleDeleteSections(Map<Integer, String> sections) {
+        Set<Integer> toDelete = new HashSet<>();
+        for (Object o : _settings.keySet()) {
+            if (!(o instanceof String)) {continue;}
+            String k = (String) o;
+            if (!k.startsWith(DELETE_PREFIX)) {continue;}
+            k = k.substring(DELETE_PREFIX.length());
+            try {
+                int keyInt = Integer.parseInt(k);
+                toDelete.add(keyInt);
+            } catch (NumberFormatException e) {}
+        }
+        Iterator<Map.Entry<Integer, String>> iter = sections.entrySet().iterator();
+        while (iter.hasNext()) {
+            Map.Entry<Integer, String> e = iter.next();
+            if (toDelete.contains(e.getKey())) {
+                addFormNotice(_t("Removed") + ": " + e.getValue(), true);
+                iter.remove();
+            }
+        }
+    }
+
+    private void handleMoveSection(Map<Integer, String> sections) {
+        String[] parts = DataHelper.split(_action, "_");
+        try {
+            int from = Integer.parseInt(parts[1]);
+            int to = 0;
+            switch (parts[2]) {
+                case "up":
+                    to = from - 1;
+                    break;
+                case "down":
+                    to = from + 1;
+                    break;
+                case "bottom":
+                    to = sections.size() - 1;
+                    break;
+                default:
+                    to = from;
+                    break;
+            }
+            int direction = (parts[2].equals("down") || parts[2].equals("bottom")) ? 1 : -1;
+            for (int i = from; direction * i < direction * to; i += direction) {
+                String temp = sections.get(i + direction);
+                sections.put(i + direction, sections.get(i));
+                sections.put(i, temp);
+            }
+            addFormNotice(_t("Moved") + ": " + sections.get(to), true);
+        } catch (NumberFormatException e) {
+            addFormError(_t("Order must be an integer"), true);
+        }
+    }
+
+    /**
+     * Scans settings to detect move button actions and sets the _action field accordingly.
+     */
     public void setMovingAction() {
         for (Object o : _settings.keySet()) {
             if (!(o instanceof String)) {continue;}
             String k = (String) o;
-            if (k.startsWith("move_") && k.endsWith(".x") && _settings.get(k) != null) {
+            if (k.startsWith(MOVE_PREFIX) && k.endsWith(".x") && _settings.get(k) != null) {
                 _action = k.substring(0, k.length() - 2);
                 break;
             }
