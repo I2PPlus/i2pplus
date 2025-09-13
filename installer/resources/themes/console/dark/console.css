@@ -2872,6 +2872,7 @@ iframe.iframed{margin:15px 0 0}
 @media (max-width:1599px){
 #changelog pre{height:calc(100vh - 254px)}
 #reseedproxytype{columns:250px 3}#reseed_urlselection.optionsingle{columns:1 auto}
+#refreshsidebar td:last-child{vertical-align:bottom}
 }
 
 @media (max-width:1499px){
@@ -2982,6 +2983,7 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #profiles_overview{margin:5px 0 -5px}
 #profiles,#peers{padding:5px 5px 0}
 #profiles #thresholds+h3{margin-top:-5px}
+#refreshsidebar label{min-width:400px}
 #stats .tab,#stats .tab2{padding:5px 6px}
 #tunnels .tab,#tunnels .tab2{margin-top:5px}
 #upnpscan{margin-bottom:5px}
