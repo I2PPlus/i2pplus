@@ -2075,8 +2075,8 @@ select[name="newlogclass"]{margin-left:3px}
 .buttonTop,.buttonBottom,.buttonUp,.buttonDown,.buttonTop,.buttonTop:hover,.buttonBottom:hover,.buttonUp:hover,.buttonDown:hover,.buttonTop:focus,.buttonBottom:focus,.buttonUp:focus,.buttonDown:focus,.buttonTop:active,.buttonBottom:active,.buttonUp:active,.buttonDown:active{background-size:11px,100%}
 #refreshsidebar tr:first-child td{padding:4px 4px 4px 10px;background:var(--th)}
 #refreshsidebar input[type=checkbox]{margin-right:3px}
-#refreshsidebar label{margin:2px 0;display:inline-block}
-#refreshsidebar label b{display:inline-block;text-align:right}
+#refreshsidebar label{margin:2px 0;min-width:400px;display:inline-block}
+#refreshsidebar label b{min-width:40px;display:inline-block;text-align:right}
 #sidebarconf label{display:inline-block;width:100%}
 #sidebarconf tr:hover label{color:var(--hover)}
 #sidebarconf button{margin:2px;padding:2px 3px;width:22px;height:22px;min-width:0}
@@ -2861,6 +2861,7 @@ h1[class],#wizardpage h1{padding:20px 15px 17px 55px;font-size:19pt;background-s
 .newsAuthor{padding:0 0 0 14px;font-size:9.5pt;background-size:12px;background-position:left center}
 .percentBarText{margin-top:-1px}
 .sb_netstatus{margin-bottom:-8px}
+.tunnelBuildStatus{margin-bottom:-9px}
 .sitemapLabel{min-height:16px}
 .subheading b{font-size:10.5pt}
 .tab2{padding:5px 12px}
@@ -2936,7 +2937,7 @@ h4#updateplugins,#news p{font-size:10pt}
 #sidebar h3 a{padding:4px 0 2px;font-size:11pt}
 #sidebar hr[hidden]+div:not([hidden]),#sidebar hr[hidden]+table:not([hidden]){margin-top:-8px}
 #sidebar hr[hidden]~h3{margin-top:-12px}
-#sidebar hr[hidden]~h4{margin-bottom:-4px}
+#sidebar hr[hidden]~h4{margin-bottom:-1px}
 #sidebar hr[hidden]~#sb_advanced:not([hidden])~h3{margin-top:-9px}
 #sidebar hr[hidden]+#sb_CPUBar{margin-top:-9px}
 #sidebar hr[hidden]~#sb_memoryBar{margin-bottom:-1px}
