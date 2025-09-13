@@ -7,77 +7,70 @@ import java.util.Arrays;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.FIFOBandwidthLimiter;
 import net.i2p.router.util.CDPQEntry;
-import net.i2p.util.TryCache;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+import net.i2p.util.TryCache;
 
 /**
- * Basic delivery unit containing the datagram.  This also maintains a cache
- * of object instances to allow rapid reuse.
- *
+ * Represents a UDP packet with caching support for efficient reuse.
+ * Provides access to the underlying DatagramPacket and maintains metadata
+ * such as priority, timestamps, message type, and bandwidth requests.
  */
 class UDPPacket implements CDPQEntry {
     private RouterContext _context;
     private final DatagramPacket _packet;
+    private final byte[] _data;
     private int _priority;
     private volatile long _initializeTime;
-    private final byte[] _data;
     private volatile int _markedType;
     private RemoteHostId _remoteHost;
-    private boolean _released;
+    private volatile boolean _released;
     private long _enqueueTime;
     private long _receivedTime;
     private int _validateCount;
     private FIFOBandwidthLimiter.Request _bandwidthRequest;
     private long _seqNum;
+    private int _messageType;
+    private int _fragmentCount;
 
+    // Packet factory and cache for object reuse
     private static class PacketFactory implements TryCache.ObjectFactory<UDPPacket> {
         static RouterContext context;
+
+        @Override
         public UDPPacket newInstance() {
             return new UDPPacket(context);
         }
     }
 
-    //  Warning - this mixes contexts in a multi-router JVM
-    private static final TryCache<UDPPacket> _packetCache;
-    private static final TryCache.ObjectFactory<UDPPacket> _packetFactory;
     private static final boolean CACHE = true;
-    private static final int MIN_CACHE_SIZE = 64;
-    private static final int MAX_CACHE_SIZE = 512;
+    private static final int MIN_CACHE_SIZE = 256;
+    private static final int MAX_CACHE_SIZE = 2048;
+    private static final TryCache.ObjectFactory<UDPPacket> _packetFactory;
+    private static final TryCache<UDPPacket> _packetCache;
+
     static {
         if (CACHE) {
             long maxMemory = SystemVersion.getMaxMemory();
-            boolean isSlow = SystemVersion.isSlow();
-            int cores = SystemVersion.getCores();
-            int csize = (int) Math.max(MIN_CACHE_SIZE, Math.min(MAX_CACHE_SIZE, maxMemory / (1024*1024)));
-            if (maxMemory >= 1024*1024*1024 && cores >= 4 && !isSlow) {csize = 1024;}
-            else if (maxMemory >= 768*1024*1024 && cores >= 4 && !isSlow) {csize = 512;}
+            int csize = (int) Math.max(MIN_CACHE_SIZE, Math.min(MAX_CACHE_SIZE, maxMemory / (1024 * 1024)));
             _packetFactory = new PacketFactory();
             _packetCache = new TryCache<>(_packetFactory, csize);
         } else {
-            _packetCache = null;
             _packetFactory = null;
+            _packetCache = null;
         }
     }
 
     /**
-     *  Actually it is one less than this, we assume
-     *  if a received packet is this big it is truncated.
-     *  This is bigger than PeerState.LARGE_MTU, as the far-end's
-     *  LARGE_MTU may be larger than ours.
-     *
-     *  Due to longstanding bugs, a packet may be larger than LARGE_MTU
-     *  (acks and padding). Together with an increase in the LARGE_MTU to
-     *  1492 in release 0.8.9, routers from 0.8.9 - 0.8.11 can generate
-     *  packets up to 1536. Data packets are always a multiple of 16,
-     *  so make this 4 + a multiple of 16.
+     * Maximum UDP packet size accepted. Packets of this size are assumed truncated.
+     * Size allows for some legacy packet bugs and includes overhead.
      */
     static final int MAX_PACKET_SIZE = 1572;
     public static final int IV_SIZE = 16;
     public static final int MAC_SIZE = 16;
 
-    /** Message types, 4 bits max */
+    // Payload type constants
     public static final int PAYLOAD_TYPE_SESSION_REQUEST = 0;
     public static final int PAYLOAD_TYPE_SESSION_CREATED = 1;
     public static final int PAYLOAD_TYPE_SESSION_CONFIRMED = 2;
@@ -86,155 +79,166 @@ class UDPPacket implements CDPQEntry {
     public static final int PAYLOAD_TYPE_RELAY_INTRO = 5;
     public static final int PAYLOAD_TYPE_DATA = 6;
     public static final int PAYLOAD_TYPE_TEST = 7;
-    /** @since 0.8.1 */
     public static final int PAYLOAD_TYPE_SESSION_DESTROY = 8;
     public static final int MAX_PAYLOAD_TYPE = PAYLOAD_TYPE_SESSION_DESTROY;
 
+    // Private constructor used by cache factory
     private UDPPacket(RouterContext ctx) {
-        // The data buffer is clobbered on init(..), but we need it to bootstrap
         _data = new byte[MAX_PACKET_SIZE];
         _packet = new DatagramPacket(_data, MAX_PACKET_SIZE);
         init(ctx);
     }
 
-    private synchronized void init(RouterContext ctx) {
+    /**
+     * Initializes or resets the packet state.
+     * @param ctx RouterContext for timing and logging
+     */
+    private void init(RouterContext ctx) {
         _context = ctx;
-        Arrays.fill(_data, (byte)0);
-        /* 
-         * WARNING - Doesn't seem like we should have to do this every time,
-         * from reading the DatagramPacket javadocs, but we get massive corruption without it.
-         */
+        int len = _packet.getLength() > 0 ? _packet.getLength() : MAX_PACKET_SIZE;
+        Arrays.fill(_data, 0, len, (byte) 0);
         _packet.setData(_data);
         _initializeTime = _context.clock().now();
         _markedType = -1;
         _validateCount = 0;
         _remoteHost = null;
         _released = false;
-        // clear out some values to make debugging easier via toString()
         _messageType = -1;
         _enqueueTime = 0;
         _receivedTime = 0;
         _fragmentCount = 0;
+        _bandwidthRequest = null;
+    }
+
+    @Override
+    public void setSeqNum(long num) {
+        _seqNum = num;
+    }
+
+    @Override
+    public long getSeqNum() {
+        return _seqNum;
     }
 
     /**
-     *  CDPQEntry
-     *  @since 0.9.53
+     * Gets the wrapped DatagramPacket.
+     * @return the DatagramPacket instance
+     * @throws IllegalStateException if the packet is already released
      */
-    public void setSeqNum(long num) { _seqNum = num; }
-
-    /**
-     *  CDPQEntry
-     *  @since 0.9.53
-     */
-    public long getSeqNum() { return _seqNum; }
-
-
-
-  /****
-    public void writeData(byte src[], int offset, int len) {
+    public DatagramPacket getPacket() {
         verifyNotReleased();
-        System.arraycopy(src, offset, _data, 0, len);
-        _packet.setLength(len);
-        resetBegin();
+        return _packet;
     }
-  ****/
 
-    /** */
-    public synchronized DatagramPacket getPacket() { verifyNotReleased(); return _packet; }
-    public int getPriority() { return _priority; }
+    public int getPriority() {
+        return _priority;
+    }
+
+    public void setPriority(int pri) {
+        _priority = pri;
+    }
 
     /**
-     *  @since 0.9.53
+     * Returns the packet initialization timestamp.
+     * @return initialization time in milliseconds
      */
-    public void setPriority(int pri) { _priority = pri; }
+    public long getBegin() {
+        verifyNotReleased();
+        return _initializeTime;
+    }
 
-    //public long getExpiration() { verifyNotReleased(); return _expiration; }
-    public synchronized long getBegin() { verifyNotReleased(); return _initializeTime; }
-    public long getLifetime() { /** verifyNotReleased(); */ return _context.clock().now() - _initializeTime; }
-    public synchronized void resetBegin() { _initializeTime = _context.clock().now(); }
-    /** flag this packet as a particular type for accounting purposes */
-    public synchronized void markType(int type) { verifyNotReleased(); _markedType = type; }
     /**
-     * flag this packet as a particular type for accounting purposes, with
-     * 1 implying the packet is an ACK, otherwise it is a data packet
-     *
+     * Returns the elapsed time since initialization.
+     * @return lifetime in milliseconds
      */
-    public synchronized int getMarkedType() { verifyNotReleased(); return _markedType; }
+    public long getLifetime() {
+        return _context.clock().now() - _initializeTime;
+    }
 
-    private int _messageType;
-    private int _fragmentCount;
-    /** only for debugging and stats, does not go on the wire */
-    int getMessageType() { return _messageType; }
-    /** only for debugging and stats, does not go on the wire */
-    void setMessageType(int type) { _messageType = type; }
+    /**
+     * Resets initialization time to current time.
+     */
+    public void resetBegin() {
+        _initializeTime = _context.clock().now();
+    }
 
-    /** only for debugging and stats */
-    int getFragmentCount() { return _fragmentCount; }
+    /**
+     * Marks the packet with a specific type for identification.
+     * @param type Mark type integer
+     */
+    public void markType(int type) {
+        verifyNotReleased();
+        _markedType = type;
+    }
 
-    /** only for debugging and stats */
-    void setFragmentCount(int count) { _fragmentCount = count; }
+    /**
+     * Gets the marked type of this packet.
+     * @return mark type integer
+     */
+    public int getMarkedType() {
+        verifyNotReleased();
+        return _markedType;
+    }
 
+    int getMessageType() {
+        return _messageType;
+    }
+
+    void setMessageType(int type) {
+        _messageType = type;
+    }
+
+    int getFragmentCount() {
+        return _fragmentCount;
+    }
+
+    void setFragmentCount(int count) {
+        _fragmentCount = count;
+    }
+
+    /**
+     * Lazily obtains the RemoteHostId representing remote address and port.
+     * @return RemoteHostId for this packet's sender
+     */
     synchronized RemoteHostId getRemoteHost() {
         if (_remoteHost == null) {
-            //long before = System.currentTimeMillis();
             InetAddress addr = _packet.getAddress();
-            byte ip[] = addr.getAddress();
-            int port = _packet.getPort();
-            _remoteHost = new RemoteHostId(ip, port);
-            //long timeToFetch = System.currentTimeMillis() - before;
-            //if (timeToFetch > 50)
-            //    _context.statManager().addRateData("udp.fetchRemoteSlow", timeToFetch, getLifetime());
+            if (addr != null) {
+                _remoteHost = new RemoteHostId(addr.getAddress(), _packet.getPort());
+            }
         }
         return _remoteHost;
     }
 
-    /**
-     *  For CDQ
-     *  @since 0.9.3
-     */
-    public void setEnqueueTime(long now) { _enqueueTime = now; }
-
-    /** a packet handler has pulled it off the inbound queue */
-    synchronized void received() { _receivedTime = _context.clock().now(); }
-
-    /** a packet handler has decrypted and verified the packet and is about to parse out the good bits */
-    //void beforeReceiveFragments() { _beforeReceiveFragments = _context.clock().now(); }
-    /** a packet handler has finished parsing out the good bits */
-    //void afterHandling() { _afterHandlingTime = _context.clock().now(); }
-
-    /**
-     *  For CDQ
-     *  @since 0.9.3
-     */
-    public long getEnqueueTime() { return _enqueueTime; }
-
-    /** a packet handler has pulled it off the inbound queue */
-    synchronized long getTimeSinceReceived() { return (_receivedTime > 0 ? _context.clock().now() - _receivedTime : 0); }
-
-    /** a packet handler has decrypted and verified the packet and is about to parse out the good bits */
-    //long getTimeSinceReceiveFragments() { return (_beforeReceiveFragments > 0 ? _context.clock().now() - _beforeReceiveFragments : 0); }
-    /** a packet handler has finished parsing out the good bits */
-    //long getTimeSinceHandling() { return (_afterHandlingTime > 0 ? _context.clock().now() - _afterHandlingTime : 0); }
-
-    /**
-     *  So that we can compete with NTCP, we want to request bandwidth
-     *  in parallel, on the way into the queue, not on the way out.
-     *  Call before enqueueing.
-     *  @since 0.9.21
-     *  @deprecated unused
-     */
-    @Deprecated
-    public synchronized void requestInboundBandwidth() {
-        verifyNotReleased();
-        _bandwidthRequest = _context.bandwidthLimiter().requestInbound(_packet.getLength(), "UDP receiver");
+    public void setEnqueueTime(long now) {
+        _enqueueTime = now;
     }
 
     /**
-     *  So that we can compete with NTCP, we want to request bandwidth
-     *  in parallel, on the way into the queue, not on the way out.
-     *  Call before enqueueing.
-     *  @since 0.9.21
+     * Marks this packet as received, setting received timestamp.
+     */
+    synchronized void received() {
+        _receivedTime = _context.clock().now();
+    }
+
+    /**
+     * Returns the enqueue timestamp.
+     * @return enqueue time in milliseconds
+     */
+    public long getEnqueueTime() {
+        return _enqueueTime;
+    }
+
+    /**
+     * Returns how long since this packet was received.
+     * @return time since received in milliseconds, or 0 if never received
+     */
+    synchronized long getTimeSinceReceived() {
+        return (_receivedTime > 0) ? _context.clock().now() - _receivedTime : 0;
+    }
+
+    /**
+     * Requests outbound bandwidth for sending this packet.
      */
     public synchronized void requestOutboundBandwidth() {
         verifyNotReleased();
@@ -242,41 +246,65 @@ class UDPPacket implements CDPQEntry {
     }
 
     /**
-     *  So that we can compete with NTCP, we want to request bandwidth
-     *  in parallel, on the way into the queue, not on the way out.
-     *  Call after dequeueing.
-     *  @since 0.9.21
+     * Returns the current bandwidth request.
+     * @return the bandwidth request, or null if none exists
      */
     public synchronized FIFOBandwidthLimiter.Request getBandwidthRequest() {
         verifyNotReleased();
         return _bandwidthRequest;
     }
 
-    // Following 5: All used only for stats in PacketHandler, commented out
+    /**
+     * Releases the packet back to cache and aborts outstanding bandwidth requests.
+     * Safe to call multiple times.
+     */
+    public synchronized void release() {
+        if (_released) return;
+        _released = true;
 
-    /** when it was pulled off the endpoint receive queue */
-    //long getReceivedTime() { return _receivedTime; }
-    /** when we began validate() */
-    //long getBeforeValidate() { return _beforeValidate; }
-    /** when we finished validate() */
-    //long getAfterValidate() { return _afterValidate; }
-    /** how many times we tried to validate the packet */
-    //int getValidateCount() { return _validateCount; }
+        if (_bandwidthRequest != null) {
+            synchronized (_bandwidthRequest) {
+                if (_bandwidthRequest.getPendingRequested() > 0)
+                    _bandwidthRequest.abort();
+            }
+            _bandwidthRequest = null;
+        }
+        if (CACHE)
+            _packetCache.release(this);
+    }
+
+    /**
+     * Clears the packet cache if caching is enabled.
+     */
+    public static void clearCache() {
+        if (CACHE)
+            _packetCache.clear();
+    }
+
+    /**
+     * Checks if the packet has already been released and logs an error if so.
+     */
+    private void verifyNotReleased() {
+        if (!CACHE) return;
+        if (_released) {
+            Log log = _context.logManager().getLog(UDPPacket.class);
+            log.error("Access attempted on already released UDPPacket", new IllegalStateException());
+        }
+    }
 
     @Override
     public String toString() {
-        synchronized(this) {
-            if (_released)
-                return "RELEASED PACKET";
-        }
+        if (_released)
+            return "RELEASED PACKET";
+
         StringBuilder buf = new StringBuilder(256);
-        if (_packet.getAddress().getAddress() != null) {
-            buf.append(Addresses.toString(_packet.getAddress().getAddress(), _packet.getPort()));
-            buf.append("\n* Size: ");
-            buf.append(_packet.getLength());
-            buf.append(" bytes");
-            //buf.append(" id=").append(System.identityHashCode(this));
-            buf.append("; Priority: ").append(_priority);
+        InetAddress addr = _packet.getAddress();
+
+        if (addr != null && addr.getAddress() != null) {
+            buf.append(Addresses.toString(addr.getAddress(), _packet.getPort()))
+               .append("\n* Size: ").append(_packet.getLength()).append(" bytes")
+               .append("; Priority: ").append(_priority);
+
             if (_messageType >= 0)
                 buf.append("; Message Type: ").append(_messageType);
             if (_markedType >= 0)
@@ -287,9 +315,6 @@ class UDPPacket implements CDPQEntry {
                 buf.append("; sinceEnqueued: ").append(_context.clock().now() - _enqueueTime);
             if (_receivedTime > 0)
                 buf.append("; sinceReceived: ").append(_context.clock().now() - _receivedTime);
-            //buf.append(" beforeReceiveFragments=").append((_beforeReceiveFragments > 0 ? _context.clock().now()-_beforeReceiveFragments : -1));
-            //buf.append(" sinceHandled=").append((_afterHandlingTime > 0 ? _context.clock().now()-_afterHandlingTime : -1));
-            //buf.append("\ndata=").append(Base64.encode(_packet.getData(), _packet.getOffset(), _packet.getLength()));
         } else {
             buf.append("\n* No address for packet - Router restarting?");
         }
@@ -297,7 +322,10 @@ class UDPPacket implements CDPQEntry {
     }
 
     /**
-     *  @param inbound unused
+     * Acquires a UDPPacket instance either from cache or new.
+     * @param ctx RouterContext used for initialization
+     * @param inbound true if packet is inbound, false if outbound (currently unused)
+     * @return initialized UDPPacket instance
      */
     public static UDPPacket acquire(RouterContext ctx, boolean inbound) {
         UDPPacket rv;
@@ -312,50 +340,10 @@ class UDPPacket implements CDPQEntry {
     }
 
     /**
-     *  For CDQ
-     *  @since 0.9.3
+     * Convenience method to release the packet.
      */
     public void drop() {
         release();
     }
 
-    public synchronized void release() {
-        verifyNotReleased();
-        _released = true;
-        //_releasedBy = new Exception("released by");
-        //_acquiredBy = null;
-        //
-        //_dataCache.release(_dataBuf);
-        if (_bandwidthRequest != null) {
-            synchronized(_bandwidthRequest) {
-                if (_bandwidthRequest.getPendingRequested() > 0)
-                    _bandwidthRequest.abort();
-            }
-            _bandwidthRequest = null;
-        }
-        if (!CACHE)
-            return;
-        _packetCache.release(this);
-    }
-
-    /**
-     *  Call at shutdown/startup to not hold ctx refs
-     *  @since 0.9.2
-     */
-    public static void clearCache() {
-        if (CACHE) {
-            PacketFactory.context = null;
-            _packetCache.clear();
-        }
-    }
-
-    private synchronized void verifyNotReleased() {
-        if (!CACHE) return;
-        if (_released) {
-            Log log = _context.logManager().getLog(UDPPacket.class);
-            log.error("Already released", new Exception());
-            //log.log(Log.CRIT, "Released by: ", _releasedBy);
-            //log.log(Log.CRIT, "Acquired by: ", _acquiredBy);
-        }
-    }
 }
