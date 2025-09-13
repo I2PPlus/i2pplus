@@ -2282,24 +2282,29 @@ select{padding:5px 20px 5px 8px}
 .tunnels_client th:first-child::after{content:"\21E9\21E7";font-family:sans-serif;font-size:12pt;line-height:0;vertical-align:middle;letter-spacing:-.3em}
 .tunnelBuildStatus{font-size:90%}
 #advconf.readonly .section th::after{margin-top:3px}
+#banSummary h2{margin:-1px -10px -1px}
+#banSummary ul{margin:-1px -10px -16px}
 #clock{font-size:16pt}
 #config_logging h3 a::before,#webappconfiguration a::before,#i2pclientconfig a::before,#pluginmanage a::before{margin-top:-2px}
 #graphFilter{right:12px;top:11px}
 #help h3,#faq h3{font-size:10.5pt}
-#sb_tunnelstatus .tunnelBuildStatus::before{margin:-1px 0 0;background-size:12px}
-#sb_localtunnels td:first-child{padding-right:3px}
 #sb_general td::after,#sb_shortgeneral td::after,#sb_advancedgeneral td::after,#sb_bandwidth td::after,#sb_peers td::after,#sb_peersadvanced td::after,#sb_tunnels td::after,#sb_queue td::after{min-height:12px}
-#sidebar #sb_internals.collapsed,#sidebar #sb_advanced.collapsed,#sidebar #sb_services.collapsed,#sb_peers_condensed,#sb_tunnels_condensed{margin-left:-1px;width:calc(100% + 2px)}
 #sb_internals .sb_icon[href="/jobs"]{display:none!important}
-#sb_wrap{position:absolute!important}
+#sb_localtunnels td:first-child{padding-right:3px}
+#sb_tunnelstatus .tunnelBuildStatus::before{margin:-1px 0 0;background-size:12px}
+#sessionBanned{margin-bottom:2px}
+#sidebar #sb_internals.collapsed,#sidebar #sb_advanced.collapsed,#sidebar #sb_services.collapsed,#sb_peers_condensed,#sb_tunnels_condensed{margin-left:-1px;width:calc(100% + 2px)}
 }
+
 @media (max-width:1400px){
 #peers #ntcpconnections th.queue{font-size:0}
 #peers #ntcpconnections th.queue::after{width:16px;height:16px;display:inline-block;background:var(--err) no-repeat center center/16px;content:""}
 #peers .ipv6,#peers .rto,#peers .mtu,#peers .sst,#peers .cwnd,#peers .rtt{display:none}
 #peers #transportSummary .ipv6{display:table-cell}
-.cells td.peer,.cells td.direction{min-width:0}.cells td.idle,.cells td.inout{min-width:90px}
+.cells td.peer,.cells td.direction{min-width:0}
+.cells td.idle,.cells td.inout{min-width:90px}
 }
+
 @media (max-width:1200px){
 div[id^="config"] .tab a{padding-right:13px}
 h2{font-size:12pt}
@@ -2384,9 +2389,11 @@ table[id*="connections"] td,#floodfills td:not(.rif):not(.rih):not(.rbw),#jobsta
 #tunnels .percentBarOuter,#tunnels .percentBarText{margin:0;width:50px}
 #upnpstatus+#ntcpcon{margin-top:5px}
 }
+
 @media (max-width:1100px){
 .tunnel_id{width:auto;text-align:center}
 }
+
 @media (max-width:1000px){
 img[src$="bound.png"]{transform:scale(.9)}
 input[name="pluginURL"]{width:260px}
@@ -2422,6 +2429,7 @@ input[name="capacity"],input[name="speed"]{min-width:80px;width:80px}
 #view_profile h3{border:0;border-bottom:var(--border)}
 #view_profile pre{margin:-5px 5px;width:calc(100% - 5px)}
 }
+
 @media (max-width:900px){
 h3.ptitle,h3.tabletitle,th.th_title,#ntcpcon,#udpcon{font-size:10pt}
 input[name="pluginFile"]{margin-left:0;transform:scale(.9)}
@@ -2438,15 +2446,19 @@ input[name="pluginURL"]{margin-left:0;width:190px}
 #plugininstall tr:nth-child(3) td:nth-last-child(2),#plugininstall tr:nth-child(5) td:nth-last-child(2){padding-left:5px;background-size:0}
 #plugininstall .optionsave,#plugininstall2 .optionsave{padding-right:0}
 }
+
 @media (min-width:900px){
 #consolepass input[name="name"],#consolepass input[name="nofilter_pw"],#externali2cp input[name="nofilter_pw"],#externali2cp input[name="user"]{width:160px}
 }
+
 @media (min-width:1060px){
 #graphs td:first-child{padding:5px}
 }
+
 @media (min-width:1000px){
 th.queue{white-space:nowrap}
 }
+
 @media (min-width:1200px){
 .cells tt,#profilelist tt{margin-left:2px}
 #jobstats tr:not(last-child):td:first-child,#jobstats tr:not(last-child):hover td:first-child{padding:6px 0 6px 26px;background:var(--yes) no-repeat 8px center/12px}
@@ -2455,6 +2467,7 @@ th.queue{white-space:nowrap}
 #terms p{break-inside:avoid}
 #terms p:first-child{margin-top:0}
 }
+
 @media (min-width:1400px){
 a.graphstat{margin-right:2px;font-size:90%}
 .joblog ul{margin-left:-40px}
@@ -2479,6 +2492,7 @@ a.graphstat{margin-right:2px;font-size:90%}
 #stats .statsName{margin:0 6px 10px 0;padding:10px 10px 0;width:calc(100% - 22px);min-width:540px;display:inline-block;border:var(--border);box-shadow:var(--highlight);background:var(--th)}
 #stats ul.statlist{margin-top:10px;padding-bottom:0;width:100%;border:0;background:none}
 }
+
 @media (min-width:1500px){
 body,.main,.main td,.news p,#news p,.tab,.tab2,.main li b,.joblog li,.statusnotes,#sidebar button.download,#consolepass td,#peerdefs,#profile_defs,#thresholds,#configinfo,.infohelp,.infowarn,button,input,select,textarea,.configtable th,.netdbentry th,.statlist a[name],.statlist b,.statlist li b,.statlist a[name]:hover,div.messages,th,label,input,input[type=submit],input[type=reset],button,.fakebutton{font-size:10pt}
 body{overflow-x:hidden}
@@ -2551,9 +2565,11 @@ h4#updateplugins{margin-top:-16px;padding:5px 10px;font-size:10pt}
 #webappconfigtext{margin:13px 0 -1px}
 #webappconfiguration{margin-bottom:-14px}
 }
+
 @media (min-width:1600px){
 #sb_localtunnels td:first-child{width:20px}
 }
+
 @media (min-width:1634px){
 .leasesets_container{margin-bottom:2px}
 th code{font-size:9pt}
@@ -2595,8 +2611,7 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #banSummary ul{margin:-1px -10px -14px;padding:5px 8px;columns:300px 5;list-style-type:none;border:var(--border);background:var(--th)}
 #banSummary .badge{margin:0 4px 0 0;padding:2px 4px;min-width:48px;display:inline-block;text-align:center;letter-spacing:0.05em;font-weight:600;box-shadow:var(--badge_bevel);background:var(--badge)}
 #sessionBanned{margin-bottom:5px}
+
 @media (max-width:1499px) {
-#banSummary h2{margin:-1px -10px -1px}
-#banSummary ul{margin:-1px -10px -16px}
-#sessionBanned{margin-bottom:2px}
+
 }

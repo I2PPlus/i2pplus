@@ -2936,7 +2936,6 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 #sb_localtunnels td{line-height:1}
 #sb_peers_condensed,#sb_tunnels_condensed{margin:-7px -1px -9px -3px;width:calc(100% + 8px)}
 #sb_tunnelstatus .tunnelBuildStatus::before{background-size:12px}
-#sb_wrap{position:absolute!important}
 #searchbar div{margin:3px 3px 0}
 #sidebar button.cancel{margin-top:10px}
 #sidebar .reload:hover,#sidebar .reload:focus{background-size:12px,12px,100%}

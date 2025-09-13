@@ -2644,7 +2644,6 @@ input.check[value$="updates"],input.check[value$="updates"]:hover,input.check[va
 #sb_internals .sb_icon[href="/jobs"]{display:none!important}
 #sb_services.collapsed td{width:calc(100% + 88px)}
 #sb_tunnelstatus .tunnelBuildStatus::before{margin:-2px 0;background-size:12px}
-#sb_wrap{position:absolute!important}
 #searchbar button{height:28px}
 #searchbar div{margin:-3px -2px -4px}
 #sidebarconf button img{width:10px;height:10px}
