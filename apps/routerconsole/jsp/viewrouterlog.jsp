@@ -1,44 +1,42 @@
-<%@page pageEncoding="UTF-8"%>
-<%@page buffer="32kb" %><%
-/*
- * USE CAUTION WHEN EDITING
- * Trailing whitespace OR NEWLINE on the last line will cause
- * IllegalStateExceptions !!!
- *
- * Do not tag this file for translation.
- */
-net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-net.i2p.util.LogManager mgr = ctx.logManager();
-mgr.flush();
-java.io.File f = new java.io.File(mgr.currentFile());
-long length = f.length();
-if (length <= 0 || !f.isFile()) {
-    response.sendError(404, "Not Found");
-} else {
+<%@ page pageEncoding="UTF-8" buffer="32kb" %>
+<%
+  /*
+   * USE CAUTION WHEN EDITING
+   * Trailing whitespace OR NEWLINE on the last line will cause IllegalStateExceptions !!!
+   *
+   * Do not tag this file for translation.
+   */
+
+    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    net.i2p.util.LogManager logMgr = ctx.logManager();
+    logMgr.flush();
+
+    java.io.File logFile = new java.io.File(logMgr.currentFile());
+    long length = logFile.length();
+
+    if (length <= 0 || !logFile.isFile()) {
+        response.sendError(404, "Not Found");
+        return;
+    }
+
     response.setContentType("text/plain");
     response.setHeader("X-Content-Type-Options", "nosniff");
     response.setHeader("Accept-Ranges", "none");
     response.setHeader("Content-Length", Long.toString(length));
-    // response.setDateHeader("Expires", 0);
     response.addHeader("Cache-Control", "no-store");
-    // response.addHeader("Pragma", "no-cache");
+
     java.io.InputStream in = null;
     try {
-        in = new java.io.FileInputStream(f);
-        java.io.OutputStream bout = response.getOutputStream();
-        net.i2p.data.DataHelper.copy(in, bout);
+        in = new java.io.FileInputStream(logFile);
+        java.io.OutputStream stream = response.getOutputStream();
+        net.i2p.data.DataHelper.copy(in, stream);
     } catch (java.io.IOException ioe) {
-        // prevent 'Committed' IllegalStateException from Jetty
-        if (!response.isCommitted()) {
-            response.sendError(403, ioe.toString());
-        }  else {
-            // not an error, happens when the browser closes the stream
-            // Jetty doesn't log this
-            throw ioe;
-        }
+        if (!response.isCommitted()) {response.sendError(403, ioe.toString());}
+        else {throw ioe;}
     } finally {
-        if (in != null)
-            try { in.close(); } catch (java.io.IOException ioe) {}
+        if (in != null) {
+            try {in.close();}
+            catch (java.io.IOException ignored) {}
+        }
     }
-}
 %>

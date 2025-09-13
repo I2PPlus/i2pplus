@@ -1,111 +1,76 @@
+<%@ page import="net.i2p.I2PAppContext, net.i2p.router.web.GraphGenerator, net.i2p.stat.Rate, net.i2p.stat.RateStat, net.i2p.data.DataHelper" buffer="64kb" %>
 <%
-/*
- * USE CAUTION WHEN EDITING
- * Trailing whitespace OR NEWLINE on the last line will cause
- * IllegalStateExceptions !!!
- *
- * Do not tag this file for translation.
- */
+  /*
+   * USE CAUTION WHEN EDITING
+   * Trailing whitespace OR NEWLINE on the last line will cause IllegalStateExceptions !!!
+   *
+   * Do not tag this file for translation.
+   */
 
-net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    I2PAppContext ctx = I2PAppContext.getGlobalContext();
+    GraphGenerator graphGen = GraphGenerator.instance(ctx);
+    if (graphGen == null) { response.sendError(403, "Graphs disabled"); return; }
 
-/*
-String lang = ctx.getProperty("routerconsole.lang");
-if (lang == null)
-    lang = "en";
-*/
+    String stat = request.getParameter("stat");
+    if (stat == null || stat.contains("\n") || stat.contains("\r")) {
+        response.sendError(403, "Invalid stat parameter"); return;
+    }
+    boolean fakeBw = "bw.combined".equals(stat);
+    RateStat rateStat = ctx.statManager().getRate(stat);
+    Rate rate = null;
 
-net.i2p.router.web.GraphGenerator ss = net.i2p.router.web.GraphGenerator.instance(ctx);
-if (ss == null) {
-    response.sendError(403, "Stats disabled");
-    return;
-}
-boolean rendered = false;
-net.i2p.stat.Rate rate = null;
-String stat = request.getParameter("stat");
-String period = request.getParameter("period");
-boolean fakeBw = (stat != null && ("bw.combined".equals(stat)));
-net.i2p.stat.RateStat rs = null;
-if (stat != null) {rs = ctx.statManager().getRate(stat);}
-if ( !rendered && ((rs != null) || fakeBw) ) {
-    long per = -1;
-    try {
-        if (fakeBw) {per = 60*1000;}
-        else {
-            per = Long.parseLong(period);
-            rate = rs.getRate(per);
-        }
-        if ((rate != null) || (fakeBw)) {
-            if (stat != null && (stat.indexOf('\n') >= 0 || stat.indexOf('\r') >= 0)) {
-                response.sendError(403, "param");
-                return;
-            }
-            java.io.OutputStream cout = response.getOutputStream();
-            String format = request.getParameter("format");
+    int width = -1, height = -1, periodCount = -1, end = 0;
+    try { width = Integer.parseInt(request.getParameter("width")); } catch (Exception e) {}
+    try { height = Integer.parseInt(request.getParameter("height")); } catch (Exception e) {}
+    try { periodCount = Integer.parseInt(request.getParameter("periodCount")); } catch (Exception e) {}
+    try { end = Integer.parseInt(request.getParameter("end")); } catch (Exception e) {}
+
+    long period = -1;
+    if (fakeBw) {period = 60000L;}
+    else {
+        try {period = Long.parseLong(request.getParameter("period"));}
+        catch (Exception e) {}
+    }
+
+    boolean hideLegend = Boolean.parseBoolean(request.getParameter("hideLegend"));
+    boolean hideGrid = Boolean.parseBoolean(request.getParameter("hideGrid"));
+    boolean hideTitle = Boolean.parseBoolean(request.getParameter("hideTitle"));
+    boolean showEvents = Boolean.parseBoolean(request.getParameter("showEvents"));
+    boolean showCredit = Boolean.parseBoolean(request.getParameter("showCredit"));
+    String format = request.getParameter("format");
+
+    boolean rendered = false;
+
+    if (fakeBw || (rateStat != null && period > 0)) {
+        if (!fakeBw) rate = rateStat.getRate(period);
+        if (fakeBw || rate != null) {
             response.setHeader("X-Content-Type-Options", "nosniff");
-            if ("xml".equals(format)) {
-                if (!fakeBw) {
+            java.io.OutputStream stream = response.getOutputStream();
+            try {
+                if ("xml".equalsIgnoreCase(format) && !fakeBw) {
                     response.setContentType("text/xml; charset=utf-8");
                     response.setHeader("Content-Disposition", "attachment; filename=\"" + stat + ".xml\"");
-                    rendered = ss.getXML(rate, cout);
+                    rendered = graphGen.getXML(rate, stream);
+                } else {
+                    response.setContentType("image/svg+xml");
+                    response.setCharacterEncoding("UTF-8");
+                    response.setHeader("Content-Disposition", "inline; filename=\"" + stat + ".svg\"");
+                    response.addHeader("Cache-Control", "private, no-cache, max-age=14400");
+                    response.setHeader("Accept-Ranges", "none");
+                    response.setHeader("Connection", "Close");
+                    rendered = fakeBw ? graphGen.renderRatePng(stream, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit)
+                                      : graphGen.renderPng(rate, stream, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);
                 }
-            } else {
-                /** PNG
-                response.setContentType("image/png");
-                response.setHeader("Content-Disposition", "inline; filename=\"" + stat + ".png\"");
-                 */
-                response.setContentType("image/svg+xml");
-                response.setCharacterEncoding("UTF-8");
-                response.setHeader("Content-Disposition", "inline; filename=\"" + stat + ".svg\"");
-                // very brief 45 sec expire
-                // response.setDateHeader("Expires", ctx.clock().now() + (45*1000));
-                response.addHeader("Cache-Control", "private, no-cache, max-age=14400");
-                response.setHeader("Accept-Ranges", "none");
-                // http://jira.codehaus.org/browse/JETTY-1346
-                // This doesn't actually appear in the response, but it fixes the problem,
-                // so Jetty must look for this header and close the connection.
-                response.setHeader("Connection", "Close");
-                int width = -1;
-                int height = -1;
-                int periodCount = -1;
-                int end = 0;
-                String str = request.getParameter("width");
-                if (str != null) try { width = Integer.parseInt(str); } catch (NumberFormatException nfe) {}
-                str = request.getParameter("height");
-                if (str != null) try { height = Integer.parseInt(str); } catch (NumberFormatException nfe) {}
-                str = request.getParameter("periodCount");
-                if (str != null) try { periodCount = Integer.parseInt(str); } catch (NumberFormatException nfe) {}
-                str = request.getParameter("end");
-                if (str != null) try { end = Integer.parseInt(str); } catch (NumberFormatException nfe) {}
-                boolean hideLegend = Boolean.parseBoolean(request.getParameter("hideLegend"));
-                boolean hideGrid = Boolean.parseBoolean(request.getParameter("hideGrid"));
-                boolean hideTitle = Boolean.parseBoolean(request.getParameter("hideTitle"));
-                boolean showEvents = Boolean.parseBoolean(request.getParameter("showEvents"));
-                boolean showCredit = false;
-                if (request.getParameter("showCredit") != null)
-                    showCredit = Boolean.parseBoolean(request.getParameter("showCredit"));
-                if (fakeBw)
-                    rendered = ss.renderRatePng(cout, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);
-                else
-                    rendered = ss.renderPng(rate, cout, width, height, hideLegend, hideGrid, hideTitle, showEvents, periodCount, end, showCredit);
+            } finally {
+                if (rendered) stream.close();
             }
-            if (rendered)
-                cout.close();
-                //System.out.println("Rendered period " + per + " for the stat " + stat + "? " + rendered);
         }
-    } catch (NumberFormatException nfe) {}
-}
-/*
- *  Send a 400 (bad request) instead of a 404, because the server sends error.jsp
- *  for 404 errors, complete with the summary bar, which would be
- *  a huge load for a page full of graphs if there's a problem
- */
-if (!rendered) {
-    if (stat != null) {
-        stat = net.i2p.data.DataHelper.stripHTML(stat);
-        response.sendError(400, "The stat " + stat + " is not available - it must be enabled for graphing on the stats configuration page.");
-    } else {
-        response.sendError(400, "No stat specified");
     }
-}
+
+    if (!rendered) {
+        String msg = (stat != null)
+           ? "The stat '" + DataHelper.stripHTML(stat) + "' is not available - enable it for graphing."
+           : "No stat specified";
+        response.sendError(400, msg);
+    }
 %>
