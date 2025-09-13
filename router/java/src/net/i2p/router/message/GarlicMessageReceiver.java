@@ -141,8 +141,6 @@ public class GarlicMessageReceiver {
          *  is no longer a separate field for the clove ID in the transmission format.
          */
 
-        //String invalidReason = _context.messageValidator().validateMessage(clove.getCloveId(),
-        //                                                                   clove.getExpiration().getTime());
         String invalidReason = _context.messageValidator().validateMessage(clove.getExpiration());
 
         boolean rv = invalidReason == null;

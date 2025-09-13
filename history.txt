@@ -1,3 +1,6 @@
+2025-09-12 dr|z3d
+ * Console: Add UI option to toggle sticky sidebar on /configsidebar
+
 2025-09-09 2.10.0+ (API 0.9.67) released
 
 2025-09-02 dr|z3d

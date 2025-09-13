@@ -1,5 +1,6 @@
 /* I2P+ StickySidebar by dr|z3d */
 /* License: AGPLv3 or later */
+
 function stickySidebar() {
   if (stickySidebarEnabled === false) return;
 
@@ -28,9 +29,7 @@ function stickySidebar() {
   if (iframe) {
     sbWrap.classList.remove("sticky");
     setTimeout(() => { calcHeight(); }, 1500);
-  } else {
-    calcHeight();
-  }
+  } else { calcHeight(); }
 
   sbWrap.addEventListener("click", function(event) {
     if (event.target.classList.contains("toggleSection")) {
