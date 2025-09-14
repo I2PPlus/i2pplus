@@ -109,7 +109,8 @@ public class GarlicMessageReceiver {
             }
         } else {
             if (_log.shouldWarn()) {
-                boolean isUs = _context.routerHash().toBase32().substring(0,6).equals(_clientDestination.toBase32().substring(0,6));
+                boolean isUs = _clientDestination == null || _clientDestination != null &&
+                               _context.routerHash().toBase32().substring(0,6).equals(_clientDestination.toBase32().substring(0,6));
                 String d = (_clientDestination != null) && !isUs ? "[" + _clientDestination.toBase32().substring(0,8) + "]" : "Our Router";
                 String keys = (decryptionKey2 != null) ? "both ElGamal and ECIES keys" : decryptionKey.getType().toString();
                 _log.warn("Failed to decrypt " + message + " with " + keys + " -> Target: " + d);
