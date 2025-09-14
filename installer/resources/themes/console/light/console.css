@@ -641,8 +641,8 @@ td.infowarn,#help tr:hover td.infowarn{background:var(--infowarn) no-repeat 15px
 #logs table::before{width:calc(100% - 4px);height:2px;position:absolute;top:1px;left:2px;z-index:999;display:block;background:linear-gradient(to right,rgba(255,96,0,.3),#f50,rgba(255,96,0,.3));content:"";animation:bar .01s steps(2) reverse,fade .012s ease both;backface-visibility:hidden;will-change:transform}
 #logs table[id$="logs"] tr:first-child td,.subheading{background:linear-gradient(45deg,#fcfcff,#eef);box-shadow:var(--highlight)}
 #logs>.tabletitle{margin:15px auto -3px;z-index:999}
-#logs ul{margin:-5px 0 -3px;width:100%;display:inline-block;word-break:break-all}
-#logs ul li{margin:0 0 -1px -4px;padding-left:4px;width:calc(100% - 2px)}
+#logs ul{margin:-5px 0 -3px -5px;width:calc(100% + 9px);display:inline-block;word-break:break-all;contain:paint}
+#logs ul li{margin:0 0 -1px 1px;padding-left:4px;width:calc(100% - 11px)}
 #logs a.configure,#logs a.delete,#logs a.configure:hover,#logs a.delete:hover,#logs a.configure:focus,#logs a.delete:focus,#logs a.active:hover,#logs a.active:hover{border-left:0;box-shadow:none;background:none;display:inline-block}
 #logs a.delete::after,#logs a.configure::after,#logs #eventlogLink::after{margin:-7px -8px -6px 0;padding:8px 4px 8px 20px;border-left:1px solid #aab}
 #logs a.configure::after{padding-left:23px;padding-right:6px}
@@ -663,9 +663,10 @@ table[id$="logs"] tr:first-child td,table[id$="logs"] tr:last-child td{border-bo
 table[id$="logs"] ul li:last-child{margin-bottom:10px}
 #criticallogs .log_debug,#criticallogs .log_info,#criticallogs .log_warn,#criticallogs .log_error,#criticallogs .log_crit,#criticallogs .log_omitted{margin:1px 1px -1px}
 #criticallogs tr:first-child{display:none}
+#logs #criticallogs ul li{margin-bottom:-2px}
 #routerlogs ul{margin-top:-5px;margin-bottom:-19px;word-wrap:break-word}
-#routerlogs li{margin-top:-14px}
-#routerlogs li:last-child,#criticallogs li:last-child{margin-bottom:-2px}
+#routerlogs ul li{width:calc(100% - 11px)}
+#logs #routerlogs ul li:last-child,#logs #criticallogs ul li:last-child{margin-bottom:2px}
 #routerlogs tr:first-child td,#wrapperlogs tr:first-child td{border-bottom:var(--border_inner)}
 #wrapperlogs,table#routerlogs{margin-bottom:10px;width:100%;table-layout:fixed}
 #wrapperlogs{margin-bottom:5px;border-bottom-width:3px}
@@ -2652,10 +2653,11 @@ hr[hidden]+#sb_graphcontainer{margin-top:-9px}
 #home h4 a::after{margin:-2px 10px 3px -6px}
 #logs li font[color]::before{display:none}
 #logs li span[class]{margin:2px 4px 0 -44px;float:left}
-#logs ul li{padding-left:46px;width:calc(100% - 44px);line-height:1.4}
+#logs ul li{padding-left:46px;width:calc(100% - 53px);line-height:1.4}
 #pluginconfig{margin-top:-14px}
 p#pluginconfigtext{margin-top:11px}
 #profilelist th:nth-child(4),#profilelist td:nth-child(4){display:none}
+#routerlogs ul{margin-bottom:-3px}
 #sb_general td::after,#sb_shortgeneral td::after,#sb_advancedgeneral td::after,#sb_bandwidth td::after,#sb_peers td::after,#sb_peersadvanced td::after,#sb_tunnels td::after,#sb_queue td::after{min-height:12px}
 #sb_internals a,#sb_advanced a #sb_help a{max-width:200px}
 #sb_peers_condensed,#sb_tunnels_condensed{width:calc(100% + 11px)}
@@ -2915,6 +2917,7 @@ h4#updateplugins,#news p{font-size:10pt}
 #jobs #jobstats th{font-size:90%}
 #loggingoptions{margin-bottom:-3px}
 #logs font[color^="#"]::before{margin-right:6px;margin-left:5px;width:7px;height:7px}
+#logs #routerlogs ul li:last-child{margin-bottom:18px}
 #minigraphcontainer,#minigraphcontainer_noscript{margin-top:-43px;margin-left:1px;width:234px;height:38px;background-size:248px 40px}
 #minigraph{margin-top:-20px;width:234px;height:43px}
 #netdbcountrylist img{width:24px;height:auto}
