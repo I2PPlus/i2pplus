@@ -24,7 +24,7 @@
 <table id=statconfig class=configtable>
 <tr><td class=infohelp id=enablefullstats colspan=2><%=intl._t("A limited selection of stats is enabled by default, required for monitoring router performance. Only stats that have an optional graph are listed here; for a full list of enabled stats, view the <a href=\"/stats\">stats page</a>.")%></td></tr>
 <tr id=enablefull><td><label><input type=checkbox class="optbox slider" id=enableFull name="isFull" value=true <%
- if (statshelper.getIsFull()) {%>checked <% }%> > <b><%=intl._t("Enable full stats?").replace(" stats?", " stat collection")%></b>
+ if (statshelper.getIsFull()) { %>checked <% } %>> <b><%=intl._t("Enable full stats?").replace(" stats?", " stat collection")%></b>
  (<%=intl._t("change requires restart to take effect").replace("change requires restart to take effect", "restart required")%>)</label></td><td class=right><input type=submit name="shouldsave" class=accept value="<%=intl._t("Save changes")%>"></td></tr>
 </table>
 <h3 class=tabletitle id=graphchoice><%=intl._t("Select Stats for Graphing")%></h3>
@@ -39,7 +39,7 @@
         } // end iterating over required groups for the current stat
         if (statshelper.getCurrentCanBeGraphed() && !statshelper.getCurrentGraphName().contains("Ping")) {
 %>
-<input hidden type=checkbox class=optbox id="<%=statshelper.getCurrentStatName().replace(" ", "_").replace("[", "").replace("]", "")%>" name="graphList" value="<%=statshelper.getCurrentGraphName()%>"<% if (statshelper.getCurrentIsGraphed()){%> checked<%}%>>
+<input hidden type=checkbox class=optbox id="<%=statshelper.getCurrentStatName().replace(" ", "_").replace("[", "").replace("]", "")%>" name="graphList" value="<%=statshelper.getCurrentGraphName()%>"<% if (statshelper.getCurrentIsGraphed()){%> checked<%} %>>
 <label for="<%=statshelper.getCurrentStatName().replace(" ", "_").replace("[", "").replace("]", "")%>" data-tooltip="<%=statshelper.getCurrentStatDescription()%>">
 <%
     int dot = statshelper.getCurrentStatName().indexOf(".");

@@ -30,7 +30,7 @@
 <label><b><%=intl._t("Refresh interval")%>:</b>
 <input type=text name=refreshInterval maxlength=4 pattern="[0-9]{1,4}" required value="<%=rval%>">
 <%=intl._t("seconds")%>
-<% if (!rval.equals("0")) {%>&nbsp;(<%=intl._t("0 to disable")%>)<% }%></label>
+<% if (!rval.equals("0")) { %>&nbsp;(<%=intl._t("0 to disable")%>)<% } %></label>
 <label id=unifiedSidebar><b><%=intl._t("Unified sidebar")%>:</b>
 <input type=checkbox class="optbox slider" name=unifiedSidebar value=true <%=(intl.useUnifiedSidebar() ? "checked" : "")%>>
 <%=intl._t("Use the same sidebar on all pages")%></label>

@@ -15,7 +15,7 @@
 <%@include file="confignav.jsi"%>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigFamilyHandler" id="formhandler" scope="request"/>
 <%@include file="formhandler.jsi"%>
-<% if (!familyHelper.isAdvanced()) {%>
+<% if (!familyHelper.isAdvanced()) { %>
 <p class=infohelp><%=intl._t("Routers in the same family share a family key.")%>&nbsp;
 <%=intl._t("To join an existing family, import the private key you exported from a router in the family.")%>&nbsp;
 <%=intl._t("To start a new family, enter a family name.")%>

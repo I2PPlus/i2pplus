@@ -53,7 +53,7 @@
         book.saveNotes();
         detail = net.i2p.data.DataHelper.stripHTML(detail);
         java.util.List<i2p.susi.dns.AddressBean> addrs = book.getLookupAll();
-        if (addrs == null) {%>
+        if (addrs == null) { %>
 <p>Not found: <%=detail%></p>
 <%      } else {
             boolean haveImagegen = book.haveImagegen();

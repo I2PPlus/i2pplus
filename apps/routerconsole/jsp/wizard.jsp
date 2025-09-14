@@ -54,11 +54,11 @@
     wizhelper.setContextId(i2pcontextId);
 %>
 </head>
-<%  if (ipg == 3) {%>
+<%  if (ipg == 3) { %>
 <body id=wizardpage>
-<%  } else {%>
+<%  } else { %>
 <body id=wizardpage class=bandwidthtester>
-<%  }%>
+<%  } %>
 <div id=sb_wrap class="" style=width:200px;float:left;margin-right:20px>
 <div class=sb id=sidebar>
 <div id=sb_logo style=height:36px;pointer-events:none>
@@ -74,9 +74,9 @@
 </div>
 <%  if (ipg > 0 && ipg < 5 || ipg == LAST_PAGE) { /* language selection */%>
 <h1>New Install Wizard <span id=pagecount style=float:right><%=ipg%>/<%=LAST_PAGE%></span></h1>
-<%  } else {%>
+<%  } else { %>
 <h1>Unknown Wizard page <span id=pagecount style=float:right><%=ipg%>/<%=LAST_PAGE%></span></h1>
-<%  }%>
+<%  } %>
 <div class=main id=setupwizard>
 <div id=wizard>
 <jsp:useBean class="net.i2p.router.web.helpers.WizardHandler" id="formhandler" scope="request"/>
@@ -96,7 +96,7 @@
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHelper" id="uihelper" scope="request"/>
 <jsp:setProperty name="uihelper" property="contextId" value="<%=i2pcontextId%>"/>
 <%-- needed for CSS: --%><div id=config_ui>
-<%-- needed for lang setting in head.jsi: --%><input type=hidden name="consoleNonce" value="<%=net.i2p.router.web.CSSHelper.getNonce()%>">
+<%-- needed for lang setting in head.jsi: --%><input type=hidden name=consoleNonce value="<%=net.i2p.router.web.CSSHelper.getNonce()%>">
 <p class=infohelp id=flags>
 <%=intl._t("Select the language to be used for the router console and web applications (<a href=/webmail target=_blank rel=noreferrer>webmail</a>, <a href=/torrents target=_blank rel=noreferrer>torrents</a>, <a href=/i2ptunnelmgr target=_blank rel=noreferrer>tunnel manager</a> etc). If you wish to change the language in future, change the router console theme, or configure a password to access the console, you may do so on the <a href=/configui target=_blank rel=noreferrer>User Interface configuration page</a>.")%>
 </p>

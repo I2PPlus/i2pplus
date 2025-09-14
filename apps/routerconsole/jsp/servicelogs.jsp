@@ -31,7 +31,7 @@
     if (llast >= 0) {
 %>
 &nbsp;<a class=delete title="<%=intl._t("Clear logs")%>" href="logs?svc=<%=llast%>&amp;svct=<%=lts%>&amp;svcf=<%=filename%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a>
-<%  }%>
+<%  } %>
 </h3>
 <table id=wrapperlogs class=logtable>
 <tbody><tr><td><% out.append(buf);%></td></tr></tbody>

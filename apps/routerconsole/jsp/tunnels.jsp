@@ -18,9 +18,9 @@
     if (isAdvanced) {
 %>
 <div class="main isAdvanced" id=tunnels>
-<%  } else {%>
+<%  } else { %>
 <div class=main id=tunnels>
-<%  }%>
+<%  } %>
 <div class=confignav>
 <span class=tab2 title="Locally hosted tunnels (exploratory and client)">Local</span>
 <span class=tab><a href="/transit"><%=intl._t("Transit")%> (<%=intl._t("Most Recent")%>)</a></span>

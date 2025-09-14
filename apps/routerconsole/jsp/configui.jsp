@@ -17,7 +17,7 @@
 <%@include file="formhandler.jsi"%>
 <h3 id=themeheading><%=uihelper._t("Router Console Theme")%></h3>
 <form action=/applytheme method=POST>
-<input type=hidden name="consoleNonce" value="<%=net.i2p.router.web.CSSHelper.getNonce()%>">
+<input type=hidden name=consoleNonce value="<%=net.i2p.router.web.CSSHelper.getNonce()%>">
 <input type=hidden name=nonce value="<%=pageNonce%>">
 <input type=hidden name=action value=blah>
 <div id=themesettings>
@@ -30,13 +30,13 @@
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>">
 <input type=submit name=shouldsave class=accept value="<%=intl._t("Apply")%>">
 </div>
-<%  } else {%>
+<%  } else { %>
 <p class=infohelp id=oldmsie>
 <%=uihelper._t("Theme selection disabled for Internet Explorer, sorry.")%> (<%=uihelper._t("A very old version has been detected. It's not recommended to use I2P with unmaintained browsers.")%>)
 <br>
 <%=uihelper._t("If you're not using IE, it's likely that your browser is pretending to be IE; please configure your browser (or proxy) to use a different User Agent string if you'd like to access the console themes.")%>
 </p>
-<%  }%>
+<%  } %>
 </div>
 </form>
 <h3 id=passwordheading><%=uihelper._t("Router Console Password")%></h3>
@@ -49,21 +49,20 @@
     if (pwEnabled) {
 %>
 <input type=submit name=action class=delete value="<%=intl._t("Delete selected")%>">
-<%  }%>
+<%  } %>
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>">
 <input type=submit name=action class=add value="<%=intl._t("Add user")%>">
 </div>
 </form>
 <h3 id=langheading><%=uihelper._t("Router Console Language")%></h3>
 <form method=POST>
-<input type=hidden name="consoleNonce" value="<%=net.i2p.router.web.CSSHelper.getNonce()%>">
+<input type=hidden name=consoleNonce value="<%=net.i2p.router.web.CSSHelper.getNonce()%>">
 <input type=hidden name=nonce value="<%=pageNonce%>">
 <input type=hidden name=action value=blah>
 <div id=langsettings>
 <jsp:getProperty name="uihelper" property="langSettings"/>
-<p id=helptranslate>
-<%=uihelper._t("Please contribute to the router console translation project! Contact the developers in #saltR on IRC to help.").replace("router console", "I2P+").replace("#i2p-dev", "#saltR")%>
-</p><hr>
+<p id=helptranslate><%=uihelper._t("Please contribute to the router console translation project! Contact the developers in #saltR on IRC to help.").replace("router console", "I2P+").replace("#i2p-dev", "#saltR")%></p>
+<hr>
 <div class=formaction id=langui>
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>">
 <input type=submit name=shouldsave class=accept value="<%=intl._t("Apply")%>">

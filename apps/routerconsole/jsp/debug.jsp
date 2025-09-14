@@ -34,12 +34,12 @@
         }
         boolean isActive = tabD.equals(currentD);
 %>
-<% if (isActive) {%>
+<% if (isActive) { %>
     <span class="tab2"><%=tab[0]%></span>
-<% } else {%>
+<% } else { %>
     <span class="tab"><a href="<%=tabUrl%>"><%=tab[0]%></a></span>
-<% }%>
-<% }%>
+<% } %>
+<% } %>
 </div>
 <%  net.i2p.router.RouterContext ctx = (net.i2p.router.RouterContext) context;
     String dd = currentD;

@@ -22,14 +22,14 @@
 <%  boolean isX86 = net.i2p.util.SystemVersion.isX86();
     if (isX86) {
 %>&ensp;<%=net.i2p.util.NativeBigInteger.cpuModel()%>
-<%  }%>
+<%  } %>
 </td></tr>
 <tr><td><b>Java:</b></td><td><%=System.getProperty("java.vendor")%>&ensp;<%=System.getProperty("java.version")%>&ensp;(<%=System.getProperty("java.runtime.name")%>&ensp;<%=System.getProperty("java.runtime.version")%>)
 <%  boolean recentJavaVersion = net.i2p.util.SystemVersion.isJava(17);
     if (!recentJavaVersion) {
 %>
 <br><span style=color:red>Warning: You are running an older version of Java that will soon no longer be supported. Please update to Java 17 or later to receive future router updates.</span>
-<%  }%>
+<%  } %>
 </td></tr>
 <jsp:getProperty name="logsHelper" property="unavailableCrypto"/>
 <tr><td><b>Jetty:</b></td><td><jsp:getProperty name="logsHelper" property="jettyVersion"/>&ensp;<b>Servlet:</b>&ensp;<%=getServletInfo()%></td></tr>

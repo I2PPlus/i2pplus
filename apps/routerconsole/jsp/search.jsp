@@ -19,7 +19,7 @@
     if (url != null) {
 %>
 <meta http-equiv=refresh content="1;URL=<%=url%>"/>
-<%  }%>
+<%  } %>
 <style>
 html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#041804}
 #sitesearch{position:relative}
@@ -31,7 +31,7 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#041804}
 <body id=sitesearch>
 <table>
 <tr>
-<%  if (url != null) {%>
+<%  if (url != null) { %>
 <td id=inprogress>
 <%  } else {
         response.setStatus(403);
@@ -39,9 +39,9 @@ html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#041804}
         if (query == null || query.trim().isEmpty()) {
 %>
 <td>No search string specified!
-<%     } else if (request.getParameter("engine") == null) {%>
+<%     } else if (request.getParameter("engine") == null) { %>
 <td>No search engine specified!
-<%     } else {%>
+<%     } else { %>
 <td>No search engines found!
 <%      }
     }

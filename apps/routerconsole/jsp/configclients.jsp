@@ -28,26 +28,26 @@
 </h3>
 <p class=infohelp id=clientconf>
 <%     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-       if (net.i2p.router.startup.ClientAppConfig.isSplitConfig(ctx)) {%>
+       if (net.i2p.router.startup.ClientAppConfig.isSplitConfig(ctx)) { %>
 <%=intl._t("To change client options, edit the files in: {0}", "<code>" + net.i2p.router.startup.ClientAppConfig.configDir(ctx).getAbsolutePath() + "</code>")%>
-<%     } else {%>
+<%     } else { %>
 <%=intl._t("To change client options, edit the file: {0}", "<code>" + net.i2p.router.startup.ClientAppConfig.configFile(ctx).getAbsolutePath() + "</code>")%>
-<%     }%>
+<%     } %>
 </p>
-<%    if (!clientshelper.isAdvanced()) {%>
+<%    if (!clientshelper.isAdvanced()) { %>
 <p class=infowarn id=clientconf>
 <b><%=intl._t("Be careful changing any settings here. The 'router console' and 'application tunnels' are required for most uses of I2P. Only advanced users should change these.")%></b>
 </p>
-<%    }%>
+<%    } %>
 <div class=wideload>
 <form id=form_clients method=POST>
 <input type=hidden name=nonce value="<%=pageNonce%>">
 <jsp:getProperty name="clientshelper" property="form1"/>
 <div class=formaction id=clientsconfig>
 <input type=submit class=cancel name=foo value="<%=intl._t("Cancel")%>"/>
-<%    if (clientshelper.isClientChangeEnabled() && request.getParameter("edit") == null) {%>
+<%    if (clientshelper.isClientChangeEnabled() && request.getParameter("edit") == null) { %>
 <input type=submit name=edit class=add value="<%=intl._t("Add Client")%>"/>
-<%   }%>
+<%   } %>
 <input type=submit class=accept name=action value="<%=intl._t("Save Client Configuration")%>"/>
 </div>
 </form>

@@ -58,7 +58,7 @@
 <span class="sitemapLabel"><%=intl._t(sitemapLink.labelKey)%></span>
 </span>
 </a>
-<% }%>
+<% } %>
 <h3><%=intl._t("Information &amp; Diagnostics")%></h3>
 <%
   LinkEntry[] infoLinks = new LinkEntry[]{
@@ -91,7 +91,7 @@
 <span class="sitemapLabel"><%=intl._t(sitemapLink.labelKey)%></span>
 </span>
 </a>
-<% }%>
+<% } %>
 <h3><%=intl._t("Configuration")%></h3>
 <%
   LinkEntry[] configLinks = new LinkEntry[]{
@@ -124,8 +124,8 @@
 <span class=sitemapLabel><%=intl._t(sitemapLink.labelKey)%></span>
 </span>
 </a>
-<% }%>
-<% if (version.equals(firstVersion)) {%>
+<% } %>
+<% if (version.equals(firstVersion)) { %>
 <h3><%=intl._t("Help &amp; Support")%></h3>
 <%
   LinkEntry[] helpLinks = new LinkEntry[]{
@@ -149,8 +149,8 @@
 <span class=sitemapLabel><%=intl._t(sitemapLink.labelKey)%></span>
 </span>
 </a>
-<% }%>
-<% }%>
+<% } %>
+<% } %>
 <%
   boolean sitemapSites = ctx.getBooleanProperty("routerconsole.sitemapSites");
   if (sitemapSites) {
@@ -164,7 +164,7 @@
 <jsp:useBean class="net.i2p.router.web.helpers.HomeHelper" id="homehelper" scope="request"/>
 <jsp:setProperty name="homehelper" property="contextId" value="<%=i2pcontextId%>"/>
 <jsp:getProperty name="homehelper" property="favorites"/>
-<% }%>
+<% } %>
 </div>
 </div>
 </body>

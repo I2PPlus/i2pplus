@@ -19,8 +19,8 @@
 %>
 <%@include file="head.jsi"%>
 <link rel=stylesheet href="<%=intl.getTheme(request.getHeader("User-Agent"))%>proxy.css">
-<%  if (useSoraFont) {%><link href=/themes/fonts/Sora.css rel=stylesheet>
-<%  } else {%><link href=/themes/fonts/OpenSans.css rel=stylesheet><% }%>
+<%  if (useSoraFont) { %><link href=/themes/fonts/Sora.css rel=stylesheet>
+<%  } else { %><link href=/themes/fonts/OpenSans.css rel=stylesheet><% } %>
 <%=intl.title("Page Not Found")%>
 <script nonce=<%=cspNonce%>>if (top.location.href !== location.href) top.location.href = location.href;</script>
 </head>

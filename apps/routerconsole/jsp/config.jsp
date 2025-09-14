@@ -24,7 +24,7 @@
 <tr>
 <td class=infohelp colspan=2>
 <%=intl._t("I2P will work best if you configure your rates to match the speed of your internet connection.").replace("I2P", "I2P+")%>
-<% if (!nethelper.isAdvanced()) {%>
+<% if (!nethelper.isAdvanced()) { %>
 &nbsp;<%=intl._t("Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed).")%>
 <% }  // !isAdvanced%>
 &nbsp;<%=intl._t("The maximum data transfer values indicate the theoretical maximum, and in practice will normally be much lower.")%>

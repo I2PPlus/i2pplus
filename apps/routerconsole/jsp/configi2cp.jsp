@@ -37,16 +37,16 @@
 <tr>
 <td>
 <div class=optionlist>
-<label><input type=radio class=optbox name="mode" value="1" <%=clientshelper.i2cpModeChecked(1)%> >
+<label><input type=radio class=optbox name="mode" value="1" <%=clientshelper.i2cpModeChecked(1)%>>
 <%=intl._t("Enabled without SSL")%></label><br>
-<label><input type=radio class=optbox name="mode" value="2" <%=clientshelper.i2cpModeChecked(2)%> >
+<label><input type=radio class=optbox name="mode" value="2" <%=clientshelper.i2cpModeChecked(2)%>>
 <%=intl._t("Enabled with SSL required")%></label><br>
 <%
     // returns nonempty string if disabled
     String disableChecked = clientshelper.i2cpModeChecked(0);
     boolean isDisabled = disableChecked.length() > 0;
 %>
-<label><input type=radio class=optbox name="mode" value="0" <%=disableChecked%> >
+<label><input type=radio class=optbox name="mode" value="0" <%=disableChecked%>>
 <%=intl._t("Disabled - Clients outside this Java process may not connect")%></label><br>
 </div>
 </td>

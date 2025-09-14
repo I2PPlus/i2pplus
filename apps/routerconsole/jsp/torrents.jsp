@@ -49,4 +49,4 @@
 <style>iframe{display:block;pointer-events:auto}#torrents::before{width:100%;animation:fade .3s linear .7s both}</style>
 </body>
 </html>
-<%  }%>
+<%  } %>
