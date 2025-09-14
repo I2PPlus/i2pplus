@@ -67,7 +67,7 @@ public class GarlicMessageReceiver {
                 PrivateKey decryptionKey3 = keys.getPQDecryptionKey();
                 if (decryptionKey == null && decryptionKey2 == null && decryptionKey3 == null) {
                     if (_log.shouldWarn()) {
-                        _log.warn("No key to decrypt for " + _clientDestination.toBase32());
+                        _log.warn("No key to decrypt for client destination " + _clientDestination.toBase32().substring(0,8));
                     }
                     return;
                 }
@@ -85,7 +85,8 @@ public class GarlicMessageReceiver {
                 }
             } else {
                 if (_log.shouldWarn()) {
-                    _log.warn("Not decrypting " + message + " for disconnected client \n* Destination: " + _clientDestination);
+                    _log.warn("Not decrypting " + message + " for disconnected client -> Target: " +
+                              _clientDestination.toBase32().substring(0,8));
                 }
                 return;
             }
@@ -108,13 +109,13 @@ public class GarlicMessageReceiver {
             }
         } else {
             if (_log.shouldWarn()) {
-                String d = (_clientDestination != null) ? _clientDestination.toBase32() : "Our Router";
+                boolean isUs = _context.routerHash().toBase32().substring(0,6).equals(_clientDestination.toBase32().substring(0,6));
+                String d = (_clientDestination != null) && !isUs ? "[" + _clientDestination.toBase32().substring(0,8) + "]" : "Our Router";
                 String keys = (decryptionKey2 != null) ? "both ElGamal and ECIES keys" : decryptionKey.getType().toString();
-                _log.warn("Failed to decrypt " + message + " with " + keys + "\n* Destination: " + d);
+                _log.warn("Failed to decrypt " + message + " with " + keys + " -> Target: " + d);
             }
             _context.statManager().addRateData("crypto.garlic.decryptFail", 1);
-            _context.messageHistory().messageProcessingError(message.getUniqueId(),
-                                                             message.getClass().getName(),
+            _context.messageHistory().messageProcessingError(message.getUniqueId(), message.getClass().getName(),
                                                              "Garlic could not be decrypted");
         }
     }
