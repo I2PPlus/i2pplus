@@ -31,6 +31,7 @@ function sectionToggler() {
   const sb_wrap = document.getElementById("sb_wrap") || sb;
   const xhr = document.getElementById("xhr");
   const savedConfigs = localStorage.getItem("sidebarSections");
+  const main = document.querySelector(".main");
   const sidebarSections = savedConfigs !== null ? JSON.parse(savedConfigs) : null;
 
   const toggleElements = {
@@ -298,10 +299,13 @@ function sectionToggler() {
   addToggleListeners();
 
   document.addEventListener("DOMContentLoaded", () => {
-    const wrap = document.getElementById("sb_wrap");
-    wrap.removeAttribute("style");
-    xhr.classList.add("fadein");
     setTimeout(() => { xhr.classList.remove("fadein"); }, 120);
+    const interval = setInterval(() => {
+      if (main) {
+        clearInterval(interval);
+        setTimeout(() => { wrap.removeAttribute("style"); }, 2000);
+      }
+    }, 1000);
   });
 }
 
