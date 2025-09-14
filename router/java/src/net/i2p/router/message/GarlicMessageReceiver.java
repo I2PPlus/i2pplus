@@ -19,6 +19,7 @@ import net.i2p.data.i2np.GarlicMessage;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.router.LeaseSetKeys;
 import net.i2p.router.RouterContext;
+import net.i2p.router.TunnelPoolSettings;
 import net.i2p.util.Log;
 
 /**
@@ -57,6 +58,21 @@ public class GarlicMessageReceiver {
         PrivateKey decryptionKey;
         PrivateKey decryptionKey2 = null;
         SessionKeyManager skm;
+        TunnelPoolSettings in = _clientDestination != null ? _context.tunnelManager().getInboundSettings(_clientDestination.calculateHash()) : null;
+        TunnelPoolSettings out = _clientDestination != null ? _context.tunnelManager().getOutboundSettings(_clientDestination.calculateHash()) : null;
+        boolean warn = _log.shouldWarn();
+        String name = "";
+        String nick = "";
+
+        if (warn && _clientDestination != null) {
+            if (in != null) {name = in.getDestinationNickname();}
+            else if (out != null) {name = out.getDestinationNickname();}
+        }
+        if (warn && _clientDestination != null) {
+            nick = "[" + _clientDestination.toBase32().substring(0,8) + "]";
+            if (!name.equals("")) {nick = name;}
+        }
+
         if (_clientDestination != null) {
             LeaseSetKeys keys = _context.keyManager().getKeys(_clientDestination);
             skm = _context.clientManager().getClientSessionKeyManager(_clientDestination);
@@ -66,8 +82,8 @@ public class GarlicMessageReceiver {
                 // this will return any of the PQ types
                 PrivateKey decryptionKey3 = keys.getPQDecryptionKey();
                 if (decryptionKey == null && decryptionKey2 == null && decryptionKey3 == null) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("No key to decrypt for client destination " + _clientDestination.toBase32().substring(0,8));
+                    if (warn) {
+                        _log.warn("No key to decrypt for client destination " + nick);
                     }
                     return;
                 }
@@ -84,9 +100,8 @@ public class GarlicMessageReceiver {
                     }
                 }
             } else {
-                if (_log.shouldWarn()) {
-                    _log.warn("Not decrypting " + message + " for disconnected client -> Target: " +
-                              _clientDestination.toBase32().substring(0,8));
+                if (warn) {
+                    _log.warn("Not decrypting " + message + " for disconnected client -> Target: " + nick);
                 }
                 return;
             }
@@ -108,11 +123,11 @@ public class GarlicMessageReceiver {
                 handleClove(clove);
             }
         } else {
-            if (_log.shouldWarn()) {
+            if (warn) {
                 boolean isUs = _clientDestination == null || _clientDestination != null &&
                                _context.routerHash().toBase32().substring(0,6).equals(_clientDestination.toBase32().substring(0,6));
-                String d = (_clientDestination != null) && !isUs ? "[" + _clientDestination.toBase32().substring(0,8) + "]" : "Our Router";
-                String keys = (decryptionKey2 != null) ? "both ElGamal and ECIES keys" : decryptionKey.getType().toString();
+                String d = _clientDestination != null && !isUs ? nick : "Our Router";
+                String keys = decryptionKey2 != null ? "both ElGamal and ECIES keys" : decryptionKey.getType().toString();
                 _log.warn("Failed to decrypt " + message + " with " + keys + " -> Target: " + d);
             }
             _context.statManager().addRateData("crypto.garlic.decryptFail", 1);

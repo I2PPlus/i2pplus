@@ -55,6 +55,8 @@ import net.i2p.util.OrderedProperties;
  * @author jrandom
  */
 public class RouterInfo extends DatabaseEntry {
+    private final I2PAppContext ctx = I2PAppContext.getGlobalContext();
+    private final Log log = ctx.logManager().getLog(RouterInfo.class);
     private RouterIdentity _identity;
     private volatile long _published;
     /**
@@ -526,13 +528,10 @@ public class RouterInfo extends DatabaseEntry {
         _validated = true;
 
         if (!_isValid) {
-            Log log = I2PAppContext.getGlobalContext().logManager().getLog(RouterInfo.class);
             if (log.shouldInfo()) {
                 log.warn("Signature verify fail: " + toString(), new Exception("from"));
             } else if (log.shouldWarn()) {
                 log.warn("RouterInfo [" + _identity.getHash().toBase64().substring(0,6) + "] has INVALID signature");
-            //} else {
-            //    log.error("RI Sig verify fail: " + _identity.getHash());
             }
         }
     }
@@ -556,8 +555,7 @@ public class RouterInfo extends DatabaseEntry {
      *  @since 0.9
      */
     public void readBytes(InputStream in, boolean verifySig) throws DataFormatException, IOException {
-        if (_signature != null)
-            throw new IllegalStateException();
+        if (_signature != null) {throw new IllegalStateException();}
         _identity = new RouterIdentity();
         _identity.readBytes(in);
         // can't set the digest until we know the sig type
@@ -566,8 +564,7 @@ public class RouterInfo extends DatabaseEntry {
         SigType type = _identity.getSigningPublicKey().getType();
         // Even if not verifying, we have to construct a Signature object
         // below, which will fail for null type.
-        if (type == null)
-            throw new DataFormatException("Unknown Signature Type");
+        if (type == null) {throw new DataFormatException("Unknown Signature Type");}
         if (verifySig) {
             if (type != SigType.EdDSA_SHA512_Ed25519) {
                 // This won't work for EdDSA
@@ -583,13 +580,8 @@ public class RouterInfo extends DatabaseEntry {
             digest = null;
             din = in;
         }
-        // avoid thrashing objects
-        //Date when = DataHelper.readDate(in);
-        //if (when == null)
-        //    _published = 0;
-        //else
-        //    _published = when.getTime();
         _published = DataHelper.readLong(din, 8);
+
         // EOF will be thrown in properties read below
         int numAddresses = din.read();
         if (numAddresses > MAX_ADDRESSES) {throw new DataFormatException("Too many addresses");}
@@ -600,11 +592,18 @@ public class RouterInfo extends DatabaseEntry {
         }
         // EOF will be thrown in properties read below
         int numPeers = din.read();
-        if (numPeers <= 0) {
-            _peers = null;
-        } else {
+        if (numPeers <= 0) {_peers = null;}
+        else {
             _peers = new HashSet<Hash>(numPeers);
-            if (numPeers > MAX_INTRODUCERS) {throw new DataFormatException("Too many introducers");}
+            if (numPeers > MAX_INTRODUCERS) {
+                if (_identity != null) {
+                    Hash h = _identity.getHash();
+                    if (log.shouldWarn()) {
+                        log.warn("Warning! [" + h.toBase64().substring(0,6) + "] has too many introducers (" + numPeers + ")");
+                    }
+                }
+                throw new DataFormatException("Too many introducers");
+            }
             for (int i = 0; i < numPeers; i++) {
                 Hash peerIdentityHash = new Hash();
                 peerIdentityHash.readBytes(din);
@@ -625,10 +624,8 @@ public class RouterInfo extends DatabaseEntry {
                 _isValid = DSAEngine.getInstance().verifySignature(_signature, hash, _identity.getSigningPublicKey());
                 _validated = true;
             } else {doValidate();} // doValidate will log
-            if (!_isValid) {throw new DataFormatException("Bad RouterInfo signature");}
+            if (!_isValid) {throw new DataFormatException("BAD RouterInfo signature");}
         }
-
-        //_log.debug("Read RouterInfo: " + toString());
     }
 
     /**
@@ -666,32 +663,30 @@ public class RouterInfo extends DatabaseEntry {
 
     @Override
     public String toString() {
-        //if (_stringified != null) return _stringified;
         StringBuilder buf = new StringBuilder(1024);
-        buf.append("RouterInfo: ");
-        buf.append("\n* Identity: ").append(_identity);
         buf.append("\n* Signature: ").append(_signature);
         buf.append("\n* Published: ").append(new Date(_published));
-        if (_peers != null) {
-            buf.append("\n* Peers (").append(_peers.size()).append("):");
-            for (Hash hash : _peers) {
-                buf.append("\n* Peer hash: ").append(hash);
+        if (log.shouldInfo()) {
+            if (_peers != null) {
+                buf.append("\n* Peers (").append(_peers.size()).append("):");
+                for (Hash hash : _peers) {
+                    buf.append("\n* Peer hash: ").append(hash);
+                }
             }
-        }
-        buf.append("\nOptions (").append(_options.size()).append("):");
-        for (Map.Entry<Object, Object> e : _options.entrySet()) {
-            String key = (String) e.getKey();
-            String val = (String) e.getValue();
-            buf.append("\n* ").append(key).append(": ").append(val);
-        }
-        if (!_addresses.isEmpty()) {
-            buf.append("\nAddresses (").append(_addresses.size()).append("):");
-            for (RouterAddress addr : _addresses) {
-                buf.append("\n    ").append(addr);
+            buf.append("\nOptions (").append(_options.size()).append("):");
+            for (Map.Entry<Object, Object> e : _options.entrySet()) {
+                String key = (String) e.getKey();
+                String val = (String) e.getValue();
+                buf.append("\n* ").append(key).append(": ").append(val);
+            }
+            if (!_addresses.isEmpty()) {
+                buf.append("\nAddresses (").append(_addresses.size()).append("):");
+                for (RouterAddress addr : _addresses) {
+                    buf.append("\n    ").append(addr);
+                }
             }
         }
         String rv = buf.toString();
-        //_stringified = rv;
         return rv;
     }
 

@@ -207,13 +207,6 @@ public class ClientManagerFacadeImpl extends ClientManagerFacade implements Inte
         return null;
     }
 
-    /** @deprecated unused */
-    @Override
-    @Deprecated
-    public void renderStatusHTML(Writer out) throws IOException {
-        if (_manager != null) {_manager.renderStatusHTML(out);}
-    }
-
     /**
      * Return the list of locally connected clients
      *

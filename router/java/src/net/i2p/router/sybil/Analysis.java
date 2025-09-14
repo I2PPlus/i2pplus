@@ -498,7 +498,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                 String reason = " <b>➜</b> " + day + ": Sybil Scan (" + fmt.format(p).replace(".00", "") + " points)";
                 if (_log.shouldWarn()) {
                     if (ri != null)
-                        _log.warn("Banning " + reason.replace("<b>➜</b>", "->") + "\n* Blocked IP Address(es): " + ri);
+                        _log.warn("Banning " + reason.replace("<b>➜</b>", "->") + " Blocked IP Address(es) \n* " + ri);
                     else
                         _log.warn("Banning " + h.toBase64() + ' ' + reason.replace("<b>➜</b>", "->"));
                 }
