@@ -2674,6 +2674,8 @@ p#pluginconfigtext{margin-top:11px}
 #sidebar #sb_internals.collapsed,#sidebar #sb_advanced.collapsed{margin-bottom:-13px}
 body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_internals.collapsed,body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_advanced.collapsed{margin-bottom:-10px}
 #sb_advancedgeneral:not([hidden])~#sb_routerControl{margin-bottom:-4px}
+#sidebar #localtunnelSummary{margin-left:-8px;width:208px}
+#sidebar #localtunnelsActive span{letter-spacing:2px}
 #sidebar,#sb_services.collapsed{margin-bottom:-14px}
 #sidebar #sb_routerControl{margin-top:-6px}
 #sidebar hr:not([hidden])+iframe+#sb_routerControl{margin-top:-3px}
@@ -2681,6 +2683,7 @@ body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_int
 #sitemap .applink img{padding-left:62px;padding-right:62px}
 #sitemap h3 img{margin-top:-8px;padding-right:6px}
 }
+
 
 @media (max-width:1480px){
 .themechoice img{margin-bottom:29px}
@@ -2863,7 +2866,6 @@ h1[class],#wizardpage h1{padding:20px 15px 17px 55px;font-size:19pt;background-s
 .netdb_header .unknownflag{margin-right:2px;margin-top:-1px}
 .newsAuthor{padding:0 0 0 14px;font-size:9.5pt;background-size:12px;background-position:left center}
 .percentBarText{margin-top:-1px}
-.sb_netstatus{margin-bottom:-8px}
 .sitemapLabel{min-height:16px}
 .statlist li a[href^="graph"]::before,.statlist li::before{margin:0 10px -30px -17px;height:6px;width:6px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.8)}
 .statlist li{padding:0 10px}
