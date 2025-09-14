@@ -1,22 +1,20 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("configure bandwidth")%>
 </head>
 <body>
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigNetHelper" id="nethelper" scope="request"/>
 <jsp:setProperty name="nethelper" property="contextId" value="<%=i2pcontextId%>"/>
 <h1 class=conf><%=intl._t("Bandwidth Allocation")%></h1>
 <div class=main id=config_bandwidth>
-<%@include file="confignav.jsi" %>
+<%@include file="confignav.jsi"%>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigNetHandler" id="formhandler" scope="request"/>
-<%@include file="formhandler.jsi" %>
+<%@include file="formhandler.jsi"%>
 <form method=POST>
 <input type=hidden name=nonce value="<%=pageNonce%>">
 <input type=hidden name=action value=blah>
@@ -26,9 +24,9 @@
 <tr>
 <td class=infohelp colspan=2>
 <%=intl._t("I2P will work best if you configure your rates to match the speed of your internet connection.").replace("I2P", "I2P+")%>
-<% if (!nethelper.isAdvanced()) { %>
+<% if (!nethelper.isAdvanced()) {%>
 &nbsp;<%=intl._t("Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed).")%>
-<% }  // !isAdvanced %>
+<% }  // !isAdvanced%>
 &nbsp;<%=intl._t("The maximum data transfer values indicate the theoretical maximum, and in practice will normally be much lower.")%>
 </td>
 </tr>

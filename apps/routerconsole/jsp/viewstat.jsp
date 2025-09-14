@@ -1,4 +1,4 @@
-<%@ page import="net.i2p.I2PAppContext, net.i2p.router.web.GraphGenerator, net.i2p.stat.Rate, net.i2p.stat.RateStat, net.i2p.data.DataHelper" buffer="64kb" %>
+<%@ page import="net.i2p.I2PAppContext, net.i2p.router.web.GraphGenerator, net.i2p.stat.Rate, net.i2p.stat.RateStat, net.i2p.data.DataHelper" buffer="64kb"%>
 <%
   /*
    * USE CAUTION WHEN EDITING

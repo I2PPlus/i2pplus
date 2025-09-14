@@ -1,28 +1,26 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("config router family")%>
 </head>
 <body>
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigFamilyHelper" id="familyHelper" scope="request"/>
 <jsp:setProperty name="familyHelper" property="contextId" value="<%=i2pcontextId%>"/>
 <h1 class=conf><%=intl._t("Router Family")%></h1>
 <div class=main id=config_family>
-<%@include file="confignav.jsi" %>
+<%@include file="confignav.jsi"%>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigFamilyHandler" id="formhandler" scope="request"/>
-<%@include file="formhandler.jsi" %>
-<% if (!familyHelper.isAdvanced()) { %>
+<%@include file="formhandler.jsi"%>
+<% if (!familyHelper.isAdvanced()) {%>
 <p class=infohelp><%=intl._t("Routers in the same family share a family key.")%>&nbsp;
 <%=intl._t("To join an existing family, import the private key you exported from a router in the family.")%>&nbsp;
 <%=intl._t("To start a new family, enter a family name.")%>
 </p>
-<% }  // !isAdvanced %>
+<% }  // !isAdvanced%>
 <%
    String family = familyHelper.getFamily();
    if (family.length() <= 0) {

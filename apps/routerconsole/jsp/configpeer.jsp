@@ -1,21 +1,19 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("config peers")%>
 <script src=/js/lazyload.js></script>
 </head>
 <body>
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <h1 class=conf><%=intl._t("Peer Manager")%></h1>
 <div class=main id=config_peers>
-<%@include file="confignav.jsi" %>
+<%@include file="confignav.jsi"%>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigPeerHandler" id="formhandler" scope="request"/>
-<%@include file="formhandler.jsi" %>
+<%@include file="formhandler.jsi"%>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigPeerHelper" id="peerhelper" scope="request"/>
 <jsp:setProperty name="peerhelper" property="contextId" value="<%=i2pcontextId%>"/>
 <% String peer = "";
@@ -36,7 +34,7 @@
             }
         }
     }
- %>
+%>
  <form action="configpeer" method=POST>
  <input type=hidden name=nonce value="<%=pageNonce%>">
  <h3 class=tabletitle><%=intl._t("Manual Peer Controls")%></h3>

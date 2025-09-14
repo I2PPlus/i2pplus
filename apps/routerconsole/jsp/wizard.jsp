@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <jsp:useBean class="net.i2p.router.web.helpers.WizardHelper" id="wizhelper" scope="session"/>
 <%
     // Note that for the helper we use a session scope, not a request scope, so that we can access the NDT test results.
@@ -45,22 +45,20 @@
     }
 %>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("New Install Wizard")%>
 <%
     wizhelper.setContextId(i2pcontextId);
 %>
 </head>
-<%  if (ipg == 3) { %>
+<%  if (ipg == 3) {%>
 <body id=wizardpage>
-<%  } else { %>
+<%  } else {%>
 <body id=wizardpage class=bandwidthtester>
-<%  } %>
+<%  }%>
 <div id=sb_wrap class="" style=width:200px;float:left;margin-right:20px>
 <div class=sb id=sidebar>
 <div id=sb_logo style=height:36px;pointer-events:none>
@@ -74,11 +72,11 @@
 </form>
 </div>
 </div>
-<%  if (ipg > 0 && ipg < 5 || ipg == LAST_PAGE) { /* language selection */ %>
+<%  if (ipg > 0 && ipg < 5 || ipg == LAST_PAGE) { /* language selection */%>
 <h1>New Install Wizard <span id=pagecount style=float:right><%=ipg%>/<%=LAST_PAGE%></span></h1>
-<%  } else { %>
+<%  } else {%>
 <h1>Unknown Wizard page <span id=pagecount style=float:right><%=ipg%>/<%=LAST_PAGE%></span></h1>
-<%  } %>
+<%  }%>
 <div class=main id=setupwizard>
 <div id=wizard>
 <jsp:useBean class="net.i2p.router.web.helpers.WizardHandler" id="formhandler" scope="request"/>
@@ -86,7 +84,7 @@
     // Bind the session-scope Helper to the request-scope Handler
     formhandler.setWizardHelper(wizhelper);
 %>
-<%@include file="formhandler.jsi" %>
+<%@include file="formhandler.jsi"%>
 <form method=POST>
 <input type=hidden name=nonce value="<%=pageNonce%>">
 <input type=hidden name=action value=blah >

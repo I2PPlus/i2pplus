@@ -1,11 +1,9 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="64kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="64kb"%>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("config advanced")%>
 </head>
 <body>
@@ -13,14 +11,14 @@
   progressx.show(theme);progressx.progress(0.1);
   const msgKeyRemove = "<%=intl._t("Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key.")%>";
 </script>
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigAdvancedHelper" id="advancedhelper" scope="request"/>
 <jsp:setProperty name="advancedhelper" property="contextId" value="<%=i2pcontextId%>"/>
 <h1 class=conf><%=intl._t("Advanced Configuration")%></h1>
 <div class=main id=config_advanced>
-<%@include file="confignav.jsi" %>
+<%@include file="confignav.jsi"%>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigAdvancedHandler" id="formhandler" scope="request"/>
-<%@include file="formhandler.jsi" %>
+<%@include file="formhandler.jsi"%>
 <div class=configure>
 <div class=wideload>
 <h3 id=ffconf class=tabletitle><%=intl._t("Floodfill Configuration")%></h3>
@@ -29,8 +27,8 @@
 <tr>
 <td class=infohelp>
 <%=intl._t("Floodfill participation helps the network, but may use more of your computer's resources.")%>
-<% if (advancedhelper.isFloodfill()) { %>(<%=intl._t("This router is currently a floodfill participant.")%>)
-<% } else { %>(<%=intl._t("This router is not currently a floodfill participant.")%>)<% } %>
+<% if (advancedhelper.isFloodfill()) {%>(<%=intl._t("This router is currently a floodfill participant.")%>)
+<% } else {%>(<%=intl._t("This router is not currently a floodfill participant.")%>)<% }%>
 </td>
 </tr>
 <tr>
@@ -38,11 +36,11 @@
 <input type=hidden name=nonce value="<%=pageNonce%>">
 <input type=hidden name=action value="ff">
 <b><%=intl._t("Enrollment")%>:</b>
-<label><input type=radio class=optbox name="ff" value=auto <%=advancedhelper.getFFChecked(2) %> >
+<label><input type=radio class=optbox name="ff" value=auto <%=advancedhelper.getFFChecked(2)%> >
 <%=intl._t("Automatic")%></label>&nbsp;
-<label><input type=radio class=optbox name="ff" value=true <%=advancedhelper.getFFChecked(1) %> >
+<label><input type=radio class=optbox name="ff" value=true <%=advancedhelper.getFFChecked(1)%> >
 <%=intl._t("Force On")%></label>&nbsp;
-<label><input type=radio class=optbox name="ff" value=false <%=advancedhelper.getFFChecked(0) %> >
+<label><input type=radio class=optbox name="ff" value=false <%=advancedhelper.getFFChecked(0)%> >
 <%=intl._t("Disable")%></label>
 </td>
 </tr>
@@ -83,14 +81,14 @@
 </div>
 <script src=/js/toggleElements.js></script>
 <script nonce=<%=cspNonce%>>document.addEventListener("DOMContentLoaded", () => { setupToggles("#ffconf", "#ffconf+form", "block"); });</script>
-<% if (isAdvanced) { %>
+<% if (isAdvanced) {%>
 <script src=/js/advconfig.js type=module></script>
 <noscript><style>#advancedsettings{display:block!important}</style></noscript>
-<% } else { %>
+<% } else {%>
 <style>#advancedsettings{display:block!important}</style>
-<% } %>
+<% }%>
 <noscript><style>#advconf.readonly tr.section{pointer-events:none}#advconf.readonly tr.section th::after{display:none}#floodfillconfig{display:table!important}</style></noscript>
-<% if (!isAdvanced) { %><script src=/js/tableSectionToggler.js type=module></script><% } %>
+<% if (!isAdvanced) {%><script src=/js/tableSectionToggler.js type=module></script><% }%>
 <script src=/js/ok.js></script>
 </body>
 </html>

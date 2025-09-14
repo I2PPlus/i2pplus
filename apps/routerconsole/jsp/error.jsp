@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
 <%
     // Let's make this easy...
@@ -15,19 +15,18 @@
     if (ERROR_MESSAGE != null) {ERROR_MESSAGE = net.i2p.data.DataHelper.escapeHTML(ERROR_MESSAGE);}
     else {ERROR_MESSAGE = "Not Found";}
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <link rel=stylesheet href="<%=intl.getTheme(request.getHeader("User-Agent"))%>proxy.css">
-<%  if (useSoraFont) { %><link href=/themes/fonts/Sora.css rel=stylesheet>
-<%  } else { %><link href=/themes/fonts/OpenSans.css rel=stylesheet><% } %>
+<%  if (useSoraFont) {%><link href=/themes/fonts/Sora.css rel=stylesheet>
+<%  } else {%><link href=/themes/fonts/OpenSans.css rel=stylesheet><% }%>
 <%=intl.title("Page Not Found")%>
 <script nonce=<%=cspNonce%>>if (top.location.href !== location.href) top.location.href = location.href;</script>
 </head>
 <body id=console_404>
 
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <h1 class=err><%=ERROR_CODE%>&nbsp;<%=ERROR_MESSAGE%></h1>
 <div class="sorry console" id=warning>
 <%=intl._t("Sorry! You appear to be requesting a non-existent Router Console page or resource.")%>

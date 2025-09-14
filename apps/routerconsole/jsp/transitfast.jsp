@@ -1,17 +1,15 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="256kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="256kb"%>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("Fastest Transit Tunnels")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body id=transitFast>
 
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <h1 class=netwrk><%=intl._t("Fastest Transit Tunnels")%></h1>
 <div class=main id=tunnels>
 <div class=confignav>
@@ -23,7 +21,7 @@
 </div>
 <jsp:useBean class="net.i2p.router.web.helpers.TunnelParticipatingFastestHelper" id="tunnelParticipatingFastestHelper" scope="request"/>
 <jsp:setProperty name="tunnelParticipatingFastestHelper" property="contextId" value="<%=i2pcontextId%>"/>
-<% tunnelParticipatingFastestHelper.storeWriter(out); %>
+<% tunnelParticipatingFastestHelper.storeWriter(out);%>
 <jsp:getProperty name="tunnelParticipatingFastestHelper" property="tunnelParticipatingFastest"/>
 </div>
 <script src=/js/tablesort/tablesort.js></script>

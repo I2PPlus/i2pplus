@@ -1,14 +1,13 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
 <%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("router information")%>
 </head>
 <body>
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <h1 class=nfo><%=intl._t("Router Summary")%></h1>
 <div class=main id=routerinformation>
 <h3 class=tabletitle id=version><%=intl._t("I2P Version and Running Environment")%><span class=h3navlinks style=float:right><a title="View Router Logs" href="/logs">View Logs</a></span></h3>
@@ -23,14 +22,14 @@
 <%  boolean isX86 = net.i2p.util.SystemVersion.isX86();
     if (isX86) {
 %>&ensp;<%=net.i2p.util.NativeBigInteger.cpuModel()%>
-<%  } %>
+<%  }%>
 </td></tr>
 <tr><td><b>Java:</b></td><td><%=System.getProperty("java.vendor")%>&ensp;<%=System.getProperty("java.version")%>&ensp;(<%=System.getProperty("java.runtime.name")%>&ensp;<%=System.getProperty("java.runtime.version")%>)
 <%  boolean recentJavaVersion = net.i2p.util.SystemVersion.isJava(17);
     if (!recentJavaVersion) {
 %>
 <br><span style=color:red>Warning: You are running an older version of Java that will soon no longer be supported. Please update to Java 17 or later to receive future router updates.</span>
-<%  } %>
+<%  }%>
 </td></tr>
 <jsp:getProperty name="logsHelper" property="unavailableCrypto"/>
 <tr><td><b>Jetty:</b></td><td><jsp:getProperty name="logsHelper" property="jettyVersion"/>&ensp;<b>Servlet:</b>&ensp;<%=getServletInfo()%></td></tr>
@@ -40,7 +39,7 @@
 </table>
 <jsp:useBean class="net.i2p.router.web.helpers.InfoHelper" id="infohelper" scope="request"/>
 <jsp:setProperty name="infohelper" property="contextId" value="<%=(String)session.getAttribute(\"i2p.contextId\")%>"/>
-<% infohelper.storeWriter(out); %>
+<% infohelper.storeWriter(out);%>
 <h3 class=tabletitle><%=intl._t("Router Information")%></h3>
 <jsp:getProperty name="infohelper" property="console"/>
 </div>

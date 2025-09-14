@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <jsp:useBean class="net.i2p.router.web.CSSHelper" id="tester" scope="request"/>
 <%
   String i2pcontextId1 = null;
@@ -19,15 +19,14 @@
 <!DOCTYPE HTML>
 <%
   net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-  String lang = "en";
-  if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+  String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("webmail")%>
 </head>
 <body class=embed>
 
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <h1 class=mail><%=intl._t("Webmail")%> <a href="/susimail/" target=_blank title="<%=intl._t("Open in new tab")%>"><span id=newtab><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>../images/newtab.svg" alt="<%=intl._t("Open in new tab")%>"></span></a></h1>
 <div class=main id=webmail>
 <noscript><p class=infohelp id=jsRequired style=margin:10px>Javascript is required to view <a href="/susimail/" target=_blank rel=noreferrer>the webmail client</a> in embedded mode.</p></noscript>
@@ -41,4 +40,4 @@
 <style>body.modal{overflow:hidden;height:100vh}#susimailframe{display:block!important;pointer-events:auto!important}#webmail::before{width:100%;animation:fade .3s linear .7s both}</style>
 </body>
 </html>
-<% } %>
+<% }%>

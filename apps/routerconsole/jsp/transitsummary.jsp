@@ -1,17 +1,15 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="256kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="256kb"%>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("Transit Tunnels by Peer")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body id=transitbypeer>
 
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <h1 class=netwrk><%=intl._t("Transit Tunnels by Peer")%></h1>
 <div class=main id=tunnels>
 <div class=confignav>
@@ -23,7 +21,7 @@
 </div>
 <jsp:useBean class="net.i2p.router.web.helpers.TransitSummaryHelper" id="transitSummaryHelper" scope="request"/>
 <jsp:setProperty name="transitSummaryHelper" property="contextId" value="<%=i2pcontextId%>"/>
-<% transitSummaryHelper.storeWriter(out); %>
+<% transitSummaryHelper.storeWriter(out);%>
 <jsp:getProperty name="transitSummaryHelper" property="transitSummary"/>
 </div>
 <script src=/js/lazyload.js></script>

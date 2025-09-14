@@ -1,22 +1,20 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("config UI")%>
 </head>
 <body>
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHelper" id="uihelper" scope="request"/>
 <jsp:setProperty name="uihelper" property="contextId" value="<%=i2pcontextId%>"/>
 <h1 class=conf><%=uihelper._t("User Interface Configuration")%></h1>
 <div class=main id=config_ui>
-<%@include file="confignav.jsi" %>
+<%@include file="confignav.jsi"%>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigUIHandler" id="formhandler" scope="request"/>
-<%@include file="formhandler.jsi" %>
+<%@include file="formhandler.jsi"%>
 <h3 id=themeheading><%=uihelper._t("Router Console Theme")%></h3>
 <form action=/applytheme method=POST>
 <input type=hidden name="consoleNonce" value="<%=net.i2p.router.web.CSSHelper.getNonce()%>">
@@ -32,13 +30,13 @@
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>">
 <input type=submit name=shouldsave class=accept value="<%=intl._t("Apply")%>">
 </div>
-<%  } else { %>
+<%  } else {%>
 <p class=infohelp id=oldmsie>
 <%=uihelper._t("Theme selection disabled for Internet Explorer, sorry.")%> (<%=uihelper._t("A very old version has been detected. It's not recommended to use I2P with unmaintained browsers.")%>)
 <br>
 <%=uihelper._t("If you're not using IE, it's likely that your browser is pretending to be IE; please configure your browser (or proxy) to use a different User Agent string if you'd like to access the console themes.")%>
 </p>
-<%  } %>
+<%  }%>
 </div>
 </form>
 <h3 id=passwordheading><%=uihelper._t("Router Console Password")%></h3>
@@ -51,7 +49,7 @@
     if (pwEnabled) {
 %>
 <input type=submit name=action class=delete value="<%=intl._t("Delete selected")%>">
-<%  } %>
+<%  }%>
 <input type=reset class=cancel value="<%=intl._t("Cancel")%>">
 <input type=submit name=action class=add value="<%=intl._t("Add user")%>">
 </div>

@@ -1,20 +1,19 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="48kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="48kb"%>
 <!DOCTYPE HTML>
 <%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("config sidebar")%>
 </head>
 <body>
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <h1 class=conf><%=intl._t("Customize Sidebar")%></h1>
 <div class=main id=config_summarybar>
-<%@include file="confignav.jsi" %>
+<%@include file="confignav.jsi"%>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigSidebarHandler" id="formhandler" scope="request"/>
-<%@include file="formhandler.jsi" %>
-<% formhandler.setMovingAction(); %>
+<%@include file="formhandler.jsi"%>
+<% formhandler.setMovingAction();%>
 <jsp:useBean class="net.i2p.router.web.helpers.SidebarHelper" id="sidebarhelper" scope="request"/>
 <jsp:setProperty name="sidebarhelper" property="contextId" value="<%=i2pcontextId%>"/>
 <h3 class=tabletitle><%=intl._t("Sidebar Options")%></h3>
@@ -31,7 +30,7 @@
 <label><b><%=intl._t("Refresh interval")%>:</b>
 <input type=text name=refreshInterval maxlength=4 pattern="[0-9]{1,4}" required value="<%=rval%>">
 <%=intl._t("seconds")%>
-<% if (!rval.equals("0")) {%>&nbsp;(<%=intl._t("0 to disable")%>)<% } %></label>
+<% if (!rval.equals("0")) {%>&nbsp;(<%=intl._t("0 to disable")%>)<% }%></label>
 <label id=unifiedSidebar><b><%=intl._t("Unified sidebar")%>:</b>
 <input type=checkbox class="optbox slider" name=unifiedSidebar value=true <%=(intl.useUnifiedSidebar() ? "checked" : "")%>>
 <%=intl._t("Use the same sidebar on all pages")%></label>

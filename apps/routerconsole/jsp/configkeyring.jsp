@@ -1,20 +1,18 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("config keyring")%>
 </head>
 <body>
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <h1 class=conf><%=intl._t("Keyring Manager")%></h1>
 <div class=main id=config_keyring>
-<%@include file="confignav.jsi" %>
+<%@include file="confignav.jsi"%>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigKeyringHandler" id="formhandler" scope="request"/>
-<%@include file="formhandler.jsi" %>
+<%@include file="formhandler.jsi"%>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigKeyringHelper" id="keyringhelper" scope="request"/>
 <jsp:setProperty name="keyringhelper" property="contextId" value="<%=i2pcontextId%>"/>
 <p id=keyringhelp class=infohelp>
@@ -28,12 +26,11 @@
 <tr>
 <td class=infohelp colspan=2>
 <%=intl._t("Enter keys for encrypted remote destinations here.")%>&nbsp;
-<%
-    net.i2p.util.PortMapper pm = net.i2p.I2PAppContext.getGlobalContext().portMapper();
+<%  net.i2p.util.PortMapper pm = net.i2p.I2PAppContext.getGlobalContext().portMapper();
     if (pm.isRegistered(net.i2p.util.PortMapper.SVC_I2PTUNNEL)) {
 %>
 <%=intl._t("Keys for local destinations must be entered on the configuration page for the relevant service in the")%> <a href="/i2ptunnelmgr"> <%=intl._t("Tunnel Manager")%></a>.
-<%  }  %>
+<%  } %>
 </td>
 </tr>
 <tr>

@@ -1,28 +1,26 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("config reseeding")%>
 </head>
 <body>
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigReseedHelper" id="reseedHelper" scope="request"/>
 <jsp:setProperty name="reseedHelper" property="contextId" value="<%=i2pcontextId%>"/>
 <h1 class=conf><%=intl._t("Reseeding")%></h1>
 <div class=main id=config_reseed>
-<%@include file="confignav.jsi" %>
+<%@include file="confignav.jsi"%>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigReseedHandler" id="formhandler" scope="request"/>
-<%@include file="formhandler.jsi" %>
-<%  if (!reseedHelper.isAdvanced()) { %>
+<%@include file="formhandler.jsi"%>
+<%  if (!reseedHelper.isAdvanced()) {%>
 <p class=infohelp>
 <%=intl._t("Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining.")%>&nbsp;<wbr>
 <%=intl._t("To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>.")%>
 </p>
-<%  } // !isAdvanced %>
+<%  } // !isAdvanced%>
 <iframe name=processForm id=processForm hidden></iframe>
 <form id=form_reseed method=POST target=processForm>
 <input type=hidden name=nonce value="<%=pageNonce%>">
@@ -36,7 +34,7 @@
 </td>
 </tr>
 -->
-<%  if (reseedHelper.isAdvanced()) { %>
+<%  if (reseedHelper.isAdvanced()) {%>
 <tr>
 <td colspan=2>
 <b class=suboption><%=intl._t("Reseed URLs")%></b><br>
@@ -46,54 +44,54 @@
 </textarea>
 </div>
 </td>
-<%  } // isAdvanced %>
+<%  } // isAdvanced%>
 </tr>
-<% if (reseedHelper.shouldShowSelect()) { %>
+<% if (reseedHelper.shouldShowSelect()) {%>
 <tr>
 <td colspan=2>
 <b class=suboption>
 <%=intl._t("Reseed URL Selection")%>
 </b><br>
 <div class=optionsingle id=reseed_urlselection>
-<label><input type=radio class=optbox name="mode" value="0" <%=reseedHelper.modeChecked(0) %>>
+<label><input type=radio class=optbox name="mode" value="0" <%=reseedHelper.modeChecked(0)%>>
 <%=intl._t("Try SSL first then non-SSL")%></label>
-<label><input type=radio class=optbox name="mode" value="1" <%=reseedHelper.modeChecked(1) %>>
+<label><input type=radio class=optbox name="mode" value="1" <%=reseedHelper.modeChecked(1)%>>
 <%=intl._t("Use SSL only")%></label>
-<label><input type=radio class=optbox name="mode" value="2" <%=reseedHelper.modeChecked(2) %>>
+<label><input type=radio class=optbox name="mode" value="2" <%=reseedHelper.modeChecked(2)%>>
 <%=intl._t("Use non-SSL only")%></label>
 </div>
 </td>
 </tr>
-<%  } // shouldShowSelect %>
-<%  if (reseedHelper.shouldShowHTTPSProxy()) { %>
+<%  } // shouldShowSelect%>
+<%  if (reseedHelper.shouldShowHTTPSProxy()) {%>
 <tr>
 <td colspan=2>
 <b class=suboption>
-<%      if (reseedHelper.shouldShowHTTPProxy()) { %>
+<%      if (reseedHelper.shouldShowHTTPProxy()) {%>
 <%=intl._t("Use Proxy for HTTPS Reseed Hosts")%>
-<%      } else { %>
+<%      } else {%>
 <%=intl._t("Use Proxy to Reseed")%>
-<%      } // shouldShowHTTPProxy %>
+<%      } // shouldShowHTTPProxy%>
 </b>
 <div id=reseedssl>
 <div id=reseedproxytype>
-<label><input type=radio class=optbox name="pmode" value="" <%=reseedHelper.pmodeChecked(0) %>>
+<label><input type=radio class=optbox name="pmode" value="" <%=reseedHelper.pmodeChecked(0)%>>
 <%=intl._t("None")%></label>
 <br>
-<label><input type=radio class=optbox name="pmode" value="HTTP" <%=reseedHelper.pmodeChecked(1) %>>
+<label><input type=radio class=optbox name="pmode" value="HTTP" <%=reseedHelper.pmodeChecked(1)%>>
 <%=intl._t("HTTPS")%></label>
 <br>
-<label><input type=radio class=optbox name="pmode" value="SOCKS4" <%=reseedHelper.pmodeChecked(2) %>>
+<label><input type=radio class=optbox name="pmode" value="SOCKS4" <%=reseedHelper.pmodeChecked(2)%>>
 <%=intl._t("SOCKS 4/4a")%></label>
 <br>
-<label><input type=radio class=optbox name="pmode" value="SOCKS5" <%=reseedHelper.pmodeChecked(3) %>>
+<label><input type=radio class=optbox name="pmode" value="SOCKS5" <%=reseedHelper.pmodeChecked(3)%>>
 <%=intl._t("SOCKS 5")%></label>
 <br>
-<label title="<%=intl._t("This option will use I2P's HTTP outproxy to reseed, or the Orchid plugin if configured. Note: this option will not work when you have 0 known peers.")%>"><input type=radio class=optbox name="pmode" value="INTERNAL" <%=reseedHelper.pmodeChecked(4) %>>
+<label title="<%=intl._t("This option will use I2P's HTTP outproxy to reseed, or the Orchid plugin if configured. Note: this option will not work when you have 0 known peers.")%>"><input type=radio class=optbox name="pmode" value="INTERNAL" <%=reseedHelper.pmodeChecked(4)%>>
 <%=intl._t("I2P Outproxy")%></label>
 </div>
 <div class=optionlist id=reseedproxysslhostport>
-<%  if (!reseedHelper.getEnable().equals(reseedHelper.pmodeChecked(4)) || !reseedHelper.getEnable().equals(reseedHelper.pmodeChecked(0))) { %>
+<%  if (!reseedHelper.getEnable().equals(reseedHelper.pmodeChecked(4)) || !reseedHelper.getEnable().equals(reseedHelper.pmodeChecked(0))) {%>
 <!--
 <span class=nowrap>
 <b><%=intl._t("Host")%>:</b>
@@ -104,7 +102,7 @@
 <input name="sport" type=text size=5 maxlength=5 property="sport" readonly>
 </span>
 -->
-<%  } else { %>
+<%  } else {%>
 <span class=nowrap>
 <b><%=intl._t("Host")%>:</b>
 <input name="shost" type=text required value="<jsp:getProperty name="reseedHelper" property="shost"/>">
@@ -113,13 +111,13 @@
 <b><%=intl._t("Port")%>:</b>
 <input name="sport" type=text size=5 maxlength=5 pattern="[0-9]{1,5}" value="<jsp:getProperty name="reseedHelper" property="sport"/>">
 </span>
-<%  } // conditionally enable host/port fields %>
+<%  } // conditionally enable host/port fields%>
 </div>
 </div>
 </td>
 </tr>
-<%  } // shouldShowHTTPSProxy %>
-<%  if (reseedHelper.shouldShowHTTPProxy()) { %>
+<%  } // shouldShowHTTPSProxy%>
+<%  if (reseedHelper.shouldShowHTTPProxy()) {%>
 <tr>
 <td colspan=2>
 <b class=suboption>
@@ -148,7 +146,7 @@
 </div>
 </td>
 </tr>
-<%  } // shouldShowHTTPProxy %>
+<%  } // shouldShowHTTPProxy%>
 <tr>
 <td class=optionsave colspan=2>
 <input type=submit name=action class=reload value="<%=intl._t("Reset URL list")%>">
@@ -203,9 +201,9 @@
     if (file != null && file.length() > 0) {
 %>
 <input type=text size=60 name="file" value="<%=net.i2p.data.DataHelper.escapeHTML(file)%>">
-<%  } else { %>
+<%  } else {%>
 <input name="file" type="file" accept=".zip,.su3" value="" required>
-<%  } %>
+<%  }%>
 </td>
 <td>
 <input type=submit name=action class=download value="<%=intl._t("Reseed from file")%>">

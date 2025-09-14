@@ -1,17 +1,15 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="256kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="256kb"%>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("tunnel peer count")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body id=routertunnels>
 
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <h1 class=netwrk><%=intl._t("Tunnel Count by Peer")%></h1>
 <div class=main id=tunnels>
 <div class=confignav>
@@ -23,7 +21,7 @@
 </div>
 <jsp:useBean class="net.i2p.router.web.helpers.TunnelPeerCountHelper" id="tunnelPeerCountHelper" scope="request"/>
 <jsp:setProperty name="tunnelPeerCountHelper" property="contextId" value="<%=i2pcontextId%>"/>
-<% tunnelPeerCountHelper.storeWriter(out); %>
+<% tunnelPeerCountHelper.storeWriter(out);%>
 <jsp:getProperty name="tunnelPeerCountHelper" property="tunnelPeerCount"/>
 </div>
 <script src=/js/tablesort/tablesort.js></script>

@@ -1,17 +1,15 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("job queue statistics")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body id=routerjobs>
 
-<%@include file="sidebar.jsi" %><h1 class=sched><%=intl._t("Job Queue Stats")%></h1>
+<%@include file="sidebar.jsi"%><h1 class=sched><%=intl._t("Job Queue Stats")%></h1>
 <div class=main id=jobs>
 <div class=confignav>
 <span class=tab2 title="<%=intl._t("Job statistics for this session")%>"><%=intl._t("Job Stats")%></span>
@@ -19,7 +17,7 @@
 </div>
 <jsp:useBean class="net.i2p.router.web.helpers.JobQueueHelper" id="jobQueueHelper" scope="request"/>
 <jsp:setProperty name="jobQueueHelper" property="contextId" value="<%=i2pcontextId%>"/>
-<% jobQueueHelper.storeWriter(out); %>
+<% jobQueueHelper.storeWriter(out);%>
 <jsp:getProperty name="jobQueueHelper" property="jobQueueStats"/>
 </div>
 <script src=/js/tablesort/tablesort.js></script>

@@ -1,4 +1,4 @@
-<%@ page import="javax.servlet.http.HttpServletResponse" %>
+<%@ page import="javax.servlet.http.HttpServletResponse"%>
 <%
   /*
    * USE CAUTION WHEN EDITING

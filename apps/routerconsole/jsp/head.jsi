@@ -9,7 +9,7 @@ boolean isConfigPage = uri.contains("config") && !uri.contains("/help/");
 boolean isHelpPage = uri.contains("/help/") && !uri.endsWith("/");
 boolean isWizardPage = uri.endsWith("wizard") || uri.endsWith("wizard.jsp");
 %>
-<html lang="<%=lang%>" class="<%= isAdvancedMode ? "advmode " : "" %><%= useSoraFont ? "sora" : "opensans" %>" <%= theme.equals("dark") || theme.equals("midnight") ? " style=\"background:var(--bodybg,#000)\"" : "" %>>
+<html lang="<%=lang%>" class="<%=isAdvancedMode ? "advmode " : ""%><%=useSoraFont ? "sora" : "opensans"%>" <%=theme.equals("dark") || theme.equals("midnight") ? "style=\"background:var(--bodybg,#000)\"" : ""%>>
 <head>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width, initial-scale=1">
@@ -25,17 +25,17 @@ boolean isWizardPage = uri.endsWith("wizard") || uri.endsWith("wizard.jsp");
 <link rel=preload href=<%=themePath%>images/images.css as=style>
 <link rel=stylesheet href=<%=themePath%>global.css>
 <link rel=stylesheet href=<%=fontStyle%>>
-<% if (isConfigPage) { %> <link rel=preload href=/themes/console/confignav.css as=style> <% } %>
-<% if (isHelpPage) { %> <link rel=stylesheet href=/themes/console/helpnav.css> <% } %>
-<% if (isMobile) { %> <link rel=preload href="<%=themePath%>mobile.css?version=<%=v%>" as=style> <% } %>
-<% if (isWizardPage) { %> <link rel=stylesheet href=<%=themePath%>wizard.css> <% } %>
+<% if (isConfigPage) {%> <link rel=preload href=/themes/console/confignav.css as=style> <% }%>
+<% if (isHelpPage) {%> <link rel=stylesheet href=/themes/console/helpnav.css> <% }%>
+<% if (isMobile) {%> <link rel=preload href="<%=themePath%>mobile.css?version=<%=v%>" as=style> <% }%>
+<% if (isWizardPage) {%> <link rel=stylesheet href=<%=themePath%>wizard.css> <% }%>
 <link rel=icon href=<%=themePath%>images/favicon.svg>
 <link rel=stylesheet href="<%=themePath%>console.css?version=<%=v%>" title="<%=theme%>">
 <link rel=stylesheet href=/themes/console/images/images.css>
 <link rel=stylesheet href=<%=themePath%>images/images.css>
-<% if (lang.equals("zh")) { %> <link href="<%=themePath%>console_big.css?version=<%=v%>" rel=stylesheet> <% }
-else if (lang.equals("ar") || lang.equals("fa")) { %> <link rel=stylesheet href="<%=themePath%>console_ar.css?version=<%=v%>"> <% } %>
-<% if (hasOverride) { %> <link href=<%=themePath%>override.css rel=stylesheet> <% } %>
+<% if (lang.equals("zh")) {%> <link href="<%=themePath%>console_big.css?version=<%=v%>" rel=stylesheet> <% }
+else if (lang.equals("ar") || lang.equals("fa")) {%> <link rel=stylesheet href="<%=themePath%>console_ar.css?version=<%=v%>"> <% }%>
+<% if (hasOverride) {%> <link href=<%=themePath%>override.css rel=stylesheet> <% }%>
 <script src=/js/progressx.js></script>
 <script nonce=<%=cspNonce%>>
   if (top.location.href !== location.href) top.location.href = location.href;
@@ -45,6 +45,6 @@ else if (lang.equals("ar") || lang.equals("fa")) { %> <link rel=stylesheet href=
   window.stickySidebarEnabled = <%=useStickySidebar%>;
   progressx.show(theme);progressx.progress(0.1);
 </script>
-<% if (!isWizardPage) { %> <script src=/js/refreshSidebar.js type=module></script> <% } %>
+<% if (!isWizardPage) {%> <script src=/js/refreshSidebar.js type=module></script> <% }%>
 <script src=/js/detectPageZoom.js></script>
 <noscript><style>.script{display:none!important}</style></noscript>

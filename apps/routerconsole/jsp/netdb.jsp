@@ -1,11 +1,9 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="256kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="256kb"%>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("network database")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
@@ -20,17 +18,17 @@ const translate_localPrivate = "<%=intl._t("Locally hosted private service")%>";
 const translate_localPublic = "<%=intl._t("Locally hosted public service")%>";
 const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 </script>
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <jsp:useBean class="net.i2p.router.web.helpers.NetDbHelper" id="formhandler" scope="request"/>
 <jsp:setProperty name="formhandler" property="full" value="<%=request.getParameter(\"f\")%>"/>
 <jsp:setProperty name="formhandler" property="router" value="<%=request.getParameter(\"r\")%>"/>
 <jsp:setProperty name="formhandler" property="lease" value="<%=request.getParameter(\"l\")%>"/>
 <jsp:setProperty name="formhandler" property="version" value="<%=request.getParameter(\"v\")%>"/>
-<%  if (request.getParameter("cc") != null && !request.getParameter("cc").equals("")) { %>
+<%  if (request.getParameter("cc") != null && !request.getParameter("cc").equals("")) {%>
 <jsp:setProperty name="formhandler" property="country" value="<%=request.getParameter(\"cc\")%>"/>
-<%  } else { %>
+<%  } else {%>
 <jsp:setProperty name="formhandler" property="country" value="<%=request.getParameter(\"c\")%>"/>
-<%  } %>
+<%  }%>
 <jsp:setProperty name="formhandler" property="family" value="<%=request.getParameter(\"fam\")%>"/>
 <jsp:setProperty name="formhandler" property="caps" value="<%=request.getParameter(\"caps\")%>"/>
 <jsp:setProperty name="formhandler" property="ip" value="<%=request.getParameter(\"ip\")%>"/>
@@ -106,26 +104,26 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
     }
 %>
 <div class=main id=netdb>
-<%  if (delayLoad) { %>
+<%  if (delayLoad) {%>
 <div id=netdbwrap style=height:5px;opacity:0>
-<%  } %>
-<%  if (r == null && ls != null || l != null) { %>
+<%  }%>
+<%  if (r == null && ls != null || l != null) {%>
 <div class=leasesets_container>
 <%  }
     formhandler.storeWriter(out);
     if (allowIFrame) {formhandler.allowGraphical();}
 %>
-<%@include file="formhandler.jsi" %>
+<%@include file="formhandler.jsi"%>
 <jsp:getProperty name="formhandler" property="floodfillNetDbSummary"/>
-<%  if (r == null && ls != null || l != null) { %>
+<%  if (r == null && ls != null || l != null) {%>
 </div>
-<%  } %>
+<%  }%>
 </div>
-<%  if (delayLoad) { %>
+<%  if (delayLoad) {%>
 </div>
 <style>#netdbwrap{height:unset!important;opacity:1!important}#netdb::before{display:none}</style>
 <noscript><style>body:not(.ready) .lazy{display:table!important}</style></noscript>
-<%  } %>
+<%  }%>
 <script src=/js/lazyload.js></script>
 <script src=/js/lsCompact.js type=module></script>
 <script src=/js/tablesort/tablesort.js></script>

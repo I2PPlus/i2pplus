@@ -1,22 +1,20 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="96kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="96kb"%>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("network database router map")%>
 <link href=/themes/geomap/geomap.css rel=stylesheet>
 </head>
 <body>
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <h1 class=netwrk><%=intl._t("Network Database Router Map")%></h1>
 <div class=main id=netdbRouterMap>
 <div id=netdbmap>
 <div id=info></div><div id=nav><span id=bycc><a href=/netdbmap>Routers by Country</a></span><span id=byff><a href="/netdbmap?class=floodfill">Floodfills by Country</a></span><span id=byX><a href="/netdbmap?class=tierX">X Tier by Country</a></span></div>
 <div id=info class=hidden></div>
-<%@ include file="/viewnetdbmap.jsp" %>
+<%@ include file="/viewnetdbmap.jsp"%>
 <div id=netdbmapLegend>
 <span id=legend_500><span class=legend_color></span>500</span>
 <span id=legend_400><span class=legend_color></span>400</span>

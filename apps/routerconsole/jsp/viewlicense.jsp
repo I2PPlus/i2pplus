@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8" buffer="32kb" %>
+<%@ page pageEncoding="UTF-8" buffer="32kb"%>
 <%
   /*
    * USE CAUTION WHEN EDITING

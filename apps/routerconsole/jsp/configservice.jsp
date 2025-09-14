@@ -1,24 +1,22 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <jsp:useBean class="net.i2p.router.web.CSSHelper" id="tester" scope="request"/>
 <jsp:setProperty name="tester" property="contextId" value="<%=(String)session.getAttribute(\"i2p.contextId\")%>"/>
-<% boolean embedApps = tester.embedApps(); %>
+<% boolean embedApps = tester.embedApps();%>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("config service")%>
 </head>
 <body>
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <h1 class=conf><%=intl._t("Router Service")%></h1>
 
 <div class=main id=config_service>
-<%@include file="confignav.jsi" %>
+<%@include file="confignav.jsi"%>
 <jsp:useBean class="net.i2p.router.web.ConfigServiceHandler" id="formhandler" scope="request"/>
-<%@include file="formhandler.jsi" %>
+<%@include file="formhandler.jsi"%>
 <form method=POST>
 <input type=hidden name=nonce value="<%=pageNonce%>">
 
@@ -30,13 +28,13 @@
 <div class=formaction id=shutdown>
 <input type=submit class=stop name=action value="<%=intl._t("Shutdown gracefully")%>">
 <input type=submit class=stop name=action value="<%=intl._t("Shutdown immediately")%>">
-<% if (formhandler.shouldShowCancelGraceful()) { %>
+<% if (formhandler.shouldShowCancelGraceful()) {%>
 <input type=submit class=cancel name=action value="<%=intl._t("Cancel graceful shutdown")%>">
-<% } %>
+<% }%>
 </div>
 </div>
 
-<% if (net.i2p.util.SystemVersion.hasWrapper()) { %>
+<% if (net.i2p.util.SystemVersion.hasWrapper()) {%>
 <div class=service_container>
 <h3 class=ptitle id=restartrouter><%=intl._t("Restart the router")%></h3>
 <p class=infohelp>
@@ -47,9 +45,9 @@
 <input type=submit class=reload name=action value="<%=intl._t("Hard restart")%>">
 </div>
 </div>
-<% } %>
+<% }%>
 
-<% if (!net.i2p.util.SystemVersion.isService()) { %>
+<% if (!net.i2p.util.SystemVersion.isService()) {%>
 <div class=service_container>
 <h3 class=ptitle id=browseronstart><%=intl._t("Launch console at startup")%>&nbsp;<span class=h3navlinks>
 <a href="/help/faq#alternative_browser" title="<%=intl._t("Help with configuring I2P to use a non-system default browser")%>">
@@ -64,46 +62,46 @@
 <input type=submit class="showconsole" name=action value="<%=intl._t("Open console on startup")%>">
 </div>
 </div>
-<% } %>
+<% }%>
 
 <div class=service_container>
 <h3 class=ptitle id=servicedebug><%=intl._t("Debugging")%></h3>
 <p class=infohelp>
-<% if (net.i2p.util.SystemVersion.hasWrapper()) { %>
+<% if (net.i2p.util.SystemVersion.hasWrapper()) {%>
 <%=intl._t("To assist in debugging I2P, it may be helpful to generate a thread dump which will be written to the {0}wrapper log{1}.", " <a href=\"/wrapper.log\" target=_blank>", "</a>").replace("I2P", "I2P+")%>
-<% } else { %>
+<% } else {%>
 <%=intl._t("If I2P appears to be using too much ram, you can force the router to run the garbage collection routine to free up memory.").replace("I2P", "I2P+")%>
-<% } %>
+<% }%>
 </p>
 <hr>
 <div class=formaction id=dumpthreads>
 <input type=submit class=reload name=action value="<%=intl._t("Force garbage collection")%>">
-<% if (net.i2p.util.SystemVersion.hasWrapper()) { %>
+<% if (net.i2p.util.SystemVersion.hasWrapper()) {%>
 <input type=submit class=download name=action value="<%=intl._t("Dump threads")%>">
-<% } %>
+<% }%>
 </div>
 </div>
 
 <!-- this appears to be borked (linux) ... should probably hide this to avoid disappointment... -->
 <!-- for now, let's just enable on windows -->
-<% if ( (System.getProperty("os.name") != null) && (System.getProperty("os.name").startsWith("Win")) ) { %>
-<%     if (formhandler.shouldShowSystray()) { %>
+<% if ( (System.getProperty("os.name") != null) && (System.getProperty("os.name").startsWith("Win")) ) {%>
+<%     if (formhandler.shouldShowSystray()) {%>
 <div class=service_container>
 <h3 class=ptitle id=systray><%=intl._t("System Tray Integration")%></h3>
 <p class=infohelp><%=intl._t("Enable or disable the I2P system tray applet to enable basic service control.")%></p>
 <hr>
 <div class=formaction id=systray>
-<%         if (!formhandler.isSystrayEnabled()) { %>
+<%         if (!formhandler.isSystrayEnabled()) {%>
 <input type=submit name=action class=accept value="<%=intl._t("Show systray icon")%>">
-<%         } else { %>
+<%         } else {%>
 <input type=submit name=action class=cancel value="<%=intl._t("Hide systray icon")%>">
-<%         } %>
+<%         }%>
 </div>
 </div>
-<%     } %>
-<% } // is Windows Service? %>
+<%     }%>
+<% } // is Windows Service?%>
 
-<% if (net.i2p.util.SystemVersion.isWindowsService()) { %>
+<% if (net.i2p.util.SystemVersion.isWindowsService()) {%>
 <div class=service_container>
 <h3 class=ptitle id=runonstartup><%=intl._t("Configure I2P system service").replace("I2P", "I2P+")%></h3>
 <p class=infohelp>
@@ -115,7 +113,7 @@
 </div>
 </div>
 
-<% } else if ((System.getProperty("os.name") != null) && (System.getProperty("os.name").startsWith("Win")) && !net.i2p.util.SystemVersion.isWindowsService()) { %>
+<% } else if ((System.getProperty("os.name") != null) && (System.getProperty("os.name").startsWith("Win")) && !net.i2p.util.SystemVersion.isWindowsService()) {%>
 <div class=service_container>
 <h3 class=ptitle id=runonstartup><%=intl._t("Install I2P system service").replace("I2P", "I2P+")%></h3>
 <p class=infohelp>
@@ -125,7 +123,7 @@
 <input type=submit name=action class=accept value="<%=intl._t("Install I2P service")%>">
 </div>
 </div>
-<% } // is Windows? %>
+<% } // is Windows?%>
 
 </form>
 </div>

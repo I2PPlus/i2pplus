@@ -1,16 +1,15 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
 <%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
     boolean isX86 = net.i2p.util.SystemVersion.isX86();
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("logs")%>
 </head>
 <body id=i2plogs>
 
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <h1 class=log><%=intl._t("Logs")%></h1>
 <div class=main id=logs>
 <div class=confignav>
@@ -21,7 +20,7 @@
 </div>
 <jsp:useBean class="net.i2p.router.web.helpers.LogsHelper" id="logsHelper" scope="request"/>
 <jsp:setProperty name="logsHelper" property="contextId" value="<%=i2pcontextId%>"/>
-<%  if (!logsHelper.isAdvanced()) { %>
+<%  if (!logsHelper.isAdvanced()) {%>
 <table id=bugreports>
 <tbody>
 <tr><td class=infohelp>
@@ -37,9 +36,9 @@
 <tr><td><b>I2P:</b></td><td><%=net.i2p.router.RouterVersion.FULL_VERSION%>&ensp;<b>API:</b>&ensp;<%=net.i2p.CoreVersion.PUBLISHED_VERSION%>&ensp;<b>Wrapper:</b>&ensp;<%=System.getProperty("wrapper.version", "none")%> &ensp;<b>Built by:</b>&ensp;<jsp:getProperty name="logsHelper" property="builtBy"/></td></tr>
 <tr><td><b>Platform:</b></td><td><%=System.getProperty("os.name")%>&ensp;<%=System.getProperty("os.arch")%>&ensp;<%=System.getProperty("os.version")%></td></tr>
 <tr><td><b>Processor:</b></td><td><span id=cputype><%=net.i2p.util.NativeBigInteger.cpuType().replace("zen2", "zen3 or later")%></span>
-<%      if (isX86) { %>
+<%      if (isX86) {%>
 &ensp;<%=net.i2p.util.NativeBigInteger.cpuModel()%>
-<%      } %>
+<%      }%>
 &ensp;<span class=nowrap>[Jcpuid version: <%=freenet.support.CPUInformation.CPUID.getJcpuidVersion()%></span>]</td></tr>
 <tr><td><b>Java:</b></td><td><%=System.getProperty("java.vendor")%>&ensp;<%=System.getProperty("java.version")%>&ensp;(<%=System.getProperty("java.runtime.name")%>&ensp;<%=System.getProperty("java.runtime.version")%>)</td></tr>
 <jsp:getProperty name="logsHelper" property="unavailableCrypto"/>
@@ -81,7 +80,7 @@
     if (last >= 0) {
 %>
 &nbsp;<a class=delete title="<%=intl._t("Clear logs")%>" href="logs?clear=<%=last%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a>
-<%  } %>
+<%  }%>
 &nbsp;<a class=configure title="<%=intl._t("Configure router logging options")%>" href="configlogging">[<%=intl._t("Configure")%>]</a>
 &nbsp;<a id=eventlogLink title="<%=intl._t("View event log")%>" href="/events?from=604800">[<%=intl._t("Events")%>]</a>
 &nbsp;<span id=toggleRefresh></span>
@@ -100,7 +99,7 @@
     if (llast >= 0) {
 %>
 &nbsp;<a class=delete title="<%=intl._t("Clear logs")%>" href="logs?svc=<%=llast%>&amp;svct=<%=lts%>&amp;svcf=<%=filename%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a>
-<%  } %>
+<%  }%>
 </h3>
 <table id=wrapperlogs class=logtable>
 <tbody><tr><td><% out.append(buf);%></td></tr></tbody>

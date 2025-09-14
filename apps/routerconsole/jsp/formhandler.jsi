@@ -42,7 +42,7 @@
         formhandler.setSettings(request.getParameterMap());
 %>
 <jsp:setProperty name="formhandler" property="*" />
-<%  } %>
+<%  }%>
 <jsp:getProperty name="formhandler" property="allMessages" />
 <%  /*
      * Only call this once per page, do not getProperty("newNonce") elsewhere, use the variable instead.

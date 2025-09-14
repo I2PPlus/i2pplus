@@ -1,21 +1,15 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    String pageTitlePrefix = "";
-    if (ctx.getProperty("routerconsole.lang") != null) {
-        lang = ctx.getProperty("routerconsole.lang");
-    }
-    if (ctx.getProperty("routerconsole.pageTitlePrefix") != null) {
-        pageTitlePrefix = ctx.getProperty("routerconsole.pageTitlePrefix") + ' ';
-    }
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
+    String pageTitlePrefix = ctx.getProperty("routerconsole.pageTitlePrefix");
+    pageTitlePrefix = (pageTitlePrefix != null) ? pageTitlePrefix + ' ' : "";
 %>
-<%@include file="../head.jsi" %>
+<%@include file="../head.jsi"%>
 <title><%=pageTitlePrefix%> <%=intl._t("New User Guide")%> - I2P+</title>
 </head>
 <body>
-<%@include file="../sidebar.jsi" %>
+<%@include file="../sidebar.jsi"%>
 <h1 class=hlp><%=intl._t("New User Guide")%></h1>
 <div class=main id=help>
 <div class=confignav>
@@ -36,7 +30,7 @@
 <div id=newuserguide>
 <h2><%=intl._t("Introduction to I2P")%></h2>
 <jsp:useBean class="net.i2p.router.web.ContentHelper" id="contenthelper" scope="request"/>
- <% java.io.File fpath = new java.io.File(net.i2p.I2PAppContext.getGlobalContext().getBaseDir(), "docs/readme/readme.html"); %>
+ <% java.io.File fpath = new java.io.File(net.i2p.I2PAppContext.getGlobalContext().getBaseDir(), "docs/readme/readme.html");%>
  <jsp:setProperty name="contenthelper" property="page" value="<%=fpath.getAbsolutePath()%>"/>
  <jsp:setProperty name="contenthelper" property="maxLines" value="300"/>
  <jsp:setProperty name="contenthelper" property="contextId" value="<%=i2pcontextId%>"/>

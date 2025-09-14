@@ -14,17 +14,16 @@
 <jsp:setProperty name="intl" property="contextId" value="<%=i2pcontextId%>"/>
 <jsp:useBean class="net.i2p.router.web.NewsHelper" id="newshelper" scope="request"/>
 <jsp:setProperty name="newshelper" property="contextId" value="<%=i2pcontextId%>"/>
-<% java.io.File fpath = new java.io.File(net.i2p.I2PAppContext.getGlobalContext().getRouterDir(), "docs/news.xml"); %>
+<% java.io.File fpath = new java.io.File(net.i2p.I2PAppContext.getGlobalContext().getRouterDir(), "docs/news.xml");%>
 <jsp:setProperty name="newshelper" property="page" value="<%=fpath.getAbsolutePath()%>"/>
 <jsp:setProperty name="newshelper" property="maxLines" value="300"/>
 <% net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-   String lang = "en";
-   if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+   String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
 <!DOCTYPE HTML>
 <html lang=<%=lang%>>
 <head><meta charset=utf-8></head>
 <body id=sb>
-<%@include file="xhr1.jsi" %>
+<%@include file="xhr1.jsi"%>
 </body>
 </html>

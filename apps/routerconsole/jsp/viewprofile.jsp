@@ -1,22 +1,20 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
     boolean isValid = true;
     String peerB64 = request.getParameter("peer");
     if (peerB64 == null || peerB64.length() <= 0 || peerB64.replaceAll("[a-zA-Z0-9~=-]", "").length() != 0) {isValid = false;}
 %>
 <link href=/themes/console/viewprofile.css rel=stylesheet>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("Peer Profile")%>
-<%  if (!isValid) { %>
+<%  if (!isValid) {%>
 <meta http-equiv=refresh content="5;url=/profiles?f=1"/>
-<%  } %>
+<%  }%>
 </head>
 <body>
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <h1 class=netwrk><%=intl._t("Peer Profile")%></h1>
 <div class=main id=view_profile>
 <div class=confignav id=confignav>
@@ -34,7 +32,7 @@
 <jsp:useBean id="stathelper" class="net.i2p.router.web.helpers.StatHelper"/>
 <jsp:setProperty name="stathelper" property="contextId" value="<%=i2pcontextId%>"/>
 <jsp:setProperty name="stathelper" property="peer" value="<%=peerB64%>"/>
-<% stathelper.storeWriter(out); %>
+<% stathelper.storeWriter(out);%>
 <h3><%=intl._t("Profile for peer")%>: <a href="/netdb?r=<%=peerB64%>" title="<%=intl._t("NetDb entry")%>"><%=peerB64%></a>&nbsp;&nbsp;
 <a class=configpeer href="/configpeer?peer=<%=peerB64%>" title="<%=intl._t("Configure peer")%>" style=float:right>
 <%=intl._t("Edit")%></a>&nbsp;&nbsp;
@@ -45,16 +43,16 @@
         if (pm.isRegistered("imagegen")) {
 %>
 <img class=identicon src="/imagegen/id?s=41&amp;c=<%=peerB64%>" style=float:right>
-<%      } %>
+<%      }%>
 </h3>
 <table id=viewprofile hidden>
 <tr><td><pre><jsp:getProperty name="stathelper" property="profile"/></pre>
-<%      if (peerB64 != null || peerB64.length() > 0) { %>
+<%      if (peerB64 != null || peerB64.length() > 0) {%>
 <span><a href="#view_profile"><%=intl._t("Return to Top")%></a></span>
-<%      } %>
+<%      }%>
 </td></tr>
 </table>
-<%  } %>
+<%  }%>
 </div>
 <script src=/js/viewprofile.js></script>
 <noscript><style>#viewprofile{display:table!important}#viewprofile:empty::before,#viewprofile:empty::after{display:none!important}</style></noscript>

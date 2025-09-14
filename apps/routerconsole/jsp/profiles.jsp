@@ -1,16 +1,14 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="256kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="256kb"%>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("peer profiles")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body>
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <jsp:useBean class="net.i2p.router.web.helpers.ProfilesHelper" id="profilesHelper" scope="request"/>
 <jsp:setProperty name="profilesHelper" property="contextId" value="<%=i2pcontextId%>"/>
 <jsp:setProperty name="profilesHelper" property="full" value="<%=request.getParameter(\"f\")%>"/>
@@ -18,15 +16,15 @@
     if (req == null) {
 %>
 <h1 class=netwrk><%=intl._t("Peer Profiles")%></h1>
-<%  } else if (req.equals("4")) { %>
+<%  } else if (req.equals("4")) {%>
 <h1 class=netwrk><%=intl._t("Peer Profiles")%> &ndash; <%=intl._t("Session Banned Peers")%></h1>
-<% } else if (req.equals("3")) { %>
+<% } else if (req.equals("3")) {%>
 <h1 class=netwrk><%=intl._t("Peer Profiles")%> &ndash; <%=intl._t("Banned Peers")%></h1>
-<%  } else if (req.equals("2")) { %>
+<%  } else if (req.equals("2")) {%>
 <h1 class=netwrk><%=intl._t("Peer Profiles")%> &ndash; <%=intl._t("Floodfills")%></h1>
-<%  } else if (req.equals("1")) { %>
+<%  } else if (req.equals("1")) {%>
 <h1 class=netwrk><%=intl._t("Peer Profiles")%> &ndash; <%=intl._t("Fast / High Capacity")%></h1>
-<%  } %>
+<%  }%>
 <div class=main id=profiles>
 <div class=wideload style=height:5px;opacity:0>
 <%  profilesHelper.storeWriter(out);

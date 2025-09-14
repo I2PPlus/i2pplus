@@ -1,15 +1,13 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="128kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="128kb"%>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("events")%>
 <jsp:useBean class="net.i2p.router.web.helpers.EventLogHelper" id="eventHelper" scope="request"/>
 <jsp:setProperty name="eventHelper" property="contextId" value="<%=i2pcontextId%>"/>
-<% /* GraphHelper sets the defaults in setContextId, so setting the properties must be after the context */ %>
+<% /* GraphHelper sets the defaults in setContextId, so setting the properties must be after the context */%>
  <jsp:setProperty name="eventHelper" property="*"/>
 <%
     eventHelper.storeWriter(out);
@@ -19,7 +17,7 @@
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body>
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <h1 class=log><%=intl._t("Event Log")%></h1>
 <div class=main id=events>
 <div class=confignav>

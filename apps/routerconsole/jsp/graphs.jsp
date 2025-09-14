@@ -1,16 +1,14 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="64kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="64kb"%>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <style id=gwrap></style>
 <%=intl.title("graphs")%>
 <jsp:useBean class="net.i2p.router.web.helpers.GraphHelper" id="graphHelper" scope="request"/>
 <jsp:setProperty name="graphHelper" property="contextId" value="<%=i2pcontextId%>"/>
-<% /* GraphHelper sets the defaults in setContextId, so setting the properties must be after the context */ %>
+<% /* GraphHelper sets the defaults in setContextId, so setting the properties must be after the context */%>
 <jsp:setProperty name="graphHelper" property="*"/>
 <%
     graphHelper.storeWriter(out);
@@ -20,13 +18,13 @@
     out.print("\n");
 %>
 <script nonce=<%=cspNonce%>>
-  window.graphRefreshInterval = <% out.print(graphHelper.getRefreshValue() * 1000); %>;
-  var graphCount = <% out.print(graphHelper.countGraphs()); %>;
+  window.graphRefreshInterval = <% out.print(graphHelper.getRefreshValue() * 1000);%>;
+  var graphCount = <% out.print(graphHelper.countGraphs());%>;
 </script>
 </head>
 <body id=perfgraphs>
 
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <h1 class=perf><%=intl._t("Performance Graphs")%></h1>
 <div class=main id=graphs>
 <div class=widepanel>

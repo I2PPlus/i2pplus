@@ -1,20 +1,18 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("config update")%>
 </head>
 <body>
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <h1 class=conf><%=intl._t("Router Updates")%></h1>
 <div class=main id=config_update>
-<%@include file="confignav.jsi" %>
+<%@include file="confignav.jsi"%>
 <jsp:useBean class="net.i2p.router.web.ConfigUpdateHandler" id="formhandler" scope="request"/>
-<%@include file="formhandler.jsi" %>
+<%@include file="formhandler.jsi"%>
 <jsp:useBean class="net.i2p.router.web.ConfigUpdateHelper" id="updatehelper" scope="request"/>
 <jsp:setProperty name="updatehelper" property="contextId" value="<%=i2pcontextId%>"/>
 <div class=messages id=statusNews>
@@ -23,7 +21,7 @@
 <iframe name=processForm id=processForm hidden></iframe>
 <form id=form_updates method=POST target=processForm>
 <input type=hidden name=nonce value="<%=pageNonce%>">
-<% /* set hidden default */ %>
+<% /* set hidden default */%>
 <input type=submit name=action value="" style=display:none>
 <%
     if (updatehelper.canInstall()) {
@@ -45,7 +43,7 @@
 <tr>
 <td id=updateHelper>
 <div class=optionlist>
-<%  if (updatehelper.canInstall()) { %>
+<%  if (updatehelper.canInstall()) {%>
 <span class=nowrap>
 <b><%=formhandler._t("I2P update policy")%>:</b>
 <jsp:getProperty name="updatehelper" property="updatePolicySelectBox"/>
@@ -58,11 +56,11 @@
 <jsp:getProperty name="updatehelper" property="refreshFrequencySelectBox"/>
 </span><br>
 <span class=nowrap id=checkforupdates>
-<%  if ("true".equals(System.getProperty("net.i2p.router.web.UpdateHandler.updateInProgress", "false"))) { %>
+<%  if ("true".equals(System.getProperty("net.i2p.router.web.UpdateHandler.updateInProgress", "false"))) {%>
 <i><%=intl._t("Update In Progress")%>&hellip;</i>
-<%  } else { %>
+<%  } else {%>
 <input type=submit name=action class=check value="<%=intl._t("Check for updates")%>">
-<%  } %>
+<%  }%>
 </span>
 </div>
 </td>
@@ -145,7 +143,7 @@
 <div class=optionsingle>
 <span class=nowrap>
 <b><%=intl._t("News URL")%>:</b>
-<input type=text size=60 name="newsURL" <% if (!updatehelper.isAdvanced()) { %>readonly<% } %> value="<jsp:getProperty name="updatehelper" property="newsURL"/>">
+<input type=text size=60 name="newsURL" <% if (!updatehelper.isAdvanced()) {%>readonly<% }%> value="<jsp:getProperty name="updatehelper" property="newsURL"/>">
 </span>
 </div>
 </td>

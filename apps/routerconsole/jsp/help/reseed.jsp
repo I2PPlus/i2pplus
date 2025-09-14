@@ -1,21 +1,15 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    String pageTitlePrefix = "";
-    if (ctx.getProperty("routerconsole.lang") != null) {
-        lang = ctx.getProperty("routerconsole.lang");
-    }
-    if (ctx.getProperty("routerconsole.pageTitlePrefix") != null) {
-        pageTitlePrefix = ctx.getProperty("routerconsole.pageTitlePrefix") + ' ';
-    }
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
+    String pageTitlePrefix = ctx.getProperty("routerconsole.pageTitlePrefix");
+    pageTitlePrefix = (pageTitlePrefix != null) ? pageTitlePrefix + ' ' : "";
 %>
-<%@include file="../head.jsi" %>
+<%@include file="../head.jsi"%>
 <title><%=pageTitlePrefix%> <%=intl._t("Reseeding Help")%> - I2P+</title>
 </head>
 <body>
-<%@include file="../sidebar.jsi" %>
+<%@include file="../sidebar.jsi"%>
 <h1 class=hlp><%=intl._t("Reseeding Help")%></h1>
 <div class=main id=help>
 

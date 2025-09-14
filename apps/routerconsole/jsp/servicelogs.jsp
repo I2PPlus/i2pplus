@@ -1,17 +1,15 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
 <%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    boolean isX86 = net.i2p.util.SystemVersion.isX86();
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
     final String consoleNonce = net.i2p.router.web.CSSHelper.getNonce();
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("service logs")%>
 </head>
 <body id=i2plogs>
 
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <h1 class=log><%=intl._t("Logs")%></h1>
 <div class=main id=logs>
 <div class=confignav>
@@ -33,7 +31,7 @@
     if (llast >= 0) {
 %>
 &nbsp;<a class=delete title="<%=intl._t("Clear logs")%>" href="logs?svc=<%=llast%>&amp;svct=<%=lts%>&amp;svcf=<%=filename%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a>
-<%  } %>
+<%  }%>
 </h3>
 <table id=wrapperlogs class=logtable>
 <tbody><tr><td><% out.append(buf);%></td></tr></tbody>

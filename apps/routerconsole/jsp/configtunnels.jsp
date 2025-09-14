@@ -1,23 +1,21 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="128kb" %>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="128kb"%>
 <!DOCTYPE HTML>
-<%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = "en";
-    if (ctx.getProperty("routerconsole.lang") != null) {lang = ctx.getProperty("routerconsole.lang");}
+<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
 %>
-<%@include file="head.jsi" %>
+<%@include file="head.jsi"%>
 <%=intl.title("config tunnels")%>
 </head>
 <body>
-<%@include file="sidebar.jsi" %>
+<%@include file="sidebar.jsi"%>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigTunnelsHelper" id="tunnelshelper" scope="request"/>
 <jsp:setProperty name="tunnelshelper" property="contextId" value="<%=i2pcontextId%>"/>
 <h1 class=conf><%=intl._t("Tunnel Options")%></h1>
 <div class=main id=config_tunnels>
-<%@include file="confignav.jsi" %>
+<%@include file="confignav.jsi"%>
 <jsp:useBean class="net.i2p.router.web.helpers.ConfigTunnelsHandler" id="formhandler" scope="request"/>
-<%@include file="formhandler.jsi" %>
-<% if (!tunnelshelper.isAdvanced()) { %>
+<%@include file="formhandler.jsi"%>
+<% if (!tunnelshelper.isAdvanced()) {%>
 <!--
 <p id=tunnelconfig class=infowarn>
 <%=intl._t("The default settings work for most people.")%>&nbsp;<wbr>
@@ -27,17 +25,17 @@
 <%=intl._t("Change these settings with care, and adjust them if you have problems.")%>
 </p>
 -->
-<% }  // !isAdvanced %>
+<% }  // !isAdvanced%>
 <p class=infohelp>
 <%=intl._t("Exploratory tunnel setting changes are stored in the router.config file.")%>&nbsp;<wbr>
-<% if (tunnelshelper.isAdvanced()) { %>
+<% if (tunnelshelper.isAdvanced()) {%>
 <%=intl._t("Client tunnel changes are temporary and are not saved.")%>&nbsp;<wbr>
-<% } else { // isAdvanced %>
-<% net.i2p.util.PortMapper pm = net.i2p.I2PAppContext.getGlobalContext().portMapper(); %>
+<% } else { // isAdvanced%>
+<% net.i2p.util.PortMapper pm = net.i2p.I2PAppContext.getGlobalContext().portMapper();%>
 <%=intl._t("The default settings are optimized for general usage and normally don't need to be changed.")%>&nbsp;<wbr>
 <%=intl._t("To modify client tunnel settings, use the <a href=\"/i2ptunnelmgr\">Tunnel Manager</a>, or the <a href=\"/i2psnark/configure\">Configuration page</a> for I2PSnark.")%>&nbsp;<wbr>
 <%=intl._t("To enable session-only changes to the client tunnels, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>.")%>
-<% } %>
+<% }%>
 </p>
 <form method=POST>
 <input type=hidden name=nonce value="<%=pageNonce%>">
@@ -49,9 +47,9 @@
 </div>
 </form>
 </div>
-<% if (!theme.equals("classic")) { %>
+<% if (!theme.equals("classic")) {%>
 <script src=/js/toggleElements.js></script>
 <script src=/js/configtunnels.js></script>
-<% } %>
+<% }%>
 </body>
 </html>
