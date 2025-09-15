@@ -1596,8 +1596,8 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 .addtobook a{vertical-align:middle;font-size:0}
 .addtobook a:hover{filter:drop-shadow(0 0 1px var(--hover))}
 .addtobook a::after{width:16px;height:16px;display:inline-block;vertical-align:middle;background:var(--abook_helper) no-repeat center center/16px;content:""}
-#netdb .leaseset{margin:0 auto 8px;width:calc(100% - 4px);box-shadow:0 0 0 1px #fff,0 0 0 2px #b6b6c9}
-#leasesetdebug,#leasesetsummary{margin:0 2px 14px;width:calc(100% - 4px);column-span:all;box-shadow:0 0 0 1px #fff,0 0 0 2px #b6b6c9!important}
+#netdb .leaseset{margin:0 auto 8px;width:calc(100% - 4px);box-shadow:var(--table_border)}
+#leasesetdebug,#leasesetsummary{margin:0 2px 14px;width:calc(100% - 4px);column-span:all;box-shadow:var(--table_border)!important}
 #leasesetdebug th,#leasesetsummary th,#leasesetdebug td,#leasesetsummary td{white-space:nowrap}
 #leasesetdebug th,#leasesetsummary th{padding:8px;font-size:11pt;font-weight:700;text-align:left;text-transform:uppercase;letter-spacing:.08em;word-spacing:.1em;border-bottom:var(--border_inner)}
 #leasesetdebug th:last-child,#leasesetsummary th:last-child{text-align:right;font-size:90%}
@@ -3040,7 +3040,7 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #results.more{margin:-12px auto 8px;padding:4px 5%;width:fit-content;border:var(--border);border-top:0;border-radius:0 0 3px 3px;box-shadow:var(--bevel),0 1px 2px 2px #0001;background:var(--row)}
 
 #netdb #singleLS~.leaseset {margin-bottom:1px;column-span:all;width:100%}
-#searchLS {margin:18px auto 0;display:block;column-span:all;text-align:center;border:var(--border_soft);box-shadow:0 0 0 1px #fff,0 0 0 2px #b6b6c9;background:var(--th)}
+#searchLS {margin:18px auto 0;display:block;column-span:all;text-align:center;border:var(--border_soft);box-shadow:var(--table_border);background:var(--th)}
 
 /* session bans */
 #banSummary h2 {margin:2px -10px 0}
