@@ -300,12 +300,6 @@ function sectionToggler() {
 
   document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => { xhr.classList.remove("fadein"); }, 120);
-    const interval = setInterval(() => {
-      if (main) {
-        clearInterval(interval);
-        setTimeout(() => { wrap.removeAttribute("style"); }, 2000);
-      }
-    }, 1000);
   });
 }
 
