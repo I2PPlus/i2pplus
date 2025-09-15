@@ -92,13 +92,13 @@ class BanlistRenderer {
             return;
         }
 
-        buf.append("<table id=sessionBanned>\n");
-        buf.append("<thead><tr><th>")
-           .append(_t("Reason")).append("</th>")
-           .append("<th></th>")
-           .append("<th>").append(_t("Router Hash")).append("</th>")
-           .append("<th data-sort-method=number>").append(_t("Expiry")).append("</th>")
-           .append("</tr></thead>\n<tbody id=sessionBanlist>\n");
+        buf.append("<table id=sessionBanned>\n<thead><tr><th>")
+           .append(_t("Reason"))
+           .append("</th><th></th><th>")
+           .append(_t("Router Hash"))
+           .append("</th><th data-sort-method=number>")
+           .append(_t("Expiry"))
+           .append("</th></tr></thead>\n<tbody id=sessionBanlist>\n");
         int tempBanned = 0;
         for (Map.Entry<Hash, Banlist.Entry> e : entries.entrySet()) {
             Hash key = e.getKey();
@@ -115,13 +115,15 @@ class BanlistRenderer {
                 if (entry.cause.toLowerCase().contains("floodfill")) {
                     buf.append(" banFF");
                 }
-                buf.append("\">")
-                   .append("<td>").append(_t(entry.cause,entry.causeCode).replace("<b>➜</b> ","")).append("</td>")
-                   .append("<td>:</td>")
-                   .append("<td><span class=b64>").append(key.toBase64()).append("</span></td>")
-                   .append("<td>").append("<span hidden>").append(expires).append(".</span>")
-                   .append(expireString).append("</td>")
-                   .append("</tr>\n");
+                buf.append("\"><td>")
+                   .append(_t(entry.cause,entry.causeCode).replace("<b>➜</b> ",""))
+                   .append("</td><td>:</td><td><span class=b64>")
+                   .append(key.toBase64())
+                   .append("</span></td><td><span hidden>")
+                   .append(expires)
+                   .append(".</span>")
+                   .append(expireString)
+                   .append("</td></tr>\n");
                 tempBanned++;
             }
         }
