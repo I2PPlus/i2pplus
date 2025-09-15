@@ -408,6 +408,8 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 .tab:active a,.tab a:active{color:#ffecdf;text-shadow:none}
 .tab2{padding:5px 12px;position:relative;z-index:50;color:#fafaff;text-shadow:0 1px 1px #113;box-shadow:0 0 0 1px rgba(255,255,255,.8) inset,3px 3px 3px rgba(0,0,16,.5) inset;background:radial-gradient(at center bottom,rgba(128,128,172,.6) 0,#0000 50%),linear-gradient(180deg,rgba(31,43,63,.7),rgba(31,43,63,.5)),linear-gradient( 90deg,#6288cb,#7fadff,#6288cb);pointer-events:none}
 div[id^="config_"] .tab:not(:hover)::before{filter:saturate(.3)!important}
+#events .tab,#events .tab2,#logs .tab,#logs .tab2{min-width:120px}
+#events .tab a,#logs .tab a{width:calc(100% - 30px);display:inline-block}
 #stats .confignav{display:flex;flex-wrap:wrap}
 
 /* main content div & variations */
@@ -2917,6 +2919,7 @@ h4#updateplugins,#news p{font-size:10pt}
 #jobs #jobstats th{font-size:90%}
 #loggingoptions{margin-bottom:-3px}
 #logs font[color^="#"]::before{margin-right:6px;margin-left:5px;width:7px;height:7px}
+#events .tab,#events .tab2,#logs .tab,#logs .tab2{min-width:160px}
 #logs #routerlogs ul li:last-child{margin-bottom:18px}
 #minigraphcontainer,#minigraphcontainer_noscript{margin-top:-43px;margin-left:1px;width:234px;height:38px;background-size:248px 40px}
 #minigraph{margin-top:-20px;width:234px;height:43px}
