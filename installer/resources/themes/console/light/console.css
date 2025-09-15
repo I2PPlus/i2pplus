@@ -2960,7 +2960,7 @@ h4#updateplugins,#news p{font-size:10pt}
 #sidebar hr[hidden]+div:not([hidden]),#sidebar hr[hidden]+table:not([hidden]){margin-top:-8px}
 #sidebar hr[hidden]~h3{margin-top:-12px}
 #sidebar hr[hidden]~h4{margin-bottom:-1px}
-#sidebar hr[hidden]~h4#sb_status{margin-bottom:-5px}
+#sidebar hr[hidden]~h4#sb_status{margin-bottom:-8px}
 #sidebar hr[hidden]~#sb_advanced:not([hidden])~h3{margin-top:-9px}
 #sidebar hr[hidden]+#sb_CPUBar{margin-top:-9px}
 #sidebar hr[hidden]~#sb_memoryBar{margin-bottom:-1px}
