@@ -186,6 +186,9 @@ public class ConfigSidebarHandler extends FormHandler {
             int from = Integer.parseInt(parts[1]);
             int to = 0;
             switch (parts[2]) {
+                case "top":
+                    to = 0;
+                    break;
                 case "up":
                     to = from - 1;
                     break;
