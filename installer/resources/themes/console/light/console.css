@@ -2952,7 +2952,7 @@ h4#updateplugins,#news p{font-size:10pt}
 #sb_warning+.sb_notice{margin-bottom:-3px}
 #searchbar select{padding:6px 24px 6px 8px}
 #sidebar{margin-bottom:5px;width:228px}
-#sidebar form button.download{margin:-3px 0 -4px}
+#sidebar form button.download{margin:-3px 0 2px}
 #sidebar form{margin-bottom:0;padding-bottom:5px}
 #sidebar h3 a .badge,#tunnelCount,#newsCount{transform:translateY(-1px)}
 #sidebar h3::after{min-height:19px;display:inline-block;vertical-align:middle;box-sizing:border-box;content:""}
