@@ -370,6 +370,8 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sidebar .running,.tunnelBuildStatus.accepting{color:#383;background:rgba(220,255,220,.15)}
 #sidebar .running,.tunnelBuildStatus.active{border:1px solid #595;background:rgba(220,255,220,.15);box-shadow:inset 0 0 1px 0 rgba(0,255,0,.5),0 0 1px rgba(96,96,96,.5)}
 .sb_netstatus:hover #ffenabled{margin:2px;display:inline-block;white-space:nowrap}
+html:not(.unified) #homepage .sb_netstatus{margin-bottom:-2px}
+html:not(.unified) #homepage #sidebar #sb_routerControl{margin-top:-2px}
 
 /* netstatus tooltip */
 .sb_netstatus #netstatus{display:none;line-height:1}
@@ -543,7 +545,7 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 
 /* graphs */
 .graphContainer#hidpi{padding:8px}
-.graphContainer{margin:4px 3px;padding:0;position:relative;display:inline-block;min-width:140px;min-height:60px;max-width:calc(100% - 18px);overflow:hidden;vertical-align:middle;text-align:center;border:var(--border_inner);box-shadow:var(--highlight),0 0 1px 1px #ddf;animation:ease grid-fade 1s forwards;background:#fff;box-sizing:border-box}
+.graphContainer{margin:4px 3px;padding:5px 0 0;position:relative;display:inline-block;min-width:140px;min-height:60px;max-width:calc(100% - 18px);overflow:hidden;vertical-align:middle;text-align:center;border:var(--border_inner);box-shadow:var(--highlight),0 0 1px 1px #ddf;animation:ease grid-fade 1s forwards;background:#fff;box-sizing:border-box}
 .graphContainer:hover{border:1px solid var(--hover);box-shadow:var(--highlight),inset 0 0 1px 1px var(--hover);box-shadow:none}
 .graphContainer>*{vertical-align:middle;position:relative}
 .graphspanel h3{text-transform:capitalize;letter-spacing:0;word-spacing:0}
@@ -666,11 +668,12 @@ table[id$="logs"] ul li:last-child{margin-bottom:10px}
 #criticallogs .log_debug,#criticallogs .log_info,#criticallogs .log_warn,#criticallogs .log_error,#criticallogs .log_crit,#criticallogs .log_omitted{margin:1px 1px -1px}
 #criticallogs tr:first-child{display:none}
 #logs #criticallogs ul li{margin-bottom:-2px}
+#routerlogs,#wrapperlogs{margin-bottom:10px;width:100%;table-layout:fixed}
+#routerlogs.single,#wrapperlogs.single{margin-bottom:5px}
 #routerlogs ul{margin-top:-5px;margin-bottom:-19px;word-wrap:break-word}
 #routerlogs ul li{width:calc(100% - 11px)}
 #logs #routerlogs ul li:last-child,#logs #criticallogs ul li:last-child{margin-bottom:2px}
 #routerlogs tr:first-child td,#wrapperlogs tr:first-child td{border-bottom:var(--border_inner)}
-#wrapperlogs,table#routerlogs{margin-bottom:10px;width:100%;table-layout:fixed}
 #wrapperlogs{margin-bottom:5px;border-bottom-width:3px}
 #wrapperlogs .nologs{padding:11px 12px}
 #wrapperlogs tr:last-child td{padding:0}
@@ -2664,32 +2667,30 @@ p#pluginconfigtext{margin-top:11px}
 #sb_general td::after,#sb_shortgeneral td::after,#sb_advancedgeneral td::after,#sb_bandwidth td::after,#sb_peers td::after,#sb_peersadvanced td::after,#sb_tunnels td::after,#sb_queue td::after{min-height:12px}
 #sb_internals a,#sb_advanced a #sb_help a{max-width:200px}
 #sb_peers_condensed,#sb_tunnels_condensed{width:calc(100% + 11px)}
-#sb_peers_condensed,#sb_tunnels_condensed,#sb_services_condensed,#homepage #sb_tunnels_condensed{margin-bottom:-7px}
+#sb_peers_condensed,#sb_tunnels_condensed,#sb_services_condensed{margin-bottom:-7px}
 #sidebar #sb_advancedgeneral[hidden] ~ #sb_peers_condensed,#sidebar #sb_tunnels_condensed{margin-bottom:-10px}
 #sb_advancedgeneral:not([hidden]) ~ #sb_services.collapsed{margin-bottom:-11px}
 #sb_wrap{width:192px!important}
 #sidebar #sb_advancedgeneral[hidden] ~ #sb_services.collapsed{margin-bottom:-14px}
-#homepage #sb_shortgeneral~#sb_peers_condensed{margin-bottom:-10px}
 #sb_tunnelstatus .tunnelBuildStatus::before{margin:-1px 0 0;background-size:12px}
 #sb_warning+.sb_notice{margin-bottom:-6px}
 #searchbar select{padding:6px 24px 7px 8px}
+#sidebar,#sb_services.collapsed{margin-bottom:-14px}
 #sidebar{margin-top:-1px}
 #sidebar h3:active::after{display:inline-block;vertical-align:middle;min-height:17px;content:""}
 #sidebar #sb_CPUBar{margin-top:-4px}
 #sidebar #sb_internals.collapsed .sb_icon img,#sidebar #sb_advanced.collapsed .sb_icon img,#sidebar #sb_services.collapsed .sb_icon img{width:17px;height:17px}
 #sidebar #sb_internals.collapsed,#sidebar #sb_advanced.collapsed{margin-bottom:-13px}
-body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_internals.collapsed,body:not(#homepage):not(#map) #sidebar #sb_advancedgeneral:not([hidden])~#sb_advanced.collapsed{margin-bottom:-10px}
-#sb_advancedgeneral:not([hidden])~#sb_routerControl{margin-bottom:-4px}
 #sidebar #localtunnelSummary{margin-left:-8px;width:208px}
 #sidebar #localtunnelsActive span{letter-spacing:2px}
-#sidebar,#sb_services.collapsed{margin-bottom:-14px}
 #sidebar #sb_routerControl{margin-top:-6px}
 #sidebar hr:not([hidden])+iframe+#sb_routerControl{margin-top:-3px}
 #sb_advancedgeneral:not([hidden])~#sb_updatesection{margin-bottom:-5px}
 #sitemap .applink img{padding-left:62px;padding-right:62px}
 #sitemap h3 img{margin-top:-8px;padding-right:6px}
+html:not(.unified) #homepage .sb_netstatus{margin-bottom:-6px}
+html:not(.unified) #homepage #sidebar #sb_routerControl{margin-top:-3px}
 }
-
 
 @media (max-width:1480px){
 .themechoice img{margin-bottom:29px}
@@ -2908,15 +2909,6 @@ h4#updateplugins,#news p{font-size:10pt}
 #help .confignav,#help .confignav .tab,#help .confignav .tab2{display:flex}
 #help .confignav .tab,#help .confignav .tab2{line-height: 1.05;font-size:95%;flex-grow:.5;justify-content:center;align-items:center}
 #helptoc b{font-size:120%}
-#homepage #sb_advancedgeneral:not([hidden])~#sb_routerControl{margin-bottom:0}
-#homepage #sb_memoryBar+hr{margin-top:5px}
-#homepage #sb_memoryBar.percentBarOuter{margin-bottom:-2px}
-#homepage #sb_peers tr:last-child td{padding-bottom:1px}
-#homepage #sb_queue tr:last-child td{padding-bottom:3px}
-#homepage #sb_shortgeneral~#sb_memoryBar.percentBarOuter{margin-bottom:-4px}
-#homepage #sb_tunnels tr:last-child td{padding-bottom:2px}
-#homepage #sidebar hr[hidden]~#sb_memoryBar{margin-bottom:-1px}
-#homepage #sidebar #sb_updateform{padding-bottom:6px}
 #iptransport a{padding-top:6px}
 #jobs #jobstats td{font-size:100%}
 #jobs #jobstats th{font-size:90%}
@@ -2953,7 +2945,7 @@ h4#updateplugins,#news p{font-size:10pt}
 #sb_warning+.sb_notice{margin-bottom:-3px}
 #searchbar select{padding:6px 24px 6px 8px}
 #sidebar{margin-bottom:5px;width:228px}
-#sidebar form button.download{margin:-3px 0 2px}
+#sidebar form button.download{margin:-3px 0 4px}
 #sidebar form{margin-bottom:0;padding-bottom:5px}
 #sidebar h3 a .badge,#tunnelCount,#newsCount{transform:translateY(-1px)}
 #sidebar h3::after{min-height:19px;display:inline-block;vertical-align:middle;box-sizing:border-box;content:""}
@@ -2981,7 +2973,7 @@ h4#updateplugins,#news p{font-size:10pt}
 #sidebar #sb_peers_condensed{margin-bottom:-7px}
 #sidebar #sb_services.collapsed{margin-bottom:-9px}
 #sidebar #sb_shutdownStatus{padding:8px 4px 9px;line-height:1.2}
-#sidebar #sb_updateform{padding-bottom:1px}
+#sidebar #sb_updateform{margin-bottom:-5px;padding-bottom:1px}
 #sidebar #sb_updateprogress+.percentBarOuter{width:232px;margin:-1px 2px 0}
 #sidebar table[id^="sb_"],#sidebar #localtunnelSummary{width:238px}
 #sybilTask th{font-size:12pt}

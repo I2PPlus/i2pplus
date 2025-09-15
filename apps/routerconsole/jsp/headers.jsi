@@ -22,6 +22,7 @@
   boolean hasOverride = themeOverride.exists();
   boolean useSoraFont = intl.useSoraDisplayFont();
   boolean useStickySidebar = intl.useStickySidebar();
+  boolean useUnifiedSidebar = intl.useUnifiedSidebar();
   String type = request.getContentType();
   boolean needsCSP = true;
   boolean isAdvancedMode = intl.isAdvancedMode();
