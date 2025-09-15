@@ -2666,6 +2666,7 @@ p#pluginconfigtext{margin-top:11px}
 #sb_peers_condensed,#sb_tunnels_condensed,#sb_services_condensed,#homepage #sb_tunnels_condensed{margin-bottom:-7px}
 #sidebar #sb_advancedgeneral[hidden] ~ #sb_peers_condensed,#sidebar #sb_tunnels_condensed{margin-bottom:-10px}
 #sb_advancedgeneral:not([hidden]) ~ #sb_services.collapsed{margin-bottom:-11px}
+#sb_wrap{width:192px!important}
 #sidebar #sb_advancedgeneral[hidden] ~ #sb_services.collapsed{margin-bottom:-14px}
 #homepage #sb_shortgeneral~#sb_peers_condensed{margin-bottom:-10px}
 #sb_tunnelstatus .tunnelBuildStatus::before{margin:-1px 0 0;background-size:12px}
@@ -2795,6 +2796,7 @@ input[name="pluginFile"],#manualreseed input[name="url"]{width:220px;min-width:2
 select[name="newlogclass"]{width:200px;text-overflow:ellipsis}
 .homelinkedit input[name="nofilter_url"]{width:240px}
 #config_family input.download{max-width:230px;overflow:hidden;text-overflow:ellipsis}
+#dns,#torrents,#webmail{position:absolute;width:calc(100% - 224px)}
 #newfamily tr:last-child td:first-child,#joinfamily tr:last-child td:first-child,#leavefamily tr:last-child td:first-child{background-size:22px 22px,100%;background-position:center left 6px}
 #joinfamily input[type="file"]{width:220px}
 #ntcpconnections th:last-child{font-size:0}
