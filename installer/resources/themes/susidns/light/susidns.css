@@ -335,6 +335,7 @@ input.search[type=submit]{padding:6px 5px}
 @media (max-width:680px){
 #navi{padding:5px 3px}
 #navi a.abook,#navi a#configlink,#navi a#overview,#navi a#subs,#navi a.abook:hover,#navi a#configlink:hover,#navi a#overview:hover,#navi a#subs:hover,#navi a.abook:focus,#navi a#configlink:focus,#navi a#overview:focus,#navi a#subs:focus{padding:3px 10px;min-width:50px;background:var(--nav) #fff}
+#navi .abook:active, #navi .abook.selected{background:var(--nav_active)}
 #visualid img[src^="/imagegen"]{width:228px;height:228px}
 }
 
