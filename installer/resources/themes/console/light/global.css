@@ -12,6 +12,7 @@
 --badgeborder:1px solid #bbc;
 --badge_hover:linear-gradient(180deg,#fff,#dba);
 --badge:linear-gradient(180deg,#fff,#ddf);
+--badge_green:linear-gradient(180deg,#f2fff2,#f0fff0);
 --badge_shadow_hover:0 0 0 1px #f60,var(--highlight);
 --bevel:inset 0 0 0 1px #e2e2e9;
 --bg:url("data:image/svg+xml,%3Csvg height='4' viewBox='0 0 4 4' width='4' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m1 3h1v1h-1zm2-2h1v1h-1z' fill='%23e2e2ff' fill-opacity='.5'/%3E%3C/svg%3E");
@@ -57,6 +58,7 @@
 --selected:#27377f;
 --suboption:linear-gradient(180deg,#fff 50%,#eef 50%);
 --table:repeating-linear-gradient(135deg,rgba(248,248,255,.8) 2px,rgba(221,221,255,.3) 3px,#fff 5px) #fff;
+--table_border:0 0 0 1px #fff,0 0 0 2px #b6b6c9;
 --th:linear-gradient(180deg,#fcfcff,#fafaff 50%,#f4f4ff 100%);
 --txtinput:linear-gradient(180deg,#f2f2ff,#fff);
 --txt_shadow:1px 1px 1px rgba(255,255,255,.75);
