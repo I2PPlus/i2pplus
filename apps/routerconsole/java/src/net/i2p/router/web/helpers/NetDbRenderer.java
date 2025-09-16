@@ -1593,6 +1593,7 @@ class NetDbRenderer {
            .append(ident.getPublicKey().getType().toString())
            .append("\">").append(ident.getPublicKey().getType().toString())
            .append("</a></span></td></tr>\n");
+
         if ((full && isU) || !isU) {
             buf.append("<tr><td><b>")
                .append(_t("Addresses"))
@@ -1609,32 +1610,72 @@ class NetDbRenderer {
                 if (laddrs.size() > 1) {
                     laddrs.sort(new RAComparator());
                 }
-                boolean hasDetails = false;
+
+                boolean hasSSU = false;
+                boolean hasNTCP = false;
+                int itagCount = 0;
+
+                // First pass: accumulate introducer count and styles
                 for (RouterAddress addr : laddrs) {
-                    if (ip != null) {_context.commSystem().queueLookup(ip);}
+                    String style = addr.getTransportStyle();
+                    if (style.startsWith("SSU")) hasSSU = true;
+                    if (style.startsWith("NTCP")) hasNTCP = true;
+
+                    Map<Object, Object> p = addr.getOptionsMap();
+                    for (Map.Entry<Object, Object> e : p.entrySet()) {
+                        String name = (String) e.getKey();
+                        String lowerCaseName = name.toLowerCase();
+                        if (lowerCaseName.startsWith("itag")) {
+                            itagCount++;
+                        }
+                    }
+                }
+
+                List<String> listItems = new ArrayList<>();
+                boolean brInserted = false;
+                boolean introducersInserted = false;
+
+                // Second pass: build <li> elements with introducer count and <br> separation
+                for (RouterAddress addr : laddrs) {
+                    if (ip != null) {
+                        _context.commSystem().queueLookup(ip);
+                    }
                     String style = addr.getTransportStyle();
                     int cost = addr.getCost();
                     Map<Object, Object> p = addr.getOptionsMap();
                     List<Map.Entry<Object, Object>> netProps = new ArrayList<>();
                     List<Map.Entry<Object, Object>> otherEntries = new ArrayList<>();
+                    boolean hasDetails = false;
+
                     for (Map.Entry<Object, Object> e : p.entrySet()) {
                         String name = (String) e.getKey();
+                        String lowerCaseName = name.toLowerCase();
                         if (full) {
                             if (name.equalsIgnoreCase("host") || name.equalsIgnoreCase("port") ||
                                 name.equalsIgnoreCase("mtu") || name.equalsIgnoreCase("caps")) {
                                 netProps.add(e);
-                            } else {otherEntries.add(e);}
+                            } else if (!name.equalsIgnoreCase("v") &&
+                                       !lowerCaseName.startsWith("ih") &&
+                                       !lowerCaseName.startsWith("iexp") &&
+                                       !lowerCaseName.startsWith("itag")) {
+                                otherEntries.add(e);
+                            }
                             if (!hasDetails && (!netProps.isEmpty() || !otherEntries.isEmpty())) {
                                 hasDetails = true;
                             }
                         } else {
                             if (name.equalsIgnoreCase("host") || name.equalsIgnoreCase("port")) {
                                 netProps.add(e);
-                                if (!hasDetails) {hasDetails = true;}
+                                if (!hasDetails) {
+                                    hasDetails = true;
+                                }
+                            } else {
+                                continue;
                             }
                         }
                     }
                     if (!hasDetails) continue;
+
                     netProps.sort((e1, e2) -> ((String) e1.getKey()).compareTo((String) e2.getKey()));
                     List<Map.Entry<Object, Object>> sortedProps = new ArrayList<>();
                     Set<String> seenNames = new HashSet<>();
@@ -1652,13 +1693,10 @@ class NetDbRenderer {
                     }
 
                     StringBuilder spans = new StringBuilder();
-                    boolean hasHost = false;
-
                     for (Map.Entry<Object, Object> e : sortedProps) {
                         String name = (String) e.getKey();
                         String val = (String) e.getValue();
                         String valStripped = DataHelper.stripHTML(val);
-
                         if (name.equalsIgnoreCase("host")) {
                             spans.append("<span class=nowrap><span class=netdb_name>")
                                  .append(_t(DataHelper.stripHTML(name))).append(":</span> ")
@@ -1669,19 +1707,13 @@ class NetDbRenderer {
                                 spans.append("<a title=\"").append(_t("Show all routers with this address in the NetDb")).append("\" ");
                                 if (valStripped.contains(":")) {
                                     spans.append(" href=\"/netdb?ipv6=");
-                                    if (valStripped.length() > 8) {
-                                        spans.append(valStripped.substring(0, 4));
-                                    } else {
-                                        spans.append(valStripped);
-                                    }
+                                    spans.append(valStripped.length() > 8 ? valStripped.substring(0, 4) : valStripped);
                                 } else {
                                     spans.append(" href=\"/netdb?ip=").append(valStripped);
                                 }
                                 spans.append("\">").append(valStripped).append("</a>");
                             }
                             spans.append("</span></span> ");
-                            hasHost = true;
-
                         } else if (name.equalsIgnoreCase("port")) {
                             spans.append("<span class=nowrap><span class=netdb_name>")
                                  .append(_t(DataHelper.stripHTML(name)))
@@ -1690,27 +1722,39 @@ class NetDbRenderer {
                                  .append("\" href=\"/netdb?port=")
                                  .append(valStripped)
                                  .append("\">").append(valStripped).append("</a></span></span> ");
-
                         } else {
-                            // Append other key/values for full mode
                             spans.append("<span class=nowrap><span class=netdb_name>")
                                  .append(_t(DataHelper.stripHTML(name)))
                                  .append(":</span> <span class=netdb_info>")
                                  .append(valStripped).append("</span></span> ");
                         }
                     }
-
-                    // Render <li> only if spans contain content
                     if (spans.length() > 0) {
-                        buf.append("<li>");
-                        buf.append("<b class=\"netdb_transport\"");
+                        StringBuilder li = new StringBuilder();
+                        li.append("<li>");
+                        li.append("<b class=\"netdb_transport\"");
                         if (!((style.equals("SSU") && cost == 5) || (style.startsWith("NTCP") && cost == 10))) {
-                            buf.append(" title=\"").append(_t("Cost")).append(": ").append(cost).append("\"");
+                            li.append(" title=\"").append(_t("Cost")).append(": ").append(cost).append("\"");
                         }
-                        buf.append(">").append(DataHelper.stripHTML(style)).append("</b> ");
-                        buf.append(spans.toString());
-                        buf.append("</li>");
+                        li.append(">").append(DataHelper.stripHTML(style)).append("</b> ");
+                        li.append(spans.toString());
+                        if (full && isU && !introducersInserted && style.startsWith("SSU") && itagCount > 0) {
+                            li.append("<span class=nowrap><span class=netdb_name>").append(_t("Introducers"))
+                              .append(":</span> <span class=netdb_info>").append(itagCount).append("</span></span>");
+                            introducersInserted = true;
+                        }
+                        li.append("</li>");
+                        if (full && hasNTCP && hasSSU && !brInserted) {
+                            if (style.startsWith("SSU")) {
+                                listItems.add("<br>");
+                                brInserted = true;
+                            }
+                        }
+                        listItems.add(li.toString());
                     }
+                }
+                for (String item : listItems) {
+                    buf.append(item);
                 }
                 buf.append("</ul></td></tr>\n");
             }
