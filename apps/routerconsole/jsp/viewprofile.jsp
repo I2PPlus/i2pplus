@@ -6,12 +6,9 @@
     String peerB64 = request.getParameter("peer");
     if (peerB64 == null || peerB64.length() <= 0 || peerB64.replaceAll("[a-zA-Z0-9~=-]", "").length() != 0) {isValid = false;}
 %>
-<link href=/themes/console/viewprofile.css rel=stylesheet>
 <%@include file="head.jsi"%>
 <%=intl.title("Peer Profile")%>
-<%  if (!isValid) { %>
-<meta http-equiv=refresh content="5;url=/profiles?f=1"/>
-<%  } %>
+<%  if (!isValid) { %><meta http-equiv=refresh content="5;url=/profiles?f=1"/><%  } %>
 </head>
 <body>
 <%@include file="sidebar.jsi"%>
@@ -25,8 +22,7 @@
 <span class=tab><a href="/profiles?f=4"><%=intl._t("Session Bans")%></a></span>
 <span class=tab2><%=intl._t("Profile View")%></span>
 </div>
-<%
-    if (!isValid) {out.print("<p class=infohelp id=nopeer>No peer specified</p>");}
+<%  if (!isValid) {out.print("<p class=infohelp id=nopeer>No peer specified</p>");}
     else {
 %>
 <jsp:useBean id="stathelper" class="net.i2p.router.web.helpers.StatHelper"/>
@@ -38,8 +34,7 @@
 <%=intl._t("Edit")%></a>&nbsp;&nbsp;
 <a class=viewprofile href="/dumpprofile?peer=<%=peerB64%>" target=_blank rel=noreferrer title="<%=intl._t("View profile in text format")%>" style=float:right>
 <%=intl._t("View Raw Profile")%></a>&nbsp;&nbsp;
-<%
-        net.i2p.util.PortMapper pm = net.i2p.I2PAppContext.getGlobalContext().portMapper();
+<%      net.i2p.util.PortMapper pm = net.i2p.I2PAppContext.getGlobalContext().portMapper();
         if (pm.isRegistered("imagegen")) {
 %>
 <img class=identicon src="/imagegen/id?s=41&amp;c=<%=peerB64%>" style=float:right>

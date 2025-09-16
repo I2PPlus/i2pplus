@@ -8,6 +8,7 @@ boolean isMobile = !intl.allowIFrame(UA);
 boolean isConfigPage = uri.contains("config") && !uri.contains("/help/");
 boolean isHelpPage = uri.contains("/help/") && !uri.endsWith("/");
 boolean isWizardPage = uri.endsWith("wizard") || uri.endsWith("wizard.jsp");
+boolean viewProfile = uri.contains("viewprofile");
 %>
 <html lang="<%=lang%>" class="<%=isAdvancedMode ? "advmode " : ""%><%=useUnifiedSidebar ? "unified " : ""%><%=useSoraFont ? "sora" : "opensans"%>" <%=theme.equals("dark") || theme.equals("midnight") ? "style=\"background:var(--bodybg,#000)\"" : ""%>>
 <head>
@@ -25,6 +26,7 @@ boolean isWizardPage = uri.endsWith("wizard") || uri.endsWith("wizard.jsp");
 <link rel=preload href=<%=themePath%>images/images.css as=style>
 <link rel=stylesheet href=<%=themePath%>global.css>
 <link rel=stylesheet href=<%=fontStyle%>>
+<% if (viewProfile) { %> <link href=/themes/console/viewprofile.css rel=stylesheet> <% } %>
 <% if (isConfigPage) {%> <link rel=preload href=/themes/console/confignav.css as=style> <% } %>
 <% if (isHelpPage) {%> <link rel=stylesheet href=/themes/console/helpnav.css> <% } %>
 <% if (isMobile) {%> <link rel=preload href="<%=themePath%>mobile.css?version=<%=v%>" as=style> <% } %>
