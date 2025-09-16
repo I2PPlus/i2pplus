@@ -1366,7 +1366,8 @@ class NetDbRenderer {
         Hash h = info.getHash();
         String hash = h.toBase64();
         String family = info.getOption("family");
-        buf.append("<table class=\"netdbentry lazy\">").append("<tr><th>");
+
+        buf.append("<table class=\"netdbentry lazy\"><tr><th>");
         if (isUs) {
             buf.append("<b id=our-info>").append(_t("Our info")).append(":</b></th><th><code>").append(hash)
                .append("</code></th><th id=netdb_ourinfo>");
@@ -1383,109 +1384,120 @@ class NetDbRenderer {
             String style = addr.getTransportStyle();
             int transportCost = addr.getCost();
             if ((style.startsWith("SSU") && transportCost == 5) ||
-                (style.startsWith("NTCP") && transportCost == 14) &&
-                (style.startsWith("SSU") && transportCost != 15)) {
+                (style.startsWith("NTCP") && transportCost == 14) && (style.startsWith("SSU") && transportCost != 15)) {
                 isJavaI2P = true;
                 break;
-            } else if ((style.startsWith("SSU") && transportCost == 3) ||
-                (style.startsWith("NTCP") && transportCost == 8)) {
-                isI2PD = true;
+            } else if ((style.startsWith("SSU") && transportCost == 3) || (style.startsWith("NTCP") && transportCost == 8)) {
+               isI2PD = true;
             }
         }
-        if (isJavaI2P) {buf.append("<span class=javai2p title=\"").append(_t("Java I2P variant")).append("\"></span> ");}
-        else if (isI2PD) {buf.append("<span class=i2pd title=\"").append(_t("I2Pd variant")).append("\"></span> ");}
+        if (isJavaI2P) {
+            buf.append("<span class=javai2p title=\"").append(_t("Java I2P variant")).append("\"></span> ");
+        } else if (isI2PD) {
+            buf.append("<span class=i2pd title=\"").append(_t("I2Pd variant")).append("\"></span> ");
+        }
         if (ident.isCompressible()) {
             buf.append("<span class=compressible title=\"").append(_t("RouterInfo is compressible")).append("\"></span> ");
         }
-        String tooltip = "\" title=\"" + _t("Show all routers with this capability in the NetDb") + "\"><span";
-        boolean hasD = DataHelper.stripHTML(info.getCapabilities()).contains("D");
-        boolean hasE = DataHelper.stripHTML(info.getCapabilities()).contains("E");
-        boolean hasG = DataHelper.stripHTML(info.getCapabilities()).contains("G");
-        boolean isR = DataHelper.stripHTML(info.getCapabilities()).contains("R");
-        boolean isU = DataHelper.stripHTML(info.getCapabilities()).contains("U");
-        String caps = DataHelper.stripHTML(info.getCapabilities())
-                                               .replace("XO", "X")
-                                               .replace("PO", "P")
-                                               .replace("Kf", "fK")
-                                               .replace("Lf", "fL")
-                                               .replace("Mf", "fM")
-                                               .replace("Nf", "fN")
-                                               .replace("Of", "fO")
-                                               .replace("Pf", "fP")
-                                               .replace("Xf", "fX")
-                                               .replace("f", "<a href=\"/netdb?caps=f\"><span class=ff>F</span></a>")
-                                               .replace("R", "<a href=\"/netdb?caps=R\"><span class=reachable>R</span></a>")
-                                               .replace("U", "<a href=\"/netdb?caps=U\"><span class=unreachable>U</span></a>")
-                                               .replace("K", "<a href=\"/netdb?caps=K\"><span class=tier>K</span></a>")
-                                               .replace("L", "<a href=\"/netdb?caps=L\"><span class=tier>L</span></a>")
-                                               .replace("M", "<a href=\"/netdb?caps=M\"><span class=tier>M</span></a>")
-                                               .replace("N", "<a href=\"/netdb?caps=N\"><span class=tier>N</span></a>")
-                                               .replace("O", "<a href=\"/netdb?caps=O\"><span class=tier>O</span></a>")
-                                               .replace("P", "<a href=\"/netdb?caps=P\"><span class=tier>P</span></a>")
-                                               .replace("X", "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>");
-        if (hasD) {caps = caps.replace("D","").replace("class=tier", "class=\"tier isD\"").replace("\"><span class", "D\"><span class");}
-        else if (hasE) {caps = caps.replace("E","").replace("class=tier", "class=\"tier isE\"").replace("\"><span class", "E\"><span class");}
-        else if (hasG) {caps = caps.replace("G","").replace("class=tier", "class=\"tier isG\"").replace("\"><span class", "G\"><span class");}
+        // Cache stripped capabilities for reuse
+        String strippedCaps = DataHelper.stripHTML(info.getCapabilities());
+        boolean hasD = strippedCaps.contains("D");
+        boolean hasE = strippedCaps.contains("E");
+        boolean hasG = strippedCaps.contains("G");
+        boolean isR = strippedCaps.contains("R");
+        boolean isU = strippedCaps.contains("U");
+        // Simplify multiple chained replacements by using a StringBuilder and map replacements
+        String capsTemp = strippedCaps
+                .replace("XO", "X")
+                .replace("PO", "P")
+                .replace("Kf", "fK")
+                .replace("Lf", "fL")
+                .replace("Mf", "fM")
+                .replace("Nf", "fN")
+                .replace("Of", "fO")
+                .replace("Pf", "fP")
+                .replace("Xf", "fX")
+                .replace("f", "<a href=\"/netdb?caps=f\"><span class=ff>F</span></a>")
+                .replace("R", "<a href=\"/netdb?caps=R\"><span class=reachable>R</span></a>")
+                .replace("U", "<a href=\"/netdb?caps=U\"><span class=unreachable>U</span></a>")
+                .replace("K", "<a href=\"/netdb?caps=K\"><span class=tier>K</span></a>")
+                .replace("L", "<a href=\"/netdb?caps=L\"><span class=tier>L</span></a>")
+                .replace("M", "<a href=\"/netdb?caps=M\"><span class=tier>M</span></a>")
+                .replace("N", "<a href=\"/netdb?caps=N\"><span class=tier>N</span></a>")
+                .replace("O", "<a href=\"/netdb?caps=O\"><span class=tier>O</span></a>")
+                .replace("P", "<a href=\"/netdb?caps=P\"><span class=tier>P</span></a>")
+                .replace("X", "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>");
         if (hasD) {
+            capsTemp = capsTemp.replace("D", "")
+                               .replace("class=tier", "class=\"tier isD\"")
+                               .replace("\"><span class", "D\"><span class");
             if (isR) {
-                caps = caps.replace("caps=KD", "caps=KRD")
-                           .replace("caps=LD", "caps=LRD")
-                           .replace("caps=MD", "caps=MRD")
-                           .replace("caps=ND", "caps=NRD")
-                           .replace("caps=OD", "caps=ORD")
-                           .replace("caps=PD", "caps=PRD")
-                           .replace("caps=XD", "caps=XRD");
+                capsTemp = capsTemp.replace("caps=KD", "caps=KRD")
+                                   .replace("caps=LD", "caps=LRD")
+                                   .replace("caps=MD", "caps=MRD")
+                                   .replace("caps=ND", "caps=NRD")
+                                   .replace("caps=OD", "caps=ORD")
+                                   .replace("caps=PD", "caps=PRD")
+                                   .replace("caps=XD", "caps=XRD");
             } else if (isU) {
-                caps = caps.replace("caps=KD", "caps=KUD")
-                           .replace("caps=LD", "caps=LUD")
-                           .replace("caps=MD", "caps=MUD")
-                           .replace("caps=ND", "caps=NUD")
-                           .replace("caps=OD", "caps=OUD")
-                           .replace("caps=PD", "caps=PUD")
-                           .replace("caps=XD", "caps=XUD");
+                capsTemp = capsTemp.replace("caps=KD", "caps=KUD")
+                                   .replace("caps=LD", "caps=LUD")
+                                   .replace("caps=MD", "caps=MUD")
+                                   .replace("caps=ND", "caps=NUD")
+                                   .replace("caps=OD", "caps=OUD")
+                                   .replace("caps=PD", "caps=PUD")
+                                   .replace("caps=XD", "caps=XUD");
             }
         } else if (hasE) {
+            capsTemp = capsTemp.replace("E", "")
+                               .replace("class=tier", "class=\"tier isE\"")
+                               .replace("\"><span class", "E\"><span class");
             if (isR) {
-                caps = caps.replace("caps=KE", "caps=KRE")
-                           .replace("caps=LE", "caps=LRE")
-                           .replace("caps=ME", "caps=MRE")
-                           .replace("caps=NE", "caps=NRE")
-                           .replace("caps=OE", "caps=ORE")
-                           .replace("caps=PE", "caps=PRE")
-                           .replace("caps=XE", "caps=XRE");
+                capsTemp = capsTemp.replace("caps=KE", "caps=KRE")
+                                   .replace("caps=LE", "caps=LRE")
+                                   .replace("caps=ME", "caps=MRE")
+                                   .replace("caps=NE", "caps=NRE")
+                                   .replace("caps=OE", "caps=ORE")
+                                   .replace("caps=PE", "caps=PRE")
+                                   .replace("caps=XE", "caps=XRE");
             } else if (isU) {
-                caps = caps.replace("caps=KE", "caps=KUE")
-                           .replace("caps=LE", "caps=LUE")
-                           .replace("caps=ME", "caps=MUE")
-                           .replace("caps=NE", "caps=NUE")
-                           .replace("caps=OE", "caps=OUE")
-                           .replace("caps=PE", "caps=PUE")
-                           .replace("caps=XE", "caps=XUE");
+                capsTemp = capsTemp.replace("caps=KE", "caps=KUE")
+                                   .replace("caps=LE", "caps=LUE")
+                                   .replace("caps=ME", "caps=MUE")
+                                   .replace("caps=NE", "caps=NUE")
+                                   .replace("caps=OE", "caps=OUE")
+                                   .replace("caps=PE", "caps=PUE")
+                                   .replace("caps=XE", "caps=XUE");
             }
         } else if (hasG) {
+            capsTemp = capsTemp.replace("G", "")
+                               .replace("class=tier", "class=\"tier isG\"")
+                               .replace("\"><span class", "G\"><span class");
             if (isR) {
-                caps = caps.replace("KG", "KRG")
-                           .replace("LG", "LRG")
-                           .replace("MG", "MRG")
-                           .replace("NG", "NRG")
-                           .replace("OG", "ORG")
-                           .replace("PG", "PRG")
-                           .replace("XG", "XRG");
+                capsTemp = capsTemp.replace("KG", "KRG")
+                                   .replace("LG", "LRG")
+                                   .replace("MG", "MRG")
+                                   .replace("NG", "NRG")
+                                   .replace("OG", "ORG")
+                                   .replace("PG", "PRG")
+                                   .replace("XG", "XRG");
             } else if (isU) {
-                caps = caps.replace("KG", "KUG")
-                           .replace("LG", "LUG")
-                           .replace("MG", "MUG")
-                           .replace("NG", "NUG")
-                           .replace("OG", "OUG")
-                           .replace("PG", "PUG")
-                           .replace("XG", "XUG");
+                capsTemp = capsTemp.replace("KG", "KUG")
+                                   .replace("LG", "LUG")
+                                   .replace("MG", "MUG")
+                                   .replace("NG", "NUG")
+                                   .replace("OG", "OUG")
+                                   .replace("PG", "PUG")
+                                   .replace("XG", "XUG");
             }
         }
-        caps = caps.replace("\"><span", tooltip);
-        buf.append(caps);
-        buf.append("&nbsp;<a href=\"/netdb?v=").append(DataHelper.stripHTML(info.getVersion())).append("\">")
+        String tooltip = "\" title=\"" + _t("Show all routers with this capability in the NetDb") + "\"><span";
+        capsTemp = capsTemp.replace("\"><span", tooltip);
+        buf.append(capsTemp);
+        String strippedVersion = DataHelper.stripHTML(info.getVersion());
+        buf.append("&nbsp;<a href=\"/netdb?v=").append(strippedVersion).append("\">")
            .append("<span class=version title=\"").append(_t("Show all routers with this version in the NetDb"))
-           .append("\">").append(DataHelper.stripHTML(info.getVersion())).append("</span></a>");
+           .append("\">").append(strippedVersion).append("</span></a>");
         if (!isUs) {
             buf.append("<span class=netdb_header>");
             if (family != null) {
@@ -1506,8 +1518,8 @@ class NetDbRenderer {
                .append("\">").append(_t("Edit")).append("</a>")
                .append(_context.commSystem().renderPeerFlag(h)).append("</span>");
         } else {
-            long used = (long) _context.statManager().getRate("router.memoryUsed").getRate(60*1000).getAvgOrLifetimeAvg();
-            used /= 1024*1024;
+            long used = (long) _context.statManager().getRate("router.memoryUsed").getRate(60 * 1000).getAvgOrLifetimeAvg();
+            used /= 1024 * 1024;
             buf.append("&nbsp;<span id=netdb_ram><b>").append(_t("Memory usage")).append(":</b> ").append(used).append("M</span>");
         }
         buf.append("</th></tr>\n<tr>");
@@ -1518,19 +1530,18 @@ class NetDbRenderer {
                .append(_t("{0} ago", DataHelper.formatDuration2(age)))
                .append("</span>&nbsp;&nbsp;");
         } else if (age > 0) {
-            buf.append("<td><b>").append(_t("Published")).append(":</b></td>")
-               .append("<td><span class=netdb_info>")
+            buf.append("<td><b>").append(_t("Published")).append(":</b></td><td><span class=netdb_info>")
                .append(_t("{0} ago", DataHelper.formatDuration2(age)))
                .append("</span>&nbsp;&nbsp;");
             String address = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info));
-            boolean isUnreachable = caps.contains("U") || caps.contains("H");
-            if (enableReverseLookups() && uptime > 30*1000 && !isUnreachable && address != null) {
+            boolean isUnreachable = capsTemp.contains("U") || capsTemp.contains("H");
+            if (enableReverseLookups() && uptime > 30 * 1000 && !isUnreachable && address != null) {
                 String rdns = _context.commSystem().getCanonicalHostName(address);
                 if (rdns != null && !rdns.equals(address) && !rdns.equals("unknown")) {
                     buf.append("<span class=netdb_info><b>").append(_t("Hostname")).append(":</b> <span class=rdns>")
                        .append(rdns).append("</span></span>&nbsp;&nbsp;");
                 }
-            } else if (uptime > 30*1000 && (isUnreachable || address == null)) {
+            } else if (uptime > 30 * 1000 && (isUnreachable || address == null)) {
                 byte[] ip = TransportImpl.getIP(info.getHash());
                 if (ip != null) {
                     _context.commSystem().queueLookup(ip);
@@ -1548,16 +1559,16 @@ class NetDbRenderer {
                         }
                     } else {
                         buf.append("<span class=netdb_info><b>").append(_t("IP Address")).append(" (")
-                           .append(_t("direct")).append(")").append(":</b> <span class=rdns>").append(directAddress)
+                           .append(_t("direct")).append(")</b>: <span class=rdns>").append(directAddress)
                            .append("</span></span>&nbsp;&nbsp;");
                     }
                 }
             }
-         } else { // shouldn't happen
+        } else {
+            // shouldn't happen
             buf.append("<td><b>").append(_t("Published")).append("</td><td>:</b> in ")
-               .append(DataHelper.formatDuration2(0-age)).append("<span class=netdb_info>???</span>&nbsp;&nbsp;");
+               .append(DataHelper.formatDuration2(0 - age)).append("<span class=netdb_info>???</span>&nbsp;&nbsp;");
         }
-
         if (family != null) {
             FamilyKeyCrypto fkc = _context.router().getFamilyKeyCrypto();
             buf.append("<span class=\"netdb_family\"><b>").append(_t("Family"))
@@ -1572,178 +1583,176 @@ class NetDbRenderer {
         buf.append("</td><td>");
         buf.append("<span class=\"signingkey\" title=\"")
            .append(_t("Show all routers with this signature type in the NetDb"))
-           .append("\">").append("<a class=\"keysearch\" href=\"/netdb?type=")
-           .append(info.getIdentity().getSigningPublicKey().getType().toString())
-           .append("\">").append(info.getIdentity().getSigningPublicKey().getType().toString())
+           .append("\"><a class=\"keysearch\" href=\"/netdb?type=")
+           .append(ident.getSigningPublicKey().getType().toString())
+           .append("\">").append(ident.getSigningPublicKey().getType().toString())
            .append("</a></span>")
            .append("&nbsp;<span class=\"signingkey encryption\" title=\"")
            .append(_t("Show all routers with this encryption type in the NetDb"))
-           .append("\">").append("<a class=\"keysearch\" href=\"/netdb?etype=")
-           .append(info.getIdentity().getPublicKey().getType().toString())
-           .append("\">").append(info.getIdentity().getPublicKey().getType().toString())
-           .append("</a></span></td></tr>\n<tr>")
-           .append("<td><b>" + _t("Addresses") + ":</b></td>")
-           .append("<td colspan=2 class=\"netdb_addresses\">")
-           .append("<ul>");
-
-        Collection<RouterAddress> addrs = info.getAddresses();
-        byte[] ip = TransportImpl.getIP(info.getHash());
-        if (addrs.isEmpty()) {
-            buf.append(_t("n/a"));
-            if (ip != null) {_context.commSystem().queueLookup(ip);}
-        } else {
-            if (addrs.size() > 1) {
-                // addrs is unmodifiable
-                List<RouterAddress> laddrs = new ArrayList<RouterAddress>(addrs);
-                Collections.sort(laddrs, new RAComparator());
-                addrs = laddrs;
-            }
-
-            boolean hasDetails = false;
-            for (RouterAddress addr : addrs) {
-                if (ip != null) {_context.commSystem().queueLookup(ip);}
-                String style = addr.getTransportStyle();
-                int cost = addr.getCost();
-
-                Map<Object, Object> p = addr.getOptionsMap();
-                List<Map.Entry<Object, Object>> netProps = new ArrayList<>();
-                List<Map.Entry<Object, Object>> otherEntries = new ArrayList<>();
-
-                // Separate host, port, mtu, and caps from others
-                for (Map.Entry<Object, Object> e : p.entrySet()) {
-                    String name = (String) e.getKey();
-                    if (name.equalsIgnoreCase("host") || name.equalsIgnoreCase("port") ||
-                        name.equalsIgnoreCase("mtu") || name.equalsIgnoreCase("caps")) {
-                        netProps.add(e);
-                    } else {otherEntries.add(e);}
-                    if (!netProps.isEmpty() || !otherEntries.isEmpty()) {hasDetails = true;}
+           .append("\"><a class=\"keysearch\" href=\"/netdb?etype=")
+           .append(ident.getPublicKey().getType().toString())
+           .append("\">").append(ident.getPublicKey().getType().toString())
+           .append("</a></span></td></tr>\n");
+        if ((full && isU) || !isU) {
+            buf.append("<tr><td><b>")
+               .append(_t("Addresses"))
+               .append(":</b></td><td colspan=2 class=netdb_addresses><ul>");
+            Collection<RouterAddress> addrs = info.getAddresses();
+            byte[] ip = TransportImpl.getIP(info.getHash());
+            if (addrs.isEmpty()) {
+                buf.append(_t("n/a"));
+                if (ip != null) {
+                    _context.commSystem().queueLookup(ip);
                 }
-
-                // Sort host, port, mtu, and caps alphabetically
-                Collections.sort(netProps, (e1, e2) -> {
-                    String key1 = (String) e1.getKey();
-                    String key2 = (String) e2.getKey();
-                    return key1.compareTo(key2);
-                });
-
-                // Create a new list with unique entries for each property name
-                List<Map.Entry<Object, Object>> sortedProps = new ArrayList<>();
-                Set<String> seenNames = new HashSet<>();
-                for (Map.Entry<Object, Object> e : netProps) {
-                    String name = (String) e.getKey();
-                    if (!seenNames.contains(name)) {
-                        sortedProps.add(e);
-                        seenNames.add(name);
-                    }
+            } else {
+                List<RouterAddress> laddrs = new ArrayList<>(addrs);
+                if (laddrs.size() > 1) {
+                    laddrs.sort(new RAComparator());
                 }
-                for (Map.Entry<Object, Object> e : otherEntries) {
-                    String name = (String) e.getKey();
-                    if (!seenNames.contains(name)) {
-                        sortedProps.add(e);
-                        seenNames.add(name);
-                    }
-                }
-
-                if (!hasDetails) {continue;}
-                buf.append("<li>");
-                buf.append("<b class=\"netdb_transport\"");
-                if (!((style.equals("SSU") && cost == 5) || (style.startsWith("NTCP") && cost == 10))) {
-                    buf.append(" title=\"").append(_t("Cost")).append(": ").append(cost).append("\"");
-                }
-                buf.append(">").append(DataHelper.stripHTML(style)).append("</b> ");
-
-                boolean hasHost = false;
-                // Append host and port first
-                for (Map.Entry<Object, Object> e : sortedProps) {
-                    String name = (String) e.getKey();
-                    String val = (String) e.getValue();
-                    if (name.equalsIgnoreCase("host")) {
-                        buf.append("<span class=nowrap><span class=netdb_name>")
-                           .append(_t(DataHelper.stripHTML(name))).append(":</span> ")
-                           .append("<span class=\"netdb_info host\">");
-                        if (DataHelper.stripHTML(val).equals("::")) {buf.append(_t("n/a"));} // fix empty ipv6
-                        else {
-                            buf.append("<a title=\"").append(_t("Show all routers with this address in the NetDb")).append("\" ");
-                            if (DataHelper.stripHTML(val).contains(":")) {buf.append(" href=\"/netdb?ipv6=");}
-                            else {buf.append(" href=\"/netdb?ip=");}
-                            if (DataHelper.stripHTML(val).contains(":")) {
-                                if (DataHelper.stripHTML(val).length() > 8) {buf.append(DataHelper.stripHTML(val).substring(0,4));}
-                                else {buf.append(DataHelper.stripHTML(val));}
-                            } else {buf.append(DataHelper.stripHTML(val));}
-                            buf.append("\">").append(DataHelper.stripHTML(val)).append("</a>");
+                boolean hasDetails = false;
+                for (RouterAddress addr : laddrs) {
+                    if (ip != null) {_context.commSystem().queueLookup(ip);}
+                    String style = addr.getTransportStyle();
+                    int cost = addr.getCost();
+                    Map<Object, Object> p = addr.getOptionsMap();
+                    List<Map.Entry<Object, Object>> netProps = new ArrayList<>();
+                    List<Map.Entry<Object, Object>> otherEntries = new ArrayList<>();
+                    for (Map.Entry<Object, Object> e : p.entrySet()) {
+                        String name = (String) e.getKey();
+                        if (full) {
+                            if (name.equalsIgnoreCase("host") || name.equalsIgnoreCase("port") ||
+                                name.equalsIgnoreCase("mtu") || name.equalsIgnoreCase("caps")) {
+                                netProps.add(e);
+                            } else {otherEntries.add(e);}
+                            if (!hasDetails && (!netProps.isEmpty() || !otherEntries.isEmpty())) {
+                                hasDetails = true;
+                            }
+                        } else {
+                            if (name.equalsIgnoreCase("host") || name.equalsIgnoreCase("port")) {
+                                netProps.add(e);
+                                if (!hasDetails) {hasDetails = true;}
+                            }
                         }
-                        buf.append("</span></span> ");
-                        hasHost = true;
-                    } else if (name.equalsIgnoreCase("port")) {
-                        buf.append("<span class=nowrap><span class=netdb_name>")
-                           .append(_t(DataHelper.stripHTML(name)))
-                           .append(":</span> <span class=\"netdb_info port\">").append("<a title=\"")
-                           .append(_t("Show all routers with this port in the NetDb")).append("\" ")
-                           .append(" href=\"/netdb?port=")
-                           .append(DataHelper.stripHTML(val)).append("\">")
-                           .append(DataHelper.stripHTML(val))
-                           .append("</a></span></span> ");
+                    }
+                    if (!hasDetails) continue;
+                    netProps.sort((e1, e2) -> ((String) e1.getKey()).compareTo((String) e2.getKey()));
+                    List<Map.Entry<Object, Object>> sortedProps = new ArrayList<>();
+                    Set<String> seenNames = new HashSet<>();
+                    for (Map.Entry<Object, Object> e : netProps) {
+                        String name = (String) e.getKey();
+                        if (seenNames.add(name)) {
+                            sortedProps.add(e);
+                        }
+                    }
+                    for (Map.Entry<Object, Object> e : otherEntries) {
+                        String name = (String) e.getKey();
+                        if (seenNames.add(name)) {
+                            sortedProps.add(e);
+                        }
+                    }
+
+                    StringBuilder spans = new StringBuilder();
+                    boolean hasHost = false;
+
+                    for (Map.Entry<Object, Object> e : sortedProps) {
+                        String name = (String) e.getKey();
+                        String val = (String) e.getValue();
+                        String valStripped = DataHelper.stripHTML(val);
+
+                        if (name.equalsIgnoreCase("host")) {
+                            spans.append("<span class=nowrap><span class=netdb_name>")
+                                 .append(_t(DataHelper.stripHTML(name))).append(":</span> ")
+                                 .append("<span class=\"netdb_info host\">");
+                            if ("::".equals(valStripped)) {
+                                spans.append(_t("n/a"));
+                            } else {
+                                spans.append("<a title=\"").append(_t("Show all routers with this address in the NetDb")).append("\" ");
+                                if (valStripped.contains(":")) {
+                                    spans.append(" href=\"/netdb?ipv6=");
+                                    if (valStripped.length() > 8) {
+                                        spans.append(valStripped.substring(0, 4));
+                                    } else {
+                                        spans.append(valStripped);
+                                    }
+                                } else {
+                                    spans.append(" href=\"/netdb?ip=").append(valStripped);
+                                }
+                                spans.append("\">").append(valStripped).append("</a>");
+                            }
+                            spans.append("</span></span> ");
+                            hasHost = true;
+
+                        } else if (name.equalsIgnoreCase("port")) {
+                            spans.append("<span class=nowrap><span class=netdb_name>")
+                                 .append(_t(DataHelper.stripHTML(name)))
+                                 .append(":</span> <span class=\"netdb_info port\"><a title=\"")
+                                 .append(_t("Show all routers with this port in the NetDb"))
+                                 .append("\" href=\"/netdb?port=")
+                                 .append(valStripped)
+                                 .append("\">").append(valStripped).append("</a></span></span> ");
+
+                        } else {
+                            // Append other key/values for full mode
+                            spans.append("<span class=nowrap><span class=netdb_name>")
+                                 .append(_t(DataHelper.stripHTML(name)))
+                                 .append(":</span> <span class=netdb_info>")
+                                 .append(valStripped).append("</span></span> ");
+                        }
+                    }
+
+                    // Render <li> only if spans contain content
+                    if (spans.length() > 0) {
+                        buf.append("<li>");
+                        buf.append("<b class=\"netdb_transport\"");
+                        if (!((style.equals("SSU") && cost == 5) || (style.startsWith("NTCP") && cost == 10))) {
+                            buf.append(" title=\"").append(_t("Cost")).append(": ").append(cost).append("\"");
+                        }
+                        buf.append(">").append(DataHelper.stripHTML(style)).append("</b> ");
+                        buf.append(spans.toString());
+                        buf.append("</li>");
                     }
                 }
-
-                // Append other entries
-                for (Map.Entry<Object, Object> e : sortedProps) {
-                    String name = (String) e.getKey();
-                    String val = (String) e.getValue();
-                    if (name.equalsIgnoreCase("host") || name.equalsIgnoreCase("port")) continue;
-                    if (name.equals("v")) {continue;}
-                    if (!full && (name.equals("caps") || name.equals("mtu"))) {continue;} // only show caps and mtu keys if adv. mode
-                    if (hasHost && !full) {break;} // only show I and S keys if no host or if in adv. mode
-                    if (name.contains("key") || name.contains("itag") || name.contains("iexp")) {continue;}
-                    if (name.toLowerCase().equals("mtu")) {name = name.toUpperCase();}
-                    buf.append(" <span class=nowrap><span class=netdb_name>").append(_t(DataHelper.stripHTML(name)))
-                       .append(":</span> <span class=netdb_info>").append(DataHelper.stripHTML(val)).append("</span></span> ");
-                }
-                if (!isUs) {buf.append("</li>");}
+                buf.append("</ul></td></tr>\n");
             }
-            buf.append("</ul>").append("</td></tr>\n");
         }
 
         if (full || isUs) {
             PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(info.getHash());
-            boolean isFF = info.getCapabilities().indexOf("f") >= 0;
+            boolean isFF = info.getCapabilities().indexOf('f') >= 0;
             String networkId = "2"; // default
             String spoofedLeasesets = "";
             String knownRouters = "";
             if (prof != null || isUs) {
-                buf.append("<tr><td><b>" + _t("Stats") + ":</b><td colspan=2>\n<ul class=netdbStats>");
+                buf.append("<tr><td><b>").append(_t("Stats")).append(":</b><td colspan=2>\n<ul class=netdbStats>");
                 Map<Object, Object> p = info.getOptionsMap();
                 for (Map.Entry<Object, Object> e : p.entrySet()) {
                     String key = (String) e.getKey();
                     if (isUs) {
                         if (key.contains("knownLeaseSets")) {
                             spoofedLeasesets = DataHelper.stripHTML((String) e.getValue());
+                            continue;
                         } else if (key.contains("knownRouters")) {
                             knownRouters = DataHelper.stripHTML((String) e.getValue());
+                            continue;
                         } else if (key.equals("netId")) {
                             networkId = DataHelper.stripHTML((String) e.getValue());
+                            continue;
                         }
                     }
-
                     String keyLower = key.toLowerCase();
                     boolean skip = keyLower.contains("caps") || keyLower.contains("version") ||
                                    keyLower.equals("family") || keyLower.contains("tunnel.") ||
                                    keyLower.contains("stat_") || key.equals("netId");
-                    if (isUs && (key.equals("knownLeaseSets") || key.equals("knownRouters"))) {continue;}
-                    if (skip) {continue;}
-
+                    if (isUs && (key.equals("knownLeaseSets") || key.equals("knownRouters"))) continue;
+                    if (skip) continue;
                     String netDbKey = DataHelper.stripHTML(key)
                         .replace("netdb.", "")
                         .replace("knownLeaseSets", "<li><b>" + _t("LeaseSets"))
                         .replace("knownRouters", "<li><b>" + _t("Routers"))
                         .replace("stat_", "")
                         .replace("uptime", "<li><b>" + _t("Uptime"));
-
                     String val = (String) e.getValue();
                     String[] values = DataHelper.stripHTML(val).split(";");
-
-                    // Hide these stats
-                    // TODO: only show 4th value for each stat
                     List<String> stats = Arrays.asList(
                         "tunnel.buildExploratoryExpire.60m",
                         "tunnel.buildExploratoryReject.60m",
@@ -1756,27 +1765,25 @@ class NetDbRenderer {
                         "stat_bandwidthSendBps.60m",
                         "stat_bandwidthReceiveBps.60m"
                     );
-
                     if (!stats.contains(key) && !key.toLowerCase().contains("family")) {
-                        if (isUs && (netDbKey.contains("Routers") || netDbKey.contains("LeaseSets"))) {continue;}
+                        if (isUs && (netDbKey.contains("Routers") || netDbKey.contains("LeaseSets"))) continue;
                         buf.append(netDbKey);
                         String netDbValue = DataHelper.stripHTML(val)
-                                                      .replace("XO", "X")
-                                                      .replace("PO", "P")
-                                                      .replace("R", "")
-                                                      .replace("U", "")
-                                                      .replace(";", " <span class=\"bullet\">&bullet;</span> ")
-                                                      .replace("&bullet;</span> 555", "&bullet;</span> " + _t("n/a"));
+                                                       .replace("XO", "X")
+                                                       .replace("PO", "P")
+                                                       .replace("R", "")
+                                                       .replace("U", "")
+                                                       .replace(";", " <span class=\"bullet\">&bullet;</span> ")
+                                                       .replace("&bullet;</span> 555", "&bullet;</span> " + _t("n/a"));
                         buf.append(":</b> ").append(netDbValue).append("</li>");
                     }
                 }
-
                 if (!isUs) {
                     long now = _context.clock().now();
                     long heard = prof.getFirstHeardAbout();
                     if (heard > 0) {
                         long peerAge = Math.max(now - heard, 1);
-                        if (isFF) {buf.append("<br>");}
+                        if (isFF) buf.append("<br>");
                         buf.append("<li><b>").append(_t("First heard about")).append(":</b> ")
                            .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>");
                     }
