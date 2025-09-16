@@ -1676,20 +1676,54 @@ class NetDbRenderer {
                     }
                     if (!hasDetails) continue;
 
+                    // Extract caps and mtu entries if present from netProps
+                    Map.Entry<Object, Object> capsEntry = null;
+                    Map.Entry<Object, Object> mtuEntry = null;
+                    Iterator<Map.Entry<Object, Object>> netPropsIterator = netProps.iterator();
+                    while (netPropsIterator.hasNext()) {
+                        Map.Entry<Object, Object> e = netPropsIterator.next();
+                        String key = (String) e.getKey();
+                        if ("caps".equals(key)) {
+                            capsEntry = e;
+                            netPropsIterator.remove();
+                        } else if ("mtu".equals(key)) {
+                            mtuEntry = e;
+                            netPropsIterator.remove();
+                        }
+                    }
+
+                    // Sort netProps by key
                     netProps.sort((e1, e2) -> ((String) e1.getKey()).compareTo((String) e2.getKey()));
+
                     List<Map.Entry<Object, Object>> sortedProps = new ArrayList<>();
                     Set<String> seenNames = new HashSet<>();
+
+                    // Add unique entries from netProps except caps and mtu
                     for (Map.Entry<Object, Object> e : netProps) {
                         String name = (String) e.getKey();
                         if (seenNames.add(name)) {
                             sortedProps.add(e);
                         }
                     }
+
+                    // Add unique entries from otherEntries except caps and mtu, update entries if found
                     for (Map.Entry<Object, Object> e : otherEntries) {
                         String name = (String) e.getKey();
-                        if (seenNames.add(name)) {
+                        if ("caps".equals(name)) {
+                            capsEntry = e;
+                        } else if ("mtu".equals(name)) {
+                            mtuEntry = e;
+                        } else if (seenNames.add(name)) {
                             sortedProps.add(e);
                         }
+                    }
+
+                    // Append capsEntry and mtuEntry at the end if found
+                    if (capsEntry != null) {
+                        sortedProps.add(capsEntry);
+                    }
+                    if (mtuEntry != null) {
+                        sortedProps.add(mtuEntry);
                     }
 
                     StringBuilder spans = new StringBuilder();
@@ -1697,6 +1731,7 @@ class NetDbRenderer {
                         String name = (String) e.getKey();
                         String val = (String) e.getValue();
                         String valStripped = DataHelper.stripHTML(val);
+                        if (name == "mtu") {name = "MTU";}
                         if (name.equalsIgnoreCase("host")) {
                             spans.append("<span class=nowrap><span class=netdb_name>")
                                  .append(_t(DataHelper.stripHTML(name))).append(":</span> ")
@@ -1736,7 +1771,7 @@ class NetDbRenderer {
                         if (!((style.equals("SSU") && cost == 5) || (style.startsWith("NTCP") && cost == 10))) {
                             li.append(" title=\"").append(_t("Cost")).append(": ").append(cost).append("\"");
                         }
-                        li.append(">").append(DataHelper.stripHTML(style)).append("</b> ");
+                        li.append(">").append(DataHelper.stripHTML(style).replace("2", "")).append("</b> ");
                         li.append(spans.toString());
                         if (full && isU && !introducersInserted && style.startsWith("SSU") && itagCount > 0) {
                             li.append("<span class=nowrap><span class=netdb_name>").append(_t("Introducers"))
