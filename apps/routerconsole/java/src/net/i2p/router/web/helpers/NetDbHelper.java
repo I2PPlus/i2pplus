@@ -355,6 +355,7 @@ public class NetDbHelper extends FormHandler {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<div class=confignav id=confignav>");
         int tab = getTab();
+        boolean isActive = false;
         for (int i = 0; i < titles.length; i++) {
             if (i == 1) {buf.append("<span class=tab><a href=/netdbmap>").append(_t("Router Map")).append("</a></span>\n");}
             if (i == 2 && tab != 2) {continue;} // can't nav to lookup
@@ -362,7 +363,7 @@ public class NetDbHelper extends FormHandler {
             if (i == 4) {continue;} // show compact mode for all routers
             if (i == 5 || i == 6) {continue;} // hide standard Leasesets tab in normal/adv. mode,
             if (i == 10 || i == 11 || _context.netDb().getRouters().size() == 0) {continue;}
-            if (i == tab) {buf.append("<span class=tab2>").append(_t(titles[i]));} // we are there
+            if (i == tab || (i == 3 && tab == 4)) {buf.append("<span class=tab2>").append(_t(titles[i]));} // we are there
             else { // we are not there, make a link
                 buf.append("<span class=tab>").append("<a href=\"netdb")
                    .append(links[i]).append("\">").append(_t(titles[i])).append("</a>");
@@ -378,13 +379,19 @@ public class NetDbHelper extends FormHandler {
      */
     private void renderLookupForm() throws IOException {
         StringBuilder buf = new StringBuilder(16*1024);
-        buf.append("<form action=/netdb method=GET id=netdbSearch>\n")
-           .append("<input type=hidden name=nonce value=").append(_newNonce).append(">\n")
-           .append("<table id=netdblookup><tr><th colspan=4>").append(_t("Network Database Search")).append("</th></tr>\n")
-           .append("<tr><td><b>").append(_t("Capabilities")).append("</b></td><td><input type=text name=\"caps\" title=\"")
-           .append(_t("e.g. f or XOfR")).append("\"></td>\n")
-           .append("<td><b>").append(_t("Cost")).append("</b></td><td><input type=text name=\"cost\"></td></tr>\n")
-           .append("<tr><td><b>").append(_t("Country")).append("</b></td><td><select name=\"c\"><option value=\"\" selected></option>");
+        buf.append("<form action=/netdb method=GET id=netdbSearch>\n<input type=hidden name=nonce value=")
+           .append(_newNonce)
+           .append(">\n<table id=netdblookup><tr><th colspan=4>")
+           .append(_t("Network Database Search"))
+           .append("</th></tr>\n<tr><td><b>")
+           .append(_t("Capabilities"))
+           .append("</b></td><td><input type=text name=\"caps\" title=\"")
+           .append(_t("e.g. f or XOfR"))
+           .append("\"></td>\n<td><b>")
+           .append(_t("Cost"))
+           .append("</b></td><td><input type=text name=\"cost\"></td></tr>\n<tr><td><b>")
+           .append(_t("Country"))
+           .append("</b></td><td><select name=\"c\"><option value=\"\" selected></option>");
         Map<String, String> sorted = new TreeMap<String, String>(Collator.getInstance());
         for (Map.Entry<String, String> e : _context.commSystem().getCountries().entrySet()) {
             String tr = Messages.getString(e.getValue(), _context, Messages.COUNTRY_BUNDLE_NAME);
