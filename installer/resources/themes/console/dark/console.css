@@ -1215,7 +1215,7 @@ p.family{white-space:nowrap;background:var(--family) no-repeat 8px center/28px,l
 .netdbentry .familyname{max-width:140px;overflow:hidden;vertical-align:text-bottom;text-overflow:ellipsis;white-space:nowrap}
 .netdb_addresses ul{margin:0;padding:0;width:100%;display:inline-block;columns:auto;column-gap:5px}
 .netdb_addresses li,.netdb_ouraddresses{margin:2px 2px 2px 0;padding:2px 5px;vertical-align:middle;border:1px solid #020;background:#000b00}
-.netdb_addresses .netdb_info:not(.host){margin-left:0;max-width:100px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.netdb_addresses .netdb_info:not(.host){margin-left:0;max-width:60px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .netdb_addresses .netdb_info:hover{max-width:unset;overflow:auto;text-overflow:none;user-select:all}
 .netdb_addresses .netdb_transport{margin:-2px 4px -2px -5px;padding:5px 5px 4px;min-width:32px;line-height:1.6;vertical-align:middle;text-align:center;border-right:1px solid #020;background:#001800}
 .netdb_addresses .nowrap{margin:0 2px 0 0;display:inline-block}
