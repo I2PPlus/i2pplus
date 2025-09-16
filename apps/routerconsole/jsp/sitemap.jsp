@@ -3,7 +3,7 @@
 <%
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String consoleNonce = net.i2p.router.web.CSSHelper.getNonce();
-    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
+    String lang = ctx.getProperty("routerconsole.lang", "en");
     String pageTitlePrefix = ctx.getProperty("routerconsole.pageTitlePrefix");
     pageTitlePrefix = (pageTitlePrefix != null) ? pageTitlePrefix + ' ' : "";
     String version = net.i2p.CoreVersion.VERSION;

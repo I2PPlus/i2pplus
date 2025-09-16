@@ -4,7 +4,7 @@
     try {i2pcontextId = (String) session.getAttribute("i2p.contextId");}
     catch (IllegalStateException ignored) {}
     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
+    String lang = ctx.getProperty("routerconsole.lang", "en");
 %>
 <jsp:useBean class="net.i2p.router.web.helpers.SearchHelper" id="searchhelper" scope="request"/>
 <jsp:setProperty name="searchhelper" property="contextId" value="<%=i2pcontextId%>"/>

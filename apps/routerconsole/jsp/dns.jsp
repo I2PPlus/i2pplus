@@ -31,7 +31,7 @@
 %>
 <!DOCTYPE HTML>
 <%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
+    String lang = ctx.getProperty("routerconsole.lang", "en");
 %>
 <%@include file="head.jsi"%>
 <%=intl.title("addressbook")%>

@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="80kb"%>
 <!DOCTYPE HTML>
 <%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = ctx.getProperty("routerconsole.lang") != null ? ctx.getProperty("routerconsole.lang") : "en";
+    String lang = ctx.getProperty("routerconsole.lang", "en");
     String consoleNonce = net.i2p.router.web.CSSHelper.getNonce();
 %>
 <%@include file="head.jsi"%>
