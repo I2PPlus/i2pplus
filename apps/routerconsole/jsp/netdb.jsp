@@ -64,8 +64,10 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
     String heading = intl._t("Network Database");
 
     if (f == null && l == null && ls == null && r == null) {
-        // Default heading remains
-    } else if (f != null) {
+%>
+<script src=/js/tablesort/tablesort.js type=module></script>
+<script src=/js/tablesort/tablesort.number.js type=module></script>
+<%  } else if (f != null) {
         delayLoad = "1".equals(f) || "2".equals(f) || "3".equals(f);
         switch (f) {
             case "1":
@@ -113,8 +115,6 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 <% } %>
 <script src=/js/lazyload.js></script>
 <script src=/js/lsCompact.js type=module></script>
-<script src=/js/tablesort/tablesort.js></script>
-<script src=/js/tablesort/tablesort.number.js></script>
-<script src=/js/netdb.js></script>
+<script src=/js/netdb.js type=module></script>
 </body>
 </html>
