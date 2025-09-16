@@ -356,7 +356,6 @@ public class GraphHelper extends FormHandler {
         buf.append(" - ");
         buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height, singleHideLegend));
         buf.append(singleHideLegend ? _t("Show Legend") : _t("Hide Legend"));
-        setSingleHideLegend(!singleHideLegend);
         buf.append("</a>");
         buf.append("\n</p>\n");
         return buf.toString();
