@@ -611,8 +611,25 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
     }
 
+    /**
+     * In-memory reverse DNS cache storing IP-to-hostname mappings.
+     *
+     * This cache is a thread-safe ConcurrentHashMap that supports
+     * concurrent reads and writes without external synchronization.
+     * It replaces the previous synchronized LinkedHashMap to improve
+     * lookup performance under high concurrency.
+     *
+     * Note that while ConcurrentHashMap is thread-safe, it does not
+     * provide built-in size-based eviction like LRU. Expiration and
+     * eviction are managed separately by periodic cleanup methods.
+     *
+     * Keys are IP addresses as Strings. Values are CacheEntry objects
+     * containing hostname and timestamp.
+     */
+    private static final ConcurrentHashMap<String, CacheEntry> rdnsCache = new ConcurrentHashMap<>();
+
     // Use a synchronized LRUCache for thread safety and size-bounded cache
-    private static final Map<String, CacheEntry> rdnsCache = Collections.synchronizedMap(new LRUCache<>(MAX_RDNS_CACHE_SIZE));
+    //private static final Map<String, CacheEntry> rdnsCache = Collections.synchronizedMap(new LRUCache<>(MAX_RDNS_CACHE_SIZE));
 
     private static Map<String, CacheEntry> getRDNSCache() {
         return rdnsCache;
