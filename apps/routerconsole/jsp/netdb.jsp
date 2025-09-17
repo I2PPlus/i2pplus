@@ -2,7 +2,6 @@
 <!DOCTYPE HTML>
 <%@include file="head.jsi"%>
 <%=intl.title("network database")%>
-<link href=/themes/console/tablesort.css rel=stylesheet>
 <script nonce=<%=cspNonce%>>
 progressx.show(theme); progressx.progress(0.1);
 const translate_encType = "<%=intl._t("Encryption type")%>";
@@ -13,11 +12,31 @@ const translate_localPrivate = "<%=intl._t("Locally hosted private service")%>";
 const translate_localPublic = "<%=intl._t("Locally hosted public service")%>";
 const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 </script>
+<% String fParam = request.getParameter("f");
+    if ("1".equals(fParam) || "2".equals(fParam)) {
+        int currentPage = 1;
+        try { currentPage = Integer.parseInt(request.getParameter("pg")); } catch (Exception ignored) {}
+        int nextPage = currentPage + 1;
+
+        StringBuilder nextPageQuery = new StringBuilder();
+        boolean first = true;
+        for (java.util.Map.Entry<String, String[]> e : request.getParameterMap().entrySet()) {
+            if (e.getKey().equals("pg")) continue;
+            for (String val : e.getValue()) {
+                if (!first) nextPageQuery.append("&");
+                nextPageQuery.append(e.getKey()).append("=").append(java.net.URLEncoder.encode(val, "UTF-8"));
+                first = false;
+            }
+        }
+        if (!first) nextPageQuery.append("&");
+        nextPageQuery.append("pg=").append(nextPage);
+%>
+<link rel=prefetch href="<%=request.getRequestURI() + "?" + nextPageQuery.toString() %>">
+<% } %>
 </head>
 <body>
 <%@include file="sidebar.jsi"%>
 <jsp:useBean id="formhandler" class="net.i2p.router.web.helpers.NetDbHelper" scope="request"/>
-
 <jsp:setProperty name="formhandler" property="full" value="<%=request.getParameter(\"f\")%>"/>
 <jsp:setProperty name="formhandler" property="router" value="<%=request.getParameter(\"r\")%>"/>
 <jsp:setProperty name="formhandler" property="lease" value="<%=request.getParameter(\"l\")%>"/>
@@ -62,6 +81,7 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 
     if (f == null && l == null && ls == null && r == null) {
 %>
+<link href=/themes/console/tablesort.css rel=stylesheet>
 <script src=/js/tablesort/tablesort.js type=module></script>
 <script src=/js/tablesort/tablesort.number.js type=module></script>
 <%  } else if (f != null) {
