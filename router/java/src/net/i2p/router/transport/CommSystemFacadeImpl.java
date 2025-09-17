@@ -643,16 +643,13 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             }
             //System.out.println("Imported " + rdnsCache.size() + " entries from cache file");
         } catch (IOException ex) {
-            System.err.println("Error reading RDNS cache file. Creating new file...");
+            System.err.println("[RDNSCache] Error reading RDNS cache file. Creating new file...");
             createRdnsCacheFile();
             ex.printStackTrace();
         }
         Timer timer = new Timer(true);
         long delay = 5 * 60 * 1000 + 30;
-        // Give writer snapshot of current cache state
-        synchronized (rdnsCache) {
-            timer.schedule(new RDNSCacheFileWriter(new HashMap<>(rdnsCache)), delay, delay);
-        }
+        timer.schedule(new RDNSCacheFileWriter(), delay, delay);
     }
 
     // CacheEntry to string includes timestamp for persistence
@@ -688,7 +685,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             try {
                 cacheFile.createNewFile();
             } catch (IOException ex) {
-                System.err.println("Error creating cache file: " + ex.getMessage());
+                System.err.println("[RDNSCache] Error creating cache file: " + ex.getMessage());
             }
         } else {
             readRDNSCacheFromFile();
@@ -696,48 +693,57 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     private static class RDNSCacheFileWriter extends TimerTask {
-        private final Map<String, CacheEntry> cacheToWrite;
-
-        public RDNSCacheFileWriter(Map<String, CacheEntry> cacheToWrite) {
-            this.cacheToWrite = cacheToWrite;
-        }
+        public RDNSCacheFileWriter() {}
 
         @Override
         public void run() {
+            System.out.println("[RDNSCache] Running cache file write task...");
+            Map<String, CacheEntry> liveCacheSnapshot;
+            synchronized (rdnsCache) {
+                liveCacheSnapshot = new HashMap<>(rdnsCache);
+            }
+            System.out.println("[RDNSCache] Entries in cache: " + liveCacheSnapshot.size());
             File cacheFile = new File(RDNS_CACHE_FILE);
             try (FileOutputStream fos = new FileOutputStream(cacheFile)) {
                 long now = System.currentTimeMillis();
-                for (CacheEntry cacheEntry : cacheToWrite.values()) {
+                int writtenCount = 0;
+                for (CacheEntry cacheEntry : liveCacheSnapshot.values()) {
                     if (now - cacheEntry.getTimestamp() <= EVICT_THRESHOLD) {
                         String line = rdnsEntryToString(cacheEntry) + "\n";
-                        fos.write(line.getBytes());
+                        byte[] bytes = line.getBytes(ENCODING);
+                        fos.write(bytes);
+                        writtenCount++;
                     }
                 }
-                //System.err.println("Reverse DNS cache written to file (" + cacheToWrite.size() + ")");
+                System.out.println("[RDNSCache] Entries written to file: " + writtenCount);
             } catch (IOException ex) {
-                System.err.println("Error updating reverse DNS cache file: " + ex.getMessage());
+                System.err.println("[RDNSCache] Error updating reverse DNS cache file: " + ex.getMessage());
+                ex.printStackTrace();
             }
         }
     }
 
     private static void writeRDNSCacheToFile() {
         synchronized (rdnslock) {
-            cleanupRDNSCache();
+            System.out.println("[RDNSCache] Starting cache file write...");
             try {
                 File cacheFile = new File(RDNS_CACHE_FILE);
                 if (!cacheFile.exists()) {
                     cacheFile.createNewFile();
-                    System.err.println("Cache file created");
+                    System.err.println("[RDNSCache] Cache file created: " + RDNS_CACHE_FILE);
                 }
                 File tmpFile = new File(RDNS_CACHE_FILE + ".tmp");
                 long now = System.currentTimeMillis();
+                int writtenCount = 0;
                 try (BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(new FileOutputStream(tmpFile), ENCODING))) {
                     synchronized (rdnsCache) {
+                        System.out.println("[RDNSCache] Cache entries count: " + rdnsCache.size());
                         for (CacheEntry cacheEntry : rdnsCache.values()) {
                             if (now - cacheEntry.getTimestamp() <= EVICT_THRESHOLD) {
                                 String line = rdnsEntryToString(cacheEntry) + NEWLINE;
                                 writer.write(line);
+                                writtenCount++;
                             }
                         }
                     }
@@ -745,11 +751,13 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 }
                 Files.copy(tmpFile.toPath(), cacheFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 tmpFile.delete();
-                //System.err.println("Reverse DNS cache written to file (" + countRdnsCacheEntries() + ")");
+                System.out.println("[RDNSCache] Entries written to file: " + writtenCount);
             } catch (IOException ex) {
-                System.err.println("Error updating reverse DNS cache file: " + ex.getMessage());
+                System.err.println("[RDNSCache] Error updating reverse DNS cache file: " + ex.getMessage());
+                ex.printStackTrace();
             }
         }
+        cleanupRDNSCache();
     }
 
     private static synchronized void cleanupRDNSCache() {
