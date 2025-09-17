@@ -1,16 +1,14 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
+<%@include file="head.jsi"%>
 <%
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
     String consoleNonce = net.i2p.router.web.CSSHelper.getNonce();
-    String lang = ctx.getProperty("routerconsole.lang", "en");
     String pageTitlePrefix = ctx.getProperty("routerconsole.pageTitlePrefix");
     pageTitlePrefix = (pageTitlePrefix != null) ? pageTitlePrefix + ' ' : "";
     String version = net.i2p.CoreVersion.VERSION;
     String firstVersion = ctx.getProperty("router.firstVersion");
     boolean embedApps = ctx.getBooleanProperty("routerconsole.embedApps");
 %>
-<%@include file="head.jsi"%>
 <title><%=pageTitlePrefix%> Sitemap - I2P+</title>
 </head>
 <body class="<%=lang%>" id="map">

@@ -45,14 +45,9 @@
     }
 %>
 <!DOCTYPE HTML>
-<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = ctx.getProperty("routerconsole.lang", "en");
-%>
 <%@include file="head.jsi"%>
 <%=intl.title("New Install Wizard")%>
-<%
-    wizhelper.setContextId(i2pcontextId);
-%>
+<%  wizhelper.setContextId(i2pcontextId); %>
 </head>
 <%  if (ipg == 3) { %>
 <body id=wizardpage>

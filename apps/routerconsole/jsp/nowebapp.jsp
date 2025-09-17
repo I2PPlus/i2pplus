@@ -1,9 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="20kb"%>
 <!DOCTYPE HTML>
-<%  response.setStatus(404);%>
-<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = ctx.getProperty("routerconsole.lang", "en");
-%>
+<% response.setStatus(404);%>
 <%@include file="head.jsi"%>
 <%=intl.title("WebApp Not Found")%>
 </head>

@@ -30,9 +30,6 @@
     } else {
 %>
 <!DOCTYPE HTML>
-<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = ctx.getProperty("routerconsole.lang", "en");
-%>
 <%@include file="head.jsi"%>
 <%=intl.title("addressbook")%>
 <style>iframe{display:none;pointer-events:none}</style>

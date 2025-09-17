@@ -1,8 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
-<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = ctx.getProperty("routerconsole.lang", "en");
-%>
 <%@include file="head.jsi"%>
 <%=intl.title("config webapps")%>
 <style>button span.hide{display:none}input.default{width:1px;height:1px;visibility:hidden}</style>

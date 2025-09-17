@@ -1,8 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="256kb"%>
 <!DOCTYPE HTML>
-<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = ctx.getProperty("routerconsole.lang", "en");
-%>
 <%@include file="head.jsi"%>
 <%=intl.title("Transit Tunnels by Peer")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>

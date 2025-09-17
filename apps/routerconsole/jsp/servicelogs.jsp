@@ -1,14 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
-<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = ctx.getProperty("routerconsole.lang", "en");
-    final String consoleNonce = net.i2p.router.web.CSSHelper.getNonce();
-%>
+<%  final String consoleNonce = net.i2p.router.web.CSSHelper.getNonce(); %>
 <%@include file="head.jsi"%>
 <%=intl.title("service logs")%>
 </head>
 <body id=i2plogs>
-
 <%@include file="sidebar.jsi"%>
 <h1 class=log><%=intl._t("Logs")%></h1>
 <div class=main id=logs>
@@ -18,7 +14,6 @@
 <span class=tab><a href=/logs><%=intl._t("Combined")%></a></span>
 <span class=tab><a href="/events?from=604800"><%=intl._t("Events")%></a></span>
 </div>
-
 <jsp:useBean class="net.i2p.router.web.helpers.LogsHelper" id="logsHelper" scope="request"/>
 <jsp:setProperty name="logsHelper" property="contextId" value="<%=i2pcontextId%>"/>
 <h3 class=tabletitle id=servicelogs><%=intl._t("Service (Wrapper) Logs")%>

@@ -1,11 +1,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
-<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = ctx.getProperty("routerconsole.lang", "en");
-    String pageTitlePrefix = ctx.getProperty("routerconsole.pageTitlePrefix");
+<%@include file="../head.jsi"%>
+<%  String pageTitlePrefix = ctx.getProperty("routerconsole.pageTitlePrefix");
     pageTitlePrefix = (pageTitlePrefix != null) ? pageTitlePrefix + ' ' : "";
 %>
-<%@include file="../head.jsi"%>
 <title><%=pageTitlePrefix%> <%=intl._t("Tunnel Filtering")%> - I2P+</title>
 </head>
 <body>

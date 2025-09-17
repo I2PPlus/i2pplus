@@ -1,5 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
+<%@include file="head.jsi"%>
 <%
     // Let's make this easy...
     // These are defined in Jetty 7 org.eclipse.jetty.server.Dispatcher,
@@ -14,10 +15,7 @@
     else {ERROR_URI = "";}
     if (ERROR_MESSAGE != null) {ERROR_MESSAGE = net.i2p.data.DataHelper.escapeHTML(ERROR_MESSAGE);}
     else {ERROR_MESSAGE = "Not Found";}
-    net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = ctx.getProperty("routerconsole.lang", "en");
 %>
-<%@include file="head.jsi"%>
 <link rel=stylesheet href="<%=intl.getTheme(request.getHeader("User-Agent"))%>proxy.css">
 <%  if (useSoraFont) { %><link href=/themes/fonts/Sora.css rel=stylesheet>
 <%  } else { %><link href=/themes/fonts/OpenSans.css rel=stylesheet><% } %>

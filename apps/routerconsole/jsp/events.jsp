@@ -1,19 +1,14 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="128kb"%>
 <!DOCTYPE HTML>
-<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = ctx.getProperty("routerconsole.lang", "en");
-%>
 <%@include file="head.jsi"%>
 <%=intl.title("events")%>
 <jsp:useBean class="net.i2p.router.web.helpers.EventLogHelper" id="eventHelper" scope="request"/>
 <jsp:setProperty name="eventHelper" property="contextId" value="<%=i2pcontextId%>"/>
 <% /* GraphHelper sets the defaults in setContextId, so setting the properties must be after the context */%>
  <jsp:setProperty name="eventHelper" property="*"/>
-<%
-    eventHelper.storeWriter(out);
+<%  eventHelper.storeWriter(out);
     eventHelper.storeMethod(request.getMethod());
 %>
-
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body>

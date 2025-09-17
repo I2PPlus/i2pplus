@@ -1,8 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
-<%  net.i2p.I2PAppContext context = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = context.getProperty("routerconsole.lang") != null ? context.getProperty("routerconsole.lang") : "en";
-%>
 <%@include file="head.jsi"%>
 <%=intl.title("config clients")%>
 <style>button span.hide{display:none}input.default{width:1px;height:1px;visibility:hidden}</style>
@@ -27,8 +24,7 @@
 </span>
 </h3>
 <p class=infohelp id=clientconf>
-<%     net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-       if (net.i2p.router.startup.ClientAppConfig.isSplitConfig(ctx)) { %>
+<%     if (net.i2p.router.startup.ClientAppConfig.isSplitConfig(ctx)) { %>
 <%=intl._t("To change client options, edit the files in: {0}", "<code>" + net.i2p.router.startup.ClientAppConfig.configDir(ctx).getAbsolutePath() + "</code>")%>
 <%     } else { %>
 <%=intl._t("To change client options, edit the file: {0}", "<code>" + net.i2p.router.startup.ClientAppConfig.configFile(ctx).getAbsolutePath() + "</code>")%>

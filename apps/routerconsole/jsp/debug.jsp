@@ -1,7 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
 <%  net.i2p.I2PAppContext context = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = context.getProperty("routerconsole.lang") != null ? context.getProperty("routerconsole.lang") : "en";
+    //String lang = context.getProperty("routerconsole.lang") != null ? context.getProperty("routerconsole.lang") : "en";
 %>
 <%@include file="head.jsi"%>
 <%=intl.title("Debug")%>
@@ -41,18 +41,18 @@
 <% } %>
 <% } %>
 </div>
-<%  net.i2p.router.RouterContext ctx = (net.i2p.router.RouterContext) context;
+<%  net.i2p.router.RouterContext _ctx = (net.i2p.router.RouterContext) context;
     String dd = currentD;
     if (dd == null || dd.equals("0")) {
-        ctx.portMapper().renderStatusHTML(out);
+        _ctx.portMapper().renderStatusHTML(out);
         net.i2p.util.InternalServerSocket.renderStatusHTML(out);
     } else if ("1".equals(dd)) {
         out.print("<div class=debug_section id=appmanager>\n");
-        ctx.routerAppManager().renderStatusHTML(out);
+        _ctx.routerAppManager().renderStatusHTML(out);
         out.print("</div>\n");
     } else if ("2".equals(dd)) {
         out.print("<div class=debug_section id=updatemanager>\n");
-        net.i2p.app.ClientAppManager cmgr = ctx.clientAppManager();
+        net.i2p.app.ClientAppManager cmgr = _ctx.clientAppManager();
         if (cmgr != null) {
             net.i2p.router.update.ConsoleUpdateManager umgr =
                 (net.i2p.router.update.ConsoleUpdateManager) cmgr.getRegisteredApp(net.i2p.update.UpdateManager.APP_NAME);
@@ -61,19 +61,19 @@
         out.print("</div>\n");
     } else if ("3".equals(dd)) {
         out.print("<div class=debug_section id=skm>\n<h2>Router Session Key Manager</h2>\n");
-        ctx.sessionKeyManager().renderStatusHTML(out);
+        _ctx.sessionKeyManager().renderStatusHTML(out);
         out.print("</div>");
     } else if ("4".equals(dd)) {
         out.print("<h2>Client Session Key Managers</h2>");
-        java.util.Set<net.i2p.data.Destination> clients = ctx.clientManager().listClients();
+        java.util.Set<net.i2p.data.Destination> clients = _ctx.clientManager().listClients();
         java.util.Set<net.i2p.crypto.SessionKeyManager> renderedSkms = new java.util.HashSet<>(clients.size());
         int i = 0;
         for (net.i2p.data.Destination dest : clients) {
             net.i2p.data.Hash h = dest.calculateHash();
-            net.i2p.crypto.SessionKeyManager skm = ctx.clientManager().getClientSessionKeyManager(h);
+            net.i2p.crypto.SessionKeyManager skm = _ctx.clientManager().getClientSessionKeyManager(h);
             if (skm != null) {
                 out.print("<div class=debug_section id=cskm" + (i++) + ">\n<h2>Session Key Manager: ");
-                net.i2p.router.TunnelPoolSettings tps = ctx.tunnelManager().getInboundSettings(h);
+                net.i2p.router.TunnelPoolSettings tps = _ctx.tunnelManager().getInboundSettings(h);
                 if (tps != null) {
                     String nick = tps.getDestinationNickname();
                     if (nick != null) {out.print(net.i2p.data.DataHelper.escapeHTML(nick));}
@@ -87,7 +87,7 @@
         }
     } else if ("5".equals(dd)) {
         out.print("<h2 id=dht>Router DHT</h2>\n");
-        ctx.netDb().renderStatusHTML(out);
+        _ctx.netDb().renderStatusHTML(out);
     } else if ("6".equals(dd)) {
         java.io.InputStream is = this.getClass().getResourceAsStream("/net/i2p/router/web/resources/translationstatus.html");
         if (is == null) {out.println("Translation status not available");}

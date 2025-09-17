@@ -1,11 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
-<%
-    // Let's make this easy...
-    // These are defined in Jetty 7 org.eclipse.jetty.server.Dispatcher,
-    // and in Servlet 3.0 (Jetty 8) javax.servlet.RequestDispatcher,
-    // just use the actual strings here to make it compatible with either
-    Integer ERROR_CODE = (Integer) request.getAttribute("javax.servlet.error.status_code");
+<%@include file="head.jsi"%>
+<%  Integer ERROR_CODE = (Integer) request.getAttribute("javax.servlet.error.status_code");
     String ERROR_URI = (String) request.getAttribute("javax.servlet.error.request_uri");
     String ERROR_MESSAGE = (String) request.getAttribute("javax.servlet.error.message");
     final Throwable ERROR_THROWABLE = (Throwable) request.getAttribute("javax.servlet.error.exception");
@@ -16,21 +12,17 @@
     if (ERROR_MESSAGE != null) {ERROR_MESSAGE = net.i2p.data.DataHelper.escapeHTML(ERROR_MESSAGE);}
     else {ERROR_MESSAGE = "";}
 %>
-<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = ctx.getProperty("routerconsole.lang", "en");
-%>
-<%@include file="head.jsi"%>
 <link rel=stylesheet href="<%=intl.getTheme(request.getHeader("User-Agent"))%>proxy.css">
 <%=intl.title("Internal Error")%>
 </head>
 <body id=error500>
 <div id=sb_wrap>
 <div class=sb id=sidebar>
-<a href="/" title="<%=intl._t("Router Console")%>">
-<img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/i2plogo.png" alt="<%=intl._t("I2P+ Router Console")%>" border="0"></a>
+<a href=/ title="<%=intl._t("Router Console")%>">
+<img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/i2plogo.png" alt="<%=intl._t("I2P+ Router Console")%>" border=0></a>
 <hr>
-<a href="/config"><%=intl._t("Configuration")%></a><br>
-<a href="/help"><%=intl._t("Help")%></a>
+<a href=/config><%=intl._t("Configuration")%></a><br>
+<a href=/help><%=intl._t("Help")%></a>
 </div>
 </div>
 <h1 class=err><%=intl._t("ERROR")%>&ensp;<%=ERROR_CODE%>: <%=intl._t("Internal Server Error")%></h1>
@@ -38,8 +30,7 @@
 <div id=stacktrace>
 <p><%=intl._t("Error {0}", ERROR_CODE)%>: &ensp;<%=ERROR_URI%>&ensp;-&ensp;<%=ERROR_MESSAGE%></p>
 <p>
-<%
-    if (ERROR_THROWABLE != null) {
+<%  if (ERROR_THROWABLE != null) {
         java.io.StringWriter sw = new java.io.StringWriter(2048);
         java.io.PrintWriter pw = new java.io.PrintWriter(sw);
         ERROR_THROWABLE.printStackTrace(pw);

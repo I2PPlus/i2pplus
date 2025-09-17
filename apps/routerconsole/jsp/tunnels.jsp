@@ -1,14 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
-<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = ctx.getProperty("routerconsole.lang", "en");
-%>
 <%@include file="head.jsi"%>
 <link rel=stylesheet href=/themes/console/tunnels.css>
 <%=intl.title("local tunnels")%>
 </head>
 <body id=routertunnels>
-
 <%@include file="sidebar.jsi"%>
 <h1 class=netwrk><%=intl._t("Local Tunnels")%></h1>
 <jsp:useBean class="net.i2p.router.web.helpers.TunnelHelper" id="tunnelHelper" scope="request"/>

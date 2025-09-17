@@ -1,14 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
-<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = ctx.getProperty("routerconsole.lang", "en");
-    boolean isX86 = net.i2p.util.SystemVersion.isX86();
-%>
+<%  boolean isX86 = net.i2p.util.SystemVersion.isX86(); %>
 <%@include file="head.jsi"%>
 <%=intl.title("logs")%>
 </head>
 <body id=i2plogs>
-
 <%@include file="sidebar.jsi"%>
 <h1 class=log><%=intl._t("Logs")%></h1>
 <div class=main id=logs>

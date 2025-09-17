@@ -1,5 +1,7 @@
 <%@include file="headers.jsi"%>
 <%
+net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+String lang = ctx.getProperty("routerconsole.lang", "en");
 String fontPath = useSoraFont ? "/themes/fonts/Sora/" : "/themes/fonts/OpenSans/";
 String fontStyle = useSoraFont ? "/themes/fonts/Sora.css" : "/themes/fonts/OpenSans.css";
 String fontFile = useSoraFont ? fontPath + "Sora.woff2" : fontPath + "OpenSans.woff2";

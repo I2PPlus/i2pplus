@@ -1,8 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
 <!DOCTYPE HTML>
-<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = ctx.getProperty("routerconsole.lang", "en");
-    boolean isValid = true;
+<%  boolean isValid = true;
     String peerB64 = request.getParameter("peer");
     if (peerB64 == null || peerB64.length() <= 0 || peerB64.replaceAll("[a-zA-Z0-9~=-]", "").length() != 0) {isValid = false;}
 %>

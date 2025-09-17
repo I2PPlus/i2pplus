@@ -1,14 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="256kb"%>
 <!DOCTYPE HTML>
-<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = ctx.getProperty("routerconsole.lang", "en");
-%>
 <%@include file="head.jsi"%>
 <%=intl.title("Fastest Transit Tunnels")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body id=transitFast>
-
 <%@include file="sidebar.jsi"%>
 <h1 class=netwrk><%=intl._t("Fastest Transit Tunnels")%></h1>
 <div class=main id=tunnels>

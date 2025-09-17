@@ -1,13 +1,8 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="256kb"%>
 <!DOCTYPE HTML>
-<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = ctx.getProperty("routerconsole.lang", "en");
-%>
 <%@include file="head.jsi"%>
 <%=intl.title("network database")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
-</head>
-<body>
 <script nonce=<%=cspNonce%>>
 progressx.show(theme); progressx.progress(0.1);
 const translate_encType = "<%=intl._t("Encryption type")%>";
@@ -18,6 +13,8 @@ const translate_localPrivate = "<%=intl._t("Locally hosted private service")%>";
 const translate_localPublic = "<%=intl._t("Locally hosted public service")%>";
 const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 </script>
+</head>
+<body>
 <%@include file="sidebar.jsi"%>
 <jsp:useBean id="formhandler" class="net.i2p.router.web.helpers.NetDbHelper" scope="request"/>
 

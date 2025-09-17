@@ -18,9 +18,6 @@
     } else {
 %>
 <!DOCTYPE HTML>
-<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = ctx.getProperty("routerconsole.lang", "en");
-%>
 <%@include file="head.jsi"%>
 <%=intl.title("Tunnel Manager")%>
 <style>iframe{display:none;pointer-events:none}</style>

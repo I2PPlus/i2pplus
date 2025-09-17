@@ -1,14 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="256kb"%>
 <!DOCTYPE HTML>
-<%  net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
-    String lang = ctx.getProperty("routerconsole.lang", "en");
-%>
 <%@include file="head.jsi"%>
 <%=intl.title("Most Recent Transit Tunnels")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
 </head>
 <body id=transitRecent>
-
 <%@include file="sidebar.jsi"%>
 <h1 class=netwrk><%=intl._t("Most Recent Transit Tunnels")%></h1>
 <div class=main id=tunnels>
