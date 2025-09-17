@@ -658,7 +658,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     rdnsCache.put(cacheEntry.getIpAddress(), cacheEntry);
                 }
             }
-            //System.out.println("Imported " + rdnsCache.size() + " entries from cache file");
+            long uptime = _context.router().getUptime();
+            if (uptime < 6*60*1000) {
+                System.out.println("[RDNSCache] Imported " + rdnsCache.size() + " entries from cache file");
+            }
         } catch (IOException ex) {
             System.err.println("[RDNSCache] Error reading RDNS cache file. Creating new file...");
             createRdnsCacheFile();
@@ -714,12 +717,12 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
         @Override
         public void run() {
-            System.out.println("[RDNSCache] Running cache file write task...");
+            //System.out.println("[RDNSCache] Running cache file write task...");
             Map<String, CacheEntry> liveCacheSnapshot;
             synchronized (rdnsCache) {
                 liveCacheSnapshot = new HashMap<>(rdnsCache);
             }
-            System.out.println("[RDNSCache] Entries in cache: " + liveCacheSnapshot.size());
+            //System.out.println("[RDNSCache] Entries in cache: " + liveCacheSnapshot.size());
             File cacheFile = new File(RDNS_CACHE_FILE);
             try (FileOutputStream fos = new FileOutputStream(cacheFile)) {
                 long now = System.currentTimeMillis();
@@ -742,20 +745,19 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     private static void writeRDNSCacheToFile() {
         synchronized (rdnslock) {
-            System.out.println("[RDNSCache] Starting cache file write...");
+            //System.out.println("[RDNSCache] Starting cache file write...");
             try {
                 File cacheFile = new File(RDNS_CACHE_FILE);
                 if (!cacheFile.exists()) {
                     cacheFile.createNewFile();
-                    System.err.println("[RDNSCache] Cache file created: " + RDNS_CACHE_FILE);
+                    System.err.println("[RDNSCache] No existing cache file found, new file created: " + RDNS_CACHE_FILE);
                 }
                 File tmpFile = new File(RDNS_CACHE_FILE + ".tmp");
                 long now = System.currentTimeMillis();
                 int writtenCount = 0;
-                try (BufferedWriter writer = new BufferedWriter(
-                        new OutputStreamWriter(new FileOutputStream(tmpFile), ENCODING))) {
+                try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpFile), ENCODING))) {
                     synchronized (rdnsCache) {
-                        System.out.println("[RDNSCache] Cache entries count: " + rdnsCache.size());
+                        //System.out.println("[RDNSCache] Cache entries count: " + rdnsCache.size());
                         for (CacheEntry cacheEntry : rdnsCache.values()) {
                             if (now - cacheEntry.getTimestamp() <= EVICT_THRESHOLD) {
                                 String line = rdnsEntryToString(cacheEntry) + NEWLINE;
@@ -768,7 +770,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 }
                 Files.copy(tmpFile.toPath(), cacheFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 tmpFile.delete();
-                System.out.println("[RDNSCache] Entries written to file: " + writtenCount);
+                //System.out.println("[RDNSCache] Entries written to file: " + writtenCount);
             } catch (IOException ex) {
                 System.err.println("[RDNSCache] Error updating reverse DNS cache file: " + ex.getMessage());
                 ex.printStackTrace();
