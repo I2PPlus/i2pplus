@@ -722,6 +722,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     private static void writeRDNSCacheToFile() {
         synchronized (rdnslock) {
+            cleanupRDNSCache();
             try {
                 File cacheFile = new File(RDNS_CACHE_FILE);
                 if (!cacheFile.exists()) {
