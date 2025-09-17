@@ -658,10 +658,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     rdnsCache.put(cacheEntry.getIpAddress(), cacheEntry);
                 }
             }
-            long uptime = _context.router().getUptime();
-            if (uptime < 6*60*1000) {
-                System.out.println("[RDNSCache] Imported " + rdnsCache.size() + " entries from cache file");
-            }
+            //System.out.println("[RDNSCache] Imported " + rdnsCache.size() + " entries from cache file");
         } catch (IOException ex) {
             System.err.println("[RDNSCache] Error reading RDNS cache file. Creating new file...");
             createRdnsCacheFile();
