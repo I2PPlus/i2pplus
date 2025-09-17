@@ -418,7 +418,8 @@ public class Reseeder {
             String truncatedURL = url.replace("https://", "");
             int slashIndex = truncatedURL.indexOf('/');
             String hostname = slashIndex > 0 ? truncatedURL.substring(0, slashIndex) : truncatedURL;
-            String reason = cause.getMessage().replaceAll("SSL certificate verification failed for .*", "SSL certificate verification failed");
+            String reason = cause != null && cause.getMessage() != null ?
+                            cause.getMessage().replaceAll("verification failed for .*", "verification failed") : "Unknown error";
             String msg = "Reseeding failed [" + hostname + "] -> " + reason;
             if (_log.shouldWarn()) {_log.warn(msg);}
             else {_log.logAlways(Log.WARN, msg);}
@@ -830,9 +831,8 @@ public class Reseeder {
                 fetched = stats[0];
                 errors = stats[1];
             } catch (Throwable t) {
-                s = getDisplayString(seedURL);
-                System.err.println("Error reseeding from " + s + " -> " + t.getMessage());
-                _log.error("Error reseeding from " + s + " -> " + t.getMessage());
+                System.err.println("Error reseeding " + trimmed + " -> " + t.getMessage());
+                _log.error("Error reseeding " + trimmed + " -> " + t.getMessage());
                 errors++;
             } finally {
                 if (contentRaw != null) {contentRaw.delete();}
