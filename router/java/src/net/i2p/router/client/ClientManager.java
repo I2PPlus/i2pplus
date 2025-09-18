@@ -86,7 +86,7 @@ class ClientManager {
     private static final long REQUEST_LEASESET_TIMEOUT = 60*1000;
     private static final int MAX_SESSION_ID = 65534; /** 2 bytes, save 65535 for unknown */
     private static final String PROP_MAX_SESSIONS = "i2cp.maxSessions";
-    private static final int DEFAULT_MAX_SESSIONS = 512;
+    private static final int DEFAULT_MAX_SESSIONS = SystemVersion.isSlow() ? 512 : 1024;
     public static final SessionId UNKNOWN_SESSION_ID = new SessionId(MAX_SESSION_ID + 1); /** 65535 */
 
     /**
