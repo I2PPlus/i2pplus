@@ -1,7 +1,6 @@
 package net.i2p.router.networkdb.kademlia;
 
 import java.util.concurrent.atomic.AtomicInteger;
-
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
@@ -20,13 +19,12 @@ import net.i2p.util.Log;
  */
 public class RepublishLeaseSetJob extends JobImpl {
     private final Log _log;
-    public final static long REPUBLISH_LEASESET_TIMEOUT = 30 * 1000;
+    public final static long REPUBLISH_LEASESET_TIMEOUT = 5 * 1000;
     private final static int RETRY_DELAY = 500;
     private final Hash _dest;
     private final KademliaNetworkDatabaseFacade _facade;
     private long _lastPublished; // this is actually last attempted publish
     private final AtomicInteger failCount = new AtomicInteger(0);
-    private String tunnelName = "";
 
     /**
      * Create a new RepublishLeaseSetJob for the given destination.
@@ -52,20 +50,16 @@ public class RepublishLeaseSetJob extends JobImpl {
      */
     public void runJob() {
         long uptime = getContext().router().getUptime();
-        if (!getContext().clientManager().shouldPublishLeaseSet(_dest) || uptime < 90 * 1000) {
-            return;
-        }
-
+        if (!getContext().clientManager().shouldPublishLeaseSet(_dest) || uptime < 90 * 1000) {return;}
         try {
             if (getContext().clientManager().isLocal(_dest)) {
                 LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
                 if (ls != null) {
-                    tunnelName = getTunnelName(ls.getDestination());
-                    String name = !tunnelName.equals("") ? " for \'" + tunnelName + "\'" : " for key";
+                    String tunnelName = getTunnelName(ls.getDestination());
+                    String name = !tunnelName.isEmpty() ? " for \'" + tunnelName + "\'" : " for key";
                     if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
                         if (_log.shouldWarn()) {
-                            _log.warn("Not publishing expired LOCAL LeaseSet" + name + " [" + _dest.toBase32().substring(0,8) + "]",
-                                      new Exception("Publish expired LOCAL lease?"));
+                            _log.warn("Not publishing expired LOCAL LeaseSet" + name + " [" + _dest.toBase32().substring(0,8) + "]");
                         }
                     } else {
                         if (_log.shouldInfo()) {
@@ -137,19 +131,18 @@ public class RepublishLeaseSetJob extends JobImpl {
             _ls = ls;
         }
 
-        public String getName() {
-            return "Timeout LeaseSet Publication";
-        }
+        public String getName() {return "Timeout LeaseSet Publication";}
 
         public void runJob() {
             LeaseSet ls = _facade.lookupLeaseSetLocally(_ls.getHash());
+            String tunnelName = "";
             if (ls != null) {tunnelName = getTunnelName(_ls.getDestination());}
             if (ls != null && !KademliaNetworkDatabaseFacade.isNewer(ls, _ls)) {requeueRepublish();}
             else {
                 if (_log.shouldInfo()) {
-                    String name = !tunnelName.equals("") ? " for \'" + tunnelName + "\'" : "";
+                    String name = !tunnelName.isEmpty() ? " for \'" + tunnelName + "\'" : "";
                     _log.info("Not requeueing failed publication of LeaseSet" + name + " [" +
-                              _ls.getDestination().toBase32().substring(0,8) + "] -> Newer LeaseSet exists");
+                              _ls.getDestination().calculateHash().toBase32().substring(0,8) + "] -> Newer LeaseSet exists");
                 }
             }
         }
@@ -159,7 +152,7 @@ public class RepublishLeaseSetJob extends JobImpl {
      * Attempts to get a human-readable tunnel name for the given destination.
      *
      * @param d destination to look up
-     * @return nickname if available, otherwise null
+     * @return nickname if available, otherwise empty string
      */
     public String getTunnelName(Destination d) {
         TunnelPoolSettings in = getContext().tunnelManager().getInboundSettings(d.calculateHash());
@@ -168,8 +161,7 @@ public class RepublishLeaseSetJob extends JobImpl {
             TunnelPoolSettings out = getContext().tunnelManager().getOutboundSettings(d.calculateHash());
             name = (out != null ? out.getDestinationNickname() : null);
         }
-        if (name == null) {return "";}
-        return name;
+        return name != null ? name : "";
     }
 
 }
