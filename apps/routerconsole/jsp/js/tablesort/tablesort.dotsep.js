@@ -1,18 +1,14 @@
 // Dot separated values. E.g. IP addresses or version numbers.
-Tablesort.extend('dotsep', function(item) {
-  return /^(\d+\.)+\d+$/.test(item);
-}, function(a, b) {
-  a = a.split('.');
-  b = b.split('.');
-
-  for (var i = 0, len = a.length, ai, bi; i < len; i++) {
-    ai = parseInt(a[i], 10);
-    bi = parseInt(b[i], 10);
-
-    if (ai === bi) continue;
-    if (ai > bi) return -1;
-    if (ai < bi) return 1;
+Tablesort.extend(
+  'dotsep',
+  item => /^(\d+\.)+\d+$/.test(item),
+  (a, b) => {
+    const aParts = a.split('.'), bParts = b.split('.');
+    for (let i = 0; i < aParts.length; i++) {
+      const ai = parseInt(aParts[i], 10), bi = parseInt(bParts[i], 10);
+      if (ai === bi) continue;
+      return ai > bi ? -1 : 1;
+    }
+    return 0;
   }
-
-  return 0;
-});
+);
