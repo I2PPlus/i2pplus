@@ -19,7 +19,7 @@ import net.i2p.util.Log;
  */
 public class RepublishLeaseSetJob extends JobImpl {
     private final Log _log;
-    public final static long REPUBLISH_LEASESET_TIMEOUT = 5 * 1000;
+    public final static long REPUBLISH_LEASESET_TIMEOUT = 15 * 1000;
     private final static int RETRY_DELAY = 500;
     private final Hash _dest;
     private final KademliaNetworkDatabaseFacade _facade;
@@ -50,7 +50,7 @@ public class RepublishLeaseSetJob extends JobImpl {
      */
     public void runJob() {
         long uptime = getContext().router().getUptime();
-        if (!getContext().clientManager().shouldPublishLeaseSet(_dest) || uptime < 90 * 1000) {return;}
+        if (!getContext().clientManager().shouldPublishLeaseSet(_dest) || uptime < 45 * 1000) {return;}
         try {
             if (getContext().clientManager().isLocal(_dest)) {
                 LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
@@ -63,7 +63,7 @@ public class RepublishLeaseSetJob extends JobImpl {
                         }
                     } else {
                         if (_log.shouldInfo()) {
-                            _log.info("Attempting to publish new LeaseSet" + name + " [" + _dest.toBase32().substring(0,8) + "]...");
+                            _log.info("Attempting to publish LeaseSet" + name + " [" + _dest.toBase32().substring(0,8) + "]...");
                         }
                         getContext().statManager().addRateData("netDb.republishLeaseSetCount", 1);
                         _facade.sendStore(_dest, ls, null, new OnRepublishFailure(ls), REPUBLISH_LEASESET_TIMEOUT, null);
@@ -94,9 +94,13 @@ public class RepublishLeaseSetJob extends JobImpl {
      */
     void requeueRepublish() {
         failCount.incrementAndGet();
+        LeaseSet ls = getContext().clientManager().isLocal(_dest) ? _facade.lookupLeaseSetLocally(_dest) : null;
+        String b32 = _dest.toBase32().substring(0,8);
+        String tunnelName = ls != null ? getTunnelName(ls.getDestination()) : "";
+        String name = !tunnelName.isEmpty() ? "\'" + tunnelName + "\'" + " [" + b32 + "]" : "[" + b32 + "]";
         String count = failCount.get() > 1 ? " (Attempt: " + failCount.get() + ")" : "";
         if (_log.shouldWarn()) {
-            _log.warn("Failed to publish LeaseSet for [" + _dest.toBase32().substring(0,8) + "] -> Retrying..." + count);
+            _log.warn("Failed to publish LeaseSet for " + name + " -> Retrying..." + count);
         }
         getContext().statManager().addRateData("netDb.republishLeaseSetFail", 1);
         getContext().jobQueue().removeJob(this);
