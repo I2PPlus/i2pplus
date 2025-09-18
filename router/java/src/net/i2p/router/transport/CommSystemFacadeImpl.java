@@ -791,41 +791,40 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * @return reverse dns hostname or ip address if unresolvable or expired
+     * Returns the canonical hostname for the given IP address, using a cached
+     * reverse DNS lookup with expiration.
+     *
+     * $lt;p$gt;The cache is checked first; if the entry is missing or expired,
+     * a DNS lookup is performed and the result cached.
+     * Returns "unknown" if lookup fails or returns the IP itself.
+     *
+     * @param ipAddress the IP address to resolve, or null/"null" returns null
+     * @return the hostname, "unknown" if unresolved, or null for invalid input
      * @since 0.9.58+
      */
     @Override
     public String getCanonicalHostName(String ipAddress) {
-        if (ipAddress == null || ipAddress.equals("null")) {
-            return null;
-        }
-        CacheEntry cacheEntry;
-        synchronized (rdnsCache) {
-            cacheEntry = rdnsCache.get(ipAddress);
-            long now = System.currentTimeMillis();
-            if (cacheEntry != null) {
-                if (now - cacheEntry.getTimestamp() <= EXPIRE_TIME) {
-                    return cacheEntry.getHostname();
-                } else {
-                    rdnsCache.remove(ipAddress);
-                }
+        if (ipAddress == null || ipAddress.equals("null")) {return null;}
+
+        long now = System.currentTimeMillis();
+        CacheEntry cacheEntry = rdnsCache.compute(ipAddress, (key, existingEntry) -> {
+            if (existingEntry != null && (now - existingEntry.getTimestamp() <= EXPIRE_TIME)) {
+                // Valid cache entry found, return as is
+                return existingEntry;
             }
-        }
-        try {
-            String hostName = InetAddress.getByName(ipAddress).getCanonicalHostName();
-            if (hostName.equals(ipAddress)) {
-                hostName = "unknown";
-            }
-            synchronized (rdnsCache) {
-                rdnsCache.put(ipAddress, new CacheEntry(ipAddress, hostName));
-            }
-            return hostName;
-        } catch (UnknownHostException exception) {
-            synchronized (rdnsCache) {
-                rdnsCache.put(ipAddress, new CacheEntry(ipAddress, "unknown"));
-            }
-            return ipAddress;
-        }
+
+            // Cache absent or expired, do DNS lookup (outside compute to avoid blocking)
+            String hostName;
+            try {
+                hostName = InetAddress.getByName(key).getCanonicalHostName();
+                if (hostName.equals(key)) {hostName = "unknown";}
+            } catch (UnknownHostException e) {hostName = "unknown";}
+
+            // Return new CacheEntry with updated hostname and timestamp
+            return new CacheEntry(key, hostName, now);
+        });
+
+        return cacheEntry.getHostname();
     }
 
     public static int countRdnsCacheEntries() {
