@@ -8,6 +8,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -160,22 +161,32 @@ class TunnelRenderer {
             int bwShare = getShareBandwidth();
             if (bwShare > 12) {
                 if (!participating.isEmpty()) {
-                    sb.append("<table id=allTransit class=\"tunneldisplay tunnels_participating\" data-sortable>\n")
-                      .append("<thead><tr data-sort-method=thead>").append("<th data-sortable>").append(_t("Role")).append("</th>")
-                      .append("<th data-sortable");
+                    sb.append("<table id=allTransit class=\"tunneldisplay tunnels_participating\" data-sortable>\n<thead><tr data-sort-method=thead><th data-sortable>")
+                      .append(_t("Role")).append("</th><th data-sortable");
                     if (!bySpeed) {sb.append(" data-sort-default");}
-                    sb.append(">").append(_t("Expiry")).append("</th>").append("<th title=\"").append(_t("Data transferred"))
-                      .append("\" data-sortable data-sort-method=dotsep>").append(_t("Data")).append("</th>").append("<th data-sortable");
+                    sb.append(">")
+                      .append(_t("Expiry"))
+                      .append("</th><th title=\"")
+                      .append(_t("Data transferred"))
+                      .append("\" data-sortable data-sort-method=dotsep>")
+                      .append(_t("Data"))
+                      .append("</th><th data-sortable");
                     if (bySpeed) {sb.append(" data-sort-default");}
                     sb.append(">").append(_t("Speed")).append("</th>");
                     if (isAdvanced) {
-                      sb.append("<th class=limit data-sortable data-sort-method=number>").append(_t("Limit")).append("</th>");
-                      sb.append("<th data-sortable>").append(_t("Receive on")).append("</th>");
+                      sb.append("<th class=limit data-sortable data-sort-method=number>")
+                        .append(_t("Limit"))
+                        .append("</th><th data-sortable>")
+                        .append(_t("Receive on"))
+                        .append("</th>");
                     }
-                    sb.append("<th data-sortable data-sort-method=number>").append(_t("From")).append("</th>");
+                    sb.append("<th data-sortable data-sort-method=number>")
+                      .append(_t("From"))
+                      .append("</th>");
                     if (isAdvanced) {sb.append("<th data-sortable>").append(_t("Send on")).append("</th>");}
-                    sb.append("<th data-sortable data-sort-method=number>").append(_t("To")).append("</th></tr>\n")
-                      .append("</thead>\n<tbody id=transitPeers>\n");
+                    sb.append("<th data-sortable data-sort-method=number>")
+                      .append(_t("To"))
+                      .append("</th></tr>\n</thead>\n<tbody id=transitPeers>\n");
                 }
                 long processed = 0;
                 RateStat rs = _context.statManager().getRate("tunnel.participatingMessageCount");
@@ -222,8 +233,8 @@ class TunnelRenderer {
                     else if (lifetime > 10*60) {lifetime = 10*60;}
                     float bps = 1024 * count / lifetime;
                     float kbps = bps / 1024;
-                    sb.append("<td class=\"cells bps\"><span class=right>").append(fmt.format(kbps)).append("&#8239;</span>")
-                      .append("<span class=left>KB/s</span></td>");
+                    sb.append("<td class=\"cells bps\"><span class=right>")
+                      .append(fmt.format(kbps)).append("&#8239;</span><span class=left>KB/s</span></td>");
 
                     long recv = cfg.getReceiveTunnelId();
                     if (isAdvanced && !participating.isEmpty()) {
@@ -290,137 +301,157 @@ class TunnelRenderer {
         sb.setLength(0);
     }
 
+    private final Map<String, String> reverseLookupCache = new HashMap<>();
+
     public void renderTransitSummary(Writer out) throws IOException {
+        int DISPLAY_LIMIT = 50;
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
         if (!participating.isEmpty() && participating.size() > 1) {
-            int displayed = 0;
-            // peer table sorted by number of tunnels
-            ObjectCounterUnsafe<Hash> counts = new ObjectCounterUnsafe<Hash>();
-            ObjectCounterUnsafe<Hash> bws = new ObjectCounterUnsafe<Hash>();
-            for (int i = 0; i < participating.size(); i++) {
-                HopConfig cfg = participating.get(i);
+            // Counters for tunnels and bandwidth by peer
+            ObjectCounterUnsafe<Hash> counts = new ObjectCounterUnsafe<>();
+            ObjectCounterUnsafe<Hash> bws = new ObjectCounterUnsafe<>();
+            for (HopConfig cfg : participating) {
                 Hash from = cfg.getReceiveFrom();
                 Hash to = cfg.getSendTo();
                 int msgs = cfg.getProcessedMessagesCount();
                 if (from != null) {
                     counts.increment(from);
-                    if (msgs > 0) {bws.add(from, msgs);}
+                    if (msgs > 0) bws.add(from, msgs);
                 }
                 if (to != null) {
                     counts.increment(to);
-                    if (msgs > 0) {bws.add(to, msgs);}
+                    if (msgs > 0) bws.add(to, msgs);
                 }
             }
 
-            // sort and output
-            StringBuilder tbuf = new StringBuilder(3*512);
-            tbuf.append("<h3 class=tabletitle>").append(_t("Transit Tunnels by Peer (Top 50)")).append("</h3>\n")
-                .append("<table id=transitSummary class=\"tunneldisplay tunnels_participating\" data-sortable>\n")
-                .append("<thead><tr data-sort-method=none>")
-                .append("<th id=country data-sortable>").append(_t("Country")).append("</th>")
-                .append("<th id=router data-sortable data-sort-method=natural>").append(_t("Router")).append("</th>")
-                .append("<th id=version data-sortable data-sort-method=dotsep>").append(_t("Version")).append("</th>")
-                .append("<th id=tier data-sortable data-sort=LMNOPX>").append(_t("Tier")).append("</th>")
-                .append("<th id=address data-sortable>").append(_t("Address") + "</th>");
-            if (enableReverseLookups()) {tbuf.append("<th id=domain data-sortable>").append(_t("Domain")).append("</th>");}
-            tbuf.append("<th class=tcount data-sortable data-sort-method=number data-sort-default>").append(_t("Tunnels")).append("</th>")
-                .append("<th id=data data-sortable data-sort-method=filesize>").append(_t("Data")).append("</th>")
-                //.append("<th data-sortable data-sort-method=number>").append(_t("Speed")).append("</th>")
-                .append("<th id=isBanned data-sortable hidden>" + _t("Banned")).append("</th>")
-                .append("<th id=edit data-sort-method=none>" + _t("Edit")).append("</th>")
-                .append("</tr></thead>\n<tbody id=transitPeers>\n");
+            StringBuilder tbuf = new StringBuilder(3 * 512);
+            tbuf.append("<h3 class=tabletitle>")
+                .append(_t("Transit Tunnels by Peer (Top 50)"))
+                .append("</h3>\n<table id=transitSummary class=\"tunneldisplay tunnels_participating\" data-sortable>\n<thead><tr data-sort-method=none><th id=country data-sortable>")
+                .append(_t("Country"))
+                .append("</th><th id=router data-sortable data-sort-method=natural>")
+                .append(_t("Router"))
+                .append("</th><th id=version data-sortable data-sort-method=dotsep>")
+                .append(_t("Version"))
+                .append("</th><th id=tier data-sortable data-sort=LMNOPX>")
+                .append(_t("Tier"))
+                .append("</th><th id=address data-sortable>")
+                .append(_t("Address"))
+                .append("</th>");
+            if (enableReverseLookups()) {
+                tbuf.append("<th id=domain data-sortable>").append(_t("Domain")).append("</th>");
+            }
+            tbuf.append("<th class=tcount data-sortable data-sort-method=number data-sort-default>")
+                .append(_t("Tunnels"))
+                .append("</th><th id=data data-sortable data-sort-method=filesize>")
+                .append(_t("Data"))
+                .append("</th><th id=isBanned data-sortable hidden>")
+                .append(_t("Banned"))
+                .append("</th><th id=edit data-sort-method=none>")
+                .append(_t("Edit"))
+                .append("</th></tr></thead>\n<tbody id=transitPeers>\n");
             out.write(tbuf.toString());
 
-            displayed = 0;
-            List<Hash> sort = counts.sortedObjects();
+            int displayed = 0;
+            List<Hash> sorted = counts.sortedObjects();
             long uptime = _context.router().getUptime();
             int bannedCount = 0;
-            StringBuilder sb = new StringBuilder(1024);
-            for (Hash h : sort) {
-                DISPLAY_LIMIT = 50;
+            StringBuilder sb = new StringBuilder(4 * 512);
+
+            for (Hash h : sorted) {
+                if (++displayed > DISPLAY_LIMIT) break;
+
                 int count = counts.count(h);
-                //char cap = getCapacity(h);
-                HopConfig cfg = participating.get(count);
-                int lifetime = count > 0 ? (int) ((_context.clock().now() - cfg.getCreation()) / 1000) : 1;
                 RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
-                String truncHash = h.toBase64().substring(0,4);
+
+                // Defensive - skip if count <= 0 (unlikely due to sorted list but just in case)
+                if (count <= 0) continue;
+
+                String truncHash = h.toBase64().substring(0, 4);
+
                 byte[] direct = TransportImpl.getIP(h);
-                String directIP = "";
-                if (direct != null) {directIP = Addresses.toString(direct);}
-                String ip = !directIP.equals("") ? directIP : (info != null) ? net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
-                String rl = (ip != null && enableReverseLookups() && uptime > 30*1000) ? _context.commSystem().getCanonicalHostName(ip) : null;
-                String v = info != null ? info.getOption("router.version") : null;
+                String directIP = (direct != null) ? Addresses.toString(direct) : "";
+                String ip = !directIP.isEmpty() ? directIP : (info != null ? Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null);
+
+                String rl = (ip != null && enableReverseLookups() && uptime > 30_000)
+                              ? reverseLookupCache.computeIfAbsent(ip, k -> _context.commSystem().getCanonicalHostName(k)) : null;
+
+                String version = (info != null) ? info.getOption("router.version") : null;
                 boolean isBanned = _context.banlist().isBanlisted(h);
-                int inactive = 0;
-                if (count <= 0 && (participating.size() == 0) || ++displayed > DISPLAY_LIMIT) {break;}
-                sb.append("<tr class=lazy><td>").append(peerFlag(h)).append("</td><td>")
-                  .append("<span class=routerHash><a href=\"netdb?r=").append(h.toBase64()).append("\">")
-                  .append(truncHash).append("</a></span></td><td>");
-                if (v != null) {
-                    sb.append("<span class=version title=\"").append(_t("Show all routers with this version in the NetDb"))
-                      .append("\"><a href=\"/netdb?v=").append(DataHelper.stripHTML(v)).append("\">")
-                      .append(DataHelper.stripHTML(v)).append("</a></span>");
-                } else if (isBanned) {sb.append("<span class=banlisted title=\"").append(_t("Router is banlisted")).append("\">???</span>");}
-                else {sb.append("<span>???</span>");}
+
+                sb.append("<tr class=lazy><td>")
+                  .append(peerFlag(h))
+                  .append("</td><td><span class=routerHash><a href=\"netdb?r=")
+                  .append(h.toBase64())
+                  .append("\">")
+                  .append(truncHash)
+                  .append("</a></span></td><td>");
+
+                if (version != null) {
+                    sb.append("<span class=version title=\"")
+                      .append(_t("Show all routers with this version in the NetDb"))
+                      .append("\"><a href=\"/netdb?v=")
+                      .append(DataHelper.stripHTML(version))
+                      .append("\">")
+                      .append(DataHelper.stripHTML(version))
+                      .append("</a></span>");
+                } else if (isBanned) {
+                    sb.append("<span class=banlisted title=\"")
+                      .append(_t("Router is banlisted"))
+                      .append("\">???</span>");
+                } else {sb.append("<span>???</span>");}
                 sb.append("</td><td>");
-                if (info != null) {sb.append(_context.commSystem().renderPeerCaps(h, false));}
-                else {sb.append("<table class=\"rid ric\"><tr><td class=rbw>?</td></tr></table>");}
+                if (info != null) {
+                    sb.append(_context.commSystem().renderPeerCaps(h, false));
+                } else {
+                    sb.append("<table class=\"rid ric\"><tr><td class=rbw>?</td></tr></table>");
+                }
                 sb.append("</td><td><span class=ipaddress>");
-                if (info != null && ip != null) {
-                    if (!ip.toString().equals("null")) {
-                        if (ip.toString().contains(":")) {sb.append("<span hidden>[IPv6]</span>").append(ip.toString());}
-                        else {sb.append(ip.toString());}
-/*
-                        sb.append("<a class=script href=\"https://gwhois.org/" + ip.toString() + "+dns\" target=_blank title=\"" +
-                                  _t("Lookup address on gwhois.org") + "\">" + ip.toString() + "</a>" +
-                                  "<noscript>" + ip.toString() + "</noscript>");
-*/
-                    } else {sb.append("&ndash;");}
+                if (ip != null && !"null".equals(ip)) {
+                    if (ip.contains(":")) sb.append("<span hidden>[IPv6]</span>");
+                    sb.append(ip);
                 } else {sb.append("&ndash;");}
                 sb.append("</span></td>");
+
                 if (enableReverseLookups()) {
                     sb.append("<td>");
-                    if (rl != null && rl.length() != 0 && !ip.toString().equals(rl)) {
-                        sb.append("<span class=rlookup title=\"").append(rl).append("\">");
-                        if (!ip.toString().equals(rl)) {sb.append(CommSystemFacadeImpl.getDomain(rl));}
-                        else {sb.append("<span hidden>").append("&ndash;").append("</span>");}
-                    } else {sb.append("<span>").append(_t("unknown"));}
-                    sb.append("</span></td>");
+                    if (rl != null && !rl.isEmpty() && !ip.equals(rl)) {
+                        sb.append("<span class=rlookup title=\"").append(rl).append("\">")
+                          .append(CommSystemFacadeImpl.getDomain(rl)).append("</span>");
+                    } else {
+                        sb.append("<span>").append(_t("unknown")).append("</span>");
+                    }
+                    sb.append("</td>");
                 }
-                sb.append("<td class=tcount>" + count + "</td>");
-                //sb.append("<td>" + (bws.count(h) > 0 ? DataHelper.formatSize2(bws.count(h) * 1024) + "B": "") + "</td>\n");
+
+                sb.append("<td class=tcount>").append(count).append("</td>");
+
+                long bw = bws.count(h);
                 sb.append("<td>");
-                if (bws.count(h) > 0) {sb.append("<span class=data>" + fmt.format(bws.count(h)).replace(".00", "") + "KB</span>");}
-                else {sb.append("<span class=data hidden>0KB</span>");}
-/*
-                if (lifetime <= 0)
-                    lifetime = 1;
-                if (lifetime > 10*60)
-                    lifetime = 10*60;
-                float bps = 1024 * count / lifetime;
-                float kbps = bps / 1024;
-                sb.append("</td><td class=\"cells bps\">");
-                if (kbps >= 1) {
-                    sb.append("<span class=right>" + fmt.format(kbps) + "&#8239;</span><span class=left>KB/s</span>");
-                } else if (kbps >= 0) {
-                    sb.append("<span class=right><&#8239;1</span><span class=left>KB/s</span>");
-                } else {
-                    sb.append("<span class=right hidden>0&#8239;</span><span class=left hidden>KB/s</span>");
-                }
-*/
-                sb.append("</td><td class=isBanned hidden>");
+                if (bw > 0) {
+                    sb.append("<span class=data>").append(fmt.format(bw).replace(".00", "")).append("KB</span>");
+                } else {sb.append("<span class=data hidden>0KB</span>");}
+                sb.append("</td>");
+
+                sb.append("<td class=isBanned hidden>");
                 if (isBanned) {
                     sb.append("<span hidden>ban</span><a class=banlisted href=\"/profiles?f=3\" title=\"")
                       .append(_t("Router is banlisted")).append("\">Banned</a> ");
                     bannedCount++;
                 }
-                sb.append("</td><td>");
+                sb.append("</td>");
+
+                sb.append("<td>");
                 if (info != null && info.getHash() != null) {
-                    sb.append("<a class=configpeer href=\"/configpeer?peer=").append(info.getHash())
-                      .append("\" title=\"Configure peer\">").append(_t("Edit")).append("</a>");
+                    sb.append("<a class=configpeer href=\"/configpeer?peer=")
+                      .append(info.getHash())
+                      .append("\" title=\"Configure peer\">")
+                      .append(_t("Edit"))
+                      .append("</a>");
                 }
                 sb.append("</td></tr>\n");
             }
+
             sb.append("</tbody>\n</table>\n");
             out.write(sb.toString());
             out.flush();
@@ -428,19 +459,20 @@ class TunnelRenderer {
         } else if (_context.router().isHidden()) {
             out.write("<p class=infohelp>");
             out.write(_t("Router is currently operating in Hidden Mode which prevents transit tunnels from being built."));
+            out.write("</p>\n");
         } else {
             out.write("<p class=infohelp>");
             out.write(_t("No transit tunnels currently active."));
+            out.write("</p>\n");
         }
     }
 
     public void renderPeers(Writer out) throws IOException {
         long uptime = _context.router().getUptime();
-        // count up the peers in the local pools
+        // count peers in the local pools
         ObjectCounter<Hash> localCount = new ObjectCounter<>();
         int tunnelCount = countTunnelsPerPeer(localCount);
-
-        // count up the peers in the participating tunnels
+        // count peers in the participating tunnels
         ObjectCounter<Hash> transitCount = new ObjectCounter<>();
         int partCount = countParticipatingPerPeer(transitCount);
 
@@ -453,91 +485,141 @@ class TunnelRenderer {
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
 
         if (!participating.isEmpty() || tunnelCount > 0) {
-            StringBuilder sb = new StringBuilder(peerCount*640+1024);
-            sb.append("<h3 class=tabletitle id=peercount>").append(_t("All Tunnels by Peer")).append("<span hidden id=counter></span>")
-              .append("&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=\"/tunnelpeercount\">")
-              .append(_t("Refresh")).append("</a></h3>\n")
-              .append("<table id=tunnelPeerCount data-sortable>")
-              .append("<thead class=lazy>\n<tr>")
-              .append("<th id=country data-sortable>").append(_t("Country")).append("</th>")
-              .append("<th id=router data-sortable data-sort-method=natural>").append(_t("Router")).append("</th>")
-              .append("<th id=version data-sortable data-sort-method=dotsep>").append(_t("Version")).append("</th>")
-              .append("<th id=tier data-sortable data-sort=LMNOPX>").append(_t("Tier")).append("</th>")
-              .append("<th id=address data-sortable title=\"").append(_t("Primary IP address")).append("\">")
-              .append(_t("Address")).append("</th>");
-            if (enableReverseLookups()) {sb.append("<th id=domain data-sortable>").append(_t("Domain")).append("</th>");}
-            sb.append("<th class=tcount colspan=2 title=\"Client and Exploratory Tunnels\" ")
-              .append("data-sortable data-sort-method=natural data-sort-column-key=localCount>")
-              .append(_t("Local")).append("</th>");
+            StringBuilder sb = new StringBuilder(peerCount * 640 + 1024);
+            sb.append("<h3 class=tabletitle id=peercount>")
+              .append(_t("All Tunnels by Peer"))
+              .append("<span hidden id=counter></span>&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=/tunnelpeercount>")
+              .append(_t("Refresh"))
+              .append("</a></h3>\n<table id=tunnelPeerCount data-sortable><thead class=lazy>\n<tr><th id=country data-sortable>")
+              .append(_t("Country"))
+              .append("</th><th id=router data-sortable data-sort-method=natural>")
+              .append(_t("Router"))
+              .append("</th><th id=version data-sortable data-sort-method=dotsep>")
+              .append(_t("Version"))
+              .append("</th><th id=tier data-sortable data-sort=LMNOPX>")
+              .append(_t("Tier"))
+              .append("</th><th id=address data-sortable title=\"")
+              .append(_t("Primary IP address"))
+              .append("\">")
+              .append(_t("Address"))
+              .append("</th>");
+            if (enableReverseLookups()) {
+                sb.append("<th id=domain data-sortable>")
+                  .append(_t("Domain"))
+                  .append("</th>");
+            }
+            sb.append("<th class=tcount colspan=2 title=\"Client and Exploratory Tunnels\" data-sortable data-sort-method=natural data-sort-column-key=localCount>")
+              .append(_t("Local"))
+              .append("</th>");
             if (!participating.isEmpty()) {
                 sb.append("<th class=tcount colspan=2 data-sortable data-sort-method=natural data-sort-column-key=transitCount>")
-                  .append(_t("Transit")).append("</th>");
-            } else {sb.append("<th></th>");}
-            sb.append("<th id=edit data-sort-method=none>").append(_t("Edit")).append("</th>")
-              .append("</tr>\n</thead>\n<tbody id=allPeers>\n");
+                  .append(_t("Transit"))
+                  .append("</th>");
+            } else {
+                sb.append("<th></th>");
+            }
+            sb.append("<th id=edit data-sort-method=none>")
+              .append(_t("Edit"))
+              .append("</th></tr>\n</thead>\n<tbody id=allPeers>\n");
+
             for (Hash h : peerList) {
                 RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
-                if (info == null) {continue;}
+                if (info == null) continue;
+
                 int localTunnelCount = localCount.count(h);
+                int transitTunnelCount = transitCount.count(h);
+
                 byte[] direct = TransportImpl.getIP(h);
-                String directIP = "";
-                if (direct != null) {directIP = Addresses.toString(direct);}
-                String ip = !directIP.equals("") ? directIP : net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info));
-                String v = info.getOption("router.version");
-                String truncHash = h.toBase64().substring(0,4);
+                String directIP = (direct != null) ? Addresses.toString(direct) : "";
+                String ip = !directIP.isEmpty() ? directIP : Addresses.toString(CommSystemFacadeImpl.getValidIP(info));
+
+                String version = info.getOption("router.version");
+                String truncHash = h.toBase64().substring(0, 4);
+
                 String rl = "";
-                if (ip != null && enableReverseLookups() && uptime > 30 * 1000) {rl = _context.commSystem().getCanonicalHostName(ip);}
-                sb.append("<tr class=lazy><td>").append(peerFlag(h)).append("</td><td><span class=routerHash><a href=\"netdb?r=")
-                  .append(h.toBase64()).append("\">").append(truncHash).append("</a></span></td><td>");
-                if (v != null) {
-                    sb.append("<span class=version title=\"Show all routers with this version in the NetDb\">")
-                      .append("<a href=\"/netdb?v=").append(DataHelper.stripHTML(v)).append("\">")
-                      .append(DataHelper.stripHTML(v)).append("</a></span>");
+                if (ip != null && enableReverseLookups() && uptime > 30_000) {
+                    rl = reverseLookupCache.computeIfAbsent(ip, k -> _context.commSystem().getCanonicalHostName(k));
+                }
+
+                sb.append("<tr class=lazy><td>")
+                  .append(peerFlag(h))
+                  .append("</td><td><span class=routerHash><a href=\"netdb?r=")
+                  .append(h.toBase64())
+                  .append("\">")
+                  .append(truncHash)
+                  .append("</a></span></td><td>");
+                if (version != null) {
+                    sb.append("<span class=version title=\"Show all routers with this version in the NetDb\"><a href=\"/netdb?v=")
+                      .append(DataHelper.stripHTML(version))
+                      .append("\">")
+                      .append(DataHelper.stripHTML(version))
+                      .append("</a></span>");
                 }
                 sb.append("</td><td>")
                   .append(_context.commSystem().renderPeerCaps(h, false))
                   .append("</td><td><span class=ipaddress>");
                 if (ip != null && !ip.isEmpty()) {
-                    if (ip.contains(":")) {sb.append("<span hidden>[IPv6]</span>");}
+                    if (ip.contains(":")) {
+                        sb.append("<span hidden>[IPv6]</span>");
+                    }
                     sb.append(ip);
                 } else {sb.append("&ndash;");}
                 sb.append("</span>");
                 if (enableReverseLookups() && rl != null && !rl.isEmpty() && !ip.equals(rl)) {
-                    sb.append(String.format("</td><td><span class=rlookup title=\"%s\">", rl))
+                    sb.append("</td><td><span class=rlookup title=\"")
+                      .append(rl)
+                      .append("\">")
                       .append(CommSystemFacadeImpl.getDomain(rl))
                       .append("</span>");
-                } else if (enableReverseLookups()) {sb.append("<td></td>");}
+                } else if (enableReverseLookups()) {
+                    sb.append("<td></td>");
+                }
                 sb.append(String.format("<td class=tcount data-sort-column-key=localCount>%d</td><td class=bar data-sort-column-key=localCount>", localTunnelCount));
                 if (localTunnelCount > 0) {
-                    sb.append(String.format("<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\">" +
-                                            "<span class=percentBarText>%d%%</span></span></span>",
+                    sb.append(String.format("<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\"><span class=percentBarText>%d%%</span></span></span>",
                                             fmt.format(localTunnelCount * 100 / tunnelCount).replace(".00", ""),
                                             localTunnelCount * 100 / tunnelCount));
                 } else {sb.append("<span hidden>&ndash;</span>");}
                 sb.append("</td>");
+
                 if (!participating.isEmpty()) {
-                    int transitTunnelCount = transitCount.count(h);
                     if (transitTunnelCount > 0) {
                         sb.append(String.format("<td class=tcount data-sort-column-key=transitCount>%d</td><td class=bar data-sort-column-key=transitCount>", transitTunnelCount));
-                        sb.append(String.format("<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\">" +
-                                                "<span class=percentBarText>%d%%</span></span></span>",
+                        sb.append(String.format("<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\"><span class=percentBarText>%d%%</span></span></span>",
                                                 fmt.format(transitTunnelCount * 100 / partCount).replace(".00", ""),
                                                 transitTunnelCount * 100 / partCount));
                         sb.append("</td>");
-                    } else {sb.append("<td></td><td></td>");}
-                } else {sb.append("<td></td>");}
+                    } else {
+                        sb.append("<td></td><td></td>");
+                    }
+                } else {
+                    sb.append("<td></td>");
+                }
                 sb.append(String.format("<td><a class=configpeer href=\"/configpeer?peer=%s\" title=\"" +
                   _t("Configure peer") + "\">%s</a></td></tr>\n", info.getHash(), _t("Edit")));
             }
             sb.append("</tbody>\n<tfoot class=lazy><tr class=tablefooter data-sort-method=none>")
-              .append("<td colspan=4><b>").append(peerCount).append(" ").append(_t("unique peers")).append("</b></td>")
-              .append("<td></td>");
+              .append("<td colspan=4><b>")
+              .append(peerCount).append(" ")
+              .append(_t("unique peers"))
+              .append("</b></td><td></td>");
             if (enableReverseLookups()) {sb.append("<td></td>");}
-            sb.append("<td colspan=2><b>").append(tunnelCount).append(" ").append(_t("local")).append("</b></td>");
+            sb.append("<td colspan=2><b>")
+              .append(tunnelCount)
+              .append(" ")
+              .append(_t("local"))
+              .append("</b></td>");
             if (!participating.isEmpty()) {
-                sb.append("<td colspan=2><b>").append(partCount).append(" ").append(_t("transit")).append("</b></td>");
-            } else {sb.append("<td></td>");}
+                sb.append("<td colspan=2><b>")
+                .append(partCount)
+                .append(" ")
+                .append(_t("transit"))
+                .append("</b></td>");
+            } else {
+                sb.append("<td></td>");
+            }
             sb.append("<td></td></tr>\n</tfoot>\n</table>\n");
+
             out.write(sb.toString());
             out.flush();
             sb.setLength(0);
@@ -550,27 +632,22 @@ class TunnelRenderer {
 
     public void renderGuide(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
-        buf.append("<h3 class=tabletitle>" + _t("Bandwidth Tiers") + "</h3>\n")
-           .append("<table id=tunnel_defs><tbody>")
-           .append("<tr><td>&nbsp;</td>")
-           .append("<td><span class=tunnel_cap><b>L</b></span></td>")
-           .append("<td>").append(_t("{0} shared bandwidth", range(Router.MIN_BW_L, Router.MIN_BW_M))).append("</td>")
-           .append("<td><span class=tunnel_cap><b>M</b></span></td>")
-           .append("<td>").append(_t("{0} shared bandwidth", range(Router.MIN_BW_M, Router.MIN_BW_N))).append("</td>")
-           .append("<td>&nbsp;</td></tr>")
-           .append("<tr><td>&nbsp;</td>")
-           .append("<td><span class=tunnel_cap><b>N</b></span></td>")
-           .append("<td>").append(_t("{0} shared bandwidth", range(Router.MIN_BW_N, Router.MIN_BW_O))).append("</td>")
-           .append("<td><span class=tunnel_cap><b>O</b></span></td>")
-           .append("<td>").append(_t("{0} shared bandwidth", range(Router.MIN_BW_O, Router.MIN_BW_P))).append("</td>")
-           .append("<td>&nbsp;</td></tr>")
-           .append("<tr><td>&nbsp;</td>")
-           .append("<td><span class=tunnel_cap><b>P</b></span></td>")
-           .append("<td>").append(_t("{0} shared bandwidth", range(Router.MIN_BW_P, Router.MIN_BW_X))).append("</td>")
-           .append("<td><span class=tunnel_cap><b>X</b></span></td>")
-           .append("<td>").append(_t("Over {0} shared bandwidth", Math.round(Router.MIN_BW_X * 1.024f))).append("KBps").append("</td>")
-           .append("<td>&nbsp;</td></tr>")
-           .append("</tbody></table>");
+        buf.append("<h3 class=tabletitle>")
+           .append(_t("Bandwidth Tiers"))
+           .append("</h3>\n<table id=tunnel_defs>\n<tbody><tr><td>&nbsp;</td><td><span class=tunnel_cap><b>L</b></span></td><td>")
+           .append(_t("{0} shared bandwidth", range(Router.MIN_BW_L, Router.MIN_BW_M)))
+           .append("</td><td><span class=tunnel_cap><b>M</b></span></td><td>")
+           .append(_t("{0} shared bandwidth", range(Router.MIN_BW_M, Router.MIN_BW_N)))
+           .append("</td><td>&nbsp;</td></tr>\n<tr><td>&nbsp;</td><td><span class=tunnel_cap><b>N</b></span></td><td>")
+           .append(_t("{0} shared bandwidth", range(Router.MIN_BW_N, Router.MIN_BW_O)))
+           .append("</td><td><span class=tunnel_cap><b>O</b></span></td><td>")
+           .append(_t("{0} shared bandwidth", range(Router.MIN_BW_O, Router.MIN_BW_P)))
+           .append("</td><td>&nbsp;</td></tr>\n")
+           .append("<tr><td>&nbsp;</td><td><span class=tunnel_cap><b>P</b></span></td><td>")
+           .append(_t("{0} shared bandwidth", range(Router.MIN_BW_P, Router.MIN_BW_X)))
+           .append("</td><td><span class=tunnel_cap><b>X</b></span></td><td>")
+           .append(_t("Over {0} shared bandwidth", Math.round(Router.MIN_BW_X * 1.024f)))
+           .append("KBps</td><td>&nbsp;</td></tr></tbody>\n</table>");
         out.append(buf);
         out.flush();
         buf.setLength(0);
@@ -696,13 +773,25 @@ class TunnelRenderer {
         }
         StringBuilder buf = new StringBuilder(32*1024);
         if (tunnels.size() != 0) {
-            buf.append("<table class=\"tunneldisplay tunnels_client\">\n")
-               .append("<tr><th title=\"").append(_t("Inbound or outbound?")).append("\">").append(_t("In/Out")).append("</th>")
-               .append("<th>").append(_t("Expiry")).append("</th>")
-               .append("<th title=\"").append(_t("Data transferred")).append("\">").append(_t("Data")).append("</th>")
-               .append("<th>").append(_t("Gateway")).append("</th>");
+            buf.append("<table class=\"tunneldisplay tunnels_client\">\n<tr><th title=\"")
+               .append(_t("Inbound or outbound?"))
+               .append("\">")
+               .append(_t("In/Out"))
+               .append("</th><th>")
+               .append(_t("Expiry"))
+               .append("</th><th title=\"")
+               .append(_t("Data transferred"))
+               .append("\">")
+               .append(_t("Data"))
+               .append("</th><th>")
+               .append(_t("Gateway"))
+               .append("</th>");
             if (maxLength > 3) {
-                buf.append("<th colspan=\"").append(maxLength - 2).append("\">").append(_t("Participants")).append("</th>");
+                buf.append("<th colspan=\"")
+                   .append(maxLength - 2)
+                   .append("\">")
+                   .append(_t("Participants"))
+                   .append("</th>");
             } else if (maxLength == 3) {buf.append("<th>").append(_t("Participant")).append("</th>");}
             if (maxLength > 1) {buf.append("<th>").append(_t("Endpoint")).append("</th>");}
             buf.append("</tr>\n");
@@ -716,11 +805,17 @@ class TunnelRenderer {
             live++;
             boolean isInbound = info.isInbound();
             if (isInbound) {
-                buf.append("<tr><td><span class=inbound title=\"").append(tib).append("\">")
-                   .append("<img src=/themes/console/images/inbound.svg alt=\"").append(tib).append("\"></span></td>");
+                buf.append("<tr><td><span class=inbound title=\"")
+                   .append(tib)
+                   .append("\"><img src=/themes/console/images/inbound.svg alt=\"")
+                   .append(tib)
+                   .append("\"></span></td>");
             } else {
-                buf.append("<tr><td><span class=outbound title=\"").append(tob).append("\">")
-                   .append("<img src=/themes/console/images/outbound.svg alt=\"").append(tob).append("\"></span></td>");
+                buf.append("<tr><td><span class=outbound title=\"")
+                   .append(tob)
+                   .append("\"><img src=/themes/console/images/outbound.svg alt=\"")
+                   .append(tob)
+                   .append("\"></span></td>");
             }
             buf.append("<td>").append(DataHelper.formatDuration2(timeLeft)).append("</td>");
             int count = info.getProcessedMessagesCount() * 1024 / 1000;
@@ -741,7 +836,7 @@ class TunnelRenderer {
                             buf.append("<td></td>");
                         }
                     }
-                    // Add empty content placeholders to force alignment.
+                    // Add empty content placeholders to force alignment
                     buf.append(" <td><span class=\"tunnel_peer tunnel_local\" title=\"")
                        .append(_t("Locally hosted tunnel")).append("\">").append(_t("Local")).append("</span>");
                     if (isAdvanced) {
