@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -1358,7 +1359,17 @@ class NetDbRenderer {
     }
 
     /**
-     *  Be careful to use stripHTML for any displayed routerInfo data to prevent vulnerabilities
+     * Renders detailed router information as an HTML table fragment.
+     *
+     * Displays router identity, capabilities, addresses, statistics, and other metadata.
+     * Includes visual indicators for router variants and status, with optional reverse DNS lookups.
+     *
+     * Assumes all displayed data is sanitized (e.g., via stripHTML) to ensure output safety.
+     *
+     * @param buf   StringBuilder to append HTML output
+     * @param info  RouterInfo object containing router details to render
+     * @param isUs  true if the router is the local router, affecting display logic
+     * @param full  true to include full details, false for summary view
      */
     private void renderRouterInfo(StringBuilder buf, RouterInfo info, boolean isUs, boolean full) {
         RouterIdentity ident = info.getIdentity();
@@ -1366,7 +1377,6 @@ class NetDbRenderer {
         Hash h = info.getHash();
         String hash = h.toBase64();
         String family = info.getOption("family");
-
         buf.append("<table class=\"netdbentry lazy\"><tr><th>");
         if (isUs) {
             buf.append("<b id=our-info>").append(_t("Our info")).append(":</b></th><th><code>").append(hash)
@@ -1524,6 +1534,10 @@ class NetDbRenderer {
         }
         buf.append("</th></tr>\n<tr>");
         long age = _context.clock().now() - info.getPublished();
+
+        // Reverse DNS cache map, local to method
+        Map<String, String> reverseLookupCache = new HashMap<>();
+
         if (isUs && _context.router().isHidden()) {
             buf.append("<td><b>").append(_t("Hidden")).append(", ").append(_t("Updated")).append(":</b></td>")
                .append("<td><span class=netdb_info>")
@@ -1536,7 +1550,13 @@ class NetDbRenderer {
             String address = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info));
             boolean isUnreachable = capsTemp.contains("U") || capsTemp.contains("H");
             if (enableReverseLookups() && uptime > 30 * 1000 && !isUnreachable && address != null) {
-                String rdns = _context.commSystem().getCanonicalHostName(address);
+                String rdns;
+                if (reverseLookupCache.containsKey(address)) {
+                    rdns = reverseLookupCache.get(address);
+                } else {
+                    rdns = _context.commSystem().getCanonicalHostName(address);
+                    reverseLookupCache.put(address, rdns);
+                }
                 if (rdns != null && !rdns.equals(address) && !rdns.equals("unknown")) {
                     buf.append("<span class=netdb_info><b>").append(_t("Hostname")).append(":</b> <span class=rdns>")
                        .append(rdns).append("</span></span>&nbsp;&nbsp;");
@@ -1547,7 +1567,13 @@ class NetDbRenderer {
                     _context.commSystem().queueLookup(ip);
                     String directAddress = Addresses.toString(ip);
                     if (enableReverseLookups()) {
-                        String rdns = _context.commSystem().getCanonicalHostName(directAddress);
+                        String rdns;
+                        if (reverseLookupCache.containsKey(directAddress)) {
+                            rdns = reverseLookupCache.get(directAddress);
+                        } else {
+                            rdns = _context.commSystem().getCanonicalHostName(directAddress);
+                            reverseLookupCache.put(directAddress, rdns);
+                        }
                         if (rdns != null && !rdns.equals(directAddress) && !rdns.equals("unknown")) {
                             buf.append("<span class=netdb_info><b>").append(_t("Hostname")).append(" (")
                                .append(_t("direct")).append(")").append(":</b> <span class=rdns>")
@@ -1593,7 +1619,6 @@ class NetDbRenderer {
            .append(ident.getPublicKey().getType().toString())
            .append("\">").append(ident.getPublicKey().getType().toString())
            .append("</a></span></td></tr>\n");
-
         if ((full && isU) || !isU) {
             buf.append("<tr><td><b>")
                .append(_t("Addresses"))
@@ -1610,17 +1635,14 @@ class NetDbRenderer {
                 if (laddrs.size() > 1) {
                     laddrs.sort(new RAComparator());
                 }
-
                 boolean hasSSU = false;
                 boolean hasNTCP = false;
                 int itagCount = 0;
-
                 // First pass: accumulate introducer count and styles
                 for (RouterAddress addr : laddrs) {
                     String style = addr.getTransportStyle();
                     if (style.startsWith("SSU")) hasSSU = true;
                     if (style.startsWith("NTCP")) hasNTCP = true;
-
                     Map<Object, Object> p = addr.getOptionsMap();
                     for (Map.Entry<Object, Object> e : p.entrySet()) {
                         String name = (String) e.getKey();
@@ -1630,11 +1652,9 @@ class NetDbRenderer {
                         }
                     }
                 }
-
                 List<String> listItems = new ArrayList<>();
                 boolean brInserted = false;
                 boolean introducersInserted = false;
-
                 // Second pass: build <li> elements with introducer count and <br> separation
                 for (RouterAddress addr : laddrs) {
                     if (ip != null) {
@@ -1646,7 +1666,6 @@ class NetDbRenderer {
                     List<Map.Entry<Object, Object>> netProps = new ArrayList<>();
                     List<Map.Entry<Object, Object>> otherEntries = new ArrayList<>();
                     boolean hasDetails = false;
-
                     for (Map.Entry<Object, Object> e : p.entrySet()) {
                         String name = (String) e.getKey();
                         String lowerCaseName = name.toLowerCase();
@@ -1675,7 +1694,6 @@ class NetDbRenderer {
                         }
                     }
                     if (!hasDetails) continue;
-
                     // Extract caps and mtu entries if present from netProps
                     Map.Entry<Object, Object> capsEntry = null;
                     Map.Entry<Object, Object> mtuEntry = null;
@@ -1691,13 +1709,10 @@ class NetDbRenderer {
                             netPropsIterator.remove();
                         }
                     }
-
                     // Sort netProps by key
                     netProps.sort((e1, e2) -> ((String) e1.getKey()).compareTo((String) e2.getKey()));
-
                     List<Map.Entry<Object, Object>> sortedProps = new ArrayList<>();
                     Set<String> seenNames = new HashSet<>();
-
                     // Add unique entries from netProps except caps and mtu
                     for (Map.Entry<Object, Object> e : netProps) {
                         String name = (String) e.getKey();
@@ -1705,7 +1720,6 @@ class NetDbRenderer {
                             sortedProps.add(e);
                         }
                     }
-
                     // Add unique entries from otherEntries except caps and mtu, update entries if found
                     for (Map.Entry<Object, Object> e : otherEntries) {
                         String name = (String) e.getKey();
@@ -1717,7 +1731,6 @@ class NetDbRenderer {
                             sortedProps.add(e);
                         }
                     }
-
                     // Append capsEntry and mtuEntry at the end if found
                     if (capsEntry != null) {
                         sortedProps.add(capsEntry);
@@ -1725,7 +1738,6 @@ class NetDbRenderer {
                     if (mtuEntry != null) {
                         sortedProps.add(mtuEntry);
                     }
-
                     StringBuilder spans = new StringBuilder();
                     for (Map.Entry<Object, Object> e : sortedProps) {
                         String name = (String) e.getKey();
@@ -1794,7 +1806,6 @@ class NetDbRenderer {
                 buf.append("</ul></td></tr>\n");
             }
         }
-
         if (full || isUs) {
             PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(info.getHash());
             boolean isFF = info.getCapabilities().indexOf('f') >= 0;
