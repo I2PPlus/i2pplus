@@ -3173,7 +3173,7 @@ span#newtab{margin-top:4px}
 #contactserver{margin-bottom:-17px}
 #debug .confignav,#netdb .confignav{padding:0}
 #debug .tab,#debug .tab2,#netdb .tab,#netdb .tab2{margin-top:-1px}
-#netdb .tab,#netdb .tab2{min-width:120px}
+#netdb .tab,#netdb .tab2,#profiles .tab,#profiles .tab2{min-width:120px}
 #error500 #sb_logo img{margin-bottom:-5px}
 #error500 #warning2.sorry{margin-top:-1px}
 #floodfills th:first-child,#floodfills td:first-child{padding-right:3px;width:58px}
