@@ -1145,6 +1145,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels #tunnelPeerCount td.tcount{padding:3px 0 3px 4px;min-width:16px;text-align:right;border-right:0}
 #tunnels .tunnels_client th:first-child{font-size:0}
 #tunnels .tunnels_participating .cells:first-child{font-size:0}
+#tunnels #tunnelPeerCount tbody tr td.bar~td:empty{border-left:0;border-right:0}
 
 /* netdb */
 #netdb #netdboverview td{border-right:var(--border)}
@@ -3229,6 +3230,7 @@ span#newtab{margin-top:4px}
 #tunnels #exploratory a,#tunnels h3.server a,#tunnels h3.client a{margin:-8px 0 -8px 0;padding:7px 2px 14px 0}
 #events .tab,#events .tab2,#logs .tab,#logs .tab2,#tunnels .tab,#tunnels .tab2{line-height:1.3}
 #tunnels h3 a::after{margin:-8px -8px -8px 0;padding:9px 8px 9px 16px}
+#tunnels .tab,#tunnels .tab2{min-width:180px}
 #udpconnections .cells td:first-child,#ntcpconnections .cells td:first-child{padding-right:8px;width:55px}
 }
 

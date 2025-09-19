@@ -273,7 +273,7 @@ class TunnelRenderer {
                         .append("</b></div>\n");
                     }
                 } else if (displayed >= 2) {
-                    sb.append("<div class=statusnotes><b>").append(_t("Active") ).append(":</b>&nbsp").append(displayed);
+                    sb.append("<div class=statusnotes><b>").append(_t("Active") ).append(":</b>&nbsp;").append(displayed);
                     if (inactive > 0) {
                         sb.append("&nbsp;&bullet;&nbsp;<b>").append(_t("Inactive")).append(":</b>&nbsp;").append(inactive)
                           .append("&nbsp;&bullet;&nbsp;<b>").append(_t("Total")).append(":</b>&nbsp;").append((inactive + displayed));
@@ -475,14 +475,15 @@ class TunnelRenderer {
         // count peers in the participating tunnels
         ObjectCounter<Hash> transitCount = new ObjectCounter<>();
         int partCount = countParticipatingPerPeer(transitCount);
-
         Set<Hash> peers = new HashSet<>(localCount.objects());
         peers.addAll(transitCount.objects());
         List<Hash> peerList = new ArrayList<>(peers);
         int peerCount = peerList.size();
         Collections.sort(peerList, new CountryComparator(this._context.commSystem()));
-
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
+
+        // Cache for RouterInfo lookups keyed by peer Hash
+        Map<Hash, RouterInfo> routerInfoCache = new HashMap<>();
 
         if (!participating.isEmpty() || tunnelCount > 0) {
             StringBuilder sb = new StringBuilder(peerCount * 640 + 1024);
@@ -523,24 +524,22 @@ class TunnelRenderer {
               .append("</th></tr>\n</thead>\n<tbody id=allPeers>\n");
 
             for (Hash h : peerList) {
-                RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
+                // Use cached RouterInfo or lookup if absent
+                RouterInfo info = routerInfoCache.computeIfAbsent(h, hash -> _context.netDb().lookupRouterInfoLocally(hash));
                 if (info == null) continue;
 
                 int localTunnelCount = localCount.count(h);
                 int transitTunnelCount = transitCount.count(h);
-
                 byte[] direct = TransportImpl.getIP(h);
                 String directIP = (direct != null) ? Addresses.toString(direct) : "";
                 String ip = !directIP.isEmpty() ? directIP : Addresses.toString(CommSystemFacadeImpl.getValidIP(info));
-
                 String version = info.getOption("router.version");
                 String truncHash = h.toBase64().substring(0, 4);
-
                 String rl = "";
                 if (ip != null && enableReverseLookups() && uptime > 30_000) {
+                    // Use existing reverseLookupCache
                     rl = reverseLookupCache.computeIfAbsent(ip, k -> _context.commSystem().getCanonicalHostName(k));
                 }
-
                 sb.append("<tr class=lazy><td>")
                   .append(peerFlag(h))
                   .append("</td><td><span class=routerHash><a href=\"netdb?r=")
@@ -563,7 +562,9 @@ class TunnelRenderer {
                         sb.append("<span hidden>[IPv6]</span>");
                     }
                     sb.append(ip);
-                } else {sb.append("&ndash;");}
+                } else {
+                    sb.append("&ndash;");
+                }
                 sb.append("</span>");
                 if (enableReverseLookups() && rl != null && !rl.isEmpty() && !ip.equals(rl)) {
                     sb.append("</td><td><span class=rlookup title=\"")
@@ -579,9 +580,10 @@ class TunnelRenderer {
                     sb.append(String.format("<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\"><span class=percentBarText>%d%%</span></span></span>",
                                             fmt.format(localTunnelCount * 100 / tunnelCount).replace(".00", ""),
                                             localTunnelCount * 100 / tunnelCount));
-                } else {sb.append("<span hidden>&ndash;</span>");}
+                } else {
+                    sb.append("<span hidden>&ndash;</span>");
+                }
                 sb.append("</td>");
-
                 if (!participating.isEmpty()) {
                     if (transitTunnelCount > 0) {
                         sb.append(String.format("<td class=tcount data-sort-column-key=transitCount>%d</td><td class=bar data-sort-column-key=transitCount>", transitTunnelCount));
@@ -598,12 +600,13 @@ class TunnelRenderer {
                 sb.append(String.format("<td><a class=configpeer href=\"/configpeer?peer=%s\" title=\"" +
                   _t("Configure peer") + "\">%s</a></td></tr>\n", info.getHash(), _t("Edit")));
             }
-            sb.append("</tbody>\n<tfoot class=lazy><tr class=tablefooter data-sort-method=none>")
-              .append("<td colspan=4><b>")
+            sb.append("</tbody>\n<tfoot class=lazy><tr class=tablefooter data-sort-method=none><td colspan=4><b>")
               .append(peerCount).append(" ")
               .append(_t("unique peers"))
               .append("</b></td><td></td>");
-            if (enableReverseLookups()) {sb.append("<td></td>");}
+            if (enableReverseLookups()) {
+                sb.append("<td></td>");
+            }
             sb.append("<td colspan=2><b>")
               .append(tunnelCount)
               .append(" ")
@@ -611,15 +614,14 @@ class TunnelRenderer {
               .append("</b></td>");
             if (!participating.isEmpty()) {
                 sb.append("<td colspan=2><b>")
-                .append(partCount)
-                .append(" ")
-                .append(_t("transit"))
-                .append("</b></td>");
+                  .append(partCount)
+                  .append(" ")
+                  .append(_t("transit"))
+                  .append("</b></td>");
             } else {
                 sb.append("<td></td>");
             }
             sb.append("<td></td></tr>\n</tfoot>\n</table>\n");
-
             out.write(sb.toString());
             out.flush();
             sb.setLength(0);
