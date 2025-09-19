@@ -1377,6 +1377,7 @@ class NetDbRenderer {
         Hash h = info.getHash();
         String hash = h.toBase64();
         String family = info.getOption("family");
+
         buf.append("<table class=\"netdbentry lazy\"><tr><th>");
         if (isUs) {
             buf.append("<b id=our-info>").append(_t("Our info")).append(":</b></th><th><code>").append(hash)
@@ -1409,34 +1410,36 @@ class NetDbRenderer {
         if (ident.isCompressible()) {
             buf.append("<span class=compressible title=\"").append(_t("RouterInfo is compressible")).append("\"></span> ");
         }
-        // Cache stripped capabilities for reuse
+
+        // Cache stripped capabilities once
         String strippedCaps = DataHelper.stripHTML(info.getCapabilities());
         boolean hasD = strippedCaps.contains("D");
         boolean hasE = strippedCaps.contains("E");
         boolean hasG = strippedCaps.contains("G");
         boolean isR = strippedCaps.contains("R");
         boolean isU = strippedCaps.contains("U");
-        // Simplify multiple chained replacements by using a StringBuilder and map replacements
+
         String capsTemp = strippedCaps
-                .replace("XO", "X")
-                .replace("PO", "P")
-                .replace("Kf", "fK")
-                .replace("Lf", "fL")
-                .replace("Mf", "fM")
-                .replace("Nf", "fN")
-                .replace("Of", "fO")
-                .replace("Pf", "fP")
-                .replace("Xf", "fX")
-                .replace("f", "<a href=\"/netdb?caps=f\"><span class=ff>F</span></a>")
-                .replace("R", "<a href=\"/netdb?caps=R\"><span class=reachable>R</span></a>")
-                .replace("U", "<a href=\"/netdb?caps=U\"><span class=unreachable>U</span></a>")
-                .replace("K", "<a href=\"/netdb?caps=K\"><span class=tier>K</span></a>")
-                .replace("L", "<a href=\"/netdb?caps=L\"><span class=tier>L</span></a>")
-                .replace("M", "<a href=\"/netdb?caps=M\"><span class=tier>M</span></a>")
-                .replace("N", "<a href=\"/netdb?caps=N\"><span class=tier>N</span></a>")
-                .replace("O", "<a href=\"/netdb?caps=O\"><span class=tier>O</span></a>")
-                .replace("P", "<a href=\"/netdb?caps=P\"><span class=tier>P</span></a>")
-                .replace("X", "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>");
+            .replace("XO", "X")
+            .replace("PO", "P")
+            .replace("Kf", "fK")
+            .replace("Lf", "fL")
+            .replace("Mf", "fM")
+            .replace("Nf", "fN")
+            .replace("Of", "fO")
+            .replace("Pf", "fP")
+            .replace("Xf", "fX")
+            .replace("f", "<a href=\"/netdb?caps=f\"><span class=ff>F</span></a>")
+            .replace("R", "<a href=\"/netdb?caps=R\"><span class=reachable>R</span></a>")
+            .replace("U", "<a href=\"/netdb?caps=U\"><span class=unreachable>U</span></a>")
+            .replace("K", "<a href=\"/netdb?caps=K\"><span class=tier>K</span></a>")
+            .replace("L", "<a href=\"/netdb?caps=L\"><span class=tier>L</span></a>")
+            .replace("M", "<a href=\"/netdb?caps=M\"><span class=tier>M</span></a>")
+            .replace("N", "<a href=\"/netdb?caps=N\"><span class=tier>N</span></a>")
+            .replace("O", "<a href=\"/netdb?caps=O\"><span class=tier>O</span></a>")
+            .replace("P", "<a href=\"/netdb?caps=P\"><span class=tier>P</span></a>")
+            .replace("X", "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>");
+
         if (hasD) {
             capsTemp = capsTemp.replace("D", "")
                                .replace("class=tier", "class=\"tier isD\"")
@@ -1501,13 +1504,16 @@ class NetDbRenderer {
                                    .replace("XG", "XUG");
             }
         }
+
         String tooltip = "\" title=\"" + _t("Show all routers with this capability in the NetDb") + "\"><span";
         capsTemp = capsTemp.replace("\"><span", tooltip);
         buf.append(capsTemp);
+
         String strippedVersion = DataHelper.stripHTML(info.getVersion());
         buf.append("&nbsp;<a href=\"/netdb?v=").append(strippedVersion).append("\">")
            .append("<span class=version title=\"").append(_t("Show all routers with this version in the NetDb"))
            .append("\">").append(strippedVersion).append("</span></a>");
+
         if (!isUs) {
             buf.append("<span class=netdb_header>");
             if (family != null) {
@@ -1533,9 +1539,9 @@ class NetDbRenderer {
             buf.append("&nbsp;<span id=netdb_ram><b>").append(_t("Memory usage")).append(":</b> ").append(used).append("M</span>");
         }
         buf.append("</th></tr>\n<tr>");
+
         long age = _context.clock().now() - info.getPublished();
 
-        // Reverse DNS cache map, local to method
         Map<String, String> reverseLookupCache = new HashMap<>();
 
         if (isUs && _context.router().isHidden()) {
@@ -1547,8 +1553,10 @@ class NetDbRenderer {
             buf.append("<td><b>").append(_t("Published")).append(":</b></td><td><span class=netdb_info>")
                .append(_t("{0} ago", DataHelper.formatDuration2(age)))
                .append("</span>&nbsp;&nbsp;");
+
             String address = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info));
             boolean isUnreachable = capsTemp.contains("U") || capsTemp.contains("H");
+
             if (enableReverseLookups() && uptime > 30 * 1000 && !isUnreachable && address != null) {
                 String rdns;
                 if (reverseLookupCache.containsKey(address)) {
@@ -1619,6 +1627,7 @@ class NetDbRenderer {
            .append(ident.getPublicKey().getType().toString())
            .append("\">").append(ident.getPublicKey().getType().toString())
            .append("</a></span></td></tr>\n");
+
         if ((full && isU) || !isU) {
             buf.append("<tr><td><b>")
                .append(_t("Addresses"))
@@ -1638,7 +1647,6 @@ class NetDbRenderer {
                 boolean hasSSU = false;
                 boolean hasNTCP = false;
                 int itagCount = 0;
-                // First pass: accumulate introducer count and styles
                 for (RouterAddress addr : laddrs) {
                     String style = addr.getTransportStyle();
                     if (style.startsWith("SSU")) hasSSU = true;
@@ -1655,7 +1663,6 @@ class NetDbRenderer {
                 List<String> listItems = new ArrayList<>();
                 boolean brInserted = false;
                 boolean introducersInserted = false;
-                // Second pass: build <li> elements with introducer count and <br> separation
                 for (RouterAddress addr : laddrs) {
                     if (ip != null) {
                         _context.commSystem().queueLookup(ip);
@@ -1694,7 +1701,6 @@ class NetDbRenderer {
                         }
                     }
                     if (!hasDetails) continue;
-                    // Extract caps and mtu entries if present from netProps
                     Map.Entry<Object, Object> capsEntry = null;
                     Map.Entry<Object, Object> mtuEntry = null;
                     Iterator<Map.Entry<Object, Object>> netPropsIterator = netProps.iterator();
@@ -1709,18 +1715,15 @@ class NetDbRenderer {
                             netPropsIterator.remove();
                         }
                     }
-                    // Sort netProps by key
                     netProps.sort((e1, e2) -> ((String) e1.getKey()).compareTo((String) e2.getKey()));
                     List<Map.Entry<Object, Object>> sortedProps = new ArrayList<>();
                     Set<String> seenNames = new HashSet<>();
-                    // Add unique entries from netProps except caps and mtu
                     for (Map.Entry<Object, Object> e : netProps) {
                         String name = (String) e.getKey();
                         if (seenNames.add(name)) {
                             sortedProps.add(e);
                         }
                     }
-                    // Add unique entries from otherEntries except caps and mtu, update entries if found
                     for (Map.Entry<Object, Object> e : otherEntries) {
                         String name = (String) e.getKey();
                         if ("caps".equals(name)) {
@@ -1731,7 +1734,6 @@ class NetDbRenderer {
                             sortedProps.add(e);
                         }
                     }
-                    // Append capsEntry and mtuEntry at the end if found
                     if (capsEntry != null) {
                         sortedProps.add(capsEntry);
                     }
@@ -1743,7 +1745,9 @@ class NetDbRenderer {
                         String name = (String) e.getKey();
                         String val = (String) e.getValue();
                         String valStripped = DataHelper.stripHTML(val);
-                        if (name == "mtu") {name = "MTU";}
+                        if (name == "mtu") {
+                            name = "MTU";
+                        }
                         if (name.equalsIgnoreCase("host")) {
                             spans.append("<span class=nowrap><span class=netdb_name>")
                                  .append(_t(DataHelper.stripHTML(name))).append(":</span> ")
