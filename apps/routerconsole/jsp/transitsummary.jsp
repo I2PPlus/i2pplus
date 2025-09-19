@@ -10,7 +10,6 @@
 <script src=/js/tablesort/tablesort.natural.js type=module></script>
 <script src=/js/tablesort/tablesort.dotsep.js type=module></script>
 <script src=/js/lazyload.js type=module></script>
-<script src=/js/transitfast.js type=module></script>
 <script src=/js/transitsummary.js type=module></script>
 </head>
 <body id=transitbypeer>
