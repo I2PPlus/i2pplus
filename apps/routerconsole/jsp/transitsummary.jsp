@@ -3,9 +3,9 @@
 <%@include file="head.jsi"%>
 <%=intl.title("Transit Tunnels by Peer")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
+<link rel=prefetch href=/tunnelpeercount>
 </head>
 <body id=transitbypeer>
-
 <%@include file="sidebar.jsi"%>
 <h1 class=netwrk><%=intl._t("Transit Tunnels by Peer")%></h1>
 <div class=main id=tunnels>

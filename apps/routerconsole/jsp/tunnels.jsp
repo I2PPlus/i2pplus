@@ -3,6 +3,7 @@
 <%@include file="head.jsi"%>
 <link rel=stylesheet href=/themes/console/tunnels.css>
 <%=intl.title("local tunnels")%>
+<link rel=prefetch href=/tunnelpeercount>
 </head>
 <body id=routertunnels>
 <%@include file="sidebar.jsi"%>

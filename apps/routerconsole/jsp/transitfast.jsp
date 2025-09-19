@@ -3,6 +3,7 @@
 <%@include file="head.jsi"%>
 <%=intl.title("Fastest Transit Tunnels")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
+<link rel=prefetch href=/tunnelpeercount>
 </head>
 <body id=transitFast>
 <%@include file="sidebar.jsi"%>
