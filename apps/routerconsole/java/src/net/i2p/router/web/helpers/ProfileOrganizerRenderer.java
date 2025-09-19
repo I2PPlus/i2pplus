@@ -5,6 +5,8 @@ import java.io.Serializable;
 import java.io.Writer;
 import java.text.DecimalFormat;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -50,7 +52,6 @@ class ProfileOrganizerRenderer {
         boolean ffmode = local != null && local.getCapabilities().indexOf('f') >= 0;
         Set<Hash> peers = _organizer.selectAllPeers();
         long now = _context.clock().now();
-        //long hideBefore = ffmode ? now - 20*60*1000 : !ffmode && mode == 2 ? now - 60*60*1000 : now - 20*60*1000;
         long hideBefore = now - 4*60*60*1000;
         Set<PeerProfile> order = new TreeSet<PeerProfile>(mode == 2 ? new ProfComparator() : new ProfileComparator());
         int older = 0;
@@ -71,7 +72,6 @@ class ProfileOrganizerRenderer {
                     continue;
                 }
             }
-//            if (prof.getLastSendSuccessful() <= hideBefore) {
             if (mode != 2 && (prof.getLastHeardFrom() <= hideBefore || prof.getLastSendSuccessful() <= hideBefore) && !prof.getIsActive()) {
                 older++;
                 continue;
@@ -82,12 +82,14 @@ class ProfileOrganizerRenderer {
             }
             order.add(prof);
         }
-
         int fast = 0;
         int reliable = 0;
         int integrated = 0;
         boolean isAdvanced = _context.getBooleanProperty("routerconsole.advanced");
         StringBuilder buf = new StringBuilder(32*1024);
+
+        // Cache for reverse DNS lookups
+        Map<String, String> reverseLookupCache = new HashMap<>();
 
         if (mode < 2) {
             buf.append("<p id=profiles_overview class=infohelp>")
@@ -101,7 +103,6 @@ class ProfileOrganizerRenderer {
                    .append("</a>\n");
             }
             buf.append(_t("Note that the profiler relies on sustained client tunnel usage to accurately profile peers.")).append("</p>");
-
             buf.append("<div class=widescroll id=peerprofiles>\n<table id=profilelist>\n")
                .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup>")
                .append("</colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
@@ -119,24 +120,20 @@ class ProfileOrganizerRenderer {
                .append("<th class=groups>").append(_t("Groups")).append("</th>")
                .append("<th>").append(_t("Speed")).append("</th>")
                .append("<th class=latency>").append(_t("Low Latency")).append("</th>")
-               //.append("<th title=\"").append(_t("Time taken for peer test")).append("\">")
-               //.append(_t("Test Avg (ms)")).append("</th>")
-               //.append("<th>").append(_t("Capacity")).append("</th>")
                .append("<th title=\"").append(_t("Tunnels peer has agreed to participate in"))
                .append("\">").append(_t("Accepted")).append("</th>")
                .append("<th title=\"").append(_t("Tunnels peer has refused to participate in"))
                .append("\">").append(_t("Rejected")).append("</th>")
-               //.append("<th>").append(_t("Integration")).append("</th>")
                .append("<th>").append(_t("First Heard About")).append("</th>")
                .append("<th>").append(_t("Last Heard From")).append("</th>")
                .append("<th>").append(_t("View/Edit")).append("</th>")
                .append("</tr>\n</thead>\n<tbody id=pbody>\n");
+
             int prevTier = 1;
             for (PeerProfile prof : order) {
                 Hash peer = prof.getPeer();
                 int tier = 0;
                 boolean isIntegrated = false;
-
                 if (_organizer.isFast(peer)) {
                     tier = 1;
                     fast++;
@@ -145,12 +142,10 @@ class ProfileOrganizerRenderer {
                     tier = 2;
                     reliable++;
                 } else {tier = 3;}
-
                 if (_organizer.isWellIntegrated(peer)) {
                     isIntegrated = true;
                     integrated++;
                 }
-
                 buf.append("<tr class=lazy><td nowrap>");
                 buf.append(_context.commSystem().renderPeerHTML(peer, false));
                 RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
@@ -166,7 +161,15 @@ class ProfileOrganizerRenderer {
                 buf.append("</td><td>");
                 long uptime = _context.router().getUptime();
                 String ip = (info != null) ? Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
-                String rl = (ip != null && enableReverseLookups() && uptime > 30*1000) ? _context.commSystem().getCanonicalHostName(ip) : null;
+                String rl = null;
+                if (ip != null && enableReverseLookups() && uptime > 30*1000) {
+                    if (reverseLookupCache.containsKey(ip)) {
+                        rl = reverseLookupCache.get(ip);
+                    } else {
+                        rl = _context.commSystem().getCanonicalHostName(ip);
+                        reverseLookupCache.put(ip, rl);
+                    }
+                }
                 if (rl != null && rl.equals("unknown")) {rl = ip;}
                 if (enableReverseLookups()) {
                     if (rl != null && rl != "null" && rl.length() != 0 && !ip.toString().equals(rl)) {
@@ -228,10 +231,10 @@ class ProfileOrganizerRenderer {
                     if (speed > 1025) {
                         speed = speed / 1024;
                         buf.append("kilobytes\">");
-                        buf.append(speed).append("&#8239;K/s");
+                        buf.append(speed).append(" K/s");
                     } else {
                         buf.append("bytes\">");
-                        buf.append(speed).append("&#8239;B/s");
+                        buf.append(speed).append(" B/s");
                     }
                     if (bonus != 0 && bonus != 9999999) {
                         if (bonus > 0) {buf.append(" (+");}
@@ -249,26 +252,6 @@ class ProfileOrganizerRenderer {
                 if (bonus >= 9999999) {buf.append("<span class=lowlatency>✔</span>");}
                 else if (capBonus == -30) {buf.append("<span class=highlatency>✖</span>");}
                 else {buf.append("<span>&ensp;</span>");}
-/*
-                buf.append("</td><td>");
-                if (prof.getPeerTestTimeAverage() > 0)
-                    buf.append(Math.round(prof.getPeerTestTimeAverage()));
-                else {
-                    buf.append("&ensp;");
-                }
-                buf.append("</td><td><span>");
-                if (capBonus != 0 && capBonus != -30) {
-                    buf.append(num(Math.round(prof.getCapacityValue())).replace(".00", ""));
-                    if (capBonus > 0)
-                        buf.append(" (+");
-                    else
-                        buf.append(" (");
-                    buf.append(capBonus).append(')');
-                } else {
-                    buf.append("&ensp;");
-                }
-                buf.append("</span>");
-*/
                 buf.append("</td><td>");
                 int agreed = Math.round(prof.getTunnelHistory().getLifetimeAgreedTo());
                 int rejected = Math.round(prof.getTunnelHistory().getLifetimeRejected());
@@ -278,14 +261,6 @@ class ProfileOrganizerRenderer {
                 if (rejected > 0) {buf.append(rejected);}
                 else {buf.append("<span hidden>0</span>");}
                 buf.append("</td><td>");
-/**
-                String integration = num(prof.getIntegrationValue()).replace(".00", "");
-                if (prof.getIntegrationValue() > 0) {
-                    buf.append("<span>").append(integration).append("</span>");
-                } else {
-                    buf.append("<span>&ensp;</span>");
-                }
-**/
                 now = _context.clock().now();
                 if (prof.getFirstHeardAbout() > 0) {
                     buf.append("<span hidden>[").append(prof.getFirstHeardAbout()).append("]</span>")
@@ -303,12 +278,9 @@ class ProfileOrganizerRenderer {
                    .append("]\">").append(_t("Edit")).append("</a></td></tr>\n");
             }
             buf.append("</tbody>\n</table>\n");
-
             buf.append("<div id=peer_thresholds>\n<h3 class=tabletitle>").append(_t("Thresholds")).append("</h3>\n")
                .append("<table id=thresholds>\n<thead><tr><th><b>").append(_t("Speed")).append(": </b>");
             double speed = Math.max(1, _organizer.getSpeedThreshold());
-            //String speedApprox = spd.substring(0, spd.indexOf("."));
-            //int speed = Integer.parseInt(speedApprox);
             if (speed < -10240) {speed += 10240;}
             else if (speed < 0) {speed = 0;}
             if (speed > 1025) {
@@ -316,7 +288,6 @@ class ProfileOrganizerRenderer {
                 buf.append((int)speed).append(' ' ).append("KB");
             } else {buf.append((int)speed).append(' ' ).append("B");}
             buf.append("ps</th><th><b>").append(_t("Capacity")).append(": </b>");
-
             double capThresh = Math.max(1, Math.round(_organizer.getCapacityThreshold()));
             double integThresh = Math.max(1, _organizer.getIntegrationThreshold());
             buf.append((int)Math.round(capThresh)).append(' ').append(_t("tunnels per hour")).append("</th><th><b>")
@@ -330,9 +301,7 @@ class ProfileOrganizerRenderer {
                .append("</td><td>")
                .append(ngettext("{0} integrated peer", "{0} integrated peers", integrated))
                .append("</td></tr>\n</tbody>\n</table>\n</div>\n</div>\n"); // thresholds
-
         } else if (mode == 2) {
-
             buf.append("<div class=widescroll id=ff>\n<table id=floodfills data-sortable>\n")
                .append("<colgroup></colgroup><colgroup></colgroup><colgroup></colgroup><colgroup></colgroup>")
                .append("<colgroup class=good></colgroup><colgroup class=good></colgroup><colgroup class=good></colgroup>")
@@ -366,7 +335,6 @@ class ProfileOrganizerRenderer {
                 boolean isGood = prof.getLastSendSuccessful() > 0 && isResponding &&
                                  (dbh != null && dbh.getLastStoreSuccessful() > 0 ||
                                  dbh.getLastLookupSuccessful() > 0);
-
                 //if (dbh != null && isFF && !isUnreachable && !isBanned && isGood) {
                 if (dbh != null && isFF && !isUnreachable && !isBanned && prof.getLastHeardFrom() > 0) {
                     displayed++;
