@@ -1027,7 +1027,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  @return IP or null
      *  @since 0.9.18
      */
-
     public static byte[] getValidIP(RouterInfo ri) {
         if (ri == null) {return null;}
         for (RouterAddress ra : ri.getAddresses()) { // NPE?!!
@@ -1047,52 +1046,67 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /**
-     * Get the country code map
-     *
-     * @return Map of two-letter lower case code to untranslated country name, unmodifiable
+     * Provides country code mappings.
+     * @return Unmodifiable map of lower-case country codes to untranslated names.
+     * Returns empty map if geoIP data is unavailable.
      * @since 0.9.53
      */
     public Map<String, String> getCountries() {
-        if (_geoIP == null) {return Collections.emptyMap();}
+        if (_geoIP == null) return Collections.emptyMap();
         return _geoIP.getCountries();
     }
 
-    /** Provide a consistent "look" for displaying router IDs in the console */
-    /* I2P+ replacement */
+    /**
+     * Renders HTML for a peer with optional extended info.
+     * Uses cached RouterInfo, country info, and reverse lookup cache.
+     *
+     * @param peer Peer Hash
+     * @param extended Whether to show extended capabilities
+     * @return HTML snippet representing peer
+     */
     @Override
     public String renderPeerHTML(Hash peer, boolean extended) {
-        StringBuilder buf = new StringBuilder(128);
-        RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+        StringBuilder buf = new StringBuilder(256);
+        RouterInfo ri = getRouterInfoCached(peer);
         String c = getCountry(peer);
         String h = peer.toBase64();
+
         if (ri != null) {
             String caps = ri.getCapabilities();
             String v = ri.getVersion();
             String ip = net.i2p.util.Addresses.toString(getValidIP(ri));
+
             buf.append("<table class=rid><tr><td class=rif>");
             if (c != null) {
                 String countryName = getCountryName(c);
-                if (countryName.length() > 2) {countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);}
+                if (countryName.length() > 2) {
+                    countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
+                }
+
                 buf.append("<a href=\"/netdb?c=").append(c).append("\"><img width=20 height=15 alt=\"")
                    .append(c.toUpperCase(Locale.US)).append("\" title=\"").append(countryName);
-                if (ip != null && !ip.equals("null")) {
-                    if (enableReverseLookups() && !getCanonicalHostName(ip).equals("unknown")) {
-                        buf.append(" &bullet; ").append(getCanonicalHostName(ip));
+
+                if (ip != null && !"null".equals(ip)) {
+                    if (enableReverseLookups()) {
+                        String canonicalHost = reverseLookupCache.computeIfAbsent(ip, k -> _context.commSystem().getCanonicalHostName(k));
+                        if (!"unknown".equals(canonicalHost)) {buf.append(" &bullet; ").append(canonicalHost);}
+                        else {buf.append(" &bullet; ").append(ip);}
                     } else {buf.append(" &bullet; ").append(ip);}
                 }
                 buf.append("\" src=\"/flags.jsp?c=").append(c).append("\"></a>");
             } else {
-                buf.append("<img width=20 height=15 alt=\"??\"").append(" src=\"/flags.jsp?c=a0\" title=\"").append(_t("unknown"));
+                buf.append("<img width=20 height=15 alt=\"??\" src=\"/flags.jsp?c=xx\" title=\"").append(_t("unknown"));
                 if (ip != null) {buf.append(" &bullet; ").append(ip);}
                 buf.append("\">");
             }
             buf.append("</td><td class=rih>");
             buf.append("<a title=\"");
             if (caps.contains("f") && !extended) {buf.append(_t("Floodfill"));}
-            if (v != null) {if (!extended) {buf.append(" &bullet; ");}}
-            buf.append(v).append("\" href=\"netdb?r=").append(h.substring(0,10)).append("\">");
-            buf.append(h.substring(0,4));
-            buf.append("</a>");
+            if (v != null) {
+                if (!extended) {buf.append(" &bullet; ");}
+                buf.append(v);
+            }
+            buf.append("\" href=\"netdb?r=").append(h.substring(0,10)).append("\">").append(h.substring(0,4)).append("</a>");
             if (extended) {buf.append("</td>").append(renderPeerCaps(peer, true));}
         } else {
             buf.append("<table class=rid><tr><td class=rif>").append(renderPeerFlag(peer))
@@ -1103,53 +1117,65 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         return buf.toString();
     }
 
-    /** Render peer's caps
-     * @since 0.9.58+
+    /**
+     * Renders the peer's capability HTML block.
+     * Caches data and removes unnecessary repeated computation.
+     *
+     * @param peer Peer Hash
+     * @param inline If true, render inline without table wrapper
+     * @return HTML snippet of peer capabilities
      */
     @Override
     public String renderPeerCaps(Hash peer, boolean inline) {
-        StringBuilder buf = new StringBuilder(128);
-        RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
-        String c = getCountry(peer);
-        String h = peer.toBase64();
+        StringBuilder buf = new StringBuilder(inline ? 128 : 256);
         if (!inline) {buf.append("<table class=\"rid ric\"><tr>");}
+
+        RouterInfo ri = getRouterInfoCached(peer);
         if (ri != null) {
             String caps = ri.getCapabilities();
-            String v = ri.getVersion();
-            String ip = net.i2p.util.Addresses.toString(getValidIP(ri));
-            String capacity = String.valueOf(getCapacity(peer));
-            boolean hasD = caps.contains("D");
-            boolean hasE = caps.contains("E");
-            boolean hasG = caps.contains("G");
-            boolean isFF = caps.contains("f");
-            boolean isU = caps.contains("U");
-            boolean isR =  caps.contains("R");
-            buf.append("<td class=\"rbw ").append(getCapacity(peer));
-            if (isFF) {buf.append(" isff");}
-            if (isU) {buf.append(" isU");}
-            if (hasD) {buf.append(" isD");}
-            else if (hasE) {buf.append(" isE");}
-            else if (hasG) {buf.append(" isG");}
-            buf.append("\"><a href=\"/netdb?caps=");
-            buf.append(getCapacity(peer));
-            if (isFF) {buf.append("f");}
-            if (isU) {buf.append("U");}
-            else if (isR) {buf.append("R");}
-            if (hasD) {buf.append("D");}
-            else if (hasE) {buf.append("E");}
-            else if (hasG) {buf.append("G");}
-            buf.append("\" title=\"").append(_t("Show all routers with this capability in the NetDb"))
-               .append("\">").append(capacity.replace("D", "").replace("E", "").replace("G", ""))
-               .append("</a>");
-        } else {buf.append("<td class=rbw>?");}
-        buf.append("</td>");
+            String capacity = getCapacityCached(peer);
+
+            boolean hasD = caps.indexOf('D') >= 0;
+            boolean hasE = caps.indexOf('E') >= 0;
+            boolean hasG = caps.indexOf('G') >= 0;
+            boolean isFF = caps.indexOf('f') >= 0;
+            boolean isU = caps.indexOf('U') >= 0;
+            boolean isR = caps.indexOf('R') >= 0;
+
+            buf.append("<td class=\"rbw ").append(capacity);
+            if (isFF) buf.append(" isff");
+            if (isU) buf.append(" isU");
+            if (hasD) buf.append(" isD");
+            else if (hasE) buf.append(" isE");
+            else if (hasG) buf.append(" isG");
+            buf.append("\"><a href=\"/netdb?caps=").append(capacity);
+
+            if (isFF) buf.append("f");
+            if (isU) buf.append("U");
+            else if (isR) buf.append("R");
+            if (hasD) buf.append("D");
+            else if (hasE) buf.append("E");
+            else if (hasG) buf.append("G");
+            buf.append("\" title=\"").append(_t("Show all routers with this capability in the NetDb")).append("\">");
+
+            // Remove first occurrence of D, E, or G character from capacity string
+            String visibleCapacity = capacity.replaceFirst("[DEG]", "");
+            buf.append(visibleCapacity);
+
+            buf.append("</a></td>");
+        } else {buf.append("<td class=rbw>?</td>");}
         if (!inline) {buf.append("</tr></table>\n");}
         return buf.toString();
     }
 
-    /** @return cap char or '?' */
+    /**
+     * Returns the capacity character for the peer, or '?' if unknown.
+     *
+     * @param peer Peer Hash
+     * @return Capacity character or '?'
+     */
     private char getCapacity(Hash peer) {
-        RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+        RouterInfo info = getRouterInfoCached(peer);
         if (info != null) {
             String caps = info.getCapabilities();
             for (int i = 0; i < RouterInfo.BW_CAPABILITY_CHARS.length(); i++) {
@@ -1160,53 +1186,85 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         return '?';
     }
 
-    /** Render a peer's country flag
-     * @since 0.9.58+
+    /** Cache for reverse DNS lookups */
+    private final Map<String, String> reverseLookupCache = new HashMap<>();
+
+    /**
+     * Renders a peer's country flag with optional reverse DNS.
+     *
+     * @param peer Peer Hash
+     * @return HTML snippet of peer flag with country and hostname
      */
     @Override
     public String renderPeerFlag(Hash peer) {
         StringBuilder buf = new StringBuilder(128);
-        //RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
-        RouterInfo ri = _context.netDb().lookupRouterInfoLocally(peer);
-        String c = getCountry(peer);
-        String countryName = getCountryName(c);
-        String h = peer.toBase64();
-        if (c != null) {
-            if (countryName.length() > 2) {
-                countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
-            }
-        } else {c = "xx";}
-        // add a hidden span to facilitate sorting
-        buf.append("<span class=cc hidden>").append(c.toUpperCase(Locale.US)).append("</span>");
+        RouterInfo ri = getRouterInfoCached(peer);
+
+        String unknownFlag = "<img class=unknownflag width=24 height=18 alt=\"??\" src=\"/flags.jsp?c=xx\">";
+        String countryCode = getCountry(peer);
+        if (countryCode == null) {countryCode = "xx";}
+
+        String countryName = getCountryName(countryCode);
+        if (countryName.length() > 2)
+            countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
+
+        buf.append("<span class=cc hidden>").append(countryCode.toUpperCase(Locale.US)).append("</span>");
         buf.append("<span class=peerFlag title=\"");
+
         if (ri != null) {
             String ip = net.i2p.util.Addresses.toString(getValidIP(ri));
-            if (ip == null || ip.equals("null") || ip.equals("")) {
+            if (ip == null || ip.isEmpty() || "null".equals(ip)) {
                 byte[] transportIP = getIP(ri);
-                if (transportIP != null) {ip = net.i2p.util.Addresses.toString(transportIP);}
+                if (transportIP != null)
+                    ip = net.i2p.util.Addresses.toString(transportIP);
             }
-            if (!c.equals("xx") && c != null && countryName.length() > 2) {
+            if (!"xx".equals(countryCode) && countryName.length() > 2) {
                 buf.append(countryName);
-                if (ip != null && !ip.equals("null") && !ip.equals("") && ip.length() > 6) {
+                if (ip != null && ip.length() > 6) {
                     buf.append(" &bullet; ");
-                    if (enableReverseLookups() && !getCanonicalHostName(ip).equals("unknown")) {
-                        buf.append(getCanonicalHostName(ip)).append(" (").append(ip).append(")");
+                    if (enableReverseLookups()) {
+                        String canonicalHost = reverseLookupCache.computeIfAbsent(ip,
+                                k -> _context.commSystem().getCanonicalHostName(k));
+                        if (canonicalHost != null && !"unknown".equals(canonicalHost)) {
+                            buf.append(canonicalHost).append(" (").append(ip).append(")");
+                        } else {buf.append(ip);}
                     } else {buf.append(ip);}
                 }
             } else {buf.append(_t("unknown"));}
             buf.append("\">");
-            if (!c.equals("xx") && c != null) {
-                buf.append("<a href=\"/netdb?c=").append(c).append("\"><img width=24 height=18 alt=\"")
-                   .append(c.toUpperCase(Locale.US)).append("\" src=\"/flags.jsp?c=").append(c).append("\"></a>");
+            if (!"xx".equals(countryCode)) {
+                buf.append("<a href=\"/netdb?c=").append(countryCode).append("\"><img width=24 height=18 alt=\"")
+                   .append(countryCode.toUpperCase(Locale.US)).append("\" src=\"/flags.jsp?c=")
+                   .append(countryCode).append("\"></a>");
             } else {
-                buf.append("<img class=unknownflag width=24 height=18 alt=\"??\"").append(" src=\"/flags.jsp?c=xx\">");
+                buf.append(unknownFlag);
             }
         } else {
-            buf.append(_t("unknown")).append("\"><img class=unknownflag width=24 height=18 alt=\"??\"")
-               .append(" src=\"/flags.jsp?c=xx\">");
+            buf.append(_t("unknown")).append("\">").append(unknownFlag);
         }
         buf.append("</span>");
         return buf.toString();
+    }
+
+    // Cache RouterInfo and Capacity to improve repeated lookup efficiency
+    private final Map<Hash, RouterInfo> routerInfoCache = new HashMap<>();
+    private final Map<Hash, String> capacityCache = new HashMap<>();
+
+    private RouterInfo getRouterInfoCached(Hash peer) {
+        return routerInfoCache.computeIfAbsent(peer, p -> (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(p));
+    }
+
+    private String getCapacityCached(Hash peer) {
+        return capacityCache.computeIfAbsent(peer, p -> {
+            RouterInfo ri = getRouterInfoCached(p);
+            if (ri == null) return "?";
+            String caps = ri.getCapabilities();
+            for (int i = 0; i < RouterInfo.BW_CAPABILITY_CHARS.length(); i++) {
+                char c = RouterInfo.BW_CAPABILITY_CHARS.charAt(i);
+                if (caps.indexOf(c) >= 0) return String.valueOf(c);
+            }
+            return "?";
+        });
     }
 
     /**
