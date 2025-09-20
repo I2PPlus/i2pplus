@@ -1187,7 +1187,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /** Cache for reverse DNS lookups */
-    private final Map<String, String> reverseLookupCache = new HashMap<>();
+    private final Map<String, String> reverseLookupCache = new ConcurrentHashMap<>();
 
     /**
      * Renders a peer's country flag with optional reverse DNS.
