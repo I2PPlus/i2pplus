@@ -1081,7 +1081,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnelPeerCount tbody tr:hover td:not(.rih):not(.rbw){background:#040}
 #tunnelPeerCount tbody tr:last-child td:not(.rih):not(.rbw){border-bottom:var(--border)}
 #tunnelPeerCount tbody tr td:not(.rih):not(.rbw),#transitSummary tbody tr td:not(.rih):not(.rbw){padding:4px;border:var(--border_softer)}
-#tunnelPeerCount tfoot td{padding:3px 5px 6px;font-size:85%;border-top:var(--border);background:#000}
+#tunnelPeerCount tfoot td{padding:5px;font-size:90%;border-top:var(--border);background:#000}
 #tunnelPeerCount th:first-child,#tunnels #tunnelPeerCount td:first-child{border-left:var(--border)}
 #tunnelPeerCount th:first-child,#transitSummary th:first-child{font-size:0}
 #tunnelPeerCount th:first-child::before,#transitSummary th:first-child::before{width:12px;height:10px;display:inline-block;vertical-align:middle;background:url(/themes/console/images/planet.svg) no-repeat left center/10px;content:""}
