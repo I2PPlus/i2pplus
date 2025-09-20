@@ -561,8 +561,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                                                   File.separator + "rdnscache.txt";
     private static final int RDNS_WRITE_INTERVAL = 15 * 60 * 1000 + 30;
     private static final boolean has512MB = SystemVersion.getMaxMemory() >= 512 * 1024 * 1024;
-    private static final long EXPIRE_TIME = (!has512MB ? 1L : 2L) * 24 * 60 * 60 * 1000; // 24/48 hours expiration
-    private static final long EVICT_THRESHOLD = 3L * 24 * 60 * 60 * 1000; // 3 days expiration for file eviction
+    private static final long EXPIRE_TIME = (!has512MB ? 2L : 3L) * 24 * 60 * 60 * 1000; // 2/3 day expiration
+    private static final long EVICT_THRESHOLD = 7L * 24 * 60 * 60 * 1000; // 7 days expiration for file eviction
     private static final int MAX_RDNS_CACHE_SIZE = !has512MB ? 20000 : 80000;
     private static final Object rdnslock = new Object();
 
