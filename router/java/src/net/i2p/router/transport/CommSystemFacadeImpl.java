@@ -1199,18 +1199,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     public String renderPeerFlag(Hash peer) {
         StringBuilder buf = new StringBuilder(128);
         RouterInfo ri = getRouterInfoCached(peer);
-
         String unknownFlag = "<img class=unknownflag width=24 height=18 alt=\"??\" src=\"/flags.jsp?c=xx\">";
         String countryCode = getCountry(peer);
         if (countryCode == null) {countryCode = "xx";}
-
         String countryName = getCountryName(countryCode);
         if (countryName.length() > 2)
             countryName = Translate.getString(countryName, _context, COUNTRY_BUNDLE_NAME);
-
         buf.append("<span class=cc hidden>").append(countryCode.toUpperCase(Locale.US)).append("</span>");
         buf.append("<span class=peerFlag title=\"");
-
         if (ri != null) {
             String ip = net.i2p.util.Addresses.toString(getValidIP(ri));
             if (ip == null || ip.isEmpty() || "null".equals(ip)) {
@@ -1223,8 +1219,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 if (ip != null && ip.length() > 6) {
                     buf.append(" &bullet; ");
                     if (enableReverseLookups()) {
-                        String canonicalHost = reverseLookupCache.computeIfAbsent(ip,
-                                k -> _context.commSystem().getCanonicalHostName(k));
+                        String canonicalHost = reverseLookupCache.computeIfAbsent(ip, k -> {
+                            try {return _context.commSystem().getCanonicalHostName(k);}
+                            catch (Exception e) {return _t("unknown");}
+                        });
                         if (canonicalHost != null && !"unknown".equals(canonicalHost)) {
                             buf.append(canonicalHost).append(" (").append(ip).append(")");
                         } else {buf.append(ip);}
@@ -1236,12 +1234,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 buf.append("<a href=\"/netdb?c=").append(countryCode).append("\"><img width=24 height=18 alt=\"")
                    .append(countryCode.toUpperCase(Locale.US)).append("\" src=\"/flags.jsp?c=")
                    .append(countryCode).append("\"></a>");
-            } else {
-                buf.append(unknownFlag);
-            }
-        } else {
-            buf.append(_t("unknown")).append("\">").append(unknownFlag);
-        }
+            } else {buf.append(unknownFlag);}
+        } else {buf.append(_t("unknown")).append("\">").append(unknownFlag);}
         buf.append("</span>");
         return buf.toString();
     }
