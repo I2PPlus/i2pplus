@@ -1556,6 +1556,7 @@ class NetDbRenderer {
 
             String address = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info));
             boolean isUnreachable = capsTemp.contains("U") || capsTemp.contains("H");
+            boolean whoisLookups = _context.getBooleanProperty("routerconsole.enableWhoisLookups");
 
             if (enableReverseLookups() && uptime > 30 * 1000 && !isUnreachable && address != null) {
                 String rdns;
@@ -1566,8 +1567,9 @@ class NetDbRenderer {
                     reverseLookupCache.put(address, rdns);
                 }
                 if (rdns != null && !rdns.equals(address) && !rdns.equals("unknown")) {
-                    buf.append("<span class=netdb_info><b>").append(_t("Hostname")).append(":</b> <span class=rdns>")
-                       .append(rdns).append("</span></span>&nbsp;&nbsp;");
+                    buf.append("<span class=netdb_info><b>").append(_t("Hostname"));
+                    if (whoisLookups) {buf.append(" / ").append(_t("Whois"));}
+                    buf.append(":</b> <span class=rdns>").append(rdns).append("</span></span>&nbsp;&nbsp;");
                 }
             } else if (uptime > 30 * 1000 && (isUnreachable || address == null)) {
                 byte[] ip = TransportImpl.getIP(info.getHash());
@@ -1583,8 +1585,9 @@ class NetDbRenderer {
                             reverseLookupCache.put(directAddress, rdns);
                         }
                         if (rdns != null && !rdns.equals(directAddress) && !rdns.equals("unknown")) {
-                            buf.append("<span class=netdb_info><b>").append(_t("Hostname")).append(" (")
-                               .append(_t("direct")).append(")").append(":</b> <span class=rdns>")
+                            buf.append("<span class=netdb_info><b>").append(_t("Hostname"));
+                            if (whoisLookups) {buf.append(" / ").append(_t("Whois"));}
+                            buf.append(" (").append(_t("direct")).append(")").append(":</b> <span class=rdns>")
                                .append(rdns).append(" (").append(directAddress).append(")</span></span>&nbsp;&nbsp;");
                         } else {
                             buf.append("<span class=netdb_info><b>").append(_t("IP Address")).append(" (")
