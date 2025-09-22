@@ -1079,9 +1079,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 List<String> contentTypeList = headers.get("Content-Type");
                 // Set a generic default MIME type
                 String mimeType = "application/octet-stream";
-                int index = url.indexOf("?");
-                if (index != -1) {url = url.substring(0, index);}
-                url = url.toLowerCase();
+                int index = url != null ? url.indexOf("?") : -1;
+                if (url != null && index != -1) {url = url.substring(0, index);}
+                if (url != null) {url = url.toLowerCase();}
                 // Set default MIME type based on the resource being requested if no mimetype header found
                 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
                 if (contentTypeList != null && !contentTypeList.isEmpty()) {mimeType = headers.get("Content-Type").get(0);}
