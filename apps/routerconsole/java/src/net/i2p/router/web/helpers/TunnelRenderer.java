@@ -376,7 +376,7 @@ class TunnelRenderer {
                 String rl = (ip != null && enableReverseLookups() && uptime > 30*1000)
                               ? reverseLookupCache.computeIfAbsent(ip, k -> _context.commSystem().getCanonicalHostName(k)) : null;
 
-                if (rl != null) {
+                if (rl != null && rl.contains(" ")) {
                     rl = rl.replace("Administered by ", "")
                            .replace("Asia Pacific Network Information Centre (APNIC)", "APNIC")
                            .replace("Latin American and Caribbean IP address Regional Registry (LACNIC)", "LACNIC")
@@ -390,7 +390,15 @@ class TunnelRenderer {
                            .replace("StormyCloud Inc (STORM-17)", "STORMYCLOUD")
                            .replace("T-Mobile USA, Inc. (TMOBI)", "T-MOBILE USA")
                            .replace("Data Bridge Limited (DBL-136)", "DATA BRIDGE LTD")
-                           .replace("ROOT", _t("PRIVATE IP ADDRESS"));
+                           .replace("Mediacom Communications Corp (MCC-244)", "MEDIACOM")
+                           .replace("AT&T Enterprises, LLC (AEL-360)", "AT&T")
+                           .replace("YELCOT TELEPHONE COMPANY (YELCOT)", "YELCOT")
+                           .replace("State University of New York at Stony Brook (SUNYASB-Z)", "SUNYASB")
+                           .replace("Cloudflare, Inc. (CLOUD14)", "CLOUDFLARE")
+                           .replace("DigitalOcean, LLC (DO-13)", "DIGITALOCEAN")
+                           .replace("ROOT", _t("PRIVATE IP ADDRESS"))
+                           .replaceAll("\\(.*?\\)", "")
+                           .trim();
                 }
 
                 String whois = rl;
@@ -553,7 +561,7 @@ class TunnelRenderer {
                     rl = reverseLookupCache.computeIfAbsent(ip, k -> _context.commSystem().getCanonicalHostName(k));
                 }
 
-                if (rl != null) {
+                if (rl != null && rl.contains(" ")) {
                     rl = rl.replace("Administered by ", "")
                            .replace("Asia Pacific Network Information Centre (APNIC)", "APNIC")
                            .replace("Latin American and Caribbean IP address Regional Registry (LACNIC)", "LACNIC")
@@ -567,7 +575,15 @@ class TunnelRenderer {
                            .replace("StormyCloud Inc (STORM-17)", "STORMYCLOUD")
                            .replace("T-Mobile USA, Inc. (TMOBI)", "T-MOBILE USA")
                            .replace("Data Bridge Limited (DBL-136)", "DATA BRIDGE LTD")
-                           .replace("ROOT", _t("PRIVATE IP ADDRESS"));
+                           .replace("Mediacom Communications Corp (MCC-244)", "MEDIACOM")
+                           .replace("AT&T Enterprises, LLC (AEL-360)", "AT&T")
+                           .replace("YELCOT TELEPHONE COMPANY (YELCOT)", "YELCOT")
+                           .replace("State University of New York at Stony Brook (SUNYASB-Z)", "SUNYASB")
+                           .replace("Cloudflare, Inc. (CLOUD14)", "CLOUDFLARE")
+                           .replace("DigitalOcean, LLC (DO-13)", "DIGITALOCEAN")
+                           .replace("ROOT", _t("PRIVATE IP ADDRESS"))
+                           .replaceAll("\\(.*?\\)", "")
+                           .trim();
                 }
 
                 String whois = rl;
