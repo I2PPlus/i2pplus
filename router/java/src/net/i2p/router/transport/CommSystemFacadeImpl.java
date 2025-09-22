@@ -32,7 +32,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -870,27 +876,42 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     @Override
     public String getCanonicalHostName(String ipAddress) {
-        if (ipAddress == null || ipAddress.equals("null")) {return _t("unknown");}
+        if (ipAddress == null || ipAddress.equals("null")) {
+            return _t("unknown");
+        }
         long now = System.currentTimeMillis();
         CacheEntry cacheEntry = rdnsCache.compute(ipAddress, (key, existingEntry) -> {
-            if (existingEntry != null && (now - existingEntry.getTimestamp() <= EXPIRE_TIME)) {return existingEntry;}
+            if (existingEntry != null && (now - existingEntry.getTimestamp() <= EXPIRE_TIME)) {
+                return existingEntry;
+            }
             String hostName;
             try {
                 hostName = InetAddress.getByName(key).getCanonicalHostName();
-                if (hostName.equals(key) || _t("unknown").equals(hostName) && enableWhoisLookups()) {
-                    // Obtain country code by converting IP string to Hash equivalent
+                if ((hostName.equals(key) || _t("unknown").equals(hostName)) && enableWhoisLookups()) {
                     String countryCode = getCountryFromIPAddress(key);
-                    // Fallback to WHOIS lookup using GeoIP country-based whois server with generic fallbacks
                     String whoisData = null;
-                    try {whoisData = queryWhoisServers(key, countryCode);}
-                    catch (IOException e) {hostName = _t("unknown");}
+                    try {
+                        whoisData = queryWhoisServers(key, countryCode);
+                    } catch (InterruptedException | ExecutionException e) {
+                        hostName = _t("unknown");
+                        if (e instanceof InterruptedException) {
+                            Thread.currentThread().interrupt(); // restore interrupt status
+                        }
+                    }
                     if (whoisData != null && !whoisData.isEmpty()) {
                         String whoisHost = parseWhois(whoisData);
-                        if (whoisHost == null || whoisHost.isEmpty()) {hostName = _t("unknown");}
-                        else {hostName = whoisHost;}
-                    } else if (hostName == null || hostName.equals(key)) {hostName = _t("unknown");}
+                        if (whoisHost == null || whoisHost.isEmpty()) {
+                            hostName = _t("unknown");
+                        } else {
+                            hostName = whoisHost;
+                        }
+                    } else if (hostName == null || hostName.equals(key)) {
+                        hostName = _t("unknown");
+                    }
                 }
-            } catch (UnknownHostException e) {hostName = _t("unknown");}
+            } catch (UnknownHostException e) {
+                hostName = _t("unknown");
+            }
             return new CacheEntry(key, hostName, now);
         });
         return cacheEntry.getHostname();
@@ -907,22 +928,30 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         } catch (UnknownHostException e) {return _t("unknown");}
     }
 
+    private static final ExecutorService WHOIS_QUERY_EXECUTOR = Executors.newFixedThreadPool(10);
+    private static final int SOCKET_TIMEOUT_MS = 5000; // 5 seconds timeout
+
     /**
-     * Query WHOIS server(s) based on country code fallback logic
+     * Query WHOIS server(s) based on country code fallback logic asynchronously
      * Returns WHOIS response or null if all fail
      */
-    private String queryWhoisServers(String ipAddress, String countryCode) throws IOException {
-        if (countryCode == null || countryCode.trim().isEmpty()) {
-            return tryWhoisServers(ipAddress, GENERIC_WHOIS_SERVERS);
-        }
+    private String queryWhoisServers(String ipAddress, String countryCode) throws InterruptedException, ExecutionException {
+        Callable<String> whoisTask = () -> {
+            if (countryCode == null || countryCode.trim().isEmpty()) {
+                return tryWhoisServers(ipAddress, GENERIC_WHOIS_SERVERS);
+            }
 
-        List<String> countryServers = WHOIS_SERVERS_BY_COUNTRY.getOrDefault(countryCode.toLowerCase(), Collections.emptyList());
+            List<String> countryServers = WHOIS_SERVERS_BY_COUNTRY.getOrDefault(countryCode.toLowerCase(), Collections.emptyList());
 
-        String whoisData = tryWhoisServers(ipAddress, countryServers);
-        if (whoisData == null || whoisData.trim().isEmpty()) {
-            whoisData = tryWhoisServers(ipAddress, GENERIC_WHOIS_SERVERS);
-        }
-        return whoisData;
+            String whoisData = tryWhoisServers(ipAddress, countryServers);
+            if (whoisData == null || whoisData.trim().isEmpty() || "unknown".equals(whoisData)) {
+                whoisData = tryWhoisServers(ipAddress, GENERIC_WHOIS_SERVERS);
+            }
+            return whoisData;
+        };
+
+        Future<String> future = WHOIS_QUERY_EXECUTOR.submit(whoisTask);
+        return future.get();
     }
 
     /**
@@ -1123,6 +1152,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         "104.36.80.11"
     );
 
+    /**
+     * Try multiple whois servers sequentially with timeout, return first successful result or "unknown"
+     */
     private String tryWhoisServers(String query, List<String> servers) {
         if (servers == null || servers.isEmpty()) {
             return _t("unknown");
@@ -1140,6 +1172,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 String result = useTor
                     ? queryWhoisServerOverTor(query, server, port)
                     : queryWhoisServer(query, server, port);
+
                 if (result == null) continue;
                 // Filter deny/refuse and empty results
                 if (result.contains("ORG-IANA1-AFRINIC") || result.startsWith("APNIC") ||
@@ -1149,15 +1182,21 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     result.contains("have been further assigned") || result.contains("NON-RIPE-NCC-MANAGED-ADDRESS-BLOCK")) {
                     continue;
                 }
-                if (!result.trim().isEmpty()) {return result;}
+                if (!result.trim().isEmpty()) {
+                    return result;
+                }
             } catch (IOException e) {} // ignore and try next server
         }
         return _t("unknown");
     }
 
+    /**
+     * WHOIS query with socket timeout support
+     */
     private String queryWhoisServer(String query, String whoisServer, int port) throws IOException {
         WhoisClient whois = new WhoisClient();
         try {
+            whois.setDefaultTimeout(SOCKET_TIMEOUT_MS);
             whois.connect(whoisServer, port);
             String result = whois.query(query);
             whois.disconnect();
@@ -1168,10 +1207,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
     }
 
+    /**
+     * WHOIS query over Tor with socket timeout support
+     */
     private String queryWhoisServerOverTor(String query, String whoisServer, int port) throws IOException {
         WhoisClient whois = new WhoisClient();
         try {
-            whois.setSocketFactory(createTorSocketFactory("127.0.0.1", 9050)); // Tor on localhost
+            whois.setSocketFactory(createTorSocketFactory("127.0.0.1", 9050));
+            whois.setDefaultTimeout(SOCKET_TIMEOUT_MS);
             whois.connect(whoisServer, port);
             String result = whois.query(query);
             whois.disconnect();
