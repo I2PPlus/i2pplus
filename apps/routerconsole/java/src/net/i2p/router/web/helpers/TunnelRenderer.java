@@ -376,32 +376,36 @@ class TunnelRenderer {
                 String rl = (ip != null && enableReverseLookups() && uptime > 30*1000)
                               ? reverseLookupCache.computeIfAbsent(ip, k -> _context.commSystem().getCanonicalHostName(k)) : null;
 
+                String whois = "";
                 if (rl != null && rl.contains(" ")) {
-                    rl = rl.replace("Administered by ", "")
-                           .replace("Asia Pacific Network Information Centre (APNIC)", "APNIC")
-                           .replace("Latin American and Caribbean IP address Regional Registry (LACNIC)", "LACNIC")
-                           .replace("RIPE Network Coordination Centre (RIPE)", "RIPE")
-                           .replace("RIPE NCC", "RIPE")
-                           .replace("Charter Communications Inc (CC-3517)", "CHARTER")
-                           .replace("Google Fiber Inc. (GF)", "GOOGLE FIBER")
-                           .replace("Oracle Corporation (ORACLE-4)", "ORACLE")
-                           .replace("FIBERNETICS CORPORATION (FC-1108)", "GIBERNETICS CORP")
-                           .replace("FranTech Solutions (SYNDI-5)", "FRANTECH")
-                           .replace("StormyCloud Inc (STORM-17)", "STORMYCLOUD")
-                           .replace("T-Mobile USA, Inc. (TMOBI)", "T-MOBILE USA")
-                           .replace("Data Bridge Limited (DBL-136)", "DATA BRIDGE LTD")
-                           .replace("Mediacom Communications Corp (MCC-244)", "MEDIACOM")
-                           .replace("AT&T Enterprises, LLC (AEL-360)", "AT&T")
-                           .replace("YELCOT TELEPHONE COMPANY (YELCOT)", "YELCOT")
-                           .replace("State University of New York at Stony Brook (SUNYASB-Z)", "SUNYASB")
-                           .replace("Cloudflare, Inc. (CLOUD14)", "CLOUDFLARE")
-                           .replace("DigitalOcean, LLC (DO-13)", "DIGITALOCEAN")
-                           .replace("ROOT", _t("PRIVATE IP ADDRESS"))
-                           .replaceAll("\\(.*?\\)", "")
-                           .trim();
+                    whois = rl.replace("Administered by ", "")
+                              .replace("Asia Pacific Network Information Centre (APNIC)", "APNIC")
+                              .replace("Latin American and Caribbean IP address Regional Registry (LACNIC)", "LACNIC")
+                              .replace("African Network Information Center (AFRINIC)", "AFRINIC")
+                              .replace("RIPE Network Coordination Centre (RIPE)", "RIPE")
+                              .replace("RIPE NCC", "RIPE")
+                              .replace("Charter Communications Inc (CC-3517)", "CHARTER")
+                              .replace("Google Fiber Inc. (GF)", "GOOGLE-FIBER")
+                              .replace("Oracle Corporation (ORACLE-4)", "ORACLE")
+                              .replace("FIBERNETICS CORPORATION (FC-1108)", "GIBERNETICS CORP")
+                              .replace("FranTech Solutions (SYNDI-5)", "FRANTECH")
+                              .replace("StormyCloud Inc (STORM-17)", "STORMYCLOUD")
+                              .replace("T-Mobile USA, Inc. (TMOBI)", "T-MOBILE USA")
+                              .replace("Data Bridge Limited (DBL-136)", "DATA BRIDGE LTD")
+                              .replace("Mediacom Communications Corp (MCC-244)", "MEDIACOM")
+                              .replace("AT&T Enterprises, LLC (AEL-360)", "AT&T")
+                              .replace("YELCOT TELEPHONE COMPANY (YELCOT)", "YELCOT")
+                              .replace("State University of New York at Stony Brook (SUNYASB-Z)", "SUNYASB")
+                              .replace("Cloudflare, Inc. (CLOUD14)", "CLOUDFLARE")
+                              .replace("DigitalOcean, LLC (DO-13)", "DIGITALOCEAN")
+                              .replace("Nortex Communications Company", "NORTEX")
+                              .replace("ROOT", _t("PRIVATE IP ADDRESS"))
+                              .replace("NON-RIPE-NCC-MANAGED-ADDRESS-BLOCK", "unknown")
+                              .replace("unknown", _t("unknown"))
+                              .replaceAll("\\(.*?\\)", "")
+                              .trim();
                 }
 
-                String whois = rl;
                 String version = (info != null) ? info.getOption("router.version") : null;
                 boolean isBanned = _context.banlist().isBanlisted(h);
 
@@ -542,124 +546,145 @@ class TunnelRenderer {
             out.flush();
 
             final int chunkSize = 50;
-            int count = 0;
-            StringBuilder chunkSb = new StringBuilder();
+            for (int start = 0; start < peerList.size(); start += chunkSize) {
+                int end = Math.min(start + chunkSize, peerList.size());
 
-            for (int i = 0; i < peerList.size(); i++) {
-                Hash h = peerList.get(i);
-                RouterInfo info = routerInfoCache.computeIfAbsent(h, hash -> _context.netDb().lookupRouterInfoLocally(hash));
-                if (info == null) continue;
-                int localTunnelCount = localCount.count(h);
-                int transitTunnelCount = transitCount.count(h);
-                byte[] direct = TransportImpl.getIP(h);
-                String directIP = (direct != null) ? Addresses.toString(direct) : "";
-                String ip = !directIP.isEmpty() ? directIP : Addresses.toString(CommSystemFacadeImpl.getValidIP(info));
-                String version = info.getOption("router.version");
-                String truncHash = h.toBase64().substring(0,4);
-                String rl = "";
-                if (ip != null && doReverseLookups && uptime > 30*1000) {
-                    rl = reverseLookupCache.computeIfAbsent(ip, k -> _context.commSystem().getCanonicalHostName(k));
-                }
+                List<String> ipsToLookup = new ArrayList<>();
+                Map<Hash, String> peerToIP = new HashMap<>();
 
-                if (rl != null && rl.contains(" ")) {
-                    rl = rl.replace("Administered by ", "")
-                           .replace("Asia Pacific Network Information Centre (APNIC)", "APNIC")
-                           .replace("Latin American and Caribbean IP address Regional Registry (LACNIC)", "LACNIC")
-                           .replace("RIPE Network Coordination Centre (RIPE)", "RIPE")
-                           .replace("RIPE NCC", "RIPE")
-                           .replace("Charter Communications Inc (CC-3517)", "CHARTER")
-                           .replace("Google Fiber Inc. (GF)", "GOOGLE FIBER")
-                           .replace("Oracle Corporation (ORACLE-4)", "ORACLE")
-                           .replace("FIBERNETICS CORPORATION (FC-1108)", "GIBERNETICS CORP")
-                           .replace("FranTech Solutions (SYNDI-5)", "FRANTECH")
-                           .replace("StormyCloud Inc (STORM-17)", "STORMYCLOUD")
-                           .replace("T-Mobile USA, Inc. (TMOBI)", "T-MOBILE USA")
-                           .replace("Data Bridge Limited (DBL-136)", "DATA BRIDGE LTD")
-                           .replace("Mediacom Communications Corp (MCC-244)", "MEDIACOM")
-                           .replace("AT&T Enterprises, LLC (AEL-360)", "AT&T")
-                           .replace("YELCOT TELEPHONE COMPANY (YELCOT)", "YELCOT")
-                           .replace("State University of New York at Stony Brook (SUNYASB-Z)", "SUNYASB")
-                           .replace("Cloudflare, Inc. (CLOUD14)", "CLOUDFLARE")
-                           .replace("DigitalOcean, LLC (DO-13)", "DIGITALOCEAN")
-                           .replace("ROOT", _t("PRIVATE IP ADDRESS"))
-                           .replaceAll("\\(.*?\\)", "")
-                           .trim();
-                }
-
-                String whois = rl;
-                chunkSb.append("<tr class=lazy><td>")
-                      .append(peerFlag(h))
-                      .append("</td><td><span class=routerHash><a href=\"netdb?r=")
-                      .append(h.toBase64())
-                      .append("\">")
-                      .append(truncHash)
-                      .append("</a></span></td><td>");
-                if (version != null) {
-                    chunkSb.append("<span class=version title=\"")
-                          .append(_t("Show all routers with this version in the NetDb"))
-                          .append("\"><a href=\"/netdb?v=")
-                          .append(DataHelper.stripHTML(version))
-                          .append("\">")
-                          .append(DataHelper.stripHTML(version))
-                          .append("</a></span>");
-                }
-                chunkSb.append("</td><td>")
-                      .append(_context.commSystem().renderPeerCaps(h, false))
-                      .append("</td><td><span class=ipaddress>");
-                if (ip != null && !ip.isEmpty()) {
-                    if (ip.contains(":")) {
-                        chunkSb.append("<span hidden>[IPv6]</span>");
+                for (int i = start; i < end; i++) {
+                    Hash h = peerList.get(i);
+                    RouterInfo info = routerInfoCache.computeIfAbsent(h, hash -> _context.netDb().lookupRouterInfoLocally(hash));
+                    if (info == null) continue;
+                    byte[] direct = TransportImpl.getIP(h);
+                    String directIP = (direct != null) ? Addresses.toString(direct) : "";
+                    String ip = !directIP.isEmpty() ? directIP : Addresses.toString(CommSystemFacadeImpl.getValidIP(info));
+                    peerToIP.put(h, ip);
+                    if (doReverseLookups && ip != null && !ip.isEmpty() && !reverseLookupCache.containsKey(ip)) {
+                        ipsToLookup.add(ip);
                     }
-                    chunkSb.append(ip);
-                } else {
-                    chunkSb.append("&ndash;");
                 }
-                chunkSb.append("</span>");
-                if (doReverseLookups) {
-                    boolean isWhoisData = rl != null && rl.contains(" ");
-                    if (rl != null && !rl.isEmpty() && !ip.equals(rl)) {
-                        chunkSb.append("</td><td><span class=rlookup title=\"")
-                               .append(rl)
-                               .append("\">")
-                               .append(isWhoisData ? whois : CommSystemFacadeImpl.getDomain(rl))
-                               .append("</span>");
+
+                for (String ip : ipsToLookup) {
+                    reverseLookupCache.put(ip, _context.commSystem().getCanonicalHostName(ip));
+                }
+
+                StringBuilder chunkSb = new StringBuilder();
+                for (int i = start; i < end; i++) {
+                    Hash h = peerList.get(i);
+                    RouterInfo info = routerInfoCache.get(h);
+                    if (info == null) continue;
+
+                    int localTunnelCount = localCount.count(h);
+                    int transitTunnelCount = transitCount.count(h);
+                    String ip = peerToIP.get(h);
+                    String version = info.getOption("router.version");
+                    String truncHash = h.toBase64().substring(0,4);
+
+                    String rl = "";
+                    if (ip != null && doReverseLookups && uptime > 30*1000) {
+                        rl = reverseLookupCache.get(ip);
+                    }
+
+                    String whois = "";
+                    if (rl != null && rl.contains(" ")) {
+                        whois = rl.replace("Administered by ", "")
+                                  .replace("Asia Pacific Network Information Centre (APNIC)", "APNIC")
+                                  .replace("Latin American and Caribbean IP address Regional Registry (LACNIC)", "LACNIC")
+                                  .replace("African Network Information Center (AFRINIC)", "AFRINIC")
+                                  .replace("RIPE Network Coordination Centre (RIPE)", "RIPE")
+                                  .replace("RIPE NCC", "RIPE")
+                                  .replace("Charter Communications Inc (CC-3517)", "CHARTER")
+                                  .replace("Google Fiber Inc. (GF)", "GOOGLE-FIBER")
+                                  .replace("Oracle Corporation (ORACLE-4)", "ORACLE")
+                                  .replace("FIBERNETICS CORPORATION (FC-1108)", "GIBERNETICS CORP")
+                                  .replace("FranTech Solutions (SYNDI-5)", "FRANTECH")
+                                  .replace("StormyCloud Inc (STORM-17)", "STORMYCLOUD")
+                                  .replace("T-Mobile USA, Inc. (TMOBI)", "T-MOBILE USA")
+                                  .replace("Data Bridge Limited (DBL-136)", "DATA BRIDGE LTD")
+                                  .replace("Mediacom Communications Corp (MCC-244)", "MEDIACOM")
+                                  .replace("AT&T Enterprises, LLC (AEL-360)", "AT&T")
+                                  .replace("YELCOT TELEPHONE COMPANY (YELCOT)", "YELCOT")
+                                  .replace("State University of New York at Stony Brook (SUNYASB-Z)", "SUNYASB")
+                                  .replace("Cloudflare, Inc. (CLOUD14)", "CLOUDFLARE")
+                                  .replace("DigitalOcean, LLC (DO-13)", "DIGITALOCEAN")
+                                  .replace("Nortex Communications Company", "NORTEX")
+                                  .replace("ROOT", _t("PRIVATE IP ADDRESS"))
+                                  .replace("NON-RIPE-NCC-MANAGED-ADDRESS-BLOCK", "unknown")
+                                  .replace("unknown", _t("unknown"))
+                                  .replaceAll("\\(.*?\\)", "")
+                                  .trim();
+                    }
+
+                    chunkSb.append("<tr class=lazy><td>")
+                          .append(peerFlag(h))
+                          .append("</td><td><span class=routerHash><a href=\"netdb?r=")
+                          .append(h.toBase64())
+                          .append("\">")
+                          .append(truncHash)
+                          .append("</a></span></td><td>");
+                    if (version != null) {
+                        chunkSb.append("<span class=version title=\"")
+                              .append(_t("Show all routers with this version in the NetDb"))
+                              .append("\"><a href=\"/netdb?v=")
+                              .append(DataHelper.stripHTML(version))
+                              .append("\">")
+                              .append(DataHelper.stripHTML(version))
+                              .append("</a></span>");
+                    }
+                    chunkSb.append("</td><td>")
+                          .append(_context.commSystem().renderPeerCaps(h, false))
+                          .append("</td><td><span class=ipaddress>");
+                    if (ip != null && !ip.isEmpty()) {
+                        if (ip.contains(":")) {
+                            chunkSb.append("<span hidden>[IPv6]</span>");
+                        }
+                        chunkSb.append(ip);
+                    } else {
+                        chunkSb.append("&ndash;");
+                    }
+                    chunkSb.append("</span>");
+                    if (doReverseLookups) {
+                        boolean isWhoisData = rl != null && rl.contains(" ");
+                        if (rl != null && !rl.isEmpty() && !ip.equals(rl)) {
+                            chunkSb.append("</td><td><span class=rlookup title=\"")
+                                   .append(rl)
+                                   .append("\">")
+                                   .append(isWhoisData ? whois : CommSystemFacadeImpl.getDomain(rl))
+                                   .append("</span>");
+                        } else {
+                            chunkSb.append("<td></td>");
+                        }
+                    }
+                    chunkSb.append(String.format("<td class=tcount data-sort-column-key=localCount>%d</td><td class=bar data-sort-column-key=localCount>", localTunnelCount));
+                    if (localTunnelCount > 0) {
+                        chunkSb.append(String.format("<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\"><span class=percentBarText>%d%%</span></span></span>",
+                                                     fmt.format(localTunnelCount * 100.0 / tunnelCount).replace(".00", ""),
+                                                     localTunnelCount * 100 / tunnelCount));
+                    } else {
+                        chunkSb.append("<span hidden>&ndash;</span>");
+                    }
+                    chunkSb.append("</td>");
+                    if (!peerList.isEmpty()) {
+                        if (transitTunnelCount > 0) {
+                            chunkSb.append(String.format("<td class=tcount data-sort-column-key=transitCount>%d</td><td class=bar data-sort-column-key=transitCount>", transitTunnelCount));
+                            chunkSb.append(String.format("<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\"><span class=percentBarText>%d%%</span></span></span>",
+                                                        fmt.format(transitTunnelCount * 100.0 / partCount).replace(".00", ""),
+                                                        transitTunnelCount * 100 / partCount));
+                            chunkSb.append("</td>");
+                        } else {
+                            chunkSb.append("<td></td><td></td>");
+                        }
                     } else {
                         chunkSb.append("<td></td>");
                     }
+                    chunkSb.append(String.format("<td><a class=configpeer href=\"/configpeer?peer=%s\" title=\"%s\">%s</a></td></tr>\n",
+                        info.getHash(),
+                        _t("Configure peer"),
+                        _t("Edit")));
                 }
-                chunkSb.append(String.format("<td class=tcount data-sort-column-key=localCount>%d</td><td class=bar data-sort-column-key=localCount>", localTunnelCount));
-                if (localTunnelCount > 0) {
-                    chunkSb.append(String.format("<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\"><span class=percentBarText>%d%%</span></span></span>",
-                                                 fmt.format(localTunnelCount * 100.0 / tunnelCount).replace(".00", ""),
-                                                 localTunnelCount * 100 / tunnelCount));
-                } else {
-                    chunkSb.append("<span hidden>&ndash;</span>");
-                }
-                chunkSb.append("</td>");
-                if (!peerList.isEmpty()) {
-                    if (transitTunnelCount > 0) {
-                        chunkSb.append(String.format("<td class=tcount data-sort-column-key=transitCount>%d</td><td class=bar data-sort-column-key=transitCount>", transitTunnelCount));
-                        chunkSb.append(String.format("<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\"><span class=percentBarText>%d%%</span></span></span>",
-                                                    fmt.format(transitTunnelCount * 100.0 / partCount).replace(".00", ""),
-                                                    transitTunnelCount * 100 / partCount));
-                        chunkSb.append("</td>");
-                    } else {
-                        chunkSb.append("<td></td><td></td>");
-                    }
-                } else {
-                    chunkSb.append("<td></td>");
-                }
-                chunkSb.append(String.format("<td><a class=configpeer href=\"/configpeer?peer=%s\" title=\"%s\">%s</a></td></tr>\n",
-                    info.getHash(),
-                    _t("Configure peer"),
-                    _t("Edit")));
-
-                count++;
-                if (count % chunkSize == 0 || i == peerList.size() - 1) {
-                    out.write(chunkSb.toString());
-                    out.flush();
-                    chunkSb.setLength(0);
-                }
+                out.write(chunkSb.toString());
+                out.flush();
             }
             StringBuilder footerSb = new StringBuilder();
             footerSb.append("</tbody>\n<tfoot class=lazy><tr class=tablefooter data-sort-method=none><td colspan=4><b>")
@@ -723,8 +748,6 @@ class TunnelRenderer {
 
     private static class TunnelComparator implements Comparator<HopConfig>, Serializable {
          public int compare(HopConfig l, HopConfig r) {
-//             return (r.getProcessedMessagesCount() - l.getProcessedMessagesCount());
-//             return (l.getProcessedMessagesCount() - r.getProcessedMessagesCount());
              long le = l.getExpiration();
              long re = r.getExpiration();
              if (le < 0) {le = 0;}
