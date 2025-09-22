@@ -441,7 +441,7 @@ class TunnelRenderer {
 
                 if (enableReverseLookups()) {
                     sb.append("<td>");
-                    boolean isWhoisData = rl.contains(" ");
+                    boolean isWhoisData = rl != null && rl.contains(" ");
                     if (rl != null && !rl.isEmpty() && !ip.equals(rl)) {
                         sb.append("<span class=rlookup title=\"").append(rl).append("\">")
                           .append(isWhoisData ? whois : CommSystemFacadeImpl.getDomain(rl)).append("</span>");
@@ -616,7 +616,7 @@ class TunnelRenderer {
                 }
                 chunkSb.append("</span>");
                 if (doReverseLookups) {
-                    boolean isWhoisData = rl.contains(" ");
+                    boolean isWhoisData = rl != null && rl.contains(" ");
                     if (rl != null && !rl.isEmpty() && !ip.equals(rl)) {
                         chunkSb.append("</td><td><span class=rlookup title=\"")
                                .append(rl)
