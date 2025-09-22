@@ -570,8 +570,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                                                   File.separator + "rdnscache.txt";
     private static final int RDNS_WRITE_INTERVAL = 15 * 60 * 1000 + 30;
     private static final boolean has512MB = SystemVersion.getMaxMemory() >= 512 * 1024 * 1024;
-    private static final long EXPIRE_TIME = (!has512MB ? 2L : 3L) * 24 * 60 * 60 * 1000; // 2/3 day expiration
-    private static final long EVICT_THRESHOLD = 7L * 24 * 60 * 60 * 1000; // 7 days expiration for file eviction
+    private static final long EXPIRE_TIME = (!has512MB ? 3L : 7L) * 24 * 60 * 60 * 1000; // 3/7 day expiration
+    private static final long EVICT_THRESHOLD = 14L * 24 * 60 * 60 * 1000; // 2 weeks expiration for file eviction
     private static final int MAX_RDNS_CACHE_SIZE = !has512MB ? 20000 : 80000;
     private static final Object rdnslock = new Object();
 
@@ -800,6 +800,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                                            name = "CenturyLink";
                                         } else if (lc.equals("root")) {
                                            name = "PRIVATE";
+                                        } else if (lc.equals("non-ripe-ncc-managed-address-block")) {
+                                           name = "unknown";
                                         }
 
                                         line = ip + "," + name + "," + timestamp;
