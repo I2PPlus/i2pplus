@@ -801,10 +801,11 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
     @Override
     public void renderStatusHTML(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
+        boolean isPQ = _type != EncType.ECIES_X25519;
 
         // inbound
-        buf.append("<h3 class=\"debug_inboundsessions\">Ratchet Inbound sessions</h3>\n" +
-                   "<table>\n");
+        buf.append("<h3 class=debug_inboundsessions>").append(isPQ ? "PQ ": "")
+           .append("Ratchet Inbound sessions</h3>\n<table>\n");
         Map<PublicKey, Set<RatchetTagSet>> inboundSets = getRatchetTagSetsByPublicKey();
         int total = 0;
         int totalSets = 0;
@@ -817,9 +818,11 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             sets.addAll(e.getValue());
             Collections.sort(sets, comp);
             totalSets += sets.size();
-            buf.append("<tr><td><b>From public key:</b> ").append(toString(skey)).append("</td>" +
-                       "<td><b>Sets:</b> ").append(sets.size()).append("</td></tr>\n" +
-                       "<tr class=\"expiry\">\n<td colspan=2>\n<ul>\n");
+            buf.append("<tr><td><b>From public key:</b> ")
+               .append(toString(skey))
+               .append("</td><td><b>Sets:</b> ")
+               .append(sets.size())
+               .append("</td></tr>\n<tr class=expiry>\n<td colspan=2>\n<ul>\n");
             for (RatchetTagSet ts : sets) {
                 synchronized(ts) {
                     int size = ts.size();
@@ -833,9 +836,6 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     else
                         buf.append(id);
                     buf.append('/').append(ts.getDebugID());
-                    // inbound sets are multi-column, keep it short
-                    //buf.append(" created:</b> ").append(DataHelper.formatTime(ts.getCreated()))
-                    //   .append(" <b>last use:</b> ").append(DataHelper.formatTime(ts.getDate()));
                     long expires = ts.getExpiration() - now;
                     buf.append(" expires in:</b> ").append(DataHelper.formatDuration2(expires)).append(" with ");
                     buf.append(size).append('+').append(ts.remaining() - size).append(" tags remaining</li>\n");
@@ -847,11 +847,11 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         }
         buf.append("<tr><th colspan=2>Total inbound tags: ").append(total).append(" (")
            .append(DataHelper.formatSize2(8 * total)).append("B); sets: ").append(totalSets)
-           .append("; sessions: ").append(inboundSets.size())
-           .append("</th></tr>\n" +
-                   "</table>" +
-                   "<h3 class=\"debug_outboundsessions\">Ratchet Outbound sessions</h3>\n" +
-                   "<table>\n");
+           .append("; sessions: ")
+           .append(inboundSets.size())
+           .append("</th></tr>\n</table><h3 class=debug_outboundsessions>")
+           .append(isPQ ? "PQ " : "")
+           .append("Ratchet Outbound sessions</h3>\n<table>\n");
 
         // outbound
         totalSets = 0;
@@ -861,16 +861,21 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
             sets.addAll(sess.getTagSets());
             Collections.sort(sets, comp);
             totalSets += sets.size();
-            buf.append("<tr class=\"debug_outboundtarget\">\n<td>\n<div class=\"debug_targetinfo\">\n<b>To public key:</b> ").append(toString(sess.getTarget())).append("<br>\n" +
-                       "<b>Established:</b> ").append(DataHelper.formatDuration2(now - sess.getEstablishedDate())).append(" ago<br>\n" +
-                       "<b>Last Used:</b> ").append(DataHelper.formatDuration2(now - sess.getLastUsedDate())).append(" ago<br>\n" +
-                       "<b>Last Rcvd:</b> ").append(DataHelper.formatDuration2(now - sess.getLastReceivedDate())).append(" ago<br>\n");
+            buf.append("<tr class=debug_outboundtarget>\n<td>\n<div class=debug_targetinfo>\n<b>To public key:</b> ")
+               .append(toString(sess.getTarget()))
+               .append("<br>\n<b>Established:</b> ")
+               .append(DataHelper.formatDuration2(now - sess.getEstablishedDate()))
+               .append(" ago<br>\n<b>Last Used:</b> ")
+               .append(DataHelper.formatDuration2(now - sess.getLastUsedDate()))
+               .append(" ago<br>\n<b>Last Rcvd:</b> ")
+               .append(DataHelper.formatDuration2(now - sess.getLastReceivedDate()))
+               .append(" ago<br>\n");
             SessionKey sk = sess.getCurrentKey();
             if (sk != null)
                 buf.append("<b>Session key:</b> ").append(sk.toBase64()).append("/n");
-            buf.append("</div>\n</td>\n" +
-                       "<td><b>Sets:</b> ").append(sets.size()).append("</td>\n</tr>\n" +
-                       "<tr>\n<td colspan=2>\n<ul>\n");
+            buf.append("</div>\n</td>\n<td><b>Sets:</b> ")
+               .append(sets.size())
+               .append("</td>\n</tr>\n<tr>\n<td colspan=2>\n<ul>\n");
             for (RatchetTagSet ts : sets) {
                 synchronized(ts) {
                     long expires = ts.getExpiration() - now;
