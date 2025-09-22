@@ -1,3 +1,7 @@
+2025-09-22 dr|z3d
+ * Console: Add optional whois lookups for routers when reverse dns
+   lookups are enabled
+
 2025-09-12 dr|z3d
  * Console: Add UI option to toggle sticky sidebar on /configsidebar
 
