@@ -1120,6 +1120,9 @@ class NetDbRenderer {
                .append(_t("Compact mode - does not include statistics published by floodfills."))
                .append(" <a href=\"/netdb?f=1\">[Advanced mode]</a></p>\n");
         }
+        out.append(buf);
+        buf.setLength(0);
+        out.flush();
 
         if (showStats && page == 0) {
             RouterInfo ourInfo = _context.router().getRouterInfo();
@@ -1135,6 +1138,9 @@ class NetDbRenderer {
         int skipped = 0;
         int written = 0;
         boolean morePages = false;
+        int chunkSize = 10;
+        int chunkCounter = 0;
+
         for (RouterInfo ri : routers) {
             Hash key = ri.getIdentity().getHash();
             boolean isUs = key.equals(us);
@@ -1149,15 +1155,24 @@ class NetDbRenderer {
                         break;
                     }
                     renderRouterInfo(buf, ri, false, full);
-                    out.append(buf);
-                    buf.setLength(0);
+                    chunkCounter++;
+                    if (chunkCounter >= chunkSize) {
+                        out.append(buf);
+                        buf.setLength(0);
+                        chunkCounter = 0;
+                    }
                 }
                 String routerVersion = ri.getOption("router.version");
-                if (routerVersion != null) {versions.increment(routerVersion);}
+                if (routerVersion != null) { versions.increment(routerVersion); }
                 String country = _context.commSystem().getCountry(key);
-                if(country != null) {countries.increment(country);}
+                if (country != null) { countries.increment(country); }
                 transportCount[classifyTransports(ri)]++;
             }
+        }
+        // Flush any remaining content after loop ends
+        if (chunkCounter > 0) {
+            out.append(buf);
+            buf.setLength(0);
         }
 
         if (showStats) {
@@ -1195,26 +1210,26 @@ class NetDbRenderer {
                .append("<thead>\n<tr><th>").append(_t("Bandwidth Tier")).append("</th><th>")
                .append(_t("Count")).append("</th></tr>\n</thead>\n");
             if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW12).size() > 0) {
-                buf.append("<tr><td><a href=\"/netdb?caps=K\" title=\"").append(showAll).append("\"><b>K</b></a>Under 12&#8239;KB/s</td><td>")
+                buf.append("<tr><td><a href=\"/netdb?caps=K\" title=\"").append(showAll).append("\"><b>K</b></a>Under 12 KB/s</td><td>")
                    .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW12).size()).append("</td></tr>\n");
             }
             if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW32).size() > 0) {
-                buf.append("<tr><td><a href=\"/netdb?caps=L\" title=\"").append(showAll).append("\"><b>L</b></a>12 - 48&#8239;KB/s</td><td>")
+                buf.append("<tr><td><a href=\"/netdb?caps=L\" title=\"").append(showAll).append("\"><b>L</b></a>12 - 48 KB/s</td><td>")
                    .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW32).size()).append("</td></tr>\n");
             }
             if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW64).size() > 0) {
-                buf.append("<tr><td><a href=\"/netdb?caps=M\" title=\"").append(showAll).append("\"><b>M</b></a>49 - 65&#8239;KB/s</td><td>")
+                buf.append("<tr><td><a href=\"/netdb?caps=M\" title=\"").append(showAll).append("\"><b>M</b></a>49 - 65 KB/s</td><td>")
                    .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW64).size()).append("</td></tr>\n");
             }
             if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW128).size() > 0) {
-                buf.append("<tr><td><a href=\"/netdb?caps=N\" title=\"").append(showAll).append("\"><b>N</b></a>66 - 130&#8239;KB/s</td><td>")
+                buf.append("<tr><td><a href=\"/netdb?caps=N\" title=\"").append(showAll).append("\"><b>N</b></a>66 - 130 KB/s</td><td>")
                    .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW128).size()).append("</td></tr>\n");
             }
-            buf.append("<tr><td><a href=\"/netdb?caps=O\" title=\"").append(showAll).append("\"><b>O</b></a>131 - 261&#8239;KB/s</td><td>")
+            buf.append("<tr><td><a href=\"/netdb?caps=O\" title=\"").append(showAll).append("\"><b>O</b></a>131 - 261 KB/s</td><td>")
                .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW256).size()).append("</td></tr>\n")
-               .append("<tr><td><a href=\"/netdb?caps=P\" title=\"").append(showAll).append("\"><b>P</b></a>262 - 2047&#8239;KB/s</td><td>")
+               .append("<tr><td><a href=\"/netdb?caps=P\" title=\"").append(showAll).append("\"><b>P</b></a>262 - 2047 KB/s</td><td>")
                .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW512).size()).append("</td></tr>\n")
-               .append("<tr><td><a href=\"/netdb?caps=X\" title=\"").append(showAll).append("\"><b>X</b></a>Over 2048&#8239;KB/s</td><td>")
+               .append("<tr><td><a href=\"/netdb?caps=X\" title=\"").append(showAll).append("\"><b>X</b></a>Over 2048 KB/s</td><td>")
                .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW_UNLIMITED).size()).append("</td></tr>\n")
                .append("</table>\n");
             out.append(buf);
