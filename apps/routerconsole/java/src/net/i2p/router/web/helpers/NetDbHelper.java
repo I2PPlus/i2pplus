@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.Collator;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
@@ -372,6 +373,7 @@ public class NetDbHelper extends FormHandler {
         }
         buf.append("</div>\n");
         _out.append(buf);
+        _out.flush();
     }
 
     /**
@@ -385,11 +387,11 @@ public class NetDbHelper extends FormHandler {
            .append(_t("Network Database Search"))
            .append("</th></tr>\n<tr><td><b>")
            .append(_t("Capabilities"))
-           .append("</b></td><td><input type=text name=\"caps\" title=\"")
+           .append("</b></td><td><input type=text name=caps title=\"")
            .append(_t("e.g. f or XOfR"))
            .append("\"></td>\n<td><b>")
            .append(_t("Cost"))
-           .append("</b></td><td><input type=text name=\"cost\"></td></tr>\n<tr><td><b>")
+           .append("</b></td><td><input type=text name=cost></td></tr>\n<tr><td><b>")
            .append(_t("Country"))
            .append("</b></td><td><select name=\"c\"><option value=\"\" selected></option>");
         Map<String, String> sorted = new TreeMap<String, String>(Collator.getInstance());
@@ -401,41 +403,124 @@ public class NetDbHelper extends FormHandler {
             buf.append("<option value=\"").append(e.getValue()).append("\">").append(e.getKey()).append("</option>\n");
         }
         buf.append("</select></td>")
-           .append("<td><b>").append(_t("Country Codes")).append("</b></td><td><input type=text name=\"cc\" title=\"e.g. cn hk\"></td></tr>\n")
-           .append("<tr><td><b>").append(_t("Hash Prefix")).append("</b></td><td><input type=text name=\"r\"></td>\n")
-           .append("<td><b>").append(_t("IP Address")).append("</b></td><td><input type=text name=\"ip\" ")
+           .append("<td><b>").append(_t("Country Codes")).append("</b></td><td><input type=text name=cc title=\"e.g. cn hk\"></td></tr>\n")
+           .append("<tr><td><b>").append(_t("Hash Prefix")).append("</b></td><td><input type=text name=r></td>\n")
+           .append("<td><b>").append(_t("IP Address")).append("</b></td><td><input type=text name=ip ")
            .append("title=\"").append(_t("IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6")).append("\"></td></tr>\n")
-           .append("<tr><td><b>").append(_t("Hostname or b32")).append("</b></td><td><input type=text name=\"ls\"></td>\n")
-           .append("<td><b>").append(_t("Router Family")).append("</b></td><td><input type=text name=\"fam\"></td></tr>\n")
-           .append("<tr><td><b>").append(_t("IPv6 Prefix")).append("</b></td><td><input type=text name=\"ipv6\"></td>\n")
-           .append("<td><b>MTU</b></td><td><input type=text name=\"mtu\"></td></tr>\n")
-           .append("<tr><td><b>").append(_t("Single port or range")).append("</b></td><td><input type=text name=\"port\"></td>\n")
-           .append("<td><b>").append(_t("Signature Type")).append("</b></td><td><select name=\"type\"><option value=\"\" selected></option>");
+           .append("<tr><td><b>").append(_t("Hostname or b32")).append("</b></td><td><input type=text name=ls></td>\n")
+           .append("<td><b>").append(_t("Router Family")).append("</b></td><td><input type=text name=fam></td></tr>\n")
+           .append("<tr><td><b>").append(_t("IPv6 Prefix")).append("</b></td><td><input type=text name=ipv6></td>\n")
+           .append("<td><b>MTU</b></td><td><input type=text name=mtu></td></tr>\n")
+           .append("<tr><td><b>").append(_t("Single port or range")).append("</b></td><td><input type=text name=port></td>\n")
+           .append("<td><b>").append(_t("Signature Type")).append("</b></td><td><select name=type><option value=\"\" selected></option>");
         for (SigType type : EnumSet.allOf(SigType.class)) {
             buf.append("<option value=\"").append(type).append("\">").append(type).append("</option>\n");
         }
         buf.append("</select></td></tr>\n")
-           .append("<tr><td><b>").append(_t("SSU Capabilities")).append("</b></td><td><input type=text name=\"ssucaps\"></td>\n")
-           .append("<td><b>").append(_t("Encryption Type")).append("</b></td><td><select name=\"etype\"><option value=\"\" selected></option>");
+           .append("<tr><td><b>").append(_t("SSU Capabilities")).append("</b></td><td><input type=text name=ssucaps></td>\n")
+           .append("<td><b>").append(_t("Encryption Type")).append("</b></td><td><select name=etype><option value=\"\" selected></option>");
         for (EncType type : EnumSet.allOf(EncType.class)) {
             buf.append("<option value=\"").append(type).append("\">").append(type).append("</option>\n");
         }
         buf.append("</select>");
-        buf.append("<tr><td><b>").append(_t("Router Version")).append("</b></td><td><input type=text name=\"v\"></td>\n")
-           .append("<td><b>").append(_t("Transport")).append("</b></td><td><select name=\"tr\"><option value=\"\" selected>")
-           .append("<option value=\"NTCP\">NTCP</option>\n")
-           .append("<option value=\"NTCP2\">NTCP2</option>\n")
-           .append("<option value=\"SSU\">SSU</option>\n")
-           .append("<option value=\"SSU2\">SSU2</option>\n")
+        buf.append("<tr><td><b>").append(_t("Router Version")).append("</b></td><td><input type=text name=v></td>\n")
+           .append("<td><b>").append(_t("Transport")).append("</b></td><td><select name=tr><option value=\"\" selected>")
+           //.append("<option value=\"NTCP\">NTCP</option>\n")
+           .append("<option value=NTCP2>NTCP2</option>\n")
+           .append("<option value=SSU>SSU</option>\n")
+           .append("<option value=SSU2>SSU2</option>\n")
            .append("</select></td></tr>\n")
            .append("<tr><td colspan=4 class=subheading><b>").append(_t("Add Sybil analysis (must pick at least one above)")).append("</b></td></tr>\n")
-           .append("<tr id=sybilSearch><td><b>").append(_t("Sybil close to")).append("</b></td><td colspan=3><input type=text name=\"sybil2\" ")
+           .append("<tr id=sybilSearch><td><b>").append(_t("Sybil close to")).append("</b></td><td colspan=3><input type=text name=sybil2 ")
            .append("title=\"").append(_t("Router hash, destination hash, b32, or from address book")).append("\">&nbsp;")
-           .append("<label for=\"closetorouter\"><b>").append(_t("or Sybil close to this router")).append("</b></label>")
-           .append("<input type=checkbox class=optbox value=1 name=\"sybil\" id=closetorouter></td></tr>\n")
-           .append("<tr><td colspan=4 class=optionsave><button type=submit class=search value=\"Lookup\">")
+           .append("<label for=closetorouter><b>").append(_t("or Sybil close to this router")).append("</b></label>")
+           .append("<input type=checkbox class=optbox value=1 name=sybil id=closetorouter></td></tr>\n")
+           .append("<tr><td colspan=4 class=optionsave><button type=submit class=search value=Lookup>")
            .append(_t("Lookup")).append("</button></td></tr>\n")
            .append("</table>\n</form>\n");
         _out.append(buf);
     }
+
+    /**
+     * Creates a simplified search form with
+     * - a select element listing all original fields as options and grouped signature/encryption/transport types
+     * - a single text input for the search value
+     * - a submit button
+     * Includes tooltips and option groups for enums and transport.
+     * @throws IOException
+     */
+    private void renderCompactLookupForm() throws IOException {
+        StringBuilder buf = new StringBuilder(8192);
+        buf.append("<form action=/netdb method=GET id=netdbSearchCompact>\n")
+           .append("<input type=hidden name=nonce value=").append(_newNonce).append(">\n")
+           .append("<table id=netdblookup>\n")
+           .append("<tr><th colspan=3>").append(_t("Network Database Search")).append("</th></tr>\n")
+           .append("<tr><td><b>").append(_t("Search Field")).append("</b></td><td><b>").append(_t("Value")).append("</b></td><td></td></tr>\n")
+           .append("<tr><td><select name=\"field\" title=\"").append(_t("Select the field to search on")).append("\">\n");
+
+        // Regular fields map (excluding enum and transport types)
+        class FieldInfo {
+            final String label;
+            final String tooltip;
+            FieldInfo(String label, String tooltip) {
+                this.label = label;
+                this.tooltip = tooltip;
+            }
+        }
+        Map<String, FieldInfo> regularFields = new LinkedHashMap<>();
+        regularFields.put("caps", new FieldInfo(_t("Capabilities"), _t("e.g. f or XOfR")));
+        regularFields.put("cost", new FieldInfo(_t("Cost"), ""));
+        regularFields.put("c", new FieldInfo(_t("Country"), ""));
+        regularFields.put("cc", new FieldInfo(_t("Country Codes"), _t("e.g. cn hk")));
+        regularFields.put("r", new FieldInfo(_t("Hash Prefix"), ""));
+        regularFields.put("ip", new FieldInfo(_t("IP Address"), _t("IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6")));
+        regularFields.put("ls", new FieldInfo(_t("Hostname or b32"), ""));
+        regularFields.put("fam", new FieldInfo(_t("Router Family"), ""));
+        regularFields.put("ipv6", new FieldInfo(_t("IPv6 Prefix"), ""));
+        regularFields.put("mtu", new FieldInfo(_t("MTU"), ""));
+        regularFields.put("port", new FieldInfo(_t("Single port or range"), ""));
+        regularFields.put("ssucaps", new FieldInfo(_t("SSU Capabilities"), ""));
+        regularFields.put("v", new FieldInfo(_t("Router Version"), ""));
+
+        // Add regular fields options
+        for (Map.Entry<String, FieldInfo> e : regularFields.entrySet()) {
+            buf.append("<option value=\"").append(e.getKey()).append("\"");
+            if (!e.getValue().tooltip.isEmpty()) {
+                buf.append(" title=\"").append(e.getValue().tooltip).append("\"");
+            }
+            buf.append(">").append(e.getValue().label).append("</option>\n");
+        }
+
+        // Signature Type group
+        buf.append("<optgroup label=\"").append(_t("Signature Type")).append("\">\n");
+        for (SigType type : EnumSet.allOf(SigType.class)) {
+            buf.append("<option value=\"type_").append(type).append("\" title=\"").append(type).append("\">")
+               .append(type).append("</option>\n");
+        }
+        buf.append("</optgroup>\n");
+
+        // Encryption Type group
+        buf.append("<optgroup label=\"").append(_t("Encryption Type")).append("\">\n");
+        for (EncType type : EnumSet.allOf(EncType.class)) {
+            buf.append("<option value=\"etype_").append(type).append("\" title=\"").append(type).append("\">")
+               .append(type).append("</option>\n");
+        }
+        buf.append("</optgroup>\n");
+
+        // Transport Type group
+        buf.append("<optgroup label=\"").append(_t("Transport")).append("\">\n");
+        String[] transports = {"NTCP2", "SSU", "SSU2"};
+        for (String tr : transports) {
+            buf.append("<option value=\"tr_").append(tr).append("\" title=\"").append(tr).append("\">")
+               .append(tr).append("</option>\n");
+        }
+        buf.append("</optgroup>\n");
+
+        buf.append("</select></td>\n")
+           .append("<td><input type=\"text\" name=\"query\" title=\"").append(_t("Enter search value here")).append("\"></td>\n")
+           .append("<td><button type=\"submit\" class=search value=\"Lookup\">").append(_t("Lookup")).append("</button></td>\n")
+           .append("</tr>\n</table>\n</form>\n");
+        _out.append(buf);
+    }
+
 }
