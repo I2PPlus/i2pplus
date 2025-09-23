@@ -1,9 +1,8 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="256kb"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32768kb"%>
 <!DOCTYPE HTML>
 <%@include file="head.jsi"%>
 <%=intl.title("network database")%>
 <script nonce=<%=cspNonce%>>
-progressx.show(theme); progressx.progress(0.1);
 const translate_encType = "<%=intl._t("Encryption type")%>";
 const translate_encTypes = "<%=intl._t("Encryption types")%>";
 const translate_sigType = "<%=intl._t("Signature type")%>";
