@@ -1147,9 +1147,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         "whois.arin.net",
         "whois.iana.org",
         "whois.ripe.net",
-        "23.184.48.6",
         "23.128.248.249",
-        "104.36.80.11"
+        "104.36.80.11",
+        "127.0.0.1"
     );
 
     /**
@@ -1167,8 +1167,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                 int port = 43;
                 if ("23.184.48.6".equals(server) || "23.128.248.249".equals(server) || "104.36.80.11".equals(server)) {
                     port = 38444;
-                }
-                boolean useTor = (port != 43);
+                } else if ("127.0.0.1".equals(server)) {port = 4043;} // i2p
+                boolean useTor = (port == 38444);
                 String result = useTor
                     ? queryWhoisServerOverTor(query, server, port)
                     : queryWhoisServer(query, server, port);
