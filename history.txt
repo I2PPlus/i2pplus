@@ -1,3 +1,6 @@
+2025-09-24 dr|z3d
+ * Console: Add compact NetDb search form to /netdb pages
+
 2025-09-22 dr|z3d
  * Console: Add optional fallback whois lookups for routers when
    reverse dns lookups are enabled
