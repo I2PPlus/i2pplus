@@ -296,14 +296,16 @@ public class NetDbHelper extends FormHandler {
 
     public String getNetDbSummary() {
         NetDbRenderer renderer = new NetDbRenderer(_context);
+        boolean isSearchResult = _routerPrefix != null || _version != null || _country != null ||
+                                 _family != null || _caps != null || _ip != null || _sybil != null ||
+                                 _port != 0 || _type != null || _mtu != null || _ipv6 != null ||
+                                 _ssucaps != null || _transport != null || _cost != 0 || _etype != null ||
+                                 _icount > 0;
+        boolean renderCompactSearch = isSearchResult || getTab() == 0;
         try {
             renderNavBar();
-            if (_full != 4) {renderCompactLookupForm();}
-            if (_routerPrefix != null || _version != null || _country != null ||
-                _family != null || _caps != null || _ip != null || _sybil != null ||
-                _port != 0 || _type != null || _mtu != null || _ipv6 != null ||
-                _ssucaps != null || _transport != null || _cost != 0 || _etype != null ||
-                _icount > 0) {
+            if (renderCompactSearch) {renderCompactLookupForm();}
+            if (isSearchResult) {
                 renderer.renderRouterInfoHTML(_out, _limit, _page,
                                               _routerPrefix, _version, _country,
                                               _family, _caps, _ip, _sybil, _port, _highPort, _type, _etype,
