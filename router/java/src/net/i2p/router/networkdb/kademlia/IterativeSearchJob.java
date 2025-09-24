@@ -16,6 +16,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.kademlia.KBucketSet;
 import net.i2p.kademlia.XORComparator;
@@ -191,6 +192,8 @@ public class IterativeSearchJob extends FloodSearchJob {
         RouterInfo ri = getContext().netDb().lookupRouterInfoLocally(_key);
         RouterInfo isUs = getContext().netDb().lookupRouterInfoLocally(getContext().routerHash());
         long uptime = getContext().router().getUptime();
+        boolean enableReverseLookups = getContext().getBooleanProperty("routerconsole.enableReverseLookups");
+
         if (ri != null && ri != isUs) {
             String v = ri.getVersion();
             String caps = ri.getCapabilities();
@@ -199,6 +202,26 @@ public class IterativeSearchJob extends FloodSearchJob {
                                     caps.indexOf(Router.CAPABILITY_BW32) >= 0 ||
                                     (v.equals("") || VersionComparator.comp(v, MIN_VERSION) < 0)) &&
                                     !isHidden && getContext().netDb().getKnownRouters() > 1000;
+
+            if (enableReverseLookups) {
+                RouterAddress address = null;
+                for (RouterAddress ra : ri.getAddresses()) {
+                    if (ra.getTransportStyle().contains("SSU")) {
+                        address = ra;
+                        break;
+                    }
+                }
+                if (address != null) {
+                    String ipAddress = address.getHost();
+                    if (ipAddress != null && !ipAddress.isEmpty()) {
+                        String rdns = getContext().commSystem().getCanonicalHostName(ipAddress);
+                        if (_log.shouldInfo()) {
+                            _log.info("Reverse DNS for " + ipAddress + ": " + rdns);
+                        }
+                    }
+                }
+            }
+
             if (uninteresting) {
                 if (_log.shouldInfo()) {
                     _log.info("Skipping search for uninteresting Router [" + _key.toBase64().substring(0,6) + "]");
