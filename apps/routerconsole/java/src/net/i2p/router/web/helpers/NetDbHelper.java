@@ -2,9 +2,12 @@ package net.i2p.router.web.helpers;
 
 import java.io.IOException;
 import java.text.Collator;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
@@ -295,6 +298,7 @@ public class NetDbHelper extends FormHandler {
         NetDbRenderer renderer = new NetDbRenderer(_context);
         try {
             renderNavBar();
+            if (_full != 4) {renderCompactLookupForm();}
             if (_routerPrefix != null || _version != null || _country != null ||
                 _family != null || _caps != null || _ip != null || _sybil != null ||
                 _port != 0 || _type != null || _mtu != null || _ipv6 != null ||
@@ -446,16 +450,14 @@ public class NetDbHelper extends FormHandler {
      * - a select element listing all original fields as options and grouped signature/encryption/transport types
      * - a single text input for the search value
      * - a submit button
-     * Includes tooltips and option groups for enums and transport.
+     * Includes tooltips and option groups for signatures, encryption types and transport.
      * @throws IOException
      */
     private void renderCompactLookupForm() throws IOException {
         StringBuilder buf = new StringBuilder(8192);
-        buf.append("<form action=/netdb method=GET id=netdbSearchCompact>\n")
+        buf.append("<div id=compactLookup hidden>\n<form action=/netdb method=GET id=netdbSearchCompact>\n")
            .append("<input type=hidden name=nonce value=").append(_newNonce).append(">\n")
            .append("<table id=netdblookup>\n")
-           .append("<tr><th colspan=3>").append(_t("Network Database Search")).append("</th></tr>\n")
-           .append("<tr><td><b>").append(_t("Search Field")).append("</b></td><td><b>").append(_t("Value")).append("</b></td><td></td></tr>\n")
            .append("<tr><td><select name=\"field\" title=\"").append(_t("Select the field to search on")).append("\">\n");
 
         // Regular fields map (excluding enum and transport types)
@@ -482,8 +484,12 @@ public class NetDbHelper extends FormHandler {
         regularFields.put("ssucaps", new FieldInfo(_t("SSU Capabilities"), ""));
         regularFields.put("v", new FieldInfo(_t("Router Version"), ""));
 
-        // Add regular fields options
-        for (Map.Entry<String, FieldInfo> e : regularFields.entrySet()) {
+        // Sort regularFields by label alphabetically
+        List<Map.Entry<String, FieldInfo>> sortedEntries = new ArrayList<>(regularFields.entrySet());
+        sortedEntries.sort(Comparator.comparing(e -> e.getValue().label));
+
+        // Append sorted options
+        for (Map.Entry<String, FieldInfo> e : sortedEntries) {
             buf.append("<option value=\"").append(e.getKey()).append("\"");
             if (!e.getValue().tooltip.isEmpty()) {
                 buf.append(" title=\"").append(e.getValue().tooltip).append("\"");
@@ -491,35 +497,18 @@ public class NetDbHelper extends FormHandler {
             buf.append(">").append(e.getValue().label).append("</option>\n");
         }
 
-        // Signature Type group
-        buf.append("<optgroup label=\"").append(_t("Signature Type")).append("\">\n");
-        for (SigType type : EnumSet.allOf(SigType.class)) {
-            buf.append("<option value=\"type_").append(type).append("\" title=\"").append(type).append("\">")
-               .append(type).append("</option>\n");
-        }
-        buf.append("</optgroup>\n");
-
-        // Encryption Type group
-        buf.append("<optgroup label=\"").append(_t("Encryption Type")).append("\">\n");
-        for (EncType type : EnumSet.allOf(EncType.class)) {
-            buf.append("<option value=\"etype_").append(type).append("\" title=\"").append(type).append("\">")
-               .append(type).append("</option>\n");
-        }
-        buf.append("</optgroup>\n");
-
-        // Transport Type group
-        buf.append("<optgroup label=\"").append(_t("Transport")).append("\">\n");
-        String[] transports = {"NTCP2", "SSU", "SSU2"};
-        for (String tr : transports) {
-            buf.append("<option value=\"tr_").append(tr).append("\" title=\"").append(tr).append("\">")
-               .append(tr).append("</option>\n");
-        }
-        buf.append("</optgroup>\n");
+        // Add enum param keys only, no enum values here, user enters value in text input
+        buf.append("<option value=\"type\">").append(_t("Signature Type")).append("</option>\n");
+        buf.append("<option value=\"etype\">").append(_t("Encryption Type")).append("</option>\n");
+        buf.append("<option value=\"tr\">").append(_t("Transport")).append("</option>\n");
 
         buf.append("</select></td>\n")
            .append("<td><input type=\"text\" name=\"query\" title=\"").append(_t("Enter search value here")).append("\"></td>\n")
            .append("<td><button type=\"submit\" class=search value=\"Lookup\">").append(_t("Lookup")).append("</button></td>\n")
-           .append("</tr>\n</table>\n</form>\n");
+           .append("</tr>\n</table>\n</form>\n</div>\n")
+           .append("<script src=/js/netdbLookup.js></script>\n")
+           .append("<noscript><style>#compactLookup{display:none!important}</style></noscript>\n");
+
         _out.append(buf);
     }
 

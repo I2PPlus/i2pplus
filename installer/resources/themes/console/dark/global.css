@@ -25,6 +25,7 @@
 --border_softer:1px solid #2525;
 --border_dotted:1px dotted #242;
 --border_badge:1px solid #030;
+--border_table:0 0 0 1px #000,0 0 0 3px #252;
 --btnAction_hover:var(--nav_hover);
 --btnAction:linear-gradient(180deg,#030,#020 50%,#010 50%);
 --btn_hover:linear-gradient(180deg,#000,#010);

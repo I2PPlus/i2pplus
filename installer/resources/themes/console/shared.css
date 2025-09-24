@@ -20,6 +20,13 @@
 #advconf .newKey:empty:not(:focus)::before{width:12px;height:12px;display:inline-block;vertical-align:middle;background:var(--star) no-repeat center center/12px;content:""}
 #advconf .value{word-break:break-all}
 #advancedconfig{position:relative}
+#compactLookup{margin:-12px auto 16px;width:50%;min-width:500px}
+#compactLookup{margin-top:15px;position:sticky !important;top:-1px;z-index:999;box-shadow:var(--border_table)}
+#compactLookup #netdblookup button,#compactLookup #netdblookup input, #compactLookup #netdblookup select{margin:0 !important;width:calc(100% - 4px);min-width:0!important;display:inline-block;vertical-align:middle}
+#compactLookup #netdblookup td,#compactLookup #netdblookup td:nth-child(2n+1){padding:8px 2px;text-align:center;border:0}
+#compactLookup #netdblookup td:first-child{padding-left:6px}
+#compactLookup #netdblookup td:last-child{padding-right:6px}
+#compactLookup #netdblookup tr{background:var(--th)}
 #config_advanced #advconfwrapper:hover{overflow-y:auto}
 #config_advanced #advconfwrapper{overflow:hidden}
 #ffconf.toggle::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:""}

@@ -4,6 +4,7 @@
 /* Author: dr|z3d */
 
 @import url(global.css);
+@import url(../shared.css);
 @import url(../images/itooplus.css);
 
 :root{
@@ -1089,7 +1090,7 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 .noresults #peercount{margin-bottom:42px}
 .noresults #refreshPage{pointer-events:none;opacity:.5}
 .noresults #tunnelPeerCount thead{opacity:0}
-.noresults #tunnelPeerCount .tablefooter{margin:10px auto;padding:0 6px;display:block;width:fit-content;position:absolute;bottom:0;left:0;right:0;text-align:center;border:var(--border);box-shadow:0 0 0 1px #000,0 0 0 3px #252,0 0 0 4px #131;background:#000}
+.noresults #tunnelPeerCount .tablefooter{margin:10px auto;padding:0 6px;display:block;width:fit-content;position:absolute;bottom:0;left:0;right:0;text-align:center;border:var(--border);box-shadow:var(--border_table),0 0 0 4px #131;background:#000}
 .noresults #tunnelPeerCount .tablefooter td{display:inline-block;padding:8px 12px;vertical-align:text-bottom;font-size:120%;border:0!important}
 .noresults #tunnelPeerCount .tablefooter td:empty{display:none}
 #tunnels #exploratory{padding-left:35px;background:var(--globe) no-repeat 9px center/18px,var(--title)}
@@ -1365,7 +1366,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .netdb_leases .tunnel_peer a{margin:0;padding:0;letter-spacing:.1em}
 .netdb_name{text-transform:capitalize;font-weight:700;color:var(--ink)}
 .netdb_tunnel{margin:0 5px 0 -1px;padding:1px 4px;display:inline-block;border:var(--border_badge);border-radius:2px;box-shadow:var(--outline);background:#020}
-#leasesetsummary{margin:0 0 10px;column-span:all;box-shadow:0 0 0 1px #000,0 0 0 3px #252}
+#leasesetsummary{margin:0 0 10px;column-span:all;box-shadow:var(--border_table)}
 #leasesetdebug td:nth-child(even),#leasesetsummary td:nth-child(even){width:24%;word-break:break-all;text-align:left}
 #leasesetdebug td:nth-child(odd),#leasesetsummary td:nth-child(odd){padding-left:20px;width:1%;white-space:nowrap;text-align:right}
 #leasesetsummary td,#leasesetsummary td:nth-child(odd){padding:8px}
@@ -1376,10 +1377,10 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #leasesetdebug th:last-child,#leasesetsummary th:last-child{border-right:var(--border)}
 #leasesetsummary td:empty{display:none}
 #netdb .confignav{position:relative;z-index:9999}
-#netdb .netdbentry,#netdb .leaseset{margin-bottom:10px;width:100%;box-shadow:0 0 0 1px #000,0 0 0 3px #252}
+#netdb .netdbentry,#netdb .leaseset{margin-bottom:10px;width:100%;box-shadow:var(--border_table)}
 #netdb .netdbentry{margin:2px auto 14px;width:calc(100% - 6px)}
 #singleLS+.leaseset{margin-bottom:1px;column-span:all}
-#netdb .leasesets_container #debugmode,#netdb #leasesetdebug,#leasesetKeyspace{box-shadow:0 0 0 1px #000,0 0 0 3px #252}
+#netdb .leasesets_container #debugmode,#netdb #leasesetdebug,#leasesetKeyspace{box-shadow:var(--border_table)}
 #netdb .leasesets_container #leasesetdebug,#leasesetKeyspace{column-span:all}
 #netdb .leaseset th code{margin-left:-3px}
 #netdb #leasesetdebug{margin-bottom:12px}
@@ -3302,7 +3303,7 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 
 /* LS search */
 #netdb #singleLS~.leaseset {margin-bottom:1px;column-span:all;width:100%}
-#searchLS {margin-bottom:10px auto -1px;display:block;column-span:all;text-align:center;box-shadow:0 0 0 1px #000,0 0 0 3px #252,var(--highlight);background:var(--th)}
+#searchLS {margin-bottom:10px auto -1px;display:block;column-span:all;text-align:center;box-shadow:var(--border_table),var(--highlight);background:var(--th)}
 
 /* session bans */
 #banSummary h2 {margin:2px -10px 0}
@@ -3313,3 +3314,5 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #banSummary h2{margin:-8px -10px -1px}
 #banSummary ul{margin:-1px -10px -19px}
 }
+#compactLookup {display:block;box-shadow:var(--border_table),0 0 0 4px #000}
+
