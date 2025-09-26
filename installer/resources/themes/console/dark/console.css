@@ -3314,5 +3314,9 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #banSummary h2{margin:-8px -10px -1px}
 #banSummary ul{margin:-1px -10px -19px}
 }
-#compactLookup {display:block;box-shadow:var(--border_table),0 0 0 4px #000}
 
+/* compact netdb search */
+#compactLookup{margin-top:0;padding:0 13px 3px;width:80%;max-width:740px;min-width:0;display:block;top:-1px;z-index:9999;border:var(--border_hard);border-radius: 0 0 4px 4px;box-shadow:3px 3px 3px #0006,var(--highlight);background: var(--badge)}
+#compactLookup table{box-shadow:var(--border_table),0 0 0 4px #000}
+#compactLookup input[type="text"]{width:100%;min-width:0}
+#compactLookup #netdblookup td:nth-child(2n){width:auto;max-width:140px}
