@@ -804,6 +804,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                                            name = "AFRINIC";
                                         } else if (lc.contains("centurylink communications")) {
                                            name = "CenturyLink";
+                                        } else if (lc.contains("cloudflare, inc")) {
+                                           name = "CLOUDFLARE";
+                                        } else if (lc.contains("t-mobile usa")) {
+                                           name = "T-MOBILE USA";
                                         } else if (lc.equals("root")) {
                                            name = "PRIVATE";
                                         } else if (lc.equals("non-ripe-ncc-managed-address-block")) {
