@@ -1068,7 +1068,7 @@ tfoot td:not(:last-child),#peers tfoot td:not(:last-child){border-right:0;box-sh
 #jobs ol li:first-child{margin-top:0}
 #jobs ol li:last-child{margin-bottom:0}
 h3#finishedjobs+ol li,h3#scheduledjobs+ol li,h3#activejobs+ol li,h3#readyjobs+ol li{list-style:none;background:var(--row)}
-h3#activejobs+ol li::before,h3#scheduledjobs+ol li::before,h3#readyjobs+ol li::before,h3#finishedjobs+ol li::before{margin:0 6px 0 -20px;display:inline-block;width:18px;height:12px;font-weight:700;color:var(--ink_light);background-size:12px;content:""}
+h3#activejobs+ol li::before,h3#scheduledjobs+ol li::before,h3#readyjobs+ol li::before,h3#finishedjobs+ol li::before{margin:0 6px 0 -20px;width:18px;height:12px;display:inline-block;vertical-align:middle;font-weight:700;color:var(--ink_light);background-size:12px;content:""}
 h3#activejobs+ol li::before{color:#5a5}
 h3#readyjobs+ol li::before{color:#dd3}
 h3#finishedjobs+ol li{background:var(--yes) no-repeat 6px center/12px}
