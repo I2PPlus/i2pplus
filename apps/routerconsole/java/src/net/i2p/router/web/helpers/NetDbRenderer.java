@@ -1831,6 +1831,7 @@ class NetDbRenderer {
         if (full || isUs) {
             PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(info.getHash());
             boolean isFF = info.getCapabilities().indexOf('f') >= 0;
+            boolean hasLsInfo = false;
             String networkId = "2"; // default
             String spoofedLeasesets = "";
             String knownRouters = "";
@@ -1839,6 +1840,7 @@ class NetDbRenderer {
                 Map<Object, Object> p = info.getOptionsMap();
                 for (Map.Entry<Object, Object> e : p.entrySet()) {
                     String key = (String) e.getKey();
+                    if (key.contains("knownLeaseSets")) {hasLsInfo = true;}
                     if (isUs) {
                         if (key.contains("knownLeaseSets")) {
                             spoofedLeasesets = DataHelper.stripHTML((String) e.getValue());
@@ -1895,7 +1897,7 @@ class NetDbRenderer {
                     long heard = prof.getFirstHeardAbout();
                     if (heard > 0) {
                         long peerAge = Math.max(now - heard, 1);
-                        if (isFF) buf.append("<br>");
+                        if (isFF && hasLsInfo) {buf.append("<br>");}
                         buf.append("<li><b>").append(_t("First heard about")).append(":</b> ")
                            .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>");
                     }
