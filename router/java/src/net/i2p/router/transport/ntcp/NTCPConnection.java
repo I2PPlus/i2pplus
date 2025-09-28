@@ -127,6 +127,8 @@ public class NTCPConnection implements Closeable {
     //private int _consecutiveBacklog;
     private long _nextInfoTime;
     private boolean _mayDisconnect;
+    private final AtomicBoolean _writeInterestPending = new AtomicBoolean(false);
+    private volatile long _lastActiveTime = System.currentTimeMillis();
 
     /*
      *  Update frequency for send/recv rates in console peers page
@@ -1898,6 +1900,22 @@ public class NTCPConnection implements Closeable {
             target[i] = (byte) value;
             value >>= 8;
         }
+    }
+
+    public boolean hasWriteInterestPending() {
+        return _writeInterestPending.get();
+    }
+
+    public boolean compareAndSetWriteInterestPending(boolean expected, boolean update) {
+        return _writeInterestPending.compareAndSet(expected, update);
+    }
+
+    public void updateLastActiveTime() {
+        _lastActiveTime = System.currentTimeMillis();
+    }
+
+    public long getLastActiveTime() {
+        return _lastActiveTime;
     }
 
     @Override

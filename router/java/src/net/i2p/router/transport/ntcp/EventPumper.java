@@ -21,6 +21,9 @@ import java.util.Iterator;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import net.i2p.I2PAppContext;
 import net.i2p.data.router.RouterAddress;
@@ -208,204 +211,231 @@ class EventPumper implements Runnable {
      *  On high-bandwidth routers, this is the thread with the highest CPU usage, so
      *  take care to minimize overhead and unnecessary debugging stuff.
      */
-    public void run() {
-        int loopCount = 0;
-        int failsafeLoopCount = FAILSAFE_LOOP_COUNT;
-        long lastFailsafeIteration = System.currentTimeMillis();
-        long lastBlockedIPClear = lastFailsafeIteration;
+public void run() {
+    int loopCount = 0;
+    int loopCountSinceLastRate = 0;
+    int failsafeLoopCount = FAILSAFE_LOOP_COUNT;
+    long lastFailsafeIteration = System.nanoTime();
+    long lastBlockedIPClear = lastFailsafeIteration;
+    long nanoNow = System.nanoTime();
+    long now = nanoNow / 1_000_000L;
+    long lastLoopRateUpdate = now;
+    long lastKeySetUpdate = now;
+
+    // Background executor for failsafe loop
+    ScheduledExecutorService background = new ScheduledThreadPoolExecutor(1);
+    background.scheduleAtFixedRate(this::doFailsafeCheck, 5, 30, TimeUnit.SECONDS);
+
+    try {
         while (_alive && _selector.isOpen()) {
             try {
                 loopCount++;
+                loopCountSinceLastRate++;
+
                 try {
-                    int count = _selector.select(SELECTOR_LOOP_DELAY);
+                    // Dynamic selector delay
+                    long delay = SELECTOR_LOOP_DELAY;
+                    if (_wantsWrite.isEmpty() && _wantsRead.isEmpty()) {
+                        delay = 1000; // idle
+                    }
+                    int count = _selector.select(delay);
                     if (count > 0) {
                         Set<SelectionKey> selected = _selector.selectedKeys();
-                        //_context.statManager().addRateData("ntcp.pumperKeysPerLoop", selected.size());
                         processKeys(selected);
-                        // does clear() do anything useful?
                         selected.clear();
                     }
                     runDelayedEvents();
-                } catch (ClosedSelectorException cse) {continue;}
-                catch (IOException ioe) {
-                    if (_log.shouldWarn()) {_log.warn("Error selecting", ioe);}
+                } catch (ClosedSelectorException cse) {
+                    continue;
+                } catch (IOException ioe) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("Error selecting", ioe);
+                    }
                     continue;
                 } catch (CancelledKeyException cke) {
-                    if (_log.shouldWarn()) {_log.warn("Error selecting", cke);}
+                    if (_log.shouldWarn()) {
+                        _log.warn("Error selecting", cke);
+                    }
                     continue;
                 }
 
-                long now = System.currentTimeMillis();
-                //int known = _context.netDbSegmentor().getKnownRouters();
-                int known = _context.netDb().getKnownRouters();
-                int loopFreq = FAILSAFE_ITERATION_FREQ;
-                if (known > 2000) {loopFreq = FAILSAFE_ITERATION_FREQ * 2;}
-                else if (known < 1000) {loopFreq = FAILSAFE_ITERATION_FREQ / 4;}
-                else {loopFreq = FAILSAFE_ITERATION_FREQ / 2;}
-                if (lastFailsafeIteration + loopFreq < now) {
-                    // in the *cough* unthinkable possibility that there are bugs in
-                    // the code, let's periodically pass over all NTCP connections and
-                    // make sure that anything which should be able to write has been
-                    // properly marked as such, etc
-                    lastFailsafeIteration = now;
-                    try {
-                        Set<SelectionKey> all = _selector.keys();
-                        int lastKeySetSize = all.size();
-                        _context.statManager().addRateData("ntcp.pumperKeySetSize", lastKeySetSize);
-                        _context.statManager().addRateData("ntcp.pumperLoopsPerSecond", loopCount / (loopFreq / 1000));
-                        // reset the failsafe loop counter,
-                        // and recalculate the max loops before failsafe sleep, based on number of keys
-                        loopCount = 0;
-                        failsafeLoopCount = Math.max(FAILSAFE_LOOP_COUNT, 2 * lastKeySetSize);
-                        int failsafeWrites = 0;
-                        int failsafeCloses = 0;
-                        int failsafeInvalid = 0;
+                nanoNow = System.nanoTime();
+                now = nanoNow / 1_000_000L;
 
-                        // Increase allowed idle time if we are well under allowed connections, otherwise decrease
-                        boolean haveCap = _transport.haveCapacity(33);
-                        if (haveCap) {
-                            _expireIdleWriteTime = Math.min(_expireIdleWriteTime + 1000, MAX_EXPIRE_IDLE_TIME);
-                        } else {
-                            _expireIdleWriteTime = Math.max(_expireIdleWriteTime - 3000, MIN_EXPIRE_IDLE_TIME);
-                        }
-                        for (SelectionKey key : all) {
-                            try {
-                                Object att = key.attachment();
-                                if (!(att instanceof NTCPConnection)) {continue;} // to the next con
-                                NTCPConnection con = (NTCPConnection)att;
-
-                                /**
-                                 * 100% CPU bug
-                                 * http://forums.java.net/jive/thread.jspa?messageID=255525
-                                 * http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6595055
-                                 *
-                                 * The problem is around a channel that was originally registered with Selector for i/o gets
-                                 * closed on the server side (due to early client side exit).  But the server side can know
-                                 * about such channel only when it does i/o (read/write) and thereby getting into an IO exception.
-                                 * In this case, (bug 6595055)there are times (erroneous) when server side (selector) did not
-                                 * know the channel is already closed (peer-reset), but continue to do the selection cycle on
-                                 * a key set whose associated channel is alreay closed or invalid. Hence, selector's slect(..)
-                                 * keep spinging with zero return without blocking for the timeout period.
-                                 *
-                                 * One fix is to have a provision in the application, to check if any of the Selector's keyset
-                                 * is having a closed channel/or invalid registration due to channel closure.
-                                 */
-                                if ((!key.isValid()) &&
-                                    (!((SocketChannel)key.channel()).isConnectionPending()) &&
-                                    con.getTimeSinceCreated(now) > 2 * NTCPTransport.ESTABLISH_TIMEOUT) {
-                                    if (_log.shouldInfo()) {_log.info("Removing invalid key for: " + con);}
-                                    // this will cancel the key, and it will then be removed from the keyset
-                                    con.close();
-                                    key.cancel();
-                                    failsafeInvalid++;
-                                    continue;
-                                }
-
-                                synchronized(con.getWriteLock()) {
-                                    if ((!con.isWriteBufEmpty()) &&
-                                        ((key.interestOps() & SelectionKey.OP_WRITE) == 0)) {
-                                        // the data queued to be sent has already passed through
-                                        // the bw limiter and really just wants to get shoved
-                                        // out the door asap.
-                                        if (_log.shouldInfo()) {_log.info("Failsafe write for " + con);}
-                                        setInterest(key, SelectionKey.OP_WRITE);
-                                        failsafeWrites++;
-                                    }
-                                }
-
-                                final long expire;
-                                if ((!haveCap || !con.isInbound()) && con.getMayDisconnect() &&
-                                    con.getMessagesReceived() <= 2 && con.getMessagesSent() <= 1) {
-                                    expire = MAY_DISCON_TIMEOUT;
-                                    if (_log.shouldInfo()) {_log.info("Possible early disconnect for: " + con);}
-                                } else {expire = _expireIdleWriteTime;}
-
-                                if ( con.getTimeSinceSend(now) > expire && con.getTimeSinceReceive(now) > expire) {
-                                    // we haven't sent or received anything in a really long time, so lets just close 'er up
-                                    // con will cancel the key
-                                    con.sendTerminationAndClose();
-                                    if (_log.shouldInfo()) {_log.info("Failsafe or expire close for: " + con);}
-                                    failsafeCloses++;
-                                } else {
-                                    // periodically send our RI
-                                    long estab = con.getEstablishedOn();
-                                    if (estab > 0) {
-                                        long uptime = now - estab;
-                                        if (uptime >= RI_STORE_INTERVAL) {
-                                            long mod = uptime % RI_STORE_INTERVAL;
-                                            if (mod < FAILSAFE_ITERATION_FREQ) {con.sendOurRouterInfo(false);}
-                                        }
-                                    }
-                                }
-                            } catch (CancelledKeyException cke) {} // cancelled while updating the interest ops
-                        }
-                        if (failsafeWrites > 0) {
-                            _context.statManager().addRateData("ntcp.failsafeWrites", failsafeWrites);
-                        }
-                        if (failsafeCloses > 0) {
-                            _context.statManager().addRateData("ntcp.failsafeCloses", failsafeCloses);
-                        }
-                        if (failsafeInvalid > 0) {
-                            _context.statManager().addRateData("ntcp.failsafeInvalid", failsafeInvalid);
-                        }
-                    } catch (ClosedSelectorException cse) {continue;}
-                } else {
-                   int cpuLoadAvg = SystemVersion.getCPULoadAvg();
-                    // another 100% CPU workaround
-                    // TODO remove or only if we appear to be looping with no interest ops
-                    int pause = SystemVersion.isSlow() || cpuLoadAvg > 95 ? 30 : 10;
-                    if ((loopCount % failsafeLoopCount) == failsafeLoopCount - 1) {
-                        if (_log.shouldInfo()) {
-                            _log.info("EventPumper throttle " + loopCount + " loops in " +
-                                      (now - lastFailsafeIteration) + " ms");
-                        }
-                        _context.statManager().addRateData("ntcp.failsafeThrottle", 1);
-                        try {Thread.sleep(pause);}
-                        catch (InterruptedException ie) {}
-                    }
+                // Update stat every second
+                if (now - lastLoopRateUpdate >= 1000) {
+                    _context.statManager().addRateData("ntcp.pumperLoopsPerSecond", loopCountSinceLastRate);
+                    loopCountSinceLastRate = 0;
+                    lastLoopRateUpdate = now;
                 }
-                if (lastBlockedIPClear + BLOCKED_IP_FREQ < now) {
+
+                // Update keyset size stat every 5s
+                if (now - lastKeySetUpdate >= 5000) {
+                    Set<SelectionKey> all = _selector.keys();
+                    _context.statManager().addRateData("ntcp.pumperKeySetSize", all.size());
+                    lastKeySetUpdate = now;
+                }
+
+                // Throttle CPU if needed
+                int cpuLoadAvg = SystemVersion.getCPULoadAvg();
+                int pause = SystemVersion.isSlow() || cpuLoadAvg > 95 ? 30 : 10;
+                if ((loopCount % failsafeLoopCount) == failsafeLoopCount - 1) {
+                    if (_log.shouldInfo()) {
+                        _log.info("EventPumper throttle " + loopCount + " loops in " +
+                                  (now - lastFailsafeIteration) + " ms");
+                    }
+                    _context.statManager().addRateData("ntcp.failsafeThrottle", 1);
+                    try {
+                        Thread.sleep(pause);
+                    } catch (InterruptedException ie) {}
+                }
+
+                // Clear blocked IPs periodically
+                if (now - lastBlockedIPClear >= BLOCKED_IP_FREQ / 1000L) {
                     _blockedIPs.clear();
                     lastBlockedIPClear = now;
                 }
-            } catch (RuntimeException re) {_log.error("Error in EventPumper", re);}
+
+            } catch (RuntimeException re) {
+                _log.error("Error in EventPumper", re);
+            }
         }
-        try {
-            if (_selector.isOpen()) {
-                if (_log.shouldDebug()) {
-                    _log.debug("Closing down EventPumper with selection keys remaining");
-                }
-                Set<SelectionKey> keys = _selector.keys();
-                for (SelectionKey key : keys) {
-                    try {
-                        Object att = key.attachment();
-                        if (att instanceof ServerSocketChannel) {
-                            ServerSocketChannel chan = (ServerSocketChannel)att;
-                            chan.close();
-                            key.cancel();
-                        } else if (att instanceof NTCPConnection) {
-                            NTCPConnection con = (NTCPConnection)att;
-                            con.close();
-                            key.cancel();
-                        }
-                    } catch (IOException ke) {
-                        _log.error("Error closing key " + key + " on EventPumper shutdown", ke);
+    } finally {
+        background.shutdownNow();
+    }
+
+    // Clean up
+    try {
+        if (_selector.isOpen()) {
+            if (_log.shouldDebug()) {
+                _log.debug("Closing down EventPumper with selection keys remaining...");
+            }
+            Set<SelectionKey> keys = _selector.keys();
+            for (SelectionKey key : keys) {
+                try {
+                    Object att = key.attachment();
+                    if (att instanceof ServerSocketChannel) {
+                        ServerSocketChannel chan = (ServerSocketChannel) att;
+                        chan.close();
+                        key.cancel();
+                    } else if (att instanceof NTCPConnection) {
+                        NTCPConnection con = (NTCPConnection) att;
+                        con.close();
+                        key.cancel();
                     }
-                }
-                _selector.close();
-            } else {
-                if (_log.shouldDebug()) {
-                    _log.debug("Closing down EventPumper with no selection keys remaining...");
+                } catch (IOException ke) {
+                    _log.error("Error closing key " + key + " on EventPumper shutdown", ke);
                 }
             }
-        } catch (IOException e) {
-            _log.error("Error closing keys on EventPumper shutdown", e);
+            _selector.close();
+        } else {
+            if (_log.shouldDebug()) {
+                _log.debug("Closing down EventPumper with no selection keys remaining...");
+            }
         }
-        _wantsConRegister.clear();
-        _wantsRead.clear();
-        _wantsRegister.clear();
-        _wantsWrite.clear();
+    } catch (IOException e) {
+        _log.error("Error closing keys on EventPumper shutdown", e);
     }
+
+    _wantsConRegister.clear();
+    _wantsRead.clear();
+    _wantsRegister.clear();
+    _wantsWrite.clear();
+}
+
+private void doFailsafeCheck() {
+    try {
+        Set<SelectionKey> all = _selector.keys();
+        int failsafeWrites = 0;
+        int failsafeCloses = 0;
+        int failsafeInvalid = 0;
+
+        boolean haveCap = _transport.haveCapacity(33);
+        if (haveCap) {
+            _expireIdleWriteTime = Math.min(_expireIdleWriteTime + 1000, MAX_EXPIRE_IDLE_TIME);
+        } else {
+            _expireIdleWriteTime = Math.max(_expireIdleWriteTime - 3000, MIN_EXPIRE_IDLE_TIME);
+        }
+
+        long now = System.currentTimeMillis();
+
+        for (SelectionKey key : all) {
+            try {
+                Object att = key.attachment();
+                if (!(att instanceof NTCPConnection)) continue;
+                NTCPConnection con = (NTCPConnection) att;
+
+                if ((!key.isValid()) &&
+                    (!((SocketChannel) key.channel()).isConnectionPending()) &&
+                    con.getTimeSinceCreated(now) > 2 * NTCPTransport.ESTABLISH_TIMEOUT) {
+                    if (_log.shouldInfo()) {
+                        _log.info("Removing invalid key for: " + con);
+                    }
+                    con.close();
+                    key.cancel();
+                    failsafeInvalid++;
+                    continue;
+                }
+
+                if (!con.isWriteBufEmpty()) {
+                    if (!con.hasWriteInterestPending() &&
+                        ((key.interestOps() & SelectionKey.OP_WRITE) == 0)) {
+                        if (con.compareAndSetWriteInterestPending(false, true)) {
+                            setInterest(key, SelectionKey.OP_WRITE);
+                            failsafeWrites++;
+                        }
+                    }
+                }
+
+                final long expire;
+                if ((!haveCap || !con.isInbound()) && con.getMayDisconnect() &&
+                    con.getMessagesReceived() <= 2 && con.getMessagesSent() <= 1) {
+                    expire = MAY_DISCON_TIMEOUT;
+                    if (_log.shouldInfo()) {
+                        _log.info("Possible early disconnect for: " + con);
+                    }
+                } else {
+                    expire = _expireIdleWriteTime;
+                }
+
+                // Use last active time instead of checking send/receive separately
+                if (con.getLastActiveTime() + expire < now) {
+                    con.sendTerminationAndClose();
+                    if (_log.shouldInfo()) {
+                        _log.info("Failsafe or expire close for: " + con);
+                    }
+                    failsafeCloses++;
+                } else {
+                    long estab = con.getEstablishedOn();
+                    if (estab > 0) {
+                        long uptime = now - estab;
+                        if (uptime >= RI_STORE_INTERVAL) {
+                            long mod = uptime % RI_STORE_INTERVAL;
+                            if (mod < FAILSAFE_ITERATION_FREQ) {
+                                con.sendOurRouterInfo(false);
+                            }
+                        }
+                    }
+                }
+            } catch (CancelledKeyException cke) {
+                // Ignore
+            }
+        }
+
+        if (failsafeWrites > 0) {
+            _context.statManager().addRateData("ntcp.failsafeWrites", failsafeWrites);
+        }
+        if (failsafeCloses > 0) {
+            _context.statManager().addRateData("ntcp.failsafeCloses", failsafeCloses);
+        }
+        if (failsafeInvalid > 0) {
+            _context.statManager().addRateData("ntcp.failsafeInvalid", failsafeInvalid);
+        }
+
+    } catch (ClosedSelectorException cse) {
+        // Ignore
+    }
+}
 
     /**
      *  Process all keys from the last select.
@@ -964,10 +994,8 @@ class EventPumper implements Runnable {
      *  @since 0.9.53
      */
     public static void setInterest(SelectionKey key, int op) throws CancelledKeyException {
-        synchronized(key) {
-            int old = key.interestOps();
-            if ((old & op) == 0) {key.interestOps(old | op);}
-        }
+        int old = key.interestOps();
+        if ((old & op) == 0) {key.interestOps(old | op);}
     }
 
     /**
@@ -977,10 +1005,8 @@ class EventPumper implements Runnable {
      *  @since 0.9.53
      */
     public static void clearInterest(SelectionKey key, int op) throws CancelledKeyException {
-        synchronized(key) {
-            int old = key.interestOps();
-            if ((old & op) != 0) {key.interestOps(old & ~op);}
-        }
+        int old = key.interestOps();
+        if ((old & op) != 0) {key.interestOps(old & ~op);}
     }
 
 }
