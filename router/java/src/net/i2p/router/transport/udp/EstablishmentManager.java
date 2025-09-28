@@ -864,7 +864,7 @@ class EstablishmentManager {
                     shouldExit = true;
                 }
             } catch (UnknownHostException uhe) {}
-            if (shouldExit = true) {return;}
+            if (shouldExit) {return;}
             state.receiveSessionConfirmed(packet);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldDebug())
