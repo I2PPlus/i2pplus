@@ -50,6 +50,7 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.SortedMap;
+import java.util.stream.Collectors;
 import java.util.Timer;
 import java.util.TimerTask;
 import javax.net.SocketFactory;
@@ -108,7 +109,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     public synchronized void startup() {
-        _log.info("Starting up the Comm System...");
+        _log.info("Starting the Comm System...");
         _manager.startListening();
         startTimestamper();
         startNetMonitor();
@@ -773,60 +774,81 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     cacheFile.createNewFile();
                     System.out.println("[RDNSCache] No existing cache file found, new file created: " + RDNS_CACHE_FILE);
                 }
+
                 File tmpFile = new File(RDNS_CACHE_FILE + ".tmp");
                 long now = System.currentTimeMillis();
                 AtomicInteger writtenCount = new AtomicInteger(0);
-                try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(tmpFile), ENCODING))) {
+
+                try (BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(new FileOutputStream(tmpFile), ENCODING))) {
+
                     synchronized (rdnsCache) {
-                        rdnsCache.values().stream()
-                            .filter(cacheEntry -> now - cacheEntry.getTimestamp() <= EVICT_THRESHOLD)
-                            .sorted((a, b) -> Long.compare(b.getTimestamp(), a.getTimestamp())) // Sort descending by timestamp
-                            .forEachOrdered(cacheEntry -> {
-                                try {
-                                    String line = rdnsEntryToString(cacheEntry);
+                        // Convert to list to allow traditional loop
+                        List<CacheEntry> entries = rdnsCache.values().stream()
+                            .filter(entry -> now - entry.getTimestamp() <= EVICT_THRESHOLD)
+                            .sorted((a, b) -> Long.compare(b.getTimestamp(), a.getTimestamp()))
+                            .collect(Collectors.toList());
+                        for (CacheEntry cacheEntry : entries) {
+                            try {
+                                String line = rdnsEntryToString(cacheEntry);
+                                if (line == null || line.trim().isEmpty()) {continue;}
 
-                                    int firstComma = line.indexOf(',');
-                                    int lastComma = line.lastIndexOf(',');
+                                int firstComma = line.indexOf(',');
+                                int lastComma = line.lastIndexOf(',');
 
-                                    if (firstComma >= 0 && lastComma > firstComma) {
-                                        String ip = line.substring(0, firstComma).trim();
-                                        String name = line.substring(firstComma + 1, lastComma).trim();
-                                        String timestamp = line.substring(lastComma + 1).trim();
-                                        String lc = name.toLowerCase();
+                                if (firstComma >= 0 && lastComma > firstComma) {
+                                    String ip = line.substring(0, firstComma).trim();
+                                    String name = line.substring(firstComma + 1, lastComma).trim();
+                                    String timestamp = line.substring(lastComma + 1).trim();
+                                    String lc = name.toLowerCase();
 
-                                        if (lc.contains("latin american and caribbean")) {
-                                            name = "LACNIC";
-                                        } else if (lc.contains("asia pacific network") || lc.contains("administered by apnic")) {
-                                            name = "APNIC";
-                                        } else if (lc.contains("ripe network coordination")) {
-                                           name = "RIPE NCC";
-                                        } else if (lc.contains("african network information center")) {
-                                           name = "AFRINIC";
-                                        } else if (lc.contains("centurylink communications")) {
-                                           name = "CenturyLink";
-                                        } else if (lc.contains("cloudflare, inc")) {
-                                           name = "CLOUDFLARE";
-                                        } else if (lc.contains("t-mobile usa")) {
-                                           name = "T-MOBILE USA";
-                                        } else if (lc.equals("root")) {
-                                           name = "PRIVATE";
-                                        } else if (lc.equals("non-ripe-ncc-managed-address-block")) {
-                                           name = "unknown";
-                                        }
-
-                                        line = ip + "," + name + "," + timestamp;
+                                    // Early skip based on original name
+                                    if (lc.contains("unknown") ||
+                                        lc.contains("root") ||
+                                        lc.contains("administered by")) {
+                                        continue;
                                     }
 
-                                    line = line + NEWLINE;
-                                    writer.write(line);
-                                    writtenCount.incrementAndGet();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
+                                    // Normalize the name
+                                    if (lc.contains("latin american and caribbean")) {
+                                        name = "LACNIC";
+                                    } else if (lc.contains("asia pacific network") || lc.contains("administered by apnic")) {
+                                        name = "APNIC";
+                                    } else if (lc.contains("ripe network coordination")) {
+                                        name = "RIPE NCC";
+                                    } else if (lc.contains("african network information center")) {
+                                        name = "AFRINIC";
+                                    } else if (lc.contains("centurylink communications")) {
+                                        name = "CenturyLink";
+                                    } else if (lc.contains("cloudflare, inc")) {
+                                        name = "CLOUDFLARE";
+                                    } else if (lc.contains("t-mobile usa")) {
+                                        name = "T-MOBILE USA";
+                                    } else if (lc.equals("root")) {
+                                        name = "PRIVATE";
+                                    } else if (lc.equals("non-ripe-ncc-managed-address-block")) {
+                                        name = "unknown";
+                                    }
+
+                                    line = ip + "," + name + "," + timestamp;
+
+                                    // Final skip based on modified line
+                                    boolean skipWrite = line.toLowerCase().contains("unknown") ||
+                                                        line.toLowerCase().contains("private");
+
+                                    if (!skipWrite) {
+                                        writer.write(line);
+                                        writer.newLine();
+                                        writtenCount.incrementAndGet();
+                                    }
                                 }
-                            });
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
                     }
-                    writer.flush();
                 }
+
                 Files.copy(tmpFile.toPath(), cacheFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
                 tmpFile.delete();
             } catch (IOException ex) {
@@ -840,7 +862,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static synchronized void cleanupRDNSCache() {
         long now = System.currentTimeMillis();
         int removed = 0;
-        long unknownExpireTimeMillis = 8 * 60 * 60 * 1000; // 8 hours in milliseconds
+        long unknownExpireTimeMillis = 15 * 60 * 1000; // 15 minutes
         synchronized (rdnsCache) {
             Iterator<Map.Entry<String, CacheEntry>> it = rdnsCache.entrySet().iterator();
             while (it.hasNext()) {
@@ -935,6 +957,16 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static final ExecutorService WHOIS_QUERY_EXECUTOR = Executors.newFixedThreadPool(10);
     private static final int SOCKET_TIMEOUT_MS = 5000; // 5 seconds timeout
 
+/*
+    private String queryWhoisServers(String ipAddress, String countryCode) throws InterruptedException, ExecutionException {
+        Callable<String> whoisTask = () -> {
+            return tryWhoisServers(ipAddress, GENERIC_WHOIS_SERVERS);
+        };
+
+        Future<String> future = WHOIS_QUERY_EXECUTOR.submit(whoisTask);
+        return future.get();
+    }
+*/
     /**
      * Query WHOIS server(s) based on country code fallback logic asynchronously
      * Returns WHOIS response or null if all fail
@@ -1148,11 +1180,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     private static final List<String> GENERIC_WHOIS_SERVERS = Arrays.asList(
+        "outproxy-1a.stormycloud.org",
+        "outproxy-1b.stormycloud.org",
+        "outproxy-1c.stormycloud.org",
         "whois.arin.net",
         "whois.iana.org",
         "whois.ripe.net",
-        "23.128.248.249",
         "104.36.80.11",
+        "23.128.248.249",
         "127.0.0.1"
     );
 
@@ -1169,7 +1204,12 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         for (String server : shuffledServers) {
             try {
                 int port = 43;
-                if ("23.184.48.6".equals(server) || "23.128.248.249".equals(server) || "104.36.80.11".equals(server)) {
+                if ("23.184.48.6".equals(server) ||
+                    "23.128.248.249".equals(server) ||
+                    "104.36.80.11".equals(server) ||
+                    "outproxy-1a.stormycloud.org".equals(server) ||
+                    "outproxy-1b.stormycloud.org".equals(server) ||
+                    "outproxy-1c.stormycloud.org".equals(server)) {
                     port = 38444;
                 } else if ("127.0.0.1".equals(server)) {port = 4043;} // i2p
                 boolean useTor = (port == 38444);
@@ -1179,13 +1219,13 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
                 if (result == null) continue;
                 // Filter deny/refuse and empty results
-                if (result.contains("ORG-IANA1-AFRINIC") || result.startsWith("APNIC") ||
-                    result.contains("IANA-BLK") || result.contains("IANA-NETBLOCK") ||
-                    result.contains("denied") || result.contains("refused") ||
+
+                if (result.contains("denied") || result.contains("refused") ||
                     result.contains("is not registered") || result.contains("not managed by") ||
                     result.contains("have been further assigned") || result.contains("NON-RIPE-NCC-MANAGED-ADDRESS-BLOCK")) {
                     continue;
                 }
+
                 if (!result.trim().isEmpty()) {
                     return result;
                 }
