@@ -1,4 +1,7 @@
 2025-09-24 dr|z3d
+ * Transports: Fix syntax bug preventing inbound SSU connections
+
+2025-09-24 dr|z3d
  * Console: Add compact NetDb search form to /netdb pages
 
 2025-09-22 dr|z3d
