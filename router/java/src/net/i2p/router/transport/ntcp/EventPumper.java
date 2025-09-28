@@ -229,6 +229,7 @@ public void run() {
     try {
         while (_alive && _selector.isOpen()) {
             try {
+                _needsWakeup = false;
                 loopCount++;
                 loopCountSinceLastRate++;
 
@@ -343,99 +344,99 @@ public void run() {
     _wantsWrite.clear();
 }
 
-private void doFailsafeCheck() {
-    try {
-        Set<SelectionKey> all = _selector.keys();
-        int failsafeWrites = 0;
-        int failsafeCloses = 0;
-        int failsafeInvalid = 0;
+    private void doFailsafeCheck() {
+        try {
+            Set<SelectionKey> all = _selector.keys();
+            int failsafeWrites = 0;
+            int failsafeCloses = 0;
+            int failsafeInvalid = 0;
 
-        boolean haveCap = _transport.haveCapacity(33);
-        if (haveCap) {
-            _expireIdleWriteTime = Math.min(_expireIdleWriteTime + 1000, MAX_EXPIRE_IDLE_TIME);
-        } else {
-            _expireIdleWriteTime = Math.max(_expireIdleWriteTime - 3000, MIN_EXPIRE_IDLE_TIME);
-        }
+            boolean haveCap = _transport.haveCapacity(33);
+            if (haveCap) {
+                _expireIdleWriteTime = Math.min(_expireIdleWriteTime + 1000, MAX_EXPIRE_IDLE_TIME);
+            } else {
+                _expireIdleWriteTime = Math.max(_expireIdleWriteTime - 3000, MIN_EXPIRE_IDLE_TIME);
+            }
 
-        long now = System.currentTimeMillis();
+            long now = System.currentTimeMillis();
 
-        for (SelectionKey key : all) {
-            try {
-                Object att = key.attachment();
-                if (!(att instanceof NTCPConnection)) continue;
-                NTCPConnection con = (NTCPConnection) att;
+            for (SelectionKey key : all) {
+                try {
+                    Object att = key.attachment();
+                    if (!(att instanceof NTCPConnection)) continue;
+                    NTCPConnection con = (NTCPConnection) att;
 
-                if ((!key.isValid()) &&
-                    (!((SocketChannel) key.channel()).isConnectionPending()) &&
-                    con.getTimeSinceCreated(now) > 2 * NTCPTransport.ESTABLISH_TIMEOUT) {
-                    if (_log.shouldInfo()) {
-                        _log.info("Removing invalid key for: " + con);
-                    }
-                    con.close();
-                    key.cancel();
-                    failsafeInvalid++;
-                    continue;
-                }
-
-                if (!con.isWriteBufEmpty()) {
-                    if (!con.hasWriteInterestPending() &&
-                        ((key.interestOps() & SelectionKey.OP_WRITE) == 0)) {
-                        if (con.compareAndSetWriteInterestPending(false, true)) {
-                            setInterest(key, SelectionKey.OP_WRITE);
-                            failsafeWrites++;
+                    if ((!key.isValid()) &&
+                        (!((SocketChannel) key.channel()).isConnectionPending()) &&
+                        con.getTimeSinceCreated(now) > 2 * NTCPTransport.ESTABLISH_TIMEOUT) {
+                        if (_log.shouldInfo()) {
+                            _log.info("Removing invalid key for: " + con);
                         }
+                        con.close();
+                        key.cancel();
+                        failsafeInvalid++;
+                        continue;
                     }
-                }
 
-                final long expire;
-                if ((!haveCap || !con.isInbound()) && con.getMayDisconnect() &&
-                    con.getMessagesReceived() <= 2 && con.getMessagesSent() <= 1) {
-                    expire = MAY_DISCON_TIMEOUT;
-                    if (_log.shouldInfo()) {
-                        _log.info("Possible early disconnect for: " + con);
-                    }
-                } else {
-                    expire = _expireIdleWriteTime;
-                }
-
-                // Use last active time instead of checking send/receive separately
-                if (con.getLastActiveTime() + expire < now) {
-                    con.sendTerminationAndClose();
-                    if (_log.shouldInfo()) {
-                        _log.info("Failsafe or expire close for: " + con);
-                    }
-                    failsafeCloses++;
-                } else {
-                    long estab = con.getEstablishedOn();
-                    if (estab > 0) {
-                        long uptime = now - estab;
-                        if (uptime >= RI_STORE_INTERVAL) {
-                            long mod = uptime % RI_STORE_INTERVAL;
-                            if (mod < FAILSAFE_ITERATION_FREQ) {
-                                con.sendOurRouterInfo(false);
+                    if (!con.isWriteBufEmpty()) {
+                        if (!con.hasWriteInterestPending() &&
+                            ((key.interestOps() & SelectionKey.OP_WRITE) == 0)) {
+                            if (con.compareAndSetWriteInterestPending(false, true)) {
+                                setInterest(key, SelectionKey.OP_WRITE);
+                                failsafeWrites++;
                             }
                         }
                     }
+
+                    final long expire;
+                    if ((!haveCap || !con.isInbound()) && con.getMayDisconnect() &&
+                        con.getMessagesReceived() <= 2 && con.getMessagesSent() <= 1) {
+                        expire = MAY_DISCON_TIMEOUT;
+                        if (_log.shouldInfo()) {
+                            _log.info("Possible early disconnect for: " + con);
+                        }
+                    } else {
+                        expire = _expireIdleWriteTime;
+                    }
+
+                    // Use last active time instead of checking send/receive separately
+                    if (con.getLastActiveTime() + expire < now) {
+                        con.sendTerminationAndClose();
+                        if (_log.shouldInfo()) {
+                            _log.info("Failsafe or expire close for: " + con);
+                        }
+                        failsafeCloses++;
+                    } else {
+                        long estab = con.getEstablishedOn();
+                        if (estab > 0) {
+                            long uptime = now - estab;
+                            if (uptime >= RI_STORE_INTERVAL) {
+                                long mod = uptime % RI_STORE_INTERVAL;
+                                if (mod < FAILSAFE_ITERATION_FREQ) {
+                                    con.sendOurRouterInfo(false);
+                                }
+                            }
+                        }
+                    }
+                } catch (CancelledKeyException cke) {
+                    // Ignore
                 }
-            } catch (CancelledKeyException cke) {
-                // Ignore
             }
-        }
 
-        if (failsafeWrites > 0) {
-            _context.statManager().addRateData("ntcp.failsafeWrites", failsafeWrites);
-        }
-        if (failsafeCloses > 0) {
-            _context.statManager().addRateData("ntcp.failsafeCloses", failsafeCloses);
-        }
-        if (failsafeInvalid > 0) {
-            _context.statManager().addRateData("ntcp.failsafeInvalid", failsafeInvalid);
-        }
+            if (failsafeWrites > 0) {
+                _context.statManager().addRateData("ntcp.failsafeWrites", failsafeWrites);
+            }
+            if (failsafeCloses > 0) {
+                _context.statManager().addRateData("ntcp.failsafeCloses", failsafeCloses);
+            }
+            if (failsafeInvalid > 0) {
+                _context.statManager().addRateData("ntcp.failsafeInvalid", failsafeInvalid);
+            }
 
-    } catch (ClosedSelectorException cse) {
-        // Ignore
+        } catch (ClosedSelectorException cse) {
+            // Ignore
+        }
     }
-}
 
     /**
      *  Process all keys from the last select.
@@ -465,13 +466,31 @@ private void doFailsafeCheck() {
         }
     }
 
+    private volatile boolean _needsWakeup = false;
+    private long _lastWakeup = 0;
+    private static final long WAKEUP_COOLDOWN = 10; // ms
+
     /**
      *  Called by the connection when it has data ready to write (after bw allocation).
      *  Only wakeup if new.
      */
     public void wantsWrite(NTCPConnection con) {
         if (_wantsWrite.add(con)) {
+           maybeWakeup();
+        }
+    }
+
+    private void maybeWakeup() {
+        long now = System.currentTimeMillis();
+        if (!_needsWakeup || now - _lastWakeup > WAKEUP_COOLDOWN) {
+            if (_log.shouldDebug()) {
+                if (_needsWakeup && now - _lastWakeup <= WAKEUP_COOLDOWN) {
+                    _log.debug("Throttling selector.wakeup()");
+                }
+            }
+            _needsWakeup = true;
             _selector.wakeup();
+            _lastWakeup = now;
         }
     }
 
@@ -719,23 +738,26 @@ private void doFailsafeCheck() {
                     break;
                 }
                 if (read == 0) {
-                    // stay interested
-                    //key.interestOps(key.interestOps() | SelectionKey.OP_READ);
                     releaseBuf(buf);
-                    // workaround for channel stuck returning 0 all the time, causing 100% CPU
                     int consec = con.gotZeroRead();
-                    if (consec >= 5) {
+                    long now = System.currentTimeMillis();
+
+                    // Only close if multiple zero-reads in a short window
+                    if (consec >= 5 && now - con.getLastZeroReadTime() <= 1000) {
                         _context.statManager().addRateData("ntcp.zeroReadDrop", 1);
-                        if (_log.shouldWarn()) {_log.warn("Fail safe zero read close " + con);}
+                        if (_log.shouldWarn()) {
+                            _log.warn("Fail safe zero read close " + con);
+                        }
                         con.close();
                     } else {
                         _context.statManager().addRateData("ntcp.zeroRead", consec);
                         if (_log.shouldInfo()) {
-                            _log.info("Nothing to read for " + con + ", but remaining interested");
+                            _log.info("Nothing to read for " + con + ", but remaining interested (count: " + consec + ")");
                         }
                     }
                     break;
                 }
+
                 // Process the data received
                 // clear counter for workaround above
                 con.clearZeroRead();
@@ -995,7 +1017,11 @@ private void doFailsafeCheck() {
      */
     public static void setInterest(SelectionKey key, int op) throws CancelledKeyException {
         int old = key.interestOps();
-        if ((old & op) == 0) {key.interestOps(old | op);}
+        NTCPConnection con = (NTCPConnection) key.attachment();
+        if (con != null && con.shouldSetInterest(op)) {
+            key.interestOps(old | op);
+            con.updateInterestOps(old | op);
+        }
     }
 
     /**
@@ -1006,7 +1032,11 @@ private void doFailsafeCheck() {
      */
     public static void clearInterest(SelectionKey key, int op) throws CancelledKeyException {
         int old = key.interestOps();
-        if ((old & op) != 0) {key.interestOps(old & ~op);}
+        NTCPConnection con = (NTCPConnection) key.attachment();
+        if (con != null && !con.shouldSetInterest(op)) {
+            key.interestOps(old & ~op);
+            con.updateInterestOps(old & ~op);
+        }
     }
 
 }

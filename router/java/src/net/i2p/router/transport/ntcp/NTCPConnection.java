@@ -129,6 +129,7 @@ public class NTCPConnection implements Closeable {
     private boolean _mayDisconnect;
     private final AtomicBoolean _writeInterestPending = new AtomicBoolean(false);
     private volatile long _lastActiveTime = System.currentTimeMillis();
+    private volatile long _lastZeroReadTime = 0;
 
     /*
      *  Update frequency for send/recv rates in console peers page
@@ -460,17 +461,27 @@ public class NTCPConnection implements Closeable {
      *  workaround for EventPumper
      *  @since 0.8.12
      */
-    void clearZeroRead() {
+    public void clearZeroRead() {
         _consecutiveZeroReads.set(0);
+        _lastZeroReadTime = 0;
     }
 
     /**
-     *  workaround for EventPumper
-     *  @return value after incrementing
-     *  @since 0.8.12
+     * Track time of zero-reads to avoid closing healthy connections
+     * @return current count after incrementing
      */
-    int gotZeroRead() {
-        return _consecutiveZeroReads.incrementAndGet();
+    public int gotZeroRead() {
+        long now = System.currentTimeMillis();
+        if (now - _lastZeroReadTime > 1000) {
+            _consecutiveZeroReads.set(0); // reset counter if older than 1s
+        }
+        int count = _consecutiveZeroReads.incrementAndGet();
+        _lastZeroReadTime = now;
+        return count;
+    }
+
+    public long getLastZeroReadTime() {
+        return _lastZeroReadTime;
     }
 
     public boolean isClosed() { return _closed.get(); }
@@ -1916,6 +1927,22 @@ public class NTCPConnection implements Closeable {
 
     public long getLastActiveTime() {
         return _lastActiveTime;
+    }
+
+    private volatile int _currentInterestOps = 0;
+
+    /**
+     * Check if the given interest op is not already set
+     */
+    public boolean shouldSetInterest(int ops) {
+        return (_currentInterestOps & ops) != ops;
+    }
+
+    /**
+     * Update the cached interest ops
+     */
+    public void updateInterestOps(int ops) {
+        _currentInterestOps = ops;
     }
 
     @Override
