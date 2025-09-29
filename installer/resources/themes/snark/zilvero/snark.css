@@ -544,15 +544,15 @@ body.debug #dhtDebug{display:table-row;box-shadow:var(--highlight);background:li
 #noDHTPeers{margin:6px 0}
 
 /* comments */
-.commentAuthor .commentAuthorName{width:calc(100% - 20px);overflow:hidden;text-overflow:ellipsis;border-radius:1px;box-shadow:inset 0 0 0 1px #bbb;background:#fff var(--user) no-repeat 4px center;background-size:14px}
-.commentAuthorName{padding-left:21px;display:inline-block;vertical-align:middle;white-space:nowrap;font-weight:700;background:var(--user) no-repeat 4px center;background-size:14px}
 .commentAuthor{padding:8px 5px}
-.commentDelete{text-align:center}
+.commentAuthorName{padding:4px 4px 4px 21px;display:inline-block;vertical-align:middle;white-space:nowrap;font-weight:700;background:var(--user) no-repeat 4px center/14px}
+.commentAuthor .commentAuthorName{width:calc(100% - 20px);overflow:hidden;text-overflow:ellipsis;text-align:left;border-radius:12px 0 0 12px;background:var(--user) no-repeat 4px center/14px,linear-gradient(90deg,#ddd,#0000)}
+.commentDelete{min-width:36px;text-align:center}
 .commentRating img{height:12px;width:13px}
 .commentRating{width:1%;white-space:nowrap}
 .commentText .commentWrapper{margin:5px 0}
 .commentWrapper{margin:6px;padding:9px 10px 10px;height:32px;max-height:300px;overflow:auto;resize:vertical;box-shadow:0 0 0 1px #ccc,var(--highlight);background:linear-gradient(180deg,#f2f2f2,#eee)}
-.commentText .commentWrapper{height:auto;resize:none}
+.commentText .commentWrapper{height:auto;resize:none;text-align:left}
 .newTab{margin:1px 4px -2px;float:right}
 .commented{display:inline-block;position:absolute;top:-3px;right:0;z-index:20;line-height:0;font-size:0}
 .commented img{padding:0;height:9px;width:auto}
@@ -564,9 +564,9 @@ body.debug #dhtDebug{display:table-row;box-shadow:var(--highlight);background:li
 #mediaContainer td{padding:20px 15px;text-align:center}
 #mediaContainer video{width:auto;max-width:calc(100% - 20px)}
 #nameRequired .commentAuthorName{float:right}
-#newRating td:first-child,.commentAuthor{width:160px}
+#newRating td:first-child,.commentAuthor{width:100px}
 #newRating td:first-child{padding:8px 5px;text-align:center}
-#showRatings td{padding:8px 5px;border-top:var(--border)}
+#showRatings td{padding:8px 5px;text-align:left;border-top:var(--border)}
 #showRatings td:first-child{text-align:right;font-weight:700}
 #newRating select{margin-left:2px;width:100%}
 #torrentSort{text-align:right}
