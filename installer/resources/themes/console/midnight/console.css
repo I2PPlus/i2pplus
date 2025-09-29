@@ -437,9 +437,9 @@ p:empty+.sb_notice{margin-top:10px}
 .tunnelBuildStatus.accepting::before{background:var(--tunn_ready) no-repeat center center/15px}
 .tunnelBuildStatus.active::before,.ok,#ntcpconnections td.queue:empty::before{background:var(--tunn_active) no-repeat center center/15px}
 .tunnelBuildStatus.starting{color:#aa0}
-.tunnelBuildStatus.starting::before{background:var(--tunn_starting) no-repeat center center/15px}
+.tunnelBuildStatus.starting::before,.notOk,.mostPass,#profilelist td:nth-child(4) span:not([class]),#profilelist td:nth-child(5) span:not([class]){background:var(--tunn_starting) no-repeat center center/15px}
 .tunnelBuildStatus.rejecting{color:#933}
-.tunnelBuildStatus.rejecting::before{background:var(--tunn_reject) no-repeat center center/15px}
+.tunnelBuildStatus.rejecting::before,.notOk.fiftyPercent,#profiles .unreachable{background:var(--tunn_reject) no-repeat center center/15px}
 .tunnelBuildStatus.hidden{color:#999}
 .tunnelBuildStatus.hidden::before{background:var(--tunn_hidden) no-repeat center center/15px}
 
@@ -1514,7 +1514,7 @@ h3[id="udpcon"]{width:auto}
 #udpconnections tfoot td:first-child{padding-left:9px}
 #udpconnections tr:hover,#ntcpconnections tr:hover,#jobstats tr:hover,#schedjobs tr:hover,#jardump tr:hover,#sidebarconf tr:hover,#webappconfig tr:hover td,.tunneldisplay tr:hover td:not(.rif):not(.rih):not(.rbw),#profilelist tr:hover,#floodfills tr:hover,.eventspanel tr:hover,#profiles tr:hover td:not(.rif):not(.rih):not(.rbw),.tx tr:hover td{background:#202;color:#eff1ff}
 #udpconnections tr:hover td:not(.rif):not(.rbw):not(.rih),#ntcpconnections tr:hover td:not(.rif):not(.rbw):not(.rih){color:var(--ink)}
-.unreachable,#profiles .unreachable{background:linear-gradient(180deg,#300,#200)}
+.unreachable{background:linear-gradient(180deg,#300,#200)}
 #view_profile h3 a{letter-spacing:0;font-size:90%;text-transform:none}
 #view_profile h3{margin-bottom:-2px;padding: 12px 10px 6px;position:relative;vertical-align:middle;border-width:1px;border-radius:0}
 #view_profile .identicon{margin:0;position:absolute;top:1px;right:1px;width:auto;height:36px;opacity:.7}
@@ -1898,8 +1898,9 @@ b.netdb_transport{margin:2px 8px 2px 0;padding:2px;min-width:64px;display:inline
 #netdboverview td,.sybil_addresses td{line-height:1.6}
 #netdb_ram{margin:0 2px 0 -2px;padding:2px 6px;display:inline-block;vertical-align:middle;line-height:1.4;font-size:90%;border:var(--border_badge);box-shadow:var(--highlight);background:var(--element)}
 
-#profiles .ok,#ntcpconnections td.queue:empty::before{display:inline-block;font-size:0;width:12px;height:12px;background-size:11px}
+#profiles .ok,#ntcpconnections td.queue:empty::before,.notOk,.mostPass,#profilelist td:nth-child(4) span:not([class]),#profilelist td:nth-child(5) span:not([class]),#profiles .unreachable{display:inline-block;font-size:0;width:12px;height:12px;background-size:11px}
 #profiles .version{margin:0 2px}
+#profiles .unreachable{border:0;box-shadow:none}
 .version,.routerHash{margin:0;padding:2px 4px;display:inline-block;min-width:50px;text-align:center;font-weight:700;border:var(--border_badge);box-shadow:var(--highlight);background:var(--element)}
 th .version{padding:2px 3px}
 .version:empty{display:none}

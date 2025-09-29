@@ -149,7 +149,7 @@ class ProfileOrganizerRenderer {
                 buf.append("<tr class=lazy><td nowrap>");
                 buf.append(_context.commSystem().renderPeerHTML(peer, false));
                 RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
-                buf.append("<td>");
+                buf.append("</td><td>");
                 if (info != null) {buf.append(_context.commSystem().renderPeerCaps(peer, false));}
                 buf.append("</td><td>");
                 String v = info != null ? info.getOption("router.version") : null;
@@ -174,7 +174,10 @@ class ProfileOrganizerRenderer {
                 if (enableReverseLookups()) {
                     if (rl != null && rl != "null" && rl.length() != 0 && !ip.toString().equals(rl)) {
                         buf.append("<span hidden>[XHost]</span><span class=rlookup title=\"").append(rl).append("\">");
-                        buf.append(CommSystemFacadeImpl.getDomain(rl.replace("null", "unknown")));
+                        buf.append(CommSystemFacadeImpl.getDomain(rl.replace("null", "unknown")
+                           .replace("Latin American and Caribbean IP address Regional Registry (LACNIC)", "LACNIC")
+                           .replace("Asia Pacific Network Information Centre (APNIC)", "APNIC")
+                           .replace("Mediacom Communications Corp (MCC-244)", "MEDIACOM")));
                     } else if (ip == "null" || ip == null) {buf.append("<span>").append(_t("unknown"));}
                     else {
                         if (ip != null && ip.contains(":")) {buf.append("<span hidden>[IPv6]</span>");}
@@ -184,13 +187,15 @@ class ProfileOrganizerRenderer {
                 } else {buf.append(ip != null ? ip : _t("unknown"));}
                 buf.append("</td><td>");
                 boolean ok = true;
+                boolean isBanned = false;
+                boolean isUnreachable = false;
                 if (_context.banlist().isBanlisted(peer)) {
-                    buf.append(_t("Banned"));
                     ok = false;
+                    isBanned = true;
                 }
                 if (_context.commSystem().wasUnreachable(peer)) {
-                    buf.append(" &bullet; ").append(_t("Unreachable"));
                     ok = false;
+                    isUnreachable = true;
                 }
                 RateAverages ra = RateAverages.getTemp();
                 Rate failed = prof.getTunnelHistory().getFailedRate().getRate(60*60*1000);
@@ -198,18 +203,40 @@ class ProfileOrganizerRenderer {
                 long bonus = prof.getSpeedBonus();
                 long capBonus = prof.getCapacityBonus();
                 if (ok && fails == 0) {buf.append("<span class=ok>").append(_t("OK")).append("</span>");}
-                else if (fails > 0) {
-                    Rate accepted = prof.getTunnelCreateResponseTime().getRate(60*60*1000);
-                    long total = fails + accepted.computeAverages(ra, false).getTotalEventCount();
-                    if (total / fails <= 5) { // don't demote if less than 5%
-                        if (bonus == 9999999) {prof.setSpeedBonus(0);}
-                        prof.setCapacityBonus(-30);
-                    }
-                    if (total / fails <= 10) {  // hide if < 10%
-                        buf.append(" &bullet; ").append(fails).append('/')
-                           .append(total).append(' ').append(_t("Test Fails"));
-                    }
-                } else {buf.append("<span>&ensp;</span>");}
+                else if (!ok) {
+                    buf.append("<span class=\"notOk").append(isBanned ? " banned" : "")
+                       .append(isUnreachable ? " unreachable" : "");
+
+                    if (fails > 0) {
+                        Rate accepted = prof.getTunnelCreateResponseTime().getRate(60*60*1000);
+                        long total = fails + accepted.computeAverages(ra, false).getTotalEventCount();
+                        double failPercentage = (double) fails / total * 100;
+
+                        if (failPercentage <= 5.0) { // don't demote if less than 5%
+                            if (bonus == 9999999) {
+                                prof.setSpeedBonus(0);
+                            }
+                            prof.setCapacityBonus(-30);
+                        }
+
+                        boolean failHigh = failPercentage >= 10.0;
+                        if (failHigh) {
+                            buf.append(" failing").append(failPercentage >= 50.0 ? " fiftyPercent" : "");
+                        }
+                        buf.append("\" title=\"");
+                        buf.append("\u2022 ").append(fails).append('/').append(total).append(' ').append(_t("Test Fails"));
+                        if (isUnreachable) buf.append(" \u2022 ").append(_t("Unreachable"));
+                        if (isBanned) buf.append(" \u2022 ").append(_t("Banned"));
+                        buf.append("\">");
+
+                        if (failHigh) {
+                            buf.append("\u2022 ").append(fails).append('/').append(total).append(' ').append(_t("Test Fails"));
+                        }
+                        if (isUnreachable) buf.append(" \u2022 ").append(_t("Unreachable"));
+                        if (isBanned) buf.append(" \u2022 ").append(_t("Banned"));
+                    } else {buf.append("\">");}
+                    buf.append("</span>");
+                } else {buf.append("<span class=mostPass title=\"").append(_t("Most tests passing")).append("\">&ensp;</span>");}
                 buf.append("</td><td class=groups><span class=\"");
                 if (isIntegrated) buf.append("integrated ");
                 switch (tier) {

@@ -384,9 +384,9 @@ html:not(.unified) #homepage #sidebar #sb_routerControl{margin-top:-2px}
 .tunnelBuildStatus.accepting::before{background:var(--tunn_ready) no-repeat center center/15px}
 .tunnelBuildStatus.active::before,.ok,#ntcpconnections td.queue:empty::before{background:var(--tunn_active) no-repeat center center/15px}
 .tunnelBuildStatus.starting{color:#aa0}
-.tunnelBuildStatus.starting::before{background:var(--tunn_starting) no-repeat center center/15px}
+.tunnelBuildStatus.starting::before,.notOk,.mostPass,#profilelist td:nth-child(4) span:not([class]),#profilelist td:nth-child(5) span:not([class]){background:var(--tunn_starting) no-repeat center center/15px}
 .tunnelBuildStatus.rejecting{color:#933}
-.tunnelBuildStatus.rejecting::before{background:var(--tunn_reject) no-repeat center center/15px}
+.tunnelBuildStatus.rejecting::before,.notOk.fiftyPercent,#profiles .unreachable{background:var(--tunn_reject) no-repeat center center/15px}
 .tunnelBuildStatus.hidden{color:#999}
 .tunnelBuildStatus.hidden::before{background:var(--tunn_hidden) no-repeat center center/15px}
 
@@ -1042,7 +1042,7 @@ th label b:hover,th label:hover{color:#333337}
 .formaction{margin-top:-15px;padding:5px;text-align:right;border:var(--border_inner);background:#fafaff}
 .mediumtags{font-weight:700}
 .netdbentry .reachable,.sybil_routerinfo .reachable,#capabilities_key .reachable,#floodfills .reachable,#profilelist .reachable{background:linear-gradient(180deg,#fff,#e2ffe2)}
-.netdbentry .unreachable,#capabilities_key .unreachable,#floodfills .unreachable,#profilelist .unreachable{background:linear-gradient(180deg,#fff,#faa)}
+.netdbentry .unreachable,#capabilities_key .unreachable,#floodfills .unreachable{background:linear-gradient(180deg,#fff,#faa)}
 .netdbentry .ff,.sybil_routerinfo .ff,#capabilities_key .ff,#floodfills .ff,#profilelist .ff{background:linear-gradient(180deg,#fff,#ffe2ad)}
 .netdbentry .hidden,#capabilities_key .hidden,#floodfills .hidden,#profilelist .hidden{color:#999;background:linear-gradient(180deg,#fff,#ddd)}
 .netdbentry .ssutesting,#capabilities_key .ssutesting,#floodfills .ssutesting,#profilelist .ssutesting{background:linear-gradient(180deg,#fff,#ffb)}
@@ -1335,7 +1335,7 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 .profilegroup.integrated::before{background:var(--integrated) no-repeat left center}
 .profilegroup.standard::before{background:var(--standard) no-repeat left center}
 #peerprofiles.widescroll{margin-top:-12px;padding-top:120px;position:relative}
-#profiles .ok,#ntcpconnections td.queue:empty::before{width:15px;height:15px;display:inline-block;font-size:0;background-size:10px}
+#profiles .ok,#ntcpconnections td.queue:empty::before,#profiles .ok,#profiles .notOk,#profiles .mostPass,#profilelist td:nth-child(4) span:not([class]),#profilelist td:nth-child(5) span:not([class]){width:15px;height:15px;display:inline-block;font-size:0;background-size:10px}
 #profiles_overview{margin-bottom:13px;background-image:url(../images/profile.svg)}
 #profiles_overview+.widescroll{margin-bottom:-5px}
 #profiles span[hidden]{display:none!important}
@@ -1345,6 +1345,7 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 #profiles .wideload{text-align:center}
 #profiles .separator hr{display:none}
 #profiles .version{margin:0 2px}
+#profiles .unreachable{border:0;box-shadow:none}
 #profiles th,#profiles td{text-align:center}
 #profiles th{font-size:90%}
 #profilelist td:nth-child(2) span,#profilelist td:nth-child(3) span,#floodfills .tier{margin:0 2px;padding:1px 4px;min-width:20px;display:inline-block;box-sizing:border-box;vertical-align:middle;text-align:center;border:1px solid #bbd;line-height:1.3}

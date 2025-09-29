@@ -282,9 +282,9 @@ p:empty+.sb_notice{margin-top:9px}
 #sidebar .tunnelBuildStatus.active{color:#58ce3a}
 #sidebar .tunnelBuildStatus.active::before,.ok,#ntcpconnections td.queue:empty::before{background:var(--tunn_active) var(--center)/14px}
 #sidebar .tunnelBuildStatus.starting{color:#aa0}
-#sidebar .tunnelBuildStatus.starting::before{background:var(--tunn_starting) var(--center)/14px}
+#sidebar .tunnelBuildStatus.starting::before,.notOk,.mostPass,#profilelist td:nth-child(4) span:not([class]),#profilelist td:nth-child(5) span:not([class]){background:var(--tunn_starting) var(--center)/14px}
 #sidebar .tunnelBuildStatus.rejecting{color:#933}
-#sidebar .tunnelBuildStatus.rejecting::before{background:var(--tunn_reject) var(--center)/14px}
+#sidebar .tunnelBuildStatus.rejecting::before,.notOk.fiftyPercent,#profiles .unreachable{background:var(--tunn_reject) var(--center)/14px}
 #sidebar .tunnelBuildStatus.hidden{color:#999}
 #sidebar .tunnelBuildStatus.hidden::before{background:var(--tunn_hidden) var(--center)/14px}
 
@@ -852,6 +852,7 @@ td.ipv6{width:1%;max-width:24px}
 #profiles{position:relative;contain:paint}
 #profiles span[hidden]{display:none!important}
 #profiles .version{margin:0 2px}
+#profiles .unreachable{border:0;box-shadow:none}
 #profilelist{margin:1px 0 10px}
 #profilelist th{font-size:85%}
 #profilelist th:first-child,#profilelist th:nth-last-child(2),#profilelist td:not(.rif):first-child,#profilelist td:nth-last-child(2){white-space:nowrap;text-align:center}
@@ -909,7 +910,7 @@ pre#activetransports,#viewprofile pre{margin:0;padding:20px 20px 0;width:calc(10
 #viewprofile h3 span{margin:-26px -1px -1px 0;padding:5px;float:right;border:var(--border);background:#000}
 #profiles_overview{margin-bottom:9px;background:url(../images/profile.svg) no-repeat 15px center/28px,var(--msg)}
 #peerprofiles+h3{margin-top:0}
-#ntcpconnections td.queue:empty::before,#profiles .ok{width:12px;height:12px;display:inline-block;vertical-align:middle;font-size:0;background-size:9px}
+#ntcpconnections td.queue:empty::before,#profiles .ok,#profiles .notOk,#profiles .mostPass,#profilelist td:nth-child(4) span:not([class]),#profilelist td:nth-child(5) span:not([class]){width:12px;height:12px;display:inline-block;vertical-align:middle;font-size:0;background-size:9px}
 #ntcpconnections td.queue:empty::before{content:""}
 a[href^="configpeer?peer"]{width:24px;height:24px;display:inline-block;font-size:0;filter:drop-shadow(0 0 1px #777)}
 a[href^="configpeer?peer"]::after{margin-left:2px;width:22px;height:22px;display:inline-block;vertical-align:middle;text-align:center;background:var(--edit) var(--center);background-size:14px;content:""}
