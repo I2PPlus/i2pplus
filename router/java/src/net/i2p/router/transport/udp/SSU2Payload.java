@@ -233,7 +233,8 @@ class SSU2Payload {
                             sig.readBytes(bais);
                             if (DSAEngine.getInstance().verifySignature(sig, data, pub)) {
                                 Log log = ctx.logManager().getLog(SSU2Payload.class);
-                                if (log.shouldWarn()) {log.warn("Error reading RouterInfo", dfe);}
+                                if (log.shouldDebug()) {log.warn("Error reading RouterInfo", dfe);}
+                                else if (log.shouldWarn()) {log.warn("Error reading RouterInfo -> " + dfe.getMessage());}
                                 // partially filled-in RI, -1 is signal to IES2.gotRI()
                                 alice = new RouterInfo();
                                 alice.setIdentity(ident);
