@@ -112,9 +112,9 @@ class ProfileOrganizerRenderer {
                .append("<th>").append(_t("Caps")).append("</th>")
                .append("<th>").append(_t("Version")).append("</th>");
             if (enableReverseLookups()) {
-                buf.append("<th>").append(_t("Host")).append(" / ").append(_t("Domain")).append("</th>");
+                buf.append("<th class=host>").append(_t("Host")).append(" / ").append(_t("Domain")).append("</th>");
             } else {
-                buf.append("<th>").append(_t("Host")).append("</th>");
+                buf.append("<th class=host>").append(_t("Host")).append("</th>");
             }
             buf.append("<th>").append(_t("Status")).append("</th>")
                .append("<th class=groups>").append(_t("Groups")).append("</th>")
@@ -158,7 +158,7 @@ class ProfileOrganizerRenderer {
                        .append("\"><a href=\"/netdb?v=").append(DataHelper.stripHTML(v)).append("\">").append(DataHelper.stripHTML(v))
                        .append("</a></span>");
                 } else {buf.append("<span>&ensp;</span>");}
-                buf.append("</td><td>");
+                buf.append("</td><td class=host>");
                 long uptime = _context.router().getUptime();
                 String ip = (info != null) ? Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null;
                 String rl = null;
@@ -234,8 +234,14 @@ class ProfileOrganizerRenderer {
                         }
                         if (isUnreachable) buf.append(" \u2022 ").append(_t("Unreachable"));
                         if (isBanned) buf.append(" \u2022 ").append(_t("Banned"));
-                    } else {buf.append("\">");}
-                    buf.append("</span>");
+                    } else if (isUnreachable) {
+                        buf.append("\" title=\"\u2022 ").append(_t("Unreachable"));
+                        if (bonus == 9999999) {prof.setSpeedBonus(0);}
+                        prof.setCapacityBonus(-30);
+                    } else if (isBanned) {
+                        buf.append("\" title=\"\u2022 ").append(_t("Banned"));
+                    }
+                    buf.append("\"></span>");
                 } else {buf.append("<span class=mostPass title=\"").append(_t("Most tests passing")).append("\">&ensp;</span>");}
                 buf.append("</td><td class=groups><span class=\"");
                 if (isIntegrated) buf.append("integrated ");
