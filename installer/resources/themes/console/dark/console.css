@@ -859,7 +859,7 @@ td.ipv6{width:1%;max-width:24px}
 #profilelist th:first-child,#profilelist th:nth-child(2),#profilelist th:nth-child(3),#profilelist th:nth-child(4),#profilelist td:not(.rif):first-child,#profilelist td:not(.rih):nth-child(2),#profilelist td:nth-child(3),#profilelist td:nth-child(4){width:1%;white-space:nowrap;text-align:center}
 #profilelist th:nth-child(4),#profilelist td:nth-child(4){width:15%}
 #profilelist th:nth-child(5),#profilelist td:nth-child(5){width:40%;text-align:center}
-#profilelist th:nth-child(5),#profilelist td:nth-child(5){width:10%;min-width:56px;white-space:nowrap}
+#profilelist th:nth-child(5),#profilelist td:nth-child(5),#profilelist th.latency,#profilelist td.latency{width:5%;min-width:56px;white-space:nowrap;text-align:center}
 #profilelist th:nth-child(2)::after{right:-4px;z-index:10}
 #profilelist .tier,#profilelist .reachable,#profilelist .unreachable,#profilelist .ff{margin-top:-6px;margin-bottom:-6px;padding-top:2px;padding-bottom:1px}
 #profilelist tr:hover,#floodfills tr:hover{background:#030}
@@ -893,7 +893,7 @@ td.ipv6{width:1%;max-width:24px}
 #profilelist .viewedit{padding:1px}
 #profilelist .nospeed{text-align:center}
 #floodfills td:empty::before,#ntcpconnections td:not(:last-child):empty::before,#udpconnections td:not(:last-child):empty::before,#profilelist td:empty::before,#tunnels .cells:empty::after{width:100%;display:inline-block;text-align:center;content:"\2013";opacity:.8}
-#profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(6) span,#profilelist td:nth-last-child(2) span{min-width:20px;display:inline-block;vertical-align:middle;text-align:right}
+#profilelist td:nth-last-child(3) span,#profilelist td:nth-last-child(6) span,#profilelist td:nth-last-child(2) span{min-width:20px;display:inline-block;vertical-align:middle;text-align:center}
 #profilelist td:nth-child(7){width:unset;min-width:unset;text-align:center}
 #profilelist .lowlatency,#profilelist .highlatency{width:12px;min-width:0;display:inline-block;text-align:center;color:#373}
 #profilelist .highlatency{color:#900}
