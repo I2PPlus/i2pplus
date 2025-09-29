@@ -310,10 +310,12 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 } else {
                     fail("Bad PK msg 1, X = " + Base64.encode(_X, 0, KEY_SIZE) + " remaining = " + src.remaining());
                 }
+/*
                 _transport.getPumper().blockIP(_con.getRemoteIP());
                 if (_log.shouldWarn()) {
                     _log.warn("Temp banning IP address " + Addresses.toString(_con.getRemoteIP()) + " for 2 hours -> Sending corrupt handshake...");
                 }
+*/
                 return;
             }
 
@@ -345,10 +347,12 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                     // Got all we need, fail now
                     fail("\n* BAD Establishment handshake message #1: X = " + Base64.encode(_X, 0, KEY_SIZE) + " remaining = " + src.remaining(), gse);
                 }
+/*
                 _transport.getPumper().blockIP(_con.getRemoteIP());
                 if (_log.shouldWarn()) {
                     _log.warn("Temp banning IP address " + Addresses.toString(_con.getRemoteIP()) + " for 2 hours -> Sending corrupt handshake...");
                 }
+*/
                 return;
             } catch (RuntimeException re) {
                 fail("\n* BAD Establishment handshake message #1: X = " + Base64.encode(_X, 0, KEY_SIZE), re);

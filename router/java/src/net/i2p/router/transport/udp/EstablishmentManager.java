@@ -220,7 +220,7 @@ class EstablishmentManager {
         loadTokens();
         _alive = true;
         I2PThread t = new I2PThread(new Establisher(), "UDPEstablisher", true);
-        t.setPriority(I2PThread.MAX_PRIORITY);
+        t.setPriority(I2PThread.MAX_PRIORITY - 1);
         t.start();
     }
 
