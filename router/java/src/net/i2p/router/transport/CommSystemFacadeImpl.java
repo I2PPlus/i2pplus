@@ -824,6 +824,8 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                                         name = "CLOUDFLARE";
                                     } else if (lc.contains("t-mobile usa")) {
                                         name = "T-MOBILE USA";
+                                    } else if (lc.equals("mediacom communications corp (mcc-244)")) {
+                                        name = "MEDIACOM";
                                     } else if (lc.equals("root")) {
                                         name = "PRIVATE";
                                     } else if (lc.equals("non-ripe-ncc-managed-address-block")) {
