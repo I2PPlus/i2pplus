@@ -191,7 +191,7 @@ p:empty+.sb_notice{margin-top:7px}
 .tunnelBuildStatus.accepting::before{background:var(--tunn_ready) no-repeat center center/15px}
 .tunnelBuildStatus.active::before,.ok,#ntcpconnections td.queue:empty::before{background:var(--tunn_active) no-repeat center center/15px}
 .tunnelBuildStatus.starting{color:#aa0}
-.tunnelBuildStatus.starting::before,.notOk,.mostPass,#profilelist td:nth-child(4) span:not([class]),#profilelist td:nth-child(5) span:not([class]){background:var(--tunn_starting) no-repeat center center/15px}
+.tunnelBuildStatus.starting::before,.notOk,.mostPass{background:var(--tunn_starting) no-repeat center center/15px}
 .tunnelBuildStatus.rejecting{color:#933}
 .tunnelBuildStatus.rejecting::before,.notOk.fiftyPercent,#profiles .unreachable{background:var(--tunn_reject) no-repeat center center/15px}
 .tunnelBuildStatus.hidden{color:#999}
@@ -546,7 +546,7 @@ a.viewfullentry:hover{filter:drop-shadow(0 0 1px var(--hover))}
 #floodfills td:not(.rif):not(.rih):not(.rbw):empty::before,#ntcpconnections td:empty::before,#udpconnections td:empty::before,#profilelist td:empty::before{width:100%;display:inline-block;text-align:center;opacity:.8;content:"‒"}
 #floodfills td:not(.rif):not(.rih):not(.rbw):first-child,#profilelist td:first-child{width:1%;white-space:nowrap}
 #profiles_overview{background-image:url(/themes/console/images/profile.svg)}
-#profiles .ok,#ntcpconnections td.queue:empty::before,#profiles .ok,#profiles .notOk,#profiles .mostPass,#profilelist td:nth-child(4) span:not([class]),#profilelist td:nth-child(5) span:not([class]){display:inline-block;font-size:0;width:12px;height:12px;background-size:11px}
+#profiles .ok,#ntcpconnections td.queue:empty::before,#profiles .ok,#profiles .notOk,#profiles .mostPass{display:inline-block;font-size:0;width:12px;height:12px;background-size:11px}
 #profiles .unreachable{border:0;box-shadow:none}
 #profiles #capabilities_key table td:last-child{border:0}
 #profiles span[hidden]{display:none!important}

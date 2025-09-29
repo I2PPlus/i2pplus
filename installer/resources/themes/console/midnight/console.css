@@ -437,7 +437,7 @@ p:empty+.sb_notice{margin-top:10px}
 .tunnelBuildStatus.accepting::before{background:var(--tunn_ready) no-repeat center center/15px}
 .tunnelBuildStatus.active::before,.ok,#ntcpconnections td.queue:empty::before{background:var(--tunn_active) no-repeat center center/15px}
 .tunnelBuildStatus.starting{color:#aa0}
-.tunnelBuildStatus.starting::before,.notOk,.mostPass,#profilelist td:nth-child(4) span:not([class]),#profilelist td:nth-child(5) span:not([class]){background:var(--tunn_starting) no-repeat center center/15px}
+.tunnelBuildStatus.starting::before,.notOk,.mostPass{background:var(--tunn_starting) no-repeat center center/15px}
 .tunnelBuildStatus.rejecting{color:#933}
 .tunnelBuildStatus.rejecting::before,.notOk.fiftyPercent,#profiles .unreachable{background:var(--tunn_reject) no-repeat center center/15px}
 .tunnelBuildStatus.hidden{color:#999}
@@ -1898,7 +1898,7 @@ b.netdb_transport{margin:2px 8px 2px 0;padding:2px;min-width:64px;display:inline
 #netdboverview td,.sybil_addresses td{line-height:1.6}
 #netdb_ram{margin:0 2px 0 -2px;padding:2px 6px;display:inline-block;vertical-align:middle;line-height:1.4;font-size:90%;border:var(--border_badge);box-shadow:var(--highlight);background:var(--element)}
 
-#profiles .ok,#ntcpconnections td.queue:empty::before,.notOk,.mostPass,#profilelist td:nth-child(4) span:not([class]),#profilelist td:nth-child(5) span:not([class]),#profiles .unreachable{display:inline-block;font-size:0;width:12px;height:12px;background-size:11px}
+#profiles .ok,#ntcpconnections td.queue:empty::before,.notOk,.mostPass,#profiles .unreachable{display:inline-block;font-size:0;width:12px;height:12px;background-size:11px}
 #profiles .version{margin:0 2px}
 #profiles .unreachable{border:0;box-shadow:none}
 .version,.routerHash{margin:0;padding:2px 4px;display:inline-block;min-width:50px;text-align:center;font-weight:700;border:var(--border_badge);box-shadow:var(--highlight);background:var(--element)}
