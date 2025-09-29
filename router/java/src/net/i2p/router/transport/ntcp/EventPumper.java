@@ -15,6 +15,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.nio.channels.spi.SelectorProvider;
 import java.nio.channels.UnresolvedAddressException;
 import java.util.EnumSet;
 import java.util.Iterator;
@@ -69,7 +70,7 @@ class EventPumper implements Runnable {
      *  message, which is a 5-slot VTBM (~2700 bytes).
      *  The occasional larger message can use multiple buffers.
      */
-    private static final int BUF_SIZE = SystemVersion.isSlow() ? 8*1024 : 32*1024;
+    private static final int BUF_SIZE = SystemVersion.isSlow() ? 8*1024 : 16*1024;
 
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
         public ByteBuffer newInstance() {
@@ -90,8 +91,8 @@ class EventPumper implements Runnable {
 //    private static final long SELECTOR_LOOP_DELAY = 200;
     private static final int FAILSAFE_ITERATION_FREQ = 30*1000;
     private static final int FAILSAFE_LOOP_COUNT = SystemVersion.isSlow() ? 512 : 1024;
-    private static final long SELECTOR_LOOP_DELAY = SystemVersion.isSlow() ? 300 : 150;
-    private static final long BLOCKED_IP_FREQ = 2*60*60*1000;
+    private static final long SELECTOR_LOOP_DELAY = SystemVersion.isSlow() ? 200 : 100;
+    private static final long BLOCKED_IP_FREQ = 15*60*1000;
 
     /** tunnel test now disabled, but this should be long enough to allow an active tunnel to get started */
     private static final long MIN_EXPIRE_IDLE_TIME = 120*1000l;
@@ -111,8 +112,8 @@ class EventPumper implements Runnable {
 
 //    private static final int MIN_MINB = 4;
 //    private static final int MAX_MINB = 12;
-    private static final int MIN_MINB = SystemVersion.isSlow() ? 8 : 16;
-    private static final int MAX_MINB = SystemVersion.isSlow() ? 24 : 128;
+    private static final int MIN_MINB = SystemVersion.isSlow() ? 8 : 64;
+    private static final int MAX_MINB = SystemVersion.isSlow() ? 32 : 512;
     public static final String PROP_MAX_MINB = "i2np.ntcp.eventPumperMaxBuffers";
     private static final int MIN_BUFS;
     static {
@@ -149,10 +150,10 @@ class EventPumper implements Runnable {
     public synchronized void startPumping() {
         if (_log.shouldInfo()) {_log.info("Starting NTCP Pumper...");}
         try {
-            _selector = Selector.open();
+            _selector = SelectorProvider.provider().openSelector();
             _alive = true;
             I2PThread t = new I2PThread(this, "NTCP Pumper", true);
-            t.setPriority(I2PThread.MAX_PRIORITY);
+            t.setPriority(I2PThread.MAX_PRIORITY - 1);
             t.start();
         } catch (IOException ioe) {
             _log.log(Log.CRIT, "Error opening the NTCP selector", ioe);
@@ -211,138 +212,135 @@ class EventPumper implements Runnable {
      *  On high-bandwidth routers, this is the thread with the highest CPU usage, so
      *  take care to minimize overhead and unnecessary debugging stuff.
      */
-public void run() {
-    int loopCount = 0;
-    int loopCountSinceLastRate = 0;
-    int failsafeLoopCount = FAILSAFE_LOOP_COUNT;
-    long lastFailsafeIteration = System.nanoTime();
-    long lastBlockedIPClear = lastFailsafeIteration;
-    long nanoNow = System.nanoTime();
-    long now = nanoNow / 1_000_000L;
-    long lastLoopRateUpdate = now;
-    long lastKeySetUpdate = now;
+    public void run() {
+        int loopCount = 0;
+        int loopCountSinceLastRate = 0;
+        int failsafeLoopCount = FAILSAFE_LOOP_COUNT;
+        long lastFailsafeIteration = System.nanoTime();
+        long lastBlockedIPClear = lastFailsafeIteration;
+        long nanoNow = System.nanoTime();
+        long now = nanoNow / 1_000_000L;
+        long lastLoopRateUpdate = now;
+        long lastKeySetUpdate = now;
+        boolean shouldDebug = _log.shouldDebug();
 
-    // Background executor for failsafe loop
-    ScheduledExecutorService background = new ScheduledThreadPoolExecutor(1);
-    background.scheduleAtFixedRate(this::doFailsafeCheck, 5, 30, TimeUnit.SECONDS);
+        // Background executor for failsafe loop
+        ScheduledExecutorService background = new ScheduledThreadPoolExecutor(1);
+        background.scheduleAtFixedRate(this::doFailsafeCheck, 5, 30, TimeUnit.SECONDS);
 
-    try {
-        while (_alive && _selector.isOpen()) {
-            try {
-                _needsWakeup = false;
-                loopCount++;
-                loopCountSinceLastRate++;
-
+        try {
+            while (_alive && _selector.isOpen()) {
                 try {
-                    // Dynamic selector delay
-                    long delay = SELECTOR_LOOP_DELAY;
-                    if (_wantsWrite.isEmpty() && _wantsRead.isEmpty()) {
-                        delay = 1000; // idle
-                    }
-                    int count = _selector.select(delay);
-                    if (count > 0) {
-                        Set<SelectionKey> selected = _selector.selectedKeys();
-                        processKeys(selected);
-                        selected.clear();
-                    }
-                    runDelayedEvents();
-                } catch (ClosedSelectorException cse) {
-                    continue;
-                } catch (IOException ioe) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Error selecting", ioe);
-                    }
-                    continue;
-                } catch (CancelledKeyException cke) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Error selecting", cke);
-                    }
-                    continue;
-                }
+                    _needsWakeup = false;
+                    loopCount++;
+                    loopCountSinceLastRate++;
 
-                nanoNow = System.nanoTime();
-                now = nanoNow / 1_000_000L;
-
-                // Update stat every second
-                if (now - lastLoopRateUpdate >= 1000) {
-                    _context.statManager().addRateData("ntcp.pumperLoopsPerSecond", loopCountSinceLastRate);
-                    loopCountSinceLastRate = 0;
-                    lastLoopRateUpdate = now;
-                }
-
-                // Update keyset size stat every 5s
-                if (now - lastKeySetUpdate >= 5000) {
-                    Set<SelectionKey> all = _selector.keys();
-                    _context.statManager().addRateData("ntcp.pumperKeySetSize", all.size());
-                    lastKeySetUpdate = now;
-                }
-
-                // Throttle CPU if needed
-                int cpuLoadAvg = SystemVersion.getCPULoadAvg();
-                int pause = SystemVersion.isSlow() || cpuLoadAvg > 95 ? 30 : 10;
-                if ((loopCount % failsafeLoopCount) == failsafeLoopCount - 1) {
-                    if (_log.shouldInfo()) {
-                        _log.info("EventPumper throttle " + loopCount + " loops in " +
-                                  (now - lastFailsafeIteration) + " ms");
-                    }
-                    _context.statManager().addRateData("ntcp.failsafeThrottle", 1);
                     try {
-                        Thread.sleep(pause);
-                    } catch (InterruptedException ie) {}
-                }
-
-                // Clear blocked IPs periodically
-                if (now - lastBlockedIPClear >= BLOCKED_IP_FREQ / 1000L) {
-                    _blockedIPs.clear();
-                    lastBlockedIPClear = now;
-                }
-
-            } catch (RuntimeException re) {
-                _log.error("Error in EventPumper", re);
-            }
-        }
-    } finally {
-        background.shutdownNow();
-    }
-
-    // Clean up
-    try {
-        if (_selector.isOpen()) {
-            if (_log.shouldDebug()) {
-                _log.debug("Closing down EventPumper with selection keys remaining...");
-            }
-            Set<SelectionKey> keys = _selector.keys();
-            for (SelectionKey key : keys) {
-                try {
-                    Object att = key.attachment();
-                    if (att instanceof ServerSocketChannel) {
-                        ServerSocketChannel chan = (ServerSocketChannel) att;
-                        chan.close();
-                        key.cancel();
-                    } else if (att instanceof NTCPConnection) {
-                        NTCPConnection con = (NTCPConnection) att;
-                        con.close();
-                        key.cancel();
+                        // Dynamic selector delay
+                        long delay = SELECTOR_LOOP_DELAY;
+                        if (_wantsWrite.isEmpty() && _wantsRead.isEmpty()) {
+                            delay = 1000; // idle
+                        }
+                        int count = _selector.select(delay);
+                        if (count > 0) {
+                            Set<SelectionKey> selected = _selector.selectedKeys();
+                            processKeys(selected);
+                            selected.clear();
+                        }
+                        runDelayedEvents();
+                    } catch (ClosedSelectorException cse) {
+                        continue;
+                    } catch (IOException ioe) {
+                        if (shouldDebug) {_log.warn("Error selecting", ioe);}
+                        else if (_log.shouldWarn()) {_log.warn("Error selecting -> " + ioe.getMessage());}
+                        continue;
+                    } catch (CancelledKeyException cke) {
+                        if (shouldDebug) {_log.warn("Error selecting", cke);}
+                        else if (_log.shouldWarn()) {_log.warn("Error selecting -> " + cke.getMessage());}
+                        continue;
                     }
-                } catch (IOException ke) {
-                    _log.error("Error closing key " + key + " on EventPumper shutdown", ke);
+
+                    nanoNow = System.nanoTime();
+                    now = nanoNow / 1_000_000L;
+
+                    // Update stat every second
+                    if (now - lastLoopRateUpdate >= 1000) {
+                        _context.statManager().addRateData("ntcp.pumperLoopsPerSecond", loopCountSinceLastRate);
+                        loopCountSinceLastRate = 0;
+                        lastLoopRateUpdate = now;
+                    }
+
+                    // Update keyset size stat every 5s
+                    if (now - lastKeySetUpdate >= 5000) {
+                        Set<SelectionKey> all = _selector.keys();
+                        _context.statManager().addRateData("ntcp.pumperKeySetSize", all.size());
+                        lastKeySetUpdate = now;
+                    }
+
+                    // Throttle CPU if needed
+                    int cpuLoadAvg = SystemVersion.getCPULoadAvg();
+                    int pause = SystemVersion.isSlow() || cpuLoadAvg > 95 ? 30 : 10;
+                    if ((loopCount % failsafeLoopCount) == failsafeLoopCount - 1) {
+                        if (shouldDebug) {
+                            _log.debug("EventPumper throttle " + loopCount + " loops in " +
+                                      (now - lastFailsafeIteration) + " ms");
+                        }
+                        _context.statManager().addRateData("ntcp.failsafeThrottle", 1);
+                        try {
+                            Thread.sleep(pause);
+                        } catch (InterruptedException ie) {}
+                    }
+
+                    // Clear blocked IPs periodically
+                    if (now - lastBlockedIPClear >= BLOCKED_IP_FREQ / 1000L) {
+                        _blockedIPs.clear();
+                        lastBlockedIPClear = now;
+                    }
+
+                } catch (RuntimeException re) {
+                    _log.error("Error in EventPumper", re);
                 }
             }
-            _selector.close();
-        } else {
-            if (_log.shouldDebug()) {
-                _log.debug("Closing down EventPumper with no selection keys remaining...");
-            }
+        } finally {
+            background.shutdownNow();
         }
-    } catch (IOException e) {
-        _log.error("Error closing keys on EventPumper shutdown", e);
-    }
 
-    _wantsConRegister.clear();
-    _wantsRead.clear();
-    _wantsRegister.clear();
-    _wantsWrite.clear();
-}
+        // Clean up
+        try {
+            if (_selector.isOpen()) {
+                if (shouldDebug) {_log.debug("Closing down EventPumper with selection keys remaining...");}
+                Set<SelectionKey> keys = _selector.keys();
+                for (SelectionKey key : keys) {
+                    try {
+                        Object att = key.attachment();
+                        if (att instanceof ServerSocketChannel) {
+                            ServerSocketChannel chan = (ServerSocketChannel) att;
+                            chan.close();
+                            key.cancel();
+                        } else if (att instanceof NTCPConnection) {
+                            NTCPConnection con = (NTCPConnection) att;
+                            con.close();
+                            key.cancel();
+                        }
+                    } catch (IOException ke) {
+                        _log.error("Error closing key " + key + " on EventPumper shutdown", ke);
+                    }
+                }
+                _selector.close();
+            } else {
+                if (shouldDebug) {
+                    _log.debug("Closing down EventPumper with no selection keys remaining...");
+                }
+            }
+        } catch (IOException e) {
+            _log.error("Error closing keys on EventPumper shutdown", e);
+        }
+
+        _wantsConRegister.clear();
+        _wantsRead.clear();
+        _wantsRegister.clear();
+        _wantsWrite.clear();
+    }
 
     private void doFailsafeCheck() {
         try {
@@ -507,7 +505,7 @@ public void run() {
     /**
      *  High-frequency path in thread.
      */
-    private ByteBuffer acquireBuf() {return _bufferCache.acquire();}
+    public static ByteBuffer acquireBuf() {return _bufferCache.acquire();}
 
     /**
      *  Return a read buffer to the pool.
@@ -902,89 +900,115 @@ public void run() {
      */
     private void runDelayedEvents() {
         NTCPConnection con;
+
+        // Process read requests
         while ((con = _wantsRead.poll()) != null) {
             SelectionKey key = con.getKey();
-            try {setInterest(key, SelectionKey.OP_READ);}
-            catch (CancelledKeyException cke) {
-                // ignore, we remove/etc elsewhere
+            if (key == null || !key.isValid()) {
+                // Connection or key is already invalid; clean up
+                con.close();
+                continue;
+            }
+            try {
+                setInterest(key, SelectionKey.OP_READ);
+            } catch (CancelledKeyException cke) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Run Delayed Events: Cancelled Key Exception [1]");
+                    _log.warn("runDelayedEvents: Cancelled key during read registration", cke);
                 }
+                con.close();
             } catch (IllegalArgumentException iae) {
-                if (_log.shouldWarn()) {_log.warn("gnu?", iae);}
+                if (_log.shouldWarn()) {
+                    _log.warn("runDelayedEvents: Invalid key for read registration", iae);
+                }
+                con.close();
             }
         }
 
-        // check before instantiating iterator for speed
+        // Process write requests
         if (!_wantsWrite.isEmpty()) {
-            for (Iterator<NTCPConnection> iter = _wantsWrite.iterator(); iter.hasNext(); ) {
+            for (Iterator<NTCPConnection> iter = _wantsWrite.iterator(); iter.hasNext();) {
                 con = iter.next();
                 iter.remove();
-                if (con.isClosed()) {continue;}
+                if (con.isClosed()) continue;
+
                 SelectionKey key = con.getKey();
-                if (key == null) {continue;}
-                try {setInterest(key, SelectionKey.OP_WRITE);}
-                catch (CancelledKeyException cke) {
-                   if (_log.shouldWarn()) {
-                       _log.warn("Run Delayed Events: Cancelled Key Exception [2]");
-                   }
-                // ignore
+                if (key == null || !key.isValid()) {
+                    con.close();
+                    continue;
+                }
+
+                try {
+                    setInterest(key, SelectionKey.OP_WRITE);
+                } catch (CancelledKeyException cke) {
+                    if (_log.shouldWarn()) {
+                        _log.warn("runDelayedEvents: Cancelled key during write registration", cke);
+                    }
+                    con.close();
                 } catch (IllegalArgumentException iae) {
-                    if (_log.shouldWarn()) {_log.warn("gnu?", iae);}
+                    if (_log.shouldWarn()) {
+                        _log.warn("runDelayedEvents: Invalid key for write registration", iae);
+                    }
+                    con.close();
                 }
             }
         }
 
-        // only when address changes
+        // Process server socket registration
         ServerSocketChannel chan;
         while ((chan = _wantsRegister.poll()) != null) {
             try {
                 SelectionKey key = chan.register(_selector, SelectionKey.OP_ACCEPT);
                 key.attach(chan);
             } catch (ClosedChannelException cce) {
-                if (_log.shouldWarn()) _log.warn("Error registering", cce);
+                if (_log.shouldWarn()) {
+                    _log.warn("runDelayedEvents: Error registering server socket", cce);
+                }
             }
         }
 
+        // Process outbound connection registration
         while ((con = _wantsConRegister.poll()) != null) {
             final SocketChannel schan = con.getChannel();
             try {
                 SelectionKey key = schan.register(_selector, SelectionKey.OP_CONNECT);
                 key.attach(con);
                 con.setKey(key);
+
                 RouterAddress naddr = con.getRemoteAddress();
-                try {
-                    // no DNS lookups, do not use hostnames
-                    int port = naddr.getPort();
-                    byte[] ip = naddr.getIP();
-                    if (port <= 0 || ip == null) {
-                        throw new IOException("Invalid NTCP address: " + naddr);
-                    }
-                    InetSocketAddress saddr = new InetSocketAddress(InetAddress.getByAddress(ip), port);
-                    boolean connected = schan.connect(saddr);
-                    if (connected) {
-                        // Never happens, we use nonblocking
-                        setInterest(key, SelectionKey.OP_READ);
-                        processConnect(key);
-                    }
-                } catch (IOException ioe) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Error connecting to: " + Addresses.toString(naddr.getIP(), naddr.getPort()) +
-                                  "\n* Error: " + ioe.getMessage());
-                    }
-                    _context.statManager().addRateData("ntcp.connectFailedIOE", 1);
-                    _transport.markUnreachable(con.getRemotePeer().calculateHash());
-                    con.close(true);
-                } catch (UnresolvedAddressException uae) {
-                    if (_log.shouldWarn()) _log.warn("Unresolved address connecting", uae);
-                    _transport.markUnreachable(con.getRemotePeer().calculateHash());
-                    con.close(true);
-                } catch (CancelledKeyException cke) {con.close(false);}
-            } catch (ClosedChannelException cce) {
-                if (_log.shouldWarn()) {_log.warn("Error registering", cce);}
+                if (naddr.getPort() <= 0 || naddr.getIP() == null) {
+                    throw new IOException("Invalid NTCP address: " + naddr);
+                }
+
+                InetSocketAddress saddr = new InetSocketAddress(
+                    InetAddress.getByAddress(naddr.getIP()), naddr.getPort()
+                );
+
+                if (saddr != null && schan.connect(saddr)) {
+                    setInterest(key, SelectionKey.OP_READ);
+                    processConnect(key);
+                }
+            } catch (IOException | UnresolvedAddressException e) {
+                if (_log.shouldWarn()) {
+                    _log.warn("runDelayedEvents: Failed outbound connection to " + con, e);
+                }
+                con.closeOnTimeout("Connect failed: " + e.getMessage(), e);
+                _transport.markUnreachable(con.getRemotePeer().calculateHash());
+                _context.statManager().addRateData("ntcp.connectFailedTimeoutIOE", 1);
+            } catch (CancelledKeyException cke) {
+                if (_log.shouldWarn()) {
+                    _log.warn("runDelayedEvents: Cancelled key during connect", cke);
+                }
+                con.close();
+            } catch (Exception e) {
+                // Catch-all for unexpected errors during registration
+                if (_log.shouldWarn()) {
+                    _log.warn("runDelayedEvents: Unexpected error during outbound registration", e);
+                }
+                con.close();
             }
         }
 
+        // Periodic maintenance
         long now = System.currentTimeMillis();
         if (_lastExpired + 1000 <= now) {
             expireTimedOut();
