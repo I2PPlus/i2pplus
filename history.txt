@@ -1,3 +1,7 @@
+2025-09-29 dr|z3d
+ * Console: Iconize and add tooltips to peer status on /profiles
+ * Transports: Optimize and refactor NTCP EventPumper
+
 2025-09-24 dr|z3d
  * Transports: Fix syntax bug preventing inbound SSU connections
 
