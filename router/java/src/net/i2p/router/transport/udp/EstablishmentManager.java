@@ -228,6 +228,11 @@ class EstablishmentManager {
         _alive = false;
         saveTokens();
         notifyActivity();
+        _inboundStates.clear();
+        _outboundStates.clear();
+        _queuedOutbound.clear();
+        _outboundByClaimedAddress.clear();
+        _outboundByHash.clear();
     }
 
     /**
@@ -331,9 +336,9 @@ class EstablishmentManager {
                 //_context.banlist().banlistRouter(toHash, " <b>➜</b> Invalid SSU address", UDPTransport.STYLE);
                  if (toHash != null) {
                      if (!isBanned) {
-                       _context.banlist().banlistRouter(toHash, " <b>➜</b> Invalid SSU address", null, null, now + 8*60*1000);
+                       _context.banlist().banlistRouter(toHash, " <b>➜</b> Invalid SSU address", null, null, now + 4*60*60*1000);
                        if (_log.shouldWarn()) {
-                          _log.warn("[SSU2] Banning [" + truncHash + "] for 8h -> Invalid SSU address");
+                          _log.warn("[SSU2] Banning [" + truncHash + "] for 4h -> Invalid SSU address");
                        }
                     }
                 } else {
@@ -455,15 +460,14 @@ class EstablishmentManager {
                         (ourMTU > 0 && ourMTU < PeerState2.MIN_MTU)) {
                         _transport.markUnreachable(toHash);
                         _transport.failed(msg, "MTU too small");
-                        //_context.banlist().banlistRouter(toHash, " <b>➜</b> Invalid MTU", null, null, now + 8*60*1000);
                         if (toHash != null) {
                             if (!isBanned) {
-                                _context.banlist().banlistRouter(toHash, " <b>➜</b> Invalid MTU", null, null, now + 8*60*1000);
+                                _context.banlist().banlistRouter(toHash, " <b>➜</b> Invalid MTU", null, null, now + 4*60*60*1000);
                                 if (_log.shouldWarn()) {
-                                    _log.warn("[SSU2] Banning [" + truncHash + "] for 8h -> Invalid MTU");
+                                    _log.warn("[SSU2] Banning [" + truncHash + "] for 4h -> Invalid MTU");
                                 }
                             }
-                        } else if (ipAddress != "") {
+                        } else if (!ipAddress.isEmpty() && !ipAddress.equals("")) {
                             if (_log.shouldWarn()) {
                                 _log.warn("[SSU2] Router has invalid MTU (too small): " + ipAddress + ":" + maybePort);
                             }
@@ -482,12 +486,12 @@ class EstablishmentManager {
                     _transport.failed(msg, "Peer has no key, cannot establish connection -> Marking unreachable");
                     if (toHash != null) {
                         if (!isBanned) {
-                            _context.banlist().banlistRouter(toHash, " <b>➜</b> No Introduction key", null, null, now + 4*60*1000);
+                            _context.banlist().banlistRouter(toHash, " <b>➜</b> No Introduction key", null, null, now + 60*60*1000);
                             if (_log.shouldWarn()) {
-                                _log.warn("[SSU2] Banning [" + truncHash + "] for 4h -> No Introduction key");
+                                _log.warn("[SSU2] Banning [" + truncHash + "] for 1h -> No Introduction key");
                             }
                         }
-                    } else if (ipAddress != "") {
+                    } else if (!ipAddress.isEmpty() && !ipAddress.equals("")) {
                         if (_log.shouldWarn()) {
                                 _log.warn("[SSU2] Received no Introduction key from: " + ipAddress + ":" + maybePort);
                         }
@@ -502,12 +506,12 @@ class EstablishmentManager {
                     _transport.failed(msg, "Peer has BAD key, cannot establish connection -> Marking unreachable");
                     if (toHash != null) {
                         if (!isBanned) {
-                            _context.banlist().banlistRouter(toHash, " <b>➜</b> Bad Introduction key", null, null, now + 8*60*1000);
+                            _context.banlist().banlistRouter(toHash, " <b>➜</b> Bad Introduction key", null, null, now + 4*60*60*1000);
                             if (_log.shouldWarn()) {
-                                _log.warn("[SSU2] Banning [" + truncHash + "] for 8h -> Bad Introduction key");
+                                _log.warn("[SSU2] Banning [" + truncHash + "] for 4h -> Bad Introduction key");
                             }
                         }
-                    } else if (ipAddress != "") {
+                    } else if (!ipAddress.isEmpty() && !ipAddress.equals("")) {
                         if (_log.shouldWarn()) {
                             _log.warn("[SSU2] Received Bad Introduction key from: " + ipAddress + ":" + maybePort);
                         }
@@ -543,15 +547,16 @@ class EstablishmentManager {
         }
         if (state != null) {
             state.addMessage(msg);
-            List<OutNetMessage> queued = _queuedOutbound.remove(to);
+            List<OutNetMessage> queued = _queuedOutbound.get(to);
             if (queued != null) {
-                // see comments above
                 synchronized (queued) {
-                    for (OutNetMessage m : queued) {state.addMessage(m);}
+                    for (OutNetMessage m : queued) {
+                        state.addMessage(m);
+                    }
                 }
+                _queuedOutbound.remove(to); // remove only after processing
             }
         }
-
         if (rejected) {
             if (_log.shouldWarn())
                 _log.warn("[SSU2] Too many pending connections, rejecting OutboundEstablish to " + to);
@@ -660,9 +665,9 @@ class EstablishmentManager {
             }
             if (fromHash != null) {
                 if (!isBanned) {
-                   _context.banlist().banlistRouter(fromHash, " <b>➜</b> Invalid address/port in Session Request", null, null, now + 8*60*1000);
+                   _context.banlist().banlistRouter(fromHash, " <b>➜</b> Invalid address/port in Session Request", null, null, now + 15*60*1000);
                    if (_log.shouldWarn()) {
-                      _log.warn("[SSU2] Banning [" + truncHash + "] for 8h -> Invalid address/port in Session Request" + " (" + from + ")");
+                      _log.warn("[SSU2] Banning [" + truncHash + "] for 15m -> Invalid address/port in Session Request" + " (" + from + ")");
                    }
                 } else if (isBanned) {
                     if (_log.shouldInfo()) {
@@ -1086,24 +1091,27 @@ class EstablishmentManager {
         if (_queuedOutbound.isEmpty()) {return 0;}
         int admitted = 0;
         int max = getMaxConcurrentEstablish();
+
         for (Iterator<Map.Entry<RemoteHostId, List<OutNetMessage>>> iter = _queuedOutbound.entrySet().iterator();
              iter.hasNext() && _outboundStates.size() < max;) {
 
-            // ok, active shrunk, let's let some queued in.
             Map.Entry<RemoteHostId, List<OutNetMessage>> entry = iter.next();
-            try {iter.remove();}
-            catch (IllegalStateException ise) {continue;} // java 5 IllegalStateException here
+            iter.remove();
+
             List<OutNetMessage> allQueued = entry.getValue();
-            List<OutNetMessage> queued = new ArrayList<OutNetMessage>();
+            List<OutNetMessage> queued = new ArrayList<>();
             long now = _context.clock().now();
+
             synchronized (allQueued) {
-                for (OutNetMessage msg : allQueued) {
+                Iterator<OutNetMessage> it = allQueued.iterator();
+                while (it.hasNext()) {
+                    OutNetMessage msg = it.next();
                     if (now - Router.CLOCK_FUDGE_FACTOR > msg.getExpiration()) {
                         _transport.failed(msg, "Timed out in EstablishmentManager Outbound queue");
+                        it.remove();
                     } else {queued.add(msg);}
                 }
             }
-            if (queued.isEmpty()) {continue;}
 
             for (OutNetMessage m : queued) {
                 m.timestamp("No longer deferred - establishing...");
@@ -1628,7 +1636,7 @@ class EstablishmentManager {
                 istate = INTRO_STATE_FAILED;
                 charlie2.setIntroState(bobHash, istate);
                 _context.statManager().addRateData("udp.relayBadIP", 1);
-                _context.banlist().banlistRouter(charlieHash, " <b>➜</b> Bad Introduction data", null, null, _context.clock().now() + 6*60*60*1000);
+                _context.banlist().banlistRouter(charlieHash, " <b>➜</b> Bad Introduction data", null, null, _context.clock().now() + 60*60*1000);
                 charlie.fail();
                 return;
             }
@@ -1673,7 +1681,7 @@ class EstablishmentManager {
             }
             charlie2.setIntroState(bobHash, istate);
             if (code == RELAY_REJECT_CHARLIE_BANNED) {
-                _context.banlist().banlistRouter(charlieHash, " <b>➜</b> They banned us", null, null, _context.clock().now() + 6*60*60*1000);
+                _context.banlist().banlistRouter(charlieHash, " <b>➜</b> They banned us", null, null, _context.clock().now() + 60*60*1000);
             }
             charlie.fail();
             _liveIntroductions.remove(lnonce);
@@ -1712,7 +1720,7 @@ class EstablishmentManager {
         chacha.initializeKey(introKey, 0);
         long n = DataHelper.fromLong(data, off + PKT_NUM_OFFSET, 4);
         chacha.setNonce(n);
-        HPCallback cb = new HPCallback(id);
+        HPCallback cb = new HPCallback(id, _log);
         long now = _context.clock().now();
         long nonce;
         try {
@@ -1832,7 +1840,7 @@ class EstablishmentManager {
                 _context.statManager().addRateData("udp.relayBadIP", 1);
                 _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(),
                                                  " <b>➜</b> Bad Introduction data", null, null,
-                                                 _context.clock().now() + 6*60*60*1000);
+                                                 _context.clock().now() + 4*60*60*1000);
                 state.fail();
                 return;
             }
@@ -1849,7 +1857,7 @@ class EstablishmentManager {
                 _context.statManager().addRateData("udp.relayBadIP", 1);
                 _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(),
                                                  " <b>➜</b> Bad Introduction data", null, null,
-                                                 _context.clock().now() + 6*60*60*1000);
+                                                 _context.clock().now() + 4*60*60*1000);
                 state.fail();
                 return;
             }
@@ -2251,7 +2259,7 @@ class EstablishmentManager {
      */
     public void addOutboundToken(RemoteHostId peer, long token, long expires) {
         long now = _context.clock().now();
-        if (expires < now) {return;}
+        if (expires < now || token == 0) {return;}
         if (expires > now + 2*60*1000) {
             // don't save if symmetric natted
             byte[] ip = peer.getIP();
@@ -2595,24 +2603,33 @@ class EstablishmentManager {
      */
     private static class HPCallback implements SSU2Payload.PayloadCallback {
         private final RemoteHostId _from;
+        private final Log _log;
+
         public long _timeReceived;
         public byte[] _aliceIP;
         public int _alicePort;
         public int _respCode = 999;
         public byte[] _respData;
 
-        public HPCallback(RemoteHostId from) {_from = from;}
+        public HPCallback(RemoteHostId from, Log log) {
+            _from = from;
+            _log = log;
+        }
 
-        public void gotDateTime(long time) {_timeReceived = time;}
+        public void gotDateTime(long time) {
+            _timeReceived = time;
+        }
 
-        public void gotOptions(byte[] options, boolean isHandshake) {}
+        public void gotOptions(byte[] options, boolean isHandshake) {
+            // Options are allowed in HolePunch (but ignored)
+        }
 
         public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) {
-            throw new IllegalStateException("Bad block in HolePunch");
+            warn("Unexpected RI block in HolePunch");
         }
 
         public void gotRIFragment(byte[] data, boolean isHandshake, boolean flood, boolean isGzipped, int frag, int totalFrags) {
-            throw new IllegalStateException("Bad block in HolePunch");
+            warn("Unexpected RI fragment block in HolePunch");
         }
 
         public void gotAddress(byte[] ip, int port) {
@@ -2621,56 +2638,66 @@ class EstablishmentManager {
         }
 
         public void gotRelayTagRequest() {
-            throw new IllegalStateException("Bad block in HolePunch");
+            warn("Unexpected RelayTagRequest block in HolePunch");
         }
 
         public void gotRelayTag(long tag) {
-            throw new IllegalStateException("Bad block in HolePunch");
+            warn("Unexpected RelayTag block in HolePunch");
         }
 
         public void gotRelayRequest(byte[] data) {
-            throw new IllegalStateException("Bad block in HolePunch");
+            warn("Unexpected RelayRequest block in HolePunch");
         }
 
         public void gotRelayResponse(int status, byte[] data) {
+            if (data == null || data.length < 12) {
+                warn("Invalid RelayResponse data in HolePunch");
+                return;
+            }
             _respCode = status;
             _respData = data;
         }
 
         public void gotRelayIntro(Hash aliceHash, byte[] data) {
-            throw new IllegalStateException("Bad block in HolePunch");
+            warn("Unexpected RelayIntro block in HolePunch");
         }
 
         public void gotPeerTest(int msg, int status, Hash h, byte[] data) {
-            throw new IllegalStateException("Bad block in HolePunch");
+            warn("Unexpected PeerTest block in HolePunch");
         }
 
         public void gotToken(long token, long expires) {
-            throw new IllegalStateException("Bad block in HolePunch");
+            warn("Unexpected Token block in HolePunch");
         }
 
         public void gotI2NP(I2NPMessage msg) {
-            throw new IllegalStateException("Bad block in HolePunch");
+            warn("Unexpected I2NP block in HolePunch");
         }
 
-        public void gotFragment(byte[] data, int off, int len, long messageId,int frag, boolean isLast) {
-            throw new IllegalStateException("Bad block in HolePunch");
+        public void gotFragment(byte[] data, int off, int len, long messageId, int frag, boolean isLast) {
+            warn("Unexpected Fragment block in HolePunch");
         }
 
         public void gotACK(long ackThru, int acks, byte[] ranges) {
-            throw new IllegalStateException("Bad block in HolePunch");
+            warn("Unexpected ACK block in HolePunch");
         }
 
         public void gotTermination(int reason, long count) {
-            throw new IllegalStateException("Bad block in HolePunch");
+            warn("Unexpected Termination block in HolePunch");
         }
 
         public void gotPathChallenge(RemoteHostId from, byte[] data) {
-            throw new IllegalStateException("Bad block in HolePunch");
+            warn("Unexpected PathChallenge block in HolePunch");
         }
 
         public void gotPathResponse(RemoteHostId from, byte[] data) {
-            throw new IllegalStateException("Bad block in HolePunch");
+            warn("Unexpected PathResponse block in HolePunch");
+        }
+
+        private void warn(String msg) {
+            if (_log != null && _log.shouldWarn()) {
+                _log.warn("[SSU2] " + msg + " from " + _from);
+            }
         }
     }
 
