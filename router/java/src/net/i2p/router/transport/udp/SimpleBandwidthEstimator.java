@@ -6,65 +6,67 @@ import net.i2p.util.BandwidthEstimator;
 import net.i2p.util.Log;
 
 /**
- *  A Westwood+ bandwidth estimator with
- *  a first stage anti-aliasing low pass filter based on RTT,
- *  and the time-varying Westwood filter based on inter-arrival time.
+ * A Westwood+ bandwidth estimator with:
+ * &lt;ul&gt;
+ *   &lt;li&gt;A first-stage anti-aliasing low-pass filter based on RTT&lt;/li&gt;
+ *   &lt;li&gt;A time-varying EWMA filter based on inter-arrival time&lt;/li&gt;
+ * &lt;/ul&gt;
  *
- *  Ref: TCP Westwood: End-to-End Congestion Control for Wired/Wireless Networks
- *  Casetti et al
- *  (Westwood)
+ * &lt;p&gt;This estimator is adapted from the Linux kernel's &lt;code&gt;tcp_westwood.c&lt;/code&gt;
+ * implementation and the Westwood+ research paper.&lt;/p&gt;
  *
- *  Ref: End-to-End Bandwidth Estimation for Congestion Control in Packet Networks
- *  Grieco and Mascolo
- *  (Westwood+)
+ * &lt;p&gt;Ref: &lt;em&gt;TCP Westwood: End-to-End Congestion Control for Wired/Wireless Networks&lt;/em&gt; - Casetti et al.&lt;/p&gt;
+ * &lt;p&gt;Ref: &lt;em&gt;End-to-End Bandwidth Estimation for Congestion Control in Packet Networks&lt;/em&gt; - Grieco and Mascolo.&lt;/p&gt;
  *
- *  Adapted from: Linux kernel tcp_westwood.c (GPLv2)
- *
- *  @since 0.9.49 adapted from streaming
+ * &lt;p&gt;Adapted for I2P streaming transport in 0.9.49.&lt;/p&gt;
  */
 class SimpleBandwidthEstimator implements BandwidthEstimator {
 
     private final I2PAppContext _context;
     private final Log _log;
-    // access outside lock on SBE to avoid deadlock
     private final PeerState _state;
 
     private long _tAck;
-    // bw_est, bw_ns_est
     private float _bKFiltered, _bK_ns_est;
-    // bk
     private int _acked;
 
-    // As in kernel tcp_westwood.c
-    // Should probably match ConnectionOptions.TCP_ALPHA
     private static final int DECAY_FACTOR = 8;
     private static final int WESTWOOD_RTT_MIN = 500;
 
+    /**
+     * Creates a new bandwidth estimator for the given peer.
+     *
+     * @param ctx I2P application context
+     * @param state peer state for RTT and other transport metrics
+     */
     SimpleBandwidthEstimator(I2PAppContext ctx, PeerState state) {
         _log = ctx.logManager().getLog(SimpleBandwidthEstimator.class);
         _context = ctx;
         _state = state;
-        // assume we're about to send something
         _tAck = ctx.clock().now();
         _acked = -1;
     }
 
     /**
-     * Records an arriving ack.
-     * @param acked how many bytes were acked with this ack
+     * Records a new bandwidth sample based on the number of bytes acknowledged.
+     *
+     * @param acked number of bytes newly acknowledged
      */
     public void addSample(int acked) {
         long now = _context.clock().now();
-        // avoid deadlock
         int rtt = _state.getRTT();
         addSample(acked, now, rtt);
     }
 
+    /**
+     * Internal synchronized version of addSample that also takes the current time and RTT.
+     *
+     * @param acked number of bytes newly acknowledged
+     * @param now current time in milliseconds
+     * @param rtt current round-trip time estimate
+     */
     private synchronized void addSample(int acked, long now, int rtt) {
         if (_acked < 0) {
-            // first sample
-            // use time since constructed as the RTT
-            // getRTT() would return zero here.
             long deltaT = Math.max(now - _tAck, WESTWOOD_RTT_MIN);
             float bkdt = ((float) acked) / deltaT;
             _bKFiltered = bkdt;
@@ -72,34 +74,37 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
             _acked = 0;
             _tAck = now;
             if (_log.shouldDebug())
-                _log.debug("First sample bytes: " + acked + "; DeltaT: " + deltaT + "\n* " + this);
+                _log.debug(String.format(
+                    "Initial sample: %d bytes over %d ms → %.4f B/ms (%s/s)",
+                    acked, deltaT,
+                    _bKFiltered,
+                    DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false)
+                ));
         } else {
             _acked += acked;
-            // anti-aliasing filter
-            // As in kernel tcp_westwood.c
-            // and the Westwood+ paper
             if (now - _tAck >= Math.max(rtt, WESTWOOD_RTT_MIN))
                 computeBWE(now, rtt);
         }
     }
 
     /**
-     * @return the current bandwidth estimate in bytes/ms.
+     * Returns the current bandwidth estimate in bytes per millisecond.
+     *
+     * @return bandwidth estimate in bytes per millisecond
      */
     public float getBandwidthEstimate() {
         return getBandwidthEstimate(_context.clock().now());
     }
 
     /**
-     * @return the current bandwidth estimate in bytes/ms.
+     * Returns the current bandwidth estimate at the specified time.
+     *
+     * @param now current time in milliseconds
+     * @return bandwidth estimate in bytes per millisecond
      * @since 0.9.58
      */
     public float getBandwidthEstimate(long now) {
-        // avoid deadlock
         int rtt = _state.getRTT();
-        // anti-aliasing filter
-        // As in kernel tcp_westwood.c
-        // and the Westwood+ paper
         synchronized(this) {
             if (now - _tAck >= Math.max(rtt, WESTWOOD_RTT_MIN))
                 return computeBWE(now, rtt);
@@ -107,6 +112,13 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
         }
     }
 
+    /**
+     * Synchronized version of the bandwidth computation method.
+     *
+     * @param now current time in milliseconds
+     * @param rtt current round-trip time
+     * @return updated bandwidth estimate
+     */
     private synchronized float computeBWE(final long now, final int rtt) {
         if (_acked < 0)
             return 0.0f; // nothing ever sampled
@@ -116,7 +128,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
     }
 
     /**
-     * Optimized version of updateBK with packets == 0
+     * Applies exponential decay to the bandwidth estimate when no new data is received.
      */
     private void decay() {
         _bK_ns_est *= (DECAY_FACTOR - 1) / (float) DECAY_FACTOR;
@@ -124,31 +136,32 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
     }
 
     /**
-     * Here we insert virtual null samples if necessary as in Westwood,
-     * And use a very simple EWMA (exponential weighted moving average)
-     * time-varying filter, as in kernel tcp_westwood.c
+     * Updates the bandwidth estimate using the latest sample.
+     * If no recent acknowledgments were received, virtual null samples are inserted.
      *
-     * @param time the time of the measurement
-     * @param packets number of bytes acked
-     * @param rtt current rtt
+     * @param time time of the measurement
+     * @param packets number of bytes acknowledged
+     * @param rtt current round-trip time
      */
     private void updateBK(long time, int packets, int rtt) {
         long deltaT = time - _tAck;
         if (rtt < WESTWOOD_RTT_MIN)
             rtt = WESTWOOD_RTT_MIN;
         if (deltaT > 2 * rtt) {
-            // Decay with virtual null samples as in the Westwood paper
             int numrtts = Math.min((int) ((deltaT / rtt) - 1), 2 * DECAY_FACTOR);
             for (int i = 0; i < numrtts; i++) {
                 decay();
             }
             deltaT -= numrtts * rtt;
             if (_log.shouldDebug())
-                _log.debug("Decayed " + numrtts + " times; New _bK_ns_est: " + _bK_ns_est + "\n* " + this);
+                _log.debug(String.format(
+                    "No ACKs → Decayed %d× → %s/s",
+                    numrtts,
+                    DataHelper.formatSize2Decimal((long) (_bK_ns_est * 1000), false)
+                ));
         }
         float bkdt;
         if (packets > 0) {
-            // As in kernel tcp_westwood.c
             bkdt = ((float) packets) / deltaT;
             _bK_ns_est = westwood_do_filter(_bK_ns_est, bkdt);
             _bKFiltered = westwood_do_filter(_bKFiltered, _bK_ns_est);
@@ -158,23 +171,37 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
         }
         _tAck = time;
         if (_log.shouldDebug())
-            _log.debug("ComputeBWE bytes: " + packets + "; DeltaT: " + deltaT +
-                       "; bK/DeltaT: " + bkdt + "; _bK_ns_est: " + _bK_ns_est + "\n* " + this);
+            _log.debug(String.format(
+                "%d B over %d ms → %.4f B/ms (%s/s)",
+                packets, deltaT,
+                bkdt,
+                DataHelper.formatSize2Decimal((long) (_bK_ns_est * 1000), false)
+            ));
     }
 
     /**
-     *  As in kernel tcp_westwood.c
+     * Applies an exponential weighted moving average (EWMA) filter to the bandwidth estimate.
+     *
+     * @param a previous estimate
+     * @param b new measurement
+     * @return filtered estimate
      */
     private static float westwood_do_filter(float a, float b) {
         return (((DECAY_FACTOR - 1) * a) + b) / DECAY_FACTOR;
     }
 
+    /**
+     * Returns a string representation of this estimator's current state.
+     *
+     * @return string representation
+     */
     @Override
     public synchronized String toString() {
-        return "SBE: " +
-                " _bKFiltered " + _bKFiltered +
-                "; _tAck " + _tAck + " -> " +
-                DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false) +
-                "Bps";
+        return String.format(
+            "Bandwidth: %.4f B/ms (%s/s) @ %d ms",
+            _bKFiltered,
+            DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false),
+            _tAck
+        );
     }
 }
