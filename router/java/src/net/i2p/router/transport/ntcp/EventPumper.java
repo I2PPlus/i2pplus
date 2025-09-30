@@ -51,8 +51,8 @@ class EventPumper implements Runnable {
     private final Log _log;
     private volatile boolean _alive;
     private Selector _selector;
-    //private final Set<NTCPConnection> _wantsWrite = new ConcurrentHashSet<NTCPConnection>(32);
-    private final Set<NTCPConnection> _wantsWrite = new ConcurrentHashSet<NTCPConnection>(64);
+    private final Queue<NTCPConnection> _wantsWrite = new ConcurrentLinkedQueue<NTCPConnection>();
+
     /**
      *  The following 3 are unbounded and lockless for performance in runDelayedEvents()
      */
@@ -905,51 +905,64 @@ class EventPumper implements Runnable {
         while ((con = _wantsRead.poll()) != null) {
             SelectionKey key = con.getKey();
             if (key == null || !key.isValid()) {
-                // Connection or key is already invalid; clean up
+                if (_log.shouldDebug()) {
+                    _log.debug("[NTCP2] Dropping connection with invalid key during read registration: " + con);
+                }
                 con.close();
                 continue;
             }
             try {
                 setInterest(key, SelectionKey.OP_READ);
             } catch (CancelledKeyException cke) {
-                if (_log.shouldWarn()) {
-                    _log.warn("runDelayedEvents: Cancelled key during read registration", cke);
+                if (_log.shouldDebug()) {
+                    _log.debug("[NTCP2] Cancelled key during read registration for connection to " + con.getRemotePeer(), cke);
+                } else if (_log.shouldWarn()) {
+                    _log.warn("[NTCP2] Cancelled key during read registration for connection to " + con.getRemotePeer() +
+                        (cke.getMessage() != null ? " -> " + cke.getMessage() : ""));
                 }
                 con.close();
             } catch (IllegalArgumentException iae) {
-                if (_log.shouldWarn()) {
-                    _log.warn("runDelayedEvents: Invalid key for read registration", iae);
+                if (_log.shouldDebug()) {
+                    _log.debug("[NTCP2] Invalid key for read registration (" + con + ")", iae);
+                } else if (_log.shouldWarn()) {
+                    _log.warn("[NTCP2] Invalid key for read registration (" + con + "): " +
+                        (iae.getMessage() != null ? iae.getMessage() : ""));
                 }
                 con.close();
             }
         }
 
         // Process write requests
-        if (!_wantsWrite.isEmpty()) {
-            for (Iterator<NTCPConnection> iter = _wantsWrite.iterator(); iter.hasNext();) {
-                con = iter.next();
-                iter.remove();
-                if (con.isClosed()) continue;
-
-                SelectionKey key = con.getKey();
-                if (key == null || !key.isValid()) {
-                    con.close();
-                    continue;
+        while ((con = _wantsWrite.poll()) != null) {
+            if (con.isClosed()) {
+                continue;
+            }
+            SelectionKey key = con.getKey();
+            if (key == null || !key.isValid()) {
+                if (_log.shouldDebug()) {
+                    _log.debug("[NTCP2] Dropping connection with invalid key during write registration: " + con);
                 }
-
-                try {
-                    setInterest(key, SelectionKey.OP_WRITE);
-                } catch (CancelledKeyException cke) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("runDelayedEvents: Cancelled key during write registration", cke);
-                    }
-                    con.close();
-                } catch (IllegalArgumentException iae) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("runDelayedEvents: Invalid key for write registration", iae);
-                    }
-                    con.close();
+                con.close();
+                continue;
+            }
+            try {
+                setInterest(key, SelectionKey.OP_WRITE);
+            } catch (CancelledKeyException cke) {
+                if (_log.shouldDebug()) {
+                    _log.debug("[NTCP2] Cancelled key during write registration for connection to " + con.getRemotePeer(), cke);
+                } else if (_log.shouldWarn()) {
+                    _log.warn("[NTCP2] Cancelled key during write registration for connection to " + con.getRemotePeer() +
+                        (cke.getMessage() != null ? " -> " + cke.getMessage() : ""));
                 }
+                con.close();
+            } catch (IllegalArgumentException iae) {
+                if (_log.shouldDebug()) {
+                    _log.debug("[NTCP2] Invalid key for write registration (" + con + ")", iae);
+                } else if (_log.shouldWarn()) {
+                    _log.warn("[NTCP2] Invalid key for write registration (" + con + "): " +
+                        (iae.getMessage() != null ? iae.getMessage() : ""));
+                }
+                con.close();
             }
         }
 
@@ -960,8 +973,11 @@ class EventPumper implements Runnable {
                 SelectionKey key = chan.register(_selector, SelectionKey.OP_ACCEPT);
                 key.attach(chan);
             } catch (ClosedChannelException cce) {
-                if (_log.shouldWarn()) {
-                    _log.warn("runDelayedEvents: Error registering server socket", cce);
+                if (_log.shouldDebug()) {
+                    _log.debug("[NTCP2] Error registering server socket", cce);
+                } else if (_log.shouldWarn()) {
+                    _log.warn("[NTCP2] Error registering server socket: " +
+                        (cce.getMessage() != null ? cce.getMessage() : ""));
                 }
             }
         }
@@ -969,13 +985,17 @@ class EventPumper implements Runnable {
         // Process outbound connection registration
         while ((con = _wantsConRegister.poll()) != null) {
             final SocketChannel schan = con.getChannel();
+            if (schan == null || con.isClosed()) {
+                continue;
+            }
+
             try {
                 SelectionKey key = schan.register(_selector, SelectionKey.OP_CONNECT);
                 key.attach(con);
                 con.setKey(key);
 
                 RouterAddress naddr = con.getRemoteAddress();
-                if (naddr.getPort() <= 0 || naddr.getIP() == null) {
+                if (naddr == null || naddr.getPort() <= 0 || naddr.getIP() == null) {
                     throw new IOException("Invalid NTCP address: " + naddr);
                 }
 
@@ -987,22 +1007,31 @@ class EventPumper implements Runnable {
                     setInterest(key, SelectionKey.OP_READ);
                     processConnect(key);
                 }
+
             } catch (IOException | UnresolvedAddressException e) {
-                if (_log.shouldWarn()) {
-                    _log.warn("runDelayedEvents: Failed outbound connection to " + con, e);
+                if (_log.shouldDebug()) {
+                    _log.debug("[NTCP2] Failed outbound connection to " + con.getRemotePeer(), e);
+                } else if (_log.shouldWarn()) {
+                    _log.warn("[NTCP2] Failed outbound connection to " + con.getRemotePeer() +
+                        (e.getMessage() != null ? " -> " + e.getMessage() : ""));
                 }
                 con.closeOnTimeout("Connect failed: " + e.getMessage(), e);
                 _transport.markUnreachable(con.getRemotePeer().calculateHash());
                 _context.statManager().addRateData("ntcp.connectFailedTimeoutIOE", 1);
             } catch (CancelledKeyException cke) {
-                if (_log.shouldWarn()) {
-                    _log.warn("runDelayedEvents: Cancelled key during connect", cke);
+                if (_log.shouldDebug()) {
+                    _log.debug("[NTCP2] Cancelled key during connect to " + con.getRemotePeer(), cke);
+                } else if (_log.shouldWarn()) {
+                    _log.warn("[NTCP2] Cancelled key during connect to " + con.getRemotePeer() +
+                        (cke.getMessage() != null ? " -> " + cke.getMessage() : ""));
                 }
                 con.close();
             } catch (Exception e) {
-                // Catch-all for unexpected errors during registration
-                if (_log.shouldWarn()) {
-                    _log.warn("runDelayedEvents: Unexpected error during outbound registration", e);
+                if (_log.shouldDebug()) {
+                    _log.debug("[NTCP2] Unexpected error during outbound registration for " + con.getRemotePeer(), e);
+                } else if (_log.shouldWarn()) {
+                    _log.warn("[NTCP2] Unexpected error during outbound registration for " + con.getRemotePeer() +
+                        (e.getMessage() != null ? " -> " + e.getMessage() : ""));
                 }
                 con.close();
             }
