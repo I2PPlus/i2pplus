@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
@@ -119,7 +120,7 @@ public class PeerState {
     static final long RETRANSMISSION_PERIOD_WIDTH = SystemVersion.isSlow() ? 100 : 400;
 
     private int _messagesReceived;
-    private int _messagesSent;
+    private final AtomicInteger _messagesSent = new AtomicInteger();
     private int _packetsTransmitted;
     /** how many packets were retransmitted within the last RETRANSMISSION_PERIOD_WIDTH packets */
     private int _packetsRetransmitted;
@@ -266,6 +267,11 @@ public class PeerState {
     /** If this many acks arrive out of order, fast rtx */
     private static final int FAST_RTX_ACKS = 3;
 
+    /** @since 0.9.68+ */
+    private final Object _outboundLock = new Object() {
+        private static final long serialVersionUID = 1L;
+    };
+
     /**
      *  For SSU2
      *
@@ -363,7 +369,7 @@ public class PeerState {
      *  candidate for removal
      */
     public int getSendWindowBytes() {
-        synchronized(_outboundMessages) {return _sendWindowBytes;}
+        synchronized(_sendWindowBytesRemainingLock) {return _sendWindowBytes;}
     }
 
     /** how many bytes can we send to the peer in the current second */
@@ -381,7 +387,10 @@ public class PeerState {
         if (_remoteIPAddress == null) {
             try {_remoteIPAddress = InetAddress.getByAddress(_remoteIP);}
             catch (UnknownHostException uhe) {
-                if (_log.shouldError()) {_log.error("Invalid IP address? ", uhe);}
+                if (_log.shouldError()) {
+                    _log.error("Invalid IP address? ", uhe);
+                }
+                return null;
             }
         }
         return _remoteIPAddress;
@@ -484,7 +493,7 @@ public class PeerState {
     }
 
     int incrementConsecutiveFailedSends() {
-        synchronized(_outboundMessages) {
+        synchronized(_outboundLock) {
             _consecutiveFailedSends++;
             return _consecutiveFailedSends;
         }
@@ -551,7 +560,7 @@ public class PeerState {
      *  2nd stat in CWND column, otherwise unused - candidate for removal
      */
     public int getConcurrentSends() {
-        synchronized(_outboundMessages) {return _outboundMessages.size();}
+        synchronized(_outboundLock) {return _outboundMessages.size();}
     }
 
     /**
@@ -559,14 +568,14 @@ public class PeerState {
      *  candidate for removal
      */
     public int getConcurrentSendWindow() {
-        synchronized(_outboundMessages) {return _concurrentMessagesAllowed;}
+        synchronized(_outboundLock) {return _concurrentMessagesAllowed;}
     }
 
     /**
      *  4th stat in CWND column, otherwise unused - candidate for removal
      */
     public int getConsecutiveSendRejections() {
-        synchronized(_outboundMessages) {return _consecutiveRejections;}
+        synchronized(_outboundLock) {return _consecutiveRejections;}
     }
 
     public boolean isInbound() {return _isInbound;}
@@ -629,8 +638,7 @@ public class PeerState {
      */
     int expireInboundMessages() {
         int rv = 0;
-
-        synchronized (_inboundMessages) {
+        synchronized (_outboundLock) {
             for (Iterator<InboundMessageState> iter = _inboundMessages.values().iterator(); iter.hasNext(); ) {
                 InboundMessageState state = iter.next();
                 if (state.isExpired() || _dead) {iter.remove();}
@@ -743,10 +751,10 @@ public class PeerState {
      *  We sent a message which was ACKed containing the given # of bytes.
      */
     private void messageACKed(int bytesACKed, int maxPktSz, long lifetime, int numSends, boolean anyPending, boolean anyQueued) {
-        synchronized(this) {
+        synchronized(_sendWindowBytesRemainingLock) {
             locked_messageACKed(bytesACKed, maxPktSz, lifetime, numSends, anyPending, anyQueued);
+            _bwEstimator.addSample(bytesACKed);
         }
-        _bwEstimator.addSample(bytesACKed);
         if (numSends >= 2 && _log.shouldDebug()) {
             _log.debug("[" + _remotePeer.toBase64().substring(0,6) + "] ACKed after numSends=" + numSends +
                        " with lifetime=" + lifetime + " and size=" + bytesACKed);
@@ -817,10 +825,12 @@ public class PeerState {
     /**
      *  @since 0.9.2
      */
-    synchronized void setHisMTU(int mtu) {
-        if (mtu <= _minMTU || mtu >= _largeMTU) {return;}
-        if (mtu < _largeMTU) {_largeMTU = mtu;}
-        if (mtu < _mtu) {_mtu = mtu;}
+    void setHisMTU(int mtu) {
+        synchronized (_outboundLock) {
+            if (mtu <= _minMTU || mtu >= _largeMTU) {return;}
+            if (mtu < _largeMTU) {_largeMTU = mtu;}
+            if (mtu < _mtu) {_mtu = mtu;}
+        }
     }
 
     /** we are resending a packet, so lets jack up the rto */
@@ -845,21 +855,31 @@ public class PeerState {
      *  I2NP messages sent - does not include duplicates.
      *  As of 0.9.24, incremented when bandwidth is allocated just before sending, not when acked.
      */
-    public int getMessagesSent() {
-        synchronized (_outboundMessages) {return _messagesSent;}
-    }
+     public int getMessagesSent() {return _messagesSent.get();}
 
     /**
      *  I2NP messages received.
      *  As of 0.9.24, does not include duplicates.
      */
-    public synchronized int getMessagesReceived() {return _messagesReceived;}
+    public synchronized int getMessagesReceived() {
+        synchronized (_outboundLock) {return _messagesReceived;}
+    }
 
-    public synchronized int getPacketsTransmitted() {return _packetsTransmitted;}
-    public synchronized int getPacketsRetransmitted() {return _packetsRetransmitted;}
+    public synchronized int getPacketsTransmitted() {
+        synchronized (_outboundLock) {return _packetsTransmitted;}
+    }
 
-    public synchronized int getPacketsReceived() {return _packetsReceived;}
-    public synchronized int getPacketsReceivedDuplicate() {return _packetsReceivedDuplicate;}
+    public synchronized int getPacketsRetransmitted() {
+        synchronized (_outboundLock) {return _packetsRetransmitted;}
+    }
+
+    public synchronized int getPacketsReceived() {
+        synchronized (_outboundLock) {return _packetsReceived;}
+    }
+
+    public synchronized int getPacketsReceivedDuplicate() {
+        synchronized (_outboundLock) {return _packetsReceivedDuplicate;}
+    }
 
     private static final int MTU_RCV_DISPLAY_THRESHOLD = 20;
     /** 60 */
@@ -926,29 +946,27 @@ public class PeerState {
      *  SSU does not support isBacklogged() now
      */
     void add(OutboundMessageState state) {
-        if (_dead) {
-            _transport.failed(state, false);
-            return;
-        }
-        if (state.getPeer() != this) {
-            if (_log.shouldWarn()) {_log.warn("Not for me!", new Exception("I did it"));}
-            _transport.failed(state, false);
-            return;
-        }
-
-        int rv = 0;
-        // will never fail for CDPQ
-        boolean fail;
-        synchronized (_outboundQueue) {
-            fail = !_outboundQueue.offer(state);
-            // reuse of CDPQ value, don't do both
-            state.setSeqNum(_nextSequenceNumber++);
-        }
-        if (fail) {
-            if (_log.shouldWarn()) {
-                _log.warn("Dropping message, Outbound queue full for " + toString());
+        synchronized (_outboundLock) {
+            if (_dead) {
+                _transport.failed(state, false);
+                return;
             }
-            _transport.failed(state, false);
+            if (state.getPeer() != this) {
+                if (_log.shouldWarn()) _log.warn("Not for me!", new Exception("I did it"));
+                _transport.failed(state, false);
+                return;
+            }
+
+            boolean fail;
+            fail = !_outboundQueue.offer(state);
+            state.setSeqNum(_nextSequenceNumber++);
+
+            if (fail) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Dropping message, Outbound queue full for " + toString());
+                }
+                _transport.failed(state, false);
+            }
         }
     }
 
@@ -1006,7 +1024,7 @@ public class PeerState {
         int rv = 0;
         List<OutboundMessageState> succeeded = null;
         List<OutboundMessageState> failed = null;
-        synchronized (_outboundMessages) {
+        synchronized (_outboundLock) {
             for (Iterator<OutboundMessageState> iter = _outboundMessages.iterator(); iter.hasNext(); ) {
                 OutboundMessageState state = iter.next();
                 if (state.isComplete()) {
@@ -1052,7 +1070,7 @@ public class PeerState {
                 } else {
                     // It can not have an OutNetMessage if the source is the final after establishment message
                     if (_log.shouldInfo()) {_log.warn("Unable to send direct message " + state + this);}
-                    else if (_log.shouldWarn()) {_log.warn("Unable to send direct message " + this);}
+                    //else if (_log.shouldWarn()) {_log.warn("Unable to send direct message " + this);}
                 }
             }
             if (failedSize > 0) {
@@ -1131,13 +1149,15 @@ public class PeerState {
      */
     private List<OutboundMessageState> allocateSend2(boolean canSendOld, long now) {
         if (_dead) return null;
+
         List<OutboundMessageState> rv = null;
-        synchronized (_outboundMessages) {
+
+        synchronized (_outboundLock) {
             if (canSendOld) {
                 for (OutboundMessageState state : _outboundMessages) {
                     if (_fastRetransmit.get()) {
                         // If fast retx flag set, just add those
-                        if (state.getNACKs() < FAST_RTX_ACKS) {continue;}
+                        if (state.getNACKs() < FAST_RTX_ACKS) continue;
                         if (_log.shouldDebug()) {
                             _log.debug("Allocate sending (FAST) to [" + _remotePeer.toBase64().substring(0,6) + "] -> " + state);
                         }
@@ -1146,71 +1166,76 @@ public class PeerState {
                             _log.debug("Allocate sending (OLD) to [" + _remotePeer.toBase64().substring(0,6) + "] -> " + state.getMessageId());
                         }
                     }
+
                     if (rv == null) {
-                        rv = new ArrayList<OutboundMessageState>((1 + _outboundMessages.size()) / 2);
+                        rv = new ArrayList<>(Math.max(4, (1 + _outboundMessages.size()) / 2));
                         _lastSendTime = now;
                     }
                     rv.add(state);
+
                     // Retransmit up to half of the packets in flight (RFC 6298 section 5.4 and RFC 5681 section 4.3)
-                    // TODO this is fragments from half the messages... OK as is?
-                    if (rv.size() >= _outboundMessages.size() / 2 && !_fastRetransmit.get()) {return rv;}
+                    if (rv.size() >= _outboundMessages.size() / 2 && !_fastRetransmit.get()) {
+                        return rv;
+                    }
                 }
                 return rv;
-            } else if (!_outboundMessages.isEmpty()) {
-                // Send some unsent fragments of pending messages, if any
+            }
+
+            if (!_outboundMessages.isEmpty()) {
                 for (OutboundMessageState state : _outboundMessages) {
-                    if (!state.hasUnsentFragments()) {continue;}
+                    if (!state.hasUnsentFragments()) continue;
+
                     boolean should = locked_shouldSend(state, now);
                     if (should) {
                         if (_log.shouldDebug()) {
                             _log.debug("Allocate sending more fragments to [" + _remotePeer.toBase64().substring(0,6) + "] -> " + state.getMessageId());
                         }
-                        if (rv == null) {rv = new ArrayList<OutboundMessageState>(_concurrentMessagesAllowed);}
+
+                        if (rv == null) {
+                            rv = new ArrayList<>(_concurrentMessagesAllowed);
+                        }
                         rv.add(state);
                     } else {
-                        // No more bandwidth available
                         if (_log.shouldDebug()) {
                             if (rv == null) {
-                                _log.debug("Nothing to send (BW) to [" + _remotePeer.toBase64().substring(0,6) + "], with " + _outboundMessages.size() +
-                                       " / " + _outboundQueue.size() + " remaining");
-                            } else {_log.debug(_remotePeer + " ran out of BW, but managed to send " + rv.size());}
+                                _log.debug("Nothing to send (BW) to [" + _remotePeer.toBase64().substring(0,6) + "], with " +
+                                           _outboundMessages.size() + " / " + _outboundQueue.size() + " remaining");
+                            } else {
+                                _log.debug(_remotePeer + " ran out of BW, but managed to send " + rv.size());
+                            }
                         }
                         return rv;
                     }
                 }
-                // Fall through to new messages
             }
-            // Peek at head of _outboundQueue and see if we can send it.
-            // If so, pull it off, put it in _outbundMessages, test
-            // again for bandwidth if necessary, and return it.
-            OutboundMessageState state;
-            synchronized (_outboundQueue) {
-                while ((state = _outboundQueue.peek()) != null && locked_shouldSend(state, now)) {
-                    // This is guaranted to be the same as what we got in peek(),
-                    // due to locking and because we aren't using the dropping CDPBQ.
-                    // If we do switch to CDPBQ,
-                    // we could get a different state, or null, when we poll,
-                    // due to AQM drops, so we test again if necessary
-                    OutboundMessageState dequeuedState = _outboundQueue.poll();
-                    if (dequeuedState != null) {
-                        _outboundMessages.add(dequeuedState);
-                        // TODO if we switch to CDPBQ, see ticket #2582
-                        //if (dequeuedState != state) {
-                        //    // ignore result, always send?
-                        //    locked_shouldSend(dequeuedState);
-                        //}
-                        if (_log.shouldDebug()) {
-                            _log.debug("Allocating send of NEW message [" + dequeuedState.getMessageId() + "] to [" +
-                                       _remotePeer.toBase64().substring(0,6) + "]");
-                        }
-                        if (rv == null) {rv = new ArrayList<OutboundMessageState>(_concurrentMessagesAllowed);}
-                        rv.add(dequeuedState);
-                        if (rv.size() >= _concurrentMessagesAllowed) {return rv;}
-                    }
+
+            // Peek at head of _outboundQueue and see if we can send it
+            while (true) {
+                OutboundMessageState state = _outboundQueue.peek();
+                if (state == null || !locked_shouldSend(state, now)) break;
+
+                OutboundMessageState dequeuedState = _outboundQueue.poll();
+                if (dequeuedState == null) break;
+
+                _outboundMessages.add(dequeuedState);
+
+                if (_log.shouldDebug()) {
+                    _log.debug("Allocating send of NEW message [" + dequeuedState.getMessageId() + "] to [" +
+                               _remotePeer.toBase64().substring(0,6) + "]");
+                }
+
+                if (rv == null) {
+                    rv = new ArrayList<>(_concurrentMessagesAllowed);
+                }
+                rv.add(dequeuedState);
+
+                if (rv.size() >= _concurrentMessagesAllowed) {
+                    return rv;
                 }
             }
+
+            return rv;
         }
-        return rv;
     }
 
     /**
@@ -1222,12 +1247,13 @@ public class PeerState {
      *         If ready now, will return 0.
      */
     int getNextDelay(long now) {
-        int rv = Integer.MAX_VALUE;
-        if (_dead) return rv;
-        synchronized(this) {
-            if (_retransmitTimer > 0) {rv = Math.max(0, (int) (_retransmitTimer - now));}
+        synchronized (_sendWindowBytesRemainingLock) {
+            if (_dead) return Integer.MAX_VALUE;
+            if (_retransmitTimer > 0) {
+                return Math.max(0, (int)(_retransmitTimer - now));
+            }
+            return Integer.MAX_VALUE;
         }
-        return rv;
     }
 
     /**
@@ -1269,19 +1295,17 @@ public class PeerState {
      *  Locks this
      */
     private boolean locked_shouldSend(OutboundMessageState state, long now) {
-        synchronized(this) {
-            if (allocateSendingBytes(state, now)) {
-                if (state.getPushCount() == 0) {_messagesSent++;}
-                return true;
-            } else {
-                _context.statManager().addRateData("udp.sendRejected", state.getPushCount());
-                if (_log.shouldDebug()) {
-                    _log.debug("Allocation for [" + _remotePeer.toBase64().substring(0,6) + "] rejected (Windown size: " + getSendWindowBytes()
-                              + " / available: " + getSendWindowBytesRemaining()
-                              + " bytes) for [MsgID" + state.getMessageId() + "]" + state);
-                }
-                return false;
+        if (allocateSendingBytes(state, now)) {
+            if (state.getPushCount() == 0) {_messagesSent.incrementAndGet();}
+            return true;
+        } else {
+            _context.statManager().addRateData("udp.sendRejected", state.getPushCount());
+            if (_log.shouldDebug()) {
+                _log.debug("Allocation for [" + _remotePeer.toBase64().substring(0,6) + "] rejected (Windown size: " + getSendWindowBytes()
+                          + " / available: " + getSendWindowBytesRemaining()
+                          + " bytes) for [MsgID" + state.getMessageId() + "]" + state);
             }
+            return false;
         }
     }
 
@@ -1389,7 +1413,7 @@ public class PeerState {
         boolean rv = false;
         boolean startFast = false;
         boolean continueFast = false;
-        synchronized(_outboundMessages) {
+        synchronized(_outboundLock) {
             for (Iterator<OutboundMessageState> iter = _outboundMessages.iterator(); iter.hasNext(); ) {
                 OutboundMessageState state = iter.next();
                 long sn = state.getSeqNum();
@@ -1442,14 +1466,14 @@ public class PeerState {
      */
     private void exitFastRetransmit() {
         if (_fastRetransmit.compareAndSet(true, false)) {
-            synchronized(this) {
-                // RFC 5681 sec. 2.4 #6 deflate the window
+            // RFC 5681 sec. 2.4 #6 deflate the window
+            synchronized (_sendWindowBytesRemainingLock) {
                 _sendWindowBytes = _slowStartThreshold;
-                synchronized(_sendWindowBytesRemainingLock) {
-                    _sendWindowBytesRemaining = _sendWindowBytes;
-                }
+                _sendWindowBytesRemaining = _sendWindowBytes;
             }
-            if (_log.shouldDebug()) {_log.debug("End of FAST RTX, deflated window: " + this);}
+            if (_log.shouldDebug()) {
+                _log.debug("End of FAST RTX, deflated window: " + this);
+            }
         }
     }
 
