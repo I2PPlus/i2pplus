@@ -70,8 +70,8 @@ import net.i2p.util.SystemVersion;
  * </pre>
  */
 public class ClientAppConfig {
-    /** wait 2 minutes before starting up client apps */
-    private final static long DEFAULT_STARTUP_DELAY = 2*60*1000;
+    /** wait 20s before starting up client apps */
+    private final static long DEFAULT_STARTUP_DELAY = 20*1000;
     /** speed up i2ptunnel without rewriting clients.config */
     private final static long I2PTUNNEL_STARTUP_DELAY = -1000;
 
