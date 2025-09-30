@@ -453,7 +453,7 @@ hr.debug{display:none}
 
 /* comments */
 td.commentRating{padding-left:2px;padding-right:0;width:80px;white-space:nowrap}
-td .commentAuthorName{margin:0 0 0 4px;padding:0 4px 0 22px;min-width:120px;max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;text-align:left;font-size:90%;border:1px solid #002800;box-shadow:var(--outline);background:var(--user) no-repeat 4px center,linear-gradient(180deg,rgba(0,48,0,.5),rgba(0,16,0,.5));background-size:14px,100%}
+td .commentAuthorName{margin:0 0 0 4px;padding:4px 4px 4px 22px;min-width:120px;max-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle;text-align:left;font-size:90%;border:1px solid #002800;box-shadow:var(--outline);background:var(--user) no-repeat 4px center,linear-gradient(180deg,rgba(0,48,0,.5),rgba(0,16,0,.5));background-size:14px,100%}
 .addCommentText,.commentText{padding-right:0}
 .commentAction,.commentDelete{padding-left:0;width:1%;white-space:nowrap}
 .commentAuthor{padding-right:0;text-align:left}
@@ -486,7 +486,7 @@ td .commentAuthorName{margin:0 0 0 4px;padding:0 4px 0 22px;min-width:120px;max-
 #commentInfo textarea{margin:1px auto -2px;width:calc(100% - 2px);height:64px;min-height:64px;resize:vertical}
 #commentInfo textarea:focus{filter:none}
 #commentsConfig .optbox{vertical-align:middle}
-#commentSection .commentDelete{padding:8px 6px 8px 24px;text-align:left;background:var(--nuke) no-repeat 2px center;background-size:16px}
+#commentSection .commentDelete{padding:8px 8px 8px 28px;text-align:left;background:var(--nuke) no-repeat 8px center;background-size:16px}
 #metacomment{padding:0;line-height:1.4;text-align:justify}
 #metacomment .commentWrapper{margin:5px 4px}
 .commentText .commentWrapper{height:auto;resize:none;white-space:normal}
