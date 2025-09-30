@@ -240,7 +240,7 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
             SSU2Payload.processPayload(_context, this, data, off + SHORT_HEADER_SIZE, payloadLen, false, from);
         } catch (Exception e) {
             if (_log.shouldWarn())
-                _log.warn("BAD encrypted packet from " + this + " -> " + e.getMessage());
+                _log.warn("BAD encrypted packet from " + this + (e.getMessage() != null ? " -> " + e.getMessage() : ""));
         }
     }
 

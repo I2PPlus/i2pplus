@@ -899,7 +899,7 @@ public abstract class TransportImpl implements Transport {
          */
         if (_context.banlist().isBanlistedForever(peer)) {
             if (_log.shouldLog(Log.WARN)) {
-                _log.warn("Unbanning HARD-banned peer (due to reachability): " + peer, new Exception("Unbanned by"));
+                _log.warn("Unbanning [" + peer.toBase32().substring(0,6) + "] -> Peer is now reachable");
             }
             _context.banlist().unbanlistRouter(peer);
         }
