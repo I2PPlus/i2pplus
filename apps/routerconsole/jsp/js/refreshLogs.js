@@ -206,45 +206,72 @@ function start() {
 
   function linkifyIPv4() {
     if (!routerlogsList) return;
-    const pattern = /(?<!\bAddress:\s*)\b(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\b/g;
+
+    const ipRegex = /\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/g;
     const liElements = routerlogsList.querySelectorAll("li");
 
     liElements.forEach((li) => {
-      let newHTML = li.innerHTML;
-      const matches = li.textContent.match(pattern);
+      const walker = document.createTreeWalker(li, NodeFilter.SHOW_TEXT, null, false);
+      const nodesToReplace = [];
 
-      if (matches) {
-        matches.forEach((match) => {
-          const linkText = match.trim();
-          if (!li.querySelector(`a[href*="${linkText}"]`)) {
-            const linkHref = `/netdb?ip=${linkText}`;
-            newHTML = newHTML.replace(new RegExp(`\\b${escapeRegExp(linkText)}\\b`, "g"), ` <a href="${linkHref}">${linkText}</a>`);
-          }
-        });
+      while (walker.nextNode()) {
+        const node = walker.currentNode;
+        if (ipRegex.test(node.textContent)) {
+          nodesToReplace.push(node);
+        }
       }
-      li.innerHTML = newHTML;
+
+      nodesToReplace.forEach((textNode) => {
+        const parentNode = textNode.parentNode;
+        const tempDiv = document.createElement("div");
+        const html = textNode.textContent.replace(ipRegex, (ip) => {
+          return ` <a href="/netdb?ip=${ip}">${ip}</a>`;
+        });
+        tempDiv.innerHTML = html;
+
+        // Replace the textNode with the generated nodes
+        while (tempDiv.firstChild) {
+          parentNode.insertBefore(tempDiv.firstChild, textNode);
+        }
+        parentNode.removeChild(textNode);
+      });
     });
   }
 
   function linkifyIPv6() {
     if (!routerlogsList) return;
-    const pattern = /\b(?:(?<!\bAddress:)\s*|\baddress:\s*)([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\b/gi;
+
+    // Regex to match IPv6 addresses, including optional zone index
+    const ipRegex = /\b(?:([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|(?:[0-9a-fA-F]{1,4}:){1,7}:)(?:%[0-9a-zA-Z]{1,})?\b/gi;
     const liElements = routerlogsList.querySelectorAll("li");
 
     liElements.forEach((li) => {
-      let newHTML = li.innerHTML;
-      const matches = li.textContent.match(pattern);
+      const walker = document.createTreeWalker(li, NodeFilter.SHOW_TEXT, null, false);
+      const nodesToReplace = [];
 
-      if (matches) {
-        matches.forEach((match) => {
-          const linkText = match;
-          if (!li.querySelector(`a[href*="${linkText}"]`)) {
-            const linkHref = `/netdb?ipv6=${linkText}`;
-            newHTML = newHTML.replace(new RegExp(`\\b${escapeRegExp(linkText)}\\b`, "g"), ` <a href="${linkHref}">${linkText}</a>`);
-          }
-        });
+      while (walker.nextNode()) {
+        const node = walker.currentNode;
+        if (ipRegex.test(node.textContent)) {
+          nodesToReplace.push(node);
+        }
       }
-      li.innerHTML = newHTML;
+
+      nodesToReplace.forEach((textNode) => {
+        const parentNode = textNode.parentNode;
+        const tempDiv = document.createElement("div");
+        const html = textNode.textContent.replace(ipRegex, (ip) => {
+          // Strip zone index for link, optional: keep it in display
+          const cleanIP = ip.split("%")[0]; // remove zone for netdb lookup
+          return ` <a href="/netdb?ipv6=${cleanIP}">${ip}</a>`;
+        });
+        tempDiv.innerHTML = html;
+
+        // Replace the textNode with the generated nodes
+        while (tempDiv.firstChild) {
+          parentNode.insertBefore(tempDiv.firstChild, textNode);
+        }
+        parentNode.removeChild(textNode);
+      });
     });
   }
 
