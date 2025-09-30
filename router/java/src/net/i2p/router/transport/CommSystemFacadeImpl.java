@@ -1365,7 +1365,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             }
         }
 
-        return (fallback != null) ? fallback : _t("unknown");
+        return (fallback != null) ? fallback.replaceAll("\\(.*?\\)", "").trim() : _t("unknown");
     }
 
     /**
