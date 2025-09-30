@@ -1282,4 +1282,16 @@ class PacketBuilder2 {
         }
         return new SSU2Payload.PaddingBlock(padlen);
     }
+
+    /**
+     * Calculates the maximum payload size that can be sent to this peer in a single data packet.
+     * @since 0.9.68+
+     */
+    public static int getMaxDataSize(PeerState peer) {
+        if (peer == null) {return 0;}
+        int mtu = peer.getMTU();
+        if (peer.isIPv6()) {return mtu - MIN_IPV6_DATA_PACKET_OVERHEAD;}
+        return mtu - MIN_DATA_PACKET_OVERHEAD;
+    }
+
 }
