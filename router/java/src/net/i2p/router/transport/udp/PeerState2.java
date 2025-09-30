@@ -73,11 +73,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     // Connection Migration, synch on _migrationLock
     private enum MigrationState {
         MIGRATION_STATE_NONE,
-        MIGRATION_STATE_PENDING,
-        // unused below here
-        MIGRATION_STATE_CANCELLED,
-        MIGRATION_STATE_FAILED,
-        MIGRATION_STATE_SUCCESS
+        MIGRATION_STATE_PENDING
     }
     private final Object _migrationLock = new Object();
     private MigrationState _migrationState = MigrationState.MIGRATION_STATE_NONE;
@@ -847,7 +843,11 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             try {
                 UDPPacket pkt = _transport.getBuilder2().buildSessionDestroyPacket(SSU2Util.REASON_TERMINATION, this);
                 _transport.send(pkt);
-            } catch (IOException ioe) {}
+            } catch (IOException ioe) {
+                if (_log.shouldWarn()) {
+                    _log.warn("[SSU2] Failed to send SessionDestroy -> " + ioe.getMessage());
+                }
+            }
             _transport.getEstablisher().receiveSessionDestroy(_remoteHostId, this);
             _dead = true;
         }
@@ -869,37 +869,73 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     }
 
     public void gotPathResponse(RemoteHostId from, byte[] data) {
-        if (_log.shouldInfo()) {_log.info("Received PATH RESPONSE block, length: " + data.length + " " + this);}
-        synchronized(_migrationLock) {
-            switch(_migrationState) {
+        if (_log.shouldInfo()) {
+            _log.info("Received PATH RESPONSE block, length: " + data.length + " from " + from + " on " + this);
+        }
+
+        synchronized (_migrationLock) {
+            switch (_migrationState) {
                 case MIGRATION_STATE_PENDING:
-                    if (from.equals(_pendingRemoteHostId) && DataHelper.eq(data, _pathChallengeData)) {
-                        // success
-                        _migrationState = MigrationState.MIGRATION_STATE_NONE;
-                        _pathChallengeData = null;
-                        if (_log.shouldInfo()) {
-                            _log.info("Connection migration successful, changed address from " + _remoteHostId + " to " + from + this);
+                    if (from.equals(_pendingRemoteHostId)) {
+                        if (DataHelper.eq(data, _pathChallengeData)) {
+                            // Success: update peer address
+                            _migrationState = MigrationState.MIGRATION_STATE_NONE;
+                            _pathChallengeData = null;
+
+                            if (_log.shouldInfo()) {
+                                _log.info("Connection migration successful, changed address from " + _remoteHostId + " to " + from + " on " + this);
+                            }
+
+                            _transport.changePeerAddress(this, from);
+                            _mtu = MIN_MTU;
+
+                            // Send NewToken if applicable
+                            if (isIPv6() || !_transport.isSymNatted()) {
+                                EstablishmentManager.Token token = _transport.getEstablisher().getInboundToken(from);
+                                SSU2Payload.Block block = new SSU2Payload.NewTokenBlock(token);
+                                try {
+                                    UDPPacket pkt = _transport.getBuilder2().buildPacket(
+                                        Collections.<Fragment>emptyList(),
+                                        Collections.singletonList(block),
+                                        this
+                                    );
+                                    _transport.send(pkt);
+                                    long now = _context.clock().now();
+                                    setLastSendTime(now);
+                                    setLastReceiveTime(now);
+                                } catch (IOException ioe) {
+                                    if (_log.shouldWarn()) {
+                                        _log.warn("[SSU2] Failed to send NewToken after successful migration to " + from + " on " + this + " -> " + ioe.getMessage());
+                                    }
+                                }
+                            } else {
+                                messagePartiallyReceived(); // still ACK-eliciting
+                            }
+                        } else {
+                            if (_log.shouldDebug()) {
+                                _log.warn("[SSU2] Path response data mismatch. Expected: " + HexDump.dump(_pathChallengeData)
+                                        + " Received: " + HexDump.dump(data) + " on " + this);
+                            } else if (_log.shouldWarn()) {
+                                _log.warn("[SSU2] Path response data mismatch on " + this);
+                            }
+                            _migrationState = MigrationState.MIGRATION_STATE_NONE; // Reset on failure
+                            messagePartiallyReceived(); // ACK-eliciting
                         }
-                        _transport.changePeerAddress(this, from);
-                        _mtu = MIN_MTU;
-                        if (isIPv6() || !_transport.isSymNatted()) {
-                            EstablishmentManager.Token token = _transport.getEstablisher().getInboundToken(from);
-                            SSU2Payload.Block block = new SSU2Payload.NewTokenBlock(token);
-                            try {
-                                UDPPacket pkt = _transport.getBuilder2().buildPacket(Collections.<Fragment>emptyList(),
-                                                                                     Collections.singletonList(block),
-                                                                                     this);
-                                _transport.send(pkt);
-                                long now = _context.clock().now();
-                                setLastSendTime(now);
-                                setLastReceiveTime(now);
-                            } catch (IOException ioe) {}
-                        } else {messagePartiallyReceived();}
-                    } else {messagePartiallyReceived();} // caller will handle - ACK-eliciting
+                    } else {
+                        if (_log.shouldWarn()) {
+                            _log.warn("[SSU2] Path response from unexpected address. Expected: " + _pendingRemoteHostId
+                                    + " Received from: " + from + " on " + this);
+                        }
+                        _migrationState = MigrationState.MIGRATION_STATE_NONE; // Reset on failure
+                        messagePartiallyReceived(); // ACK-eliciting
+                    }
                     break;
 
                 default:
-                    messagePartiallyReceived();
+                    if (_log.shouldDebug()) {
+                        _log.debug("[SSU2] Received PATH RESPONSE in unexpected migration state: " + _migrationState + " on " + this);
+                    }
+                    messagePartiallyReceived(); // ACK-eliciting
                     break;
             }
         }
