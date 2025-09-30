@@ -974,7 +974,7 @@ public class PeerState {
     void dropOutbound() {
         _dead = true;
         List<OutboundMessageState> tempList;
-        synchronized (_outboundMessages) {
+        synchronized (_outboundLock) {
             tempList = new ArrayList<OutboundMessageState>(_outboundMessages);
             _outboundMessages.clear();
         }
@@ -1024,25 +1024,26 @@ public class PeerState {
         int rv = 0;
         List<OutboundMessageState> succeeded = null;
         List<OutboundMessageState> failed = null;
+
         synchronized (_outboundLock) {
             for (Iterator<OutboundMessageState> iter = _outboundMessages.iterator(); iter.hasNext(); ) {
                 OutboundMessageState state = iter.next();
                 if (state.isComplete()) {
                     iter.remove();
-                    if (succeeded == null) succeeded = new ArrayList<OutboundMessageState>(4);
+                    if (succeeded == null) succeeded = new ArrayList<>(4);
                     succeeded.add(state);
                 } else if (state.isExpired(now)) {
                     iter.remove();
                     _context.statManager().addRateData("udp.sendFailed", state.getPushCount());
-                    if (failed == null) failed = new ArrayList<OutboundMessageState>(4);
+                    if (failed == null) failed = new ArrayList<>(4);
                     failed.add(state);
                 } else if (state.getMaxSends() > OutboundMessageFragments.MAX_VOLLEYS) {
                     iter.remove();
                     _context.statManager().addRateData("udp.sendAggressiveFailed", state.getPushCount());
-                    if (failed == null) failed = new ArrayList<OutboundMessageState>(4);
+                    if (failed == null) failed = new ArrayList<>(4);
                     failed.add(state);
-                } // end (pushCount > maxVolleys)
-            } // end iterating over outbound messages
+                }
+            }
             rv = _outboundMessages.size();
         }
 
@@ -1130,7 +1131,7 @@ public class PeerState {
         } else if (canSendOld) {
             // failsafe - push out or cancel timer to prevent looping
             boolean isEmpty;
-            synchronized (_outboundMessages) {isEmpty = _outboundMessages.isEmpty();}
+            synchronized (_outboundLock) {isEmpty = _outboundMessages.isEmpty();}
             synchronized(this) {
                 if (isEmpty) {
                     _retransmitTimer = 0;
@@ -1330,7 +1331,7 @@ public class PeerState {
         }
         if (ackedSize <= 0) {return false;}
         boolean anyPending;
-        synchronized (_outboundMessages) {
+        synchronized (_outboundLock) {
             if (isComplete) {
                 long sn = state.getSeqNum();
                 boolean found = false;
@@ -1518,7 +1519,7 @@ public class PeerState {
                 tmp2.addAll(oldPeer._outboundMessages);
                 oldPeer._outboundMessages.clear();
             }
-            if (!_dead) { synchronized (_outboundMessages) {_outboundMessages.addAll(tmp2);} }
+            if (!_dead) { synchronized (_outboundLock) {_outboundMessages.addAll(tmp2);} }
         }
     }
 
