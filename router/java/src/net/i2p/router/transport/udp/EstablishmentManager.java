@@ -878,6 +878,7 @@ class EstablishmentManager {
                 _log.warn("[SSU2] Received CORRUPT SessionConfirmed \n* Router: " + state + "\n* " + gse.getMessage());
             // state called fail()
 
+/*
             try {
                 String fromIP = InetAddress.getByAddress(state.getRemoteHostId().getIP()).getHostAddress();
                 String targetIP = fromIP.toString().replace("/", "");
@@ -889,7 +890,7 @@ class EstablishmentManager {
                     }
                 }
             } catch (UnknownHostException uhe) {}
-
+*/
             _inboundStates.remove(state.getRemoteHostId());
             return;
         }
@@ -939,6 +940,7 @@ class EstablishmentManager {
             else if (_log.shouldWarn())
                 _log.warn("[SSU2] Received CORRUPT SessionCreated \n* Router: " + state + "\n* " + gse.getMessage());
 
+/*
             try {
                 String fromIP = InetAddress.getByAddress(state.getRemoteHostId().getIP()).getHostAddress();
                 String targetIP = fromIP.toString().replace("/", "");
@@ -950,7 +952,7 @@ class EstablishmentManager {
                     }
                 }
             } catch (UnknownHostException uhe) {}
-
+*/
             // state called fail()
             _outboundStates.remove(state.getRemoteHostId());
             return;
@@ -987,6 +989,7 @@ class EstablishmentManager {
             else if (_log.shouldWarn())
                 _log.warn("[SSU2] Received CORRUPT Retry \n* Router: " + state + "\n* " + gse.getMessage());
 
+/*
             try {
                 String fromIP = InetAddress.getByAddress(state.getRemoteHostId().getIP()).getHostAddress();
                 String targetIP = fromIP.toString().replace("/", "");
@@ -998,7 +1001,7 @@ class EstablishmentManager {
                     }
                 }
             } catch (UnknownHostException uhe) {}
-
+*/
             if (shouldExit) {return;}
 
             // state called fail()
