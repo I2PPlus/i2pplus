@@ -221,6 +221,7 @@ public class LogsHelper extends HelperBase {
                         !line.matches("^.*[^\\n]#\\s*$") &&
                         !line.matches(".*#$") &&
                         !line.matches(".*\\* $") &&
+                        !line.endsWith("java.lang.IllegalStateException") &&
                         !line.contains("  \n")) {
                         filtered.append(line).append("\n");
                     }
