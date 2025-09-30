@@ -174,10 +174,15 @@ class ProfileOrganizerRenderer {
                 if (enableReverseLookups()) {
                     if (rl != null && !rl.equals("null") && !rl.isEmpty() && rl.length() != 0 && !ip.toString().equals(rl)) {
                         String whois = CommSystemFacadeImpl.getDomain(rl);
-                        String whoisShort = whois.replace("Latin American and Caribbean IP address Regional Registry (LACNIC)", "LACNIC")
-                                                 .replace("Asia Pacific Network Information Centre (APNIC)", "APNIC")
-                                                 .replace("Mediacom Communications Corp (MCC-244)", "MEDIACOM")
-                                                 .replaceAll("\\(.*?\\)", "").trim();
+                        String whoisShort = whois.replaceAll("\\(.*?\\)", "").toLowerCase().trim();
+                        whoisShort = whoisShort.replace("latin american and caribbean ip address regional registry", "lacnic")
+                                               .replace("asia pacific network information centre", "apnic")
+                                               .replace("mediacom communications corp", "mediacom")
+                                               .replace(", inc", "")
+                                               .replace(" inc", "")
+                                               .replace(" llc", "")
+                                               .replace("administered by ", "")
+                                               .trim();
                         buf.append("<span hidden>[XHost]</span><span class=rlookup title=\"").append(whois).append("\">").append(whoisShort);
                     } else if (ip == "null" || ip == null) {buf.append("<span>").append(_t("unknown"));}
                     else {

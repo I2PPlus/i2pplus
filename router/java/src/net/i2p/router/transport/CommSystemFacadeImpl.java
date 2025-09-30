@@ -1372,18 +1372,57 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *  @return domain name only from reverse dns hostname lookups
      *  @since 0.9.58+
      */
-
     public static String getDomain(String hostname) {
-        String[] domainArray = hostname.split("\\.");
-        int length = domainArray.length;
+        if (hostname == null || hostname.isEmpty()) return "";
 
-        if (length > 3 && (hostname.endsWith(".uk") || hostname.endsWith(".au") || hostname.endsWith(".nz") ||
-                           hostname.contains(".co.") || hostname.contains(".ne.") || hostname.contains(".com.") ||
-                           hostname.contains(".net.") || hostname.contains(".org.") || hostname.contains(".gov."))) {
-            return domainArray[length - 3] + "." + domainArray[length - 2] + "." + domainArray[length - 1];
-        } else if (length == 1) {return domainArray[0];}
-        else if (length > 2) {return domainArray[length - 2] + "." + domainArray[length - 1];}
-        return "";
+        hostname = hostname.toLowerCase();
+        if (hostname.startsWith(".")) hostname = hostname.substring(1);
+
+        String[] parts = hostname.split("\\.");
+        int len = parts.length;
+
+        if (len < 2) return hostname;
+
+        // Try to match known multi-part TLDs
+        for (int i = 1; i < len; i++) {
+            StringBuilder tldBuilder = new StringBuilder();
+            for (int j = i; j < len; j++) {
+                if (j > i) tldBuilder.append(".");
+                tldBuilder.append(parts[j]);
+            }
+            if (MULTI_PART_TLDS.contains(tldBuilder.toString())) {
+                int domainIndex = len - tldBuilder.toString().split("\\.").length;
+                StringBuilder domain = new StringBuilder();
+                for (int k = domainIndex; k < len; k++) {
+                    if (k > domainIndex) domain.append(".");
+                    domain.append(parts[k]);
+                }
+                return domain.toString();
+            }
+        }
+
+        // Default to 2-part domain
+        return parts[len - 2] + "." + parts[len - 1];
+    }
+
+    /* @since 0.9.68+ */
+    private static final Set<String> MULTI_PART_TLDS;
+
+    /* @since 0.9.68+ */
+    static {
+        MULTI_PART_TLDS = new HashSet<>(Arrays.asList(
+            "co.uk", "gov.uk", "ac.uk", "nhs.uk", "org.uk", "mod.uk", "mil.uk", "sch.uk",
+            "com.au", "net.au", "org.au", "edu.au", "gov.au",
+            "co.nz", "net.nz", "org.nz", "govt.nz", "school.nz",
+            "co.jp", "ne.jp", "or.jp", "go.jp", "ac.jp", "ed.jp", "ad.jp", "gr.jp", "lg.jp",
+            "co.kr", "re.kr", "pe.kr", "go.kr", "mil.kr", "ac.kr", "hs.kr", "ms.kr", "es.kr", "sc.kr",
+            "com.tw", "org.tw", "edu.tw", "gov.tw", "idv.tw",
+            "com.br", "org.br", "gov.br", "mil.br",
+            "com.tr", "gov.tr", "edu.tr", "org.tr",
+            "co.za", "net.za", "org.za", "web.za",
+            "co.il", "org.il", "k12.il", "muni.il", "gov.il",
+            "com.sg", "net.sg", "org.sg", "gov.sg", "edu.sg"
+        ));
     }
 
     /**
