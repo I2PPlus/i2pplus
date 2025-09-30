@@ -2,6 +2,7 @@ package net.i2p.router.transport.udp;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -33,19 +34,12 @@ class OutboundMessageFragments {
     private final UDPTransport _transport;
 
     /**
-     *  Peers we are actively sending messages to.
-     *  We use the iterator so we treat it like a list,
-     *  but we use a HashSet so remove() is fast and
-     *  we don't need to do contains().
-     *  Even though most (but NOT all) accesses are synchronized,
-     *  we use a ConcurrentHashSet as the iterator is long-lived.
+     *  List of peers currently sending outbound messages.
+     *  Thread-safe for iteration and modification.
      */
-    private final Set<PeerState> _activePeers;
-
-    /**
-     *  The long-lived iterator over _activePeers.
-     */
-    private Iterator<PeerState> _iterator;
+    private final List<PeerState> _activePeers = new CopyOnWriteArrayList<>();
+    private int _peerIndex = 0;
+    private final Object _waitLock = new Object();
     private volatile boolean _alive;
     private final PacketBuilder2 _builder2;
     static final int MAX_VOLLEYS = 10; // don't send a packet more than 10 times
@@ -55,7 +49,6 @@ class OutboundMessageFragments {
         _context = ctx;
         _log = ctx.logManager().getLog(OutboundMessageFragments.class);
         _transport = transport;
-        _activePeers = new ConcurrentHashSet<PeerState>(256);
         _builder2 = transport.getBuilder2();
         _alive = true;
         _context.statManager().createRateStat("udp.outboundActivePeers", "Number of peers we are actively sending to", "Transport [UDP]", UDPTransport.RATES);
@@ -167,97 +160,101 @@ class OutboundMessageFragments {
         }
     }
 
-    /**
-     * Fetch all the packets for a message volley, blocking until there is a
-     * message which can be fully transmitted (or the transport is shut down).
-     *
-     * NOT thread-safe. Called by the PacketPusher thread only.
-     *
-     * @return null only on shutdown
-     */
-    public List<UDPPacket> getNextVolley() {
-        PeerState peer = null;
-        List<OutboundMessageState> states = null;
-        // Keep track of how many we've looked at, since we don't start the iterator at the beginning.
-        int peersProcessed = 0;
-        int nextSendDelay = Integer.MAX_VALUE;
-        while (_alive && (states == null)) {
-            // do we need a new long-lived iterator?
-            if (_iterator == null || ((!_activePeers.isEmpty()) && (!_iterator.hasNext()))) {
-                _iterator = _activePeers.iterator();
-            }
+/**
+ * Fetch all the packets for a message volley, blocking until there is a
+ * message which can be fully transmitted (or the transport is shut down).
+ *
+ * NOT thread-safe. Called by the PacketPusher thread only.
+ *
+ * @return null only on shutdown
+ */
+public List<UDPPacket> getNextVolley() {
+    PeerState peer = null;
+    List<OutboundMessageState> states = null;
+    long now = _context.clock().now();
+    int peersProcessed = 0;
+    int nextSendDelay = Integer.MAX_VALUE;
 
-            // Go through all the peers that we are actively sending messages to.
-            // Call finishMessages() for each one, and remove them from the iterator
-            // if there is nothing left to send.
-            // Otherwise, return the volley to be sent.
-            // Otherwise, wait()
-            long now = _context.clock().now();
-            while (_iterator.hasNext()) {
-                PeerState p = _iterator.next();
-                int remaining = p.finishMessages(now);
-                if (remaining <= 0) {
-                    // race with add()
-                    _iterator.remove();
-                    if (_log.shouldDebug()) {
-                        _log.debug("No more pending messages for [" + p.getRemotePeer().toBase64().substring(0,6) + "]");
-                    }
-                    continue;
-                }
-                peersProcessed++;
-                states = p.allocateSend(now);
-                if (states != null) { // we have something to send and we will be returning it
-                    peer = p;
-                    break;
-                }
-                int delay = p.getNextDelay(now);
-                if (delay < nextSendDelay) {nextSendDelay = delay;}
-                if (peersProcessed >= _activePeers.size()) {break;} // we've gone all the way around, time to sleep
+    while (_alive && (states == null)) {
+        // Reset peer index if we've gone through all peers
+        if (_peerIndex >= _activePeers.size()) {
+            _peerIndex = 0;
+            if (_activePeers.isEmpty()) {
+                // Wait for new messages
+                waitForMessages();
+                continue;
             }
+        }
 
-            // If we've gone all the way through the loop, wait
-            // ... unless nextSendDelay says we have more ready now
-            if (states == null && peersProcessed >= _activePeers.size() && nextSendDelay > 0) {
-                peersProcessed = 0;
-                // why? we do this in the loop one at a time
-                //finishMessages();
-                // wait a min of 10 and a max of MAX_WAIT ms no matter what peer.getNextDelay() says
-                // use max of 1 second so finishMessages() and/or PeerState.finishMessages()
-                // gets called regularly
+        // Get the next peer in the round-robin list
+        PeerState p = _activePeers.get(_peerIndex++);
+        peersProcessed++;
+
+        // Clean up completed messages
+        int remaining = p.finishMessages(now);
+        if (remaining <= 0) {
+            removePeer(p);
+            continue;
+        }
+
+        // Try to allocate fragments to send
+        states = p.allocateSend(now);
+        if (states != null) {
+            peer = p;
+            break;
+        }
+
+        // Track the soonest time this peer will be ready
+        int delay = p.getNextDelay(now);
+        if (delay < nextSendDelay) {
+            nextSendDelay = delay;
+        }
+
+        // If we've gone through all peers, wait or retry
+        if (peersProcessed >= _activePeers.size()) {
+            if (nextSendDelay > 0) {
                 int toWait = Math.min(Math.max(nextSendDelay, 10), MAX_WAIT);
-                if (_log.shouldDebug()) {_log.debug("Waiting " + toWait + "ms before sending next message...");}
-
+                waitForMessages(toWait);
+                peersProcessed = 0;
                 nextSendDelay = Integer.MAX_VALUE;
-                // wait.. or somethin'
-                synchronized (_activePeers) {
-                    try {_activePeers.wait(toWait);}
-                    catch (InterruptedException ie) { // no-op
-                        if (_log.shouldDebug()) {_log.debug("Woken up while waiting");}
-                    }
-                }
+            } else {
+                // Reset for next round
+                _peerIndex = 0;
             }
-        } // while alive && state == null
-
-        if (_log.shouldDebug()) {_log.debug("Sending to " + peer + DataHelper.toString(states));}
-        List<UDPPacket> packets = preparePackets(states, peer);
-        return packets;
+        }
     }
+
+    if (peer == null || states == null) {
+        return null;
+    }
+
+    if (_log.shouldDebug()) {
+        _log.debug("Sending to " + peer + ": " + DataHelper.toString(states));
+    }
+
+    return preparePackets(states, peer);
+}
 
     /**
      * Wakes up the packet pusher thread.
      * @since 0.9.48
      */
     void nudge() {
-        synchronized(_activePeers) {_activePeers.notify();}
+        synchronized (_waitLock) {
+            _waitLock.notify();
+        }
     }
 
     /**
      *  @return null if state or peer is null
      */
     private List<UDPPacket> preparePackets(List<OutboundMessageState> states, PeerState peer) {
-        if (states == null || peer == null) {return null;}
+        if (states == null || peer == null) {
+            return null;
+        }
+
         // build the list of fragments to send
-        List<Fragment> toSend = new ArrayList<Fragment>(8);
+        List<Fragment> toSend = new ArrayList<>(8);
         for (OutboundMessageState state : states) {
             int queued = state.push(toSend);
             // per-state stats
@@ -269,73 +266,84 @@ class OutboundMessageFragments {
                 peer.messageRetransmitted(queued, maxPktSz);
                 long lifetime = state.getLifetime();
                 int transmitted = peer.getPacketsTransmitted();
-                _context.statManager().addRateData("udp.peerPacketsRetransmitted", peer.getPacketsRetransmitted(), transmitted);
+                _context.statManager().addRateData("udp.peerPacketsRetransmitted", peer.getPacketsTransmitted(), transmitted);
                 _context.statManager().addRateData("udp.packetsRetransmitted", lifetime, transmitted);
-                if (_log.shouldInfo()) {_log.info("Retransmitting " + state + " to " + peer);}
+                if (_log.shouldInfo()) {
+                    _log.info("Retransmitting " + state + " to " + peer);
+                }
                 _context.statManager().addRateData("udp.sendVolleyTime", lifetime, queued);
             }
         }
 
-        if (toSend.isEmpty()) {return null;}
+        if (toSend.isEmpty()) {
+            return null;
+        }
 
         int fragmentsToSend = toSend.size();
-        List<Fragment> sendNext = new ArrayList<Fragment>(Math.min(toSend.size(), 4));
-        List<UDPPacket> rv = new ArrayList<UDPPacket>(toSend.size());
-        for (int i = 0; i < toSend.size(); i++) {
-            Fragment next = toSend.get(i);
-            sendNext.add(next);
-            OutboundMessageState state = next.state;
-            OutNetMessage msg = state.getMessage();
-            int msgType = (msg != null) ? msg.getMessageTypeId() : -1;
-            if (_log.shouldDebug()) {_log.debug("Building UDP packet for " + next + " to: " + peer);}
-            int curTotalDataSize = state.fragmentSize(next.num);
-            curTotalDataSize += SSU2Util.FIRST_FRAGMENT_HEADER_SIZE;
-            if (next.num > 0) {curTotalDataSize += SSU2Util.DATA_FOLLOWON_EXTRA_SIZE;}
-            // now stuff in more fragments if they fit
-            if (i +1 < toSend.size()) {
-                int maxAvail = PacketBuilder2.getMaxAdditionalFragmentSize(peer, sendNext.size(), curTotalDataSize);
-                // if less than 16, just use it for acks, don't even try to look for a tiny fragment
-                if (maxAvail >= 16) {
-                    for (int j = i + 1; j < toSend.size(); j++) {
-                        next = toSend.get(j);
-                        int nextDataSize = next.state.fragmentSize(next.num);
-                        if (next.num > 0) {nextDataSize += SSU2Util.DATA_FOLLOWON_EXTRA_SIZE;}
-                        if (nextDataSize <= maxAvail) { // add it
-                            toSend.remove(j);
-                            j--;
-                            sendNext.add(next);
-                            curTotalDataSize += nextDataSize;
-                            maxAvail = PacketBuilder2.getMaxAdditionalFragmentSize(peer, sendNext.size(), curTotalDataSize);
-                            if (_log.shouldInfo()) {_log.info("Adding in additional " + next + " to: " + peer);}
-                            // if less than 16, just use it for acks, don't even try to look for a tiny fragment
-                            if (maxAvail < 16) {break;}
-                        }  // else too big
+        List<UDPPacket> rv = new ArrayList<>(toSend.size());
+
+        // Greedy fragment grouping logic
+        List<Fragment> remaining = new ArrayList<>(toSend);
+        int maxPacketSize = PacketBuilder2.getMaxDataSize(peer);
+
+        while (!remaining.isEmpty()) {
+            List<Fragment> sendNext = new ArrayList<>();
+            int curTotalDataSize = 0;
+
+            for (Iterator<Fragment> it = remaining.iterator(); it.hasNext();) {
+                Fragment next = it.next();
+                OutboundMessageState state = next.state;
+                int nextDataSize = state.fragmentSize(next.num);
+                if (next.num > 0) {
+                    nextDataSize += SSU2Util.DATA_FOLLOWON_EXTRA_SIZE;
+                }
+
+                // If this is the first fragment in the packet, add the first fragment header
+                if (sendNext.isEmpty()) {
+                    nextDataSize += SSU2Util.FIRST_FRAGMENT_HEADER_SIZE;
+                } else {
+                    nextDataSize += SSU2Util.DATA_FOLLOWON_EXTRA_SIZE;
+                }
+
+                // Check if it fits
+                if (curTotalDataSize + nextDataSize <= maxPacketSize || sendNext.isEmpty()) {
+                    sendNext.add(next);
+                    curTotalDataSize += nextDataSize;
+                    it.remove();
+                }
+            }
+
+            if (!sendNext.isEmpty()) {
+                UDPPacket pkt;
+                try {
+                    pkt = _builder2.buildPacket(sendNext, (PeerState2) peer);
+                } catch (IOException ioe) {
+                    pkt = null;
+                }
+
+                if (pkt != null) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("Sent UDP packet with " + sendNext.size() + " fragments (" + curTotalDataSize +
+                                   " data bytes)\n* Target: " + peer);
                     }
+                    _context.statManager().addRateData("udp.sendFragmentsPerPacket", sendNext.size());
+                } else {
+                    if (_log.shouldWarn()) {
+                        _log.info("Building UDP packet FAIL for " + DataHelper.toString(sendNext) + " to: " + peer);
+                    }
+                    continue;
                 }
-            }
 
-            UDPPacket pkt;
-            try {pkt = _builder2.buildPacket(sendNext, (PeerState2) peer);}
-            catch (IOException ioe) {pkt = null;}
-            if (pkt != null) {
-                if (_log.shouldDebug()) {
-                    _log.debug("Sent UDP packet with " + sendNext.size() + " fragments (" + curTotalDataSize +
-                               " data bytes)\n* Target: " + peer);
+                // Set metadata for debugging and stats
+                pkt.setFragmentCount(sendNext.size());
+                if (!sendNext.isEmpty()) {
+                    OutNetMessage msg = sendNext.get(0).state.getMessage();
+                    int msgType = (msg != null) ? msg.getMessageTypeId() : -1;
+                    pkt.setMessageType(msgType);
                 }
-                _context.statManager().addRateData("udp.sendFragmentsPerPacket", sendNext.size());
-            } else {
-                if (_log.shouldWarn()) {
-                    _log.info("Building UDP packet FAIL for " + DataHelper.toString(sendNext) + " to: " + peer);
-                }
-                sendNext.clear();
-                continue;
-            }
-            rv.add(pkt);
 
-            // following for debugging and stats
-            pkt.setFragmentCount(sendNext.size());
-            pkt.setMessageType(msgType); // type of first fragment
-            sendNext.clear();
+                rv.add(pkt);
+            }
         }
 
         int sent = rv.size();
@@ -348,5 +356,37 @@ class OutboundMessageFragments {
 
         return rv;
     }
+
+private void removePeer(PeerState peer) {
+    _activePeers.remove(peer);
+    if (_log.shouldDebug()) {
+        _log.debug("No more pending messages for [" + peer.getRemotePeer().toBase64().substring(0,6) + "]");
+    }
+}
+
+private void waitForMessages() {
+    synchronized (_waitLock) {
+        try {
+            _waitLock.wait(MAX_WAIT);
+        } catch (InterruptedException ie) {
+            if (_log.shouldDebug()) {
+                _log.debug("Woken up while waiting");
+            }
+        }
+    }
+}
+
+private void waitForMessages(int timeout) {
+    synchronized (_waitLock) {
+        try {
+            _waitLock.wait(timeout);
+        } catch (InterruptedException ie) {
+            if (_log.shouldDebug()) {
+                _log.debug("Woken up while waiting");
+            }
+        }
+    }
+}
+
 
 }
