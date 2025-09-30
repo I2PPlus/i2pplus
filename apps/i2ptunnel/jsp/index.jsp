@@ -151,7 +151,7 @@
 <%              } else if (indexBean.isSSLEnabled(curServer)) { %>
 <a class="httpserver ssl" href="https://<%=target%>/" title="<%=intl._t("Test HTTPS server, bypassing I2P")%>" target=_blank rel=noreferrer><%=target%> SSL</a>
 <%              } else { %>
-<a class=httpserver href="target%>/" title="<%=intl._t("Test HTTP server, bypassing I2P")%>" target=_blank rel=noreferrer><%=target%></a>
+<a class=httpserver href="<%=target%>/" title="<%=intl._t("Test HTTP server, bypassing I2P")%>" target=_blank rel=noreferrer><%=target%></a>
 <%              }
             } else {
 %>
