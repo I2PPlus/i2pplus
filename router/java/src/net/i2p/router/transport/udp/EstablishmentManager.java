@@ -43,6 +43,7 @@ import static net.i2p.router.transport.udp.InboundEstablishState.InboundState.*;
 import static net.i2p.router.transport.udp.OutboundEstablishState.OutboundState.*;
 import static net.i2p.router.transport.udp.OutboundEstablishState2.IntroState.*;
 import static net.i2p.router.transport.udp.SSU2Util.*;
+import static net.i2p.router.transport.udp.UDPPacket.*;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
 import net.i2p.stat.RateStat;
@@ -839,7 +840,8 @@ class EstablishmentManager {
         long sendConnID = DataHelper.fromLong8(data, off + SRC_CONN_ID_OFFSET);
         if (rcvConnID == 0 || sendConnID == 0 || rcvConnID == sendConnID) {return;}
         if (_log.shouldInfo()) {
-            _log.warn("[SSU2] Sending termination packet (" + parseReason(terminationCode) + ") on type " + type + " to: " + to);
+             String typeStr = UDPPacket.payloadTypeToString(type);
+            _log.warn("[SSU2] Sending termination packet for " + typeStr + " to: " + to + " -> " + parseReason(terminationCode));
         }
         UDPPacket packet = _builder2.buildRetryPacket(to, pkt.getSocketAddress(), sendConnID, rcvConnID, terminationCode);
         _transport.send(packet);
@@ -856,9 +858,8 @@ class EstablishmentManager {
      */
     void receiveSessionConfirmed(InboundEstablishState2 state, UDPPacket packet) {
         if (state != null && isPeerBanned(state)) {return;}
-        try {
-            state.receiveSessionConfirmed(packet);
-        } catch (GeneralSecurityException gse) {
+        try {state.receiveSessionConfirmed(packet);}
+        catch (GeneralSecurityException gse) {
             if (_log.shouldDebug()) {
                 _log.warn("[SSU2] Received CORRUPT SessionConfirmed \n* Router: " + state, gse);
             } else if (_log.shouldWarn()) {
@@ -916,9 +917,8 @@ class EstablishmentManager {
      */
     void receiveRetry(OutboundEstablishState2 state, UDPPacket packet) {
         if (state != null && isPeerBanned(state)) {return;}
-        try {
-            state.receiveRetry(packet);
-        } catch (GeneralSecurityException gse) {
+        try {state.receiveRetry(packet);}
+        catch (GeneralSecurityException gse) {
             if (_log.shouldDebug()) {
                 _log.warn("[SSU2] Received CORRUPT Retry \n* Router: " + state, gse);
             } else if (_log.shouldWarn()) {
@@ -978,49 +978,69 @@ class EstablishmentManager {
     }
 
     /**
-     * Is the peer on the blocklist?
+     * Is the peer on the blocklist or banlist?
      * @since 0.9.68+
      */
-    private boolean isPeerBanned(InboundEstablishState2 state) {
-        try {
-            String fromIP = InetAddress.getByAddress(state.getRemoteHostId().getIP()).getHostAddress();
-            String targetIP = fromIP.replace("/", "");
-            byte[] ip = Addresses.getIP(targetIP);
-            if (ip != null && _context.blocklist().isBlocklisted(ip)) {
-                if (_log.shouldInfo()) {
-                    _log.info("[SSU2] Ignoring Session Request from " + targetIP + " -> IP address is blocklisted");
-                }
-                return true;
-            }
-        } catch (UnknownHostException uhe) {
-            if (_log.shouldDebug()) {
-                _log.debug("[SSU2] UnknownHostException while checking banned IP", uhe);
-            }
-        }
-        return false;
+    private boolean isPeerBanned(RemoteHostId hostId) {
+        return isPeerBanned(hostId, "peer");
     }
 
     /**
-     * Is the peer on the blocklist?
+     * Is the peer on the blocklist or banlist?
      * @since 0.9.68+
      */
-    private boolean isPeerBanned(OutboundEstablishState2 state) {
+    private boolean isPeerBanned(RemoteHostId hostId, String context) {
         try {
-            String fromIP = InetAddress.getByAddress(state.getRemoteHostId().getIP()).getHostAddress();
-            String targetIP = fromIP.replace("/", "");
-            byte[] ip = Addresses.getIP(targetIP);
+            byte[] ip = hostId.getIP();
             if (ip != null && _context.blocklist().isBlocklisted(ip)) {
                 if (_log.shouldInfo()) {
-                    _log.info("[SSU2] Ignoring message from " + targetIP + " -> IP address is blocklisted");
+                    _log.info("Ignoring " + context + " from blocklisted IP addreess " + Addresses.toString(ip));
                 }
                 return true;
             }
-        } catch (UnknownHostException uhe) {
-            if (_log.shouldDebug()) {
-                _log.debug("[SSU2] UnknownHostException while checking banned IP", uhe);
+            Hash hash = hostId.getPeerHash();
+            if (hash != null && _context.banlist().isBanlisted(hash)) {
+                if (_log.shouldInfo()) {
+                    _log.info("Ignoring " + context + " from banlisted peer [" + hash.toBase64().substring(0, 6) +"]");
+                }
+                return true;
             }
+            return false;
+        } catch (Exception e) {
+            return false;
         }
-        return false;
+    }
+
+    /**
+     * Is the peer on the blocklist or banlist?
+     * @since 0.9.68+
+     */
+    private boolean isPeerBanned(InboundEstablishState state) {
+        return isPeerBanned(state.getRemoteHostId());
+    }
+
+    /**
+     * Is the peer on the blocklist or banlist?
+     * @since 0.9.68+
+     */
+    private boolean isPeerBanned(InboundEstablishState2 state) {
+        return isPeerBanned(state.getRemoteHostId());
+    }
+
+    /**
+     * Is the peer on the blocklist or banlist?
+     * @since 0.9.68+
+     */
+    private boolean isPeerBanned(OutboundEstablishState state) {
+        return isPeerBanned(state.getRemoteHostId());
+    }
+
+    /**
+     * Is the peer on the blocklist or banlist?
+     * @since 0.9.68+
+     */
+    private boolean isPeerBanned(OutboundEstablishState2 state) {
+        return isPeerBanned(state.getRemoteHostId());
     }
 
     /**
