@@ -1,3 +1,7 @@
+2025-10-01 dr|z3d
+ * Console: Replace combined logs view with error view and remove
+   error logs from /routerlogs page; add error logs counter on nav
+
 2025-09-29 dr|z3d
  * Console: Iconize and add tooltips to peer status on /profiles
  * Transports: Optimize and refactor NTCP EventPumper
