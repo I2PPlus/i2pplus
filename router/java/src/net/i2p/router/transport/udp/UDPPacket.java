@@ -82,6 +82,22 @@ class UDPPacket implements CDPQEntry {
     public static final int PAYLOAD_TYPE_SESSION_DESTROY = 8;
     public static final int MAX_PAYLOAD_TYPE = PAYLOAD_TYPE_SESSION_DESTROY;
 
+    /** @since 0.9.68+ */
+    public static String payloadTypeToString(int type) {
+        switch (type) {
+            case PAYLOAD_TYPE_SESSION_REQUEST:    return "Session Request";
+            case PAYLOAD_TYPE_SESSION_CREATED:    return "Session Created";
+            case PAYLOAD_TYPE_SESSION_CONFIRMED:  return "Session Confirmed";
+            case PAYLOAD_TYPE_RELAY_REQUEST:      return "Relay Request";
+            case PAYLOAD_TYPE_RELAY_RESPONSE:     return "Relay Response";
+            case PAYLOAD_TYPE_RELAY_INTRO:        return "Relay Intro";
+            case PAYLOAD_TYPE_DATA:               return "Data";
+            case PAYLOAD_TYPE_TEST:               return "Test";
+            case PAYLOAD_TYPE_SESSION_DESTROY:    return "Session Destroy";
+            default:                              return "Unknown Payload Type: " + type;
+        }
+    }
+
     // Private constructor used by cache factory
     private UDPPacket(RouterContext ctx) {
         _data = new byte[MAX_PACKET_SIZE];

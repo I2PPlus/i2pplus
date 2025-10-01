@@ -168,6 +168,35 @@ final class SSU2Util {
     public static final int REASON_NETID = 21;
     public static final int REASON_REPLACED = 22;
 
+    public static String terminationCodeToString(int code) {
+        switch (code) {
+            case REASON_UNSPEC:          return "Unspecified reason";
+            case REASON_TERMINATION:     return "Termination requested";
+            case REASON_TIMEOUT:         return "Timeout occurred";
+            case REASON_SHUTDOWN:        return "Shutdown in progress";
+            case REASON_AEAD:            return "AEAD verification failure";
+            case REASON_OPTIONS:         return "Options mismatch";
+            case REASON_SIGTYPE:         return "Signature type error";
+            case REASON_SKEW:            return "Clock skew too large";
+            case REASON_PADDING:         return "Padding error";
+            case REASON_FRAMING:         return "Framing error";
+            case REASON_PAYLOAD:         return "Payload error";
+            case REASON_MSG1:            return "Message 1 error";
+            case REASON_MSG2:            return "Message 2 error";
+            case REASON_MSG3:            return "Message 3 error";
+            case REASON_FRAME_TIMEOUT:   return "Frame timeout";
+            case REASON_SIGFAIL:         return "Signature verification failed";
+            case REASON_S_MISMATCH:      return "Session mismatch";
+            case REASON_BANNED:          return "Banned";
+            case REASON_TOKEN:           return "Token error";
+            case REASON_LIMITS:          return "Resource limits exceeded";
+            case REASON_VERSION:         return "Protocol version mismatch";
+            case REASON_NETID:           return "Network ID mismatch";
+            case REASON_REPLACED:        return "Session replaced";
+            default:                     return "Unknown termination reason: " + code;
+        }
+    }
+
     private SSU2Util() {}
 
     /**
