@@ -1525,12 +1525,7 @@ public class NTCPTransport extends TransportImpl {
         }
         if (_log.shouldInfo())
             _log.info("Old port: " + oport + " Config: " + cport + " New: " + nport);
-        //if (nport == null || nport.length() <= 0)
-        //    return;
-        // 0.9.6 change
-        // Don't have NTCP "chase" SSU's external port,
-        // as it may change, possibly frequently.
-        //if (oport == null || ! oport.equals(nport)) {
+
         if (oport == null && nport != null && nport.length() > 0) {
             newProps.setProperty(RouterAddress.PROP_PORT, nport);
             changed = true;
@@ -1656,21 +1651,6 @@ public class NTCPTransport extends TransportImpl {
             return true;
         }
 
-        // stopListening stops the pumper, readers, and writers, so required even if
-        // oldAddr == null since startListening starts them all again
-        //
-        // really need to fix this so that we can change or create an inbound address
-        // without tearing down everything
-        // Especially on disabling the address, we shouldn't tear everything down.
-        //
-        //if (_log.shouldWarn())
-        //    _log.warn("Halting NTCP to change address");
-        //stopListening();
-        // Wait for NTCP Pumper to stop so we don't end up with two...
-        //while (isAlive()) {
-        //    try {Thread.sleep(5*1000);} catch (InterruptedException ie) {}
-        //}
-
         // do not restart on transition to firewalled
         if (ip != null || port > 0)
         restartListening(newAddr, isIPv6);
@@ -1699,13 +1679,6 @@ public class NTCPTransport extends TransportImpl {
             else
                 _log.warn("UPnP has failed to open the NTCP port: " + Addresses.toString(ip, externalPort) + " reason: " + reason);
         }
-        // if SSU is disabled, externalAddressReceived() will update our address and call rebuildRouterInfo().
-        // getReachabilityStatus() should report correctly after address is updated.
-        //if (!_context.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP)) {
-        //    if (success && ip != null && isValid(ip) && !isIPv4Firewalled()) {
-        //
-        //    }
-        //}
     }
 
     /**
@@ -1851,17 +1824,6 @@ public class NTCPTransport extends TransportImpl {
         _endpoints.clear();
         _lastInboundIPv4 = 0;
         _lastInboundIPv6 = 0;
-    }
-
-    public void renderStatusHTML(java.io.Writer out, int sortFlags) throws IOException {}
-
-    /**
-     * Does nothing
-     * @deprecated as of 0.9.31
-     */
-    @Override
-    @Deprecated
-    public void renderStatusHTML(java.io.Writer out, String urlBase, int sortFlags) throws IOException {
     }
 
     /**
