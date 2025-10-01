@@ -408,6 +408,6 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
 
     @Override
     public String toString() {
-        return "[" + _remoteHostId + "] destroyed " + DataHelper.formatDuration(_context.clock().now() - _destroyedOn) + " ago";
+        return _remoteHostId + " destroyed " + DataHelper.formatDuration(_context.clock().now() - _destroyedOn) + " ago";
     }
 }

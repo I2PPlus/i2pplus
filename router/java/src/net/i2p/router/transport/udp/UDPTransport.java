@@ -2013,41 +2013,9 @@ public class UDPTransport extends TransportImpl {
             buf.append(timeSinceSendOK).append(" / ");
             buf.append(timeSinceRecv).append(" / ").append(timeSinceAck);
             buf.append("]; Consecutive failures: ").append(consec);
-            if (why != null)
-                buf.append("\n* Cause: ").append(why);
-            /*
-            buf.append("Existing peers: \n");
-            synchronized (_peersByIdent) {
-                for (Iterator iter = _peersByIdent.keySet().iterator(); iter.hasNext(); ) {
-                    Hash c = (Hash)iter.next();
-                    PeerState p = (PeerState)_peersByIdent.get(c);
-                    if (c.equals(peer.getRemotePeer())) {
-                        if (p != peer) {
-                            buf.append(" SAME PEER, DIFFERENT STATE ");
-                        } else {
-                            buf.append(" same peer, same state ");
-                        }
-                    } else {
-                        buf.append("Peer ").append(p.toString()).append(" ");
-                    }
-
-                    buf.append(" lifetime: ").append(now - p.getKeyEstablishedTime());
-
-                    timeSinceSend = now - p.getLastSendTime();
-                    timeSinceRecv = now - p.getLastReceiveTime();
-                    timeSinceAck  = now - p.getLastACKSend();
-
-                    buf.append(" time since send/recv/ack: ").append(timeSinceSend).append(" / ");
-                    buf.append(timeSinceRecv).append(" / ").append(timeSinceAck);
-                    buf.append("\n");
-                }
-            }
-             */
-//            _log.debug(buf.toString(), new Exception("Dropped by"));
+            if (why != null) {buf.append("\n* Cause: ").append(why);}
         }
-        synchronized(_addDropLock) {
-            locked_dropPeer(peer, shouldBanlist, why);
-        }
+        synchronized(_addDropLock) {locked_dropPeer(peer, shouldBanlist, why);}
         // the only possible reason to rebuild is if they were an introducer for us
         // so avoid going through rebuildIfNecessary()
         long tag = peer.getTheyRelayToUsAs();
@@ -2113,12 +2081,13 @@ public class UDPTransport extends TransportImpl {
         RemoteHostId remoteId = peer.getRemoteHostId();
         PeerState altByHost = _peersByRemoteHost.remove(remoteId);
 
-        if (altByIdent != altByHost && _log.shouldWarn())
-            _log.warn("Mismatch on remove, RHID = " + remoteId
-                      + " byID = " + altByIdent
-                      + " byHost = " + altByHost
-                      + " byIDsz = " + _peersByIdent.size()
-                      + " byHostsz = " + _peersByRemoteHost.size());
+        if (altByIdent != altByHost && _log.shouldInfo())
+            _log.warn("[SSU2] Mismatch on remove -> " +
+                      (remoteId != null ? "RemoteHostId: " + remoteId : "") +
+                      (altByIdent != null ? " byID: " + altByIdent : "") +
+                      (altByHost != null ? " byHost: " + altByHost : "") +
+                      " byIdentSize: " + _peersByIdent.size() +
+                      " byHostSize: " + _peersByRemoteHost.size());
 
         // deal with races to make sure we drop the peers fully
         if ( (altByIdent != null) && (peer != altByIdent) ) locked_dropPeer(altByIdent, shouldBanlist, "recurse");
