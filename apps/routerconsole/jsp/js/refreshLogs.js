@@ -11,6 +11,7 @@ function start() {
   const criticallogs = document.getElementById("criticallogs");
   const critLogsHead = document.getElementById("critLogsHead");
   const noCritLogs = criticallogs?.querySelector(".nologs");
+  const errorCount = document.getElementById("errorCount");
   const routerlogs = document.getElementById("routerlogs");
   const routerlogsList = routerlogs?.querySelector("td ul");
   const routerlogsFileInfo = routerlogs?.querySelector("tr:first-child td p");
@@ -33,16 +34,18 @@ function start() {
       const doc = parser.parseFromString(responseText, "text/html");
       const mainLogsResponse = doc.getElementById("logs");
       const criticallogsResponse = criticallogs ? doc.getElementById("criticallogs") : null;
+      const errorCountResponse = errorCount ? doc.getElementById("errorCount") : null;
 
-      if (!criticallogs && criticallogsResponse) {
-        mainLogs.innerHTML = mainLogsResponse?.innerHTML;
-      } else if (criticallogs && criticallogsResponse && !criticallogs.querySelector(".nologs")) {
+      if (errorCount && errorCountResponse) {
+        if (errorCountResponse.textContent !== errorCount.textContent) {
+          updates.push(() => {errorCount.textContent = errorCountResponse.textContent;});
+        }
+      }
+
+      if (criticallogs && criticallogsResponse) {
         if (criticallogsResponse.innerHTML !== criticallogs.innerHTML) {
           updates.push(() => {criticallogs.innerHTML = criticallogsResponse.innerHTML;});
         }
-      } else {
-        critLogsHead?.remove();
-        criticallogs?.remove();
       }
 
       if (routerlogs && routerlogsList) {

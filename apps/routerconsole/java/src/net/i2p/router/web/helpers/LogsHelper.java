@@ -85,6 +85,17 @@ public class LogsHelper extends HelperBase {
     }
 
     /**
+     * Returns the number of critical/error log messages currently displayed.
+     *
+     * @return the count of critical/error messages
+     * @since 0.9.68+
+     */
+    public int getCriticalLogCount() {
+        List<String> criticalMessages = _context.logManager().getBuffer().getMostRecentCriticalMessages();
+        return criticalMessages != null ? criticalMessages.size() : 0;
+    }
+
+    /**
      *  Call before getLogs()
      *
      *  @return -1 if none

@@ -2548,12 +2548,15 @@ table[id$="logs"] tr:nth-child(even){background:#000}
 table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #bugreports{margin-top:11px}
 #bugreports td{padding:20px 24px 20px 58px;background:var(--infohelp) no-repeat 15px center}
+#criticallogs{margin-bottom:10px}
 #criticallogs tr:first-child{display:none}
 #criticallogs td ,#routerlogs td,#eventlogs td,#wrapperlogs td{padding:5px 10px;font-weight:400;border-top:var(--border)}
 #criticallogs ul{margin:-6px -11px;border:var(--border)}
 #criticallogs ul:empty{display:none}
 #critLogsHead{margin-bottom:-2px}
 #enviro #revision{padding-left:16px;background:var(--gitlab) no-repeat left center/14px}
+#errorCount{margin:-1px 0 -2px 3px;padding:1px 5px 2px;display:inline-block;font-size:90%;box-shadow:var(--bevel);background:var(--badge)}
+#errorlogs #errorCount{display:none}
 #logs a.configure:active::after{transform:rotate(90deg);transition:linear transform .2s}
 #logs a.delete{margin-left:8px}
 #logs a.delete:hover::after{background:var(--close_hover) var(--center)/14px}
