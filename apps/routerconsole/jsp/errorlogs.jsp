@@ -6,17 +6,7 @@
 <body id=errorlogs>
 <jsp:useBean class="net.i2p.router.web.helpers.LogsHelper" id="logsHelper" scope="request"/>
 <jsp:setProperty name="logsHelper" property="contextId" value="<%=i2pcontextId%>"/>
-
 <%@include file="sidebar.jsi"%>
-<h1 class=log><%=intl._t("Logs")%></h1>
-<div class=main id=logs>
-<div class=confignav>
-<%  int errorCount = logsHelper.getCriticalLogCount(); %>
-<span class=tab><a href=/routerlogs><%=intl._t("Router")%></a></span>
-<span class=tab><a href=/servicelogs><%=intl._t("Service")%></a></span>
-<span class=tab2><span><%=intl._t("Errors")%></span></span>
-<span class=tab><a href="/events?from=604800"><%=intl._t("Events")%></a></span>
-</div>
 <%  final String consoleNonce = net.i2p.router.web.CSSHelper.getNonce();
     final String ct1 = request.getParameter("clear");
     final String ct2 = request.getParameter("crit");
@@ -25,11 +15,7 @@
     final String ct5 = request.getParameter("svcf");
     final String ctn = request.getParameter("consoleNonce");
     int last = logsHelper.getLastCriticalMessageNumber();
-    boolean hasCritical = last >= 0;
-%>
-
-<h3 id=critLogsHead class=tabletitle><%=intl._t("Critical / Error Level Logs")%>
-<%  if ((ct1 != null || ct2 != null || (ct3 != null && ct4 != null && ct5 != null)) && ctn != null) {
+    if ((ct1 != null || ct2 != null || (ct3 != null && ct4 != null && ct5 != null)) && ctn != null) {
         int ict1 = -1, ict2 = -1;
         long ict3 = -1, ict4 = -1;
         try { ict1 = Integer.parseInt(ct1); } catch (NumberFormatException nfe) {}
@@ -39,11 +25,20 @@
         logsHelper.clearThrough(ict1, ict2, ict3, ict4, ct5, ctn);
     }
 %>
-&nbsp;<a id=clearCritical class=delete title="<%=intl._t("Clear logs")%>" href="logs?crit=<%=last%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a></h3>
-<table id=criticallogs class=logtable>
-<tbody><tr><td><jsp:getProperty name="logsHelper" property="criticalLogs"/></td></tr></tbody>
-</table>
-
+<h1 class=log><%=intl._t("Logs")%></h1>
+<div class=main id=logs>
+<div class=confignav>
+<%  int errorCount = logsHelper.getCriticalLogCount(); %>
+<span class=tab><a href=/routerlogs><%=intl._t("Router")%></a></span>
+<span class=tab><a href=/servicelogs><%=intl._t("Service")%></a></span>
+<span class=tab2><span><%=intl._t("Errors")%></span></span>
+<span class=tab><a href="/events?from=604800"><%=intl._t("Events")%></a></span>
+</div>
+<div class=logwrap>
+<h3 id=critLogsHead class=tabletitle><%=intl._t("Critical / Error Level Logs")%>
+&nbsp;<a id=clearCritical class=delete title="<%=intl._t("Clear logs")%>" href="/errorlogs?crit=<%=last%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a></h3>
+<table id=criticallogs class="logtable single"><tbody><tr><td><jsp:getProperty name="logsHelper" property="criticalLogs"/></td></tr></tbody></table>
+</div>
 </div>
 <script nonce=<%=cspNonce%> type=module src=/js/refreshLogs.js></script>
 <noscript><style>#toggleRefresh,#refreshPeriod,#logFilter{display:none!important}</style></noscript>

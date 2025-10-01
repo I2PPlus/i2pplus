@@ -83,10 +83,6 @@ public class EventLogHelper extends FormHandler {
         }
     }
 
-    //public void setTo(String s) {
-    //   _to = s;
-    //}
-
     public void setType(String s) {
         _event = s;
     }
@@ -97,16 +93,16 @@ public class EventLogHelper extends FormHandler {
         // So just use the "shared/console nonce".
         String nonce = CSSHelper.getNonce();
         try {
-            _out.write("<br><h3 id=displayevents>" + _t("Display Events") + "</h3>");
-            _out.write("<form action=\"events\" method=post>\n" +
-                       "<input type=hidden name=\"action\" value=\"Save\">\n" +
-                       "<input type=hidden name=\"nonce\" value=\"" + nonce + "\">\n<b>");
-            _out.write(_t("Events since") + ":</b> <select name=\"from\">");
+            _out.write("<br><div class=logwrap>\n<h3 id=displayevents>" + _t("Display Events") + "</h3>");
+            _out.write("<form action=/events method=post>\n" +
+                       "<input type=hidden name=action value=Save>\n" +
+                       "<input type=hidden name=nonce value=\"" + nonce + "\">\n<b>");
+            _out.write(_t("Events since") + ":</b> <select name=from>");
             for (int i = 0; i < _times.length; i++) {
                 writeOption(_times[i]);
             }
             _out.write("</select>&nbsp;<b>");
-            _out.write(_t("Event type") + ":</b> <select name=\"type\">");
+            _out.write(_t("Event type") + ":</b> <select name=type>");
             // sorted by translated display string
             Map<String, String> events = new TreeMap<String, String>(Collator.getInstance());
             for (int i = 0; i < _events.length; i += 2) {
@@ -117,7 +113,7 @@ public class EventLogHelper extends FormHandler {
                 writeOption(e.getKey(), e.getValue());
             }
             _out.write("</select>" +
-                       "&nbsp;<input type=submit class=accept value=\"" + _t("Filter events") + "\"></form>");
+                       "&nbsp;<input type=submit class=accept value=\"" + _t("Filter events") + "\"></form>\n");
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
@@ -222,7 +218,7 @@ public class EventLogHelper extends FormHandler {
             }
             buf.append("</td></tr>\n");
         }
-        buf.append("</table>\n");
+        buf.append("</table>\n</div>\n");
         return buf.toString();
     }
 }

@@ -3,10 +3,9 @@
 <%@include file="head.jsi"%>
 <%=intl.title("router logs")%>
 </head>
-<body id=i2plogs>
+<body id=routerlogs>
 <jsp:useBean class="net.i2p.router.web.helpers.LogsHelper" id="logsHelper" scope="request"/>
 <jsp:setProperty name="logsHelper" property="contextId" value="<%=i2pcontextId%>"/>
-
 <%@include file="sidebar.jsi"%>
 <h1 class=log><%=intl._t("Logs")%></h1>
 <div class=main id=logs>
@@ -25,23 +24,20 @@
     final String ct5 = request.getParameter("svcf");
     final String ctn = request.getParameter("consoleNonce");
     int last = logsHelper.getLastCriticalMessageNumber();
-    boolean hasCritical = last >= 0;
 %>
-
+<div class=logwrap>
 <h3 class=tabletitle id=routerlogs_h3><%=intl._t("Router Logs")%>
 <%  last = logsHelper.getLastMessageNumber();
     if (last >= 0) {
 %>
-&nbsp;<a class=delete title="<%=intl._t("Clear logs")%>" href="logs?clear=<%=last%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a>
+&nbsp;<a class=delete title="<%=intl._t("Clear logs")%>" href="/routerlogs?clear=<%=last%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a>
 <%  } %>
 &nbsp;<a class=configure title="<%=intl._t("Configure router logging options")%>" href="configlogging">[<%=intl._t("Configure")%>]</a>
 &nbsp;<a id=eventlogLink title="<%=intl._t("View event log")%>" href="/events?from=604800">[<%=intl._t("Events")%>]</a>
 &nbsp;<span id=toggleRefresh></span>
 &nbsp;<span id=logFilter title="<%=intl._t("Filter Router log output")%>"><input type=text id=logFilterInput></span></h3>
-<table id=routerlogs class="logtable single">
-<tbody><tr><td><jsp:getProperty name="logsHelper" property="logs"/></td></tr></tbody>
-</table>
-
+<table id=routerlogs class="logtable single"><tbody><tr><td><jsp:getProperty name="logsHelper" property="logs"/></td></tr></tbody></table>
+</div>
 </div>
 <script nonce=<%=cspNonce%> type=module src=/js/refreshLogs.js></script>
 <noscript><style>#toggleRefresh,#refreshPeriod,#logFilter{display:none!important}</style></noscript>

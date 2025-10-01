@@ -723,7 +723,7 @@ h3.stats{border:var(--border);border-radius:0}
 .confignav+#statsWrap{margin-top:0}
 
 /* eventlogs */
-form[action="events"]{background:#000}
+form[action="/events"]{background:#000}
 #eventlog{margin-top:-21px;margin-bottom:10px}
 #eventlog th{word-spacing:0;letter-spacing:0;text-transform:none}
 #eventlog td{padding:3px 10px}
@@ -985,9 +985,9 @@ a[href^="configpeer?peer"]:active::after{background:var(--edit_active) var(--cen
 
 /* events */
 div.eventspanel{margin-top:-15px}
-form[action="events"]{margin-top:-11px;margin-bottom:20px;padding:10px 20px 10px;border:var(--border)}
-form[action="events"]>br{display:none}
-form[action="events"]>.formaction{margin-bottom:-11px;margin-right:-21px;margin-left:-21px}
+form[action="/events"]{margin-top:-11px;margin-bottom:20px;padding:10px 10px 10px 50px;border:var(--border);box-shadow: var(--bevel);background:var(--logs) no-repeat 15px center/28px,var(--msg)}
+form[action="/events"]>br{display:none}
+form[action="/events"]>.formaction{margin-bottom:-11px;margin-right:-21px;margin-left:-21px}
 .eventspanel th{padding-left:10px;word-spacing:.1em;letter-spacing:.08em;text-transform:uppercase;text-align:left;font-size:10pt}
 .eventspanel table{font-size:9pt}
 .eventspanel table tr:hover{background:#002000}
@@ -1783,7 +1783,6 @@ td.optionsave,.buckets,.formaction,#certs h4,#certs p,#certs textarea,#config_ad
 #configstats th b::before{margin:-4px 6px 0 0;width:16px;height:16px;display:inline-block;vertical-align:middle;background:var(--star) no-repeat center center/16px;content:""}
 
 /* infohelp/warn */
-form[action="events"]{padding:10px 10px 10px 50px;background:var(--logs) no-repeat 15px center/28px,var(--msg)}
 h3.ptitle{margin-bottom:-6px}
 h3.tabletitle a{text-transform:lowercase;letter-spacing:normal}
 h3.tabletitle,#i2pclientconfig,#advancedclientconfig,#webappconfiguration,#pconfig,#pluginfromurl,#pluginfromfile,#updateplugins,#pluginmanage,#bannedpeers,h3.ptitle,#transports,h3.sybils,#certs h3,label.tabletitle{margin-bottom:0;padding:8px 10px}
@@ -2541,6 +2540,7 @@ a[href^="/netdb"]:hover span{color:var(--hover)}
 .log_omitted.colorize{color:#252}
 .log_warn.colorize{color:#737}
 .log_warn.colorize::before,.log_warn .log_level{background:#971197}
+.logwrap{box-shadow:var(--border_table)}
 .logtable ul li{margin-left:15px;list-style:none}
 table[id$="logs"] tr:first-child{background:#001000}
 table[id$="logs"] tr:nth-child(2){background:none}

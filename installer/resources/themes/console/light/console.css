@@ -1770,8 +1770,8 @@ p.threatpoints{margin-top:10px;padding-left:33px;background:var(--eye_static) no
 h4#updateplugins{margin:-15px 0 14px;padding:5px;letter-spacing:0;text-transform:none;font-size:10pt;color:var(--ink_light);border:var(--border_inner);background:linear-gradient(180deg,#fff 50%,rgba(238,238,255,.2) 50%,#eef 100%) #fff}
 table#permabanned,table#i2pupdates{margin-bottom:10px}
 #pluginconfigactions{margin-top:-6px}
-.main form[action="events"]{margin:-16px 0 -2px;padding:10px 10px 10px 50px;border:var(--border_inner);box-shadow:var(--highlight);background:#f2f2ff var(--logs) no-repeat 15px center;background-size:28px}
-.main form[action="events"] select+b,.main form[action="events"] input[type=submit]{margin-left:8px}
+.main form[action="/events"]{margin:-16px 0 -2px;padding:10px 10px 10px 50px;border:var(--border_inner);box-shadow:var(--highlight);background:#f2f2ff var(--logs) no-repeat 15px center;background-size:28px}
+.main form[action="/events"] select+b,.main form[action="/events"] input[type=submit]{margin-left:8px}
 #newfamily{margin-top:-6px;margin-bottom:10px}
 a[href^="configpeer?peer"]{font-size:0;filter:drop-shadow(0 0 1px #777)}
 a[href^="configpeer?peer"]::after{margin:0 0 0 3px;display:inline-block;vertical-align:middle;height:16px;width:16px;background:var(--edit) no-repeat center center;background-size:14px;content:""}
@@ -2758,9 +2758,9 @@ h4 span[style="float:right;"] .unbold{max-width:300px}
 }
 
 @media (max-width:1000px){
-form[action="events"]{padding-left:10px;background:none}
-form[action="events"] select{min-width:80px}
-form[action="events"] select+b,form[action="events"] input[type=submit]{margin-left:3px}
+form[action="/events"]{padding-left:10px;background:none}
+form[action="/events"] select{min-width:80px}
+form[action="/events"] select+b,form[action="/events"] input[type=submit]{margin-left:3px}
 .cells,.cells td{padding:3px 2px}
 .encDests code{max-width:60px}
 .encKey{font-size:80%}

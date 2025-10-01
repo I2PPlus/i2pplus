@@ -91,8 +91,9 @@ public class LogsHelper extends HelperBase {
      * @since 0.9.68+
      */
     public int getCriticalLogCount() {
-        List<String> criticalMessages = _context.logManager().getBuffer().getMostRecentCriticalMessages();
-        return criticalMessages != null ? criticalMessages.size() : 0;
+        _context.logManager().flush();
+        int count = getLastCriticalMessageNumber();
+        return count >= 0 ? count + 1 : 0;
     }
 
     /**
