@@ -11,7 +11,7 @@
 <div class=confignav>
 <span class=tab><a href=/routerlogs><%=intl._t("Router")%></a></span>
 <span class=tab2><span><%=intl._t("Service")%></span></span>
-<span class=tab><a href=/logs><%=intl._t("Combined")%></a></span>
+<span class=tab><a href=/errorlogs><%=intl._t("Errors")%></a></span>
 <span class=tab><a href="/events?from=604800"><%=intl._t("Events")%></a></span>
 </div>
 <jsp:useBean class="net.i2p.router.web.helpers.LogsHelper" id="logsHelper" scope="request"/>

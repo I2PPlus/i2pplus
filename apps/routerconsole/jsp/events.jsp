@@ -18,7 +18,7 @@
 <div class=confignav>
 <span class=tab><a href=/routerlogs><%=intl._t("Router")%></a></span>
 <span class=tab><a href=/servicelogs><%=intl._t("Service")%></a></span>
-<span class=tab><a href=/logs><%=intl._t("Combined")%></a></span>
+<span class=tab><a href=/errorlogs><%=intl._t("Errors")%></a></span>
 <span class=tab2><span><%=intl._t("Events")%></span></span>
 </div>
 <div class=eventspanel>
