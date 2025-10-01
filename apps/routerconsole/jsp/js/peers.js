@@ -17,7 +17,7 @@
   const query = location.search;
   const queryParams = new URL(url.href).searchParams;
   const xhrPeers = new XMLHttpRequest();
-  const REFRESH_INTERVAL = summary ? 10*1000 : 30*1000;
+  const REFRESH_INTERVAL = summary ? 5*1000 : 30*1000;
 
   let sorterNTCP, sorterSSU;
 
