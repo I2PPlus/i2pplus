@@ -2563,7 +2563,6 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #logs a.delete:active::after{opacity:.7;transform:scale(.85)}
 #logs a.delete::after{background:var(--close) var(--center)/14px}
 #logs .embedlink{margin-top:1px;font-size:85%}
-#logs #enviro,#criticallogs,#routerlogs,#eventlogs,#wrapperlogs{margin-top:-1px}
 #logs #enviro:hover{user-select:all;cursor:text}
 #logs #enviro td{padding:7px 10px;font-weight:400;border-right:1px inset #131;box-shadow:var(--highlight)}
 #logs #enviro td:first-child{width:1%;white-space:nowrap;text-align:right}
