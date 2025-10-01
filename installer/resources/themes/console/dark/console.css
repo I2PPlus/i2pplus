@@ -2555,8 +2555,7 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #criticallogs ul:empty{display:none}
 #critLogsHead{margin-bottom:-2px}
 #enviro #revision{padding-left:16px;background:var(--gitlab) no-repeat left center/14px}
-#errorCount{margin:-1px 0 -2px 3px;padding:1px 5px 2px;display:inline-block;font-size:90%;box-shadow:var(--bevel);background:var(--badge)}
-#errorlogs #errorCount{display:none}
+#errorCount{margin:-2px 0 -2px 3px;padding:2px 5px;min-width:12px;display:inline-block;font-size:90%;box-shadow:var(--bevel);background:var(--badge)}
 #logs a.configure:active::after{transform:rotate(90deg);transition:linear transform .2s}
 #logs a.delete{margin-left:8px}
 #logs a.delete:hover::after{background:var(--close_hover) var(--center)/14px}

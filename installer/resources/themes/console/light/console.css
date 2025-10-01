@@ -633,6 +633,7 @@ td.infowarn,#help tr:hover td.infowarn{background:var(--infowarn) no-repeat 15px
 .log_level{margin:-4px -3px 0;padding:2px 2px 0;min-width:36px;max-width:36px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1;vertical-align:middle;text-align:center;color:#fff;font-weight:700;font-size:95%;border-radius:2px;background:#55555f;opacity:.8}
 .log_omitted{margin-right:1px}
 .nologs{padding:6px 8px}
+#errorCount{margin:-2px 0 -2px 3px;padding:2px 5px;min-width:12px;display:inline-block;font-size:90%;box-shadow:var(--bevel);background:var(--badge)}
 #logs font[color^="#"]::before{margin-right:5px;margin-left:-17px;margin:-2px 5px 0 -17px;width:6px;height:6px;display:inline-block;content:"";vertical-align:middle;border-radius:50%;background:#fff}
 #logs li{margin:0 0 -1px -5px;padding:1px 6px 1px 20px;width:calc(100% - 16px);text-align:left;list-style:none;font-size:8.5pt;font-weight:500;box-shadow:inset 0 0 0 1px #ddf,inset 0 0 0 2px #fff;opacity:.7}
 #logs li:nth-child(even){background:#f0f0ff}

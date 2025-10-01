@@ -1559,6 +1559,7 @@ img.unknownflag{opacity:.8}
 #criticallogs tr:first-child{display:none}
 #enviro td,#eventlogs td{padding:5px 10px}
 #enviro td:last-child b{margin-left:8px;margin-right:5px}
+#errorCount{margin:-2px 0 -2px 3px;padding:1px 4px;min-width:10px;display:inline-block;font-size:90%;border:var(--border);box-shadow:var(--bevel);background:var(--badge)}
 #logFilter{margin:-6px -7px -6px 0;display:block}
 #logFilterInput{margin:2px -5px -1px 0;padding-left:30px;width:160px;min-width:0;background:#fff var(--filter) no-repeat 8px center/16px;background-blend-mode:luminosity}
 #logRefreshInterval:focus,#logFilterInput:focus{box-shadow:var(--btn_shadow_active);filter:none!important;caret-color:auto}
@@ -1568,6 +1569,8 @@ img.unknownflag{opacity:.8}
 #logs .logtable p{margin:0;padding:0}
 #logs .logtable tr:first-child{border-bottom:var(--border);padding:5px 10px}
 #logs .logtable ul{margin-bottom:0}
+#logs .tab,#logs .tab2,#events .tab,#events .tab2{min-width:110px}
+#logs #critLogsHead{margin-top:14px}
 #logs #enviro td:first-child{padding-right:0;width:1%;text-align:right;white-space:nowrap}
 #logs #enviro:hover #cputype{background:none}
 #logs #enviro:hover tr,#logs #enviro:hover td{background:var(--row_hover);border-top:1px inset #0000;border-bottom:1px inset #0000}

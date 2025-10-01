@@ -130,7 +130,10 @@ public class LogsHelper extends HelperBase {
     public void clearThrough(int n, int crit, long wn, long wts, String wf, String consoleNonce) {
         if (!CSSHelper.getNonce().equals(consoleNonce)) {return;}
         if (n >= 0) {_context.logManager().getBuffer().getUIMessages().clearThrough(n);}
-        if (crit >= 0) {_context.logManager().getBuffer().getCriticalUIMessages().clearThrough(crit);}
+        if (crit >= 0) {
+            _context.logManager().getBuffer().getCriticalUIMessages().clearThrough(crit);
+            _context.logManager().flush(); // Force a refresh of the message list
+        }
         if (wn >= 0 && wts > 0 && wf != null) {
             // timestamp, last line number, filename
             String val = wts + "," + wn + "," + wf;
