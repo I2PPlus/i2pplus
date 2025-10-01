@@ -1302,7 +1302,7 @@ public class PeerState {
         } else {
             _context.statManager().addRateData("udp.sendRejected", state.getPushCount());
             if (_log.shouldDebug()) {
-                _log.debug("Allocation for [" + _remotePeer.toBase64().substring(0,6) + "] rejected (Windown size: " + getSendWindowBytes()
+                _log.debug("Allocation for [" + _remotePeer.toBase64().substring(0,6) + "] rejected (Window size: " + getSendWindowBytes()
                           + " / available: " + getSendWindowBytesRemaining()
                           + " bytes) for [MsgID" + state.getMessageId() + "]" + state);
             }
@@ -1370,7 +1370,7 @@ public class PeerState {
             if (_log.shouldDebug()) {
                 if (state.getFragmentCount() > 1) {
                     _log.debug("Received partial ACK of [MsgID " + state.getMessageId() + "] from [" +
-                               _remotePeer.toBase32().substring(0,6) + "] ->  Newly-acked: " + ackedSize +
+                               _remotePeer.toBase64().substring(0,6) + "] ->  Newly-acked: " + ackedSize +
                                " bytes, now complete for: " + state);
                 } else {
                     _log.debug("Received ACK of [MsgID " + state.getMessageId() + "] from [" +
@@ -1380,7 +1380,7 @@ public class PeerState {
             }
         } else {
             if (_log.shouldDebug()) {
-                _log.debug("Received partial ACK of [MsgID " + state.getMessageId() + "] from [" + _remotePeer.toBase32().substring(0,6)
+                _log.debug("Received partial ACK of [MsgID " + state.getMessageId() + "] from [" + _remotePeer.toBase64().substring(0,6)
                       + "] after " + lifetime + " and " + numSends + " sends ->"
                       + " Complete? false"
                       + "; Newly-acked: " + ackedSize

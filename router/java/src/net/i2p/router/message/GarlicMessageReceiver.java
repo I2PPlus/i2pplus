@@ -164,11 +164,11 @@ public class GarlicMessageReceiver {
         if (!rv) {
             String howLongAgo = DataHelper.formatDuration(_context.clock().now()-clove.getExpiration());
             if (_log.shouldDebug()) {
-                _log.debug("Clove is NOT valid: id=" + clove.getCloveId() + " expiration " + howLongAgo + " ago",
+                _log.debug("Clove [" + clove.getCloveId() + "] + is NOT valid -> Expired " + howLongAgo + " ago",
                            new Exception("Invalid within..."));
             }
             else if (_log.shouldWarn()) {
-                _log.warn("Clove is NOT valid: id=" + clove.getCloveId() + " expiration " + howLongAgo + " ago: " +
+                _log.warn("Clove [" + clove.getCloveId() + "] + is NOT valid -> Expired " + howLongAgo + " ago: " +
                           invalidReason + ": " + clove);
             }
             _context.messageHistory().messageProcessingError(clove.getCloveId(),

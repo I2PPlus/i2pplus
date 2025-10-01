@@ -75,7 +75,7 @@ public class TunnelPool {
             name = _settings.getDestinationNickname();
             // just strip HTML here rather than escape it everywhere in the console
             if (name != null) {name = DataHelper.stripHTML(name);}
-            else {name = "[" + _settings.getDestination().toBase32().substring(0,6) + "]";}
+            else {name = "[" + _settings.getDestination().toBase32().substring(0,8) + "]";}
         }
         _rateName = "[" + name + "] " + (_settings.isInbound() ? "InBps" : "OutBps");
         refreshSettings();

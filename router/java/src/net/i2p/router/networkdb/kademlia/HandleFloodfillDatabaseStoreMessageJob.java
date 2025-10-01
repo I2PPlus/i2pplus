@@ -139,7 +139,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                         getContext().statManager().addRateData("netDb.storeLocalLeaseSetToLocalClient", 1, 0);
                         dontBlamePeer = true;
                         throw new IllegalArgumentException("Peer attempted to store LOCAL LeaseSet [" +
-                                                           key.toBase32().substring(0,6) + "]" +
+                                                           key.toBase32().substring(0,8) + "]" +
                                                            "(DbId: " + _facade + ")");
                     }
                 }

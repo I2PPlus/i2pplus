@@ -1301,7 +1301,7 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
                     _nextIBRootKey = ts.getNextRootKey();
                     if (_log.shouldInfo())
                         _log.info("Received nextkey " + key +
-                                  "\n* From: [" + (_destination != null ? _destination.toBase32().substring(0,6) : "???") +
+                                  "\n* From: [" + (_destination != null ? _destination.toBase64().substring(0,6) : "???") +
                                   "] \n* Old Inbound TagSet ID #" + oldtsID +
                                   "\n* Ratchet to new Inbound ES TagSet: " + ts);
                 }
