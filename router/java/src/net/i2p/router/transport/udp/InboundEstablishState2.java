@@ -234,15 +234,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (isHandshake) {throw new DataFormatException("RouterInfo in Session Request");}
         if (_receivedUnconfirmedIdentity != null) {throw new DataFormatException("Duplicate RouterInfo in SessionConfirmed");}
         _receivedUnconfirmedIdentity = ri.getIdentity();
-        if (ri.getPublished() < 0) {
-            // See SSU2Payload: RI format error, signature was verified there, so we can take action
-            _context.blocklist().add(_aliceIP);
-            Hash h = _receivedUnconfirmedIdentity.calculateHash();
-            // These really hammer the floodfills, so reduce the time on floodfills so the banlist doesn't get huge
-            long banDuration = _context.netDb().floodfillEnabled() ? 36*60*60*1000 : 4*24*60*60*1000;
-            _context.banlist().banlistRouter(h, " <b>➜</b> Invalid publication date", null, null, _context.clock().now() + banDuration);
-            throw new RIException("Invalid publication date in RouterInfo " + h.toBase64(), REASON_BANNED);
-        }
+        if (ri.getPublished() < 0) {throw new RIException("Invalid publication date in RouterInfo", REASON_BANNED);}
 
         // try to find the right address, because we need the MTU
         boolean isIPv6 = _aliceIP.length == 16;
@@ -295,50 +287,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
         // only after here can we throw RIExceptions and send a response in-session
         // because we have his ikey and we verified he's the owner of the RI
-
         Hash h = _receivedUnconfirmedIdentity.calculateHash();
-        boolean isBanned = _context.banlist().isBanlisted(h);
-        if (isBanned) {
-            // validate sig to prevent spoofing
-            if (ri.verifySignature()) {_context.blocklist().add(_aliceIP);}
-            throw new RIException("Router is banned: " + h.toBase64(), REASON_BANNED);
-        }
-        if (ri.getNetworkId() != _context.router().getNetworkID()) {
-            if (ri.verifySignature()) {_context.blocklist().add(_aliceIP);}
-            throw new RIException("SSU2 network ID mismatch", REASON_NETID);
-        }
-
-        if (mismatchMessage != null) {
-            _context.banlist().banlistRouter(h, " <b>➜</b> Invalid SSU address",
-                                             null, null, _context.clock().now() + 4*60*60*1000);
-            _context.commSystem().forceDisconnect(h);
-            if (_log.shouldWarn() && !isBanned)
-                _log.warn("Banning for 4h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
-                          " -> Invalid SSU address");
-            if (ri.verifySignature()) {_context.blocklist().add(_aliceIP);}
-            throw new RIException(mismatchMessage + ri, REASON_BANNED);
-        }
-
-        if (!"2".equals(ra.getOption("v"))) {throw new RIException("BAD SSU2 v", REASON_VERSION);}
-
-        String cap = ri.getCapabilities();
-        String bw = ri.getBandwidthTier();
-        boolean reachable = cap != null && cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
-        boolean isSlow = (cap != null && !cap.equals("")) && bw.equals("K") ||
-                          bw.equals("L") || bw.equals("M") || bw.equals("N");
-        String version = ri.getVersion();
-        boolean isOld = VersionComparator.comp(version, "0.9.62") < 0;
-
-        if (!reachable && isSlow && isOld) {
-            _context.banlist().banlistRouter(h, " <b>➜</b> Old and slow (" + version + " / " + bw + "U)", null,
-                                             null, _context.clock().now() + 60*60*1000);
-            if (ri.verifySignature()) {_context.blocklist().add(_aliceIP);}
-            if (_log.shouldWarn() && !isBanned)
-                _log.warn("Banning for 1h and disconnecting from Router [" + h.toBase64().substring(0,6) + "]" +
-                          " -> " + version + " / " + bw + "U");
-            _context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
-            throw new RIException("Old and slow: " + h, REASON_BANNED);
-        }
+        validateRouterInfo(ri, ra, mismatchMessage);
 
         String smtu = ra.getOption(UDPAddress.PROP_MTU);
         int mtu = 0;
@@ -415,6 +365,91 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         }
         createPeerState();
         //_sendHeaderEncryptKey2 calculated below
+    }
+
+    /**
+     * Validates the RouterInfo for banning conditions and throws RIException if any issue is found.
+     * Checks:
+     * - Valid publication date
+     * - Banned status
+     * - Network ID match
+     * - IP match
+     * - SSU2 version
+     * - Old/slow router status
+     */
+    private void validateRouterInfo(RouterInfo ri, RouterAddress ra, String mismatchMessage) throws RIException {
+        Hash h = _receivedUnconfirmedIdentity.calculateHash();
+        boolean isBanned = _context.banlist().isBanlisted(h);
+
+        if (ri.getPublished() < 0) {
+            // RI format error, signature was verified, so we can take action
+            if (ri.verifySignature()) {
+                _context.blocklist().add(_aliceIP);
+            }
+            // These really hammer the floodfills, so reduce the time on floodfills
+            long banDuration = _context.netDb().floodfillEnabled() ? 36*60*60*1000 : 4*24*60*60*1000;
+            _context.banlist().banlistRouter(h, " <b>➜</b> Invalid publication date",
+                                             null, null, _context.clock().now() + banDuration);
+            if (_log.shouldWarn() && !isBanned) {
+                _log.warn("Banning for 1h and disconnecting from Router [" +
+                          h.toBase64().substring(0,6) + "] -> Invalid publication date");
+            }
+            throw new RIException("Invalid publication date in RouterInfo", REASON_BANNED);
+        }
+
+        if (isBanned) {
+            if (ri.verifySignature()) {
+                _context.blocklist().add(_aliceIP);
+            }
+            throw new RIException("Router is banned: " + h.toBase64(), REASON_BANNED);
+        }
+
+        if (ri.getNetworkId() != _context.router().getNetworkID()) {
+            if (ri.verifySignature()) {
+                _context.blocklist().add(_aliceIP);
+            }
+            throw new RIException("SSU2 network ID mismatch", REASON_NETID);
+        }
+
+        if (mismatchMessage != null) {
+            _context.banlist().banlistRouter(h, " <b>➜</b> Invalid SSU address",
+                                             null, null, _context.clock().now() + 4 * 60 * 60 * 1000);
+            _context.commSystem().forceDisconnect(h);
+            if (_log.shouldWarn() && !isBanned) {
+                _log.warn("Banning for 4h and disconnecting from Router [" +
+                          h.toBase64().substring(0,6) + "] -> Invalid SSU address");
+            }
+            if (ri.verifySignature()) {
+                _context.blocklist().add(_aliceIP);
+            }
+            throw new RIException(mismatchMessage + ri, REASON_BANNED);
+        }
+
+        if (!"2".equals(ra.getOption("v"))) {
+            throw new RIException("BAD SSU2 v", REASON_VERSION);
+        }
+
+        String cap = ri.getCapabilities();
+        String bw = ri.getBandwidthTier();
+        boolean reachable = cap != null && cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0;
+        boolean isSlow = (cap != null && !cap.equals("")) &&
+                         (bw.equals("K") || bw.equals("L") || bw.equals("M") || bw.equals("N"));
+        String version = ri.getVersion();
+        boolean isOld = VersionComparator.comp(version, "0.9.62") < 0;
+
+        if (!reachable && isSlow && isOld) {
+            _context.banlist().banlistRouter(h, " <b>➜</b> Old and slow (" + version + " / " + bw + "U)",
+                                             null, null, _context.clock().now() + 60 * 60 * 1000);
+            if (ri.verifySignature()) {
+                _context.blocklist().add(_aliceIP);
+            }
+            if (_log.shouldWarn() && !isBanned) {
+                _log.warn("Banning for 1h and disconnecting from Router [" +
+                          h.toBase64().substring(0,6) + "] -> " + version + " / " + bw + "U");
+            }
+            _context.simpleTimer2().addEvent(new Disconnector(h), 3 * 1000);
+            throw new RIException("Old and slow: " + h, REASON_BANNED);
+        }
     }
 
     public void gotRIFragment(byte[] data, boolean isHandshake, boolean flood, boolean isGzipped, int frag, int totalFrags) {
