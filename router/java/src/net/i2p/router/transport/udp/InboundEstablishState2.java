@@ -381,6 +381,20 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         Hash h = _receivedUnconfirmedIdentity.calculateHash();
         boolean isBanned = _context.banlist().isBanlisted(h);
 
+        if (isBanned) {
+            if (ri.verifySignature()) {
+                _context.blocklist().add(_aliceIP);
+            }
+            throw new RIException("Router is banned: " + h.toBase64(), REASON_BANNED);
+        }
+
+        if (ri.getNetworkId() != _context.router().getNetworkID()) {
+            if (ri.verifySignature()) {
+                _context.blocklist().add(_aliceIP);
+            }
+            throw new RIException("SSU2 network ID mismatch", REASON_NETID);
+        }
+
         if (ri.getPublished() < 0) {
             // RI format error, signature was verified, so we can take action
             if (ri.verifySignature()) {
@@ -395,20 +409,6 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                           h.toBase64().substring(0,6) + "] -> Invalid publication date");
             }
             throw new RIException("Invalid publication date in RouterInfo", REASON_BANNED);
-        }
-
-        if (isBanned) {
-            if (ri.verifySignature()) {
-                _context.blocklist().add(_aliceIP);
-            }
-            throw new RIException("Router is banned: " + h.toBase64(), REASON_BANNED);
-        }
-
-        if (ri.getNetworkId() != _context.router().getNetworkID()) {
-            if (ri.verifySignature()) {
-                _context.blocklist().add(_aliceIP);
-            }
-            throw new RIException("SSU2 network ID mismatch", REASON_NETID);
         }
 
         if (mismatchMessage != null) {
@@ -539,7 +539,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
     public void gotTermination(int reason, long count) {
         if (_log.shouldInfo()) {
-            _log.info("[SSU2] Received TERMINATION block -> Reason: " + reason + "; Count: " + count + "\n* " + this);
+            _log.info("[SSU2] Received TERMINATION block -> " + SSU2Util.terminationCodeToString(reason) + "; Count: " + count + "\n* " + this);
         }
         // this sets the state to FAILED
         fail();

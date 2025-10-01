@@ -836,7 +836,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     public void gotTermination(int reason, long count) {
         if (_log.shouldInfo()) {
-            _log.info("[SSU2] Received TERMINATION block -> Reason: " + reason + "; Count: " + count + " " + this);
+            _log.info("[SSU2] Received TERMINATION block -> " + SSU2Util.terminationCodeToString(reason) + "; Count: " + count + " " + this);
         }
         if (reason == SSU2Util.REASON_TERMINATION) {} // this should only happen at shutdown, where we don't have a post-termination handler
         else if (!_dead) {
@@ -1130,7 +1130,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             _wantACKSendSince = _context.clock().now();
             long delta = Math.min(_rtt/16, 5);
             if (_log.shouldDebug()) {
-                _log.debug("[SSU2] Sending immediate ACK in " + delta + ": " + PeerState2.this);
+                _log.debug("[SSU2] Sending immediate ACK in " + delta + "ms: " + PeerState2.this);
             }
             reschedule(delta, true);
         }

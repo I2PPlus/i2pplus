@@ -314,8 +314,10 @@ class PeerStateDestroyed implements SSU2Payload.PayloadCallback, SSU2Sender {
     public void gotACK(long ackThru, int acks, byte[] ranges) {}
 
     public void gotTermination(int reason, long count) {
-        if (_log.shouldInfo())
-            _log.info("Received TERMINATION block -> Reason: " + reason + " (Our reason: " + _destroyReason + ") from " + this);
+        if (_log.shouldInfo()) {
+            _log.info("Received TERMINATION block -> " + SSU2Util.terminationCodeToString(reason) +
+                      " (Our reason: " + SSU2Util.terminationCodeToString(_destroyReason) + ") from " + this);
+        }
         if (reason == SSU2Util.REASON_TERMINATION) {
             // prevent any additional tranmissions if other packets come in
             // i2pd has a bug and may send I2NP after termination ack
