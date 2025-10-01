@@ -44,6 +44,7 @@ import net.i2p.router.transport.FIFOBandwidthLimiter;
 import net.i2p.router.transport.FIFOBandwidthLimiter.Request;
 import net.i2p.router.transport.ntcp.NTCP2Payload.Block;
 import net.i2p.router.util.PriBlockingQueue;
+import net.i2p.util.Addresses;
 import net.i2p.util.ByteCache;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.Log;
@@ -1286,6 +1287,7 @@ public class NTCPConnection implements Closeable {
      * This is the entry point as called from Reader.processRead()
      */
     void recvEncryptedI2NP(ByteBuffer buf) {
+        if (isBanned()) {return;}
         synchronized(_readLock) {
         if (_curReadState == null)
             throw new IllegalStateException("not established");
@@ -1358,6 +1360,41 @@ public class NTCPConnection implements Closeable {
         public int getFramesReceived();
     }
 
+    /**
+     *  Check if the peer is blocklisted or banned.
+     *  If so, log and close the connection.
+     *
+     *  @return true if banned or blocklisted, false otherwise
+     *  @since 0.9.68+
+     */
+    private boolean isBanned() {
+        if (_remotePeer == null) {return false;}
+
+        Hash peerHash = _remotePeer.calculateHash();
+        if (peerHash == null) {return false;}
+
+        byte[] ip = getRemoteIP();
+        if (ip != null) {
+            if (_context.blocklist().isBlocklisted(ip)) {
+                if (_log.shouldInfo()) {
+                    _log.info("IP address " + Addresses.toString(ip) + " is blocklisted -> Closing connection...");
+                }
+                close();
+                return true;
+            }
+        }
+
+        if (_context.banlist().isBanlisted(peerHash)) {
+            if (_log.shouldInfo()) {
+                _log.info("Router [" + peerHash.toBase64().substring(0,6) + "] is banned -> Closing connection...");
+            }
+            close();
+            return true;
+        }
+
+        return false;
+    }
+
     //// NTCP2 below here
 
     /**
@@ -1375,6 +1412,7 @@ public class NTCPConnection implements Closeable {
      */
     synchronized void finishOutboundEstablishment(CipherState sender, CipherState receiver,
                                                   byte[] sip_ab, byte[] sip_ba, long clockSkew) {
+        if (isBanned()) {return;}
         finishEstablishment(sender, receiver, sip_ab, sip_ba, clockSkew);
         _transport.markReachable(getRemotePeer().calculateHash(), false);
         if (!_outbound.isEmpty())
@@ -1399,6 +1437,7 @@ public class NTCPConnection implements Closeable {
     synchronized void finishInboundEstablishment(CipherState sender, CipherState receiver,
                                                  byte[] sip_ba, byte[] sip_ab, long clockSkew,
                                                  NTCP2Options hisPadding) {
+        if (isBanned()) {return;}
         finishEstablishment(sender, receiver, sip_ba, sip_ab, clockSkew);
         if (hisPadding != null) {
             _paddingConfig = OUR_PADDING.merge(hisPadding);
@@ -1456,6 +1495,7 @@ public class NTCPConnection implements Closeable {
      */
     private synchronized void finishEstablishment(CipherState sender, CipherState receiver,
                                                   byte[] sip_send, byte[] sip_recv, long clockSkew) {
+        if (isBanned()) {return;}
         if (_establishState == EstablishBase.VERIFIED) {
             IllegalStateException ise = new IllegalStateException("Already finished on " + this);
             _log.error("Already finished", ise);
@@ -1528,10 +1568,6 @@ public class NTCPConnection implements Closeable {
                     _recvLen[1] = buf.get();
                     _received++;
                     long sipIV = SipHashInline.hash24(_sipk1, _sipk2, _sipIV);
-                    //if (_log.shouldDebug())
-                    //    _log.debug("Received Encrypted frame length: " + DataHelper.fromLong(_recvLen, 0, 2) +
-                    //               " byte 1: " + (_recvLen[0] & 0xff) + " byte 2: " + (_recvLen[1] & 0xff) +
-                    //               " decrypting with keys " + _sipk1 + ' ' + _sipk2 + ' ' + Base64.encode(_sipIV) + ' ' + sipIV);
                     _recvLen[0] ^= (byte) (sipIV >> 8);
                     _recvLen[1] ^= (byte) sipIV;
                     toLong8LE(_sipIV, 0, sipIV);
@@ -1618,6 +1654,7 @@ public class NTCPConnection implements Closeable {
          *  @return success, false for fatal error (AEAD) only
          */
         private boolean decryptAndProcess(byte[] data, int off) {
+            if (isBanned()) {return false;}
             if (_log.shouldDebug())
                 _log.debug("Decrypting frame " + _frameCount + " with " + _framelen + " bytes");
             try {
