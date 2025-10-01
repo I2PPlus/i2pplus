@@ -1,11 +1,11 @@
-<%@ page import="javax.servlet.http.HttpServletResponse"%>
+<%@ page import="javax.servlet.http.HttpServletResponse" trimDirectiveWhitespaces="true"%>
 <%
-  /*
-   * USE CAUTION WHEN EDITING
-   * Trailing whitespace OR NEWLINE on the last line will cause IllegalStateExceptions !!!
-   *
-   * Do not tag this file for translation.
-   */
+    /*
+     * USE CAUTION WHEN EDITING
+     * Trailing whitespace OR NEWLINE on the last line will cause IllegalStateExceptions !!!
+     *
+     * Do not tag this file for translation.
+     */
 
     // Determine Content-Type by file extension
     String uri = request.getRequestURI();

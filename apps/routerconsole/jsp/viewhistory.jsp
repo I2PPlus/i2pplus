@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8" buffer="64kb"%>
+<%@ page pageEncoding="UTF-8" buffer="64kb" trimDirectiveWhitespaces="true"%>
 <%
   /*
    * USE CAUTION WHEN EDITING
