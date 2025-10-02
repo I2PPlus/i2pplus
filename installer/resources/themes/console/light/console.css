@@ -674,7 +674,7 @@ table[id$="logs"] ul li:last-child{margin-bottom:10px}
 #routerlogs ul{margin-top:-5px;margin-bottom:-19px;word-wrap:break-word}
 #routerlogs ul li{width:calc(100% - 11px)}
 #logs #routerlogs ul li:last-child,#logs #criticallogs ul li:last-child{margin-bottom:2px}
-#routerlogs tr:first-child td,#wrapperlogs tr:first-child td{border-bottom:var(--border_inner)}
+#routerlogs .logwrap tr:first-child td,#wrapperlogs .logwrap tr:first-child td{border-bottom:var(--border_inner)}
 #wrapperlogs{margin-bottom:5px;border-bottom-width:3px}
 #wrapperlogs .nologs{padding:11px 12px}
 #wrapperlogs tr:last-child td{padding:0}
