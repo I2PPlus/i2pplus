@@ -8,21 +8,18 @@
 <jsp:setProperty name="logsHelper" property="contextId" value="<%=i2pcontextId%>"/>
 <%@include file="sidebar.jsi"%>
 <%  final String consoleNonce = net.i2p.router.web.CSSHelper.getNonce();
-    final String ct1 = request.getParameter("clear");
-    final String ct2 = request.getParameter("crit");
-    final String ct3 = request.getParameter("svc");
-    final String ct4 = request.getParameter("svct");
-    final String ct5 = request.getParameter("svcf");
-    final String ctn = request.getParameter("consoleNonce");
+    final String critParam = request.getParameter("crit");
+    final String nonceParam = request.getParameter("consoleNonce");
     int last = logsHelper.getLastCriticalMessageNumber();
-    if ((ct1 != null || ct2 != null || (ct3 != null && ct4 != null && ct5 != null)) && ctn != null) {
-        int ict1 = -1, ict2 = -1;
-        long ict3 = -1, ict4 = -1;
-        try { ict1 = Integer.parseInt(ct1); } catch (NumberFormatException nfe) {}
-        try { ict2 = Integer.parseInt(ct2); } catch (NumberFormatException nfe) {}
-        try { ict3 = Long.parseLong(ct3); } catch (NumberFormatException nfe) {}
-        try { ict4 = Long.parseLong(ct4); } catch (NumberFormatException nfe) {}
-        logsHelper.clearThrough(ict1, ict2, ict3, ict4, ct5, ctn);
+    if (critParam != null && nonceParam != null) {
+        int icrit = -1;
+        try {icrit = Integer.parseInt(critParam);}
+        catch (NumberFormatException nfe) {}
+        if (consoleNonce.equals(nonceParam)) {
+            logsHelper.clearThrough(-1, icrit, -1, -1, null, nonceParam);
+            response.sendRedirect("errorlogs");
+            return;
+        }
     }
 %>
 <h1 class=log><%=intl._t("Logs")%></h1>
@@ -36,7 +33,10 @@
 </div>
 <div class=logwrap>
 <h3 id=critLogsHead class=tabletitle><%=intl._t("Critical / Error Level Logs")%>
-&nbsp;<a id=clearCritical class=delete title="<%=intl._t("Clear logs")%>" href="/errorlogs?crit=<%=last%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a></h3>
+<%  if (last >= 0) { %>
+&nbsp;<a id=clearCritical class=delete title="<%=intl._t("Clear logs")%>" href="/errorlogs?crit=<%=last%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a>
+<%  } %>
+</h3>
 <table id=criticallogs class="logtable single"><tbody><tr><td><jsp:getProperty name="logsHelper" property="criticalLogs"/></td></tr></tbody></table>
 </div>
 </div>

@@ -1,5 +1,4 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
-<%  final String consoleNonce = net.i2p.router.web.CSSHelper.getNonce(); %>
 <!DOCTYPE HTML>
 <%@include file="head.jsi"%>
 <%=intl.title("service logs")%>
@@ -7,15 +6,29 @@
 <body id=servicelogs>
 <jsp:useBean class="net.i2p.router.web.helpers.LogsHelper" id="logsHelper" scope="request"/>
 <jsp:setProperty name="logsHelper" property="contextId" value="<%=i2pcontextId%>"/>
-<%  int errorCount = logsHelper.getCriticalLogCount();
+<%@include file="sidebar.jsi"%>
+<%  final String consoleNonce = net.i2p.router.web.CSSHelper.getNonce();
+    int errorCount = logsHelper.getCriticalLogCount();
     StringBuilder buf = new StringBuilder(24*1024);
-    // timestamp, last line number, escaped filename
     Object[] vals = logsHelper.getServiceLogs(buf);
     String lts = vals[0].toString();
     long llast = ((Long) vals[1]).longValue();
     String filename = vals[2].toString();
+    final String svcParam = request.getParameter("svc");
+    final String svctParam = request.getParameter("svct");
+    final String svcfParam = request.getParameter("svcf");
+    final String nonceParam = request.getParameter("consoleNonce");
+    if (svcParam != null && svctParam != null && svcfParam != null && nonceParam != null) {
+        try {
+            long svc = Long.parseLong(svcParam);
+            long svct = Long.parseLong(svctParam);
+            String svcf = svcfParam;
+            logsHelper.clearThrough(-1, -1, svc, svct, svcf, nonceParam);
+            response.sendRedirect("servicelogs");
+            return;
+        } catch (NumberFormatException nfe) {}
+    }
 %>
-<%@include file="sidebar.jsi"%>
 <h1 class=log><%=intl._t("Logs")%></h1>
 <div class=main id=logs>
 <div class=confignav>

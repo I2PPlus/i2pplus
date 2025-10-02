@@ -17,19 +17,22 @@
 <span class=tab><a href="/events?from=604800"><%=intl._t("Events")%></a></span>
 </div>
 <%  final String consoleNonce = net.i2p.router.web.CSSHelper.getNonce();
-    final String ct1 = request.getParameter("clear");
-    final String ct2 = request.getParameter("crit");
-    final String ct3 = request.getParameter("svc");
-    final String ct4 = request.getParameter("svct");
-    final String ct5 = request.getParameter("svcf");
-    final String ctn = request.getParameter("consoleNonce");
-    int last = logsHelper.getLastCriticalMessageNumber();
+    StringBuilder buf = new StringBuilder(24*1024);
+    int last = logsHelper.getLastMessageNumber();
+    final String clearParam = request.getParameter("clear");
+    final String nonceParam = request.getParameter("consoleNonce");
+    if (clearParam != null && nonceParam != null && consoleNonce.equals(nonceParam)) {
+        int iclear = -1;
+        try {iclear = Integer.parseInt(clearParam);}
+        catch (NumberFormatException nfe) {}
+        logsHelper.clearThrough(iclear, -1, -1, -1, null, nonceParam);
+        response.sendRedirect("routerlogs");
+        return;
+    }
 %>
 <div class=logwrap>
 <h3 class=tabletitle id=routerlogs_h3><%=intl._t("Router Logs")%>
-<%  last = logsHelper.getLastMessageNumber();
-    if (last >= 0) {
-%>
+<%  if (last >= 0) { %>
 &nbsp;<a class=delete title="<%=intl._t("Clear logs")%>" href="/routerlogs?clear=<%=last%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a>
 <%  } %>
 &nbsp;<a class=configure title="<%=intl._t("Configure router logging options")%>" href="configlogging">[<%=intl._t("Configure")%>]</a>
