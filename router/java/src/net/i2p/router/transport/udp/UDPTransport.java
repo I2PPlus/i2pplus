@@ -1889,27 +1889,8 @@ public class UDPTransport extends TransportImpl {
                 }
             }
         }
-
-/*
-        synchronized(_rebuildLock) {
-            rebuildIfNecessary();
-            Status status = getReachabilityStatus();
-            if (!STATUS_NO_RETEST.contains(status) &&
-                _reachabilityStatusUnchanged < 7) {
-                _testEvent.forceRunSoon(peer.isIPv6());
-            }
-        }
-*/
         return true;
     }
-
-/*** infinite loop
-    public RouterAddress getCurrentAddress() {
-        if (needsRebuild())
-            rebuildExternalAddress(false);
-        return super.getCurrentAddress();
-    }
-***/
 
     @Override
     public void messageReceived(I2NPMessage inMsg, RouterIdentity remoteIdent, Hash remoteIdentHash, long msToReceive, int bytesReceived) {
@@ -1993,7 +1974,7 @@ public class UDPTransport extends TransportImpl {
             if (why != null) {buf.append("\n* Cause: ").append(why);}
         }
         synchronized(_addDropLock) {locked_dropPeer(peer, shouldBanlist, why);}
-        // the only possible reason to rebuild is if they were an introducer for us
+        // The only possible reason to rebuild is if they were an introducer for us
         // so avoid going through rebuildIfNecessary()
         long tag = peer.getTheyRelayToUsAs();
         if (tag > 0) {
@@ -3109,58 +3090,11 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Calls replaceAddress(address), then shuts down the router if
-     *  dynamic keys is enabled, which it never is, so all this is unused.
-     *
-     *  @param address the new address or null to remove all
-     */
-/****
-    protected void replaceAddress(RouterAddress address, RouterAddress oldAddress) {
-        replaceAddress(address);
-        if (oldAddress != null) {
-            UDPAddress old = new UDPAddress(oldAddress);
-            InetAddress oldHost = old.getHostAddress();
-            UDPAddress newAddr = new UDPAddress(address);
-            InetAddress newHost = newAddr.getHostAddress();
-            if ( (old.getPort() > 0) && (oldHost != null) && (isValid(oldHost.getAddress())) &&
-                 (newAddr.getPort() > 0) && (newHost != null) && (isValid(newHost.getAddress())) ) {
-                if ( (old.getPort() != newAddr.getPort()) || (!oldHost.equals(newHost)) ) {
-                    // substantial data has changed, so if we are in 'dynamic keys' mode, restart the
-                    // router hard and regenerate a new identity
-                    if (_context.getBooleanProperty(Router.PROP_DYNAMIC_KEYS)) {
-                        if (_log.shouldError())
-                            _log.error("SSU address updated. new address: "
-                                       + newAddr.getHostAddress() + ":" + newAddr.getPort() + ", old address: "
-                                       + old.getHostAddress() + ":" + old.getPort());
-                        // shutdown itself checks the DYNAMIC_KEYS flag, and if its set to true, deletes
-                        // the keys
-                        _context.router().shutdown(Router.EXIT_HARD_RESTART);
-                    }
-                }
-            }
-        }
-    }
-****/
-
-    /**
      *  Do we require introducers?
      */
     private boolean introducersRequired(boolean ipv6) {
         if (_context.router().isHidden())
             return false;
-        //if (ipv6) return false;
-        /******************
-         *  Don't do this anymore, as we are removing the checkbox from the UI,
-         *  and we rarely if ever see the problem of false negatives for firewall detection -
-         *  it's usually false positives.
-         ******************
-        String forceIntroducers = _context.getProperty(PROP_FORCE_INTRODUCERS);
-        if ( (forceIntroducers != null) && (Boolean.parseBoolean(forceIntroducers)) ) {
-            if (_log.shouldInfo())
-                _log.info("Force introducers specified");
-            return true;
-        }
-        *******************/
         Status status = getReachabilityStatus();
         TransportUtil.IPv6Config config = getIPv6Config();
         if (ipv6) {
@@ -3303,13 +3237,6 @@ public class UDPTransport extends TransportImpl {
         if ( allowPeerFailure && (msg.getPeer() != null) &&
              ( (msg.getMaxSends() >= OutboundMessageFragments.MAX_VOLLEYS) ||
                (msg.isExpired())) ) {
-            //long recvDelay = _context.clock().now() - msg.getPeer().getLastReceiveTime();
-            //long sendDelay = _context.clock().now() - msg.getPeer().getLastSendFullyTime();
-            //if (m != null)
-            //    m.timestamp("message failure - volleys = " + msg.getMaxSends()
-            //                + " lastReceived: " + recvDelay
-            //                + " lastSentFully: " + sendDelay
-            //                + " expired? " + msg.isExpired());
             int consecutive = msg.getPeer().incrementConsecutiveFailedSends();
             if (_log.shouldInfo())
                 _log.info("Consecutive failure #" + consecutive
@@ -3323,10 +3250,6 @@ public class UDPTransport extends TransportImpl {
                 sendDestroy(msg.getPeer(), SSU2Util.REASON_FRAME_TIMEOUT);
                 dropPeer(msg.getPeer(), true, "too many failures");
             }
-            //if ( (consecutive > MAX_CONSECUTIVE_FAILED) && (msg.getPeer().getInactivityTime() > DROP_INACTIVITY_TIME))
-            //    dropPeer(msg.getPeer(), false);
-            //else if (consecutive > 2 * MAX_CONSECUTIVE_FAILED) // they're sending us data, but we can't reply?
-            //    dropPeer(msg.getPeer(), false);
         } else {
             if (_log.shouldDebug())
                 _log.debug("Failed sending " + msg + " to " + msg.getPeer());
@@ -3336,50 +3259,9 @@ public class UDPTransport extends TransportImpl {
             super.afterSend(m, false);
     }
 
-/*
-    private void noteSend(OutboundMessageState msg, boolean successful) {
-        // bail before we do all the work
-        if (!_context.messageHistory().getDoLog())
-            return;
-        int pushCount = msg.getPushCount();
-        int sends = msg.getMaxSends();
-        boolean expired = msg.isExpired();
-
-        OutNetMessage m = msg.getMessage();
-        PeerState p = msg.getPeer();
-        StringBuilder buf = new StringBuilder(64);
-        buf.append(" Lifetime: ").append(msg.getLifetime());
-        buf.append(" Sends: ").append(sends);
-        buf.append(" Pushes: ").append(pushCount);
-        buf.append(" Expired? ").append(expired);
-        buf.append(" UnACKed: ").append(msg.getUnackedSize());
-        if ( (p != null) && (!successful) ) {
-            buf.append(" Consec_failed: ").append(p.getConsecutiveFailedSends());
-            long timeSinceSend = _context.clock().now() - p.getLastSendFullyTime();
-            buf.append(" LastFullSend: ").append(timeSinceSend);
-            long timeSinceRecv = _context.clock().now() - p.getLastReceiveTime();
-            buf.append(" LastRecv: ").append(timeSinceRecv);
-            buf.append(" Xfer: ").append(p.getSendBps()).append("/").append(p.getReceiveBps());
-            buf.append(" MTU: ").append(p.getMTU());
-            buf.append(" RTO: ").append(p.getRTO());
-            buf.append(" Sent: ").append(p.getMessagesSent()).append("/").append(p.getPacketsTransmitted());
-            buf.append(" Recv: ").append(p.getMessagesReceived()).append("/").append(p.getPacketsReceived());
-            buf.append(" Uptime: ").append(_context.clock().now()-p.getKeyEstablishedTime());
-        }
-        if ( (m != null) && (p != null) ) {
-            _context.messageHistory().sendMessage(m.getMessageType(), msg.getMessageId(), m.getExpiration(),
-                                                  p.getRemotePeer(), successful, buf.toString());
-        } else {
-            _context.messageHistory().sendMessage("establish", msg.getMessageId(), -1,
-                                                  (p != null ? p.getRemotePeer() : null), successful, buf.toString());
-        }
-    }
-*/
-
     public void failed(OutNetMessage msg, String reason) {
         if (msg == null) return;
         if (_log.shouldInfo())
-//            _log.info("Send failed: " + reason + msg, new Exception("failed from"));
             _log.info("Send failed: " + reason + msg);
 
         if (_context.messageHistory().getDoLog())
@@ -3392,7 +3274,6 @@ public class UDPTransport extends TransportImpl {
         if (msg == null) return;
         if (_log.shouldDebug())
             _log.debug("Sending message succeeded: " + msg);
-        //noteSend(msg, true);
         OutNetMessage m = msg.getMessage();
         if (m != null)
             super.afterSend(m, true);
@@ -3433,7 +3314,6 @@ public class UDPTransport extends TransportImpl {
     }
 
     public int countActivePeers() {
-//        long old = _context.clock().now() - 5*60*1000;
         long old = _context.clock().now() - 60*1000;
         int active = 0;
         for (PeerState peer : _peersByIdent.values()) {
@@ -3531,8 +3411,6 @@ public class UDPTransport extends TransportImpl {
                 continue; // Big RTT makes for a poor calculation
             skews.add(Long.valueOf(peer.getClockSkew() / 1000));
         }
-        //if (_log.shouldDebug())
-        //    _log.debug("UDP transport returned " + skews.size() + " peer clock skew results");
         return skews;
     }
 
