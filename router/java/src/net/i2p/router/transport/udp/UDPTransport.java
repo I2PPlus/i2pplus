@@ -1456,12 +1456,7 @@ public class UDPTransport extends TransportImpl {
                         }
                     }
 
-                    // This prevents us from changing our IP when we are not firewalled
-                    //if ( (_reachabilityStatus != CommSystemFacade.STATUS_OK) ||
-                    //     (_externalListenHost == null) || (_externalListenPort <= 0) ||
-                    //     (_context.clock().now() - _reachabilityStatusLastUpdated > 2*TEST_FREQUENCY) ) {
-
-                        // they told us something different and our tests are either old or failing
+                    // they told us something different and our tests are either old or failing
                     if (rebuild) {
                             if (externalListenPort > 0 && ourPort > 0 &&
                                 externalListenPort != ourPort &&
@@ -1486,14 +1481,6 @@ public class UDPTransport extends TransportImpl {
                             RouterAddress newAddr = rebuildExternalAddress(ourIP, ourPort, true);
                             updated = newAddr != null;
                     }
-
-                    //} else {
-                    //    // they told us something different, but our tests are recent and positive,
-                    //    // so lets test again
-                    //    fireTest = true;
-                    //    if (_log.shouldWarn())
-                    //        _log.warn("Different address, but we're fine.. (" + _reachabilityStatus + ")");
-                    //}
                 } else {
                     // matched what we expect
                     if (_log.shouldDebug())
@@ -1509,7 +1496,7 @@ public class UDPTransport extends TransportImpl {
             Map<String, String> changes = new HashMap<String, String>();
             if (!isIPv6 && !fixedPort)
                 changes.put(PROP_EXTERNAL_PORT, Integer.toString(ourPort));
-            // queue a country code lookup of the new IP
+            // Queue a country code lookup of the new IP
             _context.commSystem().queueLookup(ourIP);
             // store these for laptop-mode (change ident on restart... or every time... when IP changes)
             // IPV4 ONLY
@@ -1520,9 +1507,8 @@ public class UDPTransport extends TransportImpl {
                 long now = _context.clock().now();
                 String lcs = _context.getProperty(PROP_IP_CHANGE);
                 if (lcs != null) {
-                    try {
-                        lastChanged = Long.parseLong(lcs);
-                    } catch (NumberFormatException nfe) {}
+                    try {lastChanged = Long.parseLong(lcs);}
+                    catch (NumberFormatException nfe) {}
                 }
 
                 changes.put(PROP_IP, newIP);
@@ -1624,7 +1610,7 @@ public class UDPTransport extends TransportImpl {
      * @return the peer state, or null if not found
      */
     PeerState getPeerState(RemoteHostId hostInfo) {
-            return _peersByRemoteHost.get(hostInfo);
+        return _peersByRemoteHost.get(hostInfo);
     }
 
     /**
@@ -1650,7 +1636,7 @@ public class UDPTransport extends TransportImpl {
      * if no state exists
      */
     PeerState getPeerState(Hash remotePeer) {
-            return _peersByIdent.get(remotePeer);
+        return _peersByIdent.get(remotePeer);
     }
 
     /**
@@ -1965,12 +1951,12 @@ public class UDPTransport extends TransportImpl {
             long timeSinceAck  = now - peer.getLastACKSend();
             long timeSinceSendOK = now - peer.getLastSendFullyTime();
             int consec = peer.getConsecutiveFailedSends();
-            buf.append("Dropping remote peer: ").append(peer.toString()).append(" Banlist? ").append(shouldBanlist);
-            buf.append("\n* Lifetime: ").append(now - peer.getKeyEstablishedTime());
-            buf.append("; Time since send/fully/RECV/ACK: [").append(timeSinceSend).append(" / ");
-            buf.append(timeSinceSendOK).append(" / ");
-            buf.append(timeSinceRecv).append(" / ").append(timeSinceAck);
-            buf.append("]; Consecutive failures: ").append(consec);
+            buf.append("Dropping remote peer: ").append(peer.toString()).append(" Banlist? ").append(shouldBanlist)
+               .append("\n* Lifetime: ").append(now - peer.getKeyEstablishedTime())
+               .append("; Time since send/fully/RECV/ACK: [").append(timeSinceSend).append(" / ")
+               .append(timeSinceSendOK).append(" / ")
+               .append(timeSinceRecv).append(" / ").append(timeSinceAck)
+               .append("]; Consecutive failures: ").append(consec);
             if (why != null) {buf.append("\n* Cause: ").append(why);}
         }
         synchronized(_addDropLock) {locked_dropPeer(peer, shouldBanlist, why);}
@@ -1992,9 +1978,7 @@ public class UDPTransport extends TransportImpl {
                 if (itag.equals(stag)) {
                     if (_log.shouldWarn())
                         _log.warn("Rebuilding address, published introducer dropped: " + peer);
-                    synchronized (_rebuildLock) {
-                        rebuildExternalAddress(ipv6);
-                    }
+                    synchronized (_rebuildLock) {rebuildExternalAddress(ipv6);}
                     break;
                 }
             }
@@ -2117,26 +2101,21 @@ public class UDPTransport extends TransportImpl {
             }
             long sinceSelected = now - (ipv6 ? _v6IntroducersSelectedOn : _v4IntroducersSelectedOn);
             if (valid >= PUBLIC_RELAY_COUNT) {
-                // try to shift 'em around every 10 minutes or so
-                //if (sinceSelected > 17*60*1000) {
-                //    if (_log.shouldWarn())
-                //        _log.warn((ipv6 ? "IPv6" : "IPv4") + " introducers valid, haven't changed in " + DataHelper.formatDuration(sinceSelected) + ", reselecting");
-                //    return true;
-                //} else {
-                    if (_log.shouldInfo())
-                        _log.info("Our" + (ipv6 ? "IPv6" : "IPv4") + " introducers valid, selected " + DataHelper.formatDuration(sinceSelected) + " ago");
-                    return false;
-                //}
+                if (_log.shouldInfo())
+                    _log.info("Our" + (ipv6 ? "IPv6" : "IPv4") + " introducers valid, selected " + DataHelper.formatDuration(sinceSelected) + " ago");
+                return false;
             } else if (sinceSelected > 2*60*1000) {
                 // Rate limit to prevent rapid churn after transition to firewalled or at startup
                 int avail = _introManager.introducerCount(ipv6);
                 boolean rv = valid < count || valid < avail;
                 if (rv) {
                     if (_log.shouldWarn())
-                        _log.warn((ipv6 ? "IPv6" : "IPv4") + " Need more introducers (have " + count + " valid " + valid + " need " + PUBLIC_RELAY_COUNT + " avail " + avail + ')');
+                        _log.warn((ipv6 ? "IPv6" : "IPv4") + " Need more introducers (have " + count + " valid " + valid +
+                                  " need " + PUBLIC_RELAY_COUNT + " avail " + avail + ')');
                 } else {
                     if (_log.shouldInfo())
-                        _log.info((ipv6 ? "IPv6" : "IPv4") + " Need more introducers, no more avail. (have " + valid + " need " + PUBLIC_RELAY_COUNT + " avail " + avail + ')');
+                        _log.info((ipv6 ? "IPv6" : "IPv4") + " Need more introducers, no more avail. (have " + valid +
+                                  " need " + PUBLIC_RELAY_COUNT + " avail " + avail + ')');
                 }
                 return rv;
             } else {
@@ -2163,7 +2142,7 @@ public class UDPTransport extends TransportImpl {
                     _log.info((ipv6 ? "IPv6" : "IPv4") + " Our direct SSU info is initialized, but not used in our address yet");
                 rv = true;
             } else {
-                //_log.info("Our direct SSU info is initialized");
+                _log.info("Our direct SSU info is initialized");
             }
             return rv;
         }
@@ -2248,8 +2227,6 @@ public class UDPTransport extends TransportImpl {
         Hash to = toAddress.getIdentity().calculateHash();
         PeerState peer = getPeerState(to);
         if (peer != null) {
-            //if (_log.shouldDebug())
-            //    _log.debug("Bidding on a message to an established peer: " + peer);
             if (preferUDP())
                 return _cachedBid[FAST_PREFERRED_BID];
             else
@@ -2274,7 +2251,6 @@ public class UDPTransport extends TransportImpl {
             if (isUnreachable(to))
                 return null;
 
-
             // temp, let NTCP2 deal with him (prop. 165)
             if (toAddress.getCapabilities().indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0) {
                 PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(to);
@@ -2295,10 +2271,7 @@ public class UDPTransport extends TransportImpl {
             // c++ bug thru 2.36.0/0.9.49, will disconnect inbound session after 5 seconds
             int cost = addr.getCost();
             if (cost == 10) {
-//                if (VersionComparator.comp(toAddress.getVersion(), "0.9.49") <= 0) {
                 if (VersionComparator.comp(toAddress.getVersion(), "0.9.52") <= 0) {
-                    //if (_log.shouldDebug())
-                    //    _log.debug("Not bidding to: " + toAddress);
                     markUnreachable(to);
                     return null;
                 }
@@ -2332,9 +2305,6 @@ public class UDPTransport extends TransportImpl {
 
             if (!allowConnection())
                 return _cachedBid[TRANSIENT_FAIL_BID];
-
-            //if (_log.shouldDebug())
-            //    _log.debug("Bidding on a message to unestablished peer [" + to.toBase64().substring(0,6) + "]");
 
             // Try to maintain at least 5 peers (30 for v6) so we can determine our IP address and
             // we have a selection to run peer tests with.
@@ -2436,26 +2406,22 @@ public class UDPTransport extends TransportImpl {
      */
     public static final int EXPIRE_TIMEOUT = 20*60*1000;
     private static final int MAX_IDLE_TIME = EXPIRE_TIMEOUT;
-    public static final int MIN_EXPIRE_TIMEOUT = 165*1000;
+    public static final int MIN_EXPIRE_TIMEOUT = 3*60*1000;
 
-    public String getStyle() { return STYLE; }
+    public String getStyle() {return STYLE;}
 
     /**
      * An alternate supported style, or null.
      * @since 0.9.54
      */
     @Override
-    public String getAltStyle() {
-        return STYLE2;
-    }
+    public String getAltStyle() {return STYLE2;}
 
     /**
      * @return "SSU" unless SSU1 disabled, then "SSU2"
      * @since 0.9.57
      */
-    private String getPublishStyle() {
-        return STYLE2;
-    }
+    private String getPublishStyle() {return STYLE2;}
 
     @Override
     public void send(OutNetMessage msg) {
@@ -2588,9 +2554,7 @@ public class UDPTransport extends TransportImpl {
     // we don't need the following, since we have our own queueing
     protected void outboundMessageReady() { throw new UnsupportedOperationException("Not used for UDP"); }
 
-    public void startListening() {
-        startup();
-    }
+    public void startListening() {startup();}
 
     public void stopListening() {
         shutdown();
@@ -2860,16 +2824,10 @@ public class UDPTransport extends TransportImpl {
             caps = isIPv6 ? CAP_IPV6 : CAP_IPV4;
         } else if (introducersRequired || !canIntroduce(isIPv6)) {
             if (!directIncluded) {
-                if (isIPv6)
-                    caps = CAP_TESTING_6;
-                else
-                caps = CAP_TESTING_4;
-            } else {
-                caps = CAP_TESTING;
-            }
-        } else {
-            caps = CAP_TESTING_INTRO;
-        }
+                if (isIPv6) {caps = CAP_TESTING_6;}
+                else {caps = CAP_TESTING_4;}
+            } else {caps = CAP_TESTING;}
+        } else {caps = CAP_TESTING_INTRO;}
         options.setProperty(UDPAddress.PROP_CAPACITY, caps);
 
         // MTU since 0.9.2
@@ -2916,7 +2874,6 @@ public class UDPTransport extends TransportImpl {
 
             if (wantsRebuild) {
                 if (_log.shouldInfo())
-//                    _log.info("Address rebuilt: " + addr, new Exception());
                     _log.info("Address rebuilt\n* " + addr);
                 replaceAddress(addr);
                 if (!isIPv6 &&
