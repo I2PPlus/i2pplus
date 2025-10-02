@@ -62,15 +62,39 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**
- *  The SSU transport
+ *  The SSU (Secure Semireliable UDP) transport implementation for I2P.
+ *  This class manages UDP-based peer connections, packet handling, peer testing, and reachability.
+ *
+ *  &lt;p&gt;It supports both SSU1 (legacy) and SSU2 (modern) protocols, including:
+ *  &lt;ul&gt;
+ *      &lt;li&gt;Establishing and maintaining peer sessions&lt;/li&gt;
+ *      &lt;li&gt;Handling inbound and outbound messages&lt;/li&gt;
+ *      &lt;li&gt;Managing introducers and peer testing&lt;/li&gt;
+ *      &lt;li&gt;Reachability detection and reporting&lt;/li&gt;
+ *      &lt;li&gt;IPv4 and IPv6 support&lt;/li&gt;
+ *  &lt;/ul&gt;
+ *
+ *  &lt;p&gt;Internally, it uses various managers such as:
+ *  &lt;ul&gt;
+ *      &lt;li&gt;{@link EstablishmentManager} for session establishment&lt;/li&gt;
+ *      &lt;li&gt;{@link PacketHandler} for processing incoming packets&lt;/li&gt;
+ *      &lt;li&gt;{@link PeerTestManager} for peer reachability tests&lt;/li&gt;
+ *      &lt;li&gt;{@link IntroductionManager} for managing introducers&lt;/li&gt;
+ *  &lt;/ul&gt;
  */
 public class UDPTransport extends TransportImpl {
     private final Log _log;
     private final List<UDPEndpoint> _endpoints;
     private final Object _addDropLock = new Object();
-    /** Peer (Hash) to PeerState */
+    /**
+     *  Map of known peers, keyed by their identity hash.
+     *  Used for fast lookup of peer state information during message handling and routing.
+     */
     private final Map<Hash, PeerState> _peersByIdent;
-    /** RemoteHostId to PeerState */
+    /**
+     *  Map of known peers, keyed by their remote host and port.
+     *  Used to identify peers based on source address in incoming packets.
+     */
     private final Map<RemoteHostId, PeerState> _peersByRemoteHost;
     private final Map<Long, PeerState2> _peersByConnID;
     private final Map<Long, PeerStateDestroyed> _recentlyClosedConnIDs;
@@ -79,7 +103,9 @@ public class UDPTransport extends TransportImpl {
     private final OutboundMessageFragments _fragments;
     private volatile PacketPusher _pusher;
     private final InboundMessageFragments _inboundFragments;
-    //private UDPFlooder _flooder;
+    /**
+     *  Manages peer reachability testing to determine if we are firewalled or reachable.
+     */
     private final PeerTestManager _testManager;
     private final IntroductionManager _introManager;
     private final ExpirePeerEvent _expireEvent;
@@ -109,7 +135,10 @@ public class UDPTransport extends TransportImpl {
     private final int _min_peers;
     private final int _min_v6_peers;
 
-    /** Do we need to rebuild our external router address asap? */
+    /**
+     *  Flag indicating whether the router's external address needs to be rebuilt.
+     *  This is typically set after significant network changes or reachability updates.
+     */
     private boolean _needsRebuild;
     private final Object _rebuildLock = new Object();
 
@@ -1354,14 +1383,12 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * Possibly change our external address to the IP/port.
-     * IP/port are already validated, but not yet compared to current IP/port.
-     * We compare here.
+     * Updates the external IP address and/or port based on feedback from a peer.
+     * This is used when a peer reports our external address, or when we detect a change.
      *
-     * @param ourIP MUST have been previously validated with isValid()
-     *              IPv4 or IPv6 OK
-     * @param ourPort &gt;= 1024 or 0 for no change
-     * @return true if updated
+     * @param ip the new IP address (IPv4 or IPv6)
+     * @param port the new port number, or 0 to keep the current port
+     * @return true if the address was successfully updated
      */
     private boolean changeAddress(byte ourIP[], int ourPort) {
         boolean updated = false;
@@ -1591,8 +1618,10 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * get the state for the peer at the given remote host/port, or null
-     * if no state exists
+     * Retrieves the current connection state for a peer identified by their remote host and port.
+     *
+     * @param hostInfo the remote host and port of the peer
+     * @return the peer state, or null if not found
      */
     PeerState getPeerState(RemoteHostId hostInfo) {
             return _peersByRemoteHost.get(hostInfo);
@@ -1737,63 +1766,11 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * Intercept RouterInfo entries received directly from a peer to inject them into
-     * the PeersByCapacity listing.
+     * Adds a new peer state or replaces an existing one if the peer identity or address changes.
+     * This method ensures thread-safe updates to internal peer tracking maps.
      *
-     */
-    /*
-    public void messageReceived(I2NPMessage inMsg, RouterIdentity remoteIdent, Hash remoteIdentHash, long msToReceive, int bytesReceived) {
-
-        if (inMsg instanceof DatabaseStoreMessage) {
-            DatabaseStoreMessage dsm = (DatabaseStoreMessage)inMsg;
-            if (dsm.getValueType() == DatabaseStoreMessage.KEY_TYPE_ROUTERINFO) {
-                Hash from = remoteIdentHash;
-                if (from == null)
-                    from = remoteIdent.getHash();
-
-                if (from.equals(dsm.getKey())) {
-                    // db info received directly from the peer - inject it into the peersByCapacity
-                    RouterInfo info = dsm.getRouterInfo();
-                    Set addresses = info.getAddresses();
-                    for (Iterator iter = addresses.iterator(); iter.hasNext(); ) {
-                        RouterAddress addr = (RouterAddress)iter.next();
-                        if (!STYLE.equals(addr.getTransportStyle()))
-                            continue;
-                        Properties opts = addr.getOptions();
-                        if ( (opts != null) && (info.isValid()) ) {
-                            String capacities = opts.getProperty(UDPAddress.PROP_CAPACITY);
-                            if (capacities != null) {
-                                if (_log.shouldInfo())
-                                    _log.info("Intercepting and storing the capacities for " + from.toBase64() + ": " + capacities);
-                                PeerState peer = getPeerState(from);
-                                for (int i = 0; i < capacities.length(); i++) {
-                                    char capacity = capacities.charAt(i);
-                                    int cap = capacity - 'A';
-                                    if ( (cap < 0) || (cap >= _peersByCapacity.length) )
-                                        continue;
-                                    List peers = _peersByCapacity[cap];
-                                    synchronized (peers) {
-                                        if ( (peers.size() < MAX_PEERS_PER_CAPACITY) && (!peers.contains(peer)) )
-                                            peers.add(peer);
-                                    }
-                                }
-                            }
-                        }
-                        // this was an SSU address so we're done now
-                        break;
-                    }
-                }
-            }
-        }
-        super.messageReceived(inMsg, remoteIdent, remoteIdentHash, msToReceive, bytesReceived);
-    }
-    */
-
-    /**
-     * add the peer info, returning true if it went in properly, false if
-     * it was rejected (causes include peer ident already connected, or no
-     * remote host info known
-     *
+     * @param peer the peer state to add or update
+     * @return true if the peer was successfully added or updated
      */
     boolean addRemotePeerState(PeerState peer) {
         if (_log.shouldDebug())
@@ -2658,9 +2635,13 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     *  Update our IPv4 or IPv6 address AND tell the router to rebuild and republish the router info.
+     * Rebuilds the external router address for either IPv4 or IPv6.
+     * This is called when the router needs to update its published address,
+     * typically after a reachability change or IP update.
      *
-     *  @return the new address if changed, else null
+     * @param allowRebuildRouterInfo whether to trigger a full router info rebuild
+     * @param ipv6 whether to rebuild the IPv6 address
+     * @return the new router address if changed, otherwise null
      */
     private RouterAddress rebuildExternalAddress(boolean ipv6) {
         if (_log.shouldDebug())
@@ -3422,9 +3403,14 @@ public class UDPTransport extends TransportImpl {
     }
 
     /**
-     * @return 8 bytes:
-     *         version 1 ipv4 in/out, ipv6 in/out
-     *         version 2 ipv4 in/out, ipv6 in/out
+     * Returns statistics on the number of connected peers, broken down by:
+     * &lt;ul&gt;
+     *     &lt;li&gt;Protocol version (SSU1 or SSU2)&lt;/li&gt;
+     *     &lt;li&gt;Address family (IPv4 or IPv6)&lt;/li&gt;
+     *     &lt;li&gt;Connection direction (inbound or outbound)&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @return an array of 8 integers representing peer counts for each category
      * @since 0.9.57
      */
     public int[] getPeerCounts() {
@@ -3451,8 +3437,7 @@ public class UDPTransport extends TransportImpl {
         long old = _context.clock().now() - 60*1000;
         int active = 0;
         for (PeerState peer : _peersByIdent.values()) {
-            // PeerState initializes times at construction,
-            // so check message count also
+            // PeerState initializes times at construction, so check message count also
             if ((peer.getMessagesReceived() > 0 && peer.getLastReceiveTime() >= old) ||
                 (peer.getMessagesSent() > 0 && peer.getLastSendTime() >= old)) {
                 active++;
@@ -3908,7 +3893,10 @@ public class UDPTransport extends TransportImpl {
     private static final String PROP_REACHABILITY_STATUS_OVERRIDE = "i2np.udp.status";
 
     /**
-     * Previously returned short, now enum as of 0.9.20
+     * Returns the current reachability status of the transport.
+     * This includes both IPv4 and IPv6 reachability states.
+     *
+     * @return the current status, never null
      */
     public Status getReachabilityStatus() {
         String override = _context.getProperty(PROP_REACHABILITY_STATUS_OVERRIDE);
