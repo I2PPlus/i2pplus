@@ -388,6 +388,7 @@ tr:hover .barText{opacity:1}
 .peerinfo.active .barOuter{background:repeating-linear-gradient(90deg,#0000,#0000 7px,rgba(0,32,0,.6) 7px,rgba(0,32,0,.6) 8px,#0000 8px),linear-gradient(90deg,#000400,#010)}
 .peerinfo.inactive .barInner{background:#030}
 .peerinfo .barOuter,.peerinfo .barInner{height:10px}
+.peerinfo .barText{display:none}
 .peerinfo .rateDown span,.peerinfo .rateUp span{opacity:.5;text-shadow:0 0 1px #000}
 .rateDown.ten span ,.rateUp.ten span{opacity:.75}
 .rateDown.hundred span,.rateUp.hundred span{opacity:1}
