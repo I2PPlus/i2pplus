@@ -3756,19 +3756,13 @@ public class I2PSnarkServlet extends BasicServlet {
         String decodedBase = decodePath(base);
         String title = decodedBase;
         String cpath = _contextPath + '/';
+        String slash = String.valueOf(java.io.File.separatorChar);
         if (title.startsWith(cpath)) {title = title.substring(cpath.length());}
 
         // Get the snark associated with this directory
-        String tName;
-        String pathInTorrent;
-        int slash = title.indexOf('/');
-        if (slash > 0) {
-            tName = title.substring(0, slash);
-            pathInTorrent = title.substring(slash);
-        } else {
-            tName = title;
-            pathInTorrent = "/";
-        }
+        String[] tNameAndPath = extractTorrentNameAndPath(title);
+        String tName = tNameAndPath[0];
+        String pathInTorrent = tNameAndPath[1];
         Snark snark = _manager.getTorrentByBaseName(tName);
 
         if (snark != null && postParams != null) {
@@ -3817,6 +3811,7 @@ public class I2PSnarkServlet extends BasicServlet {
         final boolean isTopLevel = dirSlash <= 0;
         title = _t("I2PSnark") + " - [" + _t("Torrent") + ": " + DataHelper.escapeHTML(title) + "]";
         buf.append(title).append("</title>\n").append(HEADER_A).append(_themePath).append(HEADER_B).append("\n");
+
         boolean collapsePanels = _manager.util().collapsePanels(); // uncollapse panels
         if (!collapsePanels) {buf.append(HEADER_A + _themePath + HEADER_C).append("\n");}
         String lang = (Translate.getLanguage(_manager.util().getContext()));
@@ -3824,6 +3819,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append(HEADER_A).append(_themePath).append(HEADER_D); // larger fonts for cjk translations
         }
         buf.append(HEADER_A + _themePath + HEADER_I).append("\n"); // images.css
+
         String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() + slash +
                            "docs" + slash + "themes" + slash + "snark" + slash + _manager.getTheme() + slash;
         File override = new File(themeBase + "override.css");
@@ -3833,23 +3829,35 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("<link rel=preload href=").append(fontPath).append("/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>\n")
                .append("<link rel=stylesheet href=").append(fontPath).append("/Sora.css>\n");
         } else {
-            buf.append("<link rel=preload href=/themes/fonts/OpenSans.css as=style>\n")
-               .append("<link rel=preload href=/themes/fonts/OpenSans/OpenSans.woff2 as=font type=font/woff2 crossorigin>\n")
-               .append("<link rel=stylesheet href=/themes/fonts/OpenSans.css>\n");
+            buf.append("<link rel=preload href=").append(fontPath).append("OpenSans.css as=style>\n")
+               .append("<link rel=preload href=").append(fontPath)
+               .append("OpenSans/OpenSans.woff2 as=font type=font/woff2 crossorigin>\n<link rel=stylesheet href=")
+               .append(fontPath).append("OpenSans.css>\n");
         }
         if (!isStandalone() && override.exists()) {
             buf.append(HEADER_A).append(_themePath).append(HEADER_Z).append("\n"); // optional override.css for version-persistent user edits
         }
+
         String theme = _manager.getTheme();
-        buf.append("<script nonce=" + cspNonce + ">const theme = \"" + theme + "\";</script>");
-        buf.append("<noscript><style>.script{display:none}</style></noscript>\n") // hide javascript-dependent buttons when js is unavailable
-           .append("<link rel=\"shortcut icon\" href=\"").append(_contextPath).append(WARBASE).append("icons/favicon.svg\">\n")
-           .append("</head>\n<body style=display:none;pointer-events:none class=\"").append(theme)
-           .append(" lang_").append(lang).append("\">\n")
-           .append("<div id=navbar><a href=\"").append(_contextPath).append("/\" title=").append(_t("Torrents"))
-           .append(" class=\"snarkNav nav_main\">").append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName).append("</a>\n")
-           .append("<a href=\"").append(_contextPath).append("/configure\" class=\"snarkNav nav_config\">").append(_t("Configure")).append("</a>")
-           .append("</div>\n");
+        buf.append("<script nonce=").append(cspNonce).append(">const theme = \"").append(theme).append("\";</script>\n")
+           .append("<noscript><style>.script{display:none}</style></noscript>\n") // hide javascript-dependent buttons when js is unavailable
+           .append("<link rel=\"shortcut icon\" href=\"")
+           .append(_contextPath).append(WARBASE)
+           .append("icons/favicon.svg\">\n</head>\n<body style=display:none;pointer-events:none class=\"")
+           .append(theme)
+           .append(" lang_")
+           .append(lang)
+           .append("\">\n<div id=navbar><a href=\"")
+           .append(_contextPath)
+           .append("/\" title=")
+           .append(_t("Torrents"))
+           .append(" class=\"snarkNav nav_main\">")
+           .append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName).append("</a>\n")
+           .append("<a href=\"")
+           .append(_contextPath)
+           .append("/configure\" class=\"snarkNav nav_config\">")
+           .append(_t("Configure"))
+           .append("</a></div>\n");
 
         if (parent) {buf.append("<div class=page id=dirlist>\n");} // always true
          // for stop/start/check
@@ -4568,6 +4576,26 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
+     * Extracts the torrent name and path-in-torrent from the given title.
+     *
+     * @param title The full path/title string.
+     * @return An array where index 0 is tName and index 1 is pathInTorrent.
+     * @since 0.9.68+
+     */
+    private String[] extractTorrentNameAndPath(String title) {
+        String[] result = new String[2];
+        int titleSlash = title.indexOf('/');
+        if (titleSlash > 0) {
+            result[0] = title.substring(0, titleSlash);   // tName
+            result[1] = title.substring(titleSlash);      // pathInTorrent
+        } else {
+            result[0] = title;                            // tName
+            result[1] = "/";                              // pathInTorrent
+        }
+        return result;
+    }
+
+    /**
      * Basic checks only, not as comprehensive as what TrackerClient does.
      * Just to hide non-i2p trackers from the details page.
      * @since 0.9.46
@@ -4647,16 +4675,10 @@ public class I2PSnarkServlet extends BasicServlet {
         if (title.startsWith(cpath)) {title = title.substring(cpath.length());}
 
         // Get the snark associated with this directory
-        String tName;
-        String pathInTorrent;
-        int slash = title.indexOf('/');
-        if (slash > 0) {
-            tName = title.substring(0, slash);
-            pathInTorrent = title.substring(slash);
-        } else {
-            tName = title;
-            pathInTorrent = "/";
-        }
+        String[] tNameAndPath = extractTorrentNameAndPath(title);
+        String tName = tNameAndPath[0];
+        String pathInTorrent = tNameAndPath[1];
+
         Snark snark = _manager.getTorrentByBaseName(tName);
         if (snark == null) {return null;}
         Storage storage = snark.getStorage();
