@@ -2558,62 +2558,13 @@ public class I2PSnarkServlet extends BasicServlet {
                     PeerID pid = peer.getPeerID();
                     String client = null;
                     String ch = pid != null ? pid.toString() : "????";
-                    if (ch.startsWith("WebSeed@")) {buf.append(ch);}
-                    else {
-                        /* Most clients start -xx - see BT spec or libtorrent identify_client.cpp
-                         * Base64 encode -xx
-                         * Anything starting with L is -xx and has an Az version
-                         * I2PSnark is 9 nulls followed by 3 3 3 (binary), see Snark
-                         * PeerID.toString() skips nulls
-                         * Base64 encode '\3\3\3' = AwMD
-                         */
-                        boolean addVersion = true;
-                        ch = ch.substring(0, 4);
-                        String version = ("ZV".equals(ch.substring(2,4)) || "VUZP".equals(ch) ? getRobtVersion(pid.getID()) : getAzVersion(pid.getID()));
-                        boolean hasVersion = version != null && !version.equals("");
+                    if (ch.startsWith("WebSeed@")) {
+                        buf.append(ch);
+                    } else {
+                        client = getClientName(peer);
                         buf.append("<span class=peerclient><code title=\"").append(_t("Destination (identity) of peer")).append("\">")
-                           .append(peer.toString().substring(5, 9)).append("</code>&nbsp;");
-                        if (hasVersion) {buf.append("<span class=clientid title=\"").append(_t("Version")).append(": ").append(version).append("\">");}
-                        else {buf.append("<span class=clientid>");}
-                        if ("AwMD".equals(ch)) {client = "I2PSnark";}
-                        else if ("LUFa".equals(ch)) {client = "Vuze";}
-                        else if ("LUJJ".equals(ch)) {client = "BiglyBT";}
-                        else if ("LVhE".equals(ch)) {client = "XD";}
-                        else if (ch.startsWith("LV")) {client = "Transmission";} // LVCS 1.0.2?; LVRS 1.0.4
-                        else if ("LUtU".equals(ch)) {client = "KTorrent";}
-                        else if ("LUVU".equals(ch)) {client = "EepTorrent";}
-
-                        // libtorrent and downstreams
-                        // https://www.libtorrent.org/projects.html
-                        else if ("LURF".equals(ch)) {client = "Deluge";} // DL
-                        else if ("LXFC".equals(ch)) {client = "qBittorrent";} // qB
-                        else if ("LUxU".equals(ch)) {client = "libtorrent";} // LT
-                        else if ("VElY".equals(ch)) {client = "Tixati";} // TIX
-
-                        // ancient below here
-                        else if ("ZV".equals(ch.substring(2,4)) || "VUZP".equals(ch)) {client = "Robert";}
-                        else if ("CwsL".equals(ch)) {client = "I2PSnarkXL";}
-                        else if ("BFJT".equals(ch)) {client = "I2PRufus";}
-                        else if ("TTMt".equals(ch)) {client = "I2P-BT";}
-                        else {
-                            // get client + version from handshake when client = null;
-                            Map<String, BEValue> handshake = peer.getHandshakeMap();
-                            if (handshake != null) {
-                                BEValue bev = handshake.get("v");
-                                if (bev != null) {
-                                    try {
-                                        String s = bev.getString();
-                                        if (s.length() > 0) {
-                                            if (s.length() > 64) {s = s.substring(0, 64);}
-                                            client = DataHelper.escapeHTML(s);
-                                            addVersion = false;
-                                        }
-                                     } catch (InvalidBEncodingException ibee) {}
-                                 }
-                             }
-                             if (client == null) {client = ch;}
-                        }
-                        buf.append(client).append("</span></span>");
+                           .append(peer.toString().substring(5, 9)).append("</code>&nbsp;")
+                           .append("<span class=clientid>").append(client).append("</span></span>");
                     }
                     if (t >= 5000) {
                         buf.append("<span class=inactivity style=width:").append(t / 2000)
@@ -2685,6 +2636,72 @@ public class I2PSnarkServlet extends BasicServlet {
             out.flush();
             buf.setLength(0);
         }
+    }
+
+    /**
+     * Returns a human-readable name of the client associated with the given Peer.
+     *
+     * &lt;p&gt;Most BitTorrent clients identify themselves using a 4-character prefix in the PeerID,
+     * often based on the client's identifier in the BitTorrent protocol handshake.
+     * These prefixes typically encode client-specific information (e.g., "-LT" for libtorrent,
+     * "-qB" for qBittorrent).&lt;/p&gt;
+     *
+     * &lt;p&gt;This method maps known PeerID prefixes to client names using standardized conventions
+     * and attempts to extract client names from the handshake data if no match is found.&lt;/p&gt;
+     *
+     * &lt;p&gt;Special cases:
+     * &lt;ul&gt;
+     *   &lt;li&gt;I2PSnark PeerID starts with "AwMD" (Base64 encoding of \3\3\3)&lt;/li&gt;
+     *   &lt;li&gt;Clients starting with "LU" or "ZV" may indicate Az or Robert versions&lt;/li&gt;
+     *   &lt;li&gt;Handshake "v" field is used as a fallback to identify unknown clients&lt;/li&gt;
+     * &lt;/ul&gt;
+     *
+     * @param peer The Peer object to analyze.
+     * @return A string representing the detected client name, or "Unknown" if undetermined.
+     */
+    private String getClientName(Peer peer) {
+        PeerID pid = peer.getPeerID();
+        if (pid == null) {return "Unknown";}
+
+        String ch = pid.toString().substring(0, 4); // First 4 chars of PeerID
+        String version = null;
+
+        // Special cases for known clients
+        if (ch.startsWith("ZV") || "VUZP".equals(ch)) {version = getRobtVersion(pid.getID());}
+        else if (ch.startsWith("LU")) {version = getAzVersion(pid.getID());}
+
+        boolean hasVersion = version != null && !version.isEmpty();
+
+        if ("AwMD".equals(ch)) {return "I2PSnark";}
+        else if ("LUFa".equals(ch)) {return "Vuze";}
+        else if ("LUJJ".equals(ch)) {return "BiglyBT";}
+        else if ("LVhE".equals(ch)) {return "XD";}
+        else if (ch.startsWith("LV")) {return "Transmission";}
+        else if ("LUtU".equals(ch)) {return "KTorrent";}
+        else if ("LUVU".equals(ch)) {return "EepTorrent";}
+        else if ("LURF".equals(ch)) {return "Deluge";}
+        else if ("LXFC".equals(ch)) {return "qBittorrent";}
+        else if ("LUxU".equals(ch)) {return "libtorrent";}
+        else if ("VElY".equals(ch)) {return "Tixati";}
+        else if ("ZV".equals(ch.substring(2, 4)) || "VUZP".equals(ch)) {return "Robert";}
+        else if ("CwsL".equals(ch)) {return "I2PSnarkXL";}
+        else if ("BFJT".equals(ch)) {return "I2PRufus";}
+        else if ("TTMt".equals(ch)) {return "I2P-BT";}
+
+        // Try to extract client name from handshake "v" field
+        Map<String, BEValue> handshake = peer.getHandshakeMap();
+        if (handshake != null) {
+            BEValue bev = handshake.get("v");
+            if (bev != null) {
+                try {
+                    String s = bev.getString();
+                    if (!s.isEmpty()) {return s.length() > 64 ? s.substring(0, 64) : s;}
+                } catch (InvalidBEncodingException ignored) {}
+            }
+        }
+
+        // Fallback: return raw PeerID prefix if nothing else matched
+        return ch;
     }
 
     /**
@@ -2924,8 +2941,7 @@ public class I2PSnarkServlet extends BasicServlet {
 
         String addTop =
             "<div id=add class=snarkNewTorrent>\n" +
-            "<form id=addForm action=_post method=POST enctype=multipart/form-data " +
-            "accept-charset=UTF-8 target=processForm>\n" +
+            "<form id=addForm action=_post method=POST enctype=multipart/form-data accept-charset=UTF-8 target=processForm>\n" +
             "<div class=sectionPanel id=addSection>\n";
         buf.append(addTop);
         writeHiddenInputs(buf, req, "Add");
