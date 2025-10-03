@@ -350,7 +350,7 @@ public class HomeHelper extends HelperBase {
                 } else if (url.equals("/routerlogs")) {
                     if (haveErrors) {
                         url = "/errorlogs";
-                        app.icon = "logsError.svg";
+                        app.icon = I + "logsError.svg";
                         app.desc += " / " + _t("Errors") + ":" + errorCount;
                     }
                 }
