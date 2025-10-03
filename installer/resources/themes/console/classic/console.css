@@ -1560,6 +1560,7 @@ img.unknownflag{opacity:.8}
 #enviro td,#eventlogs td{padding:5px 10px}
 #enviro td:last-child b{margin-left:8px;margin-right:5px}
 #errorCount{margin:-2px 0 -2px 3px;padding:1px 4px;min-width:10px;display:inline-block;font-size:90%;border:var(--border);box-shadow:var(--bevel);background:var(--badge)}
+.tab:hover #errorCount{display:none}
 #logFilter{margin:-6px -7px -6px 0;display:block}
 #logFilterInput{margin:2px -5px -1px 0;padding-left:30px;width:160px;min-width:0;background:#fff var(--filter) no-repeat 8px center/16px;background-blend-mode:luminosity}
 #logRefreshInterval:focus,#logFilterInput:focus{box-shadow:var(--btn_shadow_active);filter:none!important;caret-color:auto}

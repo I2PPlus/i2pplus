@@ -634,6 +634,7 @@ td.infowarn,#help tr:hover td.infowarn{background:var(--infowarn) no-repeat 15px
 .log_omitted{margin-right:1px}
 .nologs{padding:6px 8px}
 #errorCount{margin:-2px 0 -2px 3px;padding:2px 5px;min-width:12px;display:inline-block;font-size:90%;box-shadow:var(--bevel);background:var(--badge)}
+.tab:hover #errorCount{display:none}
 #logs font[color^="#"]::before{margin-right:5px;margin-left:-17px;margin:-2px 5px 0 -17px;width:6px;height:6px;display:inline-block;content:"";vertical-align:middle;border-radius:50%;background:#fff}
 #logs li{margin:0 0 -1px -5px;padding:1px 6px 1px 20px;width:calc(100% - 16px);text-align:left;list-style:none;font-size:8.5pt;font-weight:500;box-shadow:inset 0 0 0 1px #ddf,inset 0 0 0 2px #fff;opacity:.7}
 #logs li:nth-child(even){background:#f0f0ff}
@@ -2832,6 +2833,7 @@ th.queue{white-space:nowrap}
 }
 
 @media (min-width:1200px){
+body{overflow-x:hidden}
 .tunnel_id:not(:empty){min-width:108px;text-align:right;background:var(--hardhat) no-repeat 5px center/14px,var(--row)}
 .tunnel_id:not(:empty)::before{width:16px;height:14px;display:inline-block;vertical-align:middle;content:""}
 #help #terms{padding:5px 0 0;columns:2 auto;column-gap:35px;column-rule:var(--border_inner)}

@@ -1386,6 +1386,7 @@ table[id$="logs"] ul{margin:1px 17px -6px -12px}
 #bugreports{margin-top:10px}
 #bugreports td{padding:15px 25px 15px 55px;background:var(--bug) no-repeat 15px center/28px}
 #errorCount{margin:-2px 0 -2px 3px;padding:2px 5px;min-width:12px;display:inline-block;font-size:90%;box-shadow:var(--bevel);background:var(--badge)}
+.tab:hover #errorCount{display:none}
 #logs h3.tabletitle{margin:10px 0;padding:7px 0 7px 10px;contain:paint}
 #logs h3.tabletitle a{margin:-12px 0;padding:10px 6px 10px 8px;border-left:var(--border_inner)}
 #logs h3.tabletitle a.configure{padding:12px 16px 8px}
