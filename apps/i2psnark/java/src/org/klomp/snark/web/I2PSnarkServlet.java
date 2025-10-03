@@ -2546,96 +2546,141 @@ public class I2PSnarkServlet extends BasicServlet {
                 //if (!showDebug) {Collections.sort(peers, new PeerComparator());}
                 Collections.sort(peers, new PeerComparator());
                 for (Peer peer : peers) {
-                    long t = peer.getInactiveTime();
-                    if ((peer.getUploadRate() > 0 || peer.getDownloadRate() > 0) && t < 60 * 1000) {
-                        snarkStatus = "active";
-                        if (peer.getUploadRate() > 0 && !peer.isInteresting() && !peer.isChoking()) {snarkStatus += " TX";}
-                        if (peer.getDownloadRate() > 0 && !peer.isInterested() && !peer.isChoked()) {snarkStatus += " RX";}
-                    } else {snarkStatus = "inactive";}
-                    if (!peer.isConnected()) {continue;}
-                    buf.append("<tr class=\"peerinfo ").append(snarkStatus).append(" volatile\">\n<td class=status title=\"")
-                       .append(_t("Peer attached to swarm")).append("\"></td><td class=peerdata colspan=5>");
-                    PeerID pid = peer.getPeerID();
-                    String client = null;
-                    String ch = pid != null ? pid.toString() : "????";
-                    if (ch.startsWith("WebSeed@")) {
-                        buf.append(ch);
-                    } else {
-                        client = getClientName(peer);
-                        buf.append("<span class=peerclient><code title=\"").append(_t("Destination (identity) of peer")).append("\">")
-                           .append(peer.toString().substring(5, 9)).append("</code>&nbsp;")
-                           .append("<span class=clientid>").append(client).append("</span></span>");
-                    }
-                    if (t >= 5000) {
-                        buf.append("<span class=inactivity style=width:").append(t / 2000)
-                           .append("px title=\"").append(_t("Inactive")).append(": ")
-                           .append(t / 1000).append(' ').append(_t("seconds")).append("\"></span>");
-                    }
-                    buf.append("</td>").append("<td class=ETA></td>").append("<td class=rxd>");
-                    float pct;
-                    if (isValid) {
-                        pct = (float) (100.0 * peer.completed() / meta.getPieces());
-                        if (pct >= 100.0) {
-                            buf.append("<span class=peerSeed title=\"").append(_t("Seed")).append("\">")
-                               .append(toSVG("peerseed", _t("Seed"), "")).append("</span>");
-                        } else {buf.append(buildProgressBar(100, (int) (100 - pct), true, noThinsp, false));}
-                    } else {pct = (float) 101.0;} // until we get the metainfo we don't know how many pieces there are
-                    buf.append("</td>")
-                       .append("<td class=\"rateDown");
-                    if (peer.getDownloadRate() >= 100000) {buf.append(" hundred");}
-                    else if (peer.getDownloadRate() >= 10000) {buf.append(" ten");}
-                    buf.append("\">");
-                    if (needed > 0) {
-                        if (peer.isInteresting() && !peer.isChoked() && peer.getDownloadRate() > 0) {
-                            buf.append("<span class=unchoked><span class=right>")
-                               .append(formatSizeSpans(formatSize(peer.getDownloadRate()), false))
-                               .append("/s</span></span>");
-                        } else if (peer.isInteresting() && !peer.isChoked()) {buf.append("<span class=\"unchoked idle\"></span>");}
-                        else {
-                            buf.append("<span class=choked title=\"");
-                            if (!peer.isInteresting()) {buf.append(_t("Uninteresting (The peer has no pieces we need)"));}
-                            else {buf.append(_t("Choked (The peer is not allowing us to request pieces)"));}
-                            buf.append("\"><span class=right>")
-                               .append(formatSizeSpans(formatSize(peer.getDownloadRate()), false))
-                               .append("/s</span></span>");
-                        }
-                    } else if (!isValid) {
-                            buf.append("<span class=unchoked><span class=right>")
-                               .append(formatSizeSpans(formatSize(peer.getDownloadRate()), false))
-                               .append("/s</span></span>");
-                    }
-                    buf.append("</td>").append("<td class=txd>").append("</td>").append("<td class=\"rateUp");
-                    if (peer.getUploadRate() >= 100000) {buf.append(" hundred");}
-                    else if (peer.getUploadRate() >= 10000) {buf.append(" ten");}
-                    buf.append("\">");
-                    if (isValid && pct < 100.0) {
-                        if (peer.isInterested() && !peer.isChoking() && peer.getUploadRate() > 0) {
-                            buf.append("<span class=unchoked><span class=right>")
-                               .append(formatSizeSpans(formatSize(peer.getUploadRate()), false))
-                               .append("/s</span></span>");
-                        } else if (peer.isInterested() && !peer.isChoking()) {
-                            buf.append("<span class=\"unchoked idle\" title=\"")
-                               .append(_t("Peer is interested but currently idle")).append("\">")
-                               .append("</span>");
-                        } else {
-                            buf.append("<span class=choked title=\"");
-                            if (!peer.isInterested()) {
-                                buf.append(_t("Uninterested (We have no pieces the peer needs)"));
-                            } else {
-                                buf.append(_t("Choking (We are not allowing the peer to request pieces)"));
-                            }
-                            buf.append("\"><span class=unchoked><span class=right>")
-                               .append(formatSizeSpans(formatSize(peer.getUploadRate()), false))
-                               .append("/s</span></span>");
-                        }
-                    }
-                    buf.append("</td>").append("<td class=tAction>").append("</td></tr>\n");
+                    appendPeerRow(buf, peer, snark, meta, noThinsp);
                 }
             }
             out.append(buf);
             out.flush();
             buf.setLength(0);
         }
+    }
+
+    /**
+     * Appends HTML for a single peer row to the given StringBuilder.
+     *
+     * @param buf the StringBuilder to append to
+     * @param peer the Peer object to render
+     * @param MetaInfo the MetaInfo of the torrent (may be null)
+     * @param boolean noThinsp whether to suppress thin space characters
+     */
+    private void appendPeerRow(StringBuilder buf, Peer peer, Snark snark, MetaInfo meta, boolean noThinsp) {
+        long t = peer.getInactiveTime();
+        String snarkStatus;
+        if ((peer.getUploadRate() > 0 || peer.getDownloadRate() > 0) && t < 60 * 1000) {
+            snarkStatus = "active";
+            if (peer.getUploadRate() > 0 && !peer.isInteresting() && !peer.isChoking()) {
+                snarkStatus += " TX";
+            }
+            if (peer.getDownloadRate() > 0 && !peer.isInterested() && !peer.isChoked()) {
+                snarkStatus += " RX";
+            }
+        } else {
+            snarkStatus = "inactive";
+        }
+
+        if (!peer.isConnected()) {
+            return;
+        }
+
+        buf.append("<tr class=\"peerinfo ").append(snarkStatus).append(" volatile\">\n<td class=status title=\"")
+           .append(_t("Peer attached to swarm")).append("\"></td><td class=peerdata colspan=5>");
+
+        PeerID pid = peer.getPeerID();
+        String ch = pid != null ? pid.toString() : "????";
+        if (ch.startsWith("WebSeed@")) {
+            buf.append(ch);
+        } else {
+            String client = getClientName(peer);
+            buf.append("<span class=peerclient><code title=\"").append(_t("Destination (identity) of peer")).append("\">")
+               .append(peer.toString().substring(5, 9)).append("</code>&nbsp;")
+               .append("<span class=clientid>").append(client).append("</span></span>");
+        }
+
+        if (t >= 5000) {
+            buf.append("<span class=inactivity style=width:").append(t / 2000)
+               .append("px title=\"").append(_t("Inactive")).append(": ")
+               .append(t / 1000).append(' ').append(_t("seconds")).append("\"></span>");
+        }
+
+        buf.append("</td>").append("<td class=ETA></td>").append("<td class=rxd>");
+        float pct;
+        boolean isValid = meta != null;
+        if (isValid) {
+            pct = (float) (100.0 * peer.completed() / meta.getPieces());
+            if (pct >= 100.0) {
+                buf.append("<span class=peerSeed title=\"").append(_t("Seed")).append("\">")
+                   .append(toSVG("peerseed", _t("Seed"), "")).append("</span>");
+            } else {
+                buf.append(buildProgressBar(100, (int) (100 - pct), true, noThinsp, false));
+            }
+        } else {
+            pct = 101.0f; // Indicates unknown
+        }
+
+        buf.append("</td>").append("<td class=\"rateDown");
+        if (peer.getDownloadRate() >= 100000) {
+            buf.append(" hundred");
+        } else if (peer.getDownloadRate() >= 10000) {
+            buf.append(" ten");
+        }
+        buf.append("\">");
+
+        long needed = meta != null ? snark.getNeededLength() : -1;
+        if (needed > 0) {
+            if (peer.isInteresting() && !peer.isChoked() && peer.getDownloadRate() > 0) {
+                buf.append("<span class=unchoked><span class=right>")
+                   .append(formatSizeSpans(formatSize(peer.getDownloadRate()), false))
+                   .append("/s</span></span>");
+            } else if (peer.isInteresting() && !peer.isChoked()) {
+                buf.append("<span class=\"unchoked idle\"></span>");
+            } else {
+                buf.append("<span class=choked title=\"");
+                if (!peer.isInteresting()) {
+                    buf.append(_t("Uninteresting (The peer has no pieces we need)"));
+                } else {
+                    buf.append(_t("Choked (The peer is not allowing us to request pieces)"));
+                }
+                buf.append("\"><span class=right>")
+                   .append(formatSizeSpans(formatSize(peer.getDownloadRate()), false))
+                   .append("/s</span></span>");
+            }
+        } else if (!isValid) {
+            buf.append("<span class=unchoked><span class=right>")
+               .append(formatSizeSpans(formatSize(peer.getDownloadRate()), false))
+               .append("/s</span></span>");
+        }
+
+        buf.append("</td>").append("<td class=txd>").append("</td>").append("<td class=\"rateUp");
+        if (peer.getUploadRate() >= 100000) {
+            buf.append(" hundred");
+        } else if (peer.getUploadRate() >= 10000) {
+            buf.append(" ten");
+        }
+        buf.append("\">");
+
+        if (isValid && pct < 100.0) {
+            if (peer.isInterested() && !peer.isChoking() && peer.getUploadRate() > 0) {
+                buf.append("<span class=unchoked><span class=right>")
+                   .append(formatSizeSpans(formatSize(peer.getUploadRate()), false))
+                   .append("/s</span></span>");
+            } else if (peer.isInterested() && !peer.isChoking()) {
+                buf.append("<span class=\"unchoked idle\" title=\"")
+                   .append(_t("Peer is interested but currently idle")).append("\">")
+                   .append("</span>");
+            } else {
+                buf.append("<span class=choked title=\"");
+                if (!peer.isInterested()) {
+                    buf.append(_t("Uninterested (We have no pieces the peer needs)"));
+                } else {
+                    buf.append(_t("Choking (We are not allowing the peer to request pieces)"));
+                }
+                buf.append("\"><span class=unchoked><span class=right>")
+                   .append(formatSizeSpans(formatSize(peer.getUploadRate()), false))
+                   .append("/s</span></span>");
+            }
+        }
+
+        buf.append("</td>").append("<td class=tAction>").append("</td></tr>\n");
     }
 
     /**
