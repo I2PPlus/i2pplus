@@ -239,6 +239,8 @@ public class LogsHelper extends HelperBase {
                         !line.matches(".*#$") &&
                         !line.matches(".*\\* $") &&
                         !line.endsWith("java.lang.IllegalStateException") &&
+                        !line.contains("at org.eclipse.jetty") &&
+                        !line.contains("at javax.servlet.http") &&
                         !line.contains("  \n")) {
                         filtered.append(line).append("\n");
                     }
