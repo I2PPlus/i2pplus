@@ -504,7 +504,7 @@ class SidebarRenderer {
             .append(_t("Health Report"))
             .append(errorTooltip)
             .append("\">")
-            .append(nbsp(tx))
+            .append(nbsp(tx)).append(haveErrors ? "*" "")
             .append("</a>\n<a class=sb_icon target=_top href=/")
             .append(haveErrors ? "error" : "router")
             .append("logs title=\"")
