@@ -39,7 +39,7 @@
 </div>
 <div class=logwrap>
 <h3 class=tabletitle id=servicelogs><%=intl._t("Service (Wrapper) Logs")%>
-<%  if (llast >= 0) { %>
+<%  if (lts != null && !lts.trim().isEmpty()) { %>
 &nbsp;<a class=delete title="<%=intl._t("Clear logs")%>" href="/servicelogs?svc=<%=llast%>&amp;svct=<%=lts%>&amp;svcf=<%=filename%>&amp;consoleNonce=<%=consoleNonce%>">[<%=intl._t("Clear logs")%>]</a>
 <%  } %>
 </h3>
