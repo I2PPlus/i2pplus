@@ -499,13 +499,13 @@ class SidebarRenderer {
         int errorCount = logsHelper.getCriticalLogCount();
         boolean haveErrors = errorCount > 0;
         String errorTooltip = haveErrors ? " / " + _t("Errors") + ":" + errorCount : "";
-        rbuf.append("<a href=/").append(haveErrors ? "error" : "router")
+        rbuf.append("<a class=volatile href=/").append(haveErrors ? "error" : "router")
             .append("logs target=_top title=\"")
             .append(_t("Health Report"))
             .append(errorTooltip)
             .append("\">")
             .append(nbsp(tx)).append(haveErrors ? "*" : "")
-            .append("</a>\n<a class=sb_icon target=_top href=/")
+            .append("</a>\n<a class=\"sb_icon volatile\" target=_top href=/")
             .append(haveErrors ? "error" : "router")
             .append("logs title=\"")
             .append(tx).append(errorTooltip)
