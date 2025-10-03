@@ -5,9 +5,9 @@ package net.i2p.router.web;
  */
 public class App {
     public final String name;
-    public final String desc;
-    public final String url;
-    public final String icon;
+    public String desc;
+    public String url;
+    public String icon;
 
     public App(String name, String desc, String url, String icon) {
         this.name = name;

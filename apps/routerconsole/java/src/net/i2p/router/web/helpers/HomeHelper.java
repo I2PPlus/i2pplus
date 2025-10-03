@@ -135,8 +135,6 @@ public class HomeHelper extends HelperBase {
         //"teddit" + S + _x("Alternative privacy-focused front-end for Reddit") + S + "http://teddit.ls.i2p/" + S + I + "eepsites/teddit.svg" + S +
 
 // hosting + other services
-        //"base64-image.i2p" + S + _x("Base64 Image Encoder") + S + "http://base64-image.i2p/" + S + I + "eepsites/base64-image.svg" + S +
-        //"imageproxy.i2p" + S + _x("An image cache and resize service") + S + "http://imageproxy.i2p/" + S + I + "eepsites/imageproxy.svg" + S +
         "ArduLLM" + S + _x("AI Image generation & Chat hub") + S + "http://ardullm.i2p/" + S + I + "eepsites/ardullm.webp" + S +
         "major.i2p" + S + _x("IRC Logs for multiple networks") + S + "http://major.i2p/" + S + I + "eepsites/major.svg" + S +
         _x("Pastebin") + S + _x("Encrypted I2P Pastebin") + S + "http://paste.r4sas.i2p/" + S + I + "paste.svg" + S +
@@ -145,6 +143,8 @@ public class HomeHelper extends HelperBase {
         "stormycloud.i2p" + S + _x("Privacy-focused not-for-profit organization") + S + "http://stormycloud.i2p/" + S + I + "eepsites/stormycloud.svg" + S +
         _x("translate") + S + _x("Text translation engine") + S + "http://translate.i2p/" + S + I + "eepsites/translate.svg" + S +
         "incognet.i2p" + S + _x("Provider of privacy respecting web hosting and VPN services") + S + "http://incognet.i2p/" + S + I + "eepsites/incog.svg" + S +
+        //"base64-image.i2p" + S + _x("Base64 Image Encoder") + S + "http://base64-image.i2p/" + S + I + "eepsites/base64-image.svg" + S +
+        //"imageproxy.i2p" + S + _x("An image cache and resize service") + S + "http://imageproxy.i2p/" + S + I + "eepsites/imageproxy.svg" + S +
         //"rimgo" + S + _x("Alternative frontend for Imgur") + S + "http://rimgo.ls.i2p/" + S + I + "eepsites/imageproxy.svg" + S +
         //"translate.idk.i2p" + S + _x("Text translation engine") + S + "http://translate.idk.i2p/" + S + I + "eepsites/translate.svg" + S +
         //"tube.i2p" + S + _x("Alternative front-end to Youtube") + S + "http://tube.i2p/" + S + I + "eepsites/tv.svg" + S +
@@ -319,8 +319,12 @@ public class HomeHelper extends HelperBase {
         String website = _t("Web Server");
         StringBuilder buf = new StringBuilder(6*1024);
         boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
-        buf.append("<div class=\"linkgroup\">");
+        buf.append("<div class=linkgroup>");
         PortMapper pm = _context.portMapper();
+        LogsHelper logsHelper = new LogsHelper();
+        logsHelper.setContext(this._context);
+        int errorCount = logsHelper.getCriticalLogCount();
+        boolean haveErrors = errorCount > 0;
         for (App app : apps) {
             String url;
             if (app.name.equals(website) && app.url.equals("http://127.0.0.1:7658/")) {
@@ -343,6 +347,12 @@ public class HomeHelper extends HelperBase {
                     if (!pm.isRegistered(PortMapper.SVC_I2PTUNNEL)) {continue;}
                 } else if (url.equals("/configplugins")) {
                     if (!PluginStarter.pluginsEnabled(_context)) {continue;}
+                } else if (url.equals("/routerlogs")) {
+                    if (haveErrors) {
+                        url = "/errorlogs";
+                        app.icon = "logsError.svg";
+                        app.desc += " / " + _t("Errors") + ":" + errorCount;
+                    }
                 }
             }
             buf.append("\n<div class=\"applink");
