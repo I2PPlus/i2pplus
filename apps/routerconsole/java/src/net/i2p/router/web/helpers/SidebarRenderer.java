@@ -22,6 +22,7 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.news.NewsEntry;
 import net.i2p.router.news.NewsManager;
 import net.i2p.router.RouterContext;
+import net.i2p.router.web.helpers.LogsHelper;
 import net.i2p.router.web.ConfigUpdateHandler;
 import net.i2p.router.web.ContextHelper;
 import net.i2p.router.web.CSSHelper;
@@ -493,13 +494,19 @@ class SidebarRenderer {
 
         tx = _t("Logs");
         rbuf.setLength(0);
-        rbuf.append("<a href=/routerlogs target=_top title=\"")
+        LogsHelper logsHelper = new LogsHelper();
+        logsHelper.setContext(this._context);
+        int errorCount = logsHelper.getCriticalLogCount();
+        boolean haveErrors = errorCount > 0;
+        rbuf.append(haveErrors ? "<a href=/errorlogs" : "<a href=/routerlogs")
+            .append(" target=_top title=\"")
             .append(_t("Health Report"))
             .append("\">")
             .append(nbsp(tx))
             .append("</a>\n<a class=sb_icon target=_top href=/routerlogs title=\"")
             .append(tx)
-            .append("\" hidden><span><img src=/themes/console/images/logs.svg></span></a>\n");
+            .append("\" hidden><span><img src=/themes/console/images/logs")
+            .append(haveErrors ? "Error" : "").append(".svg></span></a>\n");
         svcs.put(tx, rbuf.toString());
 
         tx = _t("NetDb");

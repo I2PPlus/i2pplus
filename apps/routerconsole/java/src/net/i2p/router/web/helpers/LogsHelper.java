@@ -18,6 +18,7 @@ import net.i2p.router.web.ConfigServiceHandler;
 import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.RouterConsoleRunner;
+import net.i2p.router.RouterContext;
 import net.i2p.util.Translate;
 import net.i2p.util.UIMessages;
 
@@ -25,6 +26,7 @@ import java.util.regex.*;
 
 public class LogsHelper extends HelperBase {
 
+    public void setContext(RouterContext context) {this._context = context;}
     private static final String _jstlVersion = jstlVersion();
     private static final int MAX_WRAPPER_LINES = 500;
     private static final String PROP_LAST_WRAPPER = "routerconsole.lastWrapperLogEntry";
