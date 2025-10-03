@@ -498,13 +498,17 @@ class SidebarRenderer {
         logsHelper.setContext(this._context);
         int errorCount = logsHelper.getCriticalLogCount();
         boolean haveErrors = errorCount > 0;
-        rbuf.append(haveErrors ? "<a href=/errorlogs" : "<a href=/routerlogs")
-            .append(" target=_top title=\"")
+        String errorTooltip = haveErrors ? " / " + _t("Errors") + ":" + errorCount : "";
+        rbuf.append("<a href=/").append(haveErrors ? "error" : "router")
+            .append("logs target=_top title=\"")
             .append(_t("Health Report"))
+            .append(errorTooltip)
             .append("\">")
             .append(nbsp(tx))
-            .append("</a>\n<a class=sb_icon target=_top href=/routerlogs title=\"")
-            .append(tx)
+            .append("</a>\n<a class=sb_icon target=_top href=/")
+            .append(haveErrors ? "error" : "router")
+            .append("logs title=\"")
+            .append(tx).append(errorTooltip)
             .append("\" hidden><span><img src=/themes/console/images/logs")
             .append(haveErrors ? "Error" : "").append(".svg></span></a>\n");
         svcs.put(tx, rbuf.toString());

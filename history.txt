@@ -1,3 +1,6 @@
+2025-10-03 dr|z3d
+ * Console: Indicate errors on logs sidebar icon and tooltip
+
 2025-10-01 dr|z3d
  * Console: Replace combined logs view with error view and remove
    error logs from /routerlogs page; add error logs counter on nav
