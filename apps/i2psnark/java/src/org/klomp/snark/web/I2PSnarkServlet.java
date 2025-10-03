@@ -2448,17 +2448,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append(DataHelper.formatDuration2(Math.max(remainingSeconds, 10) * 1000));
             } // (eta 6h)
             buf.append("</td>").append("<td class=rxd>");
-            if (remaining > 0) {
-                long percent = 100 * (total - remaining) / total;
-                buf.append("<div class=barOuter>")
-                   .append("<div class=barInner style=\"width: ").append(percent).append("%;\">")
-                   .append("<div class=barText tabindex=0 title=\"")
-                   .append(percent).append("% ").append(_t("complete"))
-                   .append("; ").append(formatSize(remaining)).append(' ').append(_t("remaining")).append("\">")
-                   .append(formatSize(total-remaining).replaceAll("iB","")).append(thinsp(noThinsp))
-                   .append(formatSize(total).replaceAll("iB",""))
-                   .append("</div></div></div>");
-            } else if (remaining == 0) {
+            if (remaining > 0) {buf.append(buildProgressBar(total, remaining, true, noThinsp, true));}
+            else if (remaining == 0) {
                 // needs locale configured for automatic translation
                 SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMM yyyy", Locale.US);
                 fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
@@ -2636,13 +2627,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         if (pct >= 100.0) {
                             buf.append("<span class=peerSeed title=\"").append(_t("Seed")).append("\">")
                                .append(toSVG("peerseed", _t("Seed"), "")).append("</span>");
-                        } else {
-                            String ps = String.valueOf(pct);
-                            if (ps.length() > 5) {ps = ps.substring(0, 5);}
-                            buf.append("<div class=barOuter title=\"").append(ps)
-                               .append("%\"><div class=barInner style=\"width:")
-                               .append(ps).append("%;\"></div></div>");
-                        }
+                        } else {buf.append(buildProgressBar(100, (int) (100 - pct), true, noThinsp, false));}
                     } else {pct = (float) 101.0;} // until we get the metainfo we don't know how many pieces there are
                     buf.append("</td>")
                        .append("<td class=\"rateDown");
@@ -4407,9 +4392,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         else if (priority == 0) {status = "<div class=priorityIndicator>" + toImg("clock") + "</div>";}
                         else {status = "<div class=priorityIndicator>" + toImg("clock_red") + "</div>";}
                         long percent = 100 * (length - remaining) / length;
-                        status += " <div class=barOuter>" + "<div class=barInner style=\"width: " + percent + "%;\">" +
-                                  "<div class=barText tabindex=0 title=\"" + formatSize(remaining) + ' ' + _t("remaining") +
-                                  "\">" + percent + "%</div></div></div>";
+                        status +=  buildProgressBar(length, remaining, true, false, true);
                     }
                 }
             }
@@ -4573,6 +4556,54 @@ public class I2PSnarkServlet extends BasicServlet {
         if (!isStandalone()) {buf.append(FOOTER);}
         else {buf.append(FOOTER_STANDALONE);}
         return buf.toString();
+    }
+
+    /**
+     * Builds an HTML progress bar with optional percentage text and a tooltip showing
+     * the remaining size and completion percentage.
+     *
+     * @param total total size in bytes
+     * @param remaining remaining size in bytes
+     * @param includePercent whether to include the percentage text inside the bar
+     * @param noThinsp whether to avoid using thin space
+     * @param formatSize whether to format the size in human-readable format
+     * @return String containing the HTML for the progress bar
+     * @since 0.9.67+
+     */
+    private String buildProgressBar(long total, long remaining, boolean includePercent, boolean noThinsp, boolean formatSize) {
+        if (total <= 0) return "";
+        long percent = 100 * (total - remaining) / total;
+        StringBuilder sb = new StringBuilder(256);
+
+        sb.append("<div class=barOuter><div class=barInner style=\"width:")
+          .append(percent).append("%\">");
+
+        if (includePercent || remaining > 0) {
+            sb.append("<div class=barText tabindex=0 title=\"")
+              .append(percent).append("% ").append(_t("complete"))
+              .append("; ")
+              .append(formatSize ? DataHelper.formatSize2(remaining).replace("i", "") : String.valueOf(remaining))
+              .append(' ').append(_t("remaining"))
+              .append("\">");
+
+            if (formatSize) {
+                // Only append "B" if the value is under 1KB
+                boolean addBLabelCurrent = (total - remaining) < 1024;
+                boolean addBLabelTotal = total < 1024;
+                sb.append(DataHelper.formatSize2(total - remaining).replace("i", ""))
+                  .append(addBLabelCurrent ? "B" : "")
+                  .append(thinsp(noThinsp))
+                  .append(DataHelper.formatSize2(total).replace("i", ""))
+                  .append(addBLabelTotal ? "B" : "");
+            } else {
+                sb.append(total - remaining).append(thinsp(noThinsp)).append(total);
+            }
+
+            sb.append("</div>");
+        }
+
+        sb.append("</div></div>");
+        return sb.toString();
     }
 
     /**
