@@ -160,80 +160,80 @@ class OutboundMessageFragments {
         }
     }
 
-/**
- * Fetch all the packets for a message volley, blocking until there is a
- * message which can be fully transmitted (or the transport is shut down).
- *
- * NOT thread-safe. Called by the PacketPusher thread only.
- *
- * @return null only on shutdown
- */
-public List<UDPPacket> getNextVolley() {
-    PeerState peer = null;
-    List<OutboundMessageState> states = null;
-    long now = _context.clock().now();
-    int peersProcessed = 0;
-    int nextSendDelay = Integer.MAX_VALUE;
+    /**
+     * Fetch all the packets for a message volley, blocking until there is a
+     * message which can be fully transmitted (or the transport is shut down).
+     *
+     * NOT thread-safe. Called by the PacketPusher thread only.
+     *
+     * @return null only on shutdown
+     */
+    public List<UDPPacket> getNextVolley() {
+        PeerState peer = null;
+        List<OutboundMessageState> states = null;
+        long now = _context.clock().now();
+        int peersProcessed = 0;
+        int nextSendDelay = Integer.MAX_VALUE;
 
-    while (_alive && (states == null)) {
-        // Reset peer index if we've gone through all peers
-        if (_peerIndex >= _activePeers.size()) {
-            _peerIndex = 0;
-            if (_activePeers.isEmpty()) {
-                // Wait for new messages
-                waitForMessages();
+        while (_alive && (states == null)) {
+            // Reset peer index if we've gone through all peers
+            if (_peerIndex >= _activePeers.size()) {
+                _peerIndex = 0;
+                if (_activePeers.isEmpty()) {
+                    // Wait for new messages
+                    waitForMessages();
+                    continue;
+                }
+            }
+
+            // Get the next peer in the round-robin list
+            PeerState p = _activePeers.get(_peerIndex++);
+            peersProcessed++;
+
+            // Clean up completed messages
+            int remaining = p.finishMessages(now);
+            if (remaining <= 0) {
+                removePeer(p);
                 continue;
             }
-        }
 
-        // Get the next peer in the round-robin list
-        PeerState p = _activePeers.get(_peerIndex++);
-        peersProcessed++;
+            // Try to allocate fragments to send
+            states = p.allocateSend(now);
+            if (states != null) {
+                peer = p;
+                break;
+            }
 
-        // Clean up completed messages
-        int remaining = p.finishMessages(now);
-        if (remaining <= 0) {
-            removePeer(p);
-            continue;
-        }
+            // Track the soonest time this peer will be ready
+            int delay = p.getNextDelay(now);
+            if (delay < nextSendDelay) {
+                nextSendDelay = delay;
+            }
 
-        // Try to allocate fragments to send
-        states = p.allocateSend(now);
-        if (states != null) {
-            peer = p;
-            break;
-        }
-
-        // Track the soonest time this peer will be ready
-        int delay = p.getNextDelay(now);
-        if (delay < nextSendDelay) {
-            nextSendDelay = delay;
-        }
-
-        // If we've gone through all peers, wait or retry
-        if (peersProcessed >= _activePeers.size()) {
-            if (nextSendDelay > 0) {
-                int toWait = Math.min(Math.max(nextSendDelay, 10), MAX_WAIT);
-                waitForMessages(toWait);
-                peersProcessed = 0;
-                nextSendDelay = Integer.MAX_VALUE;
-            } else {
-                // Reset for next round
-                _peerIndex = 0;
+            // If we've gone through all peers, wait or retry
+            if (peersProcessed >= _activePeers.size()) {
+                if (nextSendDelay > 0) {
+                    int toWait = Math.min(Math.max(nextSendDelay, 10), MAX_WAIT);
+                    waitForMessages(toWait);
+                    peersProcessed = 0;
+                    nextSendDelay = Integer.MAX_VALUE;
+                } else {
+                    // Reset for next round
+                    _peerIndex = 0;
+                }
             }
         }
-    }
 
-    if (peer == null || states == null) {
-        return null;
-    }
+        if (peer == null || states == null) {
+            return null;
+        }
 
-    if (_log.shouldDebug()) {
-        _log.debug("Sending to " + peer + ": " + DataHelper.toString(states));
-    }
+        if (_log.shouldDebug()) {
+            _log.debug("Sending to " + peer + ": " + DataHelper.toString(states));
+        }
 
-    return preparePackets(states, peer);
-}
+        return preparePackets(states, peer);
+    }
 
     /**
      * Wakes up the packet pusher thread.

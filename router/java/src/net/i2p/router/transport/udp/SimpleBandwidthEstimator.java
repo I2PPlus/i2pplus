@@ -73,13 +73,10 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
             _bK_ns_est = bkdt;
             _acked = 0;
             _tAck = now;
-            if (_log.shouldDebug())
-                _log.debug(String.format(
-                    "Initial sample: %d bytes over %d ms → %.4f B/ms (%s/s)",
-                    acked, deltaT,
-                    _bKFiltered,
-                    DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false)
-                ));
+            if (_log.shouldDebug()) {
+                _log.debug(String.format("Initial sample: %d bytes over %d ms → %.4f B/ms (%s/s)",
+                                         acked, deltaT, _bKFiltered, formatRate(_bKFiltered * 1000)));
+            }
         } else {
             _acked += acked;
             if (now - _tAck >= Math.max(rtt, WESTWOOD_RTT_MIN))
@@ -153,12 +150,10 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
                 decay();
             }
             deltaT -= numrtts * rtt;
-            if (_log.shouldDebug())
-                _log.debug(String.format(
-                    "No ACKs → Decayed %d× → %s/s",
-                    numrtts,
-                    DataHelper.formatSize2Decimal((long) (_bK_ns_est * 1000), false)
-                ));
+            if (_log.shouldDebug()) {
+                String rate = formatRate(_bK_ns_est * 1000);
+                _log.debug(String.format("No ACKs → Decayed %d× → %s/s", numrtts, rate));
+            }
         }
         float bkdt;
         if (packets > 0) {
@@ -170,13 +165,14 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
             decay();
         }
         _tAck = time;
-        if (_log.shouldDebug())
-            _log.debug(String.format(
-                "%d B over %d ms → %.4f B/ms (%s/s)",
-                packets, deltaT,
-                bkdt,
-                DataHelper.formatSize2Decimal((long) (_bK_ns_est * 1000), false)
-            ));
+        if (_log.shouldDebug()) {
+            String rate = formatRate(_bK_ns_est * 1000);
+            _log.debug(String.format("%d B over %d ms → %.4f B/ms (%s/s)", packets, deltaT, bkdt, rate));
+        }
+    }
+
+    private String formatRate(double value) {
+        return DataHelper.formatSize2Decimal((long) value, false).trim();
     }
 
     /**
@@ -197,11 +193,6 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
      */
     @Override
     public synchronized String toString() {
-        return String.format(
-            "Bandwidth: %.4f B/ms (%s/s) @ %d ms",
-            _bKFiltered,
-            DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false),
-            _tAck
-        );
+        return String.format("Bandwidth: %.4f B/ms (%s/s) @ %d ms", _bKFiltered, formatRate(_bKFiltered * 1000), _tAck);
     }
 }
