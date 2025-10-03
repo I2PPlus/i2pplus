@@ -93,7 +93,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     public static final int DEFAULT_SSU_IPV4_MTU = MAX_SSU_IPV4_MTU;
     public static final int MIN_SSU_IPV6_MTU = 1280;
     public static final int MAX_SSU_IPV6_MTU = 1488;
-    public static final int DEFAULT_SSU_IPV6_MTU = MIN_SSU_IPV6_MTU;  // should always be published
+    public static final int DEFAULT_SSU_IPV6_MTU = MIN_SSU_IPV6_MTU; // should always be published
     // As SSU2
     public static final int MIN_MTU = 1280;
     public static final int MAX_MTU = 1500;
@@ -123,7 +123,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         _rcvHeaderEncryptKey2 = rcvHdrKey2;
         _receivedMessages = new SSU2Bitfield(BITFIELD_SIZE, 0);
         _ackedMessages = new SSU2Bitfield(BITFIELD_SIZE, 0);
-        _sentMessages = new ConcurrentHashMap<Long, List<PacketBuilder.Fragment>>(32);
+        _sentMessages = new ConcurrentHashMap<Long, List<PacketBuilder.Fragment>>(512);
         _sentMessagesLastExpired = _keyEstablishedTime;
         if (isInbound) {_receivedMessages.set(0);} // Prep for immediate ack of Session Confirmed
         // ACK 0 now sent in sendAck0() below
@@ -1128,7 +1128,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
          */
         public void scheduleImmediate() {
             _wantACKSendSince = _context.clock().now();
-            long delta = Math.min(_rtt/16, 5);
+            int rnd = _context.random().nextInt(4) + 2;
+            long delta = Math.min(_rtt/16, rnd);
             if (_log.shouldDebug()) {
                 _log.debug("[SSU2] Sending immediate ACK in " + delta + "ms: " + PeerState2.this);
             }
