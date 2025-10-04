@@ -2447,7 +2447,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (isRunning && remainingSeconds > 0 && !snark.isChecking()) {
                 buf.append(DataHelper.formatDuration2(Math.max(remainingSeconds, 10) * 1000));
             } // (eta 6h)
-            buf.append("</td>").append("<td class=rxd>");
+            buf.append("</td><td class=rxd>");
             if (remaining > 0) {buf.append(buildProgressBar(total, remaining, true, noThinsp, true));}
             else if (remaining == 0) {
                 // needs locale configured for automatic translation
@@ -2460,7 +2460,7 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append(formatSize(total).replaceAll("iB","")) // 3GB
                    .append("</div>");
             }
-            buf.append("</td>").append("<td class=\"rateDown");
+            buf.append("</td><td class=\"rateDown");
             if (downBps >= 100000) {buf.append(" hundred");}
             else if (downBps >= 10000) {buf.append(" ten");}
             buf.append("\">");
@@ -2470,7 +2470,7 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append(formatSizeSpans(formatSize(downBps), false))
                    .append("/s</span>");
             }
-            buf.append("</td>").append("<td class=txd>");
+            buf.append("</td><td class=txd>");
             if (isValid) {
                 double ratio = uploaded / ((double) total);
                 if (total <= 0) {ratio = 0;}
@@ -2500,7 +2500,7 @@ public class I2PSnarkServlet extends BasicServlet {
                        .append(" - 2px)\"></span></span>");
                 }
             }
-            buf.append("</td>").append("<td class=\"rateUp");
+            buf.append("</td><td class=\"rateUp");
             if (upBps >= 100000) {buf.append(" hundred");}
             else if (upBps >= 10000) {buf.append(" ten");}
             buf.append("\">");
@@ -2574,22 +2574,17 @@ public class I2PSnarkServlet extends BasicServlet {
             if (peer.getDownloadRate() > 0 && !peer.isInterested() && !peer.isChoked()) {
                 snarkStatus += " RX";
             }
-        } else {
-            snarkStatus = "inactive";
-        }
+        } else {snarkStatus = "inactive";}
 
-        if (!peer.isConnected()) {
-            return;
-        }
+        if (!peer.isConnected()) {return;}
 
         buf.append("<tr class=\"peerinfo ").append(snarkStatus).append(" volatile\">\n<td class=status title=\"")
            .append(_t("Peer attached to swarm")).append("\"></td><td class=peerdata colspan=5>");
 
         PeerID pid = peer.getPeerID();
         String ch = pid != null ? pid.toString() : "????";
-        if (ch.startsWith("WebSeed@")) {
-            buf.append(ch);
-        } else {
+        if (ch.startsWith("WebSeed@")) {buf.append(ch);}
+        else {
             String client = getClientName(peer);
             buf.append("<span class=peerclient><code title=\"").append(_t("Destination (identity) of peer")).append("\">")
                .append(peer.toString().substring(5, 9)).append("</code>&nbsp;")
@@ -2602,7 +2597,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(t / 1000).append(' ').append(_t("seconds")).append("\"></span>");
         }
 
-        buf.append("</td>").append("<td class=ETA></td>").append("<td class=rxd>");
+        buf.append("</td><td class=ETA></td><td class=rxd>");
         float pct;
         boolean isValid = meta != null;
         if (isValid) {
@@ -2613,16 +2608,11 @@ public class I2PSnarkServlet extends BasicServlet {
             } else {
                 buf.append(buildProgressBar(100, (int) (100 - pct), true, noThinsp, false));
             }
-        } else {
-            pct = 101.0f; // Indicates unknown
-        }
+        } else {pct = 101.0f;} // Indicates unknown
 
-        buf.append("</td>").append("<td class=\"rateDown");
-        if (peer.getDownloadRate() >= 100000) {
-            buf.append(" hundred");
-        } else if (peer.getDownloadRate() >= 10000) {
-            buf.append(" ten");
-        }
+        buf.append("</td><td class=\"rateDown");
+        if (peer.getDownloadRate() >= 100000) {buf.append(" hundred");}
+        else if (peer.getDownloadRate() >= 10000) {buf.append(" ten");}
         buf.append("\">");
 
         long needed = meta != null ? snark.getNeededLength() : -1;
@@ -2650,12 +2640,9 @@ public class I2PSnarkServlet extends BasicServlet {
                .append("/s</span></span>");
         }
 
-        buf.append("</td>").append("<td class=txd>").append("</td>").append("<td class=\"rateUp");
-        if (peer.getUploadRate() >= 100000) {
-            buf.append(" hundred");
-        } else if (peer.getUploadRate() >= 10000) {
-            buf.append(" ten");
-        }
+        buf.append("</td><td class=txd></td><td class=\"rateUp");
+        if (peer.getUploadRate() >= 100000) {buf.append(" hundred");}
+        else if (peer.getUploadRate() >= 10000) {buf.append(" ten");}
         buf.append("\">");
 
         if (isValid && pct < 100.0) {
@@ -2680,7 +2667,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         }
 
-        buf.append("</td>").append("<td class=tAction>").append("</td></tr>\n");
+        buf.append("</td><td class=tAction></td></tr>\n");
     }
 
     /**
