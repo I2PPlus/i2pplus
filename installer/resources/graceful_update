@@ -340,7 +340,7 @@ start_restart_precheck() {
     debug "Start sequence started, running prechecks..."
     if [ -f "$I2P/i2pupdate.zip" ]; then
         debug "Found $I2P/i2pupdate.zip, validating..."
-        file_cmd="$(command -v || which file 2>/dev/null)"
+        file_cmd="$(command -v file || which file 2>/dev/null)"
         if [ "$file_cmd" ]; then
             is_zip="$($file_cmd $I2P/i2pupdate.zip | sed -e 's/i2pupdate.zip//g' | grep -io zip)"
             if [ "$is_zip" ]; then
