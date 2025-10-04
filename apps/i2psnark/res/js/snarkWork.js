@@ -13,12 +13,13 @@ self.addEventListener("message", async (event) => {
       if (!response.ok) throw new Error("Network error: No response from server");
       const reader = response.body.getReader();
       const decoder = new TextDecoder("utf-8");
-      let content = "";
+      const chunks = [];
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
-        content += decoder.decode(value, { stream: true });
+        chunks.push(decoder.decode(value, { stream: true }));
       }
+      const content = chunks.join("");
       const doc = new DOMParser().parseFromString(content, "text/html");
       self.postMessage({ type: MESSAGE_TYPES.FETCH_HTML_DOCUMENT_RESPONSE, payload: doc });
     } catch (error) {
