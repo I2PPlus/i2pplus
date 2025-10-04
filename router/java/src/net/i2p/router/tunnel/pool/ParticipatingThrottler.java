@@ -51,7 +51,15 @@ class ParticipatingThrottler {
         ctx.simpleTimer2().addPeriodicEvent(new Cleaner(), CLEAN_TIME);
     }
 
-    /** increments before checking */
+    /**
+     * Determines whether to throttle tunnel participation for the given router.
+     * Increments the participation count for the router and evaluates conditions
+     * including router version, capabilities, and request count limits to decide
+     * if the tunnel request should be accepted, rejected, or dropped.
+     *
+     * @param h the hash of the router to check
+     * @return the throttling Result (ACCEPT, REJECT, or DROP)
+     */
     Result shouldThrottle(Hash h) {
         RouterInfo ri = (RouterInfo) context.netDb().lookupLocallyWithoutValidation(h);
         Hash us = context.routerHash();
@@ -94,12 +102,31 @@ class ParticipatingThrottler {
         return rv;
     }
 
+    /**
+     * Calculates the participation limit for tunnels based on the number of tunnels
+     * and router capabilities such as reachability and bandwidth share.
+     *
+     * @param numTunnels the current count of participating tunnels
+     * @param isUnreachable true if the router is unreachable
+     * @param isLowShare true if the router has low bandwidth share
+     * @param isFast true if the router has high bandwidth share
+     * @return the maximum allowed tunnel participation limit for the router
+     */
     private int calculateLimit(int numTunnels, boolean isUnreachable, boolean isLowShare, boolean isFast) {
         if (isUnreachable || isLowShare) {return Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 20, numTunnels * (PERCENT_LIMIT / 10) / 100));}
         else if (isSlow) {return Math.min(MIN_LIMIT, Math.max(MAX_LIMIT / 10, numTunnels * (PERCENT_LIMIT / 5) / 100));}
         return Math.min((MIN_LIMIT * 3), Math.max(MAX_LIMIT / 2, numTunnels * (PERCENT_LIMIT / 2) / 100));
     }
 
+    /**
+     * Handles banning and optionally disconnecting routers with no version info.
+     *
+     * @param shouldDisconnect whether to disconnect the router after banning
+     * @param h the router hash
+     * @param isBanned true if already banned
+     * @param caps router capabilities string
+     * @param bantime duration of the ban in milliseconds
+     */
     private void handleNoVersion(boolean shouldDisconnect, Hash h, boolean isBanned, String caps, int bantime) {
         if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);}
         if (!isBanned && _log.shouldWarn()) {
@@ -108,6 +135,17 @@ class ParticipatingThrottler {
         context.banlist().banlistRouter(h, " <b>➜</b> No version in RouterInfo", null, null, context.clock().now() + bantime);
     }
 
+    /**
+     * Checks router version and compressibility of RouterInfo to decide on banning.
+     *
+     * @param version router software version string
+     * @param isCompressible true if RouterInfo data is compressible (potentially suspicious)
+     * @param shouldDisconnect whether to disconnect after banning
+     * @param h router hash
+     * @param isBanned true if already banned
+     * @param caps router capabilities string
+     * @return true if the router should be dropped (banned), false otherwise
+     */
     private boolean checkVersionAndCompressibility(String version, boolean isCompressible, boolean shouldDisconnect, Hash h, boolean isBanned, String caps) {
         if (VersionComparator.comp(version, "0.9.57") < 0 && isCompressible) {
             if (shouldDisconnect) {context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);}
@@ -120,6 +158,19 @@ class ParticipatingThrottler {
         return false;
     }
 
+    /**
+     * Checks if a low-share, old-version router should be banned and disconnected.
+     *
+     * @param version router version string
+     * @param isLU true if router is low share and unreachable
+     * @param shouldBlockOldRouters whether to block old routers
+     * @param h router hash
+     * @param shouldDisconnect whether to disconnect after banning
+     * @param isBanned true if already banned
+     * @param caps router capabilities string
+     * @param bantime ban duration in milliseconds
+     * @return true if the router should be dropped (banned), false otherwise
+     */
     private boolean checkLowShareAndVersion(String version, boolean isLU, boolean shouldBlockOldRouters, Hash h,
                                             boolean shouldDisconnect, boolean isBanned, String caps, int bantime) {
         if (VersionComparator.comp(version, MIN_VERSION) < 0 && isLU && shouldBlockOldRouters) {
@@ -136,6 +187,19 @@ class ParticipatingThrottler {
         return false;
     }
 
+    /**
+     * Checks if an unreachable and old router should be banned or ignored.
+     *
+     * @param version router version string
+     * @param isUnreachable true if router is unreachable
+     * @param isFast true if router has high bandwidth
+     * @param shouldBlockOldRouters whether to block old routers
+     * @param h router hash
+     * @param shouldDisconnect whether to disconnect after banning
+     * @param isBanned true if already banned
+     * @param caps router capabilities string
+     * @return true if the router should be dropped (ignored), false otherwise
+     */
     private boolean checkUnreachableAndOld(String version, boolean isUnreachable, boolean isFast, boolean shouldBlockOldRouters, Hash h,
                                            boolean shouldDisconnect, boolean isBanned, String caps) {
         if (VersionComparator.comp(version, MIN_VERSION) < 0 && isUnreachable && shouldBlockOldRouters && !isFast) {
@@ -148,6 +212,22 @@ class ParticipatingThrottler {
         return false;
     }
 
+    /**
+     * Evaluates whether to accept, reject, or drop tunnel requests based on the
+     * current count relative to the limit and router capabilities.
+     *
+     * @param count current participation count for the router
+     * @param limit maximum allowed participation
+     * @param shouldThrottle true if throttling is enabled
+     * @param isFast true if router is high bandwidth
+     * @param isLowShare true if router is low bandwidth
+     * @param isUnreachable true if router is unreachable
+     * @param h router hash
+     * @param caps router capabilities string
+     * @param isBanned true if router is already banned
+     * @param bantime ban duration in milliseconds
+     * @return Result indicating ACCEPT, REJECT, or DROP action
+     */
     private Result evaluateThrottleConditions(int count, int limit, boolean shouldThrottle, boolean isFast, boolean isLowShare,
                                               boolean isUnreachable, Hash h, String caps, boolean isBanned, int bantime) {
         if (count > limit && shouldThrottle) {
@@ -164,7 +244,7 @@ class ParticipatingThrottler {
                 handleExcessiveRequests(h, caps, count, limit, bantime);
                 return Result.DROP;
             } else {
-                _logHighRequestCount(caps, count, limit);
+                _logHighRequestCount(h, caps, count, limit);
                 return Result.REJECT;
             }
         }
@@ -172,6 +252,15 @@ class ParticipatingThrottler {
         return Result.ACCEPT;
     }
 
+    /**
+     * Handles excessive tunnel request counts by banning and scheduling disconnect.
+     *
+     * @param h router hash
+     * @param caps router capabilities string
+     * @param count current participation count
+     * @param limit participation limit
+     * @param bantime ban duration in milliseconds
+     */
     private void handleExcessiveRequests(Hash h, String caps, int count, int limit, int bantime) {
         context.banlist().banlistRouter(h, " <b>➜</b> Excessive tunnel requests", null, null, context.clock().now() + bantime);
         context.simpleTimer2().addEvent(new Disconnector(h), 11 * 60 * 1000);
@@ -182,13 +271,16 @@ class ParticipatingThrottler {
         }
     }
 
-    private void _logHighRequestCount(String caps, int count, int limit) {
+    /** Logs warnings for high count tunnel request rejections. */
+    private void _logHighRequestCount(Hash h, String caps, int count, int limit) {
         if (_log.shouldWarn()) {
             _log.warn("Rejecting Tunnel Requests from " + (caps != null ? caps : "") +
-                      " Router -> Count / Limit: " + count + " / " + limit + " in " + 11 * 60 / LIFETIME_PORTION + "s");
+                      " Router [" + h.toBase64().substring(0,6) + "] -> Count / Limit: " +
+                      count + " / " + limit + " in " + 11 * 60 / LIFETIME_PORTION + "s");
         }
     }
 
+    /** Logs debug information for accepted tunnel requests. */
     private void _logAcceptRequest(String caps, int count) {
         if (_log.shouldDebug()) {
             _log.debug("Accepting Tunnel Request from " + (caps != "" ? caps : "") +
@@ -196,10 +288,16 @@ class ParticipatingThrottler {
         }
     }
 
+    /**
+     * Periodic timer event that clears the participation counts to reset throttling.
+     */
     private class Cleaner implements SimpleTimer.TimedEvent {
         public void timeReached() {counter.clear();}
     }
 
+    /**
+     * Timer event that disconnects a router after a delay.
+     */
     private class Disconnector implements SimpleTimer.TimedEvent {
         private final Hash h;
         public Disconnector(Hash h) { this.h = h; }

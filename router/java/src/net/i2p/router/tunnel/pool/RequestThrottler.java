@@ -16,9 +16,12 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**
- * Like ParticipatingThrottler, but checked much earlier, cleaned more frequently,
- * and with more than double the min and max limits.
- * This is called before the request is queued or decrypted.
+ * Throttles incoming tunnel requests earlier than ParticipatingThrottler,
+ * with higher limits and more frequent cleanup.
+ *
+ * Checks various router characteristics and decides whether to throttle,
+ * ban, or disconnect routers based on request count, version, bandwidth,
+ * country, and system load.
  *
  * @since 0.9.5
  */
@@ -50,7 +53,14 @@ class RequestThrottler {
         ctx.simpleTimer2().addPeriodicEvent(new Cleaner(), CLEAN_TIME);
     }
 
-    /** increments before checking */
+    /**
+     * Checks if the given router's tunnel requests should be throttled.
+     * Increments the request count and evaluates limits, router capabilities,
+     * blocking policies, version, and system load to decide throttling.
+     *
+     * @param h the router's hash
+     * @return true if the request should be throttled (denied), false otherwise
+     */
     boolean shouldThrottle(Hash h) {
         RouterInfo ri = context.netDb().lookupRouterInfoLocally(h);
         boolean isUnreachable = ri != null && ri.getCapabilities().indexOf(Router.CAPABILITY_REACHABLE) < 0;
@@ -142,18 +152,30 @@ class RequestThrottler {
         return rv;
     }
 
-    /** @since 0.9.65+ */
+    /**
+     * Returns the set of country codes configured to be blocked from participation.
+     *
+     * @return set of country codes (in lower case) to block; empty if none configured
+     * @since 0.9.65+
+     */
     private Set<String> getBlockedCountries() {
         String blockCountries = context.getProperty(PROP_BLOCK_COUNTRIES, DEFAULT_BLOCK_COUNTRIES);
         if (blockCountries.isEmpty()) {return Collections.emptySet();}
         return new HashSet<>(Arrays.asList(blockCountries.toLowerCase().split(",")));
     }
 
+    /**
+     * Periodic timer event that clears the request counts to reset throttling.
+     */
     private class Cleaner implements SimpleTimer.TimedEvent {
         public void timeReached() {RequestThrottler.this.counter.clear();}
     }
 
-    /** @since 0.9.52 */
+    /**
+     * Timer event that forces disconnection from a router after a delay.
+     *
+     * @since 0.9.52
+     */
     private class Disconnector implements SimpleTimer.TimedEvent {
         private final Hash h;
         public Disconnector(Hash h) {this.h = h;}
