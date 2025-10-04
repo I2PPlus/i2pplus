@@ -382,6 +382,7 @@ tr.active:hover .barComplete,tr.active:hover .txBarInner{background:#f50a}
 tr.inactive:not(.stopped):hover .barComplete,tr.inactive:not(.stopped):hover .txBarInner{background:#ff66ceaa}
 tr.stopped:hover .barComplete,tr.stopped:hover .txBarInner{background:#00b8e6aa}
 tr:hover .barText{color:#333;opacity:1}
+#dirInfo .barInner{height:12px}
 #diskSpace,#diskSpaceInner{width:80px;height:12px;display:inline-block;vertical-align:middle;text-align:left}
 #diskSpace{margin:1px 3px 1px 5px;vertical-align:text-top;contain:paint}
 #diskSpaceInner{position:absolute;background:linear-gradient(180deg,#fff3,#0003),linear-gradient(90deg,#383a 30px,#880a 60px,#b30a)}
