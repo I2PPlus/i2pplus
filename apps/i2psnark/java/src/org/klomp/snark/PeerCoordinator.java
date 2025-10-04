@@ -1026,51 +1026,50 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         // try/catch outside the sync to avoid deadlock in the catch
         try {
             synchronized(wantedPieces) {
-            Piece p = new Piece(piece);
-            if (!wantedPieces.contains(p)) {
-                if (_log.shouldDebug()) {
-                    _log.debug("Received unwanted piece [" + piece + "/" + metainfo.getPieces() + "] from [" +
-                               peer + "] for " + metainfo.getName());
+                Piece p = new Piece(piece);
+                if (!wantedPieces.contains(p)) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("Received unwanted piece [" + piece + "/" + metainfo.getPieces() + "] from [" +
+                                   peer + "] for " + metainfo.getName());
+                    }
+
+                    // No need to announce have piece to peers.
+                    // Assume we got a good piece, we don't really care anymore.
+                    // Well, this could be caused by a change in priorities, so
+                    // only return true if we already have it, otherwise might as well keep it.
+                    if (storage.getBitField().get(piece)) {
+                        pp.release();
+                        return true;
+                    }
                 }
 
-                // No need to announce have piece to peers.
-                // Assume we got a good piece, we don't really care anymore.
-                // Well, this could be caused by a change in priorities, so
-                // only return true if we already have it, otherwise might as well keep it.
-                if (storage.getBitField().get(piece)) {
-                    pp.release();
-                    return true;
+                // try/catch moved outside of sync
+                // this takes forever if complete, as it rechecks
+                if (storage.putPiece(pp)) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("Received valid piece [" + piece + "/" + metainfo.getPieces() + "] from [" +
+                                    peer + "] for " + metainfo.getName());
+                    }
+                } else {
+                    // so we will try again
+                    markUnrequested(peer, piece);
+                    removePartialPiece(piece); // just in case
+                    // Oops. We didn't actually download this then... :(
+                    // Reports of counter going negative?
+                    //downloaded.addAndGet(0 - metainfo.getPieceLength(piece));
+                    // Mark this peer as not having the piece. PeerState will update its bitfield.
+                    for (Piece pc : wantedPieces) {
+                        if (pc.getId() == piece) {
+                            pc.removePeer(peer);
+                            break;
+                        }
+                    }
+                    if (_log.shouldDebug()) {
+                        _log.debug("Received BAD piece [" + piece + "/" + metainfo.getPieces() + "] from [" +
+                                    peer + "] for " + metainfo.getName());
+                    }
+                    return false; // No need to announce BAD piece to peers.
                 }
-            }
-
-              // try/catch moved outside of sync
-              // this takes forever if complete, as it rechecks
-              if (storage.putPiece(pp)) {
-                  if (_log.shouldDebug()) {
-                      _log.debug("Received valid piece [" + piece + "/" + metainfo.getPieces() + "] from [" +
-                                  peer + "] for " + metainfo.getName());
-                  }
-              } else {
-                  // so we will try again
-                  markUnrequested(peer, piece);
-                  removePartialPiece(piece); // just in case
-                  // Oops. We didn't actually download this then... :(
-                  // Reports of counter going negative?
-                  //downloaded.addAndGet(0 - metainfo.getPieceLength(piece));
-                  // Mark this peer as not having the piece. PeerState will update its bitfield.
-                  for (Piece pc : wantedPieces) {
-                      if (pc.getId() == piece) {
-                          pc.removePeer(peer);
-                          break;
-                      }
-                  }
-                  if (_log.shouldDebug()) {
-                      _log.debug("Received BAD piece [" + piece + "/" + metainfo.getPieces() + "] from [" +
-                                  peer + "] for " + metainfo.getName());
-                  }
-                  return false; // No need to announce BAD piece to peers.
-                }
-
                 wantedPieces.remove(p);
                 wantedBytes -= metainfo.getPieceLength(p.getId());
             }  // synch
@@ -1086,10 +1085,8 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
             snark.stopTorrent();
             throw new RuntimeException(msg, ioe);
         }
-
         // just in case
         removePartialPiece(piece);
-
         boolean done = wantedBytes <= 0;
 
         // Announce to the world we have it!
@@ -1101,7 +1098,6 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
                 else {p.have(piece);}
             }
         }
-
         if (done) {
             for (Peer p : toDisconnect) {p.disconnect(true);}
         }
@@ -1110,12 +1106,9 @@ class PeerCoordinator implements PeerListener, BandwidthListener {
         if (!completed()) {snark.storageCompleted(storage);}
 
         synchronized (partialPieces) {
-            for (PartialPiece ppp : partialPieces) {
-                ppp.release();
-                partialPieces.clear();
-            }
+            for (PartialPiece ppp : partialPieces) {ppp.release();}
+            partialPieces.clear();
         }
-
         return true;
     }
 
