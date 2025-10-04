@@ -2448,7 +2448,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append(DataHelper.formatDuration2(Math.max(remainingSeconds, 10) * 1000));
             } // (eta 6h)
             buf.append("</td><td class=rxd>");
-            if (remaining > 0) {buf.append(buildProgressBar(total, remaining, true, noThinsp, true));}
+            if (remaining > 0) {buf.append(buildProgressBar(total, remaining, true, true, noThinsp, true));}
             else if (remaining == 0) {
                 // needs locale configured for automatic translation
                 SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMM yyyy", Locale.US);
@@ -2606,7 +2606,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("<span class=peerSeed title=\"").append(_t("Seed")).append("\">")
                    .append(toSVG("peerseed", _t("Seed"), "")).append("</span>");
             } else {
-                buf.append(buildProgressBar(100, (int) (100 - pct), true, noThinsp, false));
+                buf.append(buildProgressBar(100, (int) (100 - pct), true, false, noThinsp, false));
             }
         } else {pct = 101.0f;} // Indicates unknown
 
@@ -4440,7 +4440,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         else if (priority == 0) {status = "<div class=priorityIndicator>" + toImg("clock") + "</div>";}
                         else {status = "<div class=priorityIndicator>" + toImg("clock_red") + "</div>";}
                         long percent = 100 * (length - remaining) / length;
-                        status +=  buildProgressBar(length, remaining, true, false, true);
+                        status +=  buildProgressBar(length, remaining, true, false, false, true);
                     }
                 }
             }
@@ -4613,12 +4613,13 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param total total size in bytes
      * @param remaining remaining size in bytes
      * @param includePercent whether to include the percentage text inside the bar
+     * @param includeTooltip whether to provide tooltip / value on hover
      * @param noThinsp whether to avoid using thin space
      * @param formatSize whether to format the size in human-readable format
      * @return String containing the HTML for the progress bar
      * @since 0.9.67+
      */
-    private String buildProgressBar(long total, long remaining, boolean includePercent, boolean noThinsp, boolean formatSize) {
+    private String buildProgressBar(long total, long remaining, boolean includePercent, boolean includeTooltip, boolean noThinsp, boolean formatSize) {
         if (total <= 0) return "";
         long percent = 100 * (total - remaining) / total;
         StringBuilder sb = new StringBuilder(256);
@@ -4626,7 +4627,7 @@ public class I2PSnarkServlet extends BasicServlet {
         sb.append("<div class=barOuter><div class=barInner style=\"width:")
           .append(percent).append("%\">");
 
-        if (includePercent || remaining > 0) {
+        if ((includePercent || remaining > 0) && includeTooltip) {
             sb.append("<div class=barText tabindex=0 title=\"")
               .append(percent).append("% ").append(_t("complete"))
               .append("; ")
