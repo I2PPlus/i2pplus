@@ -294,7 +294,7 @@ td.peerCount:empty{text-align:center}
 .barOuter,.barText{width:80px;display:inline-block;vertical-align:middle;text-align:center}
 .barOuter,#diskSpace{margin:0;border:1px solid #414;border-bottom:1px solid #212;border-right:1px solid #212;box-shadow:0 0 0 1px rgba(0,0,0,.7),inset 0 0 0 1px #080008,var(--shadow_inset);background:repeating-linear-gradient(90deg,#0000,#0000 7px,rgba(64,0,64,.6) 7px,rgba(64,0,64,.6) 8px,#0000 8px) #101}
 .barInner,.txBarInner,#diskSpaceInner{height:100%;border:0;border-right:1px solid rgba(64,16,64,.8);box-shadow:inset 0 0 0 1px #101;background:linear-gradient(180deg,#414,#313 50%,#101 50%,#000)}
-.barText{padding:1px 0;min-width:140px;display:block;position:relative;top:-18px;left:-32px;z-index:10;white-space:nowrap;text-align:center;font-weight:700;color:#dd7;border-radius:2px;background:#000;opacity:0;transition:ease opacity .15s;filter:drop-shadow(0 0 1px #737)}
+.barText{padding:3px;min-width:120px;display:block;position:relative;top:-18px;left:-22px;z-index:10;white-space:nowrap;text-align:center;font-size:90%;font-weight:700;color:#dd7;border-radius:2px;background:#000;opacity:0;transition:ease opacity .15s;filter:drop-shadow(0 0 1px #737)}
 .barText::after{margin-left:-7px;position:absolute;top:90%;left:50%;border-width:7px;border-style:solid;border-color:#000 #0000 #0000 #0000;content:""}
 .barComplete{margin:0;padding:4px 0 2px;min-width:84px;display:inline-block;line-height:1.4;vertical-align:middle;text-align:center;text-shadow:var(--txt_shadow);box-shadow:inset 0 0 0 1px rgba(16,0,16,.85),inset 0 1px 2px rgba(128,96,128,.3),inset 0 -1px 3px rgba(0,0,0,.75),inset 0 0 2px 1px rgba(92,0,92,.7);border-radius:15px;background:radial-gradient(at center bottom,rgba(64,16,64,.5) 10%,rgba(16,0,16,.1) 80%,#0000 70%),linear-gradient(180deg,rgba(64,24,64,.9),rgba(16,0,16,.9));user-select:none}
 .active.peerinfo .barOuter{box-shadow:0 0 0 1px rgba(0,0,0,.5),inset 0 0 0 1px rgba(16,0,16,.5),var(--shadow_inset);background:repeating-linear-gradient(90deg,#0000,#0000 7px,#0003 7px,#0003 8px,#0000 8px),linear-gradient(90deg,#202,#303,#404)}
@@ -307,9 +307,9 @@ td.peerCount:empty{text-align:center}
 .peerinfo .barOuter,.peerinfo .barInner{height:12px}
 .peerinfo.TX .barOuter::after{top:auto;left:auto;bottom:0;right:1px;background:#242;animation:bar .2s steps(2) reverse}
 .peerSeed img{font-size:0;opacity:.7;transform:scale(1)}
-tr:hover .barInner,tr:hover .peerinfo .barInner{border-right:1px solid #808;box-shadow:none;background:linear-gradient(180deg,#404,#303);opacity:1}
-tr:hover .barOuter,tr:hover .peerinfo .barOuter{border:1px solid #808;box-shadow:0 0 0 1px #000;background:#000;opacity:1;filter:none}
-tr:hover .barComplete{color:#8d7cc1;box-shadow:inset 0 0 0 1px rgba(16,0,16,.95),inset 0 1px 3px rgba(192,96,192,.7),inset 0 -1px 3px rgba(48,0,48,.75);background:radial-gradient(at center bottom,rgba(80,40,80,.6) 10%,rgba(64,16,64,.15) 60%,#0000 70%),linear-gradient(180deg,rgba(72,32,72,.9),rgba(16,0,16,.9))}
+#torrents tr:not(.peerinfo):hover .barInner{border-right:1px solid #808;box-shadow:none;background:linear-gradient(180deg,#404,#303);opacity:1}
+#torrents tr:not(.peerinfo):hover .barOuter{border:1px solid #808;box-shadow:0 0 0 1px #000;background:#000;opacity:1;filter:none}
+#torrents tr:not(.peerinfo):hover .barComplete{color:#8d7cc1;box-shadow:inset 0 0 0 1px rgba(16,0,16,.95),inset 0 1px 3px rgba(192,96,192,.7),inset 0 -1px 3px rgba(48,0,48,.75);background:radial-gradient(at center bottom,rgba(80,40,80,.6) 10%,rgba(64,16,64,.15) 60%,#0000 70%),linear-gradient(180deg,rgba(72,32,72,.9),rgba(16,0,16,.9))}
 tr.active:hover .barInner,tr.active:hover .peerinfo .barInner{background:repeating-linear-gradient(135deg,rgba(0,0,0,.5) 1px,rgba(0,0,0,.5) 6px,rgba(48,0,48,.5) 6px,rgba(48,0,48,.5) 11px),linear-gradient(180deg,#404,#303)}
 .iframed .barText,.iframed .barText:hover,.iframed .barText:focus{transition:none}
 
@@ -366,7 +366,6 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 #dirInfo th.fileSize{text-align:center}
 #dirInfo .fileStatus img{margin:0 3px}
 #dirInfo .fileStatus .iconStatus[src$="warn.svg"]{width:20px;height:20px}
-#dirInfo .barText{padding:0 2px;min-width:unset;left:-2px}
 #dirInfo .rowEven{background:#270027}
 #dirInfo .rowOdd{background:#351933}
 #dirInfo .thumb,audio,video{padding:1px;border:var(--border_hard);box-shadow:inset 0 0 0 1px #414;background:#000;box-sizing:border-box}
@@ -1216,7 +1215,7 @@ b.alwaysShow{display:inline}
 td.status img{height:20px}
 td.status img{margin-left:1px;height:20px;width:auto}
 #dirInfo{margin-top:6px}
-#dirInfo .barText,#dirInfo .barOuter{width:60px}
+#dirInfo .barOuter{width:60px}
 .status{padding-left:0;padding-right:0}
 .iframed .mainsection#commentSection{margin-bottom:5px}
 .iframed #mainsection{padding-bottom:6px}
@@ -1291,7 +1290,6 @@ th.peerCount img{display:none}
 .details{padding-right:0;width:1%;text-align:right}
 #dirInfo .fileStatus img{float:none}
 #dirInfo td.fileStatus{font-size:0;text-align:center}
-#dirInfo td.fileStatus .percentbarText{font-size:7pt}
 .page,#navbar{min-width:650px}
 .peerclient{margin-left:4px}
 .peerclient code{padding:0 3px 0 5px}
