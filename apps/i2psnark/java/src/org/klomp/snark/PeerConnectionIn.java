@@ -232,8 +232,12 @@ class PeerConnectionIn implements Runnable {
                 _log.warn("Error communicating with [" + peer + "]" + (ioe.getMessage() != null ? " -> " + ioe.getMessage() : ""));
             }
         } catch (RuntimeException t) {
-            if (!isStandalone && _log.shouldInfo()) {
-                _log.warn("Error communicating with [" + peer + "]" + (t.getMessage() != null ? " -> " + t.getMessage() : t));
+            if (!isStandalone) {
+                if (_log.shouldInfo()) {
+                    _log.warn("Error communicating with [" + peer + "] ", t);
+                } else if (_log.shouldWarn()) {
+                    _log.warn("Error communicating with [" + peer + "] " + (t.getMessage() != null ? " -> " + t.getMessage() : ""));
+                }
             }
         } finally {peer.disconnect();}
     }
