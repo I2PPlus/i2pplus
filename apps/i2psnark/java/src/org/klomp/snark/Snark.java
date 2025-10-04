@@ -841,7 +841,12 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     public boolean isStorageCompleted() {return storageCompleted;}
 
     public void setWantedPieces(Storage storage) {
-        if (coordinator != null) {coordinator.setWantedPieces();}
+        PeerCoordinator localCoordinator = this.coordinator;
+        if (localCoordinator != null) {
+            synchronized(localCoordinator) {
+                localCoordinator.setWantedPieces();
+            }
+        }
     }
 
     ///////////// End StorageListener methods
