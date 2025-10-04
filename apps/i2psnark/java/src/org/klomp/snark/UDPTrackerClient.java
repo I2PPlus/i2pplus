@@ -74,10 +74,13 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
     private static final int SEND_CRYPTO_TAGS = 8;
     private static final int LOW_CRYPTO_TAGS = 4;
 
-    private static final long CONN_EXPIRATION = 60*1000; // BEP 15
-    private static final long DEFAULT_TIMEOUT = 20*1000;
+    //private static final long CONN_EXPIRATION = 60*1000; // BEP 15
+    //private static final long DEFAULT_TIMEOUT = 15*1000;
+    //private static final long CLEAN_TIME = 163*1000;
+    private static final long CONN_EXPIRATION = 3*60*1000;
+    private static final long DEFAULT_TIMEOUT = 90*1000;
     private static final long DEFAULT_QUERY_TIMEOUT = 75*1000;
-    private static final long CLEAN_TIME = 163*1000;
+    private static final long CLEAN_TIME = 2*60*1000;
 
     /** in seconds */
     private static final int DEFAULT_INTERVAL = 60*60;
