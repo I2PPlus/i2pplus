@@ -1217,6 +1217,8 @@ h3+.statusnotes{margin-top:2px}
 #country,#router,th#version,#tier,#edit,.tcount{width:2%;white-space:nowrap}
 #refreshPage{cursor:pointer}
 #transitbypeer #tunnels th{position:relative}
+#tnlfilter{position:absolute;top:4px;right:41px}
+#tnlfilter input[type="text"]{background:#fff var(--filter) no-repeat 7px center/12px}
 #tunnel_defs b{color:#fff}
 #tunnel_defs td:first-child,#tunnel_defs td:last-child{padding:0;width:0;font-size:0;display:none}
 #tunnel_defs td:nth-child(3){border-right:var(--border_soft)}
