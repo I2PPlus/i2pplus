@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32kb"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="64kb"%>
 <!DOCTYPE HTML>
 <%@include file="head.jsi"%>
 <%
