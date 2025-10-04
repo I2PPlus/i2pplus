@@ -229,11 +229,11 @@ class PeerConnectionIn implements Runnable {
         } catch (IOException ioe) {
             // Ignore, probably the other side closed connection.
             if (_log.shouldInfo()) {
-                _log.info("Error communicating with [" + peer + "]" + (ioe.getMessage() != null ? " -> " + ioe.getMessage() : ""));
+                _log.warn("Error communicating with [" + peer + "]" + (ioe.getMessage() != null ? " -> " + ioe.getMessage() : ""));
             }
         } catch (RuntimeException t) {
             if (!isStandalone && _log.shouldInfo()) {
-                _log.error("Error communicating with [" + peer + "]" + (t.getMessage() != null ? " -> " + t.getMessage() : ""));
+                _log.warn("Error communicating with [" + peer + "]" + (t.getMessage() != null ? " -> " + t.getMessage() : t));
             }
         } finally {peer.disconnect();}
     }
