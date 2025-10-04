@@ -662,16 +662,16 @@ class Connection {
                 // only send a RESET if we ever got something (and he didn't RESET us),
                 // otherwise don't waste the crypto and tags
                 if (_log.shouldInfo()) {
-                    _log.warn("Hard disconnecting " + (disconnectCount > 1 ? "(Count: " + disconnectCount + ")" : "") +
-                              " and sending RESET to " + getRemotePeerString() + " -> " +
+                    _log.warn("Hard disconnecting " + (disconnectCount > 1 ? "(Count: " + disconnectCount + ") " : "") +
+                              "and sending RESET to " + getRemotePeerString() + " -> " +
                               (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager"));
                 }
                 sendReset();
                 disconnectCount++;
             } else {
                 if (_log.shouldWarn()) {
-                    _log.warn("Hard disconnecting " + (disconnectCount > 1 ? "(Count: " + disconnectCount + ")" : "") +
-                              " from " + getRemotePeerString() + " -> " +
+                    _log.warn("Hard disconnecting " + (disconnectCount > 1 ? "(Count: " + disconnectCount + ") " : "") +
+                              "from " + getRemotePeerString() + " -> " +
                               (removeFromConMgr ? "Removed from Connection Manager" : "Not removed from Connection Manager"));
                 }
             }
