@@ -202,9 +202,8 @@ class BasicServlet extends HttpServlet {
                 response.sendError(404);
             } else {
                 if (passConditionalHeaders(request, response, content)) {
-                    if (_log.shouldDebug()) {_log.debug("Sending: " + content);}
                     sendData(request, response, content);
-                } else if (_log.shouldDebug()) {_log.debug("Not modified: " + content);}
+                }
             }
         }
         catch(IllegalArgumentException e) {
