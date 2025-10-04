@@ -1820,6 +1820,12 @@ public class I2PSnarkServlet extends BasicServlet {
             boolean enableVaryOutboundHops = req.getParameter("varyOutbound") != null;
             String apiTarget = req.getParameter("apiTarget");
             String apiKey = req.getParameter("apiKey");
+            if (req.getParameter("upBW") != null && req.getParameter("downBW") != null) {
+                _manager.addMessage(_t("Upload and download bandwidth limits updated."));
+            } else {
+                if (req.getParameter("upBW") != null) {_manager.addMessage(_t("Upload bandwidth limit updated."));}
+                if (req.getParameter("downBW") != null) {_manager.addMessage(_t("Download bandwidth limit updated."));}
+            }
             _manager.updateConfig(dataDir, filesPublic, autoStart, refreshDel, startupDel, pageSize, seedPct, eepHost, eepPort,
                                   i2cpHost, i2cpPort, i2cpOpts, upLimit, upBW, downBW, useOpenTrackers, useDHT, theme, lang, ratings, comments,
                                   commentsName, collapsePanels, showStatusFilter, enableLightbox, enableAddCreate, enableVaryInboundHops,
