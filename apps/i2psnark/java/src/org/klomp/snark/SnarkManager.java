@@ -1115,7 +1115,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 } else {
                     String msg = _t("Minimum up bandwidth limit is {0}KBps", MIN_UP_BW);
-                    //addMessage(msg);
+                    addMessage(msg);
                     if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 }
             }
@@ -1132,7 +1132,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                     if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 } else {
                     String msg = _t("Download speed limit is {0}KB/s", MIN_DOWN_BW);
-                    //addMessage(msg);
+                    addMessage(msg);
                     if (!_context.isRouterContext()) {System.out.println(" • " + msg);}
                 }
             }
