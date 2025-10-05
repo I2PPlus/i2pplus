@@ -1435,11 +1435,8 @@ msgstr "Seznam zvukových stop"
 msgid "Not found"
 msgstr "Nenalezeno"
 
-msgid "Torrent not found?"
-msgstr "Torrent nebyl nalezen?"
-
-msgid "File not found in torrent?"
-msgstr "Soubor nebyl nalezen v torrentu?"
+msgid "File not found in torrent"
+msgstr "Soubor nebyl nalezen v torrentu"
 
 msgid "Unrecognized"
 msgstr "Nerozpoznáno"

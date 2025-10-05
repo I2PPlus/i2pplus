@@ -1421,11 +1421,8 @@ msgstr "Daftar Putar Audio"
 msgid "Not found"
 msgstr "Tidak ditemukan"
 
-msgid "Torrent not found?"
-msgstr "Torrent tidak ditemukan?"
-
-msgid "File not found in torrent?"
-msgstr "File tidak ditemukan di torrent?"
+msgid "File not found in torrent"
+msgstr "File tidak ditemukan di torrent"
 
 msgid "Unrecognized"
 msgstr "Tidak dikenali"

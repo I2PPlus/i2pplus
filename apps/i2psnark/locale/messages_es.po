@@ -1428,11 +1428,8 @@ msgstr "Lista de reproducción de audio"
 msgid "Not found"
 msgstr "No encontrado"
 
-msgid "Torrent not found?"
-msgstr "¿No se encotró el fichero torrent?"
-
-msgid "File not found in torrent?"
-msgstr "¿No se encontró el fichero en el torrent?"
+msgid "File not found in torrent"
+msgstr "No se encontró el fichero en el torrent"
 
 msgid "Unrecognized"
 msgstr "No reconocido"

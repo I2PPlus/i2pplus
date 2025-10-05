@@ -1428,11 +1428,8 @@ msgstr "ऑडियो प्ले लिस्ट"
 msgid "Not found"
 msgstr "नहीं मिला"
 
-msgid "Torrent not found?"
-msgstr "टॉरेंट नहीं मिला?"
-
-msgid "File not found in torrent?"
-msgstr "टॉरेंट में फ़ाइल नहीं मिली?"
+msgid "File not found in torrent"
+msgstr "टॉरेंट में फ़ाइल नहीं मिली"
 
 msgid "Unrecognized"
 msgstr "अनाजान"

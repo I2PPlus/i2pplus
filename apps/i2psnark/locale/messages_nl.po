@@ -1428,11 +1428,8 @@ msgstr "Audioafspeellijst"
 msgid "Not found"
 msgstr "Niet gevonden"
 
-msgid "Torrent not found?"
-msgstr "Torrent niet gevonden?"
-
-msgid "File not found in torrent?"
-msgstr "Bestand niet gevonden in torrent?"
+msgid "File not found in torrent"
+msgstr "Bestand niet gevonden in torrent"
 
 msgid "Unrecognized"
 msgstr "Niet herkend"

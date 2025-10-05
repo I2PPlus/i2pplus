@@ -1428,10 +1428,7 @@ msgstr "لیست پخش صوتی"
 msgid "Not found"
 msgstr "یافت نشد"
 
-msgid "Torrent not found?"
-msgstr "تورنت پیدا نشد؟"
-
-msgid "File not found in torrent?"
+msgid "File not found in torrent"
 msgstr "فایل در تورنت یافت نشد؟"
 
 msgid "Unrecognized"

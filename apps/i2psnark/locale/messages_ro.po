@@ -1435,10 +1435,7 @@ msgstr "Playlist audio"
 msgid "Not found"
 msgstr "Nu a fost găsit"
 
-msgid "Torrent not found?"
-msgstr "Torrentul nu a fost găsit?"
-
-msgid "File not found in torrent?"
+msgid "File not found in torrent"
 msgstr "Fișierul nu a fost găsit în torrent?"
 
 msgid "Unrecognized"

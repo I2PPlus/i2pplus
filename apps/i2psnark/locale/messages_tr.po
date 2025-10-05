@@ -1428,11 +1428,8 @@ msgstr "Ses Oynatma Listesi"
 msgid "Not found"
 msgstr "Bulunamadı"
 
-msgid "Torrent not found?"
-msgstr "Torrent bulunamadı?"
-
-msgid "File not found in torrent?"
-msgstr "Dosya torrent içinde bulunamadı?"
+msgid "File not found in torrent"
+msgstr "Dosya torrent içinde bulunamadı"
 
 msgid "Unrecognized"
 msgstr "Tanınmıyor"

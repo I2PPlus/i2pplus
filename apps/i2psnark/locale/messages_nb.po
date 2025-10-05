@@ -1428,11 +1428,8 @@ msgstr "Lydspilleliste"
 msgid "Not found"
 msgstr "Ikke funnet"
 
-msgid "Torrent not found?"
-msgstr "Torrent ikke funnet?"
-
-msgid "File not found in torrent?"
-msgstr "Fil ikke funnet i torrent?"
+msgid "File not found in torrent"
+msgstr "Fil ikke funnet i torrent"
 
 msgid "Unrecognized"
 msgstr "Ukjent"

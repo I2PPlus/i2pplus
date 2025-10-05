@@ -1428,11 +1428,8 @@ msgstr "Äänisoittolista"
 msgid "Not found"
 msgstr "Ei löydy"
 
-msgid "Torrent not found?"
-msgstr "Vertaisverkkoa ei löytynyt?"
-
-msgid "File not found in torrent?"
-msgstr "Tiedostoa ei löytynyt vertaisverkossa?"
+msgid "File not found in torrent"
+msgstr "Tiedostoa ei löytynyt vertaisverkossa"
 
 msgid "Unrecognized"
 msgstr "Tuntematon"

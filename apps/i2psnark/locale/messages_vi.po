@@ -1421,11 +1421,8 @@ msgstr "Danh sách phát âm thanh"
 msgid "Not found"
 msgstr "Không tìm thấy"
 
-msgid "Torrent not found?"
-msgstr "Không tìm thấy torrent?"
-
-msgid "File not found in torrent?"
-msgstr "Không tìm thấy tập tin trong torrent?"
+msgid "File not found in torrent"
+msgstr "Không tìm thấy tập tin trong torrent"
 
 msgid "Unrecognized"
 msgstr "Không được công nhận"

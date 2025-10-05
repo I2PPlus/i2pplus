@@ -1428,11 +1428,8 @@ msgstr "Audio lejátszási lista"
 msgid "Not found"
 msgstr "Nem található"
 
-msgid "Torrent not found?"
-msgstr "Torrent nem található?"
-
-msgid "File not found in torrent?"
-msgstr "File nem található a torrentben?"
+msgid "File not found in torrent"
+msgstr "File nem található a torrentben"
 
 msgid "Unrecognized"
 msgstr "Ismeretlen"

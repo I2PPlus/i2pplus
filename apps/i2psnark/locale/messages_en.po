@@ -1428,10 +1428,7 @@ msgstr ""
 msgid "Not found"
 msgstr ""
 
-msgid "Torrent not found?"
-msgstr ""
-
-msgid "File not found in torrent?"
+msgid "File not found in torrent"
 msgstr ""
 
 msgid "Unrecognized"

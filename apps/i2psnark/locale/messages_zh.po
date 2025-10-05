@@ -1421,10 +1421,7 @@ msgstr "音频播放列表"
 msgid "Not found"
 msgstr "找不到资源"
 
-msgid "Torrent not found?"
-msgstr "种子未找到"
-
-msgid "File not found in torrent?"
+msgid "File not found in torrent"
 msgstr "种子中没有发现文件？"
 
 msgid "Unrecognized"

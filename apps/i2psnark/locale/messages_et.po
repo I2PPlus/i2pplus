@@ -1428,11 +1428,8 @@ msgstr "Heliplaad"
 msgid "Not found"
 msgstr "Ei leitud"
 
-msgid "Torrent not found?"
-msgstr "Torrentit ei leitud?"
-
-msgid "File not found in torrent?"
-msgstr "Failit ei leitud torrentis?"
+msgid "File not found in torrent"
+msgstr "Failit ei leitud torrentis"
 
 msgid "Unrecognized"
 msgstr "Tuvastamata"

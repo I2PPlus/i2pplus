@@ -1442,11 +1442,8 @@ msgstr "Seznam reprodukcije zvoka"
 msgid "Not found"
 msgstr "Ni najdeno"
 
-msgid "Torrent not found?"
-msgstr "Torrent ni najden?"
-
-msgid "File not found in torrent?"
-msgstr "Datoteke ni mogoče najeti v torrentu?"
+msgid "File not found in torrent"
+msgstr "Datoteke ni mogoče najeti v torrentu"
 
 msgid "Unrecognized"
 msgstr "Neznan"

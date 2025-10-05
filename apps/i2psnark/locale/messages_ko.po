@@ -1421,10 +1421,7 @@ msgstr "오디오 재생 목록"
 msgid "Not found"
 msgstr "찾을 수 없음"
 
-msgid "Torrent not found?"
-msgstr "토렌트 발견안됨"
-
-msgid "File not found in torrent?"
+msgid "File not found in torrent"
 msgstr "토렌트에 파일 없음"
 
 msgid "Unrecognized"

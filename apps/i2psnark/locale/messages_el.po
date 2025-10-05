@@ -1428,10 +1428,7 @@ msgstr "Λίστα αναπαραγωγής ήχου"
 msgid "Not found"
 msgstr "Δεν βρέθηκε"
 
-msgid "Torrent not found?"
-msgstr "Το torrent δεν βρέθηκε"
-
-msgid "File not found in torrent?"
+msgid "File not found in torrent"
 msgstr "Δεν βρέθηκε το αρχείο σε torrent"
 
 msgid "Unrecognized"

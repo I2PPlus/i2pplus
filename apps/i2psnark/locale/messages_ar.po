@@ -1456,10 +1456,7 @@ msgstr "قائمة تشغيل الصوت"
 msgid "Not found"
 msgstr "غير موجود"
 
-msgid "Torrent not found?"
-msgstr "تورنت غير موجود؟"
-
-msgid "File not found in torrent?"
+msgid "File not found in torrent"
 msgstr "الملف غير موجود في التورنت؟"
 
 msgid "Unrecognized"

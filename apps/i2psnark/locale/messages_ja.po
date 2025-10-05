@@ -1421,11 +1421,8 @@ msgstr "オーディオプレイリスト"
 msgid "Not found"
 msgstr "見つからない"
 
-msgid "Torrent not found?"
-msgstr "トレントが見つかりませんか?"
-
-msgid "File not found in torrent?"
-msgstr "Torrent でファイルが見つかりませんか?"
+msgid "File not found in torrent"
+msgstr "Torrent でファイルが見つかりませんか"
 
 msgid "Unrecognized"
 msgstr "認識されない"

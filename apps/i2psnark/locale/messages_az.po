@@ -1427,11 +1427,8 @@ msgstr "Səs siyahısı"
 msgid "Not found"
 msgstr "Tapılmadı"
 
-msgid "Torrent not found?"
-msgstr "Torrent tapılmadı?"
-
-msgid "File not found in torrent?"
-msgstr "Torrentdə fayl tapılmadı?"
+msgid "File not found in torrent"
+msgstr "Torrentdə fayl tapılmadı"
 
 msgid "Unrecognized"
 msgstr "Tanınmayan"
