@@ -643,13 +643,13 @@ public class I2PSnarkServlet extends BasicServlet {
             String tx = _t("clear messages");
             String x = _t("Expand");
             String s = _t("Shrink");
-            mbuf.append("action=Clear&amp;id=").append(lastID).append("&amp;nonce=").append(_nonce).append("\">")
-                .append(toThemeSVG("delete", tx, tx)).append("</a>\n")
-                .append("<a class=script id=expand hidden>")
-                .append(toThemeSVG("expand", x, x)).append("</a>\n")
-                .append("<a class=script id=shrink hidden>")
-                .append(toThemeSVG("shrink", s, s)).append("</a>\n")
-                .append("<ul id=messages class=volatile>\n");
+            mbuf.append("action=Clear&amp;id=").append(lastID).append("&amp;nonce=").append(_nonce).append("\">");
+            appendIcon(mbuf, "delete", tx, tx, true, true); // fromTheme=true, isSvg=true
+            mbuf.append("</a>\n<a class=script id=expand hidden>");
+            appendIcon(mbuf, "expand", x, x, true, true);
+            mbuf.append("</a>\n<a class=script id=shrink hidden>");
+            appendIcon(mbuf, "shrink", s, s, true, true);
+            mbuf.append("</a>\n<ul id=messages class=volatile>\n");
             if (!_manager.util().connected()) {
                 mbuf.append("<noscript>\n<li class=noscriptWarning>")
                     .append(_t("Warning! Javascript is disabled in your browser. " +
@@ -794,7 +794,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 .append(separator).append(filterQuery).append("\">");
         }
         String tx = _t("Status");
-        hbuf.append(toThemeImg("status", tx, showSort ? _t("Sort by {0}", tx) : tx));
+        appendIcon(hbuf, "status", tx, showSort ? _t("Sort by {0}", tx) : "", true, false);
         if (showSort) {hbuf.append("</a></span>");}
         hbuf.append("</th><th class=peerCount>");
 
@@ -818,7 +818,9 @@ public class I2PSnarkServlet extends BasicServlet {
                     link = link.substring(0, index) + link.substring(index).replaceFirst("filter=", filterParam);
                 } else {link += filterParam;}
                 hbuf.append(" <a class=\"sorter ").append(peerParam == null ? "showPeers" : "hidePeers")
-                    .append("\" href=\"").append(link).append("\">").append(toThemeImg(img, tx, tx)).append("</a>\n");
+                    .append("\" href=\"").append(link).append("\">");
+                appendIcon(hbuf, img, tx, tx, true, false);
+                hbuf.append("</a>\n");
             }
         }
 
@@ -845,7 +847,7 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         tx = _t("Torrent");
         if (!snarks.isEmpty()) {
-            hbuf.append(toThemeImg("torrent", tx, showSort ? _t("Sort by {0}", (isTypeSort ? _t("File type") : _t("Torrent name"))) : tx));
+            appendIcon(hbuf, "torrent", tx, showSort ? _t("Sort by {0}", (isTypeSort ? _t("File type") : _t("Torrent name"))) : "", true, false);
             if (showSort) {hbuf.append("</a></span>");}
         }
         hbuf.append("</th><th class=tName></th><th class=ETA>");
@@ -872,8 +874,8 @@ public class I2PSnarkServlet extends BasicServlet {
                     hbuf.append("<a class=sorter href=\"").append(_contextPath).append('/').append(getQueryString(req, null, null, sort))
                         .append(separator).append(filterQuery).append("\">");
                 }
-            tx = _t("ETA");
-            hbuf.append(toThemeImg("eta", tx, showSort ? _t("Sort by {0}", _t("Estimated time remaining")) : _t("Estimated time remaining")));
+                tx = _t("ETA");
+                appendIcon(hbuf, "eta", tx, showSort ? _t("Sort by {0}", _t("Estimated time remaining")) : "", true, false);
                 if (showSort) {hbuf.append("</a></span>");}
             }
         }
@@ -903,7 +905,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     .append(separator).append(filterQuery).append("\">");
             }
             tx = _t("RX");
-            hbuf.append(toThemeImg("head_rx", tx, showSort ? _t("Sort by {0}", (isDlSort ? _t("Downloaded") : _t("Size"))) : _t("Downloaded")));
+            appendIcon(hbuf, "head_rx", tx, showSort ? _t("Sort by {0}", (isDlSort ? _t("Downloaded") : _t("Size"))) : "", true, false);
             if (showSort) {hbuf.append("</a></span>");}
         }
         hbuf.append("</th>")
@@ -935,8 +937,8 @@ public class I2PSnarkServlet extends BasicServlet {
                     }
                     hbuf.append(separator).append(filterQuery).append("\">");
                     tx = _t("RX Rate");
-                    hbuf.append(toThemeImg("head_rxspeed", tx, showSort ? _t("Sort by {0}", _t("Down Rate")) : _t("Down Rate")))
-                        .append("</a></span>");
+                    appendIcon(hbuf, "head_rx", tx, showSort ? _t("Sort by {0}", (isDlSort ? _t("Downloaded") : _t("Size"))) : "", true, false);
+                    hbuf.append("</a></span>");
                 }
             }
         }
@@ -967,7 +969,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 .append(separator).append(filterQuery).append("\">");
         }
         tx = _t("TX");
-        hbuf.append(toThemeImg("head_tx", tx, showSort ? _t("Sort by {0}", (nextRatSort ? _t("Upload ratio") : _t("Uploaded"))) : _t("Uploaded")));
+        appendIcon(hbuf, "head_tx", tx, showSort ? _t("Sort by {0}", (nextRatSort ? _t("Upload ratio") : _t("Uploaded"))) : "", true, false);
         if (showSort) {hbuf.append("</a></span>");}
         hbuf.append("</th>").append("<th class=rateUp>");
         // FIXME only show icon when total up rate > 0 and no choked peers
@@ -994,7 +996,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         .append(separator).append(filterQuery).append("\">");
                 }
                 tx = _t("TX Rate");
-                hbuf.append(toThemeImg("head_txspeed", tx, showSort ? _t("Sort by {0}", _t("Up Rate")) : _t("Up Rate")));
+                appendIcon(hbuf, "head_txspeed", tx, showSort ? _t("Sort by {0}", _t("Up Rate")) : "", true, false);
                 if (showSort) {hbuf.append("</a></span>");}
             }
         }
@@ -1063,20 +1065,19 @@ public class I2PSnarkServlet extends BasicServlet {
             } else {
                 ftr.append("<tr id=pagenavbottom hidden><td colspan=12><div class=pagenavcontrols></div></td></tr>\n");
             }
-            ftr.append("</tbody>\n<tfoot id=snarkFoot><tr class=volatile>")
-               .append("<th id=torrentTotals class=left colspan=6><span id=totals>");
+            ftr.append("</tbody>\n<tfoot id=snarkFoot><tr class=volatile><th id=torrentTotals class=left colspan=6><span id=totals>");
 
             // Disk usage
             ftr.append(_manager.getDiskUsage());
 
             // torrent count
             ftr.append("<span id=torrentCount class=counter title=\"").append(ngettext("1 torrent", "{0} torrents", total)).append("\">");
-            toThemeImg(ftr, "torrent");
+            appendIcon(ftr, "torrent", "", "", true, false);
             ftr.append("<span class=badge>").append(total).append("</span></span>");
 
             // torrents filesize
             ftr.append("<span id=torrentFilesize class=counter title=\"").append(_t("Total size of loaded torrents")).append("\">");
-            toThemeImg(ftr, "size");
+            appendIcon(ftr, "size", "", "", true, false);
             ftr.append("<span class=badge>").append(DataHelper.formatSize2(stats[5]).replace("i", "")).append("</span></span>");
 
             // connected peers
@@ -1090,7 +1091,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             }
             ftr.append("\">");
-            toThemeImg(ftr, "showpeers");
+            appendIcon(ftr, "showpeers", "", "", true, false);
             ftr.append("<span class=badge>").append((int) stats[4]).append("</span></span>");
 
             // actively downloading
@@ -1101,7 +1102,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             }
             ftr.append("<span id=rxCount class=counter title=\"").append(_t("Active downloads")).append("\">");
-            toThemeImg(ftr, "head_rx");
+            appendIcon(ftr, "head_rx", "", "", true, false);
             ftr.append("<span class=badge>").append(downloads).append("</span></span>");
 
             // actively uploading
@@ -1112,17 +1113,20 @@ public class I2PSnarkServlet extends BasicServlet {
                 }
             }
             ftr.append("<span id=txCount class=counter title=\"").append(_t("Active uploads")).append("\">");
-            toThemeImg(ftr, "head_tx");
+            appendIcon(ftr, "head_tx", "", "", true, false);
             ftr.append("<span class=badge>").append(uploads).append("</span></span>");
 
             if (!isStandalone()) {
                 _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
-                ftr.append("<span id=tnlInCount class=counter title=\"").append(_t("Active Inbound tunnels")).append("\" hidden>");
-                toThemeSVG(ftr, "inbound", "", "");
-                ftr.append("<span class=badge>").append("</span></span>")
-                   .append("<span id=tnlOutCount class=counter title=\"").append(_t("Active Outbound tunnels")).append("\" hidden>");
-                toThemeSVG(ftr, "outbound", "", "");
-                ftr.append("<span class=badge>").append("</span></span>");
+                ftr.append("<span id=tnlInCount class=counter title=\"")
+                   .append(_t("Active Inbound tunnels"))
+                   .append("\" hidden>");
+                appendIcon(ftr, "inbound", "", "", true, true);
+                ftr.append("<span class=badge></span></span><span id=tnlOutCount class=counter title=\"")
+                   .append(_t("Active Outbound tunnels"))
+                   .append("\" hidden>");
+                appendIcon(ftr, "outbound", "", "", true, true);
+                ftr.append("<span class=badge></span></span>");
             }
 
             ftr.append("</span></th>");
@@ -1419,14 +1423,16 @@ public class I2PSnarkServlet extends BasicServlet {
 
         // First
         buf.append("<a href=\"").append(_contextPath).append(getQueryString(req, null, "", null, null)).append("\"")
-           .append(start > 0 ? "" : " class=disabled").append("><span id=first>")
-           .append(toThemeSVG("first", _t("First"), _t("First page"))).append("</span></a>");
+           .append(start > 0 ? "" : " class=disabled").append("><span id=first>");
+        appendIcon(buf, "first", _t("First"), _t("First page"), true, true);
+        buf.append("</span></a>");
 
         // Back
         int prev = Math.max(0, start - pageSize);
         buf.append("<a href=\"").append(_contextPath).append(getQueryString(req, null, String.valueOf(prev), null, null)).append("\"")
-           .append(prev > 0 ? "" : " class=disabled").append("><span id=previous>")
-           .append(toThemeSVG("previous", _t("Prev"), _t("Previous page"))).append("</span></a>");
+           .append(prev > 0 ? "" : " class=disabled").append("><span id=previous>");
+        appendIcon(buf, "previous", _t("Prev"), _t("Previous page"), true, true);
+        buf.append("</span></a>");
 
         // Page count
         int pages = 1 + ((total - 1) / pageSize);
@@ -1439,14 +1445,16 @@ public class I2PSnarkServlet extends BasicServlet {
         // Next
         int next = start + pageSize;
         buf.append("<a href=\"").append(_contextPath).append(getQueryString(req, null, String.valueOf(next), null, null)).append("\"")
-           .append(next + pageSize < total ? "" : " class=disabled").append("><span id=next>")
-           .append(toThemeSVG("next", _t("Next"), _t("Next page"))).append("</span></a>");
+           .append(next + pageSize < total ? "" : " class=disabled").append("><span id=next>");
+        appendIcon(buf, "next", _t("Next"), _t("Next page"), true, true);
+        buf.append("</span></a>");
 
         // Last
         int last = ((total - 1) / pageSize) * pageSize;
         buf.append("<a href=\"").append(_contextPath).append(getQueryString(req, null, String.valueOf(last), null, null)).append("\"")
-           .append(start + pageSize < total ? "" : " class=disabled").append("><span id=last>")
-           .append(toThemeSVG("last", _t("Last"), _t("Last page"))).append("</span></a>");
+           .append(start + pageSize < total ? "" : " class=disabled").append("><span id=last>");
+        appendIcon(buf, "last", _t("Last"), _t("Last page"), true, true);
+        buf.append("</span></a>");
 
         out.append(buf);
         buf.setLength(0);
@@ -2281,24 +2289,32 @@ public class I2PSnarkServlet extends BasicServlet {
         sortEnabled = sortParam != null && !sortParam.equals("");
 
         String statusString;
+        StringBuilder iconBuf = new StringBuilder();
         // add status to table rows so we can selectively show/hide snarks and style based on status
-        //String snarkStatus;
         String rowClass = (row % 2 == 0 ? "rowEven" : "rowOdd");
         if (snark.isChecking()) {
             (new DecimalFormat("0.00%")).format(snark.getCheckingProgress());
-            statusString = toSVGWithDataTooltip("processing", "", _t("Checking")) + "</td>" + "<td class=peerCount><b><span class=right>" +
+            appendIcon(iconBuf, "processing", "", _t("Checking"), false, true);
+            statusString = iconBuf.toString() + "</td>" + "<td class=peerCount><b><span class=right>" +
                            curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
             snarkStatus = "active starting processing";
+            iconBuf.setLength(0);
         } else if (snark.isAllocating()) {
-            statusString = toSVGWithDataTooltip("processing", "", _t("Allocating")) + "</td>" + "<td class=peerCount><b>";
+            appendIcon(iconBuf, "processing", "", _t("Allocating"), false, true);
+            statusString = iconBuf.toString() + "</td>" + "<td class=peerCount><b>";
             snarkStatus = "active starting processing";
+            iconBuf.setLength(0);
         } else if (err != null && isRunning && curPeers == 0) {
-            statusString = toSVGWithDataTooltip("error", "", err) + "</td>" + "<td class=peerCount><b><span class=right>" +
+            appendIcon(iconBuf, "error", "", err, false, true);
+            statusString = iconBuf.toString() + "</td>" + "<td class=peerCount><b><span class=right>" +
                            curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
             snarkStatus = "inactive downloading incomplete neterror";
+            iconBuf.setLength(0);
         } else if (snark.isStarting()) {
-            statusString = toSVGWithDataTooltip("stalled", "", _t("Starting")) + "</td>" + "<td class=peerCount><b>";
+            appendIcon(iconBuf, "stalled", "", _t("Starting"), false, true);
+            statusString = iconBuf.toString() + "</td>" + "<td class=peerCount><b>";
             snarkStatus = "active starting";
+            iconBuf.setLength(0);
         } else if (remaining == 0 || needed == 0) { // < 0 means no meta size yet
             // partial complete or seeding
             if (isRunning) {
@@ -2399,7 +2415,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (encodedBaseName != null) {
                     buf.append("&amp;dn=").append(encodedBaseName.replace(".torrent", ""));
                 }
-                buf.append("\">").append(toSVG("magnet", "")).append("<span class=copyMagnet></span></a>");
+                buf.append("\">");
+                appendIcon(buf, "magnet", "", "", false, true);
+                buf.append("<span class=copyMagnet></span></a>");
             }
             // File type icon column
             buf.append("</td><td class=\"details");
@@ -2414,7 +2432,7 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append("\" title=\"").append(_t("Torrent details")).append("\">");
                 if (comments != null && !comments.isEmpty()) {
                     buf.append("<span class=commented title=\"").append(_t("Torrent has comments")).append("\">");
-                    toSVG(buf, "rateme", "", "");
+                    appendIcon(buf, "rateme", "", "", false, true);
                     buf.append("</span>");
                 }
             }
@@ -2423,8 +2441,10 @@ public class I2PSnarkServlet extends BasicServlet {
             else if (isValid) {icon = toIcon(meta.getName());}
             else if (snark instanceof FetchAndAdd) {icon = "download";}
             else {icon = "magnet";}
-            if (isValid) {buf.append(toSVG(icon)).append("</a></span>");}
-            else {buf.append(toSVG(icon));}
+            if (isValid) {
+                appendIcon(buf, icon, "", "", false, true);
+                buf.append("</a></span>");
+            } else {appendIcon(buf, icon, "", "", false, true);}
 
             // Torrent name column
             buf.append("</td><td class=tName>");
@@ -2603,11 +2623,10 @@ public class I2PSnarkServlet extends BasicServlet {
         if (isValid) {
             pct = (float) (100.0 * peer.completed() / meta.getPieces());
             if (pct >= 100.0) {
-                buf.append("<span class=peerSeed title=\"").append(_t("Seed")).append("\">")
-                   .append(toSVG("peerseed", _t("Seed"), "")).append("</span>");
-            } else {
-                buf.append(buildProgressBar(100, (int) (100 - pct), true, false, noThinsp, false));
-            }
+                buf.append("<span class=peerSeed title=\"").append(_t("Seed")).append("\">");
+                appendIcon(buf, "peerseed", _t("Seed"), "", false, true);
+                buf.append("</span>");
+            } else {buf.append(buildProgressBar(100, (int) (100 - pct), true, false, noThinsp, false));}
         } else {pct = 101.0f;} // Indicates unknown
 
         buf.append("</td><td class=\"rateDown");
@@ -2875,7 +2894,9 @@ public class I2PSnarkServlet extends BasicServlet {
         String linkUrl = getTrackerLinkUrl(announce, infohash);
         if (linkUrl != null) {
             StringBuilder buf = new StringBuilder(128);
-            buf.append(linkUrl).append(toSVG("link", _t("Info"), "")).append("</a>");
+            buf.append(linkUrl);
+            appendIcon(buf, "link", _t("Info"), "", false, true);
+            buf.append("</a>");
             return buf.toString();
         }
         return null;
@@ -3108,10 +3129,15 @@ public class I2PSnarkServlet extends BasicServlet {
         if (_manager.getUniversalTheming()) {
             buf.append("<select id=themeSelect name=theme disabled title=\"")
                .append(_t("To change themes manually, disable universal theming"))
-               .append("\"><option>").append(_manager.getTheme()).append("</option></select> <span id=bwHoverHelp>")
-               .append(toThemeSVG("details", "", ""))
-               .append("<span id=bwHelp>").append(_t("Universal theming is enabled.")).append("</span></span>")
-               .append(" <a href=\"/configui\" target=_blank>[").append(_t("Configure")).append("]</a></span><br>");
+               .append("\"><option>")
+               .append(_manager.getTheme())
+               .append("</option></select> <span id=bwHoverHelp>");
+            appendIcon(buf, "details", "", "", true, true);
+            buf.append("<span id=bwHelp>")
+               .append(_t("Universal theming is enabled."))
+               .append("</span></span> <a href=\"/configui\" target=_blank>[")
+               .append(_t("Configure"))
+               .append("]</a></span><br>");
         } else {
             buf.append("<select id=themeSelect name=theme>");
             String theme = _manager.getTheme();
@@ -3915,7 +3941,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<div class=mainsection id=snarkInfo>")
                .append("<table id=torrentInfo>\n")
                .append("<tr><th colspan=2>");
-            toThemeImg(buf, "torrent");
+            appendIcon(buf, "torrent", "", "", true, false);
             buf.append("<b>").append(_t("Torrent")).append(":</b> ");
             if (snark.getStorage() != null) {buf.append(DataHelper.escapeHTML(snark.getStorage().getBase().getPath()));}
             else {buf.append(DataHelper.escapeHTML(snark.getBaseName()));}
@@ -3977,13 +4003,18 @@ public class I2PSnarkServlet extends BasicServlet {
                         buf.append("&amp;dn=").append(DataHelper.escapeHTML(baseName).replace(".torrent", "")
                            .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"));
                     }
-                    buf.append("\">").append(toSVG("magnet", "")).append("</a>");
+                    buf.append("\">");
+                    appendIcon(buf, "magnet", "", "", false, true);
+                    buf.append("</a>");
                 }
 
                 buf.append("<a class=torrentlink href=\"").append(_contextPath).append('/')
-                   .append(baseName).append("\" title=\"").append(DataHelper.escapeHTML(baseName)
-                   .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"))
-                   .append("\">").append(toSVG("torrent", "")).append("</a>").append("</th></tr>\n");
+                   .append(baseName).append("\" title=\"")
+                   .append(DataHelper.escapeHTML(baseName).replace("%20", " ").replace("%27", "\'")
+                                                          .replace("%5B", "[").replace("%5D", "]"))
+                   .append("\">");
+                   appendIcon(buf, "torrent", "", "", false, true);
+                   buf.append("</a></th></tr>\n");
 
                 long dat = meta.getCreationDate();
                 // needs locale configured for automatic translation
@@ -3996,12 +4027,12 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append(" title=\"").append(_t("Created")).append(": ").append(date).append("\"");
                 }
                 buf.append(">");
-                toThemeImg(buf, "file");
+                appendIcon(buf, "file", "", "", true, false);
                 buf.append("<b>").append(_t("Size")).append(":</b> ").append(formatSize(snark.getTotalLength()));
                 if (storage != null) {
                     int fileCount = storage.getFileCount();
                     buf.append("</span>&nbsp;<span class=nowrap>");
-                    toThemeImg(buf, "file");
+                    appendIcon(buf, "file", "", "", true, false);
                     buf.append("<b>").append(_t("Files")).append(":</b> ").append(fileCount);
                 }
                 int pieces = snark.getPieces();
@@ -4012,7 +4043,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append(" title=\"").append(_t("Added")).append(": ").append(date).append("\"");
                 }
                 buf.append(">");
-                toThemeImg(buf, "file");
+                appendIcon(buf, "file", "", "", true, false);
                 buf.append("<b>").append(_t("Pieces")).append(":</b> ").append(pieces)
                    .append(" @ ").append(formatSize(snark.getPieceLength(0)).replace("iB", ""));
 
@@ -4034,7 +4065,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         if (rate >= 100) {
                             buf.append("</span>&nbsp;<span class=nowrap title=\"")
                                .append(_t("Average download speed for torrent")).append("\">");
-                            toThemeImg(buf, "head_rxspeed");
+                            appendIcon(buf, "head_rxspeed", "", "", true, false);
                             buf.append("<b>").append(_t("Download speed")).append(":</b> ")
                                .append(rate / 1024).append("K/s");
                        }
@@ -4043,7 +4074,8 @@ public class I2PSnarkServlet extends BasicServlet {
 
                 // up ratio
                 buf.append("</span>&nbsp;<span class=nowrap>");
-                toThemeImg(buf, "head_tx");
+                appendIcon(buf, "head_tx", "", "", true, false);
+
                 buf.append("<b>").append(_t("Share ratio")).append(":</b> ");
                 long uploaded = snark.getUploaded();
                 if (uploaded > 0) {
@@ -4059,7 +4091,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append(" title=\"").append(_t("Completed")).append(": ").append(date).append("\"");
                 }
                 buf.append(">");
-                toThemeImg(buf, "head_rx");
+                appendIcon(buf, "head_rx", "", "", true, false);
                 buf.append("<b>");
                 if (completion < 1.0) {
                     buf.append(_t("Completion")).append(":</b> ").append((new DecimalFormat("0.0%"))
@@ -4073,13 +4105,13 @@ public class I2PSnarkServlet extends BasicServlet {
                     if (needed < 0) {needed = snark.getRemainingLength();} // including skipped files, valid when not running
                     if (needed > 0) {
                        buf.append("&nbsp;<span class=nowrap>");
-                       toThemeImg(buf, "head_rx");
+                       appendIcon(buf, "head_rx", "", "", true, false);
                        buf.append("<b>").append(_t("Remaining")).append(":</b> ").append(formatSize(needed)).append("</span>");
                     }
                     long skipped = snark.getSkippedLength();
                     if (skipped > 0) {
                         buf.append("&nbsp;<span class=nowrap>");
-                        toThemeImg(buf, "head_rx");
+                        appendIcon(buf, "head_rx", "", "", true, false);
                         buf.append("<b>").append(_t("Skipped")).append(":</b> ").append(formatSize(skipped)).append("</span");
                     }
 
@@ -4090,7 +4122,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         if (dat > 0) {
                             String date = fmt.format(new Date(dat));
                             buf.append("&nbsp;<span class=nowrap>");
-                            toThemeImg(buf, "torrent");
+                            appendIcon(buf, "torrent", "", "", true, false);
                             buf.append("<b>").append(_t("Last activity")).append(":</b> ").append(date).append("</span>");
                         }
                     }
@@ -4102,7 +4134,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append("<tr id=trackers title=\"")
                        .append(_t("Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"))
                        .append("\"><td colspan=3>");
-                    toThemeImg(buf, "torrent");
+                    appendIcon(buf, "torrent", "", "", true, false);
                     buf.append("<b>").append(_t("Trackers")).append(":</b> ");
 
                     for (List<String> alist2 : alist) {
@@ -4156,7 +4188,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         buf.append("<tr id=trackers title=\"")
                            .append(_t("Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"))
                            .append("\"><td colspan=3>");
-                        toThemeImg(buf, "torrent");
+                        appendIcon(buf, "torrent", "", "", true, false);
                         buf.append("<b>").append(_t("Tracker")).append(":</b> ").append("<span class=\"info_tracker primary\">")
                            .append(getShortTrackerLink(announce, snark.getInfoHash())).append("</span> ").append("</td></tr>\n");
                         }
@@ -4172,7 +4204,7 @@ public class I2PSnarkServlet extends BasicServlet {
                     }
                     if (!wlist.isEmpty()) {
                         buf.append("<tr id=webseeds><td colspan=3>");
-                        toThemeImg(buf, "torrent");
+                        appendIcon(buf, "torrent", "", "", true, false);
                         buf.append("<b>").append(_t("Web Seeds")).append("</b>: ");
                         boolean more = false;
                         for (String s : wlist) {
@@ -4342,7 +4374,7 @@ public class I2PSnarkServlet extends BasicServlet {
             else {sort = "";}
             buf.append("<a href=\"").append(base).append(getQueryString(sort)).append("\">");
         }
-        toThemeImg(buf, "file", tx, showSort ? _t("Sort by {0}", (isTypeSort ? _t("File type") : _t("Name"))) : tx + ": " + directory);
+        appendIcon(buf, "file", tx, showSort ? _t("Sort by {0}", (isTypeSort ? _t("File type") : _t("Name"))) : tx + ": " + directory, true, false);
         if (showSort) {buf.append("</a>");}
         if (!isTopLevel) {
             buf.append("&nbsp;").append(DataHelper.escapeHTML(directory.substring(dirSlash + 1)));
@@ -4353,7 +4385,7 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("<a href=\"").append(base).append(getQueryString(sort)).append("\">");
         }
         tx = _t("Size");
-        toThemeImg(buf, "size", tx, showSort ? _t("Sort by {0}", tx) : tx);
+        appendIcon(buf, "size", tx, showSort ? _t("Sort by {0}", tx) : tx, true, false);
         if (showSort) {buf.append("</a>");}
         buf.append("</th><th class=fileStatus>");
         boolean showRemainingSort = showSort && showPriority;
@@ -4363,7 +4395,7 @@ public class I2PSnarkServlet extends BasicServlet {
                .append(getQueryString(sort)).append("\">");
         }
         tx = _t("Download Status");
-        toThemeImg(buf, "status", tx, showRemainingSort ? _t("Sort by {0}", _t("Remaining")) : tx);
+        appendIcon(buf, "status", tx, showRemainingSort ? _t("Sort by {0}", _t("Remaining")) : tx, true, false);
         if (showRemainingSort) {buf.append("</a>");}
         if (showPriority) {
             buf.append("</th><th class=\"priority volatile\">");
@@ -4372,7 +4404,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("<a href=\"").append(base).append(getQueryString(sort)).append("\">");
             }
             tx = _t("Download Priority");
-            toThemeImg(buf, "priority", tx, showSort ? _t("Sort by {0}", tx) : tx);
+            appendIcon(buf, "priority", tx, showSort ? _t("Sort by {0}", tx) : tx, true, false);
             if (showSort) {buf.append("</a>");}
         }
         buf.append("</th></tr></thead>\n<tbody>");
@@ -4382,12 +4414,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 up = "up";
                 buf.append("<a href=\"");
                 URIUtil.encodePath(buf, addPaths(decodedBase,"../"));
-                buf.append("/").append(getQueryString(up))
-                   .append("\">")
-                   .append(toThemeSVG(up, "", ""))
-                   .append(' ')
-                   .append(_t("Up to higher level directory").replace("Up to higher level", "Parent"))
-                   .append("</a>");
+                buf.append("/").append(getQueryString(up)).append("\">");
+                appendIcon(buf, up, "", "", true, true);
+                buf.append(' ').append(_t("Up to higher level directory").replace("Up to higher level", "Parent")).append("</a>");
             }
 
             buf.append("</td><td colspan=2 class=\"ParentDir playlist\">");
@@ -4397,7 +4426,9 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (sortParam != null && !"0".equals(sortParam) && !"1".equals(sortParam)) {
                     buf.append("&amp;sort=").append(sortParam);
                 }
-                buf.append("\">").append(toSVG("playlist")).append(' ').append(_t("Audio Playlist")).append("</a>");
+                buf.append("\">");
+                appendIcon(buf, "playlist", "", _t("Audio Playlist"), false, true);
+                buf.append(' ').append(_t("Audio Playlist")).append("</a>");
             }
             buf.append("</td></tr>\n");
         }
@@ -4425,24 +4456,36 @@ public class I2PSnarkServlet extends BasicServlet {
             if (fai.isDirectory) {complete = true;}
             else {
                 if (storage == null) {
-                    // Assume complete, perhaps he removed a completed torrent but kept a bookmark
                     complete = true;
-                    status = toSVG("warn", "iconStatus", _t("Not found"), _t("Torrent not found?").replace("?", ""));
+                    StringBuilder ico = new StringBuilder();
+                    appendIcon(ico, "warn", _t("Not found"), _t("Torrent not found"), false, true);
+                    status = ico.toString();
                 } else {
                     long remaining = fai.remaining;
                     if (remaining < 0) {
                         complete = true;
-                        status = toSVG("warn", "iconStatus", _t("Unrecognized"), _t("File not found in torrent?").replace("?", ""));
+                        StringBuilder ico = new StringBuilder();
+                        appendIcon(ico, "warn", _t("Unrecognized"), _t("File not found in torrent"), false, true);
+                        status = ico.toString();
                     } else if (remaining == 0 || length <= 0) {
                         complete = true;
-                        status = toSVG("tick", "iconStatus", _t("Complete"), _t("Complete"));
+                        StringBuilder ico = new StringBuilder();
+                        appendIcon(ico, "tick", _t("Complete"), _t("Complete"), false, true);
+                        status = ico.toString();
                     } else {
                         priority = fai.priority;
-                        if (priority < 0) {status = "<div class=priorityIndicator>" + toImg("block") + "</div>";}
-                        else if (priority == 0) {status = "<div class=priorityIndicator>" + toImg("clock") + "</div>";}
-                        else {status = "<div class=priorityIndicator>" + toImg("clock_red") + "</div>";}
+                        StringBuilder ico = new StringBuilder();
+                        ico.append("<div class=priorityIndicator>");
+                        if (priority < 0) {
+                            appendIcon(buf, "block", "", "", false, false);
+                        } else if (priority == 0) {
+                            appendIcon(ico, "clock", "", "", false, false);
+                        } else {
+                            appendIcon(ico, "clock_red", "", "", false, false);
+                        }
+                        ico.append("</div>");
                         long percent = 100 * (length - remaining) / length;
-                        status +=  buildProgressBar(length, remaining, true, false, false, true);
+                        status = ico.toString() + buildProgressBar(length, remaining, true, false, false, true);
                     }
                 }
             }
@@ -4509,10 +4552,13 @@ public class I2PSnarkServlet extends BasicServlet {
                     buf.append("<img alt=\"\" width=16 height=16 class=favicon border=0 src=\"")
                        .append(ppath).append("\" data-lb data-lb-caption=\"")
                        .append(item.getName()).append("\" data-lb-group=allInDir></a>");
-                } else {buf.append(toSVG(icon, _t("Open"))).append("</a>");}
+                } else {
+                    appendIcon(buf, icon, _t("Open"), "", false, true);
+                    buf.append("</a>");
+                }
                 if (isAudio) {buf.append("</audio>");}
                 else if (isVideo) {buf.append("</video>");}
-            } else {buf.append(toSVG(icon));}
+            } else {appendIcon(buf, icon, "", "", false, true);}
             buf.append("</td><td class=\"snarkFileName");
             if (!complete) {buf.append(" volatile");}
             buf.append("\">");
@@ -4887,8 +4933,11 @@ public class I2PSnarkServlet extends BasicServlet {
                     myRating = comments.getMyRating();
                     if (myRating > 0) {
                         buf.append(_t("My Rating")).append(":</td><td colspan=2 class=commentRating>");
-                        String img = toSVG("rateme", "★", "");
-                        for (int i = 0; i < myRating; i++) {buf.append(img);}
+                        for (int i = 0; i < myRating; i++) {
+                            StringBuilder iconBuf = new StringBuilder();
+                            appendIcon(iconBuf, "rateme", "★", "", false, true);
+                            buf.append(iconBuf.toString());
+                        }
                     }
                     buf.append("</td></tr>");
                 }
@@ -4928,8 +4977,11 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (er) {
                     int rt = c.getRating();
                     if (rt > 0) {
-                        String img = toSVG("rateme", "★", "");
-                        for (int i = 0; i < rt; i++) {buf.append(img);}
+                        for (int i = 0; i < rt; i++) {
+                            StringBuilder iconBuf = new StringBuilder();
+                            appendIcon(iconBuf, "rateme", "★", "", false, true);
+                            buf.append(iconBuf.toString());
+                        }
                     }
                 }
                 buf.append("</td><td class=commentText>");
@@ -5066,186 +5118,40 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     *  Icon file in the .war. Always 16x16.
+     * Appends an <img> tag for an icon to the given StringBuilder.
      *
-     *  @param icon name without the ".png"
-     *  @since 0.7.14
+     * @param buf the StringBuilder to append to (must not be null)
+     * @param name the icon name without file extension (e.g., "magnet", "folder")
+     * @param alt the alt text (should already be HTML-escaped if needed)
+     * @param title the tooltip title (optional; if empty, no title attribute is added)
+     * @param fromTheme if true, uses the current theme's image path (_imgPath); otherwise uses the WARBASE/icons/ path
+     * @param isSvg if true, uses .svg extension; otherwise uses .png
+     * @since 0.9.68+
      */
-    private String toImg(String icon) {return toImg(icon, "");}
-
-    /**
-     *  Icon file in the .war. Always 16x16.
-     *
-     *  @param icon name without the ".png"
-     *  @since 0.8.2
-     */
-    private String toImg(String icon, String altText) {
-        return "<img alt=\"" + altText + "\" height=16 width=16 src=\"" + _contextPath + WARBASE + "icons/" + icon + ".png\">";
-    }
-
-    /**
-     *  Icon file in the .war. Always 16x16.
-     *
-     *  @param image name without the ".png"
-     *  @param altText non-null
-     *  @param titleText non-null
-     *  @since 0.9.33
-     */
-    private String toImg(String icon, String classText, String altText, String titleText) {
-        return "<img class=\"" + classText + "\" alt=\"" + altText + "\" height=16 width=16 src=" +
-                _contextPath + WARBASE + "icons/" + icon + ".png title=\"" + titleText + "\">";
+    private void appendIcon(StringBuilder buf, String name, String alt, String title, boolean fromTheme, boolean isSvg) {
+        buf.append("<img alt=\"").append(alt).append("\" src=\"");
+        if (fromTheme) {buf.append(_imgPath).append(name);}
+        else {buf.append(_contextPath).append(WARBASE).append("icons/").append(name);}
+        buf.append(isSvg ? ".svg\"" : ".png\"");
+        if (!title.isEmpty()) {buf.append(" title=\"").append(title).append("\"");}
+        buf.append(">");
     }
 
     /**
      *  Icon file (svg) in the .war. Always 16x16.
+     *  Wrapped in a tooltip span.
      *
      *  @param icon name without the ".svg"
-     *  @since 0.9.51+
-     */
-    private String toSVG(String icon) {return toSVG(icon, "");}
-
-    /**
-     *  Icon file (svg) in the .war. Always 16x16.
-     *
-     *  @param icon name without the ".svg"
-     *  @since 0.8.2
-     */
-    private String toSVG(String icon, String altText) {
-        return "<img alt=\"" + altText + "\" height=16 width=16 src=" + _contextPath + WARBASE + "icons/" + icon + ".svg>";
-    }
-
-    /**
-     *  Icon file (svg) in the .war. Always 16x16.
-     *
-     *  @param image name without the ".svg"
      *  @param altText non-null
-     *  @param titleText non-null
-     *  @since 0.9.51+
-     */
-    private String toSVG(String icon, String altText, String titleText) {
-        return "<img alt=\"" + altText + "\" height=16 width=16 src=" + _contextPath +
-                WARBASE + "icons/" + icon + ".svg title=\"" + titleText + "\">";
-    }
-
-    /**
-     *  Icon file (svg) in the .war. Always 16x16.
-     *
-     *  @param image name without the ".svg"
-     *  @param altText non-null
-     *  @param titleText non-null
+     *  @param titleText non-null (used as data-tooltip)
      *  @since 0.9.51+
      */
     private String toSVGWithDataTooltip(String icon, String altText, String titleText) {
-        return "<span class=tooltipped data-tooltip=\"" + titleText + "\"><img alt=\"" + altText +
-               "\" height=16 width=16 src=" + _contextPath + WARBASE + "icons/" + icon + ".svg></span>";
-    }
-
-    /**
-     *  Icon file (svg) in the .war.
-     *
-     *  @param image name without the ".svg"
-     *  @param altText non-null
-     *  @param titleText non-null
-     *  @since 0.9.33
-     */
-    private String toSVG(String icon, String classText, String altText, String titleText) {
-        return "<img class=\"" + classText + "\" alt=\"" + altText + "\" height=16 width=16 src=" + _contextPath +
-                WARBASE + "icons/" + icon + ".svg title=\"" + titleText + "\">";
-    }
-
-    /**
-     *  Image file in the theme.
-     *
-     *  @param image name without the ".png"
-     *  @since 0.9.16
-     */
-    private String toThemeImg(String image) {return toThemeImg(image, "", "");}
-
-    /**
-     *  Image file in the theme.
-     *
-     *  @param image name without the ".png"
-     *  @since 0.9.16
-     */
-    private void toThemeImg(StringBuilder buf, String image) {toThemeImg(buf, image, "", "");}
-
-    /**
-     *  Image file in the theme.
-     *
-     *  @param image name without the ".png"
-     *  @param altText non-null
-     *  @param titleText non-null
-     *  @since 0.9.16
-     */
-    private String toThemeImg(String image, String altText, String titleText) {
         StringBuilder buf = new StringBuilder(128);
-        toThemeImg(buf, image, altText, titleText);
+        buf.append("<span class=tooltipped data-tooltip=\"").append(titleText).append("\">");
+        appendIcon(buf, icon, altText, "", false, true); // from WARBASE, SVG, no title on img (tooltip is on span)
+        buf.append("</span>");
         return buf.toString();
-    }
-
-    /**
-     *  Image file in the theme.
-     *
-     *  @param image name without the ".png"
-     *  @param altText non-null
-     *  @param titleText non-null
-     *  @since 0.9.16
-     */
-    private void toThemeImg(StringBuilder buf, String image, String altText, String titleText) {
-        buf.append("<img alt=\"").append(altText).append("\" src=").append(_imgPath).append(image).append(".png");
-        if (titleText.length() > 0) {buf.append(" title=\"").append(titleText).append('"');}
-        buf.append('>');
-    }
-
-    /**
-     *  SVG image file in the .war
-     *
-     *  @param image name without the ".svg"
-     *  @since 0.9.51+
-     */
-    private void toSVG(StringBuilder buf, String image) {toSVG(buf, image, "", "");}
-
-    /**
-     *  SVG Image file in the .war
-     *
-     *  @param image name without the ".svg"
-     *  @param altText non-null
-     *  @param titleText non-null
-     *  @since 0.9.51 (I2P+)
-     */
-    private void toSVG(StringBuilder buf, String image, String altText, String titleText) {
-        buf.append("<img alt=\"").append(altText).append("\" src=").append(_contextPath + WARBASE)
-           .append("icons/").append(image).append(".svg");
-        if (titleText.length() > 0) {buf.append(" title=\"").append(titleText).append('"');}
-        buf.append('>');
-    }
-
-    /**
-     *  SVG Image file in the theme.
-     *
-     *  @param image name without the ".svg"
-     *  @param altText non-null
-     *  @param titleText non-null
-     *  @since 0.9.48 (I2P+)
-     */
-    private String toThemeSVG(String image, String altText, String titleText) {
-        StringBuilder buf = new StringBuilder(128);
-        toThemeSVG(buf, image, altText, titleText);
-        return buf.toString();
-    }
-
-    /**
-     *  SVG Image file in the theme.
-     *
-     *  @param image name without the ".svg"
-     *  @param altText non-null
-     *  @param titleText non-null
-     *  @since 0.9.48 (I2P+)
-     */
-    private void toThemeSVG(StringBuilder buf, String image, String altText, String titleText) {
-        buf.append("<img alt=\"").append(altText).append("\" src=").append(_imgPath).append(image).append(".svg");
-        if (titleText.length() > 0) {buf.append(" title=\"").append(titleText).append('"');}
-        buf.append('>');
     }
 
     /** @since 0.8.1 */
