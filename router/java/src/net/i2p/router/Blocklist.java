@@ -779,10 +779,12 @@ public class Blocklist {
 
         if (rv) {
             // lower log level at startup when initializing from blocklist files
-            if (source == null && _log.shouldWarn()) {
-                _log.warn("Banning " + Addresses.toString(ip) + " for duration of session -> Blocklist entry");
-            } else if (_log.shouldDebug()) {
-                _log.debug("Banning " + Addresses.toString(ip) + " for duration of session -> Source: " + source, new Exception("Source"));
+            if (_log.shouldWarn()) {
+                if (source == null) {
+                    _log.warn("Banning " + Addresses.toString(ip) + " for duration of session -> Blocklist entry");
+                } else {
+                    _log.warn("Banning " + Addresses.toString(ip) + " for duration of session -> " + source);
+                }
             }
         }
     }
@@ -1266,14 +1268,6 @@ public class Blocklist {
      *  @since 0.9.48
      */
     public synchronized int getBlocklistSize() {return _blocklistSize;}
-
-    /**
-     *  Does nothing, moved to console ConfigPeerHelper
-     *
-     *  @deprecated
-     */
-    @Deprecated
-    public void renderStatusHTML(Writer out) throws IOException {}
 
     /**
      *  Mark a string for extraction by xgettext and translation.
