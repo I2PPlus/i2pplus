@@ -2196,10 +2196,10 @@ public class I2PSnarkServlet extends BasicServlet {
     static final int MAX_DISPLAYED_FILENAME_LENGTH = 255;
     private static final int MAX_DISPLAYED_ERROR_LENGTH = 43;
 
-    private boolean snarkMatchesFilter(Snark s, String filter) {
-        if (s == null || filter == null || filter.isEmpty()) {return true;}
+    private boolean snarkMatchesFilter(Snark s, String filter, String snarkStatus) {
+        if (s == null || filter == null || filter.isEmpty()) { return true; }
+        if (snarkStatus == null) { return false; }
 
-        String snarkStatus = this.snarkStatus;
         switch (filter) {
             case "active":
                 return snarkStatus.contains("active") && !snarkStatus.contains("inactive");
@@ -2266,10 +2266,10 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         // includes skipped files, -1 for magnet mode
         long remaining = snark.getRemainingLength();
-        if (remaining > total) {remaining = total;}
+        if (remaining < 0 || remaining > total) {remaining = total;}
         // does not include skipped files, -1 for magnet mode or when not running.
         long needed = snark.getNeededLength();
-        if (needed > total) {needed = total;}
+        if (needed < 0 || needed > total) {needed = total;}
         long remainingSeconds;
         if (downBps > 0 && needed > 0) {remainingSeconds = needed / downBps;}
         else {remainingSeconds = -1;}
@@ -2287,110 +2287,13 @@ public class I2PSnarkServlet extends BasicServlet {
         filterEnabled = filterParam != null && !filterParam.equals("all") && !filterParam.equals("");
         sortParam = req.getParameter("sort");
         sortEnabled = sortParam != null && !sortParam.equals("");
-
-        String statusString;
-        StringBuilder iconBuf = new StringBuilder();
-        // add status to table rows so we can selectively show/hide snarks and style based on status
         String rowClass = (row % 2 == 0 ? "rowEven" : "rowOdd");
-        if (snark.isChecking()) {
-            (new DecimalFormat("0.00%")).format(snark.getCheckingProgress());
-            appendIcon(iconBuf, "processing", "", _t("Checking"), false, true);
-            statusString = iconBuf.toString() + "</td>" + "<td class=peerCount><b><span class=right>" +
-                           curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
-            snarkStatus = "active starting processing";
-            iconBuf.setLength(0);
-        } else if (snark.isAllocating()) {
-            appendIcon(iconBuf, "processing", "", _t("Allocating"), false, true);
-            statusString = iconBuf.toString() + "</td>" + "<td class=peerCount><b>";
-            snarkStatus = "active starting processing";
-            iconBuf.setLength(0);
-        } else if (err != null && isRunning && curPeers == 0) {
-            appendIcon(iconBuf, "error", "", err, false, true);
-            statusString = iconBuf.toString() + "</td>" + "<td class=peerCount><b><span class=right>" +
-                           curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
-            snarkStatus = "inactive downloading incomplete neterror";
-            iconBuf.setLength(0);
-        } else if (snark.isStarting()) {
-            appendIcon(iconBuf, "stalled", "", _t("Starting"), false, true);
-            statusString = iconBuf.toString() + "</td>" + "<td class=peerCount><b>";
-            snarkStatus = "active starting";
-            iconBuf.setLength(0);
-        } else if (remaining == 0 || needed == 0) { // < 0 means no meta size yet
-            // partial complete or seeding
-            if (isRunning) {
-                String img;
-                String txt;
-                String tooltip;
-                if (remaining == 0) {
-                    img = "seeding";
-                    txt = _t("Seeding");
-                    tooltip = ngettext("Seeding to {0} peer", "Seeding to {0} peers", curPeers);
-                    if (curPeers > 0 && upBps <= 0) {snarkStatus = "inactive seeding complete connected";}
-                    else if (curPeers > 0) {
-                        snarkStatus = "active seeding complete connected";
-                        img = "seeding_active";
-                    }
-                } else {
-                    // partial
-                    img = "complete";
-                    txt = _t("Complete");
-                    tooltip = txt;
-                    snarkStatus = "complete";
-                    if (curPeers > 0) {
-                        tooltip = txt + " (" + _t("Seeding to {0} of {1} peers in swarm", curPeers, knownPeers) + ")";
-                        if (upBps > 0) {snarkStatus = "active seeding complete connected";}
-                        else {snarkStatus = "inactive seeding complete connected";}
-                    }
-                }
-                if (curPeers > 0) {
-                    statusString = toSVGWithDataTooltip(img, "", tooltip) + "</td>" +
-                                   "<td class=peerCount><b><span class=right>" + curPeers +
-                                   "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
-                    if (upBps > 0) {snarkStatus = "active seeding complete connected";}
-                    else {snarkStatus = "inactive seeding complete connected";}
-                } else {
-                    statusString = toSVGWithDataTooltip(img, "", tooltip) + "</td>" +
-                                   "<td class=peerCount><b><span class=right>" + curPeers +
-                                   "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
-                    snarkStatus = "inactive seeding complete";
-                }
-            } else {
-                statusString = toSVGWithDataTooltip("complete", "", _t("Complete")) + "</td>" + "<td class=peerCount><b>‒";
-                snarkStatus = "inactive complete stopped zero";
-            }
-        } else {
-            if (isRunning && curPeers > 0 && downBps > 0) {
-                statusString = toSVGWithDataTooltip("downloading", "", _t("OK") + ", " +
-                               ngettext("Downloading from {0} peer", "Downloading from {0} peers", curPeers)) + "</td>" +
-                               "<td class=peerCount><b><span class=right>" + curPeers + "</span>" + thinsp(noThinsp) +
-                               "<span class=left>" + knownPeers + "</span>";
-                snarkStatus = "active downloading incomplete connected";
-            } else if (isRunning && curPeers > 0) {
-                statusString = toSVGWithDataTooltip("stalled", "", _t("Stalled") +
-                               " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>" +
-                               "<td class=peerCount><b><span class=right>" + curPeers + "</span>" + thinsp(noThinsp) +
-                               "<span class=left>" + knownPeers + "</span>";
-                snarkStatus = "inactive downloading incomplete connected";
-            } else if (isRunning && knownPeers > 0) {
-                statusString = toSVGWithDataTooltip("nopeers", "", _t("No Peers") +
-                               " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td>" +
-                               "<td class=peerCount><b><span class=right>0</span>" +
-                               thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
-                snarkStatus = "inactive downloading incomplete nopeers";
-            } else if (isRunning) {
-                statusString = toSVGWithDataTooltip("nopeers", "", _t("No Peers")) + "</td>" +
-                               "<td class=peerCount><b>‒";
-                snarkStatus = "inactive downloading incomplete nopeers zero";
-            } else {
-                statusString = toSVGWithDataTooltip("stopped", "", _t("Stopped")) + "</td>" +
-                               "<td class=peerCount><b>‒";
-                snarkStatus = "inactive incomplete stopped zero";
-            }
-        }
-
-    String rowStatus = (rowClass + ' ' + snarkStatus);
+        StatusResult statusResult = buildStatusString(snark, curPeers, knownPeers, downBps, upBps, isRunning, remaining, needed, noThinsp);
+        String statusString = statusResult.statusHtml;
+        String snarkStatus = statusResult.snarkStatus;
+        String rowStatus = (rowClass + ' ' + snarkStatus);
         StringBuilder buf = new StringBuilder(2*1024);
-        if (!filterEnabled || snarkMatchesFilter(snark, filterParam)) {
+        if (!filterEnabled || snarkMatchesFilter(snark, filterParam, snarkStatus)) {
             buf.append("<tr class=\"").append(rowStatus).append(" volatile\">")
                .append("<td class=status>").append(statusString).append("</b></td><td class=trackerLink>"); // link column
             if (isValid) {
@@ -2576,6 +2479,118 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
+     * Generates HTML status string and status code for a Snark based on its state and peer info.
+     * @param snark the Snark instance
+     * @param curPeers current connected peers
+     * @param knownPeers total known peers
+     * @param downBps download speed
+     * @param upBps upload speed
+     * @param isRunning running state
+     * @param remaining data left to download
+     * @param needed data needed for completion
+     * @param noThinsp spacing control flag
+     * @return StatusResult containing the status HTML and status keyword
+     * @since 0.9.68+
+    */
+    private StatusResult buildStatusString(Snark snark, int curPeers, int knownPeers,
+                                         long downBps, long upBps, boolean isRunning,
+                                         long remaining, long needed, boolean noThinsp) {
+        StringBuilder iconBuf = new StringBuilder();
+        String statusString;
+        String snarkSt = "unassigned";
+        String tooltip;
+        boolean isAllocating = snark.isAllocating();
+        boolean isChecking = snark.isChecking();
+        boolean isStarting = snark.isStarting();
+        boolean hasTrackerProblems = snark.getTrackerProblems() != null && isRunning && curPeers == 0;
+        boolean isComplete = remaining == 0 || needed == 0;
+        boolean isSeeding = isComplete && isRunning;
+        boolean isStopped = !isRunning;
+        boolean isConnected = curPeers > 0;
+        boolean isUploading = upBps > 0;
+        boolean isDownloading = downBps > 0;
+        boolean isActivelySeeding = isComplete && isRunning && isConnected && isUploading;
+
+        if (isChecking) {
+            appendIcon(iconBuf, "processing", "", _t("Checking"), false, true);
+            statusString = iconBuf.toString() + "</td><td class=peerCount><b><span class=right>" +
+                           curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+            snarkSt = "active starting processing";
+        } else if (isAllocating) {
+            appendIcon(iconBuf, "processing", "", _t("Allocating"), false, true);
+            statusString = iconBuf.toString() + "</td><td class=peerCount><b>";
+            snarkSt = "active starting processing";
+        } else if (hasTrackerProblems) {
+            tooltip = snark.getTrackerProblems();
+            appendIcon(iconBuf, "error", "", tooltip, false, true);
+            statusString = iconBuf.toString() + "</td><td class=peerCount><b><span class=right>" +
+                           curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+            snarkSt = "inactive downloading incomplete neterror";
+        } else if (isStarting) {
+            appendIcon(iconBuf, "stalled", "", _t("Starting"), false, true);
+            statusString = iconBuf.toString() + "</td><td class=peerCount><b>";
+            snarkSt = "active starting";
+        } else if (isActivelySeeding) {
+            tooltip = ngettext("Seeding to {0} peer", "Seeding to {0} peers", curPeers);
+            appendIcon(iconBuf, "seeding_active", "", tooltip, false, true);
+            statusString = iconBuf.toString() + "</td><td class=peerCount><b><span class=right>" +
+                           curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+            snarkSt = "active seeding complete connected";
+        } else if (isSeeding) {
+             tooltip = ngettext("Seeding to {0} peer in swarm", "Seeding to {0} peers in swarm", curPeers);
+             appendIcon(iconBuf, "seeding", "", tooltip, false, true);
+             snarkSt = "inactive seeding complete";
+             statusString = iconBuf.toString() + "</td><td class=peerCount><b><span class=right>" +
+                           curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+        } else if (!isRunning && isComplete) {
+                snarkSt = "inactive complete stopped";
+                statusString = toSVGWithDataTooltip("complete", "", _t("Complete")) + "</td><td class=peerCount><b>‒";
+        } else {
+            if (isRunning && isConnected && isDownloading) {
+                statusString = toSVGWithDataTooltip("downloading", "", _t("OK") + ", " +
+                               ngettext("Downloading from {0} peer", "Downloading from {0} peers", curPeers)) + "</td><td class=peerCount><b><span class=right>" +
+                               curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+                snarkSt = "active downloading incomplete connected";
+            } else if (isRunning && isConnected && !isDownloading) {
+                statusString = toSVGWithDataTooltip("stalled", "", _t("Stalled") +
+                               " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td><td class=peerCount><b><span class=right>" +
+                               curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+                snarkSt = "inactive downloading incomplete connected";
+            } else if (isRunning && knownPeers > 0) {
+                statusString = toSVGWithDataTooltip("nopeers", "", _t("No Peers") +
+                               " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td><td class=peerCount><b><span class=right>0</span>" +
+                               thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+                snarkSt = "inactive downloading incomplete nopeers";
+            } else if (isRunning) {
+                statusString = toSVGWithDataTooltip("nopeers", "", _t("No Peers")) + "</td><td class=peerCount><b><span class=right>" +
+                               curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+                snarkSt = "inactive downloading incomplete nopeers zero";
+            } else {
+                statusString = toSVGWithDataTooltip("stopped", "", _t("Stopped")) + "</td><td class=peerCount><b>‒";
+                snarkSt = "inactive incomplete stopped zero";
+            }
+        }
+        /*
+        System.out.println("Snark " + snark.getBaseName() + " status: " + snarkSt + " remaining: " + remaining +
+                           " needed: " + needed + " isRunning: " + isRunning);
+        */
+        return new StatusResult(statusString, snarkSt);
+    }
+
+    /**
+     * Encapsulates result of status building with HTML output and status keyword.
+     */
+    private static class StatusResult {
+        final String statusHtml;
+        final String snarkStatus;
+
+        StatusResult(String statusHtml, String snarkStatus) {
+            this.statusHtml = statusHtml;
+            this.snarkStatus = snarkStatus;
+        }
+    }
+
+    /**
      * Appends HTML for a single peer row to the given StringBuilder.
      *
      * @param buf the StringBuilder to append to
@@ -2598,17 +2613,24 @@ public class I2PSnarkServlet extends BasicServlet {
 
         if (!peer.isConnected()) {return;}
 
-        buf.append("<tr class=\"peerinfo ").append(snarkStatus).append(" volatile\">\n<td class=status title=\"")
-           .append(_t("Peer attached to swarm")).append("\"></td><td class=peerdata colspan=5>");
+        buf.append("<tr class=\"peerinfo ")
+           .append(snarkStatus)
+           .append(" volatile\">\n<td class=status title=\"")
+           .append(_t("Peer attached to swarm"))
+           .append("\"></td><td class=peerdata colspan=5>");
 
         PeerID pid = peer.getPeerID();
         String ch = pid != null ? pid.toString() : "????";
         if (ch.startsWith("WebSeed@")) {buf.append(ch);}
         else {
             String client = getClientName(peer);
-            buf.append("<span class=peerclient><code title=\"").append(_t("Destination (identity) of peer")).append("\">")
-               .append(peer.toString().substring(5, 9)).append("</code>&nbsp;")
-               .append("<span class=clientid>").append(client).append("</span></span>");
+            buf.append("<span class=peerclient><code title=\"")
+               .append(_t("Destination (identity) of peer"))
+               .append("\">")
+               .append(peer.toString().substring(5, 9))
+               .append("</code>&nbsp;<span class=clientid>")
+               .append(client)
+               .append("</span></span>");
         }
 
         if (t >= 5000) {
@@ -2623,7 +2645,9 @@ public class I2PSnarkServlet extends BasicServlet {
         if (isValid) {
             pct = (float) (100.0 * peer.completed() / meta.getPieces());
             if (pct >= 100.0) {
-                buf.append("<span class=peerSeed title=\"").append(_t("Seed")).append("\">");
+                buf.append("<span class=peerSeed title=\"")
+                   .append(_t("Seed"))
+                   .append("\">");
                 appendIcon(buf, "peerseed", _t("Seed"), "", false, true);
                 buf.append("</span>");
             } else {buf.append(buildProgressBar(100, (int) (100 - pct), true, false, noThinsp, false));}
@@ -2671,8 +2695,8 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append("/s</span></span>");
             } else if (peer.isInterested() && !peer.isChoking()) {
                 buf.append("<span class=\"unchoked idle\" title=\"")
-                   .append(_t("Peer is interested but currently idle")).append("\">")
-                   .append("</span>");
+                   .append(_t("Peer is interested but currently idle"))
+                   .append("\"></span>");
             } else {
                 buf.append("<span class=choked title=\"");
                 if (!peer.isInterested()) {
@@ -3882,16 +3906,11 @@ public class I2PSnarkServlet extends BasicServlet {
         String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() + slash +
                            "docs" + slash + "themes" + slash + "snark" + slash + _manager.getTheme() + slash;
         File override = new File(themeBase + "override.css");
-        String fontPath = isStandalone() ? "/i2psnark/.res/themes/fonts" : "/themes/fonts";
+        String fontPath = isStandalone() ? "/i2psnark/.res/themes/fonts/" : "/themes/fonts/";
         if (isStandalone() || useSoraFont()) {
-            buf.append("<link rel=preload href=").append(fontPath).append("/Sora.css as=style>\n")
-               .append("<link rel=preload href=").append(fontPath).append("/Sora/Sora.woff2 as=font type=font/woff2 crossorigin>\n")
-               .append("<link rel=stylesheet href=").append(fontPath).append("/Sora.css>\n");
+            buf.append("<link rel=stylesheet href=").append(fontPath).append("Sora.css>\n");
         } else {
-            buf.append("<link rel=preload href=").append(fontPath).append("OpenSans.css as=style>\n")
-               .append("<link rel=preload href=").append(fontPath)
-               .append("OpenSans/OpenSans.woff2 as=font type=font/woff2 crossorigin>\n<link rel=stylesheet href=")
-               .append(fontPath).append("OpenSans.css>\n");
+            buf.append("<link rel=stylesheet href=").append(fontPath).append("OpenSans.css>\n");
         }
         if (!isStandalone() && override.exists()) {
             buf.append(HEADER_A).append(_themePath).append(HEADER_Z).append("\n"); // optional override.css for version-persistent user edits
@@ -4587,20 +4606,22 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("<td class=\"priority volatile\">\n");
                 if (!complete && !fai.isDirectory) {
                     buf.append("<label class=priorityHigh title=\"")
-                       .append(_t("Download file at high priority")).append("\">")
-                       .append("<input type=radio class=\"optbox prihigh\" value=5 name=\"pri_")
+                       .append(_t("Download file at high priority"))
+                       .append("\"><input type=radio class=\"optbox prihigh\" value=5 name=\"pri_")
                        .append(fileIndex).append("\"");
                     if (priority > 0) {buf.append(" checked");}
-                    buf.append('>').append(_t("High")).append("</label>\n");
-                    buf.append("<label class=priorityNormal title=\"")
-                       .append(_t("Download file at normal priority")).append("\">")
-                       .append("<input type=radio class=\"optbox prinorm\" value=0 name=\"pri_")
+                    buf.append('>')
+                       .append(_t("High"))
+                       .append("</label>\n<label class=priorityNormal title=\"")
+                       .append(_t("Download file at normal priority"))
+                       .append("\"><input type=radio class=\"optbox prinorm\" value=0 name=\"pri_")
                        .append(fileIndex).append("\"");
                     if (priority == 0) {buf.append(" checked");}
-                    buf.append('>').append(_t("Normal")).append("</label>\n")
-                       .append("<label class=prioritySkip title=\"")
-                       .append(_t("Do not download this file")).append("\">")
-                       .append("<input type=radio class=\"optbox priskip\" value=-9 name=\"pri_")
+                    buf.append('>')
+                       .append(_t("Normal"))
+                       .append("</label>\n<label class=prioritySkip title=\"")
+                       .append(_t("Do not download this file"))
+                       .append("\"><input type=radio class=\"optbox priskip\" value=-9 name=\"pri_")
                        .append(fileIndex).append("\"");
                     if (priority < 0) {buf.append(" checked");}
                     buf.append('>').append(_t("Skip")).append("</label>\n");
@@ -4611,9 +4632,9 @@ public class I2PSnarkServlet extends BasicServlet {
             buf.append("</tr>\n");
         }
         if (showSaveButton) {
-            buf.append("</tbody>\n<thead><tr id=setPriority><th colspan=5>")
-               .append("<input type=submit class=accept value=\"").append(_t("Save priorities"))
-               .append("\" name=savepri>\n").append("</th></tr></thead>\n");
+            buf.append("</tbody>\n<thead><tr id=setPriority><th colspan=5><input type=submit class=accept value=\"")
+               .append(_t("Save priorities"))
+               .append("\" name=savepri>\n</th></tr></thead>\n");
         }
         buf.append("</table>\n</div>\n");
         //if (videoCount == 1) {buf.append("<script src=\"" + _resourcePath + "js/getMetadata.js?" + CoreVersion.VERSION + "\"></script>\n");}
@@ -4625,12 +4646,11 @@ public class I2PSnarkServlet extends BasicServlet {
 
         CommentSet comments = snark.getComments();
         if (er || ec) {
-            buf.append("<div class=mainsection id=commentSection>\n")
-               .append("<input hidden class=toggle_input id=toggle_comments type=checkbox");
+            buf.append("<div class=mainsection id=commentSection>\n<input hidden class=toggle_input id=toggle_comments type=checkbox");
             if (comments != null && !comments.isEmpty()) {buf.append(" checked");}
         }
-        buf.append(">\n<label id=tab_comments class=toggleview for=toggle_comments>")
-           .append("<span class=tab_label>").append(_t("Comments")).append("</span></label><hr>\n");
+        buf.append(">\n<label id=tab_comments class=toggleview for=toggle_comments><span class=tab_label>")
+           .append(_t("Comments")).append("</span></label><hr>\n");
         displayComments(snark, er, ec, esc, buf);
         // for stop/start/check
         buf.append("</div>\n");
@@ -4922,8 +4942,7 @@ public class I2PSnarkServlet extends BasicServlet {
             if (er && esc) {buf.append(_t("Rate and Comment"));}
             else if (er) {buf.append(_t("Rate Torrent"));}
             else {buf.append(_t("Add Comment"));}
-            buf.append("\" class=accept></td>");
-            buf.append("</tr>\n");
+            buf.append("\" class=accept></td></tr>\n");
         }
         if (comments != null) {
             synchronized(comments) {
@@ -4946,7 +4965,9 @@ public class I2PSnarkServlet extends BasicServlet {
                     int rcnt = comments.getRatingCount();
                     if (rcnt > 0) {
                         double avg = comments.getAverageRating();
-                        buf.append(_t("Average Rating")).append(":</td><td colspan=2>").append((new DecimalFormat("0.0")).format(avg));
+                        buf.append(_t("Average Rating"))
+                           .append(":</td><td colspan=2>")
+                           .append((new DecimalFormat("0.0")).format(avg));
                     } else {
                         buf.append(_t("Average Rating")).append(":</td><td colspan=2>");
                         buf.append(_t("No community ratings currently available"));
@@ -4998,8 +5019,7 @@ public class I2PSnarkServlet extends BasicServlet {
                 buf.append("</td></tr>\n");
             }
             if (esc && ccount > 0) {
-                buf.append("<tr id=commentDeleteAction><td colspan=4 class=commentAction>")
-                   .append("<input type=submit name=deleteComments value=\"")
+                buf.append("<tr id=commentDeleteAction><td colspan=4 class=commentAction><input type=submit name=deleteComments value=\"")
                    .append(_t("Delete Selected"))
                    .append("\" class=delete></td></tr>\n");
             }
@@ -5042,78 +5062,51 @@ public class I2PSnarkServlet extends BasicServlet {
         String mime = getMimeType(path);
         if (mime == null) {mime = "";}
         if (mime.equals("text/html") || plc.endsWith(".jsp") || plc.endsWith(".url")) {icon = "html";}
-
         else if (plc.endsWith(".srt")) {icon = "srt";}
-
         else if (mime.equals("text/plain") || mime.equals("text/x-sfv") ||
                  mime.equals("application/rtf") || plc.endsWith(".md") ||
                  plc.endsWith(".ini") || plc.endsWith(".nfo")) {icon = "text";}
-
         else if (mime.equals("application/epub+zip") ||
                  mime.equals("application/x-mobipocket-ebook") ||
                  plc.endsWith(".fb2") || plc.endsWith(".azw3") ||
                  plc.endsWith(".azw4") || plc.endsWith(".prc")) {icon = "ebook";}
-
         else if (mime.equals("application/x-jar") || mime.equals("application/x-java-archive") ||
                  mime.equals("application/java-archive") || plc.endsWith(".jar") || plc.endsWith(".exe")) {
             if (plc.contains("i2pinstall") && plc.contains("+")) {icon = "plus";}
             else if (plc.contains("i2pinstall")) {icon = "i2p";}
             else if (plc.endsWith(".exe")) {icon = "windows";}
             else {icon = "package";}
-        }
-
-        else if (mime.equals("application/java-archive") || plc.endsWith(".deb") ||
+        } else if (mime.equals("application/java-archive") || plc.endsWith(".deb") ||
                  plc.endsWith(".rpm") || plc.endsWith(".flatpak") || plc.endsWith(".snap") ||
                  plc.endsWith(".appimage")) {icon = "package";}
-
         else if (plc.endsWith(".xpi2p")) {icon = "plugin";}
-
         else if (mime.equals("application/pdf")) {icon = "pdf";}
-
         else if (mime.startsWith("image/")) {icon = "image";}
-
         else if (mime.startsWith("audio/") || mime.equals("application/ogg")) {icon = "audio";}
-
         else if (mime.startsWith("video/")) {icon = "video";}
-
         else if (mime.startsWith("font/") || plc.endsWith(".ttf") ||
                  plc.endsWith(".woff") || plc.endsWith(".woff2")) {icon = "font";}
-
         else if (mime.equals("application/zip")) {
             if (plc.endsWith(".su3") || plc.endsWith(".su2")) {icon = "i2p";}
             else {icon = "compress";}
-        }
-
-        else if (mime.equals("application/x-rar-compressed")) {icon = "rar";}
-
+        } else if (mime.equals("application/x-rar-compressed")) {icon = "rar";}
         else if (mime.equals("application/x-gtar") || mime.equals("application/x-tar") ||
                  plc.endsWith(".txz") || plc.endsWith(".tgz")) {icon = "tar";}
-
         else if (mime.equals("application/x-xz") || mime.equals("application/compress") ||
                  mime.equals("application/gzip") || mime.equals("application/x-7z-compressed") ||
                  mime.equals("application/x-bzip2")) {icon = "compress";}
-
         else if (plc.endsWith(".bin")) {icon = "app";}
-
         else if (plc.endsWith(".bat") || plc.endsWith(".dll")) {icon = "windows";}
-
         else if (plc.endsWith(".dmg")) {icon = "apple";}
-
         else if (plc.endsWith(".iso") || plc.endsWith(".nrg")) {icon = "cd";}
-
         else if (plc.endsWith(".sh")) {icon = "shell";}
-
         else if (plc.contains(".css.") || plc.endsWith(".css") || plc.endsWith(".js") ||
                  plc.endsWith(".cgi") || plc.endsWith(".pl") || plc.endsWith(".py") ||
                  plc.endsWith(".php") || plc.endsWith(".h") || plc.endsWith(".cpp") ||
                  plc.endsWith(".json")) {icon = "code";}
-
         else if (plc.endsWith(".md5") || plc.contains("shasum")) {icon = "hash";}
-
         else if (mime.equals("application/x-bittorrent")) {icon = "magnet";}
-
         else {icon = "generic";}
-
         return icon;
     }
 
@@ -5245,15 +5238,24 @@ public class I2PSnarkServlet extends BasicServlet {
         }
         if (announce != null) {annlist.add(announce);}
         if (!annlist.isEmpty()) {
-            buf.append("<tr class=header><th>").append(_t("Active Trackers")).append("</th>")
-               .append("<th>").append(_t("Announce URL")).append("</th><th>")
-               .append(_t("Primary")).append("</th><th id=remove>").append(_t("Delete")).append("</th></tr>\n");
+            buf.append("<tr class=header><th>")
+               .append(_t("Active Trackers"))
+               .append("</th><th>")
+               .append(_t("Announce URL"))
+               .append("</th><th>")
+               .append(_t("Primary"))
+               .append("</th><th id=remove>")
+               .append(_t("Delete"))
+               .append("</th></tr>\n");
             for (String s : annlist) {
                 String hc = Integer.toString(s.hashCode());
                 buf.append("<tr><td>");
                 s = DataHelper.stripHTML(s);
-                buf.append("<span class=info_tracker>").append(getShortTrackerLink(s, snark.getInfoHash())).append("</span>")
-                   .append("</td><td>").append(s).append("</td><td>");
+                buf.append("<span class=info_tracker>")
+                   .append(getShortTrackerLink(s, snark.getInfoHash()))
+                   .append("</span></td><td>")
+                   .append(s)
+                   .append("</td><td>");
                 if (hc != null) {
                     buf.append("<input type=radio class=optbox name=primary");
                     if (s.equals(announce)) {buf.append(" checked ");}
@@ -5303,21 +5305,20 @@ public class I2PSnarkServlet extends BasicServlet {
         String com = meta.getComment();
         if (com == null) {com = "";}
         else if (com.length() > 0) {com = DataHelper.escapeHTML(com);}
-        buf.append("<tr class=header><th colspan=4>").append(_t("Torrent Comment")).append("</th></tr>\n")
-           .append("<tr><td colspan=4 id=addCommentText><textarea name=nofilter_newTorrentComment cols=88 rows=4");
+        buf.append("<tr class=header><th colspan=4>")
+           .append(_t("Torrent Comment"))
+           .append("</th></tr>\n<tr><td colspan=4 id=addCommentText><textarea name=nofilter_newTorrentComment cols=88 rows=4");
         if (isRunning) {buf.append(" readonly");}
-        buf.append(">").append(com).append("</textarea></td>").append("</tr>\n");
+        buf.append(">").append(com).append("</textarea></td></tr>\n");
         if (isRunning) {
             buf.append("<tfoot><tr><td colspan=4><span id=stopfirst>")
                .append(_t("Torrent must be stopped in order to edit"))
                .append("</span></td></tr></tfoot>\n</table>\n</div>\n");
             return;
         } else {
-            buf.append("<tfoot><tr><td colspan=4>")
-               .append("<input type=submit name=editTorrent value=\"")
+            buf.append("<tfoot><tr><td colspan=4><input type=submit name=editTorrent value=\"")
                .append(_t("Save Changes"))
-               .append("\" class=accept></td></tr></tfoot>\n")
-               .append("</table>\n</div>\n");
+               .append("\" class=accept></td></tr></tfoot>\n</table>\n</div>\n");
         }
     }
 
