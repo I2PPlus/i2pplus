@@ -204,34 +204,55 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      */
     private void doGetAndPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.setCharacterEncoding("UTF-8"); // Set request encoding early
+        // Get HTTP method and servlet path
         String method = req.getMethod(); // since we are not overriding handle*(), do this here
         String path = req.getServletPath(); // this is the part after /i2psnark
-        String csp = "default-src 'self'; base-uri 'self'; connect-src 'self'; worker-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; ";
-        if (path.contains(".js")) {resp.setHeader("Content-Security-Policy", csp);}
 
-        // in-war icons etc.
+        // Set Content Security Policy header for JS requests
+        String csp = "default-src 'self'; base-uri 'self'; connect-src 'self'; worker-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; ";
+        if (path.contains(".js")) {
+            resp.setHeader("Content-Security-Policy", csp);
+        }
+
+        // Handle static resource under WARBASE only supporting GET/HEAD
         if (path != null && path.startsWith(WARBASE)) {
-            if (method.equals("GET") || method.equals("HEAD")) {super.doGet(req, resp);}
-            else {resp.sendError(405);} // no POST either
+            if ("GET".equals(method) || "HEAD".equals(method)) {
+                super.doGet(req, resp);
+            } else {
+                resp.sendError(405); // no POST either
+            }
             return;
         }
 
-        if (_context.isRouterContext()) {_themePath = "/themes/snark/" + _manager.getTheme() + '/';}
-        else {_themePath = _contextPath + WARBASE + "themes/snark/" + _manager.getTheme() + '/';}
-        _imgPath = _themePath + "images/";
-        req.setCharacterEncoding("UTF-8");
+        // Cache theme once for reuse
+        String theme = _manager.getTheme();
 
-        String pOverride = _manager.util().connected() ? null : "";
+        // Cache theme and image paths
+        if (_context.isRouterContext()) {
+            _themePath = "/themes/snark/" + theme + '/';
+        } else {
+            _themePath = _contextPath + WARBASE + "themes/snark/" + theme + '/';
+        }
+        _imgPath = _themePath + "images/";
+
+        // Cache connected status and related parameters
+        boolean isConnected = _manager.util().connected();
+        String pOverride = isConnected ? null : "";
         String peerString = getQueryString(req, pOverride, null, null, "");
         String jsPfx = _context.isRouterContext() ? "" : ".res";
+
+        PrintWriter out = resp.getWriter();
+        boolean isConfigure = path.endsWith("/configure");
 
         // AJAX for mainsection
         if ("/.ajax/xhr1.html".equals(path)) {
             setXHRHeaders(resp, cspNonce, false);
-            PrintWriter out = resp.getWriter();
-            out.write("<!DOCTYPE HTML>\n<html>\n<body id=snarkxhr>\n<div id=mainsection>\n");
             boolean canWrite;
-            synchronized(this) {canWrite = _resourceBase.canWrite();}
+            synchronized (this) {
+                canWrite = _resourceBase.canWrite();
+            }
+            out.write("<!DOCTYPE HTML>\n<html>\n<body id=snarkxhr>\n<div id=mainsection>\n");
             writeTorrents(out, req, canWrite);
             out.write("\n</div>\n</body>\n</html>\n");
             out.flush();
@@ -241,113 +262,125 @@ public class I2PSnarkServlet extends BasicServlet {
         // AJAX for screenlog
         if ("/.ajax/xhrscreenlog.html".equals(path)) {
             setXHRHeaders(resp, cspNonce, false);
-            PrintWriter out = resp.getWriter();
-            out.write("<!DOCTYPE HTML>\n<html>\n<body id=snarkxhrlogs>\n");
-            writeMessages(out, false, peerString);
             boolean canWrite;
-            synchronized(this) {canWrite = _resourceBase.canWrite();}
+            synchronized (this) {
+                canWrite = _resourceBase.canWrite();
+            }
+            out.write("<!DOCTYPE HTML>\n<html>\n<body id=snarkxhrlogs>\n");
+            writeMessages(out, isConfigure, peerString);
             out.write("</body>\n</html>\n");
             out.flush();
             return;
         }
 
-        boolean isConfigure = path.endsWith("/configure");
-        boolean isIndex = (path.isEmpty() || "/".equals(path) || path.equals("index.jsp"));
-        // index.jsp doesn't work, it is grabbed by the war handler before here
-        if (!(isIndex || path.equals("/index.html") || path.equals("/_post") || isConfigure)) {
+        boolean isIndex = (path.isEmpty() || "/".equals(path) || "index.jsp".equals(path));
+
+        // Handle non index, configure, or known special paths
+        if (!(isIndex || "/index.html".equals(path) || "/_post".equals(path) || isConfigure)) {
             if (path.endsWith("/")) {
-                // Listing of a torrent (torrent detail page)
-                // bypass the horrid Resource.getListHTML()
                 String pathInfo = req.getPathInfo();
                 String pathInContext = addPaths(path, pathInfo);
                 File resource = getResource(pathInContext);
-                if (resource == null) {resp.sendError(404);}
-                else if (req.getParameter("playlist") != null) {
+                if (resource == null) {
+                    resp.sendError(404);
+                    return;
+                }
+                if (req.getParameter("playlist") != null) {
                     String base = addPaths(req.getRequestURI(), "/");
                     String listing = getPlaylist(req.getRequestURL().toString(), base, req.getParameter("sort"));
                     if (listing != null) {
                         setHTMLHeaders(resp, cspNonce, false);
-                        // TODO custom name
                         resp.setContentType("audio/mpegurl; charset=UTF-8; name=\"playlist.m3u\"");
                         resp.addHeader("Content-Disposition", "attachment; filename=\"playlist.m3u\"");
                         resp.getWriter().write(listing);
-                    } else {resp.sendError(404);}
+                        return;
+                    } else {
+                        resp.sendError(404);
+                        return;
+                    }
                 } else {
                     String base = addPaths(req.getRequestURI(), "/");
                     String listing = getListHTML(resource, base, true,
-                                                 method.equals("POST") ? req.getParameterMap() : null,
-                                                 req.getParameter("sort"));
-                    if (method.equals("POST")) {sendRedirect(req, resp, "");} // P-R-G
-                    else if (listing != null) {
+                        "POST".equals(method) ? req.getParameterMap() : null,
+                        req.getParameter("sort"));
+                    if ("POST".equals(method)) {
+                        sendRedirect(req, resp, ""); // POST-Redirect-GET
+                        return;
+                    } else if (listing != null) {
                         setHTMLHeaders(resp, cspNonce, true);
                         resp.getWriter().write(listing);
-                    } else {resp.sendError(404);} // shouldn't happen
+                        return;
+                    } else {
+                        resp.sendError(404);
+                        return;
+                    }
                 }
             } else {
-                // local completed files in torrent directories
-                if (method.equals("GET") || method.equals("HEAD")) {super.doGet(req, resp);}
-                else if (method.equals("POST")) {super.doPost(req, resp);}
-                else {resp.sendError(405);}
+                if ("GET".equals(method) || "HEAD".equals(method)) {
+                    super.doGet(req, resp);
+                } else if ("POST".equals(method)) {
+                    super.doPost(req, resp);
+                } else {
+                    resp.sendError(405);
+                }
+                return;
             }
-            return;
         }
 
-        // Either the main page or /configure
-
         setHTMLHeaders(resp, cspNonce, true);
+
         String nonce = req.getParameter("nonce");
         if (nonce != null) {
-            // the clear messages button is a GET
-            if ((method.equals("POST") || "Clear".equals(req.getParameter("action"))) &&
-                nonce.equals(String.valueOf(_nonce))) {processRequest(req);}
-            else {_manager.addMessage("Please retry form submission (bad nonce)");} // nonce is constant, shouldn't happen
-            // P-R-G (or G-R-G to hide the params from the address bar)
+            if (( "POST".equals(method) || "Clear".equals(req.getParameter("action"))) &&
+                nonce.equals(String.valueOf(_nonce))) {
+                processRequest(req);
+            } else {
+                _manager.addMessage("Please retry form submission (bad nonce)");
+            }
             sendRedirect(req, resp, peerString);
             return;
         }
 
+        // Cache panel and utility flags
         boolean noCollapse = noCollapsePanels(req);
         boolean collapsePanels = _manager.util().collapsePanels();
         boolean showStatusFilter = _manager.util().showStatusFilter();
+
         setHTMLHeaders(resp, cspNonce, false);
-        PrintWriter out = resp.getWriter();
-        StringBuilder buf = new StringBuilder(4*1024);
-        String theme = _manager.getTheme();
+        StringBuilder buf = new StringBuilder(16 * 1024);
+
+        // Determine page background color based on theme
         String pageBackground = "#fff";
-        String preload;
+        if ("dark".equals(theme)) {
+            pageBackground = "#000";
+        } else if ("midnight".equals(theme)) {
+            pageBackground = "#001";
+        } else if ("ubergine".equals(theme)) {
+            pageBackground = "#101";
+        } else if ("vanilla".equals(theme)) {
+            pageBackground = "#cab39b";
+        }
         _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
 
-        if (theme.equals("dark")) {pageBackground = "#000";}
-        else if (theme.equals("midnight")) {pageBackground = "#001";}
-        else if (theme.equals("ubergine")) {pageBackground = "#101";}
-        else if (theme.equals("vanilla")) {pageBackground = "#cab39b";}
         buf.append(DOCTYPE).append("<html").append(isStandalone() ? " class=standalone" : "")
-           .append(" style=\"background:").append(pageBackground).append("\">\n")
-           .append("<head>\n").append("<meta charset=utf-8>\n")
-           .append("<meta name=viewport content=\"width=device-width, initial-scale=1\">\n")
+           .append(" style=\"background:").append(pageBackground).append("\">\n<head>\n")
+           .append("<meta charset=utf-8>\n<meta name=viewport content=\"width=device-width, initial-scale=1\">\n")
            .append("<script nonce=").append(cspNonce).append(">const theme = \"").append(theme).append("\";</script>\n");
 
         if (!isConfigure && !isStandalone()) {
-            preload =
-               "<link rel=modulepreload href=/js/iframeResizer/updatedEvent.js>\n" +
-               "<link rel=modulepreload href=/js/iframeResizer/iframeResizer.contentWindow.js>\n" +
-               "<link rel=modulepreload href=/js/setupIframe.js>\n" +
-               "<link rel=modulepreload href=" + _resourcePath + "js/tunnelCounter.js>\n";
-            buf.append(preload);
+            buf.append("<link rel=modulepreload href=/js/iframeResizer/updatedEvent.js>\n")
+               .append("<link rel=modulepreload href=/js/iframeResizer/iframeResizer.contentWindow.js>\n")
+               .append("<link rel=modulepreload href=/js/setupIframe.js>\n")
+               .append("<link rel=modulepreload href=").append(_resourcePath).append("js/tunnelCounter.js>\n");
         }
-
         if (!isConfigure) {
-            preload =
-                "<link rel=modulepreload href=" + _resourcePath + "js/refreshTorrents.js>\n" +
-                "<link rel=modulepreload href=" + _resourcePath + "js/snarkSort.js>\n" +
-                "<link rel=modulepreload href=" + _resourcePath + "js/toggleLinks.js>\n" +
-                "<link rel=modulepreload href=" + _resourcePath + "js/toggleLog.js>\n";
-            buf.append(preload);
+            buf.append("<link rel=modulepreload href=").append(_resourcePath).append("js/refreshTorrents.js>\n")
+               .append("<link rel=modulepreload href=").append(_resourcePath).append("js/snarkSort.js>\n")
+               .append("<link rel=modulepreload href=").append(_resourcePath).append("js/toggleLinks.js>\n")
+               .append("<link rel=modulepreload href=").append(_resourcePath).append("js/toggleLog.js>\n");
             if (showStatusFilter) {
-                preload =
-                    "<link rel=modulepreload href=" + _resourcePath + "js/filterBar.js>\n" +
-                    "<link rel=modulepreload href=" + _resourcePath + "js/setFilterQuery.js>\n";
-                buf.append(preload);
+                buf.append("<link rel=modulepreload href=").append(_resourcePath).append("js/filterBar.js>\n")
+                   .append("<link rel=modulepreload href=").append(_resourcePath).append("js/setFilterQuery.js>\n");
             }
             if (isIndex) {
                 buf.append("<script src=/i2psnark/.res/js/click.js type=module></script>\n")
@@ -358,189 +391,197 @@ public class I2PSnarkServlet extends BasicServlet {
         String v = CoreVersion.VERSION;
         String fontPath = isStandalone() ? "/i2psnark/.res/themes/fonts" : "/themes/fonts";
         String displayFont = isStandalone() || useSoraFont() ? "Sora" : "OpenSans";
-        String fontCss =
-            "<link rel=preload href=" + fontPath + "/" + displayFont + ".css as=style>\n" +
-            "<link rel=preload href=" + fontPath + "/" + displayFont + "/" + displayFont + ".woff2 as=font type=font/woff2 crossorigin>\n" +
-            "<link rel=stylesheet href=" + fontPath + "/" + displayFont + ".css>\n";
-        buf.append(fontCss)
+        buf.append("<link rel=preload href=").append(fontPath).append("/").append(displayFont).append(".css as=style>\n")
+           .append("<link rel=preload href=").append(fontPath).append("/").append(displayFont).append("/").append(displayFont)
+           .append(".woff2 as=font type=font/woff2 crossorigin>\n")
+           .append("<link rel=stylesheet href=").append(fontPath).append("/").append(displayFont).append(".css>\n")
            .append("<link rel=preload href=\"").append(_themePath).append("snark.css?").append(v).append("\" as=style>\n")
            .append("<link rel=preload href=\"").append(_themePath).append("images/images.css?").append(v).append("\" as=style>\n")
            .append("<link rel=\"shortcut icon\" href=\"").append(_contextPath).append(WARBASE).append("icons/favicon.svg\">\n")
            .append("<title>");
-        if (_contextName.equals(DEFAULT_NAME)) {buf.append(_t("I2PSnark"));}
-        else {buf.append(_contextName);}
-        buf.append(" - ");
-        if (isConfigure) {buf.append(_t("Configuration"));}
-        else {buf.append(_t("Anonymous BitTorrent Client"));}
-        buf.append("</title>\n");
+        buf.append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName)
+           .append(" - ")
+           .append(isConfigure ? _t("Configuration") : _t("Anonymous BitTorrent Client"))
+           .append("</title>\n");
 
         int delay = _manager.getRefreshDelaySeconds();
         String pageSize = String.valueOf(_manager.getPageSize());
-        String script;
 
         if (!isConfigure) {
-            script =
-                "<script nonce=" + cspNonce + ">\n" +
-                "  const deleteMsg = \"" + _t("Are you sure you want to delete {0} and all downloaded data?") + "\";\n" +
-                "  const postDeleteMsg = \"" + _t("Deleting <b>{0}</b> and all associated data...") + "\";\n" +
-                "  const removeMsg = \"" + _t("Are you sure you want to delete torrent file {0} and associated metadata?") + "\";\n" +
-                "  const removeMsg2 = \"" + _t("Note: Downloaded data will not be deleted.") + "\";\n" +
-                "  const postRemoveMsg = \"" + _t("Deleting {0} and associated metadata only...") + "\";\n" +
-                "  const snarkPageSize = " +  pageSize + ";\n" +
-                "  const snarkRefreshDelay = " + delay + ";\n" +
-                "  const totalSnarks = " + _manager.listTorrentFiles().size() + ";\n" +
-                "  window.snarkPageSize = snarkPageSize;\n" +
-                "  window.snarkRefreshDelay = snarkRefreshDelay;\n" +
-                "  window.totalSnarks = totalSnarks;\n</script>\n" +
-                "<script src=" + _resourcePath + "js/snarkWork.js type=module></script>\n" +
-                "<script src=" + _resourcePath + "js/messageTypes.js type=module></script>\n";
-            buf.append(script);
-
+            buf.append("<script nonce=").append(cspNonce).append(">\n")
+               .append("  const deleteMsg = \"").append(_t("Are you sure you want to delete {0} and all downloaded data?")).append("\";\n")
+               .append("  const postDeleteMsg = \"").append(_t("Deleting <b>{0}</b> and all associated data...")).append("\";\n")
+               .append("  const removeMsg = \"").append(_t("Are you sure you want to delete torrent file {0} and associated metadata?")).append("\";\n")
+               .append("  const removeMsg2 = \"").append(_t("Note: Downloaded data will not be deleted.")).append("\";\n")
+               .append("  const postRemoveMsg = \"").append(_t("Deleting {0} and associated metadata only...")).append("\";\n")
+               .append("  const snarkPageSize = ").append(pageSize).append(";\n")
+               .append("  const snarkRefreshDelay = ").append(delay).append(";\n")
+               .append("  const totalSnarks = ").append(_manager.listTorrentFiles().size()).append(";\n")
+               .append("  window.snarkPageSize = snarkPageSize;\n")
+               .append("  window.snarkRefreshDelay = snarkRefreshDelay;\n")
+               .append("  window.totalSnarks = totalSnarks;\n</script>\n")
+               .append("<script src=").append(_resourcePath).append("js/snarkWork.js type=module></script>\n")
+               .append("<script src=").append(_resourcePath).append("js/messageTypes.js type=module></script>\n");
             if (!isStandalone()) {
-                script = "<script src=" + _resourcePath + "js/tunnelCounter.js type=module></script>\n";
-                buf.append(script);
+                buf.append("<script src=").append(_resourcePath).append("js/tunnelCounter.js type=module></script>\n");
             }
-
-            script =
-                "<script nonce=" + cspNonce + " type=module>\n" +
-                "  import {initSnarkRefresh} from \"" + _resourcePath + "js/refreshTorrents.js\";\n" +
-                "  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n";
-            buf.append(script);
-
+            buf.append("<script nonce=").append(cspNonce).append(" type=module>\n")
+               .append("  import {initSnarkRefresh} from \"").append(_resourcePath).append("js/refreshTorrents.js\";\n")
+               .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n");
             if (delay > 0) {
-                String downMsg = _context.isRouterContext() ? _t("Router is down") : _t("I2PSnark has stopped");
-                // fallback to metarefresh when javascript is disabled
-                script =
-                    "<noscript><meta http-equiv=refresh content=\"" + (delay < 60 ? 60 : delay) + ";" +
-                    _contextPath + "/" + peerString + "\"></noscript>\n";
-                buf.append(script);
+                buf.append("<noscript><meta http-equiv=refresh content=\"").append(delay < 60 ? 60 : delay)
+                   .append(";").append(_contextPath).append("/").append(peerString).append("\"></noscript>\n");
             }
-        } else {delay = 0;}
+        } else {
+            delay = 0;
+        }
 
-        // selected theme inserted here
+        // Append CSS assets and user overrides
         buf.append(HEADER_A).append(_themePath).append(HEADER_B).append("\n");
-        buf.append(HEADER_A).append(_themePath).append(HEADER_I).append("\n"); // load css image assets
+        buf.append(HEADER_A).append(_themePath).append(HEADER_I).append("\n");
+
         String slash = String.valueOf(java.io.File.separatorChar);
-        String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() + slash + "docs" + slash + "themes" +
-                           slash + "snark" + slash + theme + slash;
+        String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() + slash +
+                           "docs" + slash + "themes" + slash + "snark" + slash + theme + slash;
         File override = new File(themeBase + "override.css");
         int rnd = _context.random().nextInt(3);
-        if (!isStandalone() && rnd == 0 && _manager.getTheme().equals("light")) {
-            String css = "<style>#screenlog{background:url(/themes/snark/light/images/k2.webp) no-repeat right bottom," +
-                         "repeating-linear-gradient(180deg,rgba(255,255,255,.5) 2px,rgba(220,220,255,.5) 4px),var(--snarkGraph) no-repeat," +
-                         "var(--th);background-size:72px auto,100%,calc(100% - 80px) calc(100% - 4px),100%;background-position:right bottom," +
-                         "center center,left bottom,center center;background-blend-mode:multiply,overlay,luminosity,normal}</style>\n";
-            buf.append(css);
+        if (!isStandalone() && rnd == 0 && "light".equals(theme)) {
+            buf.append("<style>#screenlog{background:url(/themes/snark/light/images/k2.webp) no-repeat right bottom,")
+               .append("repeating-linear-gradient(180deg,rgba(255,255,255,.5) 2px,rgba(220,220,255,.5) 4px),")
+               .append("var(--snarkGraph) no-repeat,var(--th);background-size:72px auto,100%,")
+               .append("calc(100% - 80px) calc(100% - 4px),100%;background-position:right bottom,")
+               .append("center center,left bottom,center center;background-blend-mode:multiply,overlay,luminosity,normal}</style>\n");
         }
         if (!isStandalone() && override.exists()) {
-            buf.append(HEADER_A).append(_themePath).append(HEADER_Z).append("\n"); // optional override.css for version-persistent user edits
+            buf.append(HEADER_A).append(_themePath).append(HEADER_Z).append("\n");
         }
 
-        // larger fonts for cjk translations
-        String lang = (Translate.getLanguage(_manager.util().getContext()));
-        long now = _context.clock().now();
-        if (lang.equals("zh") || lang.equals("ja") || lang.equals("ko")) {
+        // Larger fonts for CJK languages
+        String lang = req.getParameter("lang");
+        if ("zh".equals(lang) || "ja".equals(lang) || "ko".equals(lang)) {
             buf.append(HEADER_A).append(_themePath).append(HEADER_D).append("\n");
         }
 
-        //  ...and inject CSS to display panels uncollapsed
-        if (noCollapse || !collapsePanels) {buf.append(HEADER_A).append(_themePath).append(HEADER_C).append("\n");}
-        // add placeholders for filterbar, toggleLog css
+        if (noCollapse || !collapsePanels) {
+            buf.append(HEADER_A).append(_themePath).append(HEADER_C).append("\n");
+        }
+
         buf.append("<style id=cssfilter></style>\n<style id=toggleLogCss></style>\n");
 
         if (!isStandalone()) {
-            String graph = "<style id=graphcss>:root{--snarkGraph:url('/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false" +
-                           "&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true" +
-                           "&hideGrid=true&t=" + now + "\')}\"</style>\n";
-            buf.append(graph);
+            long now = _context.clock().now();
+            buf.append("<style id=graphcss>:root{--snarkGraph:url('/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false")
+               .append("&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true")
+               .append("&hideGrid=true&t=").append(now).append("')}\"</style>\n");
         }
-        buf.append("</head>\n");
 
-        String bodyTag = "<body style=display:none;pointer-events:none id=snarkxhr class=\"" + theme + " lang_" + lang + "\">\n";
-        buf.append(bodyTag);
+        buf.append("</head>\n")
+           .append("<body style=display:none;pointer-events:none id=snarkxhr class=\"")
+           .append(theme).append(" lang_").append(lang).append("\">\n");
 
-        if (isIndex) {buf.append("<span id=toast hidden></span>\n").append(IFRAME_FORM);}
+        if (isIndex) {
+            buf.append("<span id=toast hidden></span>\n").append(IFRAME_FORM);
+        }
+
+        // Build navbar, cache trackers and filters once
         List<Tracker> sortedTrackers = null;
         List<TorrentCreateFilter> sortedFilters = null;
-        String navLink;
+
         buf.append("<div id=navbar>\n");
+
         if (isConfigure) {
-            navLink = "<a href=\"" + _contextPath + "/\" title=\"" + _t("Torrents") + "\" class=\"snarkNav nav_main\">" +
-                      (_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName) + "</a>\n";
-            buf.append(navLink);
+            buf.append("<a href=\"").append(_contextPath).append("/\" title=\"").append(_t("Torrents"))
+               .append("\" class=\"snarkNav nav_main\">").append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName)
+               .append("</a>\n");
         } else {
-            navLink = "<a href=\"" + _contextPath + '/' + peerString + "\" title=\"" + _t("Refresh page") +
-                      "\" class=\"snarkNav nav_main\">" + (_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName) + "</a>\n";
-            buf.append(navLink);
-            navLink = "<a href=\"" + _contextPath + "/configure\" class=\"snarkNav nav_config\">" + _t("Configure") + "</a>";
-            buf.append(navLink);
+            buf.append("<a href=\"").append(_contextPath).append('/').append(peerString).append("\" title=\"")
+               .append(_t("Refresh page")).append("\" class=\"snarkNav nav_main\">")
+               .append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName).append("</a>\n");
+            buf.append("<a href=\"").append(_contextPath).append("/configure\" class=\"snarkNav nav_config\">")
+               .append(_t("Configure")).append("</a>");
+
             sortedTrackers = _manager.getSortedTrackers();
             sortedFilters = _manager.getSortedTorrentCreateFilterStrings();
-            navLink = "<a href=http://discuss.i2p/ class=\"snarkNav nav_forum\" target=_blank title=\"" +
-                      _t("Torrent &amp; filesharing forum") + "\">" + _t("Forum") + "</a>";
-            buf.append(navLink);
+
+            buf.append("<a href=http://discuss.i2p/ class=\"snarkNav nav_forum\" target=_blank title=\"")
+               .append(_t("Torrent &amp; filesharing forum")).append("\">").append(_t("Forum")).append("</a>");
+
             for (Tracker t : sortedTrackers) {
-                if (t.baseURL == null || !t.baseURL.startsWith("http")) {continue;}
-                if (_manager.util().isKnownOpenTracker(t.announceURL)) {continue;}
-                navLink = "\n<a href=\"" + t.baseURL + "\" class=\"snarkNav nav_tracker\" target=_blank>" + t.name + "</a>";
-                buf.append(navLink);
+                if (t.baseURL == null || !t.baseURL.startsWith("http")) continue;
+                if (_manager.util().isKnownOpenTracker(t.announceURL)) continue;
+                buf.append("\n<a href=\"").append(t.baseURL).append("\" class=\"snarkNav nav_tracker\" target=_blank>")
+                   .append(t.name).append("</a>");
             }
-            /*
-            navLink = "\n<a href=http://btdigg.i2p/ class=\"snarkNav nav_search\" target=_blank title=\"" +
-                      _t("I2P-based search engine for clearnet-hosted torrents") + "\">" + _t("BTDigg") + "</a>";
-            buf.append(navLink);
-            */
         }
 
+        buf.append("</div>\n");
+
+        // Render search form when multiple torrents exist
         if (_manager.getTorrents().size() > 1) {
             String s = req.getParameter("search");
             boolean searchActive = (s != null && !s.equals(""));
-            String form = "<form id=snarkSearch action=\"" + _contextPath + "\" method=GET hidden>\n" +
-                          "<span id=searchwrap><input id=searchInput type=search required name=search size=20 placeholder=\"" +
-                          _t("Search torrents") + "\"" + (searchActive ? " value=\"" + DataHelper.escapeHTML(s).trim() + '"' : "") +
-                          "><a href=" + _contextPath + " title=\"" + _t("Clear search") +
-                          "\" hidden>x</a></span><input type=submit value=\"Search\">\n" + "</form>\n";
-            buf.append(form);
+            buf.append("<form id=snarkSearch action=\"").append(_contextPath).append("\" method=GET hidden>\n")
+               .append("<span id=searchwrap><input id=searchInput type=search required name=search size=20 placeholder=\"")
+               .append(_t("Search torrents")).append("\"");
+            if (searchActive) {
+                buf.append(" value=\"").append(DataHelper.escapeHTML(s.trim())).append("\"");
+            }
+            buf.append("><a href=").append(_contextPath).append(" title=\"").append(_t("Clear search"))
+               .append("\" hidden>x</a></span><input type=submit value=\"Search\">\n</form>\n");
         }
-        buf.append("</div>\n");
+
+        // Notify user about new torrent URLs in GET requests
         String newURL = req.getParameter("newURL");
-        if (newURL != null && newURL.trim().length() > 0 && req.getMethod().equals("GET")) {
+        if (newURL != null && !newURL.trim().isEmpty() && "GET".equals(method)) {
             _manager.addMessage(_t("Click \"Add torrent\" button to fetch torrent"));
         }
+
         buf.append("<div id=page>\n<div id=mainsection class=mainsection>\n");
+
+        // Output header and navigation content
         out.append(buf);
         buf.setLength(0);
         out.flush();
 
+        // Render messages area dynamically
         writeMessages(out, isConfigure, peerString);
 
         if (isConfigure) {
-            // end of mainsection div
             out.write("<div class=logshim></div>\n</div>\n");
             writeConfigForm(out, req);
             writeTorrentCreateFilterForm(out, req);
             writeTrackerForm(out, req);
-
         } else {
             boolean canWrite;
-            synchronized(this) {canWrite = _resourceBase.canWrite();}
+            synchronized (this) {
+                canWrite = _resourceBase.canWrite();
+            }
             boolean pageOne = writeTorrents(out, req, canWrite);
+
+            out.write("</div>\n"); // close mainsection div
+
             boolean enableAddCreate = _manager.util().enableAddCreate();
-            out.write("</div>\n"); // end of mainsection div
-            if (pageOne || enableAddCreate) {
-                if (canWrite) {
-                    out.write("<div id=lowersection>\n");
-                    writeAddForm(out, req);
-                    writeSeedForm(out, req, sortedTrackers, sortedFilters);
-                    out.write("</div>\n");
-                } // end of lowersection div
+
+            if ((pageOne || enableAddCreate) && canWrite) {
+                out.write("<div id=lowersection>\n");
+                writeAddForm(out, req);
+                writeSeedForm(out, req, sortedTrackers, sortedFilters);
+                out.write("</div>\n");
             }
         }
+
         String jsPath = "<script src=" + _resourcePath + "js/";
-        if (!isConfigure) {out.write(jsPath + "toggleLinks.js type=module></script>\n");}
+
+        if (!isConfigure) {
+            out.write(jsPath + "toggleLinks.js type=module></script>\n");
+        }
         out.write(jsPath + "setFilterQuery.js type=module></script>\n");
-        if (!isStandalone()) {out.write(FOOTER);}
-        else {out.write(FOOTER_STANDALONE);}
+
+        if (!isStandalone()) {
+            out.write(FOOTER);
+        } else {
+            out.write(FOOTER_STANDALONE);
+        }
         out.flush();
     }
 
@@ -645,7 +686,7 @@ public class I2PSnarkServlet extends BasicServlet {
             String x = _t("Expand");
             String s = _t("Shrink");
             mbuf.append("action=Clear&amp;id=").append(lastID).append("&amp;nonce=").append(_nonce).append("\">");
-            appendIcon(mbuf, "delete", tx, tx, true, true); // fromTheme=true, isSvg=true
+            appendIcon(mbuf, "delete", tx, tx, true, true);
             mbuf.append("</a>\n<a class=script id=expand hidden>");
             appendIcon(mbuf, "expand", x, x, true, true);
             mbuf.append("</a>\n<a class=script id=shrink hidden>");
@@ -1516,6 +1557,7 @@ public class I2PSnarkServlet extends BasicServlet {
      */
     private void renderPageNavigation(PrintWriter out, HttpServletRequest req, int start, int pageSize, int total,
                                       String filter, boolean noThinsp, boolean isForm, boolean searchActive, int searchLength) throws IOException {
+        req.setCharacterEncoding("UTF-8");
         if (isForm && total > 0 && (start > 0 || total > pageSize)) {
             if (!searchActive || (searchActive && searchLength > pageSize)) {
                 out.write("<div class=pagenavcontrols id=pagenavtop>");
@@ -2089,13 +2131,25 @@ public class I2PSnarkServlet extends BasicServlet {
      */
     private void sendRedirect(HttpServletRequest req, HttpServletResponse resp, String p) throws IOException {
         String url = req.getRequestURL().toString();
-        StringBuilder buf = new StringBuilder(128);
+        // Trim trailing "_post" if present
         if (url.endsWith("_post")) {url = url.substring(0, url.length() - 5);}
-        buf.append(url);
-        if (p.length() > 0) {buf.append(p.replace("&amp;", "&"));} // no you don't html escape the redirect header
-        resp.setHeader("Location", buf.toString());
-        resp.setStatus(303);
-        resp.getOutputStream().close();
+
+        // Validate parameter p as numeric (digits only)
+        if (p != null && !p.isEmpty()) {
+            // Remove any HTML entities &amp; before validating
+            String decodedP = p.replace("&amp;", "&");
+            // Check that decodedP only contains digits and optional query characters
+            // Example: if p is query string starting with '?', allow appropriate format
+            // For strict numeric only:
+            if (!decodedP.matches("\\d+")) {
+                // Invalid redirect parameter, reject request
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid redirect parameter");
+                return;
+            }
+            url += decodedP;
+        }
+        // Perform redirect safely
+        resp.sendRedirect(url);
     }
 
     /** @since 0.9 */
@@ -2313,6 +2367,7 @@ public class I2PSnarkServlet extends BasicServlet {
                               Snark snark, String uri, int row, long stats[], boolean showPeers,
                               boolean isDegraded, boolean noThinsp, boolean showDebug, boolean statsOnly,
                               boolean showRatios, boolean canWrite) throws IOException {
+        req.setCharacterEncoding("UTF-8");
         // stats
         long uploaded = snark.getUploaded();
         stats[0] += snark.getDownloaded();
@@ -2478,7 +2533,7 @@ public class I2PSnarkServlet extends BasicServlet {
                         buf.append("<span class=tx><span class=txBarText>").append(txPercent).append("&#8239;%")
                            .append("</span><span class=txBarInner style=\"width:calc(").append(txPercentBar)
                            .append(" - 2px)\"></span></span>");
-                    } else {buf.append("‒");}
+                    } else {buf.append("&mdash;");}
                 } else if (uploaded > 0) {
                     buf.append("<span class=tx title=\"").append(_t("Share ratio"))
                        .append(": ").append(txPercent).append("&#8239;%");
@@ -2616,7 +2671,7 @@ public class I2PSnarkServlet extends BasicServlet {
                            curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
         } else if (!isRunning && isComplete) {
                 snarkSt = "inactive complete stopped";
-                statusString = toSVGWithDataTooltip("complete", "", _t("Complete")) + "</td><td class=peerCount><b>‒";
+                statusString = toSVGWithDataTooltip("complete", "", _t("Complete")) + "</td><td class=peerCount><b>&mdash;";
         } else {
             if (isRunning && isConnected && isDownloading) {
                 statusString = toSVGWithDataTooltip("downloading", "", _t("OK") + ", " +
@@ -2638,7 +2693,7 @@ public class I2PSnarkServlet extends BasicServlet {
                                curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
                 snarkSt = "inactive downloading incomplete nopeers zero";
             } else {
-                statusString = toSVGWithDataTooltip("stopped", "", _t("Stopped")) + "</td><td class=peerCount><b>‒";
+                statusString = toSVGWithDataTooltip("stopped", "", _t("Stopped")) + "</td><td class=peerCount><b>&mdash;";
                 snarkSt = "inactive incomplete stopped zero";
             }
         }
@@ -4095,7 +4150,7 @@ public class I2PSnarkServlet extends BasicServlet {
                            .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"));
                     }
                     buf.append("\">");
-                    appendIcon(buf, "magnet", "", "", false, true);
+                    appendIcon(buf, "magnet", "", "", false, true, true);
                     buf.append("</a>");
                 }
 
@@ -4104,7 +4159,7 @@ public class I2PSnarkServlet extends BasicServlet {
                    .append(DataHelper.escapeHTML(baseName).replace("%20", " ").replace("%27", "\'")
                                                           .replace("%5B", "[").replace("%5D", "]"))
                    .append("\">");
-                   appendIcon(buf, "torrent", "", "", false, true);
+                   appendIcon(buf, "torrent", "", "", false, true, true);
                    buf.append("</a></th></tr>\n");
 
                 long dat = meta.getCreationDate();
@@ -4549,30 +4604,30 @@ public class I2PSnarkServlet extends BasicServlet {
                 if (storage == null) {
                     complete = true;
                     StringBuilder ico = new StringBuilder();
-                    appendIcon(ico, "warn", _t("Not found"), _t("Torrent not found"), false, true);
+                    appendIcon(ico, "warn", _t("Not found"), _t("Torrent not found"), false, true, true);
                     status = ico.toString();
                 } else {
                     long remaining = fai.remaining;
                     if (remaining < 0) {
                         complete = true;
                         StringBuilder ico = new StringBuilder();
-                        appendIcon(ico, "warn", _t("Unrecognized"), _t("File not found in torrent"), false, true);
+                        appendIcon(ico, "warn", _t("Unrecognized"), _t("File not found in torrent"), false, true, true);
                         status = ico.toString();
                     } else if (remaining == 0 || length <= 0) {
                         complete = true;
                         StringBuilder ico = new StringBuilder();
-                        appendIcon(ico, "tick", _t("Complete"), _t("Complete"), false, true);
+                        appendIcon(ico, "tick", _t("Complete"), _t("Complete"), false, true, true);
                         status = ico.toString();
                     } else {
                         priority = fai.priority;
                         StringBuilder ico = new StringBuilder();
                         ico.append("<div class=priorityIndicator>");
                         if (priority < 0) {
-                            appendIcon(buf, "block", "", "", false, false);
+                            appendIcon(buf, "block", "", "", false, false, true);
                         } else if (priority == 0) {
-                            appendIcon(ico, "clock", "", "", false, false);
+                            appendIcon(ico, "clock", "", "", false, false, true);
                         } else {
-                            appendIcon(ico, "clock_red", "", "", false, false);
+                            appendIcon(ico, "clock_red", "", "", false, false, true);
                         }
                         ico.append("</div>");
                         long percent = 100 * (length - remaining) / length;
@@ -5193,13 +5248,21 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param isSvg if true, uses .svg extension; otherwise uses .png
      * @since 0.9.68+
      */
-    private void appendIcon(StringBuilder buf, String name, String alt, String title, boolean fromTheme, boolean isSvg) {
-        buf.append("<img alt=\"").append(alt).append("\" src=\"");
+    private void appendIcon(StringBuilder buf, String name, String alt, String title, boolean fromTheme, boolean isSvg, boolean addDimensions) {
+        buf.append("<img").append(addDimensions ? " width=16 height=16" : "").append(" alt=\"").append(alt).append("\" src=\"");
         if (fromTheme) {buf.append(_imgPath).append(name);}
         else {buf.append(_contextPath).append(WARBASE).append("icons/").append(name);}
         buf.append(isSvg ? ".svg\"" : ".png\"");
         if (!title.isEmpty()) {buf.append(" title=\"").append(title).append("\"");}
         buf.append(">");
+    }
+
+    /**
+     * Overloaded method that defaults addDimensions to false.
+     * @since 0.9.68+
+     */
+    private void appendIcon(StringBuilder buf, String name, String alt, String title, boolean fromTheme, boolean isSvg) {
+        appendIcon(buf, name, alt, title, fromTheme, isSvg, false);
     }
 
     /**
