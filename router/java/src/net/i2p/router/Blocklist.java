@@ -779,11 +779,11 @@ public class Blocklist {
 
         if (rv) {
             // lower log level at startup when initializing from blocklist files
-            if (_log.shouldWarn()) {
+            if (_log.shouldInfo()) {
                 if (source == null) {
-                    _log.warn("Banning " + Addresses.toString(ip) + " for duration of session -> Blocklist entry");
+                    _log.info("Banning " + Addresses.toString(ip) + " for duration of session -> Blocklist entry");
                 } else {
-                    _log.warn("Banning " + Addresses.toString(ip) + " for duration of session -> " + source);
+                    _log.info("Banning " + Addresses.toString(ip) + " for duration of session -> " + source);
                 }
             }
         }
