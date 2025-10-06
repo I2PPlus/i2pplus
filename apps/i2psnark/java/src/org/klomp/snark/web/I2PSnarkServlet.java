@@ -780,6 +780,27 @@ public class I2PSnarkServlet extends BasicServlet {
         String sort = ("-2".equals(currentSort)) ? "2" : "-2";
         String ascending = "<span class=ascending></span>";
         String descending = "<span class=descending></span>";
+
+        boolean hasPeers = false;
+        boolean isDownloading = false;
+        boolean isUploading = false;
+        int activeDownloadsCount = 0;
+        int activeUploadsCount = 0;
+        int end = Math.min(start + pageSize, snarks.size());
+        for (int i = start; i < end; i++) {
+            Snark s = snarks.get(i);
+            if (s.getPeerList().size() >= 1) {
+                hasPeers = true;
+                if (s.getDownloadRate() > 0) {
+                    isDownloading = true;
+                    activeDownloadsCount++;
+                }
+                if (s.getUploadRate() > 0) {
+                    isUploading = true;
+                    activeUploadsCount++;
+                }
+            }
+        }
         if (showSort) {
             hbuf.append("<span class=sortIcon>");
             if (currentSort == null || "-2".equals(currentSort)) {
@@ -797,8 +818,6 @@ public class I2PSnarkServlet extends BasicServlet {
         if (showSort) {hbuf.append("</a></span>");}
         hbuf.append("</th><th class=peerCount>");
 
-        boolean hasPeers = false;
-        int end;
         if (_manager.util().connected() && !snarks.isEmpty()) {
             end = Math.min(start + pageSize, snarks.size());
             for (int i = start; i < end; i++) {
@@ -853,7 +872,6 @@ public class I2PSnarkServlet extends BasicServlet {
         hbuf.append("</th><th class=tName></th><th class=ETA>");
         // FIXME: only show icon when actively downloading, not uploading
         if (_manager.util().connected() && !snarks.isEmpty()) {
-            boolean isDownloading = false;
             end = Math.min(start + pageSize, snarks.size());
             for (int i = start; i < end; i++) {
                 if ((snarks.get(i).getPeerList().size() >= 1) && (snarks.get(i).getDownloadRate() > 0)) {
@@ -911,7 +929,6 @@ public class I2PSnarkServlet extends BasicServlet {
         hbuf.append("</th><th class=rateDown>");
         // FIXME only show icon when total down rate > 0
         if (_manager.util().connected() && !snarks.isEmpty()) {
-            boolean isDownloading = false;
             end = Math.min(start + pageSize, snarks.size());
             for (int i = start; i < end; i++) {
                 if ((snarks.get(i).getPeerList().size() >= 1) && (snarks.get(i).getDownloadRate() > 0)) {
@@ -973,7 +990,6 @@ public class I2PSnarkServlet extends BasicServlet {
         hbuf.append("</th>").append("<th class=rateUp>");
         // FIXME only show icon when total up rate > 0 and no choked peers
         if (_manager.util().connected() && !snarks.isEmpty()) {
-            boolean isUploading = false;
             end = Math.min(start + pageSize, snarks.size());
             for (int i = start; i < end; i++) {
                 if ((snarks.get(i).getPeerList().size() >= 1) && (snarks.get(i).getUploadRate() > 0)) {
@@ -1162,7 +1178,6 @@ public class I2PSnarkServlet extends BasicServlet {
                 ftr.append("</th>").append("<th class=txd  title=\"").append(_t("Total data uploaded (for listed torrents)")).append("\">");
                 if (stats[1] > 0) {ftr.append(formatSize(stats[1]).replaceAll("iB", ""));}
                 ftr.append("</th>").append("<th class=rateUp title=\"").append(_t("Total upload speed")).append("\">");
-                boolean isUploading = false;
                 end = snarks.size(); // show total upload speed for all torrents, displayed or otherwise
                 for (int i = start; i < end; i++) {
                     if ((snarks.get(i).getPeerList().size() >= 1) && (snarks.get(i).getUploadRate() > 0)) {
