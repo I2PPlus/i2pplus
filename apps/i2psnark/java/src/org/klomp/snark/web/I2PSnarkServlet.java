@@ -760,11 +760,19 @@ public class I2PSnarkServlet extends BasicServlet {
 
         String currentSort = req.getParameter("sort");
         String currentSearch = req.getParameter("search");
-        String filterQuery = "" + (currentSearch == null ? "" : "&search=" + currentSearch);
         String url = req.getRequestURL().toString();
         boolean hasQueryParams = req.getQueryString() != null && !req.getQueryString().isEmpty();
         String separator = hasQueryParams ? "&" : "?";
-        filterQuery = "filter=" + (filterParam == null || filterParam.isEmpty() ? "all" : filterParam);
+
+        StringBuilder fq = new StringBuilder();
+        fq.append("filter=");
+        if (filterParam == null || filterParam.isEmpty()) {fq.append("all");}
+        else {fq.append(filterParam);}
+        if (currentSearch != null && !currentSearch.isEmpty()) {
+            fq.append(separator).append("search=").append(currentSearch);
+        }
+        String filterQuery = fq.toString();
+
         boolean showSort = total > 1;
         StringBuilder hbuf = new StringBuilder(2*1024);
         hbuf.append("<tr><th class=status>");
