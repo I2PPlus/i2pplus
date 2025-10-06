@@ -444,11 +444,13 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
                     Log _log = getTunnel().getContext().logManager().getLog(I2PTunnelClientBase.class);
                     Logging log = this.l;
                     // Try to make this error sensible as it will happen...
+                    String host = getTunnel().host;
                     String portNum = getTunnel().port;
                     if (portNum == null) {portNum = Integer.toString(I2PClient.DEFAULT_LISTEN_PORT);}
+                    String hostAndPort = host + ":" + portNum;
                     String msg;
-                    if (getTunnel().getContext().isRouterContext()) {msg = "✖ Unable to build tunnels for client";}
-                    else {msg = "✖ Cannot build client tunnels: No connection to router at " + getTunnel().host + ':' + portNum;}
+                    if (getTunnel().getContext().isRouterContext()) {msg = "✖ Unable to build tunnels for client at " + hostAndPort;}
+                    else {msg = "✖ Cannot build client tunnels: No connection to router at " + hostAndPort;}
                     String exmsg = ise.getMessage();
                     boolean fail = !_buildingTunnels || (exmsg != null && exmsg.contains("session limit exceeded"));
                     if (!fail && ++retries < MAX_RETRIES) {
