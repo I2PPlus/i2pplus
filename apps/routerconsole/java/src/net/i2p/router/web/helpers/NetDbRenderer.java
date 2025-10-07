@@ -2020,7 +2020,7 @@ class NetDbRenderer {
         for (Future<String> future : futures) {
             try {fullHtml.append(future.get());}
             catch (InterruptedException e) {Thread.currentThread().interrupt();}
-            } catch (ExecutionException e) {}
+            catch (ExecutionException e) {}
         }
 
         executor.shutdown();
