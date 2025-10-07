@@ -123,7 +123,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         _rcvHeaderEncryptKey2 = rcvHdrKey2;
         _receivedMessages = new SSU2Bitfield(BITFIELD_SIZE, 0);
         _ackedMessages = new SSU2Bitfield(BITFIELD_SIZE, 0);
-        _sentMessages = new ConcurrentHashMap<Long, List<PacketBuilder.Fragment>>(512);
+        _sentMessages = new ConcurrentHashMap<Long, List<PacketBuilder.Fragment>>(32);
         _sentMessagesLastExpired = _keyEstablishedTime;
         if (isInbound) {_receivedMessages.set(0);} // Prep for immediate ack of Session Confirmed
         // ACK 0 now sent in sendAck0() below
