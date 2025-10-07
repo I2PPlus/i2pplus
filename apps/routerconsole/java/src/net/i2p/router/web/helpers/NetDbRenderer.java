@@ -19,6 +19,11 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -59,6 +64,7 @@ import net.i2p.util.Addresses;
 import net.i2p.util.ConvertToHash;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounterUnsafe;
+import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 import net.i2p.util.VersionComparator;
 
@@ -126,160 +132,199 @@ class NetDbRenderer {
      *  @param family may be null
      *  @param highPort if nonzero, a range from port to highPort inclusive
      */
-
     public void renderRouterInfoHTML(Writer out, int pageSize, int page, String routerPrefix, String version,
-                                     String country, String family, String caps, String ip, String sybil, int port,
-                                     int highPort, SigType type, EncType etype, String mtu, String ipv6, String ssucaps,
-                                     String tr, int cost, int icount) throws IOException {
-        StringBuilder buf = new StringBuilder(4*1024);
-        List<Hash> sybils = sybil != null ? new ArrayList<Hash>(128) : null;
-        NetworkDatabaseFacade netdb = _context.netDb();
+                                     String country, String family, String capabilities, String ipAddress, String sybil,
+                                     int port, int highPort, SigType signatureType, EncType encryptionType, String mtu,
+                                     String ipv6Address, String ssuCapabilities, String transport, int cost, int introducerCount) throws IOException {
+        StringBuilder buffer = new StringBuilder(4 * 1024);
+        List<Hash> sybilHashes = sybil != null ? new ArrayList<Hash>(128) : null;
+        NetworkDatabaseFacade networkDatabase = _context.netDb();
 
         if (".".equals(routerPrefix)) {
-            buf.append("<p class=infowarn><b>")
-               .append(_t("Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."))
-               .append("</b></p>\n");
-            renderRouterInfo(buf, _context.router().getRouterInfo(), true, true);
+            buffer.append("<p class=infowarn><b>")
+                  .append(_t("Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."))
+                  .append("</b></p>\n");
+            renderRouterInfo(buffer, _context.router().getRouterInfo(), true, true);
         } else if (routerPrefix != null && routerPrefix.length() >= 44) {
-            // easy way, full hash
-            byte[] h = Base64.decode(routerPrefix);
-            if (h != null && h.length == Hash.HASH_LENGTH) {
-                Hash hash = new Hash(h);
-                RouterInfo ri = (RouterInfo) netdb.lookupLocallyWithoutValidation(hash);
-                boolean banned = false;
-                if (ri == null) {
-                    LookupWaiter lw = new LookupWaiter();
-                    synchronized(lw) {
-                        netdb.lookupRouterInfo(hash, lw, lw, LOOKUP_WAIT); // remote lookup
-                        try {lw.wait(LOOKUP_WAIT);}
-                        catch (InterruptedException ie) {}
+            // Easy way, full hash
+            byte[] hashedBytes = Base64.decode(routerPrefix);
+            if (hashedBytes != null && hashedBytes.length == Hash.HASH_LENGTH) {
+                Hash hash = new Hash(hashedBytes);
+                RouterInfo routerInfo = (RouterInfo) networkDatabase.lookupLocallyWithoutValidation(hash);
+                boolean isBanned = false;
+                if (routerInfo == null) {
+                    LookupWaiter lookupWaiter = new LookupWaiter();
+                    synchronized (lookupWaiter) {
+                        networkDatabase.lookupRouterInfo(hash, lookupWaiter, lookupWaiter, LOOKUP_WAIT); // remote lookup
+                        try {
+                            lookupWaiter.wait(LOOKUP_WAIT);
+                        } catch (InterruptedException ignored) {}
                     }
                 }
-                ri = (RouterInfo) netdb.lookupLocallyWithoutValidation(hash);
-                if (ri != null) {renderRouterInfo(buf, ri, false, true);}
-                else {
-                    buf.append("<div class=netdbnotfound>").append(_t("Router")).append(' ')
-                       .append(routerPrefix).append(' ').append(banned ? _t("is banned") : _t("not found in network database"))
-                       .append(".").append("</div>");
+                routerInfo = (RouterInfo) networkDatabase.lookupLocallyWithoutValidation(hash);
+                if (routerInfo != null) {
+                    renderRouterInfo(buffer, routerInfo, false, true);
+                } else {
+                    buffer.append("<div class=netdbnotfound>").append(_t("Router")).append(' ')
+                          .append(routerPrefix).append(' ').append(isBanned ? _t("is banned") : _t("not found in network database"))
+                          .append(".").append("</div>");
                 }
             } else {
-                buf.append("<div class=netdbnotfound>").append(_t("Bad Base64 Router hash")).append(' ')
-                   .append(DataHelper.escapeHTML(routerPrefix)).append("</div>");
+                buffer.append("<div class=netdbnotfound>").append(_t("Bad Base64 Router hash")).append(' ')
+                      .append(DataHelper.escapeHTML(routerPrefix)).append("</div>");
             }
         } else {
-            StringBuilder ubuf = new StringBuilder();
-            if (routerPrefix != null) {ubuf.append("&amp;r=").append(routerPrefix);}
-            if (version != null) {ubuf.append("&amp;v=").append(version);}
-            if (country != null) {ubuf.append("&amp;c=").append(country);}
-            if (family != null) {ubuf.append("&amp;fam=").append(family);}
-            if (caps != null) {ubuf.append("&amp;caps=").append(caps);}
-            if (tr != null) {ubuf.append("&amp;tr=").append(tr);}
-            if (type != null) {ubuf.append("&amp;type=").append(type);}
-            if (etype != null) {ubuf.append("&amp;etype=").append(etype);}
-            if (ip != null) {ubuf.append("&amp;ip=").append(ip);}
-            if (port != 0) {ubuf.append("&amp;port=").append(port);}
-            if (mtu != null) {ubuf.append("&amp;mtu=").append(mtu);}
-            if (ipv6 != null) {ubuf.append("&amp;ipv6=").append(ipv6);}
-            if (ssucaps != null) {ubuf.append("&amp;ssucaps=").append(ssucaps);}
-            if (cost != 0) {ubuf.append("&amp;cost=").append(cost);}
-            if (sybil != null) {ubuf.append("&amp;sybil=").append(sybil);}
-            String itag;
-            if (icount > 0) {
-                ubuf.append("&amp;i=").append(icount);
-                itag = "itag" + (icount - 1);
-            } else {itag = null;}
-            Set<RouterInfo> routers = new HashSet<RouterInfo>();
-            routers.addAll(_context.netDb().getRouters());
+            StringBuilder urlParameters = new StringBuilder();
+            if (routerPrefix != null) { urlParameters.append("&amp;r=").append(routerPrefix); }
+            if (version != null) { urlParameters.append("&amp;v=").append(version); }
+            if (country != null) { urlParameters.append("&amp;c=").append(country); }
+            if (family != null) { urlParameters.append("&amp;fam=").append(family); }
+            if (capabilities != null) { urlParameters.append("&amp;caps=").append(capabilities); }
+            if (transport != null) { urlParameters.append("&amp;tr=").append(transport); }
+            if (signatureType != null) { urlParameters.append("&amp;type=").append(signatureType); }
+            if (encryptionType != null) { urlParameters.append("&amp;etype=").append(encryptionType); }
+            if (ipAddress != null) { urlParameters.append("&amp;ip=").append(ipAddress); }
+            if (port != 0) { urlParameters.append("&amp;port=").append(port); }
+            if (mtu != null) { urlParameters.append("&amp;mtu=").append(mtu); }
+            if (ipv6Address != null) { urlParameters.append("&amp;ipv6=").append(ipv6Address); }
+            if (ssuCapabilities != null) { urlParameters.append("&amp;ssucaps=").append(ssuCapabilities); }
+            if (cost != 0) { urlParameters.append("&amp;cost=").append(cost); }
+            if (sybil != null) { urlParameters.append("&amp;sybil=").append(sybil); }
+            String introducerTag;
+            if (introducerCount > 0) {
+                urlParameters.append("&amp;i=").append(introducerCount);
+                introducerTag = "itag" + (introducerCount - 1);
+            } else {
+                introducerTag = null;
+            }
+
+            Set<RouterInfo> routers = new HashSet<>(networkDatabase.getRouters());
+
             int ipMode = 0;
-            String ipArg = ip; // save for error message
-            String altIPv6 = null;
-            if (ip != null) {
-                if (ip.endsWith("/24")) {ipMode = 1;}
-                else if (ip.endsWith("/16")) {ipMode = 2;}
-                else if (ip.endsWith("/8")) {ipMode = 3;}
-                else if (ip.indexOf(':') > 0) {
+            String ipArg = ipAddress; // save for error message
+            String alternativeIPv6 = null;
+
+            if (ipAddress != null) {
+                if (ipAddress.endsWith("/24")) {
+                    ipMode = 1;
+                } else if (ipAddress.endsWith("/16")) {
+                    ipMode = 2;
+                } else if (ipAddress.endsWith("/8")) {
+                    ipMode = 3;
+                } else if (ipAddress.indexOf(':') > 0) {
                     ipMode = 4;
-                    if (ip.endsWith("::")) {ip = ip.substring(0, ip.length() - 1);} // truncate for prefix search
-                    else {altIPv6 = getAltIPv6(ip);} // We don't canonicalize as we search, so create alt string to check also
+                    if (ipAddress.endsWith("::")) {
+                        ipAddress = ipAddress.substring(0, ipAddress.length() - 1); // truncate for prefix search
+                    } else {
+                        alternativeIPv6 = getAltIPv6(ipAddress); // create alternative string to check also
+                    }
                 }
                 if (ipMode > 0 && ipMode < 4) {
                     for (int i = 0; i < ipMode; i++) {
-                        int last = ip.substring(0, ip.length() - 1).lastIndexOf('.');
-                        if (last > 0) {ip = ip.substring(0, last + 1);}
+                        int lastDot = ipAddress.substring(0, ipAddress.length() - 1).lastIndexOf('.');
+                        if (lastDot > 0) {
+                            ipAddress = ipAddress.substring(0, lastDot + 1);
+                        }
                     }
                 }
             }
-            if (ipv6 != null) {
-                if (ipv6.endsWith("::")) {ipv6 = ipv6.substring(0, ipv6.length() - 1);} // truncate for prefix search
-                else {altIPv6 = getAltIPv6(ipv6);} // We don't canonicalize as we search, so create alt string to check also
+            if (ipv6Address != null) {
+                if (ipv6Address.endsWith("::")) {
+                    ipv6Address = ipv6Address.substring(0, ipv6Address.length() - 1); // truncate for prefix search
+                } else {
+                    alternativeIPv6 = getAltIPv6(ipv6Address); // create alternative string to check also
+                }
             }
+
             String familyArg = family; // save for error message
-            if (family != null) {family = family.toLowerCase(Locale.US);}
-            if (routerPrefix != null && !routers.isEmpty()) {filterHashPrefix(routers, routerPrefix);}
-            if (version != null && !routers.isEmpty()) {filterVersion(routers, version);}
-            if (country != null && !routers.isEmpty()) {filterCountry(routers, country);}
-            if (caps != null && !routers.isEmpty()) {filterCaps(routers, caps);}
-            if (type != null && !routers.isEmpty()) {filterSigType(routers, type);}
-            if (etype != null && !routers.isEmpty()) {filterEncType(routers, etype);}
-            if (tr != null && !routers.isEmpty()) {filterTransport(routers, tr);}
-            if (family != null && !routers.isEmpty()) {filterFamily(routers, family);}
-            if (ip != null && !routers.isEmpty()) {
-                if (ipMode == 0) {filterIP(routers, ip);}
-                else {filterIP(routers, ip, altIPv6);}
+            if (family != null) {
+                family = family.toLowerCase(Locale.US);
             }
-            if (port != 0 && !routers.isEmpty()) {filterPort(routers, port, highPort);}
-            if (mtu != null && !routers.isEmpty()) {filterMTU(routers, mtu);}
-            if (ipv6 != null && !routers.isEmpty()) {filterIP(routers, ipv6, altIPv6);}
-            if (ssucaps != null && !routers.isEmpty()) {filterSSUCaps(routers, ssucaps);}
-            if (cost != 0 && !routers.isEmpty()) {filterCost(routers, cost);}
-            if (itag != null && !routers.isEmpty()) {filterITag(routers, itag);}
+
+            if (routerPrefix != null && !routers.isEmpty()) { filterHashPrefix(routers, routerPrefix); }
+            if (version != null && !routers.isEmpty()) { filterVersion(routers, version); }
+            if (country != null && !routers.isEmpty()) { filterCountry(routers, country); }
+            if (capabilities != null && !routers.isEmpty()) { filterCaps(routers, capabilities); }
+            if (signatureType != null && !routers.isEmpty()) { filterSigType(routers, signatureType); }
+            if (encryptionType != null && !routers.isEmpty()) { filterEncType(routers, encryptionType); }
+            if (transport != null && !routers.isEmpty()) { filterTransport(routers, transport); }
+            if (family != null && !routers.isEmpty()) { filterFamily(routers, family); }
+            if (ipAddress != null && !routers.isEmpty()) {
+                if (ipMode == 0) {
+                    filterIP(routers, ipAddress);
+                } else {
+                    filterIP(routers, ipAddress, alternativeIPv6);
+                }
+            }
+            if (port != 0 && !routers.isEmpty()) { filterPort(routers, port, highPort); }
+            if (mtu != null && !routers.isEmpty()) { filterMTU(routers, mtu); }
+            if (ipv6Address != null && !routers.isEmpty()) { filterIP(routers, ipv6Address, alternativeIPv6); }
+            if (ssuCapabilities != null && !routers.isEmpty()) { filterSSUCaps(routers, ssuCapabilities); }
+            if (cost != 0 && !routers.isEmpty()) { filterCost(routers, cost); }
+            if (introducerTag != null && !routers.isEmpty()) { filterITag(routers, introducerTag); }
 
             if (routers.isEmpty()) {
-                buf.append("<div class=netdbnotfound>");
-                buf.append(_t("No routers with")).append(' ');
-                if (routerPrefix != null) {buf.append("[").append(_t("Hash prefix")).append(' ').append(routerPrefix).append("] ");}
-                if (version != null) {buf.append("[").append(_t("Version")).append(' ').append(version).append("] ");}
-                if (country != null) {buf.append("[").append(_t("Country")).append(' ').append(country).append("] ");}
-                if (family != null) {buf.append("[").append(_t("Family")).append(' ').append(family).append("] ");}
-                if (ip != null) {buf.append("[").append("IPv4 address ").append(ipArg).append("] ");}
-                if (ipv6 != null) {buf.append("[").append("IPv6 address ").append(ipv6).append("] ");}
+                buffer.append("<div class=netdbnotfound>");
+                buffer.append(_t("No routers with")).append(' ');
+                if (routerPrefix != null) { buffer.append("[").append(_t("Hash prefix")).append(' ').append(routerPrefix).append("] "); }
+                if (version != null) { buffer.append("[").append(_t("Version")).append(' ').append(version).append("] "); }
+                if (country != null) { buffer.append("[").append(_t("Country")).append(' ').append(country).append("] "); }
+                if (family != null) { buffer.append("[").append(_t("Family")).append(' ').append(family).append("] "); }
+                if (ipAddress != null) { buffer.append("[").append("IPv4 address ").append(ipArg).append("] "); }
+                if (ipv6Address != null) { buffer.append("[").append("IPv6 address ").append(ipv6Address).append("] "); }
                 if (port != 0) {
-                    buf.append("[").append(_t("Port")).append(' ').append(port);
-                    if (highPort != 0) {buf.append('-').append(highPort);}
-                    buf.append("] ");
+                    buffer.append("[").append(_t("Port")).append(' ').append(port);
+                    if (highPort != 0) { buffer.append('-').append(highPort); }
+                    buffer.append("] ");
                 }
-                if (mtu != null) {buf.append("[").append(_t("MTU")).append(' ').append(mtu).append("] ");}
-                if (cost != 0) {buf.append("[").append("Cost ").append(cost).append("] ");}
-                if (type != null) {buf.append("[").append("Type ").append(type).append("] ");}
-                if (etype != null) {buf.append("[").append("Type ").append(etype).append("] ");}
-                if (caps != null) {buf.append("[").append("Caps ").append(caps).append("] ");}
-                if (ssucaps != null) {buf.append("[").append("SSU Caps ").append(ssucaps).append("] ");}
-                if (tr != null) {buf.append("[").append("Transport ").append(tr).append("] ");}
-                buf.append(_t("found in the network database")).append(".</div>");
+                if (mtu != null) { buffer.append("[").append(_t("MTU")).append(' ').append(mtu).append("] "); }
+                if (cost != 0) { buffer.append("[").append("Cost ").append(cost).append("] "); }
+                if (signatureType != null) { buffer.append("[").append("Type ").append(signatureType).append("] "); }
+                if (encryptionType != null) { buffer.append("[").append("Type ").append(encryptionType).append("] "); }
+                if (capabilities != null) { buffer.append("[").append("Caps ").append(capabilities).append("] "); }
+                if (ssuCapabilities != null) { buffer.append("[").append("SSU Caps ").append(ssuCapabilities).append("] "); }
+                if (transport != null) { buffer.append("[").append("Transport ").append(transport).append("] "); }
+                buffer.append(_t("found in the network database")).append(".</div>");
             } else {
-                List<RouterInfo> results = new ArrayList<RouterInfo>(routers);
-                int sz = results.size();
-                if (sz > 1) {Collections.sort(results, RouterInfoComparator.getInstance());}
-                boolean morePages = false;
+                List<RouterInfo> filteredRouters = new ArrayList<>(routers);
+                int size = filteredRouters.size();
+                if (size > 1) {
+                    Collections.sort(filteredRouters, RouterInfoComparator.getInstance());
+                }
+                boolean hasMorePages = false;
                 int toSkip = pageSize * page;
-                int last = Math.min(toSkip + pageSize, sz - 1);
-                if (last < sz - 1) {morePages = true;}
-                for (int i = toSkip; i <= last; i++) {
-                    RouterInfo ri = results.get(i);
-                    renderRouterInfo(buf, ri, false, true);
-                    if (sybil != null) {sybils.add(ri.getIdentity().getHash());}
-                    if ((i & 0x07) == 0) {
-                        out.append(buf);
-                        buf.setLength(0);
+                int lastIndex = Math.min(toSkip + pageSize, size - 1);
+                if (lastIndex < size - 1) {
+                    hasMorePages = true;
+                }
+
+                // Prepare sublist for the current page
+                List<RouterInfo> routersToRender;
+                if (toSkip > lastIndex) {
+                    routersToRender = Collections.emptyList();
+                } else {
+                    routersToRender = filteredRouters.subList(toSkip, lastIndex + 1);
+                }
+
+                // Use parallel rendering for the page's routers
+                String renderedHtml = renderRouterInfosInParallel(routersToRender, false, true);
+                buffer.append(renderedHtml);
+
+                if (sybil != null) {
+                    for (RouterInfo ri : routersToRender) {
+                        sybilHashes.add(ri.getIdentity().getHash());
                     }
                 }
-                paginate(buf, ubuf, page, pageSize, morePages, sz);
+
+                paginate(buffer, urlParameters, page, pageSize, hasMorePages, size);
             }
         }
-        out.append(buf);
+        out.append(buffer);
         out.flush();
-        if (sybil != null)
-        SybilRenderer.renderSybilHTML(out, _context, sybils, sybil);
+
+        if (sybil != null) {
+            SybilRenderer.renderSybilHTML(out, _context, sybilHashes, sybil);
+        }
     }
 
     /**
@@ -318,11 +363,11 @@ class NetDbRenderer {
     }
 
     private void renderPageSizeInput(StringBuilder buf) {
-        buf.append("<form id=pagesize hidden>\n")
-           .append("<label>").append(_t("Results per page")).append(": ")
-           .append("<input type=text name=pageSize value=\"\" maxlength=4 pattern=\"[0-9]{1,4}\"></label>\n")
-           .append("<input type=submit value=").append(_t("Update")).append(">\n")
-           .append("</form>");
+        buf.append("<form id=pagesize hidden>\n<label>")
+           .append(_t("Results per page"))
+           .append(": <input type=text name=pageSize value=\"\" maxlength=4 pattern=\"[0-9]{1,4}\"></label>\n<input type=submit value=")
+           .append(_t("Update"))
+           .append(">\n</form>");
     }
 
     /**
@@ -1138,30 +1183,24 @@ class NetDbRenderer {
         int skipped = 0;
         int written = 0;
         boolean morePages = false;
-        int chunkSize = 10;
-        int chunkCounter = 0;
 
+        List<RouterInfo> routersToRender = new ArrayList<>();
         for (RouterInfo ri : routers) {
             Hash key = ri.getIdentity().getHash();
             boolean isUs = key.equals(us);
             if (!isUs) {
-                if (showStats) {
-                    if (skipped < toSkip) {
-                        skipped++;
-                        continue;
-                    }
-                    if (written++ >= pageSize) {
-                        morePages = true;
-                        break;
-                    }
-                    renderRouterInfo(buf, ri, false, full);
-                    chunkCounter++;
-                    if (chunkCounter >= chunkSize) {
-                        out.append(buf);
-                        buf.setLength(0);
-                        chunkCounter = 0;
-                    }
+                if (skipped < toSkip) {
+                    skipped++;
+                    continue;
                 }
+                if (written >= pageSize) {
+                    morePages = true;
+                    break;
+                }
+                routersToRender.add(ri);
+                written++;
+
+                // Still count versions, countries, and transport counts as before
                 String routerVersion = ri.getOption("router.version");
                 if (routerVersion != null) { versions.increment(routerVersion); }
                 String country = _context.commSystem().getCountry(key);
@@ -1169,10 +1208,11 @@ class NetDbRenderer {
                 transportCount[classifyTransports(ri)]++;
             }
         }
-        // Flush any remaining content after loop ends
-        if (chunkCounter > 0) {
-            out.append(buf);
-            buf.setLength(0);
+
+        // Render collected routers in parallel, then write all at once
+        if (showStats) {
+            String renderedHtml = renderRouterInfosInParallel(routersToRender, false, full);
+            out.append(renderedHtml);
         }
 
         if (showStats) {
@@ -1374,6 +1414,14 @@ class NetDbRenderer {
     }
 
     /**
+     * Cache for storing reverse DNS lookups of IP addresses to hostnames.
+     *
+     * This synchronized map improves performance by avoiding redundant DNS queries
+     * for the same IP address across multiple renderRouterInfo() method calls.
+     */
+    private final Map<String, String> reverseLookupCache = Collections.synchronizedMap(new HashMap<>());
+
+    /**
      * Renders detailed router information as an HTML table fragment.
      *
      * Displays router identity, capabilities, addresses, statistics, and other metadata.
@@ -1381,60 +1429,60 @@ class NetDbRenderer {
      *
      * Assumes all displayed data is sanitized (e.g., via stripHTML) to ensure output safety.
      *
-     * @param buf   StringBuilder to append HTML output
-     * @param info  RouterInfo object containing router details to render
-     * @param isUs  true if the router is the local router, affecting display logic
-     * @param full  true to include full details, false for summary view
+     * @param buf            StringBuilder to append HTML output
+     * @param routerInfo     RouterInfo object containing router details to render
+     * @param isLocalRouter  true if the router is the local router, affecting display logic
+     * @param fullDetails    true to include full details, false for summary view
      */
-    private void renderRouterInfo(StringBuilder buf, RouterInfo info, boolean isUs, boolean full) {
-        RouterIdentity ident = info.getIdentity();
+    private void renderRouterInfo(StringBuilder buf, RouterInfo routerInfo, boolean isLocalRouter, boolean fullDetails) {
+        RouterIdentity identity = routerInfo.getIdentity();
         long uptime = _context.router().getUptime();
-        Hash h = info.getHash();
-        String hash = h.toBase64();
-        String family = info.getOption("family");
+        Hash routerHash = routerInfo.getHash();
+        String routerHashBase64 = routerHash.toBase64();
+        String family = routerInfo.getOption("family");
 
         buf.append("<table class=\"netdbentry lazy\"><tr><th>");
-        if (isUs) {
-            buf.append("<b id=our-info>").append(_t("Our info")).append(":</b></th><th><code>").append(hash)
-               .append("</code></th><th id=netdb_ourinfo>");
+        if (isLocalRouter) {
+            buf.append("<b id=our-info>").append(_t("Our info")).append(":</b></th><th><code>").append(routerHashBase64)
+                  .append("</code></th><th id=netdb_ourinfo>");
         } else {
-            buf.append("<b>").append(_t("Router")).append(":</b></th><th><code>").append(hash).append("</code></th><th>");
+            buf.append("<b>").append(_t("Router")).append(":</b></th><th><code>").append(routerHashBase64).append("</code></th><th>");
         }
-        if (_context.banlist().isBanlisted(h)) {
+        if (_context.banlist().isBanlisted(routerHash)) {
             buf.append("<a class=banlisted href=\"/profiles?f=3\" title=\"").append(_t("Router is banlisted")).append("\">Banned</a> ");
         }
-        Collection<RouterAddress> addresses = info.getAddresses();
-        boolean isJavaI2P = false;
-        boolean isI2PD = false;
-        for (RouterAddress addr : addresses) {
-            String style = addr.getTransportStyle();
-            int transportCost = addr.getCost();
-            if ((style.startsWith("SSU") && transportCost == 5) ||
-                (style.startsWith("NTCP") && transportCost == 14) && (style.startsWith("SSU") && transportCost != 15)) {
-                isJavaI2P = true;
+        Collection<RouterAddress> routerAddresses = routerInfo.getAddresses();
+        boolean isJavaI2PVariant = false;
+        boolean isI2PdVariant = false;
+        for (RouterAddress address : routerAddresses) {
+            String transportStyle = address.getTransportStyle();
+            int transportCost = address.getCost();
+            if ((transportStyle.startsWith("SSU") && transportCost == 5) ||
+                (transportStyle.startsWith("NTCP") && transportCost == 14) && (transportStyle.startsWith("SSU") && transportCost != 15)) {
+                isJavaI2PVariant = true;
                 break;
-            } else if ((style.startsWith("SSU") && transportCost == 3) || (style.startsWith("NTCP") && transportCost == 8)) {
-               isI2PD = true;
+            } else if ((transportStyle.startsWith("SSU") && transportCost == 3) || (transportStyle.startsWith("NTCP") && transportCost == 8)) {
+                isI2PdVariant = true;
             }
         }
-        if (isJavaI2P) {
+        if (isJavaI2PVariant) {
             buf.append("<span class=javai2p title=\"").append(_t("Java I2P variant")).append("\"></span> ");
-        } else if (isI2PD) {
+        } else if (isI2PdVariant) {
             buf.append("<span class=i2pd title=\"").append(_t("I2Pd variant")).append("\"></span> ");
         }
-        if (ident.isCompressible()) {
+        if (identity.isCompressible()) {
             buf.append("<span class=compressible title=\"").append(_t("RouterInfo is compressible")).append("\"></span> ");
         }
 
         // Cache stripped capabilities once
-        String strippedCaps = DataHelper.stripHTML(info.getCapabilities());
-        boolean hasD = strippedCaps.contains("D");
-        boolean hasE = strippedCaps.contains("E");
-        boolean hasG = strippedCaps.contains("G");
-        boolean isR = strippedCaps.contains("R");
-        boolean isU = strippedCaps.contains("U");
+        String strippedCapabilities = DataHelper.stripHTML(routerInfo.getCapabilities());
+        boolean hasD = strippedCapabilities.contains("D");
+        boolean hasE = strippedCapabilities.contains("E");
+        boolean hasG = strippedCapabilities.contains("G");
+        boolean isReachable = strippedCapabilities.contains("R");
+        boolean isUnreachable = strippedCapabilities.contains("U");
 
-        String capsTemp = strippedCaps
+        String processedCaps = strippedCapabilities
             .replace("XO", "X")
             .replace("PO", "P")
             .replace("Kf", "fK")
@@ -1456,110 +1504,118 @@ class NetDbRenderer {
             .replace("X", "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>");
 
         if (hasD) {
-            capsTemp = capsTemp.replace("D", "")
-                               .replace("class=tier", "class=\"tier isD\"")
-                               .replace("\"><span class", "D\"><span class");
-            if (isR) {
-                capsTemp = capsTemp.replace("caps=KD", "caps=KRD")
-                                   .replace("caps=LD", "caps=LRD")
-                                   .replace("caps=MD", "caps=MRD")
-                                   .replace("caps=ND", "caps=NRD")
-                                   .replace("caps=OD", "caps=ORD")
-                                   .replace("caps=PD", "caps=PRD")
-                                   .replace("caps=XD", "caps=XRD");
-            } else if (isU) {
-                capsTemp = capsTemp.replace("caps=KD", "caps=KUD")
-                                   .replace("caps=LD", "caps=LUD")
-                                   .replace("caps=MD", "caps=MUD")
-                                   .replace("caps=ND", "caps=NUD")
-                                   .replace("caps=OD", "caps=OUD")
-                                   .replace("caps=PD", "caps=PUD")
-                                   .replace("caps=XD", "caps=XUD");
+            processedCaps = processedCaps
+               .replace("D", "")
+               .replace("class=tier", "class=\"tier isD\"")
+               .replace("\"><span class", "D\"><span class");
+            if (isReachable) {
+                processedCaps = processedCaps
+                    .replace("caps=KD", "caps=KRD")
+                    .replace("caps=LD", "caps=LRD")
+                    .replace("caps=MD", "caps=MRD")
+                    .replace("caps=ND", "caps=NRD")
+                    .replace("caps=OD", "caps=ORD")
+                    .replace("caps=PD", "caps=PRD")
+                    .replace("caps=XD", "caps=XRD");
+            } else if (isUnreachable) {
+                processedCaps = processedCaps.replace("caps=KD", "caps=KUD")
+                    .replace("caps=LD", "caps=LUD")
+                    .replace("caps=MD", "caps=MUD")
+                    .replace("caps=ND", "caps=NUD")
+                    .replace("caps=OD", "caps=OUD")
+                    .replace("caps=PD", "caps=PUD")
+                    .replace("caps=XD", "caps=XUD");
             }
         } else if (hasE) {
-            capsTemp = capsTemp.replace("E", "")
-                               .replace("class=tier", "class=\"tier isE\"")
-                               .replace("\"><span class", "E\"><span class");
-            if (isR) {
-                capsTemp = capsTemp.replace("caps=KE", "caps=KRE")
-                                   .replace("caps=LE", "caps=LRE")
-                                   .replace("caps=ME", "caps=MRE")
-                                   .replace("caps=NE", "caps=NRE")
-                                   .replace("caps=OE", "caps=ORE")
-                                   .replace("caps=PE", "caps=PRE")
-                                   .replace("caps=XE", "caps=XRE");
-            } else if (isU) {
-                capsTemp = capsTemp.replace("caps=KE", "caps=KUE")
-                                   .replace("caps=LE", "caps=LUE")
-                                   .replace("caps=ME", "caps=MUE")
-                                   .replace("caps=NE", "caps=NUE")
-                                   .replace("caps=OE", "caps=OUE")
-                                   .replace("caps=PE", "caps=PUE")
-                                   .replace("caps=XE", "caps=XUE");
+            processedCaps = processedCaps
+               .replace("E", "")
+               .replace("class=tier", "class=\"tier isE\"")
+               .replace("\"><span class", "E\"><span class");
+            if (isReachable) {
+                processedCaps = processedCaps
+                    .replace("caps=KE", "caps=KRE")
+                    .replace("caps=LE", "caps=LRE")
+                    .replace("caps=ME", "caps=MRE")
+                    .replace("caps=NE", "caps=NRE")
+                    .replace("caps=OE", "caps=ORE")
+                    .replace("caps=PE", "caps=PRE")
+                    .replace("caps=XE", "caps=XRE");
+            } else if (isUnreachable) {
+                processedCaps = processedCaps
+                    .replace("caps=KE", "caps=KUE")
+                    .replace("caps=LE", "caps=LUE")
+                    .replace("caps=ME", "caps=MUE")
+                    .replace("caps=NE", "caps=NUE")
+                    .replace("caps=OE", "caps=OUE")
+                    .replace("caps=PE", "caps=PUE")
+                    .replace("caps=XE", "caps=XUE");
             }
         } else if (hasG) {
-            capsTemp = capsTemp.replace("G", "")
-                               .replace("class=tier", "class=\"tier isG\"")
-                               .replace("\"><span class", "G\"><span class");
-            if (isR) {
-                capsTemp = capsTemp.replace("KG", "KRG")
-                                   .replace("LG", "LRG")
-                                   .replace("MG", "MRG")
-                                   .replace("NG", "NRG")
-                                   .replace("OG", "ORG")
-                                   .replace("PG", "PRG")
-                                   .replace("XG", "XRG");
-            } else if (isU) {
-                capsTemp = capsTemp.replace("KG", "KUG")
-                                   .replace("LG", "LUG")
-                                   .replace("MG", "MUG")
-                                   .replace("NG", "NUG")
-                                   .replace("OG", "OUG")
-                                   .replace("PG", "PUG")
-                                   .replace("XG", "XUG");
+            processedCaps = processedCaps
+                .replace("G", "")
+                .replace("class=tier", "class=\"tier isG\"")
+                .replace("\"><span class", "G\"><span class");
+            if (isReachable) {
+                processedCaps = processedCaps
+                    .replace("KG", "KRG")
+                    .replace("LG", "LRG")
+                    .replace("MG", "MRG")
+                    .replace("NG", "NRG")
+                    .replace("OG", "ORG")
+                    .replace("PG", "PRG")
+                    .replace("XG", "XRG");
+            } else if (isUnreachable) {
+                processedCaps = processedCaps
+                    .replace("KG", "KUG")
+                    .replace("LG", "LUG")
+                    .replace("MG", "MUG")
+                    .replace("NG", "NUG")
+                    .replace("OG", "OUG")
+                    .replace("PG", "PUG")
+                    .replace("XG", "XUG");
             }
         }
 
         String tooltip = "\" title=\"" + _t("Show all routers with this capability in the NetDb") + "\"><span";
-        capsTemp = capsTemp.replace("\"><span", tooltip);
-        buf.append(capsTemp);
+        processedCaps = processedCaps.replace("\"><span", tooltip);
+        buf.append(processedCaps);
 
-        String strippedVersion = DataHelper.stripHTML(info.getVersion());
+        String strippedVersion = DataHelper.stripHTML(routerInfo.getVersion());
         buf.append("&nbsp;<a href=\"/netdb?v=").append(strippedVersion).append("\">")
            .append("<span class=version title=\"").append(_t("Show all routers with this version in the NetDb"))
            .append("\">").append(strippedVersion).append("</span></a>");
 
-        if (!isUs) {
+        if (!isLocalRouter) {
             buf.append("<span class=netdb_header>");
             if (family != null) {
-                FamilyKeyCrypto fkc = _context.router().getFamilyKeyCrypto();
+                FamilyKeyCrypto familyKeyCrypto = _context.router().getFamilyKeyCrypto();
                 buf.append("<a class=\"familysearch");
-                if (fkc != null) {buf.append(" verified");}
+                if (familyKeyCrypto != null) {
+                    buf.append(" verified");
+                }
                 buf.append("\" href=\"/netdb?fam=").append(DataHelper.stripHTML(family))
                    .append("\" title=\"").append(_t("Show all members of the {0} family in NetDb", DataHelper.stripHTML(family)))
                    .append("\">").append(_t("Family")).append("</a>");
             }
-            PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(info.getHash());
-            if (prof != null) {
-                buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(hash).append("\" title=\"")
+            PeerProfile profile = _context.profileOrganizer().getProfileNonblocking(routerInfo.getHash());
+            if (profile != null) {
+                buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(routerHashBase64).append("\" title=\"")
                    .append(_t("View profile")).append("\">").append(_t("Profile")).append("</a>");
             }
-            buf.append("<a class=configpeer href=\"/configpeer?peer=").append(hash)
+            buf.append("<a class=configpeer href=\"/configpeer?peer=").append(routerHashBase64)
                .append("\" title=\"").append(_t("Configure peer"))
                .append("\">").append(_t("Edit")).append("</a>")
-               .append(_context.commSystem().renderPeerFlag(h)).append("</span>");
+               .append(_context.commSystem().renderPeerFlag(routerHash)).append("</span>");
         } else {
-            long used = (long) _context.statManager().getRate("router.memoryUsed").getRate(60 * 1000).getAvgOrLifetimeAvg();
-            used /= 1024 * 1024;
-            buf.append("&nbsp;<span id=netdb_ram><b>").append(_t("Memory usage")).append(":</b> ").append(used).append("M</span>");
+            long memoryUsedBytes = (long) _context.statManager().getRate("router.memoryUsed").getRate(60 * 1000).getAvgOrLifetimeAvg();
+            long memoryUsedMegabytes = memoryUsedBytes / (1024 * 1024);
+            buf.append("&nbsp;<span id=netdb_ram><b>").append(_t("Memory usage")).append(":</b> ").append(memoryUsedMegabytes).append("M</span>");
         }
         buf.append("</th></tr>\n<tr>");
 
-        long age = _context.clock().now() - info.getPublished();
+        long age = _context.clock().now() - routerInfo.getPublished();
 
-        Map<String, String> reverseLookupCache = new HashMap<>();
-
-        if (isUs && _context.router().isHidden()) {
+        if (isLocalRouter && _context.router().isHidden()) {
             buf.append("<td><b>").append(_t("Hidden")).append(", ").append(_t("Updated")).append(":</b></td>")
                .append("<td><span class=netdb_info>")
                .append(_t("{0} ago", DataHelper.formatDuration2(age)))
@@ -1569,66 +1625,70 @@ class NetDbRenderer {
                .append(_t("{0} ago", DataHelper.formatDuration2(age)))
                .append("</span>&nbsp;&nbsp;");
 
-            String address = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(info));
-            boolean isUnreachable = capsTemp.contains("U") || capsTemp.contains("H");
-            boolean whoisLookups = _context.getBooleanProperty("routerconsole.enableWhoisLookups");
+            String primaryAddress = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(routerInfo));
+            boolean isUnreachableFlag = processedCaps.contains("U") || processedCaps.contains("H");
+            boolean enableWhoisLookups = _context.getBooleanProperty("routerconsole.enableWhoisLookups");
 
-            if (enableReverseLookups() && uptime > 30 * 1000 && !isUnreachable && address != null) {
-                String rdns;
-                if (reverseLookupCache.containsKey(address)) {
-                    rdns = reverseLookupCache.get(address);
+            if (enableReverseLookups() && uptime > 30 * 1000 && !isUnreachableFlag && primaryAddress != null) {
+                String canonicalHostname;
+                if (reverseLookupCache.containsKey(primaryAddress)) {
+                    canonicalHostname = reverseLookupCache.get(primaryAddress);
                 } else {
-                    rdns = _context.commSystem().getCanonicalHostName(address);
-                    reverseLookupCache.put(address, rdns);
+                    canonicalHostname = _context.commSystem().getCanonicalHostName(primaryAddress);
+                    reverseLookupCache.put(primaryAddress, canonicalHostname);
                 }
-                if (rdns != null && !rdns.equals(address) && !rdns.equals("unknown")) {
+                if (canonicalHostname != null && !canonicalHostname.equals(primaryAddress) && !canonicalHostname.equals("unknown")) {
                     buf.append("<span class=netdb_info><b>").append(_t("Hostname"));
-                    if (whoisLookups) {buf.append(" / ").append(_t("Whois"));}
-                    buf.append(":</b> <span class=rdns>").append(rdns).append("</span></span>&nbsp;&nbsp;");
+                    if (enableWhoisLookups) {
+                        buf.append(" / ").append(_t("Whois"));
+                    }
+                    buf.append(":</b> <span class=rdns>").append(canonicalHostname).append("</span></span>&nbsp;&nbsp;");
                 }
-            } else if (uptime > 30 * 1000 && (isUnreachable || address == null)) {
-                byte[] ip = TransportImpl.getIP(info.getHash());
-                if (ip != null) {
-                    _context.commSystem().queueLookup(ip);
-                    String directAddress = Addresses.toString(ip);
+            } else if (uptime > 30 * 1000 && (isUnreachableFlag || primaryAddress == null)) {
+                byte[] ipAddress = TransportImpl.getIP(routerInfo.getHash());
+                if (ipAddress != null) {
+                    _context.commSystem().queueLookup(ipAddress);
+                    String directAddressString = Addresses.toString(ipAddress);
                     if (enableReverseLookups()) {
-                        String rdns;
-                        if (reverseLookupCache.containsKey(directAddress)) {
-                            rdns = reverseLookupCache.get(directAddress);
+                        String canonicalHostname;
+                        if (reverseLookupCache.containsKey(directAddressString)) {
+                            canonicalHostname = reverseLookupCache.get(directAddressString);
                         } else {
-                            rdns = _context.commSystem().getCanonicalHostName(directAddress);
-                            reverseLookupCache.put(directAddress, rdns);
+                            canonicalHostname = _context.commSystem().getCanonicalHostName(directAddressString);
+                            reverseLookupCache.put(directAddressString, canonicalHostname);
                         }
-                        if (rdns != null && !rdns.equals(directAddress) && !rdns.equals("unknown")) {
+                        if (canonicalHostname != null && !canonicalHostname.equals(directAddressString) && !canonicalHostname.equals("unknown")) {
                             buf.append("<span class=netdb_info><b>").append(_t("Hostname"));
-                            if (whoisLookups) {buf.append(" / ").append(_t("Whois"));}
+                            if (enableWhoisLookups) {
+                                buf.append(" / ").append(_t("Whois"));
+                            }
                             buf.append(" (").append(_t("direct")).append(")").append(":</b> <span class=rdns>")
-                               .append(rdns).append(" (").append(directAddress).append(")</span></span>&nbsp;&nbsp;");
+                               .append(canonicalHostname).append(" (").append(directAddressString).append(")</span></span>&nbsp;&nbsp;");
                         } else {
                             buf.append("<span class=netdb_info><b>").append(_t("IP Address")).append(" (")
-                               .append(_t("direct")).append(")").append(":</b> <span class=rdns>").append(directAddress)
+                               .append(_t("direct")).append(")").append(":</b> <span class=rdns>").append(directAddressString)
                                .append("</span></span>&nbsp;&nbsp;");
                         }
                     } else {
                         buf.append("<span class=netdb_info><b>").append(_t("IP Address")).append(" (")
-                           .append(_t("direct")).append(")</b>: <span class=rdns>").append(directAddress)
+                           .append(_t("direct")).append(")</b>: <span class=rdns>").append(directAddressString)
                            .append("</span></span>&nbsp;&nbsp;");
                     }
                 }
             }
         } else {
-            // shouldn't happen
+            // Should not happen - published timestamp in the future
             buf.append("<td><b>").append(_t("Published")).append("</td><td>:</b> in ")
                .append(DataHelper.formatDuration2(0 - age)).append("<span class=netdb_info>???</span>&nbsp;&nbsp;");
         }
         if (family != null) {
-            FamilyKeyCrypto fkc = _context.router().getFamilyKeyCrypto();
+            FamilyKeyCrypto familyKeyCrypto = _context.router().getFamilyKeyCrypto();
             buf.append("<span class=\"netdb_family\"><b>").append(_t("Family"))
                .append(":</b> <span class=familyname>").append(DataHelper.stripHTML(family));
-            if (fkc != null) {
-               buf.append(" <span class=verified title=\"")
-                  .append(_t("Verified family (signing certificate is installed and valid)"))
-                  .append("\">[").append(_t("Verified")).append("]</span>");
+            if (familyKeyCrypto != null) {
+                buf.append(" <span class=verified title=\"")
+                   .append(_t("Verified family (signing certificate is installed and valid)"))
+                   .append("\">[").append(_t("Verified")).append("]</span>");
             }
             buf.append("</span></span>");
         }
@@ -1636,190 +1696,187 @@ class NetDbRenderer {
         buf.append("<span class=\"signingkey\" title=\"")
            .append(_t("Show all routers with this signature type in the NetDb"))
            .append("\"><a class=\"keysearch\" href=\"/netdb?type=")
-           .append(ident.getSigningPublicKey().getType().toString())
-           .append("\">").append(ident.getSigningPublicKey().getType().toString())
+           .append(identity.getSigningPublicKey().getType().toString())
+           .append("\">").append(identity.getSigningPublicKey().getType().toString())
            .append("</a></span>")
            .append("&nbsp;<span class=\"signingkey encryption\" title=\"")
            .append(_t("Show all routers with this encryption type in the NetDb"))
            .append("\"><a class=\"keysearch\" href=\"/netdb?etype=")
-           .append(ident.getPublicKey().getType().toString())
-           .append("\">").append(ident.getPublicKey().getType().toString())
+           .append(identity.getPublicKey().getType().toString())
+           .append("\">").append(identity.getPublicKey().getType().toString())
            .append("</a></span></td></tr>\n");
 
-        if ((full && isU) || !isU) {
+        if ((fullDetails && isUnreachable) || !isUnreachable) {
             buf.append("<tr><td><b>")
                .append(_t("Addresses"))
                .append(":</b></td><td colspan=2 class=netdb_addresses><ul>");
-            Collection<RouterAddress> addrs = info.getAddresses();
-            byte[] ip = TransportImpl.getIP(info.getHash());
-            if (addrs.isEmpty()) {
+            Collection<RouterAddress> addresses = routerInfo.getAddresses();
+            byte[] ipAddress = TransportImpl.getIP(routerInfo.getHash());
+            if (addresses.isEmpty()) {
                 buf.append(_t("n/a"));
-                if (ip != null) {
-                    _context.commSystem().queueLookup(ip);
+                if (ipAddress != null) {
+                    _context.commSystem().queueLookup(ipAddress);
                 }
             } else {
-                List<RouterAddress> laddrs = new ArrayList<>(addrs);
-                if (laddrs.size() > 1) {
-                    laddrs.sort(new RAComparator());
+                List<RouterAddress> listAddresses = new ArrayList<>(addresses);
+                if (listAddresses.size() > 1) {
+                    listAddresses.sort(new RAComparator());
                 }
                 boolean hasSSU = false;
                 boolean hasNTCP = false;
-                int itagCount = 0;
-                for (RouterAddress addr : laddrs) {
-                    String style = addr.getTransportStyle();
+                int introducerTagCount = 0;
+                for (RouterAddress address : listAddresses) {
+                    String style = address.getTransportStyle();
                     if (style.startsWith("SSU")) hasSSU = true;
                     if (style.startsWith("NTCP")) hasNTCP = true;
-                    Map<Object, Object> p = addr.getOptionsMap();
-                    for (Map.Entry<Object, Object> e : p.entrySet()) {
-                        String name = (String) e.getKey();
-                        String lowerCaseName = name.toLowerCase();
-                        if (lowerCaseName.startsWith("itag")) {
-                            itagCount++;
+                    Map<Object, Object> optionsMap = address.getOptionsMap();
+                    for (Map.Entry<Object, Object> entry : optionsMap.entrySet()) {
+                        String entryName = (String) entry.getKey();
+                        if (entryName.toLowerCase().startsWith("itag")) {
+                            introducerTagCount++;
                         }
                     }
+                }
+                if (ipAddress != null) {
+                    _context.commSystem().queueLookup(ipAddress);
                 }
                 List<String> listItems = new ArrayList<>();
                 boolean brInserted = false;
                 boolean introducersInserted = false;
-                for (RouterAddress addr : laddrs) {
-                    if (ip != null) {
-                        _context.commSystem().queueLookup(ip);
-                    }
-                    String style = addr.getTransportStyle();
-                    int cost = addr.getCost();
-                    Map<Object, Object> p = addr.getOptionsMap();
-                    List<Map.Entry<Object, Object>> netProps = new ArrayList<>();
-                    List<Map.Entry<Object, Object>> otherEntries = new ArrayList<>();
+                for (RouterAddress address : listAddresses) {
+                    String transportStyle = address.getTransportStyle();
+                    int cost = address.getCost();
+                    Map<Object, Object> optionsMap = address.getOptionsMap();
+                    List<Map.Entry<Object, Object>> networkProperties = new ArrayList<>();
+                    List<Map.Entry<Object, Object>> otherProperties = new ArrayList<>();
                     boolean hasDetails = false;
-                    for (Map.Entry<Object, Object> e : p.entrySet()) {
-                        String name = (String) e.getKey();
-                        String lowerCaseName = name.toLowerCase();
-                        if (full) {
-                            if (name.equalsIgnoreCase("host") || name.equalsIgnoreCase("port") ||
-                                name.equalsIgnoreCase("mtu") || name.equalsIgnoreCase("caps")) {
-                                netProps.add(e);
-                            } else if (!name.equalsIgnoreCase("v") &&
-                                       !lowerCaseName.startsWith("ih") &&
-                                       !lowerCaseName.startsWith("iexp") &&
-                                       !lowerCaseName.startsWith("itag")) {
-                                otherEntries.add(e);
+                    for (Map.Entry<Object, Object> entry : optionsMap.entrySet()) {
+                        String key = (String) entry.getKey();
+                        String keyLower = key.toLowerCase();
+                        if (fullDetails) {
+                            if (key.equalsIgnoreCase("host") || key.equalsIgnoreCase("port") ||
+                                key.equalsIgnoreCase("mtu") || key.equalsIgnoreCase("caps")) {
+                                networkProperties.add(entry);
+                            } else if (!key.equalsIgnoreCase("v") &&
+                                       !keyLower.startsWith("ih") &&
+                                       !keyLower.startsWith("iexp") &&
+                                       !keyLower.startsWith("itag")) {
+                                otherProperties.add(entry);
                             }
-                            if (!hasDetails && (!netProps.isEmpty() || !otherEntries.isEmpty())) {
+                            if (!hasDetails && (!networkProperties.isEmpty() || !otherProperties.isEmpty())) {
                                 hasDetails = true;
                             }
                         } else {
-                            if (name.equalsIgnoreCase("host") || name.equalsIgnoreCase("port")) {
-                                netProps.add(e);
+                            if (key.equalsIgnoreCase("host") || key.equalsIgnoreCase("port")) {
+                                networkProperties.add(entry);
                                 if (!hasDetails) {
                                     hasDetails = true;
                                 }
-                            } else {
-                                continue;
                             }
                         }
                     }
                     if (!hasDetails) continue;
                     Map.Entry<Object, Object> capsEntry = null;
                     Map.Entry<Object, Object> mtuEntry = null;
-                    Iterator<Map.Entry<Object, Object>> netPropsIterator = netProps.iterator();
+                    Iterator<Map.Entry<Object, Object>> netPropsIterator = networkProperties.iterator();
                     while (netPropsIterator.hasNext()) {
-                        Map.Entry<Object, Object> e = netPropsIterator.next();
-                        String key = (String) e.getKey();
-                        if ("caps".equals(key)) {
-                            capsEntry = e;
+                        Map.Entry<Object, Object> entry = netPropsIterator.next();
+                        String entryKey = (String) entry.getKey();
+                        if ("caps".equals(entryKey)) {
+                            capsEntry = entry;
                             netPropsIterator.remove();
-                        } else if ("mtu".equals(key)) {
-                            mtuEntry = e;
+                        } else if ("mtu".equals(entryKey)) {
+                            mtuEntry = entry;
                             netPropsIterator.remove();
                         }
                     }
-                    netProps.sort((e1, e2) -> ((String) e1.getKey()).compareTo((String) e2.getKey()));
-                    List<Map.Entry<Object, Object>> sortedProps = new ArrayList<>();
+                    networkProperties.sort((e1, e2) -> ((String) e1.getKey()).compareTo((String) e2.getKey()));
+                    List<Map.Entry<Object, Object>> sortedProperties = new ArrayList<>();
                     Set<String> seenNames = new HashSet<>();
-                    for (Map.Entry<Object, Object> e : netProps) {
-                        String name = (String) e.getKey();
+                    for (Map.Entry<Object, Object> entry : networkProperties) {
+                        String name = (String) entry.getKey();
                         if (seenNames.add(name)) {
-                            sortedProps.add(e);
+                            sortedProperties.add(entry);
                         }
                     }
-                    for (Map.Entry<Object, Object> e : otherEntries) {
-                        String name = (String) e.getKey();
+                    for (Map.Entry<Object, Object> entry : otherProperties) {
+                        String name = (String) entry.getKey();
                         if ("caps".equals(name)) {
-                            capsEntry = e;
+                            capsEntry = entry;
                         } else if ("mtu".equals(name)) {
-                            mtuEntry = e;
+                            mtuEntry = entry;
                         } else if (seenNames.add(name)) {
-                            sortedProps.add(e);
+                            sortedProperties.add(entry);
                         }
                     }
                     if (capsEntry != null) {
-                        sortedProps.add(capsEntry);
+                        sortedProperties.add(capsEntry);
                     }
                     if (mtuEntry != null) {
-                        sortedProps.add(mtuEntry);
+                        sortedProperties.add(mtuEntry);
                     }
-                    StringBuilder spans = new StringBuilder();
-                    for (Map.Entry<Object, Object> e : sortedProps) {
-                        String name = (String) e.getKey();
-                        String val = (String) e.getValue();
-                        String valStripped = DataHelper.stripHTML(val);
-                        if (name == "mtu") {
+                    StringBuilder detailsSpans = new StringBuilder();
+                    for (Map.Entry<Object, Object> entry : sortedProperties) {
+                        String name = (String) entry.getKey();
+                        String value = (String) entry.getValue();
+                        String valueStripped = DataHelper.stripHTML(value);
+                        if ("mtu".equals(name)) {
                             name = "MTU";
                         }
                         if (name.equalsIgnoreCase("host")) {
-                            spans.append("<span class=nowrap><span class=netdb_name>")
-                                 .append(_t(DataHelper.stripHTML(name))).append(":</span> ")
-                                 .append("<span class=\"netdb_info host\">");
-                            if ("::".equals(valStripped)) {
-                                spans.append(_t("n/a"));
+                            detailsSpans.append("<span class=nowrap><span class=netdb_name>")
+                                        .append(_t(DataHelper.stripHTML(name))).append(":</span> ")
+                                        .append("<span class=\"netdb_info host\">");
+                            if ("::".equals(valueStripped)) {
+                                detailsSpans.append(_t("n/a"));
                             } else {
-                                spans.append("<a title=\"").append(_t("Show all routers with this address in the NetDb")).append("\" ");
-                                if (valStripped.contains(":")) {
-                                    spans.append(" href=\"/netdb?ipv6=");
-                                    spans.append(valStripped.length() > 8 ? valStripped.substring(0, 4) : valStripped);
+                                detailsSpans.append("<a title=\"").append(_t("Show all routers with this address in the NetDb")).append("\" ");
+                                if (valueStripped.contains(":")) {
+                                    detailsSpans.append(" href=\"/netdb?ipv6=");
+                                    detailsSpans.append(valueStripped.length() > 8 ? valueStripped.substring(0, 4) : valueStripped);
                                 } else {
-                                    spans.append(" href=\"/netdb?ip=").append(valStripped);
+                                    detailsSpans.append(" href=\"/netdb?ip=").append(valueStripped);
                                 }
-                                spans.append("\">").append(valStripped).append("</a>");
+                                detailsSpans.append("\">").append(valueStripped).append("</a>");
                             }
-                            spans.append("</span></span> ");
+                            detailsSpans.append("</span></span> ");
                         } else if (name.equalsIgnoreCase("port")) {
-                            spans.append("<span class=nowrap><span class=netdb_name>")
-                                 .append(_t(DataHelper.stripHTML(name)))
-                                 .append(":</span> <span class=\"netdb_info port\"><a title=\"")
-                                 .append(_t("Show all routers with this port in the NetDb"))
-                                 .append("\" href=\"/netdb?port=")
-                                 .append(valStripped)
-                                 .append("\">").append(valStripped).append("</a></span></span> ");
+                            detailsSpans.append("<span class=nowrap><span class=netdb_name>")
+                                        .append(_t(DataHelper.stripHTML(name)))
+                                        .append(":</span> <span class=\"netdb_info port\"><a title=\"")
+                                        .append(_t("Show all routers with this port in the NetDb"))
+                                        .append("\" href=\"/netdb?port=")
+                                        .append(valueStripped)
+                                        .append("\">").append(valueStripped).append("</a></span></span> ");
                         } else {
-                            spans.append("<span class=nowrap><span class=netdb_name>")
-                                 .append(_t(DataHelper.stripHTML(name)))
-                                 .append(":</span> <span class=netdb_info>")
-                                 .append(valStripped).append("</span></span> ");
+                            detailsSpans.append("<span class=nowrap><span class=netdb_name>")
+                                        .append(_t(DataHelper.stripHTML(name)))
+                                        .append(":</span> <span class=netdb_info>")
+                                        .append(valueStripped).append("</span></span> ");
                         }
                     }
-                    if (spans.length() > 0) {
-                        StringBuilder li = new StringBuilder();
-                        li.append("<li>");
-                        li.append("<b class=\"netdb_transport\"");
-                        if (!((style.equals("SSU") && cost == 5) || (style.startsWith("NTCP") && cost == 10))) {
-                            li.append(" title=\"").append(_t("Cost")).append(": ").append(cost).append("\"");
+                    if (detailsSpans.length() > 0) {
+                        StringBuilder listItem = new StringBuilder();
+                        listItem.append("<li>");
+                        listItem.append("<b class=\"netdb_transport\"");
+                        if (!((transportStyle.equals("SSU") && cost == 5) || (transportStyle.startsWith("NTCP") && cost == 10))) {
+                            listItem.append(" title=\"").append(_t("Cost")).append(": ").append(cost).append("\"");
                         }
-                        li.append(">").append(DataHelper.stripHTML(style).replace("2", "")).append("</b> ");
-                        li.append(spans.toString());
-                        if (full && isU && !introducersInserted && style.startsWith("SSU") && itagCount > 0) {
-                            li.append("<span class=nowrap><span class=netdb_name>").append(_t("Introducers"))
-                              .append(":</span> <span class=netdb_info>").append(itagCount).append("</span></span>");
+                        listItem.append(">").append(DataHelper.stripHTML(transportStyle).replace("2", "")).append("</b> ");
+                        listItem.append(detailsSpans.toString());
+                        if (fullDetails && isUnreachable && !introducersInserted && transportStyle.startsWith("SSU") && introducerTagCount > 0) {
+                            listItem.append("<span class=nowrap><span class=netdb_name>").append(_t("Introducers"))
+                                    .append(":</span> <span class=netdb_info>").append(introducerTagCount).append("</span></span>");
                             introducersInserted = true;
                         }
-                        li.append("</li>");
-                        if (full && hasNTCP && hasSSU && !brInserted) {
-                            if (style.startsWith("SSU")) {
+                        listItem.append("</li>");
+                        if (fullDetails && hasNTCP && hasSSU && !brInserted) {
+                            if (transportStyle.startsWith("SSU")) {
                                 listItems.add("<br>");
                                 brInserted = true;
                             }
                         }
-                        listItems.add(li.toString());
+                        listItems.add(listItem.toString());
                     }
                 }
                 for (String item : listItems) {
@@ -1828,28 +1885,30 @@ class NetDbRenderer {
                 buf.append("</ul></td></tr>\n");
             }
         }
-        if (full || isUs) {
-            PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(info.getHash());
-            boolean isFF = info.getCapabilities().indexOf('f') >= 0;
-            boolean hasLsInfo = false;
-            String networkId = "2"; // default
-            String spoofedLeasesets = "";
-            String knownRouters = "";
-            if (prof != null || isUs) {
+        if (fullDetails || isLocalRouter) {
+            PeerProfile profile = _context.profileOrganizer().getProfileNonblocking(routerInfo.getHash());
+            boolean hasFastForwardCapability = routerInfo.getCapabilities().indexOf('f') >= 0;
+            boolean hasLeaseSetInfo = false;
+            String networkId = "2"; // default network id
+            String spoofedLeaseSets = "";
+            String knownRoutersString = "";
+            if (profile != null || isLocalRouter) {
                 buf.append("<tr><td><b>").append(_t("Stats")).append(":</b><td colspan=2>\n<ul class=netdbStats>");
-                Map<Object, Object> p = info.getOptionsMap();
-                for (Map.Entry<Object, Object> e : p.entrySet()) {
-                    String key = (String) e.getKey();
-                    if (key.contains("knownLeaseSets")) {hasLsInfo = true;}
-                    if (isUs) {
+                Map<Object, Object> optionsMap = routerInfo.getOptionsMap();
+                for (Map.Entry<Object, Object> entry : optionsMap.entrySet()) {
+                    String key = (String) entry.getKey();
+                    if (key.contains("knownLeaseSets")) {
+                        hasLeaseSetInfo = true;
+                    }
+                    if (isLocalRouter) {
                         if (key.contains("knownLeaseSets")) {
-                            spoofedLeasesets = DataHelper.stripHTML((String) e.getValue());
+                            spoofedLeaseSets = DataHelper.stripHTML((String) entry.getValue());
                             continue;
                         } else if (key.contains("knownRouters")) {
-                            knownRouters = DataHelper.stripHTML((String) e.getValue());
+                            knownRoutersString = DataHelper.stripHTML((String) entry.getValue());
                             continue;
                         } else if (key.equals("netId")) {
-                            networkId = DataHelper.stripHTML((String) e.getValue());
+                            networkId = DataHelper.stripHTML((String) entry.getValue());
                             continue;
                         }
                     }
@@ -1857,7 +1916,7 @@ class NetDbRenderer {
                     boolean skip = keyLower.contains("caps") || keyLower.contains("version") ||
                                    keyLower.equals("family") || keyLower.contains("tunnel.") ||
                                    keyLower.contains("stat_") || key.equals("netId");
-                    if (isUs && (key.equals("knownLeaseSets") || key.equals("knownRouters"))) continue;
+                    if (isLocalRouter && (key.equals("knownLeaseSets") || key.equals("knownRouters"))) continue;
                     if (skip) continue;
                     String netDbKey = DataHelper.stripHTML(key)
                         .replace("netdb.", "")
@@ -1865,9 +1924,9 @@ class NetDbRenderer {
                         .replace("knownRouters", "<li><b>" + _t("Routers"))
                         .replace("stat_", "")
                         .replace("uptime", "<li><b>" + _t("Uptime"));
-                    String val = (String) e.getValue();
-                    String[] values = DataHelper.stripHTML(val).split(";");
-                    List<String> stats = Arrays.asList(
+                    String value = (String) entry.getValue();
+                    String[] valuesArray = DataHelper.stripHTML(value).split(";");
+                    List<String> statsToIgnore = Arrays.asList(
                         "tunnel.buildExploratoryExpire.60m",
                         "tunnel.buildExploratoryReject.60m",
                         "tunnel.buildExploratorySuccess.60m",
@@ -1879,49 +1938,51 @@ class NetDbRenderer {
                         "stat_bandwidthSendBps.60m",
                         "stat_bandwidthReceiveBps.60m"
                     );
-                    if (!stats.contains(key) && !key.toLowerCase().contains("family")) {
-                        if (isUs && (netDbKey.contains("Routers") || netDbKey.contains("LeaseSets"))) continue;
+                    if (!statsToIgnore.contains(key) && !key.toLowerCase().contains("family")) {
+                        if (isLocalRouter && (netDbKey.contains("Routers") || netDbKey.contains("LeaseSets"))) continue;
                         buf.append(netDbKey);
-                        String netDbValue = DataHelper.stripHTML(val)
-                                                       .replace("XO", "X")
-                                                       .replace("PO", "P")
-                                                       .replace("R", "")
-                                                       .replace("U", "")
-                                                       .replace(";", " <span class=\"bullet\">&bullet;</span> ")
-                                                       .replace("&bullet;</span> 555", "&bullet;</span> " + _t("n/a"));
+                        String netDbValue = DataHelper.stripHTML(value)
+                            .replace("XO", "X")
+                            .replace("PO", "P")
+                            .replace("R", "")
+                            .replace("U", "")
+                            .replace(";", " <span class=\"bullet\">&bullet;</span> ")
+                            .replace("&bullet;</span> 555", "&bullet;</span> " + _t("n/a"));
                         buf.append(":</b> ").append(netDbValue).append("</li>");
                     }
                 }
-                if (!isUs) {
-                    long now = _context.clock().now();
-                    long heard = prof.getFirstHeardAbout();
-                    if (heard > 0) {
-                        long peerAge = Math.max(now - heard, 1);
-                        if (isFF && hasLsInfo) {buf.append("<br>");}
+                if (!isLocalRouter) {
+                    long currentTime = _context.clock().now();
+                    long firstHeardAbout = profile.getFirstHeardAbout();
+                    if (firstHeardAbout > 0) {
+                        long ageSinceFirstHeard = Math.max(currentTime - firstHeardAbout, 1);
+                        if (hasFastForwardCapability && hasLeaseSetInfo) {
+                            buf.append("<br>");
+                        }
                         buf.append("<li><b>").append(_t("First heard about")).append(":</b> ")
-                           .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>");
+                           .append(_t("{0} ago", DataHelper.formatDuration2(ageSinceFirstHeard))).append("</li>");
                     }
-                    heard = prof.getLastHeardAbout();
-                    if (heard > 0) {
-                        long peerAge = Math.max(now - heard, 1);
+                    long lastHeardAbout = profile.getLastHeardAbout();
+                    if (lastHeardAbout > 0) {
+                        long ageSinceLastHeard = Math.max(currentTime - lastHeardAbout, 1);
                         buf.append("<li><b>").append(_t("Last heard about")).append(":</b> ")
-                           .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>");
+                           .append(_t("{0} ago", DataHelper.formatDuration2(ageSinceLastHeard))).append("</li>");
                     }
-                    heard = prof.getLastHeardFrom();
-                    if (heard > 0) {
-                        long peerAge = Math.max(now - heard, 1);
+                    long lastHeardFrom = profile.getLastHeardFrom();
+                    if (lastHeardFrom > 0) {
+                        long ageSinceLastHeardFrom = Math.max(currentTime - lastHeardFrom, 1);
                         buf.append("<li><b>").append(_t("Last heard from")).append(":</b> ")
-                           .append(_t("{0} ago", DataHelper.formatDuration2(peerAge))).append("</li>");
+                           .append(_t("{0} ago", DataHelper.formatDuration2(ageSinceLastHeardFrom))).append("</li>");
                     }
                 } else {
                     buf.append("<li><b>").append(_t("Network Id")).append(":</b> ").append(networkId).append("</li>");
-                    if (isFF) {
+                    if (hasFastForwardCapability) {
                         buf.append("<li title=\"")
                            .append(_t("Count is always spoofed to avoid indicating router restarts"))
                            .append("\"><b>")
                            .append(_t("LeaseSets"))
                            .append(":</b> ")
-                           .append(spoofedLeasesets)
+                           .append(spoofedLeaseSets)
                            .append("</li>");
                     }
                     buf.append("<li><b>").append(_t("Routers")).append(":</b> ")
@@ -1931,6 +1992,40 @@ class NetDbRenderer {
             }
         }
         buf.append("</table>\n");
+    }
+
+    /**
+     * Renders multiple RouterInfo objects in parallel and concatenates their HTML output.
+     *
+     * @param routerInfos    Collection of RouterInfo objects to render
+     * @param isLocalRouter  true if rendering the local router (affects display logic)
+     * @param fullDetails    true for full details, false for a summary view
+     * @return concatenated  HTML fragment containing all routers' rendered output
+     */
+    public String renderRouterInfosInParallel(Collection<RouterInfo> routerInfos, boolean isLocalRouter, boolean fullDetails) {
+        int numCores = SystemVersion.getCores();
+        ExecutorService executor = Executors.newFixedThreadPool(numCores);
+
+        List<Future<String>> futures = new ArrayList<>();
+        for (RouterInfo routerInfo : routerInfos) {
+            Callable<String> task = () -> {
+                StringBuilder buffer = new StringBuilder();
+                renderRouterInfo(buffer, routerInfo, isLocalRouter, fullDetails);
+                return buffer.toString();
+            };
+            futures.add(executor.submit(task));
+        }
+
+        StringBuilder fullHtml = new StringBuilder();
+        for (Future<String> future : futures) {
+            try {fullHtml.append(future.get());}
+            catch (InterruptedException e) {Thread.currentThread().interrupt();}
+            } catch (ExecutionException e) {}
+        }
+
+        executor.shutdown();
+
+        return fullHtml.toString();
     }
 
     private static final int SSU = 1;
