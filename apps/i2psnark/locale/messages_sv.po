@@ -1419,7 +1419,7 @@ msgstr "Hämtningsstatus"
 msgid "Download Priority"
 msgstr "Hämtningsprioritet"
 
-msgid "Up to higher level directory"
+msgid "Parent directory"
 msgstr "Upp till högre mappnivå"
 
 msgid "Audio Playlist"

@@ -1419,7 +1419,7 @@ msgstr "Κατάσταση λήψης"
 msgid "Download Priority"
 msgstr "Προτεραιότητα λήψης"
 
-msgid "Up to higher level directory"
+msgid "Parent directory"
 msgstr "Κατάλογος μέχρι υψηλότερου επιπέδου"
 
 msgid "Audio Playlist"

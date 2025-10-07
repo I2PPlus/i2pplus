@@ -1419,7 +1419,7 @@ msgstr "Allalaadimise staatus"
 msgid "Download Priority"
 msgstr "Allalaadimise prioriteet"
 
-msgid "Up to higher level directory"
+msgid "Parent directory"
 msgstr "Kõrgema taseme kataloogi"
 
 msgid "Audio Playlist"

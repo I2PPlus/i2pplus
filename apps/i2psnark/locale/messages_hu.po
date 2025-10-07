@@ -1419,7 +1419,7 @@ msgstr "Letöltés állapota"
 msgid "Download Priority"
 msgstr "Letöltési prioritás"
 
-msgid "Up to higher level directory"
+msgid "Parent directory"
 msgstr "Vissza a felsőbb szintű könyvtárba"
 
 msgid "Audio Playlist"

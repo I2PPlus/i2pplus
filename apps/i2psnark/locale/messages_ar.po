@@ -1447,7 +1447,7 @@ msgstr "حالة التنزيل"
 msgid "Download Priority"
 msgstr "أولوية التنزيل"
 
-msgid "Up to higher level directory"
+msgid "Parent directory"
 msgstr "ما يصل إلى دليل المستوى الأعلى"
 
 msgid "Audio Playlist"

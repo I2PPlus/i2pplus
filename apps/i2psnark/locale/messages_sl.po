@@ -1433,7 +1433,7 @@ msgstr "Stanje prenosa"
 msgid "Download Priority"
 msgstr "Prioriteta prenosa"
 
-msgid "Up to higher level directory"
+msgid "Parent directory"
 msgstr "Nadaljevanje do višje mape"
 
 msgid "Audio Playlist"

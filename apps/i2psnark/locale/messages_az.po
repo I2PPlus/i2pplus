@@ -1418,7 +1418,7 @@ msgstr "Endirmə statusu"
 msgid "Download Priority"
 msgstr "Endirmə prioriteti"
 
-msgid "Up to higher level directory"
+msgid "Parent directory"
 msgstr "Yüksək səviyyəli kataloqu qədər"
 
 msgid "Audio Playlist"

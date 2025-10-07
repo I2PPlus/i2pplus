@@ -1412,7 +1412,7 @@ msgstr "ダウンロードステータス"
 msgid "Download Priority"
 msgstr "ダウンロードの優先順位"
 
-msgid "Up to higher level directory"
+msgid "Parent directory"
 msgstr "上位ディレクトリまで"
 
 msgid "Audio Playlist"

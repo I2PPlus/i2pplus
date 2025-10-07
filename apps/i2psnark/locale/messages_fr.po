@@ -1418,7 +1418,7 @@ msgstr "État de téléchargement"
 msgid "Download Priority"
 msgstr "Priorité de téléchargement"
 
-msgid "Up to higher level directory"
+msgid "Parent directory"
 msgstr "Vers le répertoire parent"
 
 msgid "Audio Playlist"

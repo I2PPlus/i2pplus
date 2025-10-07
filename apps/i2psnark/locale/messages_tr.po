@@ -1419,7 +1419,7 @@ msgstr "İndirme Durumu"
 msgid "Download Priority"
 msgstr "İndirme Önceliği"
 
-msgid "Up to higher level directory"
+msgid "Parent directory"
 msgstr "Bir üst klasöre geç"
 
 msgid "Audio Playlist"

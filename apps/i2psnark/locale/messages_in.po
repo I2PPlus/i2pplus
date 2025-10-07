@@ -1412,7 +1412,7 @@ msgstr "Status Download"
 msgid "Download Priority"
 msgstr "Prioritas Download"
 
-msgid "Up to higher level directory"
+msgid "Parent directory"
 msgstr "Ke tingkat direktori yang lebih tinggi"
 
 msgid "Audio Playlist"

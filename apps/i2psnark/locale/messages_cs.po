@@ -1426,7 +1426,7 @@ msgstr "Stav stahování"
 msgid "Download Priority"
 msgstr "Priorita stahování"
 
-msgid "Up to higher level directory"
+msgid "Parent directory"
 msgstr "Až do adresáře vyšší úrovně"
 
 msgid "Audio Playlist"

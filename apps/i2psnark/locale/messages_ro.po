@@ -1426,7 +1426,7 @@ msgstr "Stare descărcare"
 msgid "Download Priority"
 msgstr "Prioritate pentru descărcare"
 
-msgid "Up to higher level directory"
+msgid "Parent directory"
 msgstr "Spre dosarul de nivel superior"
 
 msgid "Audio Playlist"

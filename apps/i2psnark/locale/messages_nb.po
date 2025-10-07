@@ -1419,7 +1419,7 @@ msgstr "Nedlastingsstatus"
 msgid "Download Priority"
 msgstr "Nedlastingsprioritet"
 
-msgid "Up to higher level directory"
+msgid "Parent directory"
 msgstr "Opp et nivå i mappe"
 
 msgid "Audio Playlist"

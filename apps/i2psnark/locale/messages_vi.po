@@ -1412,7 +1412,7 @@ msgstr "Trạng thái tải xuống"
 msgid "Download Priority"
 msgstr "Ưu tiên tải xuống"
 
-msgid "Up to higher level directory"
+msgid "Parent directory"
 msgstr "Lên thư mục cấp cao hơn"
 
 msgid "Audio Playlist"

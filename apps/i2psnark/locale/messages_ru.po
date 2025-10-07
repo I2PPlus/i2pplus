@@ -1426,7 +1426,7 @@ msgstr "Статус загрузок"
 msgid "Download Priority"
 msgstr "Приоритет загрузки"
 
-msgid "Up to higher level directory"
+msgid "Parent directory"
 msgstr "Перейти в директорию уровнем выше"
 
 msgid "Audio Playlist"

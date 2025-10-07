@@ -1419,7 +1419,7 @@ msgstr "Status do download"
 msgid "Download Priority"
 msgstr "Prioridade de download"
 
-msgid "Up to higher level directory"
+msgid "Parent directory"
 msgstr "Subir uma herarquia"
 
 msgid "Audio Playlist"

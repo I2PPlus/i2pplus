@@ -1419,7 +1419,7 @@ msgstr "Latauksen tila"
 msgid "Download Priority"
 msgstr "Lataa prioriteetti"
 
-msgid "Up to higher level directory"
+msgid "Parent directory"
 msgstr "Siirry hakemistohierarkiassa ylöspäin"
 
 msgid "Audio Playlist"
