@@ -1061,9 +1061,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
                 return result; // Valid result, return immediately
 
-            } catch (IOException e) {
-                // You could optionally mark server down on IOException as well, but probably better to let retries happen
-            }
+            } catch (IOException e) {}
         }
 
         return null; // All attempts failed without valid response

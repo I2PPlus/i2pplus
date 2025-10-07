@@ -58,6 +58,10 @@ class TunnelRenderer {
         _log = _context.logManager().getLog(TunnelRenderer.class);
     }
 
+    private final Map<Hash, RouterInfo> routerInfoCache = new HashMap<>();
+    private final Map<Hash, ReverseLookupResult> reverseLookupResults = new HashMap<>();
+    private final Map<Hash, String> peerToIP = new HashMap<>();
+
     public void renderStatusHTML(Writer out) throws IOException {
         boolean isAdvanced = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
         TunnelManagerFacade tm = _context.tunnelManager();
@@ -361,16 +365,24 @@ class TunnelRenderer {
                 if (++displayed > DISPLAY_LIMIT) break;
 
                 int count = counts.count(h);
-                RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
+                //RouterInfo info = _context.netDb().lookupRouterInfoLocally(h);
+                RouterInfo info = routerInfoCache.computeIfAbsent(h, hash -> (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(hash));
 
                 // Defensive - skip if count <= 0 (unlikely due to sorted list but just in case)
                 if (count <= 0) continue;
 
                 String truncHash = h.toBase64().substring(0,4);
 
-                byte[] direct = TransportImpl.getIP(h);
-                String directIP = (direct != null) ? Addresses.toString(direct) : "";
-                String ip = !directIP.isEmpty() ? directIP : (info != null ? Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null);
+                String ip = peerToIP.get(h);
+                if (ip == null) {
+                    byte[] direct = TransportImpl.getIP(h);
+                    String directIP = (direct != null) ? Addresses.toString(direct) : "";
+                    ip = !directIP.isEmpty() ? directIP : (info != null ? Addresses.toString(CommSystemFacadeImpl.getValidIP(info)) : null);
+                    if (ip != null) {
+                        peerToIP.put(h, ip);
+                    }
+                }
+
                 String version = (info != null) ? info.getOption("router.version") : null;
                 ReverseLookupResult rlResult = getReverseLookupInfo(h, info, uptime);
                 boolean isBanned = _context.banlist().isBanlisted(h);
@@ -469,18 +481,18 @@ class TunnelRenderer {
     public void renderPeers(Writer out) throws IOException {
         long uptime = _context.router().getUptime();
         final boolean doReverseLookups = enableReverseLookups();
+
         // Count tunnels per peer local and transit
         ObjectCounter<Hash> localCount = new ObjectCounter<>();
         int tunnelCount = countTunnelsPerPeer(localCount);
         ObjectCounter<Hash> transitCount = new ObjectCounter<>();
         int partCount = countParticipatingPerPeer(transitCount);
-        // Collect all peers and sort by country
+
         Set<Hash> peers = new HashSet<>(localCount.objects());
-        peers.addAll(transitCount.objects());
         List<Hash> peerList = new ArrayList<>(peers);
-        Collections.sort(peerList, new CountryComparator(_context.commSystem()));
-        // Cache for RouterInfo lookups keyed by peer Hash
-        Map<Hash, RouterInfo> routerInfoCache = new HashMap<>();
+        // Collect all peers and sort by country
+        peers.addAll(transitCount.objects());
+
         if (!peerList.isEmpty() && (tunnelCount > 0 || partCount > 0)) {
             StringBuilder headerSb = new StringBuilder(peerList.size() * 640 + 2048);
             headerSb.append("<h3 class=tabletitle id=peercount>")
@@ -513,11 +525,10 @@ class TunnelRenderer {
             out.write(headerSb.toString());
             out.flush();
 
-            // Precompute IPs and reverse lookup results for all peers
-            Map<Hash, ReverseLookupResult> reverseLookupResults = new HashMap<>();
-            Map<Hash, String> peerToIP = new HashMap<>();
+            Collections.sort(peerList, new CountryComparator(_context.commSystem()));
             for (Hash h : peerList) {
-                RouterInfo info = routerInfoCache.computeIfAbsent(h, hash -> _context.netDb().lookupRouterInfoLocally(hash));
+                //RouterInfo info = routerInfoCache.computeIfAbsent(h, hash -> _context.netDb().lookupRouterInfoLocally(hash));
+                RouterInfo info = routerInfoCache.computeIfAbsent(h, hash -> (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(hash));
                 if (info == null) continue;
                 byte[] direct = TransportImpl.getIP(h);
                 String directIP = (direct != null) ? Addresses.toString(direct) : "";
