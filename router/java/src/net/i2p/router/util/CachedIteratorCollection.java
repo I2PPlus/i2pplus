@@ -112,12 +112,14 @@ public class CachedIteratorCollection<E> extends AbstractCollection<E> {
     }
 
     /**
-     *  Iterator: Resets and returns CachedIterator
+     * Returns a new iterator over the elements in this collection.
      *
+     * Each iterator has independent state.
+     *
+     * @return a new {@link CachedIterator} instance
      */
     public Iterator<E> iterator() {
-        iterator.reset();
-        return iterator;
+        return new CachedIterator();
     }
 
     /**
