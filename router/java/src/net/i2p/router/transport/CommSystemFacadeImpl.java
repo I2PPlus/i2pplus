@@ -919,7 +919,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     String countryCode = getCountryFromIPAddress(key);
                     String whoisData = null;
                     try {
-                        whoisData = queryWhoisServers(key, countryCode);
+                        whoisData = queryWhoisServers(key, countryCode).get();
                     } catch (InterruptedException | ExecutionException e) {
                         hostName = _t("unknown");
                         if (e instanceof InterruptedException) {
@@ -956,40 +956,117 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         } catch (UnknownHostException e) {return _t("unknown");}
     }
 
-    private static final ExecutorService WHOIS_QUERY_EXECUTOR = Executors.newFixedThreadPool(10);
+    private static final ExecutorService WHOIS_QUERY_EXECUTOR = Executors.newFixedThreadPool(16);
     private static final int SOCKET_TIMEOUT_MS = 5000; // 5 seconds timeout
+    private static final int MAX_RETRIES = 1;
 
-/*
-    private String queryWhoisServers(String ipAddress, String countryCode) throws InterruptedException, ExecutionException {
-        Callable<String> whoisTask = () -> {
-            return tryWhoisServers(ipAddress, GENERIC_WHOIS_SERVERS);
-        };
-
-        Future<String> future = WHOIS_QUERY_EXECUTOR.submit(whoisTask);
-        return future.get();
-    }
-*/
     /**
-     * Query WHOIS server(s) based on country code fallback logic asynchronously
-     * Returns WHOIS response or null if all fail
+     * Query WHOIS server(s) based on country code fallback logic asynchronously.
+     * Returns WHOIS response or null if all fail.
      */
-    private String queryWhoisServers(String ipAddress, String countryCode) throws InterruptedException, ExecutionException {
-        Callable<String> whoisTask = () -> {
-            if (countryCode == null || countryCode.trim().isEmpty()) {
-                return tryWhoisServers(ipAddress, GENERIC_WHOIS_SERVERS);
-            }
-
-            List<String> countryServers = WHOIS_SERVERS_BY_COUNTRY.getOrDefault(countryCode.toLowerCase(), Collections.emptyList());
+    private Future<String> queryWhoisServers(String ipAddress, String countryCode) {
+        return WHOIS_QUERY_EXECUTOR.submit(() -> {
+            List<String> countryServers = countryCode == null || countryCode.trim().isEmpty()
+                    ? Collections.emptyList()
+                    : WHOIS_SERVERS_BY_COUNTRY.getOrDefault(countryCode.toLowerCase(), Collections.emptyList());
 
             String whoisData = tryWhoisServers(ipAddress, countryServers);
-            if (whoisData == null || whoisData.trim().isEmpty() || "unknown".equals(whoisData)) {
+
+            if (whoisData == null || whoisData.trim().isEmpty() || "unknown".equalsIgnoreCase(whoisData)) {
                 whoisData = tryWhoisServers(ipAddress, GENERIC_WHOIS_SERVERS);
             }
             return whoisData;
-        };
+        });
+    }
 
-        Future<String> future = WHOIS_QUERY_EXECUTOR.submit(whoisTask);
-        return future.get();
+    /**
+     * Concurrently tries WHOIS servers in parallel with retries and returns first successful result or "unknown".
+     */
+    private String tryWhoisServers(String query, List<String> servers) throws InterruptedException {
+        if (servers == null || servers.isEmpty()) {
+            return "unknown";
+        }
+
+        ExecutorService executor = Executors.newFixedThreadPool(Math.min(servers.size(), 8));
+        try {
+            List<Callable<String>> tasks = new ArrayList<>();
+            for (String server : servers) {
+                tasks.add(() -> {
+                    int attempts = 0;
+                    while (attempts < MAX_RETRIES) {
+                        attempts++;
+                        String response = queryWhoisServerWithFallback(query, server);
+                        if (response != null && !response.trim().isEmpty() && !"unknown".equalsIgnoreCase(response.trim())) {
+                            return response;
+                        }
+                    }
+                    return null;
+                });
+            }
+
+            String result = executor.invokeAny(tasks);
+            return result != null ? result : "unknown";
+        } catch (ExecutionException e) {
+            return "unknown";
+        } finally {
+            executor.shutdownNow();
+        }
+    }
+
+    /**
+     * Query a single WHOIS server with port logic and optional Tor.
+     */
+    private String queryWhoisServerWithFallback(String query, String whoisServer) {
+        int port = 43;
+        boolean useTor = false;
+
+        if ("23.184.48.6".equals(whoisServer) ||
+            "23.128.248.249".equals(whoisServer) ||
+            "104.36.80.11".equals(whoisServer) ||
+            "outproxy-1a.stormycloud.org".equals(whoisServer) ||
+            "outproxy-1b.stormycloud.org".equals(whoisServer) ||
+            "outproxy-1c.stormycloud.org".equals(whoisServer)) {
+            port = 38444;
+            useTor = true;
+        } else if ("127.0.0.1".equals(whoisServer)) {
+            port = 4043;
+        }
+
+        try {
+            String result = useTor
+                    ? queryWhoisServerOverTor(query, whoisServer, port)
+                    : queryWhoisServer(query, whoisServer, port);
+
+            // filter unreliable or denied results (optional, add more if needed)
+            if (result == null || result.trim().isEmpty()) return null;
+            String lower = result.toLowerCase();
+            if (lower.contains("denied") || lower.contains("refused") || lower.contains("is not registered") ||
+                lower.contains("not managed by") || lower.contains("have been further assigned") ||
+                lower.contains("non-ripe-ncc-managed-address-block")) {
+                return null;
+            }
+            return result;
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
+    /**
+     * WHOIS query with socket timeout support.
+     */
+    private String queryWhoisServer(String query, String whoisServer, int port) throws IOException {
+        WhoisClient whois = new WhoisClient();
+        try {
+            whois.setDefaultTimeout(SOCKET_TIMEOUT_MS);
+            whois.connect(whoisServer, port);
+            String result = whois.query(query);
+            whois.disconnect();
+            return result;
+        } finally {
+            if (whois.isConnected()) {
+                whois.disconnect();
+            }
+        }
     }
 
     /**
@@ -1192,66 +1269,6 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         "23.128.248.249",
         "127.0.0.1"
     );
-
-    /**
-     * Try multiple whois servers sequentially with timeout, return first successful result or "unknown"
-     */
-    private String tryWhoisServers(String query, List<String> servers) {
-        if (servers == null || servers.isEmpty()) {
-            return _t("unknown");
-        }
-        List<String> shuffledServers = new ArrayList<>(servers);
-        Collections.shuffle(shuffledServers, new Random());
-
-        for (String server : shuffledServers) {
-            try {
-                int port = 43;
-                if ("23.184.48.6".equals(server) ||
-                    "23.128.248.249".equals(server) ||
-                    "104.36.80.11".equals(server) ||
-                    "outproxy-1a.stormycloud.org".equals(server) ||
-                    "outproxy-1b.stormycloud.org".equals(server) ||
-                    "outproxy-1c.stormycloud.org".equals(server)) {
-                    port = 38444;
-                } else if ("127.0.0.1".equals(server)) {port = 4043;} // i2p
-                boolean useTor = (port == 38444);
-                String result = useTor
-                    ? queryWhoisServerOverTor(query, server, port)
-                    : queryWhoisServer(query, server, port);
-
-                if (result == null) continue;
-                // Filter deny/refuse and empty results
-
-                if (result.contains("denied") || result.contains("refused") ||
-                    result.contains("is not registered") || result.contains("not managed by") ||
-                    result.contains("have been further assigned") || result.contains("NON-RIPE-NCC-MANAGED-ADDRESS-BLOCK")) {
-                    continue;
-                }
-
-                if (!result.trim().isEmpty()) {
-                    return result;
-                }
-            } catch (IOException e) {} // ignore and try next server
-        }
-        return _t("unknown");
-    }
-
-    /**
-     * WHOIS query with socket timeout support
-     */
-    private String queryWhoisServer(String query, String whoisServer, int port) throws IOException {
-        WhoisClient whois = new WhoisClient();
-        try {
-            whois.setDefaultTimeout(SOCKET_TIMEOUT_MS);
-            whois.connect(whoisServer, port);
-            String result = whois.query(query);
-            whois.disconnect();
-            return result;
-        } catch (IOException e) {
-            if (whois.isConnected()) { whois.disconnect(); }
-            throw e;
-        }
-    }
 
     /**
      * WHOIS query over Tor with socket timeout support
