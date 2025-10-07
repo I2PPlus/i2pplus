@@ -34,6 +34,7 @@ import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
@@ -1013,10 +1014,16 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         }
     }
 
-    /**
-     * Query a single WHOIS server with port logic and optional Tor.
-     */
+    private static final long SERVER_DOWN_TIMEOUT_MS = 60 * 60 * 1000L;
+    private static final ConcurrentMap<String, Long> downServers = new ConcurrentHashMap<>();
+
     private String queryWhoisServerWithFallback(String query, String whoisServer) {
+        // Skip server if marked down and timeout not expired
+        Long downSince = downServers.get(whoisServer);
+        if (downSince != null && (System.currentTimeMillis() - downSince) < SERVER_DOWN_TIMEOUT_MS) {
+            return null; // skip querying this server
+        }
+
         int port = 43;
         boolean useTor = false;
 
@@ -1032,23 +1039,34 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             port = 4043;
         }
 
-        try {
-            String result = useTor
-                    ? queryWhoisServerOverTor(query, whoisServer, port)
-                    : queryWhoisServer(query, whoisServer, port);
+        int maxAttempts = 2;
+        for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+            try {
+                String result = useTor
+                        ? queryWhoisServerOverTor(query, whoisServer, port)
+                        : queryWhoisServer(query, whoisServer, port);
 
-            // filter unreliable or denied results (optional, add more if needed)
-            if (result == null || result.trim().isEmpty()) return null;
-            String lower = result.toLowerCase();
-            if (lower.contains("denied") || lower.contains("refused") || lower.contains("is not registered") ||
-                lower.contains("not managed by") || lower.contains("have been further assigned") ||
-                lower.contains("non-ripe-ncc-managed-address-block")) {
-                return null;
+                if (result == null || result.trim().isEmpty()) {
+                    continue; // Retry on empty/null result
+                }
+
+                String lower = result.toLowerCase();
+                if (lower.contains("denied") || lower.contains("refused") || lower.contains("is not registered") ||
+                    lower.contains("not managed by") || lower.contains("have been further assigned") ||
+                    lower.contains("non-ripe-ncc-managed-address-block")) {
+                    // Mark server as down and stop retries
+                    downServers.put(whoisServer, System.currentTimeMillis());
+                    return null;
+                }
+
+                return result; // Valid result, return immediately
+
+            } catch (IOException e) {
+                // You could optionally mark server down on IOException as well, but probably better to let retries happen
             }
-            return result;
-        } catch (IOException e) {
-            return null;
         }
+
+        return null; // All attempts failed without valid response
     }
 
     /**
