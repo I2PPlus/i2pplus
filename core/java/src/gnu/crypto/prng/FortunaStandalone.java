@@ -152,6 +152,7 @@ public class FortunaStandalone extends BasePRNGStandalone implements Serializabl
 
     @Override
     public void addRandomBytes(byte[] buf, int offset, int length) {
+        if (pools == null) {return;}
         pools[pool].update(buf, offset, length);
         if (pool == 0) {pool0Count += length;}
         pool = (pool + 1) % NUM_POOLS;
