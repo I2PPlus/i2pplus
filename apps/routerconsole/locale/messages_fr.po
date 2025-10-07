@@ -4456,7 +4456,7 @@ msgstr "Le routeur fonctionne actuellement en mode caché, ce qui empêche la co
 msgid "No transit tunnels currently active."
 msgstr "Aucun tunnel de transit actuellement actif."
 
-msgid "Transit Tunnels by Peer (Top 50)"
+msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"

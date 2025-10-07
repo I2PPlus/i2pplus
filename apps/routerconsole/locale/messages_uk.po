@@ -4474,7 +4474,7 @@ msgstr "Маршрутизатор наразі працює в прихован
 msgid "No transit tunnels currently active."
 msgstr "Наразі немає активних транзитних тунелів."
 
-msgid "Transit Tunnels by Peer (Top 50)"
+msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"

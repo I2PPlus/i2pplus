@@ -4456,7 +4456,7 @@ msgstr "Ο δρομολογητής λειτουργεί επί του παρό�
 msgid "No transit tunnels currently active."
 msgstr "Επί του παρόντος δεν υπάρχουν ενεργές σήραγγες διέλευσης."
 
-msgid "Transit Tunnels by Peer (Top 50)"
+msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"

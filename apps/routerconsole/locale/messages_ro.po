@@ -4474,7 +4474,7 @@ msgstr "Routerul funcționează în prezent în modul ascuns, ceea ce împiedic�
 msgid "No transit tunnels currently active."
 msgstr "Niciun tunel de tranzit activ în prezent."
 
-msgid "Transit Tunnels by Peer (Top 50)"
+msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"

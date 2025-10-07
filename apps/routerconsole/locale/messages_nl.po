@@ -4456,7 +4456,7 @@ msgstr "De router werkt momenteel in de verborgen modus, waardoor er geen doorga
 msgid "No transit tunnels currently active."
 msgstr "Momenteel zijn er geen transittunnels actief."
 
-msgid "Transit Tunnels by Peer (Top 50)"
+msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"

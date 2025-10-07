@@ -4438,7 +4438,7 @@ msgstr "Router saat ini beroperasi dalam Mode Tersembunyi yang mencegah terowong
 msgid "No transit tunnels currently active."
 msgstr "Saat ini tidak ada terowongan transit yang aktif."
 
-msgid "Transit Tunnels by Peer (Top 50)"
+msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"

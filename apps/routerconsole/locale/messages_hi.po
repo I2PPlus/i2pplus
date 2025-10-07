@@ -4456,7 +4456,7 @@ msgstr "रूटर क्रेन्टली हाइडन मोड म�
 msgid "No transit tunnels currently active."
 msgstr "वर्तमान में कोई सक्रिय ट्रांजिट टनल नहीं है।"
 
-msgid "Transit Tunnels by Peer (Top 50)"
+msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"

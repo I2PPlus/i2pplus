@@ -4438,7 +4438,7 @@ msgstr "ルーターは現在隠しモードで動作しているため、中継
 msgid "No transit tunnels currently active."
 msgstr "現在アクティブなトランジット トンネルはありません。"
 
-msgid "Transit Tunnels by Peer (Top 50)"
+msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"

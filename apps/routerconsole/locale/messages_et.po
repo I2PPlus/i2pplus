@@ -4457,7 +4457,7 @@ msgstr "ruuter töötab praegu varjatud režiimis, mis takistab transiiditunneli
 msgid "No transit tunnels currently active."
 msgstr "praegu aktiivseid ühistransporditunneleid ei ole."
 
-msgid "Transit Tunnels by Peer (Top 50)"
+msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"

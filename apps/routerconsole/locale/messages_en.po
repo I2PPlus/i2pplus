@@ -4456,7 +4456,7 @@ msgstr ""
 msgid "No transit tunnels currently active."
 msgstr ""
 
-msgid "Transit Tunnels by Peer (Top 50)"
+msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"

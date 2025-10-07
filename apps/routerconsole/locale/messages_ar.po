@@ -4528,7 +4528,7 @@ msgstr "يعمل جهاز التوجيه حاليًا في الوضع المخف
 msgid "No transit tunnels currently active."
 msgstr "لا توجد أنفاق عبور نشطة حاليًا."
 
-msgid "Transit Tunnels by Peer (Top 50)"
+msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"

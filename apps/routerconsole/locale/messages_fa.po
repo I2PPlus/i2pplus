@@ -4456,7 +4456,7 @@ msgstr "روتر در حال حاضر در حالت مخفی کار می کند 
 msgid "No transit tunnels currently active."
 msgstr "در حال حاضر هیچ تونل ترانزیت فعال نیست."
 
-msgid "Transit Tunnels by Peer (Top 50)"
+msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"

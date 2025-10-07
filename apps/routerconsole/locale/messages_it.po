@@ -4457,7 +4457,7 @@ msgstr "Il router attualmente funziona in modalità nascosta che impedisce la co
 msgid "No transit tunnels currently active."
 msgstr "Nessun tunnel di transito attualmente attivo."
 
-msgid "Transit Tunnels by Peer (Top 50)"
+msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"

@@ -4456,7 +4456,7 @@ msgstr "Yönlendirici şu anda gizli modda çalışıyor ve bu da transit tünel
 msgid "No transit tunnels currently active."
 msgstr "Şu anda aktif transit tünel yok."
 
-msgid "Transit Tunnels by Peer (Top 50)"
+msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"

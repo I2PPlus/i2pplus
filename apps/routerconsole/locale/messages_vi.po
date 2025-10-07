@@ -4438,7 +4438,7 @@ msgstr "Bộ định tuyến hiện đang hoạt động ở Chế độ ẩn, c
 msgid "No transit tunnels currently active."
 msgstr "Hiện không có đường hầm chuyển tuyến nào đang hoạt động."
 
-msgid "Transit Tunnels by Peer (Top 50)"
+msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"

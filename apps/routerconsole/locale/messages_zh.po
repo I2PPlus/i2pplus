@@ -4438,7 +4438,7 @@ msgstr "路由器目前正在以隐藏模式运行，该模式可防止运输隧
 msgid "No transit tunnels currently active."
 msgstr "目前没有参与的隧道在运行。"
 
-msgid "Transit Tunnels by Peer (Top 50)"
+msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"

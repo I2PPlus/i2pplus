@@ -4492,7 +4492,7 @@ msgstr "Usmerjevalnik trenutno deluje v skriti načini, ki preprečuje izgradnjo
 msgid "No transit tunnels currently active."
 msgstr "Trenutno ni aktivnih prenosnih tuneljev."
 
-msgid "Transit Tunnels by Peer (Top 50)"
+msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"

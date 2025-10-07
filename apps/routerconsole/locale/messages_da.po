@@ -4456,7 +4456,7 @@ msgstr "Router kører i øjeblikket i skjult tilstand, som forhindrer transittun
 msgid "No transit tunnels currently active."
 msgstr "Ingen transittunneler er i øjeblikket aktive."
 
-msgid "Transit Tunnels by Peer (Top 50)"
+msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"

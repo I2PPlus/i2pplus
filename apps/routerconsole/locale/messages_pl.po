@@ -4474,7 +4474,7 @@ msgstr "Router działa obecnie w trybie ukrytym, który uniemożliwia budowę tu
 msgid "No transit tunnels currently active."
 msgstr "Obecnie nie są aktywne żadne tunele tranzytowe."
 
-msgid "Transit Tunnels by Peer (Top 50)"
+msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"

@@ -4456,7 +4456,7 @@ msgstr "Router hazırda tranzit tunellərin qurulmasının qarşısını alan Gi
 msgid "No transit tunnels currently active."
 msgstr "Hazırda aktiv tranzit tunel yoxdur."
 
-msgid "Transit Tunnels by Peer (Top 50)"
+msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"

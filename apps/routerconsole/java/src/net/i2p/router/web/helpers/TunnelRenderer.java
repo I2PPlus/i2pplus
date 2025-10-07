@@ -307,7 +307,6 @@ class TunnelRenderer {
     private final Map<String, String> reverseLookupCache = new HashMap<>();
 
     public void renderTransitSummary(Writer out) throws IOException {
-        int DISPLAY_LIMIT = 50;
         List<HopConfig> participating = _context.tunnelDispatcher().listParticipatingTunnels();
         if (!participating.isEmpty() && participating.size() > 1) {
             // Counters for tunnels and bandwidth by peer
@@ -329,7 +328,7 @@ class TunnelRenderer {
 
             StringBuilder tbuf = new StringBuilder(3 * 512);
             tbuf.append("<h3 class=tabletitle>")
-                .append(_t("Transit Tunnels by Peer (Top 50)"))
+                .append(_t("Transit Tunnels by Peer (Top {0})", DISPLAY_LIMIT))
                 .append("</h3>\n<table id=transitSummary class=\"tunneldisplay tunnels_participating\" data-sortable>\n<thead><tr data-sort-method=none><th id=country data-sortable>")
                 .append(_t("Country"))
                 .append("</th><th id=router data-sortable data-sort-method=natural>")

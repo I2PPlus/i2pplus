@@ -4456,7 +4456,7 @@ msgstr "O roteador está atualmente operando no modo oculto, o que impede a cons
 msgid "No transit tunnels currently active."
 msgstr "Nenhum túnel de trânsito atualmente ativo."
 
-msgid "Transit Tunnels by Peer (Top 50)"
+msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"

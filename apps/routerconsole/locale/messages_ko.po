@@ -4438,7 +4438,7 @@ msgstr "라우터는 현재 대중교통 터널이 건설되는 것을 방지하
 msgid "No transit tunnels currently active."
 msgstr "현재 운송 터널이 활성화되지 않습니다."
 
-msgid "Transit Tunnels by Peer (Top 50)"
+msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"

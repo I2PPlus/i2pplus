@@ -4456,7 +4456,7 @@ msgstr "El enrutador está funcionando actualmente en modo oculto, lo que impide
 msgid "No transit tunnels currently active."
 msgstr "Actualmente no hay túneles de tránsito activos."
 
-msgid "Transit Tunnels by Peer (Top 50)"
+msgid "Transit Tunnels by Peer (Top {0})"
 msgstr ""
 
 msgid "Address"
