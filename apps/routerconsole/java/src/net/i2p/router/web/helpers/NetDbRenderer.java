@@ -2024,10 +2024,10 @@ class NetDbRenderer {
      * @return concatenated HTML fragment containing the rendered output of all routers
      */
     public String renderRouterInfosInParallel(Collection<RouterInfo> routerInfos, boolean isLocalRouter, boolean fullDetails) {
-        int numCores = Math.max(SystemVersion.getCores() * 3, 10);
+        int numCores = Math.max(SystemVersion.getCores() * 4, 10);
         ExecutorService executor = Executors.newFixedThreadPool(numCores);
 
-        int chunkSize = 25;
+        int chunkSize = SystemVersion.isSlow() ? 50 : 100;
         List<RouterInfo> list = new ArrayList<>(routerInfos);
         StringBuilder fullHtml = new StringBuilder();
 
