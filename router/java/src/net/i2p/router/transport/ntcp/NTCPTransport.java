@@ -185,19 +185,14 @@ public class NTCPTransport extends TransportImpl {
         _context.statManager().createRateStat("ntcp.writeError", "Number of NTCP write errors", "Transport [NTCP]", RATES);
 
         _endpoints = new HashSet<InetSocketAddress>(4);
-//        _establishing = new ConcurrentHashSet<NTCPConnection>(16);
         _establishing = new ConcurrentHashSet<NTCPConnection>(64);
         _conLock = new Object();
-//        _conByIdent = new ConcurrentHashMap<Hash, NTCPConnection>(64);
         _conByIdent = new ConcurrentHashMap<Hash, NTCPConnection>(256);
         _replayFilter = new DecayingHashSet(ctx, 10*60*1000, 8, "NTCP-Hx^HI");
-
         _finisher = new NTCPSendFinisher(ctx, this);
-
         _pumper = new EventPumper(ctx, this);
         _reader = new Reader(ctx);
         _writer = new net.i2p.router.transport.ntcp.Writer(ctx);
-
         _networkID = ctx.router().getNetworkID();
         _fastBid = new SharedBid(25); // best
         _slowBid = new SharedBid(70); // better than ssu unestablished, but not better than ssu established
@@ -297,8 +292,11 @@ public class NTCPTransport extends TransportImpl {
     }
 
     /**
-     * @param con that is established
-     * @return the previous connection to the same peer, must be closed by caller, null if no such.
+     * Registers a newly established inbound connection, replacing any existing connection
+     * for the same peer. Updates reachability status and connection statistics.
+     *
+     * @param con The newly established NTCPConnection.
+     * @return The previous NTCPConnection to the same peer if one existed, or null otherwise.
      */
     NTCPConnection inboundEstablished(NTCPConnection con) {
         _context.statManager().addRateData("ntcp.inboundEstablished", 1);
@@ -308,179 +306,179 @@ public class NTCPTransport extends TransportImpl {
         synchronized (_conLock) {
             old = _conByIdent.put(peer, con);
         }
-        if (con.isIPv6()) {
-            long last = _lastInboundIPv6;
-            Status oldStatus;
+        updateInboundIPStats(con.isIPv6(), con.getCreated());
+        return old;
+    }
+
+    /**
+     * Updates statistics and reachability status related to inbound connections
+     * based on IP version and connection creation time. Triggers address change
+     * notification if this is the first inbound connection of the IP family.
+     *
+     * @param ipv6 True if the connection is IPv6, false if IPv4.
+     * @param created The creation timestamp of the inbound connection.
+     */
+    private void updateInboundIPStats(boolean ipv6, long created) {
+        long last;
+        Status oldStatus = null;
+        if (ipv6) {
+            last = _lastInboundIPv6;
             if (last <= 0)
                 oldStatus = getReachabilityStatus();
-            else
-                oldStatus = null;
-            _lastInboundIPv6 = con.getCreated();
-            // Get that "R" cap in the netdb ASAP, esp. when SSU disabled
+            _lastInboundIPv6 = created;
             if (last <= 0)
                 addressChanged(oldStatus);
             _context.statManager().addRateData("ntcp.inboundIPv6Conn", 1);
         } else {
-            long last = _lastInboundIPv4;
-            Status oldStatus;
+            last = _lastInboundIPv4;
             if (last <= 0)
                 oldStatus = getReachabilityStatus();
-            else
-                oldStatus = null;
-            _lastInboundIPv4 = con.getCreated();
-            // Get that "R" cap in the netdb ASAP, esp. when SSU disabled
+            _lastInboundIPv4 = created;
             if (last <= 0)
                 addressChanged(oldStatus);
             _context.statManager().addRateData("ntcp.inboundIPv4Conn", 1);
         }
-        return old;
     }
 
+    /**
+     * Processes the next outbound message by retrieving or creating a connection,
+     * preparing it for sending, and handling related failures or bans.
+     */
     protected void outboundMessageReady() {
         OutNetMessage msg = getNextMessage();
-        if (msg != null) {
-            RouterInfo target = msg.getTarget();
-            RouterIdentity ident = target.getIdentity();
-            Hash ih = ident.calculateHash();
-            NTCPConnection con = null;
-            int newVersion = 0;
-            boolean fail = false;
+        if (msg == null) return;
+
+        RouterInfo target = msg.getTarget();
+        RouterIdentity ident = target.getIdentity();
+        Hash ih = ident.calculateHash();
+
+        NTCPConnection con = getConnectionOrCreateNew(ih, target);
+        if (con == null) {
+            banPeerForInvalidAddress(ih, target);
+            afterSend(msg, false);
+            return;
+        }
+
+        try {
+            prepareConnectionForSending(con, msg);
+        } catch (IOException | IllegalStateException e) {
+            logConnectionSetupError(e);
+            con.close();
+            afterSend(msg, false);
+        }
+    }
+
+    /**
+     * Retrieves an existing NTCPConnection for the given peer hash or creates a new one.
+     * Synchronizes minimally on the connection map to avoid race conditions.
+     *
+     * @param ih The hash identifier of the target router identity.
+     * @param target The RouterInfo object representing the connection target.
+     * @return An existing or newly created NTCPConnection, or null if creation failed.
+     */
+    private NTCPConnection getConnectionOrCreateNew(Hash ih, RouterInfo target) {
+        NTCPConnection con;
+        synchronized (_conLock) {
+            con = _conByIdent.get(ih);
+            if (con != null) return con;
+        }
+
+        RouterAddress addr = getTargetAddress(target);
+        if (addr == null) return null;
+
+        int newVersion = getNTCPVersion(addr);
+        if (newVersion == 0) return null;
+
+        try {
+            NTCPConnection newCon = new NTCPConnection(_context, this, target.getIdentity(), addr, newVersion);
             synchronized (_conLock) {
-                con = _conByIdent.get(ih);
-                if (con == null) {
-                    RouterAddress addr = getTargetAddress(target);
-                    if (addr != null) {
-                        newVersion = getNTCPVersion(addr);
-                        if (newVersion != 0) {
-                            try {
-                                con = new NTCPConnection(_context, this, ident, addr, newVersion);
-                                establishing(con);
-                                //if (_log.shouldDebug())
-                                //    _log.debug("Send on a new con: " + con + " at " + addr + " for " + ih);
-                                // Note that outbound conns go in the map BEFORE establishment
-                                _conByIdent.put(ih, con);
-                            } catch (DataFormatException dfe) {
-                                fail = true;
-                            }
-                        } else {
-                            fail = true;
-                        }
-                    } else {
-                        // race, RI changed out from under us
-                        // call afterSend below outside of conLock
-                        fail = true;
-                    }
+                // Check again for race
+                NTCPConnection existingCon = _conByIdent.get(ih);
+                if (existingCon != null) {
+                    newCon.close();
+                    return existingCon;
                 }
+                _conByIdent.put(ih, newCon);
             }
-            long now = _context.clock().now();
-            if (fail) {
-                // race, RI changed out from under us, maybe SSU can handle it
-                if (_log.shouldInfo()) {
-                    _log.warn("[NTCP] We bid on a peer without a valid NTCP address, banning for 8h\n" + target);
-                } else if (_log.shouldWarn()) {
-                    _log.warn("[NTCP] Router [" + ident.toBase64().substring(0,6) + "] has no valid NTCP address, banning for 8h" );
-                }
-                _context.banlist().banlistRouter(ih, " <b>➜</b> Invalid NTCP address", null, null, now + 8*60*60*1000);
-                afterSend(msg, false);
-                return;
-            }
-            if (newVersion != 0) {
-                /**
-                 *  As of 0.9.12, don't send our info if the first message is
-                 *  doing the same (common when connecting to a floodfill).
-                 *  Also, put the info message after whatever we are trying to send
-                 *  (it's a priority queue anyway and the info is low priority)
-                 *  Prior to 0.9.12, Bob would not send his RI unless he had ours,
-                 *  but that's fixed in 0.9.12.
-                 */
-                boolean shouldSkipInfo = false;
-                boolean shouldFlood = false;
-                I2NPMessage m = msg.getMessage();
-                if (m.getType() == DatabaseStoreMessage.MESSAGE_TYPE) {
-                    DatabaseStoreMessage dsm = (DatabaseStoreMessage) m;
-                    if (dsm.getKey().equals(_context.routerHash())) {
-                        shouldSkipInfo = true;
-                        shouldFlood = dsm.getReplyToken() != 0;
-                        // TODO tell the NTCP2 con to flood in the handshake and mark success when sent
-                    }
-                }
-                if (!shouldSkipInfo) {
-                    // Queue the message, and our RI
-                    // doesn't do anything yet, just enqueues it
-                    con.send(msg);
-                    // does nothing for outbound NTCP2
-                    //con.enqueueInfoMessage();
-                } else if (shouldFlood || newVersion == 1) {
-                    // Queue the message, which is a DSM of our RI
-                    con.send(msg);
-                } else if (_log.shouldInfo()) {
-                    // Send nothing, the handshake has the RI
-                    // version == 2 && shouldSkipInfo && !shouldFlood
-                    _log.info("SKIPPING INFO message: " + con);
-                }
+            establishing(newCon);
+            return newCon;
+        } catch (DataFormatException dfe) {
+            return null;
+        }
+    }
 
-                try {
-                    SocketChannel channel = SocketChannel.open();
-                    con.setChannel(channel);
-                    channel.configureBlocking(false);
-                    _pumper.registerConnect(con);
-                    con.getEstablishState().prepareOutbound();
-                } catch (IOException ioe) {
-                    if (_log.shouldError())
-                        _log.error("[NTCP] Error opening a channel \n* IO Exception: " + ioe.getMessage());
-                    _context.statManager().addRateData("ntcp.outboundFailedIOEImmediate", 1);
-                    con.close();
-                    afterSend(msg, false);
-                } catch (IllegalStateException ise) {
-                    if (_log.shouldWarn())
-                        _log.warn("[NTCP] Failed opening a channel \n* Illegal State Exception: " +  ise.getMessage());
-                    afterSend(msg, false);
-                }
-            } else {
-                con.send(msg);
-            }
-            /*
-            NTCPConnection con = getCon(ident);
-            remove the race here
-            if (con != null) {
-                //if (_log.shouldDebug())
-                //    _log.debug("Send on an existing con: " + con);
-                con.send(msg);
-            } else {
-                RouterAddress addr = msg.getTarget().getTargetAddress(STYLE);
-                if (addr != null) {
-                    NTCPAddress naddr = new NTCPAddress(addr);
-                    con = new NTCPConnection(_context, this, ident, naddr);
-                    Hash ih = ident.calculateHash();
-                    if (_log.shouldDebug())
-                        _log.debug("Send on a new con: " + con + " at " + addr + " for " + ih.toBase64());
-                    NTCPConnection old = null;
-                    synchronized (_conLock) {
-                        old = (NTCPConnection)_conByIdent.put(ih, con);
-                    }
-                    if (old != null) {
-                        if (_log.shouldWarn())
-                            _log.warn("Multiple connections on out ready, closing " + old + " and keeping " + con);
-                        old.close();
-                    }
-                    con.enqueueInfoMessage(); // enqueues a netDb store of our own info
-                    con.send(msg); // doesn't do anything yet, just enqueues it
+    /**
+     * Bans a peer router for having an invalid or missing NTCP address.
+     * Logs the ban event with appropriate log levels based on configuration.
+     *
+     * @param ih The hash identifier of the peer router.
+     * @param target The RouterInfo of the banned peer.
+     */
+    private void banPeerForInvalidAddress(Hash ih, RouterInfo target) {
+        long now = _context.clock().now();
+        if (_log.shouldInfo()) {
+            _log.warn("[NTCP] We bid on a peer without a valid NTCP address, banning for 8h\n" + target);
+        } else if (_log.shouldWarn()) {
+            String shortId = target.getIdentity().toBase64().substring(0,6);
+            _log.warn("[NTCP] Router [" + shortId + "] has no valid NTCP address, banning for 8h");
+        }
+        _context.banlist().banlistRouter(ih, " <b>➜</b> Invalid NTCP address", null, null, now + 8*60*60*1000);
+    }
 
-                    try {
-                        SocketChannel channel = SocketChannel.open();
-                        con.setChannel(channel);
-                        channel.configureBlocking(false);
-                        _pumper.registerConnect(con);
-                    } catch (IOException ioe) {
-                        if (_log.shouldError())
-                            _log.error("Error opening a channel", ioe);
-                        con.close();
-                    }
-                } else {
-                    con.close();
+    /**
+     * Prepares the given NTCPConnection for sending the specified message,
+     * including checking message types and connection version, sending
+     * control info if needed, and ensuring the channel is open.
+     *
+     * @param con The NTCPConnection to prepare and send on.
+     * @param msg The outbound message to send.
+     * @throws IOException If channel operations fail.
+     */
+    private void prepareConnectionForSending(NTCPConnection con, OutNetMessage msg) throws IOException {
+        int newVersion = con.getVersion();
+        I2NPMessage m = msg.getMessage();
+        boolean shouldSkipInfo = false;
+        boolean shouldFlood = false;
+
+        if (newVersion != 0) {
+            if (m.getType() == DatabaseStoreMessage.MESSAGE_TYPE) {
+                DatabaseStoreMessage dsm = (DatabaseStoreMessage) m;
+                if (dsm.getKey().equals(_context.routerHash())) {
+                    shouldSkipInfo = true;
+                    shouldFlood = dsm.getReplyToken() != 0;
                 }
             }
-            */
+
+            if (!shouldSkipInfo || shouldFlood || newVersion == 1) {
+                con.send(msg);
+            } else if (_log.shouldInfo()) {
+                _log.info("SKIPPING INFO message: " + con);
+            }
+
+            if (con.getChannel() == null) {
+                SocketChannel channel = SocketChannel.open();
+                con.setChannel(channel);
+                channel.configureBlocking(false);
+                _pumper.registerConnect(con);
+                con.getEstablishState().prepareOutbound();
+            }
+        } else {
+            con.send(msg);
+        }
+    }
+
+    /**
+     * Logs errors or warnings related to connection setup failures, differentiating
+     * between IOExceptions and IllegalStateExceptions with appropriate log levels.
+     *
+     * @param e The exception that occurred during connection setup.
+     */
+    private void logConnectionSetupError(Exception e) {
+        if (e instanceof IOException) {
+            if (_log.shouldError()) _log.error("[NTCP] Error opening a channel \n* IO Exception: " + e.getMessage());
+            _context.statManager().addRateData("ntcp.outboundFailedIOEImmediate", 1);
+        } else if (e instanceof IllegalStateException) {
+            if (_log.shouldWarn()) _log.warn("[NTCP] Failed opening a channel \n* Illegal State Exception: " + e.getMessage());
         }
     }
 
