@@ -717,12 +717,3 @@ public abstract class CommSystemFacade implements Service {
         private static String _x(String s) { return s; }
     }
 }
-
-/** unused
-class DummyCommSystemFacade extends CommSystemFacade {
-    public void shutdown() {}
-    public void startup() {}
-    public void restart() {}
-    public void processMessage(OutNetMessage msg) { }
-}
-**/

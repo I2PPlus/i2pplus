@@ -1528,8 +1528,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     };
 
     /**
-     *  Uses the transport IP first because that lookup is fast,
-     *  then the IP from the netDb.
+     *  Uses the transport IP first because that lookup is fast, then the IP from the netDb.
      *  Not recommended for our local router hash, as we may not be either in the cache or netdb,
      *  or may not be publishing an IP.
      *
