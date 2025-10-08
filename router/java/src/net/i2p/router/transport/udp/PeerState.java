@@ -1005,90 +1005,109 @@ public class PeerState {
 
 
     /**
-     * Expire / complete any outbound messages
-     * High usage -
-     * OutboundMessageFragments.getNextVolley() calls this 1st.
-     * TODO combine finishMessages(), allocateSend(), and getNextDelay() so we don't iterate 3 times.
+     * Processes outbound messages by expiring overdue messages and
+     * completing messages marked as done. Called frequently by
+     * OutboundMessageFragments.getNextVolley() to maintain message state.
      *
-     * @return number of active outbound messages remaining
+     * This method removes completed or expired messages from the active pool,
+     * updates relevant statistics, and triggers callbacks for success or failure.
+     *
+     * @param now current time in milliseconds for expiration checks
+     * @return total count of active outbound messages plus those queued for sending
      */
     int finishMessages(long now) {
-        // short circuit, unsynchronized
-        if (_outboundMessages.isEmpty()) {return _outboundQueue.size();}
+        // Synchronized empty check for thread safety
+        synchronized (_outboundLock) {
+            if (_outboundMessages.isEmpty()) {
+                return _outboundQueue.size();
+            }
+        }
 
         if (_dead) {
             dropOutbound();
             return 0;
         }
 
-        int rv = 0;
-        List<OutboundMessageState> succeeded = null;
-        List<OutboundMessageState> failed = null;
+        List<OutboundMessageState> succeeded = new ArrayList<>(4);
+        List<OutboundMessageState> failed = new ArrayList<>(4);
+
+        boolean shouldLogInfo = _log.shouldInfo();
+        boolean shouldLogWarn = _log.shouldWarn();
+
+        int rv;
+        // Variables for failed stats accumulation
+        int failedSize = 0;
+        int failedCount = 0;
+        boolean totalFail = false;
 
         synchronized (_outboundLock) {
-            for (Iterator<OutboundMessageState> iter = _outboundMessages.iterator(); iter.hasNext(); ) {
+            Iterator<OutboundMessageState> iter = _outboundMessages.iterator();
+            while (iter.hasNext()) {
                 OutboundMessageState state = iter.next();
                 if (state.isComplete()) {
                     iter.remove();
-                    if (succeeded == null) succeeded = new ArrayList<>(4);
                     succeeded.add(state);
                 } else if (state.isExpired(now)) {
                     iter.remove();
                     _context.statManager().addRateData("udp.sendFailed", state.getPushCount());
-                    if (failed == null) failed = new ArrayList<>(4);
                     failed.add(state);
+                    failedSize += state.getUnackedSize();
+                    failedCount += state.getUnackedFragments();
+                    OutNetMessage msg = state.getMessage();
+                    if (msg != null && !_isInbound && state.getSeqNum() == 0) {
+                        totalFail = true;
+                    }
                 } else if (state.getMaxSends() > OutboundMessageFragments.MAX_VOLLEYS) {
                     iter.remove();
                     _context.statManager().addRateData("udp.sendAggressiveFailed", state.getPushCount());
-                    if (failed == null) failed = new ArrayList<>(4);
                     failed.add(state);
+                    failedSize += state.getUnackedSize();
+                    failedCount += state.getUnackedFragments();
+                    OutNetMessage msg = state.getMessage();
+                    if (msg != null && !_isInbound && state.getSeqNum() == 0) {
+                        totalFail = true;
+                    }
                 }
             }
             rv = _outboundMessages.size();
         }
 
-        for (int i = 0; succeeded != null && i < succeeded.size(); i++) {
-            OutboundMessageState state = succeeded.get(i);
+        // Handle succeeded messages outside lock
+        for (OutboundMessageState state : succeeded) {
             _transport.succeeded(state);
             OutNetMessage msg = state.getMessage();
-            if (msg != null) {msg.timestamp("sending complete");}
+            if (msg != null) {
+                msg.timestamp("sending complete");
+            }
         }
 
-        if (failed != null) {
-            int failedSize = 0;
-            int failedCount = 0;
-            boolean totalFail = false;
-            for (int i = 0; i < failed.size(); i++) {
-                OutboundMessageState state = failed.get(i);
-                failedSize += state.getUnackedSize();
-                failedCount += state.getUnackedFragments();
+        if (!failed.isEmpty()) {
+            for (OutboundMessageState state : failed) {
                 OutNetMessage msg = state.getMessage();
                 if (msg != null) {
                     msg.timestamp("Expired in the active pool");
                     _transport.failed(state);
-                    if (_log.shouldInfo()) {_log.info("Message expired " + state + this);}
-                    if (!_isInbound && state.getSeqNum() == 0) {totalFail = true;} // see below
+                    if (shouldLogInfo) {
+                        _log.info("Message expired " + state + this);
+                    }
                 } else {
-                    // It can not have an OutNetMessage if the source is the final after establishment message
-                    if (_log.shouldInfo()) {_log.warn("Unable to send direct message " + state + this);}
-                    //else if (_log.shouldWarn()) {_log.warn("Unable to send direct message " + this);}
+                    if (shouldLogInfo) {
+                        _log.warn("Unable to send direct message " + state + this);
+                    }
                 }
             }
+
             if (failedSize > 0) {
                 if (totalFail) {
-                    // First outbound message failed
-                    // This also ensures that in SSU2 if we never get an ACK of the
-                    // Session Confirmed, we will fail quickly (because we don't have
-                    // a separate timer for retransmitting it)
-                    if (_log.shouldWarn()) {_log.warn("First Outbound message failed " + this);}
+                    if (shouldLogWarn) {
+                        _log.warn("First Outbound message failed " + this);
+                    }
                     _transport.sendDestroy(this, SSU2Util.REASON_FRAME_TIMEOUT);
                     _transport.dropPeer(this, true, "OB First Message Fail");
                     return 0;
                 }
-                // Restore the window
-                synchronized(_sendWindowBytesRemainingLock) {
-                    // This isn't exactly right, because some fragments may not have been sent at all,
-                    // but that should be unlikely
+
+                synchronized (_sendWindowBytesRemainingLock) {
                     _sendWindowBytesRemaining += failedSize;
                     _sendWindowBytesRemaining += failedCount * fragmentOverhead();
                     if (_sendWindowBytesRemaining > _sendWindowBytes) {
@@ -1097,8 +1116,9 @@ public class PeerState {
                 }
                 // no need to nudge(), this is called from OMF loop before allocateSend()
             }
+
             if (rv <= 0) {
-                synchronized(this) {
+                synchronized (this) {
                     _retransmitTimer = 0;
                     exitFastRetransmit();
                 }
