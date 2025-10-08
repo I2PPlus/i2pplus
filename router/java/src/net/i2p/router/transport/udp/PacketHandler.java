@@ -1,5 +1,7 @@
 package net.i2p.router.transport.udp;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.concurrent.BlockingQueue;
 
 import net.i2p.router.RouterContext;
@@ -222,36 +224,42 @@ class PacketHandler {
      *  @since 0.9.54
      */
     private boolean receiveSSU2Packet(RemoteHostId from, UDPPacket packet, InboundEstablishState2 state) {
-        // decrypt header
         byte[] k1 = _transport.getSSU2StaticIntroKey();
         byte[] k2;
         SSU2Header.Header header;
-        int type;
+        int type = -1;
         boolean shouldBan = false;
+        String banReason = "";
+        InetAddress ip = null;
+        boolean ipBlocklisted = false;
+
+        // Extract IP once for logging and banning decisions
+        if (from != null && from.getIP() != null) {
+            try {
+                ip = InetAddress.getByAddress(from.getIP());
+                ipBlocklisted = _context.blocklist().isBlocklisted(ip.getHostAddress());
+            } catch (UnknownHostException e) {
+                if (_log.shouldDebug())
+                    _log.warn("Failed to create InetAddress for blocklist check from RemoteHostId: " + from + " -> " + e.getMessage());
+            }
+        }
+
         if (state == null) {
-            // Session Request, Token Request, Peer Test 5-7, or Hole Punch
             k2 = k1;
             header = SSU2Header.trialDecryptHandshakeHeader(packet, k1, k2);
             if (header == null ||
                 header.getType() != SSU2Util.SESSION_REQUEST_FLAG_BYTE ||
                 header.getVersion() != 2 ||
                 header.getNetID() != _networkID) {
+
                 if (header != null && _log.shouldInfo()) {
                     _log.info("Packet does not decrypt as Session Request, attempting to decrypt as Token Request / PeerTest / HolePunch \n* " +
                               header + " from " + from);
                 }
-                // The first 32 bytes were fine, but it corrupted the next 32 bytes
-                // TODO make this more efficient, just take the first 32 bytes
+
                 header = SSU2Header.trialDecryptLongHeader(packet, k1, k2);
                 if (header == null || header.getVersion() != 2 || header.getNetID() != _networkID) {
-                    // typical case, SSU 1 that didn't validate, will be logged at WARN level above
-                    // in group 4 receive packet
-                    //if (_log.shouldDebug())
-                    //    _log.debug("Packet does not decrypt as Session Request, Token Request, or Peer Test: " + header);
                     if (header != null) {
-                        // conn ID decryption is the same for short and long header, with k1
-                        // presumably a data packet, either ip/port changed, or a race during establishment?
-                        // lookup peer state by conn ID, pass over for decryption with the proper k2
                         long id = header.getDestConnID();
                         PeerState2 ps2 = _transport.getPeerState(id);
                         if (ps2 != null) {
@@ -259,166 +267,191 @@ class PacketHandler {
                                 _log.info("Migrated " + packet.getPacket().getLength() + " byte packet from " + from + ps2);
                             }
                             ps2.receivePacket(from, packet);
+                            performBanIfNeeded(ip, banReason, shouldBan);
                             return true;
                         }
                         PeerStateDestroyed dead = _transport.getRecentlyClosed(id);
                         if (dead != null) {
-                            // Probably termination ack.
-                            // Prevent attempted SSU1 fallback processing and adding to fail cache
                             if (_log.shouldDebug()) {
                                 _log.debug("Handling " + packet.getPacket().getLength() + " byte packet from " + from +
                                            " for recently closed ID " + id);
                             }
                             dead.receivePacket(from, packet);
+                            performBanIfNeeded(ip, banReason, shouldBan);
                             return true;
                         }
                     }
+                    performBanIfNeeded(ip, banReason, shouldBan);
                     return false;
                 }
                 type = header.getType();
 
-                /* One in a million decrypt of SSU 1 packet with type/version/netid all correct?
-                   can't have session confirmed with null state, avoid NPE below */
-                if (type == SSU2Util.SESSION_CONFIRMED_FLAG_BYTE) {return false;}
+                if (type == SSU2Util.SESSION_CONFIRMED_FLAG_BYTE) {
+                    performBanIfNeeded(ip, banReason, shouldBan);
+                    return false;
+                }
                 if (type == SSU2Util.SESSION_REQUEST_FLAG_BYTE &&
                     packet.getPacket().getLength() == SSU2Util.MIN_HANDSHAKE_DATA_LEN - 1) {
-                    // i2pd short 87 byte session request thru 0.9.56, drop packet
-                    if (_log.shouldWarn()) {
+                    if (!ipBlocklisted && _log.shouldWarn()) {
                         _log.warn("Received short Session Request (87 bytes) from " + from);
                     }
                     shouldBan = true;
-                    return true;
+                    banReason = "Short Session Requests";
                 }
-            } else {type = SSU2Util.SESSION_REQUEST_FLAG_BYTE;}
+            } else {
+                type = SSU2Util.SESSION_REQUEST_FLAG_BYTE;
+            }
         } else {
-            // Session Request (after Retry) or Session Confirmed
-            // or retransmitted Session Request or Token Request
             k2 = state.getRcvHeaderEncryptKey2();
             if (k2 == null) {
-                // Session Request after Retry
                 k2 = k1;
                 header = SSU2Header.trialDecryptHandshakeHeader(packet, k1, k2);
                 if (header == null ||
                     header.getType() != SSU2Util.SESSION_REQUEST_FLAG_BYTE ||
                     header.getVersion() != 2 ||
                     header.getNetID() != _networkID) {
-                    // possibly token-request-after-retry? let's see...
+
                     header = SSU2Header.trialDecryptLongHeader(packet, k1, k2);
                     if (header != null && header.getType() == SSU2Util.SESSION_REQUEST_FLAG_BYTE &&
                         header.getVersion() == 2 && header.getNetID() == _networkID &&
                         packet.getPacket().getLength() == 87) {
-                        // i2pd short 87 byte session request thru 0.9.56, drop packet
-                        if (_log.shouldWarn()) {
+                        if (!ipBlocklisted && _log.shouldWarn()) {
                             _log.warn("Received short Session Request (87 bytes) after Retry on " + state);
                         }
                         shouldBan = true;
-                        return true;
+                        banReason = "Short Session Requests";
                     }
                     if (header == null ||
                         header.getType() != SSU2Util.TOKEN_REQUEST_FLAG_BYTE ||
                         header.getVersion() != 2 ||
                         header.getNetID() != _networkID) {
-                        if (_log.shouldWarn()) {
+                        if (!ipBlocklisted && _log.shouldWarn()) {
                             _log.warn("Failed to decrypt Session or Token Request after Retry \n* " + header +
                                       " (" + packet.getPacket().getLength() + " bytes) on " + state);
                         }
                         shouldBan = true;
+                        banReason = "Corrupt Session / Token Requests";
+                        performBanIfNeeded(ip, banReason, shouldBan);
                         return false;
                     }
-                    // yes, retransmitted token request
                 }
                 if (header.getSrcConnID() != state.getSendConnID()) {
-                    if (_log.shouldWarn()) {
+                    if (!ipBlocklisted && _log.shouldWarn()) {
                         _log.warn("Received BAD Source Connection ID \n* " + header +
                                   " (" + packet.getPacket().getLength() + " bytes) on " + state);
                     }
-                    // TODO could be a retransmitted Session Request,
-                    // tell establisher?
                     shouldBan = true;
+                    banReason = "Bad Source ConnectionID";
+                    performBanIfNeeded(ip, banReason, shouldBan);
                     return false;
                 }
                 if (header.getDestConnID() != state.getRcvConnID()) {
-                    // i2pd bug changing after retry, thru 0.9.56, drop packet
-                    if (_log.shouldWarn()) {
+                    if (!ipBlocklisted && _log.shouldWarn()) {
                         _log.warn("Received BAD Destination Connection ID \n* " + header +
                                   " (" + packet.getPacket().getLength() + " bytes) on " + state);
                     }
                     shouldBan = true;
-                    return true;
+                    banReason = "Bad Destination ConnectionID";
                 }
                 type = header.getType();
             } else {
-                // Session Confirmed or retransmitted Session Request or Token Request
                 header = SSU2Header.trialDecryptShortHeader(packet, k1, k2);
                 if (header == null) {
-                    // Java I2P thru 0.9.56 retransmits session confirmed with 1-2 byte packets
-                    if (_log.shouldWarn()) {
+                    if (!ipBlocklisted && _log.shouldWarn()) {
                         _log.warn("Received SessionConfirmed packet was too short (" +
                                   + packet.getPacket().getLength() + " bytes) on " + state);
                     }
                     shouldBan = true;
+                    banReason = "Short Session Requests";
+                    performBanIfNeeded(ip, banReason, shouldBan);
                     return false;
                 }
                 if (header.getDestConnID() != state.getRcvConnID()) {
-                    if (_log.shouldWarn()) {
+                    if (!ipBlocklisted && _log.shouldWarn()) {
                         _log.warn("Received BAD Destination Connection ID \n* " + header + " on " + state);
                     }
                     shouldBan = true;
+                    banReason = "Bad Destination ConnectionID";
+                    performBanIfNeeded(ip, banReason, shouldBan);
                     return false;
                 }
                 if (header.getPacketNumber() != 0 ||
                     header.getType() != SSU2Util.SESSION_CONFIRMED_FLAG_BYTE) {
+                    shouldBan = false;
                     if (_log.shouldInfo()) {
                         _log.info("Queueing possible data packet (" + packet.getPacket().getLength() + " bytes) on: " + state);
                     }
-                    // TODO either attempt to decrypt as a retransmitted
-                    // Session Request or Token Request,
-                    // or just tell establisher so it can retransmit Session Created or Retry
-
-                    // Possible ordering issues and races:
-                    // Case 1: Data packets before (possibly lost or out-of-order) Session Confirmed
-                    // Case 2: Data packets after Session Confirmed but it wasn't processed yet
-                    // Queue the packet with the state for processing
                     state.queuePossibleDataPacket(packet);
+                    performBanIfNeeded(ip, banReason, shouldBan);
                     return true;
                 }
                 type = SSU2Util.SESSION_CONFIRMED_FLAG_BYTE;
             }
         }
 
-        // all good
-        SSU2Header.acceptTrialDecrypt(packet, header);
-        switch (type) {
-          case SSU2Util.SESSION_REQUEST_FLAG_BYTE:
-            if (_log.shouldDebug()) {_log.debug("Received a SessionRequest on " + state);}
-            _establisher.receiveSessionOrTokenRequest(from, state, packet);
-            break;
+        performBanIfNeeded(ip, banReason, shouldBan);
 
-          case SSU2Util.TOKEN_REQUEST_FLAG_BYTE:
-            if (_log.shouldDebug()) {_log.debug("Received a TokenRequest on " + state);}
-            _establisher.receiveSessionOrTokenRequest(from, state, packet);
-            break;
+        if (type != -1) {
+            SSU2Header.acceptTrialDecrypt(packet, header);
+            switch (type) {
+              case SSU2Util.SESSION_REQUEST_FLAG_BYTE:
+                if (_log.shouldDebug()) {_log.debug("Received a SessionRequest on " + state);}
+                _establisher.receiveSessionOrTokenRequest(from, state, packet);
+                break;
 
-          case SSU2Util.SESSION_CONFIRMED_FLAG_BYTE:
-            if (_log.shouldDebug()) {_log.debug("Received a SessionConfirmed on " + state);}
-            _establisher.receiveSessionConfirmed(state, packet);
-            break;
+              case SSU2Util.TOKEN_REQUEST_FLAG_BYTE:
+                if (_log.shouldDebug()) {_log.debug("Received a TokenRequest on " + state);}
+                _establisher.receiveSessionOrTokenRequest(from, state, packet);
+                break;
 
-          case SSU2Util.PEER_TEST_FLAG_BYTE:
-            if (_log.shouldDebug()) {_log.debug("Received a PeerTest from " + from);}
-            _testManager.receiveTest(from, packet);
-            break;
+              case SSU2Util.SESSION_CONFIRMED_FLAG_BYTE:
+                if (_log.shouldDebug()) {_log.debug("Received a SessionConfirmed on " + state);}
+                _establisher.receiveSessionConfirmed(state, packet);
+                break;
 
-          case SSU2Util.HOLE_PUNCH_FLAG_BYTE:
-            if (_log.shouldDebug()) {_log.debug("Received a HolePunch from " + from);}
-            _establisher.receiveHolePunch(from, packet);
-            break;
+              case SSU2Util.PEER_TEST_FLAG_BYTE:
+                if (_log.shouldDebug()) {_log.debug("Received a PeerTest from " + from);}
+                _testManager.receiveTest(from, packet);
+                break;
 
-          default:
-            if (_log.shouldWarn()) {_log.warn("Received UNKNOWN SSU2 message \n* " + header + " from " + from);}
-            break;
+              case SSU2Util.HOLE_PUNCH_FLAG_BYTE:
+                if (_log.shouldDebug()) {_log.debug("Received a HolePunch from " + from);}
+                _establisher.receiveHolePunch(from, packet);
+                break;
+
+              default:
+                if (_log.shouldWarn()) {_log.warn("Received UNKNOWN SSU2 message \n* " + header + " from " + from);}
+                break;
+            }
+            return true;
         }
-        return true;
+
+        return false;
+    }
+
+    /**
+     * Performs banning of a peer IP address if requested.
+     * Does nothing if the IP is already blocklisted or if banning is not required.
+     *
+     * @param ip the InetAddress of the peer to ban; may be null
+     * @param banReason the reason for banning; must not be null or empty if banning
+     * @param shouldBan true if banning should be performed; false to skip banning
+     */
+    private void performBanIfNeeded(InetAddress ip, String banReason, boolean shouldBan) {
+        if (shouldBan && ip != null && banReason != null && !banReason.isEmpty()) {
+            if (_context.blocklist().isBlocklisted(ip.getHostAddress())) {
+                return;
+            }
+            long now = _context.clock().now();
+            _context.blocklist().add(ip.getHostAddress());
+            if (_log.shouldWarn()) {
+                _log.warn("Banning IP Address " + ip.getHostAddress() + " for duration of session -> " + banReason);
+            }
+        } else {
+            if (_log.shouldDebug()) {
+                _log.warn("Cannot ban packet source, missing IP address or ban reason");
+            }
+        }
     }
 
     /**
