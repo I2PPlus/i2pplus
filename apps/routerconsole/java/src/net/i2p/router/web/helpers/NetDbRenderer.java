@@ -73,7 +73,7 @@ class NetDbRenderer {
     public NetDbRenderer (RouterContext ctx) {_context = ctx;}
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
-    public static final int LOOKUP_WAIT = 8 * 1000;
+    public static final int LOOKUP_WAIT = 5 * 1000;
     public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}
     public int localLSCount;
 
@@ -195,42 +195,28 @@ class NetDbRenderer {
             String alternativeIPv6 = null;
 
             if (ipAddress != null) {
-                if (ipAddress.endsWith("/24")) {
-                    ipMode = 1;
-                } else if (ipAddress.endsWith("/16")) {
-                    ipMode = 2;
-                } else if (ipAddress.endsWith("/8")) {
-                    ipMode = 3;
-                } else if (ipAddress.indexOf(':') > 0) {
+                if (ipAddress.endsWith("/24")) {ipMode = 1;}
+                else if (ipAddress.endsWith("/16")) {ipMode = 2;}
+                else if (ipAddress.endsWith("/8")) {ipMode = 3;}
+                else if (ipAddress.indexOf(':') > 0) {
                     ipMode = 4;
-                    if (ipAddress.endsWith("::")) {
-                        ipAddress = ipAddress.substring(0, ipAddress.length() - 1); // truncate for prefix search
-                    } else {
-                        alternativeIPv6 = getAltIPv6(ipAddress); // create alternative string to check also
-                    }
+                    if (ipAddress.endsWith("::")) {ipAddress = ipAddress.substring(0, ipAddress.length() - 1);} // truncate for prefix search
+                    else {alternativeIPv6 = getAltIPv6(ipAddress);} // create alternative string to check also
                 }
                 if (ipMode > 0 && ipMode < 4) {
                     for (int i = 0; i < ipMode; i++) {
                         int lastDot = ipAddress.substring(0, ipAddress.length() - 1).lastIndexOf('.');
-                        if (lastDot > 0) {
-                            ipAddress = ipAddress.substring(0, lastDot + 1);
-                        }
+                        if (lastDot > 0) {ipAddress = ipAddress.substring(0, lastDot + 1);}
                     }
                 }
             }
             if (ipv6Address != null) {
-                if (ipv6Address.endsWith("::")) {
-                    ipv6Address = ipv6Address.substring(0, ipv6Address.length() - 1); // truncate for prefix search
-                } else {
-                    alternativeIPv6 = getAltIPv6(ipv6Address); // create alternative string to check also
-                }
+                if (ipv6Address.endsWith("::")) {ipv6Address = ipv6Address.substring(0, ipv6Address.length() - 1);} // truncate for prefix search
+                else {alternativeIPv6 = getAltIPv6(ipv6Address);} // create alternative string to check also
             }
 
             String familyArg = family; // save for error message
-            if (family != null) {
-                family = family.toLowerCase(Locale.US);
-            }
-
+            if (family != null) {family = family.toLowerCase(Locale.US);}
             if (routerPrefix != null && !routers.isEmpty()) { filterHashPrefix(routers, routerPrefix); }
             if (version != null && !routers.isEmpty()) { filterVersion(routers, version); }
             if (country != null && !routers.isEmpty()) { filterCountry(routers, country); }
@@ -240,11 +226,8 @@ class NetDbRenderer {
             if (transport != null && !routers.isEmpty()) { filterTransport(routers, transport); }
             if (family != null && !routers.isEmpty()) { filterFamily(routers, family); }
             if (ipAddress != null && !routers.isEmpty()) {
-                if (ipMode == 0) {
-                    filterIP(routers, ipAddress);
-                } else {
-                    filterIP(routers, ipAddress, alternativeIPv6);
-                }
+                if (ipMode == 0) {filterIP(routers, ipAddress);}
+                else {filterIP(routers, ipAddress, alternativeIPv6);}
             }
             if (port != 0 && !routers.isEmpty()) { filterPort(routers, port, highPort); }
             if (mtu != null && !routers.isEmpty()) { filterMTU(routers, mtu); }
@@ -1200,6 +1183,17 @@ class NetDbRenderer {
         int written = 0;
         boolean morePages = false;
 
+        if (mode == 0 || mode == 3) {
+            for (RouterInfo ri : routers) {
+                Hash key = ri.getIdentity().getHash();
+                String routerVersion = ri.getOption("router.version");
+                if (routerVersion != null) { versions.increment(routerVersion); }
+                String country = _context.commSystem().getCountry(key);
+                if (country != null) { countries.increment(country); }
+                transportCount[classifyTransports(ri)]++;
+            }
+        }
+
         List<RouterInfo> routersToRender = new ArrayList<>();
         for (RouterInfo ri : routers) {
             Hash key = ri.getIdentity().getHash();
@@ -1215,13 +1209,6 @@ class NetDbRenderer {
                 }
                 routersToRender.add(ri);
                 written++;
-
-                // Still count versions, countries, and transport counts as before
-                String routerVersion = ri.getOption("router.version");
-                if (routerVersion != null) { versions.increment(routerVersion); }
-                String country = _context.commSystem().getCountry(key);
-                if (country != null) { countries.increment(country); }
-                transportCount[classifyTransports(ri)]++;
             }
         }
 
