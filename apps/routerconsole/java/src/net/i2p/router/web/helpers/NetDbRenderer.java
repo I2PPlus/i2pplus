@@ -150,18 +150,8 @@ class NetDbRenderer {
             byte[] hashedBytes = Base64.decode(routerPrefix);
             if (hashedBytes != null && hashedBytes.length == Hash.HASH_LENGTH) {
                 Hash hash = new Hash(hashedBytes);
-                RouterInfo routerInfo = (RouterInfo) networkDatabase.lookupLocallyWithoutValidation(hash);
                 boolean isBanned = false;
-                if (routerInfo == null) {
-                    LookupWaiter lookupWaiter = new LookupWaiter();
-                    synchronized (lookupWaiter) {
-                        networkDatabase.lookupRouterInfo(hash, lookupWaiter, lookupWaiter, LOOKUP_WAIT); // remote lookup
-                        try {
-                            lookupWaiter.wait(LOOKUP_WAIT);
-                        } catch (InterruptedException ignored) {}
-                    }
-                }
-                routerInfo = (RouterInfo) networkDatabase.lookupLocallyWithoutValidation(hash);
+                RouterInfo routerInfo = lookupRouterInfoWithWait(networkDatabase, hash, LOOKUP_WAIT);
                 if (routerInfo != null) {
                     renderRouterInfo(buffer, routerInfo, false, true);
                 } else {
@@ -325,6 +315,32 @@ class NetDbRenderer {
         if (sybil != null) {
             SybilRenderer.renderSybilHTML(out, _context, sybilHashes, sybil);
         }
+    }
+
+    /**
+     * Looks up a RouterInfo by its hash.
+     * Tries a local lookup first, then waits for a remote lookup
+     * to complete if not found, retrying the local lookup afterward.
+     *
+     * @param networkDatabase the network database facade for lookups
+     * @param hash the unique identifier of the router
+     * @param timeout the max wait time in milliseconds for the remote lookup
+     * @return the RouterInfo if found locally or remotely within the given time; otherwise null
+     * @since 0.9.68+
+     */
+    private RouterInfo lookupRouterInfoWithWait(NetworkDatabaseFacade networkDatabase, Hash hash, long timeout) {
+        RouterInfo routerInfo = (RouterInfo) networkDatabase.lookupLocallyWithoutValidation(hash);
+        if (routerInfo == null) {
+            LookupWaiter lookupWaiter = new LookupWaiter();
+            synchronized (lookupWaiter) {
+                networkDatabase.lookupRouterInfo(hash, lookupWaiter, lookupWaiter, timeout);
+                try {
+                    lookupWaiter.wait(timeout);
+                } catch (InterruptedException ignored) {}
+            }
+            routerInfo = (RouterInfo) networkDatabase.lookupLocallyWithoutValidation(hash);
+        }
+        return routerInfo;
     }
 
     /**
@@ -1437,6 +1453,7 @@ class NetDbRenderer {
     private void renderRouterInfo(StringBuilder buf, RouterInfo routerInfo, boolean isLocalRouter, boolean fullDetails) {
         RouterIdentity identity = routerInfo.getIdentity();
         long uptime = _context.router().getUptime();
+        long now = _context.clock().now();
         Hash routerHash = routerInfo.getHash();
         String routerHashBase64 = routerHash.toBase64();
         String family = routerInfo.getOption("family");
@@ -1613,7 +1630,7 @@ class NetDbRenderer {
         }
         buf.append("</th></tr>\n<tr>");
 
-        long age = _context.clock().now() - routerInfo.getPublished();
+        long age = now - routerInfo.getPublished();
 
         if (isLocalRouter && _context.router().isHidden()) {
             buf.append("<td><b>").append(_t("Hidden")).append(", ").append(_t("Updated")).append(":</b></td>")
@@ -1952,7 +1969,7 @@ class NetDbRenderer {
                     }
                 }
                 if (!isLocalRouter) {
-                    long currentTime = _context.clock().now();
+                    long currentTime = now;
                     long firstHeardAbout = profile.getFirstHeardAbout();
                     if (firstHeardAbout > 0) {
                         long ageSinceFirstHeard = Math.max(currentTime - firstHeardAbout, 1);
@@ -1995,32 +2012,46 @@ class NetDbRenderer {
     }
 
     /**
-     * Renders multiple RouterInfo objects in parallel and concatenates their HTML output.
+     * Renders multiple RouterInfo objects in parallel in chunks and concatenates their HTML output.
      *
-     * @param routerInfos    Collection of RouterInfo objects to render
-     * @param isLocalRouter  true if rendering the local router (affects display logic)
-     * @param fullDetails    true for full details, false for a summary view
-     * @return concatenated  HTML fragment containing all routers' rendered output
+     * Divides the input collection into chunks processed concurrently,
+     * allowing partial results to be obtained and concatenated incrementally.
+     * This improves responsiveness when rendering large sets of RouterInfos.
+     *
+     * @param routerInfos   Collection of RouterInfo objects to render
+     * @param isLocalRouter true if rendering the local router (affects display logic)
+     * @param fullDetails   true for full details, false for a summary view
+     * @return concatenated HTML fragment containing the rendered output of all routers
      */
     public String renderRouterInfosInParallel(Collection<RouterInfo> routerInfos, boolean isLocalRouter, boolean fullDetails) {
-        int numCores = SystemVersion.getCores();
+        int numCores = Math.max(SystemVersion.getCores() * 3, 10);
         ExecutorService executor = Executors.newFixedThreadPool(numCores);
 
-        List<Future<String>> futures = new ArrayList<>();
-        for (RouterInfo routerInfo : routerInfos) {
-            Callable<String> task = () -> {
-                StringBuilder buffer = new StringBuilder();
-                renderRouterInfo(buffer, routerInfo, isLocalRouter, fullDetails);
-                return buffer.toString();
-            };
-            futures.add(executor.submit(task));
-        }
-
+        int chunkSize = 25;
+        List<RouterInfo> list = new ArrayList<>(routerInfos);
         StringBuilder fullHtml = new StringBuilder();
-        for (Future<String> future : futures) {
-            try {fullHtml.append(future.get());}
-            catch (InterruptedException e) {Thread.currentThread().interrupt();}
-            catch (ExecutionException e) {}
+
+        for (int start = 0; start < list.size(); start += chunkSize) {
+            int end = Math.min(start + chunkSize, list.size());
+            List<RouterInfo> chunk = list.subList(start, end);
+
+            List<Future<String>> futures = new ArrayList<>();
+            for (RouterInfo routerInfo : chunk) {
+                Callable<String> task = () -> {
+                    StringBuilder buffer = new StringBuilder();
+                    renderRouterInfo(buffer, routerInfo, isLocalRouter, fullDetails);
+                    return buffer.toString();
+                };
+                futures.add(executor.submit(task));
+            }
+
+            for (Future<String> future : futures) {
+                try {
+                    fullHtml.append(future.get());  // Append as each chunk completes
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                } catch (ExecutionException e) {}
+            }
         }
 
         executor.shutdown();
