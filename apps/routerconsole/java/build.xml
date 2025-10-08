@@ -410,11 +410,15 @@
   </target>
 
   <target name="precompilejsp" depends="jar1" unless="precompilejsp.uptodate">
-    <delete dir="../jsp/WEB-INF/"/>
-    <delete file="../jsp/web-fragment.xml"/>
-    <delete file="../jsp/web-out.xml"/>
-    <mkdir dir="../jsp/WEB-INF/"/>
-    <mkdir dir="../jsp/WEB-INF/classes"/>
+    <parallel>
+      <delete dir="../jsp/WEB-INF/"/>
+      <delete file="../jsp/web-fragment.xml"/>
+      <delete file="../jsp/web-out.xml"/>
+    </parallel>
+    <parallel>
+      <mkdir dir="../jsp/WEB-INF/"/>
+      <mkdir dir="../jsp/WEB-INF/classes"/>
+    </parallel>
 
     <!-- There are various jspc ant tasks, but they all seem a bit flakey.
          Warning - jspC will fail on unknown options, check oldest libtomcat8-java distro package version we use.
