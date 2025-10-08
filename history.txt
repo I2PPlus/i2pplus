@@ -1,3 +1,6 @@
+2025-10-08 dr|z3d
+ * Console: Rendering speedups for tunnels pages and routerinfo listings
+
 2025-10-03 dr|z3d
  * Console: Indicate errors on logs sidebar icon and tooltip
 
