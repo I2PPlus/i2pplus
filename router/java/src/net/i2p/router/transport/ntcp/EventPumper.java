@@ -91,7 +91,7 @@ class EventPumper implements Runnable {
 //    private static final long SELECTOR_LOOP_DELAY = 200;
     private static final int FAILSAFE_ITERATION_FREQ = 30*1000;
     private static final int FAILSAFE_LOOP_COUNT = SystemVersion.isSlow() ? 512 : 1024;
-    private static final long SELECTOR_LOOP_DELAY = SystemVersion.isSlow() ? 200 : 150;
+    private static final long SELECTOR_LOOP_DELAY = SystemVersion.isSlow() ? 1000 : 500;
     private static final long BLOCKED_IP_FREQ = 15*60*1000;
 
     /** tunnel test now disabled, but this should be long enough to allow an active tunnel to get started */
@@ -700,7 +700,7 @@ class EventPumper implements Runnable {
                 }
                 if (readThisTime < 0 && read == 0) {read = readThisTime;}
                 if (_log.shouldDebug()) {
-                    _log.debug("Read " + read + " bytes total in " + readCount + " times from " + con);
+                    _log.debug("Read " + read + " bytes from " + con);
                 }
                 if (read < 0) {
                     if (con.isInbound() && con.getMessagesReceived() <= 0) {
@@ -742,8 +742,8 @@ class EventPumper implements Runnable {
                         con.close();
                     } else {
                         _context.statManager().addRateData("ntcp.zeroRead", consec);
-                        if (_log.shouldInfo()) {
-                            _log.info("Nothing to read for " + con + ", but remaining interested (count: " + consec + ")");
+                        if (_log.shouldDebug()) {
+                            _log.debug("Nothing to read for " + con + ", but remaining interested (Count: " + consec + ")");
                         }
                     }
                     break;

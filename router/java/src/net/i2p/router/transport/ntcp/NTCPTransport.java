@@ -966,7 +966,7 @@ public class NTCPTransport extends TransportImpl {
     private void startIt() {
         _finisher.start();
         _pumper.startPumping();
-        int threads = SystemVersion.isSlow() ? 2 : SystemVersion.getCores() >= 12 ? 6 : 4;
+        int threads = SystemVersion.isSlow() ? 1 : 2;
         long maxMemory = SystemVersion.getMaxMemory();
         _reader.startReading(threads);
         _writer.startWriting(threads);

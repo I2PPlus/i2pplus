@@ -11,65 +11,81 @@ import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.router.OutNetMessage;
 import net.i2p.util.Log;
-import net.i2p.util.SystemVersion;
 
 /**
- * Previously, NTCP was using SimpleTimer with a delay of 0, which
- * was a real abuse.
- *
- * Here we use the non-scheduled, lockless ThreadPoolExecutor with
- * a fixed pool size and an unbounded queue.
- *
- * The old implementation was having problems with lock contention;
- * this should work a lot better - and not clog up the SimpleTimer queue.
- *
- * @author zzz
+ * Handles asynchronous post-send processing of OutNetMessage using a
+ * fixed-size thread pool executor with a bounded queue and backpressure.
+ * Replaces previous abuse of SimpleTimer with efficient, lockless execution.
  */
 class NTCPSendFinisher {
     private static final int MIN_THREADS = 1;
-    private static final int MAX_THREADS = SystemVersion.isSlow() ? 2 : 4;
+    private static final int MAX_THREADS = 2;
+    private static final int QUEUE_CAPACITY = 1000;
     private final I2PAppContext _context;
     private final NTCPTransport _transport;
     private final Log _log;
     private static final AtomicInteger _count = new AtomicInteger();
     private ThreadPoolExecutor _executor;
-    private static final int THREADS;
-    static {
-//        THREADS = (int) Math.max(MIN_THREADS, Math.min(MAX_THREADS, 1 + (maxMemory / (32*1024*1024))));
-          THREADS = (int) MAX_THREADS;
-    }
+    private static final int THREADS = MAX_THREADS;
 
     public NTCPSendFinisher(I2PAppContext context, NTCPTransport transport) {
         _context = context;
         _log = _context.logManager().getLog(NTCPSendFinisher.class);
         _transport = transport;
-        //_context.statManager().createRateStat("ntcp.sendFinishTime", "How long to queue and excecute msg.afterSend()", "Transport [NTCP]", new long[] {5*1000});
     }
 
+    /**
+     * Starts the thread pool executor for processing send finish tasks.
+     */
     public synchronized void start() {
-        _executor = new CustomThreadPoolExecutor(THREADS);
-    }
-
-    public synchronized void stop() {
-        if (_executor != null)
-            _executor.shutdownNow();
-    }
-
-    public void add(OutNetMessage msg) {
-        try {
-            _executor.execute(new RunnableEvent(msg));
-        } catch (RejectedExecutionException ree) {
-            // race with stop()
-            _log.warn("NTCP Send Finisher stopped, discarding msg.afterSend()");
+        if (_executor == null || _executor.isShutdown() || _executor.isTerminated()) {
+            _executor = new CustomThreadPoolExecutor(THREADS);
         }
     }
 
-    // not really needed for now but in case we want to add some hooks like afterExecute()
+    /**
+     * Stops the thread pool executor, waiting briefly for termination.
+     */
+    public synchronized void stop() {
+        if (_executor != null) {
+            _executor.shutdownNow();
+            try {
+                if (!_executor.awaitTermination(5, TimeUnit.SECONDS)) {
+                    _log.warn("NTCP Send Finisher did not terminate promptly");
+                }
+            } catch (InterruptedException ie) {
+                Thread.currentThread().interrupt();
+                _log.warn("Interrupted while waiting for NTCP Send Finisher shutdown");
+            }
+            _executor = null;
+        }
+    }
+
+    /**
+     * Adds a message to the finishing queue to call afterSend asynchronously.
+     * If the executor is stopped or saturated, falls back to caller running the task.
+     */
+    public void add(OutNetMessage msg) {
+        if (_executor == null || _executor.isShutdown() || _executor.isTerminated()) {
+            _log.warn("NTCP Send Finisher not running, invoking afterSend inline");
+            _transport.afterSend(msg, true, false, msg.getSendTime());
+            return;
+        }
+        try {
+            _executor.execute(new RunnableEvent(msg));
+        } catch (RejectedExecutionException ree) {
+            // Pool saturated or shutdown, fallback to caller thread for backpressure
+            _log.warn("NTCP Send Finisher saturated, running afterSend inline");
+            _transport.afterSend(msg, true, false, msg.getSendTime());
+        }
+    }
+
     private static class CustomThreadPoolExecutor extends ThreadPoolExecutor {
         public CustomThreadPoolExecutor(int num) {
-             // use unbounded queue, so maximumPoolSize and keepAliveTime have no effect
-             super(num, num, 10*1000, TimeUnit.MILLISECONDS,
-                   new LinkedBlockingQueue<Runnable>(), new CustomThreadFactory());
+            super(num, num, 10_000, TimeUnit.MILLISECONDS,
+                  new LinkedBlockingQueue<>(QUEUE_CAPACITY),
+                  new CustomThreadFactory(),
+                  new ThreadPoolExecutor.CallerRunsPolicy());
         }
     }
 
@@ -77,33 +93,28 @@ class NTCPSendFinisher {
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
             rv.setName("NTCPTXFinis " + _count.incrementAndGet() + '/' + THREADS);
-            rv.setPriority(Thread.MAX_PRIORITY);
+            rv.setPriority(Thread.MAX_PRIORITY - 1);
             rv.setDaemon(true);
             return rv;
         }
     }
 
     /**
-     * Call afterSend() for the message
+     * Executes the transport's afterSend callback for the message.
      */
     private class RunnableEvent implements Runnable {
         private final OutNetMessage _msg;
-        //private final long _queued;
 
         public RunnableEvent(OutNetMessage msg) {
             _msg = msg;
-            //_queued = _context.clock().now();
         }
 
         public void run() {
             try {
                 _transport.afterSend(_msg, true, false, _msg.getSendTime());
-                // appx 0.1 ms
-                //_context.statManager().addRateData("ntcp.sendFinishTime", _context.clock().now() - _queued, 0);
             } catch (Throwable t) {
-                _log.log(Log.CRIT, " afterSend broken?", t);
+                _log.log(Log.CRIT, "afterSend failed", t);
             }
         }
     }
 }
-
