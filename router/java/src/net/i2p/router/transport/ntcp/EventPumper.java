@@ -91,11 +91,11 @@ class EventPumper implements Runnable {
 //    private static final long SELECTOR_LOOP_DELAY = 200;
     private static final int FAILSAFE_ITERATION_FREQ = 30*1000;
     private static final int FAILSAFE_LOOP_COUNT = SystemVersion.isSlow() ? 512 : 1024;
-    private static final long SELECTOR_LOOP_DELAY = SystemVersion.isSlow() ? 200 : 100;
+    private static final long SELECTOR_LOOP_DELAY = SystemVersion.isSlow() ? 200 : 150;
     private static final long BLOCKED_IP_FREQ = 15*60*1000;
 
     /** tunnel test now disabled, but this should be long enough to allow an active tunnel to get started */
-    private static final long MIN_EXPIRE_IDLE_TIME = 120*1000l;
+    private static final long MIN_EXPIRE_IDLE_TIME = 90*1000l;
     private static final long MAX_EXPIRE_IDLE_TIME = 11*60*1000l;
     private static final long MAY_DISCON_TIMEOUT = 10*1000;
     private static final long RI_STORE_INTERVAL = 29*60*1000;
@@ -109,27 +109,20 @@ class EventPumper implements Runnable {
      *  @see java.nio.ByteBuffer
      */
     private static final String PROP_NODELAY = "i2np.ntcp.nodelay";
-
-//    private static final int MIN_MINB = 4;
-//    private static final int MAX_MINB = 12;
-    private static final int MIN_MINB = SystemVersion.isSlow() ? 8 : 64;
-    private static final int MAX_MINB = SystemVersion.isSlow() ? 32 : 512;
+    private static final int MIN_MINB = SystemVersion.isSlow() ? 4 : 8;
+    private static final int MAX_MINB = SystemVersion.isSlow() ? 12 : Math.max(SystemVersion.getCores(), 16);
     public static final String PROP_MAX_MINB = "i2np.ntcp.eventPumperMaxBuffers";
     private static final int MIN_BUFS;
     static {
         long maxMemory = SystemVersion.getMaxMemory();
         boolean isSlow = SystemVersion.isSlow();
-        //MIN_BUFS = (int) Math.max(MIN_MINB, Math.min(MAX_MINB, 1 + (maxMemory / (16*1024*1024))));
-        MIN_BUFS = (int) Math.max(MIN_MINB, Math.max(MAX_MINB, 1 + (maxMemory / (4*1024*1024))));
+        MIN_BUFS = (int) Math.max(MIN_MINB, Math.min(MAX_MINB, 1 + (maxMemory / (16*1024*1024))));
     }
 
-    private static final float DEFAULT_THROTTLE_FACTOR = SystemVersion.isSlow() ? 1.1f : 1.5f;
+    private static final float DEFAULT_THROTTLE_FACTOR = SystemVersion.isSlow() ? 1.5f : 2.5f;
     private static final String PROP_THROTTLE_FACTOR = "router.throttleFactor";
-
     private static final TryCache<ByteBuffer> _bufferCache = new TryCache<>(new BufferFactory(), MIN_BUFS);
-
-    private static final Set<Status> STATUS_OK =
-        EnumSet.of(Status.OK, Status.IPV4_OK_IPV6_UNKNOWN, Status.IPV4_OK_IPV6_FIREWALLED);
+    private static final Set<Status> STATUS_OK = EnumSet.of(Status.OK, Status.IPV4_OK_IPV6_UNKNOWN, Status.IPV4_OK_IPV6_FIREWALLED);
 
     public EventPumper(RouterContext ctx, NTCPTransport transport) {
         _context = ctx;
@@ -893,11 +886,220 @@ class EventPumper implements Runnable {
         return rv;
     }
 
+    private static final int MAX_BATCH = SystemVersion.isSlow() ? 80 : 160; // max items per queue per invocation to limit work
+
     /**
-     *  Pull off the 4 _wants* queues and update the interest ops,
-     *  which may, according to the javadocs, be a "naive" implementation and block.
-     *  High-frequency path in thread.
+     * Processes delayed events from multiple queues by updating selector interest ops.
+     * Limits batch size to avoid long blocking, handles exceptions, and performs periodic maintenance.
      */
+    private void runDelayedEvents() {
+        boolean debug = _log.shouldDebug();
+        boolean warn = _log.shouldWarn();
+
+        processReadRequests(debug, warn);
+        processWriteRequests(debug, warn);
+        processServerSocketRegistrations(debug, warn);
+        processOutboundConnectionRegistrations(debug, warn);
+
+        long now = System.currentTimeMillis();
+        if (_lastExpired + 1000 <= now) {
+            expireTimedOut();
+            _lastExpired = now;
+        }
+    }
+
+    /**
+     * Processes queued read requests, updating SelectionKey to OP_READ if valid.
+     * Closes connections with invalid or cancelled keys.
+     *
+     * @param debug whether debug logging is enabled
+     * @param warn whether warning logging is enabled
+     */
+    private void processReadRequests(boolean debug, boolean warn) {
+        NTCPConnection con;
+        int count = 0;
+        while (count++ < MAX_BATCH && (con = _wantsRead.poll()) != null) {
+            if (con.isClosed()) continue;
+            SelectionKey key = con.getKey();
+            if (!isKeyValid(key)) {
+                logAndClose(debug, "[NTCP2] Dropping connection with invalid key during read registration: ", con);
+                con.close();
+                continue;
+            }
+            try {
+                setInterest(key, SelectionKey.OP_READ);
+            } catch (CancelledKeyException cke) {
+                handleException(debug, warn, cke, "[NTCP2] Cancelled key during read registration for connection to ", con);
+                con.close();
+            } catch (IllegalArgumentException iae) {
+                handleException(debug, warn, iae, "[NTCP2] Invalid key for read registration (", con);
+                con.close();
+            }
+        }
+    }
+
+    /**
+     * Processes queued write requests, updating SelectionKey to OP_WRITE if valid.
+     * Closes connections with invalid or cancelled keys.
+     *
+     * @param debug whether debug logging is enabled
+     * @param warn whether warning logging is enabled
+     */
+    private void processWriteRequests(boolean debug, boolean warn) {
+        NTCPConnection con;
+        int count = 0;
+        while (count++ < MAX_BATCH && (con = _wantsWrite.poll()) != null) {
+            if (con.isClosed()) continue;
+            SelectionKey key = con.getKey();
+            if (!isKeyValid(key)) {
+                logAndClose(debug, "[NTCP2] Dropping connection with invalid key during write registration: ", con);
+                con.close();
+                continue;
+            }
+            try {
+                setInterest(key, SelectionKey.OP_WRITE);
+            } catch (CancelledKeyException cke) {
+                handleException(debug, warn, cke, "[NTCP2] Cancelled key during write registration for connection to ", con);
+                con.close();
+            } catch (IllegalArgumentException iae) {
+                handleException(debug, warn, iae, "[NTCP2] Invalid key for write registration (", con);
+                con.close();
+            }
+        }
+    }
+
+    /**
+     * Processes queued server socket channels for registration with selector.
+     * Logs errors on failure to register.
+     *
+     * @param debug whether debug logging is enabled
+     * @param warn whether warning logging is enabled
+     */
+    private void processServerSocketRegistrations(boolean debug, boolean warn) {
+        ServerSocketChannel chan;
+        int count = 0;
+        while (count++ < MAX_BATCH && (chan = _wantsRegister.poll()) != null) {
+            try {
+                SelectionKey key = chan.register(_selector, SelectionKey.OP_ACCEPT);
+                key.attach(chan);
+            } catch (ClosedChannelException cce) {
+                if (debug) {
+                    _log.debug("[NTCP2] Error registering server socket", cce);
+                } else if (warn) {
+                    _log.warn("[NTCP2] Error registering server socket: " + safeMessage(cce));
+                }
+            }
+        }
+    }
+
+    /**
+     * Processes queued outbound connections for registration and attempts to connect.
+     * Handles exceptions and closes connections on failure.
+     *
+     * @param debug whether debug logging is enabled
+     * @param warn whether warning logging is enabled
+     */
+    private void processOutboundConnectionRegistrations(boolean debug, boolean warn) {
+        NTCPConnection con;
+        int count = 0;
+        while (count++ < MAX_BATCH && (con = _wantsConRegister.poll()) != null) {
+            if (con.isClosed()) continue;
+            final SocketChannel schan = con.getChannel();
+            if (schan == null) continue;
+
+            try {
+                SelectionKey key = schan.register(_selector, SelectionKey.OP_CONNECT);
+                key.attach(con);
+                con.setKey(key);
+
+                RouterAddress naddr = con.getRemoteAddress();
+                if (naddr == null || naddr.getPort() <= 0 || naddr.getIP() == null) {
+                    throw new IOException("Invalid NTCP address: " + naddr);
+                }
+
+                InetSocketAddress saddr = new InetSocketAddress(
+                    InetAddress.getByAddress(naddr.getIP()), naddr.getPort()
+                );
+
+                if (schan.connect(saddr)) {
+                    setInterest(key, SelectionKey.OP_READ);
+                    processConnect(key);
+                }
+
+            } catch (IOException | UnresolvedAddressException e) {
+                if (debug) {
+                    _log.debug("[NTCP2] Failed outbound connection to " + con.getRemotePeer(), e);
+                } else if (warn) {
+                    _log.warn("[NTCP2] Failed outbound connection to " + con.getRemotePeer() + " -> " + safeMessage(e));
+                }
+                con.closeOnTimeout("Connect failed: " + e.getMessage(), e);
+                _transport.markUnreachable(con.getRemotePeer().calculateHash());
+                _context.statManager().addRateData("ntcp.connectFailedTimeoutIOE", 1);
+            } catch (CancelledKeyException cke) {
+                handleException(debug, warn, cke, "[NTCP2] Cancelled key during connect to ", con);
+                con.close();
+            } catch (Exception e) {
+                if (debug) {
+                    _log.debug("[NTCP2] Unexpected error during outbound registration for " + con.getRemotePeer(), e);
+                } else if (warn) {
+                    _log.warn("[NTCP2] Unexpected error during outbound registration for " + con.getRemotePeer() + " -> " + safeMessage(e));
+                }
+                con.close();
+            }
+        }
+    }
+
+    /**
+     * Checks if the given SelectionKey is non-null and currently valid.
+     *
+     * @param key the SelectionKey to validate
+     * @return true if key is non-null and valid, false otherwise
+     */
+    private boolean isKeyValid(SelectionKey key) {
+        return key != null && key.isValid();
+    }
+
+    /**
+     * Logs a debug message about dropping a connection and closes it.
+     *
+     * @param debug whether debug logging is enabled
+     * @param msg the message prefix
+     * @param con the NTCPConnection to log and close
+     */
+    private void logAndClose(boolean debug, String msg, NTCPConnection con) {
+        if (debug) {
+            _log.debug(msg + con);
+        }
+    }
+
+    /**
+     * Logs an exception with either debug or warning level including connection info.
+     *
+     * @param debug whether debug logging is enabled
+     * @param warn whether warning logging is enabled
+     * @param e the Exception to log
+     * @param msgStart the message prefix
+     * @param con the NTCPConnection related to the exception
+     */
+    private void handleException(boolean debug, boolean warn, Exception e, String msgStart, NTCPConnection con) {
+        if (debug) {
+            _log.debug(msgStart + con.getRemotePeer(), e);
+        } else if (warn) {
+            _log.warn(msgStart + con.getRemotePeer() + (e.getMessage() != null ? " -> " + e.getMessage() : ""));
+        }
+    }
+
+    /**
+     * Returns a safe string message from an Exception, avoiding null.
+     *
+     * @param e the Exception
+     * @return the message or empty string if null
+     */
+    private String safeMessage(Exception e) {
+        return e.getMessage() != null ? e.getMessage() : "";
+    }
+
+/*
     private void runDelayedEvents() {
         NTCPConnection con;
 
@@ -1044,6 +1246,7 @@ class EventPumper implements Runnable {
             _lastExpired = now;
         }
     }
+/*
 
     /**
      *  Temp. block inbound from this IP
