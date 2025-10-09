@@ -516,195 +516,253 @@ public class UDPTransport extends TransportImpl {
         }
     }
 
+    /**
+     * Starts up the SSU transport listener, configuring and binding UDP endpoints,
+     * initializing components, and setting reachability status.
+     * This method is synchronized to prevent concurrent startup attempts.
+     */
     private synchronized void startup() {
+        shutdownComponents();
+        Set<InetAddress> bindToAddrs = resolveBindAddresses();
+        int port = determinePort(bindToAddrs);
+        setupEndpoints(bindToAddrs, port);
+        initializeManagers();
+
+        int newPort = startEndpointsAndGetPort();
+        if (_endpoints.isEmpty()) {
+            _log.log(Log.CRIT, "[UDP] Unable to open port");
+            setReachabilityStatus(Status.HOSED);
+            return;
+        }
+
+        updatePortsInConfig(port, newPort);
+        startupComponentServices();
+
+        configureExternalAddressesAndStatus(newPort, bindToAddrs);
+
+        adjustReachabilityForFirewalled();
+
+        _establisher.startup();
+        _handler.startup();
+        rebuildExternalAddress(false, getIPv6Config() == IPV6_ONLY);
+    }
+
+    /**
+     * Shutdown components and clear endpoints safely.
+     */
+    private void shutdownComponents() {
         _fragments.shutdown();
         if (_pusher != null)
             _pusher.shutdown();
         if (_handler != null)
             _handler.shutdown();
-        for (UDPEndpoint endpoint : _endpoints) {
+
+        Iterator<UDPEndpoint> iterator = _endpoints.iterator();
+        while (iterator.hasNext()) {
+            UDPEndpoint endpoint = iterator.next();
             endpoint.shutdown();
-            // should we remove?
-            _endpoints.remove(endpoint);
+            iterator.remove();
         }
+
         if (_establisher != null)
             _establisher.shutdown();
+
         _inboundFragments.shutdown();
         _introManager.reset();
         UDPPacket.clearCache();
 
         if (_log.shouldInfo())
             _log.info("Starting SSU transport listener...");
+    }
 
-        // bind host
-        // This is not exposed in the UI and in practice is always null.
-        // We use PROP_EXTERNAL_HOST instead. See below.
+    /**
+     * Resolves bind addresses from configuration properties,
+     * expanding hostnames if necessary.
+     *
+     * @return set of InetAddress to bind to, empty if none specified
+     */
+    private Set<InetAddress> resolveBindAddresses() {
         String bindTo = _context.getProperty(PROP_BIND_INTERFACE);
-
         if (bindTo == null) {
-            // If we are configured with a fixed IP address,
-            // AND it's one of our local interfaces,
-            // bind only to that.
-            String fixedHost = _context.getProperty(PROP_EXTERNAL_HOST);
-            if (fixedHost != null && fixedHost.length() > 0) {
-                // Generate a comma-separated list of valid IP addresses
-                // that we can bind to,
-                // from the comma-separated PROP_EXTERNAL_HOST config.
-                // The config may contain IPs or hostnames; expand each
-                // hostname to one or more (v4 or v6) IPs.
-                TransportUtil.IPv6Config cfg = getIPv6Config();
-                Set<String> myAddrs;
-                if (cfg == IPV6_DISABLED)
-                    myAddrs = Addresses.getAddresses(false, false);
-                else
-                    myAddrs = Addresses.getAddresses(false, true);
-                StringBuilder buf = new StringBuilder();
-                String[] bta = DataHelper.split(fixedHost, "[,; \r\n\t]");
-                for (int i = 0; i < bta.length; i++) {
-                    String bt = bta[i];
-                    if (bt.length() <= 0)
-                        continue;
-                    try {
-                        InetAddress[] all = InetAddress.getAllByName(bt);
-                        for (int j = 0; j < all.length; j++) {
-                            InetAddress ia = all[j];
-                            if (cfg == IPV6_ONLY && (ia instanceof Inet4Address)) {
-                                if (_log.shouldWarn())
-                                    _log.warn("Configured for IPv6 only, not binding to configured IPv4 host " + bt);
-                                continue;
-                            }
-                            String testAddr = ia.getHostAddress();
-                            if (myAddrs.contains(testAddr)) {
-                                if (buf.length() > 0)
-                                    buf.append(',');
-                                buf.append(testAddr);
-                            } else {
-                                if (_log.shouldWarn())
-                                    _log.warn("Not a local address, not binding to configured IP " + testAddr);
-                            }
-                        }
-                    } catch (UnknownHostException uhe) {
-                        if (_log.shouldWarn())
-                            _log.warn("Not binding to configured host " + bt + " - " + uhe);
-                    }
-                }
-                if (buf.length() > 0) {
-                    bindTo = buf.toString();
-                    if (_log.shouldWarn() && !fixedHost.equals(bindTo))
-                        _log.warn("Expanded external host config \"" + fixedHost + "\" to \"" + bindTo + '"');
-                }
-            }
+            bindTo = expandExternalHostToBind();
         }
-
-        // construct a set of addresses
-        Set<InetAddress> bindToAddrs = new HashSet<InetAddress>(4);
+        Set<InetAddress> bindToAddrs = new HashSet<>(4);
         if (bindTo != null) {
-            // Generate a set IP addresses
-            // that we can bind to,
-            // from the comma-separated PROP_BIND_INTERFACE config,
-            // or as generated from the PROP_EXTERNAL_HOST config.
-            // In theory, the config may contain IPs and/or hostnames.
-            // However, in practice, it's only IPs, because any hostnames
-            // in PROP_EXTERNAL_HOST were expanded above to one or more (v4 or v6) IPs.
-            // PROP_BIND_INTERFACE is not exposed in the UI and is never set.
             String[] bta = DataHelper.split(bindTo, "[,; \r\n\t]");
-            for (int i = 0; i < bta.length; i++) {
-                String bt = bta[i];
-                if (bt.length() <= 0)
-                    continue;
+            for (String bt : bta) {
+                if (bt.length() <= 0) continue;
                 try {
                     bindToAddrs.add(InetAddress.getByName(bt));
                 } catch (UnknownHostException uhe) {
                     _log.error("Invalid SSU bind interface specified [" + bt + "]", uhe);
-                    //setReachabilityStatus(CommSystemFacade.STATUS_HOSED);
-                    //return;
-                    // fall thru...
                 }
             }
         }
+        return bindToAddrs;
+    }
 
-        // Requested bind port
-        // This may be -1 or may not be honored if busy,
-        // Priority: Configured internal, then already used, then configured external
-        // we will check below after starting up the endpoint.
-        int port;
+    /**
+     * Expands the PROP_EXTERNAL_HOST configuration into a comma-separated
+     * string of IP addresses that are local and allowed.
+     *
+     * @return expanded bind string or null if no resolved addresses
+     */
+    private String expandExternalHostToBind() {
+        String fixedHost = _context.getProperty(PROP_EXTERNAL_HOST);
+        if (fixedHost == null || fixedHost.isEmpty())
+            return null;
+
+        TransportUtil.IPv6Config cfg = getIPv6Config();
+        Set<String> myAddrs = (cfg == IPV6_DISABLED) ? Addresses.getAddresses(false, false) : Addresses.getAddresses(false, true);
+
+        StringBuilder buf = new StringBuilder();
+        String[] hosts = DataHelper.split(fixedHost, "[,; \r\n\t]");
+        for (String bt : hosts) {
+            if (bt.isEmpty())
+                continue;
+            try {
+                InetAddress[] all = InetAddress.getAllByName(bt);
+                for (InetAddress ia : all) {
+                    if (cfg == IPV6_ONLY && (ia instanceof Inet4Address)) {
+                        if (_log.shouldWarn())
+                            _log.warn("Configured for IPv6 only, not binding to configured IPv4 host " + bt);
+                        continue;
+                    }
+                    String testAddr = ia.getHostAddress();
+                    if (myAddrs.contains(testAddr)) {
+                        if (buf.length() > 0)
+                            buf.append(',');
+                        buf.append(testAddr);
+                    } else {
+                        if (_log.shouldWarn())
+                            _log.warn("Not a local address, not binding to configured IP " + testAddr);
+                    }
+                }
+            } catch (UnknownHostException uhe) {
+                if (_log.shouldWarn())
+                    _log.warn("Not binding to configured host " + bt + " - " + uhe);
+            }
+        }
+
+        String expanded = (buf.length() > 0) ? buf.toString() : null;
+        if (_log.shouldWarn() && expanded != null && !fixedHost.equals(expanded))
+            _log.warn("Expanded external host config \"" + fixedHost + "\" to \"" + expanded + '"');
+        return expanded;
+    }
+
+    /**
+     * Determines the port to bind to based on internal, bind, or external port properties.
+     *
+     * @param bindToAddrs set of addresses to bind; used for logging
+     * @return the port to bind to
+     */
+    private int determinePort(Set<InetAddress> bindToAddrs) {
         int oldIPort = _context.getProperty(PROP_INTERNAL_PORT, -1);
         int oldBindPort = getListenPort(false);
         int oldEPort = _context.getProperty(PROP_EXTERNAL_PORT, -1);
+        int port;
         if (oldIPort > 0)
             port = oldIPort;
         else if (oldBindPort > 0)
             port = oldBindPort;
         else
             port = oldEPort;
+
         if (!bindToAddrs.isEmpty() && _log.shouldWarn())
             _log.warn("Binding only to " + bindToAddrs);
         if (_log.shouldInfo())
             _log.info("Binding to port: " + port);
+
+        return port;
+    }
+
+    /**
+     * Sets up UDP endpoints based on bind addresses and port.
+     *
+     * @param bindToAddrs addresses to bind, empty means wildcard
+     * @param port port to bind endpoints on
+     */
+    private void setupEndpoints(Set<InetAddress> bindToAddrs, int port) {
         if (_endpoints.isEmpty()) {
-            // _endpoints will always be empty since we removed them above
             if (bindToAddrs.isEmpty()) {
                 UDPEndpoint endpoint = new UDPEndpoint(_context, this, port, null);
                 _endpoints.add(endpoint);
                 setMTU(null);
             } else {
-                for (InetAddress bindToAddr : bindToAddrs) {
-                    UDPEndpoint endpoint = new UDPEndpoint(_context, this, port, bindToAddr);
+                for (InetAddress addr : bindToAddrs) {
+                    UDPEndpoint endpoint = new UDPEndpoint(_context, this, port, addr);
                     _endpoints.add(endpoint);
-                    setMTU(bindToAddr);
+                    setMTU(addr);
                 }
             }
         } else {
-            // unused for now
             for (UDPEndpoint endpoint : _endpoints) {
                 if (endpoint.isIPv4()) {
-                    // hack, first IPv4 endpoint, FIXME
-                    // todo, set bind address too
                     endpoint.setListenPort(port);
                     break;
                 }
             }
         }
+    }
 
+    /**
+     * Initializes establishment and handler managers if missing.
+     */
+    private void initializeManagers() {
         if (_establisher == null)
             _establisher = new EstablishmentManager(_context, this);
-
         if (_handler == null)
             _handler = new PacketHandler(_context, this, _establisher, _inboundFragments, _testManager, _introManager);
+    }
 
-        // Startup the endpoint with the requested port, check the actual port, and
-        // take action if it failed or was different than requested or it needs to be saved
+    /**
+     * Starts all endpoints, returns the listen port of the first IPv4 endpoint started or -1 if none.
+     *
+     * @return new port that endpoints are listening on or -1
+     */
+    private int startEndpointsAndGetPort() {
         int newPort = -1;
-        for (UDPEndpoint endpoint : _endpoints) {
+        Iterator<UDPEndpoint> iterator = _endpoints.iterator();
+        while (iterator.hasNext()) {
+            UDPEndpoint endpoint = iterator.next();
             try {
                 endpoint.startup();
-                // hack, first IPv4 endpoint, FIXME
                 if (newPort < 0 && endpoint.isIPv4()) {
                     newPort = endpoint.getListenPort();
                 }
                 if (_log.shouldWarn())
                     _log.warn("Started " + endpoint);
             } catch (SocketException se) {
-                _endpoints.remove(endpoint);
+                iterator.remove();
                 _log.error("Failed to start " + endpoint, se);
             }
         }
-        if (_endpoints.isEmpty()) {
-            _log.log(Log.CRIT, "[UDP] Unable to open port");
-            setReachabilityStatus(Status.HOSED);
-            return;
-        }
-        if (newPort > 0 &&
-            (newPort != port || newPort != oldIPort)) {
-            // Attempt to use it as our external port - this will be overridden by externalAddressReceived(...)
-            Map<String, String> changes = new HashMap<String, String>();
+        return newPort;
+    }
+
+    /**
+     * Updates internal and external port config after successful endpoint startup.
+     *
+     * @param port previously requested port
+     * @param newPort actual port endpoints listen on
+     */
+    private void updatePortsInConfig(int port, int newPort) {
+        int oldIPort = _context.getProperty(PROP_INTERNAL_PORT, -1);
+        int oldEPort = _context.getProperty(PROP_EXTERNAL_PORT, -1);
+        if (newPort > 0 && (newPort != port || newPort != oldIPort)) {
+            Map<String, String> changes = new HashMap<>();
             String sport = Integer.toString(newPort);
             changes.put(PROP_INTERNAL_PORT, sport);
             if (oldEPort <= 0)
                 changes.put(PROP_EXTERNAL_PORT, sport);
             _context.router().saveConfig(changes, null);
         }
+    }
 
+    /**
+     * Starts fragment and packet components.
+     */
+    private void startupComponentServices() {
         _fragments.startup();
         _inboundFragments.startup();
         _pusher = new PacketPusher(_context, _fragments, _endpoints);
@@ -712,69 +770,65 @@ public class UDPTransport extends TransportImpl {
         _expireEvent.setIsAlive(true);
         _reachabilityStatus = Status.UNKNOWN;
         _testEvent.setIsAlive(true);
-        boolean v6only = getIPv6Config() == IPV6_ONLY;
+    }
 
-        // set up external addresses
-        // REA param is false;
-        // TransportManager.startListening() calls router.rebuildRouterInfo()
+    /**
+     * Configures external addresses and sets reachability status based on current state.
+     *
+     * @param newPort port that endpoints are listening on
+     * @param bindToAddrs bind addresses provided
+     */
+    private void configureExternalAddressesAndStatus(int newPort, Set<InetAddress> bindToAddrs) {
+        boolean v6only = getIPv6Config() == IPV6_ONLY;
+        boolean save = _context.router().isHidden();
+        Map<String, String> changes = save ? new HashMap<>(4) : null;
+
         if (newPort > 0 && bindToAddrs.isEmpty()) {
-            // Update some config variables and event logs,
-            // because changeAddress() below won't do that for hidden mode
-            // because rebuildExternalAddress() always returns null.
-            boolean save = _context.router().isHidden();
-            Map<String, String> changes = save ? new HashMap<String, String>(4) : null;
             boolean hasv6 = false;
             for (InetAddress ia : getSavedLocalAddresses()) {
-                // Discovered or configured addresses are presumed good at the start.
-                // when externalAddressReceived() was called with SOURCE_INTERFACE,
-                // isAlive() was false, so setReachabilityStatus() was not called
                 byte[] addr = ia.getAddress();
                 String prop = addr.length == 4 ? PROP_IP : PROP_IPV6;
                 String oldIP = save ? _context.getProperty(prop) : null;
                 String newIP = Addresses.toString(addr);
+
                 if (addr.length == 16) {
-                    // only call REA for one v6 address
-                    if (hasv6)
-                        continue;
+                    if (hasv6) continue;
                     hasv6 = true;
-                    // save the external address but don't publish it
-                    // save it where UPnP can get it and try to forward it
+
                     OrderedProperties localOpts = new OrderedProperties();
                     localOpts.setProperty(UDPAddress.PROP_PORT, String.valueOf(newPort));
                     localOpts.setProperty(UDPAddress.PROP_HOST, newIP);
                     RouterAddress local = new RouterAddress(getPublishStyle(), localOpts, DEFAULT_COST);
                     replaceCurrentExternalAddress(local, true);
+
                     if (isIPv6Firewalled()) {
                         setReachabilityStatus(Status.IPV4_UNKNOWN_IPV6_FIREWALLED, true);
                     } else if (_context.getBooleanProperty(PROP_IPV6_FIREWALLED)) {
                         setReachabilityStatus(Status.IPV4_UNKNOWN_IPV6_FIREWALLED, true);
-                        // this must be after the setReachabilityStatus() call
-                        _testEvent.forceRunSoon(true, v6only ? 10*1000 : 60*1000);
+                        _testEvent.forceRunSoon(true, v6only ? 10_000 : 60_000);
                     } else {
                         _lastInboundIPv6 = _context.clock().now();
                         setReachabilityStatus(Status.IPV4_UNKNOWN_IPV6_OK, true);
                         rebuildExternalAddress(newIP, newPort, false);
-                        // this must be after the setReachabilityStatus() call
-                        _testEvent.forceRunSoon(true, v6only ? 10*1000 : 60*1000);
+                        _testEvent.forceRunSoon(true, v6only ? 10_000 : 60_000);
                     }
                 } else {
-                    // save the external address but don't publish it
-                    // save it where UPnP can get it and try to forward it
                     OrderedProperties localOpts = new OrderedProperties();
                     localOpts.setProperty(UDPAddress.PROP_PORT, String.valueOf(newPort));
                     localOpts.setProperty(UDPAddress.PROP_HOST, newIP);
                     RouterAddress local = new RouterAddress(getPublishStyle(), localOpts, DEFAULT_COST);
                     replaceCurrentExternalAddress(local, false);
+
                     if (isIPv4Firewalled()) {
                         setReachabilityStatus(Status.IPV4_FIREWALLED_IPV6_UNKNOWN);
                     } else {
                         setReachabilityStatus(Status.IPV4_OK_IPV6_UNKNOWN);
                         rebuildExternalAddress(newIP, newPort, false);
-                        // this must be after the setReachabilityStatus() call
                         if (!v6only)
-                            _testEvent.forceRunSoon(false, 10*1000);
+                            _testEvent.forceRunSoon(false, 10_000);
                     }
                 }
+
                 if (save && !newIP.equals(oldIP)) {
                     changes.put(prop, newIP);
                     if (addr.length == 4)
@@ -783,9 +837,9 @@ public class UDPTransport extends TransportImpl {
                         _context.router().eventLog().addEvent(EventLog.CHANGE_IP, newIP);
                 }
             }
-            if (save && !changes.isEmpty())
+            if (save && changes != null && !changes.isEmpty())
                 _context.router().saveConfig(changes, null);
-        } else if (newPort > 0 && !bindToAddrs.isEmpty()) {
+        } else if (newPort > 0) { // bindToAddrs not empty
             for (InetAddress ia : bindToAddrs) {
                 if (ia.getAddress().length == 16) {
                     _lastInboundIPv6 = _context.clock().now();
@@ -797,25 +851,23 @@ public class UDPTransport extends TransportImpl {
                 }
                 rebuildExternalAddress(ia.getHostAddress(), newPort, false);
             }
-            // TODO
-            // If we are bound only to v4 addresses,
-            // force _haveIPv6Address to false, or else we get 'no endpoint' errors
-            // If we are bound only to v6 addresses,
-            // override getIPv6Config() ?
-        } else {
+            // TODO: IPv4/IPv6 binding edge cases
+        } else { // newPort <= 0
             if ((!v6only && !isIPv4Firewalled()) || (v6only && !isIPv6Firewalled()))
-                _testEvent.forceRunSoon(v6only, 10*1000);
+                _testEvent.forceRunSoon(v6only, 10_000);
         }
+    }
+
+    /**
+     * Adjusts reachability status when IPv4 is firewalled.
+     */
+    private void adjustReachabilityForFirewalled() {
         if (isIPv4Firewalled()) {
             if (_lastInboundIPv6 > 0)
                 setReachabilityStatus(Status.IPV4_FIREWALLED_IPV6_UNKNOWN);
             else
                 setReachabilityStatus(Status.REJECT_UNSOLICITED);
         }
-        // must be after pusher and setting external addresses
-        _establisher.startup();
-        _handler.startup();
-        rebuildExternalAddress(false, v6only);
     }
 
     public synchronized void shutdown() {
