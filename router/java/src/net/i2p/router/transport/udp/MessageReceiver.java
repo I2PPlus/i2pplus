@@ -30,10 +30,10 @@ class MessageReceiver {
     private final BlockingQueue<InboundMessageState> _completeMessages;
     private volatile boolean _alive;
     private static final int cores = SystemVersion.getCores();
-    private static final int MIN_THREADS = SystemVersion.isSlow() ? 1 : 2;
-    private static final int MAX_THREADS = SystemVersion.isSlow() ? 2 : 4;
-    private static final int MIN_QUEUE_SIZE =  SystemVersion.isSlow() ? 32 : 64;
-    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 128 : 256;
+    private static final int MIN_THREADS = 1;
+    private static final int MAX_THREADS = 2;
+    private static final int MIN_QUEUE_SIZE =  SystemVersion.isSlow() ? 16 : 32;
+    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 64 : 128;
     private final int _threadCount;
     private static final long POISON_IMS = -99999999999l;
 

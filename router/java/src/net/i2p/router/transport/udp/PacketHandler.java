@@ -33,10 +33,10 @@ class PacketHandler {
     private final int _networkID;
 
     private static final int TYPE_POISON = -99999;
-    private static final int MIN_QUEUE_SIZE = SystemVersion.isSlow() ? 32 : 64;
-    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 192 : 384;
+    private static final int MIN_QUEUE_SIZE = SystemVersion.isSlow() ? 16 : 32;
+    private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 64 : 128;
     private static final int MIN_NUM_HANDLERS = 1;  // if < 128MB
-    private static final int MAX_NUM_HANDLERS = SystemVersion.isSlow() ? 2 : 4;
+    private static final int MAX_NUM_HANDLERS = 2;
 
     PacketHandler(RouterContext ctx, UDPTransport transport, EstablishmentManager establisher,
                   InboundMessageFragments inbound, PeerTestManager testManager, IntroductionManager introManager) {
