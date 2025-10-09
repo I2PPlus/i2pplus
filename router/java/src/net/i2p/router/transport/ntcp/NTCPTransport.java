@@ -828,47 +828,45 @@ public class NTCPTransport extends TransportImpl {
     private static final int MIN_CONCURRENT_WRITERS = 2;  // unless < 32MB
     private static final int MAX_CONCURRENT_READERS = (SystemVersion.isSlow() ? 4 : SystemVersion.getCores() >= 12 ? 8 : 6);
     private static final int MAX_CONCURRENT_WRITERS = MAX_CONCURRENT_READERS;
+
     /**
-     *  Called by TransportManager.
-     *  Caller should stop the transport first, then
-     *  verify stopped with isAlive()
-     *  Unfortunately TransportManager doesn't do that, so we
-     *  check here to prevent two pumpers.
+     * Starts the NTCP transport listening process, ensuring only one pumper is running
+     * by checking existing state since the caller may not stop the transport correctly.
+     * It configures and binds local addresses, handles firewall and network interface
+     * settings, and sets fallback addresses as needed. This method is synchronized
+     * to prevent concurrent starts.
      */
     public synchronized void startListening() {
-        // try once again to prevent two pumpers which is fatal
-        if (_pumper.isAlive()) {return;}
-        if (_log.shouldWarn()) {_log.warn("Starting NTCP transport listening...");}
+        if (_pumper.isAlive()) return;
+        if (_log.shouldWarn()) _log.warn("Starting NTCP transport listening...");
 
         startIt();
         RouterAddress addr = configureLocalAddress();
         boolean ssuDisabled = !_context.getBooleanPropertyDefaultTrue(TransportManager.PROP_ENABLE_UDP);
-        int port;
-        if (addr != null) {port = addr.getPort();} // probably not set
-        else if (ssuDisabled) {port = setupPort();}
-        else {port = _ssuPort;} // received by externalAddressReceived() from TransportManager
-        boolean isFixedOrForceFirewalled = _context.getProperty(PROP_I2NP_NTCP_AUTO_IP, "true")
-                                           .toLowerCase(Locale.US).equals("false");
+        boolean isFixedOrForceFirewalled = !"false".equalsIgnoreCase(_context.getProperty(PROP_I2NP_NTCP_AUTO_IP, "true"));
+
+        int port = (addr != null) ? addr.getPort() : (ssuDisabled ? setupPort() : _ssuPort);
         RouterAddress myAddress = bindAddress(port);
+
         if (myAddress != null) {
-            // fixed interface, or bound to the specified host
             replaceAddress(myAddress);
         } else if (addr != null) {
-            // specified host, bound to wildcard
             replaceAddress(addr);
         } else if (port > 0 && !isFixedOrForceFirewalled) {
-            // all detected interfaces
             Collection<InetAddress> addrs = getSavedLocalAddresses();
             if (!addrs.isEmpty() && !_context.router().isHidden()) {
+                boolean skipv4 = false, skipv6 = false;
                 int count = 0;
-                boolean skipv4 = false;
-                boolean skipv6 = false;
+
+                boolean ipv6Firewalled = isIPv6Firewalled();
+                boolean propIPv6Firewalled = _context.getBooleanProperty(PROP_IPV6_FIREWALLED);
+                boolean checkIPv6Skip = ipv6Firewalled || (propIPv6Firewalled && !ssuDisabled);
                 for (InetAddress ia : addrs) {
                     boolean ipv6 = ia instanceof Inet6Address;
-                    if ((ipv6 && (isIPv6Firewalled() || (_context.getBooleanProperty(PROP_IPV6_FIREWALLED) && !ssuDisabled))) ||
-                        (!ipv6 && isIPv4Firewalled())) {
-                        if (ipv6) {skipv6 = true;}
-                        else {skipv4 = true;}
+                    if ((ipv6 && checkIPv6Skip) || (!ipv6 && isIPv4Firewalled())) {
+                        if (ipv6) skipv6 = true;
+                        else skipv4 = true;
+                        if (skipv4 && skipv6) break; // early exit, both skipped
                         continue;
                     }
                     OrderedProperties props = new OrderedProperties();
@@ -876,23 +874,29 @@ public class NTCPTransport extends TransportImpl {
                     props.setProperty(RouterAddress.PROP_PORT, Integer.toString(port));
                     addNTCP2Options(props);
                     int cost = getDefaultCost(ipv6);
-                    myAddress = new RouterAddress(getPublishStyle(), props, cost);
-                    replaceAddress(myAddress);
+                    RouterAddress address = new RouterAddress(getPublishStyle(), props, cost);
+                    replaceAddress(address);
                     count++;
                 }
-                if (count <= 0) {setOutboundNTCP2Address();}
-                else if (skipv6) {setOutboundNTCP2Address(true);}
-                else if (skipv4) {setOutboundNTCP2Address(false);}
-            } else {setOutboundNTCP2Address();}
-        } else {setOutboundNTCP2Address();}
+                if (count <= 0) {
+                    setOutboundNTCP2Address();
+                } else if (skipv6) {
+                    setOutboundNTCP2Address(true);
+                } else if (skipv4) {
+                    setOutboundNTCP2Address(false);
+                }
+            } else {
+                setOutboundNTCP2Address();
+            }
+        } else {
+            setOutboundNTCP2Address();
+        }
+
         if (ssuDisabled) {
-            // Since we don't have peer testing, start out reachable,
-            // so peers will attempt to connect to us
             long now = _context.clock().now();
             _lastInboundIPv4 = now;
             _lastInboundIPv6 = now;
         }
-        // TransportManager.startListening() calls router.rebuildRouterInfo()
     }
 
     /**
