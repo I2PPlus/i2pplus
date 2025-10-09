@@ -205,7 +205,7 @@ a:active #sb_bandwidthgraph{border:1px solid var(--active)}
 .sb_info .percentBarInner{height:16px}
 .sb_info .percentBarText{padding-top:3px;opacity:0;mix-blend-mode:multiply}
 .sb_info .percentBarOuter:hover .percentBarText{opacity:.8}
-#sidebar .sb_update{margin:-11px -7px -9px}
+#sidebar .sb_update{margin:-11px -7px -7px}
 #sidebar .sb_update a{white-space:nowrap;vertical-align:baseline}
 #sidebar .sb_update b{margin-top:-2px;display:inline-block;line-height:1.2;word-spacing:0;letter-spacing:0;vertical-align:middle;font-size:8.5pt}
 #sidebar .sb_update br::before{content:"";display:inline-block;height:3px}
