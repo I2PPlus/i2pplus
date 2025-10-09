@@ -70,7 +70,7 @@ class EventPumper implements Runnable {
      *  message, which is a 5-slot VTBM (~2700 bytes).
      *  The occasional larger message can use multiple buffers.
      */
-    private static final int BUF_SIZE = SystemVersion.isSlow() ? 8*1024 : 16*1024;
+    private static final int BUF_SIZE = 16*1024;
 
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
         public ByteBuffer newInstance() {
@@ -91,7 +91,7 @@ class EventPumper implements Runnable {
 //    private static final long SELECTOR_LOOP_DELAY = 200;
     private static final int FAILSAFE_ITERATION_FREQ = 30*1000;
     private static final int FAILSAFE_LOOP_COUNT = SystemVersion.isSlow() ? 512 : 1024;
-    private static final long SELECTOR_LOOP_DELAY = SystemVersion.isSlow() ? 1000 : 500;
+    private static final long SELECTOR_LOOP_DELAY = SystemVersion.isSlow() ? 200 : 50;
     private static final long BLOCKED_IP_FREQ = 15*60*1000;
 
     /** tunnel test now disabled, but this should be long enough to allow an active tunnel to get started */
@@ -201,24 +201,27 @@ class EventPumper implements Runnable {
     }
 
     /**
-     *  The selector loop.
-     *  On high-bandwidth routers, this is the thread with the highest CPU usage, so
-     *  take care to minimize overhead and unnecessary debugging stuff.
+     * Main selector loop for handling non-blocking IO events.
+     * Optimized for minimal overhead on high-bandwidth routers.
+     * Uses dynamic selector delays, efficient timing checks, and respects thread interruptions.
      */
     public void run() {
         int loopCount = 0;
         int loopCountSinceLastRate = 0;
-        int failsafeLoopCount = FAILSAFE_LOOP_COUNT;
+        final int failsafeLoopCount = FAILSAFE_LOOP_COUNT;
         long lastFailsafeIteration = System.nanoTime();
         long lastBlockedIPClear = lastFailsafeIteration;
-        long nanoNow = System.nanoTime();
-        long now = nanoNow / 1_000_000L;
-        long lastLoopRateUpdate = now;
-        long lastKeySetUpdate = now;
-        boolean shouldDebug = _log.shouldDebug();
+        long lastLoopRateUpdate = System.currentTimeMillis();
+        long lastKeySetUpdate = lastLoopRateUpdate;
+        final boolean shouldDebug = _log.shouldDebug();
+        final boolean shouldWarn = _log.shouldWarn();
 
-        // Background executor for failsafe loop
-        ScheduledExecutorService background = new ScheduledThreadPoolExecutor(1);
+        // Background executor for failsafe loop; single daemon thread to avoid resource leaks
+        ScheduledExecutorService background = new ScheduledThreadPoolExecutor(1, r -> {
+            Thread t = new Thread(r, "EventPumperFailsafe");
+            t.setDaemon(true);
+            return t;
+        });
         background.scheduleAtFixedRate(this::doFailsafeCheck, 5, 30, TimeUnit.SECONDS);
 
         try {
@@ -228,66 +231,67 @@ class EventPumper implements Runnable {
                     loopCount++;
                     loopCountSinceLastRate++;
 
+                    // Determine selector delay dynamically
+                    long delay = (_wantsWrite.isEmpty() && _wantsRead.isEmpty()) ? 1000L : SELECTOR_LOOP_DELAY;
+
+                    int selectedCount;
                     try {
-                        // Dynamic selector delay
-                        long delay = SELECTOR_LOOP_DELAY;
-                        if (_wantsWrite.isEmpty() && _wantsRead.isEmpty()) {
-                            delay = 1000; // idle
-                        }
-                        int count = _selector.select(delay);
-                        if (count > 0) {
-                            Set<SelectionKey> selected = _selector.selectedKeys();
-                            processKeys(selected);
-                            selected.clear();
-                        }
-                        runDelayedEvents();
+                        selectedCount = _selector.select(delay);
                     } catch (ClosedSelectorException cse) {
                         continue;
-                    } catch (IOException ioe) {
-                        if (shouldDebug) {_log.warn("Error selecting", ioe);}
-                        else if (_log.shouldWarn()) {_log.warn("Error selecting -> " + ioe.getMessage());}
-                        continue;
-                    } catch (CancelledKeyException cke) {
-                        if (shouldDebug) {_log.warn("Error selecting", cke);}
-                        else if (_log.shouldWarn()) {_log.warn("Error selecting -> " + cke.getMessage());}
+                    } catch (IOException | CancelledKeyException e) {
+                        if (shouldDebug) _log.warn("Error selecting", e);
+                        else if (shouldWarn) _log.warn("Error selecting -> " + e.getMessage());
                         continue;
                     }
 
-                    nanoNow = System.nanoTime();
-                    now = nanoNow / 1_000_000L;
+                    if (selectedCount > 0) {
+                        Set<SelectionKey> selected = _selector.selectedKeys();
+                        processKeys(selected);
+                        selected.clear();
+                    }
 
-                    // Update stat every second
-                    if (now - lastLoopRateUpdate >= 1000) {
+                    runDelayedEvents();
+
+                    long nowMs = System.currentTimeMillis();
+
+                    // Update loop rate stat every second
+                    if (nowMs - lastLoopRateUpdate >= 1000) {
                         _context.statManager().addRateData("ntcp.pumperLoopsPerSecond", loopCountSinceLastRate);
                         loopCountSinceLastRate = 0;
-                        lastLoopRateUpdate = now;
+                        lastLoopRateUpdate = nowMs;
                     }
 
-                    // Update keyset size stat every 5s
-                    if (now - lastKeySetUpdate >= 5000) {
-                        Set<SelectionKey> all = _selector.keys();
-                        _context.statManager().addRateData("ntcp.pumperKeySetSize", all.size());
-                        lastKeySetUpdate = now;
+                    // Update keyset size stat every 5 seconds
+                    if (nowMs - lastKeySetUpdate >= 5000) {
+                        _context.statManager().addRateData("ntcp.pumperKeySetSize", _selector.keys().size());
+                        lastKeySetUpdate = nowMs;
                     }
 
-                    // Throttle CPU if needed
+                    // Throttle CPU usage periodically with adaptive pause
                     int cpuLoadAvg = SystemVersion.getCPULoadAvg();
                     int pause = SystemVersion.isSlow() || cpuLoadAvg > 95 ? 30 : 10;
                     if ((loopCount % failsafeLoopCount) == failsafeLoopCount - 1) {
                         if (shouldDebug) {
-                            _log.debug("EventPumper throttle " + loopCount + " loops in " +
-                                      (now - lastFailsafeIteration) + " ms");
+                            long throttleDuration = nowMs - (lastFailsafeIteration / 1_000_000L);
+                            _log.debug("EventPumper throttle " + loopCount + " loops in " + throttleDuration + " ms");
                         }
                         _context.statManager().addRateData("ntcp.failsafeThrottle", 1);
                         try {
                             Thread.sleep(pause);
-                        } catch (InterruptedException ie) {}
+                        } catch (InterruptedException ie) {
+                            Thread.currentThread().interrupt(); // Respect interruption
+                            break;
+                        }
+                        lastFailsafeIteration = System.nanoTime();
                     }
 
-                    // Clear blocked IPs periodically
-                    if (now - lastBlockedIPClear >= BLOCKED_IP_FREQ / 1000L) {
-                        _blockedIPs.clear();
-                        lastBlockedIPClear = now;
+                    // Clear blocked IPs periodically with synchronization
+                    if (nowMs - lastBlockedIPClear >= BLOCKED_IP_FREQ) {
+                        synchronized (_blockedIPs) {
+                            _blockedIPs.clear();
+                        }
+                        lastBlockedIPClear = nowMs;
                     }
 
                 } catch (RuntimeException re) {
@@ -298,37 +302,35 @@ class EventPumper implements Runnable {
             background.shutdownNow();
         }
 
-        // Clean up
+        // Clean up selection keys and channels on shutdown
         try {
             if (_selector.isOpen()) {
-                if (shouldDebug) {_log.debug("Closing down EventPumper with selection keys remaining...");}
-                Set<SelectionKey> keys = _selector.keys();
-                for (SelectionKey key : keys) {
+                if (shouldDebug) {
+                    _log.debug("Closing down EventPumper with selection keys remaining...");
+                }
+                for (SelectionKey key : _selector.keys()) {
                     try {
                         Object att = key.attachment();
                         if (att instanceof ServerSocketChannel) {
-                            ServerSocketChannel chan = (ServerSocketChannel) att;
-                            chan.close();
+                            ((ServerSocketChannel) att).close();
                             key.cancel();
                         } else if (att instanceof NTCPConnection) {
-                            NTCPConnection con = (NTCPConnection) att;
-                            con.close();
+                            ((NTCPConnection) att).close();
                             key.cancel();
                         }
-                    } catch (IOException ke) {
-                        _log.error("Error closing key " + key + " on EventPumper shutdown", ke);
+                    } catch (IOException ioe) {
+                        _log.error("Error closing key " + key + " on EventPumper shutdown", ioe);
                     }
                 }
                 _selector.close();
-            } else {
-                if (shouldDebug) {
-                    _log.debug("Closing down EventPumper with no selection keys remaining...");
-                }
+            } else if (shouldDebug) {
+                _log.debug("Closing down EventPumper with no selection keys remaining...");
             }
         } catch (IOException e) {
             _log.error("Error closing keys on EventPumper shutdown", e);
         }
 
+        // Clear wants sets safely
         _wantsConRegister.clear();
         _wantsRead.clear();
         _wantsRegister.clear();
