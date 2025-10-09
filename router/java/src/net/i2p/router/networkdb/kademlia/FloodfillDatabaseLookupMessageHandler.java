@@ -200,7 +200,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
                 RouterInfo to = _facade.lookupRouterInfoLocally(dlm.getFrom());
                 if (to != null && to.getCapabilities().indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Dropping direct" + searchType + " lookup request from floodfill " + dlm.getFrom());
+                        _log.warn("Dropping direct " + searchType + " lookup request from floodfill " + dlm.getFrom());
                     }
                     _context.statManager().addRateData("netDb.lookupsDropped", 1);
                     return null;
