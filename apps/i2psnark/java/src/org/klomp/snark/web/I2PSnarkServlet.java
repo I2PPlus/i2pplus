@@ -2649,17 +2649,22 @@ public class I2PSnarkServlet extends BasicServlet {
             statusString = iconBuf.toString() + "</td><td class=peerCount><b><span class=right>" +
                            curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
             snarkSt = "active seeding complete connected";
+        } else if (isSeeding && hasConnectedPeers && !isUploading) {
+            statusString = toSVGWithDataTooltip("seeding", "", _t("Seeding") +
+                           " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td><td class=peerCount><b><span class=right>" +
+                           curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+            snarkSt = "inactive seeding complete connected";
+        } else if (!isComplete && hasConnectedPeers && !isUploading && !isDownloading) {
+            statusString = toSVGWithDataTooltip("seeding", "", _t("Seeding") +
+                           " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td><td class=peerCount><b><span class=right>" +
+                           curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+            snarkSt = "inactive incomplete connected";
         } else if (isSeeding) {
              tooltip = ngettext("Seeding to {0} peer in swarm", "Seeding to {0} peers in swarm", curPeers);
              appendIcon(iconBuf, "seeding", "", tooltip, false, true);
              snarkSt = "inactive seeding complete";
              statusString = iconBuf.toString() + "</td><td class=peerCount><b><span class=right>" +
                            curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
-        } else if (isSeeding && hasConnectedPeers && !isUploading) {
-            statusString = toSVGWithDataTooltip("seeding", "", _t("Seeding") +
-                           " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td><td class=peerCount><b><span class=right>" +
-                           curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
-            snarkSt = "inactive seeding complete connected";
         } else if (!isRunning && isComplete) {
                 snarkSt = "inactive complete stopped";
                 statusString = toSVGWithDataTooltip("complete", "", _t("Complete")) + "</td><td class=peerCount><b>&mdash;";
@@ -2688,10 +2693,6 @@ public class I2PSnarkServlet extends BasicServlet {
                 snarkSt = "inactive incomplete stopped zero";
             }
         }
-        /*
-        System.out.println("Snark " + snark.getBaseName() + " status: " + snarkSt + " remaining: " + remaining +
-                           " needed: " + needed + " isRunning: " + isRunning);
-        */
         return new StatusResult(statusString, snarkSt);
     }
 
