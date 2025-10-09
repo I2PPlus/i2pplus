@@ -749,7 +749,7 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                         writtenCount++;
                     }
                 }
-                System.out.println("[RDNSCache] Entries written to file: " + writtenCount);
+                //System.out.println("[RDNSCache] Entries written to file: " + writtenCount);
             } catch (IOException ex) {
                 System.err.println("[RDNSCache] Error updating reverse DNS cache file: " + ex.getMessage());
                 ex.printStackTrace();
