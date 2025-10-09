@@ -3,277 +3,408 @@ package net.i2p.util;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 
+import java.util.Random;
+
 /**
- *  A "synthetic" queue in that it doesn't actually queue anything.
- *  Actual queueing is assumed to be "dowstream" of this.
+ * A "synthetic" queue that does not store data but estimates the average queue size
+ * assuming a fixed output bandwidth, and applies the Random Early Detection (RED)
+ * algorithm to decide probabilistically whether to accept or drop packets.
  *
- *  Maintains an average estimated "queue size" assuming a constant output rate
- *  declared in the constructor. The queue size is measured in bytes.
+ * The purpose is to model queue behavior and preemptively drop packets to prevent congestion
+ * before an actual queue is affected downstream.
  *
- *  With offer(), will return true for "accepted" or false for "dropped", based on
- *  the RED algorithm which uses the current average queue size and the offered data
- *  size to calculate a drop probability. Bandwidth is not directly used in the RED
- *  algorithm, except to synthetically calculate an average queue size assuming the
- *  queue is being drained precisely at that rate, byte-by-byte (not per-packet).
+ * The average queue size is measured in bytes and is updated continuously, assuming the
+ * queue drains at a constant rate defined at construction.
  *
- *  addSample() unconditionally accepts the packet.
+ * Packet acceptance is based on the RED algorithm, which uses the current average queue size
+ * and the offered packet size to calculate a drop probability. The drop probability is adjusted
+ * by a factor parameter and limited by configurable minimum and maximum queue size thresholds.
  *
- *  Also maintains a Westwood+ bandwidth estimator. The bandwidth and queue size estimates
- *  are only updated if the packet is "accepted".
+ * This class also incorporates a Westwood+ bandwidth estimator that updates bandwidth estimates
+ * based on acknowledged packet sizes and timing, using an exponential weighted moving average (EWMA).
+ * Both bandwidth and queue size estimates are only updated when packets are accepted.
  *
- *  The average queue size is calculated in the same manner as the bandwidth, with an update
- *  every WESTWOOD_RTT_MIN ms. Both estimators use a first stage anti-aliasing low pass filter
- *  based on RTT, and the time-varying Westwood filter based on inter-arrival time.
+ * The implementation is adapted from the Linux kernel tcp_westwood.c logic and follows
+ * established research including:
+ * - Random Early Detection Gateways for Congestion Avoidance (Floyd & Jacobson)
+ * - TCP Westwood: End-to-End Congestion Control for Wired/Wireless Networks (Casetti et al.)
+ * - End-to-End Bandwidth Estimation for Congestion Control (Grieco & Mascolo)
  *
- *  Ref: Random Early Detection Gateways for Congestion Avoidance - Sally Floyd and Van Jacobson
- *  Ref: TCP Westwood: End-to-End Congestion Control for Wired/Wireless Networks - Casetti et al
- *  Ref: End-to-End Bandwidth Estimation for Congestion Control in Packet Networks - Grieco and Mascolo
+ * Note: minThB (minimum threshold) must be less than maxThB (maximum threshold) for correct RED operation.
  *
- *  Adapted from: Linux kernel tcp_westwood.c (GPLv2)
- *
- *  @since 0.9.50 adapted from streaming; moved from transport in 0.9.62
+ * @since 0.9.50 adapted from streaming; moved from transport in 0.9.62
  */
 public class SyntheticREDQueue implements BandwidthEstimator {
 
-    private static final float MAXP = 0.02f;
+    private static final float MAX_DROP_PROBABILITY = 0.02f;
     private static final int DECAY_FACTOR = 8;
-    private static final int WESTWOOD_RTT_MIN = 50;
-    private static final int DEFAULT_LOW_THRESHOLD = 13;
-    private static final int DEFAULT_HIGH_THRESHOLD = 3;
+    private static final int WESTWOOD_RTT_MIN = 50; // ms
+
+    // Corrected threshold constants - min threshold must be less than max
+    private static final int DEFAULT_LOW_THRESHOLD_DIV = 3;
+    private static final int DEFAULT_HIGH_THRESHOLD_DIV = 13;
 
     private final I2PAppContext _context;
     private final Log _log;
+    private final Random _random;
 
-    private long _tAck;
-    private float _bKFiltered, _bK_ns_est;
-    private int _acked;
+    private long _lastAckTime;
+    private float _bKFiltered, _bKNonSmoothed;
+    private int _bytesAcked;
 
-    private int _count = -1;
-    private float _avgQSize, _qSize;
+    private int _dropCount = -1;
+    private float _avgQueueSize, _queueSizeEstimate;
     private int _newDataSize;
-    private long _tQSize;
-    private final int _minth, _maxth;
-    private final int _bwBps;
-    private final float _bwBpms;
+    private long _lastQueueUpdateTime;
 
+    private final int _minThresholdBytes, _maxThresholdBytes;
+    private final int _bandwidthBps;
+    private final float _bandwidthBytesPerMs;
+
+    /**
+     * Construct with default queue size thresholds based on bandwidth.
+     *
+     * @param ctx the I2P application context
+     * @param bwBps nominal output bandwidth in bytes per second
+     */
     public SyntheticREDQueue(I2PAppContext ctx, int bwBps) {
-        this(ctx, bwBps, bwBps / DEFAULT_LOW_THRESHOLD, bwBps / DEFAULT_HIGH_THRESHOLD);
+        this(ctx, bwBps, Math.max(1, bwBps / DEFAULT_HIGH_THRESHOLD_DIV), Math.max(1, bwBps / DEFAULT_LOW_THRESHOLD_DIV));
     }
 
     /**
-     *  Specified queue size thresholds.
-     *  offer() drops a 1024 byte packet at 2% probability just lower than maxThKB,
-     *  and at 100% probability higher than maxThKB.
+     * Construct specifying bandwidth and queue size thresholds.
      *
-     *  @param bwBps the output rate of the queue in Bps
-     *  @param minThB the minimum queue size to start dropping in Bytes
-     *  @param maxThB the queue size to drop everything in Bytes
+     * Queue size thresholds:
+     * - minThB: queue size in bytes to start probabilistically dropping packets
+     * - maxThB: queue size in bytes at which all packets are dropped (100% drop probability)
+     *
+     * NOTE: minThB must be less than maxThB for proper operation.
+     *
+     * @param ctx the I2P application context
+     * @param bwBps nominal output bandwidth in bytes per second
+     * @param minThB minimum threshold queue size to start dropping (Bytes)
+     * @param maxThB maximum threshold queue size to drop all packets (Bytes)
      */
     public SyntheticREDQueue(I2PAppContext ctx, int bwBps, int minThB, int maxThB) {
-        _log = ctx.logManager().getLog(SyntheticREDQueue.class);
+        if (minThB >= maxThB) {
+            throw new IllegalArgumentException("minThB (" + minThB + ") must be less than maxThB (" + maxThB + ")");
+        }
         _context = ctx;
-        _tAck = ctx.clock().now();
-        _acked = -1;
-        _minth = minThB;
-        _maxth = maxThB;
-        _bwBps = bwBps;
-        _bwBpms = bwBps / 1000f;
-        _tQSize = _tAck;
+        _log = ctx.logManager().getLog(SyntheticREDQueue.class);
+        _random = _context.random();
+
+        _lastAckTime = ctx.clock().now();
+        _bytesAcked = -1;
+
+        _minThresholdBytes = minThB;
+        _maxThresholdBytes = maxThB;
+
+        _bandwidthBps = bwBps;
+        _bandwidthBytesPerMs = bwBps / 1000f;
+
+        _lastQueueUpdateTime = _lastAckTime;
+
         if (_log.shouldDebug()) {
-            _log.debug("Configured " + bwBps + " Bytes/s; Min: " + minThB + "B; Max: " + maxThB + "B");
+            _log.debug("Configured bandwidth: " + bwBps + "B/s; MinThreshold: " + minThB + "B; MaxThreshold: " + maxThB + "B");
         }
     }
 
-    /** Nominal bandwidth limit in bytes per second, as passed to the constructor */
-    public int getMaxBandwidth() {return _bwBps;}
-
     /**
-     * Unconditional, never drop.
-     * The queue size and bandwidth estimates will be updated.
+     * @return the configured maximum bandwidth in bytes per second.
      */
-    public void addSample(int size) {offer(size, 0);}
+    public int getMaxBandwidth() {
+        return _bandwidthBps;
+    }
 
     /**
-     * Should we drop this packet?
-     * If accepted, the queue size and bandwidth estimates will be updated.
+     * Unconditionally accepts the given packet size.
+     * Updates queue size and bandwidth estimates accordingly.
      *
-     * @param size how many bytes to be offered
-     * @param factor how to adjust the size for the drop probability calculation,
-     *        or 1.0 for standard probability. 0 to prevent dropping.
-     *        Does not affect bandwidth calculations.
-     * @return true for accepted, false for drop
+     * @param size size of packet in bytes
+     */
+    public void addSample(int size) {
+        offer(size, 0f);
+    }
+
+    /**
+     * Offer a packet to the queue.
+     *
+     * The decision to accept or drop the packet is made based on RED algorithm using
+     * the current average queue size and the offered packet size with a drop probability.
+     * If packet is accepted, the queue size and bandwidth estimators are updated.
+     *
+     * @param size size in bytes of the packet
+     * @param factor drop probability adjustment factor (1.0 for standard, 0 disables dropping)
+     * @return true if accepted, false if dropped
      */
     public boolean offer(int size, float factor) {
         long now = _context.clock().now();
-        return addSample(size, factor, now);
-    }
-
-    private synchronized boolean addSample(int acked, float factor, long now) {
-        if (_acked < 0) {
-            long deltaT = Math.max(now - _tAck, WESTWOOD_RTT_MIN);
-            float bkdt = ((float) acked) / deltaT;
-            _bKFiltered = bkdt;
-            _bK_ns_est = bkdt;
-            _acked = 0;
-            _tAck = now;
-            _tQSize = now;
-            _newDataSize = acked;
-            if (_log.shouldDebug()) {
-                _log.debug("First sample bytes: " + acked + " deltaT: " + deltaT + ' ' + this);
-            }
-            return true;
-        } else {
-            long deltaT = now - _tQSize;
-            if (deltaT > WESTWOOD_RTT_MIN) {updateQSize(now, deltaT);}
-
-            if (factor > 0) {
-                if (_avgQSize > _maxth) {
-                    if (_log.shouldWarn()) {_log.warn("Drop bytes (qsize): " + acked + ' ' + this);}
-                    _count = 0;
-                    return false;
-                }
-                if (_avgQSize > _minth) {
-                    _count++;
-                    float pb = (acked / 1024f) * factor * MAXP * (_avgQSize - _minth) / (_maxth - _minth);
-                    float pa = pb / (1 - (_count * pb));
-                    float rand = _context.random().nextFloat();
-                    if (rand < pa) {
-                        if (_log.shouldWarn()) {
-                            _log.warn("Drop bytes (prob): " + acked + "; Factor " + factor + "; Probability: " + pa + "; deltaT: " + deltaT + ' ' + this);
-                        }
-                        _count = 0;
-                        return false;
-                    }
-                    _count = -1;
-                }
-            }
-
-            _newDataSize += acked;
-            _acked += acked;
-            deltaT = now - _tAck;
-            if (deltaT >= WESTWOOD_RTT_MIN) {computeBWE(now, (int) deltaT);}
-
-            if (_log.shouldDebug()) {
-                _log.debug("Accept bytes: " + acked + "; Factor: " + factor + ' ' + this);
-            }
-            return true;
-        }
+        return addSampleInternal(size, factor, now);
     }
 
     /**
-     * @return the current bandwidth estimate in bytes/ms.
+     * Core synchronized update method that processes incoming byte packets,
+     * decides whether to accept or drop them based on queue size and probabilistic dropping,
+     * and updates bandwidth and queue statistics accordingly.
+     *
+     * @param bytes Number of bytes in the sample or packet received.
+     * @param factor A factor affecting drop probability, typically related to congestion level (0 if no drop logic needed).
+     * @param now Current timestamp in milliseconds.
+     * @return true if the bytes are accepted and stats updated, false if the sample is dropped.
+     */
+    private synchronized boolean addSampleInternal(int bytes, float factor, long now) {
+        // Initialization block for the very first sample received
+        // Sets initial bandwidth estimates using bytes and elapsed time since lastAckTime (or a minimum RTT)
+        if (_bytesAcked < 0) {
+            long deltaT = Math.max(now - _lastAckTime, WESTWOOD_RTT_MIN);
+            float bkdt = (float) bytes / deltaT; // Initial bandwidth estimate in bytes per millisecond
+            _bKFiltered = bkdt;                  // Smoothed bandwidth estimate (filtered)
+            _bKNonSmoothed = bkdt;               // Raw bandwidth estimate (non-smoothed)
+            _bytesAcked = 0;                     // Total bytes acknowledged so far initialized to zero
+            _lastAckTime = now;                  // Timestamp of last acknowledged sample
+            _lastQueueUpdateTime = now;          // Timestamp of last queue size update
+            _newDataSize = bytes;                // Pending new data size to accumulate
+            if (_log.shouldDebug()) {
+                _log.debug("First sample bytes: " + bytes + " deltaT: " + deltaT + " " + this);
+            }
+            return true;
+        }
+
+        // Update the estimated queue size if enough time has elapsed since last update
+        long deltaTQueue = now - _lastQueueUpdateTime;
+        if (deltaTQueue > WESTWOOD_RTT_MIN) {
+            updateQueueSize(now, deltaTQueue);
+        }
+
+        // If drop probability factor is positive, apply probabilistic dropping logic based on queue thresholds
+        if (factor > 0f) {
+            // Immediately drop all bytes if queue size exceeds the configured max threshold
+            if (_avgQueueSize > _maxThresholdBytes) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Dropping bytes (queue size exceeded max): " + bytes + " " + this);
+                }
+                _dropCount = 0;  // Reset consecutive drop counter
+                return false;    // Drop this sample (bytes rejected)
+            }
+
+            // If average queue size is above min threshold but below max, probabilistically drop bytes
+            if (_avgQueueSize > _minThresholdBytes) {
+                _dropCount++;  // Increment count of consecutive drop attempts
+
+                // Compute base drop probability proportional to bytes size, factor, max drop probability, and queue size above min threshold
+                float pb = (bytes / 1024f) * factor * MAX_DROP_PROBABILITY * (_avgQueueSize - _minThresholdBytes) / (_maxThresholdBytes - _minThresholdBytes);
+                pb = Math.min(pb, MAX_DROP_PROBABILITY); // Clamp to max drop probability
+
+                // Calculate adjusted drop probability pa that accounts for consecutive drops to avoid over-dropping
+                float denominator = 1.0f - (_dropCount * pb);
+                if (denominator <= 0) {
+                    denominator = Float.MIN_VALUE; // Prevent division by zero or negative values
+                }
+                float pa = pb / denominator;
+
+                // Clamp pa to maximum of 0.99 to avoid nonsensical probability >= 1
+                pa = Math.min(pa, 0.99f);
+
+                float rand = _random.nextFloat(); // Random float
+                if (rand < pa) {
+                    if (_log.shouldWarn()) {
+                        _log.warn(String.format("Dropping bytes (probabilistic): %d; Factor: %.2f; Probability: %.4f; deltaTQueue: %d %s", bytes, factor, pa, deltaTQueue, this));
+                    }
+                    _dropCount = 0;
+                    return false;
+                }
+                _dropCount = -1;
+            }
+        }
+
+        // Accepted, update stats
+        _newDataSize += bytes;
+        _bytesAcked += bytes;
+
+        long deltaTAck = now - _lastAckTime;
+        if (deltaTAck >= WESTWOOD_RTT_MIN) {
+            computeBandwidthEstimate(now, (int) deltaTAck);
+        }
+
+        if (_log.shouldDebug()) {
+            _log.debug("Accepted bytes: " + bytes + "; Factor: " + factor + " " + this);
+        }
+        return true;
+    }
+
+    /**
+     * Returns the current bandwidth estimate in bytes/ms.
+     * Updates estimate if enough time elapsed since last update.
+     *
+     * @return bandwidth estimate in bytes/ms
      */
     public float getBandwidthEstimate() {
         long now = _context.clock().now();
         synchronized (this) {
-            long deltaT = now - _tAck;
-            if (deltaT >= WESTWOOD_RTT_MIN) {return computeBWE(now, (int) deltaT);}
+            long deltaT = now - _lastAckTime;
+            if (deltaT >= WESTWOOD_RTT_MIN) {
+                return computeBandwidthEstimate(now, (int) deltaT);
+            }
             return _bKFiltered;
         }
     }
 
     /**
-     * @return the current queue size estimate in bytes.
+     * Returns the current estimated average queue size in bytes.
+     * Updates estimate if enough time elapsed since last update.
+     *
+     * @return queue size estimate in bytes
      */
     public float getQueueSizeEstimate() {
         long now = _context.clock().now();
         synchronized (this) {
-            long deltaT = now - _tQSize;
-            if (deltaT >= WESTWOOD_RTT_MIN) {updateQSize(now, deltaT);}
-            return _avgQSize;
+            long deltaT = now - _lastQueueUpdateTime;
+            if (deltaT >= WESTWOOD_RTT_MIN) {
+                updateQueueSize(now, deltaT);
+            }
+            return _avgQueueSize;
         }
     }
 
-    private synchronized float computeBWE(final long now, final int rtt) {
-        if (_acked < 0) {return 0.0f;}
-        updateBK(now, _acked, rtt);
-        _acked = 0;
+    /**
+     * Computes and updates the bandwidth estimate applying the Westwood EWMA filter.
+     * Resets acknowledged byte count after update.
+     *
+     * @param now current time in milliseconds
+     * @param rtt round-trip time in milliseconds (used as filter parameter)
+     * @return the updated bandwidth estimate in bytes/ms
+     */
+    private synchronized float computeBandwidthEstimate(long now, int rtt) {
+        if (_bytesAcked < 0) {
+            return 0.0f;
+        }
+        updateBandwidthEstimate(now, _bytesAcked, rtt);
+        _bytesAcked = 0;
         return _bKFiltered;
     }
 
     /**
-     * Optimized version of updateBK with packets == 0
+     * Applies an exponential weighted moving average (EWMA) decay to the bandwidth estimate,
+     * simulating bandwidth reduction when no packets have been received.
      */
-    private void decay() {
-        _bK_ns_est *= (DECAY_FACTOR - 1) / (float) DECAY_FACTOR;
-        _bKFiltered = westwood_do_filter(_bKFiltered, _bK_ns_est);
-    }
-
-    private void decayQueue(int rtt) {
-        _qSize -= rtt * _bwBpms;
-        if (_qSize < 1) {_qSize = 0;}
-        _avgQSize = westwood_do_filter(_avgQSize, _qSize);
+    private void decayBandwidth() {
+        _bKNonSmoothed *= (DECAY_FACTOR - 1) / (float) DECAY_FACTOR;
+        _bKFiltered = westwoodFilter(_bKFiltered, _bKNonSmoothed);
     }
 
     /**
-     * Here we insert virtual null samples if necessary as in Westwood,
-     * And use a very simple EWMA (exponential weighted moving average)
-     * time-varying filter, as in kernel tcp_westwood.c
+     * Applies EWMA decay to the queue size estimate to simulate queue draining over the given RTT.
+     * Ensures queue size estimate does not drop below zero.
      *
-     * @param time the time of the measurement
-     * @param packets number of bytes acked
-     * @param rtt current rtt
+     * @param rtt round-trip time in milliseconds to use for decay calculation
      */
-    private void updateBK(long time, int packets, int rtt) {
-        long deltaT = time - _tAck;
-        if (rtt < WESTWOOD_RTT_MIN) {rtt = WESTWOOD_RTT_MIN;}
+    private void decayQueue(int rtt) {
+        _queueSizeEstimate -= rtt * _bandwidthBytesPerMs;
+        if (_queueSizeEstimate < 1) {
+            _queueSizeEstimate = 0;
+        }
+        _avgQueueSize = westwoodFilter(_avgQueueSize, _queueSizeEstimate);
+    }
+
+    /**
+     * Updates the bandwidth estimate based on newly acknowledged bytes and elapsed time,
+     * applying Westwood EWMA filtering and injecting decay for periods with no packets.
+     *
+     * @param time current time in milliseconds
+     * @param packets number of bytes acknowledged since last update
+     * @param rtt current round-trip time in milliseconds (minimum enforced)
+     */
+    private void updateBandwidthEstimate(long time, int packets, int rtt) {
+        long deltaT = time - _lastAckTime;
+        if (rtt < WESTWOOD_RTT_MIN) {
+            rtt = WESTWOOD_RTT_MIN;
+        }
         if (deltaT > 2 * rtt) {
-            int numrtts = Math.min((int) ((deltaT / rtt) - 1), 2 * DECAY_FACTOR);
-            for (int i = 0; i < numrtts; i++) {decay();}
-            deltaT -= numrtts * rtt;
+            int numRTTs = Math.min((int) ((deltaT / rtt) - 1), 2 * DECAY_FACTOR);
+            for (int i = 0; i < numRTTs; i++) {
+                decayBandwidth();
+            }
+            deltaT -= numRTTs * rtt;
         }
 
         if (packets > 0) {
             float bkdt = ((float) packets) / deltaT;
-            _bK_ns_est = westwood_do_filter(_bK_ns_est, bkdt);
-            _bKFiltered = westwood_do_filter(_bKFiltered, _bK_ns_est);
-        } else {decay();}
-        _tAck = time;
+            _bKNonSmoothed = westwoodFilter(_bKNonSmoothed, bkdt);
+            _bKFiltered = westwoodFilter(_bKFiltered, _bKNonSmoothed);
+        } else {
+            decayBandwidth();
+        }
+        _lastAckTime = time;
     }
 
     /**
-     * Here we insert virtual null samples if necessary as in Westwood,
-     * And use a very simple EWMA (exponential weighted moving average)
-     * time-varying filter, as in kernel tcp_westwood.c
+     * Updates the average queue size estimator with new data sizes and elapsed time,
+     * applying EWMA filtering and decay to reflect queue drainage.
      *
-     * @param time the time of the measurement
-     * @param deltaT at least WESTWOOD_RTT_MIN
+     * @param time current time in milliseconds
+     * @param deltaT time elapsed since the last update in milliseconds
      */
-    private void updateQSize(long time, long deltaT) {
-        long origDT = deltaT;
+    private void updateQueueSize(long time, long deltaT) {
+        long originalDeltaT = deltaT;
+
         if (deltaT > 2 * WESTWOOD_RTT_MIN) {
-            int numrtts = Math.min((int) ((deltaT / WESTWOOD_RTT_MIN) - 1), 2 * DECAY_FACTOR);
-            for (int i = 0; i < numrtts; i++) {
-                if (_avgQSize <= 0) {break;}
+            int numRTTs = Math.min((int) ((deltaT / WESTWOOD_RTT_MIN) - 1), 2 * DECAY_FACTOR);
+            for (int i = 0; i < numRTTs; i++) {
+                if (_avgQueueSize <= 0) break;
                 decayQueue(WESTWOOD_RTT_MIN);
             }
-            deltaT -= numrtts * WESTWOOD_RTT_MIN;
+            deltaT -= numRTTs * WESTWOOD_RTT_MIN;
         }
-        int origNDS = _newDataSize;
-        float newQSize = _newDataSize;
+
+        int originalNewDataSize = _newDataSize;
+        float newQueueSize = _newDataSize;
+
         if (_newDataSize > 0) {
-            newQSize -= deltaT * _bwBpms;
-            if (newQSize < 1) {newQSize = 0;}
-            _qSize = westwood_do_filter(_qSize, newQSize);
-            _avgQSize = westwood_do_filter(_avgQSize, _qSize);
+            // Decrease queue size by drained bytes since last update
+            newQueueSize -= deltaT * _bandwidthBytesPerMs;
+            if (newQueueSize < 1) {
+                newQueueSize = 0;
+            }
+            _queueSizeEstimate = westwoodFilter(_queueSizeEstimate, newQueueSize);
+            _avgQueueSize = westwoodFilter(_avgQueueSize, _queueSizeEstimate);
             _newDataSize = 0;
-        } else {decayQueue((int) deltaT);}
-        _tQSize = time;
+        } else {
+            // No new data, decay queue estimate to simulate drainage
+            decayQueue((int) deltaT);
+        }
+        _lastQueueUpdateTime = time;
+
         if (_log.shouldDebug()) {
-            _log.debug("computeQS deltaT: " + origDT + " newData: " + origNDS +
-                       " newQsize: " + newQSize + " qSize: " + _qSize + ' ' + this);
+            _log.debug("Queue update - deltaT: " + originalDeltaT + " newData: " + originalNewDataSize +
+                       " newQueueSize: " + newQueueSize + " queueSizeEstimate: " + _queueSizeEstimate + " " + this);
         }
     }
 
-    private static float westwood_do_filter(float a, float b) {
-        return (((DECAY_FACTOR - 1) * a) + b) / DECAY_FACTOR;
+    /**
+     * Applies a Westwood exponential weighted moving average (EWMA) filter,
+     * combining previous and new sample values with a weighted average.
+     *
+     * @param oldVal previous filtered value
+     * @param newVal new sample value
+     * @return updated filtered value
+     */
+    private static float westwoodFilter(float oldVal, float newVal) {
+        return (((DECAY_FACTOR - 1) * oldVal) + newVal) / DECAY_FACTOR;
     }
 
+
+    /**
+     * Returns a human-readable string displaying the current bandwidth and queue size estimates,
+     * formatted for debugging or informational output.
+     *
+     * @return formatted status string including bandwidth and average queue size
+     */
     @Override
     public synchronized String toString() {
-        return "\n* " + (_bKFiltered > 0 ? " Queue: " + DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false) + "Bytes/s " : "") +
-               (_avgQSize > 0 ? "Average size / " : "") + "Limit: " + (_avgQSize > 0 ? DataHelper.formatSize2((long) _avgQSize, false) + "B / " : "") +
-               DataHelper.formatSize2Decimal((long) _bwBps, false) + "B/s";
+        return "\n* " +
+               (_bKFiltered > 0 ? "Bandwidth: " + DataHelper.formatSize2Decimal((long) (_bKFiltered * 1000), false) + " Bytes/s " : "") +
+               (_avgQueueSize > 0 ? "Average Queue Size / " : "") +
+               (_avgQueueSize > 0 ? DataHelper.formatSize2((long) _avgQueueSize, false) + " B / " : "") +
+               "Limit: " + DataHelper.formatSize2Decimal((long) _bandwidthBps, false) + " Bytes/s";
     }
-
 }
