@@ -495,7 +495,6 @@ public class NTCPConnection implements Closeable {
             return;
         }
         if (_log.shouldInfo()) {
-//            _log.info("Closing connection " + toString(), new Exception("cause"));
             _log.info("Closing " + toString());
         }
         NTCPConnection toClose = locked_close(allowRequeue);
@@ -593,34 +592,39 @@ public class NTCPConnection implements Closeable {
 
     public boolean isBacklogged() { return _outbound.isBacklogged(); }
 
+    /**
+     * Returns true if the outbound connection is currently too backlogged to accept new messages,
+     * allowing a short grace period after connection establishment and optionally logging details.
+     */
     public boolean tooBacklogged() {
-        // perhaps we could take into account the size of the queued messages too, our
-        // current transmission rate, and how much time is left before the new message's expiration?
-        // ok, maybe later...
-//        if (getUptime() < 10*1000) // allow some slack just after establishment
-        if (getUptime() < 15*1000) // allow some slack just after establishment
+        // Allow some slack just after connection establishment
+        if (getUptime() < 15*1000)
             return false;
-        if (_outbound.isBacklogged()) { // bloody arbitrary.  well, it's half the average message lifetime...
-            int size = _outbound.size();
-            if (_log.shouldWarn()) {
-                int writeBufs = _writeBufs.size();
-                boolean currentOutboundSet;
-                long seq;
-                synchronized(_writeLock) {
-                    currentOutboundSet = !_currentOutbound.isEmpty();
-                    seq = currentOutboundSet ? _currentOutbound.get(0).getSeqNum() : -1;
-                }
-                try {
-                    _log.warn("Outbound connection too backlogged (Size: " + size +
-                              ") \n* Wants write? " + (0 != (_conKey.interestOps()&SelectionKey.OP_WRITE)) +
-                              "; Current Outbound set? " + currentOutboundSet +
-                              "\n* Write buffers: " + writeBufs + " on " + toString());
-                } catch (RuntimeException e) {}  // java.nio.channels.CancelledKeyException
+
+        if (!_outbound.isBacklogged())
+            return false;
+
+        int size = _outbound.size();
+
+        if (_log.shouldWarn()) {
+            int writeBufs = _writeBufs.size();
+            boolean currentOutboundSet;
+            long seq;
+
+            synchronized (_writeLock) {
+                currentOutboundSet = !_currentOutbound.isEmpty();
+                seq = currentOutboundSet ? _currentOutbound.get(0).getSeqNum() : -1;
             }
-            return true;
-        } else {
-            return false;
+
+            try {
+                _log.warn("Outbound connection too backlogged (Size: " + size +
+                          ") \n* Wants write? " + ((_conKey.interestOps() & SelectionKey.OP_WRITE) != 0) +
+                          "; Current Outbound set? " + currentOutboundSet +
+                          "\n* Write buffers: " + writeBufs + " on " + toString());
+            } catch (RuntimeException ignored) {}
         }
+
+        return true;
     }
 
     /**
