@@ -59,13 +59,12 @@ public class JobQueue {
     private volatile long _nextPumperRun;
 
     /** How many when we go parallel */
-    private static final int RUNNERS;
+    private static int RUNNERS;
     static {
-        long maxMemory = SystemVersion.getMaxMemory();
         int cores = SystemVersion.getCores();
-        int maxRunners = 24;
-        int minRunners = 12;
-        RUNNERS = SystemVersion.isSlow() ? 6 : Math.max(cores / 2, 10);
+        int maxRunners = 32;
+        RUNNERS = Math.max(cores * 2, 16);
+        if (RUNNERS > maxRunners) {RUNNERS = maxRunners;}
     }
 
     /** Default max # job queue runners operating */
