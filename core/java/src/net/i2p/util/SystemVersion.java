@@ -6,14 +6,13 @@ package net.i2p.util;
 
 import com.sun.management.OperatingSystemMXBean;
 import java.lang.management.ManagementFactory;
-
 import java.lang.reflect.Field;
 import java.util.TimeZone;
 import java.util.TreeSet;
 
-import net.i2p.stat.Rate;
-
 import net.i2p.I2PAppContext;
+import net.i2p.stat.Rate;
+import net.i2p.stat.StatManager;
 
 /**
  * Methods to find out what system we are running on
@@ -77,6 +76,7 @@ public abstract class SystemVersion {
     /** @since 0.9.55+ */
     public static final String PROP_OVERRIDE_IS_SLOW = "router.overrideIsSlow";
     public static final boolean DEFAULT_OVERRIDE_IS_SLOW = false;
+    private static final I2PAppContext _ctx = I2PAppContext.getGlobalContext();
 
     static {
         boolean is64 = "64".equals(System.getProperty("sun.arch.data.model")) ||
@@ -237,7 +237,6 @@ public abstract class SystemVersion {
      * speed: do not cripple down for powerful ARM
      */
     public static boolean isARM() {
-//         return _isArm;
         return _isArm && (getCores() < 4 || getCores() == 4 && System.getProperty("os.arch").startsWith("arm"));
     }
 
@@ -263,7 +262,7 @@ public abstract class SystemVersion {
         // to prevent a circular initialization with NBI.
         return _isSlow || !NativeBigInteger.isNative() || (getCores() < 4 && !is64Bit()) ||
                (getCores() == 1 && getMaxMemory() < 384*1024*1024L) &&
-               !I2PAppContext.getGlobalContext().getBooleanProperty(PROP_OVERRIDE_IS_SLOW);
+               !_ctx.getBooleanProperty(PROP_OVERRIDE_IS_SLOW);
     }
 
     /**
@@ -511,7 +510,7 @@ public abstract class SystemVersion {
      *  @since 0.9.24
      */
     public static TimeZone getSystemTimeZone() {
-        return getSystemTimeZone(I2PAppContext.getGlobalContext());
+        return getSystemTimeZone(_ctx);
     }
 
     /**
@@ -559,13 +558,9 @@ public abstract class SystemVersion {
      * @since 0.9.57+
      */
     public static int getCPULoad() {
-        int cores = SystemVersion.getCores();
         OperatingSystemMXBean osmxb = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
-        double cpuLoadAvg = osmxb.getProcessCpuLoad() * 100;
-        int cpuLoad = (int) cpuLoadAvg;
-        int max = 100;
-        if (cpuLoad > max) {cpuLoad = max;}
-        return cpuLoad;
+        int cpuLoad = (int)(osmxb.getProcessCpuLoad() * 100);
+        return Math.min(cpuLoad, 100);
     }
 
     /**
@@ -573,12 +568,11 @@ public abstract class SystemVersion {
      * @since 0.9.57+
      */
     public static int getCPULoadAvg() {
-        if (I2PAppContext.getGlobalContext().statManager() == null ||
-            I2PAppContext.getGlobalContext().statManager().getRate("router.cpuLoad") == null) {
+        if (_ctx == null || _ctx.statManager() == null || _ctx.statManager().getRate("router.cpuLoad") == null) {
             return 0;
         } else {
             int max = 100;
-            Rate stat = I2PAppContext.getGlobalContext().statManager().getRate("router.cpuLoad").getRate(60*1000);
+            Rate stat = _ctx.statManager().getRate("router.cpuLoad").getRate(60*1000);
             long loadAvg;
             long count = (1 + (3 * stat.getCurrentEventCount() + stat.getLastEventCount()));
             if (count > 1) {
@@ -595,7 +589,7 @@ public abstract class SystemVersion {
      * @since 0.9.57+
      */
     public static int getSystemLoad() {
-        if (I2PAppContext.getGlobalContext().statManager() == null) {return 0;}
+        if (_ctx == null || _ctx.statManager() == null) {return 0;}
         else {
             int cores = SystemVersion.getCores();
             OperatingSystemMXBean osmxb = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
@@ -611,13 +605,16 @@ public abstract class SystemVersion {
      * @since 0.9.58+
      */
     public static int getTunnelBuildSuccess() {
-        if (I2PAppContext.getGlobalContext().statManager() == null) {return 0;}
-        Rate explSuccess = I2PAppContext.getGlobalContext().statManager().getRate("tunnel.buildExploratorySuccess").getRate(10*60*1000);
-        Rate explReject = I2PAppContext.getGlobalContext().statManager().getRate("tunnel.buildExploratoryReject").getRate(10*60*1000);
-        Rate explExpire = I2PAppContext.getGlobalContext().statManager().getRate("tunnel.buildExploratoryExpire").getRate(10*60*1000);
-        Rate clientSuccess = I2PAppContext.getGlobalContext().statManager().getRate("tunnel.buildClientSuccess").getRate(10*60*1000);
-        Rate clientReject = I2PAppContext.getGlobalContext().statManager().getRate("tunnel.buildClientReject").getRate(10*60*1000);
-        Rate clientExpire = I2PAppContext.getGlobalContext().statManager().getRate("tunnel.buildClientExpire").getRate(10*60*1000);
+        I2PAppContext context = I2PAppContext.getGlobalContext();
+        StatManager sm = context.statManager();
+        if (context == null || sm == null) {return 0;}
+        int RATE = 10*60*1000;
+        Rate explSuccess = sm.getRate("tunnel.buildExploratorySuccess").getRate(RATE);
+        Rate explReject = sm.getRate("tunnel.buildExploratoryReject").getRate(RATE);
+        Rate explExpire = sm.getRate("tunnel.buildExploratoryExpire").getRate(RATE);
+        Rate clientSuccess = sm.getRate("tunnel.buildClientSuccess").getRate(RATE);
+        Rate clientReject = sm.getRate("tunnel.buildClientReject").getRate(RATE);
+        Rate clientExpire = sm.getRate("tunnel.buildClientExpire").getRate(RATE);
         int success = (int)explSuccess.getLastEventCount() + (int)clientSuccess.getLastEventCount();
         int reject = (int)explReject.getLastEventCount() + (int)clientReject.getLastEventCount();
         int expire = (int)explExpire.getLastEventCount() + (int)clientExpire.getLastEventCount();
