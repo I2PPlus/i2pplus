@@ -137,7 +137,10 @@ class TunnelParticipant {
             TunnelCreatorConfig cfg = _inboundEndpointProcessor.getConfig(); // IBEP
             cfg.incrementProcessedMessages();
             ok = _handler.receiveTunnelMessage(data, 0, data.length);
-            if (ok && _log.shouldDebug()) {_log.debug("Received fragment on " + _config + ": " + msg);}
+            if (ok && _log.shouldDebug()) {
+                String configStr = _config != null ? _config.toString() : "Inbound Endpoint";
+                _log.debug("Received fragment on " + configStr + ": " + msg);
+            }
             else if (!ok) {
                 // blame everybody equally
                 int lenm1 = cfg.getLength() - 1;
@@ -169,7 +172,8 @@ class TunnelParticipant {
     private class DefragmentedHandler implements FragmentHandler.DefragmentedReceiver {
         public void receiveComplete(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
             if (_log.shouldDebug()) {
-                _log.debug("Receive complete: on " + _config + ": " + msg);
+                String configStr = _config != null ? _config.toString() : "Inbound Endpoint";
+                _log.debug("Receive complete on " + configStr + ": " + msg);
             }
             _inboundDistributor.distribute(msg, toRouter, toTunnel);
         }
@@ -188,7 +192,10 @@ class TunnelParticipant {
         msg.setMessageExpiration(_context.clock().now() + 10*1000);
         msg.setTunnelId(config.getSendTunnel());
         OutNetMessage m = new OutNetMessage(_context, msg, msg.getMessageExpiration(), PRIORITY, ri);
-        if (_log.shouldDebug()) {_log.debug("Forward on from " + _config + ": " + msg);}
+        if (_log.shouldDebug()) {
+            String configStr = _config != null ? _config.toString() : "Inbound Endpoint";
+            _log.debug("Forward on from " + configStr + ": " + msg);
+        }
         _context.outNetMessagePool().add(m);
     }
 
