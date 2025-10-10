@@ -833,7 +833,7 @@ msgstr "{0} üçün torrent yaratma xətası"
 msgid "Cannot create a torrent for the nonexistent data: {0}"
 msgstr "Mövcud olmayan məlumatlar üçün torrent yaratmaq mümkün deyil: {0}"
 
-msgid "Error creating torrent - you must enter a file or directory"
+msgid "Error creating torrent - you must specify a file or directory"
 msgstr "Torrent yaratma xətası - siz fayl və ya qovluğu daxil etməlisiniz"
 
 msgid "Delete selected"

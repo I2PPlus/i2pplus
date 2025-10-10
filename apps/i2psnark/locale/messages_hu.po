@@ -834,7 +834,7 @@ msgstr "Hiba történt a torrent létrehozásakor  \"{0}\" számára"
 msgid "Cannot create a torrent for the nonexistent data: {0}"
 msgstr "Nem sikerült torrent létrehozása, nemlétező adat: {0}"
 
-msgid "Error creating torrent - you must enter a file or directory"
+msgid "Error creating torrent - you must specify a file or directory"
 msgstr "Hiba a torrent létrehozásakor - Fájl vagy könyvtár megadása kötelező"
 
 msgid "Delete selected"

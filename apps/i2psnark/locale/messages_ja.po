@@ -831,7 +831,7 @@ msgstr "「{0}」の torrent 作成中にエラーが発生しました"
 msgid "Cannot create a torrent for the nonexistent data: {0}"
 msgstr "存在しないデータのトレントを作成できません: {0}"
 
-msgid "Error creating torrent - you must enter a file or directory"
+msgid "Error creating torrent - you must specify a file or directory"
 msgstr "トレント作成エラー - ファイルまたはディレクトリを入力する必要があります"
 
 msgid "Delete selected"

@@ -834,7 +834,7 @@ msgstr "Virhe luotaessa torrentia kohteelle \"{0}\""
 msgid "Cannot create a torrent for the nonexistent data: {0}"
 msgstr "Ei voi luoda torrentia olemattomille tiedoille: {0}"
 
-msgid "Error creating torrent - you must enter a file or directory"
+msgid "Error creating torrent - you must specify a file or directory"
 msgstr "Virhe luotaessa torrentia - sinun on syötettävä tiedosto tai hakemistoVirhe vertaisverkon luomisessa - sinun on kirjoitettava tiedosto tai hakemisto"
 
 msgid "Delete selected"

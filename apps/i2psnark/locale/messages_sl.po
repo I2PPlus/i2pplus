@@ -840,7 +840,7 @@ msgstr "Napaka pri ustvarjanju torrenta za \"{0}\""
 msgid "Cannot create a torrent for the nonexistent data: {0}"
 msgstr "Torrenta za neobstoječe podatke ni mogoče ustvariti: {0}"
 
-msgid "Error creating torrent - you must enter a file or directory"
+msgid "Error creating torrent - you must specify a file or directory"
 msgstr "Napaka pri ustvarjanju torrenta - morate vnesti datoteko ali mapo"
 
 msgid "Delete selected"

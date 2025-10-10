@@ -831,7 +831,7 @@ msgstr "Lỗi khi tạo torrent cho \"{0}\""
 msgid "Cannot create a torrent for the nonexistent data: {0}"
 msgstr "Không thể tạo torrent cho dữ liệu không tồn tại: {0}"
 
-msgid "Error creating torrent - you must enter a file or directory"
+msgid "Error creating torrent - you must specify a file or directory"
 msgstr "Lỗi tạo torrent - bạn phải nhập tệp hoặc thư mục"
 
 msgid "Delete selected"

@@ -834,7 +834,7 @@ msgstr "Fout bij het maken van een torrent voor \"{0}\""
 msgid "Cannot create a torrent for the nonexistent data: {0}"
 msgstr "Kan geen torrent maken voor niet-bestaande data: {0}"
 
-msgid "Error creating torrent - you must enter a file or directory"
+msgid "Error creating torrent - you must specify a file or directory"
 msgstr "Fout bij het maken van torrent - je moet een bestand of map invoerenFout bij het maken van de torrent - je moet een bestand of directory invullen"
 
 msgid "Delete selected"

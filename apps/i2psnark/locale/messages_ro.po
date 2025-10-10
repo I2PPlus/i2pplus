@@ -837,7 +837,7 @@ msgstr "Eroare la crearea unui torrent pentru \"{0}\""
 msgid "Cannot create a torrent for the nonexistent data: {0}"
 msgstr "Nu se poate crea un torrent pentru datele inexistente: {0}"
 
-msgid "Error creating torrent - you must enter a file or directory"
+msgid "Error creating torrent - you must specify a file or directory"
 msgstr "Eroare la crearea torrentului - trebuie să introduceți un fișier sau un directorEroare la crearea torrentului - trebuie să introduceți un fișier sau un director"
 
 msgid "Delete selected"

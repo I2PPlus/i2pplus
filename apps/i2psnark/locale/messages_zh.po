@@ -831,7 +831,7 @@ msgstr "创建种子时发生错误 \"{0}\""
 msgid "Cannot create a torrent for the nonexistent data: {0}"
 msgstr "无法为不存在的数据文件创建种子:{0}"
 
-msgid "Error creating torrent - you must enter a file or directory"
+msgid "Error creating torrent - you must specify a file or directory"
 msgstr "创建种子时发生错误 - 必须指定文件或文件夹"
 
 msgid "Delete selected"

@@ -834,7 +834,7 @@ msgstr "Σφάλμα κατά τη δημιουργία ενός torrent για 
 msgid "Cannot create a torrent for the nonexistent data: {0}"
 msgstr "Δεν είναι δυνατή η δημιουργία torrent για τα ανύπαρκτα δεδομένα: {0}"
 
-msgid "Error creating torrent - you must enter a file or directory"
+msgid "Error creating torrent - you must specify a file or directory"
 msgstr "Σφάλμα δημιουργίας torrent - πρέπει να εισαγάγετε ένα αρχείο ή έναν κατάλογο"
 
 msgid "Delete selected"

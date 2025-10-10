@@ -837,7 +837,7 @@ msgstr "Неможливо створити торрент для \"{0}\""
 msgid "Cannot create a torrent for the nonexistent data: {0}"
 msgstr "Не вдається створити торрент для неіснуючих даних: {0}"
 
-msgid "Error creating torrent - you must enter a file or directory"
+msgid "Error creating torrent - you must specify a file or directory"
 msgstr "Неможливо створити торрент: необхідно вибрати файл або директорію"
 
 msgid "Delete selected"

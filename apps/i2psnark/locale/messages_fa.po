@@ -834,7 +834,7 @@ msgstr "خطا در ایجاد یک تورنت برای \"{0}'"
 msgid "Cannot create a torrent for the nonexistent data: {0}"
 msgstr "نمی توان یک تورنت برای داده های موجود ایجاد کرد: {0}"
 
-msgid "Error creating torrent - you must enter a file or directory"
+msgid "Error creating torrent - you must specify a file or directory"
 msgstr "خطا در ایجاد تورنت - شما باید یک فایل یا دایرکتوری را وارد کنید"
 
 msgid "Delete selected"

@@ -831,7 +831,7 @@ msgstr "\"{0}\" 토렌트 시작 오류"
 msgid "Cannot create a torrent for the nonexistent data: {0}"
 msgstr "존재하지 않는 데이터 \"{0}\"을 토렌트로 만들 수 없습니다"
 
-msgid "Error creating torrent - you must enter a file or directory"
+msgid "Error creating torrent - you must specify a file or directory"
 msgstr "토렌트 생성 오류 - 파일이나 디렉토리를 입력하세요"
 
 msgid "Delete selected"
