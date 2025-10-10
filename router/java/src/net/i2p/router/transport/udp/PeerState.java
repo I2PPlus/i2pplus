@@ -655,7 +655,7 @@ public class PeerState {
 
     /**
      * Either they told us to back off, or we had to resend to get the data through.
-     *  Caller should synch on this
+     * Caller should synch on this
      */
     private void congestionOccurred() {
         long now = _context.clock().now();
