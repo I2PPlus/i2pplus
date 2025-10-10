@@ -364,7 +364,6 @@ public class UDPTransport extends TransportImpl {
                                                                       Status.IPV4_DISABLED_IPV6_UNKNOWN,
                                                                       Status.IPV4_SNAT_IPV6_UNKNOWN);
 
-
     /**
      *  @param xdh non-null
      */
