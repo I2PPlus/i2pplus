@@ -49,7 +49,7 @@ import static net.i2p.router.tunnel.pool.BuildExecutor.Result.*;
  * to requests, updating the lists of our tunnels and participating tunnels, and updating stats.
  *
  * Replies are handled immediately on reception; requests are queued. As of 0.8.11 the request queue
- * is handled in a separate thread, it used to be called from the  BuildExecutor thread loop.
+ * is handled in a separate thread, it used to be called from the BuildExecutor thread loop.
  *
  * Note that 10 minute tunnel expiration is hardcoded in here.
  *
@@ -81,13 +81,13 @@ class BuildHandler implements Runnable {
     private enum ExplState {NONE, IB, OB, BOTH}
 
     /** TODO these may be too high, review and adjust */
-    private static final int MIN_QUEUE = SystemVersion.isSlow() ? 32 : 64;
-    private static final int MAX_QUEUE = SystemVersion.isSlow() ? 128 : 256;
+    private static final int MIN_QUEUE = SystemVersion.isSlow() ? 8 : 16;
+    private static final int MAX_QUEUE = SystemVersion.isSlow() ? 32 : 64;
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
-    private static final int NEXT_HOP_LOOKUP_TIMEOUT = SystemVersion.isSlow() ? 8*1000 : 5*1000;
+    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 10*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
     private static final int MIN_LOOKUP_LIMIT = SystemVersion.isSlow() ? 8 : 16; // limits on concurrent next-hop RI lookup
-    private static final int MAX_LOOKUP_LIMIT = SystemVersion.isSlow() ? 64 : 128;
+    private static final int MAX_LOOKUP_LIMIT = SystemVersion.isSlow() ? 32 : 64;
     private static final int PERCENT_LOOKUP_LIMIT = SystemVersion.isSlow() ? 5 : 10; // limit lookups to this % of current participating tunnels
     /**
      *  This must be high, as if we timeout the send we remove the tunnel from
