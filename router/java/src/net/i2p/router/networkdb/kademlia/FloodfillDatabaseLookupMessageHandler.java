@@ -177,7 +177,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             if (dlm.getFrom().equals(_context.routerHash())) {
                 if (fromHash != null) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Fixing direct " + searchType + " lookup request from us, actually from: " + fromHash);
+                        _log.warn("Fixing direct " + searchType + " lookup from us, actually from [" + fromHash.toBase64().substring(0,6) + "]");
                     }
                     DatabaseLookupMessage newdlm = new DatabaseLookupMessage(_context);
                     newdlm.setFrom(fromHash);
@@ -188,7 +188,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
                     return newdlm;
                 } else {
                     if (_log.shouldWarn())
-                        _log.warn("Dropping direct " + searchType + " lookup request from us");
+                        _log.warn("Dropping direct " + searchType + " lookup from our own router");
                     _context.statManager().addRateData("netDb.lookupsDropped", 1);
                     return null;
                 }
@@ -200,7 +200,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
                 RouterInfo to = _facade.lookupRouterInfoLocally(dlm.getFrom());
                 if (to != null && to.getCapabilities().indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0) {
                     if (_log.shouldWarn()) {
-                        _log.warn("Dropping direct " + searchType + " lookup request from floodfill " + dlm.getFrom());
+                        _log.warn("Dropping direct " + searchType + " lookup from floodfill [" + dlm.getFrom().toBase64().substring(0,6) + "]");
                     }
                     _context.statManager().addRateData("netDb.lookupsDropped", 1);
                     return null;
