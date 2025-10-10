@@ -731,7 +731,7 @@ public class TunnelPool {
         }
 
         // We don't want it to expire before the client signs it or the ff gets it
-        long expireAfter = _context.clock().now() - 10*1000;
+        long expireAfter = _context.clock().now() - 15*1000;
 
         TunnelInfo zeroHopTunnel = null;
         Lease zeroHopLease = null;
