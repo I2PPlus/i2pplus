@@ -25,14 +25,14 @@ class TunnelGatewayPumper implements Runnable {
     private final List<Thread> _threads;
     private volatile boolean _stop;
     private static final int MIN_PUMPERS = 1;
-    private static final int MAX_PUMPERS = SystemVersion.isSlow() ? 2 : 4;
-    private static final int QUEUE_BUFFER = SystemVersion.isSlow() ? 16 : 32;
+    private static final int MAX_PUMPERS = SystemVersion.isSlow() ? 1 : 2;
+    private static final int QUEUE_BUFFER = SystemVersion.isSlow() ? 12 : 16;
     private final int _pumpers;
 
     /**
      * Wait just a little, but this lets the pumper queue back up.
      */
-    private static final long REQUEUE_TIME = SystemVersion.isSlow() ? 50 : 30;
+    private static final long REQUEUE_TIME = SystemVersion.isSlow() ? 100 : 50;
 
     /** Creates a new instance of TunnelGatewayPumper */
     public TunnelGatewayPumper(RouterContext ctx) {
