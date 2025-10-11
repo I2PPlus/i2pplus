@@ -1,10 +1,8 @@
 package net.i2p.router.tunnel;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
@@ -46,10 +44,10 @@ class PumpedTunnelGateway extends TunnelGateway {
     public final boolean _isInbound;
     private final Hash _nextHop;
 
-    private static final int MAX_OB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 64 : 128;
-    private static final int MAX_IB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 32 : 64;
-    private static final int INITIAL_OB_QUEUE = SystemVersion.isSlow() ? 48 : 96;
-    private static final int MAX_IB_QUEUE = SystemVersion.isSlow() ? 768 : 1536;
+    private static final int MAX_OB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 64 : 256;
+    private static final int MAX_IB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 32 : 128;
+    private static final int INITIAL_OB_QUEUE = SystemVersion.isSlow() ? 64 : 256;
+    private static final int MAX_IB_QUEUE = SystemVersion.isSlow() ? 1024 : 2048;
 
     public static final String PROP_MAX_OB_MSGS_PER_PUMP = "router.pumpMaxOutboundMsgs";
     public static final String PROP_MAX_IB_MSGS_PER_PUMP = "router.pumpMaxInboundMsgs";
@@ -160,7 +158,6 @@ class PumpedTunnelGateway extends TunnelGateway {
         final boolean debug = _log.shouldDebug();
         long startTime = debug ? _context.clock().now() : 0;
 
-        // Add drained messages to internal queue with synchronization
         synchronized (_queue) {
             _queue.addAll(queueBuf);
             if (debug) {
@@ -169,15 +166,14 @@ class PumpedTunnelGateway extends TunnelGateway {
             boolean delayedFlush = _preprocessor.preprocessQueue(_queue, _sender, _receiver);
             if (debug) {
                 long afterPreprocess = _context.clock().now();
-                _log.debug("Preprocessing took " + (afterPreprocess - startTime) + " ms");
+                if (afterPreprocess - startTime > 0) {
+                    _log.debug("Preprocessing took " + (afterPreprocess - startTime) + " ms");
+                }
             }
             _lastFlush = _context.clock().now();
-
-            // Clear queueBuf before releasing lock to avoid holding it unnecessarily
-            queueBuf.clear();
         }
 
-        // Expiration pruning moved outside synchronized block to reduce lock contention
+        queueBuf.clear();
         pruneExpiredMessages();
 
         if (debug) {
