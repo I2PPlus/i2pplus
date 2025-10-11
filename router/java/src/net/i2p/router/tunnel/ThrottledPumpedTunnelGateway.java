@@ -7,16 +7,38 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.SyntheticREDQueue;
 
 /**
- * Same as PTG, but check to see if a message should be dropped before queueing it.
- * Used for IBGWs.
+ * Specialized pumped tunnel gateway for inbound gateways (IBGWs) that throttles messages
+ * by checking bandwidth usage before queuing them.
+ *
+ * This class drops messages early based on bandwidth heuristics to more efficiently
+ * preserve network and system resources compared to processing fragments.
+ *
+ * The drop decision is made here instead of deeper in the tunnel to allow dropping
+ * whole I2NP messages, where message type and size are known accurately.
+ *
+ * Thread safety and behavior otherwise follows PumpedTunnelGateway.
  *
  * @since 0.7.9
  */
 class ThrottledPumpedTunnelGateway extends PumpedTunnelGateway {
-    /** saved so we can note messages that get dropped */
+    /** Configuration and statistics for this hop, used to count dropped messages */
     private final HopConfig _config;
+
+    /** Synthetic Random Early Drop queue to estimate bandwidth usage and perform drops */
     private final SyntheticREDQueue _partBWE;
 
+    /**
+     * Constructs a ThrottledPumpedTunnelGateway with bandwidth throttling.
+     *
+     * Allocated bandwidth value is retrieved from config or set to reasonable default.
+     *
+     * @param context RouterContext
+     * @param preprocessor QueuePreprocessor for the gateway
+     * @param sender Encrypting Sender for fragments
+     * @param receiver Receiving entity consuming encrypted messages
+     * @param pumper TunnelGatewayPumper managing pumping threads
+     * @param config HopConfig containing bandwidth and message statistics
+     */
     public ThrottledPumpedTunnelGateway(RouterContext context, QueuePreprocessor preprocessor, Sender sender,
                                         Receiver receiver, TunnelGatewayPumper pumper, HopConfig config) {
         super(context, preprocessor, sender, receiver, pumper);
@@ -30,37 +52,51 @@ class ThrottledPumpedTunnelGateway extends PumpedTunnelGateway {
     }
 
     /**
-     * Possibly drop a message due to bandwidth before adding it to the preprocessor queue.
-     * We do this here instead of in the InboundGatewayReceiver because it is much smarter to drop
-     * whole I2NP messages, where we know the message type and length, rather than
-     * tunnel messages containing I2NP fragments.
+     * Adds a message to the inbound gateway after a bandwidth-based drop check.
+     *
+     * Drops messages early based on estimated size and bandwidth usage, tracking statistics.
+     *
+     * We do this here instead of in the InboundGatewayReceiver because it is
+     * much smarter to drop whole I2NP messages, where we know the message type
+     * and length, rather than tunnel messages containing I2NP fragments.
+     *
+     * Hard to do this exactly, but we'll assume 2:1 batching for the purpose
+     * of estimating outgoing size. We assume that it's the outbound bandwidth that
+     * is the issue...
+     *
+     * @param msg the I2NP message to add
+     * @param toRouter optional target router after the endpoint
+     * @param toTunnel optional target tunnel after the endpoint
      */
     @Override
     public void add(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
-        //_log.error("IBGW count: " + _config.getProcessedMessagesCount() + " type: " + msg.getType() + " size: " + msg.getMessageSize());
-
-        // Hard to do this exactly, but we'll assume 2:1 batching
-        // for the purpose of estimating outgoing size.
-        // We assume that it's the outbound bandwidth that is the issue...
-        // first frag. overhead
+        // Estimate size with overheads to better match actual transmitted size
         int size = msg.getMessageSize() + 60;
         if (size > 1024) {
-            // additional frag. overhead
+            // Additional fragmentation overhead for larger messages
             size += 28 * (size / 1024);
         } else if (size < 512) {
-            // 2:1 batching of small messages
-            size = 512;
+            size = 512; // Minimum size for small message batching assumption
         }
+
         if (_context.tunnelDispatcher().shouldDropParticipatingMessage(TunnelDispatcher.Location.IBGW, msg.getType(), size, _partBWE)) {
-            // this overstates the stat somewhat, but ok for now
+            // Increment dropped message counters; this may slightly overstate statistics but is acceptable
             int kb = (size + 1023) / 1024;
-            for (int i = 0; i < kb; i++) {_config.incrementProcessedMessages();}
-            return;
+            for (int i = 0; i < kb; i++) {
+                _config.incrementProcessedMessages();
+            }
+            return;  // Drop the message without queuing
         }
+
         add(new PendingGatewayMessage(msg, toRouter, toTunnel));
     }
 
-    /** @since 0.9.8 */
+    /**
+     * Human-readable description differentiating inbound gateway and including tunnel ID.
+     *
+     * @return String description of this inbound pumped tunnel gateway
+     * @since 0.9.8
+     */
     @Override
     public String toString() {
         return "IBGW " + _config.getReceiveTunnelId();
