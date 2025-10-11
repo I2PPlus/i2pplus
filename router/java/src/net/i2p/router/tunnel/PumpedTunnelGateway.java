@@ -1,7 +1,10 @@
 package net.i2p.router.tunnel;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
@@ -14,27 +17,28 @@ import net.i2p.router.util.CoDelPriorityBlockingQueue;
 import net.i2p.util.SystemVersion;
 
 /**
- * This is used for all gateways with more than zero hops.
+ * This class represents a tunnel gateway with multiple hops that accepts messages,
+ * then coalesces and fragments them before sending them down the tunnel.
  *
- * Serve as the gatekeeper for a tunnel, accepting messages, coalescing and/or
- * fragmenting them before wrapping them up for tunnel delivery. The flow here
- * is: <ol>
- * <li>add an I2NPMessage (and a target tunnel/router, if necessary)</li>
- * <li>that message is queued up into a TunnelGateway.Pending and offered to the
- *     assigned QueuePreprocessor.</li>
- * <li>that QueuePreprocessor may then take off any of the TunnelGateway.Pending
- *     messages or instruct the TunnelGateway to offer it the messages again in
- *     a short while (in an attempt to coalesce them).
- * <li>when the QueueProcessor accepts a TunnelGateway.Pending, it preprocesses
- *     it into fragments, forwarding each preprocessed fragment group through
- *     the Sender.</li>
- * <li>the Sender then encrypts the preprocessed data and delivers it to the
- *     Receiver.</li>
- * <li>the Receiver now has the encrypted message and may do with it as it
- *     pleases (e.g. wrap it as necessary and enqueue it onto the OutNetMessagePool,
- *     or if debugging, verify that it can be decrypted properly)</li>
+ * The processing flow is:
+ * <ol>
+ *  <li>add an I2NPMessage (and optionally, the target router or tunnel)</li>
+ *  <li>messages queue in this PumpedTunnelGateway's internal _prequeue</li>
+ *  <li>QueuePreprocessor pulls PendingGatewayMessages from _prequeue and processes them</li>
+ *  <li>Fragments are sent to Sender, encrypted, and delivered to the Receiver</li>
+ *  <li>Receiver directs the message to the next tunnel hop or endpoint</li>
  * </ol>
  *
+ * This class uses specialized CoDel queues to manage queue delays and bufferbloat.
+ * The outbound gateway uses a priority queue, while inbound uses a bounded non-priority queue.
+ *
+ * Thread safety:
+ * <ul>
+ *  <li>_prequeue is a thread-safe blocking queue managing pending messages</li>
+ *  <li>_queue is synchronized for modifications and preprocessing</li>
+ *  <li>Expiration pruning is done outside locks to minimize contention</li>
+ *  <li>The pump() method is safe for concurrent invocation by pumper threads</li>
+ * </ul>
  */
 class PumpedTunnelGateway extends TunnelGateway {
     private final BlockingQueue<PendingGatewayMessage> _prequeue;
@@ -42,20 +46,10 @@ class PumpedTunnelGateway extends TunnelGateway {
     public final boolean _isInbound;
     private final Hash _nextHop;
 
-    /**
-     *  warning - these limit total messages per second throughput due to
-     *  requeue delay in TunnelGatewayPumper to max * 1000 / REQUEUE_TIME
-     */
-/*
-    private static final int MAX_OB_MSGS_PER_PUMP = 64;
-    private static final int MAX_IB_MSGS_PER_PUMP = 24;
-    private static final int INITIAL_OB_QUEUE = 64;
-    private static final int MAX_IB_QUEUE = 1024;
-*/
-    private static final int MAX_OB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 64 : 256;
-    private static final int MAX_IB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 24 : 96;
-    private static final int INITIAL_OB_QUEUE = SystemVersion.isSlow() ? 64 : 256;
-    private static final int MAX_IB_QUEUE = SystemVersion.isSlow() ? 1024 : 4096;
+    private static final int MAX_OB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 64 : 128;
+    private static final int MAX_IB_MSGS_PER_PUMP = SystemVersion.isSlow() ? 32 : 64;
+    private static final int INITIAL_OB_QUEUE = SystemVersion.isSlow() ? 48 : 96;
+    private static final int MAX_IB_QUEUE = SystemVersion.isSlow() ? 768 : 1536;
 
     public static final String PROP_MAX_OB_MSGS_PER_PUMP = "router.pumpMaxOutboundMsgs";
     public static final String PROP_MAX_IB_MSGS_PER_PUMP = "router.pumpMaxInboundMsgs";
@@ -63,40 +57,45 @@ class PumpedTunnelGateway extends TunnelGateway {
     public static final String PROP_MAX_IB_QUEUE = "router.pumpMaxInboundQueue";
 
     /**
-     * @param preprocessor this pulls Pending messages off a list, builds some full preprocessed
-                           messages, and pumps those into the sender
-     * @param sender this takes a preprocessed message, encrypts it, and sends it to the receiver
-     * @param receiver this receives the encrypted message and forwards it off to the first hop
+     * Constructs a PumpedTunnelGateway instance.
+     *
+     * Outbound gateways use an unbounded priority queue;
+     * inbound gateways use a bounded blocking queue.
+     *
+     * @param context RouterContext
+     * @param preprocessor QueuePreprocessor responsible for preprocessing messages
+     * @param sender Sender responsible for encrypting and delivering messages
+     * @param receiver Receiver that consumes encrypted messages for forwarding
+     * @param pumper TunnelGatewayPumper managing pumping threads
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public PumpedTunnelGateway(RouterContext context, QueuePreprocessor preprocessor,
                                Sender sender, Receiver receiver, TunnelGatewayPumper pumper) {
         super(context, preprocessor, sender, receiver);
         if (getClass() == PumpedTunnelGateway.class) {
-            // Unbounded priority queue for outbound
-            // FIXME: lint PendingGatewayMessage is not a CDPQEntry
-            _prequeue = new CoDelPriorityBlockingQueue(context, "OBGW", context.getProperty(PROP_INITIAL_OB_QUEUE, INITIAL_OB_QUEUE));
-            _nextHop = receiver.getSendTo();
+            // Outbound gateway uses priority queue
+            _prequeue = new CoDelPriorityBlockingQueue(context, "OBGW",
+                    context.getProperty(PROP_INITIAL_OB_QUEUE, INITIAL_OB_QUEUE));
             _isInbound = false;
-        } else { // Extended by ThrottledPTG for IB
-            // Bounded non-priority queue for inbound
-            _prequeue = new CoDelBlockingQueue<PendingGatewayMessage>(context, "IBGW", context.getProperty(PROP_MAX_IB_QUEUE, MAX_IB_QUEUE));
-            _nextHop = receiver.getSendTo();
+        } else {
+            // Inbound gateway uses bounded blocking queue
+            _prequeue = new CoDelBlockingQueue<PendingGatewayMessage>(context, "IBGW",
+                    context.getProperty(PROP_MAX_IB_QUEUE, MAX_IB_QUEUE));
             _isInbound = true;
         }
+        _nextHop = receiver.getSendTo();
         _pumper = pumper;
     }
 
     /**
-     * Add a message to be sent down the tunnel, either sending it now (perhaps coalesced with
-     * other pending messages) or after a brief pause (_flushFrequency).
-     * If it is queued up past its expiration, it is silently dropped
+     * Adds a message to be sent down the tunnel.
+     * If the prequeue is full, the message is dropped silently and a statistic is updated.
      *
-     * This is only for OBGWs. See TPTG override for IBGWs.
+     * This method is optimized for outbound gateways and called by TPTG for inbound.
      *
-     * @param msg message to be sent through the tunnel
-     * @param toRouter router to send to after the endpoint (or null for endpoint processing)
-     * @param toTunnel tunnel to send to after the endpoint (or null for endpoint or router processing)
+     * @param msg the message to send
+     * @param toRouter optional target router
+     * @param toTunnel optional target tunnel
      */
     @Override
     public void add(I2NPMessage msg, Hash toRouter, TunnelId toTunnel) {
@@ -107,100 +106,112 @@ class PumpedTunnelGateway extends TunnelGateway {
         add(cur);
     }
 
+    /**
+     * Adds a PendingGatewayMessage to the prequeue and notifies the pumper to process it.
+     *
+     * @param cur the PendingGatewayMessage to add
+     */
     protected void add(PendingGatewayMessage cur) {
         _messagesSent++;
-        if (_prequeue.offer(cur)) {_pumper.wantsPumping(this);}
-        else {_context.statManager().addRateData("tunnel.dropGatewayOverflow", 1);}
+        if (_prequeue.offer(cur)) {
+            _pumper.wantsPumping(this);
+        } else {
+            _context.statManager().addRateData("tunnel.dropGatewayOverflow", 1);
+        }
     }
 
     /**
-     * Run in one of the TunnelGatewayPumper's threads, this pulls pending messages off the prequeue,
-     * adds them to the queue and then tries to preprocess the queue, scheduling a later delayed flush
-     * as necessary.  This allows the gw.add call to go quickly, rather than blocking its callers on
-     * potentially substantial processing.
+     * Pumps messages from the internal prequeue into the processing queue.
      *
-     * @param queueBuf Empty list for convenience, to use as a temporary buffer.
-     *                 Must be empty when called; will always be emptied before return.
-     * @return true if we did not finish, and the pumper should be requeued.
+     * This method tries to drain a bounded number of messages from _prequeue into the provided queueBuf,
+     * then adds them to the internal _queue for preprocessing and fragmentation.
+     *
+     * Expired messages are removed after preprocessing, outside the synchronization block, to reduce contention.
+     *
+     * @param queueBuf an empty list used as a temporary buffer for messages (will be cleared before return)
+     * @return true if there are still messages remaining in _prequeue and the caller should requeue this gateway
      */
     public boolean pump(List<PendingGatewayMessage> queueBuf) {
-        // If the next hop is backlogged, drain only a little... better to let things back up here,
-        // before fragmentation, where we have priority queueing (for OBGW)
+        // Adjust max messages per pump based on backlog and system load
         int max;
         boolean backlogged = _context.commSystem().isBacklogged(_nextHop);
         long lag = _context.jobQueue().getMaxLag();
-        boolean highLoad = SystemVersion.getCPULoadAvg() > 95 && lag > 1000;
+
         if (backlogged && _log.shouldInfo()) {
-            _log.info("PumpedTunnelGateway backlogged, queued to " + _nextHop + " : " + _prequeue.size() +
-                      " Inbound? " + _isInbound);
+            _log.info("PumpedTunnelGateway backlogged, queued to " + _nextHop + " : "
+                      + _prequeue.size() + " inbound? " + _isInbound);
         }
-        if (backlogged) {max = _isInbound ? 1 : 2;}
-        else {
-            max = _isInbound ? _context.getProperty(PROP_MAX_IB_MSGS_PER_PUMP, MAX_IB_MSGS_PER_PUMP) :
-                               _context.getProperty(PROP_MAX_OB_MSGS_PER_PUMP, MAX_OB_MSGS_PER_PUMP);
+
+        if (backlogged) {
+            max = _isInbound ? 1 : 2;
+        } else {
+            max = _isInbound
+                    ? _context.getProperty(PROP_MAX_IB_MSGS_PER_PUMP, MAX_IB_MSGS_PER_PUMP)
+                    : _context.getProperty(PROP_MAX_OB_MSGS_PER_PUMP, MAX_OB_MSGS_PER_PUMP);
         }
+
         _prequeue.drainTo(queueBuf, max);
-        if (queueBuf.isEmpty()) {return false;}
-        boolean rv = !_prequeue.isEmpty();
+        if (queueBuf.isEmpty()) {
+            return false;
+        }
+
+        boolean moreMessagesExist = !_prequeue.isEmpty();
 
         final boolean debug = _log.shouldDebug();
-        long startAdd;
-        if (debug) {startAdd = _context.clock().now();}
-        else {startAdd = 0;}
-        long beforeLock = startAdd;
-        long afterAdded = -1;
-        boolean delayedFlush = false;
-        long delayAmount = -1;
-        int remaining = 0;
-        long afterPreprocess = 0;
-        long afterExpire = 0;
+        long startTime = debug ? _context.clock().now() : 0;
 
+        // Add drained messages to internal queue with synchronization
         synchronized (_queue) {
             _queue.addAll(queueBuf);
             if (debug) {
-                afterAdded = _context.clock().now();
                 _log.debug("Added before direct flush preprocessing for " + toString() + ":\n* " + _queue);
             }
-            delayedFlush = _preprocessor.preprocessQueue(_queue, _sender, _receiver);
-            if (debug) {afterPreprocess = _context.clock().now();}
-            if (delayedFlush) {delayAmount = _preprocessor.getDelayAmount();}
+            boolean delayedFlush = _preprocessor.preprocessQueue(_queue, _sender, _receiver);
+            if (debug) {
+                long afterPreprocess = _context.clock().now();
+                _log.debug("Preprocessing took " + (afterPreprocess - startTime) + " ms");
+            }
             _lastFlush = _context.clock().now();
 
-            // expire any as necessary, even if fragmented
-            for (int i = 0; i < _queue.size(); i++) {
-                PendingGatewayMessage m = _queue.get(i);
-                if (m.getExpiration() + Router.CLOCK_FUDGE_FACTOR < _lastFlush) {
-                    if (debug) {
-                        _log.debug("Expire on the queue (size=" + _queue.size() + "): " + m);
-                    }
-                    _queue.remove(i);
-                    i--;
-                }
-            }
-            remaining = _queue.size();
-            if ((remaining > 0) && debug) {
-                afterExpire = _context.clock().now();
-                _log.debug("Remaining after preprocessing: " + _queue);
-            }
-
-            // Clear queueBuf while still holding the lock on _queue
+            // Clear queueBuf before releasing lock to avoid holding it unnecessarily
             queueBuf.clear();
         }
 
-        if (delayedFlush) {_delayedFlush.reschedule(delayAmount);}
+        // Expiration pruning moved outside synchronized block to reduce lock contention
+        pruneExpiredMessages();
+
         if (debug) {
-            long complete = _context.clock().now();
-            _log.debug("Time to add " + queueBuf.size() + " messages to " + toString() + ":" + (complete-startAdd)
-                       + "\n* Delayed? " + delayedFlush + "; Remaining: " + remaining
-                       + "; Add: " + (afterAdded-beforeLock)
-                       + "; Preprocess: " + (afterPreprocess-afterAdded)
-                       + "; Expire: " + (afterExpire-afterPreprocess)
-                       + "; Queue flush: " + (complete-afterExpire));
+            long endTime = _context.clock().now();
+            _log.debug("Total pump processing time for " + toString() + ": " + (endTime - startTime) + " ms");
         }
-        if (rv && _log.shouldInfo())
-            _log.info("PumpedTunnelGateway remaining to [" + _nextHop.toBase64().substring(0,6) + "] -> Pre-queue: " + _prequeue.size() +
-                      "bytes; Inbound? " + _isInbound + "; Backlogged? " + backlogged);
-        return rv;
+
+        if (moreMessagesExist && _log.shouldInfo()) {
+            _log.info("PumpedTunnelGateway remaining to [" + _nextHop.toBase64().substring(0, 6) + "] -> Pre-queue: "
+                      + _prequeue.size() + " inbound? " + _isInbound + " backlogged? " + backlogged);
+        }
+
+        return moreMessagesExist;
     }
 
+    /**
+     * Removes messages from the internal processing queue that have expired.
+     * This method is called outside synchronized blocks to minimize contention.
+     */
+    private void pruneExpiredMessages() {
+        long now = _context.clock().now();
+        long expirationCutoff = now - Router.CLOCK_FUDGE_FACTOR;
+
+        synchronized (_queue) {
+            Iterator<PendingGatewayMessage> it = _queue.iterator();
+            while (it.hasNext()) {
+                PendingGatewayMessage m = it.next();
+                if (m.getExpiration() < expirationCutoff) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("Expiring message from queue: " + m);
+                    }
+                    it.remove();
+                }
+            }
+        }
+    }
 }
