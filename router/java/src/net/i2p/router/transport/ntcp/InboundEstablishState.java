@@ -334,13 +334,15 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
                 _padlen1 = _context.random().nextInt(PADDING1_FAIL_MAX) - src.remaining();
                 if (_padlen1 > 0) {
                     // Delayed fail for probing resistance - need more bytes before failure
-                    if (_log.shouldDebug()) {
-                        _log.warn("BAD Establishment handshake message #1 \n* X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
-                                  " more bytes, waiting for " + _padlen1 + " more bytes", gse);
-                    } else if (_log.shouldWarn()) {
-                        _log.warn("BAD Establishment handshake message #1 \n* X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
-                                  " more bytes, waiting for " + _padlen1 + " more bytes" +
-                                  (gseNotNull ? "\n* General Security Exception: " + gse.getMessage() : ""));
+                    if (verifyInbound(h)) {
+                        if (_log.shouldDebug()) {
+                            _log.warn("BAD Establishment handshake message #1 \n* X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
+                                      " more bytes, waiting for " + _padlen1 + " more bytes", gse);
+                        } else if (_log.shouldWarn()) {
+                            _log.warn("BAD Establishment handshake message #1 \n* X = " + Base64.encode(_X, 0, KEY_SIZE) + " with " + src.remaining() +
+                                      " more bytes, waiting for " + _padlen1 + " more bytes" +
+                                      (gseNotNull ? "\n* General Security Exception: " + gse.getMessage() : ""));
+                        }
                     }
                     changeState(State.IB_NTCP2_READ_RANDOM);
                 } else {

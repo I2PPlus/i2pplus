@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
+import net.i2p.router.Banlist;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
 import net.i2p.router.util.CachedIteratorCollection;
@@ -1083,6 +1084,9 @@ public class PeerState {
 
         if (!failed.isEmpty()) {
             for (OutboundMessageState state : failed) {
+                Hash hash = getRemoteHostId() != null ? getRemoteHostId().getPeerHash() : null;
+                boolean isBanned = hash != null && _context.banlist().isBanlisted(hash);
+                if (isBanned) {shouldLogInfo = false; shouldLogWarn = false;}
                 OutNetMessage msg = state.getMessage();
                 if (msg != null) {
                     msg.timestamp("Expired in the active pool");

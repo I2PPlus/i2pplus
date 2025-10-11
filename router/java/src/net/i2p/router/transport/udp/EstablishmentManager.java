@@ -730,11 +730,13 @@ class EstablishmentManager {
                 state = new InboundEstablishState2(_context, _transport, packet);
             } catch (GeneralSecurityException gse) {
                 boolean gseNotNull = gse.getMessage() != null && gse.getMessage() != "null";
-                if (_log.shouldDebug())
-                    _log.warn("[SSU2] Received CORRUPT Session or Token Request from " + from, gse);
-                else if (_log.shouldWarn())
-                    _log.warn("[SSU2] Received CORRUPT Session or Token Request from " + from +
-                    (gseNotNull ? "\n* General Security Exception: " + gse.getMessage() : ""));
+                if (from != null && !isPeerBanned(from)) {
+                    if (_log.shouldDebug())
+                        _log.warn("[SSU2] Received CORRUPT Session or Token Request from " + from, gse);
+                    else if (_log.shouldWarn())
+                        _log.warn("[SSU2] Received CORRUPT Session or Token Request from " + from +
+                        (gseNotNull ? "\n* General Security Exception: " + gse.getMessage() : ""));
+                }
                 _context.statManager().addRateData("udp.establishDropped", 1);
                 return;
             }
@@ -768,11 +770,13 @@ class EstablishmentManager {
                 state.receiveSessionOrTokenRequestAfterRetry(packet);
             } catch (GeneralSecurityException gse) {
                 boolean gseNotNull = gse.getMessage() != null && gse.getMessage() != "null";
-                if (_log.shouldDebug())
-                    _log.warn("[SSU2] Received CORRUPT Session or Token Request after Retry \n* Router: " + state, gse);
-                else if (_log.shouldWarn())
-                    _log.warn("[SSU2] Received CORRUPT Session or Token Request after Retry \n* Router: " + state +
-                    (gseNotNull ? "\n* General Security Exception: " + gse.getMessage() : ""));
+                if (state != null && !isPeerBanned(state)) {
+                    if (_log.shouldDebug())
+                        _log.warn("[SSU2] Received CORRUPT Session or Token Request after Retry \n* Router: " + state, gse);
+                    else if (_log.shouldWarn())
+                        _log.warn("[SSU2] Received CORRUPT Session or Token Request after Retry \n* Router: " + state +
+                        (gseNotNull ? "\n* General Security Exception: " + gse.getMessage() : ""));
+                }
                 // state called fail()
                 _inboundStates.remove(state.getRemoteHostId());
                 return;
@@ -860,10 +864,12 @@ class EstablishmentManager {
         if (state != null && isPeerBanned(state)) {return;}
         try {state.receiveSessionConfirmed(packet);}
         catch (GeneralSecurityException gse) {
-            if (_log.shouldDebug()) {
-                _log.warn("[SSU2] Received CORRUPT SessionConfirmed \n* Router: " + state, gse);
-            } else if (_log.shouldWarn()) {
-                _log.warn("[SSU2] Received CORRUPT SessionConfirmed \n* Router: " + state + "\n* " + gse.getMessage());
+            if (state != null && !isPeerBanned(state)) {
+                if (_log.shouldDebug()) {
+                    _log.warn("[SSU2] Received CORRUPT SessionConfirmed \n* Router: " + state, gse);
+                } else if (_log.shouldWarn()) {
+                    _log.warn("[SSU2] Received CORRUPT SessionConfirmed \n* Router: " + state + "\n* " + gse.getMessage());
+                }
             }
             _inboundStates.remove(state.getRemoteHostId());
             return;
