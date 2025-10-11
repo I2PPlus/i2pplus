@@ -171,10 +171,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  forgotten about us, else we can't build IB exploratory tunnels.
      *  Unused.
      */
-    protected final static long PUBLISH_JOB_DELAY = 60*1000l;
+    protected final static long PUBLISH_JOB_DELAY = 15*1000l;
 
     /** Maximum number of peers to place in the queue to explore */
-    static final int MAX_EXPLORE_QUEUE = SystemVersion.isSlow() ? 128 : 256;
+    static final int MAX_EXPLORE_QUEUE = 64;
     static final String PROP_EXPLORE_QUEUE = "router.exploreQueue";
 
     /**
@@ -903,9 +903,11 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private static final long PUBLISH_DELAY = 1000;
 
     /**
-     * Stores in local netdb, and publishes to floodfill if client manager says to
+     * Publishes a local LeaseSet by storing it and scheduling republishing if applicable.
+     * Ensures LeaseSet expiry dates are valid (not expired before publish).
      *
-     * @throws IllegalArgumentException if the leaseSet is not valid
+     * @param localLeaseSet the LeaseSet to publish
+     * @throws IllegalArgumentException if LeaseSet is invalid or expired
      */
     public void publish(LeaseSet localLeaseSet) throws IllegalArgumentException {
         if (!_initialized) {
@@ -915,41 +917,71 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             return;
         }
 
-        Hash h = localLeaseSet.getHash();
+        // Validate LeaseSet expiry before storing
+        validateLeaseSetExpiry(localLeaseSet);
+
+        Hash hash = localLeaseSet.getHash();
+
         try {
-            store(h, localLeaseSet, true); // force overwrite
+            store(hash, localLeaseSet, true); // force overwrite
         } catch (IllegalArgumentException iae) {
             _log.error("Locally published LeaseSet is not valid", iae);
             throw iae;
         }
 
-        if (!_context.clientManager().shouldPublishLeaseSet(h)) {return;}
+        // Skip publishing if client manager advises against it
+        if (!_context.clientManager().shouldPublishLeaseSet(hash)) {
+            return;
+        }
 
-        // If we're shutting down, don't publish.
-        // If we're restarting, keep publishing to minimize the downtime.
+        // If shutting down gracefully with defined exit codes, skip publishing
         if (_context.router().gracefulShutdownInProgress()) {
             int code = _context.router().scheduledGracefulExitCode();
-            if (code == Router.EXIT_GRACEFUL || code == Router.EXIT_HARD) {return;}
+            if (code == Router.EXIT_GRACEFUL || code == Router.EXIT_HARD) {
+                return;
+            }
         }
 
-        RepublishLeaseSetJob j = _publishingLeaseSets.computeIfAbsent(h, key -> new RepublishLeaseSetJob(_context, this, key));
+        scheduleRepublish(hash);
+    }
 
-        // Don't spam the floodfills. In addition, always delay a few seconds since there may
-        // be another leaseset change coming along momentarily.
+    /**
+     * Validates that the LeaseSet has not expired before current publication time.
+     * Throws IllegalArgumentException if LeaseSet is already expired.
+     */
+    private void validateLeaseSetExpiry(LeaseSet leaseSet) {
         long now = _context.clock().now();
-        long nextTime = Math.max(j.lastPublished() + RepublishLeaseSetJob.REPUBLISH_LEASESET_TIMEOUT,
+        long earliest = leaseSet.getEarliestLeaseDate();
+        long latest = leaseSet.getLatestLeaseDate();
+
+        // If either expiry date is in the past relative to current time, reject
+        if (earliest <= now || latest <= now) {
+            throw new IllegalArgumentException("Cannot publish LeaseSet with expiry date in the past. "
+                    + "Earliest: " + new Date(earliest) + ", Latest: " + new Date(latest));
+        }
+    }
+
+    /**
+     * Queues the LeaseSet for future republishing, delaying to avoid flooding floodfills.
+     */
+    private void scheduleRepublish(Hash hash) {
+        RepublishLeaseSetJob job = _publishingLeaseSets.computeIfAbsent(hash,
+            key -> new RepublishLeaseSetJob(_context, this, key));
+
+        long now = _context.clock().now();
+        long nextTime = Math.max(job.lastPublished() + RepublishLeaseSetJob.REPUBLISH_LEASESET_TIMEOUT,
                                  now + PUBLISH_DELAY);
-        j.getTiming().setStartAfter(Math.max(now, nextTime));
+        job.getTiming().setStartAfter(Math.max(now, nextTime));
 
         if (_log.shouldInfo()) {
-            _log.info("Queueing LOCAL LeaseSet [" + h.toBase32().substring(0,8) + "] for publication..." +
-                      "\n* Publication time: " + (new Date(nextTime)));
+            _log.info("Queueing LOCAL LeaseSet [" + hash.toBase32().substring(0, 8) + "] for publication..." +
+                      "\n* Publication time: " + new Date(nextTime));
         }
 
-        if (j instanceof JobImpl) {
-            ((JobImpl) j).madeReady(_context.clock().now());
+        if (job instanceof JobImpl) {
+            ((JobImpl) job).madeReady(now);
         }
-        _context.jobQueue().addJobToTop(j);
+        _context.jobQueue().addJobToTop(job);
     }
 
     void stopPublishing(Hash target) {_publishingLeaseSets.remove(target);}
@@ -961,7 +993,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *         or if this is a client DB
      */
     public void publish(RouterInfo localRouterInfo) throws IllegalArgumentException {
-        if (isClientDb()) {throw new IllegalArgumentException("RouterInfo publication to client db attempted");}
+        if (isClientDb()) {throw new IllegalArgumentException("RouterInfo publication to ClientDb attempted");}
         if (!_initialized) {return;}
         if (_context.router().gracefulShutdownInProgress()) {return;}
         if (_context.router().isHidden()) {return;} // don't store RouterInfos with hidden cap
@@ -983,80 +1015,117 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     public long getLastRouterInfoPublishTime() {return _lastRIPublishTime;}
 
     /**
-     * Determine whether this leaseSet will be accepted as valid and current given what we know now.
+     * Validates whether the given LeaseSet is acceptable as valid and current based on current known parameters.
      *
-     * Unlike for RouterInfos, this is only called once, when stored.
-     * After that, LeaseSet.isCurrent() is used.
+     * <p>This method performs several checks including:</p>
+     * <ul>
+     *   <li>Verifying the key matches the LeaseSet destination.</li>
+     *   <li>Validating the LeaseSet's cryptographic signature.</li>
+     *   <li>Checking if the LeaseSet is too old (expired).</li>
+     *   <li>Checking if the LeaseSet expires too far in the future.</li>
+     * </ul>
      *
-     * @throws UnsupportedCryptoException if that's why it failed.
-     * @return reason why the entry is not valid, or null if it is valid
+     * <p>Note: Unlike RouterInfos, this validation is only done once at storage time.
+     * Afterward, {@code LeaseSet.isCurrent()} should be used to check currency.</p>
+     *
+     * @param key the expected key (destination hash) for this LeaseSet
+     * @param leaseSet the LeaseSet instance to validate
+     * @throws UnsupportedCryptoException if the LeaseSet uses an unsupported cryptographic type/signature
+     * @return a descriptive reason why the LeaseSet is invalid or expired, or {@code null} if the LeaseSet is valid
      */
     public String validate(Hash key, LeaseSet leaseSet) throws UnsupportedCryptoException {
-        if (!key.equals(leaseSet.getHash())) {
+        String keyBase32 = key.toBase32();
+        Hash leaseHash = leaseSet.getHash();
+        String leaseBase32 = leaseHash.toBase32();
+
+        // Check that the key matches the LeaseSet hash
+        if (!key.equals(leaseHash)) {
             if (_log.shouldWarn()) {
                 _log.warn("Invalid NetDbStore attempt! Key does not match LeaseSet destination!" +
-                          "\n* Key: [" + key.toBase32().substring(0,8) + "]" +
-                          "\n* LeaseSet: [" + leaseSet.getHash().toBase32().substring(0,8) + "]");
+                          "\n* Key: [" + keyBase32.substring(0, 8) + "]" +
+                          "\n* LeaseSet: [" + leaseBase32.substring(0, 8) + "]");
             }
-            return "Key does not match LeaseSet destination - " + key.toBase32();
+            return "Key does not match LeaseSet destination - " + keyBase32;
         }
-        // todo experimental sig types
+
+        // Verify the LeaseSet's cryptographic signature validity
         if (!leaseSet.verifySignature()) {
-            processStoreFailure(key, leaseSet); // throws UnsupportedCryptoException
+            processStoreFailure(key, leaseSet); // This may throw UnsupportedCryptoException if signature type is unsupported
             if (_log.shouldWarn()) {
-                _log.warn("Invalid LeaseSet signature! [" + leaseSet.getHash().toBase32().substring(0,8) + "]");
+                _log.warn("Invalid LeaseSet signature! [" + leaseBase32.substring(0, 8) + "]");
             }
             return "Invalid LeaseSet signature on " + key;
         }
-        long earliest;
-        long latest;
+
+        // Determine LeaseSet date boundaries based on LeaseSet type
+        long earliest, latest;
         int type = leaseSet.getType();
+
         if (type == DatabaseEntry.KEY_TYPE_ENCRYPTED_LS2) {
+            // For encrypted LeaseSet2, use published and expires times directly
             LeaseSet2 ls2 = (LeaseSet2) leaseSet;
-            // we'll assume it's not an encrypted meta, for now
             earliest = ls2.getPublished();
             latest = ls2.getExpires();
         } else if (type == DatabaseEntry.KEY_TYPE_META_LS2) {
+            // For meta LeaseSet2, use minimum of lease and publish dates for earliest/latest
             LeaseSet2 ls2 = (LeaseSet2) leaseSet;
-            // TODO this isn't right, and must adjust limits below also
             earliest = Math.min(ls2.getEarliestLeaseDate(), ls2.getPublished());
             latest = Math.min(ls2.getLatestLeaseDate(), ls2.getExpires());
         } else {
+            // For legacy LeaseSet, directly query earliest and latest lease dates
             earliest = leaseSet.getEarliestLeaseDate();
             latest = leaseSet.getLatestLeaseDate();
         }
+
         long now = _context.clock().now();
-        // same as the isCurrent(Router.CLOCK_FUDGE_FACTOR) test in lookupLeaseSetLocally()
-        if (earliest <= now - 10*60*1000L || latest <= now - Router.CLOCK_FUDGE_FACTOR) {
+        final long TEN_MINUTES_MS = 10 * 60 * 1000L;  // 10 minutes in milliseconds
+
+        // Determine if LeaseSet timestamps are outdated (stale)
+        boolean isEarliestStale = earliest <= now - TEN_MINUTES_MS;
+        boolean isLatestStale = latest <= now - Router.CLOCK_FUDGE_FACTOR;
+
+        // Retrieve destination ID string, fallback to LeaseSet hash base32 if null
+        Destination dest = leaseSet.getDestination();
+        String id = (dest != null ? dest.toBase32() : leaseBase32);
+        String idShort = id.substring(0, 6);  // Shortened ID for logs and messages
+
+        // Reject old (expired) LeaseSets
+        if (isEarliestStale || isLatestStale) {
             long age = now - earliest;
-            Destination dest = leaseSet.getDestination();
-            String id = dest != null ? dest.toBase32() : leaseSet.getHash().toBase32();
             if (_log.shouldWarn()) {
-                _log.warn("Old LeaseSet [" + id.substring(0,6) + "] -> rejecting store..." +
+                _log.warn("Old LeaseSet [" + idShort + "] -> rejecting store..." +
                           "\n* First expired: " + new Date(earliest) +
                           "\n* Last expired: " + new Date(latest) +
                           "\n* " + leaseSet);
             }
-            // i2pd bug?
-            // So we don't immediately go try to fetch it for a reply
+            // If there are no leases, aggressively mark lookups as failed to reduce retries
             if (leaseSet.getLeaseCount() == 0) {
-                for (int i = 0; i < NegativeLookupCache.MAX_FAILS; i++) {lookupFailed(key);}
+                for (int i = 0; i < NegativeLookupCache.MAX_FAILS; i++) {
+                    lookupFailed(key);
+                }
             }
-            return "LeaseSet for [" + id.substring(0,6) + "] expired " + DataHelper.formatDuration(age) + " ago";
+            return "LeaseSet for [" + idShort + "] expired " + DataHelper.formatDuration(age) + " ago";
         }
-        if (latest > now + (Router.CLOCK_FUDGE_FACTOR + MAX_LEASE_FUTURE) &&
-            (leaseSet.getType() != DatabaseEntry.KEY_TYPE_META_LS2 ||
-             latest > now + (Router.CLOCK_FUDGE_FACTOR + MAX_META_LEASE_FUTURE))) {
+
+        // Determine limits for future expiration timestamps
+        long futureLimit = Router.CLOCK_FUDGE_FACTOR + MAX_LEASE_FUTURE;
+        long metaFutureLimit = Router.CLOCK_FUDGE_FACTOR + MAX_META_LEASE_FUTURE;
+
+        // If LeaseSet expires too far into the future, reject it (to handle clock skew issues)
+        boolean isFutureTooFar =
+            latest > now + futureLimit &&
+            (type != DatabaseEntry.KEY_TYPE_META_LS2 || latest > now + metaFutureLimit);
+
+        if (isFutureTooFar) {
             long age = latest - now;
-            // let's not make this an error, it happens when peers have bad clocks
-            Destination dest = leaseSet.getDestination();
-            String id = dest != null ? dest.toBase32() : leaseSet.getHash().toBase32();
             if (_log.shouldWarn()) {
-                _log.warn("LeaseSet expires too far in the future: [" + id.substring(0,6) +
-                          "]\n* Expires: " + DataHelper.formatDuration(age) + " from now");
+                _log.warn("LeaseSet expires too far in the future: [" + idShort + "]" +
+                          "\n* Expires: " + DataHelper.formatDuration(age) + " from now");
             }
-            return "Future LeaseSet for [" + id.substring(0,6) + "] expiring in " + DataHelper.formatDuration(age);
+            return "Future LeaseSet for [" + idShort + "] expiring in " + DataHelper.formatDuration(age);
         }
+
+        // Passed all validation checks - LeaseSet is valid and current
         return null;
     }
 
