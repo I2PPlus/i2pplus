@@ -163,7 +163,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         _timeoutMs = Math.min(timeoutMs, MAX_SEARCH_TIME);
         _maxConcurrent = (ctx.router().getUptime() > 30*60*1000 || known > 1000) ? ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT) :
                           ctx.getProperty("netdb.maxConcurrent", MAX_CONCURRENT + 1);
-        if (fromLocalDest != null && !isLease && _log.shouldLog(Log.WARN)) {
+        if (fromLocalDest != null && !isLease && _log.shouldWarn()) {
             _log.warn("IterativeSearch for RouterInfo [" + key.toBase64().substring(0,6) + "] down client tunnel " + fromLocalDest, new Exception());
         }
         // All createRateStat in FNDF
@@ -256,7 +256,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         if (floodfillPeers.isEmpty()) {
             // Ask anybody, they may not return the answer but they will return a few ff peers we can go look up,
             // so this situation should be temporary
-            if (_log.shouldLog(Log.WARN) && uptime > 2*60*1000) {
+            if (_log.shouldWarn() && uptime > 2*60*1000) {
                 _log.warn("Cannot query remote floodfills -> None known (this should resolve shortly)");
             }
             List<Hash> all = new ArrayList<Hash>(_facade.getAllRouters());
@@ -283,7 +283,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             empty = _toTry.isEmpty();
         }
         if (empty) {
-            if (_log.shouldLog(Log.WARN)) {
+            if (_log.shouldWarn()) {
                 _log.warn("IterativeSearch for " + (_isLease ? "LeaseSet " : "Router") +
                           " [" + _key.toBase64().substring(0,6) + "] failed -> No Floodfills in NetDb");
             }
@@ -445,7 +445,7 @@ public class IterativeSearchJob extends FloodSearchJob {
             replyTunnel = null;
             isClientReplyTunnel = false;
             isDirect = true;
-            if (_facade.isClientDb() && _log.shouldLog(Log.WARN)) {
+            if (_facade.isClientDb() && _log.shouldWarn()) {
                 _log.warn("Warning! Direct search selected in a client NetDb context! (DbId: " + _facade + ")");
             }
             ctx.statManager().addRateData("netDb.RILookupDirect", 1);
@@ -476,14 +476,14 @@ public class IterativeSearchJob extends FloodSearchJob {
         if (outTunnel != null && outTunnel.getLength() <= 1) {
             if (peer != null && peer.equals(_key)) {
                 failed(peer, false);
-                if (_log.shouldLog(Log.WARN)) {
+                if (_log.shouldWarn()) {
                     _log.warn("Not sending zero-hop self-lookup of [" + peer.toBase64().substring(0,6) + "]");
                 }
                 return;
             }
             if (peer != null && _facade.lookupLocallyWithoutValidation(peer) == null) {
                 failed(peer, false);
-                if (_log.shouldLog(Log.WARN)) {
+                if (_log.shouldWarn()) {
                     _log.warn("Not sending zero-hop lookup of [" + peer.toBase64().substring(0,6) + "] to UNKNOWN");
                 }
                 return;
@@ -526,7 +526,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                 // Request encrypted reply - now covered by version check above, which is more recent
                 if (!(type == EncType.ELGAMAL_2048 || (type == EncType.ECIES_X25519 && DatabaseLookupMessage.USE_ECIES_FF))) {
                     failed(peer, false);
-                    if (_log.shouldLog(Log.WARN)) {
+                    if (_log.shouldWarn()) {
                         _log.warn("Can't do encrypted lookup to [" + peer.toBase64().substring(0,6) + "] with EncType " + type);
                     }
                     return;
@@ -541,7 +541,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                     boolean ratchet2 = DatabaseLookupMessage.supportsRatchetReplies(ri);
                     if (ratchet1 && !ratchet2) {
                         failed(peer, false);
-                        if (_log.shouldLog(Log.WARN)) {
+                        if (_log.shouldWarn()) {
                             _log.warn("Can't do encrypted lookup to [" + peer.toBase64().substring(0,6) +
                                       "] -> Router does not support AEAD replies");
                         }
@@ -565,7 +565,7 @@ public class IterativeSearchJob extends FloodSearchJob {
                         dlm.setReplySession(sess.key, sess.rtag);
                     }
                 } else { // client went away, but send it anyway
-                    if (_log.shouldLog(Log.WARN)) {_log.warn("Failed encrypt to " + ri);}
+                    if (_log.shouldWarn()) {_log.warn("Failed encrypt to " + ri);}
                 }
 
                 outMsg = MessageWrapper.wrap(ctx, dlm, ri);
@@ -584,7 +584,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         }
         if (outMsg == null) {outMsg = dlm;}
         if (isDirect) {
-            if (_facade.isClientDb() && _log.shouldLog(Log.WARN)) {
+            if (_facade.isClientDb() && _log.shouldWarn()) {
                 _log.warn("Warning! Sending direct search message in a client NetDb context! (DbId: " + _facade + ")" + outMsg );
             }
             OutNetMessage m = new OutNetMessage(ctx, outMsg, outMsg.getMessageExpiration(),

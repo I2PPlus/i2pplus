@@ -139,7 +139,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
         // garlic encrypt to hide contents from the OBEP
         RouterInfo peer = ctx.netDb().lookupRouterInfoLocally(_target);
         if (peer == null) {
-             if (_log.shouldLog(Log.WARN)) {
+             if (_log.shouldWarn()) {
                  _log.warn("LOCAL lookup of RouterInfo for target " + _target + " failed [DbId: " + _facade + "]");
              }
             _facade.verifyFinished(_key);
@@ -382,7 +382,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
                 }
                 // only for RI... LS too dangerous?
                 if (_isRouterInfo) {
-                    if (_facade.isClientDb() && _log.shouldLog(Log.WARN)) {
+                    if (_facade.isClientDb() && _log.shouldWarn()) {
                         _log.warn("Warning! Client is starting a SingleLookupJob (DIRECT?) for RouterInfo [DbId: " + _facade + "]");
                     }
                     ctx.jobQueue().addJob(new SingleLookupJob(ctx, dsrm));

@@ -898,7 +898,7 @@ public abstract class TransportImpl implements Transport {
          * banned or not), then mark it with an warning-level log entry.
          */
         if (_context.banlist().isBanlistedForever(peer)) {
-            if (_log.shouldLog(Log.WARN)) {
+            if (_log.shouldWarn()) {
                 _log.warn("Unbanning [" + peer.toBase64().substring(0,6) + "] -> Peer is now reachable");
             }
             _context.banlist().unbanlistRouter(peer);

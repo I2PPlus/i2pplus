@@ -1626,7 +1626,7 @@ class EstablishmentManager {
                 _transport.isTooClose(ip) ||
                 DataHelper.eq(ip, bob.getRemoteIP()) ||
                 _context.blocklist().isBlocklisted(ip)) {
-                if (_log.shouldLog(Log.WARN)) {
+                if (_log.shouldWarn()) {
                     _log.warn("[SSU2] BAD RelayResponse from " + charlie + " for " + Addresses.toString(ip, port));
                 }
                 istate = INTRO_STATE_FAILED;
@@ -1847,7 +1847,7 @@ class EstablishmentManager {
             if (!TransportUtil.isValidPort(port) || !_transport.isValid(ip) ||
                 _transport.isTooClose(ip) || !DataHelper.eq(ip, id.getIP()) /* IP mismatch */ ||
                 _context.blocklist().isBlocklisted(ip)) {
-                if (_log.shouldLog(Log.WARN)) {
+                if (_log.shouldWarn()) {
                     _log.warn("[SSU2] BAD HolePunch from " + state + " for " + Addresses.toString(ip, port) + " via " + id);
                 }
                 _context.statManager().addRateData("udp.relayBadIP", 1);

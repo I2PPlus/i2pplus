@@ -1366,7 +1366,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 !Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_INTERNAL_SSL, "true"))) {
                 try {writeErrorMessage(ERR_INTERNAL_SSL, out, targetRequest, false, destination);}
                 catch (IOException ioe) {}  // ignore
-                if (_log.shouldLog(Log.WARN)) {_log.warn("SSL to I2P destinations denied by configuration: " + targetRequest);}
+                if (_log.shouldWarn()) {_log.warn("SSL to I2P destinations denied by configuration: " + targetRequest);}
                 return;
             }
 

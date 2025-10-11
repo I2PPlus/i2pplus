@@ -197,7 +197,7 @@ class InboundMessageDistributor implements GarlicMessageReceiver.CloveReceiver {
             // TODO use the OCMOSJ cache to pick OB tunnel we are already using?
             TunnelInfo out = _context.tunnelManager().selectOutboundTunnel(_client, target);
             if (out == null) {
-                if (_log.shouldLog(Log.WARN)) {
+                if (_log.shouldWarn()) {
                     _log.warn("No Outbound tunnel to send the client message for [" + _client.toBase64().substring(0,6) + "] \n* Message: " + msg);
                 }
                 return;

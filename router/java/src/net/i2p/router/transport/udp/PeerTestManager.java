@@ -809,7 +809,7 @@ class PeerTestManager {
         long time = DataHelper.fromLong(data, 5, 4) * 1000;
         int iplen = data[9] & 0xff;
         if (iplen != 0 && iplen != 6 && iplen != 18) {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Bad IP address length " + iplen);
             return;
         }
@@ -976,7 +976,7 @@ class PeerTestManager {
                     return;
                 }
                 if (_throttle.shouldThrottle(fromIP)) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("PeerTest throttle from " + Addresses.toString(fromIP, fromPort));
                     sendRejectToAlice(SSU2Util.TEST_REJECT_BOB_LIMIT, data, fromPeer);
                     fromPeer.setLastSendTime(now);
@@ -985,7 +985,7 @@ class PeerTestManager {
                 Hash alice = fromPeer.getRemotePeer();
                 RouterInfo aliceRI = _context.netDb().lookupRouterInfoLocally(alice);
                 if (aliceRI == null) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("No RouterInfo for Alice");
                     // send reject
                     sendRejectToAlice(SSU2Util.TEST_REJECT_BOB_UNSPEC, data, fromPeer);
@@ -1006,7 +1006,7 @@ class PeerTestManager {
                 }
                 PeerState charlie = _transport.pickTestPeer(CHARLIE, 2, isIPv6, from);
                 if (charlie == null) {
-                    if (_log.shouldLog(Log.WARN))
+                    if (_log.shouldWarn())
                         _log.warn("Unable to pick a Charlie (no peer), IPv6? " + isIPv6);
                     // send reject
                     sendRejectToAlice(SSU2Util.TEST_REJECT_BOB_NO_CHARLIE, data, fromPeer);

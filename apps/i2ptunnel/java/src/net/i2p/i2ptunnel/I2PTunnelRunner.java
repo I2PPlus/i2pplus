@@ -440,7 +440,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
             _keepAliveI2P = false;
             _keepAliveSocket = false;
         } catch (IllegalStateException ise) {
-            if (_log.shouldLog(Log.WARN)) {_log.warn("gnu?", ise);}
+            if (_log.shouldWarn()) {_log.warn("gnu?", ise);}
             _keepAliveI2P = false;
             _keepAliveSocket = false;
         } catch (RuntimeException e) {
@@ -615,7 +615,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 if (!keepAliveFrom) {
                     try {in.close();}
                     catch (IOException ex) {
-                        if (_log.shouldLog(Log.WARN)) {_log.warn(direction + " Error closing input stream (" + ex.getMessage() + ")");}
+                        if (_log.shouldWarn()) {_log.warn(direction + " Error closing input stream (" + ex.getMessage() + ")");}
                     }
                 }
                 try {

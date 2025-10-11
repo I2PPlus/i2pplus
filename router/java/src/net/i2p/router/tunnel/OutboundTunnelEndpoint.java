@@ -93,7 +93,7 @@ class OutboundTunnelEndpoint {
                         UnknownI2NPMessage umsg = (UnknownI2NPMessage) msg;
                         msg = umsg.convert();
                     } catch (I2NPMessageException ime) {
-                        if (_log.shouldLog(Log.WARN))
+                        if (_log.shouldWarn())
                             _log.warn("Unable to convert to standard message class at zero-hop Inbound Gateway \n* " + ime.getMessage());
                         return;
                     }
@@ -137,7 +137,7 @@ class OutboundTunnelEndpoint {
                             _log.info("OutboundEndpoint RouterInfo DbStoreMsg (Count: " +
                                       _ridsm + "/" + _totalmsg + ") from [TunnelId " + _config.getReceiveTunnelId() + "] " +
                                       "to Router [" + toRouter.toBase64().substring(0,6) + "] with message:\n* " + dsm);
-/*                        else if (_log.shouldLog(Log.WARN))
+/*                        else if (_log.shouldWarn())
                             _log.warn("OutboundEndpoint RouterInfo DbStoreMsg from [TunnelId " + _config.getReceiveTunnelId() + "] " +
                                       "to Router [" + toRouter.toBase64().substring(0,6) + "] -> Count: " + _ridsm + " / " + _totalmsg);
 */
@@ -148,7 +148,7 @@ class OutboundTunnelEndpoint {
                                       "from [TunnelId " + _config.getReceiveTunnelId() + "] to Router " +
                                       toRouter.toBase64().substring(0,6) + "] with message:\n* " + dsm);
 /*
-                        else if (_log.shouldLog(Log.WARN))
+                        else if (_log.shouldWarn())
                             _log.warn("OutboundEndpoint LeaseSet DbStoreMsg from [TunnelId " + _config.getReceiveTunnelId() + "] " +
                                       "to Router " + toRouter.toBase64().substring(0,6) + "] -> Count: " + _lsdsm + " / " + _totalmsg);
 */
@@ -160,7 +160,7 @@ class OutboundTunnelEndpoint {
                                   _config.getReceiveTunnelId() + "] to Router [" + toRouter.toBase64().substring(0,6) + "] " +
                                   "with message:\n* " + msg);
 /*
-                    else if (_log.shouldLog(Log.WARN))
+                    else if (_log.shouldWarn())
                         _log.warn("OutboundEndpoint I2NP Message from [TunnelId " + _config.getReceiveTunnelId() + "] " +
                                   "to Router [" + toRouter.toBase64().substring(0,6) + "] -> Count: " + _i2npmsg + " / " + _totalmsg);
 */

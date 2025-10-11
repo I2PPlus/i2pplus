@@ -1526,7 +1526,7 @@ public class UDPTransport extends TransportImpl {
                                 _establisher.ipChanged(isIPv6);
                             }
 
-                            if (_log.shouldLog(Log.WARN))
+                            if (_log.shouldWarn())
                                 _log.warn("Trying to change our external address to " +
                                           Addresses.toString(ourIP, ourPort));
                             RouterAddress newAddr = rebuildExternalAddress(ourIP, ourPort, true);
@@ -2952,7 +2952,7 @@ public class UDPTransport extends TransportImpl {
             _needsRebuild = false;
             return addr;
         } else {
-            if (_log.shouldLog(Log.WARN))
+            if (_log.shouldWarn())
                 _log.warn("Wanted to rebuild our SSU address, but couldn't specify either the direct or indirect info (needs introducers? "
                            + introducersRequired +
                            " IPv6? " + isIPv6 + ')');

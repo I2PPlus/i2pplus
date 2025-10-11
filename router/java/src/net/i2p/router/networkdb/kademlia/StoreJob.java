@@ -294,7 +294,7 @@ abstract class StoreJob extends JobImpl {
                 // For now, send it out through exploratory tunnels,
                 // and issue a warning.
                 sendStoreThroughExploratory(msg, peer, expiration);
-                if (_log.shouldLog(Log.WARN)) {
+                if (_log.shouldWarn()) {
                     _log.warn("[" + _facade + "] Sending RouterInfo store via Exploratory tunnels in client context to [" +
                               peer.getIdentity().getHash().toBase64().substring(0,6) + "] with message " + msg);
                 }

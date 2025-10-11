@@ -551,7 +551,7 @@ public class OutboundClientMessageOneShotJob extends JobImpl {
 
             int cause;
             if (getContext().clientNetDb(_from.calculateHash()).isNegativeCachedForever(_to.calculateHash())) {
-                if (_log.shouldLog(Log.WARN)) {
+                if (_log.shouldWarn()) {
                     _log.warn("Cannot send to " + _toString + " -> Unsupported Signature type");
                 }
                 cause = MessageStatusMessage.STATUS_SEND_FAILURE_UNSUPPORTED_ENCRYPTION;

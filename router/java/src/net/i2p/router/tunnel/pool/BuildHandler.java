@@ -471,7 +471,7 @@ class BuildHandler implements Runnable {
             if (caps != null) {
                 if (caps.indexOf(Router.CAPABILITY_NO_TUNNELS) >= 0) {
                     _context.statManager().addRateData("tunnel.dropTunnelFromCongestionCapability", 1);
-                    if (_log.shouldLog(Log.WARN) && from != null) {
+                    if (_log.shouldWarn() && from != null) {
                         _log.warn("Dropped request from [" + from.toBase64().substring(0,6) + "] -> Local congestion");
                     }
                     RouterInfo fromRI = _context.netDb().lookupRouterInfoLocally(from);
