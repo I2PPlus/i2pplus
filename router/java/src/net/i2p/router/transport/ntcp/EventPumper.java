@@ -518,6 +518,8 @@ class EventPumper implements Runnable {
 
     private void processAccept(SelectionKey key) {
         ServerSocketChannel servChan = (ServerSocketChannel)key.attachment();
+        boolean shouldWarn = _log.shouldWarn();
+        boolean shouldInfo = _log.shouldInfo();
         try {
             SocketChannel chan = servChan.accept();
             // don't throw an NPE if the connect is gone again
@@ -528,8 +530,8 @@ class EventPumper implements Runnable {
             String ba = Addresses.toString(ip).replace("/", "");
             boolean isBanned = _context.blocklist().isBlocklisted(ip);
             if (isBanned) {
-                if (_log.shouldLog(Log.WARN)) {
-                    _log.warn("Refusing Session Request from blocklisted IP address " + ba);
+                if (shouldInfo) {
+                    _log.info("Refusing Session Request from blocklisted IP address " + ba);
                 }
                 try {chan.close();}
                 catch (IOException ioe) {}
@@ -537,7 +539,7 @@ class EventPumper implements Runnable {
             }
             if (!_context.commSystem().isExemptIncoming(Addresses.toCanonicalString(ba))) {
                 if (!_transport.allowConnection()) {
-                    if (_log.shouldWarn()) {
+                    if (shouldWarn) {
                         _log.warn("Refusing Session Request from: " + ba + " -> NTCP connection limit reached");
                     }
                     try {chan.close();}
@@ -548,11 +550,11 @@ class EventPumper implements Runnable {
                 int count = _blockedIPs.count(ba);
                 if (count > 0) {
                     count = _blockedIPs.increment(ba);
-                    if (_log.shouldWarn()) {
-                        _log.warn("Blocking NTCP connection attempt from" + (isBanned ? "banned IP address" : "") +
+                    if (shouldInfo) {
+                        _log.info("Blocking NTCP connection attempt from" + (isBanned ? "banned IP address" : "") +
                                   ": " + ba + " (Count: " + count + ")");
                     }
-                    if (count >= 30 && _log.shouldWarn()) {
+                    if (count >= 30 && shouldWarn) {
                         _log.warn("WARNING! " +  (isBanned ? "Banned " : "")  + "IP Address " + ba +
                                   " is making excessive inbound NTCP connection attempts (Count: " + count + ")");
                     }
@@ -682,146 +684,166 @@ class EventPumper implements Runnable {
     }
 
     /**
-     *  OP_READ will always be set before this is called.
-     *  This method will disable the interest if no more reads remain because of inbound bandwidth throttling.
-     *  High-frequency path in thread.
+     * Handles reading from the channel associated with the given SelectionKey.
+     * <p>
+     * This method assumes OP_READ is set before calling and disables interest when
+     * no more inbound data can be read, e.g., due to bandwidth throttling or connection closure.
+     * It is a high-frequency method invoked within an IO thread.
+     * <p>
+     * The method reads available data into buffers repeatedly until no more data is currently available
+     * or an error/EOF occurs. It manages connection state, bandwidth requests, and logging.
+     *
+     * @param key the SelectionKey representing the channel ready for read
      */
     private void processRead(SelectionKey key) {
-        final NTCPConnection con = (NTCPConnection)key.attachment();
+        final NTCPConnection con = (NTCPConnection) key.attachment();
         final SocketChannel chan = con.getChannel();
         ByteBuffer buf = null;
+        boolean shouldDebug = _log.shouldDebug();
+        boolean shouldInfo = _log.shouldInfo();
+
         try {
             while (true) {
-                buf = acquireBuf();
-                int read = 0;
-                int readThisTime;
+                buf = acquireBuf();  // Acquire buffer once per iteration
+
+                int totalRead = 0;
                 int readCount = 0;
-                while ((readThisTime = chan.read(buf)) > 0)  {
-                    read += readThisTime;
+                int bytesRead;
+
+                // Read as many times as possible until no more data immediately available
+                while ((bytesRead = chan.read(buf)) > 0) {
+                    totalRead += bytesRead;
                     readCount++;
                 }
-                if (readThisTime < 0 && read == 0) {read = readThisTime;}
-                if (_log.shouldDebug()) {
-                    _log.debug("Read " + read + " bytes from " + con);
+
+                // bytesRead < 0 means EOF - if nothing read before, mark EOF
+                if (bytesRead < 0 && totalRead == 0) totalRead = bytesRead;
+
+                if (shouldDebug && totalRead != 0) {
+                    _log.debug("Read " + totalRead + " bytes from " + con);
                 }
-                if (read < 0) {
+
+                if (totalRead < 0) {
+                    // EOF handling - log and block IP for inbound connections with zero msg received
                     if (con.isInbound() && con.getMessagesReceived() <= 0) {
                         InetAddress addr = chan.socket().getInetAddress();
                         int count;
                         if (addr != null) {
-                            byte[] ip = addr.getAddress();
-                            String ba = Addresses.toString(ip).replace("/", "");
-                            count = _blockedIPs.increment(ba);
-                            if (_log.shouldWarn()) {
-                                _log.warn("EOF on Inbound connection before receiving any data " +
-                                          "\n* Blocking IP address: " + ba + (count > 1 ? " (Count: " + count + ")" : ""));
+                            String ipStr = Addresses.toString(addr.getAddress()).replace("/", "");
+                            count = _blockedIPs.increment(ipStr);
+                            if (shouldInfo) {
+                                _log.info("EOF on Inbound connection before receiving any data, blocking IP: "
+                                          + ipStr + (count > 1 ? " (Count: " + count + ")" : ""));
                             }
                         } else {
                             count = 1;
-                            if (_log.shouldWarn()) {
-                                _log.warn("EOF on Inbound connection before receiving any data: " + con);
+                            if (shouldInfo) {
+                                _log.info("EOF on Inbound connection before receiving any data: " + con);
                             }
                         }
                         _context.statManager().addRateData("ntcp.dropInboundNoMessage", count);
-                    } else {
-                        if (_log.shouldDebug()) {_log.debug("EOF on " + con);}
-                    }
+                    } else if (shouldDebug) {_log.debug("EOF on " + con);}
                     con.close();
                     releaseBuf(buf);
                     break;
                 }
-                if (read == 0) {
+
+                if (totalRead == 0) {
                     releaseBuf(buf);
-                    int consec = con.gotZeroRead();
+                    int zeroReadCount = con.gotZeroRead();
                     long now = System.currentTimeMillis();
 
-                    // Only close if multiple zero-reads in a short window
-                    if (consec >= 5 && now - con.getLastZeroReadTime() <= 1000) {
+                    // Close connection if multiple zero reads within a short window
+                    if (zeroReadCount >= 5 && now - con.getLastZeroReadTime() <= 1000) {
                         _context.statManager().addRateData("ntcp.zeroReadDrop", 1);
-                        if (_log.shouldWarn()) {
-                            _log.warn("Fail safe zero read close " + con);
-                        }
+                        if (shouldInfo) {_log.info("Fail safe zero read close " + con);}
                         con.close();
                     } else {
-                        _context.statManager().addRateData("ntcp.zeroRead", consec);
-                        if (_log.shouldDebug()) {
-                            _log.debug("Nothing to read for " + con + ", but remaining interested (Count: " + consec + ")");
+                        _context.statManager().addRateData("ntcp.zeroRead", zeroReadCount);
+                        if (shouldDebug) {
+                            _log.debug("Nothing to read for " + con + ", remaining interested (Count: " + zeroReadCount + ")");
                         }
                     }
                     break;
                 }
 
-                // Process the data received
-                // clear counter for workaround above
+                // Data read successfully, clear zero-read count
                 con.clearZeroRead();
-                // go around again if we filled the buffer (so we can read more)
-                boolean keepReading = !buf.hasRemaining();
-                // ZERO COPY. The buffer will be returned in Reader.processRead()
-                // not ByteBuffer to avoid Java 8/9 issues with flip()
-                ((Buffer)buf).flip();
-                FIFOBandwidthLimiter.Request req = _context.bandwidthLimiter().requestInbound(read, "NTCP read"); //con, buf);
+
+                // Flip buffer for reading downstream
+                ((Buffer) buf).flip();
+
+                // Request bandwidth for inbound data
+                FIFOBandwidthLimiter.Request req = _context.bandwidthLimiter().requestInbound(totalRead, "NTCP read");
+
                 if (req.getPendingRequested() > 0) {
-                    // rare since we generally don't throttle inbound
+                    // Bandwidth throttling active - clear read interest and queue the buffer
                     clearInterest(key, SelectionKey.OP_READ);
-                    _context.statManager().addRateData("ntcp.queuedRecv", read);
+                    _context.statManager().addRateData("ntcp.queuedRecv", totalRead);
                     con.queuedRecv(buf, req);
                     break;
                 } else {
-                    // stay interested
-                    //key.interestOps(key.interestOps() | SelectionKey.OP_READ);
+                    // No throttling - deliver buffer directly and keep read interest
                     con.recv(buf);
-                    _context.statManager().addRateData("ntcp.read", read);
-                    if (readThisTime < 0) { // EOF, we're done
+                    _context.statManager().addRateData("ntcp.read", totalRead);
+
+                    // EOF detected previously? Close connection
+                    if (bytesRead < 0) {
                         con.close();
                         break;
                     }
-                    if (!keepReading) {break;}
+
+                    // Continue reading if buffer filled entirely (may be more data)
+                    if (buf.hasRemaining()) {
+                        break;
+                    }
                 }
-            } // while true
+            }
         } catch (CancelledKeyException cke) {
-            if (buf != null) {releaseBuf(buf);}
-            if (_log.shouldWarn()) _log.warn("Error reading on " + con + "\n* " + cke.getMessage());
+            if (buf != null) releaseBuf(buf);
+            if (shouldInfo) _log.info("Error reading on " + con + "\n* " + cke.getMessage());
             con.close();
             _context.statManager().addRateData("ntcp.readError", 1);
+
         } catch (IOException ioe) {
-            // common, esp. at outbound connect time
-            if (buf != null) {releaseBuf(buf);}
+            if (buf != null) releaseBuf(buf);
+
             if (con.isInbound() && con.getMessagesReceived() <= 0) {
                 byte[] ip = con.getRemoteIP();
                 int count;
                 if (ip != null) {
-                    String ba = Addresses.toString(ip).replace("/", "");
-                    count = _blockedIPs.increment(ba);
-                    if (_log.shouldWarn()) {
-                        _log.warn("Blocking IP address " + ba + (count > 1 ? " (Count: " + count + ")" : "") +
-                                  "\n* IO Error: " +  ioe.getMessage());
+                    String ipStr = Addresses.toString(ip).replace("/", "");
+                    count = _blockedIPs.increment(ipStr);
+                    if (shouldInfo) {
+                        _log.info("Blocking IP address " + ipStr + (count > 1 ? " (Count: " + count + ")" : "")
+                                  + "\n* IO Error: " + ioe.getMessage());
                     }
                 } else {
                     count = 1;
-                    if (_log.shouldWarn()) {
-                        _log.warn("IO Error on Inbound connection before receiving any data: " + con);
+                    if (shouldInfo) {
+                        _log.info("IO Error on Inbound connection before receiving any data: " + con);
                     }
                 }
                 _context.statManager().addRateData("ntcp.dropInboundNoMessage", count);
-            } else {
-                if (_log.shouldWarn()) {
-                    _log.warn("Error reading: " + con + " (" + ioe.getMessage() + ")");
-                }
+            } else if (shouldInfo) {
+                _log.info("Error reading: " + con + " (" + ioe.getMessage() + ")");
             }
-            if (con.isEstablished()) {_context.statManager().addRateData("ntcp.readError", 1);}
-            else {
-                // Usually "connection reset by peer", probably a conn limit rejection?
-                // although it could be a read failure during the DH handshake
-                // Same stat as in processConnect()
+
+            if (con.isEstablished()) {
+                _context.statManager().addRateData("ntcp.readError", 1);
+            } else {
                 _context.statManager().addRateData("ntcp.connectFailedTimeoutIOE", 1);
                 RouterIdentity rem = con.getRemotePeer();
-                if (rem != null && !con.isInbound()) {_transport.markUnreachable(rem.calculateHash());}
+                if (rem != null && !con.isInbound()) {
+                    _transport.markUnreachable(rem.calculateHash());
+                }
             }
             con.close();
+
         } catch (NotYetConnectedException nyce) {
-            if (buf != null) {releaseBuf(buf);}
+            if (buf != null) releaseBuf(buf);
             clearInterest(key, SelectionKey.OP_READ);
-            if (_log.shouldWarn()) {_log.warn("Error reading: " + con, nyce);}
+            if (shouldInfo) {_log.info("Error reading: " + con, nyce);}
         }
     }
 
