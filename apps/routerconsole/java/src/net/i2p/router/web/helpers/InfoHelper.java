@@ -111,13 +111,13 @@ public class InfoHelper extends HelperBase {
     public String codelInterval() {
         String interval = _context.getProperty("router.codelInterval");
         if (interval != null) {return interval;}
-        else {return "500";}
+        else {return "1000";}
     }
 
     public String codelTarget() {
         String target = _context.getProperty("router.codelTarget");
         if (target != null) {return target;}
-        else {return "20";}
+        else {return "100";}
     }
 
     public String getFamily() {

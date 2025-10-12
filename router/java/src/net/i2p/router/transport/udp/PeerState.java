@@ -118,7 +118,7 @@ public class PeerState {
     private int _rto;
 
     /** how many packets will be considered within the retransmission rate calculation */
-    static final long RETRANSMISSION_PERIOD_WIDTH = SystemVersion.isSlow() ? 100 : 400;
+    static final long RETRANSMISSION_PERIOD_WIDTH = SystemVersion.isSlow() ? 100 : 200;
 
     private int _messagesReceived;
     private final AtomicInteger _messagesSent = new AtomicInteger();
@@ -160,7 +160,7 @@ public class PeerState {
     /** The minimum number of outstanding messages (NOT fragments/packets) */
     private static final int MIN_CONCURRENT_MSGS = SystemVersion.isSlow() ? 16 : 64;
     /** @since 0.9.42 */
-    private static final int INIT_CONCURRENT_MSGS = SystemVersion.isSlow() ? 64 : 256;
+    private static final int INIT_CONCURRENT_MSGS = SystemVersion.isSlow() ? 64 : 512;
     /** how many concurrent outbound messages do we allow OutboundMessageFragments to send
         This counts full messages, NOT fragments (UDP packets)
      */
@@ -172,7 +172,7 @@ public class PeerState {
     /** Last time it was made an introducer **/
     private long _lastIntroducerTime;
 
-    private static final int MAX_SEND_WINDOW_BYTES = SystemVersion.isSlow() ? 1024*1024 : 4*1024*1024;
+    private static final int MAX_SEND_WINDOW_BYTES = SystemVersion.isSlow() ? 1024*1024 : 2*1024*1024;
 
     /**
      *  Was 32 before 0.9.2, but since the streaming lib goes up to 128,
@@ -1004,66 +1004,52 @@ public class PeerState {
      */
     public boolean getMayDisconnect() {return _mayDisconnect;}
 
-
     /**
-     * Processes outbound messages by expiring overdue messages and
-     * completing messages marked as done. Called frequently by
-     * OutboundMessageFragments.getNextVolley() to maintain message state.
-     *
-     * This method removes completed or expired messages from the active pool,
-     * updates relevant statistics, and triggers callbacks for success or failure.
+     * Processes outbound messages by expiring overdue messages and completing messages marked as done,
+     * updating stats and triggering callbacks. Returns the total count of active plus queued messages.
      *
      * @param now current time in milliseconds for expiration checks
      * @return total count of active outbound messages plus those queued for sending
      */
     int finishMessages(long now) {
-        // Synchronized empty check for thread safety
-        synchronized (_outboundLock) {
-            if (_outboundMessages.isEmpty()) {
-                return _outboundQueue.size();
-            }
-        }
-
+        if (_outboundMessages.isEmpty()) {return _outboundQueue.size();}
         if (_dead) {
             dropOutbound();
             return 0;
         }
 
-        List<OutboundMessageState> succeeded = new ArrayList<>(4);
-        List<OutboundMessageState> failed = new ArrayList<>(4);
+        List<OutboundMessageState> succeeded = new ArrayList<>(16);
+        List<OutboundMessageState> failed = new ArrayList<>(8);
 
         boolean shouldLogInfo = _log.shouldInfo();
         boolean shouldLogWarn = _log.shouldWarn();
 
-        int rv;
-        // Variables for failed stats accumulation
         int failedSize = 0;
         int failedCount = 0;
         boolean totalFail = false;
 
+        int rv;
         synchronized (_outboundLock) {
             Iterator<OutboundMessageState> iter = _outboundMessages.iterator();
             while (iter.hasNext()) {
                 OutboundMessageState state = iter.next();
+
                 if (state.isComplete()) {
                     iter.remove();
                     succeeded.add(state);
-                } else if (state.isExpired(now)) {
+                    continue;
+                }
+
+                boolean isFailed = state.isExpired(now) || state.getMaxSends() > OutboundMessageFragments.MAX_VOLLEYS;
+                if (isFailed) {
                     iter.remove();
-                    _context.statManager().addRateData("udp.sendFailed", state.getPushCount());
+                    String statKey = state.isExpired(now) ? "udp.sendFailed" : "udp.sendAggressiveFailed";
+                    _context.statManager().addRateData(statKey, state.getPushCount());
                     failed.add(state);
+
                     failedSize += state.getUnackedSize();
                     failedCount += state.getUnackedFragments();
-                    OutNetMessage msg = state.getMessage();
-                    if (msg != null && !_isInbound && state.getSeqNum() == 0) {
-                        totalFail = true;
-                    }
-                } else if (state.getMaxSends() > OutboundMessageFragments.MAX_VOLLEYS) {
-                    iter.remove();
-                    _context.statManager().addRateData("udp.sendAggressiveFailed", state.getPushCount());
-                    failed.add(state);
-                    failedSize += state.getUnackedSize();
-                    failedCount += state.getUnackedFragments();
+
                     OutNetMessage msg = state.getMessage();
                     if (msg != null && !_isInbound && state.getSeqNum() == 0) {
                         totalFail = true;
@@ -1073,7 +1059,6 @@ public class PeerState {
             rv = _outboundMessages.size();
         }
 
-        // Handle succeeded messages outside lock
         for (OutboundMessageState state : succeeded) {
             _transport.succeeded(state);
             OutNetMessage msg = state.getMessage();
@@ -1083,10 +1068,15 @@ public class PeerState {
         }
 
         if (!failed.isEmpty()) {
+            Hash hash = getRemoteHostId() != null ? getRemoteHostId().getPeerHash() : null;
+            boolean isBanned = hash != null && _context.banlist().isBanlisted(hash);
+            if (isBanned) {
+                // don't bother logging if the router is banned
+                shouldLogInfo = false;
+                shouldLogWarn = false;
+            }
+
             for (OutboundMessageState state : failed) {
-                Hash hash = getRemoteHostId() != null ? getRemoteHostId().getPeerHash() : null;
-                boolean isBanned = hash != null && _context.banlist().isBanlisted(hash);
-                if (isBanned) {shouldLogInfo = false; shouldLogWarn = false;}
                 OutNetMessage msg = state.getMessage();
                 if (msg != null) {
                     msg.timestamp("Expired in the active pool");
@@ -1118,7 +1108,6 @@ public class PeerState {
                         _sendWindowBytesRemaining = _sendWindowBytes;
                     }
                 }
-                // no need to nudge(), this is called from OMF loop before allocateSend()
             }
 
             if (rv <= 0) {
