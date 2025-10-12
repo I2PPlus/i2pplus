@@ -17,6 +17,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -85,8 +86,13 @@ class EstablishmentManager {
      */
     private final ConcurrentHashMap<RemoteHostId, OutboundEstablishState> _outboundStates;
 
-    /** map of RemoteHostId to List of OutNetMessage for messages exceeding capacity */
-    private final ConcurrentHashMap<RemoteHostId, List<OutNetMessage>> _queuedOutbound;
+    /**
+     * Map of RemoteHostId to a bounded, thread-safe queue of OutNetMessage instances
+     * for peers whose outbound establishment is pending due to concurrency limits.
+     * Each queue is capped at {@link #MAX_QUEUED_PER_PEER} messages.
+     * Thread-safe: no external synchronization required.
+     */
+    private final ConcurrentHashMap<RemoteHostId, LinkedBlockingQueue<OutNetMessage>> _queuedOutbound;
 
     /**
      *  Map of nonce (Long) to OutboundEstablishState.
@@ -126,14 +132,14 @@ class EstablishmentManager {
 
     /** Max outbound in progress - max inbound is half of this */
     private final int DEFAULT_MAX_CONCURRENT_ESTABLISH;
-    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 64 : 192;
-    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 256 : 768;
+    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 64 : 256;
+    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 256 : 1024;
     private static final String PROP_MAX_CONCURRENT_ESTABLISH = "i2np.udp.maxConcurrentEstablish";
     private static final float DEFAULT_THROTTLE_FACTOR = SystemVersion.isSlow() ? 1.5f : 3f;
     private static final String PROP_THROTTLE_FACTOR = "router.throttleFactor";
 
     /** Max pending outbound connections (waiting because we are at MAX_CONCURRENT_ESTABLISH) */
-    private static final int MAX_QUEUED_OUTBOUND = SystemVersion.isSlow() ? 48 : 96;
+    private static final int MAX_QUEUED_OUTBOUND = SystemVersion.isSlow() ? 64 : 128;
 
     /** Max queued msgs per peer while the peer connection is queued */
     private static final int MAX_QUEUED_PER_PEER = SystemVersion.isSlow() ? 32 : 64;
@@ -149,7 +155,7 @@ class EstablishmentManager {
      * But SSU probably isn't higher priority than NTCP.
      * And it's important to not fail an establishment too soon and waste it.
      */
-    private static final int MAX_OB_ESTABLISH_TIME = SystemVersion.isSlow() ? 25*1000 : 20*1000;
+    private static final int MAX_OB_ESTABLISH_TIME = 25*1000;
 
     /**
      * Kill any inbound that takes more than this
@@ -159,10 +165,10 @@ class EstablishmentManager {
     public static final int MAX_IB_ESTABLISH_TIME = 15*1000;
 
     /** Max wait before receiving a response to a single message during outbound establishment */
-    public static final int OB_MESSAGE_TIMEOUT = SystemVersion.isSlow() ? 15*1000 : 12*1000;
+    public static final int OB_MESSAGE_TIMEOUT = 18*1000;
 
     /** for the DSM and or netdb store */
-    private static final int DATA_MESSAGE_TIMEOUT = SystemVersion.isSlow() ? 12*1000 : 10*1000;
+    private static final int DATA_MESSAGE_TIMEOUT = 12*1000;
 
     private static final int IB_BAN_TIME = 60*60*1000;
 
@@ -183,7 +189,7 @@ class EstablishmentManager {
         _builder2 = transport.getBuilder2();
         _inboundStates = new ConcurrentHashMap<RemoteHostId, InboundEstablishState>();
         _outboundStates = new ConcurrentHashMap<RemoteHostId, OutboundEstablishState>();
-        _queuedOutbound = new ConcurrentHashMap<RemoteHostId, List<OutNetMessage>>();
+        _queuedOutbound = new ConcurrentHashMap<RemoteHostId, LinkedBlockingQueue<OutNetMessage>>();
         _liveIntroductions = new ConcurrentHashMap<Long, OutboundEstablishState>();
         _outboundByClaimedAddress = new ConcurrentHashMap<RemoteHostId, OutboundEstablishState>();
         _outboundByHash = new ConcurrentHashMap<Hash, OutboundEstablishState>();
@@ -409,28 +415,23 @@ class EstablishmentManager {
                 if (_queuedOutbound.size() >= MAX_QUEUED_OUTBOUND && !_queuedOutbound.containsKey(to)) {
                     rejected = true;
                 } else {
-                    List<OutNetMessage> newQueued = new ArrayList<OutNetMessage>(MAX_QUEUED_PER_PEER);
-                    List<OutNetMessage> queued = _queuedOutbound.putIfAbsent(to, newQueued);
-                    if (queued == null) {
-                        queued = newQueued;
+                    // Use a bounded LinkedBlockingQueue to enforce MAX_QUEUED_PER_PEER atomically
+                    LinkedBlockingQueue<OutNetMessage> queued = _queuedOutbound.computeIfAbsent(
+                        to,
+                        k -> new LinkedBlockingQueue<>(MAX_QUEUED_PER_PEER)
+                    );
+
+                    // offer() is atomic and returns false if the queue is full
+                    if (queued.offer(msg)) {
+                        queueCount = queued.size(); // O(1), safe
                         if (_log.shouldWarn()) {
-                            _log.warn("[SSU2] Queueing OutboundEstablish to " + to + ", increase " + PROP_MAX_CONCURRENT_ESTABLISH);
+                            _log.warn("[SSU2] Queueing OutboundEstablish to " + to +
+                                      ", increase " + PROP_MAX_CONCURRENT_ESTABLISH);
                         }
+                    } else {
+                        rejected = true;
                     }
-                    // this used to be inside a synchronized (_outboundStates) block,
-                    // but that's now a CHM, so protect the ArrayList
-                    // There are still races possible but this should prevent AIOOBE and NPE
-                    synchronized (queued) {
-                        queueCount = queued.size();
-                        if (queueCount < MAX_QUEUED_PER_PEER) {
-                            queued.add(msg);
-                            // increment for the stat below
-                            queueCount++;
-                        } else {
-                            rejected = true;
-                        }
-                        deferred = _queuedOutbound.size();
-                    }
+                    deferred = _queuedOutbound.size();
                 }
             } else {
                 // must have a valid session key
@@ -548,14 +549,12 @@ class EstablishmentManager {
         }
         if (state != null) {
             state.addMessage(msg);
-            List<OutNetMessage> queued = _queuedOutbound.get(to);
+            LinkedBlockingQueue<OutNetMessage> queued = _queuedOutbound.remove(to);
             if (queued != null) {
-                synchronized (queued) {
-                    for (OutNetMessage m : queued) {
-                        state.addMessage(m);
-                    }
+                // Drain all messages safely — no sync needed
+                for (OutNetMessage m : queued) {
+                    state.addMessage(m);
                 }
-                _queuedOutbound.remove(to); // remove only after processing
             }
         }
         if (rejected) {
@@ -1059,11 +1058,10 @@ class EstablishmentManager {
         state.dataReceived();
         _outboundStates.remove(state.getRemoteHostId());
         // there shouldn't have been queued messages for this active state, but just in case...
-        List<OutNetMessage> queued = _queuedOutbound.remove(state.getRemoteHostId());
+        LinkedBlockingQueue<OutNetMessage> queued = _queuedOutbound.remove(state.getRemoteHostId());
         if (queued != null) {
-            // see comments above
-            synchronized (queued) {
-                for (OutNetMessage m : queued) {state.addMessage(m);}
+            for (OutNetMessage m : queued) {
+                state.addMessage(m);
             }
         }
 
@@ -1080,36 +1078,39 @@ class EstablishmentManager {
     }
 
     /**
-     *  Move pending OB messages from _queuedOutbound to _outboundStates.
-     *  This isn't so great because _queuedOutbound is not a FIFO.
+     * Move pending outbound messages from {@link #_queuedOutbound} into active
+     * outbound establishment states. This processes one peer at a time until
+     * concurrency limits are reached.
+     *
+     * @return number of peers admitted from the queue
      */
     private int locked_admitQueued() {
-        if (_queuedOutbound.isEmpty()) {return 0;}
+        if (_queuedOutbound.isEmpty()) {
+            return 0;
+        }
         int admitted = 0;
         int max = getMaxConcurrentEstablish();
+        Iterator<Map.Entry<RemoteHostId, LinkedBlockingQueue<OutNetMessage>>> iter =
+            _queuedOutbound.entrySet().iterator();
 
-        for (Iterator<Map.Entry<RemoteHostId, List<OutNetMessage>>> iter = _queuedOutbound.entrySet().iterator();
-             iter.hasNext() && _outboundStates.size() < max;) {
-
-            Map.Entry<RemoteHostId, List<OutNetMessage>> entry = iter.next();
+        while (iter.hasNext() && _outboundStates.size() < max) {
+            Map.Entry<RemoteHostId, LinkedBlockingQueue<OutNetMessage>> entry = iter.next();
             iter.remove();
+            LinkedBlockingQueue<OutNetMessage> allQueued = entry.getValue();
+            List<OutNetMessage> validMessages = new ArrayList<>();
 
-            List<OutNetMessage> allQueued = entry.getValue();
-            List<OutNetMessage> queued = new ArrayList<>();
+            // Filter out expired messages
             long now = _context.clock().now();
-
-            synchronized (allQueued) {
-                Iterator<OutNetMessage> it = allQueued.iterator();
-                while (it.hasNext()) {
-                    OutNetMessage msg = it.next();
-                    if (now - Router.CLOCK_FUDGE_FACTOR > msg.getExpiration()) {
-                        _transport.failed(msg, "Timed out in EstablishmentManager Outbound queue");
-                        it.remove();
-                    } else {queued.add(msg);}
+            for (OutNetMessage msg : allQueued) {
+                if (now - Router.CLOCK_FUDGE_FACTOR > msg.getExpiration()) {
+                    _transport.failed(msg, "Timed out in EstablishmentManager Outbound queue");
+                } else {
+                    validMessages.add(msg);
                 }
             }
 
-            for (OutNetMessage m : queued) {
+            // Re-establish each valid message
+            for (OutNetMessage m : validMessages) {
                 m.timestamp("No longer deferred - establishing...");
                 establish(m, false);
             }
