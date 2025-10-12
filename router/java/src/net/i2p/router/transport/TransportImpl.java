@@ -199,10 +199,10 @@ public abstract class TransportImpl implements Transport {
 
         if (style.equals("SSU")) {
             def *= 3;
-            if (def > 3000) {def = 3000;}
+            if (def > 4000) {def = 4000;}
         } else if (style.equals("NTCP")) {
             def *= 3;
-            if (def > 2000) {def = 2000;}
+            if (def > 4000) {def = 4000;}
         }
 
         return _context.getProperty(maxProp, def);
@@ -248,16 +248,15 @@ public abstract class TransportImpl implements Transport {
 
         if (style.equals("SSU")) {
             def *= 3;
-            if (def > 3000) {def = 3000;}
+            if (def > 4000) {def = 4000;}
         } else if (style.equals("NTCP")) {
             def *= 3;
-            if (def > 2000) {def = 2000;}
+            if (def > 4000) {def = 4000;}
         }
 
         return ctx.getProperty(maxProp, def);
     }
 
-    //private static final int DEFAULT_CAPACITY_PCT = 75;
     private static final int DEFAULT_CAPACITY_PCT = 90;
 
     /**
@@ -304,6 +303,7 @@ public abstract class TransportImpl implements Transport {
     protected void afterSend(OutNetMessage msg, boolean sendSuccessful) {
         afterSend(msg, sendSuccessful, true, 0);
     }
+
     /**
      * The transport is done sending this message
      *
@@ -314,6 +314,7 @@ public abstract class TransportImpl implements Transport {
     protected void afterSend(OutNetMessage msg, boolean sendSuccessful, boolean allowRequeue) {
         afterSend(msg, sendSuccessful, allowRequeue, 0);
     }
+
     /**
      * The transport is done sending this message
      *
@@ -324,6 +325,7 @@ public abstract class TransportImpl implements Transport {
     protected void afterSend(OutNetMessage msg, boolean sendSuccessful, long msToSend) {
         afterSend(msg, sendSuccessful, true, msToSend);
     }
+
     /**
      * The transport is done sending this message.  This is the method that actually
      * does all of the cleanup - firing off jobs, requeueing, updating stats, etc.
@@ -334,129 +336,103 @@ public abstract class TransportImpl implements Transport {
      * @param allowRequeue true if we should try other transports if available
      */
     protected void afterSend(OutNetMessage msg, boolean sendSuccessful, boolean allowRequeue, long msToSend) {
-        if (msg.getTarget() == null) {
-            // Probably injected by the transport.
-            // Bail out now as it will NPE in a dozen places below.
-            return;
-        }
-        //boolean log = false;
+        if (msg.getTarget() == null) return; // early exit if no target
+
         final boolean debug = _log.shouldDebug();
-        if (sendSuccessful) {msg.timestamp("afterSend(successful)");}
-        else {msg.timestamp("afterSend(failed)");}
+        String peerHash = msg.getTarget().getIdentity().calculateHash().toBase64().substring(0,6);
+        String routerHash = _context.routerHash().toBase64().substring(0,6);
+        String style = getStyle();
+        long now = _context.clock().now();
+
+        msg.timestamp("afterSend(" + (sendSuccessful ? "successful" : "failed") + ")");
 
         if (!sendSuccessful) {
-            int prev = msg.transportFailed(getStyle());
-            // This catches the usual case with two enabled transports
-            // GetBidsJob will check against actual transport count
-            if (prev > 0) {allowRequeue = false;}
+            int prev = msg.transportFailed(style);
+            if (prev > 0) allowRequeue = false;
         }
 
-        if (msToSend > 1500) {
-            if (debug) {
-                _log.debug("[" + getStyle() + "] afterSend slow: " + (sendSuccessful ? "Success! " : "FAIL! ")
-                          + "\n* " + msg.getMessageSize() + " byte "
-                          + msg.getMessageType() + "[MsgID "+ msg.getMessageId() + "] to ["
-                          + msg.getTarget().getIdentity().calculateHash().toBase64().substring(0,6) + "] took " + msToSend + " ms");
-            }
+        if (msToSend > 1500 && debug) {
+            _log.debug("[" + style + "] afterSend slow: " + (sendSuccessful ? "Success! " : "FAIL! ") +
+                       String.format("\n* %d byte %s[MsgID %d] to [%s] took %d ms", msg.getMessageSize(),
+                       msg.getMessageType(), msg.getMessageId(), peerHash, msToSend));
         }
 
         long lifetime = msg.getLifetime();
         if (lifetime > 3000) {
-            int level = Log.DEBUG;
-            if (_log.shouldLog(level)) {
-                _log.log(level, "[" + getStyle() + "] afterSend slow: " + (sendSuccessful ? "Success! " : "FAIL! ")
-                          + "(Lifetime: " + lifetime + "ms / Time taken: " + msToSend + "ms)\n* " + msg.getMessageSize() + " byte "
-                          + msg.getMessageType() + " [MsgID " + msg.getMessageId() + "] from [" + _context.routerHash().toBase64().substring(0,6)
-                          + "] to [" + msg.getTarget().getIdentity().calculateHash().toBase64().substring(0,6) + "]: " + msg.toString());
+            if (_log.shouldLog(Log.DEBUG)) {
+                _log.log(Log.DEBUG, String.format("[%s] afterSend slow: %s(Lifetime: %dms / Time taken: %dms)\n* %d byte %s [MsgID %d] from [%s] to [%s]: %s",
+                                                 style, (sendSuccessful ? "Success! " : "FAIL! "), lifetime, msToSend,
+                                                 msg.getMessageSize(), msg.getMessageType(), msg.getMessageId(),
+                                                 routerHash, peerHash, msg));
             }
-        } else {
-            if (debug) {
-                _log.debug("[" + getStyle() + "] afterSend: " + (sendSuccessful ? "Success! " : "FAIL! ")
-                          + "\n* " + msg.getMessageSize() + " byte "
-                          + msg.getMessageType() + " [MsgID " + msg.getMessageId() + "] from [" + _context.routerHash().toBase64().substring(0,6)
-                          + "] to [" + msg.getTarget().getIdentity().calculateHash().toBase64().substring(0,6) + "] " + msg.toString());
-            }
+        } else if (debug) {
+            _log.debug(String.format("[%s] afterSend: %s\n* %d byte %s [MsgID %d] from [%s] to [%s] %s",
+                      style, (sendSuccessful ? "Success! " : "FAIL! "), msg.getMessageSize(), msg.getMessageType(),
+                      msg.getMessageId(), routerHash, peerHash, msg));
         }
 
-        long now = _context.clock().now();
         if (sendSuccessful) {
             if (debug) {
-                _log.debug("[" + getStyle() + "] Sent " + msg.getMessageType() + " successfully to ["
-                           + msg.getTarget().getIdentity().getHash().toBase64().substring(0,6) + "]");
+                _log.debug(String.format("[%s] Sent %s successfully to [%s]", style, msg.getMessageType(), peerHash));
             }
-            Job j = msg.getOnSendJob();
-            if (j != null) {_context.jobQueue().addJob(j);}
+            addJobIfPresent(msg.getOnSendJob());
             msg.discardData();
         } else {
             if (debug) {
-                _log.debug("[" + getStyle() + "] Failed to send " + msg.getMessageType() +
-                          " to [" + msg.getTarget().getIdentity().getHash().toBase64().substring(0,6) + "]" + msg);
+                _log.debug(String.format("[%s] Failed to send %s to [%s] %s", style, msg.getMessageType(), peerHash, msg));
             }
-            if (msg.getExpiration() < now)
+            if (msg.getExpiration() < now) {
                 _context.statManager().addRateData("transport.expiredOnQueueLifetime", lifetime);
-
-            if (allowRequeue) {
-                if (((msg.getExpiration() <= 0) || (msg.getExpiration() > now)) && (msg.getMessage() != null)) {
-                    // this may not be the last transport available - keep going
-                    _context.outNetMessagePool().add(msg);
-                    // don't discard the data yet!
-                } else {
-                    if (debug) {
-                        _log.debug("[" + getStyle() + "] Failed to send the " + msg.getMessageType() + " (out of time)\n* Expired: " + new Date(msg.getExpiration()));
-                    }
-                    if (msg.getOnFailedSendJob() != null) {_context.jobQueue().addJob(msg.getOnFailedSendJob());}
-                    MessageSelector selector = msg.getReplySelector();
-                    if (selector != null) {_context.messageRegistry().unregisterPending(msg);}
-                    msg.discardData();
-                }
+            }
+            if (allowRequeue && ((msg.getExpiration() <= 0) || (msg.getExpiration() > now)) && (msg.getMessage() != null)) {
+                _context.outNetMessagePool().add(msg);
             } else {
-                MessageSelector selector = msg.getReplySelector();
                 if (debug) {
-                    _log.debug("[" + getStyle() + "] Failed and no requeue allowed for " + msg.getMessageSize() + " byte " +
-                              msg.getMessageType() + " with selector " + selector);
+                    _log.debug(String.format("[%s] Failed to send the %s (out of time) Expired: %s",
+                              style, msg.getMessageType(), new Date(msg.getExpiration())));
                 }
-                if (msg.getOnFailedSendJob() != null) {_context.jobQueue().addJob(msg.getOnFailedSendJob());}
-                if (msg.getOnFailedReplyJob() != null) {_context.jobQueue().addJob(msg.getOnFailedReplyJob());}
-                if (selector != null) {_context.messageRegistry().unregisterPending(msg);}
-                msg.discardData();
+                addJobIfPresent(msg.getOnFailedSendJob());
+                unregisterAndDiscard(msg);
+                return;
             }
         }
 
         long sendTime = now - msg.getSendBegin();
         long allTime = now - msg.getCreated();
-        if (allTime > 5*1000) {
-            if (debug) {
-                _log.debug("Took too long (" + allTime + "ms) from preparation to afterSend (ok? " + sendSuccessful +
-                          ")\n* Sent: " + new Date(sendTime) + " after failing on " +
-                          msg.getFailedTransports() +
-                          (sendSuccessful ? (" and succeeding on " + getStyle()) : ""));
-            }
-            if ((allTime > 60*1000) && (sendSuccessful)) { // VERY slow
-                if (_log.shouldWarn()) {
-                    _log.warn("Severe latency? More than a minute slow? \n* " + msg.getMessageType() +
-                              " of [MsgID " + msg.getMessageId() + "] \n* Send began: " +
-                              new Date(msg.getSendBegin()) + "\n* Message created: " +
-                              new Date(msg.getCreated()) + msg);
-                }
-                _context.messageHistory().messageProcessingError(msg.getMessageId(),
-                                                                 msg.getMessageType(),
-                                                                 "Took too long to send [" + allTime + "ms]");
-            }
+        if (allTime > 5000 && debug) {
+            _log.debug(String.format("Took too long (%d ms) from preparation to afterSend (ok? %b)\n* Sent: %s after failing on %s%s",
+                      allTime, sendSuccessful, new Date(sendTime), msg.getFailedTransports(),
+                      (sendSuccessful ? " and succeeding on " + style : "")));
         }
-
+        if (allTime > 60000 && sendSuccessful && _log.shouldWarn()) {
+            _log.warn(String.format("Severe latency? More than a minute slow?\n* %s of [MsgID %d]\n* Send began: %s\n* Message created: %s%s",
+                    msg.getMessageType(), msg.getMessageId(), new Date(msg.getSendBegin()), new Date(msg.getCreated()), msg));
+            _context.messageHistory().messageProcessingError(msg.getMessageId(), msg.getMessageType(),
+                                                             "Took too long to send [" + allTime + "ms]");
+        }
 
         if (sendSuccessful) {
-            // TODO fix this stat for SSU ticket #698
             _context.statManager().addRateData("transport.sendProcessingTime", lifetime);
-            // object churn. 33 ms for NTCP and 788 for SSU, but meaningless due to
-            // differences in how it's computed (immediate vs. round trip)
-            //_context.statManager().addRateData("transport.sendProcessingTime." + getStyle(), lifetime, 0);
-            _context.profileManager().messageSent(msg.getTarget().getIdentity().getHash(), getStyle(), sendTime, msg.getMessageSize());
+            _context.profileManager().messageSent(msg.getTarget().getIdentity().getHash(), style, sendTime, msg.getMessageSize());
             _context.statManager().addRateData("transport.sendMessageSize", msg.getMessageSize(), sendTime);
         } else {
-            _context.profileManager().messageFailed(msg.getTarget().getIdentity().getHash(), getStyle());
+            _context.profileManager().messageFailed(msg.getTarget().getIdentity().getHash(), style);
             _context.statManager().addRateData("transport.sendMessageFailureLifetime", lifetime);
         }
+    }
+
+    private void addJobIfPresent(Job job) {
+        if (job != null) {
+            _context.jobQueue().addJob(job);
+        }
+    }
+
+    private void unregisterAndDiscard(OutNetMessage msg) {
+        MessageSelector selector = msg.getReplySelector();
+        if (selector != null) {
+            _context.messageRegistry().unregisterPending(msg);
+        }
+        msg.discardData();
     }
 
     /**
@@ -817,7 +793,7 @@ public abstract class TransportImpl implements Transport {
 
     /** Who to notify on message availability */
     public void setListener(TransportEventListener listener) {_listener = listener;}
-    /** Make this stuff pretty (only used in the old console) */
+    /** Make this stuff pretty */
     public void renderStatusHTML(Writer out) throws IOException {}
     public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException {renderStatusHTML(out);}
 
