@@ -1094,7 +1094,7 @@ public class PeerState {
             if (failedSize > 0) {
                 if (totalFail) {
                     if (shouldLogWarn) {
-                        _log.warn("First Outbound message failed " + this);
+                        _log.warn("First Outbound message failed (timeout)" + this);
                     }
                     _transport.sendDestroy(this, SSU2Util.REASON_FRAME_TIMEOUT);
                     _transport.dropPeer(this, true, "OB First Message Fail");
