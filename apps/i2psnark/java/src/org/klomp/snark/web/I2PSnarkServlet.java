@@ -4336,336 +4336,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         }
 
-// Torrent info section
-
-        if (snark != null) {
-            String fullPath = snark.getName();
-            String baseName = encodePath((new File(fullPath)).getName());
-            MetaInfo meta = snark.getMetaInfo();
-            buf.append("<div class=mainsection id=snarkInfo>")
-               .append("<table id=torrentInfo>\n")
-               .append("<tr><th colspan=2>");
-            appendIcon(buf, "torrent", "", "", true, false);
-            buf.append("<b>").append(_t("Torrent")).append(":</b> ");
-            if (snark.getStorage() != null) {buf.append(DataHelper.escapeHTML(snark.getStorage().getBase().getPath()));}
-            else {buf.append(DataHelper.escapeHTML(snark.getBaseName()));}
-            String hex = I2PSnarkUtil.toHex(snark.getInfoHash());
-            buf.append("</th><th><span class=infohash title=\"").append(_t("Info hash")).append("\" tabindex=0>")
-               .append(hex.toUpperCase(Locale.US)).append("</span>");
-
-            String announce = null;
-            // FIXME: if b64 appears in link, convert to b32 or domain name (if known)
-            String postmanb64 = "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICkEbKUqJ9mPYQlTSujhNxiRIW-oLwMtvayCFci99oX8MvazPS7~97x0Gsm-onEK1Td9nBdmq30OqDxpRtXBimbzkLbR1IKObbg9HvrKs3L-kSyGwTUmHG9rSQSoZEvFMA-S0EXO~o4g21q1oikmxPMhkeVwQ22VHB0-LZJfmLr4SAAAA";
-            String postmanb64_new = "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICrsRuil8qK~whOvj8uNTv~ohZnTZHxTLgi~sDyo98BwJ-4Y4NMSuF4GLzcgLypcR1D1WY2tDqMKRYFVyLE~MTPVjRRgXfcKolykQ666~Go~A~~CNV4qc~zlO6F4bsUhVZDU7WJ7mxCAwqaMiJsL-NgIkb~SMHNxIzaE~oy0agHJMBQAEAAcAAA==";
-            String btb32 = "ev5dpxvcmshi6mil7gaon3b2wbplwylzraxs4wtz7dd5lzdsc2dq.b32.i2p";
-            String chudob32 = "swhb5i7wcjcohmus3gbt3w6du6pmvl3isdvxvepuhdxxkfbzao6q.b32.i2p";
-            String cryptb32 = "ri5a27ioqd4vkik72fawbcryglkmwyy4726uu5j3eg6zqh2jswfq.b32.i2p";
-            String freedomb32 = "nfrjvknwcw47itotkzmk6mdlxmxfxsxhbhlr5ozhlsuavcogv4hq.b32.i2p";
-            String icu812b32 = "h77hk3pr622mx5c6qmybvbtrdo5la7pxo6my4kzr47x2mlpnvm2a.b32.i2p";
-            String lodikonb32 = "q2a7tqlyddbyhxhtuia4bmtqpohpp266wsnrkm6cgoahdqrjo3ra.b32.i2p";
-            String lyokob32 = "afuuortfaqejkesne272krqvmafn65mhls6nvcwv3t7l2ic2p4kq.b32.i2p";
-            String odiftb32 = "bikpeyxci4zuyy36eau5ycw665dplun4yxamn7vmsastejdqtfoq.b32.i2p";
-            String omitrackb32 = "a5ruhsktpdhfk5w46i6yf6oqovgdlyzty7ku6t5yrrpf4qedznjq.b32.i2p";
-            String otdgb32 = "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p";
-            String postmanb32_new = "6a4kxkg5wp33p25qqhgwl6sj4yh4xuf5b3p3qldwgclebchm3eea.b32.i2p";
-            String r4sasb32 = "punzipidirfqspstvzpj6gb4tkuykqp6quurj6e23bgxcxhdoe7q.b32.i2p";
-            String simpb32 = "wc4sciqgkceddn6twerzkfod6p2npm733p7z3zwsjfzhc4yulita.b32.i2p";
-            String skankb32 = "by7luzwhx733fhc5ug2o75dcaunblq2ztlshzd7qvptaoa73nqua.b32.i2p";
-            String theblandb32 = "s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p";
-
-            if (meta != null) {
-                announce = meta.getAnnounce();
-                if (announce == null) {announce = snark.getTrackerURL();}
-                announce = DataHelper.stripHTML(announce)
-                                     .replace(postmanb64, "tracker2.postman.i2p")
-                                     .replace(postmanb64_new, "tracker2.postman.i2p")
-                                     .replace(postmanb32_new, "tracker2.postman.i2p")
-                                     .replaceAll(btb32, "opentracker.bt.i2p")
-                                     .replaceAll(chudob32, "tracker.chudo.i2p")
-                                     .replaceAll(cryptb32, "tracker.crypthost.i2p")
-                                     .replaceAll(freedomb32, "torrfreedom.i2p")
-                                     .replaceAll(icu812b32, "tracker.icu812.i2p")
-                                     .replaceAll(lodikonb32, "tracker.lodikon.i2p")
-                                     .replaceAll(lyokob32, "lyoko.i2p")
-                                     .replaceAll(odiftb32, "opendiftracker.i2p")
-                                     .replaceAll(omitrackb32, "omitracker.i2p")
-                                     .replaceAll(otdgb32, "opentracker.dg2.i2p")
-                                     .replaceAll(r4sasb32, "opentracker.r4sas.i2p")
-                                     .replaceAll(skankb32, "opentracker.skank.i2p")
-                                     .replaceAll(simpb32, "opentracker.simp.i2p")
-                                     .replaceAll(theblandb32, "tracker.thebland.i2p");
-                if (!meta.isPrivate()) {
-                    buf.append("<a class=magnetlink href=\"").append(MagnetURI.MAGNET_FULL).append(hex);
-                    if (announce != null) {buf.append("&amp;tr=").append(announce);}
-                    if (baseName != null) {
-                        buf.append("&amp;dn=").append(DataHelper.escapeHTML(baseName).replace(".torrent", "")
-                           .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"));
-                    }
-                    buf.append("\" title=\"").append(MagnetURI.MAGNET_FULL).append(hex);
-                    if (announce != null) {buf.append("&amp;tr=").append(announce);}
-                    if (baseName != null) {
-                        buf.append("&amp;dn=").append(DataHelper.escapeHTML(baseName).replace(".torrent", "")
-                           .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"));
-                    }
-                    buf.append("\">");
-                    appendIcon(buf, "magnet", "", "", false, true, true);
-                    buf.append("</a>");
-                }
-
-                buf.append("<a class=torrentlink href=\"").append(_contextPath).append('/')
-                   .append(baseName).append("\" title=\"")
-                   .append(DataHelper.escapeHTML(baseName).replace("%20", " ").replace("%27", "\'")
-                                                          .replace("%5B", "[").replace("%5D", "]"))
-                   .append("\">");
-                   appendIcon(buf, "torrent", "", "", false, true, true);
-                   buf.append("</a></th></tr>\n");
-
-                long dat = meta.getCreationDate();
-                // needs locale configured for automatic translation
-                SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMMM yyyy", Locale.US);
-                fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
-                long[] dates = _manager.getSavedAddedAndCompleted(snark);
-                buf.append("<tr id=torrentInfoStats>").append("<td colspan=3><span class=nowrap");
-                if (dat > 0) {
-                    String date = fmt.format(new Date(dat));
-                    buf.append(" title=\"").append(_t("Created")).append(": ").append(date).append("\"");
-                }
-                buf.append(">");
-                appendIcon(buf, "file", "", "", true, false);
-                buf.append("<b>").append(_t("Size")).append(":</b> ").append(formatSize(snark.getTotalLength()));
-                if (storage != null) {
-                    int fileCount = storage.getFileCount();
-                    buf.append("</span>&nbsp;<span class=nowrap>");
-                    appendIcon(buf, "file", "", "", true, false);
-                    buf.append("<b>").append(_t("Files")).append(":</b> ").append(fileCount);
-                }
-                int pieces = snark.getPieces();
-                double completion = (pieces - snark.getNeeded()) / (double) pieces;
-                buf.append("</span>&nbsp;<span class=nowrap");
-                if (dates[0] > 0) {
-                    String date = fmt.format(new Date(dates[0]));
-                    buf.append(" title=\"").append(_t("Added")).append(": ").append(date).append("\"");
-                }
-                buf.append(">");
-                appendIcon(buf, "file", "", "", true, false);
-                buf.append("<b>").append(_t("Pieces")).append(":</b> ").append(pieces)
-                   .append(" @ ").append(formatSize(snark.getPieceLength(0)).replace("iB", ""));
-
-                // avg download speed
-                if (dates[0] > 0) {
-                    String date = DataHelper.formatTime(dates[0]);
-                    long sz = snark.getTotalLength();
-                    long time;
-                    if (storage.complete()) {
-                        time = dates[1] - dates[0];
-                    } else {
-                        sz -= snark.getRemainingLength();
-                        time = _context.clock().now() - dates[0];
-                    }
-                    time /= 1000;
-
-                    if (time >= 30) {
-                        long rate = sz / time;
-                        if (rate >= 100) {
-                            buf.append("</span>&nbsp;<span class=nowrap title=\"")
-                               .append(_t("Average download speed for torrent")).append("\">");
-                            appendIcon(buf, "head_rxspeed", "", "", true, false);
-                            buf.append("<b>").append(_t("Download speed")).append(":</b> ")
-                               .append(rate / 1024).append("K/s");
-                       }
-                   }
-                }
-
-                // up ratio
-                buf.append("</span>&nbsp;<span class=nowrap>");
-                appendIcon(buf, "head_tx", "", "", true, false);
-
-                buf.append("<b>").append(_t("Share ratio")).append(":</b> ");
-                long uploaded = snark.getUploaded();
-                if (uploaded > 0) {
-                    double ratio = uploaded / ((double) snark.getTotalLength());
-                    if (ratio < 0.1) {buf.append((new DecimalFormat("0.000")).format(ratio));}
-                    else {buf.append((new DecimalFormat("0.00")).format(ratio));}
-                    buf.append("&#8239;x");
-                } else {buf.append('0');}
-
-                buf.append("</span>&nbsp;<span id=completion class=nowrap");
-                if (dates[1] > 0) {
-                    String date = fmt.format(new Date(dates[1]));
-                    buf.append(" title=\"").append(_t("Completed")).append(": ").append(date).append("\"");
-                }
-                buf.append(">");
-                appendIcon(buf, "head_rx", "", "", true, false);
-                buf.append("<b>");
-                if (completion < 1.0) {
-                    buf.append(_t("Completion")).append(":</b> ").append((new DecimalFormat("0.0%"))
-                       .format(completion).replace("0.0%","0%"));
-                } else {buf.append(_t("Complete")).append("</b>");}
-                buf.append("</span>");
-
-                if (meta != null) {
-                    String cby = meta.getCreatedBy();
-                    long needed = snark.getNeededLength(); // not including skipped files, but -1 when not running
-                    if (needed < 0) {needed = snark.getRemainingLength();} // including skipped files, valid when not running
-                    if (needed > 0) {
-                       buf.append("&nbsp;<span class=nowrap>");
-                       appendIcon(buf, "head_rx", "", "", true, false);
-                       buf.append("<b>").append(_t("Remaining")).append(":</b> ").append(formatSize(needed)).append("</span>");
-                    }
-                    long skipped = snark.getSkippedLength();
-                    if (skipped > 0) {
-                        buf.append("&nbsp;<span class=nowrap>");
-                        appendIcon(buf, "head_rx", "", "", true, false);
-                        buf.append("<b>").append(_t("Skipped")).append(":</b> ").append(formatSize(skipped)).append("</span");
-                    }
-
-                    // needs locale configured for automatic translation
-                    fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
-                    if (storage != null) {
-                        dat = storage.getActivity();
-                        if (dat > 0) {
-                            String date = fmt.format(new Date(dat));
-                            buf.append("&nbsp;<span class=nowrap>");
-                            appendIcon(buf, "torrent", "", "", true, false);
-                            buf.append("<b>").append(_t("Last activity")).append(":</b> ").append(date).append("</span>");
-                        }
-                    }
-                }
-                buf.append("</td></tr>\n");
-
-                List<List<String>> alist = meta.getAnnounceList();
-                if (alist != null && !alist.isEmpty()) {
-                    buf.append("<tr id=trackers title=\"")
-                       .append(_t("Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"))
-                       .append("\"><td colspan=3>");
-                    appendIcon(buf, "torrent", "", "", true, false);
-                    buf.append("<b>").append(_t("Trackers")).append(":</b> ");
-
-                    for (List<String> alist2 : alist) {
-                        if (alist2.isEmpty()) {
-                            buf.append("<span class=\"info_tracker primary\">");
-                            boolean more = false;
-                            for (String s : alist2) {
-                                if (more) {buf.append("<span class=info_tracker>");}
-                                else {more = true;}
-                                buf.append(getShortTrackerLink(DataHelper.stripHTML(s)
-                                   .replaceAll(cryptb32, "tracker.crypthost.i2p")
-                                   .replaceAll(freedomb32, "torrfreedom.i2p")
-                                   .replaceAll(lodikonb32, "tracker.lodikon.i2p")
-                                   .replaceAll(otdgb32, "opentracker.dg2.i2p")
-                                   .replaceAll(odiftb32, "opendiftracker.i2p")
-                                   .replaceAll(theblandb32, "tracker.thebland.i2p"), snark.getInfoHash()));
-                                buf.append("</span> ");
-                            }
-                        }
-                        buf.append("<span class=info_tracker>");
-                        boolean more = false;
-                        for (String s : alist2) {
-                            if (more) {buf.append("<span class=info_tracker>");}
-                            else {more = true;}
-                            buf.append(getShortTrackerLink(DataHelper.stripHTML(s)
-                               .replaceAll(cryptb32, "tracker.crypthost.i2p")
-                               .replaceAll(freedomb32, "torrfreedom.i2p")
-                               .replaceAll(lodikonb32, "tracker.lodikon.i2p")
-                               .replaceAll(otdgb32, "opentracker.dg2.i2p")
-                               .replaceAll(odiftb32, "opendiftracker.i2p")
-                               .replaceAll(theblandb32, "tracker.thebland.i2p"), snark.getInfoHash()));
-                            buf.append("</span> ");
-                        }
-                    }
-                    buf.append("</td></tr>\n");
-                } else {
-                    if (meta != null) {
-                    announce = meta.getAnnounce();
-                    if (announce == null) {announce = snark.getTrackerURL();}
-                    if (announce != null) {
-                        announce = DataHelper.stripHTML(announce)
-                           .replace(postmanb64, "tracker2.postman")
-                           .replaceAll(cryptb32, "tracker.crypthost.i2p")
-                           .replaceAll(freedomb32, "torrfreedom.i2p")
-                           .replaceAll(lodikonb32, "tracker.lodikon.i2p")
-                           .replaceAll(otdgb32, "opentracker.dg2.i2p")
-                           .replaceAll(odiftb32, "opendiftracker.i2p")
-                           .replaceAll(theblandb32, "tracker.thebland.i2p")
-                           .replaceAll(icu812b32, "tracker.icu812.i2p")
-                           .replaceAll(chudob32, "tracker.chudo.i2p");
-                        buf.append("<tr id=trackers title=\"")
-                           .append(_t("Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"))
-                           .append("\"><td colspan=3>");
-                        appendIcon(buf, "torrent", "", "", true, false);
-                        buf.append("<b>").append(_t("Tracker")).append(":</b> ").append("<span class=\"info_tracker primary\">")
-                           .append(getShortTrackerLink(announce, snark.getInfoHash())).append("</span> ").append("</td></tr>\n");
-                        }
-                    }
-                }
-
-                List<String> weblist = meta.getWebSeedURLs();
-                if (weblist != null) {
-                    List<String> wlist = new ArrayList<String>(weblist.size());
-                    // strip non-i2p web seeds
-                    for (String s : weblist) {
-                        if (isI2PTracker(s)) {wlist.add(s);}
-                    }
-                    if (!wlist.isEmpty()) {
-                        buf.append("<tr id=webseeds><td colspan=3>");
-                        appendIcon(buf, "torrent", "", "", true, false);
-                        buf.append("<b>").append(_t("Web Seeds")).append("</b>: ");
-                        boolean more = false;
-                        for (String s : wlist) {
-                            buf.append("<span class=info_tracker>");
-                            if (more) {buf.append(' ');}
-                            else {more = true;}
-                            buf.append(getShortTrackerLink(DataHelper.stripHTML(s), snark.getInfoHash()))
-                               .append("</span> ");
-                        }
-                        buf.append("</td></tr>\n");
-                    }
-                }
-                String com = meta.getComment();
-                if (com != null && com.length() > 0) {
-                    if (com.length() > 5000) {com = com.substring(0, 5000) + "&hellip;";}
-                    buf.append("<tr><td id=metacomment colspan=3>").append("<div class=commentWrapper>\n")
-                       .append(DataHelper.stripHTML(com).replace("\r\n", "<br>").replace("\n", "<br>").replace("&apos;", "&#39;"))
-                       .append("</div>\n</td></tr>\n");
-                }
-            }
-
-            // buttons
-            if (showStopStart) {
-                buf.append("<tr id=torrentInfoControl><td colspan=3>");
-                if (snark.isChecking()) {
-                    buf.append("<span id=fileCheck><b>").append(_t("Checking")).append("&hellip; ")
-                       .append((new DecimalFormat("0.0%")).format(snark.getCheckingProgress()))
-                       .append("&nbsp;<a href=\"").append(base).append("\">")
-                       .append(_t("Refresh page for results")).append("</a></b></span>");
-                } else if (snark.isStarting()) {buf.append("<b>").append(_t("Starting")).append("&hellip;</b>");}
-                else if (snark.isAllocating()) {buf.append("<b>").append(_t("Allocating")).append("&hellip;</b>");}
-                else {
-                    boolean isRunning = !snark.isStopped();
-                    buf.append("<input type=submit value=\"");
-                    if (isRunning) {buf.append(_t("Stop")).append("\" name=stop class=stoptorrent>");}
-                    else {buf.append(_t("Start")).append("\" name=start class=starttorrent>");}
-                    buf.append("<input type=submit name=recheck value=\"").append(_t("Force Recheck"));
-                    if (isRunning) {
-                        buf.append("\" class=disabled disabled title=\"")
-                           .append(_t("Stop the torrent in order to check file integrity")).append("\">");
-                    } else {
-                        buf.append("\" class=reload title=\"").append(_t("Check integrity of the downloaded files")).append("\">");
-                    }
-                }
-                buf.append("</td></tr>\n");
-            }
-        } else {
-            // snark == null
-            // shouldn't happen
-            buf.append("<table class=resourceError id=NotFound><tr><th colspan=2>")
-               .append(_t("Resource Not found"))
-               .append("</th></tr><tr><td><b>").append(_t("Torrent")).append(":</b></td><td>").append(DataHelper.escapeHTML(tName))
-               .append("</td></tr><tr><td><b>").append(_t("Base")).append(":</b></td><td>").append(base)
-               .append("</td></tr>\n");
-        }
-        buf.append("</table>\n").append("</div>\n");
-
+        appendTorrentInfo(buf, snark, base, tName, showStopStart);
         displayTorrentEdit(snark, base, buf);
 
         if (snark != null && !r.exists()) {
@@ -5020,6 +4691,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append(">\n<label id=tab_comments class=toggleview for=toggle_comments><span class=tab_label>")
            .append(_t("Comments")).append("</span></label><hr>\n");
         displayComments(snark, er, ec, esc, buf);
+
         // for stop/start/check
         buf.append("</div>\n");
         if (includeForm) {buf.append("</form>\n");}
@@ -5040,6 +4712,365 @@ public class I2PSnarkServlet extends BasicServlet {
         if (!isStandalone()) {buf.append(FOOTER);}
         else {buf.append(FOOTER_STANDALONE);}
         return buf.toString();
+    }
+
+    /**
+     * Appends detailed torrent information as HTML to the provided StringBuilder buffer.
+     * <p>
+     * This includes torrent metadata such as torrent name, size, pieces, trackers,
+     * web seeds, completion status, download speed, share ratio, and control buttons.
+     * It handles cases where the torrent (snark) or metadata may be null.
+     *
+     * @param buf            the StringBuilder to append HTML to
+     * @param snark          the Snark object representing the torrent; may be null
+     * @param base           the base URL or path used in links
+     * @param tName          the torrent display name used in error case
+     * @param showStopStart  whether to show start/stop/recheck buttons in torrent info
+     */
+    private void appendTorrentInfo(StringBuilder buf, Snark snark, String base, String tName, boolean showStopStart) {
+        if (snark == null) {
+            buf.append("<table class=resourceError id=NotFound><tr><th colspan=2>")
+               .append(_t("Resource Not found"))
+               .append("</th></tr><tr><td><b>").append(_t("Torrent")).append(":</b></td><td>")
+               .append(DataHelper.escapeHTML(tName))
+               .append("</td></tr><tr><td><b>").append(_t("Base")).append(":</b></td><td>")
+               .append(base)
+               .append("</td></tr>\n</table>\n");
+            return;
+        }
+
+        String fullPath = snark.getName();
+        String baseName = encodePath((new File(fullPath)).getName());
+        MetaInfo meta = snark.getMetaInfo();
+        Storage storage = snark.getStorage();
+
+        buf.append("<div class=mainsection id=snarkInfo>")
+           .append("<table id=torrentInfo>\n")
+           .append("<tr><th colspan=2>");
+        appendIcon(buf, "torrent", "", "", true, false);
+        buf.append("<b>").append(_t("Torrent")).append(":</b> ");
+        if (storage != null) {
+            buf.append(DataHelper.escapeHTML(storage.getBase().getPath()));
+        } else {
+            buf.append(DataHelper.escapeHTML(snark.getBaseName()));
+        }
+        String hex = I2PSnarkUtil.toHex(snark.getInfoHash());
+        buf.append("</th><th><span class=infohash title=\"").append(_t("Info hash"))
+           .append("\" tabindex=0>")
+           .append(hex.toUpperCase(Locale.US))
+           .append("</span>");
+
+        String announce = null;
+        // FIXME: if b64 appears in link, convert to b32 or domain name (if known)
+        String postmanb64 = "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICkEbKUqJ9mPYQlTSujhNxiRIW-oLwMtvayCFci99oX8MvazPS7~97x0Gsm-onEK1Td9nBdmq30OqDxpRtXBimbzkLbR1IKObbg9HvrKs3L-kSyGwTUmHG9rSQSoZEvFMA-S0EXO~o4g21q1oikmxPMhkeVwQ22VHB0-LZJfmLr4SAAAA";
+        String postmanb64_new = "lnQ6yoBTxQuQU8EQ1FlF395ITIQF-HGJxUeFvzETLFnoczNjQvKDbtSB7aHhn853zjVXrJBgwlB9sO57KakBDaJ50lUZgVPhjlI19TgJ-CxyHhHSCeKx5JzURdEW-ucdONMynr-b2zwhsx8VQCJwCEkARvt21YkOyQDaB9IdV8aTAmP~PUJQxRwceaTMn96FcVenwdXqleE16fI8CVFOV18jbJKrhTOYpTtcZKV4l1wNYBDwKgwPx5c0kcrRzFyw5~bjuAKO~GJ5dR7BQsL7AwBoQUS4k1lwoYrG1kOIBeDD3XF8BWb6K3GOOoyjc1umYKpur3G~FxBuqtHAsDRICrsRuil8qK~whOvj8uNTv~ohZnTZHxTLgi~sDyo98BwJ-4Y4NMSuF4GLzcgLypcR1D1WY2tDqMKRYFVyLE~MTPVjRRgXfcKolykQ666~Go~A~~CNV4qc~zlO6F4bsUhVZDU7WJ7mxCAwqaMiJsL-NgIkb~SMHNxIzaE~oy0agHJMBQAEAAcAAA==";
+        String btb32 = "ev5dpxvcmshi6mil7gaon3b2wbplwylzraxs4wtz7dd5lzdsc2dq.b32.i2p";
+        String chudob32 = "swhb5i7wcjcohmus3gbt3w6du6pmvl3isdvxvepuhdxxkfbzao6q.b32.i2p";
+        String cryptb32 = "ri5a27ioqd4vkik72fawbcryglkmwyy4726uu5j3eg6zqh2jswfq.b32.i2p";
+        String freedomb32 = "nfrjvknwcw47itotkzmk6mdlxmxfxsxhbhlr5ozhlsuavcogv4hq.b32.i2p";
+        String icu812b32 = "h77hk3pr622mx5c6qmybvbtrdo5la7pxo6my4kzr47x2mlpnvm2a.b32.i2p";
+        String lodikonb32 = "q2a7tqlyddbyhxhtuia4bmtqpohpp266wsnrkm6cgoahdqrjo3ra.b32.i2p";
+        String lyokob32 = "afuuortfaqejkesne272krqvmafn65mhls6nvcwv3t7l2ic2p4kq.b32.i2p";
+        String odiftb32 = "bikpeyxci4zuyy36eau5ycw665dplun4yxamn7vmsastejdqtfoq.b32.i2p";
+        String omitrackb32 = "a5ruhsktpdhfk5w46i6yf6oqovgdlyzty7ku6t5yrrpf4qedznjq.b32.i2p";
+        String otdgb32 = "w7tpbzncbcocrqtwwm3nezhnnsw4ozadvi2hmvzdhrqzfxfum7wa.b32.i2p";
+        String postmanb32_new = "6a4kxkg5wp33p25qqhgwl6sj4yh4xuf5b3p3qldwgclebchm3eea.b32.i2p";
+        String r4sasb32 = "punzipidirfqspstvzpj6gb4tkuykqp6quurj6e23bgxcxhdoe7q.b32.i2p";
+        String simpb32 = "wc4sciqgkceddn6twerzkfod6p2npm733p7z3zwsjfzhc4yulita.b32.i2p";
+        String skankb32 = "by7luzwhx733fhc5ug2o75dcaunblq2ztlshzd7qvptaoa73nqua.b32.i2p";
+        String theblandb32 = "s5ikrdyjwbcgxmqetxb3nyheizftms7euacuub2hic7defkh3xhq.b32.i2p";
+
+        if (meta != null) {
+            announce = meta.getAnnounce();
+            if (announce == null) { announce = snark.getTrackerURL(); }
+            announce = DataHelper.stripHTML(announce)
+                .replace(postmanb64, "tracker2.postman.i2p")
+                .replace(postmanb64_new, "tracker2.postman.i2p")
+                .replace(postmanb32_new, "tracker2.postman.i2p")
+                .replaceAll(btb32, "opentracker.bt.i2p")
+                .replaceAll(chudob32, "tracker.chudo.i2p")
+                .replaceAll(cryptb32, "tracker.crypthost.i2p")
+                .replaceAll(freedomb32, "torrfreedom.i2p")
+                .replaceAll(icu812b32, "tracker.icu812.i2p")
+                .replaceAll(lodikonb32, "tracker.lodikon.i2p")
+                .replaceAll(lyokob32, "lyoko.i2p")
+                .replaceAll(odiftb32, "opendiftracker.i2p")
+                .replaceAll(omitrackb32, "omitracker.i2p")
+                .replaceAll(otdgb32, "opentracker.dg2.i2p")
+                .replaceAll(r4sasb32, "opentracker.r4sas.i2p")
+                .replaceAll(skankb32, "opentracker.skank.i2p")
+                .replaceAll(simpb32, "opentracker.simp.i2p")
+                .replaceAll(theblandb32, "tracker.thebland.i2p");
+        }
+        if (meta != null && !meta.isPrivate()) {
+            buf.append("<a class=magnetlink href=\"").append(MagnetURI.MAGNET_FULL).append(hex);
+            if (announce != null) { buf.append("&amp;tr=").append(announce); }
+            if (baseName != null) {
+                buf.append("&amp;dn=").append(DataHelper.escapeHTML(baseName).replace(".torrent", "")
+                   .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"));
+            }
+            buf.append("\" title=\"").append(MagnetURI.MAGNET_FULL).append(hex);
+            if (announce != null) { buf.append("&amp;tr=").append(announce); }
+            if (baseName != null) {
+                buf.append("&amp;dn=").append(DataHelper.escapeHTML(baseName).replace(".torrent", "")
+                   .replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"));
+            }
+            buf.append("\">");
+            appendIcon(buf, "magnet", "", "", false, true, true);
+            buf.append("</a>");
+        }
+
+        buf.append("<a class=torrentlink href=\"").append(_contextPath).append('/')
+           .append(baseName).append("\" title=\"")
+           .append(DataHelper.escapeHTML(baseName).replace("%20", " ").replace("%27", "\'").replace("%5B", "[").replace("%5D", "]"))
+           .append("\">");
+        appendIcon(buf, "torrent", "", "", false, true, true);
+        buf.append("</a></th></tr>\n");
+
+        long dat = (meta != null) ? meta.getCreationDate() : 0;
+        SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMMM yyyy", Locale.US);
+        long[] dates = _manager.getSavedAddedAndCompleted(snark);
+
+        buf.append("<tr id=torrentInfoStats>").append("<td colspan=3><span class=nowrap");
+        if (dat > 0) {
+            String date = fmt.format(new Date(dat));
+            buf.append(" title=\"").append(_t("Created")).append(": ").append(date).append("\"");
+        }
+        buf.append(">");
+        appendIcon(buf, "file", "", "", true, false);
+        buf.append("<b>").append(_t("Size")).append(":</b> ").append(formatSize(snark.getTotalLength()));
+        if (storage != null) {
+            int fileCount = storage.getFileCount();
+            buf.append("</span>&nbsp;<span class=nowrap>");
+            appendIcon(buf, "file", "", "", true, false);
+            buf.append("<b>").append(_t("Files")).append(":</b> ").append(fileCount);
+        }
+        int pieces = snark.getPieces();
+        double completion = (pieces - snark.getNeeded()) / (double) pieces;
+        buf.append("</span>&nbsp;<span class=nowrap");
+        if (dates[0] > 0) {
+            String date = fmt.format(new Date(dates[0]));
+            buf.append(" title=\"").append(_t("Added")).append(": ").append(date).append("\"");
+        }
+        buf.append(">");
+        appendIcon(buf, "file", "", "", true, false);
+        buf.append("<b>").append(_t("Pieces")).append(":</b> ").append(pieces)
+           .append(" @ ").append(formatSize(snark.getPieceLength(0)).replace("iB", ""));
+
+        if (dates[0] > 0) {
+            String date = DataHelper.formatTime(dates[0]);
+            long sz = snark.getTotalLength();
+            long time;
+            if (storage != null && storage.complete()) {
+                time = dates[1] - dates[0];
+            } else {
+                sz -= snark.getRemainingLength();
+                time = _context.clock().now() - dates[0];
+            }
+            time /= 1000;
+
+            if (time >= 30) {
+                long rate = sz / time;
+                if (rate >= 100) {
+                    buf.append("</span>&nbsp;<span class=nowrap title=\"")
+                       .append(_t("Average download speed for torrent")).append("\">");
+                    appendIcon(buf, "head_rxspeed", "", "", true, false);
+                    buf.append("<b>").append(_t("Download speed")).append(":</b> ")
+                       .append(rate / 1024).append("K/s");
+                }
+            }
+        }
+
+        buf.append("</span>&nbsp;<span class=nowrap>");
+        appendIcon(buf, "head_tx", "", "", true, false);
+
+        buf.append("<b>").append(_t("Share ratio")).append(":</b> ");
+        long uploaded = snark.getUploaded();
+        if (uploaded > 0) {
+            double ratio = uploaded / ((double) snark.getTotalLength());
+            if (ratio < 0.1) {
+                buf.append((new DecimalFormat("0.000")).format(ratio));
+            } else {
+                buf.append((new DecimalFormat("0.00")).format(ratio));
+            }
+            buf.append(" x");
+        } else {
+            buf.append('0');
+        }
+
+        buf.append("</span>&nbsp;<span id=completion class=nowrap");
+        if (dates[1] > 0) {
+            String date = fmt.format(new Date(dates[1]));
+            buf.append(" title=\"").append(_t("Completed")).append(": ").append(date).append("\"");
+        }
+        buf.append(">");
+        appendIcon(buf, "head_rx", "", "", true, false);
+        buf.append("<b>");
+        if (completion < 1.0) {
+            buf.append(_t("Completion")).append(":</b> ").append((new DecimalFormat("0.0%"))
+               .format(completion).replace("0.0%", "0%"));
+        } else {
+            buf.append(_t("Complete")).append("</b>");
+        }
+        buf.append("</span>");
+
+        if (meta != null) {
+            String cby = meta.getCreatedBy();
+            long needed = snark.getNeededLength();
+            if (needed < 0) { needed = snark.getRemainingLength(); }
+            if (needed > 0) {
+               buf.append("&nbsp;<span class=nowrap>");
+               appendIcon(buf, "head_rx", "", "", true, false);
+               buf.append("<b>").append(_t("Remaining")).append(":</b> ").append(formatSize(needed)).append("</span>");
+            }
+            long skipped = snark.getSkippedLength();
+            if (skipped > 0) {
+                buf.append("&nbsp;<span class=nowrap>");
+                appendIcon(buf, "head_rx", "", "", true, false);
+                buf.append("<b>").append(_t("Skipped")).append(":</b> ").append(formatSize(skipped)).append("</span>");
+            }
+
+            if (storage != null) {
+                dat = storage.getActivity();
+                if (dat > 0) {
+                    String date = fmt.format(new Date(dat));
+                    buf.append("&nbsp;<span class=nowrap>");
+                    appendIcon(buf, "torrent", "", "", true, false);
+                    buf.append("<b>").append(_t("Last activity")).append(":</b> ").append(date).append("</span>");
+                }
+            }
+        }
+        buf.append("</td></tr>\n");
+
+        List<List<String>> alist = (meta != null) ? meta.getAnnounceList() : null;
+        if (alist != null && !alist.isEmpty()) {
+            buf.append("<tr id=trackers title=\"")
+               .append(_t("Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"))
+               .append("\"><td colspan=3>");
+            appendIcon(buf, "torrent", "", "", true, false);
+            buf.append("<b>").append(_t("Trackers")).append(":</b> ");
+
+            for (List<String> alist2 : alist) {
+                if (alist2.isEmpty()) {
+                    buf.append("<span class=\"info_tracker primary\">");
+                    boolean more = false;
+                    for (String s : alist2) {
+                        if (more) { buf.append("<span class=info_tracker>"); }
+                        else { more = true; }
+                        buf.append(getShortTrackerLink(DataHelper.stripHTML(s)
+                           .replaceAll(cryptb32, "tracker.crypthost.i2p")
+                           .replaceAll(freedomb32, "torrfreedom.i2p")
+                           .replaceAll(lodikonb32, "tracker.lodikon.i2p")
+                           .replaceAll(otdgb32, "opentracker.dg2.i2p")
+                           .replaceAll(odiftb32, "opendiftracker.i2p")
+                           .replaceAll(theblandb32, "tracker.thebland.i2p"), snark.getInfoHash()));
+                        buf.append("</span> ");
+                    }
+                }
+                buf.append("<span class=info_tracker>");
+                boolean more = false;
+                for (String s : alist2) {
+                    if (more) { buf.append("<span class=info_tracker>"); }
+                    else { more = true; }
+                    buf.append(getShortTrackerLink(DataHelper.stripHTML(s)
+                       .replaceAll(cryptb32, "tracker.crypthost.i2p")
+                       .replaceAll(freedomb32, "torrfreedom.i2p")
+                       .replaceAll(lodikonb32, "tracker.lodikon.i2p")
+                       .replaceAll(otdgb32, "opentracker.dg2.i2p")
+                       .replaceAll(odiftb32, "opendiftracker.i2p")
+                       .replaceAll(theblandb32, "tracker.thebland.i2p"), snark.getInfoHash()));
+                    buf.append("</span> ");
+                }
+            }
+            buf.append("</td></tr>\n");
+        } else if (meta != null) {
+            announce = meta.getAnnounce();
+            if (announce == null) { announce = snark.getTrackerURL(); }
+            if (announce != null) {
+                announce = DataHelper.stripHTML(announce)
+                   .replace(postmanb64, "tracker2.postman")
+                   .replaceAll(cryptb32, "tracker.crypthost.i2p")
+                   .replaceAll(freedomb32, "torrfreedom.i2p")
+                   .replaceAll(lodikonb32, "tracker.lodikon.i2p")
+                   .replaceAll(otdgb32, "opentracker.dg2.i2p")
+                   .replaceAll(odiftb32, "opendiftracker.i2p")
+                   .replaceAll(theblandb32, "tracker.thebland.i2p")
+                   .replaceAll(icu812b32, "tracker.icu812.i2p")
+                   .replaceAll(chudob32, "tracker.chudo.i2p");
+                buf.append("<tr id=trackers title=\"")
+                   .append(_t("Only I2P trackers will be used; non-I2P trackers are displayed for informational purposes only"))
+                   .append("\"><td colspan=3>");
+                appendIcon(buf, "torrent", "", "", true, false);
+                buf.append("<b>").append(_t("Tracker")).append(":</b> <span class=\"info_tracker primary\">")
+                   .append(getShortTrackerLink(announce, snark.getInfoHash()))
+                   .append("</span> ")
+                   .append("</td></tr>\n");
+            }
+        }
+
+        List<String> weblist = (meta != null) ? meta.getWebSeedURLs() : null;
+        if (weblist != null) {
+            List<String> wlist = new ArrayList<>(weblist.size());
+            for (String s : weblist) {
+                if (isI2PTracker(s)) { wlist.add(s); }
+            }
+            if (!wlist.isEmpty()) {
+                buf.append("<tr id=webseeds><td colspan=3>");
+                appendIcon(buf, "torrent", "", "", true, false);
+                buf.append("<b>").append(_t("Web Seeds")).append("</b>: ");
+                boolean more = false;
+                for (String s : wlist) {
+                    buf.append("<span class=info_tracker>");
+                    if (more) { buf.append(' '); }
+                    else { more = true; }
+                    buf.append(getShortTrackerLink(DataHelper.stripHTML(s), snark.getInfoHash()))
+                       .append("</span> ");
+                }
+                buf.append("</td></tr>\n");
+            }
+        }
+
+        if (meta != null) {
+            String com = meta.getComment();
+            if (com != null && com.length() > 0) {
+                if (com.length() > 5000) { com = com.substring(0, 5000) + "&hellip;"; }
+                buf.append("<tr><td id=metacomment colspan=3><div class=commentWrapper>\n")
+                   .append(DataHelper.stripHTML(com).replace("\r\n", "<br>").replace("\n", "<br>").replace("&apos;", "'"))
+                   .append("</div>\n</td></tr>\n");
+            }
+        }
+
+        if (showStopStart) {
+            buf.append("<tr id=torrentInfoControl><td colspan=3>");
+            if (snark.isChecking()) {
+                buf.append("<span id=fileCheck><b>").append(_t("Checking")).append("&hellip; ")
+                   .append((new DecimalFormat("0.0%")).format(snark.getCheckingProgress()))
+                   .append("&nbsp;<a href=\"").append(base).append("\">")
+                   .append(_t("Refresh page for results")).append("</a></b></span>");
+            } else if (snark.isStarting()) {
+                buf.append("<b>").append(_t("Starting")).append("&hellip;</b>");
+            } else if (snark.isAllocating()) {
+                buf.append("<b>").append(_t("Allocating")).append("&hellip;</b>");
+            } else {
+                boolean isRunning = !snark.isStopped();
+                buf.append("<input type=submit value=\"");
+                if (isRunning) {
+                    buf.append(_t("Stop")).append("\" name=stop class=stoptorrent>");
+                } else {
+                    buf.append(_t("Start")).append("\" name=start class=starttorrent>");
+                }
+                buf.append("<input type=submit name=recheck value=\"").append(_t("Force Recheck"));
+                if (isRunning) {
+                    buf.append("\" class=disabled disabled title=\"")
+                       .append(_t("Stop the torrent in order to check file integrity")).append("\">");
+                } else {
+                    buf.append("\" class=reload title=\"").append(_t("Check integrity of the downloaded files")).append("\">");
+                }
+            }
+            buf.append("</td></tr>\n");
+        }
+
+        buf.append("</table>\n").append("</div>\n");
     }
 
     /**
