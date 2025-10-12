@@ -20,18 +20,17 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
 /**
- * Unencrypt a garlic message and handle each of the cloves - locally destined
- * messages are tossed into the inbound network message pool so they're handled
- * as if they arrived locally.  Other instructions are not yet implemented (but
- * need to be. soon)
- *
- * This is the handler for garlic message not received down a tunnel, which is the
- * case for floodfills receiving netdb messages.
- * It is not the handler for garlic messages received down a tunnel,
- * as InNetMessagePool short circuits tunnel messages,
- * and those garlic messages are handled in InboundMessageDistributor.
- *
- * Public for JobQueue as these jobs may be dropped.
+ * Job to handle an inbound GarlicMessage received outside of a tunnel.
+ * <p>
+ * Decrypts the garlic message and processes each contained clove. Local-message cloves are
+ * added directly to the inbound message pool, while cloves destined for other routers or tunnels
+ * are forwarded accordingly.
+ * <p>
+ * This class handles garlic messages received directly (not down a tunnel), e.g., in floodfill routers
+ * receiving network database messages.
+ * <p>
+ * Implements {@link GarlicMessageReceiver.CloveReceiver} to receive and process individual cloves.
+ * Public visibility is necessary for integration with the job queue system.
  */
 public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageReceiver.CloveReceiver {
     private final Log _log;
@@ -39,103 +38,134 @@ public class HandleGarlicMessageJob extends JobImpl implements GarlicMessageRece
     private final long _msgIDBloomXorLocal;
     private final long _msgIDBloomXorRouter;
     private final long _msgIDBloomXorTunnel;
-    //private RouterIdentity _from;
-    //private Hash _fromHash;
-    //private Map _cloves; // map of clove Id --> Expiration of cloves we've already seen
-    //private MessageHandler _handler;
-    //private GarlicMessageParser _parser;
 
-    private final static int ROUTER_PRIORITY = OutNetMessage.PRIORITY_LOWEST;
-    private final static int TUNNEL_PRIORITY = OutNetMessage.PRIORITY_LOWEST;
+    private static final int ROUTER_PRIORITY = OutNetMessage.PRIORITY_LOWEST;
+    private static final int TUNNEL_PRIORITY = OutNetMessage.PRIORITY_LOWEST;
 
     /**
-     *  @param from ignored
-     *  @param fromHash ignored
+     * Constructs a job to handle an inbound garlic message.
+     *
+     * @param context              router context providing core services
+     * @param msg                  garlic message to process
+     * @param from                 ignored (sender identity)
+     * @param fromHash             ignored (sender hash)
+     * @param msgIDBloomXorLocal   long unique to router/session for XOR with message ID in local inbound messages
+     * @param msgIDBloomXorRouter  long unique to router/session for XOR with message ID in router-targeted messages
+     * @param msgIDBloomXorTunnel  long unique to router/session for XOR with message ID in tunnel-targeted messages
      */
-    public HandleGarlicMessageJob(RouterContext context, GarlicMessage msg, RouterIdentity from, Hash fromHash, long msgIDBloomXorLocal, long msgIDBloomXorRouter, long msgIDBloomXorTunnel) {
+    public HandleGarlicMessageJob(final RouterContext context, final GarlicMessage msg,
+                                 RouterIdentity from, Hash fromHash,
+                                 final long msgIDBloomXorLocal, final long msgIDBloomXorRouter, final long msgIDBloomXorTunnel) {
         super(context);
         _log = context.logManager().getLog(HandleGarlicMessageJob.class);
-        if (_log.shouldDebug())
+        if (_log.shouldDebug()) {
             _log.debug("Garlic Message not down a tunnel from [" + from + "]");
+        }
         _message = msg;
         _msgIDBloomXorLocal = msgIDBloomXorLocal;
         _msgIDBloomXorRouter = msgIDBloomXorRouter;
         _msgIDBloomXorTunnel = msgIDBloomXorTunnel;
-        //_from = from;
-        //_fromHash = fromHash;
-        //_cloves = new HashMap();
-        //_handler = new MessageHandler(context);
-        //_parser = new GarlicMessageParser(context);
-        // all createRateStat in OCMOSJ.init()
     }
 
-    public String getName() { return "Handle Inbound Garlic Message"; }
+    /**
+     * Returns a descriptive name for this job.
+     *
+     * @return Name of the job.
+     */
+    @Override
+    public String getName() {
+        return "Handle Inbound Garlic Message";
+    }
+
+    /**
+     * Entry point for the job. Creates an instance of GarlicMessageReceiver configured to
+     * use this job as the clove receiver, then processes the garlic message.
+     */
+    @Override
     public void runJob() {
-        GarlicMessageReceiver recv = new GarlicMessageReceiver(getContext(), this);
-        recv.receive(_message);
+        GarlicMessageReceiver receiver = new GarlicMessageReceiver(getContext(), this);
+        receiver.receive(_message);
     }
 
-    public void handleClove(DeliveryInstructions instructions, I2NPMessage data) {
+    /**
+     * Handle each garlic clove based on its delivery instructions.
+     * <p>
+     * Local delivery cloves are added to the inbound message pool with a XOR mask for the message ID.
+     * Router delivery cloves are either queued locally or forwarded directly.
+     * Tunnel delivery cloves are wrapped in a TunnelGatewayMessage and forwarded.
+     *
+     * @param instructions  Delivery instructions specifying the target for this clove.
+     * @param data          The message contained in the clove.
+     */
+    @Override
+    public void handleClove(final DeliveryInstructions instructions, final I2NPMessage data) {
         switch (instructions.getDeliveryMode()) {
             case DeliveryInstructions.DELIVERY_MODE_LOCAL:
-                if (_log.shouldDebug())
+                if (_log.shouldDebug()) {
                     _log.debug("Local delivery instructions for clove: " + data);
-                // Here we are adding the message to the InNetMessagePool and it is Local. Xor the messageID with
-                // a long unique to the router/session.
+                }
+                // Add message to inbound pool with local XOR mask
                 getContext().inNetMessagePool().add(data, null, null, _msgIDBloomXorLocal);
                 return;
+
             case DeliveryInstructions.DELIVERY_MODE_DESTINATION:
-                // i2pd bug with DLM to ratchet router
-                if (_log.shouldWarn())
-                    _log.warn("Message didn't come down a tunnel, not forwarding to a destination: " + instructions + "\n" + data);
-                return;
-            case DeliveryInstructions.DELIVERY_MODE_ROUTER:
-                if (getContext().routerHash().equals(instructions.getRouter())) {
-                    if (_log.shouldDebug())
-                        _log.debug("Router delivery instructions targeting us");
-                    // Here we are adding the message to the InNetMessagePool and it is for us. Xor the messageID with
-                    // a long unique to the router/session.
-                    getContext().inNetMessagePool().add(data, null, null, _msgIDBloomXorRouter);
-                } else {
-                    if (_log.shouldDebug())
-                        _log.debug("Router delivery instructions targeting ["
-                                   + instructions.getRouter().toBase64().substring(0,6) + "] for " + data);
-                    // we don't need to use the msgIDBloomXorRouter here because we have already handled the case
-                    // where the message will be added to the InNetMessagePool(see SendMessageDirectJob 159-179)
-                    SendMessageDirectJob j = new SendMessageDirectJob(getContext(), data, 
-                                                                      instructions.getRouter(),
-                                                                      10*1000, ROUTER_PRIORITY, _msgIDBloomXorRouter);
-                    // run it inline (adds to the outNetPool if it has the router info, otherwise queue a lookup)
-                    j.runJob();
-                    //getContext().jobQueue().addJob(j);
+                // Not expected for messages not received down a tunnel - warn for potential bugs
+                if (_log.shouldWarn()) {
+                    _log.warn("Message didn't come down a tunnel, not forwarding to a destination: "
+                            + instructions + "\n" + data);
                 }
                 return;
-            case DeliveryInstructions.DELIVERY_MODE_TUNNEL:
-                TunnelGatewayMessage gw = new TunnelGatewayMessage(getContext());
-                gw.setMessage(data);
-                gw.setTunnelId(instructions.getTunnelId());
-                gw.setMessageExpiration(data.getMessageExpiration());
-                if (_log.shouldDebug())
-                    _log.debug("Tunnel delivery instructions targeting ["
-                               + instructions.getRouter().toBase64().substring(0,6) + "] for " + data);
-                // Here we do Xor the messageID in case it is added to the InNetMessagePool(see SendMessageDirectJob 159-179)
-                SendMessageDirectJob job = new SendMessageDirectJob(getContext(), gw, 
-                                                                    instructions.getRouter(), 
-                                                                    10*1000, TUNNEL_PRIORITY, _msgIDBloomXorTunnel);
-                // run it inline (adds to the outNetPool if it has the router info, otherwise queue a lookup)
-                job.runJob();
-                // getContext().jobQueue().addJob(job);
+
+            case DeliveryInstructions.DELIVERY_MODE_ROUTER:
+                if (getContext().routerHash().equals(instructions.getRouter())) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("Router delivery instructions targeting us");
+                    }
+                    // Add message to inbound pool for this router with router XOR mask
+                    getContext().inNetMessagePool().add(data, null, null, _msgIDBloomXorRouter);
+                } else {
+                    if (_log.shouldDebug()) {
+                        _log.debug("Router delivery instructions targeting ["
+                                + instructions.getRouter().toBase64().substring(0, 6) + "] for " + data);
+                    }
+                    // Forward message directly to target router with a 10 second timeout and low priority
+                    SendMessageDirectJob job = new SendMessageDirectJob(getContext(), data,
+                            instructions.getRouter(),
+                            10_000, ROUTER_PRIORITY, _msgIDBloomXorRouter);
+                    job.runJob();
+                }
                 return;
+
+            case DeliveryInstructions.DELIVERY_MODE_TUNNEL:
+                TunnelGatewayMessage gwMessage = new TunnelGatewayMessage(getContext());
+                gwMessage.setMessage(data);
+                gwMessage.setTunnelId(instructions.getTunnelId());
+                gwMessage.setMessageExpiration(data.getMessageExpiration());
+                if (_log.shouldDebug()) {
+                    _log.debug("Tunnel delivery instructions targeting ["
+                            + instructions.getRouter().toBase64().substring(0, 6) + "] for " + data);
+                }
+                // Forward message wrapped in tunnel gateway message to target router with a 10 second timeout and low priority
+                SendMessageDirectJob tunnelJob = new SendMessageDirectJob(getContext(), gwMessage,
+                        instructions.getRouter(),
+                        10_000, TUNNEL_PRIORITY, _msgIDBloomXorTunnel);
+                tunnelJob.runJob();
+                return;
+
             default:
                 _log.error("Unknown instruction " + instructions.getDeliveryMode() + ": " + instructions);
                 return;
         }
     }
 
+    /**
+     * Called when this job has been dropped (e.g. due to queue overload).
+     * Records an error in message history indicating the message was dropped.
+     */
     @Override
     public void dropped() {
         getContext().messageHistory().messageProcessingError(_message.getUniqueId(),
-                                                         _message.getClass().getName(),
-                                                         "Dropped due to overload");
+                _message.getClass().getName(),
+                "Dropped due to overload");
     }
 }
