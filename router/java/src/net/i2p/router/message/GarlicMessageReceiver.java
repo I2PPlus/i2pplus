@@ -60,15 +60,13 @@ public class GarlicMessageReceiver {
         SessionKeyManager skm;
         TunnelPoolSettings in = _clientDestination != null ? _context.tunnelManager().getInboundSettings(_clientDestination.calculateHash()) : null;
         TunnelPoolSettings out = _clientDestination != null ? _context.tunnelManager().getOutboundSettings(_clientDestination.calculateHash()) : null;
-        boolean warn = _log.shouldWarn();
+        boolean debug = _log.shouldDebug();
         String name = "";
         String nick = "";
 
-        if (warn && _clientDestination != null) {
+        if (debug && _clientDestination != null) {
             if (in != null) {name = in.getDestinationNickname();}
             else if (out != null) {name = out.getDestinationNickname();}
-        }
-        if (warn && _clientDestination != null) {
             nick = "[" + _clientDestination.toBase32().substring(0,8) + "]";
             if (!name.equals("")) {nick = name;}
         }
@@ -82,7 +80,7 @@ public class GarlicMessageReceiver {
                 // this will return any of the PQ types
                 PrivateKey decryptionKey3 = keys.getPQDecryptionKey();
                 if (decryptionKey == null && decryptionKey2 == null && decryptionKey3 == null) {
-                    if (warn) {
+                    if (debug) {
                         _log.warn("No key to decrypt for client destination " + nick);
                     }
                     return;
@@ -100,8 +98,8 @@ public class GarlicMessageReceiver {
                     }
                 }
             } else {
-                if (warn) {
-                    _log.warn("Not decrypting " + message + " for disconnected client -> Target: " + nick);
+                if (debug) {
+                    _log.warn("Not decrypting " + message + " for disconnected client " + nick);
                 }
                 return;
             }
@@ -123,7 +121,7 @@ public class GarlicMessageReceiver {
                 handleClove(clove);
             }
         } else {
-            if (warn) {
+            if (debug) {
                 boolean isUs = _clientDestination == null || _clientDestination != null &&
                                _context.routerHash().toBase32().substring(0,6).equals(_clientDestination.toBase32().substring(0,6));
                 String d = _clientDestination != null && !isUs ? nick : "Our Router";
