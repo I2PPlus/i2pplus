@@ -32,9 +32,7 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**
- * Coordinate the selection of peers to go into a tunnel for one particular
- * pool.
- *
+ * Coordinate the selection of peers to go into a tunnel for one particular pool.
  */
 public abstract class TunnelPeerSelector extends ConnectChecker {
 
