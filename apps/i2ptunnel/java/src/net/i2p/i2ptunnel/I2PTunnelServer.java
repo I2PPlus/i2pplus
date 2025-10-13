@@ -82,7 +82,6 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     private static int CORES = SystemVersion.getCores();
     private static int MIN_THREADS = Math.max(CORES / 2, 8);
     private static int MAX_THREADS = 4096;
-    private static int MAX_BACKLOG = MIN_THREADS - 1; // max requests to queue before abort
     private static int KEEP_ALIVE = 30; // seconds
     private final Map<Integer, InetSocketAddress> _socketMap = new ConcurrentHashMap<Integer, InetSocketAddress>(4);
     private volatile StatefulConnectionFilter _filter;
@@ -584,7 +583,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 t.setDaemon(true);
                 return t;
             },
-            new ThreadPoolExecutor.CallerRunsPolicy()
+            new ThreadPoolExecutor.AbortPolicy()
         );
 
         _executor.prestartAllCoreThreads(); // warmup
@@ -609,27 +608,40 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
                 final I2PSocket socketToHandle = i2ps;
 
-                // Run the handler asynchronously using CompletableFuture with custom executor
-                CompletableFuture.runAsync(() -> {
-                    try {
-                        new Handler(socketToHandle).run();
-                    } catch (Exception e) {
-                        _log.warn("Exception in async handler for " + remoteHost + ':' + remotePort, e);
+                try {
+                    CompletableFuture.runAsync(() -> {
                         try {
-                            socketToHandle.close();
-                        } catch (IOException ioe) {
-                            // Ignored, socket already errored
+                            new Handler(socketToHandle).run();
+                        } catch (Exception e) {
+                            _log.warn("Exception in async handler for " + remoteHost + ':' + remotePort, e);
+                            try {
+                                socketToHandle.close();
+                            } catch (IOException ioe) {
+                                // Ignored, socket already errored
+                            }
                         }
+                    }, _executor).exceptionally(ex -> {
+                        _log.warn("Async handler task failed for " + remoteHost + ':' + remotePort, ex);
+                        return null;
+                    });
+                } catch (RejectedExecutionException ree) {
+                    _log.warn("Max " + MAX_THREADS + " connections exceeded on " +
+                               remoteHost.toString().replace("/", "") + ':' + remotePort + " -> Ignoring request");
+                    try {
+                        socketToHandle.close();
+                    } catch (IOException ioe) {
+                        // ignore
                     }
-                }, _executor).exceptionally(ex -> {
-                    // Log exceptions from CompletableFuture execution
-                    _log.warn("Async handler task failed for " + remoteHost + ':' + remotePort, ex);
-                    return null;
-                });
+                }
+
             } catch (RouterRestartException rre) {
                 _log.warn("Waiting for router restart...");
                 if (i2ps != null) try { i2ps.close(); } catch (IOException ioe) {}
-                try { Thread.sleep(2 * 60 * 1000); } catch (InterruptedException ie) {}
+                try {
+                    Thread.sleep(2 * 60 * 1000);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                }
                 _log.warn("Reconnecting to router after restart");
                 i2pss = sockMgr.getServerSocket();
             } catch (I2PException ipe) {
@@ -643,30 +655,55 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                     close(true);
                 }
                 if (i2ps != null) {
-                    try { i2ps.close(); } catch (IOException ioe) {}
+                    try {
+                        i2ps.close();
+                    } catch (IOException ioe) {
+                        // ignore
+                    }
                 }
                 break;
             } catch (ConnectException ce) {
                 if (i2ps != null) try { i2ps.close(); } catch (IOException ioe) {}
-                if (!open) { break; }
+                if (!open) {
+                    break;
+                }
                 if (_log.shouldError()) {
                     _log.error("Error accepting server socket connection \n* " + ce.getMessage());
                 }
-                try { Thread.sleep(2 * 60 * 1000); } catch (InterruptedException ie) {}
+                try {
+                    Thread.sleep(2 * 60 * 1000);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                }
                 i2pss = sockMgr.getServerSocket();
             } catch (SocketTimeoutException ste) {
                 // ignored, we never set timeout
                 if (i2ps != null) {
-                    try { i2ps.close(); } catch (IOException ioe) {}
+                    try {
+                        i2ps.close();
+                    } catch (IOException ioe) {
+                        // ignore
+                    }
                 }
             } catch (RuntimeException e) {
-                if (_log.shouldError()) { _log.error("Uncaught exception accepting", e); }
-                if (i2ps != null) {
-                    try { i2ps.close(); } catch (IOException ioe) {}
+                if (_log.shouldError()) {
+                    _log.error("Uncaught exception accepting", e);
                 }
-                try { Thread.sleep(500); } catch (InterruptedException ie) {}
+                if (i2ps != null) {
+                    try {
+                        i2ps.close();
+                    } catch (IOException ioe) {
+                        // ignore
+                    }
+                }
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
+
 
         if (_executor != null && !_executor.isTerminated() && !_executor.isShutdown()) {
             shutdownAndAwaitTermination(_executor);
