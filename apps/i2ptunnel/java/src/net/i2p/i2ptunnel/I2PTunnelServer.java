@@ -577,7 +577,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             MAX_THREADS,
             KEEP_ALIVE,
             TimeUnit.SECONDS,
-            new LinkedBlockingQueue<>(MAX_BACKLOG),
+            new LinkedBlockingQueue<>(MAX_THREADS),
             runnable -> {
                 Thread t = new Thread(runnable);
                 t.setName("Server:" + remotePort);
