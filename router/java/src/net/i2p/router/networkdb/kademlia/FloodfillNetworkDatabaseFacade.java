@@ -271,6 +271,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         // If we are a part of the floodfill netDb, don't send out our own leaseSets as part
         // of the flooding - instead, send them to random floodfill peers so they can flood 'em out.
         Set<Hash> floodfillParticipants = selectFloodfillParticipants(toIgnore, getKBuckets(), concurrent);
+        if (floodfillParticipants == null) {return;} // No peers to send to, so return early
         if (floodfillEnabled() && (ds.getType() == DatabaseEntry.KEY_TYPE_ROUTERINFO)) {flood(ds);}
         else {
             List<Hash> participantList = new ArrayList<>(floodfillParticipants);
@@ -296,10 +297,26 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         }
     }
 
+    /**
+     * Selects a set of floodfill participant peers to which data should be sent.
+     *
+     * <p>The method filters peers having the floodfill capability and excludes peers that are
+     * unreachable, banned, ignored, or known to send bad replies. It then randomly selects
+     * up to the specified number of concurrent peers.
+     *
+     * @param toIgnore the set of peer hashes to exclude from selection, may be null
+     * @param kbuckets the KBucketSet representing the routing table (currently unused in logic)
+     * @param concurrent the maximum number of peers to select
+     * @return a set of floodfill participant Hashes; never null but possibly empty if no suitable peers found
+     */
     private Set<Hash> selectFloodfillParticipants(Set<Hash> toIgnore, KBucketSet<Hash> kbuckets, int concurrent) {
         Set<Hash> set = _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL);
+        if (set == null || set.isEmpty()) {
+            // Return early if no floodfill peers available
+            return Collections.emptySet();
+        }
+
         List<Hash> rv = new ArrayList<>(set.size());
-        if (set.size() <= 0) {return null;}
         for (Hash h : set) {
             RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(h);
             String caps = ri != null ? ri.getCapabilities() : "";
@@ -310,9 +327,16 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             }
             rv.add(h);
         }
+
+        if (rv.isEmpty()) {
+            // Return early if no suitable peers remain after filtering
+            return Collections.emptySet();
+        }
+
         Collections.shuffle(rv);
-        Set<Hash> floodfillParticipants = new HashSet<>(rv.subList(0, Math.min(1, concurrent)));
-        return floodfillParticipants;
+
+        // Return up to 'concurrent' number of participants
+        return new HashSet<>(rv.subList(0, Math.min(concurrent, rv.size())));
     }
 
     /**
