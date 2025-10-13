@@ -128,11 +128,12 @@ public class RouterConsoleRunner implements RouterApp {
                                         "Usage: [[port host[,host]] [-s sslPort [host[,host]]] [webAppsDir]]";
 
     /** this is for the handlers only. We will adjust for the connectors and acceptors below. */
-    private static final int MIN_THREADS = 1;
+    private static final int MIN_THREADS = 4;
     /** this is for the handlers only. We will adjust for the connectors and acceptors below. */
-    private static final int MAX_THREADS = 4;
+    private static final int MAX_THREADS = 32;
+
     private static final int MAX_IDLE_TIME = 30*1000;
-    private static final String THREAD_NAME = "RouterConsole Jetty";
+    private static final String THREAD_NAME = "I2P+ [Jetty]";
     public static final String PROP_DTG_ENABLED = "desktopgui.enabled";
     static final String PROP_ALLOWED_HOSTS = "routerconsole.allowedHosts";
     /** @since 0.9.34 */
