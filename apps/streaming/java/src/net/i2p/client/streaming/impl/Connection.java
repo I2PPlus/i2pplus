@@ -1307,11 +1307,16 @@ class Connection {
 
         public synchronized void pushBackRTO(int rto) {
             if (!_scheduled) {
-                if (_log.shouldWarn()) {
-                    _log.warn(Connection.this + " timer was not scheduled", new Exception());
+                // Safety: if we're being asked to push back RTO, we likely have unacked packets.
+                // So just schedule it.
+                if (_log.shouldInfo()) {
+                    _log.info(Connection.this + " Retransmit timer was not scheduled; rescheduling.", new Exception());
                 }
+                _scheduled = true;
+                schedule(rto);
+            } else {
+                reschedule(rto, false);
             }
-            reschedule(rto, false);
         }
 
         @Override
