@@ -458,7 +458,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 socket.setReadTimeout(SERVER_READ_TIMEOUT_POST);
                 Socket s = getSocket(socket.getPeerDestination().calculateHash(), 443);
                 Runnable t = new I2PTunnelRunner(s, socket, slock, null, null, null, (I2PTunnelRunner.FailCallback) null);
-                executeInPool(t); // Run in the server pool
+                _clientExecutor.execute(t);
                 return;
             }
 
@@ -840,7 +840,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 Runnable t = new CompressedRequestor(s, socket, modifiedHeader, getTunnel().getContext(),
                                                      _log, compress, upgrade, _clientExecutor, keepalive, waiter);
                 if (keepalive || isGetOrHead) {t.run();} // run inline
-                else {executeInPool(t);} // run in the server pool
+                else {_clientExecutor.execute(t);} // run in the server pool
 
 
                 long afterHandle = getTunnel().getContext().clock().now();
