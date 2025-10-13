@@ -81,9 +81,9 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     protected volatile ThreadPoolExecutor _clientExecutor;
     private static int CORES = SystemVersion.getCores();
     private static int MIN_THREADS = Math.max(CORES / 2, 8);
-    private static int MAX_THREADS = Math.max(CORES * 48, 512);
-    private static int MAX_BACKLOG = MAX_THREADS*2; // max requests to queue before abort
-    private static int KEEP_ALIVE = 60; // seconds
+    private static int MAX_THREADS = 4096;
+    private static int MAX_BACKLOG = MIN_THREADS - 1; // max requests to queue before abort
+    private static int KEEP_ALIVE = 30; // seconds
     private final Map<Integer, InetSocketAddress> _socketMap = new ConcurrentHashMap<Integer, InetSocketAddress>(4);
     private volatile StatefulConnectionFilter _filter;
 
