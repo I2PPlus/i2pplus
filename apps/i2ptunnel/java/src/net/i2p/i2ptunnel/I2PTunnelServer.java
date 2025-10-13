@@ -558,10 +558,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
     /**
      * Runs the I2PTunnelServer to accept and handle incoming connections asynchronously.
-     * <p>
-     * Initializes a thread pool with configurable core and max threads, keep-alive timeout,
-     * and a bounded task queue. It prestarts core threads and allows them to expire if idle.
-     * <p>
+     *
      * Accepts connections in a loop, submitting each to the thread pool via CompletableFuture.
      * Handles expected exceptions with retries and logs errors. On shutdown, gracefully terminates the pool.
      */
@@ -581,6 +578,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 Thread t = new Thread(runnable);
                 t.setName("Server:" + remotePort);
                 t.setDaemon(true);
+                t.setPriority(Thread.MAX_PRIORITY - 1);
                 return t;
             },
             new ThreadPoolExecutor.CallerRunsPolicy()
