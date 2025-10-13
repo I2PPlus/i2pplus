@@ -467,31 +467,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                             subRequest += '/';
                         }
                         request = "http://" + subRequest;
-                    /****
-                    } else if (request.toLowerCase(Locale.US).startsWith("http://i2p/")) {
-                    // http://i2p/b64key/bar/baz.html
-                    // we can't do this now by setting the URI host to the b64key, as
-                    // it probably contains '=' and '~' which are illegal,
-                    // and a host may not include escaped octets
-                    // This will get undone below.
-                    String subRequest = request.substring("http://i2p/".length());
-                    if (subRequest.indexOf("/") == -1)
-                    subRequest += "/";
-                    "http://" + "b64key/bar/baz.html"
-                    request = "http://" + subRequest;
-                    } else if (request.toLowerCase(Locale.US).startsWith("http://")) {
-                    // Unsupported
-                    // http://$b64key/...
-                    // This probably used to work, rewrite it so that
-                    // we can create a URI without illegal characters
-                    // This will get undone below.
-                    String  oldPath = request.substring(7);
-                    int slash = oldPath.indexOf("/");
-                    if (slash < 0)
-                    slash = oldPath.length();
-                    if (slash >= 516 && !oldPath.substring(0, slash).contains("."))
-                    request = "http://i2p/" + oldPath;
-                     ****/
                     }
 
                     method = params[0].toUpperCase(Locale.US);
