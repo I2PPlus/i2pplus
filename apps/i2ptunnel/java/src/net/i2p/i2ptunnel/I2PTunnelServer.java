@@ -571,23 +571,20 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             _log.info("Starting async executor with cached thread pool for server " + remoteHost + ':' + remotePort);
         }
 
-        ThreadPoolExecutor _executor = new ThreadPoolExecutor(
+        ThreadPoolExecutor connectionExecutor = new ThreadPoolExecutor(
             MIN_THREADS,
             MAX_THREADS,
             KEEP_ALIVE,
             TimeUnit.SECONDS,
-            new LinkedBlockingQueue<>(MAX_THREADS),
+            new SynchronousQueue<>(),
             runnable -> {
                 Thread t = new Thread(runnable);
                 t.setName("Server:" + remotePort);
                 t.setDaemon(true);
                 return t;
             },
-            new ThreadPoolExecutor.AbortPolicy()
+            new ThreadPoolExecutor.CallerRunsPolicy()
         );
-
-        _executor.prestartAllCoreThreads(); // warmup
-        _executor.allowCoreThreadTimeOut(true); // allow core threads to expire if unused for KEEP_ALIVE seconds
 
         TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
         if (tcg != null) {
@@ -620,7 +617,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                                 // Ignored, socket already errored
                             }
                         }
-                    }, _executor).exceptionally(ex -> {
+                    }, connectionExecutor).exceptionally(ex -> {
                         _log.warn("Async handler task failed for " + remoteHost + ':' + remotePort, ex);
                         return null;
                     });
@@ -704,9 +701,8 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             }
         }
 
-
-        if (_executor != null && !_executor.isTerminated() && !_executor.isShutdown()) {
-            shutdownAndAwaitTermination(_executor);
+        if (connectionExecutor != null && !connectionExecutor.isTerminated()) {
+            shutdownAndAwaitTermination(connectionExecutor);
         }
     }
 
