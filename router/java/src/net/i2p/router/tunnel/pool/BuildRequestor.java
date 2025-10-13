@@ -3,6 +3,7 @@ package net.i2p.router.tunnel.pool;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SessionKeyManager;
@@ -31,100 +32,145 @@ import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
 import static net.i2p.router.tunnel.pool.BuildExecutor.Result.*;
 import net.i2p.util.Log;
-import java.util.Properties;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**
- *  Methods for creating Tunnel Build Messages, i.e. requests
+ * Utility class for creating and dispatching tunnel build request messages.
+ *
+ * <p>This class handles:
+ * <ul>
+ *   <li>Preparation of tunnel hop IDs</li>
+ *   <li>Selection of paired or exploratory tunnels for replies</li>
+ *   <li>Construction of {@link TunnelBuildMessage}, including legacy and
+ *       new-style (Short/Variable) formats</li>
+ *   <li>Garlic encryption for inbound builds</li>
+ *   <li>Timeout and failure handling</li>
+ * </ul>
+ *
+ * <p>Paired tunnels are always used (as of 0.9.50+) to improve client
+ * isolation and prevent correlation across tunnel pools.
  */
 abstract class BuildRequestor {
-    private static final List<Integer> ORDER = new ArrayList<Integer>(TunnelBuildMessage.MAX_RECORD_COUNT);
+
+    // --- Configuration constants ---
     private static final String MIN_NEWTBM_VERSION = "0.9.51";
     private static final boolean SEND_VARIABLE = true;
     private static final int SHORT_RECORDS = 4;
-    private static final List<Integer> SHORT_ORDER = new ArrayList<Integer>(SHORT_RECORDS);
-    /** 5 (~2600 bytes) fits nicely in 3 tunnel messages */
+    /** 5 records (~2600 bytes) fit well within 3 tunnel messages */
     private static final int MEDIUM_RECORDS = 5;
-    private static final List<Integer> MEDIUM_ORDER = new ArrayList<Integer>(MEDIUM_RECORDS);
+
+    // --- Static immutable order lists for randomized record placement ---
+    private static final List<Integer> ORDER;
+    private static final List<Integer> SHORT_ORDER;
+    private static final List<Integer> MEDIUM_ORDER;
+
     static {
-        for (int i = 0; i < TunnelBuildMessage.MAX_RECORD_COUNT; i++) {ORDER.add(Integer.valueOf(i));}
-        for (int i = 0; i < SHORT_RECORDS; i++) {SHORT_ORDER.add(Integer.valueOf(i));}
-        for (int i = 0; i < MEDIUM_RECORDS; i++) {MEDIUM_ORDER.add(Integer.valueOf(i));}
+        // Now SAFE to reference SHORT_RECORDS and MEDIUM_RECORDS
+        List<Integer> order = new ArrayList<>(TunnelBuildMessage.MAX_RECORD_COUNT);
+        for (int i = 0; i < TunnelBuildMessage.MAX_RECORD_COUNT; i++) {
+            order.add(i);
+        }
+        ORDER = Collections.unmodifiableList(order);
+
+        List<Integer> shortOrder = new ArrayList<>(SHORT_RECORDS);
+        for (int i = 0; i < SHORT_RECORDS; i++) {
+            shortOrder.add(i);
+        }
+        SHORT_ORDER = Collections.unmodifiableList(shortOrder);
+
+        List<Integer> mediumOrder = new ArrayList<>(MEDIUM_RECORDS);
+        for (int i = 0; i < MEDIUM_RECORDS; i++) {
+            mediumOrder.add(i);
+        }
+        MEDIUM_ORDER = Collections.unmodifiableList(mediumOrder);
     }
 
     private static final int PRIORITY = OutNetMessage.PRIORITY_MY_BUILD_REQUEST;
 
     /**
-     *  At 10 seconds, we were receiving about 20% of replies after expiration
-     *  Todo: make this variable on a per-request basis, to account for tunnel length,
-     *  expl. vs. client, uptime, and network conditions.
-     *  Put the expiration in the PTCC.
-     *
-     *  Also, we now save the PTCC even after expiration for an extended time,
-     *  so can we use a successfully built tunnel anyway.
-     *
+     * Timeout for waiting for a full tunnel build reply.
+     * Increased on slow devices.
      */
-    static final int REQUEST_TIMEOUT = SystemVersion.isSlow() ? 18*1000 : 15*1000;
+    static final int REQUEST_TIMEOUT = SystemVersion.isSlow() ? 14_000 : 12_000;
 
-    /** make this shorter than REQUEST_TIMEOUT */
-    private static final int FIRST_HOP_TIMEOUT = SystemVersion.isSlow() ? 12*1000 : 10*1000;
+    /**
+     * Shorter timeout for the first hop of an outbound build,
+     * to trigger early failure detection.
+     */
+    private static final int FIRST_HOP_TIMEOUT = SystemVersion.isSlow() ? 10_000 : 8_000;
 
-    /** some randomization is added on to this */
-    private static final int BUILD_MSG_TIMEOUT = 40*1000;
+    /**
+     * Base expiration for the TunnelBuildMessage itself.
+     * Randomized per-message to obscure tunnel length.
+     */
+    private static final int BUILD_MSG_TIMEOUT = 40_000;
 
     private static final int MAX_CONSECUTIVE_CLIENT_BUILD_FAILS = 8;
 
-    // following for proposal 168
+    // Proposal 168 bandwidth property keys
     static final String PROP_MIN_BW = "m";
     static final String PROP_REQ_BW = "r";
     static final String PROP_MAX_BW = "l";
     static final String PROP_AVAIL_BW = "b";
 
     /**
-     *  "paired tunnels" means using a client's own inbound tunnel to receive the
-     *  reply for an outbound build request, and using a client's own outbound tunnel
-     *  to send an inbound build request.
-     *  This is more secure than using the router's exploratory tunnels, as it
-     *  makes correlation of multiple clients more difficult.
-     *  @return true always
+     * Paired tunnels are always used for client tunnels to prevent correlation
+     * between different clients or tunnel pools.
+     *
+     * <p>Historically this was configurable via {@code router.usePairedTunnels},
+     * but it is now permanently enabled for security reasons.
+     *
+     * @return {@code true} always
      */
-    private static boolean usePairedTunnels(RouterContext ctx) {
+    private static boolean usePairedTunnels() {
         return true;
-        //return ctx.getBooleanPropertyDefaultTrue("router.usePairedTunnels");
     }
 
-    /** new style requests need to fill in the tunnel IDs before hand */
+    /**
+     * Assigns tunnel IDs to each hop in the configuration.
+     * For zero-hop tunnels, dummy IDs are assigned to maintain consistency.
+     *
+     * @param ctx router context
+     * @param cfg tunnel configuration to prepare
+     */
     private static void prepare(RouterContext ctx, PooledTunnelCreatorConfig cfg) {
         int len = cfg.getLength();
         boolean isIB = cfg.isInbound();
         for (int i = 0; i < len; i++) {
             HopConfig hop = cfg.getConfig(i);
-            if ( (!isIB) && (i == 0) ) {
-                // outbound gateway (us) doesn't receive on a tunnel id
-                if (len <= 1)  { // zero hop, pretend to have a send id
+            if (!isIB && i == 0) {
+                // Outbound gateway (us) doesn't receive on a tunnel ID
+                if (len <= 1) {
                     TunnelId id = ctx.tunnelDispatcher().getNewOBGWID();
                     hop.setSendTunnelId(id);
                 }
             } else {
                 TunnelId id;
-                if (isIB && len == 1) {id = ctx.tunnelDispatcher().getNewIBZeroHopID();}
-                else if (isIB && i == len - 1) {id = ctx.tunnelDispatcher().getNewIBEPID();}
-                else {id = new TunnelId(1 + ctx.random().nextLong(TunnelId.MAX_ID_VALUE));}
+                if (isIB && len == 1) {
+                    id = ctx.tunnelDispatcher().getNewIBZeroHopID();
+                } else if (isIB && i == len - 1) {
+                    id = ctx.tunnelDispatcher().getNewIBEPID();
+                } else {
+                    id = new TunnelId(1 + ctx.random().nextLong(TunnelId.MAX_ID_VALUE));
+                }
                 hop.setReceiveTunnelId(id);
             }
-            if (i > 0) {cfg.getConfig(i-1).setSendTunnelId(hop.getReceiveTunnelId());}
+            if (i > 0) {
+                cfg.getConfig(i - 1).setSendTunnelId(hop.getReceiveTunnelId());
+            }
         }
     }
 
     /**
-     *  Send out a build request message.
+     * Initiates a tunnel build request.
      *
-     *  @param cfg ReplyMessageId must be set
-     *  @return success
+     * @param ctx   router context
+     * @param cfg   tunnel configuration (must have ReplyMessageId set)
+     * @param exec  executor to notify on completion
+     * @return {@code true} if request was successfully dispatched
      */
     public static boolean request(RouterContext ctx, PooledTunnelCreatorConfig cfg, BuildExecutor exec) {
-        // new style crypto fills in all the blanks, while the old style waits for replies to fill in the next hop, etc
         prepare(ctx, cfg);
 
         if (cfg.getLength() <= 1) {
@@ -133,372 +179,378 @@ abstract class BuildRequestor {
         }
 
         Log log = ctx.logManager().getLog(BuildRequestor.class);
-        final TunnelPool pool = cfg.getTunnelPool();
-        final TunnelPoolSettings settings = pool.getSettings();
-
-        TunnelInfo pairedTunnel = null;
-        Hash farEnd = cfg.getFarEnd();
-        TunnelManagerFacade mgr = ctx.tunnelManager();
+        TunnelPool pool = cfg.getTunnelPool();
+        TunnelPoolSettings settings = pool.getSettings();
         boolean isInbound = settings.isInbound();
-        // OB only, short record only
-        SessionKeyManager replySKM = null;
-        if (settings.isExploratory() || !usePairedTunnels(ctx)) {
-            if (isInbound) {pairedTunnel = mgr.selectOutboundExploratoryTunnel(farEnd);}
-            else {
-                pairedTunnel = mgr.selectInboundExploratoryTunnel(farEnd);
-                if (pairedTunnel != null) {replySKM = ctx.sessionKeyManager();}
-            }
-        } else {
-            // building a client tunnel
-            int fails = pool.getConsecutiveBuildTimeouts();
-            if (fails < MAX_CONSECUTIVE_CLIENT_BUILD_FAILS) {
-                Hash from = settings.getDestination();
-                if (isInbound) {pairedTunnel = mgr.selectOutboundTunnel(from, farEnd);}
-                else {pairedTunnel = mgr.selectInboundTunnel(from, farEnd);}
-                if (pairedTunnel != null) {
-                    replySKM = ctx.clientManager().getClientSessionKeyManager(from);
-                    // no client SKM, fall back to expl.
-                    if (replySKM == null && cfg.getGarlicReplyKeys() != null) {pairedTunnel = null;}
-                }
-            } else {
-                // Force using an expl. tunnel as the paired tunnel
-                // This prevents us from being stuck for 10 minutes if the client pool
-                // has exactly one tunnel in the other direction and it's bad
-                if (log.shouldWarn()) {
-                    log.warn(fails + " consecutive build timeouts for " + cfg + " -> Using Exploratory tunnel...");
-                }
-            }
-            if (pairedTunnel == null) {
-                if (isInbound) {
-                    // random more reliable than closest ??
-                    //pairedTunnel = mgr.selectOutboundExploratoryTunnel(farEnd);
-                    pairedTunnel = mgr.selectOutboundTunnel();
-                    if (pairedTunnel != null && pairedTunnel.getLength() <= 1 &&
-                        mgr.getOutboundSettings().getLength() > 0 &&
-                        mgr.getOutboundSettings().getLength() + mgr.getOutboundSettings().getLengthVariance() > 0) {
-                        // don't build using a zero or 1 hop expl. as it is both very bad for anonomyity,
-                        // and it takes a build slot away from exploratory
-                        pairedTunnel = null;
-                    }
-                } else {
-                    // random more reliable than closest ??
-                    //pairedTunnel = mgr.selectInboundExploratoryTunnel(farEnd);
-                    pairedTunnel = mgr.selectInboundTunnel();
-                    if (pairedTunnel != null &&
-                        pairedTunnel.getLength() <= 1 &&
-                        mgr.getInboundSettings().getLength() > 0 &&
-                        mgr.getInboundSettings().getLength() + mgr.getInboundSettings().getLengthVariance() > 0) {
-                        // ditto
-                        pairedTunnel = null;
-                    }
-                    if (pairedTunnel != null) {replySKM = ctx.sessionKeyManager();}
-                }
-                if (pairedTunnel != null && log.shouldInfo()) {
-                    log.info("Can't find a paired tunnel -> Using Exploratory tunnel instead for: " + cfg);
-                }
-            }
-        }
+        TunnelManagerFacade mgr = ctx.tunnelManager();
+
+        TunnelInfo pairedTunnel = selectPairedTunnel(ctx, pool, cfg, exec, log);
         if (pairedTunnel == null) {
-            if (log.shouldWarn()) {log.warn("Tunnel build failed -> Can't find a paired tunnel for " + cfg);}
+            // No tunnel available — not even exploratory. This is severe.
+            log.warn("Tunnel build failed: No paired or exploratory tunnel available for " + cfg);
             exec.buildComplete(cfg, OTHER_FAILURE);
-            // Not even an exploratory tunnel? We are in big trouble.
-            // Let's not spin through here too fast.
-            // But don't let a client tunnel waiting for exploratories slow things down too much,
-            // as there may be other tunnel pools who can build
-            int ms = settings.isExploratory() ? 200 : 30;
-            try {Thread.sleep(ms);}
-            catch (InterruptedException ie) {}
+            // Do NOT sleep here — avoid blocking job threads.
+            // Let the executor or pool handle backoff.
             return false;
         }
 
         I2NPMessage msg = createTunnelBuildMessage(ctx, pool, cfg, pairedTunnel, exec);
         if (msg == null) {
-            if (log.shouldWarn()) {log.warn("Tunnel build failed -> Can't create the TunnelBuildMessage " + cfg);}
+            log.warn("Tunnel build failed: Could not create TunnelBuildMessage for " + cfg);
             exec.buildComplete(cfg, OTHER_FAILURE);
             return false;
         }
 
-        // store the ID of the paired GW so we can credit/blame the paired tunnel,
-        // see TunnelPool.updatePairedProfile()
+        // Store paired gateway ID for profiling
         if (pairedTunnel.getLength() > 1) {
-            TunnelId gw = pairedTunnel.isInbound() ?
-                          pairedTunnel.getReceiveTunnelId(0) :
-                          pairedTunnel.getSendTunnelId(0);
+            TunnelId gw = pairedTunnel.isInbound()
+                ? pairedTunnel.getReceiveTunnelId(0)
+                : pairedTunnel.getSendTunnelId(0);
             cfg.setPairedGW(gw);
         }
 
-        if (cfg.isInbound()) {
-            Hash ibgw = cfg.getPeer(0);
-            // don't wrap if IBGW == OBEP
-            if (msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE && !ibgw.equals(pairedTunnel.getEndpoint())) {
-                // STBM is garlic encrypted to the IBGW, to hide it from the OBEP
-                RouterInfo peer = ctx.netDb().lookupRouterInfoLocally(ibgw);
-                if (peer != null) {
-                    I2NPMessage enc = MessageWrapper.wrap(ctx, msg, peer);
-                    if (enc != null) {msg = enc;}
-                    else if (log.shouldWarn()) {log.warn("Failed to wrap Inbound TunnelBuildMessage to " + ibgw);}
-                } else {
-                    if (log.shouldWarn()) {
-                        log.warn("No RouterInfo, failed to wrap Inbound TunnelBuildMessage to " + ibgw);
-                    }
-                }
-            }
-
-            if (log.shouldInfo()) {
-                log.info("Sending TunnelBuildRequest [MsgID " + msg.getUniqueId() + "] via " + pairedTunnel + "\n* To ["
-                          + ibgw.toBase64().substring(0,6) + "] for " + cfg + "\n* Waiting for reply of [ReplyMsgId "
-                          + cfg.getReplyMessageId() + "]...");
-            }
-            // send it out a tunnel targeting the first hop
-            // TODO - would be nice to have a TunnelBuildFirstHopFailJob queued if the
-            // pairedTunnel is zero-hop, but no way to do that?
-            ctx.tunnelDispatcher().dispatchOutbound(msg, pairedTunnel.getSendTunnelId(0), ibgw);
+        if (isInbound) {
+            handleInboundBuild(ctx, cfg, pairedTunnel, msg, log);
         } else {
-            if (log.shouldInfo()) {
-                log.info("Sending TunnelBuildRequest direct to [" + cfg.getPeer(1).toBase64().substring(0,6) + "] for " + cfg +
-                         "\n* Waiting for reply of [ReplyMsgId" + cfg.getReplyMessageId() + "] via " + pairedTunnel +
-                         " with [MsgID " + msg.getUniqueId() + "]");
-            }
-            // send it directly to the first hop
-            // Add some fuzz to the TBM expiration to make it harder to guess how many hops
-            // or placement in the tunnel
-            msg.setMessageExpiration(ctx.clock().now() + BUILD_MSG_TIMEOUT + ctx.random().nextLong(15*1000) + ctx.random().nextInt(5*1000));
-            // We set the OutNetMessage expiration much shorter, so that the
-            // TunnelBuildFirstHopFailJob fires before the 13s build expiration.
-            RouterInfo peer = ctx.netDb().lookupRouterInfoLocally(cfg.getPeer(1));
-            if (peer == null) {
-                if (log.shouldWarn()) {log.warn("Failed to find next hop to send Outbound request to -> " + cfg);}
-                exec.buildComplete(cfg, OTHER_FAILURE);
-                return false;
-            }
-            OutNetMessage outMsg = new OutNetMessage(ctx, msg, ctx.clock().now() + FIRST_HOP_TIMEOUT, PRIORITY, peer);
-            outMsg.setOnFailedSendJob(new TunnelBuildFirstHopFailJob(ctx, cfg, exec));
-            OneTimeSession ots = cfg.getGarlicReplyKeys();
-            if (ots != null && replySKM != null) {
-                if (replySKM instanceof RatchetSKM) {
-                    RatchetSKM rskm = (RatchetSKM) replySKM;
-                    rskm.tagsReceived(ots.key, ots.rtag, 2 * BUILD_MSG_TIMEOUT);
-                } else if (replySKM instanceof MuxedSKM) {
-                    MuxedSKM mskm = (MuxedSKM) replySKM;
-                    mskm.tagsReceived(ots.key, ots.rtag, 2 * BUILD_MSG_TIMEOUT);
-                } else if (replySKM instanceof MuxedPQSKM) {
-                    MuxedPQSKM mskm = (MuxedPQSKM) replySKM;
-                    mskm.tagsReceived(ots.key, ots.rtag, 2 * BUILD_MSG_TIMEOUT);
-                } else {
-                    // non-EC client, shouldn't happen, checked at top of createTunnelBuildMessage() below
-                    if (log.shouldWarn()) {log.warn("Unsupported SessionKeyManager for Garlic reply to: " + cfg);}
-                }
-                cfg.setGarlicReplyKeys(null);
-            }
-            try {ctx.outNetMessagePool().add(outMsg);}
-            catch (RuntimeException re) {
-                log.error("Failed sending TunnelBuildMessage", re);
-                return false;
-            }
+            handleOutboundBuild(ctx, cfg, pairedTunnel, msg, exec, log);
         }
         return true;
     }
 
     /**
-     * @since 0.9.51
+     * Selects an appropriate tunnel for sending the build reply.
+     * Prefers paired client tunnels; falls back to exploratory if needed.
      */
-    private static boolean supportsShortTBM(RouterContext ctx, Hash h) {
-        RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(h);
-        if (ri == null) {return false;}
-        if (ri.getIdentity().getPublicKey().getType() != EncType.ECIES_X25519) {return false;}
+    private static TunnelInfo selectPairedTunnel(RouterContext ctx, TunnelPool pool,
+                                                 PooledTunnelCreatorConfig cfg,
+                                                 BuildExecutor exec, Log log) {
+        TunnelPoolSettings settings = pool.getSettings();
+        boolean isInbound = settings.isInbound();
+        Hash farEnd = cfg.getFarEnd();
+        TunnelManagerFacade mgr = ctx.tunnelManager();
+
+        // Use exploratory tunnels for exploratory pools or if paired disabled (never)
+        if (settings.isExploratory() || !usePairedTunnels()) {
+            return isInbound
+                ? mgr.selectOutboundExploratoryTunnel(farEnd)
+                : mgr.selectInboundExploratoryTunnel(farEnd);
+        }
+
+        // Client tunnel: try paired first
+        int fails = pool.getConsecutiveBuildTimeouts();
+        Hash from = settings.getDestination();
+
+        if (fails < MAX_CONSECUTIVE_CLIENT_BUILD_FAILS) {
+            TunnelInfo paired = isInbound
+                ? mgr.selectOutboundTunnel(from, farEnd)
+                : mgr.selectInboundTunnel(from, farEnd);
+
+            if (paired != null) {
+                SessionKeyManager skm = ctx.clientManager().getClientSessionKeyManager(from);
+                if (skm != null || cfg.getGarlicReplyKeys() == null) {
+                    return paired;
+                }
+                // Client SKM missing but garlic reply expected → fall through to expl
+                if (log.shouldInfo()) {
+                    log.info("Client SKM unavailable for garlic reply; falling back to exploratory for " + cfg);
+                }
+            }
+        } else {
+            if (log.shouldWarn()) {
+                log.warn(fails + " consecutive build timeouts for " + cfg + " → Forcing exploratory tunnel");
+            }
+        }
+
+        // Fallback to exploratory
+        TunnelInfo expl = isInbound
+            ? selectFallbackOutboundTunnel(ctx, mgr, log)
+            : selectFallbackInboundTunnel(ctx, mgr, log);
+
+        if (expl != null && log.shouldInfo()) {
+            log.info("Using exploratory tunnel as fallback for: " + cfg);
+        }
+        return expl;
+    }
+
+    private static TunnelInfo selectFallbackOutboundTunnel(RouterContext ctx, TunnelManagerFacade mgr, Log log) {
+        TunnelInfo tunnel = mgr.selectOutboundTunnel();
+        if (tunnel != null &&
+            tunnel.getLength() <= 1 &&
+            mgr.getOutboundSettings().getLength() > 0 &&
+            mgr.getOutboundSettings().getLength() + mgr.getOutboundSettings().getLengthVariance() > 0) {
+            // Avoid zero/1-hop expl tunnels for anonymity and resource fairness
+            return null;
+        }
+        return tunnel;
+    }
+
+    private static TunnelInfo selectFallbackInboundTunnel(RouterContext ctx, TunnelManagerFacade mgr, Log log) {
+        TunnelInfo tunnel = mgr.selectInboundTunnel();
+        if (tunnel != null &&
+            tunnel.getLength() <= 1 &&
+            mgr.getInboundSettings().getLength() > 0 &&
+            mgr.getInboundSettings().getLength() + mgr.getInboundSettings().getLengthVariance() > 0) {
+            return null;
+        }
+        return tunnel;
+    }
+
+    private static void handleInboundBuild(RouterContext ctx, PooledTunnelCreatorConfig cfg,
+                                           TunnelInfo pairedTunnel, I2NPMessage msg, Log log) {
+        Hash ibgw = cfg.getPeer(0);
+        // Wrap in garlic if IBGW != OBEP (to hide IBGW from OBEP)
+        if (msg.getType() == ShortTunnelBuildMessage.MESSAGE_TYPE && !ibgw.equals(pairedTunnel.getEndpoint())) {
+            RouterInfo peer = ctx.netDb().lookupRouterInfoLocally(ibgw);
+            if (peer != null) {
+                I2NPMessage enc = MessageWrapper.wrap(ctx, msg, peer);
+                if (enc != null) {
+                    msg = enc;
+                } else if (log.shouldWarn()) {
+                    log.warn("Failed to garlic-wrap inbound TunnelBuildMessage to " + ibgw);
+                }
+            } else if (log.shouldWarn()) {
+                log.warn("No RouterInfo for " + ibgw + "; cannot wrap inbound TunnelBuildMessage");
+            }
+        }
+
+        if (log.shouldInfo()) {
+            log.info("Sending inbound TunnelBuildRequest [MsgID " + msg.getUniqueId() + "] via " + pairedTunnel +
+                     " to [" + ibgw.toBase64().substring(0, 6) + "] for " + cfg +
+                     "; awaiting reply [MsgID " + cfg.getReplyMessageId() + "]");
+        }
+        ctx.tunnelDispatcher().dispatchOutbound(msg, pairedTunnel.getSendTunnelId(0), ibgw);
+    }
+
+    private static void handleOutboundBuild(RouterContext ctx, PooledTunnelCreatorConfig cfg,
+                                            TunnelInfo pairedTunnel, I2NPMessage msg,
+                                            BuildExecutor exec, Log log) {
+        Hash nextHop = cfg.getPeer(1);
+        if (log.shouldInfo()) {
+            log.info("Sending outbound TunnelBuildRequest direct to [" + nextHop.toBase64().substring(0, 6) + "] for " + cfg +
+                     "; reply via " + pairedTunnel + " [MsgID " + msg.getUniqueId() + "]");
+        }
+
+        // Add fuzz to expiration to obscure tunnel structure
+        long baseExp = ctx.clock().now() + BUILD_MSG_TIMEOUT;
+        long fuzz = ctx.random().nextLong(15_000) + ctx.random().nextInt(5_000);
+        msg.setMessageExpiration(baseExp + fuzz);
+
+        RouterInfo peer = ctx.netDb().lookupRouterInfoLocally(nextHop);
+        if (peer == null) {
+            log.warn("Next hop RouterInfo not found for outbound build: " + cfg);
+            exec.buildComplete(cfg, OTHER_FAILURE);
+            return;
+        }
+
+        OutNetMessage outMsg = new OutNetMessage(ctx, msg, ctx.clock().now() + FIRST_HOP_TIMEOUT, PRIORITY, peer);
+        outMsg.setOnFailedSendJob(new TunnelBuildFirstHopFailJob(ctx, cfg, exec));
+
+        // Register one-time reply tags
+        OneTimeSession ots = cfg.getGarlicReplyKeys();
+        if (ots != null) {
+            SessionKeyManager replySKM = ctx.clientManager().getClientSessionKeyManager(cfg.getTunnelPool().getSettings().getDestination());
+            if (replySKM == null) {
+                replySKM = ctx.sessionKeyManager(); // fallback for exploratory
+            }
+            if (replySKM != null) {
+                if (replySKM instanceof RatchetSKM) {
+                    ((RatchetSKM) replySKM).tagsReceived(ots.key, ots.rtag, 2 * BUILD_MSG_TIMEOUT);
+                } else if (replySKM instanceof MuxedSKM) {
+                    ((MuxedSKM) replySKM).tagsReceived(ots.key, ots.rtag, 2 * BUILD_MSG_TIMEOUT);
+                } else if (replySKM instanceof MuxedPQSKM) {
+                    ((MuxedPQSKM) replySKM).tagsReceived(ots.key, ots.rtag, 2 * BUILD_MSG_TIMEOUT);
+                } else {
+                    log.warn("Unsupported SessionKeyManager for garlic reply: " + replySKM.getClass());
+                }
+                cfg.setGarlicReplyKeys(null);
+            }
+        }
+
+        try {
+            ctx.outNetMessagePool().add(outMsg);
+        } catch (RuntimeException e) {
+            log.error("Failed to send TunnelBuildMessage", e);
+        }
+    }
+
+    /**
+     * Checks if a router supports ShortTunnelBuildMessage (ECIES + version >= 0.9.51).
+     */
+    private static boolean supportsShortTBM(RouterContext ctx, Hash routerHash) {
+        RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(routerHash);
+        if (ri == null) return false;
+        if (ri.getIdentity().getPublicKey().getType() != EncType.ECIES_X25519) return false;
         String v = ri.getVersion();
         return VersionComparator.comp(v, MIN_NEWTBM_VERSION) >= 0;
     }
 
     /**
-     *  If the tunnel is short enough, and everybody in the tunnel, and the
-     *  OBEP or IBGW for the paired tunnel, all support the new variable-sized tunnel build message,
-     *  then use that, otherwise the old 8-entry version.
-     *  @return null on error
+     * Creates a tunnel build message using the most efficient format supported
+     * by all hops and the local router.
+     *
+     * @return the message, or {@code null} on error
      */
     private static TunnelBuildMessage createTunnelBuildMessage(RouterContext ctx, TunnelPool pool,
                                                                PooledTunnelCreatorConfig cfg,
                                                                TunnelInfo pairedTunnel, BuildExecutor exec) {
         Log log = ctx.logManager().getLog(BuildRequestor.class);
-        long replyTunnel = 0;
-        Hash replyRouter;
+        boolean isInbound = cfg.isInbound();
+        Hash replyRouter = isInbound ? ctx.routerHash() : pairedTunnel.getPeer(0);
+        long replyTunnel = isInbound ? 0 : pairedTunnel.getReceiveTunnelId(0).getTunnelId();
+
         boolean useVariable = SEND_VARIABLE && cfg.getLength() <= MEDIUM_RECORDS;
         boolean useShortTBM = ctx.keyManager().getPublicKey().getType() == EncType.ECIES_X25519;
-        if (useShortTBM && !cfg.isInbound() && !pool.getSettings().isExploratory()) {
-            // client must be EC also to get garlic OTBRM reply
+
+        // For client outbound tunnels, ensure destination supports ECIES
+        if (useShortTBM && !isInbound && !pool.getSettings().isExploratory()) {
             LeaseSetKeys lsk = ctx.keyManager().getKeys(pool.getSettings().getDestination());
-            if (lsk != null) {
-                if (!lsk.isSupported(EncType.ECIES_X25519)) {useShortTBM = false;}
-            } else {useShortTBM = false;}
+            if (lsk == null || !lsk.isSupported(EncType.ECIES_X25519)) {
+                useShortTBM = false;
+            }
         }
 
-        if (cfg.isInbound()) {
-            //replyTunnel = 0; // as above
-            replyRouter = ctx.routerHash();
-            if (useShortTBM) {
-                // check all the tunnel peers except ourselves
-                for (int i = 0; i < cfg.getLength() - 1; i++) {
-                    // TODO remove explicit check
-                    if (!supportsShortTBM(ctx, cfg.getPeer(i))) {
-                        useShortTBM = false;
-                        break;
-                    }
+        // Validate all hops support ShortTBM if we plan to use it
+        if (useShortTBM) {
+            int start = isInbound ? 0 : 1;
+            int end = cfg.getLength() - (isInbound ? 1 : 0);
+            for (int i = start; i < end; i++) {
+                if (!supportsShortTBM(ctx, cfg.getPeer(i))) {
+                    useShortTBM = false;
+                    break;
                 }
             }
-        } else {
-            replyTunnel = pairedTunnel.getReceiveTunnelId(0).getTunnelId();
-            replyRouter = pairedTunnel.getPeer(0);
-            if (useShortTBM) {
-                // check all the tunnel peers except ourselves
-                for (int i = 1; i < cfg.getLength(); i++) {
-                    // TODO remove explicit check
-                    if (!supportsShortTBM(ctx, cfg.getPeer(i))) {
-                            useShortTBM = false;
-                            break;
-                        }
-                    }
-                }
-            }
+        }
 
-        // populate and encrypt the message
+        // Create message of appropriate type
         TunnelBuildMessage msg;
         List<Integer> order;
+        int recordCount;
+
         if (useShortTBM) {
-            int len;
             if (cfg.getLength() <= SHORT_RECORDS) {
-                len = SHORT_RECORDS;
-                order = new ArrayList<Integer>(SHORT_ORDER);
+                recordCount = SHORT_RECORDS;
+                order = new ArrayList<>(SHORT_ORDER);
             } else if (cfg.getLength() <= MEDIUM_RECORDS) {
-                len = MEDIUM_RECORDS;
-                order = new ArrayList<Integer>(MEDIUM_ORDER);
+                recordCount = MEDIUM_RECORDS;
+                order = new ArrayList<>(MEDIUM_ORDER);
             } else {
-                len = TunnelBuildMessage.MAX_RECORD_COUNT;
-                order = new ArrayList<Integer>(ORDER);
+                recordCount = TunnelBuildMessage.MAX_RECORD_COUNT;
+                order = new ArrayList<>(ORDER);
             }
-            msg = new ShortTunnelBuildMessage(ctx, len);
+            msg = new ShortTunnelBuildMessage(ctx, recordCount);
         } else if (useVariable) {
-            if (cfg.getLength() <= SHORT_RECORDS) {
-                msg = new VariableTunnelBuildMessage(ctx, SHORT_RECORDS);
-                order = new ArrayList<Integer>(SHORT_ORDER);
-            } else {
-                msg = new VariableTunnelBuildMessage(ctx, MEDIUM_RECORDS);
-                order = new ArrayList<Integer>(MEDIUM_ORDER);
-            }
+            recordCount = cfg.getLength() <= SHORT_RECORDS ? SHORT_RECORDS : MEDIUM_RECORDS;
+            msg = new VariableTunnelBuildMessage(ctx, recordCount);
+            order = new ArrayList<>(recordCount <= SHORT_RECORDS ? SHORT_ORDER : MEDIUM_ORDER);
         } else {
             msg = new TunnelBuildMessage(ctx);
-            order = new ArrayList<Integer>(ORDER);
+            order = new ArrayList<>(ORDER);
         }
 
+        // Initialize hop keys if not using ShortTBM (keys are derived in ShortTBM)
         if (!useShortTBM) {
-            int len = cfg.getLength();
-            for (int i = 0; i < len; i++) {
+            for (int i = 0; i < cfg.getLength(); i++) {
                 HopConfig hop = cfg.getConfig(i);
-                // set IV/Layer keys (formerly in TunnelPool.configureNewTunnel())
                 hop.setIVKey(ctx.keyGenerator().generateSessionKey());
                 hop.setLayerKey(ctx.keyGenerator().generateSessionKey());
-                // set the AES reply keys (formerly in prepare())
-                byte iv[] = new byte[TunnelCreatorConfig.REPLY_IV_LENGTH];
+                byte[] iv = new byte[TunnelCreatorConfig.REPLY_IV_LENGTH];
                 ctx.random().nextBytes(iv);
                 cfg.setAESReplyKeys(i, ctx.keyGenerator().generateSessionKey(), iv);
             }
-        }  // else keys are derived
+        }
 
-        Collections.shuffle(order, ctx.random()); // randomized placement within the message
+        Collections.shuffle(order, ctx.random());
         cfg.setReplyOrder(order);
 
-        if (log.shouldDebug())
-            log.debug("Build order: " + order + " for " + cfg);
+        if (log.shouldDebug()) {
+            log.debug("Build record order: " + order + " for " + cfg);
+        }
 
-        // BW properties
-        Properties props;
-        int bw = 0;
-        int variance = 0;
-        if (!useShortTBM || pool.getSettings().isExploratory()) {
-            props = EmptyProperties.INSTANCE;
-        } else {
+        // Prepare bandwidth properties (only for ShortTBM non-exploratory)
+        Properties baseProps;
+        int bw = 0, variance = 0;
+        if (useShortTBM && !pool.getSettings().isExploratory()) {
             bw = pool.getAvgBWPerTunnel();
             if (bw > 7000) {
-                props = new Properties();
+                baseProps = new Properties();
                 variance = 4 * bw / 10;
             } else {
-                props = EmptyProperties.INSTANCE;
+                baseProps = EmptyProperties.INSTANCE;
             }
+        } else {
+            baseProps = EmptyProperties.INSTANCE;
         }
 
+        // Populate records
         for (int i = 0; i < msg.getRecordCount(); i++) {
-            int hop = order.get(i).intValue();
+            int hopIndex = order.get(i);
             PublicKey key = null;
 
-            if (BuildMessageGenerator.isBlank(cfg, hop)) {} // erm, blank
-            else {
-                Hash peer = cfg.getPeer(hop);
+            if (!BuildMessageGenerator.isBlank(cfg, hopIndex)) {
+                Hash peer = cfg.getPeer(hopIndex);
                 RouterInfo peerInfo = ctx.netDb().lookupRouterInfoLocally(peer);
                 if (peerInfo == null) {
-                    if (log.shouldWarn()) {
-                        log.warn("Peer selected for hop " + i + "/" + hop + " was not found locally: "
-                                  + peer + " for " + cfg);
-                    }
+                    log.warn("Peer not found locally for hop " + hopIndex + ": " + peer + " in " + cfg);
                     return null;
-                } else {key = peerInfo.getIdentity().getPublicKey();}
-            }
-            if (log.shouldDebug()) {
-                if (key != null) {
-                    log.debug("[ReplyMsgID " + cfg.getReplyMessageId() + "] Record " + i + "/" + hop + " has key " + key);
-                } else {
-                    log.debug("[ReplyMsgID " + cfg.getReplyMessageId() + "] Record " + i + "/" + hop + " is empty");
                 }
+                key = peerInfo.getIdentity().getPublicKey();
             }
+
+            Properties props = key != null ? baseProps : EmptyProperties.INSTANCE;
             if (key != null && variance > 0) {
-                // BW properties, randomize per-hop
-                int min = bw - ctx.random().nextInt(variance);
+                // Clone to avoid mutating shared instance
+                props = new Properties(baseProps);
+                int min = Math.max(0, bw - ctx.random().nextInt(variance));
                 int req = bw + variance + ctx.random().nextInt(variance);
-                if (log.shouldWarn())
-                    log.warn("Pool: " + pool + " min: " + min + " avg: " + bw + " req: " + req);
                 props.setProperty(PROP_MIN_BW, Integer.toString(min / 1000));
                 props.setProperty(PROP_REQ_BW, Integer.toString(req / 1000));
-                // TOOO if (i == 0 && pool.getSettings().isExploratory()) set PROP_MAX_BW
+                if (log.shouldDebug()) {
+                    log.debug("BW props for hop " + hopIndex + ": min=" + min + ", req=" + req);
+                }
             }
-            Properties p = key != null ? props : EmptyProperties.INSTANCE;
-            BuildMessageGenerator.createRecord(i, hop, msg, cfg, replyRouter, replyTunnel, ctx, key, p);
+
+            BuildMessageGenerator.createRecord(i, hopIndex, msg, cfg, replyRouter, replyTunnel, ctx, key, props);
         }
+
         BuildMessageGenerator.layeredEncrypt(ctx, msg, cfg, order);
         return msg;
     }
 
     private static void buildZeroHop(RouterContext ctx, PooledTunnelCreatorConfig cfg, BuildExecutor exec) {
         Log log = ctx.logManager().getLog(BuildRequestor.class);
-        if (log.shouldDebug()) {log.debug("Build zero hop tunnel " + cfg);}
-
-        boolean ok;
-        if (cfg.isInbound()) {ok = ctx.tunnelDispatcher().joinInbound(cfg);}
-        else {ok = ctx.tunnelDispatcher().joinOutbound(cfg);}
+        if (log.shouldDebug()) {
+            log.debug("Building zero-hop tunnel: " + cfg);
+        }
+        boolean ok = cfg.isInbound()
+            ? ctx.tunnelDispatcher().joinInbound(cfg)
+            : ctx.tunnelDispatcher().joinOutbound(cfg);
         exec.buildComplete(cfg, ok ? SUCCESS : DUP_ID);
-        // can it get much easier?
     }
 
     /**
-     *  Do two important things if we can't get the build msg to the
-     *  first hop on an outbound tunnel -
-     *  - Call buildComplete() so we can get started on the next build
-     *    without waiting for the full expire time
-     *  - Blame the first hop in the profile
-     *  Most likely to happen on an exploratory tunnel, obviously.
-     *  Can't do this for inbound tunnels since the msg goes out an expl. tunnel.
+     * Job executed when the first hop of an outbound tunnel build fails to receive the request.
+     * Notifies the executor and updates peer profile.
      */
     private static class TunnelBuildFirstHopFailJob extends JobImpl {
         private final PooledTunnelCreatorConfig _cfg;
         private final BuildExecutor _exec;
-        private TunnelBuildFirstHopFailJob(RouterContext ctx, PooledTunnelCreatorConfig cfg, BuildExecutor exec) {
+
+        TunnelBuildFirstHopFailJob(RouterContext ctx, PooledTunnelCreatorConfig cfg, BuildExecutor exec) {
             super(ctx);
             _cfg = cfg;
             _exec = exec;
         }
-        public String getName() {return "Timeout OB Tunnel Build First Hop";}
+
+        @Override
+        public String getName() {
+            return "Timeout OB Tunnel Build First Hop";
+        }
+
+        @Override
         public void runJob() {
             _exec.buildComplete(_cfg, OTHER_FAILURE);
             getContext().profileManager().tunnelTimedOut(_cfg.getPeer(1));
             getContext().statManager().addRateData("tunnel.buildFailFirstHop", 1);
         }
     }
-
 }
