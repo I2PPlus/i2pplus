@@ -640,14 +640,18 @@ public class PeerState {
     int expireInboundMessages() {
         int rv = 0;
         synchronized (_outboundLock) {
-            for (Iterator<InboundMessageState> iter = _inboundMessages.values().iterator(); iter.hasNext(); ) {
-                InboundMessageState state = iter.next();
-                if (state.isExpired() || _dead) {iter.remove();}
-                else {
+            for (Iterator<Map.Entry<Long, InboundMessageState>> iter = _inboundMessages.entrySet().iterator(); iter.hasNext(); ) {
+                Map.Entry<Long, InboundMessageState> entry = iter.next();
+                InboundMessageState state = entry.getValue();
+                if (state.isExpired() || _dead) {
+                    iter.remove();
+                } else {
                     if (state.isComplete()) {
                         _log.error("Inbound message is complete, but wasn't handled inline? " + state + " with " + this);
                         iter.remove();
-                    } else {rv++;}
+                    } else {
+                        rv++;
+                    }
                 }
             }
         }
