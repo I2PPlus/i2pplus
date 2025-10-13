@@ -87,10 +87,6 @@ public class RouterConsoleRunner implements RouterApp {
         } catch (Throwable t) {
             System.err.println("WARN: I2P Jetty logging class not found, logging to wrapper log");
         }
-        // This way it doesn't try to load Slf4jLog first
-        // This causes an NPE in AbstractLifeCycle
-        // http://dev.eclipse.org/mhonarc/lists/jetty-users/msg02587.html
-        //System.setProperty("org.eclipse.jetty.util.log.class", "net.i2p.jetty.I2PLogger");
     }
 
     private final RouterContext _context;
@@ -134,9 +130,8 @@ public class RouterConsoleRunner implements RouterApp {
     /** this is for the handlers only. We will adjust for the connectors and acceptors below. */
     private static final int MIN_THREADS = 1;
     /** this is for the handlers only. We will adjust for the connectors and acceptors below. */
-//    private static final int MAX_THREADS = 24;
-    private static final int MAX_THREADS = 16;
-    private static final int MAX_IDLE_TIME = 90*1000;
+    private static final int MAX_THREADS = 4;
+    private static final int MAX_IDLE_TIME = 30*1000;
     private static final String THREAD_NAME = "RouterConsole Jetty";
     public static final String PROP_DTG_ENABLED = "desktopgui.enabled";
     static final String PROP_ALLOWED_HOSTS = "routerconsole.allowedHosts";
@@ -311,7 +306,7 @@ public class RouterConsoleRunner implements RouterApp {
         return Server.getVersion();
     }
 
-/**
+    /**
      *  Package private for ConfigServiceHandler
      *  @since 0.9.48 pulled out of startTrayApp
      */
@@ -328,7 +323,6 @@ public class RouterConsoleRunner implements RouterApp {
                             //"XFCE".equals(xdg) ||
                             "KDE".equals(xdg) ||
                             "LXDE".equals(xdg));
-//            return context.getProperty(PROP_DTG_ENABLED, dflt);
             return context.getProperty(PROP_DTG_ENABLED, false);
     }
 
@@ -349,9 +343,6 @@ public class RouterConsoleRunner implements RouterApp {
             } else {
                 // required true for jrobin to work
                 System.setProperty("java.awt.headless", "true");
-                // this check is in SysTray but do it here too
-                //if (SystemVersion.isWindows() && (!Boolean.getBoolean("systray.disable")) && (!SystemVersion.is64Bit()))
-                //    SysTray.getInstance();
             }
         } catch (Throwable t) {
             t.printStackTrace();
@@ -398,11 +389,6 @@ public class RouterConsoleRunner implements RouterApp {
                 log.logAlways(net.i2p.util.Log.WARN, s);
                 System.out.println("Warning: " + s);
             }
-            //if (isJava11) {
-            //    s = "Java 11+ support is beta, and not recommended for general use";
-            //    log.logAlways(net.i2p.util.Log.WARN, s);
-            //    System.out.println("Warning: " + s);
-            //}
         }
     }
 
@@ -456,53 +442,16 @@ public class RouterConsoleRunner implements RouterApp {
 
         // so Jetty can find WebAppConfiguration
         System.setProperty("jetty.class.path", (new File(_context.getLibDir(), "routerconsole.jar")).getPath());
-        // FIXME
-        // http://dev.eclipse.org/mhonarc/lists/jetty-users/msg03487.html
-        //_server.setGracefulShutdown(1000);
-
-        // In Jetty 6, QTP was not concurrent, so we switched to
-        // ThreadPoolExecutor with a fixed-size queue, a set maxThreads,
-        // and a RejectedExecutionPolicy of CallerRuns.
-        // Unfortunately, CallerRuns causes lockups in Jetty NIO (ticket #1395)
-        // In addition, no flavor of TPE gives us what QTP does:
-        // - TPE direct handoff (which we were using) never queues.
-        //   This doesn't provide any burst management when maxThreads is reached.
-        //   CallerRuns was an attempt to work around that.
-        // - TPE unbounded queue does not adjust the number of threads.
-        //   This doesn't provide automatic resource management.
-        // - TPE bounded queue does not add threads until the queue is full.
-        //   This doesn't provide good responsiveness to even small bursts.
-        // QTP adds threads as soon as the queue is non-empty.
-        // QTP as of Jetty 7 uses concurrent.
-        // QTP unbounded queue is the default in Jetty.
-        // So switch back to QTP with a bounded queue.
-        //
-        // ref:
-        // http://docs.oracle.com/javase/6/docs/api/java/util/concurrent/ThreadPoolExecutor.html
-        // https://wiki.eclipse.org/Jetty/Howto/High_Load
-        //
-        //try {
-        //    ThreadPool ctp = new CustomThreadPoolExecutor();
-        //    // Gone in Jetty 7
-        //    //ctp.prestartAllCoreThreads();
-        //    _server.setThreadPool(ctp);
-        //} catch (Throwable t) {
-            // class not found...
-            //System.out.println("INFO: Jetty concurrent ThreadPool unavailable, using QueuedThreadPool");
-            LinkedBlockingQueue<Runnable> lbq = new LinkedBlockingQueue<Runnable>(4*MAX_THREADS);
-            // min and max threads will be reset below
-            QueuedThreadPool qtp = new QueuedThreadPool(MAX_THREADS, MIN_THREADS, MAX_IDLE_TIME, lbq);
-            qtp.setName(THREAD_NAME);
-            qtp.setDaemon(true);
-            _server = new Server(qtp);
-        //}
-
+        LinkedBlockingQueue<Runnable> lbq = new LinkedBlockingQueue<Runnable>(4*MAX_THREADS);
+        // min and max threads will be reset below
+        QueuedThreadPool qtp = new QueuedThreadPool(MAX_THREADS, MIN_THREADS, MAX_IDLE_TIME, lbq);
+        qtp.setName(THREAD_NAME);
+        qtp.setDaemon(true);
+        _server = new Server(qtp);
         HandlerCollection hColl = new HandlerCollection();
         ContextHandlerCollection chColl = new ContextHandlerCollection();
         HostCheckHandler chCollWrapper = new HostCheckHandler(_context);
         chCollWrapper.setHandler(chColl);
-        // gone in Jetty 7
-        //_server.addHandler(hColl);
         _server.setHandler(hColl);
         hColl.addHandler(chCollWrapper);
         hColl.addHandler(new DefaultHandler());
@@ -1206,38 +1155,4 @@ public class RouterConsoleRunner implements RouterApp {
              return l.compareTo(r);
         }
     }
-
-    /**
-     * Just to set the name and set Daemon
-     * @since Jetty 6
-     */
-/*****
-    private static class CustomThreadPoolExecutor extends ExecutorThreadPool {
-        public CustomThreadPoolExecutor() {
-             super(new ThreadPoolExecutor(
-                      MIN_THREADS, MAX_THREADS, MAX_IDLE_TIME, TimeUnit.MILLISECONDS,
-                      new SynchronousQueue<Runnable>(),
-                      new CustomThreadFactory(),
-                      new ThreadPoolExecutor.CallerRunsPolicy())
-                  );
-        }
-    }
-*****/
-
-    /**
-     * Just to set the name and set Daemon
-     * @since Jetty 6
-     */
-/*****
-    private static class CustomThreadFactory implements ThreadFactory {
-
-        public Thread newThread(Runnable r) {
-            Thread rv = Executors.defaultThreadFactory().newThread(r);
-            rv.setName(THREAD_NAME);
-            rv.setDaemon(true);
-            return rv;
-        }
-    }
-*****/
-
 }
