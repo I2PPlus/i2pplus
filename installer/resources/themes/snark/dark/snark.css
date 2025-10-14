@@ -523,8 +523,8 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .thumb{width:48px;height:48px;object-fit:cover;box-shadow:0 0 0 1px #030;background:#000}
 .thumb:hover,tr:hover .thumb{box-shadow:0 0 0 1px #930;filter:none}
 #mediaContainer{margin-top:-1px}
-#mediaContainer th{padding:10px 5px 10px 30px;background:url(/i2psnark/.res/icons/film.png) no-repeat 8px center,linear-gradient(180deg,#000a00 50%,#000 50%)}
-#mediaContainer th.audio{background:url(/i2psnark/.res/icons/music.png) no-repeat 8px center,linear-gradient(180deg,#000a00 50%,#000 50%)}
+#mediaContainer th{padding:10px 5px 10px 30px;background:url(/i2psnark/.res/icons/video.svg) no-repeat 8px center,linear-gradient(180deg,#000a00 50%,#000 50%)}
+#mediaContainer th.audio{background:url(/i2psnark/.res/icons/audio.svg) no-repeat 8px center,linear-gradient(180deg,#000a00 50%,#000 50%)}
 #mediaContainer td{padding:20px 15px;text-align:center}
 #mediaContainer audio,#mediaContainer video{width:auto;max-width:100%}
 #snarkFiles table{margin-bottom:-1px}

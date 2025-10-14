@@ -323,8 +323,8 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 #enableInOrder{margin-left:0;margin-right:12px}
 #setPriority th{border-bottom:0}
 #mediaContainer{background:#f0f0ff}
-#mediaContainer th{padding:8px 5px 8px 30px;background:url(/i2psnark/.res/icons/film.png) no-repeat 8px center,linear-gradient(180deg,#fff 50%,rgb(240,240,255))}
-#mediaContainer th.audio{background:url(/i2psnark/.res/icons/music.png) no-repeat 8px center,linear-gradient(180deg,#fff 50%,rgb(240,240,255))}
+#mediaContainer th{padding:8px 5px 8px 30px;background:url(/i2psnark/.res/icons/video.svg) no-repeat 8px center,linear-gradient(180deg,#fff 50%,rgb(240,240,255))}
+#mediaContainer th.audio{background:url(/i2psnark/.res/icons/audio.svg) no-repeat 8px center,linear-gradient(180deg,#fff 50%,rgb(240,240,255))}
 #mediaContainer td{padding:20px 15px;text-align:center}
 #mediaContainer video{width:auto;max-width:calc(100% - 10px)}
 

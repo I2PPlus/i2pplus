@@ -403,8 +403,8 @@ video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-pa
 .torrentLink{padding:0;text-align:right}
 #enableInOrder{margin-left:4px;margin-right:8px}
 #linkswitch{will-change:transform}
-#mediaContainer th{padding:8px 5px 8px 30px;background:url(/i2psnark/.res/icons/video.png) no-repeat 8px center/16px,var(--th)}
-#mediaContainer th.audio{padding:8px 5px 8px 30px;background:url(/i2psnark/.res/icons/music.png) no-repeat 8px center/16px,var(--th)}
+#mediaContainer th{padding:8px 5px 8px 30px;background:url(/i2psnark/.res/icons/video.svg) no-repeat 8px center/16px,var(--th)}
+#mediaContainer th.audio{padding:8px 5px 8px 30px;background:url(/i2psnark/.res/icons/audio.svg) no-repeat 8px center/16px,var(--th)}
 #mediaContainer td{padding:15px;text-align:center;background:linear-gradient(135deg,rgba(0,0,0,.1),rgba(16,0,16,.5),rgba(16,0,16,.8),#101),linear-gradient(135deg,#0000,rgba(16,0,16,.5))}
 #mediaContainer audio,#mediaContainer video{width:auto;max-width:100%}
 #setPriority>*{vertical-align:middle}

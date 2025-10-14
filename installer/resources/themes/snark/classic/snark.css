@@ -366,8 +366,8 @@ audio::-webkit-media-controls-enclosure{border-radius:0;filter:invert(1)}
 video::-webkit-media-controls-panel{display:none}
 video:hover::-webkit-media-controls-panel,video:focus::-webkit-media-controls-panel{display:flex}
 .newTab{margin:3px 4px -2px;float:right}
-#mediaContainer th{background:url(/i2psnark/.res/icons/film.png) no-repeat 8px center,var(--th)}
-#mediaContainer th.audio{background:url(/i2psnark/.res/icons/music.png) no-repeat 8px center,var(--th)}
+#mediaContainer th{background:url(/i2psnark/.res/icons/video.svg) no-repeat 8px center,var(--th)}
+#mediaContainer th.audio{background:url(/i2psnark/.res/icons/audio.svg) no-repeat 8px center,var(--th)}
 #mediaContainer td{padding:15px;text-align:center}
 #mediaContainer video{width:auto;max-width:calc(100% - 20px)}
 .info_tracker{margin:0 2px;padding:1px 6px 1px 18px;display:inline-block;white-space:nowrap;max-width:155px;vertical-align:middle;overflow:hidden;text-overflow:ellipsis;color:#bbf;border-radius:1px;box-shadow:0 0 0 1px #ccf;background:var(--bg2) var(--tracker) no-repeat left 3px center/14px}

@@ -568,7 +568,7 @@ input:checked+label+hr+table,input:checked+label+hr+table+table{display:table}
 .iframed #commentInfo{margin-top:10px}
 #dirlist #commentSection #userComments{margin-top:-1px;border-top:1px solid #12111f}
 #commentInfo th{padding:2px 5px 2px 30px;background:url(images/comment.png) no-repeat 8px center,linear-gradient(180deg,#121225,#00000d)}
-#mediaContainer th{padding:10px 5px 10px 30px;background:url(/i2psnark/.res/icons/film.png) no-repeat 8px center,linear-gradient(180deg,#121225,#00000d)}
+#mediaContainer th{padding:10px 5px 10px 30px;background:url(/i2psnark/.res/icons/video.svg) no-repeat 8px center,linear-gradient(180deg,#121225,#00000d)}
 #commentInfo tr:nth-child(even),#userComments tr:nth-child(odd){background:#010010;border-bottom:var(--border_inner)}
 #commentInfo tr:nth-child(odd),#userComments tr:nth-child(even){background:#000016;border-bottom:var(--border_inner)}
 #commentInfo tr:last-child td,.iframed #commentInfo tr:last-child td{border-bottom:2px solid #113}
