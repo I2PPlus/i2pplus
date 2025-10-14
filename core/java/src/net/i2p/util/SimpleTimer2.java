@@ -476,7 +476,7 @@ public class SimpleTimer2 {
             if (time > 500 && _log.shouldWarn())
                 _log.warn(_pool + " event execution took " + time + "ms: " + this);
             else if (_log.shouldDebug())
-                _log.debug("Execution finished in " + time + "ms: " + this);
+                _log.debug("Execution finished" + (time > 0 ? " in " + time + "ms" : "") + ": " + this);
 
             // Reduce debug logging frequency to avoid overhead under load
             if (_log.shouldInfo()) {
