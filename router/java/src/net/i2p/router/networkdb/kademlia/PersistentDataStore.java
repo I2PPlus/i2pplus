@@ -168,11 +168,11 @@ public class PersistentDataStore extends TransientDataStore {
         return rv;
     }
 
-    /** How many files to write every 5 minutes. Doesn't make sense to limit it,
+    /** How many files to write every 10 minutes. Doesn't make sense to limit it,
      *  they just back up in the queue hogging memory.
      */
     private static final int WRITE_LIMIT = 10000;
-    private static final long WRITE_DELAY = 5*60*1000;
+    private static final long WRITE_DELAY = 10*60*1000;
 
     /*
      * Queue up writes, write unlimited files every 10 minutes.
@@ -211,14 +211,19 @@ public class PersistentDataStore extends TransientDataStore {
          *  @since 0.9.50 was in separate RemoveJob
          */
         private void removeQueued() {
+
             if (_keysToRemove.isEmpty()) {return;}
+            int toRemove = 0;
             for (Iterator<Hash> iter = _keysToRemove.iterator(); iter.hasNext(); ) {
                 Hash key = iter.next();
                 iter.remove();
-                try {removeFile(key, _dbDir);}
-                catch (IOException ioe) {
-                    if (_log.shouldWarn()) {
-                        _log.warn("Error removing key " + key, ioe);
+                toRemove++;
+                if (toRemove < 50) {
+                    try {removeFile(key, _dbDir);}
+                    catch (IOException ioe) {
+                        if (_log.shouldWarn()) {
+                            _log.warn("Error removing key " + key, ioe);
+                        }
                     }
                 }
             }
