@@ -25,6 +25,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     private final KademliaNetworkDatabaseFacade _facade;
     private long _lastPublished; // this is actually last attempted publish
     private final AtomicInteger failCount = new AtomicInteger(0);
+    private boolean highPriority;
 
     /**
      * Create a new RepublishLeaseSetJob for the given destination.
@@ -43,7 +44,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     /**
      * Get the name of this job.
      */
-    public String getName() {return "Republish Local LeaseSet";}
+    public String getName() {return "Republish Local LeaseSet" + (highPriority ? " [High priority]" : "");}
 
     /**
      * Main job logic: checks if the LeaseSet should be republished and publishes it if necessary.
@@ -102,12 +103,12 @@ public class RepublishLeaseSetJob extends JobImpl {
         String name = !tunnelName.isEmpty() ? "\'" + tunnelName + "\'" + " [" + b32 + "]" : "[" + b32 + "]";
         String countStr = count > 1 ? " (Attempt: " + count + ")" : "";
         if (_log.shouldWarn()) {
-            _log.warn("Failed to publish LeaseSet for " + name + " -> Retrying..." + countStr);
+            _log.warn("Failed to publish LeaseSet for " + name + " -> Retrying..." + countStr + (highPriority ? " [High priority]" : ""));
         }
         getContext().statManager().addRateData("netDb.republishLeaseSetFail", 1);
         getContext().jobQueue().removeJob(this);
         // For first failure, add normally, after 2+ failures, add to top
-        boolean highPriority = count >= 2;
+        highPriority = count >= 2;
         requeue(RETRY_DELAY, highPriority);
     }
 
