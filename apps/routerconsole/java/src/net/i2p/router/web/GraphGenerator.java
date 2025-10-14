@@ -5,12 +5,15 @@ import java.io.FileFilter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collections;
-import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.Semaphore;
 
 import org.rrd4j.core.RrdBackendFactory;
 import org.rrd4j.core.RrdNioBackendFactory;
@@ -51,7 +54,7 @@ public class GraphGenerator implements Runnable, ClientApp {
                                                   Math.max(12, cores);
     private final Semaphore _sem;
     private volatile boolean _isRunning;
-    private volatile Thread _thread;
+    private ScheduledExecutorService _scheduler;
     private static final String NAME = "GraphGenerator";
 
     public GraphGenerator(RouterContext ctx) {
@@ -112,18 +115,47 @@ public class GraphGenerator implements Runnable, ClientApp {
             deleteOldRRDs();
         }
         RrdNioBackendFactory.setSyncPoolSize(syncThreads);
-        _thread = Thread.currentThread();
         _context.clientAppManager().register(this);
-        String specs = "";
+        _scheduler = Executors.newSingleThreadScheduledExecutor(r -> {
+            Thread t = new Thread(r, "StatWriter");
+            t.setDaemon(true);
+            t.setPriority(Thread.MIN_PRIORITY);
+            return t;
+        });
+
+        final String[] specsHolder = {""};
         try {
-            while (_isRunning && _context.router().isAlive()) {
-                specs = adjustDatabases(specs);
-                try {Thread.sleep(60*1000);}
-                catch (InterruptedException ie) {break;}
+            _scheduler.scheduleAtFixedRate(() -> {
+                try {
+                    if (!_isRunning || !_context.router().isAlive()) {
+                        stop();
+                        return;
+                    }
+                    specsHolder[0] = adjustDatabases(specsHolder[0]);
+                } catch (Exception e) {
+                    _log.error("Failed to sync RRD4J stats to disk", e);
+                }
+            }, 0, 90, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            _log.error("Failed to sync RRD4J stats to disk", e);
+        }
+    }
+
+    public synchronized void stop() {
+        _isRunning = false;
+        _context.clientAppManager().unregister(this);
+        if (_scheduler != null) {
+            _scheduler.shutdown(); // Disable new tasks, let running finish
+            try {
+                if (!_scheduler.awaitTermination(10, TimeUnit.SECONDS)) {
+                    _scheduler.shutdownNow(); // Force if not terminated in time
+                    _scheduler.awaitTermination(5, TimeUnit.SECONDS);
+                }
+            } catch (InterruptedException e) {
+                _scheduler.shutdownNow();
+                Thread.currentThread().interrupt();
             }
-        } finally {
-            _isRunning = false;
-            _context.clientAppManager().unregister(this);
+            _scheduler = null;
         }
     }
 
@@ -150,8 +182,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     synchronized void setDisabled() {
         if (_isRunning) {
             _isRunning = false;
-            Thread t = _thread;
-            if (t != null) {t.interrupt();}
+            stop();
         }
     }
 
@@ -176,7 +207,7 @@ public class GraphGenerator implements Runnable, ClientApp {
     public String getName() {return NAME;}
 
     /** @since 0.9.38 */
-    public String getDisplayName() {return "Console Graph Generator";}
+    public String getDisplayName() {return "I2P+ Graph Generator";}
 
     /////// End ClientApp methods
 
@@ -432,6 +463,7 @@ public class GraphGenerator implements Runnable, ClientApp {
             setDisabled();
             for (GraphListener lsnr : _listeners) {lsnr.stopListening();} // FIXME could cause exceptions if rendering?
             _listeners.clear();
+            stop();
             // Stops the sync thread pool in NIO; noop if not persistent, we set num threads to zero in run() above
             try {RrdBackendFactory.getDefaultFactory().close();}
             catch (IOException ioe) {}
