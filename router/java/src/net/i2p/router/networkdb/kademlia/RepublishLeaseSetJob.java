@@ -20,7 +20,7 @@ import net.i2p.util.Log;
 public class RepublishLeaseSetJob extends JobImpl {
     private final Log _log;
     public final static long REPUBLISH_LEASESET_TIMEOUT = 15 * 1000;
-    private final static int RETRY_DELAY = 500;
+    private final static int RETRY_DELAY = 1000;
     private final Hash _dest;
     private final KademliaNetworkDatabaseFacade _facade;
     private long _lastPublished; // this is actually last attempted publish
@@ -90,21 +90,25 @@ public class RepublishLeaseSetJob extends JobImpl {
 
     /**
      * Requeues this job to retry the republish attempt.
-     * Uses high priority to ensure faster retry on failure.
+     * Adds the job normally on the first failure to avoid aggressive retries,
+     * and uses high priority to enqueue the job at the front of the queue
+     * starting from the second consecutive failure to enable faster retries.
      */
     void requeueRepublish() {
-        failCount.incrementAndGet();
+        int count = failCount.incrementAndGet();
         LeaseSet ls = getContext().clientManager().isLocal(_dest) ? _facade.lookupLeaseSetLocally(_dest) : null;
         String b32 = _dest.toBase32().substring(0,8);
         String tunnelName = ls != null ? getTunnelName(ls.getDestination()) : "";
         String name = !tunnelName.isEmpty() ? "\'" + tunnelName + "\'" + " [" + b32 + "]" : "[" + b32 + "]";
-        String count = failCount.get() > 1 ? " (Attempt: " + failCount.get() + ")" : "";
+        String countStr = count > 1 ? " (Attempt: " + count + ")" : "";
         if (_log.shouldWarn()) {
-            _log.warn("Failed to publish LeaseSet for " + name + " -> Retrying..." + count);
+            _log.warn("Failed to publish LeaseSet for " + name + " -> Retrying..." + countStr);
         }
         getContext().statManager().addRateData("netDb.republishLeaseSetFail", 1);
         getContext().jobQueue().removeJob(this);
-        requeue(RETRY_DELAY, true); // Prioritized requeue
+        // For first failure, add normally, after 2+ failures, add to top
+        boolean highPriority = count >= 2;
+        requeue(RETRY_DELAY, highPriority);
     }
 
     /**
