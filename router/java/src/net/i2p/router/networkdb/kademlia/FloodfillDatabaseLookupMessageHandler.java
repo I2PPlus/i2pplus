@@ -90,7 +90,10 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         final boolean isRISearch = type == DatabaseLookupMessage.Type.RI;
         final int keyLength = isRISearch ? 6 : 8;
         final boolean isDirect = dlm.getReplyTunnel() == null;
-        final boolean isBanned = dlm.getFrom() != null && _context.banlist().isBanlisted(dlm.getFrom());
+        final boolean isBanned = dlm.getFrom() != null &&
+            (_context.banlist().isBanlisted(dlm.getFrom()) ||
+             _context.banlist().isBanlistedHostile(dlm.getFrom()) ||
+             _context.banlist().isBanlistedForever(dlm.getFrom()));
 
         RouterInfo info = (RouterInfo) _context.netDb().lookupLocally(dlm.getFrom());
         final String caps = info != null ? info.getCapabilities() : "";

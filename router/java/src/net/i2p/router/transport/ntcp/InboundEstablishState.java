@@ -680,7 +680,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         boolean ok = verifyInbound(h);
         if (!ok) {throw new DataFormatException("NTCP2 verifyInbound() fail");}
 
-        boolean isBanned = _context.banlist().isBanlisted(h);
+        boolean isBanned = _context.banlist().isBanlisted(h) ||
+                           _context.banlist().isBanlistedHostile(h) ||
+                           _context.banlist().isBanlistedForever(h);
 
         // s is verified, we may now ban the hash
         if (mismatchMessage != null) {

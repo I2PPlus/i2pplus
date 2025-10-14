@@ -309,7 +309,10 @@ class EstablishmentManager {
         RouterIdentity toIdentity = toRouterInfo.getIdentity();
         Hash toHash = toIdentity.calculateHash();
         int id = toRouterInfo.getNetworkId();
-        boolean isBanned = toHash != null && _context.banlist().isBanlisted(toHash);
+        boolean isBanned = toHash != null &&
+            (_context.banlist().isBanlisted(toHash) ||
+             _context.banlist().isBanlistedHostile(toHash) ||
+             _context.banlist().isBanlistedForever(toHash));
         long now = _context.clock().now();
         String truncHash = toHash != null ? toHash.toBase64().substring(0,6) : "";
         if (id != _networkID) {
@@ -658,7 +661,10 @@ class EstablishmentManager {
         Hash fromHash = host.getPeerHash();
         boolean hasIP = fromIP != null;
         boolean isBlocklisted = hasIP && _context.blocklist().isBlocklisted(fromIP);
-        boolean isBanned = fromHash != null && _context.banlist().isBanlisted(fromHash);
+        boolean isBanned = fromHash != null &&
+            (_context.banlist().isBanlisted(fromHash) ||
+             _context.banlist().isBanlistedHostile(fromHash) ||
+             _context.banlist().isBanlistedForever(fromHash));
         String truncHash = fromHash != null ? fromHash.toBase64().substring(0,6) : "";
         if (!TransportUtil.isValidPort(from.getPort()) || !_transport.isValid(fromIP)) {
             if (_log.shouldWarn()) {

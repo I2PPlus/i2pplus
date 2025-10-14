@@ -35,7 +35,7 @@ class TunnelParticipant {
     private static final long LONG_MAX_LOOKUP_TIME = 25*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_PARTICIPATING;
     /** @since 0.9.68 from BuildHandler */
-    static final int DEFAULT_BW_PER_TUNNEL_ESTIMATE = RouterThrottleImpl.DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE * 1024 / (10*60);
+    static final int DEFAULT_BW_PER_TUNNEL_ESTIMATE = RouterThrottleImpl.DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE * 2048 / (10*60);
 
     /** not an inbound endpoint */
     public TunnelParticipant(RouterContext ctx, HopConfig config, HopProcessor processor) {

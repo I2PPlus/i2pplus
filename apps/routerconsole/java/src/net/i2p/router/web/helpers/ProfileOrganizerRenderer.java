@@ -366,7 +366,7 @@ class ProfileOrganizerRenderer {
                 Hash peer = prof.getPeer();
                 DBHistory dbh = prof.getDBHistory();
                 RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
-                boolean isBanned = _context.banlist().isBanlisted(peer);
+                boolean isBanned = _context.banlist().isBanlisted(peer) || _context.banlist().isBanlistedHostile(peer);
                 boolean isUnreachable = info != null && info.getCapabilities().indexOf('U') >= 0;
                 boolean isFF = info != null && info.getCapabilities().indexOf('f') >= 0;
                 int displayed = 0;

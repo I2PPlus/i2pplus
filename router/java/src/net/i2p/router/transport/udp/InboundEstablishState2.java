@@ -379,7 +379,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      */
     private void validateRouterInfo(RouterInfo ri, RouterAddress ra, String mismatchMessage) throws RIException {
         Hash h = _receivedUnconfirmedIdentity.calculateHash();
-        boolean isBanned = _context.banlist().isBanlisted(h);
+        boolean isBanned = _context.banlist().isBanlisted(h) ||
+                           _context.banlist().isBanlistedHostile(h) ||
+                           _context.banlist().isBanlistedForever(h);
 
         if (isBanned) {
             if (ri.verifySignature()) {

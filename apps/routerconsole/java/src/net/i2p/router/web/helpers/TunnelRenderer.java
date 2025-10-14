@@ -384,7 +384,9 @@ class TunnelRenderer {
 
                 String version = (info != null) ? info.getOption("router.version") : null;
                 ReverseLookupResult rlResult = getReverseLookupInfo(h, info, uptime);
-                boolean isBanned = _context.banlist().isBanlisted(h);
+                boolean isBanned = _context.banlist().isBanlisted(h) ||
+                                   _context.banlist().isBanlisted(h) ||
+                                   _context.banlist().isBanlistedHostile(h);
 
                 sb.append("<tr class=lazy><td>")
                   .append(peerFlag(h))

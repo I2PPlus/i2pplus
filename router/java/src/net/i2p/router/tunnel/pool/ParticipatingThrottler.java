@@ -87,7 +87,12 @@ class ParticipatingThrottler {
         boolean shouldThrottle = context.getProperty(PROP_SHOULD_THROTTLE, DEFAULT_SHOULD_THROTTLE);
         boolean shouldDisconnect = context.getProperty(PROP_SHOULD_DISCONNECT, DEFAULT_SHOULD_DISCONNECT);
         boolean shouldBlockOldRouters = context.getProperty(PROP_BLOCK_OLD_ROUTERS, DEFAULT_BLOCK_OLD_ROUTERS);
-        boolean isBanned = context.banlist().isBanlisted(h);
+        boolean isBanned = context.banlist().isBanlisted(h) ||
+                           context.banlist().isBanlistedHostile(h) ||
+                           context.banlist().isBanlistedForever(h);
+
+        if (!isUs && isBanned) {return Result.DROP;} // return early if router's already banned
+
         String version = ri != null ? ri.getVersion() : "";
 
         if (version.equals("0") || version.equals("")) {
