@@ -4362,18 +4362,24 @@ public class I2PSnarkServlet extends BasicServlet {
                 String imgPath = isStandalone() ? "/i2psnark/.res/icons/" : "/themes/console/images/";
                 String newTab = "<img src=" + imgPath + "newtab.svg width=16 height=auto class=newTab>";
                 if (isAudio || isVideo) {
-                    buf.append("<div class=mainsection id=media>\n").append("<table id=mediaContainer>\n<tr>");
+                    buf.append("<div class=mainsection id=media>\n<table id=mediaContainer>\n<tr>");
                     // HTML5
                     if (isAudio) {
-                        buf.append("<th class=audio>").append(_t("Audio file: "))
-                           .append(DataHelper.escapeHTML(tName)).append("<a href=\"").append(path)
-                           .append("\" title=\"Open in new tab\" target=_blank>").append(newTab)
-                           .append("</a>").append("</th></tr>\n<tr><td>").append("<audio controls>");
+                        buf.append("<th class=audio>")
+                           .append(DataHelper.escapeHTML(tName))
+                           .append("<a href=\"")
+                           .append(path)
+                           .append("\" title=\"Open in new tab\" target=_blank>")
+                           .append(newTab)
+                           .append("</a></th></tr>\n<tr><td><audio controls>");
                     } else {
-                        buf.append("<th id=videoTitle class=video>").append(_t("Video file: "))
-                           .append(DataHelper.escapeHTML(tName)).append("<a href=\"").append(path)
-                           .append("\" title=\"Open in new tab\" target=_blank>").append(newTab)
-                           .append("</a>").append("</th></tr>\n<tr><td>").append("<video id=embedVideo controls>");
+                        buf.append("<th id=videoTitle class=video>")
+                           .append(DataHelper.escapeHTML(tName))
+                           .append("<a href=\"")
+                           .append(path)
+                           .append("\" title=\"Open in new tab\" target=_blank>")
+                           .append(newTab)
+                           .append("</a></th></tr>\n<tr><td><video id=embedVideo controls>");
                     }
                     // strip trailing slash
                     buf.append("<source src=\"").append(path).append("\" type=\"").append(mime).append("\">");
