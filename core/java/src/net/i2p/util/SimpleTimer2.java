@@ -49,8 +49,7 @@ public class SimpleTimer2 {
         return I2PAppContext.getGlobalContext().simpleTimer2();
     }
 
-    private static final int MIN_THREADS = 1;
-    private static final int MAX_THREADS = 4;
+    private static final int THREADS = Math.max(SystemVersion.getCores() / 2, 8);
 
     private final ScheduledThreadPoolExecutor _executor;
     private final String _name;
@@ -86,7 +85,7 @@ public class SimpleTimer2 {
     protected SimpleTimer2(I2PAppContext context, String name, boolean prestartAllThreads) {
         _context = context;
         _name = name;
-        _threads = MAX_THREADS;
+        _threads = THREADS;
         _executor = new CustomScheduledThreadPoolExecutor(_threads, new CustomThreadFactory());
         if (prestartAllThreads)
             _executor.prestartAllCoreThreads();
