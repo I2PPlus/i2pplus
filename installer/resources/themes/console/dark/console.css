@@ -1150,10 +1150,10 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels #tunnelPeerCount tbody tr td.bar~td:empty{border-left:0;border-right:0}
 
 /* netdb */
+#netdboverview{margin:11px auto 13px;width:calc(100% - 8px);box-shadow:var(--border_table)}
 #netdb #netdboverview td{border-right:var(--border)}
 #netdb #netdboverview th,#netdb #netdboverview tr,#netdb #netdboverview td{line-height:1;box-shadow:none}
 #netdbcongestion a,#netdboverview a[href^="/netdb?caps"]{margin:0 10px 0 0;padding:3px;display:inline-block;vertical-align:middle;line-height:1}
-#netdboverview{margin:11px 0 9px}
 #netdboverview #netdbcongestion td,#netdboverview #netdbversions td,#netdboverview #netdbtransports td,#netdboverview #netdbcountrylist td,#netdboverview #netdbtiers td{border-right:0;border-left:0}
 #netdboverview td{background:repeating-linear-gradient(90deg,rgba(0,0,0,.5) 2px,rgba(0,16,0,.5) 4px);background-size:4px 100%}
 #netdboverview td:nth-child(2){border-left:var(--border_softer);border-right:var(--border_softer)}
