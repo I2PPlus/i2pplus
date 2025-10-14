@@ -4,40 +4,31 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 
 /**
- * A robust, high-concurrency event scheduler built on {@link ScheduledThreadPoolExecutor}.
+ * A high-concurrency event scheduler built on {@link ScheduledThreadPoolExecutor}
+ * with dynamically adjustable thread pool size.
  *
- * <p>Events are executed after a specified delay. The {@code timeReached()} method
- * <strong>must not block</strong>, or it will delay other scheduled tasks.</p>
+ * <p>Initially, the thread pool contains a single thread and can grow as workload increases,
+ * up to a maximum size defined by {@code Math.max(SystemVersion.getCores() * 4, 32)}.
+ * Threads that remain idle for more than 5 seconds are expired and removed, allowing
+ * the pool to shrink during low activity periods.
  *
- * <p>This class replaces the older {@code SimpleTimer} and supports:
- * <ul>
- *   <li>Safe cancellation and rescheduling</li>
- *   <li>Periodic events</li>
- *   <li>Fuzz-based deduplication to reduce timer churn</li>
- *   <li>Graceful shutdown via {@link I2PAppContext}</li>
- * </ul>
+ * <p>This design ensures efficient resource utilization by scaling the thread count based
+ * on workload, with quick shrinking to free resources when demand drops.
  *
- * <p><strong>Concurrency Notes:</strong>
- * <ul>
- *   <li>All scheduling operations are thread-safe.</li>
- *   <li>Rescheduling from within {@code timeReached()} is safe but should use {@link #schedule(long)}
- *       rather than {@link #reschedule(long)} to avoid races.</li>
- *   <li>Under high load (e.g., thousands of concurrent timers), this implementation avoids
- *       early aborts by using conservative rescheduling logic and state guards.</li>
- * </ul>
+ * <p>Note: The thread pool dynamically grows when queued tasks exceed active thread count,
+ * and shrinks automatically via thread timeout. Use this for workloads with intermittent
+ * bursts or high levels of timers.</p>
  *
- * <p>For simple one-off tasks without cancellation, consider {@link SimpleScheduler} instead.</p>
- *
- * @author zzz
- * @since 0.9
+ * @author zzz, modified by dr|z3d to allocate from a dynamically allocated pool
+ * @since 0.9 (modified 2025)
  */
 public class SimpleTimer2 {
 
@@ -49,12 +40,14 @@ public class SimpleTimer2 {
         return I2PAppContext.getGlobalContext().simpleTimer2();
     }
 
-    private static final int THREADS = Math.max(SystemVersion.getCores() / 2, 8);
+    private static final int MAX_THREADS = Math.max(SystemVersion.getCores() * 4, 32);
+    private static final int INITIAL_THREADS = 1;
+    private static final long THREAD_KEEP_ALIVE_SECONDS = 5;
 
     private final ScheduledThreadPoolExecutor _executor;
     private final String _name;
     private final AtomicInteger _count = new AtomicInteger();
-    private final int _threads;
+    private final int _threadsMax;
     private final I2PAppContext _context;
     private final Runnable _shutdown;
 
@@ -79,16 +72,18 @@ public class SimpleTimer2 {
      * Construct a named timer with optional prestart.
      * @param context non-null context
      * @param name thread pool name
-     * @param prestartAllThreads if true, start all core threads immediately
+     * @param prestartAllThreads if true, start all core threads immediately (ignored here)
      * @since 0.9
      */
     protected SimpleTimer2(I2PAppContext context, String name, boolean prestartAllThreads) {
         _context = context;
         _name = name;
-        _threads = THREADS;
-        _executor = new CustomScheduledThreadPoolExecutor(_threads, new CustomThreadFactory());
-        if (prestartAllThreads)
-            _executor.prestartAllCoreThreads();
+        _threadsMax = MAX_THREADS;
+        _executor = new CustomScheduledThreadPoolExecutor(INITIAL_THREADS, new CustomThreadFactory());
+        // Allow core threads to time out after inactivity so pool can shrink
+        _executor.setKeepAliveTime(THREAD_KEEP_ALIVE_SECONDS, TimeUnit.SECONDS);
+        _executor.allowCoreThreadTimeOut(true);
+        // We do not prestart all threads since we start with 1 thread and grow as needed
         _shutdown = new Shutdown();
         context.addShutdownTask(_shutdown);
     }
@@ -114,10 +109,12 @@ public class SimpleTimer2 {
         _executor.shutdownNow();
     }
 
-    private static class CustomScheduledThreadPoolExecutor extends ScheduledThreadPoolExecutor {
+    private class CustomScheduledThreadPoolExecutor extends ScheduledThreadPoolExecutor {
         public CustomScheduledThreadPoolExecutor(int threads, ThreadFactory factory) {
             super(threads, factory);
             setRemoveOnCancelPolicy(true);
+            // Set max pool size (though ScheduledThreadPoolExecutor bases worker threads on corePoolSize)
+            // We will adjust corePoolSize dynamically to grow/shrink thread count
         }
 
         @Override
@@ -127,17 +124,59 @@ public class SimpleTimer2 {
                 Log log = I2PAppContext.getGlobalContext().logManager().getLog(SimpleTimer2.class);
                 log.log(Log.CRIT, "Event borked: " + r, t);
             }
+            // Dynamically adjust thread pool size after task execution
+            adjustThreadPoolSize();
         }
     }
 
     private class CustomThreadFactory implements ThreadFactory {
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
-            rv.setName(_name + ' ' + _count.incrementAndGet() + '/' + _threads);
+            rv.setName(_name + ' ' + _count.incrementAndGet() + '/' + _threadsMax);
             rv.setDaemon(true);
             // Use normal priority to avoid starving other threads under load
-            rv.setPriority(Thread.NORM_PRIORITY);
+            rv.setPriority(Thread.NORM_PRIORITY - 2);
             return rv;
+        }
+    }
+
+    /**
+     * Dynamically adjust the thread pool size based on current workload.
+     *
+     * Logic:
+     * - If queue size grows and active thread count equals current pool size,
+     *   increase core pool size up to max.
+     * - If queue is empty and threads are idle, pool will shrink automatically due to timeout.
+     */
+    private synchronized void adjustThreadPoolSize() {
+        int active = _executor.getActiveCount();
+        int poolSize = _executor.getCorePoolSize();
+        int queueSize = _executor.getQueue().size();
+
+        // Grow pool if needed
+        if (queueSize > 0 && active >= poolSize && poolSize < _threadsMax) {
+            int newSize = Math.min(poolSize + 1, _threadsMax);
+            _executor.setCorePoolSize(newSize);
+            if (_context != null) {
+                Log log = _context.logManager().getLog(SimpleTimer2.class);
+                if (log.shouldInfo())
+                    log.info("Increased thread pool size to " + newSize + " due to workload");
+            }
+        }
+
+        // Shrink pool if possible:
+        // When there is no queued work and active threads are much less than pool size,
+        // reduce core pool size to free threads
+        else if (queueSize == 0 && active < poolSize && poolSize > INITIAL_THREADS) {
+            int newSize = Math.max(active, INITIAL_THREADS);
+            if (newSize < poolSize) {
+                _executor.setCorePoolSize(newSize);
+                if (_context != null) {
+                    Log log = _context.logManager().getLog(SimpleTimer2.class);
+                    if (log.shouldInfo())
+                        log.info("Decreased thread pool size to " + newSize + " due to low workload");
+                }
+            }
         }
     }
 
@@ -201,6 +240,8 @@ public class SimpleTimer2 {
             }
         };
     }
+
+    // Rest of class unchanged below: TimedEvent, PeriodicTimedEvent, etc.
 
     private enum TimedEventState {
         IDLE, SCHEDULED, RUNNING, CANCELLED
@@ -465,7 +506,7 @@ public class SimpleTimer2 {
         _executor.purge();
         return
             "\n* Pool: " + _name +
-            "; Active: " + _executor.getActiveCount() + '/' + _executor.getPoolSize() +
+            "; Active: " + _executor.getActiveCount() + '/' + _executor.getCorePoolSize() +
             "; Completed: " + _executor.getCompletedTaskCount() +
             "; Queued: " + _executor.getQueue().size();
     }
