@@ -46,7 +46,6 @@ import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
-
 /**
  * Write out keys to disk when we get them and periodically read ones we don't know
  * about into memory, with newly read routers are also added to the routing table.
@@ -226,6 +225,8 @@ public class PersistentDataStore extends TransientDataStore {
         }
 
         public void run() {
+            if (isShuttingDown(_context)) {return;}
+
             _quit = false;
             Hash key = null;
             DatabaseEntry data = null;
@@ -288,6 +289,8 @@ public class PersistentDataStore extends TransientDataStore {
     }
 
     private void write(Hash key, DatabaseEntry data) {
+        if (isShuttingDown(_context)) {return;}
+
         if (data == null) {
             if (_log.shouldWarn()) {_log.warn("Attempted to write NULL data for key: " + key);}
             return;
@@ -894,6 +897,12 @@ public class PersistentDataStore extends TransientDataStore {
         private final Hash h;
         public Disconnector(Hash h) {this.h = h;}
         public void timeReached() {_context.commSystem().forceDisconnect(h);}
+    }
+
+    public static boolean isShuttingDown(RouterContext ctx) {
+        int code = ctx.router().scheduledGracefulExitCode();
+        return Router.EXIT_GRACEFUL == code || Router.EXIT_HARD == code ||
+               Router.EXIT_GRACEFUL_RESTART == code || Router.EXIT_HARD_RESTART == code;
     }
 
 }
