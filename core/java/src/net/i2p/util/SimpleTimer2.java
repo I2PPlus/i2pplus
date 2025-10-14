@@ -40,7 +40,7 @@ public class SimpleTimer2 {
         return I2PAppContext.getGlobalContext().simpleTimer2();
     }
 
-    private static final int MAX_THREADS = Math.max(SystemVersion.getCores() * 4, 32);
+    private static final int MAX_THREADS = 1024;
     private static final int INITIAL_THREADS = 1;
     private static final long THREAD_KEEP_ALIVE_SECONDS = 5;
 
@@ -48,6 +48,7 @@ public class SimpleTimer2 {
     private final String _name;
     private final AtomicInteger _count = new AtomicInteger();
     private final int _threadsMax;
+    private ScheduledFuture<?> _resizeThreadPool;
     private final I2PAppContext _context;
     private final Runnable _shutdown;
 
@@ -80,6 +81,8 @@ public class SimpleTimer2 {
         _name = name;
         _threadsMax = MAX_THREADS;
         _executor = new CustomScheduledThreadPoolExecutor(INITIAL_THREADS, new CustomThreadFactory());
+        // Schedule periodic thread pool resizing housekeeping every 5 seconds
+        _resizeThreadPool = _executor.scheduleAtFixedRate(this::adjustThreadPoolSize, 5, 5, TimeUnit.SECONDS);
         // Allow core threads to time out after inactivity so pool can shrink
         _executor.setKeepAliveTime(THREAD_KEEP_ALIVE_SECONDS, TimeUnit.SECONDS);
         _executor.allowCoreThreadTimeOut(true);
@@ -99,6 +102,8 @@ public class SimpleTimer2 {
      * Cannot be restarted.
      */
     public void stop() {
+        if (_resizeThreadPool != null)
+            _resizeThreadPool.cancel(true);
         stop(true);
     }
 
