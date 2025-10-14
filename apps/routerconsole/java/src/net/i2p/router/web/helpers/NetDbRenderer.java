@@ -1130,10 +1130,21 @@ class NetDbRenderer {
     }
 
     /**
-     *  @param mode 0: charts only;
-     *         mode 1: full routerinfos;
-     *         mode 2: abbreviated routerinfos
-     *         mode 3: Same as 0 but sort countries by count
+     * Renders the network database status page as HTML.
+     *
+     * Modes:
+     *  0: Charts only (summary statistics)
+     *  1: Full router infos (detailed)
+     *  2: Abbreviated router infos (compact)
+     *  3: Like mode 0 but sorts countries by count
+     *
+     * Supports pagination for router info display.
+     *
+     * @param out       Writer to output HTML content
+     * @param pageSize  Number of routers per page for detailed views
+     * @param page      Current page index (0-based)
+     * @param mode      Rendering mode (0 to 3)
+     * @throws IOException on write errors
      */
     public void renderStatusHTML(Writer out, int pageSize, int page, int mode) throws IOException {
         if (!_context.netDb().isInitialized()) {
@@ -1141,20 +1152,21 @@ class NetDbRenderer {
             out.flush();
             return;
         }
-        Log log = _context.logManager().getLog(NetDbRenderer.class);
-        long start = System.currentTimeMillis();
 
-        boolean full = mode == 1;
-        boolean shortStats = mode == 2;
-        boolean showStats = full || shortStats; // this means show the RouterInfos
+        boolean full = (mode == 1);
+        boolean shortStats = (mode == 2);
+        boolean showStats = full || shortStats; // show router infos or not
         Hash us = _context.routerHash();
 
-        Set<RouterInfo> routers = new TreeSet<RouterInfo>(RouterInfoComparator.getInstance());
+        // Fetch and sort all routers by their comparator
+        Set<RouterInfo> routers = new TreeSet<>(RouterInfoComparator.getInstance());
         routers.addAll(_context.netDb().getRouters());
-        int toSkip = pageSize * page;
-        boolean nextpg = routers.size() > toSkip + pageSize;
+
+        int offset = pageSize * page;
+        boolean hasNextPage = routers.size() > offset + pageSize;
         StringBuilder buf = new StringBuilder(8192);
 
+        // Show informational banner based on mode
         if (showStats && full && page == 0) {
             buf.append("<p class=infohelp id=debugmode>")
                .append(_t("Advanced mode - includes all statistics published by floodfills."))
@@ -1166,185 +1178,267 @@ class NetDbRenderer {
         }
         out.append(buf);
         buf.setLength(0);
-        out.flush();
 
+        // Render our own router info on first page if showing stats
         if (showStats && page == 0) {
-            RouterInfo ourInfo = _context.router().getRouterInfo();
-            renderRouterInfo(buf, ourInfo, true, true);
+            renderRouterInfo(buf, _context.router().getRouterInfo(), true, true);
             out.append(buf);
             buf.setLength(0);
         }
 
-        ObjectCounterUnsafe<String> versions = new ObjectCounterUnsafe<String>();
-        ObjectCounterUnsafe<String> countries = new ObjectCounterUnsafe<String>();
+        // Data structures for summary stats
+        ObjectCounterUnsafe<String> versions = new ObjectCounterUnsafe<>();
+        ObjectCounterUnsafe<String> countries = new ObjectCounterUnsafe<>();
         int[] transportCount = new int[TNAMES.length];
 
+        List<RouterInfo> pagedRouters = new ArrayList<>();
         int skipped = 0;
-        int written = 0;
-        boolean morePages = false;
 
-        if (mode == 0 || mode == 3) {
+        if (mode == 1 || mode == 2) {
             for (RouterInfo ri : routers) {
                 Hash key = ri.getIdentity().getHash();
+                if (!key.equals(us)) {
+                    if (skipped < offset) {
+                        skipped++;
+                    } else if (pagedRouters.size() < pageSize) {
+                        pagedRouters.add(ri);
+                    } else {
+                        break;
+                    }
+                }
+
                 String routerVersion = ri.getOption("router.version");
-                if (routerVersion != null) { versions.increment(routerVersion); }
+                if (routerVersion != null) versions.increment(routerVersion);
+
                 String country = _context.commSystem().getCountry(key);
-                if (country != null) { countries.increment(country); }
+                if (country != null) countries.increment(country);
+
                 transportCount[classifyTransports(ri)]++;
             }
+        } else if (!showStats) {
+            countFullRouterStats(routers, versions, countries, transportCount);
         }
 
-        List<RouterInfo> routersToRender = new ArrayList<>();
+        // Render detailed router info or summary depending on mode
+        if (showStats) {
+            out.append(renderRouterInfosInParallel(pagedRouters, false, full));
+            paginate(buf, new StringBuilder("&amp;f=").append(mode), page, pageSize, hasNextPage, routers.size() - 1);
+            out.append(buf);
+            buf.setLength(0);
+        } else {
+            renderSummaryTables(buf, versions, countries, transportCount, routers);
+            out.append(buf);
+            buf.setLength(0);
+        }
+        out.flush();
+    }
+
+    /**
+     * Renders all summary tables inside a parent overview table.
+     *
+     * @param buf            StringBuilder to append HTML to
+     * @param versions       ObjectCounterUnsafe with version counts
+     * @param countries      ObjectCounterUnsafe with country counts
+     * @param transportCount Array of transport counts
+     * @param routers        Set of all routers for country-related counts
+     */
+    private void renderSummaryTables(StringBuilder buf, ObjectCounterUnsafe<String> versions,
+                                     ObjectCounterUnsafe<String> countries, int[] transportCount,
+                                     Set<RouterInfo> routers) {
+        buf.append("<table id=netdboverview width=100%>\n<tr><th colspan=3>")
+           .append(_t("Network Database Router Statistics"))
+           .append("</th></tr>\n<tr><td style=vertical-align:top>");
+        renderVersionsTable(buf, versions);
+        buf.append("</td><td style=vertical-align:top>\n");
+        renderBandwidthTiers(buf);
+        renderCongestionCaps(buf);
+        renderTransportsTable(buf, transportCount);
+        buf.append("</td><td style=vertical-align:top>\n");
+        renderCountryTable(buf, countries, routers);
+        buf.append("</td>\n</tr>\n</table>\n");
+    }
+
+    /**
+     * Renders the table of router software versions with their counts.
+     *
+     * @param buf      StringBuilder to append HTML to
+     * @param versions Version to count map
+     */
+    private void renderVersionsTable(StringBuilder buf, ObjectCounterUnsafe<String> versions) {
+        List<String> versionList = new ArrayList<>(versions.objects());
+        if (versionList.isEmpty()) return;
+        Collections.sort(versionList, Collections.reverseOrder(new VersionComparator()));
+
+        buf.append("<table id=netdbversions>\n<thead>\n<tr><th>").append(_t("Version"))
+           .append("</th><th>").append(_t("Count")).append("</th></tr>\n</thead>\n");
+        for (String v : versionList) {
+            int count = versions.count(v);
+            String sanitized = DataHelper.stripHTML(v);
+            buf.append("<tr><td><span class=version><a href=\"/netdb?v=").append(sanitized).append("\">")
+               .append(sanitized).append("</a></span></td><td>").append(count).append("</td></tr>\n");
+        }
+        buf.append("</table>\n");
+    }
+
+    private static final char[] BW_CAPS = {
+        FloodfillNetworkDatabaseFacade.CAPABILITY_BW12,
+        FloodfillNetworkDatabaseFacade.CAPABILITY_BW32,
+        FloodfillNetworkDatabaseFacade.CAPABILITY_BW64,
+        FloodfillNetworkDatabaseFacade.CAPABILITY_BW128,
+        FloodfillNetworkDatabaseFacade.CAPABILITY_BW256,
+        FloodfillNetworkDatabaseFacade.CAPABILITY_BW512,
+        FloodfillNetworkDatabaseFacade.CAPABILITY_BW_UNLIMITED
+    };
+
+    // Labels stay Strings for display
+    private static final String[] BW_LABELS = {
+        "K", "L", "M", "N", "O", "P", "X"
+    };
+
+    private static final String[] BW_DESCRIPTIONS = {
+        "Under 12 KB/s", "12 - 48 KB/s", "49 - 65 KB/s",
+        "66 - 130 KB/s", "131 - 261 KB/s", "262 - 2047 KB/s", "Over 2048 KB/s"
+    };
+
+    /**
+     * Renders the bandwidth tiers table showing counts of routers by bandwidth capability.
+     * @param buf StringBuilder used to append the generated HTML
+     */
+    private void renderBandwidthTiers(StringBuilder buf) {
+        String showAll = _t("Show all routers with this capability in the NetDb");
+        buf.append("<table id=netdbtiers>\n<thead>\n<tr><th>").append(_t("Bandwidth Tier")).append("</th><th>")
+           .append(_t("Count")).append("</th></tr>\n</thead>\n");
+
+        Map<Character, Set<Hash>> capsPeers = new HashMap<>();
+        for (char cap : BW_CAPS) {
+            Set<Hash> peers = _context.peerManager().getPeersByCapability(cap);
+            capsPeers.put(cap, peers != null ? peers : Collections.emptySet());
+        }
+
+        for (int i = 0; i < BW_CAPS.length; i++) {
+            char cap = BW_CAPS[i];
+            Set<Hash> peers = capsPeers.get(cap);
+            if (!peers.isEmpty()) {
+                buf.append("<tr><td><a href=\"/netdb?caps=").append(BW_LABELS[i])
+                   .append("\" title=\"").append(showAll).append("\"><b>")
+                   .append(BW_LABELS[i]).append("</b></a>")
+                   .append(_t(BW_DESCRIPTIONS[i])).append("</td><td>")
+                   .append(peers.size()).append("</td></tr>\n");
+            }
+        }
+        buf.append("</table>\n");
+    }
+
+    /**
+     * Renders the congestion capability table showing counts of routers by congestion state.
+     * @param buf StringBuilder used to append the generated HTML
+     */
+    private void renderCongestionCaps(StringBuilder buf) {
+        String showAll = _t("Show all routers with this capability in the NetDb");
+        Set<Hash> moderate = _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_CONGESTION_MODERATE);
+        Set<Hash> severe = _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_CONGESTION_SEVERE);
+        Set<Hash> noTunnels = _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_NO_TUNNELS);
+
+        if ((moderate == null || moderate.isEmpty()) &&
+            (severe == null || severe.isEmpty()) &&
+            (noTunnels == null || noTunnels.isEmpty()))
+            return;
+
+        buf.append("<table id=netdbcongestion>\n<thead>\n<tr><th>").append(_t("Congestion Cap")).append("</th><th>")
+           .append(_t("Count")).append("</th></tr>\n</thead>\n");
+
+        if (moderate != null && !moderate.isEmpty()) {
+            buf.append("<tr><td><a class=isD href=\"/netdb?caps=D\" title=\"").append(showAll).append("\"><b>D</b></a>")
+               .append(_t("Medium congestion / low performance")).append("</td><td>")
+               .append(moderate.size()).append("</td></tr>\n");
+        }
+        if (severe != null && !severe.isEmpty()) {
+            buf.append("<tr><td><a class=isE href=\"/netdb?caps=E\" title=\"").append(showAll).append("\"><b>E</b></a>")
+               .append(_t("High congestion")).append("</td><td>")
+               .append(severe.size()).append("</td></tr>\n");
+        }
+        if (noTunnels != null && !noTunnels.isEmpty()) {
+            buf.append("<tr><td><a class=isG href=\"/netdb?caps=G\" title=\"").append(showAll).append("\"><b>G</b></a>")
+               .append(_t("Rejecting all tunnel requests")).append("</td><td>")
+               .append(noTunnels.size()).append("</td></tr>\n");
+        }
+        buf.append("</table>\n");
+    }
+
+    /**
+     * Renders a table of transport types and their counts.
+     * @param buf            StringBuilder to append HTML to
+     * @param transportCount Counts of each transport according to TNAMES indices
+     */
+    private void renderTransportsTable(StringBuilder buf, int[] transportCount) {
+        buf.append("<table id=netdbtransports>\n<thead>\n<tr><th>").append(_t("Transports")).append("</th><th>")
+           .append(_t("Count")).append("</th></tr>\n</thead>\n");
+        for (int i = 0; i < TNAMES.length; i++) {
+            int count = transportCount[i];
+            if (count > 0) {
+                buf.append("<tr><td>").append(_t(TNAMES[i])).append("</td><td>").append(count).append("</td></tr>\n");
+            }
+        }
+        buf.append("</table>\n");
+    }
+
+    /**
+     * Renders the country list table with counts and tier/floodfill info.
+     *
+     * @param buf       StringBuilder to append HTML to
+     * @param countries ObjectCounterUnsafe mapping countries to router counts
+     * @param routers   Set of all routers for tier and floodfill counts
+     */
+    private void renderCountryTable(StringBuilder buf, ObjectCounterUnsafe<String> countries, Set<RouterInfo> routers) {
+        List<String> countryList = new ArrayList<>(countries.objects());
+        buf.append("<table id=netdbcountrylist data-sortable>\n<thead>\n<tr>")
+           .append("<th>").append(_t("Country")).append("</th>")
+           .append("<th class=countX>").append(_t("X Tier")).append("</th>")
+           .append("<th class=countFF>").append(_t("Floodfills")).append("</th>")
+           .append("<th class=countCC data-sort-default>").append(_t("Total")).append("</th>")
+           .append("</tr>\n</thead>\n");
+
+        if (!countryList.isEmpty()) {
+            Collections.sort(countryList, new CountryComparator());
+            buf.append("<tbody id=cclist>\n");
+            for (String country : countryList) {
+                int totalCount = Math.max(countries.count(country) - 1, 0);
+                buf.append("<tr><td><a href=\"/netdb?c=").append(country).append("\">")
+                   .append("<img width=20 height=15 alt=\"").append(country.toUpperCase(Locale.US)).append("\"")
+                   .append(" src=\"/flags.jsp?c=").append(country).append("\">")
+                   .append(getTranslatedCountry(country).replace("xx", _t("Unknown"))).append("</a></td>")
+                   .append("<td class=countX><a href=\"/netdb?caps=X&amp;cc=").append(country).append("\">")
+                   .append(countXTierInCountry(routers, country)).append("</a></td>")
+                   .append("<td class=countFF><a href=\"/netdb?caps=f&amp;cc=").append(country).append("\">")
+                   .append(countFloodfillsInCountry(routers, country)).append("</a></td>")
+                   .append("<td class=countCC>").append(totalCount).append("</td></tr>\n");
+            }
+            buf.append("</tbody></table>\n");
+        } else {
+            buf.append("<tbody><tr><td colspan=2>").append(_t("Initializing")).append("&hellip;</td></tr></tbody></table>\n");
+        }
+    }
+
+    /**
+     * Helper method to collect full statistics over all routers.
+     *
+     * @param routers        Set of all routers
+     * @param versions       ObjectCounterUnsafe for versions counting
+     * @param countries      ObjectCounterUnsafe for countries counting
+     * @param transportCount int array for transport counts
+     */
+    private void countFullRouterStats(Set<RouterInfo> routers, ObjectCounterUnsafe<String> versions,
+                                     ObjectCounterUnsafe<String> countries, int[] transportCount) {
         for (RouterInfo ri : routers) {
             Hash key = ri.getIdentity().getHash();
-            boolean isUs = key.equals(us);
-            if (!isUs) {
-                if (skipped < toSkip) {
-                    skipped++;
-                    continue;
-                }
-                if (written >= pageSize) {
-                    morePages = true;
-                    break;
-                }
-                routersToRender.add(ri);
-                written++;
-            }
+            String routerVersion = ri.getOption("router.version");
+            if (routerVersion != null) versions.increment(routerVersion);
+
+            String country = _context.commSystem().getCountry(key);
+            if (country != null) countries.increment(country);
+
+            transportCount[classifyTransports(ri)]++;
         }
-
-        // Render collected routers in parallel, then write all at once
-        if (showStats) {
-            String renderedHtml = renderRouterInfosInParallel(routersToRender, false, full);
-            out.append(renderedHtml);
-        }
-
-        if (showStats) {
-            int sz = routers.size() - 1; // -1 for us
-            StringBuilder ubuf = new StringBuilder();
-            ubuf.append("&amp;f=").append(mode);
-            paginate(buf, ubuf, page, pageSize, morePages, sz);
-        }
-
-        if (!showStats) {
-            // the summary table
-            buf.append("<table id=netdboverview width=100%>\n<tr><th colspan=3>")
-               .append(_t("Network Database Router Statistics"))
-               .append("</th></tr>\n<tr><td style=vertical-align:top>");
-            // versions table
-            List<String> versionList = new ArrayList<String>(versions.objects());
-            if (!versionList.isEmpty()) {
-                Collections.sort(versionList, Collections.reverseOrder(new VersionComparator()));
-                buf.append("<table id=netdbversions>\n").append("<thead>\n<tr><th>").append(_t("Version"))
-                   .append("</th><th>").append(_t("Count")).append("</th></tr>\n</thead>\n");
-                for (String routerVersion : versionList) {
-                    int num = versions.count(routerVersion);
-                    String ver = DataHelper.stripHTML(routerVersion);
-                    buf.append("<tr><td><span class=version><a href=\"/netdb?v=").append(ver).append("\">")
-                       .append(ver).append("</a></span></td><td>").append(num).append("</td></tr>\n");
-                }
-                buf.append("</table>\n");
-            }
-            buf.append("</td><td style=vertical-align:top>\n");
-            out.append(buf);
-            buf.setLength(0);
-
-            String showAll = _t("Show all routers with this capability in the NetDb");
-            buf.append("<table id=netdbtiers>\n")
-               .append("<thead>\n<tr><th>").append(_t("Bandwidth Tier")).append("</th><th>")
-               .append(_t("Count")).append("</th></tr>\n</thead>\n");
-            if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW12).size() > 0) {
-                buf.append("<tr><td><a href=\"/netdb?caps=K\" title=\"").append(showAll).append("\"><b>K</b></a>Under 12 KB/s</td><td>")
-                   .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW12).size()).append("</td></tr>\n");
-            }
-            if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW32).size() > 0) {
-                buf.append("<tr><td><a href=\"/netdb?caps=L\" title=\"").append(showAll).append("\"><b>L</b></a>12 - 48 KB/s</td><td>")
-                   .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW32).size()).append("</td></tr>\n");
-            }
-            if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW64).size() > 0) {
-                buf.append("<tr><td><a href=\"/netdb?caps=M\" title=\"").append(showAll).append("\"><b>M</b></a>49 - 65 KB/s</td><td>")
-                   .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW64).size()).append("</td></tr>\n");
-            }
-            if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW128).size() > 0) {
-                buf.append("<tr><td><a href=\"/netdb?caps=N\" title=\"").append(showAll).append("\"><b>N</b></a>66 - 130 KB/s</td><td>")
-                   .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW128).size()).append("</td></tr>\n");
-            }
-            buf.append("<tr><td><a href=\"/netdb?caps=O\" title=\"").append(showAll).append("\"><b>O</b></a>131 - 261 KB/s</td><td>")
-               .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW256).size()).append("</td></tr>\n")
-               .append("<tr><td><a href=\"/netdb?caps=P\" title=\"").append(showAll).append("\"><b>P</b></a>262 - 2047 KB/s</td><td>")
-               .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW512).size()).append("</td></tr>\n")
-               .append("<tr><td><a href=\"/netdb?caps=X\" title=\"").append(showAll).append("\"><b>X</b></a>Over 2048 KB/s</td><td>")
-               .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_BW_UNLIMITED).size()).append("</td></tr>\n")
-               .append("</table>\n");
-            out.append(buf);
-            buf.setLength(0);
-
-            if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_CONGESTION_MODERATE).size() > 0 ||
-                _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_CONGESTION_SEVERE).size() > 0 ||
-                _context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_NO_TUNNELS).size() > 0) {
-
-                buf.append("<table id=netdbcongestion>\n");
-                buf.append("<thead>\n<tr><th>").append(_t("Congestion Cap")).append("</th><th>").append(_t("Count")).append("</th></tr>\n</thead>\n");
-                if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_CONGESTION_MODERATE).size() > 0) {
-                    buf.append("<tr><td><a class=isD href=\"/netdb?caps=D\" title=\"").append(showAll).append("\"><b>D</b></a>")
-                       .append(_t("Medium congestion / low performance")).append("</td><td>")
-                       .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_CONGESTION_MODERATE).size()).append("</td></tr>\n");
-                }
-                if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_CONGESTION_SEVERE).size() > 0) {
-                    buf.append("<tr><td><a class=isE href=\"/netdb?caps=E\" title=\"").append(showAll).append("\"><b>E</b></a>")
-                       .append(_t("High congestion")).append("</td><td>")
-                       .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_CONGESTION_SEVERE).size()).append("</td></tr>\n");
-                }
-                if (_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_NO_TUNNELS).size() > 0) {
-                    buf.append("<tr><td><a class=isG href=\"/netdb?caps=G\" title=\"").append(showAll).append("\"><b>G</b></a>")
-                       .append(_t("Rejecting all tunnel requests")).append("</td><td>")
-                       .append(_context.peerManager().getPeersByCapability(FloodfillNetworkDatabaseFacade.CAPABILITY_NO_TUNNELS).size()).append("</td></tr>\n");
-                }
-                buf.append("</table>\n");
-                out.append(buf);
-                buf.setLength(0);
-            }
-
-            // transports table
-            buf.append("<table id=netdbtransports>\n")
-               .append("<thead>\n<tr><th>").append(_t("Transports")).append("</th><th>").append(_t("Count")).append("</th></tr>\n</thead>\n");
-            for (int i = 0; i < TNAMES.length; i++) {
-                int num = transportCount[i];
-                if (num > 0) {buf.append("<tr><td>").append(_t(TNAMES[i])).append("</td><td>").append(num).append("</td></tr>\n");}
-            }
-            buf.append("</table>\n").append("</td>").append("<td style=vertical-align:top>\n");
-
-            // country table
-            List<String> countryList = new ArrayList<String>(countries.objects());
-            buf.append("<table id=netdbcountrylist data-sortable>\n")
-               .append("<thead>\n<tr>")
-               .append("<th>").append(_t("Country")).append("</th>")
-               .append("<th class=countX>").append(_t("X Tier")).append("</th>")
-               .append("<th class=countFF>").append(_t("Floodfills")).append("</th>")
-               .append("<th class=countCC data-sort-default>").append(_t("Total")).append("</th>")
-               .append("</tr>\n</thead>\n");
-            if (!countryList.isEmpty()) {
-                Collections.sort(countryList, new CountryComparator());
-                buf.append("<tbody id=cclist>\n");
-                for (String country : countryList) {
-                    int num = countries.count(country);
-                    buf.append("<tr><td><a href=\"/netdb?c=").append(country).append("\">")
-                       .append("<img width=20 height=15 alt=\"").append(country.toUpperCase(Locale.US)).append("\"")
-                       .append(" src=\"/flags.jsp?c=").append(country).append("\">")
-                       .append(getTranslatedCountry(country).replace("xx", _t("Unknown"))).append("</a></td>")
-                       .append("<td class=countX>").append("<a href=\"/netdb?caps=X&amp;cc=").append(country).append("\">")
-                       .append(countXTierInCountry(routers, country)).append("</a></td>")
-                       .append("<td class=countFF>").append("<a href=\"/netdb?caps=f&amp;cc=").append(country).append("\">")
-                       .append(countFloodfillsInCountry(routers, country)).append("</a></td>")
-                       .append("<td class=countCC>").append(num).append("</td></tr>\n");
-                }
-                buf.append("</tbody></table>\n");
-            } else {
-                buf.append("<tbody><tr><td colspan=2>").append(_t("Initializing")).append("&hellip;</td></tr></tbody></table>\n");
-            }
-            buf.append("</td></tr>\n</table>\n");
-        } // if !showStats
-        out.append(buf);
-        out.flush();
     }
 
     /**
