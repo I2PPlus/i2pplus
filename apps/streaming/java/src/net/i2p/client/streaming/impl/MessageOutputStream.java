@@ -386,10 +386,16 @@ class MessageOutputStream extends OutputStream {
             _log.debug("Finished waiting for write completion");
         }
 
-        if (ws.writeFailed() && _writeTimeout > 0) {
-            throw new InterruptedIOException("Timed out during write");
-        } else if (ws.writeFailed()) {
-            throw new IOException("Write failed");
+        if (ws != null) {
+            if (ws.writeFailed() && _writeTimeout > 0) {
+                throw new InterruptedIOException("Timed out during write");
+            } else if (ws.writeFailed()) {
+                throw new IOException("Write failed");
+            }
+        } else {
+            if (_log.shouldWarn()) {
+                _log.warn("Skipped writeFailed check due to null WriteStatus");
+            }
         }
 
         if (_log.shouldDebug()) {
