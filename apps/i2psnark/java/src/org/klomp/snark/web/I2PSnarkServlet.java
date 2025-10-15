@@ -1260,78 +1260,119 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     * Renders the filter bar for filtering torrent displays based on various criteria.
+     * Renders the torrent filter bar with links for filtering and searching torrents.
+     * Constructs URLs preserving existing query parameters except the current filter,
+     * then appends updated filter criteria. Displays badges with counts for some filters.
      *
-     * @param out the PrintWriter to which the generated HTML will be written
-     * @param req the HttpServletRequest object containing the current request parameters
-     * @throws IOException if an I/O error occurs while writing to the output stream
+     * @param out  the PrintWriter to write the generated HTML output
+     * @param req  the current HttpServletRequest providing query parameters and URL
+     * @throws IOException if an I/O error occurs during writing to the output stream
      */
     private void renderFilterBar(PrintWriter out, HttpServletRequest req) throws IOException {
-        String filter = req.getParameter("filter") != null ? req.getParameter("filter") : "";
+        String filter = req.getParameter("filter");
+        filter = filter != null ? filter : "";
         String peerParam = req.getParameter("p");
         String psize = req.getParameter("ps");
         String search = req.getParameter("search");
         String srt = req.getParameter("sort");
-        String stParam = req.getParameter("st");
         String reqURL = req.getRequestURL().toString();
+
         int pageSizeConf = _manager.getPageSize();
         List<Snark> snarks = getSortedSnarks(req);
         int total = snarks.size();
-        boolean searchActive = (search != null && !search.equals("") && search.length() > 0);
+        int maxPageSize = Math.max(pageSizeConf, 10);
+        boolean searchActive = (search != null && !search.isEmpty());
+
+        StringBuilder activeQuery = new StringBuilder("/i2psnark/?");
+        if (peerParam != null) activeQuery.append("p=").append(peerParam).append("&");
+        if (srt != null) activeQuery.append("sort=").append(srt).append("&");
+        if (searchActive) activeQuery.append("search=").append(search).append("&");
+        if (psize != null) activeQuery.append("ps=").append(psize).append("&");
+
+        // Remove existing filter parameter from activeQuery if present
+        String existingFilter = "filter=" + filter;
+        int filterIndex = activeQuery.indexOf(existingFilter);
+        if (filterIndex >= 0) {
+            activeQuery.delete(filterIndex, filterIndex + existingFilter.length());
+            // Remove trailing '&' that may remain after deletion
+            if (filterIndex < activeQuery.length() && activeQuery.charAt(filterIndex) == '&') {
+                activeQuery.deleteCharAt(filterIndex);
+            }
+        }
+
+        // Trim trailing '&' if present
+        if (activeQuery.length() > 0 && activeQuery.charAt(activeQuery.length() - 1) == '&') {
+            activeQuery.setLength(activeQuery.length() - 1);
+        }
+
+        String buttonUrl = activeQuery.toString();
+        if (buttonUrl.endsWith("?")) {buttonUrl += "filter=";}
+        else {buttonUrl += "&filter=";}
+
+        final String badge = "<span class=badge></span>";
+
+        String allBadgeText = null;
+        if (!searchActive) {
+            allBadgeText = (maxPageSize < total) ? (maxPageSize + " / " + total) : String.valueOf(total);
+        }
 
         StringBuilder buf = new StringBuilder(1280);
-        buf.append("<form id=torrentlist action=_post method=POST target=processForm>\n");
-        StringBuilder activeQuery = new StringBuilder("/i2psnark/?");
-        if (peerParam != null) {activeQuery.append("p=" + peerParam + "&");}
-        if (srt != null) {activeQuery.append("sort=" + srt + "&");}
-        if (searchActive) {activeQuery.append("search=" + search + "&");}
-        if (psize != null) {activeQuery.append("ps=" + psize + "&");}
-        if (filter != null && !filter.equals("all")) {
-            String existingFilter = "filter=" + filter;  // remove existing filter parameter
-            int filterIndex = activeQuery.indexOf(existingFilter);
-            if (filterIndex >= 0) {activeQuery.delete(filterIndex, filterIndex + existingFilter.length());}
-        }
-        activeQuery.setLength(activeQuery.length() - 1);
-        String buttonUrl = activeQuery.toString();
-        buttonUrl += (buttonUrl.contains("=") ? "&filter=" : "?filter=");
-        buf.append("<div id=filterBar>")
-           .append("<a class=filter id=search href=\"").append(buttonUrl).append("all\"")
-           .append(searchActive ? "" : " hidden").append("><span>").append(_t("Search"))
-           .append("<span class=badge").append(searchActive ? "" : " hidden").append(">");
-        if (searchResults > Math.max(pageSizeConf, 10)) {
-            buf.append(Math.max(pageSizeConf, 10)).append(" / ").append(searchResults);
-        } else if (searchActive) {buf.append(searchResults);}
-        buf.append("</span></span></a>")
-           .append("<a class=filter id=all href=\"").append(buttonUrl).append("all\"")
-           .append(!searchActive ? "" : " hidden").append("><span>").append(_t("Show All"))
-           .append("<span class=badge hidden>");
-        if (Math.max(pageSizeConf, 10) < total) {
-            buf.append(Math.max(pageSizeConf, 10)).append(" / ").append(total);
-        } else {buf.append(total);}
-        String badge = "<span class=badge></span>";
-        buf.append("</span></span></a>")
-           .append("<a class=filter id=active href=\"").append(buttonUrl).append("active\"><span>")
-           .append(_t("Active")).append(badge).append("</span></a>")
-           .append("<a class=filter id=inactive href=\"").append(buttonUrl).append("inactive\"><span>")
-           .append(_t("Inactive")).append(badge).append("</span></a>")
-           .append("<a class=filter id=connected href=\"").append(buttonUrl).append("connected\"><span>")
-           .append(_t("Connected")).append(badge).append("</span></a>")
-           .append("<a class=filter id=downloading href=\"").append(buttonUrl).append("downloading\"><span>")
-           .append(_t("Downloading")).append(badge).append("</span></a>")
-           .append("<a class=filter id=seeding href=\"").append(buttonUrl).append("seeding\"><span>")
-           .append(_t("Seeding")).append(badge).append("</span></a>")
-           .append("<a class=filter id=complete href=\"").append(buttonUrl).append("complete\"><span>")
-           .append(_t("Complete")).append(badge).append("</span></a>")
-           .append("<a class=filter id=incomplete href=\"").append(buttonUrl).append("incomplete\"><span>")
-           .append(_t("Incomplete")).append(badge).append("</span></a>")
-           .append("<a class=filter id=stopped href=\"").append(buttonUrl).append("stopped\"><span>")
-           .append(_t("Stopped")).append(badge).append("</span></a>")
+        buf.append("<form id=torrentlist action=_post method=POST target=processForm>\n<div id=filterBar>")
+           .append(buildFilterLink(buttonUrl, "search", searchActive, _t("Search"),
+               searchActive ? (searchResults > maxPageSize ? maxPageSize + " / " + searchResults : String.valueOf(searchResults)) : null))
+           .append(buildFilterLink(buttonUrl, "all", !searchActive, _t("Show All"), allBadgeText))
+           .append(buildSimpleFilterLink(buttonUrl, "active", _t("Active"), badge))
+           .append(buildSimpleFilterLink(buttonUrl, "inactive", _t("Inactive"), badge))
+           .append(buildSimpleFilterLink(buttonUrl, "connected", _t("Connected"), badge))
+           .append(buildSimpleFilterLink(buttonUrl, "downloading", _t("Downloading"), badge))
+           .append(buildSimpleFilterLink(buttonUrl, "seeding", _t("Seeding"), badge))
+           .append(buildSimpleFilterLink(buttonUrl, "complete", _t("Complete"), badge))
+           .append(buildSimpleFilterLink(buttonUrl, "incomplete", _t("Incomplete"), badge))
+           .append(buildSimpleFilterLink(buttonUrl, "stopped", _t("Stopped"), badge))
            .append("</div>\n");
         if (!reqURL.contains("/.ajax")) {
             buf.append("<script src=/i2psnark/.res/js/filterBar.js type=module></script>\n");
         }
         out.append(buf);
         buf.setLength(0);
+    }
+
+    /**
+     * Builds an HTML filter link anchor element with an optional badge and visibility toggle.
+     *
+     * @param baseUrl   the base URL to which the filter id is appended as a parameter
+     * @param filterId  the id and filter name used in the link
+     * @param visible   whether the link should be visible or hidden (via CSS)
+     * @param title     the display text for the filter link
+     * @param badgeText optional badge content to display inside the link
+     * @return          the constructed HTML string of the filter link
+     */
+    private String buildFilterLink(String baseUrl, String filterId, boolean visible, String title, String badgeText) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("<a class=filter id=").append(filterId).append(" href=\"").append(baseUrl).append(filterId).append("\"");
+        if (!visible) sb.append(" hidden");
+        sb.append("><span>").append(title)
+          .append("<span class=badge");
+        if (!visible) sb.append(" hidden");
+        sb.append(">");
+        if (badgeText != null) sb.append(badgeText);
+        sb.append("</span></span></a>");
+        return sb.toString();
+    }
+
+    /**
+     * Builds a simple HTML filter link anchor element with a badge but no visibility toggle.
+     *
+     * @param baseUrl  the base URL to which the filter id is appended as a parameter
+     * @param filterId the id and filter name used in the link
+     * @param title    the display text for the filter link
+     * @param badge    the badge HTML to append inside the link
+     * @return         the constructed HTML string of the filter link
+     */
+    private String buildSimpleFilterLink(String baseUrl, String filterId, String title, String badge) {
+        return new StringBuilder()
+          .append("<a class=filter id=").append(filterId).append(" href=\"").append(baseUrl).append(filterId).append("\"><span>")
+          .append(title).append(badge).append("</span></a>").toString();
     }
 
     /**
