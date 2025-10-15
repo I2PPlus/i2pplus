@@ -154,7 +154,6 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     /** @since 0.9.34 */
     public static final int DEFAULT_TAG_THRESHOLD = 30;
 
-
     /**
      *  If PROTO is enforced, we cannot communicate with destinations earlier than version 0.7.1.
      *  Default true as of 0.9.36.

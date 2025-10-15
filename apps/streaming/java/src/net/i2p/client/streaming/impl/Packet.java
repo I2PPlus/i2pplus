@@ -17,6 +17,7 @@ import net.i2p.data.Signature;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.util.ByteArrayStream;
 import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
 
 /**
  * This contains solely the data that goes out on the wire,
@@ -176,7 +177,7 @@ class Packet {
      */
     public static final int FLAG_SIGNATURE_OFFLINE = (1 << 11);
 
-    public static final int DEFAULT_MAX_SIZE = 32*1024;
+    public static final int DEFAULT_MAX_SIZE = SystemVersion.isSlow() ? 32*1024 : 128*1024;
     protected static final int MAX_DELAY_REQUEST = 65535;
     public static final int MIN_DELAY_CHOKE = 60001;
     public static final int SEND_DELAY_CHOKE = 61000;

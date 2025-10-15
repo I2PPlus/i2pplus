@@ -49,7 +49,7 @@ class MessageOutputStream extends OutputStream {
      *  Since this is less than i2ptunnel's i2p.streaming.connectDelay default of 1000,
      *  we only wait 250 at the start. Guess that's ok, 1000 is too long anyway.
      */
-    private static final int DEFAULT_PASSIVE_FLUSH_DELAY = SystemVersion.isSlow() ? 160 : 80;
+    private static final int DEFAULT_PASSIVE_FLUSH_DELAY = SystemVersion.isSlow() ? 200 : 100;
     private static final String PROP_PASSIVE_FLUSH_DELAY = "router.passiveFlushDelay";
 
     /** */
@@ -69,7 +69,7 @@ class MessageOutputStream extends OutputStream {
                    bufSize < ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE_RATCHET) {
             bufSize = ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE_RATCHET;
         }
-        _dataCache = ByteCache.getInstance(128, bufSize);
+        _dataCache = ByteCache.getInstance(256, bufSize);
         _originalBufferSize = bufSize;
         _currentBufferSize = initBufSize;
         _context = ctx;

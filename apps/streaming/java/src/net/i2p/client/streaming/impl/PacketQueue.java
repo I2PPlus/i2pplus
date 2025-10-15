@@ -29,7 +29,7 @@ import net.i2p.util.SimpleTimer2;
 class PacketQueue implements SendMessageStatusListener, Closeable {
     private final I2PAppContext _context;
     private final Log _log;
-    private final ByteCache _cache = ByteCache.getInstance(64, 36*1024);
+    private final ByteCache _cache = ByteCache.getInstance(128, 64*1024);
     private final Map<Long, Connection> _messageStatusMap;
     private volatile boolean _dead;
 

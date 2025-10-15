@@ -22,7 +22,7 @@ class PacketHandler {
     private final ConnectionManager manager;
     private final I2PAppContext context;
     private final Log log;
-    private final ByteCache cache = ByteCache.getInstance(32, 4 * 1024);
+    private final ByteCache cache = ByteCache.getInstance(128, 32 * 1024);
 
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("HH:mm:ss.SSS");
 
