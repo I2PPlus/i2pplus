@@ -190,18 +190,7 @@ public class I2PSnarkServlet extends BasicServlet {
     /**
      * Handle what we can here, calling super.doGet() or super.doPost() for the rest.
      *
-     * Some parts modified from:
-     * <pre>
-      // ========================================================================
-      // $Id: Default.java,v 1.51 2006/10/08 14:13:18 gregwilkins Exp $
-      // Copyright 199-2004 Mort Bay Consulting Pty. Ltd.
-      // ------------------------------------------------------------------------
-      // Licensed under the Apache License, Version 2.0 (the "License");
-      // you may not use this file except in compliance with the License.
-      // See: http://www.apache.org/licenses/LICENSE-2.0
-      // ========================================================================
-     * </pre>
-     *
+     * Some parts modified from Jetty
      */
     private void doGetAndPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         // Get HTTP method and servlet path
@@ -729,6 +718,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String search = req.getParameter("search");
         String srt = req.getParameter("sort");
         String stParam = req.getParameter("st");
+        filterEnabled = !filterParam.isEmpty() && !filterParam.equals("all");
         int refresh = _manager.getRefreshDelaySeconds();
         List<Snark> snarks = getSortedSnarks(req);
         int total = snarks.size();
@@ -736,7 +726,7 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean noSnarks = snarks.isEmpty();
         boolean isForm = isConnected || !noSnarks;
         boolean showStatusFilter = _manager.util().showStatusFilter();
-        filterEnabled = filterParam != null && !filterParam.equals("all") && !filterParam.equals("");
+        boolean sortEnabled = srt != null && !srt.isEmpty();
         boolean searchActive = (search != null && !search.equals("") && search.length() > 0);
         if (isForm) {
             if (showStatusFilter) {renderFilterBar(out, req);}
@@ -799,7 +789,9 @@ public class I2PSnarkServlet extends BasicServlet {
             Snark snark = snarks.get(i);
             boolean showPeers = showDebug || "1".equals(peerParam) || Base64.encode(snark.getInfoHash()).equals(peerParam);
             boolean hide = i < start || i >= start + pageSize;
-            displaySnark(out, req, snark, uri, i, stats, showPeers, isDegraded, noThinsp, showDebug, hide, isRatSort, canWrite);
+            StringBuilder buf = new StringBuilder(2048);
+            displaySnark(out, req, snark, uri, i, stats, showPeers, isDegraded, noThinsp, showDebug, hide, isRatSort, canWrite,
+                         filterParam, filterEnabled, sortParam, sortEnabled, buf);
         }
 
         StringBuilder ftr = new StringBuilder(2*1024);
@@ -2597,18 +2589,39 @@ public class I2PSnarkServlet extends BasicServlet {
     private boolean sortEnabled;
 
     /**
-     *  Display one snark (one line in table, unless showPeers is true)
+     * Displays a single snark (torrent) as an HTML table row, including optional peer rows.
+     * Updates the provided statistics array with cumulative data (uploaded, downloaded, rates,
+     * peer counts, and size). Controls filtering and sorting behavior based on provided
+     * parameters, showing detailed information with status, progress bars, and action buttons.
+     * Appends generated HTML to the provided StringBuilder buffer instead of writing directly
+     * to output, allowing batching and improved rendering performance.
      *
-     *  @param stats in/out param (totals)
-     *  @param statsOnly if true, output nothing, update stats only
-     *  @param canWrite is the i2psnark data directory writable?
+     * @param out the PrintWriter for output (used only for final append)
+     * @param req the HttpServletRequest containing request parameters and context
+     * @param snark the Snark instance representing the torrent to display
+     * @param uri base URI context path for links and references
+     * @param row the index of this snark in the listing, used for styling
+     * @param stats a six-element long array accumulating totals: [downloaded, uploaded, down rate, up rate, peers, total size]
+     * @param showPeers whether to display peer detail rows below this snark
+     * @param isDegraded true if the browser environment is text-mode or limited, affecting formatting
+     * @param noThinsp true if thin spaces should be omitted due to browser quirks
+     * @param showDebug if true, enables debug mode showing additional details
+     * @param statsOnly if true, only updates stats array and output is suppressed
+     * @param showRatios if true, display upload ratio bars instead of raw data
+     * @param canWrite indicates if the i2psnark data directory is writable (affects action buttons)
+     * @param filterParam filter parameter from request for conditional row inclusion
+     * @param filterEnabled true if filtering is active (non-default filter applied)
+     * @param sortParam current sort field parameter from request
+     * @param sortEnabled true if sorting is active
+     * @param buf StringBuilder buffer to append the generated HTML output for this snark
+     * @throws IOException if an I/O error occurs during output operations
      */
-    private void displaySnark(PrintWriter out, HttpServletRequest req,
-                              Snark snark, String uri, int row, long stats[], boolean showPeers,
-                              boolean isDegraded, boolean noThinsp, boolean showDebug, boolean statsOnly,
-                              boolean showRatios, boolean canWrite) throws IOException {
-        req.setCharacterEncoding("UTF-8");
-        // stats
+    private void displaySnark(PrintWriter out, HttpServletRequest req, Snark snark, String uri, int row, long stats[],
+                              boolean showPeers, boolean isDegraded, boolean noThinsp, boolean showDebug, boolean statsOnly,
+                              boolean showRatios, boolean canWrite,
+                              String filterParam, boolean filterEnabled, String sortParam, boolean sortEnabled,
+                              StringBuilder buf) throws IOException {
+        // Update stats first (minimal processing)
         long uploaded = snark.getUploaded();
         stats[0] += snark.getDownloaded();
         stats[1] += uploaded;
@@ -2622,226 +2635,201 @@ public class I2PSnarkServlet extends BasicServlet {
         int curPeers = snark.getPeerList().size();
         stats[4] += curPeers;
         long total = snark.getTotalLength();
-        if (total > 0) {stats[5] += total;}
-        if (statsOnly) {return;}
+        if (total > 0) stats[5] += total;
+        if (statsOnly) return;
 
+        // Cache repeated computations
         String basename = snark.getBaseName();
         String fullBasename = basename;
         if (basename.length() > MAX_DISPLAYED_FILENAME_LENGTH) {
             String start = ServletUtil.truncate(basename, MAX_DISPLAYED_FILENAME_LENGTH);
-            if (start.indexOf(' ') < 0 && start.indexOf('-') < 0) {basename = start + HELLIP;} // browser has nowhere to break it
+            if (start.indexOf(' ') < 0 && start.indexOf('-') < 0) basename = start + HELLIP;
         }
-        // includes skipped files, -1 for magnet mode
         long remaining = snark.getRemainingLength();
-        if (remaining < 0 || remaining > total) {remaining = total;}
-        // does not include skipped files, -1 for magnet mode or when not running.
+        if (remaining < 0 || remaining > total) remaining = total;
         long needed = snark.getNeededLength();
-        if (needed < 0 || needed > total) {needed = total;}
-        long remainingSeconds;
-        if (downBps > 0 && needed > 0) {remainingSeconds = needed / downBps;}
-        else {remainingSeconds = -1;}
+        if (needed < 0 || needed > total) needed = total;
+        long remainingSeconds = (downBps > 0 && needed > 0) ? needed / downBps : -1;
 
         MetaInfo meta = snark.getMetaInfo();
         String b64 = Base64.encode(snark.getInfoHash());
-        String b64Short = b64.substring(0, 6);
-        // isValid means isNotMagnet
         boolean isValid = meta != null;
         boolean isMultiFile = isValid && meta.getFiles() != null;
 
-        String err = snark.getTrackerProblems();
         int knownPeers = Math.max(curPeers, snark.getTrackerSeenPeers());
-        filterParam = req.getParameter("filter");
-        filterEnabled = filterParam != null && !filterParam.equals("all") && !filterParam.equals("");
-        sortParam = req.getParameter("sort");
-        sortEnabled = sortParam != null && !sortParam.equals("");
-        String rowClass = (row % 2 == 0 ? "rowEven" : "rowOdd");
         StatusResult statusResult = buildStatusString(snark, curPeers, knownPeers, downBps, upBps, isRunning, remaining, needed, noThinsp);
-        String statusString = statusResult.statusHtml;
-        String snarkStatus = statusResult.snarkStatus;
-        String rowStatus = (rowClass + ' ' + snarkStatus);
-        StringBuilder buf = new StringBuilder(2*1024);
-        if (!filterEnabled || snarkMatchesFilter(snark, filterParam, snarkStatus)) {
-            buf.append("<tr class=\"").append(rowStatus).append(" volatile\">")
-               .append("<td class=status>").append(statusString).append("</b></td><td class=trackerLink>"); // link column
+        String snarkStatusLocal = statusResult.snarkStatus;
+
+        // Filter check early exit
+        if (!filterEnabled || snarkMatchesFilter(snark, filterParam, snarkStatusLocal)) {
+            String statusString = statusResult.statusHtml;
+            String rowClass = (row % 2 == 0 ? "rowEven" : "rowOdd");
+            String rowStatus = rowClass + ' ' + snarkStatusLocal;
+
+            buf.append("<tr class=\"").append(rowStatus).append(" volatile\"><td class=status>")
+               .append(statusString).append("</b></td><td class=trackerLink>");
+
             if (isValid) {
                 String announce = meta.getAnnounce();
-                if (announce == null) {announce = snark.getTrackerURL();}
+                if (announce == null) announce = snark.getTrackerURL();
                 if (announce != null) {
-                    String trackerLink = getTrackerLink(announce, snark.getInfoHash()); // Link to tracker details page
-                    if (trackerLink != null) {buf.append(trackerLink);}
+                    String trackerLink = getTrackerLink(announce, snark.getInfoHash());
+                    if (trackerLink != null) buf.append(trackerLink);
                 }
             }
+
             String encodedBaseName = encodePath(fullBasename);
             String hex = I2PSnarkUtil.toHex(snark.getInfoHash());
-            String torrentPath = "";
-            if (encodedBaseName != null) {torrentPath = "/i2psnark/" + encodedBaseName + "/";}
-            // magnet column
+            String torrentPath = (encodedBaseName != null) ? "/i2psnark/" + encodedBaseName + "/" : "";
+
             buf.append("</td><td class=magnet>");
             if (isValid && meta != null) {
                 String announce = meta.getAnnounce();
                 String magnetLink = MagnetURI.MAGNET_FULL + hex;
                 buf.append("<a class=magnetlink href=\"").append(magnetLink);
-                if (announce != null) {buf.append("&amp;tr=").append(announce);}
-                if (encodedBaseName != null) {
-                    buf.append("&amp;dn=").append(encodedBaseName.replace(".torrent", ""));
-                }
+                if (announce != null) buf.append("&amp;tr=").append(announce);
+                if (encodedBaseName != null) buf.append("&amp;dn=").append(encodedBaseName.replace(".torrent", ""));
                 buf.append("\">");
                 appendIcon(buf, "magnet", "", "", false, true);
                 buf.append("<span class=copyMagnet></span></a>");
             }
-            // File type icon column
-            buf.append("</td><td class=\"details");
-            if (!isValid && !isMultiFile) {buf.append(" fetching");}
-            else {buf.append(" data");}
-            buf.append("\">");
+
+            buf.append("</td><td class=\"details").append(!isValid && !isMultiFile ? " fetching" : " data").append("\">");
+
             if (isValid) {
                 CommentSet comments = snark.getComments();
-                // Link to local details page - note that trailing slash on a single-file torrent
-                // gets us to the details page instead of the file.
-                buf.append("<span class=filetype><a href=\"").append(torrentPath)
-                   .append("\" title=\"").append(_t("Torrent details")).append("\">");
+                buf.append("<span class=filetype><a href=\"")
+                   .append(torrentPath)
+                   .append("\" title=\"")
+                   .append(_t("Torrent details"))
+                   .append("\">");
                 if (comments != null && !comments.isEmpty()) {
-                    buf.append("<span class=commented title=\"").append(_t("Torrent has comments")).append("\">");
+                    buf.append("<span class=commented title=\"")
+                       .append(_t("Torrent has comments")).append("\">");
                     appendIcon(buf, "rateme", "", "", false, true);
                     buf.append("</span>");
                 }
             }
-            String icon;
-            if (isMultiFile) {icon = "folder";}
-            else if (isValid) {icon = toIcon(meta.getName());}
-            else if (snark instanceof FetchAndAdd) {icon = "download";}
-            else {icon = "magnet";}
+
+            String icon = isMultiFile ? "folder" : (isValid ? toIcon(meta.getName()) : (snark instanceof FetchAndAdd ? "download" : "magnet"));
             if (isValid) {
                 appendIcon(buf, icon, "", "", false, true);
                 buf.append("</a></span>");
-            } else {appendIcon(buf, icon, "", "", false, true);}
+            } else {
+                appendIcon(buf, icon, "", "", false, true);
+            }
 
-            // Torrent name column
             buf.append("</td><td class=tName>");
             if (remaining == 0 || isMultiFile) {
                 buf.append("<a href=\"").append(DataHelper.escapeHTML(torrentPath));
-                if (isMultiFile) {buf.append('/');}
-                buf.append("\" title=\"");
-                if (isMultiFile) {buf.append(_t("View files"));}
-                else {buf.append(_t("Open file"));}
-                buf.append("\">");
+                if (isMultiFile) buf.append('/');
+                buf.append("\" title=\"").append(isMultiFile ? _t("View files") : _t("Open file")).append("\">");
             }
+
             if (basename.contains("Magnet")) {
                 buf.append(DataHelper.escapeHTML(basename)
-                   .replace("Magnet ", "<span class=infohash>")
-                   .replaceFirst("\\(", "</span> <span class=magnetLabel>").replaceAll("\\)$", ""))
+                    .replace("Magnet ", "<span class=infohash>")
+                    .replaceFirst("\\(", "</span> <span class=magnetLabel>").replaceAll("\\)$", ""))
                    .append("</span>");
-            } else {buf.append(DataHelper.escapeHTML(basename));}
-            if (remaining == 0 || isMultiFile) {buf.append("</a>");}
+            } else {
+                buf.append(DataHelper.escapeHTML(basename));
+            }
+
+            if (remaining == 0 || isMultiFile) buf.append("</a>");
+
             buf.append("</td><td class=ETA>");
             if (isRunning && remainingSeconds > 0 && !snark.isChecking()) {
                 buf.append(DataHelper.formatDuration2(Math.max(remainingSeconds, 10) * 1000));
-            } // (eta 6h)
+            }
             buf.append("</td><td class=rxd>");
-            if (remaining > 0) {buf.append(buildProgressBar(total, remaining, true, true, noThinsp, true));}
-            else if (remaining == 0) {
-                // needs locale configured for automatic translation
+            if (remaining > 0) {
+                buf.append(buildProgressBar(total, remaining, true, true, noThinsp, true));
+            } else if (remaining == 0) {
                 SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMM yyyy", Locale.US);
                 fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
                 long[] dates = _manager.getSavedAddedAndCompleted(snark);
                 String date = fmt.format(new Date(dates[1]));
-                buf.append("<div class=barComplete title=\"")
-                   .append(_t("Completed")).append(": ").append(date).append("\">")
-                   .append(formatSize(total).replaceAll("iB","")) // 3GB
-                   .append("</div>");
+                buf.append("<div class=barComplete title=\"").append(_t("Completed")).append(": ").append(date).append("\">")
+                   .append(formatSize(total).replaceAll("iB", "")).append("</div>");
             }
+
             buf.append("</td><td class=\"rateDown");
-            if (downBps >= 100000) {buf.append(" hundred");}
-            else if (downBps >= 10000) {buf.append(" ten");}
+            if (downBps >= 100000) buf.append(" hundred");
+            else if (downBps >= 10000) buf.append(" ten");
             buf.append("\">");
-            // we may only be uploading to peers, so hide when downrate <= 0
+
             if (isRunning && needed > 0 && downBps > 0 && curPeers > 0) {
-                buf.append("<span class=right>")
-                   .append(formatSizeSpans(formatSize(downBps), false))
-                   .append("/s</span>");
+                buf.append("<span class=right>").append(formatSizeSpans(formatSize(downBps), false)).append("/s</span>");
             }
+
             buf.append("</td><td class=txd>");
             if (isValid) {
-                double ratio = uploaded / ((double) total);
-                if (total <= 0) {ratio = 0;}
-                String txPercent = (new DecimalFormat("0")).format(ratio * 100);
-                String txPercentBar = txPercent + "%";
-                if (ratio > 1) {txPercentBar = "100%";}
-                if (ratio <= 0.01 && ratio > 0) {txPercent = (new DecimalFormat("0.00")).format(ratio * 100);}
+                double ratio = total > 0 ? uploaded / (double) total : 0;
+                String txPercent = new DecimalFormat(ratio <= 0.01 && ratio > 0 ? "0.00" : "0").format(ratio * 100);
+                String txPercentBar = ratio > 1 ? "100%" : txPercent + "%";
+
                 if (showRatios) {
                     if (total > 0) {
-                        buf.append("<span class=tx><span class=txBarText>").append(txPercent).append("&#8239;%")
-                           .append("</span><span class=txBarInner style=\"width:calc(").append(txPercentBar)
-                           .append(" - 2px)\"></span></span>");
-                    } else {buf.append("&mdash;");}
+                        buf.append("<span class=tx><span class=txBarText>").append(txPercent).append(" %")
+                           .append("</span><span class=txBarInner style=\"width:calc(")
+                           .append(txPercentBar).append(" - 2px)\"></span></span>");
+                    } else {
+                        buf.append("&mdash;");
+                    }
                 } else if (uploaded > 0) {
-                    buf.append("<span class=tx title=\"").append(_t("Share ratio"))
-                       .append(": ").append(txPercent).append("&#8239;%");
+                    buf.append("<span class=tx title=\"").append(_t("Share ratio")).append(": ").append(txPercent).append(" %");
                     SimpleDateFormat fmt = new SimpleDateFormat("HH:mm, EEE dd MMM yyyy", Locale.US);
-                    fmt.setTimeZone(SystemVersion.getSystemTimeZone(_context));
                     Storage storage = snark.getStorage();
-                    long lastActive = storage.getActivity();
-                    String date = fmt.format(new Date(lastActive));
-                    if (storage != null) {buf.append(" &bullet; ").append(_t("Last activity")).append(": ").append(date);}
+                    if (storage != null) {
+                        long lastActive = storage.getActivity();
+                        String date = fmt.format(new Date(lastActive));
+                        buf.append(" &bullet; ").append(_t("Last activity")).append(": ").append(date);
+                    }
                     buf.append("\"><span class=txBarText><span class=right>")
                        .append(formatSizeSpans(formatSize(uploaded), true))
-                       .append("</span> <span class=txBarInner style=\"width:calc(")
-                       .append(txPercentBar)
-                       .append(" - 2px)\"></span></span>");
+                       .append("</span> <span class=txBarInner style=\"width:calc(").append(txPercentBar).append(" - 2px)\"></span></span>");
                 }
             }
+
             buf.append("</td><td class=\"rateUp");
-            if (upBps >= 100000) {buf.append(" hundred");}
-            else if (upBps >= 10000) {buf.append(" ten");}
+            if (upBps >= 100000) buf.append(" hundred");
+            else if (upBps >= 10000) buf.append(" ten");
             buf.append("\">");
             if (isRunning && isValid && upBps > 0 && curPeers > 0) {
-                buf.append("<span class=right>")
-                   .append(formatSizeSpans(formatSize(upBps), false))
-                   .append("/s</span>");
+                buf.append("<span class=right>").append(formatSizeSpans(formatSize(upBps), false)).append("/s</span>");
             }
-            buf.append("</td>").append("<td class=tAction>");
+
+            buf.append("</td><td class=tAction>");
             boolean shouldDisable = snark.isChecking();
             if (isRunning) {
-                // Stop Button
-                buf.append("<input type=submit class=actionStop name=\"action_Stop_").append(b64).append("\" value=\"")
-                   .append(_t("Stop")).append("\" title=\"").append(_t("Stop torrent")).append("\"")
-                   .append(shouldDisable ? " disabled" : "").append(">");
+                buf.append("<input type=submit class=actionStop name=\"action_Stop_").append(b64).append("\" value=\"").append(_t("Stop"))
+                   .append("\" title=\"").append(_t("Stop torrent")).append("\"").append(shouldDisable ? " disabled" : "").append(">");
             } else if (!snark.isStarting()) {
-                // Start Button
-                buf.append("<input type=submit class=actionStart name=\"action_Start_").append(b64).append("\" value=\"")
-                   .append(_t("Start")).append("\" title=\"").append(_t("Start torrent")).append("\"")
-                   .append(shouldDisable ? " disabled" : "").append(">");
+                buf.append("<input type=submit class=actionStart name=\"action_Start_").append(b64).append("\" value=\"").append(_t("Start"))
+                   .append("\" title=\"").append(_t("Start torrent")).append("\"").append(shouldDisable ? " disabled" : "").append(">");
 
                 if (isValid && canWrite) {
-                    // Remove Button
-                    buf.append("<input type=submit class=actionRemove name=\"action_Remove_").append(b64).append("\" value=\"")
-                       .append(_t("Remove")).append("\" title=\"").append(_t("Remove and delete torrent, retaining downloaded files"))
-                       .append("\" client=\"").append(escapeJSString(snark.getName()))
-                       .append("\" data-name=\"").append(escapeJSString(snark.getBaseName())).append(".torrent\">");
+                    buf.append("<input type=submit class=actionRemove name=\"action_Remove_").append(b64).append("\" value=\"").append(_t("Remove"))
+                       .append("\" title=\"").append(_t("Remove and delete torrent, retaining downloaded files")).append("\" client=\"")
+                       .append(escapeJSString(snark.getName())).append("\" data-name=\"").append(escapeJSString(snark.getBaseName())).append(".torrent\">");
                 }
-
-                // We can delete magnets without write privs
                 if (!isValid || canWrite) {
-                    // Delete Button
-                    buf.append("<input type=submit class=actionDelete name=\"action_Delete_").append(b64).append("\" value=\"")
-                       .append(_t("Delete")).append("\" title=\"").append(_t("Delete .torrent file and associated data files"))
-                       .append("\" client=\"").append(escapeJSString(snark.getName()))
-                       .append("\" data-name=\"").append(escapeJSString(snark.getBaseName())).append(".torrent\">");
+                    buf.append("<input type=submit class=actionDelete name=\"action_Delete_").append(b64).append("\" value=\"").append(_t("Delete"))
+                       .append("\" title=\"").append(_t("Delete .torrent file and associated data files")).append("\" client=\"")
+                       .append(escapeJSString(snark.getName())).append("\" data-name=\"").append(escapeJSString(snark.getBaseName())).append(".torrent\">");
                 }
             }
             buf.append("</td></tr>\n");
 
+            // Conditionally render peers
             if (showPeers && isRunning && curPeers > 0) {
                 List<Peer> peers = snark.getPeerList();
-                //if (!showDebug) {Collections.sort(peers, new PeerComparator());}
                 Collections.sort(peers, new PeerComparator());
                 for (Peer peer : peers) {
                     appendPeerRow(buf, peer, snark, meta, noThinsp);
                 }
             }
             out.append(buf);
-            out.flush();
-            buf.setLength(0);
         }
     }
 
