@@ -2848,12 +2848,13 @@ public class I2PSnarkServlet extends BasicServlet {
      * @since 0.9.68+
     */
     private StatusResult buildStatusString(Snark snark, int curPeers, int knownPeers,
-                                         long downBps, long upBps, boolean isRunning,
-                                         long remaining, long needed, boolean noThinsp) {
-        StringBuilder iconBuf = new StringBuilder();
-        String statusString;
-        String snarkSt = "unassigned";
-        String tooltip;
+                                           long downBps, long upBps, boolean isRunning,
+                                           long remaining, long needed, boolean noThinsp) {
+        StringBuilder iconBuf = new StringBuilder(128);
+        StringBuilder statusBuf = new StringBuilder(256);
+
+        String snarkSt = "";
+
         boolean isAllocating = snark.isAllocating();
         boolean isChecking = snark.isChecking();
         boolean isStarting = snark.isStarting();
@@ -2867,76 +2868,85 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean isDownloading = downBps > 0;
         boolean isActivelySeeding = isComplete && isRunning && hasPeers && isUploading;
 
+        // Cache repeated peer count HTML once
+        final String peerCountHtml = new StringBuilder()
+            .append("</td><td class=peerCount><b><span class=right>")
+            .append(curPeers)
+            .append("</span>")
+            .append(thinsp(noThinsp))
+            .append("<span class=left>").append(knownPeers).append("</span>")
+            .toString();
+
         if (isChecking) {
             appendIcon(iconBuf, "processing", "", _t("Checking"), false, true);
-            statusString = iconBuf.toString() + "</td><td class=peerCount><b><span class=right>" +
-                           curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+            statusBuf.append(iconBuf).append(peerCountHtml);
             snarkSt = "active starting processing";
         } else if (isAllocating) {
             appendIcon(iconBuf, "processing", "", _t("Allocating"), false, true);
-            statusString = iconBuf.toString() + "</td><td class=peerCount><b>";
+            statusBuf.append(iconBuf).append("</td><td class=peerCount><b>");
             snarkSt = "active starting processing";
         } else if (hasTrackerProblems) {
-            tooltip = snark.getTrackerProblems();
+            String tooltip = snark.getTrackerProblems();
             appendIcon(iconBuf, "error", "", tooltip, false, true);
-            statusString = iconBuf.toString() + "</td><td class=peerCount><b><span class=right>" +
-                           curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+            statusBuf.append(iconBuf).append(peerCountHtml);
             snarkSt = "inactive downloading incomplete neterror";
         } else if (isStarting) {
             appendIcon(iconBuf, "stalled", "", _t("Starting"), false, true);
-            statusString = iconBuf.toString() + "</td><td class=peerCount><b>";
+            statusBuf.append(iconBuf).append("</td><td class=peerCount><b>");
             snarkSt = "active starting";
         } else if (isActivelySeeding) {
-            tooltip = ngettext("Seeding to {0} peer", "Seeding to {0} peers", curPeers);
+            String tooltip = ngettext("Seeding to {0} peer", "Seeding to {0} peers", curPeers);
             appendIcon(iconBuf, "seeding_active", "", tooltip, false, true);
-            statusString = iconBuf.toString() + "</td><td class=peerCount><b><span class=right>" +
-                           curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+            statusBuf.append(iconBuf).append(peerCountHtml);
             snarkSt = "active seeding complete connected";
         } else if (isSeeding && hasConnectedPeers && !isUploading) {
-            statusString = toSVGWithDataTooltip("seeding", "", _t("Seeding") +
-                           " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td><td class=peerCount><b><span class=right>" +
-                           curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+            statusBuf.append(toSVGWithDataTooltip("seeding", "",
+                    _t("Seeding") + " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")"))
+                .append(peerCountHtml);
             snarkSt = "inactive seeding complete connected";
         } else if (!isComplete && hasConnectedPeers && !isUploading && !isDownloading) {
-            statusString = toSVGWithDataTooltip("seeding", "", _t("Seeding") +
-                           " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td><td class=peerCount><b><span class=right>" +
-                           curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+            statusBuf.append(toSVGWithDataTooltip("seeding", "",
+                    _t("Seeding") + " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")"))
+                .append(peerCountHtml);
             snarkSt = "inactive incomplete connected";
         } else if (isSeeding) {
-             tooltip = ngettext("Seeding to {0} peer in swarm", "Seeding to {0} peers in swarm", curPeers);
-             appendIcon(iconBuf, "seeding", "", tooltip, false, true);
-             snarkSt = "inactive seeding complete";
-             statusString = iconBuf.toString() + "</td><td class=peerCount><b><span class=right>" +
-                           curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+            String tooltip = ngettext("Seeding to {0} peer in swarm", "Seeding to {0} peers in swarm", curPeers);
+            appendIcon(iconBuf, "seeding", "", tooltip, false, true);
+            statusBuf.append(iconBuf).append(peerCountHtml);
+            snarkSt = "inactive seeding complete";
         } else if (!isRunning && isComplete) {
-                snarkSt = "inactive complete stopped";
-                statusString = toSVGWithDataTooltip("complete", "", _t("Complete")) + "</td><td class=peerCount><b>&mdash;";
+            snarkSt = "inactive complete stopped";
+            statusBuf.append(toSVGWithDataTooltip("complete", "", _t("Complete"))).append("</td><td class=peerCount><b>&mdash;");
         } else {
             if (hasConnectedPeers && isDownloading) {
-                statusString = toSVGWithDataTooltip("downloading", "", _t("OK") + ", " +
-                               ngettext("Downloading from {0} peer", "Downloading from {0} peers", curPeers)) + "</td><td class=peerCount><b><span class=right>" +
-                               curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+                statusBuf.append(toSVGWithDataTooltip("downloading", "",
+                        _t("OK") + ", " + ngettext("Downloading from {0} peer", "Downloading from {0} peers", curPeers)))
+                    .append(peerCountHtml);
                 snarkSt = "active downloading incomplete connected";
             } else if (!isComplete && hasConnectedPeers) {
-                statusString = toSVGWithDataTooltip("stalled", "", _t("Stalled") +
-                               " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td><td class=peerCount><b><span class=right>" +
-                               curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+                statusBuf.append(toSVGWithDataTooltip("stalled", "",
+                        _t("Stalled") + " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")"))
+                    .append(peerCountHtml);
                 snarkSt = "inactive downloading incomplete connected";
             } else if (isRunning && hasPeers && !hasConnectedPeers) {
-                statusString = toSVGWithDataTooltip("nopeers", "", _t("No Peers") +
-                               " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")") + "</td><td class=peerCount><b><span class=right>0</span>" +
-                               thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+                statusBuf.append(toSVGWithDataTooltip("nopeers", "",
+                        _t("No Peers") + " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")"))
+                    .append("</td><td class=peerCount><b><span class=right>0</span>")
+                    .append(thinsp(noThinsp))
+                    .append("<span class=left>").append(knownPeers).append("</span>");
                 snarkSt = "inactive downloading incomplete nopeers";
             } else if (isRunning && !hasPeers) {
-                statusString = toSVGWithDataTooltip("nopeers", "", _t("No Peers")) + "</td><td class=peerCount><b><span class=right>" +
-                               curPeers + "</span>" + thinsp(noThinsp) + "<span class=left>" + knownPeers + "</span>";
+                statusBuf.append(toSVGWithDataTooltip("nopeers", "", _t("No Peers")))
+                    .append(peerCountHtml);
                 snarkSt = "inactive downloading incomplete nopeers zero";
             } else {
-                statusString = toSVGWithDataTooltip("stopped", "", _t("Stopped")) + "</td><td class=peerCount><b>&mdash;";
+                statusBuf.append(toSVGWithDataTooltip("stopped", "", _t("Stopped")))
+                    .append("</td><td class=peerCount><b>&mdash;");
                 snarkSt = "inactive incomplete stopped zero";
             }
         }
-        return new StatusResult(statusString, snarkSt);
+
+        return new StatusResult(statusBuf.toString(), snarkSt);
     }
 
     /**
