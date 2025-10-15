@@ -44,8 +44,8 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
     private final long _runnerId;
 
     /** Max bytes streamed in a packet - smaller packets might be filled up to this size */
-    private static final int MAX_PACKET_SIZE = 16 * 1024;
-    private static final int NETWORK_BUFFER_SIZE = MAX_PACKET_SIZE * 2;
+    private static final int MAX_PACKET_SIZE = 4 * 1024;
+    private static final int NETWORK_BUFFER_SIZE = MAX_PACKET_SIZE * 8;
 
     private final Socket s;
     private final Socket i2ps;
