@@ -412,6 +412,9 @@ async function initSnarkRefresh() {
   let serverOKIntervalId = setInterval(checkIfUp, 5000);
   clearInterval(snarkRefreshIntervalId);
   document.documentElement.removeAttribute("style");
+  const loaded = torrentsBody?.querySelector(".rowEven");
+  const noload = torrents?.querySelector("#noTorrents");
+  if (loaded && noload) {noload.remove();}
   try {
     snarkRefreshIntervalId = setInterval(async () => {
       try {

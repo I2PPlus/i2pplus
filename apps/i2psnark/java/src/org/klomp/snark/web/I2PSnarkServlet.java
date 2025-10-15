@@ -708,261 +708,120 @@ public class I2PSnarkServlet extends BasicServlet {
      * @return true if the current page is the first page of the torrent list
      * @throws IOException if an I/O error occurs while writing to the output stream
      */
-    private boolean writeTorrents(PrintWriter out, HttpServletRequest req, boolean canWrite) throws IOException {
-        /** dl, ul, down rate, up rate, peers, size */
-        final long stats[] = new long[6];
-        String filter = req.getParameter("filter") != null ? req.getParameter("filter") : "";
-        String filterParam = filter;
-        String peerParam = req.getParameter("p");
-        String psize = req.getParameter("ps");
-        String search = req.getParameter("search");
-        String srt = req.getParameter("sort");
-        String stParam = req.getParameter("st");
-        filterEnabled = !filterParam.isEmpty() && !filterParam.equals("all");
-        int refresh = _manager.getRefreshDelaySeconds();
-        List<Snark> snarks = getSortedSnarks(req);
-        int total = snarks.size();
-        boolean isConnected = _manager.util().connected();
-        boolean noSnarks = snarks.isEmpty();
-        boolean isForm = isConnected || !noSnarks;
-        boolean showStatusFilter = _manager.util().showStatusFilter();
-        boolean sortEnabled = srt != null && !srt.isEmpty();
-        boolean searchActive = (search != null && !search.equals("") && search.length() > 0);
-        if (isForm) {
-            if (showStatusFilter) {renderFilterBar(out, req);}
-            else {
-                StringBuilder buf = new StringBuilder(1280);
-                buf.append("<form id=torrentlist action=_post method=POST target=processForm>\n");
-                out.append(buf);
-                buf.setLength(0);
-            }
-            writeHiddenInputs(out, req, null);
-            out.flush();
-        }
+private boolean writeTorrents(PrintWriter out, HttpServletRequest req, boolean canWrite) throws IOException {
+    final long stats[] = new long[6];
+    String filter = req.getParameter("filter") != null ? req.getParameter("filter") : "";
+    String peerParam = req.getParameter("p");
+    String search = req.getParameter("search");
+    String srt = req.getParameter("sort");
+    String stParam = req.getParameter("st");
+    boolean filterEnabled = !filter.isEmpty() && !"all".equals(filter);
 
-        // Opera and text-mode browsers: no &thinsp; and no input type=image values submitted
-        // Using a unique name fixes Opera, except for the buttons with js confirms, see below
-        String ua = req.getHeader("User-Agent");
-        boolean isDegraded = ua != null && ServletUtil.isTextBrowser(ua);
-        boolean noThinsp = isDegraded || (ua != null && ua.startsWith("Opera"));
+    List<Snark> snarks = getSortedSnarks(req);
+    int total = snarks.size();
+    int downloads = 0;
+    int uploads = 0;
+    long totalETA = 0;
+    boolean isConnected = _manager.util().connected();
+    boolean noSnarks = snarks.isEmpty();
+    boolean isForm = isConnected || !noSnarks;
+    boolean showStatusFilter = _manager.util().showStatusFilter();
+    boolean sortEnabled = srt != null && !srt.isEmpty();
+    boolean searchActive = search != null && !search.isEmpty();
+    boolean isUploading = false;
+    boolean hasPeers = false;
+    DHT dht = _manager.util().getDHT();
 
-        // search
-        boolean isSearch = false;
-        if (searchActive) {
-            List<Snark> matches = search(search, snarks);
-            if (matches != null) {
-                snarks = matches;
-                isSearch = true;
-                searchResults = matches.size();
-            }
-        }
-
-        // Pagination
-        int start = 0;
-        if (stParam != null) {
-            try {start = Math.max(0, Math.min(total - 1, Integer.parseInt(stParam)));}
-            catch (NumberFormatException nfe) {} // ignore and use default start = 0
-        }
-        // Determine page size, using large count if filter enabled
-        int pageSize = filterEnabled ? 9999 : Math.max(_manager.getPageSize(), 10);
-        String ps = req.getParameter("ps");
-        String currentSort = req.getParameter("sort");
-        if ("null".equals(ps)) {ps = String.valueOf(pageSize);}
-        if (ps != null) {
-            try {pageSize = Integer.parseInt(ps);}
-            catch (NumberFormatException nfe) {} // ignore and use existing pageSize
-        }
-        renderPageNavigation(out, req, start, pageSize, total, filter, noThinsp, isForm, searchActive, (searchActive ? search.length() : 0));
-
-        out.write(TABLE_HEADER);
-        out.write(buildTorrentTableHeader(req, snarks, start, pageSize, filterParam, peerParam, currentSort, _contextPath));
-        out.flush();
-        String uri = _contextPath + '/';
-        boolean showDebug = "2".equals(peerParam);
-        int totalSnarks = snarks.size();
-        boolean isRatSort = false;
-        boolean hasPeers;
-        boolean isUploading = false;
-        int end = 0;
-
-        for (int i = 0; i < totalSnarks; i++) {
-            Snark snark = snarks.get(i);
-            boolean showPeers = showDebug || "1".equals(peerParam) || Base64.encode(snark.getInfoHash()).equals(peerParam);
-            boolean hide = i < start || i >= start + pageSize;
-            StringBuilder buf = new StringBuilder(2048);
-            displaySnark(out, req, snark, uri, i, stats, showPeers, isDegraded, noThinsp, showDebug, hide, isRatSort, canWrite,
-                         filterParam, filterEnabled, sortParam, sortEnabled, buf);
-        }
-
-        StringBuilder ftr = new StringBuilder(2*1024);
-        if (totalSnarks == 0) {
-            ftr.append("<tr id=noload class=noneLoaded><td colspan=12><i>");
-            synchronized(this) {
-                File dd = _resourceBase;
-                if (!dd.exists() && !dd.mkdirs()) {
-                    ftr.append(_t("Data directory cannot be created")).append(": ").append(DataHelper.escapeHTML(dd.toString()));
-                } else if (!dd.isDirectory()) {
-                    ftr.append(_t("Not a directory")).append(": ").append(DataHelper.escapeHTML(dd.toString()));
-                } else if (!dd.canRead()) {
-                    ftr.append(_t("Unreadable")).append(": ").append(DataHelper.escapeHTML(dd.toString()));
-                } else if (!canWrite) {
-                    ftr.append(_t("No write permissions for data directory")).append(": ").append(DataHelper.escapeHTML(dd.toString()));
-                } else if (isSearch) {ftr.append(_t("No torrents found."));}
-                else {ftr.append(_t("No torrents loaded."));}
-            }
-            ftr.append("</i></td></tr></tbody>\n").append("<tfoot id=snarkFoot");
-            if (_manager.util().isConnecting()) {ftr.append(" class=initializing");}
-            ftr.append("><tr><th id=torrentTotals class=left colspan=12></th></tr></tfoot>\n");
-        } else if (totalSnarks > 0) {
-            PrintWriter tempOut = new PrintWriter(new Writer() {
-                @Override public void write(char[] cbuf, int off, int len) {
-                    ftr.append(cbuf, off, len);
-                }
-                @Override public void flush() {}
-                @Override public void close() {}
-            });
-            renderPageNavigation(tempOut, req, start, pageSize, total, filter, noThinsp, true, searchActive, (searchActive ? search.length() : 0));
-            tempOut.flush();
-            String pageNavHtml = ftr.toString();
-            if (!pageNavHtml.isEmpty()) {
-                ftr.setLength(0); // clear buffer to keep original footer content
-                ftr.append("<tr id=pagenavbottom><td colspan=12><div class=pagenavcontrols>")
-                   .append(pageNavHtml)
-                   .append("</div></td></tr>\n");
-            } else {ftr.append("<tr id=pagenavbottom hidden><td colspan=12><div class=pagenavcontrols></div></td></tr>\n");}
-        }
-        ftr.append("</tbody>\n<tfoot id=snarkFoot><tr class=volatile><th id=torrentTotals class=left colspan=6><span id=totals>");
-
-        // Disk usage
-        ftr.append(_manager.getDiskUsage());
-
-        // torrent count
-        ftr.append("<span id=torrentCount class=counter title=\"").append(ngettext("1 torrent", "{0} torrents", total)).append("\">");
-        appendIcon(ftr, "torrent", "", "", true, false);
-        ftr.append("<span class=badge>").append(total).append("</span></span>");
-
-        // torrents filesize
-        ftr.append("<span id=torrentFilesize class=counter title=\"").append(_t("Total size of loaded torrents")).append("\">");
-        appendIcon(ftr, "size", "", "", true, false);
-        ftr.append("<span class=badge>").append(DataHelper.formatSize2(stats[5]).replace("i", "")).append("</span></span>");
-
-        // connected peers
-        ftr.append("<span id=peerCount class=counter title=\"")
-           .append(ngettext("1 connected peer", "{0} peer connections", (int) stats[4]));
-        DHT dht = _manager.util().getDHT();
-        if (dht != null) {
-            int dhts = dht.size();
-            if (dhts > 0) {
-                ftr.append(" (").append(ngettext("1 DHT peer", "{0} DHT peers", dhts)).append(")");
-            }
-        }
-        ftr.append("\">");
-        appendIcon(ftr, "showpeers", "", "", true, false);
-        ftr.append("<span class=badge>").append((int) stats[4]).append("</span></span>");
-
-        // actively downloading
-        int downloads = 0;
-        for (int i = start; i < snarks.size(); i++) {
-            if ((snarks.get(i).getPeerList().size() >= 1) && (snarks.get(i).getDownloadRate() > 0)) {downloads++;}
-        }
-        ftr.append("<span id=rxCount class=counter title=\"").append(_t("Active downloads")).append("\">");
-        appendIcon(ftr, "head_rx", "", "", true, false);
-        ftr.append("<span class=badge>").append(downloads).append("</span></span>");
-
-        // actively uploading
-        int uploads = 0;
-        for (int i = start; i < snarks.size(); i++) {
-            if ((snarks.get(i).getPeerList().size() >= 1) && (snarks.get(i).getUploadRate() > 0)) {uploads++;}
-        }
-        ftr.append("<span id=txCount class=counter title=\"").append(_t("Active uploads")).append("\">");
-        appendIcon(ftr, "head_tx", "", "", true, false);
-        ftr.append("<span class=badge>").append(uploads).append("</span></span>");
-
-        if (!isStandalone()) {
-            _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
-            ftr.append("<span id=tnlInCount class=counter title=\"")
-               .append(_t("Active Inbound tunnels"))
-               .append("\" hidden>");
-            appendIcon(ftr, "inbound", "", "", true, true);
-            ftr.append("<span class=badge></span></span><span id=tnlOutCount class=counter title=\"")
-               .append(_t("Active Outbound tunnels"))
-               .append("\" hidden>");
-            appendIcon(ftr, "outbound", "", "", true, true);
-            ftr.append("<span class=badge></span></span>");
-        }
-
-        ftr.append("</span></th>");
-
-        if (isConnected && total > 0) {
-            ftr.append("<th class=ETA>");
-            if (!noSnarks) {
-                hasPeers = false;
-                long remainingSeconds = 0;
-                long totalETA = 0;
-                end = Math.min(start + pageSize, snarks.size());
-                for (int i = start; i < end; i++) {
-                    long needed = snarks.get(i).getNeededLength();
-                    if (needed > total) {needed = total;}
-                    if (stats[2] > 0 && needed > 0) {remainingSeconds = needed / stats[2];}
-                    else {remainingSeconds = 0;}
-                    totalETA+= remainingSeconds;
-                    hasPeers = true;
-                    if (hasPeers) {
-                        if (totalETA > 0) {
-                            ftr.append("<span title=\"")
-                               .append(_t("Estimated download time for all torrents")).append("\">")
-                               .append(DataHelper.formatDuration2(Math.max(totalETA, 10) * 1000))
-                               .append("</span>");
-                        }
-                    }
-                    break;
-                }
-                ftr.append("</th>").append("<th class=rxd title=\"").append(_t("Data downloaded this session")).append("\">");
-                if (stats[0] > 0) {ftr.append(formatSize(stats[0]).replaceAll("iB", ""));}
-                ftr.append("</th>").append("<th class=rateDown title=\"").append(_t("Total download speed")).append("\">");
-                if (stats[2] > 0) {ftr.append(formatSize(stats[2]).replaceAll("iB", "") + "/s");}
-                ftr.append("</th>").append("<th class=txd  title=\"").append(_t("Total data uploaded (for listed torrents)")).append("\">");
-                if (stats[1] > 0) {ftr.append(formatSize(stats[1]).replaceAll("iB", ""));}
-                ftr.append("</th>").append("<th class=rateUp title=\"").append(_t("Total upload speed")).append("\">");
-                end = snarks.size(); // show total upload speed for all torrents, displayed or otherwise
-                for (int i = start; i < end; i++) {
-                    if ((snarks.get(i).getPeerList().size() >= 1) && (snarks.get(i).getUploadRate() > 0)) {
-                        isUploading = true;
-                        break;
-                    }
-                }
-                if (stats[3] > 0 && isUploading) {ftr.append(formatSize(stats[3]).replaceAll("iB", "") + "/s");}
-                ftr.append("</th>").append("<th class=tAction>");
-                String toggleDebug = "Toggle Debug Panel";
-                if (dht != null && (!"2".equals(peerParam))) {
-                    ftr.append("<a id=debugMode href=\"?p=2\" title=\"").append(_t(toggleDebug))
-                       .append("\">").append(_t("Debug Mode")).append("</a>");
-                } else if (dht != null) {
-                    ftr.append("<a id=debugMode href=\"?p\" title=\"").append(_t(toggleDebug))
-                       .append("\">").append(_t("Normal Mode")).append("</a>");
-                }
-                ftr.append("</th>");
-            } else {ftr.append("<th colspan=6></th>");}
-            ftr.append("</tr>\n");
-
-            if (showDebug) {ftr.append("<tr id=dhtDebug>");}
-            else {ftr.append("<tr id=dhtDebug hidden>");}
-            ftr.append("<th colspan=12><div class=volatile>");
-            if (dht != null) {ftr.append(_manager.getBandwidthListener().toString()).append(dht.renderStatusHTML());}
-            else {ftr.append("<b id=noDHTpeers>").append(_t("No DHT Peers")).append("</b>");}
-            ftr.append("</div></th></tr>").append("</tfoot>\n");
-        }
-
-        ftr.append("</table>\n");
-        if (isForm) {ftr.append("</form>\n");}
-        if (total > 0) {ftr.append("<script src=/i2psnark/.res/js/convertTooltips.js></script>\n");}
-
-        out.write(ftr.toString());
-        ftr.setLength(0);
-        out.flush();
-
-        return start == 0;
+    if (searchActive) {
+        List<Snark> matches = search(search, snarks);
+        if (matches != null) { snarks = matches; searchResults = matches.size(); }
     }
+
+    int start = 0;
+    if (stParam != null) {
+        try { start = Math.max(0, Math.min(total - 1, Integer.parseInt(stParam))); } catch(NumberFormatException ignored) {}
+    }
+
+    int pageSize = filterEnabled ? 9999 : Math.max(_manager.getPageSize(), 10);
+    String ps = req.getParameter("ps");
+    if ("null".equals(ps)) ps = Integer.toString(pageSize);
+    if (ps != null) {
+        try { pageSize = Integer.parseInt(ps); } catch(NumberFormatException ignored) {}
+    }
+
+    boolean isDegraded = false, noThinsp = false;
+    String ua = req.getHeader("User-Agent");
+    if (ua != null) {
+        isDegraded = ServletUtil.isTextBrowser(ua);
+        noThinsp = isDegraded || ua.startsWith("Opera");
+    }
+
+    if (isForm) {
+        if (showStatusFilter) renderFilterBar(out, req);
+        else out.write("<form id=torrentlist action=_post method=POST target=processForm>\n");
+        writeHiddenInputs(out, req, null);
+        out.flush();
+    }
+
+    renderPageNavigation(out, req, start, pageSize, total, filter, noThinsp, isForm, searchActive, (searchActive ? search.length() : 0));
+    out.write(TABLE_HEADER);
+    out.write(appendSnarkHeader(req, snarks, start, pageSize, filter, peerParam, srt, _contextPath));
+    out.flush();
+
+    String uri = _contextPath + '/';
+    boolean showDebug = "2".equals(peerParam);
+    int end = Math.min(start + pageSize, snarks.size());
+    StringBuilder buf = new StringBuilder(2048);
+
+    for (int i = start; i < end; i++) {
+        Snark snark = snarks.get(i);
+        boolean showPeers = showDebug || "1".equals(peerParam) || Base64.encode(snark.getInfoHash()).equals(peerParam);
+        boolean hide = false;
+        buf.setLength(0);
+        displaySnark(out, req, snark, uri, i, stats, showPeers, isDegraded, noThinsp, showDebug,
+                     hide, false, canWrite, filter, filterEnabled, srt, sortEnabled, buf);
+
+        // additionally accumulate downloads, uploads, ETA, flags
+        if (snark.getPeerList().size() >= 1) {
+            if (snark.getDownloadRate() > 0) downloads++;
+            if (snark.getUploadRate() > 0) { uploads++; isUploading = true; }
+            hasPeers = true;
+            long needed = snark.getNeededLength();
+            if (needed > total) needed = total;
+            if (stats[2] > 0 && needed > 0) totalETA += needed / stats[2];
+        }
+    }
+
+    if (total == 0) {
+        out.write("<tbody id=noTorrents><tr id=noload class=noneLoaded><td colspan=12><i>");
+        synchronized(this) {
+            File dd = _resourceBase;
+            if (!dd.exists() && !dd.mkdirs()) out.write(_t("Data directory cannot be created") + ": " + DataHelper.escapeHTML(dd.toString()));
+            else if (!dd.isDirectory()) out.write(_t("Not a directory") + ": " + DataHelper.escapeHTML(dd.toString()));
+            else if (!dd.canRead()) out.write(_t("Unreadable") + ": " + DataHelper.escapeHTML(dd.toString()));
+            else if (!canWrite) out.write(_t("No write permissions for data directory") + ": " + DataHelper.escapeHTML(dd.toString()));
+            else if (searchActive) out.write(_t("No torrents found."));
+            else out.write(_t("No torrents loaded."));
+        }
+        out.write("</i></td></tr></tbody>");
+    }
+
+    //renderPageNavigation(out, req, start, pageSize, total, filter, noThinsp, true, searchActive, (searchActive ? search.length() : 0));
+    appendSnarkFooter(out, buf, stats, total, isConnected, noSnarks, hasPeers, isUploading, dht, isStandalone(), debug, peerParam);
+
+    if (showDebug) out.write("<tr id=dhtDebug>");
+    else out.write("<tr id=dhtDebug hidden>");
+    out.write("<th colspan=12><div class=volatile>");
+    if (dht != null) out.write(_manager.getBandwidthListener().toString() + dht.renderStatusHTML());
+    else out.write("<b id=noDHTpeers>" + _t("No DHT Peers") + "</b>");
+    out.write("</div></th></tr></tfoot>\n</table>\n");
+
+    if (isForm) out.write("</form>\n");
+    if (total > 0) out.write("<script src=/i2psnark/.res/js/convertTooltips.js></script>\n");
+
+    out.flush();
+    return start == 0;
+}
 
     /**
      * Builds the HTML table header row for the torrent list display, including sortable column
@@ -986,7 +845,7 @@ public class I2PSnarkServlet extends BasicServlet {
      * @return a String containing the fully constructed HTML for the torrent table header row
      * @since 0.9.68+
      */
-    private String buildTorrentTableHeader(HttpServletRequest req, List<Snark> snarks, int start, int pageSize,
+    private String appendSnarkHeader(HttpServletRequest req, List<Snark> snarks, int start, int pageSize,
                                           String filterParam, String peerParam, String currentSort, String contextPath) {
         StringBuilder buf = new StringBuilder(2 * 1024);
         boolean showSort = snarks.size() > 1;
@@ -1257,6 +1116,123 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("</th></tr></thead>\n<tbody id=snarkTbody>");
 
         return buf.toString();
+    }
+
+    /**
+     * Appends the footer section for the torrent list table, displaying overall statistics,
+     * counters, and status indicators with associated icons.
+     *
+     * If the manager is in a connecting state, outputs a placeholder footer indicating initialization.
+     * Otherwise, outputs detailed stats including disk usage, torrent count, file size, peer counts,
+     * active downloads/uploads, tunnel counts (if applicable), and connection speed metrics.
+     *
+     * @param out          the PrintWriter to write HTML output to
+     * @param buf          a reusable StringBuilder used for generating icon HTML snippets
+     * @param stats        a long array of cumulative stats: [downloaded, uploaded, download rate, upload rate, peers, total size]
+     * @param total        total number of torrents
+     * @param isConnected  whether the system is connected
+     * @param noSnarks     true if no torrents are loaded (empty list)
+     * @param hasPeers     true if there are any connected peers
+     * @param isUploading  true if there is active uploading
+     * @param dht          the DHT instance providing additional peer info (may be null)
+     * @param isStandalone true if running in standalone mode (tunnel info omitted if standalone)
+     * @param debug        true if in debug mode (affects resource path and display)
+     * @param peerParam    the peer parameter from the request query, affects debug mode toggle links
+     * @throws IOException if writing to the output stream fails
+     */
+    private void appendSnarkFooter(PrintWriter out, StringBuilder buf, long[] stats, int total, boolean isConnected,
+                                   boolean noSnarks, boolean hasPeers, boolean isUploading, DHT dht,
+                                   boolean isStandalone, boolean debug, String peerParam) throws IOException {
+
+        if (_manager.util().isConnecting()) {
+            out.write("<tfoot id=snarkFoot class=initializing><tr><th id=torrentTotals class=left colspan=12></th></tr></tfoot>\n");
+        } else {
+            out.write("<tfoot id=snarkFoot><tr class=volatile><th id=torrentTotals class=left colspan=6><span id=totals>");
+            out.write(_manager.getDiskUsage());
+
+            buf.setLength(0);
+            out.write("<span id=torrentCount class=counter title=\"");
+            out.write(ngettext("1 torrent", "{0} torrents", total));
+            out.write("\">");
+            appendIcon(buf, "torrent", "", "", true, false);
+            out.write(buf.toString());
+            out.write("<span class=badge>");
+            out.write(Integer.toString(total));
+            out.write("</span></span>");
+
+            buf.setLength(0);
+            out.write("<span id=torrentFilesize class=counter title=\"" + _t("Total size of loaded torrents") + "\">");
+            appendIcon(buf, "size", "", "", true, false);
+            out.write(buf.toString());
+            out.write("<span class=badge>");
+            out.write(DataHelper.formatSize2(stats[5]).replace("i", ""));
+            out.write("</span></span>");
+
+            buf.setLength(0);
+            out.write("<span id=peerCount class=counter title=\"" + ngettext("1 connected peer", "{0} peer connections", (int) stats[4]) + "\">");
+            appendIcon(buf, "showpeers", "", "", true, false);
+            out.write(buf.toString());
+            out.write("<span class=badge>");
+            out.write(Integer.toString((int) stats[4]));
+            out.write("</span></span>");
+
+            buf.setLength(0);
+            out.write("<span id=rxCount class=counter title=\"" + _t("Active downloads") + "\">");
+            appendIcon(buf, "head_rx", "", "", true, false);
+            out.write(buf.toString());
+            out.write("<span class=badge>");
+            out.write(Integer.toString((int) stats[2])); // or pass downloads count here if computed separately
+            out.write("</span></span>");
+
+            buf.setLength(0);
+            out.write("<span id=txCount class=counter title=\"" + _t("Active uploads") + "\">");
+            appendIcon(buf, "head_tx", "", "", true, false);
+            out.write(buf.toString());
+            out.write("<span class=badge>");
+            out.write(Integer.toString((int) stats[3])); // or uploads count
+            out.write("</span></span>");
+
+            if (!isStandalone) {
+                _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
+                buf.setLength(0);
+                out.write("<span id=tnlInCount class=counter title=\"" + _t("Active Inbound tunnels") + "\" hidden>");
+                appendIcon(buf, "inbound", "", "", true, true);
+                out.write(buf.toString());
+                out.write("<span class=badge></span></span>");
+
+                buf.setLength(0);
+                out.write("<span id=tnlOutCount class=counter title=\"" + _t("Active Outbound tunnels") + "\" hidden>");
+                appendIcon(buf, "outbound", "", "", true, true);
+                out.write(buf.toString());
+                out.write("<span class=badge></span></span>");
+            }
+
+            out.write("</span></th>");
+            if (isConnected && total > 0) {
+                out.write("<th class=ETA>");
+                if (!noSnarks && hasPeers && stats[2] > 0)
+                    out.write("<span title=\"" + _t("Estimated download time for all torrents") + "\">" +
+                              DataHelper.formatDuration2(Math.max(stats[2], 10) * 1000) + "</span>");
+                out.write("</th><th class=rxd title=\"" + _t("Data downloaded this session") + "\">");
+                if (stats[0] > 0) out.write(formatSize(stats[0]).replace("iB", ""));
+                out.write("</th><th class=rateDown title=\"" + _t("Total download speed") + "\">");
+                if (stats[2] > 0) out.write(formatSize(stats[2]).replace("iB", "") + "/s");
+                out.write("</th><th class=txd  title=\"" + _t("Total data uploaded (for listed torrents)") + "\">");
+                if (stats[1] > 0) out.write(formatSize(stats[1]).replace("iB", ""));
+                out.write("</th><th class=rateUp title=\"" + _t("Total upload speed") + "\">");
+                if (stats[3] > 0 && isUploading) out.write(formatSize(stats[3]).replace("iB", "") + "/s");
+                out.write("</th><th class=tAction>");
+                String toggleDebug = "Toggle Debug Panel";
+                if (dht != null && !"2".equals(peerParam))
+                    out.write("<a id=debugMode href=\"?p=2\" title=\"" + _t(toggleDebug) + "\">" + _t("Debug Mode") + "</a>");
+                else if (dht != null)
+                    out.write("<a id=debugMode href=\"?p\" title=\"" + _t(toggleDebug) + "\">" + _t("Normal Mode") + "</a>");
+                out.write("</th>");
+            } else {
+                out.write("<th colspan=6></th>");
+            }
+            out.write("</tr>\n");
+        }
     }
 
     /**
@@ -1575,21 +1551,20 @@ public class I2PSnarkServlet extends BasicServlet {
     private void renderPageNavigation(PrintWriter out, HttpServletRequest req, int start, int pageSize, int total,
                                       String filter, boolean noThinsp, boolean isForm, boolean searchActive, int searchLength) throws IOException {
         req.setCharacterEncoding("UTF-8");
-        if (isForm && total > 0 && (start > 0 || total > pageSize)) {
-            if (!searchActive || (searchActive && searchLength > pageSize)) {
-                out.write("<div class=pagenavcontrols id=pagenavtop>");
-                writePageNav(out, req, start, pageSize, total, filter, noThinsp);
-                out.write("</div>");
-                return;
-            }
+        boolean showNav = isForm && total > 0 && (start > 0 || total > pageSize);
+        boolean navVisible = !searchActive || (searchActive && searchLength > pageSize);
+
+        out.write("<tr colspan=12><div class=\"pagenavcontrols\" id=\"pagenavtop\"");
+        if (!showNav || !navVisible) {
+            out.write(" style=\"display:none;\"");
         }
-        if (isForm && _manager.util().showStatusFilter() && total > pageSize) {
-            out.write("<div class=pagenavcontrols id=pagenavtop hidden>");
+        out.write(">");
+
+        if (showNav && navVisible) {
             writePageNav(out, req, start, pageSize, total, filter, noThinsp);
-            out.write("</div>");
-            return;
         }
-        out.write("<div class=pagenavcontrols id=pagenavtop hidden></div>");
+
+        out.write("</div></tr>");
     }
 
     /**
