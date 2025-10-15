@@ -138,17 +138,16 @@ tfoot td:first-child{padding-left:0;text-align:left}
 .nav_search{background:var(--search) no-repeat 11px center/16px,var(--nav),var(--search_hover) no-repeat 11px center/16px,var(--search_active) no-repeat 11px center/16px}
 .nav_search:hover,.nav_search:focus{background:var(--search_hover) no-repeat 11px center/16px,var(--nav_hover)}
 .nav_search:active,.nav_search.depress{background:var(--search_active) no-repeat 11px center/16px,var(--nav_active)}
-#navbar{margin:-11px auto 10px;padding:7px 10px 5px;min-width:600px;width:80%;position:sticky;top:-3px;z-index:99999;text-align:center;border:var(--border_hard);border-radius:0 0 4px 4px;box-shadow:inset 0 0 0 1px rgba(169,61,169,.2),inset 0 0 0 2px #101,inset 0 0 3px 1px #212,0 0 0 1px rgba(0,0,0,.7);background:linear-gradient(180deg,#535,#202 55%,#101,#080008);filter:drop-shadow(0 2px 4px #101)}
-html:not(.iframed) #navbar{transition:width .5s ease-in-out .5s;will-change:transform}
+#navbar{margin:-11px auto 10px;padding:7px 10px 5px;min-width:600px;width:calc(100% - 22px);position:static;text-align:center;border:var(--border_hard);border-radius:0 0 4px 4px;box-shadow:inset 0 0 0 1px rgba(169,61,169,.2),inset 0 0 0 2px #101,inset 0 0 3px 1px #212,0 0 0 1px rgba(0,0,0,.7);background:linear-gradient(180deg,#535,#202 55%,#101,#080008);filter:drop-shadow(0 2px 4px #101)}
 #navbar a{display:inline-block;font:700 10.5pt/1.3 var(--bodyfont);letter-spacing:.11em;text-decoration:none;text-transform:uppercase;color:#f70;text-shadow:1px 0 1px #0009,-1px 0 1px rgba(255,240,255,.2);outline:none;border-radius:0;box-shadow:0 0 1px #000,inset 0 0 0 1px rgba(16,0,16,.7),inset 0 0 2px 0 rgba(255,128,0,.5)}
 #navbar a:hover,#navbar a:focus{color:#d2baff;border:1px solid #820b64;box-shadow:0 0 1px #000,inset 0 0 0 1px rgba(16,0,16,.9),inset 0 0 2px 0 #515}
 #navbar a:active,#navbar a.depress{color:#fff;text-shadow:none;border:1px solid #730;box-shadow:0 0 1px 0 #000,var(--highlight),inset 3px 3px 3px 2px #3f1900}
-.iframed #navbar{margin-top:3px;margin-bottom:-9px;padding-bottom:12px;width:auto;position:relative;border-radius:0;box-shadow:inset 0 0 0 1px rgba(255,239,253,.25),inset 0 0 2px 1px rgba(255,239,253,.15);background:linear-gradient(180deg,#522852,#281428 50%,#1c0e1c 54%,#080008);filter:none}
+.iframed #navbar{margin:0 auto -6px;padding:5px 10px 12px;width:auto;position:relative;border-radius:0;box-shadow:inset 0 0 0 1px rgba(255,239,253,.25),inset 0 0 2px 1px rgba(255,239,253,.15);background:linear-gradient(180deg,#522852,#281428 48%,#1c0e1c 55%,#080008);filter:none}
 .iframed .snarkNav:first-child,.iframed .snarkNav:last-child{border-radius:0}
 :not(.iframed) .snarkNav,:not(.iframed) .snarkNav:hover,:not(.iframed) .snarkNav:focus,:not(.iframed) .snarkNav.depress{background-position-y:calc(50% + 1px),center,center}
 
 /* search */
-#snarkSearch{margin-left:8px;display:block;position:absolute;right:10px;top:7px}
+#snarkSearch{margin-left:8px;display:block;position:absolute;right:14px;top:7px}
 #snarkSearch input[type=search],#snarkSearch input[type=submit]{padding:12px 8px 4px;height:28px;border:0;box-shadow:none;background:#0000}
 #snarkSearch input[type=search]:not([value]):not(:focus){opacity:0}
 #snarkSearch:hover input[type=search],#snarkSearch input[type=search]:focus,#snarkSearch input[type=search][value]{padding-right:22px;border-bottom:1px solid #303;opacity:1;transform:translateY(-4px);-webkit-appearance:none}
@@ -1200,6 +1199,7 @@ td.peerCount:empty::after{display:none}
 #navbar a:not(.nav_tracker){padding-top:12px;padding-bottom:12px;width:36px;font-size:0}
 #navbar a.nav_tracker{padding-left:24px;background-position:7px center}
 #navbar{margin-bottom:6px;width:calc(100% - 22px);min-width:600px;transition:ease width .5s .5s}
+#snarkSearch{top:6px}
 #totals{margin-left:4px;white-space:nowrap}
 #trackerselect td{font-size:9pt}
 .magnet,.trackerLink,#torrents #snarkHead th.torrentLink{width:0!important;padding:0!important}
@@ -1449,7 +1449,7 @@ th.radio{width:96px}
 #contentFilter{margin:0;padding:4px 6px;width:calc(80% - 6px);display:flex;flex-wrap:wrap;align-items:center;box-shadow:var(--txtInputBevel);background:#101 var(--tile)}
 #fileFilter td,#trackerconfig td,#trackerconfig td label{font-size:10pt}
 #navbar{padding:11px 10px 10px}
-.iframed #navbar{padding:12px 10px 10px}
+.iframed #navbar{padding:11px 10px 10px}
 #navbar a{font-size:12pt}
 #pagenavbottom img{width:16px;height:16px}
 #screenlog{margin-top:0;min-height:64px!important}
