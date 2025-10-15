@@ -365,9 +365,11 @@ class MessageOutputStream extends OutputStream {
         if (_log.shouldDebug()) {
             _log.debug("Waiting up to " + _writeTimeout + "ms for write completion, ws: " + ws);
         }
+
         try {
-            if (_closed.get() &&
-                (_writeTimeout > Connection.DISCONNECT_TIMEOUT || _writeTimeout <= 0)) {
+            if (ws == null) {
+                if (_log.shouldWarn()) {_log.warn("WriteStatus is null during flush");}
+            } else if (_closed.get() && (_writeTimeout > Connection.DISCONNECT_TIMEOUT || _writeTimeout <= 0)) {
                 ws.waitForCompletion(Connection.DISCONNECT_TIMEOUT);
             } else if (_writeTimeout <= 0 || _writeTimeout > Connection.DISCONNECT_TIMEOUT) {
                 ws.waitForCompletion(Connection.DISCONNECT_TIMEOUT);
