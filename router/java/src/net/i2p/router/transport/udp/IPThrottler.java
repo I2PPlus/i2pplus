@@ -1,7 +1,6 @@
 package net.i2p.router.transport.udp;
 
 import net.i2p.util.ObjectCounter;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 
 /**
@@ -49,7 +48,12 @@ class IPThrottler {
         return Integer.valueOf(rv);
     }
 
-    private class Cleaner implements SimpleTimer.TimedEvent {
+    private class Cleaner extends SimpleTimer2.TimedEvent {
+        public Cleaner() {
+            super(SimpleTimer2.getInstance());
+        }
+
+        @Override
         public void timeReached() {
             _counter.clear();
         }

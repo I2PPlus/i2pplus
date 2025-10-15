@@ -56,7 +56,6 @@ import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.LHMCache;
 import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
@@ -1967,9 +1966,15 @@ public class UDPTransport extends TransportImpl {
         super.messageReceived(inMsg, remoteIdent, remoteIdentHash, msToReceive, bytesReceived);
     }
 
-    private class RemoveDropList implements SimpleTimer.TimedEvent {
+    private class RemoveDropList extends SimpleTimer2.TimedEvent {
         private final RemoteHostId _peer;
-        public RemoveDropList(RemoteHostId peer) { _peer = peer; }
+
+        public RemoveDropList(RemoteHostId peer) {
+            super(SimpleTimer2.getInstance());
+            _peer = peer;
+        }
+
+        @Override
         public void timeReached() {
             _dropList.remove(_peer);
         }
@@ -3924,7 +3929,12 @@ public class UDPTransport extends TransportImpl {
      *  than we rebuild our address.
      *  @since 0.8.11
      */
-    private class PingIntroducers implements SimpleTimer.TimedEvent {
+    private class PingIntroducers extends SimpleTimer2.TimedEvent {
+        public PingIntroducers() {
+            super(SimpleTimer2.getInstance());
+        }
+
+        @Override
         public void timeReached() {
             if (introducersRequired(false) || introducersRequired(true))
                 _introManager.pingIntroducers();

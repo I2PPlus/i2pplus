@@ -12,7 +12,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.Log;
 
 /**
@@ -20,16 +20,22 @@ import net.i2p.util.Log;
  *
  * @since 0.8.12 moved from Router.java
  */
-public class Republish implements SimpleTimer.TimedEvent {
+public class Republish extends SimpleTimer2.TimedEvent {
     private final RouterContext _context;
 
-    public Republish(RouterContext ctx) {_context = ctx;}
+    public Republish(RouterContext ctx) {
+        super(SimpleTimer2.getInstance());
+        _context = ctx;
+    }
 
+    @Override
     public void timeReached() {
         RouterInfo ri = null;
         try {
             ri = _context.router().getRouterInfo();
-            if (ri != null) {_context.netDb().publish(ri);}
+            if (ri != null) {
+                _context.netDb().publish(ri);
+            }
         } catch (IllegalArgumentException iae) {
             Log log = _context.logManager().getLog(Router.class);
             // clock skew / shift race?
@@ -47,6 +53,4 @@ public class Republish implements SimpleTimer.TimedEvent {
             _context.router().rebuildNewIdentity();
         }
     }
-
 }
-

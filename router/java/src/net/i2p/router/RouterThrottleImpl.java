@@ -7,7 +7,7 @@ import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 
@@ -77,9 +77,17 @@ public class RouterThrottleImpl implements RouterThrottle {
      *
      *  @since 0.8.12
      */
-    private class ResetStatus implements SimpleTimer.TimedEvent {
+    private class ResetStatus extends SimpleTimer2.TimedEvent {
+        public ResetStatus() {
+            super(SimpleTimer2.getInstance());
+        }
+
+        @Override
         public void timeReached() {
-            if (_tunnelStatus.contains(_x("Starting up"))) {cancelShutdownStatus();}
+            if (_tunnelStatus.contains(_x("Starting up"))) {
+                cancelShutdownStatus();
+                cancel();
+            }
         }
     }
 

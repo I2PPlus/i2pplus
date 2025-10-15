@@ -10,7 +10,7 @@ import net.i2p.data.LeaseSet;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 
 /**
  * Helper cache manager for outbound message optimization in OCMOSJ.
@@ -220,7 +220,11 @@ public class OutboundCache {
     /**
      * Internal timer event that periodically cleans all caches.
      */
-    private class OCMOSJCacheCleaner implements SimpleTimer.TimedEvent {
+    private class OCMOSJCacheCleaner extends SimpleTimer2.TimedEvent {
+        public OCMOSJCacheCleaner() {
+            super(SimpleTimer2.getInstance());
+        }
+
         @Override
         public void timeReached() {
             cleanLeaseSetCache(_context, leaseSetCache);
@@ -230,4 +234,5 @@ public class OutboundCache {
             cleanReplyCache(_context, lastReplyRequestCache);
         }
     }
+
 }

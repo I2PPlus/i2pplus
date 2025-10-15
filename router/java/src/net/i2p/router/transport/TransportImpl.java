@@ -41,7 +41,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.LHMCache;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 import net.i2p.util.VersionComparator;
@@ -883,7 +883,12 @@ public abstract class TransportImpl implements Transport {
         if (!isInbound) {markWasUnreachable(peer, false);}
     }
 
-    private class CleanupUnreachable implements SimpleTimer.TimedEvent {
+    private class CleanupUnreachable extends SimpleTimer2.TimedEvent {
+        public CleanupUnreachable() {
+            super(SimpleTimer2.getInstance());
+        }
+
+        @Override
         public void timeReached() {
             long now = _context.clock().now();
             long limit = now - UNREACHABLE_PERIOD;

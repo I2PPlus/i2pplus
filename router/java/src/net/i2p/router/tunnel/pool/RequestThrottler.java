@@ -11,7 +11,7 @@ import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
@@ -164,22 +164,29 @@ class RequestThrottler {
         return new HashSet<>(Arrays.asList(blockCountries.toLowerCase().split(",")));
     }
 
-    /**
-     * Periodic timer event that clears the request counts to reset throttling.
-     */
-    private class Cleaner implements SimpleTimer.TimedEvent {
-        public void timeReached() {RequestThrottler.this.counter.clear();}
+    private class Cleaner extends SimpleTimer2.TimedEvent {
+        public Cleaner() {
+            super(SimpleTimer2.getInstance());
+        }
+
+        @Override
+        public void timeReached() {
+            RequestThrottler.this.counter.clear();
+        }
     }
 
-    /**
-     * Timer event that forces disconnection from a router after a delay.
-     *
-     * @since 0.9.52
-     */
-    private class Disconnector implements SimpleTimer.TimedEvent {
+    private class Disconnector extends SimpleTimer2.TimedEvent {
         private final Hash h;
-        public Disconnector(Hash h) {this.h = h;}
-        public void timeReached() {context.commSystem().forceDisconnect(h);}
+
+        public Disconnector(Hash h) {
+            super(SimpleTimer2.getInstance());
+            this.h = h;
+        }
+
+        @Override
+        public void timeReached() {
+            context.commSystem().forceDisconnect(h);
+        }
     }
 
 }

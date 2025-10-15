@@ -46,7 +46,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFile;
 import net.i2p.util.SecureFileOutputStream;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 
@@ -437,9 +437,12 @@ public class I2PSnarkUtil implements DisconnectListener {
         }
     }
 
-    private class Unbanlist implements SimpleTimer.TimedEvent {
+    private class Unbanlist extends SimpleTimer2.TimedEvent {
         private Hash _dest;
-        public Unbanlist(Hash dest) {_dest = dest;}
+        public Unbanlist(Hash dest) {
+            super(SimpleTimer2.getInstance());
+            _dest = dest;
+        }
         public void timeReached() {_banlist.remove(_dest);}
     }
 

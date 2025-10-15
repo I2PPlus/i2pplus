@@ -5,7 +5,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.Hash;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.RandomSource;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 
 /**
@@ -80,7 +79,11 @@ class ConnThrottler {
         return false;
     }
 
-    private class Cleaner implements SimpleTimer.TimedEvent {
+    private class Cleaner extends SimpleTimer2.TimedEvent {
+        public Cleaner() {
+            super(SimpleTimer2.getInstance());
+        }
+        @Override
         public void timeReached() {
             if (_totalMax > 0)
                 _currentTotal.set(0);

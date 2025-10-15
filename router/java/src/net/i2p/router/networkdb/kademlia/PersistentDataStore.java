@@ -42,7 +42,7 @@ import net.i2p.util.FileUtil;
 import net.i2p.util.I2PThread;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFileOutputStream;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
@@ -898,10 +898,18 @@ public class PersistentDataStore extends TransientDataStore {
         }
     }
 
-    private class Disconnector implements SimpleTimer.TimedEvent {
+    private class Disconnector extends SimpleTimer2.TimedEvent {
         private final Hash h;
-        public Disconnector(Hash h) {this.h = h;}
-        public void timeReached() {_context.commSystem().forceDisconnect(h);}
+
+        public Disconnector(Hash h) {
+            super(SimpleTimer2.getInstance());
+            this.h = h;
+        }
+
+        @Override
+        public void timeReached() {
+            _context.commSystem().forceDisconnect(h);
+        }
     }
 
     public static boolean isShuttingDown(RouterContext ctx) {

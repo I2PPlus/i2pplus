@@ -12,7 +12,6 @@ import net.i2p.data.ByteArray;
 import net.i2p.data.Destination;
 import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 
@@ -280,11 +279,15 @@ class ConnectionHandler {
         _manager.getPacketQueue().enqueue(reply); // this just sends the packet - no retries or whatnot
     }
 
-    private class TimeoutSyn implements SimpleTimer.TimedEvent {
+    private class TimeoutSyn extends SimpleTimer2.TimedEvent {
         private final Packet _synPacket;
 
-        public TimeoutSyn(Packet packet) {_synPacket = packet;}
+        public TimeoutSyn(Packet packet) {
+           super(SimpleTimer2.getInstance());
+           _synPacket = packet;
+        }
 
+        @Override
         public void timeReached() {
             boolean removed = _synQueue.remove(_synPacket);
 

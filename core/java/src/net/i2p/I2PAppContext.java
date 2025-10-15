@@ -32,8 +32,6 @@ import net.i2p.util.LogManager;
 import net.i2p.util.PortMapper;
 import net.i2p.util.RandomSource;
 import net.i2p.util.SecureDirectory;
-import net.i2p.util.SimpleScheduler;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.TempDirScanner;
@@ -83,9 +81,6 @@ public class I2PAppContext {
     private RandomSource _random;
     private KeyGenerator _keyGenerator;
     protected KeyRing _keyRing; // overridden in RouterContext
-    @SuppressWarnings("deprecation")
-    private SimpleScheduler _simpleScheduler;
-    private SimpleTimer _simpleTimer;
     private SimpleTimer2 _simpleTimer2;
     private final PortMapper _portMapper;
     private volatile boolean _statManagerInitialized;
@@ -101,8 +96,6 @@ public class I2PAppContext {
     private volatile boolean _randomInitialized;
     private volatile boolean _keyGeneratorInitialized;
     protected volatile boolean _keyRingInitialized; // used in RouterContext
-    private volatile boolean _simpleSchedulerInitialized;
-    private volatile boolean _simpleTimerInitialized;
     private volatile boolean _simpleTimer2Initialized;
     protected final Set<Runnable> _shutdownTasks;
     private final File _baseDir;
@@ -972,55 +965,6 @@ public class I2PAppContext {
      */
     public PortMapper portMapper() {
         return _portMapper;
-    }
-
-    /**
-     * Use instead of SimpleScheduler.getInstance()
-     * @since 0.9 to replace static instance in the class
-     * @deprecated in 0.9.20, use simpleTimer2()
-     */
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public SimpleScheduler simpleScheduler() {
-        if (!_simpleSchedulerInitialized)
-            initializeSimpleScheduler();
-        return _simpleScheduler;
-    }
-
-    /**
-     * @deprecated in 0.9.20
-     */
-    @Deprecated
-    private void initializeSimpleScheduler() {
-        synchronized (_lock18) {
-            if (_simpleScheduler == null)
-                _simpleScheduler = new SimpleScheduler(this);
-            _simpleSchedulerInitialized = true;
-        }
-    }
-
-    /**
-     * Use instead of SimpleTimer.getInstance()
-     * @since 0.9 to replace static instance in the class
-     * @deprecated use SimpleTimer2
-     */
-    @Deprecated
-    public SimpleTimer simpleTimer() {
-        if (!_simpleTimerInitialized)
-            initializeSimpleTimer();
-        return _simpleTimer;
-    }
-
-    /**
-     * @deprecated use SimpleTimer2
-     */
-    @Deprecated
-    private void initializeSimpleTimer() {
-        synchronized (_lock19) {
-            if (_simpleTimer == null)
-                _simpleTimer = new SimpleTimer(this);
-            _simpleTimerInitialized = true;
-        }
     }
 
     /**

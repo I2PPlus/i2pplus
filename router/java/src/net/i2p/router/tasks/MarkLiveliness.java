@@ -16,7 +16,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.router.Router;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFileOutputStream;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 
 /**
  *  Write a timestamp to the ping file where
@@ -24,12 +24,13 @@ import net.i2p.util.SimpleTimer;
  *
  * @since 0.8.12 moved from Router.java
  */
-public class MarkLiveliness implements SimpleTimer.TimedEvent {
+public class MarkLiveliness extends SimpleTimer2.TimedEvent {
     private final Router _router;
     private final File _pingFile;
     private volatile boolean _errorLogged;
 
     public MarkLiveliness(Router router, File pingFile) {
+        super(SimpleTimer2.getInstance());
         _router = router;
         _pingFile = pingFile;
         _pingFile.deleteOnExit();
@@ -58,4 +59,3 @@ public class MarkLiveliness implements SimpleTimer.TimedEvent {
         }
     }
 }
-

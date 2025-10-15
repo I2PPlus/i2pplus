@@ -123,7 +123,7 @@ public final class ByteCache extends TryCache<ByteArray> {
         super(new ByteArrayFactory(entrySize), maxCachedEntries);
         _entrySize = entrySize;
         int stagger = SystemVersion.isAndroid() ? 0 : (entrySize % 777);
-        SimpleTimer2.getInstance().addPeriodicEvent(new Cleanup(), CLEANUP_FREQUENCY + stagger);
+        new Cleanup().schedule(CLEANUP_FREQUENCY + stagger);
         I2PAppContext.getGlobalContext().statManager().createRateStat("byteCache.memory." + entrySize,
                                                                       "Memory usage (B)", "Router [ByteCache]",
                                                                       new long[] { 60*1000, 10*60*1000, 24*60*60*1000 });
@@ -153,23 +153,36 @@ public final class ByteCache extends TryCache<ByteArray> {
         super.release(entry);
     }
 
-    private class Cleanup implements SimpleTimer.TimedEvent {
+    private class Cleanup extends SimpleTimer2.TimedEvent {
+        public Cleanup() {
+            super(SimpleTimer2.getInstance());
+        }
+
+        @Override
         public void timeReached() {
             int origsz;
             lock.lock();
             try {
                 origsz = items.size();
                 if (origsz > 1 && System.currentTimeMillis() - _lastUnderflow > EXPIRE_PERIOD) {
-                    // We haven't exceeded the cache size in a few minutes, so let's shrink the cache
                     int toRemove = origsz / 2;
-                    for (int i = 0; i < toRemove; i++) {items.remove(items.size() - 1);}
+                    for (int i = 0; i < toRemove; i++) {
+                        items.remove(items.size() - 1);
+                    }
                 }
-            } finally {lock.unlock();}
+            } finally {
+                lock.unlock();
+            }
             I2PAppContext.getGlobalContext().statManager().addRateData("byteCache.memory." + _entrySize, _entrySize * origsz);
+
+            // Reschedule next cleanup
+            schedule(CLEANUP_FREQUENCY);
         }
 
         @Override
-        public String toString() {return "Cleaner for " + _entrySize + " byte cache";}
+        public String toString() {
+            return "Cleaner for " + _entrySize + " byte cache";
+        }
     }
 
 }

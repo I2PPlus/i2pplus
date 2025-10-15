@@ -189,65 +189,6 @@ public class SimpleTimer2 {
         return _executor.schedule(t, timeoutMs, TimeUnit.MILLISECONDS);
     }
 
-    /**
-     * Schedule a one-time event (uncancellable).
-     * For new code, extend {@link TimedEvent} instead.
-     * @param event non-null event
-     * @param timeoutMs delay in milliseconds
-     * @since 0.9.20
-     */
-    public void addEvent(final SimpleTimer.TimedEvent event, final long timeoutMs) {
-        if (event == null)
-            throw new IllegalArgumentException("addEvent null");
-
-        new TimedEvent(this, timeoutMs) {
-            @Override
-            public void timeReached() {
-                event.timeReached();
-            }
-
-            @Override
-            public String toString() {
-                return event.toString();
-            }
-        };
-    }
-
-    /**
-     * Schedule a periodic event (uncancellable).
-     * @param event non-null event
-     * @param timeoutMs period (≥5000 ms)
-     * @since 0.9.20
-     */
-    public void addPeriodicEvent(final SimpleTimer.TimedEvent event, final long timeoutMs) {
-        addPeriodicEvent(event, timeoutMs, timeoutMs);
-    }
-
-    /**
-     * Schedule a periodic event with initial delay.
-     * @param delay initial delay in ms
-     * @param timeoutMs period in ms (≥5000)
-     * @since 0.9.20
-     */
-    public void addPeriodicEvent(final SimpleTimer.TimedEvent event, final long delay, final long timeoutMs) {
-        if (timeoutMs < 5000)
-            throw new IllegalArgumentException("timeout minimum 5000");
-
-        new PeriodicTimedEvent(this, delay, timeoutMs) {
-            @Override
-            public void timeReached() {
-                event.timeReached();
-            }
-
-            @Override
-            public String toString() {
-                return event.toString();
-            }
-        };
-    }
-
-    // Rest of class unchanged below: TimedEvent, PeriodicTimedEvent, etc.
-
     private enum TimedEventState {
         IDLE, SCHEDULED, RUNNING, CANCELLED
     }
@@ -542,4 +483,27 @@ public class SimpleTimer2 {
             }
         }
     }
+
+    /**
+     * Schedules a periodic event with the specified initial delay and period.
+     * The event should call schedule(period) internally in its timeReached() for repetition.
+     *
+     * @param event    the timed event to schedule periodically
+     * @param periodMs the period between executions, in milliseconds
+     */
+    public void addPeriodicEvent(TimedEvent event, long periodMs) {
+        // schedule the event once with the initial delay equals period
+        event.schedule(periodMs);
+    }
+
+    public void addPeriodicEvent(TimedEvent event, long initialDelayMs, long periodMs) {
+        event.schedule(initialDelayMs);
+        // The event's timeReached() method is responsible for calling schedule(periodMs) for repeated runs
+    }
+
+    /* Schedules a single one-shot event with the specified initial delay. */
+    public void addEvent(TimedEvent event, long delayMs) {
+        event.schedule(delayMs);
+    }
+
 }

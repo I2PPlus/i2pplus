@@ -124,7 +124,7 @@ public class Rate {
     public void setRateStat(RateStat rs) { _stat = rs; }
 
     /**
-     * A rate with period shorter than Router.COALESCE_TIME = 50*1000 has to
+     * A rate with period shorter than Router.INITIAL_COALESCE_DELAY = 50*1000 has to
      * be manually coalesced before values are fetched from it.
      * @param period number of milliseconds in the period this rate deals with, min 1, max Integer.MAX_VALUE
      * @throws IllegalArgumentException if the period is invalid

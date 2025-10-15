@@ -10,7 +10,7 @@ import net.i2p.data.Destination;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 
 /**
  * Receive a packet for a particular connection - placing the data onto the
@@ -634,15 +634,17 @@ class ConnectionPacketHandler {
         }
     }
 
-    private class AckDup implements SimpleTimer.TimedEvent {
+    private class AckDup extends SimpleTimer2.TimedEvent {
         private final long _created;
         private final Connection _con;
 
         public AckDup(Connection con) {
+            super(SimpleTimer2.getInstance());
             _created = _context.clock().now();
             _con = con;
         }
 
+        @Override
         public void timeReached() {
             boolean sent = false;
             if (_con.getLastSendTime() <= _created) {

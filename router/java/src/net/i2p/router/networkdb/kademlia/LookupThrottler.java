@@ -3,7 +3,6 @@ package net.i2p.router.networkdb.kademlia;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.util.ObjectCounter;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 
 import java.util.Deque;
@@ -94,7 +93,12 @@ class LookupThrottler {
         return this.counter.increment(rt) > _max;
     }
 
-    private class Cleaner implements SimpleTimer.TimedEvent {
+    private class Cleaner extends SimpleTimer2.TimedEvent {
+        public Cleaner() {
+            super(SimpleTimer2.getInstance());
+        }
+
+        @Override
         public void timeReached() {
             LookupThrottler.this.counter.clear();
             synchronized (burstTimestamps) {

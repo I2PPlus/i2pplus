@@ -15,7 +15,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.stat.StatManager;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 
 
@@ -24,12 +24,13 @@ import net.i2p.util.SystemVersion;
  *
  * @since 0.8.12 moved from Router.java
  */
-public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
+public class CoalesceStatsEvent extends SimpleTimer2.TimedEvent {
     private final RouterContext _ctx;
     private final long _maxMemory;
     private static final long LOW_MEMORY_THRESHOLD = 5 * 1024 * 1024;
 
     public CoalesceStatsEvent(RouterContext ctx) {
+        super(SimpleTimer2.getInstance());
         _ctx = ctx;
         StatManager sm = ctx.statManager();
         // NOTE TO TRANSLATORS - each of these phrases is a description for a statistic
@@ -50,7 +51,6 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
         sm.createRateStat("router.tunnelBacklog", _x("Size of tunnel acceptor backlog"), "Tunnels", new long[] { 60*1000, 60*60*1000 });
         sm.createRateStat("clock.skew", _x("Clock step adjustment (ms)"), "Router", new long[] { 60*1000, 3*60*60*1000, 24*60*60*1000 });
         _maxMemory = Runtime.getRuntime().maxMemory();
-//        String legend = "(Bytes)";
         String legend = "";
         if (_maxMemory < Long.MAX_VALUE)
             legend += "Maximum allocated to the JVM is " + DataHelper.formatSize(_maxMemory) + 'B';
@@ -60,6 +60,7 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
         sm.createRequiredRateStat("tunnel.tunnelBuildSuccessAvg", _x("Average tunnel build success %"), "Tunnels", new long[] { 60*1000, 10*60*1000, 60*60*1000, 24*60*60*1000 });
     }
 
+    @Override
     public void timeReached() {
         StatManager sm = _ctx.statManager();
         int known = _ctx.netDb().getKnownRouters() - 1;
@@ -98,7 +99,7 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
         sm.addRateData("router.cpuLoad", (long) SystemVersion.getCPULoad());
         sm.addRateData("tunnel.tunnelBuildSuccessAvg", (long)SystemVersion.getTunnelBuildSuccess());
 
-        _ctx.tunnelDispatcher().updateParticipatingStats(Router.COALESCE_TIME);
+        _ctx.tunnelDispatcher().updateParticipatingStats(Router.INITIAL_COALESCE_DELAY);
 
         sm.coalesceStats();
 
@@ -121,6 +122,7 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
                 sm.addRateData("bw.sendBps", (long)bps, 60*1000);
             }
         }
+        schedule(50*1000);
     }
 
     /**

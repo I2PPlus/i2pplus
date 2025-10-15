@@ -7,7 +7,7 @@ import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
@@ -293,19 +293,29 @@ class ParticipatingThrottler {
         }
     }
 
-    /**
-     * Periodic timer event that clears the participation counts to reset throttling.
-     */
-    private class Cleaner implements SimpleTimer.TimedEvent {
-        public void timeReached() {counter.clear();}
+    private class Cleaner extends SimpleTimer2.TimedEvent {
+        public Cleaner() {
+            super(SimpleTimer2.getInstance());
+        }
+
+        @Override
+        public void timeReached() {
+            counter.clear();
+        }
     }
 
-    /**
-     * Timer event that disconnects a router after a delay.
-     */
-    private class Disconnector implements SimpleTimer.TimedEvent {
+    private class Disconnector extends SimpleTimer2.TimedEvent {
         private final Hash h;
-        public Disconnector(Hash h) { this.h = h; }
-        public void timeReached() {context.commSystem().forceDisconnect(h);}
+
+        public Disconnector(Hash h) {
+            super(SimpleTimer2.getInstance());
+            this.h = h;
+        }
+
+        @Override
+        public void timeReached() {
+            context.commSystem().forceDisconnect(h);
+        }
     }
+
 }

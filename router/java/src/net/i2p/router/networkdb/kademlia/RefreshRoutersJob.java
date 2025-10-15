@@ -15,7 +15,7 @@ import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
@@ -324,10 +324,20 @@ class RefreshRoutersJob extends JobImpl {
         }
     }
 
-    private class Disconnector implements SimpleTimer.TimedEvent {
+    private class Disconnector extends SimpleTimer2.TimedEvent {
+        private final RouterContext _context;
         private final Hash h;
-        public Disconnector(Hash h) {this.h = h;}
-        public void timeReached() {getContext().commSystem().forceDisconnect(h);}
+
+        public Disconnector(RouterContext ctx, Hash h) {
+            super(SimpleTimer2.getInstance());
+            _context = ctx;
+            this.h = h;
+        }
+
+        @Override
+        public void timeReached() {
+            _context.commSystem().forceDisconnect(h);
+        }
     }
 
 }

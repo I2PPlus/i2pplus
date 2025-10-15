@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
-//import net.i2p.util.SimpleTimer;
+//import net.i2p.util.SimpleTimer2;
 
 class PeerConnectionOut implements Runnable {
     private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(PeerConnectionOut.class);

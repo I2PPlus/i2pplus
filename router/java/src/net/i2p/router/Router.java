@@ -125,7 +125,7 @@ public class Router implements RouterClock.ClockShiftListener {
     private final int _networkID;
 
     /** coalesce stats this often - should be a little less than one minute, so the graphs get updated */
-    public static final int COALESCE_TIME = 50*1000;
+    public static final int INITIAL_COALESCE_DELAY = 50*1000;
 
     /** this puts an 'H' in your routerInfo **/
     public final static String PROP_HIDDEN = "router.hiddenMode";
@@ -665,10 +665,8 @@ public class Router implements RouterClock.ClockShiftListener {
         _context.tunnelDispatcher().startup();
         _context.inNetMessagePool().startup();
         _context.jobQueue().runQueue(1);
-        //_context.jobQueue().addJob(new CoalesceStatsJob(_context));
-        _context.simpleTimer2().addPeriodicEvent(new CoalesceStatsEvent(_context), COALESCE_TIME);
+        _context.simpleTimer2().addPeriodicEvent(new CoalesceStatsEvent(_context), INITIAL_COALESCE_DELAY);
         _context.jobQueue().addJob(new UpdateRoutingKeyModifierJob(_context));
-        //_context.adminManager().startup();
         _context.blocklist().startup();
 
         synchronized(_configFileLock) {

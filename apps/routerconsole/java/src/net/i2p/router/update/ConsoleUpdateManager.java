@@ -42,7 +42,7 @@ import static net.i2p.update.UpdateMethod.*;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.FileUtil;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
@@ -1385,25 +1385,40 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
         _context.simpleTimer2().addEvent(new StatusCleaner(msg), STATUS_CLEAN_TIME);
     }
 
-    private class StatusCleaner implements SimpleTimer.TimedEvent {
+    private class StatusCleaner extends SimpleTimer2.TimedEvent {
         private final String _msg;
-        public StatusCleaner(String msg) {_msg = msg;}
+
+        public StatusCleaner(String msg) {
+            super(SimpleTimer2.getInstance());
+            _msg = msg;
+        }
+
+        @Override
         public void timeReached() {
-            if (_msg.equals(getStatus())) {updateStatus("");}
+            if (_msg.equals(getStatus())) {
+                updateStatus("");
+            }
         }
     }
 
     /**
      *  Failsafe
      */
-    private class TaskCleaner implements SimpleTimer.TimedEvent {
+    private class TaskCleaner extends SimpleTimer2.TimedEvent {
+        public TaskCleaner() {
+            super(SimpleTimer2.getInstance());
+        }
+
+        @Override
         public void timeReached() {
             if (!_activeCheckers.isEmpty()) {
                 synchronized(_activeCheckers) {
                     for (Iterator<UpdateTask> iter = _activeCheckers.iterator(); iter.hasNext(); ) {
                         UpdateTask t = iter.next();
                         if (!t.isRunning()) {
-                            if (_log.shouldWarn()) {_log.warn("Failsafe remove checker " + t);}
+                            if (_log.shouldWarn()) {
+                                _log.warn("Failsafe remove checker " + t);
+                            }
                             iter.remove();
                         }
                     }
@@ -1413,7 +1428,9 @@ public class ConsoleUpdateManager implements UpdateManager, RouterApp {
                 for (Iterator<UpdateTask> iter = _downloaders.keySet().iterator(); iter.hasNext(); ) {
                     UpdateTask t = iter.next();
                     if (!t.isRunning()) {
-                        if (_log.shouldWarn()) {_log.warn("Failsafe remove downloader " + t);}
+                        if (_log.shouldWarn()) {
+                            _log.warn("Failsafe remove downloader " + t);
+                        }
                         iter.remove();
                     }
                 }

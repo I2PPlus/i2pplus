@@ -62,9 +62,6 @@ class Message
   // Used to do deferred fetch of data
   private final DataLoader dataLoader;
 
-  // now unused
-  //SimpleTimer.TimedEvent expireEvent;
-
   private static final int BUFSIZE = PeerState.PARTSIZE;
   private static final ByteCache _cache = ByteCache.getInstance(16, BUFSIZE);
 

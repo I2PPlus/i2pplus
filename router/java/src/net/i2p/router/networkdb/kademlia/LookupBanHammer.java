@@ -3,7 +3,6 @@ package net.i2p.router.networkdb.kademlia;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.util.ObjectCounter;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -109,7 +108,11 @@ class LookupBanHammer {
      * Periodic cleanup task that clears counters and timestamps,
      * and removes any expired bans from the ban expiration map.
      */
-    private class Cleaner implements SimpleTimer.TimedEvent {
+    private class Cleaner extends SimpleTimer2.TimedEvent {
+        public Cleaner() {
+            super(SimpleTimer2.getInstance());
+        }
+
         @Override
         public void timeReached() {
             long now = System.currentTimeMillis();

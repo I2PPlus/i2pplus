@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 import net.i2p.router.RouterContext;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 
 /**
@@ -212,10 +212,11 @@ class TunnelGatewayPumper implements Runnable {
     /**
      * Timer event for requeuing backlogged gateways after delay.
      */
-    private class Requeue implements SimpleTimer.TimedEvent {
+    private class Requeue extends SimpleTimer2.TimedEvent {
         private final PumpedTunnelGateway _ptg;
 
         public Requeue(PumpedTunnelGateway ptg) {
+            super(SimpleTimer2.getInstance());
             _ptg = ptg;
         }
 

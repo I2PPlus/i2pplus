@@ -72,7 +72,6 @@ import net.i2p.util.ArraySet;
 import net.i2p.util.I2PThread;
 import net.i2p.util.LHMCache;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
@@ -514,25 +513,43 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      *
      *  As of 0.9.32, works only for literal IPs, ignores host names.
      */
-    private class QueueAll implements SimpleTimer.TimedEvent {
+    public class QueueAll extends SimpleTimer2.TimedEvent {
+        public QueueAll() {
+            super(SimpleTimer2.getInstance());
+        }
+
+        @Override
         public void timeReached() {
             long uptime = _context.router().getUptime();
             for (Hash h : _context.netDb().getAllRouters()) {
-                //RouterInfo ri = _context.netDb().lookupRouterInfoLocally(h);
                 RouterInfo ri = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(h);
-                if (ri == null) {continue;}
+                if (ri == null) {
+                    continue;
+                }
                 byte[] ip = getIP(ri);
-                if (ip == null) {ip = TransportImpl.getIP(h);}
-                if (ip == null) {continue;}
+                if (ip == null) {
+                    ip = TransportImpl.getIP(h);
+                }
+                if (ip == null) {
+                    continue;
+                }
                 _geoIP.add(ip);
             }
-            _context.simpleTimer2().addPeriodicEvent(new Lookup(), 5000, LOOKUP_TIME);
+            Lookup lookupEvent = new Lookup();
+            lookupEvent.schedule(5000);
         }
+
     }
 
-    private class Lookup implements SimpleTimer.TimedEvent {
+    public class Lookup extends SimpleTimer2.TimedEvent {
+        public Lookup() {
+            super(SimpleTimer2.getInstance());
+        }
+
+        @Override
         public void timeReached() {
             (new LookupThread()).start();
+            schedule(LOOKUP_TIME);
         }
     }
 
@@ -1898,16 +1915,23 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * NTP source, so it will be ignored unless NTP is broken.
      * @since 0.7.12
      */
-    private class Timestamper implements SimpleTimer.TimedEvent {
+    private class Timestamper extends SimpleTimer2.TimedEvent {
+        public Timestamper() {
+            super(SimpleTimer2.getInstance());
+        }
+
+        @Override
         public void timeReached() {
-             // use the same % as in RouterClock so that check will never fail
-             // This is their our offset w.r.t. them...
-             long peerOffset = getFramedAveragePeerClockSkew(10);
-             if (peerOffset == 0) {return;}
-             long currentOffset = _context.clock().getOffset();
-             // ... so we subtract it to get in sync with them
-             long newOffset = currentOffset - peerOffset;
-             _context.clock().setOffset(newOffset);
+            // use the same % as in RouterClock so that check will never fail
+            // This is their our offset w.r.t. them...
+            long peerOffset = getFramedAveragePeerClockSkew(10);
+            if (peerOffset == 0) {
+                return;
+            }
+            long currentOffset = _context.clock().getOffset();
+            // ... so we subtract it to get in sync with them
+            long newOffset = currentOffset - peerOffset;
+            _context.clock().setOffset(newOffset);
         }
     }
 

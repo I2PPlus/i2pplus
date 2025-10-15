@@ -23,7 +23,7 @@ import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounterUnsafe;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 
 /**
@@ -471,12 +471,18 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
     }
 
-    private static class DelayedStartup implements SimpleTimer.TimedEvent {
+    private static class DelayedStartup extends SimpleTimer2.TimedEvent {
         private final TunnelPool pool;
 
-        public DelayedStartup(TunnelPool p) {this.pool = p;}
+        public DelayedStartup(TunnelPool p) {
+            super(SimpleTimer2.getInstance());
+            this.pool = p;
+        }
 
-        public void timeReached() {this.pool.startup();}
+        @Override
+        public void timeReached() {
+            this.pool.startup();
+        }
     }
 
     /**

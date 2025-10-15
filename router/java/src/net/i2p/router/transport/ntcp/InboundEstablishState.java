@@ -32,7 +32,7 @@ import net.i2p.util.Addresses;
 import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleByteCache;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 import net.i2p.util.VersionComparator;
 
 /**
@@ -827,10 +827,18 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
         }
     }
 
-    private class Disconnector implements SimpleTimer.TimedEvent {
+    private class Disconnector extends SimpleTimer2.TimedEvent {
         private final Hash h;
-        public Disconnector(Hash h) { this.h = h; }
-        public void timeReached() {_context.commSystem().forceDisconnect(h);}
+
+        public Disconnector(Hash h) {
+            super(SimpleTimer2.getInstance());
+            this.h = h;
+        }
+
+        @Override
+        public void timeReached() {
+            _context.commSystem().forceDisconnect(h);
+        }
     }
 
     public static String parseReason(int reasonCode) {

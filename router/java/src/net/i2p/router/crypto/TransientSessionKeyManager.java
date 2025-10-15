@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,9 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SessionKeyManager;
 import net.i2p.crypto.TagSetHandle;
@@ -32,8 +31,9 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.PublicKey;
 import net.i2p.data.SessionKey;
 import net.i2p.data.SessionTag;
+import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
 
 /**
  * Implement the session key management, but keep everything in memory (don't write to disk).
@@ -189,19 +189,29 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         synchronized (_outboundSessions) {_outboundSessions.clear();}
     }
 
-    private class CleanupEvent implements SimpleTimer.TimedEvent {
+    private class CleanupEvent extends SimpleTimer2.TimedEvent {
+        public CleanupEvent() {
+            super(SimpleTimer2.getInstance());
+        }
+
+        @Override
         public void timeReached() {
-            if (!_alive) {return;}
+            if (!_alive) {
+                return;
+            }
             long beforeExpire = _context.clock().now();
             int expired = aggressiveExpire();
             int overage = _inboundTagSets.size() - MAX_INBOUND_SESSION_TAGS;
-            if (overage > 0) {clearExcess(overage);}
+            if (overage > 0) {
+                clearExcess(overage);
+            }
             long expireTime = _context.clock().now() - beforeExpire;
             _context.statManager().addRateData("crypto.sessionTagsExpired", expired, expireTime);
-            _context.simpleTimer2().addEvent(this, 60*1000);
+
+            // Reschedule to run again after 60 seconds
+            schedule(60 * 1000);
         }
     }
-
 
     /** TagSet */
     private Set<TagSet> getInboundTagSets() {

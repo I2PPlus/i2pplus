@@ -50,7 +50,6 @@ import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFileOutputStream;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
@@ -364,7 +363,10 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /** @since 0.9.4 */
-    private class Register implements SimpleTimer.TimedEvent {
+    private class Register extends SimpleTimer2.TimedEvent {
+        public Register() {
+            super(SimpleTimer2.getInstance());
+        }
         public void timeReached() {
             if (!_running) {return;}
             ClientAppManager cmgr = _context.clientAppManager();
@@ -3472,7 +3474,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     }
 
     /** @since 0.9.1 */
-    private class Disconnector implements SimpleTimer.TimedEvent {
+    private class Disconnector extends SimpleTimer2.TimedEvent {
+        public Disconnector() {
+            super(SimpleTimer2.getInstance());
+        }
+        @Override
         public void timeReached() {
             if (_util.connected()) {
                 _util.disconnect();
