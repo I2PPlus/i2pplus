@@ -708,120 +708,120 @@ public class I2PSnarkServlet extends BasicServlet {
      * @return true if the current page is the first page of the torrent list
      * @throws IOException if an I/O error occurs while writing to the output stream
      */
-private boolean writeTorrents(PrintWriter out, HttpServletRequest req, boolean canWrite) throws IOException {
-    final long stats[] = new long[6];
-    String filter = req.getParameter("filter") != null ? req.getParameter("filter") : "";
-    String peerParam = req.getParameter("p");
-    String search = req.getParameter("search");
-    String srt = req.getParameter("sort");
-    String stParam = req.getParameter("st");
-    boolean filterEnabled = !filter.isEmpty() && !"all".equals(filter);
+    private boolean writeTorrents(PrintWriter out, HttpServletRequest req, boolean canWrite) throws IOException {
+        final long stats[] = new long[6];
+        String filter = req.getParameter("filter") != null ? req.getParameter("filter") : "";
+        String peerParam = req.getParameter("p");
+        String search = req.getParameter("search");
+        String srt = req.getParameter("sort");
+        String stParam = req.getParameter("st");
+        boolean filterEnabled = !filter.isEmpty() && !"all".equals(filter);
 
-    List<Snark> snarks = getSortedSnarks(req);
-    int total = snarks.size();
-    int downloads = 0;
-    int uploads = 0;
-    long totalETA = 0;
-    boolean isConnected = _manager.util().connected();
-    boolean noSnarks = snarks.isEmpty();
-    boolean isForm = isConnected || !noSnarks;
-    boolean showStatusFilter = _manager.util().showStatusFilter();
-    boolean sortEnabled = srt != null && !srt.isEmpty();
-    boolean searchActive = search != null && !search.isEmpty();
-    boolean isUploading = false;
-    boolean hasPeers = false;
-    DHT dht = _manager.util().getDHT();
+        List<Snark> snarks = getSortedSnarks(req);
+        int total = snarks.size();
+        int downloads = 0;
+        int uploads = 0;
+        long totalETA = 0;
+        boolean isConnected = _manager.util().connected();
+        boolean noSnarks = snarks.isEmpty();
+        boolean isForm = isConnected || !noSnarks;
+        boolean showStatusFilter = _manager.util().showStatusFilter();
+        boolean sortEnabled = srt != null && !srt.isEmpty();
+        boolean searchActive = search != null && !search.isEmpty();
+        boolean isUploading = false;
+        boolean hasPeers = false;
+        DHT dht = _manager.util().getDHT();
 
-    if (searchActive) {
-        List<Snark> matches = search(search, snarks);
-        if (matches != null) { snarks = matches; searchResults = matches.size(); }
-    }
+        if (searchActive) {
+            List<Snark> matches = search(search, snarks);
+            if (matches != null) { snarks = matches; searchResults = matches.size(); }
+        }
 
-    int start = 0;
-    if (stParam != null) {
-        try { start = Math.max(0, Math.min(total - 1, Integer.parseInt(stParam))); } catch(NumberFormatException ignored) {}
-    }
+        int start = 0;
+        if (stParam != null) {
+            try { start = Math.max(0, Math.min(total - 1, Integer.parseInt(stParam))); } catch(NumberFormatException ignored) {}
+        }
 
-    int pageSize = filterEnabled ? 9999 : Math.max(_manager.getPageSize(), 10);
-    String ps = req.getParameter("ps");
-    if ("null".equals(ps)) ps = Integer.toString(pageSize);
-    if (ps != null) {
-        try { pageSize = Integer.parseInt(ps); } catch(NumberFormatException ignored) {}
-    }
+        int pageSize = filterEnabled ? 9999 : Math.max(_manager.getPageSize(), 10);
+        String ps = req.getParameter("ps");
+        if ("null".equals(ps)) ps = Integer.toString(pageSize);
+        if (ps != null) {
+            try { pageSize = Integer.parseInt(ps); } catch(NumberFormatException ignored) {}
+        }
 
-    boolean isDegraded = false, noThinsp = false;
-    String ua = req.getHeader("User-Agent");
-    if (ua != null) {
-        isDegraded = ServletUtil.isTextBrowser(ua);
-        noThinsp = isDegraded || ua.startsWith("Opera");
-    }
+        boolean isDegraded = false, noThinsp = false;
+        String ua = req.getHeader("User-Agent");
+        if (ua != null) {
+            isDegraded = ServletUtil.isTextBrowser(ua);
+            noThinsp = isDegraded || ua.startsWith("Opera");
+        }
 
-    if (isForm) {
-        if (showStatusFilter) renderFilterBar(out, req);
-        else out.write("<form id=torrentlist action=_post method=POST target=processForm>\n");
-        writeHiddenInputs(out, req, null);
+        if (isForm) {
+            if (showStatusFilter) renderFilterBar(out, req);
+            else out.write("<form id=torrentlist action=_post method=POST target=processForm>\n");
+            writeHiddenInputs(out, req, null);
+            out.flush();
+        }
+
+        renderPageNavigation(out, req, start, pageSize, total, filter, noThinsp, isForm, searchActive, (searchActive ? search.length() : 0));
+        out.write(TABLE_HEADER);
+        out.write(appendSnarkHeader(req, snarks, start, pageSize, filter, peerParam, srt, _contextPath));
         out.flush();
-    }
 
-    renderPageNavigation(out, req, start, pageSize, total, filter, noThinsp, isForm, searchActive, (searchActive ? search.length() : 0));
-    out.write(TABLE_HEADER);
-    out.write(appendSnarkHeader(req, snarks, start, pageSize, filter, peerParam, srt, _contextPath));
-    out.flush();
+        String uri = _contextPath + '/';
+        boolean showDebug = "2".equals(peerParam);
+        int end = Math.min(start + pageSize, snarks.size());
+        StringBuilder buf = new StringBuilder(2048);
 
-    String uri = _contextPath + '/';
-    boolean showDebug = "2".equals(peerParam);
-    int end = Math.min(start + pageSize, snarks.size());
-    StringBuilder buf = new StringBuilder(2048);
+        for (int i = start; i < end; i++) {
+            Snark snark = snarks.get(i);
+            boolean showPeers = showDebug || "1".equals(peerParam) || Base64.encode(snark.getInfoHash()).equals(peerParam);
+            boolean hide = false;
+            buf.setLength(0);
+            displaySnark(out, req, snark, uri, i, stats, showPeers, isDegraded, noThinsp, showDebug,
+                         hide, false, canWrite, filter, filterEnabled, srt, sortEnabled, buf);
 
-    for (int i = start; i < end; i++) {
-        Snark snark = snarks.get(i);
-        boolean showPeers = showDebug || "1".equals(peerParam) || Base64.encode(snark.getInfoHash()).equals(peerParam);
-        boolean hide = false;
-        buf.setLength(0);
-        displaySnark(out, req, snark, uri, i, stats, showPeers, isDegraded, noThinsp, showDebug,
-                     hide, false, canWrite, filter, filterEnabled, srt, sortEnabled, buf);
-
-        // additionally accumulate downloads, uploads, ETA, flags
-        if (snark.getPeerList().size() >= 1) {
-            if (snark.getDownloadRate() > 0) downloads++;
-            if (snark.getUploadRate() > 0) { uploads++; isUploading = true; }
-            hasPeers = true;
-            long needed = snark.getNeededLength();
-            if (needed > total) needed = total;
-            if (stats[2] > 0 && needed > 0) totalETA += needed / stats[2];
+            // additionally accumulate downloads, uploads, ETA, flags
+            if (snark.getPeerList().size() >= 1) {
+                if (snark.getDownloadRate() > 0) downloads++;
+                if (snark.getUploadRate() > 0) { uploads++; isUploading = true; }
+                hasPeers = true;
+                long needed = snark.getNeededLength();
+                if (needed > total) needed = total;
+                if (stats[2] > 0 && needed > 0) totalETA += needed / stats[2];
+            }
         }
-    }
 
-    if (total == 0) {
-        out.write("<tbody id=noTorrents><tr id=noload class=noneLoaded><td colspan=12><i>");
-        synchronized(this) {
-            File dd = _resourceBase;
-            if (!dd.exists() && !dd.mkdirs()) out.write(_t("Data directory cannot be created") + ": " + DataHelper.escapeHTML(dd.toString()));
-            else if (!dd.isDirectory()) out.write(_t("Not a directory") + ": " + DataHelper.escapeHTML(dd.toString()));
-            else if (!dd.canRead()) out.write(_t("Unreadable") + ": " + DataHelper.escapeHTML(dd.toString()));
-            else if (!canWrite) out.write(_t("No write permissions for data directory") + ": " + DataHelper.escapeHTML(dd.toString()));
-            else if (searchActive) out.write(_t("No torrents found."));
-            else out.write(_t("No torrents loaded."));
+        if (total == 0) {
+            out.write("<tbody id=noTorrents><tr id=noload class=noneLoaded><td colspan=12><i>");
+            synchronized(this) {
+                File dd = _resourceBase;
+                if (!dd.exists() && !dd.mkdirs()) out.write(_t("Data directory cannot be created") + ": " + DataHelper.escapeHTML(dd.toString()));
+                else if (!dd.isDirectory()) out.write(_t("Not a directory") + ": " + DataHelper.escapeHTML(dd.toString()));
+                else if (!dd.canRead()) out.write(_t("Unreadable") + ": " + DataHelper.escapeHTML(dd.toString()));
+                else if (!canWrite) out.write(_t("No write permissions for data directory") + ": " + DataHelper.escapeHTML(dd.toString()));
+                else if (searchActive) out.write(_t("No torrents found."));
+                else out.write(_t("No torrents loaded."));
+            }
+            out.write("</i></td></tr></tbody>");
         }
-        out.write("</i></td></tr></tbody>");
+
+        //renderPageNavigation(out, req, start, pageSize, total, filter, noThinsp, true, searchActive, (searchActive ? search.length() : 0));
+        appendSnarkFooter(out, buf, stats, total, isConnected, noSnarks, hasPeers, isUploading, dht, isStandalone(), debug, peerParam);
+
+        if (showDebug) out.write("<tr id=dhtDebug>");
+        else out.write("<tr id=dhtDebug hidden>");
+        out.write("<th colspan=12><div class=volatile>");
+        if (dht != null) out.write(_manager.getBandwidthListener().toString() + dht.renderStatusHTML());
+        else out.write("<b id=noDHTpeers>" + _t("No DHT Peers") + "</b>");
+        out.write("</div></th></tr></tfoot>\n</table>\n");
+
+        if (isForm) out.write("</form>\n");
+        if (total > 0) out.write("<script src=/i2psnark/.res/js/convertTooltips.js></script>\n");
+
+        out.flush();
+        return start == 0;
     }
-
-    //renderPageNavigation(out, req, start, pageSize, total, filter, noThinsp, true, searchActive, (searchActive ? search.length() : 0));
-    appendSnarkFooter(out, buf, stats, total, isConnected, noSnarks, hasPeers, isUploading, dht, isStandalone(), debug, peerParam);
-
-    if (showDebug) out.write("<tr id=dhtDebug>");
-    else out.write("<tr id=dhtDebug hidden>");
-    out.write("<th colspan=12><div class=volatile>");
-    if (dht != null) out.write(_manager.getBandwidthListener().toString() + dht.renderStatusHTML());
-    else out.write("<b id=noDHTpeers>" + _t("No DHT Peers") + "</b>");
-    out.write("</div></th></tr></tfoot>\n</table>\n");
-
-    if (isForm) out.write("</form>\n");
-    if (total > 0) out.write("<script src=/i2psnark/.res/js/convertTooltips.js></script>\n");
-
-    out.flush();
-    return start == 0;
-}
 
     /**
      * Builds the HTML table header row for the torrent list display, including sortable column
