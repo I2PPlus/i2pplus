@@ -61,8 +61,7 @@ class MessageOutputStream extends OutputStream {
     public MessageOutputStream(I2PAppContext ctx, SimpleTimer2 timer,
                                DataReceiver receiver, int bufSize, int initBufSize, int passiveFlushDelay) {
         super();
-        // we only use two buffer sizes to prevent an attack
-        // where we end up with a thousand caches
+        // We only use two buffer sizes to prevent an attack where we'd end up with a thousand caches
         if (bufSize < ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE) {
             bufSize = ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE;
         } else if (bufSize > ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE &&
@@ -82,8 +81,6 @@ class MessageOutputStream extends OutputStream {
         //_sendPeriodBeginTime = ctx.clock().now();
         //_context.statManager().createRateStat("stream.sendBps", "How fast we pump data through the stream", "Stream", new long[] { 60*1000, 5*60*1000, 60*60*1000 });
         _flusher = new Flusher(timer);
-        //if (_log.shouldDebug())
-        //    _log.debug("MessageOutputStream created");
     }
 
     public void setWriteTimeout(int ms) {
@@ -140,9 +137,7 @@ class MessageOutputStream extends OutputStream {
                         _flusher.enqueue();
                     }
                 } else {
-                    // buffer whatever we can fit then flush,
-                    // repeating until we've pushed all of the
-                    // data through
+                    // buffer what we can fit then flush, repeat until we've pushed all of the data through
                     int toWrite = maxBuffer - _valid;
                     System.arraycopy(b, cur, _buf, _valid, toWrite);
                     remaining -= toWrite;
@@ -192,7 +187,6 @@ class MessageOutputStream extends OutputStream {
                 _log.debug("Took " + elapsed + "ms to write to the stream?", new Exception("foo"));
         }
         throwAnyError();
-        //updateBps(len);
     }
 
     /** */
@@ -210,11 +204,6 @@ class MessageOutputStream extends OutputStream {
         int size = _nextBufferSize;
         if (size > 0) {
             // update the buffer size to the requested amount
-            // No, never do this, to avoid ByteCache churn.
-            //_dataCache.release(new ByteArray(_buf));
-            //_dataCache = ByteCache.getInstance(128, size);
-            //ByteArray ba = _dataCache.acquire();
-            //_buf = ba.getData();
             _currentBufferSize = size;
             _nextBufferSize = 0;
         }
@@ -222,7 +211,8 @@ class MessageOutputStream extends OutputStream {
     }
 
     /**
-     * Flush data that has been enqued but not flushed after a certain period of inactivity
+     * Handles flushing of data that has been enqueued but not flushed after a configured period of inactivity.
+     * This class uses a timed event to trigger passive flushing to optimize throughput and reduce latency.
      */
     private class Flusher extends SimpleTimer2.TimedEvent {
         private boolean _enqueued;
@@ -231,43 +221,75 @@ class MessageOutputStream extends OutputStream {
             super(timer);
         }
 
+        /**
+         * Schedules the flusher to run after a delay specified by PROP_PASSIVE_FLUSH_DELAY.
+         * Uses forceReschedule to avoid accumulating multiple duplicate scheduled tasks, which previously caused queue overloads.
+         * Duplicate scheduling is not harmful—it only defers the flush timing—but this approach prevents unnecessary queue growth.
+         */
         public void enqueue() {
-            // no need to be overly worried about duplicates - it would just push it further out
             int pfd = _context.getProperty(PROP_PASSIVE_FLUSH_DELAY, DEFAULT_PASSIVE_FLUSH_DELAY);
             if (!_enqueued) {
-                /**
-                 *  Maybe we could just use schedule() here - or even SimpleTimer2 - not sure...
-                 *  To be safe, use forceReschedule() so we don't get lots of duplicates
-                 *  We've seen the queue blow up before, maybe it was this before the rewrite...
-                 *  So perhaps it IS wise to be "overly worried" ...
-                 */
                 forceReschedule(pfd);
-                if (_log.shouldDebug()) {_log.debug("Rescheduling the flusher to run in " + pfd + "ms");}
+                if (_log.shouldDebug()) {
+                    _log.debug("Flusher rescheduled to run after " + pfd + "ms delay");
+                }
                 _enqueued = true;
             } else {
-                if (_log.shouldDebug()) {_log.debug("NOT rescheduling the flusher");}
+                if (_log.shouldDebug()) {
+                    _log.debug("Flusher already enqueued, not rescheduling to avoid duplicates...");
+                }
             }
         }
 
+        /**
+         * Triggered when the scheduled time is reached.
+         * If the flusher is closed, does nothing.
+         * Otherwise, determines whether to re-enqueue or flush based on remaining time and write activity.
+         * - If flush time has not fully elapsed, re-enqueues itself.
+         * - If a write is currently in process, re-enqueues to delay flush.
+         * - Otherwise, performs the flush operation.
+         */
         public void timeReached() {
-            if (_closed.get()) {return;}
+            if (_closed.get()) {
+                return;
+            }
             _enqueued = false;
-            long timeLeft = (_lastBuffered + _passiveFlushDelay - _context.clock().now());
-            if (_log.shouldDebug()) {_log.debug("Flusher time reached with " + timeLeft + "ms remaining");}
-            if (timeLeft > 0) {enqueue();}
-            // don't passive flush if there is a write being done (unacked outbound)
-            else if (_dataReceiver.writeInProcess()) {enqueue();}
-            else {doFlush();}
+
+            long timeLeft = _lastBuffered + _passiveFlushDelay - _context.clock().now();
+
+            if (_log.shouldDebug()) {
+                _log.debug("Flusher triggered with " + timeLeft + "ms remaining before flush");
+            }
+
+            if (timeLeft > 0) {
+                enqueue();
+                if (_log.shouldDebug()) {
+                    _log.debug("Flush delay not elapsed -> Re-enqueued flusher");
+                }
+            } else if (_dataReceiver.writeInProcess()) {
+                enqueue();
+                if (_log.shouldDebug()) {
+                    _log.debug("Write in process -> Re-enqueued flusher to defer flush");
+                }
+            } else {
+                doFlush();
+            }
         }
 
+        /**
+         * Performs the actual flush of buffered data if valid data exists and flush time has elapsed.
+         * Logs flush activity and rejection reasons appropriately.
+         * Synchronized on _dataLock to safely access shared buffer state.
+         */
         private void doFlush() {
             boolean sent = false;
             WriteStatus ws = null;
             synchronized (_dataLock) {
                 long flushTime = _lastBuffered + _passiveFlushDelay;
-                if ( (_valid > 0) && (flushTime <= _context.clock().now()) ) {
-                    if (_log.shouldDebug())
-                        _log.debug("doFlush() valid = " + _valid);
+                if ((_valid > 0) && (flushTime <= _context.clock().now())) {
+                    if (_log.shouldDebug()) {
+                        _log.debug("doFlush() processing buffer with " + _valid + " valid bytes");
+                    }
                     if (_buf != null) {
                         ws = _dataReceiver.writeData(_buf, 0, _valid);
                         _written += _valid;
@@ -276,13 +298,14 @@ class MessageOutputStream extends OutputStream {
                         sent = true;
                     }
                 } else {
-                    if (_log.shouldInfo() && _valid > 0)
-                        _log.info("doFlush() rejected... valid = " + _valid);
+                    if (_log.shouldInfo() && _valid > 0) {
+                        _log.info("doFlush() skipped: flush time not reached or no valid data; valid bytes=" + _valid);
+                    }
                 }
             }
-            // ignore the ws
-            if (sent && _log.shouldDebug())
-                _log.debug("Passive flush of " + ws);
+            if (sent && _log.shouldDebug()) {
+                _log.debug("Passive flush completed with status: " + ws);
+            }
         }
     }
 
@@ -304,9 +327,6 @@ class MessageOutputStream extends OutputStream {
      */
     @Override
     public void flush() throws IOException {
-        /** @throws InterruptedIOException if the write times out
-         *  Documented here, but doesn't belong in the javadoc.
-         */
         flush(true);
     }
 
