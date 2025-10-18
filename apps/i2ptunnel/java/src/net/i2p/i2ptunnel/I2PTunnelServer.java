@@ -85,7 +85,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     private static int MAX_THREADS = 4096;
     private static int MAX_BACKLOG = 1024;
     private static int KEEP_ALIVE = 30; // seconds
-    private static int BUFFER_SIZE = 32 * 1024;
+    private static int BUFFER_SIZE = 8 * 1024;
     private final Map<Integer, InetSocketAddress> _socketMap = new ConcurrentHashMap<Integer, InetSocketAddress>(4);
     private volatile StatefulConnectionFilter _filter;
 

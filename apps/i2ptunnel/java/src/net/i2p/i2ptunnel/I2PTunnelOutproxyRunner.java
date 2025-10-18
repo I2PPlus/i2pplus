@@ -234,7 +234,7 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
                 int len;
                 // Batch flush every 64KB or when no more data available
                 int flushedSinceLast = 0;
-                final int FLUSH_THRESHOLD = 64 * 1024;
+                final int FLUSH_THRESHOLD = 8 * 1024;
 
                 while ((len = in.read(buffer)) != -1) {
                     if (len > 0) {
