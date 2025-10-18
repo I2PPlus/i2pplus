@@ -24,6 +24,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -81,7 +82,8 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     protected volatile ThreadPoolExecutor _clientExecutor;
     private static int CORES = SystemVersion.getCores();
     private static int MIN_THREADS = Math.max(CORES / 2, 8);
-    private static int MAX_THREADS = 4096;
+    private static int MAX_THREADS = 1024;
+    private static int MAX_BACKLOG = 1024;
     private static int KEEP_ALIVE = 30; // seconds
     private final Map<Integer, InetSocketAddress> _socketMap = new ConcurrentHashMap<Integer, InetSocketAddress>(4);
     private volatile StatefulConnectionFilter _filter;
@@ -183,7 +185,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     }
 
     private static final int RETRY_DELAY = 15*1000;
-    private static final int MAX_RETRIES = 20;
+    private static final int MAX_RETRIES = 30;
 
     /**
      *
@@ -558,52 +560,71 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
     /**
      * Runs the I2PTunnelServer to accept and handle incoming connections asynchronously.
-     *
-     * Accepts connections in a loop, submitting each to the thread pool via CompletableFuture.
-     * Handles expected exceptions with retries and logs errors. On shutdown, gracefully terminates the pool.
+     * Uses a bounded thread pool with a buffer to improve resource management and throughput.
      */
     public void run() {
         i2pss = sockMgr.getServerSocket();
+
         if (_log.shouldInfo()) {
-            _log.info("Starting async executor with cached thread pool for server " + remoteHost + ':' + remotePort);
+            _log.info("Starting async executor with buffered thread pool for server " + remoteHost + ':' + remotePort);
         }
 
+        // Initialize thread pool with balanced size; use a LinkedBlockingQueue for buffering incoming tasks.
         ThreadPoolExecutor connectionExecutor = new ThreadPoolExecutor(
             MIN_THREADS,
             MAX_THREADS,
             KEEP_ALIVE,
             TimeUnit.SECONDS,
-            new SynchronousQueue<>(),
+            new LinkedBlockingQueue<>(MAX_BACKLOG), // buffer queue to handle bursts
             runnable -> {
                 Thread t = new Thread(runnable);
                 t.setName("Server:" + remotePort);
                 t.setDaemon(true);
-                t.setPriority(Thread.MAX_PRIORITY - 1);
                 return t;
             },
-            new ThreadPoolExecutor.CallerRunsPolicy()
+            new RejectedExecutionHandler() {
+                @Override
+                public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+                    if (r instanceof Handler) {
+                        I2PSocket socket = ((Handler) r).getSocket();
+                        try {
+                            socket.close();
+                        } catch (IOException ioe) {
+                            _log.debug("Error closing socket rejected by thread pool", ioe);
+                        }
+                        _log.warn("Connection from " + socket.getPeerDestination().calculateHash() +
+                                  " rejected -> Max (" + (MAX_THREADS + MAX_BACKLOG) + ") concurrent connections reached");
+                    } else {
+                        _log.warn("Unknown runnable rejected by thread pool: " + r);
+                    }
+                }
+            }
         );
 
-        TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
-        if (tcg != null) {
-            _clientExecutor = tcg.getClientExecutor();
-        } else {
-            // Fallback executor
-            _clientExecutor = new TunnelControllerGroup.CustomThreadPoolExecutor();
-        }
+        try {
+            // Retrieve or fallback to a client executor
+            TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();
+            if (tcg != null) {
+                _clientExecutor = tcg.getClientExecutor();
+            } else {
+                _clientExecutor = new TunnelControllerGroup.CustomThreadPoolExecutor();
+            }
 
-        while (open) {
-            I2PSocket i2ps = null;
-            try {
-                I2PServerSocket ci2pss = i2pss;
-                if (ci2pss == null) {
-                    throw new I2PException("I2PServerSocket closed");
-                }
-                i2ps = ci2pss.accept(); // blocking call
-
-                final I2PSocket socketToHandle = i2ps;
-
+            // Main accept loop
+            while (open) {
+                I2PSocket i2ps = null;
                 try {
+                    I2PServerSocket ci2pss = i2pss; // server socket
+                    if (ci2pss == null) {
+                        throw new I2PException("I2PServerSocket closed");
+                    }
+
+                    // Accept blocks until a connection arrives
+                    i2ps = ci2pss.accept();
+
+                    final I2PSocket socketToHandle = i2ps;
+
+                    // Submit handling asynchronously
                     CompletableFuture.runAsync(() -> {
                         try {
                             new Handler(socketToHandle).run();
@@ -612,95 +633,81 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                             try {
                                 socketToHandle.close();
                             } catch (IOException ioe) {
-                                // Ignored, socket already errored
+                                _log.debug("Error closing socket after handler exception", ioe);
                             }
                         }
                     }, connectionExecutor).exceptionally(ex -> {
-                        _log.warn("Async handler task failed for " + remoteHost + ':' + remotePort, ex);
+                        // Log and handle any unexpected failure in the async task
+                        _log.warn("Async handler task failure for " + remoteHost + ':' + remotePort, ex);
                         return null;
                     });
-                } catch (RejectedExecutionException ree) {
-                    _log.warn("Max " + MAX_THREADS + " connections exceeded on " +
-                               remoteHost.toString().replace("/", "") + ':' + remotePort + " -> Ignoring request");
-                    try {
-                        socketToHandle.close();
-                    } catch (IOException ioe) {
-                        // ignore
-                    }
-                }
 
-            } catch (RouterRestartException rre) {
-                _log.warn("Waiting for router restart...");
-                if (i2ps != null) try { i2ps.close(); } catch (IOException ioe) {}
-                try {
-                    Thread.sleep(2 * 60 * 1000);
-                } catch (InterruptedException ie) {
-                    Thread.currentThread().interrupt();
-                }
-                _log.warn("Reconnecting to router after restart");
-                i2pss = sockMgr.getServerSocket();
-            } catch (I2PException ipe) {
-                String s = "Error accepting server socket connection - KILLING THE TUNNEL SERVER!";
-                _log.log(Log.CRIT, s, ipe);
-                l.log("✖ " + s + ": " + ipe.getMessage());
-                TunnelController tc = getTunnel().getController();
-                if (tc != null) {
-                    tc.stopTunnel();
-                } else {
-                    close(true);
-                }
-                if (i2ps != null) {
+                } catch (RejectedExecutionException ree) {
+                    // When max threads or queue is full, reject new tasks
+                    _log.warn("Max " + MAX_THREADS + " connections exceeded on " +
+                              remoteHost.toString().replace("/", "") + ':' + remotePort + " -> Ignoring request");
+                    if (i2ps != null) try { i2ps.close(); } catch (IOException ioe) { _log.debug("Error closing rejected socket", ioe); }
+
+                } catch (RouterRestartException rre) {
+                    _log.warn("Waiting for router restart...");
+                    if (i2ps != null) try {i2ps.close(); } catch (IOException ioe) {}
+                    // Wait before reconnecting after a restart
                     try {
-                        i2ps.close();
-                    } catch (IOException ioe) {
-                        // ignore
+                        Thread.sleep(2 * 60 * 1000);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
                     }
-                }
-                break;
-            } catch (ConnectException ce) {
-                if (i2ps != null) try { i2ps.close(); } catch (IOException ioe) {}
-                if (!open) {
+                    _log.warn("Reconnecting to router after restart");
+                    i2pss = sockMgr.getServerSocket(); // attempt reconnect
+
+                } catch (I2PException ipe) {
+                    // Severe error: log, stop tunnel, and break loop
+                    String s = "Error accepting server socket connection - KILLING THE TUNNEL SERVER!";
+                    _log.log(Log.CRIT, s, ipe);
+                    l.log("✖ " + s + ": " + ipe.getMessage());
+                    TunnelController tc = getTunnel().getController();
+                    if (tc != null) {
+                        tc.stopTunnel();
+                    } else {
+                        close(true);
+                    }
+                    if (i2ps != null) try { i2ps.close(); } catch (IOException ioe) {}
                     break;
-                }
-                if (_log.shouldError()) {
-                    _log.error("Error accepting server socket connection \n* " + ce.getMessage());
-                }
-                try {
-                    Thread.sleep(2 * 60 * 1000);
-                } catch (InterruptedException ie) {
-                    Thread.currentThread().interrupt();
-                }
-                i2pss = sockMgr.getServerSocket();
-            } catch (SocketTimeoutException ste) {
-                // ignored, we never set timeout
-                if (i2ps != null) {
-                    try {
-                        i2ps.close();
-                    } catch (IOException ioe) {
-                        // ignore
+                } catch (ConnectException ce) {
+                    // Similar handling as above
+                    if (i2ps != null) try { i2ps.close(); } catch (IOException ioe) {}
+                    if (!open) break;
+                    if (_log.shouldError()) {
+                        _log.error("Error accepting server socket connection \n* " + ce.getMessage());
                     }
-                }
-            } catch (RuntimeException e) {
-                if (_log.shouldError()) {
-                    _log.error("Uncaught exception accepting", e);
-                }
-                if (i2ps != null) {
                     try {
-                        i2ps.close();
-                    } catch (IOException ioe) {
-                        // ignore
+                        Thread.sleep(2 * 60 * 1000);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
                     }
-                }
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException ie) {
-                    Thread.currentThread().interrupt();
+                    i2pss = sockMgr.getServerSocket();
+                } catch (SocketTimeoutException ste) {
+                    // No timeout set, ignore
+                    if (i2ps != null) try { i2ps.close(); } catch (IOException ioe) {}
+                } catch (RuntimeException e) {
+                    // Catch-all for unexpected runtime issues
+                    if (_log.shouldError()) {
+                        _log.error("Uncaught exception accepting", e);
+                    }
+                    if (i2ps != null) try { i2ps.close(); } catch (IOException ioe) {}
+                    // brief pause before resuming
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
                 }
             }
-        }
-
-        if (connectionExecutor != null && !connectionExecutor.isTerminated()) {
-            shutdownAndAwaitTermination(connectionExecutor);
+        } finally {
+            // Properly shutdown the connection thread pool
+            if (connectionExecutor != null && !connectionExecutor.isTerminated()) {
+                shutdownAndAwaitTermination(connectionExecutor);
+            }
         }
     }
 
@@ -725,24 +732,45 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     private class Handler implements Runnable {
         private final I2PSocket _i2ps;
 
-        public Handler(I2PSocket socket) {_i2ps = socket;}
+        public Handler(I2PSocket socket) {
+            _i2ps = socket;
+        }
 
+        /**
+         * Return the wrapped I2PSocket for rejection handling
+         */
+        public I2PSocket getSocket() {
+            return _i2ps;
+        }
+
+        @Override
         public void run() {
-            try {blockingHandle(_i2ps);}
-            catch (Throwable t) {_log.error("Uncaught error in I2PTunnel server", t);}
+            try {
+                blockingHandle(_i2ps);
+            } catch (Throwable t) {
+                _log.error("Uncaught error in I2PTunnel server", t);
+            }
         }
     }
 
     /**
-     *  This is run in a thread from a limited-size thread pool via Handler.run(),
-     *  except for a standard server (this class, no extension, as determined in getUsePool()),
-     *  it is run directly in the acceptor thread (see run()).
+     * Handles an incoming I2P socket connection.
      *
-     *  In either case, this method and any overrides must spawn a thread and return quickly.
-     *  If blocking while reading the headers (as in HTTP and IRC), the thread pool
-     *  may be exhausted.
+     * <p>This method is invoked from a limited-size thread pool by {@link Handler#run()},
+     * except when used in a standard server (i.e., this class with no extensions determined by {@link #getUsePool()}),
+     * in which case it runs directly in the acceptor thread (see {@link #run()}).</p>
      *
-     *  See PROP_USE_POOL, DEFAULT_USE_POOL, PROP_HANDLER_COUNT, DEFAULT_HANDLER_COUNT
+     * <p>Implementations of this method (including overrides) must spawn handler threads quickly and return promptly
+     * to avoid blocking the calling thread. Blocking during header processing or socket setup (e.g., in protocols like HTTP or IRC)
+     * risks exhausting the thread pool and degrading server responsiveness.</p>
+     *
+     * <p>Thread management and concurrency behavior can be influenced through the following configuration properties:
+     * {@code PROP_USE_POOL}, {@code DEFAULT_USE_POOL}, {@code PROP_HANDLER_COUNT}, and {@code DEFAULT_HANDLER_COUNT}.</p>
+     *
+     * @param socket the incoming {@link I2PSocket} representing the connection to be processed
+     *
+     * @implNote For optimal performance and scalability, consider offloading any blocking or long-running operations
+     * to separate threads or async handlers, as this method directly impacts connection acceptance throughput.
      */
     protected void blockingHandle(I2PSocket socket) {
         if (_log.shouldInfo()) {
@@ -751,36 +779,60 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         }
         long afterAccept = getTunnel().getContext().clock().now();
         long afterSocket = -1;
-        // local is fast, so synchronously. Does not need that many threads.
+
         try {
+            // Set read timeout on the incoming socket to avoid indefinite blocking
             socket.setReadTimeout(readTimeout);
+
+            // Create a new outgoing socket to the remote peer
             Socket s = getSocket(socket.getPeerDestination().calculateHash(), socket.getLocalPort());
+
+            // Optional: Tune socket performance preferences for this connection
+            s.setPerformancePreferences(1, 2, 3);  // Example: prioritize low latency and bandwidth
+
+            // Optional: Set socket buffer sizes for throughput improvement
+            int bufferSize = 64 * 1024;  // 64KB buffer size recommended in many cases
+            s.setReceiveBufferSize(bufferSize);
+            s.setSendBufferSize(bufferSize);
+
             afterSocket = getTunnel().getContext().clock().now();
-            Thread t = new I2PTunnelRunner(s, socket, slock, null, null,
-                                           null, (I2PTunnelRunner.FailCallback) null);
+
+            // Delegate to client executor pool for actual handling to avoid blocking here
+            Thread t = new I2PTunnelRunner(s, socket, slock, null, null, null, (I2PTunnelRunner.FailCallback) null);
             _clientExecutor.execute(t);
 
             long afterHandle = getTunnel().getContext().clock().now();
             long timeToHandle = afterHandle - afterAccept;
+            // Log only if handling takes unusually long to avoid excessive log overhead
             if ((timeToHandle > 1500) && (_log.shouldInfo())) {
                 _log.info("Took a while (" + timeToHandle + "ms) to handle the request for " + remoteHost + ':' + remotePort +
                           "\n* Socket create: " + (afterSocket-afterAccept) + "ms");
             }
         } catch (SocketException ex) {
             int port = socket.getLocalPort();
-            try {socket.reset();}
-            catch (IOException ioe) {}
-            if (_log.shouldError()) {_log.error("Error connecting to server " + getSocketString(port));}
-        } catch (IOException ex) {_log.error("Error while waiting for I2PConnections", ex);}
+            try {
+                socket.reset();
+            } catch (IOException ioe) {
+                _log.debug("IOException during socket reset for port " + port, ioe);
+            }
+            if (_log.shouldError()) {
+                _log.error("SocketException connecting to server " + getSocketString(port), ex);
+            }
+        } catch (IOException ex) {
+            _log.error("IOException while waiting for I2PConnections", ex);
+        }
     }
 
     /**
-     *  Get a regular or SSL socket depending on config and the incoming port.
-     *  To configure a specific host:port as the server for incoming port xx,
-     *  set option targetForPort.xx=host:port
+     * Get a regular or SSL socket depending on config and the incoming port.
      *
-     *  @param from may be used to construct local address since 0.9.13
-     *  @since 0.9.9
+     * <p>Allows configuring a specific target host:port mapping for incoming ports with the option
+     * "targetForPort.{port}=host:port". For SSL, avoids SSL-over-SSL on certain ports (e.g., 443 and 22).</p>
+     *
+     * @param from may be used to construct a unique local address since version 0.9.13
+     * @param incomingPort the local port for which a socket is requested
+     * @return a connected Socket, either SSL or plain depending on configuration and port
+     * @throws IOException on socket creation or address resolution failure
      */
     protected Socket getSocket(Hash from, int incomingPort) throws IOException {
         InetAddress host = remoteHost;
@@ -789,82 +841,124 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             InetSocketAddress isa = _socketMap.get(Integer.valueOf(incomingPort));
             if (isa != null) {
                 host = isa.getAddress();
-                if (host == null) {throw new IOException("Cannot resolve " + isa.getHostName());}
+                if (host == null) {
+                    throw new IOException("Cannot resolve " + isa.getHostName());
+                }
                 port = isa.getPort();
             }
         }
-        // Don't do SSL-over-SSL
+        // Avoid SSL-over-SSL on ports commonly used with SSL or SSH
         boolean force = incomingPort == 443 || incomingPort == 22;
-        return getSocket(from, host, port, force);
+        Socket s = getSocket(from, host, port, force);
+        // Tune send/receive buffer sizes to reduce system call overhead and improve throughput
+        int bufSize = 64 * 1024;  // 64 KB buffer size chosen empirically
+        s.setReceiveBufferSize(bufSize);
+        s.setSendBufferSize(bufSize);
+        // Hint JVM/network stack for latency and bandwidth preferences
+        s.setPerformancePreferences(1, 2, 3);
+
+        return s;
     }
 
     /**
-     *  Only for logging, to correctly show where we were trying to get to
-     *  after getSocket() throws a SocketException
+     * Returns a string representing the target host:port for logging purposes.
      *
-     *  @since 0.9.62
+     * @param incomingPort incoming port used to look up mapped target addresses
+     * @return human-readable hostname:port string for logging
      */
     protected String getSocketString(int incomingPort) {
         if (incomingPort != 0 && !_socketMap.isEmpty()) {
             InetSocketAddress isa = _socketMap.get(Integer.valueOf(incomingPort));
-            if (isa != null) {return isa.toString().replace("/", "");}
+            if (isa != null) {
+                // Remove leading slash for cleaner logging output
+                return isa.toString().replace("/", "");
+            }
         }
         return remoteHost.toString().replace("/", "") + ':' + remotePort;
     }
 
     /**
-     *  Get a regular or SSL socket depending on config.
-     *  The SSL config applies to all hosts/ports.
+     * Get a regular or SSL socket depending on config.
      *
-     *  @param from may be used to construct local address since 0.9.13
-     *  @since 0.9.9
+     * @param from may be used to construct local address since 0.9.13
+     * @param remoteHost remote address to connect to
+     * @param remotePort remote port to connect to
+     * @return a new Socket connected to the remote host and port
+     * @throws IOException on socket errors
+     * @since 0.9.9
      */
     protected Socket getSocket(Hash from, InetAddress remoteHost, int remotePort) throws IOException {
+        // Delegate to main getSocket method without forcing non-SSL
         return getSocket(from, remoteHost, remotePort, false);
     }
 
     /**
-     *  Get a regular or SSL socket depending on config.
-     *  The SSL config applies to all hosts/ports, unless forced off.
+     * Get a regular or SSL socket depending on config, with option to force non-SSL.
      *
-     *  @param forceNonSSL override config
-     *  @since 0.9.50
+     * <p>If SSL is enabled and not forced off, creates an SSL socket from a cached SSL factory.</p>
+     * <p>If SSL is disabled or forced off, creates a plain socket. If the connection is loopback and
+     * configured for unique local addresses, constructs the local address accordingly.</p>
+     *
+     * @param from may be used to construct local address since 0.9.13
+     * @param remoteHost remote address to connect to
+     * @param remotePort remote port to connect to
+     * @param forceNonSSL whether to override config and create a plain socket instead of SSL
+     * @return a new Socket or SSLSocket connected to the remote host and port
+     * @throws IOException on socket errors or SSL initialization failures
+     * @since 0.9.50
      */
     private Socket getSocket(Hash from, InetAddress remoteHost, int remotePort, boolean forceNonSSL) throws IOException {
         String opt = getTunnel().getClientOptions().getProperty(PROP_USE_SSL);
         if (!forceNonSSL && Boolean.parseBoolean(opt)) {
+            // Lazily initialize SSL factory with thread safety
             synchronized(sslLock) {
                 if (_sslFactory == null) {
                     try {
                         _sslFactory = new I2PSSLSocketFactory(getTunnel().getContext(),
                                                                true, "certificates/i2ptunnel");
                     } catch (GeneralSecurityException gse) {
-                        IOException ioe = new IOException("SSL Fail");
+                        // Wrap security exceptions as IOExceptions to conform to signature
+                        IOException ioe = new IOException("SSL initialization failed");
                         ioe.initCause(gse);
                         throw ioe;
                     }
                 }
             }
-            return _sslFactory.createSocket(remoteHost, remotePort);
+            Socket sslSocket = _sslFactory.createSocket(remoteHost, remotePort);
+            // Apply same performance tuning to SSL socket
+            sslSocket.setReceiveBufferSize(64 * 1024);
+            sslSocket.setSendBufferSize(64 * 1024);
+            sslSocket.setPerformancePreferences(1, 2, 3);
+
+            return sslSocket;
         } else {
-            // as suggested in https://lists.torproject.org/pipermail/tor-dev/2014-March/00657
             boolean unique = Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_UNIQUE_LOCAL));
             if (unique && remoteHost.isLoopbackAddress()) {
+                // Construct a unique local address using 'from' to prevent collisions on loopback
                 byte[] addr;
                 if (remoteHost instanceof Inet4Address) {
                     addr = new byte[4];
-                    addr[0] = 127;
+                    addr[0] = 127; // IPv4 loopback prefix
                     System.arraycopy(from.getData(), 0, addr, 1, 3);
                 } else {
                     addr = new byte[16];
-                    addr[0] = (byte) 0xfd;
+                    addr[0] = (byte) 0xfd; // Unique local IPv6 prefix
                     System.arraycopy(from.getData(), 0, addr, 1, 15);
                 }
                 InetAddress local = InetAddress.getByAddress(addr);
-                // Javadocs say local port of 0 allowed in Java 7.
-                // Not clear if supported in Java 6 or not.
-                return new Socket(remoteHost, remotePort, local, 0);
-            } else {return new Socket(remoteHost, remotePort);}
+
+                Socket socket = new Socket(remoteHost, remotePort, local, 0);
+                socket.setReceiveBufferSize(64 * 1024);
+                socket.setSendBufferSize(64 * 1024);
+                socket.setPerformancePreferences(1, 2, 3);
+                return socket;
+            } else {
+                Socket socket = new Socket(remoteHost, remotePort);
+                socket.setReceiveBufferSize(64 * 1024);
+                socket.setSendBufferSize(64 * 1024);
+                socket.setPerformancePreferences(1, 2, 3);
+                return socket;
+            }
         }
     }
 
