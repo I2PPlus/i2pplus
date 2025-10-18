@@ -58,26 +58,25 @@ public class IrcOutboundFilter implements Runnable {
             {
                 try {
                     String inmsg = in.readLine();
-                    if(inmsg==null)
+                    if (inmsg == null)
                         break;
-                    if(inmsg.endsWith("\r"))
-                        inmsg=inmsg.substring(0,inmsg.length()-1);
-                    // dupe of info level log
-                    //if (_log.shouldDebug())
-                    //    _log.debug("[IRC Client] Out: [" + inmsg + "]");
+                    if (inmsg.endsWith("\r")) {
+                        inmsg = inmsg.substring(0,inmsg.length() - 1);
+                    }
                     String outmsg = IRCFilter.outboundFilter(inmsg, expectedPong, _dccHelper);
-                    if(outmsg!=null)
-                    {
-                        if(!inmsg.equals(outmsg)) {
+                    if (outmsg != null) {
+                        if (!inmsg.equals(outmsg)) {
                             if (_log.shouldWarn()) {
                                 _log.warn("[IRC Client] Outbound message FILTERED [" + outmsg + "]");
                                 _log.warn("[IRC Client] Outbound message [" + inmsg + "]");
                             }
                         } else {
-                            if (_log.shouldInfo())
-                                _log.info("[IRC Client] Outbound message [" + outmsg + "]");
+                            if (_log.shouldInfo()) {
+                                _log.info("[IRC Client] Outbound message [" +
+                                          (outmsg.startsWith("PASS ") ? "PASS ************" : outmsg) + "]"); // don't log passwords
+                            }
                         }
-                        outmsg=outmsg+"\r\n";   // rfc1459 sec. 2.3
+                        outmsg = outmsg + "\r\n"; // rfc1459 sec. 2.3
                         output.write(outmsg.getBytes("ISO-8859-1"));
                         // save 250 ms in streaming
                         // Check ready() so we don't split the initial handshake up into multiple streaming messages
@@ -93,10 +92,10 @@ public class IrcOutboundFilter implements Runnable {
                     break;
                 }
             }
-        } catch (RuntimeException re) {
-            _log.error("[IRC Client] Error filtering outbound data", re);
-        } finally {
-            try { remote.close(); } catch (IOException e) {}
+        } catch (RuntimeException re) {_log.error("[IRC Client] Error filtering outbound data", re);}
+        finally {
+            try {remote.close();}
+            catch (IOException e) {}
         }
         if (_log.shouldDebug())
             _log.debug("[IRC Client] Outbound Filter: Stopped");
