@@ -1625,9 +1625,9 @@ public class I2PSnarkServlet extends BasicServlet {
         boolean showNav = isForm && total > 0 && (start > 0 || total > pageSize);
         boolean navVisible = !searchActive || (searchActive && searchLength > pageSize);
 
-        out.write("<tr colspan=12><div class=\"pagenavcontrols\" id=\"pagenavtop\"");
+        out.write("<tr colspan=12><td><div class=pagenavcontrols id=pagenavtop");
         if (!showNav || !navVisible) {
-            out.write(" style=\"display:none;\"");
+            out.write(" style=display:none");
         }
         out.write(">");
 
@@ -1635,7 +1635,7 @@ public class I2PSnarkServlet extends BasicServlet {
             writePageNav(out, req, start, pageSize, total, filter, noThinsp);
         }
 
-        out.write("</div></tr>");
+        out.write("</div></td></tr>");
     }
 
     /**
