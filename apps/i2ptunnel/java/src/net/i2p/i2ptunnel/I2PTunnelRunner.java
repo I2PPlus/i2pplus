@@ -312,17 +312,29 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      * @since 0.9.62
      */
     public void streamDone() {
+        String peerId = null;
+        try {
+            if (i2ps != null && i2ps.getPeerDestination() != null) {
+                peerId = i2ps.getPeerDestination().calculateHash().toBase64().substring(0, 8);
+            }
+        } catch (Exception e) {
+            // Ignore logging failure here to avoid recursion or errors
+        }
+
         if (_keepAliveSocket && fromI2P != null) {
-            // we are client-side
-            // tell the from-I2P runner
-            if (_log.shouldInfo()) {_log.info("Stream done from I2P", new Exception("I did it"));}
+            if (_log.shouldInfo()) {
+                _log.info("Completed forwarding data from peer [" + (peerId != null ? peerId : "unknown") + "] to local socket");
+            }
             fromI2P.done = true;
         } else if (_keepAliveI2P && toI2P != null) {
-            // we are server-side - tell the to-I2P runner
-            if (_log.shouldInfo()) {_log.info("Stream done from Server", new Exception("I did it"));}
+            if (_log.shouldInfo()) {
+                _log.info("Completed forwarding data from local socket to peer [" + (peerId != null ? peerId : "unknown") + "]");
+            }
             toI2P.done = true;
         } else {
-            if (_log.shouldWarn()) {_log.info("Unexpected stream done", new Exception("I did it"));}
+            if (_log.shouldWarn()) {
+                _log.warn("Stream forwarding completed in unexpected state for peer [" + (peerId != null ? peerId : "unknown") + "]");
+            }
         }
     }
 
