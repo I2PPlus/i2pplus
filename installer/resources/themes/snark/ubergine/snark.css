@@ -1176,7 +1176,7 @@ td.peerCount:empty::after{display:none}
 .lang_de #trackerconfig input.trackername,.lang_ru #trackerconfig input.trackername{width:120px;max-width:120px;min-width:0}
 .tAction input[type=submit],#actionStopAll,#actionStartAll,#actionStopAll:hover,#actionStartAll:hover,#actionStopAll:focus,#actionStartAll:focus{padding:10px;background-size:auto 12px,100%}
 .tAction input[type=submit]:active,#actionStopAll:active,#actionStartAll:active{background-size:auto 10px,100%}
-#torrents .txd,#torrents.rateUp,.iframed #torrents .txd,.iframed #torrents .rateUp{padding:0;width:0;min-width:0;font-size:0}
+#torrents .txd,#torrents.rateUp,.iframed #torrents .txd,.iframed #torrents .rateUp{padding:0;width:0;min-width:0!important;font-size:0}
 .txd>*,.rateUp>*,.iframed .txd>*,.iframed .rateUp>*{display:none}
 #actionStopAll,#actionStartAll,#actionStopAll:hover,#actionStartAll:hover,#actionStopAll:focus,#actionStartAll:focus{padding:10px 17px}
 #snarkSearch input[type=search]{width:140px}
@@ -1342,6 +1342,8 @@ select[name$=".quantity"],select[name$=".length"]{min-width:95px}
 .snarkNav.nav_main:not(:last-child),.iframed .snarkNav.nav_main:not(:last-child){padding-left:0;padding-right:13px;width:27px;background-position:calc(50% - 1px) center}
 .iframed .snarkNav.nav_forum{width:26px}
 .snarkNav.nav_tracker:last-child,.iframed .snarkNav.nav_tracker:last-child{padding-right:8px}
+#navbar{justify-content:left}
+#snarkSearch{top:2px}
 }
 
 @media (min-width:800px){
