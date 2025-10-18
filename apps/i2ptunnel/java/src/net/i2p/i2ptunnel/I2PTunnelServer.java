@@ -82,9 +82,10 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     protected volatile ThreadPoolExecutor _clientExecutor;
     private static int CORES = SystemVersion.getCores();
     private static int MIN_THREADS = Math.max(CORES / 2, 8);
-    private static int MAX_THREADS = 1024;
+    private static int MAX_THREADS = 4096;
     private static int MAX_BACKLOG = 1024;
     private static int KEEP_ALIVE = 30; // seconds
+    private static int BUFFER_SIZE = 32 * 1024;
     private final Map<Integer, InetSocketAddress> _socketMap = new ConcurrentHashMap<Integer, InetSocketAddress>(4);
     private volatile StatefulConnectionFilter _filter;
 
@@ -791,7 +792,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             s.setPerformancePreferences(1, 2, 3);  // Example: prioritize low latency and bandwidth
 
             // Optional: Set socket buffer sizes for throughput improvement
-            int bufferSize = 64 * 1024;  // 64KB buffer size recommended in many cases
+            int bufferSize = BUFFER_SIZE;
             s.setReceiveBufferSize(bufferSize);
             s.setSendBufferSize(bufferSize);
 
@@ -851,7 +852,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         boolean force = incomingPort == 443 || incomingPort == 22;
         Socket s = getSocket(from, host, port, force);
         // Tune send/receive buffer sizes to reduce system call overhead and improve throughput
-        int bufSize = 64 * 1024;  // 64 KB buffer size chosen empirically
+        int bufSize = BUFFER_SIZE;  // 64 KB buffer size chosen empirically
         s.setReceiveBufferSize(bufSize);
         s.setSendBufferSize(bufSize);
         // Hint JVM/network stack for latency and bandwidth preferences
@@ -926,8 +927,8 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             }
             Socket sslSocket = _sslFactory.createSocket(remoteHost, remotePort);
             // Apply same performance tuning to SSL socket
-            sslSocket.setReceiveBufferSize(64 * 1024);
-            sslSocket.setSendBufferSize(64 * 1024);
+            sslSocket.setReceiveBufferSize(BUFFER_SIZE);
+            sslSocket.setSendBufferSize(BUFFER_SIZE);
             sslSocket.setPerformancePreferences(1, 2, 3);
 
             return sslSocket;
@@ -948,14 +949,14 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 InetAddress local = InetAddress.getByAddress(addr);
 
                 Socket socket = new Socket(remoteHost, remotePort, local, 0);
-                socket.setReceiveBufferSize(64 * 1024);
-                socket.setSendBufferSize(64 * 1024);
+                socket.setReceiveBufferSize(BUFFER_SIZE);
+                socket.setSendBufferSize(BUFFER_SIZE);
                 socket.setPerformancePreferences(1, 2, 3);
                 return socket;
             } else {
                 Socket socket = new Socket(remoteHost, remotePort);
-                socket.setReceiveBufferSize(64 * 1024);
-                socket.setSendBufferSize(64 * 1024);
+                socket.setReceiveBufferSize(BUFFER_SIZE);
+                socket.setSendBufferSize(BUFFER_SIZE);
                 socket.setPerformancePreferences(1, 2, 3);
                 return socket;
             }
