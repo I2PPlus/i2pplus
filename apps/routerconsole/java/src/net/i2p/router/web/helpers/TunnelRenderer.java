@@ -560,24 +560,24 @@ class TunnelRenderer {
                     ReverseLookupResult rlResult = doReverseLookups ? reverseLookupResults.get(h) : null;
 
                     chunkSb.append("<tr class=lazy><td>")
-                          .append(peerFlag(h))
-                          .append("</td><td><span class=routerHash><a href=\"netdb?r=")
-                          .append(h.toBase64())
-                          .append("\">")
-                          .append(truncHash)
-                          .append("</a></span></td><td>");
+                           .append(peerFlag(h))
+                           .append("</td><td><span class=routerHash><a href=\"netdb?r=")
+                           .append(h.toBase64())
+                           .append("\">")
+                           .append(truncHash)
+                           .append("</a></span></td><td>");
                     if (version != null) {
                         chunkSb.append("<span class=version title=\"")
-                              .append(_t("Show all routers with this version in the NetDb"))
-                              .append("\"><a href=\"/netdb?v=")
-                              .append(DataHelper.stripHTML(version))
-                              .append("\">")
-                              .append(DataHelper.stripHTML(version))
-                              .append("</a></span>");
+                               .append(_t("Show all routers with this version in the NetDb"))
+                               .append("\"><a href=\"/netdb?v=")
+                               .append(DataHelper.stripHTML(version))
+                               .append("\">")
+                               .append(DataHelper.stripHTML(version))
+                               .append("</a></span>");
                     }
                     chunkSb.append("</td><td>")
-                          .append(_context.commSystem().renderPeerCaps(h, false))
-                          .append("</td><td><span class=ipaddress>");
+                           .append(_context.commSystem().renderPeerCaps(h, false))
+                           .append("</td><td><span class=ipaddress>");
                     if (ip != null && !ip.isEmpty()) {
                         if (ip.contains(":")) {chunkSb.append("<span hidden>[IPv6]</span>");}
                         chunkSb.append(ip);
@@ -612,8 +612,8 @@ class TunnelRenderer {
                             chunkSb.append(String.format("<td class=tcount data-sort-column-key=transitCount>%d</td><td class=bar data-sort-column-key=transitCount>", transitTunnelCount));
                             chunkSb.append(String.format("<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\"><span class=percentBarText>%d%%</span></span></span>",
                                                         fmt.format(transitTunnelCount * 100.0 / partCount).replace(".00", ""),
-                                                        transitTunnelCount * 100 / partCount));
-                            chunkSb.append("</td>");
+                                                        transitTunnelCount * 100 / partCount))
+                                   .append("</td>");
                         } else {
                             chunkSb.append("<td></td><td></td>");
                         }
@@ -630,24 +630,24 @@ class TunnelRenderer {
             }
             StringBuilder footerSb = new StringBuilder();
             footerSb.append("</tbody>\n<tfoot class=lazy><tr class=tablefooter data-sort-method=none><td colspan=4><b>")
-                  .append(peerList.size())
-                  .append(" ")
-                  .append(_t("unique peers"))
-                  .append("</b></td><td></td>");
+                    .append(peerList.size())
+                    .append(" ")
+                    .append(_t("unique peers"))
+                    .append("</b></td><td></td>");
             if (doReverseLookups) {
                 footerSb.append("<td></td>");
             }
             footerSb.append("<td colspan=2><b>")
-                  .append(tunnelCount)
-                  .append(" ")
-                  .append(_t("local"))
-                  .append("</b></td>");
+                    .append(tunnelCount)
+                    .append(" ")
+                    .append(_t("local"))
+                    .append("</b></td>");
             if (!peerList.isEmpty()) {
                 footerSb.append("<td colspan=2><b>")
-                      .append(partCount)
-                      .append(" ")
-                      .append(_t("transit"))
-                      .append("</b></td>");
+                        .append(partCount)
+                        .append(" ")
+                        .append(_t("transit"))
+                        .append("</b></td>");
             } else {
                 footerSb.append("<td></td>");
             }
