@@ -1203,9 +1203,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     s = new Sender(browserout, serverin, "Server -> Client " +
                                    (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""), _log);
                 }
-                if (_log.shouldDebug())
-                    _log.debug("[HTTPServer] Running server-to-browser Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive +
-                               (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
+                if (_log.shouldDebug()) {
+                    _log.debug("[HTTPServer] Sending " + (_shouldCompress ? "gzipped " : "") + "response" + (_keepalive ? " [KeepAlive]" : "") +
+                               (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
+                }
                 s.run(); // same thread
             } catch (SSLException she) {
                 if (_log.shouldError()) {_log.error("[HTTPServer] SSL error", she);}
@@ -1274,8 +1275,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 try { _webserver.close(); } catch (IOException ioe) {}
                 if (!_keepalive) try { _browser.close(); } catch (IOException ioe) {}
                 if (_log.shouldDebug()) {
-                    _log.debug("Finished server-to-browser: Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive +
-                               (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
+                    _log.debug("Finished sending " + (_shouldCompress ? "gzipped " : "") + "response" + (_keepalive ? " [KeepAlive]" : "") +
+                               (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
                 }
             }
         }
