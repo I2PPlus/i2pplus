@@ -308,6 +308,13 @@ async function refreshTorrents(callback) {
               th.innerHTML = thElementsResponse[index].innerHTML;
             });
           }
+          if (torrentsBody && torrentsBody.children.length === 0) {
+            snarkHeader.querySelectorAll("th:nth-child(n+2) .sortIcon, th:nth-child(n+2) .optbox")
+                       .forEach(el => el.style.opacity = "0");
+          } else {
+            snarkHeader.querySelectorAll("th:nth-child(n+2):not(.tAction) img, th:nth-child(n+2):not(.tAction) input")
+                       .forEach(el => el.style.opacity = "");
+          }
         }
       } catch (error) {}
     }

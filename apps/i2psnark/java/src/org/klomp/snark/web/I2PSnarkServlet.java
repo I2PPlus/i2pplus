@@ -709,258 +709,117 @@ public class I2PSnarkServlet extends BasicServlet {
      * @throws IOException if an I/O error occurs while writing to the output stream
      */
     private boolean writeTorrents(PrintWriter out, HttpServletRequest req, boolean canWrite) throws IOException {
-        /** dl, ul, down rate, up rate, peers, size */
         final long stats[] = new long[6];
         String filter = req.getParameter("filter") != null ? req.getParameter("filter") : "";
-        String filterParam = filter;
         String peerParam = req.getParameter("p");
-        String psize = req.getParameter("ps");
         String search = req.getParameter("search");
         String srt = req.getParameter("sort");
         String stParam = req.getParameter("st");
-        filterEnabled = !filterParam.isEmpty() && !filterParam.equals("all");
-        int refresh = _manager.getRefreshDelaySeconds();
+        boolean filterEnabled = !filter.isEmpty() && !"all".equals(filter);
+
         List<Snark> snarks = getSortedSnarks(req);
         int total = snarks.size();
+        int downloads = 0;
+        int uploads = 0;
+        long totalETA = 0;
         boolean isConnected = _manager.util().connected();
         boolean noSnarks = snarks.isEmpty();
         boolean isForm = isConnected || !noSnarks;
         boolean showStatusFilter = _manager.util().showStatusFilter();
         boolean sortEnabled = srt != null && !srt.isEmpty();
-        boolean searchActive = (search != null && !search.equals("") && search.length() > 0);
+        boolean searchActive = search != null && !search.isEmpty();
+        boolean isUploading = false;
+        boolean hasPeers = false;
+        DHT dht = _manager.util().getDHT();
+
+        if (searchActive) {
+            List<Snark> matches = search(search, snarks);
+            if (matches != null) { snarks = matches; searchResults = matches.size(); }
+        }
+
+        int start = 0;
+        if (stParam != null) {
+            try { start = Math.max(0, Math.min(total - 1, Integer.parseInt(stParam))); } catch(NumberFormatException ignored) {}
+        }
+
+        int pageSize = filterEnabled ? 9999 : Math.max(_manager.getPageSize(), 10);
+        String ps = req.getParameter("ps");
+        if ("null".equals(ps)) ps = Integer.toString(pageSize);
+        if (ps != null) {
+            try { pageSize = Integer.parseInt(ps); } catch(NumberFormatException ignored) {}
+        }
+
+        boolean isDegraded = false, noThinsp = false;
+        String ua = req.getHeader("User-Agent");
+        if (ua != null) {
+            isDegraded = ServletUtil.isTextBrowser(ua);
+            noThinsp = isDegraded || ua.startsWith("Opera");
+        }
+
         if (isForm) {
-            if (showStatusFilter) {renderFilterBar(out, req);}
-            else {
-                StringBuilder buf = new StringBuilder(1280);
-                buf.append("<form id=torrentlist action=_post method=POST target=processForm>\n");
-                out.append(buf);
-                buf.setLength(0);
-            }
+            if (showStatusFilter) renderFilterBar(out, req);
+            else out.write("<form id=torrentlist action=_post method=POST target=processForm>\n");
             writeHiddenInputs(out, req, null);
             out.flush();
         }
 
-        // Opera and text-mode browsers: no &thinsp; and no input type=image values submitted
-        // Using a unique name fixes Opera, except for the buttons with js confirms, see below
-        String ua = req.getHeader("User-Agent");
-        boolean isDegraded = ua != null && ServletUtil.isTextBrowser(ua);
-        boolean noThinsp = isDegraded || (ua != null && ua.startsWith("Opera"));
-
-        // search
-        boolean isSearch = false;
-        if (searchActive) {
-            List<Snark> matches = search(search, snarks);
-            if (matches != null) {
-                snarks = matches;
-                isSearch = true;
-                searchResults = matches.size();
-            }
-        }
-
-        // Pagination
-        int start = 0;
-        if (stParam != null) {
-            try {start = Math.max(0, Math.min(total - 1, Integer.parseInt(stParam)));}
-            catch (NumberFormatException nfe) {} // ignore and use default start = 0
-        }
-        // Determine page size, using large count if filter enabled
-        int pageSize = filterEnabled ? 9999 : Math.max(_manager.getPageSize(), 10);
-        String ps = req.getParameter("ps");
-        String currentSort = req.getParameter("sort");
-        if ("null".equals(ps)) {ps = String.valueOf(pageSize);}
-        if (ps != null) {
-            try {pageSize = Integer.parseInt(ps);}
-            catch (NumberFormatException nfe) {} // ignore and use existing pageSize
-        }
         renderPageNavigation(out, req, start, pageSize, total, filter, noThinsp, isForm, searchActive, (searchActive ? search.length() : 0));
-
         out.write(TABLE_HEADER);
-        out.write(buildTorrentTableHeader(req, snarks, start, pageSize, filterParam, peerParam, currentSort, _contextPath));
+        out.write(appendSnarkHeader(req, snarks, start, pageSize, filter, peerParam, srt, _contextPath));
         out.flush();
+
         String uri = _contextPath + '/';
         boolean showDebug = "2".equals(peerParam);
-        int totalSnarks = snarks.size();
-        boolean isRatSort = false;
-        boolean hasPeers;
-        boolean isUploading = false;
-        int end = 0;
+        int end = Math.min(start + pageSize, snarks.size());
+        StringBuilder buf = new StringBuilder(2048);
 
-        for (int i = 0; i < totalSnarks; i++) {
+        for (int i = start; i < end; i++) {
             Snark snark = snarks.get(i);
             boolean showPeers = showDebug || "1".equals(peerParam) || Base64.encode(snark.getInfoHash()).equals(peerParam);
-            boolean hide = i < start || i >= start + pageSize;
-            StringBuilder buf = new StringBuilder(2048);
-            displaySnark(out, req, snark, uri, i, stats, showPeers, isDegraded, noThinsp, showDebug, hide, isRatSort, canWrite,
-                         filterParam, filterEnabled, sortParam, sortEnabled, buf);
+            boolean hide = false;
+            buf.setLength(0);
+            displaySnark(out, req, snark, uri, i, stats, showPeers, isDegraded, noThinsp, showDebug,
+                         hide, false, canWrite, filter, filterEnabled, srt, sortEnabled, buf);
+
+            // additionally accumulate downloads, uploads, ETA, flags
+            if (snark.getPeerList().size() >= 1) {
+                if (snark.getDownloadRate() > 0) downloads++;
+                if (snark.getUploadRate() > 0) { uploads++; isUploading = true; }
+                hasPeers = true;
+                long needed = snark.getNeededLength();
+                if (needed > total) needed = total;
+                if (stats[2] > 0 && needed > 0) totalETA += needed / stats[2];
+            }
         }
 
-        StringBuilder ftr = new StringBuilder(2*1024);
-        if (totalSnarks == 0) {
-            ftr.append("<tr id=noload class=noneLoaded><td colspan=12><i>");
+        if (total == 0) {
+            out.write("<tbody id=noTorrents><tr id=noload class=noneLoaded><td colspan=12><i>");
             synchronized(this) {
                 File dd = _resourceBase;
-                if (!dd.exists() && !dd.mkdirs()) {
-                    ftr.append(_t("Data directory cannot be created")).append(": ").append(DataHelper.escapeHTML(dd.toString()));
-                } else if (!dd.isDirectory()) {
-                    ftr.append(_t("Not a directory")).append(": ").append(DataHelper.escapeHTML(dd.toString()));
-                } else if (!dd.canRead()) {
-                    ftr.append(_t("Unreadable")).append(": ").append(DataHelper.escapeHTML(dd.toString()));
-                } else if (!canWrite) {
-                    ftr.append(_t("No write permissions for data directory")).append(": ").append(DataHelper.escapeHTML(dd.toString()));
-                } else if (isSearch) {ftr.append(_t("No torrents found."));}
-                else {ftr.append(_t("No torrents loaded."));}
+                if (!dd.exists() && !dd.mkdirs()) out.write(_t("Data directory cannot be created") + ": " + DataHelper.escapeHTML(dd.toString()));
+                else if (!dd.isDirectory()) out.write(_t("Not a directory") + ": " + DataHelper.escapeHTML(dd.toString()));
+                else if (!dd.canRead()) out.write(_t("Unreadable") + ": " + DataHelper.escapeHTML(dd.toString()));
+                else if (!canWrite) out.write(_t("No write permissions for data directory") + ": " + DataHelper.escapeHTML(dd.toString()));
+                else if (searchActive) out.write(_t("No torrents found."));
+                else out.write(_t("No torrents loaded."));
             }
-            ftr.append("</i></td></tr></tbody>\n").append("<tfoot id=snarkFoot");
-            if (_manager.util().isConnecting()) {ftr.append(" class=initializing");}
-            ftr.append("><tr><th id=torrentTotals class=left colspan=12></th></tr></tfoot>\n");
-        } else if (totalSnarks > 0) {
-            PrintWriter tempOut = new PrintWriter(new Writer() {
-                @Override public void write(char[] cbuf, int off, int len) {
-                    ftr.append(cbuf, off, len);
-                }
-                @Override public void flush() {}
-                @Override public void close() {}
-            });
-            renderPageNavigation(tempOut, req, start, pageSize, total, filter, noThinsp, true, searchActive, (searchActive ? search.length() : 0));
-            tempOut.flush();
-            String pageNavHtml = ftr.toString();
-            if (!pageNavHtml.isEmpty()) {
-                ftr.setLength(0); // clear buffer to keep original footer content
-                ftr.append("<tr id=pagenavbottom><td colspan=12><div class=pagenavcontrols>")
-                   .append(pageNavHtml)
-                   .append("</div></td></tr>\n");
-            } else {ftr.append("<tr id=pagenavbottom hidden><td colspan=12><div class=pagenavcontrols></div></td></tr>\n");}
-        }
-        ftr.append("</tbody>\n<tfoot id=snarkFoot><tr class=volatile><th id=torrentTotals class=left colspan=6><span id=totals>");
-
-        // Disk usage
-        ftr.append(_manager.getDiskUsage());
-
-        // torrent count
-        ftr.append("<span id=torrentCount class=counter title=\"").append(ngettext("1 torrent", "{0} torrents", total)).append("\">");
-        appendIcon(ftr, "torrent", "", "", true, false);
-        ftr.append("<span class=badge>").append(total).append("</span></span>");
-
-        // torrents filesize
-        ftr.append("<span id=torrentFilesize class=counter title=\"").append(_t("Total size of loaded torrents")).append("\">");
-        appendIcon(ftr, "size", "", "", true, false);
-        ftr.append("<span class=badge>").append(DataHelper.formatSize2(stats[5]).replace("i", "")).append("</span></span>");
-
-        // connected peers
-        ftr.append("<span id=peerCount class=counter title=\"")
-           .append(ngettext("1 connected peer", "{0} peer connections", (int) stats[4]));
-        DHT dht = _manager.util().getDHT();
-        if (dht != null) {
-            int dhts = dht.size();
-            if (dhts > 0) {
-                ftr.append(" (").append(ngettext("1 DHT peer", "{0} DHT peers", dhts)).append(")");
-            }
-        }
-        ftr.append("\">");
-        appendIcon(ftr, "showpeers", "", "", true, false);
-        ftr.append("<span class=badge>").append((int) stats[4]).append("</span></span>");
-
-        // actively downloading
-        int downloads = 0;
-        for (int i = start; i < snarks.size(); i++) {
-            if ((snarks.get(i).getPeerList().size() >= 1) && (snarks.get(i).getDownloadRate() > 0)) {downloads++;}
-        }
-        ftr.append("<span id=rxCount class=counter title=\"").append(_t("Active downloads")).append("\">");
-        appendIcon(ftr, "head_rx", "", "", true, false);
-        ftr.append("<span class=badge>").append(downloads).append("</span></span>");
-
-        // actively uploading
-        int uploads = 0;
-        for (int i = start; i < snarks.size(); i++) {
-            if ((snarks.get(i).getPeerList().size() >= 1) && (snarks.get(i).getUploadRate() > 0)) {uploads++;}
-        }
-        ftr.append("<span id=txCount class=counter title=\"").append(_t("Active uploads")).append("\">");
-        appendIcon(ftr, "head_tx", "", "", true, false);
-        ftr.append("<span class=badge>").append(uploads).append("</span></span>");
-
-        if (!isStandalone()) {
-            _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
-            ftr.append("<span id=tnlInCount class=counter title=\"")
-               .append(_t("Active Inbound tunnels"))
-               .append("\" hidden>");
-            appendIcon(ftr, "inbound", "", "", true, true);
-            ftr.append("<span class=badge></span></span><span id=tnlOutCount class=counter title=\"")
-               .append(_t("Active Outbound tunnels"))
-               .append("\" hidden>");
-            appendIcon(ftr, "outbound", "", "", true, true);
-            ftr.append("<span class=badge></span></span>");
+            out.write("</i></td></tr></tbody>");
         }
 
-        ftr.append("</span></th>");
+        //renderPageNavigation(out, req, start, pageSize, total, filter, noThinsp, true, searchActive, (searchActive ? search.length() : 0));
+        appendSnarkFooter(out, buf, stats, total, isConnected, noSnarks, hasPeers, isUploading, dht, isStandalone(), debug, peerParam);
 
-        if (isConnected && total > 0) {
-            ftr.append("<th class=ETA>");
-            if (!noSnarks) {
-                hasPeers = false;
-                long remainingSeconds = 0;
-                long totalETA = 0;
-                end = Math.min(start + pageSize, snarks.size());
-                for (int i = start; i < end; i++) {
-                    long needed = snarks.get(i).getNeededLength();
-                    if (needed > total) {needed = total;}
-                    if (stats[2] > 0 && needed > 0) {remainingSeconds = needed / stats[2];}
-                    else {remainingSeconds = 0;}
-                    totalETA+= remainingSeconds;
-                    hasPeers = true;
-                    if (hasPeers) {
-                        if (totalETA > 0) {
-                            ftr.append("<span title=\"")
-                               .append(_t("Estimated download time for all torrents")).append("\">")
-                               .append(DataHelper.formatDuration2(Math.max(totalETA, 10) * 1000))
-                               .append("</span>");
-                        }
-                    }
-                    break;
-                }
-                ftr.append("</th>").append("<th class=rxd title=\"").append(_t("Data downloaded this session")).append("\">");
-                if (stats[0] > 0) {ftr.append(formatSize(stats[0]).replaceAll("iB", ""));}
-                ftr.append("</th>").append("<th class=rateDown title=\"").append(_t("Total download speed")).append("\">");
-                if (stats[2] > 0) {ftr.append(formatSize(stats[2]).replaceAll("iB", "") + "/s");}
-                ftr.append("</th>").append("<th class=txd  title=\"").append(_t("Total data uploaded (for listed torrents)")).append("\">");
-                if (stats[1] > 0) {ftr.append(formatSize(stats[1]).replaceAll("iB", ""));}
-                ftr.append("</th>").append("<th class=rateUp title=\"").append(_t("Total upload speed")).append("\">");
-                end = snarks.size(); // show total upload speed for all torrents, displayed or otherwise
-                for (int i = start; i < end; i++) {
-                    if ((snarks.get(i).getPeerList().size() >= 1) && (snarks.get(i).getUploadRate() > 0)) {
-                        isUploading = true;
-                        break;
-                    }
-                }
-                if (stats[3] > 0 && isUploading) {ftr.append(formatSize(stats[3]).replaceAll("iB", "") + "/s");}
-                ftr.append("</th>").append("<th class=tAction>");
-                String toggleDebug = "Toggle Debug Panel";
-                if (dht != null && (!"2".equals(peerParam))) {
-                    ftr.append("<a id=debugMode href=\"?p=2\" title=\"").append(_t(toggleDebug))
-                       .append("\">").append(_t("Debug Mode")).append("</a>");
-                } else if (dht != null) {
-                    ftr.append("<a id=debugMode href=\"?p\" title=\"").append(_t(toggleDebug))
-                       .append("\">").append(_t("Normal Mode")).append("</a>");
-                }
-                ftr.append("</th>");
-            } else {ftr.append("<th colspan=6></th>");}
-            ftr.append("</tr>\n");
+        if (showDebug) out.write("<tr id=dhtDebug>");
+        else out.write("<tr id=dhtDebug hidden>");
+        out.write("<th colspan=12><div class=volatile>");
+        if (dht != null) out.write(_manager.getBandwidthListener().toString() + dht.renderStatusHTML());
+        else out.write("<b id=noDHTpeers>" + _t("No DHT Peers") + "</b>");
+        out.write("</div></th></tr></tfoot>\n</table>\n");
 
-            if (showDebug) {ftr.append("<tr id=dhtDebug>");}
-            else {ftr.append("<tr id=dhtDebug hidden>");}
-            ftr.append("<th colspan=12><div class=volatile>");
-            if (dht != null) {ftr.append(_manager.getBandwidthListener().toString()).append(dht.renderStatusHTML());}
-            else {ftr.append("<b id=noDHTpeers>").append(_t("No DHT Peers")).append("</b>");}
-            ftr.append("</div></th></tr>").append("</tfoot>\n");
-        }
+        if (isForm) out.write("</form>\n");
+        if (total > 0) out.write("<script src=/i2psnark/.res/js/convertTooltips.js></script>\n");
 
-        ftr.append("</table>\n");
-        if (isForm) {ftr.append("</form>\n");}
-        if (total > 0) {ftr.append("<script src=/i2psnark/.res/js/convertTooltips.js></script>\n");}
-
-        out.write(ftr.toString());
-        ftr.setLength(0);
         out.flush();
-
         return start == 0;
     }
 
@@ -970,10 +829,11 @@ public class I2PSnarkServlet extends BasicServlet {
      *
      * <p>This method constructs the header HTML fragment for the torrents table,
      * dynamically inserting sorting links, peer visibility toggles, and icons that
-     * reflect the current torrent list state and request parameters.
+     * reflect the current torrent list state and request parameters.</p>
      *
-     * <p>It also caches torrent activity flags such as whether there are connected peers,
-     * active downloads, and active uploads, to optimize rendering decisions.
+     * <p>Key enhancements include caching localized strings for reuse, extracting common
+     * patterns into helper methods, and simplifying query string construction to improve
+     * both server-side rendering performance and code maintainability.</p>
      *
      * @param req the HttpServletRequest containing the current request parameters
      * @param snarks the list of torrent objects currently shown or filtered
@@ -986,43 +846,50 @@ public class I2PSnarkServlet extends BasicServlet {
      * @return a String containing the fully constructed HTML for the torrent table header row
      * @since 0.9.68+
      */
-    private String buildTorrentTableHeader(HttpServletRequest req, List<Snark> snarks, int start, int pageSize,
-                                          String filterParam, String peerParam, String currentSort, String contextPath) {
-        StringBuilder buf = new StringBuilder(2 * 1024);
+    private String appendSnarkHeader(HttpServletRequest req, List<Snark> snarks, int start, int pageSize,
+                                     String filterParam, String peerParam, String currentSort, String contextPath) {
+        StringBuilder buf = new StringBuilder(2048);
         boolean showSort = snarks.size() > 1;
         boolean isConnected = _manager.util().connected();
         boolean noSnarks = snarks.isEmpty();
         int total = snarks.size();
 
+        // Cache common localized strings
+        final String txtStatus = _t("Status");
+        final String txtTorrent = _t("Torrent");
+        final String txtType = _t("File type");
+        final String txtName = _t("Torrent name");
+        final String txtETA = _t("ETA");
+        final String txtRX = _t("RX");
+        final String txtRXRate = _t("RX Rate");
+        final String txtTX = _t("TX");
+        final String txtTXRate = _t("TX Rate");
+        final String txtStartAll = _t("Start All");
+        final String txtStopAll = _t("Stop All");
+        final String txtStopAllTitle = _t("Stop all torrents and the I2P tunnel");
+        final String txtStartAllTitle = _t("Start all torrents and the I2P tunnel");
+        final String txtStartStoppedTitle = _t("Start all stopped torrents");
+
         // Determine URL separator based on presence of query params
         boolean hasQueryParams = req.getQueryString() != null && !req.getQueryString().isEmpty();
         String separator = hasQueryParams ? "&" : "?";
 
-        // Construct filterQuery string
+        // Construct filterQuery string reliably
         String currentSearch = req.getParameter("search");
-        StringBuilder fq = new StringBuilder();
-        fq.append("filter=");
-        if (filterParam == null || filterParam.isEmpty()) {fq.append("all");}
-        else {fq.append(filterParam);}
+        StringBuilder fq = new StringBuilder("filter=");
+        fq.append(filterParam == null || filterParam.isEmpty() ? "all" : filterParam);
         if (currentSearch != null && !currentSearch.isEmpty()) {
             fq.append(separator).append("search=").append(currentSearch);
         }
         String filterQuery = fq.toString();
 
-        // Icons for sorting arrows
-        String ascending = "<span class=ascending></span>";
-        String descending = "<span class=descending></span>";
-
-        // Cache torrent activity flags and counts
-        boolean hasPeers = false;
-        boolean isDownloading = false;
-        boolean isUploading = false;
-        int activeDownloadsCount = 0;
-        int activeUploadsCount = 0;
+        // Cache torrent activity flags and counts, break early if all true to save time
+        boolean hasPeers = false, isDownloading = false, isUploading = false;
+        int activeDownloadsCount = 0, activeUploadsCount = 0;
         int end = Math.min(start + pageSize, total);
-        for (int i = start; i < end; i++) {
+        for (int i = start; i < end && !(hasPeers && isDownloading && isUploading); i++) {
             Snark s = snarks.get(i);
-            if (s.getPeerList().size() >= 1) {
+            if (!s.getPeerList().isEmpty()) {
                 hasPeers = true;
                 if (s.getDownloadRate() > 0) {
                     isDownloading = true;
@@ -1035,228 +902,408 @@ public class I2PSnarkServlet extends BasicServlet {
             }
         }
 
-        // Start header building
-        buf.append("<tr><th class=status>");
-        String sort = ("-2".equals(currentSort)) ? "2" : "-2";
-        if (showSort) {
-            buf.append("<span class=sortIcon>");
-            if (currentSort == null || "-2".equals(currentSort)) {
-                sort = "2";
-                if ("-2".equals(currentSort)) {
-                    buf.append(ascending);
-                }
-            } else if ("2".equals(currentSort)) {
-                sort = "-2";
-                buf.append(descending);
-            } else {
-                sort = "2";
-            }
-            buf.append("<a class=sorter href=\"").append(contextPath).append('/')
-               .append(getQueryString(req, null, null, sort))
-               .append(separator).append(filterQuery).append("\">");
-        }
-        String tx = _t("Status");
-        appendIcon(buf, "status", tx, showSort ? _t("Sort by {0}", tx) : "", true, false);
-        if (showSort) buf.append("</a></span>");
-        buf.append("</th><th class=peerCount>");
+        // Start building header row
+        buf.append("<tr>");
 
-        // Peer toggle link if peers exist
+        // Status header sort parameters and active sort detection
+        String nextSort = ("-2".equals(currentSort)) ? "2" : "-2";
+        boolean isStatusSort = "2".equals(currentSort) || "-2".equals(currentSort);
+        boolean isStatusDesc = currentSort != null && currentSort.startsWith("-");
+        appendSortHeader(buf, contextPath, req, currentSort, nextSort, separator, filterQuery,
+                         "status", "status", txtStatus, showSort, isStatusSort, isStatusDesc);
+
+        // Peer toggle link cell
+        buf.append("<th class=peerCount>");
         if (isConnected && !noSnarks && hasPeers) {
-            String queryString = peerParam != null ? getQueryString(req, "", null, null) : getQueryString(req, "1", null, null);
+            boolean showPeers = peerParam != null;
+            String queryString = showPeers ? getQueryString(req, "", null, null) : getQueryString(req, "1", null, null);
             String link = contextPath + '/' + queryString + filterQuery;
-            tx = peerParam != null ? _t("Hide Peers") : _t("Show Peers");
-            String img = peerParam != null ? "hidepeers" : "showpeers";
-            String filterPrefix = peerParam == null ? "&filter=" : "?filter=";
+            String tx = showPeers ? _t("Hide Peers") : _t("Show Peers");
+            String img = showPeers ? "hidepeers" : "showpeers";
+            String filterPrefix = showPeers ? "?filter=" : "&filter=";
+            // Adjust filter prefix within link if needed
             if (link.contains("filter=")) {
                 int index = link.indexOf("filter=");
                 link = link.substring(0, index) + link.substring(index).replaceFirst("filter=", filterPrefix);
             } else {
                 link += filterPrefix;
             }
-            buf.append(" <a class=\"sorter ").append(peerParam == null ? "showPeers" : "hidePeers")
+            buf.append("<a class=\"sorter ").append(showPeers ? "hidePeers" : "showPeers")
                .append("\" href=\"").append(link).append("\">");
             appendIcon(buf, img, tx, tx, true, false);
             buf.append("</a>\n");
         }
+        buf.append("</th>");
 
-        // Torrent link and sorting header (name/type)
-        buf.append("<th class=torrentLink colspan=2><input id=linkswitch class=optbox type=checkbox hidden></th>")
-            .append("<th id=torrentSort>");
+        // Torrent name/type sorting header (colspan=2 includes hidden checkbox)
+        buf.append("<th class=torrentLink colspan=2><input id=linkswitch class=optbox type=checkbox hidden></th>");
+
+        // Torrent header with sort icon (toggle between name and type)
         boolean isTypeSort = false;
+        nextSort = null;
         if (showSort) {
-            buf.append("<span class=sortIcon>");
             if (currentSort == null || "0".equals(currentSort) || "1".equals(currentSort)) {
-                sort = "-1";
-                if ("1".equals(currentSort) || currentSort == null) {
-                    buf.append(ascending);
-                }
+                nextSort = "-1";
             } else if ("-1".equals(currentSort)) {
-                sort = "12";
+                nextSort = "12";
                 isTypeSort = true;
-                buf.append(descending);
             } else if ("12".equals(currentSort)) {
-                sort = "-12";
+                nextSort = "-12";
                 isTypeSort = true;
-                buf.append(ascending);
             } else {
-                sort = "1";
+                nextSort = "1";
             }
-            buf.append("<a class=sorter href=\"").append(contextPath).append('/')
-               .append(getQueryString(req, null, null, sort))
-               .append(separator).append(filterQuery).append("\">");
         }
-        tx = _t("Torrent");
-        if (!noSnarks) {
-            appendIcon(buf, "torrent", tx, showSort ? _t("Sort by {0}", (isTypeSort ? _t("File type") : _t("Torrent name"))) : "", true, false);
-            if (showSort) buf.append("</a></span>");
-        }
-        buf.append("</th><th class=tName></th><th class=ETA>");
+        boolean isTorrentSortActive = "1".equals(currentSort) || "0".equals(currentSort) || "-1".equals(currentSort)
+                                     || "12".equals(currentSort) || "-12".equals(currentSort);
+        boolean isTorrentSortDesc = currentSort != null && currentSort.startsWith("-");
+        appendSortHeader(buf, contextPath, req, currentSort, nextSort, separator, filterQuery,
+                         "torrentSort", "torrent", txtTorrent,
+                         showSort, isTorrentSortActive, isTorrentSortDesc);
 
-        // ETA header with sort icon if downloading
+        // Empty cell class=tName
+        buf.append("<th class=tName></th>");
+
+        // ETA header (sortable if downloading)
         if (isConnected && !noSnarks && isDownloading) {
+            nextSort = null;
             if (showSort) {
-                buf.append("<span class=sortIcon>");
                 if (currentSort == null || "-4".equals(currentSort)) {
-                    sort = "4";
-                    if ("-4".equals(currentSort)) buf.append(descending);
+                    nextSort = "4";
                 } else if ("4".equals(currentSort)) {
-                    sort = "-4";
-                    buf.append(ascending);
+                    nextSort = "-4";
                 }
-                buf.append("<a class=sorter href=\"").append(contextPath).append('/')
-                   .append(getQueryString(req, null, null, sort))
-                   .append(separator).append(filterQuery).append("\">");
             }
-            tx = _t("ETA");
-            appendIcon(buf, "eta", tx, showSort ? _t("Sort by {0}", _t("Estimated time remaining")) : "", true, false);
-            if (showSort) buf.append("</a></span>");
+            boolean isETAActive = "4".equals(currentSort) || "-4".equals(currentSort);
+            boolean isETADesc = "-4".equals(currentSort);
+            appendSortHeader(buf, contextPath, req, currentSort, nextSort, separator, filterQuery,
+                             "ETA", "eta", txtETA, showSort, isETAActive, isETADesc);
+        } else {
+            buf.append("<th class=ETA></th>");
         }
 
-        buf.append("</th><th class=rxd>");
-
-        // RX header (size or downloaded)
+        // RX header with multi-state sorting
         boolean isDlSort = false;
         if (!noSnarks && showSort) {
-            buf.append("<span class=sortIcon>");
-            if ("-5".equals(currentSort)) {
-                sort = "5";
-                buf.append(descending);
-            } else if ("5".equals(currentSort)) {
-                sort = "-6";
-                isDlSort = true;
-                buf.append(ascending);
-            } else if ("-6".equals(currentSort)) {
-                sort = "6";
-                isDlSort = true;
-                buf.append(descending);
-            } else if ("6".equals(currentSort)) {
-                sort = "-5";
-                isDlSort = true;
-                buf.append(ascending);
+            String sortRX = currentSort;
+            if ("-5".equals(sortRX)) {
+                nextSort = "5";
+            } else if ("5".equals(sortRX)) {
+                nextSort = "-6"; isDlSort = true;
+            } else if ("-6".equals(sortRX)) {
+                nextSort = "6"; isDlSort = true;
+            } else if ("6".equals(sortRX)) {
+                nextSort = "-5"; isDlSort = true;
             } else {
-                sort = "-5";
+                nextSort = "-5";
             }
-            buf.append("<a class=sorter href=\"").append(contextPath)
-               .append('/').append(getQueryString(req, null, null, sort))
-               .append(separator).append(filterQuery).append("\">");
-            tx = _t("RX");
-            appendIcon(buf, "head_rx", tx, showSort ? _t("Sort by {0}", (isDlSort ? _t("Downloaded") : _t("Size"))) : "", true, false);
-            buf.append("</a></span>");
+            boolean isRXActive = "-5".equals(currentSort) || "5".equals(currentSort) || "-6".equals(currentSort) || "6".equals(currentSort);
+            boolean isRXDesc = "-5".equals(currentSort) || "-6".equals(currentSort);
+            appendSortHeader(buf, contextPath, req, currentSort, nextSort, separator, filterQuery,
+                             "rxd", "head_rx", txtRX, showSort, isRXActive, isRXDesc);
+        } else {
+            buf.append("<th class=rxd></th>");
         }
-        buf.append("</th><th class=rateDown>");
 
-        // Rate down header show icon if downloading
+        // RateDown header (show if downloading)
         if (isConnected && !noSnarks && isDownloading) {
-            if (showSort) {
-                buf.append("<span class=sortIcon>");
-                sort = "-8".equals(currentSort) ? "8" : "-8";
-                if ("8".equals(currentSort)) {buf.append(descending);}
-                else if ("-8".equals(currentSort)) {buf.append(ascending);}
-                if (peerParam != null) {
-                    buf.append("<a class=sorter href=\"").append(contextPath)
-                       .append('/').append(getQueryString(req, "1", sort, filterParam, null));
-                } else {
-                    buf.append("<a class=sorter href=\"").append(contextPath).append('/')
-                       .append(getQueryString(req, "0", sort, filterParam, null));
-                }
-                buf.append(separator).append(filterQuery).append("\">");
-                tx = _t("RX Rate");
-                appendIcon(buf, "head_rx", tx, showSort ? _t("Sort by {0}", (isDlSort ? _t("Downloaded") : _t("Size"))) : "", true, false);
-                buf.append("</a></span>");
-            }
-        }
-        buf.append("<th class=txd>");
-
-        // TX and ratio sort header
-        boolean isRatSort = false;
-        boolean nextRatSort = false;
-        if (showSort) {
-            buf.append("<span class=sortIcon>");
-            if ("-7".equals(currentSort)) {
-                sort = "7";
-                buf.append(descending);
-            } else if ("7".equals(currentSort)) {
-                sort = "-11";
-                nextRatSort = true;
-                buf.append(ascending);
-            } else if ("-11".equals(currentSort)) {
-                sort = "11";
-                nextRatSort = true;
-                isRatSort = true;
-                buf.append(descending);
-            } else if ("11".equals(currentSort)) {
-                sort = "-7";
-                isRatSort = true;
-                buf.append(ascending);
+            nextSort = "-8".equals(currentSort) ? "8" : "-8";
+            boolean desc8 = "8".equals(currentSort);
+            // Determine peerFlag for getQueryString
+            String peerFlag = (peerParam != null) ? "1" : "0";
+            buf.append("<th class=rateDown><span class=sortIcon>");
+            if (desc8) {
+                buf.append("<span class=descending></span>");
             } else {
-                sort = "-7";
+                buf.append("<span class=ascending></span>");
             }
-            buf.append("<a class=sorter href=\"").append(contextPath).append('/').append(getQueryString(req, null, null, sort))
+            buf.append("<a class=sorter href=\"").append(contextPath).append('/')
+               .append(getQueryString(req, peerFlag, nextSort, filterParam, null))
                .append(separator).append(filterQuery).append("\">");
+            appendIcon(buf, "head_rx", txtRXRate, showSort ? _t("Sort by {0}", txtRX) : "", true, false);
+            buf.append("</a></span></th>");
+        } else {
+            buf.append("<th class=rateDown></th>");
         }
-        tx = _t("TX");
-        appendIcon(buf, "head_tx", tx, showSort ? _t("Sort by {0}", (nextRatSort ? _t("Upload ratio") : _t("Uploaded"))) : "", true, false);
-        if (showSort) buf.append("</a></span>");
-        buf.append("</th><th class=rateUp>");
 
-        // Rate up header show icon if uploading
-        if (isConnected && !noSnarks && isUploading) {
-            if (showSort) {
-                buf.append("<span class=sortIcon>");
-                sort = "-9".equals(currentSort) ? "9" : "-9";
-                if ("9".equals(currentSort)) {buf.append(ascending);}
-                else if ("-9".equals(currentSort)) {buf.append(descending);}
-                buf.append("<a class=sorter href=\"").append(contextPath).append('/')
-                   .append(getQueryString(req, null, null, sort))
-                   .append(separator).append(filterQuery).append("\">");
-                tx = _t("TX Rate");
-                appendIcon(buf, "head_txspeed", tx, showSort ? _t("Sort by {0}", _t("Up Rate")) : "", true, false);
-                buf.append("</a></span>");
+        // TX header with ratio sorting
+        boolean isRatSort = false, nextRatSort = false;
+        if (showSort) {
+            if ("-7".equals(currentSort)) {
+                nextSort = "7";
+            } else if ("7".equals(currentSort)) {
+                nextSort = "-11"; nextRatSort = true;
+            } else if ("-11".equals(currentSort)) {
+                nextSort = "11"; nextRatSort = true; isRatSort = true;
+            } else if ("11".equals(currentSort)) {
+                nextSort = "-7"; isRatSort = true;
+            } else {
+                nextSort = "-7";
             }
+            boolean isTXActive = "-7".equals(currentSort) || "7".equals(currentSort) || "-11".equals(currentSort) || "11".equals(currentSort);
+            boolean isTXDesc = "-7".equals(currentSort) || "-11".equals(currentSort);
+            appendSortHeader(buf, contextPath, req, currentSort, nextSort, separator, filterQuery,
+                             "txd", "head_tx", txtTX, showSort, isTXActive, isTXDesc);
+        } else {
+            buf.append("<th class=txd></th>");
         }
-        buf.append("</th><th class=tAction>");
 
-        // Start / Stop All buttons
+        // RateUp header (show if uploading)
+        if (isConnected && !noSnarks && isUploading) {
+            nextSort = "-9".equals(currentSort) ? "9" : "-9";
+            boolean ascendingRateUp = "9".equals(currentSort);
+            buf.append("<th class=rateUp><span class=sortIcon>");
+            if (ascendingRateUp) {
+                buf.append("<span class=ascending></span>");
+            } else {
+                buf.append("<span class=descending></span>");
+            }
+            buf.append("<a class=sorter href=\"").append(contextPath).append('/')
+               .append(getQueryString(req, null, null, nextSort))
+               .append(separator).append(filterQuery).append("\">");
+            appendIcon(buf, "head_txspeed", txtTXRate, showSort ? _t("Sort by {0}", _t("Up Rate")) : "", true, false);
+            buf.append("</a></span></th>");
+        } else {
+            buf.append("<th class=rateUp></th>");
+        }
+
+        // Action buttons header (Start/Stop all)
+        buf.append("<th class=tAction>");
         if (isConnected && !noSnarks) {
-            buf.append("<input type=submit id=actionStopAll name=action_StopAll value=\"").append(_t("Stop All"))
-               .append("\" title=\"").append(_t("Stop all torrents and the I2P tunnel")).append("\">");
+            buf.append("<input type=submit id=actionStopAll name=action_StopAll value=\"").append(txtStopAll)
+               .append("\" title=\"").append(txtStopAllTitle).append("\">");
             for (Snark s : snarks) {
                 if (s.isStopped()) {
                     buf.append("<input type=submit id=actionStartAll name=action_StartAll value=\"")
-                       .append(_t("Start All")).append("\" title=\"").append(_t("Start all stopped torrents"))
-                       .append("\">");
+                       .append(txtStartAll).append("\" title=\"").append(txtStartStoppedTitle).append("\">");
                     break;
                 }
             }
         } else if (!noSnarks) {
-            boolean shouldDisable = _manager.util().isConnecting();
+            boolean disableStartAll = _manager.util().isConnecting();
             buf.append("<input type=submit id=actionStartAll name=action_StartAll value=\"")
-               .append(_t("Start All")).append("\" title=\"").append(_t("Start all torrents and the I2P tunnel")).append("\"")
-               .append(shouldDisable ? " disabled" : "").append(">");
+               .append(txtStartAll).append("\" title=\"").append(txtStartAllTitle).append("\"")
+               .append(disableStartAll ? " disabled" : "").append(">");
         }
-        buf.append("</th></tr></thead>\n<tbody id=snarkTbody>");
+        buf.append("</th></tr>\n</thead>\n<tbody id=snarkTbody>");
 
         return buf.toString();
+    }
+
+    /**
+     * Appends a sortable table header cell including sort icons and links.
+     * Shows ascending or descending icon only if this header matches current sorting.
+     *
+     * @param buf the StringBuilder used to append HTML content
+     * @param contextPath the context path prefix used in URLs
+     * @param req current HttpServletRequest to build query strings
+     * @param currentSort the current sort parameter value
+     * @param newSort the sort parameter value to link to for toggling sorting
+     * @param separator '&' or '?' depending on query string presence
+     * @param filterQuery filtered search parameters to append to URL
+     * @param cssClass CSS class to apply to the <th> element
+     * @param iconName icon identifier for rendering
+     * @param title localized title text for the header cell
+     * @param showSort if true, render sorting link and icons; otherwise render plain header
+     * @param currentSortMatches true if this header corresponds to the current sort parameter (active sorted column)
+     * @param isDescending true if the current sorting direction for this header is descending
+     */
+    private void appendSortHeader(StringBuilder buf, String contextPath, HttpServletRequest req,
+                                  String currentSort, String newSort, String separator, String filterQuery,
+                                  String cssClass, String iconName, String title, boolean showSort,
+                                  boolean currentSortMatches, boolean isDescending) {
+        if (!showSort) {
+            buf.append("<th class=").append(cssClass).append(">");
+            appendIcon(buf, iconName, title, "", true, false);
+            buf.append("</th>");
+            return;
+        }
+
+        buf.append("<th class=").append(cssClass).append("><span class=sortIcon>");
+
+        // Render icon only if this header is currently sorted
+        if (currentSortMatches) {
+            if (isDescending) {
+                buf.append("<span class=descending></span>");
+            } else {
+                buf.append("<span class=ascending></span>");
+            }
+        }
+
+        buf.append("<a class=sorter href=\"").append(contextPath).append('/')
+           .append(getQueryString(req, null, null, newSort))
+           .append(separator).append(filterQuery).append("\">");
+
+        appendIcon(buf, iconName, title, _t("Sort by {0}", title), true, false);
+        buf.append("</a></span></th>");
+    }
+
+    /**
+     * Appends the footer section for the torrent list table, displaying overall statistics,
+     * counters, and status indicators with associated icons.
+     *
+     * If the manager is in a connecting state, outputs a placeholder footer indicating initialization.
+     * Otherwise, outputs detailed stats including disk usage, torrent count, file size, peer counts,
+     * active downloads/uploads, tunnel counts (if applicable), and connection speed metrics.
+     *
+     * @param out          the PrintWriter to write HTML output to
+     * @param buf          a reusable StringBuilder used for generating icon HTML snippets
+     * @param stats        a long array of cumulative stats: [downloaded, uploaded, download rate, upload rate, peers, total size]
+     * @param total        total number of torrents
+     * @param isConnected  whether the system is connected
+     * @param noSnarks     true if no torrents are loaded (empty list)
+     * @param hasPeers     true if there are any connected peers
+     * @param isUploading  true if there is active uploading
+     * @param dht          the DHT instance providing additional peer info (may be null)
+     * @param isStandalone true if running in standalone mode (tunnel info omitted if standalone)
+     * @param debug        true if in debug mode (affects resource path and display)
+     * @param peerParam    the peer parameter from the request query, affects debug mode toggle links
+     * @throws IOException if writing to the output stream fails
+     */
+    private void appendSnarkFooter(PrintWriter out, StringBuilder buf, long[] stats, int total, boolean isConnected,
+                                   boolean noSnarks, boolean hasPeers, boolean isUploading, DHT dht,
+                                   boolean isStandalone, boolean debug, String peerParam) throws IOException {
+
+        if (_manager.util().isConnecting()) {
+            out.write("<tfoot id=snarkFoot class=initializing><tr><th id=torrentTotals class=left colspan=12></th></tr></tfoot>\n");
+            return;
+        }
+
+        // Cache constant localized strings that are reused
+        final String titleTotalSize = _t("Total size of loaded torrents");
+        final String titleConnectedPeers = ngettext("1 connected peer", "{0} peer connections", (int) stats[4]);
+        final String titleActiveDownloads = _t("Active downloads");
+        final String titleActiveUploads = _t("Active uploads");
+        final String titleInboundTunnels = _t("Active Inbound tunnels");
+        final String titleOutboundTunnels = _t("Active Outbound tunnels");
+        final String titleEstimatedDownload = _t("Estimated download time for all torrents");
+        final String titleDataDownloaded = _t("Data downloaded this session");
+        final String titleTotalDownloadSpeed = _t("Total download speed");
+        final String titleTotalUploaded = _t("Total data uploaded (for listed torrents)");
+        final String titleTotalUploadSpeed = _t("Total upload speed");
+        final String toggleDebug = _t("Toggle Debug Panel");
+        final String debugModeText = _t("Debug Mode");
+        final String normalModeText = _t("Normal Mode");
+
+        final String resourcePath = !isStandalone ? (debug ? "/themes/" : _contextPath + WARBASE) : null;
+
+        out.write("<tfoot id=snarkFoot><tr class=volatile><th id=torrentTotals class=left colspan=6><span id=totals>");
+        out.write(_manager.getDiskUsage());
+
+        // Torrent count span
+        buf.setLength(0);
+        buf.append("<span id=torrentCount class=counter title=\"");
+        buf.append(ngettext("1 torrent", "{0} torrents", total));
+        buf.append("\">");
+        appendIcon(buf, "torrent", "", "", true, false);
+        buf.append("<span class=badge>");
+        buf.append(total);
+        buf.append("</span></span>");
+        out.write(buf.toString());
+
+        // Filesize span
+        buf.setLength(0);
+        buf.append("<span id=torrentFilesize class=counter title=\"");
+        buf.append(titleTotalSize);
+        buf.append("\">");
+        appendIcon(buf, "size", "", "", true, false);
+        buf.append("<span class=badge>");
+        buf.append(DataHelper.formatSize2(stats[5]).replace("i", ""));
+        buf.append("</span></span>");
+        out.write(buf.toString());
+
+        // Peer count span
+        buf.setLength(0);
+        buf.append("<span id=peerCount class=counter title=\"");
+        buf.append(titleConnectedPeers);
+        buf.append("\">");
+        appendIcon(buf, "showpeers", "", "", true, false);
+        buf.append("<span class=badge>");
+        buf.append((int) stats[4]);
+        buf.append("</span></span>");
+        out.write(buf.toString());
+
+        // RX count span
+        buf.setLength(0);
+        buf.append("<span id=rxCount class=counter title=\"");
+        buf.append(titleActiveDownloads);
+        buf.append("\">");
+        appendIcon(buf, "head_rx", "", "", true, false);
+        buf.append("<span class=badge>");
+        buf.append((int) stats[2]);
+        buf.append("</span></span>");
+        out.write(buf.toString());
+
+        // TX count span
+        buf.setLength(0);
+        buf.append("<span id=txCount class=counter title=\"");
+        buf.append(titleActiveUploads);
+        buf.append("\">");
+        appendIcon(buf, "head_tx", "", "", true, false);
+        buf.append("<span class=badge>");
+        buf.append((int) stats[3]);
+        buf.append("</span></span>");
+        out.write(buf.toString());
+
+        // Tunnel counter if not standalone
+        if (!isStandalone) {
+            buf.setLength(0);
+            buf.append("<span id=tnlInCount class=counter title=\"");
+            buf.append(titleInboundTunnels);
+            buf.append("\" hidden>");
+            appendIcon(buf, "inbound", "", "", true, true);
+            buf.append("<span class=badge></span></span>");
+            out.write(buf.toString());
+
+            buf.setLength(0);
+            buf.append("<span id=tnlOutCount class=counter title=\"");
+            buf.append(titleOutboundTunnels);
+            buf.append("\" hidden>");
+            appendIcon(buf, "outbound", "", "", true, true);
+            buf.append("<span class=badge></span></span>");
+            out.write(buf.toString());
+        }
+
+        out.write("</span></th>");
+
+        if (isConnected && total > 0) {
+            out.write("<th class=ETA>");
+            if (!noSnarks && hasPeers && stats[2] > 0) {
+                out.write("<span title=\"");
+                out.write(titleEstimatedDownload);
+                out.write("\">");
+                out.write(DataHelper.formatDuration2(Math.max(stats[2], 10) * 1000));
+                out.write("</span>");
+            }
+            out.write("</th><th class=rxd title=\"");
+            out.write(titleDataDownloaded);
+            out.write("\">");
+            if (stats[0] > 0) out.write(formatSize(stats[0]).replace("iB", ""));
+            out.write("</th><th class=rateDown title=\"");
+            out.write(titleTotalDownloadSpeed);
+            out.write("\">");
+            if (stats[2] > 0) out.write(formatSize(stats[2]).replace("iB", "") + "/s");
+            out.write("</th><th class=txd title=\"");
+            out.write(titleTotalUploaded);
+            out.write("\">");
+            if (stats[1] > 0) out.write(formatSize(stats[1]).replace("iB", ""));
+            out.write("</th><th class=rateUp title=\"");
+            out.write(titleTotalUploadSpeed);
+            out.write("\">");
+            if (stats[3] > 0 && isUploading) out.write(formatSize(stats[3]).replace("iB", "") + "/s");
+            out.write("</th><th class=tAction>");
+
+            if (dht != null && !"2".equals(peerParam)) {
+                out.write("<a id=debugMode href=\"?p=2\" title=\"" + toggleDebug + "\">" + debugModeText + "</a>");
+            } else if (dht != null) {
+                out.write("<a id=debugMode href=\"?p\" title=\"" + toggleDebug + "\">" + normalModeText + "</a>");
+            }
+
+            out.write("</th>");
+        } else {
+            out.write("<th colspan=6></th>");
+        }
+        out.write("</tr>\n</tfoot>");
     }
 
     /**
@@ -1575,21 +1622,20 @@ public class I2PSnarkServlet extends BasicServlet {
     private void renderPageNavigation(PrintWriter out, HttpServletRequest req, int start, int pageSize, int total,
                                       String filter, boolean noThinsp, boolean isForm, boolean searchActive, int searchLength) throws IOException {
         req.setCharacterEncoding("UTF-8");
-        if (isForm && total > 0 && (start > 0 || total > pageSize)) {
-            if (!searchActive || (searchActive && searchLength > pageSize)) {
-                out.write("<div class=pagenavcontrols id=pagenavtop>");
-                writePageNav(out, req, start, pageSize, total, filter, noThinsp);
-                out.write("</div>");
-                return;
-            }
+        boolean showNav = isForm && total > 0 && (start > 0 || total > pageSize);
+        boolean navVisible = !searchActive || (searchActive && searchLength > pageSize);
+
+        out.write("<tr colspan=12><div class=\"pagenavcontrols\" id=\"pagenavtop\"");
+        if (!showNav || !navVisible) {
+            out.write(" style=\"display:none;\"");
         }
-        if (isForm && _manager.util().showStatusFilter() && total > pageSize) {
-            out.write("<div class=pagenavcontrols id=pagenavtop hidden>");
+        out.write(">");
+
+        if (showNav && navVisible) {
             writePageNav(out, req, start, pageSize, total, filter, noThinsp);
-            out.write("</div>");
-            return;
         }
-        out.write("<div class=pagenavcontrols id=pagenavtop hidden></div>");
+
+        out.write("</div></tr>");
     }
 
     /**
