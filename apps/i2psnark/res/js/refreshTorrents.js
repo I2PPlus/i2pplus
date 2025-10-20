@@ -309,8 +309,11 @@ async function refreshTorrents(callback) {
             });
           }
           const noload = torrents?.querySelector("#noTorrents");
-          if ((torrentsBody && torrentsBody.children.length < 2) || noload) {
+          if ((torrentsBody && torrentsBody.children.length === 0) || noload) {
             snarkHeader.querySelectorAll("th:nth-child(n+2) .sortIcon, th:nth-child(n+2) .optbox")
+                       .forEach(el => el.style.opacity = "0");
+          } else if (torrentsBody && torrentsBody.children.length < 2) {
+            snarkHeader.querySelectorAll("th:nth-child(n+2) .sortIcon")
                        .forEach(el => el.style.opacity = "0");
           } else {
             snarkHeader.querySelectorAll("th:nth-child(n+2):not(.tAction) img, th:nth-child(n+2):not(.tAction) input")
