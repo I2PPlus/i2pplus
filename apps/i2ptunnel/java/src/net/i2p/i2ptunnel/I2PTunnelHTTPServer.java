@@ -819,9 +819,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 boolean allowGZIP = true;
                 String val = opts.getProperty(TunnelController.PROP_TUN_GZIP);
                 if ((val != null) && (!Boolean.parseBoolean(val))) {allowGZIP = false;}
-                if (_log.shouldDebug() && (enc != null && !enc.trim().isEmpty() || (altEnc != null && !altEnc.trim().isEmpty()))) {
-                    _log.debug("[HTTPServer] Encoding header: " + enc + "/" + altEnc);
+
+                boolean hasEnc = enc != null && !enc.trim().isEmpty();
+                boolean hasAltEnc = altEnc != null && !altEnc.trim().isEmpty();
+                if (_log.shouldDebug() && (hasEnc || hasAltEnc) {
+                    _log.debug("[HTTPServer] Encoding header: " + (hasEnc ? enc : "") +
+                               (hasEnc && hasAltEnc ? "/" : "") + (hasAltEnc ? altEnc : ""));
                 }
+
                 boolean alt = (altEnc != null) && (altEnc.indexOf("x-i2p-gzip") >= 0);
                 boolean useGZIP = alt || ( (enc != null) && (enc.indexOf("x-i2p-gzip") >= 0) );
                 // Don't pass this on, outproxies should strip so I2P traffic isn't so obvious but they probably don't
