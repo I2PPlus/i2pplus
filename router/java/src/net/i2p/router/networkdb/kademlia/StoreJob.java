@@ -103,7 +103,7 @@ abstract class StoreJob extends JobImpl {
     public void runJob() {sendNext();}
     private boolean isExpired() {return getContext().clock().now() >= _expiration;}
     private static final int MAX_PEERS_SENT = 10;
-    private static final int RESEND_DELAY = 1000; // upstream is 3s
+    private static final int RESEND_DELAY = 5000; // upstream is 3s
 
     /**
      * send the key to the next batch of peers
