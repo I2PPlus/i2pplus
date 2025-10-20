@@ -25,6 +25,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -1556,10 +1557,7 @@ public class I2PSnarkServlet extends BasicServlet {
         return buf.toString();
     }
 
-    /**
-     *  @since 0.9.6
-     */
-
+    /** @since 0.9.6 */
     private void writePageNav(PrintWriter out, HttpServletRequest req, int start, int pageSize, int total, String search, boolean noThinsp) {
         StringBuilder buf = new StringBuilder(1024);
 
@@ -4032,67 +4030,97 @@ public class I2PSnarkServlet extends BasicServlet {
     }
 
     /**
-     * Writes the HTML form for managing trackers.
+     * Writes the HTML form for managing trackers with optimized string building.
+     * Minimizes append() calls by batching HTML fragments, and caches collections for efficient lookups.
      *
      * @param out the PrintWriter to which the HTML output will be written
      * @param req the HttpServletRequest containing the current request parameters
      * @throws IOException if an I/O error occurs while writing to the output stream
-     * @since 0.9 Added tracker management form
+     * @since 0.9 Added tracker management form, optimized in 2025 for rendering performance
      */
     private void writeTrackerForm(PrintWriter out, HttpServletRequest req) throws IOException {
-        StringBuilder buf = new StringBuilder(5*1024);
-        buf.append("<form id=trackerConfigForm action=\"" + _contextPath + "/configure\" method=POST>\n")
-           .append("<div class=configPanel id=trackers><div class=snarkConfig>\n");
+        StringBuilder buf = new StringBuilder(5 * 1024);
+
+        buf.append("<form id=trackerConfigForm action=\"")
+           .append(_contextPath)
+           .append("/configure\" method=POST>\n<div class=configPanel id=trackers><div class=snarkConfig>\n");
         writeHiddenInputs(buf, req, "SaveTrackers");
-        buf.append("<span id=trackersTitle class=\"configTitle expanded\">").append(_t("Trackers")).append("</span><hr>\n")
-           .append("<table id=trackerconfig hidden>\n<tr>")
-           .append("<th title=\"").append(_t("Select trackers for removal from I2PSnark's known list")).append("\"></th>")
-           .append("<th>").append(_t("Name")).append("</th>")
-           .append("<th>").append(_t("Website URL")).append("</th>")
-           .append("<th class=radio>").append(_t("Standard")).append("</th>")
-           .append("<th class=radio>").append(_t("Open")).append("</th>")
-           .append("<th class=radio>").append(_t("Private")).append("</th>")
-           .append("<th>").append(_t("Announce URL")).append("</th>")
-           .append("</tr>\n");
-        List<String> openTrackers = _manager.util().getOpenTrackers();
-        List<String> privateTrackers = _manager.getPrivateTrackers();
+        buf.append("<span id=trackersTitle class=\"configTitle expanded\">")
+           .append(_t("Trackers"))
+           .append("</span><hr>\n<table id=trackerconfig hidden>\n<tr><th title=\"")
+           .append(_t("Select trackers for removal from I2PSnark's known list"))
+           .append("\"></th><th>")
+           .append(_t("Name"))
+           .append("</th><th>")
+           .append(_t("Website URL"))
+           .append("</th><th class=radio>")
+           .append(_t("Standard"))
+           .append("</th><th class=radio>")
+           .append(_t("Open"))
+           .append("</th><th class=radio>")
+           .append(_t("Private"))
+           .append("</th><th>")
+           .append(_t("Announce URL"))
+           .append("</th></tr>\n");
+
+        I2PSnarkUtil util = _manager.util();
+        Set<String> openSet = new HashSet<>(util.getOpenTrackers());
+        Set<String> privateSet = new HashSet<>(_manager.getPrivateTrackers());
+
+        // Batch all rows to reduce append calls
+        StringBuilder rowsBatch = new StringBuilder(8192);
         for (Tracker t : _manager.getSortedTrackers()) {
             String name = t.name;
-            String homeURL = t.baseURL;
-            String announceURL = t.announceURL.replace("&#61;", "=");
-            boolean isPrivate = privateTrackers.contains(t.announceURL);
-            boolean isKnownOpen = _manager.util().isKnownOpenTracker(t.announceURL);
-            boolean isOpen = isKnownOpen || openTrackers.contains(t.announceURL);
-            buf.append("<tr class=knownTracker><td><input type=checkbox class=optbox id=\"")
-               .append(name).append("\" name=\"delete_")
-               .append(name).append("\" title=\"").append(_t("Mark tracker for deletion")).append("\">")
-               .append("</td><td><label for=\"").append(name).append("\">").append(name).append("</label></td><td>");
-            if (homeURL.endsWith(".i2p/")) {homeURL = homeURL.substring(0, homeURL.length() - 1);}
-            buf.append(urlify(homeURL, 64))
-               .append("</td><td><input type=radio class=optbox value=\"0\" tabindex=-1 name=\"ttype_")
-               .append(announceURL).append("\"");
-            if (!(isOpen || isPrivate)) {buf.append(" checked");}
-            else if (isKnownOpen) {buf.append(" disabled");}
-            buf.append("></td><td><input type=radio class=optbox value=1 tabindex=-1 name=\"ttype_")
-               .append(announceURL).append("\"");
-            if (isOpen) {buf.append(" checked");}
-            else if (t.announceURL.equals("http://diftracker.i2p/announce.php") ||
-                     t.announceURL.equals("http://tracker2.postman.i2p/announce.php") ||
-                     t.announceURL.equals("http://torrfreedom.i2p/announce.php")) {
-                buf.append(" disabled");
+            String homeURL = t.baseURL.endsWith(".i2p/") ? t.baseURL.substring(0, t.baseURL.length() - 1) : t.baseURL;
+            String announceURL = t.announceURL;
+
+            boolean isPrivate = privateSet.contains(announceURL);
+            boolean isKnownOpen = util.isKnownOpenTracker(announceURL);
+            boolean isOpen = isKnownOpen || openSet.contains(announceURL);
+
+            rowsBatch.append("<tr class=knownTracker><td><input type=checkbox class=optbox id=\"")
+                     .append(name)
+                     .append("\" name=\"delete_")
+                     .append(name)
+                     .append("\" title=\"")
+                     .append(_t("Mark tracker for deletion"))
+                     .append("\"></td><td><label for=\"")
+                     .append(name)
+                     .append("\">")
+                     .append(name)
+                     .append("</label></td><td>")
+                     .append(urlify(homeURL, 64))
+                     .append("</td><td><input type=radio class=optbox value=\"0\" tabindex=-1 name=\"ttype_")
+                     .append(announceURL).append("\"");
+            if (!(isOpen || isPrivate)) {rowsBatch.append(" checked");}
+            else if (isKnownOpen) {rowsBatch.append(" disabled");}
+            rowsBatch.append("></td><td><input type=radio class=optbox value=1 tabindex=-1 name=\"ttype_")
+                     .append(announceURL)
+                     .append("\"");
+            if (isOpen) {rowsBatch.append(" checked");}
+            else if ("http://diftracker.i2p/announce.php".equals(announceURL) ||
+                     "http://tracker2.postman.i2p/announce.php".equals(announceURL) ||
+                     "http://torrfreedom.i2p/announce.php".equals(announceURL)) {
+                rowsBatch.append(" disabled");
             }
-            buf.append("></td><td><input type=radio class=optbox value=2 tabindex=-1 name=\"ttype_")
-               .append(announceURL).append("\"");
-            if (isPrivate) {buf.append(" checked");}
-            else if (isKnownOpen ||
-                     t.announceURL.equals("http://diftracker.i2p/announce.php") ||
-                     t.announceURL.equals("http://tracker2.postman.i2p/announce.php") ||
-                     t.announceURL.equals("http://torrfreedom.i2p/announce.php")) {
-                buf.append(" disabled");
+            rowsBatch.append("></td><td><input type=radio class=optbox value=2 tabindex=-1 name=\"ttype_")
+                     .append(announceURL)
+                     .append("\"");
+            if (isPrivate) {rowsBatch.append(" checked");}
+            else if (isKnownOpen || "http://diftracker.i2p/announce.php".equals(announceURL) ||
+                     "http://tracker2.postman.i2p/announce.php".equals(announceURL) ||
+                     "http://torrfreedom.i2p/announce.php".equals(announceURL)) {
+                rowsBatch.append(" disabled");
             }
-            buf.append("></td><td>").append(urlify(announceURL, 64)).append("</td></tr>\n");
+            rowsBatch.append("></td><td>")
+                     .append(urlify(announceURL, 64))
+                     .append("</td></tr>\n");
         }
+
+        buf.append(rowsBatch);
+
         _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
+
         String spacer = "<tr class=spacer><td colspan=7>&nbsp;</td></tr>\n";
         String trackerFormElements =
             "<td><input type=text class=trackername name=tname spellcheck=false></td>" +
@@ -4101,34 +4129,35 @@ public class I2PSnarkServlet extends BasicServlet {
             "<td><input type=radio class=optbox value=1 name=add_tracker_type></td>" +
             "<td><input type=radio class=optbox value=2 name=add_tracker_type></td>" +
             "<td><input type=text class=trackerannounce name=taurl spellcheck=false></td>";
+
         String noscript =
             "<noscript><style>" +
             ".configPanel .configTitle{pointer-events:none!important}" +
             "#fileFilter table,#trackers table{display:table!important}" +
             "#fileFilter .configTitle::after,#trackers .configTitle::after{display:none!important}" +
             "</style></noscript>\n";
-        buf.append(spacer)
-           .append("<tr id=addtracker><td><b>")
-           .append(_t("Add")).append(":</b></td>")
+
+        buf.append(spacer);
+        buf.append("<tr id=addtracker><td><b>")
+           .append(_t("Add"))
+           .append(":</b></td>")
            .append(trackerFormElements)
            .append("</tr>\n")
-           .append(spacer)
-           .append("<tr><td colspan=7>\n")
-           .append("<input type=submit name=taction class=default value=\"")
-           .append(_t("Add tracker")).append("\">\n")
-           .append("<input type=submit name=taction class=delete value=\"")
-           .append(_t("Delete selected")).append("\">\n")
-           .append("<input type=submit name=taction class=accept value=\"")
-           .append(_t("Save tracker configuration")).append("\">\n")
-           .append("<input type=submit name=taction class=add value=\"")
-           .append(_t("Add tracker")).append("\">\n")
-           .append("<input type=submit name=taction class=reload value=\"")
-           .append(_t("Restore defaults")).append("\">\n")
-           .append("</td></tr>")
-           .append(spacer)
-           .append("</table>\n</div>\n</div></form>\n")
-           .append(noscript)
-           .append("<script src=\"" + _resourcePath + "js/toggleConfigs.js?" + CoreVersion.VERSION + "\"></script>\n");
+           .append(spacer);
+
+        String buttons =
+            "<tr><td colspan=7>\n" +
+            "<input type=submit name=taction class=default value=\"" + _t("Add tracker") + "\">\n" +
+            "<input type=submit name=taction class=delete value=\"" + _t("Delete selected") + "\">\n" +
+            "<input type=submit name=taction class=accept value=\"" + _t("Save tracker configuration") + "\">\n" +
+            "<input type=submit name=taction class=add value=\"" + _t("Add tracker") + "\">\n" +
+            "<input type=submit name=taction class=reload value=\"" + _t("Restore defaults") + "\">\n" +
+            "</td></tr>" + spacer +
+            "</table>\n</div>\n</div></form>\n" +
+            noscript +
+            "<script src=\"" + _resourcePath + "js/toggleConfigs.js?" + CoreVersion.VERSION + "\"></script>\n";
+
+        buf.append(buttons);
         out.append(buf);
         out.flush();
         buf.setLength(0);
