@@ -827,8 +827,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (alt) {headers.remove("X-Accept-Encoding");}
 
                 String modifiedHeader = formatHeaders(headers, command);
-                if (_log.shouldDebug()) {_log.debug("[HTTPServer] Modified headers\n\t" + modifiedHeader);}
-                else if (_log.shouldInfo() && !command.toString().toLowerCase().contains("head")) {
+                //if (_log.shouldDebug()) {_log.debug("[HTTPServer] Modified headers\n\t" + modifiedHeader);}
+                if (_log.shouldInfo() && !command.toString().toLowerCase().contains("head")) {
                     String compactHeaders = formatHeadersCompact(headers, command);
                     _log.info("[HTTPServer] Received request headers" + compactHeaders);
                 }
