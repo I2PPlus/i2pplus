@@ -849,7 +849,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
                     long startupTime = afterSocket - afterHeaders;   // time for reading headers + socket creation
                     long forwardingTime = afterHandle - afterSocket; // time for runner's forwarding threads to complete
-                    String rhost = remoteHost.toString().replace("/", "");
+                    String rhost = remoteHost.toString().replace("/", "").replace("127.0.0.1", "localhost");
 
                     if (timeToHandle > 120_000 && _log.shouldInfo()) {
                         _log.info("[HTTPServer] Took a while (" + timeToHandle + "ms) to handle the request for " + rhost + ':' + remotePort +
