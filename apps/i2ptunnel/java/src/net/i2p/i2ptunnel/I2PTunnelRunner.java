@@ -313,16 +313,21 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
      */
     public void streamDone() {
         if (_keepAliveSocket && fromI2P != null) {
-            // we are client-side
-            // tell the from-I2P runner
-            if (_log.shouldInfo()) {_log.info("Stream done from I2P", new Exception("I did it"));}
+            // Client-side: signal from-I2P forwarder done
+            if (_log.shouldInfo()) {
+                _log.info("Stream done -> Notification received from I2P side");
+            }
             fromI2P.done = true;
         } else if (_keepAliveI2P && toI2P != null) {
-            // we are server-side - tell the to-I2P runner
-            if (_log.shouldInfo()) {_log.info("Stream done from Server", new Exception("I did it"));}
+            // Server-side: signal to-I2P forwarder done
+            if (_log.shouldInfo()) {
+                _log.info("Stream done -> Notification received from Server side");
+            }
             toI2P.done = true;
         } else {
-            if (_log.shouldWarn()) {_log.info("Unexpected stream done", new Exception("I did it"));}
+            if (_log.shouldWarn()) {
+                _log.warn("Unexpected streamDone() call -> Unable to determine stream direction or forwarder state");
+            }
         }
     }
 
@@ -369,23 +374,29 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                            + " bytes written to the socket, starting forwarders...");
 
             }
-            if (_keepAliveSocket) {
-                // Standard GET or HEAD, no data, do not thread a forwarder because we don't need it
-                // and we don't want it to swallow the next request
-            } else {
+
+            if (!_keepAliveSocket) {
                 in = getSocketIn();
-                // InternalSocket already has buffering
-                if (!(s instanceof InternalSocket)) {in = new BufferedInputStream(in, 2*NETWORK_BUFFER_SIZE);}
+                if (!(s instanceof InternalSocket)) {
+                    in = new BufferedInputStream(in, 2*NETWORK_BUFFER_SIZE);
+                }
                 toI2P = new StreamForwarder(in, i2pout, true, null);
                 toI2P.start();
             }
             fromI2P = new StreamForwarder(i2pin, out, false, _onSuccess);
-            // We are already a thread, so run the second one inline
-            //fromI2P.start();
-            fromI2P.run();
+            fromI2P.start();
+
+            try {
+                if (toI2P != null) toI2P.join();
+                if (fromI2P != null) fromI2P.join();
+            } catch (InterruptedException e) {} // ignore
+
             synchronized (finishLock) {
-                while (!finished) {finishLock.wait();}
+                while (!finished) {
+                    finishLock.wait();
+                }
             }
+
             if (_log.shouldLog(Log.DEBUG)) {
                 _log.debug("Both forwarders completed -> " + totalSent + " bytes sent, " +  totalReceived + " bytes received");
             }
