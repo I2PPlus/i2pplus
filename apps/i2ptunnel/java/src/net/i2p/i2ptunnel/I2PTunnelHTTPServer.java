@@ -847,18 +847,21 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     long timeToHandle = afterHandle - afterAccept;
                     getTunnel().getContext().statManager().addRateData("i2ptunnel.httpserver.blockingHandleTime", timeToHandle);
 
+                    long acceptToHeaders = afterHeaders - afterAccept; // time from accept to start reading headers
                     long startupTime = afterSocket - afterHeaders;   // time for reading headers + socket creation
                     long forwardingTime = afterHandle - afterSocket; // time for runner's forwarding threads to complete
                     String rhost = remoteHost.toString().replace("/", "").replace("127.0.0.1", "localhost");
 
                     if (timeToHandle > 120_000 && _log.shouldInfo()) {
                         _log.info("[HTTPServer] Took a while (" + timeToHandle + "ms) to handle the request for " + rhost + ':' + remotePort +
-                                  "\n* Tasks: Read headers + Socket create: " + startupTime + "ms; " +
+                                  "\n* Tasks:  Accept to Headers: " + acceptToHeaders + "ms; " +
+                                  "Read headers + Socket create: " + startupTime + "ms; " +
                                   "Forwarding duration (data transfer): " + forwardingTime + "ms" +
                                   "\n* Client: " + peerB32);
                     } else if (_log.shouldInfo()) {
                         _log.info("[HTTPServer] Took " + timeToHandle + "ms to handle the request for " + rhost + ':' + remotePort +
-                                  "\n* Tasks: Read headers + Socket create: " + startupTime + "ms; " +
+                                  "\n* Tasks:  Accept to Headers: " + acceptToHeaders + "ms; " +
+                                  "Read headers + Socket create: " + startupTime + "ms; " +
                                   "Forwarding duration (data transfer): " + forwardingTime + "ms" +
                                   "\n* Client: " + peerB32);
                     }
