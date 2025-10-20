@@ -206,13 +206,19 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         int lastEnd = -1;
         byte[] data = _headerBuffer.getData();
         int valid = _headerBuffer.getValid();
+        StringBuilder buf = null;
+
         for (int i = 0; i < valid; i++) {
             if (data[i] == NL) {
                 if (lastEnd == -1) {
                     String responseLine = DataHelper.getUTF8(data, 0, i+1); // includes NL
                     responseLine = (responseLine.trim() + "\r\n");
-                    if (_log.shouldInfo())
-                        _log.info("Response: " + responseLine.trim());
+
+                    if (_log.shouldInfo()) {
+                        buf = new StringBuilder();
+                        buf.append("Response: ").append(responseLine.trim());  // First log line
+                    }
+
                     // Persistent conn requires HTTP/1.1
                     if (!responseLine.startsWith("HTTP/1.1 ")) {
                         _keepAliveIn = false;
@@ -230,7 +236,6 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                         _keepAliveIn = false;
                         _keepAliveOut = false;
                     }
-
                     out.write(DataHelper.getUTF8(responseLine));
                 } else {
                     for (int j = lastEnd+1; j < i; j++) {
@@ -247,7 +252,10 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                                 val = DataHelper.getUTF8(data, j+2, valLen).trim();
 
                             if (_log.shouldInfo()) {
-                                _log.info("Response header: [" + key + ": " + val + "]");
+                                if (buf == null) {buf = new StringBuilder();}
+                                if (val != null && !val.isEmpty()) {
+                                    buf.append("\n* ").append(key).append(": ").append(val);
+                                }
                             }
 
                             String lcKey = key.toLowerCase(Locale.US);
@@ -316,6 +324,13 @@ class HTTPResponseOutputStream extends FilterOutputStream {
             }
         }
 
+        if (_log.shouldInfo() && buf != null) {
+            if (!buf.toString().startsWith("Response:")) {
+                buf.append("Response headers:\n");
+            }
+            _log.info(buf.toString());
+        }
+
         // Now make the final keepalive decisions
         if (_keepAliveOut) {
             // we need one but not both
@@ -329,7 +344,7 @@ class HTTPResponseOutputStream extends FilterOutputStream {
                 (!chunked && _dataExpected < 0))
                 _keepAliveIn = false;
         }
-        
+
         if (!connectionSent && !_keepAliveOut)
             out.write(CONNECTION_CLOSE);
 

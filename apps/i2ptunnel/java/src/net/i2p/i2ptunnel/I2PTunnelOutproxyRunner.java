@@ -278,8 +278,6 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
                     // If onTimeout is set, don't close output stream from socket side if no data received
                     if (!(onTimeout != null && !_toI2P && totalReceived.get() <= 0)) {
                         out.close();
-                    } else if (_log.shouldInfo()) {
-                        _log.info(direction + " Not closing stream to write the error message...");
                     }
                 } catch (IOException ioe) {
                     if (_log.shouldWarn())

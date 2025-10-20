@@ -642,7 +642,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                         if (keepAliveTo) {out.flush();}
                         else {out.close();}
                     } else {
-                        if (_log.shouldInfo()) {_log.info(direction + " Not closing stream so we can write the error message...");}
+                        //if (_log.shouldInfo()) {_log.info(direction + " Not closing stream so we can write the error message...");}
                         if (keepAliveTo) {out.flush();}
                     }
                 } catch (IOException ioe) {

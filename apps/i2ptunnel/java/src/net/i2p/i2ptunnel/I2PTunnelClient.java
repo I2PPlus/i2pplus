@@ -91,12 +91,12 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
                     _addrs.add(addr);
                     if (addr.isUnresolved()) {
                         String name = addr.getHostName();
-                        if (name.length() == 60 && name.endsWith(".b32.i2p"))
-                            l.log("▲ Warning - Could not resolve " + name +
-                                  ", perhaps it is not up, will retry when connecting.");
-                        else
-                            l.log("▲ Warning - Could not resolve " + name +
-                                  ", you must add it to your addressbook for it to work.");
+                        if (name.length() == 60 && name.endsWith(".b32.i2p")) {
+                            l.log("▲ Warning - Could not resolve " + name.substring(0,16) + "...b32.i2p" +
+                                  " -> Will retry when connecting...");
+                        } else {
+                            l.log("▲ Warning - Could not resolve " + name + " -> Not found in addressbook");
+                        }
                     } else {
                         dests.add(addr.getAddress());
                     }
