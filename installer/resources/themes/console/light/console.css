@@ -1511,6 +1511,8 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 .netdb_header img[src^="/flags"],th img[src^="/flags"]{margin-left:2px;width:24px;height:auto}
 .netdb_header img[src^="/flags"]{box-shadow:0 0 0 1px #bbc}
 .netdb_header img[src="/flags.jsp?c=a0"]{margin-right:0;margin-top:-2px;display:inline-block;vertical-align:middle}
+#compactLookup{margin:-15px auto 11px;display:block;position:relative!important;z-index:-1}
+#netdb #compactLookup button.search{min-width:80px!important;padding-right:10px}
 #netdb{contain:paint}
 #netdb .leasesets_container .confignav{margin:-10px -16px 16px;column-span:all}
 #netdb_ourinfo .version{margin-right:4px}
