@@ -10,10 +10,9 @@ import net.i2p.client.streaming.I2PSocket;
 import net.i2p.util.Log;
 
 /**
- *  Thread to do outbound filtering.
- *  Moved from I2PTunnelIRCClient.java
- *
- *  @since 0.8.9
+ * Filters outbound IRC messages, applying filtering rules before sending them over an I2PSocket.
+ * Runs as a separate thread handling outbound message filtering.
+ * @since 0.8.9
  */
 public class IrcOutboundFilter implements Runnable {
 
@@ -23,13 +22,14 @@ public class IrcOutboundFilter implements Runnable {
     private final Log _log;
     private final DCCHelper _dccHelper;
 
-    public IrcOutboundFilter(Socket lcl, I2PSocket rem, StringBuffer pong, Log log) {
-        this(lcl, rem, pong, log, null);
-    }
-
     /**
-     *  @param helper may be null
-     *  @since 0.8.9
+     * Constructs the outbound filter thread.
+     * @param lcl the local socket to read outbound messages from
+     * @param rem the remote I2PSocket to write filtered messages to
+     * @param pong buffer tracking expected PONG responses
+     * @param log logging instance
+     * @param helper optional DCC helper, may be null
+     * @since 0.8.9
      */
     public IrcOutboundFilter(Socket lcl, I2PSocket rem, StringBuffer pong, Log log, DCCHelper helper) {
         local = lcl;
@@ -39,66 +39,58 @@ public class IrcOutboundFilter implements Runnable {
         _dccHelper = helper;
     }
 
+    /**
+     * Constructs the outbound filter without a DCC helper.
+     * @param lcl the local socket to read outbound messages from
+     * @param rem the remote I2PSocket to write filtered messages to
+     * @param pong buffer tracking expected PONG responses
+     * @param log logging instance
+     * @since 0.8.9
+     */
+    public IrcOutboundFilter(Socket lcl, I2PSocket rem, StringBuffer pong, Log log) {
+        this(lcl, rem, pong, log, null);
+    }
+
+    @Override
     public void run() {
-        // Todo: Don't use BufferedReader - IRC spec limits line length to 512 but...
-        BufferedReader in;
-        OutputStream output;
-        try {
-            in = new BufferedReader(new InputStreamReader(local.getInputStream(), "ISO-8859-1"));
-            output=remote.getOutputStream();
-        } catch (IOException e) {
-            if (_log.shouldWarn())
-                _log.warn("[IRC Client] Outbound Filter: No streams",e);
-            return;
-        }
-        if (_log.shouldDebug())
-            _log.debug("[IRC Client] Outbound Filter: Running");
-        try {
-            while(true)
-            {
-                try {
-                    String inmsg = in.readLine();
-                    if(inmsg==null)
-                        break;
-                    if(inmsg.endsWith("\r"))
-                        inmsg=inmsg.substring(0,inmsg.length()-1);
-                    // dupe of info level log
-                    //if (_log.shouldDebug())
-                    //    _log.debug("[IRC Client] Out: [" + inmsg + "]");
-                    String outmsg = IRCFilter.outboundFilter(inmsg, expectedPong, _dccHelper);
-                    if(outmsg!=null)
-                    {
-                        if(!inmsg.equals(outmsg)) {
-                            if (_log.shouldWarn()) {
-                                _log.warn("[IRC Client] Outbound message FILTERED [" + outmsg + "]");
-                                _log.warn("[IRC Client] Outbound message [" + inmsg + "]");
-                            }
-                        } else {
-                            if (_log.shouldInfo())
-                                _log.info("[IRC Client] Outbound message [" + outmsg + "]");
-                        }
-                        outmsg=outmsg+"\r\n";   // rfc1459 sec. 2.3
-                        output.write(outmsg.getBytes("ISO-8859-1"));
-                        // save 250 ms in streaming
-                        // Check ready() so we don't split the initial handshake up into multiple streaming messages
-                        if (!in.ready())
-                            output.flush();
-                    } else {
-                        if (_log.shouldWarn())
-                            _log.warn("[IRC Client] Outbound message BLOCKED [" + inmsg + "]");
+        try (BufferedReader in = new BufferedReader(new InputStreamReader(local.getInputStream(), "ISO-8859-1"));
+             OutputStream output = remote.getOutputStream()) {
+
+            if (_log.shouldDebug())
+                _log.debug("[IRC Client] Outbound Filter: Running");
+
+            String inmsg;
+            while ((inmsg = in.readLine()) != null) {
+                if (inmsg.endsWith("\r"))
+                    inmsg = inmsg.substring(0, inmsg.length() - 1);
+
+                String outmsg = IRCFilter.outboundFilter(inmsg, expectedPong, _dccHelper);
+
+                if (outmsg != null) {
+                    if (!inmsg.equals(outmsg) && _log.shouldWarn()) {
+                        _log.warn("[IRC Client] Outbound message FILTERED [" + outmsg + "]");
+                        _log.warn("[IRC Client] Original message [" + inmsg + "]");
+                    } else if (_log.shouldInfo()) {
+                        _log.info("[IRC Client] Outbound message [" +
+                                  (outmsg.startsWith("PASS ") ? "PASS ************" : outmsg) + "]"); // don't log passwords
                     }
-                } catch (IOException e1) {
-                    if (_log.shouldWarn())
-                        _log.warn("[IRC Client] Outbound Filter: disconnected \n* Reason: " + e1.getMessage());
-                    break;
+                    outmsg += "\r\n";
+                    output.write(outmsg.getBytes("ISO-8859-1"));
+                    if (!in.ready())
+                        output.flush();
+                } else if (_log.shouldWarn()) {
+                    _log.warn("[IRC Client] Outbound message BLOCKED [" + inmsg + "]");
                 }
             }
+        } catch (IOException e) {
+            if (_log.shouldWarn())
+                _log.warn("[IRC Client] Outbound Filter: disconnected \n* Reason: " + e.getMessage());
         } catch (RuntimeException re) {
             _log.error("[IRC Client] Error filtering outbound data", re);
         } finally {
-            try { remote.close(); } catch (IOException e) {}
+            try { remote.close(); } catch (IOException ignored) {}
+            if (_log.shouldDebug())
+                _log.debug("[IRC Client] Outbound Filter: Stopped");
         }
-        if (_log.shouldDebug())
-            _log.debug("[IRC Client] Outbound Filter: Stopped");
     }
 }
