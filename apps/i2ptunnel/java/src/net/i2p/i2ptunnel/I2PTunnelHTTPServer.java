@@ -822,7 +822,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
                 boolean hasEnc = enc != null && !enc.trim().isEmpty();
                 boolean hasAltEnc = altEnc != null && !altEnc.trim().isEmpty();
-                if (_log.shouldDebug() && (hasEnc || hasAltEnc) {
+                if (_log.shouldDebug() && (hasEnc || hasAltEnc)) {
                     _log.debug("[HTTPServer] Encoding header: " + (hasEnc ? enc : "") +
                                (hasEnc && hasAltEnc ? "/" : "") + (hasAltEnc ? altEnc : ""));
                 }
