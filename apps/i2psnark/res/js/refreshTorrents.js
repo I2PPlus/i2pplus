@@ -308,7 +308,8 @@ async function refreshTorrents(callback) {
               th.innerHTML = thElementsResponse[index].innerHTML;
             });
           }
-          if (torrentsBody && torrentsBody.children.length === 0) {
+          const noload = torrents?.querySelector("#noTorrents");
+          if ((torrentsBody && torrentsBody.children.length < 2) || noload) {
             snarkHeader.querySelectorAll("th:nth-child(n+2) .sortIcon, th:nth-child(n+2) .optbox")
                        .forEach(el => el.style.opacity = "0");
           } else {
