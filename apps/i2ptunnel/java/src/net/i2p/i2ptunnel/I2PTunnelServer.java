@@ -405,7 +405,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
         StatefulConnectionFilter filter = _filter;
         if (filter != null) {filter.start();}
         boolean isDaemon = getTunnel().getContext().isRouterContext(); // prevent JVM exit when running outside the router
-        Thread t = new I2PAppThread(this, "Server " + remoteHost + ':' + remotePort, isDaemon);
+        Thread t = new I2PAppThread(this, "Server " + remoteHost.toString().replace("/", "") + ':' + remotePort, isDaemon);
         t.start();
     }
 
@@ -565,7 +565,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     public void run() {
         i2pss = sockMgr.getServerSocket();
         if (_log.shouldInfo()) {
-            _log.info("Starting async executor with cached thread pool for server " + remoteHost + ':' + remotePort);
+            _log.info("Starting async executor with cached thread pool for server " + remoteHost.toString().replace("/", "") + ':' + remotePort);
         }
 
         ThreadPoolExecutor connectionExecutor = new ThreadPoolExecutor(
@@ -608,7 +608,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                         try {
                             new Handler(socketToHandle).run();
                         } catch (Exception e) {
-                            _log.warn("Exception in async handler for " + remoteHost + ':' + remotePort, e);
+                            _log.warn("Exception in async handler for " + remoteHost.toString().replace("/", "") + ':' + remotePort, e);
                             try {
                                 socketToHandle.close();
                             } catch (IOException ioe) {
@@ -616,7 +616,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                             }
                         }
                     }, connectionExecutor).exceptionally(ex -> {
-                        _log.warn("Async handler task failed for " + remoteHost + ':' + remotePort, ex);
+                        _log.warn("Async handler task failed for " + remoteHost.toString().replace("/", "") + ':' + remotePort, ex);
                         return null;
                     });
                 } catch (RejectedExecutionException ree) {
@@ -750,28 +750,35 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                       "\n* From: " + socket.getPeerDestination().calculateHash() + " port " + socket.getPort());
         }
         long afterAccept = getTunnel().getContext().clock().now();
-        long afterSocket = -1;
         // local is fast, so synchronously. Does not need that many threads.
         try {
             socket.setReadTimeout(readTimeout);
-            Socket s = getSocket(socket.getPeerDestination().calculateHash(), socket.getLocalPort());
-            afterSocket = getTunnel().getContext().clock().now();
-            Thread t = new I2PTunnelRunner(s, socket, slock, null, null,
-                                           null, (I2PTunnelRunner.FailCallback) null);
-            _clientExecutor.execute(t);
+            if (_log.shouldInfo()) {
+                _log.info("Set socket read timeout to " + readTimeout + " ms for client: " + remoteHost);
+            }
 
+            Socket s = getSocket(socket.getPeerDestination().calculateHash(), socket.getLocalPort());
+            long afterSocket = getTunnel().getContext().clock().now();
+
+            Thread t = new I2PTunnelRunner(s, socket, slock, null, null, null, (I2PTunnelRunner.FailCallback) null);
+            _clientExecutor.execute(t);
             long afterHandle = getTunnel().getContext().clock().now();
             long timeToHandle = afterHandle - afterAccept;
-            if ((timeToHandle > 1500) && (_log.shouldInfo())) {
-                _log.info("Took a while (" + timeToHandle + "ms) to handle the request for " + remoteHost + ':' + remotePort +
-                          "\n* Socket create: " + (afterSocket-afterAccept) + "ms");
+
+            if (timeToHandle > 60_000 && _log.shouldInfo()) {
+                _log.info("Took a while (" + timeToHandle + "ms) to handle the request for " +
+                          remoteHost.toString().replace("/", "") + ':' + remotePort +
+                          "\n* Socket create: " + (afterSocket - afterAccept) + "ms");
+            } else if (_log.shouldInfo()) {
+                _log.info("Took " + timeToHandle + "ms to handle the request for " +
+                          remoteHost.toString().replace("/", "") + ':' + remotePort +
+                          "\n* Socket create: " + (afterSocket - afterAccept) + "ms");
             }
-        } catch (SocketException ex) {
-            int port = socket.getLocalPort();
-            try {socket.reset();}
-            catch (IOException ioe) {}
-            if (_log.shouldError()) {_log.error("Error connecting to server " + getSocketString(port));}
-        } catch (IOException ex) {_log.error("Error while waiting for I2PConnections", ex);}
+        } catch (IOException e) {
+            if (_log.shouldWarn()) {
+                _log.warn("Failed to create socket or execute runner for client: " + remoteHost + ":" + remotePort, e);
+            }
+        }
     }
 
     /**

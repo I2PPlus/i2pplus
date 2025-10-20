@@ -842,19 +842,28 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (keepalive || isGetOrHead) {t.run();} // run inline
                 else {_clientExecutor.execute(t);} // run in the server pool
 
-
                 long afterHandle = getTunnel().getContext().clock().now();
                 if (requestCount == 0) {
                     long timeToHandle = afterHandle - afterAccept;
                     getTunnel().getContext().statManager().addRateData("i2ptunnel.httpserver.blockingHandleTime", timeToHandle);
-                    if ((timeToHandle > 1500) && (_log.shouldDebug())) {
-                        _log.info("[HTTPServer] Took a while (" + timeToHandle + "ms) to handle the request for " + remoteHost + ':' + remotePort +
-                                  "\n* Client: " + peerB32 +
-                                  "\n* Tasks: Read headers: " + (afterHeaders-afterAccept) + "ms; " +
-                                  "Socket create: " + (afterSocket-afterHeaders) + "ms; " +
-                                  "Start runners: " + (afterHandle-afterSocket) + "ms");
-                     }
+
+                    long startupTime = afterSocket - afterHeaders;   // time for reading headers + socket creation
+                    long forwardingTime = afterHandle - afterSocket; // time for runner's forwarding threads to complete
+                    String rhost = remoteHost.toString().replace("/", "");
+
+                    if (timeToHandle > 120_000 && _log.shouldInfo()) {
+                        _log.info("[HTTPServer] Took a while (" + timeToHandle + "ms) to handle the request for " + rhost + ':' + remotePort +
+                                  "\n* Tasks: Read headers + Socket create: " + startupTime + "ms; " +
+                                  "Forwarding duration (data transfer): " + forwardingTime + "ms" +
+                                  "\n* Client: " + peerB32);
+                    } else if (_log.shouldInfo()) {
+                        _log.info("[HTTPServer] Took " + timeToHandle + "ms to handle the request for " + rhost + ':' + remotePort +
+                                  "\n* Tasks: Read headers + Socket create: " + startupTime + "ms; " +
+                                  "Forwarding duration (data transfer): " + forwardingTime + "ms" +
+                                  "\n* Client: " + peerB32);
+                    }
                 }
+
                 if (keepalive) { // Since we are now running the CompressedRequestor inline, if keepalive is true, we don't need to wait.
                     if (_log.shouldDebug()) {
                         long timeToWait = getTunnel().getContext().clock().now() - afterAccept;
@@ -1204,8 +1213,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                                    (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""), _log);
                 }
                 if (_log.shouldDebug())
-                    _log.debug("[HTTPServer] Running server-to-browser Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive +
-                               (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
+                    _log.debug("[HTTPServer] Sending" + (_shouldCompress ? " gzipped" : "") + " response" + (_keepalive ? " [KeepAlive]" : "") +
+                               (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
                 s.run(); // same thread
             } catch (SSLException she) {
                 if (_log.shouldError()) {_log.error("[HTTPServer] SSL error", she);}
@@ -1251,7 +1260,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         boolean sockReset = msg != null && msg.contains("reset");
                         if (sockReset) {
                             if (_log.shouldDebug()) {
-                                _log.warn("[HTTPServer] Received socket RESET ->  Resetting I2P socket..." +
+                                _log.warn("[HTTPServer] Received socket RESET -> Resetting I2P socket..." +
                                           (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
                             }
                             try {_browser.reset();}
@@ -1274,7 +1283,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 try { _webserver.close(); } catch (IOException ioe) {}
                 if (!_keepalive) try { _browser.close(); } catch (IOException ioe) {}
                 if (_log.shouldDebug()) {
-                    _log.debug("Finished server-to-browser: Compressed? " + _shouldCompress + " KeepAlive? " + _keepalive +
+                    _log.debug("Finished sending" + (_shouldCompress ? " gzipped" : "") + " response" + (_keepalive ? " [KeepAlive]" : "") +
                                (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
                 }
             }
@@ -1313,19 +1322,19 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         }
 
         public void run() {
-            if (_log.shouldDebug()) {_log.debug("[HTTPServer] Begin sending " + _name);}
+            if (_log.shouldDebug()) {_log.debug("[HTTPServer] Begin sending: " + _name);}
             try {
                 DataHelper.copy(_in, _out);
-                if (_log.shouldDebug()) {_log.debug("[HTTPServer] Done sending " + _name);}
+                if (_log.shouldDebug()) {_log.debug("[HTTPServer] Done sending: " + _name);}
             } catch (IOException ioe) {
                 if (ioe.getMessage() != null) {
                     if (ioe.getMessage().indexOf("Input stream closed") >= 0 ||
                         ioe.getMessage().indexOf("Input stream error") >= 0 ||
                         ioe.getMessage().indexOf("Socket closed") >= 0) {
                         // client closed connection early?
-                            if (_log.shouldDebug()) {_log.debug("[HTTPServer] Error sending " + _name + " -> " + ioe.getMessage());}
+                            if (_log.shouldDebug()) {_log.debug("[HTTPServer] Error sending: " + _name + " -> " + ioe.getMessage());}
                     } else {
-                        if (_log.shouldWarn()) {_log.warn("[HTTPServer] Error sending " + _name + " -> " + ioe.getMessage());}
+                        if (_log.shouldWarn()) {_log.warn("[HTTPServer] Error sending: " + _name + " -> " + ioe.getMessage());}
                     }
                 }
                 synchronized(this) {_failure = ioe;}

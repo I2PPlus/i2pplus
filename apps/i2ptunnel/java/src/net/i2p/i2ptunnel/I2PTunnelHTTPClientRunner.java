@@ -84,7 +84,7 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
     boolean getKeepAliveSocket() {
         return _hout != null && _hout.getKeepAliveOut() && super.getKeepAliveSocket();
     }
-        
+
     /**
      * Should we keep the I2P socket open when done?
      * @since 0.9.62
@@ -93,7 +93,7 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
     boolean getKeepAliveI2P() {
         return _hout != null && _hout.getKeepAliveIn() && super.getKeepAliveI2P();
     }
-        
+
     /**
      *  May not actually close either socket, depending on keepalive settings.
      *
@@ -113,8 +113,8 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
         boolean keepaliveI2P = getKeepAliveI2P();
         boolean threadI2PClose = keepaliveSocket && !keepaliveI2P && i2pout != null && !i2ps.isClosed();
         if (_log.shouldInfo())
-            _log.info("Closing HTTPClientRunner keepaliveI2P? " + keepaliveI2P + " keepaliveSocket? " + keepaliveSocket +
-                      " threadedClose? " + threadI2PClose, new Exception("I did it"));
+            _log.info("Closing HTTPClientRunner -> keepaliveI2P? " + keepaliveI2P + " keepaliveSocket? " + keepaliveSocket +
+                      " threadedClose? " + threadI2PClose);
         if (threadI2PClose) {
             // Thread the I2P stream/socket closing, because it is blocking, may take several seconds,
             // and we don't want to delay the next request
@@ -135,7 +135,7 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
             }
             if (i2pout != null) { try {
                 if (keepaliveI2P)
-                    i2pout.flush(); 
+                    i2pout.flush();
                 else
             i2pout.close();
         } catch (IOException ioe) {} }
@@ -155,7 +155,7 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
         } catch (IOException ioe) {} }
 
         if (!threadI2PClose && !keepaliveI2P) {
-        try { 
+        try {
             i2ps.close();
         } catch (IOException ioe) {}
         }
@@ -194,14 +194,14 @@ public class I2PTunnelHTTPClientRunner extends I2PTunnelRunner {
         @Override
         public void run() {
             if (in != null) {
-                try { 
+                try {
                     in.close();
                 } catch (IOException ioe) {}
             }
-            try { 
-                out.close(); 
+            try {
+                out.close();
             } catch (IOException ioe) {}
-            try { 
+            try {
                 s.close();
             } catch (IOException ioe) {}
             //_log.info("(threaded) i2p socket closed");
