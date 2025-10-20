@@ -437,8 +437,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         Hash peerHash = socket.getPeerDestination().calculateHash();
         String peerB32 = socket.getPeerDestination().toBase32();
         if (_log.shouldDebug()) {
-            _log.debug("[HTTPServer] Incoming connection to " + toString().replace("/", "") + " (Port " + socket.getLocalPort() + ")" +
-                      "\n* From: " + peerB32 + " on port " + socket.getPort());
+            _log.debug("[HTTPServer] Incoming connection to " + toString().replace("/", "").replace("127.0.0.1", "localhost")+
+                       " (Port " + socket.getLocalPort() + ")" +
+                       "\n* From: " + peerB32 + " on port " + socket.getPort());
         }
         // local is fast, so synchronously. Does not need that many threads.
         try {
@@ -818,7 +819,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 boolean allowGZIP = true;
                 String val = opts.getProperty(TunnelController.PROP_TUN_GZIP);
                 if ((val != null) && (!Boolean.parseBoolean(val))) {allowGZIP = false;}
-                if (_log.shouldDebug() && (enc != null || altEnc != null)) {
+                if (_log.shouldDebug() && (enc != null && !enc.trim().isEmpty() || (altEnc != null && !altEnc.trim().isEmpty()))) {
                     _log.debug("[HTTPServer] Encoding header: " + enc + "/" + altEnc);
                 }
                 boolean alt = (altEnc != null) && (altEnc.indexOf("x-i2p-gzip") >= 0);
