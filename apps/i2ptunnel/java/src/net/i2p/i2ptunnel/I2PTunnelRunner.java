@@ -461,7 +461,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
         } finally {
             removeRef();
             if (i2pReset) {
-                if (_log.shouldInfo()) {_log.warn("Received I2P reset, resetting socket...");}
+                if (_log.shouldInfo()) {_log.warn("Received I2P reset -> Resetting socket...");}
                 try {s.setSoLinger(true, 0);}
                 catch (IOException ioe) {}
                 try {s.close();}
@@ -471,7 +471,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 _keepAliveI2P = false;
                 _keepAliveSocket = false;
             } else if (sockReset) {
-                if (_log.shouldInfo()) {_log.warn("Received socket reset, resetting I2P socket...");}
+                if (_log.shouldInfo()) {_log.warn("Received socket reset -> Resetting I2P socket...");}
                 try {i2ps.reset();}
                 catch (IOException ioe) {}
                 try {s.close();}
@@ -605,9 +605,11 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                         fnshd = finished;
                     }
                     if (!fnshd) {
-                        _log.debug(direction + ": IOE - error forwarding", ex);
+                        _log.debug(direction + ": Data transmission failure" +
+                                   (ex.getMessage() != null ? " -> " + ex.getMessage() : ""));
                     } else {
-                        _log.debug(direction + ": IOE caused by other direction", ex);
+                        _log.debug(direction + ": Error sending data" +
+                                   (ex.getMessage() != null ? " -> " + ex.getMessage() : ""));
                     }
                 }
                 _failure = ex;
@@ -618,9 +620,11 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                         fnshd = finished;
                     }
                     if (!fnshd) {
-                        _log.warn(direction + ": IOE - error forwarding", ex);
+                        _log.warn(direction + ": Data transimission failure" +
+                                  (ex.getMessage() != null ? " -> " + ex.getMessage() : ""));
                     } else if (_log.shouldDebug()) {
-                        _log.debug(direction + ": IOE caused by other direction", ex);
+                        _log.debug(direction + ": Error sending data" +
+                                   (ex.getMessage() != null ? " -> " + ex.getMessage() : ""));
                     }
                 }
                 _failure = ex;
@@ -646,7 +650,8 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                         in.close();
                     } catch (IOException ex) {
                         if (_log.shouldLog(Log.WARN))
-                            _log.warn(direction + ": Error closing input stream", ex);
+                            _log.warn(direction + ": Error closing input stream" +
+                                      (ex.getMessage() != null ? " -> " + ex.getMessage() : ""));
                     }
                 }
                 try {
@@ -658,14 +663,15 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                         else
                             out.close();
                     } else {
-                        if (_log.shouldInfo())
-                            _log.info(direction + ": not closing so we can write the error message");
+                        //if (_log.shouldInfo())
+                        //    _log.info(direction + ": not closing so we can write the error message");
                         if (keepAliveTo)
                             out.flush();
                     }
                 } catch (IOException ioe) {
                     if (_log.shouldLog(Log.DEBUG))
-                        _log.debug(direction + ": Error flushing to close", ioe);
+                        _log.debug(direction + ": Error flushing data before closing socket" +
+                                   (ioe.getMessage() != null ? " -> " + ioe.getMessage() : ""));
                 }
                 synchronized (finishLock) {
                     finished = true;

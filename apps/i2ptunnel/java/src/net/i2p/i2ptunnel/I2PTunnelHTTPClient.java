@@ -440,14 +440,14 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     }
 
                     if (_log.shouldDebug() && headers.length() > 0) {
-                        _log.debug(getPrefix(requestId) + "Request headers: " + headers.toString());
+                        _log.debug(getPrefix(requestId) + "Request headers received: " + headers.toString());
                     }
 
                     String lowercaseLine = line.toLowerCase(Locale.US);
                     if (method == null) {
                         // first line GET/POST/etc.
                         if (_log.shouldDebug()) {
-                            _log.debug(getPrefix(requestId) + "Request [#" + requestCount + "] \n* First line: " + line);
+                            _log.debug(getPrefix(requestId) + "Request header received: \n* " + line);
                         }
 
                         String[] params = DataHelper.split(line, " ", 3);
