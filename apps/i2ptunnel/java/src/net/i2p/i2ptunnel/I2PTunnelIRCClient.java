@@ -63,12 +63,11 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
               "IRC Client on " + tunnel.listenHost + ':' + localPort, tunnel, pkf);
         // force connect delay and bulk profile
         Properties opts = tunnel.getClientOptions();
-//        opts.setProperty("i2p.streaming.connectDelay", "200");
         if (opts.getProperty("i2p.streaming.connectDelay") == null)
-            opts.setProperty("i2p.streaming.connectDelay", "150");
+            opts.setProperty("i2p.streaming.connectDelay", "100");
         opts.remove("i2p.streaming.maxWindowSize");
         if (opts.getProperty("i2cp.leaseSetEncType") == null)
-            opts.setProperty("i2cp.leaseSetEncType", "4,0");
+            opts.setProperty("i2cp.leaseSetEncType", "6,4");
 
         _addrs = new ArrayList<I2PSocketAddress>(4);
         buildAddresses(destinations);
@@ -129,8 +128,8 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
 
     protected void clientConnectionRun(Socket s) {
         if (_log.shouldInfo())
-            _log.info("[IRC Client] New connection - local address is: " + s.getLocalAddress() +
-                      " from: " + s.getInetAddress());
+            _log.info("[IRC Client] New connection -> Local address is: " + s.getLocalAddress().toString().replace("/", "") +
+                      " connecting from: " + s.getInetAddress().toString().replace("/", ""));
         I2PSocket i2ps = null;
         I2PSocketAddress addr = pickDestination();
         try {
@@ -156,7 +155,8 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
         } catch (IOException ex) {
             // generally NoRouteToHostException
             if (_log.shouldWarn())
-                _log.warn("[IRC Client] Error connecting: " + ex.getMessage());
+                _log.warn("[IRC Client] Error connecting to IRC server" +
+                          (ex.getMessage() != null && !ex.getMessage().toString().isEmpty() ? " -> " + ex.getMessage() : ""));
             try {
                 // Send a response so the user doesn't just see a disconnect
                 // and blame his router or the network.
@@ -166,7 +166,8 @@ public class I2PTunnelIRCClient extends I2PTunnelClientBase {
             } catch (IOException ioe) {}
         } catch (I2PException ex) {
             if (_log.shouldWarn())
-                _log.warn("[IRC Client] Error connecting: " + ex.getMessage());
+                _log.warn("[IRC Client] Error connecting to IRC server" +
+                          (ex.getMessage() != null && !ex.getMessage().toString().isEmpty() ? " -> " + ex.getMessage() : ""));
             try {
                 // Send a response so the user doesn't just see a disconnect
                 // and blame his router or the network.
