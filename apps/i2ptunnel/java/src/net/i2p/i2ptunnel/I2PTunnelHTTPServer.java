@@ -582,7 +582,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     int port = hostname.indexOf(":");
                     if (port != -1) {hostname = hostname.substring(0, port);}
                 }
-                if (_log.shouldDebug()) {_log.debug("[HTTPServer] Incoming request for: " + hostname + "\n* Client: " + peerB32);}
+                if (_log.shouldInfo()) {
+                    _log.info("[HTTPServer] Incoming request for: " +
+                              (hostname.contains("b32.i2p") ? hostname.substring(0,16) + "...b32.i2p" : "") +
+                              "\n* Client: " + peerB32);
+                }
                 if (hostname != null && !hostname.endsWith(".i2p") && !hostname.endsWith(".onion")) {
                     InetAddress address = InetAddress.getByName(hostname);
                     if (address != null) {
@@ -824,13 +828,13 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 String val = opts.getProperty(TunnelController.PROP_TUN_GZIP);
                 if ((val != null) && (!Boolean.parseBoolean(val))) {allowGZIP = false;}
 
-                boolean hasEnc = enc != null && !enc.trim().isEmpty();
-                boolean hasAltEnc = altEnc != null && !altEnc.trim().isEmpty();
-                if (_log.shouldDebug() && (hasEnc || hasAltEnc)) {
-                    _log.debug("[HTTPServer] Encoding header: " + (hasEnc ? enc : "") +
-                               (hasEnc && hasAltEnc ? "/" : "") + (hasAltEnc ? altEnc : "") +
-                               "\n* Client: " + peerB32);
-                }
+                //boolean hasEnc = enc != null && !enc.trim().isEmpty();
+                //boolean hasAltEnc = altEnc != null && !altEnc.trim().isEmpty();
+                //if (_log.shouldDebug() && (hasEnc || hasAltEnc)) {
+                //    _log.debug("[HTTPServer] Encoding header: " + (hasEnc ? enc : "") +
+                //               (hasEnc && hasAltEnc ? "/" : "") + (hasAltEnc ? altEnc : "") +
+                //               "\n* Client: " + peerB32);
+                //}
 
                 boolean alt = (altEnc != null) && (altEnc.indexOf("x-i2p-gzip") >= 0);
                 boolean useGZIP = alt || ( (enc != null) && (enc.indexOf("x-i2p-gzip") >= 0) );

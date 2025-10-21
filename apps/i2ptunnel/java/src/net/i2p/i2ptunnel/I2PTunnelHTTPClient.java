@@ -434,7 +434,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                 while ((line = reader.readLine(method)) != null) {
                     line = line.trim();
                     if (_log.shouldDebug()) {
-                        if (line != null && !line.isEmpty()) {
+                        if (line != null && !line.isEmpty() && !line.contains("Cookie")) { // don't log cookies
                             headers.append("\n* ").append(line);
                         }
                     }
@@ -1281,8 +1281,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     }
                 } else {
                     String destName = destination;
-                    if (destination != null && destination.length() > 20)
-                        destName = destination.substring(0,15) + "...";
+                    if (destination != null && destination.length() > 60)
+                        destName = destination.substring(0,57) + "...";
                     if (_log.shouldInfo())
                         _log.info("[HTTPClient] Looking up hostname: " + destName);
                     clientDest = _context.namingService().lookup(destination);
@@ -1292,8 +1292,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     //l.log("Could not resolve " + destination + ".");
                     if (_log.shouldWarn()) {
                         String destName = destination;
-                        if (destination != null && destination.length() > 20) {
-                            destName = destination.substring(0,15) + "...";
+                        if (destination != null && destination.length() > 60) {
+                            destName = destination.substring(0,57) + "...";
                         }
                         _log.warn("[HTTPClient] Unable to resolve " + destName + "..." +
                                   (usingWWWProxy ? " (Outproxy)" : "") + "\n* Request: " + targetRequest);
