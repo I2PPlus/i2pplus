@@ -56,13 +56,15 @@ public class IrcOutboundFilter implements Runnable {
         try (BufferedReader in = new BufferedReader(new InputStreamReader(local.getInputStream(), "ISO-8859-1"));
              OutputStream output = remote.getOutputStream()) {
 
-            if (_log.shouldDebug())
+            if (_log.shouldDebug()) {
                 _log.debug("[IRC Client] Outbound Filter: Running");
+            }
 
             String inmsg;
             while ((inmsg = in.readLine()) != null) {
-                if (inmsg.endsWith("\r"))
+                if (inmsg.endsWith("\r")) {
                     inmsg = inmsg.substring(0, inmsg.length() - 1);
+                }
 
                 String outmsg = IRCFilter.outboundFilter(inmsg, expectedPong, _dccHelper);
 
@@ -70,9 +72,12 @@ public class IrcOutboundFilter implements Runnable {
                     if (!inmsg.equals(outmsg) && _log.shouldWarn()) {
                         _log.warn("[IRC Client] Outbound message FILTERED [" + outmsg + "]");
                         _log.warn("[IRC Client] Original message [" + inmsg + "]");
-                    } else if (_log.shouldInfo()) {
+                    // don't log private messages to nickserv that may contain passwords
+                    } else if (_log.shouldInfo() && !outmsg.startsWith("PRIVMSG nickserv")) {
                         _log.info("[IRC Client] Outbound message [" +
-                                  (outmsg.startsWith("PASS ") ? "PASS ************" : outmsg) + "]"); // don't log passwords
+                                  (outmsg.startsWith("PASS ") ? "PASS ************" :
+                                  (outmsg.startsWith("NICKSERV IDENTIFY") ?
+                                  "NICKSERV IDENTIFY /msg nickserv identify **********" : outmsg)) + "]"); // don't log passwords
                     }
                     outmsg += "\r\n";
                     output.write(outmsg.getBytes("ISO-8859-1"));
