@@ -162,15 +162,15 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     };
 
     /** timeout for first request line */
-    private static final long HEADER_TIMEOUT = 45*1000;
+    private static final long HEADER_TIMEOUT = 45_000;
     /** timeout for the rest of the request headers */
     private static final long HEADER_FINISH_TIMEOUT = HEADER_TIMEOUT;
     private static final long START_INTERVAL = (60 * 1000) * 3;
-    private static final int MAX_LINE_LENGTH = 8*1024;
+    private static final int MAX_LINE_LENGTH = 8192;
     /** ridiculously long, just to prevent OOM DOS @since 0.7.13 */
     private static final int MAX_HEADERS = 60;
     /** Includes request, just to prevent OOM DOS @since 0.9.20 */
-    private static final int MAX_TOTAL_HEADER_SIZE = 32*1024;
+    private static final int MAX_TOTAL_HEADER_SIZE = 32768; // 32KB
     // Does not apply to header reads.
     // We set it to forever so that it won't timeout when sending a large response.
     // The server will presumably have its own timeout implemented for POST
@@ -178,7 +178,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     // Set a relatively short timeout for GET/HEAD,
     // and a long failsafe timeout for POST/CONNECT, since the user
     // could be POSTing a massive file
-    private static final int SERVER_READ_TIMEOUT_GET = 90*1000;
+    private static final int SERVER_READ_TIMEOUT_GET = 90_000;
     private static final int SERVER_READ_TIMEOUT_MEDIUM = 5*60*1000;
     private static final int SERVER_READ_TIMEOUT_POST = 4*60*60*1000;
 
@@ -436,11 +436,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     protected void blockingHandle(I2PSocket socket) {
         Hash peerHash = socket.getPeerDestination().calculateHash();
         String peerB32 = socket.getPeerDestination().toBase32();
-        if (_log.shouldDebug()) {
-            _log.debug("[HTTPServer] Incoming connection to " + toString().replace("/", "").replace("127.0.0.1", "localhost")+
-                       " (Port " + socket.getLocalPort() + ")" +
-                       "\n* From: " + peerB32 + " on port " + socket.getPort());
-        }
+
         // local is fast, so synchronously. Does not need that many threads.
         try {
             if (socket.getLocalPort() == 443) {
@@ -824,7 +820,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 boolean hasAltEnc = altEnc != null && !altEnc.trim().isEmpty();
                 if (_log.shouldDebug() && (hasEnc || hasAltEnc)) {
                     _log.debug("[HTTPServer] Encoding header: " + (hasEnc ? enc : "") +
-                               (hasEnc && hasAltEnc ? "/" : "") + (hasAltEnc ? altEnc : ""));
+                               (hasEnc && hasAltEnc ? "/" : "") + (hasAltEnc ? altEnc : "") +
+                               "\n* Client: " + peerB32);
                 }
 
                 boolean alt = (altEnc != null) && (altEnc.indexOf("x-i2p-gzip") >= 0);
@@ -836,7 +833,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 //if (_log.shouldDebug()) {_log.debug("[HTTPServer] Modified headers\n\t" + modifiedHeader);}
                 if (_log.shouldInfo() && !command.toString().toLowerCase().contains("head")) {
                     String compactHeaders = formatHeadersCompact(headers, command);
-                    _log.info("[HTTPServer] Received request headers" + compactHeaders);
+                    _log.info("[HTTPServer] Received request headers" + "\n* Client: " + peerB32 + compactHeaders);
                 }
 
                 boolean compress = allowGZIP && useGZIP;
@@ -859,7 +856,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     String server = remoteHost.toString().replace("/", "").replace("127.0.0.1", "localhost") + ":" + remotePort;
                     boolean isSlow = timeToHandle > 120_000;
                     if (_log.shouldInfo()) {
-                        _log.info("[HTTPServer] Processed request for server at " + server +
+                        _log.info("[HTTPServer] Processed request for " + (spoofHost != null ? spoofHost : "server at " + server) +
                                   " in " + timeToHandle + "ms" + (isSlow ? " [!]" : "") +
                                   "\n* Tasks:  Accept to Headers: " + acceptToHeaders + "ms; " +
                                   "Read headers + Socket create: " + startupTime + "ms; " +
@@ -879,10 +876,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                             case 2: code = "KeepAlive"; break;
                             default: code = "Unknown";
                        }
-                       _log.debug("[HTTPServer] Waited " + timeToWait + "ms for response [#" + requestCount + "] to complete -> " + code);
                    }
-                    if (waiter.get() != 2)
-                        break;
+                    if (waiter.get() != 2) {break;}
                 }
 
                 // go around again
@@ -903,7 +898,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             // Don't complain too early, Jetty may not be ready.
             int level = getTunnel().getContext().clock().now() - _startedOn > START_INTERVAL ? Log.ERROR : Log.WARN;
             if (_log.shouldLog(level))
-                _log.log(level, "[HTTPServer] Error connecting to HTTP server " + getSocketString(port));
+                _log.log(level, "[HTTPServer] Error connecting to HTTP server on port: " + getSocketString(port));
         } catch (IOException ex) {
             try {
                 socket.close();
@@ -992,6 +987,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             String host = null;
             String url = null;
             String req = null;
+            Hash peerHash = _browser.getPeerDestination().calculateHash();
+            String peerB32 = _browser.getPeerDestination().toBase32();
+
             try {
                 serverout = _webserver.getOutputStream();
                 serverout.write(DataHelper.getUTF8(_headers));
@@ -1206,7 +1204,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 _webserver.setSoTimeout(SERVER_READ_TIMEOUT_GET);
 
                 if (_shouldCompress) {
-                    compressedout = new CompressedResponseOutputStream(browserout, _keepalive);
+                    String acceptEncoding = getEntryOrNull(headers, "Accept-Encoding");
+                    compressedout = new CompressedResponseOutputStream(browserout, _keepalive, acceptEncoding);
                     compressedout.write(DataHelper.getUTF8(modifiedHeaders));
                     s = new Sender(compressedout, serverin, "Server -> Client (Gzip) " +
                                    (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""), _log);
@@ -1216,9 +1215,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     s = new Sender(browserout, serverin, "Server -> Client " +
                                    (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""), _log);
                 }
-                if (_log.shouldDebug())
-                    _log.debug("[HTTPServer] Sending" + (_shouldCompress ? " gzipped" : "") + " response" + (_keepalive ? " [KeepAlive]" : "") +
-                               (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
+                if (_log.shouldInfo())
+                    _log.info("[HTTPServer] Sending" + (_shouldCompress ? " gzipped" : "") + " response" + (_keepalive ? " [KeepAlive]" : "") +
+                               "\n* Client: " + peerB32 + (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
                 s.run(); // same thread
             } catch (SSLException she) {
                 if (_log.shouldError()) {_log.error("[HTTPServer] SSL error", she);}
@@ -1232,7 +1231,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 _keepalive = false;
             } catch (IOException ioe) {
                 if (_log.shouldWarn()) {
-                    _log.warn("[HTTPServer] Error compressing -> " + ioe.getMessage()  +
+                    _log.warn("[HTTPServer] Error compressing -> " + ioe.getMessage() + "\n* Client: " + peerB32 +
                               (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
                 }
                 ioex = ioe;
@@ -1252,7 +1251,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         i2pReset = status == I2PSocketException.STATUS_CONNECTION_RESET;
                         if (i2pReset) {
                             if (_log.shouldDebug()) {
-                                _log.warn("[HTTPServer] Received I2P RESET -> Resetting socket..." +
+                                _log.warn("[HTTPServer] Received I2P RESET -> Resetting socket...\n* Client: " + peerB32 +
                                           (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
                             }
                             try {_webserver.setSoLinger(true, 0);}
@@ -1264,7 +1263,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         boolean sockReset = msg != null && msg.contains("reset");
                         if (sockReset) {
                             if (_log.shouldDebug()) {
-                                _log.warn("[HTTPServer] Received socket RESET -> Resetting I2P socket..." +
+                                _log.warn("[HTTPServer] Received socket RESET -> Resetting I2P socket...\n* Client: " + peerB32 +
                                           (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
                             }
                             try {_browser.reset();}
@@ -1286,10 +1285,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (serverin != null) try { serverin.close(); } catch (IOException ioe) {}
                 try { _webserver.close(); } catch (IOException ioe) {}
                 if (!_keepalive) try { _browser.close(); } catch (IOException ioe) {}
-                if (_log.shouldDebug()) {
-                    _log.debug("Finished sending" + (_shouldCompress ? " gzipped" : "") + " response" + (_keepalive ? " [KeepAlive]" : "") +
-                               (req != null && !req.equals("") && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
-                }
             }
         }
     }
@@ -1332,23 +1327,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          */
         public void run() {
             String response = "response";
-            if (_name.contains("Gzip")) {
-                response = "gzipped response";
-            }
+            if (_name.contains("Gzip")) {response = "gzipped response";}
 
             long startTime = System.currentTimeMillis();  // Record start time before sending
-            if (_log.shouldDebug()) {
-                _log.debug("[HTTPServer] Started sending " + response);
-            }
 
             try {
                 // Perform the actual data copy from input to output streams
                 DataHelper.copy(_in, _out);
-
                 long elapsed = System.currentTimeMillis() - startTime;  // Calculate elapsed time
-                if (_log.shouldDebug()) {
-                    _log.debug("[HTTPServer] Finished sending " + response + " in " + elapsed + "ms");
-                }
             } catch (IOException ioe) {
                 long elapsed = System.currentTimeMillis() - startTime;  // Also log elapsed on error
                 if (ioe.getMessage() != null) {
@@ -1357,18 +1343,18 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         ioe.getMessage().indexOf("Socket closed") >= 0) {
                         // Client closed connection early or expected stream close
                         if (_log.shouldDebug()) {
-                            _log.debug("[HTTPServer] Error sending " + response + " -> " + ioe.getMessage()
-                                       + " after " + elapsed + " ms");
+                            _log.debug("[HTTPServer] Error sending " + response + " -> " + ioe.getMessage() +
+                                       " after " + elapsed + "ms");
                         }
                     } else {
                         if (_log.shouldWarn()) {
                             _log.warn("[HTTPServer] Error sending " + response + " -> " + ioe.getMessage()
-                                      + " after " + elapsed + " ms");
+                                      + " after " + elapsed + "ms");
                         }
                     }
                 } else {
                     if (_log.shouldWarn()) {
-                        _log.warn("[HTTPServer] Error sending " + response + " after " + elapsed + " ms");
+                        _log.warn("[HTTPServer] Error sending " + response + " after " + elapsed + "ms");
                     }
                 }
                 synchronized(this) {
@@ -1392,23 +1378,17 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     private static class CompressedResponseOutputStream extends HTTPResponseOutputStream {
         private InternalGZIPOutputStream _gzipOut;
-
-        public CompressedResponseOutputStream(OutputStream o, boolean keepalive) {
-            super(o, false, keepalive, false, null);
-        }
+        private final boolean clientSupportsGzip; // indicates if client accepts gzip
 
         /**
-         *  Overridden to peek at response code. Always returns line.
-         *  Finish gzipping but don't close the output stream,
-         *  if keepalive is true.
-         *
-         *  @since 0.9.62
+         * Constructor now takes the Accept-Encoding header value.
+         * @param o OutputStream to write response data to
+         * @param keepalive indicates if connection is keep-alive
+         * @param acceptEncoding The raw Accept-Encoding header from the request or null
          */
-        public void finish() throws IOException {
-            if (getKeepAliveOut()) {
-                if (_gzipOut != null) {_gzipOut.finish();}
-                else {flush();}
-            } else {close();}
+        public CompressedResponseOutputStream(OutputStream o, boolean keepalive, String acceptEncoding) {
+            super(o, false, keepalive, false, null);
+            this.clientSupportsGzip = acceptEncoding != null && acceptEncoding.contains("gzip");
         }
 
         /**
@@ -1419,7 +1399,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
          */
         @Override
         protected boolean shouldCompress() {
-            return (_dataExpected < 0 || _dataExpected >= MIN_TO_COMPRESS) &&
+            return clientSupportsGzip &&
+                   (_dataExpected < 0 || _dataExpected >= MIN_TO_COMPRESS) &&
                    // must be null as we write the header in finishHeaders(), can't have two
                    (_contentEncoding == null) &&
                    (_contentType == null ||
@@ -1443,17 +1424,15 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
         @Override
         protected void finishHeaders() throws IOException {
-            // TODO if browser supports gzip, send as gzip
-            if (shouldCompress())
+            if (shouldCompress()) {
+                // Send gzip encoding header only if client supports gzip
                 out.write(DataHelper.getASCII("Content-Encoding: x-i2p-gzip\r\n"));
+            }
             super.finishHeaders();
         }
 
         @Override
         protected void beginProcessing() throws IOException {
-            //if (_log.shouldInfo())
-            //    _log.info("Beginning compression processing");
-            //out.flush();
             if (shouldCompress()) {
                 _gzipOut = new InternalGZIPOutputStream(out);
                 out = _gzipOut;
@@ -1462,14 +1441,27 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
         public long getTotalRead() {
             InternalGZIPOutputStream gzipOut = _gzipOut;
-            if (gzipOut != null) {return gzipOut.getTotalRead();}
-            else {return 0;}
+            if (gzipOut != null) {
+                return gzipOut.getTotalRead();
+            } else {
+                return 0;
+            }
         }
 
         public long getTotalCompressed() {
             InternalGZIPOutputStream gzipOut = _gzipOut;
-            if (gzipOut != null) {return gzipOut.getTotalCompressed();}
-            else {return 0;}
+            if (gzipOut != null) {
+                return gzipOut.getTotalCompressed();
+            } else {
+                return 0;
+            }
+        }
+
+        public void finish() throws IOException {
+            if (getKeepAliveOut()) {
+                if (_gzipOut != null) {_gzipOut.finish();}
+                else {flush();}
+            } else {close();}
         }
     }
 
@@ -1478,12 +1470,10 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         public InternalGZIPOutputStream(OutputStream target) throws IOException {super(target);}
         public long getTotalRead() {
             try {return def.getTotalIn();}
-            // j2se 1.4.2_08 on linux is sometimes throwing an NPE in the getTotalIn() implementation
             catch (RuntimeException e) {return 0;}
         }
         public long getTotalCompressed() {
             try {return def.getTotalOut();}
-            // j2se 1.4.2_08 on linux is sometimes throwing an NPE in the getTotalOut() implementation
             catch (RuntimeException e) {return 0;}
         }
     }
@@ -1596,9 +1586,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
         // slowloris / darkloris
         long expire = ctx.clock().now() + initialTimeout + HEADER_FINISH_TIMEOUT;
         if (socket != null) {
-            try {
-                readLine(socket, command, initialTimeout);
-            } catch (LineTooLongException ltle) {
+            try {readLine(socket, command, initialTimeout);}
+            catch (LineTooLongException ltle) {
                 // convert for first line
                 throw new RequestTooLongException("Request too long (Max allowed: " + MAX_LINE_LENGTH + ")");
             }
@@ -1672,12 +1661,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     }
                 }
                 if (skip) {continue;}
-
                 addEntry(headers, name, value);
-                //if (_log.shouldDebug()) {
-                //    _log.debug("Reading headers sent by client [" + peerB32.substring(0,6) + "]" +
-                //    "\n* " + name + ": " + value);
-                //}
             }
         }
     }
