@@ -54,30 +54,26 @@ public class IrcInboundFilter implements Runnable {
         if (_log.shouldDebug())
             _log.debug("[IRC Client] Inbound Filter: Running");
         try {
-            while(true)
-            {
+            while(true) {
                 try {
                     String inmsg = in.readLine();
-                    if(inmsg == null)
+                    if (inmsg == null)
                         break;
-                    if(inmsg.endsWith("\r"))
-                        inmsg=inmsg.substring(0,inmsg.length()-1);
-                    // dupe of info level log
-                    //if (_log.shouldDebug())
-                    //    _log.debug("[IRC Client] In: [" + inmsg + "]");
+                    if (inmsg.endsWith("\r"))
+                        inmsg = inmsg.substring(0,inmsg.length() - 1);
                     String outmsg = IRCFilter.inboundFilter(inmsg, expectedPong, _dccHelper);
-                    if(outmsg != null)
-                    {
-                        if(!inmsg.equals(outmsg)) {
+                    if (outmsg != null) {
+                        if (!inmsg.equals(outmsg)) {
                             if (_log.shouldWarn()) {
                                 _log.warn("[IRC Client] Inbound message FILTERED [" + outmsg + "]");
                                 _log.warn("[IRC Client] Inbound message [" + inmsg + "]");
                             }
                         } else {
-                            if (_log.shouldInfo())
+                            if (_log.shouldInfo()) {
                                 _log.info("[IRC Client] Inbound message [" + outmsg + "]");
+                            }
                         }
-                        outmsg = outmsg + "\r\n";   // rfc1459 sec. 2.3
+                        outmsg = outmsg + "\r\n"; // rfc1459 sec. 2.3
                         output.write(outmsg.getBytes("ISO-8859-1"));
                         // probably doesn't do much but can't hurt
                         if (!in.ready())
@@ -98,7 +94,8 @@ public class IrcInboundFilter implements Runnable {
             try { in.close(); } catch (IOException e) {}
             try { local.close(); } catch(IOException e) {}
         }
-        if(_log.shouldDebug())
+        if (_log.shouldDebug())
             _log.debug("[IRC Client] Inbound Filter: Stopped");
     }
+
 }

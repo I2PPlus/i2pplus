@@ -1325,23 +1325,55 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             _log = log;
         }
 
+        /**
+         * Runs the sending of response data from _in to _out streams,
+         * logging the start and end times along with elapsed duration.
+         * Handles typical IO exceptions gracefully with debug/warn logs.
+         */
         public void run() {
-            if (_log.shouldDebug()) {_log.debug("[HTTPServer] Begin sending: " + _name);}
+            String response = "response";
+            if (_name.contains("Gzip")) {
+                response = "gzipped response";
+            }
+
+            long startTime = System.currentTimeMillis();  // Record start time before sending
+            if (_log.shouldDebug()) {
+                _log.debug("[HTTPServer] Started sending " + response);
+            }
+
             try {
+                // Perform the actual data copy from input to output streams
                 DataHelper.copy(_in, _out);
-                if (_log.shouldDebug()) {_log.debug("[HTTPServer] Done sending: " + _name);}
+
+                long elapsed = System.currentTimeMillis() - startTime;  // Calculate elapsed time
+                if (_log.shouldDebug()) {
+                    _log.debug("[HTTPServer] Finished sending " + response + " in " + elapsed + "ms");
+                }
             } catch (IOException ioe) {
+                long elapsed = System.currentTimeMillis() - startTime;  // Also log elapsed on error
                 if (ioe.getMessage() != null) {
                     if (ioe.getMessage().indexOf("Input stream closed") >= 0 ||
                         ioe.getMessage().indexOf("Input stream error") >= 0 ||
                         ioe.getMessage().indexOf("Socket closed") >= 0) {
-                        // client closed connection early?
-                            if (_log.shouldDebug()) {_log.debug("[HTTPServer] Error sending: " + _name + " -> " + ioe.getMessage());}
+                        // Client closed connection early or expected stream close
+                        if (_log.shouldDebug()) {
+                            _log.debug("[HTTPServer] Error sending " + response + " -> " + ioe.getMessage()
+                                       + " after " + elapsed + " ms");
+                        }
                     } else {
-                        if (_log.shouldWarn()) {_log.warn("[HTTPServer] Error sending: " + _name + " -> " + ioe.getMessage());}
+                        if (_log.shouldWarn()) {
+                            _log.warn("[HTTPServer] Error sending " + response + " -> " + ioe.getMessage()
+                                      + " after " + elapsed + " ms");
+                        }
+                    }
+                } else {
+                    if (_log.shouldWarn()) {
+                        _log.warn("[HTTPServer] Error sending " + response + " after " + elapsed + " ms");
                     }
                 }
-                synchronized(this) {_failure = ioe;}
+                synchronized(this) {
+                    _failure = ioe;
+                }
             }
         }
 

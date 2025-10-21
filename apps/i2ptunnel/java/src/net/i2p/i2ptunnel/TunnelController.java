@@ -945,9 +945,6 @@ public class TunnelController implements Logging {
 
         synchronized (this) {
             if (_state != TunnelState.RUNNING) {
-                if (_log.shouldDebug()) {
-                    _log.debug("Not running, not updating sessions");
-                }
                 return;
             }
         }
