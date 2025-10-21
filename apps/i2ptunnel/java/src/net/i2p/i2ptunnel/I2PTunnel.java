@@ -1806,14 +1806,12 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
     /** Helper method to actually close the given task number (optionally forcing closure) */
     private boolean closetask(I2PTunnelTask t, CloseMode mode, Logging l) {
         if (_log.shouldInfo()) {_log.info("Closing task " + t.getId() + " mode: " + mode);}
-        //l.log("Closing task " + t.getId() + (forced ? " forced..." : "..."));
         boolean success;
         if (mode == CloseMode.NORMAL) {success = t.close(false);}
         else if (mode == CloseMode.FORCED) {success = t.close(true);}
         else {success = t.destroy();} // DESTROY
         if (success) {
             if (_log.shouldInfo()) {_log.info("Task " + t.getId() + " closed.");}
-            //l.log("Task " + t.getId() + " closed.");
         }
         return success;
     }
