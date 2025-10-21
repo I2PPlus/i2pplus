@@ -856,19 +856,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     long acceptToHeaders = afterHeaders - afterAccept; // time from accept to start reading headers
                     long startupTime = afterSocket - afterHeaders;   // time for reading headers + socket creation
                     long forwardingTime = afterHandle - afterSocket; // time for runner's forwarding threads to complete
-                    String rhost = remoteHost.toString().replace("/", "").replace("127.0.0.1", "localhost");
-
-                    if (timeToHandle > 120_000 && _log.shouldInfo()) {
-                        _log.info("[HTTPServer] Took a while (" + timeToHandle + "ms) to handle the request for " + rhost + ':' + remotePort +
+                    String server = remoteHost.toString().replace("/", "").replace("127.0.0.1", "localhost") + ":" + remotePort;
+                    boolean isSlow = timeToHandle > 120_000;
+                    if (_log.shouldInfo()) {
+                        _log.info("[HTTPServer] Processed request for server at " + server +
+                                  " in " + timeToHandle + "ms" + (isSlow ? " [!]" : "") +
                                   "\n* Tasks:  Accept to Headers: " + acceptToHeaders + "ms; " +
                                   "Read headers + Socket create: " + startupTime + "ms; " +
-                                  "Forwarding duration (data transfer): " + forwardingTime + "ms" +
-                                  "\n* Client: " + peerB32);
-                    } else if (_log.shouldInfo()) {
-                        _log.info("[HTTPServer] Took " + timeToHandle + "ms to handle the request for " + rhost + ':' + remotePort +
-                                  "\n* Tasks:  Accept to Headers: " + acceptToHeaders + "ms; " +
-                                  "Read headers + Socket create: " + startupTime + "ms; " +
-                                  "Forwarding duration (data transfer): " + forwardingTime + "ms" +
+                                  "Data transfer: " + forwardingTime + "ms" +
                                   "\n* Client: " + peerB32);
                     }
                 }

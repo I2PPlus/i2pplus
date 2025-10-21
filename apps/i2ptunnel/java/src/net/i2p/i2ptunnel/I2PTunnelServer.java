@@ -764,14 +764,10 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             _clientExecutor.execute(t);
             long afterHandle = getTunnel().getContext().clock().now();
             long timeToHandle = afterHandle - afterAccept;
-
-            if (timeToHandle > 60_000 && _log.shouldInfo()) {
-                _log.info("Took a while (" + timeToHandle + "ms) to handle the request for " +
-                          remoteHost.toString().replace("/", "") + ':' + remotePort +
-                          "\n* Socket create: " + (afterSocket - afterAccept) + "ms");
-            } else if (_log.shouldInfo()) {
-                _log.info("Took " + timeToHandle + "ms to handle the request for " +
-                          remoteHost.toString().replace("/", "") + ':' + remotePort +
+            boolean isSlow = timeToHandle > 60_000;
+            if (_log.shouldInfo()) {
+                _log.info("Processed request for server at " + remoteHost.toString().replace("/", "") + ':' + remotePort +
+                          " in " + timeToHandle + "ms" + (isSlow ? " [!]" : "") +
                           "\n* Socket create: " + (afterSocket - afterAccept) + "ms");
             }
         } catch (IOException e) {
@@ -854,7 +850,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             }
             return _sslFactory.createSocket(remoteHost, remotePort);
         } else {
-            // as suggested in https://lists.torproject.org/pipermail/tor-dev/2014-March/00657
+            // as suggested in https://lists.torproject.org/pipermail/tor-dev/2014-March/006576.html
             boolean unique = Boolean.parseBoolean(getTunnel().getClientOptions().getProperty(PROP_UNIQUE_LOCAL));
             if (unique && remoteHost.isLoopbackAddress()) {
                 byte[] addr;
@@ -869,7 +865,6 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 }
                 InetAddress local = InetAddress.getByAddress(addr);
                 // Javadocs say local port of 0 allowed in Java 7.
-                // Not clear if supported in Java 6 or not.
                 return new Socket(remoteHost, remotePort, local, 0);
             } else {return new Socket(remoteHost, remotePort);}
         }
