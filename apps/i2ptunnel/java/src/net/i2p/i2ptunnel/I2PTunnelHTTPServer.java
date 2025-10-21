@@ -464,9 +464,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             boolean keepalive = getBooleanOption(OPT_KEEPALIVE, DEFAULT_KEEPALIVE);
 
             do {
-                if (requestCount > 0) {
-                    if (_log.shouldDebug()) {_log.debug("[HTTPServer] KeepAlive, awaiting request [#" + requestCount + "]");}
-                }
+                //if (requestCount > 0) {
+                //    if (_log.shouldDebug()) {_log.debug("[HTTPServer] KeepAlive, awaiting request [#" + requestCount + "]");}
+                //}
 
                 // The headers _should_ be in the first packet, but may not be, depending on the client-side options
 
@@ -481,8 +481,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     headers = readHeaders(socket, null, command, CLIENT_SKIPHEADERS, getTunnel().getContext(), timeout);
                 } catch (SocketTimeoutException ste) {
                     if (requestCount > 0) {
-                        if (_log.shouldDebug())
-                             _log.debug("[HTTPServer] Timeout reached awaiting request [#" + requestCount + "]");
+                        //if (_log.shouldDebug())
+                        //     _log.debug("[HTTPServer] Timeout reached awaiting request [#" + requestCount + "]");
                     } else {
                         try {sendError(socket, ERR_REQUEST_TIMEOUT);}
                         catch (IOException ioe) {}
@@ -497,8 +497,8 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     return;
                 } catch (EOFException eofe) {
                     if (requestCount > 0) {
-                        if (_log.shouldDebug())
-                             _log.debug("[HTTPServer] Client closed awaiting request [#" + requestCount + "]");
+                        //if (_log.shouldDebug())
+                        //     _log.debug("[HTTPServer] Client closed awaiting request [#" + requestCount + "]");
                     } else {
                         try {sendError(socket, ERR_BAD_REQUEST);}
                         catch (IOException ioe) {}
@@ -583,7 +583,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     if (port != -1) {hostname = hostname.substring(0, port);}
                 }
                 if (_log.shouldInfo()) {
-                    _log.info("[HTTPServer] Incoming request for: " +
+                    _log.info("[HTTPServer] Incoming request for server: " +
                               (hostname.contains("b32.i2p") ? hostname.substring(0,16) + "...b32.i2p" : "") +
                               "\n* Client: " + peerB32);
                 }
@@ -1229,7 +1229,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 }
                 if (_log.shouldInfo())
                     _log.info("[HTTPServer] Sending" + (_shouldCompress ? " gzipped" : "") + " response" + (_keepalive ? " [KeepAlive]" : "") +
-                               "\n* Client: " + peerB32 + (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
+                               "...\n* Client: " + peerB32 + (req != null && !req.isEmpty() && !req.equals("Unknown request") ? "\n* URL: " + req : ""));
                 s.run(); // same thread
             } catch (SSLException she) {
                 if (_log.shouldError()) {_log.error("[HTTPServer] SSL error", she);}

@@ -565,7 +565,8 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
     public void run() {
         i2pss = sockMgr.getServerSocket();
         if (_log.shouldInfo()) {
-            _log.info("Starting async executor with cached thread pool for server " + remoteHost.toString().replace("/", "") + ':' + remotePort);
+            _log.info("Starting async executor with cached thread pool for server at " +
+                      remoteHost.toString().replace("/", "") + ':' + remotePort + "...");
         }
 
         ThreadPoolExecutor connectionExecutor = new ThreadPoolExecutor(
@@ -620,7 +621,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                         return null;
                     });
                 } catch (RejectedExecutionException ree) {
-                    _log.warn("Max " + MAX_THREADS + " connections exceeded on " +
+                    _log.warn("Max " + MAX_THREADS + " connections exceeded on server at " +
                                remoteHost.toString().replace("/", "") + ':' + remotePort + " -> Ignoring request");
                     try {
                         socketToHandle.close();
@@ -640,7 +641,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 _log.warn("Reconnecting to router after restart");
                 i2pss = sockMgr.getServerSocket();
             } catch (I2PException ipe) {
-                String s = "Error accepting server socket connection - KILLING THE TUNNEL SERVER!";
+                String s = "Error accepting server socket connection -> KILLING THE TUNNEL SERVER!!!";
                 _log.log(Log.CRIT, s, ipe);
                 l.log("✖ " + s + ": " + ipe.getMessage());
                 TunnelController tc = getTunnel().getController();
@@ -746,7 +747,7 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      */
     protected void blockingHandle(I2PSocket socket) {
         if (_log.shouldInfo()) {
-            _log.info("Incoming connection to " + toString().replace("/", "") + " (port " + socket.getLocalPort() + ")" +
+            _log.info("Incoming connection to server at " + toString().replace("/", "") + " (port " + socket.getLocalPort() + ")" +
                       "\n* From: " + socket.getPeerDestination().calculateHash() + " port " + socket.getPort());
         }
         long afterAccept = getTunnel().getContext().clock().now();
@@ -772,7 +773,8 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
             }
         } catch (IOException e) {
             if (_log.shouldWarn()) {
-                _log.warn("Failed to create socket or execute runner for client: " + remoteHost + ":" + remotePort, e);
+                _log.warn("Failed to create socket or execute runner for server at " + remoteHost + ":" + remotePort +
+                          (e.getMessage() != null && !e.getMessage().toString().isEmpty() ? " -> " + e.getMessage() : ""));
             }
         }
     }
