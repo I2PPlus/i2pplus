@@ -408,12 +408,12 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     try {
                         s.setSoTimeout(BROWSER_KEEPALIVE_TIMEOUT);
                     } catch (IOException ioe) {
-                        if (_log.shouldInfo())
-                            _log.info("Socket closed (timeout) before request #" + requestCount);
+                        //if (_log.shouldDebug())
+                        //    _log.debug("Socket closed (timeout) before request #" + requestCount);
                         return;
                     }
-                    if (_log.shouldDebug())
-                        _log.debug("KeepAlive, awaiting request #" + requestCount);
+                    //if (_log.shouldDebug())
+                    //    _log.debug("KeepAlive, awaiting request #" + requestCount);
                 }
 
                 String line, method = null, protocol = null, host = null, destination = null;
