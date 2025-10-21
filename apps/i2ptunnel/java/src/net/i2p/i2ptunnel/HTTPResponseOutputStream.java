@@ -93,8 +93,10 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         _keepAliveOut = allowKeepAliveOut;
         if (isHead)
             _dataExpected = 0;
-        if (_log.shouldInfo())
-            _log.info("Before headers: keepaliveIn? " + allowKeepAliveIn + " keepaliveOut? " + allowKeepAliveOut);
+        if (_log.shouldInfo()) {
+            _log.info("New Incoming connection -> Inbound Keep-alive: " + allowKeepAliveIn +
+              "; Outbound keep-alive: " + allowKeepAliveOut + (isHead ? "[HEAD]" : ""));
+        }
     }
 
     /**

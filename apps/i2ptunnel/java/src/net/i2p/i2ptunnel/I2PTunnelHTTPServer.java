@@ -558,10 +558,20 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 String hostname = null;
                 boolean isValidRequest = true;
                 boolean isPossibleExploit = false;
+                Properties props = tunnel.getClientOptions();
+                String spoofHost = props.getProperty(TunnelController.PROP_SPOOFED_HOST);
+                String _spoofHost = (spoofHost != null && spoofHost.trim().length() > 0) ? spoofHost.trim() : null;
                 List<String> host = headers.get("Host");
+                if (host != null) {
+                    hostname = host.get(0);
+                    int port = hostname.indexOf(":");
+                    if (port != -1) {hostname = hostname.substring(0, port);}
+                    if (_spoofHost != null) {hostname = _spoofHost;}
+                }
 
                 if (peerB32.length() != 60) {
-                    _log.warn("[HTTPServer] Invalid B32 (expected 60 characters, got " + peerB32.length() + ") -> Denying request to [" + hostname + "]" +
+                    _log.warn("[HTTPServer] Invalid B32 (expected 60 characters, got " + peerB32.length() +
+                              ") -> Denying request to [" + hostname + "]" +
                     "\n* Client: " + peerB32);
                     isValidRequest = false;
                     isPossibleExploit = false;
@@ -750,8 +760,6 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 addEntry(headers, DEST32_HEADER, peerB32);
                 addEntry(headers, DEST64_HEADER, socket.getPeerDestination().toBase64());
 
-                // Port-specific spoofhost
-                String spoofHost;
                 int ourPort = socket.getLocalPort();
                 if (ourPort != 80 && ourPort > 0 && ourPort <= 65535) {
                     String portSpoof = opts.getProperty("spoofedHost." + ourPort);
