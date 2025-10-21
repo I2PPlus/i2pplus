@@ -16,8 +16,9 @@ import net.i2p.util.Log;
  */
 public class GracefulShutdown implements Runnable {
     private final RouterContext _context;
-    private final Object lock = new Object();
     private volatile boolean running = true;
+    /** Delay in milliseconds to wait before shutdown/restart after conditions are met. */
+    private static final int RESTART_DELAY = 15_000;
 
     /**
      * Creates a new GracefulShutdown instance tied to the given RouterContext.
@@ -29,10 +30,9 @@ public class GracefulShutdown implements Runnable {
     }
 
     /**
-     * Main execution loop of the graceful shutdown thread. Waits indefinitely
-     * until a shutdown is initiated, then monitors whether shutdown conditions
-     * are satisfied (such as no active tunnels or specific exit codes). Logs
-     * status updates and triggers shutdown when ready.
+     * Main execution loop of the graceful shutdown thread.
+     * Waits indefinitely until a shutdown is initiated,
+     * then monitors whether shutdown conditions are satisfied.
      */
     @Override
     public void run() {
@@ -46,36 +46,24 @@ public class GracefulShutdown implements Runnable {
 
                 if (shouldShutdown(exitCode)) {
                     logShutdownMessage(exitCode, log);
-                    waitOrSleep(10_000); // Allow UI updates or cleanup time
+                    waitOrSleep(RESTART_DELAY); // Allow UI updates or cleanup time
                     _context.router().shutdown(exitCode);
                     running = false;
                 } else {
-                    waitOrSleep(10_000); // Wait and re-check conditions
+                    waitOrSleep(RESTART_DELAY); // Wait and re-check conditions
                 }
             } else {
-                waitIndefinitely(); // Wait until notified of shutdown start
+                // Wait indefinitely on current thread object until notified to start shutdown
+                waitIndefinitely();
             }
         }
     }
 
-    /**
-     * Determines if the router should proceed with shutdown based on the exit code
-     * and current tunnel participation.
-     *
-     * @param code scheduled graceful exit code
-     * @return true if shutdown conditions are met, false otherwise
-     */
     private boolean shouldShutdown(int code) {
         return code == Router.EXIT_HARD || code == Router.EXIT_HARD_RESTART ||
                (code == Router.EXIT_GRACEFUL && _context.tunnelManager().getParticipatingCount() <= 0);
     }
 
-    /**
-     * Logs an appropriate message based on the shutdown exit code.
-     *
-     * @param code the exit code determining shutdown type
-     * @param log  the log instance to use for logging the messages
-     */
     private void logShutdownMessage(int code, Log log) {
         switch (code) {
             case Router.EXIT_HARD:
@@ -93,12 +81,6 @@ public class GracefulShutdown implements Runnable {
         }
     }
 
-    /**
-     * Sleeps for the specified duration in milliseconds, handling interrupts by
-     * restoring the interrupt status.
-     *
-     * @param millis number of milliseconds to sleep
-     */
     private void waitOrSleep(long millis) {
         try {
             Thread.sleep(millis);
@@ -108,13 +90,14 @@ public class GracefulShutdown implements Runnable {
     }
 
     /**
-     * Waits indefinitely until notified, handling interrupts by restoring the
-     * interrupt status.
+     * Waits indefinitely until notified on the current thread object.
+     * This restores the original behavior of waiting and notifying on the
+     * thread object, critical to the restart function working properly.
      */
     private void waitIndefinitely() {
-        synchronized (lock) {
+        synchronized (Thread.currentThread()) {
             try {
-                lock.wait();
+                Thread.currentThread().wait();
             } catch (InterruptedException ie) {
                 Thread.currentThread().interrupt();
             }
@@ -122,23 +105,23 @@ public class GracefulShutdown implements Runnable {
     }
 
     /**
-     * Stops the graceful shutdown thread. This method notifies the thread to exit
-     * any waiting state and end its loop cleanly.
+     * Notifies the graceful shutdown thread to wake up from waiting.
+     *
+     * This method must be called by external code immediately upon shutdown initiation
+     * to ensure this thread wakes and begins shutdown processing.
      */
-    public void stop() {
-        running = false;
-        synchronized (lock) {
-            lock.notifyAll();
+    public void notifyShutdownStarted() {
+        synchronized (Thread.currentThread()) {
+            Thread.currentThread().notifyAll();
         }
     }
 
     /**
-     * Notifies the graceful shutdown thread to wake up from waiting state, e.g.,
-     * when a shutdown is initiated.
+     * Stops the graceful shutdown thread by ending the loop and
+     * interrupting any wait.
      */
-    public void notifyShutdownStarted() {
-        synchronized (lock) {
-            lock.notifyAll();
-        }
+    public void stop() {
+        running = false;
+        notifyShutdownStarted();
     }
 }
