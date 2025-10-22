@@ -29,15 +29,15 @@ p.mailbody{font-size:9.5pt}
 .bottombuttons td,.pagenav td{border-right:0!important}
 .iframed .topbuttons{border:0;border-bottom:var(--border_inner);border-radius:0}
 img.sort{padding:4px 5px;width:10px;height:10px;vertical-align:middle;font-size:0;border:var(--border_btn);border-radius:2px;opacity:.6}
-.list0 td,.list1 td{padding:4px;color:#7670c2;border-top:var(--border_soft);border-bottom:var(--border_soft)}
-.list0:active,.list1:active,.list0:active a,.list1:active a{color:var(--active)}
-.list0:hover,.list1:hover,.list0:hover a,.list1:hover a{color:var(--a_hover);background:#1e0b28}
-.list0:hover td:first-child,.list1:hover td:first-child{box-shadow:inset 3px 0 0 #0b0099}
-.list0:hover td:last-child,.list1:hover td:last-child{box-shadow:inset -3px 0 0 #0b0099}
-.list0:hover td:nth-child(3) a,.list1:hover td:nth-child(3) a{color:var(--ink)}
-.list0,.list1{background:var(--row)}
-.list0 td:first-child,.list1 td:first-child,#mailbox th:first-child{width:1%;white-space:nowrap;text-align:center}
 .mailbody{padding:0 10px}
+.mailEntry td{padding:4px;color:#7670c2;border-top:var(--border_soft);border-bottom:var(--border_soft)}
+.mailEntry:active,.mailEntry:active a{color:var(--active)}
+.mailEntry:hover,.mailEntry:hover a{color:var(--a_hover);background:#1e0b28}
+.mailEntry:hover td:last-child{box-shadow:inset -3px 0 0 #0b0099}
+.mailEntry:hover td:nth-child(3) a{color:var(--ink)}
+.mailEntry{background:var(--row)}
+.mailListDate{width:1%;white-space:nowrap;text-align:center}
+.mailEntry:hover .mailListDate{box-shadow:inset 3px 0 0 #0b0099}
 .mailListDelete{width:1%}
 .mailListSender a,.mailListDate,.mailListSize{font-weight:400;color:var(--ink)}
 .mailListSubject{text-align:left}
@@ -61,7 +61,7 @@ tr.spacer{display:none}
 #attachedfile input[type=checkbox]{margin:0 2px 0 0;vertical-align:middle}
 #attachedfile{padding:5px 5px 5px 8px;border-bottom:1px dotted #322e6b}
 #mailbox{margin-bottom:0}
-#mailbox .list0 td,#mailbox .list1 td{border-bottom:0}
+#mailbox .mailEntry td{border-bottom:0}
 #mailbox td{padding:4px 8px;border-right:var(--border_soft)}
 #mailbox td[colspan="3"],#mailbox td[colspan="4"]{padding:6px 0 2px;border-top:var(--border_inner)}
 #mailbox td[colspan="3"]{padding-left:6px;padding-bottom:6px;border-bottom:0;background:#000}
