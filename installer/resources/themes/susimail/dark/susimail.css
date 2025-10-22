@@ -310,7 +310,7 @@ p.error{text-align:center}
 td p.error{padding:10px}
 
 /* compose mail */
-#composemail{padding:4px 8px 12px;text-align:center;border-radius:0 0 2px 2px;background:#010;background:repeating-linear-gradient(90deg,rgba(0,32,0,.4),#0006 1px,#0006 2px),repeating-linear-gradient(180deg,#0006 1px,#0006 2px,rgba(0,64,0,.4) 3px),url(/themes/console/dark/images/camotile2.png)}
+#composemail{padding:4px 8px 12px;text-align:center;border-radius:0 0 2px 2px;background:#010;background:repeating-linear-gradient(90deg,rgba(0,32,0,.4),#0006 1px,#0006 2px) center center/4px,repeating-linear-gradient(180deg,#0006 1px,#0006 2px,rgba(0,64,0,.4) 3px),url(/themes/console/dark/images/camotile2.png)}
 .iframed #composemail{margin-bottom:-7px;border-bottom:0}
 #composemail hr{display:none}
 #composemail textarea,#composemail input[type=text]{width:calc(100% - 20px);min-width:565px}
