@@ -12,6 +12,7 @@ const serverRefresh = document.getElementById("serverRefresh");
 if (notify) { setTimeout(() => { notify.remove(); }, 4000); }
 
 if (mailbox && pageRefresh) {
+  removeDupeNotices();
   const interval = setInterval(() => {
     if (document.getElementById("serverRefresh")) {
       clearInterval(interval);
@@ -31,7 +32,17 @@ if (mailbox && pageRefresh) {
           if (notify) {notify.remove();}
           form.appendChild(newNotify);
         }
+        removeDupeNotices();
       })
       .catch(() => {});
   }, 5000);
+}
+
+function removeDupeNotices() {
+  const notices = document.querySelectorAll(".notifications");
+  if (!notices) {return;}
+  for (let i = 1; i < notices.length; i++) {
+      const toRemove = notices[i];
+      toRemove.parentNode.removeChild(toRemove);
+  }
 }
