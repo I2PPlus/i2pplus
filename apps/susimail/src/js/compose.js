@@ -1,22 +1,28 @@
-let beforePopup = true;
-window.addEventListener('beforeunload', (e)=>{if (beforePopup) e.returnValue=true;} );
+// When the user attempts to leave the page, show a confirmation prompt
+let allowUnload = false;
 
-function initPopup() {
-	var buttons = document.getElementsByClassName("beforePopup");
-	for(index = 0; index < buttons.length; index++)
-	{
-		var button = buttons[index];
-		addClickHandler5(button);
-	}
+window.addEventListener("beforeunload", (event) => {
+  if (!allowUnload) {
+    event.returnValue = ""; // Standard way to trigger the prompt in most browsers
+  }
+});
+
+// Initialize the popup-related behavior
+function initBeforeUnloadGuard() {
+  const triggerButtons = document.getElementsByClassName("confirm");
+  // Use forEach-like pattern with Array.from for readability
+  Array.from(triggerButtons).forEach((button) => {
+    attachGuardButtonHandler(button);
+  });
 }
 
-function addClickHandler5(elem)
-{
-	elem.addEventListener("click", function() {
-		beforePopup = false;
-	});
+// Attach a click handler that disables the unload prompt
+function attachGuardButtonHandler(element) {
+  element.addEventListener("click", () => {
+    allowUnload = true;
+  });
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    initPopup();
-}, true);
+document.addEventListener("DOMContentLoaded", () => {
+  initBeforeUnloadGuard();
+}, { once: true });
