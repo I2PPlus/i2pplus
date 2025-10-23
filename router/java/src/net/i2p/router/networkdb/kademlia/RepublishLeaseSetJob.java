@@ -20,7 +20,7 @@ import net.i2p.util.Log;
 public class RepublishLeaseSetJob extends JobImpl {
     private final Log _log;
     public final static long REPUBLISH_LEASESET_TIMEOUT = 15 * 1000;
-    private final static int RETRY_DELAY = 1000;
+    private final static int RETRY_DELAY = 2000;
     private final Hash _dest;
     private final KademliaNetworkDatabaseFacade _facade;
     private long _lastPublished; // this is actually last attempted publish
@@ -107,9 +107,9 @@ public class RepublishLeaseSetJob extends JobImpl {
         }
         getContext().statManager().addRateData("netDb.republishLeaseSetFail", 1);
         getContext().jobQueue().removeJob(this);
-        // For first failure, add normally, after 2+ failures, add to top
-        highPriority = count >= 2;
-        requeue(RETRY_DELAY, highPriority);
+        // For first failure, add normally, after 4+ failures, add to top of job queue
+        highPriority = count >= 4;
+        requeue(RETRY_DELAY + getContext().random().nextInt(1500), highPriority);
     }
 
     /**
@@ -119,7 +119,6 @@ public class RepublishLeaseSetJob extends JobImpl {
      * @param highPriority if true, adds the job to the front of the queue
      */
     private void requeue(long delayMs, boolean highPriority) {
-        requeue(delayMs);
         if (highPriority) {getContext().jobQueue().addJobToTop(this);}
         else {getContext().jobQueue().addJob(this);}
     }
