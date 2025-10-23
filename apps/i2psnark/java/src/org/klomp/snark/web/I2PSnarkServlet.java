@@ -1224,6 +1224,16 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("</span></span>");
         out.write(buf.toString());
 
+        ArrayList<Snark> snarks = new ArrayList<Snark>(_manager.getTorrents());
+
+        // actively downloading
+        int downloads = 0;
+        int start = 1;
+
+        for (int i = start; i < snarks.size(); i++) {
+            if ((snarks.get(i).getPeerList().size() >= 1) && (snarks.get(i).getDownloadRate() > 0)) {downloads++;}
+        }
+
         // RX count span
         buf.setLength(0);
         buf.append("<span id=rxCount class=counter title=\"");
@@ -1231,9 +1241,15 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("\">");
         appendIcon(buf, "head_rx", "", "", true, false);
         buf.append("<span class=badge>");
-        buf.append((int) stats[2]);
+        buf.append(downloads);
         buf.append("</span></span>");
         out.write(buf.toString());
+
+        // actively uploading
+        int uploads = 0;
+        for (int i = start; i < snarks.size(); i++) {
+            if ((snarks.get(i).getPeerList().size() >= 1) && (snarks.get(i).getUploadRate() > 0)) {uploads++;}
+        }
 
         // TX count span
         buf.setLength(0);
@@ -1242,7 +1258,7 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("\">");
         appendIcon(buf, "head_tx", "", "", true, false);
         buf.append("<span class=badge>");
-        buf.append((int) stats[3]);
+        buf.append(uploads);
         buf.append("</span></span>");
         out.write(buf.toString());
 
