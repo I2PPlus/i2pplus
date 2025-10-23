@@ -52,10 +52,10 @@ public class TunnelPool {
 
     private static final int TUNNEL_LIFETIME = 10*60*1000;
     /** if less than one success in this many, reduce quantity (exploratory only) */
-    private static final int BUILD_TRIES_QUANTITY_OVERRIDE = 8;
+    private static final int BUILD_TRIES_QUANTITY_OVERRIDE = 10;
     /** if less than one success in this many, reduce length (exploratory only) */
-    private static final int BUILD_TRIES_LENGTH_OVERRIDE_1 = 10;
-    private static final int BUILD_TRIES_LENGTH_OVERRIDE_2 = 12;
+    private static final int BUILD_TRIES_LENGTH_OVERRIDE_1 = 12;
+    private static final int BUILD_TRIES_LENGTH_OVERRIDE_2 = 15;
     private static final long STARTUP_TIME = 30*60*1000;
 
     TunnelPool(RouterContext ctx, TunnelPoolManager mgr, TunnelPoolSettings settings, TunnelPeerSelector sel) {
@@ -331,18 +331,18 @@ public class TunnelPool {
             if (rv <= 1) {return rv;}
             // throttle client tunnel builds in times of congestion
             int fails = _consecutiveBuildTimeouts.get();
-            if (fails > 4) {
-                if (fails > 12) {
+            if (fails > 5) {
+                if (fails > 15) {
                     rv = 1;
                     if (_log.shouldWarn()) {
                         _log.warn("Limiting to 1 tunnel after " + fails + " consecutive build timeouts on " + this);
                     }
-                } else if (fails > 8) {
+                } else if (fails > 10) {
                     rv = Math.max(1, rv / 3);
                     if (_log.shouldWarn()) {
                         _log.warn("Limiting to " + rv + " tunnels after " + fails + " consecutive build timeouts on " + this);
                     }
-                } else if (rv > 2) {
+                } else if (rv > 5) {
                     rv--;
                     if (_log.shouldWarn()) {
                         _log.warn("Limiting to " + rv + " tunnels after " + fails + " consecutive build timeouts on " + this);
@@ -351,15 +351,17 @@ public class TunnelPool {
             }
             return rv;
         }
-        // TODO high-bw non-ff also
-        if ((_context.netDb().floodfillEnabled() && _context.router().getUptime() > 5*60*1000 ||
-            SystemVersion.getMaxMemory() >= 1024*1024*1024) && rv < 4) {
-            rv += 2;
-       // Since we're running RefreshRouters on a repeat cycle (I2P+) let's keep a couple of extras available
-       } else if (_settings.isExploratory() && rv < 2 && _context.router().getUptime() > 10*60*1000) {
-            rv += 1;
-       }
-       if (rv > 1) {
+
+        /*
+         *  Boost exploratory tunnel quantity after initial integration:
+         *  - Floodfills need more (8) due to high netdb traffic
+         *  - Regular routers get a moderate boost (6) for reliability
+         */
+        if (_context.router().getUptime() > 5*60*1000) {
+            if (_context.netDb().floodfillEnabled() && rv < 8) {rv = 8;}
+            else if (rv < 6) {rv = 6;}
+        }
+        if (rv > 1) {
            RateStat e = _context.statManager().getRate("tunnel.buildExploratoryExpire");
            RateStat r = _context.statManager().getRate("tunnel.buildExploratoryReject");
            RateStat s = _context.statManager().getRate("tunnel.buildExploratorySuccess");
@@ -383,7 +385,6 @@ public class TunnelPool {
        if (_context.router().getUptime() < STARTUP_TIME && rv < 3) {rv++;}
        return rv;
     }
-
 
     /**
      *  Shorten the length when under extreme stress, else clear the override.

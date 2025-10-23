@@ -67,11 +67,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         _executor = new BuildExecutor(ctx, this);
         _handler = new BuildHandler(ctx, this, _executor);
         int numHandlerThreads;
-        long maxMemory = SystemVersion.getMaxMemory();
-        int cores = SystemVersion.getCores();
-        Boolean isSlow = SystemVersion.isSlow();
         int share = TunnelDispatcher.getShareBandwidth(ctx);
-        _numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", isSlow ? 2 : 4);
+        _numHandlerThreads = 4;
 
         // The following are for TestJob
         long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
