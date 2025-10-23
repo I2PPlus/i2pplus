@@ -461,7 +461,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
         } finally {
             removeRef();
             if (i2pReset) {
-                if (_log.shouldInfo()) {_log.warn("Received I2P reset -> Resetting socket...");}
+                if (_log.shouldInfo()) {_log.info("Received I2P reset -> Resetting socket...");}
                 try {s.setSoLinger(true, 0);}
                 catch (IOException ioe) {}
                 try {s.close();}
@@ -471,7 +471,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
                 _keepAliveI2P = false;
                 _keepAliveSocket = false;
             } else if (sockReset) {
-                if (_log.shouldInfo()) {_log.warn("Received socket reset -> Resetting I2P socket...");}
+                if (_log.shouldInfo()) {_log.info("Received socket reset -> Resetting I2P socket...");}
                 try {i2ps.reset();}
                 catch (IOException ioe) {}
                 try {s.close();}

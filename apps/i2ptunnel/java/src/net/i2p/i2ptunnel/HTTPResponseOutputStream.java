@@ -353,8 +353,16 @@ class HTTPResponseOutputStream extends FilterOutputStream {
         finishHeaders();
 
         boolean shouldCompress = shouldCompress();
-        if (_log.shouldInfo())
-            _log.info("After headers: GZIP? " + _gzip + " Compressed? " + shouldCompress + " KeepAliveIn? " + _keepAliveIn + " KeepAliveOut? " + _keepAliveOut);
+        if (_log.shouldInfo()) {
+            String status = String.format(
+                "After processing request headers -> gzip is %s; compression is %s; keep-alive [in] is %s; keep-alive [out] is %s",
+                _gzip ? "on" : "off",
+                shouldCompress ? "on" : "off",
+                _keepAliveIn ? "on" : "off",
+                _keepAliveOut ? "on" : "off"
+            );
+            _log.info(status);
+        }
 
         if (data.length == CACHE_SIZE)
             _cache.release(_headerBuffer);
