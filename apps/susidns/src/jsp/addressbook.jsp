@@ -19,21 +19,23 @@
 <c:forEach items="${paramValues.checked}" var="checked">
 <jsp:setProperty name="book" property="markedForDeletion" value="${checked}"/>
 </c:forEach>
-<%
+<%  RequestWrapper bookRequest = new RequestWrapper(request);
+    String here = bookRequest.getParameter("book");
     String importMessages = null;
     String query = request.getQueryString();
-    RequestWrapper bookRequest = new RequestWrapper(request);
-    String here = bookRequest.getParameter("book");
     String formMessages = book.getMessages();
     String susiNonce = book.getSerial(); // have to only do this once per page
     boolean isFiltered = book.isHasFilter();
+    boolean showAll = query == null || query.contains("none") || !query.contains("filter");
+    boolean haveImagegen = book.haveImagegen();
+    boolean isPublishedBook = book.getBook().equals("published");
+    boolean overrideCssActive = base.isOverrideCssActive();
+    String theme = base.getTheme().replace("/themes/susidns/", "").replace("/", "");
+    theme = "\"" + theme + "\"";
     if (intl._t("Import").equals(request.getParameter("action"))) {
         RequestWrapper wrequest = new RequestWrapper(request);
         importMessages = book.importFile(wrequest);
     }
-    boolean overrideCssActive = base.isOverrideCssActive();
-    String theme = base.getTheme().replace("/themes/susidns/", "").replace("/", "");
-    theme = "\"" + theme + "\"";
 %>
 <!DOCTYPE HTML>
 <html<c:if test="${book.isEmpty}"> class=emptybook</c:if>>
@@ -66,11 +68,12 @@
 <form action="/susidns/export" id=exportlist method=GET target=_blank hidden></form>
 <div class=headline id=addressbook>
 <h3><%=intl._t("Book")%>: <%=intl._t(book.getBook())%>${book.loadBookMessages}<c:if test="${book.isEmpty}">&nbsp;<span class=results>(<%=intl._t("No entries")%>)</span></c:if>
+<%  boolean hasEntries = book.getEntries().length > 0; %>
 <span id=export>
 <a href=#add id=addNewDest class=fakebutton title="<%=intl._t("Add new destination")%>" style=display:none!important hidden></a><a href=#import id=importFromFile class=fakebutton title="<%=intl._t("Import from hosts.txt file")%>" style=display:none!important hidden></a>
 <c:if test="${book.isEmpty}"><input form="exportlist" type=submit class=export id=exporthosts <c:if test="${book.isEmpty}">disabled</c:if>></c:if><c:if test="${book.isEmpty}"></span></c:if>
 <c:if test="${book.notEmpty}">
-<%  if (book.getEntries().length > 0) { /* Don't show if no results. Can't figure out how to do this with c:if */ %>
+<%  if (hasEntries) { /* Don't show if no results. Can't figure out how to do this with c:if */ %>
 <input form="exportlist" type=hidden name="book" value="${book.book}">
 <c:if test="${book.search} != null && ${book.search}.length() > 0"><input form="exportlist" type=hidden name="search" value="${book.search}"></c:if>
 <c:if test="${book.hasFilter}">
@@ -80,7 +83,7 @@
         else if ("xn--".equals(filter)) {filter = intl._t("other");}
 %>
 </c:if>
-<%      if (book.isHasFilter() || book.getSearch() != null) { %>
+<%      if (isFiltered || book.getSearch() != null) { %>
 <input form="exportlist" type=submit class=export id=exporthosts value="<%=intl._t("Export in hosts.txt format")%>" name="export" title="<%=intl._t("Export results in hosts.txt format")%>">
 <%      } else { %>
 <input form="exportlist" type=submit class=export id=exporthosts value="<%=intl._t("Export in hosts.txt format")%>" name="export" title="<%=intl._t("Export book in hosts.txt format")%>">
@@ -127,7 +130,6 @@
         String filterValue = filter[0];
         String displayText = filter[1];
         boolean notActive = query != null && !query.matches(".*[?&]filter=" + filterValue + "(&|$).*");
-        boolean showAll = query == null || query.contains("none") || !query.contains("filter");
 
         if (notActive) {
 %>
@@ -149,7 +151,7 @@
 <div id=book>
 <table class=book id=host_list>
 <tr class=head>
-<%  if (book.getEntries().length > 0) { /* Don't show if no results. Can't figure out how to do this with c:if */ %>
+<%  if (hasEntries) { /* Don't show if no results. Can't figure out how to do this with c:if */ %>
 <th class=info><%=intl._t("Info")%></th><th class=names><%=intl._t("Hostname")%></th><th class=b32link><%=intl._t("Link (b32)")%></th><th class=helper>Helper</th><th class=destinations><%=intl._t("Destination")%> (b64)</th>
 <c:if test="${book.validBook}"><th class=checkbox title="<%=intl._t("Select hosts for deletion from addressbook")%>"></th></c:if>
 </tr>
@@ -157,9 +159,7 @@
 <c:forEach items="${book.entries}" var="addr" begin="${book.resultBegin}" end="${book.resultEnd}">
 <tr class=lazy>
 <td class=info>
-<%      boolean haveImagegen = book.haveImagegen();
-        if (haveImagegen) {
-%>
+<%      if (haveImagegen) { %>
 <a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><svg width="24" height="24" class=identicon data-jdenticon-value="${addr.b32}" xmlns="http://www.w3.org/2000/svg"></svg><noscript><img src="/imagegen/id?s=24&amp;c=${addr.b32}" loading=lazy><style>.identicon{display:none!important}</style></noscript></a>
 <%      }  else { /* haveImagegen */ %>
 <a href="details?h=${addr.name}&amp;book=${book.book}" title="<%=intl._t("More information on this entry")%>"><img width=20 height=20 src="/themes/console/images/info.svg"></a>
@@ -175,7 +175,7 @@
 <%  } /* book..getEntries().length() > 0 */ %>
 </table>
 </div>
-<%  if (book.getEntries().length > 0) { /* Don't show if no results. Can't figure out how to do this with c:if */ %>
+<%  if (hasEntries) { /* Don't show if no results. Can't figure out how to do this with c:if */ %>
 <c:if test="${book.validBook}">
 <div id=buttons>
 <p class=buttons>
@@ -204,7 +204,7 @@
 <input class=cancel type=reset value="<%=intl._t("Cancel")%>">
 <c:if test="${book.notEmpty}">
 <input class="accept scrollToNav" type=submit name=action value="<%=intl._t("Replace")%>">
-<%  if (!book.getBook().equals("published")) { %>
+<%  if (!isPublishedBook) { %>
 <input class="add scrollToNav" type=submit name=action value="<%=intl._t("Add Alternate")%>">
 <%  } %>
 </c:if><% /* book.notEmpty */ %>
@@ -212,7 +212,7 @@
 </p>
 </div>
 </form>
-<%  if (!book.getBook().equals("published")) { %>
+<%  if (!isPublishedBook) { %>
 <form id=importHostsForm method=POST action="/susidns/addressbook?book=${book.book}" enctype="multipart/form-data" accept-charset=utf-8>
 <input type=hidden name="book" value="${book.book}">
 <input type=hidden name="serial" value="<%=susiNonce%>">
