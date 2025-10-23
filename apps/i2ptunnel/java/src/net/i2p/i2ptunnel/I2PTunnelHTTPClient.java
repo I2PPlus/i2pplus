@@ -1526,11 +1526,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                       label + "</button></div>\n</div>\n");
 
         }
-        // Firefox (and others?) don't send referer to meta refresh target, which is
-        // what the jump servers use, so this isn't that useful.
-        if (referer != null) {
-            out.write("<input type=hidden name=\"referer\" value=\"" + referer + "\">\n");
-        }
         out.write("<input type=hidden name=\"url\" value=\"" + targetRequest + "\">\n</form>\n</div>\n");
         writeFooter(out);
     }
@@ -1557,10 +1552,10 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             msg = "lookup failure code " + code;
         out.write("<p><b>" + msg + "</b></p>");
         out.write("<form method=GET action=\"http://" + LOCAL_SERVER + "/b32\">\n" +
-                  "<input type=hidden name=\"host\" value=\"" + destination + "\">\n" +
-                  "<input type=hidden name=\"url\" value=\"" + targetRequest + "\">\n" +
-                  "<input type=hidden name=\"code\" value=\"" + code + "\">\n" +
-                  "<input type=hidden name=\"nonce\" value=\"" + _proxyNonce + "\">\n");
+                  "<input type=hidden name=host value=\"" + destination + "\">\n" +
+                  "<input type=hidden name=url value=\"" + targetRequest + "\">\n" +
+                  "<input type=hidden name=code value=\"" + code + "\">\n" +
+                  "<input type=hidden name=nonce value=\"" + _proxyNonce + "\">\n");
 
         if (code == LookupResult.RESULT_KEY_REQUIRED || code == LookupResult.RESULT_SECRET_AND_KEY_REQUIRED) {
             String label = _t("Generate");
@@ -1579,7 +1574,7 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         if (code == LookupResult.RESULT_SECRET_REQUIRED || code == LookupResult.RESULT_SECRET_AND_KEY_REQUIRED) {
             out.write("<h4>" + _t("Lookup password") + "</h4>\n" +
                       "<p>" + _t("You must enter the password provided by the server operator.") + "</p>\n" +
-                      "<input type=text size=55 name=\"secret\" value=\"\">\n");
+                      "<input type=text size=55 name=secret value=\"\">\n");
         }
 
         // FIXME wasn't escaped
@@ -1654,28 +1649,6 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         if ((host == null) || (protocol == null)) {
             return false;
         }
-
-        /****
-         *  Let's not look up the name _again_
-         *  and now that host is a b32, this was failing
-         *
-        boolean found = false;
-        String lcHost = host.toLowerCase();
-        for (int i = 0; i < SUPPORTED_HOSTS.length; i++) {
-        if (SUPPORTED_HOSTS[i].equals(lcHost)) {
-        found = true;
-        break;
-        }
-        }
-
-        if (!found) {
-        try {
-        Destination d = _context.namingService().lookup(host);
-        if (d == null) return false;
-        } catch (DataFormatException dfe) {
-        }
-        }
-         ****/
         String lc = protocol.toLowerCase(Locale.US);
         return lc.equals("http") || lc.equals("https");
     }
@@ -1782,36 +1755,4 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
         }
         return null;
     }
-
-/****
-    private static String[] tests = {
-        "", "foo", "foo=bar", "&", "&=&", "===", "&&",
-        "i2paddresshelper=foo",
-        "i2paddresshelpe=foo",
-        "2paddresshelper=foo",
-        "i2paddresshelper=%66oo",
-        "%692paddresshelper=foo",
-        "i2paddresshelper=foo&a=b",
-        "a=b&i2paddresshelper=foo",
-        "a=b&i2paddresshelper&c=d",
-        "a=b&i2paddresshelper=foo&c=d",
-        "a=b;i2paddresshelper=foo;c=d",
-        "a=b&i2paddresshelper=foo&c",
-        "a=b&i2paddresshelper=foo==&c",
-        "a=b&i2paddresshelper=foo%3d%3d&c",
-        "a=b&i2paddresshelper=f%6f%6F==&c",
-        "a=b&i2paddresshelper=foo&i2paddresshelper=bar&c",
-        "a=b&i2paddresshelper=foo&c%3F%3f%26%3b%3B%3d%3Dc=x%3F%3f%26%3b%3B%3d%3Dx"
-    };
-
-    public static void main(String[] args) {
-        for (int i = 0; i < tests.length; i++) {
-            String[] s = removeHelper(tests[i]);
-            if (s != null)
-                System.out.println("Test \"" + tests[i] + "\" q=\"" + s[0] + "\" h=\"" + s[1] + "\"");
-            else
-                System.out.println("Test \"" + tests[i] + "\" no match");
-        }
-    }
-****/
 }
