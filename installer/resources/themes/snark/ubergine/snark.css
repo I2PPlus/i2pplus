@@ -103,7 +103,7 @@ tfoot td:first-child{padding-left:0;text-align:left}
 .rowEven{background:var(--row)}
 .rowEven td,.rowOdd td{border-top:0;border-bottom:0}
 .script{display:inline-block;vertical-align:top}
-.toggleview,.configTitle,#navbar,img,input[type=submit],input[type=radio],input[type=checkbox],label,th img,#createSection,#closelog,#pagenavbottom{user-select:none}
+.toggleview,.configTitle,#navbar,img,input[type=submit],input[type=radio],input[type=checkbox],label,th img,#createSection,#closelog,#paginate{user-select:none}
 #dirInfo,#torrents{background:none}
 #dirInfo::before,#torrents::before{top:0}
 #page{margin:5px 0 0 0;padding:10px 10px 0;border:var(--border_hard);border-radius:4px;box-shadow:inset 0 0 3px 0 #101,0 0 2px 2px rgba(16,0,16,.4);background:repeating-linear-gradient(180deg,#2b172f 2px,#1f081f 4px);background-size:100% 4px}
@@ -620,17 +620,18 @@ td.tAction input[type=submit]{margin-top:1px}
 #torrents #actionStopAll:active,#torrents #actionStopAll.depress{background:var(--stopall_hover) no-repeat center center/auto 12px,var(--btnAction_active)}
 
 /* pagenav */
-.pagenavcontrols:hover #pagecount{color:#dbd}
-.pagenavcontrols{padding:2px 10px;display:block;letter-spacing:.1em;font-family:var(--bodyfont);font-weight:700;border-bottom:var(--border_inner);background:var(--th)}
-.pagenavcontrols:hover{mix-blend-mode:normal}
-.pagenavcontrols img,.pagenavcontrols img:hover{margin:0 2px;border:var(--border_inner)}
-.pagenavcontrols img{padding:5px 8px;width:12px;border-radius:2px;box-shadow:var(--highlight);background:var(--btnAction);opacity:1;mix-blend-mode:luminosity}
-.pagenavcontrols a img:hover,.pagenavcontrols a:focus img,.pagenavcontrols a img:active{background:var(--btnAction_hover);opacity:1;filter:none;mix-blend-mode:normal;transition:box-shadow ease .03s}
-.pagenavcontrols a img:active{box-shadow:var(--highlight),var(--shadow_inset);background:var(--btnAction_active);transform:scale(.9)}
-.pagenavcontrols img.disable{opacity:.3;pointer-events:none}
-.pagenavcontrols .disabled{position:relative;border:0;box-shadow:none;background:none;opacity:.5;filter:saturate(0);pointer-events:none!important}
+#paginate:hover #pagecount{color:#dbd}
+#paginate{letter-spacing:.1em;font-family:var(--bodyfont);font-weight:700;border-bottom:var(--border_inner);background:var(--th)}
+#paginate:hover{mix-blend-mode:normal}
+#paginate th{text-align:center;border-bottom:var(--border_inner)}
+#paginate th:empty{display:none}
+#paginate img,#paginate img:hover{margin:0 2px;border:var(--border_inner)}
+#paginate img{padding:5px 8px;width:12px;border-radius:2px;box-shadow:var(--highlight);background:var(--btnAction);opacity:1;mix-blend-mode:luminosity}
+#paginate a img:hover,#paginate a:focus img,#paginate a img:active{background:var(--btnAction_hover);opacity:1;filter:none;mix-blend-mode:normal;transition:box-shadow ease .03s}
+#paginate a img:active{box-shadow:var(--highlight),var(--shadow_inset);background:var(--btnAction_active);transform:scale(.9)}
+#paginate img.disable{opacity:.3;pointer-events:none}
+#paginate .disabled{position:relative;border:0;box-shadow:none;background:none;opacity:.5;filter:saturate(0);pointer-events:none!important}
 #pagecount{margin:3px 6px;padding:3px 10px 2px;display:inline-block;vertical-align:middle;letter-spacing:.2em;color:#a8a;text-shadow:var(--txt_shadow);border-radius:3px;box-shadow:var(--highlight);background:var(--badge);mix-blend-mode:luminosity}
-#pagenavbottom,#pagenavtop[hidden],#pagenavtop:empty{display:none}
 
 /* panels */
 .snarkConfig{font-size:10pt;width:100%}
@@ -1187,8 +1188,6 @@ td.peerCount:empty::after{display:none}
 .canhide{display:none}
 .configPanel .configTitle{font-size:11pt}
 #dirInfoComplete{display:none}
-.iframed #pagenavtop{margin:1px 0 -2px}
-.iframed #filterBar~#pagenavtop{margin:1px 0 2px}
 .snarkNav.nav_main,.snarkNav:last-child[href="/i2psnark/"]{padding-left:32px}
 .tab_label::after,#tab_addtorrent .tab_label::after,#tab_newtorrent .tab_label::after,#tab_comments .tab_label::after,#tab_files .tab_label::after,#tab_torrentedit .tab_label::after,#tab_addtorrent:hover .tab_label::after,#tab_newtorrent:hover .tab_label::after,#tab_comments:hover .tab_label::after,#tab_torrentedit:hover .tab_label::after{width:15px;height:15px;background-size:13px}
 .tName a{max-width:320px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1376,13 +1375,10 @@ body,th,td,#commentInfo textarea,input[type=submit],input[type=reset],select,sel
 th{font-size:9pt;background:#101}
 th.radio{width:72px}
 .debugConnection{margin:2px 4px;padding:1px 3px;display:inline-block;font-weight:700;color:#fff;border-radius:2px;box-shadow:0 0 0 1px #101;background:#003000}
-.iframed #pagenavtop{margin:2px 0 -1px}
-.iframed #filterBar~#pagenavtop{margin:2px 0 1px}
 .peerSeed img{margin-top:2px;width:18px;height:18px}
 .percentDownloaded{pointer-events:none}
 .snarkNav{font-size:10.5pt}
 .nav_main,.nav_main:hover,.nav_main:focus,.nav_main.depress{padding-left:29px;background-position:8px center}
-#pagenavbottom img{width:14px;height:14px}
 #totals{word-spacing:.15em}
 }
 
@@ -1424,7 +1420,7 @@ th.radio{width:96px}
 .nav_forum,.nav_forum:hover,.nav_forum:focus,.nav_forum.depress,.nav_search,.nav_search:hover,.nav_search:focus,.nav_search.depress,.nav_tracker,.nav_tracker:hover,.nav_tracker:focus,.nav_tracker.depress{background-size:19px,100%,100%;background-position-x:8px,center,center}
 .iframed .nav_config,.iframed .nav_config:hover,.iframed .nav_config:focus,.iframed .nav_config.depress{padding-left:28px;background-size:18px,100%,100%;background-position:8px center,center,center}
 .optionlist{padding:7px 6px 6px}
-.pagenavcontrols{margin-top:1px}
+#paginate{margin-top:1px}
 .peerclient code{display:inline-block}
 .priority{padding:4px 10px;width:1%;white-space:nowrap;vertical-align:middle;text-align:center;font-size:8pt}
 .rateDown:not(:empty),.rateUp:not(:empty){min-width:70px}
@@ -1453,7 +1449,6 @@ th.radio{width:96px}
 #navbar{padding:11px 10px 10px}
 .iframed #navbar{padding:11px 10px 10px}
 #navbar a{font-size:12pt}
-#pagenavbottom img{width:16px;height:16px}
 #screenlog{margin-top:0;min-height:64px!important}
 #screenlog li,#screenlog li a{font-size:9.5pt}
 #screenlog li::before{width:14px;height:12px;background-size:10px}

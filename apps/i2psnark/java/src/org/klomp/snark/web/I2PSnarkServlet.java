@@ -197,6 +197,7 @@ public class I2PSnarkServlet extends BasicServlet {
         // Get HTTP method and servlet path
         String method = req.getMethod(); // since we are not overriding handle*(), do this here
         String path = req.getServletPath(); // this is the part after /i2psnark
+        String lang = req.getParameter("lang");
 
         req.setCharacterEncoding("UTF-8"); // Set request encoding early
 
@@ -328,134 +329,12 @@ public class I2PSnarkServlet extends BasicServlet {
 
         setHTMLHeaders(resp, cspNonce, false);
         StringBuilder buf = new StringBuilder(16 * 1024);
-
-        // Determine page background color based on theme
-        String pageBackground = "#fff";
-        if ("dark".equals(theme)) {
-            pageBackground = "#000";
-        } else if ("midnight".equals(theme)) {
-            pageBackground = "#001";
-        } else if ("ubergine".equals(theme)) {
-            pageBackground = "#101";
-        } else if ("vanilla".equals(theme)) {
-            pageBackground = "#cab39b";
-        }
-        _resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
-
-        buf.append(DOCTYPE).append("<html").append(isStandalone() ? " class=standalone" : "")
-           .append(" style=\"background:").append(pageBackground).append("\">\n<head>\n")
-           .append("<meta charset=utf-8>\n<meta name=viewport content=\"width=device-width, initial-scale=1\">\n")
-           .append("<script nonce=").append(cspNonce).append(">const theme = \"").append(theme).append("\";</script>\n");
-
-        if (!isConfigure && !isStandalone()) {
-            buf.append("<link rel=modulepreload href=/js/iframeResizer/updatedEvent.js>\n")
-               .append("<link rel=modulepreload href=/js/iframeResizer/iframeResizer.contentWindow.js>\n")
-               .append("<link rel=modulepreload href=/js/setupIframe.js>\n")
-               .append("<link rel=modulepreload href=").append(_resourcePath).append("js/tunnelCounter.js>\n");
-        }
-        if (!isConfigure) {
-            buf.append("<link rel=modulepreload href=").append(_resourcePath).append("js/refreshTorrents.js>\n")
-               .append("<link rel=modulepreload href=").append(_resourcePath).append("js/snarkSort.js>\n")
-               .append("<link rel=modulepreload href=").append(_resourcePath).append("js/toggleLinks.js>\n")
-               .append("<link rel=modulepreload href=").append(_resourcePath).append("js/toggleLog.js>\n");
-            if (showStatusFilter) {
-                buf.append("<link rel=modulepreload href=").append(_resourcePath).append("js/filterBar.js>\n")
-                   .append("<link rel=modulepreload href=").append(_resourcePath).append("js/setFilterQuery.js>\n");
-            }
-            if (isIndex) {
-                buf.append("<script src=/i2psnark/.res/js/click.js type=module></script>\n")
-                   .append("<script src=/i2psnark/.res/js/snarkAlert.js type=module></script>\n");
-            }
-        }
-
-        String v = CoreVersion.VERSION;
-        String fontPath = isStandalone() ? "/i2psnark/.res/themes/fonts" : "/themes/fonts";
-        String displayFont = isStandalone() || useSoraFont() ? "Sora" : "OpenSans";
-        buf.append("<link rel=preload href=").append(fontPath).append("/").append(displayFont).append(".css as=style>\n")
-           .append("<link rel=preload href=").append(fontPath).append("/").append(displayFont).append("/").append(displayFont)
-           .append(".woff2 as=font type=font/woff2 crossorigin>\n")
-           .append("<link rel=stylesheet href=").append(fontPath).append("/").append(displayFont).append(".css>\n")
-           .append("<link rel=preload href=\"").append(_themePath).append("snark.css?").append(v).append("\" as=style>\n")
-           .append("<link rel=preload href=\"").append(_themePath).append("images/images.css?").append(v).append("\" as=style>\n")
-           .append("<link rel=\"shortcut icon\" href=\"").append(_contextPath).append(WARBASE).append("icons/favicon.svg\">\n")
-           .append("<title>");
-        buf.append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName)
-           .append(" - ")
-           .append(isConfigure ? _t("Configuration") : _t("Anonymous BitTorrent Client"))
-           .append("</title>\n");
-
         int delay = _manager.getRefreshDelaySeconds();
-        String pageSize = String.valueOf(_manager.getPageSize());
+        int pageSize = _manager.getPageSize();
+        String head = renderHead(req, isConfigure, isIndex, noCollapse, collapsePanels,
+                                     showStatusFilter, peerString, lang, delay, pageSize);
 
-        if (!isConfigure) {
-            buf.append("<script nonce=").append(cspNonce).append(">\n")
-               .append("  const deleteMsg = \"").append(_t("Are you sure you want to delete {0} and all downloaded data?")).append("\";\n")
-               .append("  const postDeleteMsg = \"").append(_t("Deleting <b>{0}</b> and all associated data...")).append("\";\n")
-               .append("  const removeMsg = \"").append(_t("Are you sure you want to delete torrent file {0} and associated metadata?")).append("\";\n")
-               .append("  const removeMsg2 = \"").append(_t("Note: Downloaded data will not be deleted.")).append("\";\n")
-               .append("  const postRemoveMsg = \"").append(_t("Deleting {0} and associated metadata only...")).append("\";\n")
-               .append("  const snarkPageSize = ").append(pageSize).append(";\n")
-               .append("  const snarkRefreshDelay = ").append(delay).append(";\n")
-               .append("  const totalSnarks = ").append(_manager.listTorrentFiles().size()).append(";\n")
-               .append("  window.snarkPageSize = snarkPageSize;\n")
-               .append("  window.snarkRefreshDelay = snarkRefreshDelay;\n")
-               .append("  window.totalSnarks = totalSnarks;\n</script>\n")
-               .append("<script src=").append(_resourcePath).append("js/snarkWork.js type=module></script>\n")
-               .append("<script src=").append(_resourcePath).append("js/messageTypes.js type=module></script>\n");
-            if (!isStandalone()) {
-                buf.append("<script src=").append(_resourcePath).append("js/tunnelCounter.js type=module></script>\n");
-            }
-            buf.append("<script nonce=").append(cspNonce).append(" type=module>\n")
-               .append("  import {initSnarkRefresh} from \"").append(_resourcePath).append("js/refreshTorrents.js\";\n")
-               .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n");
-            if (delay > 0) {
-                buf.append("<noscript><meta http-equiv=refresh content=\"").append(delay < 60 ? 60 : delay)
-                   .append(";").append(_contextPath).append("/").append(peerString).append("\"></noscript>\n");
-            }
-        } else {
-            delay = 0;
-        }
-
-        // Append CSS assets and user overrides
-        buf.append(HEADER_A).append(_themePath).append(HEADER_B).append("\n");
-        buf.append(HEADER_A).append(_themePath).append(HEADER_I).append("\n");
-
-        String slash = String.valueOf(java.io.File.separatorChar);
-        String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() + slash +
-                           "docs" + slash + "themes" + slash + "snark" + slash + theme + slash;
-        File override = new File(themeBase + "override.css");
-        int rnd = _context.random().nextInt(3);
-        if (!isStandalone() && rnd == 0 && "light".equals(theme)) {
-            buf.append("<style>#screenlog{background:url(/themes/snark/light/images/k2.webp) no-repeat right bottom,")
-               .append("repeating-linear-gradient(180deg,rgba(255,255,255,.5) 2px,rgba(220,220,255,.5) 4px),")
-               .append("var(--snarkGraph) no-repeat,var(--th);background-size:72px auto,100%,")
-               .append("calc(100% - 80px) calc(100% - 4px),100%;background-position:right bottom,")
-               .append("center center,left bottom,center center;background-blend-mode:multiply,overlay,luminosity,normal}</style>\n");
-        }
-        if (!isStandalone() && override.exists()) {
-            buf.append(HEADER_A).append(_themePath).append(HEADER_Z).append("\n");
-        }
-
-        // Larger fonts for CJK languages
-        String lang = req.getParameter("lang");
-        if ("zh".equals(lang) || "ja".equals(lang) || "ko".equals(lang)) {
-            buf.append(HEADER_A).append(_themePath).append(HEADER_D).append("\n");
-        }
-
-        if (noCollapse || !collapsePanels) {
-            buf.append(HEADER_A).append(_themePath).append(HEADER_C).append("\n");
-        }
-
-        buf.append("<style id=cssfilter></style>\n<style id=toggleLogCss></style>\n");
-
-        if (!isStandalone()) {
-            long now = _context.clock().now();
-            buf.append("<style id=graphcss>:root{--snarkGraph:url('/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false")
-               .append("&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true")
-               .append("&hideGrid=true&t=").append(now).append("')}\"</style>\n");
-        }
-
-        buf.append("</head>\n")
+        buf.append(head)
            .append("<body style=display:none;pointer-events:none id=snarkxhr class=\"")
            .append(theme).append(" lang_").append(lang).append("\">\n");
 
@@ -564,6 +443,144 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write(FOOTER_STANDALONE);
         }
         out.flush();
+    }
+
+    /**
+     * Renders the full <head> section of the main HTML page.
+     * @since 0.9.68+
+     */
+    private String renderHead(HttpServletRequest req, boolean isConfigure,
+                              boolean isIndex, boolean noCollapse,
+                              boolean collapsePanels, boolean showStatusFilter,
+                              String peerString, String lang, int delay, int pageSize) {
+        StringBuilder buf = new StringBuilder(4096);
+        String theme = _manager.getTheme();
+
+        // Determine page background color based on theme
+        String pageBackground = "#fff";
+        if ("dark".equals(theme)) {
+            pageBackground = "#000";
+        } else if ("midnight".equals(theme)) {
+            pageBackground = "#001";
+        } else if ("ubergine".equals(theme)) {
+            pageBackground = "#101";
+        } else if ("vanilla".equals(theme)) {
+            pageBackground = "#cab39b";
+        }
+
+        String resourcePath = debug ? "/themes/" : _contextPath + WARBASE;
+
+        buf.append(DOCTYPE)
+           .append("<html")
+           .append(isStandalone() ? " class=standalone" : "")
+           .append(" style=\"background:").append(pageBackground).append("\">\n<head>\n")
+           .append("<meta charset=utf-8>\n<meta name=viewport content=\"width=device-width, initial-scale=1\">\n")
+           .append("<script nonce=").append(cspNonce).append(">const theme = \"").append(theme).append("\";</script>\n");
+
+        if (!isConfigure && !isStandalone()) {
+            buf.append("<link rel=modulepreload href=/js/iframeResizer/updatedEvent.js>\n")
+               .append("<link rel=modulepreload href=/js/iframeResizer/iframeResizer.contentWindow.js>\n")
+               .append("<link rel=modulepreload href=/js/setupIframe.js>\n")
+               .append("<link rel=modulepreload href=").append(resourcePath).append("js/tunnelCounter.js>\n");
+        }
+        if (!isConfigure) {
+            buf.append("<link rel=modulepreload href=").append(resourcePath).append("js/refreshTorrents.js>\n")
+               .append("<link rel=modulepreload href=").append(resourcePath).append("js/snarkSort.js>\n")
+               .append("<link rel=modulepreload href=").append(resourcePath).append("js/toggleLinks.js>\n")
+               .append("<link rel=modulepreload href=").append(resourcePath).append("js/toggleLog.js>\n");
+            if (showStatusFilter) {
+                buf.append("<link rel=modulepreload href=").append(resourcePath).append("js/filterBar.js>\n")
+                   .append("<link rel=modulepreload href=").append(resourcePath).append("js/setFilterQuery.js>\n");
+            }
+            if (isIndex) {
+                buf.append("<script src=/i2psnark/.res/js/click.js type=module></script>\n")
+                   .append("<script src=/i2psnark/.res/js/snarkAlert.js type=module></script>\n");
+            }
+        }
+
+        String v = CoreVersion.VERSION;
+        String fontPath = isStandalone() ? "/i2psnark/.res/themes/fonts" : "/themes/fonts";
+        String displayFont = isStandalone() || useSoraFont() ? "Sora" : "OpenSans";
+        buf.append("<link rel=preload href=").append(fontPath).append("/").append(displayFont).append(".css as=style>\n")
+           .append("<link rel=preload href=").append(fontPath).append("/").append(displayFont).append("/").append(displayFont)
+           .append(".woff2 as=font type=font/woff2 crossorigin>\n")
+           .append("<link rel=stylesheet href=").append(fontPath).append("/").append(displayFont).append(".css>\n")
+           .append("<link rel=preload href=\"").append(_themePath).append("snark.css?").append(v).append("\" as=style>\n")
+           .append("<link rel=preload href=\"").append(_themePath).append("images/images.css?").append(v).append("\" as=style>\n")
+           .append("<link rel=\"shortcut icon\" href=\"").append(_contextPath).append(WARBASE).append("icons/favicon.svg\">\n")
+           .append("<title>");
+        buf.append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName)
+           .append(" - ")
+           .append(isConfigure ? _t("Configuration") : _t("Anonymous BitTorrent Client"))
+           .append("</title>\n");
+
+        if (!isConfigure) {
+            buf.append("<script nonce=").append(cspNonce).append(">\n")
+               .append("  const deleteMsg = \"").append(_t("Are you sure you want to delete {0} and all downloaded data?")).append("\";\n")
+               .append("  const postDeleteMsg = \"").append(_t("Deleting <b>{0}</b> and all associated data...")).append("\";\n")
+               .append("  const removeMsg = \"").append(_t("Are you sure you want to delete torrent file {0} and associated metadata?")).append("\";\n")
+               .append("  const removeMsg2 = \"").append(_t("Note: Downloaded data will not be deleted.")).append("\";\n")
+               .append("  const postRemoveMsg = \"").append(_t("Deleting {0} and associated metadata only...")).append("\";\n")
+               .append("  const snarkPageSize = ").append(pageSize).append(";\n")
+               .append("  const snarkRefreshDelay = ").append(delay).append(";\n")
+               .append("  const totalSnarks = ").append(_manager.listTorrentFiles().size()).append(";\n")
+               .append("  window.snarkPageSize = snarkPageSize;\n")
+               .append("  window.snarkRefreshDelay = snarkRefreshDelay;\n")
+               .append("  window.totalSnarks = totalSnarks;\n</script>\n")
+               .append("<script src=").append(resourcePath).append("js/snarkWork.js type=module></script>\n")
+               .append("<script src=").append(resourcePath).append("js/messageTypes.js type=module></script>\n");
+            if (!isStandalone()) {
+                buf.append("<script src=").append(resourcePath).append("js/tunnelCounter.js type=module></script>\n");
+            }
+            buf.append("<script nonce=").append(cspNonce).append(" type=module>\n")
+               .append("  import {initSnarkRefresh} from \"").append(resourcePath).append("js/refreshTorrents.js\";\n")
+               .append("  document.addEventListener(\"DOMContentLoaded\", initSnarkRefresh);\n</script>\n");
+            if (delay > 0) {
+                buf.append("<noscript><meta http-equiv=refresh content=\"").append(delay < 60 ? 60 : delay)
+                   .append(";").append(_contextPath).append("/").append(peerString).append("\"></noscript>\n");
+            }
+        }
+
+        // Append CSS assets and user overrides
+        buf.append(HEADER_A).append(_themePath).append(HEADER_B).append("\n");
+        buf.append(HEADER_A).append(_themePath).append(HEADER_I).append("\n");
+
+        String slash = String.valueOf(java.io.File.separatorChar);
+        String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() + slash +
+                           "docs" + slash + "themes" + slash + "snark" + slash + theme + slash;
+        File override = new File(themeBase + "override.css");
+        int rnd = _context.random().nextInt(3);
+        if (!isStandalone() && rnd == 0 && "light".equals(theme)) {
+            buf.append("<style>#screenlog{background:url(/themes/snark/light/images/k2.webp) no-repeat right bottom,")
+               .append("repeating-linear-gradient(180deg,rgba(255,255,255,.5) 2px,rgba(220,220,255,.5) 4px),")
+               .append("var(--snarkGraph) no-repeat,var(--th);background-size:72px auto,100%,")
+               .append("calc(100% - 80px) calc(100% - 4px),100%;background-position:right bottom,")
+               .append("center center,left bottom,center center;background-blend-mode:multiply,overlay,luminosity,normal}</style>\n");
+        }
+        if (!isStandalone() && override.exists()) {
+            buf.append(HEADER_A).append(_themePath).append(HEADER_Z).append("\n");
+        }
+
+        // Larger fonts for CJK languages
+        if ("zh".equals(lang) || "ja".equals(lang) || "ko".equals(lang)) {
+            buf.append(HEADER_A).append(_themePath).append(HEADER_D).append("\n");
+        }
+
+        if (noCollapse || !collapsePanels) {
+            buf.append(HEADER_A).append(_themePath).append(HEADER_C).append("\n");
+        }
+
+        buf.append("<style id=cssfilter></style>\n<style id=toggleLogCss></style>\n");
+
+        if (!isStandalone()) {
+            long now = _context.clock().now();
+            buf.append("<style id=graphcss>:root{--snarkGraph:url('/viewstat.jsp?stat=[I2PSnark] InBps&showEvents=false")
+               .append("&period=60000&periodCount=1440&end=0&width=2000&height=160&hideLegend=true&hideTitle=true")
+               .append("&hideGrid=true&t=").append(now).append("')}\"</style>\n");
+        }
+
+        buf.append("</head>\n");
+        return buf.toString();
     }
 
     /**
@@ -764,8 +781,8 @@ public class I2PSnarkServlet extends BasicServlet {
             out.flush();
         }
 
-        renderPageNavigation(out, req, start, pageSize, total, filter, noThinsp, isForm, searchActive, (searchActive ? search.length() : 0));
         out.write(TABLE_HEADER);
+        paginator(out, req, start, pageSize, total, filter, noThinsp, isForm, searchActive, (searchActive ? search.length() : 0));
         out.write(appendSnarkHeader(req, snarks, start, pageSize, filter, peerParam, srt, _contextPath));
         out.flush();
 
@@ -807,7 +824,7 @@ public class I2PSnarkServlet extends BasicServlet {
             out.write("</i></td></tr></tbody>");
         }
 
-        //renderPageNavigation(out, req, start, pageSize, total, filter, noThinsp, true, searchActive, (searchActive ? search.length() : 0));
+        //paginator(out, req, start, pageSize, total, filter, noThinsp, true, searchActive, (searchActive ? search.length() : 0));
         appendSnarkFooter(out, buf, stats, total, isConnected, noSnarks, hasPeers, isUploading, dht, isStandalone(), debug, peerParam);
 
         if (showDebug) out.write("<tr id=dhtDebug>");
@@ -1573,50 +1590,6 @@ public class I2PSnarkServlet extends BasicServlet {
         return buf.toString();
     }
 
-    /** @since 0.9.6 */
-    private void writePageNav(PrintWriter out, HttpServletRequest req, int start, int pageSize, int total, String search, boolean noThinsp) {
-        StringBuilder buf = new StringBuilder(1024);
-
-        // First
-        buf.append("<a href=\"").append(_contextPath).append(getQueryString(req, null, "", null, null)).append("\"")
-           .append(start > 0 ? "" : " class=disabled").append("><span id=first>");
-        appendIcon(buf, "first", _t("First"), _t("First page"), true, true);
-        buf.append("</span></a>");
-
-        // Back
-        int prev = Math.max(0, start - pageSize);
-        buf.append("<a href=\"").append(_contextPath).append(getQueryString(req, null, String.valueOf(prev), null, null)).append("\"")
-           .append(prev > 0 ? "" : " class=disabled").append("><span id=previous>");
-        appendIcon(buf, "previous", _t("Prev"), _t("Previous page"), true, true);
-        buf.append("</span></a>");
-
-        // Page count
-        int pages = 1 + ((total - 1) / pageSize);
-        if (pages == 1 && start > 0) {pages = 2;}
-        if (pages > 1) {
-            int page = (start + pageSize >= total) ? pages : (1 + (start / pageSize));
-            buf.append("<span id=pagecount>").append(page).append(thinsp(noThinsp)).append(pages).append("</span>");
-        }
-
-        // Next
-        int next = start + pageSize;
-        buf.append("<a href=\"").append(_contextPath).append(getQueryString(req, null, String.valueOf(next), null, null)).append("\"")
-           .append(next + pageSize < total ? "" : " class=disabled").append("><span id=next>");
-        appendIcon(buf, "next", _t("Next"), _t("Next page"), true, true);
-        buf.append("</span></a>");
-
-        // Last
-        int last = ((total - 1) / pageSize) * pageSize;
-        buf.append("<a href=\"").append(_contextPath).append(getQueryString(req, null, String.valueOf(last), null, null)).append("\"")
-           .append(start + pageSize < total ? "" : " class=disabled").append("><span id=last>");
-        appendIcon(buf, "last", _t("Last"), _t("Last page"), true, true);
-        buf.append("</span></a>");
-
-        out.append(buf);
-        buf.setLength(0);
-        out.flush();
-    }
-
     /**
      * Renders the page navigation controls with visibility handling.
      *
@@ -1631,25 +1604,72 @@ public class I2PSnarkServlet extends BasicServlet {
      * @param searchActive whether a search is currently active on the page
      * @param searchLength length of the active search string
      * @throws IOException if an error occurs writing output
-     * @since 0.9.68+
      */
-    private void renderPageNavigation(PrintWriter out, HttpServletRequest req, int start, int pageSize, int total,
-                                      String filter, boolean noThinsp, boolean isForm, boolean searchActive, int searchLength) throws IOException {
+    private void paginator(PrintWriter out, HttpServletRequest req, int start, int pageSize, int total,
+                         String filter, boolean noThinsp, boolean isForm, boolean searchActive, int searchLength) throws IOException {
+
         req.setCharacterEncoding("UTF-8");
         boolean showNav = isForm && total > 0 && (start > 0 || total > pageSize);
         boolean navVisible = !searchActive || (searchActive && searchLength > pageSize);
 
-        out.write("<tr colspan=12><div class=\"pagenavcontrols\" id=\"pagenavtop\"");
+        out.write("<tr id=paginate");
         if (!showNav || !navVisible) {
-            out.write(" style=\"display:none;\"");
+            out.write(" hidden");
         }
-        out.write(">");
+        out.write("><th colspan=12>");
 
         if (showNav && navVisible) {
-            writePageNav(out, req, start, pageSize, total, filter, noThinsp);
+            StringBuilder buf = new StringBuilder(1024);
+
+            // First
+            buf.append("<a href=\"").append(_contextPath)
+               .append(getQueryString(req, null, "", null))
+               .append("\"").append(start > 0 ? "" : " class=disabled")
+               .append("><span id=first>");
+            appendIcon(buf, "first", _t("First"), _t("First page"), true, true);
+            buf.append("</span></a>");
+
+            // Back
+            int prev = Math.max(0, start - pageSize);
+            buf.append("<a href=\"").append(_contextPath)
+               .append(getQueryString(req, null, String.valueOf(prev), null))
+               .append("\"").append(prev > 0 ? "" : " class=disabled")
+               .append("><span id=previous>");
+            appendIcon(buf, "previous", _t("Prev"), _t("Previous page"), true, true);
+            buf.append("</span></a>");
+
+            // Page count
+            int pages = 1 + ((total - 1) / pageSize);
+            if (pages == 1 && start > 0) { pages = 2; }
+            if (pages > 1) {
+                int page = (start + pageSize >= total) ? pages : (1 + (start / pageSize));
+                buf.append("<span id=pagecount>").append(page).append(thinsp(noThinsp))
+                   .append(pages).append("</span>");
+            }
+
+            // Next
+            int next = start + pageSize;
+            buf.append("<a href=\"").append(_contextPath)
+               .append(getQueryString(req, null, String.valueOf(next), null))
+               .append("\"").append(next + pageSize < total ? "" : " class=disabled")
+               .append("><span id=next>");
+            appendIcon(buf, "next", _t("Next"), _t("Next page"), true, true);
+            buf.append("</span></a>");
+
+            // Last
+            int last = ((total - 1) / pageSize) * pageSize;
+            buf.append("<a href=\"").append(_contextPath)
+               .append(getQueryString(req, null, String.valueOf(last), null))
+               .append("\"").append(start + pageSize < total ? "" : " class=disabled")
+               .append("><span id=last>");
+            appendIcon(buf, "last", _t("Last"), _t("Last page"), true, true);
+            buf.append("</span></a>");
+
+            out.append(buf);
+            buf.setLength(0);
         }
 
-        out.write("</div></tr>");
+        out.write("</th></tr>");
     }
 
     /**
@@ -1658,35 +1678,24 @@ public class I2PSnarkServlet extends BasicServlet {
      */
     private void processRequest(HttpServletRequest req) {
         String action = extractAction(req);
-        if (action == null) {
-            // No action specified
-            return;
-        }
+        if (action == null) {return;} // No action specified
 
         switch (action) {
-            case "Add":
-                handleAdd(req);
+            case "Add": handleAdd(req);
                 break;
-            case "Save":
-                handleSave(req);
+            case "Save": handleSave(req);
                 break;
-            case "SaveTrackers":
-                handleSaveTrackers(req);
+            case "SaveTrackers": handleSaveTrackers(req);
                 break;
-            case "SaveCreateFilters":
-                handleSaveCreateFilters(req);
+            case "SaveCreateFilters": handleSaveCreateFilters(req);
                 break;
-            case "Create":
-                handleCreate(req);
+            case "Create": handleCreate(req);
                 break;
-            case "StopAll":
-                handleStopAll(req);
+            case "StopAll": handleStopAll(req);
                 break;
-            case "StartAll":
-                handleStartAll(req);
+            case "StartAll": handleStartAll(req);
                 break;
-            case "Clear":
-                handleClearMessages(req);
+            case "Clear": handleClearMessages(req);
                 break;
             default:
                 if (action.startsWith("Stop_")) {
