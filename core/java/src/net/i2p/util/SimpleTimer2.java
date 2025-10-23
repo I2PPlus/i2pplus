@@ -40,9 +40,9 @@ public class SimpleTimer2 {
         return I2PAppContext.getGlobalContext().simpleTimer2();
     }
 
-    private static final int MAX_THREADS = 1024;
+    private static final int MAX_THREADS = 32768;
     private static final int INITIAL_THREADS = 1;
-    private static final long THREAD_KEEP_ALIVE_SECONDS = 5;
+    private static final long THREAD_KEEP_ALIVE_SECONDS = 20;
 
     private final ScheduledThreadPoolExecutor _executor;
     private final String _name;
@@ -81,11 +81,18 @@ public class SimpleTimer2 {
         _name = name;
         _threadsMax = MAX_THREADS;
         _executor = new CustomScheduledThreadPoolExecutor(INITIAL_THREADS, new CustomThreadFactory());
+
+        // Capture a snapshot of pool state for the initial thread names (initial threads)
+        int activeAtCreation = _executor.getActiveCount();
+        int coreAtCreation = _executor.getCorePoolSize();
+        int poolAtCreation = _executor.getPoolSize();
+
         // Schedule periodic thread pool resizing housekeeping every 5 seconds
         _resizeThreadPool = _executor.scheduleAtFixedRate(this::adjustThreadPoolSize, 5, 5, TimeUnit.SECONDS);
         // Allow core threads to time out after inactivity so pool can shrink
         _executor.setKeepAliveTime(THREAD_KEEP_ALIVE_SECONDS, TimeUnit.SECONDS);
         _executor.allowCoreThreadTimeOut(true);
+
         // We do not prestart all threads since we start with 1 thread and grow as needed
         _shutdown = new Shutdown();
         context.addShutdownTask(_shutdown);
@@ -134,14 +141,22 @@ public class SimpleTimer2 {
         }
     }
 
+    /**
+     * Custom thread factory that assigns each newly created thread a unique, creation-time name.
+     * Each thread name uses a running sequence suffix to ensure uniqueness.
+     */
     private class CustomThreadFactory implements ThreadFactory {
+        private final AtomicInteger _localSeq = new AtomicInteger();
+
+        @Override
         public Thread newThread(Runnable r) {
-            Thread rv = Executors.defaultThreadFactory().newThread(r);
-            rv.setName(_name + ' ' + _count.incrementAndGet() + '/' + _threadsMax);
-            rv.setDaemon(true);
-            // Use normal priority to avoid starving other threads under load
-            rv.setPriority(Thread.NORM_PRIORITY - 2);
-            return rv;
+            Thread t = Executors.defaultThreadFactory().newThread(r);
+            int seq = _localSeq.incrementAndGet();
+            String nameWithSnapshot = "SimpleTimer2 [" + seq + "]";
+            t.setName(nameWithSnapshot);
+            t.setDaemon(true);
+            t.setPriority(Thread.NORM_PRIORITY - 1);
+            return t;
         }
     }
 
