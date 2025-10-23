@@ -1528,11 +1528,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             String value = e.getValue().iterator().next().trim();
             boolean hasUA = name.toLowerCase().contains("user-agent") && !value.isEmpty();
             if (request.toLowerCase().contains("head")) {continue;}
-            if (lcName.contains("desthash") || lcName.contains("destb64") || lcName.contains("dnt") ||
+            if (lcName.contains("desthash") || lcName.contains("destb64") || lcName.contains("destB32") || lcName.contains("dnt") ||
                 lcName.contains("connection") || lcName.contains("accept") || lcName.contains("cookie") ||
                 lcName.contains("pragma") || lcName.contains("cache-control") || lcName.contains("referer") ||
                 lcName.contains("upgrade-insecure-requests") || (lcName.equals("content-length") && value.equals("0")) ||
-                (lcName.contains("user-agent") && hasUA && value.contains("MYOB"))) {
+                hasUA && value.contains("MYOB")) {
                 continue;
             }
             for (String val: e.getValue()) {
