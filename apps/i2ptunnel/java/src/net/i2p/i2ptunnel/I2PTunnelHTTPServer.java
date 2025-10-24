@@ -867,14 +867,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     long startupTime = afterSocket - afterHeaders;   // time for reading headers + socket creation
                     long forwardingTime = afterHandle - afterSocket; // time for runner's forwarding threads to complete
                     String server = remoteHost.toString().replace("/", "").replace("127.0.0.1", "localhost") + ":" + remotePort;
-                    boolean isSlow = timeToHandle > 120_000;
+                    boolean isSlow = timeToHandle > 60_000;
                     if (_log.shouldInfo()) {
                         _log.info("[HTTPServer] Processed request for " + (spoofHost != null ? spoofHost : "server at " + server) +
                                   " in " + timeToHandle + "ms" + (isSlow ? " [!]" : "") +
+                                  "\n* Client: " + peerB32 +
                                   "\n* Tasks:  Accept to Headers: " + acceptToHeaders + "ms; " +
                                   "Read headers + Socket create: " + startupTime + "ms; " +
-                                  "Data transfer: " + forwardingTime + "ms" +
-                                  "\n* Client: " + peerB32);
+                                  "Data transfer: " + forwardingTime + "ms");
                     }
                 }
 
