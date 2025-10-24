@@ -179,10 +179,14 @@ class I2CPMessageProducer {
             boolean valTooLong = val.length() > 255;
             boolean bothKeyAndValTooLong = keyTooLong && valTooLong;
             if (keyTooLong || valTooLong) {
-                if (_log.shouldWarn())
-                    _log.warn("Stripping [" + key + "] in session config -> " + (keytooLong ? "Key" : "") +
-                              (keyAndValTooLong ? " and value" ? valTooLong ? "Value" : "") +
-                              " too long, max permitted is 255 bytes" + "\n* Value: " + val);
+                if (_log.shouldWarn()) {
+                    String message = "Stripping [" + key + "] in session config -> ";
+                    if (keyTooLong) {message += "Key";}
+                    if (keyTooLong && valTooLong) {message += " and value";}
+                    else if (valTooLong) {message += "Value";}
+                    message += " too long, max permitted is 255 bytes\n* Value: " + val;
+                    _log.warn(message);
+                }
                 iter.remove();
             }
         }
