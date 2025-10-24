@@ -870,11 +870,11 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     boolean isSlow = timeToHandle > 60_000;
                     if (_log.shouldInfo()) {
                         _log.info("[HTTPServer] Processed request for " + (spoofHost != null ? spoofHost : "server at " + server) +
-                                  " in " + timeToHandle + "ms" + (isSlow ? " [!]" : "") +
+                                  " in " + formatMs(timeToHandle) + (isSlow ? " [!]" : "") +
                                   "\n* Client: " + peerB32 +
-                                  "\n* Tasks:  Accept to Headers: " + acceptToHeaders + "ms; " +
-                                  "Read headers + Socket create: " + startupTime + "ms; " +
-                                  "Data transfer: " + forwardingTime + "ms");
+                                  "\n* Tasks:  Accept to Headers: " + formatMs(acceptToHeaders) + "; " +
+                                  "Read headers + Socket create: " + formatMs(startupTime) + "; " +
+                                  "Data transfer: " + formatMs(forwardingTime));
                     }
                 }
 
@@ -936,6 +936,25 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             } catch (IOException ioe) {}
             if (_log.shouldError())
                 _log.error("[HTTPServer] Out of Memory error (" + oom.getMessage() + ")");
+        }
+    }
+
+    /**
+     * Formats a duration given in milliseconds.
+     * - If duration < 60_000 ms, returns "<seconds>s"
+     * - If duration >= 60_000 ms, returns "<minutes>m <seconds>s"
+     * This method avoids TimeUnit.
+     */
+    public static String formatMs(long duration) {
+        long totalSeconds = duration / 1000;
+        if (duration < 10_000L) {return duration + "ms";}
+        else if (duration < 90_000L) {
+            // seconds only
+            return totalSeconds + "s";
+        } else {
+            long minutes = totalSeconds / 60;
+            long seconds = totalSeconds % 60;
+            return minutes + "m " + seconds + "s";
         }
     }
 
@@ -1357,17 +1376,17 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                         // Client closed connection early or expected stream close
                         if (_log.shouldDebug()) {
                             _log.debug("[HTTPServer] Error sending " + response + " -> " + ioe.getMessage() +
-                                       " after " + elapsed + "ms");
+                                       " after " + formatMs(elapsed));
                         }
                     } else {
                         if (_log.shouldWarn()) {
                             _log.warn("[HTTPServer] Error sending " + response + " -> " + ioe.getMessage()
-                                      + " after " + elapsed + "ms");
+                                      + " after " + formatMs(elapsed));
                         }
                     }
                 } else {
                     if (_log.shouldWarn()) {
-                        _log.warn("[HTTPServer] Error sending " + response + " after " + elapsed + "ms");
+                        _log.warn("[HTTPServer] Error sending " + response + " after " + formatMs(elapsed));
                     }
                 }
                 synchronized(this) {
