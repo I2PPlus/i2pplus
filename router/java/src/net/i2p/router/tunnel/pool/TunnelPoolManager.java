@@ -44,12 +44,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private final TunnelPeerSelector _clientPeerSelector;
     private volatile boolean _isShutdown;
     private final int _numHandlerThreads;
-
-    private static final String PROP_DISABLE_TUNNEL_TESTING = "router.disableTunnelTesting";
-
-    private static final int MIN_KBPS_TWO_HANDLERS = 32;
-    private static final int MIN_KBPS_THREE_HANDLERS = 128;
     private static final double MAX_SHARE_RATIO = 100000d;
+    private static final String PROP_DISABLE_TUNNEL_TESTING = "router.disableTunnelTesting";
 
     public TunnelPoolManager(RouterContext ctx) {
         _context = ctx;
