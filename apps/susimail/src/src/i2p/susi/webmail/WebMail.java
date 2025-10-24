@@ -184,9 +184,9 @@ public class WebMail extends HttpServlet {
     static final String SORT_DEFAULT = SORT_DATE;
     static final SortOrder SORT_ORDER_DEFAULT = SortOrder.UP;
     private static final List<String> VALID_SORTS = Arrays.asList(new String[] {// for XSS
-                                          SORT_ID, SORT_SENDER, SORT_SUBJECT, SORT_DATE, SORT_SIZE,
-                                          '-' + SORT_ID, '-' + SORT_SENDER, '-' + SORT_SUBJECT, '-' +
-                                          SORT_DATE, '-' + SORT_SIZE});
+                                      SORT_ID, SORT_SENDER, SORT_SUBJECT, SORT_DATE, SORT_SIZE,
+                                      '-' + SORT_ID, '-' + SORT_SENDER, '-' + SORT_SUBJECT, '-' +
+                                      SORT_DATE, '-' + SORT_SIZE});
     static final String DIR_FOLDER = "cur"; // MailDir-like
     public static final String DIR_DRAFTS = _x("Drafts"); // MailDir-like
     public static final String DIR_SENT = _x("Sent"); // MailDir-like
@@ -2375,6 +2375,7 @@ public class WebMail extends HttpServlet {
      * @param showRefresh Whether a refresh indicator should be shown.
      * @param sessionObject The current session context.
      * @param mc Optional mail cache; can be null if not used for loading state.
+     * @since 0.9.68+
      */
     private static void renderNotifications(StringBuilder buf, boolean showRefresh,
                                             SessionObject sessionObject, Object mc) {

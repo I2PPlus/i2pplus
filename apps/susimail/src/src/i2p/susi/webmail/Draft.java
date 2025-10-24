@@ -21,136 +21,136 @@ import i2p.susi.util.Buffer;
  */
 class Draft extends Mail {
 
-	private final List<Attachment> attachments;
-	private String[] bcc;        // addresses only, enclosed by <>
-	private long size;
-	private static final String HDR_ATTACH = "X-I2P-Attachment: ";
-	public static final String HDR_BCC = "Bcc: ";
+    private final List<Attachment> attachments;
+    private String[] bcc;        // addresses only, enclosed by <>
+    private long size;
+    private static final String HDR_ATTACH = "X-I2P-Attachment: ";
+    public static final String HDR_BCC = "Bcc: ";
 
-	public Draft(String uidl) {
-		super(uidl);
-		attachments = new ArrayList<Attachment>(4);
-	}
+    public Draft(String uidl) {
+        super(uidl);
+        attachments = new ArrayList<Attachment>(4);
+    }
 
-	/**
-	 *  Overridden to process attachment and Bcc headers
-	 */
-	@Override
-	public synchronized void setBody(Buffer rb) {
-		super.setBody(rb);
-		size = rb.getLength();
-		MailPart part = getPart();
-		if (part != null) {
-			String[] hdrs = part.headerLines;
-			for (int i = 0; i < hdrs.length; i++) {
-				String hdr = hdrs[i];
-				if (hdr.startsWith(HDR_BCC)) {
-					ArrayList<String> list = new ArrayList<String>();
-					getRecipientsFromList(list, hdr.substring(HDR_BCC.length()).trim(), true);
-					if (list.isEmpty()) {
-						// don't set
-					} else if (bcc == null) {
-						bcc = list.toArray(new String[list.size()]);
-					} else {
-						// add to the array, shouldn't happen
-						for (int j = 0; j < bcc.length; j++) {
-							list.add(j, bcc[i]);
-						}
-						bcc = list.toArray(new String[list.size()]);
-					}
-				}
-				if (!hdr.startsWith(HDR_ATTACH))
-					break;
-				String[] flds = DataHelper.split(hdr.substring(HDR_ATTACH.length()), ",", 4);
-				if (flds.length != 4)
-					continue;
-				byte[] b = Base64.decode(flds[0]);
-				if (b == null)
-					continue;
-				String name = DataHelper.getUTF8(b);
-				String type = flds[1];
-				String enc = flds[2];
-				b = Base64.decode(flds[3]);
-				if (b == null)
-					continue;
-				String path = DataHelper.getUTF8(b);
-				Attachment a = new Attachment(name, type, enc, new File(path));
-				size += a.getSize();
-				attachments.add(a);
-			}
-		}
-	}
+    /**
+     *  Overridden to process attachment and Bcc headers
+     */
+    @Override
+    public synchronized void setBody(Buffer rb) {
+        super.setBody(rb);
+        size = rb.getLength();
+        MailPart part = getPart();
+        if (part != null) {
+            String[] hdrs = part.headerLines;
+            for (int i = 0; i < hdrs.length; i++) {
+                String hdr = hdrs[i];
+                if (hdr.startsWith(HDR_BCC)) {
+                    ArrayList<String> list = new ArrayList<String>();
+                    getRecipientsFromList(list, hdr.substring(HDR_BCC.length()).trim(), true);
+                    if (list.isEmpty()) {
+                        // don't set
+                    } else if (bcc == null) {
+                        bcc = list.toArray(new String[list.size()]);
+                    } else {
+                        // add to the array, shouldn't happen
+                        for (int j = 0; j < bcc.length; j++) {
+                            list.add(j, bcc[i]);
+                        }
+                        bcc = list.toArray(new String[list.size()]);
+                    }
+                }
+                if (!hdr.startsWith(HDR_ATTACH))
+                    break;
+                String[] flds = DataHelper.split(hdr.substring(HDR_ATTACH.length()), ",", 4);
+                if (flds.length != 4)
+                    continue;
+                byte[] b = Base64.decode(flds[0]);
+                if (b == null)
+                    continue;
+                String name = DataHelper.getUTF8(b);
+                String type = flds[1];
+                String enc = flds[2];
+                b = Base64.decode(flds[3]);
+                if (b == null)
+                    continue;
+                String path = DataHelper.getUTF8(b);
+                Attachment a = new Attachment(name, type, enc, new File(path));
+                size += a.getSize();
+                attachments.add(a);
+            }
+        }
+    }
 
-	/**
-	 * Includes size of attachments
-	 *
-	 * @since 0.9.62
-	 */
-	@Override
-	public synchronized long getSize() {
-		return size;
-	}
+    /**
+     * Includes size of attachments
+     *
+     * @since 0.9.62
+     */
+    @Override
+    public synchronized long getSize() {
+        return size;
+    }
 
-	/**
-	 * @since 0.9.62
-	 */
-	@Override
-	public synchronized void setSize(long size) {}
+    /**
+     * @since 0.9.62
+     */
+    @Override
+    public synchronized void setSize(long size) {}
 
-	@Override
-	public synchronized boolean hasAttachment() {
-		return !attachments.isEmpty();
-	}
+    @Override
+    public synchronized boolean hasAttachment() {
+        return !attachments.isEmpty();
+    }
 
-	/** @return may be null */
-	public synchronized String[] getBcc() {
-		return bcc;
-	}
+    /** @return may be null */
+    public synchronized String[] getBcc() {
+        return bcc;
+    }
 
-	/** @return non-null, not a copy */
-	public synchronized List<Attachment> getAttachments() {
-		return attachments;
-	}
+    /** @return non-null, not a copy */
+    public synchronized List<Attachment> getAttachments() {
+        return attachments;
+    }
 
-	public synchronized int addAttachment(Attachment a) {
-		int rv = attachments.indexOf(a);
-		if (rv >= 0)
-			return rv;
-		rv = attachments.size();
-		attachments.add(a);
-		size += a.getSize();
-		return rv;
-	}
+    public synchronized int addAttachment(Attachment a) {
+        int rv = attachments.indexOf(a);
+        if (rv >= 0)
+            return rv;
+        rv = attachments.size();
+        attachments.add(a);
+        size += a.getSize();
+        return rv;
+    }
 
-	public synchronized void removeAttachment(int index) {
-		if (index >= 0 && index < attachments.size()) {
-			Attachment a = attachments.get(index);
-			size -= a.getSize();
-			a.deleteData();
-			attachments.remove(index);
-		}
-	}
+    public synchronized void removeAttachment(int index) {
+        if (index >= 0 && index < attachments.size()) {
+            Attachment a = attachments.get(index);
+            size -= a.getSize();
+            a.deleteData();
+            attachments.remove(index);
+        }
+    }
 
-	public synchronized void clearAttachments() {
-		for (Attachment a : attachments) {
-			size -= a.getSize();
-			a.deleteData();
-		}
-		attachments.clear();
-	}
+    public synchronized void clearAttachments() {
+        for (Attachment a : attachments) {
+            size -= a.getSize();
+            a.deleteData();
+        }
+        attachments.clear();
+    }
 
-	public synchronized StringBuilder encodeAttachments() {
-		StringBuilder buf = new StringBuilder(256 * attachments.size());
-		if (attachments.isEmpty())
-			return buf;
-		for (int i = 0; i < attachments.size(); i++) {
-			Attachment a = attachments.get(i);
-			buf.append(HDR_ATTACH);
-			buf.append(Base64.encode(a.getFileName())).append(',');
-			buf.append(a.getContentType()).append(',');
-			buf.append(a.getTransferEncoding()).append(',');
-			buf.append(Base64.encode(a.getPath())).append("\r\n");
-		}
-		return buf;
-	}
+    public synchronized StringBuilder encodeAttachments() {
+        StringBuilder buf = new StringBuilder(256 * attachments.size());
+        if (attachments.isEmpty())
+            return buf;
+        for (int i = 0; i < attachments.size(); i++) {
+            Attachment a = attachments.get(i);
+            buf.append(HDR_ATTACH);
+            buf.append(Base64.encode(a.getFileName())).append(',');
+            buf.append(a.getContentType()).append(',');
+            buf.append(a.getTransferEncoding()).append(',');
+            buf.append(Base64.encode(a.getPath())).append("\r\n");
+        }
+        return buf;
+    }
 }
