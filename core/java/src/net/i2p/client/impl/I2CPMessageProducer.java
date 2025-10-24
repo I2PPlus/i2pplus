@@ -175,9 +175,14 @@ class I2CPMessageProducer {
             Map.Entry<Object, Object> e = iter.next();
             String key = (String) e.getKey();
             String val = (String) e.getValue();
-            if (key.length() > 255 || val.length() > 255) {
+            boolean keyTooLong = key.length() > 255;
+            boolean valTooLong = val.length() > 255;
+            boolean bothKeyAndValTooLong = keyTooLong && valTooLong;
+            if (keyTooLong || valTooLong) {
                 if (_log.shouldWarn())
-                    _log.warn("Not passing on property [" + key + "] in session config: key or value too long (max=255). Value: " + val);
+                    _log.warn("Stripping [" + key + "] in session config -> " + (keytooLong ? "Key" : "") +
+                              (keyAndValTooLong ? " and value" ? valTooLong ? "Value" : "") +
+                              " too long, max permitted is 255 bytes" + "\n* Value: " + val);
                 iter.remove();
             }
         }

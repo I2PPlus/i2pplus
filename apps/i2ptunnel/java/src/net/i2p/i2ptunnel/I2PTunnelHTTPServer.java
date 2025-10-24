@@ -585,7 +585,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 if (_log.shouldInfo()) {
                     if (hostname == null) {hostname = "Unknown destination";}
                     _log.info("[HTTPServer] Incoming request for server: " +
-                              (hostname.contains("b32.i2p") ? hostname.substring(0,16) + "...b32.i2p" : "") +
+                              (hostname.contains("b32.i2p") ? hostname.substring(0,16) + "...b32.i2p" : hostname) + "..." +
                               "\n* Client: " + peerB32);
                 }
                 if (hostname != null && !hostname.endsWith(".i2p") && !hostname.endsWith(".onion")) {

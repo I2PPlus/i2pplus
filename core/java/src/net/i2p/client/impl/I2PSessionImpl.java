@@ -1608,14 +1608,14 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         try {
             if (_routerSupportsHostLookup) {
                 if (_log.shouldInfo()) {
-                    _log.info("Sending HostLookup for [" + h.toBase32().substring(0,8) + "]");
+                    _log.info("Sending HostLookup for [" + h.toBase32().substring(0,8) + "]...");
                 }
                 SessionId id = _sessionId;
                 if (id == null)
                     id = DUMMY_SESSION;
                 sendMessage_unchecked(new HostLookupMessage(id, h, nonce, maxWait));
             } else {
-                if (_log.shouldInfo()) {_log.info("Sending DestLookup for [" + h.toBase32().substring(0,8) + "]");}
+                if (_log.shouldInfo()) {_log.info("Sending DestLookup for [" + h.toBase32().substring(0,8) + "]...");}
                 sendMessage_unchecked(new DestLookupMessage(h));
             }
             try {
@@ -1763,7 +1763,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         LookupWaiter waiter = new LookupWaiter(h, nonce, callback);
         _pendingLookups.offer(waiter);
         if (_log.shouldLog(Log.INFO))
-            _log.info("Sending HostLookup for " + h);
+            _log.info("Sending HostLookup for " + h + "...");
         SessionId id = _sessionId;
         if (id == null)
             id = DUMMY_SESSION;
@@ -1823,7 +1823,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         LookupWaiter waiter = new LookupWaiter(name, nonce, callback);
         _pendingLookups.offer(waiter);
         if (_log.shouldLog(Log.INFO))
-            _log.info("Sending HostLookup for " + name);
+            _log.info("Sending HostLookup for " + name + "...");
         SessionId id = _sessionId;
         if (id == null)
             id = DUMMY_SESSION;
