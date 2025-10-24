@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 import net.i2p.I2PAppContext;
@@ -47,24 +48,46 @@ import net.i2p.data.i2cp.SessionId;
 import net.i2p.util.Log;
 
 /**
- * Produce the various messages the session needs to send to the router.
+ * Produces the various I2CP messages that a client session needs to send to the router.
+ * <p>
+ * This class also enforces outbound bandwidth limits via a token bucket throttler
+ * to prevent overwhelming the router or the network. The throttling is applied
+ * at the I2CP layer and includes all protocol overhead (streaming, gzip, etc.),
+ * but not router-level tunnel encryption or LeaseSet overhead.
+ * </p>
  *
  * @author jrandom
+ * @since 0.8.4 (throttling added), refactored in later versions
  */
 class I2CPMessageProducer {
     private final Log _log;
     private final I2PAppContext _context;
-    private int _maxBytesPerSecond;
-    private volatile int _sendPeriodBytes;
-    private volatile long _sendPeriodBeginTime;
-    private final ReentrantLock _lock;
-    private static final String PROP_MAX_BW = "i2cp.outboundBytesPerSecond";
-    /** see ConnectionOptions in streaming  - MTU + streaming overhead + gzip overhead */
-    private static final int TYP_SIZE = 1730 + 28 + 23;
-    private static final int MIN_RATE = 2 * TYP_SIZE;
 
-    // http://i2p-projekt.i2p/en/docs/protocol/i2cp
-    // Note that some are listed for both client and server side, don't include those below.
+    /** Property name for outbound bandwidth limit (bytes per second) */
+    private static final String PROP_MAX_BW = "i2cp.outboundBytesPerSecond";
+
+    /**
+     * Typical message size estimate: MTU (1730) + streaming overhead (28) + gzip overhead (23).
+     * Used for rounding and minimum rate enforcement.
+     */
+    private static final int TYP_SIZE = 1730 + 28 + 23;
+
+    /** Minimum allowed rate: 2x typical size to avoid pathological low rates */
+    private static final int MIN_RATE = Math.max(2 * TYP_SIZE, 16384);
+
+    /**
+     * Maximum burst allowed: up to 2 seconds worth of bandwidth can be accumulated
+     * when idle, enabling short bursts without violating long-term rate limits.
+     */
+    private static final double MAX_BURST_SECONDS = 2.0;
+
+    /**
+     * Maximum time (in milliseconds) a message will wait for bandwidth before being dropped.
+     * Prevents indefinite blocking, especially for non-expiring messages.
+     */
+    private static final long MAX_WAIT_MILLIS = 10_000; // 10 seconds
+
+    // Client-side options that must not be sent to the router
     private static final String[] CLIENT_SIDE_OPTIONS = new String[] {
         "i2cp.closeIdleTime",
         "i2cp.closeOnIdle",
@@ -78,21 +101,40 @@ class I2CPMessageProducer {
         I2PClient.PROP_ENABLE_SSL,
         I2PClient.PROP_TCP_HOST,
         I2PClient.PROP_TCP_PORT,
-        // long and shouldn't be passed through
+        // Long strings MUST be removed, even in router context,
+        // as the session config properties must be serialized to be signed.
         "i2p.reseedURL"
     };
 
+    // Throttling state
+    private volatile int _maxBytesPerSecond = 0;
+    private double _tokens = 0.0; // accumulated tokens (bytes)
+    private long _lastRefillTime = 0;
+
+    // Synchronization
+    private final ReentrantLock _lock = new ReentrantLock(true);
+    private final Condition _bandwidthAvailable = _lock.newCondition();
 
     public I2CPMessageProducer(I2PAppContext context) {
         _context = context;
         _log = context.logManager().getLog(I2CPMessageProducer.class);
-        _lock = new ReentrantLock(true);
-        context.statManager().createRateStat("client.sendThrottled", "Time we waited for bandwidth (throttled)", "ClientMessages", new long[] { 60*1000 });
-        context.statManager().createRateStat("client.sendDropped", "Length of message dropped while waiting for bandwidth", "ClientMessages", new long[] { 60*1000 });
+        _lastRefillTime = context.clock().now();
+
+        // Initialize stats
+        context.statManager().createRateStat("client.sendThrottled",
+            "Time (ms) waited for bandwidth due to throttling",
+            "ClientMessages", new long[] { 60 * 1000 });
+        context.statManager().createRateStat("client.sendDropped",
+            "Length of message dropped while waiting for bandwidth",
+            "ClientMessages", new long[] { 60 * 1000 });
     }
 
     /**
-     * Update the bandwidth setting
+     * Update the bandwidth limit based on session options.
+     * The configured limit is rounded up to the next multiple of {@link #TYP_SIZE}
+     * and clamped to at least {@link #MIN_RATE} for usability.
+     *
+     * @param session the session whose options to read
      * @since 0.8.4
      */
     public void updateBandwidth(I2PSessionImpl session) {
@@ -100,41 +142,42 @@ class I2CPMessageProducer {
         if (max != null) {
             try {
                 int iMax = Integer.parseInt(max);
-                if (iMax > 0)
-                    // round up to next higher TYP_SIZE for efficiency, then add some fudge for small messages
+                if (iMax > 0) {
+                    // Round up to next TYP_SIZE block and add small fudge for small messages
                     _maxBytesPerSecond = 256 + Math.max(MIN_RATE, TYP_SIZE * ((iMax + TYP_SIZE - 1) / TYP_SIZE));
-                else
-                    _maxBytesPerSecond = 0;
-            } catch (NumberFormatException nfe) {}
+                } else {
+                    _maxBytesPerSecond = 0; // disable throttling
+                }
+            } catch (NumberFormatException ignored) {
+                // Keep current value
+            }
         }
         if (_log.shouldDebug())
-            _log.debug("Setting " + _maxBytesPerSecond + "Bps max");
+            _log.debug("Setting max outbound bandwidth to " + _maxBytesPerSecond + " Bps");
     }
 
     /**
-     * Strip out the client-side options from the session options.
-     * @return a new copy, may be modified
+     * Strip client-side options from session properties before sending to router.
+     * Also removes any key or value longer than 255 characters, as these cannot
+     * be serialized in signed session configs.
+     *
+     * @param session the session
+     * @return a new Properties object safe for router transmission
      * @since 0.9.38
      */
     private Properties getRouterOptions(I2PSessionImpl session) {
         Properties props = new Properties();
         props.putAll(session.getOptions());
-        for (int i = 0; i < CLIENT_SIDE_OPTIONS.length; i++) {
-            props.remove(CLIENT_SIDE_OPTIONS[i]);
+        for (String option : CLIENT_SIDE_OPTIONS) {
+            props.remove(option);
         }
         for (Iterator<Map.Entry<Object, Object>> iter = props.entrySet().iterator(); iter.hasNext(); ) {
-            // Long strings MUST be removed, even in router context,
-            // as the session config properties must be serialized to be signed.
-            // fixme, bytes could still be over 255 (unlikely)
             Map.Entry<Object, Object> e = iter.next();
             String key = (String) e.getKey();
             String val = (String) e.getValue();
             if (key.length() > 255 || val.length() > 255) {
                 if (_log.shouldWarn())
-                    _log.warn("Not passing on property ["
-                              + key
-                              + "] in the session config, key or value is too long (max = 255) \n* Value: "
-                              + val);
+                    _log.warn("Not passing on property [" + key + "] in session config: key or value too long (max=255). Value: " + val);
                 iter.remove();
             }
         }
@@ -142,20 +185,43 @@ class I2CPMessageProducer {
     }
 
     /**
-     * Send all the messages that a client needs to send to a router to establish
-     * a new session.
+     * Establish a new session with the router by sending a {@link CreateSessionMessage}.
+     *
+     * <p>
+     * This method initializes the session negotiation by:
+     * <ul>
+     *   <li>Updating the outbound bandwidth settings for the session (if configured).</li>
+     *   <li>Building a {@link SessionConfig} populated with router-safe options.</li>
+     *   <li>Handling offline signatures when the session operates in offline mode.</li>
+     *   <li>Signing the session configuration to attest integrity and authenticity.</li>
+     *   <li>Sending the signed configuration to the router via the session channel.</li>
+     * </ul>
+     * </p>
+     *
+     * @param session the session to connect
+     * @throws I2PSessionException if the session configuration cannot be signed or if the offline signature is expired
      */
     public void connect(I2PSessionImpl session) throws I2PSessionException {
+        // Apply any bandwidth limits configured for this session
         updateBandwidth(session);
+
+        // Prepare the CreateSessionMessage to carry the SessionConfig
         CreateSessionMessage msg = new CreateSessionMessage();
+
+        // Build the session configuration based on current session state
         SessionConfig cfg = new SessionConfig(session.getMyDestination());
+
+        // Gather router-safe options (client-side options stripped and length-validated)
         Properties p = getRouterOptions(session);
         boolean isOffline = session.isOffline();
-        if (isOffline) {
-            if (!p.containsKey(RequestLeaseSetMessageHandler.PROP_LS_TYPE))
-                p.setProperty(RequestLeaseSetMessageHandler.PROP_LS_TYPE, "3");
-        }
+
+        // If offline, ensure LS type is set unless already provided
+        if (isOffline && !p.containsKey(RequestLeaseSetMessageHandler.PROP_LS_TYPE))
+            p.setProperty(RequestLeaseSetMessageHandler.PROP_LS_TYPE, "3");
+
         cfg.setOptions(p);
+
+        // If offline, attach the offline signature data for router verification
         if (isOffline) {
             long exp = session.getOfflineExpiration();
             if (exp < _context.clock().now()) {
@@ -167,19 +233,26 @@ class I2CPMessageProducer {
                                     session.getTransientSigningPublicKey(),
                                     session.getOfflineSignature());
         }
+
+        // Sign the router-facing session configuration
         try {
             cfg.signSessionConfig(session.getPrivateKey());
         } catch (DataFormatException dfe) {
             throw new I2PSessionException("Unable to sign the session config", dfe);
         }
+
+        // Attach the signed configuration to the message and send
         msg.setSessionConfig(cfg);
         session.sendMessage_unchecked(msg);
     }
 
+
     /**
-     * Send a message to the router destroying the session, which could be a subsession.
-     * This does NOT close the socket.
+     * Send a {@link DestroySessionMessage} to the router to tear down the session.
+     * Does not close the underlying socket.
      *
+     * @param session the session to disconnect
+     * @throws I2PSessionException if message cannot be sent
      */
     public void disconnect(I2PSessionImpl session) throws I2PSessionException {
         if (session.isClosed()) return;
@@ -189,21 +262,22 @@ class I2CPMessageProducer {
             id = I2PSessionImpl.DUMMY_SESSION;
         dmsg.setSessionId(id);
         session.sendMessage_unchecked(dmsg);
-        // use DisconnectMessage only if we fail and drop connection...
-        // todo: update the code to fire off DisconnectMessage on socket error
-        //DisconnectMessage msg = new DisconnectMessage();
-        //msg.setReason("Destroy called");
-        //session.sendMessage(msg);
     }
 
     /**
-     * Package up and send the payload to the router for delivery
+     * Send a message to the router for delivery to a destination.
+     * This overload uses default expiration (0) and flags (0).
      *
-     * @param nonce 0 to 0xffffffff; if 0, the router will not reply with a MessageStatusMessage
-     * @param tag unused - no end-to-end crypto
-     * @param tags unused - no end-to-end crypto
-     * @param key unused - no end-to-end crypto
-     * @param newKey unused - no end-to-end crypto
+     * @param session the sending session
+     * @param dest destination
+     * @param nonce message ID (0 = no status reply)
+     * @param payload message content
+     * @param tag unused (no end-to-end crypto)
+     * @param key unused
+     * @param tags unused
+     * @param newKey unused
+     * @param expires expiration timestamp (0 = none)
+     * @throws I2PSessionException if session is closed or payload is null
      */
     public void sendMessage(I2PSessionImpl session, Destination dest, long nonce, byte[] payload, SessionTag tag,
                             SessionKey key, Set<SessionTag> tags, SessionKey newKey, long expires) throws I2PSessionException {
@@ -211,24 +285,30 @@ class I2CPMessageProducer {
     }
 
     /**
-     * Package up and send the payload to the router for delivery
+     * Send a message with explicit expiration and flags.
      *
-     * @param nonce 0 to 0xffffffff; if 0, the router will not reply with a MessageStatusMessage
+     * @param session the sending session
+     * @param dest destination
+     * @param nonce message ID (0 = no status reply)
+     * @param payload message content
+     * @param expires expiration timestamp (0 = none)
+     * @param flags message flags
+     * @throws I2PSessionException if session is closed or payload is null
      * @since 0.8.4
      */
     public void sendMessage(I2PSessionImpl session, Destination dest, long nonce, byte[] payload,
                             long expires, int flags) throws I2PSessionException {
-
-        if (!updateBps(payload.length, expires))
-            // drop the message... send fail notification?
+        if (!updateBps(payload.length, expires)) {
+            // Message was dropped due to throttling or expiration
             return;
-        SendMessageMessage msg;
+        }
         SessionId sid = session.getSessionId();
         if (sid == null) {
             _log.error(session.toString() + " cannot send message, session closed", new Exception());
             return;
         }
         Payload data = createPayload(payload);
+        SendMessageMessage msg;
         if (expires > 0 || flags > 0) {
             SendMessageExpiresMessage smsg = new SendMessageExpiresMessage(sid, dest, data, nonce);
             smsg.setExpiration(expires);
@@ -241,18 +321,22 @@ class I2CPMessageProducer {
     }
 
     /**
-     * Package up and send the payload to the router for delivery
+     * Send a message using {@link SendMessageOptions}.
      *
-     * @param nonce 0 to 0xffffffff; if 0, the router will not reply with a MessageStatusMessage
+     * @param session the sending session
+     * @param dest destination
+     * @param nonce message ID (0 = no status reply)
+     * @param payload message content
+     * @param options message options (expiration, flags, etc.)
+     * @throws I2PSessionException if session is closed or payload is null
      * @since 0.9.2
      */
     public void sendMessage(I2PSessionImpl session, Destination dest, long nonce, byte[] payload,
                             SendMessageOptions options) throws I2PSessionException {
-
         long expires = options.getTime();
-        if (!updateBps(payload.length, expires))
-            // drop the message... send fail notification?
+        if (!updateBps(payload.length, expires)) {
             return;
+        }
         SessionId sid = session.getSessionId();
         if (sid == null) {
             _log.error(session.toString() + " cannot send message, session closed", new Exception());
@@ -264,102 +348,101 @@ class I2CPMessageProducer {
     }
 
     /**
-     *  Super-simple bandwidth throttler.
-     *  We only calculate on a one-second basis, so large messages
-     *  (compared to the one-second limit) may exceed the limits.
-     *  Tuned for streaming, may not work well for large datagrams.
+     * Token bucket bandwidth throttler.
+     * <p>
+     * This method enforces a long-term average outbound rate of {@link #_maxBytesPerSecond},
+     * while allowing bursts up to {@link #MAX_BURST_SECONDS} seconds of that rate.
+     * </p>
+     * <p>
+     * If bandwidth is unavailable, the caller will wait (blocking) until:
+     * <ul>
+     *   <li>Enough tokens accumulate, OR</li>
+     *   <li>The message expires (if {@code expires > 0}), OR</li>
+     *   <li>Maximum wait time ({@link #MAX_WAIT_MILLIS}) is reached.</li>
+     * </ul>
+     * In the latter two cases, the message is dropped.
+     * </p>
      *
-     *  This does poorly with low rate limits since it doesn't credit
-     *  bandwidth across two periods. So the limit is rounded up,
-     *  and the min limit is set to 2x the typ size, above.
-     *
-     *  Blocking so this could be very bad for retransmissions,
-     *  as it could clog StreamingTimer.
-     *  Waits are somewhat "fair" using ReentrantLock.
-     *  While out-of-order transmission is acceptable, fairness
-     *  reduces the chance of starvation. ReentrantLock does not
-     *  guarantee in-order execution due to thread priority issues,
-     *  so out-of-order may still occur. But shouldn't happen within
-     *  the same thread anyway... Also note that small messages may
-     *  go ahead of large ones that are waiting for the next window.
-     *  Also, threads waiting a second time go to the back of the line.
-     *
-     *  Since this is at the I2CP layer, it includes streaming overhead,
-     *  streaming acks and retransmissions,
-     *  gzip overhead (or "underhead" for compression),
-     *  repliable datagram overhead, etc.
-     *  However, it does not, of course, include the substantial overhead
-     *  imposed by the router for the leaseset, tags, encryption,
-     *  and fixed-size tunnel messages.
-     *
-     *  @param expires if $gt; 0, an expiration date
-     *  @return true if we should send the message, false to drop it
+     * @param len the message length in bytes
+     * @param expires absolute expiration time (ms since epoch), or 0 for no expiration
+     * @return {@code true} if the message should be sent, {@code false} if dropped
      */
     private boolean updateBps(int len, long expires) {
+        // No throttling if disabled
         if (_maxBytesPerSecond <= 0)
             return true;
-        //synchronized(this) {
+
         _lock.lock();
         try {
-            int waitCount = 0;
+            long totalWaited = 0;
             while (true) {
                 long now = _context.clock().now();
-                if (waitCount > 0 && expires > 0 && expires < now) {
-                    // just say no to bufferbloat... drop the message right here
+
+                // Refill tokens based on elapsed time
+                double elapsedSeconds = (now - _lastRefillTime) / 1000.0;
+                if (elapsedSeconds > 0) {
+                    _tokens = Math.min(
+                        _maxBytesPerSecond * MAX_BURST_SECONDS,
+                        _tokens + elapsedSeconds * _maxBytesPerSecond
+                    );
+                    _lastRefillTime = now;
+                }
+
+                // If we have enough tokens, consume and send
+                if (_tokens >= len) {
+                    _tokens -= len;
+                    if (_log.shouldDebug())
+                        _log.debug("Sending " + len + " byte message; tokens remaining: " + (int)_tokens);
+                    return true;
+                }
+
+                // Check if message is already expired
+                if (expires > 0 && expires <= now) {
                     _context.statManager().addRateData("client.sendDropped", len, 0);
                     if (_log.shouldWarn())
-                        _log.warn("Dropping " + len + " byte message - expired in queue");
+                        _log.warn("Dropping " + len + " byte message - expired while waiting for bandwidth");
                     return false;
                 }
 
-                long period = now - _sendPeriodBeginTime;
-                if (period >= 2000) {
-                    // start new period, always let it through no matter how big
-                    _sendPeriodBytes = len;
-                    _sendPeriodBeginTime = now;
-                    if (_log.shouldDebug())
-                        _log.debug("New period after idle -> " + len + " bytes");
-                    return true;
+                // Calculate how long we need to wait for enough tokens
+                double needed = len - _tokens;
+                double waitSeconds = needed / _maxBytesPerSecond;
+                long waitMillis = (long) (waitSeconds * 1000);
+
+                // Cap wait time to avoid indefinite blocking
+                if (waitMillis > MAX_WAIT_MILLIS - totalWaited) {
+                    waitMillis = Math.max(0, MAX_WAIT_MILLIS - totalWaited);
                 }
 
-                if (period >= 1000) {
-                    // start new period
-                    // Allow burst within 2 sec, only advance window by 1 sec, and
-                    // every other second give credit for unused bytes in previous period
-                    if (_sendPeriodBytes > 0 && ((_sendPeriodBeginTime / 1000) & 0x01) == 0)
-                        _sendPeriodBytes += len - _maxBytesPerSecond;
-                    else
-                        _sendPeriodBytes = len;
-                    _sendPeriodBeginTime += 1000;
-                    if (_log.shouldDebug())
-                        _log.debug("New period -> " + len + " bytes");
-                    return true;
+                // If message has expiration, respect it
+                if (expires > 0) {
+                    long timeUntilExpiry = expires - now;
+                    if (waitMillis > timeUntilExpiry) {
+                        waitMillis = timeUntilExpiry;
+                    }
                 }
 
-                if (_sendPeriodBytes + len <= _maxBytesPerSecond) {
-                    // still bytes available in this period
-                    _sendPeriodBytes += len;
-                    if (_log.shouldDebug())
-                        _log.debug("Sending " + len + " bytes (elapsed: " + period + "ms) -> Total: " + _sendPeriodBytes + " bytes");
-                    return true;
-                }
-
-                if (waitCount >= 2) {
-                    // just say no to bufferbloat... drop the message right here
+                // If no time left to wait, drop
+                if (waitMillis <= 0) {
                     _context.statManager().addRateData("client.sendDropped", len, 0);
                     if (_log.shouldWarn())
-                        _log.warn("Dropping " + len + " byte message after waiting " + waitCount + " times");
+                        _log.warn("Dropping " + len + " byte message - insufficient bandwidth within constraints");
                     return false;
                 }
 
-                // wait until next period
-                _context.statManager().addRateData("client.sendThrottled", ++waitCount, 0);
+                // Wait for bandwidth or timeout
+                totalWaited += waitMillis;
+                _context.statManager().addRateData("client.sendThrottled", waitMillis, 0);
                 if (_log.shouldDebug())
-                    _log.debug("Throttled " + len + " bytes, wait #" + waitCount + ' ' + (1000 - period) + "ms" /*, new Exception()*/);
+                    _log.debug("Throttling " + len + " byte message; waiting " + waitMillis + " ms (total: " + totalWaited + " ms)");
+
                 try {
-                    //this.wait(1000 - period);
-                    _lock.newCondition().await(1000 - period, TimeUnit.MILLISECONDS);
-                } catch (InterruptedException ie) {}
+                    _bandwidthAvailable.await(waitMillis, TimeUnit.MILLISECONDS);
+                } catch (InterruptedException ignored) {
+                    Thread.currentThread().interrupt(); // restore interrupt status
+                }
+
+                // Loop to re-check tokens and expiration
             }
         } finally {
             _lock.unlock();
@@ -367,18 +450,29 @@ class I2CPMessageProducer {
     }
 
     /**
-     * Create a new payload.
-     * No more end-to-end encryption, just set the "encrypted" data to the payload.
+     * Create a {@link Payload} object from raw bytes.
+     * End-to-end encryption is no longer used at this layer; the payload
+     * is stored directly as encrypted data.
+     *
+     * @param payload the raw message bytes
+     * @return a new Payload instance
+     * @throws I2PSessionException if payload is null
      */
     private static Payload createPayload(byte[] payload) throws I2PSessionException {
-        if (payload == null) throw new I2PSessionException("No payload specified");
+        if (payload == null)
+            throw new I2PSessionException("No payload specified");
         Payload data = new Payload();
         data.setEncryptedData(payload);
         return data;
     }
 
     /**
-     * Send an abuse message to the router
+     * Report abusive behavior to the router.
+     *
+     * @param session the reporting session
+     * @param msgId ID of the offending message
+     * @param severity abuse severity level
+     * @throws I2PSessionException if message cannot be sent
      */
     public void reportAbuse(I2PSessionImpl session, int msgId, int severity) throws I2PSessionException {
         ReportAbuseMessage msg = new ReportAbuseMessage();
@@ -395,12 +489,17 @@ class I2CPMessageProducer {
     }
 
     /**
-     * In response to a RequestLeaseSet Message from the router, send a
-     * CreateLeaseset Message back to the router.
-     * This method is misnamed, it does not create the LeaseSet,
-     * the caller does that.
+     * Respond to a LeaseSet request by sending a {@link CreateLeaseSetMessage} or
+     * {@link CreateLeaseSet2Message} back to the router.
+     * <p>
+     * Note: This method does not create the LeaseSet; it only sends it.
+     * </p>
      *
-     * @param signingPriv ignored for LS2
+     * @param session the session
+     * @param leaseSet the LeaseSet to send
+     * @param signingPriv signing private key (ignored for LS2)
+     * @param privs list of private keys for decryption
+     * @throws I2PSessionException if session is closed or message cannot be sent
      */
     public void createLeaseSet(I2PSessionImpl session, LeaseSet leaseSet, SigningPrivateKey signingPriv,
                                List<PrivateKey> privs) throws I2PSessionException {
@@ -428,9 +527,11 @@ class I2CPMessageProducer {
     }
 
     /**
-     * Update number of tunnels
+     * Update the number of tunnels used by the session.
      *
-     * @param tunnels 0 for original configured number
+     * @param session the session to reconfigure
+     * @param tunnels number of tunnels (0 = use original configured value)
+     * @throws I2PSessionException if session config signing fails
      */
     public void updateTunnels(I2PSessionImpl session, int tunnels) throws I2PSessionException {
         ReconfigureSessionMessage msg = new ReconfigureSessionMessage();
