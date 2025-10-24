@@ -941,9 +941,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     /**
      * Formats a duration given in milliseconds.
-     * - If duration < 60_000 ms, returns "<seconds>s"
-     * - If duration >= 60_000 ms, returns "<minutes>m <seconds>s"
-     * This method avoids TimeUnit.
+     *  - If duration < 60_000 ms, returns "<seconds>s"
+     *  - If duration >= 60_000 ms, returns "<minutes>m <seconds>s"
+     * @since 0.9.68+
      */
     public static String formatMs(long duration) {
         long totalSeconds = duration / 1000;
