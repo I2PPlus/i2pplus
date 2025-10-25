@@ -362,7 +362,7 @@ public class NTCPTransport extends TransportImpl {
         try {
             prepareConnectionForSending(con, msg);
         } catch (IOException | IllegalStateException e) {
-            logConnectionSetupError(e);
+            logConnectionSetupError(e, ih.toBase64().substring(0,6));
             con.close();
             afterSend(msg, false);
         }
@@ -472,13 +472,29 @@ public class NTCPTransport extends TransportImpl {
      * between IOExceptions and IllegalStateExceptions with appropriate log levels.
      *
      * @param e The exception that occurred during connection setup.
+     * @param destination A human-readable destination identifier (e.g., host:port).
      */
-    private void logConnectionSetupError(Exception e) {
+    private void logConnectionSetupError(Exception e, String destination) {
+        String base = "[NTCP] Connection setup failure" + (destination != null ? " to " + destination : "");
+
         if (e instanceof IOException) {
-            if (_log.shouldError()) _log.error("[NTCP] Error opening a channel \n* IO Exception: " + e.getMessage());
-            _context.statManager().addRateData("ntcp.outboundFailedIOEImmediate", 1);
+            if (_log.shouldWarn()) {
+                _log.warn(base + " -> " + e.getMessage());
+            }
+            // Track a metric for IOExceptions during outbound setup
+            _context.statManager().addRateData("ntcp.outboundFailedIOEImmediate", 1, 1);
         } else if (e instanceof IllegalStateException) {
-            if (_log.shouldWarn()) _log.warn("[NTCP] Failed opening a channel \n* Illegal State Exception: " + e.getMessage());
+            if (_log.shouldWarn()) {
+                _log.warn(base + " - Illegal State Exception -> " + e.getMessage());
+            }
+            // Optional: add a metric for illegal state occurrences
+            _context.statManager().addRateData("ntcp.outboundFailedIllegalState", 1, 1);
+        } else {
+            // Fallback for any other unexpected exception type
+            if (_log.shouldWarn()) {
+                _log.warn(base + " - Unexpected Exception -> " + e.getMessage(), e);
+            }
+            _context.statManager().addRateData("ntcp.outboundFailedOther", 1, 1);
         }
     }
 

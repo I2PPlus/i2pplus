@@ -1333,8 +1333,8 @@ class BuildHandler implements Runnable {
             getContext().statManager().addRateData("tunnel.rejectTimeout2", 1);
             getContext().statManager().addRateData("tunnel.nextHopLookupTimeout", _currentNextHopTimeout);
             Log log = getContext().logManager().getLog(BuildHandler.class);
-            if (log.shouldInfo()) {
-                log.info("Timeout (" + (_currentNextHopTimeout / 1000) + "s) contacting next hop");
+            if (log.shouldDebug()) {
+                log.debug("Timeout (" + (_currentNextHopTimeout / 1000) + "s) contacting next hop" + _cfg);
             }
         }
     }
