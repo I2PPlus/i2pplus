@@ -349,14 +349,14 @@ public class I2PSnarkServlet extends BasicServlet {
         buf.append("<div id=navbar>\n");
 
         if (isConfigure) {
-            buf.append("<a href=\"").append(_contextPath).append("/\" title=\"").append(_t("Torrents"))
+            buf.append("<a href=").append(_contextPath).append("/ title=\"").append(_t("Torrents"))
                .append("\" id=nav_main class=\"snarkNav isConfig\">").append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName)
-               .append("</a>\n");
+               .append("</a>");
         } else {
             buf.append("<a href=\"").append(_contextPath).append('/').append(peerString).append("\" title=\"")
                .append(_t("Refresh page")).append("\" id=nav_main class=snarkNav>")
-               .append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName).append("</a>\n");
-            buf.append("<a href=\"").append(_contextPath).append("/configure\" id=nav_config class=snarkNav>")
+               .append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName).append("</a>");
+            buf.append("<a href=").append(_contextPath).append("/configure id=nav_config class=snarkNav>")
                .append(_t("Configure")).append("</a>");
 
             sortedTrackers = _manager.getSortedTrackers();
@@ -368,7 +368,7 @@ public class I2PSnarkServlet extends BasicServlet {
             for (Tracker t : sortedTrackers) {
                 if (t.baseURL == null || !t.baseURL.startsWith("http")) continue;
                 if (_manager.util().isKnownOpenTracker(t.announceURL)) continue;
-                buf.append("\n<a href=\"").append(t.baseURL).append("\" class=\"snarkNav nav_tracker\" target=_blank>")
+                buf.append("<a href=\"").append(t.baseURL).append("\" class=\"snarkNav nav_tracker\" target=_blank>")
                    .append(t.name).append("</a>");
             }
         }
@@ -4449,15 +4449,15 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(theme)
            .append(" lang_")
            .append(lang)
-           .append("\">\n<div id=navbar><a href=\"")
+           .append("\">\n<div id=navbar><a href=")
            .append(_contextPath)
-           .append("/\" title=")
+           .append("/ title=")
            .append(_t("Torrents"))
            .append(" id=nav_main class=snarkNav>")
-           .append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName).append("</a>\n")
-           .append("<a href=\"")
+           .append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName).append("</a>")
+           .append("<a href=")
            .append(_contextPath)
-           .append("/configure\" id=nav_config class=snarkNav>")
+           .append("/configure id=nav_config class=snarkNav>")
            .append(_t("Configure"))
            .append("</a></div>\n");
 

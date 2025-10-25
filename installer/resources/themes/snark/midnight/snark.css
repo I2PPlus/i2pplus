@@ -89,7 +89,7 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 .snarkNav:last-child{border-radius:0 1px 1px 0}
 .snarkNav:first-child{border-radius:1px 0 0 1px}
 .snarkNav[href*="i2psnark"]{border-radius:1px}
-.snarkNav,.snarkNav:hover,.snarkNav:focus,.snarkNav:active,.snarkNav:active,#nav_search:hover,#nav_search:focus,#nav_forum:hover,#nav_forum:focus,#nav_main:hover,#nav_main:focus{background-size:15px,100%,100%,100%}
+.snarkNav,.snarkNav:hover,.snarkNav:focus,.snarkNav:active{background-size:15px,100%,100%,100%!important}
 @supports (justify-content:center){#navbar{display:flex;justify-content:center}.snarkNav{margin-left:-1px;margin-right:-1px}}
 
 /* search */
@@ -186,21 +186,23 @@ th.status img,td.status img{margin:2px;width:auto;height:22px}
 #torrents tbody tr:last-child td{border-bottom:var(--border)}
 #torrents td[colspan="10"]{padding:2px}
 #torrents td{padding:5px 1px;line-height:1.2;text-align:left}
-#torrents tfoot th br{margin-left:20px;display:inline-block}
-#torrents tfoot th:nth-child(2){text-align:center}
-#torrents tfoot th:nth-child(3){text-align:center}
-#torrents tfoot th:nth-child(n+2){white-space:nowrap}
-#torrents tfoot th{padding:6px 4px;background:#000}
-#torrents tfoot th,#torrents tfoot th code{font-weight:700}
-#torrents tfoot th code{margin-left:4px}
-#torrents tfoot,#torrents tfoot th{font-weight:400}
-#torrents tfoot tr:first-child th:first-child{text-align:left}
-#torrents tfoot tr:first-child th{font-weight:700;background:linear-gradient(180deg,#001,#030306)}
-#torrents tfoot tr:first-child th{padding:4px;vertical-align:middle}
+#snarkFoot th br{margin-left:20px;display:inline-block}
+#snarkFoot th:nth-child(2){text-align:center}
+#snarkFoot th:nth-child(3){text-align:center}
+#snarkFoot th:nth-child(n+2){white-space:nowrap}
+#snarkFoot th{padding:6px 4px;background:#000}
+#snarkFoot th,#snarkFoot th code{font-weight:700}
+#snarkFoot th code{margin-left:4px}
+#snarkFoot,#snarkFoot th{font-weight:400}
+#snarkFoot tr:first-child th:first-child{text-align:left}
+#snarkFoot tr:first-child th{font-weight:700;background:linear-gradient(180deg,#001,#030306)}
+#snarkFoot tr:first-child th{padding:4px;vertical-align:middle}
+#snarkTbody tr:last-child td{border-bottom:2px solid #181537}
+#snarkFoot+tbody::before{display:block;background:#181537;content:""}
 #torrents th a{display:inline}
-#torrents thead th:last-child img{padding:2px}
-#torrents thead th{padding:2px 1px;border-top:0;background:linear-gradient(180deg,#001,#00000d)}
-#torrents th:empty,#torrents thead th:empty,#torrents tfoot th:empty,#torrents td:empty,.trackerLink:empty{padding:4px!important;width:0!important;min-width:0!important;max-width:0;white-space:normal}
+#snarkHead th:last-child img{padding:2px}
+#snarkHead th{padding:2px 1px;border-top:0;background:linear-gradient(180deg,#001,#00000d)}
+#torrents th:empty,#snarkHead th:empty,#snarkFoot th:empty,#torrents td:empty,.trackerLink:empty{padding:4px!important;width:0!important;min-width:0!important;max-width:0;white-space:normal}
 .magnets #snarkTbody .trackerLink{width:0!important;padding:0!important}
 .magnets #snarkTbody .magnet,.tlinks #snarkTbody .trackerLink{text-align:center}
 #linkswitch::before{left:calc(50% - 8px)}
