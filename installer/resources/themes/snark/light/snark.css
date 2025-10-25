@@ -89,21 +89,21 @@ td{padding:3px 4px;color:var(--ink_light);opacity:1;font-size:9pt}
 .snarkNav:last-child{border-radius:0 2px 2px 0}
 .snarkNav[href="/i2psnark/"]:last-of-type{border-radius:2px}
 .snarkNav:hover,.snarkNav:focus{color:var(--hover)}
-.nav_main{border-radius:2px 0 0 2px;background:var(--snark) no-repeat 8px center,var(--nav),var(--snark_hover),var(--snark_active)}
-.nav_main:hover,.nav_main:focus{background:var(--snark_hover) no-repeat 8px center,var(--nav_hover)}
-.nav_main:active,.nav_main.depress{background:var(--hover) var(--snark_active) no-repeat 8px center}
-.nav_config{background:var(--nav_config) no-repeat 8px center,var(--nav),var(--nav_config_hover),var(--nav_config_active)}
-.nav_config:hover,.nav_config:focus{background:var(--nav_config_hover) no-repeat 8px center,var(--nav_hover)}
-.nav_config:active{background:var(--hover) var(--nav_config_active) no-repeat 8px center}
-.nav_forum{background:var(--forum) no-repeat 8px center,var(--nav),var(--forum_hover),var(--forum_active)}
-.nav_forum:hover,.nav_forum:focus{background:var(--forum_hover) no-repeat 8px center,var(--nav_hover)}
-.nav_forum:active,.nav_forum.depress{background:var(--hover) var(--forum_active) no-repeat 8px center}
+#nav_main{border-radius:2px 0 0 2px;background:var(--snark) no-repeat 8px center,var(--nav),var(--snark_hover),var(--snark_active)}
+#nav_main:hover,#nav_main:focus{background:var(--snark_hover) no-repeat 8px center,var(--nav_hover)}
+#nav_main:active,#nav_main.depress{background:var(--hover) var(--snark_active) no-repeat 8px center}
+#nav_config{background:var(--nav_config) no-repeat 8px center,var(--nav),var(--nav_config_hover),var(--nav_config_active)}
+#nav_config:hover,#nav_config:focus{background:var(--nav_config_hover) no-repeat 8px center,var(--nav_hover)}
+#nav_config:active{background:var(--hover) var(--nav_config_active) no-repeat 8px center}
+#nav_forum{background:var(--forum) no-repeat 8px center,var(--nav),var(--forum_hover),var(--forum_active)}
+#nav_forum:hover,#nav_forum:focus{background:var(--forum_hover) no-repeat 8px center,var(--nav_hover)}
+#nav_forum:active,#nav_forum.depress{background:var(--hover) var(--forum_active) no-repeat 8px center}
 .nav_tracker{background:var(--tracker) no-repeat 8px center,var(--nav),var(--tracker_hover),var(--tracker_active)}
 .nav_tracker:hover,.nav_tracker:focus{background:var(--tracker_hover) no-repeat 8px center,var(--nav_hover)}
 .nav_tracker:active,.nav_tracker.depress{background:var(--hover) var(--tracker_active) no-repeat 8px center}
-.nav_search{background:var(--search) no-repeat 8px center,var(--nav),var(--search_hover),var(--search_active)}
-.nav_search:hover,.nav_search:focus{background:var(--search_hover) no-repeat 8px center,var(--nav_hover)}
-.nav_search:active,.nav_search.depress{background:var(--hover) var(--search_active) no-repeat 8px center}
+#nav_search{background:var(--search) no-repeat 8px center,var(--nav),var(--search_hover),var(--search_active)}
+#nav_search:hover,#nav_search:focus{background:var(--search_hover) no-repeat 8px center,var(--nav_hover)}
+#nav_search:active,#nav_search.depress{background:var(--hover) var(--search_active) no-repeat 8px center}
 
 /* search */
 #snarkSearch{display:block;position:absolute;right:8px;top:-2px}
@@ -861,7 +861,7 @@ img[src$="magnet.png"]{margin-top:-2px;margin-bottom:-2px;display:inline-block;v
 #dirInfoComplete{display:none}
 .magnet,.trackerLink,#torrents #snarkHead th.torrentLink{width:0!important;padding:0!important}
 .magnet>*,.trackerLink>*,#torrents #snarkHead th.torrentLink>*{display:none!important}
-.nav_main,.snarkNav:not(.nav_tracker){padding-left:22px}
+#nav_main,.snarkNav:not(.nav_tracker){padding-left:22px}
 .tName a{max-width:300px}
 .trackerLink{padding-right:8px}
 #screenlog li{opacity:1}
@@ -877,7 +877,7 @@ body,td,#screenlog li,#screenlog a,button,input,select,.snarkAddInfo,code,th,a,a
 .status{width:1%;max-width:28px}
 .iframed #paginate{padding:4px 5px}
 .magnetLabel{max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.nav_main,.nav_forum,.nav_search{white-space:nowrap;text-indent:-9999px;color:#0000;background-position:10px center}
+#nav_main,#nav_forum,#nav_search{white-space:nowrap;text-indent:-9999px;color:#0000;background-position:10px center}
 .newTab{margin:1px 4px 0}
 #paginate{margin:0;padding:2px;width:100%;position:static;background:var(--th)}
 .barOuter,.barText{height:12px;line-height:12px}
@@ -950,7 +950,7 @@ td.peerCount{padding-left:0;padding-right:3px;width:1%;white-space:nowrap;font-w
 .active.starting .peerCount b:empty::after{display:inline;content:"..."}
 .active.starting .peerCount b,.inactive.downloading .peerCount b{background:#bb0}
 .inactive.downloading .peerCount b,.peerCount b .right,.peerCount b .left{text-shadow:1px 1px 1px #0009}
-.nav_main:link,.nav_main:visited,.nav_main:hover,.nav_main:focus,.nav_main:active{padding-left:27px;background-size:17px,100%!important}
+#nav_main:link,#nav_main:visited,#nav_main:hover,#nav_main:focus,#nav_main:active{padding-left:27px;background-size:17px,100%!important}
 .nopeers.incomplete .peerCount b::before{border-color:#0000 #aaa #0000 #0000}
 .nopeers.incomplete .peerCount b{text-shadow:1px 1px 1px #999;background:#aaa}
 .nopeers .peerCount b .left,.nopeers .peerCount b .right{color:#333;text-shadow:var(--txt_shadow)}

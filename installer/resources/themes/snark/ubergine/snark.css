@@ -126,18 +126,18 @@ tfoot td:first-child{padding-left:0;text-align:left}
 .snarkNav:active+.snarkNav:nth-last-child(1n-2){border-left:1px solid #730}
 .snarkNav:active,.snarkNav.depress{background:var(--tracker_active) no-repeat 11px center/16px,var(--nav_active)}
 .snarkNav:last-child[href="/i2psnark/"]{display:inline-block;border-radius:2px}
-.nav_main{padding-left:29px;background:var(--snark) no-repeat 9px center/18px,var(--nav),var(--snark_hover) no-repeat 9px center/18px,var(--snark_active) no-repeat 9px center/18px}
-.nav_main:hover,.nav_main:focus{background:var(--snark_hover) no-repeat 11px center/18px,var(--nav_hover)}
-.nav_main:active,.nav_main.depress{background:var(--snark_active) no-repeat 11px center/18px,var(--nav_active)}
-.nav_config{background:var(--nav_config) no-repeat 10px center/16px,var(--nav),var(--nav_config_hover) no-repeat 10px center/0,var(--nav_config_active) no-repeat 10px center/0}
-.nav_config:hover,.nav_config:focus{background:var(--nav_config_hover) no-repeat 10px center/16px,var(--nav_hover)}
-.nav_config:active,.nav_config.depress{background:var(--nav_config_active) no-repeat 10px center/16px,var(--nav_active)}
-.nav_forum{background:var(--forum) no-repeat 11px center/16px,var(--nav),var(--forum_hover) no-repeat 11px center/16px,var(--forum_active) no-repeat 11px center/16px}
-.nav_forum:hover,.nav_forum:focus{background:var(--forum_hover) no-repeat 11px center/16px,var(--nav_hover)}
-.nav_forum:active,.nav_forum.depress{background:var(--forum_active) no-repeat 11px center/16px,var(--nav_active)}
-.nav_search{background:var(--search) no-repeat 11px center/16px,var(--nav),var(--search_hover) no-repeat 11px center/16px,var(--search_active) no-repeat 11px center/16px}
-.nav_search:hover,.nav_search:focus{background:var(--search_hover) no-repeat 11px center/16px,var(--nav_hover)}
-.nav_search:active,.nav_search.depress{background:var(--search_active) no-repeat 11px center/16px,var(--nav_active)}
+#nav_main{padding-left:29px;background:var(--snark) no-repeat 9px center/18px,var(--nav),var(--snark_hover) no-repeat 9px center/18px,var(--snark_active) no-repeat 9px center/18px}
+#nav_main:hover,#nav_main:focus{background:var(--snark_hover) no-repeat 11px center/18px,var(--nav_hover)}
+#nav_main:active,#nav_main.depress{background:var(--snark_active) no-repeat 11px center/18px,var(--nav_active)}
+#nav_config{background:var(--nav_config) no-repeat 10px center/16px,var(--nav),var(--nav_config_hover) no-repeat 10px center/0,var(--nav_config_active) no-repeat 10px center/0}
+#nav_config:hover,#nav_config:focus{background:var(--nav_config_hover) no-repeat 10px center/16px,var(--nav_hover)}
+#nav_config:active,#nav_config.depress{background:var(--nav_config_active) no-repeat 10px center/16px,var(--nav_active)}
+#nav_forum{background:var(--forum) no-repeat 11px center/16px,var(--nav),var(--forum_hover) no-repeat 11px center/16px,var(--forum_active) no-repeat 11px center/16px}
+#nav_forum:hover,#nav_forum:focus{background:var(--forum_hover) no-repeat 11px center/16px,var(--nav_hover)}
+#nav_forum:active,#nav_forum.depress{background:var(--forum_active) no-repeat 11px center/16px,var(--nav_active)}
+#nav_search{background:var(--search) no-repeat 11px center/16px,var(--nav),var(--search_hover) no-repeat 11px center/16px,var(--search_active) no-repeat 11px center/16px}
+#nav_search:hover,#nav_search:focus{background:var(--search_hover) no-repeat 11px center/16px,var(--nav_hover)}
+#nav_search:active,#nav_search.depress{background:var(--search_active) no-repeat 11px center/16px,var(--nav_active)}
 #navbar{margin:-11px auto 10px;padding:7px 10px 5px;min-width:600px;width:calc(100% - 22px);position:static;text-align:center;border:var(--border_hard);border-radius:0 0 4px 4px;box-shadow:inset 0 0 0 1px rgba(169,61,169,.2),inset 0 0 0 2px #101,inset 0 0 3px 1px #212,0 0 0 1px rgba(0,0,0,.7);background:linear-gradient(180deg,#535,#202 55%,#101,#080008);filter:drop-shadow(0 2px 4px #101)}
 #navbar a{display:inline-block;font:700 10.5pt/1.3 var(--bodyfont);letter-spacing:.11em;text-decoration:none;text-transform:uppercase;color:#f70;text-shadow:1px 0 1px #0009,-1px 0 1px rgba(255,240,255,.2);outline:none;border-radius:0;box-shadow:0 0 1px #000,inset 0 0 0 1px rgba(16,0,16,.7),inset 0 0 2px 0 rgba(255,128,0,.5)}
 #navbar a:hover,#navbar a:focus{color:#d2baff;border:1px solid #820b64;box-shadow:0 0 1px #000,inset 0 0 0 1px rgba(16,0,16,.9),inset 0 0 2px 0 #515}
@@ -1188,7 +1188,7 @@ td.peerCount:empty::after{display:none}
 .canhide{display:none}
 .configPanel .configTitle{font-size:11pt}
 #dirInfoComplete{display:none}
-.snarkNav.nav_main,.snarkNav:last-child[href="/i2psnark/"]{padding-left:32px}
+#nav_main,.snarkNav:last-child[href="/i2psnark/"]{padding-left:32px}
 .tab_label::after,#tab_addtorrent .tab_label::after,#tab_newtorrent .tab_label::after,#tab_comments .tab_label::after,#tab_files .tab_label::after,#tab_torrentedit .tab_label::after,#tab_addtorrent:hover .tab_label::after,#tab_newtorrent:hover .tab_label::after,#tab_comments:hover .tab_label::after,#tab_torrentedit:hover .tab_label::after{width:15px;height:15px;background-size:13px}
 .tName a{max-width:320px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #commentDeleteAction td{padding-top:4px}
@@ -1206,7 +1206,7 @@ td.peerCount:empty::after{display:none}
 }
 
 @media (min-resolution:120dpi)and (max-width:1180px){
-.snarkNav.nav_main,.snarkNav:last-child[href="/i2psnark/"]{padding-left:26px;background-position:8px 50%,center center}
+#nav_main,.snarkNav:last-child[href="/i2psnark/"]{padding-left:26px;background-position:8px 50%,center center}
 }
 
 @media (max-width:1100px){
@@ -1337,9 +1337,9 @@ select[name$=".quantity"],select[name$=".length"]{min-width:95px}
 }
 
 @media (max-width:840px){
-.snarkNav.nav_main:not(:last-child),.snarkNav.nav_forum,.iframed .snarkNav.nav_main:not(:last-child),.iframed .snarkNav.nav_forum,.snarkNav.nav_search,.iframed .snarkNav.nav_search{padding-left:0;padding-right:12px;width:36px;text-indent:-99999px;background-position:center center}
-.snarkNav.nav_main:not(:last-child),.iframed .snarkNav.nav_main:not(:last-child){padding-left:0;padding-right:13px;width:27px;background-position:calc(50% - 1px) center}
-.iframed .snarkNav.nav_forum{width:26px}
+#nav_main:not(:last-child),#nav_forum,.iframed #nav_main:not(:last-child),.iframed #nav_forum,.snarkNav#nav_search,.iframed .snarkNav#nav_search{padding-left:0;padding-right:12px;width:36px;text-indent:-99999px;background-position:center center}
+#nav_main:not(:last-child),.iframed #nav_main:not(:last-child){padding-left:0;padding-right:13px;width:27px;background-position:calc(50% - 1px) center}
+.iframed #nav_forum{width:26px}
 .snarkNav.nav_tracker:last-child,.iframed .snarkNav.nav_tracker:last-child{padding-right:8px}
 #navbar{justify-content:left}
 #snarkSearch{top:2px}
@@ -1378,7 +1378,7 @@ th.radio{width:72px}
 .peerSeed img{margin-top:2px;width:18px;height:18px}
 .percentDownloaded{pointer-events:none}
 .snarkNav{font-size:10.5pt}
-.nav_main,.nav_main:hover,.nav_main:focus,.nav_main.depress{padding-left:29px;background-position:8px center}
+#nav_main,#nav_main:hover,#nav_main:focus,#nav_main.depress{padding-left:29px;background-position:8px center}
 #totals{word-spacing:.15em}
 }
 
@@ -1415,10 +1415,10 @@ th.radio{width:96px}
 .ETA:not(:empty){min-width:80px}
 .magnetLabel{margin-top:-1px;padding:1px 8px 1px 18px;line-height:1.5;border-radius:3px;box-shadow:var(--highlight);background:#303 var(--tag) no-repeat 5px center/11px}
 .mainsection td{padding-top:4px;padding-bottom:4px}
-.nav_main,.nav_main:hover,.nav_main:focus,.nav_main.depress{padding-left:30px;background-size:19px,100%,100%;background-position:9px center,center center}
-:not(.iframed) .nav_main,:not(.iframed) .nav_main:hover,:not(.iframed) .nav_main:focus,:not(.iframed) .nav_main.depress{background-position-y:calc(50% + 1px),center,center}
-.nav_forum,.nav_forum:hover,.nav_forum:focus,.nav_forum.depress,.nav_search,.nav_search:hover,.nav_search:focus,.nav_search.depress,.nav_tracker,.nav_tracker:hover,.nav_tracker:focus,.nav_tracker.depress{background-size:19px,100%,100%;background-position-x:8px,center,center}
-.iframed .nav_config,.iframed .nav_config:hover,.iframed .nav_config:focus,.iframed .nav_config.depress{padding-left:28px;background-size:18px,100%,100%;background-position:8px center,center,center}
+#nav_main,#nav_main:hover,#nav_main:focus,#nav_main.depress{padding-left:30px;background-size:19px,100%,100%;background-position:9px center,center center}
+:not(.iframed) #nav_main,:not(.iframed) #nav_main:hover,:not(.iframed) #nav_main:focus,:not(.iframed) #nav_main.depress{background-position-y:calc(50% + 1px),center,center}
+#nav_forum,#nav_forum:hover,#nav_forum:focus,#nav_forum.depress,#nav_search,#nav_search:hover,#nav_search:focus,#nav_search.depress,.nav_tracker,.nav_tracker:hover,.nav_tracker:focus,.nav_tracker.depress{background-size:19px,100%,100%;background-position-x:8px,center,center}
+.iframed #nav_config,.iframed #nav_config:hover,.iframed #nav_config:focus,.iframed #nav_config.depress{padding-left:28px;background-size:18px,100%,100%;background-position:8px center,center,center}
 .optionlist{padding:7px 6px 6px}
 #paginate{margin-top:1px}
 .peerclient code{display:inline-block}

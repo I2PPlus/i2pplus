@@ -72,24 +72,24 @@ th img,td img,#closelog,#expand,#shrink{font-size:0}
 .snarkNav:active{background:var(--tracker_active) no-repeat 9px center,var(--nav_active)}
 .snarkNav::before,.snarkNav::after{width:1px;height:1px;display:inline-block;vertical-align:middle;content:""}
 .snarkNav:first-child,.snarkNav[href*="i2psnark"]:last-child{padding-left:27px}
-.nav_main{background:var(--snark) no-repeat 9px center,var(--nav),var(--snark_hover),var(--snark_active)}
-.nav_main:hover,.nav_main:focus{background:var(--snark_hover) no-repeat 9px center,var(--btn_hover_radial),var(--nav_hover)}
-.nav_main:active{background:var(--snark_active) no-repeat 9px center,var(--nav_active)}
-.nav_config{background:var(--nav_config) no-repeat 9px center,var(--nav),var(--nav_config_hover),var(--nav_config_active)}
-.nav_config:hover,.nav_config:focus{background:var(--nav_config_hover) no-repeat 9px center,var(--btn_hover_radial),var(--nav_hover)}
-.nav_config:active{background:var(--nav_config_active) no-repeat 9px center,var(--nav_active)}
-.nav_forum{background:var(--forum) no-repeat 9px center,var(--nav),var(--forum_hover),var(--forum_active)}
-.nav_forum:hover,.nav_forum:focus{background:var(--forum_hover) no-repeat 9px center,var(--btn_hover_radial),var(--nav_hover)}
-.nav_forum:active{background:var(--forum_active) no-repeat 9px center,var(--nav_active)}
-.nav_search{background:var(--search) no-repeat 9px center,var(--nav),var(--search_hover),var(--search_active)}
-.nav_search:active{background:var(--search_active) no-repeat 9px center,var(--nav_active)}
-.nav_search:active{background:var(--search_active) no-repeat 9px center,var(--nav_active)}
+#nav_main{background:var(--snark) no-repeat 9px center,var(--nav),var(--snark_hover),var(--snark_active)}
+#nav_main:hover,#nav_main:focus{background:var(--snark_hover) no-repeat 9px center,var(--btn_hover_radial),var(--nav_hover)}
+#nav_main:active{background:var(--snark_active) no-repeat 9px center,var(--nav_active)}
+#nav_config{background:var(--nav_config) no-repeat 9px center,var(--nav),var(--nav_config_hover),var(--nav_config_active)}
+#nav_config:hover,#nav_config:focus{background:var(--nav_config_hover) no-repeat 9px center,var(--btn_hover_radial),var(--nav_hover)}
+#nav_config:active{background:var(--nav_config_active) no-repeat 9px center,var(--nav_active)}
+#nav_forum{background:var(--forum) no-repeat 9px center,var(--nav),var(--forum_hover),var(--forum_active)}
+#nav_forum:hover,#nav_forum:focus{background:var(--forum_hover) no-repeat 9px center,var(--btn_hover_radial),var(--nav_hover)}
+#nav_forum:active{background:var(--forum_active) no-repeat 9px center,var(--nav_active)}
+#nav_search{background:var(--search) no-repeat 9px center,var(--nav),var(--search_hover),var(--search_active)}
+#nav_search:active{background:var(--search_active) no-repeat 9px center,var(--nav_active)}
+#nav_search:active{background:var(--search_active) no-repeat 9px center,var(--nav_active)}
 .snarkNav:last-of-type{border-radius:1px}
 .snarkNav[target="_blank"]:last-child{border-radius:0 1px 1px 0}
 .snarkNav:last-child{border-radius:0 1px 1px 0}
 .snarkNav:first-child{border-radius:1px 0 0 1px}
 .snarkNav[href*="i2psnark"]{border-radius:1px}
-.snarkNav,.snarkNav:hover,.snarkNav:focus,.snarkNav:active,.snarkNav:active,.nav_search:hover,.nav_search:focus,.nav_forum:hover,.nav_forum:focus,.nav_main:hover,.nav_main:focus{background-size:15px,100%,100%,100%}
+.snarkNav,.snarkNav:hover,.snarkNav:focus,.snarkNav:active,.snarkNav:active,#nav_search:hover,#nav_search:focus,#nav_forum:hover,#nav_forum:focus,#nav_main:hover,#nav_main:focus{background-size:15px,100%,100%,100%}
 @supports (justify-content:center){#navbar{display:flex;justify-content:center}.snarkNav{margin-left:-1px;margin-right:-1px}}
 
 /* search */
@@ -921,7 +921,7 @@ body.textview{height:100vh}
 .magnetLabel{max-width:270px}
 .barText,.barOuter{width:100px}
 .snarkNav{padding-left:24px}
-.snarkNav,.snarkNav:hover,.snarkNav:focus,.snarkNav:active,.snarkNav:active,.nav_search:hover,.nav_search:focus,.nav_forum:hover,.nav_forum:focus,.nav_main:hover,.nav_main:focus{background-size:14px 14px,100%,100%}
+.snarkNav,.snarkNav:hover,.snarkNav:focus,.snarkNav:active,.snarkNav:active,#nav_search:hover,#nav_search:focus,#nav_forum:hover,#nav_forum:focus,#nav_main:hover,#nav_main:focus{background-size:14px 14px,100%,100%}
 .tab_label::after{width:16px;height:16px;background-size:14px,100%}
 .tName a,.magnetLabel{max-width:340px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #ourDest code{line-height:1.25}

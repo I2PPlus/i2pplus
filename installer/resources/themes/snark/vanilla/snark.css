@@ -91,18 +91,18 @@ th a:hover,th a:visited:hover,th a:focus,th a:visited:focus,td a:hover,td a:visi
 .snarkNav,.snarkNav:visited{margin:-3px -4px -4px 0;padding:4px 10px 4px 28px;display:inline-block;position:relative;z-index:30;line-height:1.3;font-family:var(--bodyfont);font-size:10pt;font-weight:700!important;color:#3f271b;text-shadow:0 0 1px #fff5ef;text-decoration:none;text-transform:uppercase;letter-spacing:.08em;border:var(--border);border-radius:0;box-shadow:var(--highlight),inset 0 0 0 #0000,0 0 0 1px rgba(77,69,62,.1);background-size:17px,100%,100%,17px,17px;background-position:12px center,center center,center center;background-repeat:no-repeat}
 .snarkNav:hover,.snarkNav:focus{z-index:50;color:#930;text-decoration:none;text-shadow:none;box-shadow:var(--highlight),inset 0 0 0 #0000,0 0 0 1px rgba(77,69,62,.1)}
 .snarkNav:active,.snarkNav.depress{text-shadow:none;box-shadow:var(--btn_shadow_inset);transition:ease box-shadow .01s}
-.nav_main{background:var(--b_snark) no-repeat 9px center/16px,var(--nav),var(--b_snark_hover) no-repeat 9px center/16px,var(--b_snark_active) no-repeat 9px center/16px}
-.nav_main:hover,.nav_main:focus{background:var(--b_snark_hover) no-repeat 9px center/18px,var(--nav_hover);background-size:18px,100%}
-.nav_main:active,.nav_main.depress{background:var(--b_snark_active) no-repeat 9px center,var(--nav_active);background-size:18px,100%}
-.nav_config{background:var(--b_config) no-repeat 12px center/16px,var(--nav),var(--b_config_hover),var(--b_config_active)}
-.nav_config:hover,.nav_config:focus{background:var(--b_config_hover) no-repeat 8px center/16px,var(--nav_hover)}
-.nav_config:active,.nav_config.depress{background:var(--b_config_active) no-repeat 8px center/16px,var(--nav_active)}
-.nav_forum{background:var(--b_forum) no-repeat 12px center/17px,var(--nav),var(--b_forum_hover),var(--b_forum_active)}
-.nav_forum:hover,.nav_forum:focus{background:var(--b_forum_hover) no-repeat 12px center/17px,var(--nav_hover)}
-.nav_forum:active,.nav_forum.depress{background:var(--b_forum_active) no-repeat 12px center/17px,var(--nav_active)}
-.nav_search{background:var(--b_search) no-repeat 12px center/15px,var(--nav),var(--b_search_hover),var(--b_search_active)}
-.nav_search:hover,.nav_search:focus{background:var(--b_search_hover) no-repeat 8px center/15px,var(--nav_hover)}
-.nav_search:active,.nav_search.depress{background:var(--b_search_active) no-repeat 12px center/17px,var(--nav_active)}
+#nav_main{background:var(--b_snark) no-repeat 9px center/16px,var(--nav),var(--b_snark_hover) no-repeat 9px center/16px,var(--b_snark_active) no-repeat 9px center/16px}
+#nav_main:hover,#nav_main:focus{background:var(--b_snark_hover) no-repeat 9px center/18px,var(--nav_hover);background-size:18px,100%}
+#nav_main:active,#nav_main.depress{background:var(--b_snark_active) no-repeat 9px center,var(--nav_active);background-size:18px,100%}
+#nav_config{background:var(--b_config) no-repeat 12px center/16px,var(--nav),var(--b_config_hover),var(--b_config_active)}
+#nav_config:hover,#nav_config:focus{background:var(--b_config_hover) no-repeat 8px center/16px,var(--nav_hover)}
+#nav_config:active,#nav_config.depress{background:var(--b_config_active) no-repeat 8px center/16px,var(--nav_active)}
+#nav_forum{background:var(--b_forum) no-repeat 12px center/17px,var(--nav),var(--b_forum_hover),var(--b_forum_active)}
+#nav_forum:hover,#nav_forum:focus{background:var(--b_forum_hover) no-repeat 12px center/17px,var(--nav_hover)}
+#nav_forum:active,#nav_forum.depress{background:var(--b_forum_active) no-repeat 12px center/17px,var(--nav_active)}
+#nav_search{background:var(--b_search) no-repeat 12px center/15px,var(--nav),var(--b_search_hover),var(--b_search_active)}
+#nav_search:hover,#nav_search:focus{background:var(--b_search_hover) no-repeat 8px center/15px,var(--nav_hover)}
+#nav_search:active,#nav_search.depress{background:var(--b_search_active) no-repeat 12px center/17px,var(--nav_active)}
 .nav_tracker{background:var(--b_tracker) no-repeat 12px center/17px,var(--nav),var(--b_tracker_hover),var(--b_tracker_active)}
 .nav_tracker:hover,.nav_tracker:focus{background:var(--b_tracker_hover) no-repeat 12px center/17px,var(--nav_hover)}
 .nav_tracker:active,.nav_tracker.depress{background:var(--b_tracker_active) no-repeat 12px center/17px,var(--nav_active)}
@@ -979,8 +979,8 @@ tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before,tfoot .rateUp
 .fileStatus .barText{font-size:8pt}
 .knownTracker a,#trackerselect td a{max-width:200px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .magnetLabel{max-width:320px;display:inline-block;vertical-align:middle;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.nav_main{padding:4px 8px 4px 23px;background-position:6px center,center center,center center}
-.nav_tracker,.nav_tracker:hover,.nav_tracker:focus,.nav_tracker:active,.nav_forum,.nav_forum:hover,.nav_forum:focus,.nav_forum:active{padding:4px 8px 4px 20px;background-size:15px,100%,100%;background-position:5px center,center center,center center}
+#nav_main{padding:4px 8px 4px 23px;background-position:6px center,center center,center center}
+.nav_tracker,.nav_tracker:hover,.nav_tracker:focus,.nav_tracker:active,#nav_forum,#nav_forum:hover,#nav_forum:focus,#nav_forum:active{padding:4px 8px 4px 20px;background-size:15px,100%,100%;background-position:5px center,center center,center center}
 .newTab{margin:-1px 4px 0}
 .barComplete,.barOuter,.barText{max-width:76px;min-width:76px;line-height:1.3}
 .barInner,.barOuter{height:14px}
@@ -1033,8 +1033,8 @@ td.status img{width:auto;height:19px}
 
 @media (min-width:1000px){
 body,#torrents td,.snarkAddInfo,th,td,.snarkFileName,a.control,input[type=submit],input[type="reset"],select,button{font-size:9pt}
-.nav_main,.nav_main:hover,.nav_main:focus,.nav_main:active{background-position:7px center,center center,center center}
-.nav_tracker,.nav_tracker:hover,.nav_tracker:focus,.nav_tracker:active,.nav_forum,.nav_forum:hover,.nav_forum:focus,.nav_forum:active{padding-left:23px;background-position:5px center,center center,center center}
+#nav_main,#nav_main:hover,#nav_main:focus,#nav_main:active{background-position:7px center,center center,center center}
+.nav_tracker,.nav_tracker:hover,.nav_tracker:focus,.nav_tracker:active,#nav_forum,#nav_forum:hover,#nav_forum:focus,#nav_forum:active{padding-left:23px;background-position:5px center,center center,center center}
 .peerclient code{display:inline-block;margin:0 3px 0 1px}
 .peerinfo .rxd .barText{line-height:14px}
 .rowOdd td,.rowEven td{padding-top:3px;padding-bottom:3px}
@@ -1062,8 +1062,8 @@ thead a img,thead img{max-height:21px}
 .mainsection #commentInfo td,.mainsection #userComments td{padding:8px 5px}
 .mainsection #userComments .commentDate{padding-left:20px}
 .mainsection #userComments .commentDelete{padding-left:24px}
-.nav_main{padding:4px 8px 4px 27px;background-position:8px center,center center,center center;background-size:18px,100%,100%}
-.nav_search:hover,.nav_search:focus{background-size:17px,100%,100%;background-position:8px center,center center,center center}
+#nav_main{padding:4px 8px 4px 27px;background-position:8px center,center center,center center;background-size:18px,100%,100%}
+#nav_search:hover,#nav_search:focus{background-size:17px,100%,100%;background-position:8px center,center center,center center}
 .nopeers .peerCount b,.nopeers .peerCount b .left,.nopeers .peerCount b .right{color:#333;text-shadow:0 1px 1px #aaa}
 .nopeers.incomplete .peerCount b{text-shadow:0 1px 1px #aaa;background:#aaa}
 .nopeers.incomplete .peerCount b::before{border-color:#0000 #aaa #0000 #0000}
@@ -1099,9 +1099,9 @@ select{padding-left:8px}
 thead a img,thead img{max-height:22px}
 .mainsection td,.peerinfo td{padding-top:2px;padding-bottom:2px}
 .mainsection #torrentInfo td{padding-top:4px;padding-bottom:4px}
-.nav_config{background-size:16px,100%,100%}
-.nav_forum,.nav_forum:hover,.nav_forum:focus,.nav_forum:active{background-position:9px center,center center,center center}
-.nav_main,.nav_main:hover,.nav_main:focus,.nav_main:active,.nav_forum,.nav_forum:hover,.nav_forum:focus,.nav_forum:active{padding-left:27px}
+#nav_config{background-size:16px,100%,100%}
+#nav_forum,#nav_forum:hover,#nav_forum:focus,#nav_forum:active{background-position:9px center,center center,center center}
+#nav_main,#nav_main:hover,#nav_main:focus,#nav_main:active,#nav_forum,#nav_forum:hover,#nav_forum:focus,#nav_forum:active{padding-left:27px}
 .nav_tracker,.nav_tracker:hover,.nav_tracker:focus,.nav_tracker:active{padding-left:25px;background-position:7px center,center center,center center}
 .peerclient code{margin:1px 4px 1px 1px}
 .rateUp{padding-right:15px}

@@ -7,17 +7,18 @@ import {doRefresh} from "./refreshTorrents.js";
 function pageNav() {
   const bodyTag = document.body;
   const active = bodyTag.classList.contains("pagenavListener");
-  const topNav = document.getElementById("pagenavtop");
+  const paginator = document.getElementById("paginate");
+  const topNav = document.getElementById("navbar");
   if (!topNav || active) {return;}
   bodyTag.classList.add("pagenavListener");
   document.addEventListener("click", pagenavListener);
 }
 
 let pagenavListener = function(event) {
-  if (event.target.closest(".pagenavcontrols a:not(disabled)")) {
+  if (event.target.closest("#paginate a:not(disabled)")) {
     event.preventDefault();
     const clickedElement = event.target;
-    const pagenavURL = new URL(event.target.closest(".pagenavcontrols a:not(disabled)").href);
+    const pagenavURL = new URL(event.target.closest("#paginate a:not(disabled)").href);
     if (pagenavURL) {
       const xhrPagenavURL = "/i2psnark/.ajax/xhr1.html" + pagenavURL.search;
       history.replaceState({}, "", new URL(pagenavURL));

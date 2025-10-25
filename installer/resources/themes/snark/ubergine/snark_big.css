@@ -18,7 +18,7 @@ th.rxd,th.txd,th.rateDown,th.rateUp,td.rxd,td.txd,td.rateDown,td.rateUp,.tName a
 .optionlist{columns:500px auto;column-gap:5px}
 .snarkAddInfo code,#pagenav,#trackerselect tr:first-child td,.clientid{font-size:9.5pt;font-weight:400}
 .snarkAddInfo{font-size:10pt}
-.snarkNav.nav_main:link{background-size:17px auto,100% 100%;padding-left:31px}
+#nav_main:link{background-size:17px auto,100% 100%;padding-left:31px}
 .snarkNav,#pagenav{font-weight:700}
 .iframed .snarkNav:link{padding-top:4px}
 #torrentInfo th,#dirInfo th,#totals,#commentInfo th,#configs th{font-size:11pt}

@@ -350,19 +350,19 @@ public class I2PSnarkServlet extends BasicServlet {
 
         if (isConfigure) {
             buf.append("<a href=\"").append(_contextPath).append("/\" title=\"").append(_t("Torrents"))
-               .append("\" class=\"snarkNav nav_main\">").append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName)
+               .append("\" id=nav_main class=\"snarkNav isConfig\">").append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName)
                .append("</a>\n");
         } else {
             buf.append("<a href=\"").append(_contextPath).append('/').append(peerString).append("\" title=\"")
-               .append(_t("Refresh page")).append("\" class=\"snarkNav nav_main\">")
+               .append(_t("Refresh page")).append("\" id=nav_main class=snarkNav>")
                .append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName).append("</a>\n");
-            buf.append("<a href=\"").append(_contextPath).append("/configure\" class=\"snarkNav nav_config\">")
+            buf.append("<a href=\"").append(_contextPath).append("/configure\" id=nav_config class=snarkNav>")
                .append(_t("Configure")).append("</a>");
 
             sortedTrackers = _manager.getSortedTrackers();
             sortedFilters = _manager.getSortedTorrentCreateFilterStrings();
 
-            buf.append("<a href=http://discuss.i2p/ class=\"snarkNav nav_forum\" target=_blank title=\"")
+            buf.append("<a href=http://discuss.i2p/ id=nav_forum class=snarkNav target=_blank title=\"")
                .append(_t("Torrent &amp; filesharing forum")).append("\">").append(_t("Forum")).append("</a>");
 
             for (Tracker t : sortedTrackers) {
@@ -4453,11 +4453,11 @@ public class I2PSnarkServlet extends BasicServlet {
            .append(_contextPath)
            .append("/\" title=")
            .append(_t("Torrents"))
-           .append(" class=\"snarkNav nav_main\">")
+           .append(" id=nav_main class=snarkNav>")
            .append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName).append("</a>\n")
            .append("<a href=\"")
            .append(_contextPath)
-           .append("/configure\" class=\"snarkNav nav_config\">")
+           .append("/configure\" id=nav_config class=snarkNav>")
            .append(_t("Configure"))
            .append("</a></div>\n");
 

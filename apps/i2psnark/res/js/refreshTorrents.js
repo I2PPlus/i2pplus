@@ -415,6 +415,9 @@ function refreshOnSubmit() {
         stopAllOrStartAllInactive.classList.add("tempDisabled");
         setTimeout(() => {stopAllOrStartAll.classList.remove("tempDisabled")}, 4000);
       }
+    } else if (clickTarget.matches("#nav_main:not(.isConfig)")) {
+      event.preventDefault();
+      refreshScreenLog(refreshTorrents, true);
     }
   });
 }
@@ -485,8 +488,45 @@ async function checkIfUp(minDelay = 14000) {
 }
 
 function preloadImage(src) {
-  const img = new Image();
-  img.src = src;
+  const CACHE_NAME = "my-image-cache";
+  const INTERVAL_MS = 10 * 60 * 1000;
+
+  const show = (url) => {};
+
+  const loadImage = (url) => show(url);
+
+  async function tryFromCache(u) {
+    if (!("caches" in window)) return false;
+    try {
+      const cache = await caches.open(CACHE_NAME);
+      const res = await cache.match(new Request(u, { mode: "cors" }));
+      if (res) {
+        show(URL.createObjectURL(await res.blob()));
+        return true;
+      }
+    } catch {}
+    return false;
+  }
+
+  async function ensureCached(u) {
+    if (await tryFromCache(u)) return;
+    if (!("caches" in window)) return loadImage(u);
+
+    try {
+      const req = new Request(u, { mode: "cors" });
+      const res = await fetch(req, { cache: "reload" });
+      if (!res.ok) return loadImage(u);
+
+      const cache = await caches.open(CACHE_NAME);
+      await cache.put(req, res.clone());
+      show(URL.createObjectURL(await res.blob()));
+    } catch {
+      loadImage(u);
+    }
+  }
+
+  ensureCached(src);
+  setInterval(() => ensureCached(src), INTERVAL_MS);
 }
 
 function isDown() {
