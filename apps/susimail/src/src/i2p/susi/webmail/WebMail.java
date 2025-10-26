@@ -215,6 +215,7 @@ public class WebMail extends HttpServlet {
     private static final String CONFIG_HTML_SHOW_WARNING = "view.html.warning";
     private static final String CONFIG_HTML_ENABLE_DARKMODE = "view.html.darkMode";
     private static final String CONFIG_HTML_SHOW_BLOCKED_IMAGES = "view.html.blockedImages";
+    private static final String CONFIG_ENABLE_MAIL_PREVIEWS = "view.enableMailPreviews";
     private static final String CONFIG_COPY_TO_SENT = "composer.copy.to.sent";
     static final String CONFIG_LEAVE_ON_SERVER = "pop3.leave.on.server";
     public static final String CONFIG_BACKGROUND_CHECK = "pop3.check.enable";
@@ -2195,8 +2196,8 @@ public class WebMail extends HttpServlet {
 
             buf.append("<!DOCTYPE HTML>\n<html class=\"" + theme + "\">\n")
                .append("<head>\n")
-               .append("<script src=\"/js/setupIframe.js\"></script>\n")
-               .append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n")
+               .append("<script src=/js/setupIframe.js></script>\n")
+               .append("<meta http-equiv=Content-Type content=text/html; charset=utf-8>\n")
                .append("<meta name=viewport content=\"width=device-width, initial-scale=1\">\n")
                .append("<title>").append(_t("I2PMail")).append(" - ").append(subtitle).append("</title>\n")
                .append("<link rel=preload as=style href=\"").append(sessionObject.themePath).append("../images/images.css?").append(CoreVersion.VERSION).append("\">\n")
@@ -2206,7 +2207,7 @@ public class WebMail extends HttpServlet {
                .append("<link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"").append(sessionObject.themePath).append("images/favicon.svg\">\n");
 
             if (sessionObject.isMobile) {
-                buf.append("<link rel=stylesheet href=\"").append(sessionObject.themePath).append("mobile.css?").append(CoreVersion.VERSION).append("\" />\n");
+                buf.append("<link rel=stylesheet href=\"").append(sessionObject.themePath).append("mobile.css?").append(CoreVersion.VERSION).append("\">\n");
             }
 
             if (enableSoraFont) {
@@ -2220,7 +2221,7 @@ public class WebMail extends HttpServlet {
             }
 
             if (state == State.LIST) {
-                buf.append("<link rel=stylesheet href=\"/susimail/css/print.css?").append(CoreVersion.VERSION).append("\" media=\"print\" />\n");
+                buf.append("<link rel=stylesheet href=\"/susimail/css/print.css?").append(CoreVersion.VERSION).append("\" media=print>\n");
             }
 
             if (state == State.NEW || state == State.CONFIG) {
@@ -2229,7 +2230,7 @@ public class WebMail extends HttpServlet {
                 buf.append("<script src=\"/susimail/js/folder.js?").append(CoreVersion.VERSION).append("\"></script>\n")
                    .append("<script src=\"/js/scrollTo.js?").append(CoreVersion.VERSION).append("\"></script>\n");
             } else if (state == State.LOADING) {
-                buf.append("<noscript><meta http-equiv=\"refresh\" content=\"5;url=").append(myself).append("\"></noscript>\n");
+                buf.append("<noscript><meta http-equiv=refresh content=\"5;url=").append(myself).append("\"></noscript>\n");
             } else if (state == State.SHOW) {
                 buf.append("<script src=\"/susimail/js/markdown.js?").append(CoreVersion.VERSION).append("\"></script>\n")
                    .append("<script src=\"/susimail/js/Markdown.Converter.js?").append(CoreVersion.VERSION).append("\"></script>\n")
@@ -2243,7 +2244,7 @@ public class WebMail extends HttpServlet {
 
             // setup noscript style so we can hide js buttons when js is disabled
             buf.append("<noscript><style>.script{display:none!important}</style></noscript>\n")
-               .append("<script src=\"/js/iframeResizer/iframeResizer.contentWindow.js\"></script>\n")
+               .append("<script src=/js/iframeResizer/iframeResizer.contentWindow.js></script>\n")
                .append("<script src=\"/js/iframeResizer/updatedEvent.js?").append(CoreVersion.VERSION).append("\"></script>\n")
                .append("<script src=\"/susimail/js/notifications.js?").append(CoreVersion.VERSION).append("\"></script>\n")
                .append("<script nonce=").append(cspNonce).append(">const theme = \"" + theme + "\";</script>\n")
@@ -2319,12 +2320,12 @@ public class WebMail extends HttpServlet {
             out.flush();
             buf.setLength(0);
 
-            /*
-             * now write body
-             */
-            if (state == State.AUTH) {showLogin(out);}
+            /* now write body */
+            boolean isLogin = state == State.AUTH;
+            boolean isList = state == State.LIST;
+            if (isLogin) {showLogin(out);}
             else if (state == State.LOADING) {showLoading(out, sessionObject, request);}
-            else if (state == State.LIST) {showFolder(out, sessionObject, mc, request);}
+            else if (isList) {showFolder(out, sessionObject, mc, request);}
             else if (state == State.SHOW) {
                 // Determine what HtmlMode we're going to show the mail in
                 boolean disable = isMobile || !CSPDetector.supportsCSP(httpRequest.getHeader("User-Agent"));
@@ -2341,10 +2342,8 @@ public class WebMail extends HttpServlet {
             } else if (state == State.NEW) {showCompose(out, sessionObject, request);}
             else if (state == State.CONFIG) {showConfig(out, folder);}
 
-            if (state == State.AUTH) {
-                buf.append("\n<div class=footer>\n<script src=\"/js/togglePassword.js?")
-                   .append(CoreVersion.VERSION).append("\"></script>")
-                   .append("<p class=footer>")
+            if (isLogin) {
+                buf.append("\n<div class=footer>\n<script src=/js/togglePassword.js></script>\n<p class=footer>")
                    .append(_t("{0} is an I2P-exclusive service provided by {1}.", "<b>I2PMail</b>",
                            "<a href=\"http://hq.postman.i2p/\" target=_blank>Postman</a>")).append(' ')
                    .append(_t("{0} webmail client &copy Susi 2004-2005.", "<b>SusiMail</b>")
@@ -2355,7 +2354,15 @@ public class WebMail extends HttpServlet {
                 buf.append("<script id=autorefresh type=module src=\"/susimail/js/refreshInbox.js?")
                    .append(CoreVersion.VERSION).append("\"></script>\n");
             }
-            buf.append("<script src=\"/susimail/js/deleteMail.js?").append(CoreVersion.VERSION).append("\"></script>\n");
+            if (!isLogin) {
+                buf.append("<script src=/susimail/js/deleteMail.js></script>\n");
+            }
+            if (isList) {
+                boolean showPreviews = Boolean.parseBoolean(Config.getProperty(CONFIG_ENABLE_MAIL_PREVIEWS));
+                if (showPreviews) {
+                    buf.append("<script src=/susimail/js/previewMail.js type=module></script>\n");
+                }
+            }
             buf.append("<style>body{display:block;pointer-events:auto}</style>\n");
             buf.append("</body>\n</html>");
 
@@ -3385,21 +3392,11 @@ public class WebMail extends HttpServlet {
         // to compute it here. For a drop-in helper, we'll rely on caller-supplied idChecked.
         // To keep this method self-contained, idChecked remains false by default.
 
-        String subj = mail.shortSubject;
+        String subj = escapeHtml(mail.shortSubject);
         if (subj.length() <= 0) {subj = "<i>" + _t("no subject") + "</i>";}
 
         StringBuilder sb = new StringBuilder(2048);
-        sb.append("<tr class=mailEntry>")
-          .append("<td class=\"mailListDate ").append(jslink).append(">")
-          .append("<span class=listDate title=\"").append(mail.dateOnly).append("\"><span>")
-          .append(mail.localFormattedDate
-          .replace("/", "</span>&#8239;/&#8239;<span>")
-          .replace(":", "&#8239;:&#8239;")
-          .replaceFirst(" ", "</span></span>&nbsp;<span class=listTime>")
-          .replace(" AM", "&#8239;<span class=listClock>AM</span>")
-          .replace(" PM", "&#8239;<span class=listClock>PM</span>")
-          .replace(",", ""))
-          .append("</span></td>");
+        sb.append("<tr class=mailEntry>").append(renderDateCell(mail, jslink));
 
         if (showToColumn) {
             if (mail.to != null) {
@@ -3409,7 +3406,7 @@ public class WebMail extends HttpServlet {
                     if (j < mail.to.length - 1) {buf.append(", ");}
                     if (buf.length() > 45) {break;}
                 }
-                String to = buf.toString().replace("&lt;", "").replace("&gt;", "").replace("@.*", "");
+                String to = escapeHtml(buf.toString().replace("@.*", ""));
                 if (to.contains("(")) {
                     int index = to.indexOf("(");
                     to = to.substring(0, index);
@@ -3432,9 +3429,9 @@ public class WebMail extends HttpServlet {
               .append(mail.sender.replace("\"", "") + "\">");
             if (mail.shortSender.contains("(")) {
                 int index = mail.shortSender.indexOf("(");
-                mail.shortSender = mail.shortSender.substring(0, index);
+                mail.shortSender = escapeHtml(mail.shortSender.substring(0, index));
             }
-            sb.append(link).append(mail.shortSender.replace("&lt;", "").replace("&gt;", "").replaceAll("@.*", ""))
+            sb.append(link).append(mail.shortSender.replaceAll("@.*", "").replace("&lt;", "").replace("&gt;", ""))
               .append("</a></td>");
         }
 
@@ -3475,6 +3472,59 @@ public class WebMail extends HttpServlet {
           .append("></td></tr>\n");
 
         return sb.toString();
+    }
+
+    /**
+     * Builds the HTML for the date cell of a mail row.
+     * @param mail The Mail object for which the date cell is being rendered
+     * @param jslink The string used to enable JavaScript-driven row interactions
+     * @since 0.9.68+
+     */
+    private static String renderDateCell(Mail mail, String jslink) {
+        String dateOnly = (mail != null && mail.dateOnly != null) ? mail.dateOnly : "";
+        String formatted = mail != null ? mail.localFormattedDate : "";
+        formatted = formatted.replace(",", "")
+                             .replace("/", "</span>&#8239;/&#8239;<span>")
+                             .replace(":", "&#8239;:&#8239;")
+                             .replaceFirst(" ", "</span></span>&nbsp;<span class=listTime>")
+                             .replace(" AM", "&#8239;<span class=listClock>AM</span>")
+                             .replace(" PM", "&#8239;<span class=listClock>PM</span>");
+
+        StringBuilder cell = new StringBuilder(320);
+        cell.append("<td class=\"mailListDate ")
+            .append(jslink)
+            .append(" title=\"")
+            .append(dateOnly)
+            .append("\"><span class=listDate title=\"")
+            .append(mail.dateOnly)
+            .append("\"><span>")
+            .append(formatted)
+            .append("</span></td>");
+
+        return cell.toString();
+    }
+
+    /**
+     * HTML escaping helper.
+     * @since 0.9.68+
+     */
+    private static String escapeHtml(String s) {
+        if (s == null || s.isEmpty()) {
+            return "";
+        }
+        StringBuilder out = new StringBuilder(s.length());
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            switch (c) {
+                case '&': out.append("&amp;"); break;
+                case '<': out.append("&lt;"); break;
+                case '>': out.append("&gt;"); break;
+                case '"': out.append("&quot;"); break;
+                case '\'': out.append("&#39;"); break;
+                default: out.append(c);
+            }
+        }
+        return out.toString();
     }
 
     /**
