@@ -49,10 +49,10 @@ import static net.i2p.router.tunnel.pool.BuildExecutor.Result.*;
  *
  * <p>This class includes an adaptive next-hop send timeout mechanism that:
  * <ul>
- * <li>Starts at 10 seconds</li>
- * <li>Increases slowly (500ms) on high failure rate (>70%)</li>
+ * <li>Starts at 8 seconds</li>
+ * <li>Increases slowly (500ms) on high failure rate (>50%)</li>
  * <li>Decreases rapidly (20% of gap to min) on low failure rate (<30%)</li>
- * <li>Timeout range is bounded between 10s and 30s</li>
+ * <li>Timeout range is bounded between 8s and 30s</li>
  * </ul>
  *
  * <p>The timeout is updated after each send (success or failure) to ensure responsiveness
@@ -94,14 +94,43 @@ class BuildHandler implements Runnable {
     private static final int MIN_NEXT_HOP_TIMEOUT = 8 * 1000;
     /** Maximum allowed timeout (30 seconds) */
     private static final int MAX_NEXT_HOP_TIMEOUT = 30 * 1000;
-    /** Step size for timeout adjustment (1s) */
-    private static final int TIMEOUT_STEP = 1000;
+    /** Step size for timeout adjustment (500ms) */
+    private static final int TIMEOUT_STEP = 500;
     /** Number of recent outcomes to consider for adaptation */
-    private static final int ADAPT_WINDOW_SIZE = 10;
-    /** Failure rate threshold above which timeout is increased */
-   private static final double INCREASE_THRESHOLD = 0.60;
-    /** Failure rate threshold below which timeout is reduced */
-   private static final double DECREASE_THRESHOLD = 0.50;
+    private static final int ADAPT_WINDOW_SIZE = 20;
+    /**
+     * Failure rate threshold above which the timeout is increased.
+     * If the recent failure rate exceeds this value (e.g., >50%), the timeout will
+     * increase slowly (by TIMEOUT_STEP) to allow more time for next-hop communication.
+     * @since 0.9.68+
+     */
+   private static final double THRESHOLD_INCREASE = 0.50;
+    /**
+     * Failure rate threshold below which the timeout is decreased.
+     * If the recent failure rate falls below this value (e.g., <30%), the timeout will
+     * decrease rapidly (by a percentage of the gap to MIN_NEXT_HOP_TIMEOUT) to improve responsiveness.
+     * @since 0.9.68+
+     */
+   private static final double THRESHOLD_DECREASE = 0.30;
+    /**
+     * Hysteresis margin to prevent oscillation.
+     * Timeout will only increase if failure rate is at least this much above THRESHOLD_DECREASE.
+     * Prevents bouncing between increasing and decreasing on small fluctuations.
+     * @since 0.9.68+
+     */
+    private static final double HYSTERESIS_MARGIN = 0.10; // 10%
+
+    /**
+     * Minimum failure rate to justify increasing timeout.
+     * Prevents increasing if we're still within hysteresis range of a recent decrease.
+     */
+    private static final double HYSTERETIC_THRESHOLD_INCREASE = THRESHOLD_DECREASE + HYSTERESIS_MARGIN;
+
+    /**
+     * Maximum failure rate to justify decreasing timeout.
+     * Prevents decreasing if we're within hysteresis range of a recent increase.
+     */
+    private static final double HYSTERETIC_THRESHOLD_DECREASE = THRESHOLD_INCREASE - HYSTERESIS_MARGIN;
 
     /**
      * Current dynamic timeout used when sending to the next hop.
@@ -144,30 +173,45 @@ class BuildHandler implements Runnable {
     }
 
     /**
-     * Adjust the next-hop send timeout based on recent failure rate.
-     * This method implements an **asymmetric adaptation strategy**:
+     * Adjust the next-hop send timeout based on recent send outcomes (success or failure).
+     * This method implements an **asymmetric adaptation strategy with hysteresis**:
+     *
      * <ul>
-     *   <li><b>Fast timeout decrease</b> when recent success rate is high (below DECREASE_THRESHOLD)</li>
-     *   <li><b>Slow timeout increase</b> when recent failure rate is high (above INCREASE_THRESHOLD)</li>
+     *   <li><b>Slow timeout increase</b> when failure rate exceeds the upper threshold
+     *       (HYSTERETIC_THRESHOLD_INCREASE). This prevents premature timeout growth
+     *       during transient failures.</li>
+     *
+     *   <li><b>Fast timeout decrease</b> when failure rate drops below the lower threshold
+     *       (HYSTERETIC_THRESHOLD_DECREASE). This allows rapid recovery during stable periods.</li>
+     *
+     *   <li><b>No change</b> when the failure rate is within the hysteresis band between
+     *       thresholds. This prevents oscillation and promotes stability during borderline conditions.</li>
      * </ul>
-     * Called whenever a send completes successfully or fails.
-     * Thread-safe via synchronization.
+     *
+     * <p>Timeout changes are bounded by MIN_NEXT_HOP_TIMEOUT and MAX_NEXT_HOP_TIMEOUT.
+     * The timeout decreases by 20% of the gap to the minimum, and increases in fixed steps.
+     *
+     * <p>This method is called after every send (success or failure) to adapt to current
+     * network conditions while avoiding unnecessary adjustments due to noise or short-term fluctuations.
+     *
+     * <p><b>Thread-safe</b> via synchronization.
+     *
      * @since 0.9.68+
      */
     private synchronized void adaptTimeout() {
         double failureRate = _recentOutcomes.getFailureRate();
 
-        if (failureRate > INCREASE_THRESHOLD && _currentNextHopTimeout < MAX_NEXT_HOP_TIMEOUT) {
-            // Slow increase: add 500ms
-            _currentNextHopTimeout = Math.min(MAX_NEXT_HOP_TIMEOUT, _currentNextHopTimeout + 500);
+        if (failureRate > HYSTERETIC_THRESHOLD_INCREASE && _currentNextHopTimeout < MAX_NEXT_HOP_TIMEOUT) {
+            // Significant failure rate — increase timeout
+            _currentNextHopTimeout = Math.min(MAX_NEXT_HOP_TIMEOUT, _currentNextHopTimeout + TIMEOUT_STEP);
             if (_log.shouldWarn()) {
                 _log.warn("Increased next-hop timeout to " + (_currentNextHopTimeout / 1000) + "s -> Failure rate: " +
                           String.format("%.1f%%", failureRate * 100));
             }
-        } else if (failureRate < DECREASE_THRESHOLD && _currentNextHopTimeout > MIN_NEXT_HOP_TIMEOUT) {
-            // Fast decrease: reduce by 20% of remaining gap to MIN_NEXT_HOP_TIMEOUT
+        } else if (failureRate < HYSTERETIC_THRESHOLD_DECREASE && _currentNextHopTimeout > MIN_NEXT_HOP_TIMEOUT) {
+            // Significant success rate — decrease timeout
             int gap = _currentNextHopTimeout - MIN_NEXT_HOP_TIMEOUT;
-            int decrease = (int) (gap * 0.2); // 20% of current gap
+            int decrease = (int) (gap * 0.2); // 20% of gap
             _currentNextHopTimeout -= decrease;
             if (_currentNextHopTimeout < MIN_NEXT_HOP_TIMEOUT) {
                 _currentNextHopTimeout = MIN_NEXT_HOP_TIMEOUT;
@@ -177,6 +221,7 @@ class BuildHandler implements Runnable {
                           String.format("%.1f%%", failureRate * 100));
             }
         }
+        // else: within hysteresis range → do nothing
     }
 
     private static final long MAX_REQUEST_FUTURE = 5*60*1000;
