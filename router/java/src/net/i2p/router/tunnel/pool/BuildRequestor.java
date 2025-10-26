@@ -252,12 +252,12 @@ abstract class BuildRequestor {
                 }
                 // Client SKM missing but garlic reply expected → fall through to expl
                 if (log.shouldInfo()) {
-                    log.info("Client SKM unavailable for garlic reply; falling back to exploratory for " + cfg);
+                    log.info("Client SKM unavailable for garlic reply -> Falling back to exploratory for " + cfg + "...");
                 }
             }
         } else {
             if (log.shouldWarn()) {
-                log.warn(fails + " consecutive build timeouts for " + cfg + " → Forcing exploratory tunnel");
+                log.warn(fails + " consecutive build timeouts for " + cfg + " → Forcing exploratory tunnel...");
             }
         }
 
@@ -309,14 +309,14 @@ abstract class BuildRequestor {
                     log.warn("Failed to garlic-wrap inbound TunnelBuildMessage to " + ibgw);
                 }
             } else if (log.shouldWarn()) {
-                log.warn("No RouterInfo for " + ibgw + "; cannot wrap inbound TunnelBuildMessage");
+                log.warn("No RouterInfo for " + ibgw + " -> Cannot wrap inbound TunnelBuildMessage");
             }
         }
 
         if (log.shouldInfo()) {
             log.info("Sending inbound TunnelBuildRequest [MsgID " + msg.getUniqueId() + "] via " + pairedTunnel +
-                     " to [" + ibgw.toBase64().substring(0, 6) + "] for " + cfg +
-                     "; awaiting reply [MsgID " + cfg.getReplyMessageId() + "]");
+                     "\n* To [" + ibgw.toBase64().substring(0, 6) + "] for " + cfg +
+                     " -> Awaiting reply [MsgID " + cfg.getReplyMessageId() + "]...");
         }
         ctx.tunnelDispatcher().dispatchOutbound(msg, pairedTunnel.getSendTunnelId(0), ibgw);
     }
@@ -326,8 +326,8 @@ abstract class BuildRequestor {
                                             BuildExecutor exec, Log log) {
         Hash nextHop = cfg.getPeer(1);
         if (log.shouldInfo()) {
-            log.info("Sending outbound TunnelBuildRequest direct to [" + nextHop.toBase64().substring(0, 6) + "] for " + cfg +
-                     "; reply via " + pairedTunnel + " [MsgID " + msg.getUniqueId() + "]");
+            log.info("Sending outbound TunnelBuildRequest direct to [" + nextHop.toBase64().substring(0, 6) + "] \n* For: " + cfg +
+                     " -> Reply via " + pairedTunnel + " [MsgID " + msg.getUniqueId() + "]");
         }
 
         // Add fuzz to expiration to obscure tunnel structure
