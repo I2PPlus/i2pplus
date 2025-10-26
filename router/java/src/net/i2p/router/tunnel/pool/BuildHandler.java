@@ -47,7 +47,7 @@ import static net.i2p.router.tunnel.pool.BuildExecutor.Result.*;
  * Handle the received tunnel build message requests and replies, including sending responses,
  * updating tunnel lists, and adjusting the next-hop send timeout adaptively.
  *
- * <p>This class now includes an adaptive next-hop send timeout mechanism that:
+ * <p>This class includes an adaptive next-hop send timeout mechanism that:
  * <ul>
  * <li>Starts at 10 seconds</li>
  * <li>Increases slowly (500ms) on high failure rate (>70%)</li>
@@ -1139,9 +1139,9 @@ class BuildHandler implements Runnable {
             _context.outNetMessagePool().add(msg);
             _recentOutcomes.add(true);
             adaptTimeout();
-            if (_log.shouldInfo()) {
-                _log.info("Successful send, adapting next-hop timeout -> New timeout: " + (_currentNextHopTimeout / 1000) + "s");
-            }
+            //if (_log.shouldDebug()) {
+            //    _log.debug("Successful send, adapting next-hop timeout -> New timeout: " + (_currentNextHopTimeout / 1000) + "s");
+            //}
         } else {
             // We are the OBEP.
             // send it to the reply tunnel on the reply peer within a new TunnelBuildReplyMessage
@@ -1181,9 +1181,9 @@ class BuildHandler implements Runnable {
                 _context.outNetMessagePool().add(outMsg);
                 _recentOutcomes.add(true);
                 adaptTimeout();
-                if (_log.shouldInfo()) {
-                    _log.info("Successful send (OBEP), adapting next-hop timeout -> New timeout: " + (_currentNextHopTimeout / 1000) + "s");
-                }
+                //if (_log.shouldDebug()) {
+                //    _log.debug("Successful send (OBEP), adapting next-hop timeout -> New timeout: " + (_currentNextHopTimeout / 1000) + "s");
+                //}
             }
         }
     }
