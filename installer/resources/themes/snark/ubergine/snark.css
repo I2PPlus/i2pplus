@@ -158,7 +158,7 @@ tfoot td:first-child{padding-left:0;text-align:left}
 #snarkSearch input[type="submit"]:active{background-size:22px;filter:none}
 #snarkSearch:hover input[type="submit"],#snarkSearch:focus-within input[type="submit"]{opacity:1}
 #searchwrap{position:relative}
-#searchwrap a[href="/i2psnark"],#searchwrap a[href="/i2psnark"]:hover,#searchwrap a[href="/i2psnark"]:active{padding:3px;height:14px;width:14px;position:absolute;top:calc(50% - 16px);right:4px;font-size:0!important;background:#000 var(--close) no-repeat center center/10px;border:1px solid #303;box-shadow:none;opacity:0;filter:none}
+#searchwrap a[href="/i2psnark"],#searchwrap a[href="/i2psnark"]:hover,#searchwrap a[href="/i2psnark"]:active{padding:3px;height:14px;width:14px;display:inline-block;position:absolute;top:calc(50% - 16px);right:4px;font-size:0!important;background:#000 var(--close) no-repeat center center/10px;border:1px solid #303;box-shadow:none;opacity:0;filter:none}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"],#snarkSearch:hover input[type=search]:not(:placeholder-shown)+a[href="/i2psnark"]{opacity:.5}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"]:hover,#snarkSearch input[type=search][value]+a[href="/i2psnark"]{opacity:1}
 .iframed #snarkSearch{top:9px}

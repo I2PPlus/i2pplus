@@ -188,7 +188,8 @@ input[type=submit]:active,input[type=submit].depress,a.control:active,a.control.
 #snarkSearch input[type="submit"]:active{background-size:22px;filter:none}
 #snarkSearch:hover input[type="submit"],#snarkSearch:focus-within input[type="submit"]{opacity:1}
 #searchwrap{position:relative}
-#searchwrap a[href="/i2psnark"]{margin:1px 0 -1px;padding:3px;height:10px;width:10px;display:inline-block;position:absolute;top:calc(50% - 9px);right:0;font-size:0;background:#f2f2f2 url(images/delete.svg) no-repeat center center/10px;border:1px solid #ccc;box-shadow:none;opacity:0;filter:none}
+#searchwrap:not(:hover) a[href="/i2psnark"]{opacity:0}
+#searchwrap a[href="/i2psnark"]{margin:1px 0 -1px;padding:3px;height:10px;width:10px;display:inline-block;position:absolute;top:calc(50% - 9px);right:0;font-size:0;background:#f2f2f2 url(images/delete.svg) no-repeat center center/10px;border:1px solid #ccc;box-shadow:none;filter:none}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"],#snarkSearch:hover input[type=search]:not(:placeholder-shown)+a[href="/i2psnark"],#snarkSearch input[type=search][value]+a[href="/i2psnark"]{background-blend-mode:luminosity}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"]:hover{background-blend-mode:normal}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"]:hover,#snarkSearch input[type=search][value]+a[href="/i2psnark"]{opacity:1}
