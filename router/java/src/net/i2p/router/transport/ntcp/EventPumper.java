@@ -231,17 +231,26 @@ class EventPumper implements Runnable {
                     loopCount++;
                     loopCountSinceLastRate++;
 
+                    int keyCount = _selector.keys().size();
                     // Determine selector delay dynamically
-                    long delay = (_wantsWrite.isEmpty() && _wantsRead.isEmpty()) ? 1000L : SELECTOR_LOOP_DELAY;
+                    long delay = (_wantsWrite.isEmpty() && _wantsRead.isEmpty()) ? 1000L : calculateSelectorDelay(keyCount);
 
                     int selectedCount;
+
                     try {
-                        selectedCount = _selector.select(delay);
+                        if (_wantsWrite.isEmpty() && _wantsRead.isEmpty()) {
+                            selectedCount = _selector.selectNow(); // non-blocking
+                        } else {
+                            selectedCount = _selector.select(SELECTOR_LOOP_DELAY);
+                        }
                     } catch (ClosedSelectorException cse) {
                         continue;
                     } catch (IOException | CancelledKeyException e) {
-                        if (shouldDebug) _log.warn("Error selecting", e);
-                        else if (shouldWarn) _log.warn("Error selecting -> " + e.getMessage());
+                        if (shouldDebug) {
+                            _log.warn("Error selecting", e);
+                        } else if (shouldWarn) {
+                            _log.warn("Error selecting -> " + e.getMessage());
+                        }
                         continue;
                     }
 
@@ -252,7 +261,6 @@ class EventPumper implements Runnable {
                     }
 
                     runDelayedEvents();
-
                     long nowMs = System.currentTimeMillis();
 
                     // Update loop rate stat every second
@@ -432,6 +440,24 @@ class EventPumper implements Runnable {
     }
 
     /**
+     * Calculate an optimal selector delay based on the current number of connections.
+     *
+     * @param keyCount number of keys currently registered with the selector
+     * @return delay in milliseconds to pass to selector.select(delay)
+     */
+    private long calculateSelectorDelay(int keyCount) {
+        if (keyCount < 100) {
+            return 5;
+        } else if (keyCount < 500) {
+            return 20;
+        } else if (keyCount < 1000) {
+            return 30;
+        } else {
+            return 50;
+        }
+    }
+
+    /**
      *  Process all keys from the last select.
      *  High-frequency path in thread.
      */
@@ -494,7 +520,7 @@ class EventPumper implements Runnable {
      */
     public void wantsRead(NTCPConnection con) {
         _wantsRead.offer(con);
-        _selector.wakeup();
+        maybeWakeup();
     }
 
     /**
