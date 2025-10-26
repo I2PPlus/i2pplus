@@ -44,19 +44,19 @@ import net.i2p.util.VersionComparator;
 import static net.i2p.router.tunnel.pool.BuildExecutor.Result.*;
 
 /**
- * Handle the received tunnel build message requests and replies, including sending responses
- * to requests, updating the lists of our tunnels and participating tunnels, and updating stats.
+ * Handle the received tunnel build message requests and replies, including sending responses,
+ * updating tunnel lists, and adjusting the next-hop send timeout adaptively.
  *
- * Replies are handled immediately on reception; requests are queued. As of 0.8.11 the request queue
- * is handled in a separate thread, it used to be called from the BuildExecutor thread loop.
+ * <p>This class now includes an adaptive next-hop send timeout mechanism that:
+ * <ul>
+ * <li>Starts at 10 seconds</li>
+ * <li>Increases slowly (500ms) on high failure rate (>70%)</li>
+ * <li>Decreases rapidly (20% of gap to min) on low failure rate (<30%)</li>
+ * <li>Timeout range is bounded between 10s and 30s</li>
+ * </ul>
  *
- * Note that 10 minute tunnel expiration is hardcoded in here.
- *
- * There is only one of these objects but there may be multiple threads running it.
- * Instantiated and started by TunnelPoolManager.
- *
- * <p>This class now includes an adaptive next-hop send timeout mechanism that starts at 10 seconds
- * and increases in 2-second steps (up to 30s) based on recent failure rate of next-hop sends.</p>
+ * <p>The timeout is updated after each send (success or failure) to ensure responsiveness
+ * to network conditions while maintaining stability during transient issues.
  */
 class BuildHandler implements Runnable {
     private final RouterContext _context;
@@ -97,9 +97,11 @@ class BuildHandler implements Runnable {
     /** Step size for timeout adjustment (1s) */
     private static final int TIMEOUT_STEP = 1000;
     /** Number of recent outcomes to consider for adaptation */
-    private static final int ADAPT_WINDOW_SIZE = 50;
+    private static final int ADAPT_WINDOW_SIZE = 10;
     /** Failure rate threshold above which timeout is increased */
-    private static final double FAILURE_THRESHOLD = 0.75;
+   private static final double INCREASE_THRESHOLD = 0.70;
+    /** Failure rate threshold below which timeout is reduced */
+   private static final double DECREASE_THRESHOLD = 0.30;
 
     /**
      * Current dynamic timeout used when sending to the next hop.
@@ -143,21 +145,33 @@ class BuildHandler implements Runnable {
 
     /**
      * Adjust the next-hop send timeout based on recent failure rate.
-     * Called after recording a failure or periodically (not implemented here).
+     * This method implements an **asymmetric adaptation strategy**:
+     * <ul>
+     *   <li><b>Fast timeout decrease</b> when recent success rate is high (below DECREASE_THRESHOLD)</li>
+     *   <li><b>Slow timeout increase</b> when recent failure rate is high (above INCREASE_THRESHOLD)</li>
+     * </ul>
+     * Called whenever a send completes successfully or fails.
      * Thread-safe via synchronization.
+     * @since 0.9.68+
      */
     private synchronized void adaptTimeout() {
         double failureRate = _recentOutcomes.getFailureRate();
 
-        if (failureRate > FAILURE_THRESHOLD && _currentNextHopTimeout < MAX_NEXT_HOP_TIMEOUT) {
-            _currentNextHopTimeout = Math.min(MAX_NEXT_HOP_TIMEOUT, _currentNextHopTimeout + TIMEOUT_STEP);
+        if (failureRate > INCREASE_THRESHOLD && _currentNextHopTimeout < MAX_NEXT_HOP_TIMEOUT) {
+            // Slow increase: add 500ms
+            _currentNextHopTimeout = Math.min(MAX_NEXT_HOP_TIMEOUT, _currentNextHopTimeout + 500);
             if (_log.shouldWarn()) {
                 _log.warn("Increased next-hop timeout to " + (_currentNextHopTimeout / 1000) + "s -> Failure rate: " +
                           String.format("%.1f%%", failureRate * 100));
             }
-        } else if (failureRate < (FAILURE_THRESHOLD) && _currentNextHopTimeout > MIN_NEXT_HOP_TIMEOUT) {
-            // Only decrease if clearly stable
-            _currentNextHopTimeout = Math.max(MIN_NEXT_HOP_TIMEOUT, _currentNextHopTimeout - TIMEOUT_STEP);
+        } else if (failureRate < DECREASE_THRESHOLD && _currentNextHopTimeout > MIN_NEXT_HOP_TIMEOUT) {
+            // Fast decrease: reduce by 20% of remaining gap to MIN_NEXT_HOP_TIMEOUT
+            int gap = _currentNextHopTimeout - MIN_NEXT_HOP_TIMEOUT;
+            int decrease = (int) (gap * 0.2); // 20% of current gap
+            _currentNextHopTimeout -= decrease;
+            if (_currentNextHopTimeout < MIN_NEXT_HOP_TIMEOUT) {
+                _currentNextHopTimeout = MIN_NEXT_HOP_TIMEOUT;
+            }
             if (_log.shouldInfo()) {
                 _log.info("Decreased next-hop timeout to " + (_currentNextHopTimeout / 1000) + "s -> Failure rate: " +
                           String.format("%.1f%%", failureRate * 100));
@@ -1123,6 +1137,11 @@ class BuildHandler implements Runnable {
             OutNetMessage msg = new OutNetMessage(_context, nextMessage, expires, PRIORITY, nextPeerInfo);
             if (response == 0) {msg.setOnFailedSendJob(new TunnelBuildNextHopFailJob(_context, cfg));}
             _context.outNetMessagePool().add(msg);
+            _recentOutcomes.add(true);
+            adaptTimeout();
+            if (_log.shouldInfo()) {
+                _log.info("Successful send, adapting next-hop timeout -> New timeout: " + (_currentNextHopTimeout / 1000) + "s");
+            }
         } else {
             // We are the OBEP.
             // send it to the reply tunnel on the reply peer within a new TunnelBuildReplyMessage
@@ -1160,6 +1179,11 @@ class BuildHandler implements Runnable {
                 OutNetMessage outMsg = new OutNetMessage(_context, m, expires, PRIORITY, nextPeerInfo);
                 if (response == 0) {outMsg.setOnFailedSendJob(new TunnelBuildNextHopFailJob(_context, cfg));}
                 _context.outNetMessagePool().add(outMsg);
+                _recentOutcomes.add(true);
+                adaptTimeout();
+                if (_log.shouldInfo()) {
+                    _log.info("Successful send (OBEP), adapting next-hop timeout -> New timeout: " + (_currentNextHopTimeout / 1000) + "s");
+                }
             }
         }
     }
