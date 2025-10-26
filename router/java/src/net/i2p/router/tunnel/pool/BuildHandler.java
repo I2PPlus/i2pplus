@@ -91,7 +91,7 @@ class BuildHandler implements Runnable {
 
     // --- Adaptive Timeout Configuration ---
     /** Initial next-hop send timeout (10 seconds) */
-    private static final int MIN_NEXT_HOP_TIMEOUT = 10 * 1000;
+    private static final int MIN_NEXT_HOP_TIMEOUT = 8 * 1000;
     /** Maximum allowed timeout (30 seconds) */
     private static final int MAX_NEXT_HOP_TIMEOUT = 30 * 1000;
     /** Step size for timeout adjustment (1s) */
@@ -99,9 +99,9 @@ class BuildHandler implements Runnable {
     /** Number of recent outcomes to consider for adaptation */
     private static final int ADAPT_WINDOW_SIZE = 10;
     /** Failure rate threshold above which timeout is increased */
-   private static final double INCREASE_THRESHOLD = 0.70;
+   private static final double INCREASE_THRESHOLD = 0.60;
     /** Failure rate threshold below which timeout is reduced */
-   private static final double DECREASE_THRESHOLD = 0.30;
+   private static final double DECREASE_THRESHOLD = 0.50;
 
     /**
      * Current dynamic timeout used when sending to the next hop.
