@@ -257,7 +257,7 @@ class EventPumper implements Runnable {
 
                     // Update loop rate stat every second
                     if (nowMs - lastLoopRateUpdate >= 1000) {
-                        _context.statManager().addRateData("ntcp.pumperLoopsPerSecond", loopCountSinceLastRate);
+                        _context.statManager().addRateData("ntcp.pumperLoopsPerSecond", (int) loopCountSinceLastRate);
                         loopCountSinceLastRate = 0;
                         lastLoopRateUpdate = nowMs;
                     }
@@ -288,7 +288,7 @@ class EventPumper implements Runnable {
 
                     // Clear blocked IPs periodically with synchronization
                     if (nowMs - lastBlockedIPClear >= BLOCKED_IP_FREQ) {
-                        synchronized (_blockedIPs) {
+                        synchronized(_blockedIPs) {
                             _blockedIPs.clear();
                         }
                         lastBlockedIPClear = nowMs;
@@ -945,7 +945,7 @@ class EventPumper implements Runnable {
         while (count++ < MAX_BATCH && (con = _wantsRead.poll()) != null) {
             if (con.isClosed()) continue;
             SelectionKey key = con.getKey();
-            if (!isKeyValid(key)) {
+            if (key == null || !isKeyValid(key)) {
                 logAndClose(debug, "[NTCP2] Dropping connection with invalid key during read registration: ", con);
                 con.close();
                 continue;
@@ -975,7 +975,7 @@ class EventPumper implements Runnable {
         while (count++ < MAX_BATCH && (con = _wantsWrite.poll()) != null) {
             if (con.isClosed()) continue;
             SelectionKey key = con.getKey();
-            if (!isKeyValid(key)) {
+            if (key == null || !isKeyValid(key)) {
                 logAndClose(debug, "[NTCP2] Dropping connection with invalid key during write registration: ", con);
                 con.close();
                 continue;
@@ -1150,8 +1150,11 @@ class EventPumper implements Runnable {
         int old = key.interestOps();
         NTCPConnection con = (NTCPConnection) key.attachment();
         if (con != null && con.shouldSetInterest(op)) {
-            key.interestOps(old | op);
-            con.updateInterestOps(old | op);
+            int newOps = old | op;
+            if (old != newOps) {
+                key.interestOps(newOps);
+                con.updateInterestOps(newOps);
+            }
         }
     }
 
