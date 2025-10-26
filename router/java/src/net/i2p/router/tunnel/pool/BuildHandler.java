@@ -200,11 +200,12 @@ class BuildHandler implements Runnable {
      */
     private synchronized void adaptTimeout() {
         double failureRate = _recentOutcomes.getFailureRate();
+        boolean isMaxTimeout = _currentNextHopTimeout == MAX_NEXT_HOP_TIMEOUT;
 
         if (failureRate > HYSTERETIC_THRESHOLD_INCREASE && _currentNextHopTimeout < MAX_NEXT_HOP_TIMEOUT) {
             // Significant failure rate — increase timeout
             _currentNextHopTimeout = Math.min(MAX_NEXT_HOP_TIMEOUT, _currentNextHopTimeout + TIMEOUT_STEP);
-            if (_log.shouldWarn()) {
+            if (_log.shouldWarn() && !isMaxTimeout) {
                 _log.warn("Increased next-hop timeout to " + (_currentNextHopTimeout / 1000) + "s -> Failure rate: " +
                           String.format("%.1f%%", failureRate * 100));
             }
@@ -216,7 +217,8 @@ class BuildHandler implements Runnable {
             if (_currentNextHopTimeout < MIN_NEXT_HOP_TIMEOUT) {
                 _currentNextHopTimeout = MIN_NEXT_HOP_TIMEOUT;
             }
-            if (_log.shouldInfo()) {
+            boolean isMinTimeout = _currentNextHopTimeout == MIN_NEXT_HOP_TIMEOUT;
+            if (_log.shouldInfo() && !isMinTimeout) {
                 _log.info("Decreased next-hop timeout to " + (_currentNextHopTimeout / 1000) + "s -> Failure rate: " +
                           String.format("%.1f%%", failureRate * 100));
             }
