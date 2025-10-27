@@ -1,3 +1,7 @@
+2025-10-26 dr|z3d
+ * SusiMail: Add optional mail preview popups on mail listings page,
+   emabled with -> view.enableMailPreviews=true
+
 2025-10-08 dr|z3d
  * Console: Rendering speedups for tunnels pages and routerinfo listings
 
