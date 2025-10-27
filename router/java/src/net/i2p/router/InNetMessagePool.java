@@ -294,8 +294,8 @@ public class InNetMessagePool implements Service {
                 long arr = ((DeliveryStatusMessage) messageBody).getArrival();
                 if (arr > 10) {
                     long timeSinceSent = _context.clock().now() - arr;
-                    if (_log.shouldWarn())
-                        _log.warn("Dropping unhandled DeliveryStatusMessage " + messageBody);
+                    if (_log.shouldInfo())
+                        _log.info("Dropping unhandled DeliveryStatusMessage " + messageBody);
                     _context.statManager().addRateData("inNetPool.droppedDeliveryStatusDelay", timeSinceSent);
                 }
                 break;
@@ -308,8 +308,8 @@ public class InNetMessagePool implements Service {
                     _log.debug("Dropping NetDb lookup due to throttling");
                 break;
             default:
-                if (_log.shouldWarn()) {
-                    _log.warn("Message expiring on " + messageBody.getMessageExpiration() +
+                if (_log.shouldInfo()) {
+                    _log.info("Message expiring on " + messageBody.getMessageExpiration() +
                         " was not handled by a HandlerJobBuilder -> DROPPING: " + messageBody);
                 }
                 _context.statManager().addRateData("inNetPool.dropped", 1);
