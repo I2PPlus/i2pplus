@@ -936,7 +936,7 @@ public class NTCPConnection implements Closeable {
         // no synch needed, sendNTCP2() is synched
         if (_log.shouldInfo())
             _log.info("Sending termination -> " + getTerminationReasonString(reason) +
-                      " - Valid frames received: " + validFramesRcvd + " on " + this);
+                      "\n* Valid frames received: " + validFramesRcvd + " on " + this);
         List<Block> blocks = new ArrayList<Block>(2);
         Block block = new NTCP2Payload.TerminationBlock(reason, validFramesRcvd);
         int plen = block.getTotalLength();
