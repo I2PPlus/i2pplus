@@ -12,8 +12,10 @@ import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -211,6 +213,36 @@ public class NTCPConnection implements Closeable {
     private long _sendSipk1, _sendSipk2;
     private byte[] _sendSipIV;
 
+    private static final Map<Hash, Long> LAST_LOGGED_HASH = new ConcurrentHashMap<>();
+    private static final Map<String, Long> LAST_LOGGED_IP = new ConcurrentHashMap<>();
+    private static final long LOGGING_INTERVAL = 10 * 60 * 1000; // 10 minutes
+
+    /**
+     * Convert an NTCP2 termination reason code to a human-readable string.
+     * @since 0.9.68+
+     */
+    public static String getTerminationReasonString(int reason) {
+        switch (reason) {
+            case REASON_UNSPEC:         return "Unspecified";
+            case REASON_TERMINATION:    return "Termination";
+            case REASON_TIMEOUT:        return "Timeout";
+            case REASON_AEAD:           return "AEAD decryption failed";
+            case REASON_OPTIONS:        return "Invalid options";
+            case REASON_SIGTYPE:        return "Unsupported signature type";
+            case REASON_SKEW:           return "Clock skew too large";
+            case REASON_PADDING:        return "Padding error";
+            case REASON_FRAMING:        return "Framing error";
+            case REASON_PAYLOAD:        return "Invalid payload";
+            case REASON_MSG1:           return "Invalid message 1";
+            case REASON_MSG2:           return "Invalid message 2";
+            case REASON_MSG3:           return "Invalid message 3";
+            case REASON_FRAME_TIMEOUT:  return "Frame timeout";
+            case REASON_SIGFAIL:        return "Signature verification failed";
+            case REASON_S_MISMATCH:     return "Public key mismatch";
+            case REASON_BANNED:         return "Banned peer";
+            default:                    return "Unknown reason (Code: " + reason + ")";
+        }
+    }
 
     /**
      * Create an inbound connected (though not established) NTCP connection.
@@ -903,7 +935,8 @@ public class NTCPConnection implements Closeable {
         // TODO add param to clear queues?
         // no synch needed, sendNTCP2() is synched
         if (_log.shouldInfo())
-            _log.info("Sending termination, reason: " + reason + "; Valid frames received: " + validFramesRcvd + " on " + this);
+            _log.info("Sending termination -> " + getTerminationReasonString(reason) +
+                      " - Valid frames received: " + validFramesRcvd + " on " + this);
         List<Block> blocks = new ArrayList<Block>(2);
         Block block = new NTCP2Payload.TerminationBlock(reason, validFramesRcvd);
         int plen = block.getTotalLength();
@@ -1778,7 +1811,7 @@ public class NTCPConnection implements Closeable {
 
         public void gotTermination(int reason, long lastReceived) {
             if (_log.shouldInfo())
-                _log.info("Received Termination: " + reason +
+                _log.info("Received termination -> " + getTerminationReasonString(reason) +
                           "\n* Total received: " + lastReceived + " on " + NTCPConnection.this);
             // close() calls destroy() sets _terminated
             close();
@@ -2012,4 +2045,44 @@ public class NTCPConnection implements Closeable {
 
         return sb.toString();
     }
+
+    /**
+     * Determine if a log message should be written for the given remote peer.
+     * Uses both IP address and Hash if available.
+     */
+    public boolean shouldLogThrottled() {
+        long now = System.currentTimeMillis();
+
+        // First try by Hash (if available)
+        if (_remotePeer != null) {
+            Hash hash = _remotePeer.calculateHash();
+            if (hash != null) {
+                long last = LAST_LOGGED_HASH.getOrDefault(hash, 0L);
+                if (now - last > LOGGING_INTERVAL) {
+                    LAST_LOGGED_HASH.put(hash, now);
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        // Fallback to IP address
+        try {
+            InetAddress addr = _chan != null ? _chan.socket().getInetAddress() : null;
+            if (addr != null) {
+                String ip = addr.getHostAddress();
+                long last = LAST_LOGGED_IP.getOrDefault(ip, 0L);
+                if (now - last > LOGGING_INTERVAL) {
+                    LAST_LOGGED_IP.put(ip, now);
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            // ignore
+        }
+
+        // If we can't identify the peer, allow logging
+        return true;
+    }
+
 }

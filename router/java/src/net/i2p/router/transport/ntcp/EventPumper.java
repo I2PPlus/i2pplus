@@ -723,8 +723,8 @@ class EventPumper implements Runnable {
                 _context.statManager().addRateData("ntcp.connectFailedTimeout", 1);
             }
         } catch (IOException ioe) { // this is the usual failure path for a timeout or connect refused
-            if (_log.shouldInfo()) {
-                _log.info("Connect failed to " + con + " -> Probable timeout or connection refused");
+            if (_log.shouldInfo() && con.shouldLogThrottled()) {
+                _log.info("Connect failed to " + con + " -> Probable timeout or connection refused (router is banned?)");
             }
             con.closeOnTimeout("Connect failed (10s timeout exceeded or connection refused) -> Marking unreachable", ioe);
             _transport.markUnreachable(con.getRemotePeer().calculateHash());
