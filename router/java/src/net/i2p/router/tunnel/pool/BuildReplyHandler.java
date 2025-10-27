@@ -101,7 +101,7 @@ class BuildReplyHandler {
             if (BuildMessageGenerator.isBlank(cfg, hop)) {
                 // self or unused...
                 if (log.shouldDebug())
-                    log.debug(reply.getUniqueId() + ": skipping record " + i + "/" + hop + " for: " + cfg);
+                    log.debug(reply.getUniqueId() + ": Skipping record [" + i + "/" + hop + "] for: " + cfg);
                 if (cfg.isInbound() && hop + 1 == cfg.getLength()) { // IBEP
                     byte[] h1 = new byte[Hash.HASH_LENGTH];
                     byte[] data = reply.getRecord(i).getData();
@@ -112,7 +112,7 @@ class BuildReplyHandler {
                         rv[i] = RESULT_OK;
                     } else {
                         if (log.shouldWarn())
-                            log.warn("IBEP record corrupt on " + cfg);
+                            log.warn("InboundEndpoint record corrupt on " + cfg);
                         // Caller doesn't check value for this hop so fail the whole thing
                         return null;
                     }
@@ -123,11 +123,11 @@ class BuildReplyHandler {
                 Result res = decryptRecord(reply, cfg, i, hop);
                 if (res.code == -1) {
                     if (log.shouldWarn())
-                        log.warn(reply.getUniqueId() + ": decrypt record " + i + "/" + hop + " fail: " + cfg);
+                        log.warn(reply.getUniqueId() + ": Decrypting record [" + i + "/" + hop + "] -> Fail: " + cfg);
                     return null;
                 } else {
                     if (log.shouldDebug())
-                        log.debug(reply.getUniqueId() + ": decrypt record " + i + "/" + hop + " code: " + res.code + " for " + cfg);
+                        log.debug(reply.getUniqueId() + ": Decrypting record [" + i + "/" + hop + "] -> Code: " + res.code + " for " + cfg);
                 }
                 rv[i] = res;
             }
@@ -169,7 +169,7 @@ class BuildReplyHandler {
             for (int j = start; j >= end; j--) {
                 byte[] replyKey = cfg.getChaChaReplyKey(j).getData();
                 if (log.shouldDebug())
-                    log.debug(reply.getUniqueId() + ": Decrypting ChaCha record " + recordNum + "/" + hop + "/" + j + " with replyKey "
+                    log.debug(reply.getUniqueId() + ": Decrypting ChaCha record [" + recordNum + "/" + hop + "/" + j + "] \n* Reply key: "
                               + Base64.encode(replyKey) + " : " + cfg);
                 // slot number, little endian
                 iv[4] = (byte) recordNum;
@@ -180,7 +180,7 @@ class BuildReplyHandler {
                 SessionKey replyKey = cfg.getAESReplyKey(j);
                 byte replyIV[] = cfg.getAESReplyIV(j);
                 if (log.shouldDebug()) {
-                    log.debug(reply.getUniqueId() + ": Decrypting AES record " + recordNum + "/" + hop + "/" + j + " with replyKey "
+                    log.debug(reply.getUniqueId() + ": Decrypting AES record " + recordNum + "/" + hop + "/" + j + "\n* Reply key: "
                               + replyKey.toBase64() + "/" + Base64.encode(replyIV) + ": " + cfg);
                     //log.debug(reply.getRawUniqueId() + ": before decrypt: " + Base64.encode(data));
                     //log.debug(reply.getRawUniqueId() + ": Full reply rec: sz=" + data.length + " data=" + Base64.encode(data));
@@ -199,7 +199,7 @@ class BuildReplyHandler {
             SessionKey replyKey = cfg.getChaChaReplyKey(hop);
             byte[] replyIV = cfg.getChaChaReplyAD(hop);
             if (log.shouldDebug())
-                log.debug(reply.getUniqueId() + ": Decrypting ChaCha/Poly record " + recordNum + "/" + hop + " with replyKey "
+                log.debug(reply.getUniqueId() + ": Decrypting ChaCha/Poly record [" + recordNum + "/" + hop + "] \n* Reply key: "
                           + replyKey.toBase64() + "/" + Base64.encode(replyIV) + ": " + cfg);
             boolean ok;
             if (isShort)
@@ -208,7 +208,7 @@ class BuildReplyHandler {
                 ok = BuildResponseRecord.decrypt(rec, replyKey, replyIV);
             if (!ok) {
                 if (log.shouldDebug())
-                    log.debug(reply.getUniqueId() + ": chacha reply decryption failure on " + recordNum + "/" + hop);
+                    log.debug(reply.getUniqueId() + ": chacha reply decryption failure on [" + recordNum + "/" + hop + "]");
                 return RESULT_NG;
             }
             // this handles both standard records in a build reply message and short records in a OTBRM
