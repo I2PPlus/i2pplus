@@ -81,7 +81,8 @@ class ExpireLeasesJob extends JobImpl {
                 boolean isLocal = ctx.clientManager().isLocal(h);
                 if (!ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
                     toExpire.add(h);
-                    if (isLocal) {
+                    long uptime = getContext().router().getUptime();
+                    if (isLocal && uptime > 10_000) {
                         tunnelName = ls != null && getTunnelName(ls.getDestination()) != null ?
                                      " for \'" + getTunnelName(ls.getDestination()) + "\'" : "";
                         _log.logAlways(Log.ERROR, "LOCAL LeaseSet" + tunnelName + " [" + h.toBase32().substring(0,8) + "] has expired");
