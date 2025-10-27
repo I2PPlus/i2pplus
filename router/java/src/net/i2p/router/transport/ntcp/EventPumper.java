@@ -88,10 +88,8 @@ class EventPumper implements Runnable {
      */
 //    private static final long FAILSAFE_ITERATION_FREQ = 2*1000l;
 //    private static final int FAILSAFE_LOOP_COUNT = 512;
-//    private static final long SELECTOR_LOOP_DELAY = 200;
     private static final int FAILSAFE_ITERATION_FREQ = 30*1000;
     private static final int FAILSAFE_LOOP_COUNT = SystemVersion.isSlow() ? 512 : 1024;
-    private static final long SELECTOR_LOOP_DELAY = SystemVersion.isSlow() ? 200 : 50;
     private static final long BLOCKED_IP_FREQ = 15*60*1000;
 
     /** tunnel test now disabled, but this should be long enough to allow an active tunnel to get started */
@@ -232,17 +230,14 @@ class EventPumper implements Runnable {
                     loopCountSinceLastRate++;
 
                     int keyCount = _selector.keys().size();
+
                     // Determine selector delay dynamically
                     long delay = (_wantsWrite.isEmpty() && _wantsRead.isEmpty()) ? 1000L : calculateSelectorDelay(keyCount);
 
                     int selectedCount;
 
                     try {
-                        if (_wantsWrite.isEmpty() && _wantsRead.isEmpty()) {
-                            selectedCount = _selector.selectNow(); // non-blocking
-                        } else {
-                            selectedCount = _selector.select(SELECTOR_LOOP_DELAY);
-                        }
+                        selectedCount = _selector.select(delay);
                     } catch (ClosedSelectorException cse) {
                         continue;
                     } catch (IOException | CancelledKeyException e) {
@@ -279,7 +274,14 @@ class EventPumper implements Runnable {
                     // Throttle CPU usage periodically with adaptive pause
                     int cpuLoadAvg = SystemVersion.getCPULoadAvg();
                     int pause = SystemVersion.isSlow() || cpuLoadAvg > 95 ? 30 : 10;
-                    if ((loopCount % failsafeLoopCount) == failsafeLoopCount - 1) {
+                    if (selectedCount == 0 && _wantsWrite.isEmpty() && _wantsRead.isEmpty()) {
+                        try {Thread.sleep(pause);}
+                        catch (InterruptedException ie) {
+                            Thread.currentThread().interrupt();
+                            break;
+                        }
+                        _context.statManager().addRateData("ntcp.selectorIdleSleep", 1);
+                    } else if ((loopCount % failsafeLoopCount) == failsafeLoopCount - 1) {
                         if (shouldDebug) {
                             long throttleDuration = nowMs - (lastFailsafeIteration / 1_000_000L);
                             _log.debug("EventPumper throttle " + loopCount + " loops in " + throttleDuration + " ms");
@@ -444,31 +446,54 @@ class EventPumper implements Runnable {
      *
      * @param keyCount number of keys currently registered with the selector
      * @return delay in milliseconds to pass to selector.select(delay)
+     * @since 0.9.68+
      */
     private long calculateSelectorDelay(int keyCount) {
-        if (keyCount < 100) {
-            return 5;
-        } else if (keyCount < 500) {
-            return 20;
-        } else if (keyCount < 1000) {
-            return 30;
-        } else {
-            return 50;
-        }
+        if (keyCount < 100) {return 50;}
+        else if (keyCount < 500) {return 30;}
+        else if (keyCount < 1000) {return 8;}
+        else if (keyCount < 2000) {return 6;}
+        else if (keyCount < 3000) {return 5;}
+        else {return 3;}
     }
 
     /**
-     *  Process all keys from the last select.
-     *  High-frequency path in thread.
+     * Process all keys from the last select.
+     * This method is called on every selector loop and handles accept, connect, read, and write events.
+     * <p>
+     * This is a high-frequency method, called in the main IO thread.
+     * It must be as fast as possible — avoid blocking or slow operations.
+     * <p>
+     * Keys with a null or invalid attachment are immediately canceled.
+      * Accept, connect, read, and write flags are processed in order.
+     * <p>
+     * This method is not thread-safe — it runs in the IO thread only.
+     * Logging should be minimal to avoid overhead.
      */
     private void processKeys(Set<SelectionKey> selected) {
-        for (SelectionKey key : selected) {
+        Iterator<SelectionKey> iter = selected.iterator();
+        while (iter.hasNext()) {
+            SelectionKey key = iter.next();
+            iter.remove(); // fast cleanup
+
             try {
                 int ops = key.readyOps();
+                Object attachment = key.attachment();
+
+                // Only proceed if we have a valid attachment
+                if (attachment == null || !key.isValid()) {
+                    if (attachment instanceof NTCPConnection) {
+                        ((NTCPConnection) attachment).close();
+                    }
+                    key.cancel();
+                    continue;
+                }
+
                 boolean accept = (ops & SelectionKey.OP_ACCEPT) != 0;
                 boolean connect = (ops & SelectionKey.OP_CONNECT) != 0;
                 boolean read = (ops & SelectionKey.OP_READ) != 0;
                 boolean write = (ops & SelectionKey.OP_WRITE) != 0;
+
                 if (accept) {
                     _context.statManager().addRateData("ntcp.accept", 1);
                     processAccept(key);
@@ -477,17 +502,26 @@ class EventPumper implements Runnable {
                     clearInterest(key, SelectionKey.OP_CONNECT);
                     processConnect(key);
                 }
-                if (read) {processRead(key);}
-                if (write) {processWrite(key);}
+                if (read) {
+                    processRead(key);
+                }
+                if (write) {
+                    processWrite(key);
+                }
+
             } catch (CancelledKeyException cke) {
-                if (_log.shouldDebug()) {_log.debug("Key cancelled");}
+                if (_log.shouldDebug()) {
+                    _log.debug("Key cancelled during processing");
+                }
+            } catch (Exception e) {
+                _log.log(Log.CRIT, "Error processing key: " + key, e);
             }
         }
     }
 
     private volatile boolean _needsWakeup = false;
     private long _lastWakeup = 0;
-    private static final long WAKEUP_COOLDOWN = 10; // ms
+    private static final long WAKEUP_COOLDOWN = 5; // ms
 
     /**
      *  Called by the connection when it has data ready to write (after bw allocation).
@@ -746,7 +780,7 @@ class EventPumper implements Runnable {
                 if (bytesRead < 0 && totalRead == 0) totalRead = bytesRead;
 
                 if (shouldDebug && totalRead != 0) {
-                    _log.debug("Read " + totalRead + " bytes from " + con);
+                    _log.debug("Read " + totalRead + " bytes from" + con);
                 }
 
                 if (totalRead < 0) {
