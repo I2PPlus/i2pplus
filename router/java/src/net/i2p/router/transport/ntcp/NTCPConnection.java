@@ -153,11 +153,8 @@ public class NTCPConnection implements Closeable {
      *  In the meantime, don't let the transport bid on big messages.
      */
     static final int BUFFER_SIZE = 16*1024;
-    //static final int BUFFER_SIZE = SystemVersion.isSlow() ? 16*1024: 32*1024;
-//    private static final int MAX_DATA_READ_BUFS = 16;
-    private static final int MAX_DATA_READ_BUFS = SystemVersion.isSlow() ? 16 : 48;
+    private static final int MAX_DATA_READ_BUFS = SystemVersion.isSlow() ? 16 : 32;
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
-
     private static final int INFO_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE_LOW;
     private static final String FIXED_RI_VERSION = "0.9.12";
     private static final AtomicLong __connID = new AtomicLong();
@@ -178,7 +175,7 @@ public class NTCPConnection implements Closeable {
     private static final long NTCP2_TERMINATION_CLOSE_DELAY = 50;
     // don't make combined messages too big, to minimize latency
     // Tunnel data msgs are 1024 + 4 + 9 + 3 = 1040, allow 5
-    private static final int NTCP2_PREFERRED_PAYLOAD_MAX = 5 * 1040;
+    private static final int NTCP2_PREFERRED_PAYLOAD_MAX = 8 * 1040;
     static final int REASON_UNSPEC = 0;
     static final int REASON_TERMINATION = 1;
     static final int REASON_TIMEOUT = 2;
@@ -267,11 +264,8 @@ public class NTCPConnection implements Closeable {
         _lastRateUpdated = _created;
         _readBufs = new ConcurrentLinkedQueue<ByteBuffer>();
         _writeBufs = new ConcurrentLinkedQueue<ByteBuffer>();
-//        _bwInRequests = new ConcurrentHashSet<Request>(2);
-//        _bwOutRequests = new ConcurrentHashSet<Request>(8);
         _bwInRequests = new ConcurrentHashSet<Request>(32);
         _bwOutRequests = new ConcurrentHashSet<Request>(32);
-//        _outbound = new PriBlockingQueue<OutNetMessage>(ctx, "NTCP-Connection", 32);
         _outbound = new PriBlockingQueue<OutNetMessage>(ctx, "NTCP-Connection", 64);
         _currentOutbound = new ArrayList<OutNetMessage>(1);
         _isInbound = isIn;
@@ -1683,18 +1677,14 @@ public class NTCPConnection implements Closeable {
                 _blockCount += blocks;
             } catch (IOException ioe) {
                 if (_log.shouldWarn())
-//                    _log.warn("Payload delivery failure " + NTCPConnection.this + ioe.getMessage());
                     _log.warn("Payload delivery failure \n* " + ioe.getMessage());
             } catch (DataFormatException dfe) {
                 if (_log.shouldWarn())
-//                    _log.warn("Payload delivery failure " + NTCPConnection.this + dfe.getMessage());
                     _log.warn("Payload delivery failure \n* " + dfe.getMessage());
             } catch (I2NPMessageException ime) {
                 if (_log.shouldDebug())
-//                    _log.warn("Error parsing I2NP message on " + NTCPConnection.this + ime.getMessage());
                     _log.warn("Error parsing I2NP message \n* " + ime.getMessage());
                 else if (_log.shouldWarn())
-//                    _log.warn("Error parsing I2NP message on " + NTCPConnection.this + "\n* I2NP Message Exception: " + ime.getMessage());
                     _log.warn("Error parsing I2NP message \n* " + ime.getMessage());
                 _context.statManager().addRateData("ntcp.corruptI2NPIME", 1);
             }
@@ -1705,7 +1695,6 @@ public class NTCPConnection implements Closeable {
 
         public void destroy() {
             if (_log.shouldInfo())
-//                _log.info("NTCP2 read state destroy() on " + NTCPConnection.this, new Exception("I did it"));
                 _log.info("NTCP2 read state destroy() on " + NTCPConnection.this);
             if (_dataBuf != null && _dataBuf.getData().length == BUFFER_SIZE)
                 releaseReadBuf(_dataBuf);
@@ -2003,12 +1992,11 @@ public class NTCPConnection implements Closeable {
             sb.append(" (Outbound) at ")
               .append(_remAddr.getHost())
               .append(":")
-              .append(_remAddr.getPort())
-              .append(' ');
+              .append(_remAddr.getPort());
         }
 
         if (!isEstablished()) {
-            sb.append("[ -> Not established ]");
+            sb.append(" -> Not established");
         }
 
         if (_log.shouldInfo()) {
