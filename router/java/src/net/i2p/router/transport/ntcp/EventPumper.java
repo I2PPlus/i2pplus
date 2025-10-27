@@ -724,7 +724,7 @@ class EventPumper implements Runnable {
             }
         } catch (IOException ioe) { // this is the usual failure path for a timeout or connect refused
             if (_log.shouldInfo()) {
-                _log.info("Failed outbound " + con + " (" + ioe.getMessage() + ")");
+                _log.info("Connect failed to " + con + " -> Probable timeout or connection refused");
             }
             con.closeOnTimeout("Connect failed (10s timeout exceeded or connection refused) -> Marking unreachable", ioe);
             _transport.markUnreachable(con.getRemotePeer().calculateHash());
@@ -780,7 +780,7 @@ class EventPumper implements Runnable {
                 if (bytesRead < 0 && totalRead == 0) totalRead = bytesRead;
 
                 if (shouldDebug && totalRead != 0) {
-                    _log.debug("Read " + totalRead + " bytes from" + con);
+                    _log.debug("Read " + totalRead + " bytes from " + con);
                 }
 
                 if (totalRead < 0) {
