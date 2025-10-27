@@ -1988,22 +1988,40 @@ public class NTCPConnection implements Closeable {
 
     @Override
     public String toString() {
-        String fromIP;
+        StringBuilder sb = new StringBuilder();
+
+        if (_remotePeer != null && _remotePeer.calculateHash() != null) {
+            sb.append("[").append(_remotePeer.calculateHash().toBase64().substring(0, 6)).append("]");
+        } else {sb.append("[Unknown]");}
+
         if (_isInbound) {
             InetAddress addr = _chan.socket().getInetAddress();
-            fromIP = addr != null ? addr.getHostAddress() : "Unknown";
+            String fromIP = addr != null ? addr.getHostAddress() : "unknown IP address";
+            int port = _chan.socket().getPort();
+            sb.append(" (Inbound) at ").append(fromIP).append(":").append(port).append(' ');
         } else {
-            fromIP = null;
+            sb.append(" (Outbound) at ")
+              .append(_remAddr.getHost())
+              .append(":")
+              .append(_remAddr.getPort())
+              .append(' ');
         }
-        return (_isInbound ? ("\n* From: " + fromIP + ":" + _chan.socket().getPort() + ' ')
-                           : ("Target: " + _remAddr.getHost() + ":" + _remAddr.getPort() + ' ')) + "[" +
-               (_remotePeer == null ? "Unknown" : _remotePeer.calculateHash().toBase64().substring(0,6)) + "]" +
-               (isEstablished() ? "" : " -> Not established ") +
-               (_log.shouldInfo() ? "\n* [NTCP" + _version + "] Connection [ID " + _connID + "]" +
-               "\n* Created: " + DataHelper.formatDuration(getTimeSinceCreated()) + " ago;" +
-               " Last message sent: " + DataHelper.formatDuration(getTimeSinceSend()) + " ago;" +
-               " Last message received: " + DataHelper.formatDuration(getTimeSinceReceive()) + " ago" +
-               "\n* Messages sent: " + _messagesWritten + ";" +
-               " Messages received: " + _messagesRead + " " : "");
+
+        if (!isEstablished()) {
+            sb.append("[ -> Not established ]");
+        }
+
+        if (_log.shouldInfo()) {
+            sb.append("\n* [NTCP").append(_version)
+              .append("] Connection [ID ").append(_connID)
+              .append("]")
+              .append("\n* Created: ").append(DataHelper.formatDuration(getTimeSinceCreated())).append(" ago;")
+              .append(" Last message sent: ").append(DataHelper.formatDuration(getTimeSinceSend())).append(" ago;")
+              .append(" Last message received: ").append(DataHelper.formatDuration(getTimeSinceReceive())).append(" ago")
+              .append("\n* Messages sent: ").append(_messagesWritten)
+              .append("; Messages received: ").append(_messagesRead).append(' ');
+        }
+
+        return sb.toString();
     }
 }
