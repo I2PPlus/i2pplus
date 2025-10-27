@@ -236,15 +236,24 @@ class BuildHandler implements Runnable {
         if (_currentNextHopTimeout != previousTimeout) {
             int delta = _currentNextHopTimeout - previousTimeout;
             String direction = delta > 0 ? "Increased" : "Decreased";
-            int newTimeoutSec = _currentNextHopTimeout / 1000;
+            double newTimeoutSec = _currentNextHopTimeout / 1000.0;
             double failureRatePercent = failureRate * 100;
 
+            // Format timeout to remove .0 if it's an integer
+            String formattedTimeout;
+            if (newTimeoutSec == (int) newTimeoutSec) {
+                formattedTimeout = String.format("%d", (int) newTimeoutSec);
+            } else {
+                formattedTimeout = String.format("%.1f", newTimeoutSec);
+            }
+
+            String logMessage = direction + " next-hop timeout to " + formattedTimeout +
+                                "s -> Failure rate: " + String.format("%.1f%%", failureRatePercent);
+
             if (delta > 0 && _log.shouldWarn()) {
-                _log.warn(direction + " next-hop timeout to " + newTimeoutSec + "s -> Failure rate: " +
-                          String.format("%.1f%%", failureRatePercent));
+                _log.warn(logMessage);
             } else if (delta < 0 && _log.shouldInfo()) {
-                _log.info(direction + " next-hop timeout to " + newTimeoutSec + "s -> Failure rate: " +
-                          String.format("%.1f%%", failureRatePercent));
+                _log.info(logMessage);
             }
         }
     }
