@@ -520,7 +520,7 @@ public class NTCPConnection implements Closeable {
             _log.logCloseLoop("NTCPConnection", this);
             return;
         }
-        if (_log.shouldInfo()) {
+        if (_log.shouldInfo() && shouldLogThrottled()) {
             _log.info("Closing " + toString());
         }
         NTCPConnection toClose = locked_close(allowRequeue);
