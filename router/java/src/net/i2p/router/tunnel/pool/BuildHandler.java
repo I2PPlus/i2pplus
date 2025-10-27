@@ -90,10 +90,10 @@ class BuildHandler implements Runnable {
     private static final int PERCENT_LOOKUP_LIMIT = isSlow ? 8 : 16; // limit lookups to this % of current participating tunnels
 
     /**
-     * Initial next-hop send timeout (8 seconds).
+     * Initial next-hop send timeout (6 seconds).
      * This is the minimum allowed timeout.
      */
-    private static final int MIN_NEXT_HOP_TIMEOUT = 8 * 1000;
+    private static final int MIN_NEXT_HOP_TIMEOUT = 6 * 1000;
     /**
      * Maximum allowed timeout (30 seconds).
      * Prevents excessive delays due to repeated failures.
