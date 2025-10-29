@@ -407,7 +407,8 @@ function refreshOnSubmit() {
   document.addEventListener("click", (event) => {
     const clickTarget = event.target;
     const form = clickTarget.closest("form");
-    const stopAllOrStartAllInactive = document.querySelector('input[id^="action"]:not(.depress)')
+    const stopAllOrStartAllInactive = document.querySelector('input[id^="action"]:not(.depress)');
+    const dirlist = document.getElementById("dirlist");
     if (clickTarget.matches("input[type=submit]")) {
       event.stopPropagation();
       clickTarget.form.requestSubmit();
@@ -415,9 +416,15 @@ function refreshOnSubmit() {
         stopAllOrStartAllInactive.classList.add("tempDisabled");
         setTimeout(() => {stopAllOrStartAll.classList.remove("tempDisabled")}, 4000);
       }
-    } else if (clickTarget.matches("#nav_main:not(.isConfig)")) {
+    } else if (clickTarget.matches("#nav_main:not(.isConfig") && !dirlist) {
+      const navMain = document.querySelector("#nav_main:not(.isConfig)");
+      navMain.classList.add("isRefreshing");
       event.preventDefault();
       refreshScreenLog(refreshTorrents, true);
+      setTimeout(() => {
+        navMain.classList.remove("isRefreshing");
+        clickTarget.blur();
+      }, 500);
     }
   });
 }
