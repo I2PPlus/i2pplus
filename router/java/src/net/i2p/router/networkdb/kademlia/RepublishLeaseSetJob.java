@@ -26,6 +26,7 @@ public class RepublishLeaseSetJob extends JobImpl {
     private long _lastPublished; // this is actually last attempted publish
     private final AtomicInteger failCount = new AtomicInteger(0);
     private boolean highPriority;
+    private boolean shouldHighPriority;
 
     /**
      * Create a new RepublishLeaseSetJob for the given destination.
@@ -109,7 +110,9 @@ public class RepublishLeaseSetJob extends JobImpl {
         getContext().jobQueue().removeJob(this);
         // For first failure, add normally, after 10+ failures, add to top of job queue
         highPriority = count >= 10;
-        requeue(RETRY_DELAY + getContext().random().nextInt(1500), highPriority);
+        // Only use high priority 1 in 10 times to avoid flooding
+        boolean shouldHighPriority = highPriority && (getContext().random().nextInt(10) == 0);
+        requeue(RETRY_DELAY + getContext().random().nextInt(1500), shouldHighPriority);
     }
 
     /**
@@ -118,8 +121,8 @@ public class RepublishLeaseSetJob extends JobImpl {
      * @param delayMs delay in milliseconds before the job is run
      * @param highPriority if true, adds the job to the front of the queue
      */
-    private void requeue(long delayMs, boolean highPriority) {
-        if (highPriority) {getContext().jobQueue().addJobToTop(this);}
+    private void requeue(long delayMs, boolean shouldHighPriority) {
+        if (shouldHighPriority) {getContext().jobQueue().addJobToTop(this);}
         else {getContext().jobQueue().addJob(this);}
     }
 
