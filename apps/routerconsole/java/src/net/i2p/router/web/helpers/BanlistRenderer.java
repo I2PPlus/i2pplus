@@ -31,108 +31,165 @@ class BanlistRenderer {
     }
 
     public void renderStatusHTML(Writer out) throws IOException {
-        int bannedCount = _context.banlist().getRouterCount();
-        StringBuilder buf = new StringBuilder(bannedCount * 512 + 8192);
-        Map<Hash, Banlist.Entry> entries = new TreeMap<Hash, Banlist.Entry>(HashComparator.getInstance());
-
-        entries.putAll(_context.banlist().getEntries());
-        if (entries.isEmpty()) {
-            buf.append("<i>").append(_t("none").replace("none", "No bans currently active")).append("</i>");
-            out.append(buf);
+        Banlist banlist = _context.banlist();
+        int bannedCount = banlist.getRouterCount();
+        if (bannedCount == 0) {
+            out.write("<i>" + _t("No bans currently active") + "</i>");
             return;
         }
 
-        buf.append("<ul id=banlist>");
+        out.write("<ul id=banlist>");
+
+        boolean largeBanlist = bannedCount > 300;
+        long now = _context.clock().now();
+        int bufferSize = banlist.getEntries().size() * 512;
+
+        StringBuilder buf = new StringBuilder(bufferSize);
+        int count = 0;
+
+        Map<Hash, Banlist.Entry> entries = banlist.getEntries();
 
         for (Map.Entry<Hash, Banlist.Entry> e : entries.entrySet()) {
             Hash key = e.getKey();
             Banlist.Entry entry = e.getValue();
-            long expires = entry.expireOn-_context.clock().now();
-            if (expires <= 0) {continue;}
-            if (entries.size() > 300 && (entry.causeCode != null && entry.causeCode.contains("LU")) ||
-                (entry.cause != null && entry.cause.contains("LU"))) {
-                continue;
+
+            long expires = entry.expireOn - now;
+            if (expires <= 0) continue;
+
+            if (largeBanlist) {
+                String cause = entry.cause;
+                String causeCode = entry.causeCode;
+                if ((cause != null && cause.contains("LU")) ||
+                    (causeCode != null && causeCode.contains("LU"))) {
+                    continue;
+                }
             }
-            buf.append("<li class=lazy>").append(_context.commSystem().renderPeerHTML(key, false));
-            buf.append(' ').append("<span class=banperiod>");
+
+            final boolean isFakeOrZero = key.equals(Hash.FAKE_HASH) || key.equals(Banlist.HASH_ZERORI);
+
+            buf.append("<li class=lazy>")
+               .append(_context.commSystem().renderPeerHTML(key, false))
+               .append(' ')
+               .append("<span class=banperiod>");
+
             String expireString = DataHelper.formatDuration2(expires);
-            if (key.equals(Hash.FAKE_HASH) || key.equals(Banlist.HASH_ZERORI)) {buf.append(_t("Permanently banned"));}
-            else if (expires < 5l*24*60*60*1000) {buf.append(_t("Temporary ban expiring in {0}", expireString));}
-            else {buf.append(_t("Banned for {0} / until restart", expireString));}
+
+            if (isFakeOrZero) {
+                buf.append(_t("Permanently banned"));
+            } else if (expires < 5L * 24 * 60 * 60 * 1000) {
+                buf.append(_t("Temporary ban expiring in {0}", expireString));
+            } else {
+                buf.append(_t("Banned for {0} / until restart", expireString));
+            }
             buf.append("</span>");
+
             Set<String> transports = entry.transports;
-            if ((transports != null) && (!transports.isEmpty())) {
+            if (transports != null && !transports.isEmpty()) {
                 buf.append(" on the following transport: ").append(transports);
             }
+
             if (entry.cause != null) {
                 buf.append("<hr>\n");
-                if (entry.causeCode != null) {buf.append(_t(entry.cause, entry.causeCode));}
-                else {buf.append(_t(entry.cause));}
+                if (entry.causeCode != null) {
+                    buf.append(_t(entry.cause, entry.causeCode));
+                } else {
+                    buf.append(_t(entry.cause));
+                }
             }
+
             if (!key.equals(Hash.FAKE_HASH)) {
                 buf.append(" <a href=\"configpeer?peer=").append(key.toBase64())
                    .append("#unsh\" title=\"Unban\">[").append(_t("unban now")).append("]</a>");
             }
+
             buf.append("</li>\n");
+            count++;
+
+            if (count % 100 == 0) {flushBuffer(buf, out);}
         }
-        buf.append("</ul>\n");
-        out.append(buf);
+
+        flushBuffer(buf, out);
+        out.write("</ul>\n");
         out.flush();
     }
 
     /* @since 0.9.59+ */
     public void renderBanlistCompact(Writer out) throws IOException {
-        StringBuilder buf = new StringBuilder(1024);
-        Map<Hash, Banlist.Entry> entries = new TreeMap<Hash, Banlist.Entry>(new HashComparator());
-
-        entries.putAll(_context.banlist().getEntries());
+        Banlist banlist = _context.banlist();
+        Map<Hash, Banlist.Entry> entries = banlist.getEntries();
         if (entries.isEmpty()) {
-            buf.append("<i>").append(_t("No bans currently active")).append("</i>");
-            out.append(buf);
+            out.write("<i>" + _t("No bans currently active") + "</i>");
             return;
         }
 
-        buf.append("<table id=sessionBanned>\n<thead><tr><th>")
-           .append(_t("Reason"))
-           .append("</th><th></th><th>")
-           .append(_t("Router Hash"))
-           .append("</th><th data-sort-method=number>")
-           .append(_t("Expiry"))
-           .append("</th></tr></thead>\n<tbody id=sessionBanlist>\n");
+        // Write static header directly
+        out.write("<table id=sessionBanned>\n<thead><tr><th>");
+        out.write(_t("Reason"));
+        out.write("</th><th></th><th>");
+        out.write(_t("Router Hash"));
+        out.write("</th><th data-sort-method=number>");
+        out.write(_t("Expiry"));
+        out.write("</th></tr></thead>\n<tbody id=sessionBanlist>\n");
+
         int tempBanned = 0;
+        long now = _context.clock().now();
+        int bufferSize = banlist.getEntries().size() * 256;
+
+        StringBuilder buf = new StringBuilder(bufferSize);
+        int count = 0;
+
         for (Map.Entry<Hash, Banlist.Entry> e : entries.entrySet()) {
             Hash key = e.getKey();
             Banlist.Entry entry = e.getValue();
-            long expires = entry.expireOn-_context.clock().now();
-            String expireString = DataHelper.formatDuration2(expires);
-            if (expires <= 0 || key.equals(Hash.FAKE_HASH) || entry.cause == null ||
-                (entry.cause.toLowerCase().contains("hash") ||
-                entry.cause.toLowerCase().contains("sybil") ||
-                entry.cause.toLowerCase().contains("blocklist"))) {
+
+            long expires = entry.expireOn - now;
+            if (expires <= 0 || key.equals(Hash.FAKE_HASH) || entry.cause == null) {
                 continue;
-            } else {
-                buf.append("<tr class=\"lazy");
-                if (entry.cause.toLowerCase().contains("floodfill")) {
-                    buf.append(" banFF");
-                }
-                buf.append("\"><td>")
-                   .append(_t(entry.cause,entry.causeCode).replace("<b>➜</b> ",""))
-                   .append("</td><td>:</td><td><span class=b64>")
-                   .append(key.toBase64())
-                   .append("</span></td><td><span hidden>")
-                   .append(expires)
-                   .append(".</span>")
-                   .append(expireString)
-                   .append("</td></tr>\n");
-                tempBanned++;
             }
+
+            String causeLower = entry.cause.toLowerCase();
+            if (causeLower.contains("hash") || causeLower.contains("sybil") || causeLower.contains("blocklist")) {
+                continue;
+            }
+
+            buf.append("<tr class=\"lazy");
+            if (causeLower.contains("floodfill")) {
+                buf.append(" banFF");
+            }
+            buf.append("\"><td>");
+
+            String translated = entry.causeCode != null ? _t(entry.cause, entry.causeCode) : _t(entry.cause);
+            buf.append(translated.replace("<b>➜</b> ", ""));
+            buf.append("</td><td>:</td><td><span class=b64>")
+               .append(key.toBase64())
+               .append("</span></td><td><span hidden>")
+               .append(expires)
+               .append(".</span>")
+               .append(DataHelper.formatDuration2(expires))
+               .append("</td></tr>\n");
+
+            tempBanned++;
+            count++;
+
+            if (count % 100 == 0) {flushBuffer(buf, out);}
         }
+
+        flushBuffer(buf, out);
+
         buf.append("</tbody>\n<tfoot id=sessionBanlistFooter><tr><th colspan=4>")
            .append(_t("Total session-only bans"))
-           .append(": ").append(tempBanned)
+           .append(": ").append(Integer.toString(tempBanned))
            .append("</th></tr></tfoot>\n</table>\n");
-        out.append(buf);
+
+        flushBuffer(buf, out);
         out.flush();
+    }
+
+    private void flushBuffer(StringBuilder buf, Writer out) throws IOException {
+        if (buf.length() > 0) {
+            out.write(buf.toString());
+            buf.setLength(0);
+        }
     }
 
     /** translate a string */
