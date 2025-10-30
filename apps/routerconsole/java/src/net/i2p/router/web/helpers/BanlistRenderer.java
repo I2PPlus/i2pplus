@@ -25,6 +25,7 @@ import net.i2p.router.web.Messages;
  */
 class BanlistRenderer {
     private final RouterContext _context;
+    private static final int BATCH_SIZE = 100;
 
     public BanlistRenderer(RouterContext context) {
         _context = context;
@@ -42,7 +43,7 @@ class BanlistRenderer {
 
         boolean largeBanlist = bannedCount > 300;
         long now = _context.clock().now();
-        int bufferSize = banlist.getEntries().size() * 512;
+        int bufferSize = BATCH_SIZE * 512;
 
         StringBuilder buf = new StringBuilder(bufferSize);
         int count = 0;
@@ -105,7 +106,7 @@ class BanlistRenderer {
             buf.append("</li>\n");
             count++;
 
-            if (count % 100 == 0) {flushBuffer(buf, out);}
+            if (count % BATCH_SIZE == 0) {flushBuffer(buf, out);}
         }
 
         flushBuffer(buf, out);
@@ -133,7 +134,7 @@ class BanlistRenderer {
 
         int tempBanned = 0;
         long now = _context.clock().now();
-        int bufferSize = banlist.getEntries().size() * 256;
+        int bufferSize = BATCH_SIZE * 256;
 
         StringBuilder buf = new StringBuilder(bufferSize);
         int count = 0;
@@ -171,7 +172,7 @@ class BanlistRenderer {
             tempBanned++;
             count++;
 
-            if (count % 100 == 0) {flushBuffer(buf, out);}
+            if (count % BATCH_SIZE == 0) {flushBuffer(buf, out);}
         }
 
         flushBuffer(buf, out);
