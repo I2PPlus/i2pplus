@@ -82,8 +82,8 @@ td{padding:3px 4px;color:var(--ink_light);opacity:1;font-size:9pt}
 /* top navigation */
 #navbar{margin:0 auto 10px;padding:7px 10px;position:sticky;top:-1px;z-index:2001;width:auto;width:calc(100% - 22px);min-width:880px;text-align:center;border:var(--border_soft);border-radius:2px 2px 0 0;box-shadow:var(--highlight)!important;background:var(--th)}
 .iframed #navbar{margin:-5px auto;padding-top:8px;width:calc(100% - 20px);position:unset;border-radius:0;border:0;border-bottom:var(--border_soft);box-shadow:none}
-.snarkNav{margin:0 -1px;padding:2px 10px 2px 24px;display:inline-block;position:relative;outline:none;line-height:1.4;letter-spacing:.08em;text-decoration:none;text-transform:uppercase;font-size:9pt;font-weight:700;border:var(--border_soft);border-radius:0;box-shadow:var(--highlight);filter:drop-shadow(0 0 1px #bbd8);transition:ease-in box-shadow .1s}
-.snarkNav:last-child{border-radius:0 2px 2px 0}
+.snarkNav{margin:0 0 0 -1px;padding:2px 10px 2px 24px;display:inline-block;position:relative;outline:none;line-height:1.4;letter-spacing:.08em;text-decoration:none;text-transform:uppercase;font-size:9pt;font-weight:700;border:var(--border_soft);border-radius:0;box-shadow:var(--highlight);filter:drop-shadow(0 0 1px #bbd8);transition:ease-in box-shadow .1s;will-change:transform}
+.snarkNav:last-child{margin-right:-1px;border-radius:0 2px 2px 0}
 .snarkNav[href="/i2psnark/"]:last-of-type{border-radius:2px}
 .snarkNav:hover,.snarkNav:focus{color:var(--hover)}
 .nav_tracker{background:var(--tracker) no-repeat 8px center,var(--nav),var(--tracker_hover),var(--tracker_active)}
@@ -92,6 +92,8 @@ td{padding:3px 4px;color:var(--ink_light);opacity:1;font-size:9pt}
 #nav_main{border-radius:2px 0 0 2px;background:var(--snark) no-repeat 8px center,var(--nav),var(--snark_hover),var(--snark_active)}
 #nav_main:hover,#nav_main:focus{background:var(--snark_hover) no-repeat 8px center,var(--nav_hover)}
 #nav_main:active,#nav_main.depress{background:var(--hover) var(--snark_active) no-repeat 8px center}
+#nav_main.isRefreshing{position:relative}
+#nav_main.isRefreshing::before{display:inline-block;width:calc(100% - 2px);height:2px;position:absolute;bottom:1px;left:1px;content:"";animation:refresh .3s ease-in-out 0s both}
 #nav_config{background:var(--nav_config) no-repeat 8px center,var(--nav),var(--nav_config_hover),var(--nav_config_active)}
 #nav_config:hover,#nav_config:focus{background:var(--nav_config_hover) no-repeat 8px center,var(--nav_hover)}
 #nav_config:active{background:var(--hover) var(--nav_config_active) no-repeat 8px center}
@@ -832,6 +834,7 @@ form[action^="/i2psnark/configure"]{display:block}
 @keyframes down{from{background-position:left bottom,right bottom}to{background-position:left bottom,left top}}
 @keyframes downloadbar{0%,100%{background-position:left center}50%{background-position:20% center}}
 @keyframes fade{0%{filter:opacity(0)}100%{filter:opacity(1)}}
+@keyframes refresh{0%{width:0;background:linear-gradient(90deg,#f60,#f90)}50%,99%{width:calc(100% - 2px)}100%{opacity:0}}
 @keyframes scale{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
 @keyframes slide-in{0%{transform:translateY(-40px)}100%{transform:translateY(0)}}
 @keyframes spin{from{transform:rotate(360deg)}}

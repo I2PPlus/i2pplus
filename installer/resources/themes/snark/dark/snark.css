@@ -105,6 +105,7 @@ select{margin:2px 4px 2px 0;padding:7px 24px 7px 12px;min-width:120px;font-size:
 #nav_main::before{margin-right:1px;background-image:var(--snark);background-size:17px}
 #nav_main:hover::before,#nav_main:focus::before{background-image:var(--snark_hover)}
 #nav_main:active::before{background-image:var(--snark_active)}
+#nav_main.isRefreshing::before{animation:spin .2s ease-in-out 0s reverse both, blur .2s ease both;transform-origin:center center;margin:-1px 2px 0 -1px}
 .iframed #navbar{margin:-2px auto -5px;padding:8px 0 7px;position:static}
 .iframed .snarkNav:last-child[href="/i2psnark/"]{margin-top:0}
 
@@ -887,6 +888,7 @@ body.textview{height:100vh}
 
 /* animation */
 @keyframes bar{from{width:100%}}
+@keyframes blur{from{filter:blur(1px)}to{filter:none}}
 @keyframes disappear{from{visibility:visible}to{visibility:collapse}}
 @keyframes downloading{from{border:1px solid #050}}
 @keyframes fade{0%,20%{filter:opacity(0)}100%{filter:opacity(1)}}
