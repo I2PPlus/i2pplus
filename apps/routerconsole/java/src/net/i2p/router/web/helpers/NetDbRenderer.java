@@ -1922,9 +1922,13 @@ class NetDbRenderer {
                             name = "MTU";
                         }
                         if (name.equalsIgnoreCase("host")) {
-                            detailsSpans.append("<span class=nowrap><span class=netdb_name>")
-                                        .append(_t(DataHelper.stripHTML(name))).append(":</span> ")
-                                        .append("<span class=\"netdb_info host\">");
+                            if (!fullDetails) {
+                                detailsSpans.append("<span class=nowrap><span class=netdb_name>")
+                                            .append(_t(DataHelper.stripHTML(name))).append(":</span> ");
+                            } else {
+                                detailsSpans.append("<span class=\"nowrap hostport\"><span class=netdb_name>");
+                            }
+                            detailsSpans.append("<span class=\"netdb_info host\">");
                             if ("::".equals(valueStripped)) {
                                 detailsSpans.append(_t("n/a"));
                             } else {
@@ -1937,11 +1941,18 @@ class NetDbRenderer {
                                 }
                                 detailsSpans.append("\">").append(valueStripped).append("</a>");
                             }
-                            detailsSpans.append("</span></span> ");
+                            if (!fullDetails) {
+                                detailsSpans.append("</span></span> ");
+                            }
                         } else if (name.equalsIgnoreCase("port")) {
-                            detailsSpans.append("<span class=nowrap><span class=netdb_name>")
-                                        .append(_t(DataHelper.stripHTML(name)))
-                                        .append(":</span> <span class=\"netdb_info port\"><a title=\"")
+                            if (!fullDetails) {
+                                detailsSpans.append("<span class=nowrap><span class=netdb_name>")
+                                            .append(_t(DataHelper.stripHTML(name)))
+                                            .append(":</span> ");
+                           } else {
+                               detailsSpans.append(":");
+                           }
+                           detailsSpans.append("<span class=\"netdb_info port\"><a title=\"")
                                         .append(_t("Show all routers with this port in the NetDb"))
                                         .append("\" href=\"/netdb?port=")
                                         .append(valueStripped)

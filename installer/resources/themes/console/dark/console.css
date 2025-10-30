@@ -1243,7 +1243,9 @@ p.family{white-space:nowrap;background:var(--family) no-repeat 8px center/28px,l
 .netdb_header{margin:0;padding:0 3px;min-width:100px;display:inline-block;vertical-align:middle;line-height:0}
 .netdb_header .viewprofile,.netdb_header .configpeer,.netdb_header .familysearch,.sybil_routerinfo .viewprofile,.sybil_routerinfo .configpeer,.sybil_routerinfo .familysearch{margin:3px;padding:4px 8px;vertical-align:middle}
 .netdb_info+b{margin-left:15px}
-.netdb_info.host,.netdb_info.port{color:#bb0;user-select:all}
+.netdb_info.host,.netdb_info.port{user-select:all}
+.hostport .host a{margin-right:2px}
+.hostport .port a{margin-left:2px}
 .netdb_info.host::selection,.netdb_info.port::selection{color:#fff;background:#770}
 .netdb_ouraddresses:empty{display:none}
 .netdb_ouraddresses .netdb_transport{margin:-1px 5px 0 -6px;padding:2px;display:inline-block}

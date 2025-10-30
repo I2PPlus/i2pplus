@@ -1472,7 +1472,7 @@ span.tier,.netdbentry .ff,.netdbentry .hidden,.netdbentry .reachable,.netdbentry
 .netdb_addresses br:first-child,.sybil_routerinfo tr:last-child td br:first-child{display:none}
 b.netdb_transport{margin-right:3px;display:inline-block}
 .netdb_name{text-transform:capitalize;font-weight:700;color:var(--ink_light)}
-.netdb_info{margin-right:1px;vertical-align:middle}
+.netdb_info{margin-right:1px;vertical-align:bottom}
 .netdb_name,.netdb_addresses .netdb_info{display:inline-block;vertical-align:middle}
 .netdb_addresses .netdb_info:not(.host){margin-left:0;max-width:72px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .netdb_addresses{line-height:1.5}
@@ -1498,12 +1498,15 @@ b.netdb_transport{margin-right:3px;display:inline-block}
 .netdb_addresses .netdb_info{font-size:90%}
 .netdb_addresses ul{margin:0;padding:0;display:inline-block;columns:auto;column-gap:0;width:100%}
 .netdb_addresses li,.netdb_ouraddresses li{margin:2px 2px 2px 0;padding:0 5px 3px;display:inline-block;vertical-align:middle;list-style:none;border:1px solid #ddf;box-shadow:var(--highlight);background:#eef}
-.netdb_addresses .nowrap{margin:0 2px 0 0;vertical-align:middle}
+.netdb_addresses .nowrap{margin:0 2px 0 0;vertical-align:bottom}
 .netdb_ouraddresses:empty{display:none}
 .netdb_ouraddresses .netdb_transport{margin:-1px 5px 0 -6px;padding:2px;display:inline-block}
 .netdb_ouraddresses .netdb_transport:nth-of-type(n+2){margin-left:5px}
 .netdb_info+b{margin-left:15px}
-.netdb_info.host,.netdb_info.port{font-size:90%;color:#040;user-select:all}
+.netdb_info.host,.netdb_info.port{display:inline-block;color:#040;user-select:all}
+.hostport a{display:inline-block;vertical-align:top}
+.hostport .netdb_info.host a{margin-right:2px}
+.hostport .netdb_info.port a{margin-left:2px}
 .netdb_info.port{color:#303}
 .netdb_info.host::selection{color:#fff;background:var(--ink_code)}
 .netdb_info.port::selection{color:#fff;background:#303}
@@ -2638,7 +2641,6 @@ hr[hidden]+#sb_graphcontainer{margin-top:-9px}
 .infowarn,.infohelp,#pluginconfigtext{background-size:24px,100%}
 .netdb_leases li b.leaseNumber{margin:1px -2px 0 0;padding:0 0 1px}
 .netdbentry .tunnel_cap,.netdbentry .tier,.netdbentry .ff,.netdbentry .reachable,.netdbentry .unreachable,.netdbentry .version,.sybil_routerinfo .tunnel_cap,.sybil_routerinfo .tier,.sybil_routerinfo .ff,.sybil_routerinfo .reachable,.sybil_routerinfo .unreachable,.sybil_routerinfo .version{padding:2px 4px}
-.netdb_info{max-width:180px;display:inline-block;overflow:hidden;text-overflow:ellipsis}
 .netdbStats li{margin:0;min-width:240px}
 .sitemapLink,.sitemapLabel,#sitemap .applink,#sitemap .applabel{width:160px;min-width:160px;font-size:8pt}
 .statsLongName{margin-bottom:0}
@@ -2863,7 +2865,7 @@ body{overflow-x:hidden}
 }
 
 @media (min-width:1500px){
-body,button,input,select,th,.fakebutton,.infohelp,.infowarn,.main,.main li b,.main td,.newscontent p,.news p,.percentBarText,.statusnotes,.tab,.tab2,.themelabel,.ui_lang,#configinfo,#configinfo th,#help code,#news p,#peerdefs,#profile_defs,#sidebar button.download,#sidebar .cancel,#sidebar .reload[value="restartImmediate"],#thresholds{font-size:10pt}
+body,button,input,select,th,.fakebutton,.hostport a,.infohelp,.infowarn,.main,.main li b,.main td,.newscontent p,.news p,.percentBarText,.statusnotes,.tab,.tab2,.themelabel,.ui_lang,#configinfo,#configinfo th,#help code,#news p,#peerdefs,#profile_defs,#sidebar button.download,#sidebar .cancel,#sidebar .reload[value="restartImmediate"],#thresholds{font-size:10pt}
 body:not(#homepage) #sb_advancedgeneral:not([hidden])~#sb_tunnels{margin-bottom:-8px}
 button.control{padding:14px}
 pre,.footnote,div.news,.news,.links code,.main[id^="config_"] .encDests th,.sb_notice,.topness,#help code,#jardump td,#jardump th,#jobs li b,#jobs .jobcount,#jobs .joblog li,#jobs #schedjobs td,#jobstats td:first-child,#logs li,#sidebar a,#sidebar button,#sidebar h4,#sidebar h4 a,#sidebar td,#sidebar .sb_update b{font-size:9pt}
@@ -2877,6 +2879,7 @@ h1[class],#wizardpage h1{padding:20px 15px 17px 55px;font-size:19pt;background-s
 .log_level{margin:-2px -3px 0;min-width:40px;max-width:40px}
 .log_omitted{margin-right:1px}
 .main,#news.news,h1,.sorry{margin-left:252px}
+.netdb_addresses .nowrap{margin:1px 2px -1px 0}
 .netdb_header img[src^="/flags"]{width:32px}
 .netdb_header .peerFlag{transform:translateY(1px)}
 .netdb_header .unknownflag{margin-right:2px;margin-top:-1px}

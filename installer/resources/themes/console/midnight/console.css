@@ -1870,9 +1870,12 @@ b.netdb_transport{margin:2px 8px 2px 0;padding:2px;min-width:64px;display:inline
 .netdb_header>*{font-size:0;line-height:0}
 .netdb_info+b{margin-left:15px}
 .netdb_info.host::selection,.netdb_info.port::selection{color:#fff;background:#090}
-.netdb_info.host,.netdb_info.port{font-size:90%;user-select:all}
+.netdb_info.host,.netdb_info.port{user-select:all}
 .netdb_leases .tunnel_id{padding:4px 6px 3px 18px;min-width:78px;font-size:85%}
 .netdb_leases .tunnel_peer{margin:0 3px;padding-right:2px;display:inline-block;vertical-align:middle}
+.hostport a{display:inline-block;vertical-align:bottom}
+.hostport .host a{margin-right:2px}
+.hostport .port a{margin-left:0}
 .netdbstats .hide+hr{display:none}
 .netdbstats hr#expl,.netdbstats hr#hrd{display:block}
 .netdbStats hr,.sybil_routerinfo hr{margin:2px 0;display:block;color:#0000;opacity:.5;border-bottom:1px solid #224;background:none}
