@@ -261,6 +261,7 @@ function initSidebar() {
 }
 
 initSidebar();
+setInterval(startAutoRefresh, Math.max(refresh * 1000 * 2, 30000));
 
 window.addEventListener("online", handleStatus);
 window.addEventListener("offline", checkConnectionStatus);
