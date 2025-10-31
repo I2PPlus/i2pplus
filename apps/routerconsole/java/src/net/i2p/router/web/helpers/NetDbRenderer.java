@@ -1760,6 +1760,37 @@ class NetDbRenderer {
                     }
                     buf.append(":</b> <span class=rdns>").append(canonicalHostname).append("</span></span>&nbsp;&nbsp;");
                 }
+            } else if (_context.router().getUptime() > 30 * 1000 && (isUnreachableFlag || primaryAddress == null)) {
+                byte[] ipAddress = TransportImpl.getIP(routerHash);
+                if (ipAddress != null) {
+                    _context.commSystem().queueLookup(ipAddress);
+                    String directAddressString = Addresses.toString(ipAddress);
+                    if (enableReverseLookups()) {
+                        String canonicalHostname = reverseLookupCache.get(directAddressString);
+                        if (canonicalHostname == null) {
+                            canonicalHostname = _context.commSystem().getCanonicalHostName(directAddressString);
+                            if (canonicalHostname != null && !canonicalHostname.equals(directAddressString) && !canonicalHostname.equals("unknown")) {
+                                reverseLookupCache.put(directAddressString, canonicalHostname);
+                            }
+                        }
+                        if (canonicalHostname != null && !canonicalHostname.equals(directAddressString) && !canonicalHostname.equals("unknown")) {
+                            buf.append("<span class=netdb_info><b>").append(_t("Hostname"));
+                            if (enableWhoisLookups) {
+                                buf.append(" / ").append(_t("Whois"));
+                            }
+                            buf.append(" (").append(_t("direct")).append("):</b> <span class=rdns>")
+                               .append(canonicalHostname).append(" (").append(directAddressString).append(")</span></span>&nbsp;&nbsp;");
+                        } else {
+                            buf.append("<span class=netdb_info><b>").append(_t("IP Address")).append(" (")
+                               .append(_t("direct")).append("):</b> <span class=rdns>").append(directAddressString)
+                               .append("</span></span>&nbsp;&nbsp;");
+                        }
+                    } else {
+                        buf.append("<span class=netdb_info><b>").append(_t("IP Address")).append(" (")
+                           .append(_t("direct")).append("):</b> <span class=rdns>").append(directAddressString)
+                           .append("</span></span>&nbsp;&nbsp;");
+                    }
+                }
             }
         } else {
             buf.append("<td><b>").append(_t("Published")).append("</td><td>:</b> in ")
@@ -1917,8 +1948,7 @@ class NetDbRenderer {
                     "\"><b>" + _t("LeaseSets") + ":</b> " + spoofedLeaseSets + "</li>");
             }
 
-            statsLines.add("<li><b>" + _t("Routers") + ":</b> " +
-                Math.max(_context.netDb().getKnownRouters() - 1, 0) + "</li>");
+            statsLines.add("<li><b>" + _t("Routers") + ":</b> " + Math.max(_context.netDb().getKnownRouters() - 1, 0) + "</li>");
         } else {
             PeerProfile profile = _context.profileOrganizer().getProfileNonblocking(routerHash);
             if (profile != null) {
@@ -1939,14 +1969,12 @@ class NetDbRenderer {
                         _t("{0} ago", DataHelper.formatDuration2(now - lastFrom)) + "</li>");
                 }
             }
+        }
 
-            if (!statsLines.isEmpty()) {
-                buf.append("<tr><td><b>").append(_t("Stats")).append(":</b></td><td colspan=2>\n<ul class=netdbStats>\n");
-                for (String line : statsLines) {
-                    buf.append(line).append('\n');
-                }
-                buf.append("</ul></td></tr>\n");
-            }
+        if (!statsLines.isEmpty()) {
+            buf.append("<tr><td><b>").append(_t("Stats")).append(":</b></td><td colspan=2>\n<ul class=netdbStats>\n");
+            for (String line : statsLines) {buf.append(line).append('\n');}
+            buf.append("</ul></td></tr>\n");
         }
 
         buf.append("</table>\n");
