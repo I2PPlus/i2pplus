@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
@@ -1510,6 +1511,22 @@ class NetDbRenderer {
         }
     }
 
+    private static final Map<Character, String> CAP_REPLACEMENTS;
+
+    static {
+        CAP_REPLACEMENTS = new HashMap<>();
+        CAP_REPLACEMENTS.put('f', "<a href=\"/netdb?caps=f\"><span class=ff>F</span></a>");
+        CAP_REPLACEMENTS.put('R', "<a href=\"/netdb?caps=R\"><span class=reachable>R</span></a>");
+        CAP_REPLACEMENTS.put('U', "<a href=\"/netdb?caps=U\"><span class=unreachable>U</span></a>");
+        CAP_REPLACEMENTS.put('K', "<a href=\"/netdb?caps=K\"><span class=tier>K</span></a>");
+        CAP_REPLACEMENTS.put('L', "<a href=\"/netdb?caps=L\"><span class=tier>L</span></a>");
+        CAP_REPLACEMENTS.put('M', "<a href=\"/netdb?caps=M\"><span class=tier>M</span></a>");
+        CAP_REPLACEMENTS.put('N', "<a href=\"/netdb?caps=N\"><span class=tier>N</span></a>");
+        CAP_REPLACEMENTS.put('O', "<a href=\"/netdb?caps=O\"><span class=tier>O</span></a>");
+        CAP_REPLACEMENTS.put('P', "<a href=\"/netdb?caps=P\"><span class=tier>P</span></a>");
+        CAP_REPLACEMENTS.put('X', "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>");
+    }
+
     /**
      * Cache for storing reverse DNS lookups of IP addresses to hostnames.
      *
@@ -1524,8 +1541,6 @@ class NetDbRenderer {
      * Displays router identity, capabilities, addresses, statistics, and other metadata.
      * Includes visual indicators for router variants and status, with optional reverse DNS lookups.
      *
-     * Assumes all displayed data is sanitized (e.g., via stripHTML) to ensure output safety.
-     *
      * @param buf            StringBuilder to append HTML output
      * @param routerInfo     RouterInfo object containing router details to render
      * @param isLocalRouter  true if the router is the local router, affecting display logic
@@ -1533,8 +1548,6 @@ class NetDbRenderer {
      */
     private void renderRouterInfo(StringBuilder buf, RouterInfo routerInfo, boolean isLocalRouter, boolean fullDetails) {
         RouterIdentity identity = routerInfo.getIdentity();
-        long uptime = _context.router().getUptime();
-        long now = _context.clock().now();
         Hash routerHash = routerInfo.getHash();
         String routerHashBase64 = routerHash.toBase64();
         String family = routerInfo.getOption("family");
@@ -1542,146 +1555,155 @@ class NetDbRenderer {
         buf.append("<table class=\"netdbentry lazy\"><tr><th>");
         if (isLocalRouter) {
             buf.append("<b id=our-info>").append(_t("Our info")).append(":</b></th><th><code>").append(routerHashBase64)
-                  .append("</code></th><th id=netdb_ourinfo>");
+               .append("</code></th><th id=netdb_ourinfo>");
         } else {
             buf.append("<b>").append(_t("Router")).append(":</b></th><th><code>").append(routerHashBase64).append("</code></th><th>");
         }
+
         if (_context.banlist().isBanlisted(routerHash)) {
             buf.append("<a class=banlisted href=\"/profiles?f=3\" title=\"").append(_t("Router is banlisted")).append("\">Banned</a> ");
         }
-        Collection<RouterAddress> routerAddresses = routerInfo.getAddresses();
+
+        // Router variant detection
         boolean isJavaI2PVariant = false;
         boolean isI2PdVariant = false;
-        for (RouterAddress address : routerAddresses) {
+        for (RouterAddress address : routerInfo.getAddresses()) {
             String transportStyle = address.getTransportStyle();
-            int transportCost = address.getCost();
-            if ((transportStyle.startsWith("SSU") && transportCost == 5) ||
-                (transportStyle.startsWith("NTCP") && transportCost == 14) && (transportStyle.startsWith("SSU") && transportCost != 15)) {
+            int cost = address.getCost();
+            if ((transportStyle.startsWith("SSU") && cost == 5) || (transportStyle.startsWith("NTCP") && cost == 14)) {
                 isJavaI2PVariant = true;
                 break;
-            } else if ((transportStyle.startsWith("SSU") && transportCost == 3) || (transportStyle.startsWith("NTCP") && transportCost == 8)) {
+            } else if ((transportStyle.startsWith("SSU") && cost == 3) || (transportStyle.startsWith("NTCP") && cost == 8)) {
                 isI2PdVariant = true;
             }
         }
+
         if (isJavaI2PVariant) {
             buf.append("<span class=javai2p title=\"").append(_t("Java I2P variant")).append("\"></span> ");
         } else if (isI2PdVariant) {
             buf.append("<span class=i2pd title=\"").append(_t("I2Pd variant")).append("\"></span> ");
         }
+
         if (identity.isCompressible()) {
             buf.append("<span class=compressible title=\"").append(_t("RouterInfo is compressible")).append("\"></span> ");
         }
 
-        // Cache stripped capabilities once
-        String strippedCapabilities = DataHelper.stripHTML(routerInfo.getCapabilities());
-        boolean hasD = strippedCapabilities.contains("D");
-        boolean hasE = strippedCapabilities.contains("E");
-        boolean hasG = strippedCapabilities.contains("G");
-        boolean isReachable = strippedCapabilities.contains("R");
-        boolean isUnreachable = strippedCapabilities.contains("U");
+        // Capability parsing
+        String caps = DataHelper.stripHTML(routerInfo.getCapabilities());
+        boolean hasD = false, hasE = false, hasG = false, isReachable = false, isUnreachable = false;
+        for (int i = 0; i < caps.length(); i++) {
+            char c = caps.charAt(i);
+            if (c == 'D') hasD = true;
+            else if (c == 'E') hasE = true;
+            else if (c == 'G') hasG = true;
+            else if (c == 'R') isReachable = true;
+            else if (c == 'U') isUnreachable = true;
+        }
 
-        String processedCaps = strippedCapabilities
-            .replace("XO", "X")
-            .replace("PO", "P")
-            .replace("Kf", "fK")
-            .replace("Lf", "fL")
-            .replace("Mf", "fM")
-            .replace("Nf", "fN")
-            .replace("Of", "fO")
-            .replace("Pf", "fP")
-            .replace("Xf", "fX")
-            .replace("f", "<a href=\"/netdb?caps=f\"><span class=ff>F</span></a>")
-            .replace("R", "<a href=\"/netdb?caps=R\"><span class=reachable>R</span></a>")
-            .replace("U", "<a href=\"/netdb?caps=U\"><span class=unreachable>U</span></a>")
-            .replace("K", "<a href=\"/netdb?caps=K\"><span class=tier>K</span></a>")
-            .replace("L", "<a href=\"/netdb?caps=L\"><span class=tier>L</span></a>")
-            .replace("M", "<a href=\"/netdb?caps=M\"><span class=tier>M</span></a>")
-            .replace("N", "<a href=\"/netdb?caps=N\"><span class=tier>N</span></a>")
-            .replace("O", "<a href=\"/netdb?caps=O\"><span class=tier>O</span></a>")
-            .replace("P", "<a href=\"/netdb?caps=P\"><span class=tier>P</span></a>")
-            .replace("X", "<a href=\"/netdb?caps=X\"><span class=tier>X</span></a>");
+        // Apply base capability replacements
+        StringBuilder processedCaps = new StringBuilder(caps.length() * 2);
+        for (int i = 0; i < caps.length(); i++) {
+            char c = caps.charAt(i);
+            processedCaps.append(CAP_REPLACEMENTS.getOrDefault(c, String.valueOf(c)));
+        }
 
-        if (hasD) {
-            processedCaps = processedCaps
-               .replace("D", "")
-               .replace("class=tier", "class=\"tier isD\"")
-               .replace("\"><span class", "D\"><span class");
-            if (isReachable) {
-                processedCaps = processedCaps
-                    .replace("caps=KD", "caps=KRD")
-                    .replace("caps=LD", "caps=LRD")
-                    .replace("caps=MD", "caps=MRD")
-                    .replace("caps=ND", "caps=NRD")
-                    .replace("caps=OD", "caps=ORD")
-                    .replace("caps=PD", "caps=PRD")
-                    .replace("caps=XD", "caps=XRD");
-            } else if (isUnreachable) {
-                processedCaps = processedCaps.replace("caps=KD", "caps=KUD")
-                    .replace("caps=LD", "caps=LUD")
-                    .replace("caps=MD", "caps=MUD")
-                    .replace("caps=ND", "caps=NUD")
-                    .replace("caps=OD", "caps=OUD")
-                    .replace("caps=PD", "caps=PUD")
-                    .replace("caps=XD", "caps=XUD");
+        String processedCapsStr = processedCaps.toString();
+
+        // Apply D/E/G-specific transformations
+        if (hasD || hasE || hasG) {
+            if (hasD && processedCapsStr.contains("D")) {
+                processedCapsStr = processedCapsStr.replace("D", "");
+            } else if (hasE && processedCapsStr.contains("E")) {
+                processedCapsStr = processedCapsStr.replace("E", "");
+            } else if (hasG && processedCapsStr.contains("G")) {
+                processedCapsStr = processedCapsStr.replace("G", "");
             }
-        } else if (hasE) {
-            processedCaps = processedCaps
-               .replace("E", "")
-               .replace("class=tier", "class=\"tier isE\"")
-               .replace("\"><span class", "E\"><span class");
-            if (isReachable) {
-                processedCaps = processedCaps
-                    .replace("caps=KE", "caps=KRE")
-                    .replace("caps=LE", "caps=LRE")
-                    .replace("caps=ME", "caps=MRE")
-                    .replace("caps=NE", "caps=NRE")
-                    .replace("caps=OE", "caps=ORE")
-                    .replace("caps=PE", "caps=PRE")
-                    .replace("caps=XE", "caps=XRE");
-            } else if (isUnreachable) {
-                processedCaps = processedCaps
-                    .replace("caps=KE", "caps=KUE")
-                    .replace("caps=LE", "caps=LUE")
-                    .replace("caps=ME", "caps=MUE")
-                    .replace("caps=NE", "caps=NUE")
-                    .replace("caps=OE", "caps=OUE")
-                    .replace("caps=PE", "caps=PUE")
-                    .replace("caps=XE", "caps=XUE");
-            }
-        } else if (hasG) {
-            processedCaps = processedCaps
-                .replace("G", "")
-                .replace("class=tier", "class=\"tier isG\"")
-                .replace("\"><span class", "G\"><span class");
-            if (isReachable) {
-                processedCaps = processedCaps
-                    .replace("KG", "KRG")
-                    .replace("LG", "LRG")
-                    .replace("MG", "MRG")
-                    .replace("NG", "NRG")
-                    .replace("OG", "ORG")
-                    .replace("PG", "PRG")
-                    .replace("XG", "XRG");
-            } else if (isUnreachable) {
-                processedCaps = processedCaps
-                    .replace("KG", "KUG")
-                    .replace("LG", "LUG")
-                    .replace("MG", "MUG")
-                    .replace("NG", "NUG")
-                    .replace("OG", "OUG")
-                    .replace("PG", "PUG")
-                    .replace("XG", "XUG");
+
+            if (hasD) {
+                processedCapsStr = processedCapsStr
+                    .replace("class=\"tier\"", "class=\"tier isD\"")
+                    .replace("class=tier", "class=\"tier isD\"");
+
+                if (isReachable) {
+                    processedCapsStr = processedCapsStr
+                        .replaceAll("href=\"/netdb\\?caps=K", "href=\"/netdb?caps=KRD")
+                        .replaceAll("href=\"/netdb\\?caps=L", "href=\"/netdb?caps=LRD")
+                        .replaceAll("href=\"/netdb\\?caps=M", "href=\"/netdb?caps=MRD")
+                        .replaceAll("href=\"/netdb\\?caps=N", "href=\"/netdb?caps=NRD")
+                        .replaceAll("href=\"/netdb\\?caps=O", "href=\"/netdb?caps=ORD")
+                        .replaceAll("href=\"/netdb\\?caps=P", "href=\"/netdb?caps=PRD")
+                        .replaceAll("href=\"/netdb\\?caps=X", "href=\"/netdb?caps=XRD");
+                } else if (isUnreachable) {
+                    processedCapsStr = processedCapsStr
+                        .replaceAll("href=\"/netdb\\?caps=K", "href=\"/netdb?caps=KUD")
+                        .replaceAll("href=\"/netdb\\?caps=L", "href=\"/netdb?caps=LUD")
+                        .replaceAll("href=\"/netdb\\?caps=M", "href=\"/netdb?caps=MUD")
+                        .replaceAll("href=\"/netdb\\?caps=N", "href=\"/netdb?caps=NUD")
+                        .replaceAll("href=\"/netdb\\?caps=O", "href=\"/netdb?caps=OUD")
+                        .replaceAll("href=\"/netdb\\?caps=P", "href=\"/netdb?caps=PUD")
+                        .replaceAll("href=\"/netdb\\?caps=X", "href=\"/netdb?caps=XUD");
+                }
+            } else if (hasE) {
+                processedCapsStr = processedCapsStr
+                    .replace("class=\"tier\"", "class=\"tier isE\"")
+                    .replace("class=tier", "class=\"tier isE\"");
+
+                if (isReachable) {
+                    processedCapsStr = processedCapsStr
+                        .replaceAll("href=\"/netdb\\?caps=K", "href=\"/netdb?caps=KRE")
+                        .replaceAll("href=\"/netdb\\?caps=L", "href=\"/netdb?caps=LRE")
+                        .replaceAll("href=\"/netdb\\?caps=M", "href=\"/netdb?caps=MRE")
+                        .replaceAll("href=\"/netdb\\?caps=N", "href=\"/netdb?caps=NRE")
+                        .replaceAll("href=\"/netdb\\?caps=O", "href=\"/netdb?caps=ORE")
+                        .replaceAll("href=\"/netdb\\?caps=P", "href=\"/netdb?caps=PRE")
+                        .replaceAll("href=\"/netdb\\?caps=X", "href=\"/netdb?caps=XRE");
+                } else if (isUnreachable) {
+                    processedCapsStr = processedCapsStr
+                        .replaceAll("href=\"/netdb\\?caps=K", "href=\"/netdb?caps=KUE")
+                        .replaceAll("href=\"/netdb\\?caps=L", "href=\"/netdb?caps=LUE")
+                        .replaceAll("href=\"/netdb\\?caps=M", "href=\"/netdb?caps=MUE")
+                        .replaceAll("href=\"/netdb\\?caps=N", "href=\"/netdb?caps=NUE")
+                        .replaceAll("href=\"/netdb\\?caps=O", "href=\"/netdb?caps=OUE")
+                        .replaceAll("href=\"/netdb\\?caps=P", "href=\"/netdb?caps=PUE")
+                        .replaceAll("href=\"/netdb\\?caps=X", "href=\"/netdb?caps=XUE");
+                }
+            } else if (hasG) {
+                processedCapsStr = processedCapsStr
+                    .replace("class=\"tier\"", "class=\"tier isG\"")
+                    .replace("class=tier", "class=\"tier isG\"");
+
+                if (isReachable) {
+                    processedCapsStr = processedCapsStr
+                        .replaceAll("href=\"/netdb\\?caps=K", "href=\"/netdb?caps=KRG")
+                        .replaceAll("href=\"/netdb\\?caps=L", "href=\"/netdb?caps=LRG")
+                        .replaceAll("href=\"/netdb\\?caps=M", "href=\"/netdb?caps=MRG")
+                        .replaceAll("href=\"/netdb\\?caps=N", "href=\"/netdb?caps=NRG")
+                        .replaceAll("href=\"/netdb\\?caps=O", "href=\"/netdb?caps=ORG")
+                        .replaceAll("href=\"/netdb\\?caps=P", "href=\"/netdb?caps=PRG")
+                        .replaceAll("href=\"/netdb\\?caps=X", "href=\"/netdb?caps=XRG");
+                } else if (isUnreachable) {
+                    processedCapsStr = processedCapsStr
+                        .replaceAll("href=\"/netdb\\?caps=K", "href=\"/netdb?caps=KUG")
+                        .replaceAll("href=\"/netdb\\?caps=L", "href=\"/netdb?caps=LUG")
+                        .replaceAll("href=\"/netdb\\?caps=M", "href=\"/netdb?caps=MUG")
+                        .replaceAll("href=\"/netdb\\?caps=N", "href=\"/netdb?caps=NUG")
+                        .replaceAll("href=\"/netdb\\?caps=O", "href=\"/netdb?caps=OUG")
+                        .replaceAll("href=\"/netdb\\?caps=P", "href=\"/netdb?caps=PUG")
+                        .replaceAll("href=\"/netdb\\?caps=X", "href=\"/netdb?caps=XUG");
+                }
             }
         }
 
+        // Reapply tooltip links
         String tooltip = "\" title=\"" + _t("Show all routers with this capability in the NetDb") + "\"><span";
-        processedCaps = processedCaps.replace("\"><span", tooltip);
-        buf.append(processedCaps);
+        processedCapsStr = processedCapsStr.replace("\"><span", tooltip);
 
-        String strippedVersion = DataHelper.stripHTML(routerInfo.getVersion());
-        buf.append("&nbsp;<a href=\"/netdb?v=").append(strippedVersion).append("\">")
+        buf.append(processedCapsStr);
+
+        String version = DataHelper.stripHTML(routerInfo.getVersion());
+        buf.append("&nbsp;<a href=\"/netdb?v=").append(version).append("\">")
            .append("<span class=version title=\"").append(_t("Show all routers with this version in the NetDb"))
-           .append("\">").append(strippedVersion).append("</span></a>");
+           .append("\">").append(version).append("</span></a>");
 
         if (!isLocalRouter) {
             buf.append("<span class=netdb_header>");
@@ -1695,11 +1717,13 @@ class NetDbRenderer {
                    .append("\" title=\"").append(_t("Show all members of the {0} family in NetDb", DataHelper.stripHTML(family)))
                    .append("\">").append(_t("Family")).append("</a>");
             }
-            PeerProfile profile = _context.profileOrganizer().getProfileNonblocking(routerInfo.getHash());
+
+            PeerProfile profile = _context.profileOrganizer().getProfileNonblocking(routerHash);
             if (profile != null) {
                 buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(routerHashBase64).append("\" title=\"")
                    .append(_t("View profile")).append("\">").append(_t("Profile")).append("</a>");
             }
+
             buf.append("<a class=configpeer href=\"/configpeer?peer=").append(routerHashBase64)
                .append("\" title=\"").append(_t("Configure peer"))
                .append("\">").append(_t("Edit")).append("</a>")
@@ -1711,7 +1735,9 @@ class NetDbRenderer {
         }
         buf.append("</th></tr>\n<tr>");
 
-        long age = now - routerInfo.getPublished();
+        long now = _context.clock().now();
+        long published = routerInfo.getPublished();
+        long age = now - published;
 
         if (isLocalRouter && _context.router().isHidden()) {
             buf.append("<td><b>").append(_t("Hidden")).append(", ").append(_t("Updated")).append(":</b></td>")
@@ -1724,16 +1750,17 @@ class NetDbRenderer {
                .append("</span>&nbsp;&nbsp;");
 
             String primaryAddress = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(routerInfo));
-            boolean isUnreachableFlag = processedCaps.contains("U") || processedCaps.contains("H");
+            String capsStr = processedCapsStr;
+            boolean isUnreachableFlag = capsStr.contains("U") || capsStr.contains("H");
             boolean enableWhoisLookups = _context.getBooleanProperty("routerconsole.enableWhoisLookups");
 
-            if (enableReverseLookups() && uptime > 30 * 1000 && !isUnreachableFlag && primaryAddress != null) {
-                String canonicalHostname;
-                if (reverseLookupCache.containsKey(primaryAddress)) {
-                    canonicalHostname = reverseLookupCache.get(primaryAddress);
-                } else {
+            if (enableReverseLookups() && _context.router().getUptime() > 30 * 1000 && !isUnreachableFlag && primaryAddress != null) {
+                String canonicalHostname = reverseLookupCache.get(primaryAddress);
+                if (canonicalHostname == null) {
                     canonicalHostname = _context.commSystem().getCanonicalHostName(primaryAddress);
-                    reverseLookupCache.put(primaryAddress, canonicalHostname);
+                    if (canonicalHostname != null && !canonicalHostname.equals(primaryAddress) && !canonicalHostname.equals("unknown")) {
+                        reverseLookupCache.put(primaryAddress, canonicalHostname);
+                    }
                 }
                 if (canonicalHostname != null && !canonicalHostname.equals(primaryAddress) && !canonicalHostname.equals("unknown")) {
                     buf.append("<span class=netdb_info><b>").append(_t("Hostname"));
@@ -1742,43 +1769,12 @@ class NetDbRenderer {
                     }
                     buf.append(":</b> <span class=rdns>").append(canonicalHostname).append("</span></span>&nbsp;&nbsp;");
                 }
-            } else if (uptime > 30 * 1000 && (isUnreachableFlag || primaryAddress == null)) {
-                byte[] ipAddress = TransportImpl.getIP(routerInfo.getHash());
-                if (ipAddress != null) {
-                    _context.commSystem().queueLookup(ipAddress);
-                    String directAddressString = Addresses.toString(ipAddress);
-                    if (enableReverseLookups()) {
-                        String canonicalHostname;
-                        if (reverseLookupCache.containsKey(directAddressString)) {
-                            canonicalHostname = reverseLookupCache.get(directAddressString);
-                        } else {
-                            canonicalHostname = _context.commSystem().getCanonicalHostName(directAddressString);
-                            reverseLookupCache.put(directAddressString, canonicalHostname);
-                        }
-                        if (canonicalHostname != null && !canonicalHostname.equals(directAddressString) && !canonicalHostname.equals("unknown")) {
-                            buf.append("<span class=netdb_info><b>").append(_t("Hostname"));
-                            if (enableWhoisLookups) {
-                                buf.append(" / ").append(_t("Whois"));
-                            }
-                            buf.append(" (").append(_t("direct")).append(")").append(":</b> <span class=rdns>")
-                               .append(canonicalHostname).append(" (").append(directAddressString).append(")</span></span>&nbsp;&nbsp;");
-                        } else {
-                            buf.append("<span class=netdb_info><b>").append(_t("IP Address")).append(" (")
-                               .append(_t("direct")).append(")").append(":</b> <span class=rdns>").append(directAddressString)
-                               .append("</span></span>&nbsp;&nbsp;");
-                        }
-                    } else {
-                        buf.append("<span class=netdb_info><b>").append(_t("IP Address")).append(" (")
-                           .append(_t("direct")).append(")</b>: <span class=rdns>").append(directAddressString)
-                           .append("</span></span>&nbsp;&nbsp;");
-                    }
-                }
             }
         } else {
-            // Should not happen - published timestamp in the future
             buf.append("<td><b>").append(_t("Published")).append("</td><td>:</b> in ")
                .append(DataHelper.formatDuration2(0 - age)).append("<span class=netdb_info>???</span>&nbsp;&nbsp;");
         }
+
         if (family != null) {
             FamilyKeyCrypto familyKeyCrypto = _context.router().getFamilyKeyCrypto();
             buf.append("<span class=\"netdb_family\"><b>").append(_t("Family"))
@@ -1790,14 +1786,14 @@ class NetDbRenderer {
             }
             buf.append("</span></span>");
         }
+
         buf.append("</td><td>");
         buf.append("<span class=\"signingkey\" title=\"")
            .append(_t("Show all routers with this signature type in the NetDb"))
            .append("\"><a class=\"keysearch\" href=\"/netdb?type=")
            .append(identity.getSigningPublicKey().getType().toString())
            .append("\">").append(identity.getSigningPublicKey().getType().toString())
-           .append("</a></span>")
-           .append("&nbsp;<span class=\"signingkey encryption\" title=\"")
+           .append("</a></span>&nbsp;<span class=\"signingkey encryption\" title=\"")
            .append(_t("Show all routers with this encryption type in the NetDb"))
            .append("\"><a class=\"keysearch\" href=\"/netdb?etype=")
            .append(identity.getPublicKey().getType().toString())
@@ -1809,7 +1805,7 @@ class NetDbRenderer {
                .append(_t("Addresses"))
                .append(":</b></td><td colspan=2 class=netdb_addresses><ul>");
             Collection<RouterAddress> addresses = routerInfo.getAddresses();
-            byte[] ipAddress = TransportImpl.getIP(routerInfo.getHash());
+            byte[] ipAddress = TransportImpl.getIP(routerHash);
             if (addresses.isEmpty()) {
                 buf.append(_t("n/a"));
                 if (ipAddress != null) {
@@ -1820,286 +1816,83 @@ class NetDbRenderer {
                 if (listAddresses.size() > 1) {
                     listAddresses.sort(new RAComparator());
                 }
+
                 boolean hasSSU = false;
                 boolean hasNTCP = false;
                 int introducerTagCount = 0;
+
                 for (RouterAddress address : listAddresses) {
-                    String style = address.getTransportStyle();
-                    if (style.startsWith("SSU")) hasSSU = true;
-                    if (style.startsWith("NTCP")) hasNTCP = true;
+                    String transportStyle = address.getTransportStyle();
+                    if (transportStyle.startsWith("SSU")) hasSSU = true;
+                    if (transportStyle.startsWith("NTCP")) hasNTCP = true;
+
                     Map<Object, Object> optionsMap = address.getOptionsMap();
                     for (Map.Entry<Object, Object> entry : optionsMap.entrySet()) {
-                        String entryName = (String) entry.getKey();
-                        if (entryName.toLowerCase().startsWith("itag")) {
+                        String key = (String) entry.getKey();
+                        if (key.toLowerCase().startsWith("itag")) {
                             introducerTagCount++;
                         }
                     }
-                }
-                if (ipAddress != null) {
-                    _context.commSystem().queueLookup(ipAddress);
-                }
-                List<String> listItems = new ArrayList<>();
-                boolean brInserted = false;
-                boolean introducersInserted = false;
-                for (RouterAddress address : listAddresses) {
-                    String transportStyle = address.getTransportStyle();
-                    int cost = address.getCost();
-                    Map<Object, Object> optionsMap = address.getOptionsMap();
-                    List<Map.Entry<Object, Object>> networkProperties = new ArrayList<>();
-                    List<Map.Entry<Object, Object>> otherProperties = new ArrayList<>();
-                    boolean hasDetails = false;
+
+                    // Render HTML for this address
+                    StringBuilder detailsSpans = new StringBuilder();
                     for (Map.Entry<Object, Object> entry : optionsMap.entrySet()) {
                         String key = (String) entry.getKey();
-                        String keyLower = key.toLowerCase();
-                        if (fullDetails) {
-                            if (key.equalsIgnoreCase("host") || key.equalsIgnoreCase("port") ||
-                                key.equalsIgnoreCase("mtu") || key.equalsIgnoreCase("caps")) {
-                                networkProperties.add(entry);
-                            } else if (!key.equalsIgnoreCase("v") &&
-                                       !keyLower.startsWith("ih") &&
-                                       !keyLower.startsWith("iexp") &&
-                                       !keyLower.startsWith("itag")) {
-                                otherProperties.add(entry);
-                            }
-                            if (!hasDetails && (!networkProperties.isEmpty() || !otherProperties.isEmpty())) {
-                                hasDetails = true;
-                            }
-                        } else {
-                            if (key.equalsIgnoreCase("host") || key.equalsIgnoreCase("port")) {
-                                networkProperties.add(entry);
-                                if (!hasDetails) {
-                                    hasDetails = true;
-                                }
-                            }
-                        }
-                    }
-                    if (!hasDetails) continue;
-                    Map.Entry<Object, Object> capsEntry = null;
-                    Map.Entry<Object, Object> mtuEntry = null;
-                    Iterator<Map.Entry<Object, Object>> netPropsIterator = networkProperties.iterator();
-                    while (netPropsIterator.hasNext()) {
-                        Map.Entry<Object, Object> entry = netPropsIterator.next();
-                        String entryKey = (String) entry.getKey();
-                        if ("caps".equals(entryKey)) {
-                            capsEntry = entry;
-                            netPropsIterator.remove();
-                        } else if ("mtu".equals(entryKey)) {
-                            mtuEntry = entry;
-                            netPropsIterator.remove();
-                        }
-                    }
-                    networkProperties.sort((e1, e2) -> ((String) e1.getKey()).compareTo((String) e2.getKey()));
-                    List<Map.Entry<Object, Object>> sortedProperties = new ArrayList<>();
-                    Set<String> seenNames = new HashSet<>();
-                    for (Map.Entry<Object, Object> entry : networkProperties) {
-                        String name = (String) entry.getKey();
-                        if (seenNames.add(name)) {
-                            sortedProperties.add(entry);
-                        }
-                    }
-                    for (Map.Entry<Object, Object> entry : otherProperties) {
-                        String name = (String) entry.getKey();
-                        if ("caps".equals(name)) {
-                            capsEntry = entry;
-                        } else if ("mtu".equals(name)) {
-                            mtuEntry = entry;
-                        } else if (seenNames.add(name)) {
-                            sortedProperties.add(entry);
-                        }
-                    }
-                    if (capsEntry != null) {
-                        sortedProperties.add(capsEntry);
-                    }
-                    if (mtuEntry != null) {
-                        sortedProperties.add(mtuEntry);
-                    }
-                    StringBuilder detailsSpans = new StringBuilder();
-                    for (Map.Entry<Object, Object> entry : sortedProperties) {
-                        String name = (String) entry.getKey();
                         String value = (String) entry.getValue();
-                        String valueStripped = DataHelper.stripHTML(value);
-                        if ("mtu".equals(name)) {
-                            name = "MTU";
-                        }
-                        if (name.equalsIgnoreCase("host")) {
-                            if (!fullDetails) {
-                                detailsSpans.append("<span class=nowrap><span class=netdb_name>")
-                                            .append(_t(DataHelper.stripHTML(name))).append(":</span> ");
+                        if (key.equalsIgnoreCase("host")) {
+                            detailsSpans.append("<span class=\"netdb_info host\">")
+                                        .append("<a title=\"Show all routers with this address in the NetDb\" ");
+                            if (value.contains(":")) {
+                                detailsSpans.append("href=\"/netdb?ipv6=").append(value.length() > 8 ? value.substring(0, 4) : value);
                             } else {
-                                detailsSpans.append("<span class=\"nowrap hostport\"><span class=netdb_name>");
+                                detailsSpans.append("href=\"/netdb?ip=").append(value);
                             }
-                            detailsSpans.append("<span class=\"netdb_info host\">");
-                            if ("::".equals(valueStripped)) {
-                                detailsSpans.append(_t("n/a"));
-                            } else {
-                                detailsSpans.append("<a title=\"").append(_t("Show all routers with this address in the NetDb")).append("\" ");
-                                if (valueStripped.contains(":")) {
-                                    detailsSpans.append(" href=\"/netdb?ipv6=");
-                                    detailsSpans.append(valueStripped.length() > 8 ? valueStripped.substring(0, 4) : valueStripped);
-                                } else {
-                                    detailsSpans.append(" href=\"/netdb?ip=").append(valueStripped);
-                                }
-                                detailsSpans.append("\">").append(valueStripped).append("</a>");
-                            }
-                            if (!fullDetails) {
-                                detailsSpans.append("</span></span> ");
-                            }
-                        } else if (name.equalsIgnoreCase("port")) {
-                            if (!fullDetails) {
-                                detailsSpans.append("<span class=nowrap><span class=netdb_name>")
-                                            .append(_t(DataHelper.stripHTML(name)))
-                                            .append(":</span> ");
-                           } else {
-                               detailsSpans.append(":");
-                           }
-                           detailsSpans.append("<span class=\"netdb_info port\"><a title=\"")
-                                        .append(_t("Show all routers with this port in the NetDb"))
-                                        .append("\" href=\"/netdb?port=")
-                                        .append(valueStripped)
-                                        .append("\">").append(valueStripped).append("</a></span></span> ");
-                        } else {
-                            detailsSpans.append("<span class=nowrap><span class=netdb_name>")
-                                        .append(_t(DataHelper.stripHTML(name)))
-                                        .append(":</span> <span class=netdb_info>")
-                                        .append(valueStripped).append("</span></span> ");
+                            detailsSpans.append("\">").append(value).append("</a></span>");
+                        } else if (key.equalsIgnoreCase("port")) {
+                            detailsSpans.append("<span class=\"netdb_info port\">")
+                                        .append("<a title=\"Show all routers with this port in the NetDb\" ")
+                                        .append("href=\"/netdb?port=").append(value)
+                                        .append("\">").append(value).append("</a></span>");
                         }
                     }
+
                     if (detailsSpans.length() > 0) {
-                        StringBuilder listItem = new StringBuilder();
-                        listItem.append("<li>");
-                        listItem.append("<b class=\"netdb_transport\"");
-                        if (!((transportStyle.equals("SSU") && cost == 5) || (transportStyle.startsWith("NTCP") && cost == 10))) {
-                            listItem.append(" title=\"").append(_t("Cost")).append(": ").append(cost).append("\"");
-                        }
-                        listItem.append(">").append(DataHelper.stripHTML(transportStyle).replace("2", "")).append("</b> ");
-                        listItem.append(detailsSpans.toString());
-                        if (fullDetails && isUnreachable && !introducersInserted && transportStyle.startsWith("SSU") && introducerTagCount > 0) {
-                            listItem.append("<span class=nowrap><span class=netdb_name>").append(_t("Introducers"))
-                                    .append(":</span> <span class=netdb_info>").append(introducerTagCount).append("</span></span>");
-                            introducersInserted = true;
-                        }
-                        listItem.append("</li>");
-                        if (fullDetails && hasNTCP && hasSSU && !brInserted) {
-                            if (transportStyle.startsWith("SSU")) {
-                                listItems.add("<br>");
-                                brInserted = true;
-                            }
-                        }
-                        listItems.add(listItem.toString());
-                    }
-                }
-                for (String item : listItems) {
-                    buf.append(item);
-                }
-                buf.append("</ul></td></tr>\n");
-            }
-        }
-        if (fullDetails || isLocalRouter) {
-            PeerProfile profile = _context.profileOrganizer().getProfileNonblocking(routerInfo.getHash());
-            boolean hasFastForwardCapability = routerInfo.getCapabilities().indexOf('f') >= 0;
-            boolean hasLeaseSetInfo = false;
-            String networkId = "2"; // default network id
-            String spoofedLeaseSets = "";
-            String knownRoutersString = "";
-            if (profile != null || isLocalRouter) {
-                buf.append("<tr><td><b>").append(_t("Stats")).append(":</b><td colspan=2>\n<ul class=netdbStats>");
-                Map<Object, Object> optionsMap = routerInfo.getOptionsMap();
-                for (Map.Entry<Object, Object> entry : optionsMap.entrySet()) {
-                    String key = (String) entry.getKey();
-                    if (key.contains("knownLeaseSets")) {
-                        hasLeaseSetInfo = true;
-                    }
-                    if (isLocalRouter) {
-                        if (key.contains("knownLeaseSets")) {
-                            spoofedLeaseSets = DataHelper.stripHTML((String) entry.getValue());
-                            continue;
-                        } else if (key.contains("knownRouters")) {
-                            knownRoutersString = DataHelper.stripHTML((String) entry.getValue());
-                            continue;
-                        } else if (key.equals("netId")) {
-                            networkId = DataHelper.stripHTML((String) entry.getValue());
-                            continue;
-                        }
-                    }
-                    String keyLower = key.toLowerCase();
-                    boolean skip = keyLower.contains("caps") || keyLower.contains("version") ||
-                                   keyLower.equals("family") || keyLower.contains("tunnel.") ||
-                                   keyLower.contains("stat_") || key.equals("netId");
-                    if (isLocalRouter && (key.equals("knownLeaseSets") || key.equals("knownRouters"))) continue;
-                    if (skip) continue;
-                    String netDbKey = DataHelper.stripHTML(key)
-                        .replace("netdb.", "")
-                        .replace("knownLeaseSets", "<li><b>" + _t("LeaseSets"))
-                        .replace("knownRouters", "<li><b>" + _t("Routers"))
-                        .replace("stat_", "")
-                        .replace("uptime", "<li><b>" + _t("Uptime"));
-                    String value = (String) entry.getValue();
-                    String[] valuesArray = DataHelper.stripHTML(value).split(";");
-                    List<String> statsToIgnore = Arrays.asList(
-                        "tunnel.buildExploratoryExpire.60m",
-                        "tunnel.buildExploratoryReject.60m",
-                        "tunnel.buildExploratorySuccess.60m",
-                        "tunnel.buildClientExpire.60m",
-                        "tunnel.buildClientReject.60m",
-                        "tunnel.buildClientSuccess.60m",
-                        "tunnel.participatingTunnels.60m",
-                        "tunnel.participatingTunnels.60s",
-                        "stat_bandwidthSendBps.60m",
-                        "stat_bandwidthReceiveBps.60m"
-                    );
-                    if (!statsToIgnore.contains(key) && !key.toLowerCase().contains("family")) {
-                        if (isLocalRouter && (netDbKey.contains("Routers") || netDbKey.contains("LeaseSets"))) continue;
-                        buf.append(netDbKey);
-                        String netDbValue = DataHelper.stripHTML(value)
-                            .replace("XO", "X")
-                            .replace("PO", "P")
-                            .replace("R", "")
-                            .replace("U", "")
-                            .replace(";", " <span class=\"bullet\">&bullet;</span> ")
-                            .replace("&bullet;</span> 555", "&bullet;</span> " + _t("n/a"));
-                        buf.append(":</b> ").append(netDbValue).append("</li>");
-                    }
-                }
-                if (!isLocalRouter) {
-                    long currentTime = now;
-                    long firstHeardAbout = profile.getFirstHeardAbout();
-                    if (firstHeardAbout > 0) {
-                        long ageSinceFirstHeard = Math.max(currentTime - firstHeardAbout, 1);
-                        if (hasFastForwardCapability && hasLeaseSetInfo) {
-                            buf.append("<br>");
-                        }
-                        buf.append("<li><b>").append(_t("First heard about")).append(":</b> ")
-                           .append(_t("{0} ago", DataHelper.formatDuration2(ageSinceFirstHeard))).append("</li>");
-                    }
-                    long lastHeardAbout = profile.getLastHeardAbout();
-                    if (lastHeardAbout > 0) {
-                        long ageSinceLastHeard = Math.max(currentTime - lastHeardAbout, 1);
-                        buf.append("<li><b>").append(_t("Last heard about")).append(":</b> ")
-                           .append(_t("{0} ago", DataHelper.formatDuration2(ageSinceLastHeard))).append("</li>");
-                    }
-                    long lastHeardFrom = profile.getLastHeardFrom();
-                    if (lastHeardFrom > 0) {
-                        long ageSinceLastHeardFrom = Math.max(currentTime - lastHeardFrom, 1);
-                        buf.append("<li><b>").append(_t("Last heard from")).append(":</b> ")
-                           .append(_t("{0} ago", DataHelper.formatDuration2(ageSinceLastHeardFrom))).append("</li>");
-                    }
-                } else {
-                    buf.append("<li><b>").append(_t("Network Id")).append(":</b> ").append(networkId).append("</li>");
-                    if (hasFastForwardCapability) {
-                        buf.append("<li title=\"")
-                           .append(_t("Count is always spoofed to avoid indicating router restarts"))
-                           .append("\"><b>")
-                           .append(_t("LeaseSets"))
-                           .append(":</b> ")
-                           .append(spoofedLeaseSets)
+                        buf.append("<li><b class=\"netdb_transport\">")
+                           .append(transportStyle.replace("2", ""))
+                           .append("</b> ")
+                           .append(detailsSpans)
                            .append("</li>");
                     }
-                    buf.append("<li><b>").append(_t("Routers")).append(":</b> ")
-                       .append(Math.max(_context.netDb().getKnownRouters() - 1, 0)).append("</li>");
                 }
+
                 buf.append("</ul></td></tr>\n");
             }
         }
+
+        if (fullDetails || isLocalRouter) {
+            buf.append("<tr><td><b>").append(_t("Stats")).append(":</b><td colspan=2>\n<ul class=netdbStats>");
+            Map<Object, Object> optionsMap = routerInfo.getOptionsMap();
+            for (Map.Entry<Object, Object> entry : optionsMap.entrySet()) {
+                String key = (String) entry.getKey();
+                String value = (String) entry.getValue();
+                if (key.contains("knownLeaseSets") || key.contains("knownRouters")) continue;
+                if (key.equals("netId")) continue;
+                if (key.toLowerCase().contains("caps") || key.toLowerCase().contains("version") || key.toLowerCase().equals("family")) continue;
+
+                buf.append("<li><b>").append(DataHelper.stripHTML(key)).append(":</b> ")
+                   .append(DataHelper.stripHTML(value).replace(";", " <span class=\"bullet\">&bull;</span> "))
+                   .append("</li>");
+            }
+
+            if (isLocalRouter) {
+                buf.append("<li><b>").append(_t("Network Id")).append(":</b> 2</li>");
+                buf.append("<li><b>").append(_t("Routers")).append(":</b> ")
+                   .append(Math.max(_context.netDb().getKnownRouters() - 1, 0)).append("</li>");
+            }
+
+            buf.append("</ul></td></tr>\n");
+        }
+
         buf.append("</table>\n");
     }
 
@@ -2123,31 +1916,28 @@ class NetDbRenderer {
         List<RouterInfo> list = new ArrayList<>(routerInfos);
         StringBuilder fullHtml = new StringBuilder();
 
+        // Use a synchronized lock to safely append to the StringBuilder
+        Object lock = new Object();
+
         for (int start = 0; start < list.size(); start += chunkSize) {
             int end = Math.min(start + chunkSize, list.size());
             List<RouterInfo> chunk = list.subList(start, end);
 
-            List<Future<String>> futures = new ArrayList<>();
+            List<CompletableFuture<Void>> futures = new ArrayList<>();
             for (RouterInfo routerInfo : chunk) {
-                Callable<String> task = () -> {
-                    StringBuilder buffer = new StringBuilder();
-                    renderRouterInfo(buffer, routerInfo, isLocalRouter, fullDetails);
-                    return buffer.toString();
-                };
-                futures.add(executor.submit(task));
+                futures.add(
+                    CompletableFuture.runAsync(() -> {
+                        StringBuilder buffer = new StringBuilder();
+                        renderRouterInfo(buffer, routerInfo, isLocalRouter, fullDetails);
+                        synchronized (lock) {
+                            fullHtml.append(buffer); // Append immediately when ready
+                        }
+                    }, executor)
+                );
             }
-
-            for (Future<String> future : futures) {
-                try {
-                    fullHtml.append(future.get());  // Append as each chunk completes
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                } catch (ExecutionException e) {}
-            }
+            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
         }
-
         executor.shutdown();
-
         return fullHtml.toString();
     }
 
