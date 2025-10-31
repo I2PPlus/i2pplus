@@ -160,7 +160,7 @@ class BanlistRenderer {
             buf.append("\"><td>");
 
             String translated = entry.causeCode != null ? _t(entry.cause, entry.causeCode) : _t(entry.cause);
-            buf.append(translated.replace("<b>➜</b> ", ""));
+            buf.append(translated.replace("<b>➜</b> ", "").replace("->", "").trim());
             buf.append("</td><td>:</td><td><span class=b64>")
                .append(key.toBase64())
                .append("</span></td><td><span hidden>")
