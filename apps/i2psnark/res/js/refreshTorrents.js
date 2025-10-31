@@ -424,7 +424,7 @@ function refreshOnSubmit() {
       setTimeout(() => {
         navMain.classList.remove("isRefreshing");
         clickTarget.blur();
-      }, 500);
+      }, 200);
     }
   });
 }
