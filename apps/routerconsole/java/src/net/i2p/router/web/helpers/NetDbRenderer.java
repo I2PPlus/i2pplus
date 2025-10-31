@@ -828,9 +828,13 @@ class NetDbRenderer {
     public void renderLocalSummary(Writer out) throws IOException {
         StringBuilder buf = new StringBuilder(1024);
         if (isRendered) {return;}
-        buf.append("<table id=leasesetsummary class=local hidden>\n<tr><th colspan=2>").append(_t("Total Local Leasesets"))
-           .append(": <span id=lsLocalCount></span></th>")
-           .append("<th colspan=2 class=right><a href=\"/netdb?l=1\">").append(_t("Remote Leasesets")).append("</a></th></tr></table>\n");
+        buf.append("<table id=leasesetsummary class=local hidden>\n<tr><th colspan=2>")
+           .append(_t("Total Local Leasesets"))
+           .append(": <span id=lsLocalCount></span></th><th colspan=2 class=right>");
+        if (isFloodfill()) {
+            buf.append("<a href=\"/netdb?l=1\">").append(_t("Remote Leasesets")).append("</a>");
+        }
+        buf.append("</th></tr></table>\n");
         out.append(buf);
         out.flush();
         isRendered = true;
@@ -1166,19 +1170,6 @@ class NetDbRenderer {
         int offset = pageSize * page;
         boolean hasNextPage = routers.size() > offset + pageSize;
         StringBuilder buf = new StringBuilder(8192);
-
-        // Show informational banner based on mode
-        if (showStats && full && page == 0) {
-            buf.append("<p class=infohelp id=debugmode>")
-               .append(_t("Advanced mode - includes all statistics published by floodfills."))
-               .append(" <a href=\"/netdb?f=2\">[Compact mode]</a></p>\n");
-        } else if (shortStats && page == 0) {
-            buf.append("<p class=infohelp>")
-               .append(_t("Compact mode - does not include statistics published by floodfills."))
-               .append(" <a href=\"/netdb?f=1\">[Advanced mode]</a></p>\n");
-        }
-        out.append(buf);
-        buf.setLength(0);
 
         // Render our own router info on first page if showing stats
         if (showStats && page == 0) {
@@ -1788,19 +1779,19 @@ class NetDbRenderer {
         }
 
         buf.append("</td><td>");
-        buf.append("<span class=\"signingkey\" title=\"")
+        buf.append("<span class=signingkey title=\"")
            .append(_t("Show all routers with this signature type in the NetDb"))
-           .append("\"><a class=\"keysearch\" href=\"/netdb?type=")
+           .append("\"><a class=keysearch href=\"/netdb?type=")
            .append(identity.getSigningPublicKey().getType().toString())
            .append("\">").append(identity.getSigningPublicKey().getType().toString())
            .append("</a></span>&nbsp;<span class=\"signingkey encryption\" title=\"")
            .append(_t("Show all routers with this encryption type in the NetDb"))
-           .append("\"><a class=\"keysearch\" href=\"/netdb?etype=")
+           .append("\"><a class=keysearch href=\"/netdb?etype=")
            .append(identity.getPublicKey().getType().toString())
            .append("\">").append(identity.getPublicKey().getType().toString())
            .append("</a></span></td></tr>\n");
 
-        if ((fullDetails && isUnreachable) || !isUnreachable) {
+        if (!isUnreachable) {
             buf.append("<tr><td><b>")
                .append(_t("Addresses"))
                .append(":</b></td><td colspan=2 class=netdb_addresses><ul>");
@@ -1847,7 +1838,7 @@ class NetDbRenderer {
                             } else {
                                 detailsSpans.append("href=\"/netdb?ip=").append(value);
                             }
-                            detailsSpans.append("\">").append(value).append("</a></span>");
+                            detailsSpans.append("\">").append(value).append("</a></span><span class=colon>:</span>");
                         } else if (key.equalsIgnoreCase("port")) {
                             detailsSpans.append("<span class=\"netdb_info port\">")
                                         .append("<a title=\"Show all routers with this port in the NetDb\" ")
@@ -1857,7 +1848,7 @@ class NetDbRenderer {
                     }
 
                     if (detailsSpans.length() > 0) {
-                        buf.append("<li><b class=\"netdb_transport\">")
+                        buf.append("<li><b class=netdb_transport>")
                            .append(transportStyle.replace("2", ""))
                            .append("</b> ")
                            .append(detailsSpans)
@@ -1869,28 +1860,93 @@ class NetDbRenderer {
             }
         }
 
-        if (fullDetails || isLocalRouter) {
-            buf.append("<tr><td><b>").append(_t("Stats")).append(":</b><td colspan=2>\n<ul class=netdbStats>");
-            Map<Object, Object> optionsMap = routerInfo.getOptionsMap();
+        List<String> statsLines = new ArrayList<>();
+
+        Map<Object, Object> optionsMap = routerInfo.getOptionsMap();
+
+        String networkId = "2";
+        String spoofedLeaseSets = null;
+        boolean hasLeaseSetInfo = false;
+
+        if (isLocalRouter) {
             for (Map.Entry<Object, Object> entry : optionsMap.entrySet()) {
                 String key = (String) entry.getKey();
-                String value = (String) entry.getValue();
-                if (key.contains("knownLeaseSets") || key.contains("knownRouters")) continue;
-                if (key.equals("netId")) continue;
-                if (key.toLowerCase().contains("caps") || key.toLowerCase().contains("version") || key.toLowerCase().equals("family")) continue;
+                if ("netId".equals(key)) {
+                    networkId = DataHelper.stripHTML((String) entry.getValue());
+                } else if ("knownLeaseSets".equals(key)) {
+                    spoofedLeaseSets = DataHelper.stripHTML((String) entry.getValue());
+                    hasLeaseSetInfo = true;
+                }
+            }
+        }
 
-                buf.append("<li><b>").append(DataHelper.stripHTML(key)).append(":</b> ")
-                   .append(DataHelper.stripHTML(value).replace(";", " <span class=\"bullet\">&bull;</span> "))
-                   .append("</li>");
+        Set<String> skipKeys = new HashSet<>(Arrays.asList("netId", "knownLeaseSets", "knownRouters", "family", "version"));
+        List<String> ignoredStats = Arrays.asList(
+            "family.key", "family.sig",
+            "tunnel.buildExploratoryExpire.60m", "tunnel.buildExploratoryReject.60m", "tunnel.buildExploratorySuccess.60m",
+            "tunnel.buildClientExpire.60m", "tunnel.buildClientReject.60m", "tunnel.buildClientSuccess.60m",
+            "tunnel.participatingTunnels.60m", "tunnel.participatingTunnels.60s",
+            "stat_bandwidthSendBps.60m", "stat_bandwidthReceiveBps.60m"
+        );
+
+        for (Map.Entry<Object, Object> entry : optionsMap.entrySet()) {
+            String key = (String) entry.getKey();
+            String lowerKey = key.toLowerCase(Locale.US);
+            if (skipKeys.contains(key) ||
+                lowerKey.contains("caps") ||
+                lowerKey.contains("version") ||
+                lowerKey.startsWith("family") ||
+                lowerKey.startsWith("tunnel.") ||
+                lowerKey.startsWith("stat_") ||
+                ignoredStats.contains(key)) {
+                continue;
+            }
+            String value = (String) entry.getValue();
+            String label = _t(DataHelper.stripHTML(key).replace("netdb.", "").replace("known", ""));
+            String formattedValue = DataHelper.stripHTML(value).replace(";", " <span class=\"bullet\">&bull;</span> ");
+            statsLines.add("<li><b>" + label + ":</b> " + formattedValue + "</li>");
+        }
+
+        if (isLocalRouter) {
+            statsLines.add("<li><b>" + _t("Network Id") + ":</b> " + networkId + "</li>");
+
+            boolean hasFastForwardCapability = routerInfo.getCapabilities().indexOf('f') >= 0;
+            if (hasFastForwardCapability && spoofedLeaseSets != null) {
+                statsLines.add("<li title=\"" +
+                    _t("Count is always spoofed to avoid indicating router restarts") +
+                    "\"><b>" + _t("LeaseSets") + ":</b> " + spoofedLeaseSets + "</li>");
             }
 
-            if (isLocalRouter) {
-                buf.append("<li><b>").append(_t("Network Id")).append(":</b> 2</li>");
-                buf.append("<li><b>").append(_t("Routers")).append(":</b> ")
-                   .append(Math.max(_context.netDb().getKnownRouters() - 1, 0)).append("</li>");
+            statsLines.add("<li><b>" + _t("Routers") + ":</b> " +
+                Math.max(_context.netDb().getKnownRouters() - 1, 0) + "</li>");
+        } else {
+            PeerProfile profile = _context.profileOrganizer().getProfileNonblocking(routerHash);
+            if (profile != null) {
+                long firstHeard = profile.getFirstHeardAbout();
+                long lastHeard = profile.getLastHeardAbout();
+                long lastFrom = profile.getLastHeardFrom();
+
+                if (firstHeard > 0) {
+                    statsLines.add("<li><b>" + _t("First heard about") + ":</b> " +
+                        _t("{0} ago", DataHelper.formatDuration2(now - firstHeard)) + "</li>");
+                }
+                if (lastHeard > 0) {
+                    statsLines.add("<li><b>" + _t("Last heard about") + ":</b> " +
+                        _t("{0} ago", DataHelper.formatDuration2(now - lastHeard)) + "</li>");
+                }
+                if (lastFrom > 0) {
+                    statsLines.add("<li><b>" + _t("Last heard from") + ":</b> " +
+                        _t("{0} ago", DataHelper.formatDuration2(now - lastFrom)) + "</li>");
+                }
             }
 
-            buf.append("</ul></td></tr>\n");
+            if (!statsLines.isEmpty()) {
+                buf.append("<tr><td><b>").append(_t("Stats")).append(":</b></td><td colspan=2>\n<ul class=netdbStats>\n");
+                for (String line : statsLines) {
+                    buf.append(line).append('\n');
+                }
+                buf.append("</ul></td></tr>\n");
+            }
         }
 
         buf.append("</table>\n");
