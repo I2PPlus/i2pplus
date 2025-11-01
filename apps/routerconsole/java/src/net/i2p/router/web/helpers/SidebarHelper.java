@@ -879,8 +879,34 @@ public class SidebarHelper extends HelperBase {
      *
      */
     public String getMessageDelay() {
-        if (_context == null) {return "0";}
-        return DataHelper.formatDuration2(_context.throttle().getMessageDelay());
+        if (_context == null) return "0";
+
+        long delay = _context.throttle().getMessageDelay(); // assume in microseconds
+
+        if (delay < 1000) {
+            // Less than 1 ms: show in microseconds
+            if (delay < 1) {
+                return DataHelper.formatDuration2((double) delay);
+            } else {
+                return DataHelper.formatDuration2(delay);
+            }
+        } else {
+            // Convert to milliseconds
+            double delayMs = delay;
+
+            // Convert to seconds as a double
+            double delaySec = delay / 1000.0;
+
+            // If delaySec is not a whole number, format with one decimal place
+            if (delaySec != Math.floor(delaySec)) {
+                // Has decimal part, format to 1 decimal place
+                String formatted = String.format("%.1f sec", delaySec);
+                return formatted.replace(".0 sec", " sec").replaceFirst("\\.0$", ""); // clean up ".0" if needed
+            } else {
+                // Whole number of seconds
+                return DataHelper.formatDuration2(delayMs);
+            }
+        }
     }
 
     /**
