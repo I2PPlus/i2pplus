@@ -345,31 +345,45 @@ public class I2PSnarkServlet extends BasicServlet {
         // Build navbar, cache trackers and filters once
         List<Tracker> sortedTrackers = null;
         List<TorrentCreateFilter> sortedFilters = null;
+        sortedTrackers = _manager.getSortedTrackers();
+        sortedFilters = _manager.getSortedTorrentCreateFilterStrings();
 
         buf.append("<div id=navbar>\n");
 
         if (isConfigure) {
-            buf.append("<a href=").append(_contextPath).append("/ title=\"").append(_t("Torrents"))
-               .append("\" id=nav_main class=\"snarkNav isConfig\">").append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName)
+            buf.append("<a href=")
+               .append(_contextPath)
+               .append("/ title=\"")
+               .append(_t("Torrents"))
+               .append("\" id=nav_main class=\"snarkNav isConfig\">")
+               .append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName)
                .append("</a>");
         } else {
-            buf.append("<a href=\"").append(_contextPath).append('/').append(peerString).append("\" title=\"")
-               .append(_t("Refresh page")).append("\" id=nav_main class=snarkNav>")
-               .append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName).append("</a>");
-            buf.append("<a href=").append(_contextPath).append("/configure id=nav_config class=snarkNav>")
-               .append(_t("Configure")).append("</a>");
-
-            sortedTrackers = _manager.getSortedTrackers();
-            sortedFilters = _manager.getSortedTorrentCreateFilterStrings();
-
-            buf.append("<a href=http://discuss.i2p/ id=nav_forum class=snarkNav target=_blank title=\"")
-               .append(_t("Torrent &amp; filesharing forum")).append("\">").append(_t("Forum")).append("</a>");
+            buf.append("<a href=\"")
+               .append(_contextPath).append('/')
+               .append(peerString)
+               .append("\" title=\"")
+               .append(_t("Refresh page"))
+               .append("\" id=nav_main class=snarkNav>")
+               .append(_contextName.equals(DEFAULT_NAME) ? _t("I2PSnark") : _contextName)
+               .append("</a><a href=")
+               .append(_contextPath)
+               .append("/configure id=nav_config class=snarkNav>")
+               .append(_t("Configure"))
+               .append("</a><a href=http://discuss.i2p/ id=nav_forum class=snarkNav target=_blank title=\"")
+               .append(_t("Torrent &amp; filesharing forum"))
+               .append("\">")
+               .append(_t("Forum"))
+               .append("</a>");
 
             for (Tracker t : sortedTrackers) {
                 if (t.baseURL == null || !t.baseURL.startsWith("http")) continue;
                 if (_manager.util().isKnownOpenTracker(t.announceURL)) continue;
-                buf.append("<a href=\"").append(t.baseURL).append("\" class=\"snarkNav nav_tracker\" target=_blank>")
-                   .append(t.name).append("</a>");
+                buf.append("<a href=\"")
+                   .append(t.baseURL)
+                   .append("\" class=\"snarkNav nav_tracker\" target=_blank>")
+                   .append(t.name)
+                   .append("</a>");
             }
         }
 
