@@ -54,6 +54,7 @@ import net.i2p.router.JobImpl;
 import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.peermanager.PeerProfile;
+import net.i2p.router.peermanager.ProfileOrganizer;
 import net.i2p.router.RouterContext;
 import static net.i2p.router.sybil.Util.biLog2;
 import net.i2p.router.transport.CommSystemFacadeImpl;
@@ -71,12 +72,16 @@ import net.i2p.util.VersionComparator;
 
 class NetDbRenderer {
     private final RouterContext _context;
-    public NetDbRenderer (RouterContext ctx) {_context = ctx;}
+    public NetDbRenderer (RouterContext ctx) {
+        _context = ctx;
+        _organizer = ctx.profileOrganizer();
+    }
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
     public static final int LOOKUP_WAIT = 5 * 1000;
     public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}
     public int localLSCount;
+    private final ProfileOrganizer _organizer;
 
     /**
      *  Inner class, can't be Serializable
@@ -1542,13 +1547,31 @@ class NetDbRenderer {
         Hash routerHash = routerInfo.getHash();
         String routerHashBase64 = routerHash.toBase64();
         String family = routerInfo.getOption("family");
+        String profileTier = getPeerProfileTier(routerHash, true);
+        String profileTierClass = getPeerProfileTier(routerHash, false);
 
-        buf.append("<table class=\"netdbentry lazy\"><tr><th>");
+        // Capability parsing
+        String caps = DataHelper.stripHTML(routerInfo.getCapabilities());
+        boolean hasD = false, hasE = false, hasG = false, isReachable = false, isUnreachable = false, isFF = false;
+        for (int i = 0; i < caps.length(); i++) {
+            char c = caps.charAt(i);
+            if (c == 'f') isFF = true;
+            if (c == 'D') hasD = true;
+            else if (c == 'E') hasE = true;
+            else if (c == 'G') hasG = true;
+            else if (c == 'R') isReachable = true;
+            else if (c == 'U') isUnreachable = true;
+        }
+
+
+        buf.append("<table class=\"netdbentry lazy\">\n<thead>\n<tr>");
         if (isLocalRouter) {
-            buf.append("<b id=our-info>").append(_t("Our info")).append(":</b></th><th><code>").append(routerHashBase64)
+            buf.append("<th id=us><b id=our-info>").append(_t("Our info")).append(":</b><th><code>").append(routerHashBase64)
                .append("</code></th><th id=netdb_ourinfo>");
         } else {
-            buf.append("<b>").append(_t("Router")).append(":</b></th><th><code>").append(routerHashBase64).append("</code></th><th>");
+            buf.append("<th class=\"router").append(isFF ? " isFF" : "").append(' ').append(profileTierClass).append("\" title=\"")
+               .append(isFF ? _t("Floodfill") : _t("Router")).append(" - ").append(profileTier).append("\"><b>")
+               .append(_t("Router")).append(":</b><th><code>").append(routerHashBase64).append("</code></th><th>");
         }
 
         if (_context.banlist().isBanlisted(routerHash)) {
@@ -1577,18 +1600,6 @@ class NetDbRenderer {
 
         if (identity.isCompressible()) {
             buf.append("<span class=compressible title=\"").append(_t("RouterInfo is compressible")).append("\"></span> ");
-        }
-
-        // Capability parsing
-        String caps = DataHelper.stripHTML(routerInfo.getCapabilities());
-        boolean hasD = false, hasE = false, hasG = false, isReachable = false, isUnreachable = false;
-        for (int i = 0; i < caps.length(); i++) {
-            char c = caps.charAt(i);
-            if (c == 'D') hasD = true;
-            else if (c == 'E') hasE = true;
-            else if (c == 'G') hasG = true;
-            else if (c == 'R') isReachable = true;
-            else if (c == 'U') isUnreachable = true;
         }
 
         // Apply base capability replacements
@@ -1724,7 +1735,7 @@ class NetDbRenderer {
             long memoryUsedMegabytes = memoryUsedBytes / (1024 * 1024);
             buf.append("&nbsp;<span id=netdb_ram><b>").append(_t("Memory usage")).append(":</b> ").append(memoryUsedMegabytes).append("M</span>");
         }
-        buf.append("</th></tr>\n<tr>");
+        buf.append("</th></tr>\n</thead>\n<tbody>\n<tr>");
 
         long now = _context.clock().now();
         long published = routerInfo.getPublished();
@@ -1809,7 +1820,7 @@ class NetDbRenderer {
             buf.append("</span></span>");
         }
 
-        buf.append("</td><td>");
+        buf.append("</td><td class=keys>");
         buf.append("<span class=signingkey title=\"")
            .append(_t("Show all routers with this signature type in the NetDb"))
            .append("\"><a class=keysearch href=\"/netdb?type=")
@@ -1977,7 +1988,7 @@ class NetDbRenderer {
             buf.append("</ul></td></tr>\n");
         }
 
-        buf.append("</table>\n");
+        buf.append("</tbody>\n</table>\n");
     }
 
     /**
@@ -2074,6 +2085,20 @@ class NetDbRenderer {
             if (bip != null) {return Addresses.toString(bip);}
         } else if (ip.contains(":0:")) {return Addresses.toCanonicalString(ip);} // convert to canonical
         return null;
+    }
+
+    /**
+     * Determines the actual peer tier using the ProfileOrganizer's live profiling data.
+     *
+     * @param peer the peer hash to classify
+     * @return the tier name
+     */
+    public String getPeerProfileTier(Hash peer, boolean fullname) {
+        if (peer == null || _context.routerHash().equals(peer)) return (fullname ? _t("Local") : "isLocal");
+        if (_organizer.isFast(peer)) return (fullname ? _t("Fast Tier") : "isFast");
+        if (_organizer.isHighCapacity(peer)) return (fullname ? _t("High Capacity Tier") : "isHighCap");
+        if (_organizer.isWellIntegrated(peer)) return (fullname ? _t("Integrated Tier") : "isIntegrated");
+        return (fullname ? _t("Standard Tier") : "isStandard");
     }
 
     /** translate a string */
