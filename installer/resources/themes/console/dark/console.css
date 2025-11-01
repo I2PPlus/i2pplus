@@ -1283,14 +1283,6 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #netdb .netdbStats .hide,#netdb .netdbStats .cap_stat.hide,#netdb .netdbStats .cap_stat.hide+hr{display:none}
 #netdb .netdbentry th a{display:inline-block}
 #netdb .netdbentry th b,#netdb .netdbentry td:first-child b{min-width:80px;text-align:right}
-#netdb .netdbentry th.router{text-align:center}
-#netdb .netdbentry th.router b{display:inline-block;width:24px;height:24px;min-width:unset;vertical-align:middle;font-size:0;color:#0000;background:var(--client) no-repeat center center/24px}
-#netdb .netdbentry th.router:not(.isStandard) b{margin-left:-24px}
-#netdb .netdbentry th.router.isFF b{background:var(--floodfill) no-repeat center center/24px}
-#netdb .netdbentry th.router b::after{margin-left:5px;display:inline-block;width:48px;height:24px;vertical-align:middle}
-#netdb .netdbentry th.router.isFast b::after{background:var(--fast) no-repeat calc(50% + 12px) center/14px;content:""}
-#netdb .netdbentry th.router.isHighCap b::after{background:var(--highcap) no-repeat calc(50% + 12px) center/14px;content:""}
-#netdb .netdbentry th.router.isIntegrated b::after{background:var(--integrated) no-repeat calc(50% + 12px) center/14px;content:""}
 #netdb .netdbentry th code:hover,#netdb .netdbentry th code:active,.leaseset th code:hover,#netdb .sybil_routerinfo th code:hover,#netdb .sybil_routerinfo th code:active{width:auto}
 #netdb .netdbentry th code,#netdb .sybil_routerinfo th code,.leaseset th code{width:150px;vertical-align:middle;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border:1px solid #020}
 #netdb .netdbentry th code,#netdb .sybil_routerinfo th code,#netdb .leaseset th code{margin:0 5px 0 0;padding:1px 4px 2px;font-family:var(--bodyfont);font-weight:700;letter-spacing:.12em;color:#bb0;text-shadow:none;border-radius:2px;box-shadow:var(--outline);background:var(--badge)}
