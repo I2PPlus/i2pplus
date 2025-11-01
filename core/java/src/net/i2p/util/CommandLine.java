@@ -138,6 +138,6 @@ public class CommandLine {
         if (buf.length() > 0)
             System.out.println(buf);
         System.err.println();
-        System.err.println("Enter \"help command\" for detailed help.");
+        System.err.println("Enter \"help {command}\" for detailed help.");
     }
 }
