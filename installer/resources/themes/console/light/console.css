@@ -1043,12 +1043,6 @@ th label b:hover,th label:hover{color:#333337}
 .cells,.cells td:not(.rif):not(.rih):not(.rbw){border-left:var(--border_soft);border-top:var(--border_soft);border-bottom:var(--border_soft)}
 .formaction{margin-top:-15px;padding:5px;text-align:right;border:var(--border_inner);background:#fafaff}
 .mediumtags{font-weight:700}
-.netdbentry .reachable,.sybil_routerinfo .reachable,#capabilities_key .reachable,#floodfills .reachable,#profilelist .reachable{background:linear-gradient(180deg,#fff,#e2ffe2)}
-.netdbentry .unreachable,#capabilities_key .unreachable,#floodfills .unreachable{background:linear-gradient(180deg,#fff,#faa)}
-.netdbentry .ff,.sybil_routerinfo .ff,#capabilities_key .ff,#floodfills .ff,#profilelist .ff{background:linear-gradient(180deg,#fff,#ffe2ad)}
-.netdbentry .hidden,#capabilities_key .hidden,#floodfills .hidden,#profilelist .hidden{color:#999;background:linear-gradient(180deg,#fff,#ddd)}
-.netdbentry .ssutesting,#capabilities_key .ssutesting,#floodfills .ssutesting,#profilelist .ssutesting{background:linear-gradient(180deg,#fff,#ffb)}
-.netdbentry .ssuintro,#capabilities_key .ssuintro,#floodfills .ssuintro,#profilelist .ssuintro{background:linear-gradient(180deg,#fff,#fbf)}
 .smallhead th,#ntcpconnections th,#transportSummary th{font-size:8pt}
 .tablefooter{background:#f8f8ff}
 .tablefooter tr,.tablefooter td,.cells .tablefooter td{padding:8px 2px;line-height:1.1;font-size:9pt;border-top:var(--border_inner);border-bottom:var(--border_inner);background:#f8f8ff}
@@ -1437,6 +1431,12 @@ th.country,th.router,th.version,th.tier,td.country,td.router,td.version,td.tier{
 #viewprofile.tabulated .subheading th{background:linear-gradient(90deg,#99d 5px,#fff 5px)}
 
 /* netdb */
+.netdbentry .reachable,.sybil_routerinfo .reachable,#capabilities_key .reachable,#floodfills .reachable,#profilelist .reachable{background:linear-gradient(180deg,#fff,#e2ffe2)}
+.netdbentry .unreachable,#capabilities_key .unreachable,#floodfills .unreachable{background:linear-gradient(180deg,#fff,#faa)}
+.netdbentry .ff,.sybil_routerinfo .ff,#capabilities_key .ff,#floodfills .ff,#profilelist .ff{background:linear-gradient(180deg,#fff,#ffe2ad)}
+.netdbentry .hidden,#capabilities_key .hidden,#floodfills .hidden,#profilelist .hidden{color:#999;background:linear-gradient(180deg,#fff,#ddd)}
+.netdbentry .ssutesting,#capabilities_key .ssutesting,#floodfills .ssutesting,#profilelist .ssutesting{background:linear-gradient(180deg,#fff,#ffb)}
+.netdbentry .ssuintro,#capabilities_key .ssuintro,#floodfills .ssuintro,#profilelist .ssuintro{background:linear-gradient(180deg,#fff,#fbf)}
 span.tier,.netdbentry .ff,.netdbentry .hidden,.netdbentry .reachable,.netdbentry .ssuintro,.netdbentry .unreachable,.sybil_routerinfo .ff,.sybil_routerinfo .hidden,.sybil_routerinfo .reachable,.sybil_routerinfo .ssuintro,.sybil_routerinfo .unreachable,#capabilities_key b,#floodfills .hidden,#floodfills .reachable,#floodfills .ssuintro,#floodfills .tier,#floodfills .unreachable{margin:2px;padding:1px 0;min-width:28px;display:inline-block;box-sizing:border-box;text-align:center;text-transform:none;font-weight:700;color:#4a415e;text-shadow:var(--txt_shadow);border:1px solid #bbc;box-shadow:var(--highlight);background:var(--tier)}
 .confignav+.netdbentry,.infowarn+.netdbentry{margin-top:10px}
 .netdbentry .ff,.netdbentry .reachable,.netdbentry .tier,.netdbentry .tunnel_cap,.netdbentry .unreachable,.netdbentry .version,.sybil_routerinfo .ff,.sybil_routerinfo .reachable,.sybil_routerinfo .tier,.sybil_routerinfo .tunnel_cap,.sybil_routerinfo .unreachable,.sybil_routerinfo .version{margin:0 2px 0;padding:1px 6px;vertical-align:middle;line-height:1.5}
@@ -1451,6 +1451,8 @@ span.tier,.netdbentry .ff,.netdbentry .hidden,.netdbentry .reachable,.netdbentry
 .tier.isD,#netdbcongestion a.isD{background:var(--isD),var(--tier)}
 .tier.isE,#netdbcongestion a.isE{background:var(--isE),var(--tier)}
 .tier.isG,#netdbcongestion a.isG{background:var(--isG),var(--tier)}
+.netdbentry .keys{white-space:nowrap}
+#netdb .netdbentry .netdb_addresses{text-align:left}
 #netdb a:hover span,#profiles a:hover span,.version:hover a,#capabilities_key table b:hover{color:var(--hover)}
 #noleasesets,#notinitialized,.netdbnotfound{margin-top:-6px;margin-bottom:5px;padding:10px 20px;font-weight:700;text-align:center;color:var(--ink_light);border:var(--border_inner);box-shadow:0 0 1px #e0e0eb;border-radius:2px;background:linear-gradient(90deg,#f2f2ff,#f8f8ff,#f2f2ff)}
 #notinitialized,.netdbnotfound{margin-top:15px}
