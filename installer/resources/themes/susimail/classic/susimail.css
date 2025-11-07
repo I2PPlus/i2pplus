@@ -83,14 +83,13 @@ td p.info,td p.error{margin:-2px -3px}
 .topbuttons .pagenav td:first-child{text-align:right}
 .topbuttons .pagenav td:last-child{text-align:left}
 .topbuttons#pagesize{padding:6px 0 4px;border-bottom:var(--border)}
-tr.list0{background:var(--bg3)}
-tr.list0 a:link{text-decoration:none}
-tr.list0:hover a,tr.list1:hover a{color:var(--hover)}
-tr.list0:hover td,tr.list1:hover td{color:#104e99}
-tr.list0:hover,tr.list1:hover{border-top:1px solid var(--border_soft);border-bottom:1px solid var(--border_soft);background:#ffd;cursor:pointer}
-tr.list0,tr.list1{border-top:1px solid var(--border_softer);border-bottom:1px solid var(--border_softer)}
-tr.list1 a:link{text-decoration:none}
-tr.list1{background:var(--bg)}
+.mailEntry:nth-child(even){background:var(--bg3)}
+.mailEntry:nth-child(odd){background:var(--bg)}
+.mailEntry:hover{border-top:1px solid var(--border_soft);border-bottom:1px solid var(--border_soft);background:#ffd;cursor:pointer}
+.mailEntry a:link{text-decoration:none}
+.mailEntry:hover a{color:var(--hover)}
+.mailEntry:hover td{color:#104e99}
+.mailEntry{border-top:1px solid var(--border_softer);border-bottom:1px solid var(--border_softer)}
 tr.mailbody:nth-child(n+3){border-top:var(--border);border-bottom:var(--border);background:var(--bg)}
 tr.mailbody p.error{margin:-3px -1px}
 .bottombuttons br{display:none}
@@ -269,6 +268,9 @@ tr:hover .listDate{opacity:.9}
 #iframeSusiHtmlView{margin:10px 10px 5px;width:calc(100% - 20px);border-radius:10px;box-shadow:0 0 0 1px #bbc,0 2px 2px #0003}
 #blockedImages td{padding:4px;text-align:center;border-top:var(--border)}
 #blockedImages .info{margin:0;padding:0 0 0 28px;display:inline-block;line-height:2.2;font-weight:600;color:#900;border:0;box-shadow:none;background:var(--warning) no-repeat left center/24px}
+
+/* mail preview */
+#mail-preview-popup{margin-right:4px;font-family:var(--monospaced);font-weight:600;border:var(--border_soft)!important;border-radius:0!important;box-shadow:0 0 0 1px #fff,0 0 0 2px #bbf,4px 4px 4px #0004!important;background:linear-gradient(180deg,#fff,#fdfdf2)!important}
 
 /* confirm mail delete */
 #confirmdelete td{padding:10px;box-shadow:var(--highlight);background:#900;background:repeating-linear-gradient(45deg,#900,#900 10px,#ee9 10px,#ee9 20px);background-size:400%;animation:attention 240s linear infinite both}
