@@ -1452,6 +1452,7 @@ span.tier,.netdbentry .ff,.netdbentry .hidden,.netdbentry .reachable,.netdbentry
 .tier.isE,#netdbcongestion a.isE{background:var(--isE),var(--tier)}
 .tier.isG,#netdbcongestion a.isG{background:var(--isG),var(--tier)}
 #netdb a:hover span,#profiles a:hover span,.version:hover a,#capabilities_key table b:hover{color:var(--hover)}
+#netdb .netdbentry th.router b{filter:drop-shadow(1px 1px #0004)}
 #noleasesets,#notinitialized,.netdbnotfound{margin-top:-6px;margin-bottom:5px;padding:10px 20px;font-weight:700;text-align:center;color:var(--ink_light);border:var(--border_inner);box-shadow:0 0 1px #e0e0eb;border-radius:2px;background:linear-gradient(90deg,#f2f2ff,#f8f8ff,#f2f2ff)}
 #notinitialized,.netdbnotfound{margin-top:15px}
 

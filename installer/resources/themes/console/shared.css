@@ -24,9 +24,18 @@
 #compactLookup{margin-top:15px;position:sticky !important;top:-1px;z-index:999;box-shadow:var(--border_table)}
 #compactLookup #netdblookup button,#compactLookup #netdblookup input, #compactLookup #netdblookup select{margin:0 !important;width:calc(100% - 4px);min-width:0!important;display:inline-block;vertical-align:middle}
 #compactLookup #netdblookup td,#compactLookup #netdblookup td:nth-child(2n+1){padding:8px 2px;text-align:center;border:0}
-#compactLookup #netdblookup td:first-child{padding-left:6px}
-#compactLookup #netdblookup td:last-child{padding-right:6px}
+#compactLookup #netdblookup td:first-child{padding-left:6px;width:15%;min-width:180px}
+#compactLookup #netdblookup td:last-child{padding-right:6px;width:10%;min-width:120px}
 #compactLookup #netdblookup tr{background:var(--th)}
+#netdbSearchCompact{width:100%}
+#netdb .netdbentry th.router{text-align:center}
+#netdb .netdbentry th.router b{display:inline-block;width:24px;height:24px;min-width:unset;vertical-align:middle;font-size:0;color:#0000;background:var(--client) no-repeat center center/24px}
+#netdb .netdbentry th.router:not(.isStandard) b{margin-left:-24px}
+#netdb .netdbentry th.router.isFF b{background:var(--floodfill) no-repeat center center/24px}
+#netdb .netdbentry th.router b::after{margin-left:5px;display:inline-block;width:48px;height:24px;vertical-align:middle}
+#netdb .netdbentry th.router.isFast b::after{background:var(--fast) no-repeat calc(50% + 12px) center/14px;content:""}
+#netdb .netdbentry th.router.isHighCap b::after{background:var(--highcap) no-repeat calc(50% + 12px) center/14px;content:""}
+#netdb .netdbentry th.router.isIntegrated b::after{background:var(--integrated) no-repeat calc(50% + 12px) center/14px;content:""}
 #config_advanced #advconfwrapper:hover{overflow-y:auto}
 #config_advanced #advconfwrapper{overflow:hidden}
 #ffconf.toggle::after{width:12px;display:inline-block;height:12px;position:absolute;right:10px;top:calc(50% - 6px);background:var(--dropdown);content:""}

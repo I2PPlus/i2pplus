@@ -1,4 +1,4 @@
-<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="32768kb"%>
+<%@page contentType="text/html" pageEncoding="UTF-8" trimDirectiveWhitespaces="true" buffer="1024kb"%>
 <!DOCTYPE HTML>
 <%@include file="head.jsi"%>
 <%=intl.title("network database")%>
@@ -116,12 +116,13 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 %>
 <h1 class=netwrk><%=heading%></h1>
 <div class=main id=netdb>
-<% if (delayLoad) {%><div id=netdbwrap style=height:5px;opacity:0><% } %>
-<% if ((r == null && ls != null) || l != null) {%><div class=leasesets_container><% } %>
 <%  formhandler.storeWriter(out);
     if (allowIFrame) formhandler.allowGraphical();
 %>
 <%@include file="formhandler.jsi"%>
+<% if (delayLoad) {%><div id=netdbwrap style=height:5px;opacity:0><% } %>
+<% if ((r == null && ls != null) || l != null) {%><div class=leasesets_container><% } %>
+<%= formhandler.getNavBarHtml() %>
 <jsp:getProperty name="formhandler" property="floodfillNetDbSummary"/>
 <% if ((r == null && ls != null) || l != null) {%></div><% } %>
 </div>
@@ -129,6 +130,7 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 <style>#netdbwrap{height:unset!important;opacity:1!important}#netdb::before{display:none}</style>
 <noscript><style>body:not(.ready) .lazy{display:table!important}</style></noscript>
 <% } %>
+<style>#pagenav{display:block!important}</style>
 <script src=/js/lazyload.js></script>
 <script src=/js/lsCompact.js type=module></script>
 <script src=/js/netdb.js type=module></script>

@@ -1,6 +1,7 @@
 package net.i2p.router.web.helpers;
 
 import java.io.IOException;
+import java.io.StringWriter;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -302,8 +303,9 @@ public class NetDbHelper extends FormHandler {
                                  _ssucaps != null || _transport != null || _cost != 0 || _etype != null ||
                                  _icount > 0;
         boolean renderCompactSearch = isSearchResult || getTab() == 0;
+        //try {renderNavBar();}
+        //catch (IOException ignore) {}
         try {
-            renderNavBar();
             if (renderCompactSearch) {renderCompactLookupForm();}
             if (isSearchResult) {
                 renderer.renderRouterInfoHTML(_out, _limit, _page,
@@ -358,11 +360,13 @@ public class NetDbHelper extends FormHandler {
     /**
      *  @since 0.9.1
      */
-    private void renderNavBar() throws IOException {
+    private String renderNavBar() throws IOException {
         StringBuilder buf = new StringBuilder(1024);
         buf.append("<div class=confignav id=confignav>");
         int tab = getTab();
         boolean isActive = false;
+        boolean isRendered = false;
+        if (isRendered) {return "";}
         for (int i = 0; i < titles.length; i++) {
             if (i == 1) {buf.append("<span class=tab><a href=/netdbmap>").append(_t("Router Map")).append("</a></span>\n");}
             if (i == 2 && tab != 2) {continue;} // can't nav to lookup
@@ -378,8 +382,15 @@ public class NetDbHelper extends FormHandler {
             buf.append("</span>\n");
         }
         buf.append("</div>\n");
-        _out.append(buf);
-        _out.flush();
+        //_out.append(buf);
+        //_out.flush();
+        isRendered = true;
+        return buf.toString();
+    }
+
+     /** @since 0.9.68+ */
+    public String getNavBarHtml() throws IOException {
+        return renderNavBar();
     }
 
     /**
@@ -431,7 +442,6 @@ public class NetDbHelper extends FormHandler {
         buf.append("</select>");
         buf.append("<tr><td><b>").append(_t("Router Version")).append("</b></td><td><input type=text name=v></td>\n")
            .append("<td><b>").append(_t("Transport")).append("</b></td><td><select name=tr><option value=\"\" selected>")
-           //.append("<option value=\"NTCP\">NTCP</option>\n")
            .append("<option value=NTCP2>NTCP2</option>\n")
            .append("<option value=SSU>SSU</option>\n")
            .append("<option value=SSU2>SSU2</option>\n")
