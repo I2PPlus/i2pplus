@@ -38,7 +38,11 @@ function updateCachedElements() {
 }
 
 function getRefreshInterval() {
-  return refresh * 1000;
+  if (refresh != null) {
+    return refresh * 1000;
+  } else {
+    return 3*1000;
+  }
 }
 
 worker.port.start();
@@ -46,9 +50,11 @@ worker.port.addEventListener("message", ({ data }) => {
   try {
     const { responseText } = data;
     if (responseText) {
-      responseDoc = parser.parseFromString(responseText, "text/html");
-      requestAnimationFrame(startAutoRefresh);
       noResponse = 0;
+      if (responseText.includes("<body id=sb>")) {
+        responseDoc = parser.parseFromString(responseText, "text/html");
+        requestAnimationFrame(applySidebarUpdates);
+      }
     } else {
       noResponse = Math.min(noResponse + 1, 10);
     }
@@ -82,7 +88,7 @@ function startAutoRefresh() {
 function scheduleNextAutoRefresh() {
   clearTimeout(refreshTimeout);
   const now = Date.now();
-  const interval = getRefreshInterval();
+  let interval = getRefreshInterval();
   if (lastRefreshTime === 0) {
     lastRefreshTime = now;
   } else {
@@ -102,68 +108,95 @@ export async function refreshSidebar(force = false) {
   if (!refreshActive || document.hidden || !navigator.onLine) return;
   try {
     worker.port.postMessage({ url: `/xhr1.jsp?requestURI=${uri}`, force });
-    if (!responseDoc || !xhrContainer) {
-      noResponse = Math.min(noResponse + 1, 10);
-      return;
-    }
-    const responseElements = {
-      volatileElements: Array.from(responseDoc.querySelectorAll(".volatile:not(.badge)")),
-      badges: Array.from(responseDoc.querySelectorAll(".badge:not(#newHosts)")),
-    };
-    const volatile = xhrContainer.querySelectorAll(".volatile");
-    const volatileResponse = responseDoc.querySelectorAll(".volatile");
-    if (volatile.length !== volatileResponse.length) return refreshAll();
-    const updates = [];
-    elements.volatileElements.forEach((elem, i) => {
-      const respElem = responseElements.volatileElements[i];
-      if (!respElem) return;
-      if (elem.classList.contains("statusDown") && elem.outerHTML !== respElem.outerHTML) {
-        updates.push(() => {
-          elem.outerHTML = respElem.outerHTML;
-          refreshAll();
-        });
-      } else if (elem.innerHTML !== respElem.innerHTML) {
-        updates.push(() => {
-          elem.innerHTML = respElem.innerHTML;
-        });
-      }
-    });
-    elements.badges.forEach((elem, i) => {
-      const respElem = responseElements.badges[i];
-      if ((respElem && elem.textContent !== respElem.textContent) || alwaysUpdate.has(elem.id)) {
-        updates.push(() => {
-          if (respElem) {
-            elem.textContent = respElem.textContent;
-          }
-        });
-      }
-    });
-    if (updates.length > 0) {
-      requestAnimationFrame(() => {
-        updates.forEach(fn => fn());
-        countNewsItems();
-        newHosts();
-        sectionToggler();
-      });
-    }
-    noResponse = 0;
-  } catch {
+  } catch (e) {
     noResponse = Math.min(noResponse + 1, 10);
   } finally {
     checkConnectionStatus();
-    startAutoRefresh();
+    isRefreshing = false;
   }
 }
 
-function refreshAll() {
-  if (!sb || !responseDoc) return noResponse = Math.min(noResponse + 1, 10);
+function applySidebarUpdates() {
+  xhrContainer = document.getElementById("xhr");
+  if (!responseDoc || !xhrContainer) return;
+
   updateCachedElements();
-  const sbResponse = responseDoc.getElementById("sb");
-  if (sbResponse && xhrContainer && sb.innerHTML !== sbResponse.innerHTML) {
-    xhrContainer.innerHTML = sbResponse.innerHTML;
-    sectionToggler();
+
+  const responseElements = {
+    volatileElements: Array.from(responseDoc.querySelectorAll(".volatile:not(.badge)")),
+    badges: Array.from(responseDoc.querySelectorAll(".badge:not(#newHosts)")),
+  };
+
+  const volatile = xhrContainer.querySelectorAll(".volatile");
+  const volatileResponse = responseDoc.querySelectorAll(".volatile");
+
+  if (volatile.length !== volatileResponse.length) {
+    return refreshAll();
   }
+
+  const updates = [];
+  elements.volatileElements.forEach((elem, i) => {
+    const respElem = responseElements.volatileElements[i];
+    if (!respElem) {
+      requestAnimationFrame(checkConnectionStatus);
+      return;
+    }
+    if (elem.classList.contains("statusDown") && elem.outerHTML !== respElem.outerHTML) {
+      updates.push(() => {
+        elem.outerHTML = respElem.outerHTML;
+        refreshAll();
+      });
+    } else if (elem.innerHTML !== respElem.innerHTML) {
+      updates.push(() => {
+        elem.innerHTML = respElem.innerHTML;
+      });
+    }
+  });
+
+  elements.badges.forEach((elem, i) => {
+    const respElem = responseElements.badges[i];
+    if ((respElem && elem.textContent !== respElem.textContent) || alwaysUpdate.has(elem.id)) {
+      updates.push(() => {
+        if (respElem) {
+          elem.textContent = respElem.textContent;
+        }
+      });
+    }
+  });
+
+  if (updates.length > 0) {
+    requestAnimationFrame(() => {
+      updates.forEach(fn => fn());
+      countNewsItems();
+      newHosts();
+      sectionToggler();
+    });
+  }
+
+  isRefreshing = false;
   noResponse = 0;
+}
+
+function refreshAll() {
+  if (!responseDoc) {
+    noResponse = Math.min(noResponse + 1, 10);
+    return;
+  }
+  const sbResponse = responseDoc.getElementById("sb");
+  if (!sbResponse) return;
+
+  xhrContainer = document.getElementById("xhr");
+  if (!xhrContainer) return;
+
+  xhrContainer.innerHTML = sbResponse.innerHTML;
+  updateCachedElements();
+  sectionToggler();
+  newHosts();
+  countNewsItems();
+  isDown = false;
+  noResponse = 0;
+  document.body.classList.remove("isDown");
+  isRefreshing = false;
 }
 
 async function isOnline() {
@@ -182,9 +215,12 @@ async function updateConnectionStatus() {
     } else if (!currentlyDown && isDown) {
       isDown = false;
       noResponse = 0;
+      lastRefreshTime = 0;
       document.body.classList.remove("isDown");
-      refreshSidebar(true);
-      scheduleNextAutoRefresh();
+      isRefreshing = true;
+        refreshSidebar(true).finally(() => {
+        isRefreshing = false;
+      });
     }
   }, 500);
 }
@@ -199,8 +235,9 @@ setInterval(updateConnectionStatus, 15000);
 
 window.addEventListener("message", (event) => {
   if (event.origin !== window.location.origin) return;
-  if (event.data === "iframeLoaded") {
+  if (event.data === "iframeLoaded" && !isRefreshing) {
     startAutoRefresh();
+    isRefreshing = true;
   }
 });
 
@@ -208,30 +245,32 @@ function isSidebarVisible() {
   const target = document.getElementById("xhr");
   if (!target) return;
   const observer = new MutationObserver(() => {
-    if (document.hidden) return;
-    const now = Date.now();
-    const elapsed = now - lastRefreshTime;
-    const interval = getRefreshInterval();
-    if (elapsed < interval) {
-      if (debounceTimeoutId) clearTimeout(debounceTimeoutId);
-      debounceTimeoutId = setTimeout(() => {
-        lastRefreshTime = Date.now();
+    if (document.hidden || isRefreshing) return;
+    debounceTimeoutId = setTimeout(() => {
+      const now = Date.now();
+      const elapsed = now - lastRefreshTime;
+      let interval = getRefreshInterval();
+      if (elapsed < interval) {
+        if (debounceTimeoutId) clearTimeout(debounceTimeoutId);
+        debounceTimeoutId = setTimeout(() => {
+          lastRefreshTime = Date.now();
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              refreshSidebar(true);
+            });
+          });
+          scheduleNextAutoRefresh();
+        }, interval - elapsed);
+      } else {
+        lastRefreshTime = now;
         requestAnimationFrame(() => {
           requestAnimationFrame(() => {
             refreshSidebar(true);
           });
         });
         scheduleNextAutoRefresh();
-      }, interval - elapsed);
-    } else {
-      lastRefreshTime = now;
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          refreshSidebar(true);
-        });
-      });
-      scheduleNextAutoRefresh();
-    }
+      }
+    }, 100);
   });
   observer.observe(target, {
     childList: true,
@@ -241,7 +280,8 @@ function isSidebarVisible() {
 
 function handleStatus() {
   lastRefreshTime = 0;
-  if (!document.hidden) {
+  if (!document.hidden && !isRefreshing) {
+    isRefreshing = true;
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
         refreshSidebar(true);
