@@ -108,7 +108,8 @@ public class RepublishLeaseSetJob extends JobImpl {
         getContext().statManager().addRateData("netDb.republishLeaseSetFail", 1);
         getContext().jobQueue().removeJob(this);
         // For first failure, add normally, after 2+ failures, add to top
-        boolean highPriority = count >= 8;
+        boolean highPriority = false;
+        if ((count - 8) % 4 == 0) {highPriority = true;}
         requeue(RETRY_DELAY, highPriority);
     }
 
