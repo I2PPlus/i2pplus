@@ -254,11 +254,12 @@ class PeerManager {
                 throw new UnsupportedOperationException();
         }
         if (peers.isEmpty()) {
+            _organizer.selectActiveNotFailingPeers(criteria.getMinimumRequired(), exclude, peers);
             if (_log.shouldWarn())
                 _log.warn("We ran out of peers when looking for reachable ones"
                           + "\n* Found: 0 with "
                           + _organizer.countHighCapacityPeers() + " High Capacity peers and "
-                          + _organizer.countFastPeers() + " Fast peers");
+                          + _organizer.countFastPeers() + " Fast peers -> Falling back to non-failing peers...");
         }
         return new ArrayList<Hash>(peers);
     }
