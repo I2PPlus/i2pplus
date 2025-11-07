@@ -47,6 +47,7 @@ import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
 import net.i2p.router.NetworkDatabaseFacade;
+import net.i2p.router.networkdb.kademlia.DataStore;
 import net.i2p.router.networkdb.reseed.ReseedChecker;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.Router;
@@ -2166,6 +2167,19 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         return Arrays.stream(blockCountries.trim().toLowerCase().split("\\s*,\\s*"))
                      .filter(s -> !s.isEmpty())
                      .collect(Collectors.toSet());
+    }
+
+    /**
+     * Get the number of RouterInfo files stored on disk, if using PersistentDataStore.
+     * @return number of RIs on disk, or 0 if not using persistent storage
+     * @since 0.9.68+
+     */
+    public int getStoredRouterInfoCount() {
+        DataStore ds = getDataStore();
+        if (ds instanceof PersistentDataStore) {
+            return ((PersistentDataStore) ds).countStoredRIs();
+        }
+        return 0;
     }
 
     /** @since 0.9.52 */

@@ -19,11 +19,14 @@ import net.i2p.data.LeaseSet;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.CommSystemFacade.Status;
+import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.RouterVersion;
 import net.i2p.router.TunnelPoolSettings;
+import net.i2p.router.networkdb.kademlia.DataStore;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
+import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
 import net.i2p.router.networkdb.reseed.ReseedChecker;
 import net.i2p.router.transport.TransportUtil;
 import net.i2p.router.web.CSSHelper;
@@ -941,6 +944,15 @@ public class SidebarHelper extends HelperBase {
         Rate rok = ok.getRate(60*60*1000);
         int avgTestTimeGood = (int) rok.getLifetimeAverageValue();
         return avgTestTimeGood;
+    }
+
+    public int getStoredRouterInfos() {
+       if (_context == null) return 0;
+       NetworkDatabaseFacade netDb = _context.netDb();
+        if (netDb instanceof KademliaNetworkDatabaseFacade) {
+            return ((KademliaNetworkDatabaseFacade) netDb).getStoredRouterInfoCount();
+        }
+        return 0;
     }
 
     private static boolean updateAvailable() {
