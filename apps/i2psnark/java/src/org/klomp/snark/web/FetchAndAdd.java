@@ -140,11 +140,11 @@ public class FetchAndAdd extends Snark implements EepGet.StatusListener, Runnabl
         _eepGet.addHeader("User-Agent", I2PSnarkUtil.EEPGET_USER_AGENT);
         if (_eepGet.fetch()) {
             if (_log.shouldInfo())
-                _log.info("Transfer successful [" + _url + "] (Size:" + out.length() + " bytes)");
+                _log.info("Transfer successful: " + _url + " (Size:" + out.length() + " bytes)");
             return out;
         } else {
             if (_log.shouldInfo())
-                _log.info("Transfer failed [" + _url + ']');
+                _log.info("Transfer failed: " + _url);
             out.delete();
             return null;
         }

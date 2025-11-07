@@ -308,6 +308,17 @@ async function refreshTorrents(callback) {
               th.innerHTML = thElementsResponse[index].innerHTML;
             });
           }
+          const noload = torrents?.querySelector("#noTorrents");
+          if ((torrentsBody && torrentsBody.children.length === 0) || noload) {
+            snarkHeader.querySelectorAll("th:nth-child(n+2) .sortIcon, th:nth-child(n+2) .optbox")
+                       .forEach(el => el.style.opacity = "0");
+          } else if (torrentsBody && torrentsBody.children.length < 2) {
+            snarkHeader.querySelectorAll("th:nth-child(n+2) .sortIcon")
+                       .forEach(el => el.style.opacity = "0");
+          } else {
+            snarkHeader.querySelectorAll("th:nth-child(n+2):not(.tAction) img, th:nth-child(n+2):not(.tAction) input")
+                       .forEach(el => el.style.opacity = "");
+          }
         }
       } catch (error) {}
     }
@@ -396,7 +407,8 @@ function refreshOnSubmit() {
   document.addEventListener("click", (event) => {
     const clickTarget = event.target;
     const form = clickTarget.closest("form");
-    const stopAllOrStartAllInactive = document.querySelector('input[id^="action"]:not(.depress)')
+    const stopAllOrStartAllInactive = document.querySelector('input[id^="action"]:not(.depress)');
+    const dirlist = document.getElementById("dirlist");
     if (clickTarget.matches("input[type=submit]")) {
       event.stopPropagation();
       clickTarget.form.requestSubmit();
@@ -404,6 +416,15 @@ function refreshOnSubmit() {
         stopAllOrStartAllInactive.classList.add("tempDisabled");
         setTimeout(() => {stopAllOrStartAll.classList.remove("tempDisabled")}, 4000);
       }
+    } else if (clickTarget.matches("#nav_main:not(.isConfig") && !dirlist) {
+      const navMain = document.querySelector("#nav_main:not(.isConfig)");
+      navMain.classList.add("isRefreshing");
+      event.preventDefault();
+      refreshScreenLog(refreshTorrents, true);
+      setTimeout(() => {
+        navMain.classList.remove("isRefreshing");
+        clickTarget.blur();
+      }, 200);
     }
   });
 }
@@ -474,8 +495,45 @@ async function checkIfUp(minDelay = 14000) {
 }
 
 function preloadImage(src) {
-  const img = new Image();
-  img.src = src;
+  const CACHE_NAME = "my-image-cache";
+  const INTERVAL_MS = 10 * 60 * 1000;
+
+  const show = (url) => {};
+
+  const loadImage = (url) => show(url);
+
+  async function tryFromCache(u) {
+    if (!("caches" in window)) return false;
+    try {
+      const cache = await caches.open(CACHE_NAME);
+      const res = await cache.match(new Request(u, { mode: "cors" }));
+      if (res) {
+        show(URL.createObjectURL(await res.blob()));
+        return true;
+      }
+    } catch {}
+    return false;
+  }
+
+  async function ensureCached(u) {
+    if (await tryFromCache(u)) return;
+    if (!("caches" in window)) return loadImage(u);
+
+    try {
+      const req = new Request(u, { mode: "cors" });
+      const res = await fetch(req, { cache: "reload" });
+      if (!res.ok) return loadImage(u);
+
+      const cache = await caches.open(CACHE_NAME);
+      await cache.put(req, res.clone());
+      show(URL.createObjectURL(await res.blob()));
+    } catch {
+      loadImage(u);
+    }
+  }
+
+  ensureCached(src);
+  setInterval(() => ensureCached(src), INTERVAL_MS);
 }
 
 function isDown() {

@@ -103,7 +103,7 @@ tfoot td:first-child{padding-left:0;text-align:left}
 .rowEven{background:var(--row)}
 .rowEven td,.rowOdd td{border-top:0;border-bottom:0}
 .script{display:inline-block;vertical-align:top}
-.toggleview,.configTitle,#navbar,img,input[type=submit],input[type=radio],input[type=checkbox],label,th img,#createSection,#closelog,#pagenavbottom{user-select:none}
+.toggleview,.configTitle,#navbar,img,input[type=submit],input[type=radio],input[type=checkbox],label,th img,#createSection,#closelog,#paginate{user-select:none}
 #dirInfo,#torrents{background:none}
 #dirInfo::before,#torrents::before{top:0}
 #page{margin:5px 0 0 0;padding:10px 10px 0;border:var(--border_hard);border-radius:4px;box-shadow:inset 0 0 3px 0 #101,0 0 2px 2px rgba(16,0,16,.4);background:repeating-linear-gradient(180deg,#2b172f 2px,#1f081f 4px);background-size:100% 4px}
@@ -118,7 +118,7 @@ tfoot td:first-child{padding-left:0;text-align:left}
 #toast b{color:#ff0}
 
 /* topnav */
-.snarkNav{margin:-1px -4px 0 0;padding:5px 12px 3px 29px;border:1px solid #730;background:var(--tracker) no-repeat 11px center/16px,var(--nav),var(--tracker_hover) no-repeat 11px center/16px,var(--tracker_active) no-repeat 11px center/16px}
+.snarkNav{margin:-1px -1px 0 0;padding:5px 12px 3px 29px;border:1px solid #730;background:var(--tracker) no-repeat 11px center/16px,var(--nav),var(--tracker_hover) no-repeat 11px center/16px,var(--tracker_active) no-repeat 11px center/16px}
 .snarkNav:last-child{border-radius:0 2px 2px 0}
 .snarkNav:first-child{border-radius:2px 0 0 2px}
 .snarkNav:hover,.snarkNav:focus{background:var(--tracker_hover) no-repeat 11px center/16px,var(--nav_hover);transition:ease border .3s .1s,ease-in-out box-shadow .01s}
@@ -126,18 +126,20 @@ tfoot td:first-child{padding-left:0;text-align:left}
 .snarkNav:active+.snarkNav:nth-last-child(1n-2){border-left:1px solid #730}
 .snarkNav:active,.snarkNav.depress{background:var(--tracker_active) no-repeat 11px center/16px,var(--nav_active)}
 .snarkNav:last-child[href="/i2psnark/"]{display:inline-block;border-radius:2px}
-.nav_main{padding-left:29px;background:var(--snark) no-repeat 9px center/18px,var(--nav),var(--snark_hover) no-repeat 9px center/18px,var(--snark_active) no-repeat 9px center/18px}
-.nav_main:hover,.nav_main:focus{background:var(--snark_hover) no-repeat 11px center/18px,var(--nav_hover)}
-.nav_main:active,.nav_main.depress{background:var(--snark_active) no-repeat 11px center/18px,var(--nav_active)}
-.nav_config{background:var(--nav_config) no-repeat 10px center/16px,var(--nav),var(--nav_config_hover) no-repeat 10px center/0,var(--nav_config_active) no-repeat 10px center/0}
-.nav_config:hover,.nav_config:focus{background:var(--nav_config_hover) no-repeat 10px center/16px,var(--nav_hover)}
-.nav_config:active,.nav_config.depress{background:var(--nav_config_active) no-repeat 10px center/16px,var(--nav_active)}
-.nav_forum{background:var(--forum) no-repeat 11px center/16px,var(--nav),var(--forum_hover) no-repeat 11px center/16px,var(--forum_active) no-repeat 11px center/16px}
-.nav_forum:hover,.nav_forum:focus{background:var(--forum_hover) no-repeat 11px center/16px,var(--nav_hover)}
-.nav_forum:active,.nav_forum.depress{background:var(--forum_active) no-repeat 11px center/16px,var(--nav_active)}
-.nav_search{background:var(--search) no-repeat 11px center/16px,var(--nav),var(--search_hover) no-repeat 11px center/16px,var(--search_active) no-repeat 11px center/16px}
-.nav_search:hover,.nav_search:focus{background:var(--search_hover) no-repeat 11px center/16px,var(--nav_hover)}
-.nav_search:active,.nav_search.depress{background:var(--search_active) no-repeat 11px center/16px,var(--nav_active)}
+#nav_main{padding-left:29px;background:var(--snark) no-repeat 9px center/18px,var(--nav),var(--snark_hover) no-repeat 9px center/18px,var(--snark_active) no-repeat 9px center/18px}
+#nav_main:hover,#nav_main:focus{background:var(--snark_hover) no-repeat 11px center/18px,var(--nav_hover)}
+#nav_main:active,#nav_main.depress{background:var(--snark_active) no-repeat 11px center/18px,var(--nav_active)}
+#nav_main.isRefreshing{position:relative}
+#nav_main.isRefreshing::before{display:inline-block;width:calc(100% - 2px);height:2px;position:absolute;bottom:1px;left:1px;content:"";animation:refresh .15s ease 0s both}
+#nav_config{background:var(--nav_config) no-repeat 10px center/16px,var(--nav),var(--nav_config_hover) no-repeat 10px center/0,var(--nav_config_active) no-repeat 10px center/0}
+#nav_config:hover,#nav_config:focus{background:var(--nav_config_hover) no-repeat 10px center/16px,var(--nav_hover)}
+#nav_config:active,#nav_config.depress{background:var(--nav_config_active) no-repeat 10px center/16px,var(--nav_active)}
+#nav_forum{background:var(--forum) no-repeat 11px center/16px,var(--nav),var(--forum_hover) no-repeat 11px center/16px,var(--forum_active) no-repeat 11px center/16px}
+#nav_forum:hover,#nav_forum:focus{background:var(--forum_hover) no-repeat 11px center/16px,var(--nav_hover)}
+#nav_forum:active,#nav_forum.depress{background:var(--forum_active) no-repeat 11px center/16px,var(--nav_active)}
+#nav_search{background:var(--search) no-repeat 11px center/16px,var(--nav),var(--search_hover) no-repeat 11px center/16px,var(--search_active) no-repeat 11px center/16px}
+#nav_search:hover,#nav_search:focus{background:var(--search_hover) no-repeat 11px center/16px,var(--nav_hover)}
+#nav_search:active,#nav_search.depress{background:var(--search_active) no-repeat 11px center/16px,var(--nav_active)}
 #navbar{margin:-11px auto 10px;padding:7px 10px 5px;min-width:600px;width:calc(100% - 22px);position:static;text-align:center;border:var(--border_hard);border-radius:0 0 4px 4px;box-shadow:inset 0 0 0 1px rgba(169,61,169,.2),inset 0 0 0 2px #101,inset 0 0 3px 1px #212,0 0 0 1px rgba(0,0,0,.7);background:linear-gradient(180deg,#535,#202 55%,#101,#080008);filter:drop-shadow(0 2px 4px #101)}
 #navbar a{display:inline-block;font:700 10.5pt/1.3 var(--bodyfont);letter-spacing:.11em;text-decoration:none;text-transform:uppercase;color:#f70;text-shadow:1px 0 1px #0009,-1px 0 1px rgba(255,240,255,.2);outline:none;border-radius:0;box-shadow:0 0 1px #000,inset 0 0 0 1px rgba(16,0,16,.7),inset 0 0 2px 0 rgba(255,128,0,.5)}
 #navbar a:hover,#navbar a:focus{color:#d2baff;border:1px solid #820b64;box-shadow:0 0 1px #000,inset 0 0 0 1px rgba(16,0,16,.9),inset 0 0 2px 0 #515}
@@ -158,7 +160,7 @@ tfoot td:first-child{padding-left:0;text-align:left}
 #snarkSearch input[type="submit"]:active{background-size:22px;filter:none}
 #snarkSearch:hover input[type="submit"],#snarkSearch:focus-within input[type="submit"]{opacity:1}
 #searchwrap{position:relative}
-#searchwrap a[href="/i2psnark"],#searchwrap a[href="/i2psnark"]:hover,#searchwrap a[href="/i2psnark"]:active{padding:3px;height:14px;width:14px;position:absolute;top:calc(50% - 16px);right:4px;font-size:0!important;background:#000 var(--close) no-repeat center center/10px;border:1px solid #303;box-shadow:none;opacity:0;filter:none}
+#searchwrap a[href="/i2psnark"],#searchwrap a[href="/i2psnark"]:hover,#searchwrap a[href="/i2psnark"]:active{padding:3px;height:14px;width:14px;display:inline-block;position:absolute;top:calc(50% - 16px);right:4px;font-size:0!important;background:#000 var(--close) no-repeat center center/10px;border:1px solid #303;box-shadow:none;opacity:0;filter:none}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"],#snarkSearch:hover input[type=search]:not(:placeholder-shown)+a[href="/i2psnark"]{opacity:.5}
 #snarkSearch input[type=search]:focus:not(:placeholder-shown)+a[href="/i2psnark"]:hover,#snarkSearch input[type=search][value]+a[href="/i2psnark"]{opacity:1}
 .iframed #snarkSearch{top:9px}
@@ -620,17 +622,18 @@ td.tAction input[type=submit]{margin-top:1px}
 #torrents #actionStopAll:active,#torrents #actionStopAll.depress{background:var(--stopall_hover) no-repeat center center/auto 12px,var(--btnAction_active)}
 
 /* pagenav */
-.pagenavcontrols:hover #pagecount{color:#dbd}
-.pagenavcontrols{padding:2px 10px;display:block;letter-spacing:.1em;font-family:var(--bodyfont);font-weight:700;border-bottom:var(--border_inner);background:var(--th)}
-.pagenavcontrols:hover{mix-blend-mode:normal}
-.pagenavcontrols img,.pagenavcontrols img:hover{margin:0 2px;border:var(--border_inner)}
-.pagenavcontrols img{padding:5px 8px;width:12px;border-radius:2px;box-shadow:var(--highlight);background:var(--btnAction);opacity:1;mix-blend-mode:luminosity}
-.pagenavcontrols a img:hover,.pagenavcontrols a:focus img,.pagenavcontrols a img:active{background:var(--btnAction_hover);opacity:1;filter:none;mix-blend-mode:normal;transition:box-shadow ease .03s}
-.pagenavcontrols a img:active{box-shadow:var(--highlight),var(--shadow_inset);background:var(--btnAction_active);transform:scale(.9)}
-.pagenavcontrols img.disable{opacity:.3;pointer-events:none}
-.pagenavcontrols .disabled{position:relative;border:0;box-shadow:none;background:none;opacity:.5;filter:saturate(0);pointer-events:none!important}
+#paginate:hover #pagecount{color:#dbd}
+#paginate{letter-spacing:.1em;font-family:var(--bodyfont);font-weight:700;border-bottom:var(--border_inner);background:var(--th)}
+#paginate:hover{mix-blend-mode:normal}
+#paginate th{text-align:center;border-bottom:var(--border_inner)}
+#paginate th:empty{display:none}
+#paginate img,#paginate img:hover{margin:0 2px;border:var(--border_inner)}
+#paginate img{padding:5px 8px;width:12px;border-radius:2px;box-shadow:var(--highlight);background:var(--btnAction);opacity:1;mix-blend-mode:luminosity}
+#paginate a img:hover,#paginate a:focus img,#paginate a img:active{background:var(--btnAction_hover);opacity:1;filter:none;mix-blend-mode:normal;transition:box-shadow ease .03s}
+#paginate a img:active{box-shadow:var(--highlight),var(--shadow_inset);background:var(--btnAction_active);transform:scale(.9)}
+#paginate img.disable{opacity:.3;pointer-events:none}
+#paginate .disabled{position:relative;border:0;box-shadow:none;background:none;opacity:.5;filter:saturate(0);pointer-events:none!important}
 #pagecount{margin:3px 6px;padding:3px 10px 2px;display:inline-block;vertical-align:middle;letter-spacing:.2em;color:#a8a;text-shadow:var(--txt_shadow);border-radius:3px;box-shadow:var(--highlight);background:var(--badge);mix-blend-mode:luminosity}
-#pagenavbottom,#pagenavtop[hidden],#pagenavtop:empty{display:none}
 
 /* panels */
 .snarkConfig{font-size:10pt;width:100%}
@@ -1128,6 +1131,7 @@ body.debug #dhtDebug,body.debug .debuginfo{display:table-row}
 @keyframes fade{0%{filter:opacity(0)}100%{filter:opacity(1)}}
 @keyframes initializing{from{background-position:200% 100%}}
 @keyframes position{from{position:absolute;transform:translateX(6px);display:none}100%{position:static;transform:translateX(0);display:inline-block}}
+@keyframes refresh{0%{width:0;background:linear-gradient(90deg,#404,#808);opacity:0}90%,99%{width:calc(100% - 2px);background:linear-gradient(90deg,#d30,#f60);opacity:.7}100%{opacity:0}}
 @keyframes routerdown{from{background-size:50% 100%,200% 100%}}
 @keyframes scale{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
 @keyframes seeding{from{box-shadow:inset 0 0 0 1px rgba(16,0,16,.9),inset 0 1px 3px rgba(255,96,0,.4),inset 0 -1px 4px rgba(128,48,0,.4);background:radial-gradient(at center bottom,rgba(128,32,64,.6) 10%,#0000 60%),linear-gradient(180deg,rgba(80,16,48,.9),rgba(16,0,16,.9))}}
@@ -1176,7 +1180,7 @@ td.peerCount:empty::after{display:none}
 .lang_de #trackerconfig input.trackername,.lang_ru #trackerconfig input.trackername{width:120px;max-width:120px;min-width:0}
 .tAction input[type=submit],#actionStopAll,#actionStartAll,#actionStopAll:hover,#actionStartAll:hover,#actionStopAll:focus,#actionStartAll:focus{padding:10px;background-size:auto 12px,100%}
 .tAction input[type=submit]:active,#actionStopAll:active,#actionStartAll:active{background-size:auto 10px,100%}
-#torrents .txd,#torrents.rateUp,.iframed #torrents .txd,.iframed #torrents .rateUp{padding:0;width:0;min-width:0;font-size:0}
+#torrents .txd,#torrents.rateUp,.iframed #torrents .txd,.iframed #torrents .rateUp{padding:0;width:0;min-width:0!important;font-size:0}
 .txd>*,.rateUp>*,.iframed .txd>*,.iframed .rateUp>*{display:none}
 #actionStopAll,#actionStartAll,#actionStopAll:hover,#actionStartAll:hover,#actionStopAll:focus,#actionStartAll:focus{padding:10px 17px}
 #snarkSearch input[type=search]{width:140px}
@@ -1187,9 +1191,7 @@ td.peerCount:empty::after{display:none}
 .canhide{display:none}
 .configPanel .configTitle{font-size:11pt}
 #dirInfoComplete{display:none}
-.iframed #pagenavtop{margin:1px 0 -2px}
-.iframed #filterBar~#pagenavtop{margin:1px 0 2px}
-.snarkNav.nav_main,.snarkNav:last-child[href="/i2psnark/"]{padding-left:32px}
+#nav_main,.snarkNav:last-child[href="/i2psnark/"]{padding-left:32px}
 .tab_label::after,#tab_addtorrent .tab_label::after,#tab_newtorrent .tab_label::after,#tab_comments .tab_label::after,#tab_files .tab_label::after,#tab_torrentedit .tab_label::after,#tab_addtorrent:hover .tab_label::after,#tab_newtorrent:hover .tab_label::after,#tab_comments:hover .tab_label::after,#tab_torrentedit:hover .tab_label::after{width:15px;height:15px;background-size:13px}
 .tName a{max-width:320px;display:inline-block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #commentDeleteAction td{padding-top:4px}
@@ -1207,7 +1209,7 @@ td.peerCount:empty::after{display:none}
 }
 
 @media (min-resolution:120dpi)and (max-width:1180px){
-.snarkNav.nav_main,.snarkNav:last-child[href="/i2psnark/"]{padding-left:26px;background-position:8px 50%,center center}
+#nav_main,.snarkNav:last-child[href="/i2psnark/"]{padding-left:26px;background-position:8px 50%,center center}
 }
 
 @media (max-width:1100px){
@@ -1338,10 +1340,12 @@ select[name$=".quantity"],select[name$=".length"]{min-width:95px}
 }
 
 @media (max-width:840px){
-.snarkNav.nav_main:not(:last-child),.snarkNav.nav_forum,.iframed .snarkNav.nav_main:not(:last-child),.iframed .snarkNav.nav_forum,.snarkNav.nav_search,.iframed .snarkNav.nav_search{padding-left:0;padding-right:12px;width:36px;text-indent:-99999px;background-position:center center}
-.snarkNav.nav_main:not(:last-child),.iframed .snarkNav.nav_main:not(:last-child){padding-left:0;padding-right:13px;width:27px;background-position:calc(50% - 1px) center}
-.iframed .snarkNav.nav_forum{width:26px}
+#nav_main:not(:last-child),#nav_forum,.iframed #nav_main:not(:last-child),.iframed #nav_forum,.snarkNav#nav_search,.iframed .snarkNav#nav_search{padding-left:0;padding-right:12px;width:36px;text-indent:-99999px;background-position:center center}
+#nav_main:not(:last-child),.iframed #nav_main:not(:last-child){padding-left:0;padding-right:13px;width:27px;background-position:calc(50% - 1px) center}
+.iframed #nav_forum{width:26px}
 .snarkNav.nav_tracker:last-child,.iframed .snarkNav.nav_tracker:last-child{padding-right:8px}
+#navbar{padding-left:9px!important;justify-content:left}
+#snarkSearch{top:2px}
 }
 
 @media (min-width:800px){
@@ -1374,13 +1378,10 @@ body,th,td,#commentInfo textarea,input[type=submit],input[type=reset],select,sel
 th{font-size:9pt;background:#101}
 th.radio{width:72px}
 .debugConnection{margin:2px 4px;padding:1px 3px;display:inline-block;font-weight:700;color:#fff;border-radius:2px;box-shadow:0 0 0 1px #101;background:#003000}
-.iframed #pagenavtop{margin:2px 0 -1px}
-.iframed #filterBar~#pagenavtop{margin:2px 0 1px}
 .peerSeed img{margin-top:2px;width:18px;height:18px}
 .percentDownloaded{pointer-events:none}
 .snarkNav{font-size:10.5pt}
-.nav_main,.nav_main:hover,.nav_main:focus,.nav_main.depress{padding-left:29px;background-position:8px center}
-#pagenavbottom img{width:14px;height:14px}
+#nav_main,#nav_main:hover,#nav_main:focus,#nav_main.depress{padding-left:29px;background-position:8px center}
 #totals{word-spacing:.15em}
 }
 
@@ -1417,12 +1418,12 @@ th.radio{width:96px}
 .ETA:not(:empty){min-width:80px}
 .magnetLabel{margin-top:-1px;padding:1px 8px 1px 18px;line-height:1.5;border-radius:3px;box-shadow:var(--highlight);background:#303 var(--tag) no-repeat 5px center/11px}
 .mainsection td{padding-top:4px;padding-bottom:4px}
-.nav_main,.nav_main:hover,.nav_main:focus,.nav_main.depress{padding-left:30px;background-size:19px,100%,100%;background-position:9px center,center center}
-:not(.iframed) .nav_main,:not(.iframed) .nav_main:hover,:not(.iframed) .nav_main:focus,:not(.iframed) .nav_main.depress{background-position-y:calc(50% + 1px),center,center}
-.nav_forum,.nav_forum:hover,.nav_forum:focus,.nav_forum.depress,.nav_search,.nav_search:hover,.nav_search:focus,.nav_search.depress,.nav_tracker,.nav_tracker:hover,.nav_tracker:focus,.nav_tracker.depress{background-size:19px,100%,100%;background-position-x:8px,center,center}
-.iframed .nav_config,.iframed .nav_config:hover,.iframed .nav_config:focus,.iframed .nav_config.depress{padding-left:28px;background-size:18px,100%,100%;background-position:8px center,center,center}
+#nav_main,#nav_main:hover,#nav_main:focus,#nav_main.depress{padding-left:30px;background-size:19px,100%,100%;background-position:9px center,center center}
+:not(.iframed) #nav_main,:not(.iframed) #nav_main:hover,:not(.iframed) #nav_main:focus,:not(.iframed) #nav_main.depress{background-position-y:calc(50% + 1px),center,center}
+#nav_forum,#nav_forum:hover,#nav_forum:focus,#nav_forum.depress,#nav_search,#nav_search:hover,#nav_search:focus,#nav_search.depress,.nav_tracker,.nav_tracker:hover,.nav_tracker:focus,.nav_tracker.depress{background-size:19px,100%,100%;background-position-x:8px,center,center}
+.iframed #nav_config,.iframed #nav_config:hover,.iframed #nav_config:focus,.iframed #nav_config.depress{padding-left:28px;background-size:18px,100%,100%;background-position:8px center,center,center}
 .optionlist{padding:7px 6px 6px}
-.pagenavcontrols{margin-top:1px}
+#paginate{margin-top:1px}
 .peerclient code{display:inline-block}
 .priority{padding:4px 10px;width:1%;white-space:nowrap;vertical-align:middle;text-align:center;font-size:8pt}
 .rateDown:not(:empty),.rateUp:not(:empty){min-width:70px}
@@ -1451,7 +1452,6 @@ th.radio{width:96px}
 #navbar{padding:11px 10px 10px}
 .iframed #navbar{padding:11px 10px 10px}
 #navbar a{font-size:12pt}
-#pagenavbottom img{width:16px;height:16px}
 #screenlog{margin-top:0;min-height:64px!important}
 #screenlog li,#screenlog li a{font-size:9.5pt}
 #screenlog li::before{width:14px;height:12px;background-size:10px}

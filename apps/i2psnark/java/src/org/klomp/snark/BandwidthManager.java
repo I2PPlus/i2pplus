@@ -179,7 +179,7 @@ public class BandwidthManager implements BandwidthListener {
     public String toString() {
         String separator = " <span class=bullet>&nbsp;&bullet;&nbsp;</span> ";
         return "<div class=debugStats id=bwManager>" +
-               "<span id=bw_in class=stat><b>Bandwidth In:</b> <span class=dbug>" + _down.toString().replace("* ", "") + "</span></span>" + separator +
-               "<span id=bw_out class=stat><b>Bandwidth Out:</b> <span class=dbug>" + _up.toString().replace("* ", "") + "</span></span>" + "</div>";
+               "<span id=bw_in class=stat><b>Bandwidth In:</b> <span class=dbug>" + _down.toString().replace("* ", "").replace(" Bytes", "B") + "</span></span>" + separator +
+               "<span id=bw_out class=stat><b>Bandwidth Out:</b> <span class=dbug>" + _up.toString().replace("* ", "").replace(" Bytes", "B") + "</span></span>" + "</div>";
     }
 }
