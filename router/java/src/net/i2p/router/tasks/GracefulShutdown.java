@@ -5,140 +5,91 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
 /**
- * Manages the graceful shutdown process of the router in a dedicated thread.
- * This thread waits indefinitely until a graceful shutdown is initiated, then
- * monitors the shutdown conditions, logging progress and triggering the actual
- * shutdown once conditions are met.
- * <p>
- * The thread supports clean interruption and can be externally stopped if needed.
- *
- * @since 0.8.12 Moved from Router
+ * GracefulShutdown manages the router's graceful shutdown/restart lifecycle.
+ * Uses configurable timings to control when to re-check state and how long to wait
+ * before finalizing a restart/shutdown after signaling.
  */
 public class GracefulShutdown implements Runnable {
     private final RouterContext _context;
-    private final Object lock = new Object();
     private volatile boolean running = true;
 
-    /**
-     * Creates a new GracefulShutdown instance tied to the given RouterContext.
-     *
-     * @param ctx the RouterContext providing router state and services
-     */
+    /** Delay before finalizing a restart/shutdown after a signaling condition is met (ms) */
+    private static final int RESTART_DELAY_MS = 20_000;
+
+    /** Interval between status checks while a restart/shutdown is in progress (ms) */
+    private static final int CHECK_STATUS_INTERVAL_MS = 5_000;
+
     public GracefulShutdown(RouterContext ctx) {
         _context = ctx;
     }
 
-    /**
-     * Main execution loop of the graceful shutdown thread. Waits indefinitely
-     * until a shutdown is initiated, then monitors whether shutdown conditions
-     * are satisfied (such as no active tunnels or specific exit codes). Logs
-     * status updates and triggers shutdown when ready.
-     */
     @Override
     public void run() {
         Log log = _context.logManager().getLog(Router.class);
-
         while (running) {
             boolean shutdownInProgress = _context.router().gracefulShutdownInProgress();
 
             if (shutdownInProgress) {
                 int exitCode = _context.router().scheduledGracefulExitCode();
 
-                if (shouldShutdown(exitCode)) {
-                    logShutdownMessage(exitCode, log);
-                    waitOrSleep(10_000); // Allow UI updates or cleanup time
+                if (exitCode == Router.EXIT_HARD || exitCode == Router.EXIT_HARD_RESTART ||
+                    _context.tunnelManager().getParticipatingCount() <= 0) {
+
+                    if (log.shouldWarn()) {
+                        if (exitCode == Router.EXIT_HARD)
+                            log.warn("Shutting down after a brief delay...");
+                        else if (exitCode == Router.EXIT_HARD_RESTART)
+                            log.warn("Restarting after a brief delay...");
+                        else
+                            log.warn("Graceful shutdown progress: No more tunnels, starting final shutdown...");
+                    }
+
+                    // Brief pause for UI/state cleanup, then finalize shutdown/restart
+                    try {
+                        synchronized (Thread.currentThread()) {
+                            Thread.currentThread().wait(RESTART_DELAY_MS);
+                        }
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
+
                     _context.router().shutdown(exitCode);
-                    running = false;
+                    return;
                 } else {
-                    waitOrSleep(10_000); // Wait and re-check conditions
+                    // Re-check at a short, deterministic cadence
+                    try {
+                        Thread.sleep(CHECK_STATUS_INTERVAL_MS);
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
                 }
             } else {
-                waitIndefinitely(); // Wait until notified of shutdown start
+                // Idle: wait indefinitely until signaled to re-check
+                synchronized (Thread.currentThread()) {
+                    try {
+                        Thread.currentThread().wait();
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
             }
         }
     }
 
     /**
-     * Determines if the router should proceed with shutdown based on the exit code
-     * and current tunnel participation.
-     *
-     * @param code scheduled graceful exit code
-     * @return true if shutdown conditions are met, false otherwise
+     * Wake up the shutdown thread when a relevant state change occurs.
      */
-    private boolean shouldShutdown(int code) {
-        return code == Router.EXIT_HARD || code == Router.EXIT_HARD_RESTART ||
-               (code == Router.EXIT_GRACEFUL && _context.tunnelManager().getParticipatingCount() <= 0);
-    }
-
-    /**
-     * Logs an appropriate message based on the shutdown exit code.
-     *
-     * @param code the exit code determining shutdown type
-     * @param log  the log instance to use for logging the messages
-     */
-    private void logShutdownMessage(int code, Log log) {
-        switch (code) {
-            case Router.EXIT_HARD:
-                log.log(Log.CRIT, "Shutting down after a brief delay...");
-                break;
-            case Router.EXIT_HARD_RESTART:
-                log.log(Log.CRIT, "Restarting after a brief delay...");
-                break;
-            case Router.EXIT_GRACEFUL:
-                log.log(Log.CRIT, "Graceful restart -> No active transit tunnels, restarting...");
-                break;
-            default:
-                log.log(Log.CRIT, "Graceful shutdown -> No active transit tunnels, starting final shutdown...");
-                break;
+    public void wakeUp() {
+        synchronized (Thread.currentThread()) {
+            Thread.currentThread().notifyAll();
         }
     }
 
     /**
-     * Sleeps for the specified duration in milliseconds, handling interrupts by
-     * restoring the interrupt status.
-     *
-     * @param millis number of milliseconds to sleep
-     */
-    private void waitOrSleep(long millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException ie) {
-            Thread.currentThread().interrupt();
-        }
-    }
-
-    /**
-     * Waits indefinitely until notified, handling interrupts by restoring the
-     * interrupt status.
-     */
-    private void waitIndefinitely() {
-        synchronized (lock) {
-            try {
-                lock.wait();
-            } catch (InterruptedException ie) {
-                Thread.currentThread().interrupt();
-            }
-        }
-    }
-
-    /**
-     * Stops the graceful shutdown thread. This method notifies the thread to exit
-     * any waiting state and end its loop cleanly.
+     * Stop the shutdown thread gracefully.
      */
     public void stop() {
         running = false;
-        synchronized (lock) {
-            lock.notifyAll();
-        }
-    }
-
-    /**
-     * Notifies the graceful shutdown thread to wake up from waiting state, e.g.,
-     * when a shutdown is initiated.
-     */
-    public void notifyShutdownStarted() {
-        synchronized (lock) {
-            lock.notifyAll();
-        }
+        wakeUp();
     }
 }
