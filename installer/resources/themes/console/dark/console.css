@@ -432,13 +432,13 @@ div[id^="config_"].main{padding-bottom:14px}
 /* top navigation */
 .confignav{margin:-1px -11px -1px;padding:7px 7px 8px;position:relative;font-weight:700;line-height:1.36;text-align:center;box-shadow:var(--bevel);background:var(--topnav);contain:none!important}
 .confignav::after{position:absolute;left:2px;bottom:-3px;width:calc(100% - 4px);height:1px;display:inline-block;background:#0c250c;content:""}
-.tab,.tab2{margin:0 -3px -1px -3px;padding:1px 0 2px;min-width:60px;display:inline-block;position:relative;box-sizing:border-box;vertical-align:middle;background:#000;transition:ease .15s all}
+.tab,.tab2{margin:0 -3px -1px -3px;padding:1px 0 2px;min-width:80px;display:inline-block;position:relative;box-sizing:border-box;vertical-align:middle;background:#000;transition:ease .15s all}
 .tab{box-shadow:var(--bevel_cell);background:var(--glow_top),linear-gradient(180deg,#002900,#000400)}
-.tab a{padding:4px 14px;width:calc(100% - 28px);display:inline-block;text-shadow:var(--textshadow)}
+.tab2{padding:5px 12px;z-index:10;text-shadow:var(--textshadow);box-shadow:var(--highlight),inset 3px 3px 3px #010;background:radial-gradient(at center bottom,rgba(0,128,0,.6) 0,#0000 80%),linear-gradient(180deg,#030,#003800)}
+.tab a{padding:4px 14px;width:calc(100% - 28px);display:inline-block;white-space:nowrap;text-shadow:var(--textshadow)}
 .tab:hover,#sidebar h3:hover{background:radial-gradient(at center bottom,rgba(128,0,0,.5) 0,#0000 130%),var(--tab_hover);box-shadow:var(--highlight),inset 0 0 0 2px rgba(128,48,0,.6)}
 .tab:hover{z-index:20}
 .tab:hover a{color:var(--hover)}
-.tab2{padding:5px 12px;z-index:10;text-shadow:var(--textshadow);box-shadow:var(--highlight),inset 3px 3px 3px #010;background:radial-gradient(at center bottom,rgba(0,128,0,.6) 0,#0000 80%),linear-gradient(180deg,#030,#003800)}
 .tab:active,#sidebar h3:active{box-shadow:var(--highlight),inset 3px 2px 3px rgba(0,0,0,.7);background:linear-gradient(180deg,#930,var(--hover));transition:ease box-shadow .15s}
 .tab:active a,#sidebar h3:active a{color:var(--ink);text-shadow:0 -1px 1px #0006}
 #debug .confignav{margin-bottom:-4px;z-index:999}
@@ -1232,7 +1232,7 @@ p.family{white-space:nowrap;background:var(--family) no-repeat 8px center/28px,l
 .netdbentry th{padding:5px 6px;text-align:left;font-weight:400}
 .netdbentry tr:last-child code{color:#bb7}
 .netdbentry tr:nth-child(2) td:last-child b,.netdbentry .familyname,.netdbStats li,.netdbStats b,#netdb .netdbentry th b,#netdb .netdbentry td:first-child b,#netdb .netdbentry th code,#netdb .sybil_routerinfo th code,#netdb .leaseset th code,.netdb_addresses li,.netdb_ouraddresses,.netdb_ouraddresses .netdb_transport{display:inline-block}
-.netdbentry tr:nth-child(2) td:last-child{text-align:right;white-space:nowrap;min-width:140px}
+.netdbentry tr:nth-child(2) td:last-child{white-space:nowrap;min-width:140px}
 .netdbentry .tunnel_cap,.netdbentry .tier,.netdbentry .ff,.netdbentry .reachable,.netdbentry .unreachable,.netdbentry .version,.sybil_routerinfo .tunnel_cap,.sybil_routerinfo .tier,.sybil_routerinfo .ff,.sybil_routerinfo .reachable,.sybil_routerinfo .unreachable,.sybil_routerinfo .version{margin:0 2px;padding:2px 4px;vertical-align:middle}
 .netdbentry .version{padding:3px 8px}
 .netdb_family,.netdb_family>*{margin-bottom:-2px;display:inline-block;vertical-align:top}
@@ -1243,7 +1243,9 @@ p.family{white-space:nowrap;background:var(--family) no-repeat 8px center/28px,l
 .netdb_header{margin:0;padding:0 3px;min-width:100px;display:inline-block;vertical-align:middle;line-height:0}
 .netdb_header .viewprofile,.netdb_header .configpeer,.netdb_header .familysearch,.sybil_routerinfo .viewprofile,.sybil_routerinfo .configpeer,.sybil_routerinfo .familysearch{margin:3px;padding:4px 8px;vertical-align:middle}
 .netdb_info+b{margin-left:15px}
-.netdb_info.host,.netdb_info.port{color:#bb0;user-select:all}
+.netdb_info.host,.netdb_info.port{user-select:all}
+.hostport .host a{margin-right:2px}
+.hostport .port a{margin-left:2px}
 .netdb_info.host::selection,.netdb_info.port::selection{color:#fff;background:#770}
 .netdb_ouraddresses:empty{display:none}
 .netdb_ouraddresses .netdb_transport{margin:-1px 5px 0 -6px;padding:2px;display:inline-block}
@@ -1286,6 +1288,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #netdb .netdbentry th code,#netdb .sybil_routerinfo th code,#netdb .leaseset th code{margin:0 5px 0 0;padding:1px 4px 2px;font-family:var(--bodyfont);font-weight:700;letter-spacing:.12em;color:#bb0;text-shadow:none;border-radius:2px;box-shadow:var(--outline);background:var(--badge)}
 #netdb .netdbentry th code::selection,#netdb .sybil_routerinfo th code::selection,.leaseset th code::selection{color:#fff;background:#070}
 #netdb .netdbStats b{margin-right:2px;margin-left:0;text-align:left;color:var(--ink)}
+#netdb .keys{white-space:nowrap;text-align:right}
 #netdb_ram{margin:0 1px 0 0;padding:1.5px 8px;display:inline-block;line-height:1.5;background:var(--badge)}
 #netdb .sybil_routerinfo th code,#netdb .leaseset th code{margin:4px 0;display:inline-block;vertical-align:middle}
 #netdb .version{margin:0 2px;padding:0 8px;vertical-align:middle}
@@ -1299,7 +1302,7 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 #currentPage .pageLink{font-weight:800;text-shadow:1px 1px 1px #000;box-shadow:0 0 0 1px #141,var(--btn_shadow_active)}
 #nextPage,#prevPage{padding:2px 12px 4px}
 #netdb.main{position:relative;contain:paint}
-#pagenav{margin:0 -11px -2px;padding:12px;position:sticky;bottom:0;left:-11px;right:-11px;text-align:center;border:var(--border);border-radius:0 0 3px 3px;box-shadow:var(--bevel);background:#000}
+#pagenav{margin:0 -11px -2px;padding:12px;position:sticky;bottom:0;left:-11px;right:-11px;text-align:center;border:var(--border);border-radius:0 0 3px 3px;box-shadow:var(--bevel);background:#000;animation:fade .3s ease .2s reverse both}
 #results{margin:3px auto;width:100%;display:block;font-size:110%;font-weight:600}
 #results.more{margin:-12px auto 8px;padding:4px 5% 3px;width:fit-content;text-shadow:1px 1px 1px #0008;border:1px solid #020;border-top:0;border-radius:0 0 4px 4px;box-shadow:var(--highlight);background:var(--glow_top),linear-gradient(#121,#001800,#010)}
 
@@ -2601,7 +2604,7 @@ table[id$="logs"] ul{margin:-6px 12px -5px -18px}
 #routerlogs ul,#criticallogs ul{margin:-4px 0;border:0}
 #servicelogs{color:var(--ink)}
 #service_logs{margin:0;padding:4px 6px;width:calc(100% - 12px);max-height:600px;white-space:pre-wrap;resize:none;font-weight:500;color:#8f935c;text-shadow:var(--textshadow)}
-#wrapperlogs{margin-bottom:10px;width:100%;table-layout:fixed}
+#wrapperlogs{margin-bottom:10px;width:100%;table-layout:fixed;contain:content}
 #wrapperlogs tr:nth-child(2){background:rgba(0,16,0,.3)}
 #wrapperlogs tr:last-child td{padding:0;position:relative}
 #toggleRefresh{margin:-6px 0 -10px;width:26px;height:32px;float:right;padding-left:10px;border-left:var(--border);background:var(--pause) no-repeat center center/14px}
@@ -3000,7 +3003,7 @@ h3[id*="jobs"]:first-of-type{margin-top:21px}
 td.optionsave{white-space:normal}
 .profilegroup::before{width:18px;height:14px}
 .statusnotes:last-child{margin-bottom:6px}
-.tab,.tab2{min-width:50px}
+.tab,.tab2{min-width:60px}
 .tab2{padding:4px 12px 5px}
 .tab a{padding:2px 14px 5px}
 .tunnel_local{margin-right:0;width:64px;line-height:1.08;box-sizing:border-box}
@@ -3178,7 +3181,7 @@ span#newtab{margin-top:4px}
 #contactserver{margin-bottom:-17px}
 #debug .confignav,#netdb .confignav{padding:0}
 #debug .tab,#debug .tab2,#netdb .tab,#netdb .tab2{margin-top:-1px}
-#netdb .tab,#netdb .tab2,#profiles .tab,#profiles .tab2{min-width:120px}
+#netdb .tab,#netdb .tab2,#profiles .tab,#profiles .tab2,#view_profile .tab,#view_profile .tab2{min-width:140px}
 #error500 #sb_logo img{margin-bottom:-5px}
 #error500 #warning2.sorry{margin-top:-1px}
 #floodfills th:first-child,#floodfills td:first-child{padding-right:3px;width:58px}
@@ -3319,7 +3322,7 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 }
 
 /* compact netdb search */
-#compactLookup{margin-top:0;padding:0 13px 3px;width:80%;max-width:740px;min-width:0;display:block;top:-1px;z-index:9999;border:var(--border_hard);border-radius: 0 0 4px 4px;box-shadow:3px 3px 3px #0006,var(--highlight);background: var(--badge)}
+#compactLookup{margin-top:0;padding:0 13px 3px;width:90%;max-width:900px;min-width:0;display:block;top:-1px;z-index:9999;border:var(--border_hard);border-radius: 0 0 4px 4px;box-shadow:3px 3px 3px #0006,var(--highlight);background: var(--badge)}
 #compactLookup table{box-shadow:var(--border_table),0 0 0 4px #000}
 #compactLookup input[type="text"]{width:100%;min-width:0}
 #compactLookup #netdblookup td:nth-child(2n){width:auto;max-width:140px}

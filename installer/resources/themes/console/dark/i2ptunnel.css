@@ -348,7 +348,7 @@ td#throttle,#clientAuthConfig{padding:0}
 #tunnelSSL:not(.iframed){margin-top:32px;margin-bottom:32px}
 
 /* initializing */
-#notReady,#down{padding:30px;width:400px;text-align:center;font-size:11pt;font-weight:700;box-shadow:var(--highlight),inset 0 0 4px 4px #0006,0 0 0 1px #000,0 0 0 2px #020,0 0 0 6px #030,0 0 0 8px #040;background:#020;background:repeating-linear-gradient(180deg,#0206 2px,#000a 4px),url(images/tunnelmanager.webp) no-repeat center center/cover}
+#notReady,#down{margin:5% auto;padding:70px 30px;width:400px;text-align:center;font-size:11pt;font-weight:700;box-shadow:var(--highlight),inset 0 0 4px 4px #0006,0 0 0 1px #000,0 0 0 2px #020,0 0 0 6px #030,0 0 0 8px #040;background:#020;background:repeating-linear-gradient(180deg,#0206 2px,#000a 4px),url(images/tunnelmanager.webp) no-repeat center center/cover}
 #down{padding:20px;200px;font-size:0}
 #down::after{width:40px;height:120px;display:inline-block;vertical-align:middle;background:var(--update) no-repeat center center;background-size:40px 40px;content:"";animation:linear spin 5s forwards infinite}
 

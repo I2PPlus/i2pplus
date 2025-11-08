@@ -287,9 +287,9 @@ tr:hover .listSize{border:1px solid #afafcf;color:var(--ink)}
 tr:hover .mailListFlagged img{opacity:1}
 tr:hover td.mailListSender{background:rgba(240,240,200,.4) var(--user) no-repeat 6px center/12px}
 tr:hover td.mailListSubject a{width:calc(100% - 2px);border-radius:2px 15px 15px 2px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,208,.9) 20%)}
-tr.list0:hover td,tr.list1:hover td{background-color:rgba(240,240,200,.4)}
-tr.list0:hover,tr.list1:hover{background-color:#ffd;box-shadow:var(--highlight)}
-tr.list0,tr.list1{background:var(--bg),var(--row)}
+.mailEntry:hover td{background-color:rgba(240,240,200,.4);cursor:pointer}
+.mailEntry:hover{background-color:#ffd;box-shadow:var(--highlight)}
+.mailEntry{background:var(--bg),var(--row)}
 th.mailListDate{text-align:left;padding-left:8px}
 th.mailListDelete:empty{min-width:24px}
 td{color:var(--ink);font-size:9pt;padding:1px 3px}
@@ -306,7 +306,7 @@ td.mailListSize{font-style:italic;box-shadow:var(--highlight)}
 td.mailListSubject a{padding:3px 0;display:inline-block}
 td span,td a,td b{vertical-align:middle;line-height:1}
 .iframed #mailbox{margin:0}
-.list0:hover td,.list1:hover td{color:var(--ink);box-shadow:inset 0 0 0 1px #ffe}
+.mailEntry td:hover{color:var(--ink);box-shadow:inset 0 0 0 1px #ffe}
 .listDate,.listTime,.listClock{display:inline-block;white-space:nowrap;text-align:right;font-size:85%}
 .listClock{margin-top:1px;padding-left:1px;min-width:18px;vertical-align:text-top;font-size:80%;text-align:left;text-transform:lowercase}
 .listDate{padding:2px;min-width:64px;text-align:right;font-weight:700;color:#5b5b71;border:var(--badgeborder);border-radius:2px;box-shadow:var(--highlight);opacity:.8;background:#f6f6ff;background:var(--badge)}
