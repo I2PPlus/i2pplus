@@ -53,14 +53,14 @@ import net.i2p.util.VersionComparator;
  */
 abstract class BuildRequestor {
 
-    // --- Configuration constants ---
+    // Configuration constants
     private static final String MIN_NEWTBM_VERSION = "0.9.51";
     private static final boolean SEND_VARIABLE = true;
     private static final int SHORT_RECORDS = 4;
     /** 5 records (~2600 bytes) fit well within 3 tunnel messages */
     private static final int MEDIUM_RECORDS = 5;
 
-    // --- Static immutable order lists for randomized record placement ---
+    // Static immutable order lists for randomized record placement
     private static final List<Integer> ORDER;
     private static final List<Integer> SHORT_ORDER;
     private static final List<Integer> MEDIUM_ORDER;
@@ -92,21 +92,22 @@ abstract class BuildRequestor {
      * Timeout for waiting for a full tunnel build reply.
      * Increased on slow devices.
      */
-    static final int REQUEST_TIMEOUT = SystemVersion.isSlow() ? 14_000 : 12_000;
+    static final int REQUEST_TIMEOUT = 15_000;
 
     /**
      * Shorter timeout for the first hop of an outbound build,
      * to trigger early failure detection.
      */
-    private static final int FIRST_HOP_TIMEOUT = SystemVersion.isSlow() ? 10_000 : 8_000;
+    private static final int FIRST_HOP_TIMEOUT = 10_000;
 
     /**
      * Base expiration for the TunnelBuildMessage itself.
      * Randomized per-message to obscure tunnel length.
      */
     private static final int BUILD_MSG_TIMEOUT = 40_000;
-
     private static final int MAX_CONSECUTIVE_CLIENT_BUILD_FAILS = 8;
+    private static final int EXPLORATORY_BACKOFF = 200;
+    private static final int CLIENT_BACKOFF = 50;
 
     // Proposal 168 bandwidth property keys
     static final String PROP_MIN_BW = "m";
@@ -187,16 +188,16 @@ abstract class BuildRequestor {
         TunnelInfo pairedTunnel = selectPairedTunnel(ctx, pool, cfg, exec, log);
         if (pairedTunnel == null) {
             // No tunnel available — not even exploratory. This is severe.
-            log.warn("Tunnel build failed: No paired or exploratory tunnel available for " + cfg);
+            log.warn("Tunnel build failed -> No paired or exploratory tunnel available for " + cfg);
+            int ms = settings.isExploratory() ? EXPLORATORY_BACKOFF : CLIENT_BACKOFF;
+            try {Thread.sleep(ms);} catch (InterruptedException ie) {}
             exec.buildComplete(cfg, OTHER_FAILURE);
-            // Do NOT sleep here — avoid blocking job threads.
-            // Let the executor or pool handle backoff.
             return false;
         }
 
         I2NPMessage msg = createTunnelBuildMessage(ctx, pool, cfg, pairedTunnel, exec);
         if (msg == null) {
-            log.warn("Tunnel build failed: Could not create TunnelBuildMessage for " + cfg);
+            log.warn("Tunnel build failed -> Could not create TunnelBuildMessage for " + cfg);
             exec.buildComplete(cfg, OTHER_FAILURE);
             return false;
         }
@@ -252,7 +253,7 @@ abstract class BuildRequestor {
                 }
                 // Client SKM missing but garlic reply expected → fall through to expl
                 if (log.shouldInfo()) {
-                    log.info("Client SKM unavailable for garlic reply; falling back to exploratory for " + cfg);
+                    log.info("Client SKM unavailable for garlic reply -> Falling back to exploratory for " + cfg);
                 }
             }
         } else {
@@ -306,17 +307,17 @@ abstract class BuildRequestor {
                 if (enc != null) {
                     msg = enc;
                 } else if (log.shouldWarn()) {
-                    log.warn("Failed to garlic-wrap inbound TunnelBuildMessage to " + ibgw);
+                    log.warn("Failed to garlic-wrap Inbound TunnelBuildMessage to " + ibgw);
                 }
             } else if (log.shouldWarn()) {
-                log.warn("No RouterInfo for " + ibgw + "; cannot wrap inbound TunnelBuildMessage");
+                log.warn("No RouterInfo for " + ibgw + " -> Cannot wrap Inbound TunnelBuildMessage");
             }
         }
 
         if (log.shouldInfo()) {
-            log.info("Sending inbound TunnelBuildRequest [MsgID " + msg.getUniqueId() + "] via " + pairedTunnel +
+            log.info("Sending Inbound TunnelBuildRequest [MsgID " + msg.getUniqueId() + "] via " + pairedTunnel +
                      " to [" + ibgw.toBase64().substring(0, 6) + "] for " + cfg +
-                     "; awaiting reply [MsgID " + cfg.getReplyMessageId() + "]");
+                     " -> Awaiting reply [MsgID " + cfg.getReplyMessageId() + "]...");
         }
         ctx.tunnelDispatcher().dispatchOutbound(msg, pairedTunnel.getSendTunnelId(0), ibgw);
     }
@@ -327,7 +328,7 @@ abstract class BuildRequestor {
         Hash nextHop = cfg.getPeer(1);
         if (log.shouldInfo()) {
             log.info("Sending outbound TunnelBuildRequest direct to [" + nextHop.toBase64().substring(0, 6) + "] for " + cfg +
-                     "; reply via " + pairedTunnel + " [MsgID " + msg.getUniqueId() + "]");
+                     " -> Reply via " + pairedTunnel + " [MsgID " + msg.getUniqueId() + "]");
         }
 
         // Add fuzz to expiration to obscure tunnel structure
@@ -352,24 +353,28 @@ abstract class BuildRequestor {
             if (replySKM == null) {
                 replySKM = ctx.sessionKeyManager(); // fallback for exploratory
             }
-            if (replySKM != null) {
-                if (replySKM instanceof RatchetSKM) {
-                    ((RatchetSKM) replySKM).tagsReceived(ots.key, ots.rtag, 2 * BUILD_MSG_TIMEOUT);
-                } else if (replySKM instanceof MuxedSKM) {
-                    ((MuxedSKM) replySKM).tagsReceived(ots.key, ots.rtag, 2 * BUILD_MSG_TIMEOUT);
-                } else if (replySKM instanceof MuxedPQSKM) {
-                    ((MuxedPQSKM) replySKM).tagsReceived(ots.key, ots.rtag, 2 * BUILD_MSG_TIMEOUT);
-                } else {
-                    log.warn("Unsupported SessionKeyManager for garlic reply: " + replySKM.getClass());
-                }
-                cfg.setGarlicReplyKeys(null);
+            if (replySKM == null) {
+                log.warn("No SessionKeyManager available for garlic reply to: " + cfg);
+                exec.buildComplete(cfg, OTHER_FAILURE);
+                return;
             }
+            if (replySKM instanceof RatchetSKM) {
+                ((RatchetSKM) replySKM).tagsReceived(ots.key, ots.rtag, 2 * BUILD_MSG_TIMEOUT);
+            } else if (replySKM instanceof MuxedSKM) {
+                ((MuxedSKM) replySKM).tagsReceived(ots.key, ots.rtag, 2 * BUILD_MSG_TIMEOUT);
+            } else if (replySKM instanceof MuxedPQSKM) {
+                ((MuxedPQSKM) replySKM).tagsReceived(ots.key, ots.rtag, 2 * BUILD_MSG_TIMEOUT);
+            } else {
+                log.warn("Unsupported SessionKeyManager for garlic reply: " + replySKM.getClass());
+            }
+            cfg.setGarlicReplyKeys(null);
         }
 
         try {
             ctx.outNetMessagePool().add(outMsg);
         } catch (RuntimeException e) {
             log.error("Failed to send TunnelBuildMessage", e);
+            exec.buildComplete(cfg, OTHER_FAILURE);
         }
     }
 
@@ -377,7 +382,7 @@ abstract class BuildRequestor {
      * Checks if a router supports ShortTunnelBuildMessage (ECIES + version >= 0.9.51).
      */
     private static boolean supportsShortTBM(RouterContext ctx, Hash routerHash) {
-        RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(routerHash);
+        final RouterInfo ri = ctx.netDb().lookupRouterInfoLocally(routerHash);
         if (ri == null) return false;
         if (ri.getIdentity().getPublicKey().getType() != EncType.ECIES_X25519) return false;
         String v = ri.getVersion();
@@ -412,7 +417,7 @@ abstract class BuildRequestor {
         // Validate all hops support ShortTBM if we plan to use it
         if (useShortTBM) {
             int start = isInbound ? 0 : 1;
-            int end = cfg.getLength() - (isInbound ? 1 : 0);
+            int end = cfg.getLength();
             for (int i = start; i < end; i++) {
                 if (!supportsShortTBM(ctx, cfg.getPeer(i))) {
                     useShortTBM = false;
