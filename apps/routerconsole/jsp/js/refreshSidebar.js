@@ -7,6 +7,7 @@ import { newHosts } from "/js/newHosts.js";
 import { miniGraph } from "/js/miniGraph.js";
 
 let alwaysUpdate = new Set();
+let autoRefreshInterval = null;
 let autoRefreshScheduled = false;
 let connectionStatusTimeout;
 let debounceTimeoutId = null;
@@ -77,31 +78,20 @@ async function start() {
 }
 
 function startAutoRefresh() {
-  if (autoRefreshScheduled) return;
-  autoRefreshScheduled = true;
-  setTimeout(() => {
-    autoRefreshScheduled = false;
-    scheduleNextAutoRefresh();
-  }, 200);
+  if (autoRefreshInterval) return;
+
+  autoRefreshInterval = setInterval(() => {
+    if (!document.hidden && navigator.onLine && refreshActive && !isRefreshing) {
+      refreshSidebar();
+    }
+  }, getRefreshInterval());
 }
 
-function scheduleNextAutoRefresh() {
-  clearTimeout(refreshTimeout);
-  const now = Date.now();
-  let interval = getRefreshInterval();
-  if (lastRefreshTime === 0) {
-    lastRefreshTime = now;
-  } else {
-    const elapsed = now - lastRefreshTime;
-    const timeUntilNext = interval - (elapsed % interval);
-    refreshTimeout = setTimeout(() => {
-      lastRefreshTime = Date.now();
-      refreshSidebar();
-    }, timeUntilNext);
-    return;
+function stopAutoRefresh() {
+  if (autoRefreshInterval) {
+    clearInterval(autoRefreshInterval);
+    autoRefreshInterval = null;
   }
-  lastRefreshTime = now;
-  refreshTimeout = setTimeout(refreshSidebar, interval);
 }
 
 export async function refreshSidebar(force = false) {
@@ -244,34 +234,18 @@ window.addEventListener("message", (event) => {
 function isSidebarVisible() {
   const target = document.getElementById("xhr");
   if (!target) return;
+
   const observer = new MutationObserver(() => {
     if (document.hidden || isRefreshing) return;
+    clearTimeout(debounceTimeoutId);
     debounceTimeoutId = setTimeout(() => {
-      const now = Date.now();
-      const elapsed = now - lastRefreshTime;
-      let interval = getRefreshInterval();
-      if (elapsed < interval) {
-        if (debounceTimeoutId) clearTimeout(debounceTimeoutId);
-        debounceTimeoutId = setTimeout(() => {
-          lastRefreshTime = Date.now();
-          requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-              refreshSidebar(true);
-            });
-          });
-          scheduleNextAutoRefresh();
-        }, interval - elapsed);
-      } else {
-        lastRefreshTime = now;
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            refreshSidebar(true);
-          });
-        });
-        scheduleNextAutoRefresh();
-      }
-    }, 100);
+      isRefreshing = true;
+      refreshSidebar(true).finally(() => {
+        isRefreshing = false;
+      });
+    }, getRefreshInterval());
   });
+
   observer.observe(target, {
     childList: true,
     subtree: true,
@@ -279,16 +253,11 @@ function isSidebarVisible() {
 }
 
 function handleStatus() {
-  lastRefreshTime = 0;
-  if (!document.hidden && !isRefreshing) {
-    isRefreshing = true;
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        refreshSidebar(true);
-      });
-    });
-  }
-  startAutoRefresh();
+  if (document.hidden || isRefreshing) return;
+  isRefreshing = true;
+  refreshSidebar(true).finally(() => {
+    isRefreshing = false;
+  });
 }
 
 function initSidebar() {
