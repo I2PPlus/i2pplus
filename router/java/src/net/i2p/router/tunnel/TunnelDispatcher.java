@@ -506,7 +506,7 @@ public class TunnelDispatcher implements Service {
             } else {
                 // Somewhat common, probably due to somebody with large clock skew?
                 _context.messageHistory().droppedTunnelDataMessageUnknown(msg.getUniqueId(), msg.getTunnelId());
-                if (_log.shouldInfo)
+                if (_log.shouldInfo())
                     _log.info("No matching participant/endpoint for [TunnelID " + msg.getTunnelId() + "] expiring in " +
                                DataHelper.formatDuration(msg.getMessageExpiration()-_context.clock().now()) +
                                "\n* Current participants: " + _participants.size() + " / Outbound endpoints: " + _outboundEndpoints.size());
@@ -549,7 +549,7 @@ public class TunnelDispatcher implements Service {
             _context.statManager().addRateData("tunnel.dispatchInbound", 1);
         } else {
             _context.messageHistory().droppedTunnelGatewayMessageUnknown(msg.getUniqueId(), id.getTunnelId());
-            if (_log.shouldInfo)
+            if (_log.shouldInfo())
                 _log.info("No matching tunnel for [TunnelID " + id.getTunnelId() +
                           "]\n* Gateway message expires: " +
                           DataHelper.formatDuration(msg.getMessageExpiration() - before) + "/" +
