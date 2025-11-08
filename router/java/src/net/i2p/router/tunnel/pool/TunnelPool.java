@@ -182,9 +182,11 @@ public class TunnelPool {
         boolean avoidZeroHop = !_settings.getAllowZeroHop();
 
         long now = _context.clock().now();
+        long uptime = _context.router().getUptime();
         synchronized (_tunnels) {
-            if (_tunnels.isEmpty() && _log.shouldWarn()) {_log.warn(toString() + " -> No tunnels available");}
-            else if (!_tunnels.isEmpty()) {
+            if (_tunnels.isEmpty() && _log.shouldWarn() && uptime > 3*60*1000 && !shouldSuppressWarning()) {
+              _log.warn(toString() + " -> No tunnels available");
+            } else if (!_tunnels.isEmpty()) {
                 // if there are nonzero hop tunnels and the zero hop tunnels are fallbacks,
                 // avoid the zero hop tunnels
                 TunnelInfo backloggedTunnel = null;
@@ -193,7 +195,7 @@ public class TunnelPool {
                         _lastSelectedIdx++;
                         if (_lastSelectedIdx >= _tunnels.size()) {_lastSelectedIdx = 0;}
                         TunnelInfo info = _tunnels.get(_lastSelectedIdx);
-                        if (info.getLength() > 1 && info.getExpiration() > now) {
+                        if (info.getLength() > 1 && info.getExpiration() > now + 60*1000) {
                             // avoid outbound tunnels where the 1st hop is backlogged
                             if (_settings.isInbound() || !_context.commSystem().isBacklogged(info.getPeer(1))) {
                                 return info;
@@ -209,7 +211,7 @@ public class TunnelPool {
                 // ok, either we are ok using zero hop tunnels, or only fallback tunnels remain.  pick 'em randomly
                 for (int i = 0; i < _tunnels.size(); i++) {
                     TunnelInfo info = _tunnels.get(i);
-                    if (info.getExpiration() > now) {
+                    if (info.getExpiration() > now + 60*1000) {
                         // avoid outbound tunnels where the 1st hop is backlogged
                         if (_settings.isInbound() || info.getLength() <= 1 ||
                             !_context.commSystem().isBacklogged(info.getPeer(1))) {
@@ -221,7 +223,7 @@ public class TunnelPool {
                 // return a random backlogged tunnel
                 if (backloggedTunnel != null) {return backloggedTunnel;}
                 if (_log.shouldWarn()) {
-                    _log.warn(toString() + ": after " + _tunnels.size() + " tries, no unexpired tunnels were found: " + _tunnels);
+                    _log.warn(toString() + ": after " + _tunnels.size() + " tries -> No unexpired tunnels were found: " + _tunnels);
                 }
             }
         }
@@ -260,7 +262,9 @@ public class TunnelPool {
         if (rv != null) {
             _context.statManager().addRateData("tunnel.matchLease", closestTo.equals(rv.getFarEnd()) ? 1 : 0);
         } else {
-            if (_log.shouldWarn()) {_log.warn(toString() + " -> No tunnels available");}
+            long uptime = _context.router().getUptime();
+            if (_log.shouldWarn() && uptime > 3*60*1000) {
+                _log.warn(toString() + " -> No tunnels available");}
         }
         return rv;
     }
@@ -334,17 +338,17 @@ public class TunnelPool {
             if (fails > 4) {
                 if (fails > 12) {
                     rv = 1;
-                    if (_log.shouldWarn()) {
+                    if (_log.shouldWarn() && !shouldSuppressWarning()) {
                         _log.warn("Limiting to 1 tunnel after " + fails + " consecutive build timeouts on " + this);
                     }
                 } else if (fails > 8) {
                     rv = Math.max(1, rv / 3);
-                    if (_log.shouldWarn()) {
+                    if (_log.shouldWarn() && !shouldSuppressWarning()) {
                         _log.warn("Limiting to " + rv + " tunnels after " + fails + " consecutive build timeouts on " + this);
                     }
                 } else if (rv > 2) {
                     rv--;
-                    if (_log.shouldWarn()) {
+                    if (_log.shouldWarn() && !shouldSuppressWarning()) {
                         _log.warn("Limiting to " + rv + " tunnels after " + fails + " consecutive build timeouts on " + this);
                     }
                 }
@@ -467,13 +471,17 @@ public class TunnelPool {
      *  Add to the pool.
      */
     protected void addTunnel(TunnelInfo info) {
+        if (info == null) {return;}
+        long now = _context.clock().now();
         if (_log.shouldDebug()) {_log.debug(toString() + " -> Adding tunnel " + info);}
         LeaseSet ls = null;
         synchronized (_tunnels) {
-            _tunnels.add(info);
-            if (_settings.isInbound() && !_settings.isExploratory()) {ls = locked_buildNewLeaseSet();}
+            if (info.getExpiration() > now + 60*1000) {
+                _tunnels.add(info);
+                if (_settings.isInbound() && !_settings.isExploratory()) {ls = locked_buildNewLeaseSet();}
+            }
         }
-        if (ls != null) {requestLeaseSet(ls);}
+        if (info.getExpiration() > now + 60*1000 && ls != null) {requestLeaseSet(ls);}
     }
 
     /**
@@ -1117,12 +1125,13 @@ public class TunnelPool {
 
             if ((peers == null) || (peers.isEmpty())) {
                 // No peers to build the tunnel with, and the pool is refusing 0 hop tunnels
+                long uptime = _context.router().getUptime();
                 if (peers == null) {
-                    if (_log.shouldWarn()) {
+                    if (_log.shouldWarn() && uptime > 3*60*1000) {
                         _log.warn("No peers to put in the new tunnel! selectPeers returned null.. boo! hiss!");
                     }
                 } else {
-                    if (_log.shouldWarn()) {
+                    if (_log.shouldWarn() && uptime > 3*60*1000) {
                         _log.warn("No peers to put in the new tunnel! selectPeers returned an empty list?!");
                     }
                 }
@@ -1233,6 +1242,30 @@ public class TunnelPool {
                paired.testSuccessful(rtt);
            } else {paired.tunnelFailed();}
        }
+    }
+
+    private boolean shouldSuppressWarning() {
+        if (_settings.isExploratory()) {
+            return false;
+        }
+
+        Hash dest = _settings.getDestination();
+        TunnelPool other = null;
+
+        if (_settings.isInbound()) {
+            other = _manager.getOutboundPool(dest);
+        } else {
+            other = _manager.getInboundPool(dest);
+        }
+
+        if (other == null) {
+            return false;
+        }
+
+        int currentCount = size();
+        int otherCount = other.size();
+
+        return currentCount >= 1 && otherCount >= 1;
     }
 
     @Override

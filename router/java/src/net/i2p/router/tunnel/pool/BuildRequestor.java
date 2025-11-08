@@ -90,15 +90,14 @@ abstract class BuildRequestor {
 
     /**
      * Timeout for waiting for a full tunnel build reply.
-     * Increased on slow devices.
      */
-    static final int REQUEST_TIMEOUT = 20_000;
+    static final int REQUEST_TIMEOUT = 30_000;
 
     /**
      * Shorter timeout for the first hop of an outbound build,
      * to trigger early failure detection.
      */
-    private static final int FIRST_HOP_TIMEOUT = 15_000;
+    private static final int FIRST_HOP_TIMEOUT = 25_000;
 
     /**
      * Base expiration for the TunnelBuildMessage itself.
@@ -188,7 +187,10 @@ abstract class BuildRequestor {
         TunnelInfo pairedTunnel = selectPairedTunnel(ctx, pool, cfg, exec, log);
         if (pairedTunnel == null) {
             // No tunnel available — not even exploratory. This is severe.
-            log.warn("Tunnel build failed -> No paired or exploratory tunnel available for " + cfg);
+            long uptime = ctx.router().getUptime();
+            if (uptime > 3*60*1000) {
+                log.warn("Tunnel build failed -> No paired or exploratory tunnel available for " + cfg);
+            }
             int ms = settings.isExploratory() ? EXPLORATORY_BACKOFF : CLIENT_BACKOFF;
             try {Thread.sleep(ms);} catch (InterruptedException ie) {}
             exec.buildComplete(cfg, OTHER_FAILURE);
