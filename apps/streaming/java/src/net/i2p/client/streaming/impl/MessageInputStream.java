@@ -42,6 +42,9 @@ import net.i2p.util.SystemVersion;
  *
  */
 class MessageInputStream extends InputStream {
+    private static final int INITIAL_CAPACITY = 4;
+    private static final int MIN_READY_BUFFERS = SystemVersion.isSlow() ? 128 : 1024;
+
     private final Log _log;
     private final List<ByteArray> _readyDataBlocks; // Ordered list of received consecutive data blocks ready for reading
     private int _readyDataBlockIndex;               // Index within first block of the next byte to read
@@ -67,8 +70,8 @@ class MessageInputStream extends InputStream {
     // Sentinel ByteArray used for out-of-order duplicates, no data.
     private static final ByteArray DUMMY_BA = new ByteArray(null);
 
-    // Minimum number of ready buffers before buffer limiting applies
-    private static final int MIN_READY_BUFFERS = SystemVersion.isSlow() ? 32 : 128;
+    // Running total of available bytes in ready blocks
+    private int _readyDataSize = 0;
 
     /**
      * Constructs the MessageInputStream with configured buffer parameters.
@@ -80,8 +83,8 @@ class MessageInputStream extends InputStream {
      */
     public MessageInputStream(I2PAppContext ctx, int maxMessageSize, int maxWindowSize, int maxBufferSize) {
         _log = ctx.logManager().getLog(MessageInputStream.class);
-        _readyDataBlocks = new ArrayList<>(4);
-        _notYetReadyBlocks = new HashMap<>(4);
+        _readyDataBlocks = new ArrayList<>(INITIAL_CAPACITY);
+        _notYetReadyBlocks = new HashMap<>(INITIAL_CAPACITY);
         _highestReadyBlockId = -1;
         _highestBlockId = -1;
         _readTimeout = I2PSocketOptionsImpl.DEFAULT_READ_TIMEOUT;
@@ -140,21 +143,17 @@ class MessageInputStream extends InputStream {
 
         synchronized (_dataLock) {
             if (messageId <= _highestReadyBlockId) {
-                // Always accept duplicates that have been received before
                 return true;
             }
 
             if (_locallyClosed) {
-                // Accept only duplicates if locally closed
                 return _notYetReadyBlocks.containsKey(messageId);
             }
 
-            // Before we have MIN_READY_BUFFERS, accept all
             if (messageId < MIN_READY_BUFFERS) {
                 return true;
             }
 
-            // Rough check assuming maximum block sizes against buffer size limits
             if ((_readyDataBlocks.size() + _notYetReadyBlocks.size()) * _maxMessageSize < _maxBufferSize) {
                 return true;
             }
@@ -163,7 +162,7 @@ class MessageInputStream extends InputStream {
                 return true;
             }
 
-            int available = _maxBufferSize - getTotalReadySize();
+            int available = _maxBufferSize - _readyDataSize;
             if (available <= 0) {
                 if (_log.shouldWarn()) {
                     _log.warn("Dropping message " + messageId + ", buffer size exceeded: available=" + available);
@@ -181,7 +180,6 @@ class MessageInputStream extends InputStream {
                 return false;
             }
 
-            // Limit accepted in-order blocks to avoid memory exhaustion
             if (_readyDataBlocks.size() >= 4 * _maxWindowSize) {
                 if (_log.shouldWarn()) {
                     _log.warn("Dropping message " + messageId + ", too many ready blocks");
@@ -295,13 +293,13 @@ class MessageInputStream extends InputStream {
                 _highestBlockId = messageId;
             }
 
-            // If next sequential message, add to ready blocks and promote any contiguous out-of-order blocks
             if (_highestReadyBlockId + 1 == messageId) {
                 if (!_locallyClosed && payload != null && payload.getValid() > 0) {
                     if (_log.shouldDebug()) {
                         _log.debug("Adding message ID " + messageId + " to ready blocks");
                     }
                     _readyDataBlocks.add(payload);
+                    _readyDataSize += payload.getValid();
                 }
                 _highestReadyBlockId = messageId;
                 long cur = _highestReadyBlockId + 1;
@@ -309,6 +307,7 @@ class MessageInputStream extends InputStream {
                 while ((ba = _notYetReadyBlocks.remove(cur)) != null) {
                     if (ba.getData() != null && ba.getValid() > 0) {
                         _readyDataBlocks.add(ba);
+                        _readyDataSize += ba.getValid();
                     }
                     if (_log.shouldDebug()) {
                         _log.debug("Promoted out-of-order block " + cur + " to ready");
@@ -318,7 +317,6 @@ class MessageInputStream extends InputStream {
                 }
                 _dataLock.notifyAll();
             } else {
-                // Store out-of-order message or dummy if locally closed to track IDs for ACK management
                 if (_locallyClosed) {
                     if (_log.shouldInfo()) {
                         _log.info("Received out-of-order message ID " + messageId + " on closed stream");
@@ -416,7 +414,6 @@ class MessageInputStream extends InputStream {
                                 _dataLock.wait(readTimeout);
                                 throwAnyError();
                             } else {
-                                // Non-blocking call, no data available
                                 if (shouldDebug) {
                                     _log.debug("Nonblocking read returning zero bytes");
                                 }
@@ -440,13 +437,11 @@ class MessageInputStream extends InputStream {
                         }
                     }
                 } else if (_readyDataBlocks.isEmpty()) {
-                    // No more data but some bytes already read, return count
                     if (shouldDebug) {
                         _log.debug("No ready data blocks available, returning " + totalRead);
                     }
                     return totalRead;
                 } else {
-                    // Copy bytes from head ready block
                     ByteArray cur = _readyDataBlocks.get(0);
                     int available = cur.getValid() - _readyDataBlockIndex;
                     int toRead = Math.min(available, length - totalRead);
@@ -456,9 +451,9 @@ class MessageInputStream extends InputStream {
                     totalRead += toRead;
                     _readTotal += toRead;
 
-                    // Remove block from ready list when fully read
                     if (_readyDataBlockIndex >= cur.getValid()) {
                         _readyDataBlockIndex = 0;
+                        _readyDataSize -= cur.getValid();
                         _readyDataBlocks.remove(0);
                     }
 
@@ -481,26 +476,13 @@ class MessageInputStream extends InputStream {
      */
     @Override
     public int available() throws IOException {
-        int numBytes = 0;
         synchronized (_dataLock) {
             if (_locallyClosed) {
                 throw new IOException("Input stream closed");
             }
             throwAnyError();
-
-            for (int i = 0; i < _readyDataBlocks.size(); i++) {
-                ByteArray cur = _readyDataBlocks.get(i);
-                numBytes += cur.getValid();
-                // For first block, subtract bytes already read
-                if (i == 0) {
-                    numBytes -= _readyDataBlockIndex;
-                }
-            }
+            return Math.max(0, _readyDataSize - _readyDataBlockIndex);
         }
-        if (_log.shouldDebug()) {
-            _log.debug("available(): " + numBytes);
-        }
-        return numBytes;
     }
 
     /**
@@ -514,15 +496,7 @@ class MessageInputStream extends InputStream {
             if (_locallyClosed) {
                 return 0;
             }
-            int numBytes = 0;
-            for (int i = 0; i < _readyDataBlocks.size(); i++) {
-                ByteArray cur = _readyDataBlocks.get(i);
-                numBytes += cur.getValid();
-                if (i == 0) {
-                    numBytes -= _readyDataBlockIndex;
-                }
-            }
-            return numBytes;
+            return _readyDataSize - _readyDataBlockIndex;
         }
     }
 
@@ -545,8 +519,9 @@ class MessageInputStream extends InputStream {
      * @param timeout read timeout in milliseconds
      */
     public void setReadTimeout(int timeout) {
-        if (_log.shouldDebug())
+        if (_log.shouldDebug()) {
             _log.debug("Changing read timeout from " + _readTimeout + " to " + timeout + ": " + hashCode());
+        }
         _readTimeout = timeout;
     }
 
@@ -559,31 +534,18 @@ class MessageInputStream extends InputStream {
         synchronized (_dataLock) {
             if (_log.shouldDebug()) {
                 StringBuilder sb = new StringBuilder(128);
-                sb.append("close(): ready bytes=");
-                long available = 0;
-                for (ByteArray ba : _readyDataBlocks) {
-                    available += ba.getValid();
-                }
-                available -= _readyDataBlockIndex;
-                sb.append(available);
-                sb.append(", ready blocks=").append(_readyDataBlocks.size());
-                sb.append(", not ready blocks=");
-                long notAvailable = 0;
-                for (ByteArray ba : _notYetReadyBlocks.values()) {
-                    notAvailable += ba.getValid();
-                }
-                sb.append(_notYetReadyBlocks.size());
-                sb.append(", not ready bytes=").append(notAvailable);
-                sb.append(", highest ready block=").append(_highestReadyBlockId);
-                sb.append(", hashCode=").append(hashCode());
-
+                sb.append("close(): ready bytes=").append(_readyDataSize - _readyDataBlockIndex)
+                  .append(", ready blocks=").append(_readyDataBlocks.size())
+                  .append(", not ready blocks=").append(_notYetReadyBlocks.size())
+                  .append(", highest ready block=").append(_highestReadyBlockId)
+                  .append(", hashCode=").append(hashCode());
                 _log.debug(sb.toString());
             }
+
             _readyDataBlocks.clear();
-            // Null data for all not-ready blocks to allow GC
-            for (ByteArray ba : _notYetReadyBlocks.values()) {
-                ba.setData(null);
-            }
+            _readyDataSize = 0;
+            _notYetReadyBlocks.clear();
+
             _locallyClosed = true;
             _dataLock.notifyAll();
         }
