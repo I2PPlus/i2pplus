@@ -94,6 +94,10 @@ public class TunnelDispatcher implements Service {
     private final Object _joinParticipantLock = new Object();
     private final AtomicInteger _allocatedBW = new AtomicInteger();
 
+    /** Recently expired tunnel IDs to suppress warnings */
+    private final ConcurrentHashMap<TunnelId, Long> _recentlyExpired = new ConcurrentHashMap<>();
+    private static final long RECENT_EXPIRY_WINDOW_MS = 5_000; // 5 seconds
+
     /** for shouldDropParticipatingMessage() */
     enum Location {OBEP, PARTICIPANT, IBGW}
 
@@ -458,18 +462,32 @@ public class TunnelDispatcher implements Service {
         boolean removed = (null != _participatingConfig.remove(recvId));
         if (removed) {
             if (_log.shouldInfo())
-                _log.info("Removing Participating tunnel config... " + cfg /* , new Exception() */ );
+                _log.info("Removing Participating tunnel config... " + cfg);
         } else {
             // this is normal, this can get called twice
             if (_log.shouldDebug())
-                _log.debug("Participating in tunnel, but no longer listed in participatingConfig? " + cfg); /* , new Exception() */
+                _log.debug("Participating in tunnel -> No longer listed in config... " + cfg);
         }
 
         removed = (null != _participants.remove(recvId));
-        if (removed) return;
+        if (removed) {
+            addRecentlyExpired(recvId);
+            return;
+        }
         removed = (null != _inboundGateways.remove(recvId));
-        if (removed) return;
-        _outboundEndpoints.remove(recvId);
+        if (removed) {
+            addRecentlyExpired(recvId);
+            return;
+        }
+        removed = (null != _outboundEndpoints.remove(recvId));
+        if (removed) {
+            addRecentlyExpired(recvId);
+            return;
+        }
+    }
+
+    private void addRecentlyExpired(TunnelId id) {
+        _recentlyExpired.put(id, _context.clock().now());
     }
 
     /**
@@ -519,8 +537,16 @@ public class TunnelDispatcher implements Service {
 
     /** We are the inbound tunnel gateway, so encrypt it as necessary and forward it on. */
     public void dispatch(TunnelGatewayMessage msg) {
-        long before = _context.clock().now();
+        // Check if this is a recently expired tunnel
+
         TunnelId id = msg.getTunnelId();
+        Long added = _recentlyExpired.get(id);
+        if (added != null && _context.clock().now() - added < RECENT_EXPIRY_WINDOW_MS) {
+            _context.messageHistory().droppedTunnelDataMessageUnknown(msg.getUniqueId(), id.getTunnelId());
+            return; // silently drop
+        }
+
+        long before = _context.clock().now();
         TunnelGateway gw = _inboundGateways.get(id);
         I2NPMessage submsg = msg.getMessage();
         // The contained message is nulled out when written
@@ -827,7 +853,7 @@ public class TunnelDispatcher implements Service {
             getContext().jobQueue().addJob(LeaveTunnel.this);
         }
 
-        private static final int LEAVE_BATCH_TIME = 10*1000;
+        private static final int LEAVE_BATCH_TIME = 1000;
 
         public void add(HopConfig cfg) {
             _configs.offer(cfg);
@@ -840,7 +866,7 @@ public class TunnelDispatcher implements Service {
         public String getName() { return "Expire Participating Tunnels"; }
         public void runJob() {
             HopConfig cur = null;
-            long now = getContext().clock().now() + LEAVE_BATCH_TIME; // leave all expiring in next 10 sec
+            long now = getContext().clock().now() + LEAVE_BATCH_TIME; // leave all expiring in next sec
             long nextTime = now + 10*60*1000;
             while ((cur = _configs.peek()) != null) {
                 long exp = cur.getExpiration() + (3 * Router.CLOCK_FUDGE_FACTOR / 2) + LEAVE_BATCH_TIME;
@@ -851,11 +877,14 @@ public class TunnelDispatcher implements Service {
                     remove(cur);
                     _allocatedBW.addAndGet(0 - cur.getAllocatedBW());
                 } else {
-                    if (exp < nextTime)
-                        nextTime = exp;
+                    if (exp < nextTime) {nextTime = exp;}
                     break;
                 }
             }
+            // Clean up old entries in _recentlyExpired
+            long expiryCutoff = now - RECENT_EXPIRY_WINDOW_MS;
+            _recentlyExpired.entrySet().removeIf(e -> e.getValue() < expiryCutoff);
+
             getTiming().setStartAfter(nextTime);
             getContext().jobQueue().addJob(LeaveTunnel.this);
         }

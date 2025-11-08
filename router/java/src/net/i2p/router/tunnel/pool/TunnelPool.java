@@ -576,6 +576,7 @@ public class TunnelPool {
      *  inversely related to the tunnel length
      */
     private void tellProfileFailed(TunnelInfo cfg) {
+        long uptime = _context.router().getUptime();
         int len = cfg.getLength();
         if (len < 2) {return;}
         int start = 0;
@@ -583,13 +584,17 @@ public class TunnelPool {
         if (cfg.isInbound()) {end--;}
         else {start++;}
         for (int i = start; i < end; i++) {
-            int pct = 100/(len-1);
+            int maxBlame = 30; // cap at 30%
+            int pct = Math.min(100 / (len - 1), maxBlame);
+            if (uptime < 5*60*1000) {
+               pct /=2;
+            }
             // if inbound, it's probably the gateway's fault
             if (cfg.isInbound() && len > 2) {
                 if (i == start) {pct *= 2;}
                 else {pct /= 2;}
             }
-            if (_log.shouldWarn()) {
+            if (_log.shouldWarn() && uptime > 5*60*1000) {
                 _log.warn(toString() + " -> Blaming [" + cfg.getPeer(i).toBase64().substring(0,6) + "] -> " + pct + '%');
             }
             _context.profileManager().tunnelFailed(cfg.getPeer(i), pct);
