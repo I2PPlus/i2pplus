@@ -1802,64 +1802,62 @@ class NetDbRenderer {
            .append("\">").append(identity.getPublicKey().getType().toString())
            .append("</a></span></td></tr>\n");
         if (!isUnreachable) {
-            buf.append("<tr><td><b>")
-               .append(_t("Addresses"))
-               .append(":</b></td><td colspan=2 class=netdb_addresses><ul>");
             Collection<RouterAddress> addresses = routerInfo.getAddresses();
-            byte[] ipAddress = TransportImpl.getIP(routerHash);
-            if (addresses.isEmpty()) {
-                buf.append(_t("n/a"));
-                if (ipAddress != null) {
-                    _context.commSystem().queueLookup(ipAddress);
-                }
-            } else {
-                List<RouterAddress> listAddresses = new ArrayList<>(addresses);
-                if (listAddresses.size() > 1) {
-                    listAddresses.sort(new RAComparator());
-                }
-                boolean hasSSU = false;
-                boolean hasNTCP = false;
-                int introducerTagCount = 0;
-                for (RouterAddress address : listAddresses) {
-                    String transportStyle = address.getTransportStyle();
-                    if (transportStyle.startsWith("SSU")) hasSSU = true;
-                    if (transportStyle.startsWith("NTCP")) hasNTCP = true;
-                    Map<Object, Object> optionsMap = address.getOptionsMap();
-                    for (Map.Entry<Object, Object> entry : optionsMap.entrySet()) {
-                        String key = (String) entry.getKey();
-                        if (key.toLowerCase().startsWith("itag")) {
-                            introducerTagCount++;
-                        }
+            if (addresses != null && !addresses.isEmpty()) {
+                buf.append("<tr><td><b>")
+                   .append(_t("Addresses"))
+                   .append(":</b></td><td colspan=2 class=netdb_addresses><ul>");
+                byte[] ipAddress = TransportImpl.getIP(routerHash);
+                if (ipAddress != null) {_context.commSystem().queueLookup(ipAddress);}
+                else {
+                    List<RouterAddress> listAddresses = new ArrayList<>(addresses);
+                    if (listAddresses.size() > 1) {
+                        listAddresses.sort(new RAComparator());
                     }
-                    StringBuilder details = new StringBuilder();
-                    for (Map.Entry<Object, Object> entry : optionsMap.entrySet()) {
-                        String key = (String) entry.getKey();
-                        String value = (String) entry.getValue();
-                        if (key.equalsIgnoreCase("host")) {
-                            details.append("<span class=\"netdb_info host\">")
-                                   .append("<a title=\"Show all routers with this address in the NetDb\" ");
-                            if (value.contains(":")) {
-                                details.append("href=\"/netdb?ipv6=").append(value.length() > 8 ? value.substring(0, 4) : value);
-                            } else {
-                                details.append("href=\"/netdb?ip=").append(value);
+                    boolean hasSSU = false;
+                    boolean hasNTCP = false;
+                    int introducerTagCount = 0;
+                    for (RouterAddress address : listAddresses) {
+                        String transportStyle = address.getTransportStyle();
+                        if (transportStyle.startsWith("SSU")) hasSSU = true;
+                        if (transportStyle.startsWith("NTCP")) hasNTCP = true;
+                        Map<Object, Object> optionsMap = address.getOptionsMap();
+                        for (Map.Entry<Object, Object> entry : optionsMap.entrySet()) {
+                            String key = (String) entry.getKey();
+                            if (key.toLowerCase().startsWith("itag")) {
+                                introducerTagCount++;
                             }
-                            details.append("\">").append(value).append("</a></span><span class=colon>:</span>");
-                        } else if (key.equalsIgnoreCase("port")) {
-                            details.append("<span class=\"netdb_info port\">")
-                                   .append("<a title=\"Show all routers with this port in the NetDb\" ")
-                                   .append("href=\"/netdb?port=").append(value)
-                                   .append("\">").append(value).append("</a></span>");
+                        }
+                        StringBuilder details = new StringBuilder();
+                        for (Map.Entry<Object, Object> entry : optionsMap.entrySet()) {
+                            String key = (String) entry.getKey();
+                            String value = (String) entry.getValue();
+                            if (key.equalsIgnoreCase("host")) {
+                                details.append("<span class=\"netdb_info host\">")
+                                       .append("<a title=\"Show all routers with this address in the NetDb\" ");
+                                if (value.contains(":")) {
+                                    details.append("href=\"/netdb?ipv6=").append(value.length() > 8 ? value.substring(0, 4) : value);
+                                } else {
+                                    details.append("href=\"/netdb?ip=").append(value);
+                                }
+                                details.append("\">").append(value).append("</a></span><span class=colon>:</span>");
+                            } else if (key.equalsIgnoreCase("port")) {
+                                details.append("<span class=\"netdb_info port\">")
+                                       .append("<a title=\"Show all routers with this port in the NetDb\" ")
+                                       .append("href=\"/netdb?port=").append(value)
+                                       .append("\">").append(value).append("</a></span>");
+                            }
+                        }
+                        if (details.length() > 0) {
+                            buf.append("<li><b class=netdb_transport>")
+                               .append(transportStyle.replace("2", ""))
+                               .append("</b> ")
+                               .append(details)
+                               .append("</li>");
                         }
                     }
-                    if (details.length() > 0) {
-                        buf.append("<li><b class=netdb_transport>")
-                           .append(transportStyle.replace("2", ""))
-                           .append("</b> ")
-                           .append(details)
-                           .append("</li>");
-                    }
+                    buf.append("</ul></td></tr>\n");
                 }
-                buf.append("</ul></td></tr>\n");
             }
         }
         List<String> statsLines = new ArrayList<>();
