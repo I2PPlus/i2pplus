@@ -198,7 +198,7 @@ public class TestJob extends JobImpl {
 
     /** How long we allow tests to run for before failing them */
     private int getTestPeriod() {
-        if (_outTunnel == null || _replyTunnel == null) {return 20*1000;}
+        if (_outTunnel == null || _replyTunnel == null) {return 30*1000;}
         /*
          * Give it 2.5s per hop + 5s (2 hop tunnel = length 3, so this will be 15s for two 2-hop tunnels)
          * Minimum is 7.5s (since a 0-hop could be the expl. tunnel, but only >= 1-hop client tunnels are tested)
@@ -216,7 +216,7 @@ public class TestJob extends JobImpl {
                 return delay + (2500 * (_outTunnel.getLength() + _replyTunnel.getLength()));
             }
         }
-        return 20*1000;
+        return 30*1000;
     }
 
     private void scheduleRetest() {scheduleRetest(false);}
