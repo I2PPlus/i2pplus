@@ -84,7 +84,7 @@ class BuildHandler implements Runnable {
     private static final int MIN_QUEUE = SystemVersion.isSlow() ? 8 : 16;
     private static final int MAX_QUEUE = SystemVersion.isSlow() ? 32 : 64;
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
-    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 10*1000;
+    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 15*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
     private static final int MIN_LOOKUP_LIMIT = SystemVersion.isSlow() ? 8 : 16; // limits on concurrent next-hop RI lookup
     private static final int MAX_LOOKUP_LIMIT = SystemVersion.isSlow() ? 32 : 64;
@@ -100,7 +100,7 @@ class BuildHandler implements Runnable {
     private static final long MAX_REQUEST_FUTURE = 5*60*1000;
     private static final long MAX_REQUEST_AGE = 65*60*1000; /** must be > 1 hour due to rounding down */
     private static final long MAX_REQUEST_AGE_ECIES = 8*60*1000;
-    private static final long JOB_LAG_LIMIT_TUNNEL = SystemVersion.isSlow() ? 1000 : 500;
+    private static final long JOB_LAG_LIMIT_TUNNEL = SystemVersion.isSlow() ? 500 : 200;
     private static final long[] RATES = {60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000};
 
     /**

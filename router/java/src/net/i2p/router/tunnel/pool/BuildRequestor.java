@@ -92,13 +92,13 @@ abstract class BuildRequestor {
      * Timeout for waiting for a full tunnel build reply.
      * Increased on slow devices.
      */
-    static final int REQUEST_TIMEOUT = 15_000;
+    static final int REQUEST_TIMEOUT = 20_000;
 
     /**
      * Shorter timeout for the first hop of an outbound build,
      * to trigger early failure detection.
      */
-    private static final int FIRST_HOP_TIMEOUT = 10_000;
+    private static final int FIRST_HOP_TIMEOUT = 15_000;
 
     /**
      * Base expiration for the TunnelBuildMessage itself.
