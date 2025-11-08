@@ -217,7 +217,7 @@ class BuildHandler implements Runnable {
      */
     private synchronized void adaptTimeout() {
         long uptime = _context.router().getUptime();
-        if (uptime < 3*60*1000) {return;} // allow initial tunnel builds with minimal friction
+        if (uptime < 5*60*1000) {return;} // allow initial tunnel builds with minimal friction
 
         double failureRate = _recentOutcomes.getFailureRate();
         int previousTimeout = _currentNextHopTimeout;
@@ -721,13 +721,14 @@ class BuildHandler implements Runnable {
             int limit = Math.max(MIN_LOOKUP_LIMIT, Math.min(MAX_LOOKUP_LIMIT, numTunnels * PERCENT_LOOKUP_LIMIT / 100));
             long uptime = _context.router().getUptime();
             long maxQueueLag = _context.jobQueue().getMaxLag();
-            boolean highload = SystemVersion.getCPULoadAvg() > 95 && maxQueueLag > 500;
+            boolean highload = SystemVersion.getCPULoadAvg() > 95 || maxQueueLag > 200;
+            boolean isSlow = SystemVersion.isSlow();
+            if (isSlow) {highload = SystemVersion.getCPULoadAvg() > 95 || maxQueueLag > 500;}
 
-            if (uptime < 60*60*1000 && !highload) {
-                if (numTunnels < 500 && SystemVersion.isSlow()) {limit = 20;}
-                if (numTunnels < 500 && !SystemVersion.isSlow()) {limit = 30;}
-                else if (numTunnels < 1000 && !SystemVersion.isSlow()) {limit = 20;}
-                else if (limit > 10) {limit = 10;}
+            if (uptime < 15*60*1000 && !highload) {
+                if (numTunnels < 500) {limit = isSlow ? 20 : 50;}
+                else if (numTunnels < 1000) {limit = isSlow ? 15 : 40;}
+                else if (limit > 20) {limit = 20;}
             }
 
             boolean lucky;
