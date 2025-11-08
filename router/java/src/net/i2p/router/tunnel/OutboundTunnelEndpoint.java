@@ -122,7 +122,7 @@ class OutboundTunnelEndpoint {
             }
 
             if (_log.shouldInfo()) {
-                _log.info("Outbound tunnel " + _config + " received a full message:\n*" + msg +
+                _log.info("Outbound tunnel " + _config + " received a full message:\n* " + msg +
                           " to be forwarded on to [" + toRouter.toBase64().substring(0,6) + "]" +
                           (toTunnel != null ? ":" + toTunnel.getTunnelId() : ""));
             }
