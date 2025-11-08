@@ -2855,7 +2855,7 @@ public class UDPTransport extends TransportImpl {
             int found = _introManager.pickInbound(current, isIPv6, options, PUBLIC_RELAY_COUNT);
             if (found > 0) {
                 if (_log.shouldInfo())
-                    _log.info("ipv6? " + isIPv6 + " picked introducers: " + found);
+                    _log.info("Selected " + (isIPv6 ? "IPv6 " : "") + "introducers: " + found);
                 long now = _context.clock().now();
                 if (isIPv6)
                     _v6IntroducersSelectedOn = now;
@@ -2863,8 +2863,9 @@ public class UDPTransport extends TransportImpl {
                     _v4IntroducersSelectedOn = now;
                 introducersIncluded = true;
             } else {
-                if (_log.shouldWarn())
-                    _log.warn("ipv6? " + isIPv6 + " no introducers");
+                // logged elsewhere
+                //if (_log.shouldWarn())
+                //    _log.warn("ipv6? " + isIPv6 + " no introducers");
             }
         }
 
@@ -2952,10 +2953,10 @@ public class UDPTransport extends TransportImpl {
             _needsRebuild = false;
             return addr;
         } else {
-            if (_log.shouldWarn())
-                _log.warn("Wanted to rebuild our SSU address, but couldn't specify either the direct or indirect info (needs introducers? "
-                           + introducersRequired +
-                           " IPv6? " + isIPv6 + ')');
+            long uptime = _context.router().getUptime();
+            if (_log.shouldWarn() && uptime > 3*60*1000) {
+                _log.warn("Failed to rebuild our " + (isIPv6 ? "IPv6 " : "") + "SSU address" + (introducersRequired ? " -> Need introducers" : ""));
+            }
             _needsRebuild = true;
             // save the external address, even if we didn't publish it
             if (port > 0 && host != null) {

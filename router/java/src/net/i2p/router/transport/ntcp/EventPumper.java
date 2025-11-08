@@ -1054,7 +1054,7 @@ class EventPumper implements Runnable {
                 if (debug) {
                     _log.debug("[NTCP2] Failed outbound connection to " + con.getRemotePeer(), e);
                 } else if (warn) {
-                    _log.warn("[NTCP2] Failed outbound connection to " + con.getRemotePeer() + " -> " + safeMessage(e));
+                    _log.warn("[NTCP2] Failed outbound connection to " + con.getRemotePeer());
                 }
                 con.closeOnTimeout("Connect failed: " + e.getMessage(), e);
                 _transport.markUnreachable(con.getRemotePeer().calculateHash());
@@ -1066,7 +1066,7 @@ class EventPumper implements Runnable {
                 if (debug) {
                     _log.debug("[NTCP2] Unexpected error during outbound registration for " + con.getRemotePeer(), e);
                 } else if (warn) {
-                    _log.warn("[NTCP2] Unexpected error during outbound registration for " + con.getRemotePeer() + " -> " + safeMessage(e));
+                    _log.warn("[NTCP2] Unexpected error during outbound registration for " + con.getRemotePeer());
                 }
                 con.close();
             }
