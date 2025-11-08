@@ -139,12 +139,6 @@ public class SimpleScheduler {
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
             rv.setName(_name +  ' ' + (++_count) + '/' + _threads);
-// Uncomment this to test threadgrouping, but we should be all safe now that the constructor preallocates!
-//            String name = rv.getThreadGroup().getName();
-//            if(!name.equals("main")) {
-//                (new Exception("OWCH! DAMN! Wrong ThreadGroup `" + name +"', `" + rv.getName() + "'")).printStackTrace();
-//            }
-            rv.setPriority(Thread.MAX_PRIORITY - 1);
             rv.setDaemon(true);
             return rv;
         }

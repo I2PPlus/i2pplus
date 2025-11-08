@@ -93,7 +93,6 @@ class NTCPSendFinisher {
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
             rv.setName("NTCPTXFinis " + _count.incrementAndGet() + '/' + THREADS);
-            rv.setPriority(Thread.MAX_PRIORITY - 1);
             rv.setDaemon(true);
             return rv;
         }

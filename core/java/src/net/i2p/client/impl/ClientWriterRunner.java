@@ -45,7 +45,6 @@ class ClientWriterRunner implements Runnable {
      */
     public void startWriting() {
         Thread t = new I2PAppThread(this, "I2CP Client Writer " + __Id.incrementAndGet(), true);
-        t.setPriority(Thread.MAX_PRIORITY);
         t.start();
     }
 

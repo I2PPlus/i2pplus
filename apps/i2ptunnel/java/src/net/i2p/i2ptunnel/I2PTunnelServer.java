@@ -578,10 +578,9 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
                 Thread t = new Thread(runnable);
                 t.setName("Server:" + remotePort);
                 t.setDaemon(true);
-                t.setPriority(Thread.MAX_PRIORITY - 1);
                 return t;
             },
-            new ThreadPoolExecutor.CallerRunsPolicy()
+            new ThreadPoolExecutor.DiscardPolicy()
         );
 
         TunnelControllerGroup tcg = TunnelControllerGroup.getInstance();

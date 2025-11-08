@@ -150,7 +150,6 @@ public class SimpleTimer2 {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
             rv.setName(_name + ' ' + _count.incrementAndGet() + '/' + _threadsMax);
             rv.setDaemon(true);
-            rv.setPriority(Thread.NORM_PRIORITY - 2);
             return rv;
         }
     }

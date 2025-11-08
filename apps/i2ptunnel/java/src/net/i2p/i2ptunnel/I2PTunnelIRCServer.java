@@ -164,8 +164,6 @@ public class I2PTunnelIRCServer extends I2PTunnelServer implements Runnable {
             Thread t = new I2PTunnelRunner(s, socket, slock, null, DataHelper.getUTF8(modifiedRegistration),
                                            null, (I2PTunnelRunner.FailCallback) null);
             // run in the unlimited client pool
-            //t.start();
-            t.setPriority(Thread.MAX_PRIORITY);
             _clientExecutor.execute(t);
         } catch (RegistrationException ex) {
             try {

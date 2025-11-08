@@ -143,9 +143,6 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
 
             Thread t1 = new StreamForwarder(in, i2pout, true);
             Thread t2 = new StreamForwarder(i2pin, out, false);
-
-            t1.setPriority(Thread.MAX_PRIORITY);
-            t2.setPriority(Thread.MAX_PRIORITY);
             t1.start();
             t2.start();
 
