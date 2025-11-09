@@ -14,7 +14,7 @@
     if (isNaN(numA) && isNaN(numB)) return 0;
     if (isNaN(numA)) return 1;  // b comes first
     if (isNaN(numB)) return -1; // a comes first
-    return numA - numB;         // ascending sort
+    return numB - numA;         // descending sort
   };
 
   // Register the numeric sorter with Tablesort
