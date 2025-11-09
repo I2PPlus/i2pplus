@@ -91,20 +91,20 @@ abstract class BuildRequestor {
     /**
      * Timeout for waiting for a full tunnel build reply.
      */
-    static final int REQUEST_TIMEOUT = 30_000;
+    static final int REQUEST_TIMEOUT = 60_000;
 
     /**
      * Shorter timeout for the first hop of an outbound build,
      * to trigger early failure detection.
      */
-    private static final int FIRST_HOP_TIMEOUT = 25_000;
+    private static final int FIRST_HOP_TIMEOUT = 20_000;
 
     /**
      * Base expiration for the TunnelBuildMessage itself.
      * Randomized per-message to obscure tunnel length.
      */
-    private static final int BUILD_MSG_TIMEOUT = 40_000;
-    private static final int MAX_CONSECUTIVE_CLIENT_BUILD_FAILS = 8;
+    private static final int BUILD_MSG_TIMEOUT = 45_000;
+    private static final int MAX_CONSECUTIVE_CLIENT_BUILD_FAILS = 30;
     private static final int EXPLORATORY_BACKOFF = 200;
     private static final int CLIENT_BACKOFF = 50;
 
@@ -231,6 +231,7 @@ abstract class BuildRequestor {
         boolean isInbound = settings.isInbound();
         Hash farEnd = cfg.getFarEnd();
         TunnelManagerFacade mgr = ctx.tunnelManager();
+        long uptime = ctx.router().getUptime();
 
         // Use exploratory tunnels for exploratory pools or if paired disabled (never)
         if (settings.isExploratory() || !usePairedTunnels()) {
@@ -259,7 +260,7 @@ abstract class BuildRequestor {
                 }
             }
         } else {
-            if (log.shouldWarn()) {
+            if (log.shouldWarn() && uptime > 5*60*1000 && fails > 2) {
                 log.warn(fails + " consecutive build timeouts for " + cfg + " → Forcing exploratory tunnel");
             }
         }
@@ -556,6 +557,7 @@ abstract class BuildRequestor {
         @Override
         public void runJob() {
             _exec.buildComplete(_cfg, OTHER_FAILURE);
+            getContext().profileManager().tunnelFailed(_cfg.getPeer(1), 500);
             getContext().profileManager().tunnelTimedOut(_cfg.getPeer(1));
             getContext().statManager().addRateData("tunnel.buildFailFirstHop", 1);
         }

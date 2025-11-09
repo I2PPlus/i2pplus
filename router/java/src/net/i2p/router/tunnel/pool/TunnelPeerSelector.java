@@ -235,8 +235,8 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         // reduce load on floodfills
         String caps = info.getCapabilities();
         boolean isFF = caps.indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0;
-        if (isFF && caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0) {return true;}
-        if (isExploratory && isFF && ctx.random().nextInt(4) != 0) {return true;}
+        //if (isFF && caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0) {return true;}
+        if (isExploratory && isFF && ctx.random().nextInt(10) != 0) {return true;}
 
         if (filterUnreachable(isInbound, isExploratory)) {
             if (caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0) {return true;}
@@ -348,44 +348,61 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
     private static final String MIN_VERSION = "0.9.60";
 
     /**
-     *  Should the peer be excluded based on its published caps?
+     * Should the peer be excluded based on its published caps, crypto, and version?
      *
-     *  Warning, this is also called by ProfileOrganizer.isSelectable()
+     * @param peer The peer to evaluate
+     * @param excl Characters representing capabilities we want to exclude
+     * @return true if the peer should be excluded
      */
     private static boolean shouldExclude(RouterInfo peer, String excl) {
         String cap = peer.getCapabilities();
+        RouterIdentity ident = peer.getIdentity();
+
+        // Exclude peers with weak signing keys
+        if (ident.getSigningPublicKey().getType() == SigType.DSA_SHA1) {
+            return true;
+        }
+
+        // Require modern encryption (ECIES-X25519)
+        if (ident.getPublicKey().getType() != EncType.ECIES_X25519) {
+            return true;
+        }
+
+        // Check for explicitly excluded capabilities
         for (int j = 0; j < excl.length(); j++) {
             if (cap.indexOf(excl.charAt(j)) >= 0) {
                 return true;
             }
         }
-        int maxLen = 0;
-        if (cap.indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0)
-            maxLen++;
-        if (cap.indexOf(Router.CAPABILITY_REACHABLE) >= 0)
-            maxLen++;
-        if (cap.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0)
-            maxLen++;
-        if (cap.length() <= maxLen)
-            return true;
-        RouterIdentity ident = peer.getIdentity();
-        if (ident.getSigningPublicKey().getType() == SigType.DSA_SHA1)
-            return true;
-        // Shouldn't be any ElG routers MIN_VERSION or higher, but just to make sure,
-        // and prevent large build messages.
-        // Restricting to 25519 may also allow us to remove some of the ElG tunnel build code.
-        EncType type = ident.getPublicKey().getType();
-        if (type != EncType.ECIES_X25519)
-            return true;
 
-        // otherwise, it contains flags we aren't trying to focus on,
-        // so don't exclude it based on published capacity
+        // Avoid degraded peers
+        if (cap.contains("E") || cap.contains("G")) {
+            return true;
+        }
 
-        // minimum version check
+        // Count meaningful capabilities
+        int knownCaps = 0;
+        if (cap.contains("F")) knownCaps++;
+        if (cap.contains("R")) knownCaps++;
+        if (cap.contains("L") || cap.contains("M") || cap.contains("N") || cap.contains("O") ||
+            cap.contains("P") || cap.contains("Q") || cap.contains("X")) knownCaps++;
+
+        // Exclude peers with only one meaningful capability (e.g. only "F" or only "R")
+        if (knownCaps < 2 && cap.length() <= knownCaps) {
+            return true;
+        }
+
+        // Exclude outdated versions
         String v = peer.getVersion();
-        // quick check to skip the comparator
-        if (v.equals(CoreVersion.PUBLISHED_VERSION)) {return false;}
-        if (VersionComparator.comp(v, MIN_VERSION) < 0) {return true;}
+        if (v.equals(CoreVersion.PUBLISHED_VERSION)) {
+            return false;
+        }
+
+        if (VersionComparator.comp(v, MIN_VERSION) < 0) {
+            return true;
+        }
+
+        // Peer is acceptable
         return false;
     }
 

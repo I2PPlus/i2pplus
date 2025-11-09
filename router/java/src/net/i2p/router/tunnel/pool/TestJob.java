@@ -310,7 +310,7 @@ public class TestJob extends JobImpl {
         long now = ctx.clock().now();
 
         if (asap) {
-            if (_cfg.getExpiration() > now + 60_000) {
+            if (_cfg.getExpiration() > now + 120_000) {
                 requeue(TEST_DELAY / 4 + ctx.random().nextInt(TEST_DELAY / 4));
             }
         } else {

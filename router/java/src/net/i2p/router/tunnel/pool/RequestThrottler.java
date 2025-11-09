@@ -111,14 +111,14 @@ class RequestThrottler {
                           "CPU is under sustained high load");
         }
         else if (isLTier && isUnreachable && isOld) {
-            if (_log.shouldWarn() && !context.banlist().isBanlisted(h)) {
-                _log.warn("Banning for 1h and disconnecting from [" + h.toBase64().substring(0,6) + "] -> LU / " + v);
+            if (_log.shouldInfo() && !context.banlist().isBanlisted(h)) {
+                _log.info("Banning for 1h and disconnecting from [" + h.toBase64().substring(0,6) + "] -> LU / " + v);
             }
             context.banlist().banlistRouter(h, " <b>➜</b> Old and slow (" + v + " / LU)", null, null, context.clock().now() + 60*60*1000);
             context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
         } else if (isOld && (isUnreachable || isLowShare) && shouldBlockOldRouters) {
-            if (_log.shouldWarn()) {
-                _log.warn("Dropping all connections from [" + h.toBase64().substring(0,6) + "] -> Unreachable / Slow / " + v);
+            if (_log.shouldInfo()) {
+                _log.info("Dropping all connections from [" + h.toBase64().substring(0,6) + "] -> Unreachable / Slow / " + v);
             }
             context.simpleTimer2().addEvent(new Disconnector(h), 11*60*1000);
         } else if (rv && enableThrottle) {

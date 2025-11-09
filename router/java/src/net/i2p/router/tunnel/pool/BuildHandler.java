@@ -46,19 +46,8 @@ import net.i2p.util.VersionComparator;
 import static net.i2p.router.tunnel.pool.BuildExecutor.Result.*;
 
 /**
- * Handle the received tunnel build message requests and replies, including sending responses,
- * updating tunnel lists, and adjusting the next-hop send timeout adaptively.
- *
- * <p>This class includes an adaptive next-hop send timeout mechanism that:
- * <ul>
- * <li>Starts at 25 seconds</li>
- * <li>Increases slowly (500ms) on high failure rate (>15%)</li>
- * <li>Decreases slowly (by percentage of gap to min) on low failure rate (<10%)</li>
- * <li>Timeout range is bounded between 8s and 30s</li>
- * </ul>
- *
- * <p>The timeout is updated after each send (success or failure) to ensure responsiveness
- * to network conditions while maintaining stability during transient issues.
+ * Handle the received tunnel build message requests and replies,
+ * including sending responses and updating tunnel lists.
  */
 class BuildHandler implements Runnable {
     private final RouterContext _context;
@@ -85,205 +74,11 @@ class BuildHandler implements Runnable {
     private static final int MIN_QUEUE = isSlow ? 32 : 128;
     private static final int MAX_QUEUE = isSlow ? 64 : 512;
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
-    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 30*1000;
+    private static final int NEXT_HOP_LOOKUP_TIMEOUT = 15*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
     private static final int MIN_LOOKUP_LIMIT = isSlow ? 4 : 16; // limits on concurrent next-hop RI lookup
     private static final int MAX_LOOKUP_LIMIT = isSlow ? 16 : 64;
     private static final int PERCENT_LOOKUP_LIMIT = isSlow ? 10 : 25; // limit lookups to this % of current participating tunnels
-
-    /**
-     * Initial next-hop send timeout (12 seconds).
-     * This is the minimum allowed timeout.
-     */
-    private static final int MIN_NEXT_HOP_TIMEOUT = 12 * 1000;
-    /**
-     * Maximum allowed timeout (30 seconds).
-     * Prevents excessive delays due to repeated failures.
-     */
-    private static final int MAX_NEXT_HOP_TIMEOUT = 30 * 1000;
-    /** Step size for timeout increase */
-    private static final int TIMEOUT_STEP_INCREASE = 1000;
-    /**
-     * Step size for timeout decrease (minimum).
-     * Used when 20% of the gap to MIN_NEXT_HOP_TIMEOUT is smaller than this step.
-     * @since 0.9.68+
-     */
-    private static final int TIMEOUT_STEP_DECREASE = 200;
-    /**
-     * Number of recent outcomes to consider for timeout adaptation.
-     * A larger window makes the system more stable but slower to adapt.
-     * @since 0.9.68+
-     */
-    private static final int ADAPT_WINDOW_SIZE = 10;
-    /**
-     * Failure rate threshold above which the timeout is increased.
-     * If the recent failure rate exceeds this value (>10%), the timeout will
-     * increase slowly (by TIMEOUT_STEP_INCREASE) to allow more time for next-hop communication.
-     * @since 0.9.68+
-     */
-   private static final double THRESHOLD_INCREASE = 0.10;
-    /**
-     * Failure rate threshold below which the timeout is decreased.
-     * If the recent failure rate falls below this value (<5%), the timeout will
-     * decrease slowly (by a percentage of the gap to MIN_NEXT_HOP_TIMEOUT) to improve responsiveness.
-     * @since 0.9.68+
-     */
-   private static final double THRESHOLD_DECREASE = 0.05;
-    /**
-     * Hysteresis margin to prevent oscillation.
-     * Timeout will only increase if failure rate is at least this much above THRESHOLD_DECREASE.
-     * Prevents bouncing between increasing and decreasing on small fluctuations.
-     * @since 0.9.68+
-     */
-    private static final double HYSTERESIS_MARGIN = 0.1; // 10%
-
-    /**
-     * Minimum failure rate to justify increasing timeout.
-     * Prevents increasing if we're still within hysteresis range of a recent decrease.
-     */
-    private static final double HYSTERETIC_THRESHOLD_INCREASE = THRESHOLD_DECREASE + HYSTERESIS_MARGIN;
-
-    /**
-     * Maximum failure rate to justify decreasing timeout.
-     * Prevents decreasing if we're within hysteresis range of a recent increase.
-     */
-    private static final double HYSTERETIC_THRESHOLD_DECREASE = THRESHOLD_INCREASE - HYSTERESIS_MARGIN;
-
-    /**
-     * Current dynamic timeout used when sending to the next hop.
-     * Replaces the old static NEXT_HOP_SEND_TIMEOUT.
-     */
-    private volatile int _currentNextHopTimeout = MAX_NEXT_HOP_TIMEOUT;
-
-    /**
-     * Circular buffer tracking recent send outcomes (true = success assumed, false = failure recorded).
-     * Used to compute failure rate for timeout adaptation.
-     */
-    private final CircularBooleanQueue _recentOutcomes = new CircularBooleanQueue(ADAPT_WINDOW_SIZE);
-
-    /**
-     * Helper class to maintain a fixed-size FIFO window of boolean outcomes.
-     */
-    private static class CircularBooleanQueue {
-        private final boolean[] buffer;
-        private int index = 0;
-        private int size = 0;
-
-        CircularBooleanQueue(int capacity) {
-            buffer = new boolean[capacity];
-        }
-
-        synchronized void add(boolean success) {
-            buffer[index] = success;
-            index = (index + 1) % buffer.length;
-            if (size < buffer.length) size++;
-        }
-
-        synchronized double getFailureRate() {
-            if (size == 0) return 0.0;
-            int failures = 0;
-            for (int i = 0; i < size; i++) {
-                if (!buffer[i]) failures++;
-            }
-            return (double) failures / size;
-        }
-    }
-
-    /**
-     * Adjust the next-hop send timeout based on recent send outcomes (success or failure).
-     * This method implements an **asymmetric adaptation strategy with hysteresis**:
-     *
-     * <ul>
-     *   <li><b>Slow timeout increase</b> when failure rate exceeds the upper threshold
-     *       (HYSTERETIC_THRESHOLD_INCREASE). This prevents premature timeout growth
-     *       during transient failures.</li>
-     *
-     *   <li><b>Fast timeout decrease</b> when failure rate drops below the lower threshold
-     *       (HYSTERETIC_THRESHOLD_DECREASE). This allows rapid recovery during stable periods.</li>
-     *
-     *   <li><b>No change</b> when the failure rate is within the hysteresis band between
-     *       thresholds. This prevents oscillation and promotes stability during borderline conditions.</li>
-     * </ul>
-     *
-     * <p>Timeout changes are bounded by MIN_NEXT_HOP_TIMEOUT and MAX_NEXT_HOP_TIMEOUT.
-     * The timeout decreases by 20% of the gap to the minimum, and increases in fixed steps.
-     *
-     * <p>This method is called after every send (success or failure) to adapt to current
-     * network conditions while avoiding unnecessary adjustments due to noise or short-term fluctuations.
-     *
-     * <p><b>Thread-safe</b> via synchronization.
-     *
-     * @since 0.9.68+
-     */
-    private synchronized void adaptTimeout() {
-        long uptime = _context.router().getUptime();
-        if (uptime < 5*60*1000) {return;} // allow initial tunnel builds with minimal friction
-
-        double failureRate = _recentOutcomes.getFailureRate();
-        int previousTimeout = _currentNextHopTimeout;
-
-        if (failureRate > HYSTERETIC_THRESHOLD_INCREASE && _currentNextHopTimeout < MAX_NEXT_HOP_TIMEOUT) {
-            // Increase timeout more aggressively
-            _currentNextHopTimeout = Math.min(MAX_NEXT_HOP_TIMEOUT, _currentNextHopTimeout + TIMEOUT_STEP_INCREASE);
-        } else if (failureRate < HYSTERETIC_THRESHOLD_DECREASE && _currentNextHopTimeout > MIN_NEXT_HOP_TIMEOUT) {
-            // Decrease timeout conservatively
-            int gap = _currentNextHopTimeout - MIN_NEXT_HOP_TIMEOUT;
-            int decrease = (int) (gap * 0.2); // 20% of gap
-            decrease = Math.max(TIMEOUT_STEP_DECREASE, decrease); // enforce minimum step
-            _currentNextHopTimeout -= decrease;
-            if (_currentNextHopTimeout < MIN_NEXT_HOP_TIMEOUT) {
-                _currentNextHopTimeout = MIN_NEXT_HOP_TIMEOUT;
-            }
-        }
-        // else: within hysteresis range → do nothing
-
-        // Only log if timeout actually changed
-        if (_currentNextHopTimeout != previousTimeout) {
-            int delta = _currentNextHopTimeout - previousTimeout;
-            String direction = delta > 0 ? "Increased" : "Decreased";
-            double newTimeoutSec = _currentNextHopTimeout / 1000.0;
-            double failureRatePercent = failureRate * 100;
-
-            // Format timeout to remove .0 if it's an integer
-            String formattedTimeout;
-            if (newTimeoutSec == (int) newTimeoutSec) {
-                formattedTimeout = String.format("%d", (int) newTimeoutSec);
-            } else {
-                formattedTimeout = String.format("%.1f", newTimeoutSec);
-            }
-
-            String logMessage = direction + " next-hop timeout to " + formattedTimeout +
-                                "s -> Failure rate: " + String.format("%.1f%%", failureRatePercent);
-
-            if (delta > 0 && _log.shouldWarn()) {
-                _log.warn(logMessage);
-            } else if (delta < 0 && _log.shouldInfo()) {
-                _log.info(logMessage);
-            }
-        }
-    }
-
-    /* @return current next hop timeout */
-    public int getCurrentNextHopTimeout() {
-        return _currentNextHopTimeout;
-    }
-
-    /**
-     * Log a failure outcome and adapt the timeout.
-     */
-    private synchronized void rejectAndAdapt() {
-        _recentOutcomes.add(false);
-        adaptTimeout();
-    }
-
-    /**
-     * Log a success outcome and adapt the timeout.
-     */
-    private synchronized void acceptAndAdapt() {
-        _recentOutcomes.add(true);
-        adaptTimeout();
-    }
-
     private static final long MAX_REQUEST_FUTURE = 5*60*1000;
     private static final long MAX_REQUEST_AGE = 65*60*1000; /** must be > 1 hour due to rounding down */
     private static final long MAX_REQUEST_AGE_ECIES = 8*60*1000;
@@ -379,7 +174,7 @@ class BuildHandler implements Runnable {
         } else if (ibz) {_explState = ExplState.IB;}
         else if (obz) {_explState = ExplState.OB;}
         if (_log.shouldInfo()) {
-            _log.info("Starting next-hop timeout at " + (_currentNextHopTimeout / 1000.0) + "s");
+            _log.info("Starting next-hop timeout at " + (NEXT_HOP_LOOKUP_TIMEOUT / 1000.0) + "s");
         }
     }
 
@@ -831,13 +626,11 @@ class BuildHandler implements Runnable {
             if (ri != null) {
                 handleReq(ri, _state, _req, _nextPeer);
                 getContext().statManager().addRateData("tunnel.buildLookupSuccess", 1);
-                acceptAndAdapt();
             } else {
                 if (_log.shouldInfo()) {
                     _log.info("Lookup deferred, but we couldn't find [" + _nextPeer.toBase64().substring(0,6) + "] ? " + _req);
                 }
                 getContext().statManager().addRateData("tunnel.buildLookupSuccess", 0);
-                rejectAndAdapt();
             }
             if (!_decremented.getAndSet(true)) {
                 if (_currentLookups.decrementAndGet() < 0) {
@@ -921,7 +714,6 @@ class BuildHandler implements Runnable {
                 _context.banlist().banlistRouter(from, " <b> -> </b> Hostile Tunnel Request (IBGW+OBEP)", null, null, System.currentTimeMillis() + bantime);
                 if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (Inbound Gateway & Outbound Endpoint)");}
             } else if (shouldLog) {_log.warn("Dropping HOSTILE Tunnel Request from UNKNOWN -> IBGW+OBEP");}
-            rejectAndAdapt();
             return;
         }
         if (ourId <= 0 || ourId > TunnelId.MAX_ID_VALUE || nextId <= 0 || nextId > TunnelId.MAX_ID_VALUE) {
@@ -931,7 +723,6 @@ class BuildHandler implements Runnable {
                 _context.banlist().banlistRouter(from, " <b> -> </b> Hostile Tunnel Request (BAD Tunnel ID)", null, null, System.currentTimeMillis() + bantime);
                 if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (BAD TunnelID)");}
             } else if (shouldLog) {_log.warn("Dropping HOSTILE Tunnel Request from UNKNOWN -> BAD Tunnel ID");}
-            rejectAndAdapt();
             return;
         }
         // Loop checks
@@ -945,7 +736,6 @@ class BuildHandler implements Runnable {
                 _context.banlist().banlistRouter(from, " <b> -> </b> Hostile Tunnel Request (double hop)", null, null, System.currentTimeMillis() + bantime);
                 _log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (We are 2 hops in a row!)");
             } else if (shouldLog) {_log.warn("Dropping HOSTILE Tunnel Request from UNKNOWN -> We are the next hop");}
-            rejectAndAdapt();
             return;
         }
         if (!isInGW) {
@@ -959,7 +749,6 @@ class BuildHandler implements Runnable {
                     _context.banlist().banlistRouter(from, " <b> -> </b> Hostile Tunnel Request (previous hop)", null, null, System.currentTimeMillis() + bantime);
                     if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (We are the previous hop!)");}
                 } else if (shouldLog) {_log.warn("Dropping HOSTILE Tunnel Request from UNKNOWN -> We are the previous hop");}
-                rejectAndAdapt();
                 return;
             }
         }
@@ -974,7 +763,6 @@ class BuildHandler implements Runnable {
                     _context.banlist().banlistRouter(from, " <b> -> </b> Hostile Tunnel Request (duplicate hops in chain)", null, null, System.currentTimeMillis() + bantime);
                     if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (duplicate hops in chain)");}
                 } else if (shouldLog) {_log.warn("Dropping HOSTILE Tunnel Request from UNKNOWN -> Previous and next hop are the same");}
-                rejectAndAdapt();
                 return;
             }
         }
@@ -1006,7 +794,6 @@ class BuildHandler implements Runnable {
                 _context.banlist().banlistRouter(from, " <b> -> </b> Hostile Tunnel Request (possible replay attack)", null, null, System.currentTimeMillis() + bantime);
                 if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (too old, replay attack?)");}
             }
-            rejectAndAdapt();
             return;
         }
         if (timeDiff < 0 - MAX_REQUEST_FUTURE) {
@@ -1019,7 +806,6 @@ class BuildHandler implements Runnable {
                 _context.banlist().banlistRouter(from, " <b> -> </b> Hostile Tunnel Request (too far in future)", null, null, System.currentTimeMillis() + bantime);
                 if (shouldLog) {_log.warn("Banning [" + fromPeer + "] for " + period + "m -> Hostile Tunnel Request (too far in future)");}
             }
-            rejectAndAdapt();
             return;
         }
         int response;
@@ -1042,10 +828,8 @@ class BuildHandler implements Runnable {
                 _context.statManager().addRateData("tunnel.rejectOverloaded", recvDelay);
                 _context.throttle().setTunnelStatus("[rejecting/overload]" + _x("Declining Tunnel Requests" + ":<br>" + _x("Request overload")));
                 response = TunnelHistory.TUNNEL_REJECT_TRANSIENT_OVERLOAD;
-                rejectAndAdapt();
             } else {
                 _context.statManager().addRateData("tunnel.acceptLoad", recvDelay);
-                acceptAndAdapt();
             }
         }
         /*
@@ -1085,7 +869,6 @@ class BuildHandler implements Runnable {
                 _context.commSystem().mayDisconnect(from);
                 // fake failed so we won't use him for our tunnels
                 _context.profileManager().tunnelFailed(from, 400);
-                rejectAndAdapt();
                 return;
             }
             if (result == ParticipatingThrottler.Result.REJECT) {
@@ -1187,10 +970,7 @@ class BuildHandler implements Runnable {
                 //cfg.setReceiveFrom(null);
             } else {
                 if (from != null) {cfg.setReceiveFrom(from);}
-                else {
-                    rejectAndAdapt();
-                    return; // b0rk
-                }
+                else {return;} // b0rk
             }
             cfg.setReceiveTunnelId(ourId);
             if (isOutEnd) {
@@ -1201,10 +981,8 @@ class BuildHandler implements Runnable {
                 cfg.setSendTo(nextPeer);
                 cfg.setSendTunnelId(nextId);
             }
-            if (avail > 0)
-                cfg.setAllocatedBW(avail);
-            else
-                cfg.setAllocatedBW(DEFAULT_BW_PER_TUNNEL_ESTIMATE);
+            if (avail > 0) {cfg.setAllocatedBW(avail);}
+            else {cfg.setAllocatedBW(DEFAULT_BW_PER_TUNNEL_ESTIMATE);}
             // now "actually" join
             boolean success;
             if (isOutEnd) {success = _context.tunnelDispatcher().joinOutboundEndpoint(cfg);}
@@ -1217,8 +995,6 @@ class BuildHandler implements Runnable {
                 response = TunnelHistory.TUNNEL_REJECT_BANDWIDTH;
                 _context.statManager().addRateData("tunnel.rejectDupID", 1);
                 if (shouldLog) {_log.warn("Duplicate TunnelID failure " + req);}
-            } else {
-                acceptAndAdapt();
             }
         }
         // determination of response is now complete
@@ -1274,7 +1050,7 @@ class BuildHandler implements Runnable {
                        (response == 0 ? "Rejected" : "Accepted?") + (recvDelay >= 1 ? " in " + recvDelay + "ms" : "") + req);
         }
         // now actually send the response
-        long expires = now + _currentNextHopTimeout; // adaptive timeout
+        long expires = now + NEXT_HOP_LOOKUP_TIMEOUT;
         if (!isOutEnd) {
             TunnelBuildMessage nextMessage = state.msg;
             nextMessage.setUniqueId(req.readReplyMessageId());
@@ -1301,7 +1077,6 @@ class BuildHandler implements Runnable {
                 outMessage = MessageWrapper.wrap(_context, replyMsg, req.readGarlicKeys()); // garlic encrypt
                 if (outMessage == null) {
                     if (shouldLog) {_log.warn("OutboundTunnelBuildReplyMessage encryption failure");}
-                    rejectAndAdapt();
                     return;
                 }
             } else {outMessage = replyMsg;}
@@ -1321,7 +1096,6 @@ class BuildHandler implements Runnable {
                 if (response == 0) {outMsg.setOnFailedSendJob(new TunnelBuildNextHopFailJob(_context, cfg));}
                 _context.outNetMessagePool().add(outMsg);
             }
-            acceptAndAdapt();
         }
     }
 
@@ -1485,9 +1259,6 @@ class BuildHandler implements Runnable {
         public String getName() {return "Timeout Building Tunnel Hop";}
         @Override
         public void runJob() {
-            // Record failure for adaptive timeout
-            _recentOutcomes.add(false);
-            adaptTimeout();
             Log log = getContext().logManager().getLog(BuildHandler.class);
 
             // Attempt to remove the participating tunnel entry to avoid leaving
@@ -1501,9 +1272,9 @@ class BuildHandler implements Runnable {
                 }
             }
             getContext().statManager().addRateData("tunnel.rejectTimeout2", 1);
-            getContext().statManager().addRateData("tunnel.nextHopLookupTimeout", _currentNextHopTimeout);
+            getContext().statManager().addRateData("tunnel.nextHopLookupTimeout", NEXT_HOP_LOOKUP_TIMEOUT);
             if (log.shouldDebug()) {
-                log.debug("Timeout (" + (_currentNextHopTimeout / 1000) + "s) contacting next hop" + _cfg);
+                log.debug("Timeout (" + (NEXT_HOP_LOOKUP_TIMEOUT / 1000) + "s) contacting next hop" + _cfg);
             }
         }
     }

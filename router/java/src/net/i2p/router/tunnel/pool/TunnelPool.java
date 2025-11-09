@@ -184,9 +184,11 @@ public class TunnelPool {
         long now = _context.clock().now();
         long uptime = _context.router().getUptime();
         synchronized (_tunnels) {
-            if (_tunnels.isEmpty() && _log.shouldWarn() && uptime > 3*60*1000 && !shouldSuppressWarning()) {
-              _log.warn(toString() + " -> No tunnels available");
-            } else if (!_tunnels.isEmpty()) {
+            if (_tunnels.isEmpty()) {
+               if (_log.shouldWarn() && uptime > 3*60*1000 && !shouldSuppressWarning()) {
+                  _log.warn(toString() + " -> No tunnels available");
+               }
+            } else {
                 // if there are nonzero hop tunnels and the zero hop tunnels are fallbacks,
                 // avoid the zero hop tunnels
                 TunnelInfo backloggedTunnel = null;
@@ -560,7 +562,7 @@ public class TunnelPool {
             }
         }
 
-        if (_log.shouldWarn()) {_log.warn(toString() + " -> Tunnel build failed " + cfg);}
+        if (_log.shouldWarn()) {_log.warn("Tunnel build failed -> " + cfg);}
 
         _manager.tunnelFailed();
         _lifetimeProcessed += cfg.getProcessedMessagesCount();
@@ -595,7 +597,7 @@ public class TunnelPool {
                 else {pct /= 2;}
             }
             if (_log.shouldWarn() && uptime > 5*60*1000) {
-                _log.warn(toString() + " -> Blaming [" + cfg.getPeer(i).toBase64().substring(0,6) + "] -> " + pct + '%');
+                _log.warn("Tunnel from " + toString() + " failed -> Blaming [" + cfg.getPeer(i).toBase64().substring(0,6) + "] -> " + pct + '%');
             }
             _context.profileManager().tunnelFailed(cfg.getPeer(i), pct);
         }
@@ -887,8 +889,8 @@ public class TunnelPool {
             if (_settings.isExploratory())
                 avg += 30*1000; // two minute safety factor
             */
-            final int PANIC_FACTOR = 6; // how many builds to kick off when time gets short
-            avg += (_settings.isExploratory() ? 30*1000 : 90*1000); // 2m safety factor
+            final int PANIC_FACTOR = 4; // how many builds to kick off when time gets short
+            avg += (_settings.isExploratory() ? 30*1000 : 15*1000);
             long now = _context.clock().now();
 
             int expireSoon = 0;

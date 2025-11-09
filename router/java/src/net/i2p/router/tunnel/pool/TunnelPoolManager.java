@@ -226,24 +226,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         return null;
     }
 
-    /**
-     *  Expensive (iterates through all tunnels of all pools) and unnecessary.
-     *  @deprecated unused
-     */
-    @Deprecated
-    public TunnelInfo getTunnelInfo(TunnelId id) {
-        TunnelInfo info = null;
-        for (TunnelPool pool : _clientInboundPools.values()) {
-            info = pool.getTunnel(id);
-            if (info != null) {return info;}
-        }
-        info = _inboundExploratory.getTunnel(id);
-        if (info != null) {return info;}
-        info = _outboundExploratory.getTunnel(id);
-        if (info != null) {return info;}
-        return null;
-    }
-
     /** @return number of inbound exploratory tunnels */
     public int getFreeTunnelCount() {return _inboundExploratory.size();}
 
@@ -433,7 +415,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             outbound.startup();
         }
         if (_log.shouldWarn()) {
-            _log.warn("Added " + dest.toBase32() + " as alias for " + existingClient.toBase32() +  settings);
+            _log.warn("Added " + dest.toBase32() + " as alias for " + existingClient.toBase32() + settings);
         }
         return true;
     }
@@ -498,12 +480,12 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     public synchronized void removeTunnels(Hash destination) {
         if (destination == null) return;
         if (_log.shouldDebug()) {
-            _log.debug("Removing tunnels for client " + destination.toBase32());
+            _log.debug("Removing tunnel pool for client [" + destination.toBase32().substring(0,8) + "]");
         }
         if (_context.clientManager().isLocal(destination)) {
             // race with buildTunnels() on restart of a client
             if (_log.shouldWarn()) {
-                _log.warn("Not removing pool still registered with client manager: " + destination.toBase32());
+                _log.warn("Not removing tunnel pool for [" + destination.toBase32().substring(0,8) + "] -> Still registered with ClientManager");
             }
             return;
         }
@@ -625,6 +607,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     }
 
     private static final int DEFAULT_MAX_PCT_TUNNELS = 10;
+    private static final int STARTUP_MAX_PCT_TUNNELS = 20;
     /**
      *  For reliability reasons, don't allow a peer in more than x% of
      *  client and exploratory tunnels.
@@ -644,7 +627,8 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         ObjectCounterUnsafe<Hash> lc = new ObjectCounterUnsafe<Hash>();
         int tunnelCount = countTunnelsPerPeer(lc);
         Set<Hash> rv = new HashSet<Hash>();
-        int max = DEFAULT_MAX_PCT_TUNNELS;
+        long uptime = _context.router().getUptime();
+        int max = uptime > 15*60*1000 ? DEFAULT_MAX_PCT_TUNNELS : STARTUP_MAX_PCT_TUNNELS;
         for (Hash h : lc.objects()) {
             if (lc.count(h) > 0 && (lc.count(h) + 1) * 100 / (tunnelCount + 1) > max) {
                 rv.add(h);
@@ -724,7 +708,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             int len = tun.getLength();
             if (len > 1 && tun.getPeer(1).equals(peer)) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Removing Outbound tunnel as first hop [" + peer.toBase64().substring(0,6) + "] is banlisted \n* " + tun);
+                    _log.warn("Removing " + tun + " -> First hop [" + peer.toBase64().substring(0,6) + "] is banlisted");
                 }
                 pool.tunnelFailed(tun, peer);
             }
@@ -741,7 +725,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
             int len = tun.getLength();
             if (len > 1 && tun.getPeer(len - 2).equals(peer)) {
                 if (_log.shouldWarn()) {
-                    _log.warn("Removing Inbound tunnel as previous hop [" + peer.toBase64().substring(0,6) + "] is banlisted \n* " + tun);
+                    _log.warn("Removing " + tun + " -> Previous hop [" + peer.toBase64().substring(0,6) + "] is banlisted");
                 }
                 pool.tunnelFailed(tun, peer);
             }
