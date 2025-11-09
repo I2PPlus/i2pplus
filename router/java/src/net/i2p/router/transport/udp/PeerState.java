@@ -272,6 +272,7 @@ public class PeerState {
     private final Object _outboundLock = new Object() {
         private static final long serialVersionUID = 1L;
     };
+    private final Object _inboundLock = new Object();
 
     /**
      *  For SSU2
@@ -629,7 +630,9 @@ public class PeerState {
      * Fetch the internal id (Long) to InboundMessageState for incomplete inbound messages.
      * Access to this map must be synchronized explicitly!
      */
-    Map<Long, InboundMessageState> getInboundMessages() {return _inboundMessages;}
+    Map<Long, InboundMessageState> getInboundMessages() {
+        synchronized(_inboundLock) {return new HashMap<>(_inboundMessages);}
+    }
 
     /**
      * Expire partially received inbound messages, returning how many are still pending.
@@ -639,7 +642,7 @@ public class PeerState {
      */
     int expireInboundMessages() {
         int rv = 0;
-        synchronized (_outboundLock) {
+        synchronized (_inboundLock) {
             for (Iterator<Map.Entry<Long, InboundMessageState>> iter = _inboundMessages.entrySet().iterator(); iter.hasNext(); ) {
                 Map.Entry<Long, InboundMessageState> entry = iter.next();
                 InboundMessageState state = entry.getValue();
@@ -1523,16 +1526,16 @@ public class PeerState {
 
         if (getVersion() == oldPeer.getVersion()) {
             Map<Long, InboundMessageState> msgs = new HashMap<Long, InboundMessageState>();
-            synchronized (oldPeer._inboundMessages) {
+            synchronized (oldPeer._inboundLock) {
                 msgs.putAll(oldPeer._inboundMessages);
                 oldPeer._inboundMessages.clear();
             }
-            if (!_dead) { synchronized (_inboundMessages) {_inboundMessages.putAll(msgs);} }
+            if (!_dead) { synchronized (_inboundLock) {_inboundMessages.putAll(msgs);} }
             msgs.clear();
 
             List<OutboundMessageState> tmp2 = new ArrayList<OutboundMessageState>();
             OutboundMessageState retransmitter = null;
-            synchronized (oldPeer._outboundMessages) {
+            synchronized (oldPeer._outboundLock) {
                 tmp2.addAll(oldPeer._outboundMessages);
                 oldPeer._outboundMessages.clear();
             }
