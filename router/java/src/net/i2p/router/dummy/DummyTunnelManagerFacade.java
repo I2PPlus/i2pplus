@@ -30,8 +30,6 @@ import net.i2p.router.tunnel.pool.TunnelPool;
 public class DummyTunnelManagerFacade implements TunnelManagerFacade {
 
     /** @deprecated unused */
-    @Deprecated
-    public TunnelInfo getTunnelInfo(TunnelId id) { return null; }
     public TunnelInfo selectInboundTunnel() { return null; }
     public TunnelInfo selectInboundTunnel(Hash destination) { return null; }
     public TunnelInfo selectOutboundTunnel() { return null; }

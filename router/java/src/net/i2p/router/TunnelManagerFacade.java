@@ -24,15 +24,6 @@ import net.i2p.router.tunnel.pool.TunnelPool;
 public interface TunnelManagerFacade extends Service {
 
     /**
-     * Retrieve the information related to a particular tunnel
-     *
-     * @param id the tunnelId as seen at the gateway
-     * @deprecated unused
-     */
-    @Deprecated
-    TunnelInfo getTunnelInfo(TunnelId id);
-
-    /**
      * Pick a random inbound exploratory tunnel
      *
      * @return null if none
