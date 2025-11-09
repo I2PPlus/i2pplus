@@ -3049,3 +3049,5 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #banSummary ul{margin:-1px -10px -16px}
 #sessionBanned{margin-bottom:9px}
 }
+
+#sidebar #sb_tunnelBuildStatus{display:none!important}

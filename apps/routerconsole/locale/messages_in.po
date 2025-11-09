@@ -4019,7 +4019,7 @@ msgstr "Antrian request dari router lain untuk berpartisipasi dalam tunnel"
 msgid "Backlog"
 msgstr "Simpanan"
 
-msgid "No transit tunnel requests are accepted for the first 10 minutes while router stabilizes"
+msgid "Declining transit tunnel requests during startup phase"
 msgstr "Tidak ada permintaan terowongan yang berpartisipasi yang diterima selama 10 menit pertama saat router stabil"
 
 msgid "Declining transit tunnel requests as we are shutting down"

@@ -4035,7 +4035,7 @@ msgstr "Αιτήματα σε αναμονή από άλλους δρομολο�
 msgid "Backlog"
 msgstr "Ανεκτέλεστες"
 
-msgid "No transit tunnel requests are accepted for the first 10 minutes while router stabilizes"
+msgid "Declining transit tunnel requests during startup phase"
 msgstr "Δεν γίνονται δεκτά αιτήματα για τις συμμετέχουσες σήραγγες για τα πρώτα 10 λεπτά, ενώ ο δρομολογητής σταθεροποιείται"
 
 msgid "Declining transit tunnel requests as we are shutting down"

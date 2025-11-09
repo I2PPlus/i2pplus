@@ -173,6 +173,8 @@ h4.sb_info{margin-top:-11px}
 #sidebar #sb_localtunnels td[colspan="3"]::after{min-height:12px;display:inline-block;vertical-align:middle;content:""}
 #sidebar #sb_shutdownStatus{margin:-7px -6px;padding:7px 4px;box-shadow:0 0 0 1px #bbc inset,0 0 0 2px #fff inset,0 0 0 3px rgba(148,0,0,.5) inset}
 #sidebar #sb_routerControl{margin-top:-5px}
+#sidebar #sb_tunnelBuildStatus{margin-top:2px;display:inline-block;width:18px;height:30px;vertical-align:middle;background:none;border:0;box-shadow:none}
+#sidebar #sb_tunnelBuildStatus::before{transform:scale(.7)}
 
 /* sidebar graph */
 #sb_bandwidthgraph{margin:-5px 0 0 3px;padding:0;width:100%;border-collapse:separate;border-spacing:0;border:1px solid #89f;border-radius:2px;box-shadow:0 0 1px #e0e0eb;transition:ease border .7s}
@@ -249,6 +251,7 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 #sidebar .toggleSection::before,#sidebar .toggleSection::after{display:none}
 #sidebar h3:hover .toggleSection{display:inline-block}
 #sidebar h3 a .badge,#sidebar #sb_status #lsCount.badge,#tunnelCount,#newsCount{margin:0 0 0 2px;padding:2px 5px;display:inline-block;vertical-align:middle;white-space:nowrap;line-height:1;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;font-size:80%;box-shadow:0 0 0 1px #bbc,0 0 0 1px #fff inset;background:#eef;transform:translateY(-1px)}
+#sidebar #sb_status #lsCount.badge{margin:4px 0 0 0}
 #sidebar h3 .badge:empty,#sidebar h3 .badge[hidden],#sidebar #newsCount:empty,#sidebar #tunnelCount:empty{display:none}
 #sidebar td .badge:empty::after{display:inline;content:"---"}
 #sidebar h3 a[href="/info"] .badge{text-transform:none}
@@ -347,6 +350,7 @@ input[type=checkbox].toggleSection:not(:checked){padding-top:6px}
 
 /* network status */
 .sb_netstatus,.tunnelBuildStatus{margin:-4px -1px -5px;padding:6px 3px;width:100%;display:inline-block;position:relative;box-sizing:border-box;vertical-align:baseline;line-height:1.2;text-shadow:var(--txt_shadow);border:1px solid #88f;border-radius:0;box-shadow:var(--highlight),0 0 1px rgba(96,96,96,.5)}
+.sb_netstatus{margin-bottom:-2px}
 .sb_netstatus a{vertical-align:baseline}
 .sb_netstatus::before{margin:0 4px 0 -4px;height:18px;width:18px;vertical-align:middle;display:inline-block;content:""}
 .sb_netstatus::before{background-size:16px}
@@ -2993,6 +2997,7 @@ h4#updateplugins,#news p{font-size:10pt}
 #sybilTask th{font-size:12pt}
 #sidebar h4#sb_tunnelstatus{margin-bottom:-2px}
 #sidebar .tunnelBuildStatus{margin-bottom:-9px}
+#sidebar #sb_tunnelBuildStatus{margin:-3px 0 -7px}
 #udpconnections .cells td{border-left:0;border-right:0}
 #updateHelper .nowrap::after,#updateProxyHostPort .nowrap::after,#config_update .nowrap::after{min-height:60px}
 #webappconfiguration a,#config_plugins .h3navlinks a{margin-top:-8px;padding:12px 8px 8px}

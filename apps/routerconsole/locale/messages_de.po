@@ -4035,7 +4035,7 @@ msgstr "wartende Anfragen anderer Router zur Teilnahme in deren Tunneln"
 msgid "Backlog"
 msgstr "Anfragenrückstau"
 
-msgid "No transit tunnel requests are accepted for the first 10 minutes while router stabilizes"
+msgid "Declining transit tunnel requests during startup phase"
 msgstr "In den ersten 10 Minuten, während sich der Router stabilisiert, werden keine teilnehmenden Tunnelanfragen akzeptiert"
 
 msgid "Declining transit tunnel requests as we are shutting down"

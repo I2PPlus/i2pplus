@@ -4035,7 +4035,7 @@ msgstr "Sett forespørsler fra andre rutere om å delta i tunneler"
 msgid "Backlog"
 msgstr "Etterslep"
 
-msgid "No transit tunnel requests are accepted for the first 10 minutes while router stabilizes"
+msgid "Declining transit tunnel requests during startup phase"
 msgstr "Ingen deltakende tunnelforespørsler aksepteres de første 10 minuttene mens ruteren stabiliserer seg"
 
 msgid "Declining transit tunnel requests as we are shutting down"

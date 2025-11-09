@@ -2617,6 +2617,4 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #banSummary .badge{margin:0 4px 0 0;padding:2px 4px;min-width:48px;display:inline-block;text-align:center;letter-spacing:0.05em;font-weight:600;box-shadow:var(--badge_bevel);background:var(--badge)}
 #sessionBanned{margin-bottom:5px}
 
-@media (max-width:1499px) {
-
-}
+#sidebar #sb_tunnelBuildStatus{display:none!important}

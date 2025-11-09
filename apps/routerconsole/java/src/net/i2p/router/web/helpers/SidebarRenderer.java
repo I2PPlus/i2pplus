@@ -841,6 +841,58 @@ class SidebarRenderer {
                .append("</span></a>");
             }
         }
+
+        String buildStatus = _helper.getTunnelStatus();
+        String buildStatusText = buildStatus;
+        String buildStatusTooltip = "";
+        String buildStatusClass = "tunnelBuildStatus";
+
+        if (buildStatus.startsWith("[starting]")) {
+            buildStatusClass += " starting";
+            buildStatusTooltip = _t("Declining transit tunnel requests during startup phase");
+            buildStatusText = buildStatusText.substring(buildStatusText.indexOf(']') + 1).trim();
+        } else if (buildStatus.startsWith("[shutdown]")) {
+            buildStatusClass += " rejecting";
+            buildStatusTooltip = _t("Declining transit tunnel requests as we are shutting down");
+            buildStatusText = buildStatusText.substring(buildStatusText.indexOf(']') + 1).trim();
+        } else if (buildStatus.startsWith("[rejecting/overload]")) {
+            buildStatusClass += " rejecting";
+            buildStatusTooltip = _t("Router or network performance is impeding the building of transit tunnels");
+            buildStatusText = buildStatusText.substring(buildStatusText.indexOf(']') + 1).trim();
+        } else if (buildStatus.startsWith("[rejecting/max]")) {
+            buildStatusClass += " rejecting";
+            buildStatusTooltip = _t("Router is currently hosting the configured maximum number of transit tunnels");
+            buildStatusText = buildStatusText.substring(buildStatusText.indexOf(']') + 1).trim();
+        } else if (buildStatus.startsWith("[rejecting/bandwidth]")) {
+            buildStatusClass += " rejecting";
+            buildStatusTooltip = _t("Router is currently using the configured maximum share bandwidth");
+            buildStatusText = buildStatusText.substring(buildStatusText.indexOf(']') + 1).trim();
+        } else if (buildStatus.startsWith("[ready]") || buildStatus.startsWith("[accepting]")) {
+            buildStatusClass += " accepting";
+            buildStatusTooltip = _t("Router is ready to build participating tunnels");
+            buildStatusText = buildStatusText.substring(buildStatusText.indexOf(']') + 1).trim();
+        } else if (buildStatus.startsWith("[hidden]")) {
+            buildStatusClass += " hidden";
+            buildStatusTooltip = _t("No transit tunnels are built when Hidden mode is active");
+            buildStatusText = buildStatusText.substring(buildStatusText.indexOf(']') + 1).trim();
+        } else if (buildStatus.startsWith("[disabled]")) {
+            buildStatusClass += " rejecting disabled";
+            buildStatusTooltip = _t("Router is configured to reject all transit tunnel requests");
+            buildStatusText = buildStatusText.substring(buildStatusText.indexOf(']') + 1).trim();
+        }
+
+        buf.append(" <span id=sb_tunnelBuildStatus class=\"volatile ")
+           .append(buildStatusClass).append("\" title=\"").append(buildStatusTooltip).append("\">")
+           .append("</span>");
+
+        buf.append("</span></h4>\n");
+
+        if (!SigType.ECDSA_SHA256_P256.isAvailable()) {
+            buf.append("<hr>\n<h4><span class=warn>")
+               .append(_t("Warning: ECDSA is not available. Update your Java or OS"))
+               .append("</a></span></h4>\n");
+        }
+
         buf.append("</span></h4>\n");
         if (!SigType.ECDSA_SHA256_P256.isAvailable()) {
             buf.append("<hr>\n<h4><span class=warn>")
@@ -1288,15 +1340,15 @@ class SidebarRenderer {
         int partTunnels = _helper.getParticipatingTunnels();
         StringBuilder buf = new StringBuilder(50);
         String getStatus = _helper.getTunnelStatus();
-        String tunnelStatus = getStatus.indexOf('[') >= 0 && getStatus.indexOf(']') > getStatus.indexOf('[')
+        String buildStatus = getStatus.indexOf('[') >= 0 && getStatus.indexOf(']') > getStatus.indexOf('[')
                               ? getStatus.substring(getStatus.indexOf(']') + 1) : getStatus;
-        boolean linebreak = tunnelStatus.indexOf("<br>") >= 0;
+        boolean linebreak = buildStatus.indexOf("<br>") >= 0;
         if (linebreak) {
-            tunnelStatus = tunnelStatus.substring(tunnelStatus.indexOf("<br>") + 4);
+            buildStatus = buildStatus.substring(buildStatus.indexOf("<br>") + 4);
         }
         buf.append("<h4 id=sb_tunnelstatus class=\"volatile collapse\"><span class=\"tunnelBuildStatus");
         if (getStatus.startsWith("[starting]"))
-            buf.append(" starting\" title=\"").append(_t("No transit tunnel requests are accepted for the first 10 minutes while router stabilizes"));
+            buf.append(" starting\" title=\"").append(_t("Declining transit tunnel requests during startup phase"));
         else if (getStatus.startsWith("[shutdown]"))
             buf.append(" rejecting\" title=\"").append(_t("Declining transit tunnel requests as we are shutting down"));
         else if (getStatus.startsWith("[rejecting/overload]"))
@@ -1313,7 +1365,7 @@ class SidebarRenderer {
             buf.append(" hidden\" title=\"").append(_t("No transit tunnels are built when Hidden mode is active"));
         else if (getStatus.startsWith("[disabled]"))
             buf.append(" rejecting disabled\" title=\"").append(_t("Router is configured to reject all transit tunnel requests"));
-        buf.append("\">").append(tunnelStatus).append("</span></h4>\n");
+        buf.append("\">").append(buildStatus).append("</span></h4>\n");
         return buf.toString();
     }
 

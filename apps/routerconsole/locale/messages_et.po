@@ -4036,7 +4036,7 @@ msgstr "teiste ruuterite taotlused tunnelites osalemiseks järjekorras"
 msgid "Backlog"
 msgstr "Järjekord"
 
-msgid "No transit tunnel requests are accepted for the first 10 minutes while router stabilizes"
+msgid "Declining transit tunnel requests during startup phase"
 msgstr "osalevate tunnelite taotlusi ei aktsepteerita esimese 10 minuti jooksul, kuni ruuter stabiliseerub"
 
 msgid "Declining transit tunnel requests as we are shutting down"

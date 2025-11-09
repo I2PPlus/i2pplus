@@ -4035,7 +4035,7 @@ msgstr "درخواست‌های روترهای دیگر برای شرکت در �
 msgid "Backlog"
 msgstr "عقب ماندگی"
 
-msgid "No transit tunnel requests are accepted for the first 10 minutes while router stabilizes"
+msgid "Declining transit tunnel requests during startup phase"
 msgstr "هیچ درخواست تونل مشارکتی در 10 دقیقه اول پذیرفته نمی شود در حالی که روتر تثبیت می شود"
 
 msgid "Declining transit tunnel requests as we are shutting down"
