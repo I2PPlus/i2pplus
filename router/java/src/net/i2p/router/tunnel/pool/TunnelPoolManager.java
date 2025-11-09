@@ -628,7 +628,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         int tunnelCount = countTunnelsPerPeer(lc);
         Set<Hash> rv = new HashSet<Hash>();
         long uptime = _context.router().getUptime();
-        int max = uptime > 15*60*1000 ? DEFAULT_MAX_PCT_TUNNELS : STARTUP_MAX_PCT_TUNNELS;
+        int max = uptime > 30*60*1000 ? DEFAULT_MAX_PCT_TUNNELS : STARTUP_MAX_PCT_TUNNELS;
         for (Hash h : lc.objects()) {
             if (lc.count(h) > 0 && (lc.count(h) + 1) * 100 / (tunnelCount + 1) > max) {
                 rv.add(h);
