@@ -118,15 +118,15 @@ class ProfileOrganizerRenderer {
             }
             buf.append("<th>").append(_t("Status")).append("</th>")
                .append("<th class=groups>").append(_t("Groups")).append("</th>")
-               .append("<th>").append(_t("Speed")).append("</th>")
+               .append("<th data-sort-method=number>").append(_t("Speed")).append("</th>")
                .append("<th class=latency>").append(_t("Low Latency")).append("</th>")
                .append("<th title=\"").append(_t("Tunnels peer has agreed to participate in"))
-               .append("\">").append(_t("Accepted")).append("</th>")
+               .append("\" data-sort-method=number>").append(_t("Accepted")).append("</th>")
                .append("<th title=\"").append(_t("Tunnels peer has refused to participate in"))
-               .append("\">").append(_t("Rejected")).append("</th>")
-               .append("<th>").append(_t("First Heard About")).append("</th>")
-               .append("<th>").append(_t("Last Heard From")).append("</th>")
-               .append("<th>").append(_t("View/Edit")).append("</th>")
+               .append("\" data-sort-method=number>").append(_t("Rejected")).append("</th>")
+               .append("<th data-sort-method=number>").append(_t("First Heard About")).append("</th>")
+               .append("<th data-sort-method=number>").append(_t("Last Heard From")).append("</th>")
+               .append("<th data-sort-method=none>").append(_t("View/Edit")).append("</th>")
                .append("</tr>\n</thead>\n<tbody id=pbody>\n");
 
             int prevTier = 1;
@@ -258,7 +258,7 @@ class ProfileOrganizerRenderer {
                     default: buf.append("failing\">").append(_t("Failing")); break;
                 }
                 if (isIntegrated) buf.append(", ").append(_t("Integrated"));
-                buf.append("</span></td><td>");
+                buf.append("</span></td><td data-sort=").append(prof.getSpeedValue()).append(">");
                 String spd = num(Math.round(prof.getSpeedValue())).replace(",", "");
                 String speedApprox = spd.substring(0, spd.indexOf("."));
                 int speed = Integer.parseInt(speedApprox);
@@ -291,30 +291,47 @@ class ProfileOrganizerRenderer {
                 if (bonus >= 9999999) {buf.append("<span class=lowlatency>✔</span>");}
                 else if (capBonus == -30) {buf.append("<span class=highlatency>✖</span>");}
                 else {buf.append("<span>&ensp;</span>");}
-                buf.append("</td><td>");
                 int agreed = Math.round(prof.getTunnelHistory().getLifetimeAgreedTo());
                 int rejected = Math.round(prof.getTunnelHistory().getLifetimeRejected());
-                if (agreed > 0) {buf.append(agreed);}
-                else {buf.append("<span hidden>0</span>");}
-                buf.append("</td><td>");
-                if (rejected > 0) {buf.append(rejected);}
-                else {buf.append("<span hidden>0</span>");}
-                buf.append("</td><td>");
+                buf.append("</td><td data-sort=")
+                   .append(prof.getTunnelHistory().getLifetimeAgreedTo())
+                   .append(">")
+                   .append(agreed)
+                   .append("</td><td data-sort=")
+                   .append(prof.getTunnelHistory().getLifetimeRejected())
+                   .append(">")
+                   .append(rejected)
+                   .append("</td><td data-sort=")
+                   .append(prof.getFirstHeardAbout())
+                   .append(">");
                 now = _context.clock().now();
                 if (prof.getFirstHeardAbout() > 0) {
-                    buf.append("<span hidden>[").append(prof.getFirstHeardAbout()).append("]</span>")
-                       .append(formatInterval(now, prof.getFirstHeardAbout()));
+                   buf.append(formatInterval(now, prof.getFirstHeardAbout()));
                 }
-                buf.append("</td><td><span hidden>[").append(prof.getLastHeardFrom() - now).append("]</span>")
+                buf.append("</td><td data-sort=").append(prof.getLastHeardFrom() - now).append(">")
                    .append(formatInterval(now, prof.getLastHeardFrom())).append("</td><td nowrap class=viewedit>");
+                String viewProfile = _t("View profile");
+                String configurePeer = _t("Configure Peer");
                 if (prof != null) {
-                    buf.append("<a class=viewprofile href=\"/viewprofile?peer=").append(peer.toBase64())
-                       .append("\" title=\"").append(_t("View profile")).append("\" alt=\"[").append(_t("View profile"))
-                       .append("]\">").append(_t("Profile")).append("</a>");
+                    buf.append("<a class=viewprofile href=\"/viewprofile?peer=")
+                       .append(peer.toBase64())
+                       .append("\" title=\"")
+                       .append(viewProfile)
+                       .append("\" alt=\"[")
+                       .append(viewProfile)
+                       .append("]\">")
+                       .append(_t("Profile"))
+                       .append("</a>");
                 }
-                buf.append("<br><a class=configpeer href=\"/configpeer?peer=").append(peer.toBase64())
-                   .append("\" title=\"").append(_t("Configure peer")).append("\" alt=\"[").append(_t("Configure peer"))
-                   .append("]\">").append(_t("Edit")).append("</a></td></tr>\n");
+                buf.append("<br><a class=configpeer href=\"/configpeer?peer=")
+                   .append(peer.toBase64())
+                   .append("\" title=\"")
+                   .append(configurePeer)
+                   .append("\" alt=\"[")
+                   .append(configurePeer)
+                   .append("]\">")
+                   .append(_t("Edit"))
+                   .append("</a></td></tr>\n");
             }
             buf.append("</tbody>\n</table>\n");
             buf.append("<div id=peer_thresholds>\n<h3 class=tabletitle>").append(_t("Thresholds")).append("</h3>\n")

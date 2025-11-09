@@ -1,26 +1,32 @@
-(function() {
-  // Removes all but digits, minus, dot, and question mark from string
-  const cleanNumber = i => i.replace(/[^\-?0-9.]/g, '');
-
-  // Parses strings to floats and compares numerically, treating NaN as 0
-  const compareNumber = (a, b) => {
-    a = parseFloat(a);
-    b = parseFloat(b);
-    a = isNaN(a) ? 0 : a;
-    b = isNaN(b) ? 0 : b;
-    return a - b;
+(function () {
+  // Cleans numeric strings without breaking scientific notation or decimals
+  const cleanNumber = (val) => {
+    if (typeof val !== 'string') return '';
+    // Allow digits, minus, dot, E/e for scientific notation, and %
+    return val.replace(/[^-0-9.Ee%]/g, '');
   };
 
-  Tablesort.extend("number",
-    // Matches numbers; allows optional prefixed/suffixed currency symbols and percent signs
-    item =>
-      /^[-+]?[£\x24Û¢´€]?\d+\s*([,\.]\d{0,2})/.test(item) ||  // Prefixed currency
-      /^[-+]?\d+\s*([,\.]\d{0,2})?[£\x24Û¢´€]/.test(item) ||  // Suffixed currency
-      /^[-+]?(\d)*-?([,\.]){0,1}-?(\d)+([E,e][\-+][\d]+)?%?$/.test(item),  // Plain number
-    (a, b) => {
-      a = cleanNumber(a);
-      b = cleanNumber(b);
-      return compareNumber(b, a);
+  // Compares two numeric values, handling NaN gracefully
+  const compareNumber = (a, b) => {
+    const numA = parseFloat(a);
+    const numB = parseFloat(b);
+
+    if (isNaN(numA) && isNaN(numB)) return 0;
+    if (isNaN(numA)) return 1;  // b comes first
+    if (isNaN(numB)) return -1; // a comes first
+    return numA - numB;         // ascending sort
+  };
+
+  // Register the numeric sorter with Tablesort
+  Tablesort.extend('number',
+    // Pattern: detects strings that contain valid numbers
+    function (item) {
+      const cleaned = cleanNumber(item);
+      return cleaned !== '' && !isNaN(parseFloat(cleaned)) && isFinite(cleaned);
+    },
+    // Sort function: compares cleaned numeric values
+    function (a, b) {
+      return compareNumber(cleanNumber(a), cleanNumber(b));
     }
   );
 })();
