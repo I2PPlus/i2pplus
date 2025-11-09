@@ -135,7 +135,7 @@ class EstablishmentManager {
     private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 64 : 256;
     private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 256 : 1024;
     private static final String PROP_MAX_CONCURRENT_ESTABLISH = "i2np.udp.maxConcurrentEstablish";
-    private static final float DEFAULT_THROTTLE_FACTOR = SystemVersion.isSlow() ? 1.5f : 3f;
+    private static final float DEFAULT_THROTTLE_FACTOR = SystemVersion.isSlow() ? 2.5f : 5f;
     private static final String PROP_THROTTLE_FACTOR = "router.throttleFactor";
 
     /** Max pending outbound connections (waiting because we are at MAX_CONCURRENT_ESTABLISH) */
@@ -155,26 +155,26 @@ class EstablishmentManager {
      * But SSU probably isn't higher priority than NTCP.
      * And it's important to not fail an establishment too soon and waste it.
      */
-    private static final int MAX_OB_ESTABLISH_TIME = 25*1000;
+    private static final int MAX_OB_ESTABLISH_TIME = 30*1000;
 
     /**
      * Kill any inbound that takes more than this
      * One round trip (Created-Confirmed)
      * Note: could be two round trips for SSU2 with retry
      */
-    public static final int MAX_IB_ESTABLISH_TIME = 15*1000;
+    public static final int MAX_IB_ESTABLISH_TIME = 20*1000;
 
     /** Max wait before receiving a response to a single message during outbound establishment */
     public static final int OB_MESSAGE_TIMEOUT = 18*1000;
 
     /** for the DSM and or netdb store */
-    private static final int DATA_MESSAGE_TIMEOUT = 12*1000;
+    private static final int DATA_MESSAGE_TIMEOUT = 15*1000;
 
     private static final int IB_BAN_TIME = 60*60*1000;
 
     // SSU 2
-    private static final int MIN_TOKENS = SystemVersion.isSlow() ? 256 : 1024;
-    private static final int MAX_TOKENS = SystemVersion.isSlow() ? 2048 : 8192;
+    private static final int MIN_TOKENS = SystemVersion.isSlow() ? 64 : 128;
+    private static final int MAX_TOKENS = SystemVersion.isSlow() ? 1024 : 4096;
     public static final long IB_TOKEN_EXPIRATION = 60*60*1000L;
     private static final long MAX_SKEW = 2*60*1000;
     private static final String TOKEN_FILE = "ssu2tokens.txt";

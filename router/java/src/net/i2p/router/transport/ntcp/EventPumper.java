@@ -109,8 +109,8 @@ class EventPumper implements Runnable {
      *  @see java.nio.ByteBuffer
      */
     private static final String PROP_NODELAY = "i2np.ntcp.nodelay";
-    private static final int MIN_MINB = SystemVersion.isSlow() ? 4 : 8;
-    private static final int MAX_MINB = SystemVersion.isSlow() ? 12 : Math.max(SystemVersion.getCores(), 16);
+    private static final int MIN_MINB = SystemVersion.isSlow() ? 16 : 32;
+    private static final int MAX_MINB = SystemVersion.isSlow() ? 32 : Math.max(SystemVersion.getCores() * 4, 128);
     public static final String PROP_MAX_MINB = "i2np.ntcp.eventPumperMaxBuffers";
     private static final int MIN_BUFS;
     static {
@@ -119,7 +119,7 @@ class EventPumper implements Runnable {
         MIN_BUFS = (int) Math.max(MIN_MINB, Math.min(MAX_MINB, 1 + (maxMemory / (16*1024*1024))));
     }
 
-    private static final float DEFAULT_THROTTLE_FACTOR = SystemVersion.isSlow() ? 1.5f : 2.5f;
+    private static final float DEFAULT_THROTTLE_FACTOR = SystemVersion.isSlow() ? 2.5f : 5f;
     private static final String PROP_THROTTLE_FACTOR = "router.throttleFactor";
     private static final TryCache<ByteBuffer> _bufferCache = new TryCache<>(new BufferFactory(), MIN_BUFS);
     private static final Set<Status> STATUS_OK = EnumSet.of(Status.OK, Status.IPV4_OK_IPV6_UNKNOWN, Status.IPV4_OK_IPV6_FIREWALLED);

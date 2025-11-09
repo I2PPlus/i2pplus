@@ -65,22 +65,22 @@ import net.i2p.util.VersionComparator;
  *  The SSU (Secure Semireliable UDP) transport implementation for I2P.
  *  This class manages UDP-based peer connections, packet handling, peer testing, and reachability.
  *
- *  &lt;p&gt;It supports both SSU1 (legacy) and SSU2 (modern) protocols, including:
- *  &lt;ul&gt;
- *      &lt;li&gt;Establishing and maintaining peer sessions&lt;/li&gt;
- *      &lt;li&gt;Handling inbound and outbound messages&lt;/li&gt;
- *      &lt;li&gt;Managing introducers and peer testing&lt;/li&gt;
- *      &lt;li&gt;Reachability detection and reporting&lt;/li&gt;
- *      &lt;li&gt;IPv4 and IPv6 support&lt;/li&gt;
- *  &lt;/ul&gt;
+ *  <p>It supports both SSU1 (legacy) and SSU2 (modern) protocols, including:
+ *  <ul>
+ *      <li>Establishing and maintaining peer sessions</li>
+ *      <li>Handling inbound and outbound messages</li>
+ *      <li>Managing introducers and peer testing</li>
+ *      <li>Reachability detection and reporting</li>
+ *      <li>IPv4 and IPv6 support</li>
+ *  </ul>
  *
- *  &lt;p&gt;Internally, it uses various managers such as:
- *  &lt;ul&gt;
- *      &lt;li&gt;{@link EstablishmentManager} for session establishment&lt;/li&gt;
- *      &lt;li&gt;{@link PacketHandler} for processing incoming packets&lt;/li&gt;
- *      &lt;li&gt;{@link PeerTestManager} for peer reachability tests&lt;/li&gt;
- *      &lt;li&gt;{@link IntroductionManager} for managing introducers&lt;/li&gt;
- *  &lt;/ul&gt;
+ *  <p>Internally, it uses various managers such as:
+ *  <ul>
+ *      <li>{@link EstablishmentManager} for session establishment</li>
+ *      <li>{@link PacketHandler} for processing incoming packets</li>
+ *      <li>{@link PeerTestManager} for peer reachability tests</li>
+ *      <li>{@link IntroductionManager} for managing introducers</li>
+ *  </ul>
  */
 public class UDPTransport extends TransportImpl {
     private final Log _log;

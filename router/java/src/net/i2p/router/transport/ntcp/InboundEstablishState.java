@@ -33,6 +33,7 @@ import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleByteCache;
 import net.i2p.util.SimpleTimer;
+import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**
@@ -62,8 +63,8 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     private NTCP2Options _hisPadding;
 
     // Same as I2PTunnelRunner
-    private static final int BUFFER_SIZE = 8*1024;
-    private static final int MAX_DATA_READ_BUFS = 64;
+    private static final int BUFFER_SIZE = 16*1024;
+    private static final int MAX_DATA_READ_BUFS = SystemVersion.isSlow() ? 32 : 64;
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
 
     // 287 - 64 = 223
