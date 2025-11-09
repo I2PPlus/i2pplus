@@ -224,9 +224,9 @@ public class TunnelPool {
                 }
                 // return a random backlogged tunnel
                 if (backloggedTunnel != null) {return backloggedTunnel;}
-                if (_log.shouldWarn()) {
-                    _log.warn(toString() + ": after " + _tunnels.size() + " tries -> No unexpired tunnels were found: " + _tunnels);
-                }
+                //if (_log.shouldWarn()) {
+                //    _log.warn(toString() + ": after " + _tunnels.size() + " tries -> No unexpired tunnels were found: " + _tunnels);
+                //}
             }
         }
 
