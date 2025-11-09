@@ -49,9 +49,9 @@ class TunnelGatewayZeroHop extends TunnelGateway {
                     imsg = umsg.convert();
                 } catch (I2NPMessageException ime) {
                     if (_log.shouldDebug())
-                        _log.warn("Unable to convert to standard message class at zero-hop IBGW", ime);
-                    else if (_log.shouldWarn())
-                        _log.warn("Unable to convert to standard message class at zero-hop IBGW \n* Reason: " + ime.getMessage());
+                        _log.debug("Unable to convert to standard message class at zero-hop IBGW", ime);
+                    else if (_log.shouldInfo())
+                        _log.info("Unable to convert to standard message class at zero-hop IBGW \n* Reason: " + ime.getMessage());
                     return;
                 }
             }

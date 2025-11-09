@@ -61,7 +61,7 @@ class OutboundTunnelEndpoint {
             Hash h = _config.getReceiveFrom();
             if (h != null) {
                 if (_log.shouldWarn())
-                    _log.warn(toString() + ": Blaming [" + h.toBase64().substring(0,6) + "] -> 50%");
+                    _log.warn("Tunnel from " + toString() + " failed -> Blaming [" + h.toBase64().substring(0,6) + "] -> 50%");
                 _context.profileManager().tunnelFailed(h, 50);
             }
         }
@@ -93,8 +93,8 @@ class OutboundTunnelEndpoint {
                         UnknownI2NPMessage umsg = (UnknownI2NPMessage) msg;
                         msg = umsg.convert();
                     } catch (I2NPMessageException ime) {
-                        if (_log.shouldWarn())
-                            _log.warn("Unable to convert to standard message class at zero-hop Inbound Gateway \n* " + ime.getMessage());
+                        if (_log.shouldInfo())
+                            _log.info("Unable to convert to standard message class at zero-hop Inbound Gateway \n* " + ime.getMessage());
                         return;
                     }
                 }

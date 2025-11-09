@@ -149,7 +149,7 @@ class TunnelParticipant {
                     for (int i = 0; i < lenm1; i++) {
                         Hash h = cfg.getPeer(i);
                         if (_log.shouldWarn()) {
-                            _log.warn(toString() + ": Blaming [" + h.toBase64().substring(0,6) + "] -> " + pct + '%');
+                            _log.warn("Tunnel from " + toString() + " failed -> Blaming [" + h.toBase64().substring(0,6) + "] -> " + pct + '%');
                         }
                         _context.profileManager().tunnelFailed(h, pct);
                     }
