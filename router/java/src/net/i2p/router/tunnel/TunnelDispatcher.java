@@ -769,6 +769,10 @@ public class TunnelDispatcher implements Service {
             long now = getContext().clock().now() + 1000;
             long nextTime = now + 10 * 60 * 1000;
 
+            if (getParticipatingCount() > 500) {nextTime = now + 3 * 60 * 1000;}
+            else if (getParticipatingCount() > 1000) {nextTime = now + 1 * 60 * 1000;}
+            else if (getParticipatingCount() > 2000) {nextTime = now + 60 * 1000;}
+
             while (true) {
                 HopConfig cur = _configs.peek();
                 if (cur == null) break;
