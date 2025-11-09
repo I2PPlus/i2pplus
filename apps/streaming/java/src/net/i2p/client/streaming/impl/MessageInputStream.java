@@ -1,3 +1,6 @@
+/* I2PTunnel is GPL'ed (with the exception mentioned in I2PTunnel.java)
+ * (c) 2003 - 2004 mihi
+ */
 package net.i2p.client.streaming.impl;
 
 import java.io.IOException;
@@ -8,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import net.i2p.I2PAppContext;
 import net.i2p.data.ByteArray;
@@ -15,71 +19,80 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
- * InputStream implementation that accepts messages potentially arriving out of order
- * and presents the data in proper order for reading.
+ * InputStream implementation that accepts messages arriving out of order
+ * and presents the data in proper sequence for reading.
  *
- * The stream buffers incoming data blocks delivered out of order, reorders them
- * as missing sequence numbers arrive, and presents a continuous byte stream.
- * Backpressure and limiting are handled upstream in ConnectionPacketHandler.
+ * <p>This class buffers incoming data blocks and reorders them transparently,
+ * ensuring a continuous byte stream to the caller. It supports:
+ * <ul>
+ *   <li>Out-of-order message handling</li>
+ *   <li>Flow control via blocking reads</li>
+ *   <li>Optional read timeouts</li>
+ *   <li>EOF signaling via closeReceived()</li>
+ *   <li>Error propagation via streamErrorOccurred()</li>
+ * </ul>
  *
- * Data arrives via {@link #messageReceived(long, ByteArray)} with sequence IDs.
- * This stream manages reordering and buffering transparently to callers reading bytes.
+ * <p><b>Thread Safety:</b> This class is synchronized internally and safe for use by one reader thread
+ * and potentially multiple message-receiving threads.
  *
- * Thread safety:
- * - Synchronized on a private lock object for state changes and data access.
- * - Read and message receive methods block efficiently waiting for data arrival.
+ * <p><b>Performance:</b> Designed for high-throughput scenarios such as large file downloads.
+ * Avoids unnecessary copying by using ByteArray references.
  *
- * Performance:
- * - Uses lists and maps optimized for expected message volumes.
- * - Avoids unnecessary copying by referencing ByteArray slices.
+ * <p><b>Lifecycle:</b> The stream can be closed locally or receive an EOF signal remotely.
+ * Once closed, no further reads or message receptions are allowed.
  *
- * Lifecycle:
- * - Closing via {@link #close()} clears buffered data and prevents further reads.
- * - EOF condition signaled by {@link #closeReceived()}
- *
- * Examples of usage:
+ * <p><b>Usage:</b>
+ * <pre>
  * I2PSession -> MessageHandler -> PacketHandler -> ConnectionPacketHandler -> MessageInputStream
- *
+ * </pre>
  */
 class MessageInputStream extends InputStream {
+
+    /**
+     * Initial capacity for internal lists and maps.
+     * Helps avoid frequent reallocations for common use cases.
+     */
     private static final int INITIAL_CAPACITY = 4;
+
+    /**
+     * Minimum number of ready buffers before limiting applies.
+     * Helps prevent unnecessary buffering limits on slow systems.
+     */
     private static final int MIN_READY_BUFFERS = SystemVersion.isSlow() ? 128 : 1024;
 
     private final Log _log;
-    private final List<ByteArray> _readyDataBlocks; // Ordered list of received consecutive data blocks ready for reading
-    private int _readyDataBlockIndex;               // Index within first block of the next byte to read
-    private long _highestReadyBlockId;              // Highest consecutive message ID fully received and ready
-    private long _highestBlockId;                   // Highest message ID ever received (including out-of-order)
+    private final List<ByteArray> _readyDataBlocks; // Ordered list of ready data blocks
+    private int _readyDataBlockIndex;               // Index in the current ready block
+    private long _highestReadyBlockId;              // Highest fully received block ID
+    private long _highestBlockId;                   // Highest received block ID (includes out-of-order)
+    private final Map<Long, ByteArray> _notYetReadyBlocks; // Out-of-order blocks
 
-    // Buffer for out-of-order message blocks indexed by message ID
-    private final Map<Long, ByteArray> _notYetReadyBlocks;
-
-    private boolean _closeReceived; // EOF signal received (no more messages after current highest block)
-    private boolean _locallyClosed; // Stream locally closed for reading (no more reads allowed)
-    private int _readTimeout;       // Read timeout in milliseconds (-1 = block forever, 0 = nonblocking)
+    private boolean _closeReceived; // EOF signal received
+    private final AtomicBoolean _locallyClosed = new AtomicBoolean(false); // Stream closed for reading
+    private int _readTimeout = I2PSocketOptionsImpl.DEFAULT_READ_TIMEOUT; // Read timeout in milliseconds
     private IOException _streamError;
-    private long _readTotal;        // Total bytes read so far (for logging/debug)
+    private long _readTotal; // Total bytes read so far
 
-    private final int _maxMessageSize; // Maximum allowed message block size
-    private final int _maxWindowSize;  // Maximum allowed window size in blocks
-    private final int _maxBufferSize;  // Maximum allowed total buffer size in bytes
+    private final int _maxMessageSize; // Max size per message block
+    private final int _maxWindowSize;  // Max number of messages in window
+    private final int _maxBufferSize;  // Max total buffer size in bytes
 
-    private final byte[] _oneByte = new byte[1];
-    private final Object _dataLock;
+    private final byte[] _oneByte = new byte[1]; // For single-byte reads
+    private final Object _dataLock = new Object(); // Lock for synchronized access
 
-    // Sentinel ByteArray used for out-of-order duplicates, no data.
+    // Sentinel used for out-of-order duplicates, avoids unnecessary allocations
     private static final ByteArray DUMMY_BA = new ByteArray(null);
 
-    // Running total of available bytes in ready blocks
+    // Total size of all ready data blocks (for fast available() and canAccept())
     private int _readyDataSize = 0;
 
     /**
-     * Constructs the MessageInputStream with configured buffer parameters.
+     * Constructs a new MessageInputStream with the specified buffer limits.
      *
-     * @param ctx           Application context for logging
-     * @param maxMessageSize Maximum allowed size of an individual message block
-     * @param maxWindowSize  Maximum allowed number of messages in window
-     * @param maxBufferSize  Maximum size in bytes allowed for buffered data
+     * @param ctx Application context for logging and utilities
+     * @param maxMessageSize Max size of a single message block
+     * @param maxWindowSize Max number of messages in the window
+     * @param maxBufferSize Max total size of all buffered data
      */
     public MessageInputStream(I2PAppContext ctx, int maxMessageSize, int maxWindowSize, int maxBufferSize) {
         _log = ctx.logManager().getLog(MessageInputStream.class);
@@ -87,17 +100,15 @@ class MessageInputStream extends InputStream {
         _notYetReadyBlocks = new HashMap<>(INITIAL_CAPACITY);
         _highestReadyBlockId = -1;
         _highestBlockId = -1;
-        _readTimeout = I2PSocketOptionsImpl.DEFAULT_READ_TIMEOUT;
-        _dataLock = new Object();
         _maxMessageSize = maxMessageSize;
         _maxWindowSize = maxWindowSize;
         _maxBufferSize = maxBufferSize;
     }
 
     /**
-     * Gets the highest consecutive block ID that has been fully received and marked ready.
+     * Returns the highest consecutive block ID that has been fully received and marked ready.
      *
-     * @return highest fully received consecutive block ID, or -1 if none
+     * @return highest ready block ID, or -1 if none
      */
     public long getHighestReadyBlockId() {
         synchronized (_dataLock) {
@@ -106,7 +117,7 @@ class MessageInputStream extends InputStream {
     }
 
     /**
-     * Gets the highest block ID received, regardless of order.
+     * Returns the highest block ID received so far, regardless of order.
      *
      * @return highest block ID received, or -1 if none
      */
@@ -117,23 +128,36 @@ class MessageInputStream extends InputStream {
     }
 
     /**
-     * Checks if the stream has been locally closed for reading.
+     * Gets the total number of bytes queued up in ready buffers.
+     * Does not throw IOException on closed stream.
      *
-     * @return true if closed locally, false otherwise
+     * @return number of bytes waiting to be read
      */
-    public boolean isLocallyClosed() {
+    public int getTotalReadySize() {
         synchronized (_dataLock) {
-            return _locallyClosed;
+            if (_locallyClosed.get()) {
+                return 0;
+            }
+            return _readyDataSize - _readyDataBlockIndex;
         }
     }
 
     /**
-     * Determines whether the stream can accept a new message based on buffer limits.
+     * Checks if this stream has been closed locally.
+     *
+     * @return true if closed, false otherwise
+     */
+    public boolean isLocallyClosed() {
+        return _locallyClosed.get();
+    }
+
+    /**
+     * Determines whether the stream can accept a new message.
      *
      * Accepts zero-length or duplicate packets always.
      *
-     * @param messageId   The message sequence ID
-     * @param payloadSize Size of the incoming message payload
+     * @param messageId The sequence ID of the message
+     * @param payloadSize Size of the message payload
      * @return true if the message can be accepted, false otherwise
      */
     public boolean canAccept(long messageId, int payloadSize) {
@@ -146,7 +170,7 @@ class MessageInputStream extends InputStream {
                 return true;
             }
 
-            if (_locallyClosed) {
+            if (_locallyClosed.get()) {
                 return _notYetReadyBlocks.containsKey(messageId);
             }
 
@@ -164,36 +188,54 @@ class MessageInputStream extends InputStream {
 
             int available = _maxBufferSize - _readyDataSize;
             if (available <= 0) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Dropping message " + messageId + ", buffer size exceeded: available=" + available);
-                }
-                _dataLock.notifyAll();
+                logBufferFull(messageId, available);
                 return false;
             }
 
             int allowedBlocks = available / _maxMessageSize;
             if (messageId > _highestReadyBlockId + allowedBlocks) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Dropping message " + messageId + ", exceeds allowed buffer blocks window");
-                }
-                _dataLock.notifyAll();
+                logBufferBlockWindowExceeded(messageId, allowedBlocks);
                 return false;
             }
 
             if (_readyDataBlocks.size() >= 4 * _maxWindowSize) {
-                if (_log.shouldWarn()) {
-                    _log.warn("Dropping message " + messageId + ", too many ready blocks");
-                }
-                _dataLock.notifyAll();
+                logTooManyReadyBlocks(messageId);
                 return false;
             }
+
+            return true;
         }
-        return true;
+    }
+
+    private void logBufferFull(long messageId, int available) {
+        if (_log.shouldWarn()) {
+            _log.warn("Dropping message " + messageId + ", buffer size exceeded: available=" + available);
+        }
+        synchronized (_dataLock) {
+            _dataLock.notifyAll();
+        }
+    }
+
+    private void logBufferBlockWindowExceeded(long messageId, int allowedBlocks) {
+        if (_log.shouldWarn()) {
+            _log.warn("Dropping message " + messageId + ", exceeds allowed buffer blocks window");
+        }
+        synchronized (_dataLock) {
+            _dataLock.notifyAll();
+        }
+    }
+
+    private void logTooManyReadyBlocks(long messageId) {
+        if (_log.shouldWarn()) {
+            _log.warn("Dropping message " + messageId + ", too many ready blocks");
+        }
+        synchronized (_dataLock) {
+            _dataLock.notifyAll();
+        }
     }
 
     /**
-     * Fetches "holes" in the received block sequence as missing block IDs between
-     * the highest ready block and highest received block.
+     * Gets an array of missing block IDs between the highest ready block and highest received block.
      *
      * @return array of missing block IDs, or null if none
      */
@@ -222,7 +264,7 @@ class MessageInputStream extends InputStream {
     /**
      * Updates the ACK and NACK fields of a packet based on current stream state.
      *
-     * @param packet PacketLocal instance for ACK/NACK update
+     * @param packet Packet to update
      */
     public void updateAcks(PacketLocal packet) {
         if (packet.getSendStreamId() > 0 || !packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
@@ -231,23 +273,20 @@ class MessageInputStream extends InputStream {
                 packet.setNacks(getNacks());
             }
         } else {
-            // Do not send ACK 0 for retransmitted SYN packets
-            packet.setAckThrough(-1);
+            packet.setAckThrough(-1); // Don't send ACK 0 for retransmitted SYN packets
         }
     }
 
     /**
-     * Notifies the stream that no further messages will be received after current highest.
+     * Notifies the stream that no more messages will be received after the current highest.
      * Buffered data remains accessible until read.
      */
     public void closeReceived() {
         synchronized (_dataLock) {
             if (_log.shouldDebug()) {
-                StringBuilder sb = new StringBuilder(128);
-                sb.append("Close received: ready blocks=").append(_readyDataBlocks.size())
-                  .append(", not ready blocks=").append(_notYetReadyBlocks.size())
-                  .append(", highest ready block=").append(_highestReadyBlockId);
-                _log.debug(sb.toString(), new Exception("InputStream closed"));
+                _log.debug("Close received: ready blocks=" + _readyDataBlocks.size()
+                        + ", not ready blocks=" + _notYetReadyBlocks.size()
+                        + ", highest ready block=" + _highestReadyBlockId);
             }
             _closeReceived = true;
             _dataLock.notifyAll();
@@ -255,7 +294,7 @@ class MessageInputStream extends InputStream {
     }
 
     /**
-     * Optional method to notify activity on the stream, wakes up waiting readers.
+     * Wakes up any threads waiting for data.
      */
     public void notifyActivity() {
         synchronized (_dataLock) {
@@ -266,14 +305,12 @@ class MessageInputStream extends InputStream {
     /**
      * Accepts a newly received message block.
      *
-     * If the message is next in sequence, adds it to ready blocks,
-     * then promotes any contiguous subsequent out-of-order messages.
+     * If the message is next in sequence, it's added to the ready list and contiguous out-of-order
+     * messages are promoted.
      *
-     * Out-of-order blocks are stored in a separate map for later promotion.
-     *
-     * @param messageId The sequence ID of the received message block
-     * @param payload   The ByteArray payload associated; may be null for dups on closed streams
-     * @return true if this is a new message block, false if duplicate
+     * @param messageId The message sequence ID
+     * @param payload The message payload
+     * @return true if the message was new, false if a duplicate
      */
     public boolean messageReceived(long messageId, ByteArray payload) {
         if (_log.shouldDebug()) {
@@ -293,15 +330,13 @@ class MessageInputStream extends InputStream {
                 _highestBlockId = messageId;
             }
 
-            if (_highestReadyBlockId + 1 == messageId) {
-                if (!_locallyClosed && payload != null && payload.getValid() > 0) {
-                    if (_log.shouldDebug()) {
-                        _log.debug("Adding message ID " + messageId + " to ready blocks");
-                    }
+            if (messageId == _highestReadyBlockId + 1) {
+                if (!_locallyClosed.get() && payload != null && payload.getValid() > 0) {
                     _readyDataBlocks.add(payload);
                     _readyDataSize += payload.getValid();
                 }
                 _highestReadyBlockId = messageId;
+
                 long cur = _highestReadyBlockId + 1;
                 ByteArray ba;
                 while ((ba = _notYetReadyBlocks.remove(cur)) != null) {
@@ -317,7 +352,7 @@ class MessageInputStream extends InputStream {
                 }
                 _dataLock.notifyAll();
             } else {
-                if (_locallyClosed) {
+                if (_locallyClosed.get()) {
                     if (_log.shouldInfo()) {
                         _log.info("Received out-of-order message ID " + messageId + " on closed stream");
                     }
@@ -334,11 +369,10 @@ class MessageInputStream extends InputStream {
     }
 
     /**
-     * Read a single byte from the stream.
-     * Throws SocketTimeoutException on timeout.
+     * Reads a single byte from the stream.
      *
-     * @return the next byte as an int in range [0,255], or -1 if EOF.
-     * @throws IOException if stream is closed or other IO error occurs.
+     * @return the next byte (0-255), or -1 on EOF
+     * @throws IOException if stream is closed or read fails
      */
     @Override
     public int read() throws IOException {
@@ -346,16 +380,16 @@ class MessageInputStream extends InputStream {
         if (read <= 0) {
             return -1;
         }
-        return _oneByte[0] & 0xff;
+        return _oneByte[0] & 0xFF;
     }
 
     /**
-     * Reads bytes into the given array, blocking up to configured read timeout.
-     * Throws SocketTimeoutException on read timeout.
+     * Reads bytes into the given array.
+     * Throws SocketTimeoutException on timeout.
      *
-     * @param target Target byte array buffer
+     * @param target byte array to read into
      * @return number of bytes read, or -1 on EOF
-     * @throws IOException on stream errors or interruptions
+     * @throws IOException if stream is closed or read fails
      */
     @Override
     public int read(byte[] target) throws IOException {
@@ -363,24 +397,23 @@ class MessageInputStream extends InputStream {
     }
 
     /**
-     * Reads up to length bytes into target buffer at offset,
-     * blocking up to read timeout if no data currently available.
-     * Throws SocketTimeoutException on timeout.
+     * Reads up to `length` bytes into the `target` array at `offset`.
+     * Blocks until data is available or timeout occurs.
      *
-     * @param target Target byte buffer
-     * @param offset Offset into buffer to start storing bytes
-     * @param length Maximum number of bytes to read
-     * @return number of bytes read, or -1 if EOF
-     * @throws IOException on errors or interruptions
+     * @param target byte array to read into
+     * @param offset offset in array to start writing
+     * @param length number of bytes to read
+     * @return number of bytes read, or -1 on EOF
+     * @throws IOException if stream is closed or read fails
      */
     @Override
     public int read(byte[] target, int offset, int length) throws IOException {
         int readTimeout = _readTimeout;
-        long expiration = (readTimeout > 0) ? System.currentTimeMillis() + readTimeout : -1;
-        final boolean shouldDebug = _log.shouldDebug();
+        long expiration = readTimeout > 0 ? System.currentTimeMillis() + readTimeout : -1;
+        boolean shouldDebug = _log.shouldDebug();
 
         synchronized (_dataLock) {
-            if (_locallyClosed) {
+            if (_locallyClosed.get()) {
                 throw new IOException("Input stream closed");
             }
             throwAnyError();
@@ -389,9 +422,8 @@ class MessageInputStream extends InputStream {
 
             while (totalRead < length) {
                 if (_readyDataBlocks.isEmpty() && totalRead == 0) {
-                    // Block until data available, timeout, or EOF condition
                     while (_readyDataBlocks.isEmpty()) {
-                        if (_locallyClosed) {
+                        if (_locallyClosed.get()) {
                             throw new IOException("Input stream closed");
                         }
                         if (_notYetReadyBlocks.isEmpty() && _closeReceived) {
@@ -402,65 +434,56 @@ class MessageInputStream extends InputStream {
                         }
                         try {
                             if (readTimeout < 0) {
-                                if (shouldDebug) {
-                                    _log.debug("Waiting indefinitely for data");
-                                }
+                                if (shouldDebug) _log.debug("Waiting indefinitely for data");
                                 _dataLock.wait();
                                 throwAnyError();
                             } else if (readTimeout > 0) {
-                                if (shouldDebug) {
-                                    _log.debug("Waiting up to " + readTimeout + "ms for data");
-                                }
+                                if (shouldDebug) _log.debug("Waiting up to " + readTimeout + "ms for data");
                                 _dataLock.wait(readTimeout);
                                 throwAnyError();
-                            } else {
-                                if (shouldDebug) {
-                                    _log.debug("Nonblocking read returning zero bytes");
+
+                                if (_readyDataBlocks.isEmpty()) {
+                                    long remaining = expiration - System.currentTimeMillis();
+                                    if (remaining <= 0) {
+                                        if (_log.shouldInfo()) {
+                                            _log.info("Read timed out after " + readTimeout + "ms");
+                                        }
+                                        throw new SocketTimeoutException("Read timed out");
+                                    }
+                                    readTimeout = (int) remaining;
                                 }
-                                return 0;
+                            } else {
+                                return 0; // non-blocking
                             }
                         } catch (InterruptedException ie) {
-                            InterruptedIOException iioe = new InterruptedIOException("Interrupted read");
-                            iioe.initCause(ie);
-                            throw iioe;
-                        }
-
-                        if (_readyDataBlocks.isEmpty() && readTimeout > 0) {
-                            long remaining = expiration - System.currentTimeMillis();
-                            if (remaining <= 0) {
-                                if (_log.shouldInfo()) {
-                                    _log.info("Read timed out after " + _readTimeout + "ms");
-                                }
-                                throw new SocketTimeoutException();
-                            }
-                            readTimeout = (int) remaining;
+                            throw new InterruptedIOException("Interrupted during read");
                         }
                     }
                 } else if (_readyDataBlocks.isEmpty()) {
-                    if (shouldDebug) {
-                        _log.debug("No ready data blocks available, returning " + totalRead);
-                    }
                     return totalRead;
                 } else {
                     ByteArray cur = _readyDataBlocks.get(0);
                     int available = cur.getValid() - _readyDataBlockIndex;
                     int toRead = Math.min(available, length - totalRead);
 
-                    System.arraycopy(cur.getData(), cur.getOffset() + _readyDataBlockIndex, target, offset + totalRead, toRead);
+                    System.arraycopy(
+                        cur.getData(), cur.getOffset() + _readyDataBlockIndex,
+                        target, offset + totalRead,
+                        toRead
+                    );
+
                     _readyDataBlockIndex += toRead;
                     totalRead += toRead;
                     _readTotal += toRead;
 
                     if (_readyDataBlockIndex >= cur.getValid()) {
-                        _readyDataBlockIndex = 0;
                         _readyDataSize -= cur.getValid();
+                        _readyDataBlockIndex = 0;
                         _readyDataBlocks.remove(0);
                     }
 
                     if (shouldDebug) {
-                        _log.debug("Read " + toRead + " bytes; readyDataBlockIndex=" + _readyDataBlockIndex
-                                + ", readyBlocks=" + _readyDataBlocks.size()
-                                + ", totalRead=" + _readTotal);
+                        _log.debug("Read " + toRead + " bytes; remaining in block: " + (cur.getValid() - _readyDataBlockIndex));
                     }
                 }
             }
@@ -471,13 +494,13 @@ class MessageInputStream extends InputStream {
     /**
      * Returns an estimate of bytes readily available to read without blocking.
      *
-     * @return number of bytes available in buffers
-     * @throws IOException if stream closed or error occurred
+     * @return number of bytes available for reading
+     * @throws IOException if stream is closed or error occurred
      */
     @Override
     public int available() throws IOException {
         synchronized (_dataLock) {
-            if (_locallyClosed) {
+            if (_locallyClosed.get()) {
                 throw new IOException("Input stream closed");
             }
             throwAnyError();
@@ -486,41 +509,24 @@ class MessageInputStream extends InputStream {
     }
 
     /**
-     * Gets the total number of bytes queued up in ready buffers.
-     * Does not throw IOException on closed stream.
+     * Returns the current read timeout in milliseconds.
+     * -1 means block indefinitely, 0 means non-blocking.
      *
-     * @return number of bytes waiting to be read
-     */
-    public int getTotalReadySize() {
-        synchronized (_dataLock) {
-            if (_locallyClosed) {
-                return 0;
-            }
-            return _readyDataSize - _readyDataBlockIndex;
-        }
-    }
-
-    /**
-     * How long a read() call should block.
-     * If less than 0, block indefinitely.
-     * If 0, do not block at all (nonblocking).
-     *
-     * @return read timeout in milliseconds, 0 for nonblocking, negative to block indefinitely
+     * @return read timeout in ms
      */
     public int getReadTimeout() {
         return _readTimeout;
     }
 
     /**
-     * Set how long a read() call should block.
-     * If less than 0, block indefinitely.
-     * If 0, do not block at all (nonblocking).
+     * Sets the read timeout in milliseconds.
+     * -1 means block indefinitely, 0 means non-blocking.
      *
-     * @param timeout read timeout in milliseconds
+     * @param timeout new read timeout
      */
     public void setReadTimeout(int timeout) {
         if (_log.shouldDebug()) {
-            _log.debug("Changing read timeout from " + _readTimeout + " to " + timeout + ": " + hashCode());
+            _log.debug("Changing read timeout from " + _readTimeout + " to " + timeout);
         }
         _readTimeout = timeout;
     }
@@ -533,27 +539,22 @@ class MessageInputStream extends InputStream {
     public void close() {
         synchronized (_dataLock) {
             if (_log.shouldDebug()) {
-                StringBuilder sb = new StringBuilder(128);
-                sb.append("close(): ready bytes=").append(_readyDataSize - _readyDataBlockIndex)
-                  .append(", ready blocks=").append(_readyDataBlocks.size())
-                  .append(", not ready blocks=").append(_notYetReadyBlocks.size())
-                  .append(", highest ready block=").append(_highestReadyBlockId)
-                  .append(", hashCode=").append(hashCode());
-                _log.debug(sb.toString());
+                _log.debug("close(): ready blocks=" + _readyDataBlocks.size()
+                        + ", not ready blocks=" + _notYetReadyBlocks.size()
+                        + ", highest ready block=" + _highestReadyBlockId);
             }
 
             _readyDataBlocks.clear();
             _readyDataSize = 0;
             _notYetReadyBlocks.clear();
-
-            _locallyClosed = true;
+            _locallyClosed.set(true);
             _dataLock.notifyAll();
         }
     }
 
     /**
-     * Records a stream error and locally closes the stream.
-     * Wakes up any waiting readers.
+     * Records a stream error and marks the stream as locally closed.
+     * Wakes up any waiting threads.
      *
      * @param ioe The IOException that occurred
      */
@@ -562,22 +563,22 @@ class MessageInputStream extends InputStream {
             if (_streamError == null) {
                 _streamError = ioe;
             }
-            _locallyClosed = true;
+            _locallyClosed.set(true);
             _dataLock.notifyAll();
         }
     }
 
     /**
-     * Throws any stored stream error and clears the error.
+     * Throws any stored stream error and clears it.
      *
-     * @throws IOException if a stream error was recorded
+     * @throws IOException if a stream error has occurred
      */
     private void throwAnyError() throws IOException {
-        IOException ioe = _streamError;
-        if (ioe != null) {
+        IOException error = _streamError;
+        if (error != null) {
             _streamError = null;
             IOException wrapped = new IOException("Input stream error");
-            wrapped.initCause(ioe);
+            wrapped.initCause(error);
             throw wrapped;
         }
     }
