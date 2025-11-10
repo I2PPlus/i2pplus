@@ -126,7 +126,7 @@ class MessageOutputStream extends OutputStream {
             bufSize = ConnectionOptions.DEFAULT_MAX_MESSAGE_SIZE_RATCHET;
         }
 
-        _dataCache = ByteCache.getInstance(256, bufSize);
+        _dataCache = ByteCache.getInstance(128, bufSize);
         _originalBufferSize = bufSize;
 
         // Ensure initial buffer size doesn't exceed original buffer size
@@ -368,7 +368,10 @@ class MessageOutputStream extends OutputStream {
 
         try {
             if (ws == null) {
-                if (_log.shouldWarn()) {_log.warn("WriteStatus is null during flush");}
+                if (_log.shouldWarn()) {
+                    _log.warn("WriteStatus is null during flush");
+                    throw new IOException("DataReceiver returned null WriteStatus");
+                }
             } else if (_closed.get() && (_writeTimeout > Connection.DISCONNECT_TIMEOUT || _writeTimeout <= 0)) {
                 ws.waitForCompletion(Connection.DISCONNECT_TIMEOUT);
             } else if (_writeTimeout <= 0 || _writeTimeout > Connection.DISCONNECT_TIMEOUT) {
@@ -471,13 +474,14 @@ class MessageOutputStream extends OutputStream {
         synchronized (_dataLock) {
             if (_valid > 0 && shouldFlush) {
                 _dataReceiver.writeData(_buf, 0, _valid);
-                _written += _valid;
             }
+            _written += _valid;
             _valid = 0;
 
             if (_buf != null) {
                 ba = new ByteArray(_buf);
                 _buf = null;
+                _valid = 0;
             }
             _dataLock.notifyAll();
         }
@@ -601,7 +605,7 @@ class MessageOutputStream extends OutputStream {
          *
          * @return true if a write is in progress, false otherwise
          */
-        boolean writeInProcess();
+        public boolean writeInProcess();
     }
 
     /**

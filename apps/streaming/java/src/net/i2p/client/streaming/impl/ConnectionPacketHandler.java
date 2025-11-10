@@ -11,6 +11,7 @@ import net.i2p.data.SigningPublicKey;
 import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
+import net.i2p.util.SystemVersion;
 
 /**
  * Receive a packet for a particular connection - placing the data onto the
@@ -26,12 +27,12 @@ import net.i2p.util.SimpleTimer;
 class ConnectionPacketHandler {
     private final I2PAppContext _context;
     private final Log _log;
-    private final ByteCache _cache = ByteCache.getInstance(32, 4*1024);
+    private final ByteCache _cache = ByteCache.getInstance(32, 32*1024);
 
     public static final int MAX_SLOW_START_WINDOW = 64;
 
     // see tickets 1939 and 2584
-    private static final int IMMEDIATE_ACK_DELAY = 120;
+    private static final int IMMEDIATE_ACK_DELAY = SystemVersion.isSlow() ? 100 : 80;
     static final String PROP_IMMEDIATE_ACK_DELAY = "i2p.streaming.immediateAckDelay";
 
     private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
@@ -487,8 +488,8 @@ class ConnectionPacketHandler {
             con.getOptions().setWindowSize(newWindowSize);
             con.setCongestionWindowEnd(newWindowSize + lowest);
 
-            if (_log.shouldInfo())
-                _log.info("New window size: " + newWindowSize + "/" + oldWindow + "/" + con.getOptions().getWindowSize() +
+            if (_log.shouldDebug())
+                _log.debug("New window size: " + newWindowSize + "/" + oldWindow + "/" + con.getOptions().getWindowSize() +
                           " (resends: " + numResends + ") for " + con);
         } else {
             if (_log.shouldDebug())
@@ -531,32 +532,34 @@ class ConnectionPacketHandler {
                     con.setSendStreamId(packet.getReceiveStreamId());
                     Destination dest = packet.getOptionalFrom();
                     if (dest == null) {
-                        if (_log.shouldWarn())
-                            _log.warn("Received SYN Packet without FROM");
+                        if (_log.shouldWarn()) {_log.warn("Received SYN Packet without FROM");}
+                        packet.releasePayload();
                         return false;
                     }
                     con.setRemotePeer(dest);
                     SigningPublicKey spk = packet.getTransientSPK();
-                    if (spk != null)
-                        con.setRemoteTransientSPK(spk);
+                    if (spk != null) {con.setRemoteTransientSPK(spk);}
+                    packet.releasePayload();
                     return true;
                 } else {
                     // neither RST nor SYN and we don't have the stream id yet?
                     if (packet.getSequenceNum() < MAX_INITIAL_PACKETS) {
+                        packet.releasePayload();
                         return true;
                     } else {
-                        if (_log.shouldWarn())
-                            _log.warn("Received packet without RESET or SYN where we don't know StreamID: " + packet);
+                        if (_log.shouldWarn()) {_log.warn("Received packet without RESET or SYN where we don't know StreamID: " + packet);}
+                        packet.releasePayload();
                         return false;
                     }
                 }
             } else {
                 // Apparently an i2pd bug...
                 if (con.getSendStreamId() != packet.getReceiveStreamId()) {
-                    if (_log.shouldWarn())
-                        _log.warn("Received packet with the WRONG reply StreamID \n* " + con + " / " + packet);
+                    if (_log.shouldWarn()) {_log.warn("Received packet with the WRONG reply StreamID \n* " + con + " / " + packet);}
+                    packet.releasePayload();
                     return false;
                 } else {
+                    packet.releasePayload();
                     return true;
                 }
             }
@@ -578,8 +581,8 @@ class ConnectionPacketHandler {
             Destination d1 = con.getRemotePeer();
             Destination d2 = packet.getOptionalFrom();
             if (d1 != null && d2 != null && !d1.equals(d2)) {
-                if (_log.shouldWarn())
-                    _log.warn("Received RESET packet from WRONG destination -> " + con);
+                if (_log.shouldWarn()) {_log.warn("Received RESET packet from WRONG destination -> " + con);}
+                packet.releasePayload();
                 return;
             }
             SigningPublicKey spk = con.getRemoteSPK();
@@ -588,20 +591,21 @@ class ConnectionPacketHandler {
             _cache.release(ba);
             if (!ok) {
                 if (_log.shouldWarn()) {_log.warn("Received UNSIGNED or FORGED RESET packet -> " + con);}
+                packet.releasePayload();
                 return;
             } else {
-                if (_log.shouldWarn()) {_log.warn("Received RESET packet -> " + con);}
+                if (_log.shouldInfo()) {_log.info("Received RESET packet -> " + con);}
                 // ok, valid RST
                 con.resetReceived();
                 con.eventOccurred();
-
                 _context.statManager().addRateData("stream.resetReceived", con.getHighestAckedThrough(), con.getLifetime());
-
+                packet.releasePayload();
                 // no further processing
                 return;
             }
         } else {
             if (_log.shouldWarn()) {_log.warn("Received RESET packet for the WRONG connection -> " + con);}
+            packet.releasePayload();
             return;
         }
     }
@@ -617,6 +621,7 @@ class ConnectionPacketHandler {
         Destination d1 = con.getRemotePeer();
         Destination d2 = packet.getOptionalFrom();
         if (d1 != null && d2 != null && !d1.equals(d2)) {
+            packet.releasePayload();
             throw new I2PException("Received packet from WRONG destination on " + con);
         }
         // verify the signature if necessary
@@ -629,6 +634,7 @@ class ConnectionPacketHandler {
             boolean sigOk = packet.verifySignature(_context, spk, ba.getData());
             _cache.release(ba);
             if (!sigOk) {
+                packet.releasePayload();
                 throw new I2PException("Received unsigned / forged packet: " + packet);
             }
         }

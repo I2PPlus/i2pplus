@@ -1,5 +1,7 @@
 package net.i2p.client.streaming.impl;
 
+import java.io.IOException;
+
 import net.i2p.I2PAppContext;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
@@ -67,32 +69,69 @@ class ConnectionDataReceiver implements MessageOutputStream.DataReceiver {
      */
     public MessageOutputStream.WriteStatus writeData(byte[] buf, int off, int size) {
         Connection con = _connection;
-        //if (con == null) return _dummyStatus;
-        boolean doSend = true;
-        if ((size <= 0) && (con.getLastSendId() >= 0)) {
-            if (con.getOutputStream().getClosed()) {
-                if (con.getCloseSentOn() <= 0) {doSend = true;}
-                else {doSend = false;} // closed, no new data, and we've already sent a close packet
-            } else {doSend = false;} // no new data, not closed, already synchronized
+        if (con == null) {
+            if (_log.shouldWarn()) {
+                _log.warn("Connection is null; dropping write of " + size + " bytes");
+            }
+            return _dummyStatus;
         }
 
-        if (con.getUnackedPacketsReceived() > 0) {doSend = true;}
+        boolean doSend = true;
 
-        if (_log.shouldInfo() && !doSend) {
-            _log.info("writeData called: size="+size + " doSend=" + doSend
-                       + " unackedReceived: " + con.getUnackedPacketsReceived()
-                       + " con: " + con  /* , new Exception("write called by") */ );
+        if ((size <= 0) && (con.getLastSendId() >= 0)) {
+            if (con.getOutputStream().getClosed()) {
+                if (con.getCloseSentOn() <= 0) {
+                    doSend = true;
+                } else {
+                    doSend = false;
+                }
+            } else {
+                doSend = false;
+            }
+        }
+
+        if (con.getUnackedPacketsReceived() > 0) {
+            doSend = true;
+        }
+
+        if (_log.shouldDebug()) {
+            _log.debug("writeData called: size=" + size + ", doSend=" + doSend +
+                       ", closed=" + con.getOutputStream().getClosed() +
+                       ", closeSentOn=" + con.getCloseSentOn() +
+                       ", unacked=" + con.getUnackedPacketsReceived());
         }
 
         if (doSend) {
             PacketLocal packet = send(buf, off, size);
-            //don't wait for non-acks
-            if ((packet.getSequenceNum() > 0) || (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE))) {
+            if ((packet.getSequenceNum() > 0) || packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
                 return packet;
-            } else {return _dummyStatus;}
-        } else {return _dummyStatus;}
+            } else {
+                return _dummyStatus;
+            }
+        } else {
+            return _dummyStatus;
+        }
     }
 
+    private static class FailedWriteStatus implements MessageOutputStream.WriteStatus {
+        private final IOException _error;
+
+        public FailedWriteStatus(IOException error) {
+            _error = error;
+        }
+
+        public void waitForCompletion(int maxWaitMs) throws IOException {
+            throw _error;
+        }
+
+        public void waitForAccept(int maxWaitMs) throws IOException {
+            throw _error;
+        }
+
+        public boolean writeAccepted() { return false; }
+        public boolean writeFailed() { return true; }
+        public boolean writeSuccessful() { return false; }
+    }
 
     /**
      * Send some data through the connection, attaching any appropriate flags
