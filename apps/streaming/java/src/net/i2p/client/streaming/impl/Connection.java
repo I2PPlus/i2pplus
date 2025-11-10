@@ -781,7 +781,7 @@ class Connection {
     public synchronized Destination getRemotePeer() {return _remotePeer;}
 
     private String getRemotePeerString() {
-        if (_remotePeer != null) {return "[" + _remotePeer.calculateHash().toBase64().substring(0,6) + "]";}
+        if (_remotePeer != null) {return "[" + _remotePeer.calculateHash().toBase32().substring(0,8) + "]";}
         else {return "[Unknown]";}
     }
 
@@ -1239,7 +1239,7 @@ class Connection {
         else {buf.append("Unknown");}
         if (_isInbound) {buf.append(" from ");}
         else {buf.append(" to ");}
-        if (_remotePeer != null) {buf.append("[").append(_remotePeer.calculateHash().toBase64().substring(0,6)).append("]");}
+        if (_remotePeer != null) {buf.append("[").append(_remotePeer.calculateHash().toBase32().substring(0,8)).append("]");}
         else {buf.append("Unknown");}
         long now = _context.clock().now();
         if  (_log.shouldInfo()) {
