@@ -129,12 +129,12 @@ class PacketHandler {
             if (con.getOptions().getAnswerPings()) {
                 receivePing(con, packet);
             } else if (log.shouldWarn()) {
-                log.warn("Dropping ECHO packet on existing connection -> " + packet);
+                log.warn("Dropping ECHO packet for [" + con + "]" + (packet != null ? " -> " + packet : ""));
             }
         } else if (packet.getReceiveStreamId() > 0) {
             receivePong(packet);
         } else if (log.shouldWarn()) {
-            log.warn("Received ECHO packet " + packet + " with no StreamIDs");
+            log.warn("Received ECHO packet " + " with no StreamIDs for [" + con + "]" + (packet != null ? " -> " + packet : ""));
         }
         packet.releasePayload();
     }
@@ -157,7 +157,7 @@ class PacketHandler {
                         con.setRemoteTransientSPK(spk);
                 } else if (oldId != packet.getReceiveStreamId()) {
                     if (log.shouldWarn())
-                        log.warn("Received SYN packet with wrong IDs: [" + con + "] Packet: " + packet);
+                        log.warn("Received SYN packet with wrong IDs for [" + con + "]");
                     sendReset(packet);
                     packet.releasePayload();
                     return;
@@ -168,14 +168,14 @@ class PacketHandler {
                 con.getPacketHandler().receivePacket(packet, con);
             } catch (I2PException ie) {
                 if (log.shouldWarn())
-                    log.warn("Signature verification failed for " + con + "/" + oldId + ": " + packet, ie);
+                    log.warn("Signature verification failed for " + con + " / " + oldId + (packet != null ? " -> " + packet : ""), ie);
                 if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
                     sendResetUnverified(packet);
                 }
             }
         } else if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
             if (log.shouldWarn())
-                log.warn("Received SYN packet with wrong IDs -> Sending RESET " + packet);
+                log.warn("Received SYN packet with wrong IDs -> Sending RESET...";
             sendReset(packet);
             packet.releasePayload();
         } else {
@@ -209,7 +209,7 @@ class PacketHandler {
 
         if (!verified) {
             if (log.shouldWarn())
-                log.warn("Cannot send reset due to spoofed packet " + packet);
+                log.warn("Cannot send reset due to spoofed packet" + (packet != null ? " -> " + packet : ""));
             return;
         }
         sendResetUnverified(packet);
