@@ -846,6 +846,7 @@ class SidebarRenderer {
         String buildStatusText = buildStatus;
         String buildStatusTooltip = "";
         String buildStatusClass = "tunnelBuildStatus";
+        int partTunnels = _helper.getParticipatingTunnels();
 
         if (buildStatus.startsWith("[starting]")) {
             buildStatusClass += " starting";
@@ -867,9 +868,13 @@ class SidebarRenderer {
             buildStatusClass += " rejecting";
             buildStatusTooltip = _t("Router is currently using the configured maximum share bandwidth");
             buildStatusText = buildStatusText.substring(buildStatusText.indexOf(']') + 1).trim();
-        } else if (buildStatus.startsWith("[ready]") || buildStatus.startsWith("[accepting]")) {
+        } else if (buildStatus.startsWith("[ready]") || buildStatus.startsWith("[accepting]")  && partTunnels <= 0) {
             buildStatusClass += " accepting";
             buildStatusTooltip = _t("Router is ready to build participating tunnels");
+            buildStatusText = buildStatusText.substring(buildStatusText.indexOf(']') + 1).trim();
+        } else if (buildStatus.startsWith("[accepting]")) {
+            buildStatusClass += " active";
+            buildStatusTooltip = _t("Accepting transit tunnel requests; hosting {0} tunnels", partTunnels);
             buildStatusText = buildStatusText.substring(buildStatusText.indexOf(']') + 1).trim();
         } else if (buildStatus.startsWith("[hidden]")) {
             buildStatusClass += " hidden";
@@ -893,12 +898,6 @@ class SidebarRenderer {
                .append("</a></span></h4>\n");
         }
 
-        buf.append("</span></h4>\n");
-        if (!SigType.ECDSA_SHA256_P256.isAvailable()) {
-            buf.append("<hr>\n<h4><span class=warn>")
-               .append(_t("Warning: ECDSA is not available. Update your Java or OS"))
-               .append("</a></span></h4>\n");
-        }
         return buf.toString();
     }
 
