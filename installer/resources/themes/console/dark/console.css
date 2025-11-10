@@ -328,7 +328,7 @@ h3:hover .toggleSection{display:inline-block;z-index:999}
 #lsCount.badge,#newsCount,#newHosts:not([hidden]),#sidebar h3 a .badge,#tunnelCount{padding:2px 5px 1px;display:inline-block;position:relative;z-index:999;white-space:nowrap;letter-spacing:.01em;word-spacing:-.02em;text-transform:lowercase;font-size:80%;font-weight:700;box-shadow:0 0 0 1px #141,var(--highlight);background:var(--badge);animation:fade .2s ease .1s reverse both}
 #lsCount.badge,#newHosts{animation:none}
 #sidebar #sb_status #lsCount.badge,#sidebar .net_status:hover #sb_status #lsCount.badge{padding:2px 3px 1px;margin:0 0 0 3px;line-height:1;vertical-align:middle;color:#494}
-#lsCount.badge{margin-top:1px;font-size:8pt!important;transform:translateY(1px)}
+#lsCount.badge{margin-top:1px;min-width:24px;font-size:8pt!important;transform:translateY(1px)}
 #sidebar h3{position:relative;contain:paint}
 #console_404 #sidebar h3 a .badge{display:none}
 #sidebar h3 a[href="/info"] .badge{text-transform:none}
