@@ -392,10 +392,6 @@ class MessageOutputStream extends OutputStream {
             } else if (ws.writeFailed()) {
                 throw new IOException("Write failed");
             }
-        } else {
-            if (_log.shouldWarn()) {
-                _log.warn("Skipped writeFailed check due to null WriteStatus");
-            }
         }
 
         if (_log.shouldDebug()) {
