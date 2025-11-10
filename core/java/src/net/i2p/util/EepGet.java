@@ -351,8 +351,11 @@ public class EepGet {
             get.addAuthorization(username, password);
         }
         get.addStatusListener(get.new CLIStatusListener(markSize, lineLen));
-        if (!get.fetch(CONNECT_TIMEOUT, -1, inactivityTimeout))
+        if (!get.fetch(CONNECT_TIMEOUT, -1, inactivityTimeout)) {
             System.exit(1);
+        } else {
+            System.exit(0);
+        }
     }
 
     /**
