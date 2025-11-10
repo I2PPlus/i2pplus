@@ -782,6 +782,9 @@ public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
      *  @since 0.9.9
      */
     protected Socket getSocket(Hash from, int incomingPort) throws IOException {
+        if (from == null) {
+            throw new IOException("Peer destination hash is null");
+        }
         InetAddress host = remoteHost;
         int port = remotePort;
         if (incomingPort != 0 && !_socketMap.isEmpty()) {
