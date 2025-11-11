@@ -57,6 +57,7 @@
     b.classList.add("ready");
     window.addEventListener("scroll", throttledLazyLoad, {passive: true});
     window.addEventListener("resize", throttledLazyLoad, {passive: true});
+    lazyload();
 
     window.addEventListener("beforeunload", () => {
       window.removeEventListener("scroll", throttledLazyLoad);
