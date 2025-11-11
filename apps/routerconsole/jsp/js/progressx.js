@@ -8,8 +8,9 @@
 function initProgressX(window, document) {
   "use strict";
 
-  let lastTime = 0;
+  // Polyfill for requestAnimationFrame
   if (!window.requestAnimationFrame) {
+    let lastTime = 0;
     window.requestAnimationFrame = function(callback) {
       const now = performance.now();
       const delay = Math.max(0, 16 - (now - lastTime));
@@ -23,7 +24,7 @@ function initProgressX(window, document) {
   }
 
   let canvas, context, gradient = null;
-  let progressTimer = null, fadeTimer = null;
+  let fadeTimer = null;
   let currentProgress = 0, isVisible = false;
   let lastColors = null;
   let frameRequested = false;
@@ -49,17 +50,17 @@ function initProgressX(window, document) {
     if (canvas) return;
     canvas = document.createElement("canvas");
     canvas.id = "pageloader";
-    Object.assign(canvas.style, {
-      position: "fixed",
-      top: "0",
-      left: "0",
-      right: "0",
-      margin: "0",
-      padding: "0",
-      zIndex: "100001",
-      display: "none",
-      opacity: "1"
-    });
+    canvas.style.cssText = `
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      margin: 0;
+      padding: 0;
+      z-index: 100001;
+      display: none;
+      opacity: 1;
+    `;
     injectCanvas();
     context = canvas.getContext("2d");
     window.addEventListener("resize", onResized, { passive: true });
@@ -67,11 +68,9 @@ function initProgressX(window, document) {
 
   function injectCanvas() {
     const html = document.documentElement;
-    if (html.firstChild) {
-      html.insertBefore(canvas, html.firstChild);
-    } else {
-      html.appendChild(canvas);
-    }
+    html.firstChild
+      ? html.insertBefore(canvas, html.firstChild)
+      : html.appendChild(canvas);
   }
 
   let ticking = false;
@@ -96,7 +95,8 @@ function initProgressX(window, document) {
   }
 
   function draw() {
-    if (!canvas || !context || document.hidden || !navigator.onLine) return;
+    if (!canvas || !context) return;
+
     const width = window.innerWidth;
     const height = options.barThickness;
     const colors = options.barColors[currentColorSetName] || options.barColors.default;
@@ -140,8 +140,7 @@ function initProgressX(window, document) {
   }
 
   function progressxShow(colorSet) {
-    if (isVisible) return;
-    if (animationLocked) return;
+    if (isVisible || animationLocked) return;
     isVisible = true;
 
     if (fadeTimer) {
@@ -149,7 +148,7 @@ function initProgressX(window, document) {
       fadeTimer = null;
     }
 
-    if (animationFrameId !== null) {
+    if (animationFrameId) {
       cancelAnimationFrame(animationFrameId);
       animationFrameId = null;
     }
@@ -169,13 +168,7 @@ function initProgressX(window, document) {
     if (!isVisible) return;
     isVisible = false;
 
-    if (progressTimer) {
-      cancelAnimationFrame(progressTimer);
-      progressTimer = null;
-    }
-
     let opacity = 1;
-
     function fadeLoop() {
       if (progressxProgress("+0.1", false) >= 1) {
         opacity -= 0.045;
@@ -197,7 +190,7 @@ function initProgressX(window, document) {
   function progressxProgress(value, animate = true) {
     if (!canvas || !context) return currentProgress;
 
-    let oldValue = currentProgress;
+    const oldValue = currentProgress;
 
     if (typeof value === "string") {
       const op = value[0], num = parseFloat(value.slice(1));
@@ -222,9 +215,7 @@ function initProgressX(window, document) {
 
     animationLocked = true;
 
-    if (animationFrameId !== null) {
-      cancelAnimationFrame(animationFrameId);
-    }
+    if (animationFrameId) cancelAnimationFrame(animationFrameId);
 
     const duration = 300;
     const start = performance.now();
@@ -258,12 +249,10 @@ function initProgressX(window, document) {
     }
     options.barColors.current = options.barColors[currentColorSetName] || options.barColors.default;
   }
+
   window.progressx = { config: progressxConfig, show: progressxShow, progress: progressxProgress, hide: progressxHide };
 }
 
 initProgressX(window, document);
 
-document.addEventListener("DOMContentLoaded", () => {
-  document.documentElement.removeAttribute("style");
-  progressx.hide();
-});
+window.addEventListener("load", () => { progressx.hide(); });
