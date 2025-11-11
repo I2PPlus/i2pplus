@@ -123,6 +123,7 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 <% if (delayLoad) {%><div id=netdbwrap style=height:5px;opacity:0><% } %>
 <% if ((r == null && ls != null) || l != null) {%><div class=leasesets_container><% } %>
 <%= formhandler.getNavBarHtml() %>
+<% out.flush(); %>
 <jsp:getProperty name="formhandler" property="floodfillNetDbSummary"/>
 <% if ((r == null && ls != null) || l != null) {%></div><% } %>
 </div>
