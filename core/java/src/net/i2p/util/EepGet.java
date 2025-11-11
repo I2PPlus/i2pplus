@@ -516,9 +516,9 @@ public class EepGet {
         private long _lastComplete;
         private boolean _firstTime;
         private final DecimalFormat _pct = new DecimalFormat("00.0%");
-        public CLIStatusListener() {
-            this(1024, 40);
-        }
+        public CLIStatusListener() {this(1024, 40);}
+        private double _smoothedRate = 0.0;
+        private static final double SMOOTHING_FACTOR = 0.1; // Tune between 0.1 and 0.5
 
         public CLIStatusListener(int markSize, int lineSize) {
             _markSize = markSize;
@@ -545,16 +545,13 @@ public class EepGet {
             for (int i = 0; i < currentWrite; i++) {
                 _written++;
                 if ((_markSize > 0) && (_written % _markSize == 0)) {
-//                    System.out.print("◼");
-
                     if ((_lineSize > 0) && (_written % ((long)_markSize*(long)_lineSize) == 0l)) {
                         long now = _context.clock().now();
                         long timeToSend = now - _lastComplete;
+                        double timeInSeconds = timeToSend / 1000.0d;
                         if (timeToSend > 0) {
                             StringBuilder buf = new StringBuilder(50);
                             Formatter fmt = new Formatter(buf);
-//                            buf.append(" ");
-//                            fmt.format("%8d", Long.valueOf(_written));
                             Float received = Float.valueOf(_written) / 1024;
                             if (received > 1024) {
                                 received = received / 1024;
@@ -564,24 +561,21 @@ public class EepGet {
                                 fmt.format("%3.0f", received);
                                 buf.append("K  ");
                             }
-                            double lineKBytes = ((double)_markSize * (double)_lineSize)/1024.0d;
-                            double kbps = lineKBytes/(timeToSend/1000.0d);
-                            fmt.format("%7.2f", Double.valueOf(kbps));
+                            double lineKBytes = ((double)_markSize * (double)_lineSize) / 1024.0d;
+                            double kbps = timeInSeconds > 0 ? lineKBytes / timeInSeconds : 0;
+                            String formattedRate = formatSmoothedValue(kbps, true);
+
+                            // Append the formatted rate (e.g., "4.3KB/s" or "12KB/s")
+                            buf.append(formattedRate);
                             buf.append("KB/s");
-                            if ( bytesRemaining > 0 ) {
+
+                            if (bytesRemaining > 0) {
                                 double pct = 100 * ((double)_written + _previousWritten) /
                                              ((double)alreadyTransferred + (double)currentWrite + bytesRemaining);
                                 buf.append("  [");
                                 fmt.format("%4.1f", Double.valueOf(pct));
                                 buf.append("%]");
                             }
-/*
-                            buf.append(" / ");
-                            long lifetime = _context.clock().now() - _startedOn;
-                            double lifetimeKBps = (1000.0d*(_written)/(lifetime*1024.0d));
-                            fmt.format("%7.2f", Double.valueOf(lifetimeKBps));
-                            buf.append(" KB/s");
-*/
                             if (SystemVersion.isWindows())
                                 System.out.println(" ◼ " + buf.toString());
                             else
@@ -593,6 +587,33 @@ public class EepGet {
                 }
             }
         }
+
+        /**
+         * Smooths the incoming value and returns a formatted string based on magnitude.
+         *
+         * @param currentValue the raw value (e.g., KB/s)
+         * @param isSmoothingEnabled whether to apply smoothing
+         * @return formatted string (e.g., "4.3KB/s", "12KB/s")
+         */
+        private String formatSmoothedValue(double currentValue, boolean isSmoothingEnabled) {
+            if (isSmoothingEnabled) {
+                // Apply exponential smoothing
+                _smoothedRate = (SMOOTHING_FACTOR * currentValue) + ((1 - SMOOTHING_FACTOR) * _smoothedRate);
+            } else {
+                _smoothedRate = currentValue;
+            }
+
+            double value = _smoothedRate;
+
+            if (value < 5.0) {
+                // Format to 1 decimal place
+                return String.format("%.1f", value);
+            } else {
+                // Format to 0 decimal places
+                return String.format("%.0f", value);
+            }
+        }
+
         public void transferComplete(long alreadyTransferred, long bytesTransferred, long bytesRemaining, String url, String outputFile, boolean notModified) {
             long transferred;
             if (_firstTime)
@@ -600,7 +621,6 @@ public class EepGet {
             else
                 transferred = alreadyTransferred - _previousWritten;
             System.out.println();
-            //System.out.println("== " + new Date());
             if (notModified) {
                 System.out.println(" • Source not modified since last download");
             } else {
@@ -647,8 +667,6 @@ public class EepGet {
         }
 
         public void attemptFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt, int numRetries, Exception cause) {
-            //System.out.println();
-            //System.out.println("** " + new Date());
             System.out.println(" ✖ Attempt " + (currentAttempt + 1) + " to retrieve " + url + " failed");
             System.out.println(" • Transferred " + bytesTransferred
                                + " bytes (" + (bytesRemaining < 0 ? "unknown" : Long.toString(bytesRemaining) + " bytes") + " remaining)");
@@ -658,7 +676,6 @@ public class EepGet {
         }
 
         public void transferFailed(String url, long bytesTransferred, long bytesRemaining, int currentAttempt) {
-            //System.out.println("== " + new Date());
             System.out.println(" ✖ Transfer of " + url + " failed after " + (currentAttempt + 1) + " retries");
             System.out.println(" • Transfer size: " + bytesTransferred + " with "
                                + (bytesRemaining < 0 ? "unknown" : Long.toString(bytesRemaining) + " bytes") + " remaining");
@@ -991,9 +1008,7 @@ public class EepGet {
             _etag = _etagOrig;
             _lastModified = _lastModifiedOrig;
             _contentType = null;
-//            _server = null; // do we need to reset this?
             _encodingChunked = false;
-
             sendRequest(timeout);
             doFetch(timeout);
             return;
@@ -1304,7 +1319,6 @@ public class EepGet {
         // clear out the arguments, as we use the same variables for return values
         _etag = null;
         _lastModified = null;
-//        _server = null; // do we need to reset this?
 
         buf.setLength(0);
         byte lookahead[] = new byte[3];
