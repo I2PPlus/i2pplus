@@ -34,12 +34,12 @@ public class SimpleTimer2 {
         return I2PAppContext.getGlobalContext().simpleTimer2();
     }
 
-    private static final int MAX_THREADS = 8192;
-    private static final int INITIAL_THREADS = 1;
+    private static final int MAX_THREADS = 64000;
+    private static final int INITIAL_THREADS = 16;
     private static final int QUEUE_CAPACITY = 1000;
-    private static final long THREAD_KEEP_ALIVE_SECONDS = 5;
-    private static final long RESIZE_INTERVAL_MILLIS = 5000;
-    private static final int MAX_THREADS_TO_ADD = 4;
+    private static final long THREAD_KEEP_ALIVE_SECONDS = 30;
+    private static final long RESIZE_INTERVAL_MILLIS = 3000;
+    private static final int MAX_THREADS_TO_ADD = 16;
 
     private final ScheduledThreadPoolExecutor _executor;
     private final ScheduledExecutorService _resizeScheduler;
