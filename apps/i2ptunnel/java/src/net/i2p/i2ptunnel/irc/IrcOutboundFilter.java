@@ -48,7 +48,7 @@ public class IrcOutboundFilter implements Runnable {
             output=remote.getOutputStream();
         } catch (IOException e) {
             if (_log.shouldWarn())
-                _log.warn("[IRC Client] Outbound Filter: No streams",e);
+                _log.warn("[IRC Client] Outbound Filter: No streams", e);
             return;
         }
         if (_log.shouldDebug())
@@ -69,15 +69,15 @@ public class IrcOutboundFilter implements Runnable {
                     if(outmsg!=null)
                     {
                         if(!inmsg.equals(outmsg)) {
-                            if (_log.shouldWarn()) {
-                                _log.warn("[IRC Client] Outbound message FILTERED [" + outmsg + "]");
-                                _log.warn("[IRC Client] Outbound message [" + inmsg + "]");
+                            if (_log.shouldInfo()) {
+                                _log.info("[IRC Client] Outbound message FILTERED [" + outmsg + "]");
+                                _log.info("[IRC Client] Outbound message [" + inmsg + "]");
                             }
                         } else {
                             if (_log.shouldInfo())
                                 _log.info("[IRC Client] Outbound message [" + outmsg + "]");
                         }
-                        outmsg=outmsg+"\r\n";   // rfc1459 sec. 2.3
+                        outmsg = outmsg + "\r\n"; // rfc1459 sec. 2.3
                         output.write(outmsg.getBytes("ISO-8859-1"));
                         // save 250 ms in streaming
                         // Check ready() so we don't split the initial handshake up into multiple streaming messages
