@@ -21,7 +21,7 @@
         lazyElement.classList.add("lazyhide");
       }
     });
-  }, { root: null, rootMargin: "0px 0px 100px 0px", threshold: [0, 0.1, 0.25, 0.5, 0.75, 1] });
+  }, { root: null, rootMargin: "100px 0px 100px 0px", threshold: [0, 0.1, 0.25, 0.5, 0.75, 1] });
 
   const throttle = (fn, limit) => {
     let inThrottle = false;
