@@ -507,6 +507,11 @@ hr+#newsStatus,hr+#newsStatus+#newsDisplay{padding-top:1px}
 .rid .rbw.isU.isD{background:var(--isD),var(--isU),var(--badge)}
 .rid .rbw.isU.isE{background:var(--isE),var(--isU),var(--badge)}
 .rid .rbw.isU.isG{background:var(--isG),var(--isU),var(--badge)}
+.netdb_introducers ul{margin:0}
+.netdbentry .rid,.netdbentry .rid td{line-height:0!important}
+.netdbentry .rid{margin:2px 6px 2px 0;float:left}
+.netdbentry .rid td{padding:3px 2px!important;width:auto!important;min-width:unset!important;text-align:center!important}
+.netdbentry .rid .rbw{min-width:20px!important}
 #topCount .rbw#ff{background:linear-gradient(135deg,#0000 90%,rgba(192,80,0,.8)90%),var(--badge)}
 #topCount .rbw#u{background:linear-gradient(45deg,#0000 87%,rgba(192,0,0,.8)87%),var(--badge)}
 #banlist li .rid{margin-right:5px;margin-left:-2px;float:left}

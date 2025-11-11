@@ -1219,16 +1219,16 @@ p.family{white-space:nowrap;background:var(--family) no-repeat 8px center/28px,l
 .netdbentry .netdb_name,.netdb_addresses .netdb_info,.netdb_addresses a,.netdb_addresses b{display:inline-block;vertical-align:text-bottom;margin:0;padding:0;line-height:1.1}
 .netdbentry .familyname{max-width:140px;overflow:hidden;vertical-align:text-bottom;text-overflow:ellipsis;white-space:nowrap}
 .netdb_addresses ul{margin:0;padding:0;width:100%;display:inline-block;columns:auto;column-gap:5px}
-.netdb_addresses li,.netdb_ouraddresses{margin:2px 2px 2px 0;padding:2px 5px;vertical-align:middle;border:1px solid #020;background:#000b00}
+.netdb_addresses li,.netdb_ouraddresses{margin:2px 5px 2px 0;padding:2px 6px 2px 4px;vertical-align:middle;border:1px solid #020;background:#000b00}
 .netdb_addresses .netdb_info:not(.host){margin-left:0;max-width:60px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .netdb_addresses .netdb_info:hover{max-width:unset;overflow:auto;text-overflow:none;user-select:all}
-.netdb_addresses .netdb_transport{margin:-2px 4px -2px -5px;padding:5px 5px 4px;min-width:32px;line-height:1.6;vertical-align:middle;text-align:center;border-right:1px solid #020;background:#001800}
+.netdb_addresses .netdb_transport{margin:-2px 3px -2px -4px;padding:5px 5px 4px;min-width:28px;line-height:1.6;vertical-align:middle;text-align:center;border-right:1px solid #020;background:#001800}
 .netdb_addresses .nowrap{margin:0 2px 0 0;display:inline-block}
 .netdbentry img{margin:1px 0 0 0}
-.netdbentry td:first-child{padding-right:8px;border-right:var(--border_soft)}
-.netdbentry td:nth-child(2){word-wrap:break-word}
+.netdbentry td:not(.rif):not(.rih):first-child{padding-right:8px;border-right:var(--border_soft)}
+.netdbentry td:not(.rif):not(.rih):nth-child(2){word-wrap:break-word}
 .netdbentry th code{margin-left:0}
-.netdbentry th:first-child,.netdbentry td:first-child{width:1%;white-space:nowrap}
+.netdbentry th:first-child,.netdbentry td:not(.rif):not(.rih):first-child{width:1%;white-space:nowrap}
 .netdbentry th:first-child{white-space:nowrap;text-align:right}
 .netdbentry th:last-child{padding:5px;width:50px;white-space:nowrap;text-align:right}
 .netdbentry th{padding:5px 6px;text-align:left;font-weight:400}
@@ -1354,9 +1354,9 @@ th>img[src^="/imagegen"],.identicon{margin:0 0 0 3px;height:26px;width:26px;bord
 .netdb_addresses{line-height:1.5}
 .netdbentry .netdb_family>*,.netdbentry .netdb_info,.netdbentry tr:nth-child(2) td:first-child b{display:inline-block}
 .netdbentry td b,.leaseset td b,#leasesetdebug td b,.sybil_routerinfo td b{color:var(--ink)}
-.netdbentry td:first-child b{display:inline-block;vertical-align:middle}
-.netdbentry td:first-child{padding-right:5px;min-width:80px;text-align:right}
-.netdbentry td,.leaseset td,#leasesetdebug td,.sybil_routerinfo td{line-height:1.6;color:#bb7}
+.netdbentry td:not(.rif):not(.rih):first-child b{display:inline-block;vertical-align:middle}
+.netdbentry td:not(.rif):not(.rih):first-child{padding-right:5px;min-width:80px;text-align:right}
+.netdbentry td:not(.rif):not(.rih),.leaseset td,#leasesetdebug td,.sybil_routerinfo td{line-height:1.6;color:#bb7}
 .netdb_expiry{margin-left:3px}
 .netdb_gateway{margin-left:0;margin-right:-10px;vertical-align:bottom}
 .netdb_info{margin-right:1px}
@@ -1465,7 +1465,7 @@ h3.sybils+div,h3.sybils+a[name]+table{margin-top:-1px}
 .sybil_routerinfo th:last-child{width:1%;white-space:nowrap}
 .sybil_routerinfo th{padding:1px 1px 1px 6px}
 .sybil_routerinfo td[colspan="3"]{white-space:normal}
-.sybil_routerinfo td:first-child,.netdbentry td:first-child{padding-right:10px;text-align:right}
+.sybil_routerinfo td:first-child,.netdbentry td:not(.rif):not(.rih):first-child{padding-right:10px;text-align:right}
 .sybil_routerinfo td:first-child{width:50px}
 .sybil_routerinfo tr:last-child{border-top:0}
 .sybil_routerinfo .viewprofile img,.sybil_routerinfo .viewfullentry img,.sybil_routerinfo .familysearch img,.sybil_routerinfo .configpeer img{margin-bottom:1px;margin-right:6px}
@@ -3276,8 +3276,12 @@ div[id^="config_"] .tab:first-child{margin-left:-1px}
 .tunnel_local,.tunnel_id,.rid td,.version,.routerHash{box-shadow:var(--highlight),0 0 1px 1px rgba(16,48,16,.8) inset!important;background:var(--badge)}
 .tunnel_local{width:98px;box-sizing:border-box}
 .tunnel_peer{display:inline-block;vertical-align:middle}
-.rid,.rid td{margin:0;padding:2px 1px;line-height:0;vertical-align:middle;text-align:center;border:1px solid #143f14!important;background:var(--badge)}
-.rid td,tr:hover .rid td,#floodfills tr:hover .rid td{font-family:var(--monospaced);letter-spacing:.1em}
+.rid,.rid td{margin:0;padding:2px 1px;min-width:0!important;line-height:0;text-align:center;border:1px solid #143f14!important;background:var(--badge)}
+.netdbentry .rid,.netdbentry .rid td{line-height:0!important}
+.netdbentry .rid{margin:2px 6px 2px 0;float:left}
+.netdbentry .rid td{padding:3px 2px}
+.netdbentry .rid .rbw{min-width:20px!important}
+.rid td,tr:hover .rid td,#floodfills tr:hover .rid td{vertical-align:middle;font-family:var(--monospaced);letter-spacing:.1em}
 .rid,.ric{width:unset;box-shadow:0 0 0 1px #000}
 .rid .rih{padding:2px 6px;vertical-align:middle;font-family:var(--monospaced);font-size:9pt}
 .rih a{text-shadow:1px 1px 1px #000c}

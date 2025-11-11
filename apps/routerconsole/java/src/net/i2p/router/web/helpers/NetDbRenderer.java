@@ -82,7 +82,7 @@ class NetDbRenderer {
         _context = ctx;
         _organizer = ctx.profileOrganizer();
         scheduleReverseDNSPrecaching();
-
+        scheduleIntroducerPreCache();
     }
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
@@ -777,6 +777,11 @@ class NetDbRenderer {
         }
     }
 
+    private boolean isUnreachable(RouterInfo ri) {
+        String caps = ri.getCapabilities();
+        return caps != null && (caps.contains("U"));
+    }
+
     /**
      *  Job used to wait for a router lookup.
      *  @since 0.9.48
@@ -785,6 +790,80 @@ class NetDbRenderer {
         public LookupWaiter() {super(_context);}
         public void runJob() {synchronized(this) {notifyAll();}}
         public String getName() {return "Console NetDb Lookup";}
+    }
+
+    private void scheduleIntroducerPreCache() {
+        SimpleTimer2 timer = _context.simpleTimer2();
+        new IntroducerPreCacher(timer, 9 * 60 * 1000);
+    }
+
+    private class IntroducerPreCacher extends SimpleTimer2.TimedEvent {
+        private final long _interval;
+
+        public IntroducerPreCacher(SimpleTimer2 timer, long interval) {
+            super(timer, interval);
+            _interval = interval;
+        }
+
+        @Override
+        public void timeReached() {
+            _context.jobQueue().addJob(new JobImpl(_context) {
+                public void runJob() {
+                    precacheIntroducerInfos();
+                }
+
+                public String getName() {
+                    return "Introducer Info Precacher";
+                }
+            });
+            schedule(_interval);
+        }
+    }
+
+    private void precacheIntroducerInfos() {
+        Set<RouterInfo> allRouters = _context.netDb().getRouters();
+        Set<Hash> introducerHashes = new HashSet<>();
+
+        for (RouterInfo ri : allRouters) {
+            if (isUnreachable(ri)) {
+                for (RouterAddress address : ri.getAddresses()) {
+                    if ("SSU".equals(address.getTransportStyle())) {
+                        Map<Object, Object> options = address.getOptionsMap();
+                        for (Map.Entry<Object, Object> entry : options.entrySet()) {
+                            String key = entry.getKey().toString();
+                            if (key.toLowerCase(Locale.US).startsWith("ih")) {
+                                String value = entry.getValue().toString();
+                                Hash ihost = ConvertToHash.getHash(value);
+                                if (ihost != null) {
+                                    introducerHashes.add(ihost);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        _context.logManager().getLog(NetDbRenderer.class).info("Pre-caching " + introducerHashes.size() + " introducer RouterInfos");
+
+        for (Hash hash : introducerHashes) {
+            scheduleLookup(hash);
+        }
+    }
+
+    private void scheduleLookup(Hash hash) {
+        _context.netDb().lookupRouterInfoLocally(hash);
+        if (_context.netDb().lookupRouterInfoLocally(hash) == null) {
+            _context.jobQueue().addJob(new JobImpl(_context) {
+                public void runJob() {
+                    lookupRouterInfoWithWait(_context.netDb(), hash, LOOKUP_WAIT);
+                }
+
+                public String getName() {
+                    return "Introducer Lookup: " + hash.toBase64().substring(0, 6);
+                }
+            });
+        }
     }
 
     /**
@@ -1803,62 +1882,79 @@ class NetDbRenderer {
            .append("</a></span></td></tr>\n");
         if (!isUnreachable) {
             Collection<RouterAddress> addresses = routerInfo.getAddresses();
-            if (addresses != null && !addresses.isEmpty()) {
+            if (addresses != null) {
+                byte[] ipAddress = TransportImpl.getIP(routerHash);
+                if (ipAddress != null) {_context.commSystem().queueLookup(ipAddress);}
+                List<RouterAddress> listAddresses = new ArrayList<>(addresses);
+                if (listAddresses.size() > 1) {listAddresses.sort(new RAComparator());}
+                boolean hasSSU = false;
+                boolean hasNTCP = false;
+                int introducerTagCount = 0;
                 buf.append("<tr><td><b>")
                    .append(_t("Addresses"))
                    .append(":</b></td><td colspan=2 class=netdb_addresses><ul>");
-                byte[] ipAddress = TransportImpl.getIP(routerHash);
-                if (ipAddress != null) {_context.commSystem().queueLookup(ipAddress);}
-                else {
-                    List<RouterAddress> listAddresses = new ArrayList<>(addresses);
-                    if (listAddresses.size() > 1) {
-                        listAddresses.sort(new RAComparator());
-                    }
-                    boolean hasSSU = false;
-                    boolean hasNTCP = false;
-                    int introducerTagCount = 0;
-                    for (RouterAddress address : listAddresses) {
-                        String transportStyle = address.getTransportStyle();
-                        if (transportStyle.startsWith("SSU")) hasSSU = true;
-                        if (transportStyle.startsWith("NTCP")) hasNTCP = true;
-                        Map<Object, Object> optionsMap = address.getOptionsMap();
-                        for (Map.Entry<Object, Object> entry : optionsMap.entrySet()) {
-                            String key = (String) entry.getKey();
-                            if (key.toLowerCase().startsWith("itag")) {
-                                introducerTagCount++;
+                for (RouterAddress address : listAddresses) {
+                    String transportStyle = address.getTransportStyle();
+                    if (transportStyle.startsWith("SSU")) hasSSU = true;
+                    if (transportStyle.startsWith("NTCP")) hasNTCP = true;
+
+                    Map<Object, Object> optionsMap = address.getOptionsMap();
+                    StringBuilder details = new StringBuilder();
+
+                    for (Map.Entry<Object, Object> entry : optionsMap.entrySet()) {
+                        String key = (String) entry.getKey();
+                        String value = (String) entry.getValue();
+
+                        if (key.equalsIgnoreCase("host")) {
+                            details.append("<span class=\"netdb_info host\">")
+                                   .append("<a title=\"")
+                                   .append(_t("Show all routers with this address in the NetDb"))
+                                   .append("\" ");
+                            if (value.contains(":")) {
+                                details.append("href=\"/netdb?ipv6=")
+                                       .append(value.length() > 8 ? value.substring(0, 4) : value);
+                            } else {
+                                details.append("href=\"/netdb?ip=").append(value);
                             }
-                        }
-                        StringBuilder details = new StringBuilder();
-                        for (Map.Entry<Object, Object> entry : optionsMap.entrySet()) {
-                            String key = (String) entry.getKey();
-                            String value = (String) entry.getValue();
-                            if (key.equalsIgnoreCase("host")) {
-                                details.append("<span class=\"netdb_info host\">")
-                                       .append("<a title=\"Show all routers with this address in the NetDb\" ");
-                                if (value.contains(":")) {
-                                    details.append("href=\"/netdb?ipv6=").append(value.length() > 8 ? value.substring(0, 4) : value);
-                                } else {
-                                    details.append("href=\"/netdb?ip=").append(value);
-                                }
-                                details.append("\">").append(value).append("</a></span><span class=colon>:</span>");
-                            } else if (key.equalsIgnoreCase("port")) {
-                                details.append("<span class=\"netdb_info port\">")
-                                       .append("<a title=\"Show all routers with this port in the NetDb\" ")
-                                       .append("href=\"/netdb?port=").append(value)
-                                       .append("\">").append(value).append("</a></span>");
-                            }
-                        }
-                        if (details.length() > 0) {
-                            buf.append("<li><b class=netdb_transport>")
-                               .append(transportStyle.replace("2", ""))
-                               .append("</b> ")
-                               .append(details)
-                               .append("</li>");
+                            details.append("\">").append(value).append("</a></span><span class=colon>:</span>");
+                        } else if (key.equalsIgnoreCase("port")) {
+                            details.append("<span class=\"netdb_info port\">")
+                                   .append("<a title=\"")
+                                   .append(_t("Show all routers with this port in the NetDb"))
+                                   .append("\" href=\"/netdb?port=").append(value)
+                                   .append("\">").append(value).append("</a></span>");
                         }
                     }
-                    buf.append("</ul></td></tr>\n");
+                    if (details.length() > 0) {
+                        buf.append("<li><b class=netdb_transport>")
+                           .append(transportStyle.replace("2", ""))
+                           .append("</b> ")
+                           .append(details)
+                           .append("</li>");
+                    }
                 }
             }
+        } else {
+            buf.append("<tr><td><b>").append(_t("Introducers")).append(":</b></td><td colspan=2 class=netdb_introducers><ul>");
+
+            boolean hasIntroducer = false;
+            Collection<RouterAddress> addresses = routerInfo.getAddresses();
+            List<RouterAddress> listAddresses = new ArrayList<>(addresses);
+            for (RouterAddress address : listAddresses) {
+                String transportStyle = address.getTransportStyle();
+                Map<Object, Object> optionsMap = address.getOptionsMap();
+                for (Map.Entry<Object, Object> entry : optionsMap.entrySet()) {
+                    String key = (String) entry.getKey();
+                    String value = (String) entry.getValue();
+                    if (key.startsWith("ih")) {
+                        hasIntroducer = true;
+                        String ih = (String) entry.getValue();
+                        Hash ihost = ConvertToHash.getHash(ih);
+                        buf.append(_context.commSystem().renderPeerHTML(ihost, true));
+                    }
+                }
+            }
+            buf.append("</ul></td></tr>\n");
         }
         List<String> statsLines = new ArrayList<>();
         Map<Object, Object> optionsMap = routerInfo.getOptionsMap();

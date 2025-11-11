@@ -1213,6 +1213,7 @@ a.keysearch{padding:2px 5px 2px 15px;display:inline-block;font-size:90%;border:1
 .gwhois:hover a::before,.gwhois a:focus::before{opacity:1;transform:scale(1.2)}
 .identicon{margin:-1px -1px -1px 8px;border-left:var(--border)}
 .leaseset th a{display:inline-block;vertical-align:text-top}
+.netdb_addresses li>*{display:inline-block;vertical-align:middle}
 .netdb_addresses .nowrap{margin:0 0 0 3px}
 .netdbentry{margin-top:10px}
 .netdbentry img{margin:1px 0 0}
@@ -1223,6 +1224,7 @@ a.keysearch{padding:2px 5px 2px 15px;display:inline-block;font-size:90%;border:1
 .netdbentry td:first-child{width:80px}
 .netdbentry td:nth-child(2){word-wrap:break-word}
 .netdbentry tr:nth-child(2) td:last-child{white-space:nowrap;text-align:right}
+.netdbentry .keys{white-space:nowrap}
 .netdbentry .version{margin-right:8px;display:inline-block}
 .netdb_family{vertical-align: bottom}
 .netdb_header a[href^="/netdb?c="],.sybil_routerinfo a[href^="/netdb?c="],.netdb_header img[src="/flags.jsp?c=a0"],.sybil_routerinfo img[src="/flags.jsp?c=a0"]{margin:0 2px 0 6px;display:inline-block}
@@ -1242,7 +1244,7 @@ p.family a{display:inline-block}
 #netdb li.longstat{width:100%}
 #netdb .netdbentry th code,#netdb .sybil_routerinfo th code,#netdb .leaseset th code{padding:2px 4px;display:inline-block;vertical-align:middle;font-family:var(--monospaced);border-radius:0;box-shadow:var(--box_border_badge);background:var(--badge)}
 #netdb_ram,.netdbentry .version,.netdb_transport{padding:1px 5px;display:inline-block;box-shadow:var(--box_border_badge);background:var(--badge)}
-#netdb .netdb_transport{padding:3px;width:46px;display:inline-block;text-align:center;font-size:90%;background:var(--badge)}
+#netdb .netdb_transport{margin-right:4px;padding:3px;width:38px;display:inline-block;text-align:center;font-size:90%;background:var(--badge)}
 #netdb_ram{padding:1px 3px}
 #netdb ul,.netdb_addresses{margin:0;padding:0;columns:auto}
 #netdb .netdbStats{line-height:1.5}
@@ -2126,6 +2128,11 @@ div[lang="pt"] li br{display:none}
 .rbw.isU.isE{background:var(--isE),var(--isU),var(--badge)}
 .rbw.isU.isG{background:var(--isG),var(--isU),var(--badge)}
 .ric{background:var(--badge)}
+.netdb_addresses ul, .netdb_introducers ul{margin:0;text-align:left}
+.netdbentry .rid,.netdbentry .rid td{line-height:0!important}
+.netdbentry .rid{margin:2px 6px 2px 0;float:left}
+.netdbentry .rid td{padding:1px!important;width:auto!important;min-width:unset!important;text-align:center!important}
+.netdbentry .rid .rbw{min-width:20px!important}
 
 /* tunnels */
 h3+.statusnotes{margin-top:-1px}
