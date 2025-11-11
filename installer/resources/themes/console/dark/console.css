@@ -258,8 +258,6 @@ p:empty+.sb_notice{margin-top:9px}
 #sidebar #sb_tunnelstatus{margin:-7px 0 -9px -1px;width:calc(100% - 1px);box-shadow:var(--note_shadow)}
 #sidebar .sb_netstatus,#sidebar .tunnelBuildStatus{margin:-3px auto;padding:8px 2px;width:calc(100% - 4px);display:block;vertical-align:middle}
 #sidebar .tunnelBuildStatus{padding:8px}
-#sidebar #sb_tunnelBuildStatus{display:inline-block;width:18px;height:30px;vertical-align:middle;background:none;box-shadow:none}
-#sidebar #sb_tunnelBuildStatus::before{transform:scale(.7)}
 #sidebar .running,.tunnelBuildStatus.active{box-shadow:var(--highlight),inset 0 0 2px 1px rgba(0,192,0,.7);background:repeating-linear-gradient(180deg,#000c 2px,rgba(0,64,0,.3) 4px) center center/100% 4px,var(--glow_top),linear-gradient(to right,rgba(16,40,15,.5),rgba(0,0,0,.9),rgba(16,40,15,.5))}
 #sidebar .firewalled,.tunnelBuildStatus{color:#bb7;box-shadow:var(--bevel)}
 #sidebar .error,.tunnelBuildStatus.rejecting,#sb_warning{color:#900;box-shadow:var(--highlight),inset 0 0 2px 1px #700;background:rgba(96,0,0,.3)}
@@ -289,6 +287,8 @@ p:empty+.sb_notice{margin-top:9px}
 #sidebar .tunnelBuildStatus.rejecting::before,.notOk.fiftyPercent,#profiles .unreachable{background:var(--tunn_reject) var(--center)/14px}
 #sidebar .tunnelBuildStatus.hidden{color:#999}
 #sidebar .tunnelBuildStatus.hidden::before{background:var(--tunn_hidden) var(--center)/14px}
+#sidebar #sb_tunnelBuildStatus{display:inline-block;width:18px;height:30px;vertical-align:middle;background:none!important;box-shadow:none}
+#sidebar #sb_tunnelBuildStatus::before{transform:scale(.7)}
 
 /* section toggler */
 .sidebarlogo{text-align:center}
@@ -3234,6 +3234,7 @@ span#newtab{margin-top:4px}
 #sidebar #sb_localtunnels td:first-child{background-size:18px}
 #sidebar #sb_advanced a:link,#sidebar #sb_internals a:link,#sidebar #sb_help a:link,#sidebar #sb_services a:link{max-width:216px}
 #sidebar .sb_netstatus.running.floodfill .badge{font-size:8.5pt!important}
+#sidebar #sb_tunnelBuildStatus{height:32px}
 #sitemap h3{font-size:12pt}
 #stacktrace p:first-of-type::first-line{font-size:110%;font-weight:700;font-variant:super;text-decoration:underline}
 #tunnels #exploratory a,#tunnels h3.server a,#tunnels h3.client a{margin:-8px 0 -8px 0;padding:7px 2px 14px 0}
