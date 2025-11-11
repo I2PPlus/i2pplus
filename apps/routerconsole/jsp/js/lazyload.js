@@ -50,7 +50,7 @@
     }
   };
 
-  const throttledLazyLoad = throttle(() => requestAnimationFrame(lazyload), 50);
+  const throttledLazyLoad = throttle(() => requestAnimationFrame(lazyload), 100);
 
   document.addEventListener("DOMContentLoaded", () => {
     const b = document.body;

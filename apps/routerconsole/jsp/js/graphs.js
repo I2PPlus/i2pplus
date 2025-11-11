@@ -110,34 +110,44 @@ import { onVisible, onHidden } from "/js/onVisible.js";
             }
           });
         },
-        { rootMargin: "0px 0px 200px 0px" }
+        { rootMargin: "200px 0px 200px 0px" }
       );
       io.observe(img);
       imgObservers.push(io);
     });
   }
 
-  function initCss() {
-    const graph = query(".statimage");
-    if (!graph) return;
-    const onLoad = () => {
-      const styleElem = query("style#gwrap");
-      if (!styleElem || d.body.classList.contains("loaded")) return;
-      const widepanel = query(".widepanel"),
-        dimensions = `.graphContainer{width:${graph.naturalWidth + 4}px;height:${graph.naturalHeight + 4}px}`;
-      if (graph.naturalWidth > 40 && !styleElem.innerText.includes("width:4px")) {
-        styleElem.innerText = dimensions;
-        d.body.classList.add("loaded");
-      } else styleElem.innerText = "";
-      widepanel.id = "nographs";
-      setTimeout(() => {
-        widepanel.id = "";
-        allgraphs.removeAttribute("hidden");
-        configs.removeAttribute("hidden");
-      }, Math.max(d.querySelectorAll(".graphContainer").length * 5, 120));
-    };
-    if (graph.complete) onLoad();
-    else graph.addEventListener("load", onLoad);
+  async function applyDimensions() {
+    const styleElem = query("style#gwrap");
+    if (!styleElem) return false;
+
+    const firstImg = query(".statimage");
+    if (!firstImg) return false;
+
+    try {
+      await firstImg.decode();
+    } catch (error) {
+      return false;
+    }
+
+    const w = firstImg.naturalWidth;
+    const h = firstImg.naturalHeight;
+    if (w <= 40 || h <= 20) {
+      return false;
+    }
+
+    const css = `.graphContainer { width: ${w + 4}px; height: ${h + 4}px; }`;
+    if (styleElem.innerText !== css) {
+      styleElem.innerText = css;
+    }
+    return true;
+  }
+
+  function ensureDimensions() {
+    const success = applyDimensions();
+    if (!success && d.querySelector(".statimage")) {
+      setTimeout(ensureDimensions, 200);
+    }
   }
 
   async function updateGraphs(input, debouncedFunc) {
@@ -189,7 +199,7 @@ import { onVisible, onHidden } from "/js/onVisible.js";
           if (resp.ok) img.src = src;
         })
       );
-    } catch {}
+    } catch(error) {}
   }
 
   if (typeof graphRefreshInterval !== "undefined" && graphRefreshInterval > 0) {
@@ -226,12 +236,15 @@ import { onVisible, onHidden } from "/js/onVisible.js";
       allgraphs.innerHTML = '<span id=nographs><b>No connection to Router</b></span>';
       progressx.hide();
     }
-    setTimeout(initCss, 5000);
+    setTimeout(ensureDimensions, 5000);
   }
 
   const stopRefresh = () => clearInterval(graphsTimerId);
 
   d.addEventListener("DOMContentLoaded", () => {
+    if (!d.body.classList.contains("loaded") && !d.body.classList.contains("ready")) {
+      d.body.classList.add("loaded", "ready");
+    }
     const { searchInput } = initializeSearchFilter();
     if (!searchInput) return;
     searchInput.value = localStorage.getItem("graphsFilter") || "";
@@ -244,7 +257,7 @@ import { onVisible, onHidden } from "/js/onVisible.js";
       initializeObservers(allgraphs, debouncedApplyFilter, searchInput);
     });
     initializeObservers(allgraphs, debouncedApplyFilter, searchInput);
-    initCss();
+    ensureDimensions();
     onVisible(allgraphs, () => {
       updateGraphs(searchInput, debouncedApplyFilter);
       debouncedApplyFilter();
@@ -252,6 +265,7 @@ import { onVisible, onHidden } from "/js/onVisible.js";
     onHidden(allgraphs, stopRefresh);
     loadToggleCss();
     toggleView();
+    $("graphConfigs").removeAttribute("hidden");
     $("toggleSettings")?.addEventListener("click", toggleView);
     setTimeout(isDown, 60000);
     if (debugging) console.log(`Refresh interval is: ${graphRefreshInterval / 1000}s`);
