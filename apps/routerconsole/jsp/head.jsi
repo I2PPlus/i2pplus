@@ -14,6 +14,7 @@ boolean viewProfile = uri.contains("viewprofile");
 %>
 <html lang="<%=lang%>" class="<%=isAdvancedMode ? "advmode " : ""%><%=useUnifiedSidebar ? "unified " : ""%><%=useSoraFont ? "sora" : "opensans"%>" <%=theme.equals("dark") || theme.equals("midnight") ? "style=\"background:var(--bodybg,#000)\"" : ""%>>
 <head>
+<script src=/js/progressx.js></script>
 <meta charset=utf-8>
 <meta name=viewport content="width=device-width, initial-scale=1">
 <link rel=modulepreload href=/js/refreshSidebar.js>
@@ -40,7 +41,6 @@ boolean viewProfile = uri.contains("viewprofile");
 <% if (lang.equals("zh")) {%> <link href="<%=themePath%>console_big.css?version=<%=v%>" rel=stylesheet> <% }
 else if (lang.equals("ar") || lang.equals("fa")) {%> <link rel=stylesheet href="<%=themePath%>console_ar.css?version=<%=v%>"> <% } %>
 <% if (hasOverride) {%> <link href=<%=themePath%>override.css rel=stylesheet> <% } %>
-<script src=/js/progressx.js></script>
 <script nonce=<%=cspNonce%>>
   if (top.location.href !== location.href) top.location.href = location.href;
   const refresh = parseInt(<%=intl.getRefresh()%>, 10);

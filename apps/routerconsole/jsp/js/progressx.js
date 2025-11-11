@@ -66,12 +66,12 @@ function initProgressX(window, document) {
   }
 
   function injectCanvas() {
-    const interval = setInterval(() => {
-      if (document.body) {
-        clearInterval(interval);
-        document.body.appendChild(canvas);
-      }
-    }, 10);
+    const html = document.documentElement;
+    if (html.firstChild) {
+      html.insertBefore(canvas, html.firstChild);
+    } else {
+      html.appendChild(canvas);
+    }
   }
 
   let ticking = false;
