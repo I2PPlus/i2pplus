@@ -11,7 +11,7 @@
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       const lazyElement = entry.target;
-      if (entry.isIntersecting) {
+      if (entry.intersectionRatio >= 0.1) {
         lazyElement.classList.add("lazyshow");
         lazyElement.classList.remove("lazyhide");
         observer.unobserve(lazyElement);
@@ -21,11 +21,7 @@
         lazyElement.classList.add("lazyhide");
       }
     });
-
-    if (lazyElementsSet.size === 0) {
-      observer.disconnect();
-    }
-  }, { root: null, rootMargin: "10px", threshold: 0.2 });
+  }, { root: null, rootMargin: "0px 0px 100px 0px", threshold: [0, 0.1, 0.25, 0.5, 0.75, 1] });
 
   const throttle = (fn, limit) => {
     let inThrottle = false;
@@ -40,6 +36,7 @@
 
   const lazyload = () => {
     const lazyElements = document.querySelectorAll(".lazy");
+    if (lazyElements.length === 0) return;
     if (lazyElements.length < 10) {
       lazyElements.forEach(lazyElement => { lazyElement.classList.remove("lazy"); });
     } else {
@@ -53,7 +50,7 @@
     }
   };
 
-  const throttledLazyLoad = throttle(() => requestAnimationFrame(lazyload), 180);
+  const throttledLazyLoad = throttle(() => requestAnimationFrame(lazyload), 50);
 
   document.addEventListener("DOMContentLoaded", () => {
     const b = document.body;
