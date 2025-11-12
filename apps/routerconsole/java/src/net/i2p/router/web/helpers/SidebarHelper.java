@@ -113,7 +113,6 @@ public class SidebarHelper extends HelperBase {
         "Advanced" + S +
         "Peers" + S +
         "Tunnels" + S +
-        "TunnelStatus" + S +
         "Congestion" + S +
         "NewsHeadings" + S +
         "RestartStatus" + S +
@@ -131,7 +130,6 @@ public class SidebarHelper extends HelperBase {
         "FirewallAndReseedStatus" + S +
         "Peers" + S +
         "Tunnels" + S +
-        "TunnelStatus" + S +
         "NewsHeadings" + S +
         "RestartStatus" + S +
         "Destinations" + S +
@@ -149,7 +147,6 @@ public class SidebarHelper extends HelperBase {
         "FirewallAndReseedStatus" + S +
         "Peers" + S +
         "Tunnels" + S +
-        "TunnelStatus" + S +
         "Congestion" + S +
         "NewsHeadings" + S +
         "RestartStatus" + S +
