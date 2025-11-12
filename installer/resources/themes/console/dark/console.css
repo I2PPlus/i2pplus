@@ -256,7 +256,7 @@ p:empty+.sb_notice{margin-top:9px}
 #sb_status,.sb_netstatus,.tunnelBuildStatus,#bandwidthTestRunning{display:inline-block;vertical-align:middle;vertical-align:-moz-middle-with-baseline;vertical-align:-webkit-baseline-middle;text-shadow:var(--textshadow);box-sizing:border-box}
 #sidebar #sb_status{margin:-6px 0 -8px -1px;width:calc(100% - 1px);position:relative;box-shadow:var(--note_shadow);contain:none}
 #sidebar #sb_tunnelstatus{margin:-7px 0 -9px -1px;width:calc(100% - 1px);box-shadow:var(--note_shadow)}
-#sidebar .sb_netstatus,#sidebar .tunnelBuildStatus{margin:-3px auto;padding:6px 2px;width:calc(100% - 4px);display:block;vertical-align:middle}
+#sidebar .sb_netstatus,#sidebar .tunnelBuildStatus{margin:-3px auto;padding:4px 2px;width:calc(100% - 4px);display:block;vertical-align:middle}
 #sidebar .tunnelBuildStatus{padding:8px}
 #sidebar .running,.tunnelBuildStatus.active{box-shadow:var(--highlight),inset 0 0 2px 1px rgba(0,192,0,.7);background:repeating-linear-gradient(180deg,#000c 2px,rgba(0,64,0,.3) 4px) center center/100% 4px,var(--glow_top),linear-gradient(to right,rgba(16,40,15,.5),rgba(0,0,0,.9),rgba(16,40,15,.5))}
 #sidebar .firewalled,.tunnelBuildStatus{color:#bb7;box-shadow:var(--bevel)}
@@ -3197,7 +3197,6 @@ span#newtab{margin-top:4px}
 #iptransport a:hover::after,#advancedconfig a:hover::after,#reseedsetup a:hover::after{background-size:20px}
 #jobs h2{margin-bottom:3px}
 #logs li,#service_logs{font-size:10pt;font-weight:500}
-#lsCount.badge{transform:translateY(2px)}
 #events .tab,#events .tab2,#logs .tab,#logs .tab2{min-width:130px}
 #loggingoptions input[type=text],#loggingoptions select{min-width:240px}
 #manualreseed input[type=submit]{min-width:140px}
