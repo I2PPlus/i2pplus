@@ -172,7 +172,7 @@ class TunnelRenderer {
                   .append(_t("Expiry"))
                   .append("</th><th title=\"")
                   .append(_t("Data transferred"))
-                  .append("\" data-sortable data-sort-method=dotsep>")
+                  .append("\" data-sortable data-sort-method=number>")
                   .append(_t("Data"))
                   .append("</th><th data-sortable");
                 if (bySpeed) {sb.append(" data-sort-default");}
@@ -223,25 +223,33 @@ class TunnelRenderer {
                     }
                     long timeLeft = cfg.getExpiration()-_context.clock().now();
                     if (timeLeft > 0) {
-                        sb.append("<td class=\"cells expiry\"><span class=right>").append(timeLeft / 1000)
+                        sb.append("<td class=\"cells expiry\" data-sort=")
+                          .append(timeLeft).append("><span class=right>").append(timeLeft / 1000)
                           .append("</span><span class=left>&#8239;").append(_t("sec")).append("</span></td>");
                     } else {
                         sb.append("<td><i>").append(_t("grace period")).append("</i></td>");
                     }
-                    sb.append("<td class=\"cells datatransfer\"><span class=right>").append((count * 1024 / 1000))
-                      .append("</span><span class=left>&#8239;KB</span></td>");
+
+                    double sizeInKB = count * 1024.0 / 1000.0;
+                    double sizeInMB = sizeInKB / 1024.0;
+                    sb.append("<td class=\"cells datatransfer\" data-sort=")
+                      .append(count).append("><span class=right>")
+                      .append(sizeInKB >= 1024 ? String.format("%.2f", sizeInMB) : String.format("%.0f", sizeInKB))
+                      .append("</span><span class=left>&#8239;")
+                      .append(sizeInKB >= 1024 ? "MB" : "KB")
+                      .append("</span></td>");
 
                     int lifetime = (int) ((_context.clock().now() - cfg.getCreation()) / 1000);
                     if (lifetime <= 0) {lifetime = 1;}
                     else if (lifetime > 10*60) {lifetime = 10*60;}
                     float bps = 1024 * count / lifetime;
                     float kbps = bps / 1024;
-                    sb.append("<td class=\"cells bps\"><span class=right>")
+                    sb.append("<td class=\"cells bps\" data-sort=").append(count/lifetime).append("><span class=right>")
                       .append(fmt.format(kbps)).append("&#8239;</span><span class=left>KB/s</span></td>");
 
                     long recv = cfg.getReceiveTunnelId();
                     if (isAdvanced) {
-                        sb.append("<td class=\"cells limit\">");
+                        sb.append("<td class=\"cells limit\" data-sort=").append(cfg.getAllocatedBW()).append(">");
                         if (cfg.getAllocatedBW() > 0) {sb.append(DataHelper.formatSize2Decimal(cfg.getAllocatedBW())).append("B/s");}
                         sb.append("</td>");
                         if (recv != 0) {
@@ -345,7 +353,7 @@ class TunnelRenderer {
             }
             tbuf.append("<th class=tcount data-sortable data-sort-method=number data-sort-default>")
                 .append(_t("Tunnels"))
-                .append("</th><th id=data data-sortable data-sort-method=filesize>")
+                .append("</th><th id=data data-sortable data-sort-method=number>")
                 .append(_t("Data"))
                 .append("</th><th id=isBanned data-sortable hidden>")
                 .append(_t("Banned"))
@@ -439,7 +447,7 @@ class TunnelRenderer {
                 sb.append("<td class=tcount>").append(count).append("</td>");
 
                 long bw = bws.count(h);
-                sb.append("<td>");
+                sb.append("<td data-sort=").append(bw).append(">");
                 if (bw > 0) {
                     sb.append("<span class=data>").append(fmt.format(bw).replace(".00", "")).append("KB</span>");
                 } else {sb.append("<span class=data hidden>0KB</span>");}
@@ -510,11 +518,11 @@ class TunnelRenderer {
             if (doReverseLookups) {
                 headerSb.append("<th id=domain data-sortable>").append(_t("Domain")).append("</th>");
             }
-            headerSb.append("<th class=tcount colspan=2 title=\"Client and Exploratory Tunnels\" data-sortable data-sort-method=natural data-sort-column-key=localCount>")
+            headerSb.append("<th class=tcount colspan=2 title=\"Client and Exploratory Tunnels\" data-sortable data-sort-method=number data-sort-column-key=localCount>")
                   .append(_t("Local"))
                   .append("</th>");
             if (!peerList.isEmpty()) {
-                headerSb.append("<th class=tcount colspan=2 data-sortable data-sort-method=natural data-sort-column-key=transitCount>")
+                headerSb.append("<th class=tcount colspan=2 data-sortable data-sort-method=number data-sort-column-key=transitCount>")
                       .append(_t("Transit"))
                       .append("</th>");
             } else {
@@ -598,22 +606,28 @@ class TunnelRenderer {
                         chunkSb.append("</td>");
                     }
 
-                    chunkSb.append(String.format("<td class=tcount data-sort-column-key=localCount>%d</td><td class=bar data-sort-column-key=localCount>", localTunnelCount));
+                    chunkSb.append(String.format(
+                                   "<td class=tcount data-sort-column-key=localCount data-sort=%d>%d</td><td class=bar data-sort-column-key=localCount>",
+                                   localTunnelCount, localTunnelCount)
+                                  );
                     if (localTunnelCount > 0) {
-                        chunkSb.append(String.format("<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\"><span class=percentBarText>%d%%</span></span></span>",
-                                                     fmt.format(localTunnelCount * 100.0 / tunnelCount).replace(".00", ""),
-                                                     localTunnelCount * 100 / tunnelCount));
+                        chunkSb.append(String.format(
+                                       "<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\"><span class=percentBarText>%d%%</span></span></span>",
+                                       fmt.format(localTunnelCount * 100.0 / tunnelCount).replace(".00", ""),
+                                       localTunnelCount * 100 / tunnelCount));
                     } else {
                         chunkSb.append("<span hidden>&ndash;</span>");
                     }
                     chunkSb.append("</td>");
                     if (!peerList.isEmpty()) {
                         if (transitTunnelCount > 0) {
-                            chunkSb.append(String.format("<td class=tcount data-sort-column-key=transitCount>%d</td><td class=bar data-sort-column-key=transitCount>", transitTunnelCount));
-                            chunkSb.append(String.format("<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\"><span class=percentBarText>%d%%</span></span></span>",
-                                                        fmt.format(transitTunnelCount * 100.0 / partCount).replace(".00", ""),
-                                                        transitTunnelCount * 100 / partCount));
-                            chunkSb.append("</td>");
+                            chunkSb.append(String.format(
+                                "<td class=tcount data-sort-column-key=transitCount data-sort=%d>%d</td><td class=bar data-sort-column-key=transitCount>",
+                                transitTunnelCount, transitTunnelCount))
+                                   .append(String.format("<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\"><span class=percentBarText>%d%%</span></span></span>",
+                                           fmt.format(transitTunnelCount * 100.0 / partCount).replace(".00", ""),
+                                           transitTunnelCount * 100 / partCount))
+                                   .append("</td>");
                         } else {
                             chunkSb.append("<td></td><td></td>");
                         }
@@ -931,12 +945,19 @@ class TunnelRenderer {
                    .append("\"></span></td>");
             }
             buf.append("<td>").append(DataHelper.formatDuration2(timeLeft)).append("</td>");
+
             int count = info.getProcessedMessagesCount() * 1024 / 1000;
-            buf.append("<td class=\"cells datatransfer\">");
+            double sizeInKB = count * 1024.0 / 1000.0;
+            double sizeInMB = sizeInKB / 1024.0;
+            buf.append("<td class=\"cells datatransfer\" data-sort=").append(count).append(">");
             if (count > 0) {
-                buf.append("<span class=right>").append(count).append("</span><span class=left>&#8239;KB</span>");
+                buf.append("<span class=right>")
+                   .append(sizeInKB >= 1024 ? String.format("%.2f", sizeInMB) : String.format("%.0f", sizeInKB))
+                   .append("</span><span class=left>&#8239;")
+                   .append(sizeInKB >= 1024 ? "MB" : "KB")
+                   .append("</span>");
             }
-            buf.append("</td>\n");
+            buf.append("</td>");
             int length = info.getLength();
             boolean isAdvanced = _context.getBooleanProperty(HelperBase.PROP_ADVANCED);
             for (int j = 0; j < length; j++) {
