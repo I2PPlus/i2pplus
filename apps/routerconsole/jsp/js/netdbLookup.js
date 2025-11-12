@@ -306,6 +306,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const queryCell = form.querySelector('input[name="query"]')?.closest('td');
   if (!fieldSelect || !queryCell) return;
 
+  if (fieldSelect) {
+    const options = Array.from(fieldSelect.options);
+    options.sort((a, b) => {
+      return a.text.localeCompare(b.text);
+    });
+    fieldSelect.innerHTML = "";
+    options.forEach(opt => fieldSelect.appendChild(opt));
+  }
+
   let currentQueryElement = form.querySelector('input[name="query"]');
 
   function createSelectForField(field, value = "") {
@@ -315,6 +324,7 @@ document.addEventListener("DOMContentLoaded", () => {
     select.title = `Select ${labels[field] || field}`;
 
     const options = dropdownFields[field] || [];
+
     options.forEach(opt => {
       const option = document.createElement("option");
       if (Array.isArray(opt)) {
@@ -327,6 +337,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (option.value === value) option.selected = true;
       select.appendChild(option);
     });
+
     return select;
   }
 
