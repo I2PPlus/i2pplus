@@ -763,7 +763,6 @@ td.ipv6{width:1%;max-width:24px}
 #ntcpconnections tbody td:not(.rif):not(.rih):not(.rbw),#udpconnections tbody td:not(.rif):not(.rih):not(.rbw){border-right:var(--border_softer)}
 #ntcpconnections td:last-child{font-weight:700}
 #ntcpconnections td:nth-child(4),#ntcpconnections td:nth-child(5),#udpconnections td:nth-child(4),#udpconnections td:nth-child(5),#udpconnections td:nth-child(8),#udpconnections td:nth-child(12){white-space:nowrap}
-#ntcpconnections td span:empty{display:none}
 #ntcp+#udp{margin-top:-12px}
 #peerdefs img{padding-left:0;margin-left:0}
 #peerdefs img[width="12"]{margin-right:3px;margin-left:2px}
@@ -3233,7 +3232,7 @@ span#newtab{margin-top:4px}
 #sidebar #sb_localtunnels td:first-child{background-size:18px}
 #sidebar #sb_advanced a:link,#sidebar #sb_internals a:link,#sidebar #sb_help a:link,#sidebar #sb_services a:link{max-width:216px}
 #sidebar .sb_netstatus.running.floodfill .badge{font-size:8.5pt!important}
-#sidebar #sb_tunnelBuildStatus{height:31px}
+#sidebar #sb_tunnelBuildStatus{height:32px}
 #sitemap h3{font-size:12pt}
 #stacktrace p:first-of-type::first-line{font-size:110%;font-weight:700;font-variant:super;text-decoration:underline}
 #tunnels #exploratory a,#tunnels h3.server a,#tunnels h3.client a{margin:-8px 0 -8px 0;padding:7px 2px 14px 0}

@@ -1167,7 +1167,6 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 #ntcpconnections td:not(.rif):first-child,#udpconnections td:not(.rif):first-child{width:1%}
 #ntcpconnections td:not(.rif):not(ric):first-child,#udpconnections td:not(.rif):not(:ric):first-child{min-width:58px}
 #ntcpconnections td:nth-child(n+7) span:not(.left),#ntcpconnections .tablefooter td:nth-child(n+7) span:not(.left){min-width:40px;display:inline-block;text-align:right}
-#ntcpconnections td span:empty{display:none}
 #ntcpconnections .ipv6:empty::before,#udpconnections .ipv6:empty::before{content:""}
 #ntcpconnections .rbw,#udpconnections .rbw{line-height:1.2}
 #udpconnections{margin-bottom:0}

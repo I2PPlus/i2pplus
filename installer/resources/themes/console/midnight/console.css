@@ -1784,7 +1784,6 @@ span.left,span.right{margin:0 1px;width:40%;display:inline-block}
 #peers .widescroll+h3{margin-top:1px}
 #ntcpconnections .ipv6:empty::before,#udpconnections .ipv6:empty::before{content:none}
 #ntcpconnections td:nth-child(n+7) span,#ntcpconnections .tablefooter td:nth-child(n+6) span{min-width:40px;display:inline-block}
-#ntcpconnections td span:empty{display:none}
 #ntcpconnections th,#udpconnections th{padding-top:6px;text-align:center}
 #udpconnections th,#udpconnections td,#ntcpconnections th,#ntcpconnections td{text-align:center}
 #peerdefs li{margin:3px;padding:4px 8px;width:calc(100% - 24px);display:inline-block;border:var(--border_badge);box-shadow:var(--highlight),inset 0 0 1px 2px #003,0 0 0 3px #000;background:linear-gradient(135deg,#001 5%,#000020 15%,#001);-webkit-column-break-inside:avoid;break-inside:avoid;page-break-inside:avoid}

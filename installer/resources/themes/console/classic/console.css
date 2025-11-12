@@ -1893,7 +1893,6 @@ table[id*="connections"] .tablefooter td:first-child{text-align:left}
 #ntcpconnections td:nth-child(n+6) span,#ntcpconnections .tablefooter td:nth-child(n+5) span{ min-width:40px;display:inline-block}
 #profiles td:last-child{border-right:var(--border)}
 #udpconnections tfoot td,#ntcpconnections tfoot td{padding-left:5px;padding-right:5px}
-#ntcpconnections td span:empty{display:none}
 #ntcpconnections tbody td:not(:last-child),#udpconnections tbody td:not(:last-child),#profilelist td:not(:last-child),#profile_defs td:not(:last-child),#floodfills td:not(.rif):not(.rih):not(.rbw):not(:last-child),#tunnelPeerCount td:not(:last-child){border-right:var(--border_softer)}
 #ntcpconnections tbody td::after,#udpconnections tbody td::after,#profilelist td:not(.rif):not(.rih)::after,#profile_defs td::after,#floodfills td:not(.rif):not(.rih):not(.rbw)::after{content:"";position:absolute;top:-1px;right:-1px;height:1px;width:1px;display:inline-block;background:var(--border_color)}
 #ntcpconnections .ipv6:empty::before,#udpconnections .ipv6:empty::before,#ntcpconnections td.queue:empty::before{content:""}
