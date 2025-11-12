@@ -335,19 +335,19 @@ public class PeerHelper extends HelperBase {
                .append(_t("Idle"))
                .append("</th><th class=inout title=\"")
                .append(_t("Average inbound/outbound rate (KBps)"))
-               .append("\">")
+               .append("\" data-sort-method=number>")
                .append(_t("In/Out"))
                .append ("</th><th class=uptime title=\"")
                .append(_t("Duration of connection to peer"))
-               .append("\">")
+               .append("\" data-sort-method=number>")
                .append(_t("Up"))
                .append("</th><th class=skew title=\"")
                .append(_t("Peer's clockskew relative to our clock"))
-               .append("\">")
+               .append("\" data-sort-method=number>")
                .append(_t("Skew"))
                .append("</th><th class=tx title=\"")
                .append(_t("Messages sent"))
-               .append("\">")
+               .append("\" data-sort-method=number>")
                .append(_t("TX"))
                .append("</th><th class=rx title=\"")
                .append(_t("Messages received"))
@@ -355,7 +355,7 @@ public class PeerHelper extends HelperBase {
                .append(_t("RX"))
                .append("</th><th class=queue title=\"")
                .append(_t("Queued messages to send to peer"))
-               .append("\">")
+               .append("\" data-sort-method=number>")
                .append(_t("Out Queue"))
                .append("</th><th class=edit></th></tr></thead>\n<tbody id=peersNTCP>\n");
         }
@@ -429,9 +429,9 @@ public class PeerHelper extends HelperBase {
             }
             totalUptime += con.getUptime();
             offsetTotal = offsetTotal + con.getClockSkew();
-            buf.append("</td><td class=uptime><span>")
+            buf.append("</td><td class=uptime data-sort=").append(totalUptime).append("><span>")
                .append(DataHelper.formatDuration2(con.getUptime()))
-               .append("</span></td><td class=skew>");
+               .append("</span></td><td class=skew data-sort=").append(offsetTotal).append(">");
             if (con.getClockSkew() > 0) {
                 buf.append("<span>")
                    .append(DataHelper.formatDuration2(1000 * con.getClockSkew()))
@@ -591,7 +591,7 @@ public class PeerHelper extends HelperBase {
             }
             buf.append("</th><th class=idle title=\"")
                .append(_t("Peer inactivity"))
-               .append("\">")
+               .append("\" data-sort-method=number>")
                .append(_t("Idle"));
             if (debugmode) {
                 buf.append("<br>");
@@ -601,7 +601,7 @@ public class PeerHelper extends HelperBase {
             }
             buf.append("</th><th class=inout title=\"")
                .append(_t("Average inbound/outbound rate (KBps)"))
-               .append("\">")
+               .append("\" data-sort-method=number>")
                .append(_t("In/Out"));
             if (debugmode) {
                 buf.append("<br>");
@@ -611,7 +611,7 @@ public class PeerHelper extends HelperBase {
             }
             buf.append("</th><th class=uptime title=\"")
                .append(_t("Duration of connection to peer"))
-               .append("\"><div class=peersort>")
+               .append("\" data-sort-method=number><div class=peersort>")
                .append(_t("Up"));
             if (debugmode) {
                 buf.append("<br>");
@@ -619,7 +619,7 @@ public class PeerHelper extends HelperBase {
             }
             buf.append("</div></th><th class=skew title=\"")
                .append(_t("Peer's clockskew relative to our clock"))
-               .append("\"><div class=peersort>")
+               .append("\" data-sort-method=number><div class=peersort>")
                .append(_t("Skew"));
             if (debugmode) {
                 buf.append("<br>");
@@ -697,20 +697,20 @@ public class PeerHelper extends HelperBase {
                .append(_context.commSystem().renderPeerCaps(peer.getRemotePeer(), false))
                .append("</td><td class=direction nowrap>");
             if (peer.isInbound()) {
-                buf.append("<span class=inbound><img src=/themes/console/images/inbound.svg alt=Inbound title=\"")
+                buf.append("<span class=inbound title=\"")
                    .append(_t("Inbound"));
             } else {
-                buf.append("<span class=outbound><img src=/themes/console/images/outbound.svg alt=Outbound title=\"")
+                buf.append("<span class=outbound title=\"")
                    .append(_t("Outbound"));
             }
             buf.append("\"></span>");
             if (peer.getWeRelayToThemAs() > 0) {
-                buf.append("&nbsp;&nbsp;<span class=\"inbound small\"><img src=/themes/console/images/outbound.svg width=8 height=8 alt=\"^\" title=\"")
+                buf.append("&nbsp;&nbsp;<span class=\"inbound small\" title=\"")
                    .append(_t("We offered to introduce them"))
                    .append("\">");
             }
             if (peer.getTheyRelayToUsAs() > 0) {
-                buf.append("&nbsp;&nbsp;<span class=\"outbound small\"><img src=/themes/console/images/inbound.svg width=8 height=8 alt=\"V\" title=\"")
+                buf.append("&nbsp;&nbsp;<span class=\"outbound small\" title=\"")
                    .append(_t("They offered to introduce us"))
                    .append("\">");
             }
@@ -747,7 +747,7 @@ public class PeerHelper extends HelperBase {
             String rx = formatKBps(recvBps).replace(".00", "");
             String tx = formatKBps(sendBps).replace(".00", "");
 
-            buf.append("<td class=idle><span class=right>")
+            buf.append("<td class=idle data-sort=").append(idleIn).append("><span class=right>")
                .append(DataHelper.formatDuration2(idleIn))
                .append("</span>")
                .append(THINSP)
@@ -772,9 +772,9 @@ public class PeerHelper extends HelperBase {
             long resent = peer.getPacketsRetransmitted();
             long dupRecv = peer.getPacketsReceivedDuplicate();
 
-            buf.append("</td><td class=uptime>")
+            buf.append("</td><td class=uptime data-sort=uptime>")
                .append(DataHelper.formatDuration2(uptime))
-               .append("</td><td class=skew>")
+               .append("</td><td class=skew data-sort=").append(skew).append(">")
                .append(DataHelper.formatDuration2(skew))
                .append("</td><td class=tx><span class=right>")
                .append(sent)
@@ -918,13 +918,13 @@ public class PeerHelper extends HelperBase {
            .append(_t("Dir"))
            .append(" (")
            .append(_t("Direction"))
-           .append("):</b><br><span class=\"peer_arrow outbound\"><img alt=Outbound src=/themes/console/images/outbound.svg></span> ")
+           .append("):</b><br><span class=\"peer_arrow outbound\"></span> ")
            .append(_t("Outbound connection"))
-           .append("<br>\n<span class=\"peer_arrow outbound small\"><img src=/themes/console/images/inbound.svg alt=\"V\" width=8 height=8></span> ")
+           .append("<br>\n<span class=\"peer_arrow outbound small\"></span> ")
            .append(_t("They offered to introduce us (help peers traverse our firewall)"))
-           .append("<br>\n<span class=\"peer_arrow inbound\"><img alt=Inbound src=/themes/console/images/inbound.svg></span> ")
+           .append("<br>\n<span class=\"peer_arrow inbound\"></span> ")
            .append(_t("Inbound connection"))
-           .append("<br>\n<span class=\"peer_arrow inbound small\"><img src=/themes/console/images/outbound.svg alt=\"^\" width=8 height=8></span> ")
+           .append("<br>\n<span class=\"peer_arrow inbound small\"></span> ")
            .append(_t("We offered to introduce them (help peers traverse their firewall)"))
            .append("</li>\n<li><b id=def.idle>")
            .append(_t("Idle"))
