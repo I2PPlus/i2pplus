@@ -60,7 +60,7 @@
 --input_txt:linear-gradient(180deg,#000800,#001800);
 --isdown:repeating-linear-gradient(135deg,#131,#131 10px,#300 11px,#000 12px,#000 19px,#300 19px,#000 20px);
 --label:linear-gradient(180deg,#001800 50%,#000 50%);
---mainbg:repeating-linear-gradient(90deg,#000c 2px,rgba(0,24,0,.7) 4px) center center/4px 100%,repeating-linear-gradient(180deg,#000c 2px,rgba(0,24,0,.7) 4px) center center/100% 4px,var(--camo) center center/2048px;
+--mainbg:repeating-linear-gradient(90deg,#000c 2px,rgba(0,24,0,.7) 4px) center center/4px 100%,repeating-linear-gradient(180deg,#000c 2px,rgba(0,24,0,.7) 4px) left top/100% 4px,var(--camo) center center/2048px;
 --msg:repeating-linear-gradient(180deg,#0009 2px,rgba(0,32,0,.3) 4px) center center/100% 4px,var(--hat) no-repeat right 2px bottom -2px/auto 56px,linear-gradient(180deg,#010,#000400);
 --msg_nohat:repeating-linear-gradient(180deg,#0009 2px,rgba(0,32,0,.3) 4px) center center/100% 4px,linear-gradient(180deg,#010,#000400);
 --msg_warn:repeating-linear-gradient(180deg,#0009 2px,rgba(96,0,0,.3) 4px) center center/100% 4px,var(--hat) no-repeat right 2px bottom -2px/auto 56px,linear-gradient(180deg,#100,#040000);
