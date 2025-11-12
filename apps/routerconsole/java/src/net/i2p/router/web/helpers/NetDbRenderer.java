@@ -81,8 +81,7 @@ class NetDbRenderer {
     public NetDbRenderer (RouterContext ctx) {
         _context = ctx;
         _organizer = ctx.profileOrganizer();
-        scheduleReverseDNSPrecaching();
-        scheduleIntroducerPreCache();
+        NetDbCachingJob.schedule(_context);
     }
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
@@ -91,10 +90,11 @@ class NetDbRenderer {
     public int localLSCount;
     private final ProfileOrganizer _organizer;
     private final int BATCH_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 10 : 20;
-    private volatile boolean _dnsPrecacheScheduled = false;
-    private volatile boolean _introducersPrecacheScheduled = false;
-    private volatile long lastrun_DNSPrecache = 0;
-    private volatile long lastrun_IntroducerPrecache = 0;
+    private long now = System.currentTimeMillis();
+    public volatile boolean _dnsPrecacheScheduled = false;
+    public volatile boolean _introducersPrecacheScheduled = false;
+    public volatile long lastrun_DNSPrecache = now;
+    public volatile long lastrun_IntroducerPrecache = now;
 
     /**
      *  Comparator for LeaseSets, used in the leaseset listing.
@@ -771,93 +771,10 @@ class NetDbRenderer {
     }
 
     /**
-     * Schedules the periodic reverse DNS precaching job if enabled and not already scheduled.
-     * This job runs every 21 minutes to pre-resolve IP addresses of known routers.
-     */
-    private void scheduleReverseDNSPrecaching() {
-        if (!_dnsPrecacheScheduled && enableReverseLookups() && !_context.router().isHidden()) {
-            SimpleTimer2 timer = _context.simpleTimer2();
-            new ReverseDNSPreCacher(timer, 21 * 60 * 1000);
-            _dnsPrecacheScheduled = true;
-        }
-    }
-
-    /**
-     * Timer task that periodically triggers reverse DNS precaching when
-     * reverse dns lookups are enabled
-     */
-    private class ReverseDNSPreCacher extends SimpleTimer2.TimedEvent {
-        private static final long INTERVAL_MS = 21 * 60 * 1000;
-
-        public ReverseDNSPreCacher(SimpleTimer2 timer, long delay) {
-            super(timer, delay);
-        }
-
-        @Override
-        public void timeReached() {
-            _context.jobQueue().addJob(new JobImpl(_context) {
-                public void runJob() {
-                    long now =_context.clock().now();
-                    if (now - lastrun_DNSPrecache >= INTERVAL_MS) {
-                        Set<RouterInfo> all = _context.netDb().getRouters();
-                        precacheReverseDNSLookups(all);
-                        lastrun_DNSPrecache = now;
-                    } else {return;}
-                }
-
-                public String getName() {
-                    return "Precache RouterInfo ReverseDNS";
-                }
-            });
-            schedule(INTERVAL_MS);
-        }
-    }
-
-    /**
-     * Schedules the introducer precaching job if not already scheduled.
-     * This job runs every 36 minutes to pre-cache RouterInfos for known introducers.
-     */
-    private void scheduleIntroducerPreCache() {
-        if (_introducersPrecacheScheduled) return;
-        SimpleTimer2 timer = _context.simpleTimer2();
-        new IntroducerPreCacher(timer, 36 * 60 * 1000);
-        _introducersPrecacheScheduled = true;
-    }
-
-    /**
-     * Timer task that periodically triggers introducer info precaching.
-     */
-    private class IntroducerPreCacher extends SimpleTimer2.TimedEvent {
-        private static final long INTERVAL_MS = 36 * 60 * 1000;
-
-        public IntroducerPreCacher(SimpleTimer2 timer, long interval) {
-            super(timer, interval);
-        }
-
-        @Override
-        public void timeReached() {
-            _context.jobQueue().addJob(new JobImpl(_context) {
-                public void runJob() {
-                    long now = _context.clock().now();
-                    if (now - lastrun_IntroducerPrecache >= INTERVAL_MS) {
-                        precacheIntroducerInfos();
-                        lastrun_IntroducerPrecache = now;
-                    } else {return;}
-                }
-
-                public String getName() {
-                    return "Precache Introducer RouterInfos";
-                }
-            });
-            schedule(INTERVAL_MS);
-        }
-    }
-
-    /**
      * Precaches RouterInfo for all known introducers by querying the network database.
      * This helps ensure we have up-to-date info for routers we might need to contact.
      */
-    private void precacheIntroducerInfos() {
+    public void precacheIntroducerInfos() {
         if (_introducersPrecacheScheduled) return;
 
         _introducersPrecacheScheduled = true;
@@ -1005,7 +922,7 @@ class NetDbRenderer {
         if (notLocal) {buf.append("</td></tr>\n</table>\n");}
         if (!leases.isEmpty()) {
             boolean linkSusi = _context.portMapper().isRegistered("susidns");
-            long now = _context.clock().now();
+            now = _context.clock().now();
             for (LeaseSet ls : leases) {
                 String distance;
                 if (debug) {
@@ -1099,7 +1016,7 @@ class NetDbRenderer {
                 BigInteger dist = HashDistance.getDistance(_context.routerHash(), ls.getRoutingKey());
                 DecimalFormat fmt = new DecimalFormat("#0.00");
                 String distance = fmt.format(biLog2(dist));
-                long now = _context.clock().now();
+                now = _context.clock().now();
                 buf.append("<span id=singleLS></span>");
                 renderLeaseSet(buf, ls, true, now, false, distance);
             } else {
@@ -1823,7 +1740,7 @@ class NetDbRenderer {
             buf.append("&nbsp;<span id=netdb_ram><b>").append(_t("Memory usage")).append(":</b> ").append(memoryUsedMegabytes).append("M</span>");
         }
         buf.append("</th></tr>\n</thead>\n<tbody>\n<tr>");
-        long now = _context.clock().now();
+        now = _context.clock().now();
         long published = routerInfo.getPublished();
         long age = now - published;
         if (isLocalRouter && _context.router().isHidden()) {
