@@ -86,12 +86,15 @@ class NetDbRenderer {
     }
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
-    public static final int LOOKUP_WAIT = 5 * 1000;
+    public static final int LOOKUP_WAIT = 3 * 1000;
     public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}
     public int localLSCount;
     private final ProfileOrganizer _organizer;
-    private final int BATCH_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 5 : 20;
+    private final int BATCH_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 10 : 20;
     private volatile boolean _dnsPrecacheScheduled = false;
+    private volatile boolean _introducersPrecacheScheduled = false;
+    private volatile long lastrun_DNSPrecache = 0;
+    private volatile long lastrun_IntroducerPrecache = 0;
 
     /**
      *  Comparator for LeaseSets, used in the leaseset listing.
@@ -325,107 +328,6 @@ class NetDbRenderer {
         out.append(buf);
         out.flush();
         if (sybil != null) {SybilRenderer.renderSybilHTML(out, _context, sybilHashes, sybil);}
-    }
-
-    /**
-     *  Looks up a RouterInfo by its hash with a timeout.
-     *  Tries local lookup first, then remote, then local again.
-     *
-     *  @param networkDatabase the network database facade
-     *  @param hash the router hash
-     *  @param timeout max time to wait in milliseconds
-     *  @return the RouterInfo or null if not found
-     *  @since 0.9.68+
-     */
-    private RouterInfo lookupRouterInfoWithWait(NetworkDatabaseFacade networkDatabase, Hash hash, long timeout) {
-        RouterInfo routerInfo = (RouterInfo) networkDatabase.lookupLocallyWithoutValidation(hash);
-        if (routerInfo == null) {
-            LookupWaiter lookupWaiter = new LookupWaiter();
-            synchronized (lookupWaiter) {
-                networkDatabase.lookupRouterInfo(hash, lookupWaiter, lookupWaiter, timeout);
-                try {
-                    lookupWaiter.wait(timeout);
-                } catch (InterruptedException ignored) {}
-            }
-            routerInfo = (RouterInfo) networkDatabase.lookupLocallyWithoutValidation(hash);
-        }
-        return routerInfo;
-    }
-
-    /**
-     * Precache reverse DNS lookups for a collection of RouterInfo entries.
-     *
-     * @param routers Collection of RouterInfo objects to resolve
-     * @return Map of IP address to canonical hostname (may be empty)
-     */
-    public Map<String, String> precacheReverseDNSLookups(Collection<RouterInfo> routers) {
-        if (!enableReverseLookups() || _context.router().isHidden()) {
-            return Collections.emptyMap();
-        }
-
-        Set<String> ipSet = new HashSet<>();
-        for (RouterInfo ri : routers) {
-            String ip = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri));
-            if (ip != null && !ip.isEmpty()) {
-                ipSet.add(ip);
-            }
-        }
-
-        if (ipSet.isEmpty()) {
-            return Collections.emptyMap();
-        }
-
-        Map<String, String> rdnsLookups = new HashMap<>();
-        int cores = Math.max(1, SystemVersion.getCores());
-        int poolSize = Math.max(1, Math.min(Math.max(cores/2, 4), Math.max(1, ipSet.size())));
-        ExecutorService dnsExecutor = Executors.newFixedThreadPool(poolSize);
-        List<Future<Void>> dnsFutures = new ArrayList<>();
-
-        for (String ip : ipSet) {
-            dnsFutures.add(dnsExecutor.submit(() -> {
-                String hostname = _context.commSystem().getCanonicalHostName(ip);
-                if (hostname != null && !hostname.equals(ip) && !hostname.equals("unknown")) {
-                    synchronized (rdnsLookups) {
-                        rdnsLookups.put(ip, hostname);
-                    }
-                    // Also update global cache
-                    reverseLookupCache.put(ip, hostname);
-                }
-                return null;
-            }));
-        }
-
-        dnsExecutor.shutdown();
-        try {Thread.sleep(3000);}
-        catch (InterruptedException ie) {Thread.currentThread().interrupt();}
-        if (!dnsExecutor.isTerminated()) {dnsExecutor.shutdownNow();}
-
-        return rdnsLookups;
-    }
-
-    private void scheduleReverseDNSPrecaching() {
-        if (!_dnsPrecacheScheduled && enableReverseLookups() && !_context.router().isHidden()) {
-            _dnsPrecacheScheduled = true;
-            SimpleTimer2 timer = _context.simpleTimer2();
-            new ReverseDNSPreCacher(timer, 10 * 60 * 1000);
-        }
-    }
-
-    private class ReverseDNSPreCacher extends SimpleTimer2.TimedEvent {
-        public ReverseDNSPreCacher(SimpleTimer2 timer, long delay) {
-            super(timer, delay);
-        }
-
-        @Override
-        public void timeReached() {
-            try {
-                Set<RouterInfo> all = _context.netDb().getRouters();
-                precacheReverseDNSLookups(all);
-            } catch (Throwable t) {
-                _context.logManager().getLog(NetDbRenderer.class).warn("Error in reverse DNS precacher", t);
-            }
-            schedule(10 * 60 * 1000);
-        }
     }
 
     /**
@@ -792,35 +694,173 @@ class NetDbRenderer {
         public String getName() {return "Console NetDb Lookup";}
     }
 
-    private void scheduleIntroducerPreCache() {
-        SimpleTimer2 timer = _context.simpleTimer2();
-        new IntroducerPreCacher(timer, 9 * 60 * 1000);
+    /**
+     *  Looks up a RouterInfo by its hash with a timeout.
+     *  Tries local lookup first, then remote, then local again.
+     *
+     *  @param networkDatabase the network database facade
+     *  @param hash the router hash
+     *  @param timeout max time to wait in milliseconds
+     *  @return the RouterInfo or null if not found
+     *  @since 0.9.68+
+     */
+    private RouterInfo lookupRouterInfoWithWait(NetworkDatabaseFacade networkDatabase, Hash hash, long timeout) {
+        RouterInfo routerInfo = (RouterInfo) networkDatabase.lookupLocallyWithoutValidation(hash);
+        if (routerInfo == null) {
+            LookupWaiter lookupWaiter = new LookupWaiter();
+            synchronized (lookupWaiter) {
+                networkDatabase.lookupRouterInfo(hash, lookupWaiter, lookupWaiter, timeout);
+                try {
+                    lookupWaiter.wait(timeout);
+                } catch (InterruptedException ignored) {}
+            }
+            routerInfo = (RouterInfo) networkDatabase.lookupLocallyWithoutValidation(hash);
+        }
+        return routerInfo;
     }
 
-    private class IntroducerPreCacher extends SimpleTimer2.TimedEvent {
-        private final long _interval;
+    /**
+     * Precache reverse DNS lookups for a collection of RouterInfo entries.
+     *
+     * @param routers Collection of RouterInfo objects to resolve
+     * @return Map of IP address to canonical hostname (may be empty)
+     */
+    public Map<String, String> precacheReverseDNSLookups(Collection<RouterInfo> routers) {
+        if (!enableReverseLookups() || _context.router().isHidden()) {
+            return Collections.emptyMap();
+        }
 
-        public IntroducerPreCacher(SimpleTimer2 timer, long interval) {
-            super(timer, interval);
-            _interval = interval;
+        Set<String> ipSet = new HashSet<>();
+        for (RouterInfo ri : routers) {
+            String ip = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri));
+            if (ip != null && !ip.isEmpty()) {
+                ipSet.add(ip);
+            }
+        }
+
+        if (ipSet.isEmpty()) {
+            return Collections.emptyMap();
+        }
+
+        Map<String, String> rdnsLookups = new HashMap<>();
+        int cores = Math.max(1, SystemVersion.getCores());
+        int poolSize = Math.max(1, Math.min(Math.max(cores/2, 4), Math.max(1, ipSet.size())));
+        ExecutorService dnsExecutor = Executors.newFixedThreadPool(poolSize);
+        List<Future<Void>> dnsFutures = new ArrayList<>();
+
+        for (String ip : ipSet) {
+            dnsFutures.add(dnsExecutor.submit(() -> {
+                String hostname = _context.commSystem().getCanonicalHostName(ip);
+                if (hostname != null && !hostname.equals(ip) && !hostname.equals("unknown")) {
+                    synchronized (rdnsLookups) {
+                        rdnsLookups.put(ip, hostname);
+                    }
+                    // Also update global cache
+                    reverseLookupCache.put(ip, hostname);
+                }
+                return null;
+            }));
+        }
+
+        dnsExecutor.shutdown();
+        try {Thread.sleep(3000);}
+        catch (InterruptedException ie) {Thread.currentThread().interrupt();}
+        if (!dnsExecutor.isTerminated()) {dnsExecutor.shutdownNow();}
+
+        return rdnsLookups;
+    }
+
+    /**
+     * Schedules the periodic reverse DNS precaching job if enabled and not already scheduled.
+     * This job runs every 21 minutes to pre-resolve IP addresses of known routers.
+     */
+    private void scheduleReverseDNSPrecaching() {
+        if (!_dnsPrecacheScheduled && enableReverseLookups() && !_context.router().isHidden()) {
+            SimpleTimer2 timer = _context.simpleTimer2();
+            new ReverseDNSPreCacher(timer, 21 * 60 * 1000);
+            _dnsPrecacheScheduled = true;
+        }
+    }
+
+    /**
+     * Timer task that periodically triggers reverse DNS precaching when
+     * reverse dns lookups are enabled
+     */
+    private class ReverseDNSPreCacher extends SimpleTimer2.TimedEvent {
+        private static final long INTERVAL_MS = 21 * 60 * 1000;
+
+        public ReverseDNSPreCacher(SimpleTimer2 timer, long delay) {
+            super(timer, delay);
         }
 
         @Override
         public void timeReached() {
             _context.jobQueue().addJob(new JobImpl(_context) {
                 public void runJob() {
-                    precacheIntroducerInfos();
+                    long now =_context.clock().now();
+                    if (now - lastrun_DNSPrecache >= INTERVAL_MS) {
+                        Set<RouterInfo> all = _context.netDb().getRouters();
+                        precacheReverseDNSLookups(all);
+                        lastrun_DNSPrecache = now;
+                    } else {return;}
                 }
 
                 public String getName() {
-                    return "Introducer Info Precacher";
+                    return "Precache RouterInfo ReverseDNS";
                 }
             });
-            schedule(_interval);
+            schedule(INTERVAL_MS);
         }
     }
 
+    /**
+     * Schedules the introducer precaching job if not already scheduled.
+     * This job runs every 36 minutes to pre-cache RouterInfos for known introducers.
+     */
+    private void scheduleIntroducerPreCache() {
+        if (_introducersPrecacheScheduled) return;
+        SimpleTimer2 timer = _context.simpleTimer2();
+        new IntroducerPreCacher(timer, 36 * 60 * 1000);
+        _introducersPrecacheScheduled = true;
+    }
+
+    /**
+     * Timer task that periodically triggers introducer info precaching.
+     */
+    private class IntroducerPreCacher extends SimpleTimer2.TimedEvent {
+        private static final long INTERVAL_MS = 36 * 60 * 1000;
+
+        public IntroducerPreCacher(SimpleTimer2 timer, long interval) {
+            super(timer, interval);
+        }
+
+        @Override
+        public void timeReached() {
+            _context.jobQueue().addJob(new JobImpl(_context) {
+                public void runJob() {
+                    long now = _context.clock().now();
+                    if (now - lastrun_IntroducerPrecache >= INTERVAL_MS) {
+                        precacheIntroducerInfos();
+                        lastrun_IntroducerPrecache = now;
+                    } else {return;}
+                }
+
+                public String getName() {
+                    return "Precache Introducer RouterInfos";
+                }
+            });
+            schedule(INTERVAL_MS);
+        }
+    }
+
+    /**
+     * Precaches RouterInfo for all known introducers by querying the network database.
+     * This helps ensure we have up-to-date info for routers we might need to contact.
+     */
     private void precacheIntroducerInfos() {
+        if (_introducersPrecacheScheduled) return;
+
+        _introducersPrecacheScheduled = true;
         Set<RouterInfo> allRouters = _context.netDb().getRouters();
         Set<Hash> introducerHashes = new HashSet<>();
 
@@ -851,6 +891,11 @@ class NetDbRenderer {
         }
     }
 
+    /**
+     * Schedule a lookup job for a specific router if it's not already in the local netDb.
+     *
+     * @param hash Hash of the router to look up
+     */
     private void scheduleLookup(Hash hash) {
         _context.netDb().lookupRouterInfoLocally(hash);
         if (_context.netDb().lookupRouterInfoLocally(hash) == null) {
@@ -1644,7 +1689,7 @@ class NetDbRenderer {
         for (RouterAddress address : routerInfo.getAddresses()) {
             String transportStyle = address.getTransportStyle();
             int cost = address.getCost();
-            if ((transportStyle.startsWith("SSU") && cost == 5) || (transportStyle.startsWith("NTCP") && cost == 14)) {
+            if ((transportStyle.startsWith("SSU") && cost == 5) || (transportStyle.startsWith("NTCP") && cost == 14) && !isUnreachable(routerInfo)) {
                 isJavaI2PVariant = true;
                 break;
             } else if ((transportStyle.startsWith("SSU") && cost == 3) || (transportStyle.startsWith("NTCP") && cost == 8)) {
@@ -1941,12 +1986,13 @@ class NetDbRenderer {
             Collection<RouterAddress> addresses = routerInfo.getAddresses();
             List<RouterAddress> listAddresses = new ArrayList<>(addresses);
             for (RouterAddress address : listAddresses) {
+                if (address == null) continue;
                 String transportStyle = address.getTransportStyle();
                 Map<Object, Object> optionsMap = address.getOptionsMap();
                 for (Map.Entry<Object, Object> entry : optionsMap.entrySet()) {
                     String key = (String) entry.getKey();
                     String value = (String) entry.getValue();
-                    if (key.startsWith("ih")) {
+                    if (key != null && key.startsWith("ih")) {
                         hasIntroducer = true;
                         String ih = (String) entry.getValue();
                         Hash ihost = ConvertToHash.getHash(ih);
