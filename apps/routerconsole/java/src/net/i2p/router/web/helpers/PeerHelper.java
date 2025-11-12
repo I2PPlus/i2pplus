@@ -382,13 +382,9 @@ public class PeerHelper extends HelperBase {
                .append(_context.commSystem().renderPeerCaps(h, false))
                .append("</td><td class=direction>");
             if (con.isInbound()) {
-                buf.append("<span class=inbound><img src=/themes/console/images/inbound.svg alt=Inbound title=\"")
-                   .append(_t("Inbound"))
-                   .append("\"/></span>");
+                buf.append("<span class=inbound title=\"").append(_t("Inbound")).append("\"></span>");
             } else {
-                buf.append("<span class=outbound><img src=/themes/console/images/outbound.svg alt=Outbound title=\"")
-                   .append(_t("Outbound"))
-                   .append("\"/></span>");
+                buf.append("<span class=outbound title=\"").append(_t("Outbound")).append("\"></span>");
             }
             buf.append("</td>");
             if (IPv6Enabled) {
@@ -397,7 +393,7 @@ public class PeerHelper extends HelperBase {
                 else {buf.append("");}
                 buf.append("</td>");
             }
-            buf.append("<td class=idle><span class=right>")
+            buf.append("<td class=idle><span class=right data-sort=").append(con.getTimeSinceReceive(now)).append(">")
                .append(DataHelper.formatDuration2(con.getTimeSinceReceive(now)))
                .append("</span>")
                .append(THINSP)
@@ -428,13 +424,13 @@ public class PeerHelper extends HelperBase {
                 buf.append("</span>");
             }
             totalUptime += con.getUptime();
-            offsetTotal = offsetTotal + con.getClockSkew();
-            buf.append("</td><td class=uptime data-sort=").append(totalUptime).append("><span>")
+            offsetTotal += con.getClockSkew();
+            buf.append("</td><td class=uptime data-sort=").append(con.getUptime()).append("><span>")
                .append(DataHelper.formatDuration2(con.getUptime()))
-               .append("</span></td><td class=skew data-sort=").append(offsetTotal).append(">");
+               .append("</span></td><td class=skew data-sort=").append(con.getClockSkew()).append(">");
             if (con.getClockSkew() > 0) {
                 buf.append("<span>")
-                   .append(DataHelper.formatDuration2(1000 * con.getClockSkew()))
+                   .append(DataHelper.formatDuration2(con.getClockSkew()))
                    .append("</span>");
             }
             totalSend += con.getMessagesSent();
@@ -772,7 +768,7 @@ public class PeerHelper extends HelperBase {
             long resent = peer.getPacketsRetransmitted();
             long dupRecv = peer.getPacketsReceivedDuplicate();
 
-            buf.append("</td><td class=uptime data-sort=uptime>")
+            buf.append("</td><td class=uptime data-sort=").append(uptime)
                .append(DataHelper.formatDuration2(uptime))
                .append("</td><td class=skew data-sort=").append(skew).append(">")
                .append(DataHelper.formatDuration2(skew))
