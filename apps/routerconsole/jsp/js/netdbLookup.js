@@ -410,6 +410,11 @@ document.addEventListener("DOMContentLoaded", () => {
     "sybil2", "sybil"
   ];
 
+  if (fieldSelect && !urlParams.toString()) {
+      fieldSelect.value = "caps";
+      switchQueryField();
+  }
+
   let found = false;
   for (const key of possibleFields) {
     if (urlParams.has(key)) {
