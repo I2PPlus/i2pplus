@@ -112,6 +112,7 @@ public class Router implements RouterClock.ClockShiftListener {
     public final Object _familyKeyLock = new Object();
     private UPnPScannerCallback _upnpScannerCallback;
     private long _downtime = -1;
+    private char _lastCongestionCap = 0;
 
     private static final String BUNDLE_NAME = "net.i2p.router.web.messages";
     public final static String PROP_CONFIG_FILE = "router.configLocation";
@@ -1091,6 +1092,7 @@ public class Router implements RouterClock.ClockShiftListener {
         boolean hidden = isHidden();
         char bw = hidden ? CAPABILITY_BW32 : getBandwidthClass();
         rv.append(bw);
+
         // 512 and unlimited supported as of 0.9.18;
         // if prop set to true, don't tell people we are ff even if we are - which means we likely won't get used at all
         if (_context.netDb().floodfillEnabled() && !_context.getBooleanProperty("router.hideFloodfillParticipant")) {
@@ -1198,11 +1200,10 @@ public class Router implements RouterClock.ClockShiftListener {
                 }
             }
         }
-        if (cong != 0) {
-            if (CONGESTION_CAPS) {
-                rv.append(cong);
-                if (_log.shouldWarn()) {_log.warn("Congestion cap \'" + cong + "\' activated");}
-            }
+        if (cong != 0 && CONGESTION_CAPS) {
+            rv.append(cong);
+            if (_log.shouldWarn() && cong != _lastCongestionCap) {_log.warn("Congestion cap \'" + cong + "\' activated");}
+            _lastCongestionCap = cong;
         }
         return rv.toString();
     }
