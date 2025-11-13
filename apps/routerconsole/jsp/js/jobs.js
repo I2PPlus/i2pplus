@@ -6,16 +6,17 @@
   const jobs = document.getElementById("jobstats");
   const sorter = new Tablesort(jobs, { descending: true });
   const xhrjobs = new XMLHttpRequest();
-  const REFRESH_INTERVAL = 10*1000;
-  progressx.hide();
-  const visibility = document.visibilityState;
+  const REFRESH_INTERVAL = 5 * 1000;
 
-  if (visibility === "visible") {
-    setInterval(function() {
+  let refreshInterval = null;
+
+  function startRefresh() {
+    refreshInterval = setInterval(function() {
       xhrjobs.open("GET", "/jobs", true);
       xhrjobs.responseType = "document";
       xhrjobs.onload = function() {
-        if (!xhrjobs.responseXML) {return;}
+        if (!xhrjobs.responseXML) return;
+
         const jobsResponse = xhrjobs.responseXML.getElementById("jobstats");
         const rows = document.querySelectorAll("#statCount tr");
         const rowsResponse = xhrjobs.responseXML.querySelectorAll("#statCount tr");
@@ -25,6 +26,7 @@
         const tfootResponse = xhrjobs.responseXML.getElementById("statTotals");
         const updatingTds = document.querySelectorAll("#statCount td");
         const updatingTdsResponse = xhrjobs.responseXML.querySelectorAll("#statCount td");
+
         let updated = false;
 
         if (!Object.is(jobs.innerHTML, jobsResponse.innerHTML)) {
@@ -34,24 +36,47 @@
             updated = true;
           } else {
             Array.from(updatingTds).forEach((elem, index) => {
-              elem.classList.remove("updated");
-              if (elem.innerHTML !== "<span hidden>[0.]</span>0" && elem.innerHTML !== updatingTdsResponse[index].innerHTML) {
-                elem.innerHTML = updatingTdsResponse[index].innerHTML;
+              const newElem = updatingTdsResponse[index];
+              if (elem.innerHTML.trim() !== newElem.innerHTML.trim()) {
+                elem.innerHTML = newElem.innerHTML;
                 elem.classList.add("updated");
                 updated = true;
+              } else {
+                elem.classList.remove("updated");
               }
             });
+
             if (tfoot.innerHTML !== tfootResponse.innerHTML) {
               tfoot.innerHTML = tfootResponse.innerHTML;
             }
           }
+
           sorter.refresh();
         }
       };
-      progressx.hide();
+
       xhrjobs.send();
     }, REFRESH_INTERVAL);
   }
+
+  function stopRefresh() {
+    if (refreshInterval) {
+      clearInterval(refreshInterval);
+      refreshInterval = null;
+    }
+  }
+
+  if (document.visibilityState === "visible") {
+    startRefresh();
+  }
+
+  document.addEventListener("visibilitychange", function() {
+    if (document.visibilityState === "visible") {
+      startRefresh();
+    } else {
+      stopRefresh();
+    }
+  });
 
   jobs.addEventListener("beforeSort", function() {
     progressx.show(theme);
