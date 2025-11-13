@@ -18,43 +18,50 @@
         if (!xhrjobs.responseXML) return;
 
         const jobsResponse = xhrjobs.responseXML.getElementById("jobstats");
-        const rows = document.querySelectorAll("#statCount tr");
-        const rowsResponse = xhrjobs.responseXML.querySelectorAll("#statCount tr");
         const tbody = document.getElementById("statCount");
+        const rows = tbody.querySelectorAll("tr");
+        const rowsResponse = xhrjobs.responseXML.querySelectorAll("#statCount tr");
         const tbodyResponse = xhrjobs.responseXML.getElementById("statCount");
         const tfoot = document.getElementById("statTotals");
         const tfootResponse = xhrjobs.responseXML.getElementById("statTotals");
-        const updatingTds = document.querySelectorAll("#statCount td");
-        const updatingTdsResponse = xhrjobs.responseXML.querySelectorAll("#statCount td");
-
-        let updated = false;
+        const updatingTds = tbody.querySelectorAll("td>span");
+        const updatingTdsResponse = xhrjobs.responseXML.querySelectorAll("#statCount td>span");
 
         if (!Object.is(jobs.innerHTML, jobsResponse.innerHTML)) {
-          if (rows.length !== rowsResponse.length) {
+          const sortedTh = jobs.querySelector("th.sorted");
+          if (sortedTh) {
+            if (rows.length !== rowsResponse.length) {
+              tbody.innerHTML = tbodyResponse.innerHTML;
+              tfoot.innerHTML = tfootResponse.innerHTML;
+            } else {
+              Array.from(updatingTds).forEach((elem, index) => {
+                const newElem = updatingTdsResponse[index];
+                if (!newElem) return;
+
+                if (elem.innerText.trim() !== newElem.innerText.trim()) {
+                  elem.innerHTML = newElem.innerHTML;
+                  elem.classList.add("updated");
+                } else {
+                  elem.classList.remove("updated");
+                  if (elem.classList.length === 0) {
+                    elem.removeAttribute("class");
+                  }
+                }
+              });
+
+              if (tfoot.innerHTML !== tfootResponse.innerHTML) {
+                tfoot.innerHTML = tfootResponse.innerHTML;
+                sorter.refresh();
+              }
+            }
+          } else {
             tbody.innerHTML = tbodyResponse.innerHTML;
             tfoot.innerHTML = tfootResponse.innerHTML;
-            updated = true;
-          } else {
-            Array.from(updatingTds).forEach((elem, index) => {
-              const newElem = updatingTdsResponse[index];
-              if (elem.innerHTML.trim() !== newElem.innerHTML.trim()) {
-                elem.innerHTML = newElem.innerHTML;
-                elem.classList.add("updated");
-                updated = true;
-              } else {
-                elem.classList.remove("updated");
-              }
-            });
-
-            if (tfoot.innerHTML !== tfootResponse.innerHTML) {
-              tfoot.innerHTML = tfootResponse.innerHTML;
-            }
+            sorter.refresh();
           }
-
-          sorter.refresh();
         }
       };
-
+      progressx.hide();
       xhrjobs.send();
     }, REFRESH_INTERVAL);
   }
@@ -64,10 +71,6 @@
       clearInterval(refreshInterval);
       refreshInterval = null;
     }
-  }
-
-  if (document.visibilityState === "visible") {
-    startRefresh();
   }
 
   document.addEventListener("visibilitychange", function() {
@@ -80,7 +83,6 @@
 
   jobs.addEventListener("beforeSort", function() {
     progressx.show(theme);
-    progressx.progress(0.5);
   });
 
   jobs.addEventListener("afterSort", function() {

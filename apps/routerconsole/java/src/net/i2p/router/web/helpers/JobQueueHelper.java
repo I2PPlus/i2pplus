@@ -191,7 +191,7 @@ public class JobQueueHelper extends HelperBase {
     private void getJobStats(StringBuilder buf) {
         buf.append("<div class=widescroll>\n<h3 id=totaljobstats>")
            .append(_t("Job Statistics (excluding single-shot jobs)"))
-           .append("</h3>\n<table id=jobstats data-sortable>\n<thead><tr data-sort-method=thead><th>")
+           .append("</h3>\n<table id=jobstats data-sortable>\n<thead><tr data-sort-method=none><th>")
            .append(_t("Job"))
            .append("</th><th data-sort-method=number>")
            .append(_t("Runs"))
@@ -304,7 +304,7 @@ public class JobQueueHelper extends HelperBase {
                 avgPendingTime = totPendingTime / totRuns;
         }
 
-        buf.append("</tbody>\n<tfoot id=statTotals><tr class=tablefooter><td><b>")
+        buf.append("</tbody>\n<tfoot id=statTotals><tr class=tablefooter data-sort-method=none><td><b>")
            .append(_t("Summary"))
            .append("</b></td><td>")
            .append(totRuns)
