@@ -105,7 +105,8 @@
       if (reasonCell) {
         let reason = reasonCell.textContent;
         reason = reason.split("(")[0].trim();
-        reason = reason.replace("Compressible RouterInfo & older than 0.9.57", "Invalid RouterInfo");
+        reason = reason.replace("Compressible RouterInfo & older than 0.9.57", "Invalid RouterInfo").replace("->", "");
+        reason = reason.trim();
         if (reason) { reasonCounts[reason] = (reasonCounts[reason] || 0) + 1; }
       }
     });
