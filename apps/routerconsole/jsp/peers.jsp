@@ -30,7 +30,6 @@
 </div>
 <script src=/js/tablesort/tablesort.js></script>
 <script src=/js/tablesort/tablesort.number.js></script>
-<script src=/js/tablesort/tablesort.natural.js></script>
 <script src=/js/lazyload.js></script>
 <script src=/js/peers.js></script>
 </body>
