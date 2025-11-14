@@ -56,8 +56,8 @@ class SearchJob extends JobImpl {
     private boolean _floodfillPeersExhausted;
     private int _floodfillSearchesOutstanding;
     private final long _msgIDBloomXor;
-    private static int SEARCH_BREDTH = 5;
-    private static int SEARCH_BREDTH_LEASE = 8;
+    private static int SEARCH_BREDTH = 3;
+    private static int SEARCH_BREDTH_LEASE = 5;
     static final int MAX_CLOSEST = 10; // Only send the 10 closest "don't tell me about" refs
 
     /**
@@ -139,7 +139,7 @@ class SearchJob extends JobImpl {
         if (ctx.netDb().floodfillEnabled() || forceExplore == "true") {return false;}
         return ctx.getProperty("netDb.floodfillOnly", DEFAULT_FLOODFILL_ONLY);
     }
-    static final int PER_FLOODFILL_PEER_TIMEOUT = 10*1000;
+    static final int PER_FLOODFILL_PEER_TIMEOUT = 8*1000;
     static final long MIN_TIMEOUT = 3*1000;
 
     protected int getPerPeerTimeoutMs(Hash peer) {
@@ -161,7 +161,7 @@ class SearchJob extends JobImpl {
         else {return PER_FLOODFILL_PEER_TIMEOUT;}
     }
 
-    private static int MAX_PEERS_QUERIED = 64;
+    private static int MAX_PEERS_QUERIED = 16;
 
     /**
      * Send the next search, or stop if its completed
