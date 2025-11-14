@@ -293,7 +293,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
 
                         if (timingBuf != null) {
                             long now = System.currentTimeMillis();
-                            timingBuf.append(" Flushed all messages in buffer, none remain (displayed to now: " + (now - afterDisplayed) + ")");
+                            timingBuf.append("\n* Flushed all messages in buffer, none remain (displayed to now: " + (now - afterDisplayed) + ")");
                             timingBuf.append(" Total time: " + (now - start));
                             _log.debug(timingBuf.toString());
                         }
@@ -347,25 +347,26 @@ class BatchedPreprocessor extends TrivialPreprocessor {
      * title: allocated: X pending: X (delay: X) [0]:offset/length/lifetime [1]:etc.
      */
     private void display(long allocated, List<PendingGatewayMessage> pending, String title) {
-        if (_log.shouldInfo()) {
+        if (_log.shouldInfo() || _log.shouldDebug()) {
             long highestDelay = 0;
             StringBuilder buf = new StringBuilder(128);
             buf.append(_name).append(": ");
             buf.append(title);
-            buf.append("\n* Allocated: ").append(allocated);
+            buf.append("\n* Allocated: ").append(allocated).append(" bytes");
             buf.append("; Pending: ").append(pending.size());
-            if (_pendingSince > 0) {buf.append("; Delay: ").append(getDelayAmount(false));}
-            for (int i = 0; i < pending.size(); i++) {
-                PendingGatewayMessage curPending = pending.get(i);
-                buf.append("; [").append(i).append("] - ");
-                buf.append(curPending.getOffset()).append(" / ").append(curPending.getData().length).append(" / ");
-                buf.append(curPending.getLifetime());
-                if (curPending.getLifetime() > highestDelay) {highestDelay = curPending.getLifetime();}
+            if (_pendingSince > 0) {buf.append("; Delay: ").append(getDelayAmount(false)).append("ms");}
+            if (_log.shouldDebug()) {
+                for (int i = 0; i < pending.size(); i++) {
+                    PendingGatewayMessage curPending = pending.get(i);
+                    buf.append("; [").append(i).append("] - ");
+                    buf.append(curPending.getOffset()).append(" / ").append(curPending.getData().length).append(" / ");
+                    buf.append(curPending.getLifetime());
+                    if (curPending.getLifetime() > highestDelay) {highestDelay = curPending.getLifetime();}
+                }
             }
             _log.info(buf.toString());
         }
     }
-
 
     /**
      * Preprocess the messages from the pending list, grouping items startAt

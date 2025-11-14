@@ -113,8 +113,8 @@ class FragmentedMessage {
             return false;
         }
         if (_log.shouldDebug())
-            _log.debug("Receiving [MsgID " + _messageId + "] with " + length + " bytes (last? " + isLast + ") targeting [" +
-                       toRouter + "] / " + toTunnel + " offset=" + offset);
+            _log.debug("Receiving " + (isLast ? "last ": "") + length + " bytes message [MsgID " + _messageId + "]\n* Target Router: [" +
+                       toRouter.toBase64().substring(0,6) + "] on tunnel: " + toTunnel + " with " + offset + " bytes offset");
         ByteArray ba = _cache.acquire(); // new ByteArray(payload, offset, length); // new byte[length]);
         System.arraycopy(payload, offset, ba.getData(), 0, length);
         ba.setValid(length);

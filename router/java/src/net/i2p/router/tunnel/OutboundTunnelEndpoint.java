@@ -122,8 +122,8 @@ class OutboundTunnelEndpoint {
             }
 
             if (_log.shouldInfo()) {
-                _log.info("Outbound tunnel " + _config + " received a full message:\n* " + msg +
-                          " to be forwarded on to [" + toRouter.toBase64().substring(0,6) + "]" +
+                _log.info("Outbound tunnel " + _config + " received a full message\n* " + msg +
+                          " to be forwarded to [" + toRouter.toBase64().substring(0,6) + "]" +
                           (toTunnel != null ? ":" + toTunnel.getTunnelId() : ""));
             }
             if (toTunnel == null) {
@@ -136,34 +136,19 @@ class OutboundTunnelEndpoint {
                         if (_log.shouldLog(Log.INFO))
                             _log.info("OutboundEndpoint RouterInfo DbStoreMsg (Count: " +
                                       _ridsm + "/" + _totalmsg + ") from [TunnelId " + _config.getReceiveTunnelId() + "] " +
-                                      "to Router [" + toRouter.toBase64().substring(0,6) + "] with message:\n* " + dsm);
-/*                        else if (_log.shouldWarn())
-                            _log.warn("OutboundEndpoint RouterInfo DbStoreMsg from [TunnelId " + _config.getReceiveTunnelId() + "] " +
-                                      "to Router [" + toRouter.toBase64().substring(0,6) + "] -> Count: " + _ridsm + " / " + _totalmsg);
-*/
+                                      "to Router [" + toRouter.toBase64().substring(0,6) + "]\n* " + dsm);
                     } else {
                         _lsdsm++;
                         if (_log.shouldLog(Log.INFO))
                             _log.info("OutboundEndpoint LeaseSet DbStoreMsg (Count: " + _lsdsm + "/" + _totalmsg + ") " +
                                       "from [TunnelId " + _config.getReceiveTunnelId() + "] to Router " +
-                                      toRouter.toBase64().substring(0,6) + "] with message:\n* " + dsm);
-/*
-                        else if (_log.shouldWarn())
-                            _log.warn("OutboundEndpoint LeaseSet DbStoreMsg from [TunnelId " + _config.getReceiveTunnelId() + "] " +
-                                      "to Router " + toRouter.toBase64().substring(0,6) + "] -> Count: " + _lsdsm + " / " + _totalmsg);
-*/
+                                      toRouter.toBase64().substring(0,6) + "]\n* " + dsm);
                     }
                 } else {
                     _i2npmsg++;
                     if (_log.shouldLog(Log.INFO))
                         _log.info("OutboundEndpoint I2NP Message (Count: " + _i2npmsg + "/" + _totalmsg + ") from [TunnelId " +
-                                  _config.getReceiveTunnelId() + "] to Router [" + toRouter.toBase64().substring(0,6) + "] " +
-                                  "with message:\n* " + msg);
-/*
-                    else if (_log.shouldWarn())
-                        _log.warn("OutboundEndpoint I2NP Message from [TunnelId " + _config.getReceiveTunnelId() + "] " +
-                                  "to Router [" + toRouter.toBase64().substring(0,6) + "] -> Count: " + _i2npmsg + " / " + _totalmsg);
-*/
+                                  _config.getReceiveTunnelId() + "] to Router [" + toRouter.toBase64().substring(0,6) + "]\n* " + msg);
                 }
             }
             int size = msg.getMessageSize();
