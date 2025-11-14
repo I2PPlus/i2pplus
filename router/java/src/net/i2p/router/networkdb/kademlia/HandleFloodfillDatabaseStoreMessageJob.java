@@ -49,7 +49,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
     // Must be lower than LIMIT_ROUTERS in StartExplorersJob because exploration does not register a reply job
     private static final int LIMIT_ROUTERS = SystemVersion.isSlow() ? 1000 : 4000;
     private final long _msgIDBloomXor;
-    private static final int RESEND_DELAY = 300;
+    private static final int RESEND_DELAY = 500;
 
     /**
      * @param receivedMessage must never have reply token set if it came down a tunnel
@@ -221,9 +221,9 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     prevNetDb = (RouterInfo) _facade.lookupLocallyWithoutValidation(key);
                     boolean isUnreachable = cap.indexOf(Router.CAPABILITY_REACHABLE) < 0;
                     boolean isSlow = cap.contains("K") || cap.contains("L") || cap.contains("M") || cap.contains("N");
+                    boolean isFast = cap.contains("P") || cap.contains("Q") || cap.contains("X");
                     String MIN_VERSION = "0.9.64";
                     String v = ri.getVersion();
-                    boolean noSSU = true;
                     boolean isOld = VersionComparator.comp(v, MIN_VERSION) < 0;
                     boolean isInvalidVersion = VersionComparator.comp(v, "2.5.0") >= 0;
                     String country = "unknown";
@@ -231,6 +231,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     long uptime = getContext().router().getUptime();
                     boolean notFrom = !key.equals(_fromHash);
                     boolean logged = false;
+                    boolean bypassThrottle = false;
 
                     if (isBanned) {
                         shouldStore = false;
@@ -249,6 +250,9 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                       " [" + key.toBase64().substring(0,6) + "] and banning for 24h -> Invalid Router version: " + v);
                             getContext().banlist().banlistRouter(key, " <b>➜</b> Invalid Router version: " + v, null, null, now + 24*60*60*1000);
                         }
+                    } else if (isFast && !isOld && prevNetDb == null) {
+                        shouldStore = true;
+                        bypassThrottle = true;
                     } else if (prevNetDb == null) { // actually new
                         if (isUnreachable && isOld) {
                             shouldStore = false;
@@ -284,7 +288,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                             }
                         }
                         int count = _facade.getDataStore().size();
-                        if (count > LIMIT_ROUTERS) {
+                        if (count > LIMIT_ROUTERS && !bypassThrottle) {
                             if (_facade.floodfillEnabled()) {
                                 // determine if they're "close enough"
                                 // we will still ack and flood by setting wasNew = true even if we don't store locally
@@ -305,9 +309,10 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                         if (pdrop > 0 && (pdrop >= 128 || getContext().random().nextInt(128) < pdrop)) {
                                             if (_log.shouldWarn() && !logged) {
                                                 logged = true;
+                                                int percentage = Math.min(pdrop * 100 / 128, 100);
                                                 _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? " Floodfill" : " Router") +
                                                           " [" + key.toBase64().substring(0,6) + "] with distance " + distance +
-                                                          " -> Drop probability: " + (pdrop * 100 / 128) + "%");
+                                                          " -> Drop probability: " + percentage + "%");
                                             }
                                             shouldStore = false;
                                             if (_message.getReplyToken() > 0) {wasNew = true;} // still flood if requested
@@ -355,13 +360,14 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                                 }
                                 // non-ff - up to 100% drop rate
                                 int pdrop = (128 * count / LIMIT_ROUTERS) - 128;
-                                if (isUnreachable || isOld || noSSU) {pdrop *= 5;}
+                                if (isUnreachable || isOld) {pdrop *= 5;}
                                 else if (notFrom) {pdrop *= 10;}
                                 if (pdrop > 0 && (pdrop >= 128 || getContext().random().nextInt(128) < pdrop)) {
                                     if (_log.shouldWarn() && !logged) {
                                         logged = true;
+                                        int percentage = Math.min(pdrop * 100 / 128, 100);
                                         _log.warn("Dropping unsolicited NetDbStore of new " + cap + (isFF ? " Floodfill" : " Router") +
-                                                  " [" + key.toBase64().substring(0,6) + "] -> Drop probability: " + (pdrop * 100 / 128) + "%");
+                                                  " [" + key.toBase64().substring(0,6) + "] -> Drop probability: " + percentage + "%");
                                     }
                                     shouldStore = false;
                                     // don't bother checking ban/blocklists.
@@ -401,7 +407,7 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                 if (shouldStore) {
                     if (_facade.isClientDb() && _log.shouldWarn()) {
                         _log.warn("[" + _facade + "] Storing RouterInfo [" + key.toBase64().substring(0,6) +
-                                  "] to client NetDb -> This is rare, should have been handled by IBMD)");
+                                  "] to client NetDb -> This is rare, should have been handled by IBMD");
                     }
                     prevNetDb = _facade.store(key, ri);
                     wasNew = ((null == prevNetDb) || (prevNetDb.getPublished() < ri.getPublished()));
