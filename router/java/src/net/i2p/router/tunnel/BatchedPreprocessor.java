@@ -353,7 +353,7 @@ class BatchedPreprocessor extends TrivialPreprocessor {
             buf.append(_name).append(": ");
             buf.append(title);
             buf.append("\n* Allocated: ").append(allocated).append(" bytes");
-            buf.append("; Pending: ").append(pending.size());
+            buf.append("; Pending messages: ").append(pending.size());
             if (_pendingSince > 0) {buf.append("; Delay: ").append(getDelayAmount(false)).append("ms");}
             if (_log.shouldDebug()) {
                 for (int i = 0; i < pending.size(); i++) {
