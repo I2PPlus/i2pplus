@@ -24,21 +24,20 @@
         const tbodyResponse = xhrjobs.responseXML.getElementById("statCount");
         const tfoot = document.getElementById("statTotals");
         const tfootResponse = xhrjobs.responseXML.getElementById("statTotals");
-        const updatingTds = tbody.querySelectorAll("td>span");
-        const updatingTdsResponse = xhrjobs.responseXML.querySelectorAll("#statCount td>span");
+        const updatingTds = tbody.querySelectorAll("td");
+        const updatingTdsResponse = xhrjobs.responseXML.querySelectorAll("#statCount td");
 
-        if (!Object.is(jobs.innerHTML, jobsResponse.innerHTML)) {
-          const sortedTh = jobs.querySelector("th.sorted");
-          if (sortedTh) {
+        requestAnimationFrame(() => {
+          if (!Object.is(jobs.innerHTML, jobsResponse.innerHTML)) {
             if (rows.length !== rowsResponse.length) {
-              tbody.innerHTML = tbodyResponse.innerHTML;
-              tfoot.innerHTML = tfootResponse.innerHTML;
+                tbody.innerHTML = tbodyResponse.innerHTML;
+                tfoot.innerHTML = tfootResponse.innerHTML;
             } else {
               Array.from(updatingTds).forEach((elem, index) => {
                 const newElem = updatingTdsResponse[index];
                 if (!newElem) return;
 
-                if (elem.innerText.trim() !== newElem.innerText.trim()) {
+                if (elem.innerHTML !== newElem.innerHTML) {
                   elem.innerHTML = newElem.innerHTML;
                   elem.classList.add("updated");
                 } else {
@@ -51,16 +50,13 @@
 
               if (tfoot.innerHTML !== tfootResponse.innerHTML) {
                 tfoot.innerHTML = tfootResponse.innerHTML;
-                sorter.refresh();
               }
             }
-          } else {
-            tbody.innerHTML = tbodyResponse.innerHTML;
-            tfoot.innerHTML = tfootResponse.innerHTML;
-            sorter.refresh();
           }
-        }
+          sorter.refresh();
+        });
       };
+
       progressx.hide();
       xhrjobs.send();
     }, REFRESH_INTERVAL);
@@ -71,6 +67,10 @@
       clearInterval(refreshInterval);
       refreshInterval = null;
     }
+  }
+
+  if (document.visibilityState === "visible") {
+    startRefresh();
   }
 
   document.addEventListener("visibilitychange", function() {
