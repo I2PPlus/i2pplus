@@ -3053,4 +3053,4 @@ body.isDown::after{width:80px;height:80px;top:calc(50% - 40px);left:calc(50% - 4
 #sessionBanned{margin-bottom:9px}
 }
 
-#sidebar #sb_tunnelBuildStatus{display:none!important}
+#sidebar #sb_tunnelBuildStatus,.mtu[hidden]{display:none!important}

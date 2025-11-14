@@ -1609,7 +1609,7 @@ class NetDbRenderer {
             if ((transportStyle.startsWith("SSU") && cost == 5) || (transportStyle.startsWith("NTCP") && cost == 14) && !isUnreachable(routerInfo)) {
                 isJavaI2PVariant = true;
                 break;
-            } else if ((transportStyle.startsWith("SSU") && cost == 3) || (transportStyle.startsWith("NTCP") && cost == 8)) {
+            } else if ((transportStyle.startsWith("SSU") && cost == 3) || (transportStyle.startsWith("NTCP") && cost == 8) && !isUnreachable(routerInfo)) {
                 isI2PdVariant = true;
             }
         }
@@ -1862,31 +1862,50 @@ class NetDbRenderer {
 
                     Map<Object, Object> optionsMap = address.getOptionsMap();
                     StringBuilder details = new StringBuilder();
+                    String host = null;
+                    String port = null;
+                    String mtu = null;
 
                     for (Map.Entry<Object, Object> entry : optionsMap.entrySet()) {
                         String key = (String) entry.getKey();
                         String value = (String) entry.getValue();
-
-                        if (key.equalsIgnoreCase("host")) {
-                            details.append("<span class=\"netdb_info host\">")
-                                   .append("<a title=\"")
-                                   .append(_t("Show all routers with this address in the NetDb"))
-                                   .append("\" ");
-                            if (value.contains(":")) {
-                                details.append("href=\"/netdb?ipv6=")
-                                       .append(value.length() > 8 ? value.substring(0, 4) : value);
-                            } else {
-                                details.append("href=\"/netdb?ip=").append(value);
-                            }
-                            details.append("\">").append(value).append("</a></span><span class=colon>:</span>");
-                        } else if (key.equalsIgnoreCase("port")) {
-                            details.append("<span class=\"netdb_info port\">")
-                                   .append("<a title=\"")
-                                   .append(_t("Show all routers with this port in the NetDb"))
-                                   .append("\" href=\"/netdb?port=").append(value)
-                                   .append("\">").append(value).append("</a></span>");
-                        }
+                        if (key.equalsIgnoreCase("host")) {host = value;}
+                        else if (key.equalsIgnoreCase("port")) {port = value;}
+                        else if (key.equalsIgnoreCase("mtu")) {mtu = value;}
                     }
+
+                    if (host != null) {
+                        details.append("<span class=\"netdb_info host\">")
+                               .append("<a title=\"")
+                               .append(_t("Show all routers with this address in the NetDb"))
+                               .append("\" ");
+                        if (host.contains(":")) {
+                            details.append("href=\"/netdb?ipv6=")
+                                   .append(host.length() > 8 ? host.substring(0, 4) : host);
+                        } else {
+                            details.append("href=\"/netdb?ip=").append(host);
+                        }
+                        details.append("\">").append(host).append("</a></span><span class=colon>:</span>");
+                    }
+
+                    if (port != null) {
+                        details.append("<span class=\"netdb_info port\">")
+                               .append("<a title=\"")
+                               .append(_t("Show all routers with this port in the NetDb"))
+                               .append("\" href=\"/netdb?port=").append(port)
+                               .append("\">").append(port).append("</a></span>");
+                    }
+
+                    if (mtu != null) {
+                        details.append("&nbsp;<span class=\"netdb_info mtu\" hidden><span title=\"")
+                               .append(_t("Maximum Transimission Unit"))
+                               .append("\">MTU</span>")
+                               .append("<a title=\"")
+                               .append(_t("Show all routers with this MTU in the NetDb"))
+                               .append("\" href=\"/netdb?mtu=").append(mtu)
+                               .append("\">").append(mtu).append("</a></span>");
+                    }
+
                     if (details.length() > 0) {
                         buf.append("<li><b class=netdb_transport>")
                            .append(transportStyle.replace("2", ""))
