@@ -121,7 +121,6 @@ class UDPSender {
         }
         _keepRunning = true;
         I2PThread t = new I2PThread(_runner, _name, true);
-        t.setPriority(I2PThread.MAX_PRIORITY - 1);
         t.start();
     }
 

@@ -98,7 +98,6 @@ public class FIFOBandwidthLimiter {
         _lastStatsUpdated = now();
         _refiller = new FIFOBandwidthRefiller(_context, this);
         _refillerThread = new I2PThread(_refiller, "BWRefiller", true);
-        _refillerThread.setPriority(I2PThread.MAX_PRIORITY - 1);
         _refillerThread.start();
     }
 
