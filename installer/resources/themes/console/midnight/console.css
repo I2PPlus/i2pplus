@@ -1877,7 +1877,7 @@ b.netdb_transport{margin:2px 8px 2px 0;padding:2px;min-width:64px;display:inline
 .netdbstats .hide+hr{display:none}
 .netdbstats hr#expl,.netdbstats hr#hrd{display:block}
 .netdbStats hr,.sybil_routerinfo hr{margin:2px 0;display:block;color:#0000;opacity:.5;border-bottom:1px solid #224;background:none}
-.netdbStats li{margin:0 10px 0 0;padding:1px 0;max-width:210px;white-space:normal;line-height:1.4;vertical-align:middle;list-style:none;text-align:left}
+.netdbStats li{margin:0 10px 0 0;padding:1px 0;white-space:normal;line-height:1.4;vertical-align:middle;list-style:none;text-align:left}
 .netdbStats li.hide+hr{display:none}
 .netdbStats li .bullet:last-of-type{opacity:0}
 .netdb_tunnel{margin-right:3px;margin-left:-5px;display:inline-block}
