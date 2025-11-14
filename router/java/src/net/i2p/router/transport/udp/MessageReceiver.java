@@ -31,7 +31,7 @@ class MessageReceiver {
     private volatile boolean _alive;
     private static final int cores = SystemVersion.getCores();
     private static final int MIN_THREADS = 1;
-    private static final int MAX_THREADS = 2;
+    private static final int MAX_THREADS = SystemVersion.isSlow() ? 3 : 6;
     private static final int MIN_QUEUE_SIZE =  SystemVersion.isSlow() ? 16 : 32;
     private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 64 : 128;
     private final int _threadCount;

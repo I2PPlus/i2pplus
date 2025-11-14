@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.router.OutNetMessage;
 import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
 
 /**
  * Handles asynchronous post-send processing of OutNetMessage using a
@@ -19,8 +20,8 @@ import net.i2p.util.Log;
  */
 class NTCPSendFinisher {
     private static final int MIN_THREADS = 1;
-    private static final int MAX_THREADS = 2;
-    private static final int QUEUE_CAPACITY = 1000;
+    private static final int MAX_THREADS = SystemVersion.isSlow() ? 3 : 6;
+    private static final int QUEUE_CAPACITY = SystemVersion.isSlow() ? 1000 : 4096;
     private final I2PAppContext _context;
     private final NTCPTransport _transport;
     private final Log _log;

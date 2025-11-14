@@ -36,7 +36,7 @@ class PacketHandler {
     private static final int MIN_QUEUE_SIZE = SystemVersion.isSlow() ? 16 : 32;
     private static final int MAX_QUEUE_SIZE = SystemVersion.isSlow() ? 64 : 128;
     private static final int MIN_NUM_HANDLERS = 1;  // if < 128MB
-    private static final int MAX_NUM_HANDLERS = 2;
+    private static final int MAX_NUM_HANDLERS = SystemVersion.isSlow() ? 3 : 6;
 
     PacketHandler(RouterContext ctx, UDPTransport transport, EstablishmentManager establisher,
                   InboundMessageFragments inbound, PeerTestManager testManager, IntroductionManager introManager) {
