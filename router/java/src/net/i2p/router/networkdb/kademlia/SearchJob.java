@@ -65,7 +65,7 @@ class SearchJob extends JobImpl {
      * How long will we give each peer to reply to our search?
      *
      */
-    private static final int PER_PEER_TIMEOUT = 5*1000;
+    private static final int PER_PEER_TIMEOUT = 8*1000;
 
     /**
      * give ourselves 5 seconds to send out the value found to the closest
@@ -141,7 +141,7 @@ class SearchJob extends JobImpl {
         return ctx.getProperty("netDb.floodfillOnly", DEFAULT_FLOODFILL_ONLY);
     }
     static final int PER_FLOODFILL_PEER_TIMEOUT = 8*1000;
-    static final long MIN_TIMEOUT = 3*1000;
+    static final long MIN_TIMEOUT = 2*1000;
 
     protected int getPerPeerTimeoutMs(Hash peer) {
         int timeout = 0;
@@ -162,7 +162,7 @@ class SearchJob extends JobImpl {
         else {return PER_FLOODFILL_PEER_TIMEOUT;}
     }
 
-    private static int MAX_PEERS_QUERIED = 16;
+    private static int MAX_PEERS_QUERIED = 20;
 
     /**
      * Send the next search, or stop if its completed
@@ -204,12 +204,13 @@ class SearchJob extends JobImpl {
 
     /** max # of concurrent searches */
     protected int getBredth() {
-        boolean isOverloaded = getContext().jobQueue().getMaxLag() > 750 ||
-                               getContext().throttle().getMessageDelay() > 1000 ||
+        boolean isOverloaded = getContext().jobQueue().getMaxLag() > 500 ||
+                               getContext().throttle().getMessageDelay() > 800 ||
                                SystemVersion.getCPULoadAvg() > 80;
+        int cores = SystemVersion.getCores();
         if (isOverloaded) {return 1;}
-        else if (_isLease) {return SEARCH_BREDTH_LEASE;}
-        else {return SEARCH_BREDTH;}
+        else if (_isLease) {return Math.max(SEARCH_BREDTH_LEASE, cores / 2);}
+        else {return Math.max(SEARCH_BREDTH, cores / 3);}
     }
 
     /**
@@ -557,7 +558,7 @@ class SearchJob extends JobImpl {
      * substantially.
      *
      */
-    private static final int MAX_LEASE_RESEND = 4;
+    private static final int MAX_LEASE_RESEND = 5;
 
     /**
      * Should we republish a routerInfo received?  Probably not worthwhile, since
