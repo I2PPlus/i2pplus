@@ -653,7 +653,7 @@ public class TunnelDispatcher implements Service {
             factor = 1.0f;
         }
 
-        int percentage = Math.round((factor - 1.0f) * 100.0f);
+        int percentage = (int) Math.min(Math.round((factor - 1.0f) * 100.0f), 100.0f);
 
         if (bwe != null && !bwe.offer(length, factor)) {
             if (_log.shouldWarn()) {
