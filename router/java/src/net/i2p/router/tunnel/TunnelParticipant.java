@@ -192,10 +192,10 @@ class TunnelParticipant {
         msg.setMessageExpiration(_context.clock().now() + 10*1000);
         msg.setTunnelId(config.getSendTunnel());
         OutNetMessage m = new OutNetMessage(_context, msg, msg.getMessageExpiration(), PRIORITY, ri);
-        if (_log.shouldDebug()) {
-            String configStr = _config != null ? _config.toString() : "Inbound Endpoint";
-            _log.debug("Forward on from " + configStr + ": " + msg);
-        }
+        //if (_log.shouldDebug()) {
+        //    String configStr = _config != null ? _config.toString() : "Inbound Endpoint";
+        //    _log.debug("Forward on from " + configStr + ": " + msg);
+        //}
         _context.outNetMessagePool().add(m);
     }
 
