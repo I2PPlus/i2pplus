@@ -204,7 +204,10 @@ class SearchJob extends JobImpl {
 
     /** max # of concurrent searches */
     protected int getBredth() {
-        if (SystemVersion.getCPULoadAvg() > 80) {return 1;}
+        boolean isOverloaded = getContext().jobQueue().getMaxLag() > 750 ||
+                               getContext().throttle().getMessageDelay() > 1000 ||
+                               SystemVersion.getCPULoadAvg() > 80;
+        if (isOverloaded) {return 1;}
         else if (_isLease) {return SEARCH_BREDTH_LEASE;}
         else {return SEARCH_BREDTH;}
     }
@@ -219,12 +222,6 @@ class SearchJob extends JobImpl {
         if (_state.completed()) {
             if (_log.shouldDebug()) {_log.debug("Search already completed", new Exception("already completed"));}
             return;
-        }
-        if (getContext().jobQueue().getMaxLag() > 750 || getContext().throttle().getMessageDelay() > 1000) {
-            SEARCH_BREDTH -= 3;
-            if (_log.shouldDebug()) {
-                _log.debug("Reducing number of parallel peer searches to " + getBredth() + " -> Router under load");
-            }
         }
         int toCheck = getBredth() - _state.getPending().size();
         if (toCheck <= 0) {
