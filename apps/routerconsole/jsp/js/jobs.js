@@ -5,103 +5,124 @@
 (function() {
   const jobs = document.getElementById("jobstats");
   const sorter = new Tablesort(jobs, { descending: true });
-  const xhrjobs = new XMLHttpRequest();
-  const REFRESH_INTERVAL = 5 * 1000;
+  const REFRESH_INTERVAL = 5000;
+  let refreshIntervalId = null;
+  let oldRowsMap = new Map();
 
-  let refreshInterval = null;
+  const progressx = window.progressx;
+  const theme = window.theme;
+
+  async function fetchJobs() {
+    try {
+      const response = await fetch("/jobs");
+      if (!response.ok) throw new Error("Fetch failed");
+      const text = await response.text();
+      const doc = new DOMParser().parseFromString(text, "text/html");
+      const jobsResponse = doc.getElementById("jobstats");
+      if (!jobsResponse) return;
+
+      const oldTbody = jobs.querySelector("#statCount");
+      const newTbody = jobsResponse.querySelector("#statCount");
+      if (!oldTbody || !newTbody) return;
+
+      if (oldRowsMap.size === 0) {
+        Array.from(oldTbody.rows).forEach(row => {
+          const name = row.cells[0]?.textContent.trim();
+          if (name) oldRowsMap.set(name, row);
+        });
+      }
+
+      progressx.show(theme);
+      requestAnimationFrame(() => {
+        const newRows = Array.from(newTbody.rows);
+        const fragment = document.createDocumentFragment();
+        const updatedRows = [];
+
+        newRows.forEach(newRow => {
+          const jobName = newRow.cells[0]?.textContent.trim();
+          if (!jobName) return;
+
+          const oldRow = oldRowsMap.get(jobName);
+          if (!oldRow) {
+            fragment.appendChild(newRow);
+            oldRowsMap.set(jobName, newRow);
+            return;
+          }
+
+          const oldCells = Array.from(oldRow.cells);
+          const newCells = Array.from(newRow.cells);
+          let changed = false;
+
+          newCells.forEach((newCell, j) => {
+            const oldCell = oldCells[j];
+            if (!oldCell) return;
+
+            const oldSpan = oldCell.querySelector("span");
+            const newSpan = newCell.querySelector("span");
+            const oldText = (oldSpan ? oldSpan.textContent : oldCell.textContent).trim();
+            const newText = (newSpan ? newSpan.textContent : newCell.textContent).trim();
+
+            if (oldText !== newText) {
+              oldCell.innerHTML = newCell.innerHTML;
+              oldCell.classList.add("updated");
+              changed = true;
+            }
+          });
+
+          if (changed) {
+            oldRowsMap.set(jobName, oldRow);
+            updatedRows.push(oldRow);
+            setTimeout(() => {
+              oldCells.forEach(cell => cell.classList.remove("updated"));
+            }, REFRESH_INTERVAL - 500);
+          }
+        });
+
+        if (fragment.hasChildNodes()) {
+          oldTbody.appendChild(fragment);
+        }
+
+        updatedRows.forEach(row => {
+          const jobName = row.cells[0]?.textContent.trim();
+          if (jobName) oldRowsMap.set(jobName, row);
+        });
+
+        sorter.refresh();
+        setTimeout(() => progressx.hide(), 500);
+      });
+    } catch (e) {
+      progressx.hide();
+    }
+  }
 
   function startRefresh() {
-    refreshInterval = setInterval(() => {
-      xhrjobs.open("GET", "/jobs", true);
-      xhrjobs.responseType = "document";
-      xhrjobs.onload = () => {
-        if (!xhrjobs.responseXML) return;
-
-        const jobsResponse = xhrjobs.responseXML.getElementById("jobstats");
-        if (!jobsResponse) return;
-
-
-        const oldTbody = jobs.querySelector("#statCount");
-        const oldTfoot = jobs.querySelector("#statTotals");
-        const newTbody = jobsResponse.querySelector("#statCount");
-        const newTfoot = jobsResponse.querySelector("#statTotals");
-
-        progressx.show(theme);
-        requestAnimationFrame(() => {
-
-          if (newTbody && oldTbody) {
-            const oldRows = Array.from(oldTbody.rows);
-            const newRows = Array.from(newTbody.rows);
-
-            newRows.forEach((newRow) => {
-              const jobName = newRow.cells[0]?.textContent.trim();
-              if (!jobName) return;
-
-              const oldRow = Array.from(oldTbody.rows).find(r => r.cells[0]?.textContent.trim() === jobName);
-              if (!oldRow) {
-                oldTbody.appendChild(newRow.cloneNode(true));
-                return;
-              }
-
-              const oldCells = Array.from(oldRow.cells);
-              const newCells = Array.from(newRow.cells);
-
-              newCells.forEach((newCell, j) => {
-                const oldCell = oldCells[j];
-                if (!oldCell) return;
-
-                const oldSpan = oldCell.querySelector("span");
-                const newSpan = newCell.querySelector("span");
-
-                const oldText = (oldSpan ? oldSpan.textContent : oldCell.textContent).trim();
-                const newText = (newSpan ? newSpan.textContent : newCell.textContent).trim();
-
-                if (oldText !== newText) {
-                  newCell.classList.add("updated");
-                }
-
-                setTimeout(() => newCell.classList.remove("updated"), REFRESH_INTERVAL - 500);
-              });
-
-              oldRow.replaceWith(newRow);
-            });
-
-          }
-          sorter.refresh();
-        });
-        setTimeout(() => {progressx.hide();}, 500);
-      };
-
-      xhrjobs.send();
-    }, REFRESH_INTERVAL);
+    if (!refreshIntervalId) {
+      fetchJobs();
+      refreshIntervalId = setInterval(fetchJobs, REFRESH_INTERVAL);
+    }
   }
 
   function stopRefresh() {
-    if (refreshInterval) clearInterval(refreshInterval);
-    refreshInterval = null;
+    if (refreshIntervalId) {
+      clearInterval(refreshIntervalId);
+      refreshIntervalId = null;
+    }
   }
 
   jobs.addEventListener("beforeSort", () => {
     progressx.show(theme);
+    progressx.progress(0.5);
   });
 
   jobs.addEventListener("afterSort", () => {
-    progressx.progress(0.5);
-    setTimeout(() => {progressx.hide();}, 500);
+    setTimeout(() => progressx.hide(), 500);
   });
 
-  if (document.visibilityState === "visible") {
-    startRefresh();
-  }
+  if (document.visibilityState === "visible") startRefresh();
 
   document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") {
-      startRefresh();
-    } else {
-      stopRefresh();
-    }
+    document.visibilityState === "visible" ? startRefresh() : stopRefresh();
   });
 
-  requestAnimationFrame(() => {sorter.refresh();});
-
+  requestAnimationFrame(() => sorter.refresh());
 })();
