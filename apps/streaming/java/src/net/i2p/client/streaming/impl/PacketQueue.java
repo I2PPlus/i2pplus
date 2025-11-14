@@ -86,6 +86,7 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
         long begin = 0;
         long end = 0;
         boolean sent = false;
+        boolean isLogged = false;
         try {
             int size = 0;
             //long beforeWrite = System.currentTimeMillis();
@@ -208,13 +209,14 @@ class PacketQueue implements SendMessageStatusListener, Closeable {
         } catch (I2PSessionException ise) {
             if (_log.shouldWarn()) {
                 _log.warn("Unable to send the packet " + packet + " -> " + ise.getMessage());
+                isLogged = true;
             }
         }
 
         _cache.release(ba);
 
         if (!sent) {
-            if (_log.shouldWarn()) {_log.warn("Send failed for packet " + packet);}
+            if (_log.shouldWarn() && !isLogged) {_log.warn("Send failed for packet " + packet);}
             if (con != null) {con.disconnect(false);} // handle race on b0rk
         } else {
             //packet.setKeyUsed(keyUsed);

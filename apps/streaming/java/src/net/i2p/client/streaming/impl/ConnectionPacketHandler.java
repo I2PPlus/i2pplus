@@ -52,7 +52,10 @@ class ConnectionPacketHandler {
         //_context.statManager().createRateStat("stream.trend", "What direction the RTT is trending in (with period = windowsize)", "Stream", new long[] { 60*1000, 60*60*1000 });
     }
 
-    /** distribute a packet to the connection specified */
+    /**
+     * Takes ownership of the packet and call packet.releasePayload() unless
+     * it is passed to the MessageInputStream.
+     */
     void receivePacket(Packet packet, Connection con) throws I2PException {
         boolean ok = verifyPacket(packet, con);
         if (!ok) {
@@ -69,22 +72,20 @@ class ConnectionPacketHandler {
             if ((seqNum > 0) || (packet.getPayloadSize() > 0) ||
                  (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE | Packet.FLAG_CLOSE))) {
                 if (_log.shouldWarn())
-                    _log.warn("Received a data packet after hard disconnect: " + packet + " on " + con);
+                    _log.warn("Received a data packet after hard disconnect on " + con + " -> Sending RESET...");
                 // the following will send a RESET
                 con.disconnect(false);
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Received a packet after hard disconnect, ignoring: " + packet + " on " + con);
+                    _log.warn("Ignoring packet received after hard disconnect on " + con);
             }
-            packet.releasePayload();
             return;
         }
 
         if ((con.getCloseSentOn() > 0) && (con.getUnackedPacketsSent() <= 0) &&
              (seqNum > 0) && (packet.getPayloadSize() > 0)) {
             if (_log.shouldInfo())
-                _log.info("Received new data when we've sent them data and all of our data is ACKed: "
-                          + packet + " on " + con + "");
+                _log.info("Received new data when we've sent them data and all of our data is ACKed on " + con);
             // this is fine, half-close
             // Major bug before 0.9.9, packets were dropped here and a reset sent
             // If we are fully closed, will handle that in the canAccept test below
@@ -136,8 +137,8 @@ class ConnectionPacketHandler {
             if (packet.getOptionalDelay() >= Packet.MIN_DELAY_CHOKE) {
                 // requested choke
                 choke = true;
-                if (_log.shouldWarn())
-                    _log.warn("Received a choke on " + con + ": " + packet);
+                if (_log.shouldInfo())
+                    _log.info("Received a choke on " + con);
                 //con.getOptions().setRTT(con.getOptions().getRTT() + 10*1000);
             }
             // Only call this if the flag is set
@@ -146,20 +147,15 @@ class ConnectionPacketHandler {
 
         if (!con.getInputStream().canAccept(seqNum, packet.getPayloadSize())) {
             if (con.getInputStream().isLocallyClosed()) {
-                if (_log.shouldWarn())
-                    _log.warn("More data received after local close on " + con +
-                              " -> Sending RESET and dropping " + packet);
-                // the following will send a RESET
-                con.disconnect(false);
+                if (_log.shouldInfo())
+                    _log.info("More data received after local close on " + con +
+                              " -> Ignoring packet instead of sending RESET...");
+                return;
             } else {
                 if (_log.shouldWarn())
-                    _log.warn("Inbound buffer exceeded on " + con +
-                              " -> Choking and dropping " + packet);
-                // this will call ackImmediately()
+                    _log.warn("Inbound buffer exceeded on " + con + " -> Choking and dropping...");
                 con.setChoking(true);
-                // TODO we could still process the acks for this packet before discarding
             }
-            packet.releasePayload();
             return;
         } // else we will call setChoking(false) below
 
@@ -296,17 +292,17 @@ class ConnectionPacketHandler {
             }
         }
 
-        if (ackOnly || !isNew) {
-            // non-ack message payloads are queued in the MessageInputStream
-            packet.releasePayload();
-        }
-
         // close *after* receiving the data, as well as after verifying the signatures / etc
         // update the TCB Cache now that we've processed the acks and updated our rtt etc.
         if (packet.isFlagSet(Packet.FLAG_CLOSE) && packet.isFlagSet(Packet.FLAG_SIGNATURE_INCLUDED)) {
             con.closeReceived();
             if (isNew)
                 con.updateShareOpts();
+        }
+
+        if (ackOnly || !isNew) {
+            // non-ack message payloads are queued in the MessageInputStream
+            packet.releasePayload();
         }
     }
 
@@ -634,7 +630,6 @@ class ConnectionPacketHandler {
             boolean sigOk = packet.verifySignature(_context, spk, ba.getData());
             _cache.release(ba);
             if (!sigOk) {
-                packet.releasePayload();
                 throw new I2PException("Received unsigned / forged packet: " + packet);
             }
         }

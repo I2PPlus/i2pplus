@@ -368,8 +368,8 @@ class MessageOutputStream extends OutputStream {
 
         try {
             if (ws == null) {
-                if (_log.shouldWarn()) {
-                    _log.warn("WriteStatus is null during flush");
+                if (_log.shouldInfo()) {
+                    _log.info("WriteStatus is null during flush");
                     throw new IOException("DataReceiver returned null WriteStatus");
                 }
             } else if (_closed.get() && (_writeTimeout > Connection.DISCONNECT_TIMEOUT || _writeTimeout <= 0)) {
