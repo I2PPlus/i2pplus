@@ -890,7 +890,7 @@ public class TunnelPool {
                 avg += 30*1000; // two minute safety factor
             */
             final int PANIC_FACTOR = 4; // how many builds to kick off when time gets short
-            avg += (_settings.isExploratory() ? 30*1000 : 15*1000);
+            avg += (_settings.isExploratory() ? 45*1000 : 60*1000);
             long now = _context.clock().now();
 
             int expireSoon = 0;
