@@ -434,7 +434,9 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
      */
     @Override
     protected void blockingHandle(I2PSocket socket) {
-        Hash peerHash = socket.getPeerDestination().calculateHash();
+        if (socket == null) {return;}
+        Hash peerHash = socket.getPeerDestination() != null ? socket.getPeerDestination().calculateHash() : null;
+        if (peerHash == null) {return;}
         String peerB32 = socket.getPeerDestination().toBase32();
         if (_log.shouldDebug()) {
             _log.debug("[HTTPServer] Incoming connection to " + toString().replace("/", "") + " (Port " + socket.getLocalPort() + ")" +
