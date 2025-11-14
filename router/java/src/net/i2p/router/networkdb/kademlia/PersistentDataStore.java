@@ -62,7 +62,7 @@ public class PersistentDataStore extends TransientDataStore {
     private final boolean _flat;
     private final int _networkID;
 
-    private final static int READ_DELAY = 2*60*1000;
+    private final static int READ_DELAY = 5*60*1000;
     private static final String PROP_FLAT = "router.networkDatabase.flat";
     static final String DIR_PREFIX = "r";
     private static final String B64 = Base64.ALPHABET_I2P;
@@ -439,23 +439,31 @@ public class PersistentDataStore extends TransientDataStore {
         if (shouldDelete && dbFile != null) {dbFile.delete();}
     }
 
+    private int cachedRiCount = 0;
+    private long lastRiCountTime = 0;
+    private static final long RI_CACHE_TTL = WRITE_DELAY;
+
     /**
      * Count the number of RouterInfo files currently stored on disk.
      * This includes files in subdirectories if not using flat mode.
      *
      * @return number of RI files on disk
-     * @since 0.9.68
+     * @since 0.9.68+
      */
     public int countStoredRIs() {
-        if (!_dbDir.exists() || !_dbDir.isDirectory()) {
-            return 0;
+        long now = System.currentTimeMillis();
+        if (lastRiCountTime + RI_CACHE_TTL > now) {
+            return cachedRiCount;
         }
 
-        if (_flat) {
+        int count;
+        if (!_dbDir.exists() || !_dbDir.isDirectory()) {
+            count = 0;
+        } else if (_flat) {
             File[] files = _dbDir.listFiles(RI_FILTER);
-            return files != null ? files.length : 0;
+            count = files != null ? files.length : 0;
         } else {
-            int count = 0;
+            int total = 0;
             for (int j = 0; j < B64.length(); j++) {
                 File subdir = new File(_dbDir, DIR_PREFIX + B64.charAt(j));
                 if (!subdir.exists() || !subdir.isDirectory()) {
@@ -463,11 +471,17 @@ public class PersistentDataStore extends TransientDataStore {
                 }
                 File[] files = subdir.listFiles(RI_FILTER);
                 if (files != null) {
-                    count += files.length;
+                    total += files.length;
                 }
             }
-            return count;
+            count = total;
         }
+
+        // Update cache
+        cachedRiCount = count;
+        lastRiCountTime = now;
+
+        return count;
     }
 
     private static long getPublishDate(DatabaseEntry data) {return data.getDate();}
@@ -494,8 +508,6 @@ public class PersistentDataStore extends TransientDataStore {
 
         public void runJob() {
             if (getContext().router().gracefulShutdownInProgress()) {
-                // Don't cause more disk I/O while saving, or start a reseed
-                requeue(READ_DELAY);
                 return;
             }
             long now = System.currentTimeMillis();
