@@ -559,8 +559,10 @@ class FragmentHandler {
     private void receiveComplete(byte[] data, int offset, int len, Hash router, TunnelId tunnelId) {
         _completed.incrementAndGet();
         try {
-            if (_log.shouldDebug())
-                _log.debug("Received unfragmented message (" + len + " bytes) from [" + router.toBase64().substring(0,6) + "]");
+            if (_log.shouldDebug()) {
+                _log.debug("Received unfragmented message (" + len + " bytes) " +
+                           (router != null ? "from [" + router.toBase64().substring(0,6) + "]" : ""));
+            }
 
             // Read in as unknown message for outbound tunnels,
             // since this will just be packaged in a TunnelGatewayMessage.
@@ -581,9 +583,10 @@ class FragmentHandler {
             _receiver.receiveComplete(m, router, tunnelId);
         } catch (I2NPMessageException ime) {
             if (_log.shouldWarn()) {
-                _log.warn("Error receiving unfragmented message from [" + router.toBase64().substring(0,6) + "] -> Corrupt?", ime);
-                _log.warn("DUMP:\n" + HexDump.dump(data, offset, len));
-                _log.warn("RAW:\n" + Base64.encode(data, offset, len));
+                _log.warn("Error receiving unfragmented message" + (router != null ? " from [" +
+                          router.toBase64().substring(0,6) + "]" : "") +  " -> Corrupt?", ime);
+                //_log.warn("DUMP:\n" + HexDump.dump(data, offset, len));
+                //_log.warn("RAW:\n" + Base64.encode(data, offset, len));
             }
         }
     }
