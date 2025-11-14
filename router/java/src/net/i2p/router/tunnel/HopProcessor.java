@@ -5,6 +5,9 @@ import net.i2p.crypto.AESEngine;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 import net.i2p.util.Log;
+import net.i2p.router.Banlist;
+import net.i2p.router.Router;
+import net.i2p.router.RouterContext;
 
 /**
  * Take a received tunnel message, verify that it isn't a
@@ -75,8 +78,15 @@ class HopProcessor {
                 _config.setReceiveFrom(prev);
             } else if (!_config.getReceiveFrom().equals(prev)) {
                 // shouldn't happen now that we have good dup ID detection in BuildHandler
-                if (_log.shouldWarn())
-                    _log.warn("Attempted mid-tunnel injection from: " + prev + "\n* Expected: " + _config.getReceiveFrom());
+                RouterContext ctx = (RouterContext) RouterContext.getGlobalContext();
+                long now = ctx.clock().now();
+                if (_log.shouldWarn()) {
+                    //_log.warn("Attempted mid-tunnel injection from: " + prev + "\n* Expected: " + _config.getReceiveFrom());
+                    _log.warn("Banning [" + prev.toBase32().substring(0,6) +
+                              "] for 24h -> Attempted mid-tunnel injection \n* Expected: " +
+                              _config.getReceiveFrom());
+                }
+                ctx.banlist().banlistRouter(prev, " <b>➜</b> Mid-tunnel injection attempt", null, null, now + 24*60*60*1000);
                 return false;
             }
         }
@@ -113,7 +123,6 @@ class HopProcessor {
      */
     @Override
     public String toString() {
-//        return getClass().getSimpleName() + " for " + _config;
         return getClass().getSimpleName() + _config;
     }
 }
