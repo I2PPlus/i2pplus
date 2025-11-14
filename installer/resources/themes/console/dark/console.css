@@ -656,20 +656,19 @@ h3[id*="jobs"]{clear:both;margin-top:25px}
 
 /* job queue stats */
 #jobstats+hr{display:none}
-#jobstats tbody td:nth-child(odd){background:rgba(255,255,255,.01)}
-#jobstats tbody td:nth-last-child(n+2){border-right:var(--border_softer)}
-#jobstats th:nth-child(2),#jobstats td:nth-child(2),#jobstats th:nth-child(3),#jobstats td:nth-child(3),#jobstats tbody{text-align:center}
-#jobstats tbody tr{border-top:var(--border_softer)}
-#jobstats td{padding:6px 8px;border-bottom:0}
-#jobstats tbody td{box-shadow:var(--highlight)}
-.advmode #jobstats td:nth-child(n+2){width:6.5%}
-#jobstats td:nth-child(n+2) span{display:inline-block;vertical-align:middle}
-#jobstats td.updated:nth-child(n+2) span{animation:updatingTd .1s ease-in-out .1s both}
 #jobstats thead th{font-size:85%}
-#jobstats thead th,#jobstats tfoot td{font-weight:700;background:var(--th)}
-#jobstats tfoot td{border-top:var(--border)}
+#jobstats thead th,#statTotals td{font-weight:700;background:var(--th)}
 #jobstats th,#jobstats td{text-align:right;padding-right:12px}
+#jobstats th:nth-child(2),#jobstats td:nth-child(2),#jobstats th:nth-child(3),#jobstats td:nth-child(3),#jobstats tbody{text-align:center}
 #routerjobs .widescroll{margin:12px auto 10px;width:calc(100% - 2px);box-shadow:var(--border_table)}
+#statCount td{padding:6px 8px;border-bottom:0;box-shadow:var(--highlight)}
+#statCount td:nth-child(odd){background:rgba(255,255,255,.01)}
+#statCount td:nth-last-child(n+2){border-right:var(--border_softer)}
+#statCount td:nth-child(n+2) span{display:inline-block;transform-origin:center center;will-change:transform}
+#statCount td.updated:nth-child(n+2) span{animation:updatingTd .1s ease-in-out both}
+.advmode #jobstats td:nth-child(n+2){width:6.5%}
+#statCount tr{border-top:var(--border_softer)}
+#statTotals td{border-top:var(--border)}
 #totaljobstats{margin-top:0}
 
 /* stats */
@@ -2850,7 +2849,7 @@ iframe.iframed{margin:15px 0 0}
 @keyframes spin{from{transform:rotate(-360deg)}}
 @keyframes textglow{from{text-shadow:0 0 1px #995}}
 @keyframes updatingIcon{from{background-image:var(--clock)}}
-@keyframes updatingTd{0%,50%{transform:scale(1.2)}100%{font-weight:500;color:var(--ink_bright);transform:none}}
+@keyframes updatingTd{0%,50%{transform:scale(1.2)}100%{color:var(--ink_bright);transform:scale(1)}}
 @keyframes zoom{from{transform:scale(0);opacity:0}to{scale:scale(1);opacity:1}}
 
 /* chrome overrides */

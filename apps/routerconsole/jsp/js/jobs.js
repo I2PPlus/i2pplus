@@ -11,69 +11,90 @@
   let refreshInterval = null;
 
   function startRefresh() {
-    refreshInterval = setInterval(function() {
+    refreshInterval = setInterval(() => {
       xhrjobs.open("GET", "/jobs", true);
       xhrjobs.responseType = "document";
-      xhrjobs.onload = function() {
+      xhrjobs.onload = () => {
         if (!xhrjobs.responseXML) return;
 
         const jobsResponse = xhrjobs.responseXML.getElementById("jobstats");
-        const tbody = document.getElementById("statCount");
-        const rows = tbody.querySelectorAll("tr");
-        const rowsResponse = xhrjobs.responseXML.querySelectorAll("#statCount tr");
-        const tbodyResponse = xhrjobs.responseXML.getElementById("statCount");
-        const tfoot = document.getElementById("statTotals");
-        const tfootResponse = xhrjobs.responseXML.getElementById("statTotals");
-        const updatingTds = tbody.querySelectorAll("td");
-        const updatingTdsResponse = xhrjobs.responseXML.querySelectorAll("#statCount td");
+        if (!jobsResponse) return;
 
+
+        const oldTbody = jobs.querySelector("#statCount");
+        const oldTfoot = jobs.querySelector("#statTotals");
+        const newTbody = jobsResponse.querySelector("#statCount");
+        const newTfoot = jobsResponse.querySelector("#statTotals");
+
+        progressx.show(theme);
         requestAnimationFrame(() => {
-          if (!Object.is(jobs.innerHTML, jobsResponse.innerHTML)) {
-            if (rows.length !== rowsResponse.length) {
-                tbody.innerHTML = tbodyResponse.innerHTML;
-                tfoot.innerHTML = tfootResponse.innerHTML;
-            } else {
-              Array.from(updatingTds).forEach((elem, index) => {
-                const newElem = updatingTdsResponse[index];
-                if (!newElem) return;
 
-                if (elem.innerHTML !== newElem.innerHTML) {
-                  elem.innerHTML = newElem.innerHTML;
-                  elem.classList.add("updated");
-                } else {
-                  elem.classList.remove("updated");
-                  if (elem.classList.length === 0) {
-                    elem.removeAttribute("class");
-                  }
+          if (newTbody && oldTbody) {
+            const oldRows = Array.from(oldTbody.rows);
+            const newRows = Array.from(newTbody.rows);
+
+            newRows.forEach((newRow) => {
+              const jobName = newRow.cells[0]?.textContent.trim();
+              if (!jobName) return;
+
+              const oldRow = Array.from(oldTbody.rows).find(r => r.cells[0]?.textContent.trim() === jobName);
+              if (!oldRow) {
+                oldTbody.appendChild(newRow.cloneNode(true));
+                return;
+              }
+
+              const oldCells = Array.from(oldRow.cells);
+              const newCells = Array.from(newRow.cells);
+
+              newCells.forEach((newCell, j) => {
+                const oldCell = oldCells[j];
+                if (!oldCell) return;
+
+                const oldSpan = oldCell.querySelector("span");
+                const newSpan = newCell.querySelector("span");
+
+                const oldText = (oldSpan ? oldSpan.textContent : oldCell.textContent).trim();
+                const newText = (newSpan ? newSpan.textContent : newCell.textContent).trim();
+
+                if (oldText !== newText) {
+                  newCell.classList.add("updated");
                 }
+
+                setTimeout(() => newCell.classList.remove("updated"), REFRESH_INTERVAL - 500);
               });
 
-              if (tfoot.innerHTML !== tfootResponse.innerHTML) {
-                tfoot.innerHTML = tfootResponse.innerHTML;
-              }
-            }
+              oldRow.replaceWith(newRow);
+            });
+
           }
           sorter.refresh();
         });
+        setTimeout(() => {progressx.hide();}, 500);
       };
 
-      progressx.hide();
       xhrjobs.send();
     }, REFRESH_INTERVAL);
   }
 
   function stopRefresh() {
-    if (refreshInterval) {
-      clearInterval(refreshInterval);
-      refreshInterval = null;
-    }
+    if (refreshInterval) clearInterval(refreshInterval);
+    refreshInterval = null;
   }
+
+  jobs.addEventListener("beforeSort", () => {
+    progressx.show(theme);
+  });
+
+  jobs.addEventListener("afterSort", () => {
+    progressx.progress(0.5);
+    setTimeout(() => {progressx.hide();}, 500);
+  });
 
   if (document.visibilityState === "visible") {
     startRefresh();
   }
 
-  document.addEventListener("visibilitychange", function() {
+  document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible") {
       startRefresh();
     } else {
@@ -81,11 +102,6 @@
     }
   });
 
-  jobs.addEventListener("beforeSort", function() {
-    progressx.show(theme);
-  });
+  requestAnimationFrame(() => {sorter.refresh();});
 
-  jobs.addEventListener("afterSort", function() {
-    progressx.hide();
-  });
 })();
