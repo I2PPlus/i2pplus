@@ -29,6 +29,7 @@ import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.util.Log;
+import net.i2p.util.SystemVersion;
 
 /**
  * Search for a particular key iteratively until we either find a value or we
@@ -203,7 +204,8 @@ class SearchJob extends JobImpl {
 
     /** max # of concurrent searches */
     protected int getBredth() {
-        if (_isLease) {return SEARCH_BREDTH_LEASE;}
+        if (SystemVersion.getCPULoadAvg() > 80) {return 1;}
+        else if (_isLease) {return SEARCH_BREDTH_LEASE;}
         else {return SEARCH_BREDTH;}
     }
 
@@ -558,7 +560,7 @@ class SearchJob extends JobImpl {
      * substantially.
      *
      */
-    private static final int MAX_LEASE_RESEND = 10;
+    private static final int MAX_LEASE_RESEND = 4;
 
     /**
      * Should we republish a routerInfo received?  Probably not worthwhile, since
