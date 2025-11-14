@@ -817,9 +817,6 @@ class EstablishmentManager {
         int count = _terminationCounter.increment(to);
         if (count > MAX_TERMINATIONS) {
             // not everybody listens or backs off...
-            if (_log.shouldWarn()) {
-                _log.warn("[SSU2] Rate limit of " + MAX_TERMINATIONS + " in 3m exceeded (Count: " + count + ") \n* No more termination packets to: " + to);
-            }
             if (count > MAX_TERMINATIONS*2) {
                 try {
                     String toIP = InetAddress.getByAddress(to.getIP()).getHostAddress();
@@ -833,6 +830,9 @@ class EstablishmentManager {
                         return;
                     }
                 } catch (UnknownHostException uhe) {}
+            }
+            if (_log.shouldWarn()) {
+                _log.warn("[SSU2] Rate limit of " + MAX_TERMINATIONS + " in 3m exceeded (Count: " + count + ") \n* No more termination packets to: " + to);
             }
         }
         // very basic validation that this is probably in response to a good packet.

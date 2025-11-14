@@ -486,7 +486,7 @@ public class TunnelDispatcher implements Service {
             } else {
                 _context.messageHistory().droppedTunnelDataMessageUnknown(msg.getUniqueId(), msg.getTunnelId());
                 if (_log.shouldInfo())
-                    _log.info("No matching participant/endpoint for [TunnelID " + msg.getTunnelId() + "] expiring in " +
+                    _log.info("No matching participant/endpoint for [TunnelID " + msg.getTunnelId() + "] -> Expires: " +
                                DataHelper.formatDuration(msg.getMessageExpiration() - _context.clock().now()) +
                                "\n* Current participants: " + _participants.size() + " / Outbound endpoints: " + _outboundEndpoints.size());
             }

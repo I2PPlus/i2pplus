@@ -165,12 +165,12 @@ public class HopConfig {
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
         buf.append(_sendTo != null ? " to: [" + _sendTo.toBase64().substring(0,6) + "]" : "");
-        buf.append(" -> Expires: ").append(DataHelper.formatTime(_expiration));
         int messagesProcessed = getProcessedMessagesCount();
         if (messagesProcessed > 0) {
             if (messagesProcessed > 1) {buf.append(" (").append(messagesProcessed).append(" messages processed)");}
             else {buf.append(" (").append(messagesProcessed).append(" message processed)");}
         }
+        buf.append("\n* Expires: ").append(DataHelper.formatTime(_expiration));
         return buf.toString();
     }
 }
