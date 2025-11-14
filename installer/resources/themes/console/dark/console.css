@@ -9,7 +9,7 @@
 
 :root{
 --tier:linear-gradient(180deg,#397,#021);
---isFF:linear-gradient(135deg,#0000 82%,rgba(192,80,0,.8) 82%);
+--isFF:linear-gradient(135deg,#0000 82%,#c05000cc 82%);
 --isU:linear-gradient(45deg,#0000 82%,rgba(192,0,0,.8) 82%);
 --isD:linear-gradient(135deg,#993 18%,#0000 18%);
 --isE:linear-gradient(135deg,#717 18%,#0000 18%);
@@ -817,8 +817,8 @@ td.ipv6{width:1%;max-width:24px}
 #topCount table,#topCount td{line-height:1}
 #topCount td{padding:4px 2px 2px 6px;min-width:32px;position:relative;line-height:1;border:var(--border_soft);text-align:left;box-shadow:var(--highlight);background:var(--badge)}
 #topCount td span{padding:1px 3px 1px;min-width:16px;display:inline-block;position:absolute;right:1px;top:1px;text-align:center;font-size:80%;letter-spacing:-.01em;font-weight:400;border-radius:0 0 0 2px;background:rgba(0,0,0,.3)}
-#topCount td#ff{background:linear-gradient(135deg,#0000 88%,rgba(192,80,0,.8) 88%),var(--badge)}
-#topCount td#u{background:linear-gradient(45deg,#0000 88%,rgba(234,0,0,.9) 88%),var(--badge)}
+#topCount td#ff{background:linear-gradient(135deg,#0000 88%,#c05000cc 88%),var(--badge)}
+#topCount td#u{background:linear-gradient(45deg,#0000 88%,#ea0000e5 88%),var(--badge)}
 #transports:hover .script,#ntcpcon:hover .script,#udpcon:hover .script{display:inline-block;opacity:1;transition:ease .2s}
 #transports:hover span,#ntcpcon:hover .reachability,#udpcon:hover .reachability{display:none}
 #transports .script,#ntcpcon .script,#udpcon .script{margin:-4px 0 -6px;float:right;text-transform:capitalize;font-size:80%;font-weight:400;letter-spacing:normal;opacity:0;transition:ease .2s}
