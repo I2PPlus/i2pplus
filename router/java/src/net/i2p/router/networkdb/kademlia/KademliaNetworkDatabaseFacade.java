@@ -150,10 +150,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      * Limits for accepting a dbStore of a router (unless we don't
      * know anyone or just started up) -- see validate() below
      */
-    private final static long ROUTER_INFO_EXPIRATION = 24*60*60*1000l;
+    private final static long ROUTER_INFO_EXPIRATION = 36*60*60*1000l;
     private final static long ROUTER_INFO_EXPIRATION_MIN = 8*60*60*1000l;
     private final static long ROUTER_INFO_EXPIRATION_SHORT = 15*60*1000l;
-    private final static long ROUTER_INFO_EXPIRATION_FLOODFILL = 4*60*60*1000l;
+    private final static long ROUTER_INFO_EXPIRATION_FLOODFILL = 16*60*60*1000l;
     private final static long ROUTER_INFO_EXPIRATION_INTRODUCED = 54*60*1000l;
     static final String PROP_ROUTER_INFO_EXPIRATION_ADJUSTED = "router.expireRouterInfo";
     static final String PROP_VALIDATE_ROUTERS_AFTER = "router.validateRoutersAfter";
@@ -224,6 +224,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         context.statManager().createRateStat("netDb.exploreKeySet", "NetDb keys queued for exploration", "NetworkDatabase", RATES);
         context.statManager().createRateStat("netDb.lookupDeferred", "Deferred NetDb lookups", "NetworkDatabase", RATES);
         context.statManager().createRateStat("netDb.negativeCache", "Aborted NetDb lookups (already cached)", "NetworkDatabase", RATES);
+
         /* the following are for StoreJob */
         context.statManager().createRateStat("netDb.ackTime", "Time peer takes to ACK a DbStore", "NetworkDatabase", RATES);
         context.statManager().createRateStat("netDb.DLMAllZeros", "Message lookups in NetDb with zero key ", "NetworkDatabase", RATES); // HandleDatabaseLookupMessageJob
@@ -320,7 +321,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
             upLongEnough = down > 0 && down < 10*60*60*1000L;
         }
         if (!_initialized || isClientDb()) {
-            if (_log.shouldInfo() && !_initialized) {_log.info("Datastore not initialized, cannot queue keys for exploration");}
+            if (_log.shouldInfo() && !_initialized) {_log.info("Datastore not initialized -> Cannot queue keys for exploration...");}
             return;
         }
         // TODO: make sure exploreQueue isn't null before assigning
@@ -425,7 +426,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         _initialized = true;
         _started = System.currentTimeMillis();
         long now = _context.clock().now();
-        _elj.getTiming().setStartAfter(now + 90*1000);
+        _elj.getTiming().setStartAfter(now + 30*1000);
         _context.jobQueue().addJob(_elj); // expire old leases
 
         // expire some routers
@@ -433,10 +434,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (!isClientDb() && !_context.commSystem().isDummy()) {
             boolean isFF = _context.getBooleanProperty(FloodfillNetworkDatabaseFacade.PROP_FLOODFILL_PARTICIPANT);
             long down = _context.router().getEstimatedDowntime();
-            long delay = (down == 0 || (!isFF && down > ROUTER_INFO_EXPIRATION_FLOODFILL/2) || (isFF && down > ROUTER_INFO_EXPIRATION_FLOODFILL*8)) ?
-                         ROUTER_INFO_EXPIRATION_FLOODFILL + ROUTER_INFO_EXPIRATION_FLOODFILL/6 :
-                         ROUTER_INFO_EXPIRATION_FLOODFILL/6;
-
+            long delay = 20*60*1000;
+            if (down > 24*60*60*1000) {delay = 60*60*1000;}
             _erj.getTiming().setStartAfter(now + delay);
             _context.jobQueue().addJob(_erj);
         }
@@ -1335,7 +1334,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         Hash h = routerInfo.getIdentity().getHash();
         if (h == null) {return null;}
         boolean isUs = h.equals(_context.routerHash());
-        int existing = _kb.size();
+        //int existing = _kb.size();
+        int existing = getStoredRouterInfoCount();
 
         if (banInvalidNTCPAddresses(routerInfo, now, caps, routerId)) {return "Invalid NTCP address";}
         if (_context.banlist().isBanlisted(h)) {return null;}
@@ -1450,15 +1450,21 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      */
     private long computeAdjustedExpiration(int existingRouters) {
         String expireRI = _context.getProperty("router.expireRouterInfo");
+        boolean shouldBoost = _context.router().isHidden() ||
+                              _context.router().getCapabilities().indexOf(Router.CAPABILITY_UNREACHABLE) >= 0;
         if (expireRI != null) {
             try {return Integer.parseInt(expireRI)*60*60*1000L;}
             catch (NumberFormatException ignored) {}
         }
-        if (floodfillEnabled()) {return ROUTER_INFO_EXPIRATION_FLOODFILL;}
-        if (existingRouters > 4000) {return ROUTER_INFO_EXPIRATION / 3;}
-        if (existingRouters > 3000) {return ROUTER_INFO_EXPIRATION / 2;}
-        if (existingRouters > 2000) {return ROUTER_INFO_EXPIRATION * 2 / 3;}
-        return ROUTER_INFO_EXPIRATION;
+        long calculatedExpiry = ROUTER_INFO_EXPIRATION;
+        if (floodfillEnabled() && existingRouters > 3000) {calculatedExpiry = ROUTER_INFO_EXPIRATION_FLOODFILL / 3 * 2;}
+        else if (floodfillEnabled() && existingRouters > 2000) {calculatedExpiry = ROUTER_INFO_EXPIRATION_FLOODFILL;}
+        else if (floodfillEnabled()) {calculatedExpiry = ROUTER_INFO_EXPIRATION_FLOODFILL * 3 / 2;}
+        else if (existingRouters < 1000) {calculatedExpiry = ROUTER_INFO_EXPIRATION * 2;}
+        else if (existingRouters < 2000) {calculatedExpiry = ROUTER_INFO_EXPIRATION * 3 / 2;}
+        else {calculatedExpiry = ROUTER_INFO_EXPIRATION;}
+        if (shouldBoost) {calculatedExpiry *= 2;}
+        return calculatedExpiry;
     }
 
     /**
