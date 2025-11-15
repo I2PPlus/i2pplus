@@ -484,14 +484,16 @@ public class PeerState {
      * An approximation, for display only
      * @return the smoothed receive transfer rate
      */
-    public synchronized int getReceiveBps(long now) {
-        long duration = now - _receivePeriodBegin;
-        if (duration >= 1000) {
-            _receiveBps = (int)(0.9f*_receiveBps + 0.1f*(_receiveBytes * (1000f/duration)));
-            _receiveBytes = 0;
-            _receivePeriodBegin = now;
+    public int getReceiveBps(long now) {
+        synchronized (_inboundLock) {
+            long duration = now - _receivePeriodBegin;
+            if (duration >= 1000) {
+                _receiveBps = (int)(0.9f*_receiveBps + 0.1f*(_receiveBytes * (1000f/duration)));
+                _receiveBytes = 0;
+                _receivePeriodBegin = now;
+            }
+            return _receiveBps;
         }
-        return _receiveBps;
     }
 
     int incrementConsecutiveFailedSends() {
@@ -595,18 +597,20 @@ public class PeerState {
      *  We received the message specified completely.
      *  @param bytes if less than or equal to zero, message is a duplicate.
      */
-    synchronized void messageFullyReceived(Long messageId, int bytes) {
-        if (bytes > 0) {
-            _receiveBytes += bytes;
-            _messagesReceived++;
-        } else {_packetsReceivedDuplicate++;}
-
+    void messageFullyReceived(Long messageId, int bytes) {
         long now = _context.clock().now();
-        long duration = now - _receivePeriodBegin;
-        if (duration >= 1000) {
-            _receiveBps = (int)(0.9f*_receiveBps + 0.1f*(_receiveBytes * (1000f/duration)));
-            _receiveBytes = 0;
-            _receivePeriodBegin = now;
+        synchronized(_inboundLock) {
+            if (bytes > 0) {
+                _receiveBytes += bytes;
+                _messagesReceived++;
+            } else {_packetsReceivedDuplicate++;}
+
+            long duration = now - _receivePeriodBegin;
+            if (duration >= 1000) {
+                _receiveBps = (int)(0.9f*_receiveBps + 0.1f*(_receiveBytes * (1000f/duration)));
+                _receiveBytes = 0;
+                _receivePeriodBegin = now;
+            }
         }
         messagePartiallyReceived(now);
     }
@@ -622,7 +626,7 @@ public class PeerState {
      *  We received a partial message, or we want to send some acks.
      *  @since 0.9.52
      */
-    protected synchronized void messagePartiallyReceived(long now) {
+    protected void messagePartiallyReceived(long now) {
         throw new UnsupportedOperationException();
     }
 
@@ -841,52 +845,60 @@ public class PeerState {
         }
     }
 
-    /** we are resending a packet, so lets jack up the rto */
-    synchronized void messageRetransmitted(int packets, int maxPktSz) {
-        _context.statManager().addRateData("udp.congestionOccurred", _sendWindowBytes);
-        _context.statManager().addRateData("udp.congestedRTO", _rto, _rttDeviation);
-        _packetsRetransmitted += packets;
-        congestionOccurred();
-        adjustMTU(maxPktSz, false);
+    /** we are resending a packet, so let's jack up the rto */
+    void messageRetransmitted(int packets, int maxPktSz) {
+        synchronized(_outboundLock) {
+            _context.statManager().addRateData("udp.congestionOccurred", _sendWindowBytes);
+            _context.statManager().addRateData("udp.congestedRTO", _rto, _rttDeviation);
+            _packetsRetransmitted += packets;
+            congestionOccurred();
+            adjustMTU(maxPktSz, false);
+        }
     }
 
-    synchronized void packetsTransmitted(int packets) {_packetsTransmitted += packets;}
+    void packetsTransmitted(int packets) {
+        synchronized(_outboundLock) {
+            _packetsTransmitted += packets;
+        }
+    }
 
     /** How long does it usually take to get a message ACKed? */
-    public synchronized int getRTT() {return _rtt;}
+    public int getRTT() {return _rtt;}
     /** How soon should we retransmit an unacked packet? */
-    public synchronized int getRTO() {return _rto;}
+    public int getRTO() {return _rto;}
     /** How skewed are the measured RTTs? */
-    public synchronized int getRTTDeviation() {return _rttDeviation;}
+    public int getRTTDeviation() {return _rttDeviation;}
 
     /**
      *  I2NP messages sent - does not include duplicates.
      *  As of 0.9.24, incremented when bandwidth is allocated just before sending, not when acked.
      */
-     public int getMessagesSent() {return _messagesSent.get();}
+     public int getMessagesSent() {
+       synchronized(_outboundLock) {return _messagesSent.get();}
+     }
 
     /**
      *  I2NP messages received.
      *  As of 0.9.24, does not include duplicates.
      */
-    public synchronized int getMessagesReceived() {
-        synchronized (_outboundLock) {return _messagesReceived;}
+    public int getMessagesReceived() {
+        synchronized (_inboundLock) {return _messagesReceived;}
     }
 
-    public synchronized int getPacketsTransmitted() {
+    public int getPacketsTransmitted() {
         synchronized (_outboundLock) {return _packetsTransmitted;}
     }
 
-    public synchronized int getPacketsRetransmitted() {
+    public int getPacketsRetransmitted() {
         synchronized (_outboundLock) {return _packetsRetransmitted;}
     }
 
-    public synchronized int getPacketsReceived() {
-        synchronized (_outboundLock) {return _packetsReceived;}
+    public int getPacketsReceived() {
+        synchronized (_inboundLock) {return _packetsReceived;}
     }
 
-    public synchronized int getPacketsReceivedDuplicate() {
-        synchronized (_outboundLock) {return _packetsReceivedDuplicate;}
+    public int getPacketsReceivedDuplicate() {
+        synchronized (_inboundLock) {return _packetsReceivedDuplicate;}
     }
 
     private static final int MTU_RCV_DISPLAY_THRESHOLD = 20;
@@ -900,17 +912,19 @@ public class PeerState {
     /**
      *  @param size not including IP header, UDP header, MAC or IV
      */
-    synchronized void packetReceived(int size) {
-        _packetsReceived++;
-        // SSU2 overhead header + MAC == SSU overhead IV + MAC
-        if (_remoteIP.length == 4) {size += OVERHEAD_SIZE;}
-        else {size += IPV6_OVERHEAD_SIZE;}
-        if (size <= _minMTU) {
-            _consecutiveSmall++;
-            if (_consecutiveSmall >= MTU_RCV_DISPLAY_THRESHOLD) {_mtuReceive = _minMTU;}
-        } else {
-            _consecutiveSmall = 0;
-            if (size > _mtuReceive) {_mtuReceive = size;}
+    void packetReceived(int size) {
+        synchronized(_inboundLock) {
+            _packetsReceived++;
+            // SSU2 overhead header + MAC == SSU overhead IV + MAC
+            if (_remoteIP.length == 4) {size += OVERHEAD_SIZE;}
+            else {size += IPV6_OVERHEAD_SIZE;}
+            if (size <= _minMTU) {
+                _consecutiveSmall++;
+                if (_consecutiveSmall >= MTU_RCV_DISPLAY_THRESHOLD) {_mtuReceive = _minMTU;}
+            } else {
+                _consecutiveSmall = 0;
+                if (size > _mtuReceive) {_mtuReceive = size;}
+            }
         }
     }
 
@@ -936,7 +950,7 @@ public class PeerState {
      *
      *  @since 0.9.52
      */
-    synchronized void clearWantedACKSendSince() {throw new UnsupportedOperationException();}
+    void clearWantedACKSendSince() {throw new UnsupportedOperationException();}
 
     /**
      *  @return non-null
