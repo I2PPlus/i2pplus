@@ -1126,7 +1126,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         public void schedule() {
             long delta = Math.max(10, Math.min(_rtt/6, ACK_FREQUENCY));
             if (shouldLogDebug) {
-                _log.debug("[SSU2] Sending delayed ACK in " + delta + "ms to " + PeerState2.this);
+                _log.debug("[SSU2] Sending delayed ACK in " + delta + "ms" + PeerState2.this);
             }
             reschedule(delta, true);
         }
@@ -1141,7 +1141,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             int rnd = _context.random().nextInt(4) + 2;
             long delta = Math.min(_rtt/16, rnd);
             if (shouldLogDebug) {
-                _log.debug("[SSU2] Sending immediate ACK in " + delta + "ms: " + PeerState2.this);
+                _log.debug("[SSU2] Sending immediate ACK in " + delta + "ms" + PeerState2.this);
             }
             reschedule(delta, true);
         }
@@ -1161,7 +1161,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
             }
             try {
                 UDPPacket ack = _transport.getBuilder2().buildACK(PeerState2.this);
-                if (shouldLogDebug) {_log.debug("[SSU2] ACKTimer sending ACKs to " + PeerState2.this);}
+                if (shouldLogDebug) {_log.debug("[SSU2] ACKTimer sending ACKs" + PeerState2.this);}
                 _transport.send(ack);
             } catch (IOException ioe) {}
         }
