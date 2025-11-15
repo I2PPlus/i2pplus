@@ -85,7 +85,7 @@ class UDPSender {
         _log = ctx.logManager().getLog(UDPSender.class);
 
         long maxMemory = SystemVersion.getMaxMemory();
-        int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, (maxMemory * 2) / (1024 * 1024)));
+        int qsize = (int) Math.max(MIN_QUEUE_SIZE, Math.min(MAX_QUEUE_SIZE, (maxMemory * 4) / (1024 * 1024)));
 
         _outboundQueue = new CoDelPriorityBlockingQueue<>(ctx, "UDP-Sender", qsize,
                 ctx.getProperty(PROP_CODEL_TARGET, CODEL_TARGET),
