@@ -1004,7 +1004,7 @@ class EstablishmentManager {
             byte[] ip = hostId.getIP();
             if (ip != null && _context.blocklist().isBlocklisted(ip)) {
                 if (_log.shouldInfo()) {
-                    _log.info("Ignoring " + context + " from blocklisted IP addreess " + Addresses.toString(ip));
+                    _log.info("Ignoring " + context + " from blocklisted IP address " + Addresses.toString(ip));
                 }
                 return true;
             }

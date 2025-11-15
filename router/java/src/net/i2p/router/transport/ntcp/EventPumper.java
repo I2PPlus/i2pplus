@@ -294,7 +294,7 @@ class EventPumper implements Runnable {
                     }
 
                 } catch (RuntimeException re) {
-                    _log.error("Error in EventPumper", re);
+                    _log.error("Error in NTCP EventPumper", re);
                 }
             }
         } finally {
@@ -305,7 +305,7 @@ class EventPumper implements Runnable {
         try {
             if (_selector.isOpen()) {
                 if (shouldDebug) {
-                    _log.debug("Closing down EventPumper with selection keys remaining...");
+                    _log.debug("Closing down NTCP EventPumper with selection keys remaining...");
                 }
                 for (SelectionKey key : _selector.keys()) {
                     try {
@@ -318,15 +318,15 @@ class EventPumper implements Runnable {
                             key.cancel();
                         }
                     } catch (IOException ioe) {
-                        _log.error("Error closing key " + key + " on EventPumper shutdown", ioe);
+                        _log.error("Error closing key " + key + " on NTCP EventPumper shutdown", ioe);
                     }
                 }
                 _selector.close();
             } else if (shouldDebug) {
-                _log.debug("Closing down EventPumper with no selection keys remaining...");
+                _log.debug("Closing down NTCP EventPumper with no selection keys remaining...");
             }
         } catch (IOException e) {
-            _log.error("Error closing keys on EventPumper shutdown", e);
+            _log.error("Error closing keys on NTCP EventPumper shutdown", e);
         }
 
         // Clear wants sets safely

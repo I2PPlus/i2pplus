@@ -42,11 +42,8 @@ class OutboundMessageState implements CDPQEntry {
     /** how many bytes push() is allowed to send */
     private int _allowedSendBytes;
     private final AtomicInteger _nacks = new AtomicInteger();
-
     public static final int MAX_MSG_SIZE = 32 * 1024;
-
     private static final long EXPIRATION = 10*1000;
-
 
     /**
      *  "injected" message from the establisher.
@@ -304,7 +301,7 @@ class OutboundMessageState implements CDPQEntry {
                     rv = tot;
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("Send window limited to " + (max - rv) + ", not sending fragment " + i + " for " + toString());
+                        _log.info("Send window limited to " + (max - rv) + ", not sending fragment " + i + toString());
                 }
             }
         }
