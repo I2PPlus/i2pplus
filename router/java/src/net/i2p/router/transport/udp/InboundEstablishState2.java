@@ -200,7 +200,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             if (_log.shouldInfo()) {_log.info("[SSU2] InboundEstablishState Payload Error", dfe);}
             throw new GeneralSecurityException("IES2 Payload Error: " + this, dfe);
         } catch (Exception e) {
-            if (!e.toString().contains("RouterInfo store fail")) {
+            if (!e.toString().contains("RouterInfo store fail") && !e.toString().contains("Old and slow")) {
                 if (_log.shouldInfo()) {
                     _log.info("[SSU2] InboundEstablishState Payload Error\n" + net.i2p.util.HexDump.dump(payload, 0, length), e);
                 }
@@ -745,8 +745,11 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         try {
             return locked_receiveSessionConfirmed(packet);
         } catch (GeneralSecurityException gse) {
-            if (_log.shouldDebug())
-                _log.debug("[SSU2] SessionConfirmed error", gse);
+            if (_log.shouldDebug()) {
+                if (gse != null && !gse.toString().contains("Old and slow")) {
+                    _log.debug("[SSU2] SessionConfirmed error", gse);
+                }
+            }
             // fail inside synch rather than have Est. Mgr. do it to prevent races
             fail();
             throw gse;

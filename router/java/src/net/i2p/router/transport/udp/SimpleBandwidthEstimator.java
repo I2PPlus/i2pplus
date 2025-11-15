@@ -167,7 +167,7 @@ class SimpleBandwidthEstimator implements BandwidthEstimator {
         _tAck = time;
         if (_log.shouldDebug()) {
             String rate = formatRate(_bK_ns_est * 1000);
-            _log.debug(String.format("%d B over %d ms → %.4f B/ms (%s/s)", packets, deltaT, bkdt, rate));
+            _log.debug(String.format("%dB over %d ms → %.4fB/ms (%s/s)", packets, deltaT, bkdt, rate));
         }
     }
 

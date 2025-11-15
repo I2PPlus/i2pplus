@@ -301,7 +301,7 @@ class OutboundMessageState implements CDPQEntry {
                     rv = tot;
                 } else {
                     if (_log.shouldInfo())
-                        _log.info("Send window limited to " + (max - rv) + ", not sending fragment " + i + toString());
+                        _log.info("Send window limited to " + (max - rv) + " -> Not sending fragment " + i + toString());
                 }
             }
         }

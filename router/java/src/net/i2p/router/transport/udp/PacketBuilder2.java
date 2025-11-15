@@ -209,7 +209,7 @@ class PacketBuilder2 {
                 off += sz;
                 sizeWritten += sz;
                 if (_log.shouldDebug())
-                    _log.debug("[SSU2] Sending ACKs " + block + " to " + peer);
+                    _log.debug("[SSU2] Sending ACKs [" + block + "] " + peer);
             }
         } else if (_log.shouldDebug()) {
             _log.debug("[SSU2] No room for ACKs -> MTU: " + currentMTU + "; Data: " + dataSize + "; Available: " + availableForAcks);
