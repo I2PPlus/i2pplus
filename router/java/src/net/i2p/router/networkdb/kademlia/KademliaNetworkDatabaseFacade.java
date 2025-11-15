@@ -2083,7 +2083,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
      *  to be greater than MAX_PER_PEER_TIMEOUT * TIMEOUT_MULTIPLIER by a factor of at least
      *  3 or 4, to allow at least that many peers to be attempted for a store.
      */
-    private static final int MAX_PER_PEER_TIMEOUT = 5*1000;
+    private static final int MAX_PER_PEER_TIMEOUT = 15*1000;
     private static final int TIMEOUT_MULTIPLIER = 3;
 
     /**
