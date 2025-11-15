@@ -89,7 +89,7 @@ public class JobQueue {
     private final static long DEFAULT_WARMUP_TIME = 15*60*1000;
     private long _warmupTime = DEFAULT_WARMUP_TIME;
     /** Max ready and waiting jobs before we start dropping 'em */
-    private final static int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 100 : 300;
+    private final static int DEFAULT_MAX_WAITING_JOBS = SystemVersion.isSlow() ? 100 : 400;
     private int _maxWaitingJobs = DEFAULT_MAX_WAITING_JOBS;
     private final static long MIN_LAG_TO_DROP = SystemVersion.isSlow() ? 1500 : 1000;
 
@@ -153,7 +153,7 @@ public class JobQueue {
 
             if (!alreadyExists) {
                 boolean removed = _timedJobs.remove(job);
-                if (removed && _log.shouldWarn()) {_log.warn(job + " rescheduled");}
+                if (removed && _log.shouldWarn()) {_log.warn(job + " removed from queue and rescheduled -> Duplicate instance");}
 
                 if (shouldDrop(job, numReady)) {
                     job.dropped();
