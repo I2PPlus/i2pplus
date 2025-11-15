@@ -63,19 +63,31 @@
       if (this.current) this.sortTable(this.current);
     },
 
-    // Sort table rows by header column and sort method
     sortTable(header, update) {
       const columnKey = header.getAttribute("data-sort-column-key"), column = header.cellIndex;
       let sortFunction = caseInsensitiveSort, sortMethod = header.getAttribute("data-sort-method"), sortOrder = header.getAttribute("aria-sort");
+
       this.table.dispatchEvent(createEvent("beforeSort"));
       window.requestAnimationFrame(() => {
         if (!update) {
-          sortOrder = sortOrder === "ascending" ? "descending" : sortOrder === "descending" ? "ascending" : this.options.descending ? "descending" : "ascending";
+          // Allow column override using data-sort-direction
+          const columnDirection = header.getAttribute("data-sort-direction");
+          let defaultDescending = this.options.descending;
+          if (columnDirection === "ascending") defaultDescending = false;
+          else if (columnDirection === "descending") defaultDescending = true;
+
+          // Toggle or apply default
+          sortOrder = sortOrder === "ascending" ? "descending" :
+                      sortOrder === "descending" ? "ascending" :
+                      defaultDescending ? "descending" : "ascending";
           header.setAttribute("aria-sort", sortOrder);
         }
+
         if (this.table.rows.length < 2) return;
+
         const tbodyRows = this.table.tBodies[0]?.rows || [], sampleItems = [];
         let rowIndex = this.thead ? 0 : 1;
+
         if (!sortMethod) {
           while (sampleItems.length < 3 && rowIndex < tbodyRows.length) {
             const cell = columnKey ? getCellByKey(tbodyRows[rowIndex].cells, columnKey) : tbodyRows[rowIndex].cells[column];
@@ -85,25 +97,42 @@
           }
           if (!sampleItems.length) return;
         }
+
         for (const option of sortOptions) {
-          if (sortMethod) { if (option.name === sortMethod) { sortFunction = option.sort; break; } }
-          else if (sampleItems.every(option.pattern)) { sortFunction = option.sort; break; }
+          if (sortMethod) {
+            if (option.name === sortMethod) {
+              sortFunction = option.sort;
+              break;
+            }
+          } else if (sampleItems.every(option.pattern)) {
+            sortFunction = option.sort;
+            break;
+          }
         }
+
         this.col = column;
         for (const tbody of this.table.tBodies) {
           if (tbody.rows.length < 2) continue;
-          const newRows = [], noSorts = {}; let totalRows = 0;
+          const newRows = [], noSorts = {};
+          let totalRows = 0;
+
           for (let j = 0; j < tbody.rows.length; j++) {
             const row = tbody.rows[j];
-            if (row.getAttribute("data-sort-method") === "none") noSorts[totalRows] = row;
-            else {
+            if (row.getAttribute("data-sort-method") === "none") {
+              noSorts[totalRows] = row;
+            } else {
               const cell = columnKey ? getCellByKey(row.cells, columnKey) : row.cells[this.col];
               newRows.push({ tr: row, td: cell ? getInnerText(cell) : "", index: totalRows });
             }
             totalRows++;
           }
-          if (sortOrder === "descending") newRows.sort(stabilize(sortFunction, true));
-          else newRows.sort(stabilize(sortFunction, false)).reverse();
+
+          if (sortOrder === "descending") {
+            newRows.sort(stabilize(sortFunction, true));
+          } else {
+            newRows.sort(stabilize(sortFunction, false)).reverse();
+          }
+
           let noSortsSoFar = 0;
           for (let j = 0; j < totalRows; j++) {
             const item = noSorts[j] || newRows[j - noSortsSoFar].tr;
@@ -111,6 +140,7 @@
             tbody.appendChild(item);
           }
         }
+
         this.table.dispatchEvent(createEvent("afterSort"));
       });
     },
@@ -119,7 +149,7 @@
     refresh() {
       if (this.current) this.sortTable(this.current, true);
     }
-  };
+  }
 
   if (typeof module !== "undefined" && module.exports) module.exports = Tablesort;
   else window.Tablesort = Tablesort;

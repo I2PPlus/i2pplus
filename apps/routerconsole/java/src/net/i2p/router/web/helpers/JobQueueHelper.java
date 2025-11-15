@@ -19,7 +19,9 @@ import net.i2p.util.SystemVersion;
 
 public class JobQueueHelper extends HelperBase {
 
-    private static int MAX_JOBS = 50; // 32 if android (see below)
+    private static int CORES = SystemVersion.getCores();
+    private static boolean isSlow = SystemVersion.isSlow();
+    private static int MAX_JOBS_DISPLAYED = isSlow ? 30 : 51; // divisible by 3 for 3 column display
 
     public String getJobQueueSummary() {
         try {
@@ -107,10 +109,7 @@ public class JobQueueHelper extends HelperBase {
             for (int i = 0; i < readyJobs.size(); i++) {
                 Job j = readyJobs.get(i);
                 counter.increment(j.getName());
-                if (SystemVersion.isAndroid())
-                    MAX_JOBS = 32;
-                if (i >= MAX_JOBS)
-                    continue;
+                if (i >= MAX_JOBS_DISPLAYED) {continue;}
                 buf.append("<li><b title=\"").append(j.toString()).append("\">").append(j.getName()).append("</b> &#10140; ")
                    .append(_t("waiting")).append(' ').append(DataHelper.formatDuration2(now-j.getTiming().getStartAfter()))
                    .append("</li>\n");
@@ -135,7 +134,7 @@ public class JobQueueHelper extends HelperBase {
         for (int i = 0; i < timedJobs.size(); i++) {
             Job j = timedJobs.get(i);
             counter.increment(j.getName());
-            if (i >= MAX_JOBS) {continue;}
+            if (i >= MAX_JOBS_DISPLAYED) {continue;}
             if (j.toString().toLowerCase().contains("disabled")) {continue;}
             long time = j.getTiming().getStartAfter() - now;
             // translators: {0} is a job name, {1} is a time, e.g. 6 min
@@ -191,7 +190,7 @@ public class JobQueueHelper extends HelperBase {
     private void getJobStats(StringBuilder buf) {
         buf.append("<div class=widescroll>\n<h3 id=totaljobstats>")
            .append(_t("Job Statistics (excluding single-shot jobs)"))
-           .append("</h3>\n<table id=jobstats data-sortable>\n<thead><tr><th>")
+           .append("</h3>\n<table id=jobstats data-sortable>\n<thead><tr><th data-sort-default data-sort-direction=ascending>")
            .append(_t("Job"))
            .append("</th><th data-sort-method=number>")
            .append(_t("Runs"))

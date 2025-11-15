@@ -4,13 +4,15 @@
 
 (function() {
   const jobs = document.getElementById("jobstats");
-  const sorter = new Tablesort(jobs, { descending: true });
-  const REFRESH_INTERVAL = 5000;
-  let refreshIntervalId = null;
-  let oldRowsMap = new Map();
+  if (!jobs) {return;}
 
+  const REFRESH_INTERVAL = 5000;
+  const sorter = new Tablesort(jobs, { descending: true });
   const progressx = window.progressx;
   const theme = window.theme;
+
+  let refreshIntervalId = null;
+  let oldRowsMap = new Map();
 
   async function fetchJobs() {
     try {
