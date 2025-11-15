@@ -190,26 +190,26 @@ public class JobQueueHelper extends HelperBase {
     private void getJobStats(StringBuilder buf) {
         buf.append("<div class=widescroll>\n<h3 id=totaljobstats>")
            .append(_t("Job Statistics (excluding single-shot jobs)"))
-           .append("</h3>\n<table id=jobstats data-sortable>\n<thead><tr><th data-sort-default data-sort-direction=ascending>")
+           .append("</h3>\n<table id=jobstats data-sortable>\n<thead><tr><th class=jobname data-sort-default data-sort-direction=ascending>")
            .append(_t("Job"))
-           .append("</th><th data-sort-method=number>")
+           .append("</th><th class=totalRuns data-sort-method=number>")
            .append(_t("Runs"))
-           .append("</th><th class=dropped data-sort-method=number>")
+           .append("</th><th class=totalDropped class=dropped data-sort-method=number>")
            .append(_t("Dropped"))
-           .append("</th><th data-sort-method=number>")
+           .append("</th><th class=totalRunTime data-sort-method=number>")
            .append(_t("Time"))
-           .append("</th><th data-sort-method=number>")
+           .append("</th><th class=avgRunTime data-sort-method=number>")
            .append(_t("Avg"))
-           .append("</th><th data-sort-method=number>")
+           .append("</th><th class=maxRunTime data-sort-method=number>")
            .append(_t("Max"))
-           .append("</th><th data-sort-method=number>")
+           .append("</th><th class=minRunTime data-sort-method=number>")
            .append(_t("Min"))
            .append("</th>");
         if (isAdvanced()) {
-            buf.append("<th data-sort-method=number>").append(_t("Pending")).append("</th>")
-               .append("<th data-sort-method=number>").append(_t("Avg")).append("</th>")
-               .append("<th data-sort-method=number>").append(_t("Max")).append("</th>")
-               .append("<th data-sort-method=number>").append(_t("Min")).append("</th>");
+            buf.append("<th class=totalPendingTime data-sort-method=number>").append(_t("Pending")).append("</th>")
+               .append("<th class=avgPendingTime data-sort-method=number>").append(_t("Avg")).append("</th>")
+               .append("<th class=maxPendingTime data-sort-method=number>").append(_t("Max")).append("</th>")
+               .append("<th class=minPendingTime data-sort-method=number>").append(_t("Min")).append("</th>");
         }
         buf.append("</tr></thead>\n<tbody id=statCount>\n");
 
@@ -232,6 +232,7 @@ public class JobQueueHelper extends HelperBase {
             totExecTime += stats.getTotalTime();
             totPendingTime += stats.getTotalPendingTime();
             totRuns += stats.getRuns();
+            boolean isRunningSlow = stats.getRuns() > 3 && stats.getAvgTime() > 1000;
 
             if (stats.getRuns() < 2) {
                 totRuns -=1;
@@ -243,43 +244,45 @@ public class JobQueueHelper extends HelperBase {
                 totRuns -=1;
                 continue;
             }
-            buf.append("<tr><td><b>")
+            buf.append("<tr")
+               .append(isRunningSlow ? "class=slowAvg" : "")
+               .append("><td class=jobname><b>")
                .append(stats.getName())
-               .append("</b></td><td><span>")
+               .append("</b></td><td class=totalRuns><span>")
                .append(stats.getRuns())
-               .append("</span></td><td class=dropped><span>")
+               .append("</span></td><td class=totalDropped><span>")
                .append(stats.getDropped())
-               .append("</span></td><td data-sort=")
+               .append("</span></td><td class=totalRunTime data-sort=")
                .append(stats.getTotalTime())
                .append("><span>")
                .append(DataHelper.formatDuration2(stats.getTotalTime()))
-               .append("</span></td><td data-sort=")
+               .append("</span></td><td class=avgRunTime data-sort=")
                .append(stats.getAvgTime())
                .append("><span>")
                .append(DataHelper.formatDuration2(stats.getAvgTime()))
-               .append("</span></td><td data-sort=")
+               .append("</span></td><td class=maxRunTime data-sort=")
                .append(stats.getMaxTime())
                .append("><span>")
                .append(DataHelper.formatDuration2(stats.getMaxTime()))
-               .append("</span></td><td data-sort=")
+               .append("</span></td><td class=minRunTime data-sort=")
                .append(stats.getMinTime())
                .append("><span>")
                .append(DataHelper.formatDuration2(stats.getMinTime()))
                .append("</span></td>");
             if (isAdvanced()) {
-                buf.append("<td data-sort=")
+                buf.append("<td class=totalPendingTime data-sort=")
                    .append(stats.getTotalPendingTime())
                    .append("><span>")
                    .append(DataHelper.formatDuration2(stats.getTotalPendingTime()))
-                   .append("</span></td><td data-sort=")
+                   .append("</span></td><td class=avgPendingTime data-sort=")
                    .append(stats.getAvgPendingTime())
                    .append("><span>")
                    .append(DataHelper.formatDuration2(stats.getAvgPendingTime()))
-                   .append("</span></td><td data-sort=")
+                   .append("</span></td><td class=maxPendingTime data-sort=")
                    .append(stats.getMaxPendingTime())
                    .append("><span>")
                    .append(DataHelper.formatDuration2(stats.getMaxPendingTime()))
-                   .append("</span></td><td data-sort=")
+                   .append("</span></td><td class=minPendingTime data-sort=")
                    .append(stats.getMinPendingTime())
                    .append("><span>")
                    .append(DataHelper.formatDuration2(stats.getMinPendingTime()))
