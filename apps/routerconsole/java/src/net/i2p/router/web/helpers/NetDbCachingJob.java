@@ -6,6 +6,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SimpleTimer2.TimedEvent;
+import net.i2p.util.SystemVersion;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -26,6 +27,7 @@ public class NetDbCachingJob extends JobImpl {
     // Shared interval (in ms)
     private static final long INTERVAL = 30 * 60 * 1000L; // Every 30 minutes
     private static final long SCHEDULE_DELAY = 15 * 60 * 1000L; // First run after 15 minutes
+    private static final boolean ENOUGH_RAM = SystemVersion.getMaxMemory() >= 1024*1024*1024;
 
     // Prevent duplicate scheduling
     private static final AtomicBoolean SCHEDULED = new AtomicBoolean(false);
@@ -55,6 +57,14 @@ public class NetDbCachingJob extends JobImpl {
     public void runJob() {
         RouterContext ctx = getContext();
         long now = ctx.clock().now();
+
+        // Don't run the job if < 1GB allocated
+        if (!ENOUGH_RAM) {
+            if (_log.shouldWarn()) {
+                _log.warn("Insufficient RAM to run the NetDB RouterInfo Precacher Job -> 1GB needed!");
+            }
+            return;
+        }
 
         // Only run if interval has passed
         if (now - _lastRunTime < INTERVAL) {
