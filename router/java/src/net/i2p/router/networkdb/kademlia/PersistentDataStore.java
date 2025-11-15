@@ -62,7 +62,8 @@ public class PersistentDataStore extends TransientDataStore {
     private final boolean _flat;
     private final int _networkID;
 
-    private final static int READ_DELAY = 5*60*1000;
+    private final static int READ_DELAY = 3*1000;
+    private final static int READ_INTERVAL = 5*60*1000;
     private static final String PROP_FLAT = "router.networkDatabase.flat";
     static final String DIR_PREFIX = "r";
     private static final String B64 = Base64.ALPHABET_I2P;
@@ -501,6 +502,7 @@ public class PersistentDataStore extends TransientDataStore {
         private volatile boolean _setNetDbReady;
         private static final int MIN_ROUTERS = KademliaNetworkDatabaseFacade.MIN_RESEED;
         private static final long MIN_RESEED_INTERVAL = 90*60*1000;
+        private volatile boolean hasRun = false;
 
         public ReadJob() {super(PersistentDataStore.this._context);}
 
@@ -531,7 +533,12 @@ public class PersistentDataStore extends TransientDataStore {
                 synchronized (_dbDir) {readFiles();} // _lastModified must be 0 for the first run
                 _lastModified = now;
             }
-            requeue(READ_DELAY);
+            if (!hasRun) {
+               requeue(READ_DELAY);
+               hasRun = true;
+            } else {
+               requeue(READ_INTERVAL);
+            }
         }
 
         public void wakeup() {requeue(0);}
@@ -600,8 +607,8 @@ public class PersistentDataStore extends TransientDataStore {
                             // Do not set _initialized yet so we don't start rescanning.
                             _setNetDbReady = true;
                             _context.router().setNetDbReady();
-                        } else if (i == 500 && !_setNetDbReady) {
-                            // do this for faster systems also at 500
+                        } else if (i == 1000 && !_setNetDbReady) {
+                            // do this for faster systems also at 1000
                             _setNetDbReady = true;
                             _context.router().setNetDbReady();
                         }
