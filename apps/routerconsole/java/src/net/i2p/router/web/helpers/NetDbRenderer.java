@@ -91,10 +91,6 @@ class NetDbRenderer {
     private final ProfileOrganizer _organizer;
     private final int BATCH_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 10 : 20;
     private long now = System.currentTimeMillis();
-    public volatile boolean _dnsPrecacheScheduled = false;
-    public volatile boolean _introducersPrecacheScheduled = false;
-    public volatile long lastrun_DNSPrecache = now;
-    public volatile long lastrun_IntroducerPrecache = now;
 
     /**
      *  Comparator for LeaseSets, used in the leaseset listing.
@@ -756,7 +752,7 @@ class NetDbRenderer {
                         rdnsLookups.put(ip, hostname);
                     }
                     // Also update global cache
-                    reverseLookupCache.put(ip, hostname);
+                    putCachedReverseDNS(ip, hostname);
                 }
                 return null;
             }));
@@ -775,9 +771,6 @@ class NetDbRenderer {
      * This helps ensure we have up-to-date info for routers we might need to contact.
      */
     public void precacheIntroducerInfos() {
-        if (_introducersPrecacheScheduled) return;
-
-        _introducersPrecacheScheduled = true;
         Set<RouterInfo> allRouters = _context.netDb().getRouters();
         Set<Hash> introducerHashes = new HashSet<>();
 
@@ -1345,8 +1338,8 @@ class NetDbRenderer {
         "K", "L", "M", "N", "O", "P", "X"
     };
     private static final String[] BW_DESCRIPTIONS = {
-        "Under 12 KB/s", "12 - 48 KB/s", "49 - 65 KB/s",
-        "66 - 130 KB/s", "131 - 261 KB/s", "262 - 2047 KB/s", "Over 2048 KB/s"
+        _x("Under 12 KB/s"), "12 - 48 KB/s", "49 - 65 KB/s",
+        "66 - 130 KB/s", "131 - 261 KB/s", "262 - 2047 KB/s", _x("Over 2048 KB/s")
     };
 
     /**
@@ -1428,7 +1421,7 @@ class NetDbRenderer {
     private void renderCountryTable(StringBuilder buf, ObjectCounterUnsafe<String> countries, Set<RouterInfo> routers) {
         List<String> countryList = new ArrayList<>(countries.objects());
         buf.append("<table id=netdbcountrylist data-sortable>\n<thead>\n<tr>")
-           .append("<th>").append(_t("Country")).append("</th>")
+           .append("<th data-sort-direction=ascending>").append(_t("Country")).append("</th>")
            .append("<th class=countX>").append(_t("X Tier")).append("</th>")
            .append("<th class=countFF>").append(_t("Floodfills")).append("</th>")
            .append("<th class=countCC data-sort-default>").append(_t("Total")).append("</th>")
@@ -1546,9 +1539,47 @@ class NetDbRenderer {
     }
 
     /**
-     *  Cache for reverse DNS lookups to avoid redundant queries.
+     * Internal class to hold reverse DNS cache entries with expiration time.
      */
-    private final Map<String, String> reverseLookupCache = Collections.synchronizedMap(new HashMap<>());
+    private static class CacheEntry {
+        String value;
+        long expiresAt;
+        CacheEntry(String value, long ttlMillis) {
+            this.value = value;
+            this.expiresAt = System.currentTimeMillis() + ttlMillis;
+        }
+        boolean isExpired() {
+            return System.currentTimeMillis() > expiresAt;
+        }
+    }
+
+    /**
+     * Reverse DNS cache with TTL (1 hour).
+     */
+    private final Map<String, CacheEntry> reverseLookupCache = new HashMap<>();
+    private static final long TTL_24_HOURS = 60 * 60 * 1000; // 1 hour
+
+    /**
+     * Gets a value from the cache if it's still valid.
+     */
+    private String getCachedReverseDNS(String ip) {
+        CacheEntry entry = reverseLookupCache.get(ip);
+        if (entry != null && !entry.isExpired()) {
+            return entry.value;
+        } else {
+            reverseLookupCache.remove(ip); // Clean up
+            return null;
+        }
+    }
+
+    /**
+     * Puts a new value into the cache with TTL.
+     */
+    private void putCachedReverseDNS(String ip, String hostname) {
+        if (hostname != null && !hostname.equals(ip) && !hostname.equals("unknown")) {
+            reverseLookupCache.put(ip, new CacheEntry(hostname, TTL_24_HOURS));
+        }
+    }
 
     /**
      *  Renders a single RouterInfo as HTML.
@@ -1762,12 +1793,12 @@ class NetDbRenderer {
                     canonicalHostname = rdnsLookups.get(primaryAddress);
                 }
                 if (canonicalHostname == null) {
-                    canonicalHostname = reverseLookupCache.get(primaryAddress);
+                    canonicalHostname = getCachedReverseDNS(primaryAddress);
                 }
                 if (canonicalHostname == null) {
                     canonicalHostname = _context.commSystem().getCanonicalHostName(primaryAddress);
                     if (canonicalHostname != null && !canonicalHostname.equals(primaryAddress) && !canonicalHostname.equals("unknown")) {
-                        reverseLookupCache.put(primaryAddress, canonicalHostname);
+                        putCachedReverseDNS(primaryAddress, canonicalHostname);
                     }
                 }
                 if (canonicalHostname != null && !canonicalHostname.equals(primaryAddress) && !canonicalHostname.equals("unknown")) {
@@ -1785,15 +1816,15 @@ class NetDbRenderer {
                     if (enableReverseLookups()) {
                         String canonicalHostname = null;
                         if (rdnsLookups != null) {
-                            canonicalHostname = rdnsLookups.get(directAddressString);
+                            canonicalHostname = rdnsLookups.get(primaryAddress);
                         }
                         if (canonicalHostname == null) {
-                            canonicalHostname = reverseLookupCache.get(directAddressString);
+                            canonicalHostname = getCachedReverseDNS(primaryAddress);
                         }
                         if (canonicalHostname == null) {
-                            canonicalHostname = _context.commSystem().getCanonicalHostName(directAddressString);
-                            if (canonicalHostname != null && !canonicalHostname.equals(directAddressString) && !canonicalHostname.equals("unknown")) {
-                                reverseLookupCache.put(directAddressString, canonicalHostname);
+                            canonicalHostname = _context.commSystem().getCanonicalHostName(primaryAddress);
+                            if (canonicalHostname != null && !canonicalHostname.equals(primaryAddress) && !canonicalHostname.equals("unknown")) {
+                                putCachedReverseDNS(primaryAddress, canonicalHostname);
                             }
                         }
                         if (canonicalHostname != null && !canonicalHostname.equals(directAddressString) && !canonicalHostname.equals("unknown")) {

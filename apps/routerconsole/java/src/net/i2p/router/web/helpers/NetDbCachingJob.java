@@ -23,10 +23,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public class NetDbCachingJob extends JobImpl {
 
-    // Caching intervals (in ms)
-    private static final long REVERSE_DNS_INTERVAL = 21 * 60 * 1000L; // 21 minutes
-    private static final long INTRODUCER_PRECACHE_INTERVAL = 36 * 60 * 1000L; // 36 minutes
-    private static final long SCHEDULE_DELAY = 11 * 60 * 1000L; // First run after 11 minutes
+    // Shared interval (in ms)
+    private static final long INTERVAL = 30 * 60 * 1000L; // Every 30 minutes
+    private static final long SCHEDULE_DELAY = 15 * 60 * 1000L; // First run after 15 minutes
 
     // Prevent duplicate scheduling
     private static final AtomicBoolean SCHEDULED = new AtomicBoolean(false);
@@ -36,8 +35,7 @@ public class NetDbCachingJob extends JobImpl {
     private final boolean _reverseDnsEnabled;
     private final boolean _introducerEnabled;
 
-    private long _lastReverseDNSRun;
-    private long _lastIntroducerRun;
+    private long _lastRunTime;
 
     public NetDbCachingJob(RouterContext ctx, boolean reverseDnsEnabled, boolean introducerEnabled) {
         super(ctx);
@@ -45,9 +43,7 @@ public class NetDbCachingJob extends JobImpl {
         _renderer = new NetDbRenderer(ctx);
         _reverseDnsEnabled = reverseDnsEnabled;
         _introducerEnabled = introducerEnabled;
-        long now = ctx.clock().now();
-        _lastReverseDNSRun = now;
-        _lastIntroducerRun = now;
+        _lastRunTime = ctx.clock().now();
     }
 
     @Override
@@ -60,18 +56,24 @@ public class NetDbCachingJob extends JobImpl {
         RouterContext ctx = getContext();
         long now = ctx.clock().now();
 
-        boolean didWork = false;
+        // Only run if interval has passed
+        if (now - _lastRunTime < INTERVAL) {
+            schedule(ctx);
+            return;
+        }
+
+        if (_log.shouldInfo()) {
+            _log.info("Starting NetDb caching job...");
+        }
 
         // Reverse DNS precaching
-        if (_reverseDnsEnabled && (now - _lastReverseDNSRun >= REVERSE_DNS_INTERVAL)) {
+        if (_reverseDnsEnabled) {
             if (_log.shouldInfo()) {
                 _log.info("Starting reverse DNS precaching...");
             }
             try {
                 Set<RouterInfo> routers = new HashSet<>(ctx.netDb().getRouters());
                 _renderer.precacheReverseDNSLookups(routers);
-                _lastReverseDNSRun = now;
-                didWork = true;
             } catch (Exception e) {
                 if (_log.shouldError()) {
                     _log.error("Error during reverse DNS precaching", e);
@@ -80,14 +82,12 @@ public class NetDbCachingJob extends JobImpl {
         }
 
         // Introducer precaching
-        if (_introducerEnabled && (now - _lastIntroducerRun >= INTRODUCER_PRECACHE_INTERVAL)) {
+        if (_introducerEnabled) {
             if (_log.shouldInfo()) {
                 _log.info("Starting introducer precaching...");
             }
             try {
                 _renderer.precacheIntroducerInfos();
-                _lastIntroducerRun = now;
-                didWork = true;
             } catch (Exception e) {
                 if (_log.shouldError()) {
                     _log.error("Error during introducer precaching", e);
@@ -95,7 +95,9 @@ public class NetDbCachingJob extends JobImpl {
             }
         }
 
-        // Always re-schedule, even if no work was done
+        _lastRunTime = now;
+
+        // Always re-schedule
         schedule(ctx);
     }
 
@@ -117,10 +119,12 @@ public class NetDbCachingJob extends JobImpl {
      */
     private static class NetDbCachingTimer extends TimedEvent {
         private final RouterContext _ctx;
+        private final SimpleTimer2 _timer;
 
         NetDbCachingTimer(RouterContext ctx, SimpleTimer2 timer, long delay) {
             super(timer, delay);
             _ctx = ctx;
+            _timer = timer;
         }
 
         @Override
@@ -132,6 +136,10 @@ public class NetDbCachingJob extends JobImpl {
 
             NetDbCachingJob job = new NetDbCachingJob(_ctx, reverseDnsEnabled, introducerEnabled);
             _ctx.jobQueue().addJob(job);
+
+            // Schedule the next run using the same timer
+            new NetDbCachingTimer(_ctx, _timer, INTERVAL);
+            SCHEDULED.set(false);
         }
     }
 }
