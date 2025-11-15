@@ -172,9 +172,10 @@ public class TunnelDataMessage extends FastI2NPMessageImpl {
     @Override
     public String toString() {
         StringBuilder buf = new StringBuilder();
-        buf.append("TunnelDataMessage");
-        buf.append(" [").append(getUniqueId());
-        buf.append("]");
+        long uid = getUniqueId();
+        String paddedUid = String.format("%010d", uid);
+        buf.append("TunnelDataMessage [");
+        buf.append(paddedUid).append("]");
         return buf.toString();
     }
 
