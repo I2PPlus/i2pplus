@@ -325,8 +325,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
     public long getNextPacketNumber() throws IOException {
          if (_dead) {
              IOException ioe = new IOException("Peer is dead: " + _remotePeer.toBase64());
-             if (shouldLogDebug) {_log.debug("Dead: " + this, ioe);}
-             else if (shouldLogDebug) {_log.debug("Router [" + _remotePeer.toBase64().substring(0,6) + "] is dead" + this);}
+             if (shouldLogDebug) {_log.debug("Router [" + _remotePeer.toBase64().substring(0,6) + "] is dead" + this, ioe);}
              throw ioe;
          }
          return _packetNumber.getAndIncrement();
