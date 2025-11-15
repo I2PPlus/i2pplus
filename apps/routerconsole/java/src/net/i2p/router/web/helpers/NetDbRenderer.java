@@ -289,7 +289,7 @@ class NetDbRenderer {
                 List<RouterInfo> routersToRender;
                 if (toSkip > lastIndex) {routersToRender = Collections.emptyList();}
                 else {routersToRender = filteredRouters.subList(toSkip, lastIndex + 1);}
-                if (enableReverseLookups() && !_context.router().isHidden() && uptime > 15*60*1000) {
+                if (enableReverseLookups() && !_context.router().isHidden() && uptime > 2*60*1000) {
                     Map<String, String> rdnsLookups = precacheReverseDNSLookups(routersToRender);
                     for (int i = 0; i < routersToRender.size(); i += BATCH_SIZE) {
                         int end = Math.min(i + BATCH_SIZE, routersToRender.size());
