@@ -17,7 +17,7 @@ class DirectLookupMatchJob extends FloodOnlyLookupMatchJob {
     }
 
     @Override
-    public String getName() { return "Direct lookup match"; }
+    public String getName() { return "Direct Lookup Match"; }
 
     /**
      * Override to not call failed() in setMessage(),
