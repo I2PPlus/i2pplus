@@ -172,6 +172,8 @@ class NetDbRenderer {
         StringBuilder buf = new StringBuilder(4 * 1024);
         List<Hash> sybilHashes = sybil != null ? new ArrayList<Hash>(128) : null;
         NetworkDatabaseFacade networkDatabase = _context.netDb();
+        long uptime = _context.router().getUptime();
+
         if (".".equals(routerPrefix)) {
             buf.append("<p class=infowarn><b>")
                .append(_t("Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."))
@@ -287,7 +289,7 @@ class NetDbRenderer {
                 List<RouterInfo> routersToRender;
                 if (toSkip > lastIndex) {routersToRender = Collections.emptyList();}
                 else {routersToRender = filteredRouters.subList(toSkip, lastIndex + 1);}
-                if (enableReverseLookups() && !_context.router().isHidden()) {
+                if (enableReverseLookups() && !_context.router().isHidden() && uptime > 15*60*1000) {
                     Map<String, String> rdnsLookups = precacheReverseDNSLookups(routersToRender);
                     for (int i = 0; i < routersToRender.size(); i += BATCH_SIZE) {
                         int end = Math.min(i + BATCH_SIZE, routersToRender.size());
