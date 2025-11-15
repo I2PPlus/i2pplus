@@ -824,10 +824,10 @@ public class NTCPTransport extends TransportImpl {
         return !_replayFilter.add(hxhi, 0, 8);
     }
 
-    private static final int MIN_CONCURRENT_READERS = 2;  // unless < 32MB
-    private static final int MIN_CONCURRENT_WRITERS = 2;  // unless < 32MB
-    private static final int MAX_CONCURRENT_READERS = (SystemVersion.isSlow() ? 4 : SystemVersion.getCores() >= 12 ? 8 : 6);
-    private static final int MAX_CONCURRENT_WRITERS = MAX_CONCURRENT_READERS;
+    private static final int MIN_CONCURRENT_READERS = SystemVersion.isSlow() ? 3 : 6;  // unless < 32MB
+    private static final int MIN_CONCURRENT_WRITERS = MIN_CONCURRENT_READERS;
+    private static final int MAX_CONCURRENT_READERS = MIN_CONCURRENT_READERS;
+    private static final int MAX_CONCURRENT_WRITERS = MIN_CONCURRENT_READERS;
 
     /**
      * Starts the NTCP transport listening process, ensuring only one pumper is running
@@ -968,7 +968,7 @@ public class NTCPTransport extends TransportImpl {
     private void startIt() {
         _finisher.start();
         _pumper.startPumping();
-        int threads = SystemVersion.isSlow() ? 1 : 2;
+        int threads = SystemVersion.isSlow() ? 3 : 6;
         long maxMemory = SystemVersion.getMaxMemory();
         _reader.startReading(threads);
         _writer.startWriting(threads);

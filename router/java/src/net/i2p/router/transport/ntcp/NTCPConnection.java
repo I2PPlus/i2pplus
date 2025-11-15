@@ -153,15 +153,13 @@ public class NTCPConnection implements Closeable {
      *  In the meantime, don't let the transport bid on big messages.
      */
     static final int BUFFER_SIZE = 16*1024;
-    //static final int BUFFER_SIZE = SystemVersion.isSlow() ? 16*1024: 32*1024;
-//    private static final int MAX_DATA_READ_BUFS = 16;
     private static final int MAX_DATA_READ_BUFS = SystemVersion.isSlow() ? 16 : 48;
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
-
     private static final int INFO_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE_LOW;
     private static final String FIXED_RI_VERSION = "0.9.12";
     private static final AtomicLong __connID = new AtomicLong();
     private final long _connID = __connID.incrementAndGet();
+    private static final int MAX_HANDLERS = SystemVersion.isSlow() ? 3 : 6;
 
     //// NTCP2 things
 
@@ -213,7 +211,6 @@ public class NTCPConnection implements Closeable {
     private CipherState _sender;
     private long _sendSipk1, _sendSipk2;
     private byte[] _sendSipIV;
-
 
     /**
      * Create an inbound connected (though not established) NTCP connection.
@@ -1322,9 +1319,6 @@ public class NTCPConnection implements Closeable {
         // FIXME does not account for RTT
         _clockSkew = newSkew;
     }
-
-
-    private static final int MAX_HANDLERS = SystemVersion.isSlow() ? 3 : 6;
 
     /**
      *  FIXME static queue mixes handlers from different contexts in multirouter JVM
