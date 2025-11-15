@@ -3,6 +3,7 @@
 <%  String consoleNonce = net.i2p.router.web.CSSHelper.getNonce(); %>
 <%@include file="head.jsi"%>
 <%=intl.title("home")%>
+<link rel=prefetch href=/netdb>
 </head>
 <body id=homepage>
 <jsp:useBean class="net.i2p.router.web.ConfigUpdateHelper" id="updatehelper" scope="request"/>

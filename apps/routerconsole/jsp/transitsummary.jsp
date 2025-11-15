@@ -3,7 +3,6 @@
 <%@include file="head.jsi"%>
 <%=intl.title("Transit Tunnels by Peer")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
-<link rel=prefetch href=/tunnelpeercount>
 <script src=/js/convertKBtoMB.js type=module></script>
 <script src=/js/tablesort/tablesort.js type=module></script>
 <script src=/js/tablesort/tablesort.number.js type=module></script>
@@ -11,6 +10,7 @@
 <script src=/js/tablesort/tablesort.dotsep.js type=module></script>
 <script src=/js/lazyload.js type=module></script>
 <script src=/js/transitsummary.js type=module></script>
+<link rel=prefetch href=/tunnelpeercount>
 </head>
 <body id=transitbypeer>
 <%@include file="sidebar.jsi"%>
