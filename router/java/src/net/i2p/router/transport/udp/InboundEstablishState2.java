@@ -191,13 +191,19 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 _transport.send(pkt);
                 if (_log.shouldInfo()) {
                     _log.info("[SSU2] Sending TERMINATION reason " + reason + " to " + psd);
-                    _log.info("[SSU2] InboundEstablishState Payload Error", rie);
+                    if (rie != null && !rie.toString().contains("RouterInfo store fail") &&
+                        !rie.toString().contains("Old and slow")) {
+                        _log.info("[SSU2] InboundEstablishState Payload Error", rie);
+                    }
                 }
             } catch (IOException ioe) {}
             throw new GeneralSecurityException("IES2 Payload Error: " + this, rie);
         } catch (DataFormatException dfe) {
             // no in-session response possible
-            if (_log.shouldInfo()) {_log.info("[SSU2] InboundEstablishState Payload Error", dfe);}
+            if (_log.shouldInfo() && dfe != null && !dfe.toString().contains("RouterInfo store fail") &&
+                !dfe.toString().contains("Old and slow")) {
+                _log.info("[SSU2] InboundEstablishState Payload Error", dfe);
+            }
             throw new GeneralSecurityException("IES2 Payload Error: " + this, dfe);
         } catch (Exception e) {
             if (!e.toString().contains("RouterInfo store fail") && !e.toString().contains("Old and slow")) {

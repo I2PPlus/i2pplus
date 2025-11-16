@@ -181,7 +181,7 @@ class OutboundNTCP2State implements EstablishState {
      */
     public synchronized void prepareOutbound() {
         if (!(_state == State.OB_INIT)) {
-            throw new IllegalStateException(this + "unexpected prepareOutbound()");
+            throw new IllegalStateException(this + " -> Unexpected prepareOutbound()");
         }
         if (_log.shouldDebug())
             _log.debug(this + "send X");

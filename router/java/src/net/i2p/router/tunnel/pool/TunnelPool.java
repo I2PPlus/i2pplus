@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import net.i2p.data.DataHelper;
@@ -57,6 +58,7 @@ public class TunnelPool {
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_1 = 10;
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_2 = 12;
     private static final long STARTUP_TIME = 30*60*1000;
+    private long lastBuildWarningTime;
 
     TunnelPool(RouterContext ctx, TunnelPoolManager mgr, TunnelPoolSettings settings, TunnelPeerSelector sel) {
         _context = ctx;
@@ -1184,6 +1186,7 @@ public class TunnelPool {
 
         switch (result) {
             case SUCCESS:
+                lastBuildWarningTime = 0;
                 _consecutiveBuildTimeouts.set(0);
                 addTunnel(cfg);
                 updatePairedProfile(cfg, true);
@@ -1256,6 +1259,11 @@ public class TunnelPool {
             return false;
         }
 
+        long now = System.currentTimeMillis();
+        if (now - lastBuildWarningTime < 60 * 1000) {
+            return true; // Suppress
+        }
+
         Hash dest = _settings.getDestination();
         TunnelPool other = null;
 
@@ -1272,7 +1280,13 @@ public class TunnelPool {
         int currentCount = size();
         int otherCount = other.size();
 
-        return currentCount >= 1 && otherCount >= 1;
+        boolean shouldSuppress = currentCount >= 1 && otherCount >= 1;
+
+        if (!shouldSuppress) {
+            lastBuildWarningTime = now; // Allow future warnings
+        }
+
+        return shouldSuppress;
     }
 
     @Override
