@@ -317,11 +317,11 @@ public class ProfileOrganizer {
     }
 
     /**
-     * if a peer sends us more than 30 replies/hr in a searchReply that we cannot
+     * if a peer sends us more than 40 replies/hr in a searchReply that we cannot
      * fetch, stop listening to them.
      *
      */
-    private final static int MAX_BAD_REPLIES_PER_HOUR = 30;
+    private final static int MAX_BAD_REPLIES_PER_HOUR = 40;
 
     /**
      * Does the given peer send us bad replies - either invalid store messages
