@@ -822,8 +822,8 @@ td.ipv6{width:1%;max-width:24px}
 #transports:hover .script,#ntcpcon:hover .script,#udpcon:hover .script{display:inline-block;opacity:1;transition:ease .2s}
 #transports:hover span,#ntcpcon:hover .reachability,#udpcon:hover .reachability{display:none}
 #transports .script,#ntcpcon .script,#udpcon .script{margin:-4px 0 -6px;float:right;text-transform:capitalize;font-size:80%;font-weight:400;letter-spacing:normal;opacity:0;transition:ease .2s}
-#transportSummary th,#transportSummary td,#transportSummary .tablefooter td{padding:8px;width:18%}
-#transportSummary th:last-child,#transportSummary td:last-child,#transportSummary .tablefooter td:last-child{padding:8px;width:46%}
+#transportSummary th,#transportSummary td,#transportSummary .tablefooter td{padding:8px;width:20%}
+#transportSummary th:last-child,#transportSummary td:last-child,#transportSummary .tablefooter td:last-child{padding:8px;width:40%}
 #transportSummary th.in span,#transportSummary th.out span{width:16px;height:12px;display:inline-block;vertical-align:text-top;font-size:0;background:var(--in) no-repeat center center/12px}
 #transportSummary th.out span{background:var(--out) no-repeat center center/12px}
 #udpconnections .tablefooter:hover td{border-top:var(--border)}
@@ -839,6 +839,11 @@ td.ipv6{width:1%;max-width:24px}
 #peers .percentBarInner{height:16px;display:inline-block}
 #peers .percentBarOuter{width:calc(100% - 4px);margin:0;height:16px;display:inline-block;position:relative;vertical-align:middle;text-align:left}
 #peers .percentBarText{width:calc(100% - 2px);display:inline-block;position:absolute;top:1px;left:1px;bottom:1px;right:1px}
+
+.bw,.cnt,.count,.kbps{display:inline-block}
+.bw,.cnt,.count{min-width:64px}
+.cnt,.count{text-align:right}
+.bw{margin-left:10px;padding:3px 6px;min-width:72px;text-align:center;box-shadow:var(--bevel);background:var(--badge)}
 
 /* profiles */
 .host_ipv6{margin:0 2px;display:inline-block;font-size:85%}
