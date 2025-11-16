@@ -1055,20 +1055,22 @@ body,#torrents td,.snarkAddInfo,th,td,.snarkFileName,a.control,input[type=submit
 @media (min-width:1200px){
 td.peerCount{padding-left:0;padding-right:6px;width:1%;white-space:nowrap;font-weight:700}
 thead a img,thead img{max-height:21px}
+.peerCount b{min-height:15px;vertical-align:middle}
 .active.downloading .peerCount b{background:repeating-linear-gradient(135deg,#252,#252 8px,#141 9px,#141 17px)}
 .active.downloading .peerCount b::before{border-color:#0000 #252 #0000 #0000}
 .active.seeding.complete .peerCount b{background:repeating-linear-gradient(135deg,#937,#937 8px,#826 9px,#826 17px)}
 .active.seeding.complete .peerCount b::before{border-color:#0000 #937 #0000 #0000}
 .barComplete{padding:3px 0 1px}
-.inactive.downloading .peerCount b,.active.starting.processing .peerCount b{color:#333;background:#fc0}
+.inactive.downloading .peerCount b{color:#333;background:#fc0}
 .inactive.downloading .peerCount b,.peerCount b .right,.peerCount b .left{text-shadow:0 1px 1px #222}
-.inactive.downloading .peerCount b::before,.active.starting.processing .peerCount b::before{border-color:#0000 #fc0 #0000 #0000}
+.inactive.downloading .peerCount b::before,.active.starting.processing .peerCount b::before,.processing .peerCount b::before{border-color:#0000 #fc0 #0000 #0000}
 .mainsection #commentInfo td,.mainsection #userComments td{padding:8px 5px}
 .mainsection #userComments .commentDate{padding-left:20px}
 .mainsection #userComments .commentDelete{padding-left:24px}
 .nopeers .peerCount b,.nopeers .peerCount b .left,.nopeers .peerCount b .right{color:#333;text-shadow:0 1px 1px #aaa}
 .nopeers.incomplete .peerCount b{text-shadow:0 1px 1px #aaa;background:#aaa}
 .nopeers.incomplete .peerCount b::before{border-color:#0000 #aaa #0000 #0000}
+.processing .peerCount b{background:repeating-linear-gradient(135deg,#fc0,#fc0 8px,#860 9px,#860 17px)}
 .peerCount b{padding:4px 3px;min-width:103px;display:inline-block;position:relative;line-height:1;text-align:center;font-size:95%;color:#ddd;text-shadow:0 1px 1px #000;border-radius:2px;background:#ac5390;filter:drop-shadow(0 0 1px #000)}
 .peerCount b::before{width:0;height:0;position:absolute;top:calc(50% - 5px);left:-10px;border-width:5px;border-style:solid;border-color:#0000 #ac5390 #0000 #0000;content:""}
 .peerCount b .left,.peerCount b .right{margin:0 1px;padding:2px 3px 1px;min-width:38px;display:inline-block;text-align:center;color:#eee;border-radius:1px;box-shadow:0 0 0 1px #0004,1px 1px 1px 1px #0003 inset;background:linear-gradient(180deg,rgba(128,128,180,.2),rgba(192,192,220,.2))}
