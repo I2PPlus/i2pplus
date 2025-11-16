@@ -5,9 +5,11 @@ import java.net.DatagramPacket;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.security.GeneralSecurityException;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.southernstorm.noise.protocol.ChaChaPolyCipherState;
 import com.southernstorm.noise.protocol.HandshakeState;
@@ -191,8 +193,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 _transport.send(pkt);
                 if (_log.shouldInfo()) {
                     _log.info("[SSU2] Sending TERMINATION reason " + reason + " to " + psd);
-                    if (rie != null && !rie.toString().contains("RouterInfo store fail") &&
-                        !rie.toString().contains("Old and slow")) {
+                    if (!shouldSuppressException(rie)) {
                         _log.info("[SSU2] InboundEstablishState Payload Error", rie);
                     }
                 }
@@ -200,16 +201,13 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             throw new GeneralSecurityException("IES2 Payload Error: " + this, rie);
         } catch (DataFormatException dfe) {
             // no in-session response possible
-            if (_log.shouldInfo() && dfe != null && !dfe.toString().contains("RouterInfo store fail") &&
-                !dfe.toString().contains("Old and slow")) {
+            if (!shouldSuppressException(dfe)) {
                 _log.info("[SSU2] InboundEstablishState Payload Error", dfe);
             }
             throw new GeneralSecurityException("IES2 Payload Error: " + this, dfe);
         } catch (Exception e) {
-            if (!e.toString().contains("RouterInfo store fail") && !e.toString().contains("Old and slow")) {
-                if (_log.shouldInfo()) {
-                    _log.info("[SSU2] InboundEstablishState Payload Error\n" + net.i2p.util.HexDump.dump(payload, 0, length), e);
-                }
+            if (!shouldSuppressException(e) && _log.shouldInfo()) {
+                _log.info("[SSU2] InboundEstablishState Payload Error\n" + net.i2p.util.HexDump.dump(payload, 0, length), e);
             }
             throw new GeneralSecurityException("IES2 Payload Error", e);
         }
@@ -751,10 +749,8 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         try {
             return locked_receiveSessionConfirmed(packet);
         } catch (GeneralSecurityException gse) {
-            if (_log.shouldDebug()) {
-                if (gse != null && !gse.toString().contains("Old and slow")) {
-                    _log.debug("[SSU2] SessionConfirmed error", gse);
-                }
+            if (!shouldSuppressException(gse) && _log.shouldDebug()) {
+                _log.debug("[SSU2] SessionConfirmed error", gse);
             }
             // fail inside synch rather than have Est. Mgr. do it to prevent races
             fail();
@@ -1059,6 +1055,34 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 _log.info("[SSU2] Passing possible data packet to PeerState2: " + this);
             _pstate.receivePacket(packet);
         }
+    }
+
+    /**
+     * Determines whether the given Throwable (or any of its causes)
+     * contains a message that should be suppressed from logging.
+     *
+     * @param t the Throwable to check
+     * @return true if the exception should be suppressed, false otherwise
+     * @since 0.9.68+
+     */
+    private boolean shouldSuppressException(Throwable t) {
+        Set<String> suppressionPatterns = new HashSet<>(Arrays.asList(
+            "Old and slow",
+            "RouterInfo store fail"
+        ));
+
+        while (t != null) {
+            String message = t.getMessage();
+            if (message != null) {
+                for (String pattern : suppressionPatterns) {
+                    if (message.contains(pattern)) {
+                        return true;
+                    }
+                }
+            }
+            t = t.getCause();
+        }
+        return false;
     }
 
     @Override
