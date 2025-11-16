@@ -183,14 +183,19 @@ public class PeerHelper extends HelperBase {
 
         boolean warnInbound = !_context.router().isHidden() && _context.router().getUptime() > 15*60*1000;
         int[] totals = new int[5];
+        int[] totalBw = new int[4];
         int totalLimits = 0;
         int rows = 0;
+        String bw = "";
+        String bwCounter = " <span class=bw>" + bw + "&thinsp;<span class=kbps>KB/s</span></span>";
 
         SortedMap<String, Transport> transports = _context.commSystem().getTransports();
         for (Map.Entry<String, Transport> e : transports.entrySet()) {
             String style = e.getKey();
             Transport t = e.getValue();
             int[] counts = t.getPeerCounts();
+            int[] bandwidths = new int[4];
+            getTransportBandwidth(t, counts, bandwidths);
 
             for (int idx = 0; idx < 8; idx += 4) {
                 if (style.equals("NTCP") && idx == 0) {continue;}
@@ -207,10 +212,17 @@ public class PeerHelper extends HelperBase {
                     if (!showIPv6 && i >= 2) {break;}
 
                     int cnt = counts[idx + i];
+                    int bps = bandwidths[i];
+                    bw = formatKBps((int)bps);
+
                     buf.append("<td");
                     if (cnt <= 0 && ((i & 0x01) != 0 || warnInbound)) {buf.append(" class=notice");}
-                    else {totals[i + 1] += cnt;}
-                    buf.append(">").append(cnt);
+                    else {
+                        totals[i + 1] += cnt;
+                        totalBw[i] += bps;
+                    }
+                    buf.append("><span class=cnt>").append(cnt).append("</span>");
+                    //if (bps > 1024) {buf.append(bwCounter);}
                 }
 
                 int limit = TransportImpl.getTransportMaxConnections(_context, style);
@@ -235,9 +247,13 @@ public class PeerHelper extends HelperBase {
                 if (!showIPv6 && i >= 3) { break; }
 
                 int cnt = totals[i];
+                int bps = totalBw[i - 1];
+                bw = formatKBps((int)bps);
+
                 buf.append("</td><td");
                 if (cnt <= 0 && ((i & 0x01) == 0 || warnInbound)) {buf.append(" class=warn");}
-                buf.append(">").append(cnt);
+                buf.append("><span class=cnt>").append(cnt).append("</span>");
+                //if (bps > 1024) {buf.append(bwCounter);}
             }
 
             int totalConnections = 0;
@@ -248,6 +264,65 @@ public class PeerHelper extends HelperBase {
         }
         buf.append("</table>\n");
         out.append(buf);
+    }
+
+    private void getTransportBandwidth(Transport transport, int[] peerCounts, int[] bandwidths) {
+        if (transport instanceof NTCPTransport) {
+            NTCPTransport nt = (NTCPTransport) transport;
+            for (NTCPConnection con : nt.getPeers()) {
+                if (!con.isEstablished()) continue;
+                boolean ipv6 = con.isIPv6();
+                boolean inbound = con.isInbound();
+                int bpsIn = (int) con.getRecvRate();
+                int bpsOut = (int) con.getSendRate();
+
+                if (ipv6) {
+                    if (inbound) {
+                        peerCounts[2]++;
+                        bandwidths[2] += bpsIn;
+                    } else {
+                        peerCounts[3]++;
+                        bandwidths[3] += bpsOut;
+                    }
+                } else {
+                    if (inbound) {
+                        peerCounts[0]++;
+                        bandwidths[0] += bpsIn;
+                    } else {
+                        peerCounts[1]++;
+                        bandwidths[1] += bpsOut;
+                    }
+                }
+            }
+        } else if (transport instanceof UDPTransport) {
+            UDPTransport ut = (UDPTransport) transport;
+            long now = _context.clock().now();
+            for (PeerState peer : ut.getPeers()) {
+                if (peer.getRemotePeer() == null) continue;
+                boolean ipv6 = peer.isIPv6();
+                boolean inbound = peer.isInbound();
+                int bpsIn = (int) peer.getReceiveBps(now);
+                int bpsOut = (int) peer.getSendBps(now);
+
+                if (ipv6) {
+                    if (inbound) {
+                        peerCounts[2]++;
+                        bandwidths[2] += bpsIn;
+                    } else {
+                        peerCounts[3]++;
+                        bandwidths[3] += bpsOut;
+                    }
+                } else {
+                    if (inbound) {
+                        peerCounts[0]++;
+                        bandwidths[0] += bpsIn;
+                    } else {
+                        peerCounts[1]++;
+                        bandwidths[1] += bpsOut;
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -996,7 +1071,7 @@ public class PeerHelper extends HelperBase {
 
     private static final String formatKBps(int bps) {
         if (bps < 5) {return "0";}
-        synchronized (_fmt) {return _fmt.format((float)bps/1000);}
+        synchronized (_fmt) {return _fmt.format((float)bps/1024);}
     }
 
 }
