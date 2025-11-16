@@ -140,9 +140,7 @@ public class NetDbCachingJob extends JobImpl {
         @Override
         public void timeReached() {
             boolean reverseDnsEnabled = _ctx.getBooleanProperty("routerconsole.enableReverseLookups");
-            String introProp = _ctx.getProperty("routerconsole.enableIntroducerPrecaching");
-            boolean introducerEnabled = introProp == null || introProp.trim().isEmpty() ||
-                                        introProp.equals("true");
+            boolean introducerEnabled = _ctx.getBooleanProperty("routerconsole.enableIntroducerPrecaching");
 
             NetDbCachingJob job = new NetDbCachingJob(_ctx, reverseDnsEnabled, introducerEnabled);
             _ctx.jobQueue().addJob(job);
