@@ -295,7 +295,7 @@ public class InNetMessagePool implements Service {
                 if (arr > 10) {
                     long timeSinceSent = _context.clock().now() - arr;
                     if (_log.shouldWarn())
-                        _log.warn("Dropping unhandled DeliveryStatusMessage " + messageBody);
+                        _log.warn("Dropping unhandled DeliveryStatusMessage" + messageBody);
                     _context.statManager().addRateData("inNetPool.droppedDeliveryStatusDelay", timeSinceSent);
                 }
                 break;
@@ -305,7 +305,7 @@ public class InNetMessagePool implements Service {
                 break;
             case DatabaseLookupMessage.MESSAGE_TYPE:
                 if (_log.shouldDebug())
-                    _log.debug("Dropping NetDb lookup due to throttling");
+                    _log.debug("Dropping NetDb lookup due to throttling...");
                 break;
             default:
                 if (_log.shouldWarn()) {

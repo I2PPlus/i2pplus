@@ -18,9 +18,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.southernstorm.noise.protocol.ChaChaPolyCipherState;
 
@@ -868,7 +870,7 @@ class EstablishmentManager {
         if (state != null && isPeerBanned(state)) {return;}
         try {state.receiveSessionConfirmed(packet);}
         catch (GeneralSecurityException gse) {
-            if (state != null && !isPeerBanned(state)) {
+            if (state != null && !isPeerBanned(state) && !shouldSuppressException(gse)) {
                 if (_log.shouldDebug()) {
                     _log.warn("[SSU2] Received CORRUPT SessionConfirmed \n* Router: " + state, gse);
                 } else if (_log.shouldWarn()) {
@@ -903,9 +905,9 @@ class EstablishmentManager {
         if (state != null && isPeerBanned(state)) {return;}
         try {state.receiveSessionCreated(packet);}
         catch (GeneralSecurityException gse) {
-            if (_log.shouldDebug()) {
+            if (_log.shouldDebug() && !shouldSuppressException(gse)) {
                 _log.warn("[SSU2] Received CORRUPT SessionCreated \n* Router: " + state, gse);
-            } else if (_log.shouldWarn()) {
+            } else if (_log.shouldWarn() && !shouldSuppressException(gse)) {
                 _log.warn("[SSU2] Received CORRUPT SessionCreated \n* Router: " + state + "\n* " + gse.getMessage());
             }
             _outboundStates.remove(state.getRemoteHostId());
@@ -929,9 +931,9 @@ class EstablishmentManager {
         if (state != null && isPeerBanned(state)) {return;}
         try {state.receiveRetry(packet);}
         catch (GeneralSecurityException gse) {
-            if (_log.shouldDebug()) {
+            if (_log.shouldDebug() && !shouldSuppressException(gse)) {
                 _log.warn("[SSU2] Received CORRUPT Retry \n* Router: " + state, gse);
-            } else if (_log.shouldWarn()) {
+            } else if (_log.shouldWarn() && !shouldSuppressException(gse)) {
                 _log.warn("[SSU2] Received CORRUPT Retry \n* Router: " + state + "\n* " + gse.getMessage());
             }
             _outboundStates.remove(state.getRemoteHostId());
@@ -1759,7 +1761,7 @@ class EstablishmentManager {
             }
             // check signature below
         } catch (Exception e) {
-            if (_log.shouldWarn()) {_log.warn("[SSU2] BAD HolePunch packet:\n" + HexDump.dump(data, off, len), e);}
+            if (_log.shouldWarn() && !shouldSuppressException(e)) {_log.warn("[SSU2] BAD HolePunch packet:\n" + HexDump.dump(data, off, len), e);}
             return;
         } finally {chacha.destroy();}
 
@@ -2825,6 +2827,34 @@ class EstablishmentManager {
                 _transport.getIntroManager().cleanup();
             }
         }
+    }
+
+    /**
+     * Determines whether the given Throwable (or any of its causes)
+     * contains a message that should be suppressed from logging.
+     *
+     * @param t the Throwable to check
+     * @return true if the exception should be suppressed, false otherwise
+     * @since 0.9.68+
+     */
+    private boolean shouldSuppressException(Throwable t) {
+        Set<String> suppressionPatterns = new HashSet<>(Arrays.asList(
+            "Old and slow",
+            "RouterInfo store fail"
+        ));
+
+        while (t != null) {
+            String message = t.getMessage();
+            if (message != null) {
+                for (String pattern : suppressionPatterns) {
+                    if (message.contains(pattern)) {
+                        return true;
+                    }
+                }
+            }
+            t = t.getCause();
+        }
+        return false;
     }
 
     public static String parseReason(int reasonCode) {
