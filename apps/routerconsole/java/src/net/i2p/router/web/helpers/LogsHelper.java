@@ -231,6 +231,7 @@ public class LogsHelper extends HelperBase {
                         !line.contains("ContextHandler") &&
                         !line.contains("AbstractConnector") &&
                         !line.contains("I2PSessionException") &&
+                        !line.contains("LOCAL LeaseSet for") &&
                         !line.contains("info_hash") &&
                         !line.contains("\\.\\.\\..*?more\n") &&
                         !line.contains("at net.i2p") &&
