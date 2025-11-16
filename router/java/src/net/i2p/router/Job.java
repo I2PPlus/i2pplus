@@ -31,13 +31,6 @@ public interface Job {
     public void runJob();
 
     /**
-     *  @deprecated
-     *  @return null always
-     */
-    @Deprecated
-    public Exception getAddedBy();
-
-    /**
      * the router is extremely overloaded, so this job has been dropped.  if for
      * some reason the job *must* do some cleanup / requeueing of other tasks, it
      * should do so here.

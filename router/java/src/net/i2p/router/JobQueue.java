@@ -508,10 +508,6 @@ public class JobQueue {
         public long getJobId() {return POISON_ID;}
         public JobTiming getTiming() {return null;}
         public void runJob() {}
-
-        @SuppressWarnings("deprecation")
-        public Exception getAddedBy() {return null;}
-
         public void dropped() {}
     }
 

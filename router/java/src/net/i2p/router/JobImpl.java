@@ -42,14 +42,6 @@ public abstract class JobImpl implements Job {
         return buf.toString();
     }
 
-    /**
-     *  @deprecated
-     *  @return null always
-     */
-    @Deprecated
-    @SuppressWarnings("deprecation")
-    public Exception getAddedBy() { return null; }
-
     public long getMadeReadyOn() { return _madeReadyOn; }
 
     /**
