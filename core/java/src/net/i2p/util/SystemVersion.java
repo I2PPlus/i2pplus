@@ -6,6 +6,7 @@ package net.i2p.util;
 
 import com.sun.management.OperatingSystemMXBean;
 import java.lang.management.ManagementFactory;
+import java.lang.management.ThreadMXBean;
 import java.lang.reflect.Field;
 import java.util.TimeZone;
 import java.util.TreeSet;
@@ -598,6 +599,18 @@ public abstract class SystemVersion {
             if (sysLoad < 0) {return 0;}
             else {return sysLoad;}
         }
+    }
+
+    /**
+     * Returns the current number of active (live) threads in the JVM.
+     * This includes both daemon and non-daemon threads.
+     * @return the estimated number of active threads, or 0 if context or stat manager is unavailable
+     * @since 0.9.68+
+     */
+    public static int getActiveThreads() {
+        if (_ctx == null || _ctx.statManager() == null) {return 0;}
+        ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
+        return threadMXBean.getThreadCount();
     }
 
     /**

@@ -35,29 +35,27 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
         // NOTE TO TRANSLATORS - each of these phrases is a description for a statistic
         // to be displayed on /stats.jsp and in the graphs on /graphs.jsp.
         // Please keep relatively short so it will fit on the graphs.
+        _maxMemory = Runtime.getRuntime().maxMemory();
+        sm.createRateStat("clock.skew", _x("Clock step adjustment (ms)"), "Router", new long[] { 60*1000, 3*60*60*1000, 24*60*60*1000 });
+        sm.createRateStat("router.tunnelBacklog", _x("Size of tunnel acceptor backlog"), "Tunnels", new long[] { 60*1000, 60*60*1000 });
         sm.createRequiredRateStat("bw.receiveBps", _x("Message receive rate (B/s)"), "Router", new long[] { 60*1000, 5*60*1000, 60*60*1000 });
+        sm.createRequiredRateStat("bw.recvRate", _x("Low-level receive rate (B/s)"), "Router", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l });
         sm.createRequiredRateStat("bw.sendBps", _x("Message send rate (B/s)"), "Router", new long[] { 60*1000, 5*60*1000, 60*60*1000 });
         sm.createRequiredRateStat("bw.sendRate", _x("Low-level send rate (B/s)"), "Router", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l });
-        sm.createRequiredRateStat("bw.recvRate", _x("Low-level receive rate (B/s)"), "Router", new long[] { 60*1000l, 5*60*1000l, 60*60*1000l });
-        sm.createRequiredRateStat("router.knownPeers", _x("Total peers in our NetDb"), "Router", new long[] { 60*1000 });
         sm.createRequiredRateStat("router.activePeers", _x("Peers active in the last minute"), "Router", new long[] { 60*1000 });
-        sm.createRequiredRateStat("router.highCapacityPeers", _x("Known high capacity peers"), "Router", new long[] { 60*1000 });
         sm.createRequiredRateStat("router.activeSendPeers", _x("Peers sent to in the last minute"), "Router", new long[] { 60*1000 });
-        sm.createRequiredRateStat("router.fastPeers", _x("Known fast peers"), "Router", new long[] { 60*1000 });
-        sm.createRequiredRateStat("router.integratedPeers", _x("Known integrated (floodfill) peers"), "Router", new long[] { 60*1000 });
         sm.createRequiredRateStat("router.bannedPeers", _x("Total peers in our banlist"), "Router", new long[] { 60*1000 });
-        sm.createRequiredRateStat("router.unreachablePeers", _x("Peers without a published IP address"), "Router", new long[] { 60*1000 });
-        sm.createRateStat("router.tunnelBacklog", _x("Size of tunnel acceptor backlog"), "Tunnels", new long[] { 60*1000, 60*60*1000 });
-        sm.createRateStat("clock.skew", _x("Clock step adjustment (ms)"), "Router", new long[] { 60*1000, 3*60*60*1000, 24*60*60*1000 });
-        _maxMemory = Runtime.getRuntime().maxMemory();
-//        String legend = "(Bytes)";
-        String legend = "";
-        if (_maxMemory < Long.MAX_VALUE)
-            legend += "Maximum allocated to the JVM is " + DataHelper.formatSize(_maxMemory) + 'B';
-        // router.memoryUsed currently has the max size in the description so it can't be tagged
-        sm.createRequiredRateStat("router.memoryUsed", legend, "Router", new long[] { 60*1000 });
         sm.createRequiredRateStat("router.cpuLoad", _x("CPU load average of the JVM"), "Router", new long[] { 60*1000 });
+        sm.createRequiredRateStat("router.fastPeers", _x("Known fast peers"), "Router", new long[] { 60*1000 });
+        sm.createRequiredRateStat("router.highCapacityPeers", _x("Known high capacity peers"), "Router", new long[] { 60*1000 });
+        sm.createRequiredRateStat("router.integratedPeers", _x("Known integrated (floodfill) peers"), "Router", new long[] { 60*1000 });
+        sm.createRequiredRateStat("router.knownPeers", _x("Total peers in our NetDb"), "Router", new long[] { 60*1000 });
+        sm.createRequiredRateStat("router.activeThreads", _x("Total number of threads in use"), "Router", new long[] { 60*1000 });
+        sm.createRequiredRateStat("router.unreachablePeers", _x("Peers without a published IP address"), "Router", new long[] { 60*1000 });
         sm.createRequiredRateStat("tunnel.tunnelBuildSuccessAvg", _x("Average tunnel build success %"), "Tunnels", new long[] { 60*1000, 10*60*1000, 60*60*1000, 24*60*60*1000 });
+        String legend = "";
+        if (_maxMemory < Long.MAX_VALUE) {legend += "Maximum allocated to the JVM is " + DataHelper.formatSize(_maxMemory) + 'B';}
+        sm.createRequiredRateStat("router.memoryUsed", legend, "Router", new long[] { 60*1000 });
     }
 
     public void timeReached() {
@@ -92,11 +90,11 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
         sm.addRateData("router.tunnelBacklog", _ctx.tunnelManager().getInboundBuildQueueSize(), 60*1000);
         long used = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
         sm.addRateData("router.memoryUsed", used);
-        if (_maxMemory - used < LOW_MEMORY_THRESHOLD)
-            Router.clearCaches();
+        if (_maxMemory - used < LOW_MEMORY_THRESHOLD) {Router.clearCaches();}
 
         sm.addRateData("router.cpuLoad", (long) SystemVersion.getCPULoad());
-        sm.addRateData("tunnel.tunnelBuildSuccessAvg", (long)SystemVersion.getTunnelBuildSuccess());
+        sm.addRateData("tunnel.tunnelBuildSuccessAvg", (long) SystemVersion.getTunnelBuildSuccess());
+        sm.addRateData("router.activeThreads", (int) SystemVersion.getActiveThreads());
 
         _ctx.tunnelDispatcher().updateParticipatingStats(Router.COALESCE_TIME);
 
