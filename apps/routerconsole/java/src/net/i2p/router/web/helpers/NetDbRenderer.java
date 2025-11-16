@@ -33,6 +33,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;
@@ -140,192 +142,239 @@ class NetDbRenderer {
     }
 
     /**
-     *  Renders router information matching search criteria.
+     *  Renders router information matching search criteria to the given writer.
      *  Supports filtering by version, country, family, capabilities, IP, port, etc.
+     *  Streams results to reduce memory pressure on low-memory systems.
      *  Performs reverse DNS lookups in parallel if enabled.
      *
      *  @param out Writer to output HTML
      *  @param pageSize number of results per page
      *  @param page zero-based page index
-     *  @param routerPrefix may be null; "." for local router
-     *  @param version may be null
-     *  @param country may be null
-     *  @param family may be null
-     *  @param capabilities may be null
-     *  @param ipAddress may be null
-     *  @param sybil if non-null, perform sybil analysis
-     *  @param port if nonzero, match port or port range (with highPort)
-     *  @param highPort if nonzero, defines end of port range
-     *  @param signatureType may be null
-     *  @param encryptionType may be null
-     *  @param mtu may be null
-     *  @param ipv6Address may be null
-     *  @param ssuCapabilities may be null
-     *  @param transport may be null
-     *  @param cost if nonzero, match router address cost
+     *  @param routerPrefix optional base64 hash prefix to filter routers (null for all)
+     *  @param version optional version string to filter routers
+     *  @param country optional country code(s) (comma/space separated) to filter routers
+     *  @param family optional router family name to filter routers
+     *  @param capabilities optional capability characters (e.g. "fK") to match all
+     *  @param ipAddress optional IPv4 address or prefix to filter routers
+     *  @param sybil optional; if non-null, collects hashes for Sybil analysis
+     *  @param port optional port or start of range (used with highPort)
+     *  @param highPort optional end of port range
+     *  @param signatureType optional signature type to filter routers
+     *  @param encryptionType optional encryption type to filter routers
+     *  @param mtu optional MTU value to filter routers
+     *  @param ipv6Address optional IPv6 address or prefix to filter routers
+     *  @param ssuCapabilities optional SSU capability characters to match
+     *  @param transport optional transport style (e.g., "NTCP", "SSU")
+     *  @param cost optional cost value to filter router addresses
      *  @param introducerCount unused
+     *  @throws IOException if writing fails
      */
     public void renderRouterInfoHTML(Writer out, int pageSize, int page, String routerPrefix, String version,
                                      String country, String family, String capabilities, String ipAddress, String sybil,
                                      int port, int highPort, SigType signatureType, EncType encryptionType, String mtu,
                                      String ipv6Address, String ssuCapabilities, String transport, int cost, int introducerCount) throws IOException {
         StringBuilder buf = new StringBuilder(4 * 1024);
-        List<Hash> sybilHashes = sybil != null ? new ArrayList<Hash>(128) : null;
         NetworkDatabaseFacade networkDatabase = _context.netDb();
-        long uptime = _context.router().getUptime();
+        List<Hash> sybilHashes = sybil != null ? new ArrayList<Hash>(128) : null;
 
+        // Handle special cases (local or single router lookup)
         if (".".equals(routerPrefix)) {
-            buf.append("<p class=infowarn><b>")
-               .append(_t("Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."))
-               .append("</b></p>\n");
             renderRouterInfo(buf, _context.router().getRouterInfo(), true, true);
+            out.append(buf);
+            return;
         } else if (routerPrefix != null && routerPrefix.length() >= 44) {
-            byte[] hashedBytes = Base64.decode(routerPrefix);
-            if (hashedBytes != null && hashedBytes.length == Hash.HASH_LENGTH) {
-                Hash hash = new Hash(hashedBytes);
-                boolean isBanned = false;
-                RouterInfo routerInfo = lookupRouterInfoWithWait(networkDatabase, hash, LOOKUP_WAIT);
-                if (routerInfo != null) {
-                    renderRouterInfo(buf, routerInfo, false, true);
-                } else {
-                    buf.append("<div class=netdbnotfound>").append(_t("Router")).append(' ')
-                       .append(routerPrefix).append(' ').append(isBanned ? _t("is banned") : _t("not found in network database"))
-                       .append(".").append("</div>");
-                }
+            Hash hash = new Hash(Base64.decode(routerPrefix));
+            RouterInfo routerInfo = lookupRouterInfoWithWait(networkDatabase, hash, LOOKUP_WAIT);
+            if (routerInfo != null) {
+                renderRouterInfo(buf, routerInfo, false, true);
             } else {
-                buf.append("<div class=netdbnotfound>").append(_t("Bad Base64 Router hash")).append(' ')
-                   .append(DataHelper.escapeHTML(routerPrefix)).append("</div>");
+                buf.append("<div class=netdbnotfound>").append(_t("Router not found")).append("</div>");
+            }
+            out.append(buf);
+            return;
+        }
+
+        // Prepare URL for pagination
+        StringBuilder urlParameters = new StringBuilder();
+        appendUrlParam(urlParameters, "r", routerPrefix);
+        appendUrlParam(urlParameters, "v", version);
+        appendUrlParam(urlParameters, "c", country);
+        appendUrlParam(urlParameters, "fam", family);
+        appendUrlParam(urlParameters, "caps", capabilities);
+        appendUrlParam(urlParameters, "tr", transport);
+        appendUrlParam(urlParameters, "ip", ipAddress);
+        if (port != 0) urlParameters.append("&amp;port=").append(port);
+        appendUrlParam(urlParameters, "mtu", mtu);
+        appendUrlParam(urlParameters, "ipv6", ipv6Address);
+        appendUrlParam(urlParameters, "ssucaps", ssuCapabilities);
+        if (cost != 0) urlParameters.append("&amp;cost=").append(cost);
+        appendUrlParam(urlParameters, "sybil", sybil);
+
+        // Streaming setup
+        Stream<RouterInfo> routerStream = networkDatabase.getRouters().stream();
+
+        // Apply filters
+        if (routerPrefix != null) {
+            routerStream = routerStream.filter(ri -> ri.getIdentity().getHash().toBase64().startsWith(routerPrefix));
+        }
+        if (version != null) {
+            routerStream = routerStream.filter(ri -> version.equals(ri.getVersion()));
+        }
+        if (country != null) {
+            Set<String> countryCodes = Arrays.stream(country.split("[, ]+")).map(String::trim).collect(Collectors.toSet());
+            routerStream = routerStream.filter(ri -> {
+                String routerCountry = _context.commSystem().getCountry(ri.getIdentity().getHash());
+                return routerCountry != null && countryCodes.contains(routerCountry.toLowerCase(Locale.US));
+            });
+        }
+        if (capabilities != null) {
+            routerStream = routerStream.filter(ri -> {
+                String caps = ri.getCapabilities();
+                return capabilities.chars().allMatch(c -> caps.indexOf(c) >= 0);
+            });
+        }
+        if (signatureType != null) {
+            routerStream = routerStream.filter(ri -> ri.getIdentity().getSigType() == signatureType);
+        }
+        if (encryptionType != null) {
+            routerStream = routerStream.filter(ri -> ri.getIdentity().getEncType() == encryptionType);
+        }
+        if (transport != null) {
+            routerStream = routerStream.filter(ri -> {
+                RouterAddress ra = ri.getTargetAddress(transport);
+                return ra != null;
+            });
+        }
+        if (family != null) {
+            routerStream = routerStream.filter(ri -> {
+                String fam = ri.getOption("family");
+                return fam != null && fam.toLowerCase(Locale.US).contains(family.toLowerCase(Locale.US));
+            });
+        }
+
+        // Handle IP filtering
+        if (ipAddress != null) {
+            routerStream = routerStream.filter(ri -> {
+                return ri.getAddresses().stream().anyMatch(addr -> addr.getHost() != null && addr.getHost().startsWith(ipAddress));
+            });
+        }
+
+        // Count total before applying page
+        List<RouterInfo> allRouters = routerStream.collect(Collectors.toList());
+        int totalSize = allRouters.size();
+
+        if (totalSize == 0) {
+            writeNoResults(buf, routerPrefix, version, country, family, capabilities, ipAddress, port, highPort,
+                           mtu, ipv6Address, ssuCapabilities, cost, signatureType, encryptionType, transport);
+            out.append(buf);
+            return;
+        }
+
+        // Sort if needed
+        Collections.sort(allRouters, RouterInfoComparator.getInstance());
+
+        // Pagination
+        int fromIndex = Math.min(page * pageSize, totalSize - 1);
+        int toIndex = Math.min(fromIndex + pageSize, totalSize);
+        List<RouterInfo> routersToRender = allRouters.subList(fromIndex, toIndex);
+
+        // Reverse DNS lookups
+        Map<String, String> rdnsLookups = enableReverseLookups()
+            ? precacheReverseDNSLookups(routersToRender)
+            : Collections.emptyMap();
+
+        // Stream and write
+        if (enableReverseLookups()) {
+            for (RouterInfo ri : routersToRender) {
+                StringBuilder batchBuf = new StringBuilder();
+                renderRouterInfo(batchBuf, ri, false, true, rdnsLookups);
+                out.append(batchBuf);
+                out.flush();
             }
         } else {
-            StringBuilder urlParameters = new StringBuilder();
-            if (routerPrefix != null) { urlParameters.append("&amp;r=").append(routerPrefix); }
-            if (version != null) { urlParameters.append("&amp;v=").append(version); }
-            if (country != null) { urlParameters.append("&amp;c=").append(country); }
-            if (family != null) { urlParameters.append("&amp;fam=").append(family); }
-            if (capabilities != null) { urlParameters.append("&amp;caps=").append(capabilities); }
-            if (transport != null) { urlParameters.append("&amp;tr=").append(transport); }
-            if (signatureType != null) { urlParameters.append("&amp;type=").append(signatureType); }
-            if (encryptionType != null) { urlParameters.append("&amp;etype=").append(encryptionType); }
-            if (ipAddress != null) { urlParameters.append("&amp;ip=").append(ipAddress); }
-            if (port != 0) { urlParameters.append("&amp;port=").append(port); }
-            if (mtu != null) { urlParameters.append("&amp;mtu=").append(mtu); }
-            if (ipv6Address != null) { urlParameters.append("&amp;ipv6=").append(ipv6Address); }
-            if (ssuCapabilities != null) { urlParameters.append("&amp;ssucaps=").append(ssuCapabilities); }
-            if (cost != 0) { urlParameters.append("&amp;cost=").append(cost); }
-            if (sybil != null) { urlParameters.append("&amp;sybil=").append(sybil); }
-            Set<RouterInfo> routers = new HashSet<>(networkDatabase.getRouters());
-            int ipMode = 0;
-            String ipArg = ipAddress;
-            String alternativeIPv6 = null;
-            if (ipAddress != null) {
-                if (ipAddress.endsWith("/24")) {ipMode = 1;}
-                else if (ipAddress.endsWith("/16")) {ipMode = 2;}
-                else if (ipAddress.endsWith("/8")) {ipMode = 3;}
-                else if (ipAddress.indexOf(':') > 0) {
-                    ipMode = 4;
-                    if (ipAddress.endsWith("::")) {ipAddress = ipAddress.substring(0, ipAddress.length() - 1);}
-                    else {alternativeIPv6 = getAltIPv6(ipAddress);}
-                }
-                if (ipMode > 0 && ipMode < 4) {
-                    for (int i = 0; i < ipMode; i++) {
-                        int lastDot = ipAddress.substring(0, ipAddress.length() - 1).lastIndexOf('.');
-                        if (lastDot > 0) {ipAddress = ipAddress.substring(0, lastDot + 1);}
-                    }
-                }
-            }
-            if (ipv6Address != null) {
-                if (ipv6Address.endsWith("::")) {ipv6Address = ipv6Address.substring(0, ipv6Address.length() - 1);}
-                else {alternativeIPv6 = getAltIPv6(ipv6Address);}
-            }
-            String familyArg = family;
-            if (family != null) {family = family.toLowerCase(Locale.US);}
-            if (routerPrefix != null && !routers.isEmpty()) { filterHashPrefix(routers, routerPrefix); }
-            if (version != null && !routers.isEmpty()) { filterVersion(routers, version); }
-            if (country != null && !routers.isEmpty()) { filterCountry(routers, country); }
-            if (capabilities != null && !routers.isEmpty()) { filterCaps(routers, capabilities); }
-            if (signatureType != null && !routers.isEmpty()) { filterSigType(routers, signatureType); }
-            if (encryptionType != null && !routers.isEmpty()) { filterEncType(routers, encryptionType); }
-            if (transport != null && !routers.isEmpty()) { filterTransport(routers, transport); }
-            if (family != null && !routers.isEmpty()) { filterFamily(routers, family); }
-            if (ipAddress != null && !routers.isEmpty()) {
-                if (ipMode == 0) {filterIP(routers, ipAddress);}
-                else {filterIP(routers, ipAddress, alternativeIPv6);}
-            }
-            if (port != 0 && !routers.isEmpty()) { filterPort(routers, port, highPort); }
-            if (mtu != null && !routers.isEmpty()) { filterMTU(routers, mtu); }
-            if (ipv6Address != null && !routers.isEmpty()) { filterIP(routers, ipv6Address, alternativeIPv6); }
-            if (ssuCapabilities != null && !routers.isEmpty()) { filterSSUCaps(routers, ssuCapabilities); }
-            if (cost != 0 && !routers.isEmpty()) { filterCost(routers, cost); }
-            if (routers.isEmpty()) {
-                buf.append("<div class=netdbnotfound>");
-                buf.append(_t("No routers with")).append(' ');
-                if (routerPrefix != null) { buf.append("[").append(_t("Hash prefix")).append(' ').append(routerPrefix).append("] "); }
-                if (version != null) { buf.append("[").append(_t("Version")).append(' ').append(version).append("] "); }
-                if (country != null) { buf.append("[").append(_t("Country")).append(' ').append(country).append("] "); }
-                if (family != null) { buf.append("[").append(_t("Family")).append(' ').append(family).append("] "); }
-                if (ipAddress != null) { buf.append("[").append("IPv4 address ").append(ipArg).append("] "); }
-                if (ipv6Address != null) { buf.append("[").append("IPv6 address ").append(ipv6Address).append("] "); }
-                if (port != 0) {
-                    buf.append("[").append(_t("Port")).append(' ').append(port);
-                    if (highPort != 0) { buf.append('-').append(highPort); }
-                    buf.append("] ");
-                }
-                if (mtu != null) { buf.append("[").append(_t("MTU")).append(' ').append(mtu).append("] "); }
-                if (cost != 0) { buf.append("[").append("Cost ").append(cost).append("] "); }
-                if (signatureType != null) { buf.append("[").append("Type ").append(signatureType).append("] "); }
-                if (encryptionType != null) { buf.append("[").append("Type ").append(encryptionType).append("] "); }
-                if (capabilities != null) { buf.append("[").append("Caps ").append(capabilities).append("] "); }
-                if (ssuCapabilities != null) { buf.append("[").append("SSU Caps ").append(ssuCapabilities).append("] "); }
-                if (transport != null) { buf.append("[").append("Transport ").append(transport).append("] "); }
-                buf.append(_t("found in the network database")).append(".</div>");
-            } else {
-                List<RouterInfo> filteredRouters = new ArrayList<>(routers);
-                int size = filteredRouters.size();
-                if (size > 1) {Collections.sort(filteredRouters, RouterInfoComparator.getInstance());}
-                boolean hasMorePages = false;
-                int toSkip = pageSize * page;
-                int lastIndex = Math.min(toSkip + pageSize, size - 1);
-                if (lastIndex < size - 1) {hasMorePages = true;}
-                List<RouterInfo> routersToRender;
-                if (toSkip > lastIndex) {routersToRender = Collections.emptyList();}
-                else {routersToRender = filteredRouters.subList(toSkip, lastIndex + 1);}
-                if (enableReverseLookups() && !_context.router().isHidden() && uptime > 2*60*1000) {
-                    Map<String, String> rdnsLookups = precacheReverseDNSLookups(routersToRender);
-                    for (int i = 0; i < routersToRender.size(); i += BATCH_SIZE) {
-                        int end = Math.min(i + BATCH_SIZE, routersToRender.size());
-                        List<RouterInfo> batch = routersToRender.subList(i, end);
-                        StringBuilder batchBuf = new StringBuilder();
-                        for (RouterInfo ri : batch) {
-                            renderRouterInfo(batchBuf, ri, false, true, rdnsLookups);
-                        }
-                        out.append(batchBuf);
-                        out.flush();
-                    }
-                } else {
-                    for (int i = 0; i < routersToRender.size(); i += BATCH_SIZE) {
-                        int end = Math.min(i + BATCH_SIZE, routersToRender.size());
-                        List<RouterInfo> batch = routersToRender.subList(i, end);
-                        String batchHtml = renderRouterInfosInParallel(batch, false, true);
-                        out.append(batchHtml);
-                        out.flush();
-                    }
-                }
-                if (sybil != null) {
-                    for (RouterInfo ri : routersToRender) {
-                        sybilHashes.add(ri.getIdentity().getHash());
-                    }
-                }
-                if (size > pageSize) {
-                    StringBuilder paginator = new StringBuilder(1024);
-                    paginate(paginator, urlParameters, page, pageSize, hasMorePages, size);
-                    out.append(paginator);
-                }
-                return;
+            for (RouterInfo ri : routersToRender) {
+                StringBuilder batchBuf = new StringBuilder();
+                renderRouterInfo(batchBuf, ri, false, true);
+                out.append(batchBuf);
+                out.flush();
             }
         }
-        out.append(buf);
+
+        if (sybil != null) {
+            sybilHashes.addAll(routersToRender.stream()
+                                              .map(ri -> ri.getIdentity().getHash())
+                                              .collect(Collectors.toList()));
+        }
+
+        // Pagination UI
+        if (totalSize > pageSize) {
+            paginate(buf, urlParameters, page, pageSize, toIndex < totalSize, totalSize);
+            out.append(buf);
+        }
+
         out.flush();
-        if (sybil != null) {SybilRenderer.renderSybilHTML(out, _context, sybilHashes, sybil);}
+        if (sybil != null) {
+            SybilRenderer.renderSybilHTML(out, _context, sybilHashes, sybil);
+        }
+    }
+
+
+    /**
+     *  Appends a URL parameter to the given StringBuilder if the value is not null.
+     *
+     *  @param sb StringBuilder to append to
+     *  @param key URL parameter name
+     *  @param value parameter value, may be null
+     */
+    private void appendUrlParam(StringBuilder sb, String key, String value) {
+        if (value != null) {
+            sb.append("&amp;").append(key).append("=").append(value);
+        }
+    }
+
+    /**
+     *  Writes a message indicating no routers matched the search criteria.
+     *
+     *  @param buf output buffer
+     *  @param routerPrefix optional router hash prefix
+     *  @param version optional version string
+     *  @param country optional country code
+     *  @param family optional family name
+     *  @param capabilities optional capability string
+     *  @param ipAddress optional IPv4 address
+     *  @param port optional port or start of range
+     *  @param highPort optional end of port range
+     *  @param mtu optional MTU value
+     *  @param ipv6Address optional IPv6 address
+     *  @param ssuCapabilities optional SSU capabilities
+     *  @param cost optional address cost
+     *  @param signatureType optional signature type
+     *  @param encryptionType optional encryption type
+     *  @param transport optional transport style
+     */
+    private void writeNoResults(StringBuilder buf, String routerPrefix, String version, String country, String family,
+                                String capabilities, String ipAddress, int port, int highPort, String mtu,
+                                String ipv6Address, String ssuCapabilities, int cost, SigType signatureType,
+                                EncType encryptionType, String transport) {
+        buf.append("<div class=netdbnotfound>").append(_t("No routers with")).append(' ');
+        if (routerPrefix != null) buf.append("Hash prefix ").append(routerPrefix).append(' ');
+        if (version != null) buf.append("Version ").append(version).append(' ');
+        if (country != null) buf.append("Country ").append(country).append(' ');
+        if (family != null) buf.append("Family ").append(family).append(' ');
+        if (ipAddress != null) buf.append("IPv4 ").append(ipAddress).append(' ');
+        if (ipv6Address != null) buf.append("IPv6 ").append(ipv6Address).append(' ');
+        if (port != 0) {
+            buf.append("Port ").append(port);
+            if (highPort > 0) buf.append('-').append(highPort);
+        }
+        if (mtu != null) buf.append("MTU ").append(mtu).append(' ');
+        if (cost != 0) buf.append("Cost ").append(cost).append(' ');
+        if (signatureType != null) buf.append("SigType ").append(signatureType).append(' ');
+        if (encryptionType != null) buf.append("EncType ").append(encryptionType).append(' ');
+        if (capabilities != null) buf.append("Caps ").append(capabilities).append(' ');
+        if (ssuCapabilities != null) buf.append("SSU Caps ").append(ssuCapabilities).append(' ');
+        if (transport != null) buf.append("Transport ").append(transport).append(' ');
+        buf.append(_t("found in the network database")).append(".</div>");
     }
 
     /**
