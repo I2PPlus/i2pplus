@@ -231,59 +231,43 @@ public class PersistentDataStore extends TransientDataStore {
         }
 
         public void run() {
-            if (isShuttingDown(_context)) {return;}
-
+            if (isShuttingDown(_context)) return;
             _quit = false;
-            Hash key = null;
-            DatabaseEntry data = null;
-            int count = 0;
-            int lastCount = 0;
-            long startTime = 0;
-            while (true) {
-                // get a new iterator every time to get a random entry without
-                // having concurrency issues or copying to a List or Array
+            long startTime = _context.clock().now();
+            while (!_quit) {
+                int written = 0;
+                List<Map.Entry<Hash, DatabaseEntry>> toWrite = new ArrayList<>();
                 Iterator<Map.Entry<Hash, DatabaseEntry>> iter = _keys.entrySet().iterator();
-                try {
-                    Map.Entry<Hash, DatabaseEntry> entry = iter.next();
-                    key = entry.getKey();
-                    data = entry.getValue();
-                    iter.remove();
-                    count++;
-                } catch (NoSuchElementException nsee) {
-                    lastCount = count;
-                    count = 0;
-                } catch (IllegalStateException ise) {
-                    lastCount = count;
-                    count = 0;
+                while (iter.hasNext() && written < WRITE_LIMIT) {
+                    try {
+                        Map.Entry<Hash, DatabaseEntry> entry = iter.next();
+                        toWrite.add(entry);
+                        iter.remove();
+                        written++;
+                    } catch (NoSuchElementException | IllegalStateException e) {
+                        break;
+                    }
                 }
-
-                if (key != null) {
+                for (Map.Entry<Hash, DatabaseEntry> entry : toWrite) {
+                    Hash key = entry.getKey();
+                    DatabaseEntry data = entry.getValue();
                     if (data != null) {
-                        // synch with the reader job
-                        synchronized (_dbDir) {write(key, data);}
-                        data = null;
+                        synchronized (_dbDir) { write(key, data); }
                     }
-                    key = null;
                 }
-                if (count >= WRITE_LIMIT) {count = 0;}
-                if (count == 0) {
-                    removeQueued();
-                    if (lastCount > 0) {
-                        long time = _context.clock().now() - startTime;
-                        if (_log.shouldInfo()) {
-                            _log.info(lastCount + " RouterInfo files saved to disk in " + time + "ms");
-                        }
-                        _context.statManager().addRateData("netDb.writeOut", lastCount);
-                        _context.statManager().addRateData("netDb.writeTime", time);
-                        int totalStored = countStoredRIs();
-                        if (_log.shouldInfo()) {_log.info("Total RouterInfos on disk: " + totalStored);}
+                removeQueued();
+                if (written > 0) {
+                    long time = _context.clock().now() - startTime;
+                    if (_log.shouldInfo()) {
+                        _log.info(written + " RouterInfo files saved to disk in " + time + "ms");
                     }
-                    if (_quit) {break;}
-                    synchronized (_waitLock) {
-                        try {_waitLock.wait(WRITE_DELAY);}
-                        catch (InterruptedException ie) {}
-                    }
+                    _context.statManager().addRateData("netDb.writeOut", written);
+                    _context.statManager().addRateData("netDb.writeTime", time);
                     startTime = _context.clock().now();
+                }
+                synchronized (_waitLock) {
+                    try { _waitLock.wait(WRITE_DELAY); }
+                    catch (InterruptedException ie) {}
                 }
             }
         }
