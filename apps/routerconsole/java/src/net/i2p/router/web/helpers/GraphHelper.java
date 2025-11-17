@@ -78,7 +78,7 @@ public class GraphHelper extends FormHandler {
             ConfigRestartBean.getRestartTimeRemaining() < (1000 * (_refreshDelaySeconds + 30)))
             return "";
         // shorten the refresh by 3 seconds so we beat the iframe
-        return "<noscript><meta http-equiv=refresh content=\"" + (_refreshDelaySeconds - 3) + "\"></noscript>";
+        return "<noscript><meta http-equiv=refresh content=" + (_refreshDelaySeconds - 3) + "></noscript>";
     }
 
     public int getRefreshValue() {
@@ -356,8 +356,7 @@ public class GraphHelper extends FormHandler {
         buf.append(" - ");
         buf.append(link(_stat, _showEvents, _periodCount, _end, _width, _height, singleHideLegend));
         buf.append(singleHideLegend ? _t("Show Legend") : _t("Hide Legend"));
-        buf.append("</a>");
-        buf.append("\n</p>\n");
+        buf.append("</a>\n</p>\n");
         return buf.toString();
     }
 
