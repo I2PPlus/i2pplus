@@ -179,17 +179,14 @@ class NetDbRenderer {
 
         // Handle special cases (local or single router lookup)
         if (".".equals(routerPrefix)) {
-            renderRouterInfo(buf, _context.router().getRouterInfo(), true, true);
+            renderRouterInfo(buf, _context.router().getRouterInfo(), true);
             out.append(buf);
             return;
         } else if (routerPrefix != null && routerPrefix.length() >= 44) {
             Hash hash = new Hash(Base64.decode(routerPrefix));
             RouterInfo routerInfo = lookupRouterInfoWithWait(networkDatabase, hash, LOOKUP_WAIT);
-            if (routerInfo != null) {
-                renderRouterInfo(buf, routerInfo, false, true);
-            } else {
-                buf.append("<div class=netdbnotfound>").append(_t("Router not found")).append("</div>");
-            }
+            if (routerInfo != null) {renderRouterInfo(buf, routerInfo, false);}
+            else {buf.append("<div class=netdbnotfound>").append(_t("Router not found")).append("</div>");}
             out.append(buf);
             return;
         }
@@ -283,22 +280,7 @@ class NetDbRenderer {
             ? precacheReverseDNSLookups(routersToRender)
             : Collections.emptyMap();
 
-        // Stream and write
-        if (enableReverseLookups()) {
-            for (RouterInfo ri : routersToRender) {
-                StringBuilder batchBuf = new StringBuilder();
-                renderRouterInfo(batchBuf, ri, false, true, rdnsLookups);
-                out.append(batchBuf);
-                out.flush();
-            }
-        } else {
-            for (RouterInfo ri : routersToRender) {
-                StringBuilder batchBuf = new StringBuilder();
-                renderRouterInfo(batchBuf, ri, false, true);
-                out.append(batchBuf);
-                out.flush();
-            }
-        }
+        renderRoutersToWriter(routersToRender, out, false);
 
         if (sybil != null) {
             sybilHashes.addAll(routersToRender.stream()
@@ -1289,6 +1271,7 @@ class NetDbRenderer {
         boolean full = (mode == 1);
         boolean shortStats = (mode == 2);
         boolean showStats = full || shortStats;
+        boolean isLocal = false;
         Hash us = _context.routerHash();
         Set<RouterInfo> routers = new TreeSet<>(RouterInfoComparator.getInstance());
         routers.addAll(_context.netDb().getRouters());
@@ -1296,7 +1279,8 @@ class NetDbRenderer {
         boolean hasNextPage = routers.size() > offset + pageSize;
         StringBuilder buf = new StringBuilder(8192);
         if (showStats && page == 0) {
-            renderRouterInfo(buf, _context.router().getRouterInfo(), true, true);
+            isLocal = _context.router().getRouterInfo().getIdentity().getHash().equals(us);
+            renderRouterInfo(buf, _context.router().getRouterInfo(), isLocal);
             out.append(buf);
             buf.setLength(0);
         }
@@ -1308,6 +1292,7 @@ class NetDbRenderer {
         if (mode == 1 || mode == 2) {
             for (RouterInfo ri : routers) {
                 Hash key = ri.getIdentity().getHash();
+                isLocal = key != null && key.equals(us);
                 if (!key.equals(us)) {
                     if (skipped < offset) {
                         skipped++;
@@ -1327,7 +1312,7 @@ class NetDbRenderer {
             countFullRouterStats(routers, versions, countries, transportCount);
         }
         if (showStats) {
-            out.append(renderRouterInfosInParallel(pagedRouters, false, full));
+            renderRoutersToWriter(routers, out, isLocal);
             paginate(buf, new StringBuilder("&amp;f=").append(mode), page, pageSize, hasNextPage, routers.size() - 1);
             out.append(buf);
             buf.setLength(0);
@@ -1337,6 +1322,34 @@ class NetDbRenderer {
             buf.setLength(0);
         }
         out.flush();
+    }
+
+    /**
+     * Renders a list of RouterInfo objects to the given Writer.
+     * Uses parallel rendering for small sets (< 300), streams for large sets.
+     */
+    public void renderRoutersToWriter(Collection<RouterInfo> routers, Writer out, boolean isLocal) throws IOException {
+        if (routers == null || routers.isEmpty()) return;
+
+        if (routers.size() <= 300) {
+            // Use parallel rendering
+            out.write(renderRouterInfosInParallel(routers, isLocal));
+        } else {
+            // Stream rendering
+            Map<String, String> rdnsLookups = enableReverseLookups()
+                ? precacheReverseDNSLookups(routers)
+                : Collections.emptyMap();
+            for (RouterInfo ri : routers) {
+                StringBuilder sb = new StringBuilder();
+                if (rdnsLookups.isEmpty()) {
+                    renderRouterInfo(sb, ri, isLocal);
+                } else {
+                    renderRouterInfo(sb, ri, isLocal, rdnsLookups);
+                }
+                out.append(sb);
+                out.flush();
+            }
+        }
     }
 
     /**
@@ -1638,10 +1651,9 @@ class NetDbRenderer {
      *  @param buf output buffer
      *  @param routerInfo the router to render
      *  @param isLocalRouter true if this is the local router
-     *  @param fullDetails true to include full details
      */
-    private void renderRouterInfo(StringBuilder buf, RouterInfo routerInfo, boolean isLocalRouter, boolean fullDetails) {
-        renderRouterInfo(buf, routerInfo, isLocalRouter, fullDetails, null);
+    private void renderRouterInfo(StringBuilder buf, RouterInfo routerInfo, boolean isLocalRouter) {
+        renderRouterInfo(buf, routerInfo, isLocalRouter, null);
     }
 
     /**
@@ -1650,10 +1662,9 @@ class NetDbRenderer {
      *  @param buf output buffer
      *  @param routerInfo the router to render
      *  @param isLocalRouter true if this is the local router
-     *  @param fullDetails true to include full details
      *  @param rdnsLookups map of IP to hostname for reverse DNS, may be null
      */
-    private void renderRouterInfo(StringBuilder buf, RouterInfo routerInfo, boolean isLocalRouter, boolean fullDetails, Map<String, String> rdnsLookups) {
+    private void renderRouterInfo(StringBuilder buf, RouterInfo routerInfo, boolean isLocalRouter, Map<String, String> rdnsLookups) {
         RouterIdentity identity = routerInfo.getIdentity();
         Hash routerHash = routerInfo.getHash();
         String routerHashBase64 = routerHash.toBase64();
@@ -1926,17 +1937,25 @@ class NetDbRenderer {
            .append("</a></span></td></tr>\n");
         if (!isUnreachable) {
             Collection<RouterAddress> addresses = routerInfo.getAddresses();
-            if (addresses != null) {
+            if (addresses != null && !addresses.isEmpty()) {
                 byte[] ipAddress = TransportImpl.getIP(routerHash);
-                if (ipAddress != null) {_context.commSystem().queueLookup(ipAddress);}
+                if (ipAddress != null) {
+                    _context.commSystem().queueLookup(ipAddress);
+                }
+
                 List<RouterAddress> listAddresses = new ArrayList<>(addresses);
-                if (listAddresses.size() > 1) {listAddresses.sort(new RAComparator());}
+                if (listAddresses.size() > 1) {
+                    listAddresses.sort(new RAComparator());
+                }
+
                 boolean hasSSU = false;
                 boolean hasNTCP = false;
                 int introducerTagCount = 0;
-                buf.append("<tr><td><b>")
-                   .append(_t("Addresses"))
-                   .append(":</b></td><td colspan=2 class=netdb_addresses><ul>");
+
+                // Flag to determine if any address has displayable content
+                boolean hasDisplayableAddress = false;
+                StringBuilder addressList = new StringBuilder();
+
                 for (RouterAddress address : listAddresses) {
                     String transportStyle = address.getTransportStyle();
                     if (transportStyle.startsWith("SSU")) hasSSU = true;
@@ -1951,50 +1970,63 @@ class NetDbRenderer {
                     for (Map.Entry<Object, Object> entry : optionsMap.entrySet()) {
                         String key = (String) entry.getKey();
                         String value = (String) entry.getValue();
-                        if (key.equalsIgnoreCase("host")) {host = value;}
-                        else if (key.equalsIgnoreCase("port")) {port = value;}
-                        else if (key.equalsIgnoreCase("mtu")) {mtu = value;}
+                        if (key.equalsIgnoreCase("host")) { host = value; }
+                        else if (key.equalsIgnoreCase("port")) { port = value; }
+                        else if (key.equalsIgnoreCase("mtu")) { mtu = value; }
                     }
 
-                    if (host != null) {
-                        details.append("<span class=\"netdb_info host\">")
-                               .append("<a title=\"")
-                               .append(_t("Show all routers with this address in the NetDb"))
-                               .append("\" ");
-                        if (host.contains(":")) {
-                            details.append("href=\"/netdb?ipv6=")
-                                   .append(host.length() > 8 ? host.substring(0, 4) : host);
-                        } else {
-                            details.append("href=\"/netdb?ip=").append(host);
+                    if (host != null || port != null) {
+                        hasDisplayableAddress = true;
+
+                        if (host != null) {
+                            details.append("<span class=\"netdb_info host\">")
+                                   .append("<a title=\"")
+                                   .append(_t("Show all routers with this address in the NetDb"))
+                                   .append("\" ");
+                            if (host.contains(":")) {
+                                details.append("href=\"/netdb?ipv6=")
+                                       .append(host.length() > 8 ? host.substring(0, 4) : host);
+                            } else {
+                                details.append("href=\"/netdb?ip=").append(host);
+                            }
+                            details.append("\">").append(host).append("</a></span><span class=colon>:</span>");
                         }
-                        details.append("\">").append(host).append("</a></span><span class=colon>:</span>");
-                    }
 
-                    if (port != null) {
-                        details.append("<span class=\"netdb_info port\">")
-                               .append("<a title=\"")
-                               .append(_t("Show all routers with this port in the NetDb"))
-                               .append("\" href=\"/netdb?port=").append(port)
-                               .append("\">").append(port).append("</a></span>");
-                    }
+                        if (port != null) {
+                            details.append("<span class=\"netdb_info port\">")
+                                   .append("<a title=\"")
+                                   .append(_t("Show all routers with this port in the NetDb"))
+                                   .append("\" href=\"/netdb?port=").append(port)
+                                   .append("\">").append(port).append("</a></span>");
+                        }
 
-                    if (mtu != null) {
-                        details.append("&nbsp;<span class=\"netdb_info mtu\" hidden><span title=\"")
-                               .append(_t("Maximum Transimission Unit"))
-                               .append("\">MTU</span>")
-                               .append("<a title=\"")
-                               .append(_t("Show all routers with this MTU in the NetDb"))
-                               .append("\" href=\"/netdb?mtu=").append(mtu)
-                               .append("\">").append(mtu).append("</a></span>");
-                    }
+                        if (mtu != null) {
+                            details.append("&nbsp;<span class=\"netdb_info mtu\" hidden><span title=\"")
+                                   .append(_t("Maximum Transmission Unit"))
+                                   .append("\">MTU</span>")
+                                   .append("<a title=\"")
+                                   .append(_t("Show all routers with this MTU in the NetDb"))
+                                   .append("\" href=\"/netdb?mtu=").append(mtu)
+                                   .append("\">").append(mtu).append("</a></span>");
+                        }
 
-                    if (details.length() > 0) {
-                        buf.append("<li><b class=netdb_transport>")
-                           .append(transportStyle.replace("2", ""))
-                           .append("</b> ")
-                           .append(details)
-                           .append("</li>");
+                        if (details.length() > 0) {
+                            addressList.append("<li><b class=netdb_transport>")
+                                       .append(transportStyle.replace("2", ""))
+                                       .append("</b> ")
+                                       .append(details)
+                                       .append("</li>");
+                        }
                     }
+                }
+
+                // Only append the row if at least one address has displayable info
+                if (hasDisplayableAddress) {
+                    buf.append("<tr><td><b>")
+                       .append(_t("Addresses"))
+                       .append(":</b></td><td colspan=2 class=netdb_addresses><ul>")
+                       .append(addressList)
+                       .append("</ul></td></tr>");
                 }
             }
         } else {
@@ -2094,10 +2126,9 @@ class NetDbRenderer {
      *
      *  @param routerInfos collection of routers to render
      *  @param isLocalRouter true if rendering the local router
-     *  @param fullDetails true for full details
      *  @return concatenated HTML
      */
-    public String renderRouterInfosInParallel(Collection<RouterInfo> routerInfos, boolean isLocalRouter, boolean fullDetails) {
+    public String renderRouterInfosInParallel(Collection<RouterInfo> routerInfos, boolean isLocalRouter) {
         if (routerInfos.size() > BATCH_SIZE) {
             // Fallback: render synchronously in small chunks to avoid OOM
             StringBuilder sb = new StringBuilder();
@@ -2105,7 +2136,7 @@ class NetDbRenderer {
             for (int i = 0; i < list.size(); i += BATCH_SIZE) {
                 int end = Math.min(i + BATCH_SIZE, list.size());
                 for (int j = i; j < end; j++) {
-                    renderRouterInfo(sb, list.get(j), isLocalRouter, fullDetails);
+                    renderRouterInfo(sb, list.get(j), isLocalRouter);
                 }
             }
             return sb.toString();
@@ -2125,7 +2156,7 @@ class NetDbRenderer {
                 futures.add(
                     CompletableFuture.runAsync(() -> {
                         StringBuilder buffer = new StringBuilder();
-                        renderRouterInfo(buffer, routerInfo, isLocalRouter, fullDetails);
+                        renderRouterInfo(buffer, routerInfo, isLocalRouter);
                         synchronized (lock) {
                             fullHtml.append(buffer);
                         }
