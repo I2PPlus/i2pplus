@@ -34,17 +34,16 @@ public class SimpleTimer2 {
         return I2PAppContext.getGlobalContext().simpleTimer2();
     }
 
-    private static final int MAX_THREADS = 64000;
-    private static final int INITIAL_THREADS = 16;
-    private static final int QUEUE_CAPACITY = 1000;
-    private static final long THREAD_KEEP_ALIVE_SECONDS = 30;
+    private static final int MAX_THREADS = 32768;
+    private static final int INITIAL_THREADS = 256;
+    private static final int QUEUE_CAPACITY = 512;
+    private static final long THREAD_KEEP_ALIVE_SECONDS = 20;
     private static final long RESIZE_INTERVAL_MILLIS = 3000;
-    private static final int MAX_THREADS_TO_ADD = 16;
+    private static final int MAX_THREADS_TO_ADD = 4;
 
     private final ScheduledThreadPoolExecutor _executor;
     private final ScheduledExecutorService _resizeScheduler;
     private final String _name;
-    private final AtomicInteger _count = new AtomicInteger();
     private final int _threadsMax;
     private final ReentrantLock _resizeLock = new ReentrantLock();
     private final I2PAppContext _context;
@@ -148,7 +147,7 @@ public class SimpleTimer2 {
     private class CustomThreadFactory implements ThreadFactory {
         public Thread newThread(Runnable r) {
             Thread rv = Executors.defaultThreadFactory().newThread(r);
-            rv.setName(_name + ' ' + _count.incrementAndGet() + '/' + _threadsMax);
+            rv.setName(_name);
             rv.setDaemon(true);
             return rv;
         }
@@ -157,7 +156,8 @@ public class SimpleTimer2 {
     private int calculateNewPoolSize(int poolSize, int queueSize) {
         if (poolSize >= _threadsMax) return poolSize;
 
-        int neededThreads = Math.min(queueSize, _threadsMax);
+        int activeThreads = _executor.getActiveCount();
+        int neededThreads = Math.max(activeThreads, Math.min(queueSize, MAX_THREADS));
         int delta = Math.min(neededThreads - poolSize, MAX_THREADS_TO_ADD);
         return poolSize + delta;
     }
@@ -198,8 +198,8 @@ public class SimpleTimer2 {
         int queueSize = queue.size();
         int poolSize = _executor.getCorePoolSize();
 
-        // Trigger resize if queue is > 50% full AND thread pool isn't already maxed
-        if (queueSize > QUEUE_CAPACITY * 0.5 && poolSize < _threadsMax) {
+        // Trigger resize if queue is > 95% full AND thread pool isn't already maxed
+        if (queueSize > QUEUE_CAPACITY * 0.95 && poolSize < _threadsMax) {
             adjustThreadPoolSize();
         }
     }
