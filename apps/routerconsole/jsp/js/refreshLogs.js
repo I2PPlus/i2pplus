@@ -1,9 +1,8 @@
-/* I2P+ refreshLogs.js by dr|z3d */
 import { onVisible, onHidden } from "/js/onVisible.js";
 import morphdom from "/js/morphdom.js";
 
 function start() {
-  const $ = (id) => document.getElementById(id);
+  const $ = id => document.getElementById(id);
 
   const els = {
     mainLogs: $("logs"),
@@ -16,18 +15,18 @@ function start() {
     refreshSpan: $("refreshPeriod"),
     refreshInput: $("logRefreshInterval"),
     toggleRefresh: $("toggleRefresh"),
-    filterInput: $("logFilterInput"),
+    filterInput: $("logFilterInput")
   };
 
   const state = {
     updates: [],
     worker: new SharedWorker("/js/fetchWorker.js"),
     logsRefreshId: null,
-    intervalValue: localStorage.getItem("logsRefresh") || "30",
+    intervalValue: localStorage.getItem("logsRefresh") || "30"
   };
 
   if ("SharedWorker" in window) {
-    state.worker.port.onmessage = (event) => {
+    state.worker.port.onmessage = event => {
       const { responseText, isDown } = event.data;
       if (isDown) return;
 
@@ -36,8 +35,9 @@ function start() {
 
       processUpdates(doc, els, state);
       requestAnimationFrame(() => {
-        state.updates.forEach((fn) => fn());
+        state.updates.forEach(fn => fn());
         postMorphActions();
+        applyFilter(els);
         state.updates = [];
       });
     };
@@ -47,8 +47,6 @@ function start() {
   }
 
   function processUpdates(doc, els, state) {
-    const filterValue = encodeURIComponent(els.filterInput?.value?.trim().toLowerCase() || "").replace(/%20/g, " ");
-
     if (els.errorCount) {
       const newEl = doc.getElementById("errorCount");
       if (newEl) state.updates.push(() => morphdom(els.errorCount, newEl, { childrenOnly: true }));
@@ -77,21 +75,12 @@ function start() {
       const newEl = doc.getElementById("wrapperlogs");
       if (newEl) state.updates.push(() => morphdom(els.servicelogs, newEl, { childrenOnly: true }));
     }
-
-    if (els.routerlogsList) {
-      els.routerlogsList.querySelectorAll("li").forEach((li) => {
-        li.style.display = li.textContent.toLowerCase().includes(filterValue) ? "block" : "none";
-      });
-    }
   }
 
   function postMorphActions() {
-    const list = document.querySelector("#routerlogs td ul") || document.querySelector("#criticallogs td ul") ;
+    const list = document.querySelector("#routerlogs td ul") || document.querySelector("#criticallogs td ul");
     if (list) {
-      linkifyRouterIds(list);
-      linkifyLeaseSets(list);
-      linkifyIPv4(list);
-      linkifyIPv6(list);
+      linkifyLogEntries(list);
     }
   }
 
@@ -135,7 +124,6 @@ function start() {
 
         state.intervalValue = value;
         localStorage.setItem("logsRefresh", value);
-
         clearInterval(state.logsRefreshId);
 
         if (value === "0") {
@@ -166,80 +154,130 @@ function start() {
   function applyFilter(els) {
     const filterValue = els.filterInput.value.toLowerCase();
     if (els.routerlogsList) {
-      els.routerlogsList.querySelectorAll("li").forEach((li) => {
+      els.routerlogsList.querySelectorAll("li").forEach(li => {
         li.style.display = li.textContent.toLowerCase().includes(filterValue) ? "block" : "none";
       });
     }
   }
 
-  function linkifyPattern(list, pattern, linkFormatter) {
-    if (!list) return;
-    const items = list.querySelectorAll("li");
-    items.forEach((li) => {
-      let html = li.innerHTML;
-      const matches = [...html.matchAll(pattern)]; // Use matchAll to get full matches
-      if (!matches) return;
+  function linkifyLogEntries(container) {
+    if (!container) return;
 
-      matches.forEach((match) => {
-        const fullMatch = match[0]; // Full matched string (e.g., "key [xxxx]")
-        const linkText = fullMatch.replace(/$$|$$/g, "").trim(); // Extract just the ID
-        const matchIndex = html.indexOf(fullMatch);
-        const preceding = html.slice(0, matchIndex).slice(-"floodfill ".length);
-        const isFloodfill = preceding === "floodfill ";
-        const link = `<a href="${linkFormatter(linkText)}"${isFloodfill ? ' class="isFF"' : ""}>${linkText}`;
+    const isValidPort = s => {
+      const n = +s;
+      return n >= 1 && n <= 65535 && s === String(n);
+    };
 
-        html = html.replace(fullMatch, link);
-      });
+    const routerPattern = /\[([a-zA-Z0-9~\-]{6})\]/g;
+    const leasePattern = /(?:key\s*)?\$([a-zA-Z0-9~\-]{8})\$|#ls_([a-zA-Z0-9]{4})\b|\[([a-zA-Z0-9~\-]{8})\]/g;
+    const ipv4PortPattern = /\b((?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b(?::(\d{1,5}))?\b/g;
+    const ipv6PortPattern = /(?:\b(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|\b(?:[0-9a-fA-F]{1,4}:){1,7}:)(?::(\d{1,5}))?\b/gi;
 
-      li.innerHTML = html;
-    });
-  }
-
-  function linkifyRouterIds(list) {
-    linkifyPattern(list, /\[([a-zA-Z0-9\~\-]{6})\]/g, (id) => `/netdb?r=${id}`);
-  }
-
-  function linkifyLeaseSets(list) {
-    linkifyPattern(list, /(?:key\s*)?$([a-zA-Z0-9\~\-]{8})$|(#ls_[a-zA-Z0-9]{4})\b/g, (id) => {
-      return `/netdb?l=3#${id.substring(0, 4)}`;
-    });
-  }
-
-  function linkifyIPv4(list) {
-    if (!list) return;
-    const ipRegex = /\b(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/g;
-    linkifyTextNodes(list, ipRegex, (ip) => `<a href="/netdb?ip=${ip}">${ip}</a>`);
-  }
-
-  function linkifyIPv6(list) {
-    if (!list) return;
-    const ipRegex = /\b(?:([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|(?:[0-9a-fA-F]{1,4}:){1,7}:)(?:%[0-9a-zA-Z]{1,})?\b/gi;
-    linkifyTextNodes(list, ipRegex, (ip) => {
-      const cleanIP = ip.split("%")[0];
-      return `<a href="/netdb?ipv6=${cleanIP}">${ip}</a>`;
-    });
-  }
-
-  function linkifyTextNodes(container, pattern, linkFormatter) {
-    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, null, false);
-    const nodesToReplace = [];
-
-    while (walker.nextNode()) {
-      const node = walker.currentNode;
-      if (pattern.test(node.textContent)) {
-        nodesToReplace.push(node);
+    const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        return node.parentElement?.tagName === "A" ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT;
       }
+    }, false);
+
+    const textNodes = [];
+    let node;
+    while ((node = walker.nextNode())) {
+      textNodes.push(node);
     }
 
-    nodesToReplace.forEach((textNode) => {
-      const parent = textNode.parentNode;
-      const tempDiv = document.createElement("div");
-      const html = textNode.textContent.replace(pattern, linkFormatter);
-      tempDiv.innerHTML = html;
+    textNodes.forEach(textNode => {
+      const parent = textNode.parentElement;
+      if (!parent) return;
 
-      while (tempDiv.firstChild) {
-        parent.insertBefore(tempDiv.firstChild, textNode);
+      const text = textNode.textContent;
+      const fragments = [];
+      let cursor = 0;
+      const matches = [];
+
+      const addMatches = (pattern, getMatches) => {
+        let match;
+        pattern.lastIndex = 0;
+        while ((match = pattern.exec(text)) !== null) {
+          const results = getMatches(match);
+          if (results) matches.push(...results);
+        }
+      };
+
+      addMatches(routerPattern, m => [{
+        start: m.index,
+        end: m.index + m[0].length,
+        clean: { id: m[1], href: `/netdb?r=${m[1]}` }
+      }]);
+
+      addMatches(leasePattern, m => {
+        const id = m[1] || m[2] || m[3];
+        if (!id) return [];
+        return [{ start: m.index, end: m.index + m[0].length, clean: { id, href: `/netdb?l=3#${id.substring(0, 4)}` } }];
+      });
+
+      addMatches(ipv4PortPattern, m => {
+        const ipStart = m.index;
+        const full = m[0];
+        const colonIdx = full.indexOf(':');
+        const ip = colonIdx === -1 ? full : full.substring(0, colonIdx);
+        const ipEnd = ipStart + ip.length;
+        const results = [{ start: ipStart, end: ipEnd, clean: { id: ip, href: `/netdb?ip=${ip}` } }];
+        if (colonIdx !== -1) {
+          const portStr = m[2];
+          if (portStr && isValidPort(portStr)) {
+            const portStart = ipEnd + 1;
+            results.push({ start: portStart, end: portStart + portStr.length, clean: { id: portStr, href: `/netdb?port=${portStr}` } });
+          }
+        }
+        return results;
+      });
+
+      addMatches(ipv6PortPattern, m => {
+        const full = m[0];
+        const ipStart = m.index;
+        const portStr = m[2];
+        const ipEnd = portStr ? ipStart + (full.length - portStr.length - 1) : ipStart + full.length;
+        const ipRaw = full.substring(0, ipEnd - ipStart);
+        const cleanIP = ipRaw.split('%')[0];
+        const results = [{ start: ipStart, end: ipEnd, clean: { id: ipRaw, href: `/netdb?ipv6=${cleanIP}` } }];
+        if (portStr && isValidPort(portStr)) {
+          const portStart = ipEnd + 1;
+          results.push({ start: portStart, end: portStart + portStr.length, clean: { id: portStr, href: `/netdb?port=${portStr}` } });
+        }
+        return results;
+      });
+
+      if (matches.length === 0) return;
+      matches.sort((a, b) => a.start - b.start);
+
+      const merged = [];
+      for (const m of matches) {
+        if (merged.length === 0 || m.start >= merged[merged.length - 1].end) {
+          merged.push(m);
+        }
       }
+
+      for (const match of merged) {
+        if (match.start > cursor) {
+          fragments.push(document.createTextNode(text.slice(cursor, match.start)));
+        }
+
+        const preceding = text.slice(Math.max(0, match.start - "floodfill ".length), match.start);
+        const isFloodfill = preceding.trim() === "floodfill";
+
+        const link = document.createElement("a");
+        link.href = match.clean.href;
+        link.textContent = match.clean.id;
+        if (isFloodfill) link.classList.add("isFF");
+        fragments.push(link);
+        cursor = match.end;
+      }
+
+      if (cursor < text.length) {
+        fragments.push(document.createTextNode(text.slice(cursor)));
+      }
+
+      fragments.forEach(frag => parent.insertBefore(frag, textNode));
       parent.removeChild(textNode);
     });
   }
