@@ -115,9 +115,8 @@ class ConnectionManager {
         _packetHandler = new PacketHandler(_context, this);
         _schedulerChooser = new SchedulerChooser(_context);
         _conPacketHandler = new ConnectionPacketHandler(_context);
-        //_timer = new RetransmissionTimer(_context, "Streaming Timer " +
-        //                                 session.getMyDestination().calculateHash().toBase64().substring(0, 4));
-        _timer = SimpleTimer2.getInstance();
+        _timer = new RetransmissionTimer(_context, "Streaming Timer " +
+                                         session.getMyDestination().calculateHash().toBase64().substring(0, 4));
         _connectionHandler = new ConnectionHandler(_context, this, _timer);
         _tcbShare = new TCBShare(_context, _timer);
         // PROTO_ANY is for backward compatibility (pre-0.7.1)
@@ -829,8 +828,11 @@ class ConnectionManager {
      * @since 0.9.7
      */
     public void shutdown() {
+        //if (_log.shouldInfo())
+        //    _log.info("ConnMan shutdown", new Exception("I did it"));
         disconnectAllHard();
         _tcbShare.stop();
+        _timer.stop();
         _outboundQueue.close();
         _connectionHandler.setActive(false);
     }
