@@ -3,6 +3,8 @@
 /* enable persistent toggling of tunnel ids and tunnel rows */
 /* License: AGPL3 or later */
 
+import { refreshElements } from './refreshElements.js';
+
 const bodyTag = document.querySelector("body");
 const container = document.querySelector("#tunnelsContainer");
 const nav = document.querySelector(".confignav");
@@ -76,21 +78,6 @@ document.addEventListener("DOMContentLoaded", function() {
   persistTunnelTableVisibility();
   persistTunnelIdVisibility();
   bodyTag.classList.add("js");
-  document.querySelector("body").classList.add("js");
-  const visibility = document.visibilityState;
-  if (visibility === "visible") {
-    setInterval(function() {
-      const xhrtunn = new XMLHttpRequest();
-      xhrtunn.open('GET', '/tunnels', true);
-      xhrtunn.responseType = "document";
-      xhrtunn.onload = function () {
-        const tunnels = document.getElementById("tunnelsContainer");
-        const tunnelsResponse = xhrtunn.responseXML?.getElementById("tunnelsContainer");
-        if (tunnels.innerHTML !== tunnelsResponse.innerHTML) {
-          tunnels.innerHTML !== tunnelsResponse.innerHTML;
-        }
-      }
-      xhrtunn.send();
-    }, 15000);
-  }
+
+  refreshElements("#tunnelsContainer", "/tunnels", 10000);
 });
