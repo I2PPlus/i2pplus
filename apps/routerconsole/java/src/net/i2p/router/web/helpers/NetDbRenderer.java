@@ -91,7 +91,7 @@ class NetDbRenderer {
     public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}
     public int localLSCount;
     private final ProfileOrganizer _organizer;
-    private final int BATCH_SIZE = 8;
+    private final int BATCH_SIZE = SystemVersion.isSlow() ? 8 : Math.max(SystemVersion.getCores() - 2, 16);
     private long now = System.currentTimeMillis();
 
     /**
@@ -256,6 +256,29 @@ class NetDbRenderer {
             });
         }
 
+        if (port != 0) {
+            final int low = port;
+            final int high = highPort > 0 ? highPort : port;
+
+            if (transport != null && !transport.isEmpty()) {
+                // Filter by port AND transport
+                routerStream = routerStream.filter(ri -> {
+                    return ri.getAddresses().stream().anyMatch(addr -> {
+                        return addr.getTransportStyle().equals(transport) &&
+                               addr.getPort() >= low && addr.getPort() <= high;
+                    });
+                });
+            } else {
+                // Filter by port only (any transport)
+                routerStream = routerStream.filter(ri -> {
+                    return ri.getAddresses().stream().anyMatch(addr -> {
+                        int p = addr.getPort();
+                        return p >= low && p <= high;
+                    });
+                });
+            }
+        }
+
         // Count total before applying page
         List<RouterInfo> allRouters = routerStream.collect(Collectors.toList());
         int totalSize = allRouters.size();
@@ -280,7 +303,7 @@ class NetDbRenderer {
             ? precacheReverseDNSLookups(routersToRender)
             : Collections.emptyMap();
 
-        renderRoutersToWriter(routersToRender, out, false);
+        renderRoutersToWriter(routersToRender, out, false, page, pageSize);
 
         if (sybil != null) {
             sybilHashes.addAll(routersToRender.stream()
@@ -1311,7 +1334,7 @@ class NetDbRenderer {
             countFullRouterStats(routers, versions, countries, transportCount);
         }
         if (showStats) {
-            renderRoutersToWriter(routers, out, isLocal);
+            renderRoutersToWriter(routers, out, isLocal, page, pageSize);
             paginate(buf, new StringBuilder("&amp;f=").append(mode), page, pageSize, hasNextPage, routers.size() - 1);
             out.append(buf);
             buf.setLength(0);
@@ -1327,19 +1350,26 @@ class NetDbRenderer {
      * Renders a list of RouterInfo objects to the given Writer.
      * Uses parallel rendering for small sets (< 300), streams for large sets.
      */
-    public void renderRoutersToWriter(Collection<RouterInfo> routers, Writer out, boolean isLocal) throws IOException {
+    public void renderRoutersToWriter(Collection<RouterInfo> routers, Writer out, boolean isLocal, int page, int pageSize) throws IOException {
         if (routers == null || routers.isEmpty()) return;
+
+        List<RouterInfo> list = new ArrayList<>(routers);
+        int total = list.size();
+        int fromIndex = Math.min(page * pageSize, total - 1);
+        int toIndex = Math.min(fromIndex + pageSize, total);
+
+        List<RouterInfo> pageList = list.subList(fromIndex, toIndex);
+
         int maxBeforeStreaming = enableReverseLookups() ? 200 : 300;
 
-        if (routers.size() <= maxBeforeStreaming) {
-            // Use parallel rendering
-            out.write(renderRouterInfosInParallel(routers, isLocal));
+        if (pageList.size() <= maxBeforeStreaming) {
+            out.write(renderRouterInfosInParallel(pageList, isLocal));
         } else {
-            // Stream rendering
             Map<String, String> rdnsLookups = enableReverseLookups()
-                ? precacheReverseDNSLookups(routers)
+                ? precacheReverseDNSLookups(pageList)
                 : Collections.emptyMap();
-            for (RouterInfo ri : routers) {
+
+            for (RouterInfo ri : pageList) {
                 StringBuilder sb = new StringBuilder();
                 if (rdnsLookups.isEmpty()) {
                     renderRouterInfo(sb, ri, isLocal);
@@ -2161,9 +2191,7 @@ class NetDbRenderer {
                     CompletableFuture.runAsync(() -> {
                         StringBuilder buffer = new StringBuilder();
                         renderRouterInfo(buffer, routerInfo, isLocalRouter);
-                        synchronized (lock) {
-                            fullHtml.append(buffer);
-                        }
+                        synchronized (lock) {fullHtml.append(buffer);}
                     }, executor)
                 );
             }
