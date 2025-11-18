@@ -411,7 +411,7 @@ public class PeerHelper extends HelperBase {
                .append("</th><th class=inout title=\"")
                .append(_t("Average inbound/outbound rate (KBps)"))
                .append("\" data-sort-method=number>")
-               .append(_t("In/Out"))
+               .append(_t("In / Out"))
                .append ("</th><th class=uptime title=\"")
                .append(_t("Duration of connection to peer"))
                .append("\" data-sort-method=number>")
@@ -474,9 +474,11 @@ public class PeerHelper extends HelperBase {
                .append(THINSP)
                .append("<span class=left>")
                .append(DataHelper.formatDuration2(con.getTimeSinceSend(now)))
-               .append("</span></td><td class=inout>");
-            String rx = formatRate(bpsRecv/1000).replace(".00", "");
-            String tx = formatRate(bpsSend/1000).replace(".00", "");
+               .append("</span></td>");
+
+            buf.append("<td class=inout data-sort=").append(con.getRecvRate()/1024 > 0.01 ? con.getRecvRate() / 1024 : 0).append(">");
+            String rx = formatRate(con.getRecvRate() / 1024).replace(".00", "");
+            String tx = formatRate(con.getSendRate() / 1024).replace(".00", "");
             if (con.getRecvRate() >= 0.01 || con.getSendRate() >= 0.01) {
                 buf.append("<span class=right>");
                 if ((peers.size() >= 300 && con.getTimeSinceReceive(now) <= 60*1000) ||
@@ -543,8 +545,8 @@ public class PeerHelper extends HelperBase {
         buf.append("</tbody>");
 
         if (!peers.isEmpty()) {
-            String rx = formatRate(bpsRecv/1000).replace(".00", "");
-            String tx = formatRate(bpsSend/1000).replace(".00", "");
+            String rx = formatRate(bpsRecv/1024).replace(".00", "");
+            String tx = formatRate(bpsSend/1024).replace(".00", "");
             buf.append("<tfoot><tr class=tablefooter><td class=peer colspan=")
                .append(IPv6Enabled ? "5" : "4")
                .append("><b>")
@@ -673,7 +675,7 @@ public class PeerHelper extends HelperBase {
             buf.append("</th><th class=inout title=\"")
                .append(_t("Average inbound/outbound rate (KBps)"))
                .append("\" data-sort-method=number>")
-               .append(_t("In/Out"));
+               .append(_t("In / Out"));
             if (debugmode) {
                 buf.append("<br>");
                 appendSortLinks(buf, urlBase, sortFlags, _t("Sort by inbound rate"), FLAG_RATE_IN);
@@ -1002,7 +1004,7 @@ public class PeerHelper extends HelperBase {
            .append(":</b> ")
            .append(_t("How long since a packet has been received / sent"))
            .append("</li><li><b id=def.rate>")
-           .append(_t("In/Out"))
+           .append(_t("In / Out"))
            .append("</b>: ")
            .append(_t("Smoothed inbound / outbound transfer rate"))
            .append(" (K/s)")

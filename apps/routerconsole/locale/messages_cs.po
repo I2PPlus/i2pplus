@@ -3074,7 +3074,7 @@ msgstr "Nečinný"
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Průměrná příchozí/odchozí rychlost (kB/s)"
 
-msgid "In/Out"
+msgid "In / Out"
 msgstr "Příchozí / Odchozí"
 
 msgid "Duration of connection to peer"

@@ -31,6 +31,6 @@
 <script src=/js/tablesort/tablesort.js></script>
 <script src=/js/tablesort/tablesort.number.js></script>
 <script src=/js/lazyload.js></script>
-<script src=/js/peers.js></script>
+<script src=/js/peers.js type=module></script>
 </body>
 </html>

@@ -3066,7 +3066,7 @@ msgstr "Desocupado"
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "La tasa de transferencia media de entrada / salida"
 
-msgid "In/Out"
+msgid "In / Out"
 msgstr "Entrante/Saliente"
 
 msgid "Duration of connection to peer"

@@ -15,7 +15,10 @@
 <% jobQueueHelper.storeWriter(out);%>
 <jsp:getProperty name="jobQueueHelper" property="jobQueueSummary"/>
 </div>
-<script src=/js/refreshElements.js></script>
-<script nonce=<%=cspNonce%>>refreshElements("#jobs", "/jobqueue", 15000);</script>
+<script src=/js/refreshElements.js type=module></script>
+<script nonce=<%=cspNonce%> type=module>
+  import {refreshElements} from "/js/refreshElements.js";
+  refreshElements("#jobs", "/jobqueue", 5000);
+</script>
 </body>
 </html>

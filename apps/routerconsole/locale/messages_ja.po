@@ -3058,7 +3058,7 @@ msgstr "アイドル"
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "平均インバウンド/アウトバウンド率（KB/S）"
 
-msgid "In/Out"
+msgid "In / Out"
 msgstr "入出力"
 
 msgid "Duration of connection to peer"

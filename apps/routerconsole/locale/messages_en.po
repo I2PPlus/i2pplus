@@ -3066,7 +3066,7 @@ msgstr ""
 msgid "Average inbound/outbound rate (KBps)"
 msgstr ""
 
-msgid "In/Out"
+msgid "In / Out"
 msgstr ""
 
 msgid "Duration of connection to peer"

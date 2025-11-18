@@ -50,24 +50,25 @@ async function processFetchRequest(url, now, clientData) {
   const {port, clientId} = clientData;
   try {
     const response = await fetch(url);
-    let messagePayload = {responseBlob: null, isDown: false, noResponse: 0};
+    let messagePayload;
 
     if (response.ok) {
       const contentType = response.headers.get("Content-Type");
-      if (contentType.includes("text/html")) {
-        messagePayload.responseText = await response.text();
+      if (contentType && contentType.includes("text/html")) {
+        const responseText = await response.text();
+        messagePayload = { url, responseText, isDown: false, noResponse: 0 };
       } else {
-        messagePayload.responseBlob = await response.blob();
+        const responseBlob = await response.blob();
+        messagePayload = { url, responseBlob, isDown: false, noResponse: 0 };
       }
       updateLastRequestTime(clientId, now);
     } else {
-      messagePayload.isDown = true;
-      incrementNoResponse();
+      messagePayload = { url, isDown: true, noResponse: incrementNoResponse() };
     }
 
     port.postMessage(messagePayload);
   } catch (error) {
-    port.postMessage({ responseBlob: null, isDown: true, noResponse: incrementNoResponse() });
+    port.postMessage({ url, isDown: true, noResponse: incrementNoResponse() });
   } finally {
     decrementActiveRequests();
     processNextFetchRequest();

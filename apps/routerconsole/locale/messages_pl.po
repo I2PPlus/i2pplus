@@ -3074,7 +3074,7 @@ msgstr "Bezczynny"
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Średnia szybkość ruchu przychodzącego/wychodzącego (KB/s)"
 
-msgid "In/Out"
+msgid "In / Out"
 msgstr "Wejście / Wyjście"
 
 msgid "Duration of connection to peer"

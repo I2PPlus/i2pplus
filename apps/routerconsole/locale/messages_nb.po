@@ -3066,7 +3066,7 @@ msgstr "Tomgang"
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Gjennomsnittlig inngående/utgående hastighet (KBps)"
 
-msgid "In/Out"
+msgid "In / Out"
 msgstr "Inn/ut"
 
 msgid "Duration of connection to peer"

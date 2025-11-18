@@ -3074,7 +3074,7 @@ msgstr "Неактивний"
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Середня швидкість вхідної/вихідної (КБ/с)"
 
-msgid "In/Out"
+msgid "In / Out"
 msgstr "Прийом/Передача"
 
 msgid "Duration of connection to peer"

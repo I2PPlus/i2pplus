@@ -3066,7 +3066,7 @@ msgstr "وقت تلف کردن"
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "میانگین نرخ ورودی/خروجی (KBps)"
 
-msgid "In/Out"
+msgid "In / Out"
 msgstr "داخل/خارج"
 
 msgid "Duration of connection to peer"

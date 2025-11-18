@@ -22,7 +22,6 @@ boolean viewProfile = uri.contains("viewprofile");
 <link rel=modulepreload href=/js/miniGraph.js>
 <link rel=modulepreload href=/js/stickySidebar.js>
 <link rel=modulepreload href=/js/iframeResizer/iframeResizer.js>
-<link rel=preload href=<%=fontFile%> as=font type=font/woff2 crossorigin>
 <link rel=preload href="<%=themePath%>console.css?version=<%=v%>" as=style>
 <link rel=preload href=<%=themePath%>images/i2plogo.png as=image>
 <link rel=preload href=/themes/console/images/images.css as=style>

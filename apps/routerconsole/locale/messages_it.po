@@ -3067,7 +3067,7 @@ msgstr "Inattivo"
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Tasso medio in entrata/uscita (KBps)"
 
-msgid "In/Out"
+msgid "In / Out"
 msgstr "Entrata/Uscita"
 
 msgid "Duration of connection to peer"

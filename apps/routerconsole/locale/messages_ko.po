@@ -3058,8 +3058,8 @@ msgstr "대기"
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "평균 인바운드/아웃바운드 속도(KBps)"
 
-msgid "In/Out"
-msgstr "In/Out"
+msgid "In / Out"
+msgstr "In / Out"
 
 msgid "Duration of connection to peer"
 msgstr "피어와의 연결 지속 시간"

@@ -294,7 +294,6 @@ class NetDbRenderer {
             out.append(buf);
         }
 
-        out.flush();
         if (sybil != null) {
             SybilRenderer.renderSybilHTML(out, _context, sybilHashes, sybil);
         }
@@ -1330,8 +1329,9 @@ class NetDbRenderer {
      */
     public void renderRoutersToWriter(Collection<RouterInfo> routers, Writer out, boolean isLocal) throws IOException {
         if (routers == null || routers.isEmpty()) return;
+        int maxBeforeStreaming = enableReverseLookups() ? 200 : 300;
 
-        if (routers.size() <= 300) {
+        if (routers.size() <= maxBeforeStreaming) {
             // Use parallel rendering
             out.write(renderRouterInfosInParallel(routers, isLocal));
         } else {

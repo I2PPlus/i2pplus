@@ -3066,7 +3066,7 @@ msgstr "Αδρανής"
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Μέσος ρυθμός εισερχόμενων/εξερχομένων (KBps)"
 
-msgid "In/Out"
+msgid "In / Out"
 msgstr "Μέσα/Έξω"
 
 msgid "Duration of connection to peer"

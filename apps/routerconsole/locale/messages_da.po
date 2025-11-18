@@ -3066,7 +3066,7 @@ msgstr "Hvile"
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Gennemsnitlig indgående/udgående hastighed (KBps)"
 
-msgid "In/Out"
+msgid "In / Out"
 msgstr "Ind/Ud"
 
 msgid "Duration of connection to peer"

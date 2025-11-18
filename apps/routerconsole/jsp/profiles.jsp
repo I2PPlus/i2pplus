@@ -34,7 +34,7 @@
 <script src=/js/tablesort/tablesort.number.js></script>
 <script src=/js/tablesort/tablesort.natural.js></script>
 <script src=/js/lazyload.js></script>
-<script src=/js/profiles.js></script>
+<script src=/js/profiles.js type=module></script>
 <style>.wideload{height:unset!important;opacity:1!important}#profiles::before{display:none}</style>
 </body>
 </html>

@@ -84,19 +84,15 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 <script src=/js/tablesort/tablesort.js type=module></script>
 <script src=/js/tablesort/tablesort.number.js type=module></script>
 <%  } else if (f != null) {
-        delayLoad = "1".equals(f) || "2".equals(f) || "3".equals(f);
+        //delayLoad = "1".equals(f) || "2".equals(f) || "3".equals(f);
         switch (f) {
-            case "1":
-                heading += " – " + intl._t("All Routers") + " [" + intl._t("Advanced") + "]";
+            case "1": heading += " – " + intl._t("All Routers") + " [" + intl._t("Advanced") + "]";
                 break;
-            case "2":
-                heading += " – " + intl._t("All Routers");
+            case "2": heading += " – " + intl._t("All Routers");
                 break;
-            case "3":
-                heading += " – " + intl._t("Sybil Analysis");
+            case "3": heading += " – " + intl._t("Sybil Analysis");
                 break;
-            case "4":
-                heading += " – " + intl._t("Advanced Lookup");
+            case "4": heading += " – " + intl._t("Advanced Lookup");
 %>
 <script src=/js/netdbLookup.js></script>
 <%              break;
@@ -133,7 +129,19 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 <% } %>
 <style>#pagenav{display:block!important}</style>
 <script src=/js/lazyload.js></script>
+<script src=/js/refreshElements.js type=module></script>
 <script src=/js/lsCompact.js type=module></script>
 <script src=/js/netdb.js type=module></script>
+<script nonce=<%=cspNonce%> type=module>
+  import {refreshElements} from "/js/refreshElements.js";
+  document.addEventListener("DOMContentLoaded", () => {
+    const hasRI = document.querySelector(".netdbentry");
+    const hasLS = document.querySelector(".leaseset");
+    const URL = window.location.href;
+    const INTERVAL = 30*1000;
+    if (hasRI) {refreshElements(".netdbentry", URL, INTERVAL);}
+    else if (hasLS) {refreshElements(".leaseset", URL, INTERVAL);}
+  });
+</script>
 </body>
 </html>

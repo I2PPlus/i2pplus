@@ -3066,7 +3066,7 @@ msgstr "untätig"
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Durchschnittliche eingehende/ausgehende Rate (KBps)"
 
-msgid "In/Out"
+msgid "In / Out"
 msgstr "ein-/ausgehend"
 
 msgid "Duration of connection to peer"

@@ -3058,7 +3058,7 @@ msgstr "Trạng thái nghỉ"
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Tốc độ vào/ra trung bình (KBps)"
 
-msgid "In/Out"
+msgid "In / Out"
 msgstr "Vào/Ra"
 
 msgid "Duration of connection to peer"

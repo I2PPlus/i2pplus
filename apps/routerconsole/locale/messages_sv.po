@@ -3066,7 +3066,7 @@ msgstr "Stillastående"
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Genomsnittlig inkommande/utgående hastighet (KBps)"
 
-msgid "In/Out"
+msgid "In / Out"
 msgstr "in/ut"
 
 msgid "Duration of connection to peer"

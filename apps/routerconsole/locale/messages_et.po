@@ -3067,7 +3067,7 @@ msgstr "Jõude"
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Keskmine sissetulemise/väljamineku kiirus (KB/s)"
 
-msgid "In/Out"
+msgid "In / Out"
 msgstr "Sisse/Välja"
 
 msgid "Duration of connection to peer"

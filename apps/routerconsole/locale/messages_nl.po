@@ -3066,7 +3066,7 @@ msgstr "Idle"
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Gemiddelde snelheid voor inkomend/uitgaand verkeer (KBps)"
 
-msgid "In/Out"
+msgid "In / Out"
 msgstr "In/Uit"
 
 msgid "Duration of connection to peer"

@@ -3098,7 +3098,7 @@ msgstr "خامل"
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "متوسط ​​معدل الوارد/الصادر (كيلو بايت في الثانية)"
 
-msgid "In/Out"
+msgid "In / Out"
 msgstr "داخل/خارج"
 
 msgid "Duration of connection to peer"

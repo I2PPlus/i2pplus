@@ -40,7 +40,10 @@
 <h3 class=tabletitle><%=intl._t("Router Information")%></h3>
 <jsp:getProperty name="infohelper" property="console"/>
 </div>
-<script src=/js/refreshElements.js></script>
-<script nonce=<%=cspNonce%>>refreshElements(".ajax", "/info", 30000);</script>
+<script src=/js/refreshElements.js type=module></script>
+<script nonce=<%=cspNonce%> type=module>
+  import {refreshElements} from "/js/refreshElements.js";
+  refreshElements(".ajax", "/info", 30000);
+</script>
 </body>
 </html>

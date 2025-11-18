@@ -3066,7 +3066,7 @@ msgstr "Boş"
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Orta giriş/çıxış sürəti (KBps)"
 
-msgid "In/Out"
+msgid "In / Out"
 msgstr "Giriş/çıxış"
 
 msgid "Duration of connection to peer"

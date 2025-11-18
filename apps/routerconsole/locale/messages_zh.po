@@ -3058,7 +3058,7 @@ msgstr "空闲"
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "平均入站/出站速率率（KBps）"
 
-msgid "In/Out"
+msgid "In / Out"
 msgstr "入/出"
 
 msgid "Duration of connection to peer"

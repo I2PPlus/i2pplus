@@ -3082,7 +3082,7 @@ msgstr "Neaktivno"
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Povprečna vhodna/izhodna stopnja (KBps)"
 
-msgid "In/Out"
+msgid "In / Out"
 msgstr "Vhod/Izhod"
 
 msgid "Duration of connection to peer"

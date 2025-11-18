@@ -3066,7 +3066,7 @@ msgstr "Üres"
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Átlagos bejövő/kimenő sebesség (KB/s)"
 
-msgid "In/Out"
+msgid "In / Out"
 msgstr "Be/Ki"
 
 msgid "Duration of connection to peer"

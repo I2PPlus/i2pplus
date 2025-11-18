@@ -3074,8 +3074,8 @@ msgstr "Inactiv"
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Rata medie de intrare/ieșire (KBps)"
 
-msgid "In/Out"
-msgstr "In/Out"
+msgid "In / Out"
+msgstr "In / Out"
 
 msgid "Duration of connection to peer"
 msgstr "Durata conexiunii la peer"

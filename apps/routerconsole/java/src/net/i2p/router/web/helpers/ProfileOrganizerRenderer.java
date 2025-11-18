@@ -258,10 +258,10 @@ class ProfileOrganizerRenderer {
                     default: buf.append("failing\">").append(_t("Failing")); break;
                 }
                 if (isIntegrated) buf.append(", ").append(_t("Integrated"));
-                buf.append("</span></td><td data-sort=").append(prof.getSpeedValue()).append(">");
                 String spd = num(Math.round(prof.getSpeedValue())).replace(",", "");
                 String speedApprox = spd.substring(0, spd.indexOf("."));
                 int speed = Integer.parseInt(speedApprox);
+                buf.append("</span></td><td data-sort=").append(speed).append(">");
                 if (prof.getSpeedValue() > 0.1) {
                     buf.append("<span class=\"");
                     if (bonus >= 9999999) {buf.append("testOK ");}
@@ -333,9 +333,11 @@ class ProfileOrganizerRenderer {
                    .append(_t("Edit"))
                    .append("</a></td></tr>\n");
             }
-            buf.append("</tbody>\n</table>\n");
-            buf.append("<div id=peer_thresholds>\n<h3 class=tabletitle>").append(_t("Thresholds")).append("</h3>\n")
-               .append("<table id=thresholds>\n<thead><tr><th><b>").append(_t("Speed")).append(": </b>");
+            buf.append("</tbody>\n</table>\n<div id=peer_thresholds>\n<h3 class=tabletitle>")
+               .append(_t("Thresholds"))
+               .append("</h3>\n<table id=thresholds>\n<thead><tr><th><b>")
+               .append(_t("Speed"))
+               .append(": </b>");
             double speed = Math.max(1, _organizer.getSpeedThreshold());
             if (speed < -10240) {speed += 10240;}
             else if (speed < 0) {speed = 0;}

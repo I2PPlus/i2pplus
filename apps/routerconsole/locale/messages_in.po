@@ -3058,7 +3058,7 @@ msgstr "Tidak aktif"
 msgid "Average inbound/outbound rate (KBps)"
 msgstr "Rata-rata tarif masuk/keluar (KBps)"
 
-msgid "In/Out"
+msgid "In / Out"
 msgstr "Masuk / keluar"
 
 msgid "Duration of connection to peer"
