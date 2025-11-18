@@ -92,7 +92,7 @@ class BanlistRenderer {
             return;
         }
 
-        buf.append("<table id=sessionBanned>\n<thead><tr><th>")
+        buf.append("<table id=sessionBanned data-sortable>\n<thead><tr><th>")
            .append(_t("Reason"))
            .append("</th><th></th><th>")
            .append(_t("Router Hash"))
@@ -119,9 +119,7 @@ class BanlistRenderer {
                    .append(_t(entry.cause,entry.causeCode).replace("<b>➜</b> ",""))
                    .append("</td><td>:</td><td><span class=b64>")
                    .append(key.toBase64())
-                   .append("</span></td><td><span hidden>")
-                   .append(expires)
-                   .append(".</span>")
+                   .append("</span></td><td data-sort=").append(expires).append(">")
                    .append(expireString)
                    .append("</td></tr>\n");
                 tempBanned++;

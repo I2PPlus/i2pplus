@@ -172,23 +172,23 @@ class TunnelRenderer {
                   .append(_t("Expiry"))
                   .append("</th><th title=\"")
                   .append(_t("Data transferred"))
-                  .append("\" data-sortable data-sort-method=number>")
+                  .append("\" data-sort-method=number>")
                   .append(_t("Data"))
                   .append("</th><th data-sortable");
                 if (bySpeed) {sb.append(" data-sort-default");}
                 sb.append(">").append(_t("Speed")).append("</th>");
                 if (isAdvanced) {
-                  sb.append("<th class=limit data-sortable data-sort-method=number>")
+                  sb.append("<th class=limit data-sort-method=number>")
                     .append(_t("Limit"))
                     .append("</th><th data-sortable>")
                     .append(_t("Receive on"))
                     .append("</th>");
                 }
-                sb.append("<th data-sortable data-sort-method=number>")
+                sb.append("<th data-sort-method=number>")
                   .append(_t("From"))
                   .append("</th>");
                 if (isAdvanced) {sb.append("<th data-sortable>").append(_t("Send on")).append("</th>");}
-                sb.append("<th data-sortable data-sort-method=number>")
+                sb.append("<th data-sort-method=number>")
                   .append(_t("To"))
                   .append("</th></tr>\n</thead>\n<tbody id=transitPeers>\n");
                 long processed = 0;
@@ -339,11 +339,11 @@ class TunnelRenderer {
                 .append(_t("Transit Tunnels by Peer (Top {0})", DISPLAY_LIMIT))
                 .append("</h3>\n<table id=transitSummary class=\"tunneldisplay tunnels_participating\" data-sortable>\n<thead><tr data-sort-method=none><th id=country data-sortable>")
                 .append(_t("Country"))
-                .append("</th><th id=router data-sortable data-sort-method=natural>")
+                .append("</th><th id=router data-sort-method=natural>")
                 .append(_t("Router"))
-                .append("</th><th id=version data-sortable data-sort-method=dotsep>")
+                .append("</th><th id=version data-sort-method=dotsep>")
                 .append(_t("Version"))
-                .append("</th><th id=tier data-sortable data-sort=LMNOPX>")
+                .append("</th><th id=tier data-sort=LMNOPX>")
                 .append(_t("Tier"))
                 .append("</th><th id=address data-sortable>")
                 .append(_t("Address"))
@@ -351,11 +351,11 @@ class TunnelRenderer {
             if (enableReverseLookups()) {
                 tbuf.append("<th id=domain data-sortable>").append(_t("Domain")).append("</th>");
             }
-            tbuf.append("<th class=tcount data-sortable data-sort-method=number data-sort-default>")
+            tbuf.append("<th class=tcount data-sort-method=number data-sort-default>")
                 .append(_t("Tunnels"))
-                .append("</th><th id=data data-sortable data-sort-method=number>")
+                .append("</th><th id=data data-sort-method=number>")
                 .append(_t("Data"))
-                .append("</th><th id=isBanned data-sortable hidden>")
+                .append("</th><th id=isBanned hidden>")
                 .append(_t("Banned"))
                 .append("</th><th id=edit data-sort-method=none>")
                 .append(_t("Edit"))
@@ -509,20 +509,20 @@ class TunnelRenderer {
                   .append("&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=/tunnelpeercount>")
                   .append(_t("Refresh"))
                   .append("</a></h3>\n<table id=tunnelPeerCount data-sortable><thead class=lazy>\n<tr><th id=country data-sortable>")
-                  .append(_t("Country")).append("</th><th id=router data-sortable data-sort-method=natural>")
-                  .append(_t("Router")).append("</th><th id=version data-sortable data-sort-method=dotsep>")
-                  .append(_t("Version")).append("</th><th id=tier data-sortable data-sort=LMNOPX>")
-                  .append(_t("Tier")).append("</th><th id=address data-sortable title=\"")
+                  .append(_t("Country")).append("</th><th id=router data-sort-method=natural>")
+                  .append(_t("Router")).append("</th><th id=version data-sort-method=dotsep>")
+                  .append(_t("Version")).append("</th><th id=tier data-sort=LMNOPX>")
+                  .append(_t("Tier")).append("</th><th id=address title=\"")
                   .append(_t("Primary IP address"))
                   .append("\">").append(_t("Address")).append("</th>");
             if (doReverseLookups) {
                 headerSb.append("<th id=domain data-sortable>").append(_t("Domain")).append("</th>");
             }
-            headerSb.append("<th class=tcount colspan=2 title=\"Client and Exploratory Tunnels\" data-sortable data-sort-method=number data-sort-column-key=localCount>")
+            headerSb.append("<th class=tcount colspan=2 title=\"Client and Exploratory Tunnels\" data-sort-method=number data-sort-column-key=localCount>")
                   .append(_t("Local"))
                   .append("</th>");
             if (!peerList.isEmpty()) {
-                headerSb.append("<th class=tcount colspan=2 data-sortable data-sort-method=number data-sort-column-key=transitCount>")
+                headerSb.append("<th class=tcount colspan=2 data-sort-method=number data-sort-column-key=transitCount>")
                       .append(_t("Transit"))
                       .append("</th>");
             } else {

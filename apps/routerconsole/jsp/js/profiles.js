@@ -6,7 +6,7 @@ import { refreshElements } from "./refreshElements.js";
 
 (function() {
   const banlist = document.getElementById("banlist");
-  const bbody = document.getElementById("sessionBanlist");
+  const banBody = document.getElementById("sessionBanlist");
   const bfoot = document.getElementById("sessionBanlistFooter");
   const ff = document.getElementById("floodfills");
   const ffprofiles = document.getElementById("ffProfiles");
@@ -44,49 +44,34 @@ import { refreshElements } from "./refreshElements.js";
 
   function setupRefreshes() {
     // Refresh profiles overview and thresholds every 5 seconds
-    if ((info || thresholds) && !uri.includes("f=3")) {
+    if (info || thresholds) {
       const targetSelectors = [info, thresholds].filter(el => el).map(el => `#${el.id}`).join(", ");
       refreshElements(targetSelectors, uri, 5000);
     }
 
     // Refresh profile list every 15 seconds
-    if (plist && !uri.includes("f=3")) {
+    if (plist) {
       const targetSelectors = pbody ? `#pbody` : `#profilelist`;
       refreshElements(targetSelectors, uri, 15000);
-      document.addEventListener("refreshComplete", () => {
-        addSortListeners();
-        if (sorterP) {
-          sorterP.refresh();
-        }
-      });
     }
 
     // Refresh floodfill profiles every 15 seconds
-    if (ff && !uri.includes("f=3")) {
+    if (ff) {
       const targetSelectors = ffprofiles ? `#ffProfiles` : `#floodfills`;
       refreshElements(targetSelectors, uri, 15000);
-      document.addEventListener("refreshComplete", () => {
-        addSortListeners();
-        if (sorterFF) {
-          sorterFF.refresh();
-        }
-      });
     }
 
     // Refresh session bans every 15 seconds
-    if (sessionBans && !uri.includes("f=3")) {
-      refreshElements("#sessionBanned", uri, 15000);
-      document.addEventListener("refreshComplete", () => {
-        addSortListeners();
-        const banBody = document.querySelector("#sessionBanned tbody");
-        if (banBody) {
-          updateBanSummary(banBody);
-        }
-        if (sorterBans) {
-          sorterBans.refresh();
-        }
-      });
-    }
+    if (sessionBans) {refreshElements("#sessionBanlist tr", uri, 15000);}
+
+    document.addEventListener("refreshComplete", () => {
+      addSortListeners();
+      if (sorterP) {sorterP.refresh();}
+      if (sorterFF) {sorterFF.refresh();}
+      if (sorterBans) {sorterBans.refresh();}
+      if (banBody) {updateBanSummary(banBody);}
+    });
+
   }
 
   function updateBanSummary(banBody) {
@@ -99,7 +84,7 @@ import { refreshElements } from "./refreshElements.js";
       if (reasonCell) {
         let reason = reasonCell.textContent;
         reason = reason.split("(")[0].trim();
-        reason = reason.replace("Compressible RouterInfo & older than 0.9.57", "Invalid RouterInfo").replace("->", "");
+        reason = reason.replace("Compressible RouterInfo & older than 0.9.57", "Invalid RouterInfo").replace("<b> -&gt; </b>", "");
         reason = reason.trim();
         if (reason) { reasonCounts[reason] = (reasonCounts[reason] || 0) + 1; }
       }
@@ -131,10 +116,6 @@ import { refreshElements } from "./refreshElements.js";
 
   document.addEventListener("DOMContentLoaded", () => {
     initRefresh();
-    progressx.hide();
-    const bbody = document.querySelector("#sessionBanned tbody");
-    if (bbody) {
-      updateBanSummary(bbody);
-    }
+    if (banBody) {updateBanSummary(banBody);}
  });
 })();

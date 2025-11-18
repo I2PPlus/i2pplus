@@ -811,6 +811,8 @@ td.ipv6{width:1%;max-width:24px}
 #peers .reachability{display:none}
 #peers #ntcpconnections .edit,#peers #udpconnections .edit{width:1%;white-space:nowrap}
 #peers #udpconnections tfoot .peer,#peers #ntcpconnections tfoot .peer{padding-left:8px;text-align:left}
+#peers .direction,#peers .queue{width:1%}
+#peers .idle,#peers .inout{width:18%}
 #ssuadv{display:inline-block}
 #topCount{display:inline-block;position:absolute;right:3px;top:3px}
 #topCount table{display:table;width:auto;margin:0!important;border-collapse:separate;border-spacing:2px;border:0}
