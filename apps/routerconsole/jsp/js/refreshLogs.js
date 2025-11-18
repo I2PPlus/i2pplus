@@ -177,17 +177,18 @@ function start() {
     const items = list.querySelectorAll("li");
     items.forEach((li) => {
       let html = li.innerHTML;
-      const matches = html.match(pattern);
+      const matches = [...html.matchAll(pattern)]; // Use matchAll to get full matches
       if (!matches) return;
 
       matches.forEach((match) => {
-        const linkText = match.replace(/[[\]]/g, "");
-        const matchIndex = html.indexOf(match);
+        const fullMatch = match[0]; // Full matched string (e.g., "key [xxxx]")
+        const linkText = fullMatch.replace(/$$|$$/g, "").trim(); // Extract just the ID
+        const matchIndex = html.indexOf(fullMatch);
         const preceding = html.slice(0, matchIndex).slice(-"floodfill ".length);
         const isFloodfill = preceding === "floodfill ";
         const link = `<a href="${linkFormatter(linkText)}"${isFloodfill ? ' class="isFF"' : ""}>${linkText}`;
-        if (isFloodfill) html = html.replace("floodfill " + match, match);
-        html = html.replace(match, link);
+
+        html = html.replace(fullMatch, link);
       });
 
       li.innerHTML = html;
@@ -199,8 +200,9 @@ function start() {
   }
 
   function linkifyLeaseSets(list) {
-    linkifyPattern(list, /(?:key\s*)?\[([a-zA-Z0-9\~\-]{8})\]/g, (id) => `/netdb?l=3#ls_${id.substring(0, 4)}`);
-  }
+    linkifyPattern(list, /(?:key\s*)?$([a-zA-Z0-9\~\-]{8})$|(#ls_[a-zA-Z0-9]{4})\b/g, (id) => {
+      return `/netdb?l=3#${id.substring(0, 4)}`;
+    });
 
   function linkifyIPv4(list) {
     if (!list) return;
