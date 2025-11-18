@@ -203,6 +203,7 @@ function start() {
     linkifyPattern(list, /(?:key\s*)?$([a-zA-Z0-9\~\-]{8})$|(#ls_[a-zA-Z0-9]{4})\b/g, (id) => {
       return `/netdb?l=3#${id.substring(0, 4)}`;
     });
+  }
 
   function linkifyIPv4(list) {
     if (!list) return;
