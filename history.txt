@@ -1,3 +1,11 @@
+2025-11-18 dr|z3d
+ * Console:
+   - Migrate various auto-refreshing pages to refreshElements.js,
+     leverage morphdom.js for improved refresh rendering performance,
+     and use our shared worker for background updates
+   - Fixup and enhance column sorting on eligible tables
+   - Add auto-refresh to leasesets and netdb listings pages
+
 2025-10-08 dr|z3d
  * Console: Rendering speedups for tunnels pages and routerinfo listings
 
