@@ -91,7 +91,7 @@ class NetDbRenderer {
     public boolean isFloodfill() {return _context.netDb().floodfillEnabled();}
     public int localLSCount;
     private final ProfileOrganizer _organizer;
-    private final int BATCH_SIZE = SystemVersion.getMaxMemory() < 1024*1024*1024 ? 10 : 20;
+    private final int BATCH_SIZE = 8;
     private long now = System.currentTimeMillis();
 
     /**
@@ -1378,15 +1378,16 @@ class NetDbRenderer {
         List<String> versionList = new ArrayList<>(versions.objects());
         if (versionList.isEmpty()) return;
         Collections.sort(versionList, Collections.reverseOrder(new VersionComparator()));
-        buf.append("<table id=netdbversions>\n<thead>\n<tr><th>").append(_t("Version"))
-           .append("</th><th>").append(_t("Count")).append("</th></tr>\n</thead>\n");
+        buf.append("<table id=netdbversions>\n<thead><tr><th data-sort-default data-sort-direction=descending>").append(_t("Version"))
+           .append("</th><th>")
+           .append(_t("Count")).append("</th></tr></thead>\n<tbody>");
         for (String v : versionList) {
             int count = versions.count(v);
             String sanitized = DataHelper.stripHTML(v);
             buf.append("<tr><td><span class=version><a href=\"/netdb?v=").append(sanitized).append("\">")
                .append(sanitized).append("</a></span></td><td>").append(count).append("</td></tr>\n");
         }
-        buf.append("</table>\n");
+        buf.append("</tbody>\n</table>\n");
     }
 
     private static final char[] BW_CAPS = {
@@ -1411,8 +1412,9 @@ class NetDbRenderer {
      */
     private void renderBandwidthTiers(StringBuilder buf) {
         String showAll = _t("Show all routers with this capability in the NetDb");
-        buf.append("<table id=netdbtiers>\n<thead>\n<tr><th>").append(_t("Bandwidth Tier")).append("</th><th>")
-           .append(_t("Count")).append("</th></tr>\n</thead>\n");
+        buf.append("<table id=netdbtiers>\n<thead><tr><th data-sort-default data-sort-direction=ascending>")
+           .append(_t("Bandwidth Tier")).append("</th><th>")
+           .append(_t("Count")).append("</th></tr></thead>\n<tbody>");
         Map<Character, Set<Hash>> capsPeers = new HashMap<>();
         for (char cap : BW_CAPS) {
             Set<Hash> peers = _context.peerManager().getPeersByCapability(cap);
@@ -1429,7 +1431,7 @@ class NetDbRenderer {
                    .append(peers.size()).append("</td></tr>\n");
             }
         }
-        buf.append("</table>\n");
+        buf.append("</tbody>\n</table>\n");
     }
 
     /**
@@ -1444,8 +1446,9 @@ class NetDbRenderer {
             (severe == null || severe.isEmpty()) &&
             (noTunnels == null || noTunnels.isEmpty()))
             return;
-        buf.append("<table id=netdbcongestion>\n<thead>\n<tr><th>").append(_t("Congestion Cap")).append("</th><th>")
-           .append(_t("Count")).append("</th></tr>\n</thead>\n");
+        buf.append("<table id=netdbcongestion>\n<thead><tr><th data-sort-default data-sort-direction=ascending>")
+           .append(_t("Congestion Cap")).append("</th><th>")
+           .append(_t("Count")).append("</th></tr></thead>\n<tbody>");
         if (moderate != null && !moderate.isEmpty()) {
             buf.append("<tr><td><a class=isD href=\"/netdb?caps=D\" title=\"").append(showAll).append("\"><b>D</b></a>")
                .append(_t("Medium congestion / low performance")).append("</td><td>")
@@ -1461,22 +1464,23 @@ class NetDbRenderer {
                .append(_t("Rejecting all tunnel requests")).append("</td><td>")
                .append(noTunnels.size()).append("</td></tr>\n");
         }
-        buf.append("</table>\n");
+        buf.append("</tbody>\n</table>\n");
     }
 
     /**
      *  Renders the transports table.
      */
     private void renderTransportsTable(StringBuilder buf, int[] transportCount) {
-        buf.append("<table id=netdbtransports>\n<thead>\n<tr><th>").append(_t("Transports")).append("</th><th>")
-           .append(_t("Count")).append("</th></tr>\n</thead>\n");
+        buf.append("<table id=netdbtransports>\n<thead><tr><th data-sort-default data-sort-direction=ascending>")
+           .append(_t("Transports")).append("</th><th>")
+           .append(_t("Count")).append("</th></tr></thead>\n<tbody>");
         for (int i = 0; i < TNAMES.length; i++) {
             int count = transportCount[i];
             if (count > 0) {
                 buf.append("<tr><td>").append(_t(TNAMES[i])).append("</td><td>").append(count).append("</td></tr>\n");
             }
         }
-        buf.append("</table>\n");
+        buf.append("</tbody>\n</table>\n");
     }
 
     /**
@@ -1484,12 +1488,12 @@ class NetDbRenderer {
      */
     private void renderCountryTable(StringBuilder buf, ObjectCounterUnsafe<String> countries, Set<RouterInfo> routers) {
         List<String> countryList = new ArrayList<>(countries.objects());
-        buf.append("<table id=netdbcountrylist data-sortable>\n<thead>\n<tr>")
+        buf.append("<table id=netdbcountrylist>\n<thead><tr>")
            .append("<th data-sort-direction=ascending>").append(_t("Country")).append("</th>")
            .append("<th class=countX>").append(_t("X Tier")).append("</th>")
            .append("<th class=countFF>").append(_t("Floodfills")).append("</th>")
            .append("<th class=countCC data-sort-default>").append(_t("Total")).append("</th>")
-           .append("</tr>\n</thead>\n");
+           .append("</tr></thead>\n");
         if (!countryList.isEmpty()) {
             Collections.sort(countryList, new CountryComparator());
             buf.append("<tbody id=cclist>\n");
@@ -1505,7 +1509,7 @@ class NetDbRenderer {
                    .append(countFloodfillsInCountry(routers, country)).append("</a></td>")
                    .append("<td class=countCC>").append(totalCount).append("</td></tr>\n");
             }
-            buf.append("</tbody></table>\n");
+            buf.append("</tbody>\n</table>\n");
         } else {
             buf.append("<tbody><tr><td colspan=2>").append(_t("Initializing")).append("&hellip;</td></tr></tbody></table>\n");
         }
@@ -1682,7 +1686,7 @@ class NetDbRenderer {
             else if (c == 'R') isReachable = true;
             else if (c == 'U') isUnreachable = true;
         }
-        buf.append("<table class=\"netdbentry lazy\">\n<thead>\n<tr>");
+        buf.append("<table class=\"netdbentry lazy\">\n<thead><tr>");
         if (isLocalRouter) {
             buf.append("<th id=us><b id=our-info>").append(_t("Our info")).append(":</b><th><code>").append(routerHashBase64)
                .append("</code></th><th id=netdb_ourinfo>");
@@ -1832,7 +1836,7 @@ class NetDbRenderer {
             long memoryUsedMegabytes = memoryUsedBytes / (1024 * 1024);
             buf.append("&nbsp;<span id=netdb_ram><b>").append(_t("Memory usage")).append(":</b> ").append(memoryUsedMegabytes).append("M</span>");
         }
-        buf.append("</th></tr>\n</thead>\n<tbody>\n<tr>");
+        buf.append("</th></tr></thead>\n<tbody>\n<tr>");
         now = _context.clock().now();
         long published = routerInfo.getPublished();
         long age = now - published;
@@ -2173,11 +2177,11 @@ class NetDbRenderer {
     private static final int SSUI = 2;
     private static final int NTCP = 4;
     private static final int IPV6 = 8;
-    private static final String[] TNAMES = { _x("Hidden or starting up"), _x("SSU"), _x("SSU with introducers"), "",
-                                             _x("NTCP"), _x("NTCP and SSU"), _x("NTCP and SSU with introducers"), "",
-                                             "", _x("IPv6 SSU"), _x("IPv6 Only SSU, introducers"), _x("IPv6 SSU, introducers"),
-                                             _x("IPv6 NTCP"), _x("IPv6 NTCP, SSU"), _x("IPv6 Only NTCP, SSU, introducers"),
-                                             _x("IPv6 NTCP, SSU, introducers")
+    private static final String[] TNAMES = { _x("Hidden or starting up"), _x("SSU"), _x("SSU with Introducers"), "",
+                                             _x("NTCP"), _x("NTCP &amp; SSU"), _x("NTCP &amp; SSU with Introducers"), "",
+                                             "", _x("SSU [IPv6]"), _x("SSU [IPv6 Only] with Introducers"), _x("SSU [IPv6] with Introducers"),
+                                             _x("NTCP [IPv6]"), _x("NTCP [IPv6] &amp; SSU"), _x("NTCP &amp; SSU with Introducers [IPv6 Only]"),
+                                             _x("NTCP [IPv6] &amp; SSU with Introducers")
                                            };
 
     /**

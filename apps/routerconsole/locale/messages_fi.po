@@ -2974,37 +2974,37 @@ msgstr "Piilotettu tai käynnistynyt"
 msgid "SSU"
 msgstr "SSU"
 
-msgid "SSU with introducers"
+msgid "SSU with Introducers"
 msgstr "SSU ja esittelijät"
 
 msgid "NTCP"
 msgstr "NTCP"
 
-msgid "NTCP and SSU"
+msgid "NTCP &amp; SSU"
 msgstr "NTCP ja SSU"
 
-msgid "NTCP and SSU with introducers"
+msgid "NTCP &amp; SSU with Introducers"
 msgstr "NTCP, SSU ja esittelijät"
 
-msgid "IPv6 Only SSU, introducers"
+msgid "SSU [IPv6 Only] with Introducers"
 msgstr "IPv6 vain SSU, esittelijät"
 
-msgid "IPv6 SSU"
-msgstr "IPv6 SSU"
+msgid "SSU [IPv6]"
+msgstr "SSU [IPv6]"
 
-msgid "IPv6 SSU, introducers"
+msgid "SSU [IPv6] with Introducers"
 msgstr "IPv6 SSU, esittelijät"
 
-msgid "IPv6 NTCP"
-msgstr "IPv6 NTCP"
+msgid "NTCP [IPv6]"
+msgstr "NTCP [IPv6]"
 
-msgid "IPv6 NTCP, SSU"
-msgstr "IPv6 NTCP, SSU"
+msgid "NTCP [IPv6] &amp; SSU"
+msgstr "NTCP [IPv6] &amp; SSU"
 
-msgid "IPv6 Only NTCP, SSU, introducers"
+msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
 msgstr "IPv6 vain NTCP, SSU, esittelijät"
 
-msgid "IPv6 NTCP, SSU, introducers"
+msgid "NTCP [IPv6] &amp; SSU with Introducers"
 msgstr "IPv6 NTCP, SSU, esittelijät"
 
 msgid "No peer connections available"

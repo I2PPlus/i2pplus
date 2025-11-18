@@ -128,20 +128,12 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 <noscript><style>body:not(.ready) .lazy{display:table!important}</style></noscript>
 <% } %>
 <style>#pagenav{display:block!important}</style>
-<script src=/js/lazyload.js></script>
 <script src=/js/refreshElements.js type=module></script>
-<script src=/js/lsCompact.js type=module></script>
+<script src=/js/lazyload.js></script>
+<script src=/js/tablesort/tablesort.js></script>
+<script src=/js/tablesort/tablesort.number.js></script>
 <script src=/js/netdb.js type=module></script>
-<script nonce=<%=cspNonce%> type=module>
-  import {refreshElements} from "/js/refreshElements.js";
-  document.addEventListener("DOMContentLoaded", () => {
-    const hasRI = document.querySelector(".netdbentry");
-    const hasLS = document.querySelector(".leaseset");
-    const URL = window.location.href;
-    const INTERVAL = 30*1000;
-    if (hasRI) {refreshElements(".netdbentry", URL, INTERVAL);}
-    else if (hasLS) {refreshElements(".leaseset", URL, INTERVAL);}
-  });
+<script src=/js/lsCompact.js type=module></script>
 </script>
 </body>
 </html>

@@ -2982,37 +2982,37 @@ msgstr "Ukryte lub uruchamia się"
 msgid "SSU"
 msgstr "SSU"
 
-msgid "SSU with introducers"
+msgid "SSU with Introducers"
 msgstr "SSU z przedstawicielami"
 
 msgid "NTCP"
 msgstr "NTCP"
 
-msgid "NTCP and SSU"
+msgid "NTCP &amp; SSU"
 msgstr "NTCP i SSU"
 
-msgid "NTCP and SSU with introducers"
+msgid "NTCP &amp; SSU with Introducers"
 msgstr "NTCP i SSU z przedstawicielami"
 
-msgid "IPv6 Only SSU, introducers"
+msgid "SSU [IPv6 Only] with Introducers"
 msgstr "IPv6 tylko SSU, przedstawiciele"
 
-msgid "IPv6 SSU"
-msgstr "IPv6 SSU"
+msgid "SSU [IPv6]"
+msgstr "SSU [IPv6]"
 
-msgid "IPv6 SSU, introducers"
+msgid "SSU [IPv6] with Introducers"
 msgstr "IPv6 SSU, przedstawiciele"
 
-msgid "IPv6 NTCP"
-msgstr "IPv6 NTCP"
+msgid "NTCP [IPv6]"
+msgstr "NTCP [IPv6]"
 
-msgid "IPv6 NTCP, SSU"
-msgstr "IPv6 NTCP, SSU"
+msgid "NTCP [IPv6] &amp; SSU"
+msgstr "NTCP [IPv6] &amp; SSU"
 
-msgid "IPv6 Only NTCP, SSU, introducers"
+msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
 msgstr "IPv6 tylko NTCP, SSU, przedstawiciele"
 
-msgid "IPv6 NTCP, SSU, introducers"
+msgid "NTCP [IPv6] &amp; SSU with Introducers"
 msgstr "IPv6 NTCP, SSU, przedstawiciele"
 
 msgid "No peer connections available"

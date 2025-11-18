@@ -21,22 +21,33 @@ fetchWorker.port.onmessage = function(e) {
   const doc = parser.parseFromString(responseText, "text/html");
 
   requestAnimationFrame(() => {
-    const targetElements = document.querySelectorAll(currentTargetSelector);
-    const targetElementsResponse = doc.querySelectorAll(currentTargetSelector);
+    currentTargetSelector.forEach(selector => {
+      const targetElements = document.querySelectorAll(selector);
+      const targetElementsResponse = doc.querySelectorAll(selector);
 
-    targetElements.forEach((targetElement, index) => {
-      const targetElementResponse = targetElementsResponse[index];
-      if (targetElement && targetElementResponse) {
-        morphdom(targetElement, targetElementResponse);
-      }
+      targetElements.forEach((targetElement, index) => {
+        const targetElementResponse = targetElementsResponse[index];
+        if (targetElement && targetElementResponse) {
+          morphdom(targetElement, targetElementResponse, {
+            onBeforeElUpdated: (fromEl, toEl) => {
+              if (fromEl.isEqualNode(toEl)) {return false;}
+              return true;
+            }
+          });
+        }
+      });
     });
 
     document.dispatchEvent(new Event("refreshComplete"));
   });
 };
 
-export function refreshElements(targetSelector, url, delay) {
-  currentTargetSelector = targetSelector;
+export function refreshElements(targetSelectors, url, delay) {
+  const selectors = Array.isArray(targetSelectors)
+    ? targetSelectors
+    : targetSelectors.split(",").map(s => s.trim());
+
+  currentTargetSelector = selectors;
   currentUrl = url;
 
   function refresh() {
@@ -52,6 +63,7 @@ export function refreshElements(targetSelector, url, delay) {
       progressx.hide();
       isRefreshing = false;
     }, 1000);
+
   }
 
   if (refreshIntervalId) {

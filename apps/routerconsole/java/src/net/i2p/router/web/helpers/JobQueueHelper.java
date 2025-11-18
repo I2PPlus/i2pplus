@@ -190,7 +190,7 @@ public class JobQueueHelper extends HelperBase {
     private void getJobStats(StringBuilder buf) {
         buf.append("<div class=widescroll>\n<h3 id=totaljobstats>")
            .append(_t("Job Statistics (excluding single-shot jobs)"))
-           .append("</h3>\n<table id=jobstats data-sortable>\n<thead><tr><th class=jobname data-sort-default data-sort-direction=ascending>")
+           .append("</h3>\n<table id=jobstats>\n<thead><tr><th class=jobname data-sort-default data-sort-direction=ascending>")
            .append(_t("Job"))
            .append("</th><th class=totalRuns data-sort-method=number>")
            .append(_t("Runs"))

@@ -92,7 +92,7 @@ class BanlistRenderer {
             return;
         }
 
-        buf.append("<table id=sessionBanned data-sortable>\n<thead><tr><th>")
+        buf.append("<table id=sessionBanned>\n<thead><tr><th>")
            .append(_t("Reason"))
            .append("</th><th></th><th>")
            .append(_t("Router Hash"))

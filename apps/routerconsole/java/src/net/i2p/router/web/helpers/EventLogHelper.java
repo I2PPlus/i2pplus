@@ -168,7 +168,7 @@ public class EventLogHelper extends FormHandler {
                 return ("<table id=eventlog><tr><td>") + _t("No events found in previous {0}", DataHelper.formatDuration2(_age)) + ("</td></tr></table>\n");
             }
             if (_age == 0)
-                return ("<table id=eventlog data-sortable>\n<tr><td  class=infohelp>") + _t("No \"{0}\" events found", xev) + ("</td></tr></table>\n");
+                return ("<table id=eventlog>\n<tr><td  class=infohelp>") + _t("No \"{0}\" events found", xev) + ("</td></tr></table>\n");
             return ("<table id=eventlog>\n<tr><td class=infohelp>") +
                     _t("No \"{0}\" events found in previous {1}", xev, DataHelper.formatDuration2(_age)) + ("</td></tr></table>\n");
         }

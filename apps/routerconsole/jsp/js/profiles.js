@@ -84,7 +84,9 @@ import { refreshElements } from "./refreshElements.js";
       if (reasonCell) {
         let reason = reasonCell.textContent;
         reason = reason.split("(")[0].trim();
-        reason = reason.replace("Compressible RouterInfo & older than 0.9.57", "Invalid RouterInfo").replace("<b> -&gt; </b>", "");
+        reason = reason.replace("Compressible RouterInfo & older than 0.9.57", "Invalid RouterInfo")
+                       .replace("<b> -&gt; </b>", "")
+                       .replace("<b> -> </b>" , "");
         reason = reason.trim();
         if (reason) { reasonCounts[reason] = (reasonCounts[reason] || 0) + 1; }
       }
