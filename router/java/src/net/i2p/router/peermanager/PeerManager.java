@@ -244,22 +244,31 @@ class PeerManager {
         exclude.add(_context.routerHash());
         switch (criteria.getPurpose()) {
             case PeerSelectionCriteria.PURPOSE_TEST:
-                // The PeerTestJob does only run every 5 minutes, but
-                // this was helping drive us to connection limits, let's leave the exploration
-                // to the ExploratoryPeerSelector, which will restrict to connected peers
-                // when we get close to the limit. So let's stick with connected peers here.
-                _organizer.selectActiveNotFailingPeers(criteria.getMinimumRequired(), exclude, peers);
+                int needed = criteria.getMinimumRequired();
+                _organizer.selectFastPeers(needed, exclude, peers);
+                needed = Math.max(0, criteria.getMinimumRequired() - peers.size());
+
+                if (needed > 0) {
+                    _organizer.selectHighCapacityPeers(needed, exclude, peers);
+                    needed = Math.max(0, needed - peers.size());
+                }
+
+                if (needed > 0) {
+                    _organizer.selectActiveNotFailingPeers(needed, exclude, peers);
+                }
+
                 break;
+
             default:
                 throw new UnsupportedOperationException();
         }
         if (peers.isEmpty()) {
-            _organizer.selectActiveNotFailingPeers(criteria.getMinimumRequired(), exclude, peers);
             if (_log.shouldWarn())
                 _log.warn("We ran out of peers when looking for reachable ones"
                           + "\n* Found: 0 with "
                           + _organizer.countHighCapacityPeers() + " High Capacity peers and "
                           + _organizer.countFastPeers() + " Fast peers -> Falling back to non-failing peers...");
+            _organizer.selectActiveNotFailingPeers(criteria.getMinimumRequired(), exclude, peers);
         }
         return new ArrayList<Hash>(peers);
     }

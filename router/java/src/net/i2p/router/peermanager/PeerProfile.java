@@ -9,7 +9,7 @@ import net.i2p.router.CommSystemFacade;
 import net.i2p.router.RouterContext;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
-
+import net.i2p.util.SystemVersion;
 
 /**
  * Copied from http://www.i2p2.i2p/how_peerselection.html
@@ -77,8 +77,8 @@ public class PeerProfile {
     //private int _consecutiveBanlists;
     private final int _distance;
 
-    /** keep track of the fastest 10 throughputs */
-    private static final int THROUGHPUT_COUNT = 10;
+    /** keep track of the fastest 8 throughputs unless slow, then 4 */
+    private static final int THROUGHPUT_COUNT = SystemVersion.isSlow() ? 4 : 8;
     /**
      * fastest 1 minute throughput, in bytes per minute, ordered with fastest
      * first.  this is not synchronized, as we don't *need* perfection, and we only
