@@ -86,7 +86,7 @@ import { refreshElements } from "./refreshElements.js";
         reason = reason.split("(")[0].trim();
         reason = reason.replace("Compressible RouterInfo & older than 0.9.57", "Invalid RouterInfo")
                        .replace("<b> -&gt; </b>", "")
-                       .replace("<b> -> </b>", "");
+                       .replace("<b> -> </b>", "")
                        .replace("-&gt;", "");
         reason = reason.trim();
         if (reason) { reasonCounts[reason] = (reasonCounts[reason] || 0) + 1; }
