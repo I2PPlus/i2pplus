@@ -39,16 +39,19 @@ fetchWorker.port.onmessage = function(e) {
     });
 
     document.dispatchEvent(new Event("refreshComplete"));
+    document.dispatchEvent(new CustomEvent("elementsRefreshed", { detail: { selectors: currentTargetSelector } }));
+
   });
 };
 
 export function refreshElements(targetSelectors, url, delay) {
-  const selectors = Array.isArray(targetSelectors)
-    ? targetSelectors
-    : targetSelectors.split(",").map(s => s.trim());
+  let selectors = [];
 
-  currentTargetSelector = selectors;
-  currentUrl = url;
+  if (typeof targetSelectors === "string") {
+    selectors = targetSelectors.split(",").map(s => s.trim());
+  } else if (Array.isArray(targetSelectors)) {
+    selectors = targetSelectors.map(s => s.trim());
+  }
 
   function refresh() {
     if (document.visibilityState !== "visible" || isRefreshing) return;

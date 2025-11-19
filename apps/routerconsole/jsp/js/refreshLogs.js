@@ -263,12 +263,19 @@ function start() {
         }
 
         const preceding = text.slice(Math.max(0, match.start - "floodfill ".length), match.start);
-        const isFloodfill = preceding.trim() === "floodfill";
+        const isFloodfill = preceding.trim().toLowerCase() === "floodfill";
 
         const link = document.createElement("a");
         link.href = match.clean.href;
         link.textContent = match.clean.id;
-        if (isFloodfill) link.classList.add("isFF");
+        if (isFloodfill) {
+          link.classList.add("isFF");
+          const startOfFloodfill = match.start - 8;
+          if (startOfFloodfill > cursor) {
+            fragments.push(document.createTextNode(text.slice(cursor, startOfFloodfill)));
+          }
+          cursor = match.end;
+        }
         fragments.push(link);
         cursor = match.end;
       }
