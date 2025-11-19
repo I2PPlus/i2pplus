@@ -1594,7 +1594,7 @@ img.unknownflag{opacity:.8}
 #logs li:last-child::after{border:0;margin:-4px}
 #logs li::after{margin:2px 0 -4px;width:100%;display:block;content:""}
 #logs li::before{margin-left:-15px;margin-right:5px;content:"";display:inline-block;width:6px;height:6px;vertical-align:calc(1px);color:#777;border-radius:50%;filter:saturate(1);transform:none}
-#logs li a::before{margin:0 3px 0 0;width:16px;height:16px;display:inline-block;vertical-align:text-bottom;content:""}
+#logs li a:not([href*="?port"])::before{margin:0 3px 0 0;width:16px;height:16px;display:inline-block;vertical-align:text-bottom;content:""}
 #logs li a:not(:hover){color:inherit}
 #logs li a[href^="/netdb?ip"]::before{width:14px;background:url(/themes/console/images/globe.svg) no-repeat center center/14px}
 #logs li a[href^="/netdb?l="]::before{margin:0 1px 0 -3px;background:var(--key) no-repeat center center/12px}
