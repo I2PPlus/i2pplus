@@ -155,7 +155,7 @@ function start() {
     const filterValue = els.filterInput.value.toLowerCase();
     if (els.routerlogsList) {
       els.routerlogsList.querySelectorAll("li").forEach(li => {
-        li.style.display = li.textContent.toLowerCase().includes(filterValue) ? "block" : "none";
+        li.style.display = li.textContent.toLowerCase().includes(filterValue) ? "" : "none";
       });
     }
   }
