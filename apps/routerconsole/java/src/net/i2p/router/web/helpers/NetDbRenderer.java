@@ -83,7 +83,7 @@ class NetDbRenderer {
     public NetDbRenderer (RouterContext ctx) {
         _context = ctx;
         _organizer = ctx.profileOrganizer();
-        NetDbCachingJob.schedule(_context);
+        //NetDbCachingJob.schedule(_context);
     }
     private static final String PROP_ENABLE_REVERSE_LOOKUPS = "routerconsole.enableReverseLookups";
     public boolean enableReverseLookups() {return _context.getBooleanProperty(PROP_ENABLE_REVERSE_LOOKUPS);}
