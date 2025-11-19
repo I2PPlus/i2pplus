@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -134,7 +136,7 @@ public class PeerState {
     private boolean _mayDisconnect;
 
     /** list of InboundMessageState for active message */
-    protected final Map<Long, InboundMessageState> _inboundMessages;
+    protected final ConcurrentMap<Long, InboundMessageState> _inboundMessages;
 
     /**
      *  Mostly messages that have been transmitted and are awaiting acknowledgement,
@@ -305,7 +307,7 @@ public class PeerState {
         if (rtt > 0) {recalculateTimeouts(rtt);}
         else {_rttDeviation = _rtt;}
 
-        _inboundMessages = new HashMap<Long, InboundMessageState>(8);
+        _inboundMessages = new ConcurrentHashMap<>(64);
         _outboundMessages = new CachedIteratorCollection<OutboundMessageState>();
         _outboundQueue = new PriBlockingQueue<OutboundMessageState>(ctx, "UDP-PeerState", 64);
         _remotePeer = remotePeer;
@@ -635,7 +637,9 @@ public class PeerState {
      * Access to this map must be synchronized explicitly!
      */
     Map<Long, InboundMessageState> getInboundMessages() {
-        synchronized(_inboundLock) {return new HashMap<>(_inboundMessages);}
+        synchronized (_inboundLock) {
+            return new HashMap<>(_inboundMessages); // safe copy
+        }
     }
 
     /**
@@ -646,19 +650,17 @@ public class PeerState {
      */
     int expireInboundMessages() {
         int rv = 0;
-        synchronized (_inboundLock) {
-            for (Iterator<Map.Entry<Long, InboundMessageState>> iter = _inboundMessages.entrySet().iterator(); iter.hasNext(); ) {
-                Map.Entry<Long, InboundMessageState> entry = iter.next();
-                InboundMessageState state = entry.getValue();
-                if (state.isExpired() || _dead) {
+        for (Iterator<Map.Entry<Long, InboundMessageState>> iter = _inboundMessages.entrySet().iterator(); iter.hasNext(); ) {
+            Map.Entry<Long, InboundMessageState> entry = iter.next();
+            InboundMessageState state = entry.getValue();
+            if (state.isExpired() || _dead) {
+                iter.remove();
+            } else {
+                if (state.isComplete()) {
+                    _log.error("Inbound message is complete, but wasn't handled inline? " + state + " with " + this);
                     iter.remove();
                 } else {
-                    if (state.isComplete()) {
-                        _log.error("Inbound message is complete, but wasn't handled inline? " + state + " with " + this);
-                        iter.remove();
-                    } else {
-                        rv++;
-                    }
+                    rv++;
                 }
             }
         }
