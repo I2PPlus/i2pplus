@@ -36,7 +36,6 @@ function start() {
       processUpdates(doc, els, state);
       requestAnimationFrame(() => {
         state.updates.forEach(fn => fn());
-        postMorphActions();
         applyFilter(els);
         state.updates = [];
       });
@@ -63,8 +62,10 @@ function start() {
 
       if (newFileInfo) state.updates.push(() => morphdom(els.routerlogsFileInfo, newFileInfo));
       if (newList) {
-        tagFirstLi(newList);
-        state.updates.push(() => morphdom(els.routerlogsList, newList, {
+        const clone = newList.cloneNode(true);
+        tagFirstLi(clone);
+        linkifyLogEntries(clone);
+        state.updates.push(() => morphdom(els.routerlogsList, clone, {
           childrenOnly: true,
           getNodeKey: el => el.nodeType === Node.ELEMENT_NODE ? el.getAttribute("data-key") : null
         }));
@@ -74,13 +75,6 @@ function start() {
     if (els.servicelogs) {
       const newEl = doc.getElementById("wrapperlogs");
       if (newEl) state.updates.push(() => morphdom(els.servicelogs, newEl, { childrenOnly: true }));
-    }
-  }
-
-  function postMorphActions() {
-    const list = document.querySelector("#routerlogs td ul") || document.querySelector("#criticallogs td ul");
-    if (list) {
-      linkifyLogEntries(list);
     }
   }
 
@@ -203,10 +197,24 @@ function start() {
         }
       };
 
-      addMatches(routerPattern, m => [{
+      addMatches(/floodfill\s*\[([a-zA-Z0-9~\-]{6})\]/gi, m => [{
         start: m.index,
         end: m.index + m[0].length,
-        clean: { id: m[1], href: `/netdb?r=${m[1]}` }
+        clean: {
+          id: m[1],
+          href: `/netdb?r=${m[1]}`,
+          isFF: true
+        }
+      }]);
+
+      addMatches(/\[([a-zA-Z0-9~\-]{6})\]/g, m => [{
+        start: m.index,
+        end: m.index + m[0].length,
+        clean: {
+          id: m[1],
+          href: `/netdb?r=${m[1]}`,
+          isFF: false
+        }
       }]);
 
       addMatches(leasePattern, m => {
@@ -262,20 +270,10 @@ function start() {
           fragments.push(document.createTextNode(text.slice(cursor, match.start)));
         }
 
-        const preceding = text.slice(Math.max(0, match.start - "floodfill ".length), match.start);
-        const isFloodfill = preceding.trim().toLowerCase() === "floodfill";
-
         const link = document.createElement("a");
         link.href = match.clean.href;
         link.textContent = match.clean.id;
-        if (isFloodfill) {
-          link.classList.add("isFF");
-          const startOfFloodfill = match.start - 8;
-          if (startOfFloodfill > cursor) {
-            fragments.push(document.createTextNode(text.slice(cursor, startOfFloodfill)));
-          }
-          cursor = match.end;
-        }
+        if (match.clean.isFF) {link.classList.add("isFF");}
         fragments.push(link);
         cursor = match.end;
       }
