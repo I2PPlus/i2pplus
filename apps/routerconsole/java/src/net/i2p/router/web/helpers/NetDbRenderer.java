@@ -370,6 +370,7 @@ class NetDbRenderer {
         if (port != 0) {
             buf.append("Port ").append(port);
             if (highPort > 0) buf.append('-').append(highPort);
+            buf.append(' ');
         }
         if (mtu != null) buf.append("MTU ").append(mtu).append(' ');
         if (cost != 0) buf.append("Cost ").append(cost).append(' ');

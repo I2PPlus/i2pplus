@@ -168,7 +168,7 @@ class TunnelRenderer {
                 sb.append("<table id=allTransit class=\"tunneldisplay tunnels_participating\">\n<thead><tr data-sort-method=thead><th>")
                   .append(_t("Role")).append("</th><th");
                 if (!bySpeed) {sb.append(" data-sort-default");}
-                sb.append(">")
+                sb.append(" data-sort-method=number>")
                   .append(_t("Expiry"))
                   .append("</th><th title=\"")
                   .append(_t("Data transferred"))
@@ -180,7 +180,7 @@ class TunnelRenderer {
                 if (isAdvanced) {
                   sb.append("<th class=limit data-sort-method=number>")
                     .append(_t("Limit"))
-                    .append("</th><th>")
+                    .append("</th><th data-sort-method=number>")
                     .append(_t("Receive on"))
                     .append("</th>");
                 }
@@ -222,13 +222,17 @@ class TunnelRenderer {
                           .append("\">").append(_t("Participant")).append("</td>");
                     }
                     long timeLeft = cfg.getExpiration()-_context.clock().now();
+                    sb.append("<td class=\"cells expiry\" data-sort=").append(timeLeft).append(">");
                     if (timeLeft > 0) {
-                        sb.append("<td class=\"cells expiry\" data-sort=")
-                          .append(timeLeft).append("><span class=right>").append(timeLeft / 1000)
-                          .append("</span><span class=left>&#8239;").append(_t("sec")).append("</span></td>");
+                      sb.append("<span class=right>")
+                        .append(timeLeft / 1000)
+                        .append("</span><span class=left>&#8239;")
+                        .append(_t("sec"))
+                        .append("</span>");
                     } else {
-                        sb.append("<td><i>").append(_t("grace period")).append("</i></td>");
+                        sb.append("<i>").append(_t("grace period")).append("</i>");
                     }
+                    sb.append("</td>");
 
                     double sizeInKB = count * 1024.0 / 1000.0;
                     double sizeInMB = sizeInKB / 1024.0;

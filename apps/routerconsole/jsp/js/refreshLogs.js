@@ -207,6 +207,16 @@ function start() {
         }
       }]);
 
+      addMatches(/router\s*\[([a-zA-Z0-9~\-]{6})\]/gi, m => [{
+        start: m.index,
+        end: m.index + m[0].length,
+        clean: {
+          id: m[1],
+          href: `/netdb?r=${m[1]}`,
+          isFF: false
+        }
+      }]);
+
       addMatches(/\[([a-zA-Z0-9~\-]{6})\]/g, m => [{
         start: m.index,
         end: m.index + m[0].length,

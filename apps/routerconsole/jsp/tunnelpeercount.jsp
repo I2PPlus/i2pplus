@@ -3,11 +3,6 @@
 <%@include file="head.jsi"%>
 <%=intl.title("tunnel peer count")%>
 <link href=/themes/console/tablesort.css rel=stylesheet>
-<script src=/js/tablesort/tablesort.js type=module></script>
-<script src=/js/tablesort/tablesort.number.js type=module></script>
-<script src=/js/tablesort/tablesort.natural.js type=module></script>
-<script src=/js/lazyload.js type=module></script>
-<script src=/js/tunnelpeercount.js type=module></script>
 </head>
 <body id=routertunnels>
 <%@include file="sidebar.jsi"%>
@@ -25,5 +20,9 @@
 <% tunnelPeerCountHelper.storeWriter(out);%>
 <jsp:getProperty name="tunnelPeerCountHelper" property="tunnelPeerCount"/>
 </div>
+<script src=/js/tablesort/tablesort.js type=module></script>
+<script src=/js/tablesort/tablesort.number.js type=module></script>
+<script src=/js/lazyload.js type=module></script>
+<script src=/js/tunnelpeercount.js type=module></script>
 </body>
 </html>

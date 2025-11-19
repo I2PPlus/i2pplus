@@ -53,12 +53,14 @@ export function refreshElements(targetSelectors, url, delay) {
     selectors = targetSelectors.map(s => s.trim());
   }
 
+  currentTargetSelector = selectors;
+  currentUrl = url;
+
   function refresh() {
     if (document.visibilityState !== "visible" || isRefreshing) return;
 
     isRefreshing = true;
     progressx.show(theme);
-    progressx.progress(0.5);
 
     fetchWorker.port.postMessage({ url: currentUrl });
 

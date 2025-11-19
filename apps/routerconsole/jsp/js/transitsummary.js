@@ -3,6 +3,7 @@
 /* License: AGPL3 or later */
 
 import {onVisible} from "/js/onVisible.js";
+import {convertKBtoMB} from "/js/convertKBtoMB.js";
 
 const main = document.getElementById("tunnels");
 const peers = document.getElementById("transitPeers");

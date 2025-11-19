@@ -2,93 +2,67 @@
 /* Handle automatic, manual refresh and tablesort for /transitfast */
 /* License: AGPL3 or later */
 
-import {onVisible} from "/js/onVisible.js";
+import {refreshElements} from "/themes/js/refreshElements.js";
 
 (function() {
-  const main = document.getElementById("tunnels");
-  const peers = document.getElementById("transitPeers");
-  const tunnels = document.getElementById("allTransit");
-  const refresh = document.getElementById("refreshPage");
-  const visible = document.visibilityState;
-  const xhrtunnels = new XMLHttpRequest();
-  const REFRESH_INTERVAL = 60*1000;
-  let refreshId;
-  let sorter;
+  const REFRESH_INTERVAL = 10*1000;
+  const RETRY_DELAY = 3000;
+  let main, peers, tunnels, refreshBtn;
+  let sorter = null;
+  let isSetup = false;
+  let isRefreshing = false;
 
-  if (tunnels) {
-    sorter = new Tablesort(tunnels, {descending: true});
+  function getDOM() {
+    if (main) return;
+    main = document.getElementById("tunnels");
+    peers = document.getElementById("transitPeers");
+    tunnels = document.getElementById("allTransit");
+    refreshBtn = document.getElementById("refreshPage");
   }
 
-  function initRefresh() {
-    if (refreshId) {
-      clearInterval(refreshId);
-    }
-    refreshId = setInterval(updateTunnels, REFRESH_INTERVAL);
-    if (tunnels && !sorter) {
-      sorter = new Tablesort(tunnels, {descending: true});
-      removeHref();
-    }
-    addSortListeners();
-    updateTunnels();
+  function setupTablesort() {
+    if (isSetup || !tunnels) return;
+    sorter = sorter || new Tablesort(tunnels, {descending: true});
+    tunnels.addEventListener("beforeSort", () => progressx.show(theme));
+    tunnels.addEventListener("afterSort", () => progressx.hide());
+    if (refreshBtn) refreshBtn.removeAttribute("href");
+    isSetup = true;
   }
 
-  function removeHref() {
-    if (refresh) {refresh.removeAttribute("href");}
+  function startRefresh() {
+    if (isRefreshing) return;
+    isRefreshing = true;
+    requestAnimationFrame(() => progressx?.show?.(theme));
   }
 
-  function addSortListeners() {
-    if (tunnels) {
-      tunnels.addEventListener("beforeSort", () => progressx.show(theme));
-      tunnels.addEventListener("afterSort", () => progressx.hide());
-    }
+  function endRefresh() {
+    requestAnimationFrame(() => progressx?.hide?.());
+    isRefreshing = false;
   }
 
-  function updateNotes() {
+  function refreshData() {
+    startRefresh();
+    getDOM();
     const notes = document.querySelectorAll(".statusnotes");
-    if (notes[0]) {
-      const notesResponse = xhrtunnels.responseXML.querySelectorAll(".statusnotes");
-      notes.forEach((note, i) => {
-        if (notesResponse[i]) {note.innerHTML = notesResponse[i].innerHTML;}
-      });
+    if (peers && notes.length) {
+      setupTablesort();
+      refreshElements(".statusnotes, #transitPeers", "/transitfast", REFRESH_INTERVAL);
+    } else if (main) { refreshElements("#tunnels", "/transitfast", RETRY_DELAY); }
+    endRefresh();
+  }
+
+  function init(retryCount = 0) {
+    getDOM();
+    if (!refreshBtn) {
+      if (retryCount < 30) setTimeout(() => init(retryCount + 1), RETRY_DELAY);
+      return;
     }
+    refreshBtn.addEventListener("click", (e) => { e.preventDefault(); refreshData(); });
+    refreshData();
   }
 
-  function updateTunnels() {
-    xhrtunnels.open("GET", "/transitfast", true);
-    xhrtunnels.responseType = "document";
-    xhrtunnels.onreadystatechange = function() {
-      if (xhrtunnels.readyState === 4 && xhrtunnels.status === 200) {
-        const mainResponse = xhrtunnels.responseXML.getElementById("tunnels");
-        const peersResponse = xhrtunnels.responseXML.getElementById("transitPeers");
-        if (peersResponse) {
-          addSortListeners();
-          if (peers && peers !== peersResponse) {
-            peers.innerHTML = peersResponse.innerHTML;
-            updateNotes();
-            sorter.refresh();
-            removeHref();
-          }
-        } else if (!tunnels || !peersResponse) {main.innerHTML = mainResponse.innerHTML;}
-      }
-    }
-    if (sorter) {sorter.refresh();}
-    xhrtunnels.send();
-  }
+  document.addEventListener("refreshComplete", () => { if (sorter) sorter.refresh(); });
 
-  if (refresh) {
-    refresh.addEventListener("click", () => {
-      progressx.show(theme);
-      progressx.progress(0.5);
-      updateTunnels();
-      progressx.hide();
-    });
-    refresh.addEventListener("mouseenter", removeHref);
-  }
-
-  onVisible(main, updateTunnels);
-
-  if (visible === "hidden") {clearInterval(refreshId);}
-
-  window.addEventListener("DOMContentLoaded", progressx.hide);
-  document.addEventListener("DOMContentLoaded", initRefresh);
+  if (document.readyState === "loading") { document.addEventListener("DOMContentLoaded", () => init()); }
+  else { init(); }
 })();

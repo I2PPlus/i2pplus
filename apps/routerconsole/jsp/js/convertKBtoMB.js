@@ -2,7 +2,7 @@
 /* Converts KB to MB when > 1024KB */
 /* License: AGPL3 or later */
 
-function convertKBtoMB(selector) {
+export function convertKBtoMB(selector) {
   let selectors, elements;
 
   if (typeof selector === "string") {selectors = [selector];}
