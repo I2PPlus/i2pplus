@@ -90,7 +90,7 @@ class EventPumper implements Runnable {
 //    private static final int FAILSAFE_LOOP_COUNT = 512;
 //    private static final long SELECTOR_LOOP_DELAY = 200;
     private static final int FAILSAFE_ITERATION_FREQ = 30*1000;
-    private static final int FAILSAFE_LOOP_COUNT = SystemVersion.isSlow() ? 512 : 1024;
+    private static final int FAILSAFE_LOOP_COUNT = SystemVersion.isSlow() ? 512 : 4096;
     private static final long SELECTOR_LOOP_DELAY = SystemVersion.isSlow() ? 200 : 50;
     private static final long BLOCKED_IP_FREQ = 15*60*1000;
 
@@ -522,7 +522,7 @@ class EventPumper implements Runnable {
         try {
             SocketChannel chan = servChan.accept();
             // don't throw an NPE if the connect is gone again
-            if(chan == null) {return;}
+            if (chan == null) {return;}
             chan.configureBlocking(false);
 
             byte[] ip = chan.socket().getInetAddress().getAddress();
@@ -719,7 +719,7 @@ class EventPumper implements Runnable {
                 if (bytesRead < 0 && totalRead == 0) totalRead = bytesRead;
 
                 if (shouldDebug && totalRead != 0) {
-                    _log.debug("Read " + totalRead + " bytes from " + con);
+                    _log.debug("Read " + totalRead + " bytes " + con);
                 }
 
                 if (totalRead < 0) {
@@ -868,6 +868,21 @@ class EventPumper implements Runnable {
     public boolean processWrite(final NTCPConnection con, final SelectionKey key) {
         boolean rv = false;
         final SocketChannel chan = con.getChannel();
+
+        if (con.isBanned()) {
+            if (_log.shouldDebug()) {
+                _log.debug("Skipping write on banned connection: " + con);
+            }
+            return true;
+        }
+
+        if (!con.isEstablished() && con.getUptime() > NTCPTransport.ESTABLISH_TIMEOUT) {
+            if (_log.shouldDebug()) {
+                _log.debug("Skipping write on timed-out unestablished connection: " + con);
+            }
+            return true;
+        }
+
         try {
             synchronized(con.getWriteLock()) {
                 while (true) {
@@ -1090,9 +1105,8 @@ class EventPumper implements Runnable {
      * @param con the NTCPConnection to log and close
      */
     private void logAndClose(boolean debug, String msg, NTCPConnection con) {
-        if (debug) {
-            _log.debug(msg + con);
-        }
+        if (debug) {_log.debug(msg + con);}
+        con.close();
     }
 
     /**

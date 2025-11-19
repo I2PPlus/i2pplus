@@ -1365,7 +1365,7 @@ public class NTCPConnection implements Closeable {
      *  @return true if banned or blocklisted, false otherwise
      *  @since 0.9.68+
      */
-    private boolean isBanned() {
+    public boolean isBanned() {
         if (_remotePeer == null) {return false;}
 
         Hash peerHash = _remotePeer.calculateHash();

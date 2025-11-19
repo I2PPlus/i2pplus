@@ -1,14 +1,16 @@
 package net.i2p.router.transport.ntcp;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.InetAddress;
 import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.UnknownHostException;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -17,7 +19,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.KeyPair;
@@ -26,27 +27,25 @@ import net.i2p.data.Base64;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
+import net.i2p.data.i2np.DatabaseStoreMessage;
+import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.PrivateKey;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.data.i2np.DatabaseStoreMessage;
-import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.router.Banlist;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
+import net.i2p.router.transport.crypto.X25519KeyFactory;
 import net.i2p.router.transport.Transport;
-import static net.i2p.router.transport.Transport.AddressSource.*;
 import net.i2p.router.transport.TransportBid;
 import net.i2p.router.transport.TransportImpl;
 import net.i2p.router.transport.TransportManager;
 import net.i2p.router.transport.TransportUtil;
-import static net.i2p.router.transport.TransportUtil.IPv6Config.*;
-import net.i2p.router.transport.crypto.X25519KeyFactory;
 import net.i2p.router.transport.udp.UDPTransport;
-import net.i2p.router.util.DecayingHashSet;
 import net.i2p.router.util.DecayingBloomFilter;
+import net.i2p.router.util.DecayingHashSet;
 import net.i2p.router.util.EventLog;
 import net.i2p.util.Addresses;
 import net.i2p.util.ConcurrentHashSet;
@@ -54,6 +53,8 @@ import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
+import static net.i2p.router.transport.Transport.AddressSource.*;
+import static net.i2p.router.transport.TransportUtil.IPv6Config.*;
 
 /**
  *  The NIO TCP transport
@@ -109,6 +110,11 @@ public class NTCPTransport extends TransportImpl {
     private final X25519KeyFactory _xdhFactory;
     private long _lastBadSkew;
     private static final long[] RATES = {60*1000, 10*60*1000, 60*60*1000, 24*60*60*1000 };
+
+    private static final int MIN_CONCURRENT_READERS = SystemVersion.isSlow() ? 3 : 6;  // unless < 32MB
+    private static final int MIN_CONCURRENT_WRITERS = MIN_CONCURRENT_READERS;
+    private static final int MAX_CONCURRENT_READERS = MIN_CONCURRENT_READERS;
+    private static final int MAX_CONCURRENT_WRITERS = MIN_CONCURRENT_READERS;
 
     /**
      *  RI sigtypes supported in 0.9.16
@@ -474,10 +480,10 @@ public class NTCPTransport extends TransportImpl {
      * @param e The exception that occurred during connection setup.
      */
     private void logConnectionSetupError(Exception e) {
-        if (e instanceof IOException) {
+        if (e instanceof IOException && !shouldSuppressException(e)) {
             if (_log.shouldError()) _log.error("[NTCP] Error opening a channel \n* IO Exception: " + e.getMessage());
             _context.statManager().addRateData("ntcp.outboundFailedIOEImmediate", 1);
-        } else if (e instanceof IllegalStateException) {
+        } else if (e instanceof IllegalStateException && !shouldSuppressException(e)) {
             if (_log.shouldWarn()) _log.warn("[NTCP] Failed opening a channel \n* Illegal State Exception: " + e.getMessage());
         }
     }
@@ -823,11 +829,6 @@ public class NTCPTransport extends TransportImpl {
     boolean isHXHIValid(byte[] hxhi) {
         return !_replayFilter.add(hxhi, 0, 8);
     }
-
-    private static final int MIN_CONCURRENT_READERS = SystemVersion.isSlow() ? 3 : 6;  // unless < 32MB
-    private static final int MIN_CONCURRENT_WRITERS = MIN_CONCURRENT_READERS;
-    private static final int MAX_CONCURRENT_READERS = MIN_CONCURRENT_READERS;
-    private static final int MAX_CONCURRENT_WRITERS = MIN_CONCURRENT_READERS;
 
     /**
      * Starts the NTCP transport listening process, ensuring only one pumper is running
@@ -1826,6 +1827,34 @@ public class NTCPTransport extends TransportImpl {
         _endpoints.clear();
         _lastInboundIPv4 = 0;
         _lastInboundIPv6 = 0;
+    }
+
+    /**
+     * Determines whether the given Throwable (or any of its causes)
+     * contains a message that should be suppressed from logging.
+     *
+     * @param t the Throwable to check
+     * @return true if the exception should be suppressed, false otherwise
+     * @since 0.9.68+
+     */
+    private boolean shouldSuppressException(Throwable t) {
+        Set<String> suppressionPatterns = new HashSet<>(Arrays.asList(
+            "Old and slow",
+            "RouterInfo store fail"
+        ));
+
+        while (t != null) {
+            String message = t.getMessage();
+            if (message != null) {
+                for (String pattern : suppressionPatterns) {
+                    if (message.contains(pattern)) {
+                        return true;
+                    }
+                }
+            }
+            t = t.getCause();
+        }
+        return false;
     }
 
     /**
