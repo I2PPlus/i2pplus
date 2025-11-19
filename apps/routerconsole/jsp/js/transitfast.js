@@ -2,7 +2,7 @@
 /* Handle automatic, manual refresh and tablesort for /transitfast */
 /* License: AGPL3 or later */
 
-import {refreshElements} from "/themes/js/refreshElements.js";
+import {refreshElements} from "/js/refreshElements.js";
 
 (function() {
   const REFRESH_INTERVAL = 10*1000;
