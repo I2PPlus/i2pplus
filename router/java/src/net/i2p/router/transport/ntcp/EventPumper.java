@@ -911,12 +911,12 @@ class EventPumper implements Runnable {
             }
         // catch and close outside the write lock to avoid deadlocks in NTCPCon.locked_close()
         } catch (CancelledKeyException cke) {
-            if (_log.shouldWarn()) {_log.warn("Error writing on: " + con + "\n* Reason: Socket channel closed or selection key cancelled");}
+            if (_log.shouldInfo()) {_log.info("Error writing on: " + con + "\n* Reason: Socket channel closed or selection key cancelled");}
             _context.statManager().addRateData("ntcp.writeError", 1);
             con.close();
             rv = true;
         } catch (IOException ioe) {
-            if (_log.shouldWarn()) {_log.warn("Error writing on: " + con + "\n* Reason: IO Error");}
+            if (_log.shouldInfo()) {_log.info("Error writing on: " + con + "\n* Reason: IO Error");}
             _context.statManager().addRateData("ntcp.writeError", 1);
             con.close();
             rv = true;
