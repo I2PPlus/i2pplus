@@ -119,7 +119,7 @@ class ProfileOrganizerRenderer {
             buf.append("<th>").append(_t("Status")).append("</th>")
                .append("<th class=groups>").append(_t("Groups")).append("</th>")
                .append("<th data-sort-method=number>").append(_t("Speed")).append("</th>")
-               .append("<th class=latency>").append(_t("Low Latency")).append("</th>")
+               .append("<th class=latency data=sort-method=number>").append(_t("Low Latency")).append("</th>")
                .append("<th title=\"").append(_t("Tunnels peer has agreed to participate in"))
                .append("\" data-sort-method=number>").append(_t("Accepted")).append("</th>")
                .append("<th title=\"").append(_t("Tunnels peer has refused to participate in"))
@@ -287,7 +287,10 @@ class ProfileOrganizerRenderer {
                     else if (capBonus <= -30) {buf.append("testFail ");}
                     buf.append("nospeed\">&ensp;</span>");
                 }
-                buf.append("</td><td class=latency>");
+                int score = 0;
+                if (bonus >= 9999999) {score = 2;}
+                else if (capBonus == -30) {score = 1;}
+                buf.append("</td><td class=latency data-sort=").append(score).append(">");
                 if (bonus >= 9999999) {buf.append("<span class=lowlatency>✔</span>");}
                 else if (capBonus == -30) {buf.append("<span class=highlatency>✖</span>");}
                 else {buf.append("<span>&ensp;</span>");}
