@@ -670,9 +670,9 @@ public class ProfileOrganizer {
             return; // within limits
         }
 
-        if (_log.shouldWarn()) {
-            _log.warn("Profile count (" + _notFailingPeers.size() +
-                      ") exceeds cap (" + maxProfiles + ") -> Evicting lowest-priority peers...");
+        if (_log.shouldInfo()) {
+            _log.info("Profiles stored in RAM (" + _notFailingPeers.size() +
+                      ") exceeds hard limit of " + maxProfiles + " -> Evicting lowest quality profiles...");
         }
 
         // Build list of profiles eligible for eviction (not in critical tiers)
