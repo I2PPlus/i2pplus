@@ -610,8 +610,7 @@ public class ProfileOrganizer {
     }
 
     public void purgeStaleProfileFiles() {
-        int maxProfiles = _context.getProperty(PROP_MAX_PROFILES, DEFAULT_MAX_PROFILES);
-        if (maxProfiles > ABSOLUTE_MAX_PROFILES) maxProfiles = ABSOLUTE_MAX_PROFILES;
+        int maxProfiles = ABSOLUTE_MAX_PROFILES;
 
         // Get all currently active peers (those we keep in memory)
         Set<Hash> activePeers = selectAllPeers(); // includes fast, high-cap, not-failing
