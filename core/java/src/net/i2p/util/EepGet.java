@@ -118,7 +118,7 @@ public class EepGet {
     /** this will be replaced by the HTTP Proxy if we are using it */
     protected static final String USER_AGENT = "Wget/1.11.4";
     protected static final int CONNECT_TIMEOUT = 90*1000;
-    protected static final int INACTIVITY_TIMEOUT = 2*60*1000;
+    protected static final int INACTIVITY_TIMEOUT = 5*60*1000;
     /** maximum times to try without getting any data at all, even if numRetries is higher @since 0.7.14 */
     protected static final int MAX_COMPLETE_FAILS = 20;
 
