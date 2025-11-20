@@ -1361,7 +1361,7 @@ class NetDbRenderer {
 
         List<RouterInfo> pageList = list.subList(fromIndex, toIndex);
 
-        int maxBeforeStreaming = enableReverseLookups() ? 200 : 300;
+        int maxBeforeStreaming = enableReverseLookups() ? 100 : 200;
 
         if (pageList.size() <= maxBeforeStreaming) {
             out.write(renderRouterInfosInParallel(pageList, isLocal));
