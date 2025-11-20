@@ -1161,6 +1161,11 @@ h3.tabletitle+.statusnotes,table.tunneldisplay{margin-top:-1px}
 #tunnels .tunnels_participating .cells:first-child{font-size:0}
 #tunnels #tunnelPeerCount tbody tr td.bar~td:empty{border-left:0;border-right:0}
 
+#transitRecent #allTransit td{width:9%}
+#transitRecent #allTransit td:first-child{width:4%}
+#transitRecent #allTransit td:nth-child(2){width:13%}
+#transitRecent #allTransit td:nth-child(n+6){width:14%}
+
 /* netdb */
 #netdboverview{margin:11px auto 13px;width:calc(100% - 8px);box-shadow:var(--border_table)}
 #netdb #netdboverview td{border-right:var(--border)}
