@@ -10,9 +10,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -50,7 +52,7 @@ class ProfilePersistenceHelper {
     private static final String DIR_PREFIX = "p";
     private static final String B64 = Base64.ALPHABET_I2P;
     // Max to read in at startup
-    private static final int LIMIT_PROFILES = SystemVersion.isSlow() ? 1000 : 3000;
+    private static final int LIMIT_PROFILES = SystemVersion.isSlow() ? 1000 : 4000;
 
     private final File _profileDir;
     private Hash _us;
@@ -500,6 +502,80 @@ class ProfilePersistenceHelper {
         String hash = profile.getPeer().toBase64();
         File dir = new File(_profileDir, DIR_PREFIX + hash.charAt(0));
         return new File(dir, PREFIX + hash + SUFFIX);
+    }
+
+    /**
+     * Delete profile files not in 'keepPeers', if total file count > maxProfiles.
+     * Deletes oldest or least relevant first (based on file mtime if no RouterInfo).
+     */
+    public void purgeExcessProfiles(Set<Hash> keepPeers, int maxProfiles) {
+        List<File> files = selectFiles();
+        if (files.size() <= maxProfiles || keepPeers == null) {
+            return; // within limit
+        }
+
+        // Build list of (file, peerHash, lastModified) for files NOT in keepPeers
+        List<FileMetadata> candidates = new ArrayList<>();
+        long now = System.currentTimeMillis();
+        long activeThreshold = now - (8 * 60 * 60 * 1000L); // 8 hours
+
+        for (File f : files) {
+            Hash peer = getHash(f.getName());
+            if (peer == null || keepPeers.contains(peer)) {
+                continue; // protected
+            }
+
+            // Try to check RouterInfo for bandwidth tier (K/L/M = delete)
+            RouterInfo info = (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(peer);
+            if (info != null) {
+                String tier = info.getBandwidthTier();
+                if ("K".equals(tier) || "L".equals(tier) || "M".equals(tier)) {
+                    f.delete();
+                    continue;
+                }
+            }
+
+            // Keep recently active ones (if we can infer)
+            boolean recentlyActive = false;
+            try {
+                Properties props = new Properties();
+                loadProps(props, f);
+                long lastSent = getLong(props, "lastSentToSuccessfully");
+                long lastHeard = getLong(props, "lastHeardFrom");
+                if (lastSent >= activeThreshold || lastHeard >= activeThreshold) {
+                    recentlyActive = true;
+                }
+            } catch (IOException e) {
+                if (_log.shouldDebug()) _log.debug("Failed to read profile " + f, e);
+            }
+
+            if (!recentlyActive) {
+                candidates.add(new FileMetadata(f, f.lastModified()));
+            }
+        }
+
+        // Now delete oldest first until within limit
+        int overage = files.size() - maxProfiles;
+        if (overage <= 0) return;
+
+        // Sort by lastModified (oldest first)
+        candidates.sort(Comparator.comparingLong(m -> m.lastModified));
+        int toDelete = Math.min(overage, candidates.size());
+
+        for (int i = 0; i < toDelete; i++) {
+            candidates.get(i).file.delete();
+        }
+
+        if (_log.shouldInfo()) {
+            _log.info("Purged " + toDelete + " stale profile files from disk");
+        }
+    }
+
+    // Helper class
+    private static class FileMetadata {
+        final File file;
+        final long lastModified;
+        FileMetadata(File f, long lm) { file = f; lastModified = lm; }
     }
 
 }

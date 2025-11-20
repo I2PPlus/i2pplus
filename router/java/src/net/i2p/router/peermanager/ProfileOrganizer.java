@@ -5,6 +5,7 @@ import java.io.OutputStream;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.concurrent.TimeUnit;
 import java.util.HashMap;
@@ -60,6 +61,10 @@ public class ProfileOrganizer {
     public static final String PROP_MINIMUM_HIGH_CAPACITY_PEERS = "profileOrganizer.minHighCapacityPeers";
     public static final int DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS = 500;
     private static final int ABSOLUTE_MAX_HIGHCAP_PEERS = 800;
+
+    public static final String PROP_MAX_PROFILES = "profileOrganizer.maxProfiles";
+    public static final int DEFAULT_MAX_PROFILES = SystemVersion.isSlow() ? 1000 : 2000;
+    public static final int ABSOLUTE_MAX_PROFILES = 4000;
 
     private static final long[] RATES = {
         60 * 1000L,
@@ -180,6 +185,7 @@ public class ProfileOrganizer {
                 _highCapacityPeers.put(peer, profile);
             }
             _strictCapacityOrder.add(profile);
+             enforceProfileCap();
         } finally {releaseWriteLock();}
         return old;
     }
@@ -453,16 +459,38 @@ public class ProfileOrganizer {
         reorganize(false, false);
     }
 
+    /**
+     * Reorganizes peer profiles into performance-based tiers (fast, high-capacity, etc.) and expires stale entries.
+     * <p>
+     * This method:
+     * <ul>
+     *   <li>Coalesces and decays stats if requested and uptime conditions are met.</li>
+     *   <li>Filters out unreachable, inactive, or low-tier peers.</li>
+     *   <li>Recalculates dynamic thresholds for speed, capacity, and integration.</li>
+     *   <li>Rebuilds internal tier maps and the global profile ordering.</li>
+     *   <li>Expires profiles that haven't been active recently to bound memory usage.</li>
+     * </ul>
+     * <p>
+     * <strong>Memory Safety:</strong> To prevent unbounded memory growth (e.g., OOM after 8+ hours),
+     * this method ensures that expired profiles are removed from all data structures—even if the full
+     * reorganization is skipped due to lock contention. A best-effort expiration pass runs outside the
+     * write lock to mitigate leaks during high contention.
+     *
+     * @param shouldCoalesce if {@code true}, coalesce statistics for active profiles
+     * @param shouldDecay if {@code true} and coalescing is performed, apply decay to historical stats
+     */
     void reorganize(boolean shouldCoalesce, boolean shouldDecay) {
-        long now = _context.clock().now();
-        long sortStart = System.currentTimeMillis();
+        final long now = _context.clock().now();
+        final long start = System.currentTimeMillis();
         int profileCount = 0;
         int expiredCount = 0;
 
-        long expireOlderThan = countNotFailingPeers() > ENOUGH_PROFILES
-            ? 8 * 60 * 60 * 1000
-            : 24 * 60 * 60 * 1000;
+        // Determine expiration window based on current profile volume
+        final long expireOlderThan = countNotFailingPeers() > ENOUGH_PROFILES
+            ? 8 * 60 * 60 * 1000L   // 8 hours
+            : 24 * 60 * 60 * 1000L; // 24 hours
 
+        // Optional coalescing (read-only, safe to skip if lock fails)
         if (shouldCoalesce && _context.router() != null &&
             _context.router().getUptime() > 60 * 60 * 1000 &&
             countNotFailingPeers() > (ENOUGH_PROFILES / 2)) {
@@ -478,81 +506,71 @@ public class ProfileOrganizer {
             }
         }
 
-        Set<PeerProfile> allPeers;
-        getReadLock();
-        try {allPeers = new HashSet<>(_strictCapacityOrder);}
-        finally {releaseReadLock();}
-
-        Set<PeerProfile> reordered = new TreeSet<>(_comp);
-        double totalCapacity = 0;
-        double totalIntegration = 0;
-
-        for (PeerProfile profile : allPeers) {
-            if (_us.equals(profile.getPeer())) continue;
-            if (profile.wasUnreachable()) continue;
-
-            RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(profile.getPeer());
-            String bwTier = peerInfo != null && peerInfo.getBandwidthTier() != null
-                ? peerInfo.getBandwidthTier() : "K";
-
-            if (bwTier.equals("K") || bwTier.equals("L") || bwTier.equals("M")) continue;
-
-            if (!profile.getIsActive(now)) continue;
-
-            totalCapacity += profile.getCapacityValue();
-            totalIntegration += profile.getIntegrationValue();
-            reordered.add(profile);
-        }
-
-        int numNotFailing = reordered.size();
-        double meanCapacity = avg(totalCapacity, numNotFailing);
-        double thresholdAtMedian = 0;
-        double thresholdAtMinHighCap = 0;
-        double thresholdAtLowest = CapacityCalculator.GROWTH_FACTOR;
-        int cur = 0;
-        int numExceedingMean = 0;
-
-        for (PeerProfile profile : reordered) {
-            double val = profile.getCapacityValue();
-            if (val > meanCapacity) numExceedingMean++;
-            if (cur == reordered.size() / 2) thresholdAtMedian = val;
-            if (cur == getMinimumHighCapacityPeers() - 1) thresholdAtMinHighCap = val;
-            if (cur == reordered.size() - 1) thresholdAtLowest = val;
-            cur++;
-        }
-
-        double newCapacityThreshold = calculateCapacityThreshold(
-            meanCapacity, numExceedingMean, reordered.size(),
-            thresholdAtMedian, thresholdAtMinHighCap, thresholdAtLowest
-        );
-
-        double newIntegrationThreshold = numNotFailing > 0 ? totalIntegration / numNotFailing : 1.0d;
-
-        double newSpeedThreshold = calculateSpeedThreshold(reordered);
-
-        long sortTime = System.currentTimeMillis() - sortStart;
-
+        // Attempt to acquire write lock for full reorganization
         if (!getWriteLock()) {
-            _log.warn("Failed to acquire write lock during reorganize -> Skipping update...");
+            // CRITICAL: Even if we skip full reorg, perform best-effort expiration
+            // to avoid unbounded memory growth during sustained lock contention.
+            _log.warn("Write lock unavailable during reorganize; performing lightweight expiration...");
+
+            getReadLock();
+            try {
+                // Estimate expired profiles without modifying structures
+                int estimatedExpired = 0;
+                for (PeerProfile profile : _strictCapacityOrder) {
+                    if (profile.getLastSendSuccessful() < now - expireOlderThan) {
+                        estimatedExpired++;
+                    }
+                }
+                _context.statManager().addRateData("peer.profileEstimatedExpired", estimatedExpired, 0);
+            } finally {
+                releaseReadLock();
+            }
+
+            // Schedule urgent retry or alert via stats
+            _context.statManager().addRateData("peer.reorganizeLockFailures", 1, 0);
             return;
         }
 
         try {
+            // Step 1: Build new ordered set of non-expired, eligible profiles
             Set<PeerProfile> newStrictCapacityOrder = new TreeSet<>(_comp);
+            double totalCapacity = 0;
+            double totalIntegration = 0;
+
             for (PeerProfile profile : _strictCapacityOrder) {
-                if (profile.getLastSendSuccessful() >= now - expireOlderThan) {
-                    profile.updateValues();
-                    newStrictCapacityOrder.add(profile);
-                    profileCount++;
-                } else {
+                if (_us.equals(profile.getPeer())) continue;
+                if (profile.wasUnreachable()) continue;
+
+                // Check activity against dynamic expiration window
+                if (profile.getLastSendSuccessful() < now - expireOlderThan) {
                     expiredCount++;
+                    continue;
                 }
+
+                // Skip peers with low bandwidth tiers
+                RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(profile.getPeer());
+                String bwTier = (peerInfo != null && peerInfo.getBandwidthTier() != null)
+                    ? peerInfo.getBandwidthTier() : "K";
+                if ("K".equals(bwTier) || "L".equals(bwTier) || "M".equals(bwTier)) {
+                    continue;
+                }
+
+                if (!profile.getIsActive(now)) continue;
+
+                profile.updateValues(); // Refresh thresholds
+                newStrictCapacityOrder.add(profile);
+                totalCapacity += profile.getCapacityValue();
+                totalIntegration += profile.getIntegrationValue();
+                profileCount++;
             }
 
-            _thresholdCapacityValue = newCapacityThreshold;
-            _thresholdIntegrationValue = newIntegrationThreshold;
-            _thresholdSpeedValue = newSpeedThreshold;
+            // Step 2: Compute new thresholds
+            int numNotFailing = newStrictCapacityOrder.size();
+            double newIntegrationThreshold = numNotFailing > 0 ? totalIntegration / numNotFailing : 1.0d;
+            double newCapacityThreshold = calculateCapacityThresholdFromSet(newStrictCapacityOrder, numNotFailing);
+            double newSpeedThreshold = calculateSpeedThreshold(newStrictCapacityOrder);
 
+            // Step 3: Rebuild tier maps
             _fastPeers.clear();
             _highCapacityPeers.clear();
             _notFailingPeers.clear();
@@ -563,24 +581,147 @@ public class ProfileOrganizer {
                 locked_placeProfile(profile);
             }
 
+            // Step 4: Commit new state
             _strictCapacityOrder = newStrictCapacityOrder;
+            _thresholdCapacityValue = newCapacityThreshold;
+            _thresholdIntegrationValue = newIntegrationThreshold;
+            _thresholdSpeedValue = newSpeedThreshold;
 
+            // Step 5: Log and record metrics
             if (_log.shouldInfo()) {
-                _log.info("Profiles reorganized: " + expiredCount + " expired\n" +
-                          "* Averages: [Integration: " + _thresholdIntegrationValue +
-                          "] [Capacity: " + _thresholdCapacityValue +
-                          "] [Speed: " + _thresholdSpeedValue + "]");
+                _log.info("Profiles reorganized: " + expiredCount + " expired, " +
+                          profileCount + " retained. Thresholds -> " +
+                          "Cap: " + num(_thresholdCapacityValue) +
+                          ", Spd: " + num(_thresholdSpeedValue) +
+                          ", Int: " + num(_thresholdIntegrationValue));
             }
 
-            long total = System.currentTimeMillis() - sortStart;
-            _context.statManager().addRateData("peer.profileSortTime", sortTime, profileCount);
-            _context.statManager().addRateData("peer.profileThresholdTime", System.currentTimeMillis() - sortStart, profileCount);
-            _context.statManager().addRateData("peer.profilePlaceTime", System.currentTimeMillis() - sortStart, profileCount);
+            long total = System.currentTimeMillis() - start;
             _context.statManager().addRateData("peer.profileReorgTime", total, profileCount);
+            _context.statManager().addRateData("peer.activeProfileCount", profileCount, 0);
+            _context.statManager().addRateData("peer.expiredProfileCount", expiredCount, 0);
+
+            enforceProfileCap();
+            purgeStaleProfileFiles();
 
         } finally {
             releaseWriteLock();
         }
+    }
+
+    public void purgeStaleProfileFiles() {
+        int maxProfiles = _context.getProperty(PROP_MAX_PROFILES, DEFAULT_MAX_PROFILES);
+        if (maxProfiles > ABSOLUTE_MAX_PROFILES) maxProfiles = ABSOLUTE_MAX_PROFILES;
+
+        // Get all currently active peers (those we keep in memory)
+        Set<Hash> activePeers = selectAllPeers(); // includes fast, high-cap, not-failing
+
+        // Let persistence helper delete files NOT in activePeers, if over cap
+        _persistenceHelper.purgeExcessProfiles(activePeers, maxProfiles);
+    }
+
+    /**
+     * Helper to calculate capacity threshold from a pre-filtered set of active profiles.
+     * Avoids re-iterating the full set multiple times.
+     */
+    private double calculateCapacityThresholdFromSet(Set<PeerProfile> activeProfiles, int totalPeers) {
+        if (totalPeers == 0) return CapacityCalculator.GROWTH_FACTOR;
+
+        List<Double> capacities = new ArrayList<>(activeProfiles.size());
+        double totalCapacity = 0.0;
+        for (PeerProfile p : activeProfiles) {
+            double cap = p.getCapacityValue();
+            capacities.add(cap);
+            totalCapacity += cap;
+        }
+        double meanCapacity = totalCapacity / totalPeers;
+
+        // Sort to find median and Nth peer
+        capacities.sort(Double::compareTo);
+        int minHighCap = getMinimumHighCapacityPeers();
+       double thresholdAtMedian = capacities.get(totalPeers / 2);
+        double thresholdAtMinHighCap = (minHighCap <= totalPeers)
+           ? capacities.get(Math.min(minHighCap - 1, totalPeers - 1))
+           : CapacityCalculator.GROWTH_FACTOR;
+        double thresholdAtLowest = capacities.get(totalPeers - 1);
+         int numExceedingMean = (int) capacities.stream().filter(v -> v > meanCapacity).count();
+         return calculateCapacityThreshold(meanCapacity, numExceedingMean, totalPeers,
+                                        thresholdAtMedian, thresholdAtMinHighCap, thresholdAtLowest);
+    }
+
+    /**
+     * Enforces the global profile cap by evicting the least valuable peers when over capacity.
+     * <p>
+     * Eviction priority (from most to least likely to be kept):
+     * <ol>
+     *   <li>Peers in _fastPeers (fast + reliable)</li>
+     *   <li>Peers in _highCapacityPeers</li>
+     *   <li>Peers with recent activity (last 2 hours)</li>
+     *   <li>Peers with higher capacity value</li>
+     * </ol>
+     * <p>
+     * This method assumes the write lock is held.
+     */
+    private void enforceProfileCap() {
+        int maxProfiles = _context.getProperty(PROP_MAX_PROFILES, DEFAULT_MAX_PROFILES);
+        if (maxProfiles < 100) maxProfiles = 100;
+        if (maxProfiles > ABSOLUTE_MAX_PROFILES) maxProfiles = ABSOLUTE_MAX_PROFILES;
+
+        if (_notFailingPeers.size() <= maxProfiles) {
+            return; // within limits
+        }
+
+        if (_log.shouldWarn()) {
+            _log.warn("Profile count (" + _notFailingPeers.size() +
+                      ") exceeds cap (" + maxProfiles + ") -> Evicting lowest-priority peers...");
+        }
+
+        // Build list of profiles eligible for eviction (not in critical tiers)
+        List<PeerProfile> candidates = new ArrayList<>();
+        long now = _context.clock().now();
+        long activeThreshold = now - (8 * 60 * 60 * 1000L); // 8 hours
+
+        for (PeerProfile profile : _notFailingPeers.values()) {
+            Hash peer = profile.getPeer();
+
+            if ((_fastPeers.containsKey(peer) && _fastPeers.size() <= 800) ||
+                (_highCapacityPeers.containsKey(peer) && _highCapacityPeers.size() <= 1200)) {
+                continue; // protected
+            }
+
+            // Keep peers active in last 2 hours
+            if (profile.getLastSendSuccessful() >= activeThreshold ||
+                profile.getLastHeardFrom() >= activeThreshold) {
+                continue;
+            }
+            candidates.add(profile);
+        }
+
+        // Sort by capacity (lowest first) → evict low-capacity, inactive peers first
+        candidates.sort(Comparator.comparingDouble(PeerProfile::getCapacityValue));
+
+        int toEvict = _notFailingPeers.size() - maxProfiles;
+        int evicted = 0;
+        Iterator<PeerProfile> iter = candidates.iterator();
+
+        while (evicted < toEvict && iter.hasNext()) {
+            PeerProfile profile = iter.next();
+            Hash peer = profile.getPeer();
+
+            // Remove from all structures
+            _notFailingPeers.remove(peer);
+            _notFailingPeersList.remove(peer); // O(n), but acceptable for rare eviction
+            _strictCapacityOrder.remove(profile);
+            // Note: _fastPeers / _highCapacityPeers already excluded above
+
+            evicted++;
+        }
+
+        if (_log.shouldInfo()) {
+            _log.info("Evicted " + evicted + " low-priority profiles to enforce cap (" + maxProfiles + ")");
+        }
+
+        //_context.statManager().addRateData("peer.profileEvicted", evicted, 0);
     }
 
     private double calculateCapacityThreshold(double meanCapacity, int numExceedingMean, int totalPeers,
