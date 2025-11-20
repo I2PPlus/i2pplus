@@ -176,7 +176,7 @@ class TunnelRenderer {
                   .append(_t("Data"))
                   .append("</th><th");
                 if (bySpeed) {sb.append(" data-sort-default");}
-                sb.append(">").append(_t("Speed")).append("</th>");
+                sb.append(" data-sort-method=number>").append(_t("Speed")).append("</th>");
                 if (isAdvanced) {
                   sb.append("<th class=limit data-sort-method=number>")
                     .append(_t("Limit"))
@@ -248,13 +248,15 @@ class TunnelRenderer {
                     else if (lifetime > 10*60) {lifetime = 10*60;}
                     float bps = 1024 * count / lifetime;
                     float kbps = bps / 1024;
-                    sb.append("<td class=\"cells bps\" data-sort=").append(count/lifetime).append("><span class=right>")
+                    sb.append("<td class=\"cells bps\" data-sort=").append(bps).append("><span class=right>")
                       .append(fmt.format(kbps)).append("&#8239;</span><span class=left>KB/s</span></td>");
 
                     long recv = cfg.getReceiveTunnelId();
                     if (isAdvanced) {
                         sb.append("<td class=\"cells limit\" data-sort=").append(cfg.getAllocatedBW()).append(">");
-                        if (cfg.getAllocatedBW() > 0) {sb.append(DataHelper.formatSize2Decimal(cfg.getAllocatedBW())).append("B/s");}
+                        if (cfg.getAllocatedBW() > 0) {
+                            sb.append("<span>").append(DataHelper.formatSize2Decimal(cfg.getAllocatedBW())).append("B/s").append("</span>");
+                        }
                         sb.append("</td>");
                         if (recv != 0) {
                             sb.append("<td title=\"").append(_t("Tunnel identity")).append("\"><span class=tunnel_id>")

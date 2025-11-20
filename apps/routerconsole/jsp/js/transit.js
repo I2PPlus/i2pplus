@@ -1,93 +1,74 @@
 /* I2P+ transit.js by dr|z3d */
-/* Handle automatic and manual refresh for /transit */
+/* Handle automatic, manual refresh and tablesort for /transit */
 /* License: AGPL3 or later */
 
-import {onVisible} from "/js/onVisible.js";
+import {refreshElements} from "/js/refreshElements.js";
 
-const main = document.getElementById("tunnels");
-const peers = document.getElementById("transitPeers");
-const tunnels = document.getElementById("allTransit");
-const refresh = document.getElementById("refreshPage");
-const visible = document.visibilityState;
-const xhrtunnels = new XMLHttpRequest();
-const REFRESH_INTERVAL = 60*1000;
-let refreshId;
-let sorter = null;
+(function () {
+  const REFRESH_INTERVAL = 10 * 1000;
+  const RETRY_DELAY = 3000;
 
-if (tunnels) {const sorter = new Tablesort(tunnels, {descending: true});}
+  let main, peers, tunnels, refreshBtn;
+  let sorter = null;
+  let isSetup = false;
+  let lastPeerRowCount = -1;
 
-function updateNotes() {
-  const notes = document.querySelectorAll(".statusnotes");
-  if (notes[0] !== null) {
-    const notesResponse = xhrtunnels.responseXML.querySelectorAll(".statusnotes");
-    for (let i = 0; i < notes.length; i++) {
-      if (notesResponse[i] !== null) {
-        notes[i].innerHTML = notesResponse[i].innerHTML;
+  function getDOM() {
+    if (main) return;
+    main = document.getElementById("tunnels");
+    peers = document.getElementById("transitPeers");
+    tunnels = document.getElementById("allTransit");
+    refreshBtn = document.getElementById("refreshPage");
+  }
+
+  function setupTablesort() {
+    if (isSetup || !tunnels) return;
+    sorter = sorter || new Tablesort(tunnels, { descending: true });
+    tunnels.addEventListener("beforeSort", () => progressx?.show?.(theme));
+    tunnels.addEventListener("afterSort", () => progressx?.hide?.());
+    if (refreshBtn) refreshBtn.removeAttribute("href");
+    isSetup = true;
+  }
+
+  function refreshData() {
+    getDOM();
+    const notes = document.querySelectorAll(".statusnotes");
+    let selector = "#tunnels";
+
+    if (peers && notes.length > 0) {
+      setupTablesort();
+      const currentRows = peers.querySelectorAll("tr").length;
+
+      if (currentRows === lastPeerRowCount && currentRows > 0) {
+        selector = "#transitPeers td>*, .statusnotes";
+      } else {
+        selector = "#transitPeers, .statusnotes";
+        lastPeerRowCount = currentRows;
       }
+      refreshElements(selector, "/transit", REFRESH_INTERVAL);
     }
   }
-}
 
-function initRefresh() {
-  if (refreshId) {clearInterval(refreshId);}
-  refreshId = setInterval(updateTunnels, REFRESH_INTERVAL);
-  if (tunnels && sorter === null) {
-    const sorter = new Tablesort(tunnels, {descending: true});
-    removeHref();
-  }
-  addSortListeners();
-  updateTunnels();
-}
-
-function removeHref() {
-  if (refresh) {refresh.removeAttribute("href");}
-}
-
-function addSortListeners() {
-  if (tunnels) {
-    tunnels.addEventListener("beforeSort", () => {
-      progressx.show(theme);
-      progressx.progress(0.5);
+  function init(retryCount = 0) {
+    getDOM();
+    if (!refreshBtn) {
+      if (retryCount < 30) setTimeout(() => init(retryCount + 1), RETRY_DELAY);
+      return;
+    }
+    refreshBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      refreshData();
     });
-    tunnels.addEventListener("afterSort", () => progressx.hide());
+    refreshData();
   }
-}
 
-function updateTunnels() {
-  xhrtunnels.open("GET", "/transit", true);
-  xhrtunnels.responseType = "document";
-  xhrtunnels.onreadystatechange = function () {
-    if (xhrtunnels.readyState === 4 && xhrtunnels.status === 200) {
-      const mainResponse = xhrtunnels.responseXML.getElementById("tunnels");
-      const peersResponse = xhrtunnels.responseXML.getElementById("transitPeers");
-      if (peersResponse) {
-        addSortListeners();
-        if (peers && peers !== peersResponse) {
-          peers.innerHTML = peersResponse.innerHTML;
-          updateNotes();
-          if (sorter) {sorter.refresh();}
-          removeHref();
-        }
-      } else if (!tunnels || !peersResponse) {main.innerHTML = mainResponse.innerHTML;}
-    }
-  }
-  if (sorter) {sorter.refresh();}
-  xhrtunnels.send();
-}
-
-if (refresh) {
-  refresh.addEventListener("click", () => {
-    progressx.show(theme);
-    progressx.progress(0.5);
-    updateTunnels();
-    progressx.hide();
+  document.addEventListener("refreshComplete", () => {
+    if (sorter) sorter.refresh();
   });
-  refresh.addEventListener("mouseenter", removeHref);
-}
 
-onVisible(main, () => updateTunnels());
-
-if (visible === "hidden") {clearInterval(refreshId);}
-
-window.addEventListener("DOMContentLoaded", () => progressx.hide());
-document.addEventListener("DOMContentLoaded", initRefresh);
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => init());
+  } else {
+    init();
+  }
+})();
