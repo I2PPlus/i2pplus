@@ -1,110 +1,90 @@
 package net.i2p.util;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 /**
- * An object cache which is safe to use by multiple threads without blocking.
- *
- * @author zab
+ * A thread-safe, lock-free-ish object cache that reuses objects to reduce allocation overhead.
+ * Designed to avoid object loss due to lock contention.
  *
  * @param <T>
- * @since 0.9.36
+ * @author zab
  */
 public class TryCache<T> {
 
     private static final boolean DEBUG_DUP = false;
 
-    /**
-     * Something that creates objects of the type cached by this cache
-     *
-     * @param <T>
-     */
-    public static interface ObjectFactory<T> {
+    public interface ObjectFactory<T> {
         T newInstance();
     }
 
     private final ObjectFactory<T> factory;
-    protected final int capacity;
-    protected final List<T> items;
-    protected final Lock lock = new ReentrantLock();
-    protected long _lastUnderflow;
+    private final int capacity;
+    private final ConcurrentLinkedDeque<T> items = new ConcurrentLinkedDeque<>();
+    private volatile long _lastUnderflow = System.currentTimeMillis();
 
-    /**
-     * @param factory to be used for creating new instances
-     * @param capacity cache up to this many items
-     */
     public TryCache(ObjectFactory<T> factory, int capacity) {
         this.factory = factory;
-        this.capacity = capacity;
-        this.items = new ArrayList<>(capacity);
+        this.capacity = Math.max(0, capacity);
     }
 
     /**
-     * @return a cached or newly created item from this cache
+     * Acquire an object from the cache or create a new one.
      */
     public T acquire() {
-        T rv = null;
-        if (lock.tryLock()) {
-            try {
-                if (!items.isEmpty()) {
-                    rv = items.remove(items.size() - 1);
-                } else {
-                    _lastUnderflow = System.currentTimeMillis();
-                }
-            } finally {
-                lock.unlock();
-            }
+        T item = items.pollLast();
+        if (item == null) {
+            _lastUnderflow = System.currentTimeMillis();
+            item = factory.newInstance();
         }
-
-        if (rv == null) {
-            rv = factory.newInstance();
-        }
-        return rv;
+        return item;
     }
 
     /**
-     * Tries to return this item to the cache but it may fail if
-     * the cache has reached capacity or it's lock is held by
-     * another thread.
+     * Try to return the item to the cache.
+     * If the cache is full, the item is discarded.
      */
     public void release(T item) {
-        if (lock.tryLock()) {
-            try {
-                if (DEBUG_DUP) {
-                    for (int i = 0; i < items.size(); i++) {
-                        // use == not equals() because ByteArray.equals()
-                        if (items.get(i) == item) {
-                            net.i2p.I2PAppContext.getGlobalContext().logManager().getLog(TryCache.class).log(Log.CRIT,
-                                "dup release of " + item.getClass(), new Exception("I did it"));
-                            return;
-                        }
-                    }
+        if (DEBUG_DUP) {
+            for (T existing : items) {
+                if (existing == item) {
+                    net.i2p.I2PAppContext.getGlobalContext().logManager().getLog(TryCache.class).log(Log.CRIT,
+                        "Duplicate release of " + item.getClass(), new Exception("Duplicate release"));
+                    return;
                 }
-                if (items.size() < capacity) {
-                    if (DEBUG_DUP)
-                        items.add(0, item);
-                    else
-                        items.add(item);
-                }
-            } finally {
-                lock.unlock();
             }
         }
+
+        // If full, discard the object
+        if (items.size() >= capacity) {
+            return;
+        }
+
+        items.add(item);
     }
 
     /**
-     * Clears all cached items.  This is the only method
-     * that blocks until it acquires the lock.
+     * Clear all cached items.
+     * This is best-effort; some may still be in flight.
      */
     public void clear() {
-        lock.lock();
-        try {
-            items.clear();
-        } finally {
-            lock.unlock();
+        items.clear();
+    }
+
+    public int size() {
+        return items.size();
+    }
+
+    public boolean wasUnderfilled(long thresholdMillis) {
+        return (System.currentTimeMillis() - _lastUnderflow) > thresholdMillis;
+    }
+
+    public void shrink(int targetSize) {
+        while (items.size() > targetSize) {
+            items.pollLast();
         }
+    }
+
+    public long getLastUnderflowTime() {
+        return _lastUnderflow;
     }
 }

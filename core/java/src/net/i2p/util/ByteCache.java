@@ -47,46 +47,45 @@ public final class ByteCache extends TryCache<ByteArray> {
 
     /**
      *  max size in bytes of each cache
-     *  Set to max memory / 128, with a min of 128KB and a max of 4MB
+     *  Set to max memory / 128, with a min of 256KB and a max of 8MB
      *
      *  @since 0.7.14
      */
+    private static final int MIN_CACHE = 256 * 1024; // 256KB
+    private static final int MAX_CACHE_LIMIT = 8 * 1024 * 1024; // 8MB
     private static final int MAX_CACHE;
+    private static final int MIN_CACHE_OBJECTS = 16;
+
     static {
         long maxMemory = SystemVersion.getMaxMemory();
-        MAX_CACHE = (int) Math.min(8*1024*1024l, Math.max(128*1024l, maxMemory / 128));
+        MAX_CACHE = Math.toIntExact(Math.min(MAX_CACHE_LIMIT, Math.max(MIN_CACHE, maxMemory / 128)));
     }
 
-    /**
-     * Get a cache responsible for objects of the given size.
-     * Warning, if you store the result in a static field, the cleaners will
-     * not operate after a restart on Android, as the old context's SimpleTimer2 will have shut down.
-     * TODO tie this to the context or clean up all calls.
-     *
-     * @param cacheSize how large we want the cache to grow
-     *                  (number of objects, NOT memory size)
-     *                  before discarding released objects.
-     *                  Since 0.7.14, a limit of 1MB / size is enforced
-     *                  for the typical 128MB max memory JVM
-     * @param size how large should the objects cached be?
-     */
     public static ByteCache getInstance(int cacheSize, int size) {
-        if (cacheSize * size > MAX_CACHE) {cacheSize = MAX_CACHE / size;}
-        Integer sz = Integer.valueOf(size);
-        ByteCache cache;
-        synchronized(_caches) {
-            cache = _caches.get(sz);
+        size = Math.max(1, size);
+        cacheSize = Math.max(0, cacheSize);
+        long totalBytes = (long) cacheSize * size;
+
+        if (totalBytes > MAX_CACHE) {
+            cacheSize = Math.max(MIN_CACHE_OBJECTS, MAX_CACHE / size);
+        }
+
+        Integer key = size;
+        synchronized (_caches) {
+            ByteCache cache = _caches.get(key);
             if (cache == null) {
                 cache = new ByteCache(cacheSize, size);
-                _caches.put(sz, cache);
+                _caches.put(key, cache);
+            } else {
+                cache.resize(cacheSize); // Only resize if it already exists
             }
+
+            if (_log.shouldInfo()) {
+                _log.info("ByteCache for " + (size / 1024) + "KB cache -> Max objects: " + cacheSize);
+            }
+
+            return cache;
         }
-        cache.resize(cacheSize);
-        if (_log.shouldInfo()) {
-            _log.info("Current ByteCache size: " + (size / 1024) + "KB (Max: " + (cacheSize / 1024) + "KB)");
-        }
-        //I2PAppContext.getGlobalContext().logManager().getLog(ByteCache.class).error("ByteCache size: " + size + " max: " + cacheSize, new Exception("from"));
-        return cache;
     }
 
     /**
@@ -155,21 +154,19 @@ public final class ByteCache extends TryCache<ByteArray> {
 
     private class Cleanup implements SimpleTimer.TimedEvent {
         public void timeReached() {
-            int origsz;
-            lock.lock();
-            try {
-                origsz = items.size();
-                if (origsz > 1 && System.currentTimeMillis() - _lastUnderflow > EXPIRE_PERIOD) {
-                    // We haven't exceeded the cache size in a few minutes, so let's shrink the cache
-                    int toRemove = origsz / 2;
-                    for (int i = 0; i < toRemove; i++) {items.remove(items.size() - 1);}
-                }
-            } finally {lock.unlock();}
+            int origsz = size();
+            if (origsz > 1 && wasUnderfilled(EXPIRE_PERIOD)) {
+                // We haven't exceeded the cache size in a while, so let's shrink
+                int toRemove = origsz / 2;
+                shrink(origsz - toRemove);
+            }
             I2PAppContext.getGlobalContext().statManager().addRateData("byteCache.memory." + _entrySize, _entrySize * origsz);
         }
 
         @Override
-        public String toString() {return "Cleaner for " + _entrySize + " byte cache";}
+        public String toString() {
+            return "Cleaner for " + _entrySize + " byte cache";
+        }
     }
 
 }
