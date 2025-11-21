@@ -60,12 +60,12 @@ export function refreshElements(targetSelectors, url, delay) {
     if (document.visibilityState !== "visible" || isRefreshing) return;
 
     isRefreshing = true;
-    progressx.show(theme);
+    progressx?.show(theme);
 
     fetchWorker.port.postMessage({ url: currentUrl });
 
     setTimeout(() => {
-      progressx.hide();
+      progressx?.hide();
       isRefreshing = false;
     }, 1000);
 
