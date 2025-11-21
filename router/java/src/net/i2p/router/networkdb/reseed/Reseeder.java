@@ -109,6 +109,7 @@ public class Reseeder {
         // https url:port, ending with "/"                    certificates/reseed/                 certificates/ssl/                 notes
         // ----------------------------------                 ---------------------------------    ------------------------------    --------------------------
         "https://coconut.incognet.io/"              + ',' +   // rambler_at_mail.i2p.crt           CA
+        "https://i2p.diyarciftci.xyz/"              + ',' +   // diyarciftci_at_protonmail.com.crt CA                                Java 8+
         "https://i2p.novg.net/"                     + ',' +   // igor_at_novg.net.crt              CA                                Java 8+
         "https://i2pseed.creativecowpat.net:8443/"  + ',' +   // creativecowpat_at_mail.i2p.crt    i2pseed.creativecowpat.net.crt    Java 7+
         "https://reseed2.i2p.net/"                  + ',' +   // echelon3_at_mail.i2p.crt          CA
