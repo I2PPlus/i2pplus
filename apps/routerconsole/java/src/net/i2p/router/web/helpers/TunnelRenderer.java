@@ -941,13 +941,13 @@ class TunnelRenderer {
             live++;
             boolean isInbound = info.isInbound();
             if (isInbound) {
-                buf.append("<tr><td><span class=inbound title=\"")
+                buf.append("<tr><td data-sort=in><span class=inbound title=\"")
                    .append(tib)
                    .append("\"><img src=/themes/console/images/inbound.svg alt=\"")
                    .append(tib)
                    .append("\"></span></td>");
             } else {
-                buf.append("<tr><td><span class=outbound title=\"")
+                buf.append("<tr><td data-sort=out><span class=outbound title=\"")
                    .append(tob)
                    .append("\"><img src=/themes/console/images/outbound.svg alt=\"")
                    .append(tob)

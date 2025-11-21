@@ -451,12 +451,13 @@ public class PeerHelper extends HelperBase {
                 continue;
             }
             Hash h = con.getRemotePeer().calculateHash();
-            buf.append("<tr class=lazy><td class=peer>")
+            boolean isInbound = con.isInbound();
+            buf.append("<tr class=lazy><td class=peer data-sort-direction=ascending>")
                .append(_context.commSystem().renderPeerHTML(h, false))
                .append("</td><td class=caps>")
                .append(_context.commSystem().renderPeerCaps(h, false))
-               .append("</td><td class=direction>");
-            if (con.isInbound()) {
+               .append("</td><td class=direction data-sort=").append(isInbound ? "in" : "out").append(">");
+            if (isInbound) {
                 buf.append("<span class=inbound title=\"").append(_t("Inbound")).append("\"></span>");
             } else {
                 buf.append("<span class=outbound title=\"").append(_t("Outbound")).append("\"></span>");
@@ -766,10 +767,15 @@ public class PeerHelper extends HelperBase {
             buf.append("<tr class=lazy><td class=peer nowrap>");
             buf.append(_context.commSystem().renderPeerHTML(peer.getRemotePeer(), false));
             Hash h = peer.getRemotePeer().calculateHash();
+            boolean isInbound = peer.isInbound();
+            boolean introToUs = peer.getTheyRelayToUsAs() > 0;
+            boolean introToThem = peer.getWeRelayToThemAs() > 0;
             buf.append("</td><td class=caps>")
                .append(_context.commSystem().renderPeerCaps(peer.getRemotePeer(), false))
-               .append("</td><td class=direction nowrap>");
-            if (peer.isInbound()) {
+               .append("</td><td class=direction nowrap data-sort=")
+               .append(isInbound ? "in" : "out")
+               .append(introToUs ? "IntroToUs" : introToThem ? "IntroToThem" : "").append(">");
+            if (isInbound) {
                 buf.append("<span class=inbound title=\"")
                    .append(_t("Inbound"));
             } else {
@@ -777,17 +783,17 @@ public class PeerHelper extends HelperBase {
                    .append(_t("Outbound"));
             }
             buf.append("\"></span>");
-            if (peer.getWeRelayToThemAs() > 0) {
+            if (introToThem) {
                 buf.append("&nbsp;&nbsp;<span class=\"inbound small\" title=\"")
                    .append(_t("We offered to introduce them"))
                    .append("\">");
             }
-            if (peer.getTheyRelayToUsAs() > 0) {
+            if (introToUs) {
                 buf.append("&nbsp;&nbsp;<span class=\"outbound small\" title=\"")
                    .append(_t("They offered to introduce us"))
                    .append("\">");
             }
-            if (peer.getWeRelayToThemAs() > 0 || peer.getTheyRelayToUsAs() > 0) {buf.append("</span>");}
+            if (introToUs || introToThem) {buf.append("</span>");}
             if (debugmode) {
                 boolean appended = false;
                 int cfs = peer.getConsecutiveFailedSends();

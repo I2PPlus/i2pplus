@@ -119,7 +119,7 @@ class ProfileOrganizerRenderer {
             buf.append("<th>").append(_t("Status")).append("</th>")
                .append("<th class=groups>").append(_t("Groups")).append("</th>")
                .append("<th data-sort-method=number>").append(_t("Speed")).append("</th>")
-               .append("<th class=latency data=sort-method=number>").append(_t("Low Latency")).append("</th>")
+               .append("<th class=latency data-sort-method=number>").append(_t("Low Latency")).append("</th>")
                .append("<th title=\"").append(_t("Tunnels peer has agreed to participate in"))
                .append("\" data-sort-method=number>").append(_t("Accepted")).append("</th>")
                .append("<th title=\"").append(_t("Tunnels peer has refused to participate in"))
