@@ -6,8 +6,6 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.concurrent.TimeUnit;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -16,12 +14,15 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import net.i2p.crypto.SipHashInline;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
-import net.i2p.data.router.RouterInfo;
 import net.i2p.data.SessionKey;
+import net.i2p.data.router.RouterInfo;
+import net.i2p.router.JobImpl;
 import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
@@ -506,15 +507,12 @@ public class ProfileOrganizer {
             }
         }
 
-        // Attempt to acquire write lock for full reorganization
+        // Attempt to acquire write lock
         if (!getWriteLock()) {
-            // CRITICAL: Even if we skip full reorg, perform best-effort expiration
-            // to avoid unbounded memory growth during sustained lock contention.
             _log.warn("Write lock unavailable during reorganize; performing lightweight expiration...");
 
             getReadLock();
             try {
-                // Estimate expired profiles without modifying structures
                 int estimatedExpired = 0;
                 for (PeerProfile profile : _strictCapacityOrder) {
                     if (profile.getLastSendSuccessful() < now - expireOlderThan) {
@@ -526,28 +524,27 @@ public class ProfileOrganizer {
                 releaseReadLock();
             }
 
-            // Schedule urgent retry or alert via stats
             _context.statManager().addRateData("peer.reorganizeLockFailures", 1, 0);
             return;
         }
 
         try {
-            // Step 1: Build new ordered set of non-expired, eligible profiles
+            // Step 1: Build a new set of active, non-expired, non-blacklisted profiles
             Set<PeerProfile> newStrictCapacityOrder = new TreeSet<>(_comp);
             double totalCapacity = 0;
             double totalIntegration = 0;
 
             for (PeerProfile profile : _strictCapacityOrder) {
-                if (_us.equals(profile.getPeer())) continue;
-                if (profile.wasUnreachable()) continue;
+                if (_us.equals(profile.getPeer()) || profile.wasUnreachable()) {
+                    continue;
+                }
 
-                // Check activity against dynamic expiration window
                 if (profile.getLastSendSuccessful() < now - expireOlderThan) {
                     expiredCount++;
                     continue;
                 }
 
-                // Skip peers with low bandwidth tiers
+                // Skip peers in low bandwidth tiers
                 RouterInfo peerInfo = _context.netDb().lookupRouterInfoLocally(profile.getPeer());
                 String bwTier = (peerInfo != null && peerInfo.getBandwidthTier() != null)
                     ? peerInfo.getBandwidthTier() : "K";
@@ -555,45 +552,109 @@ public class ProfileOrganizer {
                     continue;
                 }
 
-                if (!profile.getIsActive(now)) continue;
+                if (!profile.getIsActive(now)) {
+                    continue;
+                }
 
-                profile.updateValues(); // Refresh thresholds
+                profile.updateValues(); // Refresh values (e.g., speed, capacity, integration)
                 newStrictCapacityOrder.add(profile);
                 totalCapacity += profile.getCapacityValue();
                 totalIntegration += profile.getIntegrationValue();
                 profileCount++;
             }
 
-            // Step 2: Compute new thresholds
+            // Step 2: Calculate new thresholds
             int numNotFailing = newStrictCapacityOrder.size();
             double newIntegrationThreshold = numNotFailing > 0 ? totalIntegration / numNotFailing : 1.0d;
             double newCapacityThreshold = calculateCapacityThresholdFromSet(newStrictCapacityOrder, numNotFailing);
             double newSpeedThreshold = calculateSpeedThreshold(newStrictCapacityOrder);
 
-            // Step 3: Rebuild tier maps
+            // Step 3: Clear and rebuild all tier maps
             _fastPeers.clear();
             _highCapacityPeers.clear();
+            _wellIntegratedPeers.clear();
             _notFailingPeers.clear();
             _notFailingPeersList.clear();
-            _wellIntegratedPeers.clear();
 
+            // Step 4: Reinsert all active profiles and assign tiers
             for (PeerProfile profile : newStrictCapacityOrder) {
                 locked_placeProfile(profile);
             }
 
-            // Step 4: Commit new state
+            // Step 5: Fallback to ensure minimum fast peers
+            int minFast = getMinimumFastPeers();
+            int added = 0;
+            int target = Math.max(minFast, getMinimumFastPeers());
+
+            if (_fastPeers.size() < target) {
+                // First, try from high-capacity peers
+                List<PeerProfile> candidates = new ArrayList<>(_highCapacityPeers.values());
+                if (candidates.isEmpty()) {
+                    candidates = new ArrayList<>(newStrictCapacityOrder);
+                }
+
+                // Sort by speed descending
+                candidates.sort((p1, p2) -> Double.compare(p2.getSpeedValue(), p1.getSpeedValue()));
+
+                // Try with original threshold
+                double threshold = _thresholdSpeedValue;
+                for (PeerProfile profile : candidates) {
+                    if (_fastPeers.size() >= target) break;
+                    if (profile.getIsActive() && profile.getSpeedValue() >= threshold) {
+                        _fastPeers.put(profile.getPeer(), profile);
+                        added++;
+                    }
+                }
+
+                // If still not enough, lower threshold and try again
+                if (_fastPeers.size() < target) {
+                    threshold = 0.3;
+                    for (PeerProfile profile : candidates) {
+                        if (_fastPeers.size() >= target) break;
+                        if (profile.getIsActive() && profile.getSpeedValue() >= threshold) {
+                            _fastPeers.put(profile.getPeer(), profile);
+                            added++;
+                        }
+                    }
+                }
+
+                // If still not enough, lower threshold and try again
+                if (_fastPeers.size() < target) {
+                    for (PeerProfile profile : candidates) {
+                        if (_fastPeers.size() >= target) break;
+                        if (profile.getIsActive() && profile.getSpeedValue() > 0.1) {
+                            _fastPeers.put(profile.getPeer(), profile);
+                            added++;
+                        }
+                    }
+                }
+
+                // If still not enough, bypass threshold and try again
+                if (_fastPeers.size() < target) {
+                    for (PeerProfile profile : candidates) {
+                        if (_fastPeers.size() >= target) break;
+                        if (profile.getIsActive()) {
+                            _fastPeers.put(profile.getPeer(), profile);
+                            added++;
+                        }
+                    }
+                }
+            }
+
+            // Step 6: Update global thresholds
             _strictCapacityOrder = newStrictCapacityOrder;
             _thresholdCapacityValue = newCapacityThreshold;
             _thresholdIntegrationValue = newIntegrationThreshold;
             _thresholdSpeedValue = newSpeedThreshold;
 
-            // Step 5: Log and record metrics
+            // Step 7: Log and record stats
             if (_log.shouldInfo()) {
                 _log.info("Profiles reorganized: " + expiredCount + " expired, " +
                           profileCount + " retained. Thresholds -> " +
                           "Cap: " + num(_thresholdCapacityValue) +
                           ", Spd: " + num(_thresholdSpeedValue) +
-                          ", Int: " + num(_thresholdIntegrationValue));
+                          ", Int: " + num(_thresholdIntegrationValue) +
+                          " -> Fast peers: " + _fastPeers.size() + " (added " + added + " via fallback)");
             }
 
             long total = System.currentTimeMillis() - start;
@@ -601,7 +662,10 @@ public class ProfileOrganizer {
             _context.statManager().addRateData("peer.activeProfileCount", profileCount, 0);
             _context.statManager().addRateData("peer.expiredProfileCount", expiredCount, 0);
 
+            // Step 8: Enforce memory cap
             enforceProfileCap();
+
+            // Step 9: Clean up persisted profiles
             purgeStaleProfileFiles();
 
         } finally {
@@ -740,23 +804,20 @@ public class ProfileOrganizer {
     }
 
     private double calculateSpeedThreshold(Set<PeerProfile> reordered) {
-        double total = 0;
-        int count = 0;
-        int minHighCap = getMinimumHighCapacityPeers();
-
+        List<PeerProfile> candidates = new ArrayList<>();
         for (PeerProfile profile : reordered) {
-            if (profile.getCapacityValue() >= _thresholdCapacityValue) {
-                total += profile.getSpeedValue();
-                int speedBonus = profile.getSpeedBonus();
-                if (speedBonus >= 9999999) total -= 9999999;
-                count++;
-                if (count > minHighCap / 2 * 3) break;
-            } else {
-                break;
+            if (profile.getCapacityValue() >= _thresholdCapacityValue && profile.getIsActive()) {
+                candidates.add(profile);
             }
         }
 
-        return count > 0 ? ((total / count) / 7) * 5 : 0;
+        if (candidates.isEmpty()) return 0;
+
+        // Sort by speed descending
+        candidates.sort((p1, p2) -> Double.compare(p2.getSpeedValue(), p1.getSpeedValue()));
+        int cutoff = Math.min((int)(candidates.size() * 0.3), 50); // Top 30% or 50 peers
+
+        return candidates.get(cutoff).getSpeedValue();
     }
 
     private final static double avg(double total, double quantity) {
@@ -872,25 +933,36 @@ public class ProfileOrganizer {
 
     private void locked_placeProfile(PeerProfile profile) {
         Hash peer = profile.getPeer();
-        int minHighCap = _context.getProperty(PROP_MINIMUM_HIGH_CAPACITY_PEERS, DEFAULT_MINIMUM_HIGH_CAPACITY_PEERS);
+        int minHighCap = getMinimumHighCapacityPeers(); // Uses context property
+        double effectiveCapThreshold = Math.max(_thresholdCapacityValue, CapacityCalculator.GROWTH_FACTOR);
+        double effectiveSpeedThreshold = _thresholdSpeedValue;
+
+        // Remove existing entries (idempotent)
         _fastPeers.remove(peer);
         _highCapacityPeers.remove(peer);
         _wellIntegratedPeers.remove(peer);
-        _notFailingPeers.put(peer, profile);
-        _notFailingPeersList.add(peer);
 
-        if (_thresholdCapacityValue <= profile.getCapacityValue() &&
-            isSelectable(peer) && (_context.commSystem() == null ||
-            !_context.commSystem().isInStrictCountry(peer))) {
+        // Always add/update in notFailing set
+        _notFailingPeers.put(peer, profile);
+        _notFailingPeersList.add(peer); // Note: O(n), but acceptable during reorg
+
+        boolean isStrictCountry = _context.commSystem() != null && _context.commSystem().isInStrictCountry(peer);
+        boolean isPeerSelectable = isSelectable(peer);
+
+        // Decide if peer qualifies for high-capacity tier
+        if (profile.getCapacityValue() >= effectiveCapThreshold && isPeerSelectable && !isStrictCountry) {
             _highCapacityPeers.put(peer, profile);
-            if (_thresholdSpeedValue <= profile.getSpeedValue() && profile.getIsActive()) {
+
+            // Also check if peer qualifies for fast tier
+            if (profile.getSpeedValue() >= effectiveSpeedThreshold && profile.getIsActive()) {
                 _fastPeers.put(peer, profile);
             }
-        } else if (countHighCapacityPeers() < minHighCap && isSelectable(peer) && !_context.commSystem().isInStrictCountry(peer)) {
+        } else if (_highCapacityPeers.size() < minHighCap && isPeerSelectable && !isStrictCountry) {
             _highCapacityPeers.put(peer, profile);
         }
 
-        if (_thresholdIntegrationValue <= profile.getIntegrationValue()) {
+        // Integration tier
+        if (profile.getIntegrationValue() >= _thresholdIntegrationValue) {
             _wellIntegratedPeers.put(peer, profile);
         }
     }

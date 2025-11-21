@@ -370,7 +370,7 @@ class ProfileOrganizerRenderer {
                .append("<colgroup class=bad></colgroup><colgroup class=bad></colgroup><colgroup class=bad></colgroup>")
                .append("<thead class=smallhead><tr>")
                .append("<th data-sort-default data-sort-direction=ascending>").append(_t("Peer")).append("</th>")
-               .append("<th data-sort-method=number>").append(_t("1h Fail Rate").replace("Rate","")).append("</th>")
+               .append("<th data-sort-direction=ascending data-sort-method=number>").append(_t("1h Fail Rate").replace("Rate","")).append("</th>")
                .append("<th data-sort-method=number>").append(_t("1h Resp. Time")).append("</th>")
                .append("<th data-sort-method=number>").append(_t("First Heard About")).append("</th>")
                .append("<th data-sort-method=number>").append(_t("Last Heard From")).append("</th>")
@@ -401,20 +401,22 @@ class ProfileOrganizerRenderer {
                     displayed++;
                     String integration = num(prof.getIntegrationValue()).replace(".00", "");
                     String hourfail = davg(dbh, 60*60*1000l, ra);
+                    String hourfailValue = hourfail.replace("%", "");
                     String dayfail = davg(dbh, 24*60*60*1000l, ra);
                     now = _context.clock().now();
                     long heard = prof.getFirstHeardAbout();
 
                     buf.append("<tr class=lazy><td nowrap>")
                        .append(_context.commSystem().renderPeerHTML(peer, true))
-                       .append("</td><td><span class=\"percentBarOuter");
+                       .append("</td><td data-sort=")
+                       .append(hourfailValue)
+                       .append("><span class=\"percentBarOuter");
                     if (hourfail.equals("0%")) {buf.append(" nofail");}
                     buf.append("\"><span class=percentBarInner style=\"width:")
                        .append(hourfail)
                        .append("\"><span class=percentBarText>")
                        .append(hourfail)
-                       .append("</span></span></span></td>")
-                       .append("<td data-sort=")
+                       .append("</span></span></span></td><td data-sort=")
                        .append(avg(prof, 60*60*1000l, ra))
                        .append(">")
                        .append(avg(prof, 60*60*1000l, ra))
