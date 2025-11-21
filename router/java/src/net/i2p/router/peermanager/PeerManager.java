@@ -46,8 +46,8 @@ class PeerManager {
     private final AtomicBoolean _storeLock = new AtomicBoolean();
     private volatile long _lastStore;
 
-    private static final long REORGANIZE_TIME = 45*1000;
-    private static final long REORGANIZE_TIME_MEDIUM = 125*1000;
+    private static final long REORGANIZE_TIME = 30*1000;
+    private static final long REORGANIZE_TIME_MEDIUM = 90*1000;
     /**
      *  We don't want this much longer than the average connect time,
      *  as the CapacityCalculator now includes connection as a factor.
@@ -56,8 +56,8 @@ class PeerManager {
      */
     static final long REORGANIZE_TIME_LONG = 250*1000;
     /** After first two hours of uptime ~= 246 */
-    static final int REORGANIZES_PER_DAY = 4;
     //static final int REORGANIZES_PER_DAY = (int) (24*60*60*1000L / REORGANIZE_TIME_LONG);
+    static final int REORGANIZES_PER_DAY = 256;
     private static final long STORE_TIME = 15*60*1000; // how frequently we write profiles to disk
     // for profiles stored to disk
     private static final long EXPIRE_AGE = 7*24*60*60*1000;

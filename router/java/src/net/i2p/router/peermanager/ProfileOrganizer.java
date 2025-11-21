@@ -82,13 +82,13 @@ public class ProfileOrganizer {
         _context = context;
         _log = context.logManager().getLog(ProfileOrganizer.class);
         _comp = new InverseCapacityComparator();
-        _fastPeers = new HashMap<>(512);
-        _highCapacityPeers = new HashMap<>(512);
+        _fastPeers = new HashMap<>(1024);
+        _highCapacityPeers = new HashMap<>(1024);
         _notFailingPeersList = new ArrayList<>(4096);
         _notFailingPeers = new HashMap<>(4096);
         _persistenceHelper = new ProfilePersistenceHelper(_context);
         _strictCapacityOrder = new TreeSet<>(_comp);
-        _wellIntegratedPeers = new HashMap<>(512);
+        _wellIntegratedPeers = new HashMap<>(1024);
 
         _context.statManager().createRateStat("peer.profileCoalesceTime", "Time to coalesce peer stats (ms)", "Peers", RATES);
         _context.statManager().createRateStat("peer.profilePlaceTime", "Time to sort peers into tiers (ms)", "Peers", RATES);
@@ -454,7 +454,7 @@ public class ProfileOrganizer {
 
     private static final long MIN_EXPIRE_TIME = 3 * 24 * 60 * 60 * 1000;
     private static final long MAX_EXPIRE_TIME = 4 * 7 * 24 * 60 * 60 * 1000;
-    private static final int ENOUGH_PROFILES = SystemVersion.isSlow() ? 1000 : 2000;
+    private static final int ENOUGH_PROFILES = SystemVersion.isSlow() ? 1000 : 4000;
 
     void reorganize() {
         reorganize(false, false);
@@ -493,7 +493,7 @@ public class ProfileOrganizer {
 
         // Optional coalescing (read-only, safe to skip if lock fails)
         if (shouldCoalesce && _context.router() != null &&
-            _context.router().getUptime() > 60 * 60 * 1000 &&
+            _context.router().getUptime() > 30 * 60 * 1000 &&
             countNotFailingPeers() > (ENOUGH_PROFILES / 2)) {
             getReadLock();
             try {

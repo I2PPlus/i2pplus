@@ -52,7 +52,7 @@ class ProfilePersistenceHelper {
     private static final String DIR_PREFIX = "p";
     private static final String B64 = Base64.ALPHABET_I2P;
     // Max to read in at startup
-    private static final int LIMIT_PROFILES = SystemVersion.isSlow() ? 1000 : 4000;
+    private static final int LIMIT_PROFILES = SystemVersion.isSlow() ? 1000 : 6000;
 
     private final File _profileDir;
     private Hash _us;
@@ -316,16 +316,17 @@ class ProfilePersistenceHelper {
 
             if (info != null) {caps = DataHelper.stripHTML(info.getCapabilities());}
             else {
-                if (_log.shouldDebug()) {_log.debug("Ignoring profile without RouterInfo: " + file.getName());}
-                //file.delete();
-                return null;
-            }
-/**
-            if (lastSentToSuccessfully <= cutoff && lastHeardFrom <= cutoff) {
-                if (_log.shouldDebug()) {_log.debug("Dropping STALE profile: " + file.getName());}
+                if (_log.shouldDebug()) {_log.debug("Deleting profile without RouterInfo: " + file.getName());}
                 file.delete();
                 return null;
-**/
+            }
+
+            if (lastSentToSuccessfully <= cutoff && lastHeardFrom <= cutoff) {
+                if (_log.shouldDebug()) {_log.debug("Deleting stale profile: " + file.getName());}
+                file.delete();
+                return null;
+            }
+
             if (!caps.equals("") && caps.contains("K") || caps.contains("L") || caps.contains("M") || caps.contains("U")) {
                 if (_log.shouldDebug()) {_log.debug("Deleting uninteresting profile: " + file.getName() + " -> K, L, M or unreachable");}
                 file.delete();
