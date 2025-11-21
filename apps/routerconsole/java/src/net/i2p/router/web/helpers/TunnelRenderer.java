@@ -408,7 +408,8 @@ class TunnelRenderer {
                   .append(h.toBase64())
                   .append("\">")
                   .append(truncHash)
-                  .append("</a></span></td><td data-sort=").append(DataHelper.stripHTML(version)).append(">");
+                  .append("</a></span></td><td data-sort=")
+                  .append(version != null ? DataHelper.stripHTML(version) : "0").append(">");
 
                 if (version != null) {
                     sb.append("<span class=version title=\"")
@@ -574,24 +575,26 @@ class TunnelRenderer {
                     ReverseLookupResult rlResult = doReverseLookups ? reverseLookupResults.get(h) : null;
 
                     chunkSb.append("<tr class=lazy><td>")
-                          .append(peerFlag(h))
-                          .append("</td><td><span class=routerHash><a href=\"netdb?r=")
-                          .append(h.toBase64())
-                          .append("\">")
-                          .append(truncHash)
-                          .append("</a></span></td><td data-sort=").append(DataHelper.stripHTML(version)).append(">");
+                           .append(peerFlag(h))
+                           .append("</td><td><span class=routerHash><a href=\"netdb?r=")
+                           .append(h.toBase64())
+                           .append("\">")
+                           .append(truncHash)
+                           .append("</a></span></td><td data-sort=")
+                           .append(version != null ? DataHelper.stripHTML(version) : "0")
+                           .append(">");
                     if (version != null) {
                         chunkSb.append("<span class=version title=\"")
-                              .append(_t("Show all routers with this version in the NetDb"))
-                              .append("\"><a href=\"/netdb?v=")
-                              .append(DataHelper.stripHTML(version))
-                              .append("\">")
-                              .append(DataHelper.stripHTML(version))
-                              .append("</a></span>");
+                               .append(_t("Show all routers with this version in the NetDb"))
+                               .append("\"><a href=\"/netdb?v=")
+                               .append(DataHelper.stripHTML(version))
+                               .append("\">")
+                               .append(DataHelper.stripHTML(version))
+                               .append("</a></span>");
                     }
                     chunkSb.append("</td><td>")
-                          .append(_context.commSystem().renderPeerCaps(h, false))
-                          .append("</td><td><span class=ipaddress>");
+                           .append(_context.commSystem().renderPeerCaps(h, false))
+                           .append("</td><td><span class=ipaddress>");
                     if (ip != null && !ip.isEmpty()) {
                         if (ip.contains(":")) {chunkSb.append("<span hidden>[IPv6]</span>");}
                         chunkSb.append(ip);
