@@ -28,6 +28,7 @@ import java.util.concurrent.Future;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -321,7 +322,6 @@ class NetDbRenderer {
             SybilRenderer.renderSybilHTML(out, _context, sybilHashes, sybil);
         }
     }
-
 
     /**
      *  Appends a URL parameter to the given StringBuilder if the value is not null.
@@ -778,15 +778,23 @@ class NetDbRenderer {
      * @return Map of IP address to canonical hostname (may be empty)
      */
     public Map<String, String> precacheReverseDNSLookups(Collection<RouterInfo> routers) {
+        final int MAX_CACHED_ENTRIES = 5000;
         if (!enableReverseLookups() || _context.router().isHidden()) {
             return Collections.emptyMap();
         }
 
-        Set<String> ipSet = new HashSet<>();
+        Set<String> ipSet = new LinkedHashSet<>();
         for (RouterInfo ri : routers) {
             String ip = net.i2p.util.Addresses.toString(CommSystemFacadeImpl.getValidIP(ri));
             if (ip != null && !ip.isEmpty()) {
                 ipSet.add(ip);
+                if (ipSet.size() > MAX_CACHED_ENTRIES) {
+                    Iterator<String> it = ipSet.iterator();
+                    if (it.hasNext()) {
+                      it.next();
+                      it.remove();
+                    }
+                }
             }
         }
 
@@ -827,8 +835,9 @@ class NetDbRenderer {
      * This helps ensure we have up-to-date info for routers we might need to contact.
      */
     public void precacheIntroducerInfos() {
+        final int MAX_INTRODUCERS = 5000;
         Set<RouterInfo> allRouters = _context.netDb().getRouters();
-        Set<Hash> introducerHashes = new HashSet<>();
+        Set<Hash> introducerHashes = new LinkedHashSet<>();
 
         for (RouterInfo ri : allRouters) {
             if (isUnreachable(ri)) {
@@ -842,6 +851,14 @@ class NetDbRenderer {
                                 Hash ihost = ConvertToHash.getHash(value);
                                 if (ihost != null) {
                                     introducerHashes.add(ihost);
+                                    if (introducerHashes.size() > MAX_INTRODUCERS) {
+                                        // Remove the oldest entry (first inserted due to LinkedHashSet)
+                                        Iterator<Hash> it = introducerHashes.iterator();
+                                        if (it.hasNext()) {
+                                            it.next();
+                                            it.remove();
+                                        }
+                                    }
                                 }
                             }
                         }
