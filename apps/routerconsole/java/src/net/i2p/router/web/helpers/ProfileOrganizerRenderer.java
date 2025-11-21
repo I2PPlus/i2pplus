@@ -261,7 +261,7 @@ class ProfileOrganizerRenderer {
                 String spd = num(Math.round(prof.getSpeedValue())).replace(",", "");
                 String speedApprox = spd.substring(0, spd.indexOf("."));
                 int speed = Integer.parseInt(speedApprox);
-                buf.append("</span></td><td data-sort=").append(speed).append(">");
+                buf.append("</span></td><td data-sort=").append(prof.getSpeedValue()).append(">");
                 if (prof.getSpeedValue() > 0.1) {
                     buf.append("<span class=\"");
                     if (bonus >= 9999999) {buf.append("testOK ");}
