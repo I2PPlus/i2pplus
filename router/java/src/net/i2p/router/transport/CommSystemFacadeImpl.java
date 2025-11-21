@@ -33,12 +33,15 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -957,7 +960,16 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         } catch (UnknownHostException e) {return _t("unknown");}
     }
 
-    private static final ExecutorService WHOIS_QUERY_EXECUTOR = Executors.newFixedThreadPool(16);
+   private static final int cores = SystemVersion.getCores();
+
+    private static final ExecutorService WHOIS_QUERY_EXECUTOR = new ThreadPoolExecutor(
+        Math.max(8, cores - 4), // core pool size
+        Math.max(20, cores*8), // max pool size
+        60L, TimeUnit.SECONDS,
+        new LinkedBlockingQueue<>(1000), // Bounded queue
+        new ThreadPoolExecutor.CallerRunsPolicy() // Apply backpressure
+    );
+
     private static final int SOCKET_TIMEOUT_MS = 5000; // 5 seconds timeout
     private static final int MAX_RETRIES = 1;
 
@@ -965,57 +977,69 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      * Query WHOIS server(s) based on country code fallback logic asynchronously.
      * Returns WHOIS response or null if all fail.
      */
-    private Future<String> queryWhoisServers(String ipAddress, String countryCode) {
-        return WHOIS_QUERY_EXECUTOR.submit(() -> {
-            List<String> countryServers = countryCode == null || countryCode.trim().isEmpty()
-                    ? Collections.emptyList()
-                    : WHOIS_SERVERS_BY_COUNTRY.getOrDefault(countryCode.toLowerCase(), Collections.emptyList());
+    private CompletableFuture<String> queryWhoisServers(String ipAddress, String countryCode) {
+        return CompletableFuture.supplyAsync(() -> {
+            List<String> countryServers = (countryCode == null || countryCode.trim().isEmpty())
+                ? Collections.emptyList()
+                : WHOIS_SERVERS_BY_COUNTRY.getOrDefault(countryCode.toLowerCase(), Collections.emptyList());
 
-            String whoisData = tryWhoisServers(ipAddress, countryServers);
-
-            if (whoisData == null || whoisData.trim().isEmpty() || "unknown".equalsIgnoreCase(whoisData)) {
-                whoisData = tryWhoisServers(ipAddress, GENERIC_WHOIS_SERVERS);
+            String result = tryWhoisServers(ipAddress, countryServers);
+            if (result == null || result.trim().isEmpty() || "unknown".equalsIgnoreCase(result)) {
+                // Fall back to generic WHOIS servers
+                String genericResult = tryWhoisServers(ipAddress, GENERIC_WHOIS_SERVERS);
+                return genericResult != null ? genericResult : "unknown";
             }
-            return whoisData;
-        });
+            return result;
+        }, WHOIS_QUERY_EXECUTOR);
     }
 
-    /**
-     * Concurrently tries WHOIS servers in parallel with retries and returns first successful result or "unknown".
-     */
-    private String tryWhoisServers(String query, List<String> servers) throws InterruptedException {
+    private String tryWhoisServers(String query, List<String> servers) {
         if (servers == null || servers.isEmpty()) {
             return "unknown";
         }
 
-        ExecutorService executor = Executors.newFixedThreadPool(Math.min(servers.size(), 8));
-        try {
-            List<Callable<String>> tasks = new ArrayList<>();
-            for (String server : servers) {
-                tasks.add(() -> {
-                    int attempts = 0;
-                    while (attempts < MAX_RETRIES) {
-                        attempts++;
-                        String response = queryWhoisServerWithFallback(query, server);
-                        if (response != null && !response.trim().isEmpty() && !"unknown".equalsIgnoreCase(response.trim())) {
-                            return response;
-                        }
+        List<Callable<String>> tasks = servers.stream()
+            .map(server -> (Callable<String>) () -> {
+                for (int i = 0; i < MAX_RETRIES; i++) {
+                    String result = queryWhoisServerWithFallback(query, server);
+                    if (result != null && !result.trim().isEmpty() && !"unknown".equalsIgnoreCase(result.trim())) {
+                        return result;
                     }
-                    return null;
-                });
-            }
+                }
+                return null;
+            })
+            .collect(Collectors.toList());
 
-            String result = executor.invokeAny(tasks);
-            return result != null ? result : "unknown";
-        } catch (ExecutionException e) {
-            return "unknown";
-        } finally {
-            executor.shutdownNow();
+        try {
+            List<Future<String>> futures = WHOIS_QUERY_EXECUTOR.invokeAll(tasks, 5, TimeUnit.SECONDS);
+            for (Future<String> future : futures) {
+                if (future.isDone()) {
+                    try {
+                        String result = future.get();
+                        if (result != null && !result.isEmpty()) {
+                            return result;
+                        }
+                    } catch (ExecutionException e) {
+                        // ignore
+                    }
+                }
+            }
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
+
+        return "unknown";
     }
 
     private static final long SERVER_DOWN_TIMEOUT_MS = 60 * 60 * 1000L;
     private static final ConcurrentMap<String, Long> downServers = new ConcurrentHashMap<>();
+
+   private static final ExecutorService REVERSE_DNS_EXECUTOR = new ThreadPoolExecutor(
+        10, 20,
+        60L, TimeUnit.SECONDS,
+        new LinkedBlockingQueue<>(500),
+        new ThreadPoolExecutor.CallerRunsPolicy()
+    );
 
     private String queryWhoisServerWithFallback(String query, String whoisServer) {
         // Skip server if marked down and timeout not expired
@@ -1824,8 +1848,17 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                     buf.append(" &bullet; ");
                     if (enableReverseLookups()) {
                         String canonicalHost = reverseLookupCache.computeIfAbsent(ip, k -> {
-                            try {return _context.commSystem().getCanonicalHostName(k);}
-                            catch (Exception e) {return _t("unknown");}
+                            try {
+                                return CompletableFuture.supplyAsync(() -> {
+                                    try {
+                                        return _context.commSystem().getCanonicalHostName(k);
+                                     } catch (Exception e) {
+                                        return _t("unknown");
+                                     }
+                                }, REVERSE_DNS_EXECUTOR).get(3, TimeUnit.SECONDS);
+                            } catch (Exception e) {
+                                return _t("unknown");
+                            }
                         });
                         if (canonicalHost != null && !"unknown".equals(canonicalHost)) {
                             buf.append(canonicalHost).append(" (").append(ip).append(")");
