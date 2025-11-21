@@ -2,7 +2,7 @@
 /* Handle automatic and manual refresh for /tunnelcountpeer */
 /* License: AGPL3 or later */
 
-import { onVisible } from "/js/onVisible.js";
+import { refreshElements } from "/js/refreshElements.js";
 
 const d = document;
 const header = d.getElementById("peercount");
@@ -10,7 +10,8 @@ const peers = d.getElementById("allPeers");
 const refreshButton = d.getElementById("refreshPage");
 const tunnels = d.getElementById("tunnelPeerCount");
 const footer = tunnels?.querySelector(".tablefooter");
-const REFRESH_INTERVAL = 60 * 1000;
+const REFRESH_INTERVAL = 10 * 1000;
+const REFRESH_INTERVAL_SHORT = 5 * 1000;
 const sorter = tunnels ? new Tablesort(tunnels, { descending: true }) : null;
 
 let debugging = false;
@@ -19,40 +20,17 @@ let filterListener = false;
 let displayed = 0;
 let debounceTimeout;
 
-const fetchTunnelData = async () => {
-  try {
-    const response = await fetch("/tunnelpeercount");
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    const doc = new DOMParser().parseFromString(await response.text(), "text/html");
-    return {
-      mainResponse: doc.getElementById("tunnels"),
-      peersResponse: doc.getElementById("allPeers"),
-      footerResponse: doc.querySelector(".tablefooter"),
-    };
-  } catch (error) {
-    if (debugging) console.error(error);
-    return null;
-  }
-};
-
 const updateTunnels = async () => {
-  const { mainResponse, peersResponse, footerResponse } = await fetchTunnelData() || {};
-  if (peersResponse) {
-    peers.innerHTML = peersResponse.innerHTML;
-    sorter?.refresh();
-  } else if (mainResponse) {
-    tunnels.innerHTML = mainResponse.innerHTML;
-  }
-  if (footer && footerResponse) {
-    footer.innerHTML = footerResponse.innerHTML;
+  if (peers) {
+    refreshElements(["#allPeers", ".tablefooter"], "/tunnelpeercount", REFRESH_INTERVAL);
+  } else if (tunnels) {
+    refreshElements("#tunnelPeerCount", "/tunnelpeercount", REFRESH_INTERVAL_SHORT);
   }
   checkForCachedFilter();
   applyQueryParamsFilter();
 };
 
 const initRefresh = () => {
-  if (refreshId) clearInterval(refreshId);
-  refreshId = setInterval(updateTunnels, REFRESH_INTERVAL);
   updateTunnels();
 };
 
@@ -250,9 +228,8 @@ function updateURLWithFilter(filterValue) {
     if (!filterListener) {addFilterListener();}
     refreshButton?.addEventListener("click", async () => { await updateTunnels(); });
     refreshButton?.addEventListener("mouseenter", () => { refreshButton?.removeAttribute("href"); });
-    onVisible(tunnels, updateTunnels);
     tunnels?.addEventListener("beforeSort", () => { progressx.show(theme); });
     tunnels?.addEventListener("afterSort", () => { progressx.hide(); checkForCachedFilter(); });
-    if (d.visibilityState === "hidden") { clearInterval(refreshId); }
+    document.addEventListener("refreshComplete", () => { sorter?.refresh(); });
   });
 })();

@@ -343,11 +343,11 @@ class TunnelRenderer {
             StringBuilder tbuf = new StringBuilder(3 * 512);
             tbuf.append("<h3 class=tabletitle>")
                 .append(_t("Transit Tunnels by Peer (Top {0})", DISPLAY_LIMIT))
-                .append("</h3>\n<table id=transitSummary class=\"tunneldisplay tunnels_participating\">\n<thead><tr data-sort-method=none><th id=country>")
+                .append("</h3>\n<table id=transitSummary class=\"tunneldisplay tunnels_participating\">\n<thead><tr><th id=country data-sort-direction=ascending>")
                 .append(_t("Country"))
-                .append("</th><th id=router data-sort-method=natural>")
+                .append("</th><th id=router data-sort-direction=ascending>")
                 .append(_t("Router"))
-                .append("</th><th id=version data-sort-method=dotsep>")
+                .append("</th><th id=version>")
                 .append(_t("Version"))
                 .append("</th><th id=tier data-sort=LMNOPX>")
                 .append(_t("Tier"))
@@ -408,7 +408,7 @@ class TunnelRenderer {
                   .append(h.toBase64())
                   .append("\">")
                   .append(truncHash)
-                  .append("</a></span></td><td>");
+                  .append("</a></span></td><td data-sort=").append(DataHelper.stripHTML(version)).append(">");
 
                 if (version != null) {
                     sb.append("<span class=version title=\"")
@@ -503,10 +503,11 @@ class TunnelRenderer {
         ObjectCounter<Hash> transitCount = new ObjectCounter<>();
         int partCount = countParticipatingPerPeer(transitCount);
 
-        Set<Hash> peers = new HashSet<>(localCount.objects());
-        List<Hash> peerList = new ArrayList<>(peers);
-        // Collect all peers and sort by country
+        Set<Hash> peers = new HashSet<>();
+        peers.addAll(localCount.objects());
         peers.addAll(transitCount.objects());
+        List<Hash> peerList = new ArrayList<>(peers);
+        Collections.sort(peerList, new CountryComparator(_context.commSystem()));
 
         if (!peerList.isEmpty() && (tunnelCount > 0 || partCount > 0)) {
             StringBuilder headerSb = new StringBuilder(peerList.size() * 640 + 2048);
@@ -514,9 +515,9 @@ class TunnelRenderer {
                   .append(_t("All Tunnels by Peer"))
                   .append("&nbsp;&nbsp;<a id=refreshPage class=refreshpage style=float:right href=/tunnelpeercount>")
                   .append(_t("Refresh"))
-                  .append("</a></h3>\n<table id=tunnelPeerCount><thead class=lazy>\n<tr><th id=country>")
-                  .append(_t("Country")).append("</th><th id=router data-sort-method=natural>")
-                  .append(_t("Router")).append("</th><th id=version data-sort-method=dotsep>")
+                  .append("</a></h3>\n<table id=tunnelPeerCount><thead class=lazy>\n<tr><th id=country data-sort-direction=ascending>")
+                  .append(_t("Country")).append("</th><th id=router>")
+                  .append(_t("Router")).append("</th><th id=version>")
                   .append(_t("Version")).append("</th><th id=tier data-sort=LMNOPX>")
                   .append(_t("Tier")).append("</th><th id=address title=\"")
                   .append(_t("Primary IP address"))
@@ -540,7 +541,6 @@ class TunnelRenderer {
             out.write(headerSb.toString());
             out.flush();
 
-            Collections.sort(peerList, new CountryComparator(_context.commSystem()));
             for (Hash h : peerList) {
                 //RouterInfo info = routerInfoCache.computeIfAbsent(h, hash -> _context.netDb().lookupRouterInfoLocally(hash));
                 RouterInfo info = routerInfoCache.computeIfAbsent(h, hash -> (RouterInfo) _context.netDb().lookupLocallyWithoutValidation(hash));
@@ -579,7 +579,7 @@ class TunnelRenderer {
                           .append(h.toBase64())
                           .append("\">")
                           .append(truncHash)
-                          .append("</a></span></td><td>");
+                          .append("</a></span></td><td data-sort=").append(DataHelper.stripHTML(version)).append(">");
                     if (version != null) {
                         chunkSb.append("<span class=version title=\"")
                               .append(_t("Show all routers with this version in the NetDb"))
@@ -612,17 +612,17 @@ class TunnelRenderer {
                         chunkSb.append("</td>");
                     }
 
-                    chunkSb.append(String.format(
-                                   "<td class=tcount data-sort-column-key=localCount data-sort=%d>%d</td><td class=bar data-sort-column-key=localCount>",
-                                   localTunnelCount, localTunnelCount)
-                                  );
                     if (localTunnelCount > 0) {
+                        chunkSb.append(String.format(
+                                       "<td class=tcount data-sort-column-key=localCount data-sort=%d>%d</td><td class=bar data-sort-column-key=localCount>",
+                                       localTunnelCount, localTunnelCount)
+                                      );
                         chunkSb.append(String.format(
                                        "<span class=percentBarOuter><span class=percentBarInner style=\"width:%s%%\"><span class=percentBarText>%d%%</span></span></span>",
                                        fmt.format(localTunnelCount * 100.0 / tunnelCount).replace(".00", ""),
                                        localTunnelCount * 100 / tunnelCount));
                     } else {
-                        chunkSb.append("<span hidden>&ndash;</span>");
+                        chunkSb.append("<td class=tcount colspan=2 data-sort=0></td>");
                     }
                     chunkSb.append("</td>");
                     if (!peerList.isEmpty()) {
@@ -635,7 +635,7 @@ class TunnelRenderer {
                                            transitTunnelCount * 100 / partCount))
                                    .append("</td>");
                         } else {
-                            chunkSb.append("<td></td><td></td>");
+                             chunkSb.append("<td class=tcount colspan=2 data-sort=0></td>");
                         }
                     } else {
                         chunkSb.append("<td></td>");
