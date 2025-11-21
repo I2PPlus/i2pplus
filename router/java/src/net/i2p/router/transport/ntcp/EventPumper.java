@@ -90,7 +90,7 @@ class EventPumper implements Runnable {
 //    private static final int FAILSAFE_LOOP_COUNT = 512;
 //    private static final long SELECTOR_LOOP_DELAY = 200;
     private static final int FAILSAFE_ITERATION_FREQ = 30*1000;
-    private static final int FAILSAFE_LOOP_COUNT = SystemVersion.isSlow() ? 512 : 4096;
+    private static final int FAILSAFE_LOOP_COUNT = SystemVersion.isSlow() ? 256 : 1024;
     private static final long SELECTOR_LOOP_DELAY = SystemVersion.isSlow() ? 200 : 50;
     private static final long BLOCKED_IP_FREQ = 15*60*1000;
 
@@ -231,7 +231,12 @@ class EventPumper implements Runnable {
                     loopCountSinceLastRate++;
 
                     // Determine selector delay dynamically
+                    int loopsPerSecond = getAvgPumpLoops();
                     long delay = (_wantsWrite.isEmpty() && _wantsRead.isEmpty()) ? 1000L : SELECTOR_LOOP_DELAY;
+                    if (loopsPerSecond > 10000) {delay *=8;}
+                    else if (loopsPerSecond > 5000) {delay *=4;}
+                    else if (loopsPerSecond > 2000) {delay *=2;}
+                    else if (loopsPerSecond < 100) {delay /=2;}
 
                     int selectedCount;
                     try {
@@ -269,16 +274,15 @@ class EventPumper implements Runnable {
 
                     // Throttle CPU usage periodically with adaptive pause
                     int cpuLoadAvg = SystemVersion.getCPULoadAvg();
-                    int pause = SystemVersion.isSlow() || cpuLoadAvg > 95 ? 30 : 10;
+                    int pause = SystemVersion.isSlow() || cpuLoadAvg > 95 || loopsPerSecond > 10000 ? 100 : 20;
                     if ((loopCount % failsafeLoopCount) == failsafeLoopCount - 1) {
                         if (shouldDebug) {
                             long throttleDuration = nowMs - (lastFailsafeIteration / 1_000_000L);
                             _log.debug("EventPumper throttle " + loopCount + " loops in " + throttleDuration + " ms");
                         }
                         _context.statManager().addRateData("ntcp.failsafeThrottle", 1);
-                        try {
-                            Thread.sleep(pause);
-                        } catch (InterruptedException ie) {
+                        try {Thread.sleep(pause);}
+                        catch (InterruptedException ie) {
                             Thread.currentThread().interrupt(); // Respect interruption
                             break;
                         }
@@ -1085,6 +1089,14 @@ class EventPumper implements Runnable {
                 con.close();
             }
         }
+    }
+
+    public int getAvgPumpLoops() {
+        if (_context == null) {return 0;}
+        RateStat rs = _context.statManager().getRate("ntcp.pumperLoopsPerSecond");
+        Rate avgLoops = rs.getRate(60*1000);
+        int avgLoopsPerSecond = (int) avgLoops.getAvgOrLifetimeAvg();
+        return avgLoopsPerSecond;
     }
 
     /**
