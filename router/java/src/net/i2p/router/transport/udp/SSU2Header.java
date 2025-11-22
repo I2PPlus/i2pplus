@@ -189,16 +189,14 @@ final class SSU2Header {
         @Override
         public String toString() {
             if (data.length >= SESSION_HEADER_SIZE) {
-                return "Handshake header: DestID: " + getDestConnID() + "; Packet number: " + getPacketNumber() + "; Type: " + getType() +
-                       "; Version: " + getVersion() + "; NetID: " + getNetID() +
+                return "Handshake header: DestID: " + getDestConnID() + "; Packet [#" + getPacketNumber() + "]; Type: " + getType() +
                        "; SourceID: " + getSrcConnID() + "\n* Token: " + getToken() + "; Key: " + Base64.encode(getEphemeralKey());
             }
             if (data.length >= LONG_HEADER_SIZE) {
-                return "Long header: DestID: " + getDestConnID() + "; Packet number: " + getPacketNumber() + "; Type: " + getType() +
-                       "; Version: " + getVersion() + "; NetID: " + getNetID() +
+                return "Long header: DestID: " + getDestConnID() + "; Packet [#" + getPacketNumber() + "]; Type: " + getType() +
                        "; SourceID: " + getSrcConnID() + "\n* Token: " + getToken();
             }
-            return "Short header: DestID: " + getDestConnID() + "; Packet number: " + getPacketNumber() + "; Type: " + getType() +
+            return "Short header: DestID: " + getDestConnID() + "; Packet [#" + getPacketNumber() + "]; Type: " + getType() +
                    "; Flags: " + getShortHeaderFlags();
         }
     }
