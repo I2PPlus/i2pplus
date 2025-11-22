@@ -456,7 +456,7 @@ class EventPumper implements Runnable {
 
     private volatile boolean _needsWakeup = false;
     private long _lastWakeup = 0;
-    private static final long WAKEUP_COOLDOWN = 10; // ms
+    private static final int WAKEUP_COOLDOWN = 10; // ms
 
     /**
      *  Called by the connection when it has data ready to write (after bw allocation).
@@ -471,7 +471,16 @@ class EventPumper implements Runnable {
     private void maybeWakeup() {
         long now = System.currentTimeMillis();
         int avgLoops = getAvgPumpLoops();
-        long cooldown = avgLoops < 1000 ? WAKEUP_COOLDOWN : WAKEUP_COOLDOWN * 3;
+        int cooldown = WAKEUP_COOLDOWN;
+        if (avgLoops > 10000) {
+            cooldown = WAKEUP_COOLDOWN * 10;
+        } else if (avgLoops > 5000) {
+            cooldown = WAKEUP_COOLDOWN * 8;
+        } else if (avgLoops > 2000) {
+            cooldown = WAKEUP_COOLDOWN * 6;
+        } else if (avgLoops > 1000) {
+            cooldown = WAKEUP_COOLDOWN * 5;
+        }
         if (!_needsWakeup || now - _lastWakeup > cooldown) {
             if (_log.shouldDebug()) {
                 if (_needsWakeup && now - _lastWakeup <= cooldown) {
