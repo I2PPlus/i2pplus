@@ -307,13 +307,17 @@ class EstablishmentManager {
             _transport.failed(msg, "Peer has no address, cannot establish connection");
             return;
         }
+
         RouterIdentity toIdentity = toRouterInfo.getIdentity();
         Hash toHash = toIdentity.calculateHash();
         int id = toRouterInfo.getNetworkId();
+
         boolean isBanned = toHash != null &&
             (_context.banlist().isBanlisted(toHash) ||
              _context.banlist().isBanlistedHostile(toHash) ||
              _context.banlist().isBanlistedForever(toHash));
+        if (isBanned) {return;}
+
         long now = _context.clock().now();
         String truncHash = toHash != null ? toHash.toBase64().substring(0,6) : "";
         if (id != _networkID) {
@@ -778,9 +782,9 @@ class EstablishmentManager {
                 boolean gseNotNull = gse.getMessage() != null && gse.getMessage() != "null";
                 if (state != null && !isPeerBanned(state)) {
                     if (_log.shouldDebug())
-                        _log.warn("[SSU2] Received CORRUPT Session or Token Request after Retry \n* Router: " + state, gse);
+                        _log.warn("[SSU2] Received CORRUPT Session or Token Request after Retry -> Router: " + state, gse);
                     else if (_log.shouldWarn())
-                        _log.warn("[SSU2] Received CORRUPT Session or Token Request after Retry \n* Router: " + state +
+                        _log.warn("[SSU2] Received CORRUPT Session or Token Request after Retry -> Router: " + state +
                         (gseNotNull ? "\n* General Security Exception: " + gse.getMessage() : ""));
                 }
                 // state called fail()
@@ -793,7 +797,7 @@ class EstablishmentManager {
             if (isNew)
                 _log.debug("[SSU2] Received NEW Session/Token Request " + state);
             else
-                _log.debug("[SSU2] Received DUPLICATE Session/Token Request \n* Router: " + state);
+                _log.debug("[SSU2] Received DUPLICATE Session/Token Request -> Router: " + state);
         }
         notifyActivity();
     }
@@ -814,7 +818,8 @@ class EstablishmentManager {
      * @since 0.9.57
      */
     private void sendTerminationPacket(RemoteHostId to, UDPPacket fromPacket, int terminationCode) {
-        boolean shouldExit = false;
+        if (to != null && isPeerBanned(to)) {return;}
+
         int count = _terminationCounter.increment(to);
         if (count > MAX_TERMINATIONS) {
             // not everybody listens or backs off...
@@ -867,14 +872,18 @@ class EstablishmentManager {
      * @since 0.9.54
      */
     void receiveSessionConfirmed(InboundEstablishState2 state, UDPPacket packet) {
-        if (state != null && isPeerBanned(state)) {return;}
+        if (state != null && isPeerBanned(state)) {
+            _inboundStates.remove(state.getRemoteHostId());
+            return;
+        }
+
         try {state.receiveSessionConfirmed(packet);}
         catch (GeneralSecurityException gse) {
             if (state != null && !isPeerBanned(state) && !shouldSuppressException(gse)) {
                 if (_log.shouldDebug()) {
-                    _log.warn("[SSU2] Received CORRUPT SessionConfirmed \n* Router: " + state, gse);
+                    _log.warn("[SSU2] Received CORRUPT SessionConfirmed -> Router: " + state, gse);
                 } else if (_log.shouldWarn()) {
-                    _log.warn("[SSU2] Received CORRUPT SessionConfirmed \n* Router: " + state + "\n* " + gse.getMessage());
+                    _log.warn("[SSU2] Received CORRUPT SessionConfirmed -> Router: " + state + "\n* " + gse.getMessage());
                 }
             }
             _inboundStates.remove(state.getRemoteHostId());
@@ -888,7 +897,7 @@ class EstablishmentManager {
 
         notifyActivity();
         if (_log.shouldDebug()) {
-            _log.debug("[SSU2] Received SessionConfirmed \n* Router: " + state);
+            _log.debug("[SSU2] Received SessionConfirmed -> Router: " + state);
         }
     }
 
@@ -902,13 +911,17 @@ class EstablishmentManager {
      * @since 0.9.54
      */
     void receiveSessionCreated(OutboundEstablishState2 state, UDPPacket packet) {
-        if (state != null && isPeerBanned(state)) {return;}
+        if (state != null && isPeerBanned(state)) {
+            _inboundStates.remove(state.getRemoteHostId());
+            return;
+        }
+
         try {state.receiveSessionCreated(packet);}
         catch (GeneralSecurityException gse) {
             if (_log.shouldDebug() && !shouldSuppressException(gse)) {
-                _log.warn("[SSU2] Received CORRUPT SessionCreated \n* Router: " + state, gse);
+                _log.warn("[SSU2] Received CORRUPT SessionCreated -> Router: " + state, gse);
             } else if (_log.shouldWarn() && !shouldSuppressException(gse)) {
-                _log.warn("[SSU2] Received CORRUPT SessionCreated \n* Router: " + state + "\n* " + gse.getMessage());
+                _log.warn("[SSU2] Received CORRUPT SessionCreated -> Router: " + state + "\n* " + gse.getMessage());
             }
             _outboundStates.remove(state.getRemoteHostId());
             return;
@@ -917,7 +930,7 @@ class EstablishmentManager {
         notifyActivity();
 
         if (_log.shouldDebug()) {
-            _log.debug("[SSU2] Received SessionCreated \n* Router: " + state);
+            _log.debug("[SSU2] Received SessionCreated -> Router: " + state);
         }
     }
 
@@ -928,13 +941,17 @@ class EstablishmentManager {
      * @since 0.9.54
      */
     void receiveRetry(OutboundEstablishState2 state, UDPPacket packet) {
-        if (state != null && isPeerBanned(state)) {return;}
+        if (state != null && isPeerBanned(state)) {
+            _inboundStates.remove(state.getRemoteHostId());
+            return;
+        }
+
         try {state.receiveRetry(packet);}
         catch (GeneralSecurityException gse) {
             if (_log.shouldDebug() && !shouldSuppressException(gse)) {
-                _log.warn("[SSU2] Received CORRUPT Retry \n* Router: " + state, gse);
+                _log.warn("[SSU2] Received CORRUPT Retry -> Router: " + state, gse);
             } else if (_log.shouldWarn() && !shouldSuppressException(gse)) {
-                _log.warn("[SSU2] Received CORRUPT Retry \n* Router: " + state + "\n* " + gse.getMessage());
+                _log.warn("[SSU2] Received CORRUPT Retry -> Router: " + state + "\n* " + gse.getMessage());
             }
             _outboundStates.remove(state.getRemoteHostId());
             return;
@@ -942,7 +959,7 @@ class EstablishmentManager {
 
         notifyActivity();
         if (_log.shouldDebug()) {
-            _log.debug("[SSU2] Received Retry with token " + state.getToken() + " \n* Router: " + state);
+            _log.debug("[SSU2] Received Retry with token " + state.getToken() + " -> Router: " + state);
         }
     }
 

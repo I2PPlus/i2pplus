@@ -675,7 +675,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (_currentState != InboundState.IB_STATE_RETRY_SENT) {
             // not fatal
             if (_log.shouldWarn())
-                _log.warn("[SSU2] Received out-of-order or RETRANSMIT message " + type + " on: " + this);
+                _log.warn("[SSU2] Received out-of-order or RETRANSMIT message (type: " + type + ") on: " + this);
             return;
         }
         if (type == TOKEN_REQUEST_FLAG_BYTE) {
@@ -1090,13 +1090,15 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         StringBuilder buf = new StringBuilder(128);
         buf.append("InboundEstablishState ");
         buf.append(Addresses.toString(_aliceIP, _alicePort));
-        buf.append("\n* Lifetime: ").append(DataHelper.formatDuration(getLifetime()));
-        buf.append("; Receive ID: ").append(_rcvConnID);
-        buf.append("; Send ID: ").append(_sendConnID);
-        buf.append("; Token: ").append(_token);
-        if (_sentRelayTag > 0)
-            buf.append("; RelayTag: ").append(_sentRelayTag);
-        buf.append(' ').append(_currentState);
+        if (_log.shouldInfo()) {
+            buf.append("\n* Lifetime: ").append(DataHelper.formatDuration(getLifetime()));
+            buf.append("; Receive ID: ").append(_rcvConnID);
+            buf.append("; Send ID: ").append(_sendConnID);
+            buf.append("; Token: ").append(_token);
+            if (_sentRelayTag > 0)
+                buf.append("; RelayTag: ").append(_sentRelayTag);
+            buf.append(' ').append(_currentState);
+        }
         return buf.toString();
     }
 
