@@ -8,19 +8,9 @@
 function initProgressX(window, document) {
   "use strict";
 
-  // Polyfill for requestAnimationFrame
   if (!window.requestAnimationFrame) {
-    let lastTime = 0;
-    window.requestAnimationFrame = function(callback) {
-      const now = performance.now();
-      const delay = Math.max(0, 16 - (now - lastTime));
-      const id = setTimeout(() => callback(now + delay), delay);
-      lastTime = now + delay;
-      return id;
-    };
-  }
-  if (!window.cancelAnimationFrame) {
-    window.cancelAnimationFrame = id => clearTimeout(id);
+    window.progressx = { config: () => {}, show: () => {}, progress: () => {}, hide: () => {} };
+    return;
   }
 
   let canvas, context, gradient = null;
