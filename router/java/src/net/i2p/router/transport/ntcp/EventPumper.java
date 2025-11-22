@@ -90,7 +90,7 @@ class EventPumper implements Runnable {
 //    private static final int FAILSAFE_LOOP_COUNT = 512;
 //    private static final long SELECTOR_LOOP_DELAY = 200;
     private static final int FAILSAFE_ITERATION_FREQ = 30*1000;
-    private static final int FAILSAFE_LOOP_COUNT = SystemVersion.isSlow() ? 256 : 1024;
+    private static final int FAILSAFE_LOOP_COUNT = SystemVersion.isSlow() ? 128 : 512;
     private static final long SELECTOR_LOOP_DELAY = SystemVersion.isSlow() ? 200 : 50;
     private static final long BLOCKED_IP_FREQ = 15*60*1000;
 
@@ -110,7 +110,7 @@ class EventPumper implements Runnable {
      */
     private static final String PROP_NODELAY = "i2np.ntcp.nodelay";
     private static final int MIN_MINB = SystemVersion.isSlow() ? 4 : 8;
-    private static final int MAX_MINB = SystemVersion.isSlow() ? 32 : Math.max(SystemVersion.getCores() * 2, 64);
+    private static final int MAX_MINB = SystemVersion.isSlow() ? 16 : Math.max(SystemVersion.getCores(), 32);
     public static final String PROP_MAX_MINB = "i2np.ntcp.eventPumperMaxBuffers";
     private static final int MIN_BUFS;
     static {
@@ -233,17 +233,19 @@ class EventPumper implements Runnable {
                     // Determine selector delay dynamically
                     int loopsPerSecond = getAvgPumpLoops();
                     long delay = (_wantsWrite.isEmpty() && _wantsRead.isEmpty()) ? 1000L : SELECTOR_LOOP_DELAY;
-                    if (loopsPerSecond > 10000) {delay *=8;}
-                    else if (loopsPerSecond > 5000) {delay *=4;}
+                    if (loopsPerSecond > 12000) {delay *=8;}
+                    else if (loopsPerSecond > 10000) {delay *=6;}
+                    else if (loopsPerSecond > 5000) {delay *=5;}
+                    else if (loopsPerSecond > 4000) {delay *=4;}
+                    else if (loopsPerSecond > 3000) {delay *=3;}
                     else if (loopsPerSecond > 2000) {delay *=2;}
-                    else if (loopsPerSecond < 100) {delay /=2;}
+                    else if (loopsPerSecond < 500) {delay /=4;}
+                    else if (loopsPerSecond < 1000) {delay /=2;}
 
                     int selectedCount;
-                    try {
-                        selectedCount = _selector.select(delay);
-                    } catch (ClosedSelectorException cse) {
-                        continue;
-                    } catch (IOException | CancelledKeyException e) {
+                    try {selectedCount = _selector.select(delay);}
+                    catch (ClosedSelectorException cse) {continue;}
+                    catch (IOException | CancelledKeyException e) {
                         if (shouldDebug) _log.warn("Error selecting", e);
                         else if (shouldWarn) _log.warn("Error selecting -> " + e.getMessage());
                         continue;
@@ -274,7 +276,7 @@ class EventPumper implements Runnable {
 
                     // Throttle CPU usage periodically with adaptive pause
                     int cpuLoadAvg = SystemVersion.getCPULoadAvg();
-                    int pause = SystemVersion.isSlow() || cpuLoadAvg > 95 || loopsPerSecond > 10000 ? 100 : 20;
+                    int pause = SystemVersion.isSlow() || cpuLoadAvg > 95 || loopsPerSecond > 2000 ? 400 : 20;
                     if ((loopCount % failsafeLoopCount) == failsafeLoopCount - 1) {
                         if (shouldDebug) {
                             long throttleDuration = nowMs - (lastFailsafeIteration / 1_000_000L);
@@ -366,7 +368,7 @@ class EventPumper implements Runnable {
                         (!((SocketChannel) key.channel()).isConnectionPending()) &&
                         con.getTimeSinceCreated(now) > 2 * NTCPTransport.ESTABLISH_TIMEOUT) {
                         if (_log.shouldInfo()) {
-                            _log.info("Removing invalid key for: " + con);
+                            _log.info("Removing invalid key... " + con);
                         }
                         con.close();
                         key.cancel();
@@ -389,7 +391,7 @@ class EventPumper implements Runnable {
                         con.getMessagesReceived() <= 2 && con.getMessagesSent() <= 1) {
                         expire = MAY_DISCON_TIMEOUT;
                         if (_log.shouldInfo()) {
-                            _log.info("Possible early disconnect for: " + con);
+                            _log.info("Possible early disconnect... " + con);
                         }
                     } else {
                         expire = _expireIdleWriteTime;
@@ -399,7 +401,7 @@ class EventPumper implements Runnable {
                     if (con.getLastActiveTime() + expire < now) {
                         con.sendTerminationAndClose();
                         if (_log.shouldInfo()) {
-                            _log.info("Failsafe or expire close for: " + con);
+                            _log.info("Failsafe or expire close... " + con);
                         }
                         failsafeCloses++;
                     } else {
@@ -414,24 +416,14 @@ class EventPumper implements Runnable {
                             }
                         }
                     }
-                } catch (CancelledKeyException cke) {
-                    // Ignore
-                }
+                } catch (CancelledKeyException cke) {} // Ignore
             }
 
-            if (failsafeWrites > 0) {
-                _context.statManager().addRateData("ntcp.failsafeWrites", failsafeWrites);
-            }
-            if (failsafeCloses > 0) {
-                _context.statManager().addRateData("ntcp.failsafeCloses", failsafeCloses);
-            }
-            if (failsafeInvalid > 0) {
-                _context.statManager().addRateData("ntcp.failsafeInvalid", failsafeInvalid);
-            }
+            if (failsafeWrites > 0) {_context.statManager().addRateData("ntcp.failsafeWrites", failsafeWrites);}
+            if (failsafeCloses > 0) {_context.statManager().addRateData("ntcp.failsafeCloses", failsafeCloses);}
+            if (failsafeInvalid > 0) {_context.statManager().addRateData("ntcp.failsafeInvalid", failsafeInvalid);}
 
-        } catch (ClosedSelectorException cse) {
-            // Ignore
-        }
+        } catch (ClosedSelectorException cse) {} // Ignore
     }
 
     /**
@@ -478,9 +470,11 @@ class EventPumper implements Runnable {
 
     private void maybeWakeup() {
         long now = System.currentTimeMillis();
-        if (!_needsWakeup || now - _lastWakeup > WAKEUP_COOLDOWN) {
+        int avgLoops = getAvgPumpLoops();
+        long cooldown = avgLoops < 1000 ? WAKEUP_COOLDOWN : WAKEUP_COOLDOWN * 3;
+        if (!_needsWakeup || now - _lastWakeup > cooldown) {
             if (_log.shouldDebug()) {
-                if (_needsWakeup && now - _lastWakeup <= WAKEUP_COOLDOWN) {
+                if (_needsWakeup && now - _lastWakeup <= cooldown) {
                     _log.debug("Throttling selector.wakeup()");
                 }
             }
@@ -928,7 +922,7 @@ class EventPumper implements Runnable {
         return rv;
     }
 
-    private static final int MAX_BATCH = SystemVersion.isSlow() ? 80 : 160; // max items per queue per invocation to limit work
+    private static final int MAX_BATCH = SystemVersion.isSlow() ? 32 : 64; // max items per queue per invocation to limit work
 
     /**
      * Processes delayed events from multiple queues by updating selector interest ops.
