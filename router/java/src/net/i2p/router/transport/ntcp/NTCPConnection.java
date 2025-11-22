@@ -153,7 +153,7 @@ public class NTCPConnection implements Closeable {
      *  In the meantime, don't let the transport bid on big messages.
      */
     static final int BUFFER_SIZE = 16*1024;
-    private static final int MAX_DATA_READ_BUFS = SystemVersion.isSlow() ? 16 : 48;
+    private static final int MAX_DATA_READ_BUFS = SystemVersion.isSlow() ? 4 : 16;
     private static final ByteCache _dataReadBufs = ByteCache.getInstance(MAX_DATA_READ_BUFS, BUFFER_SIZE);
     private static final int INFO_PRIORITY = OutNetMessage.PRIORITY_MY_NETDB_STORE_LOW;
     private static final String FIXED_RI_VERSION = "0.9.12";
@@ -1989,11 +1989,11 @@ public class NTCPConnection implements Closeable {
         } else {
             fromIP = null;
         }
-        return (_isInbound ? ("\n* From: " + fromIP + ":" + _chan.socket().getPort() + ' ')
-                           : ("Target: " + _remAddr.getHost() + ":" + _remAddr.getPort() + ' ')) + "[" +
+        return (_isInbound ? (" -> Inbound: " + fromIP + ":" + _chan.socket().getPort() + ' ')
+                           : (" -> Outbound: " + _remAddr.getHost() + ":" + _remAddr.getPort() + ' ')) + "[" +
                (_remotePeer == null ? "Unknown" : _remotePeer.calculateHash().toBase64().substring(0,6)) + "]" +
                (isEstablished() ? "" : " -> Not established ") +
-               (_log.shouldInfo() ? "\n* [NTCP" + _version + "] Connection [ID " + _connID + "]" +
+               (_log.shouldInfo() ? "\n* Connection [ID " + _connID + "]" +
                "\n* Created: " + DataHelper.formatDuration(getTimeSinceCreated()) + " ago;" +
                " Last message sent: " + DataHelper.formatDuration(getTimeSinceSend()) + " ago;" +
                " Last message received: " + DataHelper.formatDuration(getTimeSinceReceive()) + " ago" +
