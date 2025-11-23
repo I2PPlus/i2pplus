@@ -420,7 +420,7 @@ public class TunnelDispatcher implements Service {
             }
         } else {
             if (_log.shouldInfo())
-                _log.info("Removing our own Outbound tunnel...\n*  " + cfg);
+                _log.info("Removing our own Outbound tunnel...\n* " + cfg);
             TunnelId outId = cfg.getConfig(0).getSendTunnel();
             TunnelGateway gw = _outboundGateways.remove(outId);
             if (gw != null) {
@@ -553,42 +553,50 @@ public class TunnelDispatcher implements Service {
 
     public void dispatchOutbound(I2NPMessage msg, TunnelId outboundTunnel, TunnelId targetTunnel, Hash targetPeer) {
         if (outboundTunnel == null) throw new IllegalArgumentException("null outbound tunnel?");
-        long before = _context.clock().now();
+        long now = _context.clock().now();
+        long age = now - msg.getMessageExpiration();
         TunnelGateway gw = _outboundGateways.get(outboundTunnel);
-        if (gw != null) {
-            if (_log.shouldDebug())
-                _log.debug("Dispatch Outbound through " + outboundTunnel.getTunnelId() + ": " + msg);
 
-            if (msg.getMessageExpiration() < before - Router.CLOCK_FUDGE_FACTOR) {
-                if (_log.shouldError())
-                    _log.error("Why are we sending a tunnel message that expired " +
-                               (before - msg.getMessageExpiration()) + "ms ago? " + msg, new Exception("cause"));
+        if (gw != null) {
+            if (_log.shouldDebug()) {
+                _log.debug("Dispatch Outbound through " + outboundTunnel.getTunnelId() + " -> " + msg);
+            }
+
+            if (msg.getMessageExpiration() < now - Router.CLOCK_FUDGE_FACTOR) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Dropping tunnel message that expired " +
+                               (now - msg.getMessageExpiration()) + "ms ago -> " + msg);
+                }
                 return;
-            } else if (msg.getMessageExpiration() < before) {
-                if (_log.shouldWarn())
-                    _log.warn("Why are we sending a tunnel message that expired " +
-                               (before - msg.getMessageExpiration()) + "ms ago? " + msg, new Exception("cause"));
-            } else if (msg.getMessageExpiration() > before + MAX_FUTURE_EXPIRATION) {
-                if (_log.shouldError())
-                    _log.error("Why are we sending a tunnel message that expires " +
-                               (msg.getMessageExpiration() - before) + "ms from now? " + msg, new Exception("cause"));
+            } else if (msg.getMessageExpiration() < now) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Dropping stale tunnel message  -> Expired " + age + "ms ago (Cutoff: 60s)\n* " + msg);
+                }
+            } else if (msg.getMessageExpiration() > now + MAX_FUTURE_EXPIRATION) {
+                if (_log.shouldWarn()) {
+                    _log.warn("Dropping tunnel message that expires " + age + "ms in the future [!] (Cutoff: " +
+                               MAX_FUTURE_EXPIRATION / 1000 + "s) \n* " + msg);
+                }
                 return;
             }
 
+            msg.setMessageExpiration(now + 10_000); // reset expiry to 10s from now
             long tid1 = outboundTunnel.getTunnelId();
             long tid2 = (targetTunnel != null ? targetTunnel.getTunnelId() : -1);
             _context.messageHistory().tunnelDispatched(msg.getUniqueId(), tid1, tid2, targetPeer, "Outbound gateway");
             gw.add(msg, targetPeer, targetTunnel);
 
-            if (targetTunnel == null)
+            if (targetTunnel == null) {
                 _context.statManager().addRateData("tunnel.dispatchOutboundPeer", 1);
-            else
+            } else {
                 _context.statManager().addRateData("tunnel.dispatchOutboundTunnel", 1);
+            }
         } else {
             _context.messageHistory().droppedTunnelGatewayMessageUnknown(msg.getUniqueId(), outboundTunnel.getTunnelId());
-            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
                 _log.warn("No matching Outbound tunnel for [TunnelId " + outboundTunnel +
                           "] from " + _outboundGateways.size() + " Outbound gateways", new Exception("src"));
+            }
         }
     }
 
