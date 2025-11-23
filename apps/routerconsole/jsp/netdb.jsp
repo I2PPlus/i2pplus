@@ -134,6 +134,5 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 <script src=/js/tablesort/tablesort.number.js></script>
 <script src=/js/netdb.js type=module></script>
 <script src=/js/lsCompact.js type=module></script>
-</script>
 </body>
 </html>
