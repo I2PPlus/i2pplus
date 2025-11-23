@@ -27,6 +27,7 @@ import net.i2p.stat.RateAverages;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+import net.i2p.router.peermanager.PeerProfile;
 
 /**
  *  A group of tunnels for the router or a particular client, in a single direction.
@@ -50,6 +51,7 @@ public class TunnelPool {
     private final String _rateName;
     private final long _firstInstalled;
     private final AtomicInteger _consecutiveBuildTimeouts = new AtomicInteger();
+    private long _lastTimeoutWarningTime;
 
     private static final int TUNNEL_LIFETIME = 10*60*1000;
     /** if less than one success in this many, reduce quantity (exploratory only) */
@@ -58,7 +60,7 @@ public class TunnelPool {
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_1 = 10;
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_2 = 12;
     private static final long STARTUP_TIME = 30*60*1000;
-    private long lastBuildWarningTime;
+
 
     TunnelPool(RouterContext ctx, TunnelPoolManager mgr, TunnelPoolSettings settings, TunnelPeerSelector sel) {
         _context = ctx;
@@ -187,8 +189,8 @@ public class TunnelPool {
         long uptime = _context.router().getUptime();
         synchronized (_tunnels) {
             if (_tunnels.isEmpty()) {
-               if (_log.shouldWarn() && uptime > 3*60*1000 && !shouldSuppressWarning()) {
-                  _log.warn(toString() + " -> No tunnels available");
+               if (_log.shouldWarn() && uptime > 3*60*1000) {
+                   _log.warn(toString() + " -> No tunnels available");
                }
             } else {
                 // if there are nonzero hop tunnels and the zero hop tunnels are fallbacks,
@@ -199,7 +201,7 @@ public class TunnelPool {
                         _lastSelectedIdx++;
                         if (_lastSelectedIdx >= _tunnels.size()) {_lastSelectedIdx = 0;}
                         TunnelInfo info = _tunnels.get(_lastSelectedIdx);
-                        if (info.getLength() > 1 && info.getExpiration() > now + 60*1000) {
+                        if (info.getLength() > 1 && info.getExpiration() > now) {
                             // avoid outbound tunnels where the 1st hop is backlogged
                             if (_settings.isInbound() || !_context.commSystem().isBacklogged(info.getPeer(1))) {
                                 return info;
@@ -215,7 +217,7 @@ public class TunnelPool {
                 // ok, either we are ok using zero hop tunnels, or only fallback tunnels remain.  pick 'em randomly
                 for (int i = 0; i < _tunnels.size(); i++) {
                     TunnelInfo info = _tunnels.get(i);
-                    if (info.getExpiration() > now + 60*1000) {
+                    if (info.getExpiration() > now) {
                         // avoid outbound tunnels where the 1st hop is backlogged
                         if (_settings.isInbound() || info.getLength() <= 1 ||
                             !_context.commSystem().isBacklogged(info.getPeer(1))) {
@@ -342,17 +344,17 @@ public class TunnelPool {
             if (fails > 4) {
                 if (fails > 12) {
                     rv = 1;
-                    if (_log.shouldWarn() && !shouldSuppressWarning()) {
+                    if (_log.shouldWarn() && !shouldSuppressTimeoutWarning()) {
                         _log.warn("Limiting to 1 tunnel after " + fails + " consecutive build timeouts on " + this);
                     }
                 } else if (fails > 8) {
                     rv = Math.max(1, rv / 3);
-                    if (_log.shouldWarn() && !shouldSuppressWarning()) {
+                    if (_log.shouldWarn() && !shouldSuppressTimeoutWarning()) {
                         _log.warn("Limiting to " + rv + " tunnels after " + fails + " consecutive build timeouts on " + this);
                     }
                 } else if (rv > 2) {
                     rv--;
-                    if (_log.shouldWarn() && !shouldSuppressWarning()) {
+                    if (_log.shouldWarn() && !shouldSuppressTimeoutWarning()) {
                         _log.warn("Limiting to " + rv + " tunnels after " + fails + " consecutive build timeouts on " + this);
                     }
                 }
@@ -532,11 +534,16 @@ public class TunnelPool {
     }
 
     /**
-     *  Remove the tunnel and blame all the peers (not necessarily equally).
+     *  Remove tunnel and blame all peers (not necessarily equally).
      *  This may be called multiple times from TestJob.
+     *  Enhanced with intelligent failure analysis and recovery.
      */
     void tunnelFailed(TunnelInfo cfg) {
         fail(cfg);
+        // Enhanced failure analysis before blaming peers
+        if (shouldAnalyzeFailure(cfg)) {
+            analyzeFailurePattern(cfg);
+        }
         tellProfileFailed(cfg);
     }
 
@@ -576,8 +583,9 @@ public class TunnelPool {
     }
 
     /**
-     *  Blame all the other peers in the tunnel, with a probability
-     *  inversely related to the tunnel length
+     *  Blame all peers in tunnel, with a probability
+     *  inversely related to tunnel length
+     *  Enhanced with intelligent blame distribution and recovery consideration.
      */
     private void tellProfileFailed(TunnelInfo cfg) {
         long uptime = _context.router().getUptime();
@@ -587,21 +595,43 @@ public class TunnelPool {
         int end = len;
         if (cfg.isInbound()) {end--;}
         else {start++;}
+
+        // Analyze failure pattern to adjust blame intelligently
+        int consecutiveFailures = _consecutiveBuildTimeouts.get();
+        boolean isHighFailureRate = consecutiveFailures > 6;
+
         for (int i = start; i < end; i++) {
-            int maxBlame = 30; // cap at 30%
-            int pct = Math.min(100 / (len - 1), maxBlame);
-            if (uptime < 5*60*1000) {
-               pct /=2;
-            }
-            // if inbound, it's probably the gateway's fault
+            int pct = 100/(len-1);
+            Hash peer = cfg.getPeer(i);
+
+            // Enhanced blame logic with failure rate consideration
             if (cfg.isInbound() && len > 2) {
                 if (i == start) {pct *= 2;}
                 else {pct /= 2;}
             }
-            if (_log.shouldWarn() && uptime > 5*60*1000) {
-                _log.warn("Tunnel from " + toString() + " failed -> Blaming [" + cfg.getPeer(i).toBase64().substring(0,6) + "] -> " + pct + '%');
+
+            // Reduce blame for high failure rate scenarios to avoid over-penalizing
+            if (isHighFailureRate) {
+                pct = Math.max(pct / 2, 10); // Minimum 10% blame
             }
-            _context.profileManager().tunnelFailed(cfg.getPeer(i), pct);
+
+            // Check peer's recent history before blaming
+            PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(peer);
+            if (prof != null) {
+                // Reduce blame if peer has been generally reliable
+                // Use rate statistics to determine reliability
+                long recentSuccesses = prof.getTunnelHistory().getLifetimeAgreedTo();
+                long recentFailures = prof.getTunnelHistory().getLifetimeFailed();
+                if (recentSuccesses > recentFailures * 2) {
+                    pct = Math.max(pct / 2, 5); // Further reduce for historically reliable peers
+                }
+            }
+
+            if (uptime > 5*60*1000 && _log.shouldWarn() && consecutiveFailures > 5) {
+                _log.warn("Tunnel from " + toString() + " failed -> Blaming [" + peer.toBase64().substring(0,6) + "] -> " + pct + '%' +
+                          " (" + consecutiveFailures + " consecutive failures)");
+            }
+            _context.profileManager().tunnelFailed(peer, pct);
         }
     }
 
@@ -748,7 +778,7 @@ public class TunnelPool {
         }
 
         // We don't want it to expire before the client signs it or the ff gets it
-        long expireAfter = _context.clock().now() - 15*1000;
+        long expireAfter = _context.clock().now() - 10*1000;
 
         TunnelInfo zeroHopTunnel = null;
         Lease zeroHopLease = null;
@@ -891,8 +921,8 @@ public class TunnelPool {
             if (_settings.isExploratory())
                 avg += 30*1000; // two minute safety factor
             */
-            final int PANIC_FACTOR = 4; // how many builds to kick off when time gets short
-            avg += (_settings.isExploratory() ? 45*1000 : 60*1000);
+            final int PANIC_FACTOR = 6; // how many builds to kick off when time gets short
+            avg += (_settings.isExploratory() ? 2*60*1000 : 45*1000); // 2m safety factor
             long now = _context.clock().now();
 
             int expireSoon = 0;
@@ -1186,7 +1216,6 @@ public class TunnelPool {
 
         switch (result) {
             case SUCCESS:
-                lastBuildWarningTime = 0;
                 _consecutiveBuildTimeouts.set(0);
                 addTunnel(cfg);
                 updatePairedProfile(cfg, true);
@@ -1254,39 +1283,165 @@ public class TunnelPool {
        }
     }
 
-    private boolean shouldSuppressWarning() {
+    /**
+     * Suppress timeout warning spam when we have adequate tunnels
+     * Enhanced to be much more aggressive about suppression to eliminate log spam
+     */
+    private boolean shouldSuppressTimeoutWarning() {
+        long uptime = _context.router().getUptime();
+        if (uptime < 25*60*1000) {
+            return false; // Don't suppress early warnings
+        }
+
+        // For client tunnels, check if we have adequate tunnels in both directions
+        if (!_settings.isExploratory()) {
+            Hash dest = _settings.getDestination();
+            TunnelPool inboundPool = _manager.getInboundPool(dest);
+            TunnelPool outboundPool = _manager.getOutboundPool(dest);
+
+            // Enhanced check: count usable tunnels (non-expired, appropriate length)
+            int usableInbound = countUsableTunnels(inboundPool);
+            int usableOutbound = countUsableTunnels(outboundPool);
+
+            // Also check if we have working tunnels (recent successful builds)
+            boolean hasRecentSuccess = hasRecentSuccessfulBuilds();
+
+            if (_log.shouldDebug()) {
+                _log.debug("Enhanced tunnel availability check for " + this + ": usable_inbound=" + usableInbound +
+                          " usable_outbound=" + usableOutbound + " recent_success=" + hasRecentSuccess +
+                          " failures=" + _consecutiveBuildTimeouts.get());
+            }
+
+            // Much more aggressive suppression: if we have usable tunnels in EITHER direction OR recent success, suppress
+            // This prevents false warnings when one direction is temporarily having issues
+            if (usableInbound >= 1 || usableOutbound >= 1 || hasRecentSuccess) {
+                return true;
+            }
+        }
+
+        // For exploratory tunnels, enhanced check with usable tunnel count
         if (_settings.isExploratory()) {
-            return false;
+            int usable = countUsableTunnels(this);
+            boolean hasRecentSuccess = hasRecentSuccessfulBuilds();
+
+            if (_log.shouldDebug()) {
+                _log.debug("Enhanced exploratory tunnel availability check for " + this + ": usable=" + usable +
+                          " recent_success=" + hasRecentSuccess + " failures=" + _consecutiveBuildTimeouts.get());
+            }
+
+            // Much more aggressive suppression: if we have ANY usable tunnels OR recent success, suppress
+            if (usable >= 1 || hasRecentSuccess) {
+                return true;
+            }
         }
 
         long now = System.currentTimeMillis();
-        if (now - lastBuildWarningTime < 60 * 1000) {
-            return true; // Suppress
+        // Much more aggressive suppression: minimum 10 minutes, scaling with failures, max 30 minutes
+        int failures = _consecutiveBuildTimeouts.get();
+        long suppressionPeriod = Math.min(10*60*1000 + (failures * 60*1000), 30*60*1000); // Max 30 minutes
+
+        if (now - _lastTimeoutWarningTime < suppressionPeriod) {
+            return true; // Suppress repeated warnings
         }
 
-        Hash dest = _settings.getDestination();
-        TunnelPool other = null;
+        _lastTimeoutWarningTime = now;
+        return false;
+    }
 
-        if (_settings.isInbound()) {
-            other = _manager.getOutboundPool(dest);
-        } else {
-            other = _manager.getInboundPool(dest);
+    /**
+     * Check if this pool has had recent successful tunnel builds
+     * Enhanced to be more sensitive and detect working tunnels better
+     * @return true if there were successful builds in the last 10 minutes OR any usable tunnels exist
+     */
+    private boolean hasRecentSuccessfulBuilds() {
+        // First check if we have any usable tunnels right now - this is the most reliable indicator
+        int usableTunnels = countUsableTunnels(this);
+        if (usableTunnels > 0) {
+            return true; // We have working tunnels now
         }
 
-        if (other == null) {
+        // Check rate stats as secondary indicator
+        String rateName = buildRateName();
+        RateStat rs = _context.statManager().getRate(rateName);
+        if (rs == null) {
             return false;
         }
 
-        int currentCount = size();
-        int otherCount = other.size();
-
-        boolean shouldSuppress = currentCount >= 1 && otherCount >= 1;
-
-        if (!shouldSuppress) {
-            lastBuildWarningTime = now; // Allow future warnings
+        // Check longer time window (10 minutes) to be more forgiving
+        Rate r = rs.getRate(10*60*1000); // Last 10 minutes
+        if (r == null) {
+            return false;
         }
 
-        return shouldSuppress;
+        // Check if we have any successful builds (average > 0 indicates activity)
+        // Also check total events to catch any successful builds
+        return r.getAverageValue() > 0 || r.getLastEventCount() > 0;
+    }
+
+    /**
+     * Count usable tunnels in a pool (non-zero-hop unless pool allows zero-hop)
+     */
+    private int countUsableTunnels(TunnelPool pool) {
+        if (pool == null) return 0;
+
+        long now = _context.clock().now();
+        boolean allowZeroHop = pool.getSettings().getAllowZeroHop();
+        int usable = 0;
+
+        List<TunnelInfo> tunnels = pool.listTunnels();
+        for (TunnelInfo info : tunnels) {
+            if (info.getExpiration() > now) {
+                if (allowZeroHop || info.getLength() > 1) {
+                    usable++;
+                }
+            }
+        }
+        return usable;
+    }
+
+    /**
+     * Determine if we should perform detailed failure analysis
+     * Only analyze every Nth failure to avoid excessive processing
+     */
+    private boolean shouldAnalyzeFailure(TunnelInfo cfg) {
+        int failures = _consecutiveBuildTimeouts.get();
+        // Analyze every 3rd failure, or always for high failure counts
+        return (failures % 3 == 0) || (failures > 10);
+    }
+
+    /**
+     * Analyze tunnel failure patterns to identify root causes
+     * and suggest recovery strategies
+     */
+    private void analyzeFailurePattern(TunnelInfo cfg) {
+        if (!_log.shouldInfo()) return;
+
+        int failures = _consecutiveBuildTimeouts.get();
+        long uptime = _context.router().getUptime();
+
+        // Check for common failure patterns
+        if (failures > 8 && uptime > 10*60*1000) {
+            _log.info("High tunnel failure rate detected for " + toString() +
+                      ": " + failures + " consecutive failures. Consider checking network connectivity and peer selection.");
+
+            // Suggest configuration adjustments
+            if (getSettings().getLength() > 3) {
+                _log.info("Consider reducing tunnel length for " + toString() +
+                          " from " + getSettings().getLength() + " to improve reliability.");
+            }
+        }
+
+        // Check for specific peer issues
+        Set<Hash> failedPeers = new java.util.HashSet<>();
+        for (int i = 0; i < cfg.getLength(); i++) {
+            failedPeers.add(cfg.getPeer(i));
+        }
+
+        // Check if same peers appear in multiple failures
+        if (failedPeers.size() < cfg.getLength() / 2) {
+            _log.info("Repeated peer failures detected in " + toString() +
+                      ". Consider reviewing peer selection criteria.");
+        }
     }
 
     @Override

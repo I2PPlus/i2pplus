@@ -102,11 +102,51 @@ class BuildExecutor implements Runnable {
     }
 
     /**
-     * Determines the allowed number of concurrent tunnel builds based on system status,
+     * Calculate adaptive timeout based on tunnel characteristics and network conditions
+     * 
+     * @param cfg the tunnel configuration
+     * @return adaptive timeout in milliseconds
+     */
+    private long calculateAdaptiveTimeout(PooledTunnelCreatorConfig cfg) {
+        long baseTimeout = BuildRequestor.REQUEST_TIMEOUT;
+        
+        // Adjust timeout based on tunnel length
+        int length = cfg.getLength();
+        if (length > 3) {
+            baseTimeout += (length - 3) * 10*1000; // Add 10s per additional hop
+        }
+        
+        // Adjust based on recent network performance
+        RateStat buildTimeStat = _context.statManager().getRate("tunnel.buildRequestTime");
+        if (buildTimeStat != null) {
+            Rate r = buildTimeStat.getRate(10*60*1000); // Last 10 minutes
+            if (r != null) {
+                double avgBuildTime = r.getAverageValue();
+                if (avgBuildTime > 100) { // If builds are taking longer than 100ms
+                    baseTimeout += (long)(avgBuildTime * 2); // Double the average build time
+                }
+            }
+        }
+        
+        // Adjust based on system load
+        int cpuLoad = SystemVersion.getCPULoadAvg();
+        if (cpuLoad > 90) {
+            baseTimeout += 30*1000; // Add 30s under high CPU load
+        } else if (cpuLoad > 80) {
+            baseTimeout += 15*1000; // Add 15s under moderate CPU load
+        }
+        
+        // Cap the timeout to prevent excessive waits
+        long maxTimeout = BuildRequestor.REQUEST_TIMEOUT * 3; // Triple the base timeout
+        return Math.min(baseTimeout, maxTimeout);
+    }
+
+    /**
+     * Determines allowed number of concurrent tunnel builds based on system status,
      * bandwidth limits, build times, system resources, and current tunnel build activity.
      * Also handles expiration and cleanup of old build requests.
      *
-     * @return the allowed number of concurrent tunnel builds
+     * @return allowed number of concurrent tunnel builds
      */
     private int allowed() {
         final CommSystemFacade csf = _context.commSystem();
@@ -182,9 +222,13 @@ class BuildExecutor implements Runnable {
         List<PooledTunnelCreatorConfig> expired = null;
 
         // Expire old build requests from currentlyBuilding map, move them to recentlyBuilding
+        // Enhanced with adaptive timeout handling
         for (Iterator<PooledTunnelCreatorConfig> iter = _currentlyBuildingMap.values().iterator(); iter.hasNext(); ) {
             PooledTunnelCreatorConfig cfg = iter.next();
-            if (cfg.getExpiration() <= expireBefore) {
+            long adaptiveTimeout = calculateAdaptiveTimeout(cfg);
+            long adjustedExpireBefore = now + TEN_MINUTES_MS - adaptiveTimeout;
+            
+            if (cfg.getExpiration() <= adjustedExpireBefore) {
                 PooledTunnelCreatorConfig existingCfg = _recentlyBuildingMap.putIfAbsent(Long.valueOf(cfg.getReplyMessageId()), cfg);
                 if (existingCfg == null) {
                     iter.remove();
