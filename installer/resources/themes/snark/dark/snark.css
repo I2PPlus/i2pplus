@@ -1045,7 +1045,7 @@ body,#torrents td,.snarkAddInfo,th,td,code,textarea,input,input[type=submit],inp
 }
 
 @media (min-width:1200px){
-.peerCount b{margin:4px 0;padding:4px 3px;min-width:98px;display:inline-block;position:relative;vertical-align:middle;line-height:1;text-align:center;font-size:95%;color:#eee;text-shadow:0 1px 1px #000;border-radius:2px;background:#ac5390;filter:drop-shadow(0 0 1px #000)}
+.peerCount b{margin:4px 0;padding:4px 3px;min-width:98px;min-height:14px;display:inline-block;position:relative;vertical-align:middle;line-height:1;text-align:center;font-size:95%;color:#eee;text-shadow:0 1px 1px #000;border-radius:2px;background:#ac5390;filter:drop-shadow(0 0 1px #000)}
 .peerCount b a{color:#fff}
 .peerCount b a[href*="?p="]:hover::after{top:calc(50% - 2px);border-color:#fff #0000 #0000 #0000}
 .peerCount b::before{width:0;height:0;position:absolute;top:calc(50% - 5px);left:-10px;border-width:5px;border-style:solid;border-color:#0000 #ac5390 #0000 #0000;content:""}
@@ -1065,8 +1065,8 @@ body,#torrents td,.snarkAddInfo,th,td,code,textarea,input,input[type=submit],inp
 .configPanel .configTitle,.configPanel .configTitle:hover,.configPanel .configTitle:active{font-size:11pt}
 .configPanel .snarkConfigtitle{font-size:12pt}
 .inactive.downloading .peerCount b,.peerCount b .right,.peerCount b .left{text-shadow:0 1px 1px #222}
-.inactive.downloading .peerCount b,.active.starting.processing .peerCount b{color:#101;background:#bb0}
-.inactive.downloading .peerCount b::before,.active.starting.processing .peerCount b::before{border-color:#0000 #bb0 #0000 #0000}
+.inactive.downloading .peerCount b,.active.starting .peerCount b,.processing .peerCount b{color:#101;background:repeating-linear-gradient(135deg,#bb0,#bb0 10px,#990 10px,#990 20px)}
+.inactive.downloading .peerCount b::before,.active.starting .peerCount b::before,.processing .peerCount b::before{border-color:#0000 #bb0 #0000 #0000}
 .nopeers.incomplete .peerCount b{background:#aaa}
 .nopeers.incomplete .peerCount b::before{border-color:#0000 #aaa #0000 #0000}
 .nopeers .peerCount b .left,.nopeers .peerCount b .right{color:#101;text-shadow:0 1px 1px #aaa}
