@@ -574,6 +574,7 @@ class EventPumper implements Runnable {
      *  High-frequency path in thread.
      */
     public static void releaseBuf(ByteBuffer buf) {
+        if (buf == null) return;
         if (buf.capacity() < BUF_SIZE) { // double check
             I2PAppContext.getGlobalContext().logManager().getLog(EventPumper.class).error("Bad size " + buf.capacity(), new Exception());
             return;
@@ -708,7 +709,15 @@ class EventPumper implements Runnable {
     }
 
     private void processConnect(SelectionKey key) {
-        final NTCPConnection con = (NTCPConnection)key.attachment();
+        Object att = key.attachment();
+        if (!(att instanceof NTCPConnection)) {
+            if (_log.shouldWarn()) {
+                _log.warn("Invalid attachment in processConnect: " + (att != null ? att.getClass().getSimpleName() : "null"));
+            }
+            key.cancel();
+            return;
+        }
+        final NTCPConnection con = (NTCPConnection)att;
         final SocketChannel chan = con.getChannel();
         try {
             boolean connected = chan.finishConnect();
@@ -769,7 +778,15 @@ class EventPumper implements Runnable {
      * @param key the SelectionKey representing the channel ready for read
      */
     private void processRead(SelectionKey key) {
-        final NTCPConnection con = (NTCPConnection) key.attachment();
+        Object att = key.attachment();
+        if (!(att instanceof NTCPConnection)) {
+            if (_log.shouldWarn()) {
+                _log.warn("Invalid attachment in processRead: " + (att != null ? att.getClass().getSimpleName() : "null"));
+            }
+            key.cancel();
+            return;
+        }
+        final NTCPConnection con = (NTCPConnection)att;
         final SocketChannel chan = con.getChannel();
         ByteBuffer buf = null;
         boolean shouldDebug = _log.shouldDebug();
@@ -931,7 +948,15 @@ class EventPumper implements Runnable {
      *  High-frequency path in thread.
      */
     private void processWrite(SelectionKey key) {
-        final NTCPConnection con = (NTCPConnection)key.attachment();
+        Object att = key.attachment();
+        if (!(att instanceof NTCPConnection)) {
+            if (_log.shouldWarn()) {
+                _log.warn("Invalid attachment in processWrite: " + (att != null ? att.getClass().getSimpleName() : "null"));
+            }
+            key.cancel();
+            return;
+        }
+        final NTCPConnection con = (NTCPConnection)att;
         processWrite(con, key);
     }
 
