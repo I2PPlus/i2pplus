@@ -341,20 +341,21 @@ public class TunnelPool {
             if (rv <= 1) {return rv;}
             // throttle client tunnel builds in times of congestion
             int fails = _consecutiveBuildTimeouts.get();
+            long uptime = _context.router().getUptime();
             if (fails > 4) {
                 if (fails > 12) {
                     rv = 1;
-                    if (_log.shouldWarn() && !shouldSuppressTimeoutWarning()) {
+                    if (_log.shouldWarn() && !shouldSuppressTimeoutWarning() && uptime > 5*60*1000) {
                         _log.warn("Limiting to 1 tunnel after " + fails + " consecutive build timeouts on " + this);
                     }
                 } else if (fails > 8) {
                     rv = Math.max(1, rv / 3);
-                    if (_log.shouldWarn() && !shouldSuppressTimeoutWarning()) {
+                    if (_log.shouldWarn() && !shouldSuppressTimeoutWarning() && uptime > 5*60*1000) {
                         _log.warn("Limiting to " + rv + " tunnels after " + fails + " consecutive build timeouts on " + this);
                     }
                 } else if (rv > 2) {
                     rv--;
-                    if (_log.shouldWarn() && !shouldSuppressTimeoutWarning()) {
+                    if (_log.shouldWarn() && !shouldSuppressTimeoutWarning() && uptime > 5*60*1000) {
                         _log.warn("Limiting to " + rv + " tunnels after " + fails + " consecutive build timeouts on " + this);
                     }
                 }
