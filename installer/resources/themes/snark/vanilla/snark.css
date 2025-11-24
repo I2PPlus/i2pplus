@@ -655,7 +655,7 @@ input[name="nofilter_commentsName"],input[name="i2cpOpts"],input[name="nofilter_
 #configs td:first-child{min-width:240px;width:25%;font-weight:700;text-align:right}
 #configs td:nth-child(2){white-space:nowrap}
 #configs tr:nth-last-child(2) td{padding:12px 0 4px;text-align:right}
-#configs th{padding:4px 8px;font-size:90%;color:var(--ink_light);border:var(--border_hard);border-radius:2px;background:var(--th_config)}
+#configs th{padding:7px 8px 6px;position:relative;font-size:90%;color:var(--ink_light);border:var(--border_hard);border-radius:2px;background:var(--th_config)}
 #configs td b{padding:0 0 0 5px;min-width:154px;display:inline-block;text-align:right;color:#453221}
 #configs td b::after{content:":"}
 #configs td label b:hover{color:#4d2200}
@@ -783,7 +783,7 @@ form[action^="/i2psnark/configure"]{display:block}
 .peerclient code,#ourDest code{margin:1px 1px 1px 4px;padding:1px 4px 1px 6px;display:inline-block;line-height:1.3;background:#3f271b}
 .clientid,.peerclient,.peerclient code{display:inline-block;vertical-align:middle;line-height:1.1}
 .peerclient code{margin:0 1px;padding:1px 5px;box-shadow:none;opacity:.8}
-#ourDest{margin:0 -4px 0 0;padding:0 0 0 4px;float:right;line-height:1.3;border:var(--border);border-radius:2px;box-shadow:var(--highlight);background:#cfc7c2;opacity:.85;contain:paint}
+#ourDest{padding:0 0 0 4px;position:absolute;top:3px;right:3px;line-height:1.3;border:var(--border);border-radius:2px;box-shadow:var(--highlight);background:#cfc7c2;opacity:.85;contain:paint}
 #ourDest code{letter-spacing:.04em;font-weight:600;color:#fffd}
 
 /* radio and checkbox */
@@ -943,6 +943,7 @@ body.textview{height:100vh}
 .tAction input[type=submit]:active{background-size:11px,100%}
 tfoot .rateDown:not(:empty)::before,tfoot .rxd:not(:empty)::before,tfoot .rateUp:not(:empty)::before,tfoot .txd:not(:empty)::before{margin-top:3px}
 #actionStopAll,#actionStartAll{padding:11px 18px}
+#configs th{line-height:1.4}
 #screenlog li .date::after{margin-top:0}
 #totals code{line-height:1.5}
 }
