@@ -57,7 +57,7 @@ task precompileJsp(type: JavaExec) {
 
     dependsOn copyJsps
 
-    classpath = sourceSets.main.runtimeClasspath + fileTree("src/lib")
+    classpath = java.sourceSets.main.runtimeClasspath + fileTree("src/lib")
     mainClass.set('net.i2p.servlet.util.JspC')
 
     jvmArgs "-Dtomcat.util.scan.StandardJarScanFilter.jarsToSkip=commons-collections.jar,junit.jar,junit4.jar"
@@ -88,7 +88,7 @@ task precompileJsp(type: JavaExec) {
         def output = new File("$buildDir/compiledJsps")
         output.mkdirs()
 
-        def classpath = sourceSets.main.runtimeClasspath + fileTree("src/lib")
+        def classpath = java.sourceSets.main.runtimeClasspath + fileTree("src/lib")
 
         ant.javac(srcDir: "$buildDir/tmp_jsp",
                     classpath: classpath.asPath,

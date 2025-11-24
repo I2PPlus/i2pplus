@@ -47,7 +47,7 @@ if (System.getenv("TARGET_JAVA_HOME") == null && JavaVersion.current() != JavaVe
     task scalaTest(dependsOn: ['testClasses'], type: JavaExec) {
         mainClass.set('org.scalatest.tools.Runner')
         args = ['-R', 'build/classes/scala/test', '-o']
-        classpath = sourceSets.test.runtimeClasspath
+        classpath = java.sourceSets.test.runtimeClasspath
     }
 
     // java.lang.NullPointerException:
@@ -118,7 +118,7 @@ task copyJsps(type: Copy) {
 
 task precompileJsp(type: JavaExec) {
     dependsOn copyJsps
-    classpath = sourceSets.main.runtimeClasspath
+    classpath = java.sourceSets.main.runtimeClasspath
     mainClass.set('net.i2p.servlet.util.JspC')
 
     jvmArgs "-Dtomcat.util.scan.StandardJarScanFilter.jarsToSkip=commons-collections.jar,junit.jar,junit4.jar"
@@ -137,7 +137,7 @@ task precompileJsp(type: JavaExec) {
         def output = new File("$buildDir/compiledJsps")
         output.mkdirs()
         ant.javac(srcDir: "jsp/WEB-INF/classes",
-                    classpath: sourceSets.main.runtimeClasspath.asPath,
+                    classpath: java.sourceSets.main.runtimeClasspath.asPath,
                     debug : true,
                     includeAntRuntime : false,
                     deprecation : "on",
