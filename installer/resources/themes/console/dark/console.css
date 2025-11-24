@@ -3173,6 +3173,7 @@ span#newtab{margin-top:4px}
 .sb_netstatus.running.floodfill::before{margin:1px 2px 0;width:46px;height:22px;background-position:left center,right center;background-size:20px,22px}
 .sb_netstatus.floodfill.restarting::after{width:20px;height:20px;display:inline-block;content:"";position:absolute;left:calc(50% - 63px);top:calc(50% - 9px);background:var(--update) no-repeat left center/cover;animation:spin 30s linear 0s infinite both;will-change:transform}
 .sb_update{padding-bottom:3px}
+.sb_updatestatus{width:calc(100% + 4px)}
 .search td{padding:6px 6px 6px 5px}
 .search td:last-child{padding-left:0;padding-right:0}
 .search td:nth-child(2){padding:5px 8px 5px 8px}
@@ -3253,6 +3254,8 @@ span#newtab{margin-top:4px}
 #sidebar #sb_localtunnels td:first-child{background-size:18px}
 #sidebar #sb_advanced a:link,#sidebar #sb_internals a:link,#sidebar #sb_help a:link,#sidebar #sb_services a:link{max-width:216px}
 #sidebar .sb_netstatus.running.floodfill .badge{font-size:8.5pt!important}
+#sidebar .sb_update{width:calc(100% - 5px)}
+#sidebar .sb_info .percentBarOuter{width:calc(100% - 4px)}
 #sidebar #sb_tunnelBuildStatus{height:32px}
 #sitemap h3{font-size:12pt}
 #stacktrace p:first-of-type::first-line{font-size:110%;font-weight:700;font-variant:super;text-decoration:underline}
