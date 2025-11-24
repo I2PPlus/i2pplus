@@ -107,9 +107,9 @@ task codeCoverageReport(type: JacocoReport) {
     dependsOn(subprojects.test)
 
     jacocoClasspath = project(':core').configurations.jacocoAnt
-    additionalSourceDirs.from(files(subprojects.sourceSets.main.allSource.srcDirs))
-    sourceDirectories.from(files(subprojects.sourceSets.main.allSource.srcDirs))
-    classDirectories.from(files(subprojects.sourceSets.main.output))
+    additionalSourceDirs.from(files(subprojects.java.sourceSets.main.allSource.srcDirs))
+    sourceDirectories.from(files(subprojects.java.sourceSets.main.allSource.srcDirs))
+    classDirectories.from(files(subprojects.java.sourceSets.main.output))
     executionData.from(files(subprojects.jacocoTestReport.executionData))
 
     // > The value for this file collection is final and cannot be changed.

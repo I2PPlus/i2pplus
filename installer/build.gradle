@@ -25,7 +25,7 @@ dependencies {
 
 jar {
     archiveBaseName.set('utility')
-    from project(':core').sourceSets.main.output
+    from project(':core').java.sourceSets.main.output
     include 'net/i2p/installer/**'
     include 'net/i2p/util/FileUtil.class'
     manifest {
@@ -35,7 +35,7 @@ jar {
 
 task jbigiJar(type: Jar) {
     archiveBaseName = 'jbigi'
-    from sourceSets.jbigi.output
+    from java.sourceSets.jbigi.output
 }
 
 artifacts {
