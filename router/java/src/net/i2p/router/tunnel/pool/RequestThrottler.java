@@ -72,7 +72,14 @@ class RequestThrottler {
                          ri.getCapabilities().indexOf(Router.CAPABILITY_BW_UNLIMITED) >= 0);
         boolean isLTier = ri != null && (ri.getCapabilities().indexOf(Router.CAPABILITY_BW12) >= 0 ||
                           ri.getCapabilities().indexOf(Router.CAPABILITY_BW32) >= 0);
+        boolean weAreFirewalled = context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
+                                  context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
+                                  context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
+                                  context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
+                                  context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
+                                  context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
         boolean shouldBlockOldRouters = context.getProperty(PROP_BLOCK_OLD_ROUTERS, DEFAULT_BLOCK_OLD_ROUTERS);
+        if (weAreFirewalled) {shouldBlockOldRouters = false;}
         int numTunnels = this.context.tunnelManager().getParticipatingCount();
         int portion = isSlow ? 6 : 4;
         //int limit = (isUnreachable || isLowShare) ? MIN_LIMIT : Math.max(MIN_LIMIT, Math.min(MAX_LIMIT / 8, numTunnels * (isFast ? 3 / 2 : PERCENT_LIMIT / 2) / 100));
