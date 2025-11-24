@@ -58,7 +58,7 @@ task precompileJsp(type: JavaExec) {
     dependsOn copyJsps
 
     classpath = sourceSets.main.runtimeClasspath + fileTree("src/lib")
-    main = 'net.i2p.servlet.util.JspC'
+    mainClass.set('net.i2p.servlet.util.JspC')
 
     jvmArgs "-Dtomcat.util.scan.StandardJarScanFilter.jarsToSkip=commons-collections.jar,junit.jar,junit4.jar"
     jvmArgs "-Dbuild.reproducible=true"
@@ -95,8 +95,8 @@ task precompileJsp(type: JavaExec) {
                     debug : true,
                     includeAntRuntime : false,
                     deprecation : "on",
-                    source: project.sourceCompatibility,
-                    target: project.targetCompatibility,
+                    source: java.sourceCompatibility,
+                    target: java.targetCompatibility,
                     destDir:file("$buildDir/compiledJsps"))
 
         def fragment = file("$buildDir/web-fragment.xml").text

@@ -76,25 +76,24 @@ subprojects {
         testImplementation 'org.mockito:mockito-core:4.11.0'
     }
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
-
-    jar {
-        // Empty attributes are set by each project. They are initialized
-        // here in order to create a defined ordering of the attributes.
+    java {
+        sourceCompatibility = 1.8
+        targetCompatibility = 1.8
         manifest {
-            attributes 'Specification-Title': ''
-            attributes 'Specification-Version': "$releaseVersion"
-            attributes 'Specification-Vendor': 'The I2P Project https://geti2p.net/'
-            attributes 'Implementation-Title': ''
-            attributes 'Implementation-Version': "$fullVersion"
-            attributes 'Implementation-Vendor': 'The I2P Project https://geti2p.net/'
-            attributes 'Built-By': "$builtBy"
-            attributes 'Build-Date': 'reproducible'
-            attributes 'Base-Revision': "$workspaceVersion"
-            attributes 'Workspace-Changes': ''
-            attributes 'X-Compile-Source-JDK': "$sourceCompatibility"
-            attributes 'X-Compile-Target-JDK': "$targetCompatibility"
+            attributes(
+                'Specification-Title': '',
+                'Specification-Version': "$releaseVersion",
+                'Specification-Vendor': 'The I2P Project https://geti2p.net/',
+                'Implementation-Title': '',
+                'Implementation-Version': "$fullVersion",
+                'Implementation-Vendor': 'The I2P Project https://geti2p.net/',
+                'Built-By': "$builtBy",
+                'Build-Date': 'reproducible',
+                'Base-Revision': "$workspaceVersion",
+                'Workspace-Changes': '',
+                'X-Compile-Source-JDK': "$sourceCompatibility",
+                'X-Compile-Target-JDK': "$targetCompatibility"
+            )
         }
     }
 
@@ -121,9 +120,9 @@ task codeCoverageReport(type: JacocoReport) {
     reports {
         // https://stackoverflow.com/questions/73546718/changing-enabled-to-required-throws-an-error-in-gradle
         xml.required.set(true)
-        xml.destination file("${buildDir}/reports/jacoco/report.xml")
+        xml.outputLocation.set(file("${buildDir}/reports/jacoco/report.xml"))
         html.required.set(true)
-        html.destination file("${buildDir}/reports/jacoco/html")
+        html.outputLocation.set(file("${buildDir}/reports/jacoco/html"))
     }
 }
 
