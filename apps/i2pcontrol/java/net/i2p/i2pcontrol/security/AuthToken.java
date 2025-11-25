@@ -3,6 +3,7 @@ package net.i2p.i2pcontrol.security;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 
 public class AuthToken {
@@ -33,8 +34,7 @@ public class AuthToken {
     }
 
     public String getExpiryTime() {
-        SimpleDateFormat sdf = new SimpleDateFormat();
-        sdf.applyPattern("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
         return sdf.format(expiry);
     }
 

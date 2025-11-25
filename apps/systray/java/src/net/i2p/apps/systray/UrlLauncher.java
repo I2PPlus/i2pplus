@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
+import java.nio.charset.StandardCharsets;
 
 import net.i2p.I2PAppContext;
 import net.i2p.app.*;
@@ -232,7 +233,7 @@ public class UrlLauncher implements ClientApp {
             // Get registry where we find the default browser
             String[] cmd = {"REG", "QUERY", hkeyquery};
             Process process = Runtime.getRuntime().exec(cmd);
-            Scanner kb = new Scanner(process.getInputStream());
+            Scanner kb = new Scanner(process.getInputStream(), StandardCharsets.UTF_8.name());
             while (kb.hasNextLine()) {
                 String line = kb.nextLine().trim();
                 if (line.startsWith(key)) {

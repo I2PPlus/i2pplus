@@ -27,6 +27,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.nio.charset.StandardCharsets;
 
 import gnu.getopt.Getopt;
 
@@ -336,7 +337,7 @@ public class EepGet {
         if (username != null) {
             if (password == null) {
                 try {
-                    BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
+                    BufferedReader r = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
                     do {
                         System.err.print("Proxy password: ");
                         password = r.readLine();

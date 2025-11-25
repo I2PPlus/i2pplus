@@ -18,6 +18,7 @@ import i2p.susi.webmail.encoding.EncodingFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -379,7 +380,7 @@ class Mail {
                         if (_log.shouldDebug()) _log.debug("EOF hit before \\r\\n\\r\\n in Mail");
                     }
                     // Fixme UTF-8 to bytes to UTF-8
-                    headerLines = DataHelper.split(new String(decoded.getContent(), decoded.getOffset(), decoded.getLength()), "\r\n");
+                    headerLines = DataHelper.split(new String(decoded.getContent(), decoded.getOffset(), decoded.getLength(), StandardCharsets.UTF_8), "\r\n");
                     // only do this once
                     if (headersParsed) {return headerLines;}
                     for (int j = 0; j < headerLines.length; j++) {

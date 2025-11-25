@@ -6,7 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 import org.rrd4j.ConsolFun;
@@ -1206,7 +1208,11 @@ public class RrdDb implements RrdUpdater<RrdDb>, Closeable {
     public synchronized String getXml() throws IOException {
         try (ByteArrayOutputStream destination = new ByteArrayOutputStream(XML_BUFFER_CAPACITY)) {
             dumpXml(destination);
-            return destination.toString();
+            try {
+                return destination.toString(StandardCharsets.UTF_8.name());
+            } catch (UnsupportedEncodingException e) {
+                return destination.toString(StandardCharsets.UTF_8.name());
+            }
         }
     }
 

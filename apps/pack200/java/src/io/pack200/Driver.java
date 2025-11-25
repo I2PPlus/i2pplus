@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -206,7 +207,7 @@ class Driver {
             } else {
                 OutputStream log = new FileOutputStream(logFile);
                 //log = new BufferedOutputStream(out);
-                System.setErr(new PrintStream(log));
+                System.setErr(new PrintStream(log, false, StandardCharsets.UTF_8.name()));
             }
         }
 

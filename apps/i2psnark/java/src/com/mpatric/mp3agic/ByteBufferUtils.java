@@ -1,6 +1,7 @@
 package com.mpatric.mp3agic;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 
 public final class ByteBufferUtils {
 
@@ -13,7 +14,7 @@ public final class ByteBufferUtils {
 
 		bb.get(buffer);
 
-		String s = new String(buffer);
+		String s = new String(buffer, StandardCharsets.ISO_8859_1);
 		int nullPos = s.indexOf(0);
 
 		s = s.substring(0, nullPos);

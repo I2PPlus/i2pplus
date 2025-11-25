@@ -101,6 +101,7 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -1778,7 +1779,7 @@ public class Device implements org.cybergarage.http.HTTPRequestListener,
 		desc += UPnP.XML_DECLARATION;
 		desc += "\n";
 		desc += rootNode.toString();
-		return desc.getBytes();
+		return desc.getBytes(StandardCharsets.UTF_8);
 	}
 
 	private void httpGetRequestRecieved(HTTPRequest httpReq) {

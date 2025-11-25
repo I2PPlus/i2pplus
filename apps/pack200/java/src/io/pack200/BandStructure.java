@@ -40,6 +40,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -749,7 +750,7 @@ class BandStructure {
 
         private void dumpBand() throws IOException {
             assert(optDumpBands);
-            try (PrintStream ps = new PrintStream(getDumpStream(this, ".txt"))) {
+            try (PrintStream ps = new PrintStream(getDumpStream(this, ".txt"), false, StandardCharsets.UTF_8.name())) {
                 String irr = (bandCoding == regularCoding) ? "" : " irregular";
                 ps.print("# length="+length+
                          " size="+outputSize()+

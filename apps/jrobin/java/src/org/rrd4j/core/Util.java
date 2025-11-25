@@ -18,6 +18,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.charset.StandardCharsets;
 import java.net.JarURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -658,7 +660,7 @@ public class Util {
         }
 
         public static Element getRootElement(File xmlFile) throws IOException {
-            try (Reader reader = new FileReader(xmlFile)) {
+            try (Reader reader = new InputStreamReader(new FileInputStream(xmlFile), StandardCharsets.UTF_8)) {
                 return getRootElement(new InputSource(reader));
             }
         }

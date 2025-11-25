@@ -32,8 +32,10 @@
 package org.cybergarage.xml;
 
 import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 
 public class Node
@@ -494,7 +496,7 @@ public class Node
 	public String toString(String enc, boolean hasChildNode)
 	{
 		ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
-		PrintWriter pr = new PrintWriter(byteOut);
+		PrintWriter pr = new PrintWriter(new OutputStreamWriter(byteOut, StandardCharsets.UTF_8), false);
 		output(pr, 0, hasChildNode);
 		pr.flush();
 		try {
@@ -502,8 +504,16 @@ public class Node
 				return byteOut.toString(enc);
 		}
 		catch (UnsupportedEncodingException e) {
+			// Fall through to UTF-8
 		}
-		return byteOut.toString();
+		try {
+			// UTF-8 should always be supported
+			return byteOut.toString(StandardCharsets.UTF_8.name());
+		}
+		catch (UnsupportedEncodingException e) {
+			// This should never happen, but fallback to default encoding
+			return byteOut.toString();
+		}
 	}
 
 	public String toString()
@@ -531,7 +541,7 @@ public class Node
 
 	public void print(boolean hasChildNode)
 	{
-		PrintWriter pr = new PrintWriter(System.out);
+		PrintWriter pr = new PrintWriter(new OutputStreamWriter(System.out, StandardCharsets.UTF_8), false);
 		output(pr, 0, hasChildNode);
 		pr.flush();
 	}

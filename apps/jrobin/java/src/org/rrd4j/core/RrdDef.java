@@ -4,7 +4,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -692,7 +694,12 @@ public class RrdDef {
     public String exportXmlTemplate(boolean compatible) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         exportXmlTemplate(out, compatible);
-        return out.toString();
+        try {
+            return out.toString(StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            // This should never happen, but fallback to default encoding
+            return out.toString();
+        }
     }
 
     /**
@@ -706,7 +713,12 @@ public class RrdDef {
     public String exportXmlTemplate() {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         exportXmlTemplate(out);
-        return out.toString();
+        try {
+            return out.toString(StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            // This should never happen, but fallback to default encoding
+            return out.toString();
+        }
     }
 
     /**

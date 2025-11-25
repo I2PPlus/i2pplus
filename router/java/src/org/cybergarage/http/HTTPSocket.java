@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 
 public class HTTPSocket
@@ -158,8 +159,8 @@ public class HTTPSocket
 		try {
 			httpRes.setContentLength(contentLength);
 
-			out.write(httpRes.getHeader().getBytes());
-			out.write(HTTP.CRLF.getBytes());
+			out.write(httpRes.getHeader().getBytes(StandardCharsets.UTF_8));
+			out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
 			if (isOnlyHeader == true) {
 				out.flush();
 				return true;
@@ -170,16 +171,16 @@ public class HTTPSocket
 			if (isChunkedResponse == true) {
 				// Thanks for Lee Peik Feng <pflee@users.sourceforge.net> (07/07/05)
 				String chunSizeBuf = Long.toHexString(contentLength);
-				out.write(chunSizeBuf.getBytes());
-				out.write(HTTP.CRLF.getBytes());
+				out.write(chunSizeBuf.getBytes(StandardCharsets.UTF_8));
+				out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
 			}
 
 			out.write(content, (int)contentOffset, (int)contentLength);
 
 			if (isChunkedResponse == true) {
-				out.write(HTTP.CRLF.getBytes());
-				out.write("0".getBytes());
-				out.write(HTTP.CRLF.getBytes());
+				out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
+				out.write("0".getBytes(StandardCharsets.UTF_8));
+				out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
 			}
 
 			out.flush();
@@ -202,8 +203,8 @@ public class HTTPSocket
 		try {
 			httpRes.setContentLength(contentLength);
 
-			out.write(httpRes.getHeader().getBytes());
-			out.write(HTTP.CRLF.getBytes());
+			out.write(httpRes.getHeader().getBytes(StandardCharsets.UTF_8));
+			out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
 
 			if (isOnlyHeader == true) {
 				out.flush();
@@ -224,20 +225,20 @@ public class HTTPSocket
 				if (isChunkedResponse == true) {
 					// Thanks for Lee Peik Feng <pflee@users.sourceforge.net> (07/07/05)
 					String chunSizeBuf = Long.toHexString(readLen);
-					out.write(chunSizeBuf.getBytes());
-					out.write(HTTP.CRLF.getBytes());
+					out.write(chunSizeBuf.getBytes(StandardCharsets.UTF_8));
+					out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
 				}
 				out.write(readBuf, 0, readLen);
 				if (isChunkedResponse == true)
-					out.write(HTTP.CRLF.getBytes());
+					out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
 				readCnt += readLen;
 				readSize = (chunkSize < (contentLength-readCnt)) ? chunkSize : (contentLength-readCnt);
 				readLen = in.read(readBuf, 0, (int)readSize);
 			}
 
 			if (isChunkedResponse == true) {
-				out.write("0".getBytes());
-				out.write(HTTP.CRLF.getBytes());
+				out.write("0".getBytes(StandardCharsets.UTF_8));
+				out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
 			}
 
 			out.flush();

@@ -75,6 +75,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 
 import org.cybergarage.http.HTTP;
@@ -463,7 +464,7 @@ public class Service
 		desc += UPnP.XML_DECLARATION;
 		desc += "\n";
 		desc += scpdNode.toString();
-		return desc.getBytes();
+		return desc.getBytes(StandardCharsets.UTF_8);
 	}
 
 	////////////////////////////////////////////////

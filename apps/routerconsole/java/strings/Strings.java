@@ -7,7 +7,7 @@ package dummy;
  *  Obviously, do not compile this.
  */
 class Dummy {
-    void dummy {
+    void dummy() {
         // wars for ConfigClientsHelper
         _t("addressbook");
         _t("i2psnark");

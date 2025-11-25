@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 
 import net.i2p.I2PAppContext;
 import net.i2p.data.Hash;
@@ -52,7 +55,7 @@ class FileFilterDefinitionElement extends FilterDefinitionElement {
 
         BufferedReader reader = null;
         try {
-            reader = new BufferedReader(new FileReader(file));
+            reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
             String b32;
             while((b32 = reader.readLine()) != null) {
                 if (b32.length() == 0)

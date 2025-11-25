@@ -62,6 +62,7 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
 import java.util.StringTokenizer;
 
 import org.cybergarage.util.Debug;
@@ -439,7 +440,7 @@ public class HTTPRequest extends HTTPPacket
 			}
 
 			out = postSocket.getOutputStream();
-			PrintStream pout = new PrintStream(out);
+			PrintStream pout = new PrintStream(out, true, "UTF-8");
 			pout.print(getHeader());
 			pout.print(HTTP.CRLF);
 

@@ -3,7 +3,9 @@ package net.i2p.router.web.helpers;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.SortedMap;
 
@@ -32,8 +34,12 @@ public class InfoHelper extends HelperBase {
                 return "";
             } else {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream(2*1024);
-                renderStatusHTML(new OutputStreamWriter(baos));
-                return baos.toString();
+                renderStatusHTML(new OutputStreamWriter(baos, StandardCharsets.UTF_8));
+                try {
+                    return baos.toString(StandardCharsets.UTF_8.name());
+                } catch (UnsupportedEncodingException e) {
+                    return baos.toString(StandardCharsets.UTF_8.name());
+                }
             }
         } catch (IOException ioe) {return "<b>" + _t("Error displaying the info page.") + "</b>";}
     }
@@ -46,8 +52,12 @@ public class InfoHelper extends HelperBase {
                 return "";
             } else {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream(32*1024);
-                gen.generateStatsPage(new OutputStreamWriter(baos), _full);
-                return baos.toString();
+                gen.generateStatsPage(new OutputStreamWriter(baos, StandardCharsets.UTF_8), _full);
+                try {
+                    return baos.toString(StandardCharsets.UTF_8.name());
+                } catch (UnsupportedEncodingException e) {
+                    return baos.toString(StandardCharsets.UTF_8.name());
+                }
             }
         } catch (IOException ioe) {return "<b>" + _t("Error displaying the info page.") + "</b>";}
     }

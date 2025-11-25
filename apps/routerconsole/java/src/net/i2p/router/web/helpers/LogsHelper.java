@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
@@ -431,9 +432,9 @@ public class LogsHelper extends HelperBase {
         BufferedReader in = null;
         try {
             if (utf8)
-                in = new BufferedReader(new InputStreamReader(new FileInputStream(f), "UTF-8"));
+                in = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8));
             else
-                in = new BufferedReader(new InputStreamReader(new FileInputStream(f)));
+                in = new BufferedReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8));
             long i = 0;
             while (i < skipLines) {
                 // skip without readLine() to avoid object churn

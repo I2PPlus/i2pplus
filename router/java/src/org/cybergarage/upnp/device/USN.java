@@ -15,6 +15,8 @@
 
 package org.cybergarage.upnp.device;
 
+import java.nio.charset.StandardCharsets;
+
 public class USN
 {
 	public final static String ROOTDEVICE = "upnp:rootdevice";
@@ -33,7 +35,8 @@ public class USN
 		int idx = usnValue.indexOf("::");
 		if (idx < 0)
 			return usnValue.trim();
-		String udnValue = new String(usnValue.getBytes(), 0, idx);
+		byte[] usnBytes = usnValue.getBytes(StandardCharsets.UTF_8);
+		String udnValue = new String(usnBytes, 0, idx, StandardCharsets.UTF_8);
 		return udnValue.trim();
 	}
 }

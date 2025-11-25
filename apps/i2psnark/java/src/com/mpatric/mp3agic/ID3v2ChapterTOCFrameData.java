@@ -2,6 +2,7 @@
 package com.mpatric.mp3agic;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -69,13 +70,13 @@ public class ID3v2ChapterTOCFrameData extends AbstractID3v2FrameData {
 	@Override
 	protected byte[] packFrameData() {
 		ByteBuffer bb = ByteBuffer.allocate(getLength());
-		bb.put(id.getBytes());
+		bb.put(id.getBytes(StandardCharsets.ISO_8859_1));
 		bb.put((byte) 0);
 		bb.put(getFlags());
 		bb.put((byte) children.length);
 
 		for (String child : children) {
-			bb.put(child.getBytes());
+			bb.put(child.getBytes(StandardCharsets.ISO_8859_1));
 			bb.put((byte) 0);
 		}
 

@@ -5,6 +5,7 @@
 package net.i2p.client.naming;
 
 import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -112,7 +113,7 @@ public class EepGetNamingService extends DummyNamingService {
                     _log.error("Short response: " + url + hostname);
                     return null;
                 }
-                String key = baos.toString();
+                String key = baos.toString("UTF-8");
                 if (key.startsWith(hostname + "="))  // strip hostname=
                     key = key.substring(hostname.length() + 1);
                 key = key.substring(0, DEST_SIZE);   // catch IndexOutOfBounds exception below

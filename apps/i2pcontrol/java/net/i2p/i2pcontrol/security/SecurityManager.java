@@ -27,6 +27,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import net.i2p.i2pcontrol.servlets.configuration.ConfigurationManager;
 
+import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -138,7 +139,7 @@ public class SecurityManager {
      */
     public String getHash(String string) {
         SHA256Generator hashGen = _context.sha();
-        byte[] bytes = string.getBytes();
+        byte[] bytes = string.getBytes(StandardCharsets.UTF_8);
         bytes = hashGen.calculateHash(bytes).toByteArray();
         return Base64.encode(bytes);
     }

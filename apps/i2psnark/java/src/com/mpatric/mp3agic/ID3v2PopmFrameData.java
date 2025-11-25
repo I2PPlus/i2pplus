@@ -1,6 +1,7 @@
 package com.mpatric.mp3agic;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -51,7 +52,7 @@ public class ID3v2PopmFrameData extends AbstractID3v2FrameData {
 
 	@Override
 	protected byte[] packFrameData() {
-		byte[] bytes = address.getBytes();
+		byte[] bytes = address.getBytes(StandardCharsets.ISO_8859_1);
 		bytes = Arrays.copyOf(bytes, address.length() + 2);
 		bytes[bytes.length - 2] = 0;
 		bytes[bytes.length - 1] = wmp9encodedRatings[rating];

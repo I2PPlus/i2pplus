@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.ByteArrayInputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import net.i2p.util.Addresses;
 import net.i2p.router.transport.TransportUtil;
@@ -190,7 +191,7 @@ public abstract class Parser
 	public Node parse(String descr) throws ParserException
 	{
 		try {
-			InputStream decrIn = new ByteArrayInputStream(descr.getBytes());
+			InputStream decrIn = new ByteArrayInputStream(descr.getBytes(StandardCharsets.UTF_8));
 			Node root = parse(decrIn);
 			return root;
 		} catch (Exception e) {

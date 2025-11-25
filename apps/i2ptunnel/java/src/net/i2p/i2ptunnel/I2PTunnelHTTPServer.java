@@ -9,6 +9,14 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
@@ -1724,7 +1732,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
 
     private Pattern compileRegexPattern(File blocklistFile) throws IOException {
         StringBuilder regexBuilder = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(blocklistFile)))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(blocklistFile), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
@@ -1768,7 +1776,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                 return;
             }
         }
-        try (BufferedReader reader = new BufferedReader(new FileReader(blocklistClients))) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(blocklistClients), StandardCharsets.UTF_8))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
@@ -1783,7 +1791,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
             if (clientBlockList.size() >= HTTP_BLOCKLIST_CLIENT_LIMIT) {
                 clientBlockList.remove(0);
             }
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(blocklistClients, true))) {
+            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(blocklistClients, true), StandardCharsets.UTF_8))) {
                 writer.write(destination);
                 writer.newLine();
             } catch (IOException ioe) {
@@ -1796,7 +1804,7 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
     private synchronized boolean existsInClientBlocklist(String destination) throws IOException {
         long currentLastModified = blocklistClients.lastModified();
         if (currentLastModified != blocklistClientsLastModified) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(blocklistClients))) {
+try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(blocklistClients), StandardCharsets.UTF_8))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     line = line.trim();

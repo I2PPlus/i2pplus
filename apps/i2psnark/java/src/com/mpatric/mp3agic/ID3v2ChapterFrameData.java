@@ -1,6 +1,7 @@
 package com.mpatric.mp3agic;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class ID3v2ChapterFrameData extends AbstractID3v2FrameData {
@@ -59,7 +60,7 @@ public class ID3v2ChapterFrameData extends AbstractID3v2FrameData {
 	@Override
 	protected byte[] packFrameData() {
 		ByteBuffer bb = ByteBuffer.allocate(getLength());
-		bb.put(id.getBytes());
+		bb.put(id.getBytes(StandardCharsets.ISO_8859_1));
 		bb.put((byte) 0);
 
 		bb.putInt(startTime);

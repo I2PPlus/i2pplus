@@ -35,6 +35,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 import org.cybergarage.http.HTTPRequest;
 import org.cybergarage.upnp.UPnP;
@@ -210,7 +211,7 @@ public class HTTPMUSocket
 			} else {
 				msock = new MulticastSocket();
 			}
-			DatagramPacket dgmPacket = new DatagramPacket(msg.getBytes(), msg.length(), ssdpMultiGroup);
+			DatagramPacket dgmPacket = new DatagramPacket(msg.getBytes(StandardCharsets.UTF_8), msg.length(), ssdpMultiGroup);
 			// Thnaks for Theo Beisch (11/09/04)
 			msock.setTimeToLive(UPnP.getTimeToLive());
 			msock.send(dgmPacket);

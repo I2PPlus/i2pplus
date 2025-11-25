@@ -24,9 +24,8 @@
 package org.cybergarage.upnp.ssdp;
 
 import java.net.*;
-
+import java.nio.charset.StandardCharsets;
 import org.cybergarage.http.*;
-
 import org.cybergarage.upnp.device.*;
 
 public class SSDPPacket
@@ -117,8 +116,8 @@ public class SSDPPacket
 
 		DatagramPacket packet = getDatagramPacket();
 		int packetLen = packet.getLength();
-		String packetData = new String(packet.getData(), 0, packetLen);
-		packetBytes = packetData.getBytes();
+		String packetData = new String(packet.getData(), 0, packetLen, StandardCharsets.UTF_8);
+		packetBytes = packetData.getBytes(StandardCharsets.UTF_8);
 
 		return packetBytes;
 	}
@@ -237,7 +236,7 @@ public class SSDPPacket
 
 	public String toString()
 	{
-		return new String(getData());
+		return new String(getData(), StandardCharsets.UTF_8);
 	}
 }
 

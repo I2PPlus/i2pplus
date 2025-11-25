@@ -3,6 +3,7 @@ package edu.internet2.ndt;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 
 /**
  * <p>OsfwWorker creates a thread that listens for a message from the server. It
@@ -107,7 +108,7 @@ public class OsfwWorker implements Runnable {
             // The server is expected to send a 20 char message that
             // says "Simple firewall test" . Every other message string
             // indicates an unknown firewall status
-            if (!new String(msg.getBody()).equals(NDTConstants.SFW_PREDEFINED_TEST_MESSAGE)) {
+            if (!new String(msg.getBody(), StandardCharsets.UTF_8).equals(NDTConstants.SFW_PREDEFINED_TEST_MESSAGE)) {
                 System.out.println("Simple firewall test: Improper message");
                 this._localTcpAppObj.setS2cSFWTestResults(NDTConstants.SFW_UNKNOWN);
                 // close socket objects and wrap up

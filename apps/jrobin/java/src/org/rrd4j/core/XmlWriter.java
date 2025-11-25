@@ -3,7 +3,10 @@ package org.rrd4j.core;
 import java.awt.*;
 import java.io.File;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -45,9 +48,7 @@ public class XmlWriter implements AutoCloseable {
      * @param stream {@link OutputStream} which receives XML code
      */
     public XmlWriter(OutputStream stream) {
-        writer = new PrintWriter(stream, true);
-        timeFormatter = ISOLIKE;
-        this.doubleFormatter = (d, n) -> Util.formatDouble(d, n,true);
+        this(new PrintWriter(new OutputStreamWriter(stream, StandardCharsets.UTF_8), true), ISOLIKE, (d, n) -> Util.formatDouble(d, n,true));
     }
 
     /**
@@ -57,9 +58,7 @@ public class XmlWriter implements AutoCloseable {
      * @param autoFlush is the stream to be flushed automatically
      */
     public XmlWriter(OutputStream stream, boolean autoFlush) {
-        writer = new PrintWriter(stream, autoFlush);
-        timeFormatter = ISOLIKE;
-        this.doubleFormatter = (d, n) -> Util.formatDouble(d, n,true);
+        this(new PrintWriter(new OutputStreamWriter(stream, StandardCharsets.UTF_8), autoFlush), ISOLIKE, (d, n) -> Util.formatDouble(d, n,true));
     }
 
     /**

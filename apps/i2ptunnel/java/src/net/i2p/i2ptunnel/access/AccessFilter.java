@@ -10,10 +10,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ExecutorService;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.BufferedWriter;
+import java.nio.charset.StandardCharsets;
 import java.io.IOException;
 
 import net.i2p.I2PAppContext;
@@ -143,7 +146,7 @@ class AccessFilter implements StatefulConnectionFilter {
             if (file.exists() && file.isFile()) {
                 BufferedReader reader = null;
                 try {
-                    reader = new BufferedReader(new FileReader(file));
+                    reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
                     String b32;
                     while((b32 = reader.readLine()) != null) {
                         breached.add(b32);
@@ -169,7 +172,7 @@ class AccessFilter implements StatefulConnectionFilter {
             try {
                 writer = new BufferedWriter(
                     new OutputStreamWriter(
-                        new SecureFileOutputStream(file)));
+                        new SecureFileOutputStream(file), StandardCharsets.UTF_8));
                 for (String b32 : breached) {
                     writer.write(b32);
                     writer.newLine();

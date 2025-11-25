@@ -7,6 +7,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.charset.StandardCharsets;
 
 import org.rrd4j.core.InvalidRrdException;
 
@@ -123,7 +124,7 @@ class RRDFile implements Constants {
     }
 
     private int indexOf(byte[] pattern, byte[] array) {
-        return (new String(array)).indexOf(new String(pattern));
+        return (new String(array, StandardCharsets.UTF_8)).indexOf(new String(pattern, StandardCharsets.UTF_8));
     }
 
     boolean isBigEndian() {
@@ -155,7 +156,7 @@ class RRDFile implements Constants {
         byte[] array = new byte[maxLength];
         mappedByteBuffer.get(array);
 
-        return new String(array, 0, maxLength).trim();
+        return new String(array, 0, maxLength, StandardCharsets.UTF_8).trim();
     }
 
     void skipBytes(int n) {

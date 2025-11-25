@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -123,7 +124,7 @@ public class EepHead extends EepGet {
         if (username != null) {
             if (password == null) {
                 try {
-                    BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
+                    BufferedReader r = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
                     do {
                         System.err.print("Proxy password: ");
                         password = r.readLine();

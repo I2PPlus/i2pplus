@@ -298,7 +298,7 @@ int getPosition(){
    * @param   in  the java.io.Inputstream to read input from.
    */
   Yylex(java.io.InputStream in) {
-    this(new java.io.InputStreamReader(in));
+    this(new java.io.InputStreamReader(in, java.nio.charset.StandardCharsets.UTF_8));
   }
 
   /**

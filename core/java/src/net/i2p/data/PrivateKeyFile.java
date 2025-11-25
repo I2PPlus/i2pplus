@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
@@ -320,7 +321,7 @@ public class PrivateKeyFile {
                 }
                 he.sign(pkf.getSigningPrivKey());
                 System.out.println("\nAddressbook Authentication String:");
-                OutputStreamWriter out = new OutputStreamWriter(System.out);
+                OutputStreamWriter out = new OutputStreamWriter(System.out, StandardCharsets.UTF_8);
                 he.write(out);
                 out.flush();
                 System.out.println("");

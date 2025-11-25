@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.io.OutputStreamWriter;
 import java.util.Arrays;
 
@@ -90,7 +91,7 @@ public class ShellCommand {
 
         public StreamConsumer(InputStream inputStream) {
             super("ShellCommand Consumer");
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
             this.bufferedReader = new BufferedReader(inputStreamReader);
         }
 
@@ -121,7 +122,7 @@ public class ShellCommand {
 
         public StreamReader(InputStream inputStream) {
             super("ShellCommand Reader");
-            InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+            InputStreamReader inputStreamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
             this.bufferedReader = new BufferedReader(inputStreamReader);
         }
 
@@ -155,13 +156,13 @@ public class ShellCommand {
 
         public StreamWriter(OutputStream outputStream) {
             super("ShellCommand Writer");
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
             this.bufferedWriter = new BufferedWriter(outputStreamWriter);
         }
 
         @Override
         public void run() {
-            BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+            BufferedReader in = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
             try {
                 while (true) {
                     bufferedWriter.write(in.readLine());

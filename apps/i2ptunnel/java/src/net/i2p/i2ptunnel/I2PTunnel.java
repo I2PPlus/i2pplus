@@ -54,6 +54,7 @@ import java.util.StringTokenizer;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicLong;
+import java.nio.charset.StandardCharsets;
 
 import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
@@ -303,7 +304,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
         } else if (cli) {
             try {
                 System.out.println("Enter 'help' for help.");
-                BufferedReader r = new BufferedReader(new InputStreamReader(System.in));
+                BufferedReader r = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
                 while (true) {
                     System.out.print("I2PTunnel> ");
                     String cmd = r.readLine();
@@ -1955,7 +1956,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
                 if (log.shouldInfo())
                     log.info("File is not a binary destination - trying base64");
                 try {
-                    byte decoded[] = Base64.decode(new String(content));
+                    byte decoded[] = Base64.decode(new String(content, StandardCharsets.UTF_8));
                     result.fromByteArray(decoded);
                     return result;
                 } catch (DataFormatException dfe) {

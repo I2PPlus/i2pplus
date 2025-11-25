@@ -19,6 +19,7 @@
 package org.cybergarage.http;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.Locale;
@@ -46,8 +47,8 @@ public class HTTPHeader
 		int colonIdx = lineStr.indexOf(':');
 		if (colonIdx < 0)
 			return;
-		String name = new String(lineStr.getBytes(), 0, colonIdx);
-		String value = new String(lineStr.getBytes(), colonIdx+1, lineStr.length()-colonIdx-1);
+		String name = new String(lineStr.getBytes(StandardCharsets.UTF_8), 0, colonIdx, StandardCharsets.UTF_8);
+		String value = new String(lineStr.getBytes(StandardCharsets.UTF_8), colonIdx+1, lineStr.length()-colonIdx-1, StandardCharsets.UTF_8);
 		setName(name.trim());
 		setValue(value.trim());
 	}
@@ -127,7 +128,7 @@ public class HTTPHeader
 
 	public final static String getValue(byte[] data, String name)
 	{
-		return getValue(new String(data), name);
+		return getValue(new String(data, StandardCharsets.UTF_8), name);
 	}
 
 	public final static int getIntegerValue(String data, String name)

@@ -27,6 +27,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
 
 import org.cybergarage.util.Debug;
 
@@ -198,7 +199,7 @@ public class HTTPUSocket
 	{
 		 try {
 			InetAddress inetAddr = InetAddress.getByName(addr);
-			DatagramPacket dgmPacket = new DatagramPacket(msg.getBytes(), msg.length(), inetAddr, port);
+			DatagramPacket dgmPacket = new DatagramPacket(msg.getBytes(StandardCharsets.UTF_8), msg.length(), inetAddr, port);
 			ssdpUniSock.send(dgmPacket);
 		}
 		catch (Exception e) {

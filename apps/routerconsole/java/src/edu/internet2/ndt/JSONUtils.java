@@ -2,6 +2,7 @@ package edu.internet2.ndt;
 
 import org.json.simple.JsonObject;
 import org.json.simple.Jsoner;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -25,7 +26,7 @@ public class JSONUtils {
      * @return {int} obtained value from JSON map
      */
     public static String getValueFromJsonObj(String jsonTxt, String key) {
-        Map json = (Map)Jsoner.deserialize(new String(jsonTxt), (JsonObject)null);
+        Map json = (Map)Jsoner.deserialize(jsonTxt, (JsonObject)null);
         if (json == null)
             return null;
         Iterator iter = json.entrySet().iterator();
@@ -44,7 +45,7 @@ public class JSONUtils {
      * @return {String} json object with added value.
      */
     public static String addValueToJsonObj(String jsonTxt, String key, String value) {
-        JsonObject json = Jsoner.deserialize(new String(jsonTxt), (JsonObject)null);
+        JsonObject json = Jsoner.deserialize(jsonTxt, (JsonObject)null);
         if (json == null)
             json = new JsonObject();
         json.put(key, value);
@@ -60,9 +61,9 @@ public class JSONUtils {
      */
     public static byte[] createJsonObj(byte[] msg) {
         JsonObject obj = new JsonObject();
-        obj.put("msg", new String(msg));
+        obj.put("msg", new String(msg, StandardCharsets.UTF_8));
 
-        return obj.toJson().getBytes();
+        return obj.toJson().getBytes(StandardCharsets.UTF_8);
     }
 
     /**
@@ -74,8 +75,8 @@ public class JSONUtils {
      */
     public static byte[] createJsonLoginObj(byte[] msg, byte tests) {
         JsonObject obj = new JsonObject();
-        obj.put("msg", new String(msg));
+        obj.put("msg", new String(msg, StandardCharsets.UTF_8));
         obj.put("tests", Integer.toString(tests & 0xff));
-        return obj.toJson().getBytes();
+        return obj.toJson().getBytes(StandardCharsets.UTF_8);
     }
 }

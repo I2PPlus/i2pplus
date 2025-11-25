@@ -18,6 +18,8 @@
 package org.apache.commons.io.output;
 
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Never prints data. Calls never go beyond this class.
@@ -51,8 +53,17 @@ public class NullPrintStream extends PrintStream {
      */
     @Deprecated
     public NullPrintStream() {
-        // Relies on the default charset which is OK since we are not actually writing.
-        super(NullOutputStream.INSTANCE);
+        // Use UTF-8 charset for consistency, though we are not actually writing.
+        super(createPrintStream());
+    }
+    
+    private static PrintStream createPrintStream() {
+        try {
+            return new PrintStream(NullOutputStream.INSTANCE, false, StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            // This should never happen with UTF-8
+            return new PrintStream(NullOutputStream.INSTANCE);
+        }
     }
 
 }

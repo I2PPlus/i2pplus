@@ -3,6 +3,8 @@ package org.rrd4j.core;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -463,7 +465,12 @@ public class FetchData {
     public String exportXml() {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         exportXml(outputStream);
-        return outputStream.toString();
+        try {
+            return outputStream.toString(StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException e) {
+            // This should never happen, but fallback to default encoding
+            return outputStream.toString();
+        }
     }
 
     /**

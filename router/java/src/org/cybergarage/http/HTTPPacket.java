@@ -81,6 +81,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -170,7 +172,13 @@ public class HTTPPacket
 			Debug.warning(e);
 		}
 
-		return lineBuf.toString();
+		try {
+			return lineBuf.toString(StandardCharsets.UTF_8.name());
+		}
+		catch (UnsupportedEncodingException e) {
+			// This should never happen, but fallback to default encoding
+			return lineBuf.toString();
+		}
 	}
 
 	protected boolean set(InputStream in, boolean onlyHeaders)
@@ -277,7 +285,7 @@ public class HTTPPacket
 					try {
 						String chunkSizeLine = readLine(reader);
 						// Thanks for Lee Peik Feng <pflee@users.sourceforge.net> (07/07/05)
-						contentLen = Long.parseLong(new String(chunkSizeLine.getBytes(), 0, chunkSizeLine.length()-2), 16);
+						contentLen = Long.parseLong(new String(chunkSizeLine.getBytes(StandardCharsets.UTF_8), 0, chunkSizeLine.length()-2, StandardCharsets.UTF_8), 16);
 					}
 					catch (Exception e) {
 						contentLen = 0;
@@ -543,7 +551,7 @@ public class HTTPPacket
 
 	public void setContent(String data, boolean updateWithContentLength)
 	{
-		setContent(data.getBytes(), updateWithContentLength);
+		setContent(data.getBytes(StandardCharsets.UTF_8), updateWithContentLength);
 	}
 
 	public void setContent(String data)
@@ -560,14 +568,14 @@ public class HTTPPacket
 	{
 		String charSet = getCharSet();
 		if (charSet == null || charSet.length() <= 0)
-			return new String(content);
+			return new String(content, StandardCharsets.UTF_8);
 		try {
 			return new String(content, charSet);
 		}
 		catch (Exception e) {
 			Debug.warning(e);
 		}
-		return new String(content);
+		return new String(content, StandardCharsets.UTF_8);
 	}
 
 	public boolean hasContent()
@@ -638,7 +646,7 @@ public class HTTPPacket
 		if (charSetIdx < 0)
 			return "";
 		int charSetEndIdx = charSetIdx + HTTP.CHARSET.length() + 1;
-		String charSet = new String(contentType.getBytes(), charSetEndIdx, (contentType.length() - charSetEndIdx));
+		String charSet = new String(contentType.getBytes(StandardCharsets.UTF_8), charSetEndIdx, (contentType.length() - charSetEndIdx), StandardCharsets.UTF_8);
 		if (charSet.length() < 0)
 			return "";
 		if (charSet.charAt(0) == '\"')
@@ -902,7 +910,7 @@ public class HTTPPacket
 	public final static boolean parse(HTTPPacket httpPacket, InputStream in)
 	{
  		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
 			return parse(httpPacket, reader);
 		}
 		catch (Exception e) {

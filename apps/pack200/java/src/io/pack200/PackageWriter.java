@@ -32,6 +32,7 @@ import io.pack200.Package.InnerClass;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -519,7 +520,7 @@ class PackageWriter extends BandStructure {
                 Utils.log.info("Writing "+cpMap.length+" "+ConstantPool.tagName(tag)+" entries...");
 
             if (optDumpBands) {
-                try (PrintStream ps = new PrintStream(getDumpStream(index, ".idx"))) {
+                try (PrintStream ps = new PrintStream(getDumpStream(index, ".idx"), false, StandardCharsets.UTF_8.name())) {
                     printArrayTo(ps, cpMap, 0, cpMap.length);
                 }
             }
@@ -633,7 +634,7 @@ class PackageWriter extends BandStructure {
                 if (verbose > 1)
                     Utils.log.info("Index group "+ConstantPool.tagName(tag)+" contains "+cpMap.length+" entries.");
                 if (optDumpBands) {
-                    try (PrintStream ps = new PrintStream(getDumpStream(index.debugName, tag, ".gidx", index))) {
+                    try (PrintStream ps = new PrintStream(getDumpStream(index.debugName, tag, ".gidx", index), false, StandardCharsets.UTF_8.name())) {
                         printArrayTo(ps, cpMap, 0, cpMap.length, true);
                     }
                 }
@@ -1026,8 +1027,8 @@ class PackageWriter extends BandStructure {
             }
         });
         attrDefsWritten = new Attribute.Layout[numAttrDefs];
-        try (PrintStream dump = !optDumpBands ? null
-                 : new PrintStream(getDumpStream(attr_definition_headers, ".def")))
+         try (PrintStream dump = !optDumpBands ? null
+                  : new PrintStream(getDumpStream(attr_definition_headers, ".def"), false, StandardCharsets.UTF_8.name()))
         {
             int[] indexForDebug = Arrays.copyOf(attrIndexLimit, ATTR_CONTEXT_LIMIT);
             for (int i = 0; i < defs.length; i++) {

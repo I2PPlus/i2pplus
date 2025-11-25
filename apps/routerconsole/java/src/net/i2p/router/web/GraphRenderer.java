@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Stroke;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;

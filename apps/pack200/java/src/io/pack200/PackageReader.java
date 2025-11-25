@@ -32,6 +32,7 @@ import io.pack200.Package.InnerClass;
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.io.FilterInputStream;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
@@ -664,7 +665,7 @@ class PackageReader extends BandStructure {
             Index index = initCPIndex(tag, cpMap);
 
             if (optDumpBands) {
-                try (PrintStream ps = new PrintStream(getDumpStream(index, ".idx"))) {
+                try (PrintStream ps = new PrintStream(getDumpStream(index, ".idx"), false, StandardCharsets.UTF_8.name())) {
                     printArrayTo(ps, index.cpMap, 0, index.cpMap.length);
                 }
             }
@@ -680,7 +681,7 @@ class PackageReader extends BandStructure {
                 if (verbose > 1)
                     Utils.log.info("Index group "+ConstantPool.tagName(tag)+" contains "+cpMap.length+" entries.");
                 if (optDumpBands) {
-                    try (PrintStream ps = new PrintStream(getDumpStream(index.debugName, tag, ".gidx", index))) {
+                    try (PrintStream ps = new PrintStream(getDumpStream(index.debugName, tag, ".gidx", index), false, StandardCharsets.UTF_8.name())) {
                         printArrayTo(ps, cpMap, 0, cpMap.length, true);
                     }
                 }
@@ -967,8 +968,8 @@ class PackageReader extends BandStructure {
         attr_definition_headers.readFrom(in);
         attr_definition_name.readFrom(in);
         attr_definition_layout.readFrom(in);
-        try (PrintStream dump = !optDumpBands ? null
-                 : new PrintStream(getDumpStream(attr_definition_headers, ".def")))
+         try (PrintStream dump = !optDumpBands ? null
+                  : new PrintStream(getDumpStream(attr_definition_headers, ".def"), false, StandardCharsets.UTF_8.name()))
         {
             for (int i = 0; i < numAttrDefs; i++) {
                 int       header = attr_definition_headers.getByte();

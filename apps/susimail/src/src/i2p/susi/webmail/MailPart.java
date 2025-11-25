@@ -23,6 +23,7 @@ import i2p.susi.webmail.encoding.EncodingFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -97,7 +98,7 @@ class MailPart {
             // Fixme UTF-8 to bytes to UTF-8
             headerLines = DataHelper.split(new String(decodedHeaders.getContent(),
                                                       decodedHeaders.getOffset(),
-                                                      decodedHeaders.getLength()), "\r\n");
+                                                      decodedHeaders.getLength(), StandardCharsets.UTF_8), "\r\n");
         }
 
         String boundary = null;
