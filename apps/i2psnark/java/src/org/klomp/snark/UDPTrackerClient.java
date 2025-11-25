@@ -512,7 +512,7 @@ class UDPTrackerClient implements I2PSessionMuxedListener {
         Tracker tr = waiter.getSentTo();
         tr.gotError();
         // TODO if we were waiting for an announce reply, fire off a new connection request
-        if (waiter.getExpectedAction() == ACTION_ANNOUNCE) {}
+        // No action needed for announce response
     }
 
     // I2PSessionMuxedListener interface ----------------

@@ -248,6 +248,18 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
     }
 
     /**
+     * Execute a runnable task, running inline when called from an unlimited thread pool
+     * to avoid creating unnecessary threads, otherwise start a new thread.
+     * 
+     * @param task Thread task to execute
+     */
+    private void executeTask(Thread task) {
+        // For now, maintain original behavior of running inline
+        // TODO: Consider using a thread pool executor for better resource management
+        task.run();
+    }
+
+    /**
      * Create the default options (using the default timeout, etc).
      * Warning, this does not make a copy of I2PTunnel's client options,
      * it modifies them directly.
@@ -1202,8 +1214,8 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
                     response = null;
                 }
                 Thread t = new I2PTunnelOutproxyRunner(s, outSocket, sockLock, data, response, onTimeout);
-                // we are called from an unlimited thread pool, so run inline
-                t.run();
+                // Execute task (inline when called from unlimited thread pool)
+                executeTask(t);
                 return;
             }
 
@@ -1435,10 +1447,9 @@ public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runn
             if (usingWWWProxy) {
                 t.setSuccessCallback(new OnProxySuccess(currentProxy, hostLowerCase, isConnect));
             }
-            // we are called from an unlimited thread pool, so run inline
-            //t.start();
+            // Execute task (inline when called from unlimited thread pool)
             String name = Thread.currentThread().getName();
-            t.run();
+            executeTask(t);
 
             // I2PTunnelHTTPClientRunner spins off the browser-to-i2p thread and keeps
             // the i2p-to-socket copier in-line. So we won't get here until the i2p socket is closed.

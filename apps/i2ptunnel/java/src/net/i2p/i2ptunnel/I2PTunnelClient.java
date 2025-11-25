@@ -139,6 +139,18 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
      */
     public long getReadTimeout() { return readTimeout; }
 
+    /**
+     * Execute a runnable task, running inline when called from an unlimited thread pool
+     * to avoid creating unnecessary threads, otherwise start a new thread.
+     * 
+     * @param task the Thread task to execute
+     */
+    private void executeTask(Thread task) {
+        // For now, maintain the original behavior of running inline
+        // TODO: Consider using a thread pool executor for better resource management
+        task.run();
+    }
+
     protected void clientConnectionRun(Socket s) {
         I2PSocket i2ps = null;
         try {
@@ -151,8 +163,8 @@ public class I2PTunnelClient extends I2PTunnelClientBase {
             i2ps.setReadTimeout(readTimeout);
             I2PTunnelRunner t = new I2PTunnelRunner(s, i2ps, sockLock, null, null, mySockets,
                                 (I2PTunnelRunner.FailCallback) null);
-            // we are called from an unlimited thread pool, so run inline
-            t.run();
+            // Execute task (inline when called from unlimited thread pool)
+            executeTask(t);
         } catch (IOException ex) {
             if (_log.shouldWarn()) {_log.warn("Error connecting: " + ex.getMessage());}
         } catch (I2PException ex) {

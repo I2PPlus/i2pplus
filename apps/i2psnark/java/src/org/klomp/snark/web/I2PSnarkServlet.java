@@ -81,7 +81,7 @@ import java.util.regex.*;
 public class I2PSnarkServlet extends BasicServlet {
 
     private static final long serialVersionUID = 1L;
-    private static String _contextPath; /** generally "/i2psnark" */
+    private String _contextPath; /** generally "/i2psnark" */
     private String _contextName; /** generally "i2psnark" */
     private transient SnarkManager _manager;
     private long _nonce;
@@ -3481,7 +3481,7 @@ public class I2PSnarkServlet extends BasicServlet {
             }
             int space = host.indexOf(" ");
             if (space == -1) {space = host.length();}
-            if ((!host.endsWith("[ext]") || host.contains(".i2p")) && !isUDP) {
+            if (!host.endsWith("[ext]") || host.contains(".i2p")) {
                 buf.append("<a href=\"http://").append(urlEncode(host)).append("/\" target=_blank>");
             } else {host = host.substring(0, space);}
         }
@@ -6038,7 +6038,7 @@ public class I2PSnarkServlet extends BasicServlet {
         String oldCreatedBy = meta.getCreatedBy();
         if (oldCreatedBy == null) {oldCreatedBy = "";}
         if (toAdd.isEmpty() && toDel.isEmpty() &&
-            (primary == null || primary.equals(oldPrimary)) &&
+            (primary == null || String.valueOf(primary).equals(oldPrimary)) &&
             oldComment.equals(newComment) && oldCreatedBy.equals(newCreatedBy)) {
             _manager.addMessage("No changes to torrent, not saved");
             return;

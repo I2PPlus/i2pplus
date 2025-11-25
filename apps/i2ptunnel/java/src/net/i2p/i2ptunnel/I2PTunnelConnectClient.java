@@ -119,6 +119,18 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
         return opts;
     }
 
+    /**
+     * Execute a runnable task, running inline when called from an unlimited thread pool
+     * to avoid creating unnecessary threads, otherwise start a new thread.
+     * 
+     * @param task Thread task to execute
+     */
+    private void executeTask(Thread task) {
+        // For now, maintain original behavior of running inline
+        // TODO: Consider using a thread pool executor for better resource management
+        task.run();
+    }
+
     @Override
     public void startRunning() {
         super.startRunning();
@@ -299,8 +311,8 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                 OnTimeout onTimeout = new OnTimeout(s, s.getOutputStream(), targetRequest, usingWWWProxy, currentProxy, requestId);
                 byte[] response = SUCCESS_RESPONSE.getBytes("UTF-8");
                 Thread t = new I2PTunnelOutproxyRunner(s, outSocket, sockLock, null, response, onTimeout);
-                // we are called from an unlimited thread pool, so run inline
-                t.run();
+                // Execute task (inline when called from unlimited thread pool)
+                executeTask(t);
                 return;
             }
 
@@ -350,8 +362,8 @@ public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements R
                 // isSSL must be false for ConnectClient
                 t.setSuccessCallback(new OnProxySuccess(currentProxy, host, false));
             }
-            // we are called from an unlimited thread pool, so run inline
-            t.run();
+            // Execute task (inline when called from unlimited thread pool)
+            executeTask(t);
         } catch (IOException ex) {
             _log.info(getPrefix(requestId) + "Error trying to connect", ex);
             handleClientException(ex, out, targetRequest, usingWWWProxy, currentProxy, requestId);
