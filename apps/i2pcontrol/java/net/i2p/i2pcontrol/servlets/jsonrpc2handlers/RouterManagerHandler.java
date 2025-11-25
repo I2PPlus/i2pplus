@@ -198,7 +198,10 @@ public class RouterManagerHandler implements RequestHandler {
                     while (isUpdating) {
                         try {
                             Thread.sleep(100);
-                        } catch (Exception e) {}
+                        } catch (InterruptedException e) {
+                            Thread.currentThread().interrupt();
+                            break;
+                        }
                         isUpdating = upmgr.isUpdateInProgress(UpdateType.ROUTER_SIGNED);
                     }
                     outParams.put("Update", upmgr.getStatus());

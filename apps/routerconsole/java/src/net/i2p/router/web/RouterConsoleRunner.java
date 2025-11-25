@@ -130,7 +130,7 @@ public class RouterConsoleRunner implements RouterApp {
     /** this is for the handlers only. We will adjust for the connectors and acceptors below. */
     private static final int MIN_THREADS = 4;
     /** this is for the handlers only. We will adjust for the connectors and acceptors below. */
-    private static final int MAX_THREADS = 32;
+    private static final int MAX_THREADS = 48;
 
     private static final int MAX_IDLE_TIME = 30*1000;
     private static final String THREAD_NAME = "I2P+ [Jetty]";
@@ -249,7 +249,9 @@ public class RouterConsoleRunner implements RouterApp {
             if (_jettyTimer != null) {
                 try {
                     _jettyTimer.stop();
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                    System.err.println("Error stopping Jetty timer: " + e.getMessage());
+                }
                 _jettyTimer = null;
             }
         }

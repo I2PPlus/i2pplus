@@ -75,9 +75,15 @@ class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Clos
                 next = new MapEntry(he.getName(), he);
                 return true;
             }
-        } catch (IOException ioe) {}
+        } catch (IOException ioe) {
+            // Log the error but continue with cleanup
+            System.err.println("Error reading from host file: " + ioe.getMessage());
+        }
         try {input.close();}
-        catch (IOException ioe) {}
+        catch (IOException ioe) {
+            // Log warning but don't throw - we're cleaning up
+            System.err.println("Warning: Failed to close host file: " + ioe.getMessage());
+        }
         input = null;
         next = null;
         return false;

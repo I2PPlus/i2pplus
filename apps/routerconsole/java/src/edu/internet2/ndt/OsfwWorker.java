@@ -54,19 +54,6 @@ public class OsfwWorker implements Runnable {
     }
 
     /**
-     * Make current thread sleep for 1000 ms
-     *
-     *
-     */
-    public void finalize() {
-        // If test is not already complete/terminated, then sleep
-        while (!_iFinalized) {
-            try {Thread.currentThread().sleep(1000);}
-            catch (InterruptedException e) {} // do nothing.
-        }
-    }
-
-    /**
      * run() method of this SFW Worker thread. This thread listens on the socket
      * from the server for a given time period, and checks to see if the server
      * has sent a message that is valid and sufficient to determine if the S-&gt;C

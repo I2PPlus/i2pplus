@@ -79,7 +79,11 @@ public class WebAppStarter {
             cls = Class.forName(CLASS_ANNOT3, false, ClassLoader.getSystemClassLoader());
             cls = Class.forName(CLASS_ANNOT4, false, ClassLoader.getSystemClassLoader());
             found = true;
-        } catch (Exception e) {}
+        } catch (ClassNotFoundException e) {
+            // Expected if annotation classes are not available
+        } catch (Exception e) {
+            System.err.println("Error checking annotation classes: " + e.getMessage());
+        }
         HAS_ANNOTATION_CLASSES = found;
 
         // don't scan these wars

@@ -296,7 +296,10 @@ public class HostTxtParser {
                 Destination d = new Destination(dest);
                 System.err.println(dest);
                 System.err.println(d.toString());
-            } catch (Exception ex) {}
+            } catch (Exception ex) {
+                System.err.println("Error processing destination: " + ex.getMessage());
+                ex.printStackTrace(System.err);
+            }
             if (p != null) {
                 for (Map.Entry<?,?> m : p.entrySet()) {
                     System.err.println(m.getKey() + "=" + m.getValue());
