@@ -73,7 +73,12 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         boolean lowOutbound = nonzero && !isInbound && !ctx.commSystem().haveHighOutboundCapacity();
         int ipRestriction =  (ctx.getBooleanProperty("i2np.allowLocal") || length <= 1) ? 0 : settings.getIPRestriction();
         MaskedIPSet ipSet = ipRestriction > 0 ? new MaskedIPSet(16) : null;
-
+        boolean isFirewalled = ctx.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
+                               ctx.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
+                               ctx.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
+                               ctx.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
+                               ctx.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
+                               ctx.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
 
         // closest-hop restrictions
         // Since we're applying orderPeers() later, we don't know
@@ -97,12 +102,12 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                 ctx.profileOrganizer().selectActiveNotFailingPeers(1, closestExclude, closest, ipRestriction, ipSet);
                 if (closest.isEmpty()) {
                     if (hiddenInbound) {
-                        // No connected peers found, give up now
-                        if (log.shouldWarn())
-                            log.warn("SelectAllNonFailingPeers (hidden) closest Inbound -> No active peers found, returning null");
-                        return null;
+                        // No connected peers found, fallback to fast peers
+                        if (log.shouldWarn()) {
+                            log.warn("SelectAllNonFailingPeers (hidden) closest Inbound -> No active peers found, trying fast peers...");
+                        }
+                        ctx.profileOrganizer().selectFastPeers(1, closestExclude, closest, ipRestriction, ipSet);
                     }
-                    // ANFP does not fall back to non-connected
                     if (log.shouldInfo())
                         log.info("SelectFastPeersclosest " + (isInbound ? "Inbound " : "Outbound ") + closestExclude);
                     ctx.profileOrganizer().selectFastPeers(1, closestExclude, closest, ipRestriction, ipSet);
@@ -178,83 +183,69 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                     log.info("SelectHighCapPeers " + length + (isInbound ? " Inbound " : " Outbound ") + exclude);
                 ctx.profileOrganizer().selectHighCapacityPeers(length, exclude, matches, ipRestriction, ipSet);
             } else {
-                // As of 0.9.23, we include a max of 2 not failing peers,
-                // to improve build success on 3-hop tunnels.
+                // As of 0.9.23, we include a max of 2 not failing peers, to improve build success on 3-hop tunnels.
                 // Peer org credits existing items in matches
-                if (length > 2)
-                    ctx.profileOrganizer().selectHighCapacityPeers(length - 2, exclude, matches);
-                // select will check both matches and exclude, no need to add matches to exclude here
-                if (log.shouldInfo())
-                    log.info("SelectNonFailingPeers " + length + (isInbound ? " Inbound " : " Outbound ") + exclude);
-                ctx.profileOrganizer().selectNotFailingPeers(length, exclude, matches, false, ipRestriction, ipSet);
+                if (length > 2) {
+                    if (log.shouldInfo()) {
+                        log.info("SelectNonFailingPeers " + length + (isInbound ? " Inbound " : " Outbound ") + exclude);
+                    }
+                    ctx.profileOrganizer().selectNotFailingPeers(length, exclude, matches, false, ipRestriction, ipSet);
+                }
+                if (matches.isEmpty()) {
+                    ctx.profileOrganizer().selectFastPeers(length, exclude, matches);
+                }
+                matches.remove(ctx.routerHash());
+                rv.addAll(matches);
             }
-            matches.remove(ctx.routerHash());
-            rv.addAll(matches);
         }
-        if (log.shouldInfo())
-            log.info("ExploratoryPeerSelector " + length + (isInbound ? " Inbound " : " Outbound ") + "final: " + exclude);
 
-        if (rv.size() > 1)
-            orderPeers(rv, settings.getRandomKey());
+        if (log.shouldInfo()) {
+            log.info("ExploratoryPeerSelector " + length + (isInbound ? " Inbound " : " Outbound ") + "final: " + exclude);
+        }
+
+        if (rv.size() > 1) {orderPeers(rv, settings.getRandomKey());}
         if (closestHop != null) {
-            if (isInbound)
-                rv.add(0, closestHop);
-            else
-                rv.add(closestHop);
+            if (isInbound) {rv.add(0, closestHop);}
+            else {rv.add(closestHop);}
             length++;
         }
         if (furthestHop != null) {
             // always OBEP for now, nothing special for IBGW
-            if (isInbound)
-                rv.add(furthestHop);
-            else
-                rv.add(0, furthestHop);
+            if (isInbound) {rv.add(furthestHop);}
+            else {rv.add(0, furthestHop);}
             length++;
         }
-        //if (length != rv.size() && log.shouldWarn())
-        //    log.warn("EPS requested " + length + " got " + rv.size() + ": " + DataHelper.toString(rv));
-        //else if (log.shouldDebug())
-        //    log.debug("EPS result: " + DataHelper.toString(rv));
-        if (isInbound)
-            rv.add(0, ctx.routerHash());
-        else
-            rv.add(ctx.routerHash());
+        if (isInbound) {rv.add(0, ctx.routerHash());}
+        else {rv.add(ctx.routerHash());}
         if (rv.size() > 1) {
-            if (!checkTunnel(isInbound, true, rv))
-                rv = null;
+            if (!checkTunnel(isInbound, true, rv)) {rv = null;}
         }
-        if (isInbound && rv != null && rv.size() > 1)
-            ctx.commSystem().exemptIncoming(rv.get(1));
+        if (isInbound && rv != null && rv.size() > 1) {ctx.commSystem().exemptIncoming(rv.get(1));}
         return rv;
     }
 
-//    private static final int MIN_NONFAILING_PCT = 15;
-    private static final int MIN_NONFAILING_PCT = 30;
-//    private static final int MIN_ACTIVE_PEERS_STARTUP = 6;
+    private static final int MIN_NONFAILING_PCT = 15;
     private static final int MIN_ACTIVE_PEERS_STARTUP = 10;
-//    private static final int MIN_ACTIVE_PEERS = 12;
     private static final int MIN_ACTIVE_PEERS = 20;
 
     /**
      *  Should we pick from the high cap pool instead of the larger not failing pool?
-     *  This should return false most of the time, but if the not-failing pool's
-     *  build success rate is much worse, return true so that reliability
-     *  is maintained.
+     *  This should return false most of the time, but if the not-failing pool's build
+     *  success rate is much worse, return true so that reliability is maintained.
      */
     private boolean shouldPickHighCap() {
         if (ctx.getBooleanProperty("router.exploreHighCapacity") ||
             (ctx.getProperty("router.exploreHighCapacity") != null && !ctx.getProperty("router.exploreHighCapacity").equals("false")))
             return true;
 
-        // If we don't have enough connected peers, use exploratory
-        // tunnel building to get us better-connected.
-        // This is a tradeoff, we could easily lose our exploratory tunnels,
-        // but with so few connected peers, anonymity suffers and reliability
-        // will decline also, as we repeatedly try to build tunnels
-        // through the same few peers.
+        /*
+         * If we don't have enough connected peers, use exploratory tunnel building to get us better-connected.
+         * This is a tradeoff, we could easily lose our exploratory tunnels, but with so few connected peers,
+         * anonymity suffers and reliability will decline also, as we repeatedly try to build tunnels
+         * through the same few peers.
+         */
         int active = ctx.commSystem().countActivePeers();
-        if (active < MIN_ACTIVE_PEERS_STARTUP)
-            return false;
+        if (active < MIN_ACTIVE_PEERS_STARTUP) {return false;}
 
         // no need to explore too wildly at first (if we have enough connected peers)
         long uptime = ctx.router().getUptime();
@@ -271,10 +262,11 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
         if (active < MIN_ACTIVE_PEERS)
             return false;
 
-        // ok, if we aren't explicitly asking for it, we should try to pick peers
-        // randomly from the 'not failing' pool.  However, if we are having a
-        // hard time building exploratory tunnels, let's fall back again on the
-        // high capacity peers, at least for a little bit.
+        /*
+         * OK, if we aren't explicitly asking for it, we should try to pick peers randomly from the 'not failing' pool.
+         * However, if we are having a hard time building exploratory tunnels, let's fall back again on the high capacity
+         * peers, at least for a little bit.
+         */
         int failPct;
         // getEvents() will be 0 for first 10 minutes
         if (uptime <= 11*60*1000) {

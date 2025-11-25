@@ -9,6 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
@@ -233,12 +234,34 @@ class TunnelGatewayPumper implements Runnable {
      */
     private static class PoisonPTG extends PumpedTunnelGateway {
         public PoisonPTG(RouterContext ctx) {
-            super(ctx, null, null, null, null);
+            super(ctx, null, null, new NoOpReceiver(), null);
         }
-
+        
         @Override
         public int getMessagesSent() {
             return POISON_PTG;
+        }
+        
+        @Override
+        public boolean pump(List<PendingGatewayMessage> queueBuf) {
+            // Poison pill should not pump any messages
+            return false;
+        }
+        
+        /**
+         * No-op receiver for poison pill to avoid null pointer issues
+         */
+        private static class NoOpReceiver implements Receiver {
+            @Override
+            public long receiveEncrypted(byte[] encrypted) {
+                // No-op for poison pill
+                return -1;
+            }
+            
+            @Override
+            public Hash getSendTo() {
+                return null; // Return null as this is poison pill
+            }
         }
     }
 }

@@ -850,8 +850,7 @@ public class PersistentDataStore extends TransientDataStore {
                 // Determine if this is a slow router
                 String bw = ri.getBandwidthTier();
                 String caps = ri.getCapabilities();
-                boolean isSlow = totalStored < 500 ? "K".equals(bw) || "L".equals(bw) :
-                                 totalStored < 1000 ? "K".equals(bw) || "L".equals(bw) || "M".equals(bw) :
+                boolean isSlow = totalStored < 1000 ? "K".equals(bw) || "L".equals(bw) || "M".equals(bw) :
                                  totalStored < 2000 ? "K".equals(bw) || "L".equals(bw) || "M".equals(bw) || "N".equals(bw) :
                                  "K".equals(bw) || "L".equals(bw) || "M".equals(bw) || "N".equals(bw) || "O".equals(bw);
                 boolean isDegraded = caps.indexOf(Router.CAPABILITY_CONGESTION_MODERATE) >= 0 ||

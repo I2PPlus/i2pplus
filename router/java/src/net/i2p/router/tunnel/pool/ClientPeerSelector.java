@@ -78,15 +78,14 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     }
                 }
                 if (matches.isEmpty()) {
-                    if (hiddenInbound) {
-                        // No connected peers found, give up now
-                        if (log.shouldWarn()) {
-                            log.warn("Can't find any active peers for Inbound connection");
-                        }
-                        return null;
+                    // No connected peers found, fall back to all fast peers
+                    if (log.shouldWarn()) {
+                        log.warn("No active peers for Inbound connection, falling back to all fast peers...");
                     }
-                    // ANFP does not fall back to non-connected
                     ctx.profileOrganizer().selectFastPeers(length, exclude, matches);
+                    if (matches.isEmpty()) {
+                        ctx.profileOrganizer().selectHighCapacityPeers(length, exclude, matches);
+                    }
                 }
                 matches.remove(ctx.routerHash());
                 rv = new ArrayList<Hash>(matches);
@@ -122,11 +121,11 @@ class ClientPeerSelector extends TunnelPeerSelector {
                         ctx.profileOrganizer().selectActiveNotFailingPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
                     }
                     if (matches.isEmpty()) {
-                        // No connected peers found, give up now
+                        // No connected peers found, fall back to all fast peers
                         if (log.shouldWarn()) {
-                            log.warn("Can't find any active peers for Inbound connection");
+                            log.warn("No active peers for Inbound connection, falling back to all fast peers...");
                         }
-                        return null;
+                        ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
                     }
                 } else if (hiddenOutbound) {
                     // OBEP
@@ -177,18 +176,22 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     } else {pickFurthest = false;} // shouldn't happen
                     if (pickFurthest) {
                         if (log.shouldInfo()) {
-                            log.info("Selecting fast/non-failing peer for OutboundEndpoint " + lastHopExclude);
+                            log.info("Selecting non-failing peer for OutboundEndpoint... " + lastHopExclude);
                         }
-                        ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
+                        ctx.profileOrganizer().selectActiveNotFailingPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
                         if (matches.isEmpty()) {
-                            ctx.profileOrganizer().selectActiveNotFailingPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
-                        }
-                        if (matches.isEmpty()) {
-                            // No connected peers found, give up now
+                            ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
                             if (log.shouldWarn()) {
-                                log.warn("Failed to select fast/non-failing peer for (hidden) OutboundEndpoint -> No active peers found");
+                                log.warn("Failed to select non-failing peer for (hidden) OutboundEndpoint -> Falling back to all fast peers...");
                             }
-                            return null;
+                        }
+
+                        if (matches.isEmpty()) {
+                            // No connected peers found, fall back to all fast peers
+                            if (log.shouldWarn()) {
+                                log.warn("Failed to select non-failing peer for (hidden) OutboundEndpoint -> Falling back to all fast peers...");
+                            }
+                            ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, randomKey, length == 2 ? SLICE_0_1 : SLICE_0, ipRestriction, ipSet);
                         }
                         ctx.commSystem().exemptIncoming(matches.get(0));
                     } else {

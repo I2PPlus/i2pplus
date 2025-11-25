@@ -36,6 +36,9 @@ class RefreshRoutersJob extends JobImpl {
 
     private static final String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
     private static final boolean DEFAULT_SHOULD_DISCONNECT = false;
+    
+    // Shared Random instance for efficient random number generation
+    private static final Random _random = new Random();
 
     public RefreshRoutersJob(RouterContext ctx, FloodfillNetworkDatabaseFacade facade) {
         super(ctx);
@@ -277,13 +280,12 @@ class RefreshRoutersJob extends JobImpl {
      */
     private void scheduleNextRunRandom() {
         RouterContext ctx = getContext();
-        Random rand = new Random();
         int netDbCount = ctx.netDb().getKnownRouters();
 
-        int baseDelay = (1500 * (rand.nextInt(3) + 1))
-                + rand.nextInt(1000)
-                + rand.nextInt(1000)
-                + (rand.nextInt(1000) * (rand.nextInt(3) + 1));
+        int baseDelay = (1500 * (_random.nextInt(3) + 1))
+                + _random.nextInt(1000)
+                + _random.nextInt(1000)
+                + (_random.nextInt(1000) * (_random.nextInt(3) + 1));
 
         String refreshProp = ctx.getProperty("router.refreshRouterDelay");
 
@@ -299,17 +301,17 @@ class RefreshRoutersJob extends JobImpl {
         if (refreshProp == null) {
             // Adjust delay based on load and netDb count
             if (ctx.jobQueue().getMaxLag() > 150 || ctx.throttle().getMessageDelay() > 750) {
-                baseDelay *= (rand.nextInt(3) + 1);
+                baseDelay *= (_random.nextInt(3) + 1);
             } else if (netDbCount < 500 || ctx.router().getUptime() < 30 * 60 * 1000) {
-                baseDelay = Math.max(Math.min(baseDelay - 6000, baseDelay - rand.nextInt(7000)),
-                                     300 + rand.nextInt(150));
+                baseDelay = Math.max(Math.min(baseDelay - 6000, baseDelay - _random.nextInt(7000)),
+                                     300 + _random.nextInt(150));
             } else if (netDbCount < 1000) {
-                baseDelay = Math.max(baseDelay - rand.nextInt(1250) - rand.nextInt(1250),
-                                     400 + rand.nextInt(150));
+                baseDelay = Math.max(baseDelay - _random.nextInt(1250) - _random.nextInt(1250),
+                                     400 + _random.nextInt(150));
             } else if (netDbCount < 2000) {
-                baseDelay -= rand.nextInt(750) / (rand.nextInt(3) + 1);
+                baseDelay -= _random.nextInt(750) / (_random.nextInt(3) + 1);
             } else {
-                baseDelay -= ((rand.nextInt(750) / (rand.nextInt(3) + 1)) * rand.nextInt(6) + 1);
+                baseDelay -= ((_random.nextInt(750) / (_random.nextInt(3) + 1)) * _random.nextInt(6) + 1);
             }
             if (_log.shouldDebug()) {
                 _log.debug("Next RouterInfo check in " + baseDelay + "ms");

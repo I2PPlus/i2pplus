@@ -44,9 +44,9 @@ public class TunnelPoolManager implements TunnelManagerFacade {
     private final TunnelPeerSelector _clientPeerSelector;
     private volatile boolean _isShutdown;
     private final int _numHandlerThreads;
-
+    private final int DEFAULT_MAX_PCT_TUNNELS;
+    private final int STARTUP_MAX_PCT_TUNNELS;
     private static final String PROP_DISABLE_TUNNEL_TESTING = "router.disableTunnelTesting";
-
     private static final int MIN_KBPS_TWO_HANDLERS = 32;
     private static final int MIN_KBPS_THREE_HANDLERS = 128;
     private static final double MAX_SHARE_RATIO = 100000d;
@@ -72,6 +72,14 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         Boolean isSlow = SystemVersion.isSlow();
         int share = TunnelDispatcher.getShareBandwidth(ctx);
         _numHandlerThreads = ctx.getProperty("router.buildHandlerThreads", isSlow ? 2 : 4);
+
+        if (isFirewalled()) {
+            DEFAULT_MAX_PCT_TUNNELS = 30;
+            STARTUP_MAX_PCT_TUNNELS = 50;
+        } else {
+            DEFAULT_MAX_PCT_TUNNELS = 10;
+            STARTUP_MAX_PCT_TUNNELS = 30;
+        }
 
         // The following are for TestJob
         long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
@@ -604,8 +612,6 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         return tunnelCount;
     }
 
-    private static final int DEFAULT_MAX_PCT_TUNNELS = 10;
-    private static final int STARTUP_MAX_PCT_TUNNELS = 20;
     /**
      *  For reliability reasons, don't allow a peer in more than x% of
      *  client and exploratory tunnels.
@@ -627,6 +633,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         Set<Hash> rv = new HashSet<Hash>();
         long uptime = _context.router().getUptime();
         int max = uptime > 30*60*1000 ? DEFAULT_MAX_PCT_TUNNELS : STARTUP_MAX_PCT_TUNNELS;
+        if (isFirewalled()) {max *=2;}
         for (Hash h : lc.objects()) {
             if (lc.count(h) > 0 && (lc.count(h) + 1) * 100 / (tunnelCount + 1) > max) {
                 rv.add(h);
@@ -635,7 +642,16 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         return rv;
     }
 
-        /** for TunnelRenderer in router console */
+    public boolean isFirewalled() {
+        return _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
+               _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
+               _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
+               _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
+               _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
+               _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
+    }
+
+    /** for TunnelRenderer in router console */
     public Map<Hash, TunnelPool> getInboundClientPools() {
         return new HashMap<Hash, TunnelPool>(_clientInboundPools);
     }

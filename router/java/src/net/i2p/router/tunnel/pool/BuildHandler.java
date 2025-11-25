@@ -355,13 +355,8 @@ class BuildHandler implements Runnable {
                     _context.profileManager().tunnelRejected(peer, rtt, howBad);
                     _context.messageHistory().tunnelParticipantRejected(peer, "peer rejected after " + rtt + " with " + howBad + ": " + cfg.toString());
                     if (_log.shouldInfo()) {
-                        if (howBad == 0) {
-                            _log.info("Received reply from [" + peer.toBase64().substring(0,6) + "] for [MsgID " + msg.getUniqueId() +
-                                      "] -> Request accepted");
-                        } else {
-                            _log.info("Received reply from [" + peer.toBase64().substring(0,6) + "] for [MsgID " + msg.getUniqueId() +
+                        _log.info("Received reply from [" + peer.toBase64().substring(0,6) + "] for [MsgID " + msg.getUniqueId() +
                                       "] -> Request rejected (Reason: " + reason + ")");
-                        }
                     }
                 }
             }

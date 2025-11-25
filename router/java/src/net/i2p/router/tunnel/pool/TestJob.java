@@ -41,7 +41,7 @@ public class TestJob extends JobImpl {
     private int _id;
 
     /** Base delay before first test (in ms) */
-    private static final int TEST_DELAY = 3 * 60 * 1000;
+    private static final int TEST_DELAY = 30 * 1000;
 
     /** Max failures before logging a warning */
     private static final int MAX_FAILURES_BEFORE_ABORT = 3;
@@ -95,7 +95,7 @@ public class TestJob extends JobImpl {
 
         if (_replyTunnel == null || _outTunnel == null) {
             if (_log.shouldWarn()) {
-                _log.warn("Insufficient tunnels to test " + _cfg + " with: " + _replyTunnel + " / " + _outTunnel);
+                _log.warn("Insufficient tunnels to test " + _cfg);
             }
             ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
             scheduleRetest();

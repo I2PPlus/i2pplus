@@ -98,6 +98,15 @@ public class ProfileOrganizer {
         _context.statManager().createRequiredRateStat("peer.profileSortTime", "Time to sort peers (ms)", "Peers", RATES);
     }
 
+    /**
+     * Check if current router is firewalled to adjust peer selection thresholds
+     */
+    private boolean isFirewalled() {
+        net.i2p.router.CommSystemFacade.Status status = _context.commSystem().getStatus();
+        return status != null && (status.toString().contains("FIREWALLED") ||
+                                status.toString().contains("REJECT_UNSOLICITED"));
+    }
+
     private void getReadLock() {_reorganizeLock.readLock().lock();}
     private boolean tryReadLock() {return _reorganizeLock.readLock().tryLock();}
     private void releaseReadLock() {_reorganizeLock.readLock().unlock();}
@@ -747,8 +756,13 @@ public class ProfileOrganizer {
         for (PeerProfile profile : _notFailingPeers.values()) {
             Hash peer = profile.getPeer();
 
-            if ((_fastPeers.containsKey(peer) && _fastPeers.size() <= 800) ||
-                (_highCapacityPeers.containsKey(peer) && _highCapacityPeers.size() <= 1200)) {
+            // More lenient thresholds for firewalled routers
+            boolean isFirewalledRouter = isFirewalled();
+            int fastPeerLimit = isFirewalledRouter ? 1600 : 800;
+            int highCapacityLimit = isFirewalledRouter ? 2400 : 1200;
+
+            if ((_fastPeers.containsKey(peer) && _fastPeers.size() <= fastPeerLimit) ||
+                (_highCapacityPeers.containsKey(peer) && _highCapacityPeers.size() <= highCapacityLimit)) {
                 continue; // protected
             }
 
@@ -1049,4 +1063,5 @@ public class ProfileOrganizer {
         System.out.println("Speed:       " + num(organizer.getSpeedThreshold()) + " (" + organizer.countFastPeers() + " fast peers)");
         System.out.println("Capacity:    " + num(organizer.getCapacityThreshold()) + " (" + organizer.countHighCapacityPeers() + " reliable peers)");
     }
+
 }

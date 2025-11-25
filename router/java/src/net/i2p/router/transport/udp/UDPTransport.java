@@ -247,10 +247,10 @@ public class UDPTransport extends TransportImpl {
     private static final int SSU_OUTBOUND_COST = 14;
     static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
     /** Minimum active peers to maintain IP detection, etc. */
-    private static final int MIN_PEERS = 10;
-    private static final int MIN_PEERS_IF_HAVE_V6 = 30;
+    private static final int MIN_PEERS = 50;
+    private static final int MIN_PEERS_IF_HAVE_V6 = 60;
     /** Minimum peers volunteering to be introducers if we need that */
-    private static final int MIN_INTRODUCER_POOL = 10;
+    private static final int MIN_INTRODUCER_POOL = 50;
     static final long INTRODUCER_EXPIRATION_MARGIN = 20*60*1000L;
     private static final long MIN_DOWNTIME_TO_REKEY = 30*24*60*60*1000L;
 

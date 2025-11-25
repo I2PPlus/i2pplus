@@ -91,19 +91,19 @@ abstract class BuildRequestor {
     /**
      * Timeout for waiting for a full tunnel build reply.
      */
-    static final int REQUEST_TIMEOUT = SystemVersion.isSlow() ? 15*1000 : 12*1000;
+    static final int REQUEST_TIMEOUT = SystemVersion.isSlow() ? 6*1000 : 5*1000;
 
     /**
      * Shorter timeout for the first hop of an outbound build,
      * to trigger early failure detection.
      */
-    private static final int FIRST_HOP_TIMEOUT = SystemVersion.isSlow() ? 10*1000 : 8*1000;
+    private static final int FIRST_HOP_TIMEOUT = 10*1000;
 
     /**
      * Base expiration for the TunnelBuildMessage itself.
      * Randomized per-message to obscure tunnel length.
      */
-    private static final int BUILD_MSG_TIMEOUT = 40*1000;
+    private static final int BUILD_MSG_TIMEOUT = 50*1000;
     private static final int MAX_CONSECUTIVE_CLIENT_BUILD_FAILS = 30;
     private static final int EXPLORATORY_BACKOFF = 200;
     private static final int CLIENT_BACKOFF = 50;
@@ -261,7 +261,7 @@ abstract class BuildRequestor {
             }
         } else {
             if (log.shouldWarn() && uptime > 5*60*1000 && fails > 2) {
-                log.warn(fails + " consecutive build timeouts for " + cfg + " → Forcing exploratory tunnel");
+                log.warn(fails + " consecutive build timeouts for " + cfg + " → Forcing exploratory tunnel...");
             }
         }
 

@@ -232,11 +232,11 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         RouterInfo info = (RouterInfo) ctx.netDb().lookupLocally(h);
         if (info == null) {return true;}
 
-        // reduce load on floodfills
+        // reduce load on floodfills (but be less aggressive to avoid peer starvation)
         String caps = info.getCapabilities();
         boolean isFF = caps.indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0;
         //if (isFF && caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0) {return true;}
-        if (isExploratory && isFF && ctx.random().nextInt(10) != 0) {return true;}
+        if (isExploratory && isFF && ctx.random().nextInt(20) != 0) {return true;}
 
         if (filterUnreachable(isInbound, isExploratory)) {
             if (caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0) {return true;}

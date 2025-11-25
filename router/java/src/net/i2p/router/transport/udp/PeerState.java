@@ -174,7 +174,7 @@ public class PeerState {
     /** Last time it was made an introducer **/
     private long _lastIntroducerTime;
 
-    private static final int MAX_SEND_WINDOW_BYTES = SystemVersion.isSlow() ? 128*1024 : 1024*1024;
+    private static final int MAX_SEND_WINDOW_BYTES = SystemVersion.isSlow() ? 32*1024 : 128*1024;
 
     /**
      *  Was 32 before 0.9.2, but since the streaming lib goes up to 128,

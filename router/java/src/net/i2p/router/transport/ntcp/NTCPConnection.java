@@ -159,7 +159,7 @@ public class NTCPConnection implements Closeable {
     private static final String FIXED_RI_VERSION = "0.9.12";
     private static final AtomicLong __connID = new AtomicLong();
     private final long _connID = __connID.incrementAndGet();
-    private static final int MAX_HANDLERS = SystemVersion.isSlow() ? 3 : 6;
+    private static final int MAX_HANDLERS = SystemVersion.isSlow() ? 2 : 3;
 
     //// NTCP2 things
 
@@ -172,7 +172,7 @@ public class NTCPConnection implements Closeable {
     private static final int PADDING_MAX = 64;
     private static final int SIP_IV_LENGTH = 8;
     private static final int NTCP2_FAIL_READ = 1024;
-    private static final long NTCP2_FAIL_TIMEOUT = 10*1000;
+    private static final long NTCP2_FAIL_TIMEOUT = 15*1000;
     private static final long NTCP2_TERMINATION_CLOSE_DELAY = 50;
     // don't make combined messages too big, to minimize latency
     // Tunnel data msgs are 1024 + 4 + 9 + 3 = 1040, allow 5
@@ -239,7 +239,6 @@ public class NTCPConnection implements Closeable {
         _version = version;
         if (version != 2) {
             throw new IllegalArgumentException("Bad version " + version);
-            //_establishState = new OutboundEstablishState(ctx, transport, this);
         } else {
             try {
                 _establishState = new OutboundNTCP2State(ctx, transport, this);
@@ -266,10 +265,9 @@ public class NTCPConnection implements Closeable {
         _writeBufs = new ConcurrentLinkedQueue<ByteBuffer>();
 //        _bwInRequests = new ConcurrentHashSet<Request>(2);
 //        _bwOutRequests = new ConcurrentHashSet<Request>(8);
-        _bwInRequests = new ConcurrentHashSet<Request>(32);
-        _bwOutRequests = new ConcurrentHashSet<Request>(32);
-//        _outbound = new PriBlockingQueue<OutNetMessage>(ctx, "NTCP-Connection", 32);
-        _outbound = new PriBlockingQueue<OutNetMessage>(ctx, "NTCP-Connection", 64);
+        _bwInRequests = new ConcurrentHashSet<Request>(4);
+        _bwOutRequests = new ConcurrentHashSet<Request>(16);
+        _outbound = new PriBlockingQueue<OutNetMessage>(ctx, "NTCP-Connection", 32);
         _currentOutbound = new ArrayList<OutNetMessage>(1);
         _isInbound = isIn;
         _inboundListener = new InboundListener();
@@ -295,8 +293,7 @@ public class NTCPConnection implements Closeable {
      *  @since IPv6
      */
     public boolean isIPv6() {
-        return _chan != null &&
-               _chan.socket().getInetAddress() instanceof Inet6Address;
+        return _chan != null && _chan.socket().getInetAddress() instanceof Inet6Address;
     }
 
     /**
@@ -614,8 +611,9 @@ public class NTCPConnection implements Closeable {
             }
 
             try {
+                String writeStatus = _conKey != null ? String.valueOf((_conKey.interestOps() & SelectionKey.OP_WRITE) != 0) : "null_key";
                 _log.warn("Outbound connection too backlogged (Size: " + size +
-                          ") \n* Wants write? " + ((_conKey.interestOps() & SelectionKey.OP_WRITE) != 0) +
+                          ") \n* Wants write? " + writeStatus +
                           "; Current Outbound set? " + currentOutboundSet +
                           "\n* Write buffers: " + writeBufs + " on " + toString());
             } catch (RuntimeException ignored) {}
@@ -995,7 +993,9 @@ public class NTCPConnection implements Closeable {
             return;
         }
         try {
-            EventPumper.setInterest(_conKey, SelectionKey.OP_READ);
+            if (_conKey != null) {
+                EventPumper.setInterest(_conKey, SelectionKey.OP_READ);
+            }
         } catch (CancelledKeyException cke) {
             try {_chan.close(); } catch (IOException ignored) {}
             return;
@@ -1145,7 +1145,8 @@ public class NTCPConnection implements Closeable {
         EventPumper pumper = _transport.getPumper();
         if (_isInbound || isEstablished()) {
             // Attempt to write directly
-            if (!pumper.processWrite(this, getKey())) {
+            SelectionKey key = getKey();
+            if (key != null && !pumper.processWrite(this, key)) {
                 if (_log.shouldDebug())
                     _log.debug("Async write not completed, pending bufs: " + _writeBufs.size() + " on " + this);
                 // queue it up
@@ -1412,7 +1413,10 @@ public class NTCPConnection implements Closeable {
                                                   byte[] sip_ab, byte[] sip_ba, long clockSkew) {
         if (isBanned()) {return;}
         finishEstablishment(sender, receiver, sip_ab, sip_ba, clockSkew);
-        _transport.markReachable(getRemotePeer().calculateHash(), false);
+        RouterIdentity remote = getRemotePeer();
+        if (remote != null) {
+            _transport.markReachable(remote.calculateHash(), false);
+        }
         if (!_outbound.isEmpty())
             _transport.getWriter().wantsWrite(this, "outbound established");
         // NTCP2 outbound cannot have extra data
@@ -1983,13 +1987,19 @@ public class NTCPConnection implements Closeable {
     @Override
     public String toString() {
         String fromIP;
+        int port = 0;
         if (_isInbound) {
-            InetAddress addr = _chan.socket().getInetAddress();
-            fromIP = addr != null ? addr.getHostAddress() : "Unknown";
+            if (_chan != null) {
+                InetAddress addr = _chan.socket().getInetAddress();
+                fromIP = addr != null ? addr.getHostAddress() : "Unknown";
+                port = _chan.socket().getPort();
+            } else {
+                fromIP = "null_channel";
+            }
         } else {
             fromIP = null;
         }
-        return (_isInbound ? (" -> Inbound: " + fromIP + ":" + _chan.socket().getPort() + ' ')
+        return (_isInbound ? (" -> Inbound: " + fromIP + ":" + port + ' ')
                            : (" -> Outbound: " + _remAddr.getHost() + ":" + _remAddr.getPort() + ' ')) + "[" +
                (_remotePeer == null ? "Unknown" : _remotePeer.calculateHash().toBase64().substring(0,6)) + "]" +
                (isEstablished() ? "" : " -> Not established ") +

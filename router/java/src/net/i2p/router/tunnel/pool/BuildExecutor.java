@@ -43,7 +43,7 @@ class BuildExecutor implements Runnable {
     private final ConcurrentHashMap<Long, PooledTunnelCreatorConfig> _recentlyBuildingMap; // indexed by ptcc.getReplyMessageId()
     private volatile boolean _isRunning;
     private boolean _repoll;
-    private static final int MAX_CONCURRENT_BUILDS = SystemVersion.isSlow() ? 10 : Math.max(SystemVersion.getCores() * 4, 16);
+    private static final int MAX_CONCURRENT_BUILDS = Math.max(SystemVersion.getCores() * 2, 16);
     private static final int LOOP_TIME = 200;
     private static final int TUNNEL_POOLS = SystemVersion.isSlow() ? 16 : 32;
     private static final long GRACE_PERIOD = 60*1000; // accept replies up to a minute after we gave up on them
@@ -103,19 +103,19 @@ class BuildExecutor implements Runnable {
 
     /**
      * Calculate adaptive timeout based on tunnel characteristics and network conditions
-     * 
+     *
      * @param cfg the tunnel configuration
      * @return adaptive timeout in milliseconds
      */
     private long calculateAdaptiveTimeout(PooledTunnelCreatorConfig cfg) {
         long baseTimeout = BuildRequestor.REQUEST_TIMEOUT;
-        
+
         // Adjust timeout based on tunnel length
         int length = cfg.getLength();
         if (length > 3) {
-            baseTimeout += (length - 3) * 10*1000; // Add 10s per additional hop
+            baseTimeout += (length - 3) * 5*1000; // Add 5s per additional hop
         }
-        
+
         // Adjust based on recent network performance
         RateStat buildTimeStat = _context.statManager().getRate("tunnel.buildRequestTime");
         if (buildTimeStat != null) {
@@ -127,7 +127,7 @@ class BuildExecutor implements Runnable {
                 }
             }
         }
-        
+
         // Adjust based on system load
         int cpuLoad = SystemVersion.getCPULoadAvg();
         if (cpuLoad > 90) {
@@ -135,7 +135,7 @@ class BuildExecutor implements Runnable {
         } else if (cpuLoad > 80) {
             baseTimeout += 15*1000; // Add 15s under moderate CPU load
         }
-        
+
         // Cap the timeout to prevent excessive waits
         long maxTimeout = BuildRequestor.REQUEST_TIMEOUT * 3; // Triple the base timeout
         return Math.min(baseTimeout, maxTimeout);
@@ -165,7 +165,7 @@ class BuildExecutor implements Runnable {
         final Hash selfHash = _context.routerHash();
 
         final int maxKBps = _context.bandwidthLimiter().getOutboundKBytesPerSecond();
-        int allowed = maxKBps / 4;
+        int allowed = maxKBps / 2;
 
         final RateStat rs = _context.statManager().getRate("tunnel.buildRequestTime");
         if (rs != null) {
@@ -227,7 +227,7 @@ class BuildExecutor implements Runnable {
             PooledTunnelCreatorConfig cfg = iter.next();
             long adaptiveTimeout = calculateAdaptiveTimeout(cfg);
             long adjustedExpireBefore = now + TEN_MINUTES_MS - adaptiveTimeout;
-            
+
             if (cfg.getExpiration() <= adjustedExpireBefore) {
                 PooledTunnelCreatorConfig existingCfg = _recentlyBuildingMap.putIfAbsent(Long.valueOf(cfg.getReplyMessageId()), cfg);
                 if (existingCfg == null) {

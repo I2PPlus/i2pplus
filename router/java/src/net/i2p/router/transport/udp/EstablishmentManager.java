@@ -134,8 +134,8 @@ class EstablishmentManager {
 
     /** Max outbound in progress - max inbound is half of this */
     private final int DEFAULT_MAX_CONCURRENT_ESTABLISH;
-    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 64 : 256;
-    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 256 : 1024;
+    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 32 : 256;
+    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 128 : 512;
     private static final String PROP_MAX_CONCURRENT_ESTABLISH = "i2np.udp.maxConcurrentEstablish";
     private static final float DEFAULT_THROTTLE_FACTOR = SystemVersion.isSlow() ? 2.5f : 5f;
     private static final String PROP_THROTTLE_FACTOR = "router.throttleFactor";
@@ -176,7 +176,7 @@ class EstablishmentManager {
 
     // SSU 2
     private static final int MIN_TOKENS = SystemVersion.isSlow() ? 64 : 128;
-    private static final int MAX_TOKENS = SystemVersion.isSlow() ? 1024 : 4096;
+    private static final int MAX_TOKENS = SystemVersion.isSlow() ? 1024 : 2048;
     public static final long IB_TOKEN_EXPIRATION = 60*60*1000L;
     private static final long MAX_SKEW = 2*60*1000;
     private static final String TOKEN_FILE = "ssu2tokens.txt";

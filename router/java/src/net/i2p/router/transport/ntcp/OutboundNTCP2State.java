@@ -171,6 +171,14 @@ class OutboundNTCP2State implements EstablishState {
     public int getVersion() { return 2; }
 
     /**
+     *  Check if the connection is in initial state and ready for prepareOutbound()
+     *  @since 0.9.59
+     */
+    public boolean isInitialState() {
+        return _state == State.OB_INIT;
+    }
+
+    /**
      *  We are Alice.
      *  We are establishing an outbound connection, so prepare ourselves by
      *  writing the first message in the handshake.

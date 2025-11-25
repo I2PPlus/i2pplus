@@ -466,7 +466,19 @@ public class NTCPTransport extends TransportImpl {
                 con.setChannel(channel);
                 channel.configureBlocking(false);
                 _pumper.registerConnect(con);
-                con.getEstablishState().prepareOutbound();
+                // Only call prepareOutbound() if connection is in initial state
+                // to avoid IllegalStateException when connection is already in progress
+                EstablishState est = con.getEstablishState();
+                if (est instanceof OutboundNTCP2State) {
+                    OutboundNTCP2State state = (OutboundNTCP2State) est;
+                    if (state.isInitialState()) {
+                        est.prepareOutbound();
+                    } else if (_log.shouldDebug()) {
+                        _log.debug("Skipping prepareOutbound() for connection already in progress: " + con);
+                    }
+                } else {
+                    est.prepareOutbound();
+                }
             }
         } else {
             con.send(msg);

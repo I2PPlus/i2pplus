@@ -55,7 +55,7 @@ public class TunnelPool {
 
     private static final int TUNNEL_LIFETIME = 10*60*1000;
     /** if less than one success in this many, reduce quantity (exploratory only) */
-    private static final int BUILD_TRIES_QUANTITY_OVERRIDE = 8;
+    private static final int BUILD_TRIES_QUANTITY_OVERRIDE = 12;
     /** if less than one success in this many, reduce length (exploratory only) */
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_1 = 10;
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_2 = 12;
@@ -204,6 +204,8 @@ public class TunnelPool {
                         if (info.getLength() > 1 && info.getExpiration() > now) {
                             // avoid outbound tunnels where the 1st hop is backlogged
                             if (_settings.isInbound() || !_context.commSystem().isBacklogged(info.getPeer(1))) {
+                                // Reset counter on successful tunnel selection - indicates working tunnels
+                                resetConsecutiveTimeoutsOnSuccess();
                                 return info;
                             } else {backloggedTunnel = info;}
                         }
@@ -222,6 +224,8 @@ public class TunnelPool {
                         if (_settings.isInbound() || info.getLength() <= 1 ||
                             !_context.commSystem().isBacklogged(info.getPeer(1))) {
                             //_log.debug("Selecting tunnel: " + info + " - " + _tunnels);
+                            // Reset counter on successful tunnel selection - indicates working tunnels
+                            resetConsecutiveTimeoutsOnSuccess();
                             return info;
                         } else {backloggedTunnel = info;}
                     }
@@ -332,6 +336,9 @@ public class TunnelPool {
      *
      *  Also returns 1 if set for zero hop, client or exploratory.
      *
+     *  Enhanced with exponential backoff for firewalled routers to prevent
+     *  tunnel pool exhaustion after extended uptime.
+     *
      *  @since 0.8.11
      */
     private int getAdjustedTotalQuantity() {
@@ -339,36 +346,42 @@ public class TunnelPool {
         int rv = _settings.getTotalQuantity();
         if (!_settings.isExploratory()) {
             if (rv <= 1) {return rv;}
-            // throttle client tunnel builds in times of congestion
+            // throttle client tunnel builds in times of congestion with exponential backoff
             int fails = _consecutiveBuildTimeouts.get();
             long uptime = _context.router().getUptime();
-            if (fails > 4) {
-                if (fails > 12) {
-                    rv = 1;
-                    if (_log.shouldWarn() && !shouldSuppressTimeoutWarning() && uptime > 5*60*1000) {
-                        _log.warn("Limiting to 1 tunnel after " + fails + " consecutive build timeouts on " + this);
-                    }
-                } else if (fails > 8) {
-                    rv = Math.max(1, rv / 3);
-                    if (_log.shouldWarn() && !shouldSuppressTimeoutWarning() && uptime > 5*60*1000) {
-                        _log.warn("Limiting to " + rv + " tunnels after " + fails + " consecutive build timeouts on " + this);
-                    }
-                } else if (rv > 2) {
-                    rv--;
-                    if (_log.shouldWarn() && !shouldSuppressTimeoutWarning() && uptime > 5*60*1000) {
-                        _log.warn("Limiting to " + rv + " tunnels after " + fails + " consecutive build timeouts on " + this);
-                    }
+            if (fails > 6) {
+                // Linear backoff: reduce by 50% after 6 failures
+                int reductionFactor = 2; // Max 2x reduction instead of 64x
+
+                // Check if router is firewalled using status check
+                boolean isFirewalled = _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
+                                   _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
+                                   _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
+                                   _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
+                                   _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
+                                   _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
+
+                int minTunnels = isFirewalled ? 6 : 1; // Keep 6 tunnels for firewalled routers
+
+                rv = Math.max(minTunnels, _settings.getTotalQuantity() / reductionFactor);
+
+                // Additional safety: never reduce below 1 for non-firewalled, 3 for firewalled
+                if (isFirewalled && rv < 6) {rv = 6;}
+                else if (rv < 1) {rv = 1;}
+
+                if (fails >= 10 && _log.shouldWarn() && !shouldSuppressTimeoutWarning() && uptime > 5*60*1000) {
+                    _log.warn("Limiting to " + rv + " tunnels after " + fails +
+                              " consecutive build timeouts on " + this);
                 }
             }
             return rv;
         }
         // TODO high-bw non-ff also
         if ((_context.netDb().floodfillEnabled() && _context.router().getUptime() > 5*60*1000 ||
-            SystemVersion.getMaxMemory() >= 1024*1024*1024) && rv < 4) {
-            rv += 2;
-       // Since we're running RefreshRouters on a repeat cycle (I2P+) let's keep a couple of extras available
-       } else if (_settings.isExploratory() && rv < 2 && _context.router().getUptime() > 10*60*1000) {
-            rv += 1;
+            SystemVersion.getMaxMemory() >= 1024*1024*1024) && rv < 3) {
+            rv = 3;
+       } else if (_settings.isExploratory() && rv < 2) {
+            rv = 2;
        }
        if (rv > 1) {
            RateStat e = _context.statManager().getRate("tunnel.buildExploratoryExpire");
@@ -385,16 +398,13 @@ public class TunnelPool {
                    long sc = sr.computeAverages(ra, false).getTotalEventCount();
                    long tot = ec + rc + sc;
                    if (tot >= BUILD_TRIES_QUANTITY_OVERRIDE) {
-                       if (1000 * sc / tot <=  1000 / BUILD_TRIES_QUANTITY_OVERRIDE) {rv--;}
+                       if (1000 * sc / tot <= 1000 / BUILD_TRIES_QUANTITY_OVERRIDE) {rv--;}
                    }
                }
            }
        }
-       // more exploratory during startup, when we are refreshing the netdb RIs
-       if (_context.router().getUptime() < STARTUP_TIME && rv < 3) {rv++;}
        return rv;
     }
-
 
     /**
      *  Shorten the length when under extreme stress, else clear the override.
@@ -599,33 +609,20 @@ public class TunnelPool {
 
         // Analyze failure pattern to adjust blame intelligently
         int consecutiveFailures = _consecutiveBuildTimeouts.get();
-        boolean isHighFailureRate = consecutiveFailures > 6;
 
         for (int i = start; i < end; i++) {
             int pct = 100/(len-1);
             Hash peer = cfg.getPeer(i);
 
-            // Enhanced blame logic with failure rate consideration
+            // Standard blame logic - avoid over-complex reductions
             if (cfg.isInbound() && len > 2) {
                 if (i == start) {pct *= 2;}
                 else {pct /= 2;}
             }
 
-            // Reduce blame for high failure rate scenarios to avoid over-penalizing
-            if (isHighFailureRate) {
-                pct = Math.max(pct / 2, 10); // Minimum 10% blame
-            }
-
-            // Check peer's recent history before blaming
-            PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(peer);
-            if (prof != null) {
-                // Reduce blame if peer has been generally reliable
-                // Use rate statistics to determine reliability
-                long recentSuccesses = prof.getTunnelHistory().getLifetimeAgreedTo();
-                long recentFailures = prof.getTunnelHistory().getLifetimeFailed();
-                if (recentSuccesses > recentFailures * 2) {
-                    pct = Math.max(pct / 2, 5); // Further reduce for historically reliable peers
-                }
+            // Only moderate reduction for high failure scenarios
+            if (consecutiveFailures > 6) {
+                pct = Math.max(pct * 3 / 4, 15); // Reduce by 25%, minimum 15% blame
             }
 
             if (uptime > 5*60*1000 && _log.shouldWarn() && consecutiveFailures > 5) {
@@ -916,14 +913,10 @@ public class TunnelPool {
         }
 
         if (avg > 0 && avg < TUNNEL_LIFETIME / 3) { // if we're taking less than 200s per tunnel to build
-            /*
             final int PANIC_FACTOR = 4;  // how many builds to kick off when time gets short
             avg += 60*1000; // one minute safety factor
             if (_settings.isExploratory())
-                avg += 30*1000; // two minute safety factor
-            */
-            final int PANIC_FACTOR = 6; // how many builds to kick off when time gets short
-            avg += (_settings.isExploratory() ? 2*60*1000 : 45*1000); // 2m safety factor
+                avg += 60*1000; // two minute safety factor
             long now = _context.clock().now();
 
             int expireSoon = 0;
@@ -1246,6 +1239,26 @@ public class TunnelPool {
     int getConsecutiveBuildTimeouts() {return _consecutiveBuildTimeouts.get();}
 
     /**
+     *  Reset consecutive timeout counter when tunnels are working properly.
+     *  This prevents excessive backoff on firewalled routers after recovery.
+     *  Only resets if we have a significant number of consecutive timeouts
+     *  to avoid flapping during normal operation.
+     *  @since 0.9.53
+     */
+    private void resetConsecutiveTimeoutsOnSuccess() {
+        int current = _consecutiveBuildTimeouts.get();
+        // Only reset if we have accumulated significant timeouts (>= 8)
+        // to avoid counter resets during normal operation
+        if (current >= 8) {
+            _consecutiveBuildTimeouts.set(0);
+            if (_log.shouldInfo()) {
+                _log.info("Resetting consecutive timeout counter after successful tunnel selection on " + this +
+                          " (was " + current + ")");
+            }
+        }
+    }
+
+    /**
      *  Update the paired tunnel profiles by treating the build as a tunnel test
      *
      *  @param cfg the build for this tunnel, to lookup the paired tunnel
@@ -1313,9 +1326,20 @@ public class TunnelPool {
                           " failures=" + _consecutiveBuildTimeouts.get());
             }
 
-            // Much more aggressive suppression: if we have usable tunnels in EITHER direction OR recent success, suppress
-            // This prevents false warnings when one direction is temporarily having issues
-            if (usableInbound >= 1 || usableOutbound >= 1 || hasRecentSuccess) {
+            // Check if the current pool has usable tunnels OR if the opposite direction has adequate tunnels
+            int currentUsable = (_settings.isInbound() ? usableInbound : usableOutbound);
+            int oppositeUsable = (_settings.isInbound() ? usableOutbound : usableInbound);
+
+            // More aggressive suppression: if we have ANY usable tunnels in current direction,
+            // OR 2+ in opposite direction, OR recent success, suppress warnings
+            // This prevents log spam when one direction struggles but overall connectivity is fine
+            if (currentUsable >= 1 || oppositeUsable >= 2 || hasRecentSuccess) {
+                return true;
+            }
+
+            // Additional suppression: if uptime > 1h and we have some tunnels (even if not many), suppress
+            // to avoid chronic warnings during network stress
+            if (uptime > 60*60*1000 && (currentUsable >= 1 || oppositeUsable >= 1)) {
                 return true;
             }
         }
@@ -1337,9 +1361,9 @@ public class TunnelPool {
         }
 
         long now = System.currentTimeMillis();
-        // Much more aggressive suppression: minimum 10 minutes, scaling with failures, max 30 minutes
+        // Very aggressive suppression: minimum 15 minutes, scaling with failures, max 60 minutes
         int failures = _consecutiveBuildTimeouts.get();
-        long suppressionPeriod = Math.min(10*60*1000 + (failures * 60*1000), 30*60*1000); // Max 30 minutes
+        long suppressionPeriod = Math.min(15*60*1000 + (failures * 2*60*1000), 60*60*1000); // Max 60 minutes
 
         if (now - _lastTimeoutWarningTime < suppressionPeriod) {
             return true; // Suppress repeated warnings

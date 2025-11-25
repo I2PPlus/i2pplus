@@ -20,7 +20,7 @@ import net.i2p.util.SystemVersion;
  */
 class NTCPSendFinisher {
     private static final int MIN_THREADS = 1;
-    private static final int MAX_THREADS = SystemVersion.isSlow() ? 3 : 6;
+    private static final int MAX_THREADS = SystemVersion.isSlow() ? 2 : 3;
     private static final int QUEUE_CAPACITY = SystemVersion.isSlow() ? 1000 : 4096;
     private final I2PAppContext _context;
     private final NTCPTransport _transport;

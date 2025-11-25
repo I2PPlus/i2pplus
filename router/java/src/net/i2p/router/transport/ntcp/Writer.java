@@ -115,9 +115,13 @@ class Writer {
                                 _pendingConnections.wait();
                             } else {
                                 Iterator<NTCPConnection> iter = _pendingConnections.iterator();
-                                con = iter.next();
-                                iter.remove();
-                                _liveWrites.add(con);
+                                if (iter.hasNext()) {
+                                    con = iter.next();
+                                    iter.remove();
+                                    _liveWrites.add(con);
+                                } else {
+                                    con = null;
+                                }
                                 if (_log.shouldDebug())
                                     _log.debug("Switch to writing on: " + con);
                             }
