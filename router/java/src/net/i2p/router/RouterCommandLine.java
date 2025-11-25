@@ -2,6 +2,7 @@ package net.i2p.router;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -11,9 +12,9 @@ import java.util.List;
  *
  * @since 0.9.25
  */
-public class CommandLine extends net.i2p.util.CommandLine {
+public class RouterCommandLine extends net.i2p.util.CommandLine {
 
-    protected static final List<String> RCLASSES = Arrays.asList(new String[] {
+    protected static final List<String> RCLASSES = Collections.unmodifiableList(Arrays.asList(new String[] {
         "com.maxmind.geoip2.DatabaseReader",
         "net.i2p.data.router.RouterInfo",
         "net.i2p.data.router.RouterKeyGenerator",
@@ -31,9 +32,9 @@ public class CommandLine extends net.i2p.util.CommandLine {
         "net.i2p.router.transport.GeoIPv6",
         "net.i2p.router.transport.udp.MTU",
         "net.i2p.router.transport.UPnP"
-    });
+    }));
 
-    protected CommandLine() {}
+    protected RouterCommandLine() {}
 
     public static void main(String args[]) {
         List<String> classes = new ArrayList<String>(RCLASSES.size() + CLASSES.size());
@@ -46,7 +47,7 @@ public class CommandLine extends net.i2p.util.CommandLine {
         System.exit(1);
     }
 
-    private static void usage(List<String> classes) {
+    public static void usage(List<String> classes) {
         System.err.println("I2P Router version " + RouterVersion.FULL_VERSION + '\n' +
                            "USAGE: java -jar /path/to/router.jar command [args]");
         printCommands(classes);

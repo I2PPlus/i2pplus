@@ -13,7 +13,7 @@ import net.i2p.CoreVersion;
  *
  * @since 0.9.55
  */
-public class CommandLine extends net.i2p.util.CommandLine {
+public class AddressBookCommandLine extends net.i2p.util.CommandLine {
 
     protected static final List<String> ACLASSES = Arrays.asList(new String[] {
         "net.i2p.addressbook.HostTxtParser",
@@ -21,7 +21,7 @@ public class CommandLine extends net.i2p.util.CommandLine {
         "net.metanotion.io.block.BlockFile",
     });
 
-    protected CommandLine() {}
+    protected AddressBookCommandLine() {}
 
     public static void main(String args[]) {
         List<String> classes = new ArrayList<String>(ACLASSES.size() + CLASSES.size());

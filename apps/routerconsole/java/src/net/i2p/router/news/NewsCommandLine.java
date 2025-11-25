@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import net.i2p.router.RouterVersion;
+import net.i2p.router.RouterCommandLine;
 
 /**
  * Simple command line access to various utilities.
@@ -13,7 +14,7 @@ import net.i2p.router.RouterVersion;
  *
  * @since 0.9.28
  */
-public class CommandLine extends net.i2p.router.CommandLine {
+public class NewsCommandLine extends net.i2p.router.RouterCommandLine {
 
     protected static final List<String> NCLASSES = Arrays.asList(new String[] {
         "com.vuze.plugins.mlab.MLabRunner",
@@ -22,21 +23,21 @@ public class CommandLine extends net.i2p.router.CommandLine {
         "net.i2p.router.update.NewsHandler"
     });
 
-    protected CommandLine() {}
+    protected NewsCommandLine() {}
 
     public static void main(String args[]) {
-        List<String> classes = new ArrayList<String>(NCLASSES.size() + RCLASSES.size() + CLASSES.size());
+        List<String> classes = new ArrayList<String>(NCLASSES.size() + RouterCommandLine.RCLASSES.size() + RouterCommandLine.CLASSES.size());
         classes.addAll(NCLASSES);
-        classes.addAll(RCLASSES);
-        classes.addAll(CLASSES);
+        classes.addAll(RouterCommandLine.RCLASSES);
+        classes.addAll(RouterCommandLine.CLASSES);
         if (args.length > 0) {
-            exec(args, classes);
+            RouterCommandLine.exec(args, classes);
         }
-        usage(classes);
+        RouterCommandLine.usage(classes);
         System.exit(1);
     }
 
-    private static void usage(List<String> classes) {
+    public static void usage(List<String> classes) {
         System.err.println("I2P Router Console version " + RouterVersion.FULL_VERSION + '\n' +
                            "USAGE: java -jar /path/to/routerconsole.jar command [args]");
         printCommands(classes);

@@ -18,7 +18,7 @@ import net.i2p.CoreVersion;
  */
 public class CommandLine {
 
-    protected static final List<String> CLASSES = Arrays.asList(new String[] {
+    protected static final List<String> CLASSES = Collections.unmodifiableList(Arrays.asList(new String[] {
         "help",
         "freenet.support.CPUInformation.CPUID",
         "net.i2p.CoreVersion",
@@ -51,7 +51,7 @@ public class CommandLine {
         "net.i2p.util.SystemVersion",
         "net.i2p.util.TranslateReader",
         "net.i2p.util.ZipFileComment"
-    });
+    }));
 
     protected CommandLine() {}
 

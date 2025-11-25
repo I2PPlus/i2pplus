@@ -13,7 +13,7 @@ import net.i2p.CoreVersion;
  *
  * @since 0.9.26
  */
-public class CommandLine extends net.i2p.util.CommandLine {
+public class SnarkCommandLine extends net.i2p.util.CommandLine {
 
     protected static final List<String> SCLASSES = Arrays.asList(new String[] {
         "org.klomp.snark.MetaInfo",
@@ -25,7 +25,7 @@ public class CommandLine extends net.i2p.util.CommandLine {
 //        "org.klomp.snark.Mp3Test",
     });
 
-    protected CommandLine() {}
+    protected SnarkCommandLine() {}
 
     public static void main(String args[]) {
         List<String> classes = new ArrayList<String>(SCLASSES.size() + CLASSES.size());
