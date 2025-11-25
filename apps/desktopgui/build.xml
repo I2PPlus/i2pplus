@@ -84,7 +84,7 @@
     <copy tofile="${build}/desktopgui/resources/images/logo.png" file="images/i2p.png"/>
     <copy todir="${build}/desktopgui/resources/images" file="images/itoopie_black_24.png"/>
     <copy todir="${build}/desktopgui/resources/images" file="images/itoopie_white_24.png"/>
-    <jar basedir="${build}" excludes="messages-src/**" destfile="${dist}/${jar}">
+    <jar basedir="${build}" excludes="messages-src/**,classes/**" destfile="${dist}/${jar}">
       <manifest>
         <attribute name="Main-Class" value="net.i2p.desktopgui.Main"/>
         <attribute name="${manifest.classpath.name}" value="i2p.jar router.jar"/>
