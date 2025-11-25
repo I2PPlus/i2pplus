@@ -466,9 +466,10 @@ public class FetchData {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         exportXml(outputStream);
         try {
+            // Use UTF-8 charset name to avoid encoding issues
             return outputStream.toString(StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
-            // This should never happen, but fallback to default encoding
+            // UTF-8 should always be supported, but fallback to default if needed
             return outputStream.toString();
         }
     }

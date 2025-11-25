@@ -499,19 +499,19 @@ public class Node
 		PrintWriter pr = new PrintWriter(new OutputStreamWriter(byteOut, StandardCharsets.UTF_8), false);
 		output(pr, 0, hasChildNode);
 		pr.flush();
-		try {
-			if (enc != null && 0 < enc.length())
+		if (enc != null && 0 < enc.length()) {
+			try {
 				return byteOut.toString(enc);
-		}
-		catch (UnsupportedEncodingException e) {
-			// Fall through to UTF-8
+			}
+			catch (UnsupportedEncodingException e) {
+				// Fall through to UTF-8
+			}
 		}
 		try {
-			// UTF-8 should always be supported
+			// Use UTF-8 charset name to avoid encoding issues
 			return byteOut.toString(StandardCharsets.UTF_8.name());
-		}
-		catch (UnsupportedEncodingException e) {
-			// This should never happen, but fallback to default encoding
+		} catch (UnsupportedEncodingException e) {
+			// UTF-8 should always be supported, but fallback to default if needed
 			return byteOut.toString();
 		}
 	}

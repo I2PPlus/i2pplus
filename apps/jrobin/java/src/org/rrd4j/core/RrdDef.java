@@ -695,9 +695,10 @@ public class RrdDef {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         exportXmlTemplate(out, compatible);
         try {
+            // Use UTF-8 charset name to avoid encoding issues
             return out.toString(StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
-            // This should never happen, but fallback to default encoding
+            // UTF-8 should always be supported, but fallback to default if needed
             return out.toString();
         }
     }
@@ -714,9 +715,10 @@ public class RrdDef {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         exportXmlTemplate(out);
         try {
+            // Use UTF-8 charset name to avoid encoding issues
             return out.toString(StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
-            // This should never happen, but fallback to default encoding
+            // UTF-8 should always be supported, but fallback to default if needed
             return out.toString();
         }
     }

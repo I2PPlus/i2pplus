@@ -173,10 +173,10 @@ public class HTTPPacket
 		}
 
 		try {
+			// Use UTF-8 charset name to avoid encoding issues
 			return lineBuf.toString(StandardCharsets.UTF_8.name());
-		}
-		catch (UnsupportedEncodingException e) {
-			// This should never happen, but fallback to default encoding
+		} catch (UnsupportedEncodingException e) {
+			// UTF-8 should always be supported, but fallback to default if needed
 			return lineBuf.toString();
 		}
 	}
