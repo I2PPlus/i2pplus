@@ -135,7 +135,7 @@ class NetDbRenderer {
      *  @since 0.7.14
      */
     private static class LeaseSetRoutingKeyComparator implements Comparator<LeaseSet>, Serializable {
-         private final Hash _us;
+         private final transient Hash _us;
          public LeaseSetRoutingKeyComparator(Hash us) {_us = us;}
          public int compare(LeaseSet l, LeaseSet r) {
              return HashDistance.getDistance(_us, l.getRoutingKey()).compareTo(HashDistance.getDistance(_us, r.getRoutingKey()));

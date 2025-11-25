@@ -1,5 +1,6 @@
 package net.i2p.i2pcontrol;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,7 +15,8 @@ public class I2PControlVersion {
     public final static Set<Integer> SUPPORTED_API_VERSIONS;
 
     static {
-        SUPPORTED_API_VERSIONS = new HashSet<Integer>();
-        SUPPORTED_API_VERSIONS.add(1);
+        Set<Integer> mutableSet = new HashSet<Integer>();
+        mutableSet.add(1);
+        SUPPORTED_API_VERSIONS = Collections.unmodifiableSet(mutableSet);
     }
 }

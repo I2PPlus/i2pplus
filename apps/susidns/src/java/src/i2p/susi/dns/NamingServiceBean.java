@@ -45,7 +45,7 @@ public class NamingServiceBean extends AddressbookBean {
     private static final String DEFAULT_NS = "BlockfileNamingService";
     private String detail;
     private String notes;
-    private static boolean fail = false;
+    private boolean fail = false;
 
     private boolean isDirect() {return getBook().equals("published");}
 

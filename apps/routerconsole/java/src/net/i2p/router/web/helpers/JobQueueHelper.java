@@ -346,7 +346,7 @@ public class JobQueueHelper extends HelperBase {
 
     /** @since 0.9.5 */
     private static class JobCountComparator implements Comparator<String>, Serializable {
-         private final ObjectCounterUnsafe<String> _counter;
+         private final transient ObjectCounterUnsafe<String> _counter;
          private final Collator coll = Collator.getInstance();
 
          public JobCountComparator(ObjectCounterUnsafe<String> counter) {

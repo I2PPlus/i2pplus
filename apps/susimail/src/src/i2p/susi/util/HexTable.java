@@ -29,6 +29,7 @@ package i2p.susi.util;
 public class HexTable {
     /**
      *  Three character strings, upper case, e.g. "=0A"
+     *  WARNING: This array is public for backward compatibility but should be treated as immutable
      */
     public static final String[] table = new String[256];
     
@@ -38,6 +39,38 @@ public class HexTable {
             if (str.length() == 1) {str = "0" + str;}
             table[i] = "=" + str;
         }
+    }
+
+    /**
+     * Get hex string for the given byte value
+     * @param b byte value (0-255)
+     * @return hex string, e.g. "=0A"
+     */
+    public static String getHexString(int b) {
+        if (b < 0 || b > 255) {
+            throw new IllegalArgumentException("Byte value must be between 0 and 255");
+        }
+        return table[b];
+    }
+
+    /**
+     * Direct access to table entry for backward compatibility
+     * @param index the index (0-255)
+     * @return hex string at that index
+     */
+    public static String getTableEntry(int index) {
+        if (index < 0 || index > 255) {
+            throw new IllegalArgumentException("Index must be between 0 and 255");
+        }
+        return table[index];
+    }
+
+    /**
+     * Get a copy of the hex table for safe access
+     * @return a copy of the hex table array
+     */
+    public static String[] getTable() {
+        return table.clone();
     }
 
     private static String intToHex(int b) {

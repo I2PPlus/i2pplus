@@ -81,7 +81,7 @@ public class SybilRenderer {
     }
 
     private static class PointsComparator implements Comparator<Hash>, Serializable {
-         private final Map<Hash, Points> _points;
+         private final transient Map<Hash, Points> _points;
 
          public PointsComparator(Map<Hash, Points> points) {
              _points = points;
