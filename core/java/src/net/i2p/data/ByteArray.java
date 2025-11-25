@@ -73,12 +73,10 @@ public class ByteArray implements Serializable, Comparable<ByteArray> {
             return compare(getData(), _offset, _valid, ba.getData(), ba.getOffset(), ba.getValid());
         }
 
-        try {
-            byte val[] = (byte[]) o;
-            return compare(getData(), _offset, _valid, val, 0, val.length);
-        } catch (Throwable t) {
-            return false;
-        }
+        // Removed byte array compatibility check as it violates equals() contract
+        // ByteArray.equals() should only compare with ByteArray objects
+        
+        return false;
     }
 
     private static final boolean compare(byte[] lhs, int loff, int llen, byte[] rhs, int roff, int rlen) {

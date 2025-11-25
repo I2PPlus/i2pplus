@@ -26,33 +26,69 @@ public interface UpdateManager {
 
     /**
      *  Call once for each type/method pair.
+     *
+     *  @param updater the updater implementation
+     *  @param type the update type
+     *  @param method the update method
+     *  @param priority the priority
      */
     public void register(Updater updater, UpdateType type, UpdateMethod method, int priority);
 
+    /**
+     *  Register a checker for updates.
+     *
+     *  @param checker the checker implementation
+     *  @param type the update type
+     *  @param method the update method
+     *  @param priority the priority
+     */
     public void register(Checker checker, UpdateType type, UpdateMethod method, int priority);
 
+    /**
+     *  Unregister an updater.
+     *
+     *  @param updater the updater implementation
+     *  @param type the update type
+     *  @param method the update method
+     */
     public void unregister(Updater updater, UpdateType type, UpdateMethod method);
 
+    /**
+     *  Unregister a checker.
+     *
+     *  @param checker the checker implementation
+     *  @param type the update type
+     *  @param method the update method
+     */
     public void unregister(Checker checker, UpdateType type, UpdateMethod method);
 
     /**
      *  Register a post-processor for this UpdateType and SU3File file type.
      *
+     *  @param upp update post processor
      *  @param type only ROUTER_SIGNED_SU3 and ROUTER_DEV_SU3 are currently supported
      *  @param fileType a SU3File TYPE_xxx constant, 1-255, TYPE_ZIP not supported.
      *  @since 0.9.51
      */
     public void register(UpdatePostProcessor upp, UpdateType type, int fileType);
 
+    /**
+     *  Start the update manager.
+     */
     public void start();
 
+    /**
+     *  Shutdown the update manager.
+     */
     public void shutdown();
 
     /**
      *  Called by the Checker, either after check() was called, or it found out on its own.
      *  Use this if there is only one UpdateMethod; otherwise use the Map method below.
      *
+     *  @param task update task
      *  @param newsSource who told us
+     *  @param type update type
      *  @param id plugin name for plugins, ignored otherwise
      *  @param method How to get the new version
      *  @param updateSources Where to get the new version
@@ -69,7 +105,9 @@ public interface UpdateManager {
      *  Called by the Checker, either after check() was called, or it found out on its own.
      *  Checkers must use this method if there are multiple UpdateMethods discoverd simultaneously.
      *
+     *  @param task update task
      *  @param newsSource who told us
+     *  @param type update type
      *  @param id plugin name for plugins, ignored otherwise
      *  @param sourceMap Mapping of methods to sources
      *  @param newVersion The new version available
@@ -87,7 +125,9 @@ public interface UpdateManager {
      *  The manager should notify the user.
      *  Called by the Checker, either after check() was called, or it found out on its own.
      *
+     *  @param task update task
      *  @param newsSource who told us
+     *  @param type update type
      *  @param id plugin name for plugins, ignored otherwise
      *  @param newVersion The new version available
      *  @param message A translated message to be displayed to the user, non-null
@@ -99,22 +139,45 @@ public interface UpdateManager {
 
     /**
      *  Called by the Checker after check() was called and all notifyVersionAvailable() callbacks are finished
+     *
+     *  @param task update task
      *  @param newer notifyVersionAvailable was called
      *  @param success check succeeded (newer or not)
      */
     public void notifyCheckComplete(UpdateTask task, boolean newer, boolean success);
 
+    /**
+     *  Notify of progress update.
+     *
+     *  @param task update task
+     *  @param status status message
+     */
     public void notifyProgress(UpdateTask task, String status);
+
+    /**
+     *  Notify of progress update with size information.
+     *
+     *  @param task update task
+     *  @param status status message
+     *  @param downloaded bytes downloaded
+     *  @param totalSize total size
+     */
     public void notifyProgress(UpdateTask task, String status, long downloaded, long totalSize);
 
     /**
      *  Not necessarily the end if there are more URIs to try.
+     *
+     *  @param task update task
+     *  @param reason failure reason
      *  @param t may be null
      */
     public void notifyAttemptFailed(UpdateTask task, String reason, Throwable t);
 
     /**
      *  The task has finished and failed.
+     *
+     *  @param task update task
+     *  @param reason failure reason
      *  @param t may be null
      */
     public void notifyTaskFailed(UpdateTask task, String reason, Throwable t);
@@ -125,6 +188,7 @@ public interface UpdateManager {
      *  Caller should delete the file upon return, unless it will share it with others,
      *  e.g. on a torrent.
      *
+     *  @param task update task
      *  @param actualVersion may be higher (or lower?) than the version requested
      *  @param file a valid format for the task's UpdateType
      *  @return true if valid, false if corrupt
@@ -242,6 +306,7 @@ public interface UpdateManager {
     /**
      *  Tell the UpdateManager that a version is already installed.
      *
+     *  @param type update type
      *  @param id subtype for plugins, or ""
      *  @param version null to remove from installed
      *  @since 0.9.45
@@ -250,6 +315,9 @@ public interface UpdateManager {
 
     /**
      *  For debugging
+     *
+     *  @param out writer to output to
+     *  @throws IOException if writing fails
      */
     public void renderStatusHTML(Writer out) throws IOException;
 }

@@ -35,7 +35,7 @@ public class SimpleTimer {
     private final List<TimedEvent> _readyEvents;
     private SimpleStore runn;
     private static final int MIN_THREADS = 2;
-    private static final int MAX_THREADS = 4;
+    private static final int MAX_THREADS = 6;
 
     /**
      *  To be instantiated by the context.
@@ -249,6 +249,9 @@ public class SimpleTimer {
                         }
                     }
                 } catch (ThreadDeath td) {
+                    // ThreadDeath is deprecated but we still need to handle it
+                    // for thread termination. This catch block ensures the thread
+                    // dies gracefully when ThreadDeath is thrown.
                     return; // die
                 } catch (InterruptedException ie) {
                     // ignore

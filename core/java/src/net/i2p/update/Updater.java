@@ -15,7 +15,11 @@ public interface Updater {
      *  Start a download and return a handle to the download task.
      *  Should not block.
      *
+     *  @param type update type
+     *  @param method update method
+     *  @param updateSources Where to get the new version from
      *  @param id plugin name or ignored
+     *  @param newVersion new version to download
      *  @param maxTime how long you have
      *  @return active task or null if unable to download
      */

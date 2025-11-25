@@ -4,10 +4,7 @@
  */
 package net.i2p.crypto;
 
-//import java.io.PrintWriter;
 import java.security.InvalidKeyException;
-
-//import net.i2p.util.Clock;
 
 //...........................................................................
 /**
@@ -29,32 +26,6 @@ import java.security.InvalidKeyException;
  */
 public final class CryptixRijndael_Algorithm // implicit no-argument constructor
 {
-    // Debugging methods and variables
-    //...........................................................................
-
-/****
-    private static final String _NAME = "Rijndael_Algorithm";
-    private static final boolean _IN = true, _OUT = false;
-
-    private static final boolean _RDEBUG = false;
-    private static final int _debuglevel = 0; // RDEBUG ? Rijndael_Properties.getLevel(NAME): 0;
-    //    static final PrintWriter err = RDEBUG ? Rijndael_Properties.getOutput() : null;
-    private static final PrintWriter _err = new PrintWriter(new java.io.OutputStreamWriter(System.err));
-
-    private static final boolean _TRACE = false; // Rijndael_Properties.isTraceable(NAME);
-
-    private static void debug(String s) {
-        _err.println(">>> " + _NAME + ": " + s);
-    }
-
-    private static void trace(boolean in, String s) {
-        if (_TRACE) _err.println((in ? "==> " : "<== ") + _NAME + "." + s);
-    }
-
-    private static void trace(String s) {
-        if (_TRACE) _err.println("<=> " + _NAME + "." + s);
-    }
-****/
 
     // Constants and variables
     //...........................................................................
@@ -91,13 +62,6 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
     //...........................................................................
 
     static {
-/****
-        if (_RDEBUG && _debuglevel > 6) {
-            System.out.println("Algorithm Name: Rijndael ver 0.1");
-            System.out.println("Electronic Codebook (ECB) Mode");
-            System.out.println();
-        }
-****/
         int ROOT = 0x11B;
         int i, j = 0;
 
@@ -226,136 +190,6 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
         for (t = 1; t < 30;) {
             _rcon[t++] = (byte) (r = mul(2, r));
         }
-
-/****
-        time = Clock.getInstance().now() - time;
-
-        if (_RDEBUG && _debuglevel > 8) {
-            System.out.println("==========");
-            System.out.println();
-            System.out.println("Static Data");
-            System.out.println();
-            System.out.println("S[]:");
-            for (i = 0; i < 16; i++) {
-                for (j = 0; j < 16; j++)
-                    System.out.print("0x" + byteToString(_S[i * 16 + j]) + ", ");
-                System.out.println();
-            }
-            System.out.println();
-            System.out.println("Si[]:");
-            for (i = 0; i < 16; i++) {
-                for (j = 0; j < 16; j++)
-                    System.out.print("0x" + byteToString(_Si[i * 16 + j]) + ", ");
-                System.out.println();
-            }
-
-            System.out.println();
-            System.out.println("iG[]:");
-            for (i = 0; i < 4; i++) {
-                for (j = 0; j < 4; j++)
-                    System.out.print("0x" + byteToString(iG[i][j]) + ", ");
-                System.out.println();
-            }
-
-            System.out.println();
-            System.out.println("T1[]:");
-            for (i = 0; i < 64; i++) {
-                for (j = 0; j < 4; j++)
-                    System.out.print("0x" + intToString(_T1[i * 4 + j]) + ", ");
-                System.out.println();
-            }
-            System.out.println();
-            System.out.println("T2[]:");
-            for (i = 0; i < 64; i++) {
-                for (j = 0; j < 4; j++)
-                    System.out.print("0x" + intToString(_T2[i * 4 + j]) + ", ");
-                System.out.println();
-            }
-            System.out.println();
-            System.out.println("T3[]:");
-            for (i = 0; i < 64; i++) {
-                for (j = 0; j < 4; j++)
-                    System.out.print("0x" + intToString(_T3[i * 4 + j]) + ", ");
-                System.out.println();
-            }
-            System.out.println();
-            System.out.println("T4[]:");
-            for (i = 0; i < 64; i++) {
-                for (j = 0; j < 4; j++)
-                    System.out.print("0x" + intToString(_T4[i * 4 + j]) + ", ");
-                System.out.println();
-            }
-            System.out.println();
-            System.out.println("T5[]:");
-            for (i = 0; i < 64; i++) {
-                for (j = 0; j < 4; j++)
-                    System.out.print("0x" + intToString(_T5[i * 4 + j]) + ", ");
-                System.out.println();
-            }
-            System.out.println();
-            System.out.println("T6[]:");
-            for (i = 0; i < 64; i++) {
-                for (j = 0; j < 4; j++)
-                    System.out.print("0x" + intToString(_T6[i * 4 + j]) + ", ");
-                System.out.println();
-            }
-            System.out.println();
-            System.out.println("T7[]:");
-            for (i = 0; i < 64; i++) {
-                for (j = 0; j < 4; j++)
-                    System.out.print("0x" + intToString(_T7[i * 4 + j]) + ", ");
-                System.out.println();
-            }
-            System.out.println();
-            System.out.println("T8[]:");
-            for (i = 0; i < 64; i++) {
-                for (j = 0; j < 4; j++)
-                    System.out.print("0x" + intToString(_T8[i * 4 + j]) + ", ");
-                System.out.println();
-            }
-
-            System.out.println();
-            System.out.println("U1[]:");
-            for (i = 0; i < 64; i++) {
-                for (j = 0; j < 4; j++)
-                    System.out.print("0x" + intToString(_U1[i * 4 + j]) + ", ");
-                System.out.println();
-            }
-            System.out.println();
-            System.out.println("U2[]:");
-            for (i = 0; i < 64; i++) {
-                for (j = 0; j < 4; j++)
-                    System.out.print("0x" + intToString(_U2[i * 4 + j]) + ", ");
-                System.out.println();
-            }
-            System.out.println();
-            System.out.println("U3[]:");
-            for (i = 0; i < 64; i++) {
-                for (j = 0; j < 4; j++)
-                    System.out.print("0x" + intToString(_U3[i * 4 + j]) + ", ");
-                System.out.println();
-            }
-            System.out.println();
-            System.out.println("U4[]:");
-            for (i = 0; i < 64; i++) {
-                for (j = 0; j < 4; j++)
-                    System.out.print("0x" + intToString(_U4[i * 4 + j]) + ", ");
-                System.out.println();
-            }
-
-            System.out.println();
-            System.out.println("rcon[]:");
-            for (i = 0; i < 5; i++) {
-                for (j = 0; j < 6; j++)
-                    System.out.print("0x" + byteToString(_rcon[i * 6 + j]) + ", ");
-                System.out.println();
-            }
-
-            System.out.println();
-            System.out.println("Total initialization time: " + time + " ms.");
-            System.out.println();
-        }
-****/
     }
 
     // multiply two elements of GF(2^m)
@@ -401,7 +235,6 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
      *                    The actual parameter type is opaque, changed in 0.9.31, and is subject to change again.
      */
     public static final void blockEncrypt(byte[] in, byte[] result, int inOffset, int outOffset, Object sessionKey) {
-        //if (_RDEBUG) trace(_IN, "blockEncrypt(" + in + ", " + inOffset + ", " + sessionKey + ")");
         int[][] Ke = ((CryptixAESKeyCache.KeyCacheEntry) sessionKey).Ke; // extract encryption round keys
         int ROUNDS = Ke.length - 1;
         int[] Ker = Ke[0];
@@ -427,11 +260,6 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
             t1 = a1;
             t2 = a2;
             t3 = a3;
-/****
-            if (_RDEBUG && _debuglevel > 6)
-                System.out.println("CT" + r + "=" + intToString(t0) + intToString(t1) + intToString(t2)
-                                   + intToString(t3));
-****/
         }
 
         // last round is special
@@ -456,13 +284,6 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
         result[outOffset++] = (byte) (_S[(t0 >>> 16) & 0xFF] ^ (tt >>> 16));
         result[outOffset++] = (byte) (_S[(t1 >>> 8) & 0xFF] ^ (tt >>> 8));
         result[outOffset++] = (byte) (_S[t2 & 0xFF] ^ tt);
-/****
-        if (_RDEBUG && _debuglevel > 6) {
-            System.out.println("CT=" + toString(result));
-            System.out.println();
-        }
-        if (_RDEBUG) trace(_OUT, "blockEncrypt()");
-****/
     }
 
     /**
@@ -482,7 +303,6 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
                                                + " result.len=" + result.length + " result.offset=" + outOffset);
         if (in.length - inOffset <= 15)
             throw new IllegalArgumentException("data too small: " + in.length + " inOffset: " + inOffset);
-        //if (_RDEBUG) trace(_IN, "blockDecrypt(" + in + ", " + inOffset + ", " + sessionKey + ")");
         int[][] Kd = ((CryptixAESKeyCache.KeyCacheEntry) sessionKey).Kd; // extract decryption round keys
         int ROUNDS = Kd.length - 1;
         int[] Kdr = Kd[0];
@@ -508,11 +328,6 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
             t1 = a1;
             t2 = a2;
             t3 = a3;
-/****
-            if (_RDEBUG && _debuglevel > 6)
-                System.out.println("PT" + r + "=" + intToString(t0) + intToString(t1) + intToString(t2)
-                                   + intToString(t3));
-****/
         }
 
         // last round is special
@@ -537,21 +352,7 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
         result[outOffset++] = (byte) (_Si[(t2 >>> 16) & 0xFF] ^ (tt >>> 16));
         result[outOffset++] = (byte) (_Si[(t1 >>> 8) & 0xFF] ^ (tt >>> 8));
         result[outOffset++] = (byte) (_Si[t0 & 0xFF] ^ tt);
-/****
-        if (_RDEBUG && _debuglevel > 6) {
-            System.out.println("PT=" + toString(result));
-            System.out.println();
-        }
-        if (_RDEBUG) trace(_OUT, "blockDecrypt()");
-****/
     }
-
-    /** A basic symmetric encryption/decryption test. */
-/****
-    public static boolean self_test() {
-        return self_test(_BLOCK_SIZE);
-    }
-****/
 
     // Rijndael own methods
     //...........................................................................
@@ -587,7 +388,6 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
      *         If keyData is null, this is newly allocated.
      */
     public static final Object makeKey(byte[] k, int blockSize, CryptixAESKeyCache.KeyCacheEntry keyData) throws InvalidKeyException {
-        //if (_RDEBUG) trace(_IN, "makeKey(" + k + ", " + blockSize + ")");
         if (k == null) throw new InvalidKeyException("Empty key");
         if (!(k.length == 16 || k.length == 24 || k.length == 32))
             throw new InvalidKeyException("Incorrect key length");
@@ -682,7 +482,6 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
             blockEncrypt(in, result, inOffset, outOffset, sessionKey);
             return;
         }
-        //if (_RDEBUG) trace(_IN, "blockEncrypt(" + in + ", " + inOffset + ", " + sessionKey + ", " + blockSize + ")");
         int[][] Ke = ((CryptixAESKeyCache.KeyCacheEntry) sessionKey).Ke; // extract encryption round keys
 
         int BC = blockSize / 4;
@@ -709,7 +508,6 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
                        ^ Ke[r][i];
             }
             System.arraycopy(a, 0, t, 0, BC);
-            //if (_RDEBUG && _debuglevel > 6) System.out.println("CT" + r + "=" + toString(t));
         }
         for (i = 0; i < BC; i++) { // last round is special
             tt = Ke[ROUNDS][i];
@@ -718,13 +516,6 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
             result[j++] = (byte) (_S[(t[(i + s2) % BC] >>> 8) & 0xFF] ^ (tt >>> 8));
             result[j++] = (byte) (_S[t[(i + s3) % BC] & 0xFF] ^ tt);
         }
-/****
-        if (_RDEBUG && _debuglevel > 6) {
-            System.out.println("CT=" + toString(result));
-            System.out.println();
-        }
-        if (_RDEBUG) trace(_OUT, "blockEncrypt()");
-****/
     }
 
     /**
@@ -744,7 +535,6 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
             return;
         }
 
-        //if (_RDEBUG) trace(_IN, "blockDecrypt(" + in + ", " + inOffset + ", " + sessionKey + ", " + blockSize + ")");
         int[][] Kd = ((CryptixAESKeyCache.KeyCacheEntry) sessionKey).Kd; // extract decryption round keys
 
         int BC = blockSize / 4;
@@ -771,7 +561,6 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
                        ^ Kd[r][i];
             }
             System.arraycopy(a, 0, t, 0, BC);
-            //if (_RDEBUG && _debuglevel > 6) System.out.println("PT" + r + "=" + toString(t));
         }
         for (i = 0; i < BC; i++) { // last round is special
             tt = Kd[ROUNDS][i];
@@ -780,68 +569,7 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
             result[j++] = (byte) (_Si[(t[(i + s2) % BC] >>> 8) & 0xFF] ^ (tt >>> 8));
             result[j++] = (byte) (_Si[t[(i + s3) % BC] & 0xFF] ^ tt);
         }
-/****
-        if (_RDEBUG && _debuglevel > 6) {
-            System.out.println("PT=" + toString(result));
-            System.out.println();
-        }
-        if (_RDEBUG) trace(_OUT, "blockDecrypt()");
-****/
     }
-
-    /** A basic symmetric encryption/decryption test for a given key size. */
-/****
-    private static boolean self_test(int keysize) {
-        if (_RDEBUG) trace(_IN, "self_test(" + keysize + ")");
-        boolean ok = false;
-        try {
-            byte[] kb = new byte[keysize];
-            byte[] pt = new byte[_BLOCK_SIZE];
-            int i;
-
-            for (i = 0; i < keysize; i++)
-                kb[i] = (byte) i;
-            for (i = 0; i < _BLOCK_SIZE; i++)
-                pt[i] = (byte) i;
-
-            if (_RDEBUG && _debuglevel > 6) {
-                System.out.println("==========");
-                System.out.println();
-                System.out.println("KEYSIZE=" + (8 * keysize));
-                System.out.println("KEY=" + toString(kb));
-                System.out.println();
-            }
-            Object key = makeKey(kb, _BLOCK_SIZE);
-
-            if (_RDEBUG && _debuglevel > 6) {
-                System.out.println("Intermediate Ciphertext Values (Encryption)");
-                System.out.println();
-                System.out.println("PT=" + toString(pt));
-            }
-            byte[] ct = new byte[_BLOCK_SIZE];
-            blockEncrypt(pt, ct, 0, 0, key, _BLOCK_SIZE);
-
-            if (_RDEBUG && _debuglevel > 6) {
-                System.out.println("Intermediate Plaintext Values (Decryption)");
-                System.out.println();
-                System.out.println("CT=" + toString(ct));
-            }
-            byte[] cpt = new byte[_BLOCK_SIZE];
-            blockDecrypt(ct, cpt, 0, 0, key, _BLOCK_SIZE);
-
-            ok = areEqual(pt, cpt);
-            if (!ok) throw new RuntimeException("Symmetric operation failed");
-        } catch (Exception x) {
-            if (_RDEBUG && _debuglevel > 0) {
-                debug("Exception encountered during self-test: " + x.getMessage());
-                x.printStackTrace();
-            }
-        }
-        if (_RDEBUG && _debuglevel > 0) debug("Self-test OK? " + ok);
-        if (_RDEBUG) trace(_OUT, "self_test()");
-        return ok;
-    }
-****/
 
     /**
      * Return The number of rounds for a given Rijndael's key and block sizes.
@@ -862,35 +590,6 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
             return 14;
         }
     }
-
-    // utility static methods (from cryptix.util.core ArrayUtil and Hex classes)
-    //...........................................................................
-
-    /**
-     * Compares two byte arrays for equality.
-     *
-     * @return true if the arrays have identical contents
-     */
-  /****
-    private static final boolean areEqual(byte[] a, byte[] b) {
-        int aLength = a.length;
-        if (aLength != b.length) return false;
-        for (int i = 0; i < aLength; i++)
-            if (a[i] != b[i]) return false;
-        return true;
-    }
-  ****/
-
-    /**
-     * Returns a string of 2 hexadecimal digits (most significant
-     * digit first) corresponding to the lowest 8 bits of <i>n</i>.
-     */
-  /****
-    private static final String byteToString(int n) {
-        char[] buf = { _HEX_DIGITS[(n >>> 4) & 0x0F], _HEX_DIGITS[n & 0x0F]};
-        return new String(buf);
-    }
-  ****/
 
     /**
      * Returns a string of 8 hexadecimal digits (most significant
@@ -941,15 +640,4 @@ public final class CryptixRijndael_Algorithm // implicit no-argument constructor
         }
         return new String(buf);
     }
-
-    // main(): use to generate the Intermediate Values KAT
-    //...........................................................................
-
-/****
-    public static void main(String[] args) {
-        self_test(16);
-        self_test(24);
-        self_test(32);
-    }
-****/
 }

@@ -133,8 +133,8 @@ public class RequestLeaseSetMessage extends I2CPMessageImpl {
 
     private static class TunnelEndpoint implements Serializable {
         private static final long serialVersionUID = 1L;
-        private final Hash _router;
-        private final TunnelId _tunnelId;
+        private final transient Hash _router;
+        private final transient TunnelId _tunnelId;
 
         public TunnelEndpoint(Hash router, TunnelId id) {
             _router = router;

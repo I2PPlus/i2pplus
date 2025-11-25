@@ -74,7 +74,7 @@ public final class DnsName implements CharSequence, Serializable, Comparable<Dns
     /**
      * Whether or not the DNS name is validated on construction.
      */
-    public static boolean VALIDATE = true;
+    public static final boolean VALIDATE = true;
 
     /**
      * The DNS name in ASCII Compatible Encoding (ACE).

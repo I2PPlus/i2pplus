@@ -12,6 +12,7 @@ package net.i2p.util;
 import gnu.crypto.prng.AsyncFortunaStandalone;
 
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.Random;
 
 import net.i2p.I2PAppContext;
@@ -41,11 +42,22 @@ public class FortunaRandomSource extends RandomSource implements EntropyHarveste
             _fortuna.seed(seed);
         } else {
             // may block forever
-            //SecureRandom sr = new SecureRandom();
-            // SecureRandom already failed in initSeed(), so try Random
-            Random sr = new Random();
-            sr.nextBytes(seed);
-            _fortuna.seed(seed);
+            // SecureRandom already failed in initSeed(), so try with a specific seed
+            try {
+                // Use SecureRandom with a fixed seed as last resort
+                SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
+                sr.setSeed(System.currentTimeMillis() ^ Runtime.getRuntime().freeMemory());
+                sr.nextBytes(seed);
+                _fortuna.seed(seed);
+            } catch (Exception e) {
+                // Absolute last resort - use system time as seed
+                long timeSeed = System.currentTimeMillis() ^ Runtime.getRuntime().freeMemory();
+                for (int i = 0; i < seed.length; i++) {
+                    seed[i] = (byte)(timeSeed & 0xFF);
+                    timeSeed >>= 8;
+                }
+                _fortuna.seed(seed);
+            }
         }
         _fortuna.startup();
         // kickstart it

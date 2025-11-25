@@ -49,7 +49,14 @@ class DevRandom implements IRandomStandalone {
         } catch (IOException ioe) {
             throw new IllegalStateException("Read failed " + F, ioe);
         } finally {
-             if (in != null) try { in.close(); } catch (IOException ioe2) {}
+             if (in != null) {
+                 try { 
+                     in.close(); 
+                 } catch (IOException ioe2) {
+                     // Log warning but don't throw - we're already in an exception state
+                     System.err.println("Warning: Failed to close " + F + ": " + ioe2.getMessage());
+                 }
+             }
         }
     }
 

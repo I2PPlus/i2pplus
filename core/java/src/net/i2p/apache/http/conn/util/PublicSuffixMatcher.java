@@ -46,9 +46,17 @@ import net.i2p.apache.http.util.Args;
  */
 public final class PublicSuffixMatcher {
 
+    /** Domain suffix rules */
     private final Map<String, String> rules;
+    /** Domain suffix exceptions */
     private final Map<String, String> exceptions;
 
+    /**
+     * Create public suffix matcher.
+     *
+     * @param rules domain suffix rules
+     * @param exceptions domain suffix exceptions
+     */
     public PublicSuffixMatcher(final Collection<String> rules, final Collection<String> exceptions) {
         Args.notNull(rules,  "Domain suffix rules");
         this.rules = new ConcurrentHashMap<String, String>(rules.size());

@@ -14,22 +14,44 @@ public interface UpdateTask {
      */
     public void start();
 
+    /**
+     *  Shutdown the task.
+     */
     public void shutdown();
 
+    /**
+     *  Check if the task is currently running.
+     *
+     *  @return true if running
+     */
     public boolean isRunning();
 
+    /**
+     *  Get the update type.
+     *
+     *  @return update type
+     */
     public UpdateType getType();
 
+    /**
+     *  Get the update method.
+     *
+     *  @return update method
+     */
     public UpdateMethod getMethod();
 
    /**
-    *  The current URI being checked or downloaded from.
-    *  Can change if there are multiple URIs to try.
-    */
+     *  The current URI being checked or downloaded from.
+     *  Can change if there are multiple URIs to try.
+     *
+     *  @return current URI
+     */
     public URI getURI();
 
    /**
-    *  Valid for plugins
-    */
+     *  Valid for plugins
+     *
+     *  @return plugin ID
+     */
     public String getID();
 }

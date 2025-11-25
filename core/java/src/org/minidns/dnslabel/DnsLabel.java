@@ -43,7 +43,7 @@ public abstract class DnsLabel implements CharSequence, Comparable<DnsLabel> {
     /**
      * Whether or not the DNS label is validated on construction.
      */
-    public static boolean VALIDATE = true;
+    public static final boolean VALIDATE = true;
 
     public final String label;
 

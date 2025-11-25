@@ -26,9 +26,9 @@ import java.util.Random;
  *
  * The implementation is adapted from the Linux kernel tcp_westwood.c logic and follows
  * established research including:
- * - Random Early Detection Gateways for Congestion Avoidance (Floyd & Jacobson)
+ * - Random Early Detection Gateways for Congestion Avoidance (Floyd &amp; Jacobson)
  * - TCP Westwood: End-to-End Congestion Control for Wired/Wireless Networks (Casetti et al.)
- * - End-to-End Bandwidth Estimation for Congestion Control (Grieco & Mascolo)
+ * - End-to-End Bandwidth Estimation for Congestion Control (Grieco &amp; Mascolo)
  *
  * Note: minThB (minimum threshold) must be less than maxThB (maximum threshold) for correct RED operation.
  *

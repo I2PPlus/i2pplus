@@ -13,7 +13,10 @@ public interface Checker {
      *  Should not block.
      *  If any are found, call back to UpdateManager.notifyUpdateAvailable().
      *
+     *  @param type update type
+     *  @param method update method
      *  @param id plugin name or ignored
+     *  @param currentVersion current version
      *  @param maxTime how long you have
      *  @return active task or null if unable to check
      */

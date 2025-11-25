@@ -77,8 +77,8 @@ subprojects {
     }
 
     java {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility = 21
+        targetCompatibility = 21
         manifest {
             attributes(
                 'Specification-Title': '',
@@ -86,7 +86,7 @@ subprojects {
                 'Specification-Vendor': 'The I2P Project https://geti2p.net/',
                 'Implementation-Title': '',
                 'Implementation-Version': "$fullVersion",
-                'Implementation-Vendor': 'The I2P Project https://geti2p.net/',
+                'Implementation-Vendor': 'I2P+ https://i2pplus.github.io/',
                 'Built-By': "$builtBy",
                 'Build-Date': 'reproducible',
                 'Base-Revision': "$workspaceVersion",
@@ -94,6 +94,19 @@ subprojects {
                 'X-Compile-Source-JDK': "$sourceCompatibility",
                 'X-Compile-Target-JDK': "$targetCompatibility"
             )
+        }
+    }
+
+    // Enable Xlint warnings for detailed compilation reports (excluding problematic ones)
+    compileJava.options.compilerArgs += ["-Xlint:all", "-Xlint:-processing", "-Xlint:-path", "-Xlint:-serial"]
+    
+    // Configure logging for compilation warnings
+    tasks.withType(JavaCompile).configureEach {
+        doLast {
+            if (logging.level == LogLevel.INFO || logging.level == LogLevel.DEBUG) {
+                println "Compilation warnings for ${project.name}:"
+                println "Source: ${sourceCompatibility}, Target: ${targetCompatibility}"
+            }
         }
     }
 

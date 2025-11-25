@@ -8,11 +8,17 @@ package net.i2p.update;
 public enum UpdateType {
     /** Dummy: internal use only */
     TYPE_DUMMY,
+    /** News and announcements */
     NEWS,
+    /** Signed router updates */
     ROUTER_SIGNED,
+    /** Unsigned router updates */
     ROUTER_UNSIGNED,
+    /** Plugin updates */
     PLUGIN,
+    /** GeoIP database updates */
     GEOIP,
+    /** Blocklist updates */
     BLOCKLIST,
     /** unused */
     RESEED,
@@ -20,12 +26,12 @@ public enum UpdateType {
     HOMEPAGE,
     /** unused */
     ADDRESSBOOK,
-    /** @since 0.9.9 */
+    /** Signed router updates in SU3 format @since 0.9.9 */
     ROUTER_SIGNED_SU3,
-    /** @since 0.9.15 */
+    /** News updates in SU3 format @since 0.9.15 */
     NEWS_SU3,
-    /** @since 0.9.17 */
+    /** Development router updates in SU3 format @since 0.9.17 */
     ROUTER_DEV_SU3,
-    /** @since 0.9.53 */
+    /** API updates @since 0.9.53 */
     API
 }

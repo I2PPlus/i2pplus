@@ -64,7 +64,7 @@ public class EepPost extends EepGet {
             }
         }
         if (multipart) {
-            String sep = multipart ? getSeparator() : null;
+            String sep = getSeparator();
             boolean useTmp = sz > PROP_MAX_POST_PAYLOAD_RAM;
             File tmp = null;
             OutputStream out = null;
