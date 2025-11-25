@@ -81,20 +81,21 @@ public class LinearGradientPaintKey {
         if (obj == this) {
             return true;
         }
-        if (! (obj instanceof LinearGradientPaint)) {
+        if (! (obj instanceof LinearGradientPaintKey)) {
             return false;
         }
-        LinearGradientPaint that = (LinearGradientPaint) obj;
-        if (!this.paint.getStartPoint().equals(that.getStartPoint())) {
+        LinearGradientPaintKey that = (LinearGradientPaintKey) obj;
+        LinearGradientPaint thatPaint = that.getPaint();
+        if (!this.paint.getStartPoint().equals(thatPaint.getStartPoint())) {
             return false;
         }
-        if (!this.paint.getEndPoint().equals(that.getEndPoint())) {
+        if (!this.paint.getEndPoint().equals(thatPaint.getEndPoint())) {
             return false;
         }
-        if (!Arrays.equals(this.paint.getColors(), that.getColors())) {
+        if (!Arrays.equals(this.paint.getColors(), thatPaint.getColors())) {
             return false;
         }
-        if (!Arrays.equals(this.paint.getFractions(), that.getFractions())) {
+        if (!Arrays.equals(this.paint.getFractions(), thatPaint.getFractions())) {
             return false;
         }
         return true;

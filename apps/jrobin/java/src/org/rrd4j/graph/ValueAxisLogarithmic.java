@@ -69,7 +69,7 @@ class ValueAxisLogarithmic extends Axis {
         Paint fontColor = gdef.getColor(ElementsNames.font);
         int labelOffset = (int) (worker.getFontAscent(font) / 2);
 
-        if (im.maxval == im.minval) {
+        if (Math.abs(im.maxval - im.minval) < 1e-10) {
             return false;
         }
         double pixpex = im.ysize / (im.log.applyAsDouble(im.maxval) - im.log.applyAsDouble(im.minval));

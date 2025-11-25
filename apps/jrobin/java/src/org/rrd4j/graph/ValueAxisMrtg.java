@@ -45,7 +45,8 @@ class ValueAxisMrtg extends Axis {
             labfmt = "%5.2f";
         }
         else {
-            labfmt = Util.sprintf(gdef.locale, "%%4.%df", 1 - ((im.scaledstep / im.magfact > 10.0 || Math.ceil(im.scaledstep / im.magfact) == im.scaledstep / im.magfact) ? 1 : 0));
+            double scaledStepRatio = im.scaledstep / im.magfact;
+            labfmt = Util.sprintf(gdef.locale, "%%4.%df", 1 - ((scaledStepRatio > 10.0 || Math.abs(Math.ceil(scaledStepRatio) - scaledStepRatio) < 1e-10) ? 1 : 0));
         }
         if (im.symbol != ' ' || gdef.unit != null) {
             labfmt += " ";

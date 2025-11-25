@@ -25,13 +25,13 @@
 %>
 <jsp:useBean id="stathelper" class="net.i2p.router.web.helpers.StatHelper"/>
 <jsp:setProperty name="stathelper" property="contextId" value="<%=i2pcontextId%>"/>
-<jsp:setProperty name="stathelper" property="peer" value="<%=peerB64%>"/>
-<% stathelper.storeWriter(out);%>
-<h3><%=intl._t("Profile for peer")%>: <a href="/netdb?r=<%=peerB64%>" title="<%=intl._t("NetDb entry")%>"><%=peerB64%></a>&nbsp;&nbsp;
-<a class=configpeer href="/configpeer?peer=<%=peerB64%>" title="<%=intl._t("Configure peer")%>" style=float:right>
-<%=intl._t("Edit")%></a>&nbsp;&nbsp;
-<a class=viewprofile href="/dumpprofile?peer=<%=peerB64%>" target=_blank rel=noreferrer title="<%=intl._t("View profile in text format")%>" style=float:right>
-<%=intl._t("View Raw Profile")%></a>&nbsp;&nbsp;
+    <jsp:setProperty name="stathelper" property="peer" value="<%=peerB64%>"/>
+    <% stathelper.storeWriter(out);%>
+    <h3><%=intl._t("Profile for peer")%>: <a href="/netdb?r=<%=peerB64%>" title="<%=intl._t("NetDb entry")%>"><%=net.i2p.data.DataHelper.escapeHTML(peerB64)%></a>&nbsp;&nbsp;
+    <a class=configpeer href="/configpeer?peer=<%=peerB64%>" title="<%=intl._t("Configure peer")%>" style=float:right>
+    <%=intl._t("Edit")%></a>&nbsp;&nbsp;
+    <a class=viewprofile href="/dumpprofile?peer=<%=peerB64%>" target=_blank rel=noreferrer title="<%=intl._t("View profile in text format")%>" style=float:right>
+    <%=intl._t("View Raw Profile")%></a>&nbsp;&nbsp;
 <%      net.i2p.util.PortMapper pm = net.i2p.I2PAppContext.getGlobalContext().portMapper();
         if (pm.isRegistered("imagegen")) {
 %>
@@ -40,7 +40,7 @@
 </h3>
 <table id=viewprofile hidden>
 <tr><td><pre><jsp:getProperty name="stathelper" property="profile"/></pre>
-<%      if (peerB64 != null || peerB64.length() > 0) { %>
+<%      if (peerB64 != null && peerB64.length() > 0) { %>
 <span><a href="#view_profile"><%=intl._t("Return to Top")%></a></span>
 <%      } %>
 </td></tr>

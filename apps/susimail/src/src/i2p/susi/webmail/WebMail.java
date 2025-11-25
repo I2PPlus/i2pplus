@@ -844,7 +844,9 @@ public class WebMail extends HttpServlet {
                 Folder<String> f = _mc.getFolder();
                 String[] uidls = _mc.getUIDLs();
                 int added = f.addElements(Arrays.asList(uidls));
-                if (added > 0) {}_so.pageChanged = true;
+                if (added > 0) {
+                    _so.pageChanged = true;
+                }
                 _so.notifyAll();
             }
         }

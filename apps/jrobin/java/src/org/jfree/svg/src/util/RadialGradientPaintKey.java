@@ -79,20 +79,21 @@ public class RadialGradientPaintKey {
         if (obj == this) {
             return true;
         }
-        if (! (obj instanceof RadialGradientPaint)) {
+        if (! (obj instanceof RadialGradientPaintKey)) {
             return false;
         }
-        RadialGradientPaint that = (RadialGradientPaint) obj;
-        if (!this.paint.getCenterPoint().equals(that.getCenterPoint())) {
+        RadialGradientPaintKey that = (RadialGradientPaintKey) obj;
+        RadialGradientPaint thatPaint = that.getPaint();
+        if (!this.paint.getCenterPoint().equals(thatPaint.getCenterPoint())) {
             return false;
         }
-        if (!this.paint.getFocusPoint().equals(that.getCenterPoint())) {
+        if (!this.paint.getFocusPoint().equals(thatPaint.getCenterPoint())) {
             return false;
         }
-        if (!Arrays.equals(this.paint.getColors(), that.getColors())) {
+        if (!Arrays.equals(this.paint.getColors(), thatPaint.getColors())) {
             return false;
         }
-        if (!Arrays.equals(this.paint.getFractions(), that.getFractions())) {
+        if (!Arrays.equals(this.paint.getFractions(), thatPaint.getFractions())) {
             return false;
         }
         return true;

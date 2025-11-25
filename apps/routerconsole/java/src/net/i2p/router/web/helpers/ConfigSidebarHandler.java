@@ -83,7 +83,7 @@ public class ConfigSidebarHandler extends FormHandler {
     private int parseRefreshInterval(String refreshStr) throws NumberFormatException {
         int refresh = Integer.parseInt(refreshStr);
         if (refresh < 0) {return 0;}
-        return (refresh < CSSHelper.MIN_REFRESH) ? CSSHelper.MIN_REFRESH : refresh;
+        return refresh;
     }
 
     private String getJettyStringOrDefault(String key, String defaultVal) {
