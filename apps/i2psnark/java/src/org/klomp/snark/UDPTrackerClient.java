@@ -34,11 +34,11 @@ import net.i2p.util.SimpleTimer2;
  *<pre>
  *    client      tracker          type
  *    ----------+----------------+--------------------
- *    conn req  | -->            | repliable Datagram2
- *              | <-- conn resp  | raw
- *    announce  | -->            | repliable Datagram3
- *              | <-- ann resp   | raw
- *              | <-- error      | raw
+ *    conn req  | --&gt;            | repliable Datagram2
+ *              | &lt;-- conn resp  | raw
+ *    announce  | --&gt;            | repliable Datagram3
+ *              | &lt;-- ann resp   | raw
+ *              | &lt;-- error      | raw
  *    ----------+-----------------+-------------------
  *</pre>
  *

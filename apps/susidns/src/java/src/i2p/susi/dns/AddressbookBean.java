@@ -325,7 +325,7 @@ public class AddressbookBean extends BaseBean {
     * Because the following from addressbook.jsp fails parsing in the new EL:
     * javax.el.ELException: Failed to parse the expression
     * Can't figure out why, so just replace it with book.validBook:
-    * <pre><code>&lt;c:if test="${book.master || book.router || book.published || book.private}"&gt;</pre></code>
+     * <pre><code>&lt;c:if test="${book.master || book.router || book.published || book.private}"&gt;</code></pre>
     *
     * This always returns true anyway, because getBook() always returns a valid book.
     *

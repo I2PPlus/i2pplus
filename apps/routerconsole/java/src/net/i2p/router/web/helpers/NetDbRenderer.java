@@ -1366,7 +1366,7 @@ class NetDbRenderer {
 
     /**
      * Renders a list of RouterInfo objects to the given Writer.
-     * Uses parallel rendering for small sets (< 300), streams for large sets.
+     * Uses parallel rendering for small sets (&lt; 300), streams for large sets.
      */
     public void renderRoutersToWriter(Collection<RouterInfo> routers, Writer out, boolean isLocal, int page, int pageSize) throws IOException {
         if (routers == null || routers.isEmpty()) return;

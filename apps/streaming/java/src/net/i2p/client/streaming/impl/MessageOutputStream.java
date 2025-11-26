@@ -97,7 +97,7 @@ class MessageOutputStream extends OutputStream {
      * @param timer        Timer used for scheduling passive flush events
      * @param receiver     DataReceiver that handles actual data dispatch
      * @param bufSize      Maximum buffer size allowed (will be clamped to preset max values)
-     * @param initBufSize  Initial buffer size to use for buffering (<= bufSize)
+     * @param initBufSize  Initial buffer size to use for buffering (&lt;= bufSize)
      */
     public MessageOutputStream(I2PAppContext ctx, SimpleTimer2 timer,
                                DataReceiver receiver, int bufSize, int initBufSize) {
@@ -111,7 +111,7 @@ class MessageOutputStream extends OutputStream {
      * @param timer              Timer used for scheduling passive flush events
      * @param receiver           DataReceiver that handles actual data dispatch
      * @param bufSize            Maximum buffer size allowed (will be clamped for safety)
-     * @param initBufSize        Initial buffer size to use for buffering (<= bufSize)
+     * @param initBufSize        Initial buffer size to use for buffering (&lt;= bufSize)
      * @param passiveFlushDelay  Delay in ms before passive flush if data is buffered but not flushed
      */
     public MessageOutputStream(I2PAppContext ctx, SimpleTimer2 timer,
@@ -169,7 +169,7 @@ class MessageOutputStream extends OutputStream {
     /**
      * Requests resizing the buffer to the specified size.
      * Effective only when the internal buffer is empty, and
-     * must be > 0 and <= the original max buffer size.
+     * must be &gt; 0 and &lt;= the original max buffer size.
      * Does not immediately resize the underlying byte array.
      *
      * @param size New desired buffer size, must be positive and no greater than original buffer size.
