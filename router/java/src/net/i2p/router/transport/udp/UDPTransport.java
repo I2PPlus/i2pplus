@@ -247,10 +247,10 @@ public class UDPTransport extends TransportImpl {
     private static final int SSU_OUTBOUND_COST = 14;
     static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
     /** Minimum active peers to maintain IP detection, etc. */
-    private static final int MIN_PEERS = 50;
-    private static final int MIN_PEERS_IF_HAVE_V6 = 60;
+    private static final int MIN_PEERS = 80;
+    private static final int MIN_PEERS_IF_HAVE_V6 = 100;
     /** Minimum peers volunteering to be introducers if we need that */
-    private static final int MIN_INTRODUCER_POOL = 50;
+    private static final int MIN_INTRODUCER_POOL = 30;
     static final long INTRODUCER_EXPIRATION_MARGIN = 20*60*1000L;
     private static final long MIN_DOWNTIME_TO_REKEY = 30*24*60*60*1000L;
 
@@ -2303,12 +2303,21 @@ public class UDPTransport extends TransportImpl {
                 return null;
 
             // temp, let NTCP2 deal with him (prop. 165)
+            // Be less aggressive about rejecting floodfills when firewalled, as we need more peers
             if (toAddress.getCapabilities().indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0) {
                 PeerProfile prof = _context.profileOrganizer().getProfileNonblocking(to);
                 if (prof != null) {
                     int agreed = Math.round(prof.getTunnelHistory().getLifetimeAgreedTo());
                     int rejected = Math.round(prof.getTunnelHistory().getLifetimeRejected());
-                    if (prof.getLastHeardFrom() <= 0 || rejected > agreed*2) {return null;}
+                    boolean weAreFirewalled = _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
+                                              _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
+                                              _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
+                                              _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
+                                              _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
+                                              _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
+                    // Much more lenient rejection threshold when firewalled (5x instead of 2x)
+                    int threshold = weAreFirewalled ? 10 : 2; // 10/2 = 5x for firewalled
+                    if (prof.getLastHeardFrom() <= 0 || rejected > agreed*threshold) {return null;}
                 } else  {return null;}
             }
 
@@ -2357,14 +2366,24 @@ public class UDPTransport extends TransportImpl {
             if (!allowConnection())
                 return _cachedBid[TRANSIENT_FAIL_BID];
 
-            // Try to maintain at least 5 peers (30 for v6) so we can determine our IP address and
-            // we have a selection to run peer tests with.
-            // If we are firewalled, and we don't have enough peers that volunteered to
-            // also introduce us, also bid aggressively so we are preferred over NTCP.
-            // (Otherwise we only talk UDP to those that are firewalled, and we will
-            // never get any introducers)
+            boolean weAreFirewalled = _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
+                                      _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
+                                      _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
+                                      _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
+                                      _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
+                                      _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
+
+            /*
+             * Try to maintain at least 5 peers (30 for v6) so we can determine our IP address and
+             * we have a selection to run peer tests with.
+             *
+             * If we are firewalled, and we don't have enough peers that volunteered to also introduce us,
+             * also bid aggressively so we are preferred over NTCP - otherwise we only talk UDP to those that
+             * are firewalled, and we will never get any introducers
+             */
             if (alwaysPreferUDP()) {
-                if (haveCapacity(90))
+                int capacityThreshold = weAreFirewalled ? 75 : 90;
+                if (haveCapacity(capacityThreshold))
                     return _cachedBid[SLOW_PREFERRED_BID];
                 if (cost > DEFAULT_COST)
                     return _cachedBid[NEAR_CAPACITY_COST_BID];
@@ -2372,37 +2391,41 @@ public class UDPTransport extends TransportImpl {
             }
             int count = _peersByIdent.size();
             boolean ipv6 = TransportUtil.isIPv6(addr);
-            if ((!ipv6 && count < _min_peers) ||
-                       (ipv6 && _haveIPv6Address && count < _min_v6_peers) ||
-                       (introducersRequired(ipv6) &&
+            boolean needIntroducers = (introducersRequired(ipv6) &&
                         addr.getOption(UDPAddress.PROP_CAPACITY) != null &&
                         addr.getOption(UDPAddress.PROP_CAPACITY).indexOf(UDPAddress.CAPACITY_INTRODUCER) >= 0 &&
-                        _introManager.introducerCount(ipv6) < MIN_INTRODUCER_POOL)) {
-                 // Even if we haven't hit our minimums, give NTCP a chance some of the time.
-                 // This may make things work a little faster at startup
-                 // (especially when we have an IPv6 address and the increased minimums),
-                 // and if UDP is completely blocked we'll still have some connectivity.
-                 // TODO After some time, decide that UDP is blocked/broken and return TRANSIENT_FAIL_BID?
-
-                // Even more if hidden.
-                // We'll have very low connection counts, and we don't need peer testing
-                int ratio = _context.router().isHidden() ? 2 : 4;
-                if (_context.random().nextInt(ratio) == 0)
-                    return _cachedBid[SLOWEST_BID];
-                else
-                    return _cachedBid[SLOW_PREFERRED_BID];
-            } else if (preferUDP()) {
-                return _cachedBid[SLOW_BID];
-            } else if (haveCapacity()) {
-                if (cost > DEFAULT_COST)
-                    return _cachedBid[SLOWEST_COST_BID];
-                else
-                    return _cachedBid[SLOWEST_BID];
+                        _introManager.introducerCount(ipv6) < MIN_INTRODUCER_POOL);
+            if ((!ipv6 && count < _min_peers) ||
+                       (ipv6 && _haveIPv6Address && count < _min_v6_peers) ||
+                       needIntroducers) {
+                 /*
+                  * Even if we haven't hit our minimums, give NTCP a chance some of the time.
+                  * This may make things work a little faster at startup, especially when we
+                  * have an IPv6 address and the increased minimums, and if UDP is completely
+                  * blocked we'll still have some connectivity.
+                  *
+                  * TODO After some time, decide that UDP is blocked/broken and return TRANSIENT_FAIL_BID?
+                  * Even more if hidden.
+                  * We'll have very low connection counts, and we don't need peer testing
+                  */
+                int ratio;
+                if (needIntroducers) {
+                    // When we need introducers, prefer UDP but not too aggressively (75% chance)
+                    ratio = 4; // 1 in 4 = 25% chance of SLOWEST, 75% chance of SLOW_PREFERRED
+                } else if (_context.router().isHidden() || weAreFirewalled) {
+                    ratio = 2;
+                } else {
+                    ratio = 4;
+                }
+                if (_context.random().nextInt(ratio) == 0) {return _cachedBid[SLOWEST_BID];}
+                return _cachedBid[SLOW_PREFERRED_BID];
+            } else if (preferUDP()) {return _cachedBid[SLOW_BID];}
+            else if (haveCapacity()) {
+                if (cost > DEFAULT_COST) {return _cachedBid[SLOWEST_COST_BID];}
+                return _cachedBid[SLOWEST_BID];
             } else {
-                if (cost > DEFAULT_COST)
-                    return _cachedBid[NEAR_CAPACITY_COST_BID];
-                else
-                    return _cachedBid[NEAR_CAPACITY_BID];
+                if (cost > DEFAULT_COST) {return _cachedBid[NEAR_CAPACITY_COST_BID];}
+                return _cachedBid[NEAR_CAPACITY_BID];
             }
         }
     }
@@ -2485,26 +2508,32 @@ public class UDPTransport extends TransportImpl {
             return;
         }
 
+        boolean weAreFirewalled = _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
+                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
+                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
+                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
+                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
+                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
+
         msg.timestamp("Sending on UDP transport");
         Hash to = tori.getIdentity().calculateHash();
         PeerState peer = getPeerState(to);
-        if (_log.shouldDebug())
-            _log.debug("Sending to " + (to != null ? to.toString() : ""));
+        if (_log.shouldDebug()) {_log.debug("Sending to " + (to != null ? to.toString() : ""));}
         if (peer != null) {
             long lastSend = peer.getLastSendFullyTime();
             long lastRecv = peer.getLastReceiveTime();
             long now = _context.clock().now();
             int inboundActive = peer.expireInboundMessages();
-            if ( (lastSend > 0) && (lastRecv > 0) ) {
-                if ( (now - lastSend > MAX_IDLE_TIME) &&
+            int maxIdle = weAreFirewalled ? MAX_IDLE_TIME*2 : MAX_IDLE_TIME;
+            if (!weAreFirewalled && (lastSend > 0) && (lastRecv > 0)) {
+                if ((now - lastSend > MAX_IDLE_TIME) &&
                      (now - lastRecv > MAX_IDLE_TIME) &&
-                     (peer.getConsecutiveFailedSends() > 0) &&
+                     (peer.getConsecutiveFailedSends() > 5) &&
                      (inboundActive <= 0)) {
                     // peer is waaaay idle, drop the con and queue it up as a new con
                     dropPeer(peer, false, "proactive reconnection");
                     msg.timestamp("peer is really idle, dropping con and reestablishing");
-                    if (_log.shouldDebug())
-                        _log.debug("Proactive reestablish to " + to);
+                    if (_log.shouldDebug()) {_log.debug("Proactive reestablish to " + to);}
                     _establisher.establish(msg);
                     _context.statManager().addRateData("udp.proactiveReestablish", now-lastSend, now-peer.getKeyEstablishedTime());
                     return;
@@ -2788,6 +2817,12 @@ public class UDPTransport extends TransportImpl {
         boolean isIPv6 = host != null && host.contains(":");
         if (isIPv6 && host.equals(":"))
             host = null;
+        boolean weAreFirewalled = _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
+                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
+                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
+                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
+                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
+                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
         OrderedProperties options = new OrderedProperties();
         if (_context.router().isHidden()) {
             // save the external address, since we didn't publish it
@@ -3397,7 +3432,15 @@ public class UDPTransport extends TransportImpl {
     }
 
     public boolean allowConnection() {
-            return _peersByIdent.size() < getMaxConnections();
+        int maxConn = getMaxConnections();
+        boolean weAreFirewalled = _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
+                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
+                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
+                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
+                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
+                                  _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
+        if (weAreFirewalled) {maxConn *= 2.5;} // Increase from 1.5x to 2.5x for firewalled routers
+        return _peersByIdent.size() < maxConn;
     }
 
     /**
@@ -3503,8 +3546,16 @@ public class UDPTransport extends TransportImpl {
         }
 
         public void timeReached() {
+            boolean weAreFirewalled = _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
+                                      _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_OK ||
+                                      _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_FIREWALLED_IPV6_UNKNOWN ||
+                                      _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_OK_IPV6_FIREWALLED ||
+                                      _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
+                                      _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
+
             // Increase allowed idle time if we are well under allowed connections, otherwise decrease
-            boolean haveCap = haveCapacity(33);
+            // Much more lenient capacity check for firewalled routers to keep peers longer
+            boolean haveCap = haveCapacity(weAreFirewalled ? 15 : 33); // 15% instead of 25% for firewalled
             if (haveCap) {
                 long inc;
                 // don't adjust too quickly if we are looping fast
@@ -3521,9 +3572,20 @@ public class UDPTransport extends TransportImpl {
                     dec = EXPIRE_DECREMENT;
                 _expireTimeout = Math.max(_expireTimeout - dec, MIN_EXPIRE_TIMEOUT);
             }
+
             long now = _context.clock().now();
-            long shortInactivityCutoff = now - _expireTimeout;
-            long longInactivityCutoff = now - EXPIRE_TIMEOUT;
+            long shortInactivityCutoff;
+            long longInactivityCutoff;
+
+            if (weAreFirewalled) {
+               // Use much more lenient timeouts for firewalled routers to retain peers
+               shortInactivityCutoff = now - Math.max(_expireTimeout, 25*60*1000);  // Min 25 minutes
+               longInactivityCutoff = now - Math.max(EXPIRE_TIMEOUT, 45*60*1000); // Min 45 minutes
+            } else {
+               shortInactivityCutoff = now - _expireTimeout;
+               longInactivityCutoff = now - EXPIRE_TIMEOUT;
+            }
+
             final long mayDisconCutoff = now - MAY_DISCON_TIMEOUT;
             long pingCutoff = now - (2 * 60*60*1000);
             long pingFirewallCutoff = now - PING_FIREWALL_CUTOFF;

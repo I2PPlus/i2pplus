@@ -134,17 +134,17 @@ class EstablishmentManager {
 
     /** Max outbound in progress - max inbound is half of this */
     private final int DEFAULT_MAX_CONCURRENT_ESTABLISH;
-    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 32 : 256;
-    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 128 : 512;
+    private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 64 : 1024;
+    private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 256 : 2048;
     private static final String PROP_MAX_CONCURRENT_ESTABLISH = "i2np.udp.maxConcurrentEstablish";
-    private static final float DEFAULT_THROTTLE_FACTOR = SystemVersion.isSlow() ? 2.5f : 5f;
+    private static final float DEFAULT_THROTTLE_FACTOR = SystemVersion.isSlow() ? 2.0f : 0.8f;
     private static final String PROP_THROTTLE_FACTOR = "router.throttleFactor";
 
     /** Max pending outbound connections (waiting because we are at MAX_CONCURRENT_ESTABLISH) */
-    private static final int MAX_QUEUED_OUTBOUND = SystemVersion.isSlow() ? 64 : 128;
+    private static final int MAX_QUEUED_OUTBOUND = SystemVersion.isSlow() ? 128 : 512;
 
-    /** Max queued msgs per peer while the peer connection is queued */
-    private static final int MAX_QUEUED_PER_PEER = SystemVersion.isSlow() ? 32 : 64;
+    /** Max queued msgs per peer while peer connection is queued */
+    private static final int MAX_QUEUED_PER_PEER = SystemVersion.isSlow() ? 64 : 256;
 
     private static final long MAX_NONCE = 0xFFFFFFFFl;
 
@@ -152,19 +152,18 @@ class EstablishmentManager {
      * Kill any outbound that takes more than this.
      * Two round trips (Req-Created-Confirmed-Data) for direct;
      * 3 1/2 round trips (RReq-RResp+Intro-HolePunch-Req-Created-Confirmed-Data) for indirect.
-     * Note that this is way too long for us to be able to fall back to NTCP
-     * for individual messages unless the message timer fires first.
-     * But SSU probably isn't higher priority than NTCP.
-     * And it's important to not fail an establishment too soon and waste it.
+     * Note: could be shorter for fast routers with better connectivity.
+     * But it's important to not fail an establishment too soon and waste it.
      */
-    private static final int MAX_OB_ESTABLISH_TIME = 30*1000;
+    private static final int MAX_OB_ESTABLISH_TIME = SystemVersion.isSlow() ? 30*1000 : 15*1000;
 
     /**
      * Kill any inbound that takes more than this
      * One round trip (Created-Confirmed)
      * Note: could be two round trips for SSU2 with retry
+     * Optimized for fast routers to reduce handshake latency.
      */
-    public static final int MAX_IB_ESTABLISH_TIME = 20*1000;
+    public static final int MAX_IB_ESTABLISH_TIME = SystemVersion.isSlow() ? 20*1000 : 10*1000;
 
     /** Max wait before receiving a response to a single message during outbound establishment */
     public static final int OB_MESSAGE_TIMEOUT = 18*1000;
@@ -196,8 +195,10 @@ class EstablishmentManager {
         _outboundByClaimedAddress = new ConcurrentHashMap<RemoteHostId, OutboundEstablishState>();
         _outboundByHash = new ConcurrentHashMap<Hash, OutboundEstablishState>();
         _inboundBans = new LHMCache<RemoteHostId, Long>(32);
-        // roughly scale based on expected traffic
-        int tokenCacheSize = Math.max(MIN_TOKENS, Math.min(MAX_TOKENS, 3 * _transport.getMaxConnections() / 4));
+        // scale based on expected traffic and system capabilities
+        int multiplier = SystemVersion.isSlow() ? 1 : 2;  // Double cache for fast systems
+        int tokenCacheSize = Math.max(MIN_TOKENS, Math.min(MAX_TOKENS,
+            multiplier * _transport.getMaxConnections() / 2));
         _inboundTokens = new InboundTokens(tokenCacheSize);
         _outboundTokens = new LHMCache<RemoteHostId, Token>(tokenCacheSize);
         _terminationCounter = new ObjectCounter<RemoteHostId>();
@@ -587,7 +588,7 @@ class EstablishmentManager {
      * How many concurrent inbound sessions to deal with
      */
     private int getMaxInboundEstablishers() {
-        return getMaxConcurrentEstablish()/2;
+        return getMaxConcurrentEstablish();
     }
 
     /**
@@ -628,21 +629,32 @@ class EstablishmentManager {
         // both of these are scaled by actual period in coalesce
         float lastRate = last / (float) lastPeriod;
         float currentRate = (float) (current / (double) currentTime);
-//        float factor = _transport.haveCapacity(95) ? 1.05f : 0.95f;
+
+        // Optimized for fast routers - don't penalize high-performance systems
+        boolean isFastRouter = !SystemVersion.isSlow();
         float factor = _transport.haveCapacity(95) ? getThrottleFactor() : 0.95f;
         float minThresh = factor * lastRate;
         int maxConnections = _transport.getMaxConnections();
         int currentConnections = _transport.countPeers();
-        if (currentRate > minThresh * 5 / 3 && (currentConnections > (maxConnections * 2 / 3))) {
-            // chance in 128
-            // max out at about 25% over the last rate
-            int probAccept = Math.max(1, ((int) (4 * 128 * currentRate / minThresh)) - 512);
+
+        // Dynamic thresholds based on system capabilities
+        float capacityThreshold = isFastRouter ? 0.9f : 0.67f;  // Fast routers: 90% vs 66%
+        float rateThreshold = isFastRouter ? 3.0f : 1.67f;     // Fast routers: 3.0x vs 1.67x
+
+        if (currentRate > minThresh * rateThreshold &&
+            (currentConnections > (maxConnections * capacityThreshold))) {
+
+            // Fast routers get much higher acceptance probability
+            int baseProb = isFastRouter ? 8 : 4;  // Fast routers: 8x vs 4x multiplier
+            int probAccept = Math.max(isFastRouter ? 64 : 1,
+                ((int) (baseProb * 128 * currentRate / minThresh)) - (isFastRouter ? 256 : 512));
             int percent = probAccept > 128 ? 100 : (probAccept / 128) * 100;
             if (probAccept >= 128 || _context.random().nextInt(128) < probAccept) {
-                if (_log.shouldWarn())
-                    _log.warn("[SSU2] Dropping incoming connection (" + (percent >= 1 ? percent : "1") + "% chance)" +
-                              " -> Previous/current connections per minute: " + last + " / " + (int) (currentRate * 60*1000));
-                return false;
+                if (_log.shouldWarn()) {
+                    _log.warn("[SSU2] Dropping incoming connection (" + (percent >= 1 ? Math.max(percent,100) : "1") + "% chance)" +
+                              " -> Previous / current connections per minute: " + last + " / " + (int) (currentRate * 60*1000));
+                 }
+                 return false;
             }
         }
         return true;
