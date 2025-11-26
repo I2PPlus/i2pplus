@@ -9,7 +9,7 @@
         Excludes style, formatting, and best-practice rules that generate noise.
     </description>
 
-    <!-- Exclude problematic patterns and generated files -->
+<!-- Exclude problematic patterns and generated files -->
     <exclude-pattern>.*/build/.*</exclude-pattern>
     <exclude-pattern>.*/target/.*</exclude-pattern>
     <exclude-pattern>.*/dist/.*</exclude-pattern>
@@ -18,18 +18,17 @@
     <exclude-pattern>.*/.*\.war</exclude-pattern>
     <exclude-pattern>.*/gradle/.*</exclude-pattern>
     <exclude-pattern>.*/\.gradle/.*</exclude-pattern>
-    <exclude-pattern>**/generated/.*</exclude-pattern>
-    <exclude-pattern>**/.*Generated\.java$</exclude-pattern>
+    <exclude-pattern>.*/generated/.*</exclude-pattern>
+    <exclude-pattern>.*/.*Generated\.java$</exclude-pattern>
 
-    <!-- Include only the most critical error-prone rules -->
+    <!-- Include only the most critical error-prone and security rules -->
     <rule ref="category/java/errorprone.xml">
-        <!-- Exclude less critical rules that generate noise -->
+        <!-- Exclude less critical error-prone rules that generate noise -->
         <exclude name="UseConcurrentHashMap"/>
         <exclude name="AvoidDuplicateLiterals"/>
         <exclude name="AvoidLiteralsInIfCondition"/>
         <exclude name="AssignmentInOperand"/>
         <exclude name="OneDeclarationPerLine"/>
-        <exclude name="UnusedLocalVariable"/>
         <exclude name="UnusedFormalParameter"/>
         <exclude name="UnusedAssignment"/>
         <exclude name="UnusedPrivateField"/>
