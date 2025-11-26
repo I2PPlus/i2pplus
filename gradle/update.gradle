@@ -2,8 +2,8 @@ task prepUpdateRouter(type: Copy) {
     dependsOn ':core:jar', ':router:jar'
     // Pass in paths as a closure, so they are not executed during configuration
     from {[
-        project(':core').jar.archivePath,
-        project(':router').jar.archivePath
+        project(':core').jar.archiveFile,
+        project(':router').jar.archiveFile
     ]}
     into 'pkg-temp/lib'
 }
@@ -18,41 +18,49 @@ task prepUpdateSmall(type: Copy) {
     into 'pkg-temp'
     into('lib') {
         from {[
-            project(':apps:ministreaming').jar.archivePath,
-            project(':apps:streaming').jar.archivePath,
-            project(':apps:routerconsole').jar.archivePath,
-            project(':apps:i2ptunnel').i2ptunnelJar.archivePath,
-            project(':apps:jrobin').jar.archivePath,
+            project(':apps:ministreaming').jar.archiveFile,
+            project(':apps:streaming').jar.archiveFile,
+            project(':apps:routerconsole').jar.archiveFile,
+            project(':apps:i2ptunnel').i2ptunnelJar.archiveFile,
+            project(':apps:jrobin').jar.archiveFile,
         ]}
     }
     into('webapps') {
         from {[
-            project(':apps:routerconsole').war.archivePath,
-            project(':apps:i2ptunnel').war.archivePath,
+            project(':apps:routerconsole').war.archiveFile,
+            project(':apps:i2ptunnel').war.archiveFile,
         ]}
     }
 }
 
 task prepUpdate(type: Copy) {
-    dependsOn prepUpdateSmall
     dependsOn ':apps:BOB:jar', ':apps:sam:jar'
-    dependsOn ':apps:i2psnark:i2psnarkJar', ':apps:systray:jar'
+    dependsOn ':apps:i2psnark:i2psnarkJar', ':apps:i2psnark:jar'
+    dependsOn ':apps:systray:jar'
     dependsOn ':apps:jetty:jar'
     dependsOn ':apps:desktopgui:jar'
     dependsOn ':apps:susidns:war', ':apps:susimail:war'
     dependsOn ':apps:i2psnark:war'
     dependsOn ':apps:i2pcontrol:war'
     dependsOn ':apps:imagegen:war'
+    inputs.files fileTree('pkg-temp/lib').include('*.jar')
+    inputs.files fileTree('pkg-temp/webapps').include('*.war')
+    from 'pkg-temp'
+    mustRunAfter ':apps:susidns:war', ':apps:susimail:war'
+    mustRunAfter ':apps:i2psnark:war'
+    mustRunAfter ':apps:i2pcontrol:war'
+    mustRunAfter ':apps:imagegen:war'
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     // Base dir
     into 'pkg-temp'
     into('lib') {
         from {[
-            project(':apps:BOB').jar.archivePath,
-            project(':apps:sam').jar.archivePath,
-            project(':apps:i2psnark').i2psnarkJar.archivePath,
-            project(':apps:systray').jar.archivePath,
-            project(':apps:desktopgui').jar.archivePath,
-            project(':apps:jetty').jar.archivePath,
+            project(':apps:BOB').jar.archiveFile,
+            project(':apps:sam').jar.archiveFile,
+            project(':apps:i2psnark').i2psnarkJar.archiveFile,
+            project(':apps:systray').jar.archiveFile,
+            project(':apps:desktopgui').jar.archiveFile,
+            project(':apps:jetty').jar.archiveFile,
         ]}
         // as of 0.7.12; someday, we can remove these from the updater
         from 'apps/susidns/src/WEB-INF/lib/jstl.jar'
@@ -60,11 +68,11 @@ task prepUpdate(type: Copy) {
     }
     into('webapps') {
         from {[
-            project(':apps:susidns').war.archivePath,
-            project(':apps:susimail').war.archivePath,
-            project(':apps:i2psnark').war.archivePath,
-            project(':apps:i2pcontrol').war.archivePath,
-            project(':apps:imagegen').war.archivePath,
+            project(':apps:susidns').war.archiveFile,
+            project(':apps:susimail').war.archiveFile,
+            project(':apps:i2psnark').war.archiveFile,
+            project(':apps:i2pcontrol').war.archiveFile,
+            project(':apps:imagegen').war.archiveFile,
         ]}
     }
     from('history.txt') {

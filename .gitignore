@@ -76,3 +76,9 @@ findbugs.html
 
 # TODO: why does this file appear?
 apps/routerconsole/jsp/favicon.ico
+
+# Gradle
+.gradle/
+!gradle/wrapper/
+!gradle/wrapper/*.jar
+!gradle/wrapper/*.properties

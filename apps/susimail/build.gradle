@@ -32,11 +32,11 @@ war {
     exclude 'WEB-INF/web.xml'
     exclude 'LICENSE'
     exclude 'src'
-    exclude 'susimail.properties'
+    exclude 'WEB-INF/classes/'
     webInf {
         into 'classes'
         from 'src/susimail.properties'
-        duplicatesStrategy 'include'
+        duplicatesStrategy = DuplicatesStrategy.INHERIT
     }
     webXml = file('src/WEB-INF/web.xml')
 }

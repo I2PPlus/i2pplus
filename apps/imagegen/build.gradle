@@ -26,6 +26,4 @@ war {
     webXml = file('imagegen/webapp/src/main/webapp/WEB-INF/web.xml')
 }
 
-artifacts {
-    archives war
-}
+assemble.dependsOn war

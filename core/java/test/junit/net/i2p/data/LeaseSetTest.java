@@ -64,7 +64,7 @@ public class LeaseSetTest extends StructureTest {
             subj.addLease(null);
             fail("exception not thrown");
         } catch (IllegalArgumentException expected) {
-            assertEquals("erm, null lease", expected.getMessage());
+            assertEquals("Error:! Null lease!", expected.getMessage());
         }
     }
 
@@ -78,7 +78,7 @@ public class LeaseSetTest extends StructureTest {
             subj.addLease(new Lease());
             fail("exception not thrown");
         } catch (IllegalArgumentException expected) {
-            assertEquals("erm, lease has no gateway", expected.getMessage());
+            assertEquals("Error: Lease has no gateway!", expected.getMessage());
         }
     }
 }

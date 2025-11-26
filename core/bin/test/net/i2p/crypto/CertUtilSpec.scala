@@ -15,7 +15,7 @@ class CertUtilSpec extends FunSpec with Matchers {
 
     it("should be able to read a certificate") {
       val cert: X509Certificate = CertUtil.loadCert(certFile)
-      assert(cert.getSubjectDN.toString === "CN=zzz@mail.i2p, OU=I2P, O=I2P Anonymous Network, L=XX, ST=XX, C=XX")
+      assert(cert.getSubjectDN.toString === "CN=meeh@mail.i2p, OU=I2P, O=I2P Anonymous Network, L=XX, ST=XX, C=XX")
     }
 
     it("should be able to tell if it's revoked or not") {

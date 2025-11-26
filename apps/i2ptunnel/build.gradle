@@ -174,12 +174,10 @@ task uiJar(type: Jar) {
     }
 }
 
-artifacts {
-    archives i2ptunnelJar,war   //, tempBeansJar, uiJar
-}
+assemble.dependsOn i2ptunnelJar, war   //, tempBeansJar, uiJar
 
 war {
-    duplicatesStrategy 'exclude'
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     include '**/EditBean.class'
     include '**/ui/*.class'
     include '**/IndexBean.class'

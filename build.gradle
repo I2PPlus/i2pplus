@@ -125,6 +125,10 @@ task codeCoverageReport(type: JacocoReport) {
     classDirectories.from(files(subprojects.java.sourceSets.main.output))
     executionData.from(files(subprojects.jacocoTestReport.executionData))
 
+    doFirst {
+        executionData = files(executionData.findAll { it.exists() })
+    }
+
     // > The value for this file collection is final and cannot be changed.
     //doFirst {
     //    executionData = files(executionData.findAll { it.exists() })

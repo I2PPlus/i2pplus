@@ -149,7 +149,5 @@ war {
     webXml = file("$buildDir/web.xml")
 }
 
-artifacts {
-    archives war
-}
+assemble.dependsOn war
 

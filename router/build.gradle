@@ -23,7 +23,6 @@ sourceSets {
 
 dependencies {
     api project(':core')
-    api 'gnu.getopt:java-getopt:1.0.13'
     testImplementation project(path: ':core', configuration: 'tests')
 }
 
