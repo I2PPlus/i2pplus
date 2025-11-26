@@ -134,7 +134,9 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
                 tmp.delete();
             }
         } catch (IOException ioe) {
-            if (tmp != null) {tmp.delete();}
+            if (tmp != null) {
+                tmp.delete();
+            }
             a = Collections.emptyMap();
         }
         this.addresses = a;
@@ -190,7 +192,9 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      * @since 0.8.7
      */
     public void delete() {
-        if (this.subFile != null) {this.subFile.delete();}
+        if (this.subFile != null) {
+            this.subFile.delete();
+        }
         else if (this.addresses != null) {
             try {this.addresses.clear();}
             catch (UnsupportedOperationException uoe) {}
@@ -213,7 +217,9 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      */
     @Override
     public String toString() {
-        if (this.location != null) {return "Book from " + this.location;}
+        if (this.location != null) {
+            return "Book from " + this.location;
+        }
         return "Map containing " + this.addresses.size() + " entries";
     }
 
@@ -225,30 +231,48 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
         final int len = host.length();
 
         // Basic suffix & length checks
-        if (!host.endsWith(".i2p")) return false;
-        if (len <= 4 || len > 67) return false; // max 63 chars + ".i2p"
+        if (!host.endsWith(".i2p")) {
+            return false;
+        }
+        if (len <= 4 || len > 67) {
+            return false; // max 63 chars + ".i2p"
+        }
 
-        if (host.startsWith(".") || host.startsWith("-")) return false;
-        if (host.contains("..") || host.contains(".-") || host.contains("-.")) return false;
+        if (host.startsWith(".") || host.startsWith("-")) {
+            return false;
+        }
+        if (host.contains("..") || host.contains(".-") || host.contains("-.")) {
+            return false;
+        }
 
         // IDN check: '--' allowed only in punycode prefix/suffix
-        if (host.contains("--") && !host.startsWith("xn--") && host.indexOf(".xn--") < 0) return false;
+        if (host.contains("--") && !host.startsWith("xn--") && host.indexOf(".xn--") < 0) {
+            return false;
+        }
 
         // Check reserved exact names and reserved suffixes
         String[] reservedExact = { "proxy.i2p", "router.i2p", "console.i2p", "b32.i2p" };
         for (String res : reservedExact) {
-            if (host.equals(res)) return false;
+            if (host.equals(res)) {
+                return false;
+            }
         }
 
         String[] reservedSuffixes = { ".proxy.i2p", ".router.i2p", ".console.i2p", ".b32.i2p" };
         for (String suffix : reservedSuffixes) {
-            if (host.endsWith(suffix)) return false;
+            if (host.endsWith(suffix)) {
+                return false;
+            }
         }
 
-        if (!HOST_PATTERN.matcher(host).matches()) return false;
+        if (!HOST_PATTERN.matcher(host).matches()) {
+            return false;
+        }
 
         // Base32 special check: only if length == 56
-        if (len == 56 && B32_PATTERN.matcher(host.substring(0, 52)).matches()) return false;
+        if (len == 56 && B32_PATTERN.matcher(host.substring(0, 52)).matches()) {
+            return false;
+        }
 
         return true;
     }
@@ -257,21 +281,29 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      * Do basic validation of the b64 dest, without bothering to instantiate it
      */
     private static boolean isValidDest(String dest) {
-        if (dest == null) return false;  // Defensive null check
+        if (dest == null) {
+            return false;  // Defensive null check
+        }
 
         final int len = dest.length();
 
         // null cert special case: must be exactly MIN_DEST_LENGTH and end with "AA"
         if (len == MIN_DEST_LENGTH) {
-            if (!dest.endsWith("AA")) return false;
+            if (!dest.endsWith("AA")) {
+                return false;
+            }
         } else {
             // Must be larger than MIN_DEST_LENGTH and no greater than MAX_DEST_LENGTH
-            if (len <= MIN_DEST_LENGTH || len > MAX_DEST_LENGTH) return false;
+            if (len <= MIN_DEST_LENGTH || len > MAX_DEST_LENGTH) {
+                return false;
+            }
         }
 
         // Base64 strings never have length mod 4 == 1
         int mod = len % 4;
-        if (mod == 1) return false;
+        if (mod == 1) {
+            return false;
+        }
 
         // Regex check for valid base64 characters (fast fail if invalid)
         return B64_PATTERN.matcher(dest).matches();
@@ -291,11 +323,15 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      * @throws IllegalStateException if this was created with the Subscription constructor.
      */
     public void merge(AddressBook other, boolean overwrite, Log log) {
-        if (this.addresses == null) {throw new IllegalStateException();}
+        if (this.addresses == null) {
+            throw new IllegalStateException();
+        }
         Iterator<Map.Entry<String, HostTxtEntry>> iter = other.iterator();
         try {merge2(other, iter, overwrite, log);}
         finally {
-            if (iter instanceof HostTxtIterator) {((HostTxtIterator) iter).close();}
+            if (iter instanceof HostTxtIterator) {
+                ((HostTxtIterator) iter).close();
+            }
         }
     }
 
@@ -314,7 +350,9 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
                 } else if (!this.addresses.containsKey(otherKey) || !this.addresses.get(otherKey).equals(otherValue)) {
                     this.addresses.put(otherKey, otherValue);
                     this.modified = true;
-                    if (log != null) {log.append("New domain " + otherKey + " [" + other.location + "]");}
+                    if (log != null) {
+                        log.append("New domain " + otherKey + " [" + other.location + "]");
+                    }
                 }
             }
         }
@@ -329,7 +367,9 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      * @throws IllegalStateException if this was created with the Subscription constructor.
      */
     public void write(File file) {
-        if (this.addresses == null) {throw new IllegalStateException();}
+        if (this.addresses == null) {
+            throw new IllegalStateException();
+        }
         if (this.modified) {
             try {HostTxtParser.write(this.addresses, file);}
             catch (IOException exp) {

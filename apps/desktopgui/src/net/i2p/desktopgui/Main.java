@@ -56,10 +56,11 @@ public class Main implements RouterApp, NotificationService {
      */
     public Main() {
         _appContext = I2PAppContext.getGlobalContext();
-        if (_appContext.isRouterContext())
+        if (_appContext.isRouterContext()) {
             _context = (RouterContext) _appContext;
-        else
+        } else {
             _context = null;
+        }
         _mgr = null;
         log = _appContext.logManager().getLog(Main.class);
         _state = INITIALIZED;
