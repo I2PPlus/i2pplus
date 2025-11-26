@@ -36,10 +36,16 @@ jobs:
         if: always()
         run: |
           if [ -f "pmd-report.sarif" ]; then
-            echo "PMD report generated successfully"
-            ls -la pmd-report.sarif
+            echo "✅ PMD report generated successfully"
+            echo "Report size: $(wc -c < pmd-report.sarif) bytes"
+            echo "Number of violations found: $(grep -c '"ruleId"' pmd-report.sarif 2>/dev/null || echo "0")"
           else
-            echo "PMD report not found - PMD may have failed"
+            echo "❌ PMD report not found - PMD may have failed"
+            echo "This could be due to:"
+            echo "  - Complex code causing stack overflow"
+            echo "  - Invalid rule references"
+            echo "  - Memory limitations"
+            echo "  - File system issues"
             exit 0
           fi
 
