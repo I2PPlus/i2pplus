@@ -5,10 +5,11 @@
          xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.net/ruleset_2_0_0.xsd">
 
     <description>
-        Minimal PMD ruleset for I2P+ project with only the most critical rules.
+        Minimal PMD ruleset for I2P+ project with only the most critical security and error-prone rules.
+        Excludes style, formatting, and best-practice rules that generate noise.
     </description>
 
-    <!-- Exclude problematic patterns -->
+    <!-- Exclude problematic patterns and generated files -->
     <exclude-pattern>.*/build/.*</exclude-pattern>
     <exclude-pattern>.*/target/.*</exclude-pattern>
     <exclude-pattern>.*/dist/.*</exclude-pattern>
@@ -17,9 +18,36 @@
     <exclude-pattern>.*/.*\.war</exclude-pattern>
     <exclude-pattern>.*/gradle/.*</exclude-pattern>
     <exclude-pattern>.*/\.gradle/.*</exclude-pattern>
+    <exclude-pattern>**/generated/.*</exclude-pattern>
+    <exclude-pattern>**/.*Generated\.java$</exclude-pattern>
 
-    <!-- Use only the most basic and stable rules -->
-    <rule ref="category/java/errorprone.xml"/>
-    <rule ref="category/java/multithreading.xml"/>
+    <!-- Focus on the most critical error-prone and security rules -->
+    <rule ref="category/java/errorprone.xml">
+        <!-- Exclude less critical error-prone rules that generate noise -->
+        <exclude name="UseConcurrentHashMap"/>
+        <exclude name="AvoidDuplicateLiterals"/>
+        <exclude name="AvoidLiteralsInIfCondition"/>
+        <exclude name="AssignmentInOperand"/>
+        <exclude name="OneDeclarationPerLine"/>
+        <exclude name="UnusedLocalVariable"/>
+        <exclude name="UnusedFormalParameter"/>
+        <exclude name="UnusedPrivateField"/>
+        <exclude name="UnusedPrivateMethod"/>
+        <exclude name="ForLoopVariableCount"/>
+        <exclude name="AvoidReassigningLoopVariables"/>
+        <exclude name="AvoidReassigningParameters"/>
+        <exclude name="UnusedAssignment"/>
+    </rule>
+
+    <!-- Include only the most critical security rules -->
+    <rule ref="category/java/security.xml">
+        <!-- Security rules are generally more important than style -->
+        <!-- Keep all security rules as they're usually critical -->
+    </rule>
+
+    <!-- Include only the most critical multithreading rules -->
+    <rule ref="category/java/multithreading.xml">
+        <!-- Keep threading rules as they can cause serious runtime issues -->
+    </rule>
 
 </ruleset>
