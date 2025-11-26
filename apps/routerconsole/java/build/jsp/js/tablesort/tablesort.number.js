@@ -1,0 +1,1 @@
+!function(){const cleanNumber=val=>"string"!=typeof val?"":val.replace(/[^-0-9.Ee%]/g,"");Tablesort.extend("number",function(item){return""!==(item=cleanNumber(item))&&!isNaN(parseFloat(item))&&isFinite(item)},function(a,b){return((a,b)=>(a=parseFloat(a),b=parseFloat(b),isNaN(a)&&isNaN(b)?0:isNaN(a)?1:isNaN(b)?-1:b-a))(cleanNumber(a),cleanNumber(b))})}();

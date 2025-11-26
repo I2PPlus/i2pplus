@@ -1,0 +1,15 @@
+2025/11/26 13:38:17.136 | DEBUG[Test worker] ....LogSettingsTest: DEBUG: debug
+2025/11/26 13:38:17.136 | INFO [Test worker] ....LogSettingsTest: DEBUG: info
+2025/11/26 13:38:17.136 | WARN [Test worker] ....LogSettingsTest: DEBUG: warn
+2025/11/26 13:38:17.136 | ERROR[Test worker] ....LogSettingsTest: DEBUG: error
+2025/11/26 13:38:17.136 | CRIT [Test worker] ....LogSettingsTest: DEBUG: crit
+2025/11/26 13:38:18.167 | ERROR[Test worker] ....LogSettingsTest: ERROR: error
+2025/11/26 13:38:18.167 | CRIT [Test worker] ....LogSettingsTest: ERROR: crit
+2025/11/26 13:38:19.188 | CRIT [Test worker] ....LogSettingsTest: CRIT: crit
+2025/11/26 13:38:20.212 | INFO [Test worker] ....LogSettingsTest: INFO: info
+2025/11/26 13:38:20.212 | WARN [Test worker] ....LogSettingsTest: INFO: warn
+2025/11/26 13:38:20.212 | ERROR[Test worker] ....LogSettingsTest: INFO: error
+2025/11/26 13:38:20.212 | CRIT [Test worker] ....LogSettingsTest: INFO: crit
+2025/11/26 13:38:21.235 | WARN [Test worker] ....LogSettingsTest: WARN: warn
+2025/11/26 13:38:21.235 | ERROR[Test worker] ....LogSettingsTest: WARN: error
+2025/11/26 13:38:21.235 | CRIT [Test worker] ....LogSettingsTest: WARN: crit

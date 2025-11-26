@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.i2p.util.AddressesTest" tests="17" skipped="0" failures="0" errors="0" timestamp="2025-11-26T13:38:16.793Z" hostname="ganesh" time="0.005">
+  <properties/>
+  <testcase name="testToString__ipv4withPort" classname="net.i2p.util.AddressesTest" time="0.002"/>
+  <testcase name="testToString__null" classname="net.i2p.util.AddressesTest" time="0.0"/>
+  <testcase name="getIPEmptyString" classname="net.i2p.util.AddressesTest" time="0.0"/>
+  <testcase name="isIPv4Address" classname="net.i2p.util.AddressesTest" time="0.0"/>
+  <testcase name="isIPAddress" classname="net.i2p.util.AddressesTest" time="0.0"/>
+  <testcase name="testToString__ipv6withPort" classname="net.i2p.util.AddressesTest" time="0.0"/>
+  <testcase name="testToString__badLengthWithPort" classname="net.i2p.util.AddressesTest" time="0.0"/>
+  <testcase name="testToString" classname="net.i2p.util.AddressesTest" time="0.0"/>
+  <testcase name="testToString__badLength" classname="net.i2p.util.AddressesTest" time="0.0"/>
+  <testcase name="getPort__invalidPort" classname="net.i2p.util.AddressesTest" time="0.0"/>
+  <testcase name="getPort" classname="net.i2p.util.AddressesTest" time="0.0"/>
+  <testcase name="getIPNull" classname="net.i2p.util.AddressesTest" time="0.0"/>
+  <testcase name="isDeprecated" classname="net.i2p.util.AddressesTest" time="0.001"/>
+  <testcase name="isDynamic" classname="net.i2p.util.AddressesTest" time="0.0"/>
+  <testcase name="getIPWithIPString" classname="net.i2p.util.AddressesTest" time="0.001"/>
+  <testcase name="isIPv6Address" classname="net.i2p.util.AddressesTest" time="0.0"/>
+  <testcase name="testToString__nullWithPort" classname="net.i2p.util.AddressesTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

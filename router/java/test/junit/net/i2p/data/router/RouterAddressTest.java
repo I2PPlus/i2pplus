@@ -1,18 +1,10 @@
 package net.i2p.data.router;
-/*
- * free (adj.): unencumbered; not under the control of others
- * Written by jrandom in 2003 and released into the public domain
- * with no warranty of any kind, either expressed or implied.
- * It probably won't make your computer catch on fire, or eat
- * your children, but it might.  Use at your own risk.
- *
- */
 
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
-
-import org.junit.Test;
+import java.io.IOException;
 
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataStructure;
@@ -20,80 +12,79 @@ import net.i2p.data.StructureTest;
 import net.i2p.util.OrderedProperties;
 
 /**
- * Test harness for loading / storing Hash objects
- *
- * @author jrandom
+ * Test harness for loading / storing RouterAddress objects.
+ * Verifies proper handling of options, writes, equality, and string representation.
  */
 public class RouterAddressTest extends StructureTest {
 
+    @Override
     public DataStructure createDataStructure() throws DataFormatException {
-        //addr.setExpiration(new Date(1000*60*60*24)); // jan 2 1970
         OrderedProperties options = new OrderedProperties();
         options.setProperty("hostname", "localhost");
         options.setProperty("portnum", "1234");
-        RouterAddress addr = new RouterAddress("Blah", options, 42);
-        return addr;
+        return new RouterAddress("Blah", options, 42);
     }
-    public DataStructure createStructureToRead() { return new RouterAddress(); }
 
-    @SuppressWarnings("deprecation")
-    @Test
-    public void testSetNullOptions(){
+    @Override
+    public DataStructure createStructureToRead() {
+        return new RouterAddress();
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void testSetNullOptionsThrows() {
         RouterAddress addr = new RouterAddress();
-
-        try {
-            addr.setOptions(null);
-            fail("no exception thrown");
-        } catch (NullPointerException expected) {}
+        addr.setOptions(null);
     }
 
-    @SuppressWarnings("deprecation")
-    @Test
-    public void testSetOptionsAgain(){
+    @Test(expected = IllegalStateException.class)
+    public void testSetOptionsAgainThrows() {
         OrderedProperties options = new OrderedProperties();
         options.setProperty("hostname", "localhost");
         options.setProperty("portnum", "1234");
         RouterAddress addr = new RouterAddress("Blah", options, 42);
-        options.setProperty("portnum", "2345");
 
-        try {
-            addr.setOptions(options);
-            fail("no exception thrown");
-        } catch (IllegalStateException expected) {}
+        // Attempt to set options again should throw
+        options.setProperty("portnum", "2345");
+        addr.setOptions(options);
     }
 
     @Test
-    public void testBadWrite() throws Exception{
+    public void testBadWriteThrows() {
         RouterAddress addr = new RouterAddress();
 
         try {
             addr.writeBytes(new ByteArrayOutputStream());
-            fail("no exception thrown");
-        } catch (DataFormatException expected) {
-            assertEquals("uninitialized", expected.getMessage());
+            fail("Expected DataFormatException not thrown");
+        } catch (DataFormatException e) {
+            assertEquals("uninitialized", e.getMessage());
+        } catch (IOException e) {
+            fail("Unexpected IOException: " + e.getMessage());
         }
     }
 
     @Test
-    public void testNullEquals(){
-        //addr.setExpiration(new Date(1000*60*60*24)); // jan 2 1970
+    public void testEqualsWithNullAndOtherObjects() {
         OrderedProperties options = new OrderedProperties();
         options.setProperty("hostname", "localhost");
         options.setProperty("portnum", "1234");
         RouterAddress addr = new RouterAddress("Blah", options, 42);
+
         assertFalse(addr.equals(null));
-        assertFalse(addr.equals(""));
+        assertFalse(addr.equals("some string"));
     }
 
     @Test
-    public void testToString(){
-        //addr.setExpiration(new Date(1000*60*60*24)); // jan 2 1970
+    public void testToStringFormat() {
         OrderedProperties options = new OrderedProperties();
         options.setProperty("hostname", "localhost");
         options.setProperty("portnum", "1234");
         RouterAddress addr = new RouterAddress("Blah", options, 42);
-        String ret = addr.toString();
-        //assertEquals("[RouterAddress: \n\tTransportStyle: Blah\n\tCost: 42\n\tExpiration: Fri Jan 02 00:00:00 UTC 1970\n\tOptions: #: 2\n\t\t[hostname] = [localhost]\n\t\t[portnum] = [1234]]", ret);
-        assertEquals("[RouterAddress: \n\tType: Blah\n\tCost: 42\n\tOptions (2):\n\t\t[hostname] = [localhost]\n\t\t[portnum] = [1234]]", ret);
+
+        String expected = "Blah:\n" +
+                          "\t* hostname: localhost\n" +
+                          "\t* portnum: 1234\n" +
+                          "\t* cost: 42";
+
+        assertEquals(expected, addr.toString());
     }
 }

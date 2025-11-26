@@ -1,0 +1,1 @@
+function initMarkdown(){var mailbodies=document.getElementsByClassName("mailbody");for(index=0;index<mailbodies.length;index++){var converter,mailbody=mailbodies[index];"P"===mailbody.nodeName&&(converter=new Markdown.Converter,mailbody.innerHTML=converter.makeHtml(mailbody.innerHTML))}}document.addEventListener("DOMContentLoaded",function(){initMarkdown()},!0);

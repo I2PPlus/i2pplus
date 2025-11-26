@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: net.i2p.i2ptunnel.I2PTunnel
+Class-Path: i2p.jar mstreaming.jar
+

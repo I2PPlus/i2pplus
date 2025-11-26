@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",function(){var newPage=new Event("updated");window.parent.document.dispatchEvent(newPage)});

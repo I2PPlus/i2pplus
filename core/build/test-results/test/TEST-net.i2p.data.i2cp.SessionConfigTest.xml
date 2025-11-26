@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.i2p.data.i2cp.SessionConfigTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-11-26T13:38:16.708Z" hostname="ganesh" time="0.001">
+  <properties/>
+  <testcase name="testStructure" classname="net.i2p.data.i2cp.SessionConfigTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

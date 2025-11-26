@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.i2p.crypto.eddsa.math.bigint.BigIntegerFieldElementTest" tests="16" skipped="0" failures="0" errors="0" timestamp="2025-11-26T13:38:15.141Z" hostname="ganesh" time="0.04">
+  <properties/>
+  <testcase name="testFieldElementBigInteger" classname="net.i2p.crypto.eddsa.math.bigint.BigIntegerFieldElementTest" time="0.001"/>
+  <testcase name="testEqualsObject" classname="net.i2p.crypto.eddsa.math.bigint.BigIntegerFieldElementTest" time="0.0"/>
+  <testcase name="testToByteArray" classname="net.i2p.crypto.eddsa.math.bigint.BigIntegerFieldElementTest" time="0.0"/>
+  <testcase name="isNonZeroReturnsTrueIfFieldElementIsNonZero" classname="net.i2p.crypto.eddsa.math.bigint.BigIntegerFieldElementTest" time="0.0"/>
+  <testcase name="multiplyReturnsCorrectResult" classname="net.i2p.crypto.eddsa.math.bigint.BigIntegerFieldElementTest" time="0.003"/>
+  <testcase name="isNonZeroReturnsFalseIfFieldElementIsZero" classname="net.i2p.crypto.eddsa.math.bigint.BigIntegerFieldElementTest" time="0.0"/>
+  <testcase name="subtractReturnsCorrectResult" classname="net.i2p.crypto.eddsa.math.bigint.BigIntegerFieldElementTest" time="0.001"/>
+  <testcase name="cmovReturnsCorrectResult" classname="net.i2p.crypto.eddsa.math.bigint.BigIntegerFieldElementTest" time="0.0"/>
+  <testcase name="pow22523ReturnsCorrectResult" classname="net.i2p.crypto.eddsa.math.bigint.BigIntegerFieldElementTest" time="0.018"/>
+  <testcase name="equalsOnlyReturnsTrueForEquivalentObjects" classname="net.i2p.crypto.eddsa.math.bigint.BigIntegerFieldElementTest" time="0.0"/>
+  <testcase name="squareAndDoubleReturnsCorrectResult" classname="net.i2p.crypto.eddsa.math.bigint.BigIntegerFieldElementTest" time="0.001"/>
+  <testcase name="squareReturnsCorrectResult" classname="net.i2p.crypto.eddsa.math.bigint.BigIntegerFieldElementTest" time="0.002"/>
+  <testcase name="negateReturnsCorrectResult" classname="net.i2p.crypto.eddsa.math.bigint.BigIntegerFieldElementTest" time="0.001"/>
+  <testcase name="hashCodesAreEqualForEquivalentObjects" classname="net.i2p.crypto.eddsa.math.bigint.BigIntegerFieldElementTest" time="0.0"/>
+  <testcase name="addReturnsCorrectResult" classname="net.i2p.crypto.eddsa.math.bigint.BigIntegerFieldElementTest" time="0.001"/>
+  <testcase name="invertReturnsCorrectResult" classname="net.i2p.crypto.eddsa.math.bigint.BigIntegerFieldElementTest" time="0.012"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

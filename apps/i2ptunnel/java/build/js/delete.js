@@ -1,0 +1,1 @@
+function init(){var buttons=document.getElementsByClassName("delete");for(index=0;index<buttons.length;index++)addClickHandler(buttons[index])}function addClickHandler(elem){elem.addEventListener("click",function(){if(!confirm(deleteMessage))return event.preventDefault(),!1})}document.addEventListener("DOMContentLoaded",init);

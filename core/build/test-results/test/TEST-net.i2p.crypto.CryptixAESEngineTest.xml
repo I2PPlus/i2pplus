@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.i2p.crypto.CryptixAESEngineTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2025-11-26T13:38:13.537Z" hostname="ganesh" time="0.001">
+  <properties/>
+  <testcase name="testEDBlock2" classname="net.i2p.crypto.CryptixAESEngineTest" time="0.0"/>
+  <testcase name="testED2" classname="net.i2p.crypto.CryptixAESEngineTest" time="0.001"/>
+  <testcase name="testFake" classname="net.i2p.crypto.CryptixAESEngineTest" time="0.0"/>
+  <testcase name="testNull" classname="net.i2p.crypto.CryptixAESEngineTest" time="0.0"/>
+  <testcase name="testED" classname="net.i2p.crypto.CryptixAESEngineTest" time="0.0"/>
+  <testcase name="testEDBlock" classname="net.i2p.crypto.CryptixAESEngineTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,1 @@
+!function(){const collator=Intl.Collator();Tablesort.extend("intl",_=>!1,(a,b)=>collator.compare(b,a))}();

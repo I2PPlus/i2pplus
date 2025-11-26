@@ -1,0 +1,44 @@
+/* I2P+ I2PSnark linkToggle.css */
+/* Author: dr|z3d */
+
+#snarkTbody .magnet>*{display:none}
+#snarkTbody .magnet,#snarkTbody .magnet:empty{padding:0;width:0;font-size:0}
+#snarkTbody .trackerLink>*{display:inline-block}
+#snarkTbody .trackerLink{padding:4px;width:1%;vertical-align:middle;text-align:center;font-size:0}
+#torrents #linkswitch.optbox{display:inline-block;background:none;box-shadow:none;border:0}
+#torrents .magnetlink,#torrents .magnetlink a,#torrents .magnetlink img,#torrents .trackerlink{margin:0;padding:0;white-space:normal;border:0;box-shadow:none;background:none}
+#torrents td.trackerLink img{margin:0;width:18px;height:18px}
+.magnetlink,.torrentink a,.torrentink img,.trackerLink a,.trackerLink img,#linkswitch{text-align:center;border:0;box-shadow:none;background:none}
+.magnets #torrents #linkswitch::before{background:url(/i2psnark/.res/icons/magnet.svg) no-repeat center center/20px}
+.magnets #snarkHead .trackerLink,#snarkTbody .trackerLink{padding:0;width:0;font-size:0}
+.magnets #snarkTbody .trackerLink>*{display:none}
+.magnets #snarkTbody .magnet{padding:4px;width:1%;vertical-align:middle;text-align:center;font-size:0}
+.magnets #snarkTbody .magnet>*{display:inline-block}
+.magnets #snarkTbody .magnetlink{position:relative}
+.magnets #snarkTbody .copyMagnet{width:100%;height:100%;position:absolute;top:0;right:0;bottom:0;left:0;border:0}
+.tlinks #torrents #linkswitch::before{background:url(/i2psnark/.res/icons/link.svg) no-repeat center center/20px}
+.tlinks #snarkTbody .magnet{padding:0;width:0;font-size:0}
+.tlinks #snarkTbody .magnet>*{display:none}
+.tlinks #snarkTbody .trackerLink{padding:4px;width:1%;vertical-align:middle;text-align:center;font-size:0}
+.tlinks #snarkTbody .trackerLink>*{display:inline-block}
+.tlinks #torrents td.trackerLink img{margin:0;width:18px;height:18px}
+.trackerLink,.magnet{padding:2px;text-align:center}
+#linkswitch::before{width:20px;height:20px;display:inline-block;position:relative;top:calc(50% - 10px);left:calc(50% - 10px);transform:none;border:0;box-shadow:none;content:"";background:url(/i2psnark/.res/icons/link.svg) no-repeat center center/20px}
+#linkswitch:checked::before{background:url(/i2psnark/.res/icons/magnet.svg) no-repeat center center/20px}
+.copyingToClipboard .magnetlink{opacity:.3;pointer-events:none}
+.magnetlink,.copyingToClipboard .magnetlink{transition:ease .2s opacity}
+
+/* copy to clipboard "toast" notifications */
+#toast{top:-5px;padding:13px 8px 8px;height:50px;position:fixed;right:5px;left:5px;z-index:999999;text-align:center;line-height:25px;font-size:10pt;font-weight:600;animation:toastSlideIn .5s ease 0s both}
+#toast.dismiss{animation:toastSlideOut .75s ease .5s both}
+.iframed #toast,.iframed #toast.dismiss{left:0;right:0;border-radius:0;animation-timing-function:ease-out}
+.iframed #toast:not(.dismiss){animation-delay:0}
+@keyframes toastSlideIn{from{transform:translateY(-120px)}to{transform:translateY(0)}}
+@keyframes toastSlideOut{from{transform:translateY(0)}to{transform:translateY(-120px)}}
+
+@media(min-width:1500px){
+  .magnets #torrents td.magnet img{margin:0;width:20px;height:20px}
+  .tlinks #torrents td.trackerLink img{margin:0;width:20px;height:20px}
+  #torrents td.trackerLink img{margin:0;width:20px;height:20px}
+  #torrents td.magnet img{margin:0;width:20px;height:20px}
+}

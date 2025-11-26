@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Main-Class: org.klomp.snark.Snark
+Class-Path: i2p.jar mstreaming.jar streaming.jar
+

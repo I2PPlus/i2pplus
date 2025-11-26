@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",()=>{document.querySelectorAll(".control.delete").forEach(btn=>{btn.addEventListener("click",event=>{var client=btn.getAttribute("client");client&&!confirm(deleteMessage.replace("{0}",client))&&event.preventDefault()})})});

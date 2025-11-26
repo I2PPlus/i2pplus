@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.i2p.client.streaming.impl.MessageOutputStreamTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-11-26T13:28:12.070Z" hostname="ganesh" time="0.029">
+  <properties/>
+  <testcase name="test" classname="net.i2p.client.streaming.impl.MessageOutputStreamTest" time="0.029"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

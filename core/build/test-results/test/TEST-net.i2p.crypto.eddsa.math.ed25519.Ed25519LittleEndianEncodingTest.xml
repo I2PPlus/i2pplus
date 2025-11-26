@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.i2p.crypto.eddsa.math.ed25519.Ed25519LittleEndianEncodingTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2025-11-26T13:38:15.304Z" hostname="ganesh" time="0.33">
+  <properties/>
+  <testcase name="decodeReturnsCorrectFieldElement" classname="net.i2p.crypto.eddsa.math.ed25519.Ed25519LittleEndianEncodingTest" time="0.075"/>
+  <testcase name="encodeReturnsCorrectByteArray" classname="net.i2p.crypto.eddsa.math.ed25519.Ed25519LittleEndianEncodingTest" time="0.135"/>
+  <testcase name="encodeReturnsCorrectByteArrayForSimpleFieldElements" classname="net.i2p.crypto.eddsa.math.ed25519.Ed25519LittleEndianEncodingTest" time="0.0"/>
+  <testcase name="isNegativeReturnsCorrectResult" classname="net.i2p.crypto.eddsa.math.ed25519.Ed25519LittleEndianEncodingTest" time="0.12"/>
+  <testcase name="decodeReturnsCorrectFieldElementForSimpleByteArrays" classname="net.i2p.crypto.eddsa.math.ed25519.Ed25519LittleEndianEncodingTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

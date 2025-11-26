@@ -1,0 +1,56 @@
+<%@page trimDirectiveWhitespaces="true"%>
+<%  /*
+     *  Does the standard setup for all form handlers, then displays the message box (which drives the form processing).
+     *  Included ~15 times, keep whitespace to a minimum
+     *
+     *  Include this directly after the line:
+     *  <jsp:useBean class="net.i2p.router.web.helpers.xxxHandler" id="formhandler" scope="request" />
+     */
+    formhandler.setContextId(i2pcontextId); // This initializes the RouterContext - must be the first thing i2pcontextId sets in css.jsi
+    formhandler.storeMethod(request.getMethod()); // Prevents any saves via GET
+    String klass = formhandler.getClass().getName(); // Store the nonces for verification
+    String nonceAttr1 = klass + ".nonce";
+    String nonceAttr2 = nonceAttr1 + "Prev";
+    String nonce1 = null;
+    try {
+        // Jetty doesn't seem to ISE here...
+        nonce1 = (String) session.getAttribute(nonceAttr1);
+        String nonce2 = (String) session.getAttribute(nonceAttr2);
+        formhandler.storeNonces(nonce1, nonce2);
+    } catch (IllegalStateException ise) {} // nonce1 will be null, removed in setAttibute below
+
+    String contentType = request.getContentType();
+    if (contentType != null && contentType.toLowerCase(java.util.Locale.US).startsWith( "multipart/form-data")) {
+        /*
+         * For multipart/form-data, we must decode things enough to get the action and nonce so FormHandler will validate.
+         * The handler must get everything else through the wrapper. No other properties will be set.
+         * All parameters other than nonce and action must be retrieved through the wrapper.
+         * Warning, parameters are NOT XSS filtered.
+         */
+        net.i2p.servlet.RequestWrapper requestWrapper = new net.i2p.servlet.RequestWrapper(request);
+        String action = requestWrapper.getParameter("action");
+        if (action != null) {formhandler.setAction(action);}
+        String nonce = requestWrapper.getParameter("nonce");
+        if (nonce != null) {formhandler.setNonce(nonce);}
+        formhandler.setRequestWrapper(requestWrapper);
+    } else {
+        /*
+         * Put all the params in the map, some handlers use this instead of individual setters.
+         * XSS Filter No multipart config for servlet
+         * We also call all of the setters below.
+         */
+        formhandler.setSettings(request.getParameterMap());
+%>
+<jsp:setProperty name="formhandler" property="*" />
+<%  } %>
+<jsp:getProperty name="formhandler" property="allMessages" />
+<%  /*
+     * Only call this once per page, do not getProperty("newNonce") elsewhere, use the variable instead.
+     * This shuffles down the nonces, so it must be after getAllMessages() above, since it does the form validation.
+     */
+    String pageNonce = formhandler.getNewNonce();
+    try {
+        session.setAttribute(nonceAttr2, nonce1); // Jetty waits to ISE until here....
+        session.setAttribute(nonceAttr1, pageNonce);
+    } catch (IllegalStateException ise) {}
+%>

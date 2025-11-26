@@ -1,0 +1,6 @@
+
+uNextWhenNone()+CachedIteratorCollection: NoSuchElementException caught successfully.java.util.NoSuchElementException
+
+gNextWhenNone()+LinkedList: NoSuchElementException caught successfully.java.util.NoSuchElementException
+rRemoveTwice()+CachedIteratorCollection: IllegalStateException caught successfully.java.lang.IllegalStateException
+dRemoveTwice()+LinkedList: IllegalStateException caught successfully.java.lang.IllegalStateException

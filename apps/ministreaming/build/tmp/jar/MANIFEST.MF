@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Specification-Title: I2P Streaming API
+Implementation-Title: I2P Java Streaming API
+

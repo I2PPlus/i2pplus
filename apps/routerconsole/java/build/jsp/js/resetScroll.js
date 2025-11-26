@@ -1,0 +1,1 @@
+function resetScrollLeft(element){element.scrollLeft=0}function initResetScroll(){for(var buttons=document.getElementsByClassName("resetScrollLeft"),i=0;i<buttons.length;i++)buttons[i].addEventListener("blur",function(){resetScrollLeft(this)})}document.addEventListener("DOMContentLoaded",initResetScroll);

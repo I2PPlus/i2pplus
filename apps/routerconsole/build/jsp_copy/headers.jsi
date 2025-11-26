@@ -1,0 +1,51 @@
+<% if (request.getCharacterEncoding() == null) {request.setCharacterEncoding("UTF-8");}
+   String i2pcontextId = request.getParameter("i2p.contextId");
+   try {
+     if (i2pcontextId != null) {session.setAttribute("i2p.contextId", i2pcontextId);}
+     else {i2pcontextId = (String) session.getAttribute("i2p.contextId");}
+   } catch (IllegalStateException ise) {}
+%>
+<jsp:useBean class="net.i2p.router.web.CSSHelper" id="intl" scope="request" />
+<jsp:setProperty name="intl" property="contextId" value="<%=i2pcontextId%>" />
+<%
+  String uri = request.getRequestURI();
+  String UA = request.getHeader("User-Agent");
+  String themePath = intl.getTheme(UA);
+  String theme = intl.getTheme(UA).replace("/themes/console/", "").replace("/", "");
+  String cspNonce = Integer.toHexString(net.i2p.util.RandomSource.getInstance().nextInt());
+  request.setAttribute("cspNonce", cspNonce);
+  String themeBase = net.i2p.I2PAppContext.getGlobalContext().getBaseDir().getAbsolutePath() +
+                     java.io.File.separatorChar + "docs" + java.io.File.separatorChar + "themes" +
+                     java.io.File.separatorChar + "console" + java.io.File.separatorChar + theme +
+                     java.io.File.separatorChar;
+  java.io.File themeOverride = new java.io.File(themeBase + "override.css");
+  boolean hasOverride = themeOverride.exists();
+  boolean useSoraFont = intl.useSoraDisplayFont();
+  boolean useStickySidebar = intl.useStickySidebar();
+  boolean useUnifiedSidebar = intl.useUnifiedSidebar();
+  String type = request.getContentType();
+  boolean needsCSP = true;
+  boolean isAdvancedMode = intl.isAdvancedMode();
+  if (type != null) {
+      if (type.startsWith("image/") || type.startsWith("font/") || type.startsWith("video/") ||
+          type.startsWith("audio/") || type.equals("text/plain") || type.equals("text/csv") ||
+          type.startsWith("data:") || type.equals("application/json") || type.equals("application/xml")) {
+          needsCSP = false;
+      }
+  }
+  String defaultCSP = "default-src 'self'; base-uri 'self'; worker-src 'self'; frame-ancestors 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; script-src 'self' 'nonce-" + cspNonce + "'; font-src 'self'; object-src 'none'; media-src 'none'";
+  response.setHeader("Accept-Ranges", "bytes");
+  if (needsCSP) {response.setHeader("Content-Security-Policy", defaultCSP);}
+  response.setHeader("X-XSS-Protection", "1; mode=block");
+  response.setHeader("X-Content-Type-Options", "nosniff");
+  response.setHeader("Referrer-Policy", "same-origin");
+  if (uri.contains("override.css")) {response.setHeader("Cache-Control", "private, no-cache, max-age=2628000");}
+  else if (uri.endsWith("xhr1.jsp")) {response.setHeader("Cache-Control", "private, no-cache, max-age=180");}
+  else if (uri.contains("themes") || uri.contains("js") || uri.contains("flags")) {response.setHeader("Cache-Control", "private, max-age=2628000, immutable");}
+  else {response.setHeader("Cache-Control", "private, no-cache, max-age=2628000");}
+  String conNonceParam = request.getParameter("consoleNonce");
+  if (net.i2p.router.web.CSSHelper.getNonce().equals(conNonceParam)) {
+    intl.setLang(request.getParameter("lang"));
+    intl.setNews(request.getParameter("news"));
+  }
+%>

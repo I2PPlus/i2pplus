@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.i2p.client.streaming.I2PSocketExceptionTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2025-11-26T13:28:12.056Z" hostname="ganesh" time="0.003">
+  <properties/>
+  <testcase name="testUnknownStatus" classname="net.i2p.client.streaming.I2PSocketExceptionTest" time="0.002"/>
+  <testcase name="testKnownStatus" classname="net.i2p.client.streaming.I2PSocketExceptionTest" time="0.001"/>
+  <testcase name="testCustomStatus" classname="net.i2p.client.streaming.I2PSocketExceptionTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.i2p.client.streaming.impl.SchedulerDeadTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2025-11-26T13:28:12.102Z" hostname="ganesh" time="0.199">
+  <properties/>
+  <testcase name="testAccept_nothingLeftToDo" classname="net.i2p.client.streaming.impl.SchedulerDeadTest" time="0.191"/>
+  <testcase name="testAccept_noDisconnectScheduled" classname="net.i2p.client.streaming.impl.SchedulerDeadTest" time="0.004"/>
+  <testcase name="testAccept_timedOut" classname="net.i2p.client.streaming.impl.SchedulerDeadTest" time="0.002"/>
+  <testcase name="testEventOccurred" classname="net.i2p.client.streaming.impl.SchedulerDeadTest" time="0.001"/>
+  <testcase name="testAccept_null" classname="net.i2p.client.streaming.impl.SchedulerDeadTest" time="0.001"/>
+  <system-out><![CDATA[[MockitoHint] SchedulerDeadTest.testAccept_nothingLeftToDo (see javadoc for MockitoHint):
+[MockitoHint] 1. Unused -> at net.i2p.client.streaming.impl.TaskSchedulerTestBase.setUp(TaskSchedulerTestBase.java:31)
+[MockitoHint] 2. Unused -> at net.i2p.client.streaming.impl.SchedulerDeadTest.setMocks(SchedulerDeadTest.java:24)
+
+[MockitoHint] SchedulerDeadTest.testAccept_noDisconnectScheduled (see javadoc for MockitoHint):
+[MockitoHint] 1. Unused -> at net.i2p.client.streaming.impl.TaskSchedulerTestBase.setUp(TaskSchedulerTestBase.java:31)
+[MockitoHint] 2. Unused -> at net.i2p.client.streaming.impl.SchedulerDeadTest.setMocks(SchedulerDeadTest.java:24)
+
+[MockitoHint] SchedulerDeadTest.testAccept_timedOut (see javadoc for MockitoHint):
+[MockitoHint] 1. Unused -> at net.i2p.client.streaming.impl.TaskSchedulerTestBase.setUp(TaskSchedulerTestBase.java:31)
+
+[MockitoHint] SchedulerDeadTest.testEventOccurred (see javadoc for MockitoHint):
+[MockitoHint] 1. Unused -> at net.i2p.client.streaming.impl.TaskSchedulerTestBase.setUp(TaskSchedulerTestBase.java:30)
+[MockitoHint] 2. Unused -> at net.i2p.client.streaming.impl.TaskSchedulerTestBase.setUp(TaskSchedulerTestBase.java:31)
+
+[MockitoHint] SchedulerDeadTest.testAccept_null (see javadoc for MockitoHint):
+[MockitoHint] 1. Unused -> at net.i2p.client.streaming.impl.TaskSchedulerTestBase.setUp(TaskSchedulerTestBase.java:30)
+[MockitoHint] 2. Unused -> at net.i2p.client.streaming.impl.TaskSchedulerTestBase.setUp(TaskSchedulerTestBase.java:31)
+
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

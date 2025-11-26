@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.i2p.client.streaming.I2PSocketAddressTest" tests="19" skipped="0" failures="0" errors="0" timestamp="2025-11-26T13:28:11.458Z" hostname="ganesh" time="0.152">
+  <properties/>
+  <testcase name="testConstruct_Dest_negPort_throwsIAE" classname="net.i2p.client.streaming.I2PSocketAddressTest" time="0.018"/>
+  <testcase name="testConstruct_HostPort_highPort_throwsIAE" classname="net.i2p.client.streaming.I2PSocketAddressTest" time="0.0"/>
+  <testcase name="testConstruct_Host_withPort" classname="net.i2p.client.streaming.I2PSocketAddressTest" time="0.092"/>
+  <testcase name="testConstruct_nullDest_throwsNPE" classname="net.i2p.client.streaming.I2PSocketAddressTest" time="0.001"/>
+  <testcase name="testCreateUnresolved_highPort_throwsIAE" classname="net.i2p.client.streaming.I2PSocketAddressTest" time="0.001"/>
+  <testcase name="testToString" classname="net.i2p.client.streaming.I2PSocketAddressTest" time="0.035"/>
+  <testcase name="testConstruct_Host_highPort_throwsIAE" classname="net.i2p.client.streaming.I2PSocketAddressTest" time="0.0"/>
+  <testcase name="testConstruct_Host_missingPort_throwsIAE" classname="net.i2p.client.streaming.I2PSocketAddressTest" time="0.0"/>
+  <testcase name="testConstruct_Host_notAPort_throwsIAE" classname="net.i2p.client.streaming.I2PSocketAddressTest" time="0.001"/>
+  <testcase name="testConstruct_Dest" classname="net.i2p.client.streaming.I2PSocketAddressTest" time="0.0"/>
+  <testcase name="testConstruct_Host" classname="net.i2p.client.streaming.I2PSocketAddressTest" time="0.001"/>
+  <testcase name="testToString_unresolved" classname="net.i2p.client.streaming.I2PSocketAddressTest" time="0.0"/>
+  <testcase name="testConstruct_Host_negPort_throwsIAE" classname="net.i2p.client.streaming.I2PSocketAddressTest" time="0.0"/>
+  <testcase name="testConstruct_HostPort" classname="net.i2p.client.streaming.I2PSocketAddressTest" time="0.0"/>
+  <testcase name="testCreateUnresolved_negPort_throwsIAE" classname="net.i2p.client.streaming.I2PSocketAddressTest" time="0.0"/>
+  <testcase name="testEquals" classname="net.i2p.client.streaming.I2PSocketAddressTest" time="0.0"/>
+  <testcase name="testConstruct_Dest_highPort_throwsIAE" classname="net.i2p.client.streaming.I2PSocketAddressTest" time="0.001"/>
+  <testcase name="testConstruct_HostPort_negPort_throwsIAE" classname="net.i2p.client.streaming.I2PSocketAddressTest" time="0.0"/>
+  <testcase name="testCreateUnresolved" classname="net.i2p.client.streaming.I2PSocketAddressTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

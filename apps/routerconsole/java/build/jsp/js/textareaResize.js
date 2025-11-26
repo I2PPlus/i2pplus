@@ -1,0 +1,1 @@
+function addResizeListener(element){element&&"textarea"===element.tagName&&(element.setAttribute("style","height:"+element.scrollHeight+"px;overflow-y:hidden;"),element.addEventListener("input",function(){this.style.height="auto",this.style.height=this.scrollHeight+"px"},!1))}

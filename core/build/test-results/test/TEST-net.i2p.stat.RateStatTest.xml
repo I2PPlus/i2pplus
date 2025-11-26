@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.i2p.stat.RateStatTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2025-11-26T13:38:16.788Z" hostname="ganesh" time="0.003">
+  <properties/>
+  <testcase name="testAddingAndRemovingThrows" classname="net.i2p.stat.RateStatTest" time="0.0"/>
+  <testcase name="testRateStat" classname="net.i2p.stat.RateStatTest" time="0.003"/>
+  <testcase name="testGettersEtc" classname="net.i2p.stat.RateStatTest" time="0.0"/>
+  <testcase name="testNoRates" classname="net.i2p.stat.RateStatTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

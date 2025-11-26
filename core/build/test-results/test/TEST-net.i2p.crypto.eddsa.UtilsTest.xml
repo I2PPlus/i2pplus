@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="net.i2p.crypto.eddsa.UtilsTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2025-11-26T13:38:14.021Z" hostname="ganesh" time="0.002">
+  <properties/>
+  <testcase name="testBit" classname="net.i2p.crypto.eddsa.UtilsTest" time="0.0"/>
+  <testcase name="hexToBytesReturnsCorrectByteArray" classname="net.i2p.crypto.eddsa.UtilsTest" time="0.0"/>
+  <testcase name="equalsReturnsOneForEqualByteArrays" classname="net.i2p.crypto.eddsa.UtilsTest" time="0.001"/>
+  <testcase name="equalsReturnsZeroForUnequalByteArrays" classname="net.i2p.crypto.eddsa.UtilsTest" time="0.0"/>
+  <testcase name="testIntEqual" classname="net.i2p.crypto.eddsa.UtilsTest" time="0.0"/>
+  <testcase name="testByteArrayEqual" classname="net.i2p.crypto.eddsa.UtilsTest" time="0.0"/>
+  <testcase name="bytesToHexReturnsCorrectHexString" classname="net.i2p.crypto.eddsa.UtilsTest" time="0.0"/>
+  <testcase name="testNegative" classname="net.i2p.crypto.eddsa.UtilsTest" time="0.0"/>
+  <testcase name="hexToBytesThrowsOnInvalidLengthHexString" classname="net.i2p.crypto.eddsa.UtilsTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

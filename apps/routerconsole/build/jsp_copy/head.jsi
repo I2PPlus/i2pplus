@@ -1,0 +1,53 @@
+<%@include file="headers.jsi"%>
+<%
+net.i2p.I2PAppContext ctx = net.i2p.I2PAppContext.getGlobalContext();
+String lang = ctx.getProperty("routerconsole.lang", "en");
+String fontPath = useSoraFont ? "/themes/fonts/Sora/" : "/themes/fonts/OpenSans/";
+String fontStyle = useSoraFont ? "/themes/fonts/Sora.css" : "/themes/fonts/OpenSans.css";
+String fontFile = useSoraFont ? fontPath + "Sora.woff2" : fontPath + "OpenSans.woff2";
+String v = net.i2p.CoreVersion.VERSION;
+boolean isMobile = !intl.allowIFrame(UA);
+boolean isConfigPage = uri.contains("config") && !uri.contains("/help/");
+boolean isHelpPage = uri.contains("/help/") && !uri.endsWith("/");
+boolean isWizardPage = uri.endsWith("wizard") || uri.endsWith("wizard.jsp");
+boolean viewProfile = uri.contains("viewprofile");
+%>
+<html lang="<%=lang%>" class="<%=isAdvancedMode ? "advmode " : ""%><%=useUnifiedSidebar ? "unified " : ""%><%=useSoraFont ? "sora" : "opensans"%>" <%=theme.equals("dark") || theme.equals("midnight") ? "style=\"background:var(--bodybg,#000)\"" : ""%>>
+<head>
+<script src=/js/progressx.js></script>
+<meta charset=utf-8>
+<meta name=viewport content="width=device-width, initial-scale=1">
+<link rel=modulepreload href=/js/refreshSidebar.js>
+<link rel=modulepreload href=/js/sectionToggle.js>
+<link rel=modulepreload href=/js/miniGraph.js>
+<link rel=modulepreload href=/js/stickySidebar.js>
+<link rel=modulepreload href=/js/iframeResizer/iframeResizer.js>
+<link rel=preload href="<%=themePath%>console.css?version=<%=v%>" as=style>
+<link rel=preload href=<%=themePath%>images/i2plogo.png as=image>
+<link rel=preload href=/themes/console/images/images.css as=style>
+<link rel=preload href=<%=themePath%>images/images.css as=style>
+<link rel=stylesheet href=<%=themePath%>global.css>
+<link rel=stylesheet href=<%=fontStyle%>>
+<% if (viewProfile) { %> <link href=/themes/console/viewprofile.css rel=stylesheet> <% } %>
+<% if (isConfigPage) {%> <link rel=preload href=/themes/console/confignav.css as=style> <% } %>
+<% if (isHelpPage) {%> <link rel=stylesheet href=/themes/console/helpnav.css> <% } %>
+<% if (isMobile) {%> <link rel=preload href="<%=themePath%>mobile.css?version=<%=v%>" as=style> <% } %>
+<% if (isWizardPage) {%> <link rel=stylesheet href=<%=themePath%>wizard.css> <% } %>
+<link rel=icon href=<%=themePath%>images/favicon.svg>
+<link rel=stylesheet href="<%=themePath%>console.css?version=<%=v%>" title="<%=theme%>">
+<link rel=stylesheet href=/themes/console/images/images.css>
+<link rel=stylesheet href=<%=themePath%>images/images.css>
+<% if (lang.equals("zh")) {%> <link href="<%=themePath%>console_big.css?version=<%=v%>" rel=stylesheet> <% }
+else if (lang.equals("ar") || lang.equals("fa")) {%> <link rel=stylesheet href="<%=themePath%>console_ar.css?version=<%=v%>"> <% } %>
+<% if (hasOverride) {%> <link href=<%=themePath%>override.css rel=stylesheet> <% } %>
+<script nonce=<%=cspNonce%>>
+  if (top.location.href !== location.href) top.location.href = location.href;
+  const refresh = parseInt(<%=intl.getRefresh()%>, 10);
+  const theme = "<%=theme%>";
+  const cspNonce = "<%=cspNonce%>";
+  window.stickySidebarEnabled = <%=useStickySidebar%>;
+  progressx.show(theme);progressx.progress(0.1);
+</script>
+<% if (!isWizardPage) {%> <script src=/js/refreshSidebar.js type=module></script> <% } %>
+<script src=/js/detectPageZoom.js></script>
+<noscript><style>.script{display:none!important}</style></noscript>

@@ -1,0 +1,1 @@
+function initSelectAll(){var inputs=document.getElementsByClassName("readonly");for(index=0;index<inputs.length;index++)addSelectAllHander(inputs[index])}function addSelectAllHander(elem){elem.addEventListener("click",function(){selectAll(elem)})}function selectAll(element){element.select()}document.addEventListener("DOMContentLoaded",initSelectAll);

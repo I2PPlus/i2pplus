@@ -1,0 +1,4 @@
+#screenlog.collapsed{height:56px!important;min-height:56px}
+#shrink{display:none}
+#expand{display:inline-block}
+@media (min-width:1500px){#screenlog.collapsed{height:60px!important;min-height:60px}}

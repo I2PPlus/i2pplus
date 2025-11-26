@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",()=>{const notice=document.getElementById("notify");notice&&(""===notice.innerHTML&&notice.remove(),notice.addEventListener("click",()=>{notice.remove(),console.log("Notification nuked!")}))});
