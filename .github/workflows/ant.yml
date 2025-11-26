@@ -61,6 +61,6 @@ jobs:
             dist/install.jar
             dist/javadoc.zip
             dist/i2psnark-standalone.zip
-          retention-days: 30
+          retention-days: 7
 
       
