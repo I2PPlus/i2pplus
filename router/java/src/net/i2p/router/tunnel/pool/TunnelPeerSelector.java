@@ -236,7 +236,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         String caps = info.getCapabilities();
         boolean isFF = caps.indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0;
         //if (isFF && caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0) {return true;}
-        if (isExploratory && isFF && ctx.random().nextInt(20) != 0) {return true;}
+        if (isExploratory && isFF && ctx.random().nextInt(4) != 0) {return true;}
 
         if (filterUnreachable(isInbound, isExploratory)) {
             if (caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0) {return true;}
@@ -245,7 +245,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         if (filterSlow(isInbound, isExploratory)) {
             // NOTE: filterSlow always returns true
             String excl = getExcludeCaps(ctx);
-            if (shouldExclude(info, excl)) {return true;}
+            if (shouldExclude(ctx, info, excl)) {return true;}
         }
 
         return false;
@@ -334,7 +334,7 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
      *  Warning, this is also called by ProfileOrganizer.isSelectable()
      */
     public static boolean shouldExclude(RouterContext ctx, RouterInfo peer) {
-        return shouldExclude(peer, getExcludeCaps(ctx));
+        return shouldExclude(ctx, peer, getExcludeCaps(ctx));
     }
 
     /**
@@ -344,17 +344,17 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         return ctx.getProperty("router.excludePeerCaps", DEFAULT_EXCLUDE_CAPS);
     }
 
-    /** SSU2 fixes (2.1.0), Congestion fixes (2.2.0) */
     private static final String MIN_VERSION = "0.9.60";
 
     /**
      * Should the peer be excluded based on its published caps, crypto, and version?
      *
+     * @param ctx Router context for peer count checks
      * @param peer The peer to evaluate
      * @param excl Characters representing capabilities we want to exclude
      * @return true if the peer should be excluded
      */
-    private static boolean shouldExclude(RouterInfo peer, String excl) {
+    private static boolean shouldExclude(RouterContext ctx, RouterInfo peer, String excl) {
         String cap = peer.getCapabilities();
         RouterIdentity ident = peer.getIdentity();
 
@@ -387,8 +387,9 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         if (cap.contains("L") || cap.contains("M") || cap.contains("N") || cap.contains("O") ||
             cap.contains("P") || cap.contains("Q") || cap.contains("X")) knownCaps++;
 
-        // Exclude peers with only one meaningful capability (e.g. only "F" or only "R")
-        if (knownCaps < 2 && cap.length() <= knownCaps) {
+        // Relax single-capability restriction when peer count is low
+        int fastPeerCount = ctx != null ? ctx.profileOrganizer().countFastPeers() : 100;
+        if (knownCaps < 2 && cap.length() <= knownCaps && fastPeerCount >= 20) {
             return true;
         }
 
