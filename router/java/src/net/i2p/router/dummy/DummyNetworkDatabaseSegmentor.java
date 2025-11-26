@@ -6,6 +6,7 @@ import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.networkdb.kademlia.SegmentedNetworkDatabaseFacade;
 
 /**
+ *  Dummy network database segmentor for testing.
  *  @since 0.9.61
  */
 public class DummyNetworkDatabaseSegmentor extends SegmentedNetworkDatabaseFacade {

@@ -35,7 +35,7 @@ import net.i2p.util.SimpleTimer2;
 
 /**
  *
- *
+ * Session key manager for ratchet encryption.
  *
  *  @since 0.9.44
  */

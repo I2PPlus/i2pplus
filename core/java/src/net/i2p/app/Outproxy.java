@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 /**
- *
+ * Interface for outproxy configuration.
  *  @since 0.9.11
  */
 public interface Outproxy {

@@ -80,6 +80,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
         T construct(byte[] buffer, int offset, int length);
     }
 
+    /** Default buffer size. */
     static final int DEFAULT_SIZE = 1024;
 
     /** The list of buffers, which grows and never reduces. */

@@ -163,6 +163,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     private Throwable _errorCause;
 
     /**
+     *  Session state enumeration.
      *  @since 0.9.8
      */
     protected enum State {

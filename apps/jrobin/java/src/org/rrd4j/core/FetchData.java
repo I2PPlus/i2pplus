@@ -38,6 +38,7 @@ import org.rrd4j.data.Variable;
  * all values for the i-th datasource. Returned datasource values correspond to
  * the values returned with {@link #getTimestamps() getTimestamps()} method.
  * <p>
+ * This data structure holds the fetched information.
  *
  * @author Sasa Markovic
  */

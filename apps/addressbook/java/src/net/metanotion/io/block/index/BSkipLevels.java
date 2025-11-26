@@ -53,6 +53,9 @@ import net.metanotion.util.skiplist.SkipSpan;
  *</pre>
  *
  * Always fits on one page.
+ *
+ * @param <K> the type of keys maintained by this skip level structure
+ * @param <V> the type of mapped values
  */
 public class BSkipLevels<K extends Comparable<? super K>, V> extends SkipLevels<K, V> {
 	private static final long MAGIC = 0x42534c6576656c73l;  // "BSLevels"

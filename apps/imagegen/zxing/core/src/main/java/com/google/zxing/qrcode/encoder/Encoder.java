@@ -32,6 +32,7 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
+ * Encoder for QR codes.
  * @author satorux@google.com (Satoru Takabayashi) - creator
  * @author dswitkin@google.com (Daniel Switkin) - ported from C++
  */

@@ -8,9 +8,10 @@ import net.i2p.i2ptunnel.udp.*;
 import net.i2p.util.Log;
 
 /**
- * Sends to one of many Sinks based on the toPort
+ * Sends to one of many Sinks based on toPort
  *
  * @author zzz modded from streamr/MultiSource
+ * @param <S> type of Sink objects managed by this MultiSink
  */
 public class MultiSink<S extends Sink> implements Source, Sink {
     private final Map<Integer, S> cache;

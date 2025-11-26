@@ -57,6 +57,9 @@ import net.metanotion.util.skiplist.SkipSpan;
  *     Magic number (int)
  *     next overflow page (unsigned int)
  *</pre>
+ *
+ * @param <K> type of keys maintained by this skip span
+ * @param <V> type of values stored in this skip span
  */
 public class BSkipSpan<K extends Comparable<? super K>, V> extends SkipSpan<K, V> {
     protected static final int MAGIC = 0x5370616e;  // "Span"

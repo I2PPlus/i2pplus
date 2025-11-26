@@ -9,6 +9,7 @@ import net.i2p.router.networkdb.reseed.Reseeder;
 import net.i2p.router.web.HelperBase;
 
 /**
+ *  Helper for reseed configuration.
  *  @since 0.8.3
  */
 public class ConfigReseedHelper extends HelperBase {

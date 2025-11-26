@@ -27,11 +27,19 @@ public class AAAA extends InternetAddressRR<Inet6Address> {
         return TYPE.AAAA;
     }
 
+    /**
+     * Create AAAA record from IPv6 address.
+     * @param inet6address IPv6 address
+     */
     public AAAA(Inet6Address inet6address) {
         super(inet6address);
         assert ip.length == 16;
     }
 
+    /**
+     * Create AAAA record from byte array.
+     * @param ip byte array containing IPv6 address (must be 16 bytes)
+     */
     public AAAA(byte[] ip) {
         super(ip);
         if (ip.length != 16) {
@@ -39,10 +47,20 @@ public class AAAA extends InternetAddressRR<Inet6Address> {
         }
     }
 
+    /**
+     * Create AAAA record from character sequence.
+     * @param ipv6CharSequence character sequence containing IPv6 address
+     */
     public AAAA(CharSequence ipv6CharSequence) {
         this(InetAddressUtil.ipv6From(ipv6CharSequence));
     }
 
+    /**
+     * Parse AAAA record from data input stream.
+     * @param dis data input stream to read from
+     * @return parsed AAAA record
+     * @throws java.io.IOException if I/O error occurs
+     */
     public static AAAA parse(DataInputStream dis)
             throws IOException {
         byte[] ip = new byte[16];

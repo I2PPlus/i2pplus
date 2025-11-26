@@ -14,6 +14,7 @@ package net.i2p.crypto.eddsa.math;
 import java.io.Serializable;
 
 /**
+ * Interface for scalar operations in EdDSA.
  * @since 0.9.15
  */
 public interface ScalarOps extends Serializable {

@@ -15,6 +15,7 @@ import java.util.Set;
  *  Also provides add() and sortedObjects()
  *
  *  @since 0.9.58
+ *  @param <K> type of objects being counted
  */
 public class ObjectCounterUnsafe<K> {
     private final HashMap<K, Int> map = new HashMap<K, Int>();

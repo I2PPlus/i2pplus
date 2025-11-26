@@ -48,6 +48,7 @@ import net.i2p.data.DataHelper;
  * All public methods are synchronized.
  * 
  * @author susi
+ * @param <O> type of objects stored in this folder
  */
 public class Folder<O extends Object> {
 	

@@ -214,6 +214,7 @@ public class RouterAppManager extends ClientAppManagerImpl {
     }
 
     /**
+     *  Shutdown task for router applications.
      *  @since 0.9.6
      */
     public class Shutdown implements Runnable {

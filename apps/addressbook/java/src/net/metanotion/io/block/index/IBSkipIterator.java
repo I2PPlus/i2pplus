@@ -40,6 +40,9 @@ import net.metanotion.util.skiplist.SkipSpan;
 	when the iterator leaves the span.
 	If the caller does not iterate all the way through, the last span
 	will remain in memory.
+ *
+ * @param <K> type of keys maintained by this iterator
+ * @param <V> type of values returned by this iterator
 */
 public class IBSkipIterator<K extends Comparable<? super K>, V> extends SkipIterator<K, V> {
 

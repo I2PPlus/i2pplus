@@ -1,7 +1,0 @@
-Manifest-Version: 1.0
-Specification-Title: I2P Router
-Implementation-Title: I2P Java Router
-Main-Class: net.i2p.router.CommandLine
-Class-Path: jetty-i2p.jar jetty-java5-threadpool.jar jetty-rewrite-handl
- er.jar jetty-sslengine.jar jetty-start.jar jetty-util.jar
-

@@ -5,6 +5,7 @@ import net.i2p.data.SimpleDataStructure;
 /**
  *  Removes nothing and always rejects the add. Flood resistant..
  *  @since 0.9.2 in i2psnark, moved to core in 0.9.10
+ *  @param <T> type of SimpleDataStructure objects in the bucket
  */
 public class RejectTrimmer<T extends SimpleDataStructure> implements KBucketTrimmer<T> {
     public boolean trim(KBucket<T> kbucket, T toAdd) {

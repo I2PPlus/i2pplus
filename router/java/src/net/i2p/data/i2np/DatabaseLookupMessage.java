@@ -66,7 +66,7 @@ public class DatabaseLookupMessage extends FastI2NPMessageImpl {
     // 0.9.46 or higher
     private static final byte FLAG_RATCHET = 0x10;
 
-    /** @since 0.9.16 */
+    /** Database lookup type enumeration. @since 0.9.16 */
     public enum Type {
         /** default - LS or RI */
         ANY,

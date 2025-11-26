@@ -42,6 +42,7 @@ import net.i2p.util.ConcurrentHashSet;
  *
  *  Refactored from net.i2p.router.networkdb.kademlia
  *  @since 0.9.2 in i2psnark, moved to core in 0.9.10
+ *  @param <T> type of SimpleDataStructure objects stored in this bucket
  */
 class KBucketImpl<T extends SimpleDataStructure> implements KBucket<T> {
     /**

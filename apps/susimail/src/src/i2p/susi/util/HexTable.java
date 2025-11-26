@@ -24,6 +24,7 @@
 package i2p.susi.util;
 
 /**
+ * Utility class for hex table operations.
  * @author susi
  */
 public class HexTable {

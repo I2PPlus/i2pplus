@@ -6,7 +6,7 @@ import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.web.FormHandler;
 
 /**
- *
+ * Handler for peer configuration.
  */
 public class ConfigPeerHandler extends FormHandler {
     private String _peer;

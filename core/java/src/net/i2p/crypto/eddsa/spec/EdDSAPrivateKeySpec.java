@@ -19,10 +19,9 @@ import java.util.Arrays;
 import net.i2p.crypto.eddsa.math.GroupElement;
 
 /**
- *
+ * EdDSA private key specification.
  * @since 0.9.15
  * @author str4d
- *
  */
 public class EdDSAPrivateKeySpec implements KeySpec {
     private final byte[] seed;

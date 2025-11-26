@@ -19,6 +19,7 @@ import net.i2p.router.web.FormHandler;
 import net.i2p.util.SecureDirectory;
 
 /**
+ *  Handler for family configuration.
  *  @since 0.9.25
  */
 public class ConfigFamilyHandler extends FormHandler {

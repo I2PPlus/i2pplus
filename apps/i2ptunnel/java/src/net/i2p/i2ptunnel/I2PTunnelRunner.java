@@ -80,6 +80,7 @@ public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErr
     }
 
     /**
+     * Callback interface for successful tunnel operation completion.
      *  @since 0.9.39
      */
     public interface SuccessCallback {public void onSuccess();}

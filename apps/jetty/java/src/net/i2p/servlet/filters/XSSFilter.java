@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.i2p.I2PAppContext;
 
 /**
+ *  Filter to prevent XSS attacks.
  *  @since 0.9.14
  */
 public class XSSFilter implements Filter {

@@ -66,6 +66,7 @@ public class MultiSource implements Source, Sink {
     }
 
     /**
+     * Sink wrapper for multi-source destinations.
      *  @since 0.9.53
      */
     static class MSink {

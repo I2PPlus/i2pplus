@@ -4,8 +4,8 @@
 package freenet.support.CPUInformation;
 
 /**
+ * Exception for unknown CPU types.
  * @author Iakin
- *
  */
 public class UnknownCPUException extends RuntimeException {
     /**

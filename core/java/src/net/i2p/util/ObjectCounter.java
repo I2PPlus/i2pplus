@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *  Count things.
  *
  *  @author zzz, welterde
+ *  @param <K> type of objects being counted
  */
 public class ObjectCounter<K> implements Serializable {
     /**

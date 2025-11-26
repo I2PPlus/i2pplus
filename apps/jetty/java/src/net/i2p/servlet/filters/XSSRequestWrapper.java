@@ -16,6 +16,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
+ *  Request wrapper to prevent XSS attacks.
  *  @since 0.9.14
  */
 public class XSSRequestWrapper extends HttpServletRequestWrapper {

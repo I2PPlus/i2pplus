@@ -50,7 +50,7 @@ class BuildExecutor implements Runnable {
     private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
     public boolean fullStats() {return _context.getBooleanProperty("stat.full");}
 
-    /** @since 0.9.53 */
+    /** Build result enumeration. @since 0.9.53 */
     enum Result { SUCCESS, REJECT, TIMEOUT, BAD_RESPONSE, DUP_ID, OTHER_FAILURE }
 
     public BuildExecutor(RouterContext ctx, TunnelPoolManager mgr) {

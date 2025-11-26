@@ -35,6 +35,7 @@ import java.util.NoSuchElementException;
  * Extend java.util.AbstractCollection to create a collection that can be
  * iterated over without creation of a new object
  *
+ * @param <E> the type of elements in this collection
  * @since 0.9.36
  *
  */

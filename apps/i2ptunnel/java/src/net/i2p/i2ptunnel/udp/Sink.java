@@ -3,6 +3,7 @@ package net.i2p.i2ptunnel.udp;
 import net.i2p.data.Destination;
 
 /**
+ * Sink interface for streaming data destinations.
  *
  * @author welterde
  */

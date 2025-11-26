@@ -6,10 +6,11 @@ import java.util.NoSuchElementException;
 
 /**
  *  Like Collections.singleton() but item is removable,
- *  clear() is supported, and the iterator supports remove().
+ *  clear() is supported, and  iterator supports remove().
  *  Item may not be null. add() and addAll() unsupported.
  *  Unsynchronized.
  *
+ *  @param <E> the type of element in this set
  *  @since 0.9.7
  */
 public class RemovableSingletonSet<E> extends AbstractSet<E> {

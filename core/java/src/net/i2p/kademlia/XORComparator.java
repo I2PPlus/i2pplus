@@ -9,6 +9,7 @@ import net.i2p.data.SimpleDataStructure;
  * Help sort Hashes in relation to a base key using the XOR metric
  *
  * @since 0.9.2 in i2psnark, moved to core in 0.9.10
+ * @param <T> type of SimpleDataStructure objects being compared
  */
 public class XORComparator<T extends SimpleDataStructure> implements Comparator<T>, Serializable {
     private final byte[] _base;

@@ -41,6 +41,9 @@ import org.apache.commons.io.function.IOSupplier;
  */
 public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
 
+    /**
+     * Convert boolean to default file visit result.
+     */
     static FileVisitResult toDefaultFileVisitResult(final boolean accept) {
         return accept ? FileVisitResult.CONTINUE : FileVisitResult.TERMINATE;
     }
@@ -99,6 +102,9 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
         return accept(new File(dir, name));
     }
 
+    /**
+     * Append list to string builder.
+     */
     void append(final List<?> list, final StringBuilder buffer) {
         for (int i = 0; i < list.size(); i++) {
             if (i > 0) {
@@ -108,6 +114,9 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
         }
     }
 
+    /**
+     * Append array to string builder.
+     */
     void append(final Object[] array, final StringBuilder buffer) {
         for (int i = 0; i < array.length; i++) {
             if (i > 0) {
@@ -117,6 +126,9 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
         }
     }
 
+    /**
+     * Get file visit result from supplier.
+     */
     FileVisitResult get(final IOSupplier<FileVisitResult> supplier) {
         try {
             return supplier.get();
@@ -136,10 +148,16 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
         return FileVisitResult.TERMINATE;
     }
 
+    /**
+     * Check if file is a directory.
+     */
     boolean isDirectory(final File file) {
         return file != null && file.isDirectory();
     }
 
+    /**
+     * Check if file is a regular file.
+     */
     boolean isFile(final File file) {
         return file != null && file.isFile();
     }

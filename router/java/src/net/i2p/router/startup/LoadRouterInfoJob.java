@@ -254,7 +254,7 @@ class LoadRouterInfoJob extends JobImpl {
         return uselong != haslong;
     }
 
-    /** @since 0.9.16 */
+    /** Key data container for router information. @since 0.9.16 */
     public static class KeyData {
         public final RouterIdentity routerIdentity;
         public final PrivateKey privateKey;

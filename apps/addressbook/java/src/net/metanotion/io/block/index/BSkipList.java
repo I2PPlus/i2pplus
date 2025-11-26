@@ -49,6 +49,9 @@ import net.metanotion.util.skiplist.*;
  *</pre>
  *
  * Always fits on one page.
+ *
+ * @param <K> type of keys maintained by this skip list
+ * @param <V> type of mapped values
  */
 public class BSkipList<K extends Comparable<? super K>, V> extends SkipList<K, V> implements Closeable {
 	private static final long MAGIC = 0x536b69704c697374l;  // "SkipList"

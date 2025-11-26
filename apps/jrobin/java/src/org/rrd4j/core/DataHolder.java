@@ -8,8 +8,9 @@ import org.rrd4j.data.IPlottable;
 import org.rrd4j.data.Variable;
 
 /**
+ * Interface for holding data sources.
  * @author Fabrice Bacchella
- * @since 3;7
+ * @since 3.7
  */
 public interface DataHolder {
 

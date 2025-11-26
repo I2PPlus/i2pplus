@@ -8,6 +8,7 @@ import java.net.InetAddress;
 import net.i2p.data.Destination;
 
 /**
+ * UDP sink implementation for streaming data.
  *
  * @author welterde
  */

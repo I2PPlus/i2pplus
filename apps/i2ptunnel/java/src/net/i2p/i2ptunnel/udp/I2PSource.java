@@ -7,6 +7,7 @@ import net.i2p.client.datagram.I2PDatagramDissector;
 import net.i2p.util.Log;
 
 /**
+ * I2P source implementation for streaming data.
  * Refactored in 0.9.53 to support I2CP protocols and ports
  *
  * @author welterde
@@ -21,6 +22,7 @@ public class I2PSource implements Source {
     private final Log log;
 
     /**
+     *  Protocol enum for I2P source handling.
      *  @since 0.9.53
      */
     public enum Protocol { REPLIABLE, RAW, BOTH }

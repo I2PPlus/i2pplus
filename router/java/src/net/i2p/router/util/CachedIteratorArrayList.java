@@ -11,6 +11,7 @@ import java.util.NoSuchElementException;
  * ArrayList that uses a single iterator.  Useful to avoid object churn
  * while keeping the conveniences of an iterator.
  *
+ * @param <E> the type of elements in this list
  * @since 0.9.4 moved from net.i2p.util in 0.9.24
  *
  * @author zab

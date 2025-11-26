@@ -9,6 +9,7 @@ import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 
 /**
+ * UDP source implementation for streaming data.
  *
  * @author welterde
  */

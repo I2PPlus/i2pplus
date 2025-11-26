@@ -18,6 +18,7 @@ import net.i2p.data.SimpleDataStructure;
  *
  * Refactored from net.i2p.router.networkdb.kademlia
  * @since 0.9.2 in i2psnark, moved to core in 0.9.10
+ * @param <T> type of SimpleDataStructure objects stored in the bucket
  */
 public interface KBucket<T extends SimpleDataStructure> {
 

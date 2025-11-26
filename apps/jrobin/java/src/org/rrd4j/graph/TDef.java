@@ -3,7 +3,7 @@ package org.rrd4j.graph;
 import org.rrd4j.core.FetchData;
 import org.rrd4j.data.DataProcessor;
 
-/** @author Mathias Bogaert */
+/** Definition for a data source in a graph. @author Mathias Bogaert */
 class TDef extends Source {
     private final FetchData fetchData;
     private final String dsName;

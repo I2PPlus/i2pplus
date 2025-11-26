@@ -577,7 +577,7 @@ class SSU2Payload {
     }
 
     /**
-     *
+     *  Follow-on fragment block for SSU2 payload.
      */
     public static class FollowFragBlock extends Block {
         private final OutboundMessageState m;
@@ -898,6 +898,7 @@ class SSU2Payload {
     }
 
     /**
+     *  Path challenge block for SSU2 payload.
      *  @since 0.9.55
      */
     public static class PathChallengeBlock extends Block {
@@ -919,6 +920,7 @@ class SSU2Payload {
     }
 
     /**
+     *  Path response block for SSU2 payload.
      *  @since 0.9.55
      */
     public static class PathResponseBlock extends Block {

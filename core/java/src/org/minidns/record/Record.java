@@ -27,6 +27,8 @@ import org.minidns.dnsname.DnsName;
 
 /**
  * A generic DNS record.
+ *
+ * @param <D> type of data stored in this record
  */
 public final class Record<D extends Data> {
 

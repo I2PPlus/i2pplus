@@ -27,6 +27,7 @@ import java.util.stream.BaseStream;
  *
  * @param <T> the type of the stream elements.
  * @param <S> the type of the stream extending {@code IOBaseStream}.
+ * @param <B> the type of the base stream.
  */
 abstract class IOBaseStreamAdapter<T, S extends IOBaseStream<T, S, B>, B extends BaseStream<T, B>> implements IOBaseStream<T, S, B> {
 

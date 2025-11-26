@@ -15,6 +15,7 @@ import net.i2p.router.web.FormHandler;
 import net.i2p.router.web.Messages;
 
 /**
+ *  Handler for reseed configuration form processing.
  *  @since 0.8.3
  */
 public class ConfigReseedHandler extends FormHandler {

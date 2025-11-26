@@ -10,6 +10,7 @@ import java.util.Locale;
 import net.i2p.data.Base32;
 
 /**
+ * Magnet URI parser and handler for BitTorrent magnet links.
  *
  * @since 0.9.4 moved from I2PSnarkServlet
  */

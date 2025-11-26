@@ -2,7 +2,7 @@ package net.i2p.router.transport.udp;
 
 
 /**
- *
+ * Builder for UDP packets.
  */
 class PacketBuilder {
 

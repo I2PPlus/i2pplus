@@ -723,6 +723,7 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
+     *  Port configuration for transport.
      *  @since IPv6
      */
     static class Port {

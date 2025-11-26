@@ -7,6 +7,7 @@
 package net.i2p.socks;
 
 /**
+ * Constants for SOCKS5 protocol.
  * @since 0.9.33 Moved out of net.i2p.i2ptunnel.socks.SOCKS5Server
  */
 public class SOCKS5Constants {

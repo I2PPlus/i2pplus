@@ -45,9 +45,8 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 
 /**
- *
+ * Sybil attack analysis implementation.
  *  @since 0.9.38 split out from SybilRenderer
- *
  */
 public class Analysis extends JobImpl implements RouterApp, Runnable {
 

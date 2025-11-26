@@ -2,9 +2,9 @@ package org.cybergarage.upnp;
 
 
 /**
+ * Root description for UPnP devices.
  * @author Stefano "Kismet" Lenzi - kismet-sl@users.sourceforge.net  <br>
  * 		Copyright (c) 2005
- *
  */
 public interface RootDescription {
 

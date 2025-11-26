@@ -27,11 +27,22 @@ public class A extends InternetAddressRR<Inet4Address> {
         return TYPE.A;
     }
 
+    /**
+     * Create A record from IPv4 address.
+     * @param inet4Address the IPv4 address
+     */
     public A(Inet4Address inet4Address) {
         super(inet4Address);
         assert ip.length == 4;
     }
 
+    /**
+     * Create A record from four octets.
+     * @param q1 first octet
+     * @param q2 second octet
+     * @param q3 third octet
+     * @param q4 fourth octet
+     */
     public A(int q1, int q2, int q3, int q4) {
         super(new byte[] { (byte) q1, (byte) q2, (byte) q3, (byte) q4 });
         if (q1 < 0 || q1 > 255 || q2 < 0 || q2 > 255 || q3 < 0 || q3 > 255 || q4 < 0 || q4 > 255) {
@@ -39,6 +50,10 @@ public class A extends InternetAddressRR<Inet4Address> {
         }
     }
 
+    /**
+     * Create A record from byte array.
+     * @param ip byte array containing IPv4 address (must be 4 bytes)
+     */
     public A(byte[] ip) {
         super(ip);
         if (ip.length != 4) {
@@ -46,10 +61,20 @@ public class A extends InternetAddressRR<Inet4Address> {
         }
     }
 
+    /**
+     * Create A record from character sequence.
+     * @param ipv4CharSequence character sequence containing IPv4 address
+     */
     public A(CharSequence ipv4CharSequence) {
         this(InetAddressUtil.ipv4From(ipv4CharSequence));
     }
 
+    /**
+     * Parse A record from data input stream.
+     * @param dis data input stream to read from
+     * @return parsed A record
+     * @throws java.io.IOException if I/O error occurs
+     */
     public static A parse(DataInputStream dis)
             throws IOException {
         byte[] ip = new byte[4];

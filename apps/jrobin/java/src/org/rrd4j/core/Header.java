@@ -11,6 +11,7 @@ import java.io.IOException;
  * Normally, you don't need to manipulate the Header object directly - Rrd4j framework
  * does it for you.
  * <p>
+ * This header contains metadata about the RRD file.
  *
  * @author Sasa Markovic*
  */

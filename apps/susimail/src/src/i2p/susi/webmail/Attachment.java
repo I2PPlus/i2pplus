@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
+ * Email attachment representation.
  * @author user
  * @since public since 0.9.33, was package private
  */

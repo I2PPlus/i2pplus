@@ -52,6 +52,8 @@ import net.metanotion.util.skiplist.SkipSpan;
  * Recommended span size is 16.
  *
  * @author zzz
+ * @param <K> type of keys maintained by this skip span
+ * @param <V> type of values stored in this skip span
  */
 public class IBSkipSpan<K extends Comparable<? super K>, V> extends BSkipSpan<K, V> {
 

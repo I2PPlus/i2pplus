@@ -34,6 +34,7 @@ import java.io.OutputStream;
 import java.io.Writer;
 
 /**
+ * Base64 encoding implementation.
  * @author susi
  */
 public class Base64 extends Encoding {

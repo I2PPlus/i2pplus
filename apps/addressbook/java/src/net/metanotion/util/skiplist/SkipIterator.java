@@ -34,11 +34,14 @@ import java.util.NoSuchElementException;
 /**	A basic iterator for a skip list.
  	This is not a complete ListIterator, in particular, since the
  	skip list is a map and is therefore indexed by Comparable objects instead
- 	of int's, the nextIndex and previousIndex methods are not really relevant.
+ 	of int's, nextIndex and previousIndex methods are not really relevant.
 
-	To be clear, this is an iterator through the values.
+	To be clear, this is an iterator through values.
 	To get the key, call nextKey() BEFORE calling next().
-*/
+ *
+ * @param <K> type of keys maintained by this iterator
+ * @param <V> type of values returned by this iterator
+ */
 public class SkipIterator<K extends Comparable<? super K>, V> implements ListIterator<V> {
 	protected SkipSpan<K, V> ss;
 	protected int index;

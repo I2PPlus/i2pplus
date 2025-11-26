@@ -2170,6 +2170,7 @@ public class EepGet {
 
 
     /**
+     *  Authentication mode enumeration.
      *  @since 0.9.12
      */
     protected enum AUTH_MODE {NONE, BASIC, DIGEST, UNKNOWN}

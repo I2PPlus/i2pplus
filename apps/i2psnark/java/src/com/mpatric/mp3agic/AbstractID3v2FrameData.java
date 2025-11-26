@@ -1,13 +1,23 @@
 package com.mpatric.mp3agic;
 
+/**
+ * Abstract base class for ID3v2 frame data.
+ */
 public abstract class AbstractID3v2FrameData {
 
+	/** Unsynchronization flag. */
 	boolean unsynchronisation;
 
+	/**
+	 * Construct frame data.
+	 */
 	public AbstractID3v2FrameData(boolean unsynchronisation) {
 		this.unsynchronisation = unsynchronisation;
 	}
 
+	/**
+	 * Synchronize and unpack frame data.
+	 */
 	protected final void synchroniseAndUnpackFrameData(byte[] bytes) throws InvalidDataException {
 		if (unsynchronisation && BufferTools.sizeSynchronisationWouldSubtract(bytes) > 0) {
 			byte[] synchronisedBytes = BufferTools.synchroniseBuffer(bytes);
@@ -17,6 +27,9 @@ public abstract class AbstractID3v2FrameData {
 		}
 	}
 
+	/**
+	 * Pack and unsynchronize frame data.
+	 */
 	protected byte[] packAndUnsynchroniseFrameData() {
 		byte[] bytes = packFrameData();
 		if (unsynchronisation && BufferTools.sizeUnsynchronisationWouldAdd(bytes) > 0) {
@@ -25,6 +38,9 @@ public abstract class AbstractID3v2FrameData {
 		return bytes;
 	}
 
+	/**
+	 * Convert frame data to bytes.
+	 */
 	protected byte[] toBytes() {
 		return packAndUnsynchroniseFrameData();
 	}
@@ -51,9 +67,18 @@ public abstract class AbstractID3v2FrameData {
 		return true;
 	}
 
+	/**
+	 * Unpack frame data from bytes.
+	 */
 	protected abstract void unpackFrameData(byte[] bytes) throws InvalidDataException;
 
+	/**
+	 * Pack frame data to bytes.
+	 */
 	protected abstract byte[] packFrameData();
 
+	/**
+	 * Get length of frame data.
+	 */
 	protected abstract int getLength();
 }

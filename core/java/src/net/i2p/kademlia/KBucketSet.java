@@ -28,15 +28,16 @@ import net.i2p.util.LHMCache;
 import net.i2p.util.Log;
 
 /**
- * In-memory storage of buckets sorted by the XOR metric from the base (us)
- * passed in via the constructor.
+ * In-memory storage of buckets sorted by XOR metric from base (us)
+ * passed in via constructor.
  * This starts with one bucket covering the whole key space, and
- * may eventually be split to a max of the number of bits in the data type
+ * may eventually be split to a max of number of bits in data type
  * (160 for SHA1Hash or 256 for Hash),
  * times 2**(B-1) for Kademlia value B.
  *
  * Refactored from net.i2p.router.networkdb.kademlia
  * @since 0.9.2 in i2psnark, moved to core in 0.9.10
+ * @param <T> type of SimpleDataStructure objects stored in buckets
  */
 public class KBucketSet<T extends SimpleDataStructure> {
     private final Log _log;

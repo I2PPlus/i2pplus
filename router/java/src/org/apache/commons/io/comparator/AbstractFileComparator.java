@@ -22,11 +22,17 @@ import java.util.Comparator;
 import java.util.List;
 
 /**
- * Abstract file {@link Comparator} which provides sorting for file arrays and lists.
- *
+ * Abstract class for file {@link Comparator}s.
  * @since 2.0
  */
 abstract class AbstractFileComparator implements Comparator<File> {
+
+    /**
+     * Default constructor.
+     */
+    protected AbstractFileComparator() {
+        super();
+    }
 
     /**
      * Sorts an array of files.

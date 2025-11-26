@@ -5,6 +5,7 @@ import net.i2p.data.SimpleDataStructure;
 /**
  *  Called when a kbucket can no longer be split and is too big
  *  @since 0.9.2 in i2psnark, moved to core in 0.9.10
+ *  @param <K> type of SimpleDataStructure objects in the bucket
  */
 public interface KBucketTrimmer<K extends SimpleDataStructure> {
     /**

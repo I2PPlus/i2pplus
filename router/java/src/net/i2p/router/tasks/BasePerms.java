@@ -8,7 +8,7 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**
- *
+ * Base permissions for router operations.
  *  @since 0.9.46
  */
 public class BasePerms {

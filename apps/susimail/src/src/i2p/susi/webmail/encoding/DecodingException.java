@@ -26,6 +26,7 @@ package i2p.susi.webmail.encoding;
 import java.io.IOException;
 
 /**
+ * Exception for decoding errors.
  * @author susi
  */
 public class DecodingException extends IOException {

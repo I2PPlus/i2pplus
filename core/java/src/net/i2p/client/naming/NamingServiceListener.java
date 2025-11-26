@@ -5,6 +5,7 @@ import java.util.Properties;
 import net.i2p.data.Destination;
 
 /**
+ * Listener for naming service events.
  * @since 0.8.7
  */
 public interface NamingServiceListener {

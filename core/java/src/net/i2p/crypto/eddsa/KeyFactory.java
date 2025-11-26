@@ -25,9 +25,9 @@ import net.i2p.crypto.eddsa.spec.EdDSAPrivateKeySpec;
 import net.i2p.crypto.eddsa.spec.EdDSAPublicKeySpec;
 
 /**
+ * EdDSA key factory implementation.
  * @since 0.9.15
  * @author str4d
- *
  */
 public final class KeyFactory extends KeyFactorySpi {
 

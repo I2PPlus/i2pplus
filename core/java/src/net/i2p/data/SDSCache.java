@@ -42,6 +42,7 @@ import net.i2p.util.SystemVersion;
  *  </pre>
  *  @since 0.8.3
  *  @author zzz
+ *  @param <V> type of SimpleDataStructure objects cached
  */
 public class SDSCache<V extends SimpleDataStructure> {
     //private static final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(SDSCache.class);

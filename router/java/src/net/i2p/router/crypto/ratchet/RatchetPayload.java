@@ -375,6 +375,7 @@ class RatchetPayload {
     }
 
     /**
+     *  Acknowledgment block for ratchet payload.
      *  @since 0.9.46
      */
     public static class AckBlock extends Block {
@@ -411,6 +412,7 @@ class RatchetPayload {
     }
 
     /**
+     *  Acknowledgment request block for ratchet payload.
      *  @since 0.9.46
      */
     public static class AckRequestBlock extends Block {
@@ -449,6 +451,7 @@ class RatchetPayload {
     }
 
     /**
+     *  Packet number block for ratchet payload.
      *  @since 0.9.46
      */
     public static class PNBlock extends Block {

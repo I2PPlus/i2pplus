@@ -13,7 +13,7 @@ import net.i2p.util.FileUtil;
 import net.i2p.util.PortMapper;
 
 /**
- *
+ * Handler for router update configuration.
  */
 public class ConfigUpdateHandler extends FormHandler {
     private String _newsURL;

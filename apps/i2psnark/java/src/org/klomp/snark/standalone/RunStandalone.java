@@ -23,6 +23,7 @@ import net.i2p.jetty.I2PLogger;
 import net.i2p.jetty.JettyStart;
 
 /**
+ *  Standalone runner for I2PSnark.
  *  @since moved from ../web and fixed in 0.9.27
  */
 public class RunStandalone {

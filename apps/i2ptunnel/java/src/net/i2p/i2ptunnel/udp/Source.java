@@ -1,6 +1,7 @@
 package net.i2p.i2ptunnel.udp;
 
 /**
+ * Source interface for streaming data sources.
  *
  * @author welterde
  */

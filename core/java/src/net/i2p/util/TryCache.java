@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
  * A thread-safe, lock-free-ish object cache that reuses objects to reduce allocation overhead.
  * Designed to avoid object loss due to lock contention.
  *
- * @param <T>
+ * @param <T> type of objects cached
  * @author zab
  */
 public class TryCache<T> {

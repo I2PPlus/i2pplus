@@ -3,129 +3,259 @@ package com.mpatric.mp3agic;
 import java.io.UnsupportedEncodingException;
 import java.util.*;
 
+/**
+ * Abstract base class for ID3v2 tags.
+ */
 public abstract class AbstractID3v2Tag implements ID3v2 {
 
+	/** Image frame ID. */
 	public static final String ID_IMAGE = "APIC";
+	/** Encoder frame ID. */
 	public static final String ID_ENCODER = "TENC";
+	/** URL frame ID. */
 	public static final String ID_URL = "WXXX";
+	/** Artist URL frame ID. */
 	public static final String ID_ARTIST_URL = "WOAR";
+	/** Commercial URL frame ID. */
 	public static final String ID_COMMERCIAL_URL = "WCOM";
+	/** Copyright URL frame ID. */
 	public static final String ID_COPYRIGHT_URL = "WCOP";
+	/** Audio file URL frame ID. */
 	public static final String ID_AUDIOFILE_URL = "WOAF";
+	/** Audio source URL frame ID. */
 	public static final String ID_AUDIOSOURCE_URL = "WOAS";
+	/** Radio station URL frame ID. */
 	public static final String ID_RADIOSTATION_URL = "WORS";
+	/** Payment URL frame ID. */
 	public static final String ID_PAYMENT_URL = "WPAY";
+	/** Publisher URL frame ID. */
 	public static final String ID_PUBLISHER_URL = "WPUB";
+	/** Copyright frame ID. */
 	public static final String ID_COPYRIGHT = "TCOP";
+	/** Original artist frame ID. */
 	public static final String ID_ORIGINAL_ARTIST = "TOPE";
+	/** BPM frame ID. */
 	public static final String ID_BPM = "TBPM";
+	/** Composer frame ID. */
 	public static final String ID_COMPOSER = "TCOM";
+	/** Publisher frame ID. */
 	public static final String ID_PUBLISHER = "TPUB";
+	/** Comment frame ID. */
 	public static final String ID_COMMENT = "COMM";
+	/** Text lyrics frame ID. */
 	public static final String ID_TEXT_LYRICS = "USLT";
+	/** Genre frame ID. */
 	public static final String ID_GENRE = "TCON";
+	/** Year frame ID. */
 	public static final String ID_YEAR = "TYER";
+	/** Date frame ID. */
 	public static final String ID_DATE = "TDAT";
+	/** Album frame ID. */
 	public static final String ID_ALBUM = "TALB";
+	/** Title frame ID. */
 	public static final String ID_TITLE = "TIT2";
+	/** Key frame ID. */
 	public static final String ID_KEY = "TKEY";
+	/** Artist frame ID. */
 	public static final String ID_ARTIST = "TPE1";
+	/** Album artist frame ID. */
 	public static final String ID_ALBUM_ARTIST = "TPE2";
+	/** Track frame ID. */
 	public static final String ID_TRACK = "TRCK";
+	/** Part of set frame ID. */
 	public static final String ID_PART_OF_SET = "TPOS";
+	/** Compilation frame ID. */
 	public static final String ID_COMPILATION = "TCMP";
+	/** Chapter table of contents frame ID. */
 	public static final String ID_CHAPTER_TOC = "CTOC";
+	/** Chapter frame ID. */
 	public static final String ID_CHAPTER = "CHAP";
+	/** Grouping frame ID. */
 	public static final String ID_GROUPING = "TIT1";
+	/** Rating frame ID. */
 	public static final String ID_RATING = "POPM";
+	/** Obsolete image frame ID. */
 	public static final String ID_IMAGE_OBSELETE = "PIC";
+	/** Obsolete encoder frame ID. */
 	public static final String ID_ENCODER_OBSELETE = "TEN";
+	/** Obsolete URL frame ID. */
 	public static final String ID_URL_OBSELETE = "WXX";
+	/** Obsolete copyright frame ID. */
 	public static final String ID_COPYRIGHT_OBSELETE = "TCR";
+	/** Obsolete original artist frame ID. */
 	public static final String ID_ORIGINAL_ARTIST_OBSELETE = "TOA";
+	/** Obsolete BPM frame ID. */
 	public static final String ID_BPM_OBSELETE = "TBP";
+	/** Obsolete composer frame ID. */
 	public static final String ID_COMPOSER_OBSELETE = "TCM";
+	/** Obsolete publisher frame ID. */
 	public static final String ID_PUBLISHER_OBSELETE = "TBP";
+	/** Obsolete comment frame ID. */
 	public static final String ID_COMMENT_OBSELETE = "COM";
+	/** Obsolete genre frame ID. */
 	public static final String ID_GENRE_OBSELETE = "TCO";
+	/** Obsolete year frame ID. */
 	public static final String ID_YEAR_OBSELETE = "TYE";
+	/** Obsolete date frame ID. */
 	public static final String ID_DATE_OBSELETE = "TDA";
+	/** Obsolete album frame ID. */
 	public static final String ID_ALBUM_OBSELETE = "TAL";
+	/** Obsolete title frame ID. */
 	public static final String ID_TITLE_OBSELETE = "TT2";
+	/** Obsolete key frame ID. */
 	public static final String ID_KEY_OBSELETE = "TKE";
+	/** Obsolete artist frame ID. */
 	public static final String ID_ARTIST_OBSELETE = "TP1";
+	/** Obsolete album artist frame ID. */
 	public static final String ID_ALBUM_ARTIST_OBSELETE = "TP2";
+	/** Obsolete track frame ID. */
 	public static final String ID_TRACK_OBSELETE = "TRK";
+	/** Obsolete part of set frame ID. */
 	public static final String ID_PART_OF_SET_OBSELETE = "TPA";
+	/** Obsolete compilation frame ID. */
 	public static final String ID_COMPILATION_OBSELETE = "TCP";
+	/** Obsolete grouping frame ID. */
 	public static final String ID_GROUPING_OBSELETE = "TT1";
 
+	/** Other picture type. */
 	public static final byte PICTURETYPE_OTHER = 0x0;
+	/** 32x32 pixels icon picture type. */
 	public static final byte PICTURETYPE_32PXICON = 0x1;
+	/** Other icon picture type. */
 	public static final byte PICTURETYPE_OTHERICON = 0x2;
+	/** Front cover picture type. */
 	public static final byte PICTURETYPE_FRONTCOVER = 0x3;
+	/** Back cover picture type. */
 	public static final byte PICTURETYPE_BACKCOVER = 0x4;
+	/** Leaflet page picture type. */
 	public static final byte PICTURETYPE_LEAFLET = 0x5;
+	/** Media picture type. */
 	public static final byte PICTURETYPE_MEDIA = 0x6;
+	/** Lead artist picture type. */
 	public static final byte PICTURETYPE_LEADARTIST = 0x7;
+	/** Artist picture type. */
 	public static final byte PICTURETYPE_ARTIST = 0x8;
+	/** Conductor picture type. */
 	public static final byte PICTURETYPE_CONDUCTOR = 0x9;
+	/** Band picture type. */
 	public static final byte PICTURETYPE_BAND = 0xA;
+	/** Composer picture type. */
 	public static final byte PICTURETYPE_COMPOSER = 0xB;
+	/** Lyricist picture type. */
 	public static final byte PICTURETYPE_LYRICIST = 0xC;
+	/** Recording location picture type. */
 	public static final byte PICTURETYPE_RECORDINGLOCATION = 0xD;
+	/** During recording picture type. */
 	public static final byte PICTURETYPE_DURING_RECORDING = 0xE;
+	/** During performance picture type. */
 	public static final byte PICTURETYPE_DURING_PERFORMANCE = 0xF;
+	/** Screen capture picture type. */
 	public static final byte PICTURETYPE_SCREEN_CAPTURE = 0x10;
+	/** Illustration picture type. */
 	public static final byte PICTURETYPE_ILLUSTRATION = 0x12;
+	/** Band logotype picture type. */
 	public static final byte PICTURETYPE_BAND_LOGOTYPE = 0x13;
+	/** Publisher logotype picture type. */
 	public static final byte PICTURETYPE_PUBLISHER_LOGOTYPE = 0x14;
 
 
+	/** ID3 tag identifier. */
 	protected static final String TAG = "ID3";
+	/** ID3 footer tag identifier. */
 	protected static final String FOOTER_TAG = "3DI";
+	/** ID3 header length in bytes. */
 	protected static final int HEADER_LENGTH = 10;
+	/** ID3 footer length in bytes. */
 	protected static final int FOOTER_LENGTH = 10;
+	/** Major version offset in header. */
 	protected static final int MAJOR_VERSION_OFFSET = 3;
+	/** Minor version offset in header. */
 	protected static final int MINOR_VERSION_OFFSET = 4;
+	/** Flags offset in tag header. */
 	protected static final int FLAGS_OFFSET = 5;
+	/** Data length offset in tag header. */
 	protected static final int DATA_LENGTH_OFFSET = 6;
+	/** Footer bit in flags. */
 	protected static final int FOOTER_BIT = 4;
+	/** Experimental bit in flags. */
 	protected static final int EXPERIMENTAL_BIT = 5;
+	/** Extended header bit in flags. */
 	protected static final int EXTENDED_HEADER_BIT = 6;
+	/** Compression bit in flags. */
 	protected static final int COMPRESSION_BIT = 6;
+	/** Unsynchronization bit in flags. */
 	protected static final int UNSYNCHRONISATION_BIT = 7;
+	/** Padding length. */
 	protected static final int PADDING_LENGTH = 256;
+	/** iTunes comment description. */
 	private static final String ITUNES_COMMENT_DESCRIPTION = "iTunNORM";
 
+	/** Unsynchronization flag. */
 	protected boolean unsynchronisation = false;
+	/** Extended header flag. */
 	protected boolean extendedHeader = false;
+	/** Experimental flag. */
 	protected boolean experimental = false;
+	/** Footer flag. */
 	protected boolean footer = false;
+	/** Compression flag. */
 	protected boolean compression = false;
+	/** Padding flag. */
+	/** Padding flag. */
 	protected boolean padding = false;
+	/** ID3 version string. */
 	protected String version = null;
+	/** Data length in bytes. */
 	private int dataLength = 0;
+	/** Extended header length in bytes. */
 	private int extendedHeaderLength;
+	/** Extended header data. */
 	private byte[] extendedHeaderData;
+	/** Obsolete format flag. */
 	private boolean obseleteFormat = false;
 
+	/** Map of frame sets keyed by frame ID. */
 	private final Map<String, ID3v2FrameSet> frameSets;
 
+	/**
+	 * Default constructor.
+	 */
 	public AbstractID3v2Tag() {
 		frameSets = new TreeMap<>();
 	}
 
+	/**
+	 * Constructor for parsing ID3v2 tag from byte array.
+	 * @param bytes the byte array containing the ID3v2 tag
+	 * @throws NoSuchTagException if no ID3v2 tag is found
+	 * @throws UnsupportedTagException if the tag version is not supported
+	 * @throws InvalidDataException if the tag data is invalid
+	 */
 	public AbstractID3v2Tag(byte[] bytes) throws NoSuchTagException, UnsupportedTagException, InvalidDataException {
 		this(bytes, false);
 	}
 
+	/**
+	 * Constructor for parsing ID3v2 tag from byte array with format option.
+	 * @param bytes the byte array containing the ID3v2 tag
+	 * @param obseleteFormat true if using obsolete format
+	 * @throws NoSuchTagException if no ID3v2 tag is found
+	 * @throws UnsupportedTagException if the tag version is not supported
+	 * @throws InvalidDataException if the tag data is invalid
+	 */
 	public AbstractID3v2Tag(byte[] bytes, boolean obseleteFormat) throws NoSuchTagException, UnsupportedTagException, InvalidDataException {
 		frameSets = new TreeMap<>();
 		this.obseleteFormat = obseleteFormat;
 		unpackTag(bytes);
 	}
 
+	/**
+	 * Unpacks the ID3v2 tag from the given byte array.
+	 * @param bytes the byte array containing the tag data
+	 * @throws NoSuchTagException if no ID3v2 tag is found
+	 * @throws UnsupportedTagException if the tag version is not supported
+	 * @throws InvalidDataException if the tag data is invalid
+	 */
 	private void unpackTag(byte[] bytes) throws NoSuchTagException, UnsupportedTagException, InvalidDataException {
 		ID3v2TagFactory.sanityCheckTag(bytes);
 		int offset = unpackHeader(bytes);
@@ -144,6 +274,13 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
 		}
 	}
 
+	/**
+	 * Unpacks the ID3v2 header from the given byte array.
+	 * @param bytes the byte array containing the header data
+	 * @return the offset after the header
+	 * @throws UnsupportedTagException if the tag version is not supported
+	 * @throws InvalidDataException if the header data is invalid
+	 */
 	private int unpackHeader(byte[] bytes) throws UnsupportedTagException, InvalidDataException {
 		int majorVersion = bytes[MAJOR_VERSION_OFFSET];
 		int minorVersion = bytes[MINOR_VERSION_OFFSET];
@@ -158,14 +295,31 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
 		return HEADER_LENGTH;
 	}
 
+	/**
+	 * Unpacks flags from the given byte array.
+	 * @param bytes the byte array containing flag data
+	 */
 	protected abstract void unpackFlags(byte[] bytes);
 
+	/**
+	 * Unpacks the extended header from the given byte array.
+	 * @param bytes the byte array containing the extended header data
+	 * @param offset the starting offset of the extended header
+	 * @return the offset after the extended header
+	 */
 	private int unpackExtendedHeader(byte[] bytes, int offset) {
 		extendedHeaderLength = BufferTools.unpackSynchsafeInteger(bytes[offset], bytes[offset + 1], bytes[offset + 2], bytes[offset + 3]) + 4;
 		extendedHeaderData = BufferTools.copyBuffer(bytes, offset + 4, extendedHeaderLength);
 		return extendedHeaderLength;
 	}
 
+	/**
+	 * Unpacks frames from the given byte array.
+	 * @param bytes the byte array containing the frame data
+	 * @param offset the starting offset of the frame data
+	 * @param framesLength the length of the frame data
+	 * @return the offset after unpacking the frames
+	 */
 	protected int unpackFrames(byte[] bytes, int offset, int framesLength) {
 		int currentOffset = offset;
 		while (currentOffset <= framesLength) {
@@ -181,6 +335,11 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
 		return currentOffset;
 	}
 
+	/**
+	 * Adds a frame to the frame sets.
+	 * @param frame the frame to add
+	 * @param replace true to replace existing frames, false to add to existing set
+	 */
 	protected void addFrame(ID3v2Frame frame, boolean replace) {
 		ID3v2FrameSet frameSet = frameSets.get(frame.getId());
 		if (frameSet == null) {
@@ -195,16 +354,36 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
 		}
 	}
 
+	/**
+	 * Creates a frame from the given byte array at the specified offset.
+	 * @param bytes the byte array containing the frame data
+	 * @param currentOffset the current offset in the byte array
+	 * @return the created frame
+	 * @throws InvalidDataException if the frame data is invalid
+	 */
 	protected ID3v2Frame createFrame(byte[] bytes, int currentOffset) throws InvalidDataException {
 		if (obseleteFormat) return new ID3v2ObseleteFrame(bytes, currentOffset);
 		return new ID3v2Frame(bytes, currentOffset);
 	}
 
+	/**
+	 * Creates a frame with the given ID and data.
+	 * @param id the frame ID
+	 * @param data the frame data
+	 * @return the created frame
+	 */
 	protected ID3v2Frame createFrame(String id, byte[] data) {
 		if (obseleteFormat) return new ID3v2ObseleteFrame(id, data);
 		else return new ID3v2Frame(id, data);
 	}
 
+	/**
+	 * Unpacks the footer from the given byte array.
+	 * @param bytes the byte array containing the footer data
+	 * @param offset the starting offset of the footer
+	 * @return the offset after the footer
+	 * @throws InvalidDataException if the footer data is invalid
+	 */
 	private int unpackFooter(byte[] bytes, int offset) throws InvalidDataException {
 		if (!FOOTER_TAG.equals(BufferTools.byteBufferToStringIgnoringEncodingIssues(bytes, offset, FOOTER_TAG.length()))) {
 			throw new InvalidDataException("Invalid footer");
@@ -219,6 +398,11 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
 		return bytes;
 	}
 
+	/**
+	 * Packs the entire tag into the given byte array.
+	 * @param bytes the byte array to pack the tag into
+	 * @throws NotSupportedException if packing is not supported
+	 */
 	public void packTag(byte[] bytes) throws NotSupportedException {
 		int offset = packHeader(bytes, 0);
 		if (extendedHeader) {
@@ -249,6 +433,11 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
 		return offset + HEADER_LENGTH;
 	}
 
+	/**
+	 * Packs flags into the given byte array.
+	 * @param bytes the byte array to pack flags into
+	 * @param i the offset
+	 */
 	protected abstract void packFlags(byte[] bytes, int i);
 
 	private int packExtendedHeader(byte[] bytes, int offset) {
@@ -257,12 +446,28 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
 		return offset + 4 + extendedHeaderData.length;
 	}
 
+	/**
+	 * Packs all frames into the given byte array.
+	 * @param bytes the byte array to pack frames into
+	 * @param offset the starting offset
+	 * @return the offset after packing frames
+	 * @throws NotSupportedException if packing is not supported
+	 */
 	public int packFrames(byte[] bytes, int offset) throws NotSupportedException {
 		int newOffset = packSpecifiedFrames(bytes, offset, null, "APIC");
 		newOffset = packSpecifiedFrames(bytes, newOffset, "APIC", null);
 		return newOffset;
 	}
 
+	/**
+	 * Packs specified frames into the given byte array.
+	 * @param bytes the byte array to pack frames into
+	 * @param offset the starting offset
+	 * @param onlyId the only frame ID to pack (null for all)
+	 * @param notId the frame ID to exclude (null for none)
+	 * @return the offset after packing frames
+	 * @throws NotSupportedException if packing is not supported
+	 */
 	private int packSpecifiedFrames(byte[] bytes, int offset, String onlyId, String notId) throws NotSupportedException {
 		for (ID3v2FrameSet frameSet : frameSets.values()) {
 			if ((onlyId == null || onlyId.equals(frameSet.getId())) && (notId == null || !notId.equals(frameSet.getId()))) {
@@ -278,6 +483,12 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
 		return offset;
 	}
 
+	/**
+	 * Packs footer into the given byte array.
+	 * @param bytes the byte array to pack the footer into
+	 * @param offset the starting offset for the footer
+	 * @return the offset after packing the footer
+	 */
 	private int packFooter(byte[] bytes, int offset) {
 		try {
 			BufferTools.stringIntoByteBuffer(FOOTER_TAG, 0, FOOTER_TAG.length(), bytes, offset);
@@ -297,6 +508,10 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
 		return offset + FOOTER_LENGTH;
 	}
 
+	/**
+	 * Calculates the total data length of the tag.
+	 * @return the data length in bytes
+	 */
 	private int calculateDataLength() {
 		int length = 0;
 		if (extendedHeader) length += extendedHeaderLength;
@@ -310,6 +525,10 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
 		return length;
 	}
 
+	/**
+	 * Determines whether to use frame unsynchronization.
+	 * @return true if frame unsynchronization should be used
+	 */
 	protected boolean useFrameUnsynchronisation() {
 		return false;
 	}
@@ -319,6 +538,9 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
 		return version;
 	}
 
+	/**
+	 * Invalidates the cached data length, forcing recalculation.
+	 */
 	protected void invalidateDataLength() {
 		dataLength = 0;
 	}
@@ -544,6 +766,11 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
 		}
 	}
 
+	/**
+	 * Extracts genre number from genre text.
+	 * @param text the genre text
+	 * @return the genre number, or -1 if not found
+	 */
 	private int getGenre(String text) {
 		if (text != null && text.length() > 0) {
 			try {
@@ -650,6 +877,12 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
 		setGenre(genreNum);
 	}
 
+	/**
+	 * Extracts genre number from genre value string.
+	 * @param genreValue the genre value string
+	 * @return the genre number
+	 * @throws NumberFormatException if the genre number cannot be parsed
+	 */
 	protected int extractGenreNumber(String genreValue) throws NumberFormatException {
 		String value = genreValue.trim();
 		if (value.length() > 0) {
@@ -663,6 +896,12 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
 		return Integer.parseInt(value);
 	}
 
+	/**
+	 * Extracts genre description from genre value string.
+	 * @param genreValue the genre value string
+	 * @return the genre description, or null if not found
+	 * @throws NumberFormatException if the genre value is malformed
+	 */
 	protected String extractGenreDescription(String genreValue) throws NumberFormatException {
 		String value = genreValue.trim();
 		if (value.length() > 0) {
@@ -710,6 +949,11 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
 		}
 	}
 
+	/**
+	 * Extracts lyrics frame data for the given frame ID.
+	 * @param id the frame ID
+	 * @return the lyrics frame data, or null if not found
+	 */
 	protected ID3v2CommentFrameData extractLyricsFrameData(String id) {
 		ID3v2FrameSet frameSet = frameSets.get(id);
 		if (frameSet != null) {
@@ -1086,6 +1330,11 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
 		}
 	}
 
+	/**
+	 * Extracts chapter frame data for the given frame ID.
+	 * @param id the frame ID
+	 * @return the list of chapter frame data, or null if not found
+	 */
 	private ArrayList<ID3v2ChapterFrameData> extractChapterFrameData(String id) {
 		ID3v2FrameSet frameSet = frameSets.get(id);
 		if (frameSet != null) {
@@ -1106,6 +1355,11 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
 		return null;
 	}
 
+	/**
+	 * Extracts chapter table of contents frame data for the given frame ID.
+	 * @param id the frame ID
+	 * @return the list of chapter TOC frame data, or null if not found
+	 */
 	private ArrayList<ID3v2ChapterTOCFrameData> extractChapterTOCFrameData(String id) {
 		ID3v2FrameSet frameSet = frameSets.get(id);
 		if (frameSet != null) {
@@ -1126,6 +1380,11 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
 		return null;
 	}
 
+	/**
+	 * Extracts text frame data for the given frame ID.
+	 * @param id the frame ID
+	 * @return the text frame data, or null if not found
+	 */
 	protected ID3v2TextFrameData extractTextFrameData(String id) {
 		ID3v2FrameSet frameSet = frameSets.get(id);
 		if (frameSet != null) {
@@ -1141,6 +1400,11 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
 		return null;
 	}
 
+	/**
+	 * Extracts WWW frame data for the given frame ID.
+	 * @param id the frame ID
+	 * @return the WWW frame data, or null if not found
+	 */
 	private ID3v2WWWFrameData extractWWWFrameData(String id) {
 		ID3v2FrameSet frameSet = frameSets.get(id);
 		if (frameSet != null) {
@@ -1156,6 +1420,11 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
 		return null;
 	}
 
+	/**
+	 * Extracts URL frame data for the given frame ID.
+	 * @param id the frame ID
+	 * @return the URL frame data, or null if not found
+	 */
 	private ID3v2UrlFrameData extractUrlFrameData(String id) {
 		ID3v2FrameSet frameSet = frameSets.get(id);
 		if (frameSet != null) {
@@ -1171,6 +1440,12 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
 		return null;
 	}
 
+	/**
+	 * Extracts comment frame data for the given frame ID.
+	 * @param id the frame ID
+	 * @param itunes true to extract iTunes comment, false for regular comment
+	 * @return the comment frame data, or null if not found
+	 */
 	private ID3v2CommentFrameData extractCommentFrameData(String id, boolean itunes) {
 		ID3v2FrameSet frameSet = frameSets.get(id);
 		if (frameSet != null) {
@@ -1191,6 +1466,11 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
 		return null;
 	}
 
+	/**
+	 * Creates picture frame data for the given frame ID.
+	 * @param id the frame ID
+	 * @return the picture frame data, or null if not found
+	 */
 	private ID3v2PictureFrameData createPictureFrameData(String id) {
 		ID3v2FrameSet frameSet = frameSets.get(id);
 		if (frameSet != null) {
@@ -1208,6 +1488,11 @@ public abstract class AbstractID3v2Tag implements ID3v2 {
 		return null;
 	}
 
+	/**
+	 * Extracts POPM (popularimeter) frame data for the given frame ID.
+	 * @param id the frame ID
+	 * @return the POPM frame data, or null if not found
+	 */
 	private ID3v2PopmFrameData extractPopmFrameData(final String id) {
 		final ID3v2FrameSet frameSet = frameSets.get(id);
 		if (frameSet != null) {

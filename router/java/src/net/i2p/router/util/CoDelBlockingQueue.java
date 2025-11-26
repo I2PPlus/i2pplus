@@ -23,6 +23,7 @@ import net.i2p.util.SystemVersion;
  *  if necessary. peek(), and remove() are NOT overridden, and do
  *  NOT implement AQM or update stats.
  *
+ *  @param <E> the type of elements in this queue
  *  @since 0.9.3
  */
 public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<E> {

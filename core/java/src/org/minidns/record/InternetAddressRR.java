@@ -19,6 +19,8 @@ import java.net.UnknownHostException;
 
 /**
  * A resource record representing a internet address. Provides {@link #getInetAddress()}.
+ *
+ * @param <IA> type of InetAddress stored in this record
  */
 public abstract class InternetAddressRR<IA extends InetAddress> extends Data {
 

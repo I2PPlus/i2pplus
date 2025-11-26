@@ -20,6 +20,7 @@ import net.i2p.util.Log;
 import net.i2p.router.RouterContext;
 
 /**
+ * Utility class for transport operations.
  *  @since IPv6
  */
 public abstract class TransportUtil {

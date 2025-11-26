@@ -7,6 +7,7 @@ import net.i2p.router.util.EventLog;
 import net.i2p.util.Log;
 
 /**
+ * Router restarter implementation.
  *  @since 0.8.8, moved from Router in 0.8.12
  */
 public class Restarter implements Runnable {

@@ -4,6 +4,7 @@ import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.web.HelperBase;
 
 /**
+ *  Helper for family configuration display.
  *  @since 0.9.25
  */
 public class ConfigFamilyHelper extends HelperBase {

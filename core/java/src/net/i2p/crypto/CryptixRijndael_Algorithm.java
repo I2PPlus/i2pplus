@@ -18,6 +18,9 @@ import java.security.InvalidKeyException;
  * <a href="http://www.systemics.com/">Systemics Ltd</a> on behalf of the
  * <a href="http://www.systemics.com/docs/cryptix/">Cryptix Development Team</a>.
  * <br>All rights reserved.<p>
+ * This implementation is based on the Rijndael algorithm.
+ * <p>
+ * This implementation provides cryptographic operations using the Rijndael algorithm.
  *
  * @author  Raif S. Naffah
  * @author  Paulo S. L. M. Barreto

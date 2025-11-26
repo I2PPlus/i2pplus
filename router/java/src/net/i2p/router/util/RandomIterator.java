@@ -58,6 +58,7 @@ import net.i2p.util.SystemVersion;
  *   - Add test code
  *</pre>
  *
+ * @param <E> the type of elements returned by this iterator
  */
 public class RandomIterator<E> implements Iterator<E> {
     /**

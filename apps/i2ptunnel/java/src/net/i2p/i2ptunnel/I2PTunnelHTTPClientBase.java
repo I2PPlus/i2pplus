@@ -769,6 +769,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     }
 
     /**
+     *  Callback for timeout events.
      *  @since 0.9.14 moved from subclasses
      */
     protected class OnTimeout implements I2PTunnelRunner.FailCallback {
@@ -832,6 +833,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
     }
 
     /**
+     *  Callback for successful proxy connections.
      *  @since 0.9.39
      */
     protected class OnProxySuccess implements I2PTunnelRunner.SuccessCallback {
