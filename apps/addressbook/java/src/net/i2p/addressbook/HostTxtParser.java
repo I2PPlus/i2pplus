@@ -27,6 +27,10 @@ import net.i2p.util.SystemVersion;
  */
 public class HostTxtParser {
 
+    private HostTxtParser() {
+        // Utility class - prevent instantiation
+    }
+
     private static final boolean isWindows = SystemVersion.isWindows();
 
     /**
@@ -139,8 +143,7 @@ public class HostTxtParser {
             fileStream = new FileInputStream(file);
             BufferedReader input = new BufferedReader(new InputStreamReader(
                     fileStream, "UTF-8"));
-            Map<String, HostTxtEntry> rv = parse(input);
-            return rv;
+            return parse(input);
         } finally {
             if (fileStream != null) {
                 try {

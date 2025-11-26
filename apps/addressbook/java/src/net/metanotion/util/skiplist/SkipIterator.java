@@ -43,7 +43,9 @@ public class SkipIterator<K extends Comparable<? super K>, V> implements ListIte
 	protected SkipSpan<K, V> ss;
 	protected int index;
 
-	protected SkipIterator() { }
+	protected SkipIterator() {
+        // Protected constructor for subclasses
+    }
 
 	public SkipIterator(SkipSpan<K, V> ss, int index) {
 		if(ss==null) { throw new NullPointerException(); }
@@ -51,9 +53,8 @@ public class SkipIterator<K extends Comparable<? super K>, V> implements ListIte
 		this.index = index;
 	}
 
-	public boolean hasNext() {
-		if(index < ss.nKeys) { return true; }
-		return false;
+public boolean hasNext() {
+		return index < ss.nKeys;
 	}
 
 	/**
@@ -89,10 +90,8 @@ public class SkipIterator<K extends Comparable<? super K>, V> implements ListIte
 		throw new NoSuchElementException();
 	}
 
-	public boolean hasPrevious() {
-		if(index > 0) { return true; }
-		if((ss.prev != null) && (ss.prev.nKeys > 0)) { return true; }
-		return false;
+public boolean hasPrevious() {
+		return index > 0 || ((ss.prev != null) && (ss.prev.nKeys > 0));
 	}
 
 	/**

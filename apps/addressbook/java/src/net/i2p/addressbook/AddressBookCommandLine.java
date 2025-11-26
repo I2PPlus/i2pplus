@@ -21,7 +21,9 @@ public class AddressBookCommandLine extends net.i2p.util.CommandLine {
         "net.metanotion.io.block.BlockFile",
     });
 
-    protected AddressBookCommandLine() {}
+    protected AddressBookCommandLine() {
+        // Protected constructor for subclass use
+    }
 
     public static void main(String args[]) {
         List<String> classes = new ArrayList<String>(ACLASSES.size() + CLASSES.size());

@@ -197,7 +197,9 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
         }
         else if (this.addresses != null) {
             try {this.addresses.clear();}
-            catch (UnsupportedOperationException uoe) {}
+            catch (UnsupportedOperationException uoe) {
+                // Clearing not supported, ignore
+            }
         }
     }
 

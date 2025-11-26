@@ -48,7 +48,9 @@ public class SkipList<K extends Comparable<? super K>, V> implements Flushable, 
 	protected int size;
 
 	public void flush() { }
-	protected SkipList() { }
+	protected SkipList() {
+        // Protected constructor for subclasses
+    }
 
 	/*
 	 *  @param span span size

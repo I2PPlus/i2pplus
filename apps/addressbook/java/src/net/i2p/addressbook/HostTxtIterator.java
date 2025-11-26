@@ -54,7 +54,9 @@ class HostTxtIterator implements Iterator<Map.Entry<String, HostTxtEntry>>, Clos
     /**
      *  A dummy iterator in which hasNext() is always false.
      */
-    public HostTxtIterator() {}
+    public HostTxtIterator() {
+        // Default constructor
+    }
 
     /**
      *  An iterator over the key/value pairs in the file.

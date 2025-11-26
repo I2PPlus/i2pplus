@@ -57,7 +57,9 @@ public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable
 	public void killInstance() { }
 	public void flush() { }
 
-	protected SkipLevels() { }
+	protected SkipLevels() {
+        // Protected constructor for subclasses
+    }
 
 	/*
 	 *  @throws IllegalArgumentException if size too big or too small

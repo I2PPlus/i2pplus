@@ -126,7 +126,7 @@ class Daemon {
          * This also has the advantage of not flushing the NamingService's LRU cache.
          */
         String nsClass = router.getClass().getSimpleName();
-        boolean isTextFile = nsClass.equals("HostsTxtNamingService") || nsClass.equals("SingleFileNamingService");
+        boolean isTextFile = "HostsTxtNamingService".equals(nsClass) || "SingleFileNamingService".equals(nsClass);
         Set<String> knownNames;
         if (isTextFile) {
             // load the hostname set
@@ -787,7 +787,7 @@ class Daemon {
      */
     public static void main(String[] args) {
         Daemon daemon = new Daemon();
-        if (args.length > 0 && args[0].equals("test")) {daemon.test(args);}
+        if (args.length > 0 && "test".equals(args[0])) {daemon.test(args);}
         else {daemon.run(args);}
     }
 

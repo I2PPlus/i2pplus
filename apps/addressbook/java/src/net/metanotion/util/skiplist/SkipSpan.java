@@ -45,7 +45,9 @@ public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
 	public void killInstance() { }
 	public void flush() { }
 
-	protected SkipSpan() { }
+	protected SkipSpan() {
+        // Protected constructor for subclasses
+    }
 
 	/*
 	 *  @throws IllegalArgumentException if size too big or too small

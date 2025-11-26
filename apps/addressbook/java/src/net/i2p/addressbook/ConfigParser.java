@@ -49,6 +49,10 @@ import net.i2p.util.SystemVersion;
  */
 class ConfigParser {
 
+    private ConfigParser() {
+        // Utility class - prevent instantiation
+    }
+
     private static final boolean isWindows = SystemVersion.isWindows();
 
     /**
@@ -96,7 +100,9 @@ class ConfigParser {
             return result;
         } finally {
             try {input.close();}
-            catch (IOException ioe) {}
+            catch (IOException ioe) {
+                // Ignore IOException
+            }
         }
     }
 
@@ -115,12 +121,13 @@ class ConfigParser {
         try {
             fileStream = new FileInputStream(file);
             BufferedReader input = new BufferedReader(new InputStreamReader(fileStream, "UTF-8"));
-            Map<String, String> rv = parse(input);
-            return rv;
+            return parse(input);
         } finally {
             if (fileStream != null) {
                 try {fileStream.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) {
+                // Ignore IOException
+            }
             }
         }
     }
@@ -159,7 +166,9 @@ class ConfigParser {
             }
             // Only write back if we successfully parsed the file originally
             if (!fileParsedSuccessfully) {write(result, file);}
-        } catch (IOException exp) {}
+        } catch (IOException exp) {
+                // Ignore IOException
+            }
         return result;
     }
 
@@ -178,7 +187,9 @@ class ConfigParser {
         } catch (IOException exp) {
             result = map;
             try {write(result, file);}
-            catch (IOException exp2) {}
+            catch (IOException exp2) {
+                // Ignore IOException
+            }
         }
         return result;
     }
@@ -204,7 +215,9 @@ class ConfigParser {
             return result;
         } finally {
             try {input.close();}
-            catch (IOException ioe) {}
+            catch (IOException ioe) {
+                // Ignore IOException
+            }
         }
     }
 
@@ -222,12 +235,13 @@ class ConfigParser {
         try {
             fileStream = new FileInputStream(file);
             BufferedReader input = new BufferedReader(new InputStreamReader(fileStream, "UTF-8"));
-            List<String> rv = parseSubscriptions(input);
-            return rv;
+            return parseSubscriptions(input);
         } finally {
             if (fileStream != null) {
                 try {fileStream.close();}
-                catch (IOException ioe) {}
+                catch (IOException ioe) {
+                // Ignore IOException
+            }
             }
         }
     }
@@ -254,12 +268,16 @@ class ConfigParser {
                     if (!result.contains(sub)) {result.add(sub);}
                 }
                 try {writeSubscriptions(result, file);} // TODO log
-                catch (IOException ioe) {}
+                catch (IOException ioe) {
+                // Ignore IOException
+            }
             }
         } catch (IOException exp) {
             result = list;
             try {writeSubscriptions(result, file);}
-            catch (IOException exp2) {}
+            catch (IOException exp2) {
+                // Ignore IOException
+            }
         }
         return result;
     }
@@ -283,7 +301,9 @@ class ConfigParser {
             }
         } finally {
             try {output.close();}
-            catch (IOException ioe) {}
+            catch (IOException ioe) {
+                // Ignore IOException
+            }
         }
     }
 
@@ -334,7 +354,9 @@ class ConfigParser {
             }
         } finally {
             try {output.close();}
-            catch (IOException ioe) {}
+            catch (IOException ioe) {
+                // Ignore IOException
+            }
         }
     }
 
