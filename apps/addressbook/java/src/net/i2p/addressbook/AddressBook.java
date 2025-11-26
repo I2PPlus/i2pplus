@@ -386,7 +386,9 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
      * @throws IllegalStateException if this was not created with the File constructor.
      */
     public void write() {
-        if (this.location == null || this.location.startsWith("http://")) {throw new IllegalStateException();}
+        if (this.location == null || this.location.startsWith("http://")) {
+            throw new IllegalStateException();
+        }
         this.write(new File(this.location));
     }
 
