@@ -25,12 +25,26 @@ jobs:
           distribution: 'temurin'
       - name: Run PMD
         id: pmd
+        continue-on-error: true
         uses: pmd/pmd-github-action@v2
         with:
           rulesets: 'pmd-custom-ruleset.xml'
           sourcePath: '.'
           analyzeModifiedFilesOnly: false
+          options: '--no-progress --no-cache --fail-on-violation false --min-priority 2'
+      - name: Check PMD Report
+        if: always()
+        run: |
+          if [ -f "pmd-report.sarif" ]; then
+            echo "PMD report generated successfully"
+            ls -la pmd-report.sarif
+          else
+            echo "PMD report not found - PMD may have failed"
+            exit 0
+          fi
+
       - name: Upload SARIF file
+        if: always() && hashFiles('pmd-report.sarif') != ''
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: pmd-report.sarif

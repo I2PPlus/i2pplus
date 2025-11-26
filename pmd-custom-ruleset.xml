@@ -9,6 +9,16 @@
         Excludes style and formatting rules to reduce noise.
     </description>
 
+    <!-- Exclude problematic patterns that cause PMD crashes -->
+    <exclude-pattern>.*/build/.*</exclude-pattern>
+    <exclude-pattern>.*/target/.*</exclude-pattern>
+    <exclude-pattern>.*/dist/.*</exclude-pattern>
+    <exclude-pattern>.*/.*\.jar</exclude-pattern>
+    <exclude-pattern>.*/.*\.class</exclude-pattern>
+    <exclude-pattern>.*/.*\.war</exclude-pattern>
+    <exclude-pattern>.*/gradle/.*</exclude-pattern>
+    <exclude-pattern>.*/\.gradle/.*</exclude-pattern>
+
     <!-- Focus on critical security and error-prone rules only -->
     <rule ref="category/java/security.xml"/>
     <rule ref="category/java/errorprone.xml"/>
