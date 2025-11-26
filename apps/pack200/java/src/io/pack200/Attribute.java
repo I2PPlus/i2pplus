@@ -1554,7 +1554,7 @@ class Attribute implements Comparable<Attribute> {
         final Entry[] cpMap = new Entry[maxVal+1];
         for (int i = 0; i < cpMap.length; i++) {
             if (i == 0)  continue;  // 0 => null
-            cpMap[i] = ConstantPool.getLiteralEntry(new Integer(i));
+            cpMap[i] = ConstantPool.getLiteralEntry(Integer.valueOf(i));
         }
         Package.Class cls = new Package().new Class("");
         cls.cpMap = cpMap;
@@ -1568,8 +1568,8 @@ class Attribute implements Comparable<Attribute> {
             public int getInt(int bandIndex) {
                 counts[0][0]++;
                 int value = rand.nextInt(maxVal+1);
-                history.add(new Integer(bandIndex));
-                history.add(new Integer(value));
+                history.add(Integer.valueOf(bandIndex));
+                history.add(Integer.valueOf(value));
                 return value;
             }
             public void putInt(int bandIndex, int token) {
@@ -1592,7 +1592,7 @@ class Attribute implements Comparable<Attribute> {
                 int value = getInt(bandIndex);
                 if (value < 0 || value > maxVal) {
                     System.out.println(" *** Unexpected ref code "+value);
-                    return ConstantPool.getLiteralEntry(new Integer(value));
+                    return ConstantPool.getLiteralEntry(Integer.valueOf(value));
                 }
                 return cpMap[value];
             }

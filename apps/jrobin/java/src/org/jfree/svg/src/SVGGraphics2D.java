@@ -1429,7 +1429,7 @@ public final class SVGGraphics2D extends Graphics2D {
         if (strokeWidth != 1.0f) {
             b.append("stroke-width:").append(strokeWidth).append(";");
         }
-        if (!stroke.equals("rgb(0,0,0)")) {
+        if (!this.getPaint().equals("rgb(0,0,0)")) {
             b.append("stroke:").append(svgColorStr()).append(";");
         }
         if (!df.format(getColorAlpha() * getAlpha()).equals("1")) {

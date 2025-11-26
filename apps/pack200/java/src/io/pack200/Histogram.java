@@ -694,7 +694,7 @@ final class Histogram {
                 case StreamTokenizer.TT_EOF:
                     throw new NoSuchElementException();
                 case StreamTokenizer.TT_NUMBER:
-                    return new Integer((int) in.nval);
+                    return Integer.valueOf((int) in.nval);
                 default:
                     assert(false);
                     return null;

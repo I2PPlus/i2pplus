@@ -76,7 +76,7 @@
 </div></td></tr>
 <tr><td><div class=optionsingle>
 <span class=nowrap><b><%=intl._t("News URL")%>:</b>
-<input type=text size=60 name=newsURL <%= isAdvanced ? "" : "readonly" %> value="<jsp:getProperty name="updatehelper" property="newsURL"/>"></span></div></td></tr>
+<input type=text size=60 name=newsURL value="<jsp:getProperty name="updatehelper" property="newsURL"/>"></span></div></td></tr>
 <%      } %>
 <tr title="<%=intl._t("If I2P cannot update via BitTorrent, it will try these addresses in the order they are listed")%>"><td>
 <div class="optionsingle optiontextarea"><span class=nowrap>

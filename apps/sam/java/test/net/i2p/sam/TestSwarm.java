@@ -91,7 +91,7 @@ public class TestSwarm {
         public void streamClosedReceived(String result, int id, String message) {
             Flooder flooder = null;
             synchronized (_remotePeers) {
-                flooder = (Flooder)_remotePeers.remove(new Integer(id));
+                flooder = (Flooder)_remotePeers.remove(Integer.valueOf(id));
             }
             if (flooder != null) {
                 flooder.closed();
@@ -103,7 +103,7 @@ public class TestSwarm {
         public void streamDataReceived(int id, byte data[], int offset, int length) {
             Flooder flooder = null;
             synchronized (_remotePeers) {
-                flooder = (Flooder)_remotePeers.get(new Integer(id));
+                flooder = (Flooder)_remotePeers.get(Integer.valueOf(id));
             }
             long value = DataHelper.fromLong(data, 0, 4);
             if (flooder != null) {
@@ -117,7 +117,7 @@ public class TestSwarm {
 
             Flooder flooder = new Flooder(id, dest);
             synchronized (_remotePeers) {
-                _remotePeers.put(new Integer(id), flooder);
+                _remotePeers.put(Integer.valueOf(id), flooder);
             }
             I2PThread t = new I2PThread(flooder, "Flood " + id);
             t.start();
@@ -200,7 +200,7 @@ public class TestSwarm {
                     synchronized (_remotePeers) {
                         con = _remotePeers.size() + 1;
                         flooder = new Flooder(con, remDest);
-                        _remotePeers.put(new Integer(con), flooder);
+                        _remotePeers.put(Integer.valueOf(con), flooder);
                     }
 
                     byte msg[] = (DataHelper.getUTF8("STREAM CONNECT ID=" + con + " DESTINATION=" + remDest + "\n"));

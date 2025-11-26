@@ -253,13 +253,13 @@ class ConnectionPacketHandler {
                     con.schedule(new AckDup(con), delay);
                 }
 
-            } else {
                 if (isSYN) {
                     con.setNextSendTime(_context.clock().now() + con.getOptions().getSendAckDelay());
-                } else {
-                    if (_log.shouldDebug())
-                        _log.debug("Received ACK-only packet: " + packet);
-                    ackOnly = true;
+                }
+            } else {
+                ackOnly = true;
+                if (_log.shouldDebug()) {
+                    _log.debug("Received ACK-only packet: " + packet);
                 }
             }
         }

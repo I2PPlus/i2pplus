@@ -1532,9 +1532,9 @@ public class DataHelper {
 
         DecimalFormat fmt = new DecimalFormat("##0.#");
 
-        if (bytes <= 1 * 1024 * 1024) {fmt.setMaximumFractionDigits(0);} // 1MiB
-        else if (bytes <= 1 * 1024 * 1024 * 1024 * 1024) {fmt.setMaximumFractionDigits(1);} // 1TiB
-        else {fmt.setMaximumFractionDigits(2);}
+        if (scale <= 1) {fmt.setMaximumFractionDigits(0);} // KiB, MiB
+        else if (scale <= 3) {fmt.setMaximumFractionDigits(1);} // GiB, TiB
+        else {fmt.setMaximumFractionDigits(2);} // PiB and above
 
         String str = fmt.format(val) + space;
         switch (scale) {
@@ -1546,7 +1546,7 @@ public class DataHelper {
             case 6: return str + "Ei";
             case 7: return str + "Zi";
             case 8: return str + "Yi";
-            default: return bytes + space;
+            default: return str + "Unknown"; // scale should never exceed 8 for realistic values
         }
     }
 

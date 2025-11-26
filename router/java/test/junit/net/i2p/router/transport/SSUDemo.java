@@ -1,4 +1,4 @@
-package net.i2p.router;
+package net.i2p.router.transport;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,6 +16,15 @@ import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.i2np.I2NPMessageException;
 import net.i2p.data.i2np.I2NPMessageImpl;
+import net.i2p.router.RouterContext;
+import net.i2p.router.Router;
+import net.i2p.router.OutNetMessage;
+import net.i2p.router.JobImpl;
+import net.i2p.router.Job;
+import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
+import net.i2p.router.networkdb.kademlia.SegmentedNetworkDatabaseFacade;
+import net.i2p.router.NetworkDatabaseFacade;
+import net.i2p.router.HandlerJobBuilder;
 
 /**
  * Demo of a stripped down router - no tunnels, no netDb, no i2cp, no peer profiling,
@@ -181,7 +190,7 @@ public class SSUDemo {
     }
 
     private void peerRead(RouterInfo ri) {
-        RouterInfo old = _us.netDbSegmentor().store(ri.getIdentity().calculateHash(), ri);
+        RouterInfo old = _us.netDb().store(ri.getIdentity().calculateHash(), ri);
         if (old == null)
             newPeerRead(ri);
     }
@@ -314,7 +323,7 @@ public class SSUDemo {
             DatabaseStoreMessage m = (DatabaseStoreMessage)_msg;
             System.out.println("RECV: " + m);
             try {
-                _us.netDbSegmentor().store(m.getKey(), (RouterInfo) m.getEntry());
+                _us.netDb().store(m.getKey(), (RouterInfo) m.getEntry());
             } catch (IllegalArgumentException iae) {
                 iae.printStackTrace();
             }

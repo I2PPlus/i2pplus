@@ -59,9 +59,10 @@ public class NullPrintStream extends PrintStream {
     
     private static PrintStream createPrintStream() {
         try {
+            // Use UTF-8 charset name to avoid encoding issues
             return new PrintStream(NullOutputStream.INSTANCE, false, StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
-            // This should never happen with UTF-8
+            // UTF-8 should always be supported, but fallback to default if needed
             return new PrintStream(NullOutputStream.INSTANCE);
         }
     }

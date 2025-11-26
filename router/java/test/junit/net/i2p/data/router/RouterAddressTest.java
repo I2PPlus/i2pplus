@@ -94,6 +94,6 @@ public class RouterAddressTest extends StructureTest {
         RouterAddress addr = new RouterAddress("Blah", options, 42);
         String ret = addr.toString();
         //assertEquals("[RouterAddress: \n\tTransportStyle: Blah\n\tCost: 42\n\tExpiration: Fri Jan 02 00:00:00 UTC 1970\n\tOptions: #: 2\n\t\t[hostname] = [localhost]\n\t\t[portnum] = [1234]]", ret);
-        assertEquals("[RouterAddress: \n\tType: Blah\n\tCost: 42\n\tOptions (2):\n\t\t[hostname] = [localhost]\n\t\t[portnum] = [1234]]", ret);
+        assertEquals("Blah:\n\t* hostname: localhost\n\t* portnum: 1234\n\t* cost: 42", ret);
     }
 }

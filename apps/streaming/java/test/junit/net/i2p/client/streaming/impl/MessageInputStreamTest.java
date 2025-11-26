@@ -281,7 +281,7 @@ public class MessageInputStreamTest {
 
         ArrayList<Integer> order = new ArrayList<Integer>(32);
         for (int i = 0; i < orig.length / 1024; i++)
-            order.add(new Integer(i));
+            order.add(Integer.valueOf(i));
         Collections.shuffle(order);
         for (int i = 0; i < orig.length / 1024; i++) {
             byte msg[] = new byte[1024];
@@ -309,7 +309,7 @@ public class MessageInputStreamTest {
         for (int n = 0; n < 3; n++) {
             ArrayList<Integer> order = new ArrayList<Integer>(32);
             for (int i = 0; i < orig.length / 1024; i++)
-                order.add(new Integer(i));
+                order.add(Integer.valueOf(i));
             Collections.shuffle(order);
             for (int i = 0; i < orig.length / 1024; i++) {
                 byte msg[] = new byte[1024];
@@ -338,7 +338,7 @@ public class MessageInputStreamTest {
 
         ArrayList<Integer> order = new ArrayList<Integer>(32);
         for (int i = 0; i < orig.length / 1024; i++)
-            order.add(new Integer(i));
+            order.add(Integer.valueOf(i));
         Collections.shuffle(order);
 
         int offset = 0;

@@ -282,7 +282,7 @@ class PacketHandler {
                 for (Connection c : manager.listConnections()) {
                     buf.append(c.toString()).append(" ");
                 }
-                log.debug("Connections: " + buf + " SendID: " + (sendId > 0 ? Packet.toId(sendId) : "unknown"));
+                log.debug("Connections: " + buf + " SendID: " + Packet.toId(sendId));
             }
             manager.getConnectionHandler().receiveNewSyn(packet);
         } else {

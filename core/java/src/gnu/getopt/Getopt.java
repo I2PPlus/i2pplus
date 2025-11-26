@@ -278,7 +278,7 @@ import java.text.MessageFormat;
   *        case 0:
   *          arg = g.getOptarg();
   *          System.out.println("Got long option with value '" +
-  *                             (char)(new Integer(sb.toString())).intValue()
+  *                             (char)(Integer.valueOf(sb.toString())).intValue()
   *                             + "' with argument " +
   *                             ((arg != null) ? arg : "null"));
   *          break;
