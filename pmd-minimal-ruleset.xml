@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<ruleset name="Minimal I2P+ PMD Ruleset"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+
+    <description>
+        Minimal PMD ruleset for I2P+ project with only the most critical security rules.
+    </description>
+
+    <!-- Exclude problematic patterns -->
+    <exclude-pattern>.*/build/.*</exclude-pattern>
+    <exclude-pattern>.*/target/.*</exclude-pattern>
+    <exclude-pattern>.*/dist/.*</exclude-pattern>
+    <exclude-pattern>.*/.*\.jar</exclude-pattern>
+    <exclude-pattern>.*/.*\.class</exclude-pattern>
+    <exclude-pattern>.*/.*\.war</exclude-pattern>
+    <exclude-pattern>.*/gradle/.*</exclude-pattern>
+    <exclude-pattern>.*/\.gradle/.*</exclude-pattern>
+
+    <!-- Only the most critical security rules -->
+    <rule ref="category/java/security.xml/HardCodedPassword"/>
+    <rule ref="category/java/security.xml/HardCodedCryptoKey"/>
+    <rule ref="category/java/security.xml/InsecureCrypto"/>
+    <rule ref="category/java/security.xml/UntrustedCode"/>
+    <rule ref="category/java/security.xml/DangerousConstructors"/>
+
+    <!-- Only critical error-prone rules -->
+    <rule ref="category/java/errorprone.xml/NullAssignment"/>
+    <rule ref="category/java/errorprone.xml/CloseResource"/>
+    <rule ref="category/java/errorprone.xml/EmptyCatchBlock"/>
+    <rule ref="category/java/errorprone.xml/AvoidBranchingStatementAsLastInLoop"/>
+    <rule ref="category/java/errorprone.xml/AvoidDuplicateLiterals"/>
+    <rule ref="category/java/errorprone.xml/AssignmentInOperand"/>
+
+</ruleset>

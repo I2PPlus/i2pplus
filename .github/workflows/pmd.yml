@@ -28,7 +28,7 @@ jobs:
         continue-on-error: true
         uses: pmd/pmd-github-action@v2
         with:
-          rulesets: 'pmd-custom-ruleset.xml'
+          rulesets: 'pmd-minimal-ruleset.xml'
           sourcePath: '.'
           analyzeModifiedFilesOnly: false
           options: '--no-progress --no-cache --fail-on-violation false --min-priority 2'
