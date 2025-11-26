@@ -148,7 +148,7 @@ public abstract class GatewayITBase extends RouterITBase {
     protected class TestReceiver implements TunnelGateway.Receiver, FragmentHandler.DefragmentedReceiver {
         private TunnelCreatorConfig _config;
         private FragmentHandler _handler;
-        private volatile List<I2NPMessage> _received;
+        private List<I2NPMessage> _received;
         public TestReceiver(TunnelCreatorConfig config) {
             _config = config;
             _handler = new FragmentHandler(_context, TestReceiver.this);

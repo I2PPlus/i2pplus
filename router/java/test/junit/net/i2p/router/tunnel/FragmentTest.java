@@ -190,10 +190,10 @@ public class FragmentTest {
     }
 
     protected class DefragmentedReceiverImpl implements FragmentHandler.DefragmentedReceiver {
-        private volatile byte _expected[];
-        private volatile byte _expected2[];
-        private volatile byte _expected3[];
-        private volatile int _received;
+        private byte _expected[];
+        private byte _expected2[];
+        private byte _expected3[];
+        private int _received;
         public DefragmentedReceiverImpl(byte expected[]) {
             this(expected, null);
         }

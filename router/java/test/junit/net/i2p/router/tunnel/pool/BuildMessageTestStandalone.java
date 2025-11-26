@@ -64,9 +64,11 @@ public class BuildMessageTestStandalone extends TestCase {
      */
     private void x_testBuildMessage(RouterContext ctx, int testType) {
         Log log = ctx.logManager().getLog(getClass());
-        log.debug("\n================================================================" +
-                  "\nTest " + testType +
-                  "\n================================================================");
+        if (log.shouldDebug()) {
+            log.debug("\n================================================================" +
+                      "\nTest " + testType +
+                      "\n================================================================");
+        }
         // set our keys to avoid NPE
         KeyPair kpr = ctx.keyGenerator().generatePKIKeys((testType == 1 || testType == 4) ? EncType.ELGAMAL_2048 : EncType.ECIES_X25519);
         PublicKey k1 = kpr.getPublic();
@@ -104,10 +106,12 @@ public class BuildMessageTestStandalone extends TestCase {
         }
         BuildMessageGenerator.layeredEncrypt(ctx, msg, cfg, order);
 
-        log.debug("\n================================================================" +
-                  "\nMessage fully encrypted" +
-                  "\n" + cfg.toStringFull() +
-                  "\n================================================================");
+        if (log.shouldDebug()) {
+            log.debug("\n================================================================" +
+                      "\nMessage fully encrypted" +
+                      "\n" + cfg.toStringFull() +
+                      "\n================================================================");
+        }
 
         if (testType == 3 || testType == 6) {
             // test read/write for new messages
@@ -159,35 +163,43 @@ public class BuildMessageTestStandalone extends TestCase {
             msg.setRecord(ourSlot, reply);
 
             if (testType == 1 || testType == 4) {
-                log.debug("Read slot " + ourSlot + " containing hop " + i + " @ " + _peers[i].toBase64()
-                          + " receives on " + ourId + " sending to " + nextId
-                          + " replyKey " + Base64.encode(req.readReplyKey().getData())
-                          + " replyIV " + Base64.encode(req.readReplyIV())
-                          + " on " + nextPeer.toBase64()
-                          + " inGW? " + isInGW + " outEnd? " + isOutEnd + " time difference " + (now-time));
+                if (log.shouldDebug()) {
+                    log.debug("Read slot " + ourSlot + " containing hop " + i + " @ " + _peers[i].toBase64()
+                              + " receives on " + ourId + " sending to " + nextId
+                              + " replyKey " + Base64.encode(req.readReplyKey().getData())
+                              + " replyIV " + Base64.encode(req.readReplyIV())
+                              + " on " + nextPeer.toBase64()
+                              + " inGW? " + isInGW + " outEnd? " + isOutEnd + " time difference " + (now-time));
+                }
             } else if (testType == 2 || testType == 5) {
-                log.debug("Read slot " + ourSlot + " containing hop " + i + " @ " + _peers[i].toBase64()
-                          + " receives on " + ourId + " sending to " + nextId
-                          + " replyKey " + Base64.encode(req.readReplyKey().getData())
-                          + " replyIV " + Base64.encode(req.readReplyIV())
-                          + " chachaKey " + Base64.encode(req.getChaChaReplyKey().getData())
-                          + " chachaAD " + Base64.encode(req.getChaChaReplyAD())
-                          + " on " + nextPeer.toBase64()
-                          + " inGW? " + isInGW + " outEnd? " + isOutEnd + " time difference " + (now-time));
+                if (log.shouldDebug()) {
+                    log.debug("Read slot " + ourSlot + " containing hop " + i + " @ " + _peers[i].toBase64()
+                              + " receives on " + ourId + " sending to " + nextId
+                              + " replyKey " + Base64.encode(req.readReplyKey().getData())
+                              + " replyIV " + Base64.encode(req.readReplyIV())
+                              + " chachaKey " + Base64.encode(req.getChaChaReplyKey().getData())
+                              + " chachaAD " + Base64.encode(req.getChaChaReplyAD())
+                              + " on " + nextPeer.toBase64()
+                              + " inGW? " + isInGW + " outEnd? " + isOutEnd + " time difference " + (now-time));
+                }
             } else {
-                log.debug("Read slot " + ourSlot + " containing hop " + i + " @ " + _peers[i].toBase64()
-                          + " receives on " + ourId + " sending to " + nextId
-                          + " chachaKey " + Base64.encode(req.getChaChaReplyKey().getData())
-                          + " chachaAD " + Base64.encode(req.getChaChaReplyAD())
-                          + " on " + nextPeer.toBase64()
-                          + " inGW? " + isInGW + " outEnd? " + isOutEnd + " time difference " + (now-time));
+                if (log.shouldDebug()) {
+                    log.debug("Read slot " + ourSlot + " containing hop " + i + " @ " + _peers[i].toBase64()
+                              + " receives on " + ourId + " sending to " + nextId
+                              + " chachaKey " + Base64.encode(req.getChaChaReplyKey().getData())
+                              + " chachaAD " + Base64.encode(req.getChaChaReplyAD())
+                              + " on " + nextPeer.toBase64()
+                              + " inGW? " + isInGW + " outEnd? " + isOutEnd + " time difference " + (now-time));
+                }
             }
         }
 
 
-        log.debug("\n================================================================" +
-                  "\nAll hops traversed and replies gathered" +
-                  "\n================================================================");
+        if (log.shouldDebug()) {
+            log.debug("\n================================================================" +
+                      "\nAll hops traversed and replies gathered" +
+                      "\n================================================================");
+        }
 
         // now all of the replies are populated, toss 'em into a reply message and handle it
         TunnelBuildReplyMessage reply;
@@ -226,9 +238,11 @@ public class BuildMessageTestStandalone extends TestCase {
                 allAgree = false;
         }
 
-        log.debug("\n================================================================" +
-                  "\nTest " + testType + " complete, all peers agree? " + allAgree +
-                  "\n================================================================");
+        if (log.shouldDebug()) {
+            log.debug("\n================================================================" +
+                      "\nTest " + testType + " complete, all peers agree? " + allAgree +
+                      "\n================================================================");
+        }
         assertTrue("All peers agree", allAgree);
     }
 

@@ -32,7 +32,7 @@ public class CachedIteratorCollectionTest {
     /* Add n-number of objects to the given CachedIteratorCollection object
      *
      */
-    private void AddNObjects(CachedIteratorCollection<String> a, int n) {
+    private void addNObjects(CachedIteratorCollection<String> a, int n) {
         if (n > 0) {
             for (int j = 0; j < n; j++) {
                 String s = "test" + j;
@@ -43,7 +43,7 @@ public class CachedIteratorCollectionTest {
         }
     }
 
-    private void AddNObjectsLL(LinkedList<String> a, int n) {
+    private void addNObjectsLL(List<String> a, int n) {
         if (n > 0) {
             for (int j = 0; j < n; j++) {
                 String s = "test" + j;
@@ -59,7 +59,7 @@ public class CachedIteratorCollectionTest {
     public void Add1Test() {
         CachedIteratorCollection<String> testCollection1 = new CachedIteratorCollection<>();
 
-        AddNObjects(testCollection1, 1);
+        addNObjects(testCollection1, 1);
         String testString = "";
 
         // Iterator test
@@ -75,7 +75,7 @@ public class CachedIteratorCollectionTest {
         assertFalse(testCollection1.isEmpty());
 
         // Compare behavior with LinkedList object
-        LinkedList<String> testCollection2 = new LinkedList<>();
+        List<String> testCollection2 = new LinkedList<>();
 
         AddNObjectsLL(testCollection2, 1);
         testString = "";
@@ -114,7 +114,7 @@ public class CachedIteratorCollectionTest {
         assertFalse(testCollection1.isEmpty());
 
         // Compare behavior with LinkedList OBject
-        LinkedList<String> testCollection2 = new LinkedList<>();
+        List<String> testCollection2 = new LinkedList<>();
 
         AddNObjectsLL(testCollection2, 10);
         testString = "";
@@ -161,7 +161,7 @@ public class CachedIteratorCollectionTest {
         assertFalse(testCollection1.isEmpty());
 
         // Compare behavior with LinkedList object
-        LinkedList<String> testCollection2 = new LinkedList<>();
+        List<String> testCollection2 = new LinkedList<>();
 
         stringArrayList = new ArrayList<>();
 
@@ -192,7 +192,7 @@ public class CachedIteratorCollectionTest {
     public void SingleRemove() {
         CachedIteratorCollection<String> testCollection1 = new CachedIteratorCollection<>();
 
-        AddNObjects(testCollection1, 1);
+        addNObjects(testCollection1, 1);
         String testString = "";
 
         // Iterator test
@@ -209,7 +209,7 @@ public class CachedIteratorCollectionTest {
         assertTrue(testCollection1.isEmpty());
 
         // Compare behavior with LinkedList object
-        LinkedList<String> testCollection2 = new LinkedList<>();
+        List<String> testCollection2 = new LinkedList<>();
 
         AddNObjectsLL(testCollection2, 1);
         testString = "";
@@ -255,7 +255,7 @@ public class CachedIteratorCollectionTest {
         assertFalse(testCollection1.isEmpty());
 
         // Compare behavior with LinkedList object
-        LinkedList<String> testCollection2 = new LinkedList<>();
+        List<String> testCollection2 = new LinkedList<>();
 
         AddNObjectsLL(testCollection2, 10);
         testString = "";
@@ -306,7 +306,7 @@ public class CachedIteratorCollectionTest {
         assertFalse(testCollection1.isEmpty());
 
         // Compare behavior with LinkedList object
-        LinkedList<String> testCollection2 = new LinkedList<>();
+        List<String> testCollection2 = new LinkedList<>();
 
         AddNObjectsLL(testCollection2, 10);
         testString = "";
@@ -357,7 +357,7 @@ public class CachedIteratorCollectionTest {
         assertFalse(testCollection1.isEmpty());
 
         // Compare behavior with LinkedList object
-        LinkedList<String> testCollection2 = new LinkedList<>();
+        List<String> testCollection2 = new LinkedList<>();
 
         AddNObjectsLL(testCollection2, 10);
         testString = "";
@@ -408,7 +408,7 @@ public class CachedIteratorCollectionTest {
         assertFalse(testCollection1.isEmpty());
 
         // Compare behavior with LinkedList object
-        LinkedList<String> testCollection2 = new LinkedList<>();
+        List<String> testCollection2 = new LinkedList<>();
 
         AddNObjectsLL(testCollection2, 10);
         testString = "";
@@ -458,7 +458,7 @@ public class CachedIteratorCollectionTest {
         assertTrue(testCollection1.isEmpty());
 
         // Compare behavior with LinkedList object
-        LinkedList<String> testCollection2 = new LinkedList<>();
+        List<String> testCollection2 = new LinkedList<>();
 
         AddNObjectsLL(testCollection2, 10);
 
@@ -496,7 +496,7 @@ public class CachedIteratorCollectionTest {
         assertSame(testCollection1Itr3,testCollection1Itr4);
 
         // LinkedList object's iterator should return different objects
-        LinkedList<String> testCollection2 = new LinkedList<>();
+        List<String> testCollection2 = new LinkedList<>();
 
         AddNObjectsLL(testCollection2, 10);
         Iterator<String> testCollection2Itr1 = testCollection2.iterator();
@@ -540,7 +540,7 @@ public class CachedIteratorCollectionTest {
         assertFalse(testCollection1.isEmpty());
 
         // Compare behavior with LinkedList object
-        LinkedList<String> testCollection2 = new LinkedList<>();
+        List<String> testCollection2 = new LinkedList<>();
 
         AddNObjectsLL(testCollection2, 10);
 
@@ -592,7 +592,7 @@ public class CachedIteratorCollectionTest {
         assertTrue(testCollection1.isEmpty());
 
         // Compare behavior with LinkedList object
-        LinkedList<String> testCollection2 = new LinkedList<>();
+        List<String> testCollection2 = new LinkedList<>();
 
         AddNObjectsLL(testCollection2, 10);
 
@@ -641,7 +641,7 @@ public class CachedIteratorCollectionTest {
         }
 
         // Compare behavior with LinkedList object
-        LinkedList<String> testCollection2 = new LinkedList<>();
+        List<String> testCollection2 = new LinkedList<>();
 
         AddNObjectsLL(testCollection2, 10);
 
@@ -695,7 +695,7 @@ public class CachedIteratorCollectionTest {
         }
 
         // Compare behavior with LinkedList object
-        LinkedList<String> testCollection2 = new LinkedList<>();
+        List<String> testCollection2 = new LinkedList<>();
 
         AddNObjectsLL(testCollection2, 10);
 
@@ -761,7 +761,7 @@ public class CachedIteratorCollectionTest {
         assertFalse(testCollection1.isEmpty());
 
         // Compare behavior with LinkedList object
-        LinkedList<String> testCollection2 = new LinkedList<>();
+        List<String> testCollection2 = new LinkedList<>();
 
         AddNObjectsLL(testCollection2, 10);
 
