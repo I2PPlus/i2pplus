@@ -16,7 +16,7 @@ public class MLKEMPrivateKeyParameters
     
     public MLKEMPrivateKeyParameters(MLKEMParameters params, byte[] s, byte[] hpk, byte[] nonce, byte[] t, byte[] rho)
     {
-        this(params, s, hpk, nonce, t, rho, (byte[]) null);
+        this(params, s, hpk, nonce, t, rho, null);
     }
 
     public MLKEMPrivateKeyParameters(MLKEMParameters params, byte[] s, byte[] hpk, byte[] nonce, byte[] t, byte[] rho, byte[] seed)

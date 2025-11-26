@@ -274,8 +274,9 @@ public class KeysAndCert extends DataStructureImpl {
     public int hashCode() {
         // don't use public key, some app devs thinking of using
         // an all-zeros or leading-zeros public key for destinations
-        if (_signingKey == null)
+        if (_signingKey == null) {
             return 0;
+        }
         return _signingKey.hashCode();
     }
 
@@ -285,10 +286,11 @@ public class KeysAndCert extends DataStructureImpl {
         String cls = getClass().getSimpleName();
         buf.append(cls);
         buf.append("\n* Hash: ");
-        if (cls.equals("Destination"))
+        if (cls.equals("Destination")) {
             buf.append(getHash().toBase32());
-        else
+        } else {
             buf.append(getHash().toBase64());
+        }
         buf.append("\n* Certificate: ").append(_certificate);
         if ((_publicKey != null && _publicKey.getType() != EncType.ELGAMAL_2048) ||
             !cls.equals("Destination")) {
@@ -297,8 +299,9 @@ public class KeysAndCert extends DataStructureImpl {
         buf.append("\n* Public Signing Key: ").append(_signingKey);
         if (_padding != null) {
             int len = _padding.length;
-            if (_paddingBlocks > 1)
+            if (_paddingBlocks > 1) {
                 len *= _paddingBlocks;
+            }
             buf.append("\n* Padding: ").append(len).append(" bytes");
         }
         return buf.toString();
