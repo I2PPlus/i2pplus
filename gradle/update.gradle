@@ -88,20 +88,20 @@ task updaterRouter(type: Zip) {
     // https://stackoverflow.com/questions/54501697/gradle-war-plugin-how-to-change-name-of-an-archive
     // https://discuss.gradle.org/t/destinationdir-is-deprecated-archivename-is-deprecated/31586
     archiveFileName.set('i2pupdate.zip')
-    destinationDirectory.set(file('.'))
+    destinationDirectory.set(file('dist'))
     from 'pkg-temp'
 }
 
 task updaterSmall(type: Zip) {
     dependsOn prepUpdateSmall
     archiveFileName.set('i2pupdate.zip')
-    destinationDirectory.set(file('.'))
+    destinationDirectory.set(file('dist'))
     from 'pkg-temp'
 }
 
 task updater(type: Zip) {
     dependsOn prepUpdate
     archiveFileName.set('i2pupdate.zip')
-    destinationDirectory.set(file('.'))
+    destinationDirectory.set(file('dist'))
     from 'pkg-temp'
 }
