@@ -1,11 +1,29 @@
 <html>
-    <body>
-        <p>
-            These classes provide a number of low-level cryptographic routines.
-        </p>
-
-        <p>
-            These cryptographic routines include symmetric and asymmetric encryption and decryption, hashing, secure random number generation...
-        </p>
-    </body>
+<body>
+<p>
+Core cryptographic primitives and algorithms used throughout I2P.
+</p>
+<p>
+This package provides the fundamental cryptographic building blocks for I2P's
+security and privacy features, including:
+</p>
+<ul>
+<li><strong>Asymmetric Encryption:</strong> ElGamal, ECIES, and post-quantum algorithms</li>
+<li><strong>Digital Signatures:</strong> DSA, EdDSA, and related signature schemes</li>
+<li><strong>Symmetric Encryption:</strong> AES and other block ciphers</li>
+<li><strong>Hash Functions:</strong> SHA-256, SHA-3, and cryptographic digests</li>
+<li><strong>Key Derivation:</strong> HKDF and other key derivation functions</li>
+<li><strong>Random Number Generation:</strong> Cryptographically secure RNG</li>
+<li><strong>Mathematical Primitives:</strong> Big integer operations and field arithmetic</li>
+</ul>
+<p>
+All cryptographic operations are designed to provide strong security guarantees
+while maintaining performance suitable for high-throughput routing operations.
+The implementation follows established cryptographic standards and best practices.
+</p>
+<p><strong>Note:</strong> This package contains low-level cryptographic primitives.
+For higher-level I2P-specific cryptographic operations, see the
+net.i2p.crypto.eddsa and net.i2p.crypto.x25519 packages.
+</p>
+</body>
 </html>
