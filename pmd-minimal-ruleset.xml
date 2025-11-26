@@ -21,9 +21,9 @@
     <exclude-pattern>**/generated/.*</exclude-pattern>
     <exclude-pattern>**/.*Generated\.java$</exclude-pattern>
 
-    <!-- Focus on the most critical error-prone and security rules -->
+    <!-- Include only the most critical error-prone rules -->
     <rule ref="category/java/errorprone.xml">
-        <!-- Exclude less critical error-prone rules that generate noise -->
+        <!-- Exclude less critical rules that generate noise -->
         <exclude name="UseConcurrentHashMap"/>
         <exclude name="AvoidDuplicateLiterals"/>
         <exclude name="AvoidLiteralsInIfCondition"/>
@@ -31,23 +31,18 @@
         <exclude name="OneDeclarationPerLine"/>
         <exclude name="UnusedLocalVariable"/>
         <exclude name="UnusedFormalParameter"/>
+        <exclude name="UnusedAssignment"/>
         <exclude name="UnusedPrivateField"/>
         <exclude name="UnusedPrivateMethod"/>
         <exclude name="ForLoopVariableCount"/>
         <exclude name="AvoidReassigningLoopVariables"/>
         <exclude name="AvoidReassigningParameters"/>
-        <exclude name="UnusedAssignment"/>
     </rule>
 
     <!-- Include only the most critical security rules -->
-    <rule ref="category/java/security.xml">
-        <!-- Security rules are generally more important than style -->
-        <!-- Keep all security rules as they're usually critical -->
-    </rule>
+    <rule ref="category/java/security.xml"/>
 
     <!-- Include only the most critical multithreading rules -->
-    <rule ref="category/java/multithreading.xml">
-        <!-- Keep threading rules as they can cause serious runtime issues -->
-    </rule>
+    <rule ref="category/java/multithreading.xml"/>
 
 </ruleset>
