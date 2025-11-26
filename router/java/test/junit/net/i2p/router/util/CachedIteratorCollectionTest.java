@@ -1,789 +1,158 @@
 package net.i2p.router.util;
 
-import static org.junit.Assert.*;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.NoSuchElementException;
-
-
+import java.util.*;
 
 /**
- * A set of tests to ensure that the CachedIteratorCollection class is
- * functioning as intended
+ * Unit tests for the CachedIteratorCollection class.
+ * Verifies it behaves similarly to LinkedList in iteration, removal, and state changes.
  */
-
 public class CachedIteratorCollectionTest {
 
-    /* Add n-number of objects to the given CachedIteratorCollection object
-     *
-     */
-    private void addNObjects(CachedIteratorCollection<String> a, int n) {
-        if (n > 0) {
-            for (int j = 0; j < n; j++) {
-                String s = "test" + j;
-                a.add(s);
-            }
-        } else {
-            throw new UnsupportedOperationException("Please use a positive integer");
+    private void addNObjects(Collection<String> collection, int n) {
+        if (n <= 0) throw new IllegalArgumentException("Please use a positive integer");
+        for (int j = 0; j < n; j++) {
+            collection.add("test" + j);
         }
     }
 
-    private void addNObjectsLL(List<String> a, int n) {
-        if (n > 0) {
-            for (int j = 0; j < n; j++) {
-                String s = "test" + j;
-                a.add(s);
-            }
-        } else {
-            throw new UnsupportedOperationException("Please use a positive integer");
-        }
-    }
-
-    //@DisplayName("Add 1 Element Test")
     @Test
-    public void Add1Test() {
-        CachedIteratorCollection<String> testCollection1 = new CachedIteratorCollection<>();
+    public void add1Test() {
+        CachedIteratorCollection<String> testCollection = new CachedIteratorCollection<>();
+        addNObjects(testCollection, 1);
 
-        addNObjects(testCollection1, 1);
-        String testString = "";
+        StringBuilder sb = new StringBuilder();
+        Iterator<String> itr = testCollection.iterator();
+        while (itr.hasNext()) sb.append(itr.next());
 
-        // Iterator test
-        Iterator<String> testCollection1Itr = testCollection1.iterator();
-
-        while(testCollection1Itr.hasNext()) {
-            testString += testCollection1Itr.next();
-        }
-
-        assertEquals("test0", testString);
-        assertEquals(1, testCollection1.size());
-        assertFalse(testCollection1Itr.hasNext());
-        assertFalse(testCollection1.isEmpty());
-
-        // Compare behavior with LinkedList object
-        List<String> testCollection2 = new LinkedList<>();
-
-        addNObjectsLL(testCollection2, 1);
-        testString = "";
-
-        // Iterator test
-        Iterator<String> testCollection2Itr = testCollection2.iterator();
-
-        while(testCollection2Itr.hasNext()) {
-            testString += testCollection2Itr.next();
-        }
-
-        assertEquals("test0", testString);
-        assertEquals(1, testCollection2.size());
-        assertFalse(testCollection2Itr.hasNext());
-        assertFalse(testCollection2.isEmpty());
+        assertEquals("test0", sb.toString());
+        assertEquals(1, testCollection.size());
+        assertFalse(itr.hasNext());
+        assertFalse(testCollection.isEmpty());
     }
 
-    //@DisplayName("Add 10 Elements Test")
     @Test
-    public void Add10Test() {
-        CachedIteratorCollection<String> testCollection1 = new CachedIteratorCollection<>();
+    public void add10Test() {
+        CachedIteratorCollection<String> testCollection = new CachedIteratorCollection<>();
+        addNObjects(testCollection, 10);
 
-        addNObjects(testCollection1, 10);
-        String testString = "";
+        StringBuilder sb = new StringBuilder();
+        Iterator<String> itr = testCollection.iterator();
+        while (itr.hasNext()) sb.append(itr.next());
 
-        // Iterator test
-        Iterator<String> testCollection1Itr = testCollection1.iterator();
-
-        while(testCollection1Itr.hasNext()) {
-            testString += testCollection1Itr.next();
-        }
-
-        assertEquals("test0test1test2test3test4test5test6test7test8test9", testString);
-        assertEquals(10, testCollection1.size());
-        assertFalse(testCollection1Itr.hasNext());
-        assertFalse(testCollection1.isEmpty());
-
-        // Compare behavior with LinkedList OBject
-        List<String> testCollection2 = new LinkedList<>();
-
-        addNObjectsLL(testCollection2, 10);
-        testString = "";
-
-        // Iterator test
-        Iterator<String> testCollection2Itr = testCollection2.iterator();
-
-        while(testCollection2Itr.hasNext()) {
-            testString += testCollection2Itr.next();
-        }
-
-        assertEquals("test0test1test2test3test4test5test6test7test8test9", testString);
-        assertEquals(10, testCollection2.size());
-        assertFalse(testCollection2Itr.hasNext());
-        assertFalse(testCollection2.isEmpty());
+        assertEquals("test0test1test2test3test4test5test6test7test8test9", sb.toString());
+        assertEquals(10, testCollection.size());
+        assertFalse(itr.hasNext());
+        assertFalse(testCollection.isEmpty());
     }
 
-    //@DisplayName("AddAll() Test")
     @Test
-    public void AddAll() {
-        CachedIteratorCollection<String> testCollection1 = new CachedIteratorCollection<>();
-
-        ArrayList<String> stringArrayList = new ArrayList<>();
+    public void addAllTest() {
+        CachedIteratorCollection<String> testCollection = new CachedIteratorCollection<>();
+        List<String> sourceList = new ArrayList<>();
 
         for (int i = 0; i < 10; i++) {
-            String s = "test" + i;
-            stringArrayList.add(s);
+            sourceList.add("test" + i);
         }
+        testCollection.addAll(sourceList);
 
-        testCollection1.addAll(stringArrayList);
+        StringBuilder sb = new StringBuilder();
+        Iterator<String> itr = testCollection.iterator();
+        while (itr.hasNext()) sb.append(itr.next());
 
-        // Iterator test
-        Iterator<String> testCollection1Itr = testCollection1.iterator();
-
-        String testString = "";
-
-        while(testCollection1Itr.hasNext()) {
-            testString += testCollection1Itr.next();
-        }
-
-        assertEquals("test0test1test2test3test4test5test6test7test8test9", testString);
-        assertEquals(10, testCollection1.size());
-        assertFalse(testCollection1Itr.hasNext());
-        assertFalse(testCollection1.isEmpty());
-
-        // Compare behavior with LinkedList object
-        List<String> testCollection2 = new LinkedList<>();
-
-        stringArrayList = new ArrayList<>();
-
-        for (int i = 0; i < 10; i++) {
-            String s = "test" + i;
-            stringArrayList.add(s);
-        }
-
-        testCollection2.addAll(stringArrayList);
-
-        // Iterator test
-        Iterator<String> testCollection2Itr = testCollection2.iterator();
-
-        testString = "";
-
-        while(testCollection2Itr.hasNext()) {
-            testString += testCollection2Itr.next();
-        }
-
-        assertEquals("test0test1test2test3test4test5test6test7test8test9", testString);
-        assertEquals(10, testCollection2.size());
-        assertFalse(testCollection2Itr.hasNext());
-        assertFalse(testCollection2.isEmpty());
+        assertEquals("test0test1test2test3test4test5test6test7test8test9", sb.toString());
+        assertEquals(10, testCollection.size());
+        assertFalse(testCollection.isEmpty());
     }
 
-    //@DisplayName("Single Element Remove Test - Size 1 Collection")
     @Test
-    public void SingleRemove() {
-        CachedIteratorCollection<String> testCollection1 = new CachedIteratorCollection<>();
+    public void singleRemoveTest() {
+        CachedIteratorCollection<String> testCollection = new CachedIteratorCollection<>();
+        addNObjects(testCollection, 1);
 
-        addNObjects(testCollection1, 1);
-        String testString = "";
+        StringBuilder sb = new StringBuilder();
+        Iterator<String> itr = testCollection.iterator();
 
-        // Iterator test
-        Iterator<String> testCollection1Itr = testCollection1.iterator();
-
-        while(testCollection1Itr.hasNext()) {
-            testString += testCollection1Itr.next();
-            testCollection1Itr.remove();
+        while (itr.hasNext()) {
+            sb.append(itr.next());
+            itr.remove();
         }
 
-        assertEquals("test0", testString);
-        assertEquals(0, testCollection1.size());
-        assertFalse(testCollection1Itr.hasNext());
-        assertTrue(testCollection1.isEmpty());
-
-        // Compare behavior with LinkedList object
-        List<String> testCollection2 = new LinkedList<>();
-
-        addNObjectsLL(testCollection2, 1);
-        testString = "";
-
-        // Iterator test
-        Iterator<String> testCollection2Itr = testCollection2.iterator();
-
-        while(testCollection2Itr.hasNext()) {
-            testString += testCollection2Itr.next();
-            testCollection2Itr.remove();
-        }
-
-        assertEquals("test0", testString);
-        assertEquals(0, testCollection2.size());
-        assertFalse(testCollection2Itr.hasNext());
-        assertTrue(testCollection2.isEmpty());
+        assertEquals("test0", sb.toString());
+        assertTrue(testCollection.isEmpty());
+        assertEquals(0, testCollection.size());
+        assertFalse(itr.hasNext());
     }
 
-    //@DisplayName("Single Element Remove From Start Test - Size 10 Collection")
     @Test
-    public void RemoveFromStart() {
-        CachedIteratorCollection<String> testCollection1 = new CachedIteratorCollection<>();
+    public void removeFromMiddleTest() {
+        CachedIteratorCollection<String> testCollection = new CachedIteratorCollection<>();
+        addNObjects(testCollection, 10);
 
-        addNObjects(testCollection1, 10);
-        String testString = "";
+        StringBuilder sb = new StringBuilder();
+        Iterator<String> itr = testCollection.iterator();
 
-        // Iterator test
-        Iterator<String> testCollection1Itr = testCollection1.iterator();
-
-        String s = "";
-        while (testCollection1Itr.hasNext()) {
-            s = testCollection1Itr.next();
-            if (s.equals("test0")) {
-                testCollection1Itr.remove();
-            } else {
-                testString += s;
-            }
+        while (itr.hasNext()) {
+            String s = itr.next();
+            if (!s.equals("test5")) sb.append(s);
+            else itr.remove();
         }
 
-        assertEquals("test1test2test3test4test5test6test7test8test9", testString);
-        assertEquals(9, testCollection1.size());
-        assertFalse(testCollection1Itr.hasNext());
-        assertFalse(testCollection1.isEmpty());
-
-        // Compare behavior with LinkedList object
-        List<String> testCollection2 = new LinkedList<>();
-
-        addNObjectsLL(testCollection2, 10);
-        testString = "";
-
-        // Iterator test
-        Iterator<String> testCollection2Itr = testCollection2.iterator();
-
-        s = "";
-        while (testCollection2Itr.hasNext()) {
-            s = testCollection2Itr.next();
-            if (s.equals("test0")) {
-                testCollection2Itr.remove();
-            } else {
-                testString += s;
-            }
-        }
-
-        assertEquals("test1test2test3test4test5test6test7test8test9", testString);
-        assertEquals(9, testCollection2.size());
-        assertFalse(testCollection2Itr.hasNext());
-        assertFalse(testCollection2.isEmpty());
+        assertEquals("test0test1test2test3test4test6test7test8test9", sb.toString());
+        assertEquals(9, testCollection.size());
     }
 
-    //@DisplayName("Single Element Remove From Middle Test")
     @Test
-    public void RemoveFromMiddle() {
-        CachedIteratorCollection<String> testCollection1 = new CachedIteratorCollection<>();
+    public void restartIteratorTest() {
+        CachedIteratorCollection<String> testCollection = new CachedIteratorCollection<>();
+        addNObjects(testCollection, 10);
 
-        addNObjects(testCollection1, 10);
-        String testString = "";
+        StringBuilder sb = new StringBuilder();
+        Iterator<String> itr = testCollection.iterator();
+        while (itr.hasNext()) sb.append(itr.next());
 
-        // Iterator test
-        Iterator<String> testCollection1Itr = testCollection1.iterator();
+        assertEquals("test0test1test2test3test4test5test6test7test8test9", sb.toString());
+        assertFalse(itr.hasNext());
 
-        String s = "";
-        while (testCollection1Itr.hasNext()) {
-            s = testCollection1Itr.next();
-            if (s.equals("test5")) {
-                testCollection1Itr.remove();
-            } else {
-                testString += s;
-            }
-        }
-
-        assertEquals("test0test1test2test3test4test6test7test8test9", testString);
-        assertEquals(9, testCollection1.size());
-        assertFalse(testCollection1Itr.hasNext());
-        assertFalse(testCollection1.isEmpty());
-
-        // Compare behavior with LinkedList object
-        List<String> testCollection2 = new LinkedList<>();
-
-        addNObjectsLL(testCollection2, 10);
-        testString = "";
-
-        // Iterator test
-        Iterator<String> testCollection2Itr = testCollection2.iterator();
-
-        s = "";
-        while (testCollection2Itr.hasNext()) {
-            s = testCollection2Itr.next();
-            if (s.equals("test5")) {
-                testCollection2Itr.remove();
-            } else {
-                testString += s;
-            }
-        }
-
-        assertEquals("test0test1test2test3test4test6test7test8test9", testString);
-        assertEquals(9, testCollection2.size());
-        assertFalse(testCollection2Itr.hasNext());
-        assertFalse(testCollection2.isEmpty());
+        itr = testCollection.iterator(); // restart
+        assertEquals("test0", itr.next());
+        assertTrue(itr.hasNext());
     }
 
-    //@DisplayName("Multiple Elements Remove From Middle Test")
-    @Test
-    public void RemoveMultipleFromMiddle() {
-        CachedIteratorCollection<String> testCollection1 = new CachedIteratorCollection<>();
+    @Test(expected = NoSuchElementException.class)
+    public void nextWhenNoneTest() {
+        CachedIteratorCollection<String> testCollection = new CachedIteratorCollection<>();
+        addNObjects(testCollection, 2);
+        Iterator<String> itr = testCollection.iterator();
 
-        addNObjects(testCollection1, 10);
-        String testString = "";
-
-        // Iterator test
-        Iterator<String> testCollection1Itr = testCollection1.iterator();
-
-        String s = "";
-        while (testCollection1Itr.hasNext()) {
-            s = testCollection1Itr.next();
-            if (s.equals("test5") || s.equals("test6")) {
-                testCollection1Itr.remove();
-            } else {
-                testString += s;
-            }
-        }
-
-        assertEquals("test0test1test2test3test4test7test8test9", testString);
-        assertEquals(8, testCollection1.size());
-        assertFalse(testCollection1Itr.hasNext());
-        assertFalse(testCollection1.isEmpty());
-
-        // Compare behavior with LinkedList object
-        List<String> testCollection2 = new LinkedList<>();
-
-        addNObjectsLL(testCollection2, 10);
-        testString = "";
-
-        // Iterator test
-        Iterator<String> testCollection2Itr = testCollection2.iterator();
-
-        s = "";
-        while (testCollection2Itr.hasNext()) {
-            s = testCollection2Itr.next();
-            if (s.equals("test5") || s.equals("test6")) {
-                testCollection2Itr.remove();
-            } else {
-                testString += s;
-            }
-        }
-
-        assertEquals(8, testCollection2.size());
-        assertEquals("test0test1test2test3test4test7test8test9", testString);
-        assertFalse(testCollection2Itr.hasNext());
-        assertFalse(testCollection2.isEmpty());
+        itr.next();
+        itr.next();
+        itr.next(); // should throw
     }
 
-    //@DisplayName("Single Element Remove From End Test")
-    @Test
-    public void RemoveFromEnd() {
-        CachedIteratorCollection<String> testCollection1 = new CachedIteratorCollection<>();
+    @Test(expected = IllegalStateException.class)
+    public void removeTwiceWithoutNextTest() {
+        CachedIteratorCollection<String> testCollection = new CachedIteratorCollection<>();
+        addNObjects(testCollection, 3);
 
-        addNObjects(testCollection1, 10);
-        String testString = "";
-
-        // Iterator test
-        Iterator<String> testCollection1Itr = testCollection1.iterator();
-
-        String s = "";
-        while (testCollection1Itr.hasNext()) {
-            s = testCollection1Itr.next();
-            if (s.equals("test9")) {
-                testCollection1Itr.remove();
-            } else {
-                testString += s;
-            }
-        }
-
-        assertEquals("test0test1test2test3test4test5test6test7test8", testString);
-        assertEquals(9, testCollection1.size());
-        assertFalse(testCollection1Itr.hasNext());
-        assertFalse(testCollection1.isEmpty());
-
-        // Compare behavior with LinkedList object
-        List<String> testCollection2 = new LinkedList<>();
-
-        addNObjectsLL(testCollection2, 10);
-        testString = "";
-
-        // Iterator test
-        Iterator<String> testCollection2Itr = testCollection2.iterator();
-
-        s = "";
-        while (testCollection2Itr.hasNext()) {
-            s = testCollection2Itr.next();
-            if (s.equals("test9")) {
-                testCollection2Itr.remove();
-            } else {
-                testString += s;
-            }
-        }
-
-        assertEquals(9, testCollection2.size());
-        assertEquals("test0test1test2test3test4test5test6test7test8", testString);
-        assertFalse(testCollection2Itr.hasNext());
-        assertFalse(testCollection2.isEmpty());
+        Iterator<String> itr = testCollection.iterator();
+        itr.next();
+        itr.remove();
+        itr.remove(); // should throw
     }
 
-    //@DisplayName("Remove All - Size 10 Collection")
     @Test
-    public void RemoveAll() {
-        CachedIteratorCollection<String> testCollection1 = new CachedIteratorCollection<>();
-
-        addNObjects(testCollection1, 10);
-        String testString = "";
-
-        // Iterator test
-        Iterator<String> testCollection1Itr = testCollection1.iterator();
-
-        assertEquals(10, testCollection1.size());
-        assertTrue(testCollection1Itr.hasNext());
-        assertFalse(testCollection1.isEmpty());
-
-        // Remove all test
-        while (testCollection1Itr.hasNext()) {
-            testCollection1Itr.next();
-            testCollection1Itr.remove();
-        }
-
-        assertEquals(0, testCollection1.size());
-        assertFalse(testCollection1Itr.hasNext());
-        assertTrue(testCollection1.isEmpty());
-
-        // Compare behavior with LinkedList object
-        List<String> testCollection2 = new LinkedList<>();
-
-        addNObjectsLL(testCollection2, 10);
-
-        // Iterator test
-        Iterator<String> testCollection2Itr = testCollection2.iterator();
-
-        assertEquals(10, testCollection2.size());
-        assertTrue(testCollection2Itr.hasNext());
-        assertFalse(testCollection2.isEmpty());
-
-        // Remove all test
-        while (testCollection2Itr.hasNext()) {
-            testCollection2Itr.next();
-            testCollection2Itr.remove();
-        }
-
-        assertEquals(0, testCollection2.size());
-        assertFalse(testCollection2Itr.hasNext());
-        assertTrue(testCollection2.isEmpty());
-    }
-
-    //@DisplayName("Test Iterator Equality/Inequality")
-    @Test
-    public void Equality() {
-        CachedIteratorCollection<String> testCollection1 = new CachedIteratorCollection<>();
-
-        addNObjects(testCollection1, 10);
-        Iterator<String> testCollection1Itr1 = testCollection1.iterator();
-        Iterator<String> testCollection1Itr2 = testCollection1.iterator();
-        Iterator<String> testCollection1Itr3 = testCollection1.iterator();
-        Iterator<String> testCollection1Itr4 = testCollection1.iterator();
-
-        assertSame(testCollection1Itr1,testCollection1Itr2);
-        assertSame(testCollection1Itr2,testCollection1Itr3);
-        assertSame(testCollection1Itr3,testCollection1Itr4);
-
-        // LinkedList object's iterator should return different objects
-        List<String> testCollection2 = new LinkedList<>();
-
-        addNObjectsLL(testCollection2, 10);
-        Iterator<String> testCollection2Itr1 = testCollection2.iterator();
-        Iterator<String> testCollection2Itr2 = testCollection2.iterator();
-        Iterator<String> testCollection2Itr3 = testCollection2.iterator();
-        Iterator<String> testCollection2Itr4 = testCollection2.iterator();
-
-        assertNotSame(testCollection2Itr1,testCollection2Itr2);
-        assertNotSame(testCollection2Itr2,testCollection2Itr3);
-        assertNotSame(testCollection2Itr3,testCollection2Itr4);
-    }
-
-    //@DisplayName("Restart Iterator Test")
-    @Test
-    public void Restart() {
-        CachedIteratorCollection<String> testCollection1 = new CachedIteratorCollection<>();
-
-        addNObjects(testCollection1, 10);
-
-        String testString = "";
-
-        // Iterator test
-        Iterator<String> testCollection1Itr = testCollection1.iterator();
-
-        String s = "";
-        while(testCollection1Itr.hasNext()) {
-            testString += testCollection1Itr.next();
-        }
-
-        assertEquals("test0test1test2test3test4test5test6test7test8test9", testString);
-        assertEquals(10, testCollection1.size());
-        assertFalse(testCollection1Itr.hasNext());
-        assertFalse(testCollection1.isEmpty());
-
-        // Restart Iterator
-        testCollection1Itr = testCollection1.iterator();
-
-        assertTrue("test0".equals(testCollection1Itr.next()));
-        assertEquals(10, testCollection1.size());
-        assertTrue(testCollection1Itr.hasNext());
-        assertFalse(testCollection1.isEmpty());
-
-        // Compare behavior with LinkedList object
-        List<String> testCollection2 = new LinkedList<>();
-
-        addNObjectsLL(testCollection2, 10);
-
-        testString = "";
-
-        // Iterator test
-        Iterator<String> testCollection2Itr = testCollection2.iterator();
-
-        while(testCollection2Itr.hasNext()) {
-            testString += testCollection2Itr.next();
-        }
-
-        assertEquals("test0test1test2test3test4test5test6test7test8test9", testString);
-        assertEquals(10, testCollection2.size());
-        assertFalse(testCollection2Itr.hasNext());
-        assertFalse(testCollection2.isEmpty());
-
-        // Restart Iterator
-        testCollection2Itr = testCollection2.iterator();
-
-        assertEquals(10, testCollection2.size());
-        assertTrue("test0".equals(testCollection2Itr.next()));
-        assertTrue(testCollection2Itr.hasNext());
-        assertFalse(testCollection2.isEmpty());
-
-    }
-
-    //@DisplayName("Clear Test")
-    @Test
-    public void Clear() {
-        CachedIteratorCollection<String> testCollection1 = new CachedIteratorCollection<>();
-
-        addNObjects(testCollection1, 10);
-
-        String testString = "";
-
-        // Iterator test
-        Iterator<String> testCollection1Itr = testCollection1.iterator();
-
-        assertEquals(10, testCollection1.size());
-        assertTrue(testCollection1Itr.hasNext());
-        assertFalse(testCollection1.isEmpty());
-
-// Clear
-        testCollection1.clear();
-        
-        assertEquals(0, testCollection1.size());
-        // Iterator should be empty after clear
-        assertFalse(testCollection1Itr.hasNext());
-        assertTrue(testCollection1.isEmpty());
-
-        // Compare behavior with LinkedList object
-        List<String> testCollection2 = new LinkedList<>();
-
-        addNObjectsLL(testCollection2, 10);
-
-        testString = "";
-
-        // Iterator test
-        Iterator<String> testCollection2Itr = testCollection2.iterator();
-
-        assertEquals(10, testCollection2.size());
-        assertFalse(testCollection2.isEmpty());
-        assertTrue(testCollection2Itr.hasNext());
-
-        // Clear
-        testCollection2.clear();
-
-        assertEquals(0, testCollection2.size());
-        assertTrue(testCollection2.isEmpty());
-        assertFalse(testCollection2Itr.hasNext());
-    }
-
-    //@DisplayName("Remove Twice Before next() Test")
-    @Test
-    public void RemoveTwice() {
-        CachedIteratorCollection<String> testCollection1 = new CachedIteratorCollection<>();
-
-        addNObjects(testCollection1, 10);
-
-        Iterator<String> testCollection1Itr = testCollection1.iterator();
-        testCollection1Itr.next();
-        testCollection1Itr.remove();
-        testCollection1Itr.next();
-        testCollection1Itr.remove();
-
-        /* Junit5 + java8+
-        assertThrows(IllegalStateException.class, () -> {
-            // Remove called once more here before a next()
-            testCollection1Itr.remove();
-        });
-        */
-
-        try {
-            testCollection1Itr.remove();
-            fail("Exception should be caught; This should not print.");
-        } catch (IllegalStateException e) {
-            System.out.println("RemoveTwice()+CachedIteratorCollection: IllegalStateException caught successfully." + e);
-        }
-
-        // Compare behavior with LinkedList object
-        List<String> testCollection2 = new LinkedList<>();
-
-        addNObjectsLL(testCollection2, 10);
-
-        Iterator<String> testCollection2Itr = testCollection2.iterator();
-        testCollection2Itr.next();
-        testCollection2Itr.remove();
-        testCollection2Itr.next();
-        testCollection2Itr.remove();
-
-        /* Junit5 + java8+
-        assertThrows(IllegalStateException.class, () -> {
-            // Remove called once more here before a next()
-            testCollection2Itr.remove();
-        });
-        */
-
-        try {
-            testCollection2Itr.remove();
-            fail("Exception should be caught; This should not print.");
-        } catch (IllegalStateException e) {
-            System.out.println("RemoveTwice()+LinkedList: IllegalStateException caught successfully." + e);
-        }
-    }
-
-    //@DisplayName("next() When No Elements Left Test")
-    @Test
-    public void NextWhenNone() {
-        CachedIteratorCollection<String> testCollection1 = new CachedIteratorCollection<>();
-
-        addNObjects(testCollection1, 10);
-
-        Iterator<String> testCollection1Itr = testCollection1.iterator();
-
-        while(testCollection1Itr.hasNext()) {
-            testCollection1Itr.next();
-        }
-
-        assertEquals(10, testCollection1.size());
-        assertFalse(testCollection1Itr.hasNext());
-        assertFalse(testCollection1.isEmpty());
-        /* JUnit5 java8+
-        // next() should throw an exception as there are no more nodes
-        assertThrows(NoSuchElementException.class, () -> { testCollection1Itr.next(); });
-        */
-
-        try {
-            testCollection1Itr.next();
-            fail("Exception should be caught; This should not print.");
-        } catch (NoSuchElementException e) {
-            System.out.println("NextWhenNone()+CachedIteratorCollection: NoSuchElementException caught successfully." + e);
-        }
-
-        // Compare behavior with LinkedList object
-        List<String> testCollection2 = new LinkedList<>();
-
-        addNObjectsLL(testCollection2, 10);
-
-        Iterator<String> testCollection2Itr = testCollection2.iterator();
-
-        while(testCollection2Itr.hasNext()) {
-            testCollection2Itr.next();
-        }
-
-        assertEquals(10, testCollection2.size());
-        assertFalse(testCollection2Itr.hasNext());
-        assertFalse(testCollection2.isEmpty());
-        /* JUnit5 java8+
-        // next() should throw an exception as there are no more nodes
-        assertThrows(NoSuchElementException.class, () -> { testCollection2Itr.next(); });
-        */
-
-        try {
-            testCollection2Itr.next();
-            fail("Exception should be caught; This should not print.");
-        } catch (NoSuchElementException e) {
-            System.out.println("NextWhenNone()+LinkedList: NoSuchElementException caught successfully." + e);
-        }
-    }
-
-    //@DisplayName("Add, Remove All and Add Again Test")
-    @Test
-    public void ReAdd() {
-        CachedIteratorCollection<String> testCollection1 = new CachedIteratorCollection<>();
-
-        addNObjects(testCollection1, 10);
-
-        Iterator<String> testCollection1Itr = testCollection1.iterator();
-
-        String testString = "";
-
-        while (testCollection1Itr.hasNext()) {
-            testString += testCollection1Itr.next();
-        }
-
-        assertEquals("test0test1test2test3test4test5test6test7test8test9", testString);
-        assertEquals(10, testCollection1.size());
-
-        // Reset and remove all
-        testCollection1Itr = testCollection1.iterator();
-
-        while(testCollection1Itr.hasNext()) {
-            testCollection1Itr.next();
-            testCollection1Itr.remove();
-        }
-
-        assertEquals(0, testCollection1.size());
-        assertFalse(testCollection1Itr.hasNext());
-        assertTrue(testCollection1.isEmpty());
-
-        // Re-add
-        addNObjects(testCollection1, 10);
-        testCollection1Itr = testCollection1.iterator();
-
-        assertEquals(10, testCollection1.size());
-        assertTrue("test0".equals(testCollection1Itr.next()));
-        assertTrue(testCollection1Itr.hasNext());
-        assertFalse(testCollection1.isEmpty());
-
-        // Compare behavior with LinkedList object
-        List<String> testCollection2 = new LinkedList<>();
-
-        addNObjectsLL(testCollection2, 10);
-
-        Iterator<String> testCollection2Itr = testCollection2.iterator();
-
-        testString = "";
-
-        while (testCollection2Itr.hasNext()) {
-            testString += testCollection2Itr.next();
-        }
-
-        assertEquals("test0test1test2test3test4test5test6test7test8test9", testString);
-        assertEquals(10, testCollection2.size());
-
-        testCollection2Itr = testCollection2.iterator();
-
-        while(testCollection2Itr.hasNext()) {
-            testCollection2Itr.next();
-            testCollection2Itr.remove();
-        }
-
-        assertEquals(0, testCollection2.size());
-        assertFalse(testCollection2Itr.hasNext());
-        assertTrue(testCollection2.isEmpty());
-
-        // Re-add
-        addNObjectsLL(testCollection2, 10);
-        testCollection2Itr = testCollection2.iterator();
-
-        assertEquals(10, testCollection2.size());
-        assertTrue("test0".equals(testCollection2Itr.next()));
-        assertTrue(testCollection2Itr.hasNext());
-        assertFalse(testCollection2.isEmpty());
+    public void clearTest() {
+        CachedIteratorCollection<String> testCollection = new CachedIteratorCollection<>();
+        addNObjects(testCollection, 5);
+
+        assertFalse(testCollection.isEmpty());
+        testCollection.clear();
+
+        assertTrue(testCollection.isEmpty());
+        assertEquals(0, testCollection.size());
+        assertFalse(testCollection.iterator().hasNext());
     }
 }
