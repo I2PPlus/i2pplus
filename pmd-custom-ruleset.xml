@@ -5,27 +5,12 @@
          xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.net/ruleset_2_0_0.xsd">
 
     <description>
-        Custom PMD ruleset for I2P+ project that excludes overly strict brace rules
-        while keeping important code quality checks like error-prone issues and security problems.
+        Custom PMD ruleset for I2P+ project focusing on security and error-prone issues only.
+        Excludes style and formatting rules to reduce noise.
     </description>
 
-    <!-- Include all rules from quickstart except for ones we want to exclude -->
-    <rule ref="rulesets/java/quickstart.xml">
-        <!-- Exclude overly strict brace enforcement rules -->
-        <exclude name="WhileLoopMustUseBraces"/>
-        <exclude name="ForLoopMustUseBraces"/>
-        <exclude name="IfStmtMustUseBraces"/>
-        <exclude name="IfElseStmtMustUseBraces"/>
-        
-        <!-- Exclude rules that may generate too much noise for this legacy codebase -->
-        <exclude name="EmptyCatchBlock"/>
-        <exclude name="SimplifyBooleanReturns"/>
-        <exclude name="UnnecessaryLocalBeforeReturn"/>
-        <exclude name="LiteralsFirstInComparisons"/>
-        <exclude name="UselessParentheses"/>
-        
-        <!-- Keep important error-prone and security rules -->
-        <!-- These exclusions focus on the most common violations while keeping critical checks -->
-    </rule>
+    <!-- Focus on critical security and error-prone rules only -->
+    <rule ref="category/java/security.xml"/>
+    <rule ref="category/java/errorprone.xml"/>
 
 </ruleset>
