@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<ruleset name="Minimal I2P+ PMD Ruleset"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+
+    <description>
+        Minimal PMD ruleset for I2P+ project with only the most critical security and error-prone rules.
+        Excludes style, formatting, and best-practice rules that generate noise.
+    </description>
+
+<!-- Exclude problematic patterns and generated files -->
+    <exclude-pattern>.*/build/.*</exclude-pattern>
+    <exclude-pattern>.*/target/.*</exclude-pattern>
+    <exclude-pattern>.*/dist/.*</exclude-pattern>
+    <exclude-pattern>.*/.*\.jar</exclude-pattern>
+    <exclude-pattern>.*/.*\.class</exclude-pattern>
+    <exclude-pattern>.*/.*\.war</exclude-pattern>
+    <exclude-pattern>.*/gradle/.*</exclude-pattern>
+    <exclude-pattern>.*/\.gradle/.*</exclude-pattern>
+    <exclude-pattern>.*/generated/.*</exclude-pattern>
+    <exclude-pattern>.*/.*Generated\.java$</exclude-pattern>
+
+    <!-- Include only the most critical error-prone and security rules -->
+    <rule ref="category/java/errorprone.xml">
+        <!-- Exclude less critical error-prone rules that generate noise -->
+        <exclude name="AvoidDuplicateLiterals"/>
+        <exclude name="AvoidLiteralsInIfCondition"/>
+        <exclude name="AssignmentInOperand"/>
+        <exclude name="OneDeclarationPerLine"/>
+        <exclude name="UnusedFormalParameter"/>
+        <exclude name="UnusedAssignment"/>
+        <exclude name="UnusedPrivateField"/>
+        <exclude name="UnusedPrivateMethod"/>
+        <exclude name="ForLoopVariableCount"/>
+        <exclude name="AvoidReassigningLoopVariables"/>
+    </rule>
+
+    <!-- Include only the most critical security rules -->
+    <rule ref="category/java/security.xml"/>
+
+    <!-- Include only the most critical multithreading rules -->
+    <rule ref="category/java/multithreading.xml"/>
+
+</ruleset>

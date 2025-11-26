@@ -23,12 +23,10 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
-      - name: Run PMD
-        id: pmd
-        continue-on-error: true
+- name: Run PMD
         uses: pmd/pmd-github-action@v2
         with:
-          rulesets: 'pmd-minimal-ruleset.xml'
+          rulesets: '.github/workflows/rulesets/pmd-minimal-ruleset.xml'
           sourcePath: '.'
           analyzeModifiedFilesOnly: false
           options: '--no-progress --no-cache --fail-on-violation false --min-priority 2'
