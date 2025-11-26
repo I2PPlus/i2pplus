@@ -57,10 +57,10 @@ jobs:
         with:
           name: i2p-build-artifacts
           path: |
-            i2pupdate.zip
-            install.jar
-            javadoc.zip
-            i2psnark-standalone.zip
+            dist/i2pupdate.zip
+            dist/install.jar
+            dist/javadoc.zip
+            dist/i2psnark-standalone.zip
           retention-days: 30
 
       
