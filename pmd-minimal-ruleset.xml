@@ -5,7 +5,7 @@
          xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.net/ruleset_2_0_0.xsd">
 
     <description>
-        Minimal PMD ruleset for I2P+ project with only the most critical security rules.
+        Minimal PMD ruleset for I2P+ project with only the most critical rules.
     </description>
 
     <!-- Exclude problematic patterns -->
@@ -18,19 +18,8 @@
     <exclude-pattern>.*/gradle/.*</exclude-pattern>
     <exclude-pattern>.*/\.gradle/.*</exclude-pattern>
 
-    <!-- Only the most critical security rules -->
-    <rule ref="category/java/security.xml/HardCodedPassword"/>
-    <rule ref="category/java/security.xml/HardCodedCryptoKey"/>
-    <rule ref="category/java/security.xml/InsecureCrypto"/>
-    <rule ref="category/java/security.xml/UntrustedCode"/>
-    <rule ref="category/java/security.xml/DangerousConstructors"/>
-
-    <!-- Only critical error-prone rules -->
-    <rule ref="category/java/errorprone.xml/NullAssignment"/>
-    <rule ref="category/java/errorprone.xml/CloseResource"/>
-    <rule ref="category/java/errorprone.xml/EmptyCatchBlock"/>
-    <rule ref="category/java/errorprone.xml/AvoidBranchingStatementAsLastInLoop"/>
-    <rule ref="category/java/errorprone.xml/AvoidDuplicateLiterals"/>
-    <rule ref="category/java/errorprone.xml/AssignmentInOperand"/>
+    <!-- Use only the most basic and stable rules -->
+    <rule ref="category/java/errorprone.xml"/>
+    <rule ref="category/java/multithreading.xml"/>
 
 </ruleset>
