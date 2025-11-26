@@ -17,20 +17,20 @@ jobs:
   pmd-code-scan:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@main
+      - uses: actions/checkout@v4
       - name: Set up JDK 11
-        uses: actions/setup-java@main
+        uses: actions/setup-java@v4
         with:
           java-version: '11'
           distribution: 'temurin'
       - name: Run PMD
         id: pmd
-        uses: pmd/pmd-github-action@main
+        uses: pmd/pmd-github-action@v3
         with:
           rulesets: 'rulesets/java/quickstart.xml'
-          sourcePath: 'src/main/java'
+          sourcePath: '.'
           analyzeModifiedFilesOnly: false
       - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@main
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: pmd-report.sarif
