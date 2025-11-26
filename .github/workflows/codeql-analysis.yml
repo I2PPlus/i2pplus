@@ -14,9 +14,25 @@ name: "CodeQL"
 on:
   push:
     branches: [ master ]
+    paths:
+      - 'core/**'
+      - 'router/**'
+      - 'apps/**'
+      - 'installer/**'
+      - 'build.gradle'
+      - 'settings.gradle'
+      - 'gradle.properties'
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [ master ]
+    paths:
+      - 'core/**'
+      - 'router/**'
+      - 'apps/**'
+      - 'installer/**'
+      - 'build.gradle'
+      - 'settings.gradle'
+      - 'gradle.properties'
   schedule:
     - cron: '15 5 * * 2'
 
@@ -40,6 +56,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 2
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
@@ -74,7 +92,7 @@ jobs:
     #   make release
 
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v3
+      uses: github/codeql-action/analyze@v4
 
 #    - name: GitHub Security Report Action
 #      uses: peter-murray/github-security-report-action@v4
