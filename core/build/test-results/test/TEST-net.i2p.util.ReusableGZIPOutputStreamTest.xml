@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="net.i2p.util.ReusableGZIPOutputStreamTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-11-26T13:38:23.020Z" hostname="ganesh" time="0.257">
-  <properties/>
-  <testcase name="testReusableGZIPOutputStream" classname="net.i2p.util.ReusableGZIPOutputStreamTest" time="0.257"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

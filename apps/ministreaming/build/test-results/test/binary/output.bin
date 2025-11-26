@@ -1,30 +1,0 @@
-R[MockitoHint] I2PSocketEepGetTest.testFetch_badB64 (see javadoc for MockitoHint):
-s[MockitoHint] 1. Unused -> at net.i2p.client.streaming.I2PSocketEepGetTest.setupMocks(I2PSocketEepGetTest.java:74)
-s[MockitoHint] 2. Unused -> at net.i2p.client.streaming.I2PSocketEepGetTest.setupMocks(I2PSocketEepGetTest.java:75)
-s[MockitoHint] 3. Unused -> at net.i2p.client.streaming.I2PSocketEepGetTest.setupMocks(I2PSocketEepGetTest.java:76)
-s[MockitoHint] 4. Unused -> at net.i2p.client.streaming.I2PSocketEepGetTest.setupMocks(I2PSocketEepGetTest.java:77)
-
-S[MockitoHint] I2PSocketEepGetTest.testFetch_negPort (see javadoc for MockitoHint):
-s[MockitoHint] 1. Unused -> at net.i2p.client.streaming.I2PSocketEepGetTest.setupMocks(I2PSocketEepGetTest.java:74)
-s[MockitoHint] 2. Unused -> at net.i2p.client.streaming.I2PSocketEepGetTest.setupMocks(I2PSocketEepGetTest.java:75)
-s[MockitoHint] 3. Unused -> at net.i2p.client.streaming.I2PSocketEepGetTest.setupMocks(I2PSocketEepGetTest.java:76)
-s[MockitoHint] 4. Unused -> at net.i2p.client.streaming.I2PSocketEepGetTest.setupMocks(I2PSocketEepGetTest.java:77)
-
-S[MockitoHint] I2PSocketEepGetTest.testFetch_fakeUrl (see javadoc for MockitoHint):
-s[MockitoHint] 1. Unused -> at net.i2p.client.streaming.I2PSocketEepGetTest.setupMocks(I2PSocketEepGetTest.java:74)
-s[MockitoHint] 2. Unused -> at net.i2p.client.streaming.I2PSocketEepGetTest.setupMocks(I2PSocketEepGetTest.java:75)
-s[MockitoHint] 3. Unused -> at net.i2p.client.streaming.I2PSocketEepGetTest.setupMocks(I2PSocketEepGetTest.java:76)
-s[MockitoHint] 4. Unused -> at net.i2p.client.streaming.I2PSocketEepGetTest.setupMocks(I2PSocketEepGetTest.java:77)
-
-\[MockitoHint] I2PSocketEepGetTest.testFetch_unsupportedProto (see javadoc for MockitoHint):
-s[MockitoHint] 1. Unused -> at net.i2p.client.streaming.I2PSocketEepGetTest.setupMocks(I2PSocketEepGetTest.java:74)
-s[MockitoHint] 2. Unused -> at net.i2p.client.streaming.I2PSocketEepGetTest.setupMocks(I2PSocketEepGetTest.java:75)
-s[MockitoHint] 3. Unused -> at net.i2p.client.streaming.I2PSocketEepGetTest.setupMocks(I2PSocketEepGetTest.java:76)
-s[MockitoHint] 4. Unused -> at net.i2p.client.streaming.I2PSocketEepGetTest.setupMocks(I2PSocketEepGetTest.java:77)
-
-X[MockitoHint] I2PSocketEepGetTest.testFetch_malformedUrl (see javadoc for MockitoHint):
-s[MockitoHint] 1. Unused -> at net.i2p.client.streaming.I2PSocketEepGetTest.setupMocks(I2PSocketEepGetTest.java:74)
-s[MockitoHint] 2. Unused -> at net.i2p.client.streaming.I2PSocketEepGetTest.setupMocks(I2PSocketEepGetTest.java:75)
-s[MockitoHint] 3. Unused -> at net.i2p.client.streaming.I2PSocketEepGetTest.setupMocks(I2PSocketEepGetTest.java:76)
-s[MockitoHint] 4. Unused -> at net.i2p.client.streaming.I2PSocketEepGetTest.setupMocks(I2PSocketEepGetTest.java:77)
-

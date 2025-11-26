@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="net.i2p.i2ptunnel.I2PTunnelHTTPServerTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2025-11-26T13:28:12.183Z" hostname="ganesh" time="0.089">
-  <properties/>
-  <testcase name="testSimpleHeader" classname="net.i2p.i2ptunnel.I2PTunnelHTTPServerTest" time="0.087"/>
-  <testcase name="testDuplicateHeader" classname="net.i2p.i2ptunnel.I2PTunnelHTTPServerTest" time="0.0"/>
-  <testcase name="testDuplicateHeadersFormat" classname="net.i2p.i2ptunnel.I2PTunnelHTTPServerTest" time="0.001"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

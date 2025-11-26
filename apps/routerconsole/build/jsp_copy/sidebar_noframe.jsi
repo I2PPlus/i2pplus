@@ -1,5 +1,0 @@
-<%  String link = "/home";
-    if (uri.contains("/home")) {link = "/sitemap";}
-%>
-<div id=sb_logo><a href=<%=link%> target=_top><img src="<%=intl.getTheme(request.getHeader("User-Agent"))%>images/i2plogo.png" alt="<%=intl._t("I2P+ Router Console")%>" title="<%=intl._t("I2P+ Router Console")%>" width=200></a></div>
-<div id=xhr><%@include file="xhr1.jsi"%></div>

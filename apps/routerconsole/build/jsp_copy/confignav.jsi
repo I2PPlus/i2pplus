@@ -1,4 +1,0 @@
-<jsp:useBean class="net.i2p.router.web.helpers.ConfigNavHelper" id="navHelper" scope="request" />
-<jsp:setProperty name="navHelper" property="contextId" value="<%=i2pcontextId%>" />
-<% navHelper.storeWriter(out);%>
-<div class="confignav" id="confignav"><% navHelper.renderNavBar(request.getRequestURI(), allowIFrame);%></div>

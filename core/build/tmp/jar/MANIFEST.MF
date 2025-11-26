@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Specification-Title: I2P Core API
-Implementation-Title: I2P Java Core API
-Main-Class: net.i2p.util.CommandLine
-
