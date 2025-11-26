@@ -61,7 +61,7 @@ public abstract class RouterITBase {
         return config;
     }
 
-    private static class TestRouterIdentity extends RouterIdentity {
+    private static final class TestRouterIdentity extends RouterIdentity {
         @Override
         public Hash getHash() {
             return Hash.FAKE_HASH;
