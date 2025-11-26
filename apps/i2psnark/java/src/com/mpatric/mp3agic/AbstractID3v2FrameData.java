@@ -10,6 +10,7 @@ public abstract class AbstractID3v2FrameData {
 
 	/**
 	 * Construct frame data.
+	 * @param unsynchronisation true if unsynchronization is enabled
 	 */
 	public AbstractID3v2FrameData(boolean unsynchronisation) {
 		this.unsynchronisation = unsynchronisation;
@@ -17,6 +18,8 @@ public abstract class AbstractID3v2FrameData {
 
 	/**
 	 * Synchronize and unpack frame data.
+	 * @param bytes byte array containing frame data
+	 * @throws com.mpatric.mp3agic.InvalidDataException if frame data is invalid
 	 */
 	protected final void synchroniseAndUnpackFrameData(byte[] bytes) throws InvalidDataException {
 		if (unsynchronisation && BufferTools.sizeSynchronisationWouldSubtract(bytes) > 0) {
@@ -29,6 +32,7 @@ public abstract class AbstractID3v2FrameData {
 
 	/**
 	 * Pack and unsynchronize frame data.
+	 * @return packed and possibly unsynchronized frame data
 	 */
 	protected byte[] packAndUnsynchroniseFrameData() {
 		byte[] bytes = packFrameData();
@@ -40,6 +44,7 @@ public abstract class AbstractID3v2FrameData {
 
 	/**
 	 * Convert frame data to bytes.
+	 * @return byte array representation of frame data
 	 */
 	protected byte[] toBytes() {
 		return packAndUnsynchroniseFrameData();
@@ -69,16 +74,20 @@ public abstract class AbstractID3v2FrameData {
 
 	/**
 	 * Unpack frame data from bytes.
+	 * @param bytes byte array containing frame data
+	 * @throws com.mpatric.mp3agic.InvalidDataException if frame data is invalid
 	 */
 	protected abstract void unpackFrameData(byte[] bytes) throws InvalidDataException;
 
 	/**
 	 * Pack frame data to bytes.
+	 * @return byte array representation of frame data
 	 */
 	protected abstract byte[] packFrameData();
 
 	/**
 	 * Get length of frame data.
+	 * @return length of frame data in bytes
 	 */
 	protected abstract int getLength();
 }
