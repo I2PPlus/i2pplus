@@ -1,0 +1,51 @@
+<html>
+<body>
+Reed-Solomon error correction algorithms for ZXing barcode library.
+
+This package provides implementations of Reed-Solomon error correction codes
+used in 2D matrix barcodes like QR codes and Data Matrix. Reed-Solomon codes
+enable the detection and correction of errors in barcode data, improving reliability
+and readability even when the barcode is partially damaged or obscured.
+
+<h2>Key Components</h2>
+<ul>
+<li>{@link com.google.zxing.common.reedsolomon.GenericGF} - Generic Galois Field implementation</li>
+<li>{@link com.google.zxing.common.reedsolomon.GenericGFPoly} - Generic Galois Field Polynomial</li>
+<li>{@link com.google.zxing.common.reedsolomon.ReedSolomonEncoder} - Reed-Solomon encoding implementation</li>
+</ul>
+
+<h2>Main Features</h2>
+<ul>
+<li>Support for multiple field sizes (GF(256), GF(4096), etc.)</li>
+<li>Efficient encoding and decoding algorithms</li>
+<li>Error detection and correction capabilities</li>
+<li>Configurable error correction levels</li>
+<li>Optimized for barcode applications</li>
+</ul>
+
+<h2>Usage in Barcodes</h2>
+<ul>
+<li>QR Code error correction</li>
+<li>Data Matrix error correction</li>
+<li>Aztec error correction</li>
+<li>PDF417 error correction</li>
+</ul>
+
+<h2>Related Packages</h2>
+<ul>
+<li>{@link com.google.zxing.common} - Common ZXing utilities</li>
+<li>{@link com.google.zxing.qrcode} - QR code implementation</li>
+<li>Data Matrix implementation (see com.google.zxing.datamatrix package)</li>
+</ul>
+
+<h2>Mathematical Background</h2>
+<p>
+Reed-Solomon codes are block-based error correction codes that work by
+adding redundant data to messages. They can detect and correct multiple errors
+within a block, making them ideal for applications where data integrity
+is critical but the transmission medium may be unreliable.
+</p>
+
+@since 0.9.10
+</body>
+</html>

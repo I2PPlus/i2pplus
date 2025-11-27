@@ -1,0 +1,41 @@
+<html>
+<body>
+Time specification parsing and handling for JRobin RRD system.
+
+This package provides classes for parsing and handling time specifications
+used in Round Robin Database (RRD) systems. Time specifications define
+how time-based data should be interpreted, consolidated, and archived
+in RRD databases.
+
+<h2>Key Components</h2>
+<ul>
+<li>{@link org.rrd4j.core.timespec.TimeSpec} - Time specification data structure</li>
+<li>{@link org.rrd4j.core.timespec.TimeParser} - Parser for time specification strings</li>
+<li>{@link org.rrd4j.core.timespec.Epoch} - Epoch time reference implementation</li>
+</ul>
+
+<h2>Main Features</h2>
+<ul>
+<li>Parse RRD time specification formats</li>
+<li>Handle various time units (seconds, minutes, hours, days)</li>
+<li>Support for absolute and relative time specifications</li>
+<li>Integration with RRD consolidation algorithms</li>
+<li>Time zone and epoch handling</li>
+</ul>
+
+<h2>Usage in RRD</h2>
+<p>
+Time specifications are used to define when RRD data points should be
+consolidated and archived. They allow for efficient storage of
+time series data by specifying the time intervals between data points.
+</p>
+
+<h2>Related Packages</h2>
+<ul>
+<li>{@link org.rrd4j.core} - Core JRobin RRD functionality</li>
+<li>{@link org.rrd4j.data} - RRD data structures</li>
+</ul>
+
+@since 0.9.10
+</body>
+</html>

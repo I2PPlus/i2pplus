@@ -1,0 +1,42 @@
+<html>
+<body>
+BCrypt implementation for password hashing and verification.
+
+This package provides a Java implementation of the BCrypt password hashing algorithm,
+which is a strong, adaptive password hashing function designed for secure password storage.
+BCrypt incorporates a salt to protect against rainbow table attacks and includes
+a work factor to make brute force attacks computationally expensive.
+
+<h2>Key Components</h2>
+<ul>
+<li>{@link org.mindrot.jbcrypt.BCrypt} - Main BCrypt implementation class</li>
+</ul>
+
+<h2>Main Features</h2>
+<ul>
+<li>Strong password hashing using the Blowfish cipher</li>
+<li>Automatic salt generation and management</li>
+<li>Configurable work factor for computational difficulty</li>
+<li>Password verification against stored hashes</li>
+<li>Thread-safe implementation</li>
+</ul>
+
+<h2>Usage</h2>
+<pre>
+// Hash a password
+String hashed = BCrypt.hashpw(password, BCrypt.gensalt());
+
+// Verify a password
+boolean matches = BCrypt.checkpw(candidate, hashed);
+</pre>
+
+<h2>Security Notes</h2>
+<ul>
+<li>Work factor should be tuned based on current hardware capabilities</li>
+<li>Higher work factors provide better security but require more computation time</li>
+<li>Suitable for password storage in authentication systems</li>
+</ul>
+
+@since 0.9.10
+</body>
+</html>

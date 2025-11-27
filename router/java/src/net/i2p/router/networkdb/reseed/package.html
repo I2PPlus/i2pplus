@@ -4,7 +4,40 @@
 </head>
 <body>
 <p>
-    Fetching, validation, unpacking, and installation of RouterInfos from signed su3 files, unsigned zip files, and web indexes. Supports loading from clearnet via HTTP and HTTPS, and from local files. Automatic reseeding on first install and when references fall below a minimum value. Support for user-initiated reseeds and status feedback via the router console.
+    Router reseeding functionality for bootstrapping into the I2P network.
 </p>
+
+<p>
+    This package provides comprehensive reseeding functionality that allows new routers to discover and connect to the I2P network. Reseeding is essential for new installations or routers that have lost their network references. The package supports multiple reseeding methods and formats to ensure reliable network bootstrap.
+</p>
+
+<p><b>Key Components:</b></p>
+<ul>
+<li>Reseeder - Main reseeding coordinator and manager</li>
+<li>ReseedChecker - Validates and verifies reseed data integrity</li>
+<li>ReseedBundler - Handles bundling and packaging of reseed data</li>
+</ul>
+
+<p><b>Main Functionality:</b></p>
+<ul>
+<li>Fetching router information from multiple sources</li>
+<li>Validation of signed SU3 files and unsigned ZIP files</li>
+<li>Processing of web indexes and router lists</li>
+<li>HTTP and HTTPS download support from clearnet</li>
+<li>Local file loading for offline reseeding</li>
+<li>Automatic reseeding on first installation</li>
+<li>Triggered reseeding when peer count falls below minimum</li>
+<li>User-initiated manual reseeding</li>
+<li>Status feedback and progress reporting via router console</li>
+</ul>
+
+<p><b>Usage Notes:</b></p>
+<ul>
+<li>Essential for new router installations</li>
+<li>Supports both automatic and manual reseeding</li>
+<li>Provides multiple fallback mechanisms for reliability</li>
+<li>Includes security validation for all reseed data</li>
+<li>Integrates with router console for user feedback</li>
+</ul>
 </body>
 </html>

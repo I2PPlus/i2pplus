@@ -1,0 +1,32 @@
+<html>
+<head>
+<title>org.cybergarage.upnp.ssdp</title>
+</head>
+<body>
+<p>Simple Service Discovery Protocol (SSDP) implementation for UPnP.</p>
+<p>This package provides classes for handling SSDP operations, including device discovery, search responses, and notification management for UPnP networks.</p>
+<p><b>Key Components:</b></p>
+<ul>
+<li>SSDPNotifySocket - Handles SSDP NOTIFY messages for device advertisements</li>
+<li>SSDPSearchResponseSocket - Manages SSDP search response operations</li>
+<li>SSDPResponse - Represents SSDP response messages</li>
+<li>HTTPUSocket - UDP socket implementation for SSDP multicast</li>
+<li>SSDPSearchResponseSocketList - Manages multiple search response sockets</li>
+<li>SSDPNotifySocketList - Manages multiple notification sockets</li>
+</ul>
+<p><b>Main Functionality:</b></p>
+<ul>
+<li>SSDP multicast message handling</li>
+<li>Device discovery and advertisement</li>
+<li>Search request and response management</li>
+<li>UDP socket management for SSDP operations</li>
+<li>Multicast group communication</li>
+</ul>
+<p><b>Usage Notes:</b></p>
+<ul>
+<li>Implements the discovery layer of UPnP protocol</li>
+<li>Uses UDP multicast on 239.255.255.250:1900</li>
+<li>Handles both M-SEARCH and NOTIFY SSDP messages</li>
+</ul>
+</body>
+</html>

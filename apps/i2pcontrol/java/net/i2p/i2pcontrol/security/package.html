@@ -1,0 +1,31 @@
+<html>
+<body>
+Security components for I2P Control authentication and authorization.
+
+This package provides the security infrastructure for the I2P Control service,
+including authentication token management, SSL certificate handling, and access control.
+
+<h2>Key Components</h2>
+<ul>
+<li>{@link net.i2p.i2pcontrol.security.SecurityManager} - Manages authentication tokens and security policies</li>
+<li>{@link net.i2p.i2pcontrol.security.AuthToken} - Represents an authentication token</li>
+<li>{@link net.i2p.i2pcontrol.security.KeyStoreProvider} - Provides SSL certificate management</li>
+</ul>
+
+<h2>Security Features</h2>
+<ul>
+<li>Token-based authentication with configurable expiration</li>
+<li>SSL/TLS support for secure communication</li>
+<li>Password hashing using BCrypt</li>
+<li>Configurable access control policies</li>
+</ul>
+
+<h2>Related Packages</h2>
+<ul>
+<li>{@link net.i2p.i2pcontrol} - Main I2P Control functionality</li>
+<li>{@link net.i2p.i2pcontrol.servlets} - HTTP servlets and handlers</li>
+</ul>
+
+@since 0.9.10
+</body>
+</html>

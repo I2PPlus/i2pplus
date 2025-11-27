@@ -4,7 +4,33 @@
 </head>
 <body>
 <p>
-    A couple of classes, but most things are in kademlia.
+    Network database management and coordination for the I2P distributed hash table.
 </p>
+
+<p>
+    This package provides high-level coordination and management classes for the I2P network database, which is a distributed hash table (DHT) that stores router information and lease sets. While most of the detailed implementation is in the kademlia subpackage, this package contains the coordination logic and job management for network database operations.
+</p>
+
+<p><b>Key Components:</b></p>
+<ul>
+<li>HandleDatabaseLookupMessageJob - Processes database lookup requests</li>
+<li>PublishLocalRouterInfoJob - Manages publication of local router information</li>
+</ul>
+
+<p><b>Main Functionality:</b></p>
+<ul>
+<li>Coordination of database lookup operations</li>
+<li>Local router information publishing and updates</li>
+<li>Integration with the Kademlia DHT implementation</li>
+<li>Job scheduling and management for network database tasks</li>
+</ul>
+
+<p><b>Usage Notes:</b></p>
+<ul>
+<li>Most detailed implementation is in the kademlia subpackage</li>
+<li>This package provides the high-level job coordination</li>
+<li>Database operations are handled through scheduled jobs</li>
+<li>Integrates with the router's job queue system</li>
+</ul>
 </body>
 </html>

@@ -1,0 +1,42 @@
+<html>
+<body>
+Java SE client-side implementation for ZXing barcode library.
+
+This package provides Java SE (Standard Edition) specific implementations for barcode
+generation and rendering, allowing desktop applications to create barcode images
+using standard Java libraries without requiring Android-specific functionality.
+
+<h2>Key Components</h2>
+<ul>
+<li>{@link com.google.zxing.client.j2se.MatrixToImageWriter} - Converts barcode matrices to images</li>
+<li>{@link com.google.zxing.client.j2se.MatrixToImageConfig} - Configuration for image generation</li>
+</ul>
+
+<h2>Main Features</h2>
+<ul>
+<li>Image output in various formats (PNG, JPEG, GIF, BMP)</li>
+<li>Configurable image dimensions and margins</li>
+<li>Support for different color schemes</li>
+<li>Anti-aliasing and image quality options</li>
+<li>Integration with AWT for desktop applications</li>
+</ul>
+
+<h2>Usage Example</h2>
+<pre>
+// Create a QR code image
+BitMatrix matrix = writer.encode(content, BarcodeFormat.QR_CODE);
+MatrixToImageConfig config = new MatrixToImageConfig();
+BufferedImage image = MatrixToImageWriter.toBufferedImage(matrix, config);
+ImageIO.write(image, "png", new File("qrcode.png"));
+</pre>
+
+<h2>Related Packages</h2>
+<ul>
+<li>{@link com.google.zxing} - Core ZXing functionality</li>
+<li>{@link com.google.zxing.common} - Common utilities and data structures</li>
+<li>{@link com.google.zxing.qrcode} - QR code specific implementation</li>
+</ul>
+
+@since 0.9.10
+</body>
+</html>

@@ -4,7 +4,44 @@
 </head>
 <body>
 <p>
-    Classes formerly in net.i2p.crypto but moved here as they are only used by the router.
+    Router-specific cryptographic operations and implementations for I2P security.
 </p>
+
+<p>
+    This package contains cryptographic classes and utilities that are used exclusively by the I2P router for secure communication, key management, and cryptographic operations. These classes were moved from the general net.i2p.crypto package to separate router-specific cryptographic functionality from client-facing APIs.
+</p>
+
+<p><b>Key Components:</b></p>
+<ul>
+<li>ElGamalEngine - ElGamal encryption for I2P</li>
+<li>AESEngine - AES encryption operations</li>
+<li>DHSessionKeyBuilder - Diffie-Hellman key exchange</li>
+<li>SessionEncryptionManager - Session encryption coordination</li>
+<li>SessionKeyManager - Session key lifecycle management</li>
+<li>HMAC256 - HMAC-SHA256 implementation</li>
+<li>SHA256Generator - SHA-256 hash generation</li>
+<li>EdDSA - Edwards curve digital signatures</li>
+<li>KeyGenerator - Cryptographic key generation utilities</li>
+</ul>
+
+<p><b>Main Functionality:</b></p>
+<ul>
+<li>ElGamal asymmetric encryption for garlic messages</li>
+<li>AES symmetric encryption for tunnel and message encryption</li>
+<li>Diffie-Hellman key exchange for session establishment</li>
+<li>Digital signatures for router authentication</li>
+<li>Hash generation for data integrity</li>
+<li>Session key management and rotation</li>
+<li>Cryptographic random number generation</li>
+<li>Post-quantum cryptography support (PQC)</li>
+</ul>
+
+<p><b>Usage Notes:</b></p>
+<ul>
+<li>These classes are for internal router use only</li>
+<li>Client applications should use higher-level cryptographic APIs</li>
+<li>Essential for I2P's security and anonymity guarantees</li>
+<li>Integrates with transport and tunnel encryption</li>
+</ul>
 </body>
 </html>

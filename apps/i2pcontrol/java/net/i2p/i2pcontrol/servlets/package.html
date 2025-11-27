@@ -1,0 +1,29 @@
+<html>
+<body>
+HTTP servlets for handling I2P Control JSON-RPC 2.0 requests.
+
+This package contains the main servlet and HTTP handlers for processing I2P Control API requests.
+It provides the web interface layer that translates HTTP requests into JSON-RPC calls
+and routes them to the appropriate handlers.
+
+<h2>Key Components</h2>
+<ul>
+<li>{@link net.i2p.i2pcontrol.servlets.JSONRPC2Servlet} - Main servlet handling JSON-RPC 2.0 requests</li>
+<li>{@link net.i2p.i2pcontrol.servlets.configuration.ConfigurationManager} - Manages I2P Control configuration</li>
+</ul>
+
+<h2>Subpackages</h2>
+<ul>
+<li>{@link net.i2p.i2pcontrol.servlets.configuration} - Configuration management</li>
+<li>{@link net.i2p.i2pcontrol.servlets.jsonrpc2handlers} - JSON-RPC method handlers</li>
+</ul>
+
+<h2>Related Packages</h2>
+<ul>
+<li>{@link net.i2p.i2pcontrol} - Main I2P Control functionality</li>
+<li>{@link net.i2p.i2pcontrol.security} - Security and authentication</li>
+</ul>
+
+@since 0.9.10
+</body>
+</html>

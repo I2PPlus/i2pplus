@@ -1,0 +1,41 @@
+<html>
+<body>
+Data utility classes for hashing and time-related algorithms.
+
+This package provides utility classes for data processing, including
+hashing algorithms and time specification parsing used by the JRobin
+RRD (Round Robin Database) system for time series data storage and analysis.
+
+<h2>Key Components</h2>
+<ul>
+<li>{@link eu.bengreen.data.utility.DownSampleImpl} - Downsampling implementation</li>
+<li>{@link eu.bengreen.data.utility.LargestTriangleThreeBuckets} - Time bucket algorithm</li>
+<li>{@link eu.bengreen.data.utility.LargestTriangleThreeBucketsTime} - Time-based bucket implementation</li>
+</ul>
+
+<h2>Main Features</h2>
+<ul>
+<li>Efficient data downsampling algorithms</li>
+<li>Time-based data aggregation methods</li>
+<li>Statistical utility functions</li>
+<li>Performance-optimized implementations</li>
+<li>Integration with RRD data structures</li>
+</ul>
+
+<h2>Usage Context</h2>
+<p>
+These utilities are primarily used by the JRobin RRD system for
+efficient data storage and retrieval. The downsampling algorithms help
+reduce data resolution while preserving important trends and patterns
+in time series data.
+</p>
+
+<h2>Related Packages</h2>
+<ul>
+<li>{@link org.rrd4j} - Main JRobin RRD implementation</li>
+<li>{@link org.rrd4j.core} - Core RRD functionality</li>
+</ul>
+
+@since 0.9.10
+</body>
+</html>
