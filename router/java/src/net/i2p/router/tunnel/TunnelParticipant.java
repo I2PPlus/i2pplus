@@ -234,23 +234,23 @@ class TunnelParticipant {
 
         long originalExpiration = msg.getMessageExpiration();
 
-        // Drop if expired more than 60s ago
-        if (originalExpiration < now - 60_000) {
+        // Drop if expired more than 75s ago
+        if (originalExpiration < now - 75_000) {
             if (shouldLogWarn) {
                 long age = now - originalExpiration;
-                _log.warn("Dropping stale" + msg + " -> Expired " + age + "ms ago (Cutoff: 60s)");
+                _log.warn("Dropping stale" + msg + " -> Expired " + age + "ms ago (Cutoff: 75s)");
             }
             return;
         }
 
-        // Always reset to 10s, but log why
-        long expiration = now + 10_000;
+        // Always reset to 20s, but log why
+        long expiration = now + 20_000;
         if (shouldLogInfo) {
             if (originalExpiration <= 0) {
-                _log.info(msg + " had no expiration set -> Resetting to 10s...");
+                _log.info(msg + " had no expiration set -> Resetting to 20s...");
             } else if (originalExpiration < now) {
                 long age = now - originalExpiration;
-                _log.info(msg + " expired " + age + "ms ago -> Resetting to 10s...");
+                _log.info(msg + " expired " + age + "ms ago -> Resetting to 20s...");
             }
         }
 
