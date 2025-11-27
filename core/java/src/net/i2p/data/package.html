@@ -1,6 +1,28 @@
-<html><body>
+<html>
+<head>
+    <title>I2P Data Structures Package</title>
+</head>
+<body>
 <p>
-These classes define the common data structures used by the various
-I2P protocols.
+    These classes define the common data structures used by the various I2P protocols.
 </p>
-</body></html>
+
+<p>
+    This package contains the fundamental data structures that form the backbone of I2P's communication protocols, including:
+</p>
+
+<ul>
+<li><strong>Destination:</strong> Complete I2P destination containing public keys and signing information</li>
+<li><strong>LeaseSet:</strong> Routing information for establishing tunnels to destinations</li>
+<li><strong>RouterInfo:</strong> Router identification and network contact information</li>
+<li><strong>TunnelId:</strong> Unique identifiers for tunnel segments</li>
+<li><strong>SessionKey:</strong> Encryption keys for secure communication</li>
+<li><strong>Signature:</strong> Digital signatures for authentication and integrity</li>
+<li><strong>Certificate:</strong> X.509-style certificates for router identification</li>
+</ul>
+
+<p>
+    All data structures implement proper serialization and deserialization for network transmission, with built-in validation and type safety. These classes are designed to be immutable where possible and provide efficient memory usage for high-throughput routing operations.
+</p>
+</body>
+</html>

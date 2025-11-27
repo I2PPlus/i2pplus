@@ -1,9 +1,30 @@
 <html>
+<head>
+    <title>CPU Information Package</title>
+</head>
 <body>
 <p>
-CPUID implementaion, borrowed from freenet, updated and heavily modified.
+    CPUID implementation, borrowed from freenet, updated and heavily modified.
+</p>
 
-Not recommended for external use, not maintained as a public API.
+<p>
+    This package provides CPU detection and identification capabilities using the CPUID instruction, allowing I2P to:
+</p>
+
+<ul>
+<li>Detect CPU manufacturer and model information</li>
+<li>Identify available CPU features and instruction sets</li>
+<li>Optimize cryptographic operations based on CPU capabilities</li>
+<li>Determine the number of available processor cores</li>
+<li>Detect hardware acceleration support (AES-NI, etc.)</li>
+</ul>
+
+<p>
+    The information gathered is used to optimize I2P's performance by selecting the most appropriate algorithms and threading strategies for the detected hardware. This is particularly important for cryptographic operations where hardware acceleration can provide significant performance improvements.
+</p>
+
+<p>
+    <strong>Warning:</strong> Not recommended for external use, not maintained as a public API. The implementation may change between I2P versions without notice.
 </p>
 </body>
 </html>
