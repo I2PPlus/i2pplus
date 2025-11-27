@@ -145,7 +145,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             return null;
         }
 
-        if (shouldAccept || isSelfLookup) {
+        if (isSelfLookup) {
 
             if (_log.shouldInfo()) {
                 if (dlm.getReplyTunnel() != null) {

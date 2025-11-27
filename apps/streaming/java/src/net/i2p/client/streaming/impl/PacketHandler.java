@@ -125,16 +125,15 @@ class PacketHandler {
      * Handles echo packets on known connections.
      */
     private void handleEchoPacket(Connection con, Packet packet) {
+        if (packet == null || con == null) {return;}
         if (packet.getSendStreamId() > 0) {
-            if (con.getOptions().getAnswerPings()) {
-                receivePing(con, packet);
-            } else if (log.shouldWarn()) {
-                log.warn("Dropping ECHO packet for [" + con + "]" + (packet != null ? " -> " + packet : ""));
+            if (con.getOptions().getAnswerPings()) {receivePing(con, packet);}
+            else if (log.shouldWarn()) {
+                log.warn("Dropping ECHO packet for [" + con + "] -> " + packet);
             }
-        } else if (packet.getReceiveStreamId() > 0) {
-            receivePong(packet);
-        } else if (log.shouldWarn()) {
-            log.warn("Received ECHO packet " + " with no StreamIDs for [" + con + "]" + (packet != null ? " -> " + packet : ""));
+        } else if (packet.getReceiveStreamId() > 0) {receivePong(packet);}
+        else if (log.shouldWarn()) {
+            log.warn("Received ECHO packet " + " with no StreamIDs for [" + con + "] -> " + packet);
         }
         packet.releasePayload();
     }
@@ -200,8 +199,9 @@ class PacketHandler {
      * @param packet the packet to respond to with a reset
      */
     private void sendReset(Packet packet) {
+        if (packet == null) {return;}
         Destination from = packet.getOptionalFrom();
-        if (from == null) return;
+        if (from == null) {return;}
 
         ByteArray ba = cache.acquire();
         boolean verified = packet.verifySignature(context, ba.getData());
@@ -209,7 +209,7 @@ class PacketHandler {
 
         if (!verified) {
             if (log.shouldWarn())
-                log.warn("Cannot send reset due to spoofed packet" + (packet != null ? " -> " + packet : ""));
+                log.warn("Cannot send reset due to spoofed packet -> " + packet);
             return;
         }
         sendResetUnverified(packet);

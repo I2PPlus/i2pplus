@@ -437,6 +437,9 @@ class PacketHandler {
      * @param shouldBan true if banning should be performed; false to skip banning
      */
     private void performBanIfNeeded(InetAddress ip, String banReason, boolean shouldBan) {
+        long uptime = _context.router().getUptime();
+        if (uptime < 15*60*1000) {return;} // don't ban at startup
+
         if (shouldBan && ip != null && banReason != null && !banReason.isEmpty()) {
             if (_context.blocklist().isBlocklisted(ip.getHostAddress())) {
                 return;
