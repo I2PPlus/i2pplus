@@ -178,9 +178,8 @@ class TunnelRenderer {
                 if (bySpeed) {sb.append(" data-sort-default");}
                 sb.append(" data-sort-method=number>").append(_t("Speed")).append("</th>");
                 if (isAdvanced) {
-                  sb.append("<th class=limit data-sort-method=number>")
-                    .append(_t("Limit"))
-                    .append("</th><th data-sort-method=number>")
+                  //sb.append("<th class=limit data-sort-method=number>").append(_t("Limit")).append("</th>");
+                  sb.append("<th data-sort-method=number>")
                     .append(_t("Receive on"))
                     .append("</th>");
                 }
@@ -253,11 +252,11 @@ class TunnelRenderer {
 
                     long recv = cfg.getReceiveTunnelId();
                     if (isAdvanced) {
-                        sb.append("<td class=\"cells limit\" data-sort=").append(cfg.getAllocatedBW()).append(">");
-                        if (cfg.getAllocatedBW() > 0) {
-                            sb.append("<span>").append(DataHelper.formatSize2Decimal(cfg.getAllocatedBW())).append("B/s").append("</span>");
-                        }
-                        sb.append("</td>");
+                        //sb.append("<td class=\"cells limit\" data-sort=").append(cfg.getAllocatedBW()).append(">");
+                        //if (cfg.getAllocatedBW() > 0) {
+                        //    sb.append("<span>").append(DataHelper.formatSize2Decimal(cfg.getAllocatedBW())).append("B/s").append("</span>");
+                        //}
+                        //sb.append("</td>");
                         if (recv != 0) {
                             sb.append("<td title=\"").append(_t("Tunnel identity")).append("\"><span class=tunnel_id>")
                               .append(recv).append("</span></td>");
