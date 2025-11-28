@@ -48,7 +48,7 @@ public class TestJob extends JobImpl {
      * Prevents overwhelming the router with too many simultaneous tunnel tests.
      * This value can be adjusted based on system capacity.
      */
-    private static final int MAX_CONCURRENT_TESTS = Math.max(SystemVersion.getCores()/2, 6);
+    private static final int MAX_CONCURRENT_TESTS = 3;
 
     /**
      * Static counter tracking the number of currently active tunnel tests.
@@ -83,9 +83,8 @@ public class TestJob extends JobImpl {
         long lag = ctx.jobQueue().getMaxLag();
         if (lag > 250) {
             if (_log.shouldWarn())
-                _log.warn("Deferred test due to job lag (" + lag + "ms) → " + _cfg);
+                _log.warn("Aborted test due to job lag (" + lag + "ms) → " + _cfg);
             ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
-            scheduleRetest();
             return;
         }
 
@@ -134,7 +133,6 @@ public class TestJob extends JobImpl {
             if (_log.shouldWarn())
                 _log.warn("Insufficient tunnels to test " + _cfg + " with: " + _replyTunnel + " / " + _outTunnel);
             ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
-            scheduleRetest();
             return;
         }
 
@@ -202,8 +200,17 @@ public class TestJob extends JobImpl {
         if (_log.shouldDebug())
             _log.debug("Sending garlic test [#" + _id + "] of " + _outTunnel + " / " + _replyTunnel);
 
-        // Dispatch with viability guard
+        // Readiness check: ensure outbound gateway exists before dispatch
         if (_outTunnel != null && _replyTunnel != null) {
+            if (!ctx.tunnelDispatcher().hasOutboundGateway(_outTunnel.getSendTunnelId(0))) {
+                if (_log.shouldInfo()) {
+                    _log.info("Outbound gateway for tunnel " + _outTunnel.getSendTunnelId(0) +
+                              " not yet registered -> Deferring test for " + _cfg);
+                }
+                CONCURRENT_TESTS.decrementAndGet();
+                scheduleRetest();
+                return false;
+            }
             ctx.tunnelDispatcher().dispatchOutbound(
                 m,
                 _outTunnel.getSendTunnelId(0),
@@ -235,12 +242,12 @@ public class TestJob extends JobImpl {
 
         _cfg.testJobSuccessful(ms);
 
-        if (_log.shouldDebug())
+        if (_log.shouldDebug()) {
             _log.debug("Tunnel Test [#" + _id + "] succeeded in " + ms + "ms → " + _cfg);
+        }
 
         // Clean up session tags
         clearTestTags();
-
         scheduleRetest();
     }
 
@@ -250,13 +257,23 @@ public class TestJob extends JobImpl {
     private void clearTestTags() {
         if (_encryptTag != null) {
             SessionKeyManager skm = getSessionKeyManager();
-            if (skm != null) skm.consumeTag(_encryptTag);
-            _encryptTag = null;
+            if (skm != null) {
+                SessionTag tag = _encryptTag;
+                _encryptTag = null;
+                skm.consumeTag(tag);
+            } else {
+                _encryptTag = null;
+            }
         }
         if (_ratchetEncryptTag != null) {
             RatchetSKM rskm = getRatchetKeyManager();
-            if (rskm != null) rskm.consumeTag(_ratchetEncryptTag);
-            _ratchetEncryptTag = null;
+            if (rskm != null) {
+                RatchetSessionTag tag = _ratchetEncryptTag;
+                _ratchetEncryptTag = null;
+                rskm.consumeTag(tag);
+            } else {
+                _ratchetEncryptTag = null;
+            }
         }
     }
 
@@ -308,7 +325,7 @@ public class TestJob extends JobImpl {
         int failCount = _cfg.getTunnelFailures();
         int scaled = baseDelay;
         if (failCount > 0) {
-            int multiplier = Math.min(1 << failCount, 8); // max 8x (24 min)
+            int multiplier = Math.min(1 << failCount, 2); // max 8x (24 min)
             scaled = baseDelay * multiplier;
         }
         // Add a small jitter to avoid thundering herd
@@ -318,7 +335,7 @@ public class TestJob extends JobImpl {
 
     private int getTestPeriod() {
         final RouterContext ctx = getContext();
-        if (_outTunnel == null || _replyTunnel == null) return 25 * 1000;
+        if (_outTunnel == null || _replyTunnel == null) return 20 * 1000;
 
         RateStat tspt = ctx.statManager().getRate("transport.sendProcessingTime");
         int base = 0;
@@ -425,11 +442,16 @@ public class TestJob extends JobImpl {
             if (!_found && (_encryptTag != null || _ratchetEncryptTag != null)) {
                 SessionKeyManager skm = getSessionKeyManager();
                 if (skm != null && _encryptTag != null) {
-                    skm.consumeTag(_encryptTag);
+                    SessionTag tag = _encryptTag;
+                    _encryptTag = null;
+                    skm.consumeTag(tag);
                 } else {
                     RatchetSKM rskm = getRatchetKeyManager();
-                    if (rskm != null && _ratchetEncryptTag != null)
-                        rskm.consumeTag(_ratchetEncryptTag);
+                    if (rskm != null && _ratchetEncryptTag != null) {
+                        RatchetSessionTag tag = _ratchetEncryptTag;
+                        _ratchetEncryptTag = null;
+                        rskm.consumeTag(tag);
+                    }
                 }
                 _encryptTag = null;
                 _ratchetEncryptTag = null;
