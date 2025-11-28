@@ -38,9 +38,10 @@ class OutboundTunnelEndpoint {
             allocated = _context.tunnelDispatcher().getMaxPerTunnelBandwidth(TunnelDispatcher.Location.OBEP);
             _config.setAllocatedBW(allocated);
         }
-        int effectiveBw = Math.max(2048, allocated);
-        int minThreshold = Math.max(1024, effectiveBw / 4);
-        int maxThreshold = Math.max(2048, effectiveBw / 2);
+        int effectiveBw = allocated;
+        // Very permissive RED thresholds - allow normal traffic flow
+        int minThreshold = Math.max(256, effectiveBw / 8);
+        int maxThreshold = Math.max(512, effectiveBw / 2);
         _partBWE = new SyntheticREDQueue(_context, effectiveBw, minThreshold, maxThreshold);
         _outDistributor = new OutboundMessageDistributor(ctx, OutNetMessage.PRIORITY_PARTICIPATING, _partBWE);
         _totalmsg = _lsdsm = _ridsm = _i2npmsg = 0;

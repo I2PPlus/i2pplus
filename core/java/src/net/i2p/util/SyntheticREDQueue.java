@@ -36,7 +36,7 @@ import java.util.Random;
  */
 public class SyntheticREDQueue implements BandwidthEstimator {
 
-    private static final float MAX_DROP_PROBABILITY = 0.02f;
+    private static final float MAX_DROP_PROBABILITY = 0.0002f;
     private static final int DECAY_FACTOR = 8;
     private static final int WESTWOOD_RTT_MIN = 50; // ms
 

@@ -702,7 +702,8 @@ public class TunnelDispatcher implements Service {
                                               RouterThrottleImpl.DEFAULT_MAX_TUNNELS);
         int max = _context.bandwidthLimiter().getMaxShareBandwidth();
 
-        return (maxTunnels > MAX_TUNNELS_THRESHOLD) ? max / 4 * 3 : max;
+        // Extremely lenient bandwidth allocation - prevent artificial packet drops
+        return max;
     }
 
     /**
