@@ -79,24 +79,24 @@ public class TestJob extends JobImpl {
         final RouterContext ctx = getContext();
         if (_pool == null || !_pool.isAlive()) return;
 
+        // Check for graceful shutdown
+        if (ctx.router().gracefulShutdownInProgress()) return;
+
         // Check for job queue lag - be more aggressive to prevent cascade
         long lag = ctx.jobQueue().getMaxLag();
         if (lag > 250) {
-            if (_log.shouldWarn())
+            if (_log.shouldWarn()) {
                 _log.warn("Aborted test due to job lag (" + lag + "ms) → " + _cfg);
-            ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
-
-            // Don't reschedule if system is overloaded - prevents job queue cascade
-            if (lag > 100) { // 100ms lag = system overload
-                if (_log.shouldWarn())
-                    _log.warn("Job lag overload detected (" + lag + "ms) - suspending tunnel tests for " + _cfg);
-                return; // Exit without rescheduling
             }
+            ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
             return;
+        } else if (lag > 100) {
+            if (_log.shouldWarn()) {
+                _log.warn("Job lag overload detected (" + lag + "ms) - suspending tunnel tests for " + _cfg);
+            }
+            ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
+            return; // Exit without rescheduling
         }
-
-        // Check for graceful shutdown
-        if (ctx.router().gracefulShutdownInProgress()) return;
 
         // Concurrency control: Check and increment counter
         // Be more restrictive during high lag to reduce queue pressure
