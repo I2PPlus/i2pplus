@@ -105,7 +105,7 @@ class EventPumper implements Runnable {
     /** tunnel test now disabled, but this should be long enough to allow an active tunnel to get started */
     private static final long MIN_EXPIRE_IDLE_TIME = 90*1000l;
     private static final long MAX_EXPIRE_IDLE_TIME = 11*60*1000l;
-    private static final long MAY_DISCON_TIMEOUT = 10*1000;
+    private static final long MAY_DISCON_TIMEOUT = 15*1000;
     private static final long RI_STORE_INTERVAL = 29*60*1000;
 
     /**
@@ -630,8 +630,7 @@ class EventPumper implements Runnable {
                 if (count > 0) {
                     count = _blockedIPs.increment(ba);
                     if (shouldInfo) {
-                        _log.info("Blocking NTCP connection attempt from" + (isBanned ? "banned IP address" : "") +
-                                  ": " + ba + " (Count: " + count + ")");
+                        _log.info("Blocking NTCP connection attempt from: " + ba + " (Count: " + count + ")");
                     }
                     if (count >= 30 && shouldWarn) {
                         _log.warn("WARNING! IP Address " + ba +
