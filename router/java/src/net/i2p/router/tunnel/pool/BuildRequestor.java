@@ -235,9 +235,19 @@ abstract class BuildRequestor {
 
         // Use exploratory tunnels for exploratory pools or if paired disabled (never)
         if (settings.isExploratory() || !usePairedTunnels()) {
-            return isInbound
+            TunnelInfo expl = isInbound
                 ? mgr.selectOutboundExploratoryTunnel(farEnd)
                 : mgr.selectInboundExploratoryTunnel(farEnd);
+            
+            // If no exploratory tunnels exist yet, allow zero-hop as fallback
+            if (expl == null) {
+                if (log.shouldInfo()) {
+                    log.info("No existing exploratory tunnels for " + cfg + " -> allowing zero-hop build");
+                }
+                // Return null to allow zero-hop tunnel build
+                return null;
+            }
+            return expl;
         }
 
         // Client tunnel: try paired first
@@ -282,6 +292,14 @@ abstract class BuildRequestor {
             tunnel.getLength() <= 1 &&
             mgr.getOutboundSettings().getLength() > 0 &&
             mgr.getOutboundSettings().getLength() + mgr.getOutboundSettings().getLengthVariance() > 0) {
+            // Allow zero/1-hop for initial exploratory tunnels, but avoid for normal operation
+            TunnelInfo anyOutbound = mgr.selectOutboundTunnel();
+            if (anyOutbound == null) {
+                if (log.shouldInfo()) {
+                    log.info("Allowing zero-hop outbound tunnel for initial exploratory build");
+                }
+                return tunnel;
+            }
             // Avoid zero/1-hop expl tunnels for anonymity and resource fairness
             return null;
         }
@@ -294,6 +312,14 @@ abstract class BuildRequestor {
             tunnel.getLength() <= 1 &&
             mgr.getInboundSettings().getLength() > 0 &&
             mgr.getInboundSettings().getLength() + mgr.getInboundSettings().getLengthVariance() > 0) {
+            // Allow zero/1-hop for initial exploratory tunnels, but avoid for normal operation
+            TunnelInfo anyInbound = mgr.selectInboundTunnel();
+            if (anyInbound == null) {
+                if (log.shouldInfo()) {
+                    log.info("Allowing zero-hop inbound tunnel for initial exploratory build");
+                }
+                return tunnel;
+            }
             return null;
         }
         return tunnel;
