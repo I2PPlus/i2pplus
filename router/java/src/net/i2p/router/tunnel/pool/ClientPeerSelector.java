@@ -252,7 +252,17 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 int skew = settings.getLengthVariance();
                 if (skew < 0) {min += skew;}
                 // not enough peers to build the minimum size
-                if (rv.size() < min) {return null;}
+                if (rv.size() < min) {
+                    // For firewalled routers with very few peers, allow shorter tunnels as fallback
+                    if (hidden && rv.size() > 0) {
+                        if (log.shouldWarn()) {
+                            log.warn("Firewalled router: allowing shorter tunnel (" + rv.size() + " hops) instead of requested " + length + " hops");
+                        }
+                        // Continue with whatever peers we have
+                    } else {
+                        return null;
+                    }
+                }
             }
         } else {rv = new ArrayList<Hash>(1);}
 
