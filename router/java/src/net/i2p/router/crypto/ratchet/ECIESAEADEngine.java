@@ -1137,8 +1137,9 @@ public final class ECIESAEADEngine {
             state.destroy();
             return null;
         }
-        if (_log.shouldDebug())
+        if (_log.shouldDebug()) {
             _log.debug("Encrypted NewSession: " + enc.length + " bytes " + state);
+        }
 
         // overwrite eph. key with encoded key
         DHState eph = state.getLocalEphemeralKeyPair();
@@ -1148,19 +1149,16 @@ public final class ECIESAEADEngine {
             state.destroy();
             return null;
         }
-        eph.getEncodedPublicKey(enc, 0);
-        if (_log.shouldDebug())
-            _log.debug("Elligator2 encoded ephemeral key [" + Base64.encode(enc, 0, 32) + "]");
 
-        if (priv != null) {
-            // tell the SKM
-            keyManager.createSession(target, to, state, callback);
-        } else {
-            state.destroy();
+        eph.getEncodedPublicKey(enc, 0);
+        if (_log.shouldDebug()) {
+            _log.debug("Elligator2 encoded ephemeral key [" + Base64.encode(enc, 0, 32) + "]");
         }
+
+        // tell the SKM
+        keyManager.createSession(target, to, state, callback);
         return enc;
     }
-
 
     /**
      * scenario 1A: New Session Message from an anonymous source.
