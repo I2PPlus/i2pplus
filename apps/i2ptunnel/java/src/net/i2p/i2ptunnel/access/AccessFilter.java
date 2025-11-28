@@ -71,8 +71,11 @@ class AccessFilter implements StatefulConnectionFilter {
     private volatile Syncer syncer;
 
     /**
+     * Create a new access filter.
+     * 
      * @param context the context, used for scheduling and timer purposes
      * @param definition definition of this filter
+     * @throws IOException if an I/O error occurs
      */
     AccessFilter(I2PAppContext context, FilterDefinition definition)
             throws IOException {

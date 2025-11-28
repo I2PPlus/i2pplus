@@ -98,5 +98,11 @@ public interface ID3v1 {
 	 */
 	void setComment(String comment);
 
+	/**
+	 * Convert ID3v1 tag to byte array.
+	 * 
+	 * @return byte array representation of the ID3v1 tag
+	 * @throws NotSupportedException if the operation is not supported
+	 */
 	byte[] toBytes() throws NotSupportedException;
 }

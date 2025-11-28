@@ -14,12 +14,21 @@ import org.rrd4j.core.Util;
  */
 @Deprecated
 public class Aggregates {
+    /** Minimal value */
     double min = Double.NaN, max = Double.NaN;
+    /** First and last values */
     double first = Double.NaN, last = Double.NaN;
+    /** Average and total values */
     double average = Double.NaN, total = Double.NaN;
 
     /**
-     * Returns the minimal value
+     * Default constructor.
+     */
+    public Aggregates() {
+    }
+
+    /**
+     * Returns minimal value
      *
      * @return Minimal value
      */
@@ -28,7 +37,7 @@ public class Aggregates {
     }
 
     /**
-     * Returns the maximum value
+     * Returns maximum value
      *
      * @return Maximum value
      */
@@ -37,7 +46,7 @@ public class Aggregates {
     }
 
     /**
-     * Returns the first value
+     * Returns first value
      *
      * @return First value
      */
@@ -46,7 +55,7 @@ public class Aggregates {
     }
 
     /**
-     * Returns the last value
+     * Returns last value
      *
      * @return Last value
      */
@@ -55,7 +64,7 @@ public class Aggregates {
     }
 
     /**
-     * Returns average
+     * Returns average value
      *
      * @return Average value
      */
@@ -72,43 +81,57 @@ public class Aggregates {
         return total;
     }
 
-
     /**
-     * Returns single aggregated value for the give consolidation function
+     * Sets minimal value
      *
-     * @param consolFun Consolidation function: MIN, MAX, FIRST, LAST, AVERAGE, TOTAL. These constants
-     *                  are conveniently defined in the {@link org.rrd4j.ConsolFun ConsolFun} interface.
-     * @return Aggregated value
-     * @throws java.lang.IllegalArgumentException Thrown if unsupported consolidation function is supplied
+     * @param min Minimal value
      */
-    public double getAggregate(ConsolFun consolFun) {
-        switch (consolFun) {
-        case AVERAGE:
-            return average;
-        case FIRST:
-            return first;
-        case LAST:
-            return last;
-        case MAX:
-            return max;
-        case MIN:
-            return min;
-        case TOTAL:
-            return total;
-        }
-        throw new IllegalArgumentException("Unknown consolidation function: " + consolFun);
+    public void setMin(double min) {
+        this.min = min;
     }
 
     /**
-     * Returns String representing all aggregated values. Just for debugging purposes.
+     * Sets maximum value
      *
-     * @return String containing all aggregated values
+     * @param max Maximum value
      */
-    public String dump() {
-        StringBuilder bl = new StringBuilder();
-        for(ConsolFun cf: ConsolFun.values()) {
-            bl.append(cf.name()).append('=').append(Util.formatDouble(this.getAggregate(cf)));
-        }
-        return bl.toString();
+    public void setMax(double max) {
+        this.max = max;
+    }
+
+    /**
+     * Sets first value
+     *
+     * @param first First value
+     */
+    public void setFirst(double first) {
+        this.first = first;
+    }
+
+    /**
+     * Sets last value
+     *
+     * @param last Last value
+     */
+    public void setLast(double last) {
+        this.last = last;
+    }
+
+    /**
+     * Sets average value
+     *
+     * @param average Average value
+     */
+    public void setAverage(double average) {
+        this.average = average;
+    }
+
+    /**
+     * Sets total value
+     *
+     * @param total Total value
+     */
+    public void setTotal(double total) {
+        this.total = total;
     }
 }

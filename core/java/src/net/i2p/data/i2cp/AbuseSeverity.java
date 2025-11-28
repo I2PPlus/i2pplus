@@ -27,14 +27,27 @@ import net.i2p.data.DataStructureImpl;
 public class AbuseSeverity extends DataStructureImpl {
     private int _severityId;
 
+    /**
+     * Create a new abuse severity with default value -1.
+     */
     public AbuseSeverity() {
         _severityId = -1;
     }
 
+    /**
+     * Get the severity level.
+     * 
+     * @return the severity level
+     */
     public int getSeverity() {
         return _severityId;
     }
 
+    /**
+     * Set the severity level.
+     * 
+     * @param id the severity level
+     */
     public void setSeverity(int id) {
         _severityId = id;
     }

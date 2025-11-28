@@ -11,7 +11,16 @@ package i2p.susi.dns;
 import java.io.Serializable;
 import java.util.Comparator;
 
+/**
+ * Comparator for sorting AddressBean by name alphabetically.
+ */
 public class AddressByNameSorter implements Comparator<AddressBean>, Serializable {
+    /**
+     * Default constructor.
+     */
+    public AddressByNameSorter() {
+    }
+
     public int compare(AddressBean a, AddressBean b) {
         return a.getDisplayName().compareToIgnoreCase(b.getDisplayName());
     }

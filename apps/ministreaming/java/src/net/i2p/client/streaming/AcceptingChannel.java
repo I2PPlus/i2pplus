@@ -16,10 +16,23 @@ import java.nio.channels.SelectableChannel;
  */
 public abstract class AcceptingChannel extends SelectableChannel {
 
+    /**
+     * Accept an incoming connection.
+     * 
+     * @return the accepted I2P socket
+     * @throws I2PException if an I2P error occurs
+     * @throws ConnectException if a connection error occurs
+     */
     protected abstract I2PSocket accept() throws I2PException, ConnectException;
 
+    /** Socket manager for this channel */
     protected final I2PSocketManager _socketManager;
 
+    /**
+     * Create a new accepting channel.
+     * 
+     * @param manager the socket manager
+     */
     protected AcceptingChannel(I2PSocketManager manager) {
         this._socketManager = manager;
     }

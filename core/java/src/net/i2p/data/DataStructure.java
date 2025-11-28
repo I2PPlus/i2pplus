@@ -61,26 +61,32 @@ public interface DataStructure /* extends Serializable */ {
      */
     public String toBase64();
 
-    /**
-     * Load the structure from the base 64 encoded data provided
+/**
+     * Load the structure from the provided base64 string.
      *
      * Warning - many classes will throw IllegalStateException if data is already set.
      * Warning - many classes will throw IllegalArgumentException if data is the wrong size.
      *
+     * @param data base64 encoded string to load from
+     * @throws DataFormatException if the data format is invalid
      */
     public void fromBase64(String data) throws DataFormatException;
 
     /**
-     *  @return may be null if data is not set
+     * Convert the structure to a byte array.
+     * 
+     * @return may be null if data is not set
      */
     public byte[] toByteArray();
 
-    /**
-     * Load the structure from the data provided
+/**
+     * Load's structure from the data provided
      *
      * Warning - many classes will throw IllegalStateException if data is already set.
      * Warning - many classes will throw IllegalArgumentException if data is the wrong size.
      *
+     * @param data byte array to load from
+     * @throws DataFormatException if the data format is invalid
      */
     public void fromByteArray(byte data[]) throws DataFormatException;
 

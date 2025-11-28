@@ -228,6 +228,8 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
     /**
      * Basic validation of the hostname.
      * Already converted to lower case by HostTxtParser.parse()
+     * @param host the hostname to validate
+     * @return true if the hostname is valid, false otherwise
      */
     public static boolean isValidKey(String host) {
         final int len = host.length();
@@ -281,6 +283,8 @@ class AddressBook implements Iterable<Map.Entry<String, HostTxtEntry>> {
 
     /**
      * Do basic validation of the b64 dest, without bothering to instantiate it
+     * @param dest the destination to validate
+     * @return true if the destination is valid, false otherwise
      */
     private static boolean isValidDest(String dest) {
         if (dest == null) {

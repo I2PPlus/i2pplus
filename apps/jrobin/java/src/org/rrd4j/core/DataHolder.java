@@ -91,14 +91,16 @@ public interface DataHolder {
      */
     void setTimeSpan(long startTime, long endTime);
 
-    /**
+/**
      * Set the step for timestamp interval.
-    */
+     * @param step time step for data processing
+     */
     void setStep(long step);
 
     /**
      * Returns the time step used for timestamp interval.
      *
+     * @param step time step for data processing
      * @return Step used for data processing.
      */
     long getStep();

@@ -69,6 +69,10 @@ public abstract class DnsLabel implements CharSequence, Comparable<DnsLabel> {
         return internationalizedRepresentation;
     }
 
+    /**
+     * Gets the internal internationalized representation.
+     * @return label string
+     */
     protected String getInternationalizedRepresentationInternal() {
         return label;
     }

@@ -22,9 +22,15 @@ import net.i2p.util.SimpleByteCache;
  * See CryptixAESEngine overrides for the real thing.
  */
 public class AESEngine {
+    /** Logger instance */
     protected final Log _log;
+    /** I2P application context */
     protected final I2PAppContext _context;
 
+    /**
+     * Constructor for subclasses.
+     * @param ctx I2P application context
+     */
     protected AESEngine(I2PAppContext ctx) {
         _context = ctx;
         _log = _context.logManager().getLog(getClass());
@@ -45,16 +51,17 @@ public class AESEngine {
         encrypt(payload, payloadIndex, out, outIndex, sessionKey, iv, 0, length);
     }
 
-    /**
-     * Encrypt the payload with the session key.
+/**
+     * Encrypt payload with session key.
      * This just copies payload to out, see extension for the real thing.
      *
      * @param payload data to be encrypted
-     * @param payloadIndex index into the payload to start encrypting
-     * @param out where to store the result
+     * @param payloadIndex index into payload to start encrypting
+     * @param out where to store result
      * @param outIndex where in out to start writing
-     * @param sessionKey private esession key to encrypt to
+     * @param sessionKey private session key to encrypt to
      * @param iv IV for CBC
+     * @param ivOffset offset into IV
      * @param length how much data to encrypt
      */
     public void encrypt(byte payload[], int payloadIndex, byte out[], int outIndex, SessionKey sessionKey, byte iv[], int ivOffset, int length) {
@@ -62,13 +69,15 @@ public class AESEngine {
         _log.logAlways(Log.WARN, "AES is disabled");
     }
 
-    /**
-     * Encrypt the SHA-256 Hash of the IV, the 4 byte length, and the payload,
-     * with random padding up to the paddedSize, rounded up to the next multiple of 16.
+/**
+     * Encrypt SHA-256 Hash of IV, 4 byte length, and payload,
+     * with random padding up to paddedSize, rounded up to next multiple of 16.
      *
-     * @param paddedSize minimum size of the output
+     * @param payload data to be encrypted
+     * @param sessionKey session key for encryption
      * @param iv IV for CBC, must be 16 bytes
-     * @return null on error
+     * @param paddedSize minimum size of output
+     * @return encrypted data or null on error
      * @deprecated unused
      */
     @Deprecated
@@ -99,8 +108,10 @@ public class AESEngine {
      * See safeEncrypt() for description.
      * WARNING - no check for maximum length here, OOM DOS possible, fix it if you're going to use this.
      *
+     * @param payload data to be decrypted
+     * @param sessionKey session key for decryption
      * @param iv IV for CBC, must be 16 bytes
-     * @return null on error
+     * @return decrypted data or null on error
      * @deprecated unused
      */
     @Deprecated
@@ -157,6 +168,7 @@ public class AESEngine {
      * @param outIndex where in out to start writing
      * @param sessionKey private session key to decrypt to
      * @param iv IV for CBC
+     * @param ivOffset offset into IV
      * @param length how much data to decrypt
      */
     public void decrypt(byte payload[], int payloadIndex, byte out[], int outIndex, SessionKey sessionKey, byte iv[], int ivOffset, int length) {
@@ -166,7 +178,12 @@ public class AESEngine {
 
     /**
      * This just copies payload to out, see extension for the real thing.
-     *   @param sessionKey unused
+     *
+     * @param payload data to encrypt
+     * @param inIndex starting index in payload
+     * @param sessionKey unused
+     * @param out output buffer
+     * @param outIndex starting index in output
      */
     public void encryptBlock(byte payload[], int inIndex, SessionKey sessionKey, byte out[], int outIndex) {
         System.arraycopy(payload, inIndex, out, outIndex, out.length - outIndex);
@@ -176,7 +193,10 @@ public class AESEngine {
      * This just copies payload to rv, see extension for the real thing.
      *
      * @param payload encrypted data
+     * @param inIndex starting index in payload
      * @param sessionKey private session key
+     * @param rv output buffer
+     * @param outIndex starting index in output
      */
     public void decryptBlock(byte payload[], int inIndex, SessionKey sessionKey, byte rv[], int outIndex) {
         System.arraycopy(payload, inIndex, rv, outIndex, rv.length - outIndex);
@@ -189,6 +209,10 @@ public class AESEngine {
      * Public for ElGamalAESEngine.
      * Not a public API, not for external use.
      *
+     * @param context I2P application context
+     * @param curSize current data size
+     * @param minPaddedSize minimum padded size
+     * @return padding bytes
      * @since 0.9.38 moved from ElGamalAESEngine
      */
     public final static byte[] getPadding(I2PAppContext context, int curSize, long minPaddedSize) {
@@ -205,6 +229,9 @@ public class AESEngine {
      * Public for ElGamalAESEngine.
      * Not a public API, not for external use.
      *
+     * @param curSize current data size
+     * @param minPaddedSize minimum padded size
+     * @return padding size required
      * @since 0.9.38 moved from ElGamalAESEngine
      */
     public final static int getPaddingSize(int curSize, long minPaddedSize) {

@@ -43,6 +43,9 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
 
     /**
      * Convert boolean to default file visit result.
+     * 
+     * @param accept the boolean value to convert
+     * @return FileVisitResult.CONTINUE if accept is true, otherwise FileVisitResult.TERMINATE
      */
     static FileVisitResult toDefaultFileVisitResult(final boolean accept) {
         return accept ? FileVisitResult.CONTINUE : FileVisitResult.TERMINATE;
@@ -104,6 +107,9 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
 
     /**
      * Append list to string builder.
+     * 
+     * @param list the list to append
+     * @param buffer the string builder to append to
      */
     void append(final List<?> list, final StringBuilder buffer) {
         for (int i = 0; i < list.size(); i++) {
@@ -116,6 +122,9 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
 
     /**
      * Append array to string builder.
+     * 
+     * @param array the array to append
+     * @param buffer the string builder to append to
      */
     void append(final Object[] array, final StringBuilder buffer) {
         for (int i = 0; i < array.length; i++) {
@@ -128,6 +137,9 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
 
     /**
      * Get file visit result from supplier.
+     * 
+     * @param supplier the supplier to get the result from
+     * @return the file visit result from the supplier, or TERMINATE if IOException occurs
      */
     FileVisitResult get(final IOSupplier<FileVisitResult> supplier) {
         try {
@@ -150,6 +162,9 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
 
     /**
      * Check if file is a directory.
+     * 
+     * @param file the file to check
+     * @return true if the file is not null and is a directory
      */
     boolean isDirectory(final File file) {
         return file != null && file.isDirectory();
@@ -157,6 +172,9 @@ public abstract class AbstractFileFilter implements IOFileFilter, PathVisitor {
 
     /**
      * Check if file is a regular file.
+     * 
+     * @param file file to check
+     * @return true if the file is not null and is a regular file
      */
     boolean isFile(final File file) {
         return file != null && file.isFile();

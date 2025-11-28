@@ -23,16 +23,27 @@ import org.cybergarage.soap.*;
 
 import org.cybergarage.upnp.*;
 
+/**
+ * Represents a UPnP action control request.
+ * Extends ControlRequest to provide action-specific functionality.
+ */
 public class ActionRequest extends ControlRequest
 {
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
 
+	/**
+	 * Default constructor
+	 */
 	public ActionRequest()
 	{
 	}
 
+	/**
+	 * Constructs an ActionRequest from an HTTP request.
+	 * @param httpReq the HTTP request to wrap
+	 */
 	public ActionRequest(HTTPRequest httpReq)
 	{
 		set(httpReq);
@@ -42,6 +53,10 @@ public class ActionRequest extends ControlRequest
 	//	Action
 	////////////////////////////////////////////////
 
+	/**
+	 * Gets the action node from the request.
+	 * @return the action node
+	 */
 	public Node getActionNode()
 	{
 		Node bodyNode = getBodyNode();
@@ -52,6 +67,10 @@ public class ActionRequest extends ControlRequest
 		return bodyNode.getNode(0);
 	}
 
+	/**
+	 * Gets the action name from the request.
+	 * @return the action name
+	 */
 	public String getActionName()
 	{
 		Node node = getActionNode();
@@ -66,6 +85,10 @@ public class ActionRequest extends ControlRequest
 		return name.substring(idx, name.length());
 	}
 
+	/**
+	 * Gets the argument list from the request.
+	 * @return the argument list
+	 */
 	public ArgumentList getArgumentList()
 	{
 		Node actNode = getActionNode();
@@ -85,6 +108,11 @@ public class ActionRequest extends ControlRequest
 	//	setRequest
 	////////////////////////////////////////////////
 
+	/**
+	 * Sets the request with the specified action and argument list.
+	 * @param action the action to set
+	 * @param argList the argument list
+	 */
 	public void setRequest(Action action, ArgumentList argList)
 	{
 		Service service = action.getService();
@@ -111,6 +139,12 @@ public class ActionRequest extends ControlRequest
 	//	Contents
 	////////////////////////////////////////////////
 
+	/**
+	 * @param service the service
+	 * @param action the action
+	 * @param argList the argument list
+	 * @return the created content node
+	 */
 	private Node createContentNode(Service service, Action action, ArgumentList argList)
 	{
 		String actionName = action.getName();
@@ -136,6 +170,10 @@ public class ActionRequest extends ControlRequest
 	//	post
 	////////////////////////////////////////////////
 
+	/**
+	 * Posts the action request and gets the response.
+	 * @return the action response
+	 */
 	public ActionResponse post()
 	{
 		SOAPResponse soapRes = postMessage(getRequestHost(), getRequestPort());

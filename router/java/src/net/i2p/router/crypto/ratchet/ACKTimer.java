@@ -31,9 +31,10 @@ class ACKTimer extends SimpleTimer2.TimedEvent {
     // and because it will be the wrong LS for subsessions
     private static final int LS_MASK = 0x0100;
 
-    /**
-     *  Caller must schedule
+/**
+     * ACK timer for ratchet.
      *
+     * @param context router context for timer and logging
      *  @param from local destination ACK will come from, non-null
      *  @param to remote destination ACK will go to, non-null
      *

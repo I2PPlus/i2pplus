@@ -15,6 +15,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * JSON-RPC handler for advanced router settings.
+ */
 public class AdvancedSettingsHandler implements RequestHandler {
 
     private final RouterContext _context;
@@ -22,6 +25,11 @@ public class AdvancedSettingsHandler implements RequestHandler {
     private final JSONRPC2Helper _helper;
     private static final String[] requiredArgs = {};
 
+    /**
+     * Constructor for advanced settings handler.
+     * @param ctx router context
+     * @param helper JSON-RPC helper instance
+     */
     public AdvancedSettingsHandler(RouterContext ctx, JSONRPC2Helper helper) {
         _helper = helper;
         _context = ctx;

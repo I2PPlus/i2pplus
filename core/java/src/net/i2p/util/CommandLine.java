@@ -63,7 +63,11 @@ public class CommandLine {
         System.exit(1);
     }
 
-    /** will only return if command not found */
+    /** 
+     * Will only return if command not found
+     * @param args command arguments
+     * @param classes list of classes to search
+     */
     protected static void exec(String args[], List<String> classes) {
         boolean help = false;
         String cmd = args[0].toLowerCase(Locale.US);

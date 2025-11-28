@@ -20,12 +20,19 @@ package org.cybergarage.upnp.device;
 import org.cybergarage.util.*;
 import org.cybergarage.upnp.*;
 
+/**
+ * UPnP device advertiser for network notifications.
+ */
 public class Advertiser extends ThreadCore
 {
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
 
+	/**
+	 * Constructor for advertiser.
+	 * @param dev device to advertise
+	 */
 	public Advertiser(Device dev)
 	{
 		setDevice(dev);
@@ -35,13 +42,22 @@ public class Advertiser extends ThreadCore
 	//	Member
 	////////////////////////////////////////////////
 
+	/** Device being advertised */
 	private Device device;
 
+	/**
+	 * Sets the device to advertise.
+	 * @param dev device to advertise
+	 */
 	public void setDevice(Device dev)
 	{
 		device = dev;
 	}
 
+	/**
+	 * Gets the device being advertised.
+	 * @return current device
+	 */
 	public Device getDevice()
 	{
 		return device;

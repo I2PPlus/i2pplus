@@ -39,31 +39,51 @@ import org.cybergarage.util.Debug;
 import org.cybergarage.util.Mutex;
 import org.cybergarage.xml.Node;
 
+/**
+ * Represents a UPnP action that can be invoked on a service.
+ * An action contains input and output arguments and can be executed
+ * either locally or remotely via control actions.
+ */
 public class Action
 {
 	////////////////////////////////////////////////
 	//	Constants
 	////////////////////////////////////////////////
 
+	/** The element name for action nodes in XML */
 	public final static String ELEM_NAME = "action";
 
 	////////////////////////////////////////////////
 	//	Member
 	////////////////////////////////////////////////
 
+	/** The service node this action belongs to */
 	private Node serviceNode;
+	/** The action node containing action definition */
 	private final Node actionNode;
 
+	/**
+	 * Gets the service node this action belongs to.
+	 * @return the service node
+	 */
 	private Node getServiceNode()
 	{
 		return serviceNode;
 	}
 
+	/**
+	 * Gets the service this action belongs to.
+	 * @return the service object
+	 */
 	public Service getService()
 	{
 		return new Service(getServiceNode());
 	}
 
+	/**
+	 * Sets the service this action belongs to.
+	 * @param s the service to set
+	 */
 	void setService(Service s){
 		serviceNode=s.getServiceNode();
 		/*To ensure integrity of the XML structure*/
@@ -74,6 +94,10 @@ public class Action
 		}
 	}
 
+	/**
+	 * Gets the action node.
+	 * @return the action node
+	 */
 	public Node getActionNode()
 	{
 		return actionNode;
@@ -82,18 +106,31 @@ public class Action
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
+	/**
+	 * Creates a new Action with the given service node.
+	 * @param serviceNode the service node this action belongs to
+	 */
 	public Action(Node serviceNode){
 		//TODO Test
 		this.serviceNode = serviceNode;
 		this.actionNode = new Node(Action.ELEM_NAME);
 	}
 
+	/**
+	 * Creates a new Action with the given service and action nodes.
+	 * @param serviceNode the service node this action belongs to
+	 * @param actionNode the action node containing action definition
+	 */
 	public Action(Node serviceNode, Node actionNode)
 	{
 		this.serviceNode = serviceNode;
 		this.actionNode = actionNode;
 	}
 
+	/**
+	 * Creates a copy of an existing Action.
+	 * @param action the action to copy
+	 */
 	public Action(Action action)
 	{
 		this.serviceNode = action.getServiceNode();
@@ -104,13 +141,20 @@ public class Action
 	// Mutex
 	////////////////////////////////////////////////
 
+	/** Mutex for thread synchronization */
 	private Mutex mutex = new Mutex();
 
+	/**
+	 * Locks the mutex for this action.
+	 */
 	public void lock()
 	{
 		mutex.lock();
 	}
 
+	/**
+	 * Unlocks the mutex for this action.
+	 */
 	public void unlock()
 	{
 		mutex.unlock();
@@ -120,6 +164,11 @@ public class Action
 	//	isActionNode
 	////////////////////////////////////////////////
 
+	/**
+	 * Checks if the given node is an action node.
+	 * @param node the node to check
+	 * @return true if the node is an action node, false otherwise
+	 */
 	public static boolean isActionNode(Node node)
 	{
 		return Action.ELEM_NAME.equals(node.getName());
@@ -129,13 +178,22 @@ public class Action
 	//	name
 	////////////////////////////////////////////////
 
+	/** The name attribute for action nodes */
 	private final static String NAME = "name";
 
+	/**
+	 * Sets the name of this action.
+	 * @param value the name to set
+	 */
 	public void setName(String value)
 	{
 		getActionNode().setNode(NAME, value);
 	}
 
+	/**
+	 * Gets the name of this action.
+	 * @return the action name
+	 */
 	public String getName()
 	{
 		return getActionNode().getNodeValue(NAME);
@@ -145,6 +203,10 @@ public class Action
 	//	argumentList
 	////////////////////////////////////////////////
 
+	/**
+	 * Gets the list of all arguments for this action.
+	 * @return the argument list
+	 */
 	public ArgumentList getArgumentList()
 	{
 		ArgumentList argumentList = new ArgumentList();
@@ -162,6 +224,10 @@ public class Action
 		return argumentList;
 	}
 
+	/**
+	 * Sets the argument list for this action.
+	 * @param al the argument list to set
+	 */
 	public void setArgumentList(ArgumentList al){
 		Node argumentListNode = getActionNode().getNode(ArgumentList.ELEM_NAME);
 		if (argumentListNode == null){
@@ -179,6 +245,10 @@ public class Action
 
 	}
 
+	/**
+	 * Gets the list of input arguments for this action.
+	 * @return the input argument list
+	 */
 	public ArgumentList getInputArgumentList()
 	{
 		ArgumentList allArgList = getArgumentList();
@@ -193,6 +263,10 @@ public class Action
 		return argList;
 	}
 
+	/**
+	 * Gets the list of output arguments for this action.
+	 * @return the output argument list
+	 */
 	public ArgumentList getOutputArgumentList()
 	{
 		ArgumentList allArgList = getArgumentList();
@@ -207,6 +281,11 @@ public class Action
 		return argList;
 	}
 
+	/**
+	 * Gets an argument by name.
+	 * @param name the name of the argument to find
+	 * @return the argument if found, null otherwise
+	 */
 	public Argument getArgument(String name)
 	{
 		ArgumentList argList = getArgumentList();
@@ -226,6 +305,7 @@ public class Action
 	 * @deprecated You should use one of the following methods instead:<br>
 	 *  - {@link #setInArgumentValues(ArgumentList)} <br>
 	 *  - {@link #setOutArgumentValues(ArgumentList)}
+	 * @param argList the argument list to set
 	 */
 	@Deprecated
 	public void setArgumentValues(ArgumentList argList)
@@ -234,8 +314,8 @@ public class Action
 	}
 
 	/**
-	 *
-	 * @param argList
+	 * Sets the values of input arguments.
+	 * @param argList the argument list containing input values
 	 * @since 1.8.0
 	 */
 	public void setInArgumentValues(ArgumentList argList)
@@ -244,8 +324,8 @@ public class Action
 	}
 
 	/**
-	 *
-	 * @param argList
+	 * Sets the values of output arguments.
+	 * @param argList the argument list containing output values
 	 * @since 1.8.0
 	 */
 	public void setOutArgumentValues(ArgumentList argList)
@@ -253,6 +333,11 @@ public class Action
 		getArgumentList().setResArgs(argList);
 	}
 
+	/**
+	 * Sets the value of an argument by name.
+	 * @param name the name of the argument
+	 * @param value the value to set
+	 */
 	public void setArgumentValue(String name, String value)
 	{
 		Argument arg = getArgument(name);
@@ -261,11 +346,19 @@ public class Action
 		arg.setValue(value);
 	}
 
+	/**
+	 * Sets the value of an argument by name using an integer value.
+	 * @param name the name of the argument
+	 * @param value the integer value to set
+	 */
 	public void setArgumentValue(String name, int value)
 	{
 		setArgumentValue(name, Integer.toString(value));
 	}
 
+	/**
+	 * Clears all output argument values by setting them to empty strings.
+	 */
 	private void clearOutputAgumentValues()
 	{
 		ArgumentList allArgList = getArgumentList();
@@ -278,6 +371,11 @@ public class Action
 		}
 	}
 
+	/**
+	 * Gets the value of an argument by name.
+	 * @param name the name of the argument
+	 * @return the argument value, or empty string if argument not found
+	 */
 	public String getArgumentValue(String name)
 	{
 		Argument arg = getArgument(name);
@@ -286,6 +384,11 @@ public class Action
 		return arg.getValue();
 	}
 
+	/**
+	 * Gets the integer value of an argument by name.
+	 * @param name the name of the argument
+	 * @return the argument integer value, or 0 if argument not found
+	 */
 	public int getArgumentIntegerValue(String name)
 	{
 		Argument arg = getArgument(name);
@@ -298,6 +401,10 @@ public class Action
 	//	UserData
 	////////////////////////////////////////////////
 
+	/**
+	 * Gets the action data associated with this action.
+	 * @return the action data object
+	 */
 	private ActionData getActionData()
 	{
 		Node node = getActionNode();
@@ -314,16 +421,29 @@ public class Action
 	//	controlAction
 	////////////////////////////////////////////////
 
+	/**
+	 * Gets the action listener for this action.
+	 * @return the action listener
+	 */
 	public ActionListener getActionListener()
 	{
 		return getActionData().getActionListener();
 	}
 
+	/**
+	 * Sets the action listener for this action.
+	 * @param listener the action listener to set
+	 */
 	public void setActionListener(ActionListener listener)
 	{
 		getActionData().setActionListener(listener);
 	}
 
+	/**
+	 * Performs the action listener for this action.
+	 * @param actionReq the action request
+	 * @return true if the listener was called, false if no listener is set
+	 */
 	public boolean performActionListener(ActionRequest actionReq)
 	{
 		ActionListener listener = getActionListener();
@@ -349,16 +469,28 @@ public class Action
 	//	ActionControl
 	////////////////////////////////////////////////
 
+	/**
+	 * Gets the control response for this action.
+	 * @return the control response
+	 */
 	private ControlResponse getControlResponse()
 	{
 		return getActionData().getControlResponse();
 	}
 
+	/**
+	 * Sets the control response for this action.
+	 * @param res the control response to set
+	 */
 	private void setControlResponse(ControlResponse res)
 	{
 		getActionData().setControlResponse(res);
 	}
 
+	/**
+	 * Gets the control status for this action.
+	 * @return the UPnP status
+	 */
 	public UPnPStatus getControlStatus()
 	{
 		return getControlResponse().getUPnPError();
@@ -368,16 +500,21 @@ public class Action
 	//	postControlAction
 	////////////////////////////////////////////////
 
+	/**
+	 * Posts this control action without binding to a specific local address.
+	 * @return true if successful, false otherwise
+	 */
 	public boolean postControlAction()
 	{
 		return postControlAction(null);
 	}
 
 	/**
-	 *  I2P - bind HTTP socket to specified local host address
-	 *
-	 *  @param fromHost null to not bind to a particlar local address
-	 *  @since 0.9.50
+	 * Posts this control action, optionally binding to a specific local host address.
+	 * I2P - bind HTTP socket to specified local host address
+	 * @param fromHost null to not bind to a particular local address
+	 * @return true if successful, false otherwise
+	 * @since 0.9.50
 	 */
 	public boolean postControlAction(String fromHost)
 	{
@@ -413,6 +550,9 @@ public class Action
 	//	Debug
 	////////////////////////////////////////////////
 
+	/**
+	 * Prints debug information about this action and its arguments.
+	 */
 	public void print()
 	{
 		Debug.message("Action : " + getName());
@@ -431,19 +571,33 @@ public class Action
 	//	UPnPStatus
 	////////////////////////////////////////////////
 
+	/** The UPnP status for this action */
 	private UPnPStatus upnpStatus = new UPnPStatus();
 
+	/**
+	 * Sets the status code and description for this action.
+	 * @param code the status code
+	 * @param descr the status description
+	 */
 	public void setStatus(int code, String descr)
 	{
 		upnpStatus.setCode(code);
 		upnpStatus.setDescription(descr);
 	}
 
+	/**
+	 * Sets the status code for this action using the default description.
+	 * @param code the status code
+	 */
 	public void setStatus(int code)
 	{
 		setStatus(code, UPnPStatus.code2String(code));
 	}
 
+	/**
+	 * Gets the UPnP status for this action.
+	 * @return the UPnP status
+	 */
 	public UPnPStatus getStatus()
 	{
 		return upnpStatus;
@@ -453,13 +607,22 @@ public class Action
 	//	userData
 	////////////////////////////////////////////////
 
+	/** User-defined data associated with this action */
 	private Object userData = null;
 
+	/**
+	 * Sets user-defined data for this action.
+	 * @param data the user data to set
+	 */
 	public void setUserData(Object data)
 	{
 		userData = data;
 	}
 
+	/**
+	 * Gets the user-defined data associated with this action.
+	 * @return the user data
+	 */
 	public Object getUserData()
 	{
 		return userData;

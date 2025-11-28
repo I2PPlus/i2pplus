@@ -6,21 +6,40 @@ package net.i2p.router.transport.udp;
  */
 interface ACKBitfield {
 
-    /** what message is this partially ACKing? */
+    /**
+     * Get the message ID this is partially ACKing.
+     * 
+     * @return message ID
+     */
     public long getMessageId();
 
-    /** how many fragments are covered in this bitfield? */
+    /**
+     * Get how many fragments are covered in this bitfield.
+     * 
+     * @return number of fragments
+     */
     public int fragmentCount();
 
-    /** has the given fragment been received? */
+    /**
+     * Check if the given fragment has been received.
+     * 
+     * @param fragmentNum fragment number to check
+     * @return true if fragment has been received
+     */
     public boolean received(int fragmentNum);
 
-    /** has the entire message been received completely? */
+    /**
+     * Check if the entire message has been received completely.
+     * 
+     * @return true if message has been completely received
+     */
     public boolean receivedComplete();
 
     /**
      *  Number of fragments acked in this bitfield.
      *  Faster than looping through received()
+     *  
+     *  @return number of fragments acked
      *  @since 0.9.16
      */
     public int ackCount();

@@ -9,7 +9,16 @@ import java.util.ArrayList;
  *
  * @since 0.9.40
  */
+/**
+ * Counter for tracking access attempts.
+ */
 class AccessCounter {
+
+    /**
+     * Create a new access counter.
+     */
+    AccessCounter() {
+    }
 
     /**
      * List of timestamps of each connection attempt
@@ -26,6 +35,8 @@ class AccessCounter {
     }
 
     /**
+     * Check if the given threshold has been breached.
+     * 
      * @param threshold definition of a threshold
      * @param now current time
      * @return true if the given threshold has been breached

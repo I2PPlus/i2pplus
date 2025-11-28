@@ -56,9 +56,12 @@
  * </tr>
  * </tbody>
  * </table>
- * <table>
- * <caption>And there are five 'boolean' filters:</caption>
- * <tbody>
+* <table>
+* <caption>Boolean filters:</caption>
+* <tbody>
+* <tr>
+* <td colspan=2 style=text-align:left>And there are five 'boolean' filters:</td>
+ * </tr>
  * <tr>
  * <td><a href="TrueFileFilter.html">TrueFileFilter</a></td>
  * <td>Accept all files</td>

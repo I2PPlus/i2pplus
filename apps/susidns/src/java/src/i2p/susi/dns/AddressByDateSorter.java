@@ -12,7 +12,17 @@ import java.util.Comparator;
  *  Newest first, then alphabetical
  *  @since 0.9.66
  */
+/**
+ * Comparator for sorting AddressBean by date (newest first, then alphabetical).
+ * @since 0.9.66
+ */
 public class AddressByDateSorter implements Comparator<AddressBean>, Serializable {
+    /**
+     * Default constructor.
+     */
+    public AddressByDateSorter() {
+    }
+
     public int compare(AddressBean a, AddressBean b) {
         String ad = a.getProp("a");
         String bd = b.getProp("a");

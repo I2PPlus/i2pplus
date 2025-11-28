@@ -23,6 +23,9 @@
 
 package com.vuze.plugins.mlab.tools.ndt.swingemu;
 
+/**
+ * Interface for handling action events in swing emulation.
+ */
 public interface ActionListener {
 
 }

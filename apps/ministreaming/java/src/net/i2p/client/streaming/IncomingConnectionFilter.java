@@ -9,6 +9,8 @@ import net.i2p.data.Destination;
 public interface IncomingConnectionFilter {
 
     /**
+     * Check if the destination should be allowed to establish an incoming connection.
+     * 
      * @param d the destination that wants to establish an
      * incoming connection
      * @return true if the connection should be allowed.

@@ -26,17 +26,43 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.util.SecureFileOutputStream;
 
+/**
+ * Bean for managing I2P address books.
+ * Provides functionality for loading, filtering, and managing address entries.
+ */
 public class AddressbookBean extends BaseBean {
-    protected String book, filter, search, hostname, destination;
-    protected int beginIndex, endIndex;
+    /** The address book name */
+    protected String book;
+    /** The filter string */
+    protected String filter;
+    /** The search string */
+    protected String search;
+    /** The hostname */
+    protected String hostname;
+    /** The destination */
+    protected String destination;
+    /** Beginning index for pagination */
+    protected int beginIndex;
+    /** Ending index for pagination */
+    protected int endIndex;
     private Properties addressbook;
     private int trClass;
+    /** List of entries marked for deletion */
     protected final LinkedList<String> deletionMarks;
+    /** Comparator for sorting addresses */
     protected static final Comparator<AddressBean> sorter;
     private static final int DISPLAY_SIZE = 100;
     static {sorter = new AddressByNameSorter();}
+    /**
+     * Returns the search string.
+     * @return the search string
+     */
     public String getSearch() {return search;}
 
+    /**
+     * Sets the search string.
+     * @param s the search string to set
+     */
     public void setSearch(String s) {
         search = DataHelper.stripHTML(s).trim(); // XSS
         if (search.startsWith("http://")) {search = search.substring(7);}
@@ -45,12 +71,39 @@ public class AddressbookBean extends BaseBean {
         if (slash > 0) {search = search.substring(0, slash);}
     }
 
+    /**
+     * Returns whether a filter is active.
+     * @return true if a filter is active
+     */
     public boolean isHasFilter() {return filter != null && filter.length() > 0;}
+    
+    /**
+     * Sets the table row class.
+     * @param trClass the table row class
+     */
     public void setTrClass(int trClass) {this.trClass = trClass;}
+    
+    /**
+     * Gets the table row class.
+     * @return the table row class
+     */
     public int getTrClass() {trClass = 1 - trClass; return trClass;}
+    
+    /**
+     * Returns whether the address book is empty.
+     * @return true if the address book is empty
+     */
     public boolean isIsEmpty() {return !isNotEmpty();}
+    
+    /**
+     * Returns whether the address book is not empty.
+     * @return true if the address book is not empty
+     */
     public boolean isNotEmpty() {return addressbook != null && !addressbook.isEmpty();}
 
+    /**
+     * Default constructor.
+     */
     public AddressbookBean() {
         super();
         deletionMarks = new LinkedList<String>();
@@ -58,6 +111,10 @@ public class AddressbookBean extends BaseBean {
         endIndex = DISPLAY_SIZE - 1;
     }
 
+    /**
+     * Returns the file name for the address book.
+     * @return the file name
+     */
     public String getFileName() {
         loadConfig();
         String filename = properties.getProperty(getBook() + "_addressbook");
@@ -67,12 +124,24 @@ public class AddressbookBean extends BaseBean {
         return filename;
     }
 
+    /**
+     * Returns the display name for the address book.
+     * @return the display name
+     */
     public String getDisplayName() {return getFileName();}
+    
+    /** Array of address entries */
     protected AddressBean[] entries;
+    
+    /**
+     * Returns the address entries.
+     * @return the address entries
+     */
     public AddressBean[] getEntries() {return entries;}
 
     /**
     * This always returns a valid book, non-null.
+    * @return the book name
     */
     public String getBook() {
         if (book == null || (!book.equalsIgnoreCase("master") &&
@@ -84,12 +153,19 @@ public class AddressbookBean extends BaseBean {
         return book;
     }
 
+    /**
+     * Sets the book name.
+     * @param book the book name to set
+     */
     public void setBook(String book) {
         if ("local".equals(book)) {book = "master";}
         this.book = DataHelper.stripHTML(book); // XSS
     }
 
-    /** Load addressbook and apply filter, returning messages about this. */
+    /** 
+     * Load addressbook and apply filter, returning messages about this.
+     * @return messages about loading the address book
+     */
     public String getLoadBookMessages() {
         loadConfig(); // Config and addressbook now loaded here, not needed in getMessages()
         addressbook = new Properties();
@@ -135,6 +211,10 @@ public class AddressbookBean extends BaseBean {
     *  Format a message about filtered addressbook size, and the number of displayed entries
     *  addressbook.jsp catches the case where the whole book is empty.
     */
+    /**
+     * Generates a message about the loaded address book.
+     * @return message about loading
+     */
     protected String generateLoadMessage() {
         String message;
         String filterArg = "";
@@ -189,7 +269,10 @@ public class AddressbookBean extends BaseBean {
         return message;
     }
 
-    /** Perform actions, returning messages about this. */
+    /** 
+     * Perform actions, returning messages about this.
+     * @return messages about the performed actions
+     */
     public String getMessages() {
         String message = ""; // Loading config and addressbook moved into getLoadBookMessages()
         boolean fail = false;
@@ -319,6 +402,10 @@ public class AddressbookBean extends BaseBean {
         }
     }
 
+    /**
+     * Returns the filter string.
+     * @return the filter string
+     */
     public String getFilter() {return filter;}
 
     /**
@@ -337,6 +424,10 @@ public class AddressbookBean extends BaseBean {
         return s.equals("router") || s.equals("master") || s.equals("local") || s.equals("published") || s.equals("private");
     }
 
+    /**
+     * Sets the filter string.
+     * @param filter the filter string to set
+     */
     public void setFilter(String filter) {
         if (filter != null && (filter.length() == 0 || filter.equalsIgnoreCase("none"))) {
             filter = null;
@@ -345,36 +436,92 @@ public class AddressbookBean extends BaseBean {
         this.filter = DataHelper.stripHTML(filter); // XSS
     }
 
+    /**
+     * Returns the destination string.
+     * @return the destination string
+     */
     public String getDestination() {return destination;}
+    
+    /**
+     * Sets the destination string.
+     * @param destination the destination string to set
+     */
     public void setDestination(String destination) {this.destination = DataHelper.stripHTML(destination).trim();} // XSS
+    
+    /**
+     * Returns the hostname string.
+     * @return the hostname string
+     */
     public String getHostname() {return hostname;}
+    
+    /**
+     * Resets the deletion marks.
+     * @param dummy dummy parameter
+     */
     public void setResetDeletionMarks(String dummy) {deletionMarks.clear();}
+    
+    /**
+     * Marks an entry for deletion.
+     * @param name the name to mark for deletion
+     */
     public void setMarkedForDeletion(String name) {deletionMarks.addLast(DataHelper.stripHTML(name));} // XSS
+    
+    /**
+     * Sets the hostname string.
+     * @param hostname the hostname to set
+     */
     public void setHostname(String hostname) {this.hostname = DataHelper.stripHTML(hostname).trim();} // XSS
+    /**
+     * Returns the beginning index as integer.
+     * @return the beginning index
+     */
     protected int getBeginInt() {return Math.max(0, Math.min(resultSize() - 1, beginIndex));}
+    
+    /**
+     * Returns the beginning index as string.
+     * @return the beginning index as string
+     */
     public String getBegin() {return Integer.toString(getBeginInt());}
 
     /**
-    *  @return beginning index into results
-    *  @since 0.8.7
-    */
+     * Gets the beginning index into results.
+     * @return beginning index into results
+     *  @since 0.8.7
+     */
     public String getResultBegin() {return isPrefiltered() ? "0" : Integer.toString(getBeginInt());}
 
+    /**
+     * Sets the beginning index.
+     * @param s the beginning index as string
+     */
     public void setBegin(String s) {
         try {beginIndex = Integer.parseInt(s);}
         catch (NumberFormatException nfe) {}
     }
 
+    /**
+     * Returns the ending index as integer.
+     * @return the ending index
+     */
     protected int getEndInt() {return Math.max(0, Math.max(getBeginInt(), Math.min(resultSize() - 1, endIndex)));}
 
+    /**
+     * Returns the ending index as string.
+     * @return the ending index as string
+     */
     public String getEnd() {return Integer.toString(getEndInt());}
 
     /**
-    *  @return ending index into results
-    *  @since 0.8.7
-    */
+     * Gets ending index into results.
+     * @return ending index into results
+     *  @since 0.8.7
+     */
     public String getResultEnd() {return Integer.toString(isPrefiltered() ? resultSize() - 1 : getEndInt());}
 
+    /**
+     * Sets the ending index.
+     * @param s the ending index as string
+     */
     public void setEnd(String s) {
         try {endIndex = Integer.parseInt(s);}
         catch (NumberFormatException nfe) {}
@@ -385,18 +532,25 @@ public class AddressbookBean extends BaseBean {
     *  or must we index into it?
     *  @since 0.8.7
     */
+    /**
+     * Checks if entries are pre-filtered.
+     * @return true if pre-filtered
+     * @since 0.8.7
+     */
     protected boolean isPrefiltered() {return false;}
 
     /**
-    *  @return the size of the lookup result
-    *  @since 0.8.7
-    */
+     * Gets the size of the lookup result.
+     * @return the size of the lookup result
+     *  @since 0.8.7
+     */
     protected int resultSize() {return entries.length;}
 
     /**
-    *  @return the total size of the address book
-    *  @since 0.8.7
-    */
+     * Gets the total size of the address book.
+     * @return the total size of the address book
+     *  @since 0.8.7
+     */
     protected int totalSize() {return entries.length;}
 
 }

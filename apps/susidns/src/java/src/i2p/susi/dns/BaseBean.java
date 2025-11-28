@@ -38,15 +38,22 @@ public class BaseBean {
     }
 
     /**
+     * Returns the addressbook directory.
+     * @return the addressbook directory
      * @since 0.9.13 moved from ConfigBean.addressbookPrefix
      */
     protected File addressbookDir() {return new File(_context.getRouterDir(), ADDRESSBOOK_DIR);}
 
     /**
+     * Returns the config file.
+     * @return the config file
      * @since 0.9.13 moved from ConfigBean.configFileName
      */
     protected File configFile() {return new File(addressbookDir(), CONFIG_FILE);}
 
+    /**
+     * Loads the configuration if needed.
+     */
     protected void loadConfig() {
         synchronized (BaseBean.class) {
             long currentTime = System.currentTimeMillis();
@@ -56,6 +63,7 @@ public class BaseBean {
     }
 
     /**
+     * Reloads the configuration from file.
      * @since 0.9.13 moved from ConfigBean
      */
     protected void reload() {
@@ -80,6 +88,7 @@ public class BaseBean {
 
     /**
      * Returns the theme path
+     * @return the theme path
      * @since 0.9.1
      */
     public String getTheme() {
@@ -105,6 +114,7 @@ public class BaseBean {
 
     /**
      * Returns the theme name
+     * @return the theme name
      * @since 0.9.64+
      */
     public String getThemeName() {
@@ -141,11 +151,15 @@ public class BaseBean {
             return themes;
     }
 
-    /** @since 0.9.59+ */
+    /**
+     * Checks if Sora font should be used.
+     * @return true if Sora font is enabled
+     * @since 0.9.59+ */
     public boolean useSoraFont() {return _context.getBooleanProperty(RC_PROP_ENABLE_SORA_FONT);}
 
     /**
      * Determine if a user-provided override.css file is active
+     * @return true if override.css is active
      * @since 0.9.65+
      */
     public boolean isOverrideCssActive() {
@@ -157,16 +171,22 @@ public class BaseBean {
     }
 
     /**
+     * Returns the action.
+     * @return the action
      * @since 0.9.13 moved from subclasses
      */
     public String getAction() {return action;}
 
     /**
+     * Sets the action.
+     * @param action the action to set
      * @since 0.9.13 moved from subclasses
      */
     public void setAction(String action) {this.action = DataHelper.stripHTML(action);}
 
     /**
+     * Returns a new serial number.
+     * @return a new serial number
      * @since 0.9.13 moved from subclasses
      */
     public String getSerial() {
@@ -176,40 +196,59 @@ public class BaseBean {
     }
 
     /**
+     * Sets the serial.
+     * @param serial the serial to set
      * @since 0.9.13 moved from subclasses
      */
     public void setSerial(String serial) {this.serial = DataHelper.stripHTML(serial);}
 
     /**
+     * Stores the HTTP method.
+     * @param method the HTTP method to store
      * @since 0.9.65
      */
     public void storeMethod(String method) {this.method = method;}
 
     /**
-     * Translate
+     * Translate a string.
+     * @param s the string to translate
+     * @return the translated string
      * @since 0.9.13 moved from subclasses
      */
     protected static String _t(String s) {return Messages.getString(s);}
 
     /**
-     * Translate
+     * Translate a string with one parameter.
+     * @param s the string to translate
+     * @param o the parameter
+     * @return the translated string
      * @since 0.9.13 moved from subclasses
      */
     protected static String _t(String s, Object o) {return Messages.getString(s, o);}
 
     /**
-     * Translate
+     * Translate a string with two parameters.
+     * @param s the string to translate
+     * @param o the first parameter
+     * @param o2 the second parameter
+     * @return the translated string
      * @since 0.9.13 moved from subclasses
      */
     protected static String _t(String s, Object o, Object o2) {return Messages.getString(s, o, o2);}
 
     /**
-     * Translate (ngettext)
+     * Translate a string with plural form (ngettext).
+     * @param s the singular form
+     * @param p the plural form
+     * @param n the count
+     * @return the translated string
      * @since 0.9.13 moved from subclasses
      */
     protected static String ngettext(String s, String p, int n) {return Messages.getString(n, s, p);}
 
     /**
+     * Log a debug message.
+     * @param msg the message to log
      * @since 0.9.13 moved from Debug
      */
     protected void debug(String msg) {
@@ -218,6 +257,8 @@ public class BaseBean {
     }
 
     /**
+     * Log a warning message.
+     * @param t the throwable to log
      * @since 0.9.13 moved from Debug
      */
     protected void warn(Throwable t) {

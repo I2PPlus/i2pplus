@@ -21,6 +21,10 @@ import net.i2p.data.Certificate;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 
+/**
+ * Bean representing an I2P address entry with hostname and destination.
+ * Provides methods for handling I2P addresses and their properties.
+ */
 public class AddressBean {
     private final String name;
     private final byte[] dest;
@@ -37,11 +41,19 @@ public class AddressBean {
         haveIDN = h;
     }
 
+    /**
+     * Constructs an AddressBean with hostname and base64 encoded destination.
+     * @param name the hostname
+     * @param destination the base64 encoded destination
+     */
     public AddressBean(String name, String destination) {
         this(name, Base64.decode(destination));
     }
 
     /**
+     * Constructs an AddressBean with hostname and destination object.
+     * @param name the hostname
+     * @param destination the destination object
      * @since 0.9.66
      */
     public AddressBean(String name, Destination destination) {
@@ -49,6 +61,9 @@ public class AddressBean {
     }
 
     /**
+     * Constructs an AddressBean with hostname and destination as byte array.
+     * @param name the hostname
+     * @param destination the destination as byte array
      * @since 0.9.66
      */
     public AddressBean(String name, byte[] destination) {
@@ -59,10 +74,15 @@ public class AddressBean {
         }
     }
 
+    /**
+     * Gets the destination as base64 encoded string.
+     * @return the base64 encoded destination
+     */
     public String getDestination() {return Base64.encode(dest);}
 
     /**
      * The ASCII (Punycode) name
+     * @return the hostname
      */
     public String getName() {return name;}
 
@@ -75,6 +95,7 @@ public class AddressBean {
 
     /**
      * The Unicode name, translated from Punycode
+     * @param host the hostname to convert
      * @return the original string on error
      * @since 0.8.7
      */
@@ -85,6 +106,7 @@ public class AddressBean {
 
     /**
      * Is the ASCII name Punycode-encoded?
+     * @return true if the name is Punycode-encoded
      * @since 0.8.7
      */
     public boolean isIDN() {
@@ -150,41 +172,74 @@ public class AddressBean {
         return host;
     }
 
-    /** @since 0.8.7 */
+    /**
+     * Gets the base32 hash address for this destination.
+     * @return the base32 hash address
+     * @since 0.8.7
+     */
     public String getB32() {
         byte[] hash = I2PAppContext.getGlobalContext().sha().calculateHash(dest).getData();
         return Base32.encode(hash) + ".b32.i2p";
     }
 
-    /** @since 0.9 */
+    /**
+     * Gets the base64 hash of the destination.
+     * @return the base64 hash
+     * @since 0.9
+     */
     public String getB64() {
         return I2PAppContext.getGlobalContext().sha().calculateHash(dest).toBase64();
     }
 
-    /** @since 0.8.7 */
+    /**
+     * Sets the properties for this address entry.
+     * @param p the properties to set
+     * @since 0.8.7
+     */
     public void setProperties(Properties p) {props = p;}
 
-    /** @since 0.8.7 */
+    /**
+     * Gets the source URL or name for this address entry.
+     * @return the source URL or name
+     * @since 0.8.7
+     */
     public String getSource() {
         String rv = getProp("s");
         if (rv.startsWith("http://")) {rv = "<a href=\"" + rv + "\" target=_top>" + rv + "</a>";}
         return rv;
     }
 
-    /** @since 0.8.7 */
+    /**
+     * Gets the date when this address was added.
+     * @return the date when added
+     * @since 0.8.7
+     */
     public String getAdded() {return getDate("a");}
 
-    /** @since 0.8.7 */
+    /**
+     * Gets the date when this address was last modified.
+     * @return the date when modified
+     * @since 0.8.7
+     */
     public String getModded() {return getDate("m");}
 
-    /** @since 0.9.26 */
+    /**
+     * Checks if this address has been validated.
+     * @return true if validated
+     * @since 0.9.26
+     */
     public boolean isValidated() {return Boolean.parseBoolean(getProp("v"));}
 
-    /** @since 0.8.7 */
+    /**
+     * Gets the notes for this address entry, HTML escaped.
+     * @return the notes, HTML escaped
+     * @since 0.8.7
+     */
     public String getNotes() {return DataHelper.escapeHTML(getProp("notes"));}
 
     /**
      * Do this the easy way
+     * @return the certificate type as a string
      * @since 0.8.7
      */
     public String getCert() {
@@ -207,6 +262,7 @@ public class AddressBean {
 
     /**
      * Do this the easy way
+     * @return the signature type as a string
      * @since 0.9.12
      */
     public String getSigType() {
@@ -221,6 +277,7 @@ public class AddressBean {
 
     /**
      * Do this the easy way
+     * @return the encryption type as a string
      * @since 0.9.66
      */
     public String getEncType() {
@@ -234,6 +291,8 @@ public class AddressBean {
     }
 
     /**
+     * Gets a property value for this address entry.
+     * @param p the property key
      * @return non-null, "" if not found
      * @since 0.8.7, package private since 0.9.66
      */
@@ -243,7 +302,11 @@ public class AddressBean {
         return rv != null ? rv : "";
     }
 
-    /** @since 0.8.7 */
+    /**
+     * @param key the property key
+     * @return the formatted date
+     * @since 0.8.7
+     */
     private String getDate(String key) {
         String d = getProp(key);
         if (d.length() > 0) {

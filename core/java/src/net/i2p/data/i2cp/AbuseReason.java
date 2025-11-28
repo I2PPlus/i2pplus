@@ -26,13 +26,26 @@ import net.i2p.data.DataStructureImpl;
 public class AbuseReason extends DataStructureImpl {
     private String _reason;
 
+    /**
+     * Create a new abuse reason.
+     */
     public AbuseReason() {
     }
 
+    /**
+     * Get the abuse reason.
+     * 
+     * @return the abuse reason
+     */
     public String getReason() {
         return _reason;
     }
 
+    /**
+     * Set abuse reason.
+     * 
+     * @param reason the abuse reason
+     */
     public void setReason(String reason) {
         _reason = reason;
     }

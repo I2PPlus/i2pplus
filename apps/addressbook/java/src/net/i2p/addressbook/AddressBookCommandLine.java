@@ -15,16 +15,24 @@ import net.i2p.CoreVersion;
  */
 public class AddressBookCommandLine extends net.i2p.util.CommandLine {
 
+    /** List of address book specific classes */
     protected static final List<String> ACLASSES = Arrays.asList(new String[] {
         "net.i2p.addressbook.HostTxtParser",
         "net.i2p.router.naming.BlockfileNamingService",
         "net.metanotion.io.block.BlockFile",
     });
 
+    /**
+     * Protected constructor for subclass use.
+     */
     protected AddressBookCommandLine() {
         // Protected constructor for subclass use
     }
 
+    /**
+     * Main entry point for address book command line interface.
+     * @param args command line arguments
+     */
     public static void main(String args[]) {
         List<String> classes = new ArrayList<String>(ACLASSES.size() + CLASSES.size());
         classes.addAll(ACLASSES);

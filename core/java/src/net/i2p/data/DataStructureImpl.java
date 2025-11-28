@@ -73,10 +73,13 @@ public abstract class DataStructureImpl implements DataStructure, Serializable {
         }
     }
 
-    /**
-     * Repeated reads until the buffer is full or IOException is thrown
+/**
+     * Repeated reads until buffer is full or IOException is thrown
      *
+     * @param in input stream to read from
+     * @param target byte array to read into
      * @return number of bytes read (should always equal target.length)
+     * @throws IOException if an I/O error occurs
      */
     protected int read(InputStream in, byte target[]) throws IOException {
         return DataHelper.read(in, target);

@@ -31,6 +31,7 @@ public class SimpleTimer2 {
 
     /**
      *  If you have a context, use context.simpleTimer2() instead
+     *  @return the global SimpleTimer2 instance
      */
     public static SimpleTimer2 getInstance() {
         return I2PAppContext.getGlobalContext().simpleTimer2();
@@ -49,6 +50,7 @@ public class SimpleTimer2 {
     /**
      *  To be instantiated by the context.
      *  Others should use context.simpleTimer2() instead
+     *  @param context the I2P application context
      */
     public SimpleTimer2(I2PAppContext context) {
         this(context, "SimpleTimer2");
@@ -57,6 +59,8 @@ public class SimpleTimer2 {
     /**
      *  To be instantiated by the context.
      *  Others should use context.simpleTimer2() instead
+     *  @param context the I2P application context
+     *  @param name the timer name
      */
     protected SimpleTimer2(I2PAppContext context, String name) {
         this(context, name, true);
@@ -65,6 +69,9 @@ public class SimpleTimer2 {
     /**
      *  To be instantiated by the context.
      *  Others should use context.simpleTimer2() instead
+     *  @param context the I2P application context
+     *  @param name the timer name
+     *  @param prestartAllThreads whether to prestart all threads
      *  @since 0.9
      */
     protected SimpleTimer2(I2PAppContext context, String name, boolean prestartAllThreads) {
@@ -183,6 +190,7 @@ public class SimpleTimer2 {
      * For transition from SimpleScheduler. Uncancellable.
      * New code should use SimpleTimer2.TimedEvent.
      *
+     * @param event the event to run periodically
      * @since 0.9.20
      * @param timeoutMs run subsequent iterations of this event every timeoutMs ms, 5000 minimum
      * @throws IllegalArgumentException if timeoutMs less than 5000
@@ -202,6 +210,7 @@ public class SimpleTimer2 {
      * For transition from SimpleScheduler. Uncancellable.
      * New code should use SimpleTimer2.TimedEvent.
      *
+     * @param event the event to run periodically
      * @since 0.9.20
      * @param delay run the first iteration of this event after delay ms
      * @param timeoutMs run subsequent iterations of this event every timeoutMs ms, 5000 minimum
@@ -280,25 +289,37 @@ public class SimpleTimer2 {
         /** whether this was cancelled during RUNNING state.  LOCKING: this */
         private boolean _cancelAfterRun;
 
-        /** must call schedule() later */
-        public TimedEvent(SimpleTimer2 pool) {
-            _pool = pool;
-            _fuzz = DEFAULT_FUZZ;
-            _log = I2PAppContext.getGlobalContext().logManager().getLog(SimpleTimer2.class);
-            _state = TimedEventState.IDLE;
-        }
+/**
+     * Create a new timed event.
+     * Must call schedule() later.
+     * 
+     * @param pool the timer pool
+     */
+    public TimedEvent(SimpleTimer2 pool) {
+        _pool = pool;
+        _fuzz = DEFAULT_FUZZ;
+        _log = I2PAppContext.getGlobalContext().logManager().getLog(SimpleTimer2.class);
+        _state = TimedEventState.IDLE;
+    }
 
-        /** automatically schedules, don't use this one if you have other things to do first */
-        public TimedEvent(SimpleTimer2 pool, long timeoutMs) {
-            this(pool);
-            schedule(timeoutMs);
-        }
+/**
+     * Create a new timed event and automatically schedules it.
+     * Don't use this one if you have other things to do first.
+     * 
+     * @param pool the timer pool
+     * @param timeoutMs timeout in milliseconds
+     */
+    public TimedEvent(SimpleTimer2 pool, long timeoutMs) {
+        this(pool);
+        schedule(timeoutMs);
+    }
 
         /**
          * Don't bother rescheduling if +/- this many ms or less.
          * Use this to reduce timer queue and object churn for a sloppy timer like
          * an inactivity timer.
          * Default 3 ms.
+         * @param fuzz the fuzz value in milliseconds
          */
         public synchronized void setFuzz(int fuzz) {
             _fuzz = fuzz;
@@ -307,6 +328,7 @@ public class SimpleTimer2 {
         /**
          *  Slightly more efficient than reschedule().
          *  Does nothing if already scheduled.
+         *  @param timeoutMs the timeout in milliseconds
          */
         public synchronized void schedule(long timeoutMs) {
             if (_log.shouldDebug())
@@ -341,7 +363,7 @@ public class SimpleTimer2 {
          * May be called from within timeReached(), but schedule() is
          * better there.
          *
-         * @param timeoutMs
+         * @param timeoutMs timeout in milliseconds
          */
         public void reschedule(long timeoutMs) {
             reschedule(timeoutMs, true);
@@ -351,7 +373,7 @@ public class SimpleTimer2 {
          * May be called from within timeReached(), but schedule() is
          * better there.
          *
-         * @param timeoutMs
+         * @param timeoutMs timeout in milliseconds
          * @param useEarliestTime if its already scheduled, use the earlier of the
          *                        two timeouts, else use the later
          */
@@ -391,7 +413,7 @@ public class SimpleTimer2 {
 
         /**
          * Always use the new time - ignores fuzz
-         * @param timeoutMs
+         * @param timeoutMs timeout in milliseconds
          */
         public synchronized void forceReschedule(long timeoutMs) {
             // don't cancel while running!
@@ -400,7 +422,11 @@ public class SimpleTimer2 {
             schedule(timeoutMs);
         }
 
-        /** @return true if cancelled */
+        /**
+         * Cancel the timed event.
+         * 
+         * @return true if cancelled
+         */
         public synchronized boolean cancel() {
             // always clear
             _rescheduleAfterRun = false;
@@ -555,6 +581,9 @@ public class SimpleTimer2 {
         public abstract void timeReached();
     }
 
+    /**
+     * @return the timer name
+     */
     @Override
     public String toString() {
         return _name;
@@ -585,6 +614,7 @@ public class SimpleTimer2 {
         /**
          * Schedule periodic event
          *
+         * @param pool the timer pool
          * @param delay run the first iteration of this event after delay ms
          * @param timeoutMs run subsequent iterations of this event every timeoutMs ms, 5000 minimum
          * @throws IllegalArgumentException if timeoutMs less than 5000

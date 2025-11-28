@@ -24,17 +24,28 @@ import org.cybergarage.http.*;
 import org.cybergarage.soap.*;
 import org.cybergarage.xml.*;
 
+/**
+ * Represents a UPnP action control response.
+ * Extends ControlResponse to provide action-specific functionality.
+ */
 public class ActionResponse extends ControlResponse
 {
 	////////////////////////////////////////////////
 	//	Constructor
 	////////////////////////////////////////////////
 
+	/**
+	 * Default constructor
+	 */
 	public ActionResponse()
 	{
 		setHeader(HTTP.EXT, "");
 	}
 
+	/**
+	 * Constructs an ActionResponse from a SOAP response.
+	 * @param soapRes the SOAP response to wrap
+	 */
 	public ActionResponse(SOAPResponse soapRes)
 	{
 		super(soapRes);
@@ -46,6 +57,10 @@ public class ActionResponse extends ControlResponse
 	//	Response
 	////////////////////////////////////////////////
 
+	/**
+	 * Sets the response for the specified action.
+	 * @param action the action to set response for
+	 */
 	public void setResponse(Action action)
 	{
 		setStatusCode(HTTPStatus.OK);
@@ -58,6 +73,10 @@ public class ActionResponse extends ControlResponse
 		setContent(envNode);
 	}
 
+	/**
+	 * @param action the action to create response node for
+	 * @return the created response node
+	 */
 	private Node createResponseNode(Action action)
 	{
 		String actionName = action.getName();
@@ -89,6 +108,9 @@ public class ActionResponse extends ControlResponse
 	//	getResponse
 	////////////////////////////////////////////////
 
+	/**
+	 * @return the action response node
+	 */
 	private Node getActionResponseNode()
 	{
 		Node bodyNode = getBodyNode();
@@ -98,6 +120,10 @@ public class ActionResponse extends ControlResponse
 	}
 
 
+	/**
+	 * Gets the argument list from the response.
+	 * @return the argument list from the response
+	 */
 	public ArgumentList getResponse()
 	{
 		ArgumentList argList = new ArgumentList();

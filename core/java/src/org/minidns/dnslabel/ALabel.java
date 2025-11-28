@@ -12,8 +12,15 @@ package org.minidns.dnslabel;
 
 import org.minidns.idna.MiniDnsIdna;
 
+/**
+ * Represents an ASCII label in DNS.
+ */
 public final class ALabel extends XnLabel {
 
+    /**
+     * Constructor for ASCII label.
+     * @param label ASCII string
+     */
     protected ALabel(String label) {
         super(label);
     }

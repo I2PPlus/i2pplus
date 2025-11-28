@@ -4,11 +4,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Aggregates RRD data values over time periods.
+ */
 class Aggregator {
+    /** Timestamps for data points */
     private final long[] timestamps;
+    /** Time step between data points */
     private final long step;
+    /** Data values */
     private final double[] values;
 
+    /**
+     * Constructor for aggregator.
+     * @param timestamps array of timestamps
+     * @param values array of data values
+     */
     Aggregator(long[] timestamps, double[] values) {
         assert timestamps.length == values.length : "Incompatible timestamps/values arrays (unequal lengths)";
         assert timestamps.length >= 2 : "At least two timestamps must be supplied";
@@ -17,6 +28,13 @@ class Aggregator {
         this.step = timestamps[1] - timestamps[0];
     }
 
+    /**
+     * Calculates aggregations for time range.
+     * @param tStart start time
+     * @param tEnd end time
+     * @return calculated aggregations
+     * @deprecated Use {@link org.rrd4j.data.Variable} instead
+     */
     @Deprecated
     Aggregates getAggregates(long tStart, long tEnd) {
         Aggregates agg = new Aggregates();
@@ -60,6 +78,13 @@ class Aggregator {
         return agg;
     }
 
+    /**
+     * Calculates percentile value for data in time range.
+     * @param tStart start time
+     * @param tEnd end time
+     * @param percentile percentile to calculate (0-100)
+     * @return percentile value
+     */
     double getPercentile(long tStart, long tEnd, double percentile) {
         List<Double> valueList = new ArrayList<>();
         // create a list of included datasource values (different from NaN)
