@@ -19,7 +19,6 @@ web-out.xml
 *.bak
 *.orig
 git.rev
-#override.properties
 
 # Temporary/build dirs
 build/
@@ -29,11 +28,12 @@ pkg-temp/
 classes/
 dist/
 !dist/README.md
-/installer/resources/locale/mo
+installer/resources/locale/mo
 /tmp
 /apps/jetty/jettylib
 *_jsp.java
 *.class
+./gradle
 
 # OSX temp dirs
 launchers/common/target
@@ -82,3 +82,34 @@ apps/routerconsole/jsp/favicon.ico
 !gradle/wrapper/
 !gradle/wrapper/*.jar
 !gradle/wrapper/*.properties
+
+# Gradle build output directories (comprehensive)
+**/build/
+!build/README.md
+!pkg-temp/README.md
+
+# Gradle-specific files
+.gradle/
+**/.gradle/
+**/gradlew
+**/gradlew.bat
+**/gradle-wrapper.jar
+
+# Gradle cache and daemon directories (if accidentally created in project)
+**/.gradle/caches/
+**/.gradle/daemon/
+**/.gradle/native/
+**/.gradle/notifications/
+**/.gradle/workers/
+**/.gradle/.tmp/
+**/.gradle/build-scan-data/
+
+# Gradle test output
+**/build/test-results/
+**/build/reports/
+**/build/tmp/
+**/build/classes/
+**/build/resources/
+
+# Gradle wrapper output
+gradle/wrapper/.gradle/
