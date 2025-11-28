@@ -3537,7 +3537,7 @@ public class UDPTransport extends TransportImpl {
         private static final long LONG_LOOP_TIME = 25*1000;
         private static final long EXPIRE_INCREMENT = 15*1000;
         private static final long EXPIRE_DECREMENT = 45*1000;
-        private static final long MAY_DISCON_TIMEOUT = 10*1000;
+        private static final long MAY_DISCON_TIMEOUT = 15*1000;
         private static final long RI_STORE_INTERVAL = 29*60*1000;
 
         public ExpirePeerEvent() {
