@@ -659,23 +659,27 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     private void locked_receiveSessionOrTokenRequestAfterRetry(UDPPacket packet) throws GeneralSecurityException {
         DatagramPacket pkt = packet.getPacket();
         SocketAddress from = pkt.getSocketAddress();
-        if (!from.equals(_aliceSocketAddress))
+        if (!from.equals(_aliceSocketAddress)) {
             throw new GeneralSecurityException("Address mismatch -> Request: " + _aliceSocketAddress + " Conf: " + from);
+        }
         int off = pkt.getOffset();
         int len = pkt.getLength();
         byte data[] = pkt.getData();
         long rid = DataHelper.fromLong8(data, off);
-        if (rid != _rcvConnID)
+        if (rid != _rcvConnID) {
             throw new GeneralSecurityException("Connection ID mismatch -> 1: " + _rcvConnID + " 2: " + rid);
+        }
         long sid = DataHelper.fromLong8(data, off + 16);
-        if (sid != _sendConnID)
+        if (sid != _sendConnID) {
             throw new GeneralSecurityException("Connection ID mismatch -> 1: " + _sendConnID + " 2: " + sid);
+        }
 
         int type = data[off + TYPE_OFFSET] & 0xff;
         if (_currentState != InboundState.IB_STATE_RETRY_SENT) {
             // not fatal
-            if (_log.shouldWarn())
-                _log.warn("[SSU2] Received out-of-order or RETRANSMIT message (type: " + type + ") on: " + this);
+            if (_log.shouldWarn()) {
+                _log.warn("[SSU2] Received out-of-order or RETRANSMIT message (Type " + type + ") on: " + this);
+            }
             return;
         }
         if (type == TOKEN_REQUEST_FLAG_BYTE) {
@@ -700,8 +704,6 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         }
         _handshakeState.start();
         _handshakeState.mixHash(data, off, 32);
-        //if (_log.shouldDebug())
-        //    _log.debug("[SSU2] State after mixHash 1: " + _handshakeState);
 
         // decrypt in-place
         try {
@@ -711,8 +713,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 _log.debug("[SSU2] Session Request error -> State at failure: " + _handshakeState + '\n' + net.i2p.util.HexDump.dump(data, off, len), gse);
             throw gse;
         }
-        //if (_log.shouldDebug())
-        //    _log.debug("[SSU2] State after Session Request: " + _handshakeState);
+
         _timeReceived = 0;
         processPayload(data, off + LONG_HEADER_SIZE, len - (LONG_HEADER_SIZE + KEY_LEN + MAC_LEN), true);
         packetReceived();
@@ -763,24 +764,30 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      */
     private PeerState2 locked_receiveSessionConfirmed(UDPPacket packet) throws GeneralSecurityException {
         if (_currentState != InboundState.IB_STATE_CREATED_SENT &&
-            _currentState != InboundState.IB_STATE_CONFIRMED_PARTIALLY)
+            _currentState != InboundState.IB_STATE_CONFIRMED_PARTIALLY) {
             throw new GeneralSecurityException("BAD state for SessionConfirmed: " + _currentState);
+        }
         DatagramPacket pkt = packet.getPacket();
         SocketAddress from = pkt.getSocketAddress();
-        if (!from.equals(_aliceSocketAddress))
+        if (!from.equals(_aliceSocketAddress)) {
             throw new GeneralSecurityException("Address mismatch -> Request: " + _aliceSocketAddress + " Conf: " + from);
+        }
+
         int off = pkt.getOffset();
         int len = pkt.getLength();
         byte data[] = pkt.getData();
         long rid = DataHelper.fromLong8(data, off);
-        if (rid != _rcvConnID)
+        if (rid != _rcvConnID) {
             throw new GeneralSecurityException("Connection ID mismatch -> Request: " + _rcvConnID + " Conf: " + rid);
+        }
+
         byte fragbyte = data[off + SHORT_HEADER_FLAGS_OFFSET];
         int frag = (fragbyte >> 4) & 0x0f;
         // allow both 0/0 (development) and 0/1 to indicate sole fragment
         int totalfrag = fragbyte & 0x0f;
-        if (totalfrag > 0 && frag > totalfrag - 1)
+        if (totalfrag > 0 && frag > totalfrag - 1) {
             throw new GeneralSecurityException("BAD SessionConfirmed fragment [" + frag + " / " + totalfrag + "]");
+        }
         if (totalfrag > 1) {
             // Fragment processing. Save fragment.
             // If we have all fragments, reassemble and continue,
@@ -803,8 +810,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                     return null;
                 }
             }
-            if (_log.shouldInfo())
+            if (_log.shouldInfo()) {
                 _log.info("[SSU2] Received " + len + " bytes SessionConfirmed fragment [" + frag + '/' + totalfrag + "] on " + this);
+            }
             byte[] fragdata;
             if (frag == 0) {
                 // preserve header
@@ -843,8 +851,6 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 _log.info("[SSU2] Have all " + totalfrag + " SessionConfirmed fragments (total length: " + len + " bytes) on " + this);
         }
         _handshakeState.mixHash(data, off, SHORT_HEADER_SIZE);
-        //if (_log.shouldDebug())
-        //    _log.debug("[SSU2] State after mixHash 3: " + _handshakeState);
 
         // decrypt in-place
         try {
@@ -854,8 +860,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 _log.debug("[SSU2] SessionConfirmed error -> State at failure: " + _handshakeState + '\n' + net.i2p.util.HexDump.dump(data, off, len), gse);
             throw gse;
         }
-        //if (_log.shouldDebug())
-        //    _log.debug("[SSU2] State after SessionConfirmed: " + _handshakeState);
+
         processPayload(data, off + SHORT_HEADER_SIZE, len - (SHORT_HEADER_SIZE + KEY_LEN + MAC_LEN + MAC_LEN), false);
         packetReceived();
         if (_currentState == InboundState.IB_STATE_FAILED) {
@@ -899,18 +904,6 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         sender.initializeKey(d_ba, 0);
         ChaChaPolyCipherState rcvr = new ChaChaPolyCipherState();
         rcvr.initializeKey(d_ab, 0);
-      /****
-        if (_log.shouldDebug())
-            _log.debug("[SSU2] split()\nGenerated Chain key:              " + Base64.encode(ckd) +
-                       "\nGenerated split key for A->B:     " + Base64.encode(k_ab) +
-                       "\nGenerated split key for B->A:     " + Base64.encode(k_ba) +
-                       "\nGenerated encrypt key for A->B:   " + Base64.encode(d_ab) +
-                       "\nGenerated encrypt key for B->A:   " + Base64.encode(d_ba) +
-                       "\nIntro key for Alice:              " + Base64.encode(_sendHeaderEncryptKey1) +
-                       "\nIntro key for Bob:                " + Base64.encode(_rcvHeaderEncryptKey1) +
-                       "\nGenerated header key 2 for A->B:  " + Base64.encode(h_ab) +
-                       "\nGenerated header key 2 for B->A:  " + Base64.encode(h_ba));
-       ****/
         Arrays.fill(ckd, (byte) 0);
         Arrays.fill(k_ab, (byte) 0);
         Arrays.fill(k_ba, (byte) 0);

@@ -43,12 +43,15 @@ class ThrottledPumpedTunnelGateway extends PumpedTunnelGateway {
                                         Receiver receiver, TunnelGatewayPumper pumper, HopConfig config) {
         super(context, preprocessor, sender, receiver, pumper);
         _config = config;
-        int max = _config.getAllocatedBW();
-        if (max <= TunnelParticipant.DEFAULT_BW_PER_TUNNEL_ESTIMATE) {
-            max = _context.tunnelDispatcher().getMaxPerTunnelBandwidth(TunnelDispatcher.Location.IBGW);
-            _config.setAllocatedBW(max);
+        int allocated = _config.getAllocatedBW();
+        if (allocated <= TunnelParticipant.DEFAULT_BW_PER_TUNNEL_ESTIMATE) {
+            allocated = _context.tunnelDispatcher().getMaxPerTunnelBandwidth(TunnelDispatcher.Location.IBGW);
+            _config.setAllocatedBW(allocated);
         }
-        _partBWE = new SyntheticREDQueue(_context, max);
+        int effectiveBw = Math.max(2048, allocated);
+        int minThreshold = Math.max(1024, effectiveBw / 4);
+        int maxThreshold = Math.max(2048, effectiveBw / 2);
+        _partBWE = new SyntheticREDQueue(context, effectiveBw, minThreshold, maxThreshold);
     }
 
     /**
