@@ -280,7 +280,9 @@ public class TestJob extends JobImpl {
             if (rskm != null) {
                 RatchetSessionTag tag = _ratchetEncryptTag;
                 _ratchetEncryptTag = null;
-                rskm.consumeTag(tag);
+                if (tag != null) {
+                    rskm.consumeTag(tag);
+                }
             } else {
                 _ratchetEncryptTag = null;
             }
@@ -460,7 +462,9 @@ public class TestJob extends JobImpl {
                     if (rskm != null && _ratchetEncryptTag != null) {
                         RatchetSessionTag tag = _ratchetEncryptTag;
                         _ratchetEncryptTag = null;
-                        rskm.consumeTag(tag);
+                        if (tag != null) {
+                            rskm.consumeTag(tag);
+                        }
                     }
                 }
                 _encryptTag = null;
