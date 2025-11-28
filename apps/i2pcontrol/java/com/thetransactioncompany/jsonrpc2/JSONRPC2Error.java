@@ -271,4 +271,9 @@ public class JSONRPC2Error extends Exception {
                        object instanceof JSONRPC2Error &&
                        code == ((JSONRPC2Error)object).getCode();
         }
+
+        @Override
+        public int hashCode() {
+                return Integer.hashCode(code);
+        }
 }

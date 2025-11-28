@@ -302,6 +302,11 @@ public class Node
 		return thisNodeString.equals(otherNodeString);
 	}
 
+	@Override
+	public int hashCode() {
+		return toString().hashCode();
+	}
+
 	////////////////////////////////////////////////
 	//	Child node
 	////////////////////////////////////////////////
