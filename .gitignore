@@ -33,7 +33,7 @@ installer/resources/locale/mo
 /apps/jetty/jettylib
 *_jsp.java
 *.class
-./gradle
+./gradle/
 
 # OSX temp dirs
 launchers/common/target
