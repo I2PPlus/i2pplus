@@ -87,6 +87,7 @@ apps/routerconsole/jsp/favicon.ico
 **/build/
 !build/README.md
 !pkg-temp/README.md
+!dist/README.md
 
 # Gradle-specific files
 .gradle/
