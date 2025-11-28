@@ -172,13 +172,8 @@ public class HTTPPacket
 			Debug.warning(e);
 		}
 
-		try {
-			// Use UTF-8 charset name to avoid encoding issues
-			return lineBuf.toString(StandardCharsets.UTF_8.name());
-		} catch (UnsupportedEncodingException e) {
-			// UTF-8 should always be supported, but fallback to default if needed
-			return lineBuf.toString();
-		}
+		// Always use UTF-8 charset to avoid encoding issues
+		return new String(lineBuf.toByteArray(), StandardCharsets.UTF_8);
 	}
 
 	protected boolean set(InputStream in, boolean onlyHeaders)

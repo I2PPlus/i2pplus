@@ -66,7 +66,7 @@ public class PersistSybil {
         StringBuilder buf = new StringBuilder(128);
         Writer out = null;
         try {
-            out = new OutputStreamWriter(new GZIPOutputStream(new SecureFileOutputStream(file)));
+            out = new OutputStreamWriter(new GZIPOutputStream(new SecureFileOutputStream(file)), "UTF-8");
             out.write("# Format (one per line)\n");
             out.write("# Base64 router hash:total points%points:reason%points:reason ...\n");
             for (Map.Entry<Hash, Points> entry : entries.entrySet()) {
@@ -116,7 +116,7 @@ public class PersistSybil {
         Map<Hash, Points> rv = new HashMap<Hash, Points>();
         BufferedReader in = null;
         try {
-            in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file))));
+                in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file)), "UTF-8"));
             String line;
             while ((line = in.readLine()) != null) {
                 if (line.startsWith("#"))
@@ -157,7 +157,7 @@ public class PersistSybil {
             File file = new File(dir, PFX + date + SFX);
             BufferedReader in = null;
             try {
-                in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file))));
+            in = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file)), "UTF-8"));
                 String line;
                 while ((line = in.readLine()) != null) {
                     if (!line.startsWith(bh))
@@ -344,7 +344,7 @@ public class PersistSybil {
         }
         Writer out = null;
         try {
-            out = new OutputStreamWriter(new SecureFileOutputStream(blFile));
+            out = new OutputStreamWriter(new SecureFileOutputStream(blFile), "UTF-8");
             out.write("# Format (one per line)\n");
             out.write("# IP or Base64 router hash,expiration (ms)\n");
             for (Map.Entry<String, Long> e : map.entrySet()) {

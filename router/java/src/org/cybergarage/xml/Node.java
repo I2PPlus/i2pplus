@@ -507,13 +507,8 @@ public class Node
 				// Fall through to UTF-8
 			}
 		}
-		try {
-			// Use UTF-8 charset name to avoid encoding issues
-			return byteOut.toString(StandardCharsets.UTF_8.name());
-		} catch (UnsupportedEncodingException e) {
-			// UTF-8 should always be supported, but fallback to default if needed
-			return byteOut.toString();
-		}
+		// Always use UTF-8 charset to avoid encoding issues
+		return new String(byteOut.toByteArray(), StandardCharsets.UTF_8);
 	}
 
 	public String toString()
