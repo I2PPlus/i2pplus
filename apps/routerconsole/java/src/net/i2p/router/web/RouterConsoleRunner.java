@@ -240,7 +240,9 @@ public class RouterConsoleRunner implements RouterApp {
         stopAllWebApps();
         try {
             _server.stop();
-        } catch (Exception ie) {}
+        } catch (Exception ie) {
+            System.err.println("Error stopping server: " + ie.getMessage());
+        }
         _mgr.unregister(_navHelper);
         PortMapper portMapper = _context.portMapper();
         portMapper.unregister(PortMapper.SVC_CONSOLE);

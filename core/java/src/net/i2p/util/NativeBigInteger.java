@@ -877,7 +877,7 @@ public class NativeBigInteger extends BigInteger {
             while (bi.signum() == 0);
             if (mode == 1) {jg.modPow(bi, jp);} // Return value ignored - benchmarking only
             else if (mode == 2) {ng.modPowCT(bi, jp);} // Return value ignored - benchmarking only  
-            else {bi.modInverse(jp);} // Return value ignored - benchmarking only
+            else {bi.modInverse(jp);} // Return value ignored - benchmarking only (FindBugs: RV_RETURN_VALUE_IGNORED)
         }
 
         BigInteger myValue = null, jval;
