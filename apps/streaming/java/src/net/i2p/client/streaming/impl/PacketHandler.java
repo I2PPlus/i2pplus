@@ -142,6 +142,7 @@ class PacketHandler {
      * Handles a packet that appears on a known connection, but with stream ID mismatches or other anomalies.
      */
     private void handleMisroutedPacket(Connection con, Packet packet) {
+        if (packet == null || con == null) {return;}
         long oldId = con.getSendStreamId();
 
         if ((con.getSendStreamId() <= 0) ||
@@ -166,8 +167,9 @@ class PacketHandler {
             try {
                 con.getPacketHandler().receivePacket(packet, con);
             } catch (I2PException ie) {
-                if (log.shouldWarn())
-                    log.warn("Signature verification failed for " + con + " / " + oldId + (packet != null ? " -> " + packet : ""), ie);
+                if (log.shouldWarn()) {
+                    log.warn("Signature verification failed for " + con + " / " + oldId + " -> " + packet, ie);
+                }
                 if (packet.isFlagSet(Packet.FLAG_SYNCHRONIZE)) {
                     sendResetUnverified(packet);
                 }
