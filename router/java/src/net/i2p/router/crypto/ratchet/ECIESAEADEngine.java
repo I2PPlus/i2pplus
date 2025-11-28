@@ -1103,25 +1103,24 @@ public final class ECIESAEADEngine {
                                      RatchetSKM keyManager,
                                      ReplyCallback callback) {
         EncType type = target.getType();
-        if (priv == null || type != priv.getType())
+        if (priv == null || type != priv.getType()) {
             throw new IllegalArgumentException("Key mismatch " + target + ' ' + priv);
+        }
         HandshakeState state;
+
         try {
             String pattern = getNoisePattern(target.getType());
             state = new HandshakeState(pattern, HandshakeState.INITIATOR, _edhThread, getHybridKeyFactory(type));
         } catch (GeneralSecurityException gse) {
             throw new IllegalStateException("Bad protocol", gse);
         }
+
         state.getRemotePublicKey().setPublicKey(target.getData(), 0);
-        if (priv != null) {
-            state.getLocalKeyPair().setKeys(priv.getData(), 0,
-                                            priv.toPublic().getData(), 0);
-        } else {
-            state.getLocalKeyPair().setKeys(NULLPK, 0, NULLPK, 0);
-        }
+        state.getLocalKeyPair().setKeys(priv.getData(), 0, priv.toPublic().getData(), 0);
         state.start();
-        if (_log.shouldDebug())
+        if (_log.shouldDebug()) {
             _log.debug("State before encrypting NewSession: " + state);
+        }
 
         byte[] payload = createPayload(cloves, cloves.getExpiration(), NS_OVERHEAD);
 
@@ -1134,8 +1133,7 @@ public final class ECIESAEADEngine {
         try {
             state.writeMessage(enc, 0, payload, 0, payload.length);
         } catch (GeneralSecurityException gse) {
-            if (_log.shouldWarn())
-                _log.warn("Encrypt fail NewSession", gse);
+            if (_log.shouldWarn()) {_log.warn("Encrypt fail NewSession", gse);}
             state.destroy();
             return null;
         }
