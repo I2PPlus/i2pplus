@@ -184,6 +184,14 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
+     * @return true if we currently have an outbound gateway for the given TunnelId.
+     * This helps callers determine if a tunnel is ready for outbound dispatch.
+     */
+    public boolean hasOutboundGateway(TunnelId tid) {
+        return _outboundGateways.containsKey(tid);
+    }
+
+    /**
      * We are the outbound gateway - we created this tunnel
      *
      * @return true if successful, false if tunnel ID is a duplicate
