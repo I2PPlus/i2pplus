@@ -85,9 +85,9 @@ public class TestJob extends JobImpl {
             if (_log.shouldWarn())
                 _log.warn("Aborted test due to job lag (" + lag + "ms) → " + _cfg);
             ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
-            
+
             // Don't reschedule if system is overloaded - prevents job queue cascade
-            if (lag > 1000) { // 1+ second lag = system overload
+            if (lag > 100) { // 100ms lag = system overload
                 if (_log.shouldWarn())
                     _log.warn("Job lag overload detected (" + lag + "ms) - suspending tunnel tests for " + _cfg);
                 return; // Exit without rescheduling
@@ -100,9 +100,8 @@ public class TestJob extends JobImpl {
 
         // Concurrency control: Check and increment counter
         // Be more restrictive during high lag to reduce queue pressure
-        long currentLag = ctx.jobQueue().getMaxLag();
-        int maxTests = (currentLag > 500) ? 1 : MAX_CONCURRENT_TESTS; // Reduce to 1 test during high lag
-        
+        int maxTests = (lag > 50) ? 1 : MAX_CONCURRENT_TESTS; // Reduce to 1 test during high lag
+
         int current;
         do {
             current = CONCURRENT_TESTS.get();
