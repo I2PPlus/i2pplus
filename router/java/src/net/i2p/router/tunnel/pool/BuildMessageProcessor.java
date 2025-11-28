@@ -54,7 +54,8 @@ class BuildMessageProcessor {
         long maxMemory = SystemVersion.getMaxMemory();
         boolean isSlow = SystemVersion.isSlow();
         boolean isAndroid = SystemVersion.isAndroid();
-        int m;
+        int m = 19; // 128 KB - appx 2K part. tunnels or 24K req/hr
+
         if (maxMemory < 256*1024*1024L) {
             // 32 KB
             // appx 500 part. tunnels or 6K req/hr
@@ -75,10 +76,6 @@ class BuildMessageProcessor {
             // 2 MB
             // appx 20K part. tunnels or 240K req/hr
             m = 23;
-        } else {
-            // 128 KB
-            // appx 2K part. tunnels or 24K req/hr
-            m = 19;
         }
 
         // Too early, keys not registered with key manager yet

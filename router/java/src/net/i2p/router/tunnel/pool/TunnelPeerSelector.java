@@ -195,60 +195,77 @@ public abstract class TunnelPeerSelector extends ConnectChecker {
         return new Excluder(isInbound, isExploratory);
     }
 
-
     /**
      *  @since 0.9.58, previously getExclude()
      */
-    private boolean shouldExclude(Hash h, boolean isInbound, boolean isExploratory) {
-        // we may want to update this to skip 'hidden' or 'unreachable' peers, but that
-        // isn't safe, since they may publish one set of routerInfo to us and another to
-        // other peers.  the defaults for filterUnreachable has always been to return false,
-        // but might as well make it explicit with a "false &&"
-        //
-        // Unreachable peers at the inbound gateway is a major cause of problems.
-        // Due to a bug in SSU peer testing in 0.6.1.32 and earlier, peers don't know
-        // if they are unreachable, so the netdb indication won't help much.
-        // As of 0.6.1.33 we should have lots of unreachables, so enable this for now.
-        // Also (and more effectively) exclude peers we detect are unreachable,
-        // this should be much more effective, especially on a router that has been
-        // up a few hours.
-        //
-        // We could just try and exclude them as the inbound gateway but that's harder
-        // (and even worse for anonymity?).
-        //
+    private boolean shouldExclude(Hash peerHash, boolean isInbound, boolean isExploratory) {
+        /*
+         *  We may want to update this to skip 'hidden' or 'unreachable' peers, but that isn't safe,
+         *  since they may publish one set of routerInfo to us and another to other peers.
+         *  The defaults for filterUnreachable has always been to return false, but might as well
+         *  make it explicit with a "false &&"
+         *
+         *  Unreachable peers at the inbound gateway is a major cause of problems.
+         *  Due to a bug in SSU peer testing in 0.6.1.32 and earlier, peers don't know
+         *  if they are unreachable, so the netdb indication won't help much.
+         *
+         *  As of 0.6.1.33 we should have lots of unreachables, so enable this for now.
+         *  Also (and more effectively) exclude peers we detect are unreachable,
+         *  this should be much more effective, especially on a router that has been
+         *  up a few hours.
+         *
+         *  We could just try and exclude them as the inbound gateway but that's harder
+         *  (and even worse for anonymity?).
+         */
+        final long BANDWIDTH_REJECTION_CUTOFF_MS = 60_000L; // 60 seconds cutoff for recent rejection
 
-        PeerProfile prof = ctx.profileOrganizer().getProfileNonblocking(h);
-        if (prof != null) {
-            long cutoff = ctx.clock().now() - (20*1000);
-            if (prof.getTunnelHistory().getLastRejectedBandwidth() > cutoff) {return true;}
+        PeerProfile profile = ctx.profileOrganizer().getProfileNonblocking(peerHash);
+        if (profile != null && wasRecentlyRejected(profile, BANDWIDTH_REJECTION_CUTOFF_MS)) {
+            return true;
         }
 
-        // the transport layer thinks is unreachable
-        if (ctx.commSystem().wasUnreachable(h)) {return true;}
+        if (ctx.commSystem().wasUnreachable(peerHash)) {
+            return true;
+        }
 
-        // Here, we use validation, because BuildRequestor does,
-        // so if we don't skip old routers here, it gets all the way to BuildRequestor
-        // before failing.
-        RouterInfo info = (RouterInfo) ctx.netDb().lookupLocally(h);
-        if (info == null) {return true;}
+        RouterInfo routerInfo = (RouterInfo) ctx.netDb().lookupLocally(peerHash);
+        if (routerInfo == null) {
+            return true;
+        }
 
-        // reduce load on floodfills (but be less aggressive to avoid peer starvation)
-        String caps = info.getCapabilities();
-        boolean isFF = caps.indexOf(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL) >= 0;
-        //if (isFF && caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0) {return true;}
-        if (isExploratory && isFF && ctx.random().nextInt(4) != 0) {return true;}
+        if (shouldExcludeFloodfillPeer(isExploratory, routerInfo)) {
+            return true;
+        }
 
         if (filterUnreachable(isInbound, isExploratory)) {
-            if (caps.indexOf(Router.CAPABILITY_UNREACHABLE) >= 0) {return true;}
+            if (routerInfo.getCapabilities().contains(Character.toString(Router.CAPABILITY_UNREACHABLE))) {
+                return true;
+            }
         }
 
         if (filterSlow(isInbound, isExploratory)) {
-            // NOTE: filterSlow always returns true
-            String excl = getExcludeCaps(ctx);
-            if (shouldExclude(ctx, info, excl)) {return true;}
+            String excludeCaps = getExcludeCaps(ctx);
+            if (shouldExclude(ctx, routerInfo, excludeCaps)) {
+                return true;
+            }
         }
 
         return false;
+    }
+
+    private boolean wasRecentlyRejected(PeerProfile profile, long cutoffMillis) {
+        long cutoff = ctx.clock().now() - cutoffMillis;
+        return profile.getTunnelHistory().getLastRejectedBandwidth() > cutoff;
+    }
+
+    private boolean shouldExcludeFloodfillPeer(boolean isExploratory, RouterInfo routerInfo) {
+        if (!isExploratory) {
+            return false;
+        }
+        String capabilities = routerInfo.getCapabilities();
+        boolean isFloodfill = capabilities.contains(Character.toString(FloodfillNetworkDatabaseFacade.CAPABILITY_FLOODFILL));
+        // Randomly exclude most exploratory floodfill peers to reduce load (approximate 15/16 exclusion)
+        return isFloodfill && ctx.random().nextInt(16) != 0;
     }
 
     /**

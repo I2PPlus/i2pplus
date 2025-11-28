@@ -78,6 +78,14 @@ public class TunnelDispatcher implements Service {
     /** Map of outbound gateways we created */
     private final ConcurrentHashMap<TunnelId, TunnelGateway> _outboundGateways = new ConcurrentHashMap<>();
 
+    /**
+     * @return true if we currently have an outbound gateway for the given TunnelId.
+     * This helps callers determine if a tunnel is ready for outbound dispatch.
+     */
+    public boolean hasOutboundGateway(TunnelId tid) {
+        return _outboundGateways.containsKey(tid);
+    }
+
     /** Map of outbound endpoints we joined */
     private final ConcurrentHashMap<TunnelId, OutboundTunnelEndpoint> _outboundEndpoints = new ConcurrentHashMap<>();
 
@@ -111,7 +119,7 @@ public class TunnelDispatcher implements Service {
     /** Location in the tunnel for RED logic */
     public enum Location { OBEP, PARTICIPANT, IBGW }
 
-    private static final long[] RATES = { 60 * 1000, 10 * 60 * 1000, 60 * 60 * 1000, 24 * 60 * 60 * 1000 };
+    private static final long[] RATES = { 60*1000, 10*60*1000, 60*60*1000, 24*60*60*1000 };
 
     /** Lock used when joining tunnels as participant, endpoint, or gateway */
     private final Object _joinParticipantLock = new Object();
@@ -184,14 +192,6 @@ public class TunnelDispatcher implements Service {
     }
 
     /**
-     * @return true if we currently have an outbound gateway for the given TunnelId.
-     * This helps callers determine if a tunnel is ready for outbound dispatch.
-     */
-    public boolean hasOutboundGateway(TunnelId tid) {
-        return _outboundGateways.containsKey(tid);
-    }
-
-    /**
      * We are the outbound gateway - we created this tunnel
      *
      * @return true if successful, false if tunnel ID is a duplicate
@@ -258,8 +258,9 @@ public class TunnelDispatcher implements Service {
      * @return true if successful, false if tunnel ID is a duplicate
      */
     public boolean joinParticipant(HopConfig cfg) {
-        if (_log.shouldInfo())
+        if (_log.shouldInfo()) {
             _log.info("Joining tunnel as participant " + cfg);
+        }
         TunnelId recvId = cfg.getReceiveTunnel();
         TunnelParticipant participant = new TunnelParticipant(_context, cfg, new HopProcessor(_context, cfg, _validator));
 
@@ -588,7 +589,7 @@ public class TunnelDispatcher implements Service {
                 return;
             }
 
-            msg.setMessageExpiration(now + 10_000); // reset expiry to 10s from now
+            msg.setMessageExpiration(now + 20_000); // reset expiry to 20s from now
             long tid1 = outboundTunnel.getTunnelId();
             long tid2 = (targetTunnel != null ? targetTunnel.getTunnelId() : -1);
             _context.messageHistory().tunnelDispatched(msg.getUniqueId(), tid1, tid2, targetPeer, "Outbound gateway");
@@ -674,7 +675,7 @@ public class TunnelDispatcher implements Service {
         if (bwe != null && !bwe.offer(length, factor)) {
             if (_log.shouldWarn()) {
                 _log.warn("Dropping participating message (per-tunnel limit)" +
-                          (percentage > 0 ? " -> Drop probability: " + percentage + "%" : "") +
+                          (percentage > 0 ? " -> Drop probability: " + Math.min(percentage, 100) + "%" : "") +
                           "\n* Location: " + loc + ", Type: " + type + ", Length: " + length + ", BWE: " + bwe);
             }
             return true;
@@ -684,7 +685,7 @@ public class TunnelDispatcher implements Service {
         if (reject) {
             if (_log.shouldWarn()) {
                 _log.warn("Dropping participating message (global bandwidth limit)" +
-                          (percentage > 0 ? " -> Drop probability: " + percentage + "%" : "") +
+                          (percentage > 0 ? " -> Drop probability: " + Math.min(percentage, 100) + "%" : "") +
                           "\n* Location: " + loc + ", Type: " + type + ", Length: " + length);
             }
             _context.statManager().addRateData("tunnel.participatingMessageDropped", 1);
@@ -696,17 +697,12 @@ public class TunnelDispatcher implements Service {
      * Get the max bandwidth per tunnel
      */
     int getMaxPerTunnelBandwidth(Location loc) {
+        final int MAX_TUNNELS_THRESHOLD = 4000;
+        int maxTunnels = _context.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS,
+                                              RouterThrottleImpl.DEFAULT_MAX_TUNNELS);
         int max = _context.bandwidthLimiter().getMaxShareBandwidth();
-        int maxTunnels = _context.getProperty(RouterThrottleImpl.PROP_MAX_TUNNELS, RouterThrottleImpl.DEFAULT_MAX_TUNNELS);
-        if (maxTunnels > 25) {
-            if (max >= 128 * 1024)
-                max /= 16;
-            else if (max <= 48 * 1024)
-                max /= 4;
-            else
-                max = (12 * 1024) + ((max - (48 * 1024)) / 8);
-        }
-        return max;
+
+        return (maxTunnels > MAX_TUNNELS_THRESHOLD) ? max / 4 * 3 : max;
     }
 
     /**

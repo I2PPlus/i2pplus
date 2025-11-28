@@ -43,9 +43,9 @@ class BuildExecutor implements Runnable {
     private final ConcurrentHashMap<Long, PooledTunnelCreatorConfig> _recentlyBuildingMap; // indexed by ptcc.getReplyMessageId()
     private volatile boolean _isRunning;
     private boolean _repoll;
-    private static final int MAX_CONCURRENT_BUILDS = Math.max(SystemVersion.getCores() * 2, 16);
+    private static final int MAX_CONCURRENT_BUILDS = Math.max(SystemVersion.getCores() * 4, 32);
     private static final int LOOP_TIME = 200;
-    private static final int TUNNEL_POOLS = SystemVersion.isSlow() ? 16 : 32;
+    private static final int TUNNEL_POOLS = SystemVersion.isSlow() ? 12 : 16;
     private static final long GRACE_PERIOD = 60*1000; // accept replies up to a minute after we gave up on them
     private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
     public boolean fullStats() {return _context.getBooleanProperty("stat.full");}
@@ -172,7 +172,7 @@ class BuildExecutor implements Runnable {
             Rate r = rs.getRate(60 * 1000);
             double avg = (r != null) ? r.getAverageValue() : rs.getLifetimeAverageValue();
             int throttleFactor = isSlow ? 100 : 200;
-            if (avg > 50) { // If builds take more than 50ms, start throttling
+            if (avg > 100) { // If builds take more than 100ms, start throttling
                 int throttle = (int) (throttleFactor * MAX_CONCURRENT_BUILDS / avg);
                 if (throttle < allowed) {
                     allowed = throttle;
@@ -208,7 +208,7 @@ class BuildExecutor implements Runnable {
 
         // Constants for expiration calculations
         final long TEN_MINUTES_MS = 10 * 60 * 1000;
-        final long expireRecentlyBefore = now + TEN_MINUTES_MS - BuildRequestor.REQUEST_TIMEOUT - GRACE_PERIOD;
+        final long expireRecentlyBefore = now + TEN_MINUTES_MS - BuildRequestor.REQUEST_TIMEOUT + GRACE_PERIOD;
         final long expireBefore = now + TEN_MINUTES_MS - BuildRequestor.REQUEST_TIMEOUT;
 
         // Expire really old build requests from recentlyBuilding map

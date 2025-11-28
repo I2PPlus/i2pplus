@@ -59,7 +59,7 @@ public class TunnelPool {
     /** if less than one success in this many, reduce length (exploratory only) */
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_1 = 10;
     private static final int BUILD_TRIES_LENGTH_OVERRIDE_2 = 12;
-    private static final long STARTUP_TIME = 30*60*1000;
+    private static final long STARTUP_TIME = 5*60*1000;
 
 
     TunnelPool(RouterContext ctx, TunnelPoolManager mgr, TunnelPoolSettings settings, TunnelPeerSelector sel) {
@@ -189,7 +189,7 @@ public class TunnelPool {
         long uptime = _context.router().getUptime();
         synchronized (_tunnels) {
             if (_tunnels.isEmpty()) {
-               if (_log.shouldWarn() && uptime > 3*60*1000) {
+               if (_log.shouldWarn() && uptime > STARTUP_TIME) {
                    _log.warn(toString() + " -> No tunnels available");
                }
             } else {
@@ -273,7 +273,7 @@ public class TunnelPool {
             _context.statManager().addRateData("tunnel.matchLease", closestTo.equals(rv.getFarEnd()) ? 1 : 0);
         } else {
             long uptime = _context.router().getUptime();
-            if (_log.shouldWarn() && uptime > 3*60*1000) {
+            if (_log.shouldWarn() && uptime > STARTUP_TIME) {
                 _log.warn(toString() + " -> No tunnels available");}
         }
         return rv;
@@ -343,15 +343,16 @@ public class TunnelPool {
      */
     private int getAdjustedTotalQuantity() {
         if (_settings.getLength() == 0 && _settings.getLengthVariance() == 0) {return 1;}
+        long uptime = _context.router().getUptime();
         int rv = _settings.getTotalQuantity();
+
         if (!_settings.isExploratory()) {
             if (rv <= 1) {return rv;}
             // throttle client tunnel builds in times of congestion with exponential backoff
             int fails = _consecutiveBuildTimeouts.get();
-            long uptime = _context.router().getUptime();
-            if (fails > 6) {
-                // Linear backoff: reduce by 50% after 6 failures
-                int reductionFactor = 2; // Max 2x reduction instead of 64x
+            if (fails > 12) {
+                // Linear backoff: reduce by 50% after 12 failures
+                int reductionFactor = 2; // Max 2x reduction
 
                 // Check if router is firewalled using status check
                 boolean isFirewalled = _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.REJECT_UNSOLICITED ||
@@ -361,15 +362,15 @@ public class TunnelPool {
                                    _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_UNKNOWN_IPV6_FIREWALLED ||
                                    _context.commSystem().getStatus() == net.i2p.router.CommSystemFacade.Status.IPV4_DISABLED_IPV6_FIREWALLED;
 
-                int minTunnels = isFirewalled ? 6 : 1; // Keep 6 tunnels for firewalled routers
+                int minTunnels = isFirewalled ? 3 : 1; // Keep 6 tunnels for firewalled routers
 
                 rv = Math.max(minTunnels, _settings.getTotalQuantity() / reductionFactor);
 
                 // Additional safety: never reduce below 1 for non-firewalled, 3 for firewalled
-                if (isFirewalled && rv < 6) {rv = 6;}
+                if (isFirewalled && rv < 3) {rv = 3;}
                 else if (rv < 1) {rv = 1;}
 
-                if (fails >= 10 && _log.shouldWarn() && !shouldSuppressTimeoutWarning() && uptime > 5*60*1000) {
+                if (fails >= 10 && _log.shouldWarn() && !shouldSuppressTimeoutWarning() && uptime > STARTUP_TIME) {
                     _log.warn("Limiting to " + rv + " tunnels after " + fails +
                               " consecutive build timeouts on " + this);
                 }
@@ -377,8 +378,7 @@ public class TunnelPool {
             return rv;
         }
         // TODO high-bw non-ff also
-        if ((_context.netDb().floodfillEnabled() && _context.router().getUptime() > 5*60*1000 ||
-            SystemVersion.getMaxMemory() >= 1024*1024*1024) && rv < 3) {
+        if ((_context.netDb().floodfillEnabled() && uptime > STARTUP_TIME ||SystemVersion.getMaxMemory() >= 1024*1024*1024) && rv < 3) {
             rv = 3;
        } else if (_settings.isExploratory() && rv < 2) {
             rv = 2;
@@ -625,7 +625,7 @@ public class TunnelPool {
                 pct = Math.max(pct * 3 / 4, 15); // Reduce by 25%, minimum 15% blame
             }
 
-            if (uptime > 5*60*1000 && _log.shouldWarn() && consecutiveFailures > 5) {
+            if (uptime > STARTUP_TIME && _log.shouldWarn() && consecutiveFailures > 5) {
                 _log.warn("Tunnel from " + toString() + " failed -> Blaming [" + peer.toBase64().substring(0,6) + "] -> " + pct + '%' +
                           " (" + consecutiveFailures + " consecutive failures)");
             }
@@ -1303,8 +1303,8 @@ public class TunnelPool {
      */
     private boolean shouldSuppressTimeoutWarning() {
         long uptime = _context.router().getUptime();
-        if (uptime < 25*60*1000) {
-            return false; // Don't suppress early warnings
+        if (uptime < STARTUP_TIME) {
+            return true; // Suppress early warnings
         }
 
         // For client tunnels, check if we have adequate tunnels in both directions

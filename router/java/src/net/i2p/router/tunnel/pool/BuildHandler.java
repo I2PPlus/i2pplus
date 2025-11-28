@@ -76,9 +76,9 @@ class BuildHandler implements Runnable {
     private static final String PROP_MAX_QUEUE = "router.buildHandlerMaxQueue";
     private static final int NEXT_HOP_LOOKUP_TIMEOUT = 30*1000;
     private static final int PRIORITY = OutNetMessage.PRIORITY_BUILD_REPLY;
-    private static final int MIN_LOOKUP_LIMIT = isSlow ? 4 : 16; // limits on concurrent next-hop RI lookup
-    private static final int MAX_LOOKUP_LIMIT = isSlow ? 8 : 64;
-    private static final int PERCENT_LOOKUP_LIMIT = isSlow ? 15 : 50; // limit lookups to this % of current participating tunnels
+    private static final int MIN_LOOKUP_LIMIT = isSlow ? 4 : 10; // limits on concurrent next-hop RI lookup
+    private static final int MAX_LOOKUP_LIMIT = isSlow ? 10 : Math.max(SystemVersion.getCores() / 2, 16);
+    private static final int PERCENT_LOOKUP_LIMIT = isSlow ? 15 : 40; // limit lookups to this % of current participating tunnels
     private static final long MAX_REQUEST_FUTURE = 5*60*1000;
     private static final long MAX_REQUEST_AGE = 65*60*1000; /** must be > 1 hour due to rounding down */
     private static final long MAX_REQUEST_AGE_ECIES = 8*60*1000;
@@ -90,7 +90,7 @@ class BuildHandler implements Runnable {
      *
      * 40 KB in 10 minutes equals 67 Bps.
      */
-    private static final int DEFAULT_BW_PER_TUNNEL_ESTIMATE = RouterThrottleImpl.DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE * 2048 / (10*60);
+    private static final int DEFAULT_BW_PER_TUNNEL_ESTIMATE = RouterThrottleImpl.DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE * 4096 / (10*60);
 
     public BuildHandler(RouterContext ctx, TunnelPoolManager manager, BuildExecutor exec) {
         _context = ctx;

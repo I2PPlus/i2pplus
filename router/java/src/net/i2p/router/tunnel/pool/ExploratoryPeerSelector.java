@@ -225,7 +225,7 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
     }
 
     private static final int MIN_NONFAILING_PCT = 15;
-    private static final int MIN_ACTIVE_PEERS_STARTUP = 10;
+    private static final int MIN_ACTIVE_PEERS_STARTUP = 3;
     private static final int MIN_ACTIVE_PEERS = 20;
 
     /**
@@ -234,9 +234,9 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
      *  success rate is much worse, return true so that reliability is maintained.
      */
     private boolean shouldPickHighCap() {
-        if (ctx.getBooleanProperty("router.exploreHighCapacity") ||
-            (ctx.getProperty("router.exploreHighCapacity") != null && !ctx.getProperty("router.exploreHighCapacity").equals("false")))
+        if (ctx.getBooleanProperty("router.exploreHighCapacity")) {
             return true;
+        }
 
         /*
          * If we don't have enough connected peers, use exploratory tunnel building to get us better-connected.
@@ -245,22 +245,20 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
          * through the same few peers.
          */
         int active = ctx.commSystem().countActivePeers();
-        if (active < MIN_ACTIVE_PEERS_STARTUP) {return false;}
+        if (active < MIN_ACTIVE_PEERS_STARTUP) {return true;}
 
-        // no need to explore too wildly at first (if we have enough connected peers)
+        // Be more permissive during startup to allow instant tunnel building
         long uptime = ctx.router().getUptime();
-        if (uptime <= (SystemVersion.isAndroid() ? 15*60*1000 : 5*60*1000))
+        if (uptime <= 15*1000) {
             return true;
-        // wait for first expiration of old RIs, if we had a long downtime
-        if (uptime <= 61*60*1000 && ctx.router().getEstimatedDowntime() > 3*24*60*60*1000L)
-            return true;
-        // or at the end
-        if (ctx.router().gracefulShutdownInProgress())
-            return true;
+        }
 
-        // see above
-        if (active < MIN_ACTIVE_PEERS)
-            return false;
+        // wait for first expiration of old RIs, if we had a long downtime
+        if (uptime <= 61*60*1000 && ctx.router().getEstimatedDowntime() > 3*24*60*60*1000L ||
+            ctx.router().gracefulShutdownInProgress() ||
+            active < MIN_ACTIVE_PEERS) {
+            return true;
+        }
 
         /*
          * OK, if we aren't explicitly asking for it, we should try to pick peers randomly from the 'not failing' pool.
@@ -268,22 +266,16 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
          * peers, at least for a little bit.
          */
         int failPct;
-        // getEvents() will be 0 for first 10 minutes
-        if (uptime <= 11*60*1000) {
-            failPct = 100 - MIN_NONFAILING_PCT;
-        } else {
-            // If well connected or ff, don't pick from high cap
-            // even during congestion, because congestion starts from the top
-            if (active > 500 || ctx.netDb().floodfillEnabled())
-                return false;
+        // If well connected or ff, don't pick from high cap
+        // even during congestion, because congestion starts from the top
+        if (active > 200 || ctx.netDb().floodfillEnabled()) {
+            return false;
+        }
 
-            failPct = getExploratoryFailPercentage();
-            //Log l = ctx.logManager().getLog(getClass());
-            //if (l.shouldDebug())
-            //    l.debug("Normalized Fail pct: " + failPct);
-            // always try a little, this helps keep the failPct stat accurate too
-            if (failPct > 100 - MIN_NONFAILING_PCT)
-                failPct = 100 - MIN_NONFAILING_PCT;
+        failPct = getExploratoryFailPercentage();
+        // always try a little, this helps keep the failPct stat accurate too
+        if (failPct > 100 - MIN_NONFAILING_PCT) {
+            failPct = 100 - MIN_NONFAILING_PCT;
         }
         return (failPct >= ctx.random().nextInt(100));
     }
