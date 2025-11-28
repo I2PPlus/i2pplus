@@ -77,9 +77,9 @@ class TunnelParticipant {
                 max = ctx.tunnelDispatcher().getMaxPerTunnelBandwidth(TunnelDispatcher.Location.PARTICIPANT);
                 config.setAllocatedBW(max);
             }
-            // Very permissive RED thresholds - allow normal traffic flow
-            int minThreshold = Math.max(256, max / 8);
-            int maxThreshold = Math.max(512, max / 2);
+            // Extremely permissive RED thresholds - prevent any artificial drops
+            int minThreshold = Math.max(1024, max / 16);
+            int maxThreshold = Math.max(2048, max / 4);
             _partBWE = new SyntheticREDQueue(ctx, max, minThreshold, maxThreshold);
         } else {
             _partBWE = null;

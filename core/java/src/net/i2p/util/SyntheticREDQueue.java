@@ -40,9 +40,8 @@ public class SyntheticREDQueue implements BandwidthEstimator {
     private static final int DECAY_FACTOR = 8;
     private static final int WESTWOOD_RTT_MIN = 50; // ms
 
-    // Corrected threshold constants - min threshold must be less than max
-    private static final int DEFAULT_LOW_THRESHOLD_DIV = 3;
-    private static final int DEFAULT_HIGH_THRESHOLD_DIV = 13;
+    private static final int DEFAULT_LOW_THRESHOLD_DIV = 4;
+    private static final int DEFAULT_HIGH_THRESHOLD_DIV = 2;
 
     private final I2PAppContext _context;
     private final Log _log;
@@ -67,8 +66,10 @@ public class SyntheticREDQueue implements BandwidthEstimator {
      * @param ctx the I2P application context
      * @param bwBps nominal output bandwidth in bytes per second
      */
-    public SyntheticREDQueue(I2PAppContext ctx, int bwBps) {
-        this(ctx, bwBps, Math.max(1, bwBps / DEFAULT_HIGH_THRESHOLD_DIV), Math.max(1, bwBps / DEFAULT_LOW_THRESHOLD_DIV));
+     public SyntheticREDQueue(I2PAppContext ctx, int bwBps) {
+         this(ctx, bwBps,
+         Math.max(1, (int)(bwBps / DEFAULT_LOW_THRESHOLD_DIV)),
+         Math.max(1, (int)(bwBps / DEFAULT_HIGH_THRESHOLD_DIV)));
     }
 
     /**

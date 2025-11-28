@@ -653,22 +653,8 @@ public class TunnelDispatcher implements Service {
     boolean shouldDropParticipatingMessage(Location loc, int type, int length, SyntheticREDQueue bwe) {
         if (length <= 0) return false;
 
-        float factor;
-        if (loc == Location.OBEP) {
-            if (type == VariableTunnelBuildMessage.MESSAGE_TYPE || type == TunnelBuildMessage.MESSAGE_TYPE ||
-                type == ShortTunnelBuildMessage.MESSAGE_TYPE)
-                factor = 1 / 1.5f;
-            else
-                factor = 1.5f;
-        } else if (loc == Location.IBGW) {
-            if (type == VariableTunnelBuildReplyMessage.MESSAGE_TYPE || type == TunnelBuildReplyMessage.MESSAGE_TYPE ||
-                type == OutboundTunnelBuildReplyMessage.MESSAGE_TYPE)
-                factor = 1 / (1.5f * 1.5f * 1.5f);
-            else
-                factor = 1 / 1.5f;
-        } else {
-            factor = 1.0f;
-        }
+        // Completely disabled throttling - maximum bandwidth allocation
+        float factor = 0.0f; // 0.0f disables all RED-based dropping
 
         int percentage = (int) Math.min(Math.round((factor - 1.0f) * 100.0f), 100.0f);
 
@@ -676,7 +662,8 @@ public class TunnelDispatcher implements Service {
             if (_log.shouldWarn()) {
                 _log.warn("Dropping participating message (per-tunnel limit)" +
                           (percentage > 0 ? " -> Drop probability: " + Math.min(percentage, 100) + "%" : "") +
-                          "\n* Location: " + loc + ", Type: " + type + ", Length: " + length + ", BWE: " + bwe);
+                          "\n* Location: " + loc + ", Type: " + type + ", Length: " + length +
+                          ", BWE: " + bwe);
             }
             return true;
         }
@@ -702,8 +689,8 @@ public class TunnelDispatcher implements Service {
                                               RouterThrottleImpl.DEFAULT_MAX_TUNNELS);
         int max = _context.bandwidthLimiter().getMaxShareBandwidth();
 
-        // Extremely lenient bandwidth allocation - prevent artificial packet drops
-        return max;
+        // Maximum bandwidth allocation - completely remove per-tunnel limits
+        return Integer.MAX_VALUE;
     }
 
     /**
