@@ -95,6 +95,13 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
                         log.info("EPS SFP closest " + (isInbound ? "IB " : "OB ") + closestExclude);
                     ctx.profileOrganizer().selectFastPeers(1, closestExclude, closest, ipRestriction, ipSet);
                 }
+
+                if (closest.isEmpty() && ctx.commSystem().getEstablished().isEmpty()) {
+                    if (log.shouldWarn()) {
+                        log.warn("Firewalled router with no established connections -> Allowing 0-hop exploratory tunnel...");
+                    }
+                    return new ArrayList<Hash>(1); // Empty list = 0-hop tunnel
+                }
             } else if (exploreHighCap) {
                 if (log.shouldInfo())
                     log.info("EPS SHCP closest " + (isInbound ? "IB " : "OB ") + closestExclude);
