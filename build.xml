@@ -1373,63 +1373,185 @@
   </target>
 
   <target name="clean" depends="pkgclean">
+    <echo message="Cleaning build artifacts and Gradle directories..."/>
     <parallel>
-      <delete includeEmptyDirs="true">
+      <delete includeEmptyDirs="true" quiet="true">
         <fileset dir="./dist" includes="**/*" excludes="README.md"/>
         <fileset dir="./build" includes="**/*" excludes="README.md"/>
       </delete>
-      <delete dir="./reports"/>
+      <delete dir="./reports" quiet="true"/>
       <delete file="installer/lib/izpack/patches.jar" failonerror="false" quiet="true"/>
       <delete dir="installer/lib/izpack5/patches/java/build" quiet="true"/>
       <delete file="syndie-standalone.zip" failonerror="false" quiet="true"/>
       <delete file="dist/i2psnark-standalone.zip" failonerror="false" quiet="true"/>
-      <delete file="core/java/cobertura.ser"/>
-      <delete file="javadoc.zip"/>
-      <delete file="dist/i2p.fba"/>
-      <delete file="${sloccount.report.file}"/>
-      <delete file="mavencentral-i2p.jar"/>
-      <delete file="mavencentral-router.jar"/>
-      <delete file="mavencentral-mstreaming.jar"/>
-      <delete file="mavencentral-streaming.jar"/>
-      <delete file="mavencentral-servlet-i2p.jar"/>
+      <delete file="core/java/cobertura.ser" quiet="true"/>
+      <delete file="javadoc.zip" quiet="true"/>
+      <delete file="dist/i2p.fba" quiet="true"/>
+      <delete file="${sloccount.report.file}" quiet="true"/>
+      <delete file="mavencentral-i2p.jar" quiet="true"/>
+      <delete file="mavencentral-router.jar" quiet="true"/>
+      <delete file="mavencentral-mstreaming.jar" quiet="true"/>
+      <delete file="mavencentral-streaming.jar" quiet="true"/>
+      <delete file="mavencentral-servlet-i2p.jar" quiet="true"/>
+      <!-- Gradle cleanup -->
+      <delete dir=".gradle" quiet="true"/>
+      <delete dir="gradle/wrapper/.gradle" quiet="true"/>
+      <!-- Clean Gradle build directories from subprojects -->
+      <delete includeEmptyDirs="true" quiet="true">
+        <fileset dir="." includes="**/build" excludes="build/README.md"/>
+        <fileset dir="apps" includes="**/build"/>
+        <fileset dir="core" includes="**/build"/>
+        <fileset dir="router" includes="**/build"/>
+        <fileset dir="installer" includes="**/build"/>
+      </delete>
     </parallel>
+    <echo message="Clean completed successfully."/>
   </target>
 
   <target name="distclean" depends="clean">
-    <parallel>
-      <fileset dir="./dist">
-        <include name="**"/>
-        <exclude name="README.md"/>
-      </fileset>
-      <ant dir="core/java/" target="distclean"/>
-      <ant dir="router/java/" target="distclean"/>
-      <ant dir="installer/java" target="distclean"/>
-      <ant dir="apps/ministreaming/java/" target="distclean"/>
-      <ant dir="apps/streaming/java/" target="distclean"/>
-      <ant dir="apps/i2ptunnel/java/" target="distclean"/>
-      <ant dir="apps/sam/java/" target="distclean"/>
-      <ant dir="apps/desktopgui" target="clean"/>
-      <ant dir="apps/routerconsole/java/" target="distclean"/>
-      <ant dir="apps/addressbook/" target="distclean"/>
-      <ant dir="apps/susimail/" target="distclean"/>
-      <ant dir="apps/susidns/src/" target="distclean"/>
-      <ant dir="apps/systray/java/" target="distclean"/>
-      <ant dir="apps/i2psnark/java/" target="distclean"/>
-      <ant dir="apps/jetty/" target="distclean"/>
-      <ant dir="apps/imagegen/" target="distclean"/>
-      <ant dir="apps/jrobin/java" target="distclean"/>
-      <delete dir="core/c/jbigi/bin"/>
-      <delete dir="core/c/jbigi/lib"/>
-      <delete dir="core/c/jcpuid/lib"/>
-      <ant dir="installer/resources/locale" target="distclean"/>
-      <ant dir="installer/tools/java" target="distclean"/>
+    <echo message="Performing comprehensive clean including Gradle artifacts..."/>
+    <sequential>
+      <delete dir="./dist" includeEmptyDirs="true" quiet="true">
+        <fileset dir="./dist" excludes="README.md"/>
+      </delete>
+      <!-- Use exec to run ant subprojects quietly -->
+      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error1">
+        <arg value="-quiet"/>
+        <arg value="-f"/>
+        <arg value="core/java/build.xml"/>
+        <arg value="distclean"/>
+      </exec>
+      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error2">
+        <arg value="-quiet"/>
+        <arg value="-f"/>
+        <arg value="router/java/build.xml"/>
+        <arg value="distclean"/>
+      </exec>
+      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error3">
+        <arg value="-quiet"/>
+        <arg value="-f"/>
+        <arg value="installer/java/build.xml"/>
+        <arg value="distclean"/>
+      </exec>
+      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error4">
+        <arg value="-quiet"/>
+        <arg value="-f"/>
+        <arg value="apps/ministreaming/java/build.xml"/>
+        <arg value="distclean"/>
+      </exec>
+      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error5">
+        <arg value="-quiet"/>
+        <arg value="-f"/>
+        <arg value="apps/streaming/java/build.xml"/>
+        <arg value="distclean"/>
+      </exec>
+      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error6">
+        <arg value="-quiet"/>
+        <arg value="-f"/>
+        <arg value="apps/i2ptunnel/java/build.xml"/>
+        <arg value="distclean"/>
+      </exec>
+      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error7">
+        <arg value="-quiet"/>
+        <arg value="-f"/>
+        <arg value="apps/sam/java/build.xml"/>
+        <arg value="distclean"/>
+      </exec>
+      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error8">
+        <arg value="-quiet"/>
+        <arg value="-f"/>
+        <arg value="apps/desktopgui/build.xml"/>
+        <arg value="clean"/>
+      </exec>
+      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error9">
+        <arg value="-quiet"/>
+        <arg value="-f"/>
+        <arg value="apps/routerconsole/java/build.xml"/>
+        <arg value="distclean"/>
+      </exec>
+      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error10">
+        <arg value="-quiet"/>
+        <arg value="-f"/>
+        <arg value="apps/addressbook/build.xml"/>
+        <arg value="distclean"/>
+      </exec>
+      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error11">
+        <arg value="-quiet"/>
+        <arg value="-f"/>
+        <arg value="apps/susimail/build.xml"/>
+        <arg value="distclean"/>
+      </exec>
+      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error12">
+        <arg value="-quiet"/>
+        <arg value="-f"/>
+        <arg value="apps/susidns/src/build.xml"/>
+        <arg value="distclean"/>
+      </exec>
+      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error13">
+        <arg value="-quiet"/>
+        <arg value="-f"/>
+        <arg value="apps/systray/java/build.xml"/>
+        <arg value="distclean"/>
+      </exec>
+      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error14">
+        <arg value="-quiet"/>
+        <arg value="-f"/>
+        <arg value="apps/i2psnark/java/build.xml"/>
+        <arg value="distclean"/>
+      </exec>
+      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error15">
+        <arg value="-quiet"/>
+        <arg value="-f"/>
+        <arg value="apps/jetty/build.xml"/>
+        <arg value="distclean"/>
+      </exec>
+      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error16">
+        <arg value="-quiet"/>
+        <arg value="-f"/>
+        <arg value="apps/imagegen/build.xml"/>
+        <arg value="distclean"/>
+      </exec>
+      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error17">
+        <arg value="-quiet"/>
+        <arg value="-f"/>
+        <arg value="apps/jrobin/java/build.xml"/>
+        <arg value="distclean"/>
+      </exec>
+      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error18">
+        <arg value="-quiet"/>
+        <arg value="-f"/>
+        <arg value="installer/resources/locale/build.xml"/>
+        <arg value="distclean"/>
+      </exec>
+      <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error19">
+        <arg value="-quiet"/>
+        <arg value="-f"/>
+        <arg value="installer/tools/java/build.xml"/>
+        <arg value="distclean"/>
+      </exec>
+      <delete dir="core/c/jbigi/bin" quiet="true"/>
+      <delete dir="core/c/jbigi/lib" quiet="true"/>
+      <delete dir="core/c/jcpuid/lib" quiet="true"/>
       <delete dir="installer/lib/izpack5/patches/java/build" quiet="true"/>
-      <delete dir="reproducible/build"/>
+      <delete dir="reproducible/build" quiet="true"/>
       <!-- custom langpacks -->
-      <delete dir="com"/>
+      <delete dir="com" quiet="true"/>
+      <!-- Comprehensive Gradle cleanup for distclean -->
+      <delete dir=".gradle" quiet="true"/>
+      <delete dir="gradle/wrapper/.gradle" quiet="true"/>
+      <delete includeEmptyDirs="true" quiet="true">
+        <fileset dir="." includes="**/build" excludes="build/README.md"/>
+        <fileset dir="apps" includes="**/build"/>
+        <fileset dir="core" includes="**/build"/>
+        <fileset dir="router" includes="**/build"/>
+        <fileset dir="installer" includes="**/build"/>
+      </delete>
+      <!-- Clean Gradle user home if it exists in project directory -->
+      <delete dir="~/.gradle/caches/${user.name}" quiet="true" failonerror="false"/>
+      <delete dir="~/.gradle/daemon/${user.name}" quiet="true" failonerror="false"/>
       <!--
                NOTE! We need to turn off the default excludes for these patterns to work.
-               These are the defaultexcludes in Ant as seen on
+               These are defaultexcludes in Ant as seen on
                http://ant.apache.org/manual/CoreTasks/defaultexcludes.html
                        **/*~
                        **/#*#
@@ -1451,7 +1573,7 @@
           -->
       <defaultexcludes remove="**/*~"/>
 
-      <delete>
+      <delete quiet="true">
         <fileset dir="." includes="**/*.class **/*.java~ **/*.txt~ **/*.xml~ **/*.sh~ **/*.SlackBuild~ **/*.*~"/>
         <!--
            Less common, but they pollute my workspace here, so we might as well nuke these as well.
@@ -1459,20 +1581,9 @@
           -->
       </delete>
       <!-- Now we put the defaults back -->
-    </parallel>
+    </sequential>
     <defaultexcludes default="true"/>
-  </target>
-
-  <target name="distcleanWebapps">
-    <parallel>
-      <ant dir="apps/i2ptunnel/java/" target="distclean"/>
-      <ant dir="apps/routerconsole/java/" target="distclean"/>
-      <ant dir="apps/addressbook/" target="distclean"/>
-      <ant dir="apps/susimail/" target="distclean"/>
-      <ant dir="apps/susidns/src/" target="distclean"/>
-      <ant dir="apps/i2psnark/java/" target="distclean"/>
-      <ant dir="apps/imagegen/" target="distclean"/>
-    </parallel>
+    <echo message="Distclean completed successfully."/>
   </target>
 
   <target name="pkg" depends="distclean, updaterWithGeoIP, preppkg, installer"/>
