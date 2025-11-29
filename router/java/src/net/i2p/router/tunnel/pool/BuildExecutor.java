@@ -43,9 +43,9 @@ class BuildExecutor implements Runnable {
     private final ConcurrentHashMap<Long, PooledTunnelCreatorConfig> _recentlyBuildingMap; // indexed by ptcc.getReplyMessageId()
     private volatile boolean _isRunning;
     private boolean _repoll;
-    private static final int MAX_CONCURRENT_BUILDS = Math.max(SystemVersion.getCores() * 4, 32);
-    private static final int LOOP_TIME = 200;
-    private static final int TUNNEL_POOLS = SystemVersion.isSlow() ? 12 : 16;
+    private static final int MAX_CONCURRENT_BUILDS = Math.max(SystemVersion.getCores() * 2, 16);
+    private static final int LOOP_TIME = 500;
+    private static final int TUNNEL_POOLS = SystemVersion.isSlow() ? 24 : 48;
     private static final long GRACE_PERIOD = 60*1000; // accept replies up to a minute after we gave up on them
     private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
     public boolean fullStats() {return _context.getBooleanProperty("stat.full");}
