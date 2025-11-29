@@ -102,7 +102,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         final boolean shouldBan = !isBanned && _facade.shouldBanLookup(dlm.getFrom(), dlm.getReplyTunnel());
         final boolean shouldAccept = shouldAcceptLookup(isSenderUs, shouldThrottle, shouldBan, ourRI, floodfillMode, isFF, type);
         final boolean isSelfLookup = ourRouter.equals(dlm.getSearchKey()) || dlm.getFrom().equals(ourRouter);
-        final int maxLookups = isFF ? 30 : 10;
+        final int maxLookups = isFF ? 60 : 30;
 
         DatabaseLookupMessage processedDLM = preProcessDatabaseLookup(dlm, fromHash);
         if (processedDLM == null) {return null;}
