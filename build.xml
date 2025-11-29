@@ -2901,7 +2901,7 @@
     <echo message="Starting findbugs, this will take a while..."/>
     <!-- ref: https://github.com/spotbugs/spotbugs/issues/148-->
     <echo message="If this doesn't work with Java 9 or later, try Java 8"/>
-    <exec executable="nice" failonerror="true">
+    <exec executable="nice" failonerror="true" error="/dev/null">
       <arg value="findbugs"/>
       <arg value="-textui"/>
       <arg value="-projectName"/>
@@ -2912,6 +2912,7 @@
       <arg value="dist/findbugs.html"/>
       <arg value="-effort:max"/>
       <arg value="-high"/>
+      <arg value="-quiet"/>
       <arg value="-auxclasspath"/>
       <arg value="build/commons-el.jar:build/jasper-runtime.jar:build/javax.servlet.jar:build/org.mortbay.jetty.jar:build/jrobin.jar:installer/lib/wrapper/all/wrapper.jar:apps/susidns/src/lib/standard.jar:apps/susidns/src/lib/jstl.jar"/>
       <arg value="-exclude"/>

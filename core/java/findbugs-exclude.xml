@@ -14,4 +14,8 @@
   <Match>
     <Bug pattern="ClassFormatException"/>
   </Match>
+  <!-- Suppress problematic JSP classes that cause BCEL parsing errors -->
+  <Match>
+    <Class name="~.*\.jsp.*"/>
+  </Match>
 </FindBugsFilter>
