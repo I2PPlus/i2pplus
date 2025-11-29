@@ -72,10 +72,8 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 else {exclude = new OBEPExcluder(exclude);}
                 // 1-hop, IP restrictions not required here
                 if (hiddenInbound) {
-                    ctx.profileOrganizer().selectFastPeers(1, exclude, matches);
-                    if (matches.isEmpty()) {
-                        ctx.profileOrganizer().selectActiveNotFailingPeers(1, exclude, matches);
-                    }
+                    // TODO this doesn't pick from fast
+                    ctx.profileOrganizer().selectActiveNotFailingPeers(1, exclude, matches);
                 }
                 if (matches.isEmpty()) {
                     // No connected peers found, fall back to all fast peers
@@ -116,16 +114,13 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     if (log.shouldInfo()) {
                         log.info("Selecting fast/non-failing peer for (hidden) closest Inbound " + lastHopExclude);
                     }
-                    ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
+                    ctx.profileOrganizer().selectActiveNotFailingPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
                     if (matches.isEmpty()) {
-                        ctx.profileOrganizer().selectActiveNotFailingPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
-                    }
-                    if (matches.isEmpty()) {
-                        // No connected peers found, fall back to all fast peers
+                        // No connected peers found, give up now
                         if (log.shouldWarn()) {
-                            log.warn("No active peers for Inbound connection, falling back to all fast peers...");
+                            log.warn("CPS SANFP hidden closest IB no active peers found, returning null");
                         }
-                        ctx.profileOrganizer().selectFastPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
+                        return null;
                     }
                 } else if (hiddenOutbound) {
                     // OBEP
