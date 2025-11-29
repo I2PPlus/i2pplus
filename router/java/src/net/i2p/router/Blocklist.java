@@ -76,7 +76,7 @@ public class Blocklist {
     private final Log _log;
     private final RouterContext _context;
     private long _blocklist[];
-    private int _blocklistSize;
+    private volatile int _blocklistSize;
     private long _countryBlocklist[];
     private int _countryBlocklistSize;
     private final Object _lock = new Object();

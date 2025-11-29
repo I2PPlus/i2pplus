@@ -23,8 +23,8 @@ class FragmentedMessage {
     private Hash _toRouter;
     private TunnelId _toTunnel;
     private final ByteArray _fragments[];
-    private boolean _lastReceived;
-    private int _highFragmentNum;
+    private volatile boolean _lastReceived;
+    private volatile int _highFragmentNum;
     private final long _createdOn;
     private boolean _completed;
     private long _releasedAfter;

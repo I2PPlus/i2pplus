@@ -40,7 +40,7 @@ class Connection {
     private final AtomicLong _resetSentOn = new AtomicLong();
     private final AtomicBoolean _connected = new AtomicBoolean(true);
     private final AtomicBoolean _finalDisconnect = new AtomicBoolean();
-    private boolean _hardDisconnected;
+    private volatile boolean _hardDisconnected;
     private final MessageInputStream _inputStream;
     private final MessageOutputStream _outputStream;
     private final SchedulerChooser _chooser;

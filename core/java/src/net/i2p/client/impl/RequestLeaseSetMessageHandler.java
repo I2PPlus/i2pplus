@@ -57,7 +57,7 @@ import net.i2p.util.OrderedProperties;
  */
 class RequestLeaseSetMessageHandler extends HandlerImpl {
     private final Map<Destination, LeaseInfo> _existingLeaseSets;
-    protected int _ls2Type = DatabaseEntry.KEY_TYPE_LS2;
+    protected volatile int _ls2Type = DatabaseEntry.KEY_TYPE_LS2;
 
     // LS 1
     private static final String PROP_LS_ENCRYPT = "i2cp.encryptLeaseSet";

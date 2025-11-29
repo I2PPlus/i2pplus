@@ -73,7 +73,7 @@ public class RouterInfo extends DatabaseEntry {
     private volatile int _hashCode;
     private volatile boolean _hashCodeInitialized;
     /** should we cache the byte and string versions _byteified ? **/
-    private boolean _shouldCache;
+    private volatile boolean _shouldCache;
     /**
      * Maybe we should check if we are floodfill?
      * If we do bring this back, don't do on ARM or Android

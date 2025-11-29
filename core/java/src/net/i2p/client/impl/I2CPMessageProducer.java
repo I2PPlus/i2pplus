@@ -54,7 +54,7 @@ import net.i2p.util.Log;
 class I2CPMessageProducer {
     private final Log _log;
     private final I2PAppContext _context;
-    private int _maxBytesPerSecond;
+    private volatile int _maxBytesPerSecond;
     private volatile int _sendPeriodBytes;
     private volatile long _sendPeriodBeginTime;
     private final ReentrantLock _lock;

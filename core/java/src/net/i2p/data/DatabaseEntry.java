@@ -61,8 +61,8 @@ public abstract class DatabaseEntry extends DataStructureImpl {
     // synch: this
     private Hash _currentRoutingKey;
     private long _routingKeyGenMod;
-    private boolean _receivedAsPublished;
-    private boolean _receivedAsReply;
+    private volatile boolean _receivedAsPublished;
+    private volatile boolean _receivedAsReply;
 
     /**
      * Hash of the client receiving the routerinfo, or null if it was sent directly.

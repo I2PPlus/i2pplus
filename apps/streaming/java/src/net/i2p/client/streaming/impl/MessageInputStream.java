@@ -69,7 +69,7 @@ class MessageInputStream extends InputStream {
 
     private boolean _closeReceived; // EOF signal received
     private final AtomicBoolean _locallyClosed = new AtomicBoolean(false); // Stream closed for reading
-    private int _readTimeout = I2PSocketOptionsImpl.DEFAULT_READ_TIMEOUT; // Read timeout in milliseconds
+    private volatile int _readTimeout = I2PSocketOptionsImpl.DEFAULT_READ_TIMEOUT; // Read timeout in milliseconds
     private IOException _streamError;
     private long _readTotal; // Total bytes read so far
 

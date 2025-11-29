@@ -20,7 +20,7 @@ import java.io.InputStream;
  */
 public class Hash extends SimpleDataStructure {
     private volatile String _base64ed;
-    private int _cachedHashCode;
+    private volatile int _cachedHashCode;
 
     public final static int HASH_LENGTH = 32;
     public final static Hash FAKE_HASH = new Hash(new byte[HASH_LENGTH]);

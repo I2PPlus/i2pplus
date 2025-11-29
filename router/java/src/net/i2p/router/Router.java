@@ -97,7 +97,7 @@ public class Router implements RouterClock.ClockShiftListener {
     public final Object routerInfoFileLock = new Object();
     private final Object _configFileLock = new Object();
     private long _started;
-    private boolean _killVMOnEnd;
+    private volatile boolean _killVMOnEnd;
     private int _gracefulExitCode;
     private I2PThread.OOMEventListener _oomListener;
     private ShutdownHook _shutdownHook;

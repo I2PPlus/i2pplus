@@ -35,8 +35,8 @@ public abstract class TunnelCreatorConfig implements TunnelInfo {
     private int _messagesProcessed;
     private long _verifiedBytesTransferred;
     private final AtomicInteger _failures = new AtomicInteger();
-    private boolean _reused;
-    private int _priority;
+    private volatile boolean _reused;
+    private volatile int _priority;
     //private static final int THROUGHPUT_COUNT = 3;
     // Fastest 1 minute throughput, in bytes per minute, ordered with fastest first.
     //private final double _peakThroughput[] = new double[THROUGHPUT_COUNT];

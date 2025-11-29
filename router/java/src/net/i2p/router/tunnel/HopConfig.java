@@ -29,7 +29,7 @@ public class HopConfig {
      */
     private int _messagesProcessed;
     private int _oldMessagesProcessed;
-    private int _allocatedBW;
+    private volatile int _allocatedBW;
 
     public HopConfig() {
         _creation = -1;

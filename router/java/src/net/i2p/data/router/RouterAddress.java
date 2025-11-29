@@ -43,7 +43,7 @@ import net.i2p.util.OrderedProperties;
  * @author jrandom
  */
 public class RouterAddress extends DataStructureImpl {
-    private short _cost;
+    private volatile short _cost;
     private long _expiration;
     private String _transportStyle;
     private final Properties _options;

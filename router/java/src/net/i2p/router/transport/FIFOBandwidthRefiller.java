@@ -27,19 +27,19 @@ public class FIFOBandwidthRefiller implements Runnable {
     private volatile SyntheticREDQueue _partBWE;
 
     /** how many KBps do we want to allow? */
-    private int _inboundKBytesPerSecond;
+    private volatile int _inboundKBytesPerSecond;
     /** how many KBps do we want to allow? */
-    private int _outboundKBytesPerSecond;
+    private volatile int _outboundKBytesPerSecond;
     /** how many KBps do we want to allow during burst? */
-    private int _inboundBurstKBytesPerSecond;
+    private volatile int _inboundBurstKBytesPerSecond;
     /** how many KBps do we want to allow during burst? */
-    private int _outboundBurstKBytesPerSecond;
+    private volatile int _outboundBurstKBytesPerSecond;
     /** when did we last replenish the queue? */
-    private long _lastRefillTime;
+    private volatile long _lastRefillTime;
     /** when did we last check the config for updates? */
-    private long _lastCheckConfigTime;
+    private volatile long _lastCheckConfigTime;
     /** how frequently do we check the config for updates? */
-    private long _configCheckPeriodMs = 60*1000;
+    private volatile long _configCheckPeriodMs = 60*1000;
     private volatile boolean _isRunning;
 
     public static final String PROP_INBOUND_BANDWIDTH = "i2np.bandwidth.inboundKBytesPerSecond";

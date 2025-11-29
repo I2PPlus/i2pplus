@@ -52,13 +52,13 @@ class IntroductionManager {
      * Limit since we ping to keep the conn open
      * @since 0.8.11
      */
-    private static final int MAX_INBOUND = 20;
+    private static final int MAX_INBOUND = 200;
 
     /**
      * This is enforced in EstablishmentManager
      * @since 0.8.11
      */
-    public static final int MAX_OUTBOUND = 100;
+    public static final int MAX_OUTBOUND = 200;
 
     /** Max one per target in this time */
     private static final long PUNCH_CLEAN_TIME = 5*1000;

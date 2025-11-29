@@ -51,7 +51,7 @@ public class SingleFileNamingService extends NamingService {
     private final File _file;
     private final ReentrantReadWriteLock _fileLock;
     /** cached number of entries */
-    private int _size;
+    private volatile int _size;
     /** last write time */
     private long _lastWrite;
     private volatile boolean _isClosed;

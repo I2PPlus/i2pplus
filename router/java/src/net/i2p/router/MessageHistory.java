@@ -34,8 +34,8 @@ public class MessageHistory {
     private final Queue<String> _unwrittenEntries; // list of raw entries (strings) yet to be written
     private String _historyFile; // where to write
     private String _localIdent; // placed in each entry to uniquely identify the local router
-    private boolean _doLog; // true == we want to log
-    private boolean _doPause; // true == briefly stop writing data to the log (used while submitting it)
+    private volatile boolean _doLog; // true == we want to log
+    private volatile boolean _doPause; // true == briefly stop writing data to the log (used while submitting it)
     private final ReinitializeJob _reinitializeJob;
     private final WriteJob _writeJob;
     //private SubmitMessageHistoryJob _submitMessageHistoryJob;

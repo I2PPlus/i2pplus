@@ -66,7 +66,7 @@ public class EepGet {
     protected final List<StatusListener> _listeners;
     protected List<String> _extraHeaders;
 
-    protected boolean _keepFetching;
+    protected volatile boolean _keepFetching;
     // The proxy or the actual site if not proxied. Warning - null when extended by I2PSocketEepGet
     protected Socket _proxy;
     protected OutputStream _proxyOut;
@@ -76,15 +76,15 @@ public class EepGet {
     protected long _bytesTransferred;
     protected long _bytesRemaining;
     protected int _currentAttempt;
-    protected int _responseCode = -1;
+    protected volatile int _responseCode = -1;
     protected String _responseText;
-    protected boolean _shouldWriteErrorToOutput;
+    protected volatile boolean _shouldWriteErrorToOutput;
     protected String _etag;
     protected String _lastModified;
     protected final String _etagOrig;
     protected final String _lastModifiedOrig;
-    protected boolean _encodingChunked;
-    protected boolean _notModified;
+    protected volatile boolean _encodingChunked;
+    protected volatile boolean _notModified;
     protected String _contentType;
     protected String _server;
     protected String _status;
@@ -102,12 +102,12 @@ public class EepGet {
     protected String _xssProtection;
     protected String _xContentTypeOptions;
     protected String _xPoweredBy;
-    protected boolean _transferFailed;
+    protected volatile boolean _transferFailed;
     protected volatile boolean _aborted;
-    protected int _fetchHeaderTimeout;
-    protected int _fetchTotalTimeout;
-    protected int _fetchInactivityTimeout;
-    protected int _redirects;
+    protected volatile int _fetchHeaderTimeout;
+    protected volatile int _fetchTotalTimeout;
+    protected volatile int _fetchInactivityTimeout;
+    protected volatile int _redirects;
     protected String _redirectLocation;
     protected boolean _isGzippedResponse;
     protected IOException _decompressException;

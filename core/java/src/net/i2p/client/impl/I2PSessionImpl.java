@@ -193,7 +193,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     protected AvailabilityNotifier _availabilityNotifier;
 
     private long _lastActivity;
-    private boolean _isReduced;
+    private volatile boolean _isReduced;
     private final boolean _fastReceive;
     private volatile boolean _routerSupportsFastReceive;
     private volatile boolean _routerSupportsHostLookup;

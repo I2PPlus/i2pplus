@@ -66,9 +66,9 @@ public class PeerState {
     /** when did we decide we need to ACK to this peer? */
     protected volatile long _wantACKSendSince;
     /** how many bytes should we send to the peer in a second */
-    private int _sendWindowBytes;
+    private volatile int _sendWindowBytes;
     /** how many bytes can we send to the peer in the current second */
-    private int _sendWindowBytesRemaining;
+    private volatile int _sendWindowBytesRemaining;
     private final Object _sendWindowBytesRemainingLock = new Object();
     private final SimpleBandwidthEstimator _bwEstimator;
     // smoothed value, for display only
@@ -113,11 +113,11 @@ public class PeerState {
     private int _mtuIncreases;
     private int _mtuDecreases;
     /** current round trip time estimate */
-    protected int _rtt;
+    protected volatile int _rtt;
     /** smoothed mean deviation in the rtt */
-    private int _rttDeviation;
+    private volatile int _rttDeviation;
     /** current retransmission timeout */
-    private int _rto;
+    private volatile int _rto;
 
     /** how many packets will be considered within the retransmission rate calculation */
     static final long RETRANSMISSION_PERIOD_WIDTH = SystemVersion.isSlow() ? 100 : 200;
@@ -133,7 +133,7 @@ public class PeerState {
     /** how many dup packets were received within the last RETRANSMISSION_PERIOD_WIDTH packets */
     protected int _packetsReceivedDuplicate;
     private int _packetsReceived;
-    private boolean _mayDisconnect;
+    private volatile boolean _mayDisconnect;
 
     /** list of InboundMessageState for active message */
     protected final ConcurrentMap<Long, InboundMessageState> _inboundMessages;

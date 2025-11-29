@@ -101,7 +101,7 @@ public class I2PTunnel extends EventDispatcherImpl implements Logging {
 //    public static final int PACKET_DELAY = 100;
     public static final int PACKET_DELAY = 80;
 
-    public boolean ownDest = false;
+    public volatile boolean ownDest = false;
 
     /** the I2CP port, non-null */
     public String port = System.getProperty(I2PClient.PROP_TCP_PORT, Integer.toString(I2PClient.DEFAULT_LISTEN_PORT));

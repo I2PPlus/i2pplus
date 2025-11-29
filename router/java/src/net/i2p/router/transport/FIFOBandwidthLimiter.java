@@ -45,17 +45,17 @@ public class FIFOBandwidthLimiter {
     /** how many bytes we can queue up for bursting */
     private final AtomicInteger _unavailableOutboundBurst = new AtomicInteger();
     /** how large _unavailableInbound can get */
-    private int _maxInboundBurst;
+    private volatile int _maxInboundBurst;
     /** how large _unavailableInbound can get */
-    private int _maxOutboundBurst;
+    private volatile int _maxOutboundBurst;
     /** how large _availableInbound can get - aka our inbound rate duringa burst */
-    private int _maxInbound;
+    private volatile int _maxInbound;
     /** how large _availableOutbound can get - aka our outbound rate during a burst */
-    private int _maxOutbound;
+    private volatile int _maxOutbound;
     /** shortcut of whether our outbound rate is unlimited - UNUSED always false for now */
-    private boolean _outboundUnlimited;
+    private volatile boolean _outboundUnlimited;
     /** shortcut of whether our inbound rate is unlimited - UNUSED always false for now */
-    private boolean _inboundUnlimited;
+    private volatile boolean _inboundUnlimited;
     /** lifetime counter of bytes received */
     private final AtomicLong _totalAllocatedInboundBytes = new AtomicLong();
     /** lifetime counter of bytes sent */
@@ -71,13 +71,13 @@ public class FIFOBandwidthLimiter {
     private final FIFOBandwidthRefiller _refiller;
     private final Thread _refillerThread;
 
-    private long _lastTotalSent;
-    private long _lastTotalReceived;
-    private long _lastStatsUpdated;
-    private float _sendBps;
-    private float _recvBps;
-    private float _sendBps15s;
-    private float _recvBps15s;
+    private volatile long _lastTotalSent;
+    private volatile long _lastTotalReceived;
+    private volatile long _lastStatsUpdated;
+    private volatile float _sendBps;
+    private volatile float _recvBps;
+    private volatile float _sendBps15s;
+    private volatile float _recvBps15s;
 
     public /* static */ long now() {
         // Don't use the clock().now(), since that may jump

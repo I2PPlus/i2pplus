@@ -38,25 +38,25 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
     private int _maxResends;
     private int _inactivityTimeout;
     private int _inactivityAction;
-    private int _inboundBufferSize;
-    private int _maxWindowSize;
-    private int _congestionAvoidanceGrowthRateFactor;
-    private int _slowStartGrowthRateFactor;
-    private boolean _accessListEnabled;
-    private boolean _blackListEnabled;
+    private volatile int _inboundBufferSize;
+    private volatile int _maxWindowSize;
+    private volatile int _congestionAvoidanceGrowthRateFactor;
+    private volatile int _slowStartGrowthRateFactor;
+    private volatile boolean _accessListEnabled;
+    private volatile boolean _blackListEnabled;
     private Set<Hash> _accessList;
     private Set<Hash> _blackList;
-    private int _maxConnsPerMinute;
-    private int _maxConnsPerHour;
-    private int _maxConnsPerDay;
-    private int _maxTotalConnsPerMinute;
-    private int _maxTotalConnsPerHour;
-    private int _maxTotalConnsPerDay;
-    private int _maxConns;
-    private boolean _disableRejectLog;
-    private String _limitAction;
-    private int _tagsToSend;
-    private int _tagThreshold;
+    private volatile int _maxConnsPerMinute;
+    private volatile int _maxConnsPerHour;
+    private volatile int _maxConnsPerDay;
+    private volatile int _maxTotalConnsPerMinute;
+    private volatile int _maxTotalConnsPerHour;
+    private volatile int _maxTotalConnsPerDay;
+    private volatile int _maxConns;
+    private volatile boolean _disableRejectLog;
+    private volatile String _limitAction;
+    private volatile int _tagsToSend;
+    private volatile int _tagThreshold;
 
     /** state of a connection */
     private enum AckInit {

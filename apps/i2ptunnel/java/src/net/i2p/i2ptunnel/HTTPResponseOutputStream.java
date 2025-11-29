@@ -36,11 +36,11 @@ import net.i2p.util.Log;
 class HTTPResponseOutputStream extends FilterOutputStream {
     private final Log _log;
     protected ByteArray _headerBuffer;
-    private boolean _headerWritten;
+    private volatile boolean _headerWritten;
     private final byte _buf1[];
-    protected boolean _gzip;
-    protected long _dataExpected = -1;
-    protected boolean _keepAliveIn, _keepAliveOut;
+    protected volatile boolean _gzip;
+    protected volatile long _dataExpected = -1;
+    protected volatile boolean _keepAliveIn, _keepAliveOut;
     /** lower-case, trimmed */
     protected String _contentType;
     /** lower-case, trimmed */

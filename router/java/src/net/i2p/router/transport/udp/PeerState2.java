@@ -62,8 +62,8 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
 
     private long _sentMessagesLastExpired;
     private byte[] _ourIP;
-    private int _ourPort;
-    private int _destroyReason;
+    private volatile int _ourPort;
+    private volatile int _destroyReason;
 
     // Session Confirmed retransmit
     private byte[][] _sessConfForReTX;

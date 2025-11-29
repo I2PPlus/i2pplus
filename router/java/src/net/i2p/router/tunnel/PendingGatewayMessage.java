@@ -19,7 +19,7 @@ class PendingGatewayMessage implements CDQEntry {
     protected final long _messageId;
     protected final long _expiration;
     protected final byte _remaining[];
-    protected int _offset;
+    protected volatile int _offset;
     protected int _fragmentNumber;
     protected final long _created;
     private List<Long> _messageIds;

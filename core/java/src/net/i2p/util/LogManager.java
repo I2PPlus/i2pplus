@@ -113,7 +113,7 @@ public class LogManager implements Flushable {
      * default log level for logs that aren't explicitly controlled
      * through a LogLimit in _limits
      */
-    private int _defaultLimit;
+    private volatile int _defaultLimit;
     /** Log record format string */
     private char[] _format;
     /** Date format instance */
@@ -123,7 +123,7 @@ public class LogManager implements Flushable {
     /** log filename pattern */
     private String _baseLogfilename;
     /** max # bytes in the logfile before rotation */
-    private int _fileSize;
+    private volatile int _fileSize;
     /** max # rotated logs */
     private int _rotationLimit;
     /** minimum log level to be displayed on stdout */
@@ -136,12 +136,12 @@ public class LogManager implements Flushable {
     /** the actual "recent logs" list */
     private final LogConsoleBuffer _consoleBuffer;
     private int _logBufferSize = MAX_BUFFER;
-    private boolean _dropOnOverflow;
+    private volatile boolean _dropOnOverflow;
     private boolean _dropDuplicates;
     private final AtomicLong _droppedRecords = new AtomicLong();
     // in seconds
     private int _flushInterval = (int) (LogWriter.FLUSH_INTERVAL / 1000);
-    private boolean _gzip;
+    private volatile boolean _gzip;
     private long _minGzipSize;
 
     private boolean _alreadyNoticedMissingConfig;
