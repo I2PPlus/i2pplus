@@ -137,7 +137,7 @@ class EstablishmentManager {
     private static final int DEFAULT_LOW_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 64 : 1024;
     private static final int DEFAULT_HIGH_MAX_CONCURRENT_ESTABLISH = SystemVersion.isSlow() ? 256 : 2048;
     private static final String PROP_MAX_CONCURRENT_ESTABLISH = "i2np.udp.maxConcurrentEstablish";
-    private static final float DEFAULT_THROTTLE_FACTOR = SystemVersion.isSlow() ? 2.0f : 0.8f;
+    private static final float DEFAULT_THROTTLE_FACTOR = SystemVersion.isSlow() ? 2.0f : 8.0f;
     private static final String PROP_THROTTLE_FACTOR = "router.throttleFactor";
 
     /** Max pending outbound connections (waiting because we are at MAX_CONCURRENT_ESTABLISH) */
@@ -155,18 +155,17 @@ class EstablishmentManager {
      * Note: could be shorter for fast routers with better connectivity.
      * But it's important to not fail an establishment too soon and waste it.
      */
-    private static final int MAX_OB_ESTABLISH_TIME = SystemVersion.isSlow() ? 30*1000 : 15*1000;
+    private static final int MAX_OB_ESTABLISH_TIME = SystemVersion.isSlow() ? 60*1000 : 45*1000;
 
     /**
      * Kill any inbound that takes more than this
      * One round trip (Created-Confirmed)
      * Note: could be two round trips for SSU2 with retry
-     * Optimized for fast routers to reduce handshake latency.
      */
-    public static final int MAX_IB_ESTABLISH_TIME = SystemVersion.isSlow() ? 20*1000 : 10*1000;
+    public static final int MAX_IB_ESTABLISH_TIME = SystemVersion.isSlow() ? 60*1000 : 45*1000;
 
     /** Max wait before receiving a response to a single message during outbound establishment */
-    public static final int OB_MESSAGE_TIMEOUT = 18*1000;
+    public static final int OB_MESSAGE_TIMEOUT = 25*1000;
 
     /** for the DSM and or netdb store */
     private static final int DATA_MESSAGE_TIMEOUT = 15*1000;
