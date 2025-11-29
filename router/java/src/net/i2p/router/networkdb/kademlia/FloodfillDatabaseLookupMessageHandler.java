@@ -22,14 +22,14 @@ import java.util.Set;
 
 /**
  * Handler for DatabaseLookupMessage received on floodfills.
- * &lt;p&gt;
- * This class verifies incoming lookup messages, applies throttling and banning policies,
- * and builds appropriate jobs for accepted lookups. Unacceptable lookups are logged and dropped.
- * &lt;p&gt;
- * It tracks lookup statistics such as received, dropped, handled, and matched lookups via the statManager.
- * &lt;p&gt;
- * Supports floodfill and non-floodfill router modes, with special handling for floodfill peers and
- * exploratory lookups.
+ *
+ * <p>This class verifies incoming lookup messages, applies throttling and banning policies,
+ * and builds appropriate jobs for accepted lookups. Unacceptable lookups are logged and dropped.</p>
+ *
+ * <p>It tracks lookup statistics such as received, dropped, handled, and matched lookups via the statManager.</p>
+ *
+ * <p>Supports floodfill and non-floodfill router modes, with special handling for floodfill peers and
+ * exploratory lookups.</p>
  */
 public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder {
     private RouterContext _context;
@@ -63,9 +63,9 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
     /**
      * Creates a job to handle an incoming DatabaseLookupMessage, or returns null if the lookup should be dropped.
      *
-     * &lt;p&gt;This method performs several checks, including: floodfill participation, sender identity,
+     * <p>This method performs several checks, including: floodfill participation, sender identity,
      * whether the lookup is for this router, throttling, banning, and lookup type compatibility.
-     * Logs details about accepted or dropped lookups and updates statistics.
+     * Logs details about accepted or dropped lookups and updates statistics.</p>
      *
      * @param receivedMessage the incoming message, expected to be a DatabaseLookupMessage
      * @param from the identity of the sender router
@@ -128,19 +128,25 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         }
 
         if ((!isSelfLookup && !floodfillMode) || !shouldAccept) {
-            logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
+            if (_log.ShouldWarn()) {
+                logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
+            }
             _context.statManager().addRateData("netDb.nonFFLookupsDropped", 1);
             return null;
         }
 
         if (!isSenderUs && isFF && isDirect && (type == DatabaseLookupMessage.Type.EXPL || type == DatabaseLookupMessage.Type.ANY)) {
-            logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
+            if (_log.ShouldWarn()) {
+                logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
+            }
             _context.statManager().addRateData("netDb.lookupsDropped", 1);
             return null;
         }
 
         if (!floodfillMode && !shouldBan) {
-            logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
+            if (_log.ShouldWarn()) {
+                logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
+            }
             _context.statManager().addRateData("netDb.lookupsDropped", 1);
             return null;
         }
@@ -159,7 +165,9 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             return new HandleFloodfillDatabaseLookupMessageJob(_context, dlm, from, fromHash, _msgIDBloomXor);
         }
 
-        logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
+        if (_log.ShouldWarn()) {
+            logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
+        }
         _context.statManager().addRateData("netDb.lookupsDropped", 1);
         return null;
     }
@@ -190,8 +198,9 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
                     if (dont != null) {newdlm.setDontIncludePeers(dont);}
                     return newdlm;
                 } else {
-                    if (_log.shouldWarn())
+                    if (_log.shouldWarn()) {
                         _log.warn("Dropping direct " + searchType + " lookup from our own router");
+                    }
                     _context.statManager().addRateData("netDb.lookupsDropped", 1);
                     return null;
                 }
@@ -277,16 +286,11 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
      */
     private static String typeToString(DatabaseLookupMessage.Type type) {
         switch (type) {
-            case EXPL:
-                return "Exploratory";
-            case RI:
-                return "RouterInfo";
-            case LS:
-                return "LeaseSet";
-            case ANY:
-                return "Any";
-            default:
-                return "";
+            case EXPL: return "Exploratory";
+            case RI:   return "RouterInfo";
+            case LS:   return "LeaseSet";
+            case ANY:  return "Any";
+            default:   return "";
         }
     }
 
