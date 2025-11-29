@@ -97,15 +97,15 @@ class EventPumper implements Runnable {
      * less frequently (or not at all), but while the connection count is small,
      * the time to iterate across them to check a few flags shouldn't be a problem.
      */
-    private static final int FAILSAFE_ITERATION_FREQ = 10*1000;
-    private static final int FAILSAFE_LOOP_COUNT = SystemVersion.isSlow() ? 64 : 256;
-    private static final long SELECTOR_LOOP_DELAY = SystemVersion.isSlow() ? 500 : 100;
+    private static final int FAILSAFE_ITERATION_FREQ = 30*1000;
+    private static final int FAILSAFE_LOOP_COUNT = SystemVersion.isSlow() ? 64 : 128;
+    private static final long SELECTOR_LOOP_DELAY = SystemVersion.isSlow() ? 500 : 200;
     private static final long BLOCKED_IP_FREQ = 10*60*1000;
 
     /** tunnel test now disabled, but this should be long enough to allow an active tunnel to get started */
-    private static final long MIN_EXPIRE_IDLE_TIME = 120*1000l;
+    private static final long MIN_EXPIRE_IDLE_TIME = 5*60*1000l;
     private static final long MAX_EXPIRE_IDLE_TIME = 11*60*1000l;
-    private static final long MAY_DISCON_TIMEOUT = 15*1000;
+    private static final long MAY_DISCON_TIMEOUT = 30*1000;
     private static final long RI_STORE_INTERVAL = 29*60*1000;
 
     /**
@@ -236,7 +236,7 @@ class EventPumper implements Runnable {
 
     private volatile boolean _selectorIsBlocked = false;
     private long _lastDelayedEventTime = System.currentTimeMillis();
-    private static final long DELAYED_EVENT_INTERVAL = 200;
+    private static final long DELAYED_EVENT_INTERVAL = 250;
 
     /**
      * Main selector loop for handling non-blocking IO events.
