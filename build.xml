@@ -2946,9 +2946,19 @@
   </target>
 
   <target name="spotbugs" depends="jar, build2, buildUtilityJar">
-    <taskdef resource="edu/umd/cs/findbugs/anttask/tasks.properties" classpath="/usr/share/ant/lib/spotbugs-ant.jar"/>
-    <property name="spotbugs.home" value="/usr/share/ant/lib/"/>
-    <spotbugs home="${spotbugs.home}" output="html" outputFile="dist/spotbugs.html" effort="max" debug="true" reportLevel="high">
+    <!-- Download latest SpotBugs if not present -->
+    <echo message="Note: SpotBugs requires Java11 or later."/>
+    <property name="spotbugs.version" value="4.9.8"/>
+    <property name="spotbugs.dir" location="build/spotbugs-${spotbugs.version}"/>
+    <property name="spotbugs.jar" location="${spotbugs.dir}/lib/spotbugs-ant.jar"/>
+
+    <available file="${spotbugs.jar}" property="spotbugs.present"/>
+    <antcall target="download-spotbugs"/>
+
+    <taskdef resource="edu/umd/cs/findbugs/anttask/tasks.properties" classpath="${spotbugs.jar}"/>
+    <property name="spotbugs.home" value="${spotbugs.dir}"/>
+    <property name="spotbugs.java" value="${java.home}/bin/java"/>
+    <spotbugs home="${spotbugs.home}" output="xml:withMessages" outputFile="dist/spotbugs.xml" effort="default" debug="false" reportLevel="medium" timeout="1800000" jvm="${spotbugs.java}">
       <auxAnalyzepath path="./build"/>
       <auxClasspath path="build/commons-el.jar:build/commons-logging.jar:build/jasper-compiler.jar:build/jasper-runtime.jar:build/jetty-continuation.jar:build/jetty-deploy.jar:build/jetty-http.jar:build/jetty-i2p.jar:build/jetty-io.jar:build/jetty-java5-threadpool.jar:build/jetty-rewrite-handler.jar:build/jetty-security.jar:build/jetty-servlet.jar:build/jetty-servlets.jar:build/jetty-sslengine.jar:build/jetty-start.jar:build/jetty-util.jar:build/jetty-webapp.jar:build/jetty-xml.jar:build/javax.servlet.jar:build/jo.jsonrpc.war:build/jrobin.jar:build/org.mortbay.jetty.jar:build/org.mortbay.jmx.jar:build/pack200.jar:build/systray.jar:build/tools.jar"/>
       <class location="./build/addressbook.jar"/>
@@ -2968,9 +2978,28 @@
       <class location="./build/susidns.war"/>
       <class location="./build/susimail.war"/>
       <class location="./build/streaming.jar"/>
-      <sourcePath path="./apps/**.*java:./router/**.*java:./core/**.*java"/>
+      <class location="./build/utility.jar"/>
+      <sourcePath path="./apps:./router:./core"/>
     </spotbugs>
-    <echo message="Spotbugs report written to dist/spotbugs.html"/>
+    <echo message="Spotbugs XML report written to dist/spotbugs.xml"/>
+    <antcall target="transform-spotbugs"/>
+  </target>
+
+  <target name="transform-spotbugs">
+    <echo message="Transforming SpotBugs XML to HTML using custom stylesheet..."/>
+    <xslt in="dist/spotbugs.xml" out="dist/spotbugs.html" style="spotbugs.xsl"/>
+    <echo message="SpotBugs HTML report written to dist/spotbugs.html"/>
+  </target>
+
+  <target name="download-spotbugs" unless="spotbugs.present">
+    <echo message="Downloading SpotBugs ${spotbugs.version}..."/>
+    <mkdir dir="build"/>
+    <get src="https://github.com/spotbugs/spotbugs/releases/download/${spotbugs.version}/spotbugs-${spotbugs.version}.tgz"
+         dest="build/spotbugs-${spotbugs.version}.tgz"
+         usetimestamp="true"
+         timeout="300000"/>
+    <untar src="build/spotbugs-${spotbugs.version}.tgz" dest="build" compression="gzip"/>
+    <echo message="SpotBugs ${spotbugs.version} downloaded and extracted to ${spotbugs.dir}"/>
   </target>
 
   <!-- this is the same dependency as pkg, but with updater200 in the middle, since preppkg puts too much stuff in pkg-temp -->

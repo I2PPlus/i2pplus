@@ -18,4 +18,8 @@
   <Match>
     <Class name="~.*\.jsp.*"/>
   </Match>
+  <!-- Suppress all Apache Commons classes -->
+  <Match>
+    <Class name="~org\.apache\.commons\..*"/>
+  </Match>
 </FindBugsFilter>
