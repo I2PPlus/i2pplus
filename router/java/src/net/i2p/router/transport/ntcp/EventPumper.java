@@ -67,10 +67,11 @@ class EventPumper implements Runnable {
     private long _expireIdleWriteTime;
     private static final boolean _useDirect = false;
     private final boolean _nodelay;
+    private boolean _selectorIsBlocked;
 
     private final Map<Hash, Long> _failedOutboundAttempts = new ConcurrentHashMap<>();
     private final Map<Hash, Integer> _failedOutboundCount = new ConcurrentHashMap<>();
-    private static final long MIN_RETRY_INTERVAL = 30_000; // 30 seconds
+    private static final long MIN_RETRY_INTERVAL = 500;
     private static final int MAX_RETRY_INTERVAL = 5 * 60 * 1000; // 5 minutes
     private static final float RETRY_BACKOFF_FACTOR = 1.5f;
     private long _lastRetryMapClear = System.currentTimeMillis();
@@ -81,7 +82,7 @@ class EventPumper implements Runnable {
      *  message, which is a 5-slot VTBM (~2700 bytes).
      *  The occasional larger message can use multiple buffers.
      */
-    private static final int BUF_SIZE = 16*1024;
+    private static final int BUF_SIZE = 8*1024;
 
     private static class BufferFactory implements TryCache.ObjectFactory<ByteBuffer> {
         public ByteBuffer newInstance() {
@@ -98,14 +99,14 @@ class EventPumper implements Runnable {
      * the time to iterate across them to check a few flags shouldn't be a problem.
      */
     private static final int FAILSAFE_ITERATION_FREQ = 30*1000;
-    private static final int FAILSAFE_LOOP_COUNT = SystemVersion.isSlow() ? 64 : 128;
-    private static final long SELECTOR_LOOP_DELAY = SystemVersion.isSlow() ? 500 : 200;
-    private static final long BLOCKED_IP_FREQ = 10*60*1000;
+    private static final int FAILSAFE_LOOP_COUNT = SystemVersion.isSlow() ? 8 : 16;
+    private static final long SELECTOR_LOOP_DELAY = SystemVersion.isSlow() ? 2000 : 1000;
+    private static final long BLOCKED_IP_FREQ = 39*60*1000;
 
     /** tunnel test now disabled, but this should be long enough to allow an active tunnel to get started */
     private static final long MIN_EXPIRE_IDLE_TIME = 5*60*1000l;
     private static final long MAX_EXPIRE_IDLE_TIME = 11*60*1000l;
-    private static final long MAY_DISCON_TIMEOUT = 30*1000;
+    private static final long MAY_DISCON_TIMEOUT = 90*1000;
     private static final long RI_STORE_INTERVAL = 29*60*1000;
 
     /**
@@ -206,7 +207,7 @@ class EventPumper implements Runnable {
                 long now = System.currentTimeMillis();
                 // Use consecutive failure count for exponential backoff instead of time-based calculation
                 int consecutiveFailures = failCount != null ? failCount : 1;
-                long delay = (long) (MIN_RETRY_INTERVAL * Math.pow(RETRY_BACKOFF_FACTOR, Math.min(5, consecutiveFailures - 1)));
+                long delay = (long) (MIN_RETRY_INTERVAL * Math.pow(RETRY_BACKOFF_FACTOR, Math.min(100, consecutiveFailures - 1)));
                 delay = Math.min(delay, MAX_RETRY_INTERVAL);
                 if (now - lastFailed < delay) {
                     if (_log.shouldWarn()) {
@@ -234,10 +235,6 @@ class EventPumper implements Runnable {
         return _context.getProperty(PROP_THROTTLE_FACTOR, DEFAULT_THROTTLE_FACTOR);
     }
 
-    private volatile boolean _selectorIsBlocked = false;
-    private long _lastDelayedEventTime = System.currentTimeMillis();
-    private static final long DELAYED_EVENT_INTERVAL = 250;
-
     /**
      * Main selector loop for handling non-blocking IO events.
      * Optimized for minimal overhead on high-bandwidth routers.
@@ -260,7 +257,7 @@ class EventPumper implements Runnable {
             t.setDaemon(true);
             return t;
         });
-        background.scheduleAtFixedRate(this::doFailsafeCheck, 5, 30, TimeUnit.SECONDS);
+        background.scheduleAtFixedRate(this::doFailsafeCheck, 5, 10, TimeUnit.SECONDS);
 
         try {
             while (_alive && _selector != null && _selector.isOpen()) {
@@ -269,19 +266,16 @@ class EventPumper implements Runnable {
                     loopCount++;
                     loopCountSinceLastRate++;
 
-                    // Determine selector delay dynamically
+                    // Determine selector delay dynamically using throttle factor
                     int loopsPerSecond = getAvgPumpLoops();
                     boolean inactive = _wantsWrite.isEmpty() && _wantsRead.isEmpty();
-                    long delay = inactive ? 1000L : SELECTOR_LOOP_DELAY;
-                    if (loopsPerSecond > 4000) {delay = Math.max(1000, delay *=5);}
-                    else if (loopsPerSecond > 3000) {delay = Math.max(1000, delay *=4);}
-                    else if (loopsPerSecond > 2000) {delay = Math.max(1000, delay *=3);}
-                    else if (loopsPerSecond > 1000) {delay = Math.max(1000, delay *=2);}
-                    else if (inactive && loopsPerSecond < 500) {delay = Math.max(1500, delay);}
+                    long delay = inactive ? 3000L : SELECTOR_LOOP_DELAY;
+                    float throttleFactor = getThrottleFactor();
+                    if (loopsPerSecond > 4000) {delay = (long) delay * (long)throttleFactor * 2;}
 
                     int selectedCount;
                     _selectorIsBlocked = true;
-                    try {selectedCount = _selector.select(inactive ? 1000L : delay);}
+                    try {selectedCount = _selector.select(delay);}
                     catch (ClosedSelectorException cse) {continue;}
                     catch (IOException | CancelledKeyException e) {
                         if (shouldDebug) _log.warn("Error selecting", e);
@@ -297,11 +291,7 @@ class EventPumper implements Runnable {
 
                     long nowMs = System.currentTimeMillis();
 
-                    if (nowMs - _lastDelayedEventTime >= DELAYED_EVENT_INTERVAL) {
-                        runDelayedEvents();
-                        _lastDelayedEventTime = nowMs;
-                    }
-
+                    runDelayedEvents();
 
                     // Update loop rate stat 60 seconds
                     if (nowMs - lastLoopRateUpdate >= 60000) {
@@ -1065,7 +1055,7 @@ class EventPumper implements Runnable {
         return rv;
     }
 
-    private static final int MAX_BATCH = SystemVersion.isSlow() ? 32 : 64; // max items per queue per invocation to limit work
+    private static final int MAX_BATCH = SystemVersion.isSlow() ? 1024 : 16384; // max items per queue per invocation to limit work
 
     /**
      * Processes delayed events from multiple queues by updating selector interest ops.
