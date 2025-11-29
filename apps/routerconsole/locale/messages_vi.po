@@ -4686,7 +4686,7 @@ msgstr "Giới hạn băng thông"
 msgid "Advanced Network Configuration"
 msgstr "Cấu hình mạng nâng cao"
 
-msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
 msgstr "I2P sẽ hoạt động tốt nhất nếu bạn định cấu hình tốc độ phù hợp với tốc độ kết nối internet của mình."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
@@ -4717,10 +4717,10 @@ msgid "NOTE"
 msgstr ""
 
 #, java-format
-msgid "You have configured I2P to share only {0} KBps."
+msgid "You have configured I2P+ to share only {0} KBps."
 msgstr "Bạn đã cấu hình I2P để chia sẻ chỉ {0} KB/s."
 
-msgid "I2P requires at least 12KBps to enable sharing. "
+msgid "I2P+ requires at least 12KBps to enable sharing. "
 msgstr "I2P yêu cầu ít nhất 12KBps để cho phép chia sẻ."
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
@@ -7688,14 +7688,14 @@ msgstr "Băng thông hạ lưu"
 msgid "Upstream Bandwidth"
 msgstr "Băng thông ngược dòng"
 
-msgid "Share of Bandwidth for I2P"
+msgid "Share of Bandwidth for I2P+"
 msgstr "Chia sẻ băng thông cho I2P"
 
 msgid "Bandwidth Configuration"
 msgstr "Cấu hình băng thông"
 
 #, java-format
-msgid "You have configured I2P to share {0} KBps."
+msgid "You have configured I2P+ to share {0} KBps."
 msgstr "Bạn đã định cấu hình I2P để chia sẻ {0} KBps."
 
 msgid "I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network."
@@ -7710,10 +7710,10 @@ msgstr "Để truy cập các trang web được lưu trữ trên mạng I2P và
 msgid "Welcome to I2P+!"
 msgstr "Chào mừng đến với I2P+"
 
-msgid "When you start I2P, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
+msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "Khi bạn bắt đầu I2P, có thể mất vài phút để bootstrap (tích hợp) bộ định tuyến của bạn vào mạng và tìm thêm các đồng nghiệp, vì vậy hãy kiên nhẫn."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P."
+msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
 msgstr "Sau khi các ngôi sao màu xanh lá cây được chỉ định bên cạnh Đường hầm cục bộ của bạn, bạn có thể làm rất nhiều việc với I2P."
 
 msgid "Unknown Wizard page"

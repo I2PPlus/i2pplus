@@ -4686,7 +4686,7 @@ msgstr "带宽限制器"
 msgid "Advanced Network Configuration"
 msgstr "高级网络配置"
 
-msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
 msgstr "与联网环境相符的速度能使 I2P 以最佳的状态工作。"
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
@@ -4717,10 +4717,10 @@ msgid "NOTE"
 msgstr ""
 
 #, java-format
-msgid "You have configured I2P to share only {0} KBps."
+msgid "You have configured I2P+ to share only {0} KBps."
 msgstr "您已设置 I2P 仅共享 {0} KB/s。"
 
-msgid "I2P requires at least 12KBps to enable sharing. "
+msgid "I2P+ requires at least 12KBps to enable sharing. "
 msgstr "I2P 需要至少 12KB/s 才能进行共享。 "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
@@ -7688,14 +7688,14 @@ msgstr "上行带宽"
 msgid "Upstream Bandwidth"
 msgstr "下行带宽"
 
-msgid "Share of Bandwidth for I2P"
+msgid "Share of Bandwidth for I2P+"
 msgstr "为 I2P 共享的带宽"
 
 msgid "Bandwidth Configuration"
 msgstr "带宽配置"
 
 #, java-format
-msgid "You have configured I2P to share {0} KBps."
+msgid "You have configured I2P+ to share {0} KBps."
 msgstr "您已设置 I2P 共享 {0} KB/s。"
 
 msgid "I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network."
@@ -7710,10 +7710,10 @@ msgstr "为了访问I2P上的网站，并可使用默认的出口代理连接到
 msgid "Welcome to I2P+!"
 msgstr "欢迎来到 I2P！"
 
-msgid "When you start I2P, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
+msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "当你启动 I2P 时, 可能需要数分钟的时间将你的路由引导（整合）至网络当中并发现其它对等节点，所以请耐心等待。"
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P."
+msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
 msgstr "一旦您的本地隧道旁显示绿星，你将可以通过 I2P 做大量事情。"
 
 msgid "Unknown Wizard page"

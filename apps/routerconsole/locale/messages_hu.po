@@ -4704,7 +4704,7 @@ msgstr "Sávszélesség-korlátozó"
 msgid "Advanced Network Configuration"
 msgstr "Speciális hálózati konfiguráció"
 
-msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
 msgstr "Az I2P akkor működik legjobban, ha a sebesség értékeidet úgy állítod be, hogy egyezzen az internetkapcsolatod sebességével."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
@@ -4735,10 +4735,10 @@ msgid "NOTE"
 msgstr ""
 
 #, java-format
-msgid "You have configured I2P to share only {0} KBps."
+msgid "You have configured I2P+ to share only {0} KBps."
 msgstr "Az I2P-t úgy állítottad be, hogy csak {0} KB-t osszon meg másodpercenként."
 
-msgid "I2P requires at least 12KBps to enable sharing. "
+msgid "I2P+ requires at least 12KBps to enable sharing. "
 msgstr "A megosztás engedélyezéséhez az I2P-nek legalább 12 KB/mp-re van szüksége."
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
@@ -7706,14 +7706,14 @@ msgstr "Lefelé irányuló sávszélesség"
 msgid "Upstream Bandwidth"
 msgstr "Upstream sávszélesség"
 
-msgid "Share of Bandwidth for I2P"
+msgid "Share of Bandwidth for I2P+"
 msgstr "Sávszélesség megosztása I2P esetén"
 
 msgid "Bandwidth Configuration"
 msgstr "Sávszélesség-konfiguráció"
 
 #, java-format
-msgid "You have configured I2P to share {0} KBps."
+msgid "You have configured I2P+ to share {0} KBps."
 msgstr "Úgy állítottad be az I2P-t, hogy {0} KB/mp-t osszon meg."
 
 msgid "I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network."
@@ -7728,10 +7728,10 @@ msgstr "Annak érdekében, hogy hozzáférhess a weboldalakhoz az I2P hálózato
 msgid "Welcome to I2P+!"
 msgstr "Üdvözöl az I2P+!"
 
-msgid "When you start I2P, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
+msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "Amikor elindítja az I2P-t, eltarthat néhány percig, amíg az útválasztót beindítja (integrálja) a hálózatba, és további társakat talál, ezért kérjük, legyen türelemmel."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P."
+msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
 msgstr "Ha a helyi alagutak mellett zöld csillagok láthatók, sokféle dolgot tehetsz az I2P-vel."
 
 msgid "Unknown Wizard page"

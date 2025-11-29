@@ -4704,7 +4704,7 @@ msgstr "محدود کننده پهنای باند"
 msgid "Advanced Network Configuration"
 msgstr "پیکربندی شبکه پیشرفته"
 
-msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
 msgstr "I2P اگر نرخ های خود را پیکربندی کنید تا با سرعت اتصال اینترنت خود مطابقت داشته باشد ، بهترین کار خواهد بود."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
@@ -4735,10 +4735,10 @@ msgid "NOTE"
 msgstr ""
 
 #, java-format
-msgid "You have configured I2P to share only {0} KBps."
+msgid "You have configured I2P+ to share only {0} KBps."
 msgstr "شما I2P را طوری پیکربندی کرده اید که فقط {0} کیلوبایت بر ثانیه به اشتراک گذاشته شود."
 
-msgid "I2P requires at least 12KBps to enable sharing. "
+msgid "I2P+ requires at least 12KBps to enable sharing. "
 msgstr "I2P به حداقل 12KBps برای فعال کردن اشتراک‌گذاری نیاز دارد."
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
@@ -7706,14 +7706,14 @@ msgstr "پهنای باند پایین دست"
 msgid "Upstream Bandwidth"
 msgstr "پهنای باند بالادست"
 
-msgid "Share of Bandwidth for I2P"
+msgid "Share of Bandwidth for I2P+"
 msgstr "سهم پهنای باند برای I2P+"
 
 msgid "Bandwidth Configuration"
 msgstr "پیکربندی پهنای باند"
 
 #, java-format
-msgid "You have configured I2P to share {0} KBps."
+msgid "You have configured I2P+ to share {0} KBps."
 msgstr "شما I2P را برای اشتراک گذاری {0} کیلوبایت بر ثانیه پیکربندی کرده اید."
 
 msgid "I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network."
@@ -7728,10 +7728,10 @@ msgstr "برای دسترسی به وب‌سایت‌های میزبانی شد�
 msgid "Welcome to I2P+!"
 msgstr "به I2P خوش آمدید!"
 
-msgid "When you start I2P, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
+msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "هنگامی که I2P را راه اندازی می کنید، ممکن است چند دقیقه طول بکشد تا روتر خود را در شبکه راه اندازی کنید (ادغام کنید) و همتاهای بیشتری پیدا کنید، بنابراین لطفا صبور باشید."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P."
+msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
 msgstr "هنگامی که ستاره های سبز در کنار تونل های محلی شما نشان داده می شوند، کارهای بسیار متنوعی وجود دارد که می توانید با I2P انجام دهید."
 
 msgid "Unknown Wizard page"

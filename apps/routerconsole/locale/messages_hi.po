@@ -4704,7 +4704,7 @@ msgstr "बैंडविड्ध सीमावाहक"
 msgid "Advanced Network Configuration"
 msgstr "उन्नत नेटवर्क सेटिंग"
 
-msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
 msgstr "I2P को सबसे अच्छी तरह से कार्य करने के लिए, आपको अपनी इंटरनेट कनेक्शन की गति के मापदंड के अनुसार बैंडविड्ध की सेटिंग करनी चाहिए।"
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
@@ -4735,10 +4735,10 @@ msgid "NOTE"
 msgstr ""
 
 #, java-format
-msgid "You have configured I2P to share only {0} KBps."
+msgid "You have configured I2P+ to share only {0} KBps."
 msgstr "आपने I2P को केवल {0} KBps साझा करने के लिए सेट किया है।"
 
-msgid "I2P requires at least 12KBps to enable sharing. "
+msgid "I2P+ requires at least 12KBps to enable sharing. "
 msgstr "I2P को कम से कम 12KBps की गति की आवश्यकता होती है शेयरिंग को सक्षम करने के लिए।"
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
@@ -7706,14 +7706,14 @@ msgstr "डाउनस्ट्रीम बैंडविड्थ"
 msgid "Upstream Bandwidth"
 msgstr "अपस्ट्रीम बैंडविड्थ"
 
-msgid "Share of Bandwidth for I2P"
+msgid "Share of Bandwidth for I2P+"
 msgstr "I2P के लिए बैंडविड्थ का हिस्सा"
 
 msgid "Bandwidth Configuration"
 msgstr "बैंडविड्थ सेटिंग"
 
 #, java-format
-msgid "You have configured I2P to share {0} KBps."
+msgid "You have configured I2P+ to share {0} KBps."
 msgstr "आपने I2P को {0} KBps शेयर करने के लिए सेट किया है।"
 
 msgid "I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network."
@@ -7728,10 +7728,10 @@ msgstr "I2P नेटवर्क पर मेज़बानी करने �
 msgid "Welcome to I2P+!"
 msgstr "I2P+ में स्वागत है!"
 
-msgid "When you start I2P, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
+msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "I2P शुरू करने पर, यह आपके राउटर को नेटवर्क में बीजीकरण करने और अतिरिक्त पीयर खोजने में कुछ मिनट ले सकता है, इसलिए कृपया सहनशील रहें।"
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P."
+msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
 msgstr "जब आपके स्थानिक टंनल के बगल में हरे तारे दिखाई देंगे, तो I2P के साथ आपके पास विभिन्न कार्य करने की संभावनाएँ होंगी।"
 
 msgid "Unknown Wizard page"

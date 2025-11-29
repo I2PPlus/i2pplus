@@ -4704,7 +4704,7 @@ msgstr "Περιοριστής εύρους ζώνης"
 msgid "Advanced Network Configuration"
 msgstr "Προηγμένη διαμόρφωση δικτύου"
 
-msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
 msgstr "Το I2P θα δουλεύει καλύτερα αν ρυθμίσεις τους ρυθμούς μεταφοράς σε αντιστοιχεία με την ταχύτητα της διαδικτυακής σου σύνδεσης."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
@@ -4735,10 +4735,10 @@ msgid "NOTE"
 msgstr ""
 
 #, java-format
-msgid "You have configured I2P to share only {0} KBps."
+msgid "You have configured I2P+ to share only {0} KBps."
 msgstr "Έχετε ρυθμίσει το I2P να μοιράζεται μόνο {0} KBps."
 
-msgid "I2P requires at least 12KBps to enable sharing. "
+msgid "I2P+ requires at least 12KBps to enable sharing. "
 msgstr "Το I2P απαιτεί τουλάχιστο 12KBps για την ενεργοποιήση του διαμοιρασμού. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
@@ -7706,14 +7706,14 @@ msgstr "Εύρος ζώνης κατάντη"
 msgid "Upstream Bandwidth"
 msgstr "Ανάντη εύρος ζώνης"
 
-msgid "Share of Bandwidth for I2P"
+msgid "Share of Bandwidth for I2P+"
 msgstr "Μερίδιο εύρους ζώνης για I2P"
 
 msgid "Bandwidth Configuration"
 msgstr "Διαμόρφωση εύρους ζώνης"
 
 #, java-format
-msgid "You have configured I2P to share {0} KBps."
+msgid "You have configured I2P+ to share {0} KBps."
 msgstr "Έχετε ρυθμίσει το I2P να μοιράζεται {0} KBps."
 
 msgid "I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network."
@@ -7728,10 +7728,10 @@ msgstr "Για να έχετε πρόσβαση σε ιστότοπους που
 msgid "Welcome to I2P+!"
 msgstr "Καλώς ήρθατε στο  I2P!"
 
-msgid "When you start I2P, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
+msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "Όταν εκκινείτε το I2P, μπορεί να χρειαστούν μερικά λεπτά για την εκκίνηση (ενσωμάτωση) του δρομολογητή σας στο δίκτυο και την εύρεση επιπλέον συνομηλίκων, οπότε παρακαλούμε να είστε υπομονετικοί."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P."
+msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
 msgstr "Μόλις επισημανθούν πράσινα αστέρια δίπλα στις τοπικές σας σήραγγες, υπάρχει μια μεγάλη ποικιλία από πράγματα που μπορείτε να κάνετε με το I2P."
 
 msgid "Unknown Wizard page"

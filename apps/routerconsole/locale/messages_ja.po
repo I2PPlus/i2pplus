@@ -4686,7 +4686,7 @@ msgstr "帯域幅リミッター"
 msgid "Advanced Network Configuration"
 msgstr "高度なネットワーク構成"
 
-msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
 msgstr "I2P は、インターネット接続の速度と一致するように料金を設定すると、最適に機能します。"
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
@@ -4717,10 +4717,10 @@ msgid "NOTE"
 msgstr ""
 
 #, java-format
-msgid "You have configured I2P to share only {0} KBps."
+msgid "You have configured I2P+ to share only {0} KBps."
 msgstr "{0} KBps のみを共有するように I2P を構成しました。"
 
-msgid "I2P requires at least 12KBps to enable sharing. "
+msgid "I2P+ requires at least 12KBps to enable sharing. "
 msgstr "I2P で共有を有効にするには、少なくとも 12KBps が必要です。"
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
@@ -7688,14 +7688,14 @@ msgstr "下り帯域幅"
 msgid "Upstream Bandwidth"
 msgstr "アップストリーム帯域幅"
 
-msgid "Share of Bandwidth for I2P"
+msgid "Share of Bandwidth for I2P+"
 msgstr "I2P+の帯域幅のシェア"
 
 msgid "Bandwidth Configuration"
 msgstr "帯域幅の設​​定"
 
 #, java-format
-msgid "You have configured I2P to share {0} KBps."
+msgid "You have configured I2P+ to share {0} KBps."
 msgstr "{0} KBps を共有するように I2P+ を設定しました。"
 
 msgid "I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network."
@@ -7710,10 +7710,10 @@ msgstr "I2Pネットワークでホストされているウェブサイトにア
 msgid "Welcome to I2P+!"
 msgstr "I2P+ にようこそ！"
 
-msgid "When you start I2P, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
+msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "I2P を開始すると、ルーターをネットワークにブートストラップ (統合) し、追加のピアを検索するのに数分かかることがありますので、しばらくお待ちください。"
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P."
+msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
 msgstr "ローカル トンネルの横に緑色の星が表示されると、I2P でさまざまなことができるようになります。"
 
 msgid "Unknown Wizard page"

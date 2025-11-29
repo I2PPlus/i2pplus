@@ -4704,7 +4704,7 @@ msgstr "Limitador de largura de banda"
 msgid "Advanced Network Configuration"
 msgstr "Configuração de rede avançada"
 
-msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
 msgstr "O I2P irá funcionar melhor se você configurar as taxas conforme a velocidade contratada da sua internet."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
@@ -4735,10 +4735,10 @@ msgid "NOTE"
 msgstr ""
 
 #, java-format
-msgid "You have configured I2P to share only {0} KBps."
+msgid "You have configured I2P+ to share only {0} KBps."
 msgstr "I2P está configurado para compartilhar apenas {0} KBps"
 
-msgid "I2P requires at least 12KBps to enable sharing. "
+msgid "I2P+ requires at least 12KBps to enable sharing. "
 msgstr "I2P requer pelo menos 12KBps para habilitar compartilhamento."
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
@@ -7706,14 +7706,14 @@ msgstr "Largura de banda a jusante"
 msgid "Upstream Bandwidth"
 msgstr "Largura de banda upstream"
 
-msgid "Share of Bandwidth for I2P"
+msgid "Share of Bandwidth for I2P+"
 msgstr "Compartilhamento de largura de banda para I2P"
 
 msgid "Bandwidth Configuration"
 msgstr "Configuração de largura de banda"
 
 #, java-format
-msgid "You have configured I2P to share {0} KBps."
+msgid "You have configured I2P+ to share {0} KBps."
 msgstr "I2P foi configurado para compartilhar {0} KBps."
 
 msgid "I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network."
@@ -7728,10 +7728,10 @@ msgstr "Para acessar sites hospedados na rede I2P e opcionalmente usar o outprox
 msgid "Welcome to I2P+!"
 msgstr "Bem-vindo ao I2P!"
 
-msgid "When you start I2P, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
+msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "Quando você inicia o I2P, pode levar alguns minutos para inicializar (integrar) seu roteador na rede e encontrar pares adicionais, portanto, seja paciente."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P."
+msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
 msgstr "Uma vez que as estrelas verdes são indicadas ao lado dos seus túneis locais, há uma grande variedade de coisas que você pode fazer com o I2P."
 
 msgid "Unknown Wizard page"

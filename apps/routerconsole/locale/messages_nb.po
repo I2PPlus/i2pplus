@@ -4704,7 +4704,7 @@ msgstr "Båndbreddebegrenser"
 msgid "Advanced Network Configuration"
 msgstr "Avansert nettverksoppsett"
 
-msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
 msgstr "I2P vil fungere best hvis du konfigurerer prisene dine for å matche hastigheten på internettforbindelsen din."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
@@ -4735,10 +4735,10 @@ msgid "NOTE"
 msgstr ""
 
 #, java-format
-msgid "You have configured I2P to share only {0} KBps."
+msgid "You have configured I2P+ to share only {0} KBps."
 msgstr "Du har satt opp I2P til å bare bruke {0} KBps."
 
-msgid "I2P requires at least 12KBps to enable sharing. "
+msgid "I2P+ requires at least 12KBps to enable sharing. "
 msgstr "I2P krever minst 12KBps for å skru på deling. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
@@ -7706,14 +7706,14 @@ msgstr "Nedstrøms båndbredde"
 msgid "Upstream Bandwidth"
 msgstr "Oppstrøms båndbredde"
 
-msgid "Share of Bandwidth for I2P"
+msgid "Share of Bandwidth for I2P+"
 msgstr "Andel av båndbredde for I2P"
 
 msgid "Bandwidth Configuration"
 msgstr "Båndbreddekonfigurasjon"
 
 #, java-format
-msgid "You have configured I2P to share {0} KBps."
+msgid "You have configured I2P+ to share {0} KBps."
 msgstr "Du har satt opp I2P til å dele {0} KBps."
 
 msgid "I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network."
@@ -7728,10 +7728,10 @@ msgstr "For å få tilgang til nettsteder som er vert på I2P-nettverket, og val
 msgid "Welcome to I2P+!"
 msgstr "Velkommen til I2P!"
 
-msgid "When you start I2P, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
+msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "Når du starter I2P, kan det ta noen minutter å starte opp (integrere) ruteren din i nettverket og finne flere likemenn, så vær tålmodig."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P."
+msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
 msgstr "Når grønne stjerner er indikert ved siden av dine lokale tunneler, er det en rekke ting du kan gjøre med I2P."
 
 msgid "Unknown Wizard page"

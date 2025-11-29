@@ -4686,7 +4686,7 @@ msgstr "대역폭 리미터"
 msgid "Advanced Network Configuration"
 msgstr "고급 네트워크 구성"
 
-msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
 msgstr "I2P를 최적화 하시려면 인터넷 연결속도와 맞춰 대역폭 비율을 설정하십시오."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
@@ -4717,10 +4717,10 @@ msgid "NOTE"
 msgstr ""
 
 #, java-format
-msgid "You have configured I2P to share only {0} KBps."
+msgid "You have configured I2P+ to share only {0} KBps."
 msgstr "I2P에 오직 {0} KBps만 사용하도록 설정되었습니다."
 
-msgid "I2P requires at least 12KBps to enable sharing. "
+msgid "I2P+ requires at least 12KBps to enable sharing. "
 msgstr "I2P는 최소 12KBps 를 공유하도록 해야합니다."
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
@@ -7688,14 +7688,14 @@ msgstr "다운 스트림 대역폭"
 msgid "Upstream Bandwidth"
 msgstr "상류 대역폭"
 
-msgid "Share of Bandwidth for I2P"
+msgid "Share of Bandwidth for I2P+"
 msgstr "i2p의 대역폭 공유"
 
 msgid "Bandwidth Configuration"
 msgstr "대역폭 구성"
 
 #, java-format
-msgid "You have configured I2P to share {0} KBps."
+msgid "You have configured I2P+ to share {0} KBps."
 msgstr "{0} KBps를 I2P와 공유하도록 설정했습니다."
 
 msgid "I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network."
@@ -7710,10 +7710,10 @@ msgstr "I2P 네트워크에서 호스팅 된 웹 사이트에 액세스하고 �
 msgid "Welcome to I2P+!"
 msgstr "I2P에 환영합니다!"
 
-msgid "When you start I2P, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
+msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "I2P를 시작하면 라우터를 네트워크에 부트 스트랩 (통합)하고 추가 피어를 찾는 데 몇 분이 걸릴 수 있으므로 인내하십시오."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P."
+msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
 msgstr "로컬 터널 옆에 녹색 별이 표시되면 i2p로 할 수있는 다양한 일이 있습니다."
 
 msgid "Unknown Wizard page"

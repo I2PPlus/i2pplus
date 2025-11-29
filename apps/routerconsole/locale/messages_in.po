@@ -4686,7 +4686,7 @@ msgstr "Pembatas bandwidth"
 msgid "Advanced Network Configuration"
 msgstr "Konfigurasi Jaringan Tingkat Lanjut"
 
-msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
 msgstr "I2P akan bekerja paling baik jika anda mengkonfigurasi rate anda sesuai kecepatan koneksi internet anda."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
@@ -4717,10 +4717,10 @@ msgid "NOTE"
 msgstr ""
 
 #, java-format
-msgid "You have configured I2P to share only {0} KBps."
+msgid "You have configured I2P+ to share only {0} KBps."
 msgstr "Anda telah mengkonfigurasi I2P untuk sharing hanya {0} KBps."
 
-msgid "I2P requires at least 12KBps to enable sharing. "
+msgid "I2P+ requires at least 12KBps to enable sharing. "
 msgstr "I2P membutuhkan setidaknya 12KBps untuk memungkinkan sharing. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
@@ -7688,14 +7688,14 @@ msgstr "Bandwidth Hilir"
 msgid "Upstream Bandwidth"
 msgstr "Bandwidth Hulu"
 
-msgid "Share of Bandwidth for I2P"
+msgid "Share of Bandwidth for I2P+"
 msgstr "Pembagian Bandwidth untuk I2P"
 
 msgid "Bandwidth Configuration"
 msgstr "Konfigurasi Bandwidth"
 
 #, java-format
-msgid "You have configured I2P to share {0} KBps."
+msgid "You have configured I2P+ to share {0} KBps."
 msgstr "Anda telah mengkonfigurasi I2P untuk sharing {0} KBps."
 
 msgid "I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network."
@@ -7710,10 +7710,10 @@ msgstr "Untuk mengakses situs web yang di-hosting pada jaringan I2P, dan secara 
 msgid "Welcome to I2P+!"
 msgstr "Selamat datang di I2P!"
 
-msgid "When you start I2P, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
+msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "Saat Anda memulai I2P, mungkin diperlukan beberapa menit untuk melakukan bootstrap (mengintegrasikan) router Anda ke dalam jaringan dan menemukan rekan tambahan, jadi harap bersabar."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P."
+msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
 msgstr "Setelah bintang hijau ditunjukkan di sebelah Terowongan Lokal Anda, ada berbagai macam hal yang dapat Anda lakukan dengan I2P."
 
 msgid "Unknown Wizard page"

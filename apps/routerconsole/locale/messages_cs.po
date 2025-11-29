@@ -4722,7 +4722,7 @@ msgstr "Omezovač šířky pásma"
 msgid "Advanced Network Configuration"
 msgstr "Pokročilá konfigurace sítě"
 
-msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
 msgstr "I2P bude nejlépe fungovat, pokud své sazby nakonfigurujete tak, aby odpovídaly rychlosti vašeho internetového připojení."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
@@ -4753,10 +4753,10 @@ msgid "NOTE"
 msgstr ""
 
 #, java-format
-msgid "You have configured I2P to share only {0} KBps."
+msgid "You have configured I2P+ to share only {0} KBps."
 msgstr "Nastavili jste I2P pro sdílení pouze {0} kB/s."
 
-msgid "I2P requires at least 12KBps to enable sharing. "
+msgid "I2P+ requires at least 12KBps to enable sharing. "
 msgstr "I2P vyžaduje pro sdílení alespoň 12 kB/s."
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
@@ -7730,14 +7730,14 @@ msgstr "Šířka pásma směrem dolů"
 msgid "Upstream Bandwidth"
 msgstr "Proudovou šířkou nahoru"
 
-msgid "Share of Bandwidth for I2P"
+msgid "Share of Bandwidth for I2P+"
 msgstr "Podíl šířky pásma pro I2P"
 
 msgid "Bandwidth Configuration"
 msgstr "Konfigurace šířky pásma"
 
 #, java-format
-msgid "You have configured I2P to share {0} KBps."
+msgid "You have configured I2P+ to share {0} KBps."
 msgstr "Nastavili jste I2P pro sdílení {0} kB/s."
 
 msgid "I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network."
@@ -7752,10 +7752,10 @@ msgstr "Za účelem přístupu k webovým stránkám hostovaným v síti I2P a v
 msgid "Welcome to I2P+!"
 msgstr "Vítejte v I2P!"
 
-msgid "When you start I2P, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
+msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "Když spustíte I2P, může zavádění (integrace) vašeho routeru do sítě a nalezení dalších kolegů trvat několik minut, takže buďte trpěliví."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P."
+msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
 msgstr "Jakmile jsou vedle vašich místních tunelů označeny zelené hvězdičky, existuje široká škála věcí, které můžete s I2P dělat."
 
 msgid "Unknown Wizard page"

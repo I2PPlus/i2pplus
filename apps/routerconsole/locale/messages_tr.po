@@ -4704,7 +4704,7 @@ msgstr "Bant Genişliği Sınırlayıcı"
 msgid "Advanced Network Configuration"
 msgstr "Gelişmiş Ağ Yapılandırması"
 
-msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
 msgstr "En iyi sonucu almak için I2P hızlarını İnternet bağlantınıza uygun olarak yapılandırın."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
@@ -4735,10 +4735,10 @@ msgid "NOTE"
 msgstr ""
 
 #, java-format
-msgid "You have configured I2P to share only {0} KBps."
+msgid "You have configured I2P+ to share only {0} KBps."
 msgstr "I2P paylaşımı {0} KBps hızına ayarlanmış."
 
-msgid "I2P requires at least 12KBps to enable sharing. "
+msgid "I2P+ requires at least 12KBps to enable sharing. "
 msgstr "Paylaşımı etkinleştirmek için I2P en az 12KBps hıza gerek duyar."
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
@@ -7706,14 +7706,14 @@ msgstr "İndirme Bant Genişliği"
 msgid "Upstream Bandwidth"
 msgstr "Yükleme Bant Genişliği"
 
-msgid "Share of Bandwidth for I2P"
+msgid "Share of Bandwidth for I2P+"
 msgstr "I2P için Bant Genişliği Paylaşımı"
 
 msgid "Bandwidth Configuration"
 msgstr "Bant Genişliği Yapılandırması"
 
 #, java-format
-msgid "You have configured I2P to share {0} KBps."
+msgid "You have configured I2P+ to share {0} KBps."
 msgstr "I2P paylaşım hızı {0} KBps olarak ayarlanmış."
 
 msgid "I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network."
@@ -7728,10 +7728,10 @@ msgstr "I2P ağında barındırılan web sitelerine erişmek ve isteğe bağlı 
 msgid "Welcome to I2P+!"
 msgstr "I2P+ Yazılımına Hoş Geldiniz!"
 
-msgid "When you start I2P, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
+msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "I2P uygulamasını başlattığınızda yönelticinizin başlatılarak ağ ile bütünleşmesi ve diğer eşleri bulması bir kaç dakika sürebilir. Lütfen sabırlı olun."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P."
+msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
 msgstr "Yerel Tünellerin yanında yeşil yıldızlar görüntülendiğinde I2P ile yapabileceğiniz pek çok işlemden birini seçebilirsiniz."
 
 msgid "Unknown Wizard page"

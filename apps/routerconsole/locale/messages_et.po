@@ -4705,7 +4705,7 @@ msgstr "Ribalaiuse piiraja"
 msgid "Advanced Network Configuration"
 msgstr "Täpsem võrgukonfiguratsioon"
 
-msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
 msgstr "I2P töötab hästi kui häälestad pruugitava ribalaiuse oma netiühendusele vastavaks."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
@@ -4736,10 +4736,10 @@ msgid "NOTE"
 msgstr ""
 
 #, java-format
-msgid "You have configured I2P to share only {0} KBps."
+msgid "You have configured I2P+ to share only {0} KBps."
 msgstr "Olete seadistanud I2P jagama üksnes {0} KB/s."
 
-msgid "I2P requires at least 12KBps to enable sharing. "
+msgid "I2P+ requires at least 12KBps to enable sharing. "
 msgstr "Et jagamine üldse toimuks, vajab I2P vähemalt 12 KB/s jagatud ribalaiust. "
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
@@ -7707,14 +7707,14 @@ msgstr "allavoolu ribalaius"
 msgid "Upstream Bandwidth"
 msgstr "ülesvoolu ribalaius"
 
-msgid "Share of Bandwidth for I2P"
+msgid "Share of Bandwidth for I2P+"
 msgstr "I2P ribalaiuse osakaal"
 
 msgid "Bandwidth Configuration"
 msgstr "Ribalaiuse konfiguratsioon"
 
 #, java-format
-msgid "You have configured I2P to share {0} KBps."
+msgid "You have configured I2P+ to share {0} KBps."
 msgstr "Olete seadistanud I2P jagama {0} KB/s."
 
 msgid "I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network."
@@ -7729,10 +7729,10 @@ msgstr "I2P-võrgus majutatud veebisaitidele juurdepääsuks ja valikuliselt vai
 msgid "Welcome to I2P+!"
 msgstr "Tere tulemast I2P-sse!"
 
-msgid "When you start I2P, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
+msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "Kui käivitate I2P, võib teie ruuteri võrku alglaadimine (integreerimine) ja täiendavate partnerite leidmine võtta paar minutit, seega olge kannatlik."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P."
+msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
 msgstr "Kui teie kohalike tunnelite kõrval on tähistatud rohelised tärnid, saate I2P-ga teha palju erinevaid asju."
 
 msgid "Unknown Wizard page"

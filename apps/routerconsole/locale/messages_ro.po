@@ -4722,7 +4722,7 @@ msgstr "Limitator Lățime de bandă"
 msgid "Advanced Network Configuration"
 msgstr "Configurarea avansată a rețelei"
 
-msgid "I2P will work best if you configure your rates to match the speed of your internet connection."
+msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
 msgstr "I2P va funcționa mai bine dacă vă configurați rata lățimii de bandă pentru a se potrivi cu viteza conexiunii dumneavoastră la internet."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
@@ -4753,10 +4753,10 @@ msgid "NOTE"
 msgstr ""
 
 #, java-format
-msgid "You have configured I2P to share only {0} KBps."
+msgid "You have configured I2P+ to share only {0} KBps."
 msgstr "Ați configurat I2P să partajeaze doar {0} kbps."
 
-msgid "I2P requires at least 12KBps to enable sharing. "
+msgid "I2P+ requires at least 12KBps to enable sharing. "
 msgstr "I2P necesită cel puțin 12KBps pentru a permite partajarea."
 
 msgid "Please enable sharing (participating in tunnels) by configuring more bandwidth. "
@@ -7724,14 +7724,14 @@ msgstr "Lățime de bandă în aval"
 msgid "Upstream Bandwidth"
 msgstr "Lățime de bandă în amonte"
 
-msgid "Share of Bandwidth for I2P"
+msgid "Share of Bandwidth for I2P+"
 msgstr "Ponderea lățimii de bandă pentru I2P"
 
 msgid "Bandwidth Configuration"
 msgstr "Configurarea lățimii de bandă"
 
 #, java-format
-msgid "You have configured I2P to share {0} KBps."
+msgid "You have configured I2P+ to share {0} KBps."
 msgstr "Ați configurat I2P să partajeze {0} kbps."
 
 msgid "I2P+ requires a web browser configured to use the resident HTTP proxy in order to browse websites on the I2P network."
@@ -7746,10 +7746,10 @@ msgstr "Pentru a accesa site-uri găzduite în rețeaua I2P și, opțional, pent
 msgid "Welcome to I2P+!"
 msgstr "Bine ați venit la I2P+!"
 
-msgid "When you start I2P, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
+msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) your router into the network and find additional peers, so please be patient."
 msgstr "Când porniți I2P, este posibil să dureze câteva minute pentru a încărca routerul (integra) routerul în rețea și pentru a găsi colegi suplimentari, așa că vă rugăm să aveți răbdare."
 
-msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P."
+msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
 msgstr "Odată ce stelele verzi sunt indicate lângă tunelurile dvs. locale, există o mare varietate de lucruri pe care le puteți face cu I2P."
 
 msgid "Unknown Wizard page"
