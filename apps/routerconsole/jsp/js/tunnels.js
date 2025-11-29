@@ -79,5 +79,26 @@ document.addEventListener("DOMContentLoaded", function() {
   persistTunnelIdVisibility();
   bodyTag.classList.add("js");
 
+  document.addEventListener("elementsRefreshed", function(event) {
+    if (event.detail.selectors.includes("#tunnelsContainer")) {
+      const currentTables = container.querySelectorAll("table").length;
+      fetch("/tunnels")
+        .then(response => response.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, "text/html");
+          const fetchedTables = doc.querySelectorAll("#tunnelsContainer table").length;
+
+          if (fetchedTables > currentTables) {
+            const newContainer = doc.querySelector("#tunnelsContainer");
+            if (newContainer) {
+              container.innerHTML = newContainer.innerHTML;
+            }
+          }
+        })
+        .catch(error => {});
+    }
+  });
+
   refreshElements("#tunnelsContainer", "/tunnels", 10000);
 });
