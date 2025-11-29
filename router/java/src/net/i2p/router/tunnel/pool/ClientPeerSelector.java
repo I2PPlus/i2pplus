@@ -78,7 +78,7 @@ class ClientPeerSelector extends TunnelPeerSelector {
                 if (matches.isEmpty()) {
                     // No connected peers found, fall back to all fast peers
                     if (log.shouldWarn()) {
-                        log.warn("No active peers for Inbound connection, falling back to all fast peers...");
+                        log.warn("No active peers for Inbound connection, falling back to all active peers...");
                     }
                     ctx.profileOrganizer().selectFastPeers(length, exclude, matches);
                     if (matches.isEmpty()) {
@@ -114,11 +114,15 @@ class ClientPeerSelector extends TunnelPeerSelector {
                     if (log.shouldInfo()) {
                         log.info("Selecting fast/non-failing peer for (hidden) closest Inbound " + lastHopExclude);
                     }
-                    ctx.profileOrganizer().selectActiveNotFailingPeers(1, lastHopExclude, matches, ipRestriction, ipSet);
+                    ctx.profileOrganizer().selectActiveNotFailingPeers(length, lastHopExclude, matches, ipRestriction, ipSet);
+                    if (matches.isEmpty()) {
+                        log.info("Selecting any active peers without restictions for (hidden) Inbound connection");
+                         ctx.profileOrganizer().selectActiveNotFailingPeers(length, lastHopExclude, matches, 0, null);
+                    }
                     if (matches.isEmpty()) {
                         // No connected peers found, give up now
                         if (log.shouldWarn()) {
-                            log.warn("CPS SANFP hidden closest IB no active peers found, returning null");
+                            log.warn("No active peers found -> Returning null...");
                         }
                         return null;
                     }
