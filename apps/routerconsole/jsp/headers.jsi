@@ -3,7 +3,7 @@
    try {
      if (i2pcontextId != null) {session.setAttribute("i2p.contextId", i2pcontextId);}
      else {i2pcontextId = (String) session.getAttribute("i2p.contextId");}
-   } catch (IllegalStateException ise) {}
+   } catch (IllegalStateException ise) {/* ignore */}
 %>
 <jsp:useBean class="net.i2p.router.web.CSSHelper" id="intl" scope="request" />
 <jsp:setProperty name="intl" property="contextId" value="<%=i2pcontextId%>" />
