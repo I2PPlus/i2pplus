@@ -27,7 +27,7 @@
     if (fakeBw) { period = 60000L; }
     else {
         try { period = Long.parseLong(request.getParameter("period")); }
-        catch (Exception ignored) {}
+        catch (Exception ignored) { /* ignored */ }
     }
 
     boolean hideLegend = Boolean.parseBoolean(request.getParameter("hideLegend"));
@@ -67,9 +67,7 @@
     }
 
     if (!rendered) {
-        String msg = (stat != null)
-            ? "The stat '" + DataHelper.stripHTML(stat) + "' is not available - enable it for graphing."
-            : "No stat specified";
+        String msg = "The stat '" + DataHelper.stripHTML(stat) + "' is not available - enable it for graphing.";
         response.sendError(400, msg);
     }
 %>
