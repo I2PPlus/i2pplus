@@ -128,7 +128,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         }
 
         if ((!isSelfLookup && !floodfillMode) || !shouldAccept) {
-            if (_log.ShouldWarn()) {
+            if (_log.shouldWarn()) {
                 logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
             }
             _context.statManager().addRateData("netDb.nonFFLookupsDropped", 1);
@@ -136,7 +136,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         }
 
         if (!isSenderUs && isFF && isDirect && (type == DatabaseLookupMessage.Type.EXPL || type == DatabaseLookupMessage.Type.ANY)) {
-            if (_log.ShouldWarn()) {
+            if (_log.shouldWarn()) {
                 logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
             }
             _context.statManager().addRateData("netDb.lookupsDropped", 1);
@@ -144,7 +144,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         }
 
         if (!floodfillMode && !shouldBan) {
-            if (_log.ShouldWarn()) {
+            if (_log.shouldWarn()) {
                 logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
             }
             _context.statManager().addRateData("netDb.lookupsDropped", 1);
@@ -165,7 +165,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
             return new HandleFloodfillDatabaseLookupMessageJob(_context, dlm, from, fromHash, _msgIDBloomXor);
         }
 
-        if (_log.ShouldWarn()) {
+        if (_log.shouldWarn()) {
             logDroppedLookup(searchType, fromBase64, searchKeyBase64, keyLength, isFF, floodfillMode, isDirect, isBanned, maxLookups);
         }
         _context.statManager().addRateData("netDb.lookupsDropped", 1);
