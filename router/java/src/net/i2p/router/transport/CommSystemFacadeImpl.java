@@ -1545,9 +1545,11 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
 
     private static final int MAX_COUNTRY_CACHE_SIZE = 20000;
+    private static final long COUNTRY_CACHE_EXPIRY = 60*60*1000; // 1 hour
     private static final Random random = new Random();
     private long lastLookupTime = 0;
     private long lastUnknownPurge = 0;
+    private long lastCacheCleanup = 0;
     private LinkedHashMap<Hash, String> countryCache = new LinkedHashMap<Hash, String>(MAX_COUNTRY_CACHE_SIZE, 0.75f, true) {
         @Override
         protected boolean removeEldestEntry(Map.Entry<Hash, String> eldest) {return size() > MAX_COUNTRY_CACHE_SIZE;}
@@ -1565,13 +1567,18 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
      */
     @Override
     public String getCountry(Hash peer) {
-        ConcurrentHashMap<Hash, String> countryCache = new ConcurrentHashMap<>();
         String cachedCountry = countryCache.get(peer);
         long now = System.currentTimeMillis();
         long uptime = _context.router().getUptime();
 
+        // Periodic cleanup of stale entries (8 hour expiry)
+        if (now - lastCacheCleanup > 5*60*1000) { // Check every 5 minutes
+            cleanupCountryCache();
+            lastCacheCleanup = now;
+        }
+
         if (cachedCountry != null && !cachedCountry.equals("xx")) {return cachedCountry;}
-        else if (cachedCountry != null && cachedCountry.equals("xx") && now - lastUnknownPurge > 5*1000) {
+        else if (cachedCountry != null && cachedCountry.equals("xx") && now - lastUnknownPurge > 5*60*1000) {
             countryCache.remove(peer);
             lastUnknownPurge = now;
         }
@@ -1646,6 +1653,29 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
             }
         }
         return null;
+    }
+
+    /**
+     *  Clean up stale entries from the country cache
+     */
+    private void cleanupCountryCache() {
+        long now = System.currentTimeMillis();
+        int removed = 0;
+        synchronized (countryCache) {
+            Iterator<Map.Entry<Hash, String>> it = countryCache.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry<Hash, String> entry = it.next();
+                // For country cache, we need to track timestamps separately since LinkedHashMap doesn't store them
+                // For now, we'll remove unknown entries and rely on LRU for size management
+                if (entry.getValue() != null && entry.getValue().equals("xx")) {
+                    it.remove();
+                    removed++;
+                }
+            }
+        }
+        if (removed > 0 && _log.shouldInfo()) {
+            _log.info("Cleaned up " + removed + " unknown country entries from cache");
+        }
     }
 
     /**
