@@ -28,7 +28,7 @@ public class MLKEMPrivateKeyParameters
         this.nonce = Util.clone(nonce);
         this.t = Util.clone(t);
         this.rho = Util.clone(rho);
-        this.seed = Util.clone(seed);
+        this.seed = seed != null ? Util.clone(seed) : null;
     }
 
     public MLKEMPrivateKeyParameters(MLKEMParameters params, byte[] encoding)
