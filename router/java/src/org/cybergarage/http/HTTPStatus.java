@@ -166,7 +166,9 @@ public class HTTPStatus
 			try {
 				code = Integer.parseInt(codeStr);
 			}
-			catch (Exception e1) {}
+			catch (Exception e1) {
+				// Use default status code 0
+			}
 			setStatusCode(code);
 
 			String reason = "";

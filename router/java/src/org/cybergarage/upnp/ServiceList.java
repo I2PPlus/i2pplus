@@ -45,7 +45,9 @@ public class ServiceList extends Vector<Service>
 		try {
 			obj = get(n);
 		}
-		catch (Exception e) {};
+		catch (Exception e) {
+			// Return null if get() fails
+		}
 		return (Service)obj;
 	}
 }

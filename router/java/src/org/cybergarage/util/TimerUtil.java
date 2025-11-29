@@ -22,7 +22,9 @@ public final class TimerUtil
 		try {
 			Thread.sleep(waitTime);
 		}
-		catch (Exception e) {}
+		catch (Exception e) {
+			// Ignore InterruptedException and other sleep exceptions
+		}
 	}
 
 	public final static void waitRandom(int time)
@@ -31,7 +33,9 @@ public final class TimerUtil
 		try {
 			Thread.sleep(waitTime);
 		}
-		catch (Exception e) {}
+		catch (Exception e) {
+			// Ignore InterruptedException and other sleep exceptions
+		}
 	}
 }
 

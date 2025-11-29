@@ -484,15 +484,21 @@ public class HTTPRequest extends HTTPPacket
 			if (isKeepAlive == false) {
 				try {
 					in.close();
-				} catch (Exception e) {};
+				} catch (Exception e) {
+					// Ignore close exceptions
+				}
 				if (in != null)
 				try {
 					out.close();
-				} catch (Exception e) {};
+				} catch (Exception e) {
+					// Ignore close exceptions
+				}
 				if (out != null)
 				try {
 					postSocket.close();
-				} catch (Exception e) {};
+				} catch (Exception e) {
+					// Ignore close exceptions
+				}
 				postSocket = null;
 			}
 		}

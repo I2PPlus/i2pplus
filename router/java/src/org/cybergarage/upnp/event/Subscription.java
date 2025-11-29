@@ -46,7 +46,9 @@ public class Subscription
 			String timeoutStr = headerValue.substring(minusIdx+1, headerValue.length());
 			timeout = Long.parseLong(timeoutStr);
 		}
-		catch (Exception e) {}
+		catch (Exception e) {
+			// Use default timeout value INFINITE_VALUE
+		}
 		return timeout;
 	}
 

@@ -14,7 +14,7 @@ const translate_requestedLS = "<%=intl._t("Requested client leaseset")%>";
 <% String fParam = request.getParameter("f");
     if ("1".equals(fParam) || "2".equals(fParam)) {
         int currentPage = 1;
-        try { currentPage = Integer.parseInt(request.getParameter("pg")); } catch (Exception ignored) {}
+        try { currentPage = Integer.parseInt(request.getParameter("pg")); } catch (Exception ignored) { /* Use default currentPage = 1 */ }
         int nextPage = currentPage + 1;
 
         StringBuilder nextPageQuery = new StringBuilder();

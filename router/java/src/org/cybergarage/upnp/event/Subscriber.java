@@ -81,7 +81,9 @@ public class Subscriber
 			deliveryPath = url.getPath();
 			deliveryPort = url.getPort();
 		}
-		catch (Exception e) {}
+		catch (Exception e) {
+			// Use default deliveryHost, deliveryPath, deliveryPort values
+		}
 	}
 
 	private String deliveryHost = "";

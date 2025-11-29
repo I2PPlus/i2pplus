@@ -100,7 +100,9 @@ public class Icon
 		try {
 			setWidth(Integer.toString(value));
 		}
-		catch (Exception e) {};
+		catch (Exception e) {
+			// Ignore exception in setWidth
+		}
 	}
 
 	public int getWidth()
@@ -128,7 +130,9 @@ public class Icon
 		try {
 			setHeight(Integer.toString(value));
 		}
-		catch (Exception e) {};
+		catch (Exception e) {
+			// Ignore exception in setHeight
+		}
 	}
 
 	public int getHeight()
@@ -156,7 +160,9 @@ public class Icon
 		try {
 			setDepth(Integer.toString(value));
 		}
-		catch (Exception e) {};
+		catch (Exception e) {
+			// Ignore exception in setDepth
+		}
 	}
 
 	public int getDepth()
