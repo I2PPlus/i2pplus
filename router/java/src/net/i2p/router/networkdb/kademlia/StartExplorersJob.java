@@ -24,7 +24,7 @@ import net.i2p.util.SystemVersion;
  * The job is scheduled to run repeatedly with delays adapted to system load and network state.
  */
 class StartExplorersJob extends JobImpl {
-    private static final int MAX_PER_RUN = 2;
+    private static final int MAX_PER_RUN = 256;
     private static final int MIN_RERUN_DELAY_MS = 90 * 1000;
     private static final int MAX_RERUN_DELAY_MS = 15 * 60 * 1000;
     private static final int STARTUP_TIME = 2 * 60 * 60 * 1000; // 2 hours
@@ -33,7 +33,7 @@ class StartExplorersJob extends JobImpl {
     private static final int MAX_ROUTERS = 5000;
     private static final int MIN_FFS = 400;
     static final int LOW_FFS = 2 * MIN_FFS;
-    private static final long MAX_LAG = 150;
+    private static final long MAX_LAG = 1000;
     private static final long MAX_MSG_DELAY = 650;
     private static final long DELAY_SPREAD_BASE = 500;
     private static final long DELAY_SPREAD_VARIANCE = 500;
@@ -182,10 +182,8 @@ class StartExplorersJob extends JobImpl {
             num += 2;
         }
 
-        if (lag > 500 || msgDelay > 1000 || highLoad) {
-            num = 1;
-        } else if (lag > 250 || msgDelay > 500) {
-            num = Math.min(num, 2);
+        if (highLoad) {
+            num /= 2;
         }
 
         return num;
