@@ -86,14 +86,13 @@ class ExploratoryPeerSelector extends TunnelPeerSelector {
             if (hiddenInbound || lowOutbound) {
                 // If hidden and inbound, use connected peers to guarantee
                 // that the adjacent hop can connect to us.
-                if (log.shouldInfo())
+                if (log.shouldInfo()) {
                     log.info("EPS SANFP closest " + (isInbound ? "IB " : "OB ") + closestExclude);
+                }
                 ctx.profileOrganizer().selectActiveNotFailingPeers(1, closestExclude, closest, ipRestriction, ipSet);
                 if (closest.isEmpty()) {
-                    // ANFP does not fall back to non-connected
-                    if (log.shouldInfo())
-                        log.info("EPS SFP closest " + (isInbound ? "IB " : "OB ") + closestExclude);
-                    ctx.profileOrganizer().selectFastPeers(1, closestExclude, closest, ipRestriction, ipSet);
+                    // select from all active peers without restriction
+                    ctx.profileOrganizer().selectActiveNotFailingPeers(1, closestExclude, closest, 0, null);
                 }
 
                 if (closest.isEmpty() && ctx.commSystem().getEstablished().isEmpty()) {
