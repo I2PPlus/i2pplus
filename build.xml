@@ -2901,7 +2901,7 @@
     <echo message="Starting findbugs, this will take a while..."/>
     <!-- ref: https://github.com/spotbugs/spotbugs/issues/148-->
     <echo message="If this doesn't work with Java 9 or later, try Java 8"/>
-    <exec executable="nice" failonerror="true" error="/dev/null">
+    <exec executable="nice" failonerror="true">
       <arg value="findbugs"/>
       <arg value="-textui"/>
       <arg value="-projectName"/>
