@@ -964,11 +964,10 @@ public class TunnelPool {
                 }
             }
 
-            if (rv > 0 && _log.shouldDebug())
-                _log.debug("[" + toString() + "] New Count: rv: " + rv + "; Allow Zero Hop? " + allowZeroHop
-                       + "; Avg: " + avg + "; LatestTime: " + latesttime
-                       + "; Soon: " + expireSoon + "; Later: " + expireLater
-                       + "; STD: " + wanted + "; InProgress: " + inProgress + "; Fallback: " + fallback);
+            if (rv > 0 && _log.shouldDebug()) {
+                _log.debug("[" + toString() + "] Requested: " + rv + (allowZeroHop ? " (zero hop)" : "") +
+                           " -> Average build time: " + avg + "ms");
+            }
             _context.statManager().addRateData(rateName, rv + inProgress);
             return rv;
         }
