@@ -5,4 +5,13 @@
     <Field name="nextPage"/>
     <Bug pattern="UR_UNINIT_READ"/>
   </Match>
+  <!-- Suppress BCEL/FindBugs internal errors that are not actionable code issues -->
+  <Match>
+    <Class name="net.i2p.router.web.helpers.NetDbRenderer$CountryComparator"/>
+    <Bug pattern="FindOpenStream"/>
+  </Match>
+  <!-- Suppress all BCEL ClassFormatException errors as these are internal FindBugs issues -->
+  <Match>
+    <Bug pattern="ClassFormatException"/>
+  </Match>
 </FindBugsFilter>
