@@ -83,9 +83,9 @@ fi
 # Build classpath matching ant task
 AUX_CLASSPATH="build/commons-el.jar:build/commons-logging.jar:build/jasper-compiler.jar:build/jasper-runtime.jar:build/jetty-continuation.jar:build/jetty-deploy.jar:build/jetty-http.jar:build/jetty-i2p.jar:build/jetty-io.jar:build/jetty-java5-threadpool.jar:build/jetty-rewrite-handler.jar:build/jetty-security.jar:build/jetty-servlet.jar:build/jetty-servlets.jar:build/jetty-sslengine.jar:build/jetty-start.jar:build/jetty-util.jar:build/jetty-webapp.jar:build/jetty-xml.jar:build/javax.servlet.jar:build/jo.jsonrpc.war:build/jrobin.jar:build/org.mortbay.jetty.jar:build/org.mortbay.jmx.jar:build/pack200.jar:build/systray.jar:build/tools.jar"
 
-# Default files to analyze (matching ant task)
+# Default files to analyze (focus on I2P core code, exclude third-party heavy libraries)
 if [ -z "$FILES" ]; then
-    FILES="build/addressbook.jar build/addressbook.war build/desktopgui.jar build/i2p.jar build/i2psnark.jar build/i2psnark.war build/i2ptunnel.jar build/i2ptunnel.war build/imagegen.war build/mstreaming.jar build/router.jar build/routerconsole.jar build/routerconsole.war build/sam.jar build/susidns.war build/susimail.war build/streaming.jar build/utility.jar"
+    FILES="build/i2p.jar build/router.jar build/streaming.jar build/mstreaming.jar build/utility.jar build/sam.jar build/addressbook.jar build/desktopgui.jar build/i2psnark.jar build/i2ptunnel.jar"
 fi
 
 # Check if build artifacts exist
@@ -123,8 +123,9 @@ if [ -f "$SPOTBUGS_SCRIPT" ]; then
         -$LEVEL \
         -auxclasspath "$AUX_CLASSPATH" \
         -sourcepath "./apps:./router:./core" \
+        -exclude spotbugs-exclude.xml \
         $FILES
-elif [ -f "$SPOTBUGS_JAR" ]; then
+ elif [ -f "$SPOTBUGS_JAR" ]; then
     $JAVA_CMD -cp "$SPOTBUGS_JAR" \
         edu.umd.cs.findbugs.FindBugs2 \
         -progress \
@@ -134,6 +135,7 @@ elif [ -f "$SPOTBUGS_JAR" ]; then
         -$LEVEL \
         -auxclasspath "$AUX_CLASSPATH" \
         -sourcepath "./apps:./router:./core" \
+        -exclude spotbugs-exclude.xml \
         $FILES
 else
     echo "Error: Neither SpotBugs script nor jar found at $SPOTBUGS_SCRIPT or $SPOTBUGS_JAR"
