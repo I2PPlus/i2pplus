@@ -316,9 +316,7 @@ public class TestJob extends JobImpl {
         boolean keepGoing = _failureCount < 3; // Keep going only if < 3 fails
 
         if (_log.shouldWarn() && _failureCount >= 3) {
-            _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") +
-                      " Test failed in " + timeToFail + "ms → " + _cfg +
-                      " (Failure count: " + _failureCount + ")");
+            _log.warn((isExploratory ? "Exploratory tunnel" : "Tunnel") + " Test failed in " + timeToFail + "ms → " + _cfg);
         }
 
         if (keepGoing) {
@@ -362,8 +360,8 @@ public class TestJob extends JobImpl {
         int calculated = base + (3000 * totalHops);
 
         // Tighter safety bounds to reduce job queue occupation
-        int minPeriod = 15 * 1000;  // 15 seconds minimum
-        int maxPeriod = 45 * 1000;  // 45 seconds maximum
+        int minPeriod = 10 * 1000;
+        int maxPeriod = 30 * 1000;
 
         int clamped = Math.max(minPeriod, calculated);
         return Math.min(clamped, maxPeriod);
