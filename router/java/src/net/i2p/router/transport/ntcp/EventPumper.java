@@ -109,9 +109,10 @@ class EventPumper implements Runnable {
      * less frequently (or not at all), but while the connection count is small,
      * the time to iterate across them to check a few flags shouldn't be a problem.
      */
+    private static final boolean isSlow = SystemVersion.isSlow();
     private static final long FAILSAFE_ITERATION_FREQ = 2 * 1000L;
-    private static final int FAILSAFE_LOOP_COUNT = SystemVersion.isSlow() ? 512 : 2048;
-    private static final long SELECTOR_LOOP_DELAY = 200;
+    private static final int FAILSAFE_LOOP_COUNT = isSlow ? 512 : 2048;
+    private static final long SELECTOR_LOOP_DELAY = isSlow ? 200 : 20;
     private static final long BLOCKED_IP_FREQ = 43 * 60 * 1000;
     /** tunnel test now disabled, but this should be long enough to allow an active tunnel to get started */
     private static final long MIN_EXPIRE_IDLE_TIME = 120 * 1000L;
@@ -138,20 +139,21 @@ class EventPumper implements Runnable {
 
     private static final TryCache<ByteBuffer> _bufferCache = new TryCache<>(new BufferFactory(), MIN_BUFS);
     private static final Set<Status> STATUS_OK = EnumSet.of(Status.OK, Status.IPV4_OK_IPV6_UNKNOWN, Status.IPV4_OK_IPV6_FIREWALLED);
+    private static final long[] RATES = { 60*1000, 10*60*1000l };
 
     public EventPumper(RouterContext ctx, NTCPTransport transport) {
         _context = ctx;
         _log = ctx.logManager().getLog(getClass());
         _transport = transport;
         _expireIdleWriteTime = MAX_EXPIRE_IDLE_TIME;
-        _blockedIPs = new ObjectCounter<>();
-        _context.statManager().createRateStat("ntcp.pumperKeySetSize", "Number of active NTCP connections", "Transport [NTCP]", new long[] { 60 * 1000, 10 * 60 * 1000 });
-        _context.statManager().createRateStat("ntcp.pumperLoopsPerSecond", "Event loop frequency", "Transport [NTCP]", new long[] { 60 * 1000, 10 * 60 * 1000 });
-        _context.statManager().createRateStat("ntcp.zeroRead", "Zero-length reads (potential spin)", "Transport [NTCP]", new long[] { 60 * 1000, 10 * 60 * 1000 });
-        _context.statManager().createRateStat("ntcp.zeroReadDrop", "Connections closed due to repeated zero reads", "Transport [NTCP]", new long[] { 60 * 1000, 10 * 60 * 1000 });
-        _context.statManager().createRateStat("ntcp.dropInboundNoMessage", "Inbound connections dropped (no message)", "Transport [NTCP]", new long[] { 60 * 1000, 10 * 60 * 1000 });
-        _context.statManager().createRequiredRateStat("ntcp.inboundConn", "Inbound NTCP Connections", "Transport [NTCP]", new long[] { 60 * 1000L });
         _nodelay = ctx.getBooleanPropertyDefaultTrue(PROP_NODELAY);
+        _blockedIPs = new ObjectCounter<>();
+        _context.statManager().createRateStat("ntcp.pumperKeySetSize", "Number of NTCP Pumper KeySetSize events", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.pumperLoopsPerSecond", "Number of NTCP Pumper loops/s", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.zeroRead", "Number of NTCP zero length read events", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.zeroReadDrop", "Number of NTCP zero length read events dropped", "Transport [NTCP]", RATES);
+        _context.statManager().createRateStat("ntcp.dropInboundNoMessage", "Number of NTCP Inbound empty message drop events", "Transport [NTCP]", RATES);
+        _context.statManager().createRequiredRateStat("ntcp.inboundConn", "Inbound NTCP Connection", "Transport [NTCP]", RATES);
     }
 
     public synchronized void startPumping() {
