@@ -64,6 +64,7 @@ public class InNetMessagePool implements Service {
 
     /** Maximum valid I2NP message type */
     private static final int MAX_I2NP_MESSAGE_TYPE = 31;
+    private static final int MAX_DELIVERY_DELAY = 2000; // 2s latitude
 
     /**
      * Constructs the message pool with given context.
@@ -292,7 +293,7 @@ public class InNetMessagePool implements Service {
         switch (messageBody.getType()) {
             case DeliveryStatusMessage.MESSAGE_TYPE: {
                 long arr = ((DeliveryStatusMessage) messageBody).getArrival();
-                if (arr > 10) {
+                if (arr > MAX_DELIVERY_DELAY) {
                     long timeSinceSent = _context.clock().now() - arr;
                     if (_log.shouldWarn())
                         _log.warn("Dropping unhandled DeliveryStatusMessage" + messageBody);
