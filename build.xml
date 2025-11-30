@@ -2952,8 +2952,8 @@
     <!-- Download latest SpotBugs if not present -->
     <echo message="Note: SpotBugs requires Java11 or later."/>
     <property name="spotbugs.version" value="4.9.8"/>
-    <property name="spotbugs.dir" location="spotbugs/spotbugs-${spotbugs.version}"/>
-    <property name="spotbugs.jar" location="${spotbugs.dir}/lib/spotbugs-ant.jar"/>
+<property name="spotbugs.dir" location="spotbugs/spotbugs-${spotbugs.version}"/>
+<property name="spotbugs.jar" location="${spotbugs.dir}/lib/spotbugs-ant.jar"/>
 
     <available file="${spotbugs.jar}" property="spotbugs.present"/>
     <antcall target="download-spotbugs"/>
@@ -3000,7 +3000,7 @@
     <get src="https://github.com/spotbugs/spotbugs/releases/download/${spotbugs.version}/spotbugs-${spotbugs.version}.tgz"
          dest="spotbugs/spotbugs-${spotbugs.version}.tgz"
          usetimestamp="true"/>
-    <untar src="spotbugs/spotbugs-${spotbugs.version}.tgz" dest="build" compression="gzip"/>
+    <untar src="spotbugs/spotbugs-${spotbugs.version}.tgz" dest="spotbugs" compression="gzip"/>
     <echo message="SpotBugs ${spotbugs.version} downloaded and extracted to ${spotbugs.dir}"/>
   </target>
 
