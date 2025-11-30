@@ -188,8 +188,11 @@
         <xsl:when test="string-length(/BugCollection/Project/@projectName)>0">
           <xsl:value-of select="/BugCollection/Project/@projectName" />
         </xsl:when>
-        <xsl:otherwise>
+        <xsl:when test="string-length(/BugCollection/Project/@filename)>0">
           <xsl:value-of select="/BugCollection/Project/@filename" />
+        </xsl:when>
+        <xsl:otherwise>
+          I2P+
         </xsl:otherwise>
       </xsl:choose>
     </h1>
