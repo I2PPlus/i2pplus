@@ -292,12 +292,12 @@ class PacketBuilder2 {
             off += MAC_LEN;
             if (_log.shouldDebug()) {
                 if (off + ipHeaderSize > currentMTU) {
-                    _log.warn("[SSU] Packet + header is larger than peer's current MTU (" + currentMTU + " bytes) " +
+                    _log.info("[SSU] Packet + header is larger than peer's current MTU (" + currentMTU + " bytes) " +
                               packet + "; Packet: " + off + " bytes; Header: " + ipHeaderSize + "bytes; Data: " + dataSize + " bytes; " +
                               "Fragments: " + DataHelper.toString(fragments) /* , new Exception() */ );
                 }
             } else if (_log.shouldInfo()) {
-                _log.warn("[SSU] Packet + header is larger than peer's current MTU (" + currentMTU + " bytes)");
+                _log.info("[SSU] Packet + header is larger than peer's current MTU (" + currentMTU + " bytes)");
             }
         }
         packet.setPriority(priority);
