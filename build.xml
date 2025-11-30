@@ -1600,6 +1600,7 @@
   </target>
 
   <target name="preppkg" depends="preppkg-linux, preppkg-freebsd, preppkg-osx, preppkg-windows, jbigi">
+    <mkdir dir="dist"/>
     <parallel>
       <copy quiet="true" file="build/jbigi.jar" todir="pkg-temp/lib"/>
       <copy quiet="true" todir="pkg-temp/lib/wrapper/solaris/">
