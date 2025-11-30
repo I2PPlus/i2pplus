@@ -421,7 +421,7 @@ class SSU2Payload {
                 default:
                     Log log = ctx.logManager().getLog(SSU2Payload.class);
                     if (log.shouldWarn())
-                        log.warn("[SSU2] Received UNKNOWN block: Type: " + type + "; Length: " + len + " bytes on " + cb);
+                        log.warn("[SSU] Received UNKNOWN block: Type: " + type + "; Length: " + len + " bytes on " + cb);
                     break;
 
             }

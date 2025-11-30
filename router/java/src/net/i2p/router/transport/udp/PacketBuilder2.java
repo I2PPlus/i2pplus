@@ -209,10 +209,10 @@ class PacketBuilder2 {
                 off += sz;
                 sizeWritten += sz;
                 if (_log.shouldDebug())
-                    _log.debug("[SSU2] Sending ACKs [" + block + "] " + peer);
+                    _log.debug("[SSU] Sending ACKs [" + block + "] " + peer);
             }
         } else if (_log.shouldDebug()) {
-            _log.debug("[SSU2] No room for ACKs -> MTU: " + currentMTU + "; Data: " + dataSize + "; Available: " + availableForAcks);
+            _log.debug("[SSU] No room for ACKs -> MTU: " + currentMTU + "; Data: " + dataSize + "; Available: " + availableForAcks);
         }
 
         // now write each fragment
@@ -292,12 +292,12 @@ class PacketBuilder2 {
             off += MAC_LEN;
             if (_log.shouldDebug()) {
                 if (off + ipHeaderSize > currentMTU) {
-                    _log.warn("[SSU2] Packet + header is larger than peer's current MTU (" + currentMTU + " bytes) " +
+                    _log.warn("[SSU] Packet + header is larger than peer's current MTU (" + currentMTU + " bytes) " +
                               packet + "; Packet: " + off + " bytes; Header: " + ipHeaderSize + "bytes; Data: " + dataSize + " bytes; " +
                               "Fragments: " + DataHelper.toString(fragments) /* , new Exception() */ );
                 }
             } else if (_log.shouldInfo()) {
-                _log.warn("[SSU2] Packet + header is larger than peer's current MTU (" + currentMTU + " bytes)");
+                _log.warn("[SSU] Packet + header is larger than peer's current MTU (" + currentMTU + " bytes)");
             }
         }
         packet.setPriority(priority);
@@ -374,7 +374,7 @@ class PacketBuilder2 {
      */
     public UDPPacket buildSessionDestroyPacket(int reason, SSU2Sender peer) throws IOException {
             if (_log.shouldDebug())
-            _log.debug("[SSU2] Sending termination " + reason + " to : " + peer);
+            _log.debug("[SSU] Sending termination " + reason + " to : " + peer);
         peer.setDestroyReason(reason);
         List<Block> blocks = new ArrayList<Block>(2);
         if (peer.isIPv6() || !_transport.isSymNatted()) {
@@ -541,7 +541,7 @@ class PacketBuilder2 {
             byte[] gzipped = DataHelper.compress(info, 0, info.length, DataHelper.MAX_COMPRESSION);
             if (gzipped.length < info.length) {
                 if (_log.shouldInfo())
-                    _log.info("[SSU2] Gzipping RouterInfo -> Max is " + max + " bytes; Size was " + info.length + " bytes, size now is " + gzipped.length + " bytes");
+                    _log.info("[SSU] Gzipping RouterInfo -> Max is " + max + " bytes; Size was " + info.length + " bytes, size now is " + gzipped.length + " bytes");
                 gzip = true;
                 info = gzipped;
                 numFragments = info.length / max;
@@ -555,7 +555,7 @@ class PacketBuilder2 {
             if (numFragments > 15)
                 throw new IllegalArgumentException();
             if (_log.shouldInfo())
-                _log.info("[SSU2] RouterInfo size " + info.length + " bytes requires " + numFragments + " packets");
+                _log.info("[SSU] RouterInfo size " + info.length + " bytes requires " + numFragments + " packets");
             len = max;
         } else {
             len = info.length;
@@ -640,7 +640,7 @@ class PacketBuilder2 {
                                 hdrKey1, hdrKey2, block, state.getNextToken());
         int total = pkt.getLength();
         if (_log.shouldInfo())
-            _log.info("[SSU2] Building " + count + " fragmented SessionConfirmed packets -> " +
+            _log.info("[SSU] Building " + count + " fragmented SessionConfirmed packets -> " +
                       " Max data: " + max +
                       "; RouterInfo block size: " + blockSize +
                       "; Total data size: " + total + " bytes");
@@ -672,7 +672,7 @@ class PacketBuilder2 {
             System.arraycopy(jumbo, i, data, off + SHORT_HEADER_SIZE, len);
             data[off + SHORT_HEADER_FLAGS_OFFSET] = (byte) (((++pktnum) << 4) | count);  // fragment n of numFragments
             if (len < 24)
-                _log.error("[SSU2] FIXME " + len);
+                _log.error("[SSU] FIXME " + len);
             pkt.setLength(len + SHORT_HEADER_SIZE);
             SSU2Header.encryptShortHeader(packet, hdrKey1, hdrKey2);
             pkt.setSocketAddress(state.getSentAddress());
@@ -682,7 +682,7 @@ class PacketBuilder2 {
         }
         if (_log.shouldInfo()) {
             for (int i = 0; i < rv.size(); i++) {
-                _log.info("[SSU2] Packet [" + i + ": " + rv.get(i).getPacket().getLength() + " bytes]");
+                _log.info("[SSU] Packet [" + i + ": " + rv.get(i).getPacket().getLength() + " bytes]");
             }
         }
         if (rv.size() != count)
@@ -896,7 +896,7 @@ class PacketBuilder2 {
         UDPPacket packet = buildLongPacketHeader(sendID, n, HOLE_PUNCH_FLAG_BYTE, rcvID, token);
         Block block = new SSU2Payload.RelayResponseBlock(signedData);
         if (_log.shouldLog(Log.INFO))
-            _log.info("[SSU2] Sending relay HolePunch to " + to.toString().replace("/", "") + ":" + port);
+            _log.info("[SSU] Sending relay HolePunch to " + to.toString().replace("/", "") + ":" + port);
 
         byte[] ik = introKey.getData();
         packet.getPacket().setLength(LONG_HEADER_SIZE);
@@ -913,7 +913,7 @@ class PacketBuilder2 {
      */
     private UDPPacket buildLongPacketHeader(long destID, long pktNum, byte type, long srcID, long token) {
         //if (_log.shouldDebug())
-        //    _log.debug("[SSU2] Building long header with DestinationID [" + destID + "] \n* Packet [#" + pktNum + "]; Type: " + type + "; SourceID [" + srcID + "]; Token [" + token + "]");
+        //    _log.debug("[SSU] Building long header with DestinationID [" + destID + "] \n* Packet [#" + pktNum + "]; Type: " + type + "; SourceID [" + srcID + "]; Token [" + token + "]");
         UDPPacket packet = buildShortPacketHeader(destID, pktNum, type);
         byte data[] = packet.getPacket().getData();
         data[13] = PROTOCOL_VERSION;
@@ -953,7 +953,7 @@ class PacketBuilder2 {
         int off = pkt.getOffset();
         try {
             if (_log.shouldDebug())
-                _log.debug("[SSU2] After start: " + state);
+                _log.debug("[SSU] After start: " + state);
             List<Block> blocks = new ArrayList<Block>(3);
             Block block = new SSU2Payload.DateTimeBlock(_context);
             int len = block.getTotalLength();
@@ -973,26 +973,26 @@ class PacketBuilder2 {
             SSU2Payload.writePayload(data, off + LONG_HEADER_SIZE + KEY_LEN, blocks);
             state.start();
             if (_log.shouldDebug())
-                _log.debug("[SSU2] State after start: " + state);
+                _log.debug("[SSU] State after start: " + state);
             state.mixHash(data, off, LONG_HEADER_SIZE);
             if (_log.shouldDebug())
-                _log.debug("[SSU2] State after mixHash 1: " + state);
+                _log.debug("[SSU] State after mixHash 1: " + state);
             state.writeMessage(data, off + LONG_HEADER_SIZE, data, off + LONG_HEADER_SIZE + KEY_LEN, len);
             pkt.setLength(pkt.getLength() + KEY_LEN + len + MAC_LEN);
         } catch (RuntimeException re) {
             if (!_log.shouldWarn())
-                _log.error("[SSU2] BAD message 1 out", re);
+                _log.error("[SSU] BAD message 1 out", re);
             throw re;
         } catch (GeneralSecurityException gse) {
             if (!_log.shouldWarn())
-                _log.error("[SSU2] BAD message 1 out", gse);
+                _log.error("[SSU] BAD message 1 out", gse);
             throw new RuntimeException("Bad msg 1 out", gse);
         }
         if (_log.shouldDebug())
-            _log.debug("[SSU2] After message 1: " + state + '\n' + net.i2p.util.HexDump.dump(data, off, pkt.getLength()));
+            _log.debug("[SSU] After message 1: " + state + '\n' + net.i2p.util.HexDump.dump(data, off, pkt.getLength()));
         SSU2Header.encryptHandshakeHeader(packet, hdrKey1, hdrKey2);
         if (_log.shouldDebug())
-            _log.debug("[SSU2] HandshakeHeader -> [Key1: " + Base64.encode(hdrKey1) + "] [Key2: " + Base64.encode(hdrKey2) + "]");
+            _log.debug("[SSU] HandshakeHeader -> [Key1: " + Base64.encode(hdrKey1) + "] [Key2: " + Base64.encode(hdrKey2) + "]");
     }
 
     /**
@@ -1034,20 +1034,20 @@ class PacketBuilder2 {
 
             state.mixHash(data, off, LONG_HEADER_SIZE);
             if (_log.shouldDebug())
-                _log.debug("[SSU2] State after mixHash 2: " + state);
+                _log.debug("[SSU] State after mixHash 2: " + state);
             state.writeMessage(data, off + LONG_HEADER_SIZE, data, off + LONG_HEADER_SIZE + KEY_LEN, len);
             pkt.setLength(pkt.getLength() + KEY_LEN + len + MAC_LEN);
         } catch (RuntimeException re) {
             if (!_log.shouldWarn())
-                _log.error("[SSU2] BAD message 2 out", re);
+                _log.error("[SSU] BAD message 2 out", re);
             throw re;
         } catch (GeneralSecurityException gse) {
             if (!_log.shouldWarn())
-                _log.error("[SSU2] BAD message 2 out", gse);
+                _log.error("[SSU] BAD message 2 out", gse);
             throw new RuntimeException("Bad msg 2 out", gse);
         }
         if (_log.shouldDebug())
-            _log.debug("[SSU2] After message 2: " + state);
+            _log.debug("[SSU] After message 2: " + state);
         SSU2Header.encryptHandshakeHeader(packet, hdrKey1, hdrKey2);
     }
 
@@ -1107,11 +1107,11 @@ class PacketBuilder2 {
             pkt.setLength(pkt.getLength() + len + MAC_LEN);
         } catch (RuntimeException re) {
             if (!_log.shouldWarn())
-                _log.error("[SSU2] Bad retry/test/holepunch message out", re);
+                _log.error("[SSU] Bad retry/test/holepunch message out", re);
             throw re;
         } catch (GeneralSecurityException gse) {
             if (!_log.shouldWarn())
-                _log.error("[SSU2] Bad retry/test/holepunch message out", gse);
+                _log.error("[SSU] Bad retry/test/holepunch message out", gse);
             throw new RuntimeException("Bad retry/test/holepunch msg out", gse);
         }
         SSU2Header.encryptLongHeader(packet, hdrKey1, hdrKey2);
@@ -1145,11 +1145,11 @@ class PacketBuilder2 {
             pkt.setLength(pkt.getLength() + len + MAC_LEN);
         } catch (RuntimeException re) {
             if (!_log.shouldWarn())
-                _log.error("[SSU2] BAD Token Request message out", re);
+                _log.error("[SSU] BAD Token Request message out", re);
             throw re;
         } catch (GeneralSecurityException gse) {
             if (!_log.shouldWarn())
-                _log.error("[SSU2] BAD Token Request message out", gse);
+                _log.error("[SSU] BAD Token Request message out", gse);
             throw new RuntimeException("BAD Token Request message out", gse);
         }
         SSU2Header.encryptLongHeader(packet, hdrKey1, hdrKey2);
@@ -1200,22 +1200,22 @@ class PacketBuilder2 {
             SSU2Payload.writePayload(data, off + SHORT_HEADER_SIZE + KEY_LEN + MAC_LEN, blocks);
             state.mixHash(data, off, SHORT_HEADER_SIZE);
             if (_log.shouldDebug())
-                _log.debug("[SSU2] State after mixHash 3: " + state);
+                _log.debug("[SSU] State after mixHash 3: " + state);
             state.writeMessage(data, off + SHORT_HEADER_SIZE, data, off + SHORT_HEADER_SIZE + KEY_LEN + MAC_LEN, len);
             pkt.setLength(pkt.getLength() + KEY_LEN + MAC_LEN + len + MAC_LEN);
             if (_log.shouldDebug())
-                _log.debug("[SSU2] SessionConfirmed packet length is: " + pkt.getLength() + " bytes");
+                _log.debug("[SSU] SessionConfirmed packet length is: " + pkt.getLength() + " bytes");
         } catch (RuntimeException re) {
             if (!_log.shouldWarn())
-                _log.error("[SSU2] BAD message 3 out", re);
+                _log.error("[SSU] BAD message 3 out", re);
             throw re;
         } catch (GeneralSecurityException gse) {
             if (!_log.shouldWarn())
-                _log.error("[SSU2] BAD message 3 out", gse);
+                _log.error("[SSU] BAD message 3 out", gse);
             throw new RuntimeException("Bad msg 1 out", gse);
         }
         if (_log.shouldDebug())
-            _log.debug("[SSU2] After message 3: " + state);
+            _log.debug("[SSU] After message 3: " + state);
         if (numFragments <= 1)
             SSU2Header.encryptShortHeader(packet, hdrKey1, hdrKey2);
     }

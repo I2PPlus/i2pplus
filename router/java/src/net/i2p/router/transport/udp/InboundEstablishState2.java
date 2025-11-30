@@ -94,7 +94,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         long token = DataHelper.fromLong8(data, off + TOKEN_OFFSET);
         String aliceIP = _aliceSocketAddress.toString().replace("/", "");
         if (type == TOKEN_REQUEST_FLAG_BYTE) {
-            if (_log.shouldDebug()) {_log.debug("[SSU2] Received Token Request from: " + aliceIP);}
+            if (_log.shouldDebug()) {_log.debug("[SSU] Received Token Request from: " + aliceIP);}
             _currentState = InboundState.IB_STATE_TOKEN_REQUEST_RECEIVED;
             // decrypt in-place
             ChaChaPolyCipherState chacha = new ChaChaPolyCipherState();
@@ -113,7 +113,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                     (ENFORCE_TOKEN && !_transport.getEstablisher().isInboundTokenValid(_remoteHostId, token)))) {
             // i2pd thru 0.9.55 ignores zero token + termination in retry
             if (_log.shouldInfo()) {
-                _log.info("[SSU2] Invalid token [" + token + "] in Session Request from: " + aliceIP);
+                _log.info("[SSU] Invalid token [" + token + "] in Session Request from: " + aliceIP);
             }
             if (token == 0) {
                 throw new GeneralSecurityException("Zero token in Session Request from: " + aliceIP);
@@ -136,22 +136,22 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             _token = token;
             _handshakeState.start();
             //if (_log.shouldDebug())
-            //    _log.debug("[SSU2] State after start: " + _handshakeState);
+            //    _log.debug("[SSU] State after start: " + _handshakeState);
             _handshakeState.mixHash(data, off, LONG_HEADER_SIZE);
             //if (_log.shouldDebug())
-            //    _log.debug("[SSU2] State after mixHash 1: " + _handshakeState);
+            //    _log.debug("[SSU] State after mixHash 1: " + _handshakeState);
 
             // decrypt in-place
             try {
                 _handshakeState.readMessage(data, off + LONG_HEADER_SIZE, len - LONG_HEADER_SIZE, data, off + LONG_HEADER_SIZE);
             } catch (GeneralSecurityException gse) {
                 if (_log.shouldDebug()) {
-                    _log.debug("[SSU2] Session Request error -> State at failure: " + _handshakeState +
+                    _log.debug("[SSU] Session Request error -> State at failure: " + _handshakeState +
                                '\n' + net.i2p.util.HexDump.dump(data, off, len), gse);
                 }
                 throw gse;
             }
-            //if (_log.shouldDebug()) {_log.debug("[SSU2] State after Session Request: " + _handshakeState);}
+            //if (_log.shouldDebug()) {_log.debug("[SSU] State after Session Request: " + _handshakeState);}
             processPayload(data, off + LONG_HEADER_SIZE, len - (LONG_HEADER_SIZE + KEY_LEN + MAC_LEN), true);
             _sendHeaderEncryptKey2 = SSU2Util.hkdf(_context, _handshakeState.getChainingKey(), "SessCreateHeader");
             _currentState = InboundState.IB_STATE_REQUEST_RECEIVED;
@@ -173,7 +173,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             throw new GeneralSecurityException("Max skew of 2m exceeded (" + _skew + "ms) in Session/Token Request (Retry sent)");
         }
         packetReceived();
-        if (_log.shouldDebug()) {_log.debug("[SSU2] New request type " + type + " len " + len + " on " + this);}
+        if (_log.shouldDebug()) {_log.debug("[SSU] New request type " + type + " len " + len + " on " + this);}
     }
 
     @Override
@@ -182,9 +182,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     private void processPayload(byte[] payload, int offset, int length, boolean isHandshake) throws GeneralSecurityException {
         try {
             int blocks = SSU2Payload.processPayload(_context, this, payload, offset, length, isHandshake, null);
-            if (_log.shouldDebug()) {_log.debug("[SSU2] Processed " + blocks + " blocks on " + this);}
+            if (_log.shouldDebug()) {_log.debug("[SSU] Processed " + blocks + " blocks on " + this);}
         } catch (RIException rie) {
-            if (_log.shouldInfo()) {_log.info("[SSU2] RouterInfo error: " + rie.getMessage());}
+            if (_log.shouldInfo()) {_log.info("[SSU] RouterInfo error: " + rie.getMessage());}
             int reason = rie.getReason();
             PeerStateDestroyed psd = createPeerStateDestroyed(reason);
             _transport.addRecentlyClosed(psd);
@@ -192,9 +192,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 UDPPacket pkt = _transport.getBuilder2().buildSessionDestroyPacket(reason, psd);
                 _transport.send(pkt);
                 if (_log.shouldInfo()) {
-                    _log.info("[SSU2] Sending TERMINATION reason " + reason + " to " + psd);
+                    _log.info("[SSU] Sending TERMINATION reason " + reason + " to " + psd);
                     if (!shouldSuppressException(rie)) {
-                        _log.info("[SSU2] InboundEstablishState Payload Error", rie);
+                        _log.info("[SSU] InboundEstablishState Payload Error", rie);
                     }
                 }
             } catch (IOException ioe) {}
@@ -202,12 +202,12 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         } catch (DataFormatException dfe) {
             // no in-session response possible
             if (!shouldSuppressException(dfe)) {
-                _log.info("[SSU2] InboundEstablishState Payload Error", dfe);
+                _log.info("[SSU] InboundEstablishState Payload Error", dfe);
             }
             throw new GeneralSecurityException("IES2 Payload Error: " + this, dfe);
         } catch (Exception e) {
             if (!shouldSuppressException(e) && _log.shouldInfo()) {
-                _log.info("[SSU2] InboundEstablishState Payload Error\n" + net.i2p.util.HexDump.dump(payload, 0, length), e);
+                _log.info("[SSU] InboundEstablishState Payload Error\n" + net.i2p.util.HexDump.dump(payload, 0, length), e);
             }
             throw new GeneralSecurityException("IES2 Payload Error", e);
         }
@@ -222,7 +222,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     public void gotOptions(byte[] options, boolean isHandshake) {
-        if (_log.shouldDebug()) {_log.debug("[SSU2] Received OPTIONS block");}
+        if (_log.shouldDebug()) {_log.debug("[SSU] Received OPTIONS block");}
     }
 
     /**
@@ -234,7 +234,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
      */
     public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) throws DataFormatException {
         //if (_log.shouldDebug())
-        //    _log.debug("[SSU2] Received RouterInfo block: " + ri);
+        //    _log.debug("[SSU] Received RouterInfo block: " + ri);
         if (isHandshake) {throw new DataFormatException("RouterInfo in Session Request");}
         if (_receivedUnconfirmedIdentity != null) {throw new DataFormatException("Duplicate RouterInfo in SessionConfirmed");}
         _receivedUnconfirmedIdentity = ri.getIdentity();
@@ -325,9 +325,9 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             if (flood && !ri.equals(old)) {
                 FloodfillNetworkDatabaseFacade fndf = (FloodfillNetworkDatabaseFacade) _context.netDb();
                 if (fndf.floodConditional(ri)) {
-                    if (_log.shouldDebug()) {_log.debug("[SSU2] Flooded the RouterInfo: " + h);}
+                    if (_log.shouldDebug()) {_log.debug("[SSU] Flooded the RouterInfo: " + h);}
                 } else {
-                    if (_log.shouldInfo()) {_log.info("[SSU2] Declined request to flood RouterInfo: " + h);}
+                    if (_log.shouldInfo()) {_log.info("[SSU] Declined request to flood RouterInfo: " + h);}
                 }
             }
         } catch (IllegalArgumentException iae) {
@@ -350,7 +350,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 _introductionRequested = false;
                 String caps = ri.getCapabilities();
                 if (_log.shouldWarn()) {
-                    _log.warn("[SSU2] Not offering to relay to Router version " + ri.getVersion() + " caps " + caps + ": " + this);
+                    _log.warn("[SSU] Not offering to relay to Router version " + ri.getVersion() + " caps " + caps + ": " + this);
                 }
             } else {
                 String caps = ri.getCapabilities();
@@ -362,7 +362,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 } else {
                     _introductionRequested = false;
                     if (_log.shouldWarn()) {
-                        _log.warn("[SSU2] Not offering to relay to Router version " + ri.getVersion() + " caps " + caps + ": " + this);
+                        _log.warn("[SSU] Not offering to relay to Router version " + ri.getVersion() + " caps " + caps + ": " + this);
                     }
                 }
             }
@@ -460,21 +460,21 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
     public void gotRIFragment(byte[] data, boolean isHandshake, boolean flood, boolean isGzipped, int frag, int totalFrags) {
         if (_log.shouldDebug()) {
-            _log.debug("[SSU2] Received RouterInfo fragment [" + frag + " / " + totalFrags + "]");
+            _log.debug("[SSU] Received RouterInfo fragment [" + frag + " / " + totalFrags + "]");
         }
         // not supported, we fragment the whole message now
         throw new IllegalStateException("Fragmented RouterInfo");
     }
 
     public void gotAddress(byte[] ip, int port) {
-        if (_log.shouldDebug()) {_log.debug("[SSU2] Received IP address: " + Addresses.toString(ip, port));}
+        if (_log.shouldDebug()) {_log.debug("[SSU] Received IP address: " + Addresses.toString(ip, port));}
         _bobIP = ip;
         // final, see super
         //_bobPort = port;
     }
 
     public void gotRelayTagRequest() {
-        if (_log.shouldDebug()) {_log.debug("[SSU2] Received RelayTagRequest on " + this);}
+        if (_log.shouldDebug()) {_log.debug("[SSU] Received RelayTagRequest on " + this);}
         _introductionRequested = true;
     }
 
@@ -507,7 +507,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
     public void gotToken(long token, long expires) {
         if (_log.shouldDebug()) {
-            _log.debug("[SSU2] Received Token: " + token + " expires " + DataHelper.formatTime(expires) + " on " + this);
+            _log.debug("[SSU] Received Token: " + token + " expires " + DataHelper.formatTime(expires) + " on " + this);
         }
         if (_receivedConfirmedIdentity == null) {
             throw new IllegalStateException("RouterInfo must be sent first");
@@ -516,7 +516,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     public void gotI2NP(I2NPMessage msg) {
-        if (_log.shouldDebug()) {_log.debug("[SSU2] Received I2NP block: " + msg);}
+        if (_log.shouldDebug()) {_log.debug("[SSU] Received I2NP block: " + msg);}
         if (getState() != InboundState.IB_STATE_CREATED_SENT) {
             throw new IllegalStateException("I2NP in Session Request");
         }
@@ -528,7 +528,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
     }
 
     public void gotFragment(byte[] data, int off, int len, long messageID, int frag, boolean isLast) throws DataFormatException {
-        if (_log.shouldDebug()) {_log.debug("[SSU2] Received FRAGMENT block: " + messageID);}
+        if (_log.shouldDebug()) {_log.debug("[SSU] Received FRAGMENT block: " + messageID);}
         if (getState() != InboundState.IB_STATE_CREATED_SENT) {
             throw new IllegalStateException("I2NP in Session Request");
         }
@@ -545,7 +545,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
 
     public void gotTermination(int reason, long count) {
         if (_log.shouldInfo()) {
-            _log.info("[SSU2] Received TERMINATION block -> " + SSU2Util.terminationCodeToString(reason) + "; Count: " + count + "\n* " + this);
+            _log.info("[SSU] Received TERMINATION block -> " + SSU2Util.terminationCodeToString(reason) + "; Count: " + count + "\n* " + this);
         }
         // this sets the state to FAILED
         fail();
@@ -627,7 +627,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             // ensure we expire before retransmitting
             _nextSend = _establishBegin + (5 * RETRANSMIT_DELAY);
             if (_log.shouldWarn())
-                _log.warn("[SSU2] Retransmit RETRY on " + this);
+                _log.warn("[SSU] Retransmit RETRY on " + this);
         } else {
         _currentState = InboundState.IB_STATE_RETRY_SENT;
         // Won't really be retransmitted, they have 5 sec to respond or
@@ -646,7 +646,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             locked_receiveSessionOrTokenRequestAfterRetry(packet);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldDebug())
-                _log.debug("[SSU2] Session or Token Request error after retry", gse);
+                _log.debug("[SSU] Session or Token Request error after retry", gse);
             // fail inside synch rather than have Est. Mgr. do it to prevent races
             fail();
             throw gse;
@@ -678,14 +678,14 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (_currentState != InboundState.IB_STATE_RETRY_SENT) {
             // not fatal
             if (_log.shouldWarn()) {
-                _log.warn("[SSU2] Received out-of-order or RETRANSMIT message (Type " + type + ") on: " + this);
+                _log.warn("[SSU] Received out-of-order or RETRANSMIT message (Type " + type + ") on: " + this);
             }
             return;
         }
         if (type == TOKEN_REQUEST_FLAG_BYTE) {
             // retransmitted token request
             if (_log.shouldWarn())
-                _log.warn("[SSU2] Received RETRANSMIT Token Request on: " + this);
+                _log.warn("[SSU] Received RETRANSMIT Token Request on: " + this);
             // Est. mgr will resend retry and call retryPacketSent()
             // Note that Java I2P < 0.9.57 doesn't handle retransmitted retries correctly,
             // so this won't work for them
@@ -695,7 +695,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             return;
         }
         if (_log.shouldDebug())
-            _log.debug("[SSU2] Received Session Request after retry on: " + this);
+            _log.debug("[SSU] Received Session Request after retry on: " + this);
         long token = DataHelper.fromLong8(data, off + 24);
         if (token != _token) {
             // most likely a retransmitted session request with the old invalid token
@@ -710,7 +710,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             _handshakeState.readMessage(data, off + LONG_HEADER_SIZE, len - LONG_HEADER_SIZE, data, off + LONG_HEADER_SIZE);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldDebug())
-                _log.debug("[SSU2] Session Request error -> State at failure: " + _handshakeState + '\n' + net.i2p.util.HexDump.dump(data, off, len), gse);
+                _log.debug("[SSU] Session Request error -> State at failure: " + _handshakeState + '\n' + net.i2p.util.HexDump.dump(data, off, len), gse);
             throw gse;
         }
 
@@ -751,7 +751,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             return locked_receiveSessionConfirmed(packet);
         } catch (GeneralSecurityException gse) {
             if (!shouldSuppressException(gse) && _log.shouldDebug()) {
-                _log.debug("[SSU2] SessionConfirmed error", gse);
+                _log.debug("[SSU] SessionConfirmed error", gse);
             }
             // fail inside synch rather than have Est. Mgr. do it to prevent races
             fail();
@@ -804,14 +804,14 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                     throw new GeneralSecurityException("BAD SessionConfirmed fragment [" + frag + " / " + totalfrag + "]");
                 if (_sessConfFragments[frag] != null) {
                     if (_log.shouldInfo())
-                        _log.info("[SSU2] Received duplicate SessionConfirmed fragment [" + frag + "] on " + this);
+                        _log.info("[SSU] Received duplicate SessionConfirmed fragment [" + frag + "] on " + this);
                     // there is no facility to ack individual fragments
                     //packetReceived();
                     return null;
                 }
             }
             if (_log.shouldInfo()) {
-                _log.info("[SSU2] Received " + len + " bytes SessionConfirmed fragment [" + frag + '/' + totalfrag + "] on " + this);
+                _log.info("[SSU] Received " + len + " bytes SessionConfirmed fragment [" + frag + '/' + totalfrag + "] on " + this);
             }
             byte[] fragdata;
             if (frag == 0) {
@@ -829,7 +829,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             for (int i = 0; i < totalfrag; i++) {
                 if (_sessConfFragments[i] == null) {
                     if (_log.shouldInfo())
-                        _log.info("[SSU2] Still missing at least one SessionConfirmed fragment on " + this);
+                        _log.info("[SSU] Still missing at least one SessionConfirmed fragment on " + this);
                     // there is no facility to ack individual fragments
                     //packetReceived();
                     return null;
@@ -848,7 +848,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 joff += f.length;
             }
             if (_log.shouldInfo())
-                _log.info("[SSU2] Have all " + totalfrag + " SessionConfirmed fragments (total length: " + len + " bytes) on " + this);
+                _log.info("[SSU] Have all " + totalfrag + " SessionConfirmed fragments (total length: " + len + " bytes) on " + this);
         }
         _handshakeState.mixHash(data, off, SHORT_HEADER_SIZE);
 
@@ -857,7 +857,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             _handshakeState.readMessage(data, off + SHORT_HEADER_SIZE, len - SHORT_HEADER_SIZE, data, off + SHORT_HEADER_SIZE);
         } catch (GeneralSecurityException gse) {
             if (_log.shouldDebug())
-                _log.debug("[SSU2] SessionConfirmed error -> State at failure: " + _handshakeState + '\n' + net.i2p.util.HexDump.dump(data, off, len), gse);
+                _log.debug("[SSU] SessionConfirmed error -> State at failure: " + _handshakeState + '\n' + net.i2p.util.HexDump.dump(data, off, len), gse);
             throw gse;
         }
 
@@ -984,7 +984,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         if (_sessCrForReTX == null)
             return null;
         if (_log.shouldInfo())
-            _log.info("[SSU2] RETRANSMIT SessionCreated on " + this);
+            _log.info("[SSU] RETRANSMIT SessionCreated on " + this);
         UDPPacket packet = UDPPacket.acquire(_context, false);
         DatagramPacket pkt = packet.getPacket();
         byte data[] = pkt.getData();
@@ -1007,7 +1007,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
             if (_queuedDataPackets != null) {
                 for (UDPPacket packet : _queuedDataPackets) {
                     if (_log.shouldInfo())
-                        _log.info("[SSU2] Passing possible data packet to PeerState2: " + this);
+                        _log.info("[SSU] Passing possible data packet to PeerState2: " + this);
                     _pstate.receivePacket(packet);
                     packet.release();
                 }
@@ -1029,11 +1029,11 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
                 _queuedDataPackets = new ArrayList<UDPPacket>(4);
             } else if (_queuedDataPackets.size() >= 10) {
                 if (_log.shouldWarn())
-                    _log.warn("[SSU2] Not queueing possible data packet from " + packet + " -> Too many packets already queued");
+                    _log.warn("[SSU] Not queueing possible data packet from " + packet + " -> Too many packets already queued");
                 return;
             }
             if (_log.shouldInfo())
-                _log.info("[SSU2] Queueing possible data packet on " + this);
+                _log.info("[SSU] Queueing possible data packet on " + this);
             // have to copy it because PacketHandler will release
             DatagramPacket pkt = packet.getPacket();
             UDPPacket packet2 = UDPPacket.acquire(_context, true);
@@ -1045,7 +1045,7 @@ class InboundEstablishState2 extends InboundEstablishState implements SSU2Payloa
         } else {
             // case 2, race, decrypt header and pass over
             if (_log.shouldInfo())
-                _log.info("[SSU2] Passing possible data packet to PeerState2: " + this);
+                _log.info("[SSU] Passing possible data packet to PeerState2: " + this);
             _pstate.receivePacket(packet);
         }
     }

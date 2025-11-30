@@ -2075,7 +2075,7 @@ public class UDPTransport extends TransportImpl {
         PeerState altByHost = _peersByRemoteHost.remove(remoteId);
 
         if (altByIdent != altByHost && _log.shouldInfo())
-            _log.warn("[SSU2] Mismatch on remove -> " +
+            _log.warn("[SSU] Mismatch on remove -> " +
                       (remoteId != null ? "RemoteHostId: " + remoteId : "") +
                       (altByIdent != null ? " byID: " + altByIdent : "") +
                       (altByHost != null ? " byHost: " + altByHost : "") +

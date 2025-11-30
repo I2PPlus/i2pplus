@@ -222,7 +222,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         //_rcvHeaderEncryptKey2 will be set after the Session Request message is created
         _rcvRetryHeaderEncryptKey2 = ik;
         if (_log.shouldDebug())
-            _log.debug("[SSU2] New " + this);
+            _log.debug("[SSU] New " + this);
     }
 
     /**
@@ -278,7 +278,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         try {
             int blocks = SSU2Payload.processPayload(_context, this, payload, offset, length, isHandshake, null);
             if (_log.shouldDebug())
-                _log.debug("[SSU2] Processed " + blocks + " blocks on " + this);
+                _log.debug("[SSU] Processed " + blocks + " blocks on " + this);
         } catch (Exception e) {
             throw new GeneralSecurityException("Retry or Session Created payload error", e);
         }
@@ -294,7 +294,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
 
     public void gotOptions(byte[] options, boolean isHandshake) {
         if (_log.shouldDebug())
-            _log.debug("[SSU2] Received OPTIONS block");
+            _log.debug("[SSU] Received OPTIONS block");
     }
 
     public void gotRI(RouterInfo ri, boolean isHandshake, boolean flood) throws DataFormatException {
@@ -307,7 +307,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
 
     public void gotAddress(byte[] ip, int port) {
         if (_log.shouldDebug())
-            _log.debug("[SSU2] Received Address: " + Addresses.toString(ip, port));
+            _log.debug("[SSU] Received Address: " + Addresses.toString(ip, port));
         _aliceIP = ip;
         _alicePort = port;
     }
@@ -318,7 +318,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
 
     public void gotRelayTag(long tag) {
         if (_log.shouldDebug())
-            _log.debug("[SSU2] Received relay tag " + tag);
+            _log.debug("[SSU] Received relay tag " + tag);
         _receivedRelayTag = tag;
     }
 
@@ -340,7 +340,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
 
     public void gotToken(long token, long expires) {
         if (_log.shouldDebug())
-            _log.debug("[SSU2] Received token: " + token + " expires " + DataHelper.formatTime(expires) + " on " + this);
+            _log.debug("[SSU] Received token: " + token + " expires " + DataHelper.formatTime(expires) + " on " + this);
         _transport.getEstablisher().addOutboundToken(_remoteHostId, token, expires);
     }
 
@@ -358,7 +358,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
 
     public void gotTermination(int reason, long count) {
         if (_log.shouldWarn())
-            _log.warn("[SSU2] Received TERMINATION block -> " + SSU2Util.terminationCodeToString(reason) + "; Count: " + count + "\n* " + this);
+            _log.warn("[SSU] Received TERMINATION block -> " + SSU2Util.terminationCodeToString(reason) + "; Count: " + count + "\n* " + this);
         // this sets the state to FAILED
         fail();
         _transport.getEstablisher().receiveSessionDestroy(_remoteHostId, this);
@@ -578,7 +578,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         //    throw new GeneralSecurityException("No Address block in Retry");
         createNewState(_routerAddress);
         if (_log.shouldDebug())
-            _log.debug("[SSU2] Received a RetryToken " + token + "\n* " + this);
+            _log.debug("[SSU] Received a RetryToken " + token + "\n* " + this);
         _currentState = OutboundState.OB_STATE_RETRY_RECEIVED;
     }
 
@@ -606,10 +606,10 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
         if (_currentState != OutboundState.OB_STATE_REQUEST_SENT &&
             _currentState != OutboundState.OB_STATE_REQUEST_SENT_NEW_TOKEN) {
             // ignore dups
-            if (_log.shouldWarn()) {_log.warn("[SSU2] Invalid state for SessionCreated: " + this);}
+            if (_log.shouldWarn()) {_log.warn("[SSU] Invalid state for SessionCreated: " + this);}
             return;
         }
-        if (_log.shouldDebug()) {_log.debug("[SSU2] Received a SessionCreated on " + this);}
+        if (_log.shouldDebug()) {_log.debug("[SSU] Received a SessionCreated on " + this);}
 
         DatagramPacket pkt = packet.getPacket();
         SocketAddress from = pkt.getSocketAddress();
@@ -627,12 +627,12 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
 
         _handshakeState.mixHash(data, off, LONG_HEADER_SIZE);
         //if (_log.shouldDebug())
-        //    _log.debug("[SSU2] State after mixHash 2: " + _handshakeState);
+        //    _log.debug("[SSU] State after mixHash 2: " + _handshakeState);
 
         // decrypt in-place
         _handshakeState.readMessage(data, off + LONG_HEADER_SIZE, len - LONG_HEADER_SIZE, data, off + LONG_HEADER_SIZE);
         //if (_log.shouldDebug())
-        //    _log.debug("[SSU2] State after SessionCreate: " + _handshakeState);
+        //    _log.debug("[SSU] State after SessionCreate: " + _handshakeState);
         _timeReceived = 0;
         processPayload(data, off + LONG_HEADER_SIZE, len - (LONG_HEADER_SIZE + KEY_LEN + MAC_LEN), true);
         packetReceived();
@@ -756,7 +756,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
             rcvr.initializeKey(d_ba, 0);
           /****
             if (_log.shouldDebug())
-                _log.debug("[SSU2] split()\nGenerated Chain key:              " + Base64.encode(ckd) +
+                _log.debug("[SSU] split()\nGenerated Chain key:              " + Base64.encode(ckd) +
                            "\nGenerated split key for A->B:     " + Base64.encode(k_ab) +
                            "\nGenerated split key for B->A:     " + Base64.encode(k_ba) +
                            "\nGenerated encrypt key for A->B:   " + Base64.encode(d_ab) +
@@ -856,7 +856,7 @@ class OutboundEstablishState2 extends OutboundEstablishState implements SSU2Payl
     @Override
     public String toString() {
         int count = _introducers != null ? _introducers.size() : 0;
-        //return "[SSU2] OutboundEstablishState [" + _remotePeer.getHash().toBase64().substring(0, 6) + "] " + _remoteHostId +
+        //return "[SSU] OutboundEstablishState [" + _remotePeer.getHash().toBase64().substring(0, 6) + "] " + _remoteHostId +
         return "OutboundEstablishState [" + _remotePeer.getHash().toBase64().substring(0, 6) + "] " +
                "\n* Lifetime: " + DataHelper.formatDuration(getLifetime()) +
                "; Receive ID: " + _rcvConnID + "; Send ID: " + _sendConnID +

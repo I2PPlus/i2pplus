@@ -773,7 +773,7 @@ class IntroductionManager {
         if (rcode == SSU2Util.RELAY_ACCEPT) {
             // send hole punch with the same data we sent to Bob
             if (_log.shouldDebug()) {
-                _log.debug("[SSU2] Sending hole punch to " + Addresses.toString(testIP, testPort).replace("/", ""));
+                _log.debug("[SSU] Sending hole punch to " + Addresses.toString(testIP, testPort).replace("/", ""));
             }
             long sendId = (nonce << 32) | nonce;
             long rcvId = ~sendId;

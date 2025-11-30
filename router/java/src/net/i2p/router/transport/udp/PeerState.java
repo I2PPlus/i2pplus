@@ -1105,11 +1105,11 @@ public class PeerState {
                     msg.timestamp("Expired in the active pool");
                     _transport.failed(state);
                     if (shouldLogInfo) {
-                        _log.info("Message expired " + state + this);
+                        _log.info("[SSU] Message expired " + state + this);
                     }
                 } else {
                     if (shouldLogInfo) {
-                        _log.warn("Unable to send direct message " + state + this);
+                        _log.warn("[SSU] Unable to send direct message " + state + this);
                     }
                 }
             }
@@ -1117,7 +1117,7 @@ public class PeerState {
             if (failedSize > 0) {
                 if (totalFail) {
                     if (shouldLogWarn) {
-                        _log.warn("First Outbound message failed (timeout)" + this);
+                        _log.warn("[SSU] First Outbound message failed -> Timeout after 60s" + this);
                     }
                     _transport.sendDestroy(this, SSU2Util.REASON_FRAME_TIMEOUT);
                     _transport.dropPeer(this, true, "OB First Message Fail");

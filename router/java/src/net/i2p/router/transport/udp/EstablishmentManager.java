@@ -263,7 +263,7 @@ class EstablishmentManager {
             if (state == null) {
                 state = _outboundByClaimedAddress.get(from);
                 if (state != null && _log.shouldInfo()) {
-                    _log.info("[SSU2] Found by claimed address: " + state);
+                    _log.info("[SSU] Found by claimed address: " + state);
                 }
             }
             // if ( (state == null) && (_log.shouldDebug()) )
@@ -353,7 +353,7 @@ class EstablishmentManager {
                      if (!isBanned) {
                        _context.banlist().banlistRouter(toHash, " <b>➜</b> Invalid SSU address", null, null, now + 4*60*60*1000);
                        if (_log.shouldWarn()) {
-                          _log.warn("[SSU2] Banning [" + truncHash + "] for 4h -> Invalid SSU address");
+                          _log.warn("[SSU] Banning [" + truncHash + "] for 4h -> Invalid SSU address");
                        }
                     }
                 } else {
@@ -380,7 +380,7 @@ class EstablishmentManager {
                         // queue it
                         inState.addMessage(msg);
                         if (_log.shouldDebug())
-                            _log.debug("[SSU2] Outbound message queued to InboundEstablishState");
+                            _log.debug("[SSU] Outbound message queued to InboundEstablishState");
                         break;
 
                       case IB_STATE_COMPLETE:
@@ -416,7 +416,7 @@ class EstablishmentManager {
         if (state == null) {
             state = _outboundByHash.get(toHash);
             if (state != null && _log.shouldInfo())
-                _log.info("[SSU2] Found by hash: " + state);
+                _log.info("[SSU] Found by hash: " + state);
         }
         if (state == null) {
             if (queueIfMaxExceeded && _outboundStates.size() >= getMaxConcurrentEstablish()) {
@@ -433,7 +433,7 @@ class EstablishmentManager {
                     if (queued.offer(msg)) {
                         queueCount = queued.size(); // O(1), safe
                         if (_log.shouldWarn()) {
-                            _log.warn("[SSU2] Queueing OutboundEstablish to " + to +
+                            _log.warn("[SSU] Queueing OutboundEstablish to " + to +
                                       ", increase " + PROP_MAX_CONCURRENT_ESTABLISH);
                         }
                     } else {
@@ -474,12 +474,12 @@ class EstablishmentManager {
                             if (!isBanned) {
                                 _context.banlist().banlistRouter(toHash, " <b>➜</b> Invalid MTU", null, null, now + 4*60*60*1000);
                                 if (_log.shouldWarn()) {
-                                    _log.warn("[SSU2] Banning [" + truncHash + "] for 4h -> Invalid MTU");
+                                    _log.warn("[SSU] Banning [" + truncHash + "] for 4h -> Invalid MTU");
                                 }
                             }
                         } else if (!ipAddress.isEmpty() && !ipAddress.equals("")) {
                             if (_log.shouldWarn()) {
-                                _log.warn("[SSU2] Router has invalid MTU (too small): " + ipAddress + ":" + maybePort);
+                                _log.warn("[SSU] Router has invalid MTU (too small): " + ipAddress + ":" + maybePort);
                             }
                         }
                         return;
@@ -498,12 +498,12 @@ class EstablishmentManager {
                         if (!isBanned) {
                             _context.banlist().banlistRouter(toHash, " <b>➜</b> No Introduction key", null, null, now + 60*60*1000);
                             if (_log.shouldWarn()) {
-                                _log.warn("[SSU2] Banning [" + truncHash + "] for 1h -> No Introduction key");
+                                _log.warn("[SSU] Banning [" + truncHash + "] for 1h -> No Introduction key");
                             }
                         }
                     } else if (!ipAddress.isEmpty() && !ipAddress.equals("")) {
                         if (_log.shouldWarn()) {
-                                _log.warn("[SSU2] Received no Introduction key from: " + ipAddress + ":" + maybePort);
+                                _log.warn("[SSU] Received no Introduction key from: " + ipAddress + ":" + maybePort);
                         }
                     }
                     return;
@@ -518,12 +518,12 @@ class EstablishmentManager {
                         if (!isBanned) {
                             _context.banlist().banlistRouter(toHash, " <b>➜</b> Bad Introduction key", null, null, now + 4*60*60*1000);
                             if (_log.shouldWarn()) {
-                                _log.warn("[SSU2] Banning [" + truncHash + "] for 4h -> Bad Introduction key");
+                                _log.warn("[SSU] Banning [" + truncHash + "] for 4h -> Bad Introduction key");
                             }
                         }
                     } else if (!ipAddress.isEmpty() && !ipAddress.equals("")) {
                         if (_log.shouldWarn()) {
-                            _log.warn("[SSU2] Received Bad Introduction key from: " + ipAddress + ":" + maybePort);
+                            _log.warn("[SSU] Received Bad Introduction key from: " + ipAddress + ":" + maybePort);
                         }
                     }
                     return;
@@ -534,7 +534,7 @@ class EstablishmentManager {
                         state = new OutboundEstablishState2(_context, _transport, maybeTo, to,
                                                             toIdentity, requestIntroduction, sessionKey, ra, addr);
                     } catch (IllegalArgumentException iae) {
-                        if (_log.shouldWarn()) {_log.warn("[SSU2] OES2 error: " + toRouterInfo, iae);}
+                        if (_log.shouldWarn()) {_log.warn("[SSU] OES2 error: " + toRouterInfo, iae);}
                         _transport.markUnreachable(toHash);
                         _transport.failed(msg, iae.getMessage());
                         return;
@@ -548,7 +548,7 @@ class EstablishmentManager {
                 boolean isNew = oldState == null;
                 if (isNew) {
                     if (isIndirect && maybeTo != null) {_outboundByClaimedAddress.put(maybeTo, state);}
-                    if (_log.shouldDebug()) {_log.debug("[SSU2] Adding new Outbound connection to: " + state);}
+                    if (_log.shouldDebug()) {_log.debug("[SSU] Adding new Outbound connection to: " + state);}
                 } else {
                     // whoops, somebody beat us to it, throw out the state we just created
                     state = oldState;
@@ -567,7 +567,7 @@ class EstablishmentManager {
         }
         if (rejected) {
             if (_log.shouldWarn())
-                _log.warn("[SSU2] Too many pending connections, rejecting OutboundEstablish to " + to);
+                _log.warn("[SSU] Too many pending connections, rejecting OutboundEstablish to " + to);
             _transport.failed(msg, "Too many pending outbound connections");
             _context.statManager().addRateData("udp.establishRejected", deferred);
             return;
@@ -650,7 +650,7 @@ class EstablishmentManager {
             int percent = probAccept > 128 ? 100 : (probAccept / 128) * 100;
             if (probAccept >= 128 || _context.random().nextInt(128) < probAccept) {
                 if (_log.shouldWarn()) {
-                    _log.warn("[SSU2] Dropping incoming connection (" + (percent >= 1 ? Math.max(percent,100) : "1") + "% chance)" +
+                    _log.warn("[SSU] Dropping incoming connection (" + (percent >= 1 ? Math.max(percent,100) : "1") + "% chance)" +
                               " -> Previous / current connections per minute: " + last + " / " + (int) (currentRate * 60*1000));
                  }
                  return false;
@@ -684,17 +684,17 @@ class EstablishmentManager {
         String truncHash = fromHash != null ? fromHash.toBase64().substring(0,6) : "";
         if (!TransportUtil.isValidPort(from.getPort()) || !_transport.isValid(fromIP)) {
             if (_log.shouldWarn()) {
-                _log.warn("[SSU2] Received Session Request from invalid address/port: " + from);
+                _log.warn("[SSU] Received Session Request from invalid address/port: " + from);
             }
             if (fromHash != null) {
                 if (!isBanned) {
                    _context.banlist().banlistRouter(fromHash, " <b>➜</b> Invalid address/port in Session Request", null, null, now + 15*60*1000);
                    if (_log.shouldWarn()) {
-                      _log.warn("[SSU2] Banning [" + truncHash + "] for 15m -> Invalid address/port in Session Request" + " (" + from + ")");
+                      _log.warn("[SSU] Banning [" + truncHash + "] for 15m -> Invalid address/port in Session Request" + " (" + from + ")");
                    }
                 } else if (isBanned) {
                     if (_log.shouldInfo()) {
-                        _log.info("[SSU2] Not banning [" + truncHash + "] -> Already in blocklist (" + from + ")");
+                        _log.info("[SSU] Not banning [" + truncHash + "] -> Already in blocklist (" + from + ")");
                     }
                 }
             }
@@ -704,10 +704,10 @@ class EstablishmentManager {
         if (state == null) {
             if (isBlocklisted) {
                 if (_log.shouldInfo()) {
-                    _log.info("[SSU2] Received Session Request from blocklisted IP address " + from);
+                    _log.info("[SSU] Received Session Request from blocklisted IP address " + from);
                 } else if (isBanned) {
                     if (_log.shouldInfo()) {
-                        _log.info("[SSU2] Received Session Request from banned Router [" + truncHash + "}");
+                        _log.info("[SSU] Received Session Request from banned Router [" + truncHash + "}");
                     }
                 }
                 _context.statManager().addRateData("udp.establishBadIP", 1);
@@ -721,7 +721,7 @@ class EstablishmentManager {
                 // IP spoofing is used. For further study.
                 if (!shouldAllowInboundEstablishment()) {
                     if (_log.shouldWarn())
-                        _log.warn("[SSU2] Dropping InboundEstablish from " + Addresses.toString(fromIP));
+                        _log.warn("[SSU] Dropping InboundEstablish from " + Addresses.toString(fromIP));
                     _context.statManager().addRateData("udp.establishDropped", 1);
                     sendTerminationPacket(from, packet, REASON_LIMITS);
                     return;
@@ -732,7 +732,7 @@ class EstablishmentManager {
                         if (exp.longValue() >= _context.clock().now()) {
                             // this is common, finally get a packet after the IES2 timeout
                             if (_log.shouldInfo())
-                                _log.info("[SSU2] Received Session Request from temporarily banned peer " + from);
+                                _log.info("[SSU] Received Session Request from temporarily banned peer " + from);
                              _context.statManager().addRateData("udp.establishBadIP", 1);
                              // use this code for a temp ban
                              sendTerminationPacket(from, packet, REASON_MSG1);
@@ -753,9 +753,9 @@ class EstablishmentManager {
                 boolean gseNotNull = gse.getMessage() != null && gse.getMessage() != "null";
                 if (from != null && !isPeerBanned(from)) {
                     if (_log.shouldDebug())
-                        _log.warn("[SSU2] Received CORRUPT Session or Token Request from " + from, gse);
+                        _log.warn("[SSU] Received CORRUPT Session or Token Request from " + from, gse);
                     else if (_log.shouldWarn())
-                        _log.warn("[SSU2] Received CORRUPT Session or Token Request from " + from +
+                        _log.warn("[SSU] Received CORRUPT Session or Token Request from " + from +
                         (gseNotNull ? "\n* General Security Exception: " + gse.getMessage() : ""));
                 }
                 _context.statManager().addRateData("udp.establishDropped", 1);
@@ -793,9 +793,9 @@ class EstablishmentManager {
                 boolean gseNotNull = gse.getMessage() != null && gse.getMessage() != "null";
                 if (state != null && !isPeerBanned(state)) {
                     if (_log.shouldDebug())
-                        _log.warn("[SSU2] Received CORRUPT Session or Token Request after Retry -> Router: " + state, gse);
+                        _log.warn("[SSU] Received CORRUPT Session or Token Request after Retry -> Router: " + state, gse);
                     else if (_log.shouldWarn())
-                        _log.warn("[SSU2] Received CORRUPT Session or Token Request after Retry -> Router: " + state +
+                        _log.warn("[SSU] Received CORRUPT Session or Token Request after Retry -> Router: " + state +
                         (gseNotNull ? "\n* General Security Exception: " + gse.getMessage() : ""));
                 }
                 // state called fail()
@@ -806,9 +806,9 @@ class EstablishmentManager {
 
         if (_log.shouldDebug()) {
             if (isNew)
-                _log.debug("[SSU2] Received NEW Session/Token Request " + state);
+                _log.debug("[SSU] Received NEW Session/Token Request " + state);
             else
-                _log.debug("[SSU2] Received DUPLICATE Session/Token Request -> Router: " + state);
+                _log.debug("[SSU] Received DUPLICATE Session/Token Request -> Router: " + state);
         }
         notifyActivity();
     }
@@ -842,14 +842,14 @@ class EstablishmentManager {
                     if (ip != null && !_context.blocklist().isBlocklisted(ip)) {
                         _context.blocklist().add(ip, "Ignores termination packets");
                         if (_log.shouldWarn()) {
-                            _log.warn("[SSU2] Banning " + targetIP + " for duration of session -> Repeatedly ignoring termination packets");
+                            _log.warn("[SSU] Banning " + targetIP + " for duration of session -> Repeatedly ignoring termination packets");
                         }
                         return;
                     }
                 } catch (UnknownHostException uhe) {}
             }
             if (_log.shouldWarn()) {
-                _log.warn("[SSU2] Rate limit of " + MAX_TERMINATIONS + " in 3m exceeded (Count: " + count + ") \n* No more termination packets to: " + to);
+                _log.warn("[SSU] Rate limit of " + MAX_TERMINATIONS + " in 3m exceeded (Count: " + count + ") \n* No more termination packets to: " + to);
             }
         }
         // very basic validation that this is probably in response to a good packet.
@@ -867,7 +867,7 @@ class EstablishmentManager {
         if (rcvConnID == 0 || sendConnID == 0 || rcvConnID == sendConnID) {return;}
         if (_log.shouldInfo()) {
              String typeStr = UDPPacket.payloadTypeToString(type);
-            _log.warn("[SSU2] Sending termination packet for " + typeStr + " to: " + to + " -> " + parseReason(terminationCode));
+            _log.warn("[SSU] Sending termination packet for " + typeStr + " to: " + to + " -> " + parseReason(terminationCode));
         }
         UDPPacket packet = _builder2.buildRetryPacket(to, pkt.getSocketAddress(), sendConnID, rcvConnID, terminationCode);
         _transport.send(packet);
@@ -892,9 +892,9 @@ class EstablishmentManager {
         catch (GeneralSecurityException gse) {
             if (state != null && !isPeerBanned(state) && !shouldSuppressException(gse)) {
                 if (_log.shouldDebug()) {
-                    _log.warn("[SSU2] Received CORRUPT SessionConfirmed -> Router: " + state, gse);
+                    _log.warn("[SSU] Received CORRUPT SessionConfirmed -> Router: " + state, gse);
                 } else if (_log.shouldWarn()) {
-                    _log.warn("[SSU2] Received CORRUPT SessionConfirmed -> Router: " + state + "\n* " + gse.getMessage());
+                    _log.warn("[SSU] Received CORRUPT SessionConfirmed -> Router: " + state + "\n* " + gse.getMessage());
                 }
             }
             _inboundStates.remove(state.getRemoteHostId());
@@ -908,7 +908,7 @@ class EstablishmentManager {
 
         notifyActivity();
         if (_log.shouldDebug()) {
-            _log.debug("[SSU2] Received SessionConfirmed -> Router: " + state);
+            _log.debug("[SSU] Received SessionConfirmed -> Router: " + state);
         }
     }
 
@@ -930,9 +930,9 @@ class EstablishmentManager {
         try {state.receiveSessionCreated(packet);}
         catch (GeneralSecurityException gse) {
             if (_log.shouldDebug() && !shouldSuppressException(gse)) {
-                _log.warn("[SSU2] Received CORRUPT SessionCreated -> Router: " + state, gse);
+                _log.warn("[SSU] Received CORRUPT SessionCreated -> Router: " + state, gse);
             } else if (_log.shouldWarn() && !shouldSuppressException(gse)) {
-                _log.warn("[SSU2] Received CORRUPT SessionCreated -> Router: " + state + "\n* " + gse.getMessage());
+                _log.warn("[SSU] Received CORRUPT SessionCreated -> Router: " + state + "\n* " + gse.getMessage());
             }
             _outboundStates.remove(state.getRemoteHostId());
             return;
@@ -941,7 +941,7 @@ class EstablishmentManager {
         notifyActivity();
 
         if (_log.shouldDebug()) {
-            _log.debug("[SSU2] Received SessionCreated -> Router: " + state);
+            _log.debug("[SSU] Received SessionCreated -> Router: " + state);
         }
     }
 
@@ -960,9 +960,9 @@ class EstablishmentManager {
         try {state.receiveRetry(packet);}
         catch (GeneralSecurityException gse) {
             if (_log.shouldDebug() && !shouldSuppressException(gse)) {
-                _log.warn("[SSU2] Received CORRUPT Retry -> Router: " + state, gse);
+                _log.warn("[SSU] Received CORRUPT Retry -> Router: " + state, gse);
             } else if (_log.shouldWarn() && !shouldSuppressException(gse)) {
-                _log.warn("[SSU2] Received CORRUPT Retry -> Router: " + state + "\n* " + gse.getMessage());
+                _log.warn("[SSU] Received CORRUPT Retry -> Router: " + state + "\n* " + gse.getMessage());
             }
             _outboundStates.remove(state.getRemoteHostId());
             return;
@@ -970,7 +970,7 @@ class EstablishmentManager {
 
         notifyActivity();
         if (_log.shouldDebug()) {
-            _log.debug("[SSU2] Received Retry with token " + state.getToken() + " -> Router: " + state);
+            _log.debug("[SSU] Received Retry with token " + state.getToken() + " -> Router: " + state);
         }
     }
 
@@ -1292,14 +1292,14 @@ class EstablishmentManager {
         switch (istate) {
             case IB_STATE_CREATED_SENT:
                 if (_log.shouldInfo())
-                    _log.info("[SSU2] ResendSessionCreated packet sent to: " + state);
+                    _log.info("[SSU] ResendSessionCreated packet sent to: " + state);
                 // if already sent, get from the state to retx
                 pkt = state2.getRetransmitSessionCreatedPacket();
                 break;
 
               case IB_STATE_REQUEST_RECEIVED:
                 if (_log.shouldDebug())
-                    _log.debug("[SSU2] Sending SessionCreated to: " + state);
+                    _log.debug("[SSU] Sending SessionCreated to: " + state);
                 pkt = _builder2.buildSessionCreatedPacket(state2);
                 break;
 
@@ -1307,19 +1307,19 @@ class EstablishmentManager {
               case IB_STATE_REQUEST_BAD_TOKEN_RECEIVED:
               case IB_STATE_RETRY_SENT:     // got a retransmitted token request
                 if (_log.shouldDebug())
-                    _log.debug("[SSU2] Sending Retry to: " + state);
+                    _log.debug("[SSU] Sending Retry to: " + state);
                 pkt = _builder2.buildRetryPacket(state2, 0);
                 break;
 
               default:
                 if (_log.shouldWarn())
-                    _log.warn("[SSU2] Unhandled state " + istate + " on " + state);
+                    _log.warn("[SSU] Unhandled state " + istate + " on " + state);
                 return;
         }
 
         if (pkt == null) {
             if (_log.shouldWarn())
-                _log.warn("[SSU2] Router " + state + " appears to have sent us an invalid IP address");
+                _log.warn("[SSU] Router " + state + " appears to have sent us an invalid IP address");
             _inboundStates.remove(state.getRemoteHostId());
             state.fail();
             return;
@@ -1345,7 +1345,7 @@ class EstablishmentManager {
               case OB_STATE_REQUEST_SENT:
               case OB_STATE_REQUEST_SENT_NEW_TOKEN:
                 if (_log.shouldInfo())
-                    _log.info("[SSU2] Resending Session Request packet to: " + state);
+                    _log.info("[SSU] Resending Session Request packet to: " + state);
                 // if already sent, get from the state to retx
                 packet = state2.getRetransmitSessionRequestPacket();
                 break;
@@ -1353,26 +1353,26 @@ class EstablishmentManager {
               case OB_STATE_NEEDS_TOKEN:
               case OB_STATE_TOKEN_REQUEST_SENT:
                 if (_log.shouldDebug())
-                    _log.debug("[SSU2] Sending Token Request to: " + state);
+                    _log.debug("[SSU] Sending Token Request to: " + state);
                 packet = _builder2.buildTokenRequestPacket(state2);
                 break;
 
               case OB_STATE_UNKNOWN:
               case OB_STATE_RETRY_RECEIVED:
                 if (_log.shouldDebug())
-                    _log.debug("[SSU2] Sending Session Request to: " + state);
+                    _log.debug("[SSU] Sending Session Request to: " + state);
                 packet = _builder2.buildSessionRequestPacket(state2);
                 break;
 
               case OB_STATE_INTRODUCED:
                 if (_log.shouldDebug())
-                    _log.debug("[SSU2] Sending Session Request after introduction to: " + state);
+                    _log.debug("[SSU] Sending Session Request after introduction to: " + state);
                 packet = _builder2.buildSessionRequestPacket(state2);
                 break;
 
               default:
                 if (_log.shouldWarn())
-                    _log.warn("[SSU2] Unhandled state " + ostate + " on " + state);
+                    _log.warn("[SSU] Unhandled state " + ostate + " on " + state);
                 return;
             }
 
@@ -1380,7 +1380,7 @@ class EstablishmentManager {
             _transport.send(packet);
         } else {
             if (_log.shouldWarn())
-                _log.warn("[SSU2] Unable to build a Session Request packet for: " + state);
+                _log.warn("[SSU] Unable to build a Session Request packet for: " + state);
         }
         // PacketBuilder2 told the state
     }
@@ -1443,7 +1443,7 @@ class EstablishmentManager {
                     }
                     if (bob != null && istate == INTRO_STATE_CONNECTED) {
                         if (_log.shouldDebug())
-                            _log.debug("[SSU2] Found connected Introducer " + bob + " for " + state);
+                            _log.debug("[SSU] Found connected Introducer " + bob + " for " + state);
                         long tag = addr.getIntroducerTag(i);
                         boolean ok = sendRelayRequest(tag, (PeerState2) bob, state);
                         // this transitions the state
@@ -1483,13 +1483,13 @@ class EstablishmentManager {
                             OutboundEstablishState oes = _outboundStates.get(rhid);
                             if (oes != null) {
                                 if (_log.shouldDebug())
-                                    _log.debug("[SSU2] Awaiting pending connection to Introducer " + oes + " for " + state);
+                                    _log.debug("[SSU] Awaiting pending connection to Introducer " + oes + " for " + state);
                                 break;
                             }
                             int version = _transport.getSSUVersion(ra);
                             if (version == 2) {
                                 if (_log.shouldDebug())
-                                    _log.debug("[SSU2] Connecting to Introducer " + bob + " for " + state);
+                                    _log.debug("[SSU] Connecting to Introducer " + bob + " for " + state);
                                 // arbitrary message because we have no way to connect for no reason
                                 DatabaseLookupMessage dlm = new DatabaseLookupMessage(_context);
                                 dlm.setSearchKey(h);
@@ -1524,7 +1524,7 @@ class EstablishmentManager {
                     OutboundEstablishState2.IntroState istate = state2.getIntroState(h);
                     if (istate == INTRO_STATE_INIT) {
                         if (_log.shouldDebug())
-                            _log.debug("[SSU2] Looking up Introducer " + h + " for " + state);
+                            _log.debug("[SSU] Looking up Introducer " + h + " for " + state);
                         istate = INTRO_STATE_LOOKUP_SENT;
                         state2.setIntroState(h, istate);
                         // TODO on success job
@@ -1535,7 +1535,7 @@ class EstablishmentManager {
             }
             if (sent) {state.introSent();} // not really
             else {
-                if (_log.shouldDebug()) {_log.debug("[SSU2] No valid Introducers for " + state);}
+                if (_log.shouldDebug()) {_log.debug("[SSU] No valid Introducers for " + state);}
                 processExpired(state);
             }
     }
@@ -1558,12 +1558,12 @@ class EstablishmentManager {
             if (ourra == null) {ourra = _transport.getCurrentExternalAddress(false);}
         } else {ourra = _transport.getCurrentExternalAddress(false);}
         if (ourra == null) {
-            if (_log.shouldWarn()) {_log.warn("[SSU2] No IP address to send in relay request");}
+            if (_log.shouldWarn()) {_log.warn("[SSU] No IP address to send in relay request");}
             return false;
         }
         byte[] ourIP = ourra.getIP();
         if (ourIP == null) {
-            if (_log.shouldWarn()) {_log.warn("[SSU2] No IP address to send in relay request");}
+            if (_log.shouldWarn()) {_log.warn("[SSU] No IP address to send in relay request");}
             return false;
         }
         // Bob should already have our RI, especially if we just connected; we do not resend it here.
@@ -1572,13 +1572,13 @@ class EstablishmentManager {
                                                       charlie.getIntroNonce(), tag, ourIP, ourPort,
                                                       _context.keyManager().getSigningPrivateKey());
         if (data == null) {
-            if (_log.shouldWarn()) {_log.warn("[SSU2] Signature failure (no data)");}
+            if (_log.shouldWarn()) {_log.warn("[SSU] Signature failure (no data)");}
             return false;
         }
         UDPPacket packet;
         try {packet = _builder2.buildRelayRequest(data, bob);}
         catch (IOException ioe) {return false;}
-        if (_log.shouldDebug()) {_log.debug("[SSU2] Sending RelayRequest to " + bob + " for " + charlie);}
+        if (_log.shouldDebug()) {_log.debug("[SSU] Sending RelayRequest to " + bob + " for " + charlie);}
         _transport.send(packet);
         bob.setLastSendTime(_context.clock().now());
         return true;
@@ -1601,7 +1601,7 @@ class EstablishmentManager {
         else {charlie = _liveIntroductions.remove(lnonce);}
         if (charlie == null) {
             if (_log.shouldDebug()) {
-                _log.debug("[SSU2] Duplicate or unknown RelayResponse: " + nonce);
+                _log.debug("[SSU] Duplicate or unknown RelayResponse: " + nonce);
             }
             return; // already established, or we were Bob and got a dup from Charlie
         }
@@ -1633,7 +1633,7 @@ class EstablishmentManager {
             if (!SSU2Util.validateSig(_context, SSU2Util.RELAY_RESPONSE_PROLOGUE,
                                      bobHash, null, data, spk)) {
                 if (_log.shouldWarn()) {
-                    _log.warn("[SSU2] Signature failed RelayResponse (" + parseReason(code) + ") as Alice from:\n" + signerRI);
+                    _log.warn("[SSU] Signature failed RelayResponse (" + parseReason(code) + ") as Alice from:\n" + signerRI);
                 }
                 istate = INTRO_STATE_FAILED;
                 charlie2.setIntroState(bobHash, istate);
@@ -1641,13 +1641,13 @@ class EstablishmentManager {
                 return;
             }
         } else {
-            if (_log.shouldWarn()) {_log.warn("[SSU2] RouterInfo not found for Signer: " + signer);}
+            if (_log.shouldWarn()) {_log.warn("[SSU] RouterInfo not found for Signer: " + signer);}
             return;
         }
         if (code == 0) {
             int iplen = data[9] & 0xff;
             if (iplen != 6 && iplen != 18) {
-                if (_log.shouldWarn()) {_log.warn("[SSU2] BAD IP address length " + iplen + " from " + charlie);}
+                if (_log.shouldWarn()) {_log.warn("[SSU] BAD IP address length " + iplen + " from " + charlie);}
                 istate = INTRO_STATE_FAILED;
                 charlie2.setIntroState(bobHash, istate);
                 charlie.fail();
@@ -1663,7 +1663,7 @@ class EstablishmentManager {
                 DataHelper.eq(ip, bob.getRemoteIP()) ||
                 _context.blocklist().isBlocklisted(ip)) {
                 if (_log.shouldWarn()) {
-                    _log.warn("[SSU2] BAD RelayResponse from " + charlie + " for " + Addresses.toString(ip, port));
+                    _log.warn("[SSU] BAD RelayResponse from " + charlie + " for " + Addresses.toString(ip, port));
                 }
                 istate = INTRO_STATE_FAILED;
                 charlie2.setIntroState(bobHash, istate);
@@ -1676,7 +1676,7 @@ class EstablishmentManager {
                 _log.debug("Received RelayResponse from " + charlie + " - they are on " + Addresses.toString(ip, port));
             }
             if (charlieRI == null) {
-                if (_log.shouldWarn()) {_log.warn("[SSU2] Charlie's RouterInfo not found " + charlie);}
+                if (_log.shouldWarn()) {_log.warn("[SSU] Charlie's RouterInfo not found " + charlie);}
                 charlie2.setIntroState(bobHash, istate);
                 // maybe it will show up later
                 return;
@@ -1698,7 +1698,7 @@ class EstablishmentManager {
                         _outboundStates.remove(oldId);
                         _outboundStates.put(newId, charlie);
                         if (_log.shouldLog(Log.INFO)) {
-                            _log.info("[SSU2] RelayResponse replaced " + oldId + " with " + newId + ", claimed address was " + claimed);
+                            _log.info("[SSU] RelayResponse replaced " + oldId + " with " + newId + ", claimed address was " + claimed);
                         }
                     }
                     if (claimed != null) {_outboundByClaimedAddress.remove(oldId, charlie);} // only if == state
@@ -1709,7 +1709,7 @@ class EstablishmentManager {
         } else if (code >= 64) {
             // that's it
             if (_log.shouldDebug()) {
-                _log.debug("[SSU2] Received RelayResponse rejection (" + parseReason(code) + ") from Charlie " + charlie);
+                _log.debug("[SSU] Received RelayResponse rejection (" + parseReason(code) + ") from Charlie " + charlie);
             }
             charlie2.setIntroState(bobHash, istate);
             if (code == RELAY_REJECT_CHARLIE_BANNED) {
@@ -1721,7 +1721,7 @@ class EstablishmentManager {
             // don't give up, maybe more bobs out there
             // TODO keep track
             if (_log.shouldDebug()) {
-                _log.debug("[SSU2] Received RelayResponse rejection (" + parseReason(code) + ") from Bob " + bob);
+                _log.debug("[SSU] Received RelayResponse rejection (" + parseReason(code) + ") from Bob " + bob);
             }
             charlie2.setIntroState(bobHash, istate);
             notifyActivity();
@@ -1762,49 +1762,49 @@ class EstablishmentManager {
             int payloadLen = len - (LONG_HEADER_SIZE + MAC_LEN);
             SSU2Payload.processPayload(_context, cb, data, off + LONG_HEADER_SIZE, payloadLen, false, null);
             if (cb._respCode != 0) {
-                if (_log.shouldWarn()) {_log.warn("[SSU2] BAD HolePunch response: " + cb._respCode);}
+                if (_log.shouldWarn()) {_log.warn("[SSU] BAD HolePunch response: " + cb._respCode);}
                 return;
             }
             long skew = cb._timeReceived - now;
             if (skew > MAX_SKEW || skew < 0 - MAX_SKEW) {
-                if (_log.shouldWarn()) {_log.warn("[SSU2] Too skewed (" + skew + "ms) in HolePunch from " + id);}
+                if (_log.shouldWarn()) {_log.warn("[SSU] Too skewed (" + skew + "ms) in HolePunch from " + id);}
                 return;
             }
             nonce = DataHelper.fromLong(cb._respData, 0, 4);
             if (nonce != (rcvConnID & 0xFFFFFFFFL) ||
                 nonce != ((rcvConnID >> 32) & 0xFFFFFFFFL)) {
-                if (_log.shouldWarn()) {_log.warn("[SSU2] BAD nonce in HolePunch from " + id);}
+                if (_log.shouldWarn()) {_log.warn("[SSU] BAD nonce in HolePunch from " + id);}
                 return;
             }
             long time = DataHelper.fromLong(cb._respData, 4, 4) * 1000;
             skew = time - now;
             if (skew > MAX_SKEW || skew < 0 - MAX_SKEW) {
-                if (_log.shouldWarn()) {_log.warn("[SSU2] Too skewed (" + skew + "ms) in HolePunch from " + id);}
+                if (_log.shouldWarn()) {_log.warn("[SSU] Too skewed (" + skew + "ms) in HolePunch from " + id);}
                 return;
             }
             int ver = cb._respData[8] & 0xff;
             if (ver != 2) {
-                if (_log.shouldWarn()) {_log.warn("[SSU2] BAD HolePunch version (" + ver + ") from " + id);}
+                if (_log.shouldWarn()) {_log.warn("[SSU] BAD HolePunch version (" + ver + ") from " + id);}
                 return;
             }
             // check signature below
         } catch (Exception e) {
-            if (_log.shouldWarn() && !shouldSuppressException(e)) {_log.warn("[SSU2] BAD HolePunch packet:\n" + HexDump.dump(data, off, len), e);}
+            if (_log.shouldWarn() && !shouldSuppressException(e)) {_log.warn("[SSU] BAD HolePunch packet:\n" + HexDump.dump(data, off, len), e);}
             return;
         } finally {chacha.destroy();}
 
         // TODO now we can look up by nonce first instead if we want
         OutboundEstablishState state = _outboundStates.get(id);
         if (state != null) {
-            if (_log.shouldInfo()) {_log.info("[SSU2] HolePunch after RelayResponse from " + state);}
+            if (_log.shouldInfo()) {_log.info("[SSU] HolePunch after RelayResponse from " + state);}
         } else {
             // This is the usual case, we received the HolePunch (1 1/2 RTT)
             // before the RelayResponse (2 RTT), lookup by nonce.
             state = _liveIntroductions.remove(Long.valueOf(nonce));
             if (state != null) {
-                if (_log.shouldInfo()) {_log.info("[SSU2] HolePunch before RelayResponse from " + state);}
+                if (_log.shouldInfo()) {_log.info("[SSU] HolePunch before RelayResponse from " + state);}
             } else {
-                if (_log.shouldLog(Log.INFO)) {_log.info("[SSU2] No state found for SSU2 HolePunch from " + id);}
+                if (_log.shouldLog(Log.INFO)) {_log.info("[SSU] No state found for SSU2 HolePunch from " + id);}
                 return;
             }
         }
@@ -1851,7 +1851,7 @@ class EstablishmentManager {
                             if (SSU2Util.validateSig(_context, SSU2Util.RELAY_RESPONSE_PROLOGUE,
                                                      h, null, data, spk)) {
                                 if (_log.shouldInfo()) {
-                                    _log.info("[SSU2] GOOD signature with HolePunch, credit " + h.toBase64() + " on " + state);
+                                    _log.info("[SSU] GOOD signature with HolePunch, credit " + h.toBase64() + " on " + state);
                                 }
                                 state2.setIntroState(h, INTRO_STATE_SUCCESS);
                                 ok = true;
@@ -1862,13 +1862,13 @@ class EstablishmentManager {
                 }
             }
             if (!ok) {
-                if (_log.shouldWarn()) {_log.warn("[SSU2] Signature failed HolePunch on " + state);}
+                if (_log.shouldWarn()) {_log.warn("[SSU] Signature failed HolePunch on " + state);}
                 return;
             }
 
             int iplen = data[9] & 0xff;
             if (iplen != 6 && iplen != 18) {
-                if (_log.shouldWarn()) {_log.warn("[SSU2] BAD IP address length " + iplen + " from " + state);}
+                if (_log.shouldWarn()) {_log.warn("[SSU] BAD IP address length " + iplen + " from " + state);}
                 _context.statManager().addRateData("udp.relayBadIP", 1);
                 _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(),
                                                  " <b>➜</b> Bad Introduction data", null, null,
@@ -1884,7 +1884,7 @@ class EstablishmentManager {
                 _transport.isTooClose(ip) || !DataHelper.eq(ip, id.getIP()) /* IP mismatch */ ||
                 _context.blocklist().isBlocklisted(ip)) {
                 if (_log.shouldWarn()) {
-                    _log.warn("[SSU2] BAD HolePunch from " + state + " for " + Addresses.toString(ip, port) + " via " + id);
+                    _log.warn("[SSU] BAD HolePunch from " + state + " for " + Addresses.toString(ip, port) + " via " + id);
                 }
                 _context.statManager().addRateData("udp.relayBadIP", 1);
                 _context.banlist().banlistRouter(state.getRemoteIdentity().getHash(),
@@ -1898,7 +1898,7 @@ class EstablishmentManager {
                 // if port mismatch only, use the source port as charlie doesn't know
                 // his port or is behind a symmetric NAT
                 if (_log.shouldWarn()) {
-                    _log.warn("[SSU2] HolePunch source mismatch (wrong port) from " + id + " -> Published port: " + port);
+                    _log.warn("[SSU] HolePunch source mismatch (wrong port) from " + id + " -> Published port: " + port);
                 }
                 if (!TransportUtil.isValidPort(fromPort)) {
                     _context.statManager().addRateData("udp.relayBadIP", 1);
@@ -1910,7 +1910,7 @@ class EstablishmentManager {
                 port = fromPort;
             } else {
                 if (_log.shouldDebug())
-                    _log.debug("[SSU2] Received HolePunch from " + state + " - they are on " +
+                    _log.debug("[SSU] Received HolePunch from " + state + " - they are on " +
                                Addresses.toString(ip, port));
             }
             synchronized (state) {
@@ -1931,7 +1931,7 @@ class EstablishmentManager {
                         _outboundStates.remove(oldId);
                         _outboundStates.put(newId, state);
                         if (_log.shouldLog(Log.INFO))
-                            _log.info("[SSU2] HolePunch replaced " + oldId + " with " + newId + ", claimed address was " + claimed);
+                            _log.info("[SSU] HolePunch replaced " + oldId + " with " + newId + ", claimed address was " + claimed);
                     }
                     if (claimed != null)
                         _outboundByClaimedAddress.remove(oldId, state);  // only if == state
@@ -1939,11 +1939,11 @@ class EstablishmentManager {
             }
             boolean sendNow = state.receiveHolePunch();
             if (sendNow) {
-                if (_log.shouldInfo()) {_log.info("[SSU2] Send Session Request after HolePunch from " + state);}
+                if (_log.shouldInfo()) {_log.info("[SSU] Send Session Request after HolePunch from " + state);}
                 notifyActivity();
             }
         } else {
-            if (_log.shouldWarn()) {_log.warn("[SSU2] Charlie's RouterInfo not found " + state);}
+            if (_log.shouldWarn()) {_log.warn("[SSU] Charlie's RouterInfo not found " + state);}
             return;
         }
     }
@@ -1972,7 +1972,7 @@ class EstablishmentManager {
         boolean valid = state.validateSessionCreated();
         if (!valid) {
             // validate clears fields on failure
-            if (_log.shouldWarn()) {_log.warn("[SSU2] SessionCreated failed validation -> " + state);}
+            if (_log.shouldWarn()) {_log.warn("[SSU] SessionCreated failed validation -> " + state);}
             return;
         }
 
@@ -1997,7 +1997,7 @@ class EstablishmentManager {
             return;
         }
 
-        if (_log.shouldDebug()) {_log.debug("[SSU2] Sending SessionConfirmed to: " + state);}
+        if (_log.shouldDebug()) {_log.debug("[SSU] Sending SessionConfirmed to: " + state);}
 
         for (int i = 0; i < packets.length; i++) {_transport.send(packets[i]);}
 
@@ -2322,7 +2322,7 @@ class EstablishmentManager {
      */
     public void ipChanged(boolean isIPv6) {
         if (_log.shouldWarn()) {
-            _log.warn("[SSU2] IP address changed (" + (isIPv6 ? "IPv6" : "IPv4") + ")");
+            _log.warn("[SSU] IP address changed (" + (isIPv6 ? "IPv6" : "IPv4") + ")");
         }
         int len = isIPv6 ? 16 : 4;
         // expire while we're at it
@@ -2397,12 +2397,12 @@ class EstablishmentManager {
             if (old != null && old.getExpiration() > expires - 2*60*1000) {
                 // reuse for the case where we're retransmitting terminations
                 // and it expires no sooner than 2 minutes earlier
-                if (_log.shouldDebug()) {_log.debug("[SSU2] Resending Inbound " + old + " for " + peer);}
+                if (_log.shouldDebug()) {_log.debug("[SSU] Resending Inbound " + old + " for " + peer);}
                 _inboundTokens.put(peer, old); // put it back
                 return old;
             }
         }
-        if (_log.shouldDebug()) {_log.debug("[SSU2] Added Inbound " + tok + " for " + peer);}
+        if (_log.shouldDebug()) {_log.debug("[SSU] Added Inbound " + tok + " for " + peer);}
         return tok;
     }
 
@@ -2422,7 +2422,7 @@ class EstablishmentManager {
             _inboundTokens.remove(peer);
         }
         boolean rv = tok.getExpiration() >= _context.clock().now();
-        if (rv && _log.shouldDebug()) {_log.debug("[SSU2] Using Inbound " + tok + " for " + peer);}
+        if (rv && _log.shouldDebug()) {_log.debug("[SSU] Using Inbound " + tok + " for " + peer);}
         return rv;
     }
 
@@ -2480,7 +2480,7 @@ class EstablishmentManager {
         if (addr != null) {ourV6Addr = addr.getHost();}
         else {ourV6Addr = null;}
         if (_log.shouldDebug()) {
-            _log.debug("[SSU2] Loading tokens for " + ourV4Addr + ' ' + ourV4Port + ' ' + ourV6Addr + ' ' + ourV6Port);
+            _log.debug("[SSU] Loading tokens for " + ourV4Addr + ' ' + ourV4Port + ' ' + ourV6Addr + ' ' + ourV6Port);
         }
         InputStream in = null;
         try {
@@ -2522,9 +2522,9 @@ class EstablishmentManager {
                     }
                 }
             }
-            if (_log.shouldDebug()) {_log.debug("[SSU2] Loaded " + count + " tokens");}
+            if (_log.shouldDebug()) {_log.debug("[SSU] Loaded " + count + " tokens");}
         } catch (IOException ioe) {
-            if (_log.shouldWarn()) {_log.warn("[SSU2] Failed to load tokens", ioe);}
+            if (_log.shouldWarn()) {_log.warn("[SSU] Failed to load tokens", ioe);}
         } finally {
             if (in != null) {
                 try {in.close();}
@@ -2583,9 +2583,9 @@ class EstablishmentManager {
                 count++;
             }
             if (out.checkError()) {throw new IOException("Failed write SSUS2 tokens to: " + f);}
-            if (_log.shouldDebug()) {_log.debug("[SSU2] Stored " + count + " tokens to " + f);}
+            if (_log.shouldDebug()) {_log.debug("[SSU] Stored " + count + " tokens to " + f);}
         } catch (IOException ioe) {
-            if (_log.shouldWarn()) {_log.warn("[SSU2] Error writing the tokens file", ioe);}
+            if (_log.shouldWarn()) {_log.warn("[SSU] Error writing the tokens file", ioe);}
         } finally {
             if (out != null) {out.close();}
         }
@@ -2622,7 +2622,7 @@ class EstablishmentManager {
                 long lifetime = _context.clock().now() - eldest.getValue().getWhenAdded();
                 _context.statManager().addRateData("udp.inboundTokenLifetime", lifetime);
                 if (_log.shouldDebug())
-                    _log.debug("[SSU2] Removed oldest Inbound " + eldest.getValue() + " for " + eldest.getKey());
+                    _log.debug("[SSU] Removed oldest Inbound " + eldest.getValue() + " for " + eldest.getKey());
             }
             return rv;
         }
@@ -2728,7 +2728,7 @@ class EstablishmentManager {
 
         private void warn(String msg) {
             if (_log != null && _log.shouldWarn()) {
-                _log.warn("[SSU2] " + msg + " from " + _from);
+                _log.warn("[SSU] " + msg + " from " + _from);
             }
         }
     }
