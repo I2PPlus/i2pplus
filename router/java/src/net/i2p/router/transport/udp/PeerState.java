@@ -653,15 +653,10 @@ public class PeerState {
         for (Iterator<Map.Entry<Long, InboundMessageState>> iter = _inboundMessages.entrySet().iterator(); iter.hasNext(); ) {
             Map.Entry<Long, InboundMessageState> entry = iter.next();
             InboundMessageState state = entry.getValue();
-            if (state.isExpired() || _dead) {
+            if (state.isExpired() || state.isComplete() || _dead) {
                 iter.remove();
             } else {
-                if (state.isComplete()) {
-                    _log.error("Inbound message is complete, but wasn't handled inline? " + state + " with " + this);
-                    iter.remove();
-                } else {
-                    rv++;
-                }
+                rv++;
             }
         }
         return rv;
