@@ -41,7 +41,7 @@ public class TestJob extends JobImpl {
     private static final AtomicInteger __id = new AtomicInteger();
     private int _id;
 
-    private static final int TEST_DELAY = 4 * 60 * 1000; // 4 minutes base
+    private static final int TEST_DELAY = 2 * 60 * 1000; // 2 minutes base
 
     /**
      * Maximum number of tunnel tests that can run concurrently.
@@ -82,15 +82,15 @@ public class TestJob extends JobImpl {
         // Check for graceful shutdown
         if (ctx.router().gracefulShutdownInProgress()) return;
 
-        // Check for job queue lag - be more aggressive to prevent cascade
+        // Check for job queue lag - adjusted thresholds to reduce unnecessary aborts
         long lag = ctx.jobQueue().getMaxLag();
-        if (lag > 250) {
+        if (lag > 500) {
             if (_log.shouldWarn()) {
-                _log.warn("Aborted test due to job lag (" + lag + "ms) → " + _cfg);
+                _log.warn("Aborted test due to severe job lag (" + lag + "ms) → " + _cfg);
             }
             ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
             return;
-        } else if (lag > 100) {
+        } else if (lag > 200) {
             if (_log.shouldWarn()) {
                 _log.warn("Job lag overload detected (" + lag + "ms) - suspending tunnel tests for " + _cfg);
             }
@@ -99,8 +99,15 @@ public class TestJob extends JobImpl {
         }
 
         // Concurrency control: Check and increment counter
-        // Be more restrictive during high lag to reduce queue pressure
-        int maxTests = (lag > 50) ? 1 : MAX_CONCURRENT_TESTS; // Reduce to 1 test during high lag
+        // Adaptive limits based on lag to balance testing and performance
+        int maxTests;
+        if (lag > 200) {
+            maxTests = 1; // Severe lag - minimal testing
+        } else if (lag > 100) {
+            maxTests = 2; // Moderate lag - reduced testing
+        } else {
+            maxTests = MAX_CONCURRENT_TESTS; // Normal operation
+        }
 
         int current;
         do {
@@ -263,29 +270,22 @@ public class TestJob extends JobImpl {
 
     /**
      * Clears session tags used in the current test to avoid leaks.
+     * Consolidated cleanup logic to reduce code duplication.
      */
     private void clearTestTags() {
         if (_encryptTag != null) {
             SessionKeyManager skm = getSessionKeyManager();
             if (skm != null) {
-                SessionTag tag = _encryptTag;
-                _encryptTag = null;
-                skm.consumeTag(tag);
-            } else {
-                _encryptTag = null;
+                skm.consumeTag(_encryptTag);
             }
+            _encryptTag = null;
         }
         if (_ratchetEncryptTag != null) {
             RatchetSKM rskm = getRatchetKeyManager();
-            if (rskm != null) {
-                RatchetSessionTag tag = _ratchetEncryptTag;
-                _ratchetEncryptTag = null;
-                if (tag != null) {
-                    rskm.consumeTag(tag);
-                }
-            } else {
-                _ratchetEncryptTag = null;
+            if (rskm != null && _ratchetEncryptTag != null) {
+                rskm.consumeTag(_ratchetEncryptTag);
             }
+            _ratchetEncryptTag = null;
         }
     }
 
@@ -337,7 +337,7 @@ public class TestJob extends JobImpl {
         int failCount = _cfg.getTunnelFailures();
         int scaled = baseDelay;
         if (failCount > 0) {
-            int multiplier = Math.min(1 << failCount, 2); // max 8x (24 min)
+            int multiplier = Math.min(1 << failCount, 8); // max 8x (48 min)
             scaled = baseDelay * multiplier;
         }
         // Add a small jitter to avoid thundering herd
@@ -360,9 +360,13 @@ public class TestJob extends JobImpl {
 
         int totalHops = _outTunnel.getLength() + _replyTunnel.getLength();
         int calculated = base + (3000 * totalHops);
-        int clamped = Math.max(15 * 1000, calculated);
-        // Safety clamp to avoid pathological values
-        return Math.min(clamped, 60 * 1000);
+
+        // Tighter safety bounds to reduce job queue occupation
+        int minPeriod = 15 * 1000;  // 15 seconds minimum
+        int maxPeriod = 45 * 1000;  // 45 seconds maximum
+
+        int clamped = Math.max(minPeriod, calculated);
+        return Math.min(clamped, maxPeriod);
     }
 
     private void scheduleRetest() {
@@ -450,26 +454,6 @@ public class TestJob extends JobImpl {
         @Override
         public void runJob() {
             clearTestTags();
-
-            if (!_found && (_encryptTag != null || _ratchetEncryptTag != null)) {
-                SessionKeyManager skm = getSessionKeyManager();
-                if (skm != null && _encryptTag != null) {
-                    SessionTag tag = _encryptTag;
-                    _encryptTag = null;
-                    skm.consumeTag(tag);
-                } else {
-                    RatchetSKM rskm = getRatchetKeyManager();
-                    if (rskm != null && _ratchetEncryptTag != null) {
-                        RatchetSessionTag tag = _ratchetEncryptTag;
-                        _ratchetEncryptTag = null;
-                        if (tag != null) {
-                            rskm.consumeTag(tag);
-                        }
-                    }
-                }
-                _encryptTag = null;
-                _ratchetEncryptTag = null;
-            }
 
             if (!_found) {
                 testFailed(getContext().clock().now() - _started);
