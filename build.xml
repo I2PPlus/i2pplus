@@ -1411,9 +1411,11 @@
   <target name="distclean" depends="clean">
     <echo message="Performing comprehensive clean including Gradle artifacts..."/>
     <sequential>
-      <delete dir="./dist" includeEmptyDirs="true" quiet="true">
+      <delete dir="./dist" quiet="true">
         <fileset dir="./dist" excludes="README.md"/>
       </delete>
+      <!-- Ensure dist directory exists after cleanup -->
+      <mkdir dir="./dist"/>
       <!-- Use exec to run ant subprojects quietly -->
       <exec executable="ant" failonerror="false" output="/dev/null" errorproperty="ant.error1">
         <arg value="-quiet"/>
