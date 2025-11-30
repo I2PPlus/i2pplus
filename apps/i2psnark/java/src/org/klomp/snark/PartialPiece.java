@@ -297,7 +297,7 @@ class PartialPiece implements Comparable<PartialPiece> {
      */
     private void handleChunkReception(int chunk, int offset, int len) {
         if (bitfield.get(chunk)) {
-            warn("Already have chunk " + chunk + " on " + this);
+            info("Already have chunk " + chunk + " on " + this);
         } else {
             bitfield.set(chunk);
             if (this.off == offset) {
@@ -307,14 +307,14 @@ class PartialPiece implements Comparable<PartialPiece> {
                 for (int i = chunk + 1; i < sz; i++) {
                     if (!bitfield.get(i))
                         break;
-                    warn("Hole filled in before chunk " + i + " on " + this + ' ' + bitfield);
+                    info("Hole filled in before chunk " + i + " on " + this + ' ' + bitfield);
                     if (i == sz - 1)
                         off = pclen;
                     else
                         off += PeerState.PARTSIZE;
                 }
             } else {
-                warn("Out of order chunk " + chunk + " on " + this + ' ' + bitfield);
+                info("Out of order chunk " + chunk + " on " + this + ' ' + bitfield);
             }
         }
     }
@@ -424,5 +424,15 @@ class PartialPiece implements Comparable<PartialPiece> {
      */
     public static void warn(String s) {
         I2PAppContext.getGlobalContext().logManager().getLog(PartialPiece.class).warn(s);
+    }
+
+    /**
+     * Logs an info message for this class.
+     *
+     * @param s info message string
+     * @since 0.9.68+
+     */
+    public static void info(String s) {
+        I2PAppContext.getGlobalContext().logManager().getLog(PartialPiece.class).info(s);
     }
 }
