@@ -1050,8 +1050,9 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         long highest = -1;
         for (PacketBuilder.Fragment f : fragments) {
             OutboundMessageState state = f.state;
+            boolean wasAcked = acked(f);
             if (shouldLogDebug) {
-                if (acked(f) && shouldLogDebug) {_log.debug("[SSU] New ACK of fragment " + f.num + state);}
+                if (wasAcked) {_log.debug("[SSU] New ACK of fragment " + f.num + state);}
                 // will happen with retransmission as a different packet number
                 else {_log.debug("[SSU] Duplicate ACK of fragment " + f.num + state);}
             }
