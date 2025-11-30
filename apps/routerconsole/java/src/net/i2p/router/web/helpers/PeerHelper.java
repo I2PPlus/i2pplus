@@ -851,9 +851,9 @@ public class PeerHelper extends HelperBase {
             long resent = peer.getPacketsRetransmitted();
             long dupRecv = peer.getPacketsReceivedDuplicate();
 
-            buf.append("</td><td class=uptime data-sort=").append(uptime)
+            buf.append("</td><td class=uptime data-sort=").append(uptime).append("\">")
                .append(DataHelper.formatDuration2(uptime))
-               .append("</td><td class=skew data-sort=").append(skew).append(">")
+               .append("</td><td class=skew data-sort=").append(skew).append("\">")
                .append(DataHelper.formatDuration2(skew))
                .append("</td><td class=tx><span class=right>")
                .append(sent)
