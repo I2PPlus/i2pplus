@@ -502,12 +502,16 @@ class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
                     getContext().statManager().addRateData("netDb.floodThrottled", 1);
                     return;
                 }
-                long floodBegin = System.currentTimeMillis();
-                _facade.flood(entry);
-                // ERR: see comment in HandleDatabaseLookupMessageJob regarding hidden mode
-                //else if (!_message.getRouterInfo().isHidden())
-                long floodEnd = System.currentTimeMillis();
-                getContext().statManager().addRateData("netDb.storeFloodNew", floodEnd-floodBegin, 60*1000);
+                // Flood in separate thread to avoid blocking main thread
+                Runnable floodTask = new Runnable() {
+                    public void run() {
+                        long floodBegin = System.currentTimeMillis();
+                        _facade.flood(entry);
+                        long floodEnd = System.currentTimeMillis();
+                        getContext().statManager().addRateData("netDb.storeFloodNew", floodEnd-floodBegin, 60*1000);
+                    }
+                };
+                new Thread(floodTask, "FloodWorker").start();
             } else {
                 // don't flood it *again*
                 getContext().statManager().addRateData("netDb.storeFloodOld", 1);
