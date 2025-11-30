@@ -897,6 +897,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (!_config.containsKey(PROP_COLLAPSE_PANELS)) {_config.setProperty(PROP_COLLAPSE_PANELS, Boolean.toString(I2PSnarkUtil.DEFAULT_COLLAPSE_PANELS));}
         if (!_config.containsKey(PROP_SHOW_STATUSFILTER)) {_config.setProperty(PROP_SHOW_STATUSFILTER, "false");}
         if (!_config.containsKey(PROP_ENABLE_LIGHTBOX)) {_config.setProperty(PROP_ENABLE_LIGHTBOX, "true");}
+        if (!_config.containsKey(PROP_UPBW_MAX)) {_config.setProperty(PROP_UPBW_MAX, Integer.toString(DEFAULT_MAX_UP_BW));}
+        if (!_config.containsKey(PROP_DOWNBW_MAX)) {_config.setProperty(PROP_DOWNBW_MAX, Integer.toString(DEFAULT_MAX_DOWN_BW));}
         updateConfig();
     }
 
