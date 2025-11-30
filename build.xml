@@ -1411,7 +1411,7 @@
   <target name="distclean" depends="clean">
     <echo message="Performing comprehensive clean including Gradle artifacts..."/>
     <sequential>
-      <delete dir="./dist" quiet="true">
+      <delete includeemptydirs="false" quiet="true">
         <fileset dir="./dist" excludes="README.md"/>
       </delete>
       <!-- Ensure dist directory exists after cleanup -->
