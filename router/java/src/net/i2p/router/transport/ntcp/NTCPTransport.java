@@ -493,10 +493,10 @@ public class NTCPTransport extends TransportImpl {
      */
     private void logConnectionSetupError(Exception e) {
         if (e instanceof IOException && !shouldSuppressException(e)) {
-            if (_log.shouldError()) _log.error("[NTCP] Error opening a channel \n* IO Exception: " + e.getMessage());
+            if (_log.shouldWarn()) _log.warn("[NTCP] Error opening a channel -> IO Exception" + (e.getMessage() != null ? ":" + e.getMessage() : ""));
             _context.statManager().addRateData("ntcp.outboundFailedIOEImmediate", 1);
         } else if (e instanceof IllegalStateException && !shouldSuppressException(e)) {
-            if (_log.shouldWarn()) _log.warn("[NTCP] Failed opening a channel \n* Illegal State Exception: " + e.getMessage());
+            if (_log.shouldWarn()) _log.warn("[NTCP] Failed opening a channel \n* Illegal State Exception" + (e.getMessage() != null ? ":" + e.getMessage() : ""));
         }
     }
 
