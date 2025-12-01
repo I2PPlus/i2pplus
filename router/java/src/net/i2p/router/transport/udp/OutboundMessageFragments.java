@@ -269,7 +269,7 @@ class OutboundMessageFragments {
                 _context.statManager().addRateData("udp.peerPacketsRetransmitted", peer.getPacketsTransmitted(), transmitted);
                 _context.statManager().addRateData("udp.packetsRetransmitted", lifetime, transmitted);
                 if (_log.shouldInfo()) {
-                    _log.info("Retransmitting " + state + " to " + peer);
+                    _log.info("Retransmitting..." + state + " to " + peer);
                 }
                 _context.statManager().addRateData("udp.sendVolleyTime", lifetime, queued);
             }
