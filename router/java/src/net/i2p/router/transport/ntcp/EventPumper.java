@@ -991,10 +991,26 @@ class EventPumper implements Runnable {
                 if (debug) _log.debug("Cancelled key during connect to " + con.getRemotePeer(), cke);
                 con.close();
             } catch (Exception e) {
+                // Determine if this is a networking exception vs unexpected error
+                String exceptionType = e.getClass().getSimpleName();
+                boolean isNetworkingError = exceptionType.contains("Blocking") || 
+                                        exceptionType.contains("Connection") ||
+                                        exceptionType.contains("Selector") ||
+                                        exceptionType.contains("Address") ||
+                                        exceptionType.equals("IllegalArgumentException") ||
+                                        exceptionType.equals("NullPointerException");
+                
                 if (debug) {
-                    _log.debug("[NTCP2] Unexpected error during outbound registration for " + con.getRemotePeer(), e);
+                    _log.debug("[NTCP2] " + (isNetworkingError ? "Connection setup error" : "Unexpected error") + 
+                              " during outbound registration for " + con.getRemotePeer(), e);
                 } else if (warn) {
-                    _log.warn("[NTCP2] Unexpected error during outbound registration for " + con.getRemotePeer());
+                    _log.warn("[NTCP2] " + (isNetworkingError ? "Connection setup error" : "Unexpected error") + 
+                              " during outbound registration for " + con.getRemotePeer() + 
+                              (isNetworkingError ? ": " + exceptionType : ": " + exceptionType + " - " + e.getMessage()));
+                }
+                
+                if (isNetworkingError) {
+                    _transport.markUnreachable(con.getRemotePeer().calculateHash());
                 }
                 con.close();
             }
