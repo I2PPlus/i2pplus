@@ -179,6 +179,15 @@ class OutboundNTCP2State implements EstablishState {
     }
 
     /**
+     *  Check if the connection is in a state where prepareOutbound() has already been called
+     *  to avoid duplicate calls that cause IllegalStateException
+     */
+    public boolean isPrepareOutboundCalled() {
+        return _state == State.OB_SENT_X || _state == State.OB_GOT_HXY || 
+               _state == State.OB_GOT_PADDING || _state == State.VERIFIED;
+    }
+
+    /**
      *  We are Alice.
      *  We are establishing an outbound connection, so prepare ourselves by
      *  writing the first message in the handshake.

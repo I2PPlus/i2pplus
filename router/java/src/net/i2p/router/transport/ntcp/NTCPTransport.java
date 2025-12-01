@@ -477,7 +477,16 @@ public class NTCPTransport extends TransportImpl {
                         _log.debug("Skipping prepareOutbound() for connection already in progress: " + con);
                     }
                 } else {
-                    est.prepareOutbound();
+                    try {
+                        est.prepareOutbound();
+                    } catch (IllegalStateException ise) {
+                        // Connection is already in progress, this is expected in race conditions
+                        if (_log.shouldDebug()) {
+                            _log.debug("Ignoring IllegalStateException for connection already in progress: " + con + " - " + ise.getMessage());
+                        }
+                        // Don't log as warning since this is expected behavior
+                        return;
+                    }
                 }
             }
         } else {
@@ -496,7 +505,14 @@ public class NTCPTransport extends TransportImpl {
             if (_log.shouldWarn()) _log.warn("[NTCP] Error opening a channel -> IO Exception" + (e.getMessage() != null ? ":" + e.getMessage() : ""));
             _context.statManager().addRateData("ntcp.outboundFailedIOEImmediate", 1);
         } else if (e instanceof IllegalStateException && !shouldSuppressException(e)) {
-            if (_log.shouldWarn()) _log.warn("[NTCP] Failed opening a channel \n* Illegal State Exception" + (e.getMessage() != null ? ":" + e.getMessage() : ""));
+            String msg = e.getMessage();
+            if (msg != null && msg.contains("Unexpected prepareOutbound()")) {
+                // This is an expected race condition, log at debug level only
+                if (_log.shouldDebug()) _log.debug("[NTCP] Race condition during channel setup - " + msg);
+            } else {
+                // Other IllegalStateExceptions are still warnings
+                if (_log.shouldWarn()) _log.warn("[NTCP] Failed opening a channel \n* Illegal State Exception" + (msg != null ? ":" + msg : ""));
+            }
         }
     }
 
