@@ -858,7 +858,7 @@ public class FIFOBandwidthLimiter {
             _allocated = _total;
             notifyAllocation();
         }
-        public CompleteListener getCompleteListener() { return _lsnr; }
+        public synchronized CompleteListener getCompleteListener() { return _lsnr; }
 
         /**
          *  Only used by NTCP.

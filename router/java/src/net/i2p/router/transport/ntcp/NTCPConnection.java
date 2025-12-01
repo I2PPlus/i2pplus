@@ -206,7 +206,7 @@ public class NTCPConnection implements Closeable {
                                                                      DELAY_DEFAULT, DELAY_DEFAULT);
     private static final int MIN_PADDING_RANGE = 16;
     private static final int MAX_PADDING_RANGE = 128;
-    private NTCP2Options _paddingConfig = OUR_PADDING;
+    private volatile NTCP2Options _paddingConfig = OUR_PADDING;
     private int _version;
     private CipherState _sender;
     private long _sendSipk1, _sendSipk2;
@@ -338,19 +338,24 @@ public class NTCPConnection implements Closeable {
 
     /** @return milliseconds */
     public long getUptime() {
-        if (!isEstablished())
-            return getTimeSinceCreated();
-        else
-            return _context.clock().now() -_establishedOn;
+        long establishedOn;
+        synchronized(this) {
+            if (!isEstablished())
+                return getTimeSinceCreated();
+            establishedOn = _establishedOn;
+        }
+        return _context.clock().now() - establishedOn;
     }
 
     /**
      * @since 0.9.55
      */
     public long getEstablishedOn() {
-        if (!isEstablished())
-            return 0;
-        return _establishedOn;
+        synchronized(this) {
+            if (!isEstablished())
+                return 0;
+            return _establishedOn;
+        }
     }
 
     public int getMessagesSent() { return _messagesWritten.get(); }
@@ -689,7 +694,7 @@ public class NTCPConnection implements Closeable {
      * @param buf we use buf.enencrypted only
      * @since 0.9.36
      */
-    private void prepareNextWriteNTCP2(PrepBuffer buf) {
+    private synchronized void prepareNextWriteNTCP2(PrepBuffer buf) {
         int size = OutboundNTCP2State.MAC_SIZE;
         List<Block> blocks = new ArrayList<Block>(4);
         long now = _context.clock().now();

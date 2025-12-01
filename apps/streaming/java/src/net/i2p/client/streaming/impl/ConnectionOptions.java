@@ -433,10 +433,12 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
         _maxTotalConnsPerHour = getInt(opts, PROP_MAX_TOTAL_CONNS_HOUR, 0);
         _maxTotalConnsPerDay = getInt(opts, PROP_MAX_TOTAL_CONNS_DAY, 0);
         _maxConns = getInt(opts, PROP_MAX_STREAMS, 0);
-        if (opts != null) {_limitAction = opts.getProperty(PROP_LIMIT_ACTION, DEFAULT_LIMIT_ACTION);}
+        if (opts != null) {        _limitAction = opts.getProperty(PROP_LIMIT_ACTION, DEFAULT_LIMIT_ACTION);}
         else {_limitAction = DEFAULT_LIMIT_ACTION;}
 
-        _rto = getInt(opts, PROP_INITIAL_RTO, INITIAL_RTO);
+        synchronized(this) {
+            _rto = getInt(opts, PROP_INITIAL_RTO, INITIAL_RTO);
+        }
         _tagsToSend = getInt(opts, PROP_TAGS_TO_SEND, DEFAULT_TAGS_TO_SEND);
         _tagThreshold = getInt(opts, PROP_TAG_THRESHOLD, DEFAULT_TAG_THRESHOLD);
     }
@@ -537,7 +539,9 @@ class ConnectionOptions extends I2PSocketOptionsImpl {
             _tagThreshold = getInt(opts, PROP_TAG_THRESHOLD, DEFAULT_TAG_THRESHOLD);
         }
 
-        _rto = getInt(opts, PROP_INITIAL_RTO, INITIAL_RTO);
+        synchronized(this) {
+            _rto = getInt(opts, PROP_INITIAL_RTO, INITIAL_RTO);
+        }
     }
 
     /**

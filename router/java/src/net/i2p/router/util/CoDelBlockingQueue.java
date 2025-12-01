@@ -203,7 +203,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
      *  Has the head of the queue been waiting too long,
      *  or is the queue almost full?
      */
-    public boolean isBacklogged() {
+    public synchronized boolean isBacklogged() {
         E e = peek();
         if (e == null)
             return false;

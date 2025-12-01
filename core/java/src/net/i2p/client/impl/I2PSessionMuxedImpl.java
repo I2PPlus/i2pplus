@@ -350,14 +350,13 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
 
         @Override
         public void stopNotifying() {
-            synchronized (stopping) {
-                if( !stopping.getAndSet(true)) {
-                    _msgs.clear();
-                    if (_alive) {
-                        // System.out.println("I2PSessionMuxedImpl.stopNotifying()");
-                        boolean again = true;
-                        while(again) {
-                            try {
+            if( !stopping.getAndSet(true)) {
+                _msgs.clear();
+                if (_alive) {
+                    // System.out.println("I2PSessionMuxedImpl.stopNotifying()");
+                    boolean again = true;
+                    while(again) {
+                        try {
                                 _msgs.put(new MsgData(0, POISON_SIZE, 0, 0, 0));
                                 again = false;
                                 // System.out.println("I2PSessionMuxedImpl.stopNotifying() success.");
@@ -369,8 +368,6 @@ class I2PSessionMuxedImpl extends I2PSessionImpl2 {
                     }
                     stopping.set(false);
                 }
-                // stopping.notifyAll();
-            }
         }
         /** unused */
         @Override

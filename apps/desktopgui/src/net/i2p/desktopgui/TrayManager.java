@@ -224,7 +224,10 @@ abstract class TrayManager {
     public int displayMessage(int priority, String title, String message, String path) {
         if (!_showNotifications)
             return -1;
-        final TrayIcon ti = trayIcon;
+        final TrayIcon ti;
+        synchronized(this) {
+            ti = trayIcon;
+        }
         if (ti == null)
             return -1;
         TrayIcon.MessageType type;

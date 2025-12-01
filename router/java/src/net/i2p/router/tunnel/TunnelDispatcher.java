@@ -230,7 +230,7 @@ public class TunnelDispatcher implements Service {
      *
      * @return true if successful, false if tunnel ID is a duplicate
      */
-    public boolean joinInbound(TunnelCreatorConfig cfg) {
+    public synchronized boolean joinInbound(TunnelCreatorConfig cfg) {
         if (_log.shouldInfo())
             _log.info("Inbound Endpoint built successfully " + cfg);
 

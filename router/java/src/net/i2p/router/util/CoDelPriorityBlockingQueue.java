@@ -162,7 +162,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
      *  or is the queue too big?
      */
     @Override
-    public boolean isBacklogged() {
+    public synchronized boolean isBacklogged() {
         E e = peek();
         if (e == null) {return false;}
         return _dropping || _context.clock().now() - e.getEnqueueTime() >= BACKLOG_TIME ||

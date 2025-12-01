@@ -214,10 +214,9 @@ public class Rate {
 
     /** 2s is plenty of slack to deal with slow coalescing (across many stats) */
     private static final int SLACK = 2000;
-    public void coalesce() {
+    public synchronized void coalesce() {
         long now = now();
         double correctedTotalValue; // for GraphListener which divides by rounded EventCount
-        synchronized (this) {
             long measuredPeriod = now - _lastCoalesceDate;
             if (measuredPeriod < _period - SLACK) {
                 // no need to coalesce (assuming we only try to do so once per minute)
@@ -228,7 +227,7 @@ public class Rate {
 
             // ok ok, lets coalesce
 
-            // how much were we off by?  (so that we can sample down the measured values)
+            // how much were we off by? (so that we can sample down the measured values)
             float periodFactor = measuredPeriod / (float)_period;
             _lastTotalValue = _currentTotalValue / periodFactor;
             _lastEventCount = (int) (0.499999 + (_currentEventCount / periodFactor));
@@ -249,7 +248,6 @@ public class Rate {
             _currentTotalValue = 0.0f;
             _currentEventCount = 0;
             _currentTotalEventTime = 0;
-        }
         if (_graphListener != null)
             _graphListener.add(correctedTotalValue, _lastEventCount, _lastTotalEventTime, _period);
     }

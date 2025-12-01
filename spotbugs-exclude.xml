@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!-- Exclude all third-party libraries and only analyze I2P core code -->
+    
+    <!-- Exclude Apache Commons libraries -->
+    <Match>
+        <Class name="~org\.apache\.commons.*" />
+    </Match>
+    
+    <!-- Exclude Jetty libraries -->
+    <Match>
+        <Class name="~org\.mortbay\.jetty.*" />
+    </Match>
+    <Match>
+        <Class name="~org\.eclipse\.jetty.*" />
+    </Match>
+    
+    <!-- Exclude Jasper/Servlet libraries -->
+    <Match>
+        <Class name="~org\.apache\.jasper.*" />
+    </Match>
+    <Match>
+        <Class name="~javax\.servlet.*" />
+    </Match>
+    
+    <!-- Exclude JRobin -->
+    <Match>
+        <Class name="~org\.jrobin.*" />
+    </Match>
+    
+    <!-- Exclude JSON-RPC -->
+    <Match>
+        <Class name="~org\.json.*" />
+    </Match>
+    
+    <!-- Exclude DNS libraries -->
+    <Match>
+        <Class name="~org\.minidns.*" />
+    </Match>
+    
+    <!-- Exclude Noise protocol -->
+    <Match>
+        <Class name="~com\.southernstorm\.noise.*" />
+    </Match>
+    
+    <!-- Exclude MaxMind GeoIP -->
+    <Match>
+        <Class name="~com\.maxmind.*" />
+    </Match>
+    
+    <!-- Exclude MP3agic -->
+    <Match>
+        <Class name="~com\.mpatric\.mp3agic.*" />
+    </Match>
+    
+    <!-- Exclude Bouncy Castle -->
+    <Match>
+        <Class name="~org\.bouncycastle.*" />
+    </Match>
+    
+    <!-- Exclude Guava -->
+    <Match>
+        <Class name="~com\.google\.common.*" />
+    </Match>
+    
+    <!-- Exclude SLF4J -->
+    <Match>
+        <Class name="~org\.slf4j.*" />
+    </Match>
+    
+    <!-- Exclude Pack200 -->
+    <Match>
+        <Class name="~com\.sun\.java\.util\.jar\.pack.*" />
+    </Match>
+    
+    <!-- Exclude system tray libraries -->
+    <Match>
+        <Class name="~java\.awt\..*" />
+    </Match>
+    
+    <!-- Exclude any class from standard library packages -->
+    <Match>
+        <Class name="~java\..*" />
+    </Match>
+    <Match>
+        <Class name="~javax\..*" />
+    </Match>
+    
+    <!-- Exclude all other third-party packages -->
+    <Match>
+        <Class name="~com\.(?!i2p).*" />
+    </Match>
+    <Match>
+        <Class name="~org\.(?!i2p).*" />
+    </Match>
+    <Match>
+        <Class name="~net\.(?!i2p).*" />
+    </Match>
+    
+    <!-- Include only I2P-specific packages - remove these matches to allow analysis -->
+    <!-- The following are commented out to allow analysis of I2P code -->
+    <!--
+    <Match>
+        <Class name="~net\.i2p\..*" />
+        <Bug pattern="~.*" />
+    </Match>
+    
+    <Match>
+        <Class name="~router\..*" />
+        <Bug pattern="~.*" />
+    </Match>
+    
+    <Match>
+        <Class name="~apps\..*" />
+        <Bug pattern="~.*" />
+    </Match>
+    -->
+</FindBugsFilter>

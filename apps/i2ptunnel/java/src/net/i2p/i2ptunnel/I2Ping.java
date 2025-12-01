@@ -221,17 +221,24 @@ public class I2Ping extends I2PTunnelClientBase {
 
     private boolean ping(Destination dest, int fromPort, int toPort, long timeout) throws I2PException {
         try {
+            long sleepTime = 0;
             synchronized (simulLock) {
                 while (simulPings >= MAX_SIMUL_PINGS) {
                     simulLock.wait();
                 }
                 simulPings++;
-                while (lastPingTime + PING_DISTANCE > System.currentTimeMillis()) {
-                    // no wait here, to delay all pingers
-                    Thread.sleep(PING_DISTANCE / 2);
+                long now = System.currentTimeMillis();
+                if (lastPingTime + PING_DISTANCE > now) {
+                    sleepTime = PING_DISTANCE / 2;
                 }
-                lastPingTime = System.currentTimeMillis();
+                lastPingTime = now;
             }
+            
+            // Sleep outside of synchronized block to avoid holding lock while sleeping
+            if (sleepTime > 0) {
+                Thread.sleep(sleepTime);
+            }
+            
             boolean sent = sockMgr.ping(dest, fromPort, toPort, timeout);
             synchronized (simulLock) {
                 simulPings--;
@@ -240,6 +247,10 @@ public class I2Ping extends I2PTunnelClientBase {
             return sent;
         } catch (InterruptedException ex) {
             _log.error("Interrupted", ex);
+            synchronized (simulLock) {
+                simulPings--;
+                simulLock.notifyAll();
+            }
             return false;
         }
     }

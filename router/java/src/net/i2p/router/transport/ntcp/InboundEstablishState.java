@@ -670,7 +670,9 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
             throw new DataFormatException("BAD s in RouterInfo: " + ri);
         }
         byte[] nb = new byte[32];
-        _handshakeState.getRemotePublicKey().getPublicKey(nb, 0); // Compare to the _handshakeState
+        synchronized(this) {
+            _handshakeState.getRemotePublicKey().getPublicKey(nb, 0); // Compare to the _handshakeState
+        }
         if (!DataHelper.eqCT(sb, 0, nb, 0, KEY_SIZE)) {
             _msg3p2FailReason = NTCPConnection.REASON_S_MISMATCH;
             throw new DataFormatException("s mismatch in RouterInfo: " + ri);
@@ -769,7 +771,7 @@ class InboundEstablishState extends EstablishBase implements NTCP2Payload.Payloa
     }
 
     /** @since 0.9.36 */
-    public void gotOptions(byte[] options, boolean isHandshake) {
+    public synchronized void gotOptions(byte[] options, boolean isHandshake) {
         NTCP2Options hisPadding = NTCP2Options.fromByteArray(options);
         if (hisPadding == null) {
             if (_log.shouldWarn()) {

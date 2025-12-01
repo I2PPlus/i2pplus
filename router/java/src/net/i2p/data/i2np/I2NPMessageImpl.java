@@ -126,7 +126,9 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
             type = data[cur] & 0xff;
             cur++;
         }
-        _uniqueId = DataHelper.fromLong(data, cur, 4);
+        synchronized(this) {
+            _uniqueId = DataHelper.fromLong(data, cur, 4);
+        }
         cur += 4;
         _expiration = DataHelper.fromLong(data, cur, DataHelper.DATE_LENGTH);
         cur += DataHelper.DATE_LENGTH;
@@ -155,8 +157,13 @@ public abstract class I2NPMessageImpl implements I2NPMessage {
             throw new I2NPMessageException("Bad checksum on " + size + " byte I2NP " + getClass().getSimpleName());
 
         //long start = _context.clock().now();
-        if (_log.shouldDebug())
-            _log.debug("Reading bytes: [Type " + type + "] [ID " + _uniqueId + "]\n* Expires: " + new Date(_expiration));
+        if (_log.shouldDebug()) {
+            long uniqueId;
+            synchronized(this) {
+                uniqueId = _uniqueId;
+            }
+            _log.debug("Reading bytes: [Type " + type + "] [ID " + uniqueId + "]\n* Expires: " + new Date(_expiration));
+        }
         readMessage(data, cur, sz, type);
         cur += sz;
         //long time = _context.clock().now() - start;

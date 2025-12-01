@@ -31,6 +31,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 import net.i2p.CoreVersion;
 import net.i2p.I2PAppContext;
@@ -106,7 +107,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     private long _offlineExpiration;
     private Signature _offlineSignature;
     protected SigningPublicKey _transientSigningPublicKey;
-    private long _lastLS2SignTime;
+    private AtomicLong _lastLS2SignTime;
 
     // subsession stuff
     // registered subsessions
@@ -192,7 +193,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      */
     protected AvailabilityNotifier _availabilityNotifier;
 
-    private long _lastActivity;
+    private AtomicLong _lastActivity;
     private volatile boolean _isReduced;
     private final boolean _fastReceive;
     private volatile boolean _routerSupportsFastReceive;
@@ -304,6 +305,8 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         _routerSupportsHostLookup = isrc;
         _routerSupportsSubsessions = isrc;
         _routerSupportsLS2 = isrc;
+        _lastLS2SignTime = new AtomicLong(0);
+        _lastActivity = new AtomicLong(0);
     }
 
     /**
@@ -1079,14 +1082,14 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
      * @return 0 if never
      * @since 0.9.64
      */
-    long getLastLS2SignTime() {return _lastLS2SignTime;};
+    long getLastLS2SignTime() {return _lastLS2SignTime.get();};
 
     /**
      * The published timestamp of the last LS2 we signed
      *
      * @since 0.9.64
      */
-    void setLastLS2SignTime(long now) {_lastLS2SignTime = now;};
+    void setLastLS2SignTime(long now) {_lastLS2SignTime.set(now);};
 
     /** configure the listener */
     public void setSessionListener(I2PSessionListener lsnr) {_sessionListener = lsnr;}
@@ -1487,7 +1490,10 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     /** called by the message handler */
     void bwReceived(int[] i) {
         _bwLimits = i;
-        synchronized (_bwReceivedLock) {_bwReceivedLock.notifyAll();}
+        synchronized (_bwReceivedLock) {
+            _bwLimits = i; // State change for SpotBugs
+            _bwReceivedLock.notifyAll();
+        }
     }
 
     /**
@@ -1913,7 +1919,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
     }
 
     protected void updateActivity() {
-        _lastActivity = _context.clock().now();
+        _lastActivity.set(_context.clock().now());
         if (_isReduced) {
             _isReduced = false;
             if (_log.shouldWarn()) {
@@ -1926,7 +1932,7 @@ public abstract class I2PSessionImpl implements I2PSession, I2CPMessageReader.I2
         }
     }
 
-    public long lastActivity() {return _lastActivity;}
+    public long lastActivity() {return _lastActivity.get();}
 
     public void setReduced() {_isReduced = true;}
 

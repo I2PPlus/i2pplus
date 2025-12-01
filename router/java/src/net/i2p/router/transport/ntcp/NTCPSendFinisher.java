@@ -67,13 +67,17 @@ class NTCPSendFinisher {
      * If the executor is stopped or saturated, falls back to caller running the task.
      */
     public void add(OutNetMessage msg) {
-        if (_executor == null || _executor.isShutdown() || _executor.isTerminated()) {
+        ThreadPoolExecutor executor;
+        synchronized(this) {
+            executor = _executor;
+        }
+        if (executor == null || executor.isShutdown() || executor.isTerminated()) {
             _log.warn("NTCP Send Finisher not running, invoking afterSend inline");
             _transport.afterSend(msg, true, false, msg.getSendTime());
             return;
         }
         try {
-            _executor.execute(new RunnableEvent(msg));
+            executor.execute(new RunnableEvent(msg));
         } catch (RejectedExecutionException ree) {
             // Pool saturated or shutdown, fallback to caller thread for backpressure
             _log.warn("NTCP Send Finisher saturated, running afterSend inline");

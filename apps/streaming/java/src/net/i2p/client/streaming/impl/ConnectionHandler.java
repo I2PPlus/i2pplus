@@ -152,7 +152,11 @@ class ConnectionHandler {
                     }
                     sendReset(packet);
                 }
-                if (_restartPending) {throw new RouterRestartException();}
+                    boolean restartPending;
+                    synchronized(this) {
+                        restartPending = _restartPending;
+                    }
+                    if (restartPending) {throw new RouterRestartException();}
                 throw new ConnectException("ServerSocket closed");
             }
 
@@ -188,7 +192,11 @@ class ConnectionHandler {
 
             if (syn != null) {
                 if (syn.getOptionalDelay() == PoisonPacket.POISON_MAX_DELAY_REQUEST) {
-                    if (_restartPending) {throw new RouterRestartException();}
+                boolean restartPending;
+                synchronized(this) {
+                    restartPending = _restartPending;
+                }
+                if (restartPending) {throw new RouterRestartException();}
                     throw new ConnectException("ServerSocket closed");
                 }
 

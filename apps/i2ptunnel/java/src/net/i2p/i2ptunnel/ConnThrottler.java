@@ -214,7 +214,11 @@ class ConnThrottler {
                     }
                 }
             }
-            schedule(_checkPeriod);
+            long checkPeriod;
+            synchronized(ConnThrottler.this) {
+                checkPeriod = ConnThrottler.this._checkPeriod;
+            }
+            schedule(checkPeriod);
         }
     }
 }

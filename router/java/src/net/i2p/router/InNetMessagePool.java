@@ -395,13 +395,17 @@ public class InNetMessagePool implements Service {
     /**
      * Restart the message pool. Shuts down and re-starts processing.
      */
-    public synchronized void restart() {
-        shutdown();
+    public void restart() {
+        synchronized (this) {
+            shutdown();
+        }
         try {
             Thread.sleep(100);
         } catch (InterruptedException ignored) {
         }
-        startup();
+        synchronized (this) {
+            startup();
+        }
     }
 
     /**

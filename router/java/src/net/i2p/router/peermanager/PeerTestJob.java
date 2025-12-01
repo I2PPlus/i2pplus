@@ -131,7 +131,13 @@ public class PeerTestJob extends JobImpl {
 
     public void runJob() {
         long lag = getContext().jobQueue().getMaxLag();
-        if (!_keepTesting) return;
+        boolean keepTesting;
+        PeerManager manager;
+        synchronized(this) {
+            keepTesting = _keepTesting;
+            manager = _manager;
+        }
+        if (!keepTesting) return;
         Set<RouterInfo> peers = selectPeersToTest();
         for (RouterInfo peer : peers) {
             testPeer(peer);
@@ -158,11 +164,15 @@ public class PeerTestJob extends JobImpl {
      * @return set of RouterInfo structures
      */
     private Set<RouterInfo> selectPeersToTest() {
+        PeerManager manager;
+        synchronized(this) {
+            manager = _manager;
+        }
         PeerSelectionCriteria criteria = new PeerSelectionCriteria();
         criteria.setMinimumRequired(getTestConcurrency());
         criteria.setMaximumRequired(getTestConcurrency());
         criteria.setPurpose(PeerSelectionCriteria.PURPOSE_TEST);
-        List<Hash> peerHashes = _manager.selectPeers(criteria);
+        List<Hash> peerHashes = manager.selectPeers(criteria);
         Set<RouterInfo> peers = new HashSet<RouterInfo>(peerHashes.size());
         for (Hash peer : peerHashes) {
             RouterInfo peerInfo = getContext().netDb().lookupRouterInfoLocally(peer);

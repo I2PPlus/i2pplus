@@ -55,12 +55,12 @@ public class InternalSocket extends Socket {
     }
 
     @Override
-    public InputStream getInputStream() {
+    public synchronized InputStream getInputStream() {
         return _is;
     }
 
     @Override
-    public OutputStream getOutputStream() {
+    public synchronized OutputStream getOutputStream() {
         return _os;
     }
 

@@ -356,7 +356,7 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
                 int afterQueued = _connection.getUnackedPacketsSent();
                 _log.debug("Took " + (_acceptedOn - before) + "ms to get "
                            + (accepted ? "ACCEPTED" : "REJECTED")
-                           + (_cancelledOn > 0 ? " and CANCELLED" : "")
+                           + (isCancelled() ? " and CANCELLED" : "")
                            + ", queued behind " + queued +" with a window size of " + window
                            + "; finally accepted with " + afterQueued + " queued: "
                            + toString());
@@ -393,6 +393,8 @@ class PacketLocal extends Packet implements MessageOutputStream.WriteStatus {
         }
     }
 
+    private synchronized boolean isCancelled() { return _cancelledOn > 0; }
+    
     public synchronized boolean writeAccepted() { return _acceptedOn > 0 && _cancelledOn <= 0; }
     public synchronized boolean writeFailed() { return _cancelledOn > 0; }
     public synchronized boolean writeSuccessful() { return _ackOn > 0 && _cancelledOn <= 0; }

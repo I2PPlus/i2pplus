@@ -553,15 +553,19 @@ public class Router implements RouterClock.ClockShiftListener {
      *
      */
     public void setRouterInfo(RouterInfo info) {
+        Log log;
         _routerInfoLock.writeLock().lock();
-        if (!info.getIdentity().equals(_routerIdent)) {
-            if (_routerIdent != null) {_log.log(Log.CRIT, "Changing router ident while running");} // shouldn't happen
-            _routerIdent = info.getIdentity();
-            _routerHash = _routerIdent.calculateHash();
-        }
-        try {_routerInfo = info;}
-        finally {_routerInfoLock.writeLock().unlock();}
-        if (_log.shouldInfo()) {_log.info("setRouterInfo() : " + info);}
+        try {
+            if (!info.getIdentity().equals(_routerIdent)) {
+                log = _log;
+                if (_routerIdent != null) {log.log(Log.CRIT, "Changing router ident while running");} // shouldn't happen
+                _routerIdent = info.getIdentity();
+                _routerHash = _routerIdent.calculateHash();
+            }
+            _routerInfo = info;
+        } finally {_routerInfoLock.writeLock().unlock();}
+        log = _log;
+        if (log != null && log.shouldInfo()) {log.info("setRouterInfo() : " + info);}
         if (info != null) {_context.jobQueue().addJob(new PersistRouterInfoJob(_context));}
     }
 
@@ -807,12 +811,14 @@ public class Router implements RouterClock.ClockShiftListener {
      */
     private void changeState(State state) {
         State oldState;
+        Log log;
         synchronized(_stateLock) {
             oldState = _state;
             _state = state;
+            log = _log;
         }
-        if (_log != null && oldState != state && state != State.STOPPED && _log.shouldWarn()) {
-            _log.warn("Router state change from " + oldState + " to " + state /* , new Exception() */ );
+        if (log != null && oldState != state && state != State.STOPPED && log.shouldWarn()) {
+            log.warn("Router state change from " + oldState + " to " + state /* , new Exception() */ );
             //for debugging
             _context.logManager().flush();
         }

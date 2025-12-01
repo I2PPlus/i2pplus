@@ -197,7 +197,7 @@ class FragmentedMessage {
         }
     }
 
-    public long getReleasedAfter() { return _releasedAfter; }
+    public synchronized long getReleasedAfter() { return _releasedAfter; }
     public void failed() {
         synchronized (this) {
             releaseFragments();

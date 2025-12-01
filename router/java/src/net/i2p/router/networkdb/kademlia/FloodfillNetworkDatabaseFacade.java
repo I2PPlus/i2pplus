@@ -168,10 +168,16 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     @Override
     public synchronized void shutdown() {
         // only if not forced ff or not restarting
-        if (_floodfillEnabled && !(_context.router().scheduledGracefulExitCode() == Router.EXIT_HARD_RESTART ||
+        boolean floodfillEnabled;
+        synchronized(this) {
+            floodfillEnabled = _floodfillEnabled;
+        }
+        if (floodfillEnabled && !(_context.router().scheduledGracefulExitCode() == Router.EXIT_HARD_RESTART ||
             _context.router().scheduledGracefulExitCode() == Router.EXIT_GRACEFUL_RESTART)) {
             // turn off to build a new RI...
-            _floodfillEnabled = false;
+            synchronized(this) {
+                _floodfillEnabled = false;
+            }
             // true -> publish inline
             // but job queue is already shut down, so sendStore() called by rebuildRouterInfo() won't work...
             _context.router().rebuildRouterInfo(true);
@@ -344,7 +350,11 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
      *  @since 0.7.11
      */
     boolean shouldThrottleFlood(Hash key) {
-        return _floodThrottler != null && _floodThrottler.shouldThrottle(key);
+        FloodThrottler ft;
+        synchronized(this) {
+            ft = _floodThrottler;
+        }
+        return ft != null && ft.shouldThrottle(key);
     }
 
 
@@ -543,7 +553,9 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
     }
 
     @Override
-    public boolean floodfillEnabled() {return _floodfillEnabled;}
+    public boolean floodfillEnabled() {
+        synchronized(this) {return _floodfillEnabled;}
+    }
 
     /**
      *  @param peer may be null, returns false if null
@@ -752,7 +764,11 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
 **/
         }
         //boolean isBadFF = isFF && noSSU;
-        if ((_floodfillEnabled && !forceExplore) ||
+        boolean floodfillEnabled;
+        synchronized(this) {
+            floodfillEnabled = _floodfillEnabled;
+        }
+        if ((floodfillEnabled && !forceExplore) ||
              _context.router().gracefulShutdownInProgress() ||
              _context.jobQueue().getMaxLag() > MAX_LAG_BEFORE_SKIP_SEARCH ||
              _context.banlist().isBanlisted(peer) || uninteresting) {
@@ -761,7 +777,11 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
              * Also don't queue a search if we have plenty of routerinfos (KBucketSetSize() includes leasesets but avoids locking)
              */
             if (_log.shouldInfo()) {
-                if (_floodfillEnabled && !forceExplore) {
+                boolean ffEnabled;
+                synchronized(this) {
+                    ffEnabled = _floodfillEnabled;
+                }
+                if (ffEnabled && !forceExplore) {
                     _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Floodfill mode active");
                 } else if (_context.banlist().isBanlistedForever(peer)) {
                     _log.info("Skipping lookup of RouterInfo [" + peer.toBase64().substring(0,6) + "] -> Banlisted");

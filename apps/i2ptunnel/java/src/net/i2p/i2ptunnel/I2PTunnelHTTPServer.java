@@ -742,10 +742,14 @@ public class I2PTunnelHTTPServer extends I2PTunnelServer {
                     }
                 }
 
-                if (_postThrottler != null && command.length() >= 5 &&
+                ConnThrottler postThrottler;
+                synchronized(this) {
+                    postThrottler = _postThrottler;
+                }
+                if (postThrottler != null && command.length() >= 5 &&
                     (command.substring(0, 5).toUpperCase(Locale.US).equals("POST ") ||
                      command.substring(0, 4).toUpperCase(Locale.US).equals("PUT "))) {
-                    if (_postThrottler.shouldThrottle(peerHash)) {
+                    if (postThrottler.shouldThrottle(peerHash)) {
                         if (_log.shouldWarn()) {
                             _log.warn("[HTTPServer] Refusing POST/PUT since peer is throttled \n* Client: " + peerB32);
                         }

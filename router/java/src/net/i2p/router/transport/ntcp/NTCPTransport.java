@@ -324,7 +324,7 @@ public class NTCPTransport extends TransportImpl {
      * @param ipv6 True if the connection is IPv6, false if IPv4.
      * @param created The creation timestamp of the inbound connection.
      */
-    private void updateInboundIPStats(boolean ipv6, long created) {
+    private synchronized void updateInboundIPStats(boolean ipv6, long created) {
         long last;
         Status oldStatus = null;
         if (ipv6) {
@@ -1427,7 +1427,7 @@ public class NTCPTransport extends TransportImpl {
                     InetAddress ia = InetAddress.getByAddress(ip);
                     saveLocalAddress(ia);
                 } catch (UnknownHostException uhe) {}
-            } else if (source == SOURCE_CONFIG) {_ssuPort = port;} // save for startListening()
+            } else if (source == SOURCE_CONFIG) {synchronized(this) {_ssuPort = port;}} // save for startListening()
             return;
         }
         // ignore UPnP for now, get everything from SSU if it's enabled

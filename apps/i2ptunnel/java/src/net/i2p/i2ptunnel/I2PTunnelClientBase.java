@@ -532,7 +532,11 @@ public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runna
             }
         }
 
-        if (open && listenerReady) {
+        boolean ready;
+        synchronized (this) {
+            ready = listenerReady;
+        }
+        if (open && ready) {
             if (localPort > 0) { // -1 for I2Ping
                 boolean openNow = !Boolean.parseBoolean(tun.getClientOptions().getProperty("i2cp.delayOpen"));
                 String nickname = tun.getClientOptions().getProperty("inbound.nickname");

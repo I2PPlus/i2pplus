@@ -872,8 +872,10 @@ class Daemon {
     }
 
     public void stop() {
-        _running = false;
-        wakeup();
+        synchronized (this) {
+            _running = false;
+            notifyAll();
+        }
     }
 
 }

@@ -112,7 +112,11 @@ final class YKGenerator {
         if (rv != null) {return rv;}
         ctx.statManager().addRateData("crypto.YKEmpty", 1);
         rv = generateYK();
-        if (_precalcThread != null) {_precalcThread.interrupt();}
+        Thread precalcThread;
+        synchronized(this) {
+            precalcThread = _precalcThread;
+        }
+        if (precalcThread != null) {precalcThread.interrupt();}
         return rv;
     }
 

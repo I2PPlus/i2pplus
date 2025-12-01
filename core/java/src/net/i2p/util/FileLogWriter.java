@@ -56,8 +56,8 @@ class FileLogWriter extends LogWriter {
         return rv;
     }
 
-    protected void writeRecord(LogRecord rec, String formatted) {
-    	writeRecord(rec.getPriority(), formatted);
+    protected synchronized void writeRecord(LogRecord rec, String formatted) {
+     	writeRecord(rec.getPriority(), formatted);
     }
 
     protected synchronized void writeRecord(int priority, String val) {

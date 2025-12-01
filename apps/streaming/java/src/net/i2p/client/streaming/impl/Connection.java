@@ -282,8 +282,12 @@ class Connection {
         if (_resetReceived.get()) {return;}
         // Unconditionally set
         _resetSentOn.set(now);
-        if ((_remotePeer == null) || (_sendStreamId.get() <= 0)) {return;}
-        PacketLocal reply = new PacketLocal(_context, _remotePeer, this);
+        Destination remotePeer;
+        synchronized(this) {
+            remotePeer = _remotePeer;
+        }
+        if ((remotePeer == null) || (_sendStreamId.get() <= 0)) {return;}
+        PacketLocal reply = new PacketLocal(_context, remotePeer, this);
         reply.setFlag(Packet.FLAG_RESET);
         reply.setFlag(Packet.FLAG_SIGNATURE_INCLUDED);
         reply.setSendStreamId(_sendStreamId.get());
@@ -780,7 +784,7 @@ class Connection {
      */
     public synchronized Destination getRemotePeer() {return _remotePeer;}
 
-    private String getRemotePeerString() {
+    private synchronized String getRemotePeerString() {
         if (_remotePeer != null) {return "[" + _remotePeer.calculateHash().toBase32().substring(0,8) + "]";}
         else {return "[Unknown]";}
     }
@@ -1239,7 +1243,11 @@ class Connection {
         else {buf.append("Unknown");}
         if (_isInbound) {buf.append(" from ");}
         else {buf.append(" to ");}
-        if (_remotePeer != null) {buf.append("[").append(_remotePeer.calculateHash().toBase32().substring(0,8)).append("]");}
+        Destination remotePeer;
+        synchronized(this) {
+            remotePeer = _remotePeer;
+        }
+        if (remotePeer != null) {buf.append("[").append(remotePeer.calculateHash().toBase32().substring(0,8)).append("]");}
         else {buf.append("Unknown");}
         long now = _context.clock().now();
         if  (_log.shouldInfo()) {
