@@ -900,6 +900,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         if (!_config.containsKey(PROP_UPBW_MAX)) {_config.setProperty(PROP_UPBW_MAX, Integer.toString(DEFAULT_MAX_UP_BW));}
         if (!_config.containsKey(PROP_DOWNBW_MAX)) {_config.setProperty(PROP_DOWNBW_MAX, Integer.toString(DEFAULT_MAX_DOWN_BW));}
         updateConfig();
+        // Initialize bandwidth from config (not from I2CP detection)
+        int maxdown = getInt(PROP_DOWNBW_MAX, DEFAULT_MAX_DOWN_BW);
+        _bwManager.setDownBWLimit(maxdown * 1000L);
+        int maxup = getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW);
+        _bwManager.setUpBWLimit(maxup * 1000L);
     }
 
     /**
@@ -969,19 +974,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
     private boolean getBWLimit() {
             int[] limits = BWLimits.getBWLimits(_util.getI2CPHost(), _util.getI2CPPort());
             if (limits == null) {return false;}
-        int up = limits[1];
-        if (up > 0) {
-            int maxup = getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW);
-            //if (maxup > up) {maxup = up;}
-            _util.setMaxUpBW(maxup);
-            _bwManager.setUpBWLimit(maxup * 1000L);
-        }
-        int down = limits[0];
-        if (down > 0) {
-            int maxdown = getInt(PROP_DOWNBW_MAX, DEFAULT_MAX_DOWN_BW);
-            //_bwManager.setDownBWLimit(Math.min(down, maxdown) * 1000L);
-            _bwManager.setDownBWLimit(maxdown * 1000L);
-        }
+        // Bandwidth limits are not updated from I2CP detected values
+        // Only user-configured values are used
         return true;
     }
 
