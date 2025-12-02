@@ -205,22 +205,25 @@ class PartialPiece implements Comparable<PartialPiece> {
             int read = 0;
             int buflen = Math.min(pclen, BUFSIZE);
             ByteArray ba = (buflen == BUFSIZE) ? _cache.acquire() : null;
-            byte[] buf = (ba != null) ? ba.getData() : new byte[buflen];
-            synchronized (this) {
-                if (raf == null)
-                    throw new IOException("File not created");
-                raf.seek(0);
-                while (read < pclen) {
-                    int toRead = Math.min(buf.length, pclen - read);
-                    raf.readFully(buf, 0, toRead);
-                    read += toRead;
-                    sha1.update(buf, 0, toRead);
+            try {
+                byte[] buf = (ba != null) ? ba.getData() : new byte[buflen];
+                synchronized (this) {
+                    if (raf == null)
+                        throw new IOException("File not created");
+                    raf.seek(0);
+                    while (read < pclen) {
+                        int toRead = Math.min(buf.length, pclen - read);
+                        raf.readFully(buf, 0, toRead);
+                        read += toRead;
+                        sha1.update(buf, 0, toRead);
+                    }
                 }
+                if (read < pclen)
+                    throw new IOException("Incomplete piece data");
+            } finally {
+                if (ba != null)
+                    _cache.release(ba, false);
             }
-            if (ba != null)
-                _cache.release(ba, false);
-            if (read < pclen)
-                throw new IOException("Incomplete piece data");
         }
         return sha1.digest();
     }
@@ -258,30 +261,33 @@ class PartialPiece implements Comparable<PartialPiece> {
         } else {
             // Use temporary file
             ByteArray ba = null;
-            byte[] tmp;
-            if (len == BUFSIZE) {
-                ba = _cache.acquire();
-                tmp = ba.getData();
-            } else {
-                tmp = new byte[len];
-            }
-            int bytesRead = 0;
-            while (bytesRead < len) {
-                int n = din.read(tmp, bytesRead, len - bytesRead);
-                if (n < 0)
-                    throw new EOFException();
-                bytesRead += n;
-                bwl.downloaded(n);
-            }
-            synchronized (this) {
-                if (raf == null)
-                    createTemp();
-                raf.seek(offset);
-                raf.write(tmp);
-                handleChunkReception(chunk, offset, len);
-            }
-            if (ba != null) {
-                _cache.release(ba, false);
+            try {
+                byte[] tmp;
+                if (len == BUFSIZE) {
+                    ba = _cache.acquire();
+                    tmp = ba.getData();
+                } else {
+                    tmp = new byte[len];
+                }
+                int bytesRead = 0;
+                while (bytesRead < len) {
+                    int n = din.read(tmp, bytesRead, len - bytesRead);
+                    if (n < 0)
+                        throw new EOFException();
+                    bytesRead += n;
+                    bwl.downloaded(n);
+                }
+                synchronized (this) {
+                    if (raf == null)
+                        createTemp();
+                    raf.seek(offset);
+                    raf.write(tmp);
+                    handleChunkReception(chunk, offset, len);
+                }
+            } finally {
+                if (ba != null) {
+                    _cache.release(ba, false);
+                }
             }
         }
     }
@@ -336,20 +342,23 @@ class PartialPiece implements Comparable<PartialPiece> {
             int read = 0;
             int buflen = Math.min(len, BUFSIZE);
             ByteArray ba = (buflen == BUFSIZE) ? _cache.acquire() : null;
-            byte[] buf = (ba != null) ? ba.getData() : new byte[buflen];
-            synchronized (this) {
-                if (raf == null)
-                    throw new IOException("Piece data not available");
-                raf.seek(offset);
-                while (read < len) {
-                    int rd = Math.min(buf.length, len - read);
-                    raf.readFully(buf, 0, rd);
-                    out.write(buf, 0, rd);
-                    read += rd;
+            try {
+                byte[] buf = (ba != null) ? ba.getData() : new byte[buflen];
+                synchronized (this) {
+                    if (raf == null)
+                        throw new IOException("Piece data not available");
+                    raf.seek(offset);
+                    while (read < len) {
+                        int rd = Math.min(buf.length, len - read);
+                        raf.readFully(buf, 0, rd);
+                        out.write(buf, 0, rd);
+                        read += rd;
+                    }
                 }
+            } finally {
+                if (ba != null)
+                    _cache.release(ba, false);
             }
-            if (ba != null)
-                _cache.release(ba, false);
         }
     }
 
