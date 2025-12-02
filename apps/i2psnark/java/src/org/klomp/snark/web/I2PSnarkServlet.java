@@ -3029,8 +3029,8 @@ public class I2PSnarkServlet extends BasicServlet {
                 .append(peerCountHtml);
             snarkSt = "inactive seeding complete connected";
         } else if (!isComplete && hasConnectedPeers && !isUploading && !isDownloading) {
-            statusBuf.append(toSVGWithDataTooltip("seeding", "",
-                    _t("Seeding") + " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")"))
+            statusBuf.append(toSVGWithDataTooltip("stalled", "",
+                    _t("Stalled") + " (" + _t("Connected to {0} of {1} peers in swarm", curPeers, knownPeers) + ")"))
                 .append(peerCountHtml);
             snarkSt = "inactive incomplete connected";
         } else if (isSeeding) {
