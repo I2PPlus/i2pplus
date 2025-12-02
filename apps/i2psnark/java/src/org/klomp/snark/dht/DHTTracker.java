@@ -39,7 +39,7 @@ class DHTTracker {
     private static final long MAX_EXPIRE_TIME = 3*60*60*1000L;
     private static final long MIN_EXPIRE_TIME = 15*60*1000;
     private static final long DELTA_EXPIRE_TIME = 3*60*1000;
-    private static final int MAX_PEERS = 2000;
+    private static final int MAX_PEERS = 400;
     private static final int MAX_PEERS_PER_TORRENT = 150;
     private static final int ABSOLUTE_MAX_PER_TORRENT = MAX_PEERS_PER_TORRENT * 2;
     private static final int MAX_TORRENTS = 2000;
