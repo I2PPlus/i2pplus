@@ -64,7 +64,8 @@ public class InNetMessagePool implements Service {
 
     /** Maximum valid I2NP message type */
     private static final int MAX_I2NP_MESSAGE_TYPE = 31;
-    private static final int MAX_DELIVERY_DELAY = 2000; // 2s latitude
+    private static final int MAX_DELIVERY_SKEW = 5000; // 5s latitude
+    private static final long[] RATES = { 60*1000, 60*60*1000l };
 
     /**
      * Constructs the message pool with given context.
@@ -91,15 +92,10 @@ public class InNetMessagePool implements Service {
         }
 
         _log = _context.logManager().getLog(InNetMessagePool.class);
-        _context.statManager().createRateStat("inNetPool.dropped", "How often we drop a message", "InNetPool",
-                new long[] {60 * 1000, 60 * 60 * 1000L});
-        _context.statManager().createRateStat("inNetPool.droppedDeliveryStatusDelay",
-                "Notification latency for dropped messages (ms)", "InNetPool",
-                new long[] {60 * 1000, 60 * 60 * 1000L});
-        _context.statManager().createRateStat("inNetPool.duplicate", "How often we receive a duplicate message",
-                "InNetPool", new long[] {60 * 1000, 60 * 60 * 1000L});
-        _context.statManager().createRateStat("inNetPool.droppedDbLookupResponseMessage",
-                "Frequency of DbLookup response drops", "InNetPool", new long[] {60 * 1000, 60 * 60 * 1000L});
+        _context.statManager().createRateStat("inNetPool.dropped", "How often we drop a message", "InNetPool", RATES);
+        _context.statManager().createRateStat("inNetPool.droppedDeliveryStatusDelay", "Notification latency for dropped messages (ms)", "InNetPool", RATES);
+        _context.statManager().createRateStat("inNetPool.duplicate", "How often we receive a duplicate message", "InNetPool", RATES);
+        _context.statManager().createRateStat("inNetPool.droppedDbLookupResponseMessage", "Frequency of DbLookup response drops", "InNetPool", RATES);
     }
 
     /**
@@ -292,9 +288,11 @@ public class InNetMessagePool implements Service {
 
         switch (messageBody.getType()) {
             case DeliveryStatusMessage.MESSAGE_TYPE: {
+                long now = _context.clock().now();
                 long arr = ((DeliveryStatusMessage) messageBody).getArrival();
-                if (arr > MAX_DELIVERY_DELAY) {
-                    long timeSinceSent = _context.clock().now() - arr;
+                long timeDiff = Math.abs(now - arr);
+                if (timeDiff > MAX_DELIVERY_SKEW) {
+                    long timeSinceSent = now - arr;
                     if (_log.shouldWarn())
                         _log.warn("Dropping unhandled DeliveryStatusMessage" + messageBody);
                     _context.statManager().addRateData("inNetPool.droppedDeliveryStatusDelay", timeSinceSent);
