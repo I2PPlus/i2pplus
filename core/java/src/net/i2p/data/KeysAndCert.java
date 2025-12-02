@@ -284,7 +284,7 @@ public class KeysAndCert extends DataStructureImpl {
     public String toString() {
         StringBuilder buf = new StringBuilder(256);
         String cls = getClass().getSimpleName();
-        if (cls.equals("RouterIdentity") {cls = "Router";}
+        if (cls.equals("RouterIdentity")) {cls = "Router";}
         buf.append(cls);
         buf.append("\n* Hash: ");
         if (cls.equals("Destination")) {
