@@ -16,6 +16,11 @@
 
 package com.google.zxing.qrcode.encoder;
 
+/**
+ * Represents a pair of data and error correction blocks for QR code encoding.
+ * This class holds the data bytes and their corresponding error correction bytes
+ * as generated during the QR code encoding process.
+ */
 final class BlockPair {
 
   private final byte[] dataBytes;
