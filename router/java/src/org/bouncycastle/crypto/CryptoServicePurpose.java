@@ -1,15 +1,29 @@
 package org.bouncycastle.crypto;
 
+/**
+ * Enumeration of cryptographic service purposes.
+ * Defines the intended use case for cryptographic operations.
+ */
 public enum CryptoServicePurpose
 {
+    /** Key agreement protocol */
     AGREEMENT,
+    /** Encryption operation */
     ENCRYPTION,
+    /** Decryption operation */
     DECRYPTION,
+    /** Key generation */
     KEYGEN,
-    SIGNING,         // for signatures (and digests)
+    /** Signing operation (for signatures and digests) */
+    SIGNING,         
+    /** Verification operation */
     VERIFYING,
-    AUTHENTICATION,  // for MACs (and digests)
+    /** Authentication operation (for MACs and digests) */
+    AUTHENTICATION,  
+    /** Verification operation */
     VERIFICATION,
+    /** Pseudo-random function */
     PRF,
+    /** Any purpose */
     ANY
 }

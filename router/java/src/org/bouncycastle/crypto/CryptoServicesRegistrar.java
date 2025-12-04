@@ -2,6 +2,10 @@ package org.bouncycastle.crypto;
 
 import java.security.SecureRandom;
 
+/**
+ * Registry for cryptographic services and utilities.
+ * Provides secure random source and constraint checking functionality.
+ */
 public class CryptoServicesRegistrar {
 
     public static void checkConstraints(CryptoServiceProperties csp) {}
