@@ -78,6 +78,9 @@
               oldCells.forEach(cell => cell.classList.remove("updated"));
             }, REFRESH_INTERVAL - 500);
           }
+          const footer = jobs.querySelector(".tablefooter");
+          const footerResponse = doc.querySelector(".tablefooter");
+          footer.innerHTML = footerResponse.innerHTML;
         });
 
         if (fragment.hasChildNodes()) {
