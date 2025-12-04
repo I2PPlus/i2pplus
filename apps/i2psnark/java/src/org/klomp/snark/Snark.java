@@ -451,8 +451,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     public void setStarting() {starting = true;}
 
     /**
-     * File checking in progress.
-     *
+     * Check if file checking is in progress.
+     * @return true if checking is in progress, false otherwise
      * @since 0.9.3
      */
     public boolean isChecking() {
@@ -460,8 +460,9 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Get the progress of file checking as a percentage.
      * If checking is in progress, return completion 0.0 ... 1.0, else return 1.0.
-     *
+     * @return checking progress as a percentage (0.0 to 1.0)
      * @since 0.9.23
      */
     public double getCheckingProgress() {
@@ -471,8 +472,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
-     * Disk allocation (ballooning) in progress.
-     *
+     * Check if disk allocation (ballooning) is in progress.
+     * @return true if allocating, false otherwise
      * @since 0.9.3
      */
     public boolean isAllocating() {
@@ -480,6 +481,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Get the current download rate in bytes per second.
+     * @return download rate in bytes per second, or 0 if not available
      * @since 0.8.4
      */
     public long getDownloadRate() {
@@ -489,6 +492,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Get the current upload rate in bytes per second.
+     * @return upload rate in bytes per second, or 0 if not available
      * @since 0.8.4
      */
     public long getUploadRate() {
@@ -498,6 +503,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Get the total number of bytes downloaded.
+     * @return total bytes downloaded, or 0 if not available
      * @since 0.8.4
      */
     public long getDownloaded() {
@@ -507,6 +514,8 @@ public class Snark implements StorageListener, CoordinatorListener, ShutdownList
     }
 
     /**
+     * Get the total number of bytes uploaded.
+     * @return total bytes uploaded, including saved uploaded if coordinator is not available
      * @since 0.8.4
      */
     public long getUploaded() {

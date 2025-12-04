@@ -100,19 +100,36 @@ class MagnetState {
         return metaSize;
     }
 
+    /**
+     * Check if the magnet state has been initialized.
+     * @return true if initialized, false otherwise
+     */
     public boolean isInitialized() {
         return isInitialized;
     }
 
+    /**
+     * Check if the magnet download is complete.
+     * @return true if complete, false otherwise
+     */
     public boolean isComplete() {
         return complete;
     }
 
+    /**
+     * Get the size of a specific chunk.
+     * @param chunk the chunk number
+     * @return the size of the chunk in bytes
+     */
     public int chunkSize(int chunk) {
         return Math.min(CHUNK_SIZE, metaSize - (chunk * CHUNK_SIZE));
     }
 
-    /** @return chunk count */
+    /**
+     * Get the number of chunks remaining to be downloaded.
+     * @return the number of chunks remaining
+     * @throws IllegalArgumentException if not initialized
+     */
     public int chunksRemaining() {
         if (!isInitialized)
             throw new IllegalArgumentException("Not initialized");
@@ -121,7 +138,12 @@ class MagnetState {
         return totalChunks - have.count();
     }
 
-    /** @return chunk number */
+    /**
+     * Get the next chunk number to request.
+     * Uses a random selection algorithm to avoid requesting the same chunks repeatedly.
+     * @return the next chunk number to request
+     * @throws IllegalArgumentException if not initialized or complete
+     */
     public int getNextRequest() {
         if (!isInitialized)
             throw new IllegalArgumentException("Not initialized");
@@ -145,7 +167,10 @@ class MagnetState {
     }
 
     /**
-     *  @throws IllegalArgumentException
+     * Get the data for a specific chunk.
+     * @param chunk the chunk number to retrieve
+     * @return the chunk data as a byte array
+     * @throws IllegalArgumentException if not complete or chunk number is invalid
      */
     public byte[] getChunk(int chunk) {
         if (!complete)
@@ -160,8 +185,14 @@ class MagnetState {
     }
 
     /**
-     *  @return true if this was the last piece
-     *  @throws NullPointerException IllegalArgumentException, IOException, ...
+     * Save a chunk of data to the magnet state.
+     * @param chunk the chunk number to save
+     * @param data the byte array containing the chunk data
+     * @param offset the offset in the data array where the chunk starts
+     * @param length the length of the chunk data
+     * @return true if this was the last piece, false otherwise
+     * @throws IllegalArgumentException if not initialized, chunk number is invalid, or length is incorrect
+     * @throws Exception if there's an error building the MetaInfo
      */
     public boolean saveChunk(int chunk, byte[] data, int off, int length) throws Exception {
         if (!isInitialized)
