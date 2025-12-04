@@ -6,10 +6,22 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- *  Count things.
+ * Thread-safe counter for tracking occurrences of objects.
+ * 
+ * <p>This class provides a concurrent way to count how many times specific
+ * objects appear. It uses ConcurrentHashMap and AtomicInteger to ensure
+ * thread-safe operations in multi-threaded environments.</p>
+ * 
+ * <p>Typical use cases include:</p>
+ * <ul>
+ * <li>Counting message frequencies</li>
+ * <li>Tracking request rates by client</li>
+ * <li>Monitoring event occurrences</li>
+ * <li>Statistical data collection</li>
+ * </ul>
  *
- *  @author zzz, welterde
- *  @param <K> type of objects being counted
+ * @author zzz, welterde
+ * @param <K> type of objects being counted
  */
 public class ObjectCounter<K> implements Serializable {
     /**

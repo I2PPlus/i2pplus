@@ -8,14 +8,25 @@ import java.util.List;
 import java.util.Set;
 
 /**
- *  Count things.
- *  NOT thread safe, mostly for UI and Sybil.
- *  Dropin replacement for ObjectCounter.
- *  Much less object churn than ObjectCounter.
- *  Also provides add() and sortedObjects()
+ * Non-thread-safe counter for tracking occurrences of objects.
+ * 
+ * <p>This class provides a lightweight alternative to ObjectCounter for
+ * single-threaded scenarios. It offers better performance with reduced
+ * object churn by using primitive integers instead of AtomicInteger.</p>
+ * 
+ * <p><strong>Key differences from ObjectCounter:</strong></p>
+ * <ul>
+ * <li>NOT thread-safe - use only in single-threaded contexts</li>
+ * <li>Lower memory overhead and better performance</li>
+ * <li>Additional add() method for incrementing by arbitrary values</li>
+ * <li>sortedObjects() method for retrieving objects by count</li>
+ * </ul>
+ * 
+ * <p>Typical use cases include UI components and Sybil attack detection
+ * where thread safety is not required.</p>
  *
- *  @since 0.9.58
- *  @param <K> type of objects being counted
+ * @since 0.9.58
+ * @param <K> type of objects being counted
  */
 public class ObjectCounterUnsafe<K> {
     private final HashMap<K, Int> map = new HashMap<K, Int>();
