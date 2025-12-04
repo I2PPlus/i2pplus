@@ -13,6 +13,10 @@ public class TryCache<T> {
 
     private static final boolean DEBUG_DUP = false;
 
+    /**
+     * Factory interface for creating new objects in TryCache.
+     * @since 0.9.35
+     */
     public interface ObjectFactory<T> {
         T newInstance();
     }

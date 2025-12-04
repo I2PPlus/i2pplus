@@ -19,18 +19,30 @@ public class SOCKS5Constants {
     /*
      * Some namespaces to enclose SOCKS protocol codes
      */
+    /**
+     * SOCKS5 authentication methods.
+     * @since 0.9.33
+     */
     public static class Method {
         public static final int NO_AUTH_REQUIRED = 0x00;
         public static final int USERNAME_PASSWORD = 0x02;
         public static final int NO_ACCEPTABLE_METHODS = 0xff;
     }
 
+    /**
+     * SOCKS5 address types.
+     * @since 0.9.33
+     */
     public static class AddressType {
         public static final int IPV4 = 0x01;
         public static final int DOMAINNAME = 0x03;
         public static final int IPV6 = 0x04;
     }
 
+    /**
+     * SOCKS5 command codes.
+     * @since 0.9.33
+     */
     public static class Command {
         public static final int CONNECT = 0x01;
         public static final int BIND = 0x02;
@@ -44,6 +56,10 @@ public class SOCKS5Constants {
         public static final int TOR_CONNECT_DIR = 0xf2;
     }
 
+    /**
+     * SOCKS5 reply codes.
+     * @since 0.9.33
+     */
     public static class Reply {
         public static final int SUCCEEDED = 0x00;
         public static final int GENERAL_SOCKS_SERVER_FAILURE = 0x01;

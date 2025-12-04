@@ -43,6 +43,10 @@ public class I2PProperties extends Properties {
 		return returnValue;
 	}
 
+	/**
+	 * Callback interface for property change notifications.
+	 * @since 0.9.35
+	 */
 	public interface I2PPropertyCallback {
 
 		public void propertyChanged(String key, String value);

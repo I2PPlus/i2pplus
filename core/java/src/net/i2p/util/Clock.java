@@ -205,6 +205,10 @@ public class Clock implements Timestamper.UpdateListener {
             }
     }
 
+    /**
+     * Listener for clock offset changes.
+     * @since 0.9.35
+     */
     public interface ClockUpdateListener {
 
         /**

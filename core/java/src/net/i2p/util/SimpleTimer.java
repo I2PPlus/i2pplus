@@ -194,6 +194,7 @@ public class SimpleTimer {
 
     /**
      * Simple interface for events to be queued up and notified on expiration
+     * @since 0.9.35
      */
     public interface TimedEvent {
         /**

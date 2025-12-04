@@ -126,6 +126,10 @@ public class I2PThread extends Thread {
         _listeners.remove(lsnr);
     }
 
+    /**
+     * Listener for out-of-memory events.
+     * @since 0.9.35
+     */
     public interface OOMEventListener {
         public void outOfMemory(OutOfMemoryError err);
     }

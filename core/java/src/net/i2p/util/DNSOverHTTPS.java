@@ -149,6 +149,10 @@ public class DNSOverHTTPS implements EepGet.StatusListener {
         baos = new ByteArrayOutputStream(512);
     }
 
+    /**
+     * DNS query type for IPv4/IPv6 preference.
+     * @since 0.9.35
+     */
     public enum Type { V4_ONLY, V6_ONLY, V4_PREFERRED, V6_PREFERRED }
 
     private static class Result {
