@@ -11,6 +11,10 @@ import java.nio.channels.FileChannel.MapMode;
 
 import com.maxmind.db.Reader.FileMode;
 
+/**
+ * Holds a ByteBuffer for MaxMind database access.
+ * Provides thread-safe access to database data either memory-mapped or loaded into memory.
+ */
 final class BufferHolder {
     // DO NOT PASS OUTSIDE THIS CLASS. Doing so will remove thread safety.
     private final ByteBuffer buffer;

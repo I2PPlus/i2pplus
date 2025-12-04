@@ -4,6 +4,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Metadata for MaxMind database files.
+ * Contains information about database format, version, build epoch, type, languages,
+ * and various structural information about the database.
+ */
 public final class Metadata {
     private final int binaryFormatMajorVersion;
     private final int binaryFormatMinorVersion;

@@ -11,10 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/*
+/**
  * Decoder for MaxMind DB data.
- *
+ * <p>
  * This class CANNOT be shared between threads
+ * </p>
  */
 final class Decoder {
 
