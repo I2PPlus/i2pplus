@@ -18,10 +18,18 @@ import java.util.HashMap;
 class SessionsDB {
 	private static final long serialVersionUID = 0x1;
 
+	/**
+	 * Exception thrown when attempting to create a session with an existing ID.
+	 * @since 0.9.25
+	 */
 	static class ExistingIdException extends Exception {
 		private static final long serialVersionUID = 0x1;
 	}
 
+	/**
+	 * Exception thrown when attempting to create a session with an existing destination.
+	 * @since 0.9.25
+	 */
 	static class ExistingDestException extends Exception {
 		private static final long serialVersionUID = 0x1;
 	}
