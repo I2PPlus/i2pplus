@@ -35,15 +35,18 @@ import net.metanotion.util.skiplist.SkipIterator;
 import net.metanotion.util.skiplist.SkipSpan;
 
 /**
-	I2P
-	Overridden to load the span when required and null out the keys and values
-	when the iterator leaves the span.
-	If the caller does not iterate all the way through, the last span
-	will remain in memory.
+ * SkipList iterator with on-demand span loading (I2P version).
+ * 
+ * <p>Loads spans from disk only when needed and unloads them
+ * when moving to next span to minimize memory usage.</p>
+ * 
+ * <p>Overridden to load span when required and null out keys and values
+ * when iterator leaves the span. If caller does not iterate all the way through,
+ * the last span will remain in memory.</p>
  *
  * @param <K> type of keys maintained by this iterator
  * @param <V> type of values returned by this iterator
-*/
+ */
 public class IBSkipIterator<K extends Comparable<? super K>, V> extends SkipIterator<K, V> {
 
 	public IBSkipIterator(SkipSpan<K, V> ss, int index) {

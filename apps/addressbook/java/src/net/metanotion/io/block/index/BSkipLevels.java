@@ -43,16 +43,21 @@ import net.metanotion.util.skiplist.SkipSpan;
 
 
 /**
- * On-disk format:
- *<pre>
+ * SkipList level management for multi-level indexing.
+ * 
+ * <p>Manages hierarchical structure of SkipList levels
+ * to provide efficient search paths through data structure.</p>
+ * 
+ * <p>On-disk format:</p>
+ * <pre>
  *    Magic number (long)
  *    max height (unsigned short)
  *    non-null height (unsigned short)
  *    span page (unsigned int)
  *    height number of level pages (unsigned ints)
- *</pre>
+ * </pre>
  *
- * Always fits on one page.
+ * <p>Always fits on one page.</p>
  *
  * @param <K> the type of keys maintained by this skip level structure
  * @param <V> the type of mapped values

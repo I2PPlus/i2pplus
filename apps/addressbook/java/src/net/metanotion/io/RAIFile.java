@@ -59,8 +59,8 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
 		this.delegate = new RandomAccessFile(file, mode);
 	}
 
-	/**
-	 *  I2P is the file writable?
+/**
+	 *  Is the file writable? (I2P)
 	 *  Only valid if the File constructor was used, not the RAF constructor
 	 *  @since 0.8.8
 	 */
@@ -68,7 +68,7 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
 		return this.w;
 	}
 
-	/**
+/**
 	 *  @since 0.8.8
 	 */
 	@Override
@@ -105,8 +105,8 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
 	public int readUnsignedByte()		throws IOException { return delegate.readUnsignedByte(); }
 	public int readUnsignedShort()		throws IOException { return delegate.readUnsignedShort(); }
 
-	/**
-	 *  I2P
+/**
+	 *  Reads an unsigned 32-bit integer from the file. (I2P)
 	 *  @throws IOException if the read value is negative
 	 */
 	public int readUnsignedInt()  throws IOException {
@@ -116,15 +116,16 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
 		return rv;
 	}
 
-	/** Read a UTF encoded string
-	 	I would delegate here. But Java's read/writeUTF combo suck.
-	 	A signed 2 byte length is not enough.
-	 	This reads a 4 byte length.
-	 	The upper byte MUST be zero, if its not, then its not this method and has used an
-	 	extensible length encoding.
-	 	This is followed by the bytes of the UTF encoded string, as
-	 	returned by String.getBytes("UTF-8");
-	*/
+/**
+	 * Read a UTF encoded string with 4-byte length prefix. (I2P)
+	 * 
+	 * <p>This method uses a 4-byte length prefix instead of Java's standard
+	 * 2-byte prefix, allowing for strings up to 16MB in length. The upper byte
+	 * must be zero for compatibility.</p>
+	 * 
+	 * @return the UTF-8 decoded string
+	 * @throws IOException if the length encoding is invalid or EOF is reached
+	 */
 	public String readUTF()				throws IOException {
 		int len = delegate.readInt();
 		if((len < 0) || (len >= 16777216)) { throw new IOException("Bad Length Encoding"); }
@@ -152,15 +153,15 @@ public class RAIFile implements RandomAccessInterface, DataInput, DataOutput {
 	public void writeBytes(String s)	throws IOException { delegate.writeBytes(s); }
 	public void writeChars(String s)	throws IOException { delegate.writeChars(s); }
 
-	/** Write a UTF encoded string
-	 	I would delegate here. But Java's read/writeUTF combo suck.
-	 	A signed 2 byte length is not enough.
-	 	This writes a 4 byte length.
-	 	The upper byte MUST be zero, if its not, then its not this method and has used an
-	 	extensible length encoding.
-	 	This is followed by the bytes of the UTF encoded string, as
-	 	returned by String.getBytes("UTF-8");
-	*/
+/**
+	 * Write a UTF encoded string with 4-byte length prefix. (I2P)
+	 * 
+	 * <p>This method uses a 4-byte length prefix instead of Java's standard
+	 * 2-byte prefix, allowing for strings up to 16MB in length.</p>
+	 * 
+	 * @param str the string to write
+	 * @throws IOException if the string is too long for encoding
+	 */
 	public void writeUTF(String str)	throws IOException {
 		byte[] string = str.getBytes("UTF-8");
 		if(string.length >= 16777216) { throw new IOException("String to long for encoding type"); }

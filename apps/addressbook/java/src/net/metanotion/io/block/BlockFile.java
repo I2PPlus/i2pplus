@@ -52,7 +52,13 @@ import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 
 /**
- * On-disk format:
+ * Block-based file storage system with indexed access.
+ * 
+ * <p>Provides paged file storage with skiplist indexes for efficient
+ * key-value data retrieval. Supports multiple named indexes within a single file.</p>
+ * 
+ * <p>On-disk format:</p>
+ * <pre>
  *    Magic number (6 bytes)
  *    Version major/minor (2 bytes)
  *    file length (long)
@@ -60,11 +66,9 @@ import net.i2p.util.Log;
  *    is mounted (unsigned short) 0 = no, 1 = yes
  *    span size (unsigned short)
  *    block size (unsigned int)
- *
- * Metaindex skiplist is on page 2
- *
- * Pages are 1 KB and are numbered starting from 1.
- * e.g. the Metaindex skiplist is at offset 1024 bytes
+ * </pre>
+ * 
+ * <p>Metaindex skiplist is on page 2. Pages are 1 KB and are numbered starting from 1.</p>
  */
 public class BlockFile implements Closeable {
 	public static final int PAGESIZE = 1024;

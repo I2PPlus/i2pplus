@@ -38,17 +38,22 @@ import net.metanotion.util.skiplist.*;
 
 
 /**
- * On-disk format:
- *<pre>
+ * On-disk SkipList implementation for persistent key-value storage.
+ * 
+ * <p>Provides efficient indexed storage with logarithmic search performance.
+ * Supports multiple spans and levels for scalable data organization.</p>
+ * 
+ * <p>On-disk format:</p>
+ * <pre>
  *    Magic number (long)
  *    first span page (unsigned int)
  *    first level page (unsigned int)
  *    size (unsigned int)
  *    spans (unsigned int)
  *    levels (unsigned int)
- *</pre>
+ * </pre>
  *
- * Always fits on one page.
+ * <p>Always fits on one page.</p>
  *
  * @param <K> type of keys maintained by this skip list
  * @param <V> type of mapped values

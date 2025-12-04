@@ -36,20 +36,23 @@ import net.i2p.util.Log;
 import net.metanotion.io.RandomAccessInterface;
 
 /**
- * On-disk format:
- *<pre>
+ * Manages free pages in a block file.
+ * 
+ * <p>Tracks available pages for allocation using a linked list of blocks.
+ * Each block contains multiple free page references and fits on a single disk page.</p>
+ * 
+ * <p>On-disk format:</p>
+ * <pre>
  *    Magic number (long)
  *    next freelist block page (unsigned int)
  *    size (unsigned int)
  *    that many free pages (unsigned ints)
- *</pre>
- *
- * Always fits on one page.
- *
- * Free page format:
- *<pre>
+ * </pre>
+ * 
+ * <p>Free page format:</p>
+ * <pre>
  *    Magic number (long)
- *</pre>
+ * </pre>
  */
 class FreeListBlock {
 	private static final long MAGIC = 0x2366724c69737423l;  // "#frList#"

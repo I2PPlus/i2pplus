@@ -37,9 +37,13 @@ import net.metanotion.util.skiplist.SkipSpan;
 
 
 /**
- * On-disk format:
- *
- *<pre>
+ * SkipList span implementation with in-memory key-value storage.
+ * 
+ * <p>Stores all keys and values in memory for fast access while maintaining
+ * disk persistence. Supports overflow to additional pages when capacity is exceeded.</p>
+ * 
+ * <p>On-disk format:</p>
+ * <pre>
  *   First Page:
  *     Magic number (int)
  *     overflow page (unsigned int)
@@ -56,7 +60,7 @@ import net.metanotion.util.skiplist.SkipSpan;
  *   Overflow pages:
  *     Magic number (int)
  *     next overflow page (unsigned int)
- *</pre>
+ * </pre>
  *
  * @param <K> type of keys maintained by this skip span
  * @param <V> type of values stored in this skip span

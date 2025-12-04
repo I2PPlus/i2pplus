@@ -37,19 +37,24 @@ import net.metanotion.util.skiplist.SkipSpan;
 
 
 /**
- * I2P version of BSkipSpan
- *
- * BSkipSpan stores all keys and values in-memory, backed by the file.
- * IBSkipSpan stores only the first key, and no values, in-memory.
- *
- * For a get(), here we do a linear search through the span in the file 
- * and load only the found value (super() does a binary search in-memory).
- *
- * For a put() or remove(), we load all keys and values for the span from
- * the file, make the modification, flush() out the keys and values,
- * and null out the keys and values in-memory.
- *
- * Recommended span size is 16.
+ * Memory-efficient SkipList span implementation (I2P version).
+ * 
+ * <p>Stores only first key in memory to reduce memory usage.
+ * Loads keys and values from disk on-demand during operations.</p>
+ * 
+ * <p>Comparison with BSkipSpan:</p>
+ * <ul>
+ * <li>BSkipSpan stores all keys and values in-memory, backed by file</li>
+ * <li>IBSkipSpan stores only first key, and no values, in-memory</li>
+ * </ul>
+ * 
+ * <p>For get(): performs linear search through span in file and loads only found value
+ * (super() does binary search in-memory).</p>
+ * 
+ * <p>For put() or remove(): loads all keys and values for span from file,
+ * makes modification, flushes out keys and values, and nulls out keys and values in-memory.</p>
+ * 
+ * <p>Recommended span size is 16.</p>
  *
  * @author zzz
  * @param <K> type of keys maintained by this skip span

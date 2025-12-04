@@ -40,8 +40,8 @@ public interface RandomAccessInterface extends Closeable {
 	public void seek(long pos) throws IOException;
 	public void setLength(long newLength) throws IOException;
 
-	/**
-	 *  I2P is the file writable?
+/**
+	 *  Is the file writable? (I2P)
 	 *  Only valid if the File constructor was used, not the RAF constructor
 	 *  @since 0.8.8
 	 */
