@@ -33,6 +33,10 @@ public class WebAppProviderConfiguration {
         wap.setTempDir(I2PAppContext.getGlobalContext().getTempDir());
     }
 
+    /**
+     * Configuration class for web app provider to set up Tomcat instance manager.
+     * @since 0.9.41
+     */
     public static class WAPConfiguration implements Configuration {
 
         public void deconfigure(WebAppContext context) {}
