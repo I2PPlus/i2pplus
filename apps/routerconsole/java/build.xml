@@ -370,7 +370,9 @@
       <then>
         <parallel>
           <foreach target="compressJavascript" param="file" parallel="true">
-            <fileset dir="build/jsp" includes="**/*.js"/>
+            <path>
+              <fileset dir="build/jsp" includes="**/*.js"/>
+            </path>
           </foreach>
         </parallel>
       </then>
