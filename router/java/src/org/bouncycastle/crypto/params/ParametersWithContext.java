@@ -3,6 +3,10 @@ package org.bouncycastle.crypto.params;
 import org.bouncycastle.crypto.CipherParameters;
 import org.bouncycastle.util.Util;
 
+/**
+ * Cipher parameters with associated context data.
+ * Wraps cipher parameters with additional context information for cryptographic operations.
+ */
 public class ParametersWithContext
     implements CipherParameters
 {

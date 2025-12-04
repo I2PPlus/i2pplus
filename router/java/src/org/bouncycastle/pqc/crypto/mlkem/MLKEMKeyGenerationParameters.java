@@ -4,6 +4,10 @@ import java.security.SecureRandom;
 
 import org.bouncycastle.crypto.KeyGenerationParameters;
 
+/**
+ * Key generation parameters for ML-KEM (Module-Lattice Key Encapsulation Mechanism).
+ * Contains parameters for generating ML-KEM key pairs with specified security level.
+ */
 public class MLKEMKeyGenerationParameters
     extends KeyGenerationParameters
 {

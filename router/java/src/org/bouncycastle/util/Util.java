@@ -4,6 +4,10 @@ import java.util.Arrays;
 
 import net.i2p.data.DataHelper;
 
+/**
+ * Utility class for byte array operations and cryptographic helper functions.
+ * Provides methods for cloning, concatenating, and comparing byte arrays.
+ */
 public class Util
 {
     public static byte[] clone(byte[] a)

@@ -4,6 +4,10 @@ import java.util.Arrays;
 
 import org.bouncycastle.util.Util;
 
+/**
+ * Private key parameters for ML-KEM (Module-Lattice Key Encapsulation Mechanism).
+ * Contains the private key components including seed, secret, and related values.
+ */
 public class MLKEMPrivateKeyParameters
     extends MLKEMKeyParameters
 {
