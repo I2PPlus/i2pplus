@@ -5,6 +5,14 @@ import net.i2p.crypto.TrustedUpdate;
 import net.i2p.data.DataHelper;
 import net.i2p.util.PortMapper;
 
+/**
+ * Helper class for managing I2P router update configuration and UI generation.
+ * 
+ * <p>This class provides methods for configuring and displaying update settings
+ * including proxy configuration, update policies, refresh frequencies, and trusted
+ * key management. It integrates with the router console to generate HTML form
+ * elements for update configuration.</p>
+ */
 public class ConfigUpdateHelper extends HelperBase {
     private boolean _dontInstall;
 
