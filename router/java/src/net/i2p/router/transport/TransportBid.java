@@ -9,6 +9,7 @@ package net.i2p.router.transport;
  */
 
 /**
+ * Represents a transport's bid for message delivery cost.
  * Provide a bid for how much it would "cost" to transfer a message of a
  * particular peer
  *

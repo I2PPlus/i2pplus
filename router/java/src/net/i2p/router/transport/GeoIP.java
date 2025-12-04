@@ -4,6 +4,10 @@ package net.i2p.router.transport;
  * Use at your own risk.
  */
 
+/**
+ * Manages geographic IP lookups using Tor geoip format.
+ */
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;

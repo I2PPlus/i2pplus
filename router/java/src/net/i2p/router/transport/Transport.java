@@ -82,7 +82,7 @@ public interface Transport {
     public List<RouterAddress> updateAddress();
 
     /**
-     *  Source of transport address.
+     * Source of transport address configuration.
      *  @since IPv6
      */
     public enum AddressSource {

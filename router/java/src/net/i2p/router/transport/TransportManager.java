@@ -52,15 +52,14 @@ import net.i2p.util.Translate;
 import net.i2p.util.VersionComparator;
 
 /**
- *  Keeps track of the enabled transports.
- *  Starts UPnP.
- *  Pluggable transport support incomplete.
+ * Manages and coordinates all enabled transport protocols.
+ * Starts UPnP.
+ * Pluggable transport support incomplete.
  *
- *  Public only for a couple things in the console and Android.
- *  To be made package private.
- *  Everything external should go through CommSystemFacadeImpl.
- *  Not a public API, not for external use.
- *
+ * Public only for a couple things in the console and Android.
+ * To be made package private.
+ * Everything external should go through CommSystemFacadeImpl.
+ * Not a public API, not for external use.
  */
 public class TransportManager implements TransportEventListener {
     private final Log _log;
@@ -723,7 +722,7 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  Port configuration for transport.
+     * Port configuration for transport protocols.
      *  @since IPv6
      */
     static class Port {

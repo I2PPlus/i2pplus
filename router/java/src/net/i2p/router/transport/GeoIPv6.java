@@ -4,6 +4,10 @@ package net.i2p.router.transport;
  * Use at your own risk.
  */
 
+/**
+ * Generates and manages compressed IPv6 geoip database.
+ */
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;

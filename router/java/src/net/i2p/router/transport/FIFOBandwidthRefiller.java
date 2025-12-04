@@ -10,8 +10,7 @@ import net.i2p.util.SyntheticREDQueue;
 import net.i2p.util.SystemVersion;
 
 /**
- *  Thread that runs several times a second to "give" bandwidth to
- *  FIFOBandwidthLimiter.
+ * Thread that periodically refills bandwidth allocations.
  *  Instantiated by FIFOBandwidthLimiter.
  *
  *  As of 0.8.12, this also contains a counter for outbound participating bandwidth.

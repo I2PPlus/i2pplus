@@ -8,6 +8,10 @@ package net.i2p.router.transport;
  *
  */
 
+/**
+ * Base implementation for transport protocols.
+ */
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;

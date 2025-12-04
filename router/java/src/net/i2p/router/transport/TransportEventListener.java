@@ -12,6 +12,9 @@ import net.i2p.data.Hash;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.i2np.I2NPMessage;
 
+/**
+ * Handles transport events including message receipt and address changes.
+ */
 public interface TransportEventListener {
 
     /**

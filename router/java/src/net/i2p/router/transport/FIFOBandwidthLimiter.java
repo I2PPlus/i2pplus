@@ -13,6 +13,8 @@ import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 
 /**
+ * FIFO-based bandwidth limiter for managing inbound and outbound traffic.
+ *
  *  Concurrent plan:
  *
  *  It's difficult to get rid of the locks on _pendingInboundRequests
@@ -976,6 +978,9 @@ public class FIFOBandwidthLimiter {
         public CompleteListener getCompleteListener();
     }
 
+    /**
+     * Listener for bandwidth request completion events.
+     */
     public interface CompleteListener {
         public void complete(Request req);
     }

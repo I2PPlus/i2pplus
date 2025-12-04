@@ -3,6 +3,10 @@
  * http://www.gnu.org/ for further details of the GPL. */
 package net.i2p.router.transport;
 
+/**
+ * Universal Plug and Play functionality for port forwarding.
+ */
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.InetAddress;
@@ -1938,6 +1942,7 @@ public class UPnP extends ControlPoint implements DeviceChangeListener, EventLis
 	}
 
 	/**
+	 * IPv6-specific port forwarding configuration.
 	 *  Extended to store the requested IP to be forwarded.
 	 *  @since 0.9.50
 	 */

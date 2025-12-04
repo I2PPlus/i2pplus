@@ -84,6 +84,9 @@ import net.i2p.util.Translate;
 
 import org.apache.commons.net.whois.WhoisClient;
 
+/**
+ * Implementation of the communication system facade for network operations.
+ */
 public class CommSystemFacadeImpl extends CommSystemFacade {
     private final Log _log;
     private final RouterContext _context;
@@ -588,6 +591,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private static final int MAX_RDNS_CACHE_SIZE = !has512MB ? 8000 : 16000;
     private static final Object rdnslock = new Object();
 
+    /**
+     * Cache entry for IP address and hostname mappings.
+     */
     public static class CacheEntry {
         private final String ipAddress;
         private final String hostname;

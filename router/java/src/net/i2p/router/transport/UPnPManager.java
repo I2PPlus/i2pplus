@@ -26,6 +26,7 @@ import org.freenetproject.ForwardPortCallback;
 import org.freenetproject.ForwardPortStatus;
 
 /**
+ * Manages UPnP operations and port forwarding.
  * Bridge from the I2P RouterAddress data structure to
  * the freenet data structures
  *

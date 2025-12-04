@@ -16,6 +16,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
 /**
+ * Retrieves transport bids for outbound message delivery.
  * Retrieve a set of bids for a particular outbound message, and if any are found
  * that meet the message's requirements, register the message as in process and
  * pass it on to the transport for processing

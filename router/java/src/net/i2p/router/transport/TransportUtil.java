@@ -42,6 +42,9 @@ public abstract class TransportUtil {
 
     private static final Pattern YGGDRASIL_PATTERN = Pattern.compile("^[2-3][0-9a-fA-F]{2}:[0-9a-fA-F:]*");
 
+    /**
+     * IPv6 configuration options for transports.
+     */
     public enum IPv6Config {
         /** IPv6 disabled */
         IPV6_DISABLED("false"),

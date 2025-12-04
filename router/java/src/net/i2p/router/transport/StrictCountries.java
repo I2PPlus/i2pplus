@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.Set;
 
 /**
+ * Maintains list of countries with strict application restrictions.
  *  Maintain a list of countries that may have tight restrictions on applications like ours.
  *  @since 0.8.13
  */
