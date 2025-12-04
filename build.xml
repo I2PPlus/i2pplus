@@ -966,6 +966,7 @@
       source="${javac.version}"
       destdir="./build/javadoc"
       packagenames="*"
+      excludepackagenames="com.mpatric.mp3agic"
       use="true"
       splitindex="true"
       failonerror="false"
