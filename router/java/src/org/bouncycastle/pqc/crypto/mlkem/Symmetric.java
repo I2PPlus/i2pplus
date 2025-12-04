@@ -26,9 +26,13 @@ abstract class Symmetric
     }
 
 
+    /**
+     * SHAKE-based symmetric implementation for ML-KEM operations.
+     * Uses SHAKE extendable output functions for cryptographic hashing.
+     */
     static class ShakeSymmetric
         extends Symmetric
-    {
+        {
         private final SHAKEDigest xof;
         private final SHA3Digest sha3Digest512;
         private final SHA3Digest sha3Digest256;

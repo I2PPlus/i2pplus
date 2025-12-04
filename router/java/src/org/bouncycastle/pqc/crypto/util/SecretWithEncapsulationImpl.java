@@ -8,6 +8,10 @@ import javax.security.auth.DestroyFailedException;
 import org.bouncycastle.crypto.SecretWithEncapsulation;
 import org.bouncycastle.util.Util;
 
+/**
+ * Implementation of SecretWithEncapsulation for post-quantum cryptography.
+ * Provides secure storage and destruction of encapsulated secrets and session keys.
+ */
 public class SecretWithEncapsulationImpl
     implements SecretWithEncapsulation
 {
