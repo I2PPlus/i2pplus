@@ -26,6 +26,11 @@ import java.util.Arrays;
 
 import org.apache.commons.net.SocketClient;
 
+/**
+ * Telnet implementation class that provides core Telnet protocol functionality.
+ * This class handles the low-level Telnet protocol operations including option negotiation
+ * and command processing.
+ */
 class Telnet extends SocketClient {
     static final boolean debug = /* true; */ false;
 

@@ -22,6 +22,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
 
+/**
+ * TelnetInputStream extends BufferedInputStream to provide Telnet protocol-specific input handling.
+ * This class processes Telnet commands and options while providing a standard InputStream interface.
+ */
 final class TelnetInputStream extends BufferedInputStream implements Runnable {
     /** End of file has been reached */
     private static final int EOF = -1;
