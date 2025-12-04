@@ -4,6 +4,10 @@ import java.util.Arrays;
 
 import org.bouncycastle.util.Util;
 
+/**
+ * Public key parameters for ML-KEM (Module-Lattice Key Encapsulation Mechanism).
+ * Contains public key components including polynomial coefficients for cryptographic operations.
+ */
 public class MLKEMPublicKeyParameters
     extends MLKEMKeyParameters
 {

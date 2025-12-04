@@ -4,6 +4,10 @@ import java.util.Arrays;
 
 import org.bouncycastle.util.Util;
 
+/**
+ * Indistinguishability under Chosen Plaintext Attack (IND-CPA) security for ML-KEM.
+ * Provides key generation operations with IND-CPA security guarantees.
+ */
 class MLKEMIndCpa
 {
     private MLKEMEngine engine;

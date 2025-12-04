@@ -2,6 +2,10 @@ package org.bouncycastle.pqc.crypto.mlkem;
 
 import java.util.Arrays;
 
+/**
+ * Vector of polynomials for ML-KEM operations.
+ * Provides operations on collections of polynomials used in lattice cryptography.
+ */
 class PolyVec
 {
     Poly[] vec;

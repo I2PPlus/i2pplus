@@ -1,5 +1,9 @@
 package org.bouncycastle.pqc.crypto.mlkem;
 
+/**
+ * Extractor for ML-KEM private key operations.
+ * Provides functionality to extract shared secrets from encapsulated data using private keys.
+ */
 public class MLKEMExtractor
 {
     private final MLKEMPrivateKeyParameters privateKey;

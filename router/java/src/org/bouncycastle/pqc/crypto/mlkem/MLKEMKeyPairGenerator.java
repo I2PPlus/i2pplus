@@ -5,6 +5,10 @@ import java.security.SecureRandom;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.KeyGenerationParameters;
 
+/**
+ * Generator for ML-KEM (Module-Lattice Key Encapsulation Mechanism) key pairs.
+ * Creates public/private key pairs for post-quantum cryptographic operations.
+ */
 public class MLKEMKeyPairGenerator
 {
     private MLKEMParameters mlkemParams;

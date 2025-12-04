@@ -1,5 +1,9 @@
 package org.bouncycastle.pqc.crypto.mlkem;
 
+/**
+ * Polynomial representation for ML-KEM operations.
+ * Provides polynomial arithmetic operations used in lattice-based cryptography.
+ */
 class Poly
 {
     private short[] coeffs;

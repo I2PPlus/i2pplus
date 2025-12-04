@@ -6,6 +6,10 @@ import org.bouncycastle.crypto.SecretWithEncapsulation;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 import org.bouncycastle.pqc.crypto.util.SecretWithEncapsulationImpl;
 
+/**
+ * Generator for ML-KEM encapsulated secrets.
+ * Creates encapsulated secrets for secure key exchange in post-quantum cryptography.
+ */
 public class MLKEMGenerator
 {
     // the source of randomness

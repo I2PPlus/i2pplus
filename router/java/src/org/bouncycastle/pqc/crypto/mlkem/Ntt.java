@@ -1,5 +1,9 @@
 package org.bouncycastle.pqc.crypto.mlkem;
 
+/**
+ * Number Theoretic Transform (NTT) implementation for ML-KEM operations.
+ * Provides efficient polynomial multiplication using number theoretic transforms.
+ */
 class Ntt
 {
 

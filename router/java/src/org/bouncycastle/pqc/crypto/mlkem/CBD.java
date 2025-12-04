@@ -1,5 +1,9 @@
 package org.bouncycastle.pqc.crypto.mlkem;
 
+/**
+ * Central Binomial Distribution (CBD) sampling for ML-KEM operations.
+ * Provides polynomial coefficient sampling from binomial distribution for noise generation.
+ */
 final class CBD
 {
 

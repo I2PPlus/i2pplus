@@ -2,6 +2,10 @@ package org.bouncycastle.pqc.crypto.mlkem;
 
 import org.bouncycastle.pqc.crypto.KEMParameters;
 
+/**
+ * Parameters for ML-KEM (Module-Lattice Key Encapsulation Mechanism) algorithms.
+ * Defines configuration for different ML-KEM security levels and variants.
+ */
 public class MLKEMParameters
     implements KEMParameters
 {

@@ -1,5 +1,9 @@
 package org.bouncycastle.pqc.crypto.mlkem;
 
+/**
+ * Polynomial reduction operations for ML-KEM cryptography.
+ * Provides Montgomery reduction and Barrett reduction for polynomial arithmetic.
+ */
 class Reduce
 {
 

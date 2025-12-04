@@ -5,6 +5,10 @@ import java.util.Arrays;
 
 import org.bouncycastle.util.Util;
 
+/**
+ * Core engine for ML-KEM (Module-Lattice Key Encapsulation Mechanism) operations.
+ * Implements the cryptographic primitives for key generation, encapsulation, and decapsulation.
+ */
 class MLKEMEngine
 {
     private SecureRandom random;

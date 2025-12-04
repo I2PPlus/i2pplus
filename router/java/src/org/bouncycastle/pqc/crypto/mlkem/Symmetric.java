@@ -3,6 +3,10 @@ package org.bouncycastle.pqc.crypto.mlkem;
 import org.bouncycastle.crypto.digests.SHA3Digest;
 import org.bouncycastle.crypto.digests.SHAKEDigest;
 
+/**
+ * Abstract base class for symmetric cryptographic primitives in ML-KEM.
+ * Provides hash function interfaces for different symmetric operations.
+ */
 abstract class Symmetric
 {
 
