@@ -23,9 +23,10 @@ import net.i2p.router.web.FormHandler;
 import net.i2p.router.web.Messages;
 
 /**
- *  /netdb
- *  A FormHandler since 0.9.38.
- *  Most output is generated in NetDbRenderer and SybilRender.
+ * Helper for network database page rendering and form processing.
+ * A FormHandler since 0.9.38.
+ * Most output is generated in NetDbRenderer and SybilRender.
+ * @since 0.9.33
  */
 public class NetDbHelper extends FormHandler {
     private String _routerPrefix;

@@ -27,6 +27,10 @@ import net.i2p.util.Addresses;
 import net.i2p.util.SystemVersion;
 
 
+/**
+ * Helper for clients configuration page rendering and form processing.
+ * @since 0.9.33
+ */
 public class ConfigClientsHelper extends HelperBase {
     private String _edit;
 

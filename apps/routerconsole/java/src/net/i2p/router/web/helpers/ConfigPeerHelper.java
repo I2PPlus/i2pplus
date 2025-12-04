@@ -9,6 +9,10 @@ import net.i2p.router.Blocklist;
 import net.i2p.router.web.HelperBase;
 import net.i2p.util.Addresses;
 
+/**
+ * Helper for peer configuration page rendering and form processing.
+ * @since 0.9.33
+ */
 public class ConfigPeerHelper extends HelperBase {
 
     private static final int MAX_DISPLAY = 1000;

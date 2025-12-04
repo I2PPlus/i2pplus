@@ -20,6 +20,10 @@ import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.router.web.HelperBase;
 import net.i2p.util.SystemVersion;
 
+/**
+ * Helper for router information page rendering and form processing.
+ * @since 0.9.33
+ */
 public class InfoHelper extends HelperBase {
     private boolean _full;
 

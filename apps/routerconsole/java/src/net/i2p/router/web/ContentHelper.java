@@ -5,6 +5,10 @@ import java.util.Locale;
 
 import net.i2p.util.FileUtil;
 
+/**
+ * Helper for including static content files in router console pages.
+ * @since 0.9.35
+ */
 public class ContentHelper extends HelperBase {
     protected String _page;
     private int _maxLines;

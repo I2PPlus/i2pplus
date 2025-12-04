@@ -15,6 +15,10 @@ import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.transport.TransportUtil;
 import net.i2p.router.web.HelperBase;
 
+/**
+ * Helper for tunnels configuration page rendering and form processing.
+ * @since 0.9.33
+ */
 public class ConfigTunnelsHelper extends HelperBase {
     private static final String HOP = "hop";
     private static final String TUNNEL = "tunnel";

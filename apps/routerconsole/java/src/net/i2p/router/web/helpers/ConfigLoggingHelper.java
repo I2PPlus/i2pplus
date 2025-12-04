@@ -11,6 +11,10 @@ import net.i2p.util.Log;
 import net.i2p.util.LogManager;
 import net.i2p.util.Translate;
 
+/**
+ * Helper for logging configuration page rendering and form processing.
+ * @since 0.9.33
+ */
 public class ConfigLoggingHelper extends HelperBase {
     private LogManager _mgr;
 

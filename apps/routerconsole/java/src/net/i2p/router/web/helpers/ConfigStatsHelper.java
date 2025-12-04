@@ -19,6 +19,10 @@ import net.i2p.stat.RateStat;
 import net.i2p.stat.StatManager;
 import net.i2p.util.Log;
 
+/**
+ * Helper for statistics configuration page rendering and form processing.
+ * @since 0.9.33
+ */
 public class ConfigStatsHelper extends HelperBase {
     private Log _log;
     private final Set<String> _graphs;

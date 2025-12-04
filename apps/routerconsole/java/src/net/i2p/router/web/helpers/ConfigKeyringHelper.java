@@ -18,6 +18,10 @@ import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.web.HelperBase;
 
 
+/**
+ * Helper for keyring configuration page rendering and form processing.
+ * @since 0.9.33
+ */
 public class ConfigKeyringHelper extends HelperBase {
     public ConfigKeyringHelper() {}
 

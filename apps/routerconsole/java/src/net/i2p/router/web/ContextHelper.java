@@ -5,6 +5,10 @@ import java.util.List;
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 
+/**
+ * Helper for accessing router contexts by context ID.
+ * @since 0.9.35
+ */
 public class ContextHelper {
 
     /** @throws IllegalStateException if no context available */

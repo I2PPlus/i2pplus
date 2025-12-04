@@ -7,6 +7,10 @@ import java.io.StringWriter;
 import net.i2p.router.tunnel.pool.TunnelPool;
 import net.i2p.router.web.HelperBase;
 
+/**
+ * Helper for tunnel bandwidth page rendering and form processing.
+ * @since 0.9.33
+ */
 public class TunnelBandwidthHelper extends HelperBase {
     public String getTunnelBandwidth() {
         TunnelRenderer renderer = new TunnelRenderer(_context);

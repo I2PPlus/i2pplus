@@ -93,8 +93,20 @@ class UDPSorters {
         return rv;
     }
 
+    /**
+     * Comparator for sorting UDP peers by peer hash in ascending order.
+     * @since 0.9.33
+     */
     static class AlphaComparator extends PeerComparator {}
 
+    /**
+     * Comparator for sorting UDP peers by inbound idle time in ascending order.
+     * @since 0.9.33
+     */
+    /**
+     * Comparator for sorting UDP peers by inbound idle time in ascending order.
+     * @since 0.9.33
+     */
     static class IdleInComparator extends PeerComparator {
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -104,6 +116,14 @@ class UDPSorters {
         }
     }
 
+    /**
+     * Comparator for sorting UDP peers by outbound idle time in ascending order.
+     * @since 0.9.33
+     */
+    /**
+     * Comparator for sorting UDP peers by outbound idle time in ascending order.
+     * @since 0.9.33
+     */
     static class IdleOutComparator extends PeerComparator {
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -113,6 +133,14 @@ class UDPSorters {
         }
     }
 
+    /**
+     * Comparator for sorting UDP peers by inbound rate in ascending order.
+     * @since 0.9.33
+     */
+    /**
+     * Comparator for sorting UDP peers by inbound rate in ascending order.
+     * @since 0.9.33
+     */
     static class RateInComparator extends PeerComparator {
         private final long now = I2PAppContext.getGlobalContext().clock().now();
 
@@ -124,6 +152,14 @@ class UDPSorters {
         }
     }
 
+    /**
+     * Comparator for sorting UDP peers by outbound rate in ascending order.
+     * @since 0.9.33
+     */
+    /**
+     * Comparator for sorting UDP peers by outbound rate in ascending order.
+     * @since 0.9.33
+     */
     static class RateOutComparator extends PeerComparator {
         private final long now = I2PAppContext.getGlobalContext().clock().now();
 
@@ -135,6 +171,10 @@ class UDPSorters {
         }
     }
 
+    /**
+     * Comparator for sorting UDP peers by uptime in ascending order.
+     * @since 0.9.33
+     */
     static class UptimeComparator extends PeerComparator {
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -144,6 +184,10 @@ class UDPSorters {
         }
     }
 
+    /**
+     * Comparator for sorting UDP peers by clock skew in ascending order.
+     * @since 0.9.33
+     */
     static class SkewComparator extends PeerComparator {
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -153,6 +197,10 @@ class UDPSorters {
         }
     }
 
+    /**
+     * Comparator for sorting UDP peers by congestion window in ascending order.
+     * @since 0.9.33
+     */
     static class CwndComparator extends PeerComparator {
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -162,6 +210,10 @@ class UDPSorters {
         }
     }
 
+    /**
+     * Comparator for sorting UDP peers by slow start threshold in ascending order.
+     * @since 0.9.33
+     */
     static class SsthreshComparator extends PeerComparator {
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -171,6 +223,10 @@ class UDPSorters {
         }
     }
 
+    /**
+     * Comparator for sorting UDP peers by round trip time in ascending order.
+     * @since 0.9.33
+     */
     static class RTTComparator extends PeerComparator {
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -180,6 +236,10 @@ class UDPSorters {
         }
     }
 
+    /**
+     * Comparator for sorting UDP peers by retransmission timeout in ascending order.
+     * @since 0.9.33
+     */
     static class RTOComparator extends PeerComparator {
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -189,6 +249,10 @@ class UDPSorters {
         }
     }
 
+    /**
+     * Comparator for sorting UDP peers by maximum transmission unit in ascending order.
+     * @since 0.9.33
+     */
     static class MTUComparator extends PeerComparator {
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -201,6 +265,10 @@ class UDPSorters {
         }
     }
 
+    /**
+     * Comparator for sorting UDP peers by sent messages count in ascending order.
+     * @since 0.9.33
+     */
     static class SendCountComparator extends PeerComparator {
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -210,6 +278,10 @@ class UDPSorters {
         }
     }
 
+    /**
+     * Comparator for sorting UDP peers by received messages count in ascending order.
+     * @since 0.9.33
+     */
     static class RecvCountComparator extends PeerComparator {
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -219,6 +291,10 @@ class UDPSorters {
         }
     }
 
+    /**
+     * Comparator for sorting UDP peers by retransmitted packets in ascending order.
+     * @since 0.9.33
+     */
     static class ResendComparator extends PeerComparator {
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -228,6 +304,10 @@ class UDPSorters {
         }
     }
 
+    /**
+     * Comparator for sorting UDP peers by duplicate packets received in ascending order.
+     * @since 0.9.33
+     */
     static class DupComparator extends PeerComparator {
         @Override
         public int compare(PeerState l, PeerState r) {
@@ -237,6 +317,10 @@ class UDPSorters {
         }
     }
 
+    /**
+     * Base comparator for UDP peers that falls back to peer hash comparison.
+     * @since 0.9.33
+     */
     static class PeerComparator implements Comparator<PeerState>, Serializable {
         public int compare(PeerState l, PeerState r) {
             return HashComparator.comp(l.getRemotePeer(), r.getRemotePeer());

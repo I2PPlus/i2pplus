@@ -8,6 +8,10 @@ import net.i2p.data.Hash;
 import net.i2p.router.web.HelperBase;
 import net.i2p.servlet.util.WriterOutputStream;
 
+/**
+ * Helper for statistics page rendering and form processing.
+ * @since 0.9.33
+ */
 public class StatHelper extends HelperBase {
     private String _peer;
     private boolean _full;

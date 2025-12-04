@@ -30,6 +30,10 @@ import net.i2p.util.Addresses;
 import net.i2p.util.AddressType;
 
 
+/**
+ * Helper for peer connections page rendering and form processing.
+ * @since 0.9.33
+ */
 public class PeerHelper extends HelperBase {
     private int _sortFlags;
     private String _urlBase;

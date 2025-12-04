@@ -17,6 +17,10 @@ import net.i2p.router.web.HelperBase;
 import net.i2p.util.ObjectCounterUnsafe;
 import net.i2p.util.SystemVersion;
 
+/**
+ * Helper for job queue page rendering and form processing.
+ * @since 0.9.33
+ */
 public class JobQueueHelper extends HelperBase {
 
     private static int CORES = SystemVersion.getCores();

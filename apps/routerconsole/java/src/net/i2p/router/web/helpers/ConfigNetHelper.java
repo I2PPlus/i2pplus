@@ -16,8 +16,9 @@ import net.i2p.router.web.HelperBase;
 import net.i2p.util.Addresses;
 
 /**
- *
- * Used for both /config and /confignet
+ * Helper for network configuration page rendering and form processing.
+ * Used for both /config and /confignet pages.
+ * @since 0.9.33
  */
 public class ConfigNetHelper extends HelperBase {
 

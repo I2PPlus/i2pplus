@@ -33,6 +33,10 @@ import net.i2p.router.web.GraphGenerator;
 import net.i2p.util.PortMapper;
 import net.i2p.util.SystemVersion;
 
+/**
+ * Helper for sidebar rendering and navigation.
+ * @since 0.9.33
+ */
 class SidebarRenderer {
 
     static final String ALL_SECTIONS[] =

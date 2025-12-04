@@ -192,6 +192,10 @@ public class SidebarHelper extends HelperBase {
     /** subtract one for ourselves, so if we know no other peers it displays zero */
     public int getAllPeers() {return Math.max(_context.netDb().getKnownRouters() - 1, 0);}
 
+    /**
+     * Enumeration of network reachability state values.
+     * @since 0.9.33
+     */
     public enum NetworkState {
         HIDDEN,
         TESTING,

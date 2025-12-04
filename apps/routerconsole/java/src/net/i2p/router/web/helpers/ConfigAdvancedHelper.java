@@ -12,6 +12,10 @@ import net.i2p.router.Router;
 import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.RouterConsoleRunner;
 
+/**
+ * Helper for advanced configuration page rendering and form processing.
+ * @since 0.9.33
+ */
 public class ConfigAdvancedHelper extends HelperBase {
     static final String PROP_FLOODFILL_PARTICIPANT = "router.floodfillParticipant";
     private static final String PROP_AUTH_PFX = RouterConsoleRunner.PROP_CONSOLE_PW + '.';

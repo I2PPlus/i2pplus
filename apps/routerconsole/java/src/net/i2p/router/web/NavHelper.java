@@ -14,6 +14,10 @@ import net.i2p.app.ClientAppState;
 import net.i2p.app.NavService;
 
 
+/**
+ * Helper for navigation and client application management in router console.
+ * @since 0.9.35
+ */
 public class NavHelper implements NavService, ClientApp {
     // both indexed by standard (untranslated) app name
     private final Map<String, App> _apps = new ConcurrentHashMap<String, App>(4);

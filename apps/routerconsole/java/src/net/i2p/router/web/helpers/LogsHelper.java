@@ -25,6 +25,10 @@ import net.i2p.util.UIMessages;
 
 import java.util.regex.*;
 
+/**
+ * Helper for logs page rendering and form processing.
+ * @since 0.9.33
+ */
 public class LogsHelper extends HelperBase {
 
     public void setContext(RouterContext context) {this._context = context;}

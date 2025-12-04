@@ -6,6 +6,10 @@ import java.io.StringWriter;
 import net.i2p.router.web.HelperBase;
 
 
+/**
+ * Helper for transit tunnel summary page rendering and form processing.
+ * @since 0.9.33
+ */
 public class TransitSummaryHelper extends HelperBase {
     public TransitSummaryHelper() {}
 

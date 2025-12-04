@@ -14,7 +14,8 @@ import net.i2p.router.web.Messages;
 import net.i2p.router.web.RouterConsoleRunner;
 
 /**
- *  Helper for /configui
+ * Helper for user interface configuration page rendering and form processing.
+ * @since 0.9.33
  */
 public class ConfigUIHelper extends HelperBase {
 
