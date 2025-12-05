@@ -142,7 +142,7 @@ public class BoundedInputStream extends ProxyInputStream {
         /**
          * Sets the maximum number of bytes to return.
          * <p>
-         * Default is {@value IOUtils#EOF}, negative means unbound.
+         * Default is {@link IOUtils#EOF}, negative means unbound.
          * </p>
          *
          * @param maxCount The maximum number of bytes to return, negative means unbound.

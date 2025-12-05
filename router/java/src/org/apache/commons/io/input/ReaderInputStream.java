@@ -89,7 +89,7 @@ public class ReaderInputStream extends AbstractInputStream {
 
     // @formatter:off
     /**
-     * Builds a new {@link ReaderInputStream}.
+     * Constructs a new {@link ReaderInputStream} with a default input buffer size of {@link IOUtils#DEFAULT_BUFFER_SIZE} characters.
      *
      * <p>
      * For example:
@@ -227,7 +227,7 @@ public class ReaderInputStream extends AbstractInputStream {
 
     /**
      * Constructs a new {@link ReaderInputStream} that uses the virtual machine's {@link Charset#defaultCharset() default charset} with a default input buffer
-     * size of {@value IOUtils#DEFAULT_BUFFER_SIZE} characters.
+     * size of {@link IOUtils#DEFAULT_BUFFER_SIZE} characters.
      *
      * @param reader the target {@link Reader}
      * @deprecated Use {@link ReaderInputStream#builder()} instead
@@ -238,7 +238,7 @@ public class ReaderInputStream extends AbstractInputStream {
     }
 
     /**
-     * Constructs a new {@link ReaderInputStream} with a default input buffer size of {@value IOUtils#DEFAULT_BUFFER_SIZE} characters.
+     * Constructs a new {@link ReaderInputStream} with a default input buffer size of {@link IOUtils#DEFAULT_BUFFER_SIZE} characters.
      *
      * <p>
      * The encoder created for the specified charset will use {@link CodingErrorAction#REPLACE} for malformed input and unmappable characters.
@@ -319,7 +319,7 @@ public class ReaderInputStream extends AbstractInputStream {
     }
 
     /**
-     * Constructs a new {@link ReaderInputStream} with a default input buffer size of {@value IOUtils#DEFAULT_BUFFER_SIZE} characters.
+     * Constructs a new {@link ReaderInputStream} with a default input buffer size of {@link IOUtils#DEFAULT_BUFFER_SIZE} characters.
      *
      * <p>
      * The encoder created for the specified charset will use {@link CodingErrorAction#REPLACE} for malformed input and unmappable characters.

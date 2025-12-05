@@ -101,18 +101,18 @@ public abstract class AbstractStreamBuilder<T, B extends AbstractStreamBuilder<T
     }
 
     /**
-     * Gets the buffer size, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
+     * Gets the buffer size, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE}.
      *
-     * @return the buffer size, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
+     * @return the buffer size, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE}.
      */
     public int getBufferSize() {
         return bufferSize;
     }
 
     /**
-     * Gets the buffer size default, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
+     * Gets the buffer size default, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE}.
      *
-     * @return the buffer size default, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE} ({@value IOUtils#DEFAULT_BUFFER_SIZE}).
+     * @return the buffer size default, defaults to {@link IOUtils#DEFAULT_BUFFER_SIZE}.
      */
     public int getBufferSizeDefault() {
         return bufferSizeDefault;

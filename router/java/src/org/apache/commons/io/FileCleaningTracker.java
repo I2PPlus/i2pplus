@@ -84,7 +84,7 @@ public class FileCleaningTracker {
     /**
      * Inner class which acts as the reference for a file pending deletion.
      */
-    private static final class Tracker extends PhantomReference<Object> {
+    public static final class Tracker extends PhantomReference<Object> {
 
         /**
          * The full path to the file being tracked.

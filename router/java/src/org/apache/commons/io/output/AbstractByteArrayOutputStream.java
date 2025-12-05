@@ -81,7 +81,7 @@ public abstract class AbstractByteArrayOutputStream<T extends AbstractByteArrayO
     }
 
     /** Default buffer size. */
-    static final int DEFAULT_SIZE = 1024;
+    public static final int DEFAULT_SIZE = 1024;
 
     /** The list of buffers, which grows and never reduces. */
     private final List<byte[]> buffers = new ArrayList<>();

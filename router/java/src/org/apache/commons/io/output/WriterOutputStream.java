@@ -183,7 +183,7 @@ public class WriterOutputStream extends OutputStream {
 
     }
 
-    private static final int BUFFER_SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
+    public static final int BUFFER_SIZE = IOUtils.DEFAULT_BUFFER_SIZE;
 
     /**
      * Constructs a new {@link Builder}.
