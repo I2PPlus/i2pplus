@@ -249,6 +249,10 @@ public class ArraySet<E> extends AbstractSet<E> implements Set<E> {
         return new ASIterator();
     }
 
+    /**
+     * Exception thrown when attempting to add an element to a full ArraySet.
+     * Only thrown when the ArraySet was configured to throw on overflow.
+     */
     public static class SetFullException extends IllegalStateException {
         private static final long serialVersionUID = 9087390587254111L;
     }
