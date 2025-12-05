@@ -1511,10 +1511,10 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         }
         if (blockedCountries.contains(country) && !isBanned) {
             if (_log.shouldWarn()) {
-                _log.warn("Banning and disconnecting from [" + routerId + "] -> Blocked country: " + country);
+                _log.warn("Banning [" + routerId + "] -> Blocked country: " + country);
             }
             _context.banlist().banlistRouter(h, " <b>➜</b> Blocked country: " + country, null, null, _context.clock().now() + 8*60*60*1000);
-            _context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
+            //_context.simpleTimer2().addEvent(new Disconnector(h), 3*1000);
             return true;
         }
         if (blockXG && isRouterBlockXG(routerInfo, h.equals(_context.routerHash()))) {
