@@ -31,6 +31,10 @@ package net.metanotion.io;
 import java.io.Closeable;
 import java.io.IOException;
 
+/**
+ * Interface for random access file operations.
+ * Provides methods for reading, writing, and seeking within files.
+ */
 public interface RandomAccessInterface extends Closeable {
 	public long getFilePointer() throws IOException;
 	public long length() throws IOException;

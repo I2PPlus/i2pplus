@@ -28,6 +28,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package net.metanotion.io;
 
+/**
+ * Interface for serializing and deserializing objects to/from byte arrays.
+ * Provides bidirectional conversion between objects and their byte representation.
+ *
+ * @param <T> type of objects to serialize/deserialize
+ */
 public interface Serializer<T> {
 	public byte[] getBytes(T o);
 	public T construct(byte[] b);
