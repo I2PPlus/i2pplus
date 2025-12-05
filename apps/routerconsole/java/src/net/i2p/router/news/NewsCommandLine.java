@@ -8,9 +8,16 @@ import net.i2p.router.RouterVersion;
 import net.i2p.router.RouterCommandLine;
 
 /**
- * Simple command line access to various utilities.
- * Not a public API. Subject to change.
- * Apps and plugins should use specific classes.
+ * Command line interface for news and blocklist management utilities.
+ * <p>
+ * Provides access to various news processing and blocklist management
+ * tools through a unified command interface. Not intended as
+ * a public API - applications and plugins should use the
+ * specific classes for direct integration.
+ * <p>
+ * Supports execution of news parsing, blocklist generation,
+ * and XML processing utilities with proper argument handling
+ * and usage documentation.
  *
  * @since 0.9.28
  */

@@ -22,11 +22,19 @@ import org.cybergarage.xml.Node;
 import org.cybergarage.xml.ParserException;
 
 /**
- *  Parse out the news.xml file which is in Atom format (RFC4287).
+ * Parser for I2P news feeds in Atom format with security filtering.
+ * <p>
+ * Processes news.xml files following RFC4287 Atom specification
+ * using the UPnP XML parser library with enhanced security
+ * features. Handles news entries, metadata, CRL entries,
+ * and blocklist data with configurable XHTML filtering.
+ * <p>
+ * Provides comprehensive validation and sanitization of news content
+ * with support for multiple content types and security levels.
+ * Includes configurable handling of potentially dangerous XHTML
+ * elements and attributes.
  *
- *  We use the XML parser from the UPnP library.
- *
- *  @since 0.9.17
+ * @since 0.9.17
  */
 public class NewsXMLParser {
     private final I2PAppContext _context;

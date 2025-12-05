@@ -3,10 +3,19 @@ package net.i2p.router.news;
 import net.i2p.data.DataHelper;
 
 /**
- *  One CRL.
- *  Any String fields may be null.
+ * Data structure for Certificate Revocation List (CRL) entries.
+ * <p>
+ * Represents individual revocation entries with identifier, data payload,
+ * and timestamp information. Provides proper equals and hashCode
+ * implementations for use in collections and maps.
+ * <p>
+ * Designed for handling certificate revocation information in I2P
+ * news feeds, supporting validation and comparison operations.
+ * <p>
+ * All String fields may be null to accommodate optional
+ * metadata elements in revocation lists.
  *
- *  @since 0.9.26
+ * @since 0.9.26
  */
 public class CRLEntry {
     public String data;

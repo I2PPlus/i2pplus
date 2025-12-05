@@ -6,10 +6,20 @@ import net.i2p.data.DataHelper;
 import net.i2p.util.VersionComparator;
 
 /**
- *  The update metadata for I2P router news and updates.
- *  Contains standard Atom feed metadata and I2P-specific release information.
- *  Any String or List fields may be null.
- *  @since 0.9.17
+ * Data structure for I2P router news feed metadata and update information.
+ * <p>
+ * Contains standard Atom feed metadata fields including title, subtitle,
+ * and update timestamps, along with I2P-specific release information
+ * such as version requirements and update sources.
+ * <p>
+ * Provides structured access to release data with nested classes for
+ * individual releases and their associated updates. Supports version
+ * comparison and validation for update management.
+ * <p>
+ * All String and List fields may be null to accommodate optional
+ * metadata elements in news feeds.
+ *
+ * @since 0.9.17
  */
 public class NewsMetadata {
     // Standard Atom feed metadata
@@ -21,6 +31,19 @@ public class NewsMetadata {
     /** I2P metadata */
     public List<Release> releases;
 
+    /**
+     * Represents a software release with version requirements and update sources.
+     * <p>
+     * Contains release metadata including publication date, version
+     * requirements, and available update sources. Supports version
+     * comparison for determining latest releases and update ordering.
+     * <p>
+     * All update source lists may be empty if no sources are available
+     * for this release. Provides structured access to release information
+     * for update management and version checking.
+     *
+     * @since 0.9.17
+     */
     public static class Release implements Comparable<Release> {
         public long date;
         public String minVersion;
@@ -60,6 +83,18 @@ public class NewsMetadata {
         }
     }
 
+    /**
+     * Represents an update source with multiple distribution methods.
+     * <p>
+     * Defines update types and their associated distribution sources
+     * including torrent, clearnet, SSL, and I2P network URLs.
+     * Supports type-based ordering for update priority management.
+     * <p>
+     * All source lists may be empty if no sources are available
+     * for this update type.
+     *
+     * @since 0.9.52
+     */
     public static class Update implements Comparable<Update> {
         public String type;
         public String torrent;

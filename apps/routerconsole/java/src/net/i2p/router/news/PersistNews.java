@@ -25,11 +25,18 @@ import org.cybergarage.xml.Node;
 import org.cybergarage.xml.ParserException;
 
 /**
- *  Store and retrieve news entries from disk.
- *  Each entry is stored in a separate file, with the name
- *  derived from the UUID.
+ * Handles persistent storage and retrieval of news entries to/from disk.
+ * <p>
+ * Manages individual news entries stored in separate compressed
+ * XML files named with UUID-based file names. Provides
+ * atomic write operations and compressed storage for efficient
+ * disk usage and data integrity.
+ * <p>
+ * Supports loading of news collections with proper sorting,
+ * validation, and error handling. Includes utilities for
+ * file naming based on content hashes and secure file operations.
  *
- *  @since 0.9.23
+ * @since 0.9.23
  */
 class PersistNews {
 

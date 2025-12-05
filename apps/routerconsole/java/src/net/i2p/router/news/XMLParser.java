@@ -27,11 +27,18 @@ import org.cybergarage.xml.parser.JaxpParser;
 
 
 /**
- *  Override so that XHTML is parsed correctly.
+ * Enhanced XML parser for I2P news content with XHTML support.
+ * <p>
+ * Extends the base JaxpParser to properly handle mixed text and
+ * subnodes in XHTML content while maintaining both output types.
+ * Overrides default parsing behavior to ensure correct handling
+ * of text nodes and element separation.
+ * <p>
+ * Provides custom output methods that recognize special text nodes
+ * and uses empty entities for self-closing tags to prevent
+ * malformed HTML output.
  *
- *  This requires us to maintain mixed text and subnodes and output both.
- *
- *  @since 0.9.17
+ * @since 0.9.17
  */
 public class XMLParser extends JaxpParser {
     private final Log _log;

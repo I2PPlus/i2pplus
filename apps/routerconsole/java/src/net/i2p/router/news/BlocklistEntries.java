@@ -25,10 +25,21 @@ import net.i2p.data.SigningPublicKey;
 import net.i2p.util.Log;
 
 /**
- *  One Blocklist.
- *  Any String fields may be null.
+ * Data structure and management for I2P router blocklist entries.
+ * <p>
+ * Represents a signed blocklist containing router identifiers to be
+ * blocked or unblocked, with support for cryptographic signature
+ * verification and timestamp validation.
+ * <p>
+ * Provides methods for loading, verifying, and managing blocklist
+ * entries with security checks to prevent expired or invalid
+ * blocklists. Includes command-line tool for creating signed
+ * blocklist files from input text.
+ * <p>
+ * All String fields may be null to accommodate optional metadata
+ * elements in blocklist feeds.
  *
- *  @since 0.9.28
+ * @since 0.9.28
  */
 public class BlocklistEntries {
     public final List<String> entries, removes;

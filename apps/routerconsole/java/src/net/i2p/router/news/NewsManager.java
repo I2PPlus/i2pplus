@@ -24,11 +24,18 @@ import net.i2p.util.TranslateReader;
 import org.cybergarage.xml.Node;
 
 /**
- *  Manage current news.
- *  Keeps current entries in memory, and provide methods to
- *  add new entries and store them to disk.
+ * Manages I2P router news entries with in-memory storage and disk persistence.
+ * <p>
+ * Maintains current news entries in memory while providing methods
+ * to add new entries and persist them to disk storage. Handles
+ * both initial welcome news and dynamic news feed updates with
+ * proper sorting and deduplication logic.
+ * <p>
+ * Implements ClientApp interface for lifecycle management with state
+ * tracking and notification capabilities. Supports legacy news.xml
+ * format for backward compatibility alongside newer structured formats.
  *
- *  @since 0.9.23
+ * @since 0.9.23
  */
 public class NewsManager implements ClientApp {
 

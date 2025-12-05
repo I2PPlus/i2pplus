@@ -1,10 +1,18 @@
 package net.i2p.router.news;
 
 /**
- *  One news item.
- *  Any String fields may be null.
+ * Represents a single news entry with content and metadata.
+ * <p>
+ * Encapsulates news item data including title, link, identifier,
+ * update timestamp, summary, content, and author information.
+ * Supports content type specification and proper sorting
+ * based on update timestamps.
+ * <p>
+ * Provides Comparable interface implementation for chronological
+ * ordering of news entries. All String fields may be null
+ * to accommodate optional metadata elements in news feeds.
  *
- *  @since 0.9.17
+ * @since 0.9.17
  */
 public class NewsEntry implements Comparable<NewsEntry> {
     public String title;

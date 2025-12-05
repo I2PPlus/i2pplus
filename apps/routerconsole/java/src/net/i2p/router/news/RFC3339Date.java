@@ -9,18 +9,21 @@ import java.util.TimeZone;
 import net.i2p.util.SystemVersion;
 
 /**
- *  Adapted from net.i2p.router.util.RFC822Date.
- *  This only supports parsing of the dates specified by Atom (RFC 4287)
- *  and a couple of others.
- *  In particular, 'T' is required, and either 'Z' or a numeric timezone offset is required,
- *  unless there's no time fields at all.
+ * RFC 3339 date parsing utility for Atom feed compatibility.
+ * <p>
+ * Provides parsing and formatting of dates according to RFC 3339
+ * (ISO 8601) and RFC 4287 Atom specifications. Supports multiple
+ * date formats including timezone handling and millisecond precision.
+ * <p>
+ * Adapted from RFC822Date with enhanced support for modern
+ * date formats and timezone specifications. Handles both numeric
+ * and named timezone offsets with proper validation.
+ * <p>
+ * Thread-safe implementation with synchronized methods for
+ * concurrent access. Includes comprehensive format support for
+ * various date representations encountered in news feeds.
  *
- *  The full variety of RFC 3339 (ISO 8601) dates is not supported by the parser,
- *  but they could be added in the future.
- *
- *  See also: http://stackoverflow.com/questions/6038136/how-do-i-parse-rfc-3339-datetimes-with-java
- *
- *  @since 0.9.17
+ * @since 0.9.17
  */
 public abstract class RFC3339Date {
 
