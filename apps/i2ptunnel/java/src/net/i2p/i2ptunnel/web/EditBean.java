@@ -29,6 +29,7 @@ import net.i2p.util.Addresses;
  * it has been moved from the jar to the war.
  * Usage by classes outside of i2ptunnel.war is deprecated.
  */
+/** Web interface bean for editing and configuring I2P tunnel settings */
 public class EditBean extends IndexBean {
     public EditBean() { super(); }
 

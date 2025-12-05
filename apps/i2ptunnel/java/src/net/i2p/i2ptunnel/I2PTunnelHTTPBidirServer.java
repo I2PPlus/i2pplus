@@ -21,6 +21,7 @@ import java.net.InetAddress;
 
 import net.i2p.util.EventDispatcher;
 
+/** Bidirectional HTTP server tunnel for I2P */
 public class I2PTunnelHTTPBidirServer extends I2PTunnelHTTPServer {
 
     public I2PTunnelHTTPBidirServer(InetAddress host, int port, int proxyport, String privData, String spoofHost, Logging l, EventDispatcher notifyThis, I2PTunnel tunnel) {

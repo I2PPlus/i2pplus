@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *  Helper class for ssl.jsp
+ * Helper class for SSL configuration and certificate management in the tunnel web interface
  *
- *  @since 0.9.35
+ * @since 0.9.35
  */
 public class SSLHelper {
 

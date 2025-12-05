@@ -9,7 +9,7 @@ import net.i2p.i2ptunnel.udp.*;
 import net.i2p.util.Log;
 
 /**
- * Sends to many Sinks
+ * Multi-source data distributor that forwards data to multiple sink destinations
  * @author welterde
  * @author zzz modded for I2PTunnel
  */

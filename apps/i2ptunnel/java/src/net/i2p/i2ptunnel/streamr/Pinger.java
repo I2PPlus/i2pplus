@@ -6,7 +6,7 @@ import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 
 /**
- * Pings destinations at regular intervals to test connectivity.
+ * Connectivity tester that pings I2P destinations at regular intervals to monitor network status
  *
  * @author welterde/zzz
  */

@@ -6,20 +6,6 @@
  */
 package net.i2p.i2ptunnel.socks;
 
-/**
- * SOCKS tunnel specialized for IRC traffic with I2P filtering and security.
- * <p>
- * This class extends I2PSOCKSTunnel to provide IRC-specific filtering
- * through I2PTunnelIRCClient filters, combining the flexibility of SOCKS
- * (dynamic destination specification) with IRC security features. It applies
- * inbound and outbound IRC filters to protect against common IRC attacks
- * and ensure proper IRC protocol handling.
- * <p>
- * This allows users to connect to any IRC server through I2P without
- * pre-configuring individual tunnels for each server, while maintaining
- * the security benefits of IRC-specific filtering.
- */
-
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
@@ -34,13 +20,18 @@ import net.i2p.socks.SOCKSException;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.I2PAppThread;
 
-/*
- * Pipe SOCKS IRC connections through I2PTunnelIRCClient filtering,
- * to get the best of both worlds:
- *
- * - SOCKS lets you specify the host so you don't have to set up
- *   a tunnel for each IRC server in advance
- * - IRC filtering for security
+/**
+ * SOCKS tunnel specialized for IRC traffic with I2P filtering and security.
+ * <p>
+ * This class extends I2PSOCKSTunnel to provide IRC-specific filtering
+ * through I2PTunnelIRCClient filters, combining the flexibility of SOCKS
+ * (dynamic destination specification) with IRC security features. It applies
+ * inbound and outbound IRC filters to protect against common IRC attacks
+ * and ensure proper IRC protocol handling.
+ * <p>
+ * This allows users to connect to any IRC server through I2P without
+ * pre-configuring individual tunnels for each server, while maintaining
+ * the security benefits of IRC-specific filtering.
  *
  * @since 0.7.12
  * @author zzz

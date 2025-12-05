@@ -54,6 +54,7 @@ import net.i2p.util.UIMessages;
  * it has been moved from the jar to the war.
  * Usage by classes outside of i2ptunnel.war is deprecated.
  */
+/** Backend bean for I2P tunnel management web interface */
 public class IndexBean {
     protected final I2PAppContext _context;
     protected final Log _log;

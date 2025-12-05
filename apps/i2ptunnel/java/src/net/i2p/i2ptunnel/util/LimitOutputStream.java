@@ -24,6 +24,7 @@ public abstract class LimitOutputStream extends FilterOutputStream {
     protected final DoneCallback _callback;
     protected boolean _isDone;
 
+    /** Callback interface for notification when a limited output stream completes */
     public interface DoneCallback { public void streamDone(); }
 
     /**

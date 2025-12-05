@@ -9,9 +9,8 @@ import net.i2p.i2ptunnel.udpTunnel.I2PTunnelUDPClientBase;
 import net.i2p.util.EventDispatcher;
 
 /**
- * Compared to a standard I2PTunnel,
- * this acts like a client on the I2P side (no privkey file)
- * but a server on the UDP side (sends to a configured host/port)
+ * Streamr consumer that acts as an I2P client and UDP server,
+ * receiving data from I2P destinations and forwarding it to a configured UDP host/port
  *
  * @author welterde
  * @author zzz modded for I2PTunnel

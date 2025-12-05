@@ -352,6 +352,7 @@ public abstract class I2PTunnelHTTPClientBase extends I2PTunnelClientBase implem
 
     protected abstract String getRealm();
 
+    /** Authentication result status for HTTP client connections */
     protected enum AuthResult {AUTH_BAD_REQ, AUTH_BAD, AUTH_STALE, AUTH_GOOD}
 
     /**

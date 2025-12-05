@@ -53,6 +53,7 @@ import net.i2p.util.I2PAppThread;
 import net.i2p.util.I2PSSLSocketFactory;
 import net.i2p.util.Log;
 
+/** Base class for I2P tunnel clients providing common functionality */
 public abstract class I2PTunnelClientBase extends I2PTunnelTask implements Runnable {
 
     protected final Log _log;

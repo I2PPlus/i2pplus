@@ -1053,27 +1053,8 @@ public class TunnelControllerGroup implements ClientApp {
     }
 
     /**
-     *  @since 0.8.8 Moved from I2PTunnelClientBase in 0.9.18
-     */
-    private void killClientExecutor() {
-        synchronized (_executorLock) {
-            if (_executor != null) {
-                _executor.setRejectedExecutionHandler(new ThreadPoolExecutor.DiscardPolicy());
-                _executor.shutdownNow();
-                _executor = null;
-            }
-        }
-        // kill the shared client, so that on restart in android
-        // we won't latch onto the old one
-        I2PTunnelClientBase.killSharedClient();
-    }
-
-    /**
-     *  Not really needed for now but in case we want to add some hooks like afterExecute().
-     *  Package private for fallback in case TCG.getInstance() is null, never instantiated
-     *  but a plugin still needs it... should be rare.
-     *
-     *  @since 0.9.18 Moved from I2PTunnelClientBase
+     * Thread pool executor for I2P tunnel client handlers with custom configuration
+     * @since 0.9.18 Moved from I2PTunnelClientBase
      */
     static class CustomThreadPoolExecutor extends ThreadPoolExecutor {
         public CustomThreadPoolExecutor() {

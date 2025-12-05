@@ -11,7 +11,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
 /**
- * server-mode
+ * Server-mode subscriber that manages multiple data sources and handles incoming connections
  * @author welterde
  * @author zzz modded from Producer for I2PTunnel
  */

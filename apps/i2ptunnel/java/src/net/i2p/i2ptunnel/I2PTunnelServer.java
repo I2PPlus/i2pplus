@@ -68,6 +68,7 @@ import net.i2p.util.I2PSSLSocketFactory;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
+/** Base I2P tunnel server for handling incoming connections */
 public class I2PTunnelServer extends I2PTunnelTask implements Runnable {
 
     protected final Log _log;
