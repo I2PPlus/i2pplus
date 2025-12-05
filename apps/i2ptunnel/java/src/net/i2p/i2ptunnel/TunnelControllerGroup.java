@@ -981,7 +981,6 @@ public class TunnelControllerGroup implements ClientApp {
         }
     }
 
-
     /**
      * Note the fact that the controller is using the session so that
      * it isn't destroyed prematurely.
@@ -1050,6 +1049,28 @@ public class TunnelControllerGroup implements ClientApp {
                 _executor = new CustomThreadPoolExecutor();
         }
         return _executor;
+    }
+
+    /**
+     *  Shutdown the client executor
+     */
+    private void killClientExecutor() {
+        synchronized (_executorLock) {
+            if (_executor != null) {
+                _executor.shutdown();
+                try {
+                    if (!_executor.awaitTermination(60, TimeUnit.SECONDS)) {
+                        _executor.shutdownNow();
+                        if (!_executor.awaitTermination(60, TimeUnit.SECONDS))
+                            _log.error("Client executor did not terminate");
+                    }
+                } catch (InterruptedException ie) {
+                    _executor.shutdownNow();
+                    Thread.currentThread().interrupt();
+                }
+                _executor = null;
+            }
+        }
     }
 
     /**
