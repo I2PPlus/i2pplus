@@ -354,8 +354,9 @@ public class RouterClock extends Clock {
             _shiftListeners.remove(lsnr);
     }
 
-    /*
-     *  @since 0.8.8
+    /**
+     * Listener interface for receiving notifications when the router clock shifts.
+     * Implementations can respond to significant time adjustments in the router's clock.
      */
     public interface ClockShiftListener {
 

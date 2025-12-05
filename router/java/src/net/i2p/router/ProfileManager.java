@@ -10,6 +10,11 @@ package net.i2p.router;
 
 import net.i2p.data.Hash;
 
+/**
+ * Manages peer profiles and performance metrics for router peers.
+ * Tracks communication statistics, tunnel participation, and database interactions
+ * to maintain performance profiles for network peers.
+ */
 public interface ProfileManager {
     /**
      * Note that it took msToSend to send a message of size bytesSent to the peer over the transport.
