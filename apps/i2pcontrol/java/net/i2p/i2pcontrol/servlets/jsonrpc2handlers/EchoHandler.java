@@ -9,6 +9,10 @@ import com.thetransactioncompany.jsonrpc2.server.RequestHandler;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * JSON-RPC2 handler for the Echo method.
+ * Returns the provided echo string as a simple test mechanism for the I2PControl API.
+ */
 public class EchoHandler implements RequestHandler {
 
     private static final String[] requiredArgs = {"Echo"};

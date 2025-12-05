@@ -29,6 +29,10 @@ import java.util.Map;
  *
  */
 
+/**
+ * JSON-RPC2 handler for the GetRate method.
+ * Retrieves statistical rate data from the router for the specified statistic and time period.
+ */
 public class GetRateHandler implements RequestHandler {
 
     private static final String[] requiredArgs = {"Stat", "Period"};

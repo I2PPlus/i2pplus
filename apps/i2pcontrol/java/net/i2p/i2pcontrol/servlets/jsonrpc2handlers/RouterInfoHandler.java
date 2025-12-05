@@ -23,6 +23,10 @@ import java.util.Map;
  *  http://www.apache.org/licenses/LICENSE-2.0
  */
 
+/**
+ * JSON-RPC2 handler for the RouterInfo method.
+ * Provides read-only access to router status information including version, uptime, network status, bandwidth usage, and peer statistics.
+ */
 public class RouterInfoHandler implements RequestHandler {
     private final JSONRPC2Helper _helper;
     private final RouterContext _context;

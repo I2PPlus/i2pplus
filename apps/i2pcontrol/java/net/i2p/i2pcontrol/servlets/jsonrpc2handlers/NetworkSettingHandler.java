@@ -35,6 +35,10 @@ import java.util.Map;
  *
  */
 
+/**
+ * JSON-RPC2 handler for the NetworkSetting method.
+ * Manages router network configuration including transport ports, hostnames, bandwidth settings, and UPnP.
+ */
 public class NetworkSettingHandler implements RequestHandler {
     private static final int BW_BURST_PCT = 110;
     private static final int BW_BURST_TIME = 20;

@@ -31,6 +31,10 @@ import java.util.Map;
  *
  */
 
+/**
+ * JSON-RPC2 handler for the I2PControl method.
+ * Manages I2PControl service settings, primarily handling password changes for the control interface.
+ */
 public class I2PControlHandler implements RequestHandler {
 
     private static final int BW_BURST_PCT = 110;

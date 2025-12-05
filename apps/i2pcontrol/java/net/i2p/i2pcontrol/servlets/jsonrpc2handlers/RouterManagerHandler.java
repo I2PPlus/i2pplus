@@ -36,6 +36,10 @@ import java.util.Map;
  *
  */
 
+/**
+ * JSON-RPC2 handler for the RouterManager method.
+ * Controls router operations including shutdown, restart, graceful shutdown, graceful restart, reseeding, and update management.
+ */
 public class RouterManagerHandler implements RequestHandler {
     private final JSONRPC2Helper _helper;
     private final RouterContext _context;

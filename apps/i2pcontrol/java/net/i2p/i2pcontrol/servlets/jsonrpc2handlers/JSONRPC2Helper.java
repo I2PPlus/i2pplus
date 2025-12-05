@@ -26,6 +26,10 @@ import java.util.Map;
  *
  */
 
+/**
+ * Helper utility class for I2PControl JSON-RPC2 handlers.
+ * Provides common functionality for parameter validation and authentication token verification.
+ */
 public class JSONRPC2Helper {
     public final static Boolean USE_NO_AUTH = false;
     public final static Boolean USE_AUTH = true;
