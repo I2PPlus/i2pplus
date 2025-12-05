@@ -4,8 +4,24 @@
 </head>
 <body>
 <p>
-    Interfaces for ElGamal keys, used for I2PProvider. Copied from Bouncy Castle 1.53.
+    Implementation of the ElGamal public-key cryptosystem for I2P.
 </p>
+
+<p>
+    This package provides interfaces and implementations for ElGamal keys and parameters,
+    supporting encryption and decryption operations in the I2P network. The ElGamal
+    algorithm is used for secure key exchange and encrypted communication within I2P,
+    providing confidentiality and authentication for network traffic.
+</p>
+
+<p>
+    Key components include:
+</p>
+<ul>
+    <li>ElGamalPrivateKey and ElGamalPublicKey interfaces defining the key contract</li>
+    <li>Concrete implementations supporting PKCS#8 and X.509 encoding standards</li>
+    <li>Parameter specifications for key generation and configuration</li>
+</ul>
 
 <p>
     Since 0.9.25.

@@ -9,6 +9,15 @@
  * work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>lt;https://creativecommons.org/publicdomain/zero/1.0/<https://creativecommons.org/publicdomain/zero/1.0/>gt;.
  *
  */
+
+/**
+ * BigInteger-based implementation of scalar operations for EdDSA cryptography.
+ * 
+ * This class provides fundamental scalar arithmetic operations required for EdDSA
+ * signature schemes, including modular reduction and scalar multiplication with addition.
+ * All operations are performed modulo the subgroup order l, ensuring results remain
+ * within the valid scalar range for EdDSA operations.
+ */
 package net.i2p.crypto.eddsa.math.bigint;
 
 import java.math.BigInteger;

@@ -9,6 +9,15 @@
  * work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>lt;https://creativecommons.org/publicdomain/zero/1.0/<https://creativecommons.org/publicdomain/zero/1.0/>gt;.
  *
  */
+
+/**
+ * Little-endian encoding implementation for EdDSA field elements using BigInteger.
+ * 
+ * This class provides encoding and decoding operations for EdDSA field elements,
+ * converting between BigInteger values and their little-endian byte representations.
+ * It handles the specific encoding requirements for EdDSA operations including
+ * bit masking and constant-time conversions.
+ */
 package net.i2p.crypto.eddsa.math.bigint;
 
 import java.io.Serializable;
