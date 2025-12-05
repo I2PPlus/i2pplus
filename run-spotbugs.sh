@@ -15,7 +15,7 @@ SPOTBUGS_TGZ="spotbugs/spotbugs-${SPOTBUGS_VERSION}.tgz"
 # Default options (matching ant task)
 OUTPUT="dist/spotbugs.xml"
 FORMAT="xml:withMessages"
-EFFORT="default"
+EFFORT="max"
 LEVEL="medium"
 
 # Parse command line arguments
