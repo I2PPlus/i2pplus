@@ -224,6 +224,7 @@ public interface I2PSocketManager {
     public void addDisconnectListener(DisconnectListener lsnr);
     public void removeDisconnectListener(DisconnectListener lsnr);
 
+    /** Listener for notification when an I2P session is disconnected */
     public static interface DisconnectListener {
         public void sessionDisconnected();
     }
