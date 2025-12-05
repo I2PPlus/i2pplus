@@ -1,0 +1,459 @@
+Buildfile: /home/rogue/i2pplus/build.xml
+
+getReleaseNumber:
+     [echo] Release version: 2.10.0
+     [echo] API version: 0.9.67
+
+getBuildNumber:
+     [echo] Build sub-version: 16+
+
+javadoc:
+     [echo] JDK: Ubuntu 21.0.10-ea (OpenJDK Runtime Environment 21.0.10-ea+4-Ubuntu-1)
+
+ensureJettylib1:
+
+mkJettylibdir:
+
+fetchJettylib:
+
+verifyJettylib:
+
+extractJettylib:
+
+compilePatches:
+
+jarPatchesUpToDate:
+
+jarPatches:
+
+buildPatches:
+
+copyJettylib1:
+
+copyTomcatLib1:
+
+copyJettylib2:
+
+copyJettylib3:
+
+copyTomcatLib2:
+
+copyTomcatLib3:
+
+copyTomcatLib:
+
+copyJettylib:
+
+ensureJettylib:
+    [mkdir] Created dir: /home/rogue/i2pplus/build/javadoc
+     [copy] Copying 1 file to /home/rogue/i2pplus/build/javadoc
+  [javadoc] Generating Javadoc
+  [javadoc] Javadoc execution
+  [javadoc] /home/rogue/i2pplus/apps/routerconsole/java/src/com/vuze/plugins/mlab/tools/ndt/swingemu/Color.java:31: error: malformed HTML
+  [javadoc]  * <pAll operations are no-ops or return null values, maintaining API compatibility
+  [javadoc]    ^
+  [javadoc] /home/rogue/i2pplus/apps/routerconsole/java/src/com/vuze/plugins/mlab/tools/ndt/swingemu/Color.java:32: error: unexpected end tag: </p>
+  [javadoc]  * without requiring an actual graphical display system.</p>
+  [javadoc]                                                         ^
+  [javadoc] /home/rogue/i2pplus/apps/routerconsole/java/src/com/vuze/plugins/mlab/tools/ndt/swingemu/Dimension.java:33: error: malformed HTML
+  [javadoc]  * <pAll operations are no-ops, maintaining API compatibility without requiring
+  [javadoc]    ^
+  [javadoc] /home/rogue/i2pplus/apps/routerconsole/java/src/com/vuze/plugins/mlab/tools/ndt/swingemu/Dimension.java:34: error: unexpected end tag: </p>
+  [javadoc]  * an actual graphical display system.</p>
+  [javadoc]                                       ^
+  [javadoc] /home/rogue/i2pplus/apps/routerconsole/java/src/com/vuze/plugins/mlab/tools/ndt/swingemu/MouseEvent.java:33: error: malformed HTML
+  [javadoc]  * <pAll operations are no-ops, maintaining API compatibility without requiring
+  [javadoc]    ^
+  [javadoc] /home/rogue/i2pplus/apps/routerconsole/java/src/com/vuze/plugins/mlab/tools/ndt/swingemu/MouseEvent.java:34: error: unexpected end tag: </p>
+  [javadoc]  * an actual graphical display system or mouse input.</p>
+  [javadoc]                                                      ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/net/i2p/util/TryCache.java:20: warning: no @param for <T>
+  [javadoc]     public interface ObjectFactory<T> {
+  [javadoc]            ^
+  [javadoc] /home/rogue/i2pplus/apps/susimail/src/src/i2p/susi/util/package.html:21: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/apps/susimail/src/src/i2p/susi/webmail/encoding/package.html:20: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/apps/susimail/src/src/i2p/susi/webmail/pop3/package.html:21: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/apps/susimail/src/src/i2p/susi/webmail/smtp/package.html:21: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/apps/desktopgui/src/net/i2p/desktopgui/i18n/package.html:20: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/apps/desktopgui/src/net/i2p/desktopgui/router/package.html:20: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/apps/i2ptunnel/java/src/net/i2p/i2ptunnel/udpTunnel/package.html:21: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/crypto/pqc/package.html:20: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/apps/sam/java/src/net/i2p/sam/package.html:20: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/net/i2p/util/package.html:17: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/apps/addressbook/java/src/net/metanotion/io/package.html:19: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/apps/addressbook/java/src/net/metanotion/io/block/package.html:19: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/apps/addressbook/java/src/net/metanotion/io/block/index/package.html:19: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/apps/addressbook/java/src/net/metanotion/io/data/package.html:19: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/apps/addressbook/java/src/net/metanotion/util/skiplist/package.html:20: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/apps/i2psnark/java/src/org/klomp/snark/bencode/package.html:20: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/apps/i2psnark/java/src/org/klomp/snark/dht/package.html:22: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/org/minidns/constants/package.html:20: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/org/minidns/dnslabel/package.html:21: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/org/minidns/dnsmessage/package.html:21: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/org/minidns/dnsname/package.html:22: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/org/minidns/edns/package.html:21: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/org/minidns/idna/package.html:22: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/org/minidns/record/package.html:23: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/org/minidns/util/package.html:22: error: unexpected end tag: </p>
+  [javadoc] </p>
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/apps/jrobin/java/src/org/rrd4j/core/DataHolder.java:103: error: @param name not found
+  [javadoc]      * @param step time step for data processing
+  [javadoc]               ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/tunnel/pool/TunnelPool.java:149: warning: no main description
+  [javadoc]      *  @return average bandwidth per configured tunnel in Bps
+  [javadoc]         ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/tunnel/pool/TunnelPool.java:258: warning: no @param for closestTo
+  [javadoc]     TunnelInfo selectTunnel(Hash closestTo) {
+  [javadoc]                ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/tunnel/pool/TunnelPool.java:283: warning: no main description
+  [javadoc]      *  @param gatewayId for inbound, the GW rcv tunnel ID; for outbound, the GW send tunnel ID.
+  [javadoc]         ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/tunnel/pool/TunnelPool.java:285: warning: no @return
+  [javadoc]     public TunnelInfo getTunnel(TunnelId gatewayId) {
+  [javadoc]                       ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/tunnel/pool/TunnelPool.java:313: warning: no @return
+  [javadoc]     boolean needFallback() {
+  [javadoc]             ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/tunnel/pool/TunnelPool.java:450: warning: no @return
+  [javadoc]     public List<PooledTunnelCreatorConfig> listPending() {synchronized (_inProgress) {return new ArrayList<PooledTunnelCreatorConfig>(_inProgress);}}
+  [javadoc]                                            ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/tunnel/pool/TunnelPool.java:453: warning: no @return
+  [javadoc]     int getTunnelCount() {return size();}
+  [javadoc]         ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/tunnel/pool/TunnelPool.java:478: warning: no @return
+  [javadoc]     public boolean isAlive() {
+  [javadoc]                    ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/tunnel/pool/TunnelPool.java:483: warning: no @return
+  [javadoc]     public int size() {
+  [javadoc]                ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/tunnel/pool/TunnelPool.java:490: warning: no @param for info
+  [javadoc]     protected void addTunnel(TunnelInfo info) {
+  [javadoc]                    ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/tunnel/pool/TunnelPool.java:507: warning: no @param for info
+  [javadoc]     void removeTunnel(TunnelInfo info) {
+  [javadoc]          ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/tunnel/pool/TunnelPool.java:552: warning: no @param for cfg
+  [javadoc]     void tunnelFailed(TunnelInfo cfg) {
+  [javadoc]          ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/tunnel/pool/TunnelPool.java:567: warning: no @param for cfg
+  [javadoc]     void tunnelFailed(TunnelInfo cfg, Hash blamePeer) {
+  [javadoc]          ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/tunnel/pool/TunnelPool.java:567: warning: no @param for blamePeer
+  [javadoc]     void tunnelFailed(TunnelInfo cfg, Hash blamePeer) {
+  [javadoc]          ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/tunnel/pool/TunnelPool.java:860: warning: no @return
+  [javadoc]     int countHowManyToBuild() {
+  [javadoc]         ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/tunnel/pool/TunnelPool.java:1202: warning: no @param for cfg
+  [javadoc]     void buildComplete(PooledTunnelCreatorConfig cfg, BuildExecutor.Result result) {
+  [javadoc]          ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/tunnel/pool/TunnelPool.java:1202: warning: no @param for result
+  [javadoc]     void buildComplete(PooledTunnelCreatorConfig cfg, BuildExecutor.Result result) {
+  [javadoc]          ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/tunnel/pool/TunnelPool.java:1236: warning: no main description
+  [javadoc]      *  @since 0.9.53
+  [javadoc]         ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/tunnel/pool/TunnelPool.java:1238: warning: no @return
+  [javadoc]     int getConsecutiveBuildTimeouts() {return _consecutiveBuildTimeouts.get();}
+  [javadoc]         ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/tunnel/pool/AliasedTunnelPool.java:24: warning: no comment
+  [javadoc]     AliasedTunnelPool(RouterContext ctx, TunnelPoolManager mgr, TunnelPoolSettings settings, TunnelPool aliasOf) {
+  [javadoc]     ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/tunnel/pool/TunnelPool.java:845: warning: no comment
+  [javadoc]     public long getLifetimeProcessed() {return _lifetimeProcessed;}
+  [javadoc]                 ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/tunnel/pool/TunnelPool.java:133: warning: no comment
+  [javadoc]     synchronized void shutdown() {
+  [javadoc]                       ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValue.java:20: warning: no comment
+  [javadoc] public class AllowedValue
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValue.java:26: warning: no comment
+  [javadoc] 	public final static String ELEM_NAME = "allowedValue";
+  [javadoc] 	                           ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValue.java:43: warning: no comment
+  [javadoc] 	public AllowedValue(Node node)
+  [javadoc] 	       ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValue.java:34: warning: no comment
+  [javadoc] 	public Node getAllowedValueNode()
+  [javadoc] 	            ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValue.java:79: warning: no comment
+  [javadoc] 	public String getValue()
+  [javadoc] 	              ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValue.java:65: warning: no comment
+  [javadoc] 	public static boolean isAllowedValueNode(Node node)
+  [javadoc] 	                      ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValue.java:74: warning: no comment
+  [javadoc] 	public void setValue(String value)
+  [javadoc] 	            ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValueList.java:23: warning: no comment
+  [javadoc] public class AllowedValueList extends Vector<AllowedValue>
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValueList.java:29: warning: no comment
+  [javadoc] 	public final static String ELEM_NAME = "allowedValueList";
+  [javadoc] 	                           ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValueList.java:36: warning: no comment
+  [javadoc] 	public AllowedValueList()
+  [javadoc] 	       ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValueList.java:40: warning: no comment
+  [javadoc] 	public AllowedValueList(String[] values) {
+  [javadoc] 	       ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValueList.java:52: warning: no comment
+  [javadoc] 	public AllowedValue getAllowedValue(int n)
+  [javadoc] 	                    ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValueList.java:57: warning: no comment
+  [javadoc] 	public boolean isAllowed(String v){
+  [javadoc] 	               ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValueRange.java:20: warning: no comment
+  [javadoc] public class AllowedValueRange
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValueRange.java:26: warning: no comment
+  [javadoc] 	public final static String ELEM_NAME = "allowedValueRange";
+  [javadoc] 	                           ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValueRange.java:48: warning: no comment
+  [javadoc] 	public AllowedValueRange(){
+  [javadoc] 	       ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValueRange.java:56: warning: no comment
+  [javadoc] 	public AllowedValueRange(Number max, Number min, Number step) {
+  [javadoc] 	       ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValueRange.java:43: warning: no comment
+  [javadoc] 	public AllowedValueRange(Node node)
+  [javadoc] 	       ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValueRange.java:34: warning: no comment
+  [javadoc] 	public Node getAllowedValueRangeNode()
+  [javadoc] 	            ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValueRange.java:99: warning: no comment
+  [javadoc] 	public String getMaximum()
+  [javadoc] 	              ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValueRange.java:83: warning: no comment
+  [javadoc] 	public String getMinimum()
+  [javadoc] 	              ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValueRange.java:115: warning: no comment
+  [javadoc] 	public String getStep()
+  [javadoc] 	              ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValueRange.java:67: warning: no comment
+  [javadoc] 	public static boolean isAllowedValueRangeNode(Node node)
+  [javadoc] 	                      ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValueRange.java:94: warning: no comment
+  [javadoc] 	public void setMaximum(String value)
+  [javadoc] 	            ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValueRange.java:78: warning: no comment
+  [javadoc] 	public void setMinimum(String value)
+  [javadoc] 	            ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/org/cybergarage/upnp/AllowedValueRange.java:110: warning: no comment
+  [javadoc] 	public void setStep(String value)
+  [javadoc] 	            ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/CPUInfo.java:81: warning: no main description
+  [javadoc]      * @return true iff the CPU supports the AVX instruction set.
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/CPUInfo.java:87: warning: no main description
+  [javadoc]      * @return true iff the CPU supports the AVX2 instruction set.
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/CPUInfo.java:127: warning: no main description
+  [javadoc]      * @return true iff the CPU supports the AES-NI instruction set.
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/CPUInfo.java:133: warning: no main description
+  [javadoc]      * @return true iff the CPU supports the 64-bit support
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/CPUInfo.java:139: warning: no main description
+  [javadoc]      * @return true iff the CPU supports the BMI1 instruction set.
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/CPUInfo.java:145: warning: no main description
+  [javadoc]      * @return true iff the CPU supports the BMI2 instruction set.
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/CPUInfo.java:151: warning: no main description
+  [javadoc]      * @return true iff the CPU supports the FMA3 instruction set.
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/CPUInfo.java:157: warning: no main description
+  [javadoc]      * @return true iff the CPU supports the MOVBE instruction set.
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/AMDCPUInfo.java:19: warning: no main description
+  [javadoc]      * @return true if the CPU present in the machine is at least an 'k6' CPU
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/AMDCPUInfo.java:23: warning: no main description
+  [javadoc]      * @return true if the CPU present in the machine is at least an 'k6-2' CPU
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/AMDCPUInfo.java:27: warning: no main description
+  [javadoc]      * @return true if the CPU present in the machine is at least an 'k6-3' CPU
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/AMDCPUInfo.java:31: warning: no main description
+  [javadoc]      * @return true if the CPU present in the machine is at least an 'geode' CPU
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/AMDCPUInfo.java:35: warning: no main description
+  [javadoc]      * @return true if the CPU present in the machine is at least an 'k7' CPU (Atlhon, Duron etc. and better)
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/AMDCPUInfo.java:39: warning: no main description
+  [javadoc]      * @return true if the CPU present in the machine is at least an 'k8' CPU (Atlhon 64, Opteron etc. and better)
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/AMDCPUInfo.java:43: warning: no main description
+  [javadoc]      * @return true if the CPU present in the machine is at least an 'k10' CPU
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/AMDCPUInfo.java:48: warning: no main description
+  [javadoc]      * @return true if the CPU present in the machine is at least an 'bobcat' CPU
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/AMDCPUInfo.java:52: warning: no main description
+  [javadoc]      * @return true if the CPU present in the machine is at least an 'jaguar' CPU
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/AMDCPUInfo.java:57: warning: no main description
+  [javadoc]      * @return true if the CPU present in the machine is at least a 'bulldozer' CPU
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/AMDCPUInfo.java:61: warning: no main description
+  [javadoc]      * @return true if the CPU present in the machine is at least a 'piledriver' CPU
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/AMDCPUInfo.java:66: warning: no main description
+  [javadoc]      * @return true if the CPU present in the machine is at least a 'steamroller' CPU
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/AMDCPUInfo.java:71: warning: no main description
+  [javadoc]      * @return true if the CPU present in the machine is at least a 'excavator' CPU
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/AMDCPUInfo.java:77: warning: no main description
+  [javadoc]      * @return true if the CPU present in the machine is at least a Zen family CPU
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/AMDCPUInfo.java:83: warning: no main description
+  [javadoc]      * @return true if the CPU present in the machine is at least a Zen2 family CPU
+  [javadoc]        ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/freenet/support/CPUInformation/AMDInfoImpl.java:11: warning: use of default constructor, which does not provide a comment
+  [javadoc] class AMDInfoImpl extends CPUIDCPUInfo implements AMDCPUInfo {
+  [javadoc] ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/net/i2p/app/ClientApp.java:30: warning: no @throws for java.lang.Throwable
+  [javadoc]     public void startup() throws Throwable;
+  [javadoc]                 ^
+  [javadoc] /home/rogue/i2pplus/core/java/src/net/i2p/app/ClientApp.java:40: warning: no @throws for java.lang.Throwable
+  [javadoc]     public void shutdown(String[] args) throws Throwable;
+  [javadoc]                 ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/Job.java:21: warning: no @return
+  [javadoc]     public String getName();
+  [javadoc]                   ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/Job.java:23: warning: no @return
+  [javadoc]     public long getJobId();
+  [javadoc]                 ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/Job.java:27: warning: no @return
+  [javadoc]     public JobTiming getTiming();
+  [javadoc]                      ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/JobImpl.java:58: warning: no @param for now
+  [javadoc]     public void madeReady(long now) { _madeReadyOn = now; }
+  [javadoc]                 ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/JobImpl.java:67: warning: no @param for delayMs
+  [javadoc]     protected void requeue(long delayMs) {
+  [javadoc]                    ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/sybil/Analysis.java:144: warning: no main description
+  [javadoc]      *  @return non-null, creates new if not already registered
+  [javadoc]         ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/sybil/Analysis.java:146: warning: no @param for ctx
+  [javadoc]     public synchronized static Analysis getInstance(RouterContext ctx) {
+  [javadoc]                                         ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/sybil/Analysis.java:342: warning: no @param for us
+  [javadoc]     public List<RouterInfo> getFloodfills(Hash us) {
+  [javadoc]                             ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/sybil/Analysis.java:342: warning: no @return
+  [javadoc]     public List<RouterInfo> getFloodfills(Hash us) {
+  [javadoc]                             ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/sybil/Analysis.java:359: warning: no @param for us
+  [javadoc]     public List<RouterInfo> getAllRouters(Hash us) {
+  [javadoc]                             ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/sybil/Analysis.java:359: warning: no @return
+  [javadoc]     public List<RouterInfo> getAllRouters(Hash us) {
+  [javadoc]                             ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/sybil/Analysis.java:389: warning: no @return
+  [javadoc]     public synchronized Map<Hash, Points> backgroundAnalysis(boolean includeAll) {
+  [javadoc]                                           ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/sybil/Analysis.java:512: warning: no main description
+  [javadoc]      *  @param pairs out parameter, sorted
+  [javadoc]         ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/sybil/Analysis.java:516: warning: no @param for ris
+  [javadoc]     public double calculatePairDistance(List<RouterInfo> ris, Map<Hash, Points> points, List<Pair> pairs) {
+  [javadoc]                   ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/sybil/Analysis.java:516: warning: no @param for points
+  [javadoc]     public double calculatePairDistance(List<RouterInfo> ris, Map<Hash, Points> points, List<Pair> pairs) {
+  [javadoc]                   ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/sybil/Analysis.java:596: warning: no main description
+  [javadoc]      *  @param ri32 out parameter
+  [javadoc]         ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/sybil/Analysis.java:603: warning: no @param for ris
+  [javadoc]     public void calculateIPGroupsUs(List<RouterInfo> ris, Map<Hash, Points> points,
+  [javadoc]                 ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/sybil/Analysis.java:603: warning: no @param for points
+  [javadoc]     public void calculateIPGroupsUs(List<RouterInfo> ris, Map<Hash, Points> points,
+  [javadoc]                 ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/sybil/Analysis.java:700: warning: no main description
+  [javadoc]      *  @since 0.9.38 split out from renderIPGroups32()
+  [javadoc]         ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/sybil/Analysis.java:702: warning: no @param for ris
+  [javadoc]     public Map<Integer, List<RouterInfo>> calculateIPGroups32(List<RouterInfo> ris, Map<Hash, Points> points) {
+  [javadoc]                                           ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/sybil/Analysis.java:702: warning: no @param for points
+  [javadoc]     public Map<Integer, List<RouterInfo>> calculateIPGroups32(List<RouterInfo> ris, Map<Hash, Points> points) {
+  [javadoc]                                           ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/sybil/Analysis.java:702: warning: no @return
+  [javadoc]     public Map<Integer, List<RouterInfo>> calculateIPGroups32(List<RouterInfo> ris, Map<Hash, Points> points) {
+  [javadoc]                                           ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/sybil/Analysis.java:749: warning: no main description
+  [javadoc]      *  @since 0.9.38 split out from renderIPGroups24()
+  [javadoc]         ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/sybil/Analysis.java:751: warning: no @param for ris
+  [javadoc]     public Map<Integer, List<RouterInfo>> calculateIPGroups24(List<RouterInfo> ris, Map<Hash, Points> points) {
+  [javadoc]                                           ^
+  [javadoc] /home/rogue/i2pplus/router/java/src/net/i2p/router/sybil/Analysis.java:751: warning: no @param for points
+  [javadoc]     public Map<Integer, List<RouterInfo>> calculateIPGroups24(List<RouterInfo> ris, Map<Hash, Points> points) {
+  [javadoc]                                           ^
+  [javadoc] /home/rogue/i2pplus/apps/i2psnark/java/src/org/klomp/snark/MagnetState.java:191: error: @param name not found
+  [javadoc]      * @param offset the offset in the data array where the chunk starts
+  [javadoc]               ^
+  [javadoc] 33 errors
+  [javadoc] 100 warnings
+    [mkdir] Created dir: /home/rogue/i2pplus/build/javadoc/resources/fonts
+     [move] Moving 5679 files to /home/rogue/i2pplus/dist/javadoc
+   [delete] Deleting directory /home/rogue/i2pplus/build/javadoc
+     [echo] javadoc creation complete, saved to dist/javadoc
+
+BUILD SUCCESSFUL
+Total time: 6 seconds
