@@ -6,6 +6,20 @@
  */
 package net.i2p.i2ptunnel.socks;
 
+/**
+ * SOCKS tunnel specialized for IRC traffic with I2P filtering and security.
+ * <p>
+ * This class extends I2PSOCKSTunnel to provide IRC-specific filtering
+ * through I2PTunnelIRCClient filters, combining the flexibility of SOCKS
+ * (dynamic destination specification) with IRC security features. It applies
+ * inbound and outbound IRC filters to protect against common IRC attacks
+ * and ensure proper IRC protocol handling.
+ * <p>
+ * This allows users to connect to any IRC server through I2P without
+ * pre-configuring individual tunnels for each server, while maintaining
+ * the security benefits of IRC-specific filtering.
+ */
+
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;

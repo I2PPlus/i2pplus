@@ -1,5 +1,20 @@
 package net.i2p.i2ptunnel.socks;
 
+/**
+ * UDP tunnel implementation for SOCKS protocol with multiple port support.
+ * <p>
+ * This class extends I2PTunnelUDPClientBase to provide UDP tunneling
+ * capabilities through SOCKS protocol, supporting multiple bidirectional
+ * ports on the UDP side. It manages SOCKSUDPWrapper instances
+ * for port multiplexing and handles datagram routing between
+ * I2P and local UDP endpoints.
+ * <p>
+ * Designed for applications requiring UDP communication through I2P,
+ * with support for dynamic port addition and removal. The implementation
+ * ensures proper reply routing and maintains port mappings for
+ * session tracking.
+ */
+
 import java.net.InetAddress;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;

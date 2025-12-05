@@ -5,6 +5,19 @@
  */
 package net.i2p.i2ptunnel.socks;
 
+/**
+ * SOCKS4a server implementation for handling SOCKS version 4/4a connections.
+ * <p>
+ * This class processes SOCKS4a protocol requests, supporting both IPv4 addresses
+ * and domain name resolution (the "4a" extension). It validates requests,
+ * maps IP addresses to domain names when configured, and forwards connections
+ * to I2P destinations or outproxies.
+ * <p>
+ * Handles CONNECT commands, rejects unsupported BIND commands, and provides
+ * proper error responses. The server integrates with I2P naming service
+ * for destination resolution and supports security restrictions on localhost access.
+ */
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

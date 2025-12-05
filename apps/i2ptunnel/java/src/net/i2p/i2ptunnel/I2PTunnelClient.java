@@ -3,6 +3,18 @@
  */
 package net.i2p.i2ptunnel;
 
+/**
+ * Standard I2P client tunnel that forwards local TCP connections to I2P destinations.
+ * <p>
+ * This class listens on a local port and creates I2P connections to configured
+ * destination(s) when clients connect. It supports multiple destinations with
+ * random selection, and provides configurable read timeouts and port mapping
+ * for services like SMTP and POP.
+ * <p>
+ * The tunnel handles destination resolution, connection management, and data forwarding
+ * between the local client socket and the remote I2P destination.
+ */
+
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;

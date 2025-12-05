@@ -6,6 +6,20 @@
  */
 package net.i2p.i2ptunnel.socks;
 
+/**
+ * Abstract base class for SOCKS protocol servers.
+ * <p>
+ * This class provides common functionality for SOCKS4a and SOCKS5 server
+ * implementations, including connection details storage, IP-to-domain mapping
+ * support, and outproxy plugin integration. It defines the interface
+ * for server setup, client socket management, and destination socket
+ * creation.
+ * <p>
+ * Serves as foundation for specific SOCKS protocol implementations,
+ * handling shared concerns like security restrictions, error handling,
+ * and integration with I2P naming and outproxy services.
+ */
+
 import java.net.Socket;
 import java.util.Properties;
 

@@ -6,6 +6,21 @@
  */
 package net.i2p.i2ptunnel.socks;
 
+/**
+ * SOCKS5 server implementation with comprehensive protocol support and authentication.
+ * <p>
+ * This class handles SOCKS version 5 protocol including authentication
+ * (username/password and no-auth), multiple address types (IPv4, IPv6, domain),
+ * and extended commands including Tor RESOLVE for hostname resolution.
+ * It supports UDP ASSOCIATE commands and provides outproxy connectivity
+ * through both SOCKS and HTTP CONNECT methods.
+ * <p>
+ * The server includes security features like localhost blocking, IP-to-domain
+ * mapping, and integrates with I2P naming service for destination
+ * resolution. It also supports torsocks compatibility through
+ * hostname caching mechanisms.
+ */
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

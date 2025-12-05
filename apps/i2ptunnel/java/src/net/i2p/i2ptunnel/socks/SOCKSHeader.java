@@ -1,5 +1,19 @@
 package net.i2p.i2ptunnel.socks;
 
+/**
+ * Represents and parses SOCKS protocol headers from UDP datagrams.
+ * <p>
+ * This class handles SOCKS header parsing according to RFC 1928, supporting
+ * multiple address types (IPv4, IPv6, domain names) and extracting
+ * destination information from SOCKS UDP packets. It provides methods to
+ * create headers for outgoing packets and extract host/port information
+ * from incoming packets.
+ * <p>
+ * Used primarily by SOCKS UDP tunnel implementations to wrap and unwrap
+ * datagrams with SOCKS protocol headers for proper routing through
+ * I2P network.
+ */
+
 import java.util.Arrays;
 
 import net.i2p.I2PAppContext;

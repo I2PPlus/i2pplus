@@ -1,5 +1,19 @@
 package net.i2p.i2ptunnel.socks;
 
+/**
+ * Wrapper for adding SOCKS protocol headers to UDP datagrams.
+ * <p>
+ * This class implements Source and Sink interfaces to wrap outgoing
+ * UDP packets with SOCKS headers according to RFC 1928. It maintains
+ * a cache of SOCKS headers for different destinations and handles
+ * the wrapping/unwrapping of datagrams for proper routing through
+ * I2P network.
+ * <p>
+ * Used by SOCKS UDP tunnel implementations to ensure datagrams
+ * conform to SOCKS protocol format, enabling proper delivery
+ * to I2P destinations with correct addressing information.
+ */
+
 import java.util.Map;
 
 import net.i2p.I2PAppContext;

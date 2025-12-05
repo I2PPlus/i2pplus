@@ -1,5 +1,19 @@
 package net.i2p.i2ptunnel.socks;
 
+/**
+ * I2PSocket implementation wrapping a standard TCP Socket for outproxy connections.
+ * <p>
+ * This class adapts a regular Socket (typically from an outproxy connection)
+ * to the I2PSocket interface, allowing seamless integration with
+ * I2P tunneling infrastructure. It provides dummy destination
+ * information and delegates all I2PSocket operations to the underlying
+ * Socket.
+ * <p>
+ * Used when SOCKS or HTTP tunnels route traffic through external
+ * outproxies, enabling the tunnel framework to treat outproxy
+ * connections as I2P connections for consistent handling.
+ */
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;

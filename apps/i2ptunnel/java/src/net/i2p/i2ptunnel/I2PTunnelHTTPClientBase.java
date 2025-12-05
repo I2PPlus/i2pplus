@@ -3,6 +3,19 @@
  */
 package net.i2p.i2ptunnel;
 
+/**
+ * Abstract base class for HTTP client tunnels providing common HTTP proxy functionality.
+ * <p>
+ * This class implements HTTP proxy protocol handling including authentication
+ * (Basic and Digest), outproxy configuration and selection, error page generation,
+ * and request filtering. It serves as the foundation for both standard HTTP
+ * clients and CONNECT clients, handling the complexities of HTTP protocol
+ * parsing, header manipulation, and proxy authentication.
+ * <p>
+ * Provides support for multiple outproxies, SSL outproxies, and comprehensive
+ * error handling with localized error pages for various failure scenarios.
+ */
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;

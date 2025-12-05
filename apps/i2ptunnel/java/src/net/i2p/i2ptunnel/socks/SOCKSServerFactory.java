@@ -6,6 +6,20 @@
  */
 package net.i2p.i2ptunnel.socks;
 
+/**
+ * Factory for creating appropriate SOCKS server implementations.
+ * <p>
+ * This class examines incoming connections to determine the SOCKS protocol
+ * version (SOCKS4/4a or SOCKS5) and creates the corresponding
+ * server implementation. It handles protocol detection, authentication
+ * requirements validation, and provides appropriate error responses for
+ * unsupported protocols or HTTP requests to SOCKS proxies.
+ * <p>
+ * Serves as entry point for SOCKS tunnel creation, abstracting
+ * differences between protocol versions and ensuring proper server
+ * instantiation based on client capabilities.
+ */
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;

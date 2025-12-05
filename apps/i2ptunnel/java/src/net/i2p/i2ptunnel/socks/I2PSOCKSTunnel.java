@@ -6,6 +6,20 @@
  */
 package net.i2p.i2ptunnel.socks;
 
+/**
+ * SOCKS proxy server that routes TCP connections through I2P network.
+ * <p>
+ * This class implements a SOCKS4a/5 proxy server that accepts local SOCKS
+ * connections and forwards them to I2P destinations or configured outproxies.
+ * It supports both I2P destination routing (for .i2p addresses) and
+ * outproxy routing for clearnet access, with authentication and port-specific
+ * proxy configuration.
+ * <p>
+ * The tunnel provides dynamic destination resolution, connection management,
+ * and serves as a flexible proxy solution for applications that support
+ * SOCKS protocol, enabling seamless I2P integration for various clients.
+ */
+
 import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;

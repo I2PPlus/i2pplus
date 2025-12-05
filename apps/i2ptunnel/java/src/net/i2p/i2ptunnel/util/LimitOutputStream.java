@@ -5,8 +5,17 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Base class for limiting writes and calling a callback when finished
+ * Abstract output stream that limits writes and provides completion callback.
  *
+ * <p>This class extends FilterOutputStream to provide a framework for
+ * implementing output streams with write limitations or size restrictions.
+ * It tracks completion state and calls a callback when the stream
+ * is finished, preventing multiple completion attempts.</p>
+ *
+ * <p>Subclasses implement specific limiting behavior while inheriting
+ * callback functionality and completion state management. Useful for
+ * implementing streams that need to enforce size limits or provide
+ * notification when writing is complete.</p>
  * @since 0.9.62
  */
 public abstract class LimitOutputStream extends FilterOutputStream {
@@ -16,7 +25,7 @@ public abstract class LimitOutputStream extends FilterOutputStream {
     protected boolean _isDone;
 
     public interface DoneCallback { public void streamDone(); }
-    
+
     /**
      *  @param done non-null
      */
@@ -41,7 +50,7 @@ public abstract class LimitOutputStream extends FilterOutputStream {
     public void write(byte buf[], int off, int len) throws IOException {
         out.write(buf, off, len);
     }
-    
+
 
     protected boolean isDone() { return _isDone; }
 
