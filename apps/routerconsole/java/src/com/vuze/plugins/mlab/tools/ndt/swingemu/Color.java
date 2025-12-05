@@ -28,7 +28,7 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  * to allow the NDT tool to run in headless environments. The class provides
  * color constants but no actual color functionality.</p>
  * 
- * <pAll operations are no-ops or return null values, maintaining API compatibility
+ * <p>All operations are no-ops or return null values, maintaining API compatibility
  * without requiring an actual graphical display system.</p>
  * 
  */

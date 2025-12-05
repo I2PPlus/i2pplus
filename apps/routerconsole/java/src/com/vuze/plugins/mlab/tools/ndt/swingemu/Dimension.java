@@ -30,7 +30,7 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  * to allow the NDT tool to run in headless environments. The dimension can be
  * constructed with width and height but provides no actual sizing functionality.</p>
  * 
- * <pAll operations are no-ops, maintaining API compatibility without requiring
+ * <p>All operations are no-ops, maintaining API compatibility without requiring
  * an actual graphical display system.</p>
  * 
  */

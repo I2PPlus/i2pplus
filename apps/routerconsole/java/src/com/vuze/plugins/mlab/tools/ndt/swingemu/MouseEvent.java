@@ -30,7 +30,7 @@ package com.vuze.plugins.mlab.tools.ndt.swingemu;
  * to allow the NDT tool to run in headless environments. The event provides
  * no actual mouse event data or functionality.</p>
  * 
- * <pAll operations are no-ops, maintaining API compatibility without requiring
+ * <p>All operations are no-ops, maintaining API compatibility without requiring
  * an actual graphical display system or mouse input.</p>
  * 
  */
