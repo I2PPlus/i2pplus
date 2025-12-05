@@ -8,6 +8,12 @@ import java.io.InputStream;
 import java.io.IOException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
+
+/**
+ * Provider for managing I2PControl keystore operations.
+ * Handles loading and accessing SSL certificates for secure connections.
+ */
+public class KeyStoreProvider {
 import java.security.cert.X509Certificate;
 
 public class KeyStoreProvider {

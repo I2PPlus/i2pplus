@@ -5,7 +5,10 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-
+/**
+ * Authentication token for I2PControl API access.
+ * Provides time-limited authentication tokens for secure API access.
+ */
 public class AuthToken {
     static final int VALIDITY_TIME = 1; // Measured in days
     private final SecurityManager _secMan;

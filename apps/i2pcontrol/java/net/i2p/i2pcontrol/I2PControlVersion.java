@@ -4,6 +4,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Version information and API compatibility for I2PControl interface.
+ * Manages supported API versions and compatibility checks.
+ */
 public class I2PControlVersion {
     /** The current version of I2PControl */
     public final static String VERSION = "0.12.0";

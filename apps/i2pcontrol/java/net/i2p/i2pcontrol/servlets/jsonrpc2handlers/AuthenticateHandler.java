@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /*
+ * 
  *  Copyright 2011 hottuna (dev@robertfoss.se)
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,6 +30,10 @@ import java.util.Map;
  *
  */
 
+/**
+ * JSON-RPC handler for authentication requests.
+ * Processes authentication and token generation for I2PControl API access.
+ */
 public class AuthenticateHandler implements RequestHandler {
 
     private static final String[] requiredArgs = {"Password", "API"};
