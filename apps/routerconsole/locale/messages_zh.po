@@ -681,7 +681,7 @@ msgid "After reporting, please restart your router"
 msgstr "更改这些设置需要重启您的路由器"
 
 msgid "Invalid form submission, requires POST"
-msgstr ""
+msgstr "无效的表单提交，需要使用POST方法"
 
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "表单提交无效，可能的原因是您使用了“后退”或“刷新”按钮。请重新提交。"
@@ -814,13 +814,13 @@ msgid "To enable SSL access for the Router Console, see the commented <code>clie
 msgstr "要启用Router Console的SSL访问，请参阅位于您的I2P应用程序目录中的<code>client.config</code>文件以了解更多信息。您需要编辑位于该目录中的RouterConsoleRunner配置文件。 "
 
 msgid "Save disabled, edit the router.config file to make changes"
-msgstr ""
+msgstr "保存已禁用，请编辑router.config文件进行更改"
 
 msgid "Error updating the configuration - please see the error logs"
 msgstr "更新配置出错 - 请查看错误日志"
 
 msgid "No changes made to the configuration"
-msgstr ""
+msgstr "配置未做任何更改"
 
 msgid "Note"
 msgstr "注意"
@@ -841,7 +841,7 @@ msgid "Save Plugin Configuration"
 msgstr "保存插件配置"
 
 msgid "Plugins disabled"
-msgstr ""
+msgstr "插件已禁用"
 
 msgid "Install Plugin"
 msgstr "安装插件"
@@ -853,7 +853,7 @@ msgid "Update All Installed Plugins"
 msgstr "更新全部已安装的插件"
 
 msgid "Delete client disabled"
-msgstr ""
+msgstr "删除客户端已禁用"
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -937,17 +937,17 @@ msgid "Updating all plugins"
 msgstr "正在更新全部插件"
 
 msgid "Update manager not registered, cannot install"
-msgstr ""
+msgstr "更新管理器未注册，无法安装"
 
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "正在从 {0} 安装插件"
 
 msgid "Cannot install, check logs"
-msgstr ""
+msgstr "无法安装，请检查日志"
 
 msgid "Update manager not registered, cannot check"
-msgstr ""
+msgstr "更新管理器未注册，无法检查"
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1047,17 +1047,17 @@ msgid "Join Family"
 msgstr "加入家族"
 
 msgid "Bad certificate - No Subject CN"
-msgstr ""
+msgstr "证书错误 - 没有主题CN"
 
 msgid "Bad characters in Family: "
-msgstr ""
+msgstr "家族名称中有非法字符："
 
 #, java-format
 msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
-msgstr ""
+msgstr "密钥库 {0} 已存在于家族 {1} 中！请先删除或重命名它。"
 
 msgid "Family key configured for router family: "
-msgstr ""
+msgstr "已为路由器家族配置家族密钥："
 
 msgid "Load from file failed"
 msgstr "从文件加载失败"
@@ -1108,7 +1108,7 @@ msgid "Invalid destination"
 msgstr "目标址无效"
 
 msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "无法为本地目标添加密钥。请在隧道管理器中启用加密。"
 
 #, java-format
 msgid "Key for {0} added to keyring"
@@ -1121,7 +1121,7 @@ msgid "Requires hostname, destination, or blinded Base32"
 msgstr "请求主机名，目标址，或已混淆的 Base32"
 
 msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
-msgstr ""
+msgstr "无法为本地目标添加密钥。请在隐藏服务管理器中启用加密。"
 
 msgid "Destination requires lookup password"
 msgstr "目标址要求查找密码"
@@ -1142,7 +1142,7 @@ msgid "Delete key"
 msgstr "删除密钥"
 
 msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "无法为本地目标移除密钥。请在隧道管理器中禁用加密。"
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -2007,7 +2007,7 @@ msgid "Show list of all known I2P routers"
 msgstr "包含所有已知 I2P 路由的列表"
 
 msgid "List of recently connected peers with profiling info"
-msgstr ""
+msgstr "包含最近连接的对等节点及其分析信息的列表"
 
 msgid "Peer Profiles"
 msgstr "对等节点摘要"
@@ -2175,7 +2175,7 @@ msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Reddit的另类隐私前端"
 
 msgid "AI Image generation & Chat hub"
-msgstr ""
+msgstr "AI图像生成和聊天中心"
 
 msgid "IRC Logs for multiple networks"
 msgstr "多个网络的 IRC 日志"
