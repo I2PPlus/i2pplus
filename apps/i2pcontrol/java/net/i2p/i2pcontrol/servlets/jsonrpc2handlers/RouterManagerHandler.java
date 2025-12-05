@@ -221,6 +221,7 @@ public class RouterManagerHandler implements RequestHandler {
         return new JSONRPC2Response(outParams, req.getID());
     }
 
+    /** Task to update the wrapper manager with a specific exit code */
     public static class UpdateWrapperManagerTask implements Runnable {
         private int _exitCode;
         public UpdateWrapperManagerTask(int exitCode) {
