@@ -7,7 +7,7 @@ import net.i2p.data.Hash;
 import net.i2p.data.Base32;
 
 /**
- * Base class for elements found in filter definition files
+ * Base class for filter definition elements.
  *
  * @since 0.9.40
  */

@@ -37,12 +37,10 @@ import java.util.Map;
 import net.i2p.data.DataHelper;
 
 /**
- * Folder object manages a array Object[] to support
- * paging and sorting.
+ * Manages an Object array with paging and sorting support.
  * 
- * You create a folder object, set the contents with setElements(),
- * add Comparators with addSorter(), choose one with setSortBy() and
- * and then fetch the content of the current page with
+ * Create a folder, set contents with setElements(), add comparators with addSorter(),
+ * select a sort method with setSortBy(), and retrieve the current page with
  * currentPageIterator().
  * 
  * All public methods are synchronized.

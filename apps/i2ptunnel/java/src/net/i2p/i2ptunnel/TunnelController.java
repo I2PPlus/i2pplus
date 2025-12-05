@@ -436,9 +436,17 @@ public class TunnelController implements Logging {
         }
     }
 
-    /**
-     *  @throws IllegalArgumentException via methods in I2PTunnel
-     */
+/**
+ * Configures and controls a single tunnel.
+ * <p>
+ * Contains persistent configuration (loaded/saved from config file) and runtime state.
+ * Used to start, stop, and monitor individual tunnels. Generally one
+ * TunnelController per user-configured tunnel, though some (e.g. shared clients)
+ * may have multiple.
+ * <p>
+ * Bundled under TunnelControllerGroup for storage/loading from single config file.
+ * Used by plugins to create tunnels - maintain public methods as stable API.
+ */
     private void doStartTunnel() {
         synchronized (this) {
             if (_state != TunnelState.STARTING) {return;}

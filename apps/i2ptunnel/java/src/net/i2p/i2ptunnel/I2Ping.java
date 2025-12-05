@@ -24,9 +24,10 @@ import net.i2p.util.EventDispatcher;
 import net.i2p.util.I2PAppThread;
 
 /**
- *  Warning - not necessarily a stable API.
- *  Used by I2PTunnel CLI only. Consider this sample code.
- *  Not for use outside this package.
+ * I2P ping utility for CLI use.
+ * <p>
+ * Warning: Not stable API. Sample code for I2PTunnel CLI only.
+ * Not for external use.
  */
 public class I2Ping extends I2PTunnelClientBase {
 

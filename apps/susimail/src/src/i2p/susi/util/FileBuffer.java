@@ -10,7 +10,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.util.SecureFileOutputStream;
 
 /**
- * File implementation of Buffer.
+ * Buffer implementation backed by a file.
  *
  * @since 0.9.34
  */

@@ -15,7 +15,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.client.streaming.StatefulConnectionFilter;
 
 /**
- * Factory for incoming connection filters.  Only public class in this package.
+ * Factory for incoming connection filters. Only public class in this package.
  *
  * @since 0.9.40
  */

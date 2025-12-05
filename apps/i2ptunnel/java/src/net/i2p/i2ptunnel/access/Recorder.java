@@ -3,9 +3,9 @@ package net.i2p.i2ptunnel.access;
 import java.io.File;
 
 /**
- * Definition of a recorder.  If any remote destinations attempt
- * enough connections to cause a breach of the specified threshold,
- * their hash will be recorded in the specified file.
+ * Recorder definition for threshold breach logging.
+ * <p>
+ * Records destination hashes to specified file when threshold breach occurs.
  *
  * @since 0.9.40
  */

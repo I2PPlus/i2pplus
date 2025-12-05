@@ -3,7 +3,7 @@ package i2p.susi.util;
 import java.io.Writer;
 
 /**
- * StringBuilder version of StringWriter
+ * Writer implementation backed by StringBuilder.
  *
  * @since 0.9.35
  */

@@ -35,7 +35,8 @@ import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
 
 /**
- * Warning - static - not for use by multiple applications or prefixes
+ * Static configuration manager.
+ * Warning: Not suitable for multiple applications or prefixes.
  *
  * @author susi
  */

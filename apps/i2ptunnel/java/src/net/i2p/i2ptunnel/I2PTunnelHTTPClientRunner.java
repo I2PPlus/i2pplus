@@ -17,7 +17,7 @@ import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 
 /**
- * HTTP client runner that filters HTTP response headers to enforce the
+ * HTTP client runner that filters response headers to enforce the
  * "Connection: close" header, ensuring browsers treat the connection as non-persistent,
  * even if the server doesn't comply.
  *

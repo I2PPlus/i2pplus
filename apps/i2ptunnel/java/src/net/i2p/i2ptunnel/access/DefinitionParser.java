@@ -8,7 +8,7 @@ import java.io.File;
 import net.i2p.data.DataHelper;
 
 /**
- * Utility class for parsing filter definitions
+ * Utility class for parsing filter definitions.
  *
  * @since 0.9.40
  */
@@ -52,12 +52,12 @@ class DefinitionParser {
      * The threshold format can be one of the following:
      * </p>
      * <ul>
-     * <li>Numeric definition of number of connections over number seconds - "15/5",
-     *   "30/60", and so on.  Note that if the number of connections is 1 (as for
-     *   example in "1/1") the first connection attempt will result in a breach.</li>
-     * <li>The word "allow".  This threshold is never breached, i.e. infinite number of
+     * <li>Numeric definition of number of connections over number seconds - &amp;quot;15/5&amp;quot;,
+     *   &amp;quot;30/60&amp;quot;, and so on.  Note that if the number of connections is 1 (as for
+     *   example in &amp;quot;1/1&amp;quot;) first connection attempt will result in a breach.</li>
+     * <li>The word &amp;quot;allow&amp;quot;.  This threshold is never breached, i.e. infinite number of
      *   connection attempts is permitted.</li>
-     * <li>The word "deny".  This threshold is always breached, i.e. no connection attempts
+     * <li>The word &amp;quot;deny&amp;quot;.  This threshold is always breached, i.e. no connection attempts
      *   will be allowed.</li>
      * </ul>
      *

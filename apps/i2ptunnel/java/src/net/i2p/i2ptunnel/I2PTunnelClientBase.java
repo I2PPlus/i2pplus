@@ -4,16 +4,15 @@
 package net.i2p.i2ptunnel;
 
 /**
- * Abstract base class for I2P client tunnels providing common functionality
- * for socket management, connection handling, and tunnel lifecycle.
+ * Abstract base class for I2P client tunnels with common functionality.
  * <p>
- * This class manages I2PSocketManager creation, local server socket setup,
- * connection threading, and provides framework for both shared and non-shared
- * client tunnels. It handles SSL configuration, connection timeouts,
- * and provides abstract methods for connection-specific implementations.
+ * Manages I2PSocketManager creation, local server socket setup,
+ * connection threading, and framework for shared and non-shared client tunnels.
+ * Handles SSL configuration, connection timeouts, and provides abstract methods
+ * for connection-specific implementations.
  * <p>
- * Extending classes implement specific tunnel types like HTTP clients,
- * SOCKS proxies, and standard TCP tunnels.
+ * Extended by specific tunnel types like HTTP clients, SOCKS proxies,
+ * and standard TCP tunnels.
  */
 
 import java.io.File;

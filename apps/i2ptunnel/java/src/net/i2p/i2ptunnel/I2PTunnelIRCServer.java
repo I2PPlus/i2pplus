@@ -20,37 +20,26 @@ import net.i2p.data.Base32;
 import net.i2p.util.EventDispatcher;
 
 /**
- * Simple extension to the I2PTunnelServer that filters the registration
- * sequence to pass the destination hash of the client through as the hostname,
- * so an IRC Server may track users across nick changes.
- *
- * Of course, this requires the ircd actually use the hostname sent by
- * the client rather than the IP. It is common for ircds to ignore the
- * hostname in the USER message (unless it's coming from another server)
- * since it is easily spoofed. So you have to fix or, if you are lucky,
- * configure your ircd first. At least in unrealircd and ngircd this is
- * not configurable.
- *
- * There are three options for mangling the desthash. Put the option in the
- * "custom options" section of i2ptunnel.
- *   - ircserver.method unset:            Defaults to user.
- *   - ircserver.method=user:             Use method described above.
- *   - ircserver.method=webirc:           Use the WEBIRC protocol.
- *   - ircserver.cloakKey unset:          Cloak with a random value that is persistent for
- *                                        the life of this tunnel. This is the default.
- *   - ircserver.cloakKey=somepassphrase: Cloak with the hash of the passphrase. Use this to
- *                                        have consistent mangling across restarts, or to
- *                                        have multiple IRC servers cloak consistently to
- *                                        be able to track users even when they switch servers.
- *                                        Note: don't quote or put spaces in the passphrase,
- *                                        the i2ptunnel gui can't handle it.
- *   - ircserver.webircPassword=password  The password to use for the WEBIRC protocol.
- *   - ircserver.webircSpoofIP=IP         The IP
- *   - ircserver.fakeHostname=%f.b32.i2p: Set the fake hostname sent by I2PTunnel,
- *                                        %f is the full B32 destination hash
- *                                        %c is the cloaked hash.
- *
- * There is no outbound filtering.
+ * IRC server tunnel that filters registration to pass client destination hash as hostname.
+ * <p>
+ * Enables IRC servers to track users across nick changes. Requires IRC daemon
+ * to use client-provided hostname rather than IP. Many IRCds ignore
+ * hostname in USER message (easily spoofed) unless from another server.
+ * May require IRCd configuration; not configurable in unrealircd/ngircd.
+ * <p>
+ * Destination mangling options (in i2ptunnel custom options):
+ * <pre>
+ *   ircserver.method unset:     Defaults to user method
+ *   ircserver.method=user:       Use described method
+ *   ircserver.method=webirc:     Use WEBIRC protocol
+ *   ircserver.cloakKey unset:    Random persistent cloaking (default)
+ *   ircserver.cloakKey=pass:     Consistent cloaking via passphrase hash
+ *   ircserver.webircPassword=pw:  WEBIRC protocol password
+ *   ircserver.webircSpoofIP=IP:   Spoofed IP for WEBIRC
+ *   ircserver.fakeHostname=%f.b32.i2p: Fake hostname (%f=full B32, %c=cloaked)
+ * </pre>
+ * Note: No quotes/spaces in passphrase for GUI compatibility.
+ * No outbound filtering.
  *
  * @author zzz
  */

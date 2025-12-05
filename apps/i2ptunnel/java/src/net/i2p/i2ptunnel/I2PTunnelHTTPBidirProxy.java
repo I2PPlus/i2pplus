@@ -22,7 +22,7 @@ import net.i2p.util.EventDispatcher;
 
 
 /**
- * Reuse HTTP server's I2PSocketManager for a proxy with no outproxy capability.
+ * HTTP proxy reusing server's I2PSocketManager without outproxy capability.
  *
  * @author sponge
  */

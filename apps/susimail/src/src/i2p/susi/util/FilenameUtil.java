@@ -8,7 +8,7 @@ import java.util.Locale;
 import net.i2p.data.DataHelper;
 
 /**
- * File name encoding methods
+ * File name encoding utilities for cross-platform compatibility.
  *
  * @since 0.9.34 pulled out of WebMail
  */

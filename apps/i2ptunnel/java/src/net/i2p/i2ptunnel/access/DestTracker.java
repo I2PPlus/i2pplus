@@ -3,7 +3,7 @@ package net.i2p.i2ptunnel.access;
 import net.i2p.data.Hash;
 
 /**
- * Tracks the connection attempts for a given remote Destination
+ * Tracks connection attempts for a specific remote destination.
  *
  * @since 0.9.40
  */

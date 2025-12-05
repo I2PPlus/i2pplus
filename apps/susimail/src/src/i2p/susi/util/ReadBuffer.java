@@ -30,8 +30,8 @@ import java.io.OutputStream;
 import net.i2p.data.DataHelper;
 
 /**
- * Input only for constant data, initialized from a byte array.
- * See MemoryBuffer for read/write.
+ * Read-only Buffer for constant data initialized from a byte array.
+ * See MemoryBuffer for read/write support.
  *
  * @author susi
  */

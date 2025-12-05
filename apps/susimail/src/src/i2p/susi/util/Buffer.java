@@ -5,9 +5,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Base interface for all Buffers.
- * Data may only be read or written via streams,
- * unless implemented via additional methods in subclasses.
+ * Base interface for data buffers.
+ * Data access is primarily through streams, with additional methods
+ * available in subclasses.
  *
  * @since 0.9.34
  */

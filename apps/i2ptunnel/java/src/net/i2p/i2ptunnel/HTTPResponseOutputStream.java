@@ -22,16 +22,13 @@ import net.i2p.util.ByteCache;
 import net.i2p.util.Log;
 
 /**
- * This does the transparent gzip decompression on the client side.
- * Extended in I2PTunnelHTTPServer to do the compression on the server side.
- *
- * Simple stream for delivering an HTTP response to
- * the client, trivially filtered to make sure "Connection: close"
- * is always in the response.  Perhaps add transparent handling of the
- * Content-Encoding: x-i2p-gzip, adjusting the headers to say Content-Encoding: identity?
- * Content-Encoding: gzip is trivial as well, but Transfer-Encoding: chunked makes it
- * more work than is worthwhile at the moment.
- *
+ * HTTP response stream with transparent gzip decompression (client side).
+ * <p>
+ * Extended in I2PTunnelHTTPServer for server-side compression.
+ * Simple filtered response stream ensuring "Connection: close" header.
+ * Could handle Content-Encoding: x-i2p-gzip transparently,
+ * adjusting to Content-Encoding: identity. gzip encoding trivial,
+ * but chunked transfer encoding adds complexity.
  */
 class HTTPResponseOutputStream extends FilterOutputStream {
     private final Log _log;

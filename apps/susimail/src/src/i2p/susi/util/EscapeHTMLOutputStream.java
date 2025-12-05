@@ -7,10 +7,9 @@ import java.io.OutputStream;
 import net.i2p.data.DataHelper;
 
 /**
- * Escape HTML on the fly.
- * Streaming version of DataHelper.escapeHTML(),
- * and we escape '-' too since we stick debugging stuff inside comments,
- * and '--' is disallowed inside comments.
+ * OutputStream that escapes HTML characters during streaming.
+ * Streaming version of DataHelper.escapeHTML(), also escapes '-' for
+ * comment safety since '--' is disallowed inside HTML comments.
  *
  * @since 0.9.34
  */

@@ -16,8 +16,7 @@ import net.i2p.data.Hash;
 import net.i2p.util.Log;
 
 /**
- * An element of filter definition that reads hashes of remote destinations
- * from a file.
+ * Filter definition element that reads destination hashes from a file.
  *
  * @since 0.9.40
  */

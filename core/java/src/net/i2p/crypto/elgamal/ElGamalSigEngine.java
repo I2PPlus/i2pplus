@@ -16,7 +16,7 @@ import net.i2p.util.RandomSource;
 /**
  * ElG signatures with SHA-256
  *
- * ref: https://en.wikipedia.org/wiki/ElGamal_signature_scheme
+ * ref: <a href=https://en.wikipedia.org/wiki/ElGamal_signature_scheme>https://en.wikipedia.org/wiki/ElGamal_signature_scheme</a>
  *
  * @since 0.9.25
  */

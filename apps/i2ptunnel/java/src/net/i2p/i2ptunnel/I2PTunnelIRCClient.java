@@ -23,7 +23,9 @@ import net.i2p.util.I2PAppThread;
 import net.i2p.util.PortMapper;
 
 /**
- * Todo: Can we extend I2PTunnelClient instead and remove some duplicated code?
+ * IRC client tunnel with DCC support and filtering.
+ * <p>
+ * TODO: Consider extending I2PTunnelClient to reduce code duplication.
  */
 public class I2PTunnelIRCClient extends I2PTunnelClientBase {
 

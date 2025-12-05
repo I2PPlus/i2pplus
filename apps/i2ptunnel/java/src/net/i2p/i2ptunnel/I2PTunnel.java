@@ -84,10 +84,10 @@ import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
 
 /**
- *  An I2PTunnel tracks one or more I2PTunnelTasks and one or more I2PSessions.
- *  Usually one of each.
- *
- *  TODO: Most events are not listened to elsewhere, so error propagation is poor
+ * Manages I2PTunnelTasks and I2PSessions.
+ * <p>
+ * Typically one of each. TODO: Poor error propagation as most events
+ * aren't listened to elsewhere.
  */
 public class I2PTunnel extends EventDispatcherImpl implements Logging {
     private final Log _log;

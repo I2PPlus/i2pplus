@@ -10,14 +10,11 @@ import net.i2p.util.EventDispatcher;
 import net.i2p.util.EventDispatcherImpl;
 
 /**
- *  Either a Server or a Client.
- *
- *  Use caution if extending externally.
- *  This class should be maintained as a stable API,
- *  but ask to be sure.
- *
- *  Note that there is no startRunning() method,
- *  however all extending classes implement one.
+ * Base class for I2P tunnel servers and clients.
+ * <p>
+ * Use caution when extending externally. Should be maintained as stable API,
+ * but confirm before use. No startRunning() method; all extending
+ * classes implement one.
  */
 public abstract class I2PTunnelTask extends EventDispatcherImpl {
 

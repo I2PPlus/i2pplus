@@ -4,13 +4,12 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- * Counts connection attempts and decides if specified thresholds have been
- * breached.
+ * Counts connection attempts and detects threshold breaches.
  *
  * @since 0.9.40
  */
 /**
- * Counter for tracking access attempts.
+ * Access attempt counter.
  */
 class AccessCounter {
 

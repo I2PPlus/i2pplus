@@ -3,7 +3,7 @@ package i2p.susi.util;
 import java.io.OutputStream;
 
 /**
- * Write to nowhere
+ * OutputStream that discards all written data.
  *
  * @since 0.9.34
  */

@@ -5,7 +5,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Output only. Input unsupported.
+ * Write-only Buffer implementation.
  *
  * @since 0.9.34
  */

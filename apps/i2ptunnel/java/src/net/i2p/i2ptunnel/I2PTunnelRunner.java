@@ -27,12 +27,12 @@ import net.i2p.util.InternalSocket;
 import net.i2p.util.Log;
 
 /**
- *  A thread that starts one more thread if keepAliveSocket is false,
- *  to forward traffic in each direction.
- *  When keepAliveSocket is true, we do not expect additional data and do not
- *  need a forwarding thread from the socket to I2P.
- *
- *  Warning - not maintained as a stable API for external use.
+ * Thread that forwards traffic between I2PSocket and TCP Socket.
+ * <p>
+ * When keepAliveSocket is true, no additional data expected and
+ * no forwarding thread needed from socket to I2P.
+ * <p>
+ * Warning: Not maintained as stable API for external use.
  */
 public class I2PTunnelRunner extends I2PAppThread implements I2PSocket.SocketErrorListener, DoneCallback {
     protected final Log _log;

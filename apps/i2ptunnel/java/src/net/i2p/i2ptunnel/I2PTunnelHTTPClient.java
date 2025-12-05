@@ -44,35 +44,25 @@ import net.i2p.util.Log;
 import net.i2p.util.PortMapper;
 
 /**
- * Act as a mini HTTP proxy, handling various different types of requests,
- * forwarding them through I2P appropriately, and displaying the reply.  Supported
- * request formats are: <pre>
+ * HTTP proxy that tunnels requests through I2P.
+ * <p>
+ * Handles various request formats and forwards through I2P:
+ * <pre>
  *   $method http://$site[$port]/$path $protocolVersion
- * or
  *   $method $path $protocolVersion\nHost: $site
- * or
  *   $method http://i2p/$b64key/$path $protocolVersion
- * or
  *   $method /$site/$path $protocolVersion
- * or (deprecated)
- *   $method /eepproxy/$site/$path $protocolVersion
+ *   (deprecated) $method /eepproxy/$site/$path $protocolVersion
  * </pre>
  *
- * CONNECT (https) supported as of release 0.9.11.
- *
- * Note that http://i2p/$b64key/... and /eepproxy/$site/... are not recommended
- * in browsers or other user-visible applications, as relative links will not
- * resolve correctly, cookies won't work, etc.
- *
- * Note that http://$b64key/... and http://$b64key.i2p/... are NOT supported, as
- * a b64 key may contain '=' and '~', both of which are illegal host name characters.
+ * CONNECT (HTTPS) supported since 0.9.11.
+ * Note: http://i2p/$b64key/... and /eepproxy/$site/... not recommended
+ * for browsers due to broken relative links and cookies.
+ * http://$b64key/... and http://$b64key.i2p/... unsupported (illegal characters).
  * Rewrite as http://i2p/$b64key/...
- *
- * If the $site resolves with the I2P naming service, then it is directed towards
- * that eepsite, otherwise it is directed towards this client's outproxy (typically
- * "squid.i2p").  Only HTTP and HTTPS are supported (no ftp, mailto, etc).  Both GET
- * and POST have been tested, though other $methods should work.
- *
+ * <p>
+ * Directs I2P-resolved sites to destinations, others to outproxy (typically "squid.i2p").
+ * Supports HTTP and HTTPS only. GET and POST tested; other methods should work.
  */
 public class I2PTunnelHTTPClient extends I2PTunnelHTTPClientBase implements Runnable {
 

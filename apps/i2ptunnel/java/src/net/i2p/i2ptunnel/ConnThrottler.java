@@ -13,14 +13,13 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
 /**
- * Count how often something happens with a particular peer and all peers.
- * This offers basic DOS protection but is not a complete solution.
- *
- * This is a little different from the one in streaming, in that the
- * ban time is different from the check time, and we keep a separate
- * map of throttled peers with individual time stamps.
- * The streaming version is lightweight but "sloppy" since it
- * uses a single time bucket for all.
+ * Connection rate limiter providing basic DoS protection.
+ * <p>
+ * Counts events per peer and across all peers. Ban time differs from check time,
+ * with separate map of throttled peers and individual timestamps.
+ * <p>
+ * Differs from streaming version: more precise tracking vs. lightweight
+ * but "sloppy" single time bucket approach.
  *
  * @since 0.9.9
  */

@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * An InputStream that implements ReadCounter.
+ * InputStream that counts bytes read and skipped.
  *
  * @since 0.9.34
  */

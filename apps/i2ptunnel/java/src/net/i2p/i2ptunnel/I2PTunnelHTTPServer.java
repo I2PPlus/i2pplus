@@ -55,12 +55,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Simple extension to the I2PTunnelServer that filters the HTTP
- * headers sent from the client to the server, replacing the Host
- * header with whatever this instance has been configured with, and
- * if the browser set Accept-Encoding: x-i2p-gzip, gzip the http
- * message body and set Content-Encoding: x-i2p-gzip.
- *
+ * HTTP server tunnel that filters headers and provides compression.
+ * <p>
+ * Extends I2PTunnelServer to filter HTTP headers from client to server,
+ * replacing the Host header with configured value. Compresses HTTP message
+ * body and sets Content-Encoding: x-i2p-gzip when browser requests
+ * Accept-Encoding: x-i2p-gzip.
  */
 public class I2PTunnelHTTPServer extends I2PTunnelServer {
 

@@ -7,15 +7,13 @@ import java.io.InputStream;
 import net.i2p.data.DataHelper;
 
 /**
- *  A stream that returns EOF when the input matches
- *  the bytes provided. The reader will never see any bytes
- *  from a full match.
+ * InputStream that returns EOF when input matches specified bytes.
+ * The reader never sees bytes from a full match.
  *
- *  We extend PushbackInputStream for convenience,
- *  but we use its buffer as a fifo, not a stack.
- *  Do not call the unread() methods externally.
+ * Extends PushbackInputStream for convenience but uses its buffer
+ * as a FIFO, not a stack. Do not call unread() methods externally.
  *
- *  @since 0.9.34
+ * @since 0.9.34
  */
 public class EOFOnMatchInputStream extends PushbackInputStream implements ReadCounter {
     private final byte[] match;

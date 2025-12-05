@@ -28,18 +28,12 @@ import net.i2p.data.Hash;
 import net.i2p.client.streaming.StatefulConnectionFilter;
 
 /**
- * A filter for incoming connections which can be configured
- * based on access list rules.
- *
- * It keeps a track of known destinations - those defined in existing access
- * lists and unknown ones - those who are not defined in such lists but have
- * recently attempted to connect to us.
- *
- * Every SYNC_INTERVAL seconds the access lists are reloaded from disk if they
- * have changed according to file modification time.  This
- * allows the user to edit them.  Also, if any recorders are defined in the
- * access rules, they will write to disk at such interval if there have been
- * any new breaches.
+ * Incoming connection filter configurable through access list rules.
+ * <p>
+ * Tracks known destinations (defined in access lists) and unknown destinations
+ * (recently attempted connections). Reloads access lists from disk when modified
+ * to allow user edits. Writes recorder data to disk at intervals when
+ * new threshold breaches occur.
  *
  * @since 0.9.40
  */

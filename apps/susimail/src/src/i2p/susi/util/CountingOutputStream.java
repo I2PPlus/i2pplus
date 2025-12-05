@@ -5,8 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * An OutputStream that counts how many bytes are written
- * and returns the count via getWritten().
+ * OutputStream that counts bytes written.
  *
  * @since 0.9.34
  */

@@ -35,10 +35,10 @@ import net.i2p.util.SecureDirectory;
 import net.i2p.util.SystemVersion;
 
 /**
- * Coordinate a set of tunnels within the JVM, loading and storing their config
- * to disk, and building new ones as requested.
- *
- * This is the entry point from clients.config.
+ * Coordinates tunnel groups within the JVM, managing configuration persistence.
+ * <p>
+ * Loads and stores tunnel configurations to disk, builds new tunnels on request.
+ * Entry point from clients.config.
  */
 public class TunnelControllerGroup implements ClientApp {
     private final Log _log;

@@ -24,36 +24,18 @@ import net.i2p.util.EventDispatcher;
 import net.i2p.util.PortMapper;
 
 /**
- * Supports the following:
- *<pre>
- *   (where protocol is generally HTTP/1.1 but is ignored)
- *   (where host is one of:
- *      example.i2p
- *      52chars.b32.i2p
- *      516+charsbase64
- *      example.com (sent to one of the configured proxies)
- *   )
+ * SSL tunnel through HTTP proxy using CONNECT method.
+ * <p>
+ * Supports various host formats (example.i2p, .b32.i2p, base64, external domains)
+ * and CONNECT syntax variations. Protocol ignored for I2P destinations.
+ * <p>
+ * Additional lines after CONNECT are stripped. CONNECT line removed for .i2p
+ * accesses, passed through for outproxy accesses.
+ * <p>
+ * Reference: RFC draft-luotonen-ssl-tunneling-03.txt (1997)
+ * "Tunneling SSL Through a WWW Proxy"
  *
- *   (protocol is ignored for i2p destinations)
- *   CONNECT host
- *   CONNECT host protocol
- *   CONNECT host:port
- *   CONNECT host:port protocol (this is the standard)
- *</pre>
- *
- * Additional lines after the CONNECT line but before the blank line are ignored and stripped.
- * The CONNECT line is removed for .i2p accesses
- * but passed along for outproxy accesses.
- *
- * Ref:
- *<pre>
- *  INTERNET-DRAFT                                              Ari Luotonen
- *  Expires: September 26, 1997          Netscape Communications Corporation
- *  draft-luotonen-ssl-tunneling-03.txt                       March 26, 1997
- *                     Tunneling SSL Through a WWW Proxy
- *</pre>
- *
- * @author zzz a stripped-down I2PTunnelHTTPClient
+ * @author zzz (stripped-down I2PTunnelHTTPClient)
  */
 public class I2PTunnelConnectClient extends I2PTunnelHTTPClientBase implements Runnable {
 

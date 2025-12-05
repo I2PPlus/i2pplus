@@ -7,8 +7,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 /**
- * Buffer backed by a byte array.
- * Use for small amounts of data only.
+ * Buffer implementation backed by a byte array.
+ * Suitable for small amounts of data only.
  *
  * @since 0.9.34
  */

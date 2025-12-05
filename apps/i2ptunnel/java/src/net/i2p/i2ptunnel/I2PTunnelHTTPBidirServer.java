@@ -4,16 +4,15 @@
 package net.i2p.i2ptunnel;
 
 /**
- * Bidirectional HTTP server tunnel that combines server and client functionality.
+ * Bidirectional HTTP server tunnel combining server and client functionality.
  * <p>
- * This class extends I2PTunnelHTTPServer to provide both inbound and outbound
- * HTTP connectivity through I2P. It creates a server tunnel to receive
- * HTTP requests and simultaneously sets up a client tunnel (proxy) to handle
- * outbound requests, enabling bidirectional HTTP communication through a single
- * I2P destination.
+ * Extends I2PTunnelHTTPServer to provide both inbound and outbound
+ * HTTP connectivity through I2P. Creates a server tunnel for receiving
+ * requests and a client tunnel (proxy) for outbound requests,
+ * enabling bidirectional HTTP communication through a single I2P destination.
  * <p>
- * Useful for applications that need both server and client HTTP capabilities
- * through I2P, such as web applications that make external API calls.
+ * Useful for applications requiring both server and client HTTP capabilities
+ * through I2P, such as web applications making external API calls.
  */
 
 import java.io.File;

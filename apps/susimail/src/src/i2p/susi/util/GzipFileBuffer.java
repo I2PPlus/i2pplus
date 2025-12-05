@@ -14,7 +14,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.util.SecureFileOutputStream;
 
 /**
- * Gzip File implementation of Buffer.
+ * Gzip-compressed file Buffer implementation.
  *
  * @since 0.9.34
  */

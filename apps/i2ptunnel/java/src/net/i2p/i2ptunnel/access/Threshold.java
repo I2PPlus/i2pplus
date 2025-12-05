@@ -1,9 +1,9 @@
 package net.i2p.i2ptunnel.access;
 
 /**
- * Definition of a Threshold.
- *
- * A Threshold is defined by a number of connections over a period of seconds
+ * Connection threshold definition.
+ * <p>
+ * Defined by maximum connection attempts over a time period in seconds.
  *
  * @since 0.9.40
  */

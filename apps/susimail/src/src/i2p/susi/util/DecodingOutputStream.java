@@ -13,10 +13,10 @@ import java.nio.charset.CoderResult;
 
 
 /**
- *  Buffering decoder, with output to a Writer.
- *  Adapted from SAM UTF8Reader.
+ * Buffering decoder that outputs to a Writer.
+ * Adapted from SAM UTF8Reader.
  *
- *  @since 0.9.34
+ * @since 0.9.34
  */
 public class DecodingOutputStream extends OutputStream {
 

@@ -19,7 +19,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SecureDirectory;
 
 /**
- * Utilities for I2PTunnel client SSL server sockets.
+ * SSL server socket utilities for I2PTunnel clients.
  *
  * @since 0.9.15 adopted from net.i2p.router.client.SSLClientListenerRunner
  */

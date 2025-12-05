@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Limit total reads and skips to a specified maximum, then return EOF
+ * InputStream that limits total bytes read to a specified maximum.
  *
  * @since 0.9.34
  */

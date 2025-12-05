@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Replace plain \n with \r\n on the fly.
+ * OutputStream that converts LF to CRLF during streaming.
  * Used when importing .eml files.
  *
  * @since 0.9.34

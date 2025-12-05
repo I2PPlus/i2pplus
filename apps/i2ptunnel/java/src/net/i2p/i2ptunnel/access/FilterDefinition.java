@@ -1,9 +1,9 @@
 package net.i2p.i2ptunnel.access;
 
 /**
- * Definition of an access filter.
- *
- * This POJO contains the parsed representation from the filter definition file.
+ * Access filter definition.
+ * <p>
+ * POJO containing parsed representation from filter definition file.
  *
  * @since 0.9.40
  */

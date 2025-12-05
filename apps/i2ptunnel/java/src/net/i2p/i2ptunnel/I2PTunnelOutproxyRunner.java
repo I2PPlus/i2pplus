@@ -60,9 +60,14 @@ public class I2PTunnelOutproxyRunner extends I2PAppThread {
     /** When the runner started up */
     private final long startedOn;
 
-    /**
-     * Called if no data (except initial) is received and timeout occurs.
-     */
+/**
+ * Thread that forwards data between local socket and I2PSocket.
+ * <p>
+ * Stripped-down version of I2PTunnelRunner without SSL or read timeout support.
+ * Intended for outproxy use only. Not maintained as stable public API.
+ *
+ * @since 0.9.11
+ */
     private final I2PTunnelRunner.FailCallback onTimeout;
 
     // Use AtomicLong to safely count totals across threads

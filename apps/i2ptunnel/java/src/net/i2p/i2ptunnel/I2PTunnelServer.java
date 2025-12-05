@@ -4,17 +4,15 @@
 package net.i2p.i2ptunnel;
 
 /**
- * I2P server tunnel that accepts I2P connections and forwards them to local TCP services.
+ * I2P server tunnel that forwards I2P connections to local TCP services.
  * <p>
- * This class listens for incoming I2P connections and creates corresponding
- * TCP connections to configured local destinations. It supports SSL/TLS,
- * connection filtering, multiple destination mapping by port, and provides
- * asynchronous connection handling through thread pools.
+ * Listens for I2P connections and creates corresponding TCP connections
+ * to local destinations. Supports SSL/TLS, connection filtering, port-based
+ * destination mapping, and asynchronous connection handling via thread pools.
  * <p>
- * The server manages I2PSocketManager lifecycle, handles connection
- * timeouts, and provides framework for specialized servers like HTTP servers
- * and bidirectional tunnels. It supports both standard and filtered
- * operation modes.
+ * Manages I2PSocketManager lifecycle, connection timeouts, and provides
+ * framework for specialized servers like HTTP and bidirectional tunnels.
+ * Supports both standard and filtered operation modes.
  */
 
 import java.io.ByteArrayInputStream;

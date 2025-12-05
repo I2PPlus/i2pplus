@@ -10,8 +10,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
 
 /**
- * Replace patterns with a simple regex on the fly.
- * Case insensitive.
+ * OutputStream that performs case-insensitive regex replacement during streaming.
  *
  * @since 0.9.62
  */
