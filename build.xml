@@ -1073,6 +1073,7 @@
       source="${javac.version}"
       destdir="./build/javadoc"
       packagenames="*"
+      excludepackagenames="com.mpatric.mp3agic:org.jfree.svg.src:org.jfree.svg.src.util"
       use="true"
       splitindex="true"
       failonerror="false"
