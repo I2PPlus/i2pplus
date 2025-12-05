@@ -6,9 +6,9 @@ import net.i2p.data.DataHelper;
 import net.i2p.util.VersionComparator;
 
 /**
- *  The update metadata.
+ *  The update metadata for I2P router news and updates.
+ *  Contains standard Atom feed metadata and I2P-specific release information.
  *  Any String or List fields may be null.
- *
  *  @since 0.9.17
  */
 public class NewsMetadata {
