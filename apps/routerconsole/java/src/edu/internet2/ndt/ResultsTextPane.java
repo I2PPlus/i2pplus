@@ -2,13 +2,9 @@ package edu.internet2.ndt;
 
 import com.vuze.plugins.mlab.tools.ndt.swingemu.*;
 
-/*
- * Class that extends TextPane. This Text-pane is used as the chief
- * Results window that summarizes the results of all tests
- * that have been run.
- *
- * This class is declared separately so that it can be easily extended
- * by users to customize based on individual needs
+/**
+ * Text pane component used as the chief results window that summarizes test results.
+ * This class is declared separately to allow easy extension for customization.
  */
 public class ResultsTextPane extends JTextPane {
 

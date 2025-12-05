@@ -20,6 +20,9 @@
 
 package com.maxmind.geoip;
 
+/**
+ * Represents geographical location data including coordinates and address information.
+ */
 public class Location {
 	public String countryCode;
 	public String countryName;

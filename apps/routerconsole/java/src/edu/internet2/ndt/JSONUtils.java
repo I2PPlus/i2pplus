@@ -7,6 +7,10 @@ import java.util.Iterator;
 import java.util.Map;
 
 /* Created by Sebastian Malecki on 13.05.14. */
+
+/**
+ * Utility class for JSON object manipulation and message handling.
+ */
 public class JSONUtils {
 
     /**

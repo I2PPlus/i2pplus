@@ -10,6 +10,10 @@ package edu.internet2.ndt;
  * Though the information inside a user-agent string is not restricted to these alone, currently,
  * NDT uses this to get Browser OS only.
  */
+
+/**
+ * Utility class for parsing user agent strings to extract browser and OS information.
+ */
 public class UserAgentTools {
 
     public static String[] getArray(String a, String b, String c) {

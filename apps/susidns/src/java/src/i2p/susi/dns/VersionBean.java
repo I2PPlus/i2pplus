@@ -8,6 +8,9 @@
 
 package i2p.susi.dns;
 
+/**
+ * Bean providing SusDNS application version and URL information.
+ */
 public class VersionBean {
     private static String version = "0.7";
     private static String url = "http://susi.i2p/";

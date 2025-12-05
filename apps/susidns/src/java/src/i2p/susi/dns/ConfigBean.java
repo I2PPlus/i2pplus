@@ -18,6 +18,9 @@ import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.OrderedProperties;
 
+/**
+ * Bean for managing SusDNS configuration properties and file operations.
+ */
 public class ConfigBean extends BaseBean implements Serializable {
 
     private String config;

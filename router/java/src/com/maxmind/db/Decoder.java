@@ -35,6 +35,9 @@ final class Decoder {
 
     private final ByteBuffer buffer;
 
+    /**
+     * Enumeration of data types supported in MaxMind DB format.
+     */
     static enum Type {
         EXTENDED, POINTER, UTF8_STRING, DOUBLE, BYTES, UINT16, UINT32, MAP, INT32, UINT64, UINT128, ARRAY, CONTAINER, END_MARKER, BOOLEAN, FLOAT;
 

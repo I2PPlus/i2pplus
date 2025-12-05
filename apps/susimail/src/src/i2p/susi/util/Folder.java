@@ -55,6 +55,9 @@ public class Folder<O extends Object> {
 	public static final String PAGESIZE = "pager.pagesize";
 	public static final int DEFAULT_PAGESIZE = 30;
 
+	/**
+	 * Enumeration defining sort direction for folder elements.
+	 */
 	public enum SortOrder {
 		/** lowest to highest */
 		DOWN,

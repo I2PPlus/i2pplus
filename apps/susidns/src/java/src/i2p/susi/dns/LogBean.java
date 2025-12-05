@@ -25,6 +25,9 @@ import java.util.Locale;
 
 import net.i2p.data.DataHelper;
 
+/**
+ * Bean for managing and displaying subscription log entries and statistics.
+ */
 public class LogBean extends BaseBean
 {
     private String logName, logged;
