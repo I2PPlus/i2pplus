@@ -151,7 +151,7 @@ public final class UnsynchronizedByteArrayOutputStream extends AbstractByteArray
     /**
      * Constructs a new byte array output stream. The buffer capacity is initially
      *
-     * {@value AbstractByteArrayOutputStream#DEFAULT_SIZE} bytes, though its size increases if necessary.
+     * {@link AbstractByteArrayOutputStream#DEFAULT_SIZE} bytes, though its size increases if necessary.
      * @deprecated Use {@link #builder()}, {@link Builder}, and {@link Builder#get()}.
      */
     @Deprecated

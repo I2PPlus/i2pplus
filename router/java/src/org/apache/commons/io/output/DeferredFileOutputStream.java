@@ -271,7 +271,7 @@ public class DeferredFileOutputStream extends ThresholdingOutputStream {
 
     /**
      * Constructs an instance of this class which will trigger an event at the specified threshold, and save data to a file beyond that point. The initial
-     * buffer size will default to {@value AbstractByteArrayOutputStream#DEFAULT_SIZE} bytes which is ByteArrayOutputStream's default buffer size.
+     * buffer size will default to {@link AbstractByteArrayOutputStream#DEFAULT_SIZE} bytes which is ByteArrayOutputStream's default buffer size.
      *
      * @param threshold  The number of bytes at which to trigger an event.
      * @param outputFile The file to which data is saved beyond the threshold.

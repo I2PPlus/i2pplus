@@ -100,7 +100,6 @@ public interface DataHolder {
     /**
      * Returns the time step used for timestamp interval.
      *
-     * @param step time step for data processing
      * @return Step used for data processing.
      */
     long getStep();
