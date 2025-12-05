@@ -970,7 +970,7 @@
       splitindex="true"
       failonerror="false"
       charset="utf-8"
-      additionalparam="-notimestamp -stylesheetFile ./javadoc.css -quiet -Xmaxwarns 10"
+      additionalparam="-notimestamp -stylesheetFile ./javadoc.css -quiet -Xmaxwarns 1000"
       doctitle="I2P+ Javadocs [${release.number}-${i2p.build.number}${build.extra}]"
       windowtitle="Javadocs [I2P+ ${release.number}+] - API Version ${api.version}+">
       <group title="Core SDK (i2p.jar)" packages="net.i2p:net.i2p.*:net.i2p.client:net.i2p.client.*:net.i2p.internal:net.i2p.internal.*:freenet.support.CPUInformation:gnu.crypto.*:gnu.getopt:gnu.gettext:com.nettgryppa.security:net.i2p.apache.http.conn.ssl:net.i2p.apache.http.conn.util:net.i2p.apache.http.util:org.json.simple:com.southernstorm.noise.crypto.x25519:com.southernstorm.noise.crypto.chacha20:org.minidns:org.minidns.*"/>
@@ -1076,7 +1076,7 @@
       splitindex="true"
       failonerror="false"
       charset="utf-8"
-      additionalparam="-notimestamp -quiet -Xmaxwarns 10"
+      additionalparam="-notimestamp -quiet -Xmaxwarns 1000"
       doctitle="I2P+ Javadocs [${release.number}-${i2p.build.number}${build.extra}]"
       windowtitle="Javadocs [I2P+ ${release.number}+] - API Version ${api.version}+">
       <group title="Core SDK (i2p.jar)" packages="net.i2p:net.i2p.*:net.i2p.client:net.i2p.client.*:net.i2p.internal:net.i2p.internal.*:freenet.support.CPUInformation:gnu.crypto.*:gnu.getopt:gnu.gettext:com.nettgryppa.security:net.i2p.apache.http.conn.ssl:net.i2p.apache.http.conn.util:net.i2p.apache.http.util:org.json.simple:com.southernstorm.noise.crypto.x25519:com.southernstorm.noise.crypto.chacha20:org.minidns:org.minidns.*"/>
@@ -1160,7 +1160,7 @@
       </fileset>
     </move>
     <delete dir="./build/javadoc" quiet="true"/>
-    <echo message="javadoc creation complete, saved to dist/javadoc (${ant.project.name} ${release.number}-${i2p.build.number}${build.extra})"/>
+    <echo message="javadoc creation complete -> Saved to dist/javadoc (${ant.project.name} ${release.number}-${i2p.build.number}${build.extra})"/>
   </target>
 
   <target name="javadoc-zip" depends="javadoc">
