@@ -37,10 +37,12 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**
+ * NTCP 2 inbound connection establishment state machine.
+ * Handles the server-side (Bob) of the NTCP 2 handshake process,
+ * including cryptographic operations, peer verification, and
+ * transition to the data phase.
  *
- *  NTCP 2. We are Bob.
- *
- *  @since 0.9.35 pulled out of EstablishState
+ * @since 0.9.35 pulled out of EstablishState
  */
 class InboundEstablishState extends EstablishBase implements NTCP2Payload.PayloadCallback {
 

@@ -10,13 +10,12 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleByteCache;
 
 /**
- * Inbound NTCP 2 only.
- * OutboundNTCP2State does not extend this.
+ * Base class for NTCP connection establishment.
+ * Provides common functionality for NTCP 2 handshake state machines,
+ * including cryptographic operations, timing calculations, and
+ * peer skew management. Inbound NTCP 2 only - OutboundNTCP2State does not extend this.
  *
  * @since 0.9.35 pulled out of EstablishState
- */
-/**
- * Base class for NTCP connection establishment.
  */
 abstract class EstablishBase implements EstablishState {
 

@@ -57,7 +57,12 @@ import static net.i2p.router.transport.Transport.AddressSource.*;
 import static net.i2p.router.transport.TransportUtil.IPv6Config.*;
 
 /**
- *  The NIO TCP transport
+ * The NIO TCP transport implementation for I2P.
+ * Manages inbound and outbound NTCP connections using non-blocking I/O,
+ * supporting both NTCP 1 and NTCP 2 protocols with configurable
+ * bandwidth limits, connection pooling, and peer management.
+ *
+ * @since 0.9.16
  */
 public class NTCPTransport extends TransportImpl {
     private final Log _log;

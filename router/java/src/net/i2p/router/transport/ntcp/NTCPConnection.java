@@ -52,15 +52,13 @@ import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 
 /**
- * Coordinate the connection to a single peer.
- * NTCP 1 or 2.
+ * Coordinates a connection to a single peer using NTCP 1 or NTCP 2 protocols.
+ * Manages the complete connection lifecycle including establishment,
+ * message encryption/decryption, bandwidth management, and graceful shutdown.
  *
  * Public only for UI peers page. Not a public API, not for external use.
  *
- *
- */
-/**
- * Coordinates a connection to a single peer.
+ * @since 0.9.16
  */
 public class NTCPConnection implements Closeable {
     private final RouterContext _context;

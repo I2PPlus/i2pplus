@@ -3,8 +3,12 @@ package net.i2p.router.transport.ntcp;
 import java.nio.ByteBuffer;
 
 /**
- * Handle the establishment
+ * Interface for handling NTCP connection establishment state machine.
+ * Manages the handshake process for both NTCP 1 and NTCP 2 protocols,
+ * including parsing handshake data, preparing outbound connections,
+ * and tracking establishment completion status.
  *
+ * @since 0.9.16
  */
 interface EstablishState {
 
