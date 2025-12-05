@@ -23,6 +23,17 @@
 
 package com.vuze.plugins.mlab.tools.ndt.swingemu;
 
+/**
+ * Emulation of java.awt.event.WindowAdapter for the NDT (Network Diagnostic Tool) plugin.
+ * 
+ * <p>This class provides a minimal stub implementation of a window event adapter
+ * to allow the NDT tool to run in headless environments. The adapter provides
+ * empty methods for window event handling but no actual functionality.</p>
+ * 
+ * <p>All operations are no-ops, maintaining API compatibility without requiring
+ * an actual graphical display system or window management.</p>
+ * 
+ */
 public class WindowAdapter {
 
 }

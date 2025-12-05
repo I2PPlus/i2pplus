@@ -23,6 +23,17 @@
 
 package com.vuze.plugins.mlab.tools.ndt.swingemu;
 
+/**
+ * Emulation of java.awt.event.MouseEvent for the NDT (Network Diagnostic Tool) plugin.
+ * 
+ * <p>This class provides a minimal stub implementation of a mouse event
+ * to allow the NDT tool to run in headless environments. The event provides
+ * no actual mouse event data or functionality.</p>
+ * 
+ * <pAll operations are no-ops, maintaining API compatibility without requiring
+ * an actual graphical display system or mouse input.</p>
+ * 
+ */
 public class MouseEvent {
 
 }

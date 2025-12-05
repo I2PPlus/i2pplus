@@ -19,18 +19,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-
-
 package com.vuze.plugins.mlab.tools.ndt.swingemu;
 
 import java.net.URL;
 
+/**
+ * Minimal implementation of applet context for swing emulation.
+ */
 public class AppletContext {
-
-	public void
-	showDocument(
-		URL	 	url )
-	{
-
-	}
+    public void showDocument(URL url) {}
 }

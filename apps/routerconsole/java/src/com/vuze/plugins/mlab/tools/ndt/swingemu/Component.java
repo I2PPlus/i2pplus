@@ -23,6 +23,17 @@
 
 package com.vuze.plugins.mlab.tools.ndt.swingemu;
 
+/**
+ * Base class for Swing component emulation in the NDT (Network Diagnostic Tool) plugin.
+ * 
+ * <p>This class provides a minimal stub implementation of Swing components to allow
+ * the NDT tool to run in headless environments without requiring actual GUI components.
+ * All methods are no-ops that do nothing, providing compatibility without functionality.</p>
+ * 
+ * <p>This emulation layer enables the NDT network testing functionality to be integrated
+ * into I2P applications that don't have graphical user interfaces.</p>
+ * 
+ */
 public class
 Component
 {
