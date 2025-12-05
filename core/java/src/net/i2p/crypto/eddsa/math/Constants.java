@@ -13,6 +13,7 @@ package net.i2p.crypto.eddsa.math;
 
 import net.i2p.crypto.eddsa.Utils;
 
+/** Mathematical constants for EdDSA operations */
 final class Constants {
     public static final byte[] ZERO = Utils.hexToBytes("0000000000000000000000000000000000000000000000000000000000000000");
     public static final byte[] ONE = Utils.hexToBytes("0100000000000000000000000000000000000000000000000000000000000000");

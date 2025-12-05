@@ -1,11 +1,3 @@
-/**
- * Implementation of ElGamal public keys.
- * 
- * This class provides a concrete implementation of the ElGamalPublicKey interface,
- * representing the public component of an ElGamal key pair. It stores the public
- * value y = g^x mod p and the ElGamal parameters (prime p and generator g), and
- * supports X.509 encoding for standardized key storage and transmission.
- */
 package net.i2p.crypto.elgamal.impl;
 
 import java.io.IOException;
@@ -24,6 +16,14 @@ import net.i2p.crypto.elgamal.ElGamalPublicKey;
 import net.i2p.crypto.elgamal.spec.ElGamalParameterSpec;
 import net.i2p.crypto.elgamal.spec.ElGamalPublicKeySpec;
 
+/**
+ * Implementation of ElGamal public keys.
+ *
+ * This class provides a concrete implementation of the ElGamalPublicKey interface,
+ * representing the public component of an ElGamal key pair. It stores the public
+ * value y = g^x mod p and the ElGamal parameters (prime p and generator g), and
+ * supports X.509 encoding for standardized key storage and transmission.
+ */
 public class ElGamalPublicKeyImpl
     implements ElGamalPublicKey, DHPublicKey
 {

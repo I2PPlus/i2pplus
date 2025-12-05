@@ -1,11 +1,3 @@
-/**
- * Implementation of ElGamal private keys.
- * 
- * This class provides a concrete implementation of the ElGamalPrivateKey interface,
- * representing the private component of an ElGamal key pair. It stores the secret
- * exponent x and the ElGamal parameters (prime p and generator g), and supports
- * PKCS#8 encoding for standardized key storage and transmission.
- */
 package net.i2p.crypto.elgamal.impl;
 
 import java.io.IOException;
@@ -25,6 +17,14 @@ import static net.i2p.crypto.elgamal.impl.ElGamalPublicKeyImpl.spaceFor;
 import net.i2p.crypto.elgamal.spec.ElGamalParameterSpec;
 import net.i2p.crypto.elgamal.spec.ElGamalPrivateKeySpec;
 
+/**
+ * Implementation of ElGamal private keys.
+ *
+ * This class provides a concrete implementation of the ElGamalPrivateKey interface,
+ * representing the private component of an ElGamal key pair. It stores the secret
+ * exponent x and the ElGamal parameters (prime p and generator g), and supports
+ * PKCS#8 encoding for standardized key storage and transmission.
+ */
 public class ElGamalPrivateKeyImpl
     implements ElGamalPrivateKey, DHPrivateKey
 {
