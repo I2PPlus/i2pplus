@@ -35,6 +35,13 @@ import net.metanotion.io.block.BlockFile;
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 
+/**
+ * Manages the level structure for a skip list data structure.
+ * Maintains pointers to different levels in the skip list hierarchy.
+ *
+ * @param <K> type of keys, must be comparable
+ * @param <V> type of values
+ */
 public class SkipLevels<K extends Comparable<? super K>, V> implements Flushable {
 	/** We can't have more than 2**32 pages */
 	public static final int MAX_SIZE = 32;

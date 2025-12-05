@@ -35,6 +35,13 @@ import net.i2p.util.RandomSource;
 
 //import net.metanotion.io.block.BlockFile;
 
+/**
+ * Skip list data structure implementation for efficient key-value storage and retrieval.
+ * Provides O(log n) average time complexity for search, insertion, and deletion operations.
+ *
+ * @param <K> type of keys, must be comparable
+ * @param <V> type of values
+ */
 public class SkipList<K extends Comparable<? super K>, V> implements Flushable, Iterable<V> {
 	/** the probability of each next higher level */
 	protected static final int P = 2;

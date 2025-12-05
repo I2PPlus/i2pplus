@@ -32,6 +32,13 @@ import java.io.Flushable;
 
 //import net.metanotion.io.block.BlockFile;
 
+/**
+ * Represents a span or node in a skip list data structure.
+ * Contains arrays of keys and values at a specific level in the skip list.
+ *
+ * @param <K> type of keys, must be comparable
+ * @param <V> type of values
+ */
 public class SkipSpan<K extends Comparable<? super K>, V> implements Flushable {
 	/** This is actually limited by BlockFile.spanSize which is much smaller */
 	public static final int MAX_SIZE = 256;
