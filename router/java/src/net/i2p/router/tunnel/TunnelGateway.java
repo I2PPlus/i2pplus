@@ -146,6 +146,10 @@ abstract class TunnelGateway {
 
     public int getMessagesSent() { return _messagesSent; }
 
+    /**
+     * Interface for sending preprocessed tunnel data.
+     * Handles encryption and forwarding of preprocessed messages to the receiver.
+     */
     public interface Sender {
         /**
          * Take the preprocessed data containing zero or more fragments, encrypt
@@ -157,6 +161,10 @@ abstract class TunnelGateway {
         public long sendPreprocessed(byte preprocessed[], Receiver receiver);
     }
 
+    /**
+     * Interface for preprocessing queued tunnel messages.
+     * Handles message coalescing, fragmentation, and preparation for sending.
+     */
     public interface QueuePreprocessor {
         /**
          * Caller must synchronize on the list!
@@ -176,6 +184,10 @@ abstract class TunnelGateway {
         public long getDelayAmount();
     }
 
+    /**
+     * Interface for receiving encrypted tunnel data.
+     * Handles delivery of encrypted messages to the next hop in the tunnel.
+     */
     public interface Receiver {
         /**
          * Take the encrypted data and send it off to the next hop

@@ -42,6 +42,10 @@ class ParticipatingThrottler {
     private static final long CLEAN_TIME = 11 * 60 * 1000 / LIFETIME_PORTION;
     private static final String MIN_VERSION = "0.9.64";
 
+    /**
+     * Result of throttling decision for tunnel participation requests.
+     * Determines whether to accept, reject, or drop a tunnel request.
+     */
     public enum Result { ACCEPT, REJECT, DROP }
 
     ParticipatingThrottler(RouterContext ctx) {
