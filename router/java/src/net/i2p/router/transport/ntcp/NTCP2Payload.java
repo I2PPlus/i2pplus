@@ -14,8 +14,7 @@ import net.i2p.data.i2np.I2NPMessageImpl;
 import net.i2p.data.router.RouterInfo;
 
 /**
- *
- *  NTCP2 Payload generation and parsing
+ * NTCP 2 payload generation and parsing utilities.
  *
  *  @since 0.9.35
  */
@@ -178,6 +177,9 @@ class NTCP2Payload {
      *  Base class for blocks to be transmitted.
      *  Not used for receive; we use callbacks instead.
      */
+    /**
+     * Base class for NTCP 2 payload blocks.
+     */
     public static abstract class Block {
         private final int type;
 
@@ -217,6 +219,9 @@ class NTCP2Payload {
         }
     }
 
+    /**
+     * Block containing router information.
+     */
     public static class RIBlock extends Block {
         private final byte[] data;
         private final boolean f;
@@ -238,6 +243,9 @@ class NTCP2Payload {
         }
     }
 
+    /**
+     * Block containing I2NP message.
+     */
     public static class I2NPBlock extends Block {
         private final I2NPMessage m;
 
@@ -255,6 +263,9 @@ class NTCP2Payload {
         }
     }
 
+    /**
+     * Block containing padding data.
+     */
     public static class PaddingBlock extends Block {
         private final int sz;
         private final I2PAppContext ctx;
@@ -284,6 +295,10 @@ class NTCP2Payload {
         }
     }
 
+    /**
+     * Block containing the current date and time.
+     * Used for time synchronization in NTCP2 protocol.
+     */
     public static class DateTimeBlock extends Block {
         private final long now;
 
@@ -302,6 +317,9 @@ class NTCP2Payload {
         }
     }
 
+    /**
+     * Block containing options data.
+     */
     public static class OptionsBlock extends Block {
         private final byte[] opts;
 
@@ -320,6 +338,9 @@ class NTCP2Payload {
         }
     }
 
+    /**
+     * Block containing termination data.
+     */
     public static class TerminationBlock extends Block {
         private final byte rsn;
         private final long rcvd;

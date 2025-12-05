@@ -59,6 +59,9 @@ import net.i2p.util.SystemVersion;
  *
  *
  */
+/**
+ * Coordinates a connection to a single peer.
+ */
 public class NTCPConnection implements Closeable {
     private final RouterContext _context;
     private final Log _log;
@@ -670,6 +673,10 @@ public class NTCPConnection implements Closeable {
         }
     }
 
+    /**
+     * Buffer for preparing data to be written to the connection.
+     * Contains unencrypted data that will be encrypted before transmission.
+     */
     static class PrepBuffer {
         final byte unencrypted[];
         //int unencryptedLength;

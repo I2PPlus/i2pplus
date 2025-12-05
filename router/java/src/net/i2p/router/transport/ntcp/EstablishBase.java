@@ -15,6 +15,9 @@ import net.i2p.util.SimpleByteCache;
  *
  * @since 0.9.35 pulled out of EstablishState
  */
+/**
+ * Base class for NTCP connection establishment.
+ */
 abstract class EstablishBase implements EstablishState {
 
     public static final VerifiedEstablishState VERIFIED = new VerifiedEstablishState();
@@ -55,6 +58,10 @@ abstract class EstablishBase implements EstablishState {
     private final AtomicBoolean _isCorrupt = new AtomicBoolean();
     private final AtomicBoolean _isComplete = new AtomicBoolean();
 
+    /**
+     * States for NTCP connection establishment process.
+     * Tracks the progression through various phases of the handshake.
+     */
     protected enum State {
         OB_INIT,
         IB_INIT,
