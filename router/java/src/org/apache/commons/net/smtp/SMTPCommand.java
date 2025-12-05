@@ -24,46 +24,46 @@ package org.apache.commons.net.smtp;
  */
 public final class SMTPCommand {
 
-    /** SMTP command {@value}. */
+    /** SMTP command {@value #HELO}. */
     public static final int HELO = 0;
 
-    /** SMTP command {@value}. */
+    /** SMTP command {@value #MAIL}. */
     public static final int MAIL = 1;
 
-    /** SMTP command {@value}. */
+    /** SMTP command {@value #RCPT}. */
     public static final int RCPT = 2;
 
-    /** SMTP command {@value}. */
+    /** SMTP command {@value #DATA}. */
     public static final int DATA = 3;
 
-    /** SMTP command {@value}. */
+    /** SMTP command {@value #SEND}. */
     public static final int SEND = 4;
 
-    /** SMTP command {@value}. */
+    /** SMTP command {@value #SOML}. */
     public static final int SOML = 5;
 
-    /** SMTP command {@value}. */
+    /** SMTP command {@value #SAML}. */
     public static final int SAML = 6;
 
-    /** SMTP command {@value}. */
+    /** SMTP command {@value #RSET}. */
     public static final int RSET = 7;
 
-    /** SMTP command {@value}. */
+    /** SMTP command {@value #VRFY}. */
     public static final int VRFY = 8;
 
-    /** SMTP command {@value}. */
+    /** SMTP command {@value #EXPN}. */
     public static final int EXPN = 9;
 
-    /** SMTP command {@value}. */
+    /** SMTP command {@value #HELP}. */
     public static final int HELP = 10;
 
-    /** SMTP command {@value}. */
+    /** SMTP command {@value #NOOP}. */
     public static final int NOOP = 11;
 
-    /** SMTP command {@value}. */
+    /** SMTP command {@value #TURN}. */
     public static final int TURN = 12;
 
-    /** SMTP command {@value}. */
+    /** SMTP command {@value #QUIT}. */
     public static final int QUIT = 13;
 
     /**
@@ -82,40 +82,40 @@ public final class SMTPCommand {
 
     private static final int NEXT = EHLO + 1; // update as necessary when adding new entries
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #HELO}. */
     public static final int HELLO = HELO;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #HELO}. */
     public static final int LOGIN = HELO;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #MAIL}. */
     public static final int MAIL_FROM = MAIL;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #RCPT}. */
     public static final int RECIPIENT = RCPT;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #DATA}. */
     public static final int SEND_MESSAGE_DATA = DATA;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #SEND}. */
     public static final int SEND_FROM = SEND;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #SOML}. */
     public static final int SEND_OR_MAIL_FROM = SOML;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #SAML}. */
     public static final int SEND_AND_MAIL_FROM = SAML;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #RSET}. */
     public static final int RESET = RSET;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #VRFY}. */
     public static final int VERIFY = VRFY;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #EXPN}. */
     public static final int EXPAND = EXPN;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #QUIT}. */
     public static final int LOGOUT = QUIT;
 
     private static final String[] commands = { "HELO", "MAIL FROM:", "RCPT TO:", "DATA", "SEND FROM:", "SOML FROM:", "SAML FROM:", "RSET", "VRFY", "EXPN",

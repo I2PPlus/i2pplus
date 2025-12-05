@@ -22,58 +22,58 @@ package org.apache.commons.net.nntp;
  */
 public final class NNTPCommand {
 
-    /** NNTP command code {@value}. */
+    /** NNTP command code {@value #ARTICLE}. */
     public static final int ARTICLE = 0;
 
-    /** NNTP command code {@value}. */
+    /** NNTP command code {@value #BODY}. */
     public static final int BODY = 1;
 
-    /** NNTP command code {@value}. */
+    /** NNTP command code {@value #GROUP}. */
     public static final int GROUP = 2;
 
-    /** NNTP command code {@value}. */
+    /** NNTP command code {@value #HEAD}. */
     public static final int HEAD = 3;
 
-    /** NNTP command code {@value}. */
+    /** NNTP command code {@value #HELP}. */
     public static final int HELP = 4;
 
-    /** NNTP command code {@value}. */
+    /** NNTP command code {@value #IHAVE}. */
     public static final int IHAVE = 5;
 
-    /** NNTP command code {@value}. */
+    /** NNTP command code {@value #LAST}. */
     public static final int LAST = 6;
 
-    /** NNTP command code {@value}. */
+    /** NNTP command code {@value #LIST}. */
     public static final int LIST = 7;
 
-    /** NNTP command code {@value}. */
+    /** NNTP command code {@value #NEWGROUPS}. */
     public static final int NEWGROUPS = 8;
 
-    /** NNTP command code {@value}. */
+    /** NNTP command code {@value #NEWNEWS}. */
     public static final int NEWNEWS = 9;
 
-    /** NNTP command code {@value}. */
+    /** NNTP command code {@value #NEXT}. */
     public static final int NEXT = 10;
 
-    /** NNTP command code {@value}. */
+    /** NNTP command code {@value #POST}. */
     public static final int POST = 11;
 
-    /** NNTP command code {@value}. */
+    /** NNTP command code {@value #QUIT}. */
     public static final int QUIT = 12;
 
-    /** NNTP command code {@value}. */
+    /** NNTP command code {@value #SLAVE}. */
     public static final int SLAVE = 13;
 
-    /** NNTP command code {@value}. */
+    /** NNTP command code {@value #STAT}. */
     public static final int STAT = 14;
 
-    /** NNTP command code {@value}. */
+    /** NNTP command code {@value #AUTHINFO}. */
     public static final int AUTHINFO = 15;
 
-    /** NNTP command code {@value}. */
+    /** NNTP command code {@value #XOVER}. */
     public static final int XOVER = 16;
 
-    /** NNTP command code {@value}. */
+    /** NNTP command code {@value #XHDR}. */
     public static final int XHDR = 17;
 
     private static final String[] commands = { "ARTICLE", "BODY", "GROUP", "HEAD", "HELP", "IHAVE", "LAST", "LIST", "NEWGROUPS", "NEWNEWS", "NEXT", "POST",

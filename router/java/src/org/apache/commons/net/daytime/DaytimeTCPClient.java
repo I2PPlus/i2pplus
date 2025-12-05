@@ -32,7 +32,7 @@ import org.apache.commons.net.SocketClient;
 public final class DaytimeTCPClient extends SocketClient {
 
     /**
-     * The default daytime port {@value} per RFC 867.
+     * The default daytime port {@value #DEFAULT_PORT} per RFC 867.
      */
     public static final int DEFAULT_PORT = 13;
 

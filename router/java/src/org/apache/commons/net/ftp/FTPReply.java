@@ -26,169 +26,169 @@ package org.apache.commons.net.ftp;
  */
 public final class FTPReply {
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #RESTART_MARKER}. */
     public static final int RESTART_MARKER = 110;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #SERVICE_NOT_READY}. */
     public static final int SERVICE_NOT_READY = 120;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #DATA_CONNECTION_ALREADY_OPEN}. */
     public static final int DATA_CONNECTION_ALREADY_OPEN = 125;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #FILE_STATUS_OK}. */
     public static final int FILE_STATUS_OK = 150;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #COMMAND_OK}. */
     public static final int COMMAND_OK = 200;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #COMMAND_IS_SUPERFLUOUS}. */
     public static final int COMMAND_IS_SUPERFLUOUS = 202;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #SYSTEM_STATUS}. */
     public static final int SYSTEM_STATUS = 211;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #DIRECTORY_STATUS}. */
     public static final int DIRECTORY_STATUS = 212;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #FILE_STATUS}. */
     public static final int FILE_STATUS = 213;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #HELP_MESSAGE}. */
     public static final int HELP_MESSAGE = 214;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #NAME_SYSTEM_TYPE}. */
     public static final int NAME_SYSTEM_TYPE = 215;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #SERVICE_READY}. */
     public static final int SERVICE_READY = 220;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #SERVICE_CLOSING_CONTROL_CONNECTION}. */
     public static final int SERVICE_CLOSING_CONTROL_CONNECTION = 221;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #DATA_CONNECTION_OPEN}. */
     public static final int DATA_CONNECTION_OPEN = 225;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #CLOSING_DATA_CONNECTION}. */
     public static final int CLOSING_DATA_CONNECTION = 226;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #ENTERING_PASSIVE_MODE}. */
     public static final int ENTERING_PASSIVE_MODE = 227;
 
     /**
-     * Reply code {@value}.
+     * Reply code {@value #ENTERING_EPSV_MODE}.
      *
      * @since 2.2
      */
     public static final int ENTERING_EPSV_MODE = 229;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #USER_LOGGED_IN}. */
     public static final int USER_LOGGED_IN = 230;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #FILE_ACTION_OK}. */
     public static final int FILE_ACTION_OK = 250;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #PATHNAME_CREATED}. */
     public static final int PATHNAME_CREATED = 257;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #NEED_PASSWORD}. */
     public static final int NEED_PASSWORD = 331;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #NEED_ACCOUNT}. */
     public static final int NEED_ACCOUNT = 332;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #FILE_ACTION_PENDING}. */
     public static final int FILE_ACTION_PENDING = 350;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #SERVICE_NOT_AVAILABLE}. */
     public static final int SERVICE_NOT_AVAILABLE = 421;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #CANNOT_OPEN_DATA_CONNECTION}. */
     public static final int CANNOT_OPEN_DATA_CONNECTION = 425;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #TRANSFER_ABORTED}. */
     public static final int TRANSFER_ABORTED = 426;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #FILE_ACTION_NOT_TAKEN}. */
     public static final int FILE_ACTION_NOT_TAKEN = 450;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #ACTION_ABORTED}. */
     public static final int ACTION_ABORTED = 451;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #INSUFFICIENT_STORAGE}. */
     public static final int INSUFFICIENT_STORAGE = 452;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #UNRECOGNIZED_COMMAND}. */
     public static final int UNRECOGNIZED_COMMAND = 500;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #SYNTAX_ERROR_IN_ARGUMENTS}. */
     public static final int SYNTAX_ERROR_IN_ARGUMENTS = 501;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #COMMAND_NOT_IMPLEMENTED}. */
     public static final int COMMAND_NOT_IMPLEMENTED = 502;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #BAD_COMMAND_SEQUENCE}. */
     public static final int BAD_COMMAND_SEQUENCE = 503;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #COMMAND_NOT_IMPLEMENTED_FOR_PARAMETER}. */
     public static final int COMMAND_NOT_IMPLEMENTED_FOR_PARAMETER = 504;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #NOT_LOGGED_IN}. */
     public static final int NOT_LOGGED_IN = 530;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #NEED_ACCOUNT_FOR_STORING_FILES}. */
     public static final int NEED_ACCOUNT_FOR_STORING_FILES = 532;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #FILE_UNAVAILABLE}. */
     public static final int FILE_UNAVAILABLE = 550;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #PAGE_TYPE_UNKNOWN}. */
     public static final int PAGE_TYPE_UNKNOWN = 551;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #STORAGE_ALLOCATION_EXCEEDED}. */
     public static final int STORAGE_ALLOCATION_EXCEEDED = 552;
 
-    /** Reply code {@value}. */
+    /** Reply code {@value #FILE_NAME_NOT_ALLOWED}. */
     public static final int FILE_NAME_NOT_ALLOWED = 553;
 
     // FTPS Reply Codes
 
     /**
-     * FTPS reply code {@value}
+     * FTPS reply code {@value #SECURITY_DATA_EXCHANGE_COMPLETE}
      *
      * @since 2.0
      */
     public static final int SECURITY_DATA_EXCHANGE_COMPLETE = 234;
 
     /**
-     * FTPS reply code {@value}
+     * FTPS reply code {@value #SECURITY_DATA_EXCHANGE_SUCCESSFULLY}
      *
      * @since 2.0
      */
     public static final int SECURITY_DATA_EXCHANGE_SUCCESSFULLY = 235;
 
     /**
-     * FTPS reply code {@value}
+     * FTPS reply code {@value #SECURITY_MECHANISM_IS_OK}
      *
      * @since 2.0
      */
     public static final int SECURITY_MECHANISM_IS_OK = 334;
 
     /**
-     * FTPS reply code {@value}
+     * FTPS reply code {@value #SECURITY_DATA_IS_ACCEPTABLE}
      *
      * @since 2.0
      */
     public static final int SECURITY_DATA_IS_ACCEPTABLE = 335;
 
     /**
-     * FTPS reply code {@value}
+     * FTPS reply code {@value #UNAVAILABLE_RESOURCE}
      *
      * @since 2.0
      */
     public static final int UNAVAILABLE_RESOURCE = 431;
 
     /**
-     * FTPS reply code {@value}
+     * FTPS reply code {@value #BAD_TLS_NEGOTIATION_OR_DATA_ENCRYPTION_REQUIRED}
      *
      * @since 2.0
      */

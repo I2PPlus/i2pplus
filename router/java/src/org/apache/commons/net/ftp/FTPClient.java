@@ -380,7 +380,7 @@ public class FTPClient extends FTP implements Configurable {
     }
 
     /**
-     * The system property ({@value}) which can be used to override the system type.<br>
+     * The system property ({@value #FTP_SYSTEM_TYPE}) which can be used to override the system type.<br>
      * If defined, the value will be used to create any automatically created parsers.
      *
      * @since 3.0
@@ -388,7 +388,7 @@ public class FTPClient extends FTP implements Configurable {
     public static final String FTP_SYSTEM_TYPE = "org.apache.commons.net.ftp.systemType";
 
     /**
-     * The system property ({@value}) which can be used as the default system type.<br>
+     * The system property ({@value #FTP_SYSTEM_TYPE_DEFAULT}) which can be used as the default system type.<br>
      * If defined, the value will be used if the SYST command fails.
      *
      * @since 3.1
@@ -408,7 +408,7 @@ public class FTPClient extends FTP implements Configurable {
     public static final String FTP_IP_ADDRESS_FROM_PASV_RESPONSE = "org.apache.commons.net.ftp.ipAddressFromPasvResponse";
 
     /**
-     * The name of an optional systemType properties file ({@value}), which is loaded using {@link Class#getResourceAsStream(String)}.<br>
+     * The name of an optional systemType properties file ({@value #SYSTEM_TYPE_PROPERTIES}), which is loaded using {@link Class#getResourceAsStream(String)}.<br>
      * The entries are the systemType (as determined by {@link FTPClient#getSystemType}) and the values are the replacement type or parserClass, which is passed
      * to {@link FTPFileEntryParserFactory#createFileEntryParser(String)}.<br>
      * For example:

@@ -31,218 +31,218 @@ public class TelnetOption {
     public static final int MAX_OPTION_VALUE = 255;
 
     /**
-     * {@value}
+     * {@value #BINARY}
      */
     public static final int BINARY = 0;
 
     /**
-     * {@value}
+     * {@value #ECHO}
      */
     public static final int ECHO = 1;
 
     /**
-     * {@value}
+     * {@value #PREPARE_TO_RECONNECT}
      */
     public static final int PREPARE_TO_RECONNECT = 2;
 
     /**
-     * {@value}
+     * {@value #SUPPRESS_GO_AHEAD}
      */
     public static final int SUPPRESS_GO_AHEAD = 3;
 
     /**
-     * {@value}
+     * {@value #APPROXIMATE_MESSAGE_SIZE}
      */
     public static final int APPROXIMATE_MESSAGE_SIZE = 4;
 
     /**
-     * {@value}
+     * {@value #STATUS}
      */
     public static final int STATUS = 5;
 
     /**
-     * {@value}
+     * {@value #TIMING_MARK}
      */
     public static final int TIMING_MARK = 6;
 
     /**
-     * {@value}
+     * {@value #REMOTE_CONTROLLED_TRANSMISSION}
      */
     public static final int REMOTE_CONTROLLED_TRANSMISSION = 7;
 
     /**
-     * {@value}
+     * {@value #NEGOTIATE_OUTPUT_LINE_WIDTH}
      */
     public static final int NEGOTIATE_OUTPUT_LINE_WIDTH = 8;
 
     /**
-     * {@value}
+     * {@value #NEGOTIATE_OUTPUT_PAGE_SIZE}
      */
     public static final int NEGOTIATE_OUTPUT_PAGE_SIZE = 9;
 
     /**
-     * {@value}
+     * {@value #NEGOTIATE_CARRIAGE_RETURN}
      */
     public static final int NEGOTIATE_CARRIAGE_RETURN = 10;
 
     /**
-     * {@value}
+     * {@value #NEGOTIATE_HORIZONTAL_TAB_STOP}
      */
     public static final int NEGOTIATE_HORIZONTAL_TAB_STOP = 11;
 
     /**
-     * {@value}
+     * {@value #NEGOTIATE_HORIZONTAL_TAB}
      */
     public static final int NEGOTIATE_HORIZONTAL_TAB = 12;
 
     /**
-     * {@value}
+     * {@value #NEGOTIATE_FORMFEED}
      */
     public static final int NEGOTIATE_FORMFEED = 13;
 
     /**
-     * {@value}
+     * {@value #NEGOTIATE_VERTICAL_TAB_STOP}
      */
     public static final int NEGOTIATE_VERTICAL_TAB_STOP = 14;
 
     /**
-     * {@value}
+     * {@value #NEGOTIATE_VERTICAL_TAB}
      */
     public static final int NEGOTIATE_VERTICAL_TAB = 15;
 
     /**
-     * {@value}
+     * {@value #NEGOTIATE_LINEFEED}
      */
     public static final int NEGOTIATE_LINEFEED = 16;
 
     /**
-     * {@value}
+     * {@value #EXTENDED_ASCII}
      */
     public static final int EXTENDED_ASCII = 17;
 
     /**
-     * {@value}
+     * {@value #FORCE_LOGOUT}
      */
     public static final int FORCE_LOGOUT = 18;
 
     /**
-     * {@value}
+     * {@value #BYTE_MACRO}
      */
     public static final int BYTE_MACRO = 19;
 
     /**
-     * {@value}
+     * {@value #DATA_ENTRY_TERMINAL}
      */
     public static final int DATA_ENTRY_TERMINAL = 20;
 
     /**
-     * {@value}
+     * {@value #SUPDUP}
      */
     public static final int SUPDUP = 21;
 
     /**
-     * {@value}
+     * {@value #SUPDUP_OUTPUT}
      */
     public static final int SUPDUP_OUTPUT = 22;
 
     /**
-     * {@value}
+     * {@value #SEND_LOCATION}
      */
     public static final int SEND_LOCATION = 23;
 
     /**
-     * {@value}
+     * {@value #TERMINAL_TYPE}
      */
     public static final int TERMINAL_TYPE = 24;
 
     /**
-     * {@value}
+     * {@value #END_OF_RECORD}
      */
     public static final int END_OF_RECORD = 25;
 
     /**
-     * {@value}
+     * {@value #TACACS_USER_IDENTIFICATION}
      */
     public static final int TACACS_USER_IDENTIFICATION = 26;
 
     /**
-     * {@value}
+     * {@value #OUTPUT_MARKING}
      */
     public static final int OUTPUT_MARKING = 27;
 
     /**
-     * {@value}
+     * {@value #TERMINAL_LOCATION_NUMBER}
      */
     public static final int TERMINAL_LOCATION_NUMBER = 28;
 
     /**
-     * {@value}
+     * {@value #REGIME_3270}
      */
     public static final int REGIME_3270 = 29;
 
     /**
-     * {@value}
+     * {@value #X3_PAD}
      */
     public static final int X3_PAD = 30;
 
     /**
-     * {@value}
+     * {@value #WINDOW_SIZE}
      */
     public static final int WINDOW_SIZE = 31;
 
     /**
-     * {@value}
+     * {@value #TERMINAL_SPEED}
      */
     public static final int TERMINAL_SPEED = 32;
 
     /**
-     * {@value}
+     * {@value #REMOTE_FLOW_CONTROL}
      */
     public static final int REMOTE_FLOW_CONTROL = 33;
 
     /**
-     * {@value}
+     * {@value #LINEMODE}
      */
     public static final int LINEMODE = 34;
 
     /**
-     * {@value}
+     * {@value #X_DISPLAY_LOCATION}
      */
     public static final int X_DISPLAY_LOCATION = 35;
 
     /**
-     * {@value}
+     * {@value #OLD_ENVIRONMENT_VARIABLES}
      */
     public static final int OLD_ENVIRONMENT_VARIABLES = 36;
 
     /**
-     * {@value}
+     * {@value #AUTHENTICATION}
      */
     public static final int AUTHENTICATION = 37;
 
     /**
-     * {@value}
+     * {@value #ENCRYPTION}
      */
     public static final int ENCRYPTION = 38;
 
     /**
-     * {@value}
+     * {@value #NEW_ENVIRONMENT_VARIABLES}
      */
     public static final int NEW_ENVIRONMENT_VARIABLES = 39;
 
     /**
-     * {@value}
+     * {@value #EXTENDED_OPTIONS_LIST}
      */
     public static final int EXTENDED_OPTIONS_LIST = 255;
 
     /**
-     * {@value}
+     * {@value #FIRST_OPTION}
      */
     @SuppressWarnings("unused")
     private static final int FIRST_OPTION = BINARY;
 
     /**
-     * {@value}
+     * {@value #LAST_OPTION}
      */
     private static final int LAST_OPTION = EXTENDED_OPTIONS_LIST;
 

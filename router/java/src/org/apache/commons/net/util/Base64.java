@@ -53,7 +53,7 @@ public class Base64 {
      * Chunk size per RFC 2045 section 6.8.
      *
      * <p>
-     * The {@value} character limit does not count the trailing CRLF, but counts all other characters, including any equal signs.
+     * The {@value #CHUNK_SIZE} character limit does not count the trailing CRLF, but counts all other characters, including any equal signs.
      * </p>
      *
      * @see <a href="http://www.ietf.org/rfc/rfc2045.txt">RFC 2045 section 6.8</a>

@@ -27,141 +27,135 @@ package org.apache.commons.net.ftp;
 @Deprecated
 public final class FTPCommand {
 
-    /** Command code {@value}. */
+    /** Command code {@value #USER}. */
     public static final int USER = 0;
 
-    /** Command code {@value}. */
+    /** Command code {@value #PASS}. */
     public static final int PASS = 1;
 
-    /** Command code {@value}. */
+    /** Command code {@value #ACCT}. */
     public static final int ACCT = 2;
 
-    /** Command code {@value}. */
+    /** Command code {@value #CWD}. */
     public static final int CWD = 3;
 
-    /** Command code {@value}. */
+    /** Command code {@value #CDUP}. */
     public static final int CDUP = 4;
 
-    /** Command code {@value}. */
+    /** Command code {@value #SMNT}. */
     public static final int SMNT = 5;
 
-    /** Command code {@value}. */
+    /** Command code {@value #REIN}. */
     public static final int REIN = 6;
 
-    /** Command code {@value}. */
+    /** Command code {@value #QUIT}. */
     public static final int QUIT = 7;
 
-    /** Command code {@value}. */
+    /** Command code {@value #PORT}. */
     public static final int PORT = 8;
 
-    /** Command code {@value}. */
+    /** Command code {@value #PASV}. */
     public static final int PASV = 9;
 
-    /** Command code {@value}. */
+    /** Command code {@value #TYPE}. */
     public static final int TYPE = 10;
 
-    /** Command code {@value}. */
+    /** Command code {@value #STRU}. */
     public static final int STRU = 11;
 
-    /** Command code {@value}. */
+    /** Command code {@value #MODE}. */
     public static final int MODE = 12;
 
-    /** Command code {@value}. */
+    /** Command code {@value #RETR}. */
     public static final int RETR = 13;
 
-    /** Command code {@value}. */
+    /** Command code {@value #STOR}. */
     public static final int STOR = 14;
 
-    /** Command code {@value}. */
-
-    /** Command code {@value}. */
+    /** Command code {@value #STOU}. */
     public static final int STOU = 15;
 
-    /** Command code {@value}. */
+    /** Command code {@value #APPE}. */
     public static final int APPE = 16;
 
-    /** Command code {@value}. */
-
-    /** Command code {@value}. */
+    /** Command code {@value #ALLO}. */
     public static final int ALLO = 17;
 
-    /** Command code {@value}. */
+    /** Command code {@value #REST}. */
     public static final int REST = 18;
 
-    /** Command code {@value}. */
+    /** Command code {@value #RNFR}. */
     public static final int RNFR = 19;
 
-    /** Command code {@value}. */
+    /** Command code {@value #RNTO}. */
     public static final int RNTO = 20;
 
-    /** Command code {@value}. */
+    /** Command code {@value #ABOR}. */
     public static final int ABOR = 21;
 
-    /** Command code {@value}. */
+    /** Command code {@value #DELE}. */
     public static final int DELE = 22;
 
-    /** Command code {@value}. */
+    /** Command code {@value #RMD}. */
     public static final int RMD = 23;
 
-    /** Command code {@value}. */
+    /** Command code {@value #MKD}. */
     public static final int MKD = 24;
 
-    /** Command code {@value}. */
+    /** Command code {@value #PWD}. */
     public static final int PWD = 25;
 
-    /** Command code {@value}. */
+    /** Command code {@value #LIST}. */
     public static final int LIST = 26;
 
-    /** Command code {@value}. */
+    /** Command code {@value #NLST}. */
     public static final int NLST = 27;
 
-    /** Command code {@value}. */
+    /** Command code {@value #SITE}. */
     public static final int SITE = 28;
 
-    /** Command code {@value}. */
+    /** Command code {@value #SYST}. */
     public static final int SYST = 29;
 
-    /** Command code {@value}. */
+    /** Command code {@value #STAT}. */
     public static final int STAT = 30;
 
-    /** Command code {@value}. */
-
-    /** Command code {@value}. */
+    /** Command code {@value #HELP}. */
     public static final int HELP = 31;
 
-    /** Command code {@value}. */
+    /** Command code {@value #NOOP}. */
     public static final int NOOP = 32;
 
     /**
-     * Command code {@value}.
+     * Command code {@value #MDTM}.
      *
      * @since 2.0
      */
     public static final int MDTM = 33;
 
     /**
-     * Command code {@value}.
+     * Command code {@value #FEAT}.
      *
      * @since 2.2
      */
     public static final int FEAT = 34;
 
     /**
-     * Command code {@value}.
+     * Command code {@value #MFMT}.
      *
      * @since 2.0
      */
     public static final int MFMT = 35;
 
     /**
-     * Command code {@value}.
+     * Command code {@value #EPSV}.
      *
      * @since 2.0
      */
     public static final int EPSV = 36;
 
     /**
-     * Command code {@value}.
+     * Command code {@value #EPRT}.
      *
      * @since 2.0
      */
@@ -184,121 +178,121 @@ public final class FTPCommand {
     // Must agree with final entry above; used to check array size
     private static final int LAST = MLST;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #USER}. */
     public static final int USERNAME = USER;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #PASS}. */
     public static final int PASSWORD = PASS;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #ACCT}. */
     public static final int ACCOUNT = ACCT;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #CWD}. */
     public static final int CHANGE_WORKING_DIRECTORY = CWD;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #CDUP}. */
     public static final int CHANGE_TO_PARENT_DIRECTORY = CDUP;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #SMNT}. */
     public static final int STRUCTURE_MOUNT = SMNT;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #REIN}. */
     public static final int REINITIALIZE = REIN;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #QUIT}. */
     public static final int LOGOUT = QUIT;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #PORT}. */
     public static final int DATA_PORT = PORT;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #PASV}. */
     public static final int PASSIVE = PASV;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #TYPE}. */
     public static final int REPRESENTATION_TYPE = TYPE;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #STRU}. */
     public static final int FILE_STRUCTURE = STRU;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #MODE}. */
     public static final int TRANSFER_MODE = MODE;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #RETR}. */
     public static final int RETRIEVE = RETR;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #STOR}. */
     public static final int STORE = STOR;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #STOU}. */
     public static final int STORE_UNIQUE = STOU;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #APPE}. */
     public static final int APPEND = APPE;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #ALLO}. */
     public static final int ALLOCATE = ALLO;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #REST}. */
     public static final int RESTART = REST;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #RNFR}. */
     public static final int RENAME_FROM = RNFR;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #RNTO}. */
     public static final int RENAME_TO = RNTO;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #ABOR}. */
     public static final int ABORT = ABOR;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #DELE}. */
     public static final int DELETE = DELE;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #RMD}. */
     public static final int REMOVE_DIRECTORY = RMD;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #MKD}. */
     public static final int MAKE_DIRECTORY = MKD;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #PWD}. */
     public static final int PRINT_WORKING_DIRECTORY = PWD;
 
     // public static final int LIST = LIST;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #NLST}. */
     public static final int NAME_LIST = NLST;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #SITE}. */
     public static final int SITE_PARAMETERS = SITE;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #SYST}. */
     public static final int SYSTEM = SYST;
 
-    /** Alias for {@value}. */
+    /** Alias for {@value #STAT}. */
     public static final int STATUS = STAT;
 
     // public static final int HELP = HELP;
     // public static final int NOOP = NOOP;
 
     /**
-     * Alias for {@value}.
+     * Alias for {@value #MDTM}.
      * @since 2.0
      */
     public static final int MOD_TIME = MDTM;
 
     /**
-     * Alias for {@value}.
+     * Alias for {@value #FEAT}.
      * @since 2.2
      */
     public static final int FEATURES = FEAT;
 
     /**
-     * Alias for {@value}.
+     * Alias for {@value #MDTM}.
      * @since 2.2
      */
     public static final int GET_MOD_TIME = MDTM;
 
     /**
-     * Alias for {@value}.
+     * Alias for {@value #MFMT}.
      * @since 2.2
      */
     public static final int SET_MOD_TIME = MFMT;

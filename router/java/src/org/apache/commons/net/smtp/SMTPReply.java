@@ -23,69 +23,67 @@ package org.apache.commons.net.smtp;
  */
 public final class SMTPReply {
 
-    /** SMTP reply code {@value}. */
+    /** SMTP reply code {@value #SYSTEM_STATUS}. */
     public static final int SYSTEM_STATUS = 211;
 
-    /** SMTP reply code {@value}. */
+    /** SMTP reply code {@value #HELP_MESSAGE}. */
     public static final int HELP_MESSAGE = 214;
 
-    /** SMTP reply code {@value}. */
+    /** SMTP reply code {@value #SERVICE_READY}. */
     public static final int SERVICE_READY = 220;
 
-    /** SMTP reply code {@value}. */
+    /** SMTP reply code {@value #SERVICE_CLOSING_TRANSMISSION_CHANNEL}. */
     public static final int SERVICE_CLOSING_TRANSMISSION_CHANNEL = 221;
 
-    /** SMTP reply code {@value}. */
+    /** SMTP reply code {@value #ACTION_OK}. */
     public static final int ACTION_OK = 250;
 
-    /** SMTP reply code {@value}. */
+    /** SMTP reply code {@value #USER_NOT_LOCAL_WILL_FORWARD}. */
     public static final int USER_NOT_LOCAL_WILL_FORWARD = 251;
 
-    /** SMTP reply code {@value}. */
+    /** SMTP reply code {@value #START_MAIL_INPUT}. */
     public static final int START_MAIL_INPUT = 354;
 
-    /** SMTP reply code {@value}. */
+    /** SMTP reply code {@value #SERVICE_NOT_AVAILABLE}. */
     public static final int SERVICE_NOT_AVAILABLE = 421;
 
-    /** SMTP reply code {@value}. */
+    /** SMTP reply code {@value #ACTION_NOT_TAKEN}. */
     public static final int ACTION_NOT_TAKEN = 450;
 
-    /** SMTP reply code {@value}. */
+    /** SMTP reply code {@value #ACTION_ABORTED}. */
     public static final int ACTION_ABORTED = 451;
 
-    /** SMTP reply code {@value}. */
+    /** SMTP reply code {@value #INSUFFICIENT_STORAGE}. */
     public static final int INSUFFICIENT_STORAGE = 452;
 
-    /** SMTP reply code {@value}. */
+    /** SMTP reply code {@value #UNRECOGNIZED_COMMAND}. */
     public static final int UNRECOGNIZED_COMMAND = 500;
 
-    /** SMTP reply code {@value}. */
+    /** SMTP reply code {@value #SYNTAX_ERROR_IN_ARGUMENTS}. */
     public static final int SYNTAX_ERROR_IN_ARGUMENTS = 501;
 
-    /** SMTP reply code {@value}. */
+    /** SMTP reply code {@value #COMMAND_NOT_IMPLEMENTED}. */
     public static final int COMMAND_NOT_IMPLEMENTED = 502;
 
-    /** SMTP reply code {@value}. */
+    /** SMTP reply code {@value #BAD_COMMAND_SEQUENCE}. */
     public static final int BAD_COMMAND_SEQUENCE = 503;
 
-    /** SMTP reply code {@value}. */
+    /** SMTP reply code {@value #COMMAND_NOT_IMPLEMENTED_FOR_PARAMETER}. */
     public static final int COMMAND_NOT_IMPLEMENTED_FOR_PARAMETER = 504;
 
-    /** SMTP reply code {@value}. */
+    /** SMTP reply code {@value #MAILBOX_UNAVAILABLE}. */
     public static final int MAILBOX_UNAVAILABLE = 550;
 
-    /** SMTP reply code {@value}. */
+    /** SMTP reply code {@value #USER_NOT_LOCAL}. */
     public static final int USER_NOT_LOCAL = 551;
 
-    /** SMTP reply code {@value}. */
-
-    /** SMTP reply code {@value}. */
+    /** SMTP reply code {@value #STORAGE_ALLOCATION_EXCEEDED}. */
     public static final int STORAGE_ALLOCATION_EXCEEDED = 552;
 
-    /** SMTP reply code {@value}. */
+    /** SMTP reply code {@value #MAILBOX_NAME_NOT_ALLOWED}. */
     public static final int MAILBOX_NAME_NOT_ALLOWED = 553;
 
-    /** SMTP reply code {@value}. */
+    /** SMTP reply code {@value #TRANSACTION_FAILED}. */
     public static final int TRANSACTION_FAILED = 554;
 
     /**

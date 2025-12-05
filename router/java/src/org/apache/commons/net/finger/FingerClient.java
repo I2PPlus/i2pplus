@@ -46,7 +46,7 @@ import org.apache.commons.net.SocketClient;
 public class FingerClient extends SocketClient {
 
     /**
-     * The default FINGER port. Set to {@value} according to RFC 1288.
+     * The default FINGER port. Set to {@value #DEFAULT_PORT} according to RFC 1288.
      */
     public static final int DEFAULT_PORT = 79;
 
