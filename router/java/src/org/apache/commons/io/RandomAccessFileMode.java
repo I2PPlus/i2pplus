@@ -75,10 +75,10 @@ public enum RandomAccessFileMode {
      */
     READ_WRITE_SYNC_CONTENT(RandomAccessFileMode.RWD, 3); // NOPMD bug https://github.com/pmd/pmd/issues/5263
 
-    private static final String R = "r";
-    private static final String RW = "rw";
-    private static final String RWD = "rwd";
-    private static final String RWS = "rws";
+    public static final String R = "r";
+    public static final String RW = "rw";
+    public static final String RWD = "rwd";
+    public static final String RWS = "rws";
 
     /**
      * Gets the enum value that best fits the given {@link OpenOption}s.
