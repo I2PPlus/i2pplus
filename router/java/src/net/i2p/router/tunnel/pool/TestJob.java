@@ -42,28 +42,28 @@ public class TestJob extends JobImpl {
     private int _id;
 
     private static final int TEST_DELAY = 2 * 60 * 1000; // 2 minutes base
-    private static final int MIN_TEST_PERIOD = 5*1000;
-    private static final int MAX_TEST_PERIOD = 15*1000;
+    private static final int MIN_TEST_PERIOD = 8*1000;
+    private static final int MAX_TEST_PERIOD = 20*1000;
 
     /**
      * Maximum number of tunnel tests that can run concurrently.
      * Prevents overwhelming the router with too many simultaneous tunnel tests.
      * This value can be adjusted based on system capacity.
      */
-    private static final int MAX_CONCURRENT_TESTS = 3;
+    private static final int MAX_CONCURRENT_TESTS = 6;
 
     /**
      * Maximum number of TestJob instances that should be queued before deferring new ones.
      * Prevents job queue saturation from too many waiting tunnel tests.
      */
-    private static final int MAX_QUEUED_TESTS = 16;
+    private static final int MAX_QUEUED_TESTS = 20;
 
     /**
      * Hard limit for total TestJob instances (queued + active).
      * Above this threshold, no new tests are scheduled until count decreases.
      * Prevents ever-increasing backlogs that could cause job lag.
      */
-    private static final int HARD_TEST_JOB_LIMIT = 64;
+    private static final int HARD_TEST_JOB_LIMIT = 72;
 
     /**
      * Static counter tracking the number of currently active tunnel tests.
@@ -112,14 +112,14 @@ public class TestJob extends JobImpl {
         if (ctx.router().gracefulShutdownInProgress()) return;
 
         long lag = ctx.jobQueue().getMaxLag();
-        if (lag > 500) {
+        if (lag > 600) {
             if (_log.shouldWarn()) {
-                _log.warn("Aborted test due to severe job lag (" + lag + "ms) → " + _cfg);
+                _log.warn("Aborted test due to severe max job lag (" + lag + "ms) → " + _cfg);
             }
             ctx.statManager().addRateData("tunnel.testAborted", _cfg.getLength());
             scheduleRetest();
             return;
-        } else if (lag > 200) {
+        } else if (lag > 500) {
             if (_log.shouldWarn()) {
                 _log.warn("Max permitted job lag exceeded (" + lag + "ms) -> Suspending " + _cfg + " tests...");
             }
@@ -154,10 +154,12 @@ public class TestJob extends JobImpl {
         // Concurrency control: Check and increment counter
         // Adaptive limits based on lag to balance testing and performance
         int maxTests;
-        if (lag > 200) {
-            maxTests = 1; // Severe lag - minimal testing
+        if (lag > 300) {
+            maxTests = 1; // High lag - minimal testing
+        } else if (lag > 200) {
+            maxTests = 3; // Moderate lag - minimal testing
         } else if (lag > 100) {
-            maxTests = 2; // Moderate lag - reduced testing
+            maxTests = 4; // Low lag - reduced testing
         } else {
             maxTests = MAX_CONCURRENT_TESTS; // Normal operation
         }
@@ -394,7 +396,6 @@ public class TestJob extends JobImpl {
                _failureCount = 0;
         }
 
-
     }
 
     private int getDelay() {
@@ -404,7 +405,7 @@ public class TestJob extends JobImpl {
         int scaled = baseDelay;
         if (failCount > 0) {
             int multiplier = Math.min(1 << failCount, 6); // max 6x (6 min)
-            scaled = baseDelay * multiplier;
+            scaled = baseDelay/2 * multiplier;
         }
         // Add a small jitter to avoid thundering herd
         int jitter = getContext().random().nextInt(Math.max(1, scaled / 3));
