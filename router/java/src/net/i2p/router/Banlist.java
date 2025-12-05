@@ -26,10 +26,9 @@ import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.Log;
 
 /**
- * Routers are banlisted only if none of our transports can talk to them
- * or their signed router info is completely screwy.  Individual transports
- * manage their own unreachable lists and do not generally add to the overall
- * banlist.
+ * Manages router banlist entries with configurable expiration times and transport-specific bans.
+ * Provides methods to add, remove, and query ban status for routers based on various criteria
+ * including permanent bans, temporary bans, and transport-specific restrictions.
  */
 public class Banlist {
     private final Log _log;
