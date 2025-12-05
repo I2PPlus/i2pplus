@@ -145,7 +145,7 @@ msgid "Unreachable on any transport"
 msgstr "Недоступен по всем транспортным протоколам"
 
 msgid "Cannot enumerate UPnP devices on Android."
-msgstr ""
+msgstr "Не удалось перечислить устройства UPnP на Android."
 
 msgid "UPnP is not enabled"
 msgstr "UPnP не включен"
@@ -685,7 +685,7 @@ msgid "After reporting, please restart your router"
 msgstr "После сообщения перезагрузите маршрутизатор"
 
 msgid "Invalid form submission, requires POST"
-msgstr ""
+msgstr "Неверная отправка формы, требуется метод POST"
 
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Неверные данные формы, скорее всего это произошло из-за того, что Вы нажимали кнопку \"Назад\" или \"Обновить\" в браузере. Пожалуйста, заполните форму заново."
@@ -820,13 +820,13 @@ msgid "To enable SSL access for the Router Console, see the commented <code>clie
 msgstr "Чтобы включить доступ SSL для консоли маршрутизатора, дополнительную информацию см. в закомментированном файле <code>clients.config</code>, расположенном в каталоге вашего приложения I2P. Вам нужно будет отредактировать файл конфигурации RouterConsoleRunner, расположенный в каталоге: "
 
 msgid "Save disabled, edit the router.config file to make changes"
-msgstr ""
+msgstr "Сохранение отключено, для внесения изменений отредактируйте файл router.config"
 
 msgid "Error updating the configuration - please see the error logs"
 msgstr "Ошибка обновления конфигурации — смотрите журналы ошибок"
 
 msgid "No changes made to the configuration"
-msgstr ""
+msgstr "Изменения в конфигурацию не внесены"
 
 msgid "Note"
 msgstr "ПРИМЕЧАНИЕ"
@@ -847,7 +847,7 @@ msgid "Save Plugin Configuration"
 msgstr "Сохранить конфигурацию модулей"
 
 msgid "Plugins disabled"
-msgstr ""
+msgstr "Плагины отключены"
 
 msgid "Install Plugin"
 msgstr "Установить модуль"
@@ -943,14 +943,14 @@ msgid "Updating all plugins"
 msgstr "Обновляются все модули"
 
 msgid "Update manager not registered, cannot install"
-msgstr ""
+msgstr "Менеджер обновлений не зарегистрирован, невозможно установить"
 
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "Установка плагина из {0}"
 
 msgid "Cannot install, check logs"
-msgstr ""
+msgstr "Не удалось установить, проверьте журналы"
 
 msgid "Update manager not registered, cannot check"
 msgstr ""
@@ -1053,17 +1053,17 @@ msgid "Join Family"
 msgstr "Присоединить к семейству маршрутизаторов"
 
 msgid "Bad certificate - No Subject CN"
-msgstr ""
+msgstr "Неверный сертификат - нет Subject CN"
 
 msgid "Bad characters in Family: "
-msgstr ""
+msgstr "Недопустимые символы в имени семейства: "
 
 #, java-format
 msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
-msgstr ""
+msgstr "Хранилище ключей {0} уже существует для семейства {1}! Сначала удалите или переименуйте его."
 
 msgid "Family key configured for router family: "
-msgstr ""
+msgstr "Ключ семейства настроен для семейства маршрутизаторов: "
 
 msgid "Load from file failed"
 msgstr "Ошибка при загрузке из файла"
@@ -1114,7 +1114,7 @@ msgid "Invalid destination"
 msgstr "Неверный адрес назначения"
 
 msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Невозможно добавить ключ для локального назначения. Включите шифрование в менеджере туннелей."
 
 #, java-format
 msgid "Key for {0} added to keyring"
@@ -1127,7 +1127,7 @@ msgid "Requires hostname, destination, or blinded Base32"
 msgstr "Требуется имя узла, адрес назначения или слепой Base32"
 
 msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
-msgstr ""
+msgstr "Невозможно добавить ключ для локального назначения. Включите шифрование в менеджере скрытых служб."
 
 msgid "Destination requires lookup password"
 msgstr "Адресат требует пароль для промежуточного запроса"
@@ -1148,7 +1148,7 @@ msgid "Delete key"
 msgstr "Удалить ключ"
 
 msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Невозможно удалить ключ для локального назначения. Отключите шифрование в менеджере туннелей."
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1201,34 +1201,34 @@ msgid "Log overrides updated"
 msgstr "Переопределения журналирования обновлены"
 
 msgid "Error updating the log limits - levels not valid"
-msgstr ""
+msgstr "Ошибка обновления ограничений журнала - недопустимые уровни"
 
 msgid "Log limits cleared"
-msgstr ""
+msgstr "Ограничения журнала очищены"
 
 #, java-format
 msgid "Default log level updated from {0} to {1}"
-msgstr ""
+msgstr "Уровень журналирования по умолчанию обновлен с {0} на {1}"
 
 msgid "Date format updated"
-msgstr ""
+msgstr "Формат даты обновлен"
 
 #, java-format
 msgid "Specified date format is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Указанный формат даты недействителен ({0}) - не обновлено"
 
 msgid "File size updated"
-msgstr ""
+msgstr "Размер файла обновлен"
 
 #, java-format
 msgid "Specified file size limit is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Указанный ограничение размера файла недействительно ({0}) - не обновлено"
 
 msgid "Compression setting updated"
-msgstr ""
+msgstr "Настройка сжатия обновлена"
 
 msgid "Log record format updated"
-msgstr ""
+msgstr "Формат записи журнала обновлен"
 
 msgid "Log configuration saved"
 msgstr "Конфигурация журналирования сохранена"
@@ -1438,10 +1438,10 @@ msgid "Bad capacity value"
 msgstr "Неверное значение емкости"
 
 msgid "Bonuses adjusted for: "
-msgstr ""
+msgstr "Бонусы настроены для: "
 
 msgid "No profile exists for: "
-msgstr ""
+msgstr "Профиль не существует для: "
 
 msgid "Unsupported"
 msgstr "Не поддерживается"
@@ -1457,7 +1457,7 @@ msgstr "Кому"
 
 #, java-format
 msgid "First {0} displayed, see the {1} file for the full list"
-msgstr ""
+msgstr "Показано первых {0}, полный список см. в файле {1}"
 
 msgid "IPs Banned Until Restart"
 msgstr "IP-адреса, заблокированные до перезапуска"
@@ -1561,7 +1561,7 @@ msgid "Save order"
 msgstr "Сохранить порядок"
 
 msgid "Sidebar preferences updated"
-msgstr ""
+msgstr "Настройки боковой панели обновлены"
 
 msgid "Refresh interval must be a number"
 msgstr "Интервал обновления должен быть числом"
@@ -1570,16 +1570,16 @@ msgid "Restore full default"
 msgstr "Восстановить полные умолчания"
 
 msgid "Full sidebar defaults restored."
-msgstr ""
+msgstr "Стандартные настройки боковой панели восстановлены."
 
 msgid "Sidebar will refresh shortly."
-msgstr ""
+msgstr "Боковая панель скоро обновится."
 
 msgid "Restore minimal default"
 msgstr "Восстановить минимальные умолчания"
 
 msgid "Minimal sidebar defaults restored."
-msgstr ""
+msgstr "Минимальные настройки боковой панели восстановлены."
 
 msgid "Order must be an integer"
 msgstr "Порядок должен быть целым числом"
@@ -1608,11 +1608,11 @@ msgstr "Список графиков обновлен, может потреб�
 
 #, java-format
 msgid "Internal error: could not resolve pool name {0}."
-msgstr ""
+msgstr "Внутренняя ошибка: не удалось разрешить имя пула {0}."
 
 #, java-format
 msgid "Internal error: could not find pool settings for {0}."
-msgstr ""
+msgstr "Внутренняя ошибка: не удалось найти настройки пула для {0}."
 
 msgid "Updated settings for all pools."
 msgstr "Настройки для всех пулов обновлены."
@@ -1689,7 +1689,7 @@ msgid "Add user"
 msgstr "Добавить пользователя"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
-msgstr ""
+msgstr "Не удалось сохранить выбор темы, имя темы содержит недопустимые символы"
 
 msgid "Theme change saved."
 msgstr "Изменение темы оформления сохранено."
@@ -1701,7 +1701,7 @@ msgid "No user name entered"
 msgstr "Не введено имя пользователя"
 
 msgid "User name may not contain '='"
-msgstr ""
+msgstr "Имя пользователя не может содержать '='"
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "Внимание: Не рекомендуются имена пользователей за пределами таблицы символов ISO-8859-1. Поддержка не стандартизована и различается от браузера к браузеру."
@@ -2023,7 +2023,7 @@ msgid "Show list of all known I2P routers"
 msgstr "Показать список всех известных I2P-маршрутизаторов"
 
 msgid "List of recently connected peers with profiling info"
-msgstr ""
+msgstr "Список недавно подключенных узлов с информацией о профилировании"
 
 msgid "Peer Profiles"
 msgstr "Профили сверстников"
@@ -2631,19 +2631,19 @@ msgid "Sybil Analysis"
 msgstr "Анализ Сивиллы"
 
 msgid "Bad value supplied, please check and try again."
-msgstr ""
+msgstr "Предоставлено неверное значение, проверьте и попробуйте снова."
 
 msgid "Router Map"
 msgstr "Карта роутера"
 
 msgid "Network Database Search"
-msgstr ""
+msgstr "Поиск в сетевой базе данных"
 
 msgid "Capabilities"
 msgstr "Характеристики"
 
 msgid "e.g. f or XOfR"
-msgstr ""
+msgstr "например, f или XOfR"
 
 msgid "Cost"
 msgstr "Стоимость"
@@ -2652,49 +2652,49 @@ msgid "Country"
 msgstr "Страна"
 
 msgid "Country Codes"
-msgstr ""
+msgstr "Коды стран"
 
 msgid "Hash Prefix"
-msgstr ""
+msgstr "Префикс хеша"
 
 msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
-msgstr ""
+msgstr "IPv4 или IPv6, суффиксы /24,/16,/8 необязательны для IPv4, префикс допустим для IPv6"
 
 msgid "Hostname or b32"
-msgstr ""
+msgstr "Имя узла или b32"
 
 msgid "IPv6 Prefix"
-msgstr ""
+msgstr "Префикс IPv6"
 
 msgid "Single port or range"
-msgstr ""
+msgstr "Одиночный порт или диапазон"
 
 msgid "Signature Type"
-msgstr ""
+msgstr "Тип подписи"
 
 msgid "SSU Capabilities"
-msgstr ""
+msgstr "Возможности SSU"
 
 msgid "Encryption Type"
-msgstr ""
+msgstr "Тип шифрования"
 
 msgid "Router Version"
-msgstr ""
+msgstr "Версия маршрутизатора"
 
 msgid "Transport"
 msgstr "Транспортные протоколы"
 
 msgid "Add Sybil analysis (must pick at least one above)"
-msgstr ""
+msgstr "Добавить анализ Сивиллы (необходимо выбрать хотя бы один из вышеперечисленных)"
 
 msgid "Sybil close to"
-msgstr ""
+msgstr "Сивилла рядом с"
 
 msgid "Router hash, destination hash, b32, or from address book"
-msgstr ""
+msgstr "Хеш маршрутизатора, хеш назначения, b32 или из адресной книги"
 
 msgid "or Sybil close to this router"
-msgstr ""
+msgstr "или Сивилла рядом с этим маршрутизатором"
 
 msgid "Lookup"
 msgstr "Искать"
@@ -4591,13 +4591,13 @@ msgid "addressbook"
 msgstr "адресная книга"
 
 msgid "i2psnark"
-msgstr "I2PSnark (BitTorrent-клиент)"
+msgstr "I2PSnark"
 
 msgid "i2ptunnel"
 msgstr "Менеджер туннелей I2P"
 
 msgid "susimail"
-msgstr "Susimail (почтовый клиент)"
+msgstr "Susimail"
 
 msgid "susidns"
 msgstr "SusiDNS"

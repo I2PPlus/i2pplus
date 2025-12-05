@@ -143,7 +143,7 @@ msgid "Unreachable on any transport"
 msgstr "Inaccessible par quelque transport"
 
 msgid "Cannot enumerate UPnP devices on Android."
-msgstr ""
+msgstr "Impossible d'énumérer les appareils UPnP sur Android."
 
 msgid "UPnP is not enabled"
 msgstr "UPnP n’est pas activé"
@@ -683,7 +683,7 @@ msgid "After reporting, please restart your router"
 msgstr "Après le rapport, veuillez redémarrer votre routeur"
 
 msgid "Invalid form submission, requires POST"
-msgstr ""
+msgstr "Soumission de formulaire invalide, la méthode POST est requise"
 
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "L’envoi du formulaire est invalide, car vous avez probablement utilisé le bouton Retour ou Recharger de votre navigateur. Veuillez le renvoyer."
@@ -817,13 +817,13 @@ msgid "To enable SSL access for the Router Console, see the commented <code>clie
 msgstr "Pour activer l'accès SSL pour la console du routeur, consultez le fichier commenté <code>clients.config</code> situé dans le répertoire de votre application I2P pour plus d'informations. Vous devrez éditer le fichier de configuration RouterConsoleRunner situé dans le répertoire: "
 
 msgid "Save disabled, edit the router.config file to make changes"
-msgstr ""
+msgstr "Enregistrement désactivé, modifiez le fichier router.config pour apporter des modifications"
 
 msgid "Error updating the configuration - please see the error logs"
 msgstr "Erreur de mise à jour de la configuration. Veuillez consulter les journaux d’erreur"
 
 msgid "No changes made to the configuration"
-msgstr ""
+msgstr "Aucune modification n'a été apportée à la configuration"
 
 msgid "Note"
 msgstr "NOTE"
@@ -844,7 +844,7 @@ msgid "Save Plugin Configuration"
 msgstr "Enregistrer la configuration du greffon"
 
 msgid "Plugins disabled"
-msgstr ""
+msgstr "Plugins désactivés"
 
 msgid "Install Plugin"
 msgstr "Installer le greffon"
@@ -940,14 +940,14 @@ msgid "Updating all plugins"
 msgstr "Mise à jour tous les greffons"
 
 msgid "Update manager not registered, cannot install"
-msgstr ""
+msgstr "Gestionnaire de mises à jour non enregistré, impossible d'installer"
 
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "Installation du greffon à partir de {0}"
 
 msgid "Cannot install, check logs"
-msgstr ""
+msgstr "Impossible d'installer, consultez les journaux"
 
 msgid "Update manager not registered, cannot check"
 msgstr ""
@@ -1050,17 +1050,17 @@ msgid "Join Family"
 msgstr "Se joindre à la famille"
 
 msgid "Bad certificate - No Subject CN"
-msgstr ""
+msgstr "Mauvais certificat - Aucun CN de sujet"
 
 msgid "Bad characters in Family: "
-msgstr ""
+msgstr "Caractères incorrects dans la famille : "
 
 #, java-format
 msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
-msgstr ""
+msgstr "Le keystore {0} existe déjà pour la famille {1} ! Supprimez-le ou renommez-le d'abord."
 
 msgid "Family key configured for router family: "
-msgstr ""
+msgstr "Clé de famille configurée pour la famille de routeurs : "
 
 msgid "Load from file failed"
 msgstr "Échec de chargement à partir d’un fichier"
@@ -1111,7 +1111,7 @@ msgid "Invalid destination"
 msgstr "Destination invalide"
 
 msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Impossible d'ajouter une clé pour la destination locale. Activez le chiffrement dans le Gestionnaire de tunnels."
 
 #, java-format
 msgid "Key for {0} added to keyring"
@@ -1198,34 +1198,34 @@ msgid "Log overrides updated"
 msgstr "Les exceptions de journalisation ont été mises à jour"
 
 msgid "Error updating the log limits - levels not valid"
-msgstr ""
+msgstr "Erreur de mise à jour des limites de journalisation - niveaux non valides"
 
 msgid "Log limits cleared"
-msgstr ""
+msgstr "Limites de journalisation effacées"
 
 #, java-format
 msgid "Default log level updated from {0} to {1}"
-msgstr ""
+msgstr "Niveau de journalisation par défaut mis à jour de {0} à {1}"
 
 msgid "Date format updated"
-msgstr ""
+msgstr "Format de date mis à jour"
 
 #, java-format
 msgid "Specified date format is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Le format de date spécifié ({0}) n'est pas valide - pas de mise à jour"
 
 msgid "File size updated"
-msgstr ""
+msgstr "Taille de fichier mise à jour"
 
 #, java-format
 msgid "Specified file size limit is not valid ({0}) - not updated"
-msgstr ""
+msgstr "La limite de taille de fichier spécifiée ({0}) n'est pas valide - pas de mise à jour"
 
 msgid "Compression setting updated"
-msgstr ""
+msgstr "Paramètre de compression mis à jour"
 
 msgid "Log record format updated"
-msgstr ""
+msgstr "Format d'enregistrement du journal mis à jour"
 
 msgid "Log configuration saved"
 msgstr "La configuration des journaux a été enregistrée"
@@ -1435,10 +1435,10 @@ msgid "Bad capacity value"
 msgstr "Mauvaise valeur de capacité"
 
 msgid "Bonuses adjusted for: "
-msgstr ""
+msgstr "Bonus ajustés pour : "
 
 msgid "No profile exists for: "
-msgstr ""
+msgstr "Aucun profil n'existe pas pour : "
 
 msgid "Unsupported"
 msgstr "Non pris en charge"
@@ -1454,7 +1454,7 @@ msgstr "Vers"
 
 #, java-format
 msgid "First {0} displayed, see the {1} file for the full list"
-msgstr ""
+msgstr "Premiers {0} affichés, voir le fichier {1} pour la liste complète"
 
 msgid "IPs Banned Until Restart"
 msgstr "IP bannies jusqu’au redémarrage"
@@ -1555,7 +1555,7 @@ msgid "Save order"
 msgstr "Enregistrer l’ordre"
 
 msgid "Sidebar preferences updated"
-msgstr ""
+msgstr "Préférences de la barre latérale mises à jour"
 
 msgid "Refresh interval must be a number"
 msgstr "L’intervalle d’actualisation doit être un nombre"
@@ -1564,16 +1564,16 @@ msgid "Restore full default"
 msgstr "Restaurer les valeurs par défaut de la barre complète"
 
 msgid "Full sidebar defaults restored."
-msgstr ""
+msgstr "Valeurs par défaut de la barre complète restaurées."
 
 msgid "Sidebar will refresh shortly."
-msgstr ""
+msgstr "La barre latérale sera rafraîchie sous peu."
 
 msgid "Restore minimal default"
 msgstr "Restaurer les valeurs par défaut de la barre minimale"
 
 msgid "Minimal sidebar defaults restored."
-msgstr ""
+msgstr "Valeurs par défaut de la barre minimale restaurées."
 
 msgid "Order must be an integer"
 msgstr "L’ordre doit être un entier"
@@ -1602,11 +1602,11 @@ msgstr "La liste des graphiques a été mise à jour. Cela prendra jusqu’à 60
 
 #, java-format
 msgid "Internal error: could not resolve pool name {0}."
-msgstr ""
+msgstr "Erreur interne : impossible de résoudre le nom du pool {0}."
 
 #, java-format
 msgid "Internal error: could not find pool settings for {0}."
-msgstr ""
+msgstr "Erreur interne : impossible de trouver les paramètres du pool {0}."
 
 msgid "Updated settings for all pools."
 msgstr "Les paramètres de toutes les réserves ont été mis à jour."
@@ -1693,7 +1693,7 @@ msgid "No user name entered"
 msgstr "Aucun nom d’utilisateur n’a été saisi"
 
 msgid "User name may not contain '='"
-msgstr ""
+msgstr "Le nom d'utilisateur ne peut pas contenir '='"
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "Avertissement: Les noms d’utilisateur qui ne se conforment pas au jeu de caractère ISO-8859-1 ne sont pas recommandés. La prise en charge n’est pas normalisée et varie selon les navigateurs."

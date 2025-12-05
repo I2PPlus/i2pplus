@@ -141,7 +141,7 @@ msgid "Unreachable on any transport"
 msgstr "各传输方式均不可达"
 
 msgid "Cannot enumerate UPnP devices on Android."
-msgstr ""
+msgstr "无法在 Android 上枚举 UPnP 设备。"
 
 msgid "UPnP is not enabled"
 msgstr "UPnP 未启用"
@@ -193,7 +193,7 @@ msgstr "子设备"
 
 #, java-format
 msgid "To disable this device, add {0} to advanced configuration and restart."
-msgstr "To disable this device, add {0} to advanced configuration and restart."
+msgstr "要禁用此设备，请将 {0} 添加到高级配置并重启。"
 
 msgid "UPnP Status"
 msgstr "UPnP 状态"
@@ -790,13 +790,13 @@ msgid "Location"
 msgstr "服务器位置"
 
 msgid "I2CP"
-msgstr "I2CP"
+msgstr "I2CP 协议"
 
 msgid "I2PTunnel"
 msgstr "I2P 隧道"
 
 msgid "SAM"
-msgstr "SAM"
+msgstr "SAM 桥接"
 
 msgid "Website"
 msgstr "网站"
@@ -906,7 +906,7 @@ msgid "Plugin configuration saved."
 msgstr "插件配置已保存。"
 
 msgid "WebApp"
-msgstr "WebApp"
+msgstr "网络应用"
 
 msgid "started"
 msgstr "已启动"
@@ -993,7 +993,7 @@ msgid "I2P+ Router Console"
 msgstr "I2P+ 路由控制台"
 
 msgid "Torrents"
-msgstr "Torrents"
+msgstr "种子下载"
 
 msgid "Tunnel Manager"
 msgstr "隧道管理器"
@@ -1075,7 +1075,7 @@ msgid "Restore defaults"
 msgstr "恢复默认值"
 
 msgid "Bad group detected, please retry"
-msgstr ""
+msgstr "检测到错误分组，请重试"
 
 msgid "Restored default settings"
 msgstr "默认设置已恢复"
@@ -1195,34 +1195,34 @@ msgid "Log overrides updated"
 msgstr "日志参数已更新"
 
 msgid "Error updating the log limits - levels not valid"
-msgstr ""
+msgstr "更新日志限制出错 - 级别无效"
 
 msgid "Log limits cleared"
-msgstr ""
+msgstr "日志限制已清除"
 
 #, java-format
 msgid "Default log level updated from {0} to {1}"
-msgstr ""
+msgstr "默认日志级别已从 {0} 更新为 {1}"
 
 msgid "Date format updated"
-msgstr ""
+msgstr "日期格式已更新"
 
 #, java-format
 msgid "Specified date format is not valid ({0}) - not updated"
-msgstr ""
+msgstr "指定的日期格式无效 ({0}) - 未更新"
 
 msgid "File size updated"
-msgstr ""
+msgstr "文件大小已更新"
 
 #, java-format
 msgid "Specified file size limit is not valid ({0}) - not updated"
-msgstr ""
+msgstr "指定的文件大小限制无效 ({0}) - 未更新"
 
 msgid "Compression setting updated"
-msgstr ""
+msgstr "压缩设置已更新"
 
 msgid "Log record format updated"
-msgstr ""
+msgstr "日志记录格式已更新"
 
 msgid "Log configuration saved"
 msgstr "日志设置已保存"
@@ -1432,10 +1432,10 @@ msgid "Bad capacity value"
 msgstr "容量值无效"
 
 msgid "Bonuses adjusted for: "
-msgstr ""
+msgstr "已调整奖励的节点："
 
 msgid "No profile exists for: "
-msgstr ""
+msgstr "不存在配置文件："
 
 msgid "Unsupported"
 msgstr "不支持"
@@ -1451,7 +1451,7 @@ msgstr "至"
 
 #, java-format
 msgid "First {0} displayed, see the {1} file for the full list"
-msgstr ""
+msgstr "显示前 {0} 个，完整列表请查看 {1} 文件"
 
 msgid "IPs Banned Until Restart"
 msgstr "IP 已封禁直到重启"
@@ -1549,7 +1549,7 @@ msgid "Save order"
 msgstr "保存顺序"
 
 msgid "Sidebar preferences updated"
-msgstr ""
+msgstr "侧边栏偏好设置已更新"
 
 msgid "Refresh interval must be a number"
 msgstr "刷新间隔必须为数字"
@@ -1558,16 +1558,16 @@ msgid "Restore full default"
 msgstr "恢复完整默认值"
 
 msgid "Full sidebar defaults restored."
-msgstr ""
+msgstr "完整侧边栏默认设置已恢复。"
 
 msgid "Sidebar will refresh shortly."
-msgstr ""
+msgstr "侧边栏将很快刷新。"
 
 msgid "Restore minimal default"
 msgstr "恢复迷你默认值"
 
 msgid "Minimal sidebar defaults restored."
-msgstr ""
+msgstr "迷你侧边栏默认设置已恢复。"
 
 msgid "Order must be an integer"
 msgstr "顺序必须是整数"
@@ -1596,11 +1596,11 @@ msgstr "图形列表已更新，可能需要长达 60 秒才能反应在{0}图�
 
 #, java-format
 msgid "Internal error: could not resolve pool name {0}."
-msgstr ""
+msgstr "内部错误：无法解析池名称 {0}。"
 
 #, java-format
 msgid "Internal error: could not find pool settings for {0}."
-msgstr ""
+msgstr "内部错误：找不到 {0} 的池设置。"
 
 msgid "Updated settings for all pools."
 msgstr "所有隧道池设置更新完毕。"
@@ -1625,7 +1625,7 @@ msgid "Exploratory tunnels"
 msgstr "探测隧道"
 
 msgid "I2PSnark"
-msgstr "I2PSnark"
+msgstr "I2PSnark 种子客户端"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
 msgstr "匿名性警告 - 设置中包括 0 跳点 隧道。"
@@ -1673,7 +1673,7 @@ msgid "Add user"
 msgstr "添加用户"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
-msgstr ""
+msgstr "无法保存主题选择，主题名称包含非法字符"
 
 msgid "Theme change saved."
 msgstr "主题设置已保存"
@@ -1685,7 +1685,7 @@ msgid "No user name entered"
 msgstr "未输入用户名"
 
 msgid "User name may not contain '='"
-msgstr ""
+msgstr "用户名不能包含'='"
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "警告：不推荐用户名包含 ISO-8859-1 字符集以外的字符。浏览器支持是非标准且各异的。"
@@ -1986,7 +1986,7 @@ msgid "Anonymous webmail client"
 msgstr "匿名 Web 邮件客户端"
 
 msgid "I2PMail"
-msgstr "I2PMail"
+msgstr "I2P 邮件"
 
 msgid "Install and configure I2P plugins"
 msgstr "安装和配置 I2P 插件"
@@ -2416,7 +2416,7 @@ msgid "Add"
 msgstr "添加"
 
 msgid "Error displaying the info page."
-msgstr ""
+msgstr "显示信息页面时出错。"
 
 msgid "Identity"
 msgstr "路由身份"
@@ -2464,7 +2464,7 @@ msgid "Performance"
 msgstr "路由器性能"
 
 msgid "Maximum available RAM"
-msgstr ""
+msgstr "最大可用内存"
 
 msgid "Classified as slow"
 msgstr "归类为慢速"
@@ -2476,7 +2476,7 @@ msgid "No"
 msgstr "不"
 
 msgid "GeoIP Db"
-msgstr ""
+msgstr "GeoIP 数据库"
 
 msgid "Target"
 msgstr "目标"
@@ -2615,19 +2615,19 @@ msgid "Sybil Analysis"
 msgstr "Sybil分析"
 
 msgid "Bad value supplied, please check and try again."
-msgstr ""
+msgstr "提供的值有误，请检查并重试。"
 
 msgid "Router Map"
 msgstr "路由器地图"
 
 msgid "Network Database Search"
-msgstr ""
+msgstr "网络数据库搜索"
 
 msgid "Capabilities"
 msgstr "功能"
 
 msgid "e.g. f or XOfR"
-msgstr ""
+msgstr "例如：f 或 XOfR"
 
 msgid "Cost"
 msgstr "成本"
@@ -2636,49 +2636,49 @@ msgid "Country"
 msgstr "国家"
 
 msgid "Country Codes"
-msgstr ""
+msgstr "国家代码"
 
 msgid "Hash Prefix"
 msgstr ""
 
 msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
-msgstr ""
+msgstr "IPv4 或 IPv6，IPv4 可选 /24,/16,/8 后缀，IPv6 支持前缀"
 
 msgid "Hostname or b32"
-msgstr ""
+msgstr "主机名或 b32 地址"
 
 msgid "IPv6 Prefix"
-msgstr ""
+msgstr "IPv6 前缀"
 
 msgid "Single port or range"
-msgstr ""
+msgstr "单个端口或范围"
 
 msgid "Signature Type"
-msgstr ""
+msgstr "签名类型"
 
 msgid "SSU Capabilities"
-msgstr ""
+msgstr "SSU 功能"
 
 msgid "Encryption Type"
-msgstr ""
+msgstr "加密类型"
 
 msgid "Router Version"
-msgstr ""
+msgstr "路由器版本"
 
 msgid "Transport"
 msgstr "传输"
 
 msgid "Add Sybil analysis (must pick at least one above)"
-msgstr ""
+msgstr "添加 Sybil 分析（必须至少选择上述一项）"
 
 msgid "Sybil close to"
-msgstr ""
+msgstr "Sybil 接近"
 
 msgid "Router hash, destination hash, b32, or from address book"
-msgstr ""
+msgstr "路由器哈希、目标哈希、b32 地址或来自地址簿"
 
 msgid "or Sybil close to this router"
-msgstr ""
+msgstr "或 Sybil 接近此路由器"
 
 msgid "Lookup"
 msgstr "查找"
@@ -2693,13 +2693,13 @@ msgid "not found in network database"
 msgstr "在网络数据库中未找到"
 
 msgid "Bad Base64 Router hash"
-msgstr ""
+msgstr "错误的 Base64 路由器哈希"
 
 msgid "No routers with"
-msgstr ""
+msgstr "没有具有...的路由器"
 
 msgid "Hash prefix"
-msgstr ""
+msgstr "哈希前缀"
 
 msgid "Port"
 msgstr "端口"
@@ -2708,10 +2708,10 @@ msgid "MTU"
 msgstr "MTU"
 
 msgid "found in the network database"
-msgstr ""
+msgstr "在网络数据库中找到"
 
 msgid "results"
-msgstr ""
+msgstr "结果"
 
 msgid "Previous Page"
 msgstr "上一页"
@@ -2720,43 +2720,43 @@ msgid "Next Page"
 msgstr "下一页"
 
 msgid "Results per page"
-msgstr ""
+msgstr "每页结果数"
 
 msgid "Not initialized"
 msgstr "未初始化"
 
 msgid "Total Remote Leasesets"
-msgstr ""
+msgstr "远程租约集总数"
 
 msgid "Compact mode"
-msgstr ""
+msgstr "紧凑模式"
 
 msgid "Local Leasesets"
-msgstr ""
+msgstr "本地租约集"
 
 msgid "Debug Mode"
-msgstr ""
+msgstr "调试模式"
 
 msgid "Published (RAP) Leasesets"
-msgstr ""
+msgstr "已发布（RAP）租约集"
 
 msgid "Sorted by hash distance, closest first."
-msgstr ""
+msgstr "按哈希距离排序，最近的在前。"
 
 msgid "Mod Data"
-msgstr ""
+msgstr "修改数据"
 
 msgid "Last Changed"
-msgstr ""
+msgstr "最后更改"
 
 msgid "Next Mod Data"
-msgstr ""
+msgstr "下次修改数据"
 
 msgid "Change in"
-msgstr ""
+msgstr "变化于"
 
 msgid "Floodfill mode enabled"
-msgstr ""
+msgstr "洪泛模式已启用"
 
 msgid "Routing Key"
 msgstr "路由器密钥"
@@ -2771,21 +2771,21 @@ msgid "Estimated total leasesets"
 msgstr "估计的租约集总数"
 
 msgid "Total Local Leasesets"
-msgstr ""
+msgstr "本地租约集总数"
 
 msgid "Remote Leasesets"
-msgstr ""
+msgstr "远程租约集"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
-msgstr ""
+msgstr "在网络数据库中找不到主机名 {0}"
 
 #, java-format
 msgid "LeaseSet for {0} not found in network database"
-msgstr ""
+msgstr "在网络数据库中找不到 {0} 的租约集"
 
 msgid "Meta"
-msgstr ""
+msgstr "元数据"
 
 msgid "LeaseSet"
 msgstr "租约集"
@@ -2817,7 +2817,7 @@ msgid "Signature type"
 msgstr "签名类型"
 
 msgid "Public Key"
-msgstr ""
+msgstr "公钥"
 
 msgid "Unsupported type"
 msgstr "不支持的类型"
@@ -2834,10 +2834,10 @@ msgid "Unknown"
 msgstr "未知"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr ""
+msgstr "高级模式 - 包含洪泛节点发布的所有统计信息。"
 
 msgid "Compact mode - does not include statistics published by floodfills."
-msgstr ""
+msgstr "紧凑模式 - 不包含洪泛节点发布的统计信息。"
 
 msgid "Network Database Router Statistics"
 msgstr "网络数据库路由统计"
@@ -2861,7 +2861,7 @@ msgid "Transports"
 msgstr "传输"
 
 msgid "X Tier"
-msgstr ""
+msgstr "X 级别"
 
 msgid "Floodfills"
 msgstr "洪水填充"
@@ -2879,10 +2879,10 @@ msgid "Router is banlisted"
 msgstr "路由器被禁止"
 
 msgid "Java I2P variant"
-msgstr ""
+msgstr "Java I2P 变体"
 
 msgid "I2Pd variant"
-msgstr ""
+msgstr "I2Pd 变体"
 
 msgid "RouterInfo is compressible"
 msgstr "Routerinfo是可压缩的"
@@ -2916,7 +2916,7 @@ msgid "Hostname"
 msgstr "域名"
 
 msgid "direct"
-msgstr ""
+msgstr "直接"
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "已验证系列（签名证书已安装且有效）"
@@ -2934,7 +2934,7 @@ msgid "Addresses"
 msgstr "地址"
 
 msgid "n/a"
-msgstr "n/a"
+msgstr "不适用"
 
 msgid "Show all routers with this address in the NetDb"
 msgstr "在NetDb中显示有此地址的所有路由器"
@@ -2955,22 +2955,22 @@ msgid "Last heard from"
 msgstr "上一次接收来自"
 
 msgid "Network Id"
-msgstr ""
+msgstr "网络 ID"
 
 msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr ""
+msgstr "计数总是被伪造以避免指示路由器重启"
 
 msgid "Hidden or starting up"
 msgstr "隐身或正在启动"
 
 msgid "SSU"
-msgstr "SSU"
+msgstr "SSU 协议"
 
 msgid "SSU with Introducers"
 msgstr "使用 SSU中介 连接"
 
 msgid "NTCP"
-msgstr "NTCP"
+msgstr "NTCP 协议"
 
 msgid "NTCP &amp; SSU"
 msgstr "NTCP 与 SSU"
@@ -3026,10 +3026,10 @@ msgid "IPv6"
 msgstr "IPv6"
 
 msgid "Active connections / Max permitted"
-msgstr ""
+msgstr "活动连接数 / 最大允许数"
 
 msgid "Connections / Limit"
-msgstr ""
+msgstr "连接数 / 限制"
 
 msgid "Current / maximum permitted"
 msgstr "当前/最大允许传输单元"
@@ -3318,7 +3318,7 @@ msgid "Rejected"
 msgstr "拒绝"
 
 msgid "First Heard About"
-msgstr ""
+msgstr "首次发现时间"
 
 msgid "Last Heard From"
 msgstr "上次连接"
@@ -3428,7 +3428,7 @@ msgstr "{0} 共享带宽"
 
 #, java-format
 msgid "Over {0} KB/s shared bandwidth"
-msgstr ""
+msgstr "共享带宽超过 {0} KB/s"
 
 msgid "status"
 msgstr "状态"
@@ -3491,11 +3491,11 @@ msgid "Total number of banned peers"
 msgstr "已封禁对等节点数量"
 
 msgid "Note: 'LU' class routers have been excluded from the list."
-msgstr ""
+msgstr "注意：'LU' 级别路由器已从列表中排除。"
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
-msgstr ""
+msgstr "要查看，请参见 {0}会话封禁{1}。"
 
 msgid "Select search engine"
 msgstr "选择搜索引擎"
@@ -3547,10 +3547,10 @@ msgid "Messenger"
 msgstr "信使"
 
 msgid "i2pchat"
-msgstr "i2pchat"
+msgstr "i2p 聊天"
 
 msgid "I2PChat"
-msgstr "I2PChat"
+msgstr "I2P 聊天"
 
 msgid "Server"
 msgstr "服务"
@@ -4555,16 +4555,16 @@ msgid "addressbook"
 msgstr "地址簿"
 
 msgid "i2psnark"
-msgstr "i2psnark"
+msgstr "i2p 种子客户端"
 
 msgid "i2ptunnel"
 msgstr "i2p隧道管理器"
 
 msgid "susimail"
-msgstr "susimail"
+msgstr "susi 邮件"
 
 msgid "susidns"
-msgstr "susidns"
+msgstr "susi DNS"
 
 msgid "routerconsole"
 msgstr "路由控制台"
@@ -5364,7 +5364,7 @@ msgid "config sidebar"
 msgstr "设置侧栏"
 
 msgid "Sidebar Options"
-msgstr ""
+msgstr "侧边栏选项"
 
 msgid "Refresh interval"
 msgstr "刷新间隔"
@@ -5376,10 +5376,10 @@ msgid "0 to disable"
 msgstr "0个可禁用"
 
 msgid "Unified sidebar"
-msgstr ""
+msgstr "统一侧边栏"
 
 msgid "Use the same sidebar on all pages"
-msgstr ""
+msgstr "在所有页面使用相同的侧边栏"
 
 msgid "config stats"
 msgstr "设置统计"
@@ -5581,7 +5581,7 @@ msgid "Event Log"
 msgstr "事件日志"
 
 msgid "Combined"
-msgstr ""
+msgstr "组合"
 
 msgid "graph"
 msgstr "图表"
@@ -7255,7 +7255,7 @@ msgid "Configure display language, theme and optional console password"
 msgstr "请输入搜索查询"
 
 msgid "Language"
-msgstr ""
+msgstr "语言"
 
 msgid "Configure router bandwidth"
 msgstr "设置路由的带宽配额"
@@ -7279,7 +7279,7 @@ msgid "Job statistics for this session"
 msgstr "此会话的作业统计信息"
 
 msgid "Job Stats"
-msgstr "Job Stats"
+msgstr "任务统计"
 
 msgid "Active and scheduled jobs"
 msgstr "活跃和计划的工作"
@@ -7322,22 +7322,22 @@ msgid "network database"
 msgstr "网络数据库"
 
 msgid "Encryption type"
-msgstr ""
+msgstr "加密类型"
 
 msgid "Encryption types"
-msgstr ""
+msgstr "加密类型"
 
 msgid "Signature types"
-msgstr ""
+msgstr "签名类型"
 
 msgid "Locally hosted private service"
-msgstr ""
+msgstr "本地托管的私有服务"
 
 msgid "Locally hosted public service"
-msgstr ""
+msgstr "本地托管的公共服务"
 
 msgid "Requested client leaseset"
-msgstr ""
+msgstr "请求的客户端租约集"
 
 msgid "network database router map"
 msgstr "网络数据库路由器映射"
@@ -7383,10 +7383,10 @@ msgid "Fast / High Capacity"
 msgstr "快速/高容量"
 
 msgid "router logs"
-msgstr ""
+msgstr "路由器日志"
 
 msgid "service logs"
-msgstr ""
+msgstr "服务日志"
 
 msgid "Manage I2P addresses"
 msgstr "地址"
@@ -7548,7 +7548,7 @@ msgid "Router Statistics"
 msgstr "路由统计"
 
 msgid "torrents"
-msgstr "torrents"
+msgstr "种子文件"
 
 msgid "Torrent Manager"
 msgstr "BT管理器"
@@ -7593,13 +7593,13 @@ msgid "Toggle Tunnels"
 msgstr "切换隧道"
 
 msgid "Updating sidebar sections"
-msgstr ""
+msgstr "更新侧边栏部分"
 
 msgid "Peer Profile"
 msgstr "对等节点摘要"
 
 msgid "Profile View"
-msgstr ""
+msgstr "配置文件视图"
 
 msgid "Profile for peer"
 msgstr "对等节点信息"
