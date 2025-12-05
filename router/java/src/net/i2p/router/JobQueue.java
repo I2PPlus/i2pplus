@@ -71,8 +71,6 @@ public class JobQueue {
     private static int DEFAULT_MAX_RUNNERS = RUNNERS;
     /** router.config parameter to override the max runners */
     private final static String PROP_MAX_RUNNERS = "router.maxJobRunners";
-    /** How frequently should we check and update the max runners */
-    private final static long MAX_LIMIT_UPDATE_DELAY = 90*1000;
     /** If a job is this lagged, spit out a warning, but keep going */
     private final static long DEFAULT_LAG_WARNING = 5*1000;
     private long _lagWarning = DEFAULT_LAG_WARNING;
@@ -116,6 +114,8 @@ public class JobQueue {
         _context.statManager().createRateStat("jobQueue.droppedJobs", "Scheduled jobs dropped due to insane overload", "JobQueue", RATES);
         _context.statManager().createRateStat("jobQueue.queuedJobs", "Scheduled jobs in queue", "JobQueue", RATES);
         _context.statManager().createRateStat("jobQueue.readyJobs", "Ready and waiting scheduled jobs", "JobQueue", RATES);
+        _context.statManager().createRateStat("jobQueue.testJobCount", "Number of TestJob instances in queue", "JobQueue", RATES);
+        _context.statManager().createRateStat("jobQueue.testJobHardLimit", "TestJob hard limit events", "JobQueue", RATES);
         // following are for JobQueueRunner
         _context.statManager().createRateStat("jobQueue.jobRun", "Duration of scheduled jobs", "JobQueue", RATES);
         _context.statManager().createRateStat("jobQueue.jobRunSlow", "Duration of jobs that take over a second (ms)", "JobQueue", RATES);
@@ -174,6 +174,12 @@ public class JobQueue {
 
         _context.statManager().addRateData("jobQueue.readyJobs", numReady);
         _context.statManager().addRateData("jobQueue.queuedJobs", _timedJobs.size());
+
+        // Track TestJob queue count for monitoring
+        int testJobCount = getTestJobCount();
+        if (testJobCount > 0) {
+            _context.statManager().addRateData("jobQueue.testJobCount", testJobCount);
+        }
         if (dropped) {
             _context.statManager().addRateData("jobQueue.droppedJobs", 1);
             if (_log.shouldWarn()) {
@@ -234,7 +240,7 @@ public class JobQueue {
         return _context.clock().now() - startAfter;
     }
 
-    private boolean shouldDrop(Job job, long numReady) {
+    private boolean shouldDrop(Job job, int numReady) {
         if (_maxWaitingJobs <= 0) return false;
         if (!_allowParallelOperation) return false;
         if (numReady > _context.getProperty(PROP_MAX_WAITING_JOBS, DEFAULT_MAX_WAITING_JOBS)) {
@@ -331,6 +337,38 @@ public class JobQueue {
                     return j;
                 }
 
+                // Check for ready timed jobs before blocking
+                long now = _context.clock().now();
+                synchronized (_jobLock) {
+                    for (Iterator<Job> iter = _timedJobs.iterator(); iter.hasNext(); ) {
+                        Job job = iter.next();
+                        long timeLeft = job.getTiming().getStartAfter() - now;
+                        if (timeLeft <= 0) {
+                            iter.remove();
+                            if (job instanceof JobImpl) {((JobImpl) job).madeReady(now);}
+                            return job;
+                        } else {
+                            // Don't remove and re-add jobs - this breaks TreeSet ordering
+                            if (timeLeft > 10*1000 && iter.hasNext()) {
+                                if (_log.shouldInfo()) {
+                                    _log.info(job + " deferred for " + DataHelper.formatDuration(timeLeft));
+                                }
+                                Job nextJob = iter.next();
+                                _timedJobs.add(job);
+                                long nextTimeLeft = nextJob.getTiming().getStartAfter() - now;
+                                if (timeLeft > nextTimeLeft) {
+                                    if (_log.shouldInfo()) {
+                                        _log.info(job + " out of order with " + nextJob + "\n* Difference: " +
+                                                  DataHelper.formatDuration(timeLeft - nextTimeLeft));
+                                    }
+                                    // timeToWait = Math.max(10, nextTimeLeft); // Removed - timeToWait not in scope
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+
                 // Then check normal priority jobs
                 j = _readyJobs.poll(100, TimeUnit.MILLISECONDS);
                 if (j != null) {
@@ -394,11 +432,12 @@ public class JobQueue {
                                     iter.remove();
                                 } else {
                                     timeToWait = timeLeft;
+                                    // Don't remove and re-add jobs - this breaks TreeSet ordering
+                                    // Just check the next job to adjust wait time if needed
                                     if (timeToWait > 10*1000 && iter.hasNext()) {
                                         if (_log.shouldInfo()) {
                                             _log.info(j + " deferred for " + DataHelper.formatDuration(timeToWait));
                                         }
-                                        iter.remove();
                                         Job nextJob = iter.next();
                                         _timedJobs.add(j);
                                         long nextTimeLeft = nextJob.getTiming().getStartAfter() - now;
@@ -462,7 +501,9 @@ public class JobQueue {
     void updateStats(Job job, long doStart, long origStartAfter, long duration) {
         if (_context.router() == null) return;
         String key = job.getName();
-        long lag = doStart - origStartAfter;
+        // Fix lag calculation: use actual job start time, not current time
+        long actualStart = job.getTiming().getStartAfter();
+        long lag = doStart - actualStart;
         MessageHistory hist = _context.messageHistory();
         long uptime = _context.router().getUptime();
 
@@ -545,5 +586,37 @@ public class JobQueue {
     public Collection<JobStats> getJobStats() {
         return Collections.unmodifiableCollection(_jobStats.values());
     }
+
+    /**
+     * Count the number of TestJob instances currently queued in the job queue.
+     * This includes both ready jobs and timed jobs waiting to be executed.
+     *
+     * @return the total number of TestJob instances in the queue
+     */
+    public int getTestJobCount() {
+        int count = 0;
+        synchronized (_jobLock) {
+            // Count TestJob instances in ready queues
+            for (Job job : _readyJobs) {
+                if (job instanceof TestJob) {
+                    count++;
+                }
+            }
+            for (Job job : _highPriorityJobs) {
+                if (job instanceof TestJob) {
+                    count++;
+                }
+            }
+            // Count TestJob instances in timed queue
+            for (Job job : _timedJobs) {
+                if (job instanceof TestJob) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+
 
 }
