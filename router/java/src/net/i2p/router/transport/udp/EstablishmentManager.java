@@ -2426,6 +2426,10 @@ class EstablishmentManager {
         return rv;
     }
 
+    /**
+     * Token used for SSU2 session establishment and validation.
+     * Contains expiration time and validation data.
+     */
     public static class Token {
         private final long token;
         // save space until 2106

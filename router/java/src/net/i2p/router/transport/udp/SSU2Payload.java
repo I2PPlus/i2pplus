@@ -22,8 +22,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 
 /**
- *
- *  SSU2 Payload generation and parsing
+ * SSU2 Payload generation and parsing utilities.
  *
  *  @since 0.9.54
  */
@@ -492,6 +491,10 @@ class SSU2Payload {
         }
     }
 
+    /**
+     * Block containing router information data.
+     * Used to exchange router information during session establishment.
+     */
     public static class RIBlock extends Block {
         private final byte[] data;
         private final int doff, dlen;
@@ -535,6 +538,10 @@ class SSU2Payload {
         }
     }
 
+    /**
+     * Block containing I2NP message data.
+     * Used to transport I2NP messages over SSU2.
+     */
     public static class I2NPBlock extends Block {
         private final OutboundMessageState m;
 
@@ -606,6 +613,10 @@ class SSU2Payload {
         }
     }
 
+    /**
+     * Block containing padding data.
+     * Used to pad messages to required sizes.
+     */
     public static class PaddingBlock extends Block {
         private final int sz;
         private final I2PAppContext ctx;
@@ -635,6 +646,10 @@ class SSU2Payload {
         }
     }
 
+    /**
+     * Block containing the current date and time.
+     * Used for time synchronization between peers.
+     */
     public static class DateTimeBlock extends Block {
         private final long now;
 
@@ -653,6 +668,10 @@ class SSU2Payload {
         }
     }
 
+    /**
+     * Block containing session options.
+     * Used to negotiate session parameters.
+     */
     public static class OptionsBlock extends Block {
         private final byte[] opts;
 
@@ -671,6 +690,10 @@ class SSU2Payload {
         }
     }
 
+    /**
+     * Block containing session termination data.
+     * Used to signal session termination.
+     */
     public static class TerminationBlock extends Block {
         private final byte rsn;
         private final long rcvd;
@@ -692,6 +715,10 @@ class SSU2Payload {
         }
     }
 
+    /**
+     * Block containing acknowledgment data.
+     * Used to acknowledge receipt of packets.
+     */
     public static class AckBlock extends Block {
         private final long t;
         private final int a;
@@ -731,6 +758,10 @@ class SSU2Payload {
         }
     }
 
+    /**
+     * Block containing IP address and port information.
+     * Used to exchange transport addresses.
+     */
     public static class AddressBlock extends Block {
         private final byte[] i;
         private final int p;
@@ -753,6 +784,10 @@ class SSU2Payload {
         }
     }
 
+    /**
+     * Block containing relay tag request data.
+     * Used to request relay tags for session establishment.
+     */
     public static class RelayTagRequestBlock extends Block {
 
         public RelayTagRequestBlock() {
@@ -768,6 +803,10 @@ class SSU2Payload {
         }
     }
 
+    /**
+     * Block containing relay tag data.
+     * Used to identify relay sessions.
+     */
     public static class RelayTagBlock extends Block {
         private final long t;
 
@@ -786,6 +825,10 @@ class SSU2Payload {
         }
     }
 
+    /**
+     * Block containing relay request data.
+     * Used to request relay services from a peer.
+     */
     public static class RelayRequestBlock extends Block {
         private final byte[] d;
 
@@ -804,6 +847,10 @@ class SSU2Payload {
         }
     }
 
+    /**
+     * Block containing relay response data.
+     * Used to respond to relay requests.
+     */
     public static class RelayResponseBlock extends Block {
         private final byte[] d;
 
@@ -822,6 +869,10 @@ class SSU2Payload {
         }
     }
 
+    /**
+     * Block containing relay introduction data.
+     * Used to introduce peers for relayed connections.
+     */
     public static class RelayIntroBlock extends Block {
         private final byte[] d;
 
@@ -840,6 +891,10 @@ class SSU2Payload {
         }
     }
 
+    /**
+     * Block containing peer test data.
+     * Used for network reachability testing.
+     */
     public static class PeerTestBlock extends Block {
         private final int n;
         private final int c;
@@ -877,6 +932,10 @@ class SSU2Payload {
         }
     }
 
+    /**
+     * Block containing a new session token.
+     * Used to provide tokens for future session establishment.
+     */
     public static class NewTokenBlock extends Block {
         private final EstablishmentManager.Token tok;
 

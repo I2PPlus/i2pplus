@@ -42,6 +42,10 @@ class InboundEstablishState {  // TODO do all these methods need to be synchroni
     protected boolean _introductionRequested; // default true for SSU 1, false for SSU 2
     protected int _rtt;
 
+    /**
+     * States for inbound SSU session establishment.
+     * Tracks the progression of incoming connection setup.
+     */
     public enum InboundState {
         IB_STATE_UNKNOWN, /** nothin' known yet */
         IB_STATE_REQUEST_RECEIVED, /** we have received an initial request */

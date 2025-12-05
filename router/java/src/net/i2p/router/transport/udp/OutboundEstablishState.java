@@ -68,6 +68,10 @@ class OutboundEstablishState {
     private long _introSentTime;
     protected int _rtt;
 
+    /**
+     * States for outbound SSU session establishment.
+     * Tracks the progression of outgoing connection setup.
+     */
     public enum OutboundState {
         /** nothin sent yet */
         OB_STATE_UNKNOWN,

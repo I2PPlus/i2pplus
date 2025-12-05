@@ -47,6 +47,10 @@ class PeerTestState {
     private int _status;
     private final AtomicInteger _packetsRelayed = new AtomicInteger();
 
+    /**
+     * Roles for peer testing scenarios.
+     * Defines the participant's role in connectivity testing.
+     */
     public enum Role {ALICE, BOB, CHARLIE};
 
     /**

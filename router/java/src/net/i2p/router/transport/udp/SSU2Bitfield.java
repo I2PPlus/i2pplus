@@ -182,6 +182,10 @@ class SSU2Bitfield {
         return rv;
     }
 
+    /**
+     * Callback interface for bitfield operations.
+     * Called when a bit is set in the bitfield.
+     */
     public interface Callback {public void bitSet(long bit);}
 
     /**
