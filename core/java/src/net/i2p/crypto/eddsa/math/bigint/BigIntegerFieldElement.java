@@ -1,13 +1,10 @@
 /**
  * EdDSA-Java by str4d
  *
- * To the extent possible under law, the person who associated CC0 with
+ * To the extent possible under law, the person who associated
+ * <a href=https://creativecommons.org/publicdomain/zero/1.0/>CC0</a> with
  * EdDSA-Java has waived all copyright and related or neighboring rights
  * to EdDSA-Java.
- *
- * You should have received a copy of the CC0 legalcode along with this
- * work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>lt;https://creativecommons.org/publicdomain/zero/1.0/<https://creativecommons.org/publicdomain/zero/1.0/>gt;.
- *
  */
 package net.i2p.crypto.eddsa.math.bigint;
 
