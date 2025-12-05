@@ -16,7 +16,9 @@ import net.i2p.util.SystemVersion;
 /**
  * Handles asynchronous post-send processing of OutNetMessage using a
  * fixed-size thread pool executor with a bounded queue and backpressure.
- * Replaces previous abuse of SimpleTimer with efficient, lockless execution.
+ * Provides efficient message serialization and prevents resource exhaustion.
+ *
+ * @since 0.9.16
  */
 class NTCPSendFinisher {
     private static final int MIN_THREADS = 1;

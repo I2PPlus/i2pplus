@@ -436,13 +436,13 @@ class OutboundNTCP2State implements EstablishState {
         setDataPhase();
     }
 
-    /**
-     *  KDF for data phase,
-     *  then calls con.finishOutboundEstablishment(),
-     *  passing over the final keys and states to the con.
-     *
-     *  Caller must synch
-     */
+/**
+ * NTCP 2 only. We are Alice.
+ * State machine for establishing outbound NTCP2 connections as Alice.
+ * Manages cryptographic handshake, key exchange, and transition to data phase.
+ *
+ * @since 0.9.35
+ */
     private void setDataPhase() {
         // Data phase ChaChaPoly keys
         CipherStatePair ckp = _handshakeState.split();

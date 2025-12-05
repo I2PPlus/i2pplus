@@ -14,9 +14,11 @@ import net.i2p.util.Log;
 
 /**
  * Pool of running threads which will process any read bytes on any of the
- * NTCPConnections, including the decryption of the data read, connection
+ * NTCPConnections, including decryption of the data read, connection
  * handshaking, parsing bytes into I2NP messages, etc.
+ * Provides efficient buffer management and connection lifecycle coordination.
  *
+ * @since 0.9.16
  */
 class Reader {
     private final RouterContext _context;

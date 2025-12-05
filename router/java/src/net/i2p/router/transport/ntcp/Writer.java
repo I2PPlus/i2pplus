@@ -13,9 +13,10 @@ import net.i2p.util.Log;
 
 /**
  * Pool of running threads which will transform the next I2NP message into
- * something ready to be transferred over an NTCP connection, including the
- * encryption of the data read.
+ * something ready to be transferred over an NTCP connection, including encryption of the data read.
+ * Provides efficient message serialization and connection lifecycle coordination.
  *
+ * @since 0.9.16
  */
 class Writer {
     private final Log _log;
