@@ -18,13 +18,13 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.RandomSource;
 
 /**
- * HandlerJobBuilder to build jobs to handle GarlicMessages
+ * Builds jobs to process garlic messages received outside tunnels. Handles floodfill netdb operations and garlic routing for direct peer communications.
  *
- * This is the handler for garlic message not received down a tunnel, which is the
+ * <p>This is the handler for garlic message not received down a tunnel, which is the
  * case for floodfills receiving netdb messages.
  * It is not the handler for garlic messages received down a tunnel,
  * as InNetMessagePool short circuits tunnel messages,
- * and those garlic messages are handled in InboundMessageDistributor.
+ * and those garlic messages are handled in InboundMessageDistributor.</p>
  */
 public class GarlicMessageHandler implements HandlerJobBuilder {
     private final RouterContext _context;

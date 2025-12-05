@@ -41,24 +41,24 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**
- * A traditional Kademlia search that continues to search when the initial lookup fails,
- * by iteratively searching the closer-to-the-key peers returned by the query in a DSRM.
- *
- * Unlike traditional Kad, it doesn't stop when there are no closer keys, it keeps going
- * until the timeout or max number of searches is reached.
- *
- * Differences from FloodOnlySearchJob:
- * - Chases peers in DSRM's immediately.
- * - FOSJ searches the two closest in parallel and then stops.
- * - There is no per-search timeout, only a total timeout.
- * Here, we search one at a time, and must have a separate per-search timeout.
- *
- * Advantages:
- * - Much more robust than FOSJ, especially in a large network where not all floodfills are known.
- * - Longer total timeout.
- * - Halves search traffic for successful searches, as this doesn't do two searches in parallel like FOSJ does.
- *
- * Public only for JobQueue, not a public API, not for external use.
+ * Traditional Kademlia iterative search with enhanced robustness.
+ * <p>
+ * Continues searching when initial lookup fails by iteratively querying
+ * closer-to-the-key peers returned in DatabaseSearchReplyMessages. Unlike traditional
+ * Kademlia, doesn't stop when no closer keys are available - keeps searching
+ * until timeout or maximum search limit is reached.
+ * <p>
+ * Key differences from FloodOnlySearchJob:
+ * - Chases peers in DSRM immediately rather than waiting
+ * - Searches one peer at a time with individual per-search timeouts
+ * - Uses total timeout rather than per-search timeouts
+ * - Longer overall timeout for better success rates
+ * - Reduces search traffic by half compared to parallel approaches
+ * <p>
+ * Advantages over flood-only approaches:
+ * - More robust in large networks with incomplete floodfill knowledge
+ * - Better success rates through sequential searching
+ * - Reduced network traffic through single-peer queries
  *
  * @since 0.8.9
  */

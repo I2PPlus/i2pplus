@@ -9,10 +9,8 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
 /**
- *  Send an empty message if the timer expires.
+ * Timer for sending ratchet-layer acknowledgments when application responses are delayed, supporting NS, NSR, ACK requests, and forward next key blocks
  *
- *  This will be created for incoming NS, NSR,
- *  ACK request blocks, and forward next key blocks.
  *  The vast majority of these will be cancelled before firing,
  *  when streaming sends a response.
  *  This should only fire if streaming drops completely,

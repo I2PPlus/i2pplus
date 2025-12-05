@@ -13,7 +13,7 @@ import net.i2p.data.SessionKey;
 import net.i2p.data.SessionTag;
 
 /**
- * Both EC and PQ
+ * Post-quantum hybrid session key manager combining ECIES and ML-KEM operations
  *
  * @since 0.9.67
  */

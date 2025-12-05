@@ -11,18 +11,32 @@ import net.i2p.util.SimpleTimer2;
 import org.xlattice.crypto.filters.BloomSHA1;
 
 /**
- * Series of bloom filters which decay over time, allowing their continual use
- * for time sensitive data.  This has a fixed size (per
- * period, using two periods overall), allowing this to pump through hundreds of
- * entries per second with virtually no false positive rate.  Down the line,
- * this may be refactored to allow tighter control of the size necessary for the
- * contained bloom filters.
+ * Time-decaying Bloom filter series for efficient data management.
+ * <p>
+ * Provides a series of Bloom filters with automatic time-based decay
+ * to handle time-sensitive data with minimal false positive rates.
+ * Uses fixed-size buffers with periodic switching to maintain
+ * consistent memory usage while allowing high-throughput operations.
+ * <p>
+ * Optimized for scenarios requiring hundreds of entries per second
+ * with virtually no false positive rate. Memory usage is carefully
+ * controlled through configurable filter parameters and buffer sizes.
+ * <p>
+ * Performance characteristics:
+ * <ul>
+ *   <li>Configurable m and k parameters for optimal false positive rates</li>
+ *   <li>Automatic buffer switching and decay operations</li>
+ *   <li>Thread-safe with read/write lock coordination</li>
+ *   <li>Comprehensive statistics tracking and performance monitoring</li>
+ * </ul>
+ * <p>
+ * Suitable for high-throughput applications like message validation,
+ * tunnel IV filtering, and router message processing where
+ * memory efficiency and low false positive rates are critical.
  *
- * See main() for an analysis of false positive rate.
- * See BloomFilterIVValidator for instantiation parameters.
- * See DecayingHashSet for a smaller and simpler version.
- * See net.i2p.router.tunnel.BloomFilterIVValidator
  * @see net.i2p.router.util.DecayingHashSet
+ * @see net.i2p.router.tunnel.BloomFilterIVValidator
+ * @since 0.8.8
  */
 public class DecayingBloomFilter {
     protected final I2PAppContext _context;

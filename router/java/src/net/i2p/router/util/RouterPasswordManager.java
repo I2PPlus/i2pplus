@@ -13,10 +13,22 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.PasswordManager;
 
 /**
- *  Manage both plaintext and salted/hashed password storage in
- *  router.config.
+ * Comprehensive password management for router configuration with migration support.
+ * <p>
+ * Manages both plaintext and salted/hashed password storage in router
+ * configuration. Provides migration utilities for transitioning from
+ * legacy plaintext passwords to modern hashed authentication.
+ * <p>
+ * Supports multiple authentication realms including i2cp, routerconsole,
+ * and keystore-based authentication. Includes validation, migration,
+ * and obfuscation utilities for secure password handling.
+ * <p>
+ * Handles password migration between different storage formats
+ * while maintaining backward compatibility and security best practices.
+ * Includes comprehensive logging and error handling for
+ * authentication operations.
  *
- *  @since 0.9.4
+ * @since 0.9.4
  */
 public class RouterPasswordManager extends PasswordManager {
     protected final RouterContext _context;

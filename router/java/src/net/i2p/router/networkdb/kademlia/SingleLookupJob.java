@@ -9,16 +9,20 @@ import net.i2p.util.SystemVersion;
 //import net.i2p.util.Log;
 
 /**
- * Ask the peer who sent us the DSRM for the RouterInfos...
- *
- * ... but If we have the routerInfo already, try to refetch it from that router itself,
- * (if the info is old or we don't think it is floodfill)
- * which will help us establish that router as a good floodfill and speed our
- * integration into the network.
- *
- * A simple version of SearchReplyJob in SearchJob.java.
- * Skip the profile updates - this should be rare.
- *
+ * Performs targeted followup lookups for RouterInfo entries from search replies.
+ * <p>
+ * Processes RouterInfo hashes received in DatabaseSearchReplyMessage by
+ * initiating direct queries to obtain missing or stale RouterInfo data.
+ * For each unknown peer, queries the peer that provided the hash; for
+ * known peers with outdated data or non-floodfill status, queries the
+ * peer directly to refresh the information.
+ * <p>
+ * This lightweight version of SearchReplyJob focuses specifically on
+ * RouterInfo acquisition without profile management overhead. Designed
+ * for efficient network integration and floodfill peer discovery.
+ * <p>
+ * Limits concurrent followup operations based on system performance
+ * to prevent resource exhaustion during high-volume search responses.
  */
 class SingleLookupJob extends JobImpl {
     //private final Log _log;

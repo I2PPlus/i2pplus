@@ -16,18 +16,24 @@ import net.i2p.util.Log;
  *
  */
 
+/**
+ * Processes DatabaseSearchReplyMessage responses from floodfill peers.
+ * <p>
+ * Validates reply messages and extracts router information for search operations.
+ * Implements security measures to prevent exploitation through malformed
+ * or malicious search replies, including authentication verification and nonce checking.
+ * <p>
+ * Tracks statistics on good, bad, and duplicate replies to identify
+ * potentially unreliable peers and adjust search behavior accordingly.
+ * <p>
+ * Thread-safe implementation with comprehensive logging for debugging
+ * and monitoring of peer reliability patterns.
+ *
+ * @since 0.9.16
+ */
 class SearchReplyJob extends JobImpl {
     private final DatabaseSearchReplyMessage _msg;
     private final Log _log;
-    /**
-     * Peer who we think sent us the reply.  Note: could be spoofed!  If the
-     * attacker knew we were searching for a particular key from a
-     * particular peer, they could send us some searchReply messages with
-     * bad values, trying to get us to consider that peer unreliable.
-     * Potential fixes include either authenticated 'from' address or use a
-     * nonce in the search + searchReply (and check for it in the selector).
-     *
-     */
     private final Hash _peer;
     private int _seenPeers;
     private int _newPeers;

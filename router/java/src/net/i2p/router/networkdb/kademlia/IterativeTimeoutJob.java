@@ -5,12 +5,22 @@ import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 
 /**
- *  This is the timeout for a single lookup, not for the whole search.
- *  It is called every time, it is not cancelled after the search succeeds
- *  or the peer replies with a DSRM. We rely on ISJ.failed(peer) to
- *  decide whether or not it actually timed out.
+ * Handles timeout events for individual peer lookups in iterative searches.
+ * <p>
+ * Manages timeout scenarios for specific peer queries during
+ * iterative search operations. Unlike overall search timeouts,
+ * this handles individual peer response timeouts while allowing
+ * the broader iterative search to continue with other peers.
+ * <p>
+ * Coordinates with IterativeSearchJob to mark peers as failed
+ * when they don't respond within the expected time window.
+ * The decision whether a timeout actually occurred is delegated
+ * to the parent search job's failure detection logic.
+ * <p>
+ * Ensures robust iterative search behavior by handling unresponsive
+ * peers without disrupting the overall search progress.
  *
- *  @since 0.8.9
+ * @since 0.8.9
  */
 class IterativeTimeoutJob extends JobImpl {
     private final IterativeSearchJob _search;

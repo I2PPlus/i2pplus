@@ -41,6 +41,7 @@ public class Banlist {
      */
     public static final Hash HASH_ZERORI = new Hash(Base64.decode("MRn86w6tHQgE25D7DIejOBCJ-dImSjdsQaOaBuUypkE="));
 
+    /** Entry representing a banned peer with expiration and reason information */
     public static class Entry {
         /** when it should expire, per the i2p clock */
         public long expireOn;

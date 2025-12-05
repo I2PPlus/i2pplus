@@ -10,9 +10,20 @@ import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer2;
 
 /**
- * Track lookup fails
+ * Negative cache for network database lookup operations.
+ * <p>
+ * Caches failed lookup attempts to prevent repeated queries to unavailable
+ * or malicious peers. Implements time-based expiration and configurable
+ * failure thresholds to balance between cache effectiveness and resource usage.
+ * <p>
+ * Uses LRU eviction policy and periodic cleanup to maintain cache size.
+ * Provides DOS protection by rate-limiting repeated failed lookups
+ * for the same targets within configurable time windows.
+ * <p>
+ * Thread-safe implementation with atomic counters and scheduled cleanup
+ * operations for reliable concurrent access in multi-threaded environments.
  *
- * @since 0.9.4
+ * @since 0.9.56
  */
 class NegativeLookupCache {
     private final ObjectCounter<Hash> counter;

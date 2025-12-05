@@ -3,9 +3,9 @@ package net.i2p.router;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- *  Glorified struct to contain basic job stats.
- *  Public for router console only.
- *  For use by the router only. Not to be used by applications or plugins.
+ * Collects and maintains statistical data for job execution performance. Tracks run counts, execution times, drop rates, and pending time metrics for job queue monitoring and optimization.
+ * Public for router console only.
+ * For use by the router only. Not to be used by applications or plugins.
  */
 public class JobStats {
     private final String _job;

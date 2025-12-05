@@ -10,19 +10,21 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
- * A priority blocking queue with bounded capacity and FIFO ordering within the
- * same priority level. Entries extend {@link PQEntry} which provides
- * priority and sequence number for ordering.
+ * Priority blocking queue with bounded capacity and FIFO ordering within priority levels.
+ * <p>
+ * Extends PriorityBlockingQueue to provide bounded capacity with
+ * FIFO ordering for elements sharing the same priority. Entries
+ * extend PQEntry to include sequence numbers for insertion ordering.
+ * <p>
+ * Applies sequence timestamps on insertion to ensure FIFO behavior
+ * within same priority level while maintaining priority-based ordering.
+ * Capacity is controlled by configuration properties to prevent
+ * unbounded growth and enable backpressure management.
+ * <p>
+ * Thread-safe implementation suitable for concurrent producer-consumer
+ * scenarios with comprehensive statistics tracking and performance monitoring.
  *
- * The queue applies a sequence number timestamp on entries on insertion to
- * ensure FIFO behavior within the same priority.
- *
- * Capacity bound is controlled by a property ("router.codelMaxQueue") with a
- * default size, avoiding unbounded growth and allowing for backpressure.
- *
- * Thread-safe and suitable for concurrent use.
- *
- * @param <E> the type of elements held in this queue, extending {@link PQEntry}
+ * @param <E>  type of elements held in this queue, extending {@link PQEntry}
  *
  * @since 0.9.3
  */

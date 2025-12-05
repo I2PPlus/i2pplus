@@ -9,9 +9,16 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
 /**
- * Check to see the message is a reply from the peer regarding the current
- * store
- *
+ * Message selector for matching database store operation confirmations.
+ * <p>
+ * Filters incoming DeliveryStatusMessage responses to identify
+ * acknowledgments for specific store operations. Tracks message
+ * IDs, peer information, and expiration times to correlate
+ * delivery confirmations with pending store jobs.
+ * <p>
+ * Provides logging support for store operation monitoring
+ * and implements simple match-once logic to prevent
+ * duplicate processing of delivery confirmations.
  */
 class StoreMessageSelector implements MessageSelector {
     private final Log _log;

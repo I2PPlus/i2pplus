@@ -4,7 +4,7 @@ import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
-/** a do run run run a do run run */
+/** Worker thread that executes jobs from the router job queue. Handles job execution, timing collection, error handling, and performance monitoring for individual job processing threads. */
 class JobQueueRunner extends I2PThread {
     private final Log _log;
     private final RouterContext _context;

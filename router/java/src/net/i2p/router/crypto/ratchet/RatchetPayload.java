@@ -81,14 +81,11 @@ class RatchetPayload {
         public void gotUnknown(int type, int len);
     }
 
-    /**
-     *  Incoming payload. Calls the callback for each received block.
-     *
-     *  @return number of blocks processed
-     *  @throws IOException on major errors
-     *  @throws DataFormatException on parsing of individual blocks
-     *  @throws I2NPMessageException on parsing of I2NP block
-     */
+/**
+ * Ratchet payload generation and parsing utilities supporting datetime, options, garlic, next key, acknowledgment, and padding blocks for ECIES+AEAD messages
+ *
+ *  @since 0.9.44 adapted from NTCP2Payload
+ */
     public static int processPayload(I2PAppContext ctx, PayloadCallback cb,
                                      byte[] payload, int off, int length, boolean isHandshake)
                                      throws IOException, DataFormatException, I2NPMessageException {
@@ -263,6 +260,7 @@ class RatchetPayload {
         }
     }
 
+    /** Garlic clove block for embedding I2NP messages in ratchet payload */
     public static class GarlicBlock extends Block {
         private final GarlicClove c;
 
@@ -280,6 +278,7 @@ class RatchetPayload {
         }
     }
 
+    /** Padding block for ratchet payload size alignment and obfuscation */
     public static class PaddingBlock extends Block {
         private final int sz;
         private final I2PAppContext ctx;
@@ -310,6 +309,7 @@ class RatchetPayload {
         }
     }
 
+    /** Timestamp block for ratchet payload synchronization and timing */
     public static class DateTimeBlock extends Block {
         private final long now;
 
@@ -328,6 +328,7 @@ class RatchetPayload {
         }
     }
 
+    /** Options block for ratchet protocol configuration and negotiation */
     public static class OptionsBlock extends Block {
         private final byte[] opts;
 
@@ -346,6 +347,7 @@ class RatchetPayload {
         }
     }
 
+    /** Next session key block for ratchet key exchange operations */
     public static class NextKeyBlock extends Block {
         private final NextSessionKey next;
 
@@ -432,6 +434,7 @@ class RatchetPayload {
         }
     }
 
+    /** Termination block for ratchet session closure with reason codes */
     public static class TerminationBlock extends Block {
         private final byte rsn;
 

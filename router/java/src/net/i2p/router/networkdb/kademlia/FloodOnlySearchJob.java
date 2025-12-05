@@ -10,25 +10,14 @@ import net.i2p.router.ReplyJob;
 import net.i2p.router.RouterContext;
 
 /**
- * Uunused directly, replaced by IterativeSearchJob, but still extended by
- * SingleSearchJob.
+ * Flood-only search implementation for network database lookups.
+ * <p>
+ * Sends search queries to floodfill peers with no fallback to Kademlia search.
+ * Fails completely if no successful match is received from initial peers.
+ * Includes enhancements to help routers bootstrap back into the network after losing
+ * floodfill references by following floodfill keys in DatabaseSearchReplyMessages.
  *
- * Try sending a search to some floodfill peers, failing completely if we don't get
- * a match from one of those peers, with no fallback to the kademlia search
- *
- * Exception (a semi-exception, since we still fail completely without fallback):
- * If we don't know any floodfill peers, we ask a couple of peers at random,
- * who will hopefully reply with some floodfill keys.
- * We still fail without fallback, but we then spin off a job to
- * ask that same random peer for the RouterInfos for those keys.
- * If that job succeeds, the next search should work better.
- *
- * In addition, we follow the floodfill keys in the DSRM
- * (DatabaseSearchReplyMessage) if we know less than 4 floodfills.
- *
- * These enhancements allow the router to bootstrap back into the network
- * after it loses (or never had) floodfill references, as long as it
- * knows one peer that is up.
+ * @since 0.8.9
  */
 abstract class FloodOnlySearchJob extends FloodSearchJob {
     private boolean _shouldProcessDSRM;

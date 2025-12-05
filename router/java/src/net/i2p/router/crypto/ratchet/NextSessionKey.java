@@ -4,7 +4,7 @@ import net.i2p.crypto.EncType;
 import net.i2p.data.PublicKey;
 
 /**
- * A X25519 key and key ID.
+ * X25519 public key with identifier for next session key exchange in ratchet protocol
  *
  * @since 0.9.44
  */

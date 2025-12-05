@@ -157,11 +157,11 @@ public class RatchetSKM extends SessionKeyManager implements SessionTagListener 
         return _destination;
     }
 
-    /**
-     *  The EncType for this SKM
-     *
-     *  @since 0.9.67
-     */
+/**
+ * Session key manager for ratchet encryption that handles outbound sessions, inbound tag sets, next key exchanges, and acknowledgment processing for ECIES+AEAD communications
+ *
+ *  @since 0.9.44
+ */
     public EncType getType() {
         return _type;
     }

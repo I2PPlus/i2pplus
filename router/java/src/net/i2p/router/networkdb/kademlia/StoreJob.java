@@ -42,9 +42,14 @@ import net.i2p.util.Log;
 import net.i2p.util.VersionComparator;
 
 /**
- *  Stores through this always request a reply.
- *
- *  Unused directly - see FloodfillStoreJob
+ * Abstract base class for network database store operations.
+ * <p>
+ * Handles the process of storing database entries (RouterInfo or LeaseSet) to floodfill peers
+ * with configurable parallelization, redundancy, and timeout handling. Supports both direct
+ * and tunnel-based delivery with garlic encryption for client data.
+ * <p>
+ * All store operations through this class request a reply to confirm successful delivery.
+ * Unused directly - see FloodfillStoreJob for the concrete implementation.
  */
 abstract class StoreJob extends JobImpl {
     protected final Log _log;

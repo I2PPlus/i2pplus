@@ -59,7 +59,10 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**
- * Kademlia based version of the network database.
+ * Kademlia based version of network database.
+ * <p>
+ * Provides core network database functionality using Kademlia DHT for peer discovery,
+ * routing table management, and data storage/lookup operations.
  * Never instantiated directly; see FloodfillNetworkDatabaseFacade.
  */
 public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacade {

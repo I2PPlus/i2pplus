@@ -21,9 +21,17 @@ import net.i2p.router.networkdb.HandleDatabaseLookupMessageJob;
 
 
 /**
- * Handle a lookup for a key received from a remote peer.  Needs to be implemented
- * to send back replies, etc
- *
+ * Processes database lookup messages received by floodfill routers.
+ * <p>
+ * Handles incoming DatabaseLookupMessage requests from remote peers, performing
+ * database searches and sending appropriate replies. Extends the base lookup
+ * handling with floodfill-specific logic including query acceptance criteria
+ * and capability-based response behavior.
+ * <p>
+ * Determines whether to answer all queries based on floodfill status and
+ * capability flags. When not operating as floodfill, includes the local
+ * RouterInfo in responses to inform peers of the capability change and
+ * reduce misdirected queries.
  */
 public class HandleFloodfillDatabaseLookupMessageJob extends HandleDatabaseLookupMessageJob {
     public HandleFloodfillDatabaseLookupMessageJob(RouterContext ctx, DatabaseLookupMessage receivedMessage, RouterIdentity from, Hash fromHash, long msgIDBloomXor) {

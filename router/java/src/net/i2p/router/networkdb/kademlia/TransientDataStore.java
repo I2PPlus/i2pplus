@@ -25,7 +25,19 @@ import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.util.Log;
 
 /**
- *  Stores in-memory only. See extension.
+ * In-memory network database storage implementation.
+ * <p>
+ * Provides volatile storage for database entries with no persistence to disk.
+ * Optimized for fast access and low memory footprint with concurrent operations
+ * using ConcurrentHashMap for thread-safe access patterns.
+ * <p>
+ * Primarily used for client network databases and temporary storage
+ * during router operations where persistence is not required.
+ * <p>
+ * Note: This should not be used for the main router database
+ * where persistence is necessary. Use PersistentDataStore instead.
+ *
+ * @since 0.8.8
  */
 class TransientDataStore implements DataStore {
     protected final Log _log;

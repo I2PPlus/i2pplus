@@ -18,7 +18,7 @@ import net.i2p.data.TunnelId;
 import net.i2p.router.tunnel.pool.TunnelPool;
 
 /**
- * Build and maintain tunnels throughout the network.
+ * Manages tunnel creation, maintenance, and selection for encrypted routing. Coordinates exploratory and client-specific tunnels for secure message delivery.
  *
  */
 public interface TunnelManagerFacade extends Service {

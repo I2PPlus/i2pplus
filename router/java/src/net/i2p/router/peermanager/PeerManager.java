@@ -30,9 +30,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
 /**
- * Manage the current state of the statistics
- *
- * Also maintain Sets for each of the capabilities in TRACKED_CAPS.
+ * Tracks peer capabilities and maintains performance statistics for router peers. Organizes peers by capability sets and manages peer state information for tunnel building and routing decisions.
  *
  */
 class PeerManager {

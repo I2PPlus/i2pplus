@@ -18,12 +18,12 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
 /**
- *  A tagset class for one direction, either inbound or outbound.
+ *  Manages session tags and keys for a single ratchet direction with automatic key generation, supporting both inbound lookahead and on-demand outbound operations
  *
  *  For outbound, uses very little memory. Tags and keys are generated on demand.
  *  See proposal 144.
  *
- *  For inbound, generates the tags in advance, maintaining minSize lookahead.
+ *  For inbound, generates tags in advance, maintaining minSize lookahead.
  *  Keys are generated as required.
  *
  *  Caller must synch on all methods.

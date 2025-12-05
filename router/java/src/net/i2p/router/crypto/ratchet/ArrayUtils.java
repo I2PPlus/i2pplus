@@ -17,8 +17,7 @@
 package net.i2p.router.crypto.ratchet;
 
 /**
- * ArrayUtils contains some methods that you can call to find out
- * the most efficient increments by which to grow arrays.
+ * Utility methods for creating unpadded arrays with optimal growth sizing
  */
 class ArrayUtils {
 

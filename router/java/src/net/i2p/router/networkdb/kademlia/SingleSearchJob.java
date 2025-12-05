@@ -7,10 +7,17 @@ import net.i2p.router.OutNetMessage;
 import net.i2p.router.TunnelInfo;
 
 /**
- * Ask a single peer for a single key.
- * This isn't really a flood-only search job at all, but we extend
- * FloodOnlySearchJob so we can use the same selectors, etc.
- *
+ * Performs a targeted lookup to a single peer for a specific key.
+ * <p>
+ * This specialized search job queries exactly one peer for a RouterInfo
+ * associated with the target key. Despite extending FloodOnlySearchJob,
+ * this is not a flood operation but rather a direct, point-to-point lookup
+ * designed for specific scenarios where the target peer is known.
+ * <p>
+ * Used primarily for followup operations and targeted peer validation
+ * where the response from a specific peer is required. The job handles
+ * tunnel selection, message construction, and timeout management for
+ * reliable single-peer communication.
  */
 class SingleSearchJob extends FloodOnlySearchJob {
     private final Hash _to;

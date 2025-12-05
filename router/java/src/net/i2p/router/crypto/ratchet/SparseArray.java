@@ -17,12 +17,29 @@
 package net.i2p.router.crypto.ratchet;
 
 /**
- * <code>SparseArray</code> maps integers to Objects and, unlike a normal
- * array of Objects, its indices can contain gaps. <code>SparseArray</code> is
- * intended to be more memory-efficient than a
- * <a href="/reference/java/util/HashMap"><code>HashMap</code></a>, because it avoids
- * auto-boxing keys and its data structure doesn't rely on an extra entry object
- * for each mapping.
+ * Memory-efficient sparse array implementation for integer-to-object mappings using binary search lookup, optimized for collections with up to hundreds of items
+ * <p>Note that this container keeps its mappings in an array data structure, using
+ * a binary search to find keys. The implementation is not intended to be appropriate
+ * for data structures that may contain large numbers of items. It is generally
+ * slower than a <code>HashMap</code> because lookups require a binary search,
+ * and adds and removes require inserting and deleting entries in array.
+ * For containers holding up to hundreds of items, the performance difference is
+ * less than 50%.</p>
+ *
+ * <p>To help with performance, the container includes an optimization when
+ * removing keys: instead of compacting its array immediately, it leaves the
+ * removed entry marked as deleted. The entry can then be re-used for the same
+ * key or compacted later in a single garbage collection of all removed entries.
+ * This garbage collection must be performed whenever the array needs to be grown,
+ * or when the map size or entry values are retrieved.</p>
+ *
+ * <p>It is possible to iterate over the items in this container using
+ * {@link #keyAt(int)} and {@link #valueAt(int)}. Iterating over keys using
+ * <code>keyAt(int)</code> with ascending values of index returns keys
+ * in ascending order. In the case of <code>valueAt(int)</code>, values
+ * corresponding to keys are returned in ascending order.</p>
+ *
+ * I2P - as of 0.9.48, changed to use chars for the index, max value 65535
  *
  * <p>Note that this container keeps its mappings in an array data structure, using
  * a binary search to find keys. The implementation is not intended to be appropriate

@@ -12,15 +12,15 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
- * Try sending a search to some floodfill peers, but if we don't get a successful
- * match within half the allowed lookup time, give up and start querying through
- * the normal (kademlia) channels.  This should cut down on spurious lookups caused
- * by simple delays in responses from floodfill peers
- *
- * NOTE: Unused directly - see FloodOnlySearchJob extension which overrides almost everything.
- * TODO: Comment out or delete what we don't use here.
- *
- * Note that this does NOT extend SearchJob.
+ * Base class for flood-based search operations with fallback to Kademlia.
+ * <p>
+ * Implements flood-based search strategy sending queries to floodfill peers.
+ * If no successful match is received within half the allowed timeout,
+ * falls back to standard Kademlia iterative search through normal channels.
+ * This reduces spurious lookups caused by response delays from floodfill peers.
+ * <p>
+ * Note: Unused directly - see FloodOnlySearchJob extension which overrides
+ * almost everything. This does NOT extend SearchJob.
  */
 abstract class FloodSearchJob extends JobImpl {
     protected final Log _log;

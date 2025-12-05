@@ -21,11 +21,8 @@ import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 
 /**
- * Manages a pool of inbound InNetMessages.
- *
- * <p>This class is responsible for receiving inbound network messages,
- * dispatching them either directly or through a job queue, and handling
- * message processing concurrency efficiently.</p>
+ * Receives and dispatches inbound network messages with configurable processing modes.
+ * Handles message routing, job queuing, and concurrent processing for efficient inbound traffic management.
  *
  * <p>Dispatching can operate in different modes configured by transport layer:
  * - Direct dispatch on caller thread (low latency),

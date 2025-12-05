@@ -3,12 +3,8 @@ package net.i2p.router;
 import net.i2p.data.Hash;
 
 /**
- * Gatekeeper for deciding whether to throttle the further processing
- * of messages through the router.  This is seperate from the bandwidth
- * limiting which simply makes sure the bytes transferred don't exceed the
- * bytes allowed (though the router throttle should take into account the
- * current bandwidth usage and limits when determining whether to accept or
- * reject certain activities, such as tunnels)
+ * Controls router load by throttling message processing and tunnel participation.
+ * Monitors system performance metrics to decide when to reject or limit activities based on current load and bandwidth constraints.
  *
  */
 public interface RouterThrottle {

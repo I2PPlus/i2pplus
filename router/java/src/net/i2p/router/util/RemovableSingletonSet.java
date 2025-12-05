@@ -5,13 +5,21 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- *  Like Collections.singleton() but item is removable,
- *  clear() is supported, and  iterator supports remove().
- *  Item may not be null. add() and addAll() unsupported.
- *  Unsynchronized.
+ * Singleton set with removable element support and iterator functionality.
+ * <p>
+ * Similar to Collections.singleton() but provides the ability to
+ * remove the single element and clear the set. Iterator supports
+ * remove() operations while maintaining singleton behavior.
+ * <p>
+ * Thread-safe implementation without synchronization overhead.
+ * Does not support add() or addAll() operations as they would
+ * violate the singleton contract. Item may not be null.
+ * <p>
+ * Useful for scenarios requiring a single, modifiable element
+ * with standard collection interface compliance and removal capabilities.
  *
- *  @param <E> the type of element in this set
- *  @since 0.9.7
+ * @param <E>  type of element in this set
+ * @since 0.9.7
  */
 public class RemovableSingletonSet<E> extends AbstractSet<E> {
     private E _elem;

@@ -32,12 +32,15 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
- * Search for a particular key iteratively until we either find a value or we
- * run out of peers
- *
- * Note that this is rarely if ever used directly, and is primary used by the ExploreJob extension.
- * FloodOnlySearchJob and FloodSearchJob do not extend this.
- * It also does not update peer profile stats.
+ * Base class for iterative network database search operations.
+ * <p>
+ * Searches for a specific key by querying peers iteratively until either the value
+ * is found or all available peers are exhausted. Manages search state, timeout handling,
+ * and peer selection with configurable concurrency levels.
+ * <p>
+ * Note that this is rarely used directly and primarily serves as a base for ExploreJob.
+ * FloodOnlySearchJob and FloodSearchJob do not extend this class.
+ * Does not update peer profile statistics.
  */
 class SearchJob extends JobImpl {
     protected final Log _log;

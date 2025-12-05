@@ -9,10 +9,7 @@ import net.i2p.router.message.CloveSet;
 import net.i2p.util.Log;
 
 /**
- * Both EC and PQ
- *
- * Handles the actual decryption using the
- * supplied keys and data.
+ * Post-quantum hybrid decryption engine supporting both ECIES and ML-KEM with adaptive ordering
  *
  * @since 0.9.67
  */

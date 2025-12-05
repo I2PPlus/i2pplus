@@ -8,20 +8,23 @@ import net.i2p.data.DataHelper;
 import net.i2p.util.SystemVersion;
 
 /**
- *  CoDel implementation of Active Queue Management.
- *  Ref: http://queue.acm.org/detail.cfm?id=2209336
- *  Ref: http://queue.acm.org/appendices/codel.html
+ * CoDel (Controlled Delay) implementation with priority-based queue management.
+ * <p>
+ * Extends CoDelBlockingQueue to add priority-based dropping
+ * functionality. Implements enhanced CoDel algorithm with
+ * configurable priority thresholds and per-priority statistics.
+ * <p>
+ * Provides priority-aware packet dropping where higher priority
+ * packets are protected from dropping during congestion events.
+ * Includes comprehensive statistics tracking and performance monitoring
+ * for different priority levels.
+ * <p>
+ * Input methods are overridden to add timestamps for
+ * delay calculation. Output methods implement AQM behavior
+ * with enhanced statistics tracking for priority-based operations.
  *
- *  Code and comments are directly from appendix above, apparently public domain.
- *
- *  Input: add(), offer(), and put() are overridden to add a timestamp.
- *
- *  Output : take(), poll(), and drainTo() are overridden to implement AQM and drop entries
- *  if necessary. peek(), and remove() are NOT overridden, and do
- *  NOT implement AQM or update stats.
- *
- *  @param <E> the type of entries in this queue
- *  @since 0.9.3
+ * @param <E>  type of elements in this queue, extending {@link CDPQEntry}
+ * @since 0.9.3
  */
 public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlockingQueue<E> {
 

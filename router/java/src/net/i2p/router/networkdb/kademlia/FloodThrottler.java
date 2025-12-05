@@ -6,8 +6,16 @@ import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 
 /**
- * Count how often we have recently flooded a key
- * This offers basic DOS protection but is not a complete solution.
+ * Provides basic denial-of-service protection for database flood operations.
+ * <p>
+ * Tracks recent flood frequency for each key to prevent excessive flooding
+ * of the same data. Implements simple rate limiting with configurable
+ * thresholds and automatic cleanup of expired counters.
+ * <p>
+ * Offers lightweight DOS protection by rejecting flood operations that
+ * exceed maximum frequency limits within a time window. This is a
+ * partial solution and should be used in conjunction with other
+ * security mechanisms for comprehensive protection.
  *
  * @since 0.7.11
  */

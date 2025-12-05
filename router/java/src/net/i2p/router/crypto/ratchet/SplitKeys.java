@@ -6,9 +6,7 @@ import net.i2p.crypto.HKDF;
 import net.i2p.data.SessionKey;
 
 /**
- *  Standard Noise split().
- *  Passed from the engine to the SKM so we don't have
- *  to do it twice.
+ * Container for Noise protocol split keys that prevents duplicate HKDF calculations by sharing derived keys between engine and session key manager components
  *
  *  @since 0.9.46
  */

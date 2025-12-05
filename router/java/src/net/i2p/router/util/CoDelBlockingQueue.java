@@ -11,20 +11,25 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
- *  CoDel implementation of Active Queue Management.
- *  Ref: http://queue.acm.org/detail.cfm?id=2209336
- *  Ref: http://queue.acm.org/appendices/codel.html
+ * CoDel (Controlled Delay) implementation of Active Queue Management.
+ * <p>
+ * Implements the CoDel algorithm from RFC 8289 for managing queue
+ * congestion and controlling latency through packet dropping.
+ * Provides active queue management with automatic dropping
+ * when queue delay exceeds configurable thresholds.
+ * <p>
+ * Code and comments are derived from RFC 8289 appendix,
+ * implementing the standard CoDel algorithm with configurable
+ * target delay and interval parameters. Monitors queue sojourn
+ * time and drops packets when above target to maintain
+ * optimal throughput and latency characteristics.
+ * <p>
+ * Input methods are overridden to add timestamps for delay
+ * calculation. Output methods implement AQM behavior with
+ * comprehensive statistics tracking for performance monitoring.
  *
- *  Code and comments are directly from appendix above, apparently public domain.
- *
- *  Input: add(), offer(), and put() are overridden to add a timestamp.
- *
- *  Output : take(), poll(), and drainTo() are overridden to implement AQM and drop entries
- *  if necessary. peek(), and remove() are NOT overridden, and do
- *  NOT implement AQM or update stats.
- *
- *  @param <E> the type of elements in this queue
- *  @since 0.9.3
+ * @param <E>  type of elements in this queue
+ * @since 0.9.3
  */
 public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<E> {
 

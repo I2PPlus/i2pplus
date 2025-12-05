@@ -12,9 +12,17 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
 /**
- * Check to see the message is a reply from the peer regarding the current
- * search
- *
+ * Message selector for matching search operation responses from specific peers.
+ * <p>
+ * Filters incoming DatabaseStoreMessage and DatabaseSearchReplyMessage
+ * to identify responses corresponding to ongoing search operations.
+ * Tracks match status, expiration times, and coordinates with
+ * SearchState to manage pending peer queries.
+ * <p>
+ * Provides unique identification for each selector instance and
+ * implements continuation logic based on search progress and
+ * timeout conditions. Ensures proper response correlation
+ * between sent queries and received replies.
  */
 class SearchMessageSelector implements MessageSelector {
     private final Log _log;

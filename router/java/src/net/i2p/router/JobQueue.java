@@ -29,8 +29,8 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
- * Manage the pending jobs according to whatever algorithm is appropriate, giving
- * preference to earlier scheduled jobs.
+ * Prioritizes and executes router jobs with preference for earlier scheduled tasks.
+ * Manages job queues, timing, and thread pool execution for router-internal operations only.
  *
  * For use by the router only. Not to be used by applications or plugins.
  */

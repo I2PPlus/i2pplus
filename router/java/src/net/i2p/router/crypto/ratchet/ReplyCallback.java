@@ -1,7 +1,7 @@
 package net.i2p.router.crypto.ratchet;
 
 /**
- * ECIES will call this back if an ack was requested and received.
+ * Callback interface for ratchet acknowledgment notifications with expiration support
  *
  * @since 0.9.46
  */

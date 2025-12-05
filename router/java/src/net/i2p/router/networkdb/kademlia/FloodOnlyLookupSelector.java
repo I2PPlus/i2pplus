@@ -8,7 +8,17 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
 /**
- * Mostly replaced by IterativeLookupSelector
+ * Message selector for flood-only database lookup operations.
+ * <p>
+ * Matches incoming DatabaseStoreMessage and DatabaseSearchReplyMessage responses
+ * to specific flood-only search jobs. Handles response validation,
+ * lookup decrement tracking, and coordinates followup searches through
+ * SingleLookupJob when appropriate.
+ * <p>
+ * Largely superseded by IterativeLookupSelector but retained for
+ * compatibility with existing flood-only search implementations.
+ * Provides specialized logic for flood-based search response handling
+ * with profile management and search lifecycle coordination.
  */
 class FloodOnlyLookupSelector implements MessageSelector {
     private final RouterContext _context;

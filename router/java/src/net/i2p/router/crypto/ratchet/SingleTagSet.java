@@ -3,9 +3,7 @@ package net.i2p.router.crypto.ratchet;
 import net.i2p.data.SessionKey;
 
 /**
- * Inbound ES tagset with a single tag and key.
- * Nonce is 0.
- * For receiving DSM/DSRM replies.
+ * Single-use tag set for handling inbound Existing Session messages in database replies with fixed nonce of 0, designed for DSM/DSRM response processing
  *
  * @since 0.9.46
  */

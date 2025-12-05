@@ -1,7 +1,7 @@
 package net.i2p.router.crypto.ratchet;
 
 /**
- * Something that looks for SessionTags.
+ * Interface for managing session tag lifecycle in ratchet tag sets
  *
  * @since 0.9.44
  */

@@ -11,13 +11,8 @@ package net.i2p.router;
 import net.i2p.util.Log;
 
 /**
- * Maintain a pool of OutNetMessages destined for other routers, organized by
- * priority, expiring messages as necessary.  This pool is populated by anything
- * that wants to send a message, and the communication subsystem periodically
- * retrieves messages for delivery.
+ * Routes outbound messages to the communication system for delivery. Validates messages, manages reply selectors, and coordinates with the message registry for reliable delivery.
  *
- * Actually, this doesn't 'pool' anything, it calls the comm system directly.
- * Nor does it organize by priority. But perhaps it could someday.
  */
 public class OutNetMessagePool {
     private final Log _log;

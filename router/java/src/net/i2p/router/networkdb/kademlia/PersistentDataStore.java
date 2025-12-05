@@ -47,11 +47,14 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**
- * Write out keys to disk when we get them and periodically read ones we don't know
- * about into memory, with newly read routers are also added to the routing table.
- *
- * Public only for access to static methods by startup classes
- *
+ * Persistent network database storage with disk I/O and memory management.
+ * <p>
+ * Writes RouterInfo entries to disk as received and periodically scans for unknown
+ * entries to load into memory. Newly discovered routers are automatically added
+ * to the routing table. Implements both flat and hierarchical directory structures
+ * for efficient file organization and access.
+ * <p>
+ * Public only for access to static methods by startup classes.
  */
 public class PersistentDataStore extends TransientDataStore {
     private final File _dbDir;

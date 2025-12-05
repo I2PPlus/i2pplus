@@ -17,11 +17,9 @@
 package net.i2p.router.crypto.ratchet;
 
 /**
- * A helper class that aims to provide comparable growth performance to ArrayList, but on primitive
- * arrays. Common array operations are implemented for efficient use in dynamic containers.
- *
+ * Helper methods for efficient primitive array growth and insertion operations, treating array length as capacity rather than element count for optimal performance
  * All methods in this class assume that the length of an array is equivalent to its capacity and
- * NOT the number of elements in the array. The current size of the array is always passed in as a
+ * NOT to number of elements in the array. The current size of the array is always passed in as a
  * parameter.
  *
  */

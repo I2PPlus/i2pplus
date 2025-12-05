@@ -4,8 +4,7 @@ import java.util.List;
 
 
 /**
- *  Simple object with outbound tag, key, and nonce,
- *  and an optional next keys.
+ *  Container for outbound ratchet encryption data including tag, key, nonce, and optional next session keys for message preparation
  *  The object returned from SKM.consumeNextAvailableTag() to the engine encrypt.
  *
  *  @since 0.9.44

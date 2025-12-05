@@ -18,15 +18,12 @@ import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
 
 /**
- * Simply act as a pen register of messages sent in and out of the router.
- * This will be pulled out later on, but is useful now for debugging.
- * (with clock synchronization, this will generate a log that can be used to
- * analyze the entire network, if everyone provides their logs honestly)
+ * Logs router message traffic for debugging and network analysis. Records inbound and outbound messages with timestamps when enabled, providing detailed traffic history for troubleshooting.
  *
- * This is always instantiated in the context and the WriteJob runs every minute,
+ * <p>This is always instantiated in context and WriteJob runs every minute,
  * (except on Android, we don't set up the WriteJob)
  * but unless router.keepHistory=true it does nothing.
- * It generates a LARGE log file.
+ * It generates a LARGE log file.</p>
  */
 public class MessageHistory {
     private final Log _log;

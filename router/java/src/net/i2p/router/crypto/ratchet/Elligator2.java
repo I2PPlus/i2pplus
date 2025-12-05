@@ -15,7 +15,7 @@ import net.i2p.data.PublicKey;
 import net.i2p.util.NativeBigInteger;
 
 /**
- *  Elligator2 for X25519 keys.
+ *  Elligator2 encoding and decoding for X25519 public keys to provide cryptographically indistinguishable representations
  *
  *  Ported from the Jan. 13, 2016 C version at https://github.com/Kleshni/Elligator-2
  *  Note: That code was completely rewritten May 8, 2017 and is now much more complex.

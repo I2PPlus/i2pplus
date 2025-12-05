@@ -8,8 +8,7 @@ import net.i2p.router.message.CloveSet;
 import net.i2p.util.Log;
 
 /**
- * Handles the actual decryption using the
- * supplied keys and data.
+ * Multiplexed decryption engine supporting both ElGamal and ECIES+AEAD with adaptive ordering
  *
  * @since 0.9.44
  */

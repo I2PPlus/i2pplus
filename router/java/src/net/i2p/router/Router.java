@@ -78,7 +78,8 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 
 /**
- * Main driver for the router.
+ * Core router implementation that manages I2P node lifecycle, configuration, and subsystem coordination.
+ * Handles startup/shutdown, router info management, bandwidth capabilities, and provides the main entry point for both embedded and standalone router operation.
  *
  * For embedded use, instantiate, call setKillVMOnEnd(false), and then call runRouter().
  *

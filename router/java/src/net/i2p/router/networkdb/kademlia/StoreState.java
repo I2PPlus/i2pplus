@@ -14,7 +14,18 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.networkdb.kademlia.MessageWrapper.WrappedMessage;
 
 /**
- *  Tracks the state of a StoreJob
+ * Manages state for network database store operations.
+ * <p>
+ * Tracks peer interaction status, timing information, and operation progress
+ * for store operations. Maintains separate sets for pending, attempted,
+ * and successful operations to coordinate concurrent store operations 
+ * and prevent duplicate queries.
+ * <p>
+ * Thread-safe implementation using synchronized collections and atomic
+ * counters for safe concurrent access from multiple store jobs.
+ * <p>
+ * Provides comprehensive state management for reliable data persistence
+ * with validation, timeout handling, and operation completion tracking.
  */
 class StoreState {
     private final RouterContext _context;
@@ -58,12 +69,7 @@ class StoreState {
     public Hash getTarget() { return _key; }
     public DatabaseEntry getData() { return _data; }
 
-    /**
-     *  The number of peers pending.
-     *
-     *  @since 0.9.53 replaces getPending()
-     */
-    public int getPendingCount() {
+public int getPendingCount() {
         synchronized (_pendingPeers) {
             return _pendingPeers.size();
         }

@@ -28,10 +28,11 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
- * Periodically search through all leases to find expired ones, failing those
+ * Periodically searches through all leases to find expired ones, failing those
  * keys and firing up a new search for each (in case we want it later, might as
- * well preemptively fetch it)
+ * well preemptively fetch it).
  *
+ * @since 0.8.9
  */
 class ExpireLeasesJob extends JobImpl {
     private final Log _log;

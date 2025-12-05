@@ -18,10 +18,24 @@ import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
 
 /**
- *  Simple event logger for occasional events,
- *  with caching for reads.
- *  Does not keep the file open.
- *  @since 0.9.3
+ * Event logging utility with caching and file-based persistence.
+ * <p>
+ * Provides simple event logging for occasional router events
+ * with efficient caching for read operations and file-based
+ * persistence. Does not maintain open file handles to
+ * avoid resource leaks.
+ * <p>
+ * Supports event categorization and timestamp tracking with
+ * configurable caching behavior. Optimized for low-frequency
+ * logging scenarios where performance is more important than
+ * comprehensive event tracking.
+ * <p>
+ * Includes predefined event types for router lifecycle events,
+ * network changes, and critical system events. Provides
+ * both append-only and read-write access patterns with proper
+ * synchronization for thread safety.
+ *
+ * @since 0.9.3
  */
 public class EventLog {
 

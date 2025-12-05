@@ -11,10 +11,22 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
 
 /**
- *  Used for detection of routers with matching IPs or family.
- *  Moved out of ProfileOrganizer for use in netdb also.
+ * IP address masking utility for router family and network detection.
+ * <p>
+ * Provides IP address masking functionality to detect routers
+ * with matching IP addresses or belonging to the same network family.
+ * Used for network topology analysis and peer relationship
+ * identification in distributed hash table operations.
+ * <p>
+ * Supports configurable masking levels (1-4 bytes) and includes
+ * both communication system records and network database addresses
+ * for comprehensive matching. Optimized for efficiency with
+ * local lookup operations to avoid deadlocks.
+ * <p>
+ * As of 0.9.24, returned set includes netdb family
+ * as well as IP-based matches for broader detection capabilities.
  *
- *  @since 0.9.28
+ * @since 0.9.28
  */
 public class MaskedIPSet extends HashSet<String> {
 

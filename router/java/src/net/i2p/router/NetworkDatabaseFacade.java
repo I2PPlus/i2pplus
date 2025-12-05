@@ -24,7 +24,7 @@ import net.i2p.data.router.RouterInfo;
 import net.i2p.router.networkdb.reseed.ReseedChecker;
 
 /**
- * Defines the mechanism for interacting with I2P's network database
+ * Abstract interface for I2P network database operations. Provides router info and lease set lookup, storage, and search functionality for peer discovery and routing.
  *
  */
 public abstract class NetworkDatabaseFacade implements Service {

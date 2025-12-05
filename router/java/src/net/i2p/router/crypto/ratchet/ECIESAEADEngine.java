@@ -38,8 +38,7 @@ import net.i2p.router.message.CloveSet;
 import net.i2p.util.Log;
 
 /**
- * Handles the actual ECIES+AEAD encryption and decryption scenarios using the
- * supplied keys and data.
+ * ECIES+AEAD encryption engine providing New Session, New Session Reply, and Existing Session message handling
  *
  * No, this does not extend ElGamalAESEngine or AEADEngine or CryptixAEADEngine.
  *

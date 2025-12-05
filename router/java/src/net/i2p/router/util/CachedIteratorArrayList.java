@@ -8,12 +8,23 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * ArrayList that uses a single iterator.  Useful to avoid object churn
- * while keeping the conveniences of an iterator.
+ * ArrayList with cached iterator for reduced object allocation overhead.
+ * <p>
+ * Extends ArrayList to provide a single reusable iterator instance,
+ * avoiding the creation of new iterator objects during repeated
+ * iteration operations. This reduces garbage collection pressure
+ * and improves performance for frequently traversed collections.
+ * <p>
+ * Maintains iterator state between iterations to support the
+ * standard iterator contract while allowing remove() operations
+ * with proper fail-fast behavior on concurrent modifications.
+ * <p>
+ * Particularly useful in scenarios where the same collection is
+ * iterated over multiple times, providing both the convenience
+ * of an iterator interface and the performance benefits of object reuse.
  *
- * @param <E> the type of elements in this list
+ * @param <E>  type of elements in this list
  * @since 0.9.4 moved from net.i2p.util in 0.9.24
- *
  * @author zab
  */
 public class CachedIteratorArrayList<E> extends ArrayList<E> {

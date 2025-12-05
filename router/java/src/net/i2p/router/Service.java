@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
- * Define the manageable service interface for the subsystems in the I2P router
+ * Defines the lifecycle interface for router subsystems. Provides startup, shutdown, restart, and status reporting capabilities for manageable components.
  *
  */
 public interface Service {

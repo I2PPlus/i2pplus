@@ -14,8 +14,19 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 
 /**
- *  Moved from PeerSelector
- *  @since 0.7.14
+ * Utility for calculating XOR distance between router hashes.
+ * <p>
+ * Computes the XOR distance between two router hashes by
+ * performing a bitwise XOR operation on the hash data.
+ * Used in Kademlia-based distributed hash tables for determining
+ * key proximity and routing decisions.
+ * <p>
+ * Returns the result as a BigInteger to handle the full
+ * 256-bit hash space without overflow issues. The distance
+ * metric is fundamental to Kademlia DHT operations including
+ * key lookup, peer selection, and network topology analysis.
+ *
+ * @since 0.7.14
  */
 public class HashDistance {
 

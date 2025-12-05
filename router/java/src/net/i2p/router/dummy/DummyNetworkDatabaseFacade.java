@@ -23,6 +23,10 @@ import net.i2p.router.Job;
 import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.RouterContext;
 
+/**
+ * In-memory network database implementation for testing and development scenarios.
+ * Provides basic router info storage and lookup functionality without persistence or network communication.
+ */
 public class DummyNetworkDatabaseFacade extends NetworkDatabaseFacade {
     private final Map<Hash, RouterInfo> _routers;
     private final RouterContext _context;

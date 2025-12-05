@@ -35,8 +35,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
- * Organizes peer profiles into tiers (fast, high-capacity, etc.) based on performance metrics.
- * This class does not actively update profiles — call reorganize() periodically.
+ * Categorizes peers into performance tiers based on historical metrics. Requires periodic reorganize() calls to update peer classifications for optimal tunnel selection.
  */
 public class ProfileOrganizer {
     private final Log _log;
@@ -328,6 +327,21 @@ public class ProfileOrganizer {
         }
     }
 
+    /**
+     * Defines peer selection slicing modes for tier-based peer organization.
+     * <p>
+     * Enumerates different strategies for dividing peers into subsets
+     * based on performance tiers and capacity requirements.
+     * Used to control which portions of the peer population
+     * are considered during selection operations.
+     * <p>
+     * Supports bit masking for combining multiple selection criteria
+     * and provides predefined constants for common slicing patterns
+     * including full selection, tier-based selection, and
+     * capacity-limited selection modes.
+     *
+     * @since 0.9.17
+     */
     public enum Slice {
         SLICE_ALL(0x00, 0),
         SLICE_0_1(0x02, 0),
@@ -336,7 +350,6 @@ public class ProfileOrganizer {
         SLICE_1(0x03, 1),
         SLICE_2(0x03, 2),
         SLICE_3(0x03, 3);
-
         final int mask, val;
         Slice(int mask, int val) {
             this.mask = mask;

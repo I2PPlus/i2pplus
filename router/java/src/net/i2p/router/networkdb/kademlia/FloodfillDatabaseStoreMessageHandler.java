@@ -18,8 +18,16 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.RandomSource;
 
 /**
- * Create a HandleDatabaseStoreMessageJob whenever a DatabaseStoreMessage arrives
- *
+ * Handles incoming DatabaseStoreMessage for floodfill network database operations.
+ * <p>
+ * Creates and dispatches HandleFloodfillDatabaseStoreMessageJob instances to process
+ * database store requests received from remote peers. Routes messages to the appropriate
+ * network database facade based on the received-by field, supporting both floodfill
+ * and client database contexts.
+ * <p>
+ * Maintains statistics for store operations including handling counts, processing times,
+ * and lease-specific metrics. Provides the entry point for all floodfill database
+ * store message processing in the Kademlia network database system.
  */
 public class FloodfillDatabaseStoreMessageHandler implements HandlerJobBuilder {
     private RouterContext _context;

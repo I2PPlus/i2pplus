@@ -10,6 +10,16 @@ import net.i2p.router.ReplyJob;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
+/**
+ * Handles match processing for flood-only search operations.
+ * <p>
+ * This job processes responses to flood-only searches, determining success or failure
+ * based on received database store messages. It coordinates with the parent search job
+ * to signal completion and handles LeaseSet reply marking appropriately.
+ * <p>
+ * Extends the base match job functionality to work specifically with flood-based
+ * search strategies where responses are processed asynchronously.
+ */
 class FloodOnlyLookupMatchJob extends JobImpl implements ReplyJob {
     protected final Log _log;
     protected final FloodSearchJob _search;

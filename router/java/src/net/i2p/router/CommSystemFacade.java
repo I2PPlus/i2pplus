@@ -25,8 +25,7 @@ import net.i2p.router.transport.crypto.X25519KeyFactory;
 import net.i2p.util.Translate;
 
 /**
- * Manages the communication subsystem between peers, including connections,
- * listeners, transports, connection keys, etc.
+ * Manages peer communication subsystem including transport protocols, connection handling, and network address management for router-to-router messaging.
  *
  */
 public abstract class CommSystemFacade implements Service {
@@ -408,8 +407,10 @@ public abstract class CommSystemFacade implements Service {
      */
     public static final short STATUS_UNKNOWN = 16;
 
-    /**
-     *  Since the codes may change.
+/**
+     * Network connectivity status enumeration for IPv4 and IPv6 transport capabilities.
+     * Represents firewall status, NAT configuration, and transport readiness for tunnel participation.
+     *  Since codes may change.
      *  @since 0.9.20
      */
     public enum Status {

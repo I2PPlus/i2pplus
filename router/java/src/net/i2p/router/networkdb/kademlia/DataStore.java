@@ -15,6 +15,12 @@ import java.util.Set;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 
+/**
+ * Interface for database storage operations in the network database.
+ * <p>
+ * Provides methods for storing, retrieving, and managing database entries
+ * including RouterInfo and LeaseSet objects with optional persistence control.
+ */
 public interface DataStore {
     public boolean isInitialized();
     public boolean isKnown(Hash key);

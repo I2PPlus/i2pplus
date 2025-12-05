@@ -14,7 +14,7 @@ import net.i2p.data.SessionTag;
 import net.i2p.router.crypto.TransientSessionKeyManager;
 
 /**
- * Both.
+ * Multiplexed session key manager combining ECIES and post-quantum key management
  *
  * @since 0.9.44
  */

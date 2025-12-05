@@ -14,8 +14,17 @@ import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 
 /**
- * Data related to a particular search
+ * Manages state for network database search operations.
+ * <p>
+ * Tracks peer interaction status, timing information, and search progress
+ * for iterative Kademlia searches. Maintains separate sets for pending,
+ * attempted, failed, successful, and replied peers to coordinate
+ * concurrent search operations and prevent duplicate queries.
+ * <p>
+ * Thread-safe implementation using synchronized collections and atomic
+ * counters for safe concurrent access from multiple search jobs.
  *
+ * @since 0.9.16
  */
 class SearchState {
     private final RouterContext _context;

@@ -28,9 +28,13 @@ import net.i2p.util.Log;
 import net.i2p.util.SecureFileOutputStream;
 
 /**
- *  Cache of blinding data. See proposal 123.
+ * Cache for blinding data as specified in I2P proposal 123.
+ * <p>
+ * Manages blinded and unblinded key mappings with persistent storage
+ * and automatic rollover at midnight UTC. Provides lookup operations
+ * for both blinded destinations and their corresponding unblinded hashes.
  *
- *  @since 0.9.40
+ * @since 0.9.40
  */
 class BlindCache {
 

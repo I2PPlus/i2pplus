@@ -26,7 +26,7 @@ import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 
 /**
- * Publishes some statistics about the router in the netDB.
+ * Collects and publishes router performance statistics to the network database. Provides bandwidth, tunnel, and peer metrics for router capability advertising.
  *
  */
 public class StatisticsManager {

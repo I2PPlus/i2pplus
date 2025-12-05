@@ -37,11 +37,8 @@ import net.i2p.util.KeyRing;
 import net.i2p.util.I2PProperties.I2PPropertyCallback;
 
 /**
- * Build off the core I2P context to provide a root for a router instance to
- * coordinate its resources.  Router instances themselves should be sure to have
- * their own RouterContext, and rooting off of it will allow multiple routers to
- * operate in the same JVM without conflict (e.g. sessionTags wont get
- * intermingled, nor will their netDbs, jobQueues, or bandwidth limiters).
+ * Extended application context that provides centralized resource coordination for router instances.
+ * Manages subsystem access, configuration, and resource isolation to enable multiple router instances within the same JVM without conflicts.
  *
  */
 public class RouterContext extends I2PAppContext {

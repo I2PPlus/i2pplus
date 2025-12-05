@@ -4,7 +4,7 @@ import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 
 /**
- *  8 bytes of random data.
+ * 8-byte session tag for ratchet protocol messages with efficient long-based storage representation for memory optimization
  *  Does not extend SessionTag or DataStructure to save space
  *
  *  @since 0.9.44

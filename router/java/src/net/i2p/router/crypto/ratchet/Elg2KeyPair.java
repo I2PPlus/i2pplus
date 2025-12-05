@@ -5,7 +5,7 @@ import net.i2p.data.PrivateKey;
 import net.i2p.data.PublicKey;
 
 /**
- *  X25519 keys, with the public key Elligator2 encoding pre-calculated
+ * X25519 key pair with pre-calculated Elligator2-encoded public key
  *
  *  @since 0.9.44
  */

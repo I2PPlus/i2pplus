@@ -12,13 +12,14 @@ import java.util.LinkedList;
 import java.util.Map;
 
 /**
- * Count how often we have recently received a lookup request with
- * the reply specified to go to a peer/TunnelId pair.
- * This offers basic DOS protection but is not a complete solution.
- * The reply peer/tunnel could be spoofed, for example.
- * And a requestor could have up to 6 reply tunnels.
- *
- * Added burst detection throttle within 1s window.
+ * Provides denial-of-service protection for network database lookup operations.
+ * <p>
+ * Tracks the frequency of recent lookup requests targeting specific reply
+ * peer/tunnel pairs to prevent abuse. Implements burst detection
+ * over sliding time windows and configurable request limits.
+ * <p>
+ * Note this is basic DOS protection and does not prevent spoofed
+ * reply identifiers or multiple reply tunnels from malicious requestors.
  *
  * @since 0.7.11
  */

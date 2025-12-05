@@ -32,12 +32,20 @@ import java.util.NoSuchElementException;
 
 
 /**
- * Extend java.util.AbstractCollection to create a collection that can be
- * iterated over without creation of a new object
+ * Thread-safe collection with cached iterator for efficient element iteration.
+ * <p>
+ * Extends AbstractCollection to provide a collection that can be iterated
+ * over without creating new iterator objects. Uses a linked list
+ * structure with a single cached iterator instance to minimize object
+ * churn during frequent iteration operations.
+ * <p>
+ * Provides efficient iteration for scenarios where the same collection
+ * is traversed multiple times, avoiding the overhead of creating
+ * multiple iterator instances. Thread-safe for concurrent access
+ * with proper synchronization on iterator state management.
  *
- * @param <E> the type of elements in this collection
+ * @param <E>  type of elements in this collection
  * @since 0.9.36
- *
  */
 
 public class CachedIteratorCollection<E> extends AbstractCollection<E> {

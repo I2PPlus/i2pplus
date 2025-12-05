@@ -24,7 +24,17 @@ import net.i2p.router.util.HashDistance;
 import net.i2p.util.Log;
 
 /**
- *  Mostly unused, see overrides in FloodfillPeerSelector
+ * Abstract base class for selecting peers from Kademlia routing tables.
+ * <p>
+ * Provides core functionality for choosing optimal peers based on XOR distance
+ * to target keys, with various selection strategies and filtering capabilities.
+ * Most methods are overridden in FloodfillPeerSelector for floodfill-specific
+ * selection logic.
+ * <p>
+ * Supports both bucket-based and explicit distance-based selection algorithms,
+ * with options to exclude already-checked peers and failing routers.
+ * Includes reliability considerations and performance optimizations for
+ * efficient peer discovery in distributed hash table operations.
  */
 abstract class PeerSelector {
     protected final Log _log;

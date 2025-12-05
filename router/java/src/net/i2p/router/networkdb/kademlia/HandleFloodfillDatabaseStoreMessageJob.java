@@ -35,8 +35,19 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**
- * Receive DatabaseStoreMessage data and store it in the local NetDb
- *
+ * Processes and stores DatabaseStoreMessage data in the floodfill network database.
+ * <p>
+ * Handles incoming database store operations for both RouterInfo and LeaseSet
+ * entries with comprehensive validation, filtering, and storage logic. Implements
+ * sophisticated acceptance criteria including version checks, capability validation,
+ * reachability assessment, and distance-based routing for floodfill operations.
+ * <p>
+ * Provides DOS protection through throttling, banlist enforcement, and probabilistic
+ * dropping based on database load and peer characteristics. Supports both floodfill
+ * and client database contexts with role-specific handling for each entry type.
+ * <p>
+ * Manages acknowledgment responses, data flooding to other floodfills, and
+ * maintains detailed statistics for store operation performance and security.
  */
 class HandleFloodfillDatabaseStoreMessageJob extends JobImpl {
     private final Log _log;

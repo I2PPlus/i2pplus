@@ -21,9 +21,12 @@ import net.i2p.util.VersionComparator;
 
 /**
  * RefreshRoutersJob performs router info refresh operations periodically.
- * After startup, it refetches router infos, prioritizing floodfill routers,
- * to keep the network database fresh and healthy.
- * This class tries to balance load and avoid overload by controlling timing.
+ * <p>
+ * After startup, refetches router infos, prioritizing floodfill routers,
+ * to keep the network database fresh and healthy. This class tries to balance
+ * load and avoid overload by controlling timing and refresh intervals.
+ *
+ * @since 0.8.9
  */
 class RefreshRoutersJob extends JobImpl {
     private final Log _log;

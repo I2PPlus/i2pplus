@@ -16,6 +16,9 @@
 
 package net.i2p.router.crypto.ratchet;
 
+/**
+ * Binary search utilities for array operations without argument validation overhead
+ */
 class ContainerHelpers {
 
     // This is Arrays.binarySearch(), but doesn't do any argument validation.

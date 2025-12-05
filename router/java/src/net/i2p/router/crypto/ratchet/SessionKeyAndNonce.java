@@ -6,8 +6,7 @@ import net.i2p.data.PublicKey;
 import net.i2p.data.SessionKey;
 
 /**
- * A session key is 32 bytes of data.
- * Nonce should be 65535 or less.
+ * Session key with nonce and optional handshake state for ratchet message encryption and decryption operations, supporting nonces up to 65535
  *
  * This is what is returned from RatchetTagSet.consume().
  * RatchetSKM puts it in a RatchetEntry and returns it to ECIESAEADEngine.

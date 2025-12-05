@@ -34,9 +34,7 @@ import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFileOutputStream;
 
 /**
- * Maintain all of the key pairs for the router.
- * Router keys are written to files in a backup directory.
- * LeaseSet keys are not written to files.
+ * Manages all router cryptographic key pairs including persistent storage of router keys and in-memory management of LeaseSet keys for secure communications.
  *
  */
 public class KeyManager {

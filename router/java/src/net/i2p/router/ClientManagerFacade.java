@@ -23,7 +23,7 @@ import net.i2p.data.i2cp.SessionConfig;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 
 /**
- * Manage all interactions with clients
+ * Manages client connections and LeaseSet operations for I2P applications. Handles client registration, lease authorization, and session management for local services.
  *
  * @author jrandom
  */

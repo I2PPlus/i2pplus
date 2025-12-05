@@ -8,17 +8,20 @@ import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 
 /**
- * Ask the peer who sent us the DSRM for the RouterInfos...
- *
- * ... but if we have the routerInfo already, try to refetch it from that router itself,
- * (if the info is old or we don't think it is floodfill) which will help us establish
- * that router as a good floodfill and speed our integration into the network.
- *
- * Very similar to SingleLookupJob.
- *
- * This was all in IterativeLookupSelector.isMatch() but it caused deadlocks
- * with OutboundMessageRegistry.getOriginalMessages()
- * at both _search.newPeerToTry() and _search.failed().
+ * Processes DatabaseSearchReplyMessage responses during iterative searches.
+ * <p>
+ * Handles the followup lookups for RouterInfo entries returned in DSRM messages
+ * during iterative Kademlia searches. For each peer hash in the reply, determines
+ * whether to fetch new RouterInfo data or refresh existing entries based on
+ * age and floodfill status.
+ * <p>
+ * Optimizes network integration by preferentially querying routers directly
+ * for their own RouterInfo when existing data is stale or the router is not
+ * confirmed as floodfill. This helps establish reliable floodfill peers
+ * and accelerates network discovery.
+ * <p>
+ * Extracted from IterativeLookupSelector to prevent deadlocks with the
+ * OutboundMessageRegistry during concurrent search operations.
  *
  * @since 0.8.9
  */
