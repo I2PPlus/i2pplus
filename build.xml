@@ -1049,6 +1049,8 @@
     <!-- create an empty dejavu.css file to keep the browser happy -->
     <mkdir dir="./build/javadoc/resources/fonts"/>
     <echo message="/* intentionally empty */" file="build/javadoc/resources/fonts/dejavu.css"/>
+    <!-- copy our fixed JavaScript file to replace the default script.js -->
+    <copy quiet="true" file="./javadoc-jav8-fix.js" tofile="./build/javadoc/script.js"/>
     <move todir="./dist/javadoc">
       <fileset dir="./build/javadoc">
         <include name="**/*"/>
