@@ -955,7 +955,6 @@
   </target>
 
   <target name="javadoc" depends="getReleaseNumber, getBuildNumber">
-    <echo message="JDK: ${java.vendor} ${java.version} (${java.runtime.name} ${java.runtime.version})"/>
     <ant dir="apps/jetty" target="ensureJettylib"/>
     <mkdir dir="./build"/>
     <mkdir dir="./build/javadoc"/>
@@ -971,7 +970,7 @@
       splitindex="true"
       failonerror="false"
       charset="utf-8"
-      additionalparam="-notimestamp -stylesheetFile ./javadoc.css -quiet"
+      additionalparam="-notimestamp -stylesheetFile ./javadoc.css -quiet -Xmaxwarns 10"
       doctitle="I2P+ Javadocs [${release.number}-${i2p.build.number}${build.extra}]"
       windowtitle="Javadocs [I2P+ ${release.number}+] - API Version ${api.version}+">
       <group title="Core SDK (i2p.jar)" packages="net.i2p:net.i2p.*:net.i2p.client:net.i2p.client.*:net.i2p.internal:net.i2p.internal.*:freenet.support.CPUInformation:gnu.crypto.*:gnu.getopt:gnu.gettext:com.nettgryppa.security:net.i2p.apache.http.conn.ssl:net.i2p.apache.http.conn.util:net.i2p.apache.http.util:org.json.simple:com.southernstorm.noise.crypto.x25519:com.southernstorm.noise.crypto.chacha20:org.minidns:org.minidns.*"/>
@@ -1051,18 +1050,17 @@
     <echo message="/* intentionally empty */" file="build/javadoc/resources/fonts/dejavu.css"/>
     <!-- copy our fixed JavaScript file to replace the default script.js -->
     <copy quiet="true" file="./javadoc-jav8-fix.js" tofile="./build/javadoc/script.js"/>
-    <move todir="./dist/javadoc">
+    <move todir="./dist/javadoc" quiet="true">
       <fileset dir="./build/javadoc">
         <include name="**/*"/>
       </fileset>
     </move>
-    <delete dir="./build/javadoc"/>
-    <echo message="javadoc creation complete, saved to dist/javadoc"/>
+    <delete dir="./build/javadoc" quiet="true"/>
+    <echo message="javadoc creation complete, saved to dist/javadoc (${ant.project.name} ${release.number}-${i2p.build.number}${build.extra})"/>
   </target>
 
   <!-- Will use the native stylesheet - use this if the javadoc target looks broken, Java 11 or later? -->
   <target name="javadoc-nostylesheet" depends="getReleaseNumber, getBuildNumber, distclean">
-    <echo message="JDK: ${java.vendor} ${java.version} (${java.runtime.name} ${java.runtime.version})"/>
     <ant dir="apps/jetty" target="ensureJettylib"/>
     <mkdir dir="./build"/>
     <mkdir dir="./build/javadoc"/>
@@ -1078,7 +1076,7 @@
       splitindex="true"
       failonerror="false"
       charset="utf-8"
-      additionalparam="-notimestamp -quiet"
+      additionalparam="-notimestamp -quiet -Xmaxwarns 10"
       doctitle="I2P+ Javadocs [${release.number}-${i2p.build.number}${build.extra}]"
       windowtitle="Javadocs [I2P+ ${release.number}+] - API Version ${api.version}+">
       <group title="Core SDK (i2p.jar)" packages="net.i2p:net.i2p.*:net.i2p.client:net.i2p.client.*:net.i2p.internal:net.i2p.internal.*:freenet.support.CPUInformation:gnu.crypto.*:gnu.getopt:gnu.gettext:com.nettgryppa.security:net.i2p.apache.http.conn.ssl:net.i2p.apache.http.conn.util:net.i2p.apache.http.util:org.json.simple:com.southernstorm.noise.crypto.x25519:com.southernstorm.noise.crypto.chacha20:org.minidns:org.minidns.*"/>
@@ -1156,13 +1154,13 @@
     <!-- Create an empty dejavu.css file to keep the browser happy -->
     <mkdir dir="./build/javadoc/resources/fonts"/>
     <echo message="/* intentionally empty */" file="build/javadoc/resources/fonts/dejavu.css"/>
-    <move todir="./dist/javadoc">
+    <move todir="./dist/javadoc" quiet="true">
       <fileset dir="./build/javadoc">
         <include name="**/*"/>
       </fileset>
     </move>
-    <delete dir="./build/javadoc"/>
-    <echo message="javadoc creation complete, saved to dist/javadoc"/>
+    <delete dir="./build/javadoc" quiet="true"/>
+    <echo message="javadoc creation complete, saved to dist/javadoc (${ant.project.name} ${release.number}-${i2p.build.number}${build.extra})"/>
   </target>
 
   <target name="javadoc-zip" depends="javadoc">
