@@ -2963,7 +2963,7 @@
     <taskdef resource="edu/umd/cs/findbugs/anttask/tasks.properties" classpath="${spotbugs.jar}"/>
     <property name="spotbugs.home" value="${spotbugs.dir}"/>
     <property name="spotbugs.java" value="${java.home}/bin/java"/>
-    <spotbugs home="${spotbugs.home}" output="xml:withMessages" outputFile="dist/spotbugs.xml" effort="default" debug="false" reportLevel="medium" timeout="1800000" jvm="${spotbugs.java}" excludeFilter="spotbugs-exclude.xml">
+    <spotbugs home="${spotbugs.home}" output="xml:withMessages" outputFile="dist/spotbugs.xml" effort="max" debug="false" reportLevel="medium" timeout="1800000" jvm="${spotbugs.java}" excludeFilter="spotbugs-exclude.xml">
       <auxAnalyzepath path="./build"/>
       <auxClasspath path="build/commons-el.jar:build/commons-logging.jar:build/jasper-compiler.jar:build/jasper-runtime.jar:build/jetty-continuation.jar:build/jetty-deploy.jar:build/jetty-http.jar:build/jetty-i2p.jar:build/jetty-io.jar:build/jetty-java5-threadpool.jar:build/jetty-rewrite-handler.jar:build/jetty-security.jar:build/jetty-servlet.jar:build/jetty-servlets.jar:build/jetty-sslengine.jar:build/jetty-start.jar:build/jetty-util.jar:build/jetty-webapp.jar:build/jetty-xml.jar:build/javax.servlet.jar:build/jo.jsonrpc.war:build/jrobin.jar:build/org.mortbay.jetty.jar:build/org.mortbay.jmx.jar:build/pack200.jar:build/systray.jar:build/tools.jar"/>
       <!-- Only analyze core I2P JAR files, exclude third-party heavy libraries -->
