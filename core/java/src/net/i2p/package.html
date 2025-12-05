@@ -4,11 +4,31 @@
 </head>
 <body>
 <p>
-    Core I2P package, contains information about the I2P version and an entry point to access important elements.
+    Core I2P package providing fundamental interfaces, version information, and entry points to essential I2P services.
 </p>
 
 <p>
-    With a few exceptions, this package and all others in i2p.jar are maintained as a stable API for use by apps, clients, and plugins.
+    This package contains the foundational components that form the public API of I2P, including:
 </p>
+<ul>
+<li><strong>I2PAppContext:</strong> Central context for accessing I2P services and configuration</li>
+<li><strong>Version information:</strong> Build version, update checking, and release management</li>
+<li><strong>Core interfaces:</strong> Fundamental abstractions used throughout the I2P codebase</li>
+<li><strong>Service locators:</strong> Entry points for accessing router and application services</li>
+</ul>
+
+<p>
+    With a few exceptions, this package and all others in i2p.jar are maintained as a stable API for use by apps, clients, and plugins.
+    The classes in this package provide the primary means for external applications to interact with the I2P network.
+</p>
+
+<p>
+    <strong>Key Usage:</strong>
+</p>
+<ul>
+<li>Applications should obtain an I2PAppContext to access I2P services</li>
+<li>Version checking and update management is handled through this package</li>
+<li>Core interfaces define contracts for I2P-compatible implementations</li>
+</ul>
 </body>
 </html>

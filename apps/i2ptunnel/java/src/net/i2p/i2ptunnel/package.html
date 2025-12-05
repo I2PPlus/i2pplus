@@ -4,11 +4,38 @@
 </head>
 <body>
 <p>
-    Implementation of preconfigured tunnels, both for clients and servers, and a UI for adding more and editing the configuration. Includes special-purpose tunnels for IRC, SOCKS, HTTP, and more.
+    Implementation of preconfigured tunnels for both clients and servers, with a comprehensive UI for tunnel management and configuration.
+    Includes special-purpose tunnels for IRC, SOCKS, HTTP, and standard client/server tunnels.
 </p>
 
 <p>
-    The entry point is TunnelControllerGroup, which is started from clients.config. Individual tunnel configuration is in i2ptunnel.config. The primary API is TunnelControllerGroup and TunnelController. Other classes may not be maintained as a stable API.
+    This package provides the core tunneling infrastructure that allows external applications
+    to communicate through the I2P network. It supports various tunnel types including:
 </p>
+<ul>
+<li><strong>Client Tunnels:</strong> Allow external applications to connect to I2P destinations</li>
+<li><strong>Server Tunnels:</strong> Expose local services to the I2P network</li>
+<li><strong>HTTP Tunnels:</strong> Web proxy and server tunneling for browsers</li>
+<li><strong>SOCKS Tunnels:</strong> Generic SOCKS proxy for TCP applications</li>
+<li><strong>IRC Tunnels:</strong> Specialized tunneling for IRC clients</li>
+<li><strong>Streamr Tunnels:</strong> Bidirectional streaming tunnels</li>
+</ul>
+
+<p>
+    The entry point is TunnelControllerGroup, which is started from clients.config. 
+    Individual tunnel configuration is stored in i2ptunnel.config. 
+    The primary API consists of TunnelControllerGroup and TunnelController. 
+    Other classes may not be maintained as a stable API.
+</p>
+
+<p>
+    <strong>Key Components:</strong>
+</p>
+<ul>
+<li>TunnelControllerGroup - Manages collections of tunnels</li>
+<li>TunnelController - Controls individual tunnel lifecycle</li>
+<li>TunnelManager - Handles tunnel creation and configuration</li>
+<li>Various tunnel implementations for different protocols</li>
+</ul>
 </body>
 </html>

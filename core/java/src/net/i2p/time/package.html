@@ -4,7 +4,32 @@
 </head>
 <body>
 <p>
-    Provides a stub class for time synchronization. Full implementation is now in net.i2p.router.time.
+    Time synchronization utilities and interfaces for I2P applications.
 </p>
+
+<p>
+    This package provides the core time synchronization functionality needed by I2P applications
+    to maintain accurate clocks and coordinate timing across the distributed network.
+    The full router-specific implementation is now in net.i2p.router.time, while this package
+    contains the essential interfaces and utilities that are available to all I2P applications.
+</p>
+
+<p>
+    <strong>Key Components:</strong>
+</p>
+<ul>
+<li><strong>Time Synchronization:</strong> Interfaces for coordinating time with network peers</li>
+<li><strong>Clock Skew Management:</strong> Handling of time differences between routers</li>
+<li><strong>NTP Integration:</strong> Network Time Protocol support for accurate timekeeping</li>
+</ul>
+
+<p>
+    <strong>Usage Notes:</strong>
+</p>
+<ul>
+<li>Applications should use the interfaces in this package for time-related operations</li>
+<li>Router-specific time synchronization implementation is in net.i2p.router.time</li>
+<li>Proper time synchronization is critical for I2P's security and performance</li>
+</ul>
 </body>
 </html>

@@ -4,7 +4,38 @@
 </head>
 <body>
 <p>
-    Constants and clients for SOCKS. Pulled out of net.i2p.i2ptunnel.socks for use by SSLEepGet as of 0.9.33.
+    SOCKS protocol implementation providing client and server functionality for proxy operations through I2P.
+</p>
+
+<p>
+    This package contains the core SOCKS protocol implementation that enables TCP applications
+    to route their traffic through the I2P network. Originally part of the i2ptunnel package,
+    it was extracted in version 0.9.33 for broader use across I2P applications, including SSLEepGet.
+</p>
+
+<p>
+    <strong>Key Features:</strong>
+</p>
+<ul>
+<li><strong>SOCKS 4/4a/5 Support:</strong> Compatible with major SOCKS protocol versions</li>
+<li><strong>Client Implementation:</strong> SOCKS client for routing connections through I2P tunnels</li>
+<li><strong>Server Implementation:</strong> SOCKS server for exposing I2P services to external applications</li>
+<li><strong>Protocol Constants:</strong> Standard SOCKS protocol definitions and message types</li>
+<li><strong>Connection Management:</strong> Handling of SOCKS negotiation and data forwarding</li>
+</ul>
+
+<p>
+    <strong>Usage:</strong>
+</p>
+<ul>
+<li>I2P tunnels use this package to provide SOCKS proxy functionality</li>
+<li>External applications can connect to I2P SOCKS proxies for anonymous networking</li>
+<li>The implementation supports both outbound and inbound SOCKS connections</li>
+</ul>
+
+<p>
+    <strong>Note:</strong> This package provides low-level SOCKS protocol handling.
+    For higher-level tunnel management, see the net.i2p.i2ptunnel package.
 </p>
 </body>
 </html>

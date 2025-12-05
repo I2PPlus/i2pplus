@@ -4,7 +4,35 @@
 </head>
 <body>
 <p>
-    These classes define the statistics package used extensively throughout I2P router - both for adaptive operation of the router and for debugging.
+    Statistical collection and analysis framework used throughout the I2P router for adaptive operation, performance monitoring, and debugging.
+</p>
+
+<p>
+    This package provides a comprehensive statistics system that enables the router to:
+</p>
+<ul>
+<li><strong>Monitor Performance:</strong> Track bandwidth usage, message rates, and processing times</li>
+<li><strong>Adaptive Behavior:</strong> Dynamically adjust routing and tunnel management based on observed patterns</li>
+<li><strong>Debugging Support:</strong> Provide detailed metrics for troubleshooting and analysis</li>
+<li><strong>Health Monitoring:</strong> Track router and network health indicators</li>
+<li><strong>Rate Limiting:</strong> Implement adaptive rate controls based on current load</li>
+</ul>
+
+<p>
+    <strong>Key Components:</strong>
+</p>
+<ul>
+<li><strong>RateStat:</strong> Core rate statistics collection and averaging</li>
+<li><strong>Rate:</strong> Individual rate measurements with configurable averaging periods</li>
+<li><strong>Frequency:</strong> Event frequency tracking and analysis</li>
+<li><strong>StatManager:</strong> Central coordinator for all statistics operations</li>
+</ul>
+
+<p>
+    The statistics system is designed to be lightweight and efficient, providing valuable
+    insights into router operation without significantly impacting performance. Statistics
+    are used both internally for adaptive routing decisions and externally for monitoring
+    and debugging purposes.
 </p>
 </body>
 </html>
