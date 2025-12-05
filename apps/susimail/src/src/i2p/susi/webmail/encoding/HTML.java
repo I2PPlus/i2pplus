@@ -9,7 +9,13 @@ package i2p.susi.webmail.encoding;
 
 import java.io.InputStream;
 import i2p.susi.util.Buffer;
-
+/**
+ * HTML encoding for safe text display in SusiMail web pages.
+ * Escapes special characters and converts newlines to HTML line breaks.
+ * Used for preventing XSS attacks in I2P webmail interface.
+ * 
+ * @author susi
+ */
 public class HTML extends Encoding {
 
   public String getName() {return "HTML";}

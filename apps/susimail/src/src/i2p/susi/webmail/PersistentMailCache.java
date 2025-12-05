@@ -29,7 +29,7 @@ import net.i2p.util.SecureFile;
 import net.i2p.util.SystemVersion;
 
 /**
- * Manage the on-disk cache.
+ * Manages persistent on-disk email cache with custom compressed format.
  *
  * This is a custom format with subdirectories, gzipped files,
  * and the encoded UIDL in the file name.

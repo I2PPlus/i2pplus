@@ -4,7 +4,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.util.Translate;
 
 /**
- * Translate strings for this package.
+ * Provides internationalization and string translation for the webmail package.
  * @since 0.8.5
  */
 public class Messages {

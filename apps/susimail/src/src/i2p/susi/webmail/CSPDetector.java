@@ -3,8 +3,8 @@ package i2p.susi.webmail;
 import java.util.Locale;
 
 /**
- *  Check user-agent for support of CSP
- *  @since 0.9.62
+ * Detects Content Security Policy support in user agent strings.
+ * @since 0.9.62
  */
 class CSPDetector {
     /**

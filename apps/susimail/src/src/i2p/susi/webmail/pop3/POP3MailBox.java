@@ -31,6 +31,13 @@ import net.i2p.util.I2PAppThread;
 import net.i2p.util.InternalSocket;
 import net.i2p.util.Log;
 
+/**
+ * POP3 client for retrieving email from POP3 servers over I2P.
+ * Supports standard POP3 commands, background checking, and delayed deletion.
+ * Optimized for high-latency I2P connections with pipelining and idle timeout management.
+ *
+ * @author susi
+ */
 public class POP3MailBox implements NewMailListener {
     private final String host, user, pass;
     private final Log _log;
@@ -86,7 +93,7 @@ public class POP3MailBox implements NewMailListener {
 
     /**
      * Fetch the header. Does not cache.
-     * 
+     *
      * @param uidl
      * @return Byte buffer containing header data or null
      */
@@ -106,7 +113,7 @@ public class POP3MailBox implements NewMailListener {
     /**
      * retrieves header from pop3 server (with TOP command and RETR as fallback)
      * Caller must sync.
-     * 
+     *
      * @param id message id
      * @return Byte buffer containing header data or null
      */
@@ -129,7 +136,7 @@ public class POP3MailBox implements NewMailListener {
 
     /**
      * Fetch the body. Does not cache.
-     * 
+     *
      * @param uidl
      * @return the buffer containing body data or null
      */
@@ -150,7 +157,7 @@ public class POP3MailBox implements NewMailListener {
      * Fetch headers and/or bodies. Does not cache.
      * ReadBuffer objects are inserted into the requests.
      * No total time limit.
-     * 
+     *
      * @since 0.9.13
      */
     public void getBodies(Collection<FetchRequest> requests) {
@@ -195,7 +202,7 @@ public class POP3MailBox implements NewMailListener {
     /**
      * retrieve message body from pop3 server (via RETR command)
      * Caller must sync.
-     * 
+     *
      * @param id message id
      * @return the buffer containing body data or null
      */
@@ -220,7 +227,7 @@ public class POP3MailBox implements NewMailListener {
 
     /**
      * Queue for later deletion. Non-blocking.
-     * 
+     *
      * @since 0.9.13
      */
     public void queueForDeletion(Collection<String> uidls) {
@@ -229,7 +236,7 @@ public class POP3MailBox implements NewMailListener {
 
     /**
      * Queue for later deletion. Non-blocking.
-     * 
+     *
      * @since 0.9.13
      */
     public void queueForDeletion(String uidl) {
@@ -241,7 +248,7 @@ public class POP3MailBox implements NewMailListener {
      * Delete all pending deletions at once.
      * If previously connected, leaves connected.
      * If not previously connected, closes connection when done.
-     * 
+     *
      * @param noWait fire-and-forget mode, only if connected
      * @since 0.9.13
      */
@@ -275,7 +282,7 @@ public class POP3MailBox implements NewMailListener {
 
     /**
      * Get cached size of a message (via previous LIST command).
-     * 
+     *
      * @param uidl
      * @return Message size in bytes or 0 if not found
      */
@@ -290,7 +297,7 @@ public class POP3MailBox implements NewMailListener {
     /**
      * Get cached size of a message (via previous LIST command).
      * Caller must sync.
-     * 
+     *
      * @param id message id
      * @return Message size in bytes or 0 if not found
      */
@@ -304,7 +311,7 @@ public class POP3MailBox implements NewMailListener {
 
     /**
      * Is the connection is still alive
-     * 
+     *
      * @return true or false
      */
     boolean isConnected() {
@@ -322,7 +329,7 @@ public class POP3MailBox implements NewMailListener {
      * If not connected, connect now.
      * Should be called from all public methods before sending a command.
      * Caller must sync.
-     * 
+     *
      * @return true or false
      */
     private void checkConnection() throws IOException {
@@ -335,27 +342,27 @@ public class POP3MailBox implements NewMailListener {
 
     /**
      * Timestamp.
-     * 
+     *
      * @since 0.9.13
      */
     private void updateActivity() {lastActive.set(System.currentTimeMillis());}
 
     /**
      * Timestamp.
-     * 
+     *
      * @since 0.9.13
      */
     long getLastActivity() {return lastActive.get();}
 
     /**
      * Timestamp. When we last successfully got the UIDL list.
-     * 
+     *
      * @since 0.9.13
      */
     long getLastChecked() {return lastChecked.get();}
 
     /**
-     * 
+     *
      * @param response line starting with +OK
      */
     private void updateMailCount(String response) {
@@ -373,7 +380,7 @@ public class POP3MailBox implements NewMailListener {
 
     /**
      * Caller must sync.
-     * 
+     *
      * @throws IOException
      */
     private void updateUIDLs(List<String> lines) {
@@ -399,7 +406,7 @@ public class POP3MailBox implements NewMailListener {
 
     /**
      * Caller must sync.
-     * 
+     *
      * @throws IOException
      */
     private void updateSizes(List<String> lines) {
@@ -561,7 +568,7 @@ public class POP3MailBox implements NewMailListener {
         if (_log.shouldDebug()) _log.debug("connect()", new Exception("I did it"));
         clear();
         if (socket != null && socket.isConnected()) {close();}
-        
+
         try {socket = InternalSocket.getSocket(host, port);}
         catch (IOException e) {
             if (_log.shouldDebug()) {_log.debug("Error connecting", e);}
@@ -623,7 +630,7 @@ public class POP3MailBox implements NewMailListener {
     /**
      * Check the initial response, send CAPA, check the CAPA result
      * Caller must sync.
-     * 
+     *
      * @return true if successful
      * @throws IOException
      * @since 0.9.13
@@ -661,7 +668,7 @@ public class POP3MailBox implements NewMailListener {
      * Send STAT, UIDL, LIST, and DELE for all pending. Must be connected.
      * Caller must sync.
      * Leaves socket connected. Caller must close on IOE.
-     * 
+     *
      * @return success
      * @throws IOException
      * @since 0.9.34 pulled out of connect()
@@ -696,7 +703,7 @@ public class POP3MailBox implements NewMailListener {
      * Send DELE for all pending deletions. Must be connected.
      * Caller must sync.
      * Leaves socket connected. Caller must close on IOE.
-     * 
+     *
      * @param noWait fire-and-forget mode
      * @throws IOException
      * @since 0.9.35 pulled out of delete()
@@ -745,7 +752,7 @@ public class POP3MailBox implements NewMailListener {
      * Send command to pop3 server (and expect single line answer)
      * Response will be in lastLine. Does not read past the first line of the response.
      * Caller must sync.
-     * 
+     *
      * @param cmd command to send
      * @return true if command was successful (+OK)
      * @throws IOException
@@ -779,7 +786,7 @@ public class POP3MailBox implements NewMailListener {
      * Send commands to pop3 server all at once (and expect answers).
      * Sets lastError to the FIRST error.
      * Caller must sync.
-     * 
+     *
      * @param cmd command to send
      * @param rcvLines lines to receive
      * @return true if ALL received lines were successful (+OK)
@@ -870,7 +877,7 @@ public class POP3MailBox implements NewMailListener {
     /**
      * Send command to pop3 server. Does NOT flush or read or wait.
      * Caller must sync.
-     * 
+     *
      * @param cmd command to send non-null
      * @throws IOException
      * @since 0.9.13
@@ -890,7 +897,7 @@ public class POP3MailBox implements NewMailListener {
     /**
      * Tries twice
      * Caller must sync.
-     * 
+     *
      * @return the buffer or null
      */
     private Buffer sendCmdN(String cmd, Buffer buffer) {
@@ -1140,7 +1147,7 @@ public class POP3MailBox implements NewMailListener {
     /**
      * returns number of message with given UIDL
      * Caller must sync.
-     * 
+     *
      * @param uidl
      * @return Message number or -1
      */
@@ -1154,7 +1161,7 @@ public class POP3MailBox implements NewMailListener {
     /**
      * Only if connected. Does not force a connect.
      * If not connected, returns null.
-     * 
+     *
      * @return A new array of the available UIDLs. No particular order.
      */
     public Collection<String> getUIDLs() {
@@ -1207,6 +1214,9 @@ public class POP3MailBox implements NewMailListener {
         }
     }
 
+    /**
+     * Request for fetching email data with UIDL and header options.
+     */
     public interface FetchRequest {
         public String getUIDL();
         public boolean getHeaderOnly();
@@ -1220,5 +1230,5 @@ public class POP3MailBox implements NewMailListener {
 
     /** translate */
     private static String _t(String s) {return Messages.getString(s);}
-    
+
 }

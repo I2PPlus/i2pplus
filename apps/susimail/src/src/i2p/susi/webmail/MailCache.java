@@ -34,13 +34,16 @@ import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 
 /**
- * There's one of these for each Folder.
- * However, only DIR_FOLDER has a non-null POP3MailBox.
+ * Caches email data for each folder with POP3 mailbox integration.
+ * Only DIR_FOLDER has a non-null POP3MailBox.
  *
  * @author user
  */
 class MailCache {
 
+	/**
+	 * Enumeration of email fetching strategies.
+	 */
 	public enum FetchMode {
 		HEADER, ALL, CACHE_ONLY, HEADER_CACHE_ONLY
 	}

@@ -33,6 +33,9 @@ import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
 
+/**
+ * Represents a part of a multipart email message with headers and content.
+ */
 class MailPart {
 
     private static final OutputStream DUMMY_OUTPUT = new DummyOutputStream();

@@ -6,7 +6,7 @@ import java.util.Comparator;
 import java.util.Locale;
 
 /**
- * Sorters
+ * Collection of comparators for sorting email messages by various criteria.
  *
  * @since 0.9.34 pulled out of WebMail
  */
@@ -53,7 +53,7 @@ class Sorters {
     }
 
     /**
-     * sorts Mail objects by sender field
+     * Sorts Mail objects by sender field.
      *
      * @author susi
      */
@@ -71,7 +71,7 @@ class Sorters {
     }
 
     /**
-     * sorts Mail objects by to: fields
+     * Sorts Mail objects by recipient fields.
      *
      * @since 0.9.43
      */
@@ -98,7 +98,7 @@ class Sorters {
     }
 
     /**
-     * sorts Mail objects by subject field
+     * Sorts Mail objects by subject field.
      * @author susi
      */
     public static class SubjectSorter extends SorterBase {
@@ -135,7 +135,7 @@ class Sorters {
     }
 
     /**
-     * sorts Mail objects by date field
+     * Sorts Mail objects by date field.
      * @author susi
      */
     public static class DateSorter extends SorterBase {
@@ -155,7 +155,7 @@ class Sorters {
     }
 
     /**
-     * sorts Mail objects by message size
+     * Sorts Mail objects by message size.
      * @author susi
      */
     public static class SizeSorter extends SorterBase {

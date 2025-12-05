@@ -78,6 +78,9 @@ import net.i2p.util.RFC822Date;
 import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.Translate;
 
+/**
+ * Main webmail application class providing email functionality for I2P.
+ */
 public class WebMail extends HttpServlet {
     private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(WebMail.class);
     private static final long serialVersionUID = 1L;

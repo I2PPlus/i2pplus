@@ -10,7 +10,7 @@ import net.i2p.data.DataHelper;
 import i2p.susi.util.Buffer;
 
 /**
- * Holds a draft message and reference to attachments, if any
+ * Represents a draft email message with attachments and Bcc support.
  *
  * Differences from Mail:
  * - Never multipart, body is always text/plain UTF-8

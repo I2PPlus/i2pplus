@@ -37,7 +37,7 @@ import net.i2p.util.RFC822Date;
 import net.i2p.util.SystemVersion;
 
 /**
-* data structure to hold a single message, mostly used with folder view and sorting
+* Data structure representing a single email message for folder display and sorting.
 *
 * @author susi
 */

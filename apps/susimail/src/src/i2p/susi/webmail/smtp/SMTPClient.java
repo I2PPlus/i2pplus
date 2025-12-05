@@ -29,6 +29,13 @@ import net.i2p.data.DataHelper;
 import net.i2p.util.InternalSocket;
 import net.i2p.util.Log;
 
+/**
+ * SMTP client for sending email through SMTP servers over I2P.
+ * Supports command pipelining, attachments, and size limits optimized for I2P.
+ * Includes base64 size calculations and 8BITMIME support for efficient I2P mail delivery.
+ *
+ * @author susi
+ */
 public class SMTPClient {
     /**
      *  10.00 MB
