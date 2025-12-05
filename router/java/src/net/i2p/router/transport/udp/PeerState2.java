@@ -644,7 +644,7 @@ public class PeerState2 extends PeerState implements SSU2Payload.PayloadCallback
         } catch (IllegalArgumentException iae) {
             if (shouldLogDebug) {_log.debug("RouterInfo store failure: " + ri, iae);}
             else if (_log.shouldWarn()) {
-                _log.warn("Failed NetDBStore of RouterInfo [" + ri.getHash().toBase64().substring(0,6) + "] -> " + iae.getMessage());
+                _log.warn("Failed NetDBStore of RouterInfo [" + ri.getHash().toBase64().substring(0,6) + "]\n*" + iae.getMessage());
             }
         }
     }
