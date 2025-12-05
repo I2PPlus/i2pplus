@@ -27,6 +27,9 @@
 
 package net.i2p.apache.http.util;
 
+/**
+ * Utility class for method argument validation.
+ */
 public class Args {
 
     public static <T> T notNull(final T argument, final String name) {
