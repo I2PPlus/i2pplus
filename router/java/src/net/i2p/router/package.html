@@ -19,43 +19,29 @@
     For applications bundling I2P router, instantiate Router and call runRouter(), or use Router.main() or RouterLaunch. Most public methods in Router are maintained as a stable I2P for those bundling router.
 </p>
 
-<p>
+<p hidden>
     Message flow:
 </p>
 
-<pre>
+<div style="overflow-x: auto; width: 100%;">
+<style>
+.flow { font-family: monospace; white-space: pre; line-height: 1.2; font-size: 12px; max-width: 100%; }
+.ntcp2 { color: #2196f3; font-weight: bold; }
+.ssu { color: #4caf50; font-weight: bold; }
+.middle { color: #ff9800; font-weight: bold; }
+.tunnel { color: #9c27b0; font-weight: bold; background: #f3e5f5; padding: 2px 4px; border-radius: 3px; }
+.arrow { color: #666; }
+</style>
+<div class="flow" hidden>
+NTCP2 ────────────────────────────── SSU ──────────────────────────────────────
+kernel→NIO→Reader → <span class="ntcp2">NTCP2 PerConn PriQ→Frag</span> → Writer→NIO→Kernel
+                    ↑
+kernel→Reader→CodelQ → <span class="ssu">SSU Reasm→RED→Codel/PriQ→Frag→Win/ReTX→OMF→CodelQ</span> → Writer→Kernel
+                    ↓
+<span class="tunnel">Tunnels / Bandwidth Limiter</span> ↔──────────────┘
 
-                                                                                                                               NTCP2
-                                                                                                                               Per-Conn
-
-                                                                                                                                 /--- Pri Queue )
-NTCP2                                                                                                                          /        .      )                                                                      NTCP2
-                                                                                                                               /         .      )
-kernel -> NIO -> Reader -------------------------\                                                                           /          .      ) ---------------------------------------                       -- Writer -> NIO -> Kernel
-                                                   \                                 Tunnels                                 /           .      )                                        \                     /
-                                                    \                                                                       /            .      )                                         \                   /
-                                                     \                      /-- RED - Codel/Pri - Frag - \                 /             .      )                                          \                 /
-                                                      \              IBGW  /          Queue               \               /                                                                 \               /
-                                                       \                  /                                \             /                                                                   \             /
-                                                        \                /                                  \           /                                                                     \           /
-                                                         \              /  Middle hop                        \         /                                                                        Bandwidth
-                                                          -> In Net --------------------- RED ------------------Out Net                                                                         Limiter
-                                                         /   Msg Pool   \                                   /   Msg Pool                                                                      /           \
-                                                        /                \                                 /            \                                                                    /             \
-                                                       /                  \                               /              \                                                                  /               \
-SSU                                                  /              OBEP  \                             /                \                                                                /                 \
-                                                     /                      \                           /                  \                                                              /                   \
-kernel -> Reader -> Codel -----------------> Codel -                        --------------------- RED -                    \                                                            /                     \
-                     Queue \              /   Queue                            \              /                              \       SSU                                                /                       \
-                            \            /                                      \            /                                \      Per-Conn                                          /                         \
-                              Reasssembly                                         Reasssembly                                  \                                                      /                           \
-                                                                                                                                --> Pri Queue -> Frag -> Window/ )                  /                             \
-                                                                                                                                                          ReTX    )                 /                               \     SSU
-                                                                                                                                                .                 )                /                                 \
-                                                                                                                                                .                 ) - OMF - Codel -                                   - Writer -> Kernel
-                                                                                                                                                .                 )         Queue
-                                                                                                                                                .                 )
-                                                                                                                                                .                 )
-</pre>
+Middle Hop: <span class="middle">InNet MsgPool → IBGW RED-Codel/Pri-FragQ → OBEP → OutNet MsgPool</span>
+</div>
+</div>
 </body>
 </html>
