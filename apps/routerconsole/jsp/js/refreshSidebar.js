@@ -208,9 +208,7 @@ async function updateConnectionStatus() {
       lastRefreshTime = 0;
       document.body.classList.remove("isDown");
       isRefreshing = true;
-        refreshSidebar(true).finally(() => {
-        isRefreshing = false;
-      });
+      refreshSidebar(true).finally(() => { isRefreshing = false; });
     }
   }, 500);
 }
@@ -231,25 +229,28 @@ window.addEventListener("message", (event) => {
   }
 });
 
+let observer;
+
 function isSidebarVisible() {
   const target = document.getElementById("xhr");
   if (!target) return;
 
-  const observer = new MutationObserver(() => {
-    if (document.hidden || isRefreshing) return;
+  observer = new MutationObserver(() => {
+    if (document.hidden || isRefreshing) {
+      observer.disconnect();
+      return;
+    }
     clearTimeout(debounceTimeoutId);
     debounceTimeoutId = setTimeout(() => {
       isRefreshing = true;
       refreshSidebar(true).finally(() => {
         isRefreshing = false;
+        observer.observe(target, { childList: true, subtree: true });
       });
     }, getRefreshInterval());
   });
 
-  observer.observe(target, {
-    childList: true,
-    subtree: true,
-  });
+  observer.observe(target, { childList: true, subtree: true });
 }
 
 function handleStatus() {
