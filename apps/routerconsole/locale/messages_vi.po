@@ -141,7 +141,7 @@ msgid "Unreachable on any transport"
 msgstr "Không thể kết bằng bất kỳ phương thức truyền tải nào"
 
 msgid "Cannot enumerate UPnP devices on Android."
-msgstr ""
+msgstr "Không thể liệt kê các thiết bị UPnP trên Android."
 
 msgid "UPnP is not enabled"
 msgstr "UPnP hiện bị vô hiệu hóa"
@@ -681,7 +681,7 @@ msgid "After reporting, please restart your router"
 msgstr "Sau khi báo cáo, vui lòng khởi động lại bộ định tuyến của bạn"
 
 msgid "Invalid form submission, requires POST"
-msgstr ""
+msgstr "Gửi biểu mẫu không hợp lệ, yêu cầu POST"
 
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Mẫu đơn đệ nạp không đúng, có lẻ vì bạn dùng nút 'back' hay 'reload\" của trình duyệt. Xin vui lòng đệ nạp lại."
@@ -814,13 +814,13 @@ msgid "To enable SSL access for the Router Console, see the commented <code>clie
 msgstr "Để cho phép truy cập SSL cho bảng điều khiển bộ định tuyến, hãy xem tệp được nhận xét <code>client.config</code> nằm trong thư mục ứng dụng I2P của bạn để biết thêm thông tin. Bạn sẽ cần chỉnh sửa tệp cấu hình RouterConsolerunner nằm trong thư mục: "
 
 msgid "Save disabled, edit the router.config file to make changes"
-msgstr ""
+msgstr "Lưu bị vô hiệu hóa, chỉnh sửa tệp router.config để thực hiện thay đổi"
 
 msgid "Error updating the configuration - please see the error logs"
 msgstr "Lỗi cập nhật cấu hình - vui lòng xem nhật ký lỗi"
 
 msgid "No changes made to the configuration"
-msgstr ""
+msgstr "Không có thay đổi nào được thực hiện đối với cấu hình"
 
 msgid "Note"
 msgstr "GHI CHÚ"
@@ -841,7 +841,7 @@ msgid "Save Plugin Configuration"
 msgstr "Lưu cấu hình plugin"
 
 msgid "Plugins disabled"
-msgstr ""
+msgstr "Plugin bị vô hiệu hóa"
 
 msgid "Install Plugin"
 msgstr "Cài đặt plugin"
@@ -853,7 +853,7 @@ msgid "Update All Installed Plugins"
 msgstr "Cập nhật tất cả các plugin đã cài đặt"
 
 msgid "Delete client disabled"
-msgstr ""
+msgstr "Xóa máy khách bị vô hiệu hóa"
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -937,17 +937,17 @@ msgid "Updating all plugins"
 msgstr "Cập nhật tất cả các plugin"
 
 msgid "Update manager not registered, cannot install"
-msgstr ""
+msgstr "Trình quản lý cập nhật chưa được đăng ký, không thể cài đặt"
 
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "Cài đặt plugin từ {0}"
 
 msgid "Cannot install, check logs"
-msgstr ""
+msgstr "Không thể cài đặt, kiểm tra nhật ký"
 
 msgid "Update manager not registered, cannot check"
-msgstr ""
+msgstr "Trình quản lý cập nhật chưa được đăng ký, không thể kiểm tra"
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1047,17 +1047,17 @@ msgid "Join Family"
 msgstr "Gia nhập gia đình"
 
 msgid "Bad certificate - No Subject CN"
-msgstr ""
+msgstr "Chứng chỉ xấu - Không có Subject CN"
 
 msgid "Bad characters in Family: "
-msgstr ""
+msgstr "Ký tự xấu trong Gia đình: "
 
 #, java-format
 msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
-msgstr ""
+msgstr "Keystore {0} đã tồn tại cho gia đình {1}! Hãy xóa hoặc đổi tên nó trước."
 
 msgid "Family key configured for router family: "
-msgstr ""
+msgstr "Khóa gia đình được cấu hình cho gia đình bộ định tuyến: "
 
 msgid "Load from file failed"
 msgstr "Tải từ tệp không thành công"
@@ -1075,7 +1075,7 @@ msgid "Restore defaults"
 msgstr "Khôi phục mặc định"
 
 msgid "Bad group detected, please retry"
-msgstr ""
+msgstr "Phát hiện nhóm xấu, vui lòng thử lại"
 
 msgid "Restored default settings"
 msgstr "Đã khôi phục cài đặt mặc định"
@@ -1108,7 +1108,7 @@ msgid "Invalid destination"
 msgstr "Đích đến không hợp lệ"
 
 msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Không thể thêm khóa cho đích đến cục bộ. Bật mã hóa trong Trình quản lý Đường hầm."
 
 #, java-format
 msgid "Key for {0} added to keyring"
@@ -1121,7 +1121,7 @@ msgid "Requires hostname, destination, or blinded Base32"
 msgstr "Yêu cầu tên máy chủ, đích đến hoặc Base32 bị ẩn"
 
 msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
-msgstr ""
+msgstr "Không thể thêm khóa cho đích đến cục bộ. Bật mã hóa trong Trình quản lý Dịch vụ Ẩn."
 
 msgid "Destination requires lookup password"
 msgstr "Đích yêu cầu tra cứu mật khẩu"
@@ -1142,7 +1142,7 @@ msgid "Delete key"
 msgstr "Xóa khóa"
 
 msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Không thể xóa khóa cho đích đến cục bộ. Tắt mã hóa trong Trình quản lý Đường hầm."
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1195,34 +1195,34 @@ msgid "Log overrides updated"
 msgstr "Đã cập nhật ghi đè nhật ký"
 
 msgid "Error updating the log limits - levels not valid"
-msgstr ""
+msgstr "Lỗi cập nhật giới hạn nhật ký - cấp độ không hợp lệ"
 
 msgid "Log limits cleared"
-msgstr ""
+msgstr "Giới hạn nhật ký đã được xóa"
 
 #, java-format
 msgid "Default log level updated from {0} to {1}"
-msgstr ""
+msgstr "Cấp độ nhật ký mặc định được cập nhật từ {0} thành {1}"
 
 msgid "Date format updated"
-msgstr ""
+msgstr "Định dạng ngày được cập nhật"
 
 #, java-format
 msgid "Specified date format is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Định dạng ngày được chỉ định không hợp lệ ({0}) - không được cập nhật"
 
 msgid "File size updated"
-msgstr ""
+msgstr "Kích thước tệp được cập nhật"
 
 #, java-format
 msgid "Specified file size limit is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Giới hạn kích thước tệp được chỉ định không hợp lệ ({0}) - không được cập nhật"
 
 msgid "Compression setting updated"
-msgstr ""
+msgstr "Cài đặt nén được cập nhật"
 
 msgid "Log record format updated"
-msgstr ""
+msgstr "Định dạng bản ghi nhật ký được cập nhật"
 
 msgid "Log configuration saved"
 msgstr "Đã lưu cấu hình nhật ký"
@@ -1432,10 +1432,10 @@ msgid "Bad capacity value"
 msgstr "Giá trị dung lượng kém"
 
 msgid "Bonuses adjusted for: "
-msgstr ""
+msgstr "Tiền thưởng được điều chỉnh cho: "
 
 msgid "No profile exists for: "
-msgstr ""
+msgstr "Không có hồ sơ nào tồn tại cho: "
 
 msgid "Unsupported"
 msgstr "Không được hỗ trợ"
@@ -1451,7 +1451,7 @@ msgstr "Đến"
 
 #, java-format
 msgid "First {0} displayed, see the {1} file for the full list"
-msgstr ""
+msgstr "{0} đầu tiên được hiển thị, xem tệp {1} để có danh sách đầy đủ"
 
 msgid "IPs Banned Until Restart"
 msgstr "IP bị cấm cho đến khi khởi động lại"
@@ -1549,7 +1549,7 @@ msgid "Save order"
 msgstr "Lưu đơn hàng"
 
 msgid "Sidebar preferences updated"
-msgstr ""
+msgstr "Tùy chọn thanh bên được cập nhật"
 
 msgid "Refresh interval must be a number"
 msgstr "Khoảng thời gian làm mới phải là một số"
@@ -1558,16 +1558,16 @@ msgid "Restore full default"
 msgstr "Khôi phục mặc định đầy đủ"
 
 msgid "Full sidebar defaults restored."
-msgstr ""
+msgstr "Mặc định thanh bên đầy đủ được khôi phục."
 
 msgid "Sidebar will refresh shortly."
-msgstr ""
+msgstr "Thanh bên sẽ làm mới trong giây lát."
 
 msgid "Restore minimal default"
 msgstr "Khôi phục mặc định tối thiểu"
 
 msgid "Minimal sidebar defaults restored."
-msgstr ""
+msgstr "Mặc định thanh bên tối thiểu được khôi phục."
 
 msgid "Order must be an integer"
 msgstr "Thứ tự phải là số nguyên"
@@ -1596,11 +1596,11 @@ msgstr "Danh sách biểu đồ được cập nhật, có thể mất tới 60 
 
 #, java-format
 msgid "Internal error: could not resolve pool name {0}."
-msgstr ""
+msgstr "Lỗi nội bộ: không thể giải quyết tên nhóm {0}."
 
 #, java-format
 msgid "Internal error: could not find pool settings for {0}."
-msgstr ""
+msgstr "Lỗi nội bộ: không thể tìm thấy cài đặt nhóm cho {0}."
 
 msgid "Updated settings for all pools."
 msgstr "Cập nhật cài đặt cho tất cả các nhóm."
@@ -1673,7 +1673,7 @@ msgid "Add user"
 msgstr "Thêm người dùng"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
-msgstr ""
+msgstr "Không thể lưu lựa chọn chủ đề, tên chủ đề có ký tự không hợp lệ"
 
 msgid "Theme change saved."
 msgstr "Đã lưu thay đổi chủ đề."
@@ -1685,7 +1685,7 @@ msgid "No user name entered"
 msgstr "Không nhập tên người dùng"
 
 msgid "User name may not contain '='"
-msgstr ""
+msgstr "Tên người dùng không được chứa '=' "
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "Cảnh báo: Không nên sử dụng tên người dùng bên ngoài bộ ký tự ISO-8859-1. Hỗ trợ không được chuẩn hóa và thay đổi theo trình duyệt."
@@ -2007,7 +2007,7 @@ msgid "Show list of all known I2P routers"
 msgstr "Hiển thị danh sách tất cả các bộ định tuyến I2P đã biết"
 
 msgid "List of recently connected peers with profiling info"
-msgstr ""
+msgstr "Danh sách các đồng nghiệp gần đây kết nối với thông tin phân tích"
 
 msgid "Peer Profiles"
 msgstr "Hồ sơ ngang hàng"
@@ -2175,7 +2175,7 @@ msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Giao diện người dùng thay thế tập trung vào quyền riêng tư dành cho Reddit"
 
 msgid "AI Image generation & Chat hub"
-msgstr ""
+msgstr "Trung tâm tạo hình ảnh AI & Trò chuyện"
 
 msgid "IRC Logs for multiple networks"
 msgstr "Nhật ký IRC cho nhiều mạng"
@@ -2316,10 +2316,10 @@ msgid "OpenDemocracy"
 msgstr "Dân chủ mở"
 
 msgid "Online privacy &amp; tech blog"
-msgstr ""
+msgstr "Blog quyền riêng tư trực tuyến & công nghệ"
 
 msgid "RightToPrivacy"
-msgstr ""
+msgstr "QuyềnRiêngTư"
 
 msgid "Lifestyle magazine"
 msgstr "Tạp chí phong cách sống"
@@ -2340,7 +2340,7 @@ msgid "Community-driven tech news"
 msgstr "Tin tức công nghệ hướng tới cộng đồng"
 
 msgid "Various services"
-msgstr ""
+msgstr "Các dịch vụ khác nhau"
 
 msgid "News for nerds"
 msgstr "Tin tức dành cho người mọt sách"
@@ -2416,7 +2416,7 @@ msgid "Add"
 msgstr "Thêm vào"
 
 msgid "Error displaying the info page."
-msgstr ""
+msgstr "Lỗi hiển thị trang thông tin."
 
 msgid "Identity"
 msgstr "Danh tính"
@@ -2464,7 +2464,7 @@ msgid "Performance"
 msgstr "Hiệu suất"
 
 msgid "Maximum available RAM"
-msgstr ""
+msgstr "RAM tối đa có sẵn"
 
 msgid "Classified as slow"
 msgstr "Được phân loại là chậm"
@@ -2476,7 +2476,7 @@ msgid "No"
 msgstr "Không"
 
 msgid "GeoIP Db"
-msgstr ""
+msgstr "Cơ sở dữ liệu GeoIP"
 
 msgid "Target"
 msgstr "Mục tiêu"
@@ -2615,19 +2615,19 @@ msgid "Sybil Analysis"
 msgstr "Phân tích âm tiết"
 
 msgid "Bad value supplied, please check and try again."
-msgstr ""
+msgstr "Giá trị xấu được cung cấp, vui lòng kiểm tra và thử lại."
 
 msgid "Router Map"
 msgstr "Bản đồ Router"
 
 msgid "Network Database Search"
-msgstr ""
+msgstr "Tìm kiếm Cơ sở dữ liệu Mạng"
 
 msgid "Capabilities"
 msgstr "Khả năng"
 
 msgid "e.g. f or XOfR"
-msgstr ""
+msgstr "ví dụ: f hoặc XOfR"
 
 msgid "Cost"
 msgstr "Chi phí"
@@ -2636,49 +2636,49 @@ msgid "Country"
 msgstr "Quốc gia"
 
 msgid "Country Codes"
-msgstr ""
+msgstr "Mã quốc gia"
 
 msgid "Hash Prefix"
-msgstr ""
+msgstr "Tiền tố Băm"
 
 msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
-msgstr ""
+msgstr "IPv4 hoặc IPv6, hậu tố /24,/16,/8 tùy chọn cho IPv4, tiền tố ok cho IPv6"
 
 msgid "Hostname or b32"
-msgstr ""
+msgstr "Tên máy chủ hoặc b32"
 
 msgid "IPv6 Prefix"
-msgstr ""
+msgstr "Tiền tố IPv6"
 
 msgid "Single port or range"
-msgstr ""
+msgstr "Cổng đơn hoặc khoảng"
 
 msgid "Signature Type"
-msgstr ""
+msgstr "Loại chữ ký"
 
 msgid "SSU Capabilities"
-msgstr ""
+msgstr "Khả năng SSU"
 
 msgid "Encryption Type"
-msgstr ""
+msgstr "Loại mã hóa"
 
 msgid "Router Version"
-msgstr ""
+msgstr "Phiên bản Bộ định tuyến"
 
 msgid "Transport"
 msgstr "Vận tải"
 
 msgid "Add Sybil analysis (must pick at least one above)"
-msgstr ""
+msgstr "Thêm phân tích Sybil (phải chọn ít nhất một ở trên)"
 
 msgid "Sybil close to"
-msgstr ""
+msgstr "Sybil gần với"
 
 msgid "Router hash, destination hash, b32, or from address book"
-msgstr ""
+msgstr "Băm bộ định tuyến, băm đích đến, b32, hoặc từ sổ địa chỉ"
 
 msgid "or Sybil close to this router"
-msgstr ""
+msgstr "hoặc Sybil gần với bộ định tuyến này"
 
 msgid "Lookup"
 msgstr "Tra cứu"
@@ -2693,13 +2693,13 @@ msgid "not found in network database"
 msgstr "không tìm thấy trong cơ sở dữ liệu mạng"
 
 msgid "Bad Base64 Router hash"
-msgstr ""
+msgstr "Băm Bộ định tuyến Base64 xấu"
 
 msgid "No routers with"
-msgstr ""
+msgstr "Không có bộ định tuyến với"
 
 msgid "Hash prefix"
-msgstr ""
+msgstr "Tiền tố băm"
 
 msgid "Port"
 msgstr "Cổng"
@@ -2708,10 +2708,10 @@ msgid "MTU"
 msgstr "MTU"
 
 msgid "found in the network database"
-msgstr ""
+msgstr "tìm thấy trong cơ sở dữ liệu mạng"
 
 msgid "results"
-msgstr ""
+msgstr "kết quả"
 
 msgid "Previous Page"
 msgstr "Trang trước"
@@ -2720,43 +2720,43 @@ msgid "Next Page"
 msgstr "Trang tiếp theo"
 
 msgid "Results per page"
-msgstr ""
+msgstr "Kết quả mỗi trang"
 
 msgid "Not initialized"
 msgstr "Chưa được khởi tạo"
 
 msgid "Total Remote Leasesets"
-msgstr ""
+msgstr "Tổng số LeaseSet từ xa"
 
 msgid "Compact mode"
-msgstr ""
+msgstr "Chế độ thu gọn"
 
 msgid "Local Leasesets"
-msgstr ""
+msgstr "LeaseSet cục bộ"
 
 msgid "Debug Mode"
-msgstr ""
+msgstr "Chế độ gỡ lỗi"
 
 msgid "Published (RAP) Leasesets"
-msgstr ""
+msgstr "LeaseSet đã xuất bản (RAP)"
 
 msgid "Sorted by hash distance, closest first."
-msgstr ""
+msgstr "Sắp xếp theo khoảng cách băm, gần nhất trước."
 
 msgid "Mod Data"
-msgstr ""
+msgstr "Dữ liệu Mod"
 
 msgid "Last Changed"
-msgstr ""
+msgstr "Thay đổi lần cuối"
 
 msgid "Next Mod Data"
-msgstr ""
+msgstr "Dữ liệu Mod tiếp theo"
 
 msgid "Change in"
-msgstr ""
+msgstr "Thay đổi trong"
 
 msgid "Floodfill mode enabled"
-msgstr ""
+msgstr "Chế độ floodfill được bật"
 
 msgid "Routing Key"
 msgstr "Khóa định tuyến"
@@ -2771,21 +2771,21 @@ msgid "Estimated total leasesets"
 msgstr "Tổng số tiền thuê ước tính"
 
 msgid "Total Local Leasesets"
-msgstr ""
+msgstr "Tổng số LeaseSet cục bộ"
 
 msgid "Remote Leasesets"
-msgstr ""
+msgstr "LeaseSet từ xa"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
-msgstr ""
+msgstr "Tên máy chủ {0} không tìm thấy trong cơ sở dữ liệu mạng"
 
 #, java-format
 msgid "LeaseSet for {0} not found in network database"
-msgstr ""
+msgstr "LeaseSet cho {0} không tìm thấy trong cơ sở dữ liệu mạng"
 
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 msgid "LeaseSet"
 msgstr "Bộ hợp đồng thuê"
@@ -2817,7 +2817,7 @@ msgid "Signature type"
 msgstr "Loại chữ ký"
 
 msgid "Public Key"
-msgstr ""
+msgstr "Khóa công khai"
 
 msgid "Unsupported type"
 msgstr "Loại không được hỗ trợ"
@@ -2834,10 +2834,10 @@ msgid "Unknown"
 msgstr "Không rõ"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr ""
+msgstr "Chế độ nâng cao - bao gồm tất cả thống kê được xuất bản bởi floodfills."
 
 msgid "Compact mode - does not include statistics published by floodfills."
-msgstr ""
+msgstr "Chế độ thu gọn - không bao gồm thống kê được xuất bản bởi floodfills."
 
 msgid "Network Database Router Statistics"
 msgstr "Thống kê bộ định tuyến cơ sở dữ liệu mạng"
@@ -2861,7 +2861,7 @@ msgid "Transports"
 msgstr "Giao thông"
 
 msgid "X Tier"
-msgstr ""
+msgstr "Cấp X"
 
 msgid "Floodfills"
 msgstr "Floodfills"
@@ -2879,10 +2879,10 @@ msgid "Router is banlisted"
 msgstr "Bộ định tuyến bị cấm"
 
 msgid "Java I2P variant"
-msgstr ""
+msgstr "Biến thể Java I2P"
 
 msgid "I2Pd variant"
-msgstr ""
+msgstr "Biến thể I2Pd"
 
 msgid "RouterInfo is compressible"
 msgstr "RouterInfo có thể nén được"
@@ -2916,7 +2916,7 @@ msgid "Hostname"
 msgstr "Tên máy chủ"
 
 msgid "direct"
-msgstr ""
+msgstr "trực tiếp"
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "Gia đình đã được xác minh (chứng chỉ ký đã được cài đặt và hợp lệ)"
@@ -2955,10 +2955,10 @@ msgid "Last heard from"
 msgstr "Nghe tin lần cuối từ"
 
 msgid "Network Id"
-msgstr ""
+msgstr "ID mạng"
 
 msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr ""
+msgstr "Số lượng luôn bị giả mạo để tránh chỉ ra việc khởi động lại bộ định tuyến"
 
 msgid "Hidden or starting up"
 msgstr "Ẩn hoặc khởi động"
@@ -3026,10 +3026,10 @@ msgid "IPv6"
 msgstr "IPv6"
 
 msgid "Active connections / Max permitted"
-msgstr ""
+msgstr "Kết nối hoạt động / Tối đa được phép"
 
 msgid "Connections / Limit"
-msgstr ""
+msgstr "Kết nối / Giới hạn"
 
 msgid "Current / maximum permitted"
 msgstr "Hiện tại / tối đa được phép"
@@ -3318,7 +3318,7 @@ msgid "Rejected"
 msgstr "Bị từ chối"
 
 msgid "First Heard About"
-msgstr ""
+msgstr "Lần đầu nghe nói về"
 
 msgid "Last Heard From"
 msgstr "Tin nhắn cuối cùng từ"
@@ -3428,7 +3428,7 @@ msgstr "{0} băng thông chia sẻ"
 
 #, java-format
 msgid "Over {0} KB/s shared bandwidth"
-msgstr ""
+msgstr "Trên {0} KB/s băng thông chia sẻ"
 
 msgid "status"
 msgstr "trạng thái"
@@ -3491,11 +3491,11 @@ msgid "Total number of banned peers"
 msgstr "Tổng số đồng nghiệp bị cấm"
 
 msgid "Note: 'LU' class routers have been excluded from the list."
-msgstr ""
+msgstr "Lưu ý: Các bộ định tuyến lớp 'LU' đã bị loại trừ khỏi danh sách."
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
-msgstr ""
+msgstr "Để xem, xem {0}Lệnh cấm phiên{1}."
 
 msgid "Select search engine"
 msgstr "Chọn công cụ tìm kiếm"
@@ -3743,7 +3743,7 @@ msgid "An introduction to hosting websites on the I2P network"
 msgstr "Giới thiệu về lưu trữ trang web trên mạng I2P"
 
 msgid "New hosts in last 24 hours"
-msgstr ""
+msgstr "Máy chủ mới trong 24 giờ qua"
 
 msgid "I2PControl"
 msgstr "I2PCĐiềukhiển"
@@ -3870,7 +3870,7 @@ msgid "Floodfill enabled"
 msgstr "Floodfill được kích hoạt"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
-msgstr ""
+msgstr "Tổng số LeaseSet từ xa được lưu trữ trong NetDb của chúng tôi"
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Cảnh báo: ECDSA không khả dụng. Cập nhật Java hoặc HĐH của bạn"
@@ -3885,7 +3885,7 @@ msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Những người bạn mà chúng ta đã nói chuyện trong vài phút qua/giờ qua"
 
 msgid "Peers we've been talking to in the last minute"
-msgstr ""
+msgstr "Các đồng nghiệp mà chúng ta đã nói chuyện trong phút cuối"
 
 msgid "The number of peers available for building client tunnels"
 msgstr "Số lượng đồng nghiệp có sẵn để xây dựng đường hầm máy khách"
@@ -4392,7 +4392,7 @@ msgid "Data"
 msgstr "Dữ liệu"
 
 msgid "Limit"
-msgstr ""
+msgstr "Giới hạn"
 
 msgid "Receive on"
 msgstr "Bật nhận"
@@ -4439,7 +4439,7 @@ msgid "No transit tunnels currently active."
 msgstr "Hiện không có đường hầm chuyển tuyến nào đang hoạt động."
 
 msgid "Transit Tunnels by Peer (Top {0})"
-msgstr ""
+msgstr "Đường hầm chuyển tiếp theo đồng đẳng (Top {0})"
 
 msgid "Address"
 msgstr "Địa chỉ"
@@ -4518,7 +4518,7 @@ msgid "Bandwidth test did not complete"
 msgstr "Kiểm tra băng thông chưa hoàn thành"
 
 msgid "Bad state for test"
-msgstr ""
+msgstr "Trạng thái xấu cho bài kiểm tra"
 
 msgid "Bandwidth test started"
 msgstr "Bắt đầu kiểm tra băng thông"
@@ -4533,16 +4533,16 @@ msgid "Bandwidth test was not running"
 msgstr "Kiểm tra băng thông không chạy"
 
 msgid "ready"
-msgstr ""
+msgstr "sẵn sàng"
 
 msgid "inbound test"
-msgstr ""
+msgstr "kiểm tra đầu vào"
 
 msgid "outbound test"
-msgstr ""
+msgstr "kiểm tra đầu ra"
 
 msgid "done"
-msgstr ""
+msgstr "hoàn thành"
 
 msgid "bits per second"
 msgstr "bit/giây"
@@ -4714,7 +4714,7 @@ msgid "Share"
 msgstr "Chia sẻ"
 
 msgid "NOTE"
-msgstr ""
+msgstr "LƯU Ý"
 
 #, java-format
 msgid "You have configured I2P+ to share only {0} KBps."
@@ -4741,7 +4741,7 @@ msgstr "Cấu hình nâng cao"
 
 #, java-format
 msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
-msgstr ""
+msgstr "Khóa <b>{0}</b> đã được chọn để xóa. Để thực hiện thay đổi, hãy lưu cấu hình, hoặc hủy để khôi phục khóa."
 
 msgid "Floodfill Configuration"
 msgstr "Cấu hình lũ lụt"
@@ -4771,7 +4771,7 @@ msgid "Advanced I2P+ Configuration"
 msgstr "Cấu hình I2P nâng cao"
 
 msgid "Help with additional configuration settings"
-msgstr ""
+msgstr "Trợ giúp về các cài đặt cấu hình bổ sung"
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5165,15 +5165,15 @@ msgid "Banning will prevent the participation of this peer in tunnels you create
 msgstr "Việc cấm sẽ ngăn chặn sự tham gia của người ngang hàng này vào các đường hầm mà bạn tạo."
 
 msgid "A list of bans by IP address is presented below."
-msgstr ""
+msgstr "Dưới đây là danh sách các lệnh cấm theo địa chỉ IP."
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
-msgstr ""
+msgstr "Để xem tất cả các lệnh cấm đang hoạt động theo hash bộ định tuyến, xem {0}Các đồng nghiệp bị cấm{1}."
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
-msgstr ""
+msgstr "Một danh sách các lệnh cấm {0}chỉ trong phiên{1} theo hash cũng có sẵn."
 
 msgid "Adjust Profile Bonuses"
 msgstr "Điều chỉnh tiền thưởng hồ sơ"
@@ -5364,7 +5364,7 @@ msgid "config sidebar"
 msgstr "thanh bên cấu hình"
 
 msgid "Sidebar Options"
-msgstr ""
+msgstr "Tùy chọn thanh bên"
 
 msgid "Refresh interval"
 msgstr "Khoảng thời gian làm mới"
@@ -5376,10 +5376,10 @@ msgid "0 to disable"
 msgstr "0 để vô hiệu hóa"
 
 msgid "Unified sidebar"
-msgstr ""
+msgstr "Thanh bên thống nhất"
 
 msgid "Use the same sidebar on all pages"
-msgstr ""
+msgstr "Sử dụng cùng một thanh bên trên tất cả các trang"
 
 msgid "config stats"
 msgstr "Cấu hình thống kê"
@@ -5581,7 +5581,7 @@ msgid "Event Log"
 msgstr "Nhật ký sự kiện"
 
 msgid "Combined"
-msgstr ""
+msgstr "Kết hợp"
 
 msgid "graph"
 msgstr "Biểu đồ"
@@ -5662,7 +5662,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Cài đặt này, khi được đặt thành True, sẽ hiển thị các liên kết <i>Các trang quan tâm</i> trên <a href=/sitemap>bản đồ trang</a>. [Mặc định là sai]"
 
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr ""
+msgstr "Cài đặt này, khi được đặt thành true, sẽ hiển thị thanh bên tiêu chuẩn trên trang chủ, cho phép cấu hình qua <a href=/configsidebar>. [Mặc định là false]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Cài đặt này xác định liệu bộ định tuyến có nên sử dụng tệp <i>blocklist.txt</i> được cung cấp và bất kỳ danh sách chặn được cấu hình bởi người dùng hay không để cho phép cấm các bộ định tuyến bằng hàm định danh hoặc địa chỉ IP. Phạm vi và mặt nạ mạng được hỗ trợ cho IPv4 nhưng không phải IPv6. Xem tệp <i>blocklist.txt</i> trong thư mục ứng dụng I2P+ của bạn để biết thêm thông tin. [Được bật theo mặc định, bắt buộc khởi động lại]"
@@ -5677,7 +5677,7 @@ msgid "This setting determines whether or not the router should use the provided
 msgstr "Cài đặt này xác định liệu bộ định tuyến có nên sử dụng tệp <i>blocklist_tor.txt</i> được cung cấp trong thư mục ứng dụng I2P+ của bạn để cho phép cấm các bộ định tuyến hoạt động từ địa chỉ IP của nút thoát Tor hay không. [Được bật theo mặc định, bắt buộc khởi động lại]"
 
 msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
-msgstr ""
+msgstr "Cài đặt này cho phép các yêu cầu từ các bộ định tuyến trong các quốc gia được chỉ định bị chặn và cấm ngay khi yêu cầu đường hầm trực tiếp được thực hiện. Các quốc gia phải được chỉ định là mã quốc gia hai chữ cái, được phân tách bằng dấu phẩy. Ví dụ: router.blockCountries=cn,ru"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
 msgstr "Khi đặt thành false, máy chủ sẽ không chặn yêu cầu xây dựng đường hầm từ các máy chủ chạy chậm hơn hoặc không thể truy cập được chạy phiên bản cũ hơn. [Mặc định là true, yêu cầu khởi động lại]"
@@ -5815,7 +5815,7 @@ msgid "This setting determines whether routers classified as uninteresting (K or
 msgstr "Cài đặt này xác định xem các bộ định tuyến được phân loại là không thú vị (K hoặc L, không thể truy cập hoặc cũ hơn 0.9,50) được kiểm tra trong quá trình bộ định tuyến làm mới sau 1 giờ thời gian hoạt động. [Mặc định là sai]"
 
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
-msgstr ""
+msgstr "Khi được đặt thành true, cài đặt này sẽ nới lỏng các điều kiện cần thiết để bộ định tuyến của bạn xuất bản giới hạn tắc nghẽn, cụ thể là khi xác định rằng việc sử dụng băng thông của bạn cao. Các điều kiện khác, chẳng hạn như độ trễ công việc cao hoặc bộ định tuyến được phân loại là chậm, vẫn sẽ gây ra việc xuất bản giới hạn. [Mặc định là false]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Khi được cấu hình, điều này đặt ra một giới hạn cứng cho số lượng đường hầm, bộ định tuyến được phép xây dựng đồng thời. Theo mặc định, bộ định tuyến sử dụng thời gian xây dựng trung bình và băng thông ra ngoài hiện tại để xác định tốc độ xây dựng tối ưu. [Khởi động lại yêu cầu]"
@@ -5830,10 +5830,10 @@ msgid "This setting (in minutes) allows you to manually configure how long to wa
 msgstr "Cài đặt này (tính bằng vài phút) cho phép bạn định cấu hình thủ công thời gian chờ đợi sau khi khởi động trước khi RouterInfos trong NETDB được kiểm tra tính hợp lệ, sau đó chỉ có các bộ định tuyến hợp lệ sẽ được chấp nhận để đưa vào. Khi xác nhận xảy ra, RouterInfos đã hết hạn và các đồng nghiệp không phản hồi chỉ có thể truy cập thông qua SSU sẽ bị xóa khỏi NETDB. ."
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
+msgstr "Cài đặt này, khi được đặt thành true, sẽ chặn giao tiếp trực tiếp từ tất cả các bộ định tuyến trong quốc gia của bạn và thêm chúng vào danh sách cấm của bạn cho đến khi bộ định tuyến của bạn khởi động lại. [Mặc định là false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr ""
+msgstr "Cài đặt này, khi được đặt thành true, sẽ chặn giao tiếp trực tiếp từ tất cả các bộ định tuyến cấp X xuất bản giới hạn tắc nghẽn G và không thể tiếp cận hoặc không thể tiếp cận được, thêm chúng vào danh sách cấm phiên. Lưu ý rằng chế độ nâng cao phải được bật để cài đặt này có hiệu lực. [Mặc định là false]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Cài đặt này cho phép vô hiệu hóa các bài kiểm tra SSU để xác định xem bộ định tuyến của bạn có bị tường lửa hay không, và có thể được kích hoạt cho các bộ định tuyến rõ ràng không bị tường lửa nhưng đang gặp vấn đề tường lửa không ổn định. Trong trường hợp kiểm tra bị vô hiệu hóa, cả SSU và NTCP nên báo cáo địa chỉ công khai hiện tại của bạn trên trang thông tin về <a href=/info>bộ định tuyến</a>. [Yêu cầu khởi động lại]"
@@ -5842,7 +5842,7 @@ msgid "This setting determines which transport takes priority when communicating
 msgstr "Cài đặt này xác định vận chuyển nào được ưu tiên khi giao tiếp với các đồng nghiệp. Theo mặc định, NTCP được ưa chuộng hơn UDP (SSU). Bằng cách đặt giá trị thành TRUE, UDP sẽ được ưa chuộng trừ khi kết nối NTCP có sẵn; Khi được đặt thành luôn luôn, UDP sẽ luôn được sử dụng bất kể kết nối NTCP trước đó. [Mặc định là sai]"
 
 msgid "miscellaneous"
-msgstr ""
+msgstr "linh tinh"
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "Nếu được đặt thành True, tùy chọn này sẽ đặt biểu tượng trên khay hệ thống/khu vực thông báo, với các tùy chọn điều khiển dịch vụ cơ bản. [Mặc định bị vô hiệu hóa]"
@@ -6082,16 +6082,16 @@ msgid "For SSL only"
 msgstr "Chỉ áp dụng cho SSL"
 
 msgid "How can I configure the console and web services to be accessible on my local network?"
-msgstr ""
+msgstr "Làm thế nào tôi có thể cấu hình bảng điều khiển và dịch vụ web để truy cập được trên mạng cục bộ của tôi?"
 
 msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
-msgstr ""
+msgstr "Để làm cho bảng điều khiển của bạn có thể truy cập được trên mạng cục bộ, hãy chỉnh sửa tệp cấu hình 00-net.i2p.router.web.RouterConsoleRunner-clients.config trong thư mục clients.config.d của thư mục cài đặt I2P của bạn. Cập nhật hoặc thêm các địa chỉ IP cần thiết vào ánh xạ localhost (127.0.0.1) hiện có. Sử dụng công tắc -s để truy cập HTTPS."
 
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
-msgstr ""
+msgstr "Ví dụ: Để cho phép truy cập từ cả localhost và 192.168.1.10 qua HTTP và HTTPS:"
 
 msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "Đối với hầu hết các dịch vụ khách hàng, hãy thay đổi địa chỉ nghe cho dịch vụ liên quan trong phần cấu hình của Trình quản lý Đường hầm bằng cách sử dụng menu thả xuống <i>có thể tiếp cận bởi</i>."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Tôi có thể kết nối đến IRC trong I2P như thế nào?"
@@ -6478,7 +6478,7 @@ msgid "If you are in a hurry and can't wait a few hours, you can tell people to 
 msgstr "Nếu bạn vội vàng không thể đợi vài giờ, bạn có thể bảo mọi người sử dụng dịch vụ định hướng lại địa chỉ trợ giúp \"nhảy\". Thường dịch vụ này sẽ hoạt động trong vài phút kể từ khi bạn đăng ký tên miền của mình trên cùng một trang. Hãy kiểm tra trước bằng cách nhập <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> vào trình duyệt của bạn. Khi đã hoạt động, bạn có thể bảo mọi người sử dụng dịch vụ này."
 
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
-msgstr ""
+msgstr "Ngoài ra, bạn có thể sao chép <i>liên kết trợ giúp địa chỉ</i> cho tên miền của mình, được chỉ định trên trang danh sách sổ địa chỉ hoặc trên trang chi tiết cho tên miền của bạn ví dụ: <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>chi tiết cho skank.i2p</a>, và dán liên kết vào nơi cần chia sẻ với người khác."
 
 msgid "Backup your private key!"
 msgstr "Sao lưu chìa khóa riêng của bạn!"
@@ -6715,7 +6715,7 @@ msgid "Getting Support Online"
 msgstr "Nhận hỗ trợ trực tuyến"
 
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
-msgstr ""
+msgstr "Bạn cũng có thể muốn xem lại thông tin trên <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>trang web I2P</a>, đăng tin nhắn vào <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>diễn đàn thảo luận I2P</a> hoặc ghé qua <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> hoặc <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> trên mạng IRC nội bộ của I2P."
 
 msgid "Reporting Bugs"
 msgstr "Báo cáo lỗi"
@@ -7255,7 +7255,7 @@ msgid "Configure display language, theme and optional console password"
 msgstr "Cấu hình ngôn ngữ hiển thị, chủ đề và mật khẩu bảng điều khiển tùy chọn"
 
 msgid "Language"
-msgstr ""
+msgstr "Ngôn ngữ"
 
 msgid "Configure router bandwidth"
 msgstr "Cấu hình băng thông bộ định tuyến"
@@ -7322,22 +7322,22 @@ msgid "network database"
 msgstr "cơ sở dữ liệu mạng"
 
 msgid "Encryption type"
-msgstr ""
+msgstr "Loại mã hóa"
 
 msgid "Encryption types"
-msgstr ""
+msgstr "Các loại mã hóa"
 
 msgid "Signature types"
-msgstr ""
+msgstr "Các loại chữ ký"
 
 msgid "Locally hosted private service"
-msgstr ""
+msgstr "Dịch vụ riêng được lưu trữ cục bộ"
 
 msgid "Locally hosted public service"
-msgstr ""
+msgstr "Dịch vụ công cộng được lưu trữ cục bộ"
 
 msgid "Requested client leaseset"
-msgstr ""
+msgstr "Bộ hợp đồng thuê khách hàng được yêu cầu"
 
 msgid "network database router map"
 msgstr "Bản đồ router cơ sở dữ liệu mạng"
@@ -7383,10 +7383,10 @@ msgid "Fast / High Capacity"
 msgstr "Nhanh / Dung lượng lớn"
 
 msgid "router logs"
-msgstr ""
+msgstr "nhật ký bộ định tuyến"
 
 msgid "service logs"
-msgstr ""
+msgstr "nhật ký dịch vụ"
 
 msgid "Manage I2P addresses"
 msgstr "Quản lý địa chỉ I2P"
@@ -7593,13 +7593,13 @@ msgid "Toggle Tunnels"
 msgstr "Bật/Tắt Đường đào"
 
 msgid "Updating sidebar sections"
-msgstr ""
+msgstr "Đang cập nhật các phần thanh bên"
 
 msgid "Peer Profile"
 msgstr "Hồ sơ ngang hàng"
 
 msgid "Profile View"
-msgstr ""
+msgstr "Xem hồ sơ"
 
 msgid "Profile for peer"
 msgstr "Hồ sơ dành cho đồng nghiệp"
