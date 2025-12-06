@@ -143,7 +143,7 @@ msgid "Unreachable on any transport"
 msgstr "در هیچ حمل و نقلی غیر قابل دسترس است"
 
 msgid "Cannot enumerate UPnP devices on Android."
-msgstr ""
+msgstr "نمی‌توان دستگاه‌های UPnP را در اندروید فهرست کرد."
 
 msgid "UPnP is not enabled"
 msgstr "UPnP فعال نمی باشد"
@@ -683,7 +683,7 @@ msgid "After reporting, please restart your router"
 msgstr "پس از گزارش، لطفاً روتر خود را مجددا راه اندازی کنید"
 
 msgid "Invalid form submission, requires POST"
-msgstr ""
+msgstr "ارسال فرم نامعتبر است، نیاز به POST دارد"
 
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "فرمِ اشتباهی ارسال شده است. احتمالا شما از کلیدهای 'back' و یا 'reload' در مرورگر خود استفاده کردید. لطفا دوباره تلاش کنید."
@@ -817,13 +817,13 @@ msgid "To enable SSL access for the Router Console, see the commented <code>clie
 msgstr "برای فعال سازی دسترسی SSL برای کنسول روتر، برای دریافت اطلاعات بیشتر وارد فایل <code>clients.config</code> که در دایرکتوری برنامه I2P شما قرار دارد شوید. شما باید فایل پیکربندی RouterConsoleRunner را که در دایرکتوری واقع شده است ویرایش کنید: "
 
 msgid "Save disabled, edit the router.config file to make changes"
-msgstr ""
+msgstr "ذخیره غیرفعال است، برای ایجاد تغییرات فایل router.config را ویرایش کنید"
 
 msgid "Error updating the configuration - please see the error logs"
 msgstr "خطا در به روز رسانی پیکربندی - لطفا گزارش خطا را ببینید"
 
 msgid "No changes made to the configuration"
-msgstr ""
+msgstr "هیچ تغییری در پیکربندی ایجاد نشد"
 
 msgid "Note"
 msgstr "توجه"
@@ -844,7 +844,7 @@ msgid "Save Plugin Configuration"
 msgstr "ذخیره پیکربندی افزونه"
 
 msgid "Plugins disabled"
-msgstr ""
+msgstr "افزونه‌ها غیرفعال شدند"
 
 msgid "Install Plugin"
 msgstr "نصب افزونه"
@@ -856,7 +856,7 @@ msgid "Update All Installed Plugins"
 msgstr "به روز رسانی تمام افزونه های نصب شده"
 
 msgid "Delete client disabled"
-msgstr ""
+msgstr "حذف کلاینت غیرفعال شد"
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -940,17 +940,17 @@ msgid "Updating all plugins"
 msgstr "به روزرسانی همه افزونه ها"
 
 msgid "Update manager not registered, cannot install"
-msgstr ""
+msgstr "مدیر به‌روزرسانی ثبت نشده، نمی‌توان نصب کرد"
 
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "نصب افزونه از {0}"
 
 msgid "Cannot install, check logs"
-msgstr ""
+msgstr "نمی‌توان نصب کرد، لاگ‌ها را بررسی کنید"
 
 msgid "Update manager not registered, cannot check"
-msgstr ""
+msgstr "مدیر به‌روزرسانی ثبت نشده، نمی‌توان بررسی کرد"
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1050,17 +1050,17 @@ msgid "Join Family"
 msgstr "عضویت در خانواده"
 
 msgid "Bad certificate - No Subject CN"
-msgstr ""
+msgstr "گواهی‌نامه نامعتبر - هیچ Subject CN وجود ندارد"
 
 msgid "Bad characters in Family: "
-msgstr ""
+msgstr "کاراکترهای نامعتبر در خانواده: "
 
 #, java-format
 msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
-msgstr ""
+msgstr "Keystore {0} از قبل برای خانواده {1} وجود دارد! ابتدا آن را حذف یا تغییر نام دهید."
 
 msgid "Family key configured for router family: "
-msgstr ""
+msgstr "کلید خانواده برای خانواده روتر پیکربندی شد: "
 
 msgid "Load from file failed"
 msgstr "بارگذاری از فایل ناموفق بود"
@@ -1078,7 +1078,7 @@ msgid "Restore defaults"
 msgstr "بازیابی پیش فرض ها"
 
 msgid "Bad group detected, please retry"
-msgstr ""
+msgstr "گروه نامعتبر شناسایی شد، لطفاً دوباره تلاش کنید"
 
 msgid "Restored default settings"
 msgstr "تنظیمات پیش فرض را بازیابی کرد"
@@ -1111,7 +1111,7 @@ msgid "Invalid destination"
 msgstr "مقصد نامعتبر"
 
 msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "نمی‌توان کلید برای مقصد محلی اضافه کرد. رمزنگاری را در مدیر تونل فعال کنید."
 
 #, java-format
 msgid "Key for {0} added to keyring"
@@ -1124,7 +1124,7 @@ msgid "Requires hostname, destination, or blinded Base32"
 msgstr "به نام میزبان، مقصد یا Base32 کور نیاز دارد"
 
 msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
-msgstr ""
+msgstr "نمی‌توان کلید برای مقصد محلی اضافه کرد. رمزنگاری را در مدیر سرویس‌های مخفی فعال کنید."
 
 msgid "Destination requires lookup password"
 msgstr "مقصد نیاز به رمز عبور جستجو دارد"
@@ -1145,7 +1145,7 @@ msgid "Delete key"
 msgstr "حذف کلید"
 
 msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "نمی‌توان کلید برای مقصد محلی حذف کرد. رمزنگاری را در مدیر تونل غیرفعال کنید."
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1198,34 +1198,34 @@ msgid "Log overrides updated"
 msgstr "لغو ورود به سیستم به روز شد"
 
 msgid "Error updating the log limits - levels not valid"
-msgstr ""
+msgstr "خطا در به‌روزرسانی محدودیت‌های لاگ - سطوح نامعتبر هستند"
 
 msgid "Log limits cleared"
-msgstr ""
+msgstr "محدودیت‌های لاگ پاک شدند"
 
 #, java-format
 msgid "Default log level updated from {0} to {1}"
-msgstr ""
+msgstr "سطح لاگ پیش‌فرض از {0} به {1} به‌روزرسانی شد"
 
 msgid "Date format updated"
-msgstr ""
+msgstr "فرمت تاریخ به‌روزرسانی شد"
 
 #, java-format
 msgid "Specified date format is not valid ({0}) - not updated"
-msgstr ""
+msgstr "فرمت تاریخ مشخص شده معتبر نیست ({0}) - به‌روزرسانی نشد"
 
 msgid "File size updated"
-msgstr ""
+msgstr "اندازه فایل به‌روزرسانی شد"
 
 #, java-format
 msgid "Specified file size limit is not valid ({0}) - not updated"
-msgstr ""
+msgstr "محدودیت اندازه فایل مشخص شده معتبر نیست ({0}) - به‌روزرسانی نشد"
 
 msgid "Compression setting updated"
-msgstr ""
+msgstr "تنظیمات فشرده‌سازی به‌روزرسانی شد"
 
 msgid "Log record format updated"
-msgstr ""
+msgstr "فرمت رکورد لاگ به‌روزرسانی شد"
 
 msgid "Log configuration saved"
 msgstr "پیکربندی گزارش ذخیره شد"
@@ -1435,10 +1435,10 @@ msgid "Bad capacity value"
 msgstr "مقدار ظرفیت بد"
 
 msgid "Bonuses adjusted for: "
-msgstr ""
+msgstr "پاداش‌ها برای موارد زیر تنظیم شدند: "
 
 msgid "No profile exists for: "
-msgstr ""
+msgstr "هیچ پروفایلی برای موارد زیر وجود ندارد: "
 
 msgid "Unsupported"
 msgstr "پشتیبانی نمی شود"
@@ -1454,7 +1454,7 @@ msgstr "به"
 
 #, java-format
 msgid "First {0} displayed, see the {1} file for the full list"
-msgstr ""
+msgstr "اولین {0} مورد نمایش داده شد، برای لیست کامل فایل {1} را ببینید"
 
 msgid "IPs Banned Until Restart"
 msgstr "IP ها تا راه اندازی مجدد ممنوع شدند"
@@ -1555,7 +1555,7 @@ msgid "Save order"
 msgstr "ذخیره ترتیب"
 
 msgid "Sidebar preferences updated"
-msgstr ""
+msgstr "ترجیحات نوار کناری به‌روزرسانی شد"
 
 msgid "Refresh interval must be a number"
 msgstr "فاصله بازخوانی باید یک عدد باشد"
@@ -1564,16 +1564,16 @@ msgid "Restore full default"
 msgstr "بازیابی کامل پیش فرض"
 
 msgid "Full sidebar defaults restored."
-msgstr ""
+msgstr "پیش‌فرض‌های نوار کناری کامل بازیابی شد."
 
 msgid "Sidebar will refresh shortly."
-msgstr ""
+msgstr "نوار کناری به زودی تازه‌سازی خواهد شد."
 
 msgid "Restore minimal default"
 msgstr "حداقل پیش فرض را بازیابی کنید"
 
 msgid "Minimal sidebar defaults restored."
-msgstr ""
+msgstr "پیش‌فرض‌های نوار کناری حداقلی بازیابی شد."
 
 msgid "Order must be an integer"
 msgstr "ترتیب باید یک عدد صحیح باشد"
@@ -1602,11 +1602,11 @@ msgstr "لیست نمودار به روز شد، ممکن است تا 60 ثان�
 
 #, java-format
 msgid "Internal error: could not resolve pool name {0}."
-msgstr ""
+msgstr "خطای داخلی: نمی‌توان نام استخر {0} را解析 کرد."
 
 #, java-format
 msgid "Internal error: could not find pool settings for {0}."
-msgstr ""
+msgstr "خطای داخلی: نمی‌توان تنظیمات استخر را برای {0} پیدا کرد."
 
 msgid "Updated settings for all pools."
 msgstr "تنظیمات به روز شده برای همه استخرها."
@@ -1681,7 +1681,7 @@ msgid "Add user"
 msgstr "افزودن کاربر"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
-msgstr ""
+msgstr "نمی‌توان انتخاب پوسته را ذخیره کرد، نام پوسته دارای کاراکترهای غیرمجاز است"
 
 msgid "Theme change saved."
 msgstr "تغییر تم ذخیره شد."
@@ -1693,7 +1693,7 @@ msgid "No user name entered"
 msgstr "نام کاربری وارد نشده است"
 
 msgid "User name may not contain '='"
-msgstr ""
+msgstr "نام کاربری نمی‌تواند شامل '=' باشد"
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "هشدار: نام کاربری خارج از مجموعه کاراکتر ISO-8859-1 توصیه نمی شود. پشتیبانی استاندارد نیست و توسط مرورگر متفاوت است."
@@ -2015,7 +2015,7 @@ msgid "Show list of all known I2P routers"
 msgstr "نمایش لیست تمام روترهای شناخته شده I2P"
 
 msgid "List of recently connected peers with profiling info"
-msgstr ""
+msgstr "لیست همتایان اخیراً متصل شده با اطلاعات پروفایل‌سازی"
 
 msgid "Peer Profiles"
 msgstr "پروفایل های همتا"
@@ -2183,7 +2183,7 @@ msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "بخش جلویی مبتنی بر حریم خصوصی جایگزین برای Reddit"
 
 msgid "AI Image generation & Chat hub"
-msgstr ""
+msgstr "مرکز تولید تصویر هوش مصنوعی و چت"
 
 msgid "IRC Logs for multiple networks"
 msgstr "ثبت‌های IRC برای چندین شبکه"
@@ -2324,10 +2324,10 @@ msgid "OpenDemocracy"
 msgstr "دموکراسی باز"
 
 msgid "Online privacy &amp; tech blog"
-msgstr ""
+msgstr "وبلاگ حریم خصوصی آنلاین و فناوری"
 
 msgid "RightToPrivacy"
-msgstr ""
+msgstr "حق حریم خصوصی"
 
 msgid "Lifestyle magazine"
 msgstr "مجله سبک زندگی"
@@ -2348,7 +2348,7 @@ msgid "Community-driven tech news"
 msgstr "اخبار فناوری جامعه محور"
 
 msgid "Various services"
-msgstr ""
+msgstr "خدمات مختلف"
 
 msgid "News for nerds"
 msgstr "اخبار برای نردها"
@@ -2424,7 +2424,7 @@ msgid "Add"
 msgstr "اضافه کردن"
 
 msgid "Error displaying the info page."
-msgstr ""
+msgstr "خطا در نمایش صفحه اطلاعات."
 
 msgid "Identity"
 msgstr "هویت"
@@ -2472,7 +2472,7 @@ msgid "Performance"
 msgstr "عملکرد"
 
 msgid "Maximum available RAM"
-msgstr ""
+msgstr "حداکثر RAM موجود"
 
 msgid "Classified as slow"
 msgstr "به عنوان کند طبقه بندی شده است"
@@ -2484,7 +2484,7 @@ msgid "No"
 msgstr "نه"
 
 msgid "GeoIP Db"
-msgstr ""
+msgstr "پایگاه داده GeoIP"
 
 msgid "Target"
 msgstr "هدف"
@@ -2623,19 +2623,19 @@ msgid "Sybil Analysis"
 msgstr "تجزیه و تحلیل سیبیل"
 
 msgid "Bad value supplied, please check and try again."
-msgstr ""
+msgstr "مقدار نامعتبر ارائه شد، لطفاً بررسی کرده و دوباره تلاش کنید."
 
 msgid "Router Map"
 msgstr " نقشه روتر"
 
 msgid "Network Database Search"
-msgstr ""
+msgstr "جستجوی پایگاه داده شبکه"
 
 msgid "Capabilities"
 msgstr "قابلیت ها"
 
 msgid "e.g. f or XOfR"
-msgstr ""
+msgstr "مثلاً f یا XOfR"
 
 msgid "Cost"
 msgstr "هزینه"
@@ -2644,49 +2644,49 @@ msgid "Country"
 msgstr "کشور"
 
 msgid "Country Codes"
-msgstr ""
+msgstr "کدهای کشور"
 
 msgid "Hash Prefix"
-msgstr ""
+msgstr "پیشوند هش"
 
 msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
-msgstr ""
+msgstr "IPv4 یا IPv6، پسوندهای /24,/16,/8 برای IPv4 اختیاری، پیشوند برای IPv6 مجاز است"
 
 msgid "Hostname or b32"
-msgstr ""
+msgstr "نام میزبان یا b32"
 
 msgid "IPv6 Prefix"
-msgstr ""
+msgstr "پیشوند IPv6"
 
 msgid "Single port or range"
-msgstr ""
+msgstr "پورت واحد یا محدوده"
 
 msgid "Signature Type"
-msgstr ""
+msgstr "نوع امضا"
 
 msgid "SSU Capabilities"
-msgstr ""
+msgstr "قابلیت‌های SSU"
 
 msgid "Encryption Type"
-msgstr ""
+msgstr "نوع رمزنگاری"
 
 msgid "Router Version"
-msgstr ""
+msgstr "نسخه روتر"
 
 msgid "Transport"
 msgstr "انتقال"
 
 msgid "Add Sybil analysis (must pick at least one above)"
-msgstr ""
+msgstr "افزودن تحلیل Sybil (باید حداقل یکی از موارد بالا را انتخاب کنید)"
 
 msgid "Sybil close to"
-msgstr ""
+msgstr "Sybil نزدیک به"
 
 msgid "Router hash, destination hash, b32, or from address book"
-msgstr ""
+msgstr "هش روتر، هش مقصد، b32، یا از دفترچه آدرس"
 
 msgid "or Sybil close to this router"
-msgstr ""
+msgstr "یا Sybil نزدیک به این روتر"
 
 msgid "Lookup"
 msgstr "جستجو"
@@ -2701,13 +2701,13 @@ msgid "not found in network database"
 msgstr "در پایگاه داده شبکه یافت نشد"
 
 msgid "Bad Base64 Router hash"
-msgstr ""
+msgstr "هش Base64 روتر نامعتبر"
 
 msgid "No routers with"
-msgstr ""
+msgstr "هیچ روتری با"
 
 msgid "Hash prefix"
-msgstr ""
+msgstr "پیشوند هش"
 
 msgid "Port"
 msgstr "پورت"
@@ -2716,10 +2716,10 @@ msgid "MTU"
 msgstr "MTU"
 
 msgid "found in the network database"
-msgstr ""
+msgstr "در پایگاه داده شبکه یافت شد"
 
 msgid "results"
-msgstr ""
+msgstr "نتایج"
 
 msgid "Previous Page"
 msgstr "صفحه قبل"
@@ -2728,43 +2728,43 @@ msgid "Next Page"
 msgstr "صفحه بعدی"
 
 msgid "Results per page"
-msgstr ""
+msgstr "نتایج در هر صفحه"
 
 msgid "Not initialized"
 msgstr "مقداردهی اولیه نشده است"
 
 msgid "Total Remote Leasesets"
-msgstr ""
+msgstr "مجموع LeaseSet‌های از راه دور"
 
 msgid "Compact mode"
-msgstr ""
+msgstr "حالت فشرده"
 
 msgid "Local Leasesets"
-msgstr ""
+msgstr "LeaseSet‌های محلی"
 
 msgid "Debug Mode"
-msgstr ""
+msgstr "حالت اشکال‌زدایی"
 
 msgid "Published (RAP) Leasesets"
-msgstr ""
+msgstr "LeaseSet‌های منتشر شده (RAP)"
 
 msgid "Sorted by hash distance, closest first."
-msgstr ""
+msgstr "مرتب شده بر اساس فاصله هش، نزدیک‌ترین‌ها اول."
 
 msgid "Mod Data"
-msgstr ""
+msgstr "داده Mod"
 
 msgid "Last Changed"
-msgstr ""
+msgstr "آخرین تغییر"
 
 msgid "Next Mod Data"
-msgstr ""
+msgstr "داده Mod بعدی"
 
 msgid "Change in"
-msgstr ""
+msgstr "تغییر در"
 
 msgid "Floodfill mode enabled"
-msgstr ""
+msgstr "حالت Floodfill فعال شد"
 
 msgid "Routing Key"
 msgstr "کلید مسیریابی"
@@ -2779,21 +2779,21 @@ msgid "Estimated total leasesets"
 msgstr "برآورد کل اجاره"
 
 msgid "Total Local Leasesets"
-msgstr ""
+msgstr "مجموع LeaseSet‌های محلی"
 
 msgid "Remote Leasesets"
-msgstr ""
+msgstr "LeaseSet‌های از راه دور"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
-msgstr ""
+msgstr "نام میزبان {0} در پایگاه داده شبکه یافت نشد"
 
 #, java-format
 msgid "LeaseSet for {0} not found in network database"
-msgstr ""
+msgstr "LeaseSet برای {0} در پایگاه داده شبکه یافت نشد"
 
 msgid "Meta"
-msgstr ""
+msgstr "فراداده"
 
 msgid "LeaseSet"
 msgstr "LeaseSet"
@@ -2825,7 +2825,7 @@ msgid "Signature type"
 msgstr "نوع امضا"
 
 msgid "Public Key"
-msgstr ""
+msgstr "کلید عمومی"
 
 msgid "Unsupported type"
 msgstr "نوع پشتیبانی نشده"
@@ -2842,10 +2842,10 @@ msgid "Unknown"
 msgstr "ناشناس"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr ""
+msgstr "حالت پیشرفته - شامل تمام آمار منتشر شده توسط floodfills."
 
 msgid "Compact mode - does not include statistics published by floodfills."
-msgstr ""
+msgstr "حالت فشرده - شامل آمار منتشر شده توسط floodfills نیست."
 
 msgid "Network Database Router Statistics"
 msgstr "آمار روتر پایگاه داده شبکه"
@@ -2869,7 +2869,7 @@ msgid "Transports"
 msgstr "انتقال ها"
 
 msgid "X Tier"
-msgstr ""
+msgstr "لایه X"
 
 msgid "Floodfills"
 msgstr "سیل"
@@ -2887,10 +2887,10 @@ msgid "Router is banlisted"
 msgstr "روتر ممنوع است"
 
 msgid "Java I2P variant"
-msgstr ""
+msgstr "نسخه Java I2P"
 
 msgid "I2Pd variant"
-msgstr ""
+msgstr "نسخه I2Pd"
 
 msgid "RouterInfo is compressible"
 msgstr "RouterInfo فشرده است"
@@ -2924,7 +2924,7 @@ msgid "Hostname"
 msgstr "نام میزبان"
 
 msgid "direct"
-msgstr ""
+msgstr "مستقیم"
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "تایید شده (گواهی امضا وارد شده و معتبر است)"
@@ -2963,10 +2963,10 @@ msgid "Last heard from"
 msgstr "آخرین خبر از"
 
 msgid "Network Id"
-msgstr ""
+msgstr "شناسه شبکه"
 
 msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr ""
+msgstr "شمارش همیشه جعل می‌شود تا از نشان دادن راه‌اندازی مجدد روتر جلوگیری کند"
 
 msgid "Hidden or starting up"
 msgstr "پنهان یا راه اندازی"
@@ -3034,10 +3034,10 @@ msgid "IPv6"
 msgstr "IPv6"
 
 msgid "Active connections / Max permitted"
-msgstr ""
+msgstr "اتصالات فعال / حداکثر مجاز"
 
 msgid "Connections / Limit"
-msgstr ""
+msgstr "اتصالات / محدودیت"
 
 msgid "Current / maximum permitted"
 msgstr "فعلی / حداکثر مجاز"
@@ -3331,7 +3331,7 @@ msgid "Rejected"
 msgstr "رد شد"
 
 msgid "First Heard About"
-msgstr ""
+msgstr "اولین بار شنیده شد"
 
 msgid "Last Heard From"
 msgstr "آخرین شنیده از"
@@ -3444,7 +3444,7 @@ msgstr "{0} پهنای باند مشترک"
 
 #, java-format
 msgid "Over {0} KB/s shared bandwidth"
-msgstr ""
+msgstr "بیش از {0} KB/s پهنای باند اشتراکی"
 
 msgid "status"
 msgstr "وضعیت"
@@ -3507,11 +3507,11 @@ msgid "Total number of banned peers"
 msgstr "تعداد کل همتاهای ممنوع شده"
 
 msgid "Note: 'LU' class routers have been excluded from the list."
-msgstr ""
+msgstr "توجه: روترهای کلاس 'LU' از لیست حذف شده‌اند."
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
-msgstr ""
+msgstr "برای مشاهده، {0}ممنوعیت‌های جلسه{1} را ببینید."
 
 msgid "Select search engine"
 msgstr "انتخاب موتور جستجو"
@@ -3759,7 +3759,7 @@ msgid "An introduction to hosting websites on the I2P network"
 msgstr "مقدمه ای برای میزبانی وب سایت ها در شبکه I2P"
 
 msgid "New hosts in last 24 hours"
-msgstr ""
+msgstr "میزبان‌های جدید در 24 ساعت گذشته"
 
 msgid "I2PControl"
 msgstr "کنترل I2P"
@@ -3886,7 +3886,7 @@ msgid "Floodfill enabled"
 msgstr "فعال کردن floodfill"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
-msgstr ""
+msgstr "مجموع تعداد LeaseSet‌های از راه دور ذخیره شده در NetDb ما"
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "هشدار: ECDSA در دسترس نیست."
@@ -3901,7 +3901,7 @@ msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "همسالانی که در چند دقیقه گذشته/ساعت آخر با آنها صحبت کرده ایم"
 
 msgid "Peers we've been talking to in the last minute"
-msgstr ""
+msgstr "همتایانی که در دقیقه گذشته با آن‌ها صحبت کرده‌ایم"
 
 msgid "The number of peers available for building client tunnels"
 msgstr "تعداد همتاهای موجود برای ساخت تونل های مشتری"
@@ -4410,7 +4410,7 @@ msgid "Data"
 msgstr "داده ها"
 
 msgid "Limit"
-msgstr ""
+msgstr "محدودیت"
 
 msgid "Receive on"
 msgstr "دریافت کنید"
@@ -4457,7 +4457,7 @@ msgid "No transit tunnels currently active."
 msgstr "در حال حاضر هیچ تونل ترانزیت فعال نیست."
 
 msgid "Transit Tunnels by Peer (Top {0})"
-msgstr ""
+msgstr "تونل‌های ترانزیت بر اساس همتا (برتر {0})"
 
 msgid "Address"
 msgstr "آدرس"
@@ -4536,7 +4536,7 @@ msgid "Bandwidth test did not complete"
 msgstr "تست پهنای باند کامل نشد"
 
 msgid "Bad state for test"
-msgstr ""
+msgstr "وضعیت نامعتبر برای تست"
 
 msgid "Bandwidth test started"
 msgstr "تست پهنای باند شروع شد"
@@ -4551,16 +4551,16 @@ msgid "Bandwidth test was not running"
 msgstr "تست پهنای باند در حال اجرا نبود"
 
 msgid "ready"
-msgstr ""
+msgstr "آماده"
 
 msgid "inbound test"
-msgstr ""
+msgstr "تست ورودی"
 
 msgid "outbound test"
-msgstr ""
+msgstr "تست خروجی"
 
 msgid "done"
-msgstr ""
+msgstr "انجام شد"
 
 msgid "bits per second"
 msgstr "بیت در ثانیه"
@@ -4732,7 +4732,7 @@ msgid "Share"
 msgstr "هم‌رسانی"
 
 msgid "NOTE"
-msgstr ""
+msgstr "توجه"
 
 #, java-format
 msgid "You have configured I2P+ to share only {0} KBps."
@@ -4759,7 +4759,7 @@ msgstr "پیکربندی پیشرفته"
 
 #, java-format
 msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
-msgstr ""
+msgstr "کلید <b>{0}</b> برای حذف انتخاب شد. برای اعمال تغییر، پیکربندی را ذخیره کنید، یا برای بازیابی کلید لغو کنید."
 
 msgid "Floodfill Configuration"
 msgstr "پیکربندی Floodfill"
@@ -4789,7 +4789,7 @@ msgid "Advanced I2P+ Configuration"
 msgstr "پیکربندی پیشرفته I2P"
 
 msgid "Help with additional configuration settings"
-msgstr ""
+msgstr "کمک با تنظیمات پیکربندی اضافی"
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5183,15 +5183,15 @@ msgid "Banning will prevent the participation of this peer in tunnels you create
 msgstr "ممنوعیت از مشارکت این همتا در تونل هایی که ایجاد می کنید جلوگیری می کند."
 
 msgid "A list of bans by IP address is presented below."
-msgstr ""
+msgstr "لیستی از ممنوعیت‌ها بر اساس آدرس IP در زیر ارائه شده است."
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
-msgstr ""
+msgstr "برای مشاهده تمام ممنوعیت‌های فعال بر اساس هش روتر، {0}همتایان ممنوع{1} را ببینید."
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
-msgstr ""
+msgstr "لیستی از {0}ممنوعیت‌های فقط جلسه{1} بر اساس هش نیز در دسترس است."
 
 msgid "Adjust Profile Bonuses"
 msgstr "پاداش های نمایه را تنظیم کنید"
@@ -5382,7 +5382,7 @@ msgid "config sidebar"
 msgstr "نوار کناری پیکربندی"
 
 msgid "Sidebar Options"
-msgstr ""
+msgstr "گزینه‌های نوار کناری"
 
 msgid "Refresh interval"
 msgstr "فاصله بازخوانی"
@@ -5394,10 +5394,10 @@ msgid "0 to disable"
 msgstr "0 برای غیرفعال کردن"
 
 msgid "Unified sidebar"
-msgstr ""
+msgstr "نوار کناری یکپارچه"
 
 msgid "Use the same sidebar on all pages"
-msgstr ""
+msgstr "از همان نوار کناری در تمام صفحات استفاده کنید"
 
 msgid "config stats"
 msgstr "آمار پیکربندی"
@@ -5599,7 +5599,7 @@ msgid "Event Log"
 msgstr "گزارش رویداد"
 
 msgid "Combined"
-msgstr ""
+msgstr "ترکیبی"
 
 msgid "graph"
 msgstr "گراف"
@@ -5680,7 +5680,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "این تنظیم، وقتی روی true تنظیم شود، پیوندهای <i>سایت های مورد علاقه</i> را در <a href=/sitemap>نقشه سایت</a> نمایش می دهد. "
 
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr ""
+msgstr "این تنظیم، وقتی روی true تنظیم شود، نوار کناری استاندارد را در صفحه اصلی نمایش می‌دهد و امکان پیکربندی از طریق <a href=/configsidebar> را فراهم می‌کند. [پیش‌فرض false است]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "این تنظیم تعیین می کند که آیا روتر باید از فایل <i>blocklist.txt</i> ارائه شده و هر لیست بلاک پیکربندی شده توسط کاربر برای فعال کردن ممنوعیت روترها توسط آدرس هش یا IP استفاده کند یا خیر. "
@@ -5695,7 +5695,7 @@ msgid "This setting determines whether or not the router should use the provided
 msgstr "این تنظیم تعیین می کند که آیا روتر باید از فایل <i>blocklist_tor.txt</i> ارائه شده در فهرست برنامه های I2P شما برای فعال کردن ممنوعیت روترهایی که از آدرس های IP گره خروج Tor استفاده می کنند استفاده کند یا خیر. "
 
 msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
-msgstr ""
+msgstr "این تنظیم درخواست‌ها را از روترهای در کشورهای مشخص شده را مسدود و ممنوع می‌کند به محض اینکه درخواست تونل مستقیم انجام شود. کشورها باید به عنوان کدهای دو حرفی کشور مشخص شوند، با کاما جدا شوند. مثلاً router.blockCountries=cn,ru"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
 msgstr "وقتی به غلط تنظیم شود، روتر از جلوگیری از درخواست‌های ساخت تونل از روترهای آرامتر یا دسترس نشدنی که نسخه‌های قدیمی را اجرا می‌کنند، خودداری نخواهد کرد. [پیش فرض صحیح است، باز شروع الزامی]"
@@ -5832,8 +5832,8 @@ msgstr "این تنظیم (در چند ثانیه) به شما اجازه می �
 msgid "This setting determines whether routers classified as uninteresting (K or L tier, unreachable or older than 0.9.50) are checked during the refresh router process after 1 hour of uptime. [Default is false]"
 msgstr "این تنظیم تعیین می‌کند که آیا روترهای طبقه‌بندی‌شده به‌عنوان غیرجالب (سطح K یا L، غیرقابل دسترس یا قدیمی‌تر از 0.9.50) در طول فرآیند تازه‌سازی روتر پس از 1 ساعت کارکرد بررسی می‌شوند. "
 
-msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
-msgstr ""
+msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
+msgstr "وقتی روی true تنظیم شود، این تنظیم شرایط لازم برای روتر شما برای انتشار محدودیت‌های تراکم را تسهیل می‌کند، به خصوص زمانی که مشخص شود استفاده از پهنای باند شما بالا است. شرایط دیگر، مانند تأخیر بالای کار یا روتر طبقه‌بندی شده به عنوان کند، همچنان باعث انتشار محدودیت‌ها می‌شود. [پیش‌فرض false است]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "هنگامی که پیکربندی می شود، محدودیت سختی برای تعداد تونل هایی که روتر مجاز به ساخت همزمان است تعیین می کند. "
@@ -5848,10 +5848,10 @@ msgid "This setting (in minutes) allows you to manually configure how long to wa
 msgstr "این تنظیم (در چند دقیقه) به شما امکان می دهد تا به صورت دستی پیکربندی کنید که چه مدت پس از راه اندازی قبل از بررسی اعتبار RouterInfos در NetDb، منتظر بمانید، پس از آن تنها روترهای معتبر برای گنجاندن پذیرفته می شوند. "
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
+msgstr "این تنظیم، وقتی روی true تنظیم شود، ارتباط مستقیم را از تمام روترهای در کشور خودتان مسدود کرده و آن‌ها را تا زمان راه‌اندازی مجدد روتر به لیست ممنوعیت شما اضافه می‌کند. [پیش‌فرض false است]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr ""
+msgstr "این تنظیم، وقتی روی true تنظیم شود، ارتباط مستقیم را از تمام روترهای لایه X که محدودیت تراکم G را منتشر می‌کنند و نه قابل دسترس و نه غیرقابل دسترس هستند، مسدود کرده و آن‌ها را به لیست ممنوعیت جلسه اضافه می‌کند. توجه داشته باشید که حالت پیشرفته باید فعال باشد تا این تنظیم اثر کند. [پیش‌فرض false است]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "این تنظیم اجازه می دهد تا تست های SSU را غیرفعال کنید تا مشخص شود آیا روتر شما دارای فایروال است یا خیر و می توان آن را برای روترهایی که قطعا فایروال ندارند اما مشکلات فایروال متناوب را تجربه می کنند فعال کرد. "
@@ -5860,7 +5860,7 @@ msgid "This setting determines which transport takes priority when communicating
 msgstr "این تنظیم تعیین می کند که کدام حمل و نقل در هنگام برقراری ارتباط با همتایان اولویت دارد. "
 
 msgid "miscellaneous"
-msgstr ""
+msgstr "متفرقه"
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "اگر روی true تنظیم شود، این گزینه نمادی را در سینی سیستم / ناحیه اعلان با گزینه های اصلی کنترل سرویس قرار می دهد. "
@@ -6100,16 +6100,16 @@ msgid "For SSL only"
 msgstr "فقط برای اساسل"
 
 msgid "How can I configure the console and web services to be accessible on my local network?"
-msgstr ""
+msgstr "چگونه می‌توانم کنسول و خدمات وب را طوری پیکربندی کنم که در شبکه محلی من قابل دسترس باشند؟"
 
 msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
-msgstr ""
+msgstr "برای اینکه کنسول شما در شبکه محلی قابل دسترس باشد، فایل پیکربندی 00-net.i2p.router.web.RouterConsoleRunner-clients.config را در پوشه clients.config.d از دایرکتوری تنظیمات I2P خود ویرایش کنید. آدرس‌های IP لازم را به نگاشت موجود localhost (127.0.0.1) به‌روزرسانی یا اضافه کنید. از سوئیچ -s برای دسترسی HTTPS استفاده کنید."
 
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
-msgstr ""
+msgstr "مثال: برای اجازه دسترسی از هر دو localhost و 192.168.1.10 از طریق HTTP و HTTPS:"
 
 msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "برای اکثر خدمات کلاینت، آدرس شنیداری را برای سرویس مربوطه در بخش پیکربندی مدیر تونل با استفاده از منوی کشویی <i>قابل دسترسی توسط</i> تغییر دهید."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "چطور از طریق I2P به IRC متصل شوم؟"
@@ -6496,7 +6496,7 @@ msgid "If you are in a hurry and can't wait a few hours, you can tell people to 
 msgstr "اگر شما عجله دارید و نمی‌توانید چند ساعت صبر کنید، می‌توانید به مردم بگویید از سرویس هدایت بازآدرسی \"پرش\" استفاده کنند. این سرویس معمولاً در عرض چند دقیقه پس از ثبت نام نام میزبان خود در همان سایت کار می‌کند. ابتدا با وارد کردن <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> در مرورگر خود آن را تست کنید. پس از آن که کار می‌کند، می‌توانید به دیگران بگویید از آن استفاده کنند."
 
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
-msgstr ""
+msgstr "به طور جایگزین، می‌توانید <i>پیوند کمک‌کننده آدرس</i> را برای دامنه خود کپی کنید، که یا در صفحه لیست دفترچه آدرس یا در صفحه جزئیات برای دامنه شما نشان داده شده است، مثلاً <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>جزئیات برای skank.i2p</a>، و پیوند را جایی که برای اشتراک‌گذاری با دیگران لازم است بچسبانید."
 
 msgid "Backup your private key!"
 msgstr "پشتیبان‌گیری کلید خصوصی‌تان کنید!"
@@ -6733,7 +6733,7 @@ msgid "Getting Support Online"
 msgstr "دریافت پشتیبانی آنلاین"
 
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
-msgstr ""
+msgstr "شما ممکن است بخواهید اطلاعات را در <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>وب‌سایت I2P</a> مرور کنید، پیام‌ها را به <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>انجمن بحث I2P</a> ارسال کنید یا به <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> یا <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> در شبکه داخلی IRC I2P سر بزنید."
 
 msgid "Reporting Bugs"
 msgstr "گزارش خطاها"
@@ -7273,7 +7273,7 @@ msgid "Configure display language, theme and optional console password"
 msgstr "پیکربندی زبان نمایش، تم و رمز عبور اختیاری کنسول"
 
 msgid "Language"
-msgstr ""
+msgstr "زبان"
 
 msgid "Configure router bandwidth"
 msgstr "پهنای باند روتر را پیکربندی کنید"
@@ -7340,22 +7340,22 @@ msgid "network database"
 msgstr "پایگاه داده شبکه"
 
 msgid "Encryption type"
-msgstr ""
+msgstr "نوع رمزنگاری"
 
 msgid "Encryption types"
-msgstr ""
+msgstr "انواع رمزنگاری"
 
 msgid "Signature types"
-msgstr ""
+msgstr "انواع امضا"
 
 msgid "Locally hosted private service"
-msgstr ""
+msgstr "سرویس خصوصی میزبانی شده محلی"
 
 msgid "Locally hosted public service"
-msgstr ""
+msgstr "سرویس عمومی میزبانی شده محلی"
 
 msgid "Requested client leaseset"
-msgstr ""
+msgstr "LeaseSet کلاینت درخواست شده"
 
 msgid "network database router map"
 msgstr "نقشه روتر بانک اطلاعاتی شبکه"
@@ -7401,10 +7401,10 @@ msgid "Fast / High Capacity"
 msgstr "سریع / ظرفیت بالا"
 
 msgid "router logs"
-msgstr ""
+msgstr "لاگ‌های روتر"
 
 msgid "service logs"
-msgstr ""
+msgstr "لاگ‌های سرویس"
 
 msgid "Manage I2P addresses"
 msgstr "آدرس های I2P را مدیریت کنید"
@@ -7611,13 +7611,13 @@ msgid "Toggle Tunnels"
 msgstr "باز و بستن تونل‌ها"
 
 msgid "Updating sidebar sections"
-msgstr ""
+msgstr "به‌روزرسانی بخش‌های نوار کناری"
 
 msgid "Peer Profile"
 msgstr "پروفایل همتا"
 
 msgid "Profile View"
-msgstr ""
+msgstr "نمای پروفایل"
 
 msgid "Profile for peer"
 msgstr "نمایه برای همتایان"
