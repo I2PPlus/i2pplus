@@ -53,7 +53,7 @@ msgstr "Échec du {0}réinitialisation{1}:"
 
 #, java-format
 msgid "For assistance, see the {0}"
-msgstr "Pour obtenir de l\'aide, consultez le {0}"
+msgstr "Pour obtenir de l'aide, consultez le {0}"
 
 msgid "reseed help"
 msgstr "réamorcer l'aide"

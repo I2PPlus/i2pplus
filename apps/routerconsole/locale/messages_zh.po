@@ -2316,10 +2316,10 @@ msgid "OpenDemocracy"
 msgstr "OpenDemocracy"
 
 msgid "Online privacy &amp; tech blog"
-msgstr ""
+msgstr "在线隐私与技术博客"
 
 msgid "RightToPrivacy"
-msgstr ""
+msgstr "隐私权"
 
 msgid "Lifestyle magazine"
 msgstr "生活方式杂志"
@@ -2340,7 +2340,7 @@ msgid "Community-driven tech news"
 msgstr "社区驱动的技术新闻"
 
 msgid "Various services"
-msgstr ""
+msgstr "各种服务"
 
 msgid "News for nerds"
 msgstr "书呆子新闻"
@@ -2639,7 +2639,7 @@ msgid "Country Codes"
 msgstr "国家代码"
 
 msgid "Hash Prefix"
-msgstr ""
+msgstr "哈希前缀"
 
 msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
 msgstr "IPv4 或 IPv6，IPv4 可选 /24,/16,/8 后缀，IPv6 支持前缀"
@@ -3743,7 +3743,7 @@ msgid "An introduction to hosting websites on the I2P network"
 msgstr "在I2P网络上托管网站的简单指南"
 
 msgid "New hosts in last 24 hours"
-msgstr ""
+msgstr "过去24小时新增主机"
 
 msgid "I2PControl"
 msgstr "I2P 控制"
@@ -3870,7 +3870,7 @@ msgid "Floodfill enabled"
 msgstr "启用泛洪填充"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
-msgstr ""
+msgstr "我们网络数据库中存储的远程租约集总数"
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "警告：ECDSA 不可用。请更新您的 Java 或操作系统"
@@ -3885,7 +3885,7 @@ msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "路由连接过的对等节点数量 过去数分钟/过去一小时"
 
 msgid "Peers we've been talking to in the last minute"
-msgstr ""
+msgstr "过去一分钟内我们通信过的对等节点"
 
 msgid "The number of peers available for building client tunnels"
 msgstr "可用来建立客户端隧道的对等节点数量"
@@ -4392,7 +4392,7 @@ msgid "Data"
 msgstr "数据"
 
 msgid "Limit"
-msgstr ""
+msgstr "限制"
 
 msgid "Receive on"
 msgstr "接收"
@@ -4439,7 +4439,7 @@ msgid "No transit tunnels currently active."
 msgstr "目前没有参与的隧道在运行。"
 
 msgid "Transit Tunnels by Peer (Top {0})"
-msgstr ""
+msgstr "按对等节点统计的传输隧道（前{0}名）"
 
 msgid "Address"
 msgstr "地址"
@@ -4518,7 +4518,7 @@ msgid "Bandwidth test did not complete"
 msgstr "带宽测试未完成"
 
 msgid "Bad state for test"
-msgstr ""
+msgstr "测试状态异常"
 
 msgid "Bandwidth test started"
 msgstr "带宽测试已开始"
@@ -4533,16 +4533,16 @@ msgid "Bandwidth test was not running"
 msgstr "带宽测试未运行"
 
 msgid "ready"
-msgstr ""
+msgstr "就绪"
 
 msgid "inbound test"
-msgstr ""
+msgstr "入站测试"
 
 msgid "outbound test"
-msgstr ""
+msgstr "出站测试"
 
 msgid "done"
-msgstr ""
+msgstr "完成"
 
 msgid "bits per second"
 msgstr "比特每秒"
@@ -4714,7 +4714,7 @@ msgid "Share"
 msgstr "共享"
 
 msgid "NOTE"
-msgstr ""
+msgstr "注意"
 
 #, java-format
 msgid "You have configured I2P+ to share only {0} KBps."
@@ -4741,7 +4741,7 @@ msgstr "高级设置"
 
 #, java-format
 msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
-msgstr ""
+msgstr "密钥 <b>{0}</b> 已选择删除。要提交更改，请保存配置，或取消以恢复密钥。"
 
 msgid "Floodfill Configuration"
 msgstr "洪泛配置"
@@ -4771,7 +4771,7 @@ msgid "Advanced I2P+ Configuration"
 msgstr "I2P 高级设置"
 
 msgid "Help with additional configuration settings"
-msgstr ""
+msgstr "附加配置设置帮助"
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5165,15 +5165,15 @@ msgid "Banning will prevent the participation of this peer in tunnels you create
 msgstr "封锁将阻止对等节点参与您的隧道创建。"
 
 msgid "A list of bans by IP address is presented below."
-msgstr ""
+msgstr "以下是按IP地址封禁的列表。"
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
-msgstr ""
+msgstr "要查看按路由器哈希值的所有活跃封禁，请参见{0}已封禁对等节点{1}。"
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
-msgstr ""
+msgstr "还提供了按哈希值的{0}仅会话封禁{1}列表。"
 
 msgid "Adjust Profile Bonuses"
 msgstr "调整配置文件评分"
@@ -5662,7 +5662,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "此设置设置为 true 时，将在边栏的“拥塞”部分显示“对等测试平均值”读数，该读数的计算方法是将成功的对等测试平均值和失败的测试所花费的平均超额时间相加。平均值可以用作确定最佳<code>路由器.peerTestTimeout</code> 值的指南。[默认值为假]"
 
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr ""
+msgstr "此设置为true时，将在主页上显示标准侧边栏，可通过<a href=/configsidebar>进行配置。[默认为false]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "此设置决定路由器是否应使用提供的 <i>blocklist.txt</i> 文件和任何用户配置的封禁清单,以通过哈希或 IP 地址禁止路由器。对 IPv4 支持范围和网络掩码,但不支持 IPv6。有关更多信息,请参阅您的 I2P+ 应用程序目录中的 <i>blocklist.txt</i> 文件。[默认启用,需要重启]"
@@ -5677,7 +5677,7 @@ msgid "This setting determines whether or not the router should use the provided
 msgstr "此设置决定路由器是否应使用您的 I2P+ 应用程序目录中的提供的 <i>blocklist_tor.txt</i> 文件,以启用封禁通过 Tor 退出节点 IP 地址运行的路由器。[默认启用,需要重启]"
 
 msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
-msgstr ""
+msgstr "此设置允许阻止并封禁来自指定国家路由器的请求，一旦发出直接隧道请求即生效。国家必须指定为两位字母的国家代码，用逗号分隔。例如：router.blockCountries=cn,ru"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
 msgstr "当设置为false时，路由器将不会阻止来自运行旧版本的较慢或不可达路由器的隧道构建请求。[默认为true，需要重启]"
@@ -5815,7 +5815,7 @@ msgid "This setting determines whether routers classified as uninteresting (K or
 msgstr "此设置（以秒为单位）允许您手动配置在确定刷新路由器的尝试失败之前等待的时间量。[默认值为 20 秒]"
 
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
-msgstr ""
+msgstr "设置为true时，此设置将放宽路由器发布拥塞限制所需的条件，特别是在确定您的带宽使用量较高时。其他条件，如高作业延迟或被分类为慢速的路由器，仍将导致发布限制。[默认为false]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "配置后，这将为允许路由器同时构建的隧道数设置硬限制。默认情况下，路由器使用平均构建时间和当前出站带宽来确定最佳构建速率。[需要重新启动]"
@@ -5830,10 +5830,10 @@ msgid "This setting (in minutes) allows you to manually configure how long to wa
 msgstr "此设置确定在运行 1 小时后刷新路由器过程中是否检查分类为无趣的路由器（K 层或 L 层、无法访问或早于 0.9.50）。[默认值为假]"
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
+msgstr "此设置为true时，将阻止来自您自己国家所有路由器的直接通信，并将它们添加到您的封禁列表中，直到路由器重启。[默认为false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr ""
+msgstr "此设置为true时，将阻止所有发布G拥塞限制且既不可达也不不可达的X层路由器的直接通信，将它们添加到会话封禁列表中。注意，必须启用高级模式此设置才能生效。[默认为false]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "此设置允许禁用 SSU 测试，以确定您的路由器是否已设置防火墙，是否可以为肯定没有防火墙但遇到间歇性防火墙问题的路由器启用。如果禁用测试，SSU 和 NTCP 都应在路由器信息页面上报告< a href=/info>的当前公共 IP 地址</a>。[需要重新启动]"
@@ -5842,7 +5842,7 @@ msgid "This setting determines which transport takes priority when communicating
 msgstr "这个设置决定了在与其他节点进行通信时，哪种传输方式具有优先权。默认情况下，NTCP比UDP（SSU）更受青睐。将该值设置为 \"true\"，除非存在预先存在的NTCP连接，否则UDP将被优先考虑；当设置为 \"always \"时，无论是否存在预先存在的NTCP连接，UDP将始终被使用。[默认值是false]"
 
 msgid "miscellaneous"
-msgstr ""
+msgstr "杂项"
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "此设置允许配置所需的备用 NTP 服务器，以确保您的路由器保持准确的时钟时间。[默认值为 0.pool.ntp.org，1.pool.ntp.org，2.pool.ntp.org]"
@@ -6082,16 +6082,16 @@ msgid "For SSL only"
 msgstr "仅使用 SSL"
 
 msgid "How can I configure the console and web services to be accessible on my local network?"
-msgstr ""
+msgstr "如何配置控制台和Web服务以便在本地网络中访问？"
 
 msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
-msgstr ""
+msgstr "要使您的控制台在本地网络中可访问，请编辑I2P设置目录中clients.config.d文件夹内的配置文件00-net.i2p.router.web.RouterConsoleRunner-clients.config。更新或添加必要的IP地址到现有的localhost (127.0.0.1)映射。使用-s开关进行HTTPS访问。"
 
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
-msgstr ""
+msgstr "示例：允许从localhost和192.168.1.10通过HTTP和HTTPS访问："
 
 msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "对于大多数客户端服务，请在隧道管理器的配置部分使用<i>可被...访问</i>下拉菜单更改相关服务的监听地址。"
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "如何使用 I2P 连接至 IRC?"
@@ -6478,7 +6478,7 @@ msgid "If you are in a hurry and can't wait a few hours, you can tell people to 
 msgstr "如果你很着急，等不了几个小时，你可以告诉人们使用 \"跳转\"服务帮助重定向。这通常会在你在同一网站上注册你的域名后几分钟内起作用。先自己在浏览器中输入测试 <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>你的域名.i2p</i></code>。一旦一切顺利，你就可以告诉其他人使用它。"
 
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
-msgstr ""
+msgstr "或者，您可以复制您域名的<i>地址助手链接</i>，该链接显示在地址簿列表页面或您域名的详情页面，例如<a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>skank.i2p的详情</a>，然后将链接粘贴到需要与他人共享的地方。"
 
 msgid "Backup your private key!"
 msgstr "备份你的私钥！"
@@ -6715,7 +6715,7 @@ msgid "Getting Support Online"
 msgstr "寻找在线帮助"
 
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
-msgstr ""
+msgstr "您可能还需要查看<a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P网站</a>上的信息，在<a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P讨论论坛</a>发帖，或访问I2P内部IRC网络上的<a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a>或<a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a>频道。"
 
 msgid "Reporting Bugs"
 msgstr "报告Bugs"
