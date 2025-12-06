@@ -96,7 +96,7 @@ class BanlistRenderer {
            .append(_t("Reason"))
            .append("</th><th></th><th>")
            .append(_t("Router Hash"))
-           .append("</th><th data-sort-method=number>")
+           .append("</th><th data-sort-method=number data-sort-direction=ascending>")
            .append(_t("Expiry"))
            .append("</th></tr></thead>\n<tbody id=sessionBanlist>\n");
         int tempBanned = 0;
