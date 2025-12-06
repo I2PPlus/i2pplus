@@ -62,7 +62,10 @@ import { refreshElements } from "./refreshElements.js";
     }
 
     // Refresh session bans every 15 seconds
-    if (sessionBans) {refreshElements("#sessionBanlist tr", uri, 15000);}
+    if (sessionBans) {
+      const targetSelectors = "#sessionBanlist tr, #banSummary";
+      refreshElements(targetSelectors, uri, 15000);
+    }
 
     document.addEventListener("refreshComplete", () => {
       addSortListeners();
