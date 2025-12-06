@@ -1062,9 +1062,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         if ("23.184.48.6".equals(whoisServer) ||
             "23.128.248.249".equals(whoisServer) ||
             "104.36.80.11".equals(whoisServer) ||
-            "outproxy-1a.stormycloud.org".equals(whoisServer) ||
-            "outproxy-1b.stormycloud.org".equals(whoisServer) ||
-            "outproxy-1c.stormycloud.org".equals(whoisServer)) {
+            "23.171.8.170".equals(whoisServer) ||
+            "74.48.163.73".equals(whoisServer) ||
+            "23.137.249.9".equals(whoisServer)) {
             port = 38444;
             useTor = true;
         } else if ("127.0.0.1".equals(whoisServer)) {
@@ -1307,9 +1307,9 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     private static final List<String> GENERIC_WHOIS_SERVERS = Arrays.asList(
-        "outproxy-1a.stormycloud.org",
-        "outproxy-1b.stormycloud.org",
-        "outproxy-1c.stormycloud.org",
+        "23.171.8.170",  /* outproxy-1a.stormycloud.org */
+        "74.48.163.73",  /* outproxy-1b.stormycloud.org */
+        "23.137.249.9", /* outproxy-1c.stormycloud.org */
         "whois.arin.net",
         "whois.iana.org",
         "whois.ripe.net",
