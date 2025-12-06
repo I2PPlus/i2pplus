@@ -95,7 +95,7 @@
 <h3><%=intl._t("How can I configure the console and web services to be accessible on my local network?")%></h3>
 <div>
 <p><%=intl._t("To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access.")%><br><%=intl._t("Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:")%>&nbsp;<code>clientApp.0.args=7657 127.0.0.1,192.168.1.10 -s 7667 127.0.0.1,192.168.1.10 ./webapps/</code></p>
-<p><%=intl._t("For most client services, change the listening address for the relevant service in the Tunnel Manager’s configuration section using the <i>reachable by</i> dropdown.")%></p>
+<p><%=intl._t("For most client services, change the listening address for the relevant service in the Tunnel Manager's configuration section using the <i>reachable by</i> dropdown.")%></p>
 </div>
 
 <h3><%=intl._t("How do I connect to IRC within I2P?")%></h3>
