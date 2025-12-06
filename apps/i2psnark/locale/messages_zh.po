@@ -1521,10 +1521,4 @@ msgstr "保存更改"
 
 msgid "Torrent must be stopped"
 msgstr "必须停止洪流"
-
-
-
-
 #, java-format
-
-

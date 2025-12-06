@@ -1529,10 +1529,4 @@ msgstr "Guardar cambios"
 
 msgid "Torrent must be stopped"
 msgstr "Se debe detener el torrent"
-
-
-
-
 #, java-format
-
-

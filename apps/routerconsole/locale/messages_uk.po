@@ -479,7 +479,7 @@ msgid "config"
 msgstr "Конфігурувати"
 
 msgid "Shutdown gracefully"
-msgstr "М’яка зупинка"
+msgstr "М'яка зупинка"
 
 msgid "Graceful shutdown initiated"
 msgstr "Запущена м'яка зупинка"
@@ -491,10 +491,10 @@ msgid "Cancel graceful shutdown"
 msgstr "М'яка зупинка відмінена"
 
 msgid "Graceful shutdown cancelled"
-msgstr "М’яка зупинка скасована"
+msgstr "М'яка зупинка скасована"
 
 msgid "Graceful restart"
-msgstr "М’який перезапуск"
+msgstr "М'який перезапуск"
 
 msgid "Graceful restart requested"
 msgstr "Запитаний м'який перезапуск"
@@ -1087,7 +1087,7 @@ msgid "Restored default settings"
 msgstr "Відновлено стандартні налаштування"
 
 msgid "No name entered"
-msgstr "Не вказано ім’я"
+msgstr "Не вказано ім'я"
 
 msgid "No URL entered"
 msgstr "Не вказано URL"
@@ -1118,13 +1118,13 @@ msgstr ""
 
 #, java-format
 msgid "Key for {0} added to keyring"
-msgstr "Ключ для {0} додано до зв’язки ключів"
+msgstr "Ключ для {0} додано до зв'язки ключів"
 
 msgid "Lookup password required"
 msgstr "Потрібен пароль для пошуку"
 
 msgid "Requires hostname, destination, or blinded Base32"
-msgstr "Потрібне ім’я хоста, адресат або закритий Base32"
+msgstr "Потрібне ім'я хоста, адресат або закритий Base32"
 
 msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
 msgstr ""
@@ -1270,7 +1270,7 @@ msgid "Clients"
 msgstr "Клієнти"
 
 msgid "Keyring"
-msgstr "В’язка ключів"
+msgstr "В'язка ключів"
 
 msgid "Logging"
 msgstr "Логування"
@@ -1382,7 +1382,7 @@ msgstr "Неправильні адреси"
 
 #, java-format
 msgid "The hostname or IP {0} is not publicly routable"
-msgstr "Ім’я хоста або IP-адреса {0} не є загальнодоступною маршрутизацією"
+msgstr "Ім'я хоста або IP-адреса {0} не є загальнодоступною маршрутизацією"
 
 msgid "Updating bandwidth share percentage"
 msgstr "Оновлення частки пропускної здатності у відсотках"
@@ -1698,7 +1698,7 @@ msgid "Mobile console option saved."
 msgstr "Опція мобільної консолі збережена."
 
 msgid "No user name entered"
-msgstr "Не вказано ім’я користувача"
+msgstr "Не вказано ім'я користувача"
 
 msgid "User name may not contain '='"
 msgstr ""
@@ -1748,7 +1748,7 @@ msgid "Remove"
 msgstr "Видалити"
 
 msgid "Username"
-msgstr "Ім’я користувача"
+msgstr "Ім'я користувача"
 
 msgid "Password"
 msgstr "Пароль"
@@ -1796,7 +1796,7 @@ msgid "Disabled floodfill"
 msgstr "Floodfill деактивовано"
 
 msgid "Out of memory error"
-msgstr "Помилка: недостатньо пам’яті"
+msgstr "Помилка: недостатньо пам'яті"
 
 msgid "Reachability change"
 msgstr "Зміна доступності"
@@ -1805,7 +1805,7 @@ msgid "Reseeded router"
 msgstr "Перезавантажений маршрутизатор"
 
 msgid "Soft restart"
-msgstr "М’який перезапуск"
+msgstr "М'який перезапуск"
 
 msgid "Started router"
 msgstr "Роутер запущено"
@@ -2179,7 +2179,7 @@ msgid "I2P Forum"
 msgstr "Форум I2P"
 
 msgid "I2P-related community forums"
-msgstr "Форуми спільноти, пов’язані з I2P"
+msgstr "Форуми спільноти, пов'язані з I2P"
 
 msgid "File-sharing forum"
 msgstr "Форум обміну файлами"
@@ -2230,7 +2230,7 @@ msgid "I2P Web Search Engine"
 msgstr "Система веб-пошуку I2P"
 
 msgid "I2P-related Wiki"
-msgstr "Вікі, пов’язана з I2P"
+msgstr "Вікі, пов'язана з I2P"
 
 msgid "Wolfram's Online Math Reference"
 msgstr "Онлайн-довідник з математики Вольфрама"
@@ -2700,7 +2700,7 @@ msgid "Lookup"
 msgstr "Пошук"
 
 msgid "Never reveal your router identity to anyone, as it is uniquely linked to your IP address in the network database."
-msgstr "Ніколи нікому не повідомляйте про свій маршрутизатор, оскільки він однозначно пов’язаний із вашою IP-адресою в базі даних мережі."
+msgstr "Ніколи нікому не повідомляйте про свій маршрутизатор, оскільки він однозначно пов'язаний із вашою IP-адресою в базі даних мережі."
 
 msgid "is banned"
 msgstr "заборонено"
@@ -3245,7 +3245,7 @@ msgid "Smoothed inbound / outbound transfer rate"
 msgstr "Згладжена вхідна / вихідна швидкість передачі"
 
 msgid "How long ago connection was established"
-msgstr "Як давно було встановлено зв’язок"
+msgstr "Як давно було встановлено зв'язок"
 
 msgid "Difference between the peer's clock and our own"
 msgstr "Різниця між годинником однолітка та нашим власним"
@@ -3893,7 +3893,7 @@ msgid "Difference between network-synced time and local time"
 msgstr "Різниця між часом, синхронізованим мережею, і місцевим часом"
 
 msgid "How much RAM I2P is using / total RAM available to I2P (excludes RAM allocated to the JVM)"
-msgstr "Скільки оперативної пам’яті I2P використовує / загальна доступна для I2P оперативної пам’яті (за винятком оперативної пам’яті, виділеної для JVM)"
+msgstr "Скільки оперативної пам'яті I2P використовує / загальна доступна для I2P оперативної пам'яті (за винятком оперативної пам'яті, виділеної для JVM)"
 
 msgid "Memory"
 msgstr "Пам'ять"
@@ -4203,7 +4203,7 @@ msgid "Close to our destinations"
 msgstr "Близько до наших пунктів призначення"
 
 msgid "This is an experimental network database tool for debugging and analysis. Do not panic even if you see warnings indicated. Possible \"threats\" are summarized, however these are unlikely to be real threats. If you see anything you would like to discuss with the devs, contact us on IRC #i2p-dev."
-msgstr "Це експериментальний інструмент бази даних мережі для налагодження та аналізу. Не панікуйте, навіть якщо ви бачите зазначені попередження. Можливі \"загрози\" узагальнені, однак вони навряд чи стануть реальними загрозами. Якщо ви бачите щось, що ви хотіли б обговорити з розробниками, зв’яжіться з нами на IRC #i2p-dev або #saltR."
+msgstr "Це експериментальний інструмент бази даних мережі для налагодження та аналізу. Не панікуйте, навіть якщо ви бачите зазначені попередження. Можливі \"загрози\" узагальнені, однак вони навряд чи стануть реальними загрозами. Якщо ви бачите щось, що ви хотіли б обговорити з розробниками, зв'яжіться з нами на IRC #i2p-dev або #saltR."
 
 msgid "No stored analysis"
 msgstr "Немає збереженого аналізу"
@@ -4894,7 +4894,7 @@ msgstr "Залишити сімейство маршрутизаторів"
 
 #, java-format
 msgid "No longer be a member of the family {0}."
-msgstr "більше не бути членом сім’ї {0}."
+msgstr "більше не бути членом сім'ї {0}."
 
 msgid "config home"
 msgstr "конфігурація додому"
@@ -5351,7 +5351,7 @@ msgid "Shutdown the router"
 msgstr "Вимкніть маршрутизатор"
 
 msgid "Graceful mode allows your router to honor its participating tunnel commitments before shutting down or restarting."
-msgstr "Витончений режим дозволяє вашому маршрутизатору виконувати свої зобов’язання щодо тунелю перед вимиканням або перезапуском."
+msgstr "Витончений режим дозволяє вашому маршрутизатору виконувати свої зобов'язання щодо тунелю перед вимиканням або перезапуском."
 
 msgid "Restart the router"
 msgstr "Перезапустіть маршрутизатор"
@@ -5376,7 +5376,7 @@ msgid "To assist in debugging I2P, it may be helpful to generate a thread dump w
 msgstr "Щоб допомогти у налагодженні I2P, може бути корисним створити дамп потоку, який буде записаний у {0}журнал оболонки{1}."
 
 msgid "If I2P appears to be using too much ram, you can force the router to run the garbage collection routine to free up memory."
-msgstr "Якщо здається, що I2P використовує забагато оперативної пам’яті, ви можете змусити маршрутизатор запустити процедуру збирання сміття, щоб звільнити пам’ять."
+msgstr "Якщо здається, що I2P використовує забагато оперативної пам'яті, ви можете змусити маршрутизатор запустити процедуру збирання сміття, щоб звільнити пам'ять."
 
 msgid "System Tray Integration"
 msgstr "Інтеграція системного лотка"
@@ -5427,7 +5427,7 @@ msgid "Configure I2P Stat Collection"
 msgstr "Налаштування збору статистики I2P"
 
 msgid "A limited selection of stats is enabled by default, required for monitoring router performance. Only stats that have an optional graph are listed here; for a full list of enabled stats, view the <a href=\"/stats\">stats page</a>."
-msgstr "За замовчуванням увімкнено обмежений вибір статистики, який необхідний для моніторингу продуктивності маршрутизатора. Тут наведено лише статистичні дані, які мають необов’язковий графік; щоб переглянути повний список увімкненої статистики, перегляньте <a href=\"/stats\">сторінку статистики</a>."
+msgstr "За замовчуванням увімкнено обмежений вибір статистики, який необхідний для моніторингу продуктивності маршрутизатора. Тут наведено лише статистичні дані, які мають необов'язковий графік; щоб переглянути повний список увімкненої статистики, перегляньте <a href=\"/stats\">сторінку статистики</a>."
 
 msgid "Enable full stats?"
 msgstr "Увімкнути повну статистику?"
@@ -5791,7 +5791,7 @@ msgid "When set to true, the router info files stored in your profile's netDB di
 msgstr "Коли встановлено true, файли інформації про роутер, збережені в каталозі netDB вашого профілю, не будуть розділені на 64 підкаталоги. [За замовчуванням false]"
 
 msgid "When set to true, your router will not be classified as slow, regardless of the specifications of your host system. Ordinarily, routers running on hosts with the following characteristics will be classified as slow, and various performance-related router options will be modified accordingly:"
-msgstr "Якщо встановлено значення true, ваш маршрутизатор не буде класифікуватися як повільний, незалежно від характеристик вашої хост-системи. Зазвичай маршрутизатори, що працюють на хостах із такими характеристиками, класифікуються як повільні, а різні параметри маршрутизатора, пов’язані з продуктивністю, змінюються відповідно:"
+msgstr "Якщо встановлено значення true, ваш маршрутизатор не буде класифікуватися як повільний, незалежно від характеристик вашої хост-системи. Зазвичай маршрутизатори, що працюють на хостах із такими характеристиками, класифікуються як повільні, а різні параметри маршрутизатора, пов'язані з продуктивністю, змінюються відповідно:"
 
 msgid "Host OS running Android"
 msgstr "Хост-ОС під управлінням Android"
@@ -5923,7 +5923,7 @@ msgid "Certain firewalls such as symmetric NATs may not work well with I2P."
 msgstr "Певні брандмауери, такі як симетричні NAT, можуть погано працювати з I2P."
 
 msgid "UPnP is used to communicate with Internet Gateway Devices (IGDs) to detect the external IP address and forward ports."
-msgstr "UPnP використовується для зв’язку з пристроями Інтернет-шлюзу (IGD) для визначення зовнішньої IP-адреси та портів переадресації."
+msgstr "UPnP використовується для зв'язку з пристроями Інтернет-шлюзу (IGD) для визначення зовнішньої IP-адреси та портів переадресації."
 
 msgid "UPnP support is beta, and may not work for any number of reasons"
 msgstr "Підтримка UPnP є бета-версією і може не працювати з багатьох причин"
@@ -6126,7 +6126,7 @@ msgstr ""
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 msgstr ""
 
-msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager’s configuration section using the <i>reachable by</i> dropdown."
+msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
 msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
@@ -6325,7 +6325,7 @@ msgid "A tunnel used by the router for communicating with other routers to perfo
 msgstr "Тунель, який використовує маршрутизатор для комунікації з іншими маршрутизаторами для виконання різних функцій «управління будинком», таких як вивчення та публікація <i>наборів оренди</i>, тестування клієнтських тунелів і вивчення та перевірка інших маршрутизаторів в мережі. Ці тунелі, як правило, мають невелику пропускну здатність."
 
 msgid "A router on the network tasked with providing and receiving information about other routers and services on the network. The current minimum share bandwidth for a router to be considered as capable of performing floodfill duties is 128 KBytes/sec, though it's possible to override this requirement and force a router to be a floodfill on the <a href=/configadvanced>Advanced Configuration page</a>. For more information, see the <a href=https://geti2p.net/en/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr "Маршрутизатор в мережі, на якого покладено обов’язки надання та отримання інформації про інших маршрутизаторів і сервісів в мережі. Поточний мінімальний обсяг смуги пропускання для маршрутизатора, щоб вважатися таким, що здатний виконувати обов’язки заповнення, становить 128 Кбайт/с, хоча існує можливість переписати цю вимогу і примусити маршрутизатор бути заповнювачем на сторінці <a href=/configadvanced>Розширеної налаштувань</a>. Додаткову інформацію можна знайти в <a href=https://geti2p.net/en/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>онлайн-документації</a>."
+msgstr "Маршрутизатор в мережі, на якого покладено обов'язки надання та отримання інформації про інших маршрутизаторів і сервісів в мережі. Поточний мінімальний обсяг смуги пропускання для маршрутизатора, щоб вважатися таким, що здатний виконувати обов'язки заповнення, становить 128 Кбайт/с, хоча існує можливість переписати цю вимогу і примусити маршрутизатор бути заповнювачем на сторінці <a href=/configadvanced>Розширеної налаштувань</a>. Додаткову інформацію можна знайти в <a href=https://geti2p.net/en/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>онлайн-документації</a>."
 
 msgid "Garlic Routing"
 msgstr "Часникова маршрутизація"
@@ -6589,14 +6589,14 @@ msgid "If a firewall is blocking your connections to reseed hosts, you may have 
 msgstr "Якщо брандмауер блокує ваші з'єднання для хостів Reseed, ви можете мати доступ до проксі."
 
 msgid "The proxy may be remotely hosted or a service running on your computer (localhost/127.0.0.1)."
-msgstr "Проксі може бути віддалено розміщений або сервіс, що працює на вашому комп’ютері (localhost / 127.0.0.1)."
+msgstr "Проксі може бути віддалено розміщений або сервіс, що працює на вашому комп'ютері (localhost / 127.0.0.1)."
 
 msgid "Reseed Configuration page"
 msgstr "Сторінка налаштувань перенасіння"
 
 #, java-format
 msgid "To use a proxy to reseed, configure the proxy type, hostname, and port on the {0}."
-msgstr "Щоб використовувати проксі для перенасіння, налаштуйте тип проксі, ім’я хоста та порт на сторінці {0}."
+msgstr "Щоб використовувати проксі для перенасіння, налаштуйте тип проксі, ім'я хоста та порт на сторінці {0}."
 
 msgid "If you are running the Tor Browser, you may use its Tor instance by configuring I2P to use: <i>Proxy type:</i> <code>SOCKS 5</code> <i>Host:</i> <code>127.0.0.1</code> <i>Port:</i> <code>9150</code>."
 msgstr "Якщо ви використовуєте Tor Browser, ви можете використати його екземпляр Tor, налаштувавши I2P: <i>Тип проксі:</i> <code>SOCKS 5</code> <i>Хост:</i> <code>127.0.0.1</code> <i>Порт:</i> <code>9150</code>."
@@ -6922,7 +6922,7 @@ msgid "The version of the I2P software you are running. If a new version is avai
 msgstr "Версія програмного забезпечення I2P, яке ви використовуєте. Якщо доступна нова версія, ви отримаєте повідомлення в бічній панелі. Рекомендується тримати маршрутизатор оновленим для забезпечення оптимальної продуктивності та безпеки. Оновлення маршрутизаторів, як правило, стають доступними в середньому кожні 2-3 місяці."
 
 msgid "The skew (offset) of your computer's clock relative to the network-synced time (if known). I2P requires your computer's time be accurate. If the skew is more than a few seconds, please correct the problem by adjusting your computer's time. If I2P cannot connect to the internet, a reading of 0ms may be indicated. Note: This is only displayed in the <i>Router Information (advanced)</i> section. You may add this section to your Sidebar on the <a href='/configsidebar'>Sidebar Configuration page</a>."
-msgstr "Зсув (зміщення) годинника вашого комп’ютера відносно синхронізованого з мережею часу (якщо відомо). I2P вимагає точного часу на вашому комп'ютері. Якщо зсув перевищує кілька секунд, будь ласка, виправте цю проблему шляхом коригування часу на комп'ютері. Якщо I2P не може підключитися до Інтернету, може бути показано 0 мс. Зауваження: це відображається лише в розділі <i>Інформація про маршрутизатор (розширена)</i>. Ви можете додати цей розділ до своєї бічної панелі на сторінці <a href='/configsidebar'>налаштування бічної панелі</a>."
+msgstr "Зсув (зміщення) годинника вашого комп'ютера відносно синхронізованого з мережею часу (якщо відомо). I2P вимагає точного часу на вашому комп'ютері. Якщо зсув перевищує кілька секунд, будь ласка, виправте цю проблему шляхом коригування часу на комп'ютері. Якщо I2P не може підключитися до Інтернету, може бути показано 0 мс. Зауваження: це відображається лише в розділі <i>Інформація про маршрутизатор (розширена)</i>. Ви можете додати цей розділ до своєї бічної панелі на сторінці <a href='/configsidebar'>налаштування бічної панелі</a>."
 
 msgid "This indicates the amount of RAM I2P is using, and the total amount available, allocated by Java. If the usage is consistently high relative to the available RAM, this may indicate that you need to increase the ram allocated to the JVM. You can allocate more RAM by editing your <code>wrapper.config</code> file which is normally located in the I2P application directory. You will need to edit the <code>wrapper.java.maxmemory</code> parameter, which by default is set to 256(MB) for I2P, or 384 for I2P+. Note: if the memory bar is enabled, the memory entry in the router info section will be suppressed."
 msgstr "Це вказує обсяг оперативної пам'яті, який використовує I2P, та загальний доступний обсяг, виділений Java. Якщо використання постійно високе відносно доступної RAM, це може свідчити про необхідність збільшення обсягу пам'яті, виділеної JVM. Ви можете виділити більше пам'яті, редагуючи файл <code>wrapper.config</code>, який, як правило, розташований у каталозі застосунку I2P. Вам потрібно буде відредагувати параметр <code>wrapper.java.maxmemory</code>, за замовчуванням встановлений у 256(МБ) для I2P або 384 для I2P+. Зауваження: якщо ввімкнено пам'яткову смугу, відображення запису про пам'ять у розділі інформації про маршрутизатор буде приховано."
@@ -7159,7 +7159,7 @@ msgid "Do you have another I2P instance running? Stop the conflicting program an
 msgstr "Чи працює інший екземпляр I2P? Зупиніть конфліктну програму та перезапустіть I2P."
 
 msgid "The skew (offset) of your computer's clock relative to the network-synced time."
-msgstr "Відхилення (зміщення) Вашого комп’ютерного годинника відносно часу, синхронізованого з мережею."
+msgstr "Відхилення (зміщення) Вашого комп'ютерного годинника відносно часу, синхронізованого з мережею."
 
 msgid "I2P requires your computer's time be accurate."
 msgstr "I2P вимагає точного комп'ютерного часу."
@@ -7210,7 +7210,7 @@ msgid "Your webserver is running by default at <a href=http://127.0.0.1:7658/>ht
 msgstr "Ваш веб-сервер працює за замовчуванням за адресою <a href=http://127.0.0.1:7658/>http://127.0.0.1:7658</a>, але недоступний для інших до початку тунелю <i>I2P Webserver</i>. Після запуску тунелю ваш сайт буде дуже важко знайти іншим. Ви можете просто повідомити людям адресу або базову 32-розрядну адресу, але на щастя в I2P є книга адрес, де можна зберігати імена доменів, і різні сервіси, де ви можете <a href=/help/hostnameregistration>зареєструвати новий домен .i2p</a> безкоштовно."
 
 msgid "Choose a name for your website (<i>hostname</i>.i2p), using lower-case. To verify that the hostname is available, check <a href=http://notbob.i2p/ target=_blank>notbob.i2p</a> or <a href=http://reg.i2p target=_blank>reg.i2p</a> before you decide. Enter the new name for your website on the <a href='/i2ptunnel/edit?tunnel=3'>Tunnel Manager Configuration page</a> where it says <i>Website name</i>, replacing the default <i>mysite.i2p</i> placeholder. If you want your website to be available when I2P starts, enable <i>Auto Start</i> and then click <i>Save</i>."
-msgstr "Виберіть назву для свого веб-сайту (<i>ім’я хосту</i>.i2p), використовуючи малі літери. Щоб переконатися, що ім’я хосту доступне, перевірте <a href=http://notbob.i2p/ target=_blank>notbob.i2p</a> або <a href=http://reg.i2p target=_blank>reg. i2p</a>, перш ніж прийняти рішення. Введіть нову назву для свого веб-сайту на <a href='/i2ptunnel/edit?tunnel=3'>сторінці конфігурації менеджера тунелю</a>, де написано <i>Назва веб-сайту</i>, замінивши стандартну <i >mysite.i2p</i> заповнювач. Якщо ви хочете, щоб ваш веб-сайт був доступним під час запуску I2P, увімкніть <i>Автозапуск</i>, а потім натисніть <i>Зберегти</i>."
+msgstr "Виберіть назву для свого веб-сайту (<i>ім'я хосту</i>.i2p), використовуючи малі літери. Щоб переконатися, що ім'я хосту доступне, перевірте <a href=http://notbob.i2p/ target=_blank>notbob.i2p</a> або <a href=http://reg.i2p target=_blank>reg. i2p</a>, перш ніж прийняти рішення. Введіть нову назву для свого веб-сайту на <a href='/i2ptunnel/edit?tunnel=3'>сторінці конфігурації менеджера тунелю</a>, де написано <i>Назва веб-сайту</i>, замінивши стандартну <i >mysite.i2p</i> заповнювач. Якщо ви хочете, щоб ваш веб-сайт був доступним під час запуску I2P, увімкніть <i>Автозапуск</i>, а потім натисніть <i>Зберегти</i>."
 
 msgid "Click the <i>Start</i> button for your webserver tunnel on the <a href=/i2ptunnelmgr/>main Tunnel Manager page</a>. You should now see it listed under <i>Service Tunnels</i> on the <a href=/>Router Console</a> sidebar. A green star displayed next to the tunnel name (<i>I2P Webserver</i> by default) indicates that your website is active on the I2P network."
 msgstr "Натисніть кнопку <i>Запустити</i> для тунелю вашого веб-сервера на <a href=/i2ptunnelmgr/>основній сторінці менеджера тунелів</a>. Тепер ви повинні побачити його у розділі <i>Сервісні тунелі</i> в боковій панелі <a href=/>консолі маршрутизатора</a>. Зелена зірочка біля назви тунелю (<i>I2P Webserver</i> за замовчуванням) означає, що ваш сайт активний в мережі I2P."
@@ -7677,7 +7677,7 @@ msgid "Bandwidth Test"
 msgstr "Перевірка пропускної здатності"
 
 msgid "I2P+ will now test your internet connection to identify the optimal speed settings."
-msgstr "I2P тепер перевірить ваше інтернет-з’єднання, щоб визначити оптимальні налаштування швидкості."
+msgstr "I2P тепер перевірить ваше інтернет-з'єднання, щоб визначити оптимальні налаштування швидкості."
 
 msgid "This is done using the third-party M-Lab service."
 msgstr "Це робиться за допомогою стороннього сервісу M-Lab."
@@ -7769,48 +7769,4 @@ msgstr "Наступна"
 
 msgid "Finished"
 msgstr "Готово"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -53,7 +53,7 @@ msgstr "Échec du {0}réinitialisation{1}:"
 
 #, java-format
 msgid "For assistance, see the {0}"
-msgstr "Pour obtenir de l'aide, consultez le {0}"
+msgstr "Pour obtenir de l\'aide, consultez le {0}"
 
 msgid "reseed help"
 msgstr "réamorcer l'aide"
@@ -63,7 +63,7 @@ msgstr "Contacter l'hôte de réamorçage"
 
 #, java-format
 msgid "Reseeding: fetching router info from seed URL ({0} successful, {1} errors)."
-msgstr "Réensemencement: récupération des infos de routeurs d’une URL de propagation ({0} réussies, {1} erreurs)."
+msgstr "Réensemencement: récupération des infos de routeurs d'une URL de propagation ({0} réussies, {1} erreurs)."
 
 #, java-format
 msgid "Acquired {0} router infos from reseed hosts"
@@ -110,7 +110,7 @@ msgid "Peers without a published IP address"
 msgstr "Pairs sans adresse IP publiée"
 
 msgid "Size of tunnel acceptor backlog"
-msgstr "Taille de l’arriéré de l’accepteur de tunnels"
+msgstr "Taille de l'arriéré de l'accepteur de tunnels"
 
 msgid "Clock step adjustment (ms)"
 msgstr "Réglage du pas d'horloge (ms)"
@@ -146,13 +146,13 @@ msgid "Cannot enumerate UPnP devices on Android."
 msgstr "Impossible d'énumérer les appareils UPnP sur Android."
 
 msgid "UPnP is not enabled"
-msgstr "UPnP n’est pas activé"
+msgstr "UPnP n'est pas activé"
 
 msgid "Service"
 msgstr "Service"
 
 msgid "WAN Common Interface Configuration"
-msgstr "Configuration de l’interface commune du réseau étendu"
+msgstr "Configuration de l'interface commune du réseau étendu"
 
 msgid "Status"
 msgstr "État"
@@ -204,14 +204,14 @@ msgid "Disabled UPnP Devices"
 msgstr "Dispositifs UPnP désactivés"
 
 msgid "UPnP has not found any UPnP-aware, compatible device on your LAN."
-msgstr "UPnP n’a trouvé aucun dispositif compatible UPnP sur votre réseau local."
+msgstr "UPnP n'a trouvé aucun dispositif compatible UPnP sur votre réseau local."
 
 #, java-format
 msgid "The current external IP address reported by UPnP is {0}"
-msgstr "L’adresse IP externe actuelle détectée par UPnP est {0}"
+msgstr "L'adresse IP externe actuelle détectée par UPnP est {0}"
 
 msgid "The current external IP address is not available."
-msgstr "L’adresse IP externe actuelle n’est pas disponible."
+msgstr "L'adresse IP externe actuelle n'est pas disponible."
 
 #, java-format
 msgid "UPnP reports the maximum downstream bit rate is {0}bits/sec"
@@ -227,7 +227,7 @@ msgstr "Le port {0} {1,number,#####} a été réacheminé avec succès par UPnP.
 
 #, java-format
 msgid "{0} port {1,number,#####} was not forwarded by UPnP."
-msgstr "Le port {0} {1,number,#####} n’a pas été réacheminé par UPnP."
+msgstr "Le port {0} {1,number,#####} n'a pas été réacheminé par UPnP."
 
 msgid "Router"
 msgstr "Routeur"
@@ -249,14 +249,14 @@ msgstr "Échec de vérification de mise à jour du greffon {0}"
 
 #, java-format
 msgid "No new version is available for plugin {0}"
-msgstr "Aucune nouvelle version n’est proposée pour le greffon {0}"
+msgstr "Aucune nouvelle version n'est proposée pour le greffon {0}"
 
 msgid "HTTP client proxy tunnel must be running"
 msgstr "Le tunnel mandataire client HTTP doit être en fonction"
 
 #, java-format
 msgid "Install failed:{0}"
-msgstr "Échec d’installation à partir de {0}"
+msgstr "Échec d'installation à partir de {0}"
 
 #, java-format
 msgid "Transfer failed:{0}"
@@ -297,14 +297,14 @@ msgid "In-network updates disabled. Check package manager."
 msgstr "Les mises à jour intraréseau sont désactivées. Vérifiez le gestionnaire de paquets."
 
 msgid "No write permission for I2P install directory."
-msgstr "Aucun droit d’écriture pour le répertoire d’installation d’I2P."
+msgstr "Aucun droit d'écriture pour le répertoire d'installation d'I2P."
 
 msgid "No update certificates installed."
-msgstr "Aucun certificat de mise à jour n’est installé."
+msgstr "Aucun certificat de mise à jour n'est installé."
 
 #, java-format
 msgid "You must first update to version {0}"
-msgstr "Vous devez d’abord mettre à jour vers la version {0}"
+msgstr "Vous devez d'abord mettre à jour vers la version {0}"
 
 #, java-format
 msgid "Checking for update of plugin {0}"
@@ -319,11 +319,11 @@ msgstr "Mauvaise URL {0}"
 
 #, java-format
 msgid "Attempting to install from file {0}"
-msgstr "Tentative d’installation à partir du fichier {0}"
+msgstr "Tentative d'installation à partir du fichier {0}"
 
 #, java-format
 msgid "Failed to install from file {0}, copy failed."
-msgstr "Échec d’installation à partir du fichier {0}, échec de copie."
+msgstr "Échec d'installation à partir du fichier {0}, échec de copie."
 
 #, java-format
 msgid "Downloading plugin from {0}"
@@ -348,7 +348,7 @@ msgid "Plugin signature verification of {0} failed"
 msgstr "Échec de vérification de la signature du greffon {0}"
 
 msgid "Plugin not installed - signer is untrusted"
-msgstr "Le greffon n’a pas été installé - le signataire n’est pas fiable"
+msgstr "Le greffon n'a pas été installé - le signataire n'est pas fiable"
 
 #, java-format
 msgid "Plugin from {0} is corrupt"
@@ -385,7 +385,7 @@ msgstr "La signature du greffon téléchargé ne correspond pas à celle du gref
 
 #, java-format
 msgid "Downloaded plugin version {0} is not newer than installed plugin"
-msgstr "La version {0} du greffon téléchargé n’est pas plus récente que celle installée"
+msgstr "La version {0} du greffon téléchargé n'est pas plus récente que celle installée"
 
 #, java-format
 msgid "Plugin update requires installed plugin version {0} or higher"
@@ -415,11 +415,11 @@ msgid "Plugin will be installed on next restart."
 msgstr "Le greffon sera installé lors du prochain redémarrage."
 
 msgid "Plugin is for upgrades only, but the plugin is not installed"
-msgstr "Ce greffon est seulement pour les mises à niveau, mais le greffon n’est pas installé"
+msgstr "Ce greffon est seulement pour les mises à niveau, mais le greffon n'est pas installé"
 
 #, java-format
 msgid "Failed to install plugin in {0}"
-msgstr "Échec d’installation du greffon {0}"
+msgstr "Échec d'installation du greffon {0}"
 
 #, java-format
 msgid "Plugin {0} installed"
@@ -453,7 +453,7 @@ msgid "Update not found:<br>{0}"
 msgstr "Fichier de mise à jour introuvable sur {0}"
 
 msgid "Updating I2P"
-msgstr "Mise à jour d’I2P"
+msgstr "Mise à jour d'I2P"
 
 msgid "Update failed"
 msgstr "Échec de la mise à jour"
@@ -531,11 +531,11 @@ msgid "I2P+ Service now disabled on system start"
 msgstr "Le service I2P est désormais désactivé au démarrage du système"
 
 msgid "Dump threads"
-msgstr "Vider les fils d’exécution"
+msgstr "Vider les fils d'exécution"
 
 #, java-format
 msgid "Threads dumped to {0}"
-msgstr "Les fils d’exécution ont été vidés vers {0}"
+msgstr "Les fils d'exécution ont été vidés vers {0}"
 
 msgid "Open console on startup"
 msgstr "Ouvrir la console au démarrage"
@@ -556,16 +556,16 @@ msgid "Full garbage collection requested"
 msgstr "Un nettoyage complet de la mémoire a été demandé"
 
 msgid "Show systray icon"
-msgstr "Afficher l’icône de le zone de notification"
+msgstr "Afficher l'icône de le zone de notification"
 
 msgid "Hide systray icon"
-msgstr "Cacher l’icône de la zone de notification"
+msgstr "Cacher l'icône de la zone de notification"
 
 msgid "Installed I2P+ system service"
 msgstr "Service système I2P+ installé"
 
 msgid "Warning: unable to install the service"
-msgstr "Avertissement: Impossible d’installer le service"
+msgstr "Avertissement: Impossible d'installer le service"
 
 msgid "Enabled I2P+ service autostart at system startup"
 msgstr "Activation du démarrage automatique du service I2P+ au démarrage du système"
@@ -583,7 +583,7 @@ msgid "Configuration saved successfully"
 msgstr "La configuration a été enregistrée avec succès"
 
 msgid "Error saving the configuration (applied but not saved) - please see the error logs"
-msgstr "Erreur d’enregistrement de la configuration (appliquée, mais pas enregistrée). Veuillez consulter les journaux d’erreurs."
+msgstr "Erreur d'enregistrement de la configuration (appliquée, mais pas enregistrée). Veuillez consulter les journaux d'erreurs."
 
 msgid "Enabled system tray"
 msgstr "La zone de notification a été activée"
@@ -598,7 +598,7 @@ msgid "Failed to start systray"
 msgstr "Échec de démarrage de la zone de notification"
 
 msgid "Failed to stop systray"
-msgstr "Échec d’arrêt de la zone de notification"
+msgstr "Échec d'arrêt de la zone de notification"
 
 msgid "Check for updates"
 msgstr "Vérifier les mises à jour"
@@ -616,21 +616,21 @@ msgid "Update available, click button on left to download"
 msgstr "Une mise à jour est proposée. Cliquer sur le bouton situé sur la gauche pour la télécharger"
 
 msgid "No update available"
-msgstr "Aucune mise à jour n’est proposée"
+msgstr "Aucune mise à jour n'est proposée"
 
 msgid "Save"
 msgstr "Enregistrer"
 
 #, java-format
 msgid "Updating news URL to {0}"
-msgstr "Mise à jour de l’URL des nouvelles à {0}"
+msgstr "Mise à jour de l'URL des nouvelles à {0}"
 
 msgid "internal"
 msgstr "interne"
 
 #, java-format
 msgid "Updating proxy host to {0}"
-msgstr "Mise à jour de l’hôte du mandataire à {0}"
+msgstr "Mise à jour de l'hôte du mandataire à {0}"
 
 #, java-format
 msgid "Updating proxy port to {0}"
@@ -638,7 +638,7 @@ msgstr "Mise à jour du port du mandataire à {0}"
 
 #, java-format
 msgid "Updating refresh frequency to {0}"
-msgstr "Mise à jour de la fréquence d’actualisation à {0}"
+msgstr "Mise à jour de la fréquence d'actualisation à {0}"
 
 msgid "Never"
 msgstr "Jamais"
@@ -655,11 +655,11 @@ msgstr "Mise à jour des clés de confiance."
 
 #, java-format
 msgid "Updating unsigned update URL to {0}"
-msgstr "Mise à jour de l’URL de mise à jour non signée à {0}"
+msgstr "Mise à jour de l'URL de mise à jour non signée à {0}"
 
 #, java-format
 msgid "Updating signed development build URL to {0}"
-msgstr "Mise à jour de l’URL de la version de développement signée à {0}"
+msgstr "Mise à jour de l'URL de la version de développement signée à {0}"
 
 msgid "Every"
 msgstr "Toutes les"
@@ -686,7 +686,7 @@ msgid "Invalid form submission, requires POST"
 msgstr "Soumission de formulaire invalide, la méthode POST est requise"
 
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
-msgstr "L’envoi du formulaire est invalide, car vous avez probablement utilisé le bouton Retour ou Recharger de votre navigateur. Veuillez le renvoyer."
+msgstr "L'envoi du formulaire est invalide, car vous avez probablement utilisé le bouton Retour ou Recharger de votre navigateur. Veuillez le renvoyer."
 
 msgid "If the problem persists, verify that you have cookies enabled in your browser."
 msgstr "Si le problème persiste, vérifiez que les témoins sont activés dans votre navigateur."
@@ -820,7 +820,7 @@ msgid "Save disabled, edit the router.config file to make changes"
 msgstr "Enregistrement désactivé, modifiez le fichier router.config pour apporter des modifications"
 
 msgid "Error updating the configuration - please see the error logs"
-msgstr "Erreur de mise à jour de la configuration. Veuillez consulter les journaux d’erreur"
+msgstr "Erreur de mise à jour de la configuration. Veuillez consulter les journaux d'erreur"
 
 msgid "No changes made to the configuration"
 msgstr "Aucune modification n'a été apportée à la configuration"
@@ -835,10 +835,10 @@ msgid "Save Client Configuration"
 msgstr "Enregistrer la configuration du client"
 
 msgid "Save Interface Configuration"
-msgstr "Enregistrer la configuration de l’interface"
+msgstr "Enregistrer la configuration de l'interface"
 
 msgid "Save WebApp Configuration"
-msgstr "Enregistrer la configuration de l’appliWeb"
+msgstr "Enregistrer la configuration de l'appliWeb"
 
 msgid "Save Plugin Configuration"
 msgstr "Enregistrer la configuration du greffon"
@@ -850,17 +850,17 @@ msgid "Install Plugin"
 msgstr "Installer le greffon"
 
 msgid "Install Plugin from File"
-msgstr "Installer le greffon à partir d’un fichier"
+msgstr "Installer le greffon à partir d'un fichier"
 
 msgid "Update All Installed Plugins"
 msgstr "Mettre à jour tous les greffons installés"
 
 msgid "Delete client disabled"
-msgstr ""
+msgstr "Suppression de client désactivée"
 
 #, java-format
 msgid "Error stopping plugin {0}"
-msgstr "Erreur d’arrêt du greffon {0}"
+msgstr "Erreur d'arrêt du greffon {0}"
 
 #, java-format
 msgid "Deleted plugin {0}"
@@ -876,7 +876,7 @@ msgstr "Le greffon {0} a été arrêté"
 
 #, java-format
 msgid "Stopped webapp {0}"
-msgstr "L’appliWeb {0} a été arrêtée"
+msgstr "L'appliWeb {0} a été arrêtée"
 
 msgid "Start"
 msgstr "Démarrer"
@@ -903,7 +903,7 @@ msgid "Client {0} deleted"
 msgstr "Le client {0} a été supprimé"
 
 msgid "WebApp configuration saved."
-msgstr "La configuration de l’appliWeb a été enregistrée."
+msgstr "La configuration de l'appliWeb a été enregistrée."
 
 msgid "Plugin configuration saved."
 msgstr "La configuration du greffon a été enregistrée."
@@ -921,17 +921,17 @@ msgid "Failed to find server."
 msgstr "Impossible de trouver le serveur."
 
 msgid "No plugin URL specified."
-msgstr "Aucune URL de greffon n’a été indiquée."
+msgstr "Aucune URL de greffon n'a été indiquée."
 
 msgid "You must enter a file"
 msgstr "Vous devez saisir un fichier"
 
 msgid "Install from file failed"
-msgstr "Échec d’installation à partir d’un fichier"
+msgstr "Échec d'installation à partir d'un fichier"
 
 #, java-format
 msgid "No update URL specified for {0}"
-msgstr "Aucune URL de mise à jour n’a été indiquée pour {0}"
+msgstr "Aucune URL de mise à jour n'a été indiquée pour {0}"
 
 msgid "Plugin or update download already in progress."
 msgstr "Le téléchargement du greffon ou de la mise à jour est déjà en cours."
@@ -950,7 +950,7 @@ msgid "Cannot install, check logs"
 msgstr "Impossible d'installer, consultez les journaux"
 
 msgid "Update manager not registered, cannot check"
-msgstr ""
+msgstr "Gestionnaire de mises à jour non enregistré, impossible de vérifier"
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -966,10 +966,10 @@ msgstr "Erreur de démarrage du greffon {0}"
 
 #, java-format
 msgid "Added user {0}"
-msgstr "L’utilisateur {0} a été ajouté"
+msgstr "L'utilisateur {0} a été ajouté"
 
 msgid "Interface configuration saved"
-msgstr "La configuration de l’interface a été enregistrée."
+msgstr "La configuration de l'interface a été enregistrée."
 
 msgid "Edit"
 msgstr "Modifier"
@@ -1002,10 +1002,10 @@ msgid "Tunnel Manager"
 msgstr "Responsable du Tunnel"
 
 msgid "Identification Image Generator"
-msgstr "Générateur d’images d’identification"
+msgstr "Générateur d'images d'identification"
 
 msgid "Addressbook"
-msgstr "Carnet d’adresses"
+msgstr "Carnet d'adresses"
 
 msgid "Email"
 msgstr "Courriel"
@@ -1063,7 +1063,7 @@ msgid "Family key configured for router family: "
 msgstr "Clé de famille configurée pour la famille de routeurs : "
 
 msgid "Load from file failed"
-msgstr "Échec de chargement à partir d’un fichier"
+msgstr "Échec de chargement à partir d'un fichier"
 
 msgid "Leave Family"
 msgstr "Quitter le famille"
@@ -1078,16 +1078,16 @@ msgid "Restore defaults"
 msgstr "Restaurer les valeurs par défaut"
 
 msgid "Bad group detected, please retry"
-msgstr ""
+msgstr "Mauvais groupe détecté, veuillez réessayer"
 
 msgid "Restored default settings"
 msgstr "Les paramètres par défaut ont été restaurés"
 
 msgid "No name entered"
-msgstr "Aucun nom n’a été saisi"
+msgstr "Aucun nom n'a été saisi"
 
 msgid "No URL entered"
-msgstr "Aucune d’URL n’a été saisie"
+msgstr "Aucune d'URL n'a été saisie"
 
 msgid "Added"
 msgstr "Ajouté"
@@ -1121,31 +1121,31 @@ msgid "Lookup password required"
 msgstr "Un mot de passe de consultation est exigé"
 
 msgid "Requires hostname, destination, or blinded Base32"
-msgstr "Exige un nom d’hôte, une destination ou un Base32 aveuglé"
+msgstr "Exige un nom d'hôte, une destination ou un Base32 aveuglé"
 
 msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
-msgstr ""
+msgstr "Impossible d'ajouter une clé pour la destination locale. Activez le chiffrement dans le Gestionnaire des services cachés."
 
 msgid "Destination requires lookup password"
 msgstr "La destination exige un mot de passe de consultation"
 
 msgid "Destination does not require lookup password"
-msgstr "La destination n’exige pas de mot de passe de consultation"
+msgstr "La destination n'exige pas de mot de passe de consultation"
 
 msgid "Destination requires encryption key"
 msgstr "La destination exige une clé de chiffrement"
 
 msgid "Destination does not require encryption key"
-msgstr "La destination n’exige pas de clé de chiffrement"
+msgstr "La destination n'exige pas de clé de chiffrement"
 
 msgid "Send key to server operator."
-msgstr "Envoyer la clé à l’opérateur du serveur."
+msgstr "Envoyer la clé à l'opérateur du serveur."
 
 msgid "Delete key"
 msgstr "Supprimer la clé"
 
 msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Impossible de supprimer une clé pour la destination locale. Désactivez le chiffrement dans le Gestionnaire des tunnels."
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1249,7 +1249,7 @@ msgid "Bandwidth"
 msgstr "Bande passante"
 
 msgid "Home Page"
-msgstr "Page d’accueil"
+msgstr "Page d'accueil"
 
 msgid "Network"
 msgstr "Réseau"
@@ -1297,7 +1297,7 @@ msgid "Save changes"
 msgstr "Enregistrer les changements"
 
 msgid "Updating IP address"
-msgstr "Mise à jour de l’adresse IP"
+msgstr "Mise à jour de l'adresse IP"
 
 msgid "Updating IPv6 setting"
 msgstr "Mise à jour du paramètre IPv6"
@@ -1307,13 +1307,13 @@ msgstr "Désactivation complète du TCP"
 
 #, java-format
 msgid "Updating TCP address to {0}"
-msgstr "Mise à jour de l’adresse TCP à {0}"
+msgstr "Mise à jour de l'adresse TCP à {0}"
 
 msgid "Disabling inbound TCP"
 msgstr "Désactivation du TCP entrant"
 
 msgid "Updating inbound TCP address to auto"
-msgstr "Mise à jour de l’adresse TCP entrante à Auto"
+msgstr "Mise à jour de l'adresse TCP entrante à Auto"
 
 #, java-format
 msgid "Updating TCP port to {0}"
@@ -1339,10 +1339,10 @@ msgid "Gracefully restarting to exit Hidden Router Mode"
 msgstr "Redémarrage respectueux pour quitter le mode routeur caché"
 
 msgid "Enabling UPnP"
-msgstr "Activation d’UPnP"
+msgstr "Activation d'UPnP"
 
 msgid "Disabling UPnP"
-msgstr "Désactivation d’UPnP"
+msgstr "Désactivation d'UPnP"
 
 msgid "Enabling laptop mode"
 msgstr "Activation du mode ordinateur portable"
@@ -1351,22 +1351,22 @@ msgid "Disabling laptop mode"
 msgstr "Désactivation du mode ordinateur portable"
 
 msgid "Disabling inbound IPv4"
-msgstr "Désactivation d’IPv4 entrant"
+msgstr "Désactivation d'IPv4 entrant"
 
 msgid "Enabling inbound IPv4"
-msgstr "Activation d’IPv4 entrant"
+msgstr "Activation d'IPv4 entrant"
 
 msgid "Disabling inbound IPv6"
-msgstr "Désactivation d’IPv6 entrant"
+msgstr "Désactivation d'IPv6 entrant"
 
 msgid "Enabling inbound IPv6"
-msgstr "Activation d’IPv6 entrant"
+msgstr "Activation d'IPv6 entrant"
 
 msgid "Disabling UDP"
-msgstr "Désactivation de l’UDP"
+msgstr "Désactivation de l'UDP"
 
 msgid "Enabling UDP"
-msgstr "Activation de l’UDP"
+msgstr "Activation de l'UDP"
 
 msgid "Requiring SSU introducers"
 msgstr "Exige des proposeurs SSU"
@@ -1375,11 +1375,11 @@ msgid "Performing a soft restart"
 msgstr "Redémarrage progressif"
 
 msgid "Invalid address"
-msgstr "L’adresse est invalide"
+msgstr "L'adresse est invalide"
 
 #, java-format
 msgid "The hostname or IP {0} is not publicly routable"
-msgstr "Le nom d’hôte ou l’IP {0} n’est pas routable publiquement"
+msgstr "Le nom d'hôte ou l'IP {0} n'est pas routable publiquement"
 
 msgid "Updating bandwidth share percentage"
 msgstr "Mise à jour du pourcentage de partage de la bande passante"
@@ -1401,7 +1401,7 @@ msgid "{0}B maximum data transfer per month"
 msgstr "{0}B transfert de données maximal par mois"
 
 msgid "Ban peer until restart"
-msgstr "Bannir le pair jusqu’au redémarrage"
+msgstr "Bannir le pair jusqu'au redémarrage"
 
 #, java-format
 msgid "Manually banned via {0}"
@@ -1411,7 +1411,7 @@ msgid "Peer"
 msgstr "Pair"
 
 msgid "banned until restart"
-msgstr "banni jusqu’au redémarrage"
+msgstr "banni jusqu'au redémarrage"
 
 msgid "Invalid peer"
 msgstr "Le pair est invalide"
@@ -1423,7 +1423,7 @@ msgid "unbanned"
 msgstr "bannissement levé"
 
 msgid "is not currently banned"
-msgstr "n’est pas banni actuellement"
+msgstr "n'est pas banni actuellement"
 
 msgid "Adjust peer bonuses"
 msgstr "Ajuster la bonification des pairs"
@@ -1457,7 +1457,7 @@ msgid "First {0} displayed, see the {1} file for the full list"
 msgstr "Premiers {0} affichés, voir le fichier {1} pour la liste complète"
 
 msgid "IPs Banned Until Restart"
-msgstr "IP bannies jusqu’au redémarrage"
+msgstr "IP bannies jusqu'au redémarrage"
 
 msgid "IPv4 Addresses"
 msgstr "Adresses IPv4"
@@ -1478,7 +1478,7 @@ msgid "check sidebar for status."
 msgstr "vérifiez l'état dans la barre latérale."
 
 msgid "Reseed from URL"
-msgstr "Réensemencer à partir d’une URL"
+msgstr "Réensemencer à partir d'une URL"
 
 msgid "No URL specified. Please supply a valid reseed URL."
 msgstr "Aucune URL n'a été spécifiée. Veuillez fournir une URL valide."
@@ -1490,13 +1490,13 @@ msgid "Reseed complete, check summary bar for status"
 msgstr "Réinitialisation terminée, vérifiez l'état de la barre de résumé."
 
 msgid "Reseed from file"
-msgstr "Réensemencer à partir d’un fichier"
+msgstr "Réensemencer à partir d'un fichier"
 
 msgid "No file specified. Please select a valid .zip or .su3 file to reseed from."
 msgstr "Aucun fichier spécifié. Veuillez sélectionner un fichier .zip ou .su3 valide à partir de la révision."
 
 msgid "Reseed from file failed"
-msgstr "Échec de réensemencement à partir d’un fichier"
+msgstr "Échec de réensemencement à partir d'un fichier"
 
 #, java-format
 msgid "Reseed successful, loaded {0} router info from file."
@@ -1552,13 +1552,13 @@ msgid "Restart in {0}"
 msgstr "Redémarrer dans {0}"
 
 msgid "Save order"
-msgstr "Enregistrer l’ordre"
+msgstr "Enregistrer l'ordre"
 
 msgid "Sidebar preferences updated"
 msgstr "Préférences de la barre latérale mises à jour"
 
 msgid "Refresh interval must be a number"
-msgstr "L’intervalle d’actualisation doit être un nombre"
+msgstr "L'intervalle d'actualisation doit être un nombre"
 
 msgid "Restore full default"
 msgstr "Restaurer les valeurs par défaut de la barre complète"
@@ -1576,19 +1576,19 @@ msgid "Minimal sidebar defaults restored."
 msgstr "Valeurs par défaut de la barre minimale restaurées."
 
 msgid "Order must be an integer"
-msgstr "L’ordre doit être un entier"
+msgstr "L'ordre doit être un entier"
 
 msgid "No section selected"
-msgstr "Aucune section n’a été sélectionnée"
+msgstr "Aucune section n'a été sélectionnée"
 
 msgid "No order entered"
-msgstr "Aucun ordre n’a été saisi"
+msgstr "Aucun ordre n'a été saisi"
 
 msgid "Moved"
 msgstr "Déplacé"
 
 msgid "Saved order of sections."
-msgstr "L’ordre des sections a été enregistré."
+msgstr "L'ordre des sections a été enregistré."
 
 msgid "Full statistics enabled"
 msgstr "Les statistiques complètes ont été activées"
@@ -1598,7 +1598,7 @@ msgstr "Les statistiques complètes ont été désactivées"
 
 #, java-format
 msgid "Graph list updated, may take up to 60s to be reflected on the {0}Graphs Page{1}"
-msgstr "La liste des graphiques a été mise à jour. Cela prendra jusqu’à 60 s pour que la {0}page des graphiques{1} le reflète."
+msgstr "La liste des graphiques a été mise à jour. Cela prendra jusqu'à 60 s pour que la {0}page des graphiques{1} le reflète."
 
 #, java-format
 msgid "Internal error: could not resolve pool name {0}."
@@ -1615,7 +1615,7 @@ msgid "Exploratory tunnel configuration saved successfully."
 msgstr "La configuration des tunnels exploratoires a été enregistrée avec succès."
 
 msgid "Error saving the configuration (applied but not saved) - please see the error logs."
-msgstr "Erreur d’enregistrement de la configuration (appliquée, mais par enregistrée). Veuillez consulter les journaux d’erreurs."
+msgstr "Erreur d'enregistrement de la configuration (appliquée, mais par enregistrée). Veuillez consulter les journaux d'erreurs."
 
 #, java-format
 msgid "{0} hop"
@@ -1636,7 +1636,7 @@ msgid "I2PSnark"
 msgstr "I2PSnark"
 
 msgid "ANONYMITY WARNING - Settings include 0-hop tunnels."
-msgstr "AVERTISSEMENT d’ANONYMAT: Les paramètres incluent des tunnels à 0 saut."
+msgstr "AVERTISSEMENT d'ANONYMAT: Les paramètres incluent des tunnels à 0 saut."
 
 msgid "WARNING - 0-hop tunnels not recommended for IPv6-only routers."
 msgstr "AVERTISSEMENT – Les tunnels à saut 0 ne sont pas recommandés pour les routeurs IPv6 uniquement."
@@ -1645,7 +1645,7 @@ msgid "WARNING - Inbound 0-hop tunnels not recommended for hidden routers."
 msgstr "AVERTISSEMENT – Les tunnels entrants à saut 0 ne sont pas recommandés pour les routeurs cachés."
 
 msgid "ANONYMITY WARNING - Settings include 1-hop tunnels."
-msgstr "AVERTISSEMENT d’ANONYMAT: Les paramètres incluent des tunnels à 1 saut."
+msgstr "AVERTISSEMENT d'ANONYMAT: Les paramètres incluent des tunnels à 1 saut."
 
 msgid "PERFORMANCE WARNING - Settings include very long tunnels."
 msgstr "AVERTISSEMENT de PERFORMANCES: Les paramètres incluent de très longs tunnels."
@@ -1681,33 +1681,33 @@ msgid "Add user"
 msgstr "Ajout un utilisateur"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
-msgstr ""
+msgstr "Impossible d'enregistrer le choix de thème, le nom du thème contient des caractères illégaux."
 
 msgid "Theme change saved."
 msgstr "Le changement de thème a été enregistré."
 
 msgid "Mobile console option saved."
-msgstr "L’option de console mobile a été enregistrée."
+msgstr "L'option de console mobile a été enregistrée."
 
 msgid "No user name entered"
-msgstr "Aucun nom d’utilisateur n’a été saisi"
+msgstr "Aucun nom d'utilisateur n'a été saisi"
 
 msgid "User name may not contain '='"
 msgstr "Le nom d'utilisateur ne peut pas contenir '='"
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
-msgstr "Avertissement: Les noms d’utilisateur qui ne se conforment pas au jeu de caractère ISO-8859-1 ne sont pas recommandés. La prise en charge n’est pas normalisée et varie selon les navigateurs."
+msgstr "Avertissement: Les noms d'utilisateur qui ne se conforment pas au jeu de caractère ISO-8859-1 ne sont pas recommandés. La prise en charge n'est pas normalisée et varie selon les navigateurs."
 
 msgid "No password entered"
-msgstr "Aucun mot de passe n’a été saisi"
+msgstr "Aucun mot de passe n'a été saisi"
 
 #, java-format
 msgid "To recover from a forgotten or non-working password, stop I2P, edit the file {0}, delete the line {1}, and restart I2P."
-msgstr "Pour récupérer d’un mot de passe oublié ou ne fonctionnant pas, arrêter I2P, éditer le fichier {0}, supprimer la ligne {1} et redémarrer I2P."
+msgstr "Pour récupérer d'un mot de passe oublié ou ne fonctionnant pas, arrêter I2P, éditer le fichier {0}, supprimer la ligne {1} et redémarrer I2P."
 
 #, java-format
 msgid "Removed user {0}"
-msgstr "L’utilisateur {0} a été supprimé"
+msgstr "L'utilisateur {0} a été supprimé"
 
 msgid "Set theme universally across all apps"
 msgstr "Définir le thème universellement pour toutes les applis"
@@ -1716,16 +1716,16 @@ msgid "Use alternative display font in console and webapps"
 msgstr "Utiliser une police d'affichage alternative dans la console et les applications web"
 
 msgid "Force the mobile console to be used"
-msgstr "Forcer l’utilisation de la console mobile"
+msgstr "Forcer l'utilisation de la console mobile"
 
 msgid "Enabling the Universal Theming option is recommended when embedding these applications"
-msgstr "Il est recommandé d’activer l’option de thème universel lors de l’intégration de ces applications"
+msgstr "Il est recommandé d'activer l'option de thème universel lors de l'intégration de ces applications"
 
 msgid "Embed I2PSnark and I2PMail in the console"
 msgstr "Intégrer I2PSnark et I2PMail dans la console"
 
 msgid "Add a user and password to enable."
-msgstr "Ajouter un utilisateur et un mot de passe pour l’activer."
+msgstr "Ajouter un utilisateur et un mot de passe pour l'activer."
 
 msgid "Note: If you forget your password, removing the configuration entry in your router.config file will clear it (restart required)."
 msgstr "Note : Si vous oubliez votre mot de passe, la suppression de l'entrée de configuration dans votre fichier router.config l'effacera (redémarrage requis)."
@@ -1740,7 +1740,7 @@ msgid "Remove"
 msgstr "Retirer"
 
 msgid "Username"
-msgstr "Nom d’utilisateur"
+msgstr "Nom d'utilisateur"
 
 msgid "Password"
 msgstr "Mot de passe"
@@ -1758,13 +1758,13 @@ msgid "Enabled floodfill"
 msgstr "Activer le remplissage par diffusion"
 
 msgid "Changed IP"
-msgstr "L’IP a été changée"
+msgstr "L'IP a été changée"
 
 msgid "Changed port"
 msgstr "Le port a été changé"
 
 msgid "Clock shifted"
-msgstr "L’horloge a varié"
+msgstr "L'horloge a varié"
 
 msgid "Crashed"
 msgstr "A planté"
@@ -1776,7 +1776,7 @@ msgid "Installed new version"
 msgstr "La nouvelle version a été installée"
 
 msgid "Install failed"
-msgstr "Échec d’installation"
+msgstr "Échec d'installation"
 
 msgid "Network error"
 msgstr "Erreur réseau"
@@ -1791,7 +1791,7 @@ msgid "Out of memory error"
 msgstr "Erreur de mémoire insuffisante"
 
 msgid "Reachability change"
-msgstr "Changement d’accessibilité"
+msgstr "Changement d'accessibilité"
 
 msgid "Reseeded router"
 msgstr "Le routeur a été réensemencé"
@@ -1818,7 +1818,7 @@ msgid "Events since"
 msgstr "Événements depuis"
 
 msgid "Event type"
-msgstr "Type d’événement"
+msgstr "Type d'événement"
 
 msgid "All events"
 msgstr "Tous les événements"
@@ -1827,19 +1827,19 @@ msgid "Filter events"
 msgstr "Filtrer les événements"
 
 msgid "No events found"
-msgstr "Aucun événement n’a été trouvé"
+msgstr "Aucun événement n'a été trouvé"
 
 #, java-format
 msgid "No events found in previous {0}"
-msgstr "Aucun événement n’a été trouvé dans les {0} précédentes"
+msgstr "Aucun événement n'a été trouvé dans les {0} précédentes"
 
 #, java-format
 msgid "No \"{0}\" events found"
-msgstr "Aucun événement « {0} » n’a été trouvé"
+msgstr "Aucun événement « {0} » n'a été trouvé"
 
 #, java-format
 msgid "No \"{0}\" events found in previous {1}"
-msgstr "Aucun événement « {0} » n’a été trouvé dans les {1} précédentes"
+msgstr "Aucun événement « {0} » n'a été trouvé dans les {1} précédentes"
 
 msgid "Time"
 msgstr "Heure"
@@ -1910,7 +1910,7 @@ msgid "Show Legend"
 msgstr "Afficher la légende"
 
 msgid "Configure Graph Display"
-msgstr "Configurer l’affichage des graphiques"
+msgstr "Configurer l'affichage des graphiques"
 
 msgid "Note: Dimensions are for graph only (excludes title, labels and legend)."
 msgstr "Note: Les dimensions sont seulement pour les graphiques (cela exclut les titres, les étiquettes et les légendes)."
@@ -1931,7 +1931,7 @@ msgid "minutes"
 msgstr "minutes"
 
 msgid "Refresh delay"
-msgstr "Délai d’actualisation"
+msgstr "Délai d'actualisation"
 
 msgid "Plot type"
 msgstr "Type de tracé"
@@ -1976,7 +1976,7 @@ msgid "FAQ"
 msgstr "FAQ"
 
 msgid "Manage your I2P hosts file here (I2P domain name resolution)"
-msgstr "Gérer ici votre fichier d’hôtes d’I2P (résolution de nom d’I2P)"
+msgstr "Gérer ici votre fichier d'hôtes d'I2P (résolution de nom d'I2P)"
 
 msgid "Graph Router Performance"
 msgstr "Performances du routeur graphique"
@@ -1997,7 +1997,7 @@ msgid "I2PMail"
 msgstr "Courrier Web"
 
 msgid "Install and configure I2P plugins"
-msgstr "Installer et configurer des greffons d’I2P"
+msgstr "Installer et configurer des greffons d'I2P"
 
 msgid "Manage Plugins"
 msgstr "Gérer les greffons"
@@ -2012,10 +2012,10 @@ msgid "Network Database"
 msgstr "Base de données de réseau"
 
 msgid "Show list of all known I2P routers"
-msgstr "Afficher la liste de tous les routeurs d’I2P connus"
+msgstr "Afficher la liste de tous les routeurs d'I2P connus"
 
 msgid "List of recently connected peers with profiling info"
-msgstr ""
+msgstr "Liste des pairs récemment connectés avec les informations de profilage"
 
 msgid "Peer Profiles"
 msgstr "Profils des pairs"
@@ -2066,7 +2066,7 @@ msgid "Configure Bandwidth"
 msgstr "Configurer la bande passante"
 
 msgid "I2P Bandwidth Configuration"
-msgstr "Configuration de la bande passante d’I2P"
+msgstr "Configuration de la bande passante d'I2P"
 
 msgid "Configure UI"
 msgstr "Configurer UI"
@@ -2105,13 +2105,13 @@ msgid "Bug tracker"
 msgstr "Système de suivi des bogues"
 
 msgid "I2P+ Bug Reports"
-msgstr "Relevés de bogue d’I2P"
+msgstr "Relevés de bogue d'I2P"
 
 msgid "Frequently Asked Questions"
 msgstr "Foire aux questions"
 
 msgid "I2P FAQ"
-msgstr "FAQ d’I2P"
+msgstr "FAQ d'I2P"
 
 msgid "I2P Plugins"
 msgstr "Greffons I2P"
@@ -2123,7 +2123,7 @@ msgid "Historical infrastructure data from the I2P network"
 msgstr "Données historiques d'infrastructure du réseau I2P"
 
 msgid "I2P home page"
-msgstr "Page d’accueil d’I2P"
+msgstr "Page d'accueil d'I2P"
 
 msgid "Project Website"
 msgstr "Site Web du projet"
@@ -2183,7 +2183,7 @@ msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Front-end alternatif axé sur la confidentialité pour Reddit"
 
 msgid "AI Image generation & Chat hub"
-msgstr ""
+msgstr "Génération d'images IA et hub de discussion"
 
 msgid "IRC Logs for multiple networks"
 msgstr "Journaux IRC pour plusieurs réseaux"
@@ -2243,7 +2243,7 @@ msgid "SimplifiedGuide"
 msgstr "Guide simplifié"
 
 msgid "Web technology reference and learning site"
-msgstr "Site de référence et d’apprentissage sur la technologie Web"
+msgstr "Site de référence et d'apprentissage sur la technologie Web"
 
 msgid "Alternative Wikipedia front-end focused on privacy"
 msgstr "Interface Wikipédia alternative axée sur la confidentialité"
@@ -2312,7 +2312,7 @@ msgid "Smart &amp; fearless journalism"
 msgstr "Journalisme intelligent et intrépide"
 
 msgid "NewStatesman"
-msgstr "Nouvel homme d’État"
+msgstr "Nouvel homme d'État"
 
 msgid "Politics &amp; Current Affairs magazine"
 msgstr "Politique et affaires actuelles"
@@ -2324,10 +2324,10 @@ msgid "OpenDemocracy"
 msgstr "Démocratie Ouverte"
 
 msgid "Online privacy &amp; tech blog"
-msgstr ""
+msgstr "Blog sur la confidentialité et la technologie en ligne"
 
 msgid "RightToPrivacy"
-msgstr ""
+msgstr "Droit à la confidentialité"
 
 msgid "Lifestyle magazine"
 msgstr "Magazine de style de vie"
@@ -2348,7 +2348,7 @@ msgid "Community-driven tech news"
 msgstr "Actualités technologiques axées sur la communauté"
 
 msgid "Various services"
-msgstr ""
+msgstr "Services divers"
 
 msgid "News for nerds"
 msgstr "Des nouvelles pour les nerds"
@@ -2411,11 +2411,11 @@ msgid "WashingtonInstitute"
 msgstr "Institut de Washington"
 
 msgid "The HTTP proxy is not up"
-msgstr "Le mandataire HTTP n’est pas en fonction"
+msgstr "Le mandataire HTTP n'est pas en fonction"
 
 #, java-format
 msgid "Your browser is not properly configured to use the HTTP proxy at {0}"
-msgstr "Votre navigateur n’est pas configuré correctement pour utiliser le mandataire HTTP à {0}"
+msgstr "Votre navigateur n'est pas configuré correctement pour utiliser le mandataire HTTP à {0}"
 
 msgid "URL"
 msgstr "URL"
@@ -2424,7 +2424,7 @@ msgid "Add"
 msgstr "Ajouter"
 
 msgid "Error displaying the info page."
-msgstr ""
+msgstr "Erreur lors de l'affichage de la page d'informations."
 
 msgid "Identity"
 msgstr "Identité"
@@ -2472,7 +2472,7 @@ msgid "Performance"
 msgstr "Performances"
 
 msgid "Maximum available RAM"
-msgstr ""
+msgstr "RAM maximale disponible"
 
 msgid "Classified as slow"
 msgstr "Classé comme lent"
@@ -2484,7 +2484,7 @@ msgid "No"
 msgstr "Non"
 
 msgid "GeoIP Db"
-msgstr ""
+msgstr "Base de données GeoIP"
 
 msgid "Target"
 msgstr "Cible"
@@ -2520,14 +2520,14 @@ msgid "Started"
 msgstr "Démarré"
 
 msgid "Clock Skew"
-msgstr "Décalage d’horloge"
+msgstr "Décalage d'horloge"
 
 msgid "Router Transport Addresses"
 msgstr "Adresses de transport du routeur"
 
 #, java-format
 msgid "{0} is used for outbound connections only"
-msgstr "{0} n’est utilisé que pour les connexions sortantes"
+msgstr "{0} n'est utilisé que pour les connexions sortantes"
 
 msgid "Job runners"
 msgstr "Exécuteurs de travaux"
@@ -2623,19 +2623,19 @@ msgid "Sybil Analysis"
 msgstr "Analyse Sybille"
 
 msgid "Bad value supplied, please check and try again."
-msgstr ""
+msgstr "Mauvaise valeur fournie, veuillez vérifier et réessayer."
 
 msgid "Router Map"
 msgstr "Carte du routeur"
 
 msgid "Network Database Search"
-msgstr ""
+msgstr "Recherche dans la base de données réseau"
 
 msgid "Capabilities"
 msgstr "Capacités"
 
 msgid "e.g. f or XOfR"
-msgstr ""
+msgstr "par ex. f ou XOfR"
 
 msgid "Cost"
 msgstr "Coût"
@@ -2644,49 +2644,49 @@ msgid "Country"
 msgstr "Pays"
 
 msgid "Country Codes"
-msgstr ""
+msgstr "Codes de pays"
 
 msgid "Hash Prefix"
-msgstr ""
+msgstr "Préfixe de hachage"
 
 msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
-msgstr ""
+msgstr "IPv4 ou IPv6, suffixes /24,/16,/8 optionnels pour IPv4, préfixe ok pour IPv6"
 
 msgid "Hostname or b32"
-msgstr ""
+msgstr "Nom d'hôte ou b32"
 
 msgid "IPv6 Prefix"
-msgstr ""
+msgstr "Préfixe IPv6"
 
 msgid "Single port or range"
-msgstr ""
+msgstr "Port unique ou plage"
 
 msgid "Signature Type"
-msgstr ""
+msgstr "Type de signature"
 
 msgid "SSU Capabilities"
-msgstr ""
+msgstr "Capacités SSU"
 
 msgid "Encryption Type"
-msgstr ""
+msgstr "Type de chiffrement"
 
 msgid "Router Version"
-msgstr ""
+msgstr "Version du routeur"
 
 msgid "Transport"
 msgstr "Transport"
 
 msgid "Add Sybil analysis (must pick at least one above)"
-msgstr ""
+msgstr "Ajouter l'analyse Sybil (doit en choisir au moins un ci-dessus)"
 
 msgid "Sybil close to"
-msgstr ""
+msgstr "Sybil proche de"
 
 msgid "Router hash, destination hash, b32, or from address book"
-msgstr ""
+msgstr "Hachage du routeur, hachage de destination, b32, ou du carnet d'adresses"
 
 msgid "or Sybil close to this router"
-msgstr ""
+msgstr "ou Sybil proche de ce routeur"
 
 msgid "Lookup"
 msgstr "Chercher"
@@ -2701,13 +2701,13 @@ msgid "not found in network database"
 msgstr "introuvable dans la base de données de réseau"
 
 msgid "Bad Base64 Router hash"
-msgstr ""
+msgstr "Mauvais hachage de routeur Base64"
 
 msgid "No routers with"
-msgstr ""
+msgstr "Aucun routeur avec"
 
 msgid "Hash prefix"
-msgstr ""
+msgstr "Préfixe de hachage"
 
 msgid "Port"
 msgstr "Port"
@@ -2716,10 +2716,10 @@ msgid "MTU"
 msgstr "MTU"
 
 msgid "found in the network database"
-msgstr ""
+msgstr "trouvé dans la base de données réseau"
 
 msgid "results"
-msgstr ""
+msgstr "résultats"
 
 msgid "Previous Page"
 msgstr "Page précédente"
@@ -2728,43 +2728,43 @@ msgid "Next Page"
 msgstr "Page suivante"
 
 msgid "Results per page"
-msgstr ""
+msgstr "Résultats par page"
 
 msgid "Not initialized"
 msgstr "Non initialisé"
 
 msgid "Total Remote Leasesets"
-msgstr ""
+msgstr "Total des jeux de baux à distance"
 
 msgid "Compact mode"
-msgstr ""
+msgstr "Mode compact"
 
 msgid "Local Leasesets"
-msgstr ""
+msgstr "Jeux de baux locaux"
 
 msgid "Debug Mode"
-msgstr ""
+msgstr "Mode de débogage"
 
 msgid "Published (RAP) Leasesets"
-msgstr ""
+msgstr "Jeux de baux publiés (RAP)"
 
 msgid "Sorted by hash distance, closest first."
-msgstr ""
+msgstr "Trié par distance de hachage, plus proches en premier."
 
 msgid "Mod Data"
-msgstr ""
+msgstr "Données de modification"
 
 msgid "Last Changed"
-msgstr ""
+msgstr "Dernière modification"
 
 msgid "Next Mod Data"
-msgstr ""
+msgstr "Prochaines données de modification"
 
 msgid "Change in"
-msgstr ""
+msgstr "Modification dans"
 
 msgid "Floodfill mode enabled"
-msgstr ""
+msgstr "Mode de remplissage activé"
 
 msgid "Routing Key"
 msgstr "Clé de routage"
@@ -2779,21 +2779,21 @@ msgid "Estimated total leasesets"
 msgstr "Total estimé des baux"
 
 msgid "Total Local Leasesets"
-msgstr ""
+msgstr "Total des jeux de baux locaux"
 
 msgid "Remote Leasesets"
-msgstr ""
+msgstr "Jeux de baux à distance"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
-msgstr ""
+msgstr "Nom d'hôte {0} non trouvé dans la base de données réseau"
 
 #, java-format
 msgid "LeaseSet for {0} not found in network database"
-msgstr ""
+msgstr "Jeu de baux pour {0} non trouvé dans la base de données réseau"
 
 msgid "Meta"
-msgstr ""
+msgstr "Méta"
 
 msgid "LeaseSet"
 msgstr "Jeu de baux"
@@ -2825,7 +2825,7 @@ msgid "Signature type"
 msgstr "Type de signature"
 
 msgid "Public Key"
-msgstr ""
+msgstr "Clé publique"
 
 msgid "Unsupported type"
 msgstr "Type non pris en charge"
@@ -2842,10 +2842,10 @@ msgid "Unknown"
 msgstr "Inconnu"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr ""
+msgstr "Mode avancé - inclut toutes les statistiques publiées par les floodfills."
 
 msgid "Compact mode - does not include statistics published by floodfills."
-msgstr ""
+msgstr "Mode compact - n'inclut pas les statistiques publiées par les floodfills."
 
 msgid "Network Database Router Statistics"
 msgstr "Statistiques de la base de données de réseau du routeur"
@@ -2869,7 +2869,7 @@ msgid "Transports"
 msgstr "Transports"
 
 msgid "X Tier"
-msgstr ""
+msgstr "Niveau X"
 
 msgid "Floodfills"
 msgstr "Décharges"
@@ -2887,10 +2887,10 @@ msgid "Router is banlisted"
 msgstr "Le routeur est banni"
 
 msgid "Java I2P variant"
-msgstr ""
+msgstr "Variante Java I2P"
 
 msgid "I2Pd variant"
-msgstr ""
+msgstr "Variante I2Pd"
 
 msgid "RouterInfo is compressible"
 msgstr "RouterInfo est compressible"
@@ -2924,7 +2924,7 @@ msgid "Hostname"
 msgstr "Nom d'hôte"
 
 msgid "direct"
-msgstr ""
+msgstr "direct"
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "Famille vérifiée (le certificat de signature est installé et valide)"
@@ -2963,10 +2963,10 @@ msgid "Last heard from"
 msgstr "Dernière nouvelle de"
 
 msgid "Network Id"
-msgstr ""
+msgstr "ID réseau"
 
 msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr ""
+msgstr "Le nombre est toujours falsifié pour éviter d'indiquer les redémarrages du routeur"
 
 msgid "Hidden or starting up"
 msgstr "Caché ou en cours de démarrage"
@@ -3011,7 +3011,7 @@ msgid "No peer connections available"
 msgstr "Aucune connexion homologue disponible"
 
 msgid "Your transport connection limits are automatically set based on your configured bandwidth."
-msgstr "Les limites de connexion de vos transports sont définies automatiquement d’après votre bande passante configurée."
+msgstr "Les limites de connexion de vos transports sont définies automatiquement d'après votre bande passante configurée."
 
 #, java-format
 msgid "To override these limits, add the settings {0} and {1}"
@@ -3034,10 +3034,10 @@ msgid "IPv6"
 msgstr "IPv6"
 
 msgid "Active connections / Max permitted"
-msgstr ""
+msgstr "Connexions actives / Max autorisées"
 
 msgid "Connections / Limit"
-msgstr ""
+msgstr "Connexions / Limite"
 
 msgid "Current / maximum permitted"
 msgstr "Courant / maximum autorisé"
@@ -3073,7 +3073,7 @@ msgid "Duration of connection to peer"
 msgstr "Durée de connexion au peer"
 
 msgid "Up"
-msgstr "Durée d’activité"
+msgstr "Durée d'activité"
 
 msgid "Peer's clockskew relative to our clock"
 msgstr "l'horloge de Peer est décalée par rapport à notre horloge"
@@ -3097,7 +3097,7 @@ msgid "Queued messages to send to peer"
 msgstr "Messages en file d'attente à envoyer à un homologue"
 
 msgid "Out Queue"
-msgstr "File d’attente sortante"
+msgstr "File d'attente sortante"
 
 msgid "Connection is backlogged"
 msgstr "La connexion est en attente"
@@ -3157,10 +3157,10 @@ msgid "Dup RX"
 msgstr "Récep. en double"
 
 msgid "Sort by packets received more than once"
-msgstr "Trier par paquet reçus plus d’une fois"
+msgstr "Trier par paquet reçus plus d'une fois"
 
 msgid "Congestion window"
-msgstr "Fenêtre d’encombrement"
+msgstr "Fenêtre d'encombrement"
 
 msgid "Sort by congestion window"
 msgstr "Trier par fenêtre de congestion"
@@ -3175,7 +3175,7 @@ msgid "Round trip time"
 msgstr "Heure aller-retour"
 
 msgid "Sort by round trip time"
-msgstr "Trier par durée d’aller-retour"
+msgstr "Trier par durée d'aller-retour"
 
 msgid "Retransmission timeout"
 msgstr "Expiration du délai de retransmission"
@@ -3229,7 +3229,7 @@ msgid "We offered to introduce them (help peers traverse their firewall)"
 msgstr "Nous avons proposé de les présenter (aider les pairs à traverser leur pare-feu)"
 
 msgid "How long since a packet has been received / sent"
-msgstr "Le temps écoulé depuis la réception ou l’envoi d’un paquet"
+msgstr "Le temps écoulé depuis la réception ou l'envoi d'un paquet"
 
 msgid "Smoothed inbound / outbound transfer rate"
 msgstr "Taux de transfert entrant / sortant lissé"
@@ -3331,7 +3331,7 @@ msgid "Rejected"
 msgstr "Rejeté"
 
 msgid "First Heard About"
-msgstr ""
+msgstr "Première entendue parler de"
 
 msgid "Last Heard From"
 msgstr "Dernière communication"
@@ -3400,7 +3400,7 @@ msgstr[0] "{0} pair intégré"
 msgstr[1] "{0} pairs intégrés"
 
 msgid "1h Fail Rate"
-msgstr "Taux d’échec 1 h"
+msgstr "Taux d'échec 1 h"
 
 msgid "1h Resp. Time"
 msgstr "Temps de rép. 1 h"
@@ -3444,7 +3444,7 @@ msgstr "{0} de bande passante partagée"
 
 #, java-format
 msgid "Over {0} KB/s shared bandwidth"
-msgstr ""
+msgstr "Plus de {0} Ko/s de bande passante partagée"
 
 msgid "status"
 msgstr "état"
@@ -3507,11 +3507,11 @@ msgid "Total number of banned peers"
 msgstr "Nombre total de pairs interdits"
 
 msgid "Note: 'LU' class routers have been excluded from the list."
-msgstr ""
+msgstr "Note : les routeurs de classe 'LU' ont été exclus de la liste."
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
-msgstr ""
+msgstr "Pour voir, consultez {0}Bannissements de session{1}."
 
 msgid "Select search engine"
 msgstr "Sélectionner le moteur de recherche"
@@ -3575,7 +3575,7 @@ msgid "service may be available to peers"
 msgstr "le service peut être disponible pour les pairs"
 
 msgid "service is only available locally"
-msgstr "le service n’est disponible que localement"
+msgstr "le service n'est disponible que localement"
 
 msgid "Show tunnels"
 msgstr "Afficher les tunnels"
@@ -3687,13 +3687,13 @@ msgid "Help &amp; FAQ"
 msgstr "Aide et FAQ"
 
 msgid "I2P Internals"
-msgstr "Composantes internes d’I2P"
+msgstr "Composantes internes d'I2P"
 
 msgid "I2P Services"
 msgstr "Services I2P"
 
 msgid "Memory Usage Bar"
-msgstr "Barre d’utilisation de la mémoire"
+msgstr "Barre d'utilisation de la mémoire"
 
 msgid "Network Reachability"
 msgstr "Accessibilité du réseau"
@@ -3702,7 +3702,7 @@ msgid "News &amp; Updates"
 msgstr "Nouvelles et mises à jour"
 
 msgid "Restart Status"
-msgstr "Redémarrer l’état"
+msgstr "Redémarrer l'état"
 
 msgid "Router Information"
 msgstr "Informations du routeur"
@@ -3714,7 +3714,7 @@ msgid "Tunnel Status"
 msgstr "État des tunnels"
 
 msgid "Update Status"
-msgstr "Mettre à jour l’état"
+msgstr "Mettre à jour l'état"
 
 msgid "I2P Router Help &amp; FAQ"
 msgstr "Aide et FAQ du routeur I2P"
@@ -3756,10 +3756,10 @@ msgid "Webhosting"
 msgstr "Hébergement Web"
 
 msgid "An introduction to hosting websites on the I2P network"
-msgstr "Une introduction à l’hébergement de sites Web sur le réseau I2P"
+msgstr "Une introduction à l'hébergement de sites Web sur le réseau I2P"
 
 msgid "New hosts in last 24 hours"
-msgstr ""
+msgstr "Nouveaux hôtes dans les dernières 24 heures"
 
 msgid "I2PControl"
 msgstr "I2PControl"
@@ -3828,7 +3828,7 @@ msgid "Show recent peer performance profiles"
 msgstr "Afficher les profils récents des performances des pairs"
 
 msgid "View existing tunnels and tunnel build status"
-msgstr "Visualiser l’état des tunnels existants et de création de tunnels"
+msgstr "Visualiser l'état des tunnels existants et de création de tunnels"
 
 msgid "Advanced Configuration"
 msgstr "Configuration avancée"
@@ -3837,7 +3837,7 @@ msgid "API"
 msgstr "API"
 
 msgid "Documentation for the I2P API"
-msgstr "Documentation de l’API d’I2P"
+msgstr "Documentation de l'API d'I2P"
 
 msgid "Debug"
 msgstr "Débogage"
@@ -3868,13 +3868,13 @@ msgid "Never disclose this to anyone, as it can reveal your real world IP."
 msgstr "Ne jamais la divulguer à qui que ce soit, car elle peut divulguer votre vraie IP."
 
 msgid "How long we've been running for this session"
-msgstr "Le temps d’exécution pour cette session"
+msgstr "Le temps d'exécution pour cette session"
 
 msgid "The version of the I2P software we are running"
 msgstr "La version du logiciel I2P que nous faisons fonctionner"
 
 msgid "Difference between network-synced time and local time"
-msgstr "Différence entre l’heure synchronisée sur le réseau et l’heure locale"
+msgstr "Différence entre l'heure synchronisée sur le réseau et l'heure locale"
 
 msgid "How much RAM I2P is using / total RAM available to I2P (excludes RAM allocated to the JVM)"
 msgstr "La quantité de mémoire vive utilisée par I2P / mémoire vive totale disponible pour I2P (exclut la mémoire vive allouée à la MVJ)"
@@ -3886,13 +3886,13 @@ msgid "Floodfill enabled"
 msgstr "Floodfill activé"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
-msgstr ""
+msgstr "Nombre total de jeux de baux à distance stockés dans notre NetDb"
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
-msgstr "Avertissement: ECDSA n’est pas disponible. Mettre à jour votre Java ou votre SE"
+msgstr "Avertissement: ECDSA n'est pas disponible. Mettre à jour votre Java ou votre SE"
 
 msgid "Configure I2P Updates"
-msgstr "Configurer les mises à jour d’I2P"
+msgstr "Configurer les mises à jour d'I2P"
 
 msgid "Total peers in NetDb"
 msgstr "Nombre total de pairs dans NetDb"
@@ -3901,7 +3901,7 @@ msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Pairs avec lesquels nous avons communiqué durant les dernières minutes ou la dernière heure"
 
 msgid "Peers we've been talking to in the last minute"
-msgstr ""
+msgstr "Pairs auxquels nous avons parlé dans la dernière minute"
 
 msgid "The number of peers available for building client tunnels"
 msgstr "Le nombre de pairs disponibles pour construire des tunnels client"
@@ -3928,7 +3928,7 @@ msgid "Known"
 msgstr "Connus"
 
 msgid "Configure router bandwidth allocation"
-msgstr "Configurer l’attribution de la bande passante du routeur"
+msgstr "Configurer l'attribution de la bande passante du routeur"
 
 msgid "Bandwidth in/out"
 msgstr "Débit entrant/sortant"
@@ -4000,7 +4000,7 @@ msgid "Tunnel Count by Peer"
 msgstr "Nombre de Tunnel par Pair"
 
 msgid "What's in the router's job queue?"
-msgstr "Quel est le contenu de la file d’attente des travaux du routeur ?"
+msgstr "Quel est le contenu de la file d'attente des travaux du routeur ?"
 
 msgid "Job lag"
 msgstr "Retard des travaux"
@@ -4015,7 +4015,7 @@ msgid "Average delay before scheduled jobs are run"
 msgstr "Délai moyen avant l'exécution des tâches planifiées"
 
 msgid "Indicates how quickly outbound messages to other I2P routers are sent"
-msgstr "Indique la vitesse d’envoi des messages sortants vers d’autres routeurs d’I2P"
+msgstr "Indique la vitesse d'envoi des messages sortants vers d'autres routeurs d'I2P"
 
 msgid "Average time to test a peer (successful / total)"
 msgstr "Temps moyen pour tester un pair (réussi / total)"
@@ -4024,19 +4024,19 @@ msgid "Peer test average"
 msgstr "Moyenne du test par les pairs"
 
 msgid "Round trip time for a tunnel test"
-msgstr "Durée d’aller-retour d’un test de tunnel"
+msgstr "Durée d'aller-retour d'un test de tunnel"
 
 msgid "Tunnel lag"
 msgstr "Retard des tunnels"
 
 msgid "Queued requests from other routers to participate in tunnels"
-msgstr "Requêtes de participation en attente d’autres routeurs à participer à des tunnels"
+msgstr "Requêtes de participation en attente d'autres routeurs à participer à des tunnels"
 
 msgid "Backlog"
 msgstr "Arriéré"
 
 msgid "Declining transit tunnel requests during startup phase"
-msgstr "Aucune demande de tunnel participant n’est acceptée pendant les 10 premières minutes pendant que le routeur se stabilise"
+msgstr "Aucune demande de tunnel participant n'est acceptée pendant les 10 premières minutes pendant que le routeur se stabilise"
 
 msgid "Declining transit tunnel requests as we are shutting down"
 msgstr "Décliner les demandes de tunnels de participation car nous fermons nos portes"
@@ -4064,10 +4064,10 @@ msgid "Router is configured to reject all transit tunnel requests"
 msgstr "Le routeur est configuré pour rejeter toutes les demandes de tunnel participantes"
 
 msgid "Statistics gathered during this router's uptime"
-msgstr "Statistiques collectées pendant le temps d’activité de ce routeur"
+msgstr "Statistiques collectées pendant le temps d'activité de ce routeur"
 
 msgid "The data gathered is quantized over a 1 minute period, so should just be used as an estimate."
-msgstr "Les données collectées sont quantifiées sur une période d’une minute et ne devraient donc être utilisées que comme estimation."
+msgstr "Les données collectées sont quantifiées sur une période d'une minute et ne devraient donc être utilisées que comme estimation."
 
 msgid "These statistics are primarily used for development and debugging."
 msgstr "Ces statistiques sont principalement utilisées à des fins de développement et de débogage."
@@ -4109,7 +4109,7 @@ msgid "Highest total in a period"
 msgstr "Total le plus élevé d'une période"
 
 msgid "Average event count"
-msgstr "Nombre d’événements moyens"
+msgstr "Nombre d'événements moyens"
 
 msgid "Events in peak period"
 msgstr "Événements en période de pointe"
@@ -4128,7 +4128,7 @@ msgid "Graph Data"
 msgstr "Données des graphiques"
 
 msgid "Graph Event Count"
-msgstr "Nombre d’événements de graphiques"
+msgstr "Nombre d'événements de graphiques"
 
 msgid "Export Data as XML"
 msgstr "Exporter les données en XML"
@@ -4410,7 +4410,7 @@ msgid "Data"
 msgstr "Données"
 
 msgid "Limit"
-msgstr ""
+msgstr "Limite"
 
 msgid "Receive on"
 msgstr "Recevoir sur"
@@ -4457,7 +4457,7 @@ msgid "No transit tunnels currently active."
 msgstr "Aucun tunnel de transit actuellement actif."
 
 msgid "Transit Tunnels by Peer (Top {0})"
-msgstr ""
+msgstr "Tunnels de transit par pair (Top {0})"
 
 msgid "Address"
 msgstr "Adresse"
@@ -4527,16 +4527,16 @@ msgid "Console language saved."
 msgstr "La langue de la console a été enregistrée."
 
 msgid "Bandwidth test completed successfully"
-msgstr "Le test de bande passante s’est terminé avec succès"
+msgstr "Le test de bande passante s'est terminé avec succès"
 
 msgid "Bandwidth test failed"
 msgstr "Le test de bande passante a échoué"
 
 msgid "Bandwidth test did not complete"
-msgstr "Le test de bande passante ne s’est pas terminé"
+msgstr "Le test de bande passante ne s'est pas terminé"
 
 msgid "Bad state for test"
-msgstr ""
+msgstr "Mauvais état pour le test"
 
 msgid "Bandwidth test started"
 msgstr "Le test de bande passante est lancé"
@@ -4548,19 +4548,19 @@ msgid "Bandwidth test cancelled"
 msgstr "Le test de bande passante a été annulé"
 
 msgid "Bandwidth test was not running"
-msgstr "Le test de bande passante n’était pas en cours"
+msgstr "Le test de bande passante n'était pas en cours"
 
 msgid "ready"
-msgstr ""
+msgstr "prêt"
 
 msgid "inbound test"
-msgstr ""
+msgstr "test entrant"
 
 msgid "outbound test"
-msgstr ""
+msgstr "test sortant"
 
 msgid "done"
-msgstr ""
+msgstr "terminé"
 
 msgid "bits per second"
 msgstr "bit par seconde"
@@ -4570,7 +4570,7 @@ msgid "{0}Bytes per month maximum"
 msgstr "maximum {0} octets par mois"
 
 msgid "addressbook"
-msgstr "carnet d’adresses"
+msgstr "carnet d'adresses"
 
 msgid "i2psnark"
 msgstr "i2psnark"
@@ -4594,7 +4594,7 @@ msgid "SAM application bridge"
 msgstr "Pont applicatif SAM"
 
 msgid "Application tunnels"
-msgstr "Tunnels d’applications"
+msgstr "Tunnels d'applications"
 
 msgid "My eepsite web server"
 msgstr "Serveur Web de mon site eep"
@@ -4705,7 +4705,7 @@ msgid "Advanced Network Configuration"
 msgstr "Configuration avancée du réseau"
 
 msgid "I2P+ will work best if you configure your rates to match the speed of your internet connection."
-msgstr "I2P fonctionnera mieux si vous configurez vos débits pour qu’ils correspondent à la vitesse de votre connexion Internet."
+msgstr "I2P fonctionnera mieux si vous configurez vos débits pour qu'ils correspondent à la vitesse de votre connexion Internet."
 
 msgid "Note: Your contribution to the network (network share) is determined by the allocation of upstream bandwidth (upload speed)."
 msgstr "Remarque : votre contribution au réseau (part de réseau) est déterminée par l'allocation de la bande passante en amont (vitesse de téléchargement)."
@@ -4732,7 +4732,7 @@ msgid "Share"
 msgstr "Partager"
 
 msgid "NOTE"
-msgstr ""
+msgstr "NOTE"
 
 #, java-format
 msgid "You have configured I2P+ to share only {0} KBps."
@@ -4759,7 +4759,7 @@ msgstr "configuration évoluée"
 
 #, java-format
 msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
-msgstr ""
+msgstr "Clé <b>{0}</b> sélectionnée pour la suppression. Pour valider le changement, enregistrez la configuration ou annulez pour restaurer la clé."
 
 msgid "Floodfill Configuration"
 msgstr "Configuration du remplissage par diffusion"
@@ -4780,16 +4780,16 @@ msgid "Automatic"
 msgstr "Automatique"
 
 msgid "Force On"
-msgstr "Forcer l’activation"
+msgstr "Forcer l'activation"
 
 msgid "Disable"
 msgstr "Désactiver"
 
 msgid "Advanced I2P+ Configuration"
-msgstr "Configuration avancée d’I2P"
+msgstr "Configuration avancée d'I2P"
 
 msgid "Help with additional configuration settings"
-msgstr ""
+msgstr "Aide avec les paramètres de configuration supplémentaires"
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -4823,7 +4823,7 @@ msgid "To change client options, edit the file: {0}"
 msgstr "Pour modifier les options du client, modifiez le fichier: {0}"
 
 msgid "Be careful changing any settings here. The 'router console' and 'application tunnels' are required for most uses of I2P. Only advanced users should change these."
-msgstr "Faire preuve de prudence ici en changeant des paramètres. La « console du routeur » et les « tunnels d’applications » sont exigés pour la plupart des utilisations d’I2P. Seuls les utilisateurs experts devraient les changer."
+msgstr "Faire preuve de prudence ici en changeant des paramètres. La « console du routeur » et les « tunnels d'applications » sont exigés pour la plupart des utilisations d'I2P. Seuls les utilisateurs experts devraient les changer."
 
 msgid "config router family"
 msgstr "config famille de routeurs"
@@ -4832,7 +4832,7 @@ msgid "Routers in the same family share a family key."
 msgstr "Les routeurs de la même famille partagent une clé familiale."
 
 msgid "To join an existing family, import the private key you exported from a router in the family."
-msgstr "Pour se joindre à une famille existante, importer la clé privée que vous avez exportée d’un routeur de la famille."
+msgstr "Pour se joindre à une famille existante, importer la clé privée que vous avez exportée d'un routeur de la famille."
 
 msgid "To start a new family, enter a family name."
 msgstr "Pour créer une nouvelle famille, saisir un nom de famille."
@@ -4841,7 +4841,7 @@ msgid "Join Existing Router Family"
 msgstr "Se joindre à une famille de routeurs existante"
 
 msgid "Import the secret family key that you exported from an existing router in the family."
-msgstr "Importer la clé familiale secrète que vous avez exportée d’un routeur existant de la famille."
+msgstr "Importer la clé familiale secrète que vous avez exportée d'un routeur existant de la famille."
 
 msgid "Select secret key file"
 msgstr "Sélectionner le fichier de clé secrète"
@@ -4862,7 +4862,7 @@ msgid "Export Family Key"
 msgstr "Exporter la clé familiale"
 
 msgid "Export the secret family key to be imported into other routers you control."
-msgstr "Exporter la clé familiale secrète à importer dans d’autres routeurs que vous contrôlez."
+msgstr "Exporter la clé familiale secrète à importer dans d'autres routeurs que vous contrôlez."
 
 #, java-format
 msgid "Restart required to activate family {0}."
@@ -4882,7 +4882,7 @@ msgid "config home"
 msgstr "config accueil"
 
 msgid "Homepage Customization"
-msgstr "Personnalisation de la page d’accueil"
+msgstr "Personnalisation de la page d'accueil"
 
 msgid "Search Engines"
 msgstr "Moteurs de recherche"
@@ -4906,7 +4906,7 @@ msgid "Any changes made here must also be configured in the external client."
 msgstr "Tout changement apporté ici doit aussi être configuré dans le client externe."
 
 msgid "Many clients do not support SSL or authorization."
-msgstr "De nombreux clients ne prennent pas en charge ni SSL ni l’authentification."
+msgstr "De nombreux clients ne prennent pas en charge ni SSL ni l'authentification."
 
 msgid "All changes require restart to take effect."
 msgstr "Tous les changements exigent un redémarrage pour prendre effet."
@@ -4930,7 +4930,7 @@ msgid "I2CP Port"
 msgstr "Port I2CP"
 
 msgid "Require username and password"
-msgstr "Exiger un nom d’utilisateur et un mot de passe"
+msgstr "Exiger un nom d'utilisateur et un mot de passe"
 
 msgid "config keyring"
 msgstr "config trousseau"
@@ -4945,7 +4945,7 @@ msgid "The keyring may contain keys for local or remote encrypted destinations."
 msgstr "Le trousseau peut contenir les clés de destinations chiffrées locales ou distantes."
 
 msgid "Manual Keyring Addition"
-msgstr "Ajout manuel d’un trousseau"
+msgstr "Ajout manuel d'un trousseau"
 
 msgid "Enter keys for encrypted remote destinations here."
 msgstr "Saisir ici les clés pour les destinations distantes chiffrées."
@@ -4957,16 +4957,16 @@ msgid "Full destination, name, Base32, or hash"
 msgstr "Destination complète, nom, Base32 ou hachage"
 
 msgid "Enter key provided by server operator."
-msgstr "Saisir la clé fournie par l’opérateur du serveur."
+msgstr "Saisir la clé fournie par l'opérateur du serveur."
 
 msgid "Prevents server discovery by floodfills"
 msgstr "Empêche la découverte des serveurs par remplissage par diffusion"
 
 msgid "Enter password provided by server operator."
-msgstr "Saisir le mot de passe fourni par l’opérateur du serveur."
+msgstr "Saisir le mot de passe fourni par l'opérateur du serveur."
 
 msgid "Enter key and password provided by server operator."
-msgstr "Saisir la clé et le mot de passe fournis par l’opérateur du serveur."
+msgstr "Saisir la clé et le mot de passe fournis par l'opérateur du serveur."
 
 msgid "Key will be generated."
 msgstr "Une clé sera générée."
@@ -4984,7 +4984,7 @@ msgid "config logging"
 msgstr "config journalisation"
 
 msgid "Configure I2P Logging Options"
-msgstr "Configurer les options de journalisation d’I2P"
+msgstr "Configurer les options de journalisation d'I2P"
 
 msgid "View Router Logs"
 msgstr "Visualiser les journaux du routeur"
@@ -5003,7 +5003,7 @@ msgid "(the symbol '@' will be replaced during log rotation)"
 msgstr "(le symbole @ sera remplacé lors de la rotation des journaux)"
 
 msgid "Log record format"
-msgstr "Format d’enregistrement des journaux"
+msgstr "Format d'enregistrement des journaux"
 
 msgid "(use 'd' = date, 'c' = class, 't' = thread, 'p' = priority, 'm' = message)"
 msgstr "(utiliser d = date, c = classe, t = fil, p = priorité, m = message)"
@@ -5039,7 +5039,7 @@ msgid "Network Configuration"
 msgstr "Configuration du réseau"
 
 msgid "IP and Transport Configuration"
-msgstr "Configuration de l’IP et des transports"
+msgstr "Configuration de l'IP et des transports"
 
 msgid "Help with router configuration"
 msgstr "Aide à la configuration du routeur"
@@ -5051,22 +5051,22 @@ msgid "Changing these settings will restart your router."
 msgstr "Changer ces paramètres redémarrera votre routeur."
 
 msgid "IP Configuration"
-msgstr "Configuration de l’IP"
+msgstr "Configuration de l'IP"
 
 msgid "Externally reachable hostname or IP address"
-msgstr "Nom d’hôte ou adresse IP accessible de l’extérieur"
+msgstr "Nom d'hôte ou adresse IP accessible de l'extérieur"
 
 msgid "Use all auto-detect methods"
 msgstr "Utiliser toutes les méthodes de détection automatique"
 
 msgid "Disable UPnP IP address detection"
-msgstr "Désactiver la détection de l’adresse IP d’UPnP"
+msgstr "Désactiver la détection de l'adresse IP d'UPnP"
 
 msgid "Ignore local interface IP address"
-msgstr "Ignorer l’adresse IP de l’interface locale"
+msgstr "Ignorer l'adresse IP de l'interface locale"
 
 msgid "Use SSU IP address detection only"
-msgstr "N’utiliser que la détection d’adresse IP de SSU"
+msgstr "N'utiliser que la détection d'adresse IP de SSU"
 
 msgid "Enabling this mode will prevent participating traffic"
 msgstr "L'activation de ce mode empêchera le trafic participant"
@@ -5096,7 +5096,7 @@ msgid "Experimental"
 msgstr "Expérimental"
 
 msgid "IPv6 Configuration"
-msgstr "Configuration d’IPv6"
+msgstr "Configuration d'IPv6"
 
 msgid "Disable inbound (firewalled)"
 msgstr "Désactiver les appels entrants (pare-feu)"
@@ -5114,13 +5114,13 @@ msgid "Prefer IPv6 over IPv4"
 msgstr "Préférer IPv6 à IPv4"
 
 msgid "Use IPv6 only (disable IPv4)"
-msgstr "N’utiliser qu’IPv6 (désactiver IPv4)"
+msgstr "N'utiliser qu'IPv6 (désactiver IPv4)"
 
 msgid "TCP Configuration"
 msgstr "Configuration du TCP"
 
 msgid "Use auto-detected IP address"
-msgstr "Utiliser l’adresse IP détectée automatiquement"
+msgstr "Utiliser l'adresse IP détectée automatiquement"
 
 msgid "if we are not firewalled"
 msgstr "si nous ne sommes pas derrière un pare-feu"
@@ -5141,7 +5141,7 @@ msgid "TCP port"
 msgstr "port TCP"
 
 msgid "Use the same port configured for UDP"
-msgstr "Utiliser le même port configuré pour l’UDP"
+msgstr "Utiliser le même port configuré pour l'UDP"
 
 msgid "currently"
 msgstr "actuellement"
@@ -5150,7 +5150,7 @@ msgid "Specify port"
 msgstr "Spécifier le port"
 
 msgid "UDP Configuration"
-msgstr "Configuration de l’UDP"
+msgstr "Configuration de l'UDP"
 
 msgid "UDP port"
 msgstr "Port UDP"
@@ -5177,21 +5177,21 @@ msgid "Manual Peer Controls"
 msgstr "Contrôle manuel des pairs"
 
 msgid "Manually Ban / Unban a Peer"
-msgstr "Bannir, lever du bannissement manuel d’un pair"
+msgstr "Bannir, lever du bannissement manuel d'un pair"
 
 msgid "Banning will prevent the participation of this peer in tunnels you create."
 msgstr "Le bannissement empêchera que ce pair participe aux tunnels que vous créez."
 
 msgid "A list of bans by IP address is presented below."
-msgstr ""
+msgstr "Une liste de bannissements par adresse IP est présentée ci-dessous."
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
-msgstr ""
+msgstr "Pour voir tous les bannissements actifs par hachage de routeur, consultez {0}Pairs bannis{1}."
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
-msgstr ""
+msgstr "Une liste de {0}bannissements de session uniquement{1} par hachage est également disponible."
 
 msgid "Adjust Profile Bonuses"
 msgstr "Ajuster la bonification des profils"
@@ -5216,7 +5216,7 @@ msgid "Enter xpi2p or su3 plugin URL"
 msgstr "Entrez l'URL du plugin xpi2p ​​ou su3"
 
 msgid "To install a plugin, enter the download URL:"
-msgstr "Pour installer un greffon, saisir l’URL de téléchargement:"
+msgstr "Pour installer un greffon, saisir l'URL de téléchargement:"
 
 msgid "Select xpi2p or su3 file"
 msgstr "Sélectionner un fichier xpi2p ou su3"
@@ -5234,7 +5234,7 @@ msgid "config reseeding"
 msgstr "config réensemencement"
 
 msgid "Reseeding is the bootstrapping process used to find other routers when you first install I2P, or when your router has too few router references remaining."
-msgstr "Le réensemencement est le processus d’amorçage utilisé pour trouver d’autres routeurs lors de la première installation d’I2P ou s’il reste trop peu de références de routeurs à votre routeur."
+msgstr "Le réensemencement est le processus d'amorçage utilisé pour trouver d'autres routeurs lors de la première installation d'I2P ou s'il reste trop peu de références de routeurs à votre routeur."
 
 msgid "To enable the configuration of reseed urls, activate the console's <a href=\"/help/advancedsettings\">Advanced mode</a>."
 msgstr "Pour activer la configuration des URL de réensemence, activez le <a href=/help/advancedsettings>Mode Avancé</a>."
@@ -5255,10 +5255,10 @@ msgid "Reseed URLs"
 msgstr "URL de réensemencement"
 
 msgid "Reseed URL Selection"
-msgstr "Sélection de l’URL de réensemencement"
+msgstr "Sélection de l'URL de réensemencement"
 
 msgid "Try SSL first then non-SSL"
-msgstr "Essayer SSL d’abord, puis non-SSL"
+msgstr "Essayer SSL d'abord, puis non-SSL"
 
 msgid "Use SSL only"
 msgstr "Utiliser SSL seulement"
@@ -5300,10 +5300,10 @@ msgid "The su3 format is preferred, as it will be verified as signed by a truste
 msgstr "Le format su3 est préféré, car sa signature par une source fiable sera vérifiée."
 
 msgid "The zip format is unsigned; use a zip file only from a source that you trust."
-msgstr "Le format ZIP n’est pas signé ; n’utiliser qu’un fichier zip provenant d’une source fiable."
+msgstr "Le format ZIP n'est pas signé ; n'utiliser qu'un fichier zip provenant d'une source fiable."
 
 msgid "Enter zip or su3 URL"
-msgstr "Saisir l’URL d’un ZIP ou d’un su3"
+msgstr "Saisir l'URL d'un ZIP ou d'un su3"
 
 msgid "Please supply a valid reseed URL"
 msgstr "Veuillez fournir une URL de reseed valide"
@@ -5315,10 +5315,10 @@ msgid "Create Reseed File"
 msgstr "Créer un fichier de réensemencement"
 
 msgid "Create a new reseed zip file you may share for others to reseed manually."
-msgstr "Créer un nouveau fichier ZIP de réensemencement à partager avec d’autres afin de réensemencer manuellement."
+msgstr "Créer un nouveau fichier ZIP de réensemencement à partager avec d'autres afin de réensemencer manuellement."
 
 msgid "This file will never contain your own router's identity or IP."
-msgstr "Ce fichier ne contiendra jamais l’identité ou l’IP de votre propre routeur."
+msgstr "Ce fichier ne contiendra jamais l'identité ou l'IP de votre propre routeur."
 
 msgid "Create reseed file"
 msgstr "Créer un fichier de réensemencement"
@@ -5382,10 +5382,10 @@ msgid "config sidebar"
 msgstr "configuration barre latérale"
 
 msgid "Sidebar Options"
-msgstr ""
+msgstr "Options de la barre latérale"
 
 msgid "Refresh interval"
-msgstr "Intervalle d’actualisation"
+msgstr "Intervalle d'actualisation"
 
 msgid "seconds"
 msgstr "secondes"
@@ -5394,10 +5394,10 @@ msgid "0 to disable"
 msgstr "0 pour désactiver"
 
 msgid "Unified sidebar"
-msgstr ""
+msgstr "Barre latérale unifiée"
 
 msgid "Use the same sidebar on all pages"
-msgstr ""
+msgstr "Utiliser la même barre latérale sur toutes les pages"
 
 msgid "config stats"
 msgstr "config statistiques"
@@ -5406,7 +5406,7 @@ msgid "Stats Collection &amp; Graphing"
 msgstr "Collecte de Statistiques et Graphique"
 
 msgid "Configure I2P Stat Collection"
-msgstr "Configurer la collecte de statistiques d’I2P"
+msgstr "Configurer la collecte de statistiques d'I2P"
 
 msgid "A limited selection of stats is enabled by default, required for monitoring router performance. Only stats that have an optional graph are listed here; for a full list of enabled stats, view the <a href=\"/stats\">stats page</a>."
 msgstr "Une sélection limitée de statistiques est activée par défaut, requise pour surveiller les performances du routeur. Seules les statistiques qui ont un graphique facultatif sont répertoriées ici; Pour une liste complète des statistiques activées, consultez la page <a href=/stats>page de statistiques</a>."
@@ -5436,7 +5436,7 @@ msgid "Tunnels longer than 3 hops (for example 2 hops + 0-2 hops, 3 hops + 0-1 h
 msgstr "Des tunnels de plus de 3 sauts (p. ex. 2 sauts + 0 à 2 sauts, 3 sauts + 0 à 1 saut, 3 sauts + 0 à 2 sauts) ou une quantité + une quantité de secours élevées, peuvent gravement dégrader les performances ou la fiabilité."
 
 msgid "High CPU and/or high outbound bandwidth usage may result."
-msgstr "Il pourrait en résulter une utilisation élevée de l’UCT ou de la bande passante sortante."
+msgstr "Il pourrait en résulter une utilisation élevée de l'UCT ou de la bande passante sortante."
 
 msgid "Change these settings with care, and adjust them if you have problems."
 msgstr "Changer ces paramètres avec prudence et les ajuster en cas de problèmes."
@@ -5469,7 +5469,7 @@ msgid "A very old version has been detected. It's not recommended to use I2P wit
 msgstr "Une très ancienne version a été détectée. Il n'est pas recommandé d'utiliser I2P+ avec des navigateurs non tenus."
 
 msgid "If you're not using IE, it's likely that your browser is pretending to be IE; please configure your browser (or proxy) to use a different User Agent string if you'd like to access the console themes."
-msgstr "Si vous n’utilisez pas IE, il est probable que votre navigateur prétend être IE. Veuillez configurer votre navigateur (ou mandataire) pour qu’il utilise une chaîne différente d’agent utilisateur si vous souhaitez accéder aux thèmes de la console."
+msgstr "Si vous n'utilisez pas IE, il est probable que votre navigateur prétend être IE. Veuillez configurer votre navigateur (ou mandataire) pour qu'il utilise une chaîne différente d'agent utilisateur si vous souhaitez accéder aux thèmes de la console."
 
 msgid "Router Console Password"
 msgstr "Mot de passe de la console du routeur"
@@ -5550,7 +5550,7 @@ msgid "config webapps"
 msgstr "config applisWeb"
 
 msgid "The Java web applications listed below are started by the webConsole client and run in the same JVM as the router. They are usually web applications accessible through the router console. They may be complete applications (e.g. i2psnark), front-ends to another client or application which must be separately enabled (e.g. susidns, i2ptunnel), or have no web interface at all (e.g. addressbook)."
-msgstr "Les applications Web Java listées ci-dessous sont démarrées par le client webConsole et s’exécutent dans la même MVJ que le routeur. Elles sont généralement des applications Web accessibles par la console du routeur. Elles peuvent être des applications complètes (p. ex.: i2pSnark), des frontales pour d’autres clients ou des applications qui doivent être activées séparément (p. ex.: susidns, i2ptunnel) ou n’avoir aucune interface Web (p. ex.: le carnet d’adresses)."
+msgstr "Les applications Web Java listées ci-dessous sont démarrées par le client webConsole et s'exécutent dans la même MVJ que le routeur. Elles sont généralement des applications Web accessibles par la console du routeur. Elles peuvent être des applications complètes (p. ex.: i2pSnark), des frontales pour d'autres clients ou des applications qui doivent être activées séparément (p. ex.: susidns, i2ptunnel) ou n'avoir aucune interface Web (p. ex.: le carnet d'adresses)."
 
 msgid "Open in new tab"
 msgstr "Ouvrir dans un nouvel onglet"
@@ -5575,7 +5575,7 @@ msgid "Error {0}"
 msgstr "Erreur {0}"
 
 msgid "I2P Version and Running Environment"
-msgstr "Version d’I2P et environnement d’exécution"
+msgstr "Version d'I2P et environnement d'exécution"
 
 msgid "Note that system information, log timestamps, and log messages may provide clues to your location; please review everything you include in a bug report."
 msgstr "Veuillez prendre note que les informations système, les estampilles temporelles et les messages de journalisation peuvent contenir des indices sur votre position géographique. Veuillez réviser tout ce que vous incluez dans un relevé de bogue."
@@ -5599,7 +5599,7 @@ msgid "Event Log"
 msgstr "Journal des Événements"
 
 msgid "Combined"
-msgstr ""
+msgstr "Combiné"
 
 msgid "graph"
 msgstr "Graphique"
@@ -5680,7 +5680,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Ce paramètre, lorsqu'il est défini sur true, affichera les liens vers les <i>Sites d'intérêt</i> sur la <a href=/sitemap>carte du site</a>. [La valeur par défaut est false]"
 
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr ""
+msgstr "Ce paramètre, lorsqu'il est réglé sur true, présentera la barre latérale standard sur la page d'accueil, permettant la configuration via <a href=/configsidebar>. [Par défaut est false]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Ce paramètre détermine si le routeur doit ou non utiliser le fichier <i>blocklist.txt</i> fourni et toutes les listes de blocage configurées par l'utilisateur pour activer l'interdiction de routeurs par hachage ou adresse IP. Les plages et masques de sous-réseau sont pris en charge pour IPv4 mais pas pour IPv6. Reportez-vous au fichier <i>blocklist.txt</i> dans le répertoire d'application I2P+ pour plus d'informations. [Activé par défaut, redémarrage requis]"
@@ -5695,7 +5695,7 @@ msgid "This setting determines whether or not the router should use the provided
 msgstr "Ce paramètre détermine si le routeur doit ou non utiliser le fichier <i>blocklist_tor.txt</i> fourni dans le répertoire d'application I2P+ pour activer l'interdiction des routeurs fonctionnant à partir d'adresses IP de nœuds de sortie Tor. [Activé par défaut, redémarrage requis]"
 
 msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
-msgstr ""
+msgstr "Ce paramètre active le blocage et l'interdiction des requêtes des routeurs dans les pays spécifiés dès qu'une demande de tunnel direct est faite. Les pays doivent être spécifiés comme des codes de pays à deux lettres, séparés par des virgules. ex: router.blockCountries=cn,ru"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
 msgstr "Quand défini sur fausse, le routeur ne bloquera pas les demandes de construction de tunnels venant de routeurs plus lents ou inaccessibles exécutant des versions plus anciennes. [Par défaut vrai, redémarrage requis]"
@@ -5833,7 +5833,7 @@ msgid "This setting determines whether routers classified as uninteresting (K or
 msgstr "Ce paramètre détermine si les routeurs classés comme peu intéressants (niveau K ou L, inaccessibles ou datant d'une version antérieure à 0.9.50) sont vérifiés pendant le processus de rafraîchissement des routeurs après 1 heure d'activité. [La valeur par défaut est false]"
 
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
-msgstr ""
+msgstr "Lorsqu'il est réglé sur true, ce paramètre assouplira les conditions requises pour que votre routeur publie des plafonds de congestion, spécifiquement lorsqu'il est déterminé que votre utilisation de la bande passante est élevée. D'autres conditions, telles qu'un délai de tâches élevé ou un routeur classé comme lent, provoqueront toujours la publication des plafonds. [Par défaut est false]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Lorsqu'il est configuré, ce paramètre définit une limite fixe pour le nombre de tunnels que le routeur est autorisé à construire simultanément. Par défaut, le routeur utilise le temps de construction moyen et la bande passante sortante actuelle pour déterminer le taux de construction optimal. [Redémarrage requis]"
@@ -5848,10 +5848,10 @@ msgid "This setting (in minutes) allows you to manually configure how long to wa
 msgstr "Ce paramètre (en minutes) vous permet de configurer manuellement la durée d'attente après le démarrage avant de vérifier la validité des RouterInfos dans la NetDb, après quoi seuls les routeurs valides seront acceptés pour inclusion. Lors de la validation, les RouterInfos expirés et les pairs non réactifs uniquement accessibles via SSU seront supprimés de la NetDb. [La valeur par défaut est de 60 minutes] Remarque : ce paramètre n'a aucune incidence sur les routeurs plus anciens (antérieurs à 0.9.29 par défaut) qui sont supprimés de la NetDb et bannis pour la session du routeur dès qu'un enregistrement NetDb est tenté."
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
+msgstr "Ce paramètre, lorsqu'il est réglé sur true, bloquera la communication directe de tous les routeurs de votre propre pays et les ajoutera à votre liste de bannissement jusqu'au redémarrage de votre routeur. [Par défaut est false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr ""
+msgstr "Ce paramètre, lorsqu'il est réglé sur true, bloquera la communication directe de tous les routeurs de niveau X qui publient un plafond de congestion G et qui ne sont ni joignables ni injoignables, les ajoutant à la liste de bannissement de session. Notez que le mode avancé doit être activé pour que ce paramètre prenne effet. [Par défaut est false]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Ce paramètre permet de désactiver les tests SSU pour déterminer si votre routeur est derrière un pare-feu et peut être activé pour les routeurs qui ne sont définitivement pas derrière un pare-feu mais rencontrent des problèmes de pare-feu intermittents. Dans le cas où les tests sont désactivés, le SSU et le NTCP devraient afficher votre adresse IP publique actuelle sur la <a href=/info>page d'informations du routeur</a>. [Redémarrage requis]"
@@ -5860,7 +5860,7 @@ msgid "This setting determines which transport takes priority when communicating
 msgstr "Ce paramètre détermine quel transport est prioritaire lors de la communication avec les pairs. Par défaut, le NTCP est privilégié par rapport au UDP (SSU). En définissant la valeur sur true, le UDP sera privilégié sauf s'il existe déjà une connexion NTCP ; lorsqu'il est défini sur always, le UDP sera toujours utilisé quelles que soient les connexions NTCP préexistantes. [La valeur par défaut est false]"
 
 msgid "miscellaneous"
-msgstr ""
+msgstr "Divers"
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "S'il est défini sur true, cette option placera une icône dans la zone de notification, avec des options de contrôle de service de base. [Désactivé par défaut]"
@@ -5890,28 +5890,28 @@ msgid "View the full change log"
 msgstr "Voir le journal complet des modifications"
 
 msgid "While I2P will work fine behind most firewalls, your speeds and network integration will generally improve if the I2P port is forwarded for both UDP and TCP."
-msgstr "Bien que I2P fonctionne bien derrière la plupart des pare-feu, vos vitesse et intégration au réseau seront généralement améliorées si le port d’I2P est réacheminé pour l’UDP et le TCP."
+msgstr "Bien que I2P fonctionne bien derrière la plupart des pare-feu, vos vitesse et intégration au réseau seront généralement améliorées si le port d'I2P est réacheminé pour l'UDP et le TCP."
 
 msgid "If you can, please poke a hole in your firewall to allow unsolicited UDP and TCP packets to reach you."
 msgstr "Si vous le pouvez, veuillez faire un trou dans votre pare-feu afin de permettre aux paquets UDP et TCP non sollicités de vous atteindre."
 
 msgid "If you can't, I2P supports UPnP (Universal Plug and Play) and UDP hole punching with \"SSU introductions\" to relay traffic."
-msgstr "Si vous ne le pouvez pas, I2P prend en charge l’UPnP (prêt-à-l’emploi universel) et le perçage de trou UDP avec « présentations SSU » pour relayer le trafic."
+msgstr "Si vous ne le pouvez pas, I2P prend en charge l'UPnP (prêt-à-l'emploi universel) et le perçage de trou UDP avec « présentations SSU » pour relayer le trafic."
 
 msgid "Most of the options on the Network Configuration page are for special situations, for example where UPnP does not work correctly, or a firewall not under your control is doing harm."
-msgstr "La plupart des options sur la page Configuration du réseau sont pour des situations particulières. Par exemple, quand UPnP ne fonctionne pas correctement ou si un pare-feu qui n’est pas sous votre contrôle vous nuit."
+msgstr "La plupart des options sur la page Configuration du réseau sont pour des situations particulières. Par exemple, quand UPnP ne fonctionne pas correctement ou si un pare-feu qui n'est pas sous votre contrôle vous nuit."
 
 msgid "Certain firewalls such as symmetric NATs may not work well with I2P."
-msgstr "Certains pare-feu tels que ceux à traduction d’adresses réseau symétrique pourraient ne pas fonctionner correctement avec I2P."
+msgstr "Certains pare-feu tels que ceux à traduction d'adresses réseau symétrique pourraient ne pas fonctionner correctement avec I2P."
 
 msgid "UPnP is used to communicate with Internet Gateway Devices (IGDs) to detect the external IP address and forward ports."
-msgstr "UPnP est utilisé pour communiquer avec des dispositifs passerelles Internet (IGD) afin de détecter l’adresse IP externe et de réacheminer les ports."
+msgstr "UPnP est utilisé pour communiquer avec des dispositifs passerelles Internet (IGD) afin de détecter l'adresse IP externe et de réacheminer les ports."
 
 msgid "UPnP support is beta, and may not work for any number of reasons"
 msgstr "La prise en charge UPnP est en version bêta et peut ne pas fonctionner pour de nombreuses raisons"
 
 msgid "No UPnP-compatible device present"
-msgstr "Aucun appareil compatible UPnP n’est présent"
+msgstr "Aucun appareil compatible UPnP n'est présent"
 
 msgid "UPnP disabled on the device"
 msgstr "UPnP est désactivé sur le dispositif"
@@ -5920,13 +5920,13 @@ msgid "Software firewall interference with UPnP"
 msgstr "Interférence des pare-feu logiciel avec UPnP"
 
 msgid "Bugs in the device's UPnP implementation"
-msgstr "Il y a des bogues de mise en oeuvre d’UPnP par le dispositif"
+msgstr "Il y a des bogues de mise en oeuvre d'UPnP par le dispositif"
 
 msgid "Multiple firewall/routers in the internet connection path"
 msgstr "Il y a plusieurs pare-feu ou routeurs sur le chemin de connexion à Internet"
 
 msgid "UPnP device change, reset, or address change"
-msgstr "Changement de dispositif UPnP, réinitialisation ou changement d’adresse"
+msgstr "Changement de dispositif UPnP, réinitialisation ou changement d'adresse"
 
 msgid "UPnP may be enabled or disabled on the Network Configuration page, but a change requires a router restart to take effect."
 msgstr "Vous pouvez activer ou désactiver UPnP sur la page Configuration du réseau, mais le routeur doit être redémarré pour que les changements prennent effet."
@@ -5935,7 +5935,7 @@ msgid "Review the UPnP status here."
 msgstr "Examinez l'état UPnP ici."
 
 msgid "Also, <b>do not enter a private IP address</b> like 127.0.0.1 or 192.168.1.1."
-msgstr "De plus, <b>ne pas saisir d’adresse IP privée</b> telle que 127.0.0.1 ou 192.168.1.1."
+msgstr "De plus, <b>ne pas saisir d'adresse IP privée</b> telle que 127.0.0.1 ou 192.168.1.1."
 
 msgid "If you specify the wrong IP address, or do not properly configure your NAT or firewall, your network performance will degrade substantially."
 msgstr "Si vous spécifiez une mauvaise adresse IP ou ne configurez pas correctement votre NAT ou votre pare-feu, les performances de votre réseau se dégraderont considérablement."
@@ -6007,7 +6007,7 @@ msgid "This is a shortened version of the official FAQ. For the full version, pl
 msgstr "Il s'agit d'une version abrégée de la FAQ officielle. Pour la version complète, veuillez visiter <a href=https://geti2p.net/faq target=_blank rel=noreferrer class='sitelink external'>https://geti2p.net/faq</a> ou <a href=http://i2p-projekt.i2p/faq target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p/faq</a>."
 
 msgid "My router has been up for several minutes and has zero or very few connections"
-msgstr "Mon routeur est en ligne depuis plusieurs minutes, mais n’a pas ou très peu de connexions"
+msgstr "Mon routeur est en ligne depuis plusieurs minutes, mais n'a pas ou très peu de connexions"
 
 msgid "If after a few minutes of uptime your router is indicating 0 Active Peers and 0 Known Peers, with a notification in the sidebar that you need to check your network connection, verify that you can access the internet. If your internet connection is functional, you may need to unblock Java in your firewall. Otherwise, you may need to reseed your I2P router. Visit the <a href=/configreseed#reseedconfig>Reseed Configuration page</a> and click the <i>Save Changes and Reseed Now</i> button. For more information, see the <a href=#reseedhelp>Reseed help section</a> above."
 msgstr "Si après quelques minutes d'activité votre routeur indique 0 pairs actifs et 0 pairs connus, avec une notification dans la barre latérale vous invitant à vérifier votre connexion réseau, vérifiez que vous pouvez accéder à Internet. Si votre connexion Internet fonctionne, il peut s'avérer nécessaire de débloquer Java dans votre pare-feu. Sinon, vous devrez procéder à une nouvelle phase de déclenchement pour votre routeur I2P. Rendez-vous sur la page <a href=/configreseed#reseedconfig>Configuration de déclenchement</a> et cliquez sur le bouton <i>Enregistrer les modifications et déclencher maintenant</i>. Pour plus d'informations, consultez la section <a href=#reseedhelp>Aide au déclenchement</a> ci-dessus."
@@ -6019,7 +6019,7 @@ msgid "If your router has 10 or more active peers, everything is fine. The route
 msgstr "Si votre routeur a 10 pairs actifs ou plus, tout va bien. Le routeur devrait maintenir des connexions à quelques pairs en permanence. La meilleure façon de rester \"mieux connecté\" au réseau est de <a href=/config>partager plus de bande passante</a>."
 
 msgid "I'm missing lots of hosts in my addressbook. What are some good subscription links?"
-msgstr "Il me manque beaucoup d’hôtes dans mon carnet d’adresses. "
+msgstr "Il me manque beaucoup d'hôtes dans mon carnet d'adresses. "
 
 msgid "The default subscription is to <code>http://i2p-projekt.i2p/hosts.txt</code> which is seldom updated. If you don't have another subscription, you may often have to use \"jump\" links which is much slower but ensures that your addressbook is only populated by sites you use (in addition to the default subscription addresses). To speed up browsing on I2P, it's a good idea to add some addressbook subscriptions."
 msgstr "L'abonnement par défaut est à <code>http://i2p-projekt.i2p/hosts.txt</code> qui est rarement mis à jour. Si vous n'avez pas d'autre abonnement, vous devrez souvent utiliser des liens \"sauts\" qui sont beaucoup plus lents mais garantissent que votre carnet d'adresses ne contient que les sites que vous utilisez (en plus des adresses de l'abonnement par défaut). Pour accélérer la navigation sur I2P, il est bon d'ajouter quelques abonnements au carnet d'adresses."
@@ -6031,7 +6031,7 @@ msgid "Note that subscribing to a hosts.txt service is an act of trust, as a mal
 msgstr "Notez que souscrire à un service hosts.txt est un acte de confiance, car un abonnement malveillant pourrait vous donner des adresses incorrectes, soyez donc prudent lorsque vous vous abonnez à des listes de sources inconnues. Les opérateurs de ces services peuvent avoir diverses politiques de référencement des hôtes. La présence sur cette liste n'implique aucune approbation."
 
 msgid "How do I access IRC, BitTorrent, or other services on the regular Internet?"
-msgstr "Comment puis-je accéder à IRC, à BitTorrent ou à d’autres services sur l’Internet ordinaire ?"
+msgstr "Comment puis-je accéder à IRC, à BitTorrent ou à d'autres services sur l'Internet ordinaire ?"
 
 msgid "Unless an outproxy has been set up for the service you want to connect to, this is not possible, with the exception of BitTorrent (see below). There are only three types of outproxies running right now: HTTP, HTTPS, and email. Note that there is currently no publicly listed SOCKS outproxy. If this type of service is required, try <a href=https://torproject.org/ target=_blank rel=noreferrer class='sitelink external'>Tor</a>."
 msgstr "À moins qu'un outproxy n'ait été configuré pour le service auquel vous souhaitez vous connecter, cela n'est pas possible, à l'exception de BitTorrent (voir ci-dessous). Il n'y a actuellement que trois types d'outproxies fonctionnels : HTTP, HTTPS et courrier électronique. Notez qu'il n'y a actuellement aucun outproxy SOCKS répertorié publiquement. Si ce type de service est nécessaire, essayez <a href=https://torproject.org/ target=_blank rel=noreferrer class='sitelink external'>Tor</a>."
@@ -6055,7 +6055,7 @@ msgid "You will need to configure your browser to use the HTTP proxy server (by 
 msgstr "Vous devrez configurer votre navigateur pour utiliser le serveur proxy HTTP (par défaut sur l'hôte : <code>127.0.0.1</code> port : <code>4444</code>). Consultez le <a href=https://geti2p.net/en/about/browser-config target=_blank rel=noreferrer class='sitelink external'>Guide de configuration du proxy du navigateur</a> pour une explication plus détaillée."
 
 msgid "What is an eepsite?"
-msgstr "Qu’est ce qu’un site eep?"
+msgstr "Qu'est ce qu'un site eep?"
 
 msgid "An eepsite is a website that is hosted anonymously on the I2P network - you can access it by configuring your web browser to use I2P's HTTP proxy (see above) and browsing to the <code>.i2p</code> suffixed website (e.g. <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p</a>). Also ensure your browser is configured to resolve DNS remotely when using the proxy to avoid DNS leaks."
 msgstr "Un site eep est un site web hébergé de manière anonyme sur le réseau I2P - vous pouvez y accéder en configurant votre navigateur web pour utiliser le proxy HTTP d'I2P (voir ci-dessus) et en naviguant vers le site dont l'adresse se termine par <code>.i2p</code> (par exemple <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer class=sitelink>http://i2p-projekt.i2p</a>). Assurez-vous également que votre navigateur est configuré pour résoudre le DNS de manière distante lors de l'utilisation du proxy afin d'éviter les fuites DNS."
@@ -6100,16 +6100,16 @@ msgid "For SSL only"
 msgstr "Pour SSL uniquement"
 
 msgid "How can I configure the console and web services to be accessible on my local network?"
-msgstr ""
+msgstr "Comment puis-je configurer la console et les services web pour qu'ils soient accessibles sur mon réseau local ?"
 
 msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
-msgstr ""
+msgstr "Pour rendre votre console accessible sur votre réseau local, modifiez le fichier de configuration 00-net.i2p.router.web.RouterConsoleRunner-clients.config dans le dossier clients.config.d de votre répertoire de paramètres I2P. Mettez à jour ou ajoutez les adresses IP nécessaires au mappage localhost existant (127.0.0.1). Utilisez le commutateur -s pour l'accès HTTPS."
 
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
-msgstr ""
+msgstr "Exemple : Pour autoriser l'accès depuis localhost et 192.168.1.10 via HTTP et HTTPS :"
 
-msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager’s configuration section using the <i>reachable by</i> dropdown."
-msgstr ""
+msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
+msgstr "Pour la plupart des services clients, modifiez l'adresse d'écoute pour le service pertinent dans la section de configuration du Gestionnaire des tunnels en utilisant la liste déroulante <i>accessible par</i>."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Comment puis-je me connecter à IRC dans I2P ?"
@@ -6310,7 +6310,7 @@ msgid "A router on the network tasked with providing and receiving information a
 msgstr "Un routeur sur le réseau chargé de fournir et de recevoir des informations sur les autres routeurs et services du réseau. Le débit de partage minimum actuel pour qu'un routeur soit considéré comme capable d'assurer les fonctions de floodfill est de 128 Ko/s, bien qu'il soit possible de contourner cette exigence et de forcer un routeur à être un floodfill sur la <a href=/configadvanced>page de configuration avancée</a>. Pour plus d'informations, consultez la <a href=https://geti2p.net/fr/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>documentation en ligne</a>."
 
 msgid "Garlic Routing"
-msgstr "Acheminement de l’ail"
+msgstr "Acheminement de l'ail"
 
 msgid "A variant of onion routing that encrypts multiple messages together to make it more difficult for attackers to perform traffic analysis and to increase the speed of data transfer. For more information, see the <a href=https://geti2p.net/en/docs/how/garlic-routing class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
 msgstr "Une variante de l'acheminement en oignon qui chiffre plusieurs messages ensemble pour rendre plus difficile pour les attaquants d'effectuer une analyse du trafic et d'augmenter la vitesse de transfert des données. Pour plus d'informations, consultez la <a href=https://geti2p.net/fr/docs/how/garlic-routing class='sitelink external' target=_blank rel=noreferrer>documentation en ligne</a>."
@@ -6355,7 +6355,7 @@ msgid "Introducer"
 msgstr "Introducteur"
 
 msgid "A router that facilitates the connection to the network of another router that is behind a firewall."
-msgstr "Un routeur qui facilite la connexion au réseau d’un autre routeur situé derrière un pare-feu."
+msgstr "Un routeur qui facilite la connexion au réseau d'un autre routeur situé derrière un pare-feu."
 
 msgid "Jump Service"
 msgstr "Service de saut"
@@ -6496,7 +6496,7 @@ msgid "If you are in a hurry and can't wait a few hours, you can tell people to 
 msgstr "Si vous êtes pressé et ne pouvez pas attendre quelques heures, vous pouvez dire aux gens d'utiliser un service de redirection d'adresse assistant de « saute ». Cela fonctionnera généralement quelques minutes après l'enregistrement de votre nom de domaine sur le même site. Testez-le d'abord vous-même en entrant <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>votrenomde domainesélectionné.i2p</i></code> dans votre navigateur. Une fois que ça fonctionne, vous pouvez dire aux autres de l'utiliser."
 
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
-msgstr ""
+msgstr "Alternativement, vous pouvez copier le <i>lien d'aide d'adresse</i> pour votre domaine, indiqué soit sur la page de liste d'adresses, soit sur la page de détails pour votre domaine par ex. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details pour skank.i2p</a>, et collez le lien là où il est nécessaire de le partager avec d'autres."
 
 msgid "Backup your private key!"
 msgstr "Sauvegardez votre clé privée!"
@@ -6541,7 +6541,7 @@ msgid "What to do in the event I2P+ isn't working"
 msgstr "Que faire si I2P ne fonctionne pas"
 
 msgid "An introduction to tunnel access lists"
-msgstr "Une introduction aux listes d’accès aux tunnels"
+msgstr "Une introduction aux listes d'accès aux tunnels"
 
 msgid "Information about the sidebar, network status messages, and theme overrides"
 msgstr "Barre latérale, messages d'état du réseau et remplacements de thème"
@@ -6565,7 +6565,7 @@ msgid "Reseeding is the bootstrapping process used to find other routers when yo
 msgstr "Le déclenchement est le processus de démarrage utilisé pour trouver d'autres routeurs lors de l'installation initiale d'I2P ou lorsque votre routeur ne dispose plus de suffisamment de références vers d'autres routeurs. Les paramètres par défaut conviendront à la plupart des gens. Ne les modifiez que si HTTPS est bloqué par un pare-feu restrictif et que le déclenchement a échoué."
 
 msgid "If reseeding has failed, you should first check your network connection."
-msgstr "Si le réensemencement a échoué, vous devriez d’abord vérifier votre connexion réseau."
+msgstr "Si le réensemencement a échoué, vous devriez d'abord vérifier votre connexion réseau."
 
 msgid "If a firewall is blocking your connections to reseed hosts, you may have access to a proxy."
 msgstr "Si un pare-feu bloque vos connexions vers les hôtes de réensemencement, vous pourriez devoir accéder à un serveur mandataire."
@@ -6617,7 +6617,7 @@ msgid "If you are stuck behind an ISP firewall or filter, you can use the follow
 msgstr "Si vous êtes coincé derrière un pare-feu ou un filtre FAI, vous pouvez utiliser la méthode manuelle suivante (solution technique non automatisée) pour rejoindre le réseau I2P."
 
 msgid "Joining the I2P Network using a reseed file"
-msgstr "Rejoindre le réseau I2P à l’aide d’un fichier de réamorçage"
+msgstr "Rejoindre le réseau I2P à l'aide d'un fichier de réamorçage"
 
 msgid "Please contact a known trustworthy friend who has a running I2P router, and ask them for help with reseeding your I2P router. Request that they send you a reseed file exported from their running I2P router. It is vital that the file is exchanged over a secure channel, e.g. encrypted to avoid external tampering (PGP Sign, Encrypt and Verified with a trusted public key). The file itself is unsigned, so please accept files only from known trusted friends. Never import a reseed file if you cannot verify its source."
 msgstr "Veuillez contacter un ami de confiance connu qui dispose d'un routeur I2P fonctionnel, et demandez-lui de l'aide pour le réensemencement de votre routeur I2P. Demandez-lui de vous envoyer un fichier de réensemencement exporté à partir de son routeur I2P fonctionnel. Il est essentiel que le fichier soit échangé par un canal sécurisé, par exemple chiffré pour éviter une altération externe (signature PGP, chiffrement et vérification avec une clé publique de confiance). Le fichier lui-même n'est pas signé, aussi veuillez accepter les fichiers uniquement de la part d'amis de confiance connus. N'importez jamais un fichier de réensemencement si vous ne pouvez pas vérifier sa provenance."
@@ -6733,7 +6733,7 @@ msgid "Getting Support Online"
 msgstr "Obtenir une assistance en ligne"
 
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
-msgstr ""
+msgstr "Vous souhaiterez peut-être aussi consulter les informations sur le <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>site web I2P</a>, poster des messages sur le <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>forum de discussion I2P</a> ou passer par <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> ou <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> sur le réseau IRC interne d'I2P."
 
 msgid "Reporting Bugs"
 msgstr "Signaler des bugs"
@@ -6991,10 +6991,10 @@ msgid "This section is not enabled by default unless <a href='/help/configuratio
 msgstr "Cette section n'est pas activée par défaut à moins que le <a href='/help/configuration#advancedconsole'>mode Console avancée</a> ne soit activé. Vous pouvez l'activer sur la page de <a href='/configsidebar'>configuration de la barre latérale</a>."
 
 msgid "Reachability Help"
-msgstr "Aide à l’accessibilité"
+msgstr "Aide à l'accessibilité"
 
 msgid "If you think you have opened up your firewall and I2P still thinks you are firewalled, remember that you may have multiple firewalls, for example both software packages and external hardware routers."
-msgstr "Si vous pensez que vous avez ouvert votre pare-feu et qu’I2P indique toujours que vous êtes derrière un pare-feu, n’oubliez pas que vous pourriez avoir plusieurs pare-feu, par exemple à la fois des paquets logiciels et des routeurs matériels externes."
+msgstr "Si vous pensez que vous avez ouvert votre pare-feu et qu'I2P indique toujours que vous êtes derrière un pare-feu, n'oubliez pas que vous pourriez avoir plusieurs pare-feu, par exemple à la fois des paquets logiciels et des routeurs matériels externes."
 
 msgid "If there is an error, the <a href=\"/logs\">logs</a> may also help diagnose the problem."
 msgstr "En cas d'erreur, les <a href=\"/logs\">journaux</a> peuvent également aider à diagnostiquer le problème."
@@ -7015,22 +7015,22 @@ msgid "However, if it appears consistently, you should check whether both your e
 msgstr "Cependant, si cela se reproduit systématiquement, vous devriez vérifier si vos pare-feu externes et internes sont tous deux ouverts pour votre port."
 
 msgid "I2P will work fine when firewalled, there is no reason for concern. When firewalled, the router uses \"introducers\" to relay inbound connections."
-msgstr "I2P fonctionnera très bien derrière un pare-feu, il n’y a pas raison de s’inquiéter. Derrière un pare-feu, le routeur utilise des « proposeurs » pour relayer les connexions entrantes."
+msgstr "I2P fonctionnera très bien derrière un pare-feu, il n'y a pas raison de s'inquiéter. Derrière un pare-feu, le routeur utilise des « proposeurs » pour relayer les connexions entrantes."
 
 msgid "However, you will get more participating traffic and help the network if you open your firewall."
 msgstr "Cependant, vous aurez plus de trafic participant et aiderez le réseau en ouvrant vos pare-feu."
 
 msgid "If you think you have already done so, remember that you may have both a hardware and a software firewall, or be behind an additional, institutional firewall you cannot control."
-msgstr "Si vous pensez que vous l’avez déjà fait, souvenez-vous que vous pourriez avoir à la fois des pare-feu matériel et logiciel ou que vous pourriez être derrière un pare-feu institutionnel supplémentaire que vous ne pouvez pas contrôler."
+msgstr "Si vous pensez que vous l'avez déjà fait, souvenez-vous que vous pourriez avoir à la fois des pare-feu matériel et logiciel ou que vous pourriez être derrière un pare-feu institutionnel supplémentaire que vous ne pouvez pas contrôler."
 
 msgid "Also, some routers cannot correctly forward both TCP and UDP on a single port, or may have other limitations or bugs that prevent them from passing traffic through to I2P."
-msgstr "De plus, certains pare-feu ne peuvent pas réacheminer correctement à la fois le TCP et l’UDP sur un même port ou pourraient avoir d’autres restrictions ou bogues qui les empêcheraient de passer le trafic à I2P."
+msgstr "De plus, certains pare-feu ne peuvent pas réacheminer correctement à la fois le TCP et l'UDP sur un même port ou pourraient avoir d'autres restrictions ou bogues qui les empêcheraient de passer le trafic à I2P."
 
 msgid "The router is currently testing whether your UDP port is firewalled."
 msgstr "Le routeur teste actuellement si votre port UDP est derrière un pare-feu."
 
 msgid "The router is not configured to publish its address, therefore it does not expect incoming connections."
-msgstr "Le routeur n’est pas configuré pour publier son adresse, il n’attend donc pas de connexion entrante."
+msgstr "Le routeur n'est pas configuré pour publier son adresse, il n'attend donc pas de connexion entrante."
 
 msgid "Hidden mode is automatically enabled for added protection in certain countries."
 msgstr "Le mode caché est activé automatiquement pour une protection accrue dans certains pays."
@@ -7042,7 +7042,7 @@ msgid "You have configured I2P to share more than 128KBps of bandwidth, but you 
 msgstr "Vous avez configuré I2P pour partager plus de 128 ko/s de bande passante, mais vous êtes derrière un pare-feu."
 
 msgid "While I2P will work fine in this configuration, if you really have over 128KBps of bandwidth to share, it will be much more helpful to the network if you open your firewall."
-msgstr "Bien qu’I2P fonctionnera correctement avec cette configuration, si vous avez vraiment plus de 128 ko/s de bande passante à partager, il serait bien plus bénéfique pour le réseau que vous ouvriez votre pare-feu."
+msgstr "Bien qu'I2P fonctionnera correctement avec cette configuration, si vous avez vraiment plus de 128 ko/s de bande passante à partager, il serait bien plus bénéfique pour le réseau que vous ouvriez votre pare-feu."
 
 msgid "WARN - Firewalled and Floodfill"
 msgstr "AVERT - Derrière un pare-feu et remplissage par diffusion"
@@ -7069,22 +7069,22 @@ msgid "WARN - Firewalled with UDP Disabled"
 msgstr "AVERT - Derrière un pare-feu avec UDP désactivé"
 
 msgid "You have configured inbound TCP, however you have disabled UDP."
-msgstr "Vous avez configuré le TCP entrant, mais vous avez désactivé l’UDP."
+msgstr "Vous avez configuré le TCP entrant, mais vous avez désactivé l'UDP."
 
 msgid "You appear to be firewalled on TCP, therefore your router cannot accept inbound connections."
 msgstr "Vous semblez être derrière un pare-feu sur le TCP et votre routeur ne peut par conséquent pas accepter les connexions entrantes."
 
 msgid "Please open your firewall or enable UDP."
-msgstr "Veuillez ouvrir votre pare-feu ou activer l’UDP."
+msgstr "Veuillez ouvrir votre pare-feu ou activer l'UDP."
 
 msgid "ERR - Clock Skew"
-msgstr "ERR - Décalage d’horloge"
+msgstr "ERR - Décalage d'horloge"
 
 msgid "Your system's clock is skewed, which will make it difficult to participate in the network."
 msgstr "Votre horloge système est décalée et il est donc difficile de participer au réseau."
 
 msgid "Correct your clock setting if this error persists."
-msgstr "Corriger vos paramètres d’horloge si cette erreur persiste."
+msgstr "Corriger vos paramètres d'horloge si cette erreur persiste."
 
 msgid "ERR - Private TCP Address"
 msgstr "ERR - Adresse TCP privée"
@@ -7093,13 +7093,13 @@ msgid "You must never advertise an unroutable IP address such as 127.0.0.1 or 19
 msgstr "Vous ne devez jamais publier une adresse IP non routable telle que 127.0.0.1 ou 192.168.1.1 pour votre adresse externe."
 
 msgid "Correct the address or disable inbound TCP on the Network Configuration page."
-msgstr "Corriger l’adresse ou désactiver le TCP entrant sur la page Configuration du réseau."
+msgstr "Corriger l'adresse ou désactiver le TCP entrant sur la page Configuration du réseau."
 
 msgid "ERR - SymmetricNAT"
-msgstr "ERR - Traduction d’adresses réseau symétrique"
+msgstr "ERR - Traduction d'adresses réseau symétrique"
 
 msgid "I2P detected that you are firewalled by a Symmetric NAT."
-msgstr "I2P a détecté que vous êtes derrière un pare-feu à traduction d’adresses réseau symétrique."
+msgstr "I2P a détecté que vous êtes derrière un pare-feu à traduction d'adresses réseau symétrique."
 
 msgid "I2P does not work well behind this type of firewall. You will probably not be able to accept inbound connections, which will limit your participation in the network."
 msgstr "I2P fonctionne mal derrière ce type de pare-feu. Vous ne pourrez probablement pas accepter de connexions entrantes, ce qui limitera votre participation au réseau."
@@ -7108,28 +7108,28 @@ msgid "ERR - UDP Port In Use - Set i2np.udp.internalPort=xxxx in advanced config
 msgstr "ERR - Le port UDP est utilisé. Définir i2np.udp.internalPort=xxxx dans la configuration évoluée et redémarrer"
 
 msgid "I2P was unable to bind to the configured port noted on the advanced network configuration page ."
-msgstr "I2P n’a pas réussi à se lier au port configuré dans la page de configuration avancée du réseau."
+msgstr "I2P n'a pas réussi à se lier au port configuré dans la page de configuration avancée du réseau."
 
 msgid "Check to see if another program is using the configured port. If so, stop that program or configure I2P to use a different port."
-msgstr "Vérifier si un autre logiciel utilise le port configuré. Si oui, arrêter ce logiciel ou configurer I2P afin qu’il utilise un port différent."
+msgstr "Vérifier si un autre logiciel utilise le port configuré. Si oui, arrêter ce logiciel ou configurer I2P afin qu'il utilise un port différent."
 
 msgid "This may be a transient error, if the other program is no longer using the port."
-msgstr "Il s’agit peut-être d’une erreur erreur passagère temporaire, si l’autre programme n’utilise plus le port."
+msgstr "Il s'agit peut-être d'une erreur erreur passagère temporaire, si l'autre programme n'utilise plus le port."
 
 msgid "However, a restart is always required after this error."
 msgstr "Cependant, un redémarrage est toujours exigé après cette erreur."
 
 msgid "ERR - UDP Disabled and Inbound TCP host/port not set"
-msgstr "ERR - L’UDP est désactivé et les port et hôte TCP entrants ne sont pas définis"
+msgstr "ERR - L'UDP est désactivé et les port et hôte TCP entrants ne sont pas définis"
 
 msgid "You have not configured inbound TCP with a hostname and port on the Network Configuration page, however you have disabled UDP."
-msgstr "Vous n’avez pas configuré le TCP entrant avec un nom d’hôte et un port sur la page Configuration du réseau, cependant vous avez désactivé l’UDP."
+msgstr "Vous n'avez pas configuré le TCP entrant avec un nom d'hôte et un port sur la page Configuration du réseau, cependant vous avez désactivé l'UDP."
 
 msgid "Therefore your router cannot accept inbound connections."
 msgstr "Par conséquent, votre routeur ne peut pas accepter de connexions entrantes."
 
 msgid "Please configure a TCP host and port on the Network Configuration page or enable UDP."
-msgstr "Veuillez configurer un hôte et un port TCP sur la page Configuration du réseau ou activer l’UDP."
+msgstr "Veuillez configurer un hôte et un port TCP sur la page Configuration du réseau ou activer l'UDP."
 
 msgid "ERR - Client Manager I2CP Error - check logs"
 msgstr "ERR - Erreur I2CP du gestionnaire de clients. Vérifier les journaux"
@@ -7138,19 +7138,19 @@ msgid "This is usually due to a port 7654 conflict. Check the logs to verify."
 msgstr "Cela est habituellement causé par un conflit du port 7654. Consulter les journaux pour vérifier."
 
 msgid "Do you have another I2P instance running? Stop the conflicting program and restart I2P."
-msgstr "Une autre instance d’I2P est-elle en cours d’exécution ? Arrêtez le programme en conflit et redémarrez I2P."
+msgstr "Une autre instance d'I2P est-elle en cours d'exécution ? Arrêtez le programme en conflit et redémarrez I2P."
 
 msgid "The skew (offset) of your computer's clock relative to the network-synced time."
-msgstr "Le décalage de l’horloge de votre ordinateur par rapport à l’heure synchronisée au réseau."
+msgstr "Le décalage de l'horloge de votre ordinateur par rapport à l'heure synchronisée au réseau."
 
 msgid "I2P requires your computer's time be accurate."
-msgstr "I2P exige que l’heure de votre ordinateur soit juste."
+msgstr "I2P exige que l'heure de votre ordinateur soit juste."
 
 msgid "If the skew is more than a few seconds, please correct the problem by adjusting your computer's time."
-msgstr "Si le décalage est supérieur à quelques secondes, veuillez corriger le problème en réglant l’heure de votre ordinateur."
+msgstr "Si le décalage est supérieur à quelques secondes, veuillez corriger le problème en réglant l'heure de votre ordinateur."
 
 msgid "If I2P cannot connect to the internet, a reading of 0ms may be indicated."
-msgstr "Si I2P n’arrive pas à se connecter à internet, un résultat de 0ms pourrait être affiché."
+msgstr "Si I2P n'arrive pas à se connecter à internet, un résultat de 0ms pourrait être affiché."
 
 msgid "Web hosting on I2P"
 msgstr "L'hébergement de sites web sur I2P"
@@ -7273,7 +7273,7 @@ msgid "Configure display language, theme and optional console password"
 msgstr "Configurer la langue d'affichage, le thème et le mot de passe de la console en option"
 
 msgid "Language"
-msgstr ""
+msgstr "Langue"
 
 msgid "Configure router bandwidth"
 msgstr "Configurer la bande passante du routeur"
@@ -7291,7 +7291,7 @@ msgid "job queue stats"
 msgstr "statistiques de la file d'attente des tâches"
 
 msgid "Job Queue"
-msgstr "File d’attente des travaux"
+msgstr "File d'attente des travaux"
 
 msgid "Job statistics for this session"
 msgstr "Statistiques des tâches pour cette session"
@@ -7312,7 +7312,7 @@ msgid "logs"
 msgstr "journaux"
 
 msgid "Please include your I2P version and running environment information in bug reports"
-msgstr "Veuillez inclure votre version d’I2P et les informations sur votre environnement d’exécution dans les relevés de bogue"
+msgstr "Veuillez inclure votre version d'I2P et les informations sur votre environnement d'exécution dans les relevés de bogue"
 
 #, java-format
 msgid "Please report bugs on {0} or {1}."
@@ -7340,22 +7340,22 @@ msgid "network database"
 msgstr "base de données de réseau"
 
 msgid "Encryption type"
-msgstr ""
+msgstr "Type de chiffrement"
 
 msgid "Encryption types"
-msgstr ""
+msgstr "Types de chiffrement"
 
 msgid "Signature types"
-msgstr ""
+msgstr "Types de signature"
 
 msgid "Locally hosted private service"
-msgstr ""
+msgstr "Service privé hébergé localement"
 
 msgid "Locally hosted public service"
-msgstr ""
+msgstr "Service public hébergé localement"
 
 msgid "Requested client leaseset"
-msgstr ""
+msgstr "Jeu de baux client demandé"
 
 msgid "network database router map"
 msgstr "Carte du réseau de la base de données du routeur"
@@ -7370,13 +7370,13 @@ msgid "Latest News"
 msgstr "Dernières nouvelles"
 
 msgid "WebApp Not Found"
-msgstr "L’appliWeb est introuvable"
+msgstr "L'appliWeb est introuvable"
 
 msgid "Web Application Not Running"
-msgstr "L’application Web ne tourne pas"
+msgstr "L'application Web ne tourne pas"
 
 msgid "The requested web application is not running."
-msgstr "L’application Web demandée ne tourne pas."
+msgstr "L'application Web demandée ne tourne pas."
 
 #, java-format
 msgid "Please visit the {0}config clients page{1} to start it."
@@ -7401,10 +7401,10 @@ msgid "Fast / High Capacity"
 msgstr "rapide/haute capacité"
 
 msgid "router logs"
-msgstr ""
+msgstr "journaux du routeur"
 
 msgid "service logs"
-msgstr ""
+msgstr "journaux de service"
 
 msgid "Manage I2P addresses"
 msgstr "Gérer les adresses I2P"
@@ -7431,7 +7431,7 @@ msgid "Information &amp; Diagnostics"
 msgstr "Informations"
 
 msgid "Review recent updates to I2P"
-msgstr "Consultez les mises à jour récentes d’I2P"
+msgstr "Consultez les mises à jour récentes d'I2P"
 
 msgid "View debugging information"
 msgstr "Afficher les informations de débogage"
@@ -7452,7 +7452,7 @@ msgid "View news relating to I2P"
 msgstr "Voir l'actualité relative à I2P"
 
 msgid "I2P News"
-msgstr "Nouvelles d’I2P"
+msgstr "Nouvelles d'I2P"
 
 msgid "View router workload and stats"
 msgstr "Afficher la charge de travail et les statistiques du routeur"
@@ -7611,13 +7611,13 @@ msgid "Toggle Tunnels"
 msgstr "Activer/Désactiver les tunnels"
 
 msgid "Updating sidebar sections"
-msgstr ""
+msgstr "Mise à jour des sections de la barre latérale"
 
 msgid "Peer Profile"
 msgstr "Profils des pairs"
 
 msgid "Profile View"
-msgstr ""
+msgstr "Affichage du profil"
 
 msgid "Profile for peer"
 msgstr "Profil pour les pairs"
@@ -7638,7 +7638,7 @@ msgid "webmail"
 msgstr "courriel Web"
 
 msgid "New Install Wizard"
-msgstr "Nouvel assistant d’installation"
+msgstr "Nouvel assistant d'installation"
 
 msgid "Skip Setup"
 msgstr "Ignorer la configuration"
@@ -7668,7 +7668,7 @@ msgid "Please review the M-Lab privacy policies linked below."
 msgstr "Veuillez consulter les politiques de confidentialité de M-Lab en lien ci-dessous."
 
 msgid "If you do not wish to run the M-Lab bandwidth test, you may skip it by clicking the button below."
-msgstr "Si vous ne souhaitez pas effectuer le test de bande passante de M-Lab, vous pouvez l’ignorer en cliquant sur le bouton ci-dessous."
+msgstr "Si vous ne souhaitez pas effectuer le test de bande passante de M-Lab, vous pouvez l'ignorer en cliquant sur le bouton ci-dessous."
 
 msgid "M-Lab Privacy Policy"
 msgstr "Politique de confidentialité de M-Lab"
@@ -7698,7 +7698,7 @@ msgid "Test server location"
 msgstr "Emplacement du serveur de test"
 
 msgid "Completion status"
-msgstr "État d’achèvement"
+msgstr "État d'achèvement"
 
 msgid "Downstream Bandwidth"
 msgstr "Bande passante en aval"
@@ -7732,7 +7732,7 @@ msgid "When you start I2P+, it may take a few minutes to bootstrap (integrate) y
 msgstr "Quand vous démarrez I2P, quelques minutes sont nécessaires pour amorcer (intégrer) votre routeur dans le réseau et trouver des pairs supplémentaires. Veuillez donc faire preuve de patience."
 
 msgid "Once green stars are indicated next to your Local Tunnels, there is a wide variety of things you can do with I2P+."
-msgstr "Une fois que des étoiles vertes apparaissent à côté de vos tunnels locaux, un large éventail de choses à faire avec I2P s’offre à vous."
+msgstr "Une fois que des étoiles vertes apparaissent à côté de vos tunnels locaux, un large éventail de choses à faire avec I2P s'offre à vous."
 
 msgid "Unknown Wizard page"
 msgstr "Page Assistant inconnu"
@@ -7751,48 +7751,4 @@ msgstr "Suivant"
 
 msgid "Finished"
 msgstr "Terminé"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

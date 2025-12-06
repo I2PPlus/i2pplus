@@ -1529,10 +1529,3 @@ msgstr "Gem ændringer"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent skal stoppes"
-
-
-
-
-#, java-format
-
-

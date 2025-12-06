@@ -859,7 +859,7 @@ msgid "Update All Installed Plugins"
 msgstr "Обновить все установленные модули"
 
 msgid "Delete client disabled"
-msgstr ""
+msgstr "Удаление клиента отключено"
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -953,7 +953,7 @@ msgid "Cannot install, check logs"
 msgstr "Не удалось установить, проверьте журналы"
 
 msgid "Update manager not registered, cannot check"
-msgstr ""
+msgstr "Менеджер обновлений не зарегистрирован, не может проверить"
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1081,7 +1081,7 @@ msgid "Restore defaults"
 msgstr "Восстановить умолчания"
 
 msgid "Bad group detected, please retry"
-msgstr ""
+msgstr "Обнаружена плохая группа, попробуйте еще раз"
 
 msgid "Restored default settings"
 msgstr "Умолчания восстановлены"
@@ -2191,7 +2191,7 @@ msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Альтернативный интерфейс Reddit, ориентированный на конфиденциальность"
 
 msgid "AI Image generation & Chat hub"
-msgstr ""
+msgstr "Генерация изображений ИИ и чат-хаб"
 
 msgid "IRC Logs for multiple networks"
 msgstr "Журналы IRC для нескольких сетей"
@@ -2332,10 +2332,10 @@ msgid "OpenDemocracy"
 msgstr "Открытая демократия"
 
 msgid "Online privacy &amp; tech blog"
-msgstr ""
+msgstr "Блог о конфиденциальности и технологиях в сети"
 
 msgid "RightToPrivacy"
-msgstr ""
+msgstr "ПравоНаКонфиденциальность"
 
 msgid "Lifestyle magazine"
 msgstr "Журнал о стиле жизни"
@@ -2356,7 +2356,7 @@ msgid "Community-driven tech news"
 msgstr "Новости технологий, поддерживаемые сообществом"
 
 msgid "Various services"
-msgstr ""
+msgstr "Различные сервисы"
 
 msgid "News for nerds"
 msgstr "Новости для ботаников"
@@ -2432,7 +2432,7 @@ msgid "Add"
 msgstr "Добавить"
 
 msgid "Error displaying the info page."
-msgstr ""
+msgstr "Ошибка отображения информационной страницы."
 
 msgid "Identity"
 msgstr "Идентичность"
@@ -2480,7 +2480,7 @@ msgid "Performance"
 msgstr "Производительность"
 
 msgid "Maximum available RAM"
-msgstr ""
+msgstr "Максимальная доступная ОЗУ"
 
 msgid "Classified as slow"
 msgstr "Классифицируется как медленный"
@@ -2492,7 +2492,7 @@ msgid "No"
 msgstr "Нет"
 
 msgid "GeoIP Db"
-msgstr ""
+msgstr "База данных GeoIP"
 
 msgid "Target"
 msgstr "Цель"
@@ -2709,13 +2709,13 @@ msgid "not found in network database"
 msgstr "не найден в сетевой базе данных"
 
 msgid "Bad Base64 Router hash"
-msgstr ""
+msgstr "Плохой хэш маршрутизатора Base64"
 
 msgid "No routers with"
-msgstr ""
+msgstr "Нет маршрутизаторов с"
 
 msgid "Hash prefix"
-msgstr ""
+msgstr "Префикс хэша"
 
 msgid "Port"
 msgstr "Порт"
@@ -2724,10 +2724,10 @@ msgid "MTU"
 msgstr "MTU"
 
 msgid "found in the network database"
-msgstr ""
+msgstr "найдено в сетевой базе данных"
 
 msgid "results"
-msgstr ""
+msgstr "результаты"
 
 msgid "Previous Page"
 msgstr "Предыдущая страница"
@@ -2736,43 +2736,43 @@ msgid "Next Page"
 msgstr "Следующая страница"
 
 msgid "Results per page"
-msgstr ""
+msgstr "Результатов на странице"
 
 msgid "Not initialized"
 msgstr "База не инициализирована"
 
 msgid "Total Remote Leasesets"
-msgstr ""
+msgstr "Всего удаленных наборов аренды"
 
 msgid "Compact mode"
-msgstr ""
+msgstr "Компактный режим"
 
 msgid "Local Leasesets"
-msgstr ""
+msgstr "Локальные наборы аренды"
 
 msgid "Debug Mode"
-msgstr ""
+msgstr "Режим отладки"
 
 msgid "Published (RAP) Leasesets"
-msgstr ""
+msgstr "Опубликованные наборы аренды (RAP)"
 
 msgid "Sorted by hash distance, closest first."
-msgstr ""
+msgstr "Отсортировано по расстоянию хэша, ближайшие первыми."
 
 msgid "Mod Data"
-msgstr ""
+msgstr "Данные модификации"
 
 msgid "Last Changed"
-msgstr ""
+msgstr "Последнее изменение"
 
 msgid "Next Mod Data"
-msgstr ""
+msgstr "Следующие данные модификации"
 
 msgid "Change in"
-msgstr ""
+msgstr "Изменение в"
 
 msgid "Floodfill mode enabled"
-msgstr ""
+msgstr "Режим заполнения включен"
 
 msgid "Routing Key"
 msgstr "Ключ маршрутизации"
@@ -2787,21 +2787,21 @@ msgid "Estimated total leasesets"
 msgstr "Оценочное общее количество арендованных комплектов"
 
 msgid "Total Local Leasesets"
-msgstr ""
+msgstr "Всего локальных наборов аренды"
 
 msgid "Remote Leasesets"
-msgstr ""
+msgstr "Удаленные наборы аренды"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
-msgstr ""
+msgstr "Имя хоста {0} не найдено в сетевой базе данных"
 
 #, java-format
 msgid "LeaseSet for {0} not found in network database"
-msgstr ""
+msgstr "Набор аренды для {0} не найден в сетевой базе данных"
 
 msgid "Meta"
-msgstr ""
+msgstr "Мета"
 
 msgid "LeaseSet"
 msgstr "LeaseSet"
@@ -2833,7 +2833,7 @@ msgid "Signature type"
 msgstr "Тип подписи"
 
 msgid "Public Key"
-msgstr ""
+msgstr "Открытый ключ"
 
 msgid "Unsupported type"
 msgstr "Неподдерживаемый тип"
@@ -2850,10 +2850,10 @@ msgid "Unknown"
 msgstr "Неизвестно"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr ""
+msgstr "Расширенный режим - включает всю статистику, опубликованную floodfills."
 
 msgid "Compact mode - does not include statistics published by floodfills."
-msgstr ""
+msgstr "Компактный режим - не включает статистику, опубликованную floodfills."
 
 msgid "Network Database Router Statistics"
 msgstr "Статистика маршрутизаторов"
@@ -2877,7 +2877,7 @@ msgid "Transports"
 msgstr "Транспортный протокол"
 
 msgid "X Tier"
-msgstr ""
+msgstr "Уровень X"
 
 msgid "Floodfills"
 msgstr "Наводнения"
@@ -2895,10 +2895,10 @@ msgid "Router is banlisted"
 msgstr "Роутер забанен"
 
 msgid "Java I2P variant"
-msgstr ""
+msgstr "Вариант Java I2P"
 
 msgid "I2Pd variant"
-msgstr ""
+msgstr "Вариант I2Pd"
 
 msgid "RouterInfo is compressible"
 msgstr "Информация о маршрутизаторе сжимается"
@@ -2932,7 +2932,7 @@ msgid "Hostname"
 msgstr "Имя хоста"
 
 msgid "direct"
-msgstr ""
+msgstr "прямой"
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "Проверенное семейство (сертификат подписи установлен и действителен)"
@@ -2971,10 +2971,10 @@ msgid "Last heard from"
 msgstr "Последнее сообщение от"
 
 msgid "Network Id"
-msgstr ""
+msgstr "Идентификатор сети"
 
 msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr ""
+msgstr "Количество всегда подделывается, чтобы избежать указания на перезапуски маршрутизатора"
 
 msgid "Hidden or starting up"
 msgstr "В скрытом режиме или недавно запущен"
@@ -3042,10 +3042,10 @@ msgid "IPv6"
 msgstr "IPv6"
 
 msgid "Active connections / Max permitted"
-msgstr ""
+msgstr "Активные подключения / Максимально разрешено"
 
 msgid "Connections / Limit"
-msgstr ""
+msgstr "Подключения / Лимит"
 
 msgid "Current / maximum permitted"
 msgstr "Ток/максимально допустимый"
@@ -3344,7 +3344,7 @@ msgid "Rejected"
 msgstr "Отклоненный"
 
 msgid "First Heard About"
-msgstr ""
+msgstr "Первое упоминание о"
 
 msgid "Last Heard From"
 msgstr "Посл. прием"
@@ -3460,7 +3460,7 @@ msgstr "{0} общей пропускной способности"
 
 #, java-format
 msgid "Over {0} KB/s shared bandwidth"
-msgstr ""
+msgstr "Более {0} КБ/с общей пропускной способности"
 
 msgid "status"
 msgstr "состояние"
@@ -3523,11 +3523,11 @@ msgid "Total number of banned peers"
 msgstr "Общее количество забаненных пиров"
 
 msgid "Note: 'LU' class routers have been excluded from the list."
-msgstr ""
+msgstr "Примечание: маршрутизаторы класса 'LU' были исключены из списка."
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
-msgstr ""
+msgstr "Чтобы просмотреть, см. {0}Блокировки сессии{1}."
 
 msgid "Select search engine"
 msgstr "Выберите поисковую систему"
@@ -3775,7 +3775,7 @@ msgid "An introduction to hosting websites on the I2P network"
 msgstr "Введение в веб-хостинг"
 
 msgid "New hosts in last 24 hours"
-msgstr ""
+msgstr "Новые хосты за последние 24 часа"
 
 msgid "I2PControl"
 msgstr "I2PControl"
@@ -3902,7 +3902,7 @@ msgid "Floodfill enabled"
 msgstr "Функция floodfill включена"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
-msgstr ""
+msgstr "Общее количество удаленных наборов аренды в нашей NetDb"
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Внимание: ECDSA недоступно. Обновите Java или ОС"
@@ -3917,7 +3917,7 @@ msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Узлы, с которыми была связь за последние минуты/часы"
 
 msgid "Peers we've been talking to in the last minute"
-msgstr ""
+msgstr "Пиры, с которыми мы общались в последнюю минуту"
 
 msgid "The number of peers available for building client tunnels"
 msgstr "Число узлов, доступных для создания клиентских туннелей"
@@ -4428,7 +4428,7 @@ msgid "Data"
 msgstr "Данные"
 
 msgid "Limit"
-msgstr ""
+msgstr "Лимит"
 
 msgid "Receive on"
 msgstr "ID принимающего туннеля"
@@ -4475,7 +4475,7 @@ msgid "No transit tunnels currently active."
 msgstr "Нет транзитных туннелей в настоящее время."
 
 msgid "Transit Tunnels by Peer (Top {0})"
-msgstr ""
+msgstr "Транзитные туннели по пиру (Топ {0})"
 
 msgid "Address"
 msgstr "Адрес"
@@ -4554,7 +4554,7 @@ msgid "Bandwidth test did not complete"
 msgstr "Тест пропускной способности не завершился"
 
 msgid "Bad state for test"
-msgstr ""
+msgstr "Плохое состояние для теста"
 
 msgid "Bandwidth test started"
 msgstr "Тест пропускной способности запущен"
@@ -4569,16 +4569,16 @@ msgid "Bandwidth test was not running"
 msgstr "Тест пропускной способности не запускался"
 
 msgid "ready"
-msgstr ""
+msgstr "готово"
 
 msgid "inbound test"
-msgstr ""
+msgstr "входящий тест"
 
 msgid "outbound test"
-msgstr ""
+msgstr "исходящий тест"
 
 msgid "done"
-msgstr ""
+msgstr "готово"
 
 msgid "bits per second"
 msgstr "бит в секунду"
@@ -4750,7 +4750,7 @@ msgid "Share"
 msgstr "Доля транзитного трафика"
 
 msgid "NOTE"
-msgstr ""
+msgstr "ПРИМЕЧАНИЕ"
 
 #, java-format
 msgid "You have configured I2P+ to share only {0} KBps."
@@ -4777,7 +4777,7 @@ msgstr "дополнительные настройки"
 
 #, java-format
 msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
-msgstr ""
+msgstr "Ключ <b>{0}</b> выбран для удаления. Чтобы применить изменения, сохраните конфигурацию или отмените для восстановления ключа."
 
 msgid "Floodfill Configuration"
 msgstr "Настройка Floodfill"
@@ -4807,7 +4807,7 @@ msgid "Advanced I2P+ Configuration"
 msgstr "Дополнительные настройки I2P"
 
 msgid "Help with additional configuration settings"
-msgstr ""
+msgstr "Справка по дополнительным настройкам конфигурации"
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5201,15 +5201,15 @@ msgid "Banning will prevent the participation of this peer in tunnels you create
 msgstr "Блокировка запретит участие указанного узла в создаваемых Вами туннелях."
 
 msgid "A list of bans by IP address is presented below."
-msgstr ""
+msgstr "Ниже представлен список блокировок по IP-адресам."
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
-msgstr ""
+msgstr "Чтобы просмотреть все активные блокировки по хэшу маршрутизатора, см. {0}Заблокированные пиры{1}."
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
-msgstr ""
+msgstr "Также доступен список {0}блокировок только для сессии{1} по хэшу."
 
 msgid "Adjust Profile Bonuses"
 msgstr "Настроить бонусы для этого узла"
@@ -5400,7 +5400,7 @@ msgid "config sidebar"
 msgstr "настроить боковую панель"
 
 msgid "Sidebar Options"
-msgstr ""
+msgstr "Параметры боковой панели"
 
 msgid "Refresh interval"
 msgstr "Интервал обновления"
@@ -5412,10 +5412,10 @@ msgid "0 to disable"
 msgstr "0 для отключения"
 
 msgid "Unified sidebar"
-msgstr ""
+msgstr "Единая боковая панель"
 
 msgid "Use the same sidebar on all pages"
-msgstr ""
+msgstr "Использовать ту же боковую панель на всех страницах"
 
 msgid "config stats"
 msgstr "конфигурация статистики"
@@ -5617,7 +5617,7 @@ msgid "Event Log"
 msgstr "Журнал событий"
 
 msgid "Combined"
-msgstr ""
+msgstr "Объединенный"
 
 msgid "graph"
 msgstr "График"
@@ -5698,7 +5698,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Этот параметр, при установке в значение true, будет отображать ссылки на <i>Интересные сайты</i> на карте сайта. [По умолчанию значение false]"
 
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr ""
+msgstr "Эта настройка, если установлена в true, будет отображать стандартную боковую панель на главной странице, включая конфигурацию через <a href=/configsidebar>. [По умолчанию false]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Этот параметр определяет, должен ли маршрутизатор использовать предоставленный файл <i>blocklist.txt</i> и любые настроенные пользователем черные списки, чтобы включить запрет маршрутизаторов по хэшу или IP-адресу. Диапазоны и сетевые маски поддерживаются для IPv4, но не для IPv6. Дополнительную информацию см. в файле <i>blocklist.txt</i> в каталоге приложения I2P+. [Включено по умолчанию, требуется перезагрузка]"
@@ -5713,7 +5713,7 @@ msgid "This setting determines whether or not the router should use the provided
 msgstr "Эта настройка определяет, должен ли маршрутизатор использовать предоставленный файл <i>blocklist_tor.txt</i> в вашем каталоге I2P+ приложений, чтобы включить запрет маршрутизаторов, работающих с IP -адресов выхода узла TOR. [Включено по умолчанию, перезапустить требуется]"
 
 msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
-msgstr ""
+msgstr "Эта настройка позволяет блокировать и запрещать запросы от маршрутизаторов в указанных странах, как только будет сделан прямой запрос туннеля. Страны должны быть указаны как двухбуквенные коды стран, разделенные запятыми. например: router.blockCountries=cn,ru"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
 msgstr "При установке в ложь, роутер не блокирует запросы на создание туннелей от медленных или недоступных роутеров с более старыми версиями. [По умолчанию истина, требуется перезагрузка]"
@@ -5851,7 +5851,7 @@ msgid "This setting determines whether routers classified as uninteresting (K or
 msgstr "Этот параметр определяет, будут ли проверяться маршрутизаторы, классифицированные как неинтересные (K или L уровень, недоступные или старше версии 0.9.50), в процессе обновления маршрутизатора после 1 часа работы. [По умолчанию установлено значение false]"
 
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
-msgstr ""
+msgstr "Когда установлено в true, эта настройка ослабит условия, необходимые вашему маршрутизатору для публикации ограничений перегрузки, особенно когда определено, что использование пропускной способности высокое. Другие условия, такие как высокая задержка заданий или маршрутизатор, классифицированный как медленный, все равно будут вызывать публикацию ограничений. [По умолчанию false]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "При настройке это устанавливает жесткое ограничение на количество туннелей, которые маршрутизатору разрешено строить одновременно. По умолчанию маршрутизатор использует среднее время построения и текущую исходящую пропускную способность для определения оптимальной скорости построения. [Требуется перезагрузка]"
@@ -5866,10 +5866,10 @@ msgid "This setting (in minutes) allows you to manually configure how long to wa
 msgstr "Этот параметр задает интервал ожидания в минутах после запуска роутера перед проверкой маршрутизаторов (RouterInfo) на валидность в NetDb, после чего будут приниматься только действительные маршрутизаторы. При проведении проверки, недействительные RouterInfo и не отвечающие пиры, доступные только через SSU, будут удалены из NetDb. По умолчанию 60 минут. Примечание: Этот параметр не влияет на старые маршрутизаторы (старше 0.9.29), которые удаляются из NetDb и блокируются в любом случае."
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
+msgstr "Эта настройка, если установлена в true, будет блокировать прямую связь со всеми маршрутизаторами в вашей собственной стране и добавлять их в ваш список блокировок до перезапуска маршрутизатора. [По умолчанию false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr ""
+msgstr "Эта настройка, если установлена в true, будет блокировать прямую связь со всеми маршрутизаторами уровня X, которые публикуют ограничение перегрузки G и не являются ни достижимыми, ни недостижимыми, добавляя их в список блокировок сессии. Обратите внимание, что для вступления этой настройки в силу необходимо включить расширенный режим. [По умолчанию false]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Этот параметр позволяет отключить тесты SSU, чтобы определить, защищен ли ваш маршрутизатор брандмауэром, и может быть включен для маршрутизаторов, которые определенно не имеют брандмауэра, но испытывают периодические проблемы с брандмауэром. Если тестирование отключено, SSU и NTCP должны сообщить ваш текущий общедоступный IP-адрес на <a href=/info>странице информации о маршрутизаторе</a>. [Требуется перезагрузка]"
@@ -5878,7 +5878,7 @@ msgid "This setting determines which transport takes priority when communicating
 msgstr "Этот параметр определяет, какой транспорт имеет приоритет при общении с одноранговыми узлами. По умолчанию NTCP предпочтительнее UDP (SSU). Если установить значение true, предпочтение будет отдано UDP, если ранее не существовало соединение NTCP; если установлено значение Always, UDP будет использоваться всегда, независимо от любого ранее существовавшего соединения NTCP. [По умолчанию неверно]"
 
 msgid "miscellaneous"
-msgstr ""
+msgstr "Разное"
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "Если установлено в значение true, эта опция разместит значок в системном трее / области уведомлений с основными опциями управления службой. [По умолчанию отключено]"
@@ -6118,16 +6118,16 @@ msgid "For SSL only"
 msgstr "Только для SSL"
 
 msgid "How can I configure the console and web services to be accessible on my local network?"
-msgstr ""
+msgstr "Как я могу настроить консоль и веб-сервисы для доступа из моей локальной сети?"
 
 msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
-msgstr ""
+msgstr "Чтобы сделать вашу консоль доступной в вашей локальной сети, отредактируйте файл конфигурации 00-net.i2p.router.web.RouterConsoleRunner-clients.config в папке clients.config.d вашего каталога настроек I2P. Обновите или добавьте необходимые IP-адреса к существующему сопоставлению localhost (127.0.0.1). Используйте переключатель -s для доступа по HTTPS."
 
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
-msgstr ""
+msgstr "Пример: Чтобы разрешить доступ с localhost и 192.168.1.10 по HTTP и HTTPS:"
 
-msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager’s configuration section using the <i>reachable by</i> dropdown."
-msgstr ""
+msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
+msgstr "Для большинства клиентских сервисов измените прослушивающий адрес для соответствующей службы в разделе конфигурации Менеджера туннелей, используя выпадающий список <i>доступен через</i>."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Как попасть в IRC внутри сети I2P?"
@@ -6514,7 +6514,7 @@ msgid "If you are in a hurry and can't wait a few hours, you can tell people to 
 msgstr "Если вам нужно срочно и вы не можете подождать несколько часов, вы можете предложить людям использовать службу перенаправления с помощью «прыжкового» адреса. Обычно это начинает работать в течение нескольких минут после регистрации вашего хост-имени на том же сайте. Сначала проверьте это самостоятельно, введя в браузер <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code>. Как только это заработает, вы можете сообщить другим, чтобы они тоже использовали этот способ."
 
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
-msgstr ""
+msgstr "В качестве альтернативы, вы можете скопировать <i>ссылку помощника адреса</i> для вашего домена, указанную либо на странице списка адресной книги, либо на странице сведений о вашем домене, например: <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>сведения о skank.i2p</a>, и вставить ссылку там, где это необходимо для обмена с другими."
 
 msgid "Backup your private key!"
 msgstr "Сделайте резервную копию вашего закрытого ключа!"
@@ -6751,7 +6751,7 @@ msgid "Getting Support Online"
 msgstr "Получение онлайн-поддержки"
 
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
-msgstr ""
+msgstr "Вы также можете просмотреть информацию на <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>веб-сайте I2P</a>, отправлять сообщения на <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>форум обсуждения I2P</a> или зайти на <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> или <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> во внутренней IRC-сети I2P."
 
 msgid "Reporting Bugs"
 msgstr "Сообщать об ошибках"
@@ -7291,7 +7291,7 @@ msgid "Configure display language, theme and optional console password"
 msgstr "Настройте язык отображения, тему и дополнительный пароль консоли"
 
 msgid "Language"
-msgstr ""
+msgstr "Язык"
 
 msgid "Configure router bandwidth"
 msgstr "Настройка пропускной способности маршрутизатора"
@@ -7358,22 +7358,22 @@ msgid "network database"
 msgstr "сетевая БД"
 
 msgid "Encryption type"
-msgstr ""
+msgstr "Тип шифрования"
 
 msgid "Encryption types"
-msgstr ""
+msgstr "Типы шифрования"
 
 msgid "Signature types"
-msgstr ""
+msgstr "Типы подписей"
 
 msgid "Locally hosted private service"
-msgstr ""
+msgstr "Локально размещенный частный сервис"
 
 msgid "Locally hosted public service"
-msgstr ""
+msgstr "Локально размещенный общественный сервис"
 
 msgid "Requested client leaseset"
-msgstr ""
+msgstr "Запрошенный набор аренды клиента"
 
 msgid "network database router map"
 msgstr "Карта роутера базы данных сети"
@@ -7419,10 +7419,10 @@ msgid "Fast / High Capacity"
 msgstr "Быстрая/большая емкость"
 
 msgid "router logs"
-msgstr ""
+msgstr "журналы маршрутизатора"
 
 msgid "service logs"
-msgstr ""
+msgstr "журналы сервисов"
 
 msgid "Manage I2P addresses"
 msgstr "Управление адресами I2P"
@@ -7629,13 +7629,13 @@ msgid "Toggle Tunnels"
 msgstr "Переключение туннелей"
 
 msgid "Updating sidebar sections"
-msgstr ""
+msgstr "Обновление разделов боковой панели"
 
 msgid "Peer Profile"
 msgstr "Профиль узла"
 
 msgid "Profile View"
-msgstr ""
+msgstr "Просмотр профиля"
 
 msgid "Profile for peer"
 msgstr "Профиль для сверстников"
@@ -7769,48 +7769,4 @@ msgstr "Далее"
 
 msgid "Finished"
 msgstr "Завершено"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

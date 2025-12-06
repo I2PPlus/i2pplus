@@ -1537,10 +1537,4 @@ msgstr "Uložit změny"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent musí být zastaven"
-
-
-
-
 #, java-format
-
-

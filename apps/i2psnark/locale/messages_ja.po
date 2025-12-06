@@ -1521,10 +1521,4 @@ msgstr "変更を保存"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent を停止する必要があります"
-
-
-
-
 #, java-format
-
-

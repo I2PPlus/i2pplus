@@ -143,7 +143,7 @@ msgid "Unreachable on any transport"
 msgstr "किसी भी पारिवहन पर पहुँचमुक्त"
 
 msgid "Cannot enumerate UPnP devices on Android."
-msgstr ""
+msgstr "Android पर UPnP डिवाइस को सूचीबद्ध नहीं कर सकते।"
 
 msgid "UPnP is not enabled"
 msgstr "UPnP सक्रिय नहीं है"
@@ -683,7 +683,7 @@ msgid "After reporting, please restart your router"
 msgstr "रिपोर्ट करने के बाद, कृपया अपने राउटर को पुनः शुरू करें"
 
 msgid "Invalid form submission, requires POST"
-msgstr ""
+msgstr "अमान्य फॉर्म सबमिशन, POST की आवश्यकता"
 
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "अवैध फ़ॉर्म जमा, संभवतः आपने अपने ब्राउज़र के 'वापस' या 'रीलोड' बटन का उपयोग किया है। कृपया पुनः जमा करें।"
@@ -817,13 +817,13 @@ msgid "To enable SSL access for the Router Console, see the commented <code>clie
 msgstr "राउटर कंसोल के लिए SSL पहुँच सक्षम करने के लिए, अपने I2P अनुप्रयोग डि렉्टरी में स्थित टिप्पणी वाले <code>clients.config</code> फ़ाइल को देखें अधिक जानकारी के लिए। आपको राउटरConsoleRunner कंfig फ़ाइल को संपादित करने की आवश्यकता होगी, जो निम्नलिखित डिरेक्टरी में स्थित है: "
 
 msgid "Save disabled, edit the router.config file to make changes"
-msgstr ""
+msgstr "सेव अक्षम, परिवर्तन करने के लिए router.config फ़ाइल संपादित करें"
 
 msgid "Error updating the configuration - please see the error logs"
 msgstr "सेटिंग अपडेट करने में त्रुटि - कृपया त्रुटि लॉग देखें"
 
 msgid "No changes made to the configuration"
-msgstr ""
+msgstr "कॉन्फ़िगरेशन में कोई परिवर्तन नहीं किए गए"
 
 msgid "Note"
 msgstr "टिप्पणी"
@@ -844,7 +844,7 @@ msgid "Save Plugin Configuration"
 msgstr "प्लगइन सेटिंग सहेजें"
 
 msgid "Plugins disabled"
-msgstr ""
+msgstr "प्लगइन्स अक्षम"
 
 msgid "Install Plugin"
 msgstr "प्लगइन स्थापित करें"
@@ -856,7 +856,7 @@ msgid "Update All Installed Plugins"
 msgstr "सभी स्थापित प्लगइन अपडेट करें"
 
 msgid "Delete client disabled"
-msgstr ""
+msgstr "क्लाइंट हटाना अक्षम"
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -940,17 +940,17 @@ msgid "Updating all plugins"
 msgstr "सभी प्लगइन अपडेट कर रहा है"
 
 msgid "Update manager not registered, cannot install"
-msgstr ""
+msgstr "अपडेट मैनेजर पंजीकृत नहीं है, इंस्टॉल नहीं कर सकते"
 
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "{0} से प्लगइन स्थापित कर रहा है"
 
 msgid "Cannot install, check logs"
-msgstr ""
+msgstr "इंस्टॉल नहीं कर सकते, लॉग जांचें"
 
 msgid "Update manager not registered, cannot check"
-msgstr ""
+msgstr "अपडेट मैनेजर पंजीकृत नहीं है, जांच नहीं कर सकते"
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1050,17 +1050,17 @@ msgid "Join Family"
 msgstr "परिवार में शामिल हों"
 
 msgid "Bad certificate - No Subject CN"
-msgstr ""
+msgstr "खराब प्रमाणपत्र - कोई विषय CN नहीं"
 
 msgid "Bad characters in Family: "
-msgstr ""
+msgstr "परिवार में खराब वर्ण: "
 
 #, java-format
 msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
-msgstr ""
+msgstr "कीस्टोर {0} परिवार {1} के लिए पहले से मौजूद है! इसे पहले हटाएं या नाम बदलें।"
 
 msgid "Family key configured for router family: "
-msgstr ""
+msgstr "राउटर परिवार के लिए कॉन्फ़िगर किया गया परिवार कुंजी: "
 
 msgid "Load from file failed"
 msgstr "फ़ाइल से लोड करने में विफलता"
@@ -1078,7 +1078,7 @@ msgid "Restore defaults"
 msgstr "डिफ़ॉल्ट स्थापित करें"
 
 msgid "Bad group detected, please retry"
-msgstr ""
+msgstr "खराब समूह का पता चला, कृपया फिर से कोशिश करें"
 
 msgid "Restored default settings"
 msgstr "डिफ़ॉल्ट सेटिंग लौटाएं"
@@ -1111,7 +1111,7 @@ msgid "Invalid destination"
 msgstr "अमान्य गंतव्य"
 
 msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "स्थानीय गंतव्य के लिए कुंजी नहीं जोड़ सकते। टनल मैनेजर में एन्क्रिप्शन सक्षम करें।"
 
 #, java-format
 msgid "Key for {0} added to keyring"
@@ -1124,7 +1124,7 @@ msgid "Requires hostname, destination, or blinded Base32"
 msgstr "होस्टनेम, गंतव्य, या अंधेरा Base32 की आवश्यकता है"
 
 msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
-msgstr ""
+msgstr "स्थानीय गंतव्य के लिए कुंजी नहीं जोड़ सकते। छिपी हुई सेवाएं मैनेजर में एन्क्रिप्शन सक्षम करें।"
 
 msgid "Destination requires lookup password"
 msgstr "गंतव्य लुकअप पासवर्ड की आवश्यकता रखता है"
@@ -1145,7 +1145,7 @@ msgid "Delete key"
 msgstr "कुंजी हटाएं"
 
 msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "स्थानीय गंतव्य के लिए कुंजी नहीं हटा सकते। टनल मैनेजर में एन्क्रिप्शन अक्षम करें।"
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1198,34 +1198,34 @@ msgid "Log overrides updated"
 msgstr "लॉग ओवरराइड अपडेट किए गए"
 
 msgid "Error updating the log limits - levels not valid"
-msgstr ""
+msgstr "लॉग सीमा अपडेट करने में त्रुटि - स्तर मान्य नहीं"
 
 msgid "Log limits cleared"
-msgstr ""
+msgstr "लॉग सीमा साफ़ की गई"
 
 #, java-format
 msgid "Default log level updated from {0} to {1}"
-msgstr ""
+msgstr "डिफ़ॉल्ट लॉग स्तर {0} से {1} में अपडेट किया गया"
 
 msgid "Date format updated"
-msgstr ""
+msgstr "दिनांक प्रारूप अपडेट किया गया"
 
 #, java-format
 msgid "Specified date format is not valid ({0}) - not updated"
-msgstr ""
+msgstr "निर्दिष्ट दिनांक प्रारूप मान्य नहीं है ({0}) - अपडेट नहीं किया गया"
 
 msgid "File size updated"
-msgstr ""
+msgstr "फ़ाइल आकार अपडेट किया गया"
 
 #, java-format
 msgid "Specified file size limit is not valid ({0}) - not updated"
-msgstr ""
+msgstr "निर्दिष्ट फ़ाइल आकार सीमा मान्य नहीं है ({0}) - अपडेट नहीं किया गया"
 
 msgid "Compression setting updated"
-msgstr ""
+msgstr "संपीड़न सेटिंग अपडेट की गई"
 
 msgid "Log record format updated"
-msgstr ""
+msgstr "लॉग रिकॉर्ड प्रारूप अपडेट किया गया"
 
 msgid "Log configuration saved"
 msgstr "लॉग सेटिंग सहेजी गई"
@@ -1435,10 +1435,10 @@ msgid "Bad capacity value"
 msgstr "बुरा क्षमता मान"
 
 msgid "Bonuses adjusted for: "
-msgstr ""
+msgstr "बोनस समायोजित: "
 
 msgid "No profile exists for: "
-msgstr ""
+msgstr "के लिए कोई प्रोफ़ाइल मौजूद नहीं है: "
 
 msgid "Unsupported"
 msgstr "समर्थन नहीं"
@@ -1454,7 +1454,7 @@ msgstr "के लिए"
 
 #, java-format
 msgid "First {0} displayed, see the {1} file for the full list"
-msgstr ""
+msgstr "पहले {0} प्रदर्शित, पूरी सूची के लिए {1} फ़ाइल देखें"
 
 msgid "IPs Banned Until Restart"
 msgstr "पुनः शुरू होने तक IP प्रतिबंधित"
@@ -1555,7 +1555,7 @@ msgid "Save order"
 msgstr "राज़ी बनाएं"
 
 msgid "Sidebar preferences updated"
-msgstr ""
+msgstr "साइडबार प्राथमिकताएं अपडेट की गईं"
 
 msgid "Refresh interval must be a number"
 msgstr "ताज़ा करने का अंतराल एक संख्या होना चाहिए"
@@ -1564,16 +1564,16 @@ msgid "Restore full default"
 msgstr "पूर्ण मानक वापस स्थापित करें"
 
 msgid "Full sidebar defaults restored."
-msgstr ""
+msgstr "पूर्ण साइडबार डिफ़ॉल्ट्स पुनर्स्थापित।"
 
 msgid "Sidebar will refresh shortly."
-msgstr ""
+msgstr "साइडबार जल्द ही रिफ्रेश होगा।"
 
 msgid "Restore minimal default"
 msgstr "अंतर्निहित मानक वापस स्थापित करें"
 
 msgid "Minimal sidebar defaults restored."
-msgstr ""
+msgstr "न्यूनतम साइडबार डिफ़ॉल्ट्स पुनर्स्थापित।"
 
 msgid "Order must be an integer"
 msgstr "राज़ी एक पूर्ण संख्या होनी चाहिए"
@@ -1602,11 +1602,11 @@ msgstr "ग्राफ़ सूची अपडेट की गई है, {0
 
 #, java-format
 msgid "Internal error: could not resolve pool name {0}."
-msgstr ""
+msgstr "आंतरिक त्रुटि: पूल नाम {0} का समाधान नहीं कर सका।"
 
 #, java-format
 msgid "Internal error: could not find pool settings for {0}."
-msgstr ""
+msgstr "आंतरिक त्रुटि: {0} के लिए पूल सेटिंग्स नहीं ढूंढ सका।"
 
 msgid "Updated settings for all pools."
 msgstr "सभी पूल के लिए सेटिंग अपडेट की गई।"
@@ -1681,7 +1681,7 @@ msgid "Add user"
 msgstr "उपयोगकर्ता जोड़ें"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
-msgstr ""
+msgstr "थीम चयन नहीं बचा सकते, थीम नाम में अवैध वर्ण हैं"
 
 msgid "Theme change saved."
 msgstr "थीम बदलाव सहेजा गया।"
@@ -1693,7 +1693,7 @@ msgid "No user name entered"
 msgstr "कोई उपयोगकर्ता नाम दर्ज नहीं किया"
 
 msgid "User name may not contain '='"
-msgstr ""
+msgstr "उपयोगकर्ता नाम में '=' नहीं हो सकता"
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "चेतावनी: ISO-8859-1 के वर्ण सेट के बाहर उपयोगकर्ता नाम सिफारिश नहीं की जाते हैं। समर्थन मानकीकृत नहीं है और ब्राउज़र द्वारा भिन्न हो सकता है।"
@@ -2015,7 +2015,7 @@ msgid "Show list of all known I2P routers"
 msgstr "सभी जानकारी वाले I2P राउटरों की सूची दिखाएं"
 
 msgid "List of recently connected peers with profiling info"
-msgstr ""
+msgstr "प्रोफाइलिंग जानकारी के साथ हाल ही में कनेक्ट किए गए पीयर्स की सूची"
 
 msgid "Peer Profiles"
 msgstr "पीयर प्रोफ़ाइल"
@@ -2183,7 +2183,7 @@ msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Reddit के लिए गोपनीयता पर ध्यान केंद्रित विकल्पी फ्रंट-एंड"
 
 msgid "AI Image generation & Chat hub"
-msgstr ""
+msgstr "AI छवि निर्माण और चैट हब"
 
 msgid "IRC Logs for multiple networks"
 msgstr "विभिन्न नेटवर्क के लिए IRC लॉग"
@@ -2324,10 +2324,10 @@ msgid "OpenDemocracy"
 msgstr "ऑपन डेमोक्रेसी"
 
 msgid "Online privacy &amp; tech blog"
-msgstr ""
+msgstr "ऑनलाइन गोपनीयता और तकनीक ब्लॉग"
 
 msgid "RightToPrivacy"
-msgstr ""
+msgstr "गोपनीयता का अधिकार"
 
 msgid "Lifestyle magazine"
 msgstr "जीवनशैली मैगज़ीन"
@@ -2348,7 +2348,7 @@ msgid "Community-driven tech news"
 msgstr "समुदाय-चलित टेक न्यूज़"
 
 msgid "Various services"
-msgstr ""
+msgstr "विभिन्न सेवाएं"
 
 msgid "News for nerds"
 msgstr "नर्ड्स के लिए समाचार"
@@ -2424,7 +2424,7 @@ msgid "Add"
 msgstr "जोड़ें"
 
 msgid "Error displaying the info page."
-msgstr ""
+msgstr "जानकारी पृष्ठ प्रदर्शित करने में त्रुटि।"
 
 msgid "Identity"
 msgstr "पहचान"
@@ -2472,7 +2472,7 @@ msgid "Performance"
 msgstr "パフォーマンス"
 
 msgid "Maximum available RAM"
-msgstr ""
+msgstr "अधिकतम उपलब्ध RAM"
 
 msgid "Classified as slow"
 msgstr "धीमा के रूप में वर्गीकृत"
@@ -2484,7 +2484,7 @@ msgid "No"
 msgstr "नहीं"
 
 msgid "GeoIP Db"
-msgstr ""
+msgstr "GeoIP डेटाबेस"
 
 msgid "Target"
 msgstr "लक्ष्य"
@@ -2623,19 +2623,19 @@ msgid "Sybil Analysis"
 msgstr "सिबिल विश्लेषण"
 
 msgid "Bad value supplied, please check and try again."
-msgstr ""
+msgstr "खराब मान दिया गया, कृपया जांचें और फिर से कोशिश करें।"
 
 msgid "Router Map"
 msgstr "राउटर मानचित्र"
 
 msgid "Network Database Search"
-msgstr ""
+msgstr "नेटवर्क डेटाबेस खोज"
 
 msgid "Capabilities"
 msgstr "क्षमताएं"
 
 msgid "e.g. f or XOfR"
-msgstr ""
+msgstr "उदा. f या XOfR"
 
 msgid "Cost"
 msgstr "मूल्य"
@@ -2644,49 +2644,49 @@ msgid "Country"
 msgstr "देश"
 
 msgid "Country Codes"
-msgstr ""
+msgstr "देश कोड"
 
 msgid "Hash Prefix"
-msgstr ""
+msgstr "हैश उपसर्ग"
 
 msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
-msgstr ""
+msgstr "IPv4 या IPv6, /24,/16,/8 उपसर्ग IPv4 के लिए वैकल्पिक, IPv6 के लिए उपसर्ग ठीक है"
 
 msgid "Hostname or b32"
-msgstr ""
+msgstr "होस्टनाम या b32"
 
 msgid "IPv6 Prefix"
-msgstr ""
+msgstr "IPv6 उपसर्ग"
 
 msgid "Single port or range"
-msgstr ""
+msgstr "एकल पोर्ट या रेंज"
 
 msgid "Signature Type"
-msgstr ""
+msgstr "हस्ताक्षर प्रकार"
 
 msgid "SSU Capabilities"
-msgstr ""
+msgstr "SSU क्षमताएं"
 
 msgid "Encryption Type"
-msgstr ""
+msgstr "एन्क्रिप्शन प्रकार"
 
 msgid "Router Version"
-msgstr ""
+msgstr "राउटर संस्करण"
 
 msgid "Transport"
 msgstr "ट्रांसपोर्ट"
 
 msgid "Add Sybil analysis (must pick at least one above)"
-msgstr ""
+msgstr "Sybil विश्लेषण जोड़ें (ऊपर से कम से कम एक चुनें)"
 
 msgid "Sybil close to"
-msgstr ""
+msgstr "के करीब Sybil"
 
 msgid "Router hash, destination hash, b32, or from address book"
-msgstr ""
+msgstr "राउटर हैश, गंतव्य हैश, b32, या पता पुस्तिका से"
 
 msgid "or Sybil close to this router"
-msgstr ""
+msgstr "या इस राउटर के करीब Sybil"
 
 msgid "Lookup"
 msgstr "खोज"
@@ -2701,13 +2701,13 @@ msgid "not found in network database"
 msgstr "नेटवर्क डेटाबेस में नहीं मिला"
 
 msgid "Bad Base64 Router hash"
-msgstr ""
+msgstr "खराब Base64 राउटर हैश"
 
 msgid "No routers with"
-msgstr ""
+msgstr "के साथ कोई राउटर नहीं"
 
 msgid "Hash prefix"
-msgstr ""
+msgstr "हैश उपसर्ग"
 
 msgid "Port"
 msgstr "पोर्ट"
@@ -2716,10 +2716,10 @@ msgid "MTU"
 msgstr "MTU"
 
 msgid "found in the network database"
-msgstr ""
+msgstr "नेटवर्क डेटाबेस में पाया गया"
 
 msgid "results"
-msgstr ""
+msgstr "परिणाम"
 
 msgid "Previous Page"
 msgstr "पिछला पृष्ठ"
@@ -2728,43 +2728,43 @@ msgid "Next Page"
 msgstr "अगला पृष्ठ"
 
 msgid "Results per page"
-msgstr ""
+msgstr "प्रति पृष्ठ परिणाम"
 
 msgid "Not initialized"
 msgstr "इनिशियलाइज़ेशन नहीं किया"
 
 msgid "Total Remote Leasesets"
-msgstr ""
+msgstr "कुल दूरस्थ लीज़सेट"
 
 msgid "Compact mode"
-msgstr ""
+msgstr "सघन मोड"
 
 msgid "Local Leasesets"
-msgstr ""
+msgstr "स्थानीय लीज़सेट"
 
 msgid "Debug Mode"
-msgstr ""
+msgstr "डिबग मोड"
 
 msgid "Published (RAP) Leasesets"
-msgstr ""
+msgstr "प्रकाशित (RAP) लीज़सेट"
 
 msgid "Sorted by hash distance, closest first."
-msgstr ""
+msgstr "हैश दूरी से क्रमबद्ध, सबसे करीब पहले।"
 
 msgid "Mod Data"
-msgstr ""
+msgstr "मॉड डेटा"
 
 msgid "Last Changed"
-msgstr ""
+msgstr "अंतिम बदलाव"
 
 msgid "Next Mod Data"
-msgstr ""
+msgstr "अगला मॉड डेटा"
 
 msgid "Change in"
-msgstr ""
+msgstr "में परिवर्तन"
 
 msgid "Floodfill mode enabled"
-msgstr ""
+msgstr "फ्लडफिल मोड सक्षम"
 
 msgid "Routing Key"
 msgstr "रूटिंग की"
@@ -2779,21 +2779,21 @@ msgid "Estimated total leasesets"
 msgstr "अनुमानित कुल लीज़ सेट्स"
 
 msgid "Total Local Leasesets"
-msgstr ""
+msgstr "कुल स्थानीय लीज़सेट"
 
 msgid "Remote Leasesets"
-msgstr ""
+msgstr "दूरस्थ लीज़सेट"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
-msgstr ""
+msgstr "होस्टनाम {0} नेटवर्क डेटाबेस में नहीं मिला"
 
 #, java-format
 msgid "LeaseSet for {0} not found in network database"
-msgstr ""
+msgstr "{0} के लिए लीज़सेट नेटवर्क डेटाबेस में नहीं मिला"
 
 msgid "Meta"
-msgstr ""
+msgstr "मेटा"
 
 msgid "LeaseSet"
 msgstr "लीज़ सेट"
@@ -2825,7 +2825,7 @@ msgid "Signature type"
 msgstr "साइनेचर तरीका"
 
 msgid "Public Key"
-msgstr ""
+msgstr "सार्वजनिक कुंजी"
 
 msgid "Unsupported type"
 msgstr "समर्थन नहीं किया जाता"
@@ -2842,10 +2842,10 @@ msgid "Unknown"
 msgstr "अज्ञात"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr ""
+msgstr "उन्नत मोड - फ्लडफिल द्वारा प्रकाशित सभी आँकड़े शामिल हैं।"
 
 msgid "Compact mode - does not include statistics published by floodfills."
-msgstr ""
+msgstr "सघन मोड - फ्लडफिल द्वारा प्रकाशित आँकड़े शामिल नहीं हैं।"
 
 msgid "Network Database Router Statistics"
 msgstr "नेटवर्क डेटाबेस राउटर स्टैटिस्टिक्स"
@@ -2869,7 +2869,7 @@ msgid "Transports"
 msgstr "ट्रांसपोर्ट"
 
 msgid "X Tier"
-msgstr ""
+msgstr "X टियर"
 
 msgid "Floodfills"
 msgstr "Floodfills"
@@ -2887,10 +2887,10 @@ msgid "Router is banlisted"
 msgstr "राउटर बैनलिस्टेड है"
 
 msgid "Java I2P variant"
-msgstr ""
+msgstr "Java I2P वेरिएंट"
 
 msgid "I2Pd variant"
-msgstr ""
+msgstr "I2Pd वेरिएंट"
 
 msgid "RouterInfo is compressible"
 msgstr "RouterInfo को संपीड़ित किया जा सकता है"
@@ -2924,7 +2924,7 @@ msgid "Hostname"
 msgstr "होस्टनाम"
 
 msgid "direct"
-msgstr ""
+msgstr "प्रत्यक्ष"
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "पुष्टि की परिवार (साइनिंग सर्टिफिकेट स्थापित और वैध है)"
@@ -2963,10 +2963,10 @@ msgid "Last heard from"
 msgstr "अंतिम बार से सुना"
 
 msgid "Network Id"
-msgstr ""
+msgstr "नेटवर्क आईडी"
 
 msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr ""
+msgstr "गिनती हमेशा राउटर पुनःप्रारंभ को इंगित करने से बचने के लिए स्पूफ की जाती है"
 
 msgid "Hidden or starting up"
 msgstr "छिपा हुआ या शुरू हो रहा"
@@ -3034,10 +3034,10 @@ msgid "IPv6"
 msgstr "IPv6"
 
 msgid "Active connections / Max permitted"
-msgstr ""
+msgstr "सक्रिय कनेक्शन / अधिकतम अनुमत"
 
 msgid "Connections / Limit"
-msgstr ""
+msgstr "कनेक्शन / सीमा"
 
 msgid "Current / maximum permitted"
 msgstr "वर्तमान / अनुमतित की अधिकतम सीमा"
@@ -3331,7 +3331,7 @@ msgid "Rejected"
 msgstr "अस्वीकृत"
 
 msgid "First Heard About"
-msgstr ""
+msgstr "पहली बार बारे में जानकारी"
 
 msgid "Last Heard From"
 msgstr "अंतिम बार सुना"
@@ -3444,7 +3444,7 @@ msgstr "{0} साझा बैंडविड्थ"
 
 #, java-format
 msgid "Over {0} KB/s shared bandwidth"
-msgstr ""
+msgstr "{0} KB/s साझा बैंडविड्थ से अधिक"
 
 msgid "status"
 msgstr "स्थिति"
@@ -3507,11 +3507,11 @@ msgid "Total number of banned peers"
 msgstr "प्रतिबंधित पीयर की कुल संख्या"
 
 msgid "Note: 'LU' class routers have been excluded from the list."
-msgstr ""
+msgstr "नोट: 'LU' वर्ग के राउटर्स को सूची से बाहर रखा गया है।"
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
-msgstr ""
+msgstr "देखने के लिए, {0}सत्र प्रतिबंध{1} देखें।"
 
 msgid "Select search engine"
 msgstr "खोज इंजन चुनें"
@@ -3759,7 +3759,7 @@ msgid "An introduction to hosting websites on the I2P network"
 msgstr "I2P नेटवर्क पर वेबसाइट्स होस्ट करने का परिचय"
 
 msgid "New hosts in last 24 hours"
-msgstr ""
+msgstr "पिछले 24 घंटों में नए होस्ट"
 
 msgid "I2PControl"
 msgstr "I2PControl"
@@ -3886,7 +3886,7 @@ msgid "Floodfill enabled"
 msgstr "फ्लॉडफिल सक्षम"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
-msgstr ""
+msgstr "हमारे NetDb में संग्रहीत दूरस्थ लीज़सेट की कुल संख्या"
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "सावधानी: ECDSA उपलब्ध नहीं है। अपने जावा या ऑपरेटिंग सिस्टम को अपडेट करें"
@@ -3901,7 +3901,7 @@ msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "अभी तक कुछ मिनटों/अंतिम घंटे में हमारे साथ बातचीत कर रहे पीयर"
 
 msgid "Peers we've been talking to in the last minute"
-msgstr ""
+msgstr "पिछले मिनट में हमने जिन पीयर्स से बात की है"
 
 msgid "The number of peers available for building client tunnels"
 msgstr "ग्राहक टनल बनाने के लिए उपलब्ध पीयर की संख्या"
@@ -4410,7 +4410,7 @@ msgid "Data"
 msgstr "डेटा"
 
 msgid "Limit"
-msgstr ""
+msgstr "सीमा"
 
 msgid "Receive on"
 msgstr "प्राप्त करें"
@@ -4457,7 +4457,7 @@ msgid "No transit tunnels currently active."
 msgstr "वर्तमान में कोई सक्रिय ट्रांजिट टनल नहीं है।"
 
 msgid "Transit Tunnels by Peer (Top {0})"
-msgstr ""
+msgstr "पीयर द्वारा ट्रांजिट टनल (शीर्ष {0})"
 
 msgid "Address"
 msgstr "पता"
@@ -4536,7 +4536,7 @@ msgid "Bandwidth test did not complete"
 msgstr "बैंडविड्थ परीक्षण पूरा नहीं हुआ"
 
 msgid "Bad state for test"
-msgstr ""
+msgstr "परीक्षण के लिए खराब स्थिति"
 
 msgid "Bandwidth test started"
 msgstr "बैंडविड्थ परीक्षण शुरू किया गया"
@@ -4551,16 +4551,16 @@ msgid "Bandwidth test was not running"
 msgstr "बैंडविड्ध परीक्षण चल नहीं रहा था"
 
 msgid "ready"
-msgstr ""
+msgstr "तैयार"
 
 msgid "inbound test"
-msgstr ""
+msgstr "आने वाली परीक्षा"
 
 msgid "outbound test"
-msgstr ""
+msgstr "जाने वाली परीक्षा"
 
 msgid "done"
-msgstr ""
+msgstr "पूर्ण"
 
 msgid "bits per second"
 msgstr "बिट प्रति सेकंड"
@@ -4732,7 +4732,7 @@ msgid "Share"
 msgstr "शेयर करें"
 
 msgid "NOTE"
-msgstr ""
+msgstr "नोट"
 
 #, java-format
 msgid "You have configured I2P+ to share only {0} KBps."
@@ -4759,7 +4759,7 @@ msgstr "विस्तृत सेटिंग"
 
 #, java-format
 msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
-msgstr ""
+msgstr "हटाने के लिए कुंजी <b>{0}</b> चयनित। परिवर्तन को प्रतिबद्ध करने के लिए, कॉन्फ़िगरेशन सहेज करें, या कुंजी पुनर्स्थापित करने के लिए रद्द करें।"
 
 msgid "Floodfill Configuration"
 msgstr "फ्लॉडफिल सेटिंग"
@@ -4789,7 +4789,7 @@ msgid "Advanced I2P+ Configuration"
 msgstr "विस्तृत I2P सेटिंग"
 
 msgid "Help with additional configuration settings"
-msgstr ""
+msgstr "अतिरिक्त कॉन्फ़िगरेशन सेटिंग्स में मदद"
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5183,15 +5183,15 @@ msgid "Banning will prevent the participation of this peer in tunnels you create
 msgstr "बैनिंग इस समकक्ष को आपके बनाए गए टनलों में भाग लेने से रोकेगा।"
 
 msgid "A list of bans by IP address is presented below."
-msgstr ""
+msgstr "IP पते द्वारा प्रतिबंधों की सूची नीचे दी गई है।"
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
-msgstr ""
+msgstr "राउटर हैश द्वारा सभी सक्रिय प्रतिबंधों को देखने के लिए, {0}प्रतिबंधित पीयर{1} देखें।"
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
-msgstr ""
+msgstr "हैश द्वारा {0}केवल-सत्र प्रतिबंधों{1} की सूची भी उपलब्ध है।"
 
 msgid "Adjust Profile Bonuses"
 msgstr "प्रोफ़ाइल बोनस को समायोजित करें"
@@ -5382,7 +5382,7 @@ msgid "config sidebar"
 msgstr "साइडबार की सेटिंग करें"
 
 msgid "Sidebar Options"
-msgstr ""
+msgstr "साइडबार विकल्प"
 
 msgid "Refresh interval"
 msgstr "ताज़ा करने का अंतराल"
@@ -5394,10 +5394,10 @@ msgid "0 to disable"
 msgstr "0 को डिसेबल करें"
 
 msgid "Unified sidebar"
-msgstr ""
+msgstr "एकीकृत साइडबार"
 
 msgid "Use the same sidebar on all pages"
-msgstr ""
+msgstr "सभी पृष्ठों पर एक ही साइडबार का उपयोग करें"
 
 msgid "config stats"
 msgstr "स्टैट्स की सेटिंग करें"
@@ -5599,7 +5599,7 @@ msgid "Event Log"
 msgstr "घटना लॉग"
 
 msgid "Combined"
-msgstr ""
+msgstr "संयुक्त"
 
 msgid "graph"
 msgstr "ग्राफ़"
@@ -5680,7 +5680,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "जब यह सेटिंग सत्य की जाती है, तो इंटरेस्टिंग साइट्स के लिंक साइटमैप पर प्रदर्शित किए जाएंगे। [डिफ़ॉल्ट तर्क है false]"
 
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr ""
+msgstr "यह सेटिंग, जब true पर सेट की जाती है, होमपेज पर मानक साइडबार प्रस्तुत करेगी, <a href=/configsidebar> के माध्यम से कॉन्फ़िगरेशन सक्षम करेगी। [डिफ़ॉल्ट गलत है]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "यह सेटिंग तय करती है कि राउटर को प्रदान की गई <i>blocklist.txt</i> फ़ाइल और किसी भी उपयोगकर्ता निर्धारित ब्लॉकलिस्ट का उपयोग करना चाहिए या नहीं, जिससे हैश या IP पते के माध्यम से राउटर को प्रतिबंधित करने की अनुमति हो। IPv4 के लिए संचार क्षेत्र और नेटमास्क समर्थित हैं, लेकिन IPv6 के लिए नहीं। अपने I2P+ ऐप्लिकेशन डिरेक्टरी में <i>blocklist.txt</i> को देखें जानकारी के लिए। [द्वारा सक्षम होने वाला, रीस्टार्ट की आवश्यकता है]"
@@ -5695,7 +5695,7 @@ msgid "This setting determines whether or not the router should use the provided
 msgstr "यह सेटिंग तय करती है कि राउटर को तार के बाहरी नोड आईपी पतों से कार्यरत राउटरों को प्रतिबंधित करने के लिए आपके I2P+ ऐप्लिकेशन डिरेक्टरी में प्रदान की गई <i>blocklist_tor.txt</i> फ़ाइल का उपयोग करना चाहिए या नहीं। [द्वारा सक्षम होने वाला, रीस्टार्ट की आवश्यकता है]"
 
 msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
-msgstr ""
+msgstr "यह सेटिंग निर्दिष्ट देशों में राउटर्स से अनुरोधों को अवरुद्ध करने और प्रतिबंधित करने के लिए सक्षम बनाती है जैसे ही एक प्रत्यक्ष टनल अनुरोध बनाया जाता है। देशों को दो अक्षर के देश कोड के रूप में निर्दिष्ट किया जाना चाहिए, जो अल्पविराम द्वारा अलग किए गए हैं। उदा. router.blockCountries=cn,ru"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
 msgstr "जब यह असत्य कर दिया जाता है, तो राउटर पुरानी संस्करण चल रहे धीमे या पहुंचहीन राउटरों के टनल बनाने के प्रश्न को ब्लॉक नहीं करेगा। [मानक रूप से सत्य, पुनः शुरू करने की आवश्यकता है]"
@@ -5833,7 +5833,7 @@ msgid "This setting determines whether routers classified as uninteresting (K or
 msgstr "यह सेटिंग निर्धारित करती है कि क्या उन राउटरों की जांच की जाती है जो अनिच्छुक (के या एल टायर, पहुंचमुक्त या 0.9.50 से पुराने) के रूप में वर्गीकृत किए गए हैं, 1 घंटे के बाद राउटर रिफ्रेश प्रक्रिया के दौरान। [मानक मान असत्य है]"
 
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
-msgstr ""
+msgstr "जब true पर सेट किया जाता है, तो यह सेटिंग आपके राउटर द्वारा कंजेशन कैप्स प्रकाशित करने के लिए आवश्यक शर्तों को शिथिल कर देगी, विशेष रूप से जब यह निर्धारित होता है कि आपका बैंडविड्थ उपयोग उच्च है। अन्य शर्तें, जैसे उच्च जॉब लैग या धीमे के रूप में वर्गीकृत राउटर, फिर भी कैप्स प्रकाशित होने का कारण बनेंगी। [डिफ़ॉल्ट गलत है]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "जब सेट किया गया है, तो यह राउटर को समानांतर बनाने की अनुमति दी गई टनल की सख्त सीमा सेट करता है। मानक रूप से, राउटर औसत बनाने का समय और वर्तमान आउटबाउंड बैंडविड्थ का उपयोग करके अत्याधुनिक बनाने की गति निर्धारित करता है। [पुनः शुरू करने की आवश्यकता है]"
@@ -5848,10 +5848,10 @@ msgid "This setting (in minutes) allows you to manually configure how long to wa
 msgstr "यह सेटिंग (मिनट में) आपको नेटडीबी में RouterInfos की वैधता की जांच के लिए शुरुआत के बाद कितनी देर इंतजार करने की मात्रा को मैन्युअल रूप से सेट करने की अनुमति देती है, जिसके बाद केवल वैध राउटर्स को शामिल किया जाएगा। जब वैधता परीक्षण होता है, समय से पार गए RouterInfos और केवल SSU के माध्यम से पहुंचने वाले अक्षम समकक्षों को नेटडीबी से हटाया जाएगा। [मानक मान 60 मिनट है] नोट: यह सेटिंग पहले के राउटरों (मानक रूप से 0.9.29 से पुराने) पर कोई प्रभाव नहीं डालती है जो जब भी नेटडीबी स्टोर की कोशिश की जाती है, तो नेटडीबी से हटाए और राउटर सत्र के लिए प्रतिबंधित हो जाते हैं।"
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
+msgstr "यह सेटिंग, जब true पर सेट की जाती है, तो आपके अपने देश के सभी राउटर्स से प्रत्यक्ष संचार को अवरुद्ध करेगी और उन्हें आपकी बैनलिस्ट में जोड़ देगी जब तक कि आपका राउटर पुनः आरंभ नहीं हो जाता। [डिफ़ॉल्ट गलत है]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr ""
+msgstr "यह सेटिंग, जब true पर सेट की जाती है, तो सभी X टियर राउटर्स से प्रत्यक्ष संचार को अवरुद्ध करेगी जो G कंजेशन कैप प्रकाशित करते हैं और न तो पहुंचने योग्य हैं और न ही अपहुंचने योग्य हैं, उन्हें सत्र बैनलिस्ट में जोड़ते हुए। ध्यान दें कि इस सेटिंग को प्रभावी होने के लिए उन्नत मोड सक्षम होना चाहिए। [डिफ़ॉल्ट गलत है]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "यह सेटिंग आपको यह जांच करने के लिए SSU परीक्षणों को अक्षम करने की अनुमति देती है कि आपका राउटर फ़ायरवॉल के पीछे है या नहीं, और जो राउटर निश्चित रूप से फ़ायरवॉल के पीछे नहीं हैं लेकिन अनियमित फ़ायरवॉलिंग समस्याओं का सामना कर रहे हैं। यदि परीक्षण अक्षम किया जाता है, तो दोनों SSU और NTCP <a href=/info>राउटर जानकारी पृष्ठ</a> पर आपकी वर्तमान सार्वजनिक IP पता रिपोर्ट करने चाहिए। [रीस्टार्ट की आवश्यकता है]"
@@ -5860,7 +5860,7 @@ msgid "This setting determines which transport takes priority when communicating
 msgstr "यह सेटिंग देखभाल करने के लिए कौन सा ट्रांसपोर्ट प्राथमिकता प्राप्त करता है जब समकक्षों के साथ संवाद किया जाता है। मानक रूप से, एनटीसीपी को यूडीपी (एसएसयू) के मुक़ाबले में पसंद किया जाता है। यदि मान को सत्य कर दिया जाता है, तो यूडीपी को प्राथमिकता दी जाएगी जब तक कि पहले से मौजूद एनटीसीपी कनेक्शन नहीं हो; जब यह हमेशा के रूप में सेट किया जाता है, तो यूडीपी हमेशा उपयोग की जाएगा चाहे कितने भी पहले से मौजूद एनटीसीपी कनेक्शन हों। [मानक रूप से असत्य]"
 
 msgid "miscellaneous"
-msgstr ""
+msgstr "विविध"
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "यदि सत्य कर दिया जाता है, तो यह विकल्प एक आइकॉन सिस्टम ट्रे / सूचना क्षेत्र में रखेगा, जिसमें मूल सेवा नियंत्रण विकल्प होंगे। [मानक रूप से अक्षम है]"
@@ -6100,16 +6100,16 @@ msgid "For SSL only"
 msgstr "केवल SSL के लिए"
 
 msgid "How can I configure the console and web services to be accessible on my local network?"
-msgstr ""
+msgstr "मैं कंसोल और वेब सेवाओं को अपने स्थानीय नेटवर्क पर पहुंचने योग्य बनाने के लिए कैसे कॉन्फ़िगर कर सकता हूं?"
 
 msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
-msgstr ""
+msgstr "अपने कंसोल को अपने स्थानीय नेटवर्क पर पहुंचने योग्य बनाने के लिए, अपनी I2P सेटिंग निर्देशिका के clients.config.d फ़ोल्डर में कॉन्फ़िगरेशन फ़ाइल 00-net.i2p.router.web.RouterConsoleRunner-clients.config संपादित करें। मौजूदा localhost (127.0.0.1) मैपिंग में आवश्यक IP पते अपडेट करें या जोड़ें। HTTPS एक्सेस के लिए -s स्विच का उपयोग करें।"
 
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
-msgstr ""
+msgstr "उदाहरण: HTTP और HTTPS दोनों पर localhost और 192.168.1.10 से एक्सेस की अनुमति देने के लिए:"
 
-msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager’s configuration section using the <i>reachable by</i> dropdown."
-msgstr ""
+msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
+msgstr "अधिकांश क्लाइंट सेवाओं के लिए, टनल मैनेजर के कॉन्फ़िगरेशन अनुभाग में <i>द्वारा पहुंचने योग्य</i> ड्रॉपडाउन का उपयोग करके संबंधित सेवा के लिए सुनने पते को बदलें।"
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "I2P के भीतर IRC कैसे जोड़ें?"
@@ -6496,7 +6496,7 @@ msgid "If you are in a hurry and can't wait a few hours, you can tell people to 
 msgstr "यदि आप तत्पर हैं और कुछ घंटों की प्रतीक्षा नहीं कर सकते, तो आप लोगों को 'जंप' एड्रेस हेल्पर रेडिरेक्टिव सर्विस का उपयोग करने के लिए कह सकते हैं। यह आमतौर पर आपके होस्टनाम को उसी साइट पर पंजीकृत करने के कुछ मिनटों के भीतर कार्य करने लगेगा। इसे अपने आप को पहले ही परीक्षण करें, अपने ब्राउज़र में http://stats.i2p/cgi-bin/jump.cgi?a=yourchosenhostname.i2p प्रविष्ट करके। एक बार यह कार्यरत हो जाता है, आप दूसरों को इसका उपयोग करने के लिए बता सकते हैं।"
 
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
-msgstr ""
+msgstr "वैकल्पिक रूप से, आप अपने डोमेन के लिए <i>पता सहायक लिंक</i> को कॉपी कर सकते हैं, जो या तो पता पुस्तिका सूची पृष्ठ पर, या आपके डोमेन के विवरण पृष्ठ पर इंगित किया गया है जैसे <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>skank.i2p के लिए विवरण</a>, और लिंक को उस स्थान पर चिपकाएं जहां इसे दूसरों के साथ साझा करने की आवश्यकता है।"
 
 msgid "Backup your private key!"
 msgstr "अपना निजी कुंजी बैकअप करें!"
@@ -6733,7 +6733,7 @@ msgid "Getting Support Online"
 msgstr "ऑनलाइन सहायता प्राप्त करें"
 
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
-msgstr ""
+msgstr "आप <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P वेबसाइट</a> पर जानकारी की समीक्षा करना भी चाह सकते हैं, <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P चर्चा मंच</a> पर संदेश पोस्ट करें या I2P के आंतरिक IRC नेटवर्क पर <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> या <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> पर जाएं।"
 
 msgid "Reporting Bugs"
 msgstr "गुमावशी की रिपोर्ट करना"
@@ -7273,7 +7273,7 @@ msgid "Configure display language, theme and optional console password"
 msgstr "दिखावा भाषा, थीम और वैलेंट कंसोल पासवर्ड को सेट करें"
 
 msgid "Language"
-msgstr ""
+msgstr "भाषा"
 
 msgid "Configure router bandwidth"
 msgstr "राउटर बैंडविड्थ को सेट करें"
@@ -7340,22 +7340,22 @@ msgid "network database"
 msgstr "नेटवर्क डेटाबेस"
 
 msgid "Encryption type"
-msgstr ""
+msgstr "एन्क्रिप्शन प्रकार"
 
 msgid "Encryption types"
-msgstr ""
+msgstr "एन्क्रिप्शन प्रकार"
 
 msgid "Signature types"
-msgstr ""
+msgstr "हस्ताक्षर प्रकार"
 
 msgid "Locally hosted private service"
-msgstr ""
+msgstr "स्थानीय रूप से होस्ट की गई निजी सेवा"
 
 msgid "Locally hosted public service"
-msgstr ""
+msgstr "स्थानीय रूप से होस्ट की गई सार्वजनिक सेवा"
 
 msgid "Requested client leaseset"
-msgstr ""
+msgstr "अनुरोधित क्लाइंट लीज़सेट"
 
 msgid "network database router map"
 msgstr "नेटवर्क डेटाबेस राउटर मानचित्र"
@@ -7401,10 +7401,10 @@ msgid "Fast / High Capacity"
 msgstr "तेज़ / उच्च क्षमता"
 
 msgid "router logs"
-msgstr ""
+msgstr "राउटर लॉग"
 
 msgid "service logs"
-msgstr ""
+msgstr "सेवा लॉग"
 
 msgid "Manage I2P addresses"
 msgstr "I2P पताओं का प्रबंधन करें"
@@ -7611,13 +7611,13 @@ msgid "Toggle Tunnels"
 msgstr "टंनल स्विच करें"
 
 msgid "Updating sidebar sections"
-msgstr ""
+msgstr "साइडबार अनुभाग अपडेट कर रहा है"
 
 msgid "Peer Profile"
 msgstr "पीयर प्रोफ़ाइल"
 
 msgid "Profile View"
-msgstr ""
+msgstr "प्रोफ़ाइल दृश्य"
 
 msgid "Profile for peer"
 msgstr "पीयर का प्रोफ़ाइल"
@@ -7751,48 +7751,4 @@ msgstr "अगला"
 
 msgid "Finished"
 msgstr "समाप्त"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

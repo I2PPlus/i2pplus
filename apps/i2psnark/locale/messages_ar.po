@@ -1561,10 +1561,4 @@ msgstr "حفظ التغييرات"
 
 msgid "Torrent must be stopped"
 msgstr "يجب إيقاف السيل"
-
-
-
-
 #, java-format
-
-

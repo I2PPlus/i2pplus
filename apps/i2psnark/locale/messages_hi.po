@@ -1529,10 +1529,4 @@ msgstr "बदलाव सहेजें"
 
 msgid "Torrent must be stopped"
 msgstr "टॉरेंट को रोकना होगा"
-
-
-
-
 #, java-format
-
-

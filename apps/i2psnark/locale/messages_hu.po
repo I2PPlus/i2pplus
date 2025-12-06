@@ -1529,10 +1529,4 @@ msgstr "Módosítások mentése"
 
 msgid "Torrent must be stopped"
 msgstr "A torrentet le kell állítani"
-
-
-
-
 #, java-format
-
-

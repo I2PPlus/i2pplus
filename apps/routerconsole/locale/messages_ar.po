@@ -151,7 +151,7 @@ msgid "Unreachable on any transport"
 msgstr "صعب الوصول بأية وسيلة"
 
 msgid "Cannot enumerate UPnP devices on Android."
-msgstr ""
+msgstr "لا يمكن تعداد أجهزة UPnP على نظام Android."
 
 msgid "UPnP is not enabled"
 msgstr "لم يتم تمكين UPnP"
@@ -691,7 +691,7 @@ msgid "After reporting, please restart your router"
 msgstr "بعد الإبلاغ، يرجى إعادة تشغيل جهاز التوجيه الخاص بك"
 
 msgid "Invalid form submission, requires POST"
-msgstr ""
+msgstr "إرسال النموذج غير صالح، يتطلب POST"
 
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "خطأ في الارسال، ربما لاستعمالك زر 'الرجوع' او 'انعش' في المتصفح. حاول اعادة الارسال."
@@ -829,13 +829,13 @@ msgid "To enable SSL access for the Router Console, see the commented <code>clie
 msgstr "لتمكين وصول SSL لوحدة التحكم في جهاز التوجيه ، راجع ملف <code>clients.config</code> المذكور في دليل تطبيق I2P لمزيد من المعلومات. ستحتاج إلى تحرير ملف تكوين RouterConsolerunner الموجود في الدليل: "
 
 msgid "Save disabled, edit the router.config file to make changes"
-msgstr ""
+msgstr "تم تعطيل الحفظ، قم بتحرير ملف router.config لإجراء التغييرات"
 
 msgid "Error updating the configuration - please see the error logs"
 msgstr "خطأ في ترقية الإعدادات - انظر التفاصيل"
 
 msgid "No changes made to the configuration"
-msgstr ""
+msgstr "لم يتم إجراء أي تغييرات على التكوين"
 
 msgid "Note"
 msgstr "ملاحظة"
@@ -856,7 +856,7 @@ msgid "Save Plugin Configuration"
 msgstr "حفظ اعدادات الملحق"
 
 msgid "Plugins disabled"
-msgstr ""
+msgstr "الإضافات معطلة"
 
 msgid "Install Plugin"
 msgstr "تثبيت الملحق"
@@ -868,7 +868,7 @@ msgid "Update All Installed Plugins"
 msgstr "تحديث كافة الإضافات المثبتة"
 
 msgid "Delete client disabled"
-msgstr ""
+msgstr "حذف العميل معطل"
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -952,17 +952,17 @@ msgid "Updating all plugins"
 msgstr "تحديث جميع الإضافات"
 
 msgid "Update manager not registered, cannot install"
-msgstr ""
+msgstr "مدير التحديث غير مسجل، لا يمكن التثبيت"
 
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "تثبيت البرنامج المساعد من {0}"
 
 msgid "Cannot install, check logs"
-msgstr ""
+msgstr "لا يمكن التثبيت، تحقق من السجلات"
 
 msgid "Update manager not registered, cannot check"
-msgstr ""
+msgstr "مدير التحديث غير مسجل، لا يمكن التحقق"
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1062,17 +1062,17 @@ msgid "Join Family"
 msgstr "انضم إلى العائلة"
 
 msgid "Bad certificate - No Subject CN"
-msgstr ""
+msgstr "شهادة سيئة - لا يوجد CN للموضوع"
 
 msgid "Bad characters in Family: "
-msgstr ""
+msgstr "أحرف سيئة في العائلة: "
 
 #, java-format
 msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
-msgstr ""
+msgstr "ملف تخزين المفاتيح {0} موجود بالفعل للعائلة {1}! احذفه أو أعد تسميته أولاً."
 
 msgid "Family key configured for router family: "
-msgstr ""
+msgstr "تم تكوين مفتاح العائلة لعائلة جهاز التوجيه: "
 
 msgid "Load from file failed"
 msgstr "فشل التحميل من الملف"
@@ -1090,7 +1090,7 @@ msgid "Restore defaults"
 msgstr "استعادة الضبط الافتراضي"
 
 msgid "Bad group detected, please retry"
-msgstr ""
+msgstr "تم اكتشاف مجموعة سيئة، يرجى المحاولة مرة أخرى"
 
 msgid "Restored default settings"
 msgstr "استعادة الإعدادات الافتراضية"
@@ -1123,7 +1123,7 @@ msgid "Invalid destination"
 msgstr "عنوان غير موجود"
 
 msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "لا يمكن إضافة مفتاح للوجهة المحلية. قم بتمكين التشفير في مدير الأنفاق."
 
 #, java-format
 msgid "Key for {0} added to keyring"
@@ -1136,7 +1136,7 @@ msgid "Requires hostname, destination, or blinded Base32"
 msgstr "يتطلب اسم المضيف أو الوجهة أو Base32 الأعمى"
 
 msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
-msgstr ""
+msgstr "لا يمكن إضافة مفتاح للوجهة المحلية. قم بتمكين التشفير في مدير الخدمات المخفية."
 
 msgid "Destination requires lookup password"
 msgstr "الوجهة تتطلب كلمة مرور البحث"
@@ -1157,7 +1157,7 @@ msgid "Delete key"
 msgstr "حذف مفتاح"
 
 msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "لا يمكن إزالة مفتاح للوجهة المحلية. قم بتعطيل التشفير في مدير الأنفاق."
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1210,34 +1210,34 @@ msgid "Log overrides updated"
 msgstr "اعدا كتابة السجلات"
 
 msgid "Error updating the log limits - levels not valid"
-msgstr ""
+msgstr "خطأ في تحديث حدود السجل - المستويات غير صالحة"
 
 msgid "Log limits cleared"
-msgstr ""
+msgstr "تم مسح حدود السجل"
 
 #, java-format
 msgid "Default log level updated from {0} to {1}"
-msgstr ""
+msgstr "تم تحديث مستوى السجل الافتراضي من {0} إلى {1}"
 
 msgid "Date format updated"
-msgstr ""
+msgstr "تم تحديث تنسيق التاريخ"
 
 #, java-format
 msgid "Specified date format is not valid ({0}) - not updated"
-msgstr ""
+msgstr "تنسيق التاريخ المحدد غير صالح ({0}) - لم يتم التحديث"
 
 msgid "File size updated"
-msgstr ""
+msgstr "تم تحديث حجم الملف"
 
 #, java-format
 msgid "Specified file size limit is not valid ({0}) - not updated"
-msgstr ""
+msgstr "حد حجم الملف المحدد غير صالح ({0}) - لم يتم التحديث"
 
 msgid "Compression setting updated"
-msgstr ""
+msgstr "تم تحديث إعداد الضغط"
 
 msgid "Log record format updated"
-msgstr ""
+msgstr "تم تحديث تنسيق سجل السجل"
 
 msgid "Log configuration saved"
 msgstr "تم حفظ السجلات"
@@ -1447,10 +1447,10 @@ msgid "Bad capacity value"
 msgstr "قدرة غير جيدة"
 
 msgid "Bonuses adjusted for: "
-msgstr ""
+msgstr "تم تعديل المكافآت لـ: "
 
 msgid "No profile exists for: "
-msgstr ""
+msgstr "لا يوجد ملف تعريف لـ: "
 
 msgid "Unsupported"
 msgstr "غير مدعومة"
@@ -1466,7 +1466,7 @@ msgstr "إلى"
 
 #, java-format
 msgid "First {0} displayed, see the {1} file for the full list"
-msgstr ""
+msgstr "تم عرض أول {0}، انظر ملف {1} للقائمة الكاملة"
 
 msgid "IPs Banned Until Restart"
 msgstr "عناوين IP محظورة حتى إعادة التشغيل"
@@ -1579,7 +1579,7 @@ msgid "Save order"
 msgstr "حفظ النظام"
 
 msgid "Sidebar preferences updated"
-msgstr ""
+msgstr "تم تحديث تفضيلات الشريط الجانبي"
 
 msgid "Refresh interval must be a number"
 msgstr "يجب أن يكون الفاصل الزمني للتحديث رقمًا"
@@ -1588,16 +1588,16 @@ msgid "Restore full default"
 msgstr "استعادة الافتراضي الكامل"
 
 msgid "Full sidebar defaults restored."
-msgstr ""
+msgstr "تم استعادة الإعدادات الافتراضية للشريط الجانبي الكامل."
 
 msgid "Sidebar will refresh shortly."
-msgstr ""
+msgstr "سيتم تحديث الشريط الجانبي قريباً."
 
 msgid "Restore minimal default"
 msgstr "استعادة الحد الأدنى من الافتراضي"
 
 msgid "Minimal sidebar defaults restored."
-msgstr ""
+msgstr "تم استعادة الإعدادات الافتراضية للشريط الجانبي الأدنى."
 
 msgid "Order must be an integer"
 msgstr "الأمر يجب أن يكون عددا صحيحا"
@@ -1626,11 +1626,11 @@ msgstr "تم تحديث قائمة الرسوم البيانية، وقد يست
 
 #, java-format
 msgid "Internal error: could not resolve pool name {0}."
-msgstr ""
+msgstr "خطأ داخلي: لا يمكن حل اسم المجمع {0}."
 
 #, java-format
 msgid "Internal error: could not find pool settings for {0}."
-msgstr ""
+msgstr "خطأ داخلي: لا يمكن العثور على إعدادات المجمع لـ {0}."
 
 msgid "Updated settings for all pools."
 msgstr "تحديث إعدادات للجميع."
@@ -1713,7 +1713,7 @@ msgid "Add user"
 msgstr "أضِفْ المستخدم"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
-msgstr ""
+msgstr "لا يمكن حفظ اختيار السمة، اسم السمة يحتوي على أحرف غير قانونية"
 
 msgid "Theme change saved."
 msgstr "تم حفظ تغيير التيمة."
@@ -1725,7 +1725,7 @@ msgid "No user name entered"
 msgstr "لم يتم إدخال اسم المستخدم"
 
 msgid "User name may not contain '='"
-msgstr ""
+msgstr "اسم المستخدم قد لا يحتوي على '='"
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "تحذير: لا يُنصح باستخدام أسماء المستخدمين خارج مجموعة الأحرف ISO-8859-1. الدعم غير موحد ويختلف حسب المتصفح."
@@ -2047,7 +2047,7 @@ msgid "Show list of all known I2P routers"
 msgstr "أظهر قائمة بكل I2P المعروفة"
 
 msgid "List of recently connected peers with profiling info"
-msgstr ""
+msgstr "قائمة الأقران المتصلين مؤخراً مع معلومات التحليل"
 
 msgid "Peer Profiles"
 msgstr "ملفات تعريف الأقران"
@@ -2215,7 +2215,7 @@ msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "واجهة أمامية بديلة تركز على الخصوصية لـ Reddit"
 
 msgid "AI Image generation & Chat hub"
-msgstr ""
+msgstr "مركز توليد الصور بالذكاء الاصطناعي والدردشة"
 
 msgid "IRC Logs for multiple networks"
 msgstr "سجلات IRC لشبكات متعددة"
@@ -2356,10 +2356,10 @@ msgid "OpenDemocracy"
 msgstr "الديمقراطية المفتوحة"
 
 msgid "Online privacy &amp; tech blog"
-msgstr ""
+msgstr "مدونة الخصوصية عبر الإنترنت والتقنية"
 
 msgid "RightToPrivacy"
-msgstr ""
+msgstr "الحق في الخصوصية"
 
 msgid "Lifestyle magazine"
 msgstr "مجلة لايف ستايل"
@@ -2380,7 +2380,7 @@ msgid "Community-driven tech news"
 msgstr "أخبار التكنولوجيا التي يحركها المجتمع"
 
 msgid "Various services"
-msgstr ""
+msgstr "خدمات متنوعة"
 
 msgid "News for nerds"
 msgstr "أخبار للمهووسين"
@@ -2456,7 +2456,7 @@ msgid "Add"
 msgstr "إضافة"
 
 msgid "Error displaying the info page."
-msgstr ""
+msgstr "خطأ في عرض صفحة المعلومات."
 
 msgid "Identity"
 msgstr "الهوية"
@@ -2504,7 +2504,7 @@ msgid "Performance"
 msgstr "الأداء"
 
 msgid "Maximum available RAM"
-msgstr ""
+msgstr "الحد الأقصى للذاكرة المتاحة"
 
 msgid "Classified as slow"
 msgstr "تصنف على أنها بطيئة"
@@ -2516,7 +2516,7 @@ msgid "No"
 msgstr "لا"
 
 msgid "GeoIP Db"
-msgstr ""
+msgstr "قاعدة بيانات GeoIP"
 
 msgid "Target"
 msgstr "الهدف"
@@ -2655,19 +2655,19 @@ msgid "Sybil Analysis"
 msgstr "تحليل سيبيل"
 
 msgid "Bad value supplied, please check and try again."
-msgstr ""
+msgstr "تم توفير قيمة سيئة، يرجى التحقق والمحاولة مرة أخرى."
 
 msgid "Router Map"
 msgstr "خريطة ال router"
 
 msgid "Network Database Search"
-msgstr ""
+msgstr "البحث في قاعدة بيانات الشبكة"
 
 msgid "Capabilities"
 msgstr "القدرات"
 
 msgid "e.g. f or XOfR"
-msgstr ""
+msgstr "مثال f أو XOfR"
 
 msgid "Cost"
 msgstr "التكلفة"
@@ -2676,49 +2676,49 @@ msgid "Country"
 msgstr "البلد"
 
 msgid "Country Codes"
-msgstr ""
+msgstr "رموز الدول"
 
 msgid "Hash Prefix"
-msgstr ""
+msgstr "بادئة البصمة"
 
 msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
-msgstr ""
+msgstr "IPv4 أو IPv6، لاحقات /24,/16,/8 اختيارية لـ IPv4، البادئة مقبولة لـ IPv6"
 
 msgid "Hostname or b32"
-msgstr ""
+msgstr "اسم المضيف أو b32"
 
 msgid "IPv6 Prefix"
-msgstr ""
+msgstr "بادئة IPv6"
 
 msgid "Single port or range"
-msgstr ""
+msgstr "منفذ واحد أو نطاق"
 
 msgid "Signature Type"
-msgstr ""
+msgstr "نوع التوقيع"
 
 msgid "SSU Capabilities"
-msgstr ""
+msgstr "قدرات SSU"
 
 msgid "Encryption Type"
-msgstr ""
+msgstr "نوع التشفير"
 
 msgid "Router Version"
-msgstr ""
+msgstr "إصدار جهاز التوجيه"
 
 msgid "Transport"
 msgstr "نقل"
 
 msgid "Add Sybil analysis (must pick at least one above)"
-msgstr ""
+msgstr "إضافة تحليل Sybil (يجب اختيار واحد على الأقل أعلاه)"
 
 msgid "Sybil close to"
-msgstr ""
+msgstr "Sybil قريب من"
 
 msgid "Router hash, destination hash, b32, or from address book"
-msgstr ""
+msgstr "بصمة جهاز التوجيه، بصمة الوجهة، b32، أو من دفتر العناوين"
 
 msgid "or Sybil close to this router"
-msgstr ""
+msgstr "أو سibil بالقرب من جهاز التوجيه هذا"
 
 msgid "Lookup"
 msgstr "بحث"
@@ -2733,13 +2733,13 @@ msgid "not found in network database"
 msgstr "غير موجود في قاعدة الشبكة"
 
 msgid "Bad Base64 Router hash"
-msgstr ""
+msgstr "بصمة جهاز التوجيه Base64 سيئة"
 
 msgid "No routers with"
-msgstr ""
+msgstr "لا توجد أجهزة توجيه مع"
 
 msgid "Hash prefix"
-msgstr ""
+msgstr "بادئة البصمة"
 
 msgid "Port"
 msgstr "منفذ"
@@ -2748,10 +2748,10 @@ msgid "MTU"
 msgstr "MTU"
 
 msgid "found in the network database"
-msgstr ""
+msgstr "تم العثور عليها في قاعدة بيانات الشبكة"
 
 msgid "results"
-msgstr ""
+msgstr "النتائج"
 
 msgid "Previous Page"
 msgstr "الصفحة السابقة"
@@ -2760,43 +2760,43 @@ msgid "Next Page"
 msgstr "الصفحة التالية"
 
 msgid "Results per page"
-msgstr ""
+msgstr "النتائج لكل صفحة"
 
 msgid "Not initialized"
 msgstr "لم تتم تهيئة"
 
 msgid "Total Remote Leasesets"
-msgstr ""
+msgstr "إجمالي مجموعات الإيجار عن بعد"
 
 msgid "Compact mode"
-msgstr ""
+msgstr "الوضع المضغوط"
 
 msgid "Local Leasesets"
-msgstr ""
+msgstr "مجموعات الإيجار المحلية"
 
 msgid "Debug Mode"
-msgstr ""
+msgstr "وضع التصحيح"
 
 msgid "Published (RAP) Leasesets"
-msgstr ""
+msgstr "مجموعات الإيجار المنشورة (RAP)"
 
 msgid "Sorted by hash distance, closest first."
-msgstr ""
+msgstr "مرتبة حسب مسافة البصمة، الأقرب أولاً."
 
 msgid "Mod Data"
-msgstr ""
+msgstr "بيانات التعديل"
 
 msgid "Last Changed"
-msgstr ""
+msgstr "آخر تغيير"
 
 msgid "Next Mod Data"
-msgstr ""
+msgstr "بيانات التعديل التالية"
 
 msgid "Change in"
-msgstr ""
+msgstr "تغيير في"
 
 msgid "Floodfill mode enabled"
-msgstr ""
+msgstr "تم تمكين وضع ملء الفيضان"
 
 msgid "Routing Key"
 msgstr "مفتاح التوجيه"
@@ -2811,21 +2811,21 @@ msgid "Estimated total leasesets"
 msgstr "مجموع الإيجارات المقدرة"
 
 msgid "Total Local Leasesets"
-msgstr ""
+msgstr "إجمالي مجموعات الإيجار المحلية"
 
 msgid "Remote Leasesets"
-msgstr ""
+msgstr "مجموعات الإيجار عن بعد"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
-msgstr ""
+msgstr "اسم المضيف {0} غير موجود في قاعدة بيانات الشبكة"
 
 #, java-format
 msgid "LeaseSet for {0} not found in network database"
-msgstr ""
+msgstr "مجموعة الإيجار لـ {0} غير موجودة في قاعدة بيانات الشبكة"
 
 msgid "Meta"
-msgstr ""
+msgstr "بيانات تعريفية"
 
 msgid "LeaseSet"
 msgstr "مجموعة الإيجار"
@@ -2857,7 +2857,7 @@ msgid "Signature type"
 msgstr "نوع التوقيع"
 
 msgid "Public Key"
-msgstr ""
+msgstr "المفتاح العام"
 
 msgid "Unsupported type"
 msgstr "نوع غير مدعوم"
@@ -2874,10 +2874,10 @@ msgid "Unknown"
 msgstr "غير معروف"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr ""
+msgstr "الوضع المتقدم - يشمل جميع الإحصائيات المنشورة بواسطة ملء الفيضان."
 
 msgid "Compact mode - does not include statistics published by floodfills."
-msgstr ""
+msgstr "الوضع المضغوط - لا يشمل الإحصائيات المنشورة بواسطة ملء الفيضان."
 
 msgid "Network Database Router Statistics"
 msgstr "احصائيات قاعدة البيانات I2P"
@@ -2901,7 +2901,7 @@ msgid "Transports"
 msgstr "نقل"
 
 msgid "X Tier"
-msgstr ""
+msgstr "المستوى X"
 
 msgid "Floodfills"
 msgstr "مدافن الفيضانات"
@@ -2919,10 +2919,10 @@ msgid "Router is banlisted"
 msgstr "تم حظر جهاز التوجيه"
 
 msgid "Java I2P variant"
-msgstr ""
+msgstr "متغير Java I2P"
 
 msgid "I2Pd variant"
-msgstr ""
+msgstr "متغير I2Pd"
 
 msgid "RouterInfo is compressible"
 msgstr "معلومات جهاز التوجيه قابلة للضغط"
@@ -2956,7 +2956,7 @@ msgid "Hostname"
 msgstr "اسم المضيف"
 
 msgid "direct"
-msgstr ""
+msgstr "مباشر"
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "تم التحقق من العائلة (شهادة التوقيع مثبتة وصالحة)"
@@ -2995,10 +2995,10 @@ msgid "Last heard from"
 msgstr "آخر سماع من"
 
 msgid "Network Id"
-msgstr ""
+msgstr "معرف الشبكة"
 
 msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr ""
+msgstr "يتم دائماً تزييف العدد لتجنب الإشارة إلى إعادة تشغيل جهاز التوجيه"
 
 msgid "Hidden or starting up"
 msgstr "مختفي"
@@ -3066,10 +3066,10 @@ msgid "IPv6"
 msgstr "IPv6"
 
 msgid "Active connections / Max permitted"
-msgstr ""
+msgstr "الاتصالات النشطة / الحد الأقصى المسموح به"
 
 msgid "Connections / Limit"
-msgstr ""
+msgstr "الاتصالات / الحد"
 
 msgid "Current / maximum permitted"
 msgstr "الحالي/الحد الأقصى المسموح به"
@@ -3383,7 +3383,7 @@ msgid "Rejected"
 msgstr "مرفوض"
 
 msgid "First Heard About"
-msgstr ""
+msgstr "سماع لأول مرة عن"
 
 msgid "Last Heard From"
 msgstr "آخر سماع من"
@@ -3508,7 +3508,7 @@ msgstr "{0} عرض النطاق الترددي المشترك"
 
 #, java-format
 msgid "Over {0} KB/s shared bandwidth"
-msgstr ""
+msgstr "أكثر من {0} كيلوبايت/ثانية من النطاق الترددي المشترك"
 
 msgid "status"
 msgstr "الحالة"
@@ -3571,11 +3571,11 @@ msgid "Total number of banned peers"
 msgstr "إجمالي عدد الأقران المحظورين"
 
 msgid "Note: 'LU' class routers have been excluded from the list."
-msgstr ""
+msgstr "ملاحظة: تم استبعاد أجهزة توجيه فئة 'LU' من القائمة."
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
-msgstr ""
+msgstr "للعرض، انظر {0}حظر الجلسات{1}."
 
 msgid "Select search engine"
 msgstr "اختر محرك البحث"
@@ -3823,7 +3823,7 @@ msgid "An introduction to hosting websites on the I2P network"
 msgstr "مقدمة عن استضافة المواقع على شبكة I2P"
 
 msgid "New hosts in last 24 hours"
-msgstr ""
+msgstr "مضيفون جدد في آخر 24 ساعة"
 
 msgid "I2PControl"
 msgstr "التحكم I2P"
@@ -3950,7 +3950,7 @@ msgid "Floodfill enabled"
 msgstr "تم تمكين floodfill"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
-msgstr ""
+msgstr "إجمالي عدد مجموعات الإيجار عن بعد المخزنة في NetDb الخاص بنا"
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "تحذير: ECDSA غير متوفر. "
@@ -3965,7 +3965,7 @@ msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "الزملاء الذين تحدثنا إليهم في الدقائق القليلة الماضية/الساعة الماضية"
 
 msgid "Peers we've been talking to in the last minute"
-msgstr ""
+msgstr "الأقران الذين تحدثنا معهم في الدقيقة الأخيرة"
 
 msgid "The number of peers available for building client tunnels"
 msgstr "عدد الأقران المتاحين لبناء أنفاق العميل"
@@ -4482,7 +4482,7 @@ msgid "Data"
 msgstr "البيانات"
 
 msgid "Limit"
-msgstr ""
+msgstr "الحد"
 
 msgid "Receive on"
 msgstr "استقبل في"
@@ -4529,7 +4529,7 @@ msgid "No transit tunnels currently active."
 msgstr "لا توجد أنفاق عبور نشطة حاليًا."
 
 msgid "Transit Tunnels by Peer (Top {0})"
-msgstr ""
+msgstr "أنفاق العبور حسب النظير (أعلى {0})"
 
 msgid "Address"
 msgstr "العنوان"
@@ -4608,7 +4608,7 @@ msgid "Bandwidth test did not complete"
 msgstr "لم يكتمل اختبار النطاق الترددي"
 
 msgid "Bad state for test"
-msgstr ""
+msgstr "حالة سيئة للاختبار"
 
 msgid "Bandwidth test started"
 msgstr "بدأ اختبار النطاق الترددي"
@@ -4623,16 +4623,16 @@ msgid "Bandwidth test was not running"
 msgstr "اختبار النطاق الترددي لم يكن قيد التشغيل"
 
 msgid "ready"
-msgstr ""
+msgstr "جاهز"
 
 msgid "inbound test"
-msgstr ""
+msgstr "اختبار وارد"
 
 msgid "outbound test"
-msgstr ""
+msgstr "اختبار صادر"
 
 msgid "done"
-msgstr ""
+msgstr "منتهي"
 
 msgid "bits per second"
 msgstr "بايت في الثانية"
@@ -4804,7 +4804,7 @@ msgid "Share"
 msgstr "شارك"
 
 msgid "NOTE"
-msgstr ""
+msgstr "ملاحظة"
 
 #, java-format
 msgid "You have configured I2P+ to share only {0} KBps."
@@ -4831,7 +4831,7 @@ msgstr "اعدادات متقدمة"
 
 #, java-format
 msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
-msgstr ""
+msgstr "تم تحديد المفتاح <b>{0}</b> للإزالة. لتأكيد التغيير، احفظ التكوين، أو ألغِ لاستعادة المفتاح."
 
 msgid "Floodfill Configuration"
 msgstr "تكوين ملء الفيضان"
@@ -4861,7 +4861,7 @@ msgid "Advanced I2P+ Configuration"
 msgstr "اعدادات I2P متقدمة"
 
 msgid "Help with additional configuration settings"
-msgstr ""
+msgstr "مساعدة في إعدادات التكوين الإضافية"
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5255,15 +5255,15 @@ msgid "Banning will prevent the participation of this peer in tunnels you create
 msgstr "سيؤدي الحظر إلى منع مشاركة هذا النظير في الأنفاق التي تقوم بإنشائها."
 
 msgid "A list of bans by IP address is presented below."
-msgstr ""
+msgstr "يتم عرض قائمة بالحظر حسب عنوان IP أدناه."
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
-msgstr ""
+msgstr "لعرض جميع الحظر النشط حسب بصمة جهاز التوجيه، انظر {0}الأقران المحظورون{1}."
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
-msgstr ""
+msgstr "متوفر أيضاً قائمة {0}حظر الجلسات فقط{1} حسب البصمة."
 
 msgid "Adjust Profile Bonuses"
 msgstr "ضبط مكافآت الملف الشخصي"
@@ -5454,7 +5454,7 @@ msgid "config sidebar"
 msgstr "الشريط الجانبي للتكوين"
 
 msgid "Sidebar Options"
-msgstr ""
+msgstr "خيارات الشريط الجانبي"
 
 msgid "Refresh interval"
 msgstr "الفاصل الزمني للتحديث"
@@ -5466,10 +5466,10 @@ msgid "0 to disable"
 msgstr "0 للتعطيل"
 
 msgid "Unified sidebar"
-msgstr ""
+msgstr "شريط جانبي موحد"
 
 msgid "Use the same sidebar on all pages"
-msgstr ""
+msgstr "استخدام نفس الشريط الجانبي على جميع الصفحات"
 
 msgid "config stats"
 msgstr "احصائيات التكوين"
@@ -5671,7 +5671,7 @@ msgid "Event Log"
 msgstr "سجل الأحداث"
 
 msgid "Combined"
-msgstr ""
+msgstr "مجمع"
 
 msgid "graph"
 msgstr "رسم بياني"
@@ -5752,7 +5752,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "هذا الإعداد عند تهيئته على صحيح، سيعرض روابط <i>المواقع ذات الاهتمام</i> على <a href=/sitemap>خريطة الموقع</a>. [الافتراضي هو خطأ]"
 
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr ""
+msgstr "هذا الإعداد، عند التعيين على true، سيقدم الشريط الجانبي القياسي على الصفحة الرئيسية، مما يتيح التكوين عبر <a href=/configsidebar>. [الافتراضي هو false]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "يحدد هذا الإعداد ما إذا كان يجب على جهاز التوجيه استخدام ملف <i>blocklist.txt</i> المتوفر وأي قوائم حظر قام المستخدم بتكوينها لتمكين حظر أجهزة التوجيه عن طريق التجزئة أو عنوان IP. "
@@ -5767,7 +5767,7 @@ msgid "This setting determines whether or not the router should use the provided
 msgstr "يحدد هذا الإعداد ما إذا كان يجب على جهاز التوجيه استخدام ملف <i>blocklist_tor.txt</i> المتوفر في دليل تطبيق I2P الخاص بك أم لا لتمكين حظر أجهزة التوجيه التي تعمل من عناوين IP لعقدة خروج Tor. "
 
 msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
-msgstr ""
+msgstr "هذا الإعداد يتيح حظر ومنع الطلبات من أجهزة التوجيه في الدول المحددة بمجرد تقديم طلب نفق مباشر. يجب تحديد الدول كرموز دول من حرفين، مفصولة بفواصل. مثال: router.blockCountries=cn,ru"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
 msgstr "عند وضعها على خاطئ، لن يمنع router طلبات بناء الأنفاق من الروترات البطيئة أو غير القابلة للوصول التي تعمل على إصدارات قديمة. [الافتراضي صحيح، يتطلب إعادة التشغيل]"
@@ -5905,7 +5905,7 @@ msgid "This setting determines whether routers classified as uninteresting (K or
 msgstr "هذا الإعداد يحدد ما إذا كانت الرواتر المصنّفة غير ذات أهمية (فئة K أو L، غير قابلة للوصول أو أقدم من 0.9.50) سيتم فحصها أثناء عملية تحديث الرواتر بعد ساعة واحدة من تشغيل النظام. [الافتراضي هو خطأ]"
 
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
-msgstr ""
+msgstr "عند التعيين على true، سيؤدي هذا الإعداد إلى تخفيف الشروط المطلوبة لنشر جهاز التوجيه الخاص بك لحدود الازدحام، على وجه التحديد عندما يُحدد أن استخدام النطاق الترددي الخاص بك مرتفع. الشروط الأخرى، مثل التأخر العالي في المهام أو تصنيف جهاز التوجيه كبطيء، ستظل تسبب نشر الحدود. [الافتراضي هو false]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "عند التكويف، هذا يضع حداً صلباً لعدد الأنفاق التي يُسمح للراوتر ببنائها بشكل متزامن. بشكل افتراضي، الراوتر يستخدم الوقت المتوسط للبناء وعرض النطاق الخارجي الحالي لتحديد معدل بناء مثالي. [إعادة تشغيل مطلوبة]"
@@ -5920,10 +5920,10 @@ msgid "This setting (in minutes) allows you to manually configure how long to wa
 msgstr "هذا الإعداد (بالدقائق) يتيح لك تكويف مدة الانتظار يدوياً بعد الإقلاع قبل فحص صحة معلومات الرواتر في قاعدة البيانات الشبكية، حيث سيتم قبول الرواتر الصالحة فقط للإدراج. عند التحقق من الصحة، سيتم إزالة معلومات الرواتر المنتهية الصلاحية والأقران غير المستجيبة المتاحة عبر بروتوكول SSU من قاعدة البيانات الشبكية. [الافتراضي هو 60 دقيقة] ملاحظة: لا تؤثر هذه الإعدادات على الرواتر الأقدم (أقدم من 0.9.29 افتراضيا) التي يتم إزالتها من قاعدة البيانات الشبكية وحظرها لمدة جلسة الراوتر عند محاولة تخزين قاعدة البيانات الشبكية."
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
+msgstr "هذا الإعداد، عند التعيين على true، سيحظر الاتصال المباشر من جميع أجهزة التوجيه في بلدك ويضيفها إلى قائمة الحظر الخاصة بك حتى يعيد جهاز التوجيه التشغيل. [الافتراضي هو false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr ""
+msgstr "هذا الإعداد، عند التعيين على true، سيحظر الاتصال المباشر من جميع أجهزة توجيه المستوى X التي تنشر حد ازدحام G ولا تكون قابلة للوصول أو غير قابلة للوصول، وإضافتها إلى قائمة حظر الجلسة. لاحظ أنه يجب تمكين الوضع المتقدم لهذا الإعداد لكي يصبح ساري المفعول. [الافتراضي هو false]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "هذا الإعداد يسمح بتعطيل اختبارات SSU لتحديد ما إذا كان الراوتر الخاص بك محمي بجدار ناري ويمكن تمكينه للرواتر التي لا شك أنها غير محمية بجدار ناري ولكنها تعاني من قضايا فرض جدار ناري متقطعة. في حالة تعطيل الاختبار، كلا SSU وـ NTCP يجب أن يبلغ عن عنوان IP العام الحالي الخاص بك على <a href=/info>صفحة معلومات الراوتر</a>. [إعادة تشغيل مطلوبة]"
@@ -5932,7 +5932,7 @@ msgid "This setting determines which transport takes priority when communicating
 msgstr "هذا الإعداد يحدد أي وسيلة نقل تحظى بالأولوية عند الاتصال مع الأقران. بشكل افتراضي، يحظى NTCP بالأولوية على UDP (SSU). بتعيين القيمة على صحيح، سيحظى UDP بالأولوية ما لم توجد اتصال موجود مسبقاً عبر NTCP؛ عند تعيينه على دائماً، سيتم استخدام UDP بشكل دائم بغض النظر عن أي اتصال موجود مسبقاً عبر NTCP. [الافتراضي هو خطأ]"
 
 msgid "miscellaneous"
-msgstr ""
+msgstr "متفرقات"
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "إذا تم تهيئتها على صحيح، ستضع هذه الخيارات أيقونة في منطقة إخطار النظام/صلصال النظام مع خيارات التحكّم الأساسية في الخدمة. [معطّلة افتراضيًا]"
@@ -6172,16 +6172,16 @@ msgid "For SSL only"
 msgstr "فقط لـ SSL"
 
 msgid "How can I configure the console and web services to be accessible on my local network?"
-msgstr ""
+msgstr "كيف يمكنني تكوين وحدة التحكم وخدمات الويب لتكون متاحة على شبكتي المحلية؟"
 
 msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
-msgstr ""
+msgstr "لجعل وحدة التحكم الخاصة بك متاحة على شبكتك المحلية، قم بتحرير ملف التكوين 00-net.i2p.router.web.RouterConsoleRunner-clients.config في مجلد clients.config.d من دليل إعدادات I2P الخاص بك. قم بتحديث أو إضافة عناوين IP الضرورية إلى تعيين localhost الموجود (127.0.0.1). استخدم مفتاح -s للوصول عبر HTTPS."
 
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
-msgstr ""
+msgstr "مثال: للسماح بالوصول من كل من localhost و 192.168.1.10 عبر HTTP و HTTPS:"
 
-msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager’s configuration section using the <i>reachable by</i> dropdown."
-msgstr ""
+msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
+msgstr "لمعظم خدمات العملاء، قم بتغيير عنوان الاستماع للخدمة ذات الصلة في قسم تكوين مدير الأنفاق باستخدام القائمة المنسدلة <i>قابل للوصول بواسطة</i>."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "كيف أتصل بخادم IRC داخل I2P؟"
@@ -6568,7 +6568,7 @@ msgid "If you are in a hurry and can't wait a few hours, you can tell people to 
 msgstr "إذا كنت في عجلة ولا تستطيع الانتظار بضع ساعات، يمكنك إخبار الناس باستخدام خدمة تحويل عناوين المساعد \"jump\" . عادةً ما يعمل هذا خلال بضع دقائق من تسجيل اسم المضيف الخاص بك على نفس الموقع. اختبر ذلك بنفسك أولاً عن طريق إدخال <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> في متصفحك. مرة واحدة يعمل، يمكنك إخبار الآخرين باستخدامه."
 
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
-msgstr ""
+msgstr "بدلاً من ذلك، يمكنك نسخ <i>رابط مساعد العنوان</i> لنطاقك، المشار إليه إما على صفحة قائمة دفتر العناوين، أو على صفحة التفاصيل لنطاقك على سبيل المثال <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>تفاصيل skank.i2p</a>، ولصق الرابط حيث يلزم مشاركته مع الآخرين."
 
 msgid "Backup your private key!"
 msgstr "قم بعمل نسخة احتياطية لمفتاحك الخاص!"
@@ -6805,7 +6805,7 @@ msgid "Getting Support Online"
 msgstr "الحصول على دعم عبر الإنترنت"
 
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
-msgstr ""
+msgstr "قد ترغب أيضاً في مراجعة المعلومات على <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>موقع I2P</a>، أو نشر رسائل إلى <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>منتدى نقاش I2P</a> أو زيارة <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> أو <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> على شبكة IRC الداخلية لـ I2P."
 
 msgid "Reporting Bugs"
 msgstr "إبلاغ عن الأخطاء"
@@ -7345,7 +7345,7 @@ msgid "Configure display language, theme and optional console password"
 msgstr "تكوين لغة العرض والموضوع وكلمة مرور وحدة التحكم الاختيارية"
 
 msgid "Language"
-msgstr ""
+msgstr "اللغة"
 
 msgid "Configure router bandwidth"
 msgstr "تكوين عرض النطاق الترددي لجهاز التوجيه"
@@ -7412,22 +7412,22 @@ msgid "network database"
 msgstr "قاعدة بيانات الشبكة"
 
 msgid "Encryption type"
-msgstr ""
+msgstr "نوع التشفير"
 
 msgid "Encryption types"
-msgstr ""
+msgstr "أنواع التشفير"
 
 msgid "Signature types"
-msgstr ""
+msgstr "أنواع التوقيع"
 
 msgid "Locally hosted private service"
-msgstr ""
+msgstr "خدمة خاصة مستضافة محلياً"
 
 msgid "Locally hosted public service"
-msgstr ""
+msgstr "خدمة عامة مستضافة محلياً"
 
 msgid "Requested client leaseset"
-msgstr ""
+msgstr "مجموعة إيجار العميل المطلوبة"
 
 msgid "network database router map"
 msgstr "خريطة router قاعدة البيانات الشبكة"
@@ -7473,10 +7473,10 @@ msgid "Fast / High Capacity"
 msgstr "سريع/عالي السعة"
 
 msgid "router logs"
-msgstr ""
+msgstr "سجلات جهاز التوجيه"
 
 msgid "service logs"
-msgstr ""
+msgstr "سجلات الخدمة"
 
 msgid "Manage I2P addresses"
 msgstr "إدارة عناوين I2P"
@@ -7683,13 +7683,13 @@ msgid "Toggle Tunnels"
 msgstr "تبديل الأنفاق"
 
 msgid "Updating sidebar sections"
-msgstr ""
+msgstr "تحديث أقسام الشريط الجانبي"
 
 msgid "Peer Profile"
 msgstr "ملف تعريف الأقران"
 
 msgid "Profile View"
-msgstr ""
+msgstr "عرض الملف الشخصي"
 
 msgid "Profile for peer"
 msgstr "الملف الشخصي للأقران"
@@ -7823,48 +7823,4 @@ msgstr "التالي"
 
 msgid "Finished"
 msgstr "منتهي"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

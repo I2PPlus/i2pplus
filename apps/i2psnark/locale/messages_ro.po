@@ -1537,10 +1537,4 @@ msgstr "Salvați modificările"
 
 msgid "Torrent must be stopped"
 msgstr "Torentul trebuie oprit"
-
-
-
-
 #, java-format
-
-

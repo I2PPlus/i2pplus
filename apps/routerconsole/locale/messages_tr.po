@@ -2900,7 +2900,7 @@ msgstr "Bu sürüme sahip tüm yönlendiricileri NetDb'de göster"
 
 #, java-format
 msgid "Show all members of the {0} family in NetDb"
-msgstr "NetDb’de {0} ailesinin tüm üyelerini göster"
+msgstr "NetDb'de {0} ailesinin tüm üyelerini göster"
 
 msgid "Profile"
 msgstr "Profil"
@@ -4749,7 +4749,7 @@ msgstr "Kapak trafiği oluşturarak anonimliğinizi artırır ve ağa yardımcı
 
 #, java-format
 msgid "You have configured I2P to share {0} KBps {1}."
-msgstr "I2P’yi paylaşmak için {0} KB/s {1} şeklinde yapılandırdınız."
+msgstr "I2P'yi paylaşmak için {0} KB/s {1} şeklinde yapılandırdınız."
 
 msgid "The higher the share bandwidth the more you improve your anonymity and help the network."
 msgstr "Daha yüksek bant genişliğinin paylaşılması isimsiz kalma şansınızı arttırır ve ağa yardımcı olur."
@@ -5956,7 +5956,7 @@ msgid "In the Network Settings sub-section, hit the <i>Settings</i> button."
 msgstr "Ağ Ayarları alt bölümünde <i>Ayarlar</i> düğmesine tıklayın."
 
 msgid "Under <i>Configure Proxy Access to Internet</i> select the <i>Manual proxy configuration</i> option."
-msgstr "<i>İnternet’e Proxy Erişimini Yapılandır</i> altında <i>Manuel proxy yapılandırması</i> seçeneğini seçin."
+msgstr "<i>İnternet'e Proxy Erişimini Yapılandır</i> altında <i>Manuel proxy yapılandırması</i> seçeneğini seçin."
 
 msgid "Enter <code>127.0.0.1</code> in the <i>HTTP Proxy</i> field, and <code>4444</code> in the <i>Port</i> field."
 msgstr "<i>HTTP Proxy</i> alanına <code>127.0.0.1</code>, <i>Port</i> alanına <code>4444</code> girin."
@@ -6108,7 +6108,7 @@ msgstr ""
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 msgstr ""
 
-msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager’s configuration section using the <i>reachable by</i> dropdown."
+msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
 msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
@@ -6598,7 +6598,7 @@ msgstr "Eğer I2P yöneten ve güvendiğiniz birisini tanıyorsanız, onlardan s
 
 #, java-format
 msgid "If you know and trust somebody that publishes reseed files, ask them for the URL. Then, click the <i>Reseed from URL</i> button on the {0} to reseed using the URL you received."
-msgstr "Eğer reseed dosyalarını yayınlayan ve güvendiğiniz birisini tanıyorsanız, URL’yi onlardan isteyin. Ardından, {0} üzerinde size ulaşan URL’yi kullanarak <i>URL'den tohumlama</i> düğmesini tıklayarak tohumlama yapın."
+msgstr "Eğer reseed dosyalarını yayınlayan ve güvendiğiniz birisini tanıyorsanız, URL'yi onlardan isteyin. Ardından, {0} üzerinde size ulaşan URL'yi kullanarak <i>URL'den tohumlama</i> düğmesini tıklayarak tohumlama yapın."
 
 msgid "How do I reseed manually?"
 msgstr "Manuel olarak nasıl tohumlama yapabilirim?"
@@ -6611,7 +6611,7 @@ msgstr "Bilinen eşlerin sayısı 50'nin altına düştüğünde, I2P otomatik o
 
 #, java-format
 msgid "In the event that you suspect the request is being blocked, you can configure I2P to use a proxy to reseed. Go to the {0} and configure the proxy type, hostname, and port."
-msgstr "İstek engellendiğinden şüphelenildiğinde, I2P’nin tohumlama yapmak için bir proxy kullanmasını yapılandırabilirsiniz. {0}’a gidin ve proxy türünü, ana bilgisayar adını ve port numarasını yapılandırın."
+msgstr "İstek engellendiğinden şüphelenildiğinde, I2P'nin tohumlama yapmak için bir proxy kullanmasını yapılandırabilirsiniz. {0}'a gidin ve proxy türünü, ana bilgisayar adını ve port numarasını yapılandırın."
 
 msgid "If you are stuck behind an ISP firewall or filter, you can use the following manual method (non-automated technical solution) to join the I2P network."
 msgstr "Eğer bir İSP güvenlik duvarı veya filtresi arkasında kaldıysanız, I2P ağına katılmak için aşağıdaki manuel yöntemi (otomatik olmayan teknik çözüm) kullanabilirsiniz."
@@ -7751,48 +7751,4 @@ msgstr "Sonraki"
 
 msgid "Finished"
 msgstr "Tamamlandı"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -1529,10 +1529,4 @@ msgstr "Tallenna muutokset"
 
 msgid "Torrent must be stopped"
 msgstr "Torrent on pysäytettävä"
-
-
-
-
 #, java-format
-
-

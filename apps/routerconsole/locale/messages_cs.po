@@ -6126,7 +6126,7 @@ msgstr ""
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 msgstr ""
 
-msgid "For most client services, change the listening address for the relevant service in the Tunnel Manager’s configuration section using the <i>reachable by</i> dropdown."
+msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
 msgstr ""
 
 msgid "How do I connect to IRC within I2P?"
@@ -7775,48 +7775,4 @@ msgstr "Další"
 
 msgid "Finished"
 msgstr "Hotové"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
