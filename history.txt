@@ -1,3 +1,6 @@
+2025-12-07 dr|z3d
+ * SusiDNS: Add source and date added columns to main hostlist tables
+
 2025-11-18 dr|z3d
  * Console:
    - Migrate various auto-refreshing pages to refreshElements.js,
