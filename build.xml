@@ -2010,7 +2010,7 @@
 
   <target name="copyflags">
     <copy quiet="true" todir="pkg-temp/eepsite/docroot/help/lib/">
-      <fileset dir="apps/routerconsole/resources/icons/flags_svg" includes="az.svg cn.svg cz.svg de.svg dk.svg es.svg ee.svg fi.svg fr.svg gr.svg hu.svg id.svg in.svg ir.svg it.svg jp.svg kr.svg no.svg nl.svg pl.svg pt.svg ro.svg ru.svg se.svg si.svg tr.svg us.svg lang_ar.svg ua.svg vn.svg"/>
+      <fileset dir="apps/routerconsole/resources/icons/flags_svg" includes="az.svg cn.svg cz.svg de.svg dk.svg es.svg ee.svg fi.svg fr.svg gr.svg hu.svg id.svg in.svg ir.svg it.svg jp.svg kr.svg no.svg nl.svg pl.svg pt.svg ro.svg ru.svg se.svg si.svg tr.svg us.svg lang_ar.svg ua.svg vn.svg xt.svg"/>
     </copy>
   </target>
 

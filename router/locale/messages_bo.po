@@ -1,0 +1,146 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: bo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "OK"
+msgstr "ཆོག"
+
+msgid "IPv4: OK; IPv6: Testing"
+msgstr "IPv4: ཆོག; IPv6: བརྟག་བཟོ་བཞིན་པ"
+
+msgid "IPv4: OK; IPv6: Firewalled"
+msgstr "IPv4: ཆོག; IPv6: སྒོ་བརྒྱབ་པ"
+
+msgid "IPv4: Testing; IPv6: OK"
+msgstr "IPv4: བརྟག་བཟོ་བཞིན་པ; IPv6: ཆོག"
+
+msgid "IPv4: Firewalled; IPv6: OK"
+msgstr "IPv4: སྒོ་བརྒྱབ་པ; IPv6: ཆོག"
+
+msgid "IPv4: Disabled; IPv6: OK"
+msgstr "IPv4: སྒོ་རྒྱུན་མེད; IPv6: ཆོག"
+
+msgid "IPv4: Symmetric NAT; IPv6: OK"
+msgstr "IPv4: དོན་ཚན་གཅིག་པའི་NAT; IPv6: ཆོག"
+
+msgid "Symmetric NAT"
+msgstr "དོན་ཚན་གཅིག་པའི་NAT"
+
+msgid "IPv4: Symmetric NAT; IPv6: Testing"
+msgstr "IPv4: དོན་ཚན་གཅིག་པའི་NAT; IPv6: བརྟག་བཟོ་བཞིན་པ"
+
+msgid "IPv4: Firewalled; IPv6: Testing"
+msgstr "IPv4: སྒོ་བརྒྱབ་པ; IPv6: བརྟག་བཟོ་བཞིན་པ"
+
+msgid "Firewalled"
+msgstr "སྒོ་བརྒྱབ་པ"
+
+msgid "IPv4: Testing; IPv6: Firewalled"
+msgstr "IPv4: བརྟག་བཟོ་བཞིན་པ; IPv6: སྒོ་བརྒྱབ་པ"
+
+msgid "IPv4: Disabled; IPv6: Testing"
+msgstr "IPv4: སྒོ་རྒྱུན་མེད; IPv6: བརྟག་བཟོ་བཞིན་པ"
+
+msgid "IPv4: Disabled; IPv6: Firewalled"
+msgstr "IPv4: སྒོ་རྒྱུན་མེད; IPv6: སྒོ་བརྒྱབ་པ"
+
+msgid "Disconnected"
+msgstr "སྒོ་བྲལ་བཞིན་པ"
+
+msgid "Port Conflict"
+msgstr "གླེང་གེ་འགལ་བ"
+
+msgid "Testing"
+msgstr "བརྟག་བཟོ་བཞིན་པ"
+
+msgid "Starting up"
+msgstr "འགོ་བཙུགས་བཞིན་པ"
+
+msgid "Declining all tunnel requests:"
+msgstr "ཀློང་གི་འཚལ་བོར་ཚང་མ་བཏོན་བཞིན་པ:"
+
+msgid "Hidden Mode"
+msgstr "གུང་གི་མཚན་ཉིད"
+
+msgid "Declining Tunnel Requests:"
+msgstr "ཀློང་གི་འཚལ་བོར་བཏོན་བཞིན་པ:"
+
+msgid "High message delay"
+msgstr "བརྗོད་འགྲེལ་དྲན་པོ་ཆེ་བ"
+
+msgid "Declining requests: "
+msgstr "འཚལ་བོར་བཏོན་བཞིན་པ: "
+
+msgid "Limit reached"
+msgstr "ཁྱབ་ཁོངས་སོར་ཐོབ་པ"
+
+msgid "Participation disabled"
+msgstr "ཚོགས་འདུར་རྒྱུན་མེད"
+
+msgid "High system load"
+msgstr "རྒྱུད་ཁོངས་ཀྱི་བཟོ་བཟོགས་ཆེ་བ"
+
+msgid "Rejecting all tunnel requests:"
+msgstr "ཀློང་གི་འཚལ་བོར་ཚང་མ་བཏོན་བཞིན་པ:"
+
+msgid "High number of requests"
+msgstr "འཚལ་བོར་གྱི་ཤོ་ཚད་ཆེ་བ"
+
+msgid "Rejecting most tunnel requests:"
+msgstr "ཀློང་གི་འཚལ་བོར་གང་ཤས་བཏོན་བཞིན་པ:"
+
+msgid "Accepting most tunnel requests"
+msgstr "ཀློང་གི་འཚལ་བོར་གང་ཤས་བཞེས་བཞིན་པ"
+
+msgid "Accepting tunnel requests"
+msgstr "ཀློང་གི་འཚལ་བོར་བཞེས་བཞིན་པ"
+
+msgid "Declining requests: Bandwidth limit"
+msgstr "འཚལ་བོར་བཏོན་བཞིན་པ: བྱང་ཚད་ཀྱི་ཁྱབ་ཁོངས"
+
+msgid "Declining requests"
+msgstr "འཚལ་བོར་བཏོན་བཞིན་པ"
+
+msgid "Shutting down"
+msgstr "སྒོ་རྒྱུན་བཟོ་བཞིན་པ"
+
+msgid "Restarting"
+msgstr "ཡང་དགོངས་འགོ་བཙུགས་བཞིན་པ"
+
+msgid "Declining Tunnel Requests"
+msgstr "ཀློང་གི་འཚལ་བོར་བཏོན་བཞིན་པ"
+
+msgid "Dropping Tunnel Requests: Too slow"
+msgstr "ཀློང་གི་འཚལ་བོར་བཏོན་བཞིན་པ: ཁྱད་པར་ནམ་པོ་ཤོས"
+
+msgid "Dropping Tunnel Requests: High job lag"
+msgstr "ཀློང་གི་འཚལ་བོར་བཏོན་བཞིན་པ: འགོ་བཙུགས་ཀྱི་དྲན་པོ་ཆེ་བ"
+
+msgid "Dropping Tunnel Requests:
+High CPU load"
+msgstr "ཀློང་གི་འཚལ་བོར་བཏོན་བཞིན་པ:
+CPU ཀྱི་བཟོ་བཟོགས་ཆེ་བ"
+
+msgid "Dropping Tunnel Requests: Overloaded"
+msgstr "ཀློང་གི་འཚལ་བོར་བཏོན་བཞིན་པ: བཟོ་བཟོགས་གཞན་གྱིས་བརྩིགས་པ"
+
+msgid "Declining requests:"
+msgstr "འཚལ་བོར་བཏོན་བཞིན་པ:"
+
+msgid "Request overload"
+msgstr "འཚལ་བོར་གཞན་གྱིས་བརྩིགས་པ"
+
+msgid "Connection limit reached"
+msgstr "སྦྲེལ་མཚམས་ཀྱི་ཁྱབ་ཁོངས་སོར་ཐོབ་པ"
+
+msgid "Dropping Tunnel Requests: High load"
+msgstr "ཀློང་གི་འཚལ་བོར་བཏོན་བཞིན་པ: བཟོ་བཟོགས་ཆེ་བ"
+
+msgid "Dropping Tunnel Requests: Queue time"
+msgstr "ཀློང་གི་འཚལ་བོར་བཏོན་བཞིན་པ: གླེང་གེ་ཚོར་བ"

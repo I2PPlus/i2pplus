@@ -1,0 +1,601 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: bo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#, java-format
+msgid "Host name \"{0}\" contains illegal character {1}"
+msgstr "གཟིགས་མིང་\"{0}\"ལ་སྤྱོད་མི་ཆོག་པའི་ཡིག་ཆའི་རྟགས་{1}ཡོད་པ་བཞག"
+
+#, java-format
+msgid "Host name cannot start with \"{0}\""
+msgstr "གཟིགས་མིང་གི་མཐའ་\"{0}\"ནས་འགོ་མ་ཆོག"
+
+#, java-format
+msgid "Host name cannot end with \"{0}\""
+msgstr "གཟིགས་མིང་གི་མཇུག་\"{0}\"ནས་མཇུག་མ་ཆོག"
+
+#, java-format
+msgid "Host name cannot contain \"{0}\""
+msgstr "གཟིགས་མིང་ལ་\"{0}\"བཞག་མི་ཆོག"
+
+#, java-format
+msgid "Host name \"{0}\" requires conversion to ASCII but the conversion library is unavailable in this JVM"
+msgstr "གཟིགས་མིང་\"{0}\" ASCIIརུ་བསྒྱུར་དགོས་པ་ཐུབ་མ་བྱུང་། འོད་སྐྱོན་འདིའི་JVMལ་བསྒྱུར་རིགས་ཀྱི་ཚོད་མེད་པ་བཞག"
+
+msgid "None"
+msgstr "མེད"
+
+msgid "Hashcash"
+msgstr "Hashcash"
+
+msgid "Hidden"
+msgstr "སྒྲིབས་པ།"
+
+msgid "Signed"
+msgstr "བརྐྱ་ཡིག་མངོན་པ།"
+
+msgid "Key"
+msgstr "གསང་ལྡན"
+
+#, java-format
+msgid "Type {0}"
+msgstr "རིགས་{0}"
+
+msgid "DSA 1024 bit"
+msgstr "DSA 1024 གཞི་གྲངས།"
+
+msgid "ElGamal 2048 bit"
+msgstr "ElGamal 2048 གཞི་གྲངས།"
+
+msgid "Search for <span class=active>"
+msgid_plural "Search for <span class=active>"
+msgstr[0] "<span class=active>ཡི་གཞིར་བཟོས་འཚོལ་བ།"
+msgstr[1] "<span class=active>ཡི་གཞིར་བཟོས་འཚོལ་བ།"
+
+#, java-format
+msgid "Filtered list contains 1 entry."
+msgid_plural "Filtered list contains {0} entries."
+msgstr[0] "དྲམ་བཤེར་གྱི་རེའི་ཐོག་ཁ་པ་གཅིག་ཡོད།"
+msgstr[1] "དྲམ་བཤེར་གྱི་རེའི་ཐོག་ཁ་པ་{0}ཡོད།"
+
+#, java-format
+msgid "One result for: <span class=active>"
+msgid_plural "{0} results for: <span class=active>"
+msgstr[0] "<span class=active>ཡི་གཞིར་བཟོས་གྲངས་གཅིག་གི་འབྲས་བུ་ཡོད།"
+msgstr[1] "<span class=active>ཡི་གཞིར་བཟོས་གྲངས་{0}གི་འབྲས་བུ་ཡོད།"
+
+#, java-format
+msgid "1 entry"
+msgid_plural "{0} entries"
+msgstr[0] "ཁ་པ་གཅིག"
+msgstr[1] "ཁ་པ་{0}"
+
+msgid "Add"
+msgstr "སྣོན་པ།"
+
+msgid "Replace"
+msgstr "བརྗེ་བ།"
+
+#, java-format
+msgid "Host name {0} is already in address book, unchanged."
+msgstr "གཟིགས་མིང་{0}ངེས་པར་དུ་ཐོག་མར་གྱི་ཡིག་ཆ་བང་གི་ཡོད་པས་འགྱུར་མེད།"
+
+#, java-format
+msgid "Host name {0} is already in address book with a different destination. Click \"Replace\" to overwrite."
+msgstr "གཟིགས་མིང་{0}ངེས་པར་དུ་ཐོག་མར་གྱི་ཡིག་ཆ་བང་གི་ཡོད་པས་འབྲས་བུ་མི་མཚུངས། \"བརྗེ་བ\"ཞིག་དུ་མནན་ནས་བརྗེ་བར་བྱ་དགོས།"
+
+msgid "Unable to resolve Base 32 address"
+msgstr "32 གཞི་གྲངས་ཀྱི་གཟིགས་མིང་བཤེར་རྒྱུ་མི་ཐུབ།"
+
+#, java-format
+msgid "Destination added for {0}."
+msgstr "{0}གི་འབྲས་བུ་སྣོན་པ།"
+
+#, java-format
+msgid "Destination changed for {0}."
+msgstr "{0}གི་འབྲས་བུ་འགྱུར་བ།"
+
+msgid "Warning - host name does not end with \".i2p\""
+msgstr "ཨང་རྟགས་-གཟིགས་མིང་གི་མཇུག་ན་\".i2p\"མེད།"
+
+msgid "Invalid Base 32 host name."
+msgstr "32 གཞི་གྲངས་ཀྱི་གཟིགས་མིང་བཟོ་མི་རུང་བ།"
+
+msgid "Invalid Base 64 destination."
+msgstr "64 གཞི་གྲངས་ཀྱི་འབྲས་བུ་བཟོ་མི་རུང་བ།"
+
+#, java-format
+msgid "Invalid host name \"{0}\"."
+msgstr "གཟིགས་མིང་\"{0}\"བཟོ་མི་རུང་བ།"
+
+msgid "Please enter a host name and destination"
+msgstr "གཟིགས་མིང་དང་འབྲས་བུ་འཇུག་རོགས།"
+
+msgid "Delete Entry"
+msgstr "ཁ་པ་སོར་ཆུབ།"
+
+msgid "Delete Selected"
+msgstr "འདེམས་པ་སོར་ཆུབ།"
+
+#, java-format
+msgid "Destination {0} deleted."
+msgstr "འབྲས་བུ་{0}སོར་ཆུབ་པ།"
+
+#, java-format
+msgid "1 destination deleted."
+msgid_plural "{0} destinations deleted."
+msgstr[0] "འབྲས་བུ་གཅིག་སོར་ཆུབ་པ།"
+msgstr[1] "འབྲས་བུ་{0}སོར་ཆུབ་པ།"
+
+msgid "No valid entries selected to delete."
+msgstr "སོར་ཆུབ་པར་འདེམས་པའི་ཁ་པ་ཡོད་མེད།"
+
+msgid "Add Alternate"
+msgstr "གཞན་དག་སྣོན་པ།"
+
+msgid "Address book saved."
+msgstr "ཡིག་ཆ་བང་བརྟན་པོར་བཞག"
+
+msgid "ERROR: Could not write addressbook file."
+msgstr "འབྲས་བུ། ཡིག་ཆ་བང་གི་ཡིག་ཆ་བཟོ་མི་ཐུབ།"
+
+msgid "Invalid form submission, probably because you used the \"back\" or \"reload\" button on your browser. Please resubmit."
+msgstr "ཕབ་རྒྱུ་བཟོ་མི་རུང་བ། ཤོག་གི་ཕབ་རྒྱུ་བཟོས་པས་མི་ཐུབ་པ་ཐུབ་པ་བཞག། དོ་ཤེས་ཕབ་རྒྱུ་བཟོ་རོགས།"
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "གནད་དོན་འདི་བརྟན་ན་ཤོག་གི་བོད་གདམས་གྲངས་རུ་Cookieབཞེངས་ཡོད་མེད་བཤེར་རོགས།"
+
+msgid "Save"
+msgstr "བརྟན་པོར་བཞག"
+
+msgid "Configuration saved."
+msgstr "སྒྲིག་འཇུག་བརྟན་པོར་བཞག"
+
+msgid "Reload"
+msgstr "ཡང་དག་བཞེངས་པ།"
+
+msgid "Configuration reloaded."
+msgstr "སྒྲིག་འཇུག་ཡང་དག་བཞེངས་པ།"
+
+msgid "New domain"
+msgstr "གཞི་གྲངས་གསར་པ།"
+
+msgid "Subscription log reloaded."
+msgstr "འབྲེལ་ཡོད་པའི་ཉིན་ཐོག་ཡང་དག་བཞེངས་པ།"
+
+#, java-format
+msgid "{0} address book in {1} database"
+msgstr "{1}གྱི་ཚོད་ཀྱི་ནང་ཡིག་ཆ་བང་{0}"
+
+#, java-format
+msgid "Host name {0} is not in the address book."
+msgstr "གཟིགས་མིང་{0}ཡིག་ཆ་བང་གི་ནང་མེད།"
+
+msgid "Manually added via SusiDNS"
+msgstr "SusiDNSགྱི་རྒྱུ་མཐུད་སྣོན་པ།"
+
+#, java-format
+msgid "Failed to add Destination for {0} to naming service {1}"
+msgstr "{0}གི་འབྲས་བུ་{1}གྱི་མིང་གི་རིགས་སུ་སྣོན་མི་ཐུབ།"
+
+#, java-format
+msgid "Failed to delete Destination for {0} from naming service {1}"
+msgstr "{0}གི་འབྲས་བུ་{1}གྱི་མིང་གི་རིགས་ནས་སོར་ཆུབ་མི་ཐུབ།"
+
+msgid "Save Notes"
+msgstr "ཐོ་ཡིག་བརྟན་པོར་བཞག"
+
+msgid "You must enter a file"
+msgstr "ཡིག་ཆ་ཞིག་འཇུག་དགོས།"
+
+msgid "No entries found in file"
+msgstr "ཡིག་ཆ་ནང་ཁ་པ་མེད་པ།"
+
+#, java-format
+msgid "Imported from file {0}"
+msgstr "ཡིག་ཆ་{0}ནས་བཞེད་པ་བཞག"
+
+msgid "Imported from file"
+msgstr "ཡིག་ཆ་ནས་བཞེད་པ་བཞག"
+
+#, java-format
+msgid "Loaded {0} entry from file"
+msgid_plural "Loaded {0} entries from file"
+msgstr[0] "ཡིག་ཆ་ནས་ཁ་པ་{0}བཞེད་པ་བཞག"
+msgstr[1] "ཡིག་ཆ་ནས་ཁ་པ་{0}བཞེད་པ་བཞག"
+
+#, java-format
+msgid "Skipped {0} duplicate entry from file"
+msgid_plural "Skipped {0} duplicate entries from file"
+msgstr[0] "ཡིག་ཆ་ནས་ཁ་པ་གཞི་གྲངས་{0}བརྐྱང་བ།"
+msgstr[1] "ཡིག་ཆ་ནས་ཁ་པ་གཞི་གྲངས་{0}བརྐྱང་བ།"
+
+msgid "Import from file failed"
+msgstr "ཡིག་ཆ་ནས་བཞེད་པ་བཞག་མི་ཐུབ།"
+
+msgid "Subscriptions saved."
+msgstr "འབྲེལ་ཡོད་པ་བརྟན་པོར་བཞག"
+
+msgid "Update"
+msgstr "བསྐྱར་བཏང་བ།"
+
+msgid "Attempting to update addressbook from subscription sources..."
+msgstr "འབྲེལ་ཡོད་པའི་རིགས་ནས་ཡིག་ཆ་བང་བསྐྱར་བཏང་བ་བྱེད་བཞིན་པ།"
+
+msgid "Cannot update subscriptions: HTTP proxy is not running!"
+msgstr "འབྲེལ་ཡོད་པ་བསྐྱར་བཏང་མི་ཐུབ། HTTP གཟིགས་མིང་འཁོར་མེད་པ་བཞག"
+
+msgid "Subscriptions reloaded."
+msgstr "འབྲེལ་ཡོད་པ་ཡང་དག་བཞེངས་པ།"
+
+msgid "Import"
+msgstr "བཞེད་པ་བཞག"
+
+msgid "address book"
+msgstr "ཡིག་ཆ་བང"
+
+msgid "Router"
+msgstr "གཞི་གྲངས་གཙོ་བོ།"
+
+msgid "Master"
+msgstr "གཙོ་བོའི་ཡིག་ཆ་བང"
+
+msgid "Private"
+msgstr "གསང་བའི་ཡིག་ཆ་བང"
+
+msgid "Published"
+msgstr "བཀོད་པའི་ཡིག་ཆ་བང"
+
+msgid "Subscriptions"
+msgstr "འབྲེལ་ཡོད་པ།"
+
+msgid "Configuration"
+msgstr "སྒྲིག་འཇུག"
+
+msgid "Help"
+msgstr "རོགས་པ།"
+
+msgid "Book"
+msgstr "ཡིག་ཆ་བང"
+
+msgid "No entries"
+msgstr "ཁ་པ་མེད"
+
+msgid "Add new destination"
+msgstr "འབྲས་བུ་གསར་པ་སྣོན་པ།"
+
+msgid "Import from hosts.txt file"
+msgstr "hosts.txtཡིག་ཆ་ནས་བཞེད་པ་བཞག"
+
+msgid "other"
+msgstr "གཞན་པ།"
+
+msgid "Export in hosts.txt format"
+msgstr "hosts.txtརིགས་སུ་ཕྱིར་འདོན།"
+
+msgid "Export results in hosts.txt format"
+msgstr "hosts.txtརིགས་སུ་འབྲས་བུ་ཕྱིར་འདོན།"
+
+msgid "Export book in hosts.txt format"
+msgstr "hosts.txtརིགས་སུ་ཡིག་ཆ་བང་ཕྱིར་འདོན།"
+
+msgid "Search"
+msgstr "འཚོལ་བ།"
+
+msgid "latest"
+msgstr "གསར་ཤོས།"
+
+msgid "all"
+msgstr "ཐམས་ཅད།"
+
+msgid "Info"
+msgstr "ཤེས་བྱ།"
+
+msgid "Hostname"
+msgstr "གཟིགས་མིང"
+
+msgid "Link (b32)"
+msgstr "རྒྱུ་མཐུད་(b32)"
+
+msgid "Destination"
+msgstr "འབྲས་བུ།"
+
+msgid "Select hosts for deletion from addressbook"
+msgstr "ཡིག་ཆ་བང་ནས་གཟིགས་མིང་སོར་ཆུབ་པར་འདེམས་པ།"
+
+msgid "More information on this entry"
+msgstr "ཁ་པ་འདིར་གྱི་ཤེས་བྱ་རྒྱས་པ།"
+
+msgid "Base 32 address"
+msgstr "32 གཞི་གྲངས་ཀྱི་གཟིགས་མིང།"
+
+msgid "Helper link to share host address with option to add to addressbook"
+msgstr "གཟིགས་མིང་གི་གཞི་གྲངས་བགྲོས་པའི་རྒྱུ་མཐུད་དང་ཡིག་ཆ་བང་སྣོན་པའི་རྒྱུ་མཐུད།"
+
+msgid "Mark for deletion"
+msgstr "སོར་ཆུབ་པར་བརྟག་པ།"
+
+msgid "Cancel"
+msgstr "མེད་པར་བཟོ།"
+
+msgid "This book currently contains no entries."
+msgstr "ཡིག་ཆ་བང་འདིར་ཁ་པ་མེད་པ་བཞག"
+
+msgid "e.g. newdomain.i2p"
+msgstr "དཔེར་ན། newdomain.i2p"
+
+msgid "B64 or B32"
+msgstr "B64 ཡང་ན་ B32"
+
+msgid "Full destination or b32 address"
+msgstr "འབྲས་བུ་གོང་དུ་ཡང་ན་b32གཟིགས་མིང"
+
+msgid "Select file"
+msgstr "ཡིག་ཆ་འདེམས་པ།"
+
+msgid "configuration"
+msgstr "སྒྲིག་འཇུག"
+
+msgid "File location"
+msgstr "ཡིག་ཆ་གནས་ས།"
+
+msgid "Hints"
+msgstr "མཚོན་བྱ།"
+
+msgid "File and directory paths here are relative to the addressbook's working directory, which is normally ~/.i2p/addressbook/ (Linux) or %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)."
+msgstr "ཡིག་ཆ་དང་དཀར་ཆག་གི་རྒྱུ་མཐུད་འདི་ཡིག་ཆ་བང་གི་ལས་ཁུངས་ཀྱི་རྒྱུ་མཐུད་ལ་བརྟེན་ནས་བཞག་ཡོད་པས་གཞི་གྲངས་ན་ ~/.i2p/addressbook/ (Linux) ཡང་ན་ %LOCALAPPDATA%\\I2P\\addressbook\\ (Windows)ཡོད།"
+
+msgid "If you want to manually add lines to an addressbook, add them to the private or master addressbooks."
+msgstr "ཡིག་ཆ་བང་ནས་མཐུད་རིམ་སྣོན་རྒྱུ་ཡོད་ན་གསང་བའི་ཡང་ན་གཙོ་བོའི་ཡིག་ཆ་བང་ནས་སྣོན་རོགས།"
+
+msgid "The router addressbook and the published addressbook are updated by the addressbook application."
+msgstr "གཞི་གྲངས་གཙོ་བོའི་ཡིག་ཆ་བང་དང་བཀོད་པའི་ཡིག་ཆ་བང་ནི་ཡིག་ཆ་བང་གི་རིགས་ཀྱི་རྒྱུ་མཐུད་བསྐྱར་བཏང་བ་བཞག"
+
+msgid "When you publish your addressbook, ALL destinations from the master and router addressbooks appear there."
+msgstr "ཁྱོད་ཀྱི་ཡིག་ཆ་བང་བཀོད་པའི་ཚེ་གཙོ་བོའི་དང་གཞི་གྲངས་གཙོ་བོའི་ཡིག་ཆ་བང་ནས་འབྲས་བུ་ཐམས་ཅད་འདིར་བཞག"
+
+msgid "Use the private addressbook for private destinations, these are not published."
+msgstr "གསང་བའི་འབྲས་བུ་གཟིགས་མིང་གི་རིགས་ལ་གསང་བའི་ཡིག་ཆ་བང་བཟོ་རོགས། འདི་བཀོད་མི་ཐུབ།"
+
+msgid "Options"
+msgstr "བཟོ་རིགས་ཀྱི་རྒྱུ་མཐུད།"
+
+msgid "File containing the list of subscriptions URLs (no need to change)"
+msgstr "འབྲེལ་ཡོད་པའི་རིགས་ཀྱི་རྒྱུ་མཐུད་གཞི་གྲངས་ཡིག་ཆ་(བཟོ་དགོས་མེད།)"
+
+msgid "Update interval in hours"
+msgstr "བསྐྱར་བཏང་བའི་རིང་ཚད་དུ་ཆུ་ཚོད་ཀྱི་གཞི་གྲངས།"
+
+msgid "Your public hosts.txt file (choose a path within your webserver document root)"
+msgstr "ཁྱོད་ཀྱི་བཀོད་པའི་hosts.txtཡིག་ཆ་(ཁྱོད་ཀྱི་དྲ་སྒྲིག་གི་མཐའ་ནས་རྒྱུ་མཐུད་འདེམས་རོགས།)"
+
+msgid "Your hosts.txt (don't change)"
+msgstr "ཁྱོད་ཀྱི་hosts.txt (བཟོ་མི་རུང་བ།)"
+
+msgid "Your personal addressbook, these hosts will be published"
+msgstr "ཁྱོད་ཀྱི་རང་གི་ཡིག་ཆ་བང་གི་གཟིགས་མིང་བཀོད་པར་བྱ་དགོས།"
+
+msgid "Your private addressbook, it is never published"
+msgstr "ཁྱོད་ཀྱི་གསང་བའི་ཡིག་ཆ་བང་གི་གཟིགས་མིང་བཀོད་མི་ཐུབ།"
+
+msgid "Port for your eepProxy (no need to change)"
+msgstr "ཁྱོད་ཀྱི་eepProxyགི་རིང་ཚད་(བཟོ་དགོས་མེད།)"
+
+msgid "Hostname for your eepProxy (no need to change)"
+msgstr "ཁྱོད་ཀྱི་eepProxyགི་གཟིགས་མིང་(བཟོ་དགོས་མེད།)"
+
+msgid "Whether to update the published addressbook"
+msgstr "བཀོད་པའི་ཡིག་ཆ་བང་བསྐྱར་བཏང་བར་བྱ་དགོས་མེད་མིན།"
+
+msgid "File containing the etags header from the fetched subscription URLs (no need to change)"
+msgstr "འབྲེལ་ཡོད་པའི་རིགས་ནས་བཞེད་པའི་etagsགི་ཡིག་ཆ་(བཟོ་དགོས་མེད།)"
+
+msgid "File containing the modification timestamp for each fetched subscription URL (no need to change)"
+msgstr "འབྲེལ་ཡོད་པའི་རིགས་ནས་བཞེད་པའི་བཟོ་བཅོས་ཀྱི་དུས་ཚོད་གཞི་གྲངས་ཡིག་ཆ་(བཟོ་དགོས་མེད།)"
+
+msgid "File to log activity to (change to /dev/null if you like)"
+msgstr "བྱ་བའི་ཉིན་ཐོག་བཟོ་བཅོས་ཀྱི་ཡིག་ཆ་(ཁྱོད་ཀྱི་འདོད་པ་བཞག /dev/nullལ་བརྗེ་རོགས།)"
+
+msgid "Name of override theme to use (defaults to console-selected theme)"
+msgstr "བཟོ་རིགས་ཀྱི་ཞབས་ཐབས་(རིགས་ལྡན་གྱི་ཞབས་ཐབས་རུ་བཞག)"
+
+msgid "delete hosts"
+msgstr "གཟིགས་མིང་སོར་ཆུབ།"
+
+msgid "addressbook"
+msgstr "ཡིག་ཆ་བང"
+
+msgid "Details"
+msgstr "ཤེས་བྱ་རྒྱས་པ།"
+
+msgid "Address Helper"
+msgstr "གཟིགས་མིང་གི་རོགས་པ།"
+
+msgid "link"
+msgstr "རྒྱུ་མཐུད།"
+
+msgid "Encoded Name"
+msgstr "བཀོད་པའི་མིང་།"
+
+msgid "Base 32 Address"
+msgstr "32 གཞི་གྲངས་ཀྱི་གཟིགས་མིང།"
+
+msgid "Base 64 Hash"
+msgstr "64 གཞི་གྲངས་ཀྱི་བཤེར་བཟོ།"
+
+msgid "Public Key"
+msgstr "གསར་གྱི་གསང་ལྡན།"
+
+msgid "Signing Key"
+msgstr "བརྐྱ་ཡིག་གི་གསང་ལྡན།"
+
+msgid "Certificate"
+msgstr "རྩད་གནས་ཀྱི་ཡིག་ཆ།"
+
+msgid "Validated"
+msgstr "རྩད་གནས་བཟོ་བ།"
+
+msgid "no"
+msgstr "མེད།"
+
+msgid "yes"
+msgstr "ཡོད།"
+
+msgid "Source"
+msgstr "རིགས་འབྲེལ།"
+
+msgid "Added Date"
+msgstr "སྣོན་པའི་དུས།"
+
+msgid "Last Modified"
+msgstr "བཟོ་བཅོས་ཀྱི་དུས་ཤེས།"
+
+msgid "Notes"
+msgstr "ཐོ་ཡིག"
+
+msgid "Add notes about domain"
+msgstr "གཞི་གྲངས་ཀྱི་ཐོ་ཡིག་སྣོན་པ།"
+
+msgid "Visual Identification for"
+msgstr "བརྙན་གྱི་རིགས་འབྲེལ་"
+
+msgid "Create your own identification images"
+msgstr "རང་གི་རིགས་འབྲེལ་གྱི་བརྙན་བཟོ་རོགས།"
+
+msgid "Launch Image Generator"
+msgstr "བརྙན་བཟོ་རིགས་འགོ་འཛུགས་པ།"
+
+msgid "Introduction"
+msgstr "མདུན་ཚེག"
+
+msgid "What is the addressbook?"
+msgstr "ཡིག་ཆ་བང་གི་དོན་ཅི་ཡིན་ནམ།"
+
+msgid "The addressbook application is part of your I2P installation."
+msgstr "ཡིག་ཆ་བང་གི་རིགས་ནི་ཁྱོད་ཀྱི་I2Pགི་རིགས་ཀྱི་ཆ་བཞག"
+
+msgid "It regularly updates your hosts.txt file from distributed sources or \"subscriptions\"."
+msgstr "འབྲེལ་ཡོད་པའི་རིགས་ནས་hosts.txtཡིག་ཆ་བསྐྱར་བཏང་བ་བཞག"
+
+msgid "Subscribing to additional sites is easy, just add them to your <a href=\"subscriptions\">subscriptions</a> file."
+msgstr "གཞི་གྲངས་གསར་པ་འབྲེལ་ཡོད་པར་བྱ་དགོས་ན་ཁྱོད་ཀྱི་<a href=\"subscriptions\">subscriptions</a>ཡིག་ཆ་ནས་སྣོན་རོགས།"
+
+msgid "For more information on naming in I2P, see <a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>the overview</a>."
+msgstr "I2Pགི་མིང་གི་ཤེས་བྱ་རྒྱས་པར་བལྟ་བར་<a href=\"http://i2p-projekt.i2p/naming.html\" target=_blank>བཤེར་བཟོས་པའི་ཐོག</a>བལྟ་རོགས།"
+
+msgid "How does the addressbook application work?"
+msgstr "ཡིག་ཆ་བང་གི་རིགས་བཟོ་བཅོས་བཟོ་བའི་ཐབས་ཅི་ཡིན་ནམ།"
+
+msgid "The addressbook application regularly polls your subscriptions and merges their content into your \"router\" address book."
+msgstr "ཡིག་ཆ་བང་གི་རིགས་ནི་ཁྱོད་ཀྱི་འབྲེལ་ཡོད་པ་བསྐྱར་བཏང་བ་བཞག་པ་དང་། འབྲེལ་ཡོད་པའི་ནང་དོན་གཟིགས་མིང་གི་རིགས་ཀྱི་ཡིག་ཆ་བང་ནས་བཞེད་པ་བཞག"
+
+msgid "Then it merges your \"master\" address book into the router address book as well."
+msgstr "དེ་རྗེས་ཁྱོད་ཀྱི་གཙོ་བོའི་ཡིག་ཆ་བང་གི་ནང་དོན་གཟིགས་མིང་གི་རིགས་ཀྱི་ཡིག་ཆ་བང་ནས་བཞེད་པ་བཞག"
+
+msgid "If configured, the router address book is now written to the \"published\" address book, which will be publicly available if you are running an eepsite."
+msgstr "སྒྲིག་འཇུག་བྱས་ན་གཞི་གྲངས་གཙོ་བོའི་ཡིག་ཆ་བང་ནི་བཀོད་པའི་ཡིག་ཆ་བང་ནས་བཞེད་པ་བཞག དེ་ནི་ཁྱོད་ཀྱི་དྲ་གྲོའི་གཟིགས་མིང་བཀོད་བཞག་ན་གསར་དུ་བཞག"
+
+msgid "The router also uses a private address book, which is not merged or published."
+msgstr "གཞི་གྲངས་གཙོ་བོའི་ཡིག་ཆ་བང་གི་ནང་དོན་གཟིགས་མིང་གི་རིགས་ཀྱི་ཡིག་ཆ་བང་ནས་བཞེད་པ་བཞག"
+
+msgid "Hosts in the private address book can be accessed by you but their addresses are never distributed to others."
+msgstr "གསང་བའི་ཡིག་ཆ་བང་གི་ནང་དོན་གཟིགས་མིང་ཁྱོད་ཀྱིས་བཤེར་རྒྱུ་ཐུབ་མིན་མིན་དུ་གཞི་གྲངས་གཞིར་བཟོས་མི་ཐུབ།"
+
+msgid "The private address book can also be used for aliases of hosts in your other address books."
+msgstr "གསང་བའི་ཡིག་ཆ་བང་གི་ནང་དོན་གཟིགས་མིང་གི་རིགས་ཀྱི་གཞི་གྲངས་གཞིར་བཟོས་པ་བཞག"
+
+msgid "subscription log"
+msgstr "འབྲེལ་ཡོད་པའི་ཉིན་ཐོག"
+
+msgid "Subscription Log"
+msgstr "འབྲེལ་ཡོད་པའི་ཉིན་ཐོག"
+
+msgid "Most recent (excluding bad domains)"
+msgstr "གསར་ཤོས་(གཞི་གྲངས་ཉེས་པ་བརྐྱང་བ།)"
+
+msgid "subscriptions"
+msgstr "འབྲེལ་ཡོད་པ།"
+
+msgid "The subscription file contains a list of i2p URLs."
+msgstr "འབྲེལ་ཡོད་པའི་ཡིག་ཆ་ནི་i2pགི་རིགས་ཀྱི་རྒྱུ་མཐུད་གཞི་གྲངས་ཡོད་པ་བཞག"
+
+msgid "The addressbook application regularly checks this list for new eepsites."
+msgstr "ཡིག་ཆ་བང་གི་རིགས་ནི་གཞི་གྲངས་གསར་པའི་དྲ་གྲོའི་གཟིགས་མིང་བསྐྱར་བཏང་བ་བཞག"
+
+msgid "Those URLs refer to published hosts.txt files."
+msgstr "རྒྱུ་མཐུད་འདི་ནི་བཀོད་པའི་hosts.txtཡིག་ཆ་གཞིར་བཟོས་པ་བཞག"
+
+msgid "See the FAQ for a list of subscription URLs."
+msgstr "འབྲེལ་ཡོད་པའི་རིགས་ཀྱི་རྒྱུ་མཐུད་གཞི་གྲངས་ལ་བལྟ་བར་FAQབལྟ་རོགས།"
+
+msgid "If SusiDNS is configured to publish your Router address book, the entries will appear in your Published address book and saved to a hosts.txt file for sharing."
+msgstr "SusiDNSགི་སྒྲིག་འཇུག་བྱས་ན་གཞི་གྲངས་གཙོ་བོའི་ཡིག་ཆ་བང་ནི་བཀོད་པའི་ཡིག་ཆ་བང་ནས་བཞེད་པ་བཞག དེ་ནི་hosts.txtཡིག་ཆ་ནས་བཞེད་པ་བཞག"
+
+msgid "Published Addressbook"
+msgstr "བཀོད་པའི་ཡིག་ཆ་བང"
+
+msgid "To configure SusiDNS to push your Router address book to your Published address book, set 'should_publish=true' on the configuration page."
+msgstr "SusiDNSགི་སྒྲིག་འཇུག་བྱས་ན་གཞི་གྲངས་གཙོ་བོའི་ཡིག་ཆ་བང་ནི་བཀོད་པའི་ཡིག་ཆ་བང་ནས་བཞེད་པ་བཞག 'should_publish=true'སྒྲིག་འཇུག་པར་བྱ་དགོས།"
+
+msgid "All hosts derived from subscriptions will appear in this address book, in addition to any you manually add here or to your Master address book."
+msgstr "འབྲེལ་ཡོད་པའི་རིགས་ནས་བཞེད་པའི་གཟིགས་མིང་ཐམས་ཅད་ཡིག་ཆ་བང་འདིར་བཞག དེ་དང་མཐུད་རིམ་སྣོན་པའི་གཟིགས་མིང་དང་གཙོ་བོའི་ཡིག་ཆ་བང་ནས་སྣོན་པའི་གཟིགས་མིང་བཞག"
+
+msgid "Router Addressbook"
+msgstr "གཞི་གྲངས་གཙོ་བོའི་ཡིག་ཆ་བང"
+
+msgid "Hosts you manually add here will never be published. You can also add aliases to hosts in other address books here."
+msgstr "ཁྱོད་ཀྱིས་མཐུད་རིམ་སྣོན་པའི་གཟིགས་མིང་བཀོད་མི་ཐུབ། གཞི་གྲངས་གཙོ་བོའི་ཡིག་ཆ་བང་ནས་གཟིགས་མིང་གི་རིགས་ཀྱི་གཞི་གྲངས་སྣོན་རོགས།"
+
+msgid "Private Addressbook"
+msgstr "གསང་བའི་ཡིག་ཆ་བང"
+
+msgid "Local Records"
+msgstr "ས་གནས་ཀྱི་ཐོག"
+
+msgid "I2P applications (including the HTTP proxy) use the hosts in your local address books to resolve .i2p hostnames."
+msgstr "I2Pགི་རིགས་(HTTP གཟིགས་མིང་གི་རིགས་ཡང་བཞག)ནི་ཁྱོད་ཀྱི་ས་གནས་ཀྱི་ཡིག་ཆ་བང་གི་ནང་དོན་གཟིགས་མིང་བཟོ་བཅོས་བཟོ་བའི་ཐབས་བཞག"
+
+msgid "Additional subscriptions can be found in the FAQ section of the Router help page."
+msgstr "འབྲེལ་ཡོད་པའི་རིགས་ཀྱི་གཞི་གྲངས་ལ་བལྟ་བར་གཞི་གྲངས་གཙོ་བོའི་རོགས་པའི་དུས་ཀྱི་FAQབལྟ་རོགས།"
+
+msgid "Hosts sourced from your subscriptions are added to your Router address book, and are automatically synced (by default every 12 hours)."
+msgstr "འབྲེལ་ཡོད་པའི་རིགས་ནས་བཞེད་པའི་གཟིགས་མིང་གཞི་གྲངས་གཙོ་བོའི་ཡིག་ཆ་བང་ནས་སྣོན་པ་བཞག དེ་ནི་རང་རྒྱུ་བཞེད་པ་བཞག (གཞི་གྲངས་ན་ཆུ་ཚོད་12ཡི་རྒྱུ་བཞེད་པ་བཞག)"
+
+msgid "Configure Subscriptions"
+msgstr "འབྲེལ་ཡོད་པ་བཟོ་བཅོས་བཟོ་བ།"
+
+msgid "If you manually add hosts here, they will be included your Published address book (if configured)."
+msgstr "ཁྱོད་ཀྱིས་མཐུད་རིམ་སྣོན་པའི་གཟིགས་མིང་བཀོད་པའི་ཡིག་ཆ་བང་ནས་བཞེད་པ་བཞག (སྒྲིག་འཇུག་བྱས་ན་)"
+
+msgid "Master Addressbook"
+msgstr "གཙོ་བོའི་ཡིག་ཆ་བང"
+
+msgid "Searchable by"
+msgstr "འཚོལ་བར་བྱ་ཐུབ་པའི་རིགས།"
+
+msgid "I2P applications"
+msgstr "I2Pགི་རིགས"
+
+msgid "The Master, Router and Private address books collectively serve as the DNS authority for I2P applications."
+msgstr "གཙོ་བོའི་གཞི་གྲངས་གཙོ་བོའི་དང་གསང་བའི་ཡིག་ཆ་བང་གི་རིགས་ཀྱི་ནང་དོན་I2Pགི་རིགས་ཀྱི་DNSགི་རིགས་བཞག"
+
+msgid "Optional,"
+msgstr "བཟོ་རིགས་ཀྱི་རྒྱུ་མཐུད།"
+
+msgid "for websites"
+msgstr "དྲ་གྲོའི་གཟིགས་མིང་གི་རིགས"
+
+msgid "If you configure SusiDNS to publish your Router address book, it will export a hosts.txt file containing all the hosts (by default to the root of your eepsite)."
+msgstr "ཁྱོད་ཀྱི་SusiDNSགི་སྒྲིག་འཇུག་བྱས་ན་གཞི་གྲངས་གཙོ་བོའི་ཡིག་ཆ་བང་ནི་hosts.txtཡིག་ཆ་ནས་བཞེད་པ་བཞག (གཞི་གྲངས་ན་དྲ་གྲོའི་གཟིགས་མིང་གི་མཐའ་ནས་བཞེད་པ་བཞག)"
+
+msgid "Addresses manually added to your Master address book will merge with your Router address book."
+msgstr "གཙོ་བོའི་ཡིག་ཆ་བང་ནས་མཐུད་རིམ་སྣོན་པའི་གཟིགས་མིང་གཞི་གྲངས་གཙོ་བོའི་ཡིག་ཆ་བང་ནས་བཞེད་པ་བཞག"
+
+msgid "Hosts you receive from your subscriptions will merge with your Router address book."
+msgstr "ཁྱོད་ཀྱི་འབྲེལ་ཡོད་པའི་རིགས་ནས་བཞེད་པའི་གཟིགས་མིང་གཞི་གྲངས་གཙོ་བོའི་ཡིག་ཆ་བང་ནས་བཞེད་པ་བཞག"

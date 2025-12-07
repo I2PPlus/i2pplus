@@ -1,0 +1,390 @@
+# I2P
+# Copyright (C) 2017 The I2P Project
+# This file is distributed under the same license as the routerconsole package.
+
+msgid ""
+msgstr ""
+"Project-Id-Version: I2P man pages\n"
+"Language: bo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. type: TH
+#: man/eepget.1:1
+#, no-wrap
+msgid "EEPGET"
+msgstr "EEPGET"
+
+#. type: TH
+#: man/eepget.1:1 man/i2prouter.1:1 man/i2prouter-nowrapper.1:1
+#, no-wrap
+msgid "January 26, 2017"
+msgstr "ཟླ་བ་༡པའི་ཚེས་༢༦, ༢༠༡༧"
+
+#. type: TH
+#: man/eepget.1:1 man/i2prouter.1:1 man/i2prouter-nowrapper.1:1
+#, no-wrap
+msgid "I2P"
+msgstr "I2P"
+
+#. type: SH
+#: man/eepget.1:3 man/i2prouter.1:3 man/i2prouter-nowrapper.1:3
+#, no-wrap
+msgid "NAME"
+msgstr "མིང་།"
+
+#. type: Plain text
+#: man/eepget.1:5
+msgid "Eepget - I2P downloader"
+msgstr "Eepget - I2P སྤྱིར་འགུལ་བྱེད་པ།"
+
+#. type: SH
+#: man/eepget.1:6 man/i2prouter.1:6 man/i2prouter-nowrapper.1:6
+#, no-wrap
+msgid "SYNOPSIS"
+msgstr "བརྗེ་བ།"
+
+#. type: Plain text
+#: man/eepget.1:9
+msgid "B<eepget> [I<options>]I<URL>"
+msgstr "B<eepget> [I<གདམ་གag>]I<URL>"
+
+#. type: SH
+#: man/eepget.1:11 man/i2prouter.1:11 man/i2prouter-nowrapper.1:10
+#, no-wrap
+msgid "DESCRIPTION"
+msgstr "ཤེས་བྱ།"
+
+#. type: Plain text
+#: man/eepget.1:15
+msgid "Download a file non-interactively via HTTP. Transfers through both I2P and the regular Internet are supported."
+msgstr "HTTP ཕྱིར་གཅིག་གིས་བྱེད་པ་མེད་པར་ཡིག་ཆ་བཤོག་པ། I2P དང་། ཉིན་རྒྱུ་གི་དྲོང་རྒྱུར་གོང་གི་གདམ་གོང་གི་ཡིག་ཆ་བཤོག་པ་རྒྱུ་ཡོད།"
+
+#. type: Plain text
+#: man/eepget.1:21
+msgid "Eepget is able to cope with slow or unstable network connections; if a download is not successful because of a network problem, it will keep retrying until the whole file has been retrieved (if the -n option is set).  If supported by the remote server, eepget will instruct the server to continue the download from the point of interruption."
+msgstr "Eepget ནུས་ཤོར་དང་། དྲོང་རྒྱུ་རྟེན་འབྲེལ་བྱེད་པ་ལ་རྒྱབ་སྐྱོར་བྱེད་ཆོག། དྲོང་རྒྱུ་འགལ་བའི་རྒྱུ་གཞིས་བཤོག་པ་མི་ཐུབ་ན་ཡིག་ཆ་ཡོངས་ནས་བཤོག་པའི་བར་དུ་བརྩར་བྱེད་པར་རྒྱབ་སྐྱོར་བྱེད། (གདམ་ག -n བཞེངས་ན་)། གློག་བཤོག་བྱེད་པའི་སེར་བཞེངས་ན་Eepget ནས་བཤོག་པའི་མཇུག་རྒྱུ་གི་རྒྱུ་གཞི་གློག་བཤོག་བྱེད་པའི་སེར་ལ་བཤོག་པ་འགོ་བཙུགས་བྱེད་པར་བཀོད་སྒྲིག་བྱེད།"
+
+#. type: SH
+#: man/eepget.1:22
+#, no-wrap
+msgid "OPTIONS"
+msgstr "གདམ་གོང་གི་གདམ་ག"
+
+#. type: Plain text
+#: man/eepget.1:25
+msgid "B<-c>"
+msgstr "B<-c>"
+
+#. type: TP
+#: man/eepget.1:25
+#, no-wrap
+msgid "Clearnet. Do not use a proxy. Same as B<-p> :0 ."
+msgstr "Clearnet. གློག་བཤོག་བྱེད་པ་མི་བཟོ་བར་བཤེར་བ། B<-p> :0 དང་མཚུངས།"
+
+#. type: Plain text
+#: man/eepget.1:31
+msgid "B<-e> etag"
+msgstr "B<-e> etag"
+
+#. type: TP
+#: man/eepget.1:31
+#, no-wrap
+msgid "Sets the etag value in the request headers."
+msgstr "རེ་ཟེ་པའི་མཇུག་གི་etags་གི་གོ་རིམ་བཞེངས་པ།"
+
+#. type: Plain text
+#: man/eepget.1:37
+msgid "B<-h> name=value"
+msgstr "B<-h> name=value"
+
+#. type: TP
+#: man/eepget.1:37
+#, no-wrap
+msgid "Adds an arbitrary request header with the given name and value."
+msgstr "མིང་དང་གོང་གི་གོང་གི་རེ་ཟེ་པའི་མཇུག་གི་གོང་གི་རྒྱབ་སྐྱོར་བྱེད།"
+
+#. type: Plain text
+#: man/eepget.1:43
+msgid "B<-l> lineLen"
+msgstr "B<-l> lineLen"
+
+#. type: TP
+#: man/eepget.1:43
+#, no-wrap
+msgid "Controls the progress display. B<\\ lineLen > is the length of one progress line in characters. The default is 40."
+msgstr "རེ་ཟེ་བའི་སྒོར་གཏོར་འདེམས་བཤེར་བྱེད་པ། B<\\ lineLen > ཡིས་རེ་ཟེ་བའི་ཐིག་གཅིག་གི་རིང་ཚད་ཡིན་ཞིང་། ཚིག་རྟགས་ཀྱི་གྲངས་ཀ་ཡིན། སོར་བཞག་གི་རིང་ཚད་ནི་40 ཡིན།"
+#. type: Plain text
+#: man/eepget.1:49
+msgid "B<-m> markSize"
+msgstr "B<-m> གནས་གོང་གི་ཆེ་ཆུང་།"
+
+#. type: TP
+#: man/eepget.1:49
+#, no-wrap
+msgid "Controls the progress display. B<\\ markSize > is the number of bytes one '#' character represents. The default is 1024."
+msgstr "རེ་ཟེ་བའི་སྒོར་གཏོར་འདེམས་བཤེར་བྱེད་པ། B<\\ markSize > ཡིས་'#' ཚིག་རྟགས་གཅིག་གིས་འཚམས་པའི་བའི་གྲངས་ཀ་ཡིན། སོར་བཞག་གི་རིང་ཚད་ནི་1024 ཡིན།"
+#. type: Plain text
+#: man/eepget.1:55
+msgid "B<-n> retries"
+msgstr "B<-n> བརྩར་བྱེད་པའི་གྲངས་ཀ།"
+
+#. type: TP
+#: man/eepget.1:55
+#, no-wrap
+msgid "Specify the number of times to retry downloading if the download isn't successful. If this option is not specified, eepget will not retry."
+msgstr "བཤོག་པ་མི་ཐུབ་ན་བརྩར་བྱེད་པའི་གྲངས་ཀ་བཞེངས་པ། གདམ་གོང་གི་གདམ་གོང་གི་གདམ་གོང་གི་མི་བཟོ་ན་Eepget ནས་བརྩར་མི་བྱེད།"
+
+#. type: Plain text
+#: man/eepget.1:61
+msgid "B<-o> file"
+msgstr "B<-o> ཡིག་ཆ།"
+
+#. type: TP
+#: man/eepget.1:61
+#, no-wrap
+msgid "Sets the output file to write to. If this option is not given, the output filename will be determined by the URL."
+msgstr "ཡིག་ཆ་བཟོ་བའི་ཡིག་ཆའི་མིང་བཞེངས་པ། གདམ་གོང་གི་གདམ་གོང་གི་མི་བཟོ་ན་ཡིག་ཆའི་མིང་ནི་URL ཡིས་བརྟག་པར་རྒྱབ་སྐྱོར་བྱེད།"
+
+#. type: Plain text
+#: man/eepget.1:67
+msgid "B<-p> proxy_host[:port]"
+msgstr "B<-p> གློག་བཤོག་བྱེད་པའི་སེར་[:བོརྒྱུགས་གནས]"
+
+#. type: TP
+#: man/eepget.1:67
+#, no-wrap
+msgid "Specify an I2P proxy server (eeproxy) to use. If the port is not specified, eepget will use 4444. If this option is not specified, eepget will use 127.0.0.1:4444. Specify B<-c> or B<-p> :0 to disable the eeproxy."
+msgstr "I2P གློག་བཤོག་བྱེད་པའི་སེར་(eeproxy) བཞེངས་པ། བོརྒྱུགས་གནས་མི་བཟོ་ན་eepget ནས་4444 བཟོ་བར་རྒྱབ་སྐྱོར་བྱེད། གདམ་གོང་གི་གདམ་གོང་གི་མི་བཟོ་ན་eepget ནས་127.0.0.1:4444 བཟོ་བར་རྒྱབ་སྐྱོར་བྱེད། eeproxy མི་བཟོ་བར་B<-c> ཡང་ན་B<-p> :0 བཞེངས་པར་རྒྱབ་སྐྱོར་བྱེད།"
+
+#. type: Plain text
+#: man/eepget.1:73
+msgid "B<-t> seconds"
+msgstr "B<-t> ཐོག་པའི་ཆུ་ཚོད།"
+#. type: TP
+#: man/eepget.1:73
+#, no-wrap
+msgid "Sets the inactivity timeout. The default is 60 seconds."
+msgstr "རེ་ཟེ་པ་མི་བྱུང་བའི་དུས་ཚོད་བཞེངས་པ། གཞི་བརྟག་བྱེད་པའི་དུས་ཚོད་ནི་ཆུ་ཚོད་60ཡིན།"
+#. type: Plain text
+#: man/eepget.1:79
+msgid "B<-u> username"
+msgstr "B<-u> གློག་བཤོག་བྱེད་པའི་མིང་།"
+
+#. type: TP
+#: man/eepget.1:79
+#, no-wrap
+msgid "Sets the username for proxy authorization, if required."
+msgstr "གློག་བཤོག་བྱེད་པའི་རེ་ཟེ་པའི་གྲངས་ཀ་བཞེངས་པ། དགོས་ན་བཤེར་བ།"
+
+#. type: Plain text
+#: man/eepget.1:85
+msgid "B<-x> password"
+msgstr "B<-x> གློག་བཤོག་བྱེད་པའི་གནས་གོང་།"
+
+#. type: TP
+#: man/eepget.1:85
+#, no-wrap
+msgid "Sets the password for proxy authorization, if required. If a username is specified but not a password, EepGet will prompt for the password."
+msgstr "གློག་བཤོག་བྱེད་པའི་རེ་ཟེ་པའི་གནས་གོང་བཞེངས་པ། དགོས་ན་བཤེར་བ། གློག་བཤོག་བྱེད་པའི་མིང་བཞེངས་ན་གནས་གོང་མི་བཟོ་ན་EepGet ནས་གནས་གོང་བཞེངས་པར་རྒྱབ་སྐྱོར་བྱེད།"
+
+#. type: SH
+#: man/eepget.1:89
+#, no-wrap
+msgid "EXIT STATUS"
+msgstr "ཕྱིར་འགུལ་བའི་གོ་རིམ།"
+
+#. type: Plain text
+#: man/eepget.1:93
+msgid "B<eepget> exits with status zero upon successful transfer and non-zero if there were problems with the download."
+msgstr "B<eepget> ནས་ཡིག་ཆ་བཤོག་པའི་མཐའ་འགོག་ན་0 ཡིས་ཕྱིར་འགུལ་བྱེད་པ་དང་། བཤོག་པ་འགལ་བའི་ན་ཕྱིར་འགུལ་བའི་གོ་རིམ་ནི་0 མིན་པའི་གྲངས་ཀ་ཡིན།"
+
+#. type: SH
+#: man/eepget.1:94 man/i2prouter.1:54 man/i2prouter-nowrapper.1:24
+#, no-wrap
+msgid "REPORTING BUGS"
+msgstr "ནོར་བའི་གནས་གོང་བསྡུས་པ།"
+
+#. type: Plain text
+#: man/eepget.1:99 man/i2prouter.1:59 man/i2prouter-nowrapper.1:29
+msgid "Please enter a ticket on E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> the I2P Bug Tracker  E<.UE .>"
+msgstr "གཞི་བརྟག་བྱེད་པའི་སེར་ནས་E<.UR http://git.idk.i2p/i2p-hackers/i2p.i2p/-/issues/> I2P ནོར་བའི་གནས་གོང་བསྡུས་པའི་སེར་ནས་E<.UE .> གི་ནང་ཡིག་ཆ་བཟོ་རོགས།"
+
+#. type: SH
+#: man/eepget.1:100 man/i2prouter.1:60 man/i2prouter-nowrapper.1:30
+#, no-wrap
+msgid "SEE ALSO"
+msgstr "གཞི་བརྟག་བྱེད་པའི་ཡིག་ཆ།"
+
+#. type: Plain text
+#: man/eepget.1:104
+msgid "B<i2prouter>(1)  B<curl>(1)  B<wget>(1)"
+msgstr "B<i2prouter>(1)  B<curl>(1)  B<wget>(1)"
+
+#. type: TH
+#: man/i2prouter.1:1
+#, no-wrap
+msgid "I2PROUTER"
+msgstr "I2PROUTER"
+
+#. type: Plain text
+#: man/i2prouter.1:5
+msgid "i2prouter - start and stop the I2P router"
+msgstr "i2prouter - I2P སྒོ་འབྱེད་པ་དང་སྒོ་རྒྱུགས་པ།"
+
+#. type: Plain text
+#: man/i2prouter.1:9
+msgid "B<i2prouter> {I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
+msgstr "B<i2prouter> {I<console>|I<start>|I<stop>|I<graceful>|I<restart>|I<condrestart>|I<status>|I<dump>|I<install>|I<remove>}"
+
+#. type: Plain text
+#: man/i2prouter.1:13
+msgid "Control the I2P service."
+msgstr "I2P དྲོང་རྒྱུའི་རྒྱུ་གཞི་བཞེངས་པ།"
+
+#. type: IP
+#: man/i2prouter.1:15
+#, no-wrap
+msgid "B<console>"
+msgstr "B<console>"
+
+#. type: Plain text
+#: man/i2prouter.1:17
+msgid "Runs I2P as a console application under the current user."
+msgstr "I2P སྒོ་འབྱེད་པ་ནི་མི་སྤྱིའི་རྒྱུ་གཞིའི་སྒོ་ནས་གསལ་ཆ་གཞིར་བཟོ་བར་རྒྱབ་སྐྱོར་བྱེད།"
+
+#. type: IP
+#: man/i2prouter.1:19
+#, no-wrap
+msgid "B<start>"
+msgstr "B<start>"
+
+#. type: Plain text
+#: man/i2prouter.1:21
+msgid "Starts the I2P service."
+msgstr "I2P དྲོང་རྒྱུ་འགོ་བཙུགས་པ།"
+
+#. type: IP
+#: man/i2prouter.1:23
+#, no-wrap
+msgid "B<stop>"
+msgstr "B<stop>"
+
+#. type: Plain text
+#: man/i2prouter.1:25
+msgid "Stops the I2P service."
+msgstr "I2P དྲོང་རྒྱུ་བརྒྱུབ་པ།"
+
+#. type: IP
+#: man/i2prouter.1:27
+#, no-wrap
+msgid "B<restart>"
+msgstr "B<restart>"
+
+#. type: Plain text
+#: man/i2prouter.1:29
+msgid "Stops the I2P service and then starts it."
+msgstr "I2P དྲོང་རྒྱུ་བརྒྱུབ་པ་དང་བཟོ་བར་འགོ་བཙུགས་པ།"
+
+#. type: IP
+#: man/i2prouter.1:31
+#, no-wrap
+msgid "B<condrestart>"
+msgstr "B<condrestart>"
+
+#. type: Plain text
+#: man/i2prouter.1:33
+msgid "Restart the I2P service only if it is already running."
+msgstr "I2P དྲོང་རྒྱུ་འདུག་ན་ཙམ་དུ་བཟོ་བར་འགོ་བཙུགས་པ།"
+
+#. type: IP
+#: man/i2prouter.1:35
+#, no-wrap
+msgid "B<graceful>"
+msgstr "B<graceful>"
+
+#. type: Plain text
+#: man/i2prouter.1:37
+msgid "Stop I2P gracefully (may take up to 11 minutes)"
+msgstr "I2P སྒོ་རྒྱུགས་པ་རྒྱུ་གཞི་བཞེངས་པ། (ཚེས་ཀ་༡༡་བར་གནང་ཆོག)"
+
+#. type: IP
+#: man/i2prouter.1:39
+#, no-wrap
+msgid "B<install>"
+msgstr "B<install>"
+
+#. type: Plain text
+#: man/i2prouter.1:41
+msgid "Install initscript to start I2P automatically when the system boots."
+msgstr "རྒྱུ་གཞི་འགོ་བཙུགས་པའི་ཚེ་I2P ནི་རང་གིས་འགོ་བཙུགས་པར་བཞེངས་པའི་གཞི་བརྟག་བྱེད་པའི་ཡིག་ཆ་བཟོ་བ།"
+
+#. type: IP
+#: man/i2prouter.1:43
+#, no-wrap
+msgid "B<remove>"
+msgstr "B<remove>"
+
+#. type: Plain text
+#: man/i2prouter.1:45
+msgid "Uninstall initscript that was installed with B<install>"
+msgstr "B<install> ཡིས་བཟོ་བའི་གཞི་བརྟག་བྱེད་པའི་ཡིག་ཆ་བཟོ་མེད་བྱེད་པ།"
+
+#. type: IP
+#: man/i2prouter.1:47
+#, no-wrap
+msgid "B<status>"
+msgstr "B<status>"
+
+#. type: Plain text
+#: man/i2prouter.1:49
+msgid "Prints whether the I2P service is running."
+msgstr "I2P དྲོང་རྒྱུ་འདུག་པ་མིན་པ་བསྡུས་པ།"
+
+#. type: IP
+#: man/i2prouter.1:51
+#, no-wrap
+msgid "B<dump>"
+msgstr "B<dump>"
+
+#. type: Plain text
+#: man/i2prouter.1:53
+msgid "Dumps the current threads into B<wrapper.log>."
+msgstr "རེ་ཟེ་བའི་ཐྲེ་ཌིག་གི་ནང་ནས་ཐོག་མའི་ཐྲེ་ཌིག་གི་གྲུབ་འབྲས་B<wrapper.log>ཡིག་ཆར་འདྲེན་བྱེད།"
+#. type: Plain text
+#: man/i2prouter.1:61
+msgid "B<i2prouter-nowrapper>(1)"
+msgstr "B<i2prouter-nowrapper>(1)"
+
+#. type: TH
+#: man/i2prouter-nowrapper.1:1
+#, no-wrap
+msgid "I2PROUTER-NOWRAPPER"
+msgstr "I2PROUTER-NOWRAPPER"
+
+#. type: Plain text
+#: man/i2prouter-nowrapper.1:5
+msgid "i2prouter-nowrapper - start the I2P router"
+msgstr "i2prouter-nowrapper - I2P སྒོ་འབྱེད་པ་འགོ་བཙུགས་པ།"
+
+#. type: Plain text
+#: man/i2prouter-nowrapper.1:8
+msgid "B<i2prouter-nowrapper>"
+msgstr "B<i2prouter-nowrapper>"
+
+#. type: Plain text
+#: man/i2prouter-nowrapper.1:14
+msgid "Start the I2P router, without the service wrapper. This means the router will not restart if it crashes. Also, it will use the default memory size, which may not be enough for I2P."
+msgstr "I2P སྒོ་འབྱེད་པ་འགོ་བཙུགས་པ་དང་། དྲོང་རྒྱུའི་རྒྱུ་གཞི་མིན་པ། དེ་ཡང་ནོར་བ་ཐོན་ན་སྒོ་འབྱེད་པ་བཟོ་མི་ཐུབ། དེ་མིན་རང་གིས་གཞི་བརྟག་བྱེད་པའི་གནས་གོང་བཟོ་བ་དང་། I2P ནི་གནས་གོང་གི་དགོས་པ་མི་བརྟན།"
+
+#. type: Plain text
+#: man/i2prouter-nowrapper.1:23
+msgid "You should really use the B<i2prouter>(1) script instead. There are no options. To stop the router, use your browser to access E<.UR http://localhost:7657/> the router console E<.UE .>"
+msgstr "ཁྱོད་ཀྱིས་B<i2prouter>(1) ཡིག་ཆ་བཟོ་རོགས། གདམ་གོང་གི་གདམ་གོང་མེད། སྒོ་འབྱེད་པ་བརྒྱུབ་པར་ཁྱོད་ཀྱིས་བཤེར་བའི་བོད་སྐོར་ནས་E<.UR http://localhost:7657/> སྒོ་འབྱེད་པའི་གཞི་བརྟག་བྱེད་པའི་སེར་ནས་E<.UE .> གི་ནང་བཞེད་པར་རྒྱབ་སྐྱོར་བྱེད།"
+
+#. type: Plain text
+#: man/i2prouter-nowrapper.1:31
+msgid "B<i2prouter>(1)"
+msgstr "B<i2prouter>(1)"

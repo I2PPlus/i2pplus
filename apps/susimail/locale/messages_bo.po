@@ -1,0 +1,459 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: bo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#, java-format
+msgid "{0} new message"
+msgid_plural "{0} new messages"
+msgstr[0] "{0} གསར་པ་ཞིག"
+msgstr[1] "{0} གསར་པ།"
+
+msgid "Email"
+msgstr "གློག་ཐུང་།"
+
+#, java-format
+msgid "No encoder found for encoding \\''{0}\\''."
+msgstr "ཤེས་ཡིག་འདེམས་པའི་\\''{0}\\'' དེར་བརྒྱུད་སྐྱོང་བྱེད་མཁན་མི་རྙེད།"
+
+msgid "Re:"
+msgstr "རྒྱབ་ལན།"
+
+msgid "Fwd:"
+msgstr "མུ་མཐུད་བཏོན།"
+
+msgid "Drafts"
+msgstr "ཐོག་མའི་ཐེམ་ཚིག"
+
+msgid "Sent"
+msgstr "བཏོན་པ།"
+
+msgid "Trash"
+msgstr "སྙིགས་སྣོད།"
+
+msgid "Bulk Mail"
+msgstr "གློག་ཐུང་མང་པོ།"
+
+msgid "Inbox"
+msgstr "ཕུང་པོ།"
+
+msgid "View message as HTML"
+msgstr "གློག་ཐུང་HTML དོན་ཚན་རུ་མཚོན་པ།"
+
+msgid "View message as plain text"
+msgstr "གློག་ཐུང་གི་ཡིག་རུ་མཚོན་པ།"
+
+msgid "unknown"
+msgstr "མི་ཤེས་པ།"
+
+msgid "To protect your privacy, SusiMail is blocking Javascript and any remote content contained in this HTML message."
+msgstr "ཁྱོད་ཀྱི་གསང་ཚན་སྲུང་བར་དུ་SusiMail HTML གློག་ཐུང་གི་Javascript དང་། གཞན་གྱི་ནང་དོན་ཚུགས་པ་བརྒྱུད་སྐྱོང་བྱེད་ཡོད།"
+
+msgid "Enable Javascript for enhanced presentation and additional features."
+msgstr "མཚོན་ཚུལ་དང་། ཐོན་མི་ཡོན་ཏན་ལ་Javascript གི་རྒྱབ་རྒུད་བྱེད་པར་བྱ་རྒྱུ།"
+
+#, java-format
+msgid "Tracking images removed from message: {0}"
+msgstr "གློག་ཐུང་ནས་བཟོ་བཅོས་པའི་རྟེན་གྱི་པར་དང་རི་མོ། {0}"
+
+#, java-format
+msgid "Blocked images not displayed: {0}"
+msgstr "བརྒྱུད་སྐྱོང་བྱས་པའི་རི་མོ་མི་མཚོན་པ། {0}"
+
+#, java-format
+msgid "Charset \\''{0}\\'' not supported."
+msgstr "ཡིག་ཚོའི་རིམ་པ་\\''{0}\\'' མི་རྒྱབ་སྐྱོང་བྱེད།"
+
+#, java-format
+msgid "Part ({0}) not shown, because of {1}"
+msgstr "ཆ་ཤས་({0}) མི་མཚོན་པ། {1} དང་རྒྱབ་རྒུད་མི་བྱེད་པའི་རྒྱུ།"
+
+msgid "Reloading the page may fix the error."
+msgstr "ཤོག་ངོས་བསྐྱར་དུ་བྱེད་པས་ནོར་འཁྲུལ་བརྗེ་ཐུབ།"
+
+msgid "File"
+msgstr "ཡིག་ཆ།"
+
+#, java-format
+msgid "Download attachment {0}"
+msgstr "དྲ་བརྐྱབ་པའི་ཡིག་ཆ་{0} ཏེང་བ།"
+
+msgid "File is packed into a zipfile for security reasons."
+msgstr "བདེ་འཇགས་ཀྱི་རྒྱུ་མཚན་གྱིས་ཡིག་ཆ་ཟིབ་བཏོན་ནི་ཡིག་ཆའི་ཞུགས་པར་བཏབ།"
+
+#, java-format
+msgid "Attachment ({0})."
+msgstr "དྲ་བརྐྱབ་པ་({0})།"
+
+msgid "Need username for authentication."
+msgstr "དཔང་བཟོ་བཞིན་པར་མིང་དགོས།"
+
+msgid "Do not include @mail.i2p in the username"
+msgstr "མིང་ལ་ @mail.i2p མི་ཚོལ་བར་བྱ་རྒྱུ།"
+
+msgid "Need password for authentication."
+msgstr "དཔང་བཟོ་བཞིན་པར་གསང་ཨང་དགོས།"
+
+msgid "Need hostname for connect."
+msgstr "སྦྱོར་བར་དུ་མིང་དགོས།"
+
+msgid "Need port number for pop3 connect."
+msgstr "pop3 སྦྱོར་བར་དུ་གློག་ཐུང་གི་ཨང་དགོས།"
+
+msgid "POP3 port number is not in range 0..65535."
+msgstr "POP3 གློག་ཐུང་གི་ཨང་ནི་ 0..65535 ནང་མི་འདུག"
+
+msgid "POP3 port number is invalid."
+msgstr "POP3 གློག་ཐུང་གི་ཨང་ནི་བརྩི་བཟོ་མིན་པ།"
+
+msgid "Need port number for smtp connect."
+msgstr "smtp སྦྱོར་བར་དུ་གློག་ཐུང་གི་ཨང་དགོས།"
+
+msgid "SMTP port number is not in range 0..65535."
+msgstr "SMTP གློག་ཐུང་གི་ཨང་ནི་ 0..65535 ནང་མི་འདུག"
+
+msgid "SMTP port number is invalid."
+msgstr "SMTP གློག་ཐུང་གི་ཨང་ནི་བརྩི་བཟོ་མིན་པ།"
+
+msgid "Cannot connect"
+msgstr "སྦྱོར་བར་མི་ཐུབ།"
+
+msgid "Error connecting to server"
+msgstr "ཞབས་ཞུ་ཁང་དུ་སྦྱོར་བར་ནོར་འཁྲུལ།"
+
+msgid "Draft saved."
+msgstr "ཐོག་མའི་ཐེམ་ཚིག་བུད་པ།"
+
+msgid "Unable to save mail."
+msgstr "གློག་ཐུང་བུད་མི་ཐུབ།"
+
+#, java-format
+msgid "On {0} {1} wrote:"
+msgstr "{0} ནས་ {1} གིས་ཡིག་ཆ་བྲིས།"
+
+#, java-format
+msgid "Error reading uploaded file: {0}"
+msgstr "ཕབ་པའི་ཡིག་ཆ་ཀློག་བར་ནོར་འཁྲུལ། {0}"
+
+msgid "begin forwarded mail"
+msgstr "མུ་མཐུད་བཏོན་པའི་གློག་ཐུང་གི་འགོ་མཚམས།"
+
+msgid "end forwarded mail"
+msgstr "མུ་མཐུད་བཏོན་པའི་གློག་ཐུང་གི་མཇུག་མཚམས།"
+
+msgid "Could not fetch mail body."
+msgstr "གློག་ཐུང་གི་ནང་དོན་མི་རྙེད།"
+
+msgid "Message id not valid."
+msgstr "གློག་ཐུང་གི་ཨང་བརྩི་བཟོ་མིན་པ།"
+
+msgid "Internal error, lost connection."
+msgstr "ནང་གི་ནོར་འཁྲུལ་སྦྱོར་བར་བཟང་མི་བྱེད།"
+
+#, java-format
+msgid "No Encoding found for {0}"
+msgstr "{0} དེར་ཤེས་ཡིག་འདེམས་མི་རྙེད།"
+
+msgid "Attachment not found."
+msgstr "དྲ་བརྐྱབ་པ་མི་རྙེད།"
+
+msgid "Message not found."
+msgstr "གློག་ཐུང་མི་རྙེད།"
+
+#, java-format
+msgid "1 message deleted."
+msgid_plural "{0} messages deleted."
+msgstr[0] "གློག་ཐུང་ཞིག་བསུབས་པ།"
+msgstr[1] "{0} གློག་ཐུང་བསུབས་པ།"
+
+msgid "No messages marked for deletion."
+msgstr "བསུབས་པར་མཚོན་བའི་གློག་ཐུང་མི་འདུག"
+
+#, java-format
+msgid "Host unchanged. Edit configation file {0} to change host."
+msgstr "མིང་བརྩིས་མི་བཅོས། {0} གློག་ཐུང་གི་ཡིག་ཆ་བཟོ་བཅོས་བྱེད་པར་མིང་བརྩི་བཅོས་བྱ་རྒྱུ།"
+
+msgid "Configuration saved"
+msgstr "བཀོད་སྒྲིག་བུད་པ།"
+
+msgid "Invalid pagesize number, resetting to default value."
+msgstr "ཤོག་ངོས་གྲངས་ཀ་ནོར་འཁྲུལ། ཐོག་མའི་གྲངས་ཀ་དུ་བཟོ་བཅོས་བྱེད་བྱེད་པ།"
+
+msgid "Login"
+msgstr "ཐོག་མའི་འཛུལ་བ།"
+
+msgid "Loading messages, please wait..."
+msgstr "གློག་ཐུང་བཟོ་བར་བྱེད་བཞིན་པ། ཊིག་ཙམ་རེ་བར་བྱེད་རོགས།"
+
+#, java-format
+msgid "1 message"
+msgid_plural "{0} messages"
+msgstr[0] "གློག་ཐུང་ཞིག"
+msgstr[1] "{0} གློག་ཐུང་།"
+
+msgid "No messages"
+msgstr "གློག་ཐུང་མི་འདུག"
+
+msgid "Show Message"
+msgstr "གློག་ཐུང་མཚོན་པ།"
+
+msgid "New Message"
+msgstr "གློག་ཐུང་གསར་པ།"
+
+msgid "Configuration"
+msgstr "བཀོད་སྒྲིག"
+
+msgid "I2PMail"
+msgstr "I2PMail"
+
+msgid "No new messages"
+msgstr "གསར་པའི་གློག་ཐུང་མི་འདུག"
+
+msgid "Checking for new messages on server"
+msgstr "ཞབས་ཞུ་ཁང་ནས་གསར་པའི་གློག་ཐུང་བཟོ་བར་བྱེད་བཞིན་པ།"
+
+msgid "Refresh the page for updates"
+msgstr "བཅོས་པར་ཤོག་ངོས་བསྐྱར་དུ་བྱེད་རོགས།"
+
+#, java-format
+msgid "{0} is an I2P-exclusive service provided by {1}."
+msgstr "{0} ནི་{1} གིས་སྐྱོང་བའི་I2P དོན་ཚན་གྱི་ཞབས་ཞུ་ཁང་།"
+
+#, java-format
+msgid "{0} webmail client &copy Susi 2004-2005."
+msgstr "{0} གློག་ཐུང་གི་སྒྲིག་ཆས་&copy Susi 2004-2005."
+
+msgid "Removed tracking image placeholder"
+msgstr "བཟོ་བཅོས་པའི་རི་མོའི་སྟོན་བཟོ་བརྒྱབ།"
+
+msgid "no subject"
+msgstr "དོན་ཚན་མི་འདུག"
+
+msgid "Found no valid sender address."
+msgstr "བཏོན་པའི་གློག་ཐུང་གི་ཡིག་རྒྱུའི་གནས་མི་རྙེད།"
+
+#, java-format
+msgid "Found no valid address in \\''{0}\\''."
+msgstr "ཡིག་རྒྱུའི་གནས་\\''{0}\\'' ནང་མི་རྙེད།"
+
+msgid "No recipients found."
+msgstr "གློག་ཐུང་རྐྱང་བཟོ་མི་རྙེད།"
+
+#, java-format
+msgid "Email is too large, max is {0}"
+msgstr "གློག་ཐུང་ཆེ་ཤོས་ནི་{0} ཡིན།"
+
+msgid "Sending mail."
+msgstr "གློག་ཐུང་བཏོན་བཞིན་པ།"
+
+msgid "Error sending mail"
+msgstr "གློག་ཐུང་བཏོན་བར་ནོར་འཁྲུལ།"
+
+msgid "Mail sent."
+msgstr "གློག་ཐུང་བཏོན་པ།"
+
+msgid "Cancel"
+msgstr "བཤིགས་པ།"
+
+msgid "Save as Draft"
+msgstr "ཐོག་མའི་ཐེམ་ཚིག་རུ་བུད་པ།"
+
+msgid "Send"
+msgstr "བཏོན་པ།"
+
+msgid "From"
+msgstr "ནས།"
+
+msgid "To"
+msgstr "རྐྱང་།"
+
+msgid "Cc"
+msgstr "Cc"
+
+msgid "Bcc"
+msgstr "Bcc"
+
+msgid "Subject"
+msgstr "དོན་ཚན།"
+
+msgid "Add Attachment"
+msgstr "དྲ་བརྐྱབ་པ་སྣོན་པ།"
+
+msgid "Add attachment"
+msgstr "དྲ་བརྐྱབ་པ་སྣོན་པ།"
+
+msgid "Attachments"
+msgstr "དྲ་བརྐྱབ་པ།"
+
+msgid "Delete selected attachments"
+msgstr "འདེམས་པའི་དྲ་བརྐྱབ་པ་བསུབས་པ།"
+
+msgid "I2PMail Login"
+msgstr "I2PMail ཐོག་མའི་འཛུལ་བ།"
+
+msgid "User"
+msgstr "སྤྱོད་མཁན།"
+
+msgid "Username"
+msgstr "མིང་།"
+
+msgid "Password"
+msgstr "གསང་ཨང་།"
+
+msgid "Toggle password visibility"
+msgstr "གསང་ཨང་མཚོན་བར་མི་མཚོན་བར་བཟོ་བཅོས་བྱེད་པ།"
+
+msgid "Host"
+msgstr "མིང་།"
+
+msgid "POP3 Port"
+msgstr "POP3 གློག་ཐུང་།"
+
+msgid "SMTP Port"
+msgstr "SMTP གློག་ཐུང་།"
+
+msgid "Read Mail Offline"
+msgstr "གློག་ཐུང་བརྒྱུད་སྐྱོང་མི་བྱེད་པར་ཀློག་པ།"
+
+msgid "Settings"
+msgstr "བཀོད་སྒྲིག"
+
+msgid "Learn about I2PMail"
+msgstr "I2PMail ནང་གི་ཤེས་བྱ་རྒྱུ།"
+
+msgid "Create Account"
+msgstr "ཐོག་མའི་བཟོ་བ།"
+
+msgid "New"
+msgstr "གསར་པ།"
+
+msgid "Check Mail"
+msgstr "གློག་ཐུང་བཟོ་བར་བྱེད་པ།"
+
+msgid "Refresh Page"
+msgstr "ཤོག་ངོས་བསྐྱར་དུ་བྱེད་པ།"
+
+#, java-format
+msgid "1 Message"
+msgid_plural "{0} Messages"
+msgstr[0] "གློག་ཐུང་ཞིག"
+msgstr[1] "{0} གློག་ཐུང་།"
+
+msgid "Logout"
+msgstr "ཐོག་མ་བཤིགས་པ།"
+
+msgid "Date"
+msgstr "ཚེས་གྲངས།"
+
+msgid "Size"
+msgstr "ཆེ་ཚོར།"
+
+msgid "Mark for deletion"
+msgstr "བསུབས་པར་མཚོན་པ།"
+
+msgid "Message contains HTML"
+msgstr "གློག་ཐུང་ནི་HTML དོན་ཚན་ཚུགས་པ།"
+
+msgid "Message is new"
+msgstr "གློག་ཐུང་གསར་པ།"
+
+msgid "Message is spam"
+msgstr "གློག་ཐུང་ནི་སྙིགས་སྣོད་ཡིན།"
+
+msgid "Message body not downloaded"
+msgstr "གློག་ཐུང་གི་ནང་དོན་ཕབ་མི་བྱེད་པ།"
+
+msgid "Really delete the marked messages?"
+msgstr "མཚོན་བའི་གློག་ཐུང་བསུབས་རྒྱུ་ནམ་།"
+
+msgid "Yes, really delete them!"
+msgstr "གཏན་ན་བསུབས་རྒྱུ།"
+
+msgid "Delete Selected"
+msgstr "འདེམས་པ་བསུབས་པ།"
+
+msgid "Mark All"
+msgstr "ཐམས་ཅད་མཚོན་པ།"
+
+msgid "Clear All"
+msgstr "ཐམས་ཅད་བཟོ་བཅོས་བྱེད་པ།"
+
+msgid "Change to Folder"
+msgstr "ཞབས་ཞུ་ཁང་དུ་བཟོ་བཅོས་བྱེད་པ།"
+
+msgid "First"
+msgstr "ཐོག་མ།"
+
+msgid "Previous"
+msgstr "སྔོན་མ།"
+
+msgid "Next"
+msgstr "མཐར་མ།"
+
+msgid "Last"
+msgstr "མཇུག་མ།"
+
+msgid "Really delete this message?"
+msgstr "གློག་ཐུང་འདི་བསུབས་རྒྱུ་ནམ་།"
+
+msgid "Yes, really delete it!"
+msgstr "གཏན་ན་བསུབས་རྒྱུ།"
+
+msgid "Reply"
+msgstr "རྒྱབ་ལན་བཏོན་པ།"
+
+msgid "Reply All"
+msgstr "ཐམས་ཅད་ལ་རྒྱབ་ལན་བཏོན་པ།"
+
+msgid "Forward"
+msgstr "མུ་མཐུད་བཏོན་པ།"
+
+msgid "Save As"
+msgstr "ཐོག་མའི་ཐེམ་ཚིག་རུ་བུད་པ།"
+
+msgid "Delete"
+msgstr "བསུབས་པ།"
+
+msgid "Back to Folder"
+msgstr "ཞབས་ཞུ་ཁང་དུ་ཕྱིར་ལོག་པ།"
+
+msgid "Move to Folder"
+msgstr "ཞབས་ཞུ་ཁང་དུ་བསྐྱོར་བ།"
+
+msgid "View message in new tab"
+msgstr "ཤོག་ངོས་གསར་པར་གློག་ཐུང་མཚོན་པ།"
+
+msgid "Folder Page Size"
+msgstr "ཞབས་ཞུ་ཁང་གི་ཤོག་ངོས་ཆེ་ཚོར།"
+
+msgid "Set"
+msgstr "བཟོ་བཅོས་བྱེད་པ།"
+
+msgid "Advanced Configuration"
+msgstr "བཀོད་སྒྲིག་མཐོ་རིམ་པ།"
+
+msgid "Save Configuration"
+msgstr "བཀོད་སྒྲིག་བུད་པ།"
+
+msgid "No response from server"
+msgstr "ཞབས་ཞུ་ཁང་ནས་རྒྱབ་ལན་མི་རྙེད།"
+
+msgid "Mail server login failed, wrong username or password."
+msgstr "གློག་ཐུང་གི་ཞབས་ཞུ་ཁང་ནས་ཐོག་མའི་འཛུལ་བ་བཟོ་མི་བྱེད། མིང་དང་གསང་ཨང་ནོར་འཁྲུལ།"
+
+msgid "Logout and then login again with the correct username and password."
+msgstr "ཐོག་མ་བཤིགས་ནས་མིང་དང་གསང་ཨང་ཡང་དག་གིས་ཐོག་མའི་འཛུལ་བ་བཟོ་བྱེད་རོགས།"
+
+msgid "Login failed"
+msgstr "ཐོག་མའི་འཛུལ་བ་བཟོ་མི་བྱེད།"
+
+msgid "Server refused connection"
+msgstr "ཞབས་ཞུ་ཁང་ནས་སྦྱོར་བར་བཟང་མི་བྱེད།"
+
+msgid "Mail rejected"
+msgstr "གློག་ཐུང་བཟོ་བར་བཟང་མི་བྱེད།"

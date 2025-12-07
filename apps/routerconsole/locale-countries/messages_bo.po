@@ -1,0 +1,771 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: bo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Anonymous Proxy"
+msgstr "མིང་མེད་མཐུད་པར"
+
+msgid "Satellite Provider"
+msgstr "རྡོལ་རྒྱུན་འཚོ་བའི་མཛོན་བྱེད་པ་"
+
+msgid "Andorra"
+msgstr "ཨན་དོར་ར"
+
+msgid "United Arab Emirates"
+msgstr "གྱུར་མེད་ཀྱི་རྒྱལ་ཁབ་"
+
+msgid "Afghanistan"
+msgstr "ཨཕ་གནིས་ཏན"
+
+msgid "Antigua and Barbuda"
+msgstr "ཨན་ཐི་གུ་དང་བར་བུ་ཌ"
+
+msgid "Anguilla"
+msgstr "ཨང་གུ་ཡིལ་ལ"
+
+msgid "Albania"
+msgstr "ཨལ་བེ་ནི་ཡ"
+
+msgid "Armenia"
+msgstr "ཨར་མེ་ནི་ཡ"
+
+msgid "Netherlands Antilles"
+msgstr "ཨེན་ཐི་ལེ་ཌ་གྱི་རྒྱལ་ཁབ་"
+
+msgid "Angola"
+msgstr "ཨང་གོ་ལ"
+
+msgid "Asia/Pacific Region"
+msgstr "ཨེ་ཤི་ཡ/ཨོ་ཌི་ཡན་གི་ས་ཁུལ"
+
+msgid "Antarctica"
+msgstr "ཨན་ཊར་ཀཊི་ཀ"
+
+msgid "Argentina"
+msgstr "ཨར་ཇེན་ཌི་ན"
+
+msgid "American Samoa"
+msgstr "ཨ་མེ་རི་ཀའི་ཟ་མོ་ཥེ་"
+
+msgid "Austria"
+msgstr "ཨོ་སི་ཌི་ཡ"
+
+msgid "Australia"
+msgstr "ཨོ་ཌི་ཤི་ཡ"
+
+msgid "Aruba"
+msgstr "ཨ་རུ་བ"
+
+msgid "Åland Islands"
+msgstr "ཨ་ལན་གི་གླིང་ཚོ"
+
+msgid "Azerbaijan"
+msgstr "ཨཛ་ཤར་བྷེ་ཛན"
+
+msgid "Bosnia and Herzegovina"
+msgstr "བོ་ཤི་ནི་ཡ་དང་ཧེར་ཙེ་གོ་བི་ན"
+
+msgid "Barbados"
+msgstr "བར་བེ་ཌོས"
+
+msgid "Bangladesh"
+msgstr "བང་གླེ་ཤེ་"
+
+msgid "Belgium"
+msgstr "བེལ་ཇིམ"
+
+msgid "Burkina Faso"
+msgstr "བུར་ཀི་ན་ཕ་སོ"
+
+msgid "Bulgaria"
+msgstr "བུལ་གེ་རི་ཡ"
+
+msgid "Bahrain"
+msgstr "བ་ཧ་རིན"
+
+msgid "Burundi"
+msgstr "བུ་རུན་ཌི"
+
+msgid "Benin"
+msgstr "བེ་ནིན"
+
+msgid "Saint Barthélemy"
+msgstr "ཤེན་བར་ཐེ་ལེ་མི"
+
+msgid "Bermuda"
+msgstr "བེར་མུ་ཌ"
+
+msgid "Brunei Darussalam"
+msgstr "བྲུ་ནེ་ཌ་རུས་ས་ལམ"
+
+msgid "Bolivia"
+msgstr "བོ་ལི་བི་ཡ"
+
+msgid "Bonaire"
+msgstr "བོ་ནེ་ཡིར"
+
+msgid "Brazil"
+msgstr "བྲེ་ཤིལ"
+
+msgid "Bahamas"
+msgstr "བ་ཧ་མས"
+
+msgid "Bhutan"
+msgstr "བོད"
+
+msgid "Bouvet Island"
+msgstr "བོ་ཝེ་ཊི་གླིང་"
+
+msgid "Botswana"
+msgstr "བོ་ཊི་ཝན"
+
+msgid "Belarus"
+msgstr "བེལ་རུས"
+
+msgid "Belize"
+msgstr "བེ་ལི་ཛེ"
+
+msgid "Canada"
+msgstr "ཅ་ན་ཌ"
+
+msgid "Cocos (Keeling) Islands"
+msgstr "ཅོ་ཀོས་(ཀི་ལིང་གི་གླིང་ཚོ)"
+
+msgid "Congo"
+msgstr "ཅོང་གོ"
+
+msgid "Central African Republic"
+msgstr "ཐོག་མའི་ཨ་ཕྲི་ཀའི་རེ་ཕབ་ལི་ཀ"
+
+msgid "Switzerland"
+msgstr "སུའི་ཌི་ལནཌ"
+
+msgid "Cote D'Ivoire"
+msgstr "ཅོ་ཌི་ཨི་བོའི་ར"
+
+msgid "Cook Islands"
+msgstr "ཀོག་གི་གླིང་ཚོ"
+
+msgid "Chile"
+msgstr "ཆི་ལི"
+
+msgid "Cameroon"
+msgstr "ཅ་མེ་རུན"
+
+msgid "China"
+msgstr "ཀྲུང་གོ"
+
+msgid "Colombia"
+msgstr "ཀོ་ལོམ་བི་ཡ"
+
+msgid "Costa Rica"
+msgstr "ཀོས་ཊ་རི་ཀ"
+
+msgid "Serbia and Montenegro"
+msgstr "སེར་བི་ཡ་དང་མོན་ཊེ་ནི་གྲོ"
+
+msgid "Cuba"
+msgstr "ཅུ་བ"
+
+msgid "Cape Verde"
+msgstr "ཀེབ་བེར་ཌི"
+
+msgid "Curaçao"
+msgstr "ཅུ་རེ་ཤོ"
+
+msgid "Christmas Island"
+msgstr "ཅི་རིས་མས་གླིང་"
+
+msgid "Cyprus"
+msgstr "སི་པྲུས"
+
+msgid "Czech Republic"
+msgstr "ཤེ་ཁིའི་རེ་ཕབ་ལི་ཀ"
+
+msgid "Germany"
+msgstr "ཇེར་མནི་"
+
+msgid "Djibouti"
+msgstr "ཇི་བོ་ཊི"
+
+msgid "Denmark"
+msgstr "ཌེན་མཱརྐ"
+
+msgid "Dominica"
+msgstr "ཌོ་མི་ནི་ཀ"
+
+msgid "Dominican Republic"
+msgstr "ཌོ་མི་ནི་ཀན་རེ་ཕབ་ལི་ཀ"
+
+msgid "Algeria"
+msgstr "ཨལ་ཇེ་རི་ཡ"
+
+msgid "Ecuador"
+msgstr "ཨེ་ཀུ་ཌོར"
+
+msgid "Estonia"
+msgstr "ཨེ་སིཊོ་ནི་ཡ"
+
+msgid "Egypt"
+msgstr "ཨེ་ཇིཔི་ཊི"
+
+msgid "Western Sahara"
+msgstr "ནུབ་བྱང་གི་ས་ཧ་ར"
+
+msgid "Eritrea"
+msgstr "ཨེ་རི་ཊི་ཡ"
+
+msgid "Spain"
+msgstr "སྤེཊིན"
+
+msgid "Ethiopia"
+msgstr "ཨེ་ཐི་ཨོ་ཕི་ཡ"
+
+msgid "European Union"
+msgstr "ཡོ་རོབ་ཀྱི་མཐུན་ཚོགས"
+
+msgid "Finland"
+msgstr "ཕིན་ལནཌ"
+
+msgid "Fiji"
+msgstr "ཕི་ཇི"
+
+msgid "Falkland Islands (Malvinas)"
+msgstr "ཕལ་ཁེན་གི་གླིང་ཚོ(མལ་ཝི་ནས)"
+
+msgid "Micronesia"
+msgstr "མི་ཀྲོ་ནེ་ཤི་ཡ"
+
+msgid "Faroe Islands"
+msgstr "ཕེ་རོ་གླིང་ཚོ"
+
+msgid "France"
+msgstr "ཕྲནས"
+
+msgid "Gabon"
+msgstr "ག་བོན"
+
+msgid "United Kingdom"
+msgstr "གྱུར་མེད་རྒྱལ་ཁབ"
+
+msgid "Grenada"
+msgstr "གྲེན་ཌ"
+
+msgid "Georgia"
+msgstr "ཇོར་ཇི་ཡ"
+
+msgid "French Guiana"
+msgstr "ཕྲནས་ཀྱི་གུ་ཡི་ན"
+
+msgid "Guernsey"
+msgstr "གེན་ཤི"
+
+msgid "Ghana"
+msgstr "ག་ན"
+
+msgid "Gibraltar"
+msgstr "ཇི་བྲལ་ཊར"
+
+msgid "Greenland"
+msgstr "གྲེན་ལནཌ"
+
+msgid "Gambia"
+msgstr "གམ་བི་ཡ"
+
+msgid "Guinea"
+msgstr "གི་ནི་ཡ"
+
+msgid "Guadeloupe"
+msgstr "གུ་ཌེ་ལོབ"
+
+msgid "Equatorial Guinea"
+msgstr "ཁྱིམ་གླིང་གི་གི་ནི་ཡ"
+
+msgid "Greece"
+msgstr "གྲིས"
+
+msgid "South Georgia and the South Sandwich Islands"
+msgstr "ལྷོ་གི་ཨོ་ཌི་གྱི་གླིང་ཚོ"
+
+msgid "Guatemala"
+msgstr "གུ་ཨོ་ཌེ་མཱལ"
+
+msgid "Guam"
+msgstr "གུ་ཨོམ"
+
+msgid "Guinea-Bissau"
+msgstr "གི་ནི་ཡ་བི་སོ"
+
+msgid "Guyana"
+msgstr "གུ་ཡི་ན"
+
+msgid "Hong Kong"
+msgstr "ཧོང་ཀོང"
+
+msgid "Honduras"
+msgstr "ཧོན་ཌུ་རས"
+
+msgid "Croatia"
+msgstr "ཀྲོ་ཨེ་ཤི་ཡ"
+
+msgid "Haiti"
+msgstr "ཧེ་ཊི"
+
+msgid "Hungary"
+msgstr "ཧུང་གེ་རི་"
+
+msgid "Indonesia"
+msgstr "ཨིན་ཌོ་ནེ་ཤི་ཡ"
+
+msgid "Ireland"
+msgstr "ཨི་རི་ལནཌ"
+
+msgid "Israel"
+msgstr "ཨིས་རེ་ལ"
+
+msgid "Isle of Man"
+msgstr "མན་གྱི་གླིང་"
+
+msgid "India"
+msgstr "ཨིན་ཌི་ཡ"
+
+msgid "British Indian Ocean Territory"
+msgstr "བྲེའུ་ཤིས་ཀྱི་ཨིན་ཌི་ཡའི་གླིང་ཚོ"
+
+msgid "Iraq"
+msgstr "ཨི་རུ་ཁ"
+
+msgid "Iran"
+msgstr "ཨི་རན"
+
+msgid "Iceland"
+msgstr "ཨི་སི་ལནཌ"
+
+msgid "Italy"
+msgstr "ཨི་ཌི་ལི"
+
+msgid "Jersey"
+msgstr "ཇེར་ཤི"
+
+msgid "Jamaica"
+msgstr "ཇ་མེ་ཀ"
+
+msgid "Jordan"
+msgstr "ཇོ་རེན"
+
+msgid "Japan"
+msgstr "ཇ་པན"
+
+msgid "Kenya"
+msgstr "ཀེ་ནི་ཡ"
+
+msgid "Kyrgyzstan"
+msgstr "ཀིར་གི་ཌི་སི་ཐན"
+
+msgid "Cambodia"
+msgstr "ཀམ་བོ་ཛི་ཡ"
+
+msgid "Kiribati"
+msgstr "ཀི་རི་བ་ཊི"
+
+msgid "Comoros"
+msgstr "ཀོ་མོ་རོས"
+
+msgid "Saint Kitts and Nevis"
+msgstr "ཤེན་ཌི་ཐི་ཐིས་དང་ནེ་ཝིས"
+
+msgid "North Korea"
+msgstr "བྱང་གི་ཀོ་རི་ཡ"
+
+msgid "Republic of Korea"
+msgstr "ལྷོ་གི་ཀོ་རི་ཡ"
+
+msgid "Kuwait"
+msgstr "ཀུ་ཨེ་ཌ"
+
+msgid "Cayman Islands"
+msgstr "ཀེ་མན་གྱི་གླིང་ཚོ"
+
+msgid "Kazakhstan"
+msgstr "ཀ་ཟཁ་སི་ཐན"
+
+msgid "Lao People's Democratic Republic"
+msgstr "ལ་ཡོངས་ཀྱི་དམངས་གཙོའི་རྒྱལ་ཁབ"
+
+msgid "Lebanon"
+msgstr "ལེ་བ་ནོན"
+
+msgid "Saint Lucia"
+msgstr "ཤེན་ལུ་ཤི་ཡ"
+
+msgid "Liechtenstein"
+msgstr "ལི་ཧེན་ཤི་ཐན"
+
+msgid "Sri Lanka"
+msgstr "ཤེན་ལང་ཀ"
+
+msgid "Liberia"
+msgstr "ལི་བེ་རི་ཡ"
+
+msgid "Lesotho"
+msgstr "ལེ་སོ་ཐོ"
+
+msgid "Lithuania"
+msgstr "ལི་ཐུ་ཨེ་ནི་ཡ"
+
+msgid "Luxembourg"
+msgstr "ལུགས་ཧེམ་བཱུར"
+
+msgid "Latvia"
+msgstr "ལེ་ཌི་ཡ"
+
+msgid "Libya"
+msgstr "ལི་བི་ཡ"
+
+msgid "Morocco"
+msgstr "མོ་རོ་ཀོ"
+
+msgid "Monaco"
+msgstr "མོ་ནེ་ཀོ"
+
+msgid "Moldova"
+msgstr "མོལ་ཌོ་བ"
+
+msgid "Montenegro"
+msgstr "མོན་ཊེ་ནི་གྲོ"
+
+msgid "Saint Martin"
+msgstr "ཤེན་མར་ཌིན"
+
+msgid "Madagascar"
+msgstr "མ་ཛག་གསར"
+
+msgid "Marshall Islands"
+msgstr "མར་ཤལ་གྱི་གླིང་ཚོ"
+
+msgid "Macedonia"
+msgstr "མ་ཅེ་ཌོ་ནི་ཡ"
+
+msgid "Mali"
+msgstr "མ་ལི"
+
+msgid "Myanmar"
+msgstr "མིན་མར"
+
+msgid "Mongolia"
+msgstr "མོང་གོལ"
+
+msgid "Macau"
+msgstr "མ་ཀོ"
+
+msgid "Northern Mariana Islands"
+msgstr "བྱང་གི་མ་རི་ཡན་གྱི་གླིང་ཚོ"
+
+msgid "Martinique"
+msgstr "མར་ཌི་ནིཀ"
+
+msgid "Mauritania"
+msgstr "མོར་ཤི་ཐེ་ནི་ཡ"
+
+msgid "Montserrat"
+msgstr "མོན་ཊེ་སེ་རེཊ"
+
+msgid "Malta"
+msgstr "མལ་ཊ"
+
+msgid "Mauritius"
+msgstr "མོར་ཤི་ཡུས"
+
+msgid "Maldives"
+msgstr "མལ་དིབས"
+
+msgid "Malawi"
+msgstr "མལ་ཨེ་ཝི་ཡ"
+
+msgid "Mexico"
+msgstr "མེགསི་ཀོ"
+
+msgid "Malaysia"
+msgstr "མ་ལེ་ཤི་ཡ"
+
+msgid "Mozambique"
+msgstr "མོས་ཐབ་བི་ཀ"
+
+msgid "Namibia"
+msgstr "ན་མི་བི་ཡ"
+
+msgid "New Caledonia"
+msgstr "གསར་གྱི་ཀེལ་ཌོ་ནི་ཡ"
+
+msgid "Niger"
+msgstr "ནི་ཇར"
+
+msgid "Norfolk Island"
+msgstr "ནོར་ཕོལྕི་གླིང་"
+
+msgid "Nigeria"
+msgstr "ནའི་ཇེ་རི་ཡ"
+
+msgid "Nicaragua"
+msgstr "ནི་ཀ་རུ་གུ་ཡ"
+
+msgid "Netherlands"
+msgstr "ནེ་ཐེར་ལེནཌ"
+
+msgid "Norway"
+msgstr "ནོར་ཝེ་"
+
+msgid "Nepal"
+msgstr "ནེ་པོལ"
+
+msgid "Nauru"
+msgstr "ནོ་རུ"
+
+msgid "Niue"
+msgstr "ནི་ཨེའུ"
+
+msgid "New Zealand"
+msgstr "གསར་གྱི་ཟེ་ལནཌ"
+
+msgid "Oman"
+msgstr "ཨོ་མན"
+
+msgid "Panama"
+msgstr "པ་ན་མ"
+
+msgid "Peru"
+msgstr "པེ་རུ"
+
+msgid "French Polynesia"
+msgstr "ཕྲནས་ཀྱི་པོ་ལི་ནེ་ཤི་ཡ"
+
+msgid "Papua New Guinea"
+msgstr "པ་པུ་ཨ་གསར་གྱི་གི་ནི་ཡ"
+
+msgid "Philippines"
+msgstr "ཕི་ལི་པིནས"
+
+msgid "Pakistan"
+msgstr "པ་ཀིས་ཐན"
+
+msgid "Poland"
+msgstr "པོ་ལནཌ"
+
+msgid "Saint Pierre and Miquelon"
+msgstr "ཤེན་པི་ཨེར་དང་མི་ཀུ་ལོན"
+
+msgid "Pitcairn Islands"
+msgstr "ཕི་ཊི་ཁེན་གྱི་གླིང་ཚོ"
+
+msgid "Puerto Rico"
+msgstr "པུའེར་ཊོ་རི་ཀོ"
+
+msgid "Palestinian Territory"
+msgstr "ཕ་ལེ་སི་ཊིན་གྱི་ས་ཁུལ"
+
+msgid "Portugal"
+msgstr "པོར་ཊུ་གེ་ལ"
+
+msgid "Palau"
+msgstr "པ་ལ་ཨུ"
+
+msgid "Paraguay"
+msgstr "པ་ར་གུ་ཡ"
+
+msgid "Qatar"
+msgstr "ཀ་ཊར"
+
+msgid "Réunion"
+msgstr "རི་ཡུན་ཡོན"
+
+msgid "Romania"
+msgstr "རོ་མེནི་ཡ"
+
+msgid "Serbia"
+msgstr "སེར་བི་ཡ"
+
+msgid "Russian Federation"
+msgstr "རུས་ཀྱི་མཐུན་ཚོགས"
+
+msgid "Rwanda"
+msgstr "རུ་ཝན་ཌ"
+
+msgid "Saudi Arabia"
+msgstr "སོའུ་ཌི་ཨར་བེ་ཡ"
+
+msgid "Solomon Islands"
+msgstr "སོ་ལོ་མོན་གྱི་གླིང་ཚོ"
+
+msgid "Seychelles"
+msgstr "སེ་ཆེལས"
+
+msgid "Sudan"
+msgstr "སུ་ཌན"
+
+msgid "Sweden"
+msgstr "སུའི་ཌན"
+
+msgid "Singapore"
+msgstr "སིང་ག་པོར"
+
+msgid "Saint Helena"
+msgstr "ཤེན་ཧེ་ལེན"
+
+msgid "Slovenia"
+msgstr "སློ་བེ་ནི་ཡ"
+
+msgid "Svalbard and Jan Mayen"
+msgstr "སྭལ་བརྡ་དང་ཇན་མ་ཡེན"
+
+msgid "Slovakia"
+msgstr "སློ་བེཀིའི་རྒྱལ་ཁབ"
+
+msgid "Sierra Leone"
+msgstr "སི་ཨེ་ར་ལེ་ཨོན"
+
+msgid "San Marino"
+msgstr "སན་མརི་ནོ"
+
+msgid "Senegal"
+msgstr "སེ་ནེ་གེལ"
+
+msgid "Somalia"
+msgstr "སོ་མ་ལི་ཡ"
+
+msgid "Suriname"
+msgstr "སུ་རི་ནེམ"
+
+msgid "South Sudan"
+msgstr "ལྷོ་གི་སུ་ཌན"
+
+msgid "Sao Tome and Principe"
+msgstr "སོ་ཐོམེ་དང་ཕྲིན་སི་པེ"
+
+msgid "El Salvador"
+msgstr "ཨེལ་སལ་བོ་དོར"
+
+msgid "Sint Maarten"
+msgstr "སིན་ཐེན་མར་ཌིན"
+
+msgid "Syria"
+msgstr "སི་རི་ཡ"
+
+msgid "Swaziland"
+msgstr "སུ་ཨེ་ཟི་ལནཌ"
+
+msgid "Turks and Caicos Islands"
+msgstr "ཐུརྐས་དང་ཀེ་ཨི་ཀོས་གླིང་ཚོ"
+
+msgid "Chad"
+msgstr "ཆད"
+
+msgid "French Southern Territories"
+msgstr "ཕྲནས་ཀྱི་ལྷོ་མཐའི་ས་ཁུལ"
+
+msgid "Togo"
+msgstr "ཐོ་གོ"
+
+msgid "Thailand"
+msgstr "ཐི་ལནཌ"
+
+msgid "Tajikistan"
+msgstr "ཐ་ཇི་ཀི་ཐན"
+
+msgid "Tokelau"
+msgstr "ཐོ་ཀེ་ལོ"
+
+msgid "Timor-Leste"
+msgstr "ཐི་མོར་ལེས་ཊེ"
+
+msgid "Turkmenistan"
+msgstr "ཐུར་ཁེན་ཐན"
+
+msgid "Tunisia"
+msgstr "ཐུ་ནི་སི་ཡ"
+
+msgid "Tonga"
+msgstr "ཐོང་ག"
+
+msgid "Turkey"
+msgstr "ཐར་ཀི་ཡ"
+
+msgid "Trinidad and Tobago"
+msgstr "ཐི་རིནི་དེ་དང་ཐོ་བོ་གོ"
+
+msgid "Tuvalu"
+msgstr "ཐུ་བལུ"
+
+msgid "Taiwan"
+msgstr "ཐའི་ཝན"
+
+msgid "Tanzania"
+msgstr "ཐན་ཟི་ནི་ཡ"
+
+msgid "Ukraine"
+msgstr "ཡུ་ཀྲེན"
+
+msgid "Uganda"
+msgstr "ཡུ་གནི་ཌ"
+
+msgid "United States Minor Outlying Islands"
+msgstr "རྒྱ་མཚོའི་མཐའི་རྒྱལ་ཁབ"
+
+msgid "United States"
+msgstr "རྒྱ་མཚོའི་རྒྱལ་ཁབ"
+
+msgid "Uruguay"
+msgstr "ཡུ་རུ་གུ་ཡ"
+
+msgid "Uzbekistan"
+msgstr "ཡུ་ཟབེ་ཀི་ཐན"
+
+msgid "Vatican"
+msgstr "ཝེ་ཌི་ཀན"
+
+msgid "Saint Vincent and the Grenadines"
+msgstr "ཤེན་བིན་ཐེན་ཌ་དང་གྲེན་ཨེ་ཌིནས"
+
+msgid "Venezuela"
+msgstr "བེན་ཐེ་ཌུ་ལ"
+
+msgid "Virgin Islands"
+msgstr "ཝར་ཇིན་གྱི་གླིང་ཚོ"
+
+msgid "Vietnam"
+msgstr "བི་ཎམ"
+
+msgid "Vanuatu"
+msgstr "བ་ནུ་ཊུ"
+
+msgid "Wallis and Futuna"
+msgstr "ཝལིས་དང་ཕུ་ཊུན"
+
+msgid "Samoa"
+msgstr "ས་མོ་ཨེ"
+
+msgid "Kosovo"
+msgstr "ཀོ་སོ་བོ"
+
+msgid "Yemen"
+msgstr "ཡེ་མེན"
+
+msgid "Mayotte"
+msgstr "མའི་ཡོཊེ"
+
+msgid "Unknown"
+msgstr "མི་ཤེས་པ"
+
+msgid "South Africa"
+msgstr "ལྷོ་ཨོ་ཕྲི་ཀ"
+
+msgid "Zambia"
+msgstr "ཛམ་བི་ཡ"
+
+msgid "Zimbabwe"
+msgstr "ཛིམ་བཱ་བེ་ཨེ"

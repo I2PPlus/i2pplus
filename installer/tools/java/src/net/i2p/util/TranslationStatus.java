@@ -48,7 +48,7 @@ public class TranslationStatus {
                                             "susidns.war", "susimail.war" };
 
     // Java lang codes, see notes below
-    private static final String[] LANGS = { "ar", "az", "cs", "da", "de", "el", "es", "et", "fa", "fi", "fr",
+    private static final String[] LANGS = { "ar", "az", "bo", "cs", "da", "de", "el", "es", "et", "fa", "fi", "fr",
                                             "hi", "hu", "in", "it", "ja", "ko", "nb", "nl", "pl", "pt", "ro",
                                             "ru", "sl", "sv", "tr", "uk", "vi", "zh" };
 /**

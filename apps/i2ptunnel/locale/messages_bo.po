@@ -1,0 +1,1566 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: bo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "internal"
+msgstr "ནང་གི་སྒྲིག་བཀོད"
+
+#, java-format
+msgid "{0} inbound, {0} outbound tunnel"
+msgid_plural "{0} inbound, {0} outbound tunnels"
+msgstr[0] "{0} ཕྱི་ནས་འཛུལ་བའི་སྒྲོམ་ལམ། {0} ཕྱི་ལ་འགྲོ་བའི་སྒྲོམ་ལམ"
+msgstr[1] "{0} ཕྱི་ནས་འཛུལ་བའི་སྒྲོམ་ལམ། {0} ཕྱི་ལ་འགྲོ་བའི་སྒྲོམ་ལམ"
+
+#, java-format
+msgid "{0} inbound tunnel"
+msgid_plural "{0} inbound tunnels"
+msgstr[0] "{0} ཕྱི་ནས་འཛུལ་བའི་སྒྲོམ་ལམ"
+msgstr[1] "{0} ཕྱི་ནས་འཛུལ་བའི་སྒྲོམ་ལམ"
+
+#, java-format
+msgid "{0} outbound tunnel"
+msgid_plural "{0} outbound tunnels"
+msgstr[0] "{0} ཕྱི་ལ་འགྲོ་བའི་སྒྲོམ་ལམ"
+msgstr[1] "{0} ཕྱི་ལ་འགྲོ་བའི་སྒྲོམ་ལམ"
+
+msgid "lower bandwidth and reliability"
+msgstr "བྱང་ཆུབ་ཉུང་བ་དང་བརྟེན་ནུས་ཉུང་བ"
+
+msgid "standard bandwidth and reliability"
+msgstr "བྱང་ཆུབ་དང་བརྟེན་ནུས་ཀྱི་རྒྱུན་གོ"
+
+msgid "higher bandwidth and reliability"
+msgstr "བྱང་ཆུབ་མང་བ་དང་བརྟེན་ནུས་མང་བ"
+
+msgid "Error - tunnels are not initialized yet"
+msgstr "འཆོར་བ། སྒྲོམ་ལམ་འདི་གདན་འཛུགས་བྱས་མེད།"
+
+msgid "No services configured, cannot restart!"
+msgstr "ཞབས་ཞུ་སྒྲིག་བཀོད་བྱས་མེད། བསྐྱར་རྒྱུ་མི་ཐུབ།"
+
+msgid "Stopping tunnel"
+msgstr "སྒྲོམ་ལམ་བརྒྱབ་བཞིན་པ།"
+
+msgid "Starting tunnel"
+msgstr "སྒྲོམ་ལམ་འགོ་ཚུགས་བཞིན་པ།"
+
+msgid "Error restarting tunnel"
+msgstr "སྒྲོམ་ལམ་བསྐྱར་འགོ་ཚུགས་པའི་འཆོར་བ།"
+
+msgid "Restarted all running tunnels"
+msgstr "སྒྲོམ་ལམ་ཚང་མ་བསྐྱར་འགོ་ཚུགས་པ།"
+
+msgid "No clients configured, cannot restart!"
+msgstr "སྒྲིག་བཀོད་བྱས་པའི་སྤྱོད་མཁན་མེད། བསྐྱར་འགོ་ཚུགས་མི་ཐུབ།"
+
+msgid "Restarted all running client tunnels"
+msgstr "སྒྲོམ་ལམ་སྤྱོད་མཁན་ཚང་མ་བསྐྱར་འགོ་ཚུགས་པ།"
+
+msgid "Configuration reloaded for all tunnels"
+msgstr "སྒྲོམ་ལམ་ཚང་མའི་སྒྲིག་བཀོད་ཡང་བསྐྱར་འཇོག་པ།"
+
+msgid "Error: Invalid tunnel"
+msgstr "འཆོར་བ། སྒྲོམ་ལམ་ནོར་བ།"
+
+msgid "Started tunnel"
+msgstr "སྒྲོམ་ལམ་འགོ་ཚུགས་པ།"
+
+msgid "Stopped tunnel"
+msgstr "སྒྲོམ་ལམ་བརྒྱབ་པ།"
+
+msgid "Restarting tunnel"
+msgstr "སྒྲོམ་ལམ་བསྐྱར་འགོ་ཚུགས་བཞིན་པ།"
+
+msgid "Please confirm removal"
+msgstr "བཟོ་འདོར་བགྱི་མཐར་གཏན་འཁེལ་བྱོས།"
+
+msgid "New Tunnel"
+msgstr "སྒྲོམ་ལམ་གསར་པ།"
+
+msgid "Port not set"
+msgstr "ཐོར་ནུབ་བཙུགས་མེད།"
+
+msgid "Invalid port"
+msgstr "ཐོར་ནུབ་ནོར་བ།"
+
+msgid "Warning - ports less than 1024 are not recommended"
+msgstr "ཨོ་སྐུལ། - 1024 ནས་ཆུང་བའི་ཐོར་ནུབ་བཟོ་རྒྱུ་མི་འོས།"
+
+msgid "Warning - duplicate port"
+msgstr "ཨོ་སྐུལ། - ཐོར་ནུབ་ཡང་དག་བཟོས་པ།"
+
+msgid "Standard client"
+msgstr "རྒྱུན་གོའི་སྤྱོད་མཁན།"
+
+msgid "HTTP/HTTPS client"
+msgstr "HTTP/HTTPS སྤྱོད་མཁན།"
+
+msgid "IRC client"
+msgstr "IRC སྤྱོད་མཁན།"
+
+msgid "Standard server"
+msgstr "རྒྱུན་གོའི་སེར་བེར།"
+
+msgid "HTTP server"
+msgstr "HTTP སེར་བེར།"
+
+msgid "SOCKS 4/4a/5 proxy"
+msgstr "SOCKS 4/4a/5 སྦྱོང་བཞག"
+
+msgid "SOCKS IRC proxy"
+msgstr "SOCKS IRC སྦྱོང་བཞག"
+
+msgid "CONNECT/SSL/HTTPS proxy"
+msgstr "CONNECT/SSL/HTTPS སྦྱོང་བཞག"
+
+msgid "IRC server"
+msgstr "IRC སེར་བེར།"
+
+msgid "Streamr client"
+msgstr "Streamr སྤྱོད་མཁན།"
+
+msgid "Streamr server"
+msgstr "Streamr སེར་བེར།"
+
+msgid "HTTP bidir"
+msgstr "HTTP དུ་མཇུག་"
+
+msgid "Host not set"
+msgstr "མིང་སྒྲིག་བཀོད་བྱས་མེད།"
+
+msgid "Invalid address"
+msgstr "ཐོབ་ཐང་ནོར་བ།"
+
+msgid "Tunnel Manager"
+msgstr "སྒྲོམ་ལམ་དོ་དམ།"
+
+msgid "Edit Client Tunnel"
+msgstr "སྤྱོད་མཁན་སྒྲོམ་ལམ་གསར་བཅོས།"
+
+msgid "Edit Server Tunnel"
+msgstr "སེར་བེར་སྒྲོམ་ལམ་གསར་བཅོས།"
+
+msgid "Are you sure you want to delete?"
+msgstr "བཟོ་འདོར་བགྱི་རེད་ནམ་མེད་ནམ་གཏན་འཁེལ་བྱོས།"
+
+msgid "required"
+msgstr "དགོས་པ།"
+
+msgid "Tunnel and all other shared client tunnels must be stopped to change this configuration"
+msgstr "སྒྲོམ་ལམ་དང་གཞན་དག་སྤྱོད་མཁན་སྒྲོམ་ལམ་ཚང་མ་བརྒྱབ་དགོས་པ་འདིའི་སྒྲིག་བཀོད་བཅོས་རྒྱུར་བཅོས་དགོས།"
+
+msgid "Tunnel must be stopped to change this configuration"
+msgstr "སྒྲོམ་ལམ་བརྒྱབ་དགོས་པ་འདིའི་སྒྲིག་བཀོད་བཅོས་རྒྱུར་བཅོས་དགོས།"
+
+msgid "Configuration"
+msgstr "སྒྲིག་བཀོད།"
+
+msgid "New Client Configuration"
+msgstr "སྤྱོད་མཁན་སྒྲིག་བཀོད་གསར་པ།"
+
+msgid "Name"
+msgstr "མིང་།"
+
+msgid "Auto Start Tunnel"
+msgstr "རྒྱུན་དུ་འགོ་ཚུགས་པའི་སྒྲོམ་ལམ།"
+
+msgid "Name of tunnel to be displayed on Tunnel Manager home page and the router console sidebar"
+msgstr "སྒྲོམ་ལམ་དོ་དམ་གི་རྟེན་གློག་ངོས་དང་བྷོ་ཌ་ཀོན་སོལ་གི་སྟེང་གི་སྒྲོམ་ལམ་གྱི་མིང་།"
+
+msgid "Enable this option to ensure this service is available when the router starts"
+msgstr "བྷོ་ཌ་འགོ་ཚུགས་པའི་ཚེ་ཞབས་ཞུ་འདི་བརྟེན་ནུས་བྱེད་པར་འདི་གདན་འཛུགས་བྱོས།"
+
+msgid "Automatically start tunnel when router starts"
+msgstr "བྷོ་ཌ་འགོ་ཚུགས་པའི་ཚེ་རྒྱུན་དུ་སྒྲོམ་ལམ་འགོ་ཚུགས་པ།"
+
+msgid "Description"
+msgstr "བསྡུས་ཚིགས།"
+
+msgid "Shared Client"
+msgstr "སྤྱོད་མཁན་གཞན་དག་གི་སྒྲིག་བཀོད།"
+
+msgid "Description of tunnel to be displayed on Tunnel Manager home page"
+msgstr "སྒྲོམ་ལམ་དོ་དམ་གི་རྟེན་གློག་ངོས་སུ་སྒྲོམ་ལམ་གྱི་བསྡུས་ཚིགས།"
+
+msgid "Traffic from all clients with this feature enabled will be routed over the same set of tunnels. This will make profiling the tunnels by an adversary more difficult, but will link the clients together."
+msgstr "འདིའི་ནུས་པ་བཟུང་བའི་སྤྱོད་མཁན་ཚང་མའི་འགྲོ་འདྲི་ཞིག་གི་སྒྲོམ་ལམ་དུ་འགྲོ་བར་བཅོས་པ་དང་། དགྲ་བོ་སྒྲོམ་ལམ་གྱི་རིགས་བཟོ་བར་དཀའ་བར་བཅོས་ཀྱི་ཡོད་པ་དང་། སྤྱོད་མཁན་ཚང་མ་དུ་འབྲེལ་བར་བཅོས་ཀྱི་ཡོད།"
+
+msgid "Share tunnels with other configured clients"
+msgstr "གཞན་དག་སྒྲིག་བཀོད་བྱས་པའི་སྤྱོད་མཁན་དང་སྒྲོམ་ལམ་གཞན་དག་གི་སྒྲིག་བཀོད་བྱོས།"
+
+msgid "Target"
+msgstr "དམིགས་ཡུལ།"
+
+msgid "Access Point"
+msgstr "འཛུལ་མཁན་གནས།"
+
+msgid "Use Outproxy Plugin"
+msgstr "ཕྱི་གཞིས་སྦྱོང་བཞག་གི་བཀག་སྒྲིག"
+
+msgid "Enable DCC"
+msgstr "DCC བཟོ་རྒྱུ་བྱོས།"
+
+msgid "Port"
+msgstr "ཐོར་ནུབ།"
+
+msgid "Specify the local port this service should be accessible from"
+msgstr "ཞབས་ཞུ་འདི་སྤྱོད་རྒྱུའི་ཐོར་ནུབ་བཙུགས་བྱོས།"
+
+msgid "Host"
+msgstr "མིང་།"
+
+msgid "Hostname or IP address of the target server"
+msgstr "དམིགས་ཡུལ་གྱི་སེར་བེར་གི་མིང་དང་ཐོབ་ཐང་།"
+
+msgid "Reachable by"
+msgstr "འཛུལ་ཐུབ་པའི་ཐོབ་ཐང་།"
+
+msgid "Local interface (ip address) the client tunnel will be reachable from"
+msgstr "སྤྱོད་མཁན་སྒྲོམ་ལམ་གྱི་ཐོབ་ཐང་དང་འཛུལ་ཐུབ་པའི་ཐོབ་ཐང་།"
+
+msgid "If an outproxy plugin is installed (e.g. Orchid), use this instead of any configured outproxies to access websites outside of I2P"
+msgstr "ཕྱི་གཞིས་སྦྱོང་བཞག་གི་བཀག་སྒྲིག་བཟོ་རྒྱུ་ཡོད་ན། (དཔེར་ན། ཨོ་རྒྱི་ཌི།) I2P ནས་ཕྱི་གཞིས་གཞན་དག་བཟོ་རྒྱུ་མི་བྱེད་པར་འདི་བཟོ་རྒྱུ་བྱོས།"
+
+msgid "Use plugin instead of proxies listed below if available"
+msgstr "གཞན་དག་སྦྱོང་བཞག་གི་བཀག་སྒྲིག་བཟོ་རྒྱུ་ཡོད་ན་འདི་བཟོ་རྒྱུ་བྱོས།"
+
+msgid "Enables direct chat and file transfers, bypassing I2P. Note that this will compromise your anonymity and is not recommended."
+msgstr "I2P ནས་ཕྱི་གཞིས་མི་བྱེད་པར་ཞུགས་པའི་ཤོག་འདོན་དང་ཡིག་ཆ་འདོན་པ་བཟོ་རྒྱུ་བྱོས། འདི་བཟོ་རྒྱུ་ཁྱོད་ཀྱི་མིང་གཞིར་བཟོ་བར་བཅོས་ཀྱི་ཡོད་པ་དང་བཟོ་རྒྱུ་མི་འོས་པ་ཡིན།"
+
+msgid "Enable Direct Client-to-Client protocol"
+msgstr "སྤྱོད་མཁན་ནས་སྤྱོད་མཁན་དུ་ཞུགས་པའི་གཞིར་བཟོ་རྒྱུ་བྱོས།"
+
+msgid "Outproxies"
+msgstr "ཕྱི་གཞིས་སྦྱོང་བཞག"
+
+msgid "SSL Outproxies"
+msgstr "SSL ཕྱི་གཞིས་སྦྱོང་བཞག"
+
+msgid "Specify the .i2p address or destination (b32 or b64) of the outproxy here."
+msgstr "ཕྱི་གཞིས་གི་ཐོབ་ཐང་(.i2p) དང་བྱེད་འདྲི་བ32 ཡང་ན་བ64 བཙུགས་བྱོས།"
+
+msgid "For a random selection from a pool, separate with commas e.g. server1.i2p,server2.i2p"
+msgstr "ཚོར་བཞག་ནས་ཨོ་མ་བཟོ་རྒྱུར་བརྟག་ནས་བརྒྱན་བྱོས། དཔེར་ན། server1.i2p,server2.i2p"
+
+msgid "Outproxy Type"
+msgstr "ཕྱི་གཞིས་གི་རིགས།"
+
+msgid "Tunnel Destination"
+msgstr "སྒྲོམ་ལམ་གི་བྱེད་འདྲི།"
+
+msgid "Use SSL"
+msgstr "SSL བཟོ་རྒྱུ་བྱོས།"
+
+msgid "Specify the .i2p address or destination (b32 or b64) of the tunnel here."
+msgstr "སྒྲོམ་ལམ་གི་ཐོབ་ཐང་(.i2p) དང་བྱེད་འདྲི་བ32 ཡང་ན་བ64 བཙུགས་བྱོས།"
+
+msgid "name, name:port, or destination"
+msgstr "མིང་། མིང་:ཐོར་ནུབ། ཡང་ན་བྱེད་འདྲི།"
+
+msgid "If you are accessing a service on a remote I2P router, you may wish to connect with SSL to avoid traffic interception. The client application should be also be configured to use SSL."
+msgstr "ཕྱི་གཞིས་ཀྱི་I2P བྷོ་ཌ་ནས་ཞབས་ཞུ་བཟོ་རྒྱུ་ཡོད་ན། SSL བཟོ་རྒྱུ་ནས་འགྲོ་འདྲི་བཙན་བཟོ་བར་བཅོས་པ་དང་སྤྱོད་མཁན་གཞིར་ཡང་SSL བཟོ་རྒྱུ་བྱོས།"
+
+msgid "Clients use SSL to connect to tunnel"
+msgstr "སྤྱོད་མཁན་SSL བཟོ་ནས་སྒྲོམ་ལམ་དུ་འགྲོ་བར་བཅོས་པ།"
+
+msgid "Please specify the full b64 destination."
+msgstr "བ64 གི་བྱེད་འདྲི་ཡང་དག་བཙུགས་བྱོས།"
+
+msgid "Local destination"
+msgstr "ནང་གི་བྱེད་འདྲི།"
+
+msgid "Local Base32"
+msgstr "ནང་གི་བ32"
+
+msgid "Read Only: Local Destination (if known)"
+msgstr "ཀློག་པ་ཙམ། ནང་གི་བྱེད་འདྲི། (ཡོད་ན།)"
+
+msgid "Stop"
+msgstr "བརྒྱབ་པ།"
+
+msgid "Start this Tunnel"
+msgstr "སྒྲོམ་ལམ་འགོ་ཚུགས་པ།"
+
+msgid "Start"
+msgstr "འགོ་ཚུགས་པ།"
+
+msgid "Cancel"
+msgstr "བཟོ་འདོར་བ།"
+
+msgid "Delete this tunnel (cannot be undone)"
+msgstr "སྒྲོམ་ལམ་བཟོ་འདོར་བ། (མེད་པར་བཟོ་མི་ཐུབ།)"
+
+msgid "Delete"
+msgstr "བཟོ་འདོར་བ།"
+
+msgid "Save"
+msgstr "བུད་པ།"
+
+msgid "Advanced networking options"
+msgstr "དེ་བཞིན་དུ་དྲོ་བཟོ་གཞིར་བཟོ་རྒྱུ།"
+
+msgid "Note: When this client is configured to share tunnels, these options apply to all clients configured to share tunnels."
+msgstr "ཨོ་སྐུལ། སྤྱོད་མཁན་འདི་སྒྲོམ་ལམ་གཞན་དག་བཟོ་རྒྱུར་སྒྲིག་བཀོད་བྱས་པ་ཡོད་ན། དེ་དག་སྒྲོམ་ལམ་གཞན་དག་བཟོ་རྒྱུར་སྒྲིག་བཀོད་བྱས་པ་དང་འབྲེལ་བ་ཡོད་པ་དེ་དག་གི་ནུས་པ་བཟུང་བྱེད་ཀྱི་ཡོད།"
+
+msgid "Profile"
+msgstr "མཚོན་རིས།"
+
+msgid "Delay Connect"
+msgstr "འགྲོ་འདྲི་བཟོ་རྒྱུ་དོར་བ།"
+
+msgid "Connection Profile"
+msgstr "འགྲོ་འདྲིའི་མཚོན་རིས།"
+
+msgid "interactive connection"
+msgstr "འགྲོ་འདྲི་བཟོ་རྒྱུ་གསོག་པ།"
+
+msgid "bulk connection (downloads/websites/BT)"
+msgstr "གཞིར་བཟོ་བཟོ་རྒྱུ། (ཕབ་ལེན། རྟེན་གློག། BT)"
+
+msgid "Delay Connection"
+msgstr "འགྲོ་འདྲི་བཟོ་རྒྱུ་དོར་བ།"
+
+msgid "for request/response connections"
+msgstr "རེ་ཁུས་ཊ་ཡང་ན་ལན་འདིའི་འགྲོ་འདྲི་བཟོ་རྒྱུ།"
+
+msgid "Router I2CP Address"
+msgstr "བྷོ་ཌ་I2CP གི་ཐོབ་ཐང་།"
+
+msgid "I2CP Hostname or IP"
+msgstr "I2CP གི་མིང་དང་ཐོབ་ཐང་།"
+
+msgid "I2CP Port Number"
+msgstr "I2CP གི་ཐོར་ནུབ།"
+
+msgid "Delay tunnel open until required"
+msgstr "སྒྲོམ་ལམ་འགོ་ཚུགས་པ་དོར་བ་དགོས་པའི་ཚེ་བར་བཅོས་པ།"
+
+msgid "Signature type"
+msgstr "བྱང་ཆུབ་གཞིར་བཟོ་བའི་རིགས།"
+
+msgid "Conserve resources by only creating tunnels when required"
+msgstr "སྒྲོམ་ལམ་བཟོ་རྒྱུ་དགོས་པའི་ཚེ་བར་བཅོས་པ་ནུས་ཤུགས་བཟོ་རྒྱུ་བྱོས།"
+
+msgid "Don't open tunnel until activity is detected on port"
+msgstr "ཐོར་ནུབ་ནས་འགྲོ་འདྲི་བཟོ་རྒྱུ་རྒྱུན་མེད་པར་སྒྲོམ་ལམ་འགོ་ཚུགས་མི་བྱེད་པ།"
+
+msgid "This is the default, recommended option"
+msgstr "འདི་ནི་རྒྱུན་གོའི་གདན་འཛུགས་བྱེད་པའི་ནུས་པ་ཡིན།"
+
+msgid "Encryption types"
+msgstr "བཀོད་སྒྲིག་བཟོ་བའི་རིགས།"
+
+msgid "Legacy options"
+msgstr "རྒྱུན་གོའི་ནུས་པ།"
+
+msgid "Post Quantum"
+msgstr "ཕོསཊ་ཀ྅ུ་ཨན་ཏམ།"
+
+msgid "Both encryption types"
+msgstr "བཀོད་སྒྲིག་གཞིར་བཟོ་བའི་རིགས་གཉིས་ཀ་བཟོ་རྒྱུ།"
+
+msgid "Tunnel Options"
+msgstr "སྒྲོམ་ལམ་གི་ནུས་པ།"
+
+msgid "Length"
+msgstr "རིང་ཚད།"
+
+msgid "Count"
+msgstr "གྲངས་ཀ།"
+
+msgid "Length of each Tunnel"
+msgstr "སྒྲོམ་ལམ་གཞིར་བཟོ་བའི་རིང་ཚད།"
+
+msgid "0 hop tunnel (no anonymity)"
+msgstr "0 གི་སྒྲོམ་ལམ། (མིང་མེད་པ།)"
+
+msgid "1 hop tunnel (low anonymity)"
+msgstr "1 གི་སྒྲོམ་ལམ། (མིང་ཉུང་བ།)"
+
+msgid "2 hop tunnel (medium anonymity)"
+msgstr "2 གི་སྒྲོམ་ལམ། (མིང་དབུགས་པ།)"
+
+msgid "3 hop tunnel (high anonymity)"
+msgstr "3 གི་སྒྲོམ་ལམ། (མིང་མང་བ།)"
+
+#, java-format
+msgid "{0} hop tunnel"
+msgid_plural "{0} hop tunnel"
+msgstr[0] "{0} གི་སྒྲོམ་ལམ།"
+msgstr[1] "{0} གི་སྒྲོམ་ལམ།"
+
+msgid "Number of Tunnels in Group"
+msgstr "ཚོར་བཞག་ནང་གི་སྒྲོམ་ལམ་གྱི་གྲངས་ཀ།"
+
+msgid "Disabled for 0 hop tunnels"
+msgstr "0 གི་སྒྲོམ་ལམ་ནུས་པ་མེད་པ།"
+
+msgid "Variance"
+msgstr "ཁྱད་པར།"
+
+msgid "Backup Count"
+msgstr "ཕབ་སྐོར་གྲངས་ཀ།"
+
+msgid "Level of Randomization for Tunnel Length"
+msgstr "སྒྲོམ་ལམ་གྱི་རིང་ཚད་གཞིར་བཟོ་བའི་ཁྱད་པར།"
+
+msgid "0 hop variance"
+msgstr "0 གི་ཁྱད་པར།"
+
+msgid "no randomization, consistent performance"
+msgstr "ཁྱད་པར་མེད་པ། དོ་དམ་བཟོ་རྒྱུའི་ནུས་པ་མཚོན་པ།"
+
+msgid "+ 0-1 hop variance"
+msgstr "+ 0-1 གི་ཁྱད་པར།"
+
+msgid "medium randomization, lower performance"
+msgstr "ཁྱད་པར་དབུགས་པ། དོ་དམ་བཟོ་རྒྱུའི་ནུས་པ་ཉུང་བ།"
+
+msgid "+ 0-2 hop variance"
+msgstr "+ 0-2 གི་ཁྱད་པར།"
+
+msgid "high randomization, very low performance"
+msgstr "ཁྱད་པར་མང་བ། དོ་དམ་བཟོ་རྒྱུའི་ནུས་པ་ཉུང་མེད།"
+
+msgid "+/- 0-1 hop variance"
+msgstr "+/- 0-1 གི་ཁྱད་པར།"
+
+msgid "standard randomization, standard performance"
+msgstr "རྒྱུན་གོའི་ཁྱད་པར། རྒྱུན་གོའི་དོ་དམ།"
+
+msgid "+/- 0-2 hop variance"
+msgstr "+/- 0-2 གི་ཁྱད་པར།"
+
+msgid "not recommended"
+msgstr "བཟོ་རྒྱུ་མི་འོས།"
+
+msgid "hop variance"
+msgstr "གཞིར་བཟོ་བའི་ཁྱད་པར།"
+
+msgid "Number of Reserve Tunnels"
+msgstr "སྒྲོམ་ལམ་གཞིར་བཟོ་བའི་གྲངས་ཀ།"
+
+#, java-format
+msgid "{0} backup tunnel"
+msgid_plural "{0} backup tunnels"
+msgstr[0] "{0} སྒྲོམ་ལམ་གཞིར་བཟོ་བ།"
+msgstr[1] "{0} སྒྲོམ་ལམ་གཞིར་བཟོ་བ།"
+
+msgid "no redundancy, no added resource usage"
+msgstr "སྒྲོམ་ལམ་གཞིར་བཟོ་བ་མེད་པ། ནུས་ཤུགས་བཟོ་རྒྱུ་མེད་པ།"
+
+msgid "low redundancy, low resource usage"
+msgstr "སྒྲོམ་ལམ་གཞིར་བཟོ་བ་ཉུང་བ། ནུས་ཤུགས་བཟོ་རྒྱུ་ཉུང་བ།"
+
+msgid "medium redundancy, medium resource usage"
+msgstr "སྒྲོམ་ལམ་གཞིར་བཟོ་བ་དབུགས་པ། ནུས་ཤུགས་བཟོ་རྒྱུ་དབུགས་པ།"
+
+msgid "high redundancy, high resource usage"
+msgstr "སྒྲོམ་ལམ་གཞིར་བཟོ་བ་མང་བ། ནུས་ཤུགས་བཟོ་རྒྱུ་མང་བ།"
+
+msgid "Reduce tunnel quantity"
+msgstr "སྒྲོམ་ལམ་གཞིར་བཟོ་བའི་གྲངས་ཀ་ཉུང་བ།"
+
+msgid "Reduce tunnel count when idle to conserve resources but keep tunnel open (to ensure immediate availability)"
+msgstr "སྒྲོམ་ལམ་གཞིར་བཟོ་བའི་གྲངས་ཀ་ཉུང་བ་ནུས་ཤུགས་བཟོ་རྒྱུ་བྱོས་པ་དང་སྒྲོམ་ལམ་འགོ་ཚུགས་བཞིན་པ། (རྒྱུན་དུ་བཟོ་རྒྱུའི་ནུས་པ་བྱོས་པའི་རྒྱུ།)"
+
+msgid "Reduce tunnel quantity when idle"
+msgstr "སྒྲོམ་ལམ་གཞིར་བཟོ་བའི་གྲངས་ཀ་ཉུང་བ་ནུས་ཤུགས་བཟོ་རྒྱུ་བྱོས་པ།"
+
+msgid "Idle period"
+msgstr "ཉིན་རེའི་བར་ཐག་།"
+
+msgid "Reduced Tunnel Idle Time"
+msgstr "སྒྲོམ་ལམ་གཞིར་བཟོ་བའི་ཉིན་རེའི་བར་ཐག་།"
+
+msgid "Reduced count"
+msgstr "ཉུང་བའི་གྲངས་ཀ།"
+
+msgid "Reduced tunnel count"
+msgstr "སྒྲོམ་ལམ་གཞིར་བཟོ་བའི་ཉུང་བའི་གྲངས་ཀ།"
+
+msgid "Close tunnels when idle"
+msgstr "སྒྲོམ་ལམ་བཟོ་རྒྱུ་མེད་པའི་ཚེ་བརྒྱབ་པ།"
+
+msgid "To conserve resources, close tunnels when not in use"
+msgstr "ནུས་ཤུགས་བཟོ་རྒྱུ་བྱོས་པ་དང་སྒྲོམ་ལམ་བཟོ་རྒྱུ་མེད་པའི་ཚེ་བརྒྱབ་པ།"
+
+msgid "Close client tunnels after specified idle period"
+msgstr "སྒྲོམ་ལམ་གཞིར་བཟོ་བའི་ཉིན་རེའི་བར་ཐག་བཟོ་རྒྱུ་བྱོས་པ་དང་སྒྲོམ་ལམ་བརྒྱབ་པ།"
+
+msgid "Close Tunnel Idle Time"
+msgstr "སྒྲོམ་ལམ་གཞིར་བཟོ་བའི་ཉིན་རེའི་བར་ཐག་།"
+
+msgid "New Keys on Reopen"
+msgstr "བརྒྱབ་པ་ནས་ཡང་བཟོ་རྒྱུའི་གདམ་ག་གསར་པ།"
+
+msgid "Change tunnel identity (destination) when tunnels reopen"
+msgstr "སྒྲོམ་ལམ་ཡང་བཟོ་རྒྱུའི་ཚེ་སྒྲོམ་ལམ་གི་མིང་(བྱེད་འདྲི) བཅོས་པ།"
+
+msgid "Enable"
+msgstr "བཟོ་རྒྱུ་བྱོས།"
+
+msgid "Retain tunnel identity (destination) when tunnels reopen"
+msgstr "སྒྲོམ་ལམ་ཡང་བཟོ་རྒྱུའི་ཚེ་སྒྲོམ་ལམ་གི་མིང་(བྱེད་འདྲི) བཟོ་མི་བྱེད་པ།"
+
+msgid "Disable"
+msgstr "བཟོ་རྒྱུ་མི་བྱོས།"
+
+msgid "Persistent private key"
+msgstr "རྒྱུན་གོའི་གདམ་ག་གཞིར་བཟོ་བ།"
+
+msgid "Private key file"
+msgstr "གདམ་ག་གཞིར་བཟོ་བའི་ཡིག་ཆ།"
+
+msgid "Enabling this feature will ensure your tunnel identity (destination) remains static, for services offering features based on destination e.g. IRC user authentication"
+msgstr "འདིའི་ནུས་པ་བཟོ་རྒྱུ་ཁྱོད་ཀྱི་སྒྲོམ་ལམ་གི་མིང་(བྱེད་འདྲི) རྒྱུན་དུ་བཟོ་རྒྱུ་བྱོས་པ་དང་བྱེད་འདྲི་གཞིར་བཟོ་བའི་ཞབས་ཞུ་བཟོ་རྒྱུར་བཅོས་པ། དཔེར་ན། IRC སྤྱོད་མཁན་གཞིར་བཟོ་བ།"
+
+msgid "Generate key to enable persistent client tunnel identity"
+msgstr "རྒྱུན་གོའི་སྤྱོད་མཁན་སྒྲོམ་ལམ་གི་མིང་བཟོ་རྒྱུར་གདམ་ག་བཟོ་བ།"
+
+msgid "Path to Private Key File"
+msgstr "གདམ་ག་གཞིར་བཟོ་བའི་ཡིག་ཆའི་ལམ་ཐོབ་ཐང་།"
+
+msgid "HTTP Filtering"
+msgstr "HTTP གཞིར་བཟོ་བའི་བརྟག་བཟོ་བ།"
+
+msgid "When enabled, the user agent of your web browser or http client will not be spoofed, potentially reducing your anonymity"
+msgstr "འདིའི་ནུས་པ་བཟོ་རྒྱུ་ཁྱོད་ཀྱི་རྟེན་གློག་བོད་མིང་དང་HTTP སྤྱོད་མཁན་གི་མིང་བཟོ་རྒྱུ་མི་བྱེད་པ་དང་ཁྱོད་ཀྱི་མིང་གཞིར་བཟོ་བའི་ནུས་པ་ཉུང་བར་བཅོས་པ།"
+
+msgid "Do not spoof User-Agent header"
+msgstr "སྤྱོད་མཁན་མིང་གཞིར་བཟོ་བའི་མཚོན་རིས་བཟོ་མི་བྱེད་པ།"
+
+msgid "When enabled, the referer (originating page) of your web requests will not be filtered, potentially reducing your anonymity"
+msgstr "འདིའི་ནུས་པ་བཟོ་རྒྱུ་ཁྱོད་ཀྱི་རྟེན་གློག་བོད་མིང་ནས་འགྲོ་བའི་ཐོབ་ཐང་བཟོ་རྒྱུ་མི་བྱེད་པ་དང་ཁྱོད་ཀྱི་མིང་གཞིར་བཟོ་བའི་ནུས་པ་ཉུང་བར་བཅོས་པ།"
+
+msgid "Do not block Referer header"
+msgstr "ཐོབ་ཐང་གཞིར་བཟོ་བའི་མཚོན་རིས་བཟོ་མི་བྱེད་པ།"
+
+msgid "When enabled, the accept headers (mime types support) broadcast by your web browser will not be filtered, potentially reducing your anonymity"
+msgstr "འདིའི་ནུས་པ་བཟོ་རྒྱུ་ཁྱོད་ཀྱི་རྟེན་གློག་བོད་མིང་གི་བཙན་བཟོ་བའི་མཚོན་རིས་(mime རིགས་བཟོ་བ་) བཟོ་རྒྱུ་མི་བྱེད་པ་དང་ཁྱོད་ཀྱི་མིང་གཞིར་བཟོ་བའི་ནུས་པ་ཉུང་བར་བཅོས་པ།"
+
+msgid "Do not block Accept headers"
+msgstr "བཙན་བཟོ་བའི་མཚོན་རིས་བཟོ་མི་བྱེད་པ།"
+
+msgid "Allow SSL to I2P addresses when enabled"
+msgstr "འདིའི་ནུས་པ་བཟོ་རྒྱུ་I2P གི་ཐོབ་ཐང་ནས་SSL བཟོ་རྒྱུ་བྱོས།"
+
+msgid "Allow SSL to I2P addresses"
+msgstr "I2P གི་ཐོབ་ཐང་ནས་SSL བཟོ་རྒྱུ་བྱོས།"
+
+msgid "Local Authorization"
+msgstr "ནང་གི་གཞིར་བཟོ་བ།"
+
+msgid "Local Credentials"
+msgstr "ནང་གི་བཙན་བཟོ་བའི་གདམ་ག་"
+
+msgid "Enable to require a username and password to access this local service (for example if hosting on a LAN)"
+msgstr "ནང་གི་ཞབས་ཞུ་བཟོ་རྒྱུར་མིང་དང་གདམ་ག་བཟོ་རྒྱུ་བྱོས། (དཔེར་ན། LAN ནས་ཞབས་ཞུ་བཟོ་རྒྱུར་བཅོས་པ།)"
+
+msgid "Require local authorization for this service"
+msgstr "ཞབས་ཞུ་འདིར་ནང་གི་གཞིར་བཟོ་བ་བཟོ་རྒྱུ་བྱོས།"
+
+msgid "Set username required to access this service"
+msgstr "ཞབས་ཞུ་འདིར་བཟོ་རྒྱུའི་མིང་བཙུགས་བྱོས།"
+
+msgid "Username"
+msgstr "མིང་།"
+
+msgid "Set password required to access this service"
+msgstr "ཞབས་ཞུ་འདིར་བཟོ་རྒྱུའི་གདམ་ག་བཙུགས་བྱོས།"
+
+msgid "Password"
+msgstr "གདམ་ག་།"
+
+msgid "Outproxy Authorization"
+msgstr "ཕྱི་གཞིས་གཞིར་བཟོ་བ།"
+
+msgid "Remote Credentials"
+msgstr "ཕྱི་གཞིས་གཞིར་བཟོ་བའི་གདམ་ག་"
+
+msgid "Enable if the outproxy a username and password to access"
+msgstr "ཕྱི་གཞིས་གི་མིང་དང་གདམ་ག་བཟོ་རྒྱུ་ཡོད་ན་བཟོ་རྒྱུ་བྱོས།"
+
+msgid "Outproxy requires authorization"
+msgstr "ཕྱི་གཞིས་གཞིར་བཟོ་བ་བཟོ་རྒྱུ་བྱོས།"
+
+msgid "Enter username required by outproxy"
+msgstr "ཕྱི་གཞིས་གཞིར་བཟོ་བའི་མིང་བཙུགས་བྱོས།"
+
+msgid "Enter password required by outproxy"
+msgstr "ཕྱི་གཞིས་གཞིར་བཟོ་བའི་གདམ་ག་བཙུགས་བྱོས།"
+
+msgid "Jump URL List"
+msgstr "URL གཞིར་བཟོ་བའི་ཚོར་བཞག"
+
+msgid "List of helper URLs providing jump links when a host is not found in your addressbook"
+msgstr "མིང་ཚོར་བཞག་ནས་མིང་མེད་པའི་ཚེ་བརྒྱན་བྱོས་པའི་URL གཞིར་བཟོ་བའི་ཚོར་བཞག"
+
+msgid "Custom options"
+msgstr "གསར་བཅོས་ནུས་པ།"
+
+msgid "Advanced tunnel, streaming, and I2CP options"
+msgstr "སྒྲོམ་ལམ་དེ་བཞིན་དུ་དྲོ་བཟོ་གཞིར་བཟོ་བའི་ནུས་པ།"
+
+msgid "New Server Configuration"
+msgstr "སེར་བེར་གི་སྒྲིག་བཀོད་གསར་པ།"
+
+msgid "Hostname"
+msgstr "མིང་།"
+
+msgid "Website Hostname"
+msgstr "རྟེན་གློག་གི་མིང་།"
+
+msgid "(leave blank for outproxies)"
+msgstr "(ཕྱི་གཞིས་གཞིར་བཟོ་བར་ཐོག་མ་བཙུགས་མི་བྱེད་པ།)"
+
+msgid "Website Hostname e.g. mysite.i2p"
+msgstr "རྟེན་གློག་གི་མིང་། དཔེར་ན། mysite.i2p"
+
+msgid "Specify the port the server is running on"
+msgstr "སེར་བེར་གི་ཐོར་ནུབ་བཙུགས་བྱོས།"
+
+msgid "Listening interface (IP address) for client access (normally 127.0.0.1)"
+msgstr "སྤྱོད་མཁན་གཞིར་བཟོ་བའི་ཐོབ་ཐང་(IP) བཙུགས་བྱོས། (རྒྱུན་གོའི་ཐོབ་ཐང་ནི་127.0.0.1)"
+
+msgid "To avoid traffic sniffing if connecting to a remote server, you can enable an SSL connection. Note that the target server must be configured to accept SSL connections."
+msgstr "ཕྱི་གཞིས་ཀྱི་སེར་བེར་ནས་ཞབས་ཞུ་བཟོ་རྒྱུར་འགྲོ་འདྲི་བཙན་བཟོ་བར་བཅོས་པ་དང་SSL བཟོ་རྒྱུ་བྱོས། དཔེར་ན། དམིགས་ཡུལ་གྱི་སེར་བེར་SSL བཟོ་རྒྱུར་སྒྲིག་བཀོད་བྱས་པ་དང་འབྲེལ་བ་ཡོད་པ་བྱོས།"
+
+msgid "Use SSL to connect to target"
+msgstr "དམིགས་ཡུལ་དུ་འགྲོ་བར་SSL བཟོ་རྒྱུ་བྱོས།"
+
+msgid "Port required to access service (this can be a different port to the port the service is hosted on)"
+msgstr "ཞབས་ཞུ་བཟོ་རྒྱུའི་ཐོར་ནུབ་བཙུགས་བྱོས། (ཞབས་ཞུ་བཟོ་རྒྱུའི་ཐོར་ནུབ་ཡང་ན་ཞབས་ཞུ་བཟོ་རྒྱུའི་ཐོར་ནུབ་ཡང་ན་མི་མཚོན་བྱོས།)"
+
+msgid "Generate a QR Code for this domain"
+msgstr "འདིའི་ཁྱབ་ཁོངས་ལ་QR ཀོ་ཌ་བཟོ་བ།"
+
+msgid "Generate QR Code"
+msgstr "QR ཀོ་ཌ་བཟོ་བ།"
+
+msgid "Add to Private addressbook"
+msgstr "མིང་ཚོར་བཞག་ནང་གཞིར་བཟོ་བ།"
+
+msgid "Add to local addressbook"
+msgstr "ནང་གི་མིང་ཚོར་བཞག་ནང་གཞིར་བཟོ་བ།"
+
+msgid "Register, unregister or change details for hostname"
+msgstr "མིང་གི་རྒྱུན་གོ་བཟོ་བ། འདོར་བ། ཡང་ན་བཅོས་པ།"
+
+msgid "Registration Authentication"
+msgstr "རྒྱུན་གོའི་གཞིར་བཟོ་བ།"
+
+msgid "HTTPS configuration"
+msgstr "HTTPS གི་སྒྲིག་བཀོད།"
+
+msgid "SSL Wizard"
+msgstr "SSL གཞིར་བཟོ་བའི་བཀག་སྒྲིག"
+
+msgid "Note: In order to enable QR code generation or registration authentication, configure the Website Hostname field (for websites) or the Name field (everything else) above with an .i2p suffixed hostname e.g. mynewserver.i2p"
+msgstr "ཨོ་སྐུལ། QR ཀོ་ཌ་བཟོ་བ་དང་རྒྱུན་གོའི་གཞིར་བཟོ་བ་བཟོ་རྒྱུར་རྟེན་གློག་གི་མིང་ཚོར་བཞག་ནང་གི་མིང་དང་ཡང་ན་ཞིབ་བཤེར་གཞིར་བཟོ་བའི་མིང་བཙུགས་བྱོས། དཔེར་ན། mynewserver.i2p"
+
+msgid "Absolute path to Private Key File (will be created if it does not exist)"
+msgstr "གདམ་ག་གཞིར་བཟོ་བའི་ཡིག་ཆའི་ལམ་ཐོབ་ཐང་། (མེད་ན་བཟོ་བ།)"
+
+msgid "Alternate private key file"
+msgstr "གདམ་ག་གཞིར་བཟོ་བའི་ཡིག་ཆ་གཞན་དག"
+
+msgid "Alternate local destination"
+msgstr "ནང་གི་བྱེད་འདྲི་གཞན་དག"
+
+msgid "Absolute path for new key (will be created)"
+msgstr "གདམ་ག་གཞིར་བཟོ་བའི་ལམ་ཐོབ་ཐང་། (བཟོ་བ།)"
+
+msgid "Read Only: Alternate Local Destination"
+msgstr "ཀློག་པ་ཙམ། ནང་གི་བྱེད་འདྲི་གཞན་དག"
+
+msgid "Specify filename or full path for new key"
+msgstr "གདམ་ག་གཞིར་བཟོ་བའི་ཡིག་ཆའི་མིང་དང་ལམ་ཐོབ་ཐང་བཙུགས་བྱོས།"
+
+msgid "Configuration cannot be changed after destination is created"
+msgstr "བྱེད་འདྲི་བཟོ་རྒྱུར་སྒྲིག་བཀོད་བཅོས་མི་ཐུབ།"
+
+msgid "Configuration of signature type is only possible when the tunnel is first created. To change, you must create a new tunnel."
+msgstr "བྱང་ཆུབ་གཞིར་བཟོ་བའི་སྒྲིག་བཀོད་བཟོ་རྒྱུ་སྒྲོམ་ལམ་བཟོ་རྒྱུའི་ཚེ་བར་བཅོས་པ། བཅོས་རྒྱུར་སྒྲོམ་ལམ་གསར་པ་བཟོ་བྱོས།"
+
+msgid "Legacy option, with alternate key configured"
+msgstr "རྒྱུན་གོའི་ནུས་པ་དང་གདམ་ག་གཞིར་བཟོ་བའི་ཡིག་ཆ་གཞན་དག་བཟོ་རྒྱུ་བྱོས།"
+
+msgid "Legacy option (deprecated), provided for backward compatibility"
+msgstr "རྒྱུན་གོའི་ནུས་པ་(བཟོ་རྒྱུ་མི་འོས)། ནུས་པ་རྒྱུན་དུ་བཟོ་རྒྱུར་བཅོས་པ།"
+
+msgid "Recommended for blinded and encrypted destinations"
+msgstr "བྱེད་འདྲི་གཞིར་བཟོ་བའི་དེ་དག་བཟོ་རྒྱུར་བཅོས་པ།"
+
+msgid "Inbound"
+msgstr "ཕྱི་ནས་འཛུལ་བ།"
+
+msgid "Outbound"
+msgstr "ཕྱི་ལ་འགྲོ་བ།"
+
+msgid "no anonymity"
+msgstr "མིང་མེད་པ།"
+
+msgid "low anonymity"
+msgstr "མིང་ཉུང་བ།"
+
+msgid "medium anonymity"
+msgstr "མིང་དབུགས་པ།"
+
+msgid "high anonymity"
+msgstr "མིང་མང་བ།"
+
+msgid "Level of Randomization for Tunnel Depth"
+msgstr "སྒྲོམ་ལམ་གཞིར་བཟོ་བའི་ཁྱད་པར།"
+
+msgid "very high randomization, very low performance"
+msgstr "ཁྱད་པར་མང་མེད་པ། དོ་དམ་བཟོ་རྒྱུའི་ནུས་པ་ཉུང་མེད།"
+
+msgid "+ 0-3 hop variance"
+msgstr "+ 0-3 གི་ཁྱད་པར།"
+
+msgid "definitely not recommended"
+msgstr "བཟོ་རྒྱུ་མི་འོས།"
+
+msgid "+/- 0-3 hop variance"
+msgstr "+/- 0-3 གི་ཁྱད་པར།"
+
+msgid "backup tunnels"
+msgstr "སྒྲོམ་ལམ་གཞིར་བཟོ་བ།"
+
+msgid "Reduce tunnels to conserve resources"
+msgstr "སྒྲོམ་ལམ་གཞིར་བཟོ་བའི་གྲངས་ཀ་ཉུང་བ་ནུས་ཤུགས་བཟོ་རྒྱུ་བྱོས་པ།"
+
+msgid "Period of inactivity before tunnel number is reduced"
+msgstr "སྒྲོམ་ལམ་གཞིར་བཟོ་བའི་གྲངས་ཀ་ཉུང་བའི་ཉིན་རེའི་བར་ཐག་།"
+msgid "minutes"
+msgstr "སྐར་མ"
+
+msgid "Number of tunnels to keep open to maintain availability of service"
+msgstr "བརྟན་པོར་ཞབས་ཞུ་བྱེད་པའི་ཕྱོན་པའི་གྲངས་བཟོ་བ"
+
+msgid "Server Access Options"
+msgstr "མཁས་པའི་འགྲོལ་སྒྲིག་རྒྱུགས་གཞི"
+
+msgid "Prevent clients from accessing this service via an inproxy"
+msgstr "ནང་གི་བརྒྱུད་རྒྱུགས་ཀྱིས་ཞབས་ཞུ་བྱེད་པར་སྐྱོན་བྱེད་པ"
+
+msgid "Block Access via Inproxies"
+msgstr "ནང་གི་བརྒྱུད་རྒྱུགས་ཀྱིས་འགྲོལ་བྱེད་པ"
+
+msgid "Block Accesses containing Referers"
+msgstr "མཇུག་ཏུ་འགྲོལ་བྱེད་པ་བཞེངས་པའི་འགྲོལ་བྱེད་པ"
+
+msgid "Use unique IP addresses for each connecting client (local non-SSL servers only)"
+msgstr "མཐུད་རྒྱུགས་བྱེད་པའི་སྤྱི་ཨང་དུས་གཅིག་གི་སྤྱི་ཨང་སྤྱོད་པ། (ནང་གི་ཨི་ཨེས་ཨེལ་མཁས་པ་ཙམ་ལུགས་ཡོད)"
+
+msgid "Unique Local Address per Client"
+msgstr "མཐུད་རྒྱུགས་བྱེད་པའི་གཅིག་གི་ནང་གི་སྤྱི་ཨང"
+
+msgid "Only enable if you are hosting this service on multiple routers"
+msgstr "ཁྱོད་ཀྱིས་མཁས་པ་འདི་མཉམ་དུ་བྲུ་ཐོག་གི་མཁས་པ་གཙོ་བོར་བྱེད་ན་གཙང་གི་བཟོ་བ"
+
+msgid "Optimize for Multihoming"
+msgstr "མཉམ་དུ་བྲུ་ཐོག་གི་གཙང་གི་བཟོ་བ"
+
+msgid "Deny User-Agents matching these strings (probably from inproxies)"
+msgstr "བཤུས་པའི་སྤྱི་ཨང་བཞེངས་པའི་མཐུད་རྒྱུགས་བྱེད་པ་སྤྱོད་པའི་རྒྱུགས་གཞི་བརྫི་བ"
+
+msgid "Block these User-Agents"
+msgstr "བཤུས་པའི་སྤྱི་ཨང་བཞེངས་པའི་མཐུད་རྒྱུགས་བྱེད་པ་བརྫི་བ"
+
+msgid "comma separated, e.g. Mozilla,Opera (case-sensitive)"
+msgstr "ཚིག་ཆ་བརྒྱུད་ནས་བྲི་བ། དཔེར་ན། Mozilla,Opera (ཚིག་ཆ་སྤྱོད་པའི་རིམ་གཞི)"
+
+msgid "Encrypt Leaseset"
+msgstr "ལི་ཤི་སེཊ་གསང་བཤིལ་བཟོ་བ"
+
+msgid "Optional Lookup Password"
+msgstr "གཙང་གི་བཟོ་བ་བརྟེན་པའི་སྒོར་ཚིག"
+
+msgid "Keyring Manager"
+msgstr "གསང་ཐོ་བཟོ་བའི་མཁས་པ་འཛིན་པ"
+
+msgid "Allow all clients to connect to this service"
+msgstr "མཐུད་རྒྱུགས་བྱེད་པ་ཐམས་ཅད་མེན་པའི་ཞབས་ཞུ་བྱེད་པ"
+
+msgid "Send key to all users."
+msgstr "གསང་ཐོ་ཐམས་ཅད་མཐུད་རྒྱུགས་བྱེད་པར་བཏགས་པ"
+
+msgid "Encrypted"
+msgstr "གསང་བཤིལ་བཟོ་བ"
+
+msgid "Prevents server discovery by floodfills"
+msgstr "མཁས་པ་འདི་ཞིག་གི་གློག་བརྒྱུད་པར་སྐྱོན་བྱེད་པ"
+
+msgid "Blinded"
+msgstr "བརྩི་བཤིལ་བཟོ་བ"
+
+msgid "Send password to all users."
+msgstr "སྒོར་ཚིག་ཐམས་ཅད་མཐུད་རྒྱུགས་བྱེད་པར་བཏགས་པ"
+
+msgid "Blinded with lookup password"
+msgstr "གཙང་གི་བཟོ་བ་བརྟེན་པའི་བརྩི་བཤིལ་བཟོ་བ"
+
+msgid "Send key and password to all users."
+msgstr "གསང་ཐོ་དང་སྒོར་ཚིག་ཐམས་ཅད་མཐུད་རྒྱུགས་བྱེད་པར་བཏགས་པ"
+
+msgid "Encrypted with lookup password"
+msgstr "གཙང་གི་བཟོ་བ་བརྟེན་པའི་གསང་བཤིལ་བཟོ་བ"
+
+msgid "Encrypted with lookup password and per-user key"
+msgstr "གཙང་གི་བཟོ་བ་དང་མཐུད་རྒྱུགས་བྱེད་པའི་གསང་ཐོ་བརྟེན་པའི་གསང་བཤིལ་བཟོ་བ"
+
+msgid "Enter key from each user."
+msgstr "མཐུད་རྒྱུགས་བྱེད་པ་གཅིག་གི་གསང་ཐོ་བཙུགས་པ"
+
+msgid "Encryption Key"
+msgstr "གསང་བཤིལ་བཟོ་བའི་གསང་ཐོ"
+
+msgid "Generate New Key"
+msgstr "གསང་ཐོ་གསར་པ་བཟོ་བ"
+
+msgid "Encryption key required to access this service"
+msgstr "ཞབས་ཞུ་བྱེད་པའི་གསང་ཐོ་བཤེར་བ"
+
+msgid "Generate new encryption key"
+msgstr "གསང་ཐོ་གསར་པ་བཟོ་བ"
+
+msgid "Generate"
+msgstr "བཟོ་བ"
+
+msgid "Tunnel must be stopped first"
+msgstr "ཕྱོན་པ་མཐོང་ནས་བརྩི་བཞག་དགོས"
+
+msgid "Client Manager"
+msgstr "མཐུད་རྒྱུགས་བྱེད་པའི་མཁས་པ་འཛིན་པ"
+
+msgid "Client Name"
+msgstr "མཐུད་རྒྱུགས་བྱེད་པའི་མིང་"
+
+msgid "Client Key"
+msgstr "མཐུད་རྒྱུགས་བྱེད་པའི་གསང་ཐོ"
+
+msgid "Revoke"
+msgstr "བརྩི་བཞག་པ"
+
+msgid "Client"
+msgstr "མཐུད་རྒྱུགས་བྱེད་པ"
+
+msgid "Add"
+msgstr "སྣོན་པ"
+
+msgid "Restricted Access List"
+msgstr "ཞབས་ཞུ་བྱེད་པའི་ཚོགས་སྒྲིག་རྒྱུགས་གཞི"
+
+msgid "Activate to enable editing"
+msgstr "བཟོ་བ་བརྟེན་ནས་གཙང་གི་བཟོ་བ"
+
+msgid "Tunnel Filter"
+msgstr "ཕྱོན་པའི་བརྒྱུད་རྒྱུགས"
+
+msgid "Help with defining tunnel filters"
+msgstr "ཕྱོན་པའི་བརྒྱུད་རྒྱུགས་བཟོ་བའི་རིམ་གཞིའི་རྒྱུགས་གཞི"
+
+msgid "Prevent listed clients from connecting to this service"
+msgstr "ཞབས་ཞུ་བྱེད་པའི་ཚོགས་སྒྲིག་བཞེངས་པའི་མཐུད་རྒྱུགས་བྱེད་པ་སྐྱོན་བྱེད་པ"
+
+msgid "Blacklist"
+msgstr "མི་ཞབས་ཞུ་བྱེད་པའི་ཚོགས་སྒྲིག"
+
+msgid "Only allow listed clients to connect to this service"
+msgstr "ཞབས་ཞུ་བྱེད་པའི་ཚོགས་སྒྲིག་བཞེངས་པའི་མཐུད་རྒྱུགས་བྱེད་པ་ཙམ་ལུགས་ཡོད"
+
+msgid "Whitelist"
+msgstr "ཞབས་ཞུ་བྱེད་པའི་ཚོགས་སྒྲིག"
+
+msgid "Absolute path to file containing filter definition"
+msgstr "བརྒྱུད་རྒྱུགས་བཟོ་བའི་ཡིག་ཆའི་གཞི་གོང་གི་ཐོག་མའི་གནས་གཞི"
+
+msgid "Absolute path to filter definition"
+msgstr "བརྒྱུད་རྒྱུགས་བཟོ་བའི་གནས་གཞི"
+
+msgid "Specify client destinations, 1 per line"
+msgstr "མཐུད་རྒྱུགས་བྱེད་པའི་མཇུག་བརྒྱུད་རྒྱུགས་བཟོ་བ། ཤོག་གཅིག་གི་མཇུག་བརྒྱུད་རྒྱུགས་བཟོ་བ"
+
+msgid "Server Throttling"
+msgstr "མཁས་པའི་ཐོག་མའི་རྒྱུགས་གཞི"
+
+msgid "Inbound connection limits"
+msgstr "ནང་གི་མཐུད་རྒྱུགས་བྱེད་པའི་གྲངས་བཟོ་བ"
+
+msgid "Per Minute"
+msgstr "སྐར་མ་གཅིག་གི་ནང་"
+
+msgid "Per Hour"
+msgstr "རིང་གཅིག་གི་ནང་"
+
+msgid "Per Day"
+msgstr "ཉིན་གཅིག་གི་ནང་"
+
+msgid "Concurrent"
+msgstr "གཅིག་སྐབས་སུ་མཐུད་རྒྱུགས་བྱེད་པ"
+
+msgid "Per Client"
+msgstr "མཐུད་རྒྱུགས་བྱེད་པའི་གཅིག་གི་ནང་"
+
+msgid "Maximum number of web page requests per minute for a unique client before access to the server is blocked"
+msgstr "མཁས་པ་ཞིག་གི་ཞབས་ཞུ་བྱེད་པ་བརྩི་བཞག་པའི་སྐར་མ་གཅིག་གི་ནང་གི་ཞིག་གི་མཐུད་རྒྱུགས་བྱེད་པའི་གྲངས་བཟོ་བ"
+
+msgid "(0 = unlimited)"
+msgstr "(0 = གྲངས་མེད་པ)"
+
+msgid "Maximum number of web page requests per hour for a unique client before access to the server is blocked"
+msgstr "མཁས་པ་ཞིག་གི་ཞབས་ཞུ་བྱེད་པ་བརྩི་བཞག་པའི་རིང་གཅིག་གི་ནང་གི་ཞིག་གི་མཐུད་རྒྱུགས་བྱེད་པའི་གྲངས་བཟོ་བ"
+
+msgid "Maximum number of web page requests per day for a unique client before access to the server is blocked"
+msgstr "མཁས་པ་ཞིག་གི་ཞབས་ཞུ་བྱེད་པ་བརྩི་བཞག་པའི་ཉིན་གཅིག་གི་ནང་གི་ཞིག་གི་མཐུད་རྒྱུགས་བྱེད་པའི་གྲངས་བཟོ་བ"
+
+msgid "Total"
+msgstr "ཐོག་མའི་གྲངས"
+
+msgid "Total number of web page requests per minute before access to the server is blocked"
+msgstr "མཁས་པ་ཞིག་གི་ཞབས་ཞུ་བྱེད་པ་བརྩི་བཞག་པའི་སྐར་མ་གཅིག་གི་ནང་གི་ཐོག་མའི་མཐུད་རྒྱུགས་བྱེད་པའི་གྲངས"
+
+msgid "Total number of web page requests per hour before access to the server is blocked"
+msgstr "མཁས་པ་ཞིག་གི་ཞབས་ཞུ་བྱེད་པ་བརྩི་བཞག་པའི་རིང་གཅིག་གི་ནང་གི་ཐོག་མའི་མཐུད་རྒྱུགས་བྱེད་པའི་གྲངས"
+
+msgid "Total number of web page requests per day before access to the server is blocked"
+msgstr "མཁས་པ་ཞིག་གི་ཞབས་ཞུ་བྱེད་པ་བརྩི་བཞག་པའི་ཉིན་གཅིག་གི་ནང་གི་ཐོག་མའི་མཐུད་རྒྱུགས་བྱེད་པའི་གྲངས"
+
+msgid "Maximum number of simultaneous client connections"
+msgstr "གཅིག་སྐབས་སུ་མཐུད་རྒྱུགས་བྱེད་པའི་གྲངས་བཟོ་བ"
+
+msgid "POST limits"
+msgstr "པོསཊ་གྲངས་བཟོ་བ"
+
+msgid "Per Period"
+msgstr "ཚེག་གཅིག་གི་ནང་"
+
+msgid "Ban Duration"
+msgstr "བརྩི་བཞག་པའི་རིང་བཟོ་བ"
+
+msgid "POST limit period"
+msgstr "པོསཊ་གྲངས་བཟོ་བའི་ཚེག"
+
+msgid "Maximum number of post requests permitted for a unique client for the configured timespan"
+msgstr "ཚེག་གཅིག་གི་ནང་གི་ཞིག་གི་མཐུད་རྒྱུགས་བྱེད་པའི་གྲངས་བཟོ་བ"
+
+msgid "If a client exceeds the maximum number of post requests per allocated period, enforce a ban for this number of minutes"
+msgstr "ཚེག་གཅིག་གི་ནང་གི་ཞིག་གི་མཐུད་རྒྱུགས་བྱེད་པའི་གྲངས་བཟོ་བ་བརྩི་བཞག་ན་སྐར་མ་གཅིག་གི་ནང་གི་བརྩི་བཞག་པ"
+
+msgid "Timespan for the maximum number of post requests to be reached before a ban is triggered"
+msgstr "བརྩི་བཞག་པའི་ཚེག་གཅིག་གི་ནང་གི་ཞིག་གི་མཐུད་རྒྱུགས་བྱེད་པའི་གྲངས་བཟོ་བ"
+
+msgid "Total number of post requests permitted for the configured timespan"
+msgstr "ཚེག་གཅིག་གི་ནང་གི་ཐོག་མའི་མཐུད་རྒྱུགས་བྱེད་པའི་གྲངས"
+
+msgid "If the maximum number of post requests per allocated period is exceeded, enforce a global access ban for this number of minutes"
+msgstr "ཚེག་གཅིག་གི་ནང་གི་ཞིག་གི་མཐུད་རྒྱུགས་བྱེད་པའི་གྲངས་བཟོ་བ་བརྩི་བཞག་ན་ཐོག་མའི་ཞབས་ཞུ་བྱེད་པའི་སྐར་མ་གཅིག་གི་ནང་གི་བརྩི་བཞག་པ"
+
+msgid "Custom HTTP Headers"
+msgstr "རྒྱུགས་གཞིའི་ཨེ་ཨེ་ཐེ་པི་མཇུག་བརྒྱུད་རྒྱུགས"
+
+msgid "Note: These custom headers will only be enabled for served files that don't have the relevant header already set."
+msgstr "རྒྱུགས་གཞི：རྒྱུགས་གཞིའི་མཇུག་བརྒྱུད་རྒྱུགས་བཟོ་བ་བཞེངས་པའི་ཡིག་ཆ་ཙམ་ལུགས་ཡོད"
+
+msgid "Set the Allow header to 'GET, POST, HEAD' for html, xml, json and text files"
+msgstr "html, xml, json དང་ཡིག་ཆ་དུམ་བཞེངས་པའི་འཆད་མཇུག་བརྒྱུད་རྒྱུགས་བཟོ་བ། 'GET, POST, HEAD'"
+
+msgid "Allow"
+msgstr "ལུགས་ཡོད"
+
+msgid "Enable Cache-Control headers (no-cache for html, xml, json and text, immutable for everything else)"
+msgstr "མེམ་དབང་འབྱུང་བའི་མཇུག་བརྒྱུད་རྒྱུགས་བཟོ་བ (html, xml, json དང་ཡིག་ཆ་དུམ་བཞེངས་པའི་མེམ་དབང་འབྱུང་བ། ཐམས་ཅད་མེན་པའི་གཞི་བཞེངས་པའི་མེམ་དབང་འབྱུང་བ)"
+
+msgid "Cache-Control"
+msgstr "མེམ་དབང་འབྱུང་བ"
+
+msgid "Set the Referrer-Policy header to 'same-origin' for html, xml, json and text files"
+msgstr "html, xml, json དང་ཡིག་ཆ་དུམ་བཞེངས་པའི་མཇུག་བརྒྱུད་རྒྱུགས་བཟོ་བ། 'same-origin'"
+
+msgid "Referrer-Policy"
+msgstr "མཇུག་ཏུ་འགྲོལ་བྱེད་པའི་རྒྱུགས་གཞི"
+
+msgid "Set the X-Content-Type-Options header to 'nosniff'"
+msgstr "X-Content-Type-Options མཇུག་བརྒྱུད་རྒྱུགས་བཟོ་བ། 'nosniff'"
+
+msgid "X-Content-Type-Options"
+msgstr "X-Content-Type-Options"
+
+#, java-format
+msgid "Initializing Tunnel Manager{0}"
+msgstr "ཕྱོན་པའི་མཁས་པ་འཛིན་པ་གཙང་བཟོ་བ{0}"
+
+msgid "Tunnels not initialized yet; please retry in a few moments."
+msgstr "ཕྱོན་པ་གཙང་བཟོ་བ་མེད། སྐར་མ་གཅིག་གི་ནང་བསྐྱར་བཟོ་བ"
+
+msgid "Status Messages"
+msgstr "རྒྱུགས་གཞིའི་བརྗོད་པ"
+
+msgid "Clear"
+msgstr "བཟོ་བ"
+
+msgid "Refresh"
+msgstr "བསྐྱར་བཟོ་བ"
+
+msgid "Global Tunnel Control"
+msgstr "ཐོག་མའི་ཕྱོན་པའི་འགྲོལ་བྱེད་པ"
+
+msgid "Tunnel Wizard"
+msgstr "ཕྱོན་པའི་མཁས་པ་བཟོ་བ"
+
+msgid "Stop All"
+msgstr "ཐམས་ཅད་བརྩི་བཞག་པ"
+
+msgid "Start All"
+msgstr "ཐམས་ཅད་མཐོང་ནས་བཟོ་བ"
+
+msgid "Restart all running tunnels"
+msgstr "མཐོང་ནས་བཟོ་བའི་ཕྱོན་པ་ཐམས་ཅད་བསྐྱར་བཟོ་བ"
+
+msgid "Restart All"
+msgstr "ཐམས་ཅད་བསྐྱར་བཟོ་བ"
+
+msgid "Restart all running server tunnels"
+msgstr "མཐོང་ནས་བཟོ་བའི་མཁས་པའི་ཕྱོན་པ་ཐམས་ཅད་བསྐྱར་བཟོ་བ"
+
+msgid "Restart All Servers"
+msgstr "མཁས་པ་ཐམས་ཅད་བསྐྱར་བཟོ་བ"
+
+msgid "Restart all running client tunnels"
+msgstr "མཐོང་ནས་བཟོ་བའི་མཐུད་རྒྱུགས་བྱེད་པའི་ཕྱོན་པ་ཐམས་ཅད་བསྐྱར་བཟོ་བ"
+
+msgid "Restart All Clients"
+msgstr "མཐུད་རྒྱུགས་བྱེད་པ་ཐམས་ཅད་བསྐྱར་བཟོ་བ"
+
+msgid "I2P Server Tunnels"
+msgstr "I2P མཁས་པའི་ཕྱོན་པ"
+
+msgid "Helper"
+msgstr "རྒྱུགས་གཞི"
+
+msgid "Type"
+msgstr "རིགས"
+
+msgid "Points at"
+msgstr "མཇུག་ཏུ་བརྒྱུད་རྒྱུགས"
+
+msgid "Preview"
+msgstr "མཇུག་ཏུ་བཟོ་བ"
+
+msgid "Status"
+msgstr "རྒྱུགས་གཞི"
+
+msgid "Control"
+msgstr "འགྲོལ་བྱེད་པ"
+
+msgid "Edit Server Tunnel Settings for"
+msgstr "མཁས་པའི་ཕྱོན་པའི་སྒྲིག་རྒྱུགས་བཟོ་བ"
+
+msgid "Test IRC server, bypassing I2P"
+msgstr "IRC མཁས་པ་བརྒྱུད་རྒྱུགས་བཟོ་བ། I2P བརྒྱུད་ནས་བཟོ་བ"
+
+msgid "Test HTTPS server, bypassing I2P"
+msgstr "HTTPS མཁས་པ་བརྒྱུད་རྒྱུགས་བཟོ་བ། I2P བརྒྱུད་ནས་བཟོ་བ"
+
+msgid "Test HTTP server, bypassing I2P"
+msgstr "HTTP མཁས་པ་བརྒྱུད་རྒྱུགས་བཟོ་བ། I2P བརྒྱུད་ནས་བཟོ་བ"
+
+msgid "Test HTTP server through I2P"
+msgstr "HTTP མཁས་པ་བརྒྱུད་རྒྱུགས་བཟོ་བ། I2P བརྒྱུད་ནས་བཟོ་བ"
+
+msgid "Base32 Address"
+msgstr "Base32 སྤྱི་ཨང"
+
+msgid "Offline"
+msgstr "མེད་པ"
+
+msgid "No Preview"
+msgstr "མཇུག་ཏུ་བཟོ་བ་མེད"
+
+msgid "Starting..."
+msgstr "མཐོང་ནས་བཟོ་བ..."
+
+msgid "Stop this Tunnel"
+msgstr "ཕྱོན་པ་འདི་བརྩི་བཞག་པ"
+
+msgid "Running"
+msgstr "མཐོང་ནས་བཟོ་བ"
+
+msgid "Hops"
+msgstr "བརྒྱུད་རྒྱུགས"
+
+msgid "in"
+msgstr "ནང་"
+
+msgid "out"
+msgstr "ཕྱིར"
+
+msgid "Restart this Tunnel"
+msgstr "ཕྱོན་པ་འདི་བསྐྱར་བཟོ་བ"
+
+msgid "Restart"
+msgstr "བསྐྱར་བཟོ་བ"
+
+msgid "Stopped"
+msgstr "བརྩི་བཞག་པ"
+
+msgid "Destination"
+msgstr "མཇུག་བརྒྱུད་རྒྱུགས"
+
+msgid "Signature"
+msgstr "མཐུད་རྒྱུགས་བྱེད་པའི་མིང་"
+
+msgid "Alternate"
+msgstr "མཇུག་བརྒྱུད་རྒྱུགས་བཞེངས་པ"
+
+msgid "Alt Destination"
+msgstr "མཇུག་བརྒྱུད་རྒྱུགས་བཞེངས་པ"
+
+msgid "Encryption"
+msgstr "གསང་བཤིལ་བཟོ་བ"
+
+msgid "Supported encryption"
+msgstr "གསང་བཤིལ་བཟོ་བའི་རྒྱུགས་གཞི"
+
+msgid "New server tunnel"
+msgstr "མཁས་པའི་ཕྱོན་པ་གསར་པ"
+
+msgid "Standard"
+msgstr "རྒྱུགས་གཞི"
+
+msgid "Create"
+msgstr "བཟོ་བ"
+
+msgid "I2P Client Tunnels"
+msgstr "I2P མཐུད་རྒྱུགས་བྱེད་པའི་ཕྱོན་པ"
+
+msgid "Interface"
+msgstr "རྒྱུགས་གཞི"
+
+msgid "Edit Tunnel Settings for"
+msgstr "ཕྱོན་པའི་སྒྲིག་རྒྱུགས་བཟོ་བ"
+
+msgid "Standby"
+msgstr "བརྟེན་ནས་བཟོ་བ"
+
+msgid "Outproxy"
+msgstr "ཕྱི་གི་བརྒྱུད་རྒྱུགས"
+
+msgid "internal plugin"
+msgstr "ནང་གི་རྒྱུགས་གཞི"
+
+msgid "none"
+msgstr "མེད་པ"
+
+msgid "New client tunnel"
+msgstr "མཐུད་རྒྱུགས་བྱེད་པའི་ཕྱོན་པ་གསར་པ"
+
+msgid "Registration Helper"
+msgstr "ཐོ་བཟོ་བའི་རྒྱུགས་གཞི"
+
+msgid "This service uses encrypted leasesets. Registration is not recommended. Registration authentication is disabled."
+msgstr "ཞབས་ཞུ་བྱེད་པ་འདི་གསང་བཤིལ་བཟོ་བའི་ལི་ཤི་སེཊ་བཟོ་བ། ཐོ་བཟོ་བ་མེན་པ། ཐོ་བཟོ་བའི་རྒྱུགས་གཞི་བརྩི་བཞག་པ"
+
+msgid "Please be sure to select, copy, and paste the entire contents of the appropriate authentication data into the form of your favorite registration site"
+msgstr "རྒྱུགས་གཞིའི་ཡིག་ཆ་གཙོ་བོར་བཟོ་བའི་རྒྱུགས་གཞིའི་ཡིག་ཆ་ཐོག་མའི་གནས་གཞིར་བཙུགས་པ"
+
+msgid "Tunnel name"
+msgstr "ཕྱོན་པའི་མིང་"
+
+msgid "Website name"
+msgstr "དྲ་བའི་མིང་"
+
+msgid "Local Destination"
+msgstr "ནང་གི་མཇུག་བརྒྱུད་རྒྱུགས"
+
+msgid "Local destination is not available. Start the tunnel."
+msgstr "ནང་གི་མཇུག་བརྒྱུད་རྒྱུགས་མེད། ཕྱོན་པ་མཐོང་ནས་བཟོ་བ"
+
+msgid "To enable registration verification, edit tunnel and set name (or website name) to a valid host name ending in '.i2p'"
+msgstr "ཐོ་བཟོ་བའི་རྒྱུགས་གཞི་བཟོ་བའི་ཕྱོན་པའི་མིང་(ཡང་ན་དྲ་བའི་མིང་)བཟོ་བའི་རྒྱུགས་གཞིའི་མིང་བཞེངས་པའི་གཞི་བཞེངས་པ། '.i2p' བརྒྱུད་ནས་བཟོ་བ"
+
+msgid "To enable registration verification, edit tunnel and set name to a valid host name ending in '.i2p'"
+msgstr "ཐོ་བཟོ་བའི་རྒྱུགས་གཞི་བཟོ་བའི་ཕྱོན་པའི་མིང་བཟོ་བའི་རྒྱུགས་གཞིའི་མིང་བཞེངས་པའི་གཞི་བཞེངས་པ། '.i2p' བརྒྱུད་ནས་བཟོ་བ"
+
+msgid "Destination signing key is not available. Start the tunnel."
+msgstr "མཇུག་བརྒྱུད་རྒྱུགས་བྱེད་པའི་གསང་ཐོ་མེད། ཕྱོན་པ་མཐོང་ནས་བཟོ་བ"
+
+msgid "Destination signing key is offline. Use CLI tools on the offline machine."
+msgstr "མཇུག་བརྒྱུད་རྒྱུགས་བྱེད་པའི་གསང་ཐོ་མེད་པ། CLI རྒྱུགས་གཞི་བཟོ་བའི་རྒྱུགས་གཞིའི་རྒྱུགས་གཞི་བཟོ་བ"
+
+#, java-format
+msgid "Authentication for adding host {0}"
+msgstr "{0}གི་མཐུད་རྒྱུགས་བྱེད་པའི་རྒྱུགས་གཞི"
+
+msgid "Copy and paste this to the registration site"
+msgstr "ཐོ་བཟོ་བའི་དྲ་བར་བཙུགས་པ"
+
+msgid "Advanced authentication strings"
+msgstr "རྒྱུགས་གཞིའི་རྒྱུགས་གཞི་བཞེངས་པ"
+
+#, java-format
+msgid "Authentication for removing host {0}"
+msgstr "{0}གི་མཐུད་རྒྱུགས་བྱེད་པའི་རྒྱུགས་གཞི"
+
+msgid "Authentication for changing name"
+msgstr "མིང་བརྗེ་བའི་རྒྱུགས་གཞི"
+
+#, java-format
+msgid "This will change the name from {0} to {1}, using the same destination"
+msgstr "མཇུག་བརྒྱུད་རྒྱུགས་གཅིག་བཟོ་བའི་མིང་{0}ནས་{1}བར་བརྗེ་བ"
+
+msgid "This tunnel must be configured with the new host name."
+msgstr "ཕྱོན་པ་འདི་མཐུད་རྒྱུགས་བྱེད་པའི་མིང་གསར་པ་བཟོ་བ"
+
+msgid "Enter old hostname below."
+msgstr "གོང་གི་མཐུད་རྒྱུགས་བྱེད་པའི་མིང་བཙུགས་པ"
+
+msgid "Authentication for adding alias"
+msgstr "མཐུད་རྒྱུགས་བྱེད་པའི་མིང་བཞེངས་པའི་རྒྱུགས་གཞི"
+
+#, java-format
+msgid "This will add an alias {0} for {1}, using the same destination"
+msgstr "མཇུག་བརྒྱུད་རྒྱུགས་གཅིག་བཟོ་བའི་མིང་{1}གི་མཐུད་རྒྱུགས་བྱེད་པའི་མིང་{0}བཟོ་བ"
+
+msgid "Authentication for changing destination"
+msgstr "མཇུག་བརྒྱུད་རྒྱུགས་བརྗེ་བའི་རྒྱུགས་གཞི"
+
+#, java-format
+msgid "This will change the destination for {0}"
+msgstr "{0}གི་མཇུག་བརྒྱུད་རྒྱུགས་བརྗེ་བ"
+
+msgid "This tunnel must be configured with the new destination."
+msgstr "ཕྱོན་པ་འདི་མཇུག་བརྒྱུད་རྒྱུགས་གསར་པ་བཟོ་བ"
+
+msgid "Enter old destination below."
+msgstr "གོང་གི་མཇུག་བརྒྱུད་རྒྱུགས་བཙུགས་པ"
+
+msgid "Authentication for adding alternate destination"
+msgstr "མཇུག་བརྒྱུད་རྒྱུགས་བཞེངས་པའི་རྒྱུགས་གཞི"
+
+#, java-format
+msgid "This will add an alternate destination for {0}"
+msgstr "{0}གི་མཇུག་བརྒྱུད་རྒྱུགས་བཞེངས་པ"
+
+msgid "Authentication for adding subdomain"
+msgstr "བཞེངས་པའི་མཐུད་རྒྱུགས་བྱེད་པའི་རྒྱུགས་གཞི"
+
+#, java-format
+msgid "This will add a subdomain {0} of {1}, with a different destination"
+msgstr "{1}གི་བཞེངས་པའི་མཐུད་རྒྱུགས་བྱེད་པ་{0}བཟོ་བ། མཇུག་བརྒྱུད་རྒྱུགས་མེན་པའི་གཞི"
+
+msgid "This tunnel must be configured with the new subdomain and destination."
+msgstr "ཕྱོན་པ་འདི་བཞེངས་པའི་མཐུད་རྒྱུགས་བྱེད་པ་དང་མཇུག་བརྒྱུད་རྒྱུགས་གསར་པ་བཟོ་བ"
+
+msgid "Enter higher-level domain and destination below."
+msgstr "མཐོ་བའི་མཐུད་རྒྱུགས་བྱེད་པ་དང་མཇུག་བརྒྱུད་རྒྱུགས་བཙུགས་པ"
+
+msgid "Return to Tunnel Configuration"
+msgstr "ཕྱོན་པའི་སྒྲིག་རྒྱུགས་བཟོ་བ"
+
+msgid "Specify old name and destination"
+msgstr "གོང་གི་མིང་དང་མཇུག་བརྒྱུད་རྒྱུགས་བཟོ་བ"
+
+msgid "This is only required for advanced authentication."
+msgstr "རྒྱུགས་གཞིའི་རྒྱུགས་གཞི་བཞེངས་པ་བཟོ་བ་བཞེངས་པ"
+
+msgid "See above for required items."
+msgstr "རྒྱུགས་གཞིའི་རྒྱུགས་གཞི་བཞེངས་པ་བཟོ་བ་བཞེངས་པ"
+
+msgid "Old / parent hostname "
+msgstr "གོང་གི་མཐུད་རྒྱུགས་བྱེད་པའི་མིང་"
+
+msgid "Private key file for old destination / sub-domain parent"
+msgstr "གོང་གི་མཇུག་བརྒྱུད་རྒྱུགས་དང་བཞེངས་པའི་མཐུད་རྒྱུགས་བྱེད་པའི་གསང་ཐོ་ཡིག་ཆ"
+
+msgid "Generate Authentication"
+msgstr "རྒྱུགས་གཞི་བཟོ་བ"
+
+msgid "SSL Helper"
+msgstr "ཨེས་ཨེས་ཨེལ་རྒྱུགས་གཞི"
+
+msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
+msgstr "ཡིག་ཆ་བཟོ་བ་མེད་པ། དཔེར་ན། དྲ་བའི་'བརྐོལ་བ'ཡང་ན་'བསྐྱར་བཟོ་བ'བཟོ་བ་བཞེངས་པ། བསྐྱར་བཟོ་བ"
+
+msgid "If the problem persists, verify that you have cookies enabled in your browser."
+msgstr "རྒྱུགས་གཞིའི་རྒྱུགས་གཞི་བཞེངས་ན་དྲ་བའི་རྒྱུགས་གཞིའི་རྒྱུགས་གཞི་བཟོ་བ"
+
+msgid "Experts only!"
+msgstr "རྒྱུགས་གཞི་བཞེངས་པ་ཙམ་ལུགས་ཡོད!"
+
+msgid "Base32"
+msgstr "Base32"
+
+msgid "Alt Base32"
+msgstr "མཇུག་བརྒྱུད་རྒྱུགས་བཞེངས་པ Base32"
+
+msgid "Incoming I2P Port Routing"
+msgstr "I2P སྐོར་བརྒྱུད་རྒྱུགས་བཟོ་བ"
+
+msgid "Virtual Host"
+msgstr "རྒྱུགས་གཞིའི་མཐུད་རྒྱུགས་བྱེད་པ"
+
+msgid "Via SSL?"
+msgstr "ཨེས་ཨེས་ཨེལ་བརྒྱུད་ནས་བཟོ་བ?"
+
+msgid "Test HTTPS server through I2P"
+msgstr "HTTPS མཁས་པ་བརྒྱུད་རྒྱུགས་བཟོ་བ། I2P བརྒྱུད་ནས་བཟོ་བ"
+
+msgid "Server"
+msgstr "མཁས་པ"
+
+msgid "SSL Activation"
+msgstr "ཨེས་ཨེས་ཨེལ་བཟོ་བ"
+
+msgid "I2P webserver (eepsite)"
+msgstr "I2P དྲ་མཁས་པ (eepsite)"
+
+msgid "Disable SSL"
+msgstr "ཨེས་ཨེས་ཨེལ་བརྩི་བཞག་པ"
+
+msgid "Enable SSL"
+msgstr "ཨེས་ཨེས་ཨེལ་བཟོ་བ"
+
+msgid "New Certificate Password"
+msgstr "གསང་ཐོ་གསར་པའི་སྒོར་ཚིག"
+
+msgid "Password (required to encrypt the certificate)"
+msgstr "སྒོར་ཚིག (གསང་བཤིལ་བཟོ་བའི་གསང་ཐོ་བཤེར་བ)"
+
+msgid "Generate new SSL certificate"
+msgstr "ཨེས་ཨེས་ཨེལ་གསང་ཐོ་གསར་པ་བཟོ་བ"
+
+msgid "Generate SSL certificate and enable"
+msgstr "ཨེས་ཨེས་ཨེལ་གསང་ཐོ་བཟོ་བ་དང་བཟོ་བ"
+
+#, java-format
+msgid "Cannot configure, no Jetty server found in {0}client configurations{1} that matches this tunnel"
+msgstr "སྒྲིག་རྒྱུགས་བཟོ་བ་མེད། {0}མཐུད་རྒྱུགས་བྱེད་པའི་སྒྲིག་རྒྱུགས{1}ནང་ཕྱོན་པ་འདི་བཞེངས་པའི་ཨེ་ཊི་ཊེ་མཁས་པ་མེད"
+
+msgid "Support for non-Jetty servers will be added in a future release"
+msgstr "ཨེ་ཊི་ཊེ་མེན་པའི་མཁས་པ་བཟོ་བའི་རྒྱུགས་གཞི་བཞེངས་པའི་བཟོ་བ"
+
+msgid "Return to Tunnel Manager Index"
+msgstr "ཕྱོན་པའི་མཁས་པ་འཛིན་པའི་རྒྱུགས་གཞི་བཟོ་བ"
+
+msgid "Return to Tunnel Editor"
+msgstr "ཕྱོན་པའི་མཁས་པ་བཟོ་བའི་རྒྱུགས་གཞི་བཟོ་བ"
+
+msgid "I2P Tunnel Manager - Tunnel Creation Wizard"
+msgstr "I2P ཕྱོན་པའི་མཁས་པ་འཛིན་པ - ཕྱོན་པ་བཟོ་བའི་མཁས་པ"
+
+msgid "Server or client tunnel?"
+msgstr "མཁས་པ་ཡང་ན་མཐུད་རྒྱུགས་བྱེད་པའི་ཕྱོན་པ?"
+
+msgid "Tunnel type"
+msgstr "ཕྱོན་པའི་རིགས"
+
+msgid "Tunnel name and description"
+msgstr "ཕྱོན་པའི་མིང་དང་བརྗོད་པ"
+
+msgid "Tunnel destination"
+msgstr "ཕྱོན་པའི་མཇུག་བརྒྱུད་རྒྱུགས"
+
+msgid "Binding address and port"
+msgstr "སྤྱི་ཨང་དང་སྐོར་བརྒྱུད་རྒྱུགས"
+
+msgid "Tunnel auto-start"
+msgstr "ཕྱོན་པ་རང་བཞིན་གི་མཐོང་ནས་བཟོ་བ"
+
+msgid "Wizard completed"
+msgstr "མཁས་པ་བཟོ་བ་བཞེངས་པ"
+
+msgid "This wizard will take you through the various options available for creating tunnels in I2P."
+msgstr "I2P ནང་གི་ཕྱོན་པ་བཟོ་བའི་རྒྱུགས་གཞི་བཞེངས་པའི་མཁས་པ་བཟོ་བ"
+
+msgid "The first thing to decide is whether you want to create a server or a client tunnel."
+msgstr "མཐོང་ནས་བཟོ་བའི་ཕྱོན་པ་ཡང་ན་མཐུད་རྒྱུགས་བྱེད་པའི་ཕྱོན་པ་བཟོ་བ་བཞེངས་པ"
+
+msgid "If you need to connect to a remote service, such as an IRC server inside I2P or a code repository, then you will require a CLIENT tunnel."
+msgstr "I2P ནང་གི་IRC མཁས་པ་ཡང་ན་བྲི་བའི་གཞི་བཟོ་བ་བཞེངས་ན་མཐུད་རྒྱུགས་བྱེད་པའི་ཕྱོན་པ་བཟོ་བ"
+
+msgid "On the other hand, if you wish to host a service for others to connect to you'll need to create a SERVER tunnel."
+msgstr "གཞན་པའི་མཐུད་རྒྱུགས་བྱེད་པའི་ཞབས་ཞུ་བྱེད་པ་བཟོ་བ་བཞེངས་ན་མཁས་པའི་ཕྱོན་པ་བཟོ་བ"
+
+msgid "Server Tunnel"
+msgstr "མཁས་པའི་ཕྱོན་པ"
+
+msgid "Client Tunnel"
+msgstr "མཐུད་རྒྱུགས་བྱེད་པའི་ཕྱོན་པ"
+
+msgid "There are several types of tunnels to choose from:"
+msgstr "ཕྱོན་པ་བཟོ་བའི་རིགས་བཞེངས་པ"
+
+msgid "Basic tunnel for connecting to a single service inside I2P."
+msgstr "I2P ནང་གི་ཞབས་ཞུ་བྱེད་པ་གཅིག་བཟོ་བའི་ཕྱོན་པ"
+
+msgid "Try this if none of the tunnel types below fit your requirements, or you don't know what type of tunnel you need."
+msgstr "ཕྱོན་པའི་རིགས་བཞེངས་པའི་གཞི་བཞེངས་པ་མེད་ན་ཡང་ན་ཕྱོན་པ་གཞི་བཞེངས་པ་མེད་ན་བཟོ་བ"
+
+msgid "Tunnel that acts as an HTTP proxy for reaching eepsites inside I2P."
+msgstr "I2P ནང་གི་དྲ་བ་བཟོ་བའི་ཨེ་ཨེ་ཐེ་པི་བརྒྱུད་རྒྱུགས་བཟོ་བ"
+
+msgid "Set your browser to use this tunnel as an http proxy, or set your \"http_proxy\" environment variable for command-line applications in GNU/Linux."
+msgstr "དྲ་བའི་རྒྱུགས་གཞི་བཟོ་བའི་ཨེ་ཨེ་ཐེ་པི་བརྒྱུད་རྒྱུགས་བཟོ་བ། GNU/Linux ནང་གི་བརྒྱུད་རྒྱུགས་བཟོ་བའི་\"http_proxy\"རྒྱུགས་གཞི་བཟོ་བ"
+
+msgid "Websites outside I2P can also be reached if an HTTP proxy within I2P is known."
+msgstr "I2P མེན་པའི་དྲ་བ་བཟོ་བའི་ཨེ་ཨེ་ཐེ་པི་བརྒྱུད་རྒྱུགས་བཟོ་བ"
+
+msgid "Customised client tunnel specific for IRC connections."
+msgstr "IRC བརྒྱུད་རྒྱུགས་བཟོ་བའི་མཐུད་རྒྱུགས་བྱེད་པའི་ཕྱོན་པ"
+
+msgid "With this tunnel type, your IRC client will be able to connect to an IRC network inside I2P."
+msgstr "IRC མཐུད་རྒྱུགས་བྱེད་པ་བཟོ་བའི་ཕྱོན་པའི་རིགས་བཟོ་བའི་IRC བརྒྱུད་རྒྱུགས་བཟོ་བ"
+
+msgid "Each IRC network in I2P that you wish to connect to will require its own tunnel. (See Also, SOCKS IRC)"
+msgstr "I2P ནང་གི་IRC བརྒྱུད་རྒྱུགས་བཟོ་བའི་ཕྱོན་པ་གཅིག་བཟོ་བ་བཞེངས་པ (དཔེར་ན། SOCKS IRC)"
+
+msgid "A tunnel that implements the SOCKS protocol."
+msgstr "SOCKS རྒྱུགས་གཞི་བཟོ་བའི་ཕྱོན་པ"
+
+msgid "This enables both TCP and UDP connections to be made through a SOCKS outproxy within I2P."
+msgstr "I2P ནང་གི་SOCKS ཕྱི་གི་བརྒྱུད་རྒྱུགས་བརྒྱུད་ནས་TCP དང་UDP བརྒྱུད་རྒྱུགས་བཟོ་བ"
+
+msgid "A client tunnel implementing the SOCKS protocol, which is customised for connecting to IRC networks."
+msgstr "SOCKS རྒྱུགས་གཞི་བཟོ་བའི་མཐུད་རྒྱུགས་བྱེད་པའི་ཕྱོན་པ། IRC བརྒྱུད་རྒྱུགས་བཟོ་བའི་རྒྱུགས་གཞི"
+
+msgid "With this tunnel type, IRC networks in I2P can be reached by typing the I2P address into your IRC client, and configuring the IRC client to use this SOCKS tunnel."
+msgstr "I2P ནང་གི་IRC བརྒྱུད་རྒྱུགས་བཟོ་བའི་I2P སྤྱི་ཨང་བཙུགས་ནས་IRC བརྒྱུད་རྒྱུགས་བཟོ་བའི་SOCKS ཕྱོན་པ་བཟོ་བ"
+
+msgid "This means that only one I2P tunnel is required rather than a separate tunnel per IRC network."
+msgstr "IRC བརྒྱུད་རྒྱུགས་གཅིག་བཟོ་བ་བཞེངས་ན་I2P ཕྱོན་པ་གཅིག་བཟོ་བ"
+
+msgid "IRC networks outside I2P can also be reached if a SOCKS outproxy within I2P is known, though it depends on whether or not the outproxy has been blocked by the IRC network."
+msgstr "I2P མེན་པའི་IRC བརྒྱུད་རྒྱུགས་བཟོ་བའི་SOCKS ཕྱི་གི་བརྒྱུད་རྒྱུགས་བཟོ་བ། དེ་ཡང་ཕྱི་གི་བརྒྱུད་རྒྱུགས་IRC བརྒྱུད་རྒྱུགས་བརྩི་བཞག་པ་བཞེངས་པ"
+msgid "A basic server tunnel for hosting a generic service inside I2P."
+msgstr "I2P ནང་གི་ཞབས་ཞུ་བྱེད་པ་བཟོ་བའི་མཁས་པའི་ཕྱོན་པ"
+msgid "A server tunnel that is customised for HTTP connections."
+msgstr "HTTP ཐོབ་ཐང་གི་འདོད་ཚུལ་དུ་བཟོ་བཅོས་བྱས་པའི་སེར་བཟོའི་སྒོ་འཕྱེ་བཞིན་པའི་སྒོ་ཡིན།"
+
+msgid "Use this tunnel type if you want to host an eepsite."
+msgstr "ཁྱོད་ཀྱིས་ཨེ་ཨེ་ཕྱི་སི་ཌི་ཡི་གཙོ་བོ་བྱེད་རྒྱུ་ཡོད་ན་འདི་སྒོ་འདི་སེར་བཟོ་བྱེད་དགོས།"
+
+msgid "A customised server tunnel for hosting IRC networks inside I2P."
+msgstr "I2P ནང་གི་IRC རྒྱུད་ལོའི་གཙོ་བོ་བྱེད་པའི་བཟོ་བཅོས་བྱས་པའི་སེར་བཟོའི་སྒོ་ཡིན།"
+
+msgid "Usually, a separate tunnel needs to be created for each IRC server that is to be accessible inside I2P."
+msgstr "I2P ནང་གི་རྒྱུ་བྱེད་ཆོག་པའི་IRC སེར་བཟོ་ཞིག་རེར་སྒོ་རེ་བཟོ་དགོས་པ་རེད།"
+
+msgid "Select tunnel type"
+msgstr "སྒོའི་རིགས་ཡོད་པར་བཟོ་བར་གདམ།"
+
+msgid "Choose a name and description for your tunnel."
+msgstr "ཁྱོད་ཀྱི་སྒོའི་མིང་དང་བསྡུས་པ་བཟོ་བར་གདམ།"
+
+msgid "These can be anything you want - they are just for ease of identifying the tunnel in the routerconsole."
+msgstr "ཁྱོད་ཀྱིས་འདོད་ཚུལ་གང་ཡང་བཟོ་ཐུབ་པ་རེད། - དེ་རོ་རུ་རོ་ཨུ་ཊེར་ཀོན་སོལ་ནང་གི་སྒོ་ཤེས་བྱེད་པར་གོང་བཟོ་བཞིན་པ་རེད།"
+
+msgid "If you know of any outproxies for this type of tunnel (either HTTP or SOCKS), fill them in below."
+msgstr "ཁྱོད་ཀྱིས་འདི་སྒོའི་རིགས་གཞི་ནས་གཞི་(HTTP འབམ་SOCKS) ཡི་ཨོའུ་ཐོ་པྲོག་ཤི་ཞིག་ཤེས་ན་དེ་གཞི་ནས་གཞི་ཡོད་པར་བཟོ་བར་གདམ།"
+
+msgid "Separate multiple proxies with commas."
+msgstr "མང་པོའི་པྲོག་ཤི་གཞི་ནས་གཞི་ཚུགས་ནུབ་དང་བརྒྱན་བར་གདམ།"
+
+msgid "List of I2P outproxy destinations, separated with commas (e.g. proxy1.i2p,proxy2.i2p)"
+msgstr "I2P ཨོའུ་ཐོ་པྲོག་ཤིའི་འགྲོ་བའི་གནས་ཚུལ་དུ་བཟོ་བ་(དཔེར་ན་ proxy1.i2p,proxy2.i2p) ཚུགས་ནུབ་དང་བརྒྱན་པར་གདམ།"
+
+msgid "Type in the I2P destination of the service that this client tunnel should connect to."
+msgstr "འདི་ཀླའ་ཡེན་ཨིའི་སྒོ་དེ་འགྲོ་རྒྱུའི་I2P གི་འགྲོ་བའི་གནས་བཙུགས་ནུབ་དང་བརྒྱན་པར་གདམ།"
+
+msgid "This could be the full Base64 destination key, or an I2P URL from your address book."
+msgstr "དེ་ནི་ཡོངས་སུ་Base64 གི་འགྲོ་བའི་མདའ་ཡང་ཡོད་པ་དང་ཁྱོད་ཀྱི་འགྱུར་བཤོལ་པའི་ཡིག་ཆ་གཞི་ནས་གཞི་I2P URL ཡང་ཡོད་པ་རེད།"
+
+msgid "Enter a b64 or .i2p address here"
+msgstr "b64 འབམ་.i2p གི་ཡིག་ཆ་འདིར་བཙུགས་ནུབ་དང་བརྒྱན་པར་གདམ།"
+
+msgid "This is the IP that your service is running on, this is usually on the same machine so 127.0.0.1 is autofilled."
+msgstr "ཁྱོད་ཀྱི་ཞབས་ཞུ་བྱེད་པའི་IP ཡིན། དེ་རོ་རུ་རོ་གཅིག་གི་མ་ཤིན་ཏུ་ཡོད་པས་127.0.0.1 ནི་རང་གིས་རང་གི་བཙུགས་པ་ཡིན།"
+
+msgid "This is the port that the service is accepting connections on."
+msgstr "ཞབས་ཞུ་བྱེད་པ་ནི་ཐོབ་ཐང་གི་སྒོ་ཡིན།"
+
+msgid "This is the port that the client tunnel will be accessed from locally."
+msgstr "ཀླའ་ཡེན་སྒོ་ནི་ཁོར་ཡོངས་ནས་འགྲོ་རྒྱུའི་ཐོབ་ཐང་གི་སྒོ་ཡིན།"
+
+msgid "How do you want this tunnel to be accessed? By just this machine, your entire subnet, or external internet?"
+msgstr "ཁྱོད་ཀྱིས་འདི་སྒོ་གང་ནས་འགྲོ་རྒྱུ་ཡོད་པ་རེད། དེ་རོ་རུ་རོ་གཅིག་གི་མ་ཤིན་ཏུ་ཡང་ན་ཁྱོད་ཀྱི་ཡོངས་སུ་གཞི་ནས་གཞི་རྒྱུ་ཡང་ན་ཕྱིའི་རྒྱུ་ཡོད་པ་རེད་ཀྱང་།"
+
+msgid "You will most likely want to just allow 127.0.0.1"
+msgstr "ཁྱོད་ཀྱིས་རེ་བ་རེ་བ་127.0.0.1 ནི་རེ་བ་ཡོད་པ་རེད།"
+
+msgid "The I2P router can automatically start this tunnel for you when the router is started."
+msgstr "I2P རོ་ཨུ་ཊེར་ནི་ཁྱོད་ཀྱི་སྒོ་རེ་བཞིན་དུ་རོ་ཨུ་ཊེར་འདོད་ཚུལ་གི་རེ་བཞིན་འགོ་ཚུགས་ཐུབ།"
+
+msgid "This can be useful for frequently-used tunnels (especially server tunnels), but for tunnels that are only used occasionally it would mean that the I2P router is creating and maintaining unnecessary tunnels."
+msgstr "འགྲོ་རྒྱུ་མང་པོའི་སྒོ་(ཐོག་མར་སེར་བཟོའི་སྒོ) ནང་གི་ཕན་ཚུན་ཡོད་པ་རེད། འོན་ཀྱང་རྒྱུན་མེད་པར་སྤྱོད་པའི་སྒོ་ཡིན་ན་I2P རོ་ཨུ་ཊེར་ནི་དོགས་པ་མེད་པའི་སྒོ་བཟོ་དང་རྒྱུན་འཁྱོངས་བྱེད་རྒྱུ་ཡོད་པ་རེད།"
+
+msgid "The wizard has now collected enough information to create your tunnel."
+msgstr "མཁས་པ་ནི་ཁྱོད་ཀྱི་སྒོ་བཟོ་བའི་ཆ་འཕྲིན་ཡོངས་ནས་བཞིག་སོང་བཞིན་ཡོད།"
+
+msgid "Upon clicking the Save button below, the wizard will set up the tunnel, and take you back to the main I2PTunnel page."
+msgstr "གཤམ་གྱི་གཟིགས་ནུབ་དང་བརྒྱན་པའི་གཟིགས་ནུབ་དེ་མནན་པ་ནི་མཁས་པ་ནི་སྒོ་བཟོ་བ་དང་ཁྱོད་ཀྱི་གཙོ་བོའི་I2PTunnel གི་ཡིག་ཆ་རུ་བཤོས་སྐྱོད་བྱེད་རྒྱུ་ཡིན།"
+
+msgid "Because you chose to automatically start the tunnel when the router starts, you don't have to do anything further."
+msgstr "ཁྱོད་ཀྱིས་རོ་ཨུ་ཊེར་འགོ་ཚུགས་པའི་དུས་སྒོ་རེ་བཞིན་འགོ་ཚུགས་པར་བཟོ་བས་ཁྱོད་ཀྱིས་གཞི་ནས་གཞི་དོན་གང་ཡང་བྱེད་དགོས་པ་མེད།"
+
+msgid "The router will start the tunnel once it has been set up."
+msgstr "རོ་ཨུ་ཊེར་ནི་སྒོ་བཟོ་བའི་དུས་འགོ་ཚུགས་རྒྱུ་ཡིན།"
+
+msgid "Because you chose not to automatically start the tunnel, you will have to manually start it."
+msgstr "ཁྱོད་ཀྱིས་རེ་བཞིན་འགོ་ཚུགས་པར་བཟོ་མེད་པས་ཁྱོད་ཀྱིས་རང་གིས་འགོ་ཚུགས་དགོས།"
+
+msgid "You can do this by clicking the Start button on the main page which corresponds to the new tunnel."
+msgstr "གཙོ་བོའི་ཡིག་ཆ་ནང་གི་འགོ་ཚུགས་པའི་གཟིགས་ནུབ་དེ་མནན་པ་ནི་གསར་བའི་སྒོ་དང་མཚུངས་པ་ཡིན།"
+
+msgid "Below is a summary of the options you chose:"
+msgstr "གཤམ་གྱི་ནང་དོན་ནི་ཁྱོད་ཀྱིས་བཟོ་བའི་གདམ་གར་གི་བཤད་པ་ཡིན།"
+
+msgid "Tunnel description"
+msgstr "སྒོའི་བསྡུས་པ་"
+
+msgid "Binding address"
+msgstr "ཡིག་ཆ་བརྒྱན་བར་གདམ།"
+
+msgid "Tunnel port"
+msgstr "སྒོའི་ཐོབ་ཐང་གི་སྒོ་"
+
+msgid "Alongside these basic settings, there are a number of advanced options for tunnel configuration."
+msgstr "འདི་དག་གི་རྒྱུན་གཏན་གཞིའི་གདམ་གར་དང་བཟུང་བོད་ནང་གི་སྒོའི་བཟོ་བའི་གདམ་གར་མང་པོ་ཡོད།"
+
+msgid "The wizard will set reasonably sensible default values for these, but you can view and/or edit these by clicking on the tunnel's name in the main I2PTunnel page."
+msgstr "མཁས་པ་ནི་འདི་དག་གི་རེ་བཞིན་གཏན་འཁེལ་གྱི་རྒྱུན་གཏན་གཞི་བཟོ་བ་རེད། འོན་ཀྱང་ཁྱོད་ཀྱིས་གཙོ་བོའི་I2PTunnel གི་ཡིག་ཆ་ནང་གི་སྒོའི་མིང་མནན་ནས་འཚལ་ནུབ་དང་བརྒྱན་པར་གདམ།"
+
+msgid "Cancel the wizard and return to Tunnel Manager home page"
+msgstr "མཁས་པ་བཤིགས་པ་དང་སྒོའི་དོ་དམ་བྱེད་པའི་གཙོ་བོའི་ཡིག་ཆ་རུ་བཤོས་སྐྱོད་བྱེད་པར་གདམ།"
+
+msgid "Return to previous page"
+msgstr "སྔོན་གི་ཡིག་ཆ་རུ་བཤོས་སྐྱོད་བྱེད་པར་གདམ།"
+
+msgid "Previous"
+msgstr "སྔོན་གི་ཡིག་ཆ་"
+
+msgid "Save tunnel configuration"
+msgstr "སྒོའི་བཟོ་བའི་གདམ་གར་ཉར་བར་གདམ།"
+
+msgid "Save Tunnel"
+msgstr "སྒོ་ཉར་བར་གདམ།"
+
+msgid "Finish Wizard and review tunnel settings"
+msgstr "མཁས་པ་དུས་མཇུག་སྒོའི་གདམ་གར་ཞིབ་བར་གདམ།"
+
+msgid "Finish"
+msgstr "དུས་མཇུག"
+
+msgid "Advance to next page"
+msgstr "ཕྱི་མའི་ཡིག་ཆ་རུ་བཤོས་སྐྱོད་བྱེད་པར་གདམ།"
+
+msgid "Next"
+msgstr "ཕྱི་མའི་ཡིག་ཆ་"

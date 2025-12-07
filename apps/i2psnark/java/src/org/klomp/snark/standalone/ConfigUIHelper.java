@@ -28,6 +28,7 @@ public class ConfigUIHelper {
     private static final String langs[][] = {
         { "ar", "lang_ar", "Arabic عربية", null },
         { "az", "az", "Azerbaijani", null },
+        { "bo", "xt", "Tibetan", null },
         { "cs", "cz", "Čeština", null },
         { "zh", "cn", "Chinese 中文", null },
         { "da", "dk", "Dansk", null },

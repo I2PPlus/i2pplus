@@ -1,0 +1,48 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: bo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "I2P+ installation complete!"
+msgstr "I2P+ སྒྲིག་འཇུག་ཚར་གཅིག་གི་རྗེས་སུ་འགྱུར"
+
+msgid "Welcome to I2P+!"
+msgstr "I2P+ ཟིན་བརྐྱབ་པར་བོད་བརྒྱུད་ཞུ་བཞིན་པ་ཡིན།"
+
+#, java-format
+msgid "Please {0}have patience{1} as I2P+ boots up and finds peers."
+msgstr "I2P+ གོང་འཕེལ་དུ་འགྱུར་བ་དང་མི་མཐུན་གྱི་མཐུད་པ་བཟོ་བར་བཟོ་སྒོར་བྱེད་པར་{0}བརྟན་པ་གནོན་པར་{1}དགོངས་རོགས།"
+
+#, java-format
+msgid "While you are waiting, please {0}adjust your bandwidth settings{1} on the {2}configuration page{3}."
+msgstr "བར་བཟོ་བཞིན་པའི་དུས་ན། དངོས་ནས་{0}ཁྱོད་ཀྱི་བྱང་ཚད་སྒྲིག་འཇུག་བྱེད་པར{1} {2}སྒྲིག་འཇུག་གི་ཡིག་ངོས་{3}ལ་བཟོ་སྒོར་བྱེད་པར་དགོངས་རོགས།"
+
+#, java-format
+msgid "You can also run the bandwidth test via the {0}Setup Wizard{1} to help with determining your bandwidth, and a guide for new users and additional documentation including an FAQ is available in the {2}help section{1}."
+msgstr "ཁྱོད་ཀྱི་བྱང་ཚད་བརྟག་པར་བརྟེན་ནས་{0}སྒྲིག་འཇུག་གི་མཛད་སྒོར{1}གྱི་གོ་རྟགས་ནས་བྱང་ཚད་བརྟག་བཏང་ཐུབ་པ་དང་། ཤིན་ཏུ་གསར་པ་དང་གཞན་དག་གི་གཞི་རྩའི་ཡིག་ཆ་དང་བཅས་པའི་མདུན་ལ་གཞི་འཛུགས་པའི་སྐོར་གྱི་བཀོད་སྒྲིག་ནི་{2}རོགས་སྐོར{1}གི་ཡིག་ངོས་ལ་མངོན་ཡོད།"
+
+#, java-format
+msgid "You may also wish to enable I2P+ updates on {0}the update configuration page{1}."
+msgstr "ཁྱོད་ཀྱིས་{0}བཅོས་འཇུག་གི་སྒྲིག་འཇུག་ཡིག་ངོས{1}ལ་I2P+ གི་བཅོས་འཇུག་བྱེད་པར་རེ་བ་ཡོད་པ་ཡིན།"
+
+msgid "Also you can setup your browser to use the I2P proxy to reach eepsites."
+msgstr "ཁྱོད་ཀྱིས་eepsites བརྒྱུད་ནས་I2P གི་མཐུད་པར་སྤྱོད་ནས་ཁྱོད་ཀྱི་བྲོ་ཟེར་སྒྲིག་འཇུག་བཏང་ཐུབ།"
+
+msgid "Just enter 127.0.0.1 (or localhost) port 4444 as a http proxy into your browser settings."
+msgstr "127.0.0.1 (དང་ན་ས་སྒོར་གྱི་མ་འགྱུར་གྱི་གླེང་གེ་) 4444 གླེང་གེ་གི་སྤྱི་ཐོན་ནས་ཁྱོད་ཀྱི་བྲོ་ཟེར་གི་སྒྲིག་འཇུག་གི་ཡིག་ངོས་ལ་འཇུག་པར་རེ་བ་ཡོད།"
+
+msgid "Do not use SOCKS for this."
+msgstr "འོ་ན་འདིར་SOCKS སྤྱོད་མི་རོགས་གནང་།"
+
+#, java-format
+msgid "More information can be found on the {0}I2P browser proxy setup page{1}."
+msgstr "གཞི་རྩའི་གནས་ཚུལ་ནི་{0}I2P བྲོ་ཟེར་གི་མཐུད་པར་སྒྲིག་འཇུག་གི་ཡིག་ངོས{1}ལ་མངོན་ཐུབ།"
+
+#, java-format
+msgid "Point your IRC client to {0}localhost:6668{1} and say hi to us on {2}#saltR{3}."
+msgstr "ཁྱོད་ཀྱི་IRC གི་སྤྱོད་མཁན་གྱི་ནང་དུ་{0}localhost:6668{1}བཙུགས་ནས་{2}#saltR{3}གི་ནང་ང་ཚོ་ལ་བཀའ་འདེབས་བྱེད་པར་རེ་བ་ཡོད།"
