@@ -1,6 +1,13 @@
 main{position:relative}
 .displayPanels #book,.displayPanels #buttons{pointer-events:none!important;user-select:none!important}
 .displayPanels main::after{display:block;position:fixed;z-index:1000;backdrop-filter:blur(2px) saturate(.5);content:"";pointer-events:none;will-change:transform}
+#host_list{font-size:90%}
+#host_list .source,#host_list .added{padding:4px 8px;width:1%;text-align:center;white-space:nowrap;font-size:98%}
+#host_list .source a{width:24px;height:24px;overflow:hidden;display:inline-block;vertical-align:middle;color:#0000;text-shadow:none;background:url(/themes/console/images/eepsites/registrar.svg) no-repeat center center/20px;transition:ease all .1s}
+#host_list .source a[href^="http://notbob.i2p"]{background-image:url(/themes/console/images/eepsites/notbob.png)}
+#host_list .source a[href^="http://reg.i2p"]{background-image:url(/themes/console/images/eepsites/reg.svg)}
+#host_list .source a[href^="http://stats.i2p"]{background-image:url(/themes/console/images/stats.svg)}
+#host_list .source a:hover{transform:scale(1.2);transition:ease all .1s}
 #add,#import{will-change:transform}
 .iframed .displayPanels #add,.iframed .displayPanels #import{top:-9px;left:-13px;right:-13px}
 .displayPanels #add,.displayPanels #import{margin:0;position:absolute;z-index:1500;top:-13px;left:0;right:0;animation:slideDown .8s ease-out 0s both}

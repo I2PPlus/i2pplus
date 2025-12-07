@@ -210,6 +210,54 @@ public class AddressBean {
     }
 
     /**
+     * Gets the source URL with hostname as display text for this address entry.
+     * @return the source URL with hostname as display text
+     */
+    public String getSourceHostname() {
+        String rv = getProp("s");
+        if (rv.startsWith("http://") || rv.startsWith("https://")) {
+            try {
+                java.net.URL url = new java.net.URL(rv);
+                String hostname = url.getHost();
+                rv = "<a href=\"" + rv + "\" target=_top>" + hostname + "</a>";
+            } catch (java.net.MalformedURLException e) {
+                // If URL parsing fails, fall back to original behavior
+                rv = "<a href=\"" + rv + "\" target=_top>" + rv + "</a>";
+            }
+        } else if ("Manually added via SusiDNS".equals(rv)) {
+            rv = _t("Manually added");
+        } else if ("Added via address helper".equals(rv)) {
+            rv = _t("Via helper");
+        } else if (rv.startsWith("Added via address helper from ")) {
+            String remaining = rv.substring("Added via address helper from ".length());
+            if (remaining.startsWith("<a href=\"") && remaining.contains("</a>")) {
+                // Extract URL from existing HTML anchor
+                int hrefStart = remaining.indexOf("href=\"") + 6;
+                int hrefEnd = remaining.indexOf("\"", hrefStart);
+                String urlPart = remaining.substring(hrefStart, hrefEnd);
+                try {
+                    java.net.URL url = new java.net.URL(urlPart);
+                    String hostname = url.getHost();
+                    rv = _t("Via helper from") + " <a href=\"" + urlPart + "\" target=_top>" + hostname + "</a>";
+                } catch (java.net.MalformedURLException e) {
+                    // If URL parsing fails, fall back to original behavior
+                    rv = _t("Via helper from") + " " + remaining;
+                }
+            } else if (remaining.startsWith("http://") || remaining.startsWith("https://")) {
+                try {
+                    java.net.URL url = new java.net.URL(remaining);
+                    String hostname = url.getHost();
+                    rv = _t("Via helper from") + " <a href=\"" + remaining + "\" target=_top>" + hostname + "</a>";
+                } catch (java.net.MalformedURLException e) {
+                    // If URL parsing fails, fall back to original behavior
+                    rv = _t("Via helper from") + " <a href=\"" + remaining + "\" target=_top>" + remaining + "</a>";
+                }
+            }
+        }
+        return rv;
+    }
+
+    /**
      * Gets the date when this address was added.
      * @return the date when added
      * @since 0.8.7
@@ -247,7 +295,7 @@ public class AddressBean {
         switch (type) {
             case Certificate.CERTIFICATE_TYPE_NULL:
                 return _t("None");
-            
+
             case Certificate.CERTIFICATE_TYPE_HIDDEN:
                 return _t("Hidden");
             case Certificate.CERTIFICATE_TYPE_SIGNED:
