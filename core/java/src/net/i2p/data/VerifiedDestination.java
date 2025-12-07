@@ -11,7 +11,7 @@ package net.i2p.data;
 
 import java.security.NoSuchAlgorithmException;
 
-import com.nettgryppa.security.HashCash;
+
 
 /**
  * Extend Destination with methods to verify its Certificate.
@@ -57,58 +57,16 @@ public class VerifiedDestination extends Destination {
             case Certificate.CERTIFICATE_TYPE_NULL:
             case Certificate.CERTIFICATE_TYPE_HIDDEN:
                 return allowNone;
-            case Certificate.CERTIFICATE_TYPE_HASHCASH:
-                return verifyHashCashCert();
+            
             case Certificate.CERTIFICATE_TYPE_SIGNED:
                 return verifySignedCert();
         }
         return verifyUnknownCert();
     }
 
-    /** Defaults for HashCash Certs */
-    public final static int MIN_HASHCASH_EFFORT = 20;
+    
 
-    /**
-     *  HashCash Certs are used to demonstrate proof-of-work.
-     *
-     *  We define a HashCash Certificate as follows:
-     *   - length: typically 47 bytes, but may vary somewhat
-     *   - contents: A version 1 HashCash Stamp,
-     *     defined at http://www.hashcash.org/docs/hashcash.html#stamp_format__version_1_
-     *     modified to remove the contents of the 4th field (the resource)
-     *     original is ver:bits:date:resource:[ext]:rand:counter
-     *     I2P version is ver:bits:date::[ext]:rand:counter
-     *  The HashCash is calculated with the following resource:
-     *     The Base64 of the Public Key concatenated with the Base64 of the Signing Public Key
-     *     (NOT the Base64 of the concatenated keys)
-     *  To generate a Cert of this type, see PrivateKeyFile.main()
-     *  To verify, we must put the keys back into the resource field of the stamp,
-     *  then pass it to the HashCash constructor, then get the number of leading
-     *  zeros and see if it meets our minimum effort.
-     */
-    protected boolean verifyHashCashCert() {
-        String hcs = DataHelper.getUTF8(_certificate.getPayload());
-        int end1 = 0;
-        for (int i = 0; i < 3; i++) {
-            end1 = 1 + hcs.indexOf(':', end1);
-            if (end1 < 0)
-                return false;
-        }
-        int start2 = hcs.indexOf(':', end1);
-        if (start2 < 0)
-            return false;
-        // put the keys back into the 4th field of the stamp
-        hcs = hcs.substring(0, end1) + _publicKey.toBase64() + _signingKey.toBase64() + hcs.substring(start2);
-        HashCash hc;
-        try {
-            hc = new HashCash(hcs);
-        } catch (IllegalArgumentException iae) {
-            return false;
-        } catch (NoSuchAlgorithmException nsae) {
-            return false;
-        }
-        return hc.getValue() >= MIN_HASHCASH_EFFORT;
-    }
+    
 
     /** Defaults for Signed Certs */
     public final static int CERTIFICATE_LENGTH_SIGNED = Signature.SIGNATURE_BYTES;

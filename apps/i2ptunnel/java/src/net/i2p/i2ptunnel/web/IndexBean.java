@@ -67,7 +67,7 @@ public class IndexBean {
     private int _msgID = -1;
     private final TunnelConfig _config;
     private boolean _removeConfirmed;
-    private int _hashCashValue;
+    
     private int _certType;
     private String _certSigner;
 
@@ -187,7 +187,7 @@ public class IndexBean {
             else if ("stop".equals(_action)) {return stop();}
             else if ("start".equals(_action)) {return start();}
             else if ("restart".equals(_action)) {return restart();}
-            else if ("Estimate".equals(_action)) {return PrivateKeyFile.estimateHashCashTime(_hashCashValue);}
+            
             else if ("Modify".equals(_action)) {return modifyDestination();}
             else if ("Generate".equals(_action)) {return generateNewEncryptionKey();}
             else {return "Action " + _action + " unknown";}
@@ -1367,13 +1367,7 @@ public class IndexBean {
         }
     }
 
-    /** params needed for hashcash and dest modification */
-    public void setEffort(String val) {
-        if (val != null) {
-            try {_hashCashValue = Integer.parseInt(val.trim());}
-            catch (NumberFormatException nfe) {}
-        }
-    }
+    
 
     public void setCert(String val) {
         if (val != null) {
@@ -1510,9 +1504,7 @@ public class IndexBean {
             case Certificate.CERTIFICATE_TYPE_HIDDEN:
                 pkf.setCertType(_certType);
                 break;
-            case Certificate.CERTIFICATE_TYPE_HASHCASH:
-                pkf.setHashCashCert(_hashCashValue);
-                break;
+            
             case Certificate.CERTIFICATE_TYPE_SIGNED:
                 if (_certSigner == null || _certSigner.trim().length() <= 0) {
                     return "No signing destination specified";

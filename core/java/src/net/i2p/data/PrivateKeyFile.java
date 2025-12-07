@@ -1,12 +1,13 @@
 package net.i2p.data;
 
+import gnu.getopt.Getopt;
 
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
@@ -17,10 +18,6 @@ import java.util.Date;
 import java.util.EnumSet;
 import java.util.Map;
 import java.util.Properties;
-
-import com.nettgryppa.security.HashCash;
-
-import gnu.getopt.Getopt;
 
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
@@ -80,7 +77,7 @@ import net.i2p.util.SecureFileOutputStream;
 
 public class PrivateKeyFile {
 
-    private static final int HASH_EFFORT = VerifiedDestination.MIN_HASHCASH_EFFORT;
+
 
     protected final File file;
     private final I2PClient client;
@@ -106,7 +103,6 @@ public class PrivateKeyFile {
      *  Copied and expanded from that in Destination.java
      */
     public static void main(String args[]) {
-        int hashEffort = HASH_EFFORT;
         String stype = null;
         String etype = null;
         String ttype = null;
@@ -180,10 +176,6 @@ public class PrivateKeyFile {
                     mode = c;
                 else
                     error = true;
-                break;
-
-            case 'e':
-                hashEffort = Integer.parseInt(g.getOptarg());
                 break;
 
             case 'd':
@@ -270,12 +262,7 @@ public class PrivateKeyFile {
                 System.out.println("New destination with hidden cert is:");
                 break;
 
-              case 'h':
-                System.out.println("Estimating hashcash generation time, stand by...");
-                System.out.println(estimateHashCashTime(hashEffort));
-                pkf.setHashCashCert(hashEffort);
-                System.out.println("New destination with hashcash cert is:");
-                break;
+
 
               case 's':
               {
@@ -427,7 +414,7 @@ public class PrivateKeyFile {
     private static void usage() {
         System.err.println("Usage: PrivateKeyFile filename (generates if nonexistent, then prints)\n" +
                            "\ncertificate options:\n" +
-                           "      -h                   (generates if nonexistent, adds hashcash cert)\n" +
+
                            "      -n                   (changes to null cert)\n" +
                            "      -s signwithdestfile  (generates if nonexistent, adds cert signed by 2nd dest)\n" +
                            "      -u                   (changes to unknown cert)\n" +
@@ -437,7 +424,7 @@ public class PrivateKeyFile {
                            "      -b example.i2p       (hostname of the 2LD dest for signing)\n" +
                            "      -c sigtype           (specify sig type of destination)\n" +
                            "      -d days              (specify expiration in days of offline sig, default 365)\n" +
-                           "      -e effort            (specify HashCash effort instead of default " + HASH_EFFORT + ")\n" +
+
                            "      -o offlinedestfile   (generate the online key file using the offline key file specified)\n" +
                            "      -p enctype           (specify enc type of destination)\n" +
                            "      -r sigtype           (specify sig type of transient key, default Ed25519)\n" +
@@ -755,41 +742,7 @@ public class PrivateKeyFile {
         return c;
     }
 
-    /** change to hashcash cert - caller must also call write() */
-    public Certificate setHashCashCert(int effort) {
-        Certificate c = setCertType(Certificate.CERTIFICATE_TYPE_HASHCASH);
-        long begin = System.currentTimeMillis();
-        System.out.println("Starting hashcash generation now...");
-        String resource = this.dest.getPublicKey().toBase64() + this.dest.getSigningPublicKey().toBase64();
-        HashCash hc;
-        try {
-            hc = HashCash.mintCash(resource, effort);
-        } catch (NoSuchAlgorithmException e) {
-            return null;
-        }
-        System.out.println("Generation took: " + DataHelper.formatDuration(System.currentTimeMillis() - begin));
-        System.out.println("Full Hashcash is: " + hc);
-        // Take the resource out of the stamp
-        String hcs = hc.toString();
-        int end1 = 0;
-        for (int i = 0; i < 3; i++) {
-            end1 = 1 + hcs.indexOf(':', end1);
-            if (end1 < 0) {
-                System.out.println("Bad hashcash");
-                return null;
-            }
-        }
-        int start2 = hcs.indexOf(':', end1);
-        if (start2 < 0) {
-            System.out.println("Bad hashcash");
-            return null;
-        }
-        hcs = hcs.substring(0, end1) + hcs.substring(start2);
-        System.out.println("Short Hashcash is: " + hcs);
 
-        c.setPayload(DataHelper.getUTF8(hcs));
-        return c;
-    }
 
     /** sign this dest by dest found in pkf2 - caller must also call write() */
     public Certificate setSignedCert(PrivateKeyFile pkf2) {
@@ -1037,25 +990,7 @@ public class PrivateKeyFile {
         return s.toString();
     }
 
-    public static String estimateHashCashTime(int hashEffort) {
-        if (hashEffort <= 0 || hashEffort > 160)
-            return "Bad HashCash value: " + hashEffort;
-        long low = Long.MAX_VALUE;
-        try {
-            low = HashCash.estimateTime(hashEffort);
-        } catch (NoSuchAlgorithmException e) {}
-        // takes a lot longer than the estimate usually...
-        // maybe because the resource string is much longer than used in the estimate?
-        return "It is estimated that generating a HashCash Certificate with value " + hashEffort +
-               " for the Destination will take " +
-               ((low < 1000l * 24l * 60l * 60l * 1000l)
-                 ?
-                   "approximately " + DataHelper.formatDuration(low) +
-                   " to " + DataHelper.formatDuration(4*low)
-                 :
-                   "longer than three years!"
-               );
-    }
+
 
     /**
      *  Sample code to verify a 3rd party signature.

@@ -34,8 +34,6 @@ public class Certificate extends DataStructureImpl {
 
     /** Specifies a null certificate type with no payload */
     public final static int CERTIFICATE_TYPE_NULL = 0;
-    /** specifies a Hashcash style certificate */
-    public final static int CERTIFICATE_TYPE_HASHCASH = 1;
     /** we should not be used for anything (don't use us in the netDb, in tunnels, or tell others about us) */
     public final static int CERTIFICATE_TYPE_HIDDEN = 2;
     /** Signed with 40-byte Signature and (optional) 32-byte hash */
@@ -272,8 +270,7 @@ public class Certificate extends DataStructureImpl {
             buf.append("Null");
         else if (getCertificateType() == CERTIFICATE_TYPE_KEY)
             buf.append("Key");
-        else if (getCertificateType() == CERTIFICATE_TYPE_HASHCASH)
-            buf.append("HashCash");
+
         else if (getCertificateType() == CERTIFICATE_TYPE_HIDDEN)
             buf.append("Hidden");
         else if (getCertificateType() == CERTIFICATE_TYPE_SIGNED)
@@ -285,9 +282,8 @@ public class Certificate extends DataStructureImpl {
             buf.append("; Payload: null");
         } else {
             buf.append("; Payload size: ").append(_payload.length);
-            if (getCertificateType() == CERTIFICATE_TYPE_HASHCASH) {
-                buf.append("; Stamp: ").append(DataHelper.getUTF8(_payload));
-            } else if (getCertificateType() == CERTIFICATE_TYPE_SIGNED && _payload.length == CERTIFICATE_LENGTH_SIGNED_WITH_HASH) {
+
+            if (getCertificateType() == CERTIFICATE_TYPE_SIGNED && _payload.length == CERTIFICATE_LENGTH_SIGNED_WITH_HASH) {
                 buf.append("; Signed by hash: ").append(Base64.encode(_payload, Signature.SIGNATURE_BYTES, Hash.HASH_LENGTH));
             } else {
                 int len = 32;

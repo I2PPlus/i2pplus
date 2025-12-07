@@ -247,8 +247,7 @@ public class AddressBean {
         switch (type) {
             case Certificate.CERTIFICATE_TYPE_NULL:
                 return _t("None");
-            case Certificate.CERTIFICATE_TYPE_HASHCASH:
-                return _t("Hashcash");
+            
             case Certificate.CERTIFICATE_TYPE_HIDDEN:
                 return _t("Hidden");
             case Certificate.CERTIFICATE_TYPE_SIGNED:
