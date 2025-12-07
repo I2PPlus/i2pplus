@@ -4,8 +4,11 @@ main{position:relative}
 #host_list{font-size:90%}
 #host_list .source,#host_list .added{padding:4px 8px;width:1%;text-align:center;white-space:nowrap;font-size:98%}
 #host_list .source a{width:24px;height:24px;overflow:hidden;display:inline-block;vertical-align:middle;color:#0000;text-shadow:none;background:url(/themes/console/images/eepsites/registrar.svg) no-repeat center center/20px;transition:ease all .1s}
+#host_list .source a.manualAdd{background-image:var(--add)}
+#host_list .source a.viaHelper{background-image:var(--helper)}
 #host_list .source a[href^="http://notbob.i2p"]{background-image:url(/themes/console/images/eepsites/notbob.png)}
 #host_list .source a[href^="http://reg.i2p"]{background-image:url(/themes/console/images/eepsites/reg.svg)}
+#host_list .source a[href^="http://skank.i2p"]{background-image:url(/themes/console/images/plus.svg)}
 #host_list .source a[href^="http://stats.i2p"]{background-image:url(/themes/console/images/stats.svg)}
 #host_list .source a:hover{transform:scale(1.2);transition:ease all .1s}
 #add,#import{will-change:transform}
