@@ -16,23 +16,73 @@ import net.i2p.util.FileUtil;
 import net.i2p.util.SystemVersion;
 
 /**
- *  If the i2pupdate.zip file is present,
- *  unzip it and JVM exit.
+ * Automatic I2P router update installer and processor.
  *
- *  @since 0.9.20 moved from Router.java
+ * This class handles the complete update process when an i2pupdate.zip
+ * file is present in the router or base directory. It performs a
+ * comprehensive update including verification, extraction, cleanup,
+ * and restart procedures.
+ *
+ * <p><strong>Update Process:</strong></p>
+ * <ul>
+ *   <li>Searches for i2pupdate.zip in router dir or base dir</li>
+ *   <li>Verifies write permissions to target directory</li>
+ *   <li>Validates ZIP file integrity and structure</li>
+ *   <li>Updates router configuration with version information</li>
+ *   <li>Extracts update files to base directory</li>
+ *   <li>Processes deletelist.txt for obsolete file removal</li>
+ *   <li>Cleans up native libraries (jbigi, jcpuid)</li>
+ *   <li>Removes update file and restarts JVM</li>
+ * </ul>
+ *
+ * <p><strong>Error Handling:</strong></p>
+ * <ul>
+ *   <li>Renames failed updates to "BAD-i2pupdate.zip"</li>
+ *   <li>Provides detailed logging throughout process</li>
+ *   <li>Handles permission issues gracefully</li>
+ *   <li>Performs cleanup even on partial failures</li>
+ * </ul>
+ *
+ * <p><strong>Restart Behavior:</strong></p>
+ * <ul>
+ *   <li>With wrapper: Automatic restart after update</li>
+ *   <li>Without wrapper: Manual restart required</li>
+ *   <li>Exit code: Router.EXIT_HARD_RESTART</li>
+ * </ul>
+ *
+ * <p>If no update file is found, performs routine maintenance
+ * including native library cleanup and deletion list processing.</p>
+ *
+ * @since 0.9.20 moved from Router.java
  */
 public class InstallUpdate {
 
     private static final String DELETE_FILE = "deletelist.txt";
 
     /**
-     * Context must be available.
-     * Unzip update file found in the router dir OR base dir, to the base dir
+     * Install updates from i2pupdate.zip file if present.
      *
-     * If successful, will call exit() and never return.
+     * This method searches for an update file in the router directory or base directory,
+     * verifies its integrity, extracts it to the base directory, and performs cleanup operations.
+     * If successful, the JVM will exit with a restart code and never return.
      *
-     * If we can't write to the base dir, write message to System.out and return.
-     * Note: _log not available here.
+     * The method performs the following steps:
+     * <ul>
+     *   <li>Search for i2pupdate.zip in router dir or base dir</li>
+     *   <li>Check write permissions to base directory</li>
+     *   <li>Verify ZIP file integrity</li>
+     *   <li>Update router configuration with version info</li>
+     *   <li>Extract update to base directory</li>
+     *   <li>Delete files listed in deletelist.txt</li>
+     *   <li>Cleanup update file and restart JVM</li>
+     * </ul>
+     *
+     * If no update file is found, the method performs cleanup of old native libraries
+     * and processes any pending file deletions.
+     *
+     * @param r the router instance, must have a valid context
+     * @throws RuntimeException if critical errors occur during update process
+     * @since 0.9.20 moved from Router.java
      */
     public static void installUpdates(Router r) {
         RouterContext context = r.getContext();

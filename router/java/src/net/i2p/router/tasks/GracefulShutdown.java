@@ -19,6 +19,11 @@ public class GracefulShutdown implements Runnable {
     /** Interval between status checks while a restart/shutdown is in progress (ms) */
     private static final int CHECK_STATUS_INTERVAL_MS = 5_000;
 
+    /**
+     * Create a new graceful shutdown handler.
+     * 
+     * @param ctx the router context for accessing router state and services
+     */
     public GracefulShutdown(RouterContext ctx) {
         _context = ctx;
     }
@@ -78,6 +83,8 @@ public class GracefulShutdown implements Runnable {
 
     /**
      * Wake up the shutdown thread when a relevant state change occurs.
+     * This method should be called when the router's shutdown state changes
+     * to prompt the graceful shutdown thread to re-evaluate the current situation.
      */
     public void wakeUp() {
         synchronized (Thread.currentThread()) {
@@ -87,6 +94,9 @@ public class GracefulShutdown implements Runnable {
 
     /**
      * Stop the shutdown thread gracefully.
+     * Sets the running flag to false and wakes up the thread to allow it
+     * to exit cleanly. This should be called during router shutdown to
+     * properly terminate the graceful shutdown monitor.
      */
     public void stop() {
         running = false;

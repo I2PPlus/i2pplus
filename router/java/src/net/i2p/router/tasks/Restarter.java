@@ -13,8 +13,31 @@ import net.i2p.util.Log;
 public class Restarter implements Runnable {
     private final RouterContext _context;
 
+    /**
+     * Create a new router restarter.
+     * 
+     * @param ctx the router context for accessing router services
+     * @since 0.8.8, moved from Router in 0.8.12
+     */
     public Restarter(RouterContext ctx) {_context = ctx;}
 
+    /**
+     * Perform a soft restart of the router.
+     * 
+     * This method gracefully restarts all major router components in sequence:
+     * <ul>
+     *   <li>Stops the client manager</li>
+     *   <li>Reinitializes the bandwidth limiter</li>
+     *   <li>Restarts the message registry and communication system</li>
+     *   <li>Restarts the tunnel manager</li>
+     *   <li>Waits for components to stabilize</li>
+     *   <li>Restarts the client manager and message pool</li>
+     *   <li>Rebuilds router info and marks router as alive</li>
+     * </ul>
+     * 
+     * The restart process is designed to minimize downtime and maintain
+     * network connectivity where possible.
+     */
     public void run() {
         Long start = System.currentTimeMillis();
         _context.router().eventLog().addEvent(EventLog.SOFT_RESTART);

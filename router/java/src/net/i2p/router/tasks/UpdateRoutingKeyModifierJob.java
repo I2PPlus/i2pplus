@@ -25,13 +25,35 @@ public class UpdateRoutingKeyModifierJob extends JobImpl {
     // Run every 15 minutes in case of time zone change, clock skew, etc.
     private static final long MAX_DELAY_FAILSAFE = 15*60*1000;
 
+    /**
+     * Create a new routing key modifier update job.
+     * 
+     * @param ctx the router context for accessing router services
+     * @since 0.8.12 moved from Router.java
+     */
     public UpdateRoutingKeyModifierJob(RouterContext ctx) {
         super(ctx);
         _log = ctx.logManager().getLog(getClass());
     }
 
+    /**
+     * Get the name of this job.
+     * 
+     * @return job name for logging and identification
+     */
     public String getName() { return "Update Routing Key Modifier"; }
 
+    /**
+     * Update the routing key modifier if needed.
+     * 
+     * This job runs periodically (every 15 minutes maximum) to ensure
+     * the routing key modifier is updated daily at midnight. The routing
+     * key modifier is used in cryptographic operations and must be updated
+     * regularly for security.
+     * 
+     * If the modifier data changes, notifies the network database that
+     * routing keys have changed.
+     */
     public void runJob() {
         RouterKeyGenerator gen = getContext().routerKeyGenerator();
         // make sure we requeue quickly if just before midnight

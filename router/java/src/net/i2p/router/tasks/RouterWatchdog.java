@@ -12,9 +12,33 @@ import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
 /**
- * Periodically check to make sure things haven't gone totally haywire (and if
- * they have, restart the JVM)
- *
+ * Router health monitor and automatic recovery system.
+ * 
+ * This watchdog runs continuously to monitor router health and detect
+ * potentially hung or unresponsive states. It checks various system
+ * components including job queue processing, client responsiveness,
+ * and network connectivity.
+ * 
+ * <strong>Monitoring Checks:</strong>
+ * <ul>
+ *   <li>Job queue liveliness - detects stuck jobs</li>
+ *   <li>Client manager responsiveness - ensures clients are alive</li>
+ *   <li>Network error rates - detects connectivity issues</li>
+ *   <li>Communication system status - checks network health</li>
+ * </ul>
+ * 
+ * <strong>Recovery Actions:</strong>
+ * <ul>
+ *   <li>Logs detailed system status when problems detected</li>
+ *   <li>Generates thread dumps for debugging hung states</li>
+ *   <li>May force JVM restart after consecutive failures</li>
+ *   <li>Configurable via watchdog.haltOnHang property</li>
+ * </ul>
+ * 
+ * The watchdog runs every minute and will attempt recovery
+ * if problems persist across multiple consecutive checks.
+ * This helps prevent router from becoming completely unresponsive
+ * and ensures automatic recovery from transient issues.
  */
 public class RouterWatchdog implements Runnable {
     private final Log _log;
@@ -26,15 +50,34 @@ public class RouterWatchdog implements Runnable {
     private static final long MAX_JOB_RUN_LAG = 60*1000;
     private static final long MIN_DUMP_INTERVAL= 6*60*60*1000;
 
+    /**
+     * Create a new router watchdog.
+     * The watchdog monitors router health and can force a restart if the router
+     * appears to be hung or unresponsive.
+     * 
+     * @param ctx the router context for accessing router services and logging
+     */
     public RouterWatchdog(RouterContext ctx) {
         _context = ctx;
         _log = ctx.logManager().getLog(RouterWatchdog.class);
         _isRunning = true;
     }
 
-    /** @since 0.8.8 */
+    /**
+     * Shutdown the watchdog gracefully.
+     * Sets the running flag to false to stop the monitoring loop.
+     * @since 0.8.8
+     */
     public void shutdown() {_isRunning = false;}
 
+    /**
+     * Verify that the job queue is processing jobs normally.
+     * Checks if any job has been running for too long, which could indicate
+     * a hung job queue.
+     * 
+     * @return true if job queue appears healthy, false if a job has been
+     *         running longer than the maximum allowed time
+     */
     public boolean verifyJobQueueLiveliness() {
         long when = _context.jobQueue().getLastJobBegin();
         if (when < 0) {return true;}
@@ -50,6 +93,13 @@ public class RouterWatchdog implements Runnable {
         } else {return true;}
     }
 
+    /**
+     * Verify that client applications are responsive.
+     * Delegates to the client manager to check if all client applications
+     * are still responding properly.
+     * 
+     * @return true if all clients appear healthy, false otherwise
+     */
     public boolean verifyClientLiveliness() {
         return _context.clientManager().verifyClientLiveliness();
     }
@@ -100,6 +150,11 @@ public class RouterWatchdog implements Runnable {
         }
     }
 
+    /**
+     * Main watchdog monitoring loop.
+     * Runs continuously while the watchdog is active, checking router health
+     * every minute and taking action if problems are detected.
+     */
     public void run() {
         while (_isRunning) {
             try {Thread.sleep(60*1000);}
@@ -108,6 +163,12 @@ public class RouterWatchdog implements Runnable {
         }
     }
 
+    /**
+     * Monitor router health and take action if needed.
+     * Checks job queue liveliness, client responsiveness, and network status.
+     * If problems are detected, logs status and may force a restart after
+     * consecutive failures.
+     */
     public void monitorRouter() {
         boolean ok = verifyJobQueueLiveliness();
         // If we aren't connected to the network that's why there's nobody to talk to

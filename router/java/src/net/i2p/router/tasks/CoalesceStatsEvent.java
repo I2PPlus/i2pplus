@@ -20,7 +20,34 @@ import net.i2p.util.SystemVersion;
 
 
 /**
- * Coalesce the stats framework every minute
+ * Periodic statistics collection and aggregation system.
+ * 
+ * This event runs every minute to collect, aggregate, and coalesce
+ * router performance statistics. It gathers metrics from all major
+ * router components and updates the statistics framework for monitoring
+ * and analysis.
+ * 
+ * <strong>Statistics Collected:</strong>
+ * <ul>
+ *   <li>Network metrics - peer counts, bandwidth usage</li>
+ *   <li>System resources - memory usage, CPU load, thread count</li>
+ *   <li>Tunnel performance - build success rates, participation</li>
+ *   <li>Router health - job queue lag, processing times</li>
+ *   <li>Communication system - send/receive rates, error counts</li>
+ * </ul>
+ * 
+ * <strong>Features:</strong>
+ * <ul>
+ *   <li>Automatic cache clearing when memory is low</li>
+ *   <li>Rate calculation and rolling averages</li>
+ *   <li>Performance trend monitoring</li>
+ *   <li>Data available via /stats.jsp and /graphs.jsp</li>
+ * </ul>
+ * 
+ * This data is essential for router performance monitoring,
+ * troubleshooting, and capacity planning. The statistics are
+ * used by the router console to display real-time performance
+ * graphs and historical trends.
  *
  * @since 0.8.12 moved from Router.java
  */
@@ -29,6 +56,12 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
     private final long _maxMemory;
     private static final long LOW_MEMORY_THRESHOLD = 5 * 1024 * 1024;
 
+    /**
+     * Create a new stats coalescence event.
+     * Initializes all required rate statistics for monitoring router performance.
+     * 
+     * @param ctx the router context for accessing statistics manager
+     */
     public CoalesceStatsEvent(RouterContext ctx) {
         _ctx = ctx;
         StatManager sm = ctx.statManager();
@@ -58,6 +91,22 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
         sm.createRequiredRateStat("router.memoryUsed", legend, "Router", new long[] { 60*1000 });
     }
 
+    /**
+     * Collect and coalesce router statistics.
+     * 
+     * This method is called periodically to gather various router metrics
+     * including network statistics, peer counts, memory usage, and tunnel performance.
+     * The collected data is used for monitoring and performance analysis.
+     * 
+     * Statistics collected include:
+     * <ul>
+     *   <li>Peer counts (known, active, fast, high capacity, etc.)</li>
+     *   <li>Bandwidth usage (send/receive rates)</li>
+     *   <li>Memory usage and CPU load</li>
+     *   <li>Tunnel performance metrics</li>
+     *   <li>Thread counts and system resources</li>
+     * </ul>
+     */
     public void timeReached() {
         StatManager sm = _ctx.statManager();
         int known = _ctx.netDb().getKnownRouters() - 1;
