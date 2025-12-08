@@ -586,9 +586,10 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
                                                   File.separator + "rdnscache.txt";
     private static final int RDNS_WRITE_INTERVAL = 15 * 60 * 1000 + 30;
     private static final boolean has512MB = SystemVersion.getMaxMemory() >= 512 * 1024 * 1024;
-    private static final long EXPIRE_TIME = (!has512MB ? 24 : 36) * 60 * 60 * 1000; // 1 / 1.5 day expiration
+    private static final boolean has1GB = SystemVersion.getMaxMemory() >= 1024 * 1024 * 1024;
+    private static final long EXPIRE_TIME = (!has512MB ? 24 : (has1GB ? 48 : 36)) * 60 * 60 * 1000; // 1/1.5/2 day expiration
     private static final long EVICT_THRESHOLD = 3 * 24 * 60 * 60 * 1000; // 3 day for eviction from file cache
-    private static final int MAX_RDNS_CACHE_SIZE = !has512MB ? 8000 : 16000;
+    private static final int MAX_RDNS_CACHE_SIZE = !has512MB ? 8000 : (has1GB ? 24000 : 16000);
     private static final Object rdnslock = new Object();
 
     /**
@@ -644,22 +645,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /**
      * In-memory reverse DNS cache storing IP-to-hostname mappings.
      *
-     * This cache is a thread-safe ConcurrentHashMap that supports
-     * concurrent reads and writes without external synchronization.
-     * It replaces the previous synchronized LinkedHashMap to improve
-     * lookup performance under high concurrency.
-     *
-     * Note that while ConcurrentHashMap is thread-safe, it does not
-     * provide built-in size-based eviction like LRU. Expiration and
-     * eviction are managed separately by periodic cleanup methods.
+     * This cache is a size-bounded LRU cache that automatically evicts
+     * least recently used entries when the maximum size is exceeded.
+     * The cache is wrapped in Collections.synchronizedMap() for thread safety.
      *
      * Keys are IP addresses as Strings. Values are CacheEntry objects
      * containing hostname and timestamp.
      */
-    private static final ConcurrentHashMap<String, CacheEntry> rdnsCache = new ConcurrentHashMap<>();
-
-    // Use a synchronized LRUCache for thread safety and size-bounded cache
-    //private static final Map<String, CacheEntry> rdnsCache = Collections.synchronizedMap(new LRUCache<>(MAX_RDNS_CACHE_SIZE));
+    private static final Map<String, CacheEntry> rdnsCache = Collections.synchronizedMap(new LRUCache<>(MAX_RDNS_CACHE_SIZE));
 
     private static Map<String, CacheEntry> getRDNSCache() {
         return rdnsCache;
@@ -902,7 +895,18 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     public static int countRdnsCacheEntries() {
-        synchronized (rdnsCache) {return rdnsCache.size();}
+        return rdnsCache.size();
+    }
+
+    /**
+     * Get cache statistics for monitoring
+     * @return formatted string with cache stats
+     */
+    public static String getRdnsCacheStats() {
+        int size = rdnsCache.size();
+        int maxSize = MAX_RDNS_CACHE_SIZE;
+        double utilization = (double) size / maxSize * 100;
+        return String.format("RDNS Cache: %d/%d entries (%.1f%% utilized)", size, maxSize, utilization);
     }
 
     /**
