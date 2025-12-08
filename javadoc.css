@@ -59,7 +59,7 @@ dt code{font-family:var(--monospaced);font-size:15px;padding-top:4px}
 h1,h2,h3,h4,h5,.indexHeader{padding:0 15px}
 .blockList h1,.blockList h2,.blockList h3,.blockList h4,.blockList h5{padding:0}
 h1.hidden{visibility:hidden;overflow:hidden;font-size:10px}
-h1.title{position:absolute;top:-5px;right:0;color:var(--ink_nav);text-shadow:var(--txt_shadow)}
+h1.title{position:absolute;top:-1px;right:0;white-space:nowrap;font-size:130%;color:var(--ink_nav);text-shadow:var(--txt_shadow)}
 h1{font-size:22px}
 h2{font-size:20px}
 h3{font-size:18px}
