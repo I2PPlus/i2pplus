@@ -1,19 +1,33 @@
 package org.klomp.snark.standalone;
 
-
 import net.i2p.I2PAppContext;
 import net.i2p.util.Translate;
 
 /**
- * Standalone (app context) only.
- * Copied from ConfigUIHelper.
+ * Configuration helper for I2PSnark standalone application user interface.
+ *
+ * <p>This class provides language selection functionality for the I2PSnark web interface
+ * when running in standalone mode (with its own app context). It is a simplified version
+ * of the router console's ConfigUIHelper, adapted specifically for I2PSnark's needs.
+ *
+ * <p>Key features:
+ * <ul>
+ * <li>Generates HTML select dropdown for language selection</li>
+ * <li>Supports ISO 639-1 and ISO 639-2 language codes</li>
+ * <li>Performs intelligent language matching with fallback logic</li>
+ * <li>Uses I2PSnark-specific message bundles for translations</li>
+ * </ul>
+ *
+ * <p>Note: This is a standalone-only helper that does not extend HelperBase and uses
+ * static methods since I2PSnark runs with its own application context separate from
+ * the main router console.
+ *
  * @since 0.9.27
  */
 public class ConfigUIHelper {
 
     private static final String CHECKED = " selected ";
     private static final String BUNDLE_NAME = "org.klomp.snark.web.messages";
-    //private static final String COUNTRY_BUNDLE_NAME = "net.i2p.router.countries.messages";
 
     /**
      *  Each language has the ISO code, the flag, the name, and the optional country name.
@@ -28,7 +42,6 @@ public class ConfigUIHelper {
     private static final String langs[][] = {
         { "ar", "lang_ar", "Arabic عربية", null },
         { "az", "az", "Azerbaijani", null },
-        { "bo", "xt", "Tibetan", null },
         { "cs", "cz", "Čeština", null },
         { "zh", "cn", "Chinese 中文", null },
         { "da", "dk", "Dansk", null },
@@ -54,6 +67,7 @@ public class ConfigUIHelper {
         { "ru", "ru", "Russian Русский", null },
         { "sl", "sk", "Slovenčina", null },
         { "sv", "se", "Svenska", null },
+        { "bo", "xt", "Tibetan", null }, // position by name, not iso code
         { "tr", "tr", "Türkçe", null },
         { "uk", "ua", "Ukrainian Українська", null },
         { "vi", "vn", "Vietnamese Tiếng Việt", null },
@@ -66,17 +80,31 @@ public class ConfigUIHelper {
     };
 
     /**
-     * Standalone (app context) only.
-     * Copied from ConfigUIHelper.
-     * @return HTML
+     * Generates HTML select dropdown for language selection in I2PSnark standalone mode.
+     *
+     * <p>Creates a &lt;select&gt; element containing all available languages with their
+     * display names. The current language is pre-selected based on the I2P app context
+     * configuration. Unlike the router console version, this generates a dropdown
+     * rather than radio buttons with flags.
+     *
+     * <p>Performs intelligent language matching:
+     * <ol>
+     * <li>First attempts to match the full language+country code (e.g., "en_US")</li>
+     * <li>Falls back to language-only code (e.g., "en")</li>
+     * <li>Defaults to English if no match is found</li>
+     * </ol>
+     *
+     * <p>The "Debug: Find untagged strings" option is hidden unless advanced mode is enabled.
+     *
+     * @param ctx the I2P application context for retrieving current language settings
+     * @return HTML string containing a complete language selection dropdown
      * @since 0.9.27
      */
     public static String getLangSettings(I2PAppContext ctx) {
         String clang = Translate.getLanguage(ctx);
         String current = clang;
         String country = Translate.getCountry(ctx);
-        if (country != null && country.length() > 0)
-            current += '_' + country;
+        if (country != null && country.length() > 0) {current += '_' + country;}
         // find best match
         boolean found = false;
         for (int i = 0; i < langs.length; i++) {
@@ -95,32 +123,36 @@ public class ConfigUIHelper {
                     }
                 }
             }
-            if (!found)
-                current = "en";
+            if (!found) {current = "en";}
         }
         StringBuilder buf = new StringBuilder(512);
-        buf.append("<select name=\"lang\">\n");
+        buf.append("<select name=lang>\n");
         for (int i = 0; i < langs.length; i++) {
             String lang = langs[i][0];
-            if (lang.equals("xx") && !isAdvanced())
-                continue;
+            if (lang.equals("xx") && !isAdvanced()) {continue;}
             buf.append("<option ");
-            if (lang.equals(current))
-                buf.append(CHECKED);
+            if (lang.equals(current)) {buf.append(CHECKED);}
             buf.append("value=\"").append(lang).append("\">");
             int under = lang.indexOf('_');
             String slang = (under > 0) ? lang.substring(0, under) : lang;
             buf.append(langs[i][2]);
             String name = langs[i][3];
-            if (name != null) {
-                buf.append(" (").append(name).append(')');
-            }
+            if (name != null) {buf.append(" (").append(name).append(')');}
             buf.append("</option>\n");
         }
         buf.append("</select>\n");
         return buf.toString();
     }
 
-    /** if necessary */
+    /**
+     * Determines if advanced mode features should be enabled.
+     *
+     * <p>Currently hardcoded to return false, meaning advanced features like
+     * the "Debug: Find untagged strings" language option are hidden.
+     * This method exists for future extensibility if advanced mode detection
+     * is needed for I2PSnark standalone.
+     *
+     * @return true if advanced features should be shown, false otherwise
+     */
     private static boolean isAdvanced() { return false; }
 }

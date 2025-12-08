@@ -14,11 +14,47 @@ import net.i2p.router.web.Messages;
 import net.i2p.router.web.RouterConsoleRunner;
 
 /**
- * Helper for user interface configuration page rendering and form processing.
+ * Helper class for rendering and processing user interface configuration pages in the I2P router console.
+ *
+ * <p>This class provides methods to generate HTML for various UI configuration sections including:
+ * <ul>
+ * <li>Theme selection and display options</li>
+ * <li>Mobile console settings</li>
+ * <li>Language selection interface</li>
+ * <li>Console password management forms</li>
+ * </ul>
+ *
+ * <p>The class extends {@link HelperBase} and uses the router context to access configuration
+ * properties and internationalization messages. All methods return HTML strings that can be
+ * directly embedded in JSP pages.
+ *
+ * <p>Key functionality includes:
+ * <ul>
+ * <li>Scanning for available themes from filesystem and configuration</li>
+ * <li>Managing language preferences with ISO 639-1/639-2 codes</li>
+ * <li>Handling console authentication settings</li>
+ * <li>Providing mobile console and app embedding options</li>
+ * </ul>
+ *
  * @since 0.9.33
  */
 public class ConfigUIHelper extends HelperBase {
 
+    /**
+     * Generates HTML for theme selection and display options configuration.
+     *
+     * <p>Renders a section containing:
+     * <ul>
+     * <li>Available theme selection with radio buttons and thumbnails</li>
+     * <li>Universal theming checkbox for applying themes across all apps</li>
+     * <li>Alternative font (Sora) selection option</li>
+     * </ul>
+     *
+     * <p>Themes are discovered from the filesystem and user configuration properties.
+     * The current theme is pre-selected based on router configuration.
+     *
+     * @return HTML string containing the theme selection interface
+     */
     public String getSettings() {
         StringBuilder buf = new StringBuilder(512);
         buf.append("<div id=availablethemes>");
@@ -27,72 +63,95 @@ public class ConfigUIHelper extends HelperBase {
         boolean useSoraFont = _context.getBooleanProperty(CSSHelper.PROP_ENABLE_SORA_FONT);
         Set<String> themes = themeSet();
         for (String theme : themes) {
-            buf.append("<label for=\"").append(theme).append("\"><div class=themechoice style=display:inline-block;text-align:center>")
+            buf.append("<label for=\"")
+               .append(theme)
+               .append("\"><div class=themechoice style=display:inline-block;text-align:center>")
                .append("<input type=radio class=optbox name=theme ");
-            if (theme.equals(current))
-                buf.append(CHECKED);
-            buf.append("value=\"").append(theme).append("\" id=\"").append(theme).append("\">")
-               .append("<img height=48 width=48 alt=\"\" src=\"/themes/console/").append(theme).append("/images/thumbnail.png\"><br>")
-               .append("<div class=themelabel>").append(_t(theme)).append("</div></div></label>\n");
+            if (theme.equals(current)) {buf.append(CHECKED);}
+            buf.append("value=\"")
+               .append(theme)
+               .append("\" id=\"")
+               .append(theme)
+               .append("\"><img height=48 width=48 alt=\"\" src=\"/themes/console/")
+               .append(theme)
+               .append("/images/thumbnail.png\"><br><div class=themelabel>")
+               .append(_t(theme))
+               .append("</div></div></label>\n");
         }
         buf.append("</div><div id=themeoptions><label><input type=checkbox class=\"optbox slider\" name=\"universalTheming\" ");
-        if (universalTheming)
-            buf.append(CHECKED);
+        if (universalTheming) {buf.append(CHECKED);}
         buf.append("value=1>")
            .append(_t("Set theme universally across all apps"))
-           .append("</label><br>\n");
-        buf.append("<label><input type=checkbox class=\"optbox slider\" name=\"useSoraFont\" ");
-        if (useSoraFont)
-            buf.append(CHECKED);
+           .append("</label><br>\n<label><input type=checkbox class=\"optbox slider\" name=\"useSoraFont\" ");
+        if (useSoraFont) {buf.append(CHECKED);}
         buf.append("value=1>")
            .append(_t("Use alternative display font in console and webapps"))
            .append("</label><br>\n");
         return buf.toString();
     }
 
+    /**
+     * Generates HTML for mobile console and app embedding configuration options.
+     *
+     * <p>Renders checkboxes for:
+     * <ul>
+     * <li>Forcing the mobile console interface to be used</li>
+     * <li>Embedding I2PSnark and I2PMail applications within the console</li>
+     * </ul>
+     *
+     * <p>Includes a tooltip recommendation to enable universal theming when embedding
+     * applications for consistent visual appearance.
+     *
+     * @return HTML string containing mobile console configuration options
+     */
     public String getForceMobileConsole() {
         StringBuilder buf = new StringBuilder(256);
         boolean forceMobileConsole = _context.getBooleanProperty(CSSHelper.PROP_FORCE_MOBILE_CONSOLE);
         boolean embedApps = _context.getBooleanProperty(CSSHelper.PROP_EMBED_APPS);
         buf.append("<label><input type=checkbox class=\"optbox slider\" name=forceMobileConsole ");
-        if (forceMobileConsole)
-            buf.append(CHECKED);
+        if (forceMobileConsole) {buf.append(CHECKED);}
         buf.append("value=1>")
            .append(_t("Force the mobile console to be used"))
-           .append("</label><br>\n");
-        buf.append("<label title=\"")
+           .append("</label><br>\n<label title=\"")
            .append(_t("Enabling the Universal Theming option is recommended when embedding these applications"))
            .append("\"><input type=checkbox class=\"optbox slider\" name=embedApps ");
-        if (embedApps)
-            buf.append(CHECKED);
+        if (embedApps) {buf.append(CHECKED);}
         buf.append("value=1>")
            .append(_t("Embed I2PSnark and I2PMail in the console"))
            .append("</label></div>\n");
         return buf.toString();
     }
 
-    /** @return standard and user-installed themes, sorted (untranslated) */
+    /**
+     * Retrieves all available themes from the filesystem and user configuration.
+     *
+     * <p>Scans the docs/themes/console directory for theme directories and also
+     * checks for user-installed themes defined in router configuration properties.
+     * The default theme is always included as a fallback.
+     *
+     * <p>Themes are returned in alphabetical order using a TreeSet for natural sorting.
+     *
+     * @return a sorted Set containing all available theme names (untranslated)
+     */
     private Set<String> themeSet() {
          Set<String> rv = new TreeSet<String>();
          // add a failsafe even if we can't find any themes
          rv.add(CSSHelper.DEFAULT_THEME);
          File dir = new File(_context.getBaseDir(), "docs/themes/console");
          File[] files = dir.listFiles();
-         if (files == null)
-             return rv;
+         if (files == null) {return rv;}
          for (int i = 0; i < files.length; i++) {
-             if (!files[i].isDirectory())
-                 continue;
+             if (!files[i].isDirectory()) {continue;}
              String name = files[i].getName();
-             if (name.equals("images"))
-                 continue;
+             if (name.equals("images")) {continue;}
              rv.add(name);
          }
          // user themes
          Set<String> props = _context.getPropertyNames();
          for (String prop : props) {
-              if (prop.startsWith(CSSHelper.PROP_THEME_PFX) && prop.length() > CSSHelper.PROP_THEME_PFX.length())
+              if (prop.startsWith(CSSHelper.PROP_THEME_PFX) && prop.length() > CSSHelper.PROP_THEME_PFX.length()) {
                   rv.add(prop.substring(CSSHelper.PROP_THEME_PFX.length()));
+              }
          }
          return rv;
     }
@@ -107,18 +166,18 @@ public class ConfigUIHelper extends HelperBase {
      *  Note: To avoid truncation, ensure language name is no longer than 17 chars.
      */
     private static final String langs[][] = {
-        /**
-            Note: any additions, also add to:
-            apps/i2psnark/java/src/org/klomp/snark/standalone/ConfigUIHelper.java
-            apps/routerconsole/jsp/console.jsp
-            apps/routerconsole/jsp/home.jsp
-            .tx/config
-            New lang_xx flags: Add to top-level build.xml
-            Names must be 18 chars or less (including country if specified)
-        **/
+        /*
+         * Note: any additions, also add to:
+         * - apps/i2psnark/java/src/org/klomp/snark/standalone/ConfigUIHelper.java
+         * - apps/routerconsole/jsp/console.jsp
+         * - apps/routerconsole/jsp/home.jsp
+         * - .tx/config
+         *
+         * New lang_xx flags: Add to top-level build.xml
+         * Names must be 18 chars or less (including country if specified)
+         */
         { "ar", "lang_ar", "Arabic عربية", null },
         { "az", "az", "Azerbaijani", null },
-        { "bo", "xt", "Tibetan", null },
         { "cs", "cz", "Čeština", null },
         { "zh", "cn", "Chinese 中文", null },
         { "da", "dk", "Dansk", null },
@@ -144,6 +203,7 @@ public class ConfigUIHelper extends HelperBase {
         { "ru", "ru", "Russian Русский", null },
         { "sl", "sk", "Slovenčina", null },
         { "sv", "se", "Svenska", null },
+        { "bo", "xt", "Tibetan", null }, // position by name, not iso code
         { "tr", "tr", "Türkçe", null },
         { "uk", "ua", "Ukraine Українська", null },
         { "vi", "vn", "Vietnam Tiếng Việt", null },
@@ -158,6 +218,22 @@ public class ConfigUIHelper extends HelperBase {
         //{ "zh_TW", "tw", "Chinese 中文", "Taiwan" },
     };
 
+    /**
+     * Generates HTML for language selection interface.
+     *
+     * <p>Renders radio buttons for all available languages with their corresponding
+     * flag icons and display names. The current language is pre-selected based on
+     * the router's language configuration.
+     *
+     * <p>Supports both ISO 639-1 two-letter codes and ISO 639-2 three-letter codes.
+     * Languages with country-specific variants include the country name in parentheses.
+     * The "Untagged strings" option is only shown for advanced users.
+     *
+     * <p>Performs intelligent language matching by first trying the full language+country
+     * code, then falling back to the language-only code, and finally defaulting to English.
+     *
+     * @return HTML string containing the language selection interface with flags and labels
+     */
     public String getLangSettings() {
         String clang = Messages.getLanguage(_context);
         String current = clang;
@@ -213,7 +289,23 @@ public class ConfigUIHelper extends HelperBase {
         return buf.toString();
     }
 
-    /** @since 0.9.4 */
+    /**
+     * Generates HTML for console password management interface.
+     *
+     * <p>Renders a form for managing router console authentication including:
+     * <ul>
+     * <li>Display of existing configured users with deletion options</li>
+     * <li>Input fields for adding new username and password</li>
+     * <li>Help text for password recovery and configuration guidance</li>
+     * </ul>
+     *
+     * <p>The delete user button is hidden when no users are configured.
+     * When users exist, shows a table with checkboxes for removal and the current usernames.
+     * Always includes fields for adding new users.
+     *
+     * @return HTML string containing the password management form
+     * @since 0.9.4
+     */
     public String getPasswordForm() {
         StringBuilder buf = new StringBuilder(512);
         ConsolePasswordManager mgr = new ConsolePasswordManager(_context);
