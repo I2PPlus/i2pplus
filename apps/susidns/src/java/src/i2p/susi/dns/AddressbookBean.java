@@ -8,10 +8,12 @@
 
 package i2p.susi.dns;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
@@ -76,25 +78,25 @@ public class AddressbookBean extends BaseBean {
      * @return true if a filter is active
      */
     public boolean isHasFilter() {return filter != null && filter.length() > 0;}
-    
+
     /**
      * Sets the table row class.
      * @param trClass the table row class
      */
     public void setTrClass(int trClass) {this.trClass = trClass;}
-    
+
     /**
      * Gets the table row class.
      * @return the table row class
      */
     public int getTrClass() {trClass = 1 - trClass; return trClass;}
-    
+
     /**
      * Returns whether the address book is empty.
      * @return true if the address book is empty
      */
     public boolean isIsEmpty() {return !isNotEmpty();}
-    
+
     /**
      * Returns whether the address book is not empty.
      * @return true if the address book is not empty
@@ -125,14 +127,61 @@ public class AddressbookBean extends BaseBean {
     }
 
     /**
+     * Load properties for a hostname from the raw hosts.txt file.
+     * This parses the #! format for properties.
+     * @param bean the AddressBean to set properties on
+     * @param hostname the hostname to find properties for
+     */
+    private void loadPropertiesFromFile(AddressBean bean, String hostname) {
+        FileInputStream fis = null;
+        try {
+            fis = new FileInputStream(getFileName());
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fis, "UTF-8"));
+            String line;
+            String search = hostname + '=';
+
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith(search)) {
+                    // Check if this line has properties
+                    int propsIndex = line.indexOf(net.i2p.client.naming.HostTxtEntry.PROPS_SEPARATOR);
+                    if (propsIndex > 0) {
+                        String propsStr = line.substring(propsIndex + 2); // Skip #!
+                        Properties props = new Properties();
+                        // Parse the properties in format key1=value1#key2=value2
+                        String[] propPairs = propsStr.split("#");
+                        for (String pair : propPairs) {
+                            int eqIndex = pair.indexOf('=');
+                            if (eqIndex > 0) {
+                                String key = pair.substring(0, eqIndex);
+                                String value = pair.substring(eqIndex + 1);
+                                props.setProperty(key, value);
+                            }
+                        }
+                        if (!props.isEmpty()) {
+                            bean.setProperties(props);
+                        }
+                    }
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            // Ignore errors, properties will remain empty
+        } finally {
+            if (fis != null) {
+                try { fis.close(); } catch (IOException e) {}
+            }
+        }
+    }
+
+    /**
      * Returns the display name for the address book.
      * @return the display name
      */
     public String getDisplayName() {return getFileName();}
-    
+
     /** Array of address entries */
     protected AddressBean[] entries;
-    
+
     /**
      * Returns the address entries.
      * @return the address entries
@@ -162,7 +211,7 @@ public class AddressbookBean extends BaseBean {
         this.book = DataHelper.stripHTML(book); // XSS
     }
 
-    /** 
+    /**
      * Load addressbook and apply filter, returning messages about this.
      * @return messages about loading the address book
      */
@@ -188,7 +237,11 @@ public class AddressbookBean extends BaseBean {
                     }
                 }
                 if (search != null && search.length() > 0 && name.indexOf(search) == -1) {continue;}
-                list.addLast(new AddressBean(name, destination));
+                AddressBean bean = new AddressBean(name, destination);
+                // For published addressbook, we need to parse properties from the raw file
+                // since Properties.load() doesn't preserve the hosts.txt format with #! properties
+                loadPropertiesFromFile(bean, name);
+                list.addLast(bean);
             }
             AddressBean array[] = list.toArray(new AddressBean[list.size()]);
             Arrays.sort(array, sorter);
@@ -208,13 +261,11 @@ public class AddressbookBean extends BaseBean {
     }
 
     /**
-    *  Format a message about filtered addressbook size, and the number of displayed entries
-    *  addressbook.jsp catches the case where the whole book is empty.
+    * Format a message about filtered addressbook size, and the number of displayed entries
+    * addressbook.jsp catches the case where the whole book is empty.
+    *
+    * @return message about loading
     */
-    /**
-     * Generates a message about the loaded address book.
-     * @return message about loading
-     */
     protected String generateLoadMessage() {
         String message;
         String filterArg = "";
@@ -269,7 +320,7 @@ public class AddressbookBean extends BaseBean {
         return message;
     }
 
-    /** 
+    /**
      * Perform actions, returning messages about this.
      * @return messages about the performed actions
      */
@@ -441,42 +492,43 @@ public class AddressbookBean extends BaseBean {
      * @return the destination string
      */
     public String getDestination() {return destination;}
-    
+
     /**
      * Sets the destination string.
      * @param destination the destination string to set
      */
     public void setDestination(String destination) {this.destination = DataHelper.stripHTML(destination).trim();} // XSS
-    
+
     /**
      * Returns the hostname string.
      * @return the hostname string
      */
     public String getHostname() {return hostname;}
-    
+
     /**
      * Resets the deletion marks.
      * @param dummy dummy parameter
      */
     public void setResetDeletionMarks(String dummy) {deletionMarks.clear();}
-    
+
     /**
      * Marks an entry for deletion.
      * @param name the name to mark for deletion
      */
     public void setMarkedForDeletion(String name) {deletionMarks.addLast(DataHelper.stripHTML(name));} // XSS
-    
+
     /**
      * Sets the hostname string.
      * @param hostname the hostname to set
      */
     public void setHostname(String hostname) {this.hostname = DataHelper.stripHTML(hostname).trim();} // XSS
+
     /**
      * Returns the beginning index as integer.
      * @return the beginning index
      */
     protected int getBeginInt() {return Math.max(0, Math.min(resultSize() - 1, beginIndex));}
-    
+
     /**
      * Returns the beginning index as string.
      * @return the beginning index as string
@@ -527,11 +579,6 @@ public class AddressbookBean extends BaseBean {
         catch (NumberFormatException nfe) {}
     }
 
-    /**
-    *  Does the entries map contain only the lookup result,
-    *  or must we index into it?
-    *  @since 0.8.7
-    */
     /**
      * Checks if entries are pre-filtered.
      * @return true if pre-filtered

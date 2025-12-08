@@ -190,11 +190,9 @@ public class NamingServiceBean extends AddressbookBean {
                 }
                 String destination = entry.getValue().toBase64();
                 AddressBean bean = new AddressBean(name, entry.getValue());
-                if (sortByDate) {
-                    Properties p = new Properties();
-                    Destination d = service.lookup(name, searchProps, p);
-                    if (d != null && !p.isEmpty()) {bean.setProperties(p);}
-                }
+                Properties p = new Properties();
+                Destination d = service.lookup(name, searchProps, p);
+                if (d != null) {bean.setProperties(p);}
                 list.addLast(bean);
             }
             AddressBean array[] = list.toArray(new AddressBean[list.size()]);
