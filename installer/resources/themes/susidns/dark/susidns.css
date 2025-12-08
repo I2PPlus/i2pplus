@@ -354,7 +354,7 @@ textarea[name="config"]{height:280px}
 }
 
 @media (min-width:1500px){
-body,input[type=submit],input[type=reset],input[type=file]::file-selector-button,.fakebutton,input,select,h4,td.names a,li,#filter a,#filter span a,td,.destaddress{font-size:10pt}
+body,input[type=submit],input[type=reset],input[type=file]::file-selector-button,.fakebutton,input,select,h4,td.names a,li,#filter a,#filter span a,td{font-size:10pt}
 th,pre{font-size:9pt}
 input[type=submit],input[type=reset],.fakebutton{padding:8px 12px 8px}
 input[type=text]{padding:8px}

@@ -2,9 +2,9 @@ main{position:relative}
 .displayPanels #book,.displayPanels #buttons{pointer-events:none!important;user-select:none!important}
 .displayPanels main::after{display:block;position:fixed;z-index:1000;backdrop-filter:blur(2px) saturate(.5);content:"";pointer-events:none;will-change:transform}
 #host_list{font-size:90%}
-#host_list .source,#host_list .added{padding:4px 8px;width:1%;text-align:center;white-space:nowrap;font-size:98%}
+#host_list .added,#host_list .b32link,#host_list .helper,#host_list .source{padding:4px 10px;width:5%;text-align:center;white-space:nowrap;font-size:99%}
 #host_list .source a{width:24px;height:24px;overflow:hidden;display:inline-block;vertical-align:middle;color:#0000;text-shadow:none;background:url(/themes/console/images/eepsites/registrar.svg) no-repeat center center/20px;transition:ease all .1s}
-#host_list .source a.manualAdd{background-image:var(--add)}
+#host_list .source a.manualAdd{background-image:var(--add);background-size:18px}
 #host_list .source a.viaHelper{background-image:var(--helper)}
 #host_list .source a[href^="http://notbob.i2p"]{background-image:url(/themes/console/images/eepsites/notbob.png)}
 #host_list .source a[href^="http://reg.i2p"]{background-image:url(/themes/console/images/eepsites/reg.svg)}
@@ -19,3 +19,8 @@ main{position:relative}
 #navi{position:relative;z-index:2000}
 @keyframes slideDown{from{transform:translateY(-800px)}to{transform:translateY(0)}}
 @keyframes slideUp{from{transform:translateY(0)}to{transform:translateY(-800px)}}
+@media (max-width:1199px){
+  #host_list th{font-size:80%!important}
+  #host_list .added,#host_list .b32link,#host_list .helper,#host_list .source{padding-left:4px;padding-right:4px;min-width:0!important}
+  #host_list .source a{background-size:16px!important}
+}

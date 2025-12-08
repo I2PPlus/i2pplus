@@ -219,14 +219,14 @@ public class AddressBean {
             try {
                 java.net.URL url = new java.net.URL(rv);
                 String hostname = url.getHost();
-                rv = "<a href=\"" + rv + "\" target=_blank title=\"" + _t("from") + ' ' + hostname + "\">" + hostname + "</a>";
+                rv = "<a href=\"" + rv + "\" target=_blank title=\"" + _t("Source") + ": " + hostname + "\">" + hostname + "</a>";
             } catch (java.net.MalformedURLException e) {
                 // If URL parsing fails, fall back to original behavior
-                rv = "<a href=\"" + rv + "\" target=_blank title=\"" + _t("from") + ' ' + rv + "\">" + rv + "</a>";
+                rv = "<a href=\"" + rv + "\" target=_blank title=\"" + _t("Source") + ": " + rv + "\">" + rv + "</a>";
             }
-        } else if ("Manually added via SusiDNS".equals(rv)) {
+        } else if (_t("Manually added via SusiDNS").equals(rv)) {
            rv = "<a class=manualAdd title=\"" + _t("Manually added") + "\"></a>";
-        } else if ("Added via address helper".equals(rv)) {
+        } else if (_t("Added via address helper").equals(rv)) {
             rv = "<a class=viaHelper title=\"" + _t("Via helper") + "\"></a>";
         } else if (rv.startsWith("Added via address helper from ")) {
             String remaining = rv.substring("Added via address helper from ".length());
