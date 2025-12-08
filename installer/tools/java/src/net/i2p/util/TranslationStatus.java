@@ -472,7 +472,8 @@ public class TranslationStatus {
                 String row = "<tr class=incomplete>";
                 if (complete) {row = "<tr class=complete>";}
                 String cc = getCountryCode(loc);
-                String flag = "<span class=langflag><img class=tx_flag src=\"/flags.jsp?c=" + cc + "\" width=24></span>";
+                boolean isTibet = cc.equals("bo");
+                String flag = "<span class=langflag><img class=tx_flag src=\"/flags.jsp?c=" + (isTibet ? "xt" : cc) + "\" width=24></span>";
                 if (_html) {
                     buf.append(row).append("<td>").append(flag).append(dlang).append(country).append("</td><td>")
                        .append(lg).append("</td><td></td><td>").append("<span class=").append(sok).append(">").append(sok).append("</span></td></tr>\n");
