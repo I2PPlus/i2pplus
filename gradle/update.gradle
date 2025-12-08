@@ -34,7 +34,7 @@ task prepUpdateSmall(type: Copy) {
 }
 
 task prepUpdate(type: Copy) {
-    dependsOn ':apps:BOB:jar', ':apps:sam:jar'
+    dependsOn ':apps:sam:jar'
     dependsOn ':apps:i2psnark:i2psnarkJar', ':apps:i2psnark:jar'
     dependsOn ':apps:systray:jar'
     dependsOn ':apps:jetty:jar'
@@ -55,7 +55,6 @@ task prepUpdate(type: Copy) {
     into 'pkg-temp'
     into('lib') {
         from {[
-            project(':apps:BOB').jar.archiveFile,
             project(':apps:sam').jar.archiveFile,
             project(':apps:i2psnark').i2psnarkJar.archiveFile,
             project(':apps:systray').jar.archiveFile,
