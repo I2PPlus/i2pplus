@@ -6257,13 +6257,13 @@ msgid "Base32 (B32) / Base64 (B64)"
 msgstr "Base32 (B32) / Base64 (B64)"
 
 msgid "A <a href=https://en.wikipedia.org/wiki/Base32 class='sitelink external' target=_blank rel=noreferrer>Base32</a> link (which always ends with .b32.i2p) is a hash of a <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external' target=_blank rel=noreferrer>Base64</a> destination. For services on the network, the Base64 hash is often mapped to an .i2p domain in the addressbook."
-msgstr ""
+msgstr "<a href=https://en.wikipedia.org/wiki/Base32 class='sitelink external' target=_blank rel=noreferrer>Base32</a> འབྲེལ་ལམ་（ནམ་རྒྱུན་ .b32.i2p ཐོག་ནས་འགྲུབ་པ་）ནི་ <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external' target=_blank rel=noreferrer>Base64</a> འགྲོ་སའི་གསལ་རྟགས་ཡིན། དྲ་ལམ་གི་ཞབས་ཞུངས་ལ་ <a href=https://en.wikipedia.org/wiki/Base64 class='sitelink external' target=_blank rel=noreferrer>Base64</a> གསལ་རྟགས་ནི་ཁ་བྱང་གནས་དེབ་ནང་ .i2p ཡུལ་ལུགས་སུ་ལ་རྟེན་པར་སྐབ་ཀྱི་རེད་པ་ཡོད།"
 
 msgid "B33"
 msgstr "B33"
 
 msgid "An address containing an encrypted LeaseSet is informally referred to as a b33 address, an extension of a base32 address with the host's public key and signature type encoded into the address instead of a lookup hash. This address type is required for blinded Leasesets. More information: <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>B33 Specification</a>"
-msgstr ""
+msgstr "གསང་བཅད་བརྒྱུད་པའི་ LeaseSet འགོད་པའི་ b33 ཁ་བྱང་ལ་གཞིམ་པར་བརྩིགས་པ་ཞིག་ཡིན། དེ་ནི་ base32 ཁ་བྱང་གི་རྒྱུད་པ་ཞིག་ཡིན་ལ་ཧོསི་གི་སྤྱི་ལྡེ་མིག་དང་མིང་རྟགས་རིགས་ཀྱི་རིགས་ཁ་བྱང་ནང་ཨང་གསལ་བའི་ཚབ་བྱུང་ཚུད་པའི་ཚབ་བརྒྱུད་པར་བརྩིགས་པ་ཞིག་ཡིན། ཁ་བྱང་རིགས་འདི་འདི་ནི་གསང་བཅད་བརྒྱུད་པའི་ Leasesets ལ་དགོས་པར་དགོས། ཕྱི་མཚམས་ཆེ་བའི་ཆེད་དོན། <a href=https://geti2p.net/spec/b32encrypted class='sitelink external' target=_blank rel=noreferrer>B33 གཏན་འབེབས་</a>"
 
 msgid "BOB"
 msgstr "BOB"
@@ -6275,7 +6275,7 @@ msgid "Clearnet"
 msgstr "Clearnet"
 
 msgid "Clearnet normally refers to the publicly accessible internet, the opposite of the darknet that typically describes the encrypted, anonymous services built on I2P, Tor etc. For more information, see the <a href=https://en.wikipedia.org/wiki/Clearnet_(networking) class='sitelink external' target=_blank rel=noreferrer>Wikipedia article</a>."
-msgstr ""
+msgstr "Clearnet གིས་སྤྱོད་ཡོད་པའི་དྲ་ལམ་ལ་འཛོལ་བརྒྱུད་པའི་དྲ་བརྒྱུད་པ་ལ་གོ་རེན་པའི་དྲ་ལམ་ལ་འཛོལ་བརྒྱུད་པ་ཡིན། དེ་ནི་ darknet གི་ལྡོགས་པ་ཡིན། darknet ནི་ I2P། Tor ལ་སོགས་པའི་གསང་བཅད་བྱས་པའི་མིང་ཚང་མེད་པའི་ཞབས་བརྩམས་བྱེད་པའི་ཞབས་བརྩམས་བྱེད་པ་ཡིན། ཕྱི་མཚམས་ཆེ་བའི་ཆེད་དོན་གསལ་བའི་དོན་གསལ་ <a href=https://en.wikipedia.org/wiki/Clearnet_(networking) class='sitelink external' target=_blank rel=noreferrer>Wikipedia རྩོམ་ཡིག</a> ལ་གཟིགས་རོགས།"
 
 msgid "The unique cryptographic identity of the inbound endpoint of a tunnel providing access to a service on the I2P network, represented as a Base32 or Base64 hash of the public key. Equivalent to an IP address and port."
 msgstr "I2P དྲ་ལམ་ཐོག་གི་ཞབས་ཞུ་ཁག་ལ་ལ་གང་འདྲེན་པའི་གདོང་ཐུད་གི་ནང་འདྲེན་པའི་མཐེབ་སྐར་གི་གསང་རྟགས་ཐོག་རྒྱུན་མཐུད་ཞིག་ཡིན། སྤེར་མོའི་ལྡེ་མིག་གི་ Base32 ཡང་ན་ Base64 གསང་རྟགས་ཞིག་ཡིན་ལ་བརྒྱུན་མཐུད་བྱས་པ། IP ཁ་བྱང་དང་ཐེབ་སྐར་དང་མཚུང་པ།"
@@ -6305,7 +6305,7 @@ msgid "A tunnel used by the router for communicating with other routers to perfo
 msgstr "རོ་ཌེར་གིས་གཞན་རོ་ཌེར་ཚོགས་པར་འབྲེལ་བརྒྱུད་བྱེད་པར་བེད་པའི་སྣོན་མཐའི་\"housekeeping\" བྱེད་པ་ཚོགས་པར་འབྲེལ་བརྒྱུད་བྱེད་པ། <i>leasesets</i> སློགས་པ་དང་པརྩིས་པ། ལེན་གནད་སྐུད་སྲོག་སྐར་ཚོད་པ། དང་དྲ་ལམ་གི་རོ་ཌེར་ཚོགས་པར་སྣོན་མཐའི་དང་གཏན་འཇལ་བའི་རྒྱུད་བྱེད་པ། འདི་སྐུད་སྲོག་སྐར་ཚོགས་པར་སྤྱིར་བརྒྱུད་བྱེད་པ།"
 
 msgid "A router on the network tasked with providing and receiving information about other routers and services on the network. The current minimum share bandwidth for a router to be considered as capable of performing floodfill duties is 128 KBytes/sec, though it's possible to override this requirement and force a router to be a floodfill on the <a href=/configadvanced>Advanced Configuration page</a>. For more information, see the <a href=https://geti2p.net/en/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>online documentation</a>."
-msgstr ""
+msgstr "དྲ་ལམ་གི་རོ་ཌེར་ཞིག་གི་ལས་ཀ་ནི་དྲ་ལམ་གི་རོ་ཌེར་དང་ཞབས་ཞུངས་ཀྱི་སྐོར་བརྒྱུད་པའི་ཆ་འཕྲིན་སྤྲོད་པ་དང་ལེན་པའི་ལས་ཀ་བྱེད་པ་ཞིག་ཡིན། རོ་ཌེར་ཞིག་ floodfill ལས་ཀ་བསྒྲུབ་པར་ནུས་ལྡན་པའི་ཆུང་ཐུང་གཞན་པའི་བརྒྱུད་ཚད་ 128 KBytes/sec ཡིན་ལ། འོན་ཀྱང་ <a href=/configadvanced>མཐོ་རིམ་རྒྱུན་རྣམ་རྒྱུན་ངོ་སྟོན་ཤོག་</a> ཐོག་ནས་འདི་རྒྱུན་རྣམ་རྒྱུན་ནུས་ལྡན་པར་བསྒྱུར་བཞག་པ་དང་རོ་ཌེར་ཞིག་ floodfill ལ་བསྒྱུར་བཞག་པ་ནུས་ལྡན་པར་བསྒྱུར་བཞག་པ་ཞིག་ཡིན། ཕྱི་མཚམས་ཆེ་བའི་ཆེད་དོན་གསལ་བའི་ <a href=https://geti2p.net/en/docs/how/network-database#floodfill class='sitelink external' target=_blank rel=noreferrer>གློ་བརྟེན་ཡིག་ཆ་</a> ལ་གཟིགས་རོགས།"
 
 msgid "Garlic Routing"
 msgstr "སྒོགས་ཆེན་ལམ་རྒྱུད་བྱེད་པ།"
@@ -6332,7 +6332,7 @@ msgid "I2P+"
 msgstr "I2P+"
 
 msgid "A soft fork of the Java I2P software which retains full compatibility, providing an enhanced user interface and improvements to network performance. See <a href=http://skank.i2p/ class=sitelink target=_blank rel=noreferrer>http://skank.i2p/</a> or <a href=https://i2pplus.github.io class='sitelink external' target=_blank rel=noreferrer>https://i2pplus.github.io</a>for more information."
-msgstr ""
+msgstr "Java I2P མཉེན་ཆས་ཀྱི་སྲུང་ལྷེན་ཞིག་ཡིན་ལ། ཆ་ཚང་ཕན་འགྲོད་པའི་མཉེན་ཆས་དང་མཐུན་སྣེགས་ལ་ལྷེན་ཞིག་ཡིན་ལ། དྲ་ལམ་གི་ནུས་ལྡན་པའི་མཐུན་སྣེགས་ལ་ལྷེན་དང་དྲ་ལམ་གི་ནུས་ལྡན་པའི་ནུས་ལྡན་པའི་ནུས་ལྡན་པ་ལ་གནས་དེབ་ནང་བསྐྱར་བསྒྱུད་པ་ཞིག་ཡིན། <a href=http://skank.i2p/ class=sitelink target=_blank rel=noreferrer>http://skank.i2p/</a> ཡང་ན་ <a href=https://i2pplus.github.io class='sitelink external' target=_blank rel=noreferrer>https://i2pplus.github.io</a> ཐོག་ནས་ཕྱི་མཚམས་ཆེ་བའི་ཆེད་དོན་གསལ་བའི་གཟིགས་རོགས།"
 
 msgid "I2PBote (plugin)"
 msgstr "I2PBote (སྒོ་རོལ་གྱི་ཚོགས་ཤེལ་)"
@@ -6657,7 +6657,7 @@ msgid "Do not reveal this file to unknown users, as it contains sensitive data (
 msgstr "ཡིག་ཆ་དེ་མི་ཤེས་མི་དང་བཤིག་མི་བྱོས། དེ་ཡང་ན་ཁྱོད་ཀྱིས་རེ་སིིཌ་བྱེད་པའི་གནས་ཚུལ་གི་ཡིག་ཆ་མང་པོ་འདོན་པ་ཡིན། དེ་ཡང་ན་ཁྱོད་ཀྱིས་རེ་སིིཌ་བྱེད་པའི་གནས་ཚུལ་གི་ཡིག་ཆ་མང་པོ་འདོན་པ་ཡིན། ཁྱོད་ཀྱིས་མིང་དོན་གཞན་གི་གྲངས་ཀ་བཟོ་སྒྲིག་བྱེད་པའི་ཆེད་དུ་གཤིབ་པ་དང་། རེ་སིིཌ་བྱེད་པའི་གནས་ཚུལ་གི་ཡིག་ཆ་མང་པོ་འདོན་པ་ཡིན།"
 
 msgid "General guidelines for manual reseeding of I2P"
-msgstr ""
+msgstr "I2P ལ་གཞི་བརྒྱུད་པའི་ལག་སློགས་པའི་སྤྱོད་ཡོད་པའི་གཞི་བརྒྱུད་པ།"
 
 msgid "Do not publicly publish the reseed file or share these files with a friend of a friend!"
 msgstr "སྐུར་བཏོན་གྱི་ཡིག་ཆ་དེ་མི་དམངས་པའི་གནས་གོང་དུ་མི་གཏོང་བ་དང་། འདྲེ་ཤོག་གི་འདྲེ་ཤོག་ལ་ཡང་མི་སྟར་བར་བརྩི་དགོས།"
@@ -6810,7 +6810,7 @@ msgid "The <i class=example>default</i> threshold applies to any remote destinat
 msgstr "<i class=example>default</i>ཚོད་འཛིན་ཞིག་ནི་བཞེངས་པའི་ཡིག་ཆ་དང་། བཤེར་བའི་ཡིག་ཆ་གང་རུང་གི་ནང་དུ་མངོན་དུ་མེད་པའི་གནས་གོང་རྣམས་ལ་ཚོད་འཛིན་བཤེར་བར་བརྟེན་པའི་ཚོད་འཛིན་ཐོག་མ་ཡིན། ཚོད་འཛིན་ཐོག་མ་བཤེར་བར་བརྟེན་ནས་ཚིག་གཞི་<i class=example>default</i>ཡིག་ཆ་གསར་བར་བརྟེན་ནས་ཚོད་འཛིན་གཙང་མ་བྱེད་ཆོག།"
 
 msgid "The following threshold definition <i class=example>180/60</i> specifies that the same remote destination is allowed to make 179 connection attempts during a 60 second period. If it makes one more attempt within the same period, the threshold will be breached and further connection attempts will be rejected until the end of the period:"
-msgstr ""
+msgstr "<i class=example>180/60</i> གི་གནས་དེབ་ནང་གི་རྒྱུན་ནི་གཅིག་གི་རིམ་ཐོག་ནས་འགྲོ་སའི་གསང་རྟགས་ནི་ཐུང་གཅིག་གི་སྐར་ཆ་ 60 སྐར་ཆའི་ནང་ 179 འབྲེལ་བརྒྱགས་བྱེད་པའི་བཀོད་པར་བསྐྱོང་བཞིན་པ། གལ་སོགས་པར་གཅིག་གི་བཀོད་པར་བསྐྱོང་བཞིན་ན། གནས་དེབ་ནང་གི་རྒྱུན་ནི་བཀས་བརྒྱགས་ཡོད་པ་དང་བཀོད་པར་བསྐྱོང་བཞིན་པའི་བརྒྱགས་ཡོད་པ་དང་བཀོད་པར་བསྐྱོང་བཞིན་པ་དུས་ལྟོབ་པར་བཀག་པ།"
 
 msgid "To allow all unspecified client destinations:"
 msgstr "བཟོ་འཐབ་བྱེད་མཁན་གི་གནས་གོང་རྣམས་ཀུན་ལ་བརྒྱུད་རྒྱུའི་ཚོད་འཛིན་བཤེར་བར་བརྟེན་ནས:"
@@ -6930,7 +6930,7 @@ msgid "Local Destinations"
 msgstr "ཡུལ་གྱི་སྡོད་གནས།"
 
 msgid "These are the local services provided by your router. They may be clients started through the <a href='/i2ptunnelmgr'>Tunnel Manager</a> or external programs connecting through SAM, BOB, or directly to I2CP. By default, most of your client services (mail, http proxy, IRC) will share the same set of tunnels and be listed as <i>Shared Clients</i> and <i>Shared Clients(DSA)</i>, which enhances anonymity by blending the traffic from all shared services, and reduces the overhead required to build and maintain tunnels. However, if you experience a tunnel failure, all your services will go offline at the same time, so in some scenarios you may wish to configure client services to use their own set of tunnels. This can be done by unchecking the <i>Share tunnels with other clients&hellip;</i> option listed under <i>Shared Clients</i> on the configuration page of the relevant client service in the Tunnel Manager, after which you will need to restart the client service from the <a href='/i2ptunnelmgr'>main Tunnel Manager page</a>."
-msgstr ""
+msgstr "འདི་ནི་ཁྱེད་ཀྱི་རོ་ཌེར་གྱིས་མཁོ་སྤྲོད་བྱས་པའི་ས་གནས་ཀྱི་ཞབས་ཞུ་ཁག་ཅིག་ཡིན། དེ་དག་ནི་<a href='/i2ptunnelmgr'>གྲུང་ལམ་དོ་དམ་པ།</a>བརྒྱུད་ནས་འགོ་ཚུགས་པའི་ལེན་གནད་ཁག་པ་ཡང་ན་ SAM། BOB། ཡང་ན་ I2CP ཐད་ཀར་ལ་མཐུད་པའི་ཕྱི་རོལ་གློག་རིམ་ཁག་ཅིག་ཡིན། སྔོན་སྒྲིག་ལྟར། ཁྱེད་ཀྱི་ལེན་གནད་ཞབས་ཞུ་མང་ཆེ་བ། (ཡིག་ཆ། http ཚབ་སྤྱོད། IRC) གཅིག་མཚུངས་ཀྱི་གྲུང་ལམ་ཚོགས་ཆ་ཞིག་བརྒྱུད་ནས་མཉམ་འདུས་བྱེད་པ་དང་། <i>མཉམ་སྤྱོད་ལེན་གནད།</i>དང་<i>མཉམ་སྤྱོད་ལེན་གནད།(DSA)</i>ཅེས་ཐོ་བཀོད་བྱེད་ཀྱི་ཡོད། དེས་མཉམ་སྤྱོད་ཞབས་ཞུ་ཚང་མའི་འགྲུལ་འཁོར་བསྡུམ་པ་བརྒྱུད་ནས་མིང་མེད་རང་བཞིན་ཇེ་དང་གསང་གསང་ཇེ་བཟོ་བ་དང་། གྲུང་ལམ་བཟོ་བ་དང་རྒྱུན་འཁྱོངས་བྱེད་པར་དགོས་པའི་ལས་ཀའི་ཁུར་ཆ་ཉུང་དུ་གཏོང་བར་བྱེད། འོན་ཀྱང་། གལ་སྲིད་ཁྱེད་ལ་གྲུང་ལམ་ཕམ་ཉེས་ཤོར་ན། ཁྱེད་ཀྱི་ཞབས་ཞུ་ཚང་མ་དུས་མཚུངས་ལ་དྲ་ལེན་དུ་འགྲོ་རྒྱུ་རེད། དེར་བརྟེན། གནས་ཚུལ་འགའ་རུང་ཞིག་ན། ཁྱེད་ཀྱིས་ལེན་གནད་ཞབས་ཞུ་ཁག་ཅིག་རང་ཉིད་ཀྱི་གྲུང་ལམ་ཚོགས་ཆ་བེད་སྤྱོད་བྱེད་པར་རྒྱུན་སྐྱོང་བྱེད་འདོད་སྲིད། དེ་ནི་གྲུང་ལམ་དོ་དམ་པའི་ནང་གི་འབྲེལ་བྱེད་ལེན་གནད་ཞབས་ཞུའི་རྒྱུན་སྒྲིག་ངོས་ཐོག་གི་<i>མཉམ་སྤྱོད་ལེན་གནད།</i>འོག་ཏུ་ཡོད་པའི་<i>ལེན་གནད་གཞན་དང་མཉམ་དུ་གྲུང་ལམ་མཉམ་སྤྱོད་བྱེད།&hellip;</i>གདམ་བཀོད་སྒོ་རྒྱག་བརྒྱུད་བྱེད་ཆོག་ལ། དེའི་རྗེས་སུ་ཁྱེད་ཀྱིས་<a href='/i2ptunnelmgr'>གྲུང་ལམ་དོ་དམ་པའི་གཙོ་ངོས་ཤོག་ལ་</a>ནས་ལེན་གནད་ཞབས་ཞུ་བསྐྱར་འགོ་ཚུགས་དགོས།"
 
 msgid "The actual tunnels are shown on the <a href='/tunnels'>Tunnels page</a>."
 msgstr "<a href='/tunnels'>འགྲོ་ལམ་དངོས་པོའི་ངོས</a>ནང་ནི་དངོས་པོའི་འགྲོ་ལམ་མཚོན་གཉིས་མངོན་འགྱུར་བྱེད།"
@@ -6943,92 +6943,92 @@ msgstr "ཁྱོད་ཀྱི་བྲོགཟར་གྱིས་སྐུ
 msgid "Participating"
 msgstr "སྤྱོད་པའི་བརྒྱུད་རིམ།"
 
-msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a  href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
-msgstr ""
+msgid "Tunnels built by other routers through your router. This may vary widely depending on network demand, your shared bandwidth, and amount of locally-generated traffic. The recommended method for limiting participating tunnels is to change your share percentage on the <a href='/config'>Bandwidth Configuration page</a>. You may also limit the total number by setting <code>router.maxParticipatingTunnels=nnn</code> on the <a href='/configadvanced'>Advanced configuration page</a>. <a href='/configstats#tunnel.participatingTunnels'>[Enable graphing]</a>."
+msgstr "གཞི་ནེལ་དོ་དམ་བྱེད་པ་གཞི་གྲ་རོ་ཌེར་གྱིས་པའི་ཞབས་ཞུ་བརྒྱུད་པ་རྣམ་པ། འདི་ནི་དོ་དམ་བྱེད་པ་དང་ཁྱེད་ཀྱི་གི་དྲེན་བརྒྱུད་པའི་ལས་གནད་པའི་ཞབས་ཞུ་བརྒྱུད་པ་དང་ས་རྒྱུད་པའི་འཕྲིན་བརྒྱུད་པའི་ཚོད་ཚད་ལ་བརྒྱུད་པ་དང་ས་རྒྱུད་པའི་འཕྲིན་བརྒྱུད་པའི་ཚོད་ཚད་ལ་བརྒྱུད་པ་དང་གཞི་གྲ་རོ་ཌེར་གྱིས་པའི་ཞབས་ཞུ་བརྒྱུད་པ་རྣམ་པ་རང་བསྐྱེད་པའི་གྲུང་ནེལ་དོ་དམ་བྱེད་པ་ཚང་མ་ནས་བརྒྱུད་པ་ཉུང་དམའི་བརྒྱུད་པ་དང་གྲུང་ནེལ་དོ་དམ་བྱེད་པ་<a href='/config'>བརྒྱུད་བཏོན་པའི་ཚད་ཆེན་རོགས་དམ་བྱེད་པ་ཤོག་ངོས་ལ་</a> ཐོག་ནས་ཁྱེད་ཀྱི་གི་སྤྱོད་ལེན་གནད་པའི་ཚད་ཆེན་རོགས་དམ་བྱེད་པ་<code>router.maxParticipatingTunnels=nnn</code> གདམ་པའི་<a href='/configadvanced'>མཐོ་རིམ་རྒྱུན་སྒྲིག་ལྟོགས་པའི་ཤོག་ངོས་ལ་</a> ལ་<a href='/configstats#tunnel.participatingTunnels'>[གྲུང་ནེལ་དོ་དམ་བྱེད་པ་བརྒྱུད་པ་བཏང་བ།]</a>།"
 
 msgid "Share Ratio"
-msgstr ""
+msgstr "གསང་རྟགས་གི་གནས་ཁག"
 
 msgid "The number of participating tunnels you route for others, divided by the total number of hops in all your exploratory and client tunnels. A number greater than 1.00 means you are contributing more tunnels to the network than you are using."
-msgstr ""
+msgstr "ཁྱེད་ཀྱི་གི་གཞི་གྲ་ནེལ་དོ་དམ་བྱེད་པ་གཞི་གྲ་རོ་ཌེར་གྱིས་པའི་ཞབས་ཞུ་བརྒྱུད་པ་རྣམ་པ་དང་ཁྱེད་ཀྱི་གི་གྲུང་ནེལ་དོ་དམ་བྱེད་པ་ཚང་མ་ནས་བརྒྱུད་པའི་འཕྲིན་བརྒྱུད་པའི་ཚོད་ཚད་ལ་བརྒྱུད་པ་དང་ས་རྒྱུད་པའི་འཕྲིན་བརྒྱུད་པའི་ཚོད་ཚད་ལ་བརྒྱུད་པ་དང་གཞི་གྲ་རོ་ཌེར་གྱིས་པའི་ཞབས་ཞུ་བརྒྱུད་པ་རྣམ་པ་དང་ཁྱེད་ཀྱི་གི་གྲུང་ནེལ་དོ་དམ་བྱེད་པ་ཚང་མ་ནས་བརྒྱུད་པ་ཉུང་དམའི་བརྒྱུད་པ་དང་གྲུང་ནེལ་དོ་དམ་བྱེད་པ་ཚང་མ་ནས་བརྒྱུད་པ་གཞི་གྲ་རོ་ཌེར་གྱིས་པའི་ཞབས་ཞུ་བརྒྱུད་པ་རྣམ་པ་རང་བསྐྱེད་པའི་གྲུང་ནེལ་དོ་དམ་བྱེད་པ་ཚང་མ་ནས་བརྒྱུད་པ་1.00 ལས་ཆེན་བས་ན་ཁྱེད་ཀྱི་གི་དྲེན་བརྒྱུད་པ་དང་གཞི་གྲ་རོ་ཌེར་གྱིས་པའི་ཞབས་ཞུ་བརྒྱུད་པ་རྣམ་པ་དང་ཁྱེད་ཀྱི་གི་དྲེན་བརྒྱུད་པ་ཚང་མ་ནས་བརྒྱུད་པ་ཉུང་དམའི་བརྒྱུད་པ་དང་གྲུང་ནེལ་དོ་དམ་བྱེད་པ་ཚང་མ་ནས་བརྒྱུད་པ།"
 
 msgid "Some basic indications of router overload:"
-msgstr ""
+msgstr "རོ་ཌེར་གི་བཟོ་བཟོགས་པའི་གཞི་བརྒྱུད་པའི་སྤྱོད་ཡོད་པའི་གཞི་བརྒྱུད་པ།"
 
 msgid "Job Lag"
-msgstr ""
+msgstr "ལས་ཀ་དོན་དུས་རིང་ལུག"
 
 msgid "How long jobs are waiting before execution. The job queue is listed on the <a href='/jobs'>Jobs page</a>. Unfortunately, there are several other job queues in the router that may be congested, and their status is not available in the router console. The job lag should generally be zero. If it is consistently higher than 500ms, your computer is very slow, your network is experiencing connectivity issues, or the router has serious problems. <a href='/configstats#jobQueue.jobLag'>[Enable graphing]</a>."
-msgstr ""
+msgstr "ལས་ཀ་དེ་ཚོད་ལྟར་སྔོན་ནས་སྒུག་སྐར་བརྒྱུད་ནས་སྒུག་ཐར་བར་དུས་ཚད་ག་ཚོད་ཅི་ཡོད། ལས་ཀའི་གྲལ་སྒོར་ནི་<a href='/jobs'>ལས་ཀའི་ཤོག་ལ་</a>ཐོག་ཏུ་བཀོད་ཡོད། སྐབས་བརྙན་ཏེ། རོ་ཌེར་ནང་ལས་ཀའི་གྲལ་སྒོར་གཞན་ཁག་ཅིག་ཡོད་པ་དེ་དག་འགགས་སླད་པར་འགྱུར་སྲིད་ལ། དེ་དག་གི་གནས་ཚུལ་ནི་རོ་ཌེར་རོགས་སྒྱུར་བཞག་ཐོག་ནས་ཐོབ་ཐབས་མེད། ལས་ཀའི་ཕྱིན་འགྱངས་ནི་སྤྱི་ནས་ཀླད་ན་ཀླད་ཡིན་དགོས། གལ་སྲིད་དེ་རྒྱུན་མཐུག་ཏུ་500msལས་མཐོ་ན། ཁྱེད་ཀྱི་གློག་རིག་ཧ་ཅང་དལཔ་བ་ཡིན་པའམ། ཁྱེད་ཀྱི་དྲ་ལམ་ལ་མཐུད་སྣེ་བའི་གནད་དོན་ཡོད་པའམ། ཡང་ན་རོ་ཌེར་ལ་གནད་དོན་ཚབས་ཆེན་ཡོད། <a href='/configstats#jobQueue.jobLag'>[རི་མོ་བཟོ་བར་བྱེད་པ་བྱེད་ཆོག]</a>"
 
 msgid "Message Delay"
-msgstr ""
+msgstr "འཕྲིན་ཐུང་དུས་རིང་ལུག"
 
 msgid "How long an outbound message waits in the queue. This should generally be a few hundred milliseconds or less. If it is consistently higher than 1000ms, your computer is very slow, or you should adjust your bandwidth limits, or your (BitTorrent?) clients may be sending too much data and should have their transmit bandwidth limit reduced. <a href='/configstats#transport.sendProcessingTime'>[Enable graphing]</a> (transport.sendProcessingTime)."
-msgstr ""
+msgstr "ཕྱི་རོལ་གྱི་འཕྲིན་ཐུང་གཅིག་གྲལ་སྒོར་ནང་སྒུག་ཐར་བར་དུས་ཚད་ག་ཚོད་ཅིག་ཡིན། དེ་ནི་སྤྱིད་ནས་སྐར་མ་བརྒྱ་བ་སྟེར་བུམ་གཅིག་ལས་ཉུང་བ་ཡང་ན་ཉུང་བ་མེད་པ། གལ་སྒོར་ནི་1000msལས་མཐོ་བ་ན། ཁྱེད་ཀྱི་གློག་རིག་ཧ་ཅང་དལཔ་བ་ཡིན་པའམ། ཡང་ན་ཁྱེད་ཀྱིས་བརྒྱ་བསྒྲིག་ཚད་བཅད་དགོས་པར་དགོས་པ། ཡང་ན་ཁྱེད་ཀྱི་(BitTorrent?) ལེན་གནད་ཁག་པ་གནད་ཆ་ཧ་ཅང་མང་པོ་བརྒྱ་བ་ནས་བརྒྱ་བསྒྲིག་ཚད་བཅད་དགོས་པར་དགོས་པ། <a href='/configstats#transport.sendProcessingTime'>[རི་མོ་བཟོ་བརྒྱ་བ]</a> (transport.sendProcessingTime)"
 
 msgid "This is the number of pending requests from other routers to build a participating tunnel through your router. It should usually be close to zero. If it is consistently high, your computer is too slow, and you should reduce your share bandwidth limits."
-msgstr ""
+msgstr "འདི་ནི་གཞན་པའི་རོ་ཌེར་ཚུགས་པ་ནས་གཞན་པའི་རོ་ཌེར་ཚུགས་པ་ལ་གྲུང་ལམ་ཞིག་པ་བརྒྱུད་པའི་ཞུང་ལན་གྱིས་གནས་ཚུད་པའི་གྱིས་གནས་ཚུད་པའི་གྲངས་བསལ་བྱེད་པ། དེ་ནི་སྤྱིན་པར་སྟོན་པར་ཀླད་པར་ཉེན་པར་ཉེན་པར་དགོས་པ། གལ་སྲིད་ན་སྤྱིན་པར་མཐོ་བ་ན། ཁྱེད་ཀྱི་གློག་རིག་ཧ་ཅང་དལཔ་བ་ཡིན་པའམ། ཁྱེད་ཀྱིས་རོགས་པའི་བརྒྱུད་པའི་ཚད་བསལ་བྱེད་པར་དགོས་པ།"
 
 msgid "Accepting/Rejecting"
-msgstr ""
+msgstr "བཞེས་བཞིན་པ/བཏོན་བཞིན་པ"
 
 msgid "Your router's status on accepting or rejecting requests from other routers to build a participating tunnel through your router. Your router may accept all requests, accept or reject a percentage of requests, or reject all requests for a number of reasons, to control the bandwidth and CPU demands and maintain capacity for local clients. <b>Note"
-msgstr ""
+msgstr "ཁྱེད་ཀྱི་རོ་ཌེར་གྱི་གཞན་པའི་རོ་ཌེར་ཚུགས་པ་ནས་གཞན་པའི་རོ་ཌེར་ཚུགས་པ་ལ་གྲུང་ལམ་ཞིག་པ་བརྒྱུད་པའི་རོ་ཌེར་གྱི་བརྒྱུད་པའི་གཞན་པ་ལ་གྲུང་ལམ་བརྒྱུད་པའི་གཞན་པ་ལ་གྲུང་ལམ་བརྒྱུད་པ། ཁྱེད་ཀྱི་རོ་ཌེར་གྱིས་གདོན་རྒྱུད་པ་ཆ་ཚང་མ་ལོན་ནས་ལེན་གནད་ཁག་པ་ཡང་ན་ གདོན་རྒྱུད་པའམ་སྐར་བརྒྱུད་པའི་ཚག་དོན་རྒྱུད་པ་ཡང་ན་ གདོན་རྒྱུད་པའི་ཚག་དོན་རྒྱུད་པའི་ཚག་དོན་རྒྱུད་པ་ཡང་ན་ ཡང་ན་གཞན་པའི་རྐྱེན་དོན་རྒྱུད་པ་ལ་གྲུང་ལམ་བརྒྱུད་པའི་གཞན་པ་ལ་གྲུང་ལམ་བརྒྱུད་པ་ལ་གྲུང་ལམ་བརྒྱུད་པ་ཡང་ན། བརྒྱུད་པའི་དོན་རྒྱུད་པ་དང་CPU དགོས་པ་དང་ས་གནས་ཚུལ་བའི་ནུས་མཁན་ལེན་གནད་ཁག་པ་ལ་ནུས་མཁན་ལེན་གནད་ཁག་པ་ལ་བརྒྱུད་པ་བཞིན་པར་བརྒྱུད་པ། <b>དོ་དམ་བཤོལ།"
 
 msgid "It will take at least 10 minutes from your router starting for it to accept building participating tunnels in order to ensure your router is stable and successfully bootstrapped to the network."
-msgstr ""
+msgstr "ཁྱེད་ཀྱི་རོ་ཌེར་འགོ་ཚུགས་པའི་དུས་ནས་ཉུང་གཅིག་གི་ 10 སྐར་ཆ་ནས་འགྲོ་སའི་གསང་རྟགས་ནི་ཐུང་གཅིག་གི་གདོན་པའི་གྲོག་སའི་གསང་རྟགས་ནི་ཐུང་གཅིག་གི་བཀོད་པར་བསྐྱོང་བཞིན་པར་བཀག་པ་དགོས་པ། དེ་ནི་ཁྱེད་ཀྱི་རོ་ཌེར་བརྟེན་པ་དང་དྲ་ལམ་ལ་འཛོལ་བརྒྱུད་པར་བཀག་པར་བསྐྱོང་བཞིན་པར་བཀག་པ་དགོས་པ་དང་དྲ་ལམ་ལ་ལ་འགྲོ་སའི་གསང་རྟགས་ནི་ཐུང་གཅིག་གི་བཀོད་པར་བསྐྱོང་བཞིན་པར་བཀག་པ་དགོས་པ་དང་དྲ་ལམ་ལ་ལ་འགྲོ་སའི་གསང་རྟགས་ནི་ཐུང་གཅིག་གི་བཀོད་པར་བསྐྱོང་བཞིན་པར་བཀག་པ་དགོས་པ།"
 
 msgid "<b>Note"
-msgstr ""
+msgstr "<b>དོ་དམ་བཤོལ།"
 
 msgid "This section is not enabled by default unless <a href='/help/configuration#advancedconsole'>Advanced Console mode</a> is enabled. You may enable it on the <a href='/configsidebar'>Sidebar Configuration page</a>."
-msgstr ""
+msgstr "དེ་དབྱེ་ཁག་སྒོ་བརྒྱབ་པ་སྔོན་སྒྲིག་མེད་པར་བཀོད་མེད་པ། <a href='/help/configuration#advancedconsole'>མཐོ་རིམ་རྒྱུག་པའི་རྒྱུག་པའི་དབྱེད་པ་</a> བཀོད་མེད་པ་ན། ཁྱེད་ཀྱི་ <a href='/configsidebar'>ཟུར་ངོས་ཕྲེང་བའི་རྒྱུག་པའི་དབྱེད་པའི་ཤོག་ལ་</a> ཐོག་ནས་བཀོད་མེད་པར་བསྐུངས་ནས་ཡོད།"
 
 msgid "Reachability Help"
-msgstr ""
+msgstr "འཛུད་ཐུབ་རེད་པའི་རོགས་རམ།"
 
 msgid "If you think you have opened up your firewall and I2P still thinks you are firewalled, remember that you may have multiple firewalls, for example both software packages and external hardware routers."
-msgstr ""
+msgstr "ཁྱེད་ཀྱི་ཁྱེད་ཀྱི་མེད་པའི་སྒོ་བརྒྱབ་པ་བཀག་པ་ཡོད་པ་དང་། I2P ད་དུང་ཁྱེད་ཀྱི་སྒོ་བརྒྱབ་པའི་རེད་པར་འདུག་པ་ཡོད་ན། ཁྱེད་ཀྱི་སྒོ་བརྒྱབ་པ་མང་མང་ཡོད་པ་ལ་དོན་ཡོད་པ་དཔང་། དཔེན་དཔར་མཚམ་ན། མཉེན་ཆས་ཀྱི་སྒོ་བརྒྱབ་པ་དང་ཕྱི་ཕྱིའི་སྒོ་བརྒྱབ་པའི་རྒྱུག་པ་ཡོད་པ་དཔང་།"
 
 msgid "If there is an error, the <a href=\"/logs\">logs</a> may also help diagnose the problem."
-msgstr ""
+msgstr "ནོར་བ་ཡོད་ན། <a href=\"/logs\">ཟིན་ཐོ་</a> གྱིས་དཀའ་གནད་དོན་ལ་རོགས་རམ་པར་རོགས་རམ་པར་བསྐུངས་ནས་ཡོད།"
 
 msgid "Your UDP port does not appear to be firewalled."
-msgstr ""
+msgstr "ཁྱེད་ཀྱི་ UDP མཐེབ་ཁུག་ཐོག་ནས་སྒོ་བརྒྱག་པར་མི་འདུག་པ།"
 
 msgid "Firewalled"
-msgstr ""
+msgstr "ཐུབ་ཚད་ཀྱི་ནང་ནས་བཅད་པ"
 
 msgid "Your UDP port appears to be firewalled."
-msgstr ""
+msgstr "ཁྱེད་ཀྱི་ UDP མཐེབ་ཁུག་ཐོག་ནས་སྒོ་བརྒྱག་པར་འདུག་པ།"
 
 msgid "As the firewall detection methods are not 100% reliable, this may occasionally be displayed in error."
-msgstr ""
+msgstr "སྒོ་བརྒྱག་པའི་ཐབས་བརྒྱུད་པའི་ཐབས་བརྒྱུད་པ་ 100% ཡིན་རུང་བདེན་པ་མེད་པ། དེ་ནི་གནས་སྐབས་ནོར་བརྒྱུད་པར་ནོར་བརྒྱུད་པར་འདུག་པ།"
 
 msgid "However, if it appears consistently, you should check whether both your external and internal firewalls are open for your port."
-msgstr ""
+msgstr "འོད་བརྒྱུད་པ་རྒྱུན་ནས་འདུག་པ་ན། ཁྱེད་ཀྱི་ཕྱི་མཚམས་དང་ནང་གི་སྒོ་བརྒྱག་པ་གཉིས་ཁྱེད་ཀྱི་མཐེབ་ཁུག་ཐོག་ཁྱེད་ཀྱི་ཕྱི་མཚམས་གཉིས་ཁྱེད་ཀྱི་མཐེབ་ཁུག་ཐོག་ཁྱེད་ཀྱི་ཕྱི་མཚམས་ཁ་བྱང་ཡོད་པར་བལྟ་བལ་རོགས་རམ།"
 
 msgid "I2P will work fine when firewalled, there is no reason for concern. When firewalled, the router uses \"introducers\" to relay inbound connections."
-msgstr ""
+msgstr "I2P སྒོ་བརྒྱབ་པའི་རེད་པར་འདུག་པ་ཡོད་ན། དོན་དུང་སྐྱོན་པའི་རྒྱུག་པ་མེད་པ། སྒོ་བརྒྱབ་པའི་དུས་ན། རོ་ཌེར་ཀྱིས་ \"introducers\" བེད་པར་ནང་འོག་སྐུད་པའི་འབྲེལ་བརྒྱུག་པ་བེད་པར་འདུག་པ་ཡོད།"
 
 msgid "However, you will get more participating traffic and help the network if you open your firewall."
-msgstr ""
+msgstr "འོད་བར་དེར་ཁྱེད་ཀྱི་སྒོ་བརྒྱབ་པ་ཕྱེད་ན། ཁྱེད་ཀྱི་དྲ་ལམ་ལ་འཕེལ་བརྒྱུག་པ་བསྐུངས་ནས་དྲ་ལམ་ལ་རོགས་རམ་པར་རོགས་རམ་པར་བསྐུངས་ནས་ཡོད།"
 
 msgid "If you think you have already done so, remember that you may have both a hardware and a software firewall, or be behind an additional, institutional firewall you cannot control."
-msgstr ""
+msgstr "ཁྱེད་ཀྱི་བསྒྱུད་པར་ད་གིས་བསྒྱུད་པ་ཚར་བཅས་པ་ན། དེ་ནི་ཁྱེད་ཀྱི་སྒོ་བརྒྱག་པ་སྒོ་བརྒྱག་པ་གཉིས་ཁྱེད་ཀྱི་མཐེབ་ཁུག་ཐོག་གཅིག་གི་ཡོད་པར་ཡོད། ཡང་ན་ཁྱེད་ཀྱི་སྒོ་བརྒྱག་པ་གཞན་པའི་སྒོ་བརྒྱག་པ་ཡོད་པར་ཡོད། ཡང་ན་སྒོ་བརྒྱག་པ་གཞན་པའི་སྒོ་བརྒྱག་པ་ཡོད་པར་ཡོད།"
 
 msgid "Also, some routers cannot correctly forward both TCP and UDP on a single port, or may have other limitations or bugs that prevent them from passing traffic through to I2P."
-msgstr ""
+msgstr "ཡང་ན། རོ་ཌེར་ལ་ལ་གཅིག་གིས་ TCP དང་ UDP གཉིས་མཐེབ་ཁུག་ཐོག་གཅིག་གི་ཐོག་ནས་བརྒྱུད་པར་བརྒྱུད་པར་བརྒྱུད་མི་འདུག་པ། ཡང་ན་གཞན་པའི་ཚད་བསྟོན་པ་ཡང་ན་བརྒྱུད་པའི་གནས་སྐབས་ནོར་བརྒྱུད་པ་ཡོད་པར་ I2P ལ་འགྲོ་སའི་བརྒྱུད་པར་བཀག་པར་བསྐུང་བ་ཡོད།"
 
 msgid "The router is currently testing whether your UDP port is firewalled."
-msgstr ""
+msgstr "རོ་ཌེར་ད་ལྟོབ་པའི་ད་ལྟོབ་པར་ཁྱེད་ཀྱི་ UDP མཐེབ་ཁུག་ཐུག་སྒོ་བརྒྱགས་ཡོད་མེད་པའི་དོན་ལ་བརྟག་པར་འདུག་པ།"
 
 msgid "The router is not configured to publish its address, therefore it does not expect incoming connections."
-msgstr ""
+msgstr "རོ་ཌེར་རང་ཁྱེད་ཀྱི་ཁ་བྱང་སྤེལ་བརྒྱུག་པ་མེད་པ། དེར་བརྒྱུག་པའི་ནང་འོག་སྐུད་པའི་འབྲེལ་བརྒྱུག་པ་རྩིགས་པར་འདུག་པ་མི་རུང་བ།"
 
 msgid "Hidden mode is automatically enabled for added protection in certain countries."
-msgstr ""
+msgstr "རྒྱལ་གནས་རྟེན་པའི་མཚན་ཉིད་རྒྱུན་མི་རྟེན་པར་རང་ཤུགས་ནས་རྒྱུན་མི་རྟེན་པར་བསྒྱུན་ཡོད།"
 
 msgid "WARN - Firewalled and Fast"
 msgstr "ཨང་རྟགས་- མེ་འདས་ཀྱི་ཐོག་ཏུ་དྲག་པོར་གནས་པ།"
