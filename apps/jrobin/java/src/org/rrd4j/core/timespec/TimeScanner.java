@@ -1,5 +1,9 @@
 package org.rrd4j.core.timespec;
 
+/**
+ * Represents a I2P timescanner.
+ */
+
 class TimeScanner {
     private final String dateString;
 
