@@ -1,7 +1,16 @@
 package org.freenetproject;
 
+/**
+ * Represents the status of a port forwarding operation.<br>
+ * This class encapsulates the result of UPnP port forwarding attempts,
+ * including success/failure status, reason messages, and external port information.
+ *
+ * @author Freenet Project
+ * @version 1.0
+ */
 public class ForwardPortStatus {
 
+	/** The current status of the port forwarding operation */
 	public final int status;
 	/** The port forward definitely succeeded. */
 	public static final int DEFINITE_SUCCESS = 3;
@@ -19,12 +28,20 @@ public class ForwardPortStatus {
 	/** The port forward definitely failed. */
 	public static final int DEFINITE_FAILURE = -2;
 
+	/** A descriptive message explaining the status or reason for failure */
 	public final String reasonString;
 
-	/** Some plugins may need to change the external port. They can return it
-	 * to the node here. */
+	/** The external port that was actually forwarded. Some plugins may need to
+	 * change the external port and can return it to the node here. */
 	public final int externalPort;
 
+	/**
+	 * Creates a new ForwardPortStatus with the specified status, reason, and external port.
+	 *
+	 * @param status the status code of the port forwarding operation
+	 * @param reason a descriptive message explaining the status or reason for failure
+	 * @param externalPort the external port that was actually forwarded
+	 */
 	public ForwardPortStatus(int status, String reason, int externalPort) {
 		this.status = status;
 		this.reasonString = reason;
