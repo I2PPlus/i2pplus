@@ -24,7 +24,29 @@ import net.i2p.util.ObjectCounter;
 import net.i2p.util.SimpleTimer2;
 
 /**
- * Accepts connections on a I2PServerSocket and routes them to PeerAcceptors.
+ * Accepts incoming I2P connections and routes them to the appropriate PeerAcceptor.
+ * 
+ * <p>This class manages the main I2P server socket that listens for incoming
+ * peer connections and routes them to the correct PeerAcceptor based on the
+ * torrent's info hash. It handles:
+ * <ul>
+ * <li>Listening on the I2P server socket for incoming connections</li>
+ * <li>Basic connection validation and handshake parsing</li>
+ * <li>Routing connections to the appropriate PeerAcceptor</li>
+ * <li>Connection rate limiting and blacklisting of misbehaving peers</li>
+ * <li>Thread management for accepting connections</li>
+ * <li>Cleanup of stale connection data</li>
+ * </ul>
+ * </p>
+ * 
+ * <p>The acceptor supports multi-torrent operation by working with a
+ * PeerCoordinatorSet to determine which torrent a connection belongs to
+ * based on the info hash in the BitTorrent handshake.</p>
+ * 
+ * <p>Connections that repeatedly fail protocol validation may be
+ * temporarily blacklisted to prevent abuse.</p>
+ * 
+ * @since 0.1.0
  */
 class ConnectionAcceptor implements Runnable {
     private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(ConnectionAcceptor.class);

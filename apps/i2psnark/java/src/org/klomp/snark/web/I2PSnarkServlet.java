@@ -76,7 +76,37 @@ import org.klomp.snark.comments.CommentSet;
 import java.util.regex.*;
 
 /**
- *  Refactored to eliminate Jetty dependencies.
+ * Web interface servlet for I2PSnark torrent management.
+ * 
+ * <p>This servlet provides the complete web-based user interface for I2PSnark,
+ * allowing users to manage their torrents through a browser. It handles:
+ * <ul>
+ * <li>Torrent listing and status display</li>
+ * <li>Adding torrents from files, URLs, or magnet links</li>
+ * <li>Torrent creation from local files</li>
+ * <li>Peer management and connection monitoring</li>
+ * <li>Bandwidth configuration and statistics</li>
+ * <li>DHT and tracker status</li>
+ * <li>Comments and ratings system</li>
+ * <li>File browsing and downloading</li>
+ * <li>Configuration management</li>
+ * <li>Theme and localization support</li>
+ * </ul>
+ * </p>
+ * 
+ * <p>The servlet has been refactored to eliminate Jetty-specific dependencies 
+ * and works with standard servlet containers.</p>
+ * 
+ * <p>Security features include:
+ * <ul>
+ * <li>CSRF protection via nonces</li>
+ * <li>Content Security Policy headers</li>
+ * <li>Input validation and sanitization</li>
+ * <li>Secure file handling</li>
+ * </ul>
+ * </p>
+ * 
+ * @since 0.1.0
  */
 public class I2PSnarkServlet extends BasicServlet {
 

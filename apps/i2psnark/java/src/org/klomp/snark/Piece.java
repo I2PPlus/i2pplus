@@ -4,8 +4,25 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * This class is used solely by PeerCoordinator.
- * Caller must synchronize on many of these methods.
+ * Represents a torrent piece and tracks which peers have it and are requesting it.
+ * 
+ * <p>This class is used internally by PeerCoordinator to manage piece selection
+ * and distribution strategies. It maintains:
+ * <ul>
+ * <li>The piece identifier within the torrent</li>
+ * <li>Set of peers that have this piece available</li>
+ * <li>Set of peers currently requesting this piece</li>
+ * <li>Priority level for piece selection</li>
+ * </ul>
+ * </p>
+ * 
+ * <p>Pieces are sorted by priority (highest first) and then by rarity 
+ * (fewest peers having it first) to optimize download performance.</p>
+ * 
+ * <p><strong>Thread Safety:</strong> This class is not thread-safe. 
+ * Callers must synchronize on access to most methods.</p>
+ * 
+ * @since 0.1.0
  */
 class Piece implements Comparable<Piece> {
 

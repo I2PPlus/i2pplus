@@ -10,7 +10,27 @@ import net.i2p.data.DataHelper;
 
 
 /**
- * Callback used to fetch data
+ * Utility class for extracting MP3 metadata tags for display in the I2PSnark web interface.
+ * 
+ * <p>This class provides methods to read ID3v1 and ID3v2 tags from MP3 files,
+ * extracting information such as:
+ * <ul>
+ * <li>Artist name</li>
+ * <li>Track title</li>
+ * <li>Album name</li>
+ * <li>Release year</li>
+ * <li>Composer and genre information</li>
+ * <li>Original artist</li>
+ * </ul>
+ * </p>
+ * 
+ * <p>The extracted metadata is used to enhance the file browsing experience
+ * in I2PSnark by displaying meaningful information about MP3 files instead
+ * of just filenames.</p>
+ * 
+ * <p>This class uses the mp3agic library for tag parsing and handles both
+ * ID3v1 and ID3v2 tag formats, with preference for ID3v2 when available.</p>
+ * 
  * @since 0.8.2
  */
 public class Mp3Tags

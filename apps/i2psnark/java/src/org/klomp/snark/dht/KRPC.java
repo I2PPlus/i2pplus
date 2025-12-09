@@ -50,8 +50,20 @@ import org.klomp.snark.bencode.InvalidBEncodingException;
 
 
 /**
- * Standard BEP 5
- * Mods for I2P:
+ * Kademlia Remote Procedure Call implementation for BitTorrent DHT (BEP 5) adapted for I2P.
+ * 
+ * <p>This class implements the DHT node communication protocol used for 
+ * decentralized peer discovery in BitTorrent networks. It handles:
+ * <ul>
+ * <li>Kademlia routing table management</li>
+ * <li>DHT queries (ping, find_node, get_peers, announce_peer)</li>
+ * <li>Token-based peer announcement system</li>
+ * <li>Node discovery and maintenance</li>
+ * <li>Blacklist management for unreachable nodes</li>
+ * </ul>
+ * </p>
+ * 
+ * <h3>I2P-Specific Modifications:</h3>
  * <pre>
  * - The UDP port need not be pinged after receiving a PORT message.
  *
@@ -61,7 +73,7 @@ import org.klomp.snark.bencode.InvalidBEncodingException;
  *   We call this the "query port".
  *   In addition to that UDP port, we use a second datagram
  *   port equal to the signed port + 1. This is used to receive
- *   unsigned (raw) datagrams for replies, errors, and announce queries..
+ *   unsigned (raw) datagrams for replies, errors, and announce queries.
  *   We call this the "response port".
  *
  * - Compact peer info is 32 bytes (32 byte SHA256 Hash)
@@ -75,10 +87,9 @@ import org.klomp.snark.bencode.InvalidBEncodingException;
  *   32 byte binary strings (SHA256 Hashes) instead of a list of lists
  *   containing a host string and a port integer.
  * </pre>
- *
- * Questions:
- *   - nodes (in the find_node and get_peers response) is one concatenated string, not a list of strings, right?
- *   - Node ID enforcement, keyspace rotation?
+ * 
+ * <p>This implementation uses I2P's datagram infrastructure for secure, 
+ * anonymous DHT operations within the I2P network.</p>
  *
  * @since 0.9.2
  * @author zzz

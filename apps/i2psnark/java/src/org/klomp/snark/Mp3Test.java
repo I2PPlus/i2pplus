@@ -8,7 +8,18 @@ import net.i2p.data.DataHelper;
 
 
 /**
- * Callback used to fetch data
+ * Test utility for extracting and displaying MP3 metadata tags.
+ * 
+ * <p>This is a standalone command-line tool used for testing and debugging
+ * MP3 tag extraction functionality. It reads ID3v1 and ID3v2 tags from 
+ * MP3 files and prints all available metadata to stdout.</p>
+ * 
+ * <p>Usage: java org.klomp.snark.Mp3Test file1.mp3 [file2.mp3 ...]</p>
+ * 
+ * <p>This utility is primarily used during development to verify that the
+ * mp3agic library integration works correctly and to inspect the contents
+ * of MP3 tags for troubleshooting purposes.</p>
+ * 
  * @since 0.8.2
  */
 public class Mp3Test

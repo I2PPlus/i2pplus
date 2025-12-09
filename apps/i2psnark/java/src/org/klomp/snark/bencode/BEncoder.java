@@ -1,8 +1,8 @@
-/* BDecoder - Converts an InputStream to BEValues.
+/* BEncoder - Converts Java objects to bencoded format.
    Copyright (C) 2003 Mark J. Wielaard
    This file is part of Snark.
    Licensed under the GPL version 2 or later.
-*/
+ */
 
 package org.klomp.snark.bencode;
 
@@ -20,6 +20,32 @@ import java.util.Set;
 
 import net.i2p.data.DataHelper;
 
+/**
+ * Converts Java objects to bencoded format for BitTorrent protocol communication.
+ * 
+ * <p>Bencoding is a simple way to structure data used in BitTorrent. This class
+ * provides static methods to encode the following Java types:
+ * <ul>
+ * <li>Strings - encoded as UTF-8 byte strings with length prefix</li>
+ * <li>byte[] - encoded as raw byte strings with length prefix</li>
+ * <li>Numbers - encoded as integer values with 'i' prefix and 'e' suffix</li>
+ * <li>List - encoded as ordered sequences starting with 'l' and ending with 'e'</li>
+ * <li>Map - encoded as dictionaries with sorted keys, starting with 'd' and ending with 'e'</li>
+ * <li>BEValue - unwrapped and encoded according to its contained type</li>
+ * </ul>
+ * </p>
+ * 
+ * <p>Example output formats:
+ * <ul>
+ * <li>String "hello" → "5:hello"</li>
+ * <li>Number 42 → "i42e"</li>
+ * <li>List ["a", "b"] → "l1:a1:be"</li>
+ * <li>Map {"key":"value"} → "d3:key5:valuee"</li>
+ * </ul>
+ * </p>
+ * 
+ * @since 0.1.0
+ */
 public class BEncoder
 {
 

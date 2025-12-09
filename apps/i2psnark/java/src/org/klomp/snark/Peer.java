@@ -26,6 +26,25 @@ import net.i2p.util.Log;
 import org.klomp.snark.bencode.BEValue;
 import org.klomp.snark.bencode.InvalidBEncodingException;
 
+/**
+ * Represents a peer in the BitTorrent network, managing all public information 
+ * and communication with that peer.
+ * 
+ * <p>This class handles:
+ * <ul>
+ * <li>Peer identification and handshaking</li>
+ * <li>BitTorrent protocol communication</li>
+ * <li>Upload/download statistics tracking</li>
+ * <li>Connection state management</li>
+ * <li>Bandwidth monitoring and limiting</li>
+ * </ul>
+ * </p>
+ * 
+ * <p>Peers can be either incoming (they connected to us) or outgoing 
+ * (we connected to them) connections.</p>
+ * 
+ * @since 0.1.0
+ */
 public class Peer implements Comparable<Peer>, BandwidthListener {
   protected final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(getClass());
     // Identifying property, the peer id of the other side.

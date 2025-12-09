@@ -30,10 +30,22 @@ import org.klomp.snark.bencode.BEValue;
 import org.klomp.snark.bencode.InvalidBEncodingException;
 
 /**
- * Note: this class is buggy, as it doesn't propogate custom meta fields into the bencoded
- * info data, and from there to the info_hash.  At the moment, though, it seems to work with
- * torrents created by I2P-BT, I2PRufus and Azureus.
- *
+ * Holds all information extracted from a torrent file.
+ * 
+ * <p>This class parses and stores the metadata from .torrent files, including:
+ * <ul>
+ * <li>Tracker announce URLs</li>
+ * <li>Info hash for torrent identification</li>
+ * <li>File names, sizes, and structure</li>
+ * <li>Piece length and piece hashes for integrity verification</li>
+ * </ul>
+ * </p>
+ * 
+ * <p><strong>Note:</strong> This class has a known limitation where it doesn't propagate 
+ * custom meta fields into the bencoded info data, and from there to the info_hash. 
+ * However, it currently works with torrents created by I2P-BT, I2PRufus and Azureus.</p>
+ * 
+ * @since 0.1.0
  */
 public class MetaInfo {
     private final Log _log = I2PAppContext.getGlobalContext().logManager().getLog(MetaInfo.class);

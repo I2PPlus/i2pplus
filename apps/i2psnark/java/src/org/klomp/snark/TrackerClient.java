@@ -37,22 +37,30 @@ import org.klomp.snark.dht.DHT;
 
 
 /**
- * Informs metainfo tracker of events and gets new peers for peer
- * coordinator.
- *
- * start() creates a thread and starts it.
- * At the end of each run, a TimedEvent is queued on the SimpleTimer2 queue.
- * The TimedEvent creates a new thread and starts it, so it does not
- * clog SimpleTimer2.
- *
- * The thread runs one pass through the trackers, the PEX, and the DHT,
- * then queues a new TimedEvent and exits.
- *
- * Thus there are only threads that are actively announcing, not one thread per torrent forever.
- *
- * start() may be called again after halt().
- *
+ * Handles communication with BitTorrent trackers and DHT to discover new peers.
+ * 
+ * <p>This class manages tracker announcements and peer discovery by:
+ * <ul>
+ * <li>Announcing torrent status to HTTP/HTTPS trackers</li>
+ * <li>Processing tracker responses and extracting peer information</li>
+ * <li>Managing UDP tracker communication</li>
+ * <li>Integrating with DHT for trackerless peer discovery</li>
+ * <li>Handling Peer Exchange (PEX) when available</li>
+ * <li>Managing announcement intervals and retry logic</li>
+ * <li>Processing various tracker events (started, completed, stopped)</li>
+ * </ul>
+ * </p>
+ * 
+ * <p><strong>Threading Model:</strong> The start() method creates a thread that
+ * runs one complete announcement cycle through all trackers, PEX, and DHT,
+ * then queues a new timed event and exits. This approach prevents thread
+ * accumulation while ensuring regular announcements.</p>
+ * 
+ * <p>The client can be restarted after halt() and handles various tracker
+ * responses including registration failures and error conditions.</p>
+ * 
  * @author Mark Wielaard (mark@klomp.org)
+ * @since 0.1.0
  */
 public class TrackerClient implements Runnable {
     private final Log _log;

@@ -10,7 +10,21 @@ import java.util.Arrays;
 
 
 /**
- * Container of a byte array representing set and unset bits.
+ * Container of a byte array representing set and unset bits for torrent piece availability.
+ * 
+ * <p>This class manages a bit field where each bit represents whether a particular 
+ * piece of a torrent is available (set) or not available (unset). It's used to:
+ * <ul>
+ * <li>Track which pieces a peer has available</li>
+ * <li>Track which pieces the local client has downloaded</li>
+ * <li>Determine which pieces are still needed</li>
+ * <li>Optimize piece selection strategies</li>
+ * </ul>
+ * </p>
+ * 
+ * <p>The bit field is stored efficiently in a byte array, with 8 bits per byte.</p>
+ * 
+ * @since 0.1.0
  */
 public class BitField
 {

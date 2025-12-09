@@ -62,7 +62,25 @@ import org.klomp.snark.dht.DHT;
 import org.klomp.snark.dht.KRPC;
 
 /**
- * Manage multiple snarks
+ * Central manager for multiple torrent downloads and the I2PSnark application.
+ * 
+ * <p>This class is the core controller that manages:
+ * <ul>
+ * <li>Multiple torrent instances (Snarks) and their lifecycle</li>
+ * <li>Configuration management and persistence</li>
+ * <li>Peer coordination and bandwidth management</li>
+ * <li>Tracker communication and DHT integration</li>
+ * <li>Web interface and user interaction</li>
+ * <li>Torrent file monitoring and auto-loading</li>
+ * <li>Magnet link handling</li>
+ * <li>Comments and metadata management</li>
+ * </ul>
+ * </p>
+ * 
+ * <p>As a ClientApp, it integrates with the I2P router application framework 
+ * and can be started, stopped, and monitored through the standard I2P interfaces.</p>
+ * 
+ * @since 0.1.0
  */
 public class SnarkManager implements CompleteListener, ClientApp, DisconnectListener {
 
@@ -2684,7 +2702,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             boolean routerOK = false;
             boolean doMagnets = true;
 
-            String bwMsg = _t("Down bandwidth limit is {0} KB/s", _bwManager.getUpBWLimit() / 1024) + "; " +
+            String bwMsg = _t("Down bandwidth limit is {0} KB/s", _bwManager.getDownBWLimit() / 1024) + "; " +
                            _t("Up bandwidth limit is {0} KB/s", _util.getMaxUpBW());
             addMessage(bwMsg);
             if (!_context.isRouterContext()) {System.out.println(" • " + bwMsg);}

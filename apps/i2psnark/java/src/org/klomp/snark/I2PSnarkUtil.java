@@ -54,10 +54,28 @@ import org.klomp.snark.dht.DHT;
 import org.klomp.snark.dht.KRPC;
 
 /**
- * I2P specific helpers for I2PSnark
- * We use this class as a sort of context for i2psnark
- * so we can run multiple instances of single Snarks
- * (but not multiple SnarkManagers, it is still static)
+ * I2P-specific utilities and context management for I2PSnark.
+ * 
+ * <p>This class provides I2P network integration and serves as a context object
+ * for I2PSnark operations. It handles:
+ * <ul>
+ * <li>I2P socket management and connection configuration</li>
+ * <li>Proxy settings for external tracker communication</li>
+ * <li>Peer banlist management</li>
+ * <li>Bandwidth and connection limits</li>
+ * <li>DHT integration and UDP tracker support</li>
+ * <li>File and directory management</li>
+ * <li>UI preferences and display options</li>
+ * <li>Comments and ratings system configuration</li>
+ * </ul>
+ * </p>
+ * 
+ * <p>This class acts as a singleton-like context that allows multiple individual 
+ * Snark instances to run while sharing common I2P configuration and resources.
+ * Note that while multiple Snarks can share one I2PSnarkUtil instance, 
+ * multiple SnarkManagers are not supported due to static resources.</p>
+ * 
+ * @since 0.1.0
  */
 public class I2PSnarkUtil implements DisconnectListener {
     private final I2PAppContext _context;
