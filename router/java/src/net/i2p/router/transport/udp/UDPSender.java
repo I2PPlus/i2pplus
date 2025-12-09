@@ -52,8 +52,8 @@ class UDPSender {
      * CoDel algorithm target delay in milliseconds and interval to control pacing.
      * Defaults are 20ms target and 500ms interval, can be overridden via properties.
      */
-    private static final int CODEL_TARGET = 100;
-    private static final int CODEL_INTERVAL = 1000;
+    private static final int CODEL_TARGET = 10;
+    private static final int CODEL_INTERVAL = 100;
 
     public static final String PROP_CODEL_TARGET = "router.codelTarget";
     public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
