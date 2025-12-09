@@ -22,7 +22,9 @@ import java.math.BigInteger;
 import java.util.Arrays;
 
 /**
- * DNSKEY record payload.
+ * DNS DNSKEY record payload for DNSSEC public keys.<br>
+ * Contains a DNSSEC public key used to verify DNSSEC signatures
+ * for a DNS zone.
  */
 public class DNSKEY extends Data {
     /**

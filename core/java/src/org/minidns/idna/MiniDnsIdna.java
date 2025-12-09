@@ -10,18 +10,42 @@
  */
 package org.minidns.idna;
 
+/**
+ * Utility class for Internationalized Domain Names in Applications (IDNA) processing.<br>
+ * Provides methods to convert between Unicode and ASCII representations of domain names
+ * according to IDNA specifications.
+ */
 public class MiniDnsIdna {
 
+    /** The active IDNA transformator implementation */
     private static IdnaTransformator idnaTransformator = new DefaultIdnaTransformator();
 
+    /**
+     * Converts a Unicode string to its ASCII representation using IDNA.
+     *
+     * @param string the Unicode string to convert
+     * @return the ASCII representation
+     */
     public static String toASCII(String string) {
         return idnaTransformator.toASCII(string);
     }
 
+    /**
+     * Converts an ASCII string back to its Unicode representation using IDNA.
+     *
+     * @param string the ASCII string to convert
+     * @return the Unicode representation
+     */
     public static String toUnicode(String string) {
         return idnaTransformator.toUnicode(string);
     }
 
+    /**
+     * Sets the active IDNA transformator implementation.
+     *
+     * @param idnaTransformator the transformator to use, must not be null
+     * @throws IllegalArgumentException if idnaTransformator is null
+     */
     public static void setActiveTransformator(IdnaTransformator idnaTransformator) {
         if (idnaTransformator == null) {
             throw new IllegalArgumentException();

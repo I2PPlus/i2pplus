@@ -908,11 +908,26 @@ public class DnsMessage {
         return new DnsMessage.Builder();
     }
 
+    /**
+     * Builder class for constructing DNS messages.<br>
+     * Provides a fluent API for building DNS messages with various
+     * sections and flags configured step by step.
+     *
+     * @author MiniDNS Project
+     */
     public static final class Builder {
 
+        /**
+         * Creates a new empty Builder.
+         */
         private Builder() {
         }
 
+        /**
+         * Creates a Builder initialized from an existing DNS message.
+         *
+         * @param message the DNS message to copy values from
+         */
         private Builder(DnsMessage message) {
             id = message.id;
             opcode = message.opcode;

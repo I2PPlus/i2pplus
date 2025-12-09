@@ -24,7 +24,9 @@ import java.util.Date;
 import java.util.TimeZone;
 
 /**
- * RRSIG record payload.
+ * DNS RRSIG (Resource Record Signature) record payload for DNSSEC.<br>
+ * Contains cryptographic signature covering a set of DNS records
+ * to provide authenticity and integrity verification.
  */
 public class RRSIG extends Data {
 

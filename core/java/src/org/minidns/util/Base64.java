@@ -11,7 +11,8 @@
 package org.minidns.util;
 
 /**
- * Very minimal Base64 encoder.
+ * Minimal Base64 encoder utility class.
+ * Provides basic Base64 encoding functionality using standard Base64 alphabet with padding.
  */
 public final class Base64 {
     private static final String ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -23,6 +24,12 @@ public final class Base64 {
     private Base64() {
     }
 
+    /**
+     * Encodes the given byte array to a Base64 string.
+     * 
+     * @param bytes the byte array to encode
+     * @return the Base64 encoded string
+     */
     public static String encodeToString(byte[] bytes) {
         int paddingCount = (3 - (bytes.length % 3)) % 3;
         byte[] padded = new byte[bytes.length + paddingCount];

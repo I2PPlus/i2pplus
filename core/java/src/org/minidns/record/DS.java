@@ -17,7 +17,9 @@ import org.minidns.record.Record.TYPE;
 import java.io.DataInputStream;
 import java.io.IOException;
 /**
- * DS (Delegation Signer) record payload.
+ * DNS DS (Delegation Signer) record payload for DNSSEC.<br>
+ * Contains the hash of a DNSKEY record used to authenticate
+ * delegated DNS zones in DNSSEC chain of trust.
  *
  * @see <a href="https://tools.ietf.org/html/rfc4034#section-5">RFC 4034 § 5</a>
  */

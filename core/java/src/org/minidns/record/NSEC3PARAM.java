@@ -19,7 +19,9 @@ import java.io.IOException;
 import java.math.BigInteger;
 
 /**
- * NSEC3PARAM record payload.
+ * DNS NSEC3PARAM record payload for DNSSEC.<br>
+ * Contains parameters used for NSEC3 hash calculations
+ * including algorithm, iterations, salt, and flags.
  */
 public class NSEC3PARAM extends Data {
 

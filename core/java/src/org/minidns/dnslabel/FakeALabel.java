@@ -10,8 +10,20 @@
  */
 package org.minidns.dnslabel;
 
+/**
+ * Represents a fake A-label in DNS labels.<br>
+ * A fake A-label is a special type of XN-label used for handling
+ * certain edge cases in internationalized domain names.
+ *
+ * @author MiniDNS Project
+ */
 public final class FakeALabel extends XnLabel {
 
+    /**
+     * Creates a new FakeALabel with the specified label.
+     *
+     * @param label the DNS label string
+     */
     protected FakeALabel(String label) {
         super(label);
     }

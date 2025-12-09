@@ -18,7 +18,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 /**
- * SOA (start of authority) record payload.
+ * DNS SOA (Start of Authority) record payload.<br>
+ * Contains authoritative information about a DNS zone including
+ * primary nameserver, admin email, and timing parameters.
  */
 public class SOA extends Data {
 

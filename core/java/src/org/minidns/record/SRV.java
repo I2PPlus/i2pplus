@@ -18,7 +18,9 @@ import org.minidns.dnsname.DnsName;
 import org.minidns.record.Record.TYPE;
 
 /**
- * SRV record payload (service pointer).
+ * DNS SRV (Service) record payload for service discovery.<br>
+ * Specifies the location of services for a given domain with priority,
+ * weight, and port information for load balancing.
  */
 public class SRV extends Data implements Comparable<SRV> {
 

@@ -11,7 +11,8 @@
 package org.minidns.util;
 
 /**
- * Very minimal Base32 encoder.
+ * Minimal Base32 encoder utility class.
+ * Provides basic Base32 encoding functionality using Base32 alphabet with padding.
  */
 public final class Base32 {
     private static final String ALPHABET = "0123456789ABCDEFGHIJKLMNOPQRSTUV";
@@ -23,6 +24,12 @@ public final class Base32 {
     private Base32() {
     }
 
+    /**
+     * Encodes the given byte array to a Base32 string.
+     * 
+     * @param bytes the byte array to encode
+     * @return the Base32 encoded string
+     */
     public static String encodeToString(byte[] bytes) {
         int paddingCount = (int) (8 - (bytes.length % 5) * 1.6) % 8;
         byte[] padded = new byte[bytes.length + paddingCount];

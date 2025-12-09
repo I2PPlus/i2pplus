@@ -25,7 +25,9 @@ import java.util.List;
 import java.util.logging.Logger;
 
 /**
- * NSEC record payload.
+ * DNS NSEC (Next Secure) record payload for DNSSEC.<br>
+ * Provides authenticated denial of existence for DNS records
+ * and links to the next valid name in the zone.
  */
 public class NSEC extends Data {
 

@@ -13,8 +13,18 @@ package org.minidns.edns;
 import org.minidns.edns.Edns.OptionCode;
 import org.minidns.util.Hex;
 
+/**
+ * EDNS option for unknown option codes.
+ * This class represents EDNS options that are not specifically implemented.
+ */
 public class UnknownEdnsOption extends EdnsOption {
 
+    /**
+     * Creates a new unknown EDNS option with the specified option code and data.
+     *
+     * @param optionCode the unknown option code
+     * @param optionData the option data
+     */
     protected UnknownEdnsOption(int optionCode, byte[] optionData) {
         super(optionCode, optionData);
     }

@@ -16,6 +16,11 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+/**
+ * DNS OPENPGPKEY record payload for OpenPGP public keys.<br>
+ * Associates OpenPGP public keys with domain names for
+ * secure email and code signing applications.
+ */
 public class OPENPGPKEY extends Data {
 
     private final byte[] publicKeyPacket;

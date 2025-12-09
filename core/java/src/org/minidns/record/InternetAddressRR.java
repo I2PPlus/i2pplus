@@ -18,7 +18,9 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * A resource record representing a internet address. Provides {@link #getInetAddress()}.
+ * Abstract base class for DNS resource records representing internet addresses.<br>
+ * Extended by A and AAAA records to provide common functionality
+ * for IP address storage and retrieval.
  *
  * @param <IA> type of InetAddress stored in this record
  */

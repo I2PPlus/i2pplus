@@ -16,7 +16,8 @@ import java.io.IOException;
 import org.minidns.dnsname.DnsName;
 
 /**
- * A resource record pointing to a target.
+ * Abstract base class for DNS resource records that point to a target domain name.<br>
+ * Extended by record types like CNAME, NS, and others that contain a target field.
  */
 public abstract class RRWithTarget extends Data {
 

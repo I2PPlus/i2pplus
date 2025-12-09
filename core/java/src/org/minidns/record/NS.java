@@ -17,7 +17,8 @@ import org.minidns.dnsname.DnsName;
 import org.minidns.record.Record.TYPE;
 
 /**
- * Nameserver record.
+ * DNS NS (Nameserver) record payload.<br>
+ * Delegates a DNS zone to use the given authoritative name servers.
  */
 public class NS extends RRWithTarget {
 

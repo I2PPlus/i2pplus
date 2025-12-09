@@ -17,7 +17,9 @@ import org.minidns.dnsname.DnsName;
 import org.minidns.record.Record.TYPE;
 
 /**
- * A PTR record is handled like a CNAME.
+ * DNS PTR (Pointer) record payload.<br>
+ * Used for reverse DNS lookups, mapping IP addresses to domain names.
+ * Functionally similar to CNAME but used for reverse resolution.
  */
 public class PTR extends RRWithTarget {
 

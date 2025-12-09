@@ -10,8 +10,17 @@
  */
 package org.minidns.util;
 
+/**
+ * Utility class for hexadecimal conversion.
+ */
 public class Hex {
 
+    /**
+     * Converts a byte array to a hexadecimal string representation.
+     * 
+     * @param bytes the byte array to convert
+     * @return a StringBuilder containing the hexadecimal representation (uppercase with spaces)
+     */
     public static StringBuilder from(byte[] bytes) {
         StringBuilder sb = new StringBuilder(bytes.length * 2);
         for (byte b : bytes) {

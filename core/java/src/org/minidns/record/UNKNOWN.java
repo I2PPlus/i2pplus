@@ -16,6 +16,11 @@ import java.io.IOException;
 
 import org.minidns.record.Record.TYPE;
 
+/**
+ * DNS record payload for unknown or unsupported record types.<br>
+ * Provides raw byte-level access to record data when the specific
+ * record type is not recognized by the library.
+ */
 public final class UNKNOWN extends Data {
 
     private final TYPE type;

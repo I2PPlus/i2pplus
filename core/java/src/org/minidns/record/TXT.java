@@ -23,9 +23,9 @@ import java.util.List;
 import org.minidns.record.Record.TYPE;
 
 /**
- *  A TXT record. Actually a binary blob containing extents, each of which is a one-byte count
- *  followed by that many bytes of data, which can usually be interpreted as ASCII strings
- *  but not always.
+ * DNS TXT record payload for arbitrary text data.<br>
+ * Contains one or more text strings, commonly used for verification,
+ * policies, or other metadata. Each string is prefixed with a length byte.
  */
 public class TXT extends Data {
 

@@ -17,9 +17,11 @@ import org.minidns.constants.DnssecConstants.DigestAlgorithm;
 import org.minidns.constants.DnssecConstants.SignatureAlgorithm;
 
 /**
- * DLV record payload.
+ * DNS DLV (DNSSEC Lookaside Validation) record payload.<br>
+ * Provides DNSSEC trust anchors from external validation repositories.
+ * Has same format as DS records but used for lookaside validation.
  *
- * According to RFC4431, DLV has exactly the same format as DS records.
+ * @see <a href="https://tools.ietf.org/html/rfc4431">RFC 4431</a>
  */
 public class DLV extends DelegatingDnssecRR {
 

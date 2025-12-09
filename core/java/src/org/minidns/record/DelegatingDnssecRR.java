@@ -20,7 +20,9 @@ import org.minidns.constants.DnssecConstants.DigestAlgorithm;
 import org.minidns.constants.DnssecConstants.SignatureAlgorithm;
 
 /**
- * DS (Delegation Signer) record payload.
+ * Abstract base class for DNSSEC delegation records.<br>
+ * Provides common functionality for DNSSEC records that delegate
+ * trust from parent zones to child zones.
  *
  * @see <a href="https://tools.ietf.org/html/rfc4034#section-5">RFC 4034 § 5</a>
  */

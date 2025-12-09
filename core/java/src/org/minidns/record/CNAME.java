@@ -17,7 +17,8 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 /**
- * CNAME payload (pointer to another domain / address).
+ * DNS CNAME (Canonical Name) record payload.<br>
+ * Maps an alias domain name to a canonical domain name for DNS resolution.
  */
 public class CNAME extends RRWithTarget {
 

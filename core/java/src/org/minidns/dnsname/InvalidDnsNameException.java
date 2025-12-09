@@ -22,14 +22,23 @@ public abstract class InvalidDnsNameException extends IllegalStateException {
         this.ace = ace;
     }
 
+    /**
+     * Exception thrown when a DNS label exceeds the maximum allowed length.<br>
+     * DNS labels are limited to 63 characters according to DNS specifications.
+     */
     public static class LabelTooLongException extends InvalidDnsNameException {
-        /**
-         *
-         */
+        /** Serial version UID for serialization */
         private static final long serialVersionUID = 1L;
 
+        /** The DNS label that exceeds the maximum length */
         private final String label;
 
+        /**
+         * Creates a new LabelTooLongException.
+         *
+         * @param ace the ASCII-encoded domain name
+         * @param label the specific label that is too long
+         */
         public LabelTooLongException(String ace, String label) {
             super(ace);
             this.label = label;
@@ -43,14 +52,23 @@ public abstract class InvalidDnsNameException extends IllegalStateException {
         }
     }
 
+    /**
+     * Exception thrown when a DNS name exceeds the maximum allowed length.<br>
+     * DNS names are limited to 255 octets according to DNS specifications.
+     */
     public static class DNSNameTooLongException extends InvalidDnsNameException {
-        /**
-         *
-         */
+        /** Serial version UID for serialization */
         private static final long serialVersionUID = 1L;
 
+        /** The byte representation of the DNS name that exceeds the maximum length */
         private final byte[] bytes;
 
+        /**
+         * Creates a new DNSNameTooLongException.
+         *
+         * @param ace the ASCII-encoded domain name
+         * @param bytes the byte representation of the DNS name
+         */
         public DNSNameTooLongException(String ace, byte[] bytes) {
             super(ace);
             this.bytes = bytes;

@@ -18,7 +18,8 @@ import org.minidns.record.Record.TYPE;
 import org.minidns.util.InetAddressUtil;
 
 /**
- * AAAA payload (an ipv6 pointer).
+ * DNS AAAA record payload representing an IPv6 address.<br>
+ * Maps a domain name to an IPv6 address, the IPv6 equivalent of A records.
  */
 public class AAAA extends InternetAddressRR<Inet6Address> {
 

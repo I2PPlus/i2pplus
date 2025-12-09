@@ -18,7 +18,8 @@ import org.minidns.dnsname.DnsName;
 import org.minidns.record.Record.TYPE;
 
 /**
- * MX record payload (mail service pointer).
+ * DNS MX (Mail Exchange) record payload.<br>
+ * Specifies mail servers responsible for accepting email messages on behalf of a domain.
  */
 public class MX extends Data {
 

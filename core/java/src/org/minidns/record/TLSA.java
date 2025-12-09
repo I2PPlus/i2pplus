@@ -18,6 +18,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * DNS TLSA record payload for TLS certificate association.<br>
+ * Associates TLS certificates with domain names for DANE-based
+ * authentication of TLS services.
+ */
 public class TLSA extends Data {
 
     private static final Map<Byte, CertUsage> CERT_USAGE_LUT = new HashMap<>();

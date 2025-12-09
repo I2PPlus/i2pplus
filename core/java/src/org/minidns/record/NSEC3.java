@@ -24,7 +24,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * NSEC3 record payload.
+ * DNS NSEC3 (Next Secure 3) record payload for DNSSEC.<br>
+ * Provides authenticated denial of existence with hashed names
+ * to prevent zone enumeration attacks.
  */
 public class NSEC3 extends Data {
 

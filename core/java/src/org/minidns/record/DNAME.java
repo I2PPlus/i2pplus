@@ -17,7 +17,9 @@ import java.io.DataInputStream;
 import java.io.IOException;
 
 /**
- * A DNAME resource record.
+ * DNS DNAME (Domain Name) redirection record payload.<br>
+ * Provides redirection of an entire subtree of the DNS name space
+ * to another domain, similar to CNAME but for entire subtrees.
  *
  * @see <a href="https://tools.ietf.org/html/rfc6672">RFC 6672 - DNAME Redirection in the DNS</a>
  */

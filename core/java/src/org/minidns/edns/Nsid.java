@@ -15,14 +15,30 @@ import java.nio.charset.StandardCharsets;
 import org.minidns.edns.Edns.OptionCode;
 import org.minidns.util.Hex;
 
+/**
+ * EDNS NSID (Name Server Identifier) option.
+ * 
+ * @see <a href="https://tools.ietf.org/html/rfc5001">RFC 5001 - DNS Name Server Identifier (NSID) Option</a>
+ */
 public class Nsid extends EdnsOption {
 
+    /**
+     * NSID request instance with empty payload.
+     */
     public static final Nsid REQUEST = new Nsid();
 
+    /**
+     * Private constructor for the REQUEST instance.
+     */
     private Nsid() {
         this(new byte[0]);
     }
 
+    /**
+     * Creates a new NSID option with the specified payload.
+     *
+     * @param payload the NSID payload data
+     */
     public Nsid(byte[] payload) {
         super(payload);
     }

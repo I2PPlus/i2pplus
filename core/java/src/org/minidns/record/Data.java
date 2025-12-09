@@ -19,7 +19,9 @@ import java.util.Arrays;
 import org.minidns.record.Record.TYPE;
 
 /**
- * Generic payload class.
+ * Abstract base class for DNS record data payloads.<br>
+ * All DNS record types extend this class to provide their specific
+ * data representation and parsing logic.
  */
 public abstract class Data {
 

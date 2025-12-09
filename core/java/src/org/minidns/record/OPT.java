@@ -21,7 +21,11 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * OPT payload (see RFC 2671 for details).
+ * DNS OPT record payload for EDNS0 extensions.<br>
+ * Enables extended DNS features and options beyond original DNS protocol.
+ * Carries EDNS options and UDP payload size information.
+ *
+ * @see <a href="https://tools.ietf.org/html/rfc2671">RFC 2671</a>
  */
 public class OPT extends Data {
 

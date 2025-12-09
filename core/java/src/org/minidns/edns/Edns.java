@@ -69,6 +69,9 @@ public class Edns {
         }
     }
 
+    /**
+     * The UDP payload size.
+     */
     public final int udpPayloadSize;
 
     /**
@@ -92,12 +95,23 @@ public class Edns {
      */
     public final int flags;
 
+    /**
+     * The list of EDNS options.
+     */
     public final List<EdnsOption> variablePart;
 
+    /**
+     * Whether DNSSEC OK flag is set.
+     */
     public final boolean dnssecOk;
 
     private Record<OPT> optRecord;
 
+    /**
+     * Creates an EDNS instance from an OPT record.
+     *
+     * @param optRecord the OPT record
+     */
     public Edns(Record<OPT> optRecord) {
         assert optRecord.type == TYPE.OPT;
         udpPayloadSize = optRecord.clazzValue;
@@ -112,6 +126,11 @@ public class Edns {
         this.optRecord = optRecord;
     }
 
+    /**
+     * Creates an EDNS instance from a builder.
+     *
+     * @param builder the builder containing EDNS configuration
+     */
     public Edns(Builder builder) {
         udpPayloadSize = builder.udpPayloadSize;
         extendedRcode = builder.extendedRcode;
@@ -129,6 +148,13 @@ public class Edns {
         }
     }
 
+    /**
+     * Gets the EDNS option with the specified option code.
+     *
+     * @param <O> the type of the EDNS option
+     * @param optionCode the option code to search for
+     * @return the EDNS option if found, null otherwise
+     */
     @SuppressWarnings("unchecked")
     public <O extends EdnsOption> O getEdnsOption(OptionCode optionCode) {
         for (EdnsOption o : variablePart) {
@@ -139,6 +165,11 @@ public class Edns {
         return null;
     }
 
+    /**
+     * Converts this EDNS instance to an OPT record.
+     *
+     * @return the OPT record
+     */
     public Record<OPT> asRecord() {
         if (optRecord == null) {
             long optFlags = flags;
@@ -151,6 +182,11 @@ public class Edns {
 
     private String terminalOutputCache;
 
+    /**
+     * Returns the terminal output representation of this EDNS instance.
+     *
+     * @return the terminal output representation
+     */
     public String asTerminalOutput() {
         if (terminalOutputCache == null) {
             StringBuilder sb = new StringBuilder();
@@ -180,6 +216,12 @@ public class Edns {
         return asTerminalOutput();
     }
 
+    /**
+     * Creates an EDNS instance from a record if it's an OPT record.
+     *
+     * @param record the record to convert
+     * @return the EDNS instance if the record is an OPT record, null otherwise
+     */
     public static Edns fromRecord(Record<? extends Data> record) {
         if (record.type != TYPE.OPT) return null;
 
@@ -188,10 +230,18 @@ public class Edns {
         return new Edns(optRecord);
     }
 
+    /**
+     * Creates a new builder for constructing EDNS instances.
+     *
+     * @return a new builder
+     */
     public static Builder builder() {
         return new Builder();
     }
 
+    /**
+     * Builder for creating EDNS instances.
+     */
     public static final class Builder {
         private int udpPayloadSize;
         private int extendedRcode;
@@ -202,6 +252,13 @@ public class Edns {
         private Builder() {
         }
 
+        /**
+         * Sets the UDP payload size.
+         *
+         * @param udpPayloadSize the UDP payload size
+         * @return this builder
+         * @throws IllegalArgumentException if the payload size is greater than 65536
+         */
         public Builder setUdpPayloadSize(int udpPayloadSize) {
             if (udpPayloadSize > 0xffff) {
                 throw new IllegalArgumentException("UDP payload size must not be greater than 65536, was " + udpPayloadSize);
@@ -210,16 +267,33 @@ public class Edns {
             return this;
         }
 
+        /**
+         * Sets the DNSSEC OK flag.
+         *
+         * @param dnssecOk whether DNSSEC OK flag should be set
+         * @return this builder
+         */
         public Builder setDnssecOk(boolean dnssecOk) {
             this.dnssecOk = dnssecOk;
             return this;
         }
 
+        /**
+         * Sets the DNSSEC OK flag to true.
+         *
+         * @return this builder
+         */
         public Builder setDnssecOk() {
             dnssecOk = true;
             return this;
         }
 
+        /**
+         * Adds an EDNS option.
+         *
+         * @param ednsOption the EDNS option to add
+         * @return this builder
+         */
         public Builder addEdnsOption(EdnsOption ednsOption) {
             if (variablePart == null) {
                 variablePart = new ArrayList<>(4);
@@ -228,6 +302,11 @@ public class Edns {
             return this;
         }
 
+        /**
+         * Builds the EDNS instance.
+         *
+         * @return the constructed EDNS instance
+         */
         public Edns build() {
             return new Edns(this);
         }

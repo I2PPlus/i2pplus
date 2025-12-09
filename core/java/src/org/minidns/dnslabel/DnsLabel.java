@@ -174,15 +174,26 @@ public abstract class DnsLabel implements CharSequence, Comparable<DnsLabel> {
         return string.toLowerCase(Locale.US).startsWith("xn--");
     }
 
+    /**
+     * Exception thrown when a DNS label exceeds the maximum allowed length.<br>
+     * DNS labels are limited to 63 characters according to RFC 1035.
+     *
+     * @author MiniDNS Project
+     * @since 0.1
+     */
     public static class LabelToLongException extends IllegalArgumentException {
 
-        /**
-         *
-         */
+        /** Serial version UID for serialization */
         private static final long serialVersionUID = 1L;
 
+        /** The DNS label that caused this exception */
         public final String label;
 
+        /**
+         * Creates a new LabelToLongException for the specified label.
+         *
+         * @param label the DNS label that exceeds the maximum length
+         */
         LabelToLongException(String label) {
             this.label = label;
         }

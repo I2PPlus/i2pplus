@@ -18,7 +18,8 @@ import org.minidns.record.Record.TYPE;
 import org.minidns.util.InetAddressUtil;
 
 /**
- * A record payload (ip pointer).
+ * DNS A record payload representing an IPv4 address.<br>
+ * Maps a domain name to an IPv4 address, the most common DNS record type.
  */
 public class A extends InternetAddressRR<Inet4Address> {
 
