@@ -31,8 +31,14 @@ final class MuxedPQEngine {
      */
     public CloveSet decrypt(byte data[], PrivateKey ecKey, PrivateKey pqKey, MuxedPQSKM keyManager) throws DataFormatException {
         if (ecKey.getType() != EncType.ECIES_X25519 ||
-            pqKey.getType().getBaseAlgorithm() != EncAlgo.ECIES_MLKEM)
-            throw new IllegalArgumentException();
+            pqKey.getType().getBaseAlgorithm() != EncAlgo.ECIES_MLKEM) {
+            if (_log.shouldWarn()) {
+                _log.warn("Invalid key types for PQ decrypt - EC: " + ecKey.getType() +
+                         " PQ: " + pqKey.getType() + " Base: " + pqKey.getType().getBaseAlgorithm());
+            }
+            throw new IllegalArgumentException("Invalid key types - EC: " + ecKey.getType() +
+                                           " PQ: " + pqKey.getType());
+        }
         final boolean debug = _log.shouldDebug();
         CloveSet rv = null;
         // Try in-order from fastest to slowest

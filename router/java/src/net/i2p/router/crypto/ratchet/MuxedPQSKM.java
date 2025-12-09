@@ -67,6 +67,16 @@ public class MuxedPQSKM extends SessionKeyManager {
             else
                 _pqCounter.incrementAndGet();
         }
+        // Debug logging for PQ failures
+        //if (!success && !isRatchet) {
+            int ec = _ecCounter.get();
+            int pq = _pqCounter.get();
+            // Log every 10th PQ failure to avoid spam
+            //if ((pq % 10) == 1) {
+            //    System.err.println("PQ decrypt failure #" + pq + " vs EC success #" + ec +
+            //                     " - preferRatchet: " + preferRatchet());
+            //}
+        //}
     }
 
     /**

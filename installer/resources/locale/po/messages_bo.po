@@ -1,0 +1,144 @@
+# I2P
+# Copyright (C) 2009 The I2P Project
+msgid ""
+msgstr ""
+"Language: bo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Failed to load the wrapper"
+msgstr ""
+
+#, sh-format
+msgid "$APP_LONG_NAME is already running."
+msgstr ""
+
+#, sh-format
+msgid "Running $APP_LONG_NAME"
+msgstr ""
+
+#, sh-format
+msgid "Waiting for $APP_LONG_NAME"
+msgstr ""
+
+#, sh-format
+msgid "WARNING: $APP_LONG_NAME may have failed to start."
+msgstr ""
+
+msgid "Must be root to perform this action."
+msgstr ""
+
+#, sh-format
+msgid "Starting $APP_LONG_NAME"
+msgstr ""
+
+#, sh-format
+msgid "Stopping $APP_LONG_NAME"
+msgstr ""
+
+#, sh-format
+msgid "$APP_LONG_NAME was not running."
+msgstr ""
+
+#, sh-format
+msgid "Unable to stop $APP_LONG_NAME."
+msgstr ""
+
+#, sh-format
+msgid "Waiting for $APP_LONG_NAME to exit"
+msgstr ""
+
+#, sh-format
+msgid "Failed to stop $APP_LONG_NAME."
+msgstr ""
+
+#, sh-format
+msgid "Stopped $APP_LONG_NAME."
+msgstr ""
+
+#, sh-format
+msgid "Stopping $APP_LONG_NAME gracefully"
+msgstr ""
+
+#, sh-format
+msgid "$APP_LONG_NAME is not running."
+msgstr ""
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid"
+msgstr ""
+
+#, sh-format
+msgid "$APP_LONG_NAME is running: PID:$pid, Wrapper:$STATUS, Java:$JAVASTATUS"
+msgstr ""
+
+#, sh-format
+msgid "The $APP_LONG_NAME daemon is already installed."
+msgstr ""
+
+#, sh-format
+msgid "Installing the $APP_LONG_NAME daemon"
+msgstr ""
+
+#, sh-format
+msgid "Install not currently supported for $DIST_OS"
+msgstr ""
+
+#, sh-format
+msgid "Removing $APP_LONG_NAME daemon"
+msgstr ""
+
+#, sh-format
+msgid "The $APP_LONG_NAME daemon is not currently installed."
+msgstr ""
+
+#, sh-format
+msgid "Remove not currently supported for $DIST_OS"
+msgstr ""
+
+msgid "Commands:"
+msgstr ""
+
+msgid "Launch in the current console."
+msgstr ""
+
+msgid "Start in the background as a daemon process."
+msgstr ""
+
+msgid "Stop if running as a daemon or in another console."
+msgstr ""
+
+msgid "Stop gracefully, may take up to 11 minutes or more."
+msgstr ""
+
+msgid "Restart gracefully, may take up to 11 minutes or more."
+msgstr ""
+
+msgid "Stop if running and then start."
+msgstr ""
+
+msgid "Restart only if already running."
+msgstr ""
+
+msgid "Query the current status."
+msgstr ""
+
+msgid "Install to start automatically when system boots."
+msgstr ""
+
+msgid "Uninstall."
+msgstr ""
+
+msgid "Request a Java thread dump if running."
+msgstr ""
+
+msgid "Please edit i2prouter and set the variable RUN_AS_USER"
+msgstr ""
+
+msgid "Running I2P as the root user is *not* recommended."
+msgstr ""
+
+msgid "To run as root anyway, edit i2prouter and set ALLOW_ROOT=true."
+msgstr ""

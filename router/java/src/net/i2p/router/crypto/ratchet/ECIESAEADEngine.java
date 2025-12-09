@@ -519,13 +519,19 @@ public final class ECIESAEADEngine {
 
         HandshakeState state;
         EncType type = targetPrivateKey.getType();
+        String pattern = null;
         try {
-            String pattern = getNoisePattern(type);
+            pattern = getNoisePattern(type);
             // Bob does not need a key factory
             //state = new HandshakeState(pattern, HandshakeState.RESPONDER, _edhThread, getHybridKeyFactory(type));
             state = new HandshakeState(pattern, HandshakeState.RESPONDER, _edhThread);
         } catch (GeneralSecurityException gse) {
-            throw new IllegalStateException("Bad protocol", gse);
+            if (_log.shouldWarn()) {
+                _log.warn("Handshake initialization failed for pattern: " + pattern +
+                         " Type: " + type, gse);
+            }
+            throw new IllegalStateException("Bad protocol - Pattern: " + pattern +
+                                          " Type: " + type, gse);
         }
         state.getLocalKeyPair().setKeys(targetPrivateKey.getData(), 0,
                                         targetPrivateKey.toPublic().getData(), 0);
