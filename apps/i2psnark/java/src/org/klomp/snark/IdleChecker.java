@@ -4,21 +4,20 @@
  */
 package org.klomp.snark;
 
-import java.util.Map;
-import java.util.Properties;
-
 import net.i2p.client.I2PSession;
 import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
+import java.util.Map;
+import java.util.Properties;
+
 /**
- *  Periodically check for idle condition based on connected peers,
- *  and reduce/restore tunnel count as necessary.
- *  We can't use the I2CP idle detector because it's based on traffic,
- *  so DHT and announces would keep it non-idle.
+ * Periodically check for idle condition based on connected peers, and reduce/restore tunnel count
+ * as necessary. We can't use the I2CP idle detector because it's based on traffic, so DHT and
+ * announces would keep it non-idle.
  *
- *  @since 0.9.7
+ * @since 0.9.7
  */
 class IdleChecker extends SimpleTimer2.TimedEvent {
 
@@ -33,14 +32,12 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
     private String _lastOut = DEFAULT_QTY;
     private final Object _lock = new Object();
 
-    private static final long CHECK_TIME = 63*1000;
+    private static final long CHECK_TIME = 63 * 1000;
     private static final int MAX_CONSEC_IDLE = 4;
     private static final int MAX_CONSEC_NOT_RUNNING = 20;
     private static final String DEFAULT_QTY = "2";
 
-    /**
-     *  Caller must schedule
-     */
+    /** Caller must schedule */
     public IdleChecker(SnarkManager mgr, PeerCoordinatorSet pcs) {
         super(mgr.util().getContext().simpleTimer2());
         _util = mgr.util();
@@ -66,23 +63,32 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
                 }
             }
 
-            if (torrentRunning) {_consecNotRunning = 0;}
-            else {
+            if (torrentRunning) {
+                _consecNotRunning = 0;
+            } else {
                 if (_consecNotRunning++ >= MAX_CONSEC_NOT_RUNNING) {
-                    if (_log.shouldWarn()) {_log.warn("[I2PSnark] Closing tunnels on idle...");}
+                    if (_log.shouldWarn()) {
+                        _log.warn("[I2PSnark] Closing tunnels on idle...");
+                    }
                     _util.disconnect();
-                    _mgr.addMessage(_util.getString("No more torrents running.") + ' ' +
-                                    _util.getString("I2P tunnel closed."));
+                    _mgr.addMessage(
+                            _util.getString("No more torrents running.")
+                                    + ' '
+                                    + _util.getString("I2P tunnel closed."));
                     schedule(3 * CHECK_TIME);
                     return;
                 }
             }
 
-            if (peerCount > 0) {restoreTunnels(peerCount);}
-            else {
+            if (peerCount > 0) {
+                restoreTunnels(peerCount);
+            } else {
                 if (!_isIdle) {
-                    if (_consec++ >= MAX_CONSEC_IDLE) {reduceTunnels();}
-                    else {restoreTunnels(1);} // pretend we have one peer for now
+                    if (_consec++ >= MAX_CONSEC_IDLE) {
+                        reduceTunnels();
+                    } else {
+                        restoreTunnels(1);
+                    } // pretend we have one peer for now
                 }
             }
         } else {
@@ -95,9 +101,7 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
         schedule(CHECK_TIME);
     }
 
-    /**
-     *  Reduce to 1 in / 1 out tunnel
-     */
+    /** Reduce to 1 in / 1 out tunnel */
     private void reduceTunnels() {
         _isIdle = true;
         boolean isStandalone = !_util.getContext().isRouterContext();
@@ -105,18 +109,26 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
         int obtunnels = Integer.parseInt(_util.getI2CPOptions().get("outbound.quantity"));
         int minTunnels = isStandalone ? 2 : 1;
         if (ibtunnels > minTunnels || obtunnels > minTunnels) {
-            String msg = "Connection is idle -> Reducing inbound / outbound tunnel count to " + minTunnels + "...";
-            if (_log.shouldInfo()) {_log.info("[I2PSnark] " + msg);}
+            String msg =
+                    "Connection is idle -> Reducing inbound / outbound tunnel count to "
+                            + minTunnels
+                            + "...";
+            if (_log.shouldInfo()) {
+                _log.info("[I2PSnark] " + msg);
+            }
             if (isStandalone) {
                 System.out.println(" • " + msg);
                 setTunnels("2", "2", "0", "0");
-            } else {setTunnels("1", "1", "0", "0");}
+            } else {
+                setTunnels("1", "1", "0", "0");
+            }
         }
     }
 
     /**
-     *  Restore or adjust tunnel count based on current peer count
-     *  @param peerCount greater than zero
+     * Restore or adjust tunnel count based on current peer count
+     *
+     * @param peerCount greater than zero
      */
     private void restoreTunnels(int peerCount) {
         _isIdle = false;
@@ -124,24 +136,41 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
         Map<String, String> opts = _util.getI2CPOptions();
         String i = opts.get("inbound.quantity");
 
-        if (i == null) {i = Integer.toString(SnarkManager.DEFAULT_TUNNEL_QUANTITY);}
+        if (i == null) {
+            i = Integer.toString(SnarkManager.DEFAULT_TUNNEL_QUANTITY);
+        }
         String o = opts.get("outbound.quantity");
-        if (o == null) {o = Integer.toString(SnarkManager.DEFAULT_TUNNEL_QUANTITY);}
+        if (o == null) {
+            o = Integer.toString(SnarkManager.DEFAULT_TUNNEL_QUANTITY);
+        }
         String ib = opts.get("inbound.backupQuantity");
-        if (ib == null) {ib = "0";}
-        String ob= opts.get("outbound.backupQuantity");
-        if (ob == null) {ob = "0";}
+        if (ib == null) {
+            ib = "0";
+        }
+        String ob = opts.get("outbound.backupQuantity");
+        if (ob == null) {
+            ob = "0";
+        }
 
-        // We don't need more tunnels than we have peers, reduce if so reduce to max(peerCount / 2, 2)
+        // We don't need more tunnels than we have peers, reduce if so reduce to max(peerCount / 2,
+        // 2)
         int in, out;
-        try {in = Integer.parseInt(i);}
-        catch (NumberFormatException nfe) {in = 3;}
-        try {out = Integer.parseInt(o);}
-        catch (NumberFormatException nfe) {out = 3;}
+        try {
+            in = Integer.parseInt(i);
+        } catch (NumberFormatException nfe) {
+            in = 3;
+        }
+        try {
+            out = Integer.parseInt(o);
+        } catch (NumberFormatException nfe) {
+            out = 3;
+        }
         int target = Math.max(peerCount / 2, 2);
 
         boolean increasedCount = false;
-        if (target > in || target > out) {increasedCount = true;}
+        if (target > in || target > out) {
+            increasedCount = true;
+        }
 
         if (target < in && in > 2) {
             in = target;
@@ -154,16 +183,23 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
         if (!(_lastIn.equals(i) && _lastOut.equals(o))) {
             setTunnels(i, o, ib, ob);
             if (increasedCount) {
-                String msg = "Peer activity detected -> Increasing tunnel count to " + i + " inbound / " + o + " outbound";
-                if (_log.shouldInfo()) {_log.info(msg);}
-                if (isStandalone) {System.out.println(" • " + msg);}
+                String msg =
+                        "Peer activity detected -> Increasing tunnel count to "
+                                + i
+                                + " inbound / "
+                                + o
+                                + " outbound";
+                if (_log.shouldInfo()) {
+                    _log.info(msg);
+                }
+                if (isStandalone) {
+                    System.out.println(" • " + msg);
+                }
             }
         }
     }
 
-    /**
-     *  Set in / out / in backup / out backup tunnel counts
-     */
+    /** Set in / out / in backup / out backup tunnel counts */
     private void setTunnels(String i, String o, String ib, String ob) {
         _consec = 0;
         I2PSocketManager mgr = _util.getSocketManager();
@@ -171,8 +207,16 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
             I2PSession sess = mgr.getSession();
             if (sess != null) {
                 if (_log.shouldInfo()) {
-                    _log.info("Tunnel settings updated: [" + i + " inbound / " + o + " outbound / " +
-                              ib + " inbound backup / " + ob + " outbound backup]");
+                    _log.info(
+                            "Tunnel settings updated: ["
+                                    + i
+                                    + " inbound / "
+                                    + o
+                                    + " outbound / "
+                                    + ib
+                                    + " inbound backup / "
+                                    + ob
+                                    + " outbound backup]");
                 }
                 Properties newProps = new Properties();
                 newProps.setProperty("inbound.quantity", i);
@@ -188,14 +232,19 @@ class IdleChecker extends SimpleTimer2.TimedEvent {
 
     /**
      * Return the current inbound tunnel count
+     *
      * @since 0.9.66+
      */
-    public int getActiveInboundCount() {return Integer.parseInt(_lastIn);}
+    public int getActiveInboundCount() {
+        return Integer.parseInt(_lastIn);
+    }
 
     /**
      * Return the current outbound tunnel count
+     *
      * @since 0.9.66+
      */
-    public int getActiveOutboundCount() {return Integer.parseInt(_lastOut);}
-
+    public int getActiveOutboundCount() {
+        return Integer.parseInt(_lastOut);
+    }
 }

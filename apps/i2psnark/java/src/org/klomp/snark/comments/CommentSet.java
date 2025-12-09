@@ -4,11 +4,13 @@
  */
 package org.klomp.snark.comments;
 
+import net.i2p.util.SecureFileOutputStream;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.AbstractSet;
@@ -21,20 +23,16 @@ import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import net.i2p.util.SecureFileOutputStream;
-
 /**
  * Store comments.
  *
- * Optimized for fast checking of duplicates, and retrieval of ratings.
- * Removes are not really removed, only marked as hidden, so
- * they don't reappear.
- * Duplicates are detected based on an approximate time range.
- * Max size of both elements and total text length is enforced.
+ * <p>Optimized for fast checking of duplicates, and retrieval of ratings. Removes are not really
+ * removed, only marked as hidden, so they don't reappear. Duplicates are detected based on an
+ * approximate time range. Max size of both elements and total text length is enforced.
  *
- * Supports persistence via save() and File constructor.
+ * <p>Supports persistence via save() and File constructor.
  *
- * NOT THREAD SAFE except for iterating AFTER the iterator() call.
+ * <p>NOT THREAD SAFE except for iterating AFTER the iterator() call.
  *
  * @since 0.9.31
  */
@@ -68,45 +66,48 @@ public class CommentSet extends AbstractSet<Comment> {
         addAll(coll);
     }
 
-    /**
-     *  File must be gzipped.
-     *  Need not be sorted.
-     *  See Comment.toPersistentString() for format.
-     */
+    /** File must be gzipped. Need not be sorted. See Comment.toPersistentString() for format. */
     public CommentSet(File file) throws IOException {
         this();
         BufferedReader br = null;
         try {
-            br = new BufferedReader(new InputStreamReader(new GZIPInputStream(new FileInputStream(file)), "UTF-8"));
+            br =
+                    new BufferedReader(
+                            new InputStreamReader(
+                                    new GZIPInputStream(new FileInputStream(file)), "UTF-8"));
             String line = null;
             while ((line = br.readLine()) != null) {
                 Comment c = Comment.fromPersistentString(line);
-                if (c != null)
-                    add(c);
+                if (c != null) add(c);
             }
         } finally {
-            if (br != null) try { br.close(); } catch (IOException ioe) {}
+            if (br != null)
+                try {
+                    br.close();
+                } catch (IOException ioe) {
+                }
         }
         modified = false;
     }
 
     /**
-     *  File will be gzipped.
-     *  Not sorted, includes hidden.
-     *  See Comment.toPersistentString() for format.
-     *  Sets isModified() to false.
+     * File will be gzipped. Not sorted, includes hidden. See Comment.toPersistentString() for
+     * format. Sets isModified() to false.
      */
     public void save(File file) throws IOException {
         PrintWriter out = null;
         try {
-            out = new PrintWriter(new OutputStreamWriter(new GZIPOutputStream(new SecureFileOutputStream(file)), "UTF-8"));
+            out =
+                    new PrintWriter(
+                            new OutputStreamWriter(
+                                    new GZIPOutputStream(new SecureFileOutputStream(file)),
+                                    "UTF-8"));
             for (List<Comment> l : map.values()) {
                 for (Comment c : l) {
                     out.println(c.toPersistentString());
                 }
             }
-            if (out.checkError())
-                throw new IOException("Failed write to " + file);
+            if (out.checkError()) throw new IOException("Failed write to " + file);
             modified = false;
         } finally {
             if (out != null) out.close();
@@ -114,30 +115,24 @@ public class CommentSet extends AbstractSet<Comment> {
     }
 
     /**
-     *  Max length for strings enforced in Comment.java.
-     *  Max total length for strings enforced here.
-     *  Enforces max size for set
+     * Max length for strings enforced in Comment.java. Max total length for strings enforced here.
+     * Enforces max size for set
      */
     @Override
     public boolean add(Comment c) {
-        if (realSize >= MAX_SIZE && !c.isMine())
-            return false;
+        if (realSize >= MAX_SIZE && !c.isMine()) return false;
         String s = c.getText();
-        if (s != null && totalTextSize + s.length() > MAX_TOTAL_TEXT_LEN)
-            return false;
+        if (s != null && totalTextSize + s.length() > MAX_TOTAL_TEXT_LEN) return false;
         // If isMine and no text and rating changed, don't bother
-        if (c.isMine() && c.getText() == null && c.getRating() == myRating)
-            return false;
+        if (c.isMine() && c.getText() == null && c.getRating() == myRating) return false;
         int hCode = c.hashCode();
         // check previous and next buckets
         Integer phc = Integer.valueOf(hCode - 1);
         List<Comment> plist = map.get(phc);
-        if (plist != null && plist.contains(c))
-            return false;
+        if (plist != null && plist.contains(c)) return false;
         Integer nhc = Integer.valueOf(hCode + 1);
         List<Comment> nxlist = map.get(nhc);
-        if (nxlist != null && nxlist.contains(c))
-            return false;
+        if (nxlist != null && nxlist.contains(c)) return false;
         // check this bucket
         Integer hc = Integer.valueOf(hCode);
         List<Comment> list = map.get(hc);
@@ -147,8 +142,7 @@ public class CommentSet extends AbstractSet<Comment> {
             addStats(c);
             return true;
         }
-        if (list.contains(c))
-            return false;
+        if (list.contains(c)) return false;
         if (list.size() == 1) {
             // presume unmodifiable singletonList
             List<Comment> nlist = new ArrayList<Comment>(2);
@@ -158,25 +152,23 @@ public class CommentSet extends AbstractSet<Comment> {
         }
         list.add(c);
         // If isMine and no text and comment changed, remove old ones
-        if (c.isMine() && c.getText() == null)
-            removeMyOldRatings(c.getID());
+        if (c.isMine() && c.getText() == null) removeMyOldRatings(c.getID());
         addStats(c);
         return true;
     }
 
     /**
-     *  Only hides the comment, doesn't really remove it.
-     *  @return true if present and not previously hidden
+     * Only hides the comment, doesn't really remove it.
+     *
+     * @return true if present and not previously hidden
      */
     @Override
     public boolean remove(Object o) {
-        if (o == null || !(o instanceof Comment))
-            return false;
+        if (o == null || !(o instanceof Comment)) return false;
         Comment c = (Comment) o;
         Integer hc = Integer.valueOf(c.hashCode());
         List<Comment> list = map.get(hc);
-        if (list == null)
-            return false;
+        if (list == null) return false;
         int i = list.indexOf(c);
         if (i >= 0) {
             Comment cc = list.get(i);
@@ -190,11 +182,10 @@ public class CommentSet extends AbstractSet<Comment> {
     }
 
     /**
-     *  Remove the id as retrieved from Comment.getID().
-     *  Only hides the comment, doesn't really remove it.
-     *  This is for the UI.
+     * Remove the id as retrieved from Comment.getID(). Only hides the comment, doesn't really
+     * remove it. This is for the UI.
      *
-     *  @return true if present and not previously hidden
+     * @return true if present and not previously hidden
      */
     public boolean remove(int id) {
         // not the most efficient but should be rare.
@@ -208,10 +199,7 @@ public class CommentSet extends AbstractSet<Comment> {
         return false;
     }
 
-    /**
-     *  Remove all ratings of mine with empty comments,
-     *  except the ID specified.
-     */
+    /** Remove all ratings of mine with empty comments, except the ID specified. */
     private void removeMyOldRatings(int exceptID) {
         for (List<Comment> l : map.values()) {
             for (Comment c : l) {
@@ -238,12 +226,10 @@ public class CommentSet extends AbstractSet<Comment> {
                 }
             }
             long time = c.getTime();
-            if (time > latestCommentTime)
-                latestCommentTime = time;
+            if (time > latestCommentTime) latestCommentTime = time;
         }
         String t = c.getText();
-        if (t != null)
-            totalTextSize += t.length();
+        if (t != null) totalTextSize += t.length();
         modified = true;
     }
 
@@ -254,8 +240,7 @@ public class CommentSet extends AbstractSet<Comment> {
             int r = c.getRating();
             if (r > 0) {
                 if (c.isMine()) {
-                    if (myRating == r)
-                        myRating = 0;
+                    if (myRating == r) myRating = 0;
                 } else {
                     totalRating -= r;
                     ratingSize--;
@@ -266,39 +251,44 @@ public class CommentSet extends AbstractSet<Comment> {
     }
 
     /**
-     *  Is not adjusted if the latest comment wasn't hidden but is then hidden.
-     *  @return the timestamp of the most recent non-hidden comment
+     * Is not adjusted if the latest comment wasn't hidden but is then hidden.
+     *
+     * @return the timestamp of the most recent non-hidden comment
      */
-    public long getLatestCommentTime() { return latestCommentTime; }
-
-    /**
-     *  @return true if modified since instantiation
-     */
-    public boolean isModified() { return modified; }
-
-    /**
-     *  @return 0 if none, or 1-5
-     */
-    public int getMyRating() { return myRating; }
-
-    /**
-     *  @return Number of ratings making up the average rating
-     */
-    public int getRatingCount() { return ratingSize; }
-
-    /**
-     *  @return 0 if none, or 1-5
-     */
-    public double getAverageRating() {
-        if (ratingSize <= 0)
-            return 0.0d;
-        return totalRating / (double) ratingSize;
+    public long getLatestCommentTime() {
+        return latestCommentTime;
     }
 
     /**
-     *  Actually clears everything, including hidden.
-     *  Resets ratings to zero.
+     * @return true if modified since instantiation
      */
+    public boolean isModified() {
+        return modified;
+    }
+
+    /**
+     * @return 0 if none, or 1-5
+     */
+    public int getMyRating() {
+        return myRating;
+    }
+
+    /**
+     * @return Number of ratings making up the average rating
+     */
+    public int getRatingCount() {
+        return ratingSize;
+    }
+
+    /**
+     * @return 0 if none, or 1-5
+     */
+    public double getAverageRating() {
+        if (ratingSize <= 0) return 0.0d;
+        return totalRating / (double) ratingSize;
+    }
+
+    /** Actually clears everything, including hidden. Resets ratings to zero. */
     @Override
     public void clear() {
         if (realSize > 0) {
@@ -314,28 +304,24 @@ public class CommentSet extends AbstractSet<Comment> {
     }
 
     /**
-     *  May be more than what the iterator returns,
-     *  we do additional deduping in the iterator.
+     * May be more than what the iterator returns, we do additional deduping in the iterator.
      *
-     *  @return the non-hidden size
+     * @return the non-hidden size
      */
     public int size() {
         return size;
     }
 
     /**
-     *  Will be in reverse-sort order, i.e. newest-first.
-     *  The returned iterator is thread-safe after this call.
-     *  Changes after this call will not be reflected in the iterator.
-     *  iter.remove() has no effect on the underlying set.
-     *  Hidden comments not included.
+     * Will be in reverse-sort order, i.e. newest-first. The returned iterator is thread-safe after
+     * this call. Changes after this call will not be reflected in the iterator. iter.remove() has
+     * no effect on the underlying set. Hidden comments not included.
      *
-     *  Returned values may be less than indicated in size()
-     *  due to additional deduping in the iterator.
+     * <p>Returned values may be less than indicated in size() due to additional deduping in the
+     * iterator.
      */
     public Iterator<Comment> iterator() {
-        if (size <= 0)
-            return Collections.<Comment>emptyList().iterator();
+        if (size <= 0) return Collections.<Comment>emptyList().iterator();
         List<Comment> list = new ArrayList<Comment>(size);
         for (List<Comment> l : map.values()) {
             int hc = l.get(0).hashCode();
@@ -351,8 +337,7 @@ public class CommentSet extends AbstractSet<Comment> {
                                 break;
                             }
                         }
-                        if (dup)
-                            continue;
+                        if (dup) continue;
                     }
                     list.add(c);
                 }

@@ -5,32 +5,38 @@ import java.util.Set;
 
 /**
  * Represents a torrent piece and tracks which peers have it and are requesting it.
- * 
- * <p>This class is used internally by PeerCoordinator to manage piece selection
- * and distribution strategies. It maintains:
+ *
+ * <p>This class is used internally by PeerCoordinator to manage piece selection and distribution
+ * strategies. It maintains:
+ *
  * <ul>
- * <li>The piece identifier within the torrent</li>
- * <li>Set of peers that have this piece available</li>
- * <li>Set of peers currently requesting this piece</li>
- * <li>Priority level for piece selection</li>
+ *   <li>The piece identifier within the torrent
+ *   <li>Set of peers that have this piece available
+ *   <li>Set of peers currently requesting this piece
+ *   <li>Priority level for piece selection
  * </ul>
- * </p>
- * 
- * <p>Pieces are sorted by priority (highest first) and then by rarity 
- * (fewest peers having it first) to optimize download performance.</p>
- * 
- * <p><strong>Thread Safety:</strong> This class is not thread-safe. 
- * Callers must synchronize on access to most methods.</p>
- * 
+ *
+ * <p>Pieces are sorted by priority (highest first) and then by rarity (fewest peers having it
+ * first) to optimize download performance.
+ *
+ * <p><strong>Thread Safety:</strong> This class is not thread-safe. Callers must synchronize on
+ * access to most methods.
+ *
  * @since 0.1.0
  */
 class Piece implements Comparable<Piece> {
 
     private final int id;
     private final Set<PeerID> peers;
-    /** @since 0.8.3 */
+
+    /**
+     * @since 0.8.3
+     */
     private volatile Set<PeerID> requests;
-    /** @since 0.8.1 */
+
+    /**
+     * @since 0.8.1
+     */
     private int priority;
 
     public Piece(int id) {
@@ -39,14 +45,10 @@ class Piece implements Comparable<Piece> {
         // defer creating requests to save memory
     }
 
-    /**
-     *  Highest priority first,
-     *  then rarest first
-     */
+    /** Highest priority first, then rarest first */
     public int compareTo(Piece op) {
-        int pdiff = op.priority - this.priority;   // reverse
-        if (pdiff != 0)
-            return pdiff;
+        int pdiff = op.priority - this.priority; // reverse
+        if (pdiff != 0) return pdiff;
         return this.peers.size() - op.peers.size();
     }
 
@@ -54,7 +56,7 @@ class Piece implements Comparable<Piece> {
     public boolean equals(Object o) {
         if (o == null) return false;
         if (o instanceof Piece) {
-            return this.id == ((Piece)o).id;
+            return this.id == ((Piece) o).id;
         }
         return false;
     }
@@ -66,20 +68,27 @@ class Piece implements Comparable<Piece> {
         return hash;
     }
 
-    public int getId() { return this.id; }
+    public int getId() {
+        return this.id;
+    }
 
     /** caller must synchronize */
-    public boolean addPeer(Peer peer) { return this.peers.add(peer.getPeerID()); }
+    public boolean addPeer(Peer peer) {
+        return this.peers.add(peer.getPeerID());
+    }
 
     /**
      * Caller must synchronize.
+     *
      * @return true if removed
      */
-    public boolean removePeer(Peer peer) { return this.peers.remove(peer.getPeerID()); }
+    public boolean removePeer(Peer peer) {
+        return this.peers.remove(peer.getPeerID());
+    }
 
     /**
-     * How many peers have this piece?
-     * Caller must synchronize
+     * How many peers have this piece? Caller must synchronize
+     *
      * @since 0.9.1
      */
     public int getPeerCount() {
@@ -92,24 +101,21 @@ class Piece implements Comparable<Piece> {
     }
 
     /**
-     * Since 0.8.3, keep track of who is requesting here,
-     * to avoid deadlocks from querying each peer.
-     * Caller must synchronize
+     * Since 0.8.3, keep track of who is requesting here, to avoid deadlocks from querying each
+     * peer. Caller must synchronize
      */
     public void setRequested(Peer peer, boolean requested) {
         if (requested) {
-            if (this.requests == null)
-                this.requests = new HashSet<PeerID>(2);
+            if (this.requests == null) this.requests = new HashSet<PeerID>(2);
             this.requests.add(peer.getPeerID());
         } else {
-            if (this.requests != null)
-                this.requests.remove(peer.getPeerID());
+            if (this.requests != null) this.requests.remove(peer.getPeerID());
         }
     }
 
     /**
-     * Is peer requesting this piece?
-     * Caller must synchronize
+     * Is peer requesting this piece? Caller must synchronize
+     *
      * @since 0.8.3
      */
     public boolean isRequestedBy(Peer peer) {
@@ -117,8 +123,8 @@ class Piece implements Comparable<Piece> {
     }
 
     /**
-     * How many peers are requesting this piece?
-     * Caller must synchronize
+     * How many peers are requesting this piece? Caller must synchronize
+     *
      * @since 0.8.3
      */
     public int getRequestCount() {
@@ -126,27 +132,42 @@ class Piece implements Comparable<Piece> {
     }
 
     /**
-     * Clear all knowledge of peers
-     * Caller must synchronize
+     * Clear all knowledge of peers Caller must synchronize
+     *
      * @since 0.9.3
      */
     public void clear() {
         peers.clear();
-        if (requests != null)
-            requests.clear();
+        if (requests != null) requests.clear();
     }
 
-    /** @return default 0 @since 0.8.1 */
-    public int getPriority() { return this.priority; }
+    /**
+     * @return default 0 @since 0.8.1
+     */
+    public int getPriority() {
+        return this.priority;
+    }
 
-    /** @since 0.8.1 */
-    public void setPriority(int p) { this.priority = p; }
+    /**
+     * @since 0.8.1
+     */
+    public void setPriority(int p) {
+        this.priority = p;
+    }
 
-    /** @since 0.8.1 */
-    public boolean isDisabled() { return this.priority < 0; }
+    /**
+     * @since 0.8.1
+     */
+    public boolean isDisabled() {
+        return this.priority < 0;
+    }
 
-    /** @since 0.8.1 */
-    public void setDisabled() { this.priority = -1; }
+    /**
+     * @since 0.8.1
+     */
+    public void setDisabled() {
+        this.priority = -1;
+    }
 
     @Override
     public String toString() {

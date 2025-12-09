@@ -23,7 +23,9 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.StringTokenizer;
 
-/** Byte range inclusive of end points.
+/**
+ * Byte range inclusive of end points.
+ *
  * <pre>
  *
  *   parses the following types of byte ranges:
@@ -40,20 +42,25 @@ import java.util.StringTokenizer;
  * </pre>
  *
  * Based on RFC2616 3.12, 14.16, 14.35.1, 14.35.2
- * @version $version$
  *
+ * @version $version$
  */
 public class InclusiveByteRange {
     long first = 0;
-    long last  = 0;
+    long last = 0;
 
     public InclusiveByteRange(long first, long last) {
         this.first = first;
         this.last = last;
     }
 
-    public long getFirst() {return first;}
-    public long getLast() {return last;}
+    public long getFirst() {
+        return first;
+    }
+
+    public long getLast() {
+        return last;
+    }
 
     /**
      * @param headers Enumeration of Range header fields.
@@ -67,8 +74,8 @@ public class InclusiveByteRange {
         headers:
         while (headers.hasMoreElements()) {
             String header = (String) headers.nextElement();
-            StringTokenizer tok = new StringTokenizer(header,"=,",false);
-            String t=null;
+            StringTokenizer tok = new StringTokenizer(header, "=,", false);
+            String t = null;
             try {
                 while (tok.hasMoreTokens()) { // read all byte ranges for this header
                     try {
@@ -76,45 +83,62 @@ public class InclusiveByteRange {
                         long first = -1;
                         long last = -1;
                         int d = t.indexOf('-');
-                        if (d < 0 || t.indexOf('-',d + 1) >= 0) {
-                            if ("bytes".equals(t)) {continue;}
+                        if (d < 0 || t.indexOf('-', d + 1) >= 0) {
+                            if ("bytes".equals(t)) {
+                                continue;
+                            }
                             continue headers;
                         } else if (d == 0) {
                             if (d + 1 < t.length()) {
                                 last = Long.parseLong(t.substring(d + 1).trim());
-                            } else {continue;}
+                            } else {
+                                continue;
+                            }
                         } else if (d + 1 < t.length()) {
-                            first = Long.parseLong(t.substring(0,d).trim());
+                            first = Long.parseLong(t.substring(0, d).trim());
                             last = Long.parseLong(t.substring(d + 1).trim());
-                        } else {first = Long.parseLong(t.substring(0,d).trim());}
+                        } else {
+                            first = Long.parseLong(t.substring(0, d).trim());
+                        }
 
-                        if (first == -1 && last == -1) {continue headers;}
-                        if (first != -1 && last != -1 && (first > last)) {continue headers;}
+                        if (first == -1 && last == -1) {
+                            continue headers;
+                        }
+                        if (first != -1 && last != -1 && (first > last)) {
+                            continue headers;
+                        }
                         if (first < size) {
-                            if (satRanges == null) {satRanges = new ArrayList<InclusiveByteRange>(4);}
-                            InclusiveByteRange range = new InclusiveByteRange(first,last);
+                            if (satRanges == null) {
+                                satRanges = new ArrayList<InclusiveByteRange>(4);
+                            }
+                            InclusiveByteRange range = new InclusiveByteRange(first, last);
                             satRanges.add(range);
                         }
+                    } catch (NumberFormatException e) {
+                        continue;
                     }
-                    catch (NumberFormatException e) {continue;}
                 }
+            } catch (Exception e) {
             }
-            catch(Exception e) {}
         }
         return satRanges;
     }
 
     public long getFirst(long size) {
         if (first < 0) {
-            long tf=size-last;
-            if (tf < 0) {tf = 0;}
+            long tf = size - last;
+            if (tf < 0) {
+                tf = 0;
+            }
             return tf;
         }
         return first;
     }
 
     public long getLast(long size) {
-        if (first < 0 || last < 0 || last>= size) {return size - 1;}
+        if (first < 0 || last < 0 || last >= size) {
+            return size - 1;
+        }
         return last;
     }
 
@@ -124,9 +148,12 @@ public class InclusiveByteRange {
 
     public String toHeaderRangeString(long size) {
         StringBuilder sb = new StringBuilder(40);
-        sb.append("bytes ").append(getFirst(size))
-          .append('-').append(getLast(size))
-          .append("/").append(size);
+        sb.append("bytes ")
+                .append(getFirst(size))
+                .append('-')
+                .append(getLast(size))
+                .append("/")
+                .append(size);
         return sb.toString();
     }
 
@@ -142,5 +169,4 @@ public class InclusiveByteRange {
         sb.append(Long.toString(first)).append(":").append(Long.toString(last));
         return sb.toString();
     }
-
 }

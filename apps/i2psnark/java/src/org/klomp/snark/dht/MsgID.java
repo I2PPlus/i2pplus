@@ -1,4 +1,5 @@
 package org.klomp.snark.dht;
+
 /*
  *  GPLv2
  */
@@ -7,7 +8,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.data.ByteArray;
 
 /**
- *  Used for both incoming and outgoing message IDs
+ * Used for both incoming and outgoing message IDs
  *
  * @since 0.9.2
  * @author zzz
@@ -16,6 +17,7 @@ class MsgID extends ByteArray {
 
     /** BEP 5: 2 bytes, incremented */
     private static final int MY_TOK_LEN = 8;
+
     private static final int MAX_TOK_LEN = 16;
 
     /** outgoing - generate a random ID */
@@ -27,11 +29,10 @@ class MsgID extends ByteArray {
         setValid(MY_TOK_LEN);
     }
 
-    /** incoming  - save the ID (arbitrary length) */
+    /** incoming - save the ID (arbitrary length) */
     public MsgID(byte[] data) {
         super(data);
         // lets not get carried away
-        if (data.length > MAX_TOK_LEN)
-            throw new IllegalArgumentException();
+        if (data.length > MAX_TOK_LEN) throw new IllegalArgumentException();
     }
 }

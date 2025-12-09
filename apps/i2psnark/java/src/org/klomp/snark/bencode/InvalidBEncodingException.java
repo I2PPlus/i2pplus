@@ -13,10 +13,8 @@ import java.io.IOException;
  *
  * @author Mark Wielaard (mark@klomp.org)
  */
-public class InvalidBEncodingException extends IOException
-{
-  public InvalidBEncodingException(String message)
-  {
-    super(message);
-  }
+public class InvalidBEncodingException extends IOException {
+    public InvalidBEncodingException(String message) {
+        super(message);
+    }
 }

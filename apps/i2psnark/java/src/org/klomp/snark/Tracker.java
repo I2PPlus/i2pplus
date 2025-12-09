@@ -17,12 +17,13 @@ public class Tracker {
     public final boolean supportsDetails;
 
     /**
-     *  @param baseURL The web site, may be null
+     * @param baseURL The web site, may be null
      */
     public Tracker(String name, String announceURL, String baseURL) {
         this.name = name;
         this.announceURL = announceURL;
         this.baseURL = baseURL;
-        this.supportsDetails = name.contains("tracker2.postman.i2p") || name.contains("torrfreedom.i2p");
+        this.supportsDetails =
+                name.contains("tracker2.postman.i2p") || name.contains("torrfreedom.i2p");
     }
 }

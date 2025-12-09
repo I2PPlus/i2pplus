@@ -1,12 +1,8 @@
 package org.klomp.snark.dht;
+
 /*
  *  From zzzot, relicensed to GPLv2
  */
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
 
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
@@ -14,6 +10,10 @@ import net.i2p.data.Hash;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * The tracker stores peers, i.e. Dest hashes (not nodes).
@@ -28,17 +28,21 @@ class DHTTracker {
     private long _expireTime;
     private final Log _log;
     private volatile boolean _isRunning;
+
     /** not current, updated by cleaner */
     private int _peerCount;
+
     /** not current, updated by cleaner */
     private int _torrentCount;
 
     /** stagger with other cleaners */
-    private static final long CLEAN_TIME = 199*1000;
+    private static final long CLEAN_TIME = 199 * 1000;
+
     /** no guidance in BEP 5; Vuze is 8h */
-    private static final long MAX_EXPIRE_TIME = 3*60*60*1000L;
-    private static final long MIN_EXPIRE_TIME = 15*60*1000;
-    private static final long DELTA_EXPIRE_TIME = 3*60*1000;
+    private static final long MAX_EXPIRE_TIME = 3 * 60 * 60 * 1000L;
+
+    private static final long MIN_EXPIRE_TIME = 15 * 60 * 1000;
+    private static final long DELTA_EXPIRE_TIME = 3 * 60 * 1000;
     private static final int MAX_PEERS = 400;
     private static final int MAX_PEERS_PER_TORRENT = 150;
     private static final int ABSOLUTE_MAX_PER_TORRENT = MAX_PEERS_PER_TORRENT * 2;
@@ -62,74 +66,62 @@ class DHTTracker {
     }
 
     void announce(InfoHash ih, Hash hash, boolean isSeed) {
-        if (_log.shouldDebug())
-            _log.debug("Announce " + hash + " for " + ih);
+        if (_log.shouldDebug()) _log.debug("Announce " + hash + " for " + ih);
         Peers peers = _torrents.get(ih);
         if (peers == null) {
-            if (_torrents.size() >= MAX_TORRENTS)
-                return;
+            if (_torrents.size() >= MAX_TORRENTS) return;
             peers = new Peers();
             Peers peers2 = _torrents.putIfAbsent(ih, peers);
-            if (peers2 != null)
-                peers = peers2;
+            if (peers2 != null) peers = peers2;
         }
 
         if (peers.size() < ABSOLUTE_MAX_PER_TORRENT) {
             Peer peer = new Peer(hash.getData());
             Peer peer2 = peers.putIfAbsent(peer, peer);
-            if (peer2 != null)
-                peer = peer2;
+            if (peer2 != null) peer = peer2;
             peer.setLastSeen(_context.clock().now());
             // don't let false trump true, as not all sources know the seed status
-            if (isSeed)
-                peer.setSeed(true);
+            if (isSeed) peer.setSeed(true);
         } else {
             // We could update setLastSeen if he is already
             // in there, but that would tend to keep
             // the same set of peers.
             // So let it expire so new ones can come in.
-            //Peer peer = peers.get(hash);
-            //if (peer != null)
+            // Peer peer = peers.get(hash);
+            // if (peer != null)
             //    peer.setLastSeen(_context.clock().now());
         }
     }
 
     void unannounce(InfoHash ih, Hash hash) {
         Peers peers = _torrents.get(ih);
-        if (peers == null)
-            return;
+        if (peers == null) return;
         peers.remove(hash);
     }
 
     /**
-     *  Caller's responsibility to remove himself from the list
+     * Caller's responsibility to remove himself from the list
      *
-     *  @param noSeeds true if we do not want seeds in the result
-     *  @return list or empty list (never null)
+     * @param noSeeds true if we do not want seeds in the result
+     * @return list or empty list (never null)
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     List<Hash> getPeers(InfoHash ih, int max, boolean noSeeds) {
         Peers peers = _torrents.get(ih);
-        if (peers == null || max <= 0)
-            return Collections.emptyList();
+        if (peers == null || max <= 0) return Collections.emptyList();
 
         List<Peer> rv = new ArrayList<Peer>(peers.values());
         int size = rv.size();
-        if (max < size)
-            Collections.shuffle(rv, _context.random());
+        if (max < size) Collections.shuffle(rv, _context.random());
         if (noSeeds) {
             int i = 0;
             for (Iterator<Peer> iter = rv.iterator(); iter.hasNext(); ) {
-                if (iter.next().isSeed())
-                    iter.remove();
-                else if (++i >= max)
-                    break;
+                if (iter.next().isSeed()) iter.remove();
+                else if (++i >= max) break;
             }
-            if (max < rv.size())
-                rv = rv.subList(0, max);
+            if (max < rv.size()) rv = rv.subList(0, max);
         } else {
-            if (max < size)
-                rv = rv.subList(0, max);
+            if (max < size) rv = rv.subList(0, max);
         }
         // a Peer is a Hash
         List rv1 = rv;
@@ -137,16 +129,22 @@ class DHTTracker {
         return rv2;
     }
 
-    /**
-     * Debug info, HTML formatted
-     */
+    /** Debug info, HTML formatted */
     public void renderStatusHTML(StringBuilder buf) {
         String separator = " <span class=bullet>&nbsp;&bullet;&nbsp;</span> ";
         buf.append("<div class=debugStats>")
-           .append("<span class=stat><b>DHT Torrents:</b> <span class=dbug>").append(_torrentCount).append("</span></span>").append(separator)
-           .append("<span class=stat><b>DHT Tracker Peers:</b> <span class=dbug>").append(_peerCount).append("</span></span>").append(separator)
-           .append("<span class=stat><b>Peer Expiration:</b> <span class=dbug>").append(DataHelper.formatDuration(_expireTime)).append("</span></span>")
-           .append(separator); // append blacklisted peers info here
+                .append("<span class=stat><b>DHT Torrents:</b> <span class=dbug>")
+                .append(_torrentCount)
+                .append("</span></span>")
+                .append(separator)
+                .append("<span class=stat><b>DHT Tracker Peers:</b> <span class=dbug>")
+                .append(_peerCount)
+                .append("</span></span>")
+                .append(separator)
+                .append("<span class=stat><b>Peer Expiration:</b> <span class=dbug>")
+                .append(DataHelper.formatDuration(_expireTime))
+                .append("</span></span>")
+                .append(separator); // append blacklisted peers info here
     }
 
     private class Cleaner extends SimpleTimer2.TimedEvent {
@@ -156,8 +154,7 @@ class DHTTracker {
         }
 
         public void timeReached() {
-            if (!_isRunning)
-                return;
+            if (!_isRunning) return;
             long now = _context.clock().now();
             int torrentCount = 0;
             int peerCount = 0;
@@ -166,22 +163,22 @@ class DHTTracker {
                 Peers p = iter.next();
                 int recent = 0;
                 for (Iterator<Peer> iterp = p.values().iterator(); iterp.hasNext(); ) {
-                     Peer peer = iterp.next();
-                     if (peer.lastSeen() < now - _expireTime)
-                         iterp.remove();
-                     else {
-                         recent++;
-                         peerCount++;
-                     }
+                    Peer peer = iterp.next();
+                    if (peer.lastSeen() < now - _expireTime) iterp.remove();
+                    else {
+                        recent++;
+                        peerCount++;
+                    }
                 }
                 if (recent > MAX_PEERS_PER_TORRENT) {
                     // too many, delete at random
                     // TODO sort and remove oldest?
                     // TODO per-torrent adjustable expiration?
-                    for (Iterator<Peer> iterp = p.values().iterator(); iterp.hasNext() && p.size() > MAX_PEERS_PER_TORRENT; ) {
-                         iterp.next();
-                         iterp.remove();
-                         peerCount--;
+                    for (Iterator<Peer> iterp = p.values().iterator();
+                            iterp.hasNext() && p.size() > MAX_PEERS_PER_TORRENT; ) {
+                        iterp.next();
+                        iterp.remove();
+                        peerCount--;
                     }
                     torrentCount++;
                     tooMany = true;
@@ -192,18 +189,19 @@ class DHTTracker {
                 }
             }
 
-            if (peerCount > MAX_PEERS)
-                tooMany = true;
-            if (tooMany)
-                _expireTime = Math.max(_expireTime - DELTA_EXPIRE_TIME, MIN_EXPIRE_TIME);
-            else
-                _expireTime = Math.min(_expireTime + DELTA_EXPIRE_TIME, MAX_EXPIRE_TIME);
+            if (peerCount > MAX_PEERS) tooMany = true;
+            if (tooMany) _expireTime = Math.max(_expireTime - DELTA_EXPIRE_TIME, MIN_EXPIRE_TIME);
+            else _expireTime = Math.min(_expireTime + DELTA_EXPIRE_TIME, MAX_EXPIRE_TIME);
 
             if (_log.shouldDebug())
-                _log.debug("DHT tracker cleaner done, now with " +
-                         torrentCount + " torrents, " +
-                         peerCount + " peers, " +
-                         DataHelper.formatDuration(_expireTime) + " expiration");
+                _log.debug(
+                        "DHT tracker cleaner done, now with "
+                                + torrentCount
+                                + " torrents, "
+                                + peerCount
+                                + " peers, "
+                                + DataHelper.formatDuration(_expireTime)
+                                + " expiration");
             _peerCount = peerCount;
             _torrentCount = torrentCount;
             schedule(tooMany ? CLEAN_TIME / 3 : CLEAN_TIME);

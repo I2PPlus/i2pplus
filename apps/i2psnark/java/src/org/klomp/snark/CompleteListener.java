@@ -9,19 +9,19 @@ package org.klomp.snark;
 
 import org.klomp.snark.comments.CommentSet;
 
-
 /**
- *  Callback for Snark events.
- *  @since 0.9.4 moved from Snark.java
+ * Callback for Snark events.
+ *
+ * @since 0.9.4 moved from Snark.java
  */
 public interface CompleteListener {
     public void torrentComplete(Snark snark);
+
     public void updateStatus(Snark snark);
 
     /**
-     * We transitioned from magnet mode, we have now initialized our
-     * metainfo and storage. The listener should now call getMetaInfo()
-     * and save the data to disk.
+     * We transitioned from magnet mode, we have now initialized our metainfo and storage. The
+     * listener should now call getMetaInfo() and save the data to disk.
      *
      * @return the new name for the torrent or null on error
      * @since 0.8.4
@@ -45,11 +45,14 @@ public interface CompleteListener {
 
     /** not really listeners but the easiest way to get back to an optional SnarkManager */
     public long getSavedTorrentTime(Snark snark);
+
     public BitField getSavedTorrentBitField(Snark snark);
+
     /**
      * @since 0.9.15
      */
     public boolean getSavedPreserveNamesSetting(Snark snark);
+
     /**
      * @since 0.9.15
      */

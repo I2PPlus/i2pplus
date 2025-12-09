@@ -1,29 +1,30 @@
 package org.klomp.snark;
 
+import net.i2p.CoreVersion;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import net.i2p.CoreVersion;
-
 /**
- * Simple command line access to various utilities.
- * Not a public API. Subject to change.
- * Apps and plugins should use specific classes.
+ * Simple command line access to various utilities. Not a public API. Subject to change. Apps and
+ * plugins should use specific classes.
  *
  * @since 0.9.26
  */
 public class SnarkCommandLine extends net.i2p.util.CommandLine {
 
-    protected static final List<String> SCLASSES = Arrays.asList(new String[] {
-        "org.klomp.snark.MetaInfo",
-        //"org.klomp.snark.Snark",
-        //"org.klomp.snark.StaticSnark",
-        "org.klomp.snark.Storage",
-        "org.klomp.snark.bencode.BDecoder",
-        //"org.klomp.snark.web.RunStandalone",
-//        "org.klomp.snark.Mp3Test",
-    });
+    protected static final List<String> SCLASSES =
+            Arrays.asList(
+                    new String[] {
+                        "org.klomp.snark.MetaInfo",
+                        // "org.klomp.snark.Snark",
+                        // "org.klomp.snark.StaticSnark",
+                        "org.klomp.snark.Storage",
+                        "org.klomp.snark.bencode.BDecoder",
+                        // "org.klomp.snark.web.RunStandalone",
+                        //        "org.klomp.snark.Mp3Test",
+                    });
 
     protected SnarkCommandLine() {}
 
@@ -39,8 +40,11 @@ public class SnarkCommandLine extends net.i2p.util.CommandLine {
     }
 
     private static void usage(List<String> classes) {
-        System.err.println("I2PSnark version " + CoreVersion.VERSION + '\n' +
-                           "USAGE: java -jar /path/to/i2psnark.jar command [args]");
+        System.err.println(
+                "I2PSnark version "
+                        + CoreVersion.VERSION
+                        + '\n'
+                        + "USAGE: java -jar /path/to/i2psnark.jar command [args]");
         printCommands(classes);
     }
 }

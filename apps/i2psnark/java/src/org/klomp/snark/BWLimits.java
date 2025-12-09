@@ -4,23 +4,23 @@
  */
 package org.klomp.snark;
 
-import java.util.Properties;
-
 import net.i2p.I2PAppContext;
-import net.i2p.client.I2PSessionException;
 import net.i2p.client.I2PClient;
 import net.i2p.client.I2PSession;
+import net.i2p.client.I2PSessionException;
 import net.i2p.client.I2PSimpleClient;
 
+import java.util.Properties;
+
 /**
- * Retrieves bandwidth limits from an I2P router via I2CP.
- * Caches results and updates at most once every 10 minutes.
+ * Retrieves bandwidth limits from an I2P router via I2CP. Caches results and updates at most once
+ * every 10 minutes.
  *
- * This method is blocking and returns cached results if called again
- * within the update interval. Returns null on failure.
+ * <p>This method is blocking and returns cached results if called again within the update interval.
+ * Returns null on failure.
  *
- * Uses a 5-second timeout internally but typically completes faster.
- * Thread-safe via method synchronization.
+ * <p>Uses a 5-second timeout internally but typically completes faster. Thread-safe via method
+ * synchronization.
  *
  * @author zzz
  */
@@ -46,7 +46,10 @@ public class BWLimits {
             session.destroySession();
             lastUpdateTime = System.currentTimeMillis();
         } catch (I2PSessionException ise) {
-            I2PAppContext.getGlobalContext().logManager().getLog(BWLimits.class).warn("[I2PSnark] Bandwidth Limiter failed", ise);
+            I2PAppContext.getGlobalContext()
+                    .logManager()
+                    .getLog(BWLimits.class)
+                    .warn("[I2PSnark] Bandwidth Limiter failed", ise);
         }
         return cachedResult;
     }

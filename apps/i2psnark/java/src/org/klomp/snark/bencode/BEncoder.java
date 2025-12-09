@@ -1,10 +1,12 @@
 /* BEncoder - Converts Java objects to bencoded format.
-   Copyright (C) 2003 Mark J. Wielaard
-   This file is part of Snark.
-   Licensed under the GPL version 2 or later.
- */
+  Copyright (C) 2003 Mark J. Wielaard
+  This file is part of Snark.
+  Licensed under the GPL version 2 or later.
+*/
 
 package org.klomp.snark.bencode;
+
+import net.i2p.data.DataHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,176 +20,152 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import net.i2p.data.DataHelper;
-
 /**
  * Converts Java objects to bencoded format for BitTorrent protocol communication.
- * 
- * <p>Bencoding is a simple way to structure data used in BitTorrent. This class
- * provides static methods to encode the following Java types:
+ *
+ * <p>Bencoding is a simple way to structure data used in BitTorrent. This class provides static
+ * methods to encode the following Java types:
+ *
  * <ul>
- * <li>Strings - encoded as UTF-8 byte strings with length prefix</li>
- * <li>byte[] - encoded as raw byte strings with length prefix</li>
- * <li>Numbers - encoded as integer values with 'i' prefix and 'e' suffix</li>
- * <li>List - encoded as ordered sequences starting with 'l' and ending with 'e'</li>
- * <li>Map - encoded as dictionaries with sorted keys, starting with 'd' and ending with 'e'</li>
- * <li>BEValue - unwrapped and encoded according to its contained type</li>
+ *   <li>Strings - encoded as UTF-8 byte strings with length prefix
+ *   <li>byte[] - encoded as raw byte strings with length prefix
+ *   <li>Numbers - encoded as integer values with 'i' prefix and 'e' suffix
+ *   <li>List - encoded as ordered sequences starting with 'l' and ending with 'e'
+ *   <li>Map - encoded as dictionaries with sorted keys, starting with 'd' and ending with 'e'
+ *   <li>BEValue - unwrapped and encoded according to its contained type
  * </ul>
- * </p>
- * 
+ *
  * <p>Example output formats:
+ *
  * <ul>
- * <li>String "hello" → "5:hello"</li>
- * <li>Number 42 → "i42e"</li>
- * <li>List ["a", "b"] → "l1:a1:be"</li>
- * <li>Map {"key":"value"} → "d3:key5:valuee"</li>
+ *   <li>String "hello" → "5:hello"
+ *   <li>Number 42 → "i42e"
+ *   <li>List ["a", "b"] → "l1:a1:be"
+ *   <li>Map {"key":"value"} → "d3:key5:valuee"
  * </ul>
- * </p>
- * 
+ *
  * @since 0.1.0
  */
-public class BEncoder
-{
+public class BEncoder {
 
-  public static void bencode(Object o, OutputStream out)
-    throws IOException, IllegalArgumentException
-  {
-    if (o == null)
-      throw new NullPointerException("Cannot bencode null");
-    if (o instanceof String)
-      bencode((String)o, out);
-    else if (o instanceof byte[])
-      bencode((byte[])o, out);
-    else if (o instanceof Number)
-      bencode((Number)o, out);
-    else if (o instanceof List)
-      bencode((List<?>)o, out);
-    else if (o instanceof Map)
-      bencode((Map<?, ?>)o, out);
-    else if (o instanceof BEValue)
-      bencode(((BEValue)o).getValue(), out);
-    else
-      throw new IllegalArgumentException("Cannot bencode: " + o.getClass());
-  }
+    public static void bencode(Object o, OutputStream out)
+            throws IOException, IllegalArgumentException {
+        if (o == null) throw new NullPointerException("Cannot bencode null");
+        if (o instanceof String) bencode((String) o, out);
+        else if (o instanceof byte[]) bencode((byte[]) o, out);
+        else if (o instanceof Number) bencode((Number) o, out);
+        else if (o instanceof List) bencode((List<?>) o, out);
+        else if (o instanceof Map) bencode((Map<?, ?>) o, out);
+        else if (o instanceof BEValue) bencode(((BEValue) o).getValue(), out);
+        else throw new IllegalArgumentException("Cannot bencode: " + o.getClass());
+    }
 
-  public static void bencode(String s, OutputStream out) throws IOException
-  {
-    byte[] bs = s.getBytes("UTF-8");
-    bencode(bs, out);
-  }
+    public static void bencode(String s, OutputStream out) throws IOException {
+        byte[] bs = s.getBytes("UTF-8");
+        bencode(bs, out);
+    }
 
-  public static void bencode(Number n, OutputStream out) throws IOException
-  {
-    out.write('i');
-    String s = n.toString();
-    out.write(s.getBytes("UTF-8"));
-    out.write('e');
-  }
+    public static void bencode(Number n, OutputStream out) throws IOException {
+        out.write('i');
+        String s = n.toString();
+        out.write(s.getBytes("UTF-8"));
+        out.write('e');
+    }
 
-  public static void bencode(List<?> l, OutputStream out) throws IOException
-  {
-    out.write('l');
-    Iterator<?> it = l.iterator();
-    while (it.hasNext())
-      bencode(it.next(), out);
-    out.write('e');
-  }
+    public static void bencode(List<?> l, OutputStream out) throws IOException {
+        out.write('l');
+        Iterator<?> it = l.iterator();
+        while (it.hasNext()) bencode(it.next(), out);
+        out.write('e');
+    }
 
-  public static void bencode(byte[] bs, OutputStream out) throws IOException
-  {
-    String l = Integer.toString(bs.length);
-    out.write(l.getBytes("UTF-8"));
-    out.write(':');
-    out.write(bs);
-  }
+    public static void bencode(byte[] bs, OutputStream out) throws IOException {
+        String l = Integer.toString(bs.length);
+        out.write(l.getBytes("UTF-8"));
+        out.write(':');
+        out.write(bs);
+    }
 
-  /**
-   * Keys must be Strings or (supported as of 0.9.31) byte[]s
-   * A mix in the same Map is not supported.
-   *
-   * @throws IllegalArgumentException if keys are not all Strings or all byte[]s
-   */
-  public static byte[] bencode(Map<?, ?> m)
-  {
-    try
-      {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bencode(m, baos);
-        return baos.toByteArray();
-      }
-    catch (IOException ioe)
-      {
-        throw new InternalError(ioe.toString());
-      }
-  }
+    /**
+     * Keys must be Strings or (supported as of 0.9.31) byte[]s A mix in the same Map is not
+     * supported.
+     *
+     * @throws IllegalArgumentException if keys are not all Strings or all byte[]s
+     */
+    public static byte[] bencode(Map<?, ?> m) {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bencode(m, baos);
+            return baos.toByteArray();
+        } catch (IOException ioe) {
+            throw new InternalError(ioe.toString());
+        }
+    }
 
-  /**
-   * Keys must be Strings or (supported as of 0.9.31) byte[]s
-   * A mix in the same Map is not supported.
-   *
-   * @throws IllegalArgumentException if keys are not all Strings or all byte[]s
-   */
-  public static void bencode(Map<?, ?> m, OutputStream out)
-    throws IOException, IllegalArgumentException
-  {
-    out.write('d');
+    /**
+     * Keys must be Strings or (supported as of 0.9.31) byte[]s A mix in the same Map is not
+     * supported.
+     *
+     * @throws IllegalArgumentException if keys are not all Strings or all byte[]s
+     */
+    public static void bencode(Map<?, ?> m, OutputStream out)
+            throws IOException, IllegalArgumentException {
+        out.write('d');
 
-    Set<?> s = m.keySet();
-    List<String> l = null;
-    List<byte[]> b = null;
-    try {
-        for (Object k : s) {
-            if (l != null) {
-                l.add((String) k);
-            } else if (b != null) {
-                b.add((byte[]) k);
-            } else if (String.class.isAssignableFrom(k.getClass())) {
-                l = new ArrayList<String>(s.size());
-                l.add((String) k);
-            } else if (byte[].class.isAssignableFrom(k.getClass())) {
-                b = new ArrayList<byte[]>(s.size());
-                b.add((byte[]) k);
-            } else {
-                throw new IllegalArgumentException("Cannot bencode map: contains key of type " + k.getClass());
+        Set<?> s = m.keySet();
+        List<String> l = null;
+        List<byte[]> b = null;
+        try {
+            for (Object k : s) {
+                if (l != null) {
+                    l.add((String) k);
+                } else if (b != null) {
+                    b.add((byte[]) k);
+                } else if (String.class.isAssignableFrom(k.getClass())) {
+                    l = new ArrayList<String>(s.size());
+                    l.add((String) k);
+                } else if (byte[].class.isAssignableFrom(k.getClass())) {
+                    b = new ArrayList<byte[]>(s.size());
+                    b.add((byte[]) k);
+                } else {
+                    throw new IllegalArgumentException(
+                            "Cannot bencode map: contains key of type " + k.getClass());
+                }
+            }
+        } catch (ClassCastException cce) {
+            throw new IllegalArgumentException("Cannot bencode map: mixed keys", cce);
+        }
+
+        if (l != null) {
+            // Keys must be sorted. XXX - This is not the correct order.
+            // Spec says to sort by bytes, not lexically
+            if (l.size() > 1) Collections.sort(l);
+            for (String key : l) {
+                bencode(key, out);
+                bencode(m.get(key), out);
+            }
+        } else if (b != null) {
+            // Works for arrays of equal lengths, otherwise is probably not
+            // what the bittorrent spec intends.
+            if (b.size() > 1) Collections.sort(b, new BAComparator());
+            for (byte[] key : b) {
+                bencode(key, out);
+                bencode(m.get(key), out);
             }
         }
-    } catch (ClassCastException cce) {
-        throw new IllegalArgumentException("Cannot bencode map: mixed keys", cce);
+
+        out.write('e');
     }
 
-    if (l != null) {
-        // Keys must be sorted. XXX - This is not the correct order.
-        // Spec says to sort by bytes, not lexically
-        if (l.size() > 1)
-            Collections.sort(l);
-        for (String key : l) {
-            bencode(key, out);
-            bencode(m.get(key), out);
-        }
-    } else if (b != null) {
-        // Works for arrays of equal lengths, otherwise is probably not
-        // what the bittorrent spec intends.
-        if (b.size() > 1)
-            Collections.sort(b, new BAComparator());
-        for (byte[] key : b) {
-            bencode(key, out);
-            bencode(m.get(key), out);
+    /**
+     * Shorter arrays are less. See DataHelper.compareTo() Works for arrays of equal lengths,
+     * otherwise is probably not what the bittorrent spec intends.
+     *
+     * @since 0.9.31
+     */
+    private static class BAComparator implements Comparator<byte[]>, Serializable {
+        public int compare(byte[] l, byte[] r) {
+            return DataHelper.compareTo(l, r);
         }
     }
-
-    out.write('e');
-  }
-
-  /**
-   * Shorter arrays are less. See DataHelper.compareTo()
-   * Works for arrays of equal lengths, otherwise is probably not
-   * what the bittorrent spec intends.
-   *
-   * @since 0.9.31
-   */
-  private static class BAComparator implements Comparator<byte[]>, Serializable {
-      public int compare(byte[] l, byte[] r) {
-          return DataHelper.compareTo(l, r);
-      }
-  }
 }
