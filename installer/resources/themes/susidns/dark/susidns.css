@@ -44,7 +44,7 @@ textarea,#subsLog ul{padding:3px 5px;width:100%;height:120px;line-height:1.4;fon
 textarea[cols="70"]{width:100%;height:40px}
 textarea[name="config"]{height:250px;overflow-y:scroll;resize:none}
 textarea:focus{filter:none}
-th{padding:5px 10px;text-align:left;color:var(--ink);font-size:8.5pt}
+th{padding:5px 10px;text-align:left;color:var(--ink)}
 .active{width:fit-content;max-width:240px;display:inline-block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:text-bottom;color:#ff6}
 .fakebutton,.fakebutton:visited{color:#494}
 .fakebutton:hover,.fakebutton:focus{color:#f60}
@@ -139,7 +139,7 @@ td.checkbox{padding:3px 10px;width:1%}
 #book input[type=checkbox]{margin:0}
 #book p,p.messages{font-size:10pt}
 #book table{width:100%;border:var(--border);border-collapse:separate}
-#book table th{font-size:90%;border-bottom:var(--border)}
+#book table th{border-bottom:var(--border)}
 #book th:last-child{background:var(--nuke) no-repeat center center/15px}
 #book tr.head{background:linear-gradient(180deg,#0000 50%,#000 50%),repeating-linear-gradient(90deg,rgba(0,0,0,.5) 2px,rgba(0,16,0,.5) 4px),linear-gradient(180deg,#002000,#000 75%);background-size:100%,4px 100%,100%}
 #host_list tr,#host_details tr{background:#010 var(--row)}
@@ -341,9 +341,9 @@ svg #arrow stop:last-child{stop-color:#010}
 }
 
 @media (min-width:1400px){
-body,input[type=submit],input[type=reset],.fakebutton,input,select,h4,td.names a,li,#filter a,#filter span a,#host_details td,th,#search td,.destaddress{font-size:9.5pt}
+body,input[type=submit],input[type=reset],.fakebutton,input,select,h4,td.names a,li,#filter a,#filter span a,#host_details td,#search td,td.destaddress{font-size:9.5pt}
 p,#content p{font-size:10pt}
-textarea,th{font-size:9pt}
+textarea{font-size:9pt}
 #navi{padding:6px 5px}
 #navi a.abook,#navi a.abook:hover,#navi a.abook:focus,#navi a.abook:active,#navi a#overview,#navi a#overview:hover,#navi a#overview:focus,#navi a#overview:active,#navi a#subs,#navi a#subs:hover,#navi a#subs:focus,#navi a#subs:active,#navi a#configlink,#navi a#configlink:hover,#navi a#configlink:focus,#navi a#configlink:active,#navi a.selected,#navi a[class].selected,#navi a[id].selected{padding:8px 10px 8px 29px!important;letter-spacing:.1em;font-size:10pt;background-position:10px center!important}
 h3{font-size:12pt}
@@ -355,7 +355,7 @@ textarea[name="config"]{height:280px}
 
 @media (min-width:1500px){
 body,input[type=submit],input[type=reset],input[type=file]::file-selector-button,.fakebutton,input,select,h4,td.names a,li,#filter a,#filter span a,td{font-size:10pt}
-th,pre{font-size:9pt}
+pre{font-size:9pt}
 input[type=submit],input[type=reset],.fakebutton{padding:8px 12px 8px}
 input[type=text]{padding:8px}
 #booksearch input[name=search],#booksearch input[name=search]:focus{padding:7px 8px;min-width:320px}
