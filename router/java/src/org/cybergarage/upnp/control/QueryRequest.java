@@ -1,19 +1,6 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: QueryRequest.java
- *
- *	Revision;
- *
- *	01/29/03
- *		- first revision.
- *	09/02/03
- *		- Giordano Sassaroli <sassarol@cefriel.it>
- *		- Error : redundant code, the setRequest method in QueryRequest invokes setURI even if after a couple of rows setRequestHost is invoked
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.upnp.control;
@@ -23,21 +10,36 @@ import org.cybergarage.soap.*;
 import org.cybergarage.upnp.*;
 import org.cybergarage.xml.*;
 
+/**
+ * Represents a UPnP query request for state variables. Extends ControlRequest to provide
+ * functionality for querying the value of state variables.
+ */
 public class QueryRequest extends ControlRequest {
     ////////////////////////////////////////////////
     //	Constructor
     ////////////////////////////////////////////////
 
+    /** Default constructor */
     public QueryRequest() {}
 
+    /**
+     * Constructs a QueryRequest from an HTTP request.
+     *
+     * @param httpReq the HTTP request to wrap
+     */
     public QueryRequest(HTTPRequest httpReq) {
         set(httpReq);
     }
 
     ////////////////////////////////////////////////
-    //	Qyery
+    //	Query
     ////////////////////////////////////////////////
 
+    /**
+     * Gets the variable name node from the query request.
+     *
+     * @return the variable name node, or null if not found
+     */
     private Node getVarNameNode() {
         Node bodyNode = getBodyNode();
         if (bodyNode == null) return null;
@@ -48,6 +50,11 @@ public class QueryRequest extends ControlRequest {
         return queryStateVarNode.getNode(0);
     }
 
+    /**
+     * Gets the name of the state variable being queried.
+     *
+     * @return the variable name, or empty string if not found
+     */
     public String getVarName() {
         Node node = getVarNameNode();
         if (node == null) return "";
@@ -58,6 +65,12 @@ public class QueryRequest extends ControlRequest {
     //	setRequest
     ////////////////////////////////////////////////
 
+    /**
+     * Sets up the query request for the specified state variable. Configures the host, SOAP
+     * envelope, and action for the query.
+     *
+     * @param stateVar the state variable to query
+     */
     public void setRequest(StateVariable stateVar) {
         Service service = stateVar.getService();
 
@@ -96,6 +109,11 @@ public class QueryRequest extends ControlRequest {
     //	post
     ////////////////////////////////////////////////
 
+    /**
+     * Posts the query request and returns the response.
+     *
+     * @return the query response
+     */
     public QueryResponse post() {
         SOAPResponse soapRes = postMessage(getRequestHost(), getRequestPort());
         return new QueryResponse(soapRes);

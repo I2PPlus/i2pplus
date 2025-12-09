@@ -1,18 +1,6 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2003
- *
- *	File: SSDPSearchResponseSocketList.java
- *
- *	Revision;
- *
- *	05/08/03
- *		- first revision.
- *	05/28/03
- *		- Added post() to send a SSDPSearchRequest.
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002-2003
  ******************************************************************/
 
 package org.cybergarage.upnp.ssdp;

@@ -1,16 +1,6 @@
 /******************************************************************
- *
- *	CyberXML for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: AttributeList.java
- *
- *	Revision;
- *
- *	11/27/02
- *		- first revision.
- *
+ * CyberXML for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.xml;
@@ -19,18 +9,15 @@ import java.util.Vector;
 
 /**
  * A vector-based collection of XML attributes.
- * 
- * <p>This class extends Vector to provide specialized methods for managing
- * collections of Attribute objects. It includes methods for finding attributes
- * by name.</p>
- * 
+ *
+ * <p>This class extends Vector to provide specialized methods for managing collections of Attribute
+ * objects. It includes methods for finding attributes by name.
+ *
  * @author Satoshi Konno
  * @since 1.0
  */
 public class AttributeList extends Vector<Attribute> {
-    /**
-     * Creates an empty AttributeList.
-     */
+    /** Creates an empty AttributeList. */
     public AttributeList() {}
 
     /**

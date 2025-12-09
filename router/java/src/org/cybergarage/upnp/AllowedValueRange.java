@@ -1,22 +1,36 @@
 /******************************************************************
- *
- *	CyberLink for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2004
- *
- *	File: AllowedValueRange.java
- *
- *	Revision:
- *
- *	03/27/04
- *		- first revision.
- *
+ * CyberLink for Java
+ * Copyright (C) Satoshi Konno 2002-2004
  ******************************************************************/
 
 package org.cybergarage.upnp;
 
 import org.cybergarage.xml.Node;
 
+/**
+ * Represents an allowed value range constraint for UPnP state variables.
+ *
+ * <p>This class encapsulates allowed value range definitions from UPnP service descriptions. It
+ * provides XML node management for state variables that have numeric ranges defined as allowed
+ * value constraints.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>XML node wrapping for value ranges
+ *   <li>Element name constant for XML parsing
+ *   <li>Service description integration
+ *   <li>State variable constraint management
+ *   <li>UPnP specification compliance
+ * </ul>
+ *
+ * <p>This class is used by UPnP services to manage allowed value range constraints for state
+ * variables, enabling proper validation and description generation for numeric variables with
+ * restricted ranges.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class AllowedValueRange {
     ////////////////////////////////////////////////
     //	Constants

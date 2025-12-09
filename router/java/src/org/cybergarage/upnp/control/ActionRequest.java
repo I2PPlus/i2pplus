@@ -1,18 +1,6 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: ControlRequest.java
- *
- *	Revision;
- *
- *	01/29/03
- *		- first revision.
- *	05/09/05
- *		- Changed getActionName() to return when the delimiter is not found.
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.upnp.control;

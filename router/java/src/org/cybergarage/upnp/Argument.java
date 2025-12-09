@@ -1,25 +1,6 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: Argument.java
- *
- *	Revision;
- *
- *	12/05/02
- *		- first revision.
- *	03/28/04
- *		- Added getRelatedStateVariable().
- *		- Changed setRelatedStateVariable() to setRelatedStateVariableName().
- *		- Changed getRelatedStateVariable() to getRelatedStateVariableName().
- *		- Added getActionNode() and getAction().
- *		- Added getServiceNode() and getService().
- *		- Added the parent service node to the constructor.
- *	04/12/06
- *		- Added setUserData() and getUserData() to set a user original data object.
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.upnp;
@@ -27,25 +8,6 @@ package org.cybergarage.upnp;
 import org.cybergarage.upnp.xml.ArgumentData;
 import org.cybergarage.xml.Node;
 
-/**
- * Represents a UPnP action argument in the CyberLink UPnP framework.
- *
- * <p>This class provides functionality for UPnP action arguments:
- *
- * <ul>
- *   <li>Argument name and direction management
- *   <li>Related state variable association
- *   <li>Service reference management
- *   <li>XML node manipulation
- * </ul>
- *
- * <p>Arguments can be input or output parameters for UPnP actions. Each argument has a name,
- * direction, and may be associated with a state variable for validation and value constraints.
- *
- * @author Satoshi Konno
- * @version 1.8
- * @since 1.0
- */
 public class Argument {
     ////////////////////////////////////////////////
     //	Constants

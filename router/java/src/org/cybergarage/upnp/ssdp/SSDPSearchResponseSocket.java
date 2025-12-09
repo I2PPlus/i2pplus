@@ -1,20 +1,6 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: SSDPSearchResponseSocket.java
- *
- *	Revision;
- *
- *	11/20/02
- *		- first revision.
- *	05/28/03
- *		- Added post() to send a SSDPSearchRequest.
- *	01/31/08
- *		- Changed start() not to abort when the interface infomation is null on Android m3-rc37a.
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.upnp.ssdp;
@@ -23,6 +9,30 @@ import org.cybergarage.upnp.*;
 
 import java.net.DatagramSocket;
 
+/**
+ * Socket for receiving SSDP search responses from UPnP devices.
+ *
+ * <p>This class extends HTTPUSocket and implements Runnable to provide asynchronous handling of
+ * SSDP search responses. It listens for responses to M-SEARCH messages sent during device discovery
+ * operations.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>Asynchronous response reception
+ *   <li>SSDP search response parsing
+ *   <li>Multi-threaded operation
+ *   <li>Network interface binding
+ *   <li>Control point notification
+ * </ul>
+ *
+ * <p>This class is used by UPnP control points to receive responses from devices when performing
+ * device discovery searches. It runs in a separate thread to continuously listen for incoming
+ * search responses without blocking the main application.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable {
     ////////////////////////////////////////////////
     //	Constructor

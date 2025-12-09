@@ -1,20 +1,6 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: ActionResponse.java
- *
- *	Revision;
- *
- *	01/29/03
- *		- first revision.
- *	09/02/03
- *		- Giordano Sassaroli <sassarol@cefriel.it>
- *		- Problem : Action Responses do not contain the mandatory header field EXT
- *		- Error : ActionResponse class does not set the EXT header
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.upnp.control;

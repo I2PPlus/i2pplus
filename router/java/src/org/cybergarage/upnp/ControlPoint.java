@@ -1,63 +1,7 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2004
- *
- *	File: ControlPoint.java
- *
- *	Revision:
- *
- *	11/18/02
- *		- first revision.
- *	05/13/03
- *		- Changed to create socket threads each local interfaces.
- *		  (HTTP, SSDPNotiry, SSDPSerachResponse)
- *	05/28/03
- *		- Changed to send m-serach packets from SSDPSearchResponseSocket.
- *		  The socket doesn't bind interface address.
- *		- SSDPSearchResponsSocketList that binds a port and a interface can't
- *		  send m-serch packets of IPv6 on J2SE v 1.4.1_02 and Redhat 9.
- *	07/23/03
- *		- Suzan Foster (suislief)
- *		- Fixed a bug. HOST field was missing.
- *	07/29/03
- *		- Synchronized when a device is added by the ssdp message.
- *	09/08/03
- *		- Giordano Sassaroli <sassarol@cefriel.it>
- *		- Problem : when an event notification message is received and the message
- *		            contains updates on more than one variable, only the first variable update
- *		            is notified.
- *		- Error :  the other xml nodes of the message are ignored
- *		- Fix : add two methods to the NotifyRequest for extracting the property array
- *                and modify the httpRequestRecieved method in ControlPoint
- *	12/12/03
- *		- Added a static() to initialize UPnP class.
- *	01/06/04
- *		- Added the following methods to remove expired devices automatically
- *		  removeExpiredDevices()
- *		  setExpiredDeviceMonitoringInterval()/getExpiredDeviceMonitoringInterval()
- *		  setDeviceDisposer()/getDeviceDisposer()
- *	04/20/04
- *		- Added the following methods.
- *		  start(String target, int mx) and start(String target).
- *	06/23/04
- *		- Added setNMPRMode() and isNMPRMode().
- *	07/08/04
- *		- Added renewSubscriberService().
- *		- Changed start() to create renew subscriber thread when the NMPR mode is true.
- *	08/17/04
- *		- Fixed removeExpiredDevices() to remove using the device array.
- *	10/16/04
- *		- Oliver Newell <newell@media-rush.com>
- *		- Added this class to allow ControlPoint applications to be notified when
- *		  the ControlPoint base class adds/removes a UPnP device
- *	03/30/05
- *		- Changed addDevice() to use Parser::parse(URL).
- *	04/12/06
- *		- Added setUserData() and getUserData() to set a user original data object.
- *
- *******************************************************************/
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002-2004
+ ******************************************************************/
 
 package org.cybergarage.upnp;
 
@@ -100,6 +44,31 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Locale;
 
+/**
+ * Main UPnP control point implementation for device discovery and control.
+ *
+ * <p>This class implements HTTPRequestListener to provide comprehensive UPnP control point
+ * functionality including device discovery, service enumeration, action invocation, and event
+ * subscription management. It serves as the primary interface for UPnP control applications.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>SSDP device discovery and advertisement monitoring
+ *   <li>HTTP server for receiving control requests
+ *   <li>Device and service lifecycle management
+ *   <li>Event subscription and notification handling
+ *   <li>SOAP action invocation and response processing
+ *   <li>Multi-homed network interface support
+ *   <li>Expired device cleanup and monitoring
+ * </ul>
+ *
+ * <p>This class is used by UPnP control applications to discover, control, and monitor UPnP devices
+ * on the network, providing a complete framework for building UPnP control point functionality.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class ControlPoint implements HTTPRequestListener {
     private static final int DEFAULT_EVENTSUB_PORT = 8058;
     private static final int DEFAULT_SSDP_PORT = 8008;

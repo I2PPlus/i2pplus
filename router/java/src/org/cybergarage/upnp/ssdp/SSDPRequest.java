@@ -1,19 +1,6 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: SSDPRequest.java
- *
- *	Revision;
- *
- *	01/14/03
- *		- first revision.
- *	03/16/04
- *		- Thanks for Darrell Young
- *		- Fixed to set v1.1 to the HTTP version.;
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.upnp.ssdp;
@@ -22,6 +9,29 @@ import org.cybergarage.http.*;
 
 import java.io.InputStream;
 
+/**
+ * Base class for SSDP request messages.
+ *
+ * <p>This class extends HTTPRequest to provide common functionality for SSDP (Simple Service
+ * Discovery Protocol) request messages used in UPnP device discovery and advertisement. It serves
+ * as the foundation for specific SSDP request types.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>SSDP request header management
+ *   <li>HTTP/1.1 version compliance
+ *   <li>Common SSDP header operations
+ *   <li>Request parsing and creation
+ *   <li>Multicast communication support
+ * </ul>
+ *
+ * <p>This class provides the base functionality for SSDP M-SEARCH and NOTIFY requests, handling
+ * common header management and HTTP protocol compliance for SSDP operations in UPnP networks.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class SSDPRequest extends HTTPRequest {
     ////////////////////////////////////////////////
     //	Constructor

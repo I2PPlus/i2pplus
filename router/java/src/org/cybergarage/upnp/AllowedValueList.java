@@ -1,18 +1,6 @@
 /******************************************************************
- *
- *	CyberLink for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2004
- *
- *	File: AllowedValueList.java
- *
- *	Revision:
- *
- *	03/27/04
- *		- first revision.
- *	02/28/05
- *		- Changed to use AllowedValue instead of String as the member.
- *
+ * CyberLink for Java
+ * Copyright (C) Satoshi Konno 2002-2004
  ******************************************************************/
 
 package org.cybergarage.upnp;
@@ -20,6 +8,30 @@ package org.cybergarage.upnp;
 import java.util.Iterator;
 import java.util.Vector;
 
+/**
+ * A collection of UPnP allowed value constraints.
+ *
+ * <p>This class extends Vector to manage multiple AllowedValue objects that represent allowed value
+ * constraints for state variables in UPnP services. It provides type-safe collection management for
+ * allowed value definitions.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>Type-safe allowed value collection
+ *   <li>XML element name constant
+ *   <li>Vector-based implementation for efficiency
+ *   <li>Iterator support for traversal
+ *   <li>Service description integration
+ * </ul>
+ *
+ * <p>This class is used by UPnP services to manage collections of allowed value constraints for
+ * state variables, enabling proper XML description generation and validation of variable value
+ * sets.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class AllowedValueList extends Vector<AllowedValue> {
     ////////////////////////////////////////////////
     //	Constants

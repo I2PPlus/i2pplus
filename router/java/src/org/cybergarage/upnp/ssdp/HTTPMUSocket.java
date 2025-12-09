@@ -1,30 +1,6 @@
 /******************************************************************
- *
- *	CyberLink for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2004
- *
- *	File: HTTPMU.java
- *
- *	Revision;
- *
- *	11/18/02
- *		- first revision.
- *	09/03/03
- *		- Changed to open the socket using setReuseAddress().
- *	12/10/03
- *		- Fixed getLocalAddress() to return a valid interface address.
- *	02/28/04
- *		- Added getMulticastInetAddress(), getMulticastAddress().
- *	11/19/04
- *		- Theo Beisch <theo.beisch@gmx.de>
- *		- Changed send() to set the TTL as 4.
- *	08/23/07
- *		- Thanks for Kazuyuki Shudo
- *		- Changed receive() to throw IOException.
- *	01/10/08
- *		- Changed getLocalAddress() to return a brank string when the ssdpMultiGroup or ssdpMultiIf is null on Android m3-rc37a.
- *
+ * CyberLink for Java
+ * Copyright (C) Satoshi Konno 2002-2004
  ******************************************************************/
 
 package org.cybergarage.upnp.ssdp;
@@ -44,6 +20,30 @@ import java.nio.charset.StandardCharsets;
 // Dummy Class for Android m3-rc37a
 // import org.cybergarage.android.MulticastSocket;
 
+/**
+ * Multicast UDP socket implementation for SSDP communication.
+ *
+ * <p>This class provides multicast socket functionality specifically designed for SSDP operations
+ * in UPnP networks. It handles both sending and receiving multicast UDP packets for device
+ * discovery and advertisement.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>Multicast socket management and configuration
+ *   <li>SSDP multicast address handling
+ *   <li>TTL (Time To Live) configuration
+ *   <li>Network interface binding
+ *   <li>Packet sending and receiving
+ * </ul>
+ *
+ * <p>This class is used by SSDP components to send multicast discovery messages and receive
+ * multicast advertisements from UPnP devices, enabling the core device discovery functionality in
+ * UPnP networks.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class HTTPMUSocket {
     ////////////////////////////////////////////////
     //	Member

@@ -1,29 +1,6 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2003
- *
- *	File: SSDPSearchSocket.java
- *
- *	Revision;
- *
- *	12/30/02
- *		- first revision.
- *	05/13/03
- *		- Added support for IPv6.
- *	05/28/03
- *		- Moved post() for SSDPSearchRequest to SSDPResponseSocketList.
- *	04/20/05
- *		- Mikael Hakman <mhakman@dkab.net>
- *		- Added close() in stop().
- *		- Added test for null return from receive() in run().
- *	08/23/07
- *		- Thanks for Kazuyuki Shudo
- * 		- Changed run() to catch IOException of HTTPMUSocket::receive().
- *	01/10/08
- *		- Changed start() not to abort when the interface infomation is null on Android m3-rc37a.
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002-2003
  ******************************************************************/
 
 package org.cybergarage.upnp.ssdp;
@@ -37,6 +14,29 @@ import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 
+/**
+ * Socket for sending SSDP search requests and receiving responses.
+ *
+ * <p>This class extends HTTPMUSocket and implements Runnable to provide asynchronous handling of
+ * SSDP search operations. It manages both sending M-SEARCH requests and receiving device responses.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>IPv4 and IPv6 support
+ *   <li>Multicast search request broadcasting
+ *   <li>Asynchronous response reception
+ *   <li>Multi-threaded operation
+ *   <li>Network interface binding
+ * </ul>
+ *
+ * <p>This class is used by UPnP control points to perform device discovery by sending M-SEARCH
+ * requests to the SSDP multicast address and receiving responses from available devices on the
+ * network.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class SSDPSearchSocket extends HTTPMUSocket implements Runnable {
     private boolean useIPv6Address;
 

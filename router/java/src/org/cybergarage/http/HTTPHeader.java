@@ -1,19 +1,6 @@
 /******************************************************************
- *
- *	CyberHTTP for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: HTTPHeader.java
- *
- *	Revision;
- *
- *	11/19/02
- *		- first revision.
- *	05/26/04
- *		- Jan Newmarch <jan.newmarch@infotech.monash.edu.au> (05/26/04)
- *		- Fixed getValue() to compare using String::equals() instead of String::startWidth().
- *
+ * CyberHTTP for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.http;
@@ -27,12 +14,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 /**
- * Represents an HTTP header field with a name and value.
- * This class provides methods to parse, manipulate, and extract HTTP headers
- * from various data sources including strings, byte arrays, and readers.
+ * Represents an HTTP header field with a name and value. This class provides methods to parse,
+ * manipulate, and extract HTTP headers from various data sources including strings, byte arrays,
+ * and readers.
  */
 public class HTTPHeader {
+    /**
+     * Maximum length for HTTP header lines to prevent excessive memory usage. Headers longer than
+     * this limit will be truncated during parsing.
+     */
     private static int MAX_LENGTH = 1024;
+
     private String name;
     private String value;
 
@@ -48,8 +40,8 @@ public class HTTPHeader {
     }
 
     /**
-     * Creates a new HTTPHeader by parsing a header line string.
-     * The line should be in the format "Name: Value".
+     * Creates a new HTTPHeader by parsing a header line string. The line should be in the format
+     * "Name: Value".
      *
      * @param lineStr the header line to parse
      */
@@ -130,8 +122,8 @@ public class HTTPHeader {
     ////////////////////////////////////////////////
 
     /**
-     * Reads from a LineNumberReader to find the value of a header with the specified name.
-     * The search is case-insensitive.
+     * Reads from a LineNumberReader to find the value of a header with the specified name. The
+     * search is case-insensitive.
      *
      * @param reader the LineNumberReader to read from
      * @param name the name of the header to find
@@ -163,8 +155,8 @@ public class HTTPHeader {
     }
 
     /**
-     * Extracts the value of a header with the specified name from a string.
-     * The search is case-insensitive.
+     * Extracts the value of a header with the specified name from a string. The search is
+     * case-insensitive.
      *
      * @param data the string containing HTTP headers
      * @param name the name of the header to find
@@ -181,8 +173,8 @@ public class HTTPHeader {
     }
 
     /**
-     * Extracts the value of a header with the specified name from a byte array.
-     * The search is case-insensitive.
+     * Extracts the value of a header with the specified name from a byte array. The search is
+     * case-insensitive.
      *
      * @param data the byte array containing HTTP headers
      * @param name the name of the header to find

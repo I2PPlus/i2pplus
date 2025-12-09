@@ -1,16 +1,6 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2003
- *
- *	File: HTTPServerList.java
- *
- *	Revision;
- *
- *	05/11/03
- *		- first revision.
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002-2003
  ******************************************************************/
 
 package org.cybergarage.upnp.ssdp;

@@ -1,18 +1,6 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2003
- *
- *	File: HTTPServerList.java
- *
- *	Revision;
- *
- *	05/08/03
- *		- first revision.
- *	24/03/06
- *		- Stefano Lenzi:added debug information as request by Stephen More
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002-2003
  ******************************************************************/
 
 package org.cybergarage.http;
@@ -26,9 +14,8 @@ import java.util.Set;
 import java.util.Vector;
 
 /**
- * A collection of HTTPServer instances that extends Vector.
- * This class manages multiple HTTP servers, allowing them to be
- * started, stopped, and configured as a group.
+ * A collection of HTTPServer instances that extends Vector. This class manages multiple HTTP
+ * servers, allowing them to be started, stopped, and configured as a group.
  */
 public class HTTPServerList extends Vector<HTTPServer> {
     ////////////////////////////////////////////////
@@ -38,9 +25,7 @@ public class HTTPServerList extends Vector<HTTPServer> {
     private InetAddress[] binds = null;
     private int port = Device.HTTP_DEFAULT_PORT;
 
-    /**
-     * Creates a new empty HTTPServerList.
-     */
+    /** Creates a new empty HTTPServerList. */
     public HTTPServerList() {}
 
     /**
@@ -85,9 +70,7 @@ public class HTTPServerList extends Vector<HTTPServer> {
     //	open/close
     ////////////////////////////////////////////////
 
-    /**
-     * Closes all HTTP servers in this list.
-     */
+    /** Closes all HTTP servers in this list. */
     public void close() {
         int nServers = size();
         for (int n = 0; n < nServers; n++) {
@@ -97,8 +80,8 @@ public class HTTPServerList extends Vector<HTTPServer> {
     }
 
     /**
-     * Opens HTTP servers on all configured bind addresses.
-     * If no bind addresses are specified, uses I2P local addresses.
+     * Opens HTTP servers on all configured bind addresses. If no bind addresses are specified, uses
+     * I2P local addresses.
      *
      * @return the number of successfully opened servers
      */
@@ -144,9 +127,7 @@ public class HTTPServerList extends Vector<HTTPServer> {
     //	start/stop
     ////////////////////////////////////////////////
 
-    /**
-     * Starts all HTTP servers in this list.
-     */
+    /** Starts all HTTP servers in this list. */
     public void start() {
         int nServers = size();
         for (int n = 0; n < nServers; n++) {
@@ -155,9 +136,7 @@ public class HTTPServerList extends Vector<HTTPServer> {
         }
     }
 
-    /**
-     * Stops all HTTP servers in this list.
-     */
+    /** Stops all HTTP servers in this list. */
     public void stop() {
         int nServers = size();
         for (int n = 0; n < nServers; n++) {

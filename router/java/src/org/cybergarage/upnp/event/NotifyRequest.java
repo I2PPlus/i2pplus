@@ -1,39 +1,6 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: SOAPRequest.java
- *
- *	Revision;
- *
- *	12/11/02
- *		- first revision.
- *	05/22/03
- *		- Giordano Sassaroli <sassarol@cefriel.it>
- *		- Description: removed the xml namespace
- *		- Problem : Notification messages refer to uncorrect variable names
- *		- Error : The NotifyRequest class introduces the XML namespace in variable names, too
- *	05/22/03
- *		- Giordano Sassaroli <sassarol@cefriel.it>
- *		- Problem : Notification messages refer to uncorrect variable names
- *		- Error : The NotifyRequest class introduces the XML namespace in variable names, too
- *		- Description : removed the xml namespace
- *	09/03/03
- *		- Giordano Sassaroli <sassarol@cefriel.it>
- *		- Problem : Notification messages refer to uncorrect variable names
- *		- Error : The NotifyRequest class introduces the XML namespace in variable names, too
- *		- Description: removed the xml namespace
- *	09/08/03
- *		- Giordano Sassaroli <sassarol@cefriel.it>
- *		- Problem : when an event notification message is received and the message
- *		            contains updates on more than one variable, only the first variable update
- *		            is notified.
- *		- Error :  the other xml nodes of the message are ignored
- *		- Fix : add two methods to the NotifyRequest for extracting the property array
- *                and modify the httpRequestRecieved method in ControlPoint
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.upnp.event;
@@ -43,6 +10,30 @@ import org.cybergarage.soap.*;
 import org.cybergarage.upnp.device.*;
 import org.cybergarage.xml.*;
 
+/**
+ * Represents a UPnP event notification request.
+ *
+ * <p>This class extends SOAPRequest to handle GENA (General Event Notification Architecture) NOTIFY
+ * messages sent by UPnP devices to inform subscribers about state variable changes. It manages the
+ * creation and parsing of event notification messages.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>Event notification message creation and parsing
+ *   <li>Property set and property XML structure handling
+ *   <li>SID (Subscription ID) and SEQ (sequence number) management
+ *   <li>NT (Notification Type) and NTS (Notification Sub-Type) headers
+ *   <li>Multi-property change notifications
+ * </ul>
+ *
+ * <p>This class is used by UPnP devices to send event notifications to subscribed control points,
+ * informing them of changes in service state variables. It handles both single and multiple
+ * property changes in a single notification message.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class NotifyRequest extends SOAPRequest {
     private static final String XMLNS = "e";
     private static final String PROPERTY = "property";

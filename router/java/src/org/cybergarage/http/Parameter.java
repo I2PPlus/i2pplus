@@ -1,32 +1,20 @@
 /******************************************************************
- *
- *	CyberHTTP for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2004
- *
- *	File: Parameter.java
- *
- *	Revision;
- *
- *	02/01/04
- *		- first revision.
- *
+ * CyberHTTP for Java
+ * Copyright (C) Satoshi Konno 2002-2004
  ******************************************************************/
 
 package org.cybergarage.http;
 
 /**
- * Represents a name-value parameter pair used in HTTP requests and responses.
- * This class provides a simple container for storing parameter names and their corresponding values,
- * commonly used for query parameters, form data, and HTTP headers.
+ * Represents a name-value parameter pair used in HTTP requests and responses. This class provides a
+ * simple container for storing parameter names and their corresponding values, commonly used for
+ * query parameters, form data, and HTTP headers.
  */
 public class Parameter {
     private String name = new String();
     private String value = new String();
 
-    /**
-     * Creates a new empty Parameter with null name and value.
-     */
+    /** Creates a new empty Parameter with null name and value. */
     public Parameter() {}
 
     /**

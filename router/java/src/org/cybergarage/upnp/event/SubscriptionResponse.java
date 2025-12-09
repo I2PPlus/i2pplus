@@ -1,16 +1,6 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: SubscriptionResponse.java
- *
- *	Revision;
- *
- *	01/29/03
- *		- first revision.
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.upnp.event;
@@ -18,6 +8,29 @@ package org.cybergarage.upnp.event;
 import org.cybergarage.http.*;
 import org.cybergarage.upnp.*;
 
+/**
+ * Represents a UPnP event subscription response.
+ *
+ * <p>This class extends HTTPResponse to handle GENA (General Event Notification Architecture)
+ * subscription responses for UPnP event notifications. It manages the response to SUBSCRIBE and
+ * UNSUBSCRIBE requests, including success and error handling.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>Subscription response status management
+ *   <li>SID (Subscription ID) header handling
+ *   <li>Timeout response management
+ *   <li>Error response generation
+ *   <li>UPnP server identification
+ * </ul>
+ *
+ * <p>This class is used by UPnP devices to respond to subscription requests from control points,
+ * providing subscription confirmation, timeout information, and error status when necessary.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class SubscriptionResponse extends HTTPResponse {
     ////////////////////////////////////////////////
     //	Constructor

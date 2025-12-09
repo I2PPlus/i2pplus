@@ -1,30 +1,6 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2004
- *
- *	File: Action.java
- *
- *	Revision;
- *
- *	12/05/02
- *		- first revision.
- *	08/30/03
- *		- Gordano Sassaroli <sassarol@cefriel.it>
- *		- Problem    : When invoking an action that has at least one out parameter, an error message is returned
- *		- Error      : The action post method gets the entire list of arguments instead of only the in arguments
- *	01/04/04
- *		- Added UPnP status methods.
- *		- Changed about new ActionListener interface.
- *	01/05/04
- *		- Added clearOutputAgumentValues() to initialize the output values before calling performActionListener().
- *	07/09/04
- *		- Thanks for Dimas <cyberrate@users.sourceforge.net> and Stefano Lenzi <kismet-sl@users.sourceforge.net>
- *		- Changed postControlAction() to set the status code to the UPnPStatus.
- *	04/12/06
- *		- Added setUserData() and getUserData() to set a user original data object.
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002-2004
  ******************************************************************/
 
 package org.cybergarage.upnp;
@@ -40,28 +16,6 @@ import org.cybergarage.xml.Node;
 
 import java.util.Iterator;
 
-/**
- * Represents a UPnP action that can be invoked on a service.
- *
- * <p>This class provides functionality for UPnP action management:
- *
- * <ul>
- *   <li>Action description and argument management
- *   <li>Input and output argument handling
- *   <li>Local and remote action execution
- *   <li>Action listener integration
- *   <li>Control request/response handling
- * </ul>
- *
- * <p>Actions can be invoked locally on the device or remotely by control points through SOAP
- * control messages. Each action has a set of input arguments and may return output arguments upon
- * execution.
- *
- * @author Satoshi Konno
- * @author Stefano Lenzi
- * @version 1.8
- * @since 1.0
- */
 public class Action {
     ////////////////////////////////////////////////
     //	Constants

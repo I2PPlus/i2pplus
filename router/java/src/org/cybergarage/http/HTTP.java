@@ -1,31 +1,6 @@
 /******************************************************************
- *
- *	CyberHTTP for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: HTTP.java
- *
- *	Revision:
- *
- *	11/18/02
- *		- first revision.
- *	08/30/03
- *		- Giordano Sassaroli <sassarol@cefriel.it>
- *		- Problem : the method getPort should return the default http port 80 when a port is not specified
- *		- Description : the method is used in ControlRequest.setRequestHost() and in SubscriptionRequest.setService(). maybe the default port check could be done in these methods.
- *	09/03/02
- *		- Added getRequestHostURL().
- *	03/11/04
- *		- Added the following methods to send big content stream.
- *		  post(HTTPResponse, byte[])
- *		  post(HTTPResponse, InputStream)
- *	05/26/04
- *		- Added NO_CATCH and MAX_AGE.
- *	10/20/04
- *		- Brent Hills <bhills@openshores.com>
- *		- Added Range and MYNAME;
- *
+ * CyberHTTP for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.http;

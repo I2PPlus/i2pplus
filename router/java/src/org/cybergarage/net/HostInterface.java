@@ -1,26 +1,6 @@
 /******************************************************************
- *
- *	CyberHTTP for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2003
- *
- *	File: HostInterface.java
- *
- *	Revision;
- *
- *	05/12/03
- *		- first revision.
- *	05/13/03
- *		- Added support for IPv6 and loopback address.
- *	02/15/04
- *		- Added the following methods to set only a interface.
- *		- setInterface(), getInterfaces(), hasAssignedInterface()
- *	06/30/04
- *		- Moved the package from org.cybergarage.http to org.cybergarage.net.
- *	06/30/04
- *		- Theo Beisch <theo.beisch@gmx.de>
- *		- Changed isUseAddress() to isUsableAddress().
- *
+ * CyberHTTP for Java
+ * Copyright (C) Satoshi Konno 2002-2003
  ******************************************************************/
 
 package org.cybergarage.net;
@@ -36,6 +16,29 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Vector;
 
+/**
+ * Utility class for network host interface management and configuration.
+ *
+ * <p>This class provides static methods for discovering and managing network interfaces and IP
+ * addresses on the local system. It supports both IPv4 and IPv6 addresses, with configurable
+ * options for address selection and interface binding.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>Network interface enumeration and discovery
+ *   <li>IPv4 and IPv6 address management
+ *   <li>Loopback address inclusion/exclusion
+ *   <li>Interface-specific binding support
+ *   <li>Host name and address resolution
+ * </ul>
+ *
+ * <p>This class is essential for UPnP devices that need to bind to specific network interfaces or
+ * discover available network addresses for device advertisement and communication.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class HostInterface {
     ////////////////////////////////////////////////
     //	Constants

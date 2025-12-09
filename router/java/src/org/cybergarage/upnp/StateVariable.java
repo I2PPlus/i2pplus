@@ -1,47 +1,6 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: StateVariable.java
- *
- *	Revision;
- *
- *	12/06/02
- *		- first revision.
- *	06/17/03
- *		- Added setSendEvents(), isSendEvents().
- *		- Changed to send a event after check the eventing state using isSendEvents().
- *	01/04/04
- *		- Added UPnP status methods.
- *	01/06/04
- *		- Added the following methods.
- *		  getQueryListener()
- *		  setQueryListener()
- *		  performQueryListener()
- *	01/07/04
- *		- Added StateVariable() and set();
- *		- Changed performQueryListener() to use a copy of the StateVariable.
- *	03/27/04
- *		- Thanks for Adavy
- *		- Added getAllowedValueList() and getAllowedValueRange().
- *	05/11/04
- *		- Added hasAllowedValueList() and hasAllowedValueRange().
- *	07/09/04
- *		- Thanks for Dimas <cyberrate@users.sourceforge.net> and Stefano Lenzi <kismet-sl@users.sourceforge.net>
- *		- Changed postQuerylAction() to set the status code to the UPnPStatus.
- *	11/09/04
- *		- Theo Beisch <theo.beisch@gmx.de>
- *		- Changed StateVariable::setValue() to update and send the event when the value is not equal to the current value.
- *	11/19/04
- *		- Rick Keiner <rick@emanciple.com>
- *		- Fixed setValue() to compare only when the current value is not null.
- *	02/28/05
- *		- Changed getAllowedValueList() to use AllowedValue instead of String as the member.
- *	04/12/06
- *		- Added setUserData() and getUserData() to set a user original data object.
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.upnp;
@@ -56,28 +15,6 @@ import org.cybergarage.xml.Node;
 
 import java.util.Iterator;
 
-/**
- * Represents a UPnP state variable in the CyberLink UPnP framework.
- *
- * <p>This class provides functionality for UPnP state variables:
- *
- * <ul>
- *   <li>Variable value management and validation
- *   <li>Event notification support
- *   <li>Allowed value range constraints
- *   <li>Query listener integration
- *   <li>XML node manipulation
- * </ul>
- *
- * <p>State variables represent the current state of UPnP service properties and can be monitored
- * through event subscriptions. They support value validation, change notification, and query
- * operations for control points.
- *
- * @author Satoshi Konno
- * @author Stefano Lenzi
- * @version 1.8
- * @since 1.0
- */
 public class StateVariable extends NodeData {
     ////////////////////////////////////////////////
     //	Constants

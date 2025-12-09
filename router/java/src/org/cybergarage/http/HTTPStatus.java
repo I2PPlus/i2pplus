@@ -1,26 +1,6 @@
 /******************************************************************
- *
- *	CyberHTTP for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: HTTPStatus.java
- *
- *	Revision;
- *
- *	12/17/02
- *		- first revision.
- *	09/03/03
- *		- Added CONTINUE_STATUS.
- *	10/20/04
- *		- Brent Hills <bhills@openshores.com>
- *		- Added PARTIAL_CONTENT and INVALID_RANGE;
- *	10/22/04
- *		- Added isSuccessful().
- *	10/29/04
- *		- Fixed set() to set the version and the response code when the mothod is null.
- *		- Fixed set() to read multi words of the response sring such as Not Found.
- *
+ * CyberHTTP for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.http;
@@ -30,9 +10,9 @@ import org.cybergarage.util.Debug;
 import java.util.StringTokenizer;
 
 /**
- * Represents an HTTP status line with version, status code, and reason phrase.
- * This class provides methods to parse and manipulate HTTP status responses,
- * including common status code constants and utility methods.
+ * Represents an HTTP status line with version, status code, and reason phrase. This class provides
+ * methods to parse and manipulate HTTP status responses, including common status code constants and
+ * utility methods.
  */
 public class HTTPStatus {
     ////////////////////////////////////////////////
@@ -50,6 +30,15 @@ public class HTTPStatus {
     public static final int INVALID_RANGE = 416;
     public static final int INTERNAL_SERVER_ERROR = 500;
 
+    /**
+     * Converts an HTTP status code to its corresponding reason phrase string.
+     *
+     * <p>This method provides the standard HTTP reason phrases for common status codes. If the
+     * status code is not recognized, an empty string is returned.
+     *
+     * @param code the HTTP status code to convert
+     * @return the corresponding reason phrase, or empty string if code is not recognized
+     */
     public static final String code2String(int code) {
         switch (code) {
             case CONTINUE:
@@ -76,9 +65,7 @@ public class HTTPStatus {
     //	Constructor
     ////////////////////////////////////////////////
 
-    /**
-     * Creates a new empty HTTPStatus with default values.
-     */
+    /** Creates a new empty HTTPStatus with default values. */
     public HTTPStatus() {
         setVersion("");
         setStatusCode(0);
@@ -99,8 +86,8 @@ public class HTTPStatus {
     }
 
     /**
-     * Creates a new HTTPStatus by parsing a status line string.
-     * The line should be in the format "HTTP/1.1 200 OK".
+     * Creates a new HTTPStatus by parsing a status line string. The line should be in the format
+     * "HTTP/1.1 200 OK".
      *
      * @param lineStr the status line to parse
      */
@@ -199,8 +186,8 @@ public class HTTPStatus {
     ////////////////////////////////////////////////
 
     /**
-     * Parses a status line string and sets the version, code, and reason phrase.
-     * The line should be in the format "HTTP/1.1 200 OK".
+     * Parses a status line string and sets the version, code, and reason phrase. The line should be
+     * in the format "HTTP/1.1 200 OK".
      *
      * @param lineStr the status line to parse
      */

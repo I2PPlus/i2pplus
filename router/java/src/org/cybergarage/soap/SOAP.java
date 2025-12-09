@@ -1,16 +1,6 @@
 /******************************************************************
- *
- *	CyberSOAP for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: SOAP.java
- *
- *	Revision;
- *
- *	12/11/02
- *		- first revision.
- *
+ * CyberSOAP for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.soap;
@@ -18,6 +8,25 @@ package org.cybergarage.soap;
 import org.cybergarage.xml.Node;
 import org.cybergarage.xml.Parser;
 
+/**
+ * Utility class for SOAP (Simple Object Access Protocol) message handling.
+ *
+ * <p>This class provides static methods and constants for creating and manipulating SOAP messages
+ * used in UPnP control operations. It includes functionality for:
+ *
+ * <ul>
+ *   <li>Creating SOAP envelope and body structures
+ *   <li>Generating SOAP fault messages
+ *   <li>Handling UPnP-specific SOAP error responses
+ *   <li>SOAP XML namespace and content type management
+ * </ul>
+ *
+ * <p>The class primarily serves as a factory for creating SOAP message structures and provides
+ * constants for standard SOAP elements and namespaces used throughout the UPnP framework.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class SOAP {
     public static final String ENVELOPE = "Envelope";
     public static final String BODY = "Body";

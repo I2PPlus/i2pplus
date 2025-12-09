@@ -1,22 +1,35 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: ArgumentList.java
- *
- *	Revision:
- *
- *	12/05/02
- *		- first revision.
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.upnp;
 
 import java.util.Vector;
 
+/**
+ * A collection of UPnP action arguments.
+ *
+ * <p>This class extends Vector to manage multiple Argument objects that represent parameters for
+ * UPnP service actions. It provides type-safe collection management for action argument
+ * definitions.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>Type-safe argument collection
+ *   <li>XML element name constant
+ *   <li>Vector-based implementation for efficiency
+ *   <li>Service description integration
+ *   <li>Action parameter management
+ * </ul>
+ *
+ * <p>This class is used by UPnP services to manage collections of action arguments, enabling proper
+ * XML description generation and action invocation parameter handling.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class ArgumentList extends Vector<Argument> {
     ////////////////////////////////////////////////
     //	Constants

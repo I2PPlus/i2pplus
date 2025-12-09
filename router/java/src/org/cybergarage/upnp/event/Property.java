@@ -1,26 +1,32 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2003
- *
- *	File: Subscriber.java
- *
- *	Revision;
- *
- *	01/29/03
- *		- first revision.
- *	05/22/03
- *		- Giordano Sassaroli <sassarol@cefriel.it>
- *		- Problem : the setName method does not set the name of the property
- *		- Error : the method contains a bug:
- *	06/18/03
- *		- Fixed a bug when a null value is received to the name and the value of property.
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002-2003
  ******************************************************************/
 
 package org.cybergarage.upnp.event;
 
+/**
+ * Represents a UPnP event property containing a name-value pair.
+ *
+ * <p>This class encapsulates a single property change in UPnP event notifications. Each property
+ * has a name (corresponding to a state variable) and a value representing the new state of that
+ * variable.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>Name-value pair storage for state variables
+ *   <li>XML representation for event messages
+ *   <li>Null-safe value handling
+ *   <li>Property name and value management
+ * </ul>
+ *
+ * <p>This class is used in UPnP event notifications to communicate changes in service state
+ * variables to subscribed control points, enabling real-time monitoring of device status changes.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class Property {
     ////////////////////////////////////////////////
     //	Constructor

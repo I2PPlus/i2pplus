@@ -1,32 +1,6 @@
 /******************************************************************
- *
- *	CyberXML for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: Element.java
- *
- *	Revision;
- *
- *	11/27/02
- *		- first revision.
- *	11/01/03
- *		- Terje Bakken
- *		- fixed missing escaping of reserved XML characters
- *	11/19/04
- *		- Theo Beisch <theo.beisch@gmx.de>
- *		- Added "&" and "\"" "\\" to toXMLString().
- *	11/19/04
- *		- Theo Beisch <theo.beisch@gmx.de>
- *		- Changed XML::output() to use short notation when the tag value is null.
- *	12/02/04
- *		- Brian Owens <brian@b-owens.com>
- *		- Fixed toXMLString() to convert from "'" to "&apos;" instead of "\".
- *	11/07/05
- *		- Changed toString() to return as utf-8 string.
- *	02/08/08
- *		- Added addValue().
- *
+ * CyberXML for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.xml;
@@ -40,20 +14,21 @@ import java.util.Iterator;
 
 /**
  * Represents an XML node with name, value, attributes, and child nodes.
- * 
- * <p>This class provides a tree-like structure for representing XML documents.
- * Each node can have a name, value, attributes, and child nodes. Nodes can be
- * created independently or as part of an XML document tree.</p>
- * 
- * <p>Key features:</p>
+ *
+ * <p>This class provides a tree-like structure for representing XML documents. Each node can have a
+ * name, value, attributes, and child nodes. Nodes can be created independently or as part of an XML
+ * document tree.
+ *
+ * <p>Key features:
+ *
  * <ul>
- *   <li>Node name and value management</li>
- *   <li>Attribute storage and retrieval</li>
- *   <li>Parent-child node relationships</li>
- *   <li>XML string output with proper escaping</li>
- *   <li>User data attachment for application-specific information</li>
+ *   <li>Node name and value management
+ *   <li>Attribute storage and retrieval
+ *   <li>Parent-child node relationships
+ *   <li>XML string output with proper escaping
+ *   <li>User data attachment for application-specific information
  * </ul>
- * 
+ *
  * @author Satoshi Konno
  * @since 1.0
  */
@@ -314,9 +289,7 @@ public class Node {
         return removeAttribute(getAttribute(name));
     }
 
-    /**
-     * Removes all attributes from this node.
-     */
+    /** Removes all attributes from this node. */
     public void removeAllAttributes() {
         attrList.clear();
     }
@@ -336,8 +309,8 @@ public class Node {
     ////////////////////////////////////////////////
 
     /**
-     * Sets an attribute value. If the attribute already exists, its value is updated.
-     * If it doesn't exist, a new attribute is created.
+     * Sets an attribute value. If the attribute already exists, its value is updated. If it doesn't
+     * exist, a new attribute is created.
      *
      * @param name the attribute name
      * @param value the attribute value
@@ -409,8 +382,8 @@ public class Node {
     ////////////////////////////////////////////////
 
     /**
-     * Copies all properties from another node to this node.
-     * This includes name, value, attributes, and child nodes.
+     * Copies all properties from another node to this node. This includes name, value, attributes,
+     * and child nodes.
      *
      * @param otherNode the node to copy from
      * @return true if the copy was successful, false if otherNode is null
@@ -565,9 +538,7 @@ public class Node {
         return nodeList.remove(getNode(name));
     }
 
-    /**
-     * Removes all child nodes from this node.
-     */
+    /** Removes all child nodes from this node. */
     public void removeAllNodes() {
         nodeList.clear();
     }
@@ -601,9 +572,9 @@ public class Node {
     }
 
     /**
-     * Ensures a child node with the specified name exists.
-     * If a child node with the name already exists, this method does nothing.
-     * If not, a new child node with the specified name is created and added.
+     * Ensures a child node with the specified name exists. If a child node with the name already
+     * exists, this method does nothing. If not, a new child node with the specified name is created
+     * and added.
      *
      * @param name the name of the child node to ensure exists
      */
@@ -616,9 +587,9 @@ public class Node {
     }
 
     /**
-     * Ensures a child node with the specified name exists and sets its value.
-     * If a child node with the name already exists, its value is updated.
-     * If not, a new child node with the specified name and value is created and added.
+     * Ensures a child node with the specified name exists and sets its value. If a child node with
+     * the name already exists, its value is updated. If not, a new child node with the specified
+     * name and value is created and added.
      *
      * @param name the name of the child node
      * @param value the value to set for the child node
@@ -782,8 +753,8 @@ public class Node {
     }
 
     /**
-     * Gets the XML string representation with all XML characters escaped.
-     * This is useful for embedding XML within XML.
+     * Gets the XML string representation with all XML characters escaped. This is useful for
+     * embedding XML within XML.
      *
      * @param hasChildNode whether to treat this node as having child nodes
      * @return the escaped XML string
@@ -801,8 +772,8 @@ public class Node {
     }
 
     /**
-     * Gets the XML string representation with all XML characters escaped.
-     * This is useful for embedding XML within XML.
+     * Gets the XML string representation with all XML characters escaped. This is useful for
+     * embedding XML within XML.
      *
      * @return the escaped XML string
      */
@@ -822,9 +793,7 @@ public class Node {
         pr.flush();
     }
 
-    /**
-     * Prints this node as XML to standard output.
-     */
+    /** Prints this node as XML to standard output. */
     public void print() {
         print(true);
     }

@@ -1,72 +1,6 @@
 /******************************************************************
- *
- *	CyberLink for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2003
- *
- *	File: Service.java
- *
- *	Revision;
- *
- *	11/28/02
- *		- first revision.
- *	04/12/02
- *		- Holmes, Arran C <acholm@essex.ac.uk>
- *		- Fixed SERVICE_ID constant instead of "serviceId".
- *	06/17/03
- *		- Added notifyAllStateVariables().
- *	09/03/03
- *		- Giordano Sassaroli <sassarol@cefriel.it>
- *		- Problem : The device does not accepts request for services when control or subscription urls are absolute
- *		- Error : device methods, when requests are received, search for services that have a controlUrl (or eventSubUrl) equal to the request URI
- *		          but request URI must be relative, so they cannot equal absolute urls
- *	09/03/03
- *		- Steven Yen
- *		- description: to retrieve service information based on information in URLBase and SCPDURL
- *		- problem: not able to retrieve service information when URLBase is missing and SCPDURL is relative
- *		- fix: modify to retrieve host information from Header's Location (required) field and update the
- *		       BaseURL tag in the xml so subsequent information retrieval can be done (Steven Yen, 8.27.2003)
- *		- note: 1. in the case that Header's Location field combine with SCPDURL is not able to retrieve proper
- *		          information, updating BaseURL would not hurt, since exception will be thrown with or without update.
- *		        2. this problem was discovered when using PC running MS win XP with ICS enabled (gateway).
- *		          It seems that  root device xml file does not have BaseURL and SCPDURL are all relative.
- *		        3. UPnP device architecture states that BaseURL is optional and SCPDURL may be relative as
- *		          specified by UPnP vendor, so MS does not seem to violate the rule.
- *	10/22/03
- *		- Added setActionListener().
- *	01/04/04
- *		- Changed about new QueryListener interface.
- *	01/06/04
- *		- Moved the following methods to StateVariable class.
- *		  getQueryListener()
- *		  setQueryListener()
- *		  performQueryListener()
- *		- Added new setQueryListener() to set a listner to all state variables.
- *	07/02/04
- *		- Added serviceSearchResponse().
- *		- Deleted getLocationURL().
- *		- Fixed announce() to set the root device URL to the LOCATION field.
- *	07/31/04
- *		- Changed notify() to remove the expired subscribers and not to remove the invalid response subscribers for NMPR.
- *	10/29/04
- *		- Fixed a bug when notify() removes the expired devices().
- *	03/23/05
- *		- Added loadSCPD() to load the description from memory.
- *	03/30/05
- *		- Added isSCPDURL().
- *		- Removed setDescriptionURL() and getDescriptionURL()
- *	03/31/05
- *		- Added getSCPDData().
- * 	04/25/05
- *		- Thanks for Mikael Hakman <mhakman@dkab.net>
- * 		- Changed getSCPDData() to add a XML declaration at first line.
- *	06/21/05
- *		- Changed notify() to continue when the subscriber is null.
- *	04/12/06
- *		- Added setUserData() and getUserData() to set a user original data object.
- *	09/18/2010 Robin V. <robinsp@gmail.com>
- *		- Fixed getSCPDNode() not to occur recursive http get requests.
- *
+ * CyberLink for Java
+ * Copyright (C) Satoshi Konno 2002-2003
  ******************************************************************/
 
 package org.cybergarage.upnp;
@@ -99,27 +33,6 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 
-/**
- * Represents a UPnP service in the CyberLink UPnP framework.
- *
- * <p>This class provides functionality for UPnP services including:
- *
- * <ul>
- *   <li>Service description and SCPD management
- *   <li>Action management and execution
- *   <li>State variable management
- *   <li>Event subscription and notification
- *   <li>SSDP announcement for service discovery
- * </ul>
- *
- * <p>A Service belongs to a Device and contains actions that can be invoked by control points, as
- * well as state variables that can be monitored through event subscriptions.
- *
- * @author Satoshi Konno
- * @author Stefano Lenzi
- * @version 1.8
- * @since 1.0
- */
 public class Service {
     ////////////////////////////////////////////////
     //	Constants
@@ -136,7 +49,7 @@ public class Service {
 
     /**
      * Gets the XML node representing this service.
-     * 
+     *
      * @return the service XML node
      */
     public Node getServiceNode() {
@@ -148,22 +61,22 @@ public class Service {
     ////////////////////////////////////////////////
     /** Root node name for service control point documents. */
     public static final String SCPD_ROOTNODE = "scpd";
-    
+
     /** Namespace for service control point documents. */
     public static final String SCPD_ROOTNODE_NS = "urn:schemas-upnp-org:service-1-0";
 
     /** XML element name for specification version. */
     public static final String SPEC_VERSION = "specVersion";
-    
+
     /** XML element name for major version. */
     public static final String MAJOR = "major";
-    
+
     /** Default major version value. */
     public static final String MAJOR_VALUE = "1";
-    
+
     /** XML element name for minor version. */
     public static final String MINOR = "minor";
-    
+
     /** Default minor version value. */
     public static final String MINOR_VALUE = "0";
 
@@ -206,16 +119,12 @@ public class Service {
 
     private Mutex mutex = new Mutex();
 
-    /**
-     * Acquires exclusive lock on this service for thread-safe operations.
-     */
+    /** Acquires exclusive lock on this service for thread-safe operations. */
     public void lock() {
         mutex.lock();
     }
 
-    /**
-     * Releases exclusive lock on this service.
-     */
+    /** Releases exclusive lock on this service. */
     public void unlock() {
         mutex.unlock();
     }
@@ -226,7 +135,7 @@ public class Service {
 
     /**
      * Checks if the given XML node represents a service.
-     * 
+     *
      * @param node the XML node to check
      * @return true if the node is a service node, false otherwise
      */
@@ -240,7 +149,7 @@ public class Service {
 
     /**
      * Gets the device node containing this service.
-     * 
+     *
      * @return the device node, or null if not found
      */
     private Node getDeviceNode() {
@@ -251,7 +160,7 @@ public class Service {
 
     /**
      * Gets the root node of the device description.
-     * 
+     *
      * @return the root node
      */
     private Node getRootNode() {
@@ -264,7 +173,7 @@ public class Service {
 
     /**
      * Gets the device containing this service.
-     * 
+     *
      * @return the parent device
      */
     public Device getDevice() {
@@ -273,7 +182,7 @@ public class Service {
 
     /**
      * Gets the root device containing this service.
-     * 
+     *
      * @return the root device
      */
     public Device getRootDevice() {
@@ -337,9 +246,7 @@ public class Service {
     /** XML attribute name for configuration ID. */
     private static final String CONFIG_ID = "configId";
 
-    /**
-     * Updates the configuration ID for this service based on its SCPD XML.
-     */
+    /** Updates the configuration ID for this service based on its SCPD XML. */
     public void updateConfigId() {
         Node scpdNode = getSCPDNode();
         if (scpdNode == null) return;
@@ -351,7 +258,7 @@ public class Service {
 
     /**
      * Gets the configuration ID for this service.
-     * 
+     *
      * @return the configuration ID, or 0 if not set
      */
     public int getConfigId() {
@@ -365,8 +272,9 @@ public class Service {
     ////////////////////////////////////////////////
 
     /**
-     * Checks if the given URL matches the reference URL, considering both absolute and relative URLs.
-     * 
+     * Checks if the given URL matches the reference URL, considering both absolute and relative
+     * URLs.
+     *
      * @param referenceUrl the reference URL to compare against
      * @param url the URL to check
      * @return true if the URLs match, false otherwise
@@ -391,7 +299,7 @@ public class Service {
 
     /**
      * Sets the SCPD URL for this service.
-     * 
+     *
      * @param value the SCPD URL to set
      */
     public void setSCPDURL(String value) {
@@ -400,7 +308,7 @@ public class Service {
 
     /**
      * Gets the SCPD URL for this service.
-     * 
+     *
      * @return the SCPD URL
      */
     public String getSCPDURL() {
@@ -409,7 +317,7 @@ public class Service {
 
     /**
      * Checks if the given URL matches this service's SCPD URL.
-     * 
+     *
      * @param url the URL to check
      * @return true if the URL matches the SCPD URL, false otherwise
      */
@@ -426,7 +334,7 @@ public class Service {
 
     /**
      * Sets the control URL for this service.
-     * 
+     *
      * @param value the control URL to set
      */
     public void setControlURL(String value) {
@@ -435,7 +343,7 @@ public class Service {
 
     /**
      * Gets the control URL for this service.
-     * 
+     *
      * @return the control URL
      */
     public String getControlURL() {
@@ -444,7 +352,7 @@ public class Service {
 
     /**
      * Checks if the given URL matches this service's control URL.
-     * 
+     *
      * @param url the URL to check
      * @return true if the URL matches the control URL, false otherwise
      */
@@ -461,7 +369,7 @@ public class Service {
 
     /**
      * Sets the event subscription URL for this service.
-     * 
+     *
      * @param value the event subscription URL to set
      */
     public void setEventSubURL(String value) {
@@ -470,7 +378,7 @@ public class Service {
 
     /**
      * Gets the event subscription URL for this service.
-     * 
+     *
      * @return the event subscription URL
      */
     public String getEventSubURL() {
@@ -479,7 +387,7 @@ public class Service {
 
     /**
      * Checks if the given URL matches this service's event subscription URL.
-     * 
+     *
      * @param url the URL to check
      * @return true if the URL matches the event subscription URL, false otherwise
      */
@@ -493,7 +401,7 @@ public class Service {
 
     /**
      * Loads service control point description (SCPD) from a string.
-     * 
+     *
      * @param scpdStr the SCPD XML string to load
      * @return true if SCPD was loaded successfully, false otherwise
      * @throws InvalidDescriptionException if SCPD cannot be parsed
@@ -550,7 +458,7 @@ public class Service {
 
     /**
      * Sets the description URL for this service.
-     * 
+     *
      * @param value the description URL to set
      */
     public void setDescriptionURL(String value) {
@@ -559,7 +467,7 @@ public class Service {
 
     /**
      * Gets the description URL for this service.
-     * 
+     *
      * @return the description URL
      */
     public String getDescriptionURL() {
@@ -568,7 +476,7 @@ public class Service {
 
     /**
      * Gets the SCPD node by parsing from a URL.
-     * 
+     *
      * @param scpdUrl the URL to parse SCPD from
      * @return the parsed SCPD node
      * @throws ParserException if parsing fails
@@ -580,7 +488,7 @@ public class Service {
 
     /**
      * Gets the SCPD node by parsing from a file.
-     * 
+     *
      * @param scpdFile the file to parse SCPD from
      * @return the parsed SCPD node
      * @throws ParserException if parsing fails
@@ -592,7 +500,7 @@ public class Service {
 
     /**
      * Gets the SCPD node for this service, loading it if necessary.
-     * 
+     *
      * @return the SCPD node, or null if not available
      */
     private Node getSCPDNode() {
@@ -623,7 +531,7 @@ public class Service {
 
     /**
      * Gets the SCPD data for this service as a byte array.
-     * 
+     *
      * @return the SCPD XML data as bytes, or empty array if not available
      */
     public byte[] getSCPDData() {
@@ -683,8 +591,8 @@ public class Service {
     /**
      * Adds an action to this service.
      *
-     * <p>This method sets service reference for all arguments in action and adds action
-     * to the service's SCPD structure.
+     * <p>This method sets service reference for all arguments in action and adds action to the
+     * service's SCPD structure.
      *
      * @param a Action to add to this service
      */
@@ -781,8 +689,8 @@ public class Service {
      * Announces this service to the network using SSDP.
      *
      * <p>This method sends SSDP NOTIFY messages to announce the service's presence. The
-     * announcement includes the service type, unique service identifier, and location of the
-     * root device containing this service.
+     * announcement includes the service type, unique service identifier, and location of the root
+     * device containing this service.
      *
      * @param bindAddr bind address to send announcement from
      */

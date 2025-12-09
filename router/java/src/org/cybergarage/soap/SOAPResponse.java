@@ -1,21 +1,6 @@
 /******************************************************************
- *
- *	CyberSOAP for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: SOAPResponse.java
- *
- *	Revision;
- *
- *	12/17/02
- *		- first revision.
- *	02/13/04
- *		- Ralf G. R. Bergs <Ralf@Ber.gs>, Inma Marin Lopez <inma@dif.um.es>.
- *		- Added XML header, <?xml version="1.0"?> to setContent().
- *	05/11/04
- *		- Changed the XML header to <?xml version="1.0" encoding="utf-8"?> in setContent().
- *
+ * CyberSOAP for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.soap;
@@ -25,6 +10,29 @@ import org.cybergarage.util.Debug;
 import org.cybergarage.xml.Node;
 import org.cybergarage.xml.XML;
 
+/**
+ * Represents a SOAP (Simple Object Access Protocol) response message.
+ *
+ * <p>This class extends HTTPResponse to handle SOAP protocol responses used in UPnP control
+ * operations. It provides functionality for creating and parsing SOAP responses with proper XML
+ * formatting and envelope structure.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>SOAP envelope and body creation
+ *   <li>XML content management
+ *   <li>UTF-8 encoding support
+ *   <li>HTTP response integration
+ *   <li>Fault message handling
+ * </ul>
+ *
+ * <p>This class is used by UPnP devices to send action invocation responses to control points,
+ * enabling structured XML responses through SOAP messaging over HTTP.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class SOAPResponse extends HTTPResponse {
     ////////////////////////////////////////////////
     //	Constructor

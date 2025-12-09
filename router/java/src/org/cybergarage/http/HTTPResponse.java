@@ -1,20 +1,6 @@
 /******************************************************************
- *
- *	CyberHTTP for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2003
- *
- *	File: HTTPResponse.java
- *
- *	Revision;
- *
- *	11/18/02
- *		- first revision.
- *	10/22/03
- *		- Changed to initialize a content length header.
- *	10/22/04
- *		- Added isSuccessful().
- *
+ * CyberHTTP for Java
+ * Copyright (C) Satoshi Konno 2002-2003
  ******************************************************************/
 
 package org.cybergarage.http;
@@ -23,25 +9,6 @@ import org.cybergarage.util.Debug;
 
 import java.io.InputStream;
 
-/**
- * Represents an HTTP response in the CyberLink HTTP framework.
- *
- * <p>This class provides functionality for creating and manipulating HTTP responses:
- *
- * <ul>
- *   <li>Status code management
- *   <li>Header management
- *   <li>Content handling
- *   <li>Response formatting
- * </ul>
- *
- * <p>HTTPResponse is used both for creating server responses and for handling client responses from
- * HTTP requests.
- *
- * @author Satoshi Konno
- * @version 1.0
- * @since 1.0
- */
 public class HTTPResponse extends HTTPPacket {
     ////////////////////////////////////////////////
     //	Constructor

@@ -1,20 +1,6 @@
 /******************************************************************
- *
- *	CyberXML for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: Parser.java
- *
- *	Revision;
- *
- *	11/26/2003
- *		- first revision.
- *	03/30/2005
- *		- Change parse(String) to use StringBufferInputStream instead of URL.
- *	11/11/2009
- *		- Changed Parser::parser() to use ByteArrayInputStream instead of StringBufferInputStream because of bugs in Android v1.6.
- *
+ * CyberXML for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.xml;
@@ -38,20 +24,21 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * Abstract base class for XML parsers.
- * 
- * <p>This class provides the foundation for parsing XML documents from various sources
- * including URLs, files, and strings. It includes security measures specific to I2P
- * to prevent access to localhost and private networks.</p>
- * 
- * <p>Key features:</p>
+ *
+ * <p>This class provides the foundation for parsing XML documents from various sources including
+ * URLs, files, and strings. It includes security measures specific to I2P to prevent access to
+ * localhost and private networks.
+ *
+ * <p>Key features:
+ *
  * <ul>
- *   <li>Abstract parse method for InputStream implementation</li>
- *   <li>URL parsing with security checks</li>
- *   <li>File parsing support</li>
- *   <li>String parsing support</li>
- *   <li>I2P-specific security restrictions</li>
+ *   <li>Abstract parse method for InputStream implementation
+ *   <li>URL parsing with security checks
+ *   <li>File parsing support
+ *   <li>String parsing support
+ *   <li>I2P-specific security restrictions
  * </ul>
- * 
+ *
  * @author Satoshi Konno
  * @since 1.0
  */
@@ -70,9 +57,7 @@ public abstract class Parser {
     //	Constructor
     ////////////////////////////////////////////////
 
-    /**
-     * Creates a new Parser instance.
-     */
+    /** Creates a new Parser instance. */
     public Parser() {}
 
     ////////////////////////////////////////////////
@@ -81,11 +66,10 @@ public abstract class Parser {
 
     /**
      * Parses XML content from the specified input stream.
-     * 
-     * <p>This is the core parsing method that must be implemented by subclasses.
-     * The implementation should parse the XML content and return the root node
-     * of the parsed XML document.</p>
-     * 
+     *
+     * <p>This is the core parsing method that must be implemented by subclasses. The implementation
+     * should parse the XML content and return the root node of the parsed XML document.
+     *
      * @param inStream the input stream containing XML content
      * @return the root node of the parsed XML document
      * @throws ParserException if parsing fails
@@ -98,10 +82,10 @@ public abstract class Parser {
 
     /**
      * Parses XML content from the specified URL.
-     * 
-     * <p>This method includes I2P-specific security checks to prevent access to
-     * localhost and private networks. Only HTTP URLs are supported.</p>
-     * 
+     *
+     * <p>This method includes I2P-specific security checks to prevent access to localhost and
+     * private networks. Only HTTP URLs are supported.
+     *
      * @param locationURL the URL to fetch and parse XML content from
      * @return the root node of the parsed XML document
      * @throws ParserException if URL validation fails, HTTP request fails, or parsing fails
@@ -219,7 +203,7 @@ public abstract class Parser {
 
     /**
      * Parses XML content from the specified file.
-     * 
+     *
      * @param descriptionFile the file containing XML content to parse
      * @return the root node of the parsed XML document
      * @throws ParserException if file reading fails or parsing fails
@@ -242,9 +226,9 @@ public abstract class Parser {
 
     /**
      * Parses XML content from the specified string.
-     * 
-     * <p>The string is assumed to contain UTF-8 encoded XML content.</p>
-     * 
+     *
+     * <p>The string is assumed to contain UTF-8 encoded XML content.
+     *
      * @param descr the string containing XML content to parse
      * @return the root node of the parsed XML document
      * @throws ParserException if parsing fails

@@ -1,21 +1,6 @@
 /******************************************************************
- *
- *	CyberSOAP for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: SOAPRequest.java
- *
- *	Revision;
- *
- *	12/11/02
- *		- first revision.
- *	02/13/04
- *		- Ralf G. R. Bergs <Ralf@Ber.gs>, Inma Marin Lopez <inma@dif.um.es>.
- *		- Added XML header, <?xml version=\"1.0\"?> to setContent().
- *	05/11/04
- *		- Changed the XML header to <?xml version="1.0" encoding="utf-8"?> in setContent().
- *
+ * CyberSOAP for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.soap;
@@ -30,6 +15,29 @@ import org.cybergarage.xml.ParserException;
 
 import java.io.ByteArrayInputStream;
 
+/**
+ * Represents a SOAP (Simple Object Access Protocol) request message.
+ *
+ * <p>This class extends HTTPRequest to handle SOAP protocol messages used in UPnP control
+ * operations. It provides functionality for creating and parsing SOAP requests with proper XML
+ * formatting and SOAP action headers.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>SOAP action header management
+ *   <li>XML content parsing and generation
+ *   <li>SOAP envelope and body handling
+ *   <li>UTF-8 encoding support
+ *   <li>HTTP protocol integration
+ * </ul>
+ *
+ * <p>This class is used by UPnP control points to send action invocation requests to UPnP devices,
+ * enabling remote procedure calls through SOAP messaging over HTTP.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class SOAPRequest extends HTTPRequest {
     private static final String SOAPACTION = HTTP.SOAP_ACTION;
 

@@ -1,55 +1,6 @@
 /******************************************************************
- *
- *	CyberHTTP for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2004
- *
- *	File: HTTPRequest.java
- *
- *	Revision;
- *
- *	11/18/02
- *		- first revision.
- *	05/23/03
- *		- Giordano Sassaroli <sassarol@cefriel.it>
- *		- Add a relative URL check to setURI().
- *	09/02/03
- *		- Giordano Sassaroli <sassarol@cefriel.it>
- *		- Problem : Devices whose description use absolute urls receive wrong http requests
- *		- Error : the presence of a base url is not mandatory, the API code makes the assumption that control and event subscription urls are relative
- *		- Description: The method setURI should be changed as follows
- *	02/01/04
- *		- Added URI parameter methods.
- *	03/16/04
- *		- Removed setVersion() because the method is added to the super class.
- *		- Changed getVersion() to return the version when the first line string has the length.
- *	05/19/04
- *		- Changed post(HTTPResponse *) to close the socket stream from the server.
- *	08/19/04
- *		- Fixed getFirstLineString() and getHTTPVersion() no to return "HTTP/HTTP/version".
- *	08/25/04
- *		- Added isHeadRequest().
- *	08/26/04
- *		- Changed post(HTTPResponse) not to close the connection.
- *		- Changed post(String, int) to add a connection header to close.
- *	08/27/04
- *		- Changed post(String, int) to support the persistent connection.
- *	08/28/04
- *		- Added isKeepAlive().
- *	10/26/04
- *		- Brent Hills <bhills@openshores.com>
- *		- Added a fix to post() when the last position of Content-Range header is 0.
- *		- Added a Content-Range header to the response in post().
- *		- Changed the status code for the Content-Range request in post().
- *		- Added to check the range of Content-Range request in post().
- *	03/02/05
- *		- Changed post() to suppot chunked stream.
- *	06/10/05
- *		- Changed post() to add a HOST headedr before the posting.
- *	07/07/05
- *		- Lee Peik Feng <pflee@users.sourceforge.net>
- *		- Fixed post() to output the chunk size as a hex string.
- *
+ * CyberHTTP for Java
+ * Copyright (C) Satoshi Konno 2002-2004
  ******************************************************************/
 
 package org.cybergarage.http;
@@ -66,14 +17,6 @@ import java.net.SocketAddress;
 import java.net.SocketException;
 import java.util.StringTokenizer;
 
-/**
- * This class rappresnet an HTTP <b>request</b>, and act as HTTP client when it sends the request
- * <br>
- *
- * @author Satoshi "skonno" Konno
- * @author Stefano "Kismet" Lenzi
- * @version 1.8
- */
 public class HTTPRequest extends HTTPPacket {
     ////////////////////////////////////////////////
     //	Constructor
@@ -143,6 +86,16 @@ public class HTTPRequest extends HTTPPacket {
 
     private String uri = null;
 
+    /**
+     * Sets the URI for this HTTP request.
+     *
+     * <p>Sets the request URI and optionally converts it to a relative URL. This is used to handle
+     * both absolute and relative URLs in HTTP requests.
+     *
+     * @param value the URI string to set
+     * @param isCheckRelativeURL if true, converts the URI to a relative URL using
+     *     HTTP.toRelativeURL()
+     */
     public void setURI(String value, boolean isCheckRelativeURL) {
         uri = value;
         if (isCheckRelativeURL == false) return;
@@ -150,6 +103,14 @@ public class HTTPRequest extends HTTPPacket {
         uri = HTTP.toRelativeURL(uri);
     }
 
+    /**
+     * Sets the URI for this HTTP request without relative URL conversion.
+     *
+     * <p>This is a convenience method that calls {@link #setURI(String, boolean)} with
+     * isCheckRelativeURL set to false.
+     *
+     * @param value the URI string to set
+     */
     public void setURI(String value) {
         setURI(value, false);
     }
@@ -249,6 +210,15 @@ public class HTTPRequest extends HTTPPacket {
     //	parseRequest
     ////////////////////////////////////////////////
 
+    /**
+     * Parses an HTTP request line and extracts method, URI, and version.
+     *
+     * <p>This method parses a request line in the format "METHOD URI VERSION" (e.g., "GET /path
+     * HTTP/1.1") and sets the corresponding properties on this HTTP request object.
+     *
+     * @param lineStr the request line string to parse
+     * @return true if parsing was successful and all three components were found, false otherwise
+     */
     public boolean parseRequestLine(String lineStr) {
         StringTokenizer st = new StringTokenizer(lineStr, HTTP.REQEST_LINE_DELIM);
         if (st.hasMoreTokens() == false) return false;
@@ -475,6 +445,16 @@ public class HTTPRequest extends HTTPPacket {
     //	OK/BAD_REQUEST
     ////////////////////////////////////////////////
 
+    /**
+     * Sends an HTTP response with the specified status code and no content.
+     *
+     * <p>This method creates a new HTTP response with the given status code, sets content length to
+     * 0, and sends it back to the client using the post() method. This is commonly used for error
+     * responses or responses that don't require a body.
+     *
+     * @param statusCode the HTTP status code to send (e.g., 200, 404, 500)
+     * @return true if the response was sent successfully, false otherwise
+     */
     public boolean returnResponse(int statusCode) {
         HTTPResponse httpRes = new HTTPResponse();
         httpRes.setStatusCode(statusCode);
@@ -482,10 +462,26 @@ public class HTTPRequest extends HTTPPacket {
         return post(httpRes);
     }
 
+    /**
+     * Sends an HTTP 200 OK response with no content.
+     *
+     * <p>This is a convenience method that sends a 200 OK status code response, typically used to
+     * indicate successful request processing when no response body is needed.
+     *
+     * @return true if the response was sent successfully, false otherwise
+     */
     public boolean returnOK() {
         return returnResponse(HTTPStatus.OK);
     }
 
+    /**
+     * Sends an HTTP 400 Bad Request response with no content.
+     *
+     * <p>This is a convenience method that sends a 400 Bad Request status code response, typically
+     * used when the client request is malformed or cannot be understood by the server.
+     *
+     * @return true if the response was sent successfully, false otherwise
+     */
     public boolean returnBadRequest() {
         return returnResponse(HTTPStatus.BAD_REQUEST);
     }
@@ -504,6 +500,12 @@ public class HTTPRequest extends HTTPPacket {
         return str.toString();
     }
 
+    /**
+     * Prints the HTTP request to the debug message stream.
+     *
+     * <p>This method outputs the complete HTTP request including headers and content to the debug
+     * logging system using Debug.message(). Useful for debugging HTTP request processing.
+     */
     public void print() {
         Debug.message(toString());
     }

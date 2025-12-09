@@ -1,28 +1,6 @@
 /******************************************************************
- *
- *	CyberHTTP for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2004
- *
- *	File: HTTPSocket.java
- *
- *	Revision;
- *
- *	12/12/02
- *		- first revision.
- *	03/11/04
- *		- Added the following methods about chunk size.
- *		  setChunkSize(), getChunkSize().
- *	08/26/04
- *		- Added a isOnlyHeader to post().
- *	03/02/05
- *		- Changed post() to suppot chunked stream.
- *	06/10/05
- *		- Changed post() to add a Date headedr to the HTTPResponse before the posting.
- *	07/07/05
- *		- Lee Peik Feng <pflee@users.sourceforge.net>
- *		- Fixed post() to output the chunk size as a hex string.
- *
+ * CyberHTTP for Java
+ * Copyright (C) Satoshi Konno 2002-2004
  ******************************************************************/
 
 package org.cybergarage.http;
@@ -34,25 +12,6 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 
-/**
- * HTTP socket wrapper for the CyberLink HTTP framework.
- *
- * <p>This class provides enhanced socket functionality for HTTP communication:
- *
- * <ul>
- *   <li>Wrapper around standard Java Socket
- *   <li>Stream management for HTTP requests/responses
- *   <li>Chunked transfer encoding support
- *   <li>Enhanced error handling and logging
- * </ul>
- *
- * <p>HTTPSocket extends the basic Socket functionality to provide HTTP-specific features needed by
- * the HTTP packet classes.
- *
- * @author Satoshi Konno
- * @version 1.0
- * @since 1.0
- */
 public class HTTPSocket {
     ////////////////////////////////////////////////
     //	Constructor
@@ -187,6 +146,20 @@ public class HTTPSocket {
     //	post
     ////////////////////////////////////////////////
 
+    /**
+     * Sends an HTTP response using byte array content.
+     *
+     * <p>This private helper method sends an HTTP response with the specified content. It handles
+     * both regular and chunked transfer encoding, sets appropriate headers, and manages the content
+     * offset and length for partial content responses.
+     *
+     * @param httpRes the HTTP response to send
+     * @param content the content data as byte array
+     * @param contentOffset the starting offset in the content array
+     * @param contentLength the length of content to send
+     * @param isOnlyHeader if true, only send headers without content body
+     * @return true if the response was sent successfully, false otherwise
+     */
     private boolean post(
             HTTPResponse httpRes,
             byte content[],
@@ -235,6 +208,20 @@ public class HTTPSocket {
         return true;
     }
 
+    /**
+     * Sends an HTTP response using input stream content.
+     *
+     * <p>This private helper method sends an HTTP response with content from an input stream. It
+     * handles both regular and chunked transfer encoding, reads content in chunks, and manages the
+     * content offset for partial content responses.
+     *
+     * @param httpRes the HTTP response to send
+     * @param in the input stream containing content data
+     * @param contentOffset the offset to skip in the input stream before reading
+     * @param contentLength the total length of content to send
+     * @param isOnlyHeader if true, only send headers without content body
+     * @return true if the response was sent successfully, false otherwise
+     */
     private boolean post(
             HTTPResponse httpRes,
             InputStream in,

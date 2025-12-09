@@ -1,16 +1,6 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: ControlResponse.java
- *
- *	Revision;
- *
- *	01/29/03
- *		- first revision.
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.upnp.control;
@@ -20,18 +10,31 @@ import org.cybergarage.soap.*;
 import org.cybergarage.upnp.*;
 import org.cybergarage.xml.*;
 
+/**
+ * Represents a UPnP control response. Extends SOAPResponse to provide UPnP-specific error handling
+ * and fault response functionality.
+ */
 public class ControlResponse extends SOAPResponse {
+    /** Default fault code for UPnP errors */
     public static final String FAULT_CODE = "Client";
+
+    /** Default fault string for UPnP errors */
     public static final String FAULT_STRING = "UPnPError";
 
     ////////////////////////////////////////////////
     //	Constructor
     ////////////////////////////////////////////////
 
+    /** Default constructor */
     public ControlResponse() {
         setServer(UPnP.getServerName());
     }
 
+    /**
+     * Constructs a ControlResponse from a SOAP response.
+     *
+     * @param soapRes the SOAP response to wrap
+     */
     public ControlResponse(SOAPResponse soapRes) {
         super(soapRes);
     }
@@ -40,6 +43,12 @@ public class ControlResponse extends SOAPResponse {
     //	FaultResponse
     ////////////////////////////////////////////////
 
+    /**
+     * Sets a fault response with the specified error code and description.
+     *
+     * @param errCode the UPnP error code
+     * @param errDescr the error description
+     */
     public void setFaultResponse(int errCode, String errDescr) {
         setStatusCode(HTTPStatus.INTERNAL_SERVER_ERROR);
 
@@ -51,6 +60,12 @@ public class ControlResponse extends SOAPResponse {
         setContent(envNode);
     }
 
+    /**
+     * Sets a fault response with the specified error code. The error description is automatically
+     * generated from the error code.
+     *
+     * @param errCode the UPnP error code
+     */
     public void setFaultResponse(int errCode) {
         setFaultResponse(errCode, UPnPStatus.code2String(errCode));
     }
@@ -105,24 +120,44 @@ public class ControlResponse extends SOAPResponse {
 
     private UPnPStatus upnpErr = new UPnPStatus();
 
+    /**
+     * Gets the UPnP error node from the fault detail.
+     *
+     * @return the UPnP error node, or null if not found
+     */
     private Node getUPnPErrorNode() {
         Node detailNode = getFaultDetailNode();
         if (detailNode == null) return null;
         return detailNode.getNodeEndsWith(SOAP.UPNP_ERROR);
     }
 
+    /**
+     * Gets the UPnP error code node.
+     *
+     * @return the error code node, or null if not found
+     */
     private Node getUPnPErrorCodeNode() {
         Node errorNode = getUPnPErrorNode();
         if (errorNode == null) return null;
         return errorNode.getNodeEndsWith(SOAP.ERROR_CODE);
     }
 
+    /**
+     * Gets the UPnP error description node.
+     *
+     * @return the error description node, or null if not found
+     */
     private Node getUPnPErrorDescriptionNode() {
         Node errorNode = getUPnPErrorNode();
         if (errorNode == null) return null;
         return errorNode.getNodeEndsWith(SOAP.ERROR_DESCRIPTION);
     }
 
+    /**
+     * Gets the UPnP error code from the response.
+     *
+     * @return the error code, or -1 if not found or invalid
+     */
     public int getUPnPErrorCode() {
         Node errorCodeNode = getUPnPErrorCodeNode();
         if (errorCodeNode == null) return -1;
@@ -134,12 +169,22 @@ public class ControlResponse extends SOAPResponse {
         }
     }
 
+    /**
+     * Gets the UPnP error description from the response.
+     *
+     * @return the error description, or empty string if not found
+     */
     public String getUPnPErrorDescription() {
         Node errorDescNode = getUPnPErrorDescriptionNode();
         if (errorDescNode == null) return "";
         return errorDescNode.getValue();
     }
 
+    /**
+     * Gets the complete UPnP error status from the response.
+     *
+     * @return a UPnPStatus object containing the error code and description
+     */
     public UPnPStatus getUPnPError() {
         int code = 0;
         String desc = "";

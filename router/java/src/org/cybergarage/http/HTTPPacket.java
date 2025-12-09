@@ -1,78 +1,7 @@
 /******************************************************************
- *
- *	CyberHTTP for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2004
- *
- *	File: HTTPConnection.java
- *
- *	Revision;
- *
- *	11/18/02
- *		- first revision.
- *	09/02/03
- *		- Giordano Sassaroli <sassarol@cefriel.it>
- *		- Problem : The API is unable to receive responses from the Microsoft UPnP stack
- *		- Error : the Microsoft UPnP stack is based on ISAPI on IIS, and whenever IIS
- *                 receives a post request, it answers with two responses: the first one has no
- *		          body and it is a code 100 (continue) response, which has to be ignored. The
- *		          second response is the actual one and should be parsed as the response.
- *	02/09/04
- *		- Ralf G. R. Bergs" <Ralf@Ber.gs>
- *		- Why do you strip leading and trailing white space from the response body?
- *		- Disabled to trim the content string.
- *	03/11/04
- *		- Added some methods about InputStream content.
- *		  setContentInputStream(), getContentInputStream() and hasContentInputStream().
- *	03/16/04
- *		- Thanks for Darrell Young
- *		- Added setVersion() and getVersion();
- *	03/17/04
- *		- Added hasFirstLine();
- *	05/26/04
- *		- Jan Newmarch <jan.newmarch@infotech.monash.edu.au> (05/26/04)
- *		- Changed setCacheControl() and getChcheControl();
- *	08/25/04
- *		- Added the following methods.
- *		  hasContentRange(), setContentRange(), getContentRange(),
- *		  getContentRangeFirstPosition(), getContentRangeLastPosition() and getContentRangeInstanceLength()
- *	08/26/04
- *		- Added the following methods.
- *		  hasConnection(), setConnection(), getConnection(),
- *		  isCloseConnection() and isKeepAliveConnection()
- *	08/27/04
- *		- Added a updateWithContentLength paramger to setContent().
- *		- Changed to HTTPPacket::set() not to change the header of Content-Length.
- *	08/28/04
- *		- Added init() and read().
- *	09/19/04
- *		- Added a onlyHeaders parameter to set().
- *	10/20/04
- *		- Brent Hills <bhills@openshores.com>
- *		- Changed hasContentRange() to check Content-Range and Range header.
- *		- Added support for Range header to getContentRange().
- *	02/02/05
- *		- Mark Retallack <mretallack@users.sourceforge.net>
- *		- Fixed set() not to read over the content length when the stream is keep alive.
- *	02/28/05
- *		- Added the following methods for chunked stream support.
- *		  hasTransferEncoding(), setTransferEncoding(), getTransferEncoding(), isChunked().
- *	03/02/05
- *		- Changed post() to suppot chunked stream.
- *	06/11/05
- *		- Added setHost().
- *	07/07/05
- *		- Lee Peik Feng <pflee@users.sourceforge.net>
- *		- Andrey Ovchar <AOvchar@consultitnow.com>
- *		- Fixed set() to parse the chunk size as a hex string.
- *	11/02/05
- *		- Changed set() to use BufferedInputStream instead of BufferedReader to
- *		  get the content as a byte stream.
- *	11/06/05
- *		- Added getCharSet().
- *		- Changed getContentString() to return the content string using the charset.
- *
- *******************************************************************/
+ * CyberHTTP for Java
+ * Copyright (C) Satoshi Konno 2002-2004
+ ******************************************************************/
 
 package org.cybergarage.http;
 
@@ -90,27 +19,6 @@ import java.util.Calendar;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-/**
- * Base class for HTTP packets in the CyberLink HTTP framework.
- *
- * <p>This class provides the foundation for HTTP request and response handling:
- *
- * <ul>
- *   <li>HTTP header management
- *   <li>Content handling (both byte arrays and streams)
- *   <li>HTTP version management
- *   <li>Connection and transfer encoding support
- *   <li>Content range support for partial content
- * </ul>
- *
- * <p>HTTPPacket serves as the base class for HTTPRequest and HTTPResponse, providing common
- * functionality for parsing and manipulating HTTP messages. It handles both standard HTTP/1.0 and
- * HTTP/1.1 protocols.
- *
- * @author Satoshi Konno
- * @version 1.0
- * @since 1.0
- */
 public class HTTPPacket {
     ////////////////////////////////////////////////
     //	Constructor
@@ -190,6 +98,16 @@ public class HTTPPacket {
     //	set
     ////////////////////////////////////////////////
 
+    /**
+     * Reads a single line from the buffered input stream.
+     *
+     * <p>This method reads characters until a line feed (LF) is encountered. Carriage return (CR)
+     * characters are ignored. The method handles interrupted IO exceptions gracefully as they are
+     * used to break HTTP connections.
+     *
+     * @param in the buffered input stream to read from
+     * @return the line as a UTF-8 string, or empty string if end of stream is reached
+     */
     private String readLine(BufferedInputStream in) {
         ByteArrayOutputStream lineBuf = new ByteArrayOutputStream();
         byte readBuf[] = new byte[1];
@@ -212,6 +130,22 @@ public class HTTPPacket {
         return new String(lineBuf.toByteArray(), StandardCharsets.UTF_8);
     }
 
+    /**
+     * Parses HTTP packet data from an input stream.
+     *
+     * <p>This method reads and parses the HTTP packet including the first line, headers, and
+     * optionally the content body. It handles special cases such as:
+     *
+     * <ul>
+     *   <li>HTTP 100 Continue responses (IIS compatibility)
+     *   <li>Chunked transfer encoding
+     *   <li>Content length parsing
+     * </ul>
+     *
+     * @param in the input stream containing HTTP packet data
+     * @param onlyHeaders if true, only parse headers and skip content body
+     * @return true if parsing was successful, false otherwise
+     */
     protected boolean set(InputStream in, boolean onlyHeaders) {
         try {
             BufferedInputStream reader = new BufferedInputStream(in);
@@ -332,14 +266,40 @@ public class HTTPPacket {
         return true;
     }
 
+    /**
+     * Parses HTTP packet data from an input stream including content.
+     *
+     * <p>This is a convenience method that calls {@link #set(InputStream, boolean)} with
+     * onlyHeaders set to false.
+     *
+     * @param in the input stream containing HTTP packet data
+     * @return true if parsing was successful, false otherwise
+     */
     protected boolean set(InputStream in) {
         return set(in, false);
     }
 
+    /**
+     * Parses HTTP packet data from an HTTP socket.
+     *
+     * <p>This is a convenience method that extracts the input stream from the HTTP socket and
+     * parses the complete HTTP packet including content.
+     *
+     * @param httpSock the HTTP socket containing the HTTP packet data
+     * @return true if parsing was successful, false otherwise
+     */
     protected boolean set(HTTPSocket httpSock) {
         return set(httpSock.getInputStream());
     }
 
+    /**
+     * Copies all data from another HTTP packet to this packet.
+     *
+     * <p>This method performs a deep copy by copying the first line, all headers, and content from
+     * the source packet. The target packet is first cleared before copying.
+     *
+     * @param httpPacket the source HTTP packet to copy from
+     */
     protected void set(HTTPPacket httpPacket) {
         setFirstLine(httpPacket.getFirstLine());
 
@@ -373,14 +333,44 @@ public class HTTPPacket {
 
     private String firstLine = "";
 
+    /**
+     * Sets the first line of the HTTP packet.
+     *
+     * <p>For requests, this is typically the request line (e.g., "GET /path HTTP/1.1"). For
+     * responses, this is the status line (e.g., "HTTP/1.1 200 OK").
+     *
+     * @param value the first line string to set
+     */
     private void setFirstLine(String value) {
         firstLine = value;
     }
 
+    /**
+     * Gets the first line of the HTTP packet.
+     *
+     * <p>For requests, this returns the request line containing method, URI, and HTTP version. For
+     * responses, this returns the status line containing HTTP version, status code, and reason
+     * phrase.
+     *
+     * @return the first line string, or empty string if not set
+     */
     protected String getFirstLine() {
         return firstLine;
     }
 
+    /**
+     * Gets a specific token from the first line using HTTP request line delimiters.
+     *
+     * <p>This method parses the first line (request line or status line) and returns the token at
+     * the specified position. Tokens are separated by spaces.
+     *
+     * <p>For request lines: token 0 = method, token 1 = URI, token 2 = HTTP version
+     *
+     * <p>For status lines: token 0 = HTTP version, token 1 = status code, token 2 = reason phrase
+     *
+     * @param num the zero-based token position to retrieve
+     * @return the token at the specified position, or empty string if not found
+     */
     protected String getFirstLineToken(int num) {
         StringTokenizer st = new StringTokenizer(firstLine, HTTP.REQEST_LINE_DELIM);
         String lastToken = "";

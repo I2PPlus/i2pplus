@@ -1,7 +1,10 @@
+/******************************************************************
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002-2003
+ ******************************************************************/
+
 /**
- * CyberUPnP for Java Copyright (C) Satoshi Konno 2002-2003 File: SSDPNotifySocket.java
- *
- * <p>This class identifies a SSDP socket only for <b>notifing packet</b>.<br>
+ * This class identifies a SSDP socket only for <b>notifing packet</b>.<br>
  *
  * @author Satoshi "skonno" Konno
  * @author Stefano "Kismet" Lenzi

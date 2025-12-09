@@ -1,16 +1,6 @@
 /******************************************************************
- *
- *	CyberHTTP for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2003
- *
- *	File: HTTPServerThread.java
- *
- *	Revision;
- *
- *	10/10/03
- *		- first revision.
- *
+ * CyberHTTP for Java
+ * Copyright (C) Satoshi Konno 2002-2003
  ******************************************************************/
 
 package org.cybergarage.http;
@@ -18,9 +8,8 @@ package org.cybergarage.http;
 import java.net.Socket;
 
 /**
- * A thread that handles HTTP requests for an HTTPServer.
- * Each thread manages a single client connection, reading requests
- * and delegating them to the server's request listeners.
+ * A thread that handles HTTP requests for an HTTPServer. Each thread manages a single client
+ * connection, reading requests and delegating them to the server's request listeners.
  */
 public class HTTPServerThread extends Thread {
     private HTTPServer httpServer;
@@ -47,9 +36,8 @@ public class HTTPServerThread extends Thread {
     ////////////////////////////////////////////////
 
     /**
-     * Runs the thread to handle HTTP requests from the client.
-     * Reads requests continuously until the connection is closed
-     * or keep-alive is not requested.
+     * Runs the thread to handle HTTP requests from the client. Reads requests continuously until
+     * the connection is closed or keep-alive is not requested.
      */
     public void run() {
         HTTPSocket httpSock = new HTTPSocket(sock);

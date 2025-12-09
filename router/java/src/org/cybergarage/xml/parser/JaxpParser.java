@@ -1,22 +1,6 @@
 /******************************************************************
- *
- *	CyberXML for Java
- *
- *	Copyright (C) Satoshi Konno 2004
- *
- *   Author: Markus Thurner (http://thoean.com)
- *
- *	File: JaxpParser.java
- *
- *	Revision;
- *
- *	06/15/04
- *		- first revision.
- *	01/08/08
- *		- Fixed parse() not to occur null exception when the NamedNodeMap is null on Android.
- *	02/08/08
- *		- Change parse() to use Node::addValue() instead of the setValue().
- *
+ * CyberXML for Java
+ * Copyright (C) Satoshi Konno 2004
  ******************************************************************/
 
 package org.cybergarage.xml.parser;
@@ -40,29 +24,28 @@ import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * JAXP-based XML parser implementation.
- * 
- * <p>This parser uses the Java API for XML Processing (JAXP) to parse XML documents.
- * It includes security measures to prevent XXE (XML External Entity) attacks and
- * handles null character filtering for compatibility.</p>
- * 
- * <p>Key features:</p>
+ *
+ * <p>This parser uses the Java API for XML Processing (JAXP) to parse XML documents. It includes
+ * security measures to prevent XXE (XML External Entity) attacks and handles null character
+ * filtering for compatibility.
+ *
+ * <p>Key features:
+ *
  * <ul>
- *   <li>XXE attack prevention</li>
- *   <li>DTD loading disabled</li>
- *   <li>Null character filtering</li>
- *   <li>Entity resolution blanking</li>
- *   <li>DOM to Node tree conversion</li>
+ *   <li>XXE attack prevention
+ *   <li>DTD loading disabled
+ *   <li>Null character filtering
+ *   <li>Entity resolution blanking
+ *   <li>DOM to Node tree conversion
  * </ul>
- * 
+ *
  * @author Satoshi Konno
  * @author Markus Thurner
  * @since 1.0
  */
 public class JaxpParser extends Parser {
 
-    /**
-     * Creates a new JaxpParser instance.
-     */
+    /** Creates a new JaxpParser instance. */
     public JaxpParser() {
         super();
     }
@@ -135,9 +118,9 @@ public class JaxpParser extends Parser {
 
     /**
      * Parses a DOM node and converts it to a Node tree.
-     * 
-     * <p>This is a convenience method that calls {@link #parse(Node, org.w3c.dom.Node, int)}
-     * with rank set to 0.</p>
+     *
+     * <p>This is a convenience method that calls {@link #parse(Node, org.w3c.dom.Node, int)} with
+     * rank set to 0.
      *
      * @param parentNode the parent Node to attach parsed nodes to
      * @param domNode the DOM node to parse
@@ -153,9 +136,9 @@ public class JaxpParser extends Parser {
      */
     /**
      * Parses XML content from the specified input stream using JAXP.
-     * 
-     * <p>This method creates a secure DocumentBuilderFactory with XXE protection
-     * disabled, parses the XML content, and converts the DOM tree to a Node tree.</p>
+     *
+     * <p>This method creates a secure DocumentBuilderFactory with XXE protection disabled, parses
+     * the XML content, and converts the DOM tree to a Node tree.
      *
      * @param inStream the input stream containing XML content
      * @return the root node of the parsed XML document
@@ -223,9 +206,9 @@ public class JaxpParser extends Parser {
      */
     /**
      * Input stream filter that removes null characters.
-     * 
-     * <p>This filter prevents SAXParserException "Content not allowed in trailing section"
-     * which can be caused by null characters in the XML stream.</p>
+     *
+     * <p>This filter prevents SAXParserException "Content not allowed in trailing section" which
+     * can be caused by null characters in the XML stream.
      */
     private static class NullFilterInputStream extends FilterInputStream {
 
@@ -292,9 +275,9 @@ public class JaxpParser extends Parser {
      */
     /**
      * Entity resolver that returns empty input for all external entities.
-     * 
-     * <p>This prevents XXE attacks by ensuring that no external entities
-     * are loaded during XML parsing.</p>
+     *
+     * <p>This prevents XXE attacks by ensuring that no external entities are loaded during XML
+     * parsing.
      */
     private static class BlankingResolver implements EntityResolver {
         private static final byte[] DUMMY = new byte[0];

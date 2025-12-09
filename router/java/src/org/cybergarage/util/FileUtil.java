@@ -1,16 +1,6 @@
 /******************************************************************
- *
- *	CyberUtil for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2003
- *
- *	File: FileUtil.java
- *
- *	Revision:
- *
- *	01/03/03
- *		- first revision.
- *
+ * CyberUtil for Java
+ * Copyright (C) Satoshi Konno 2002-2003
  ******************************************************************/
 
 package org.cybergarage.util;
@@ -21,14 +11,13 @@ import java.io.FileInputStream;
 import java.util.Locale;
 
 /**
- * Utility class for file operations and XML file detection.
- * This class provides static methods for loading file contents into byte arrays
- * and checking if files have XML extensions.
+ * Utility class for file operations and XML file detection. This class provides static methods for
+ * loading file contents into byte arrays and checking if files have XML extensions.
  */
 public final class FileUtil {
     /**
      * Loads the entire contents of a file into a byte array.
-     * 
+     *
      * @param fileName the path to the file to load
      * @return the file contents as a byte array, or empty array if an error occurs
      */
@@ -44,7 +33,7 @@ public final class FileUtil {
 
     /**
      * Loads the entire contents of a File object into a byte array.
-     * 
+     *
      * @param file the File object to load
      * @return the file contents as a byte array, or empty array if an error occurs
      */
@@ -60,7 +49,7 @@ public final class FileUtil {
 
     /**
      * Loads the entire contents of a FileInputStream into a byte array.
-     * 
+     *
      * @param fin the FileInputStream to read from
      * @return the stream contents as a byte array, or empty array if an error occurs
      */
@@ -87,7 +76,7 @@ public final class FileUtil {
 
     /**
      * Checks if a filename has an XML extension.
-     * 
+     *
      * @param name the filename to check
      * @return true if the filename ends with ".xml" (case-insensitive), false otherwise
      */

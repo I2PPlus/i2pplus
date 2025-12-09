@@ -1,24 +1,6 @@
 /******************************************************************
- *
- *	CyberLink for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2003
- *
- *	File: SSDPPacket.java
- *
- *	Revision;
- *
- *	11/18/02
- *		- first revision.
- *	05/13/03
- *		- Added getLocalAddress().
- *	11/01/04
- *		- Theo Beisch <theo.beisch@gmx.de>
- *		- Fixed isRootDevice() to check the ST header.
- *	11/19/04
- *		- Theo Beisch <theo.beisch@gmx.de>
- *		- Changed getRemoteAddress() to return the adresss instead of the host name.
- *
+ * CyberLink for Java
+ * Copyright (C) Satoshi Konno 2002-2003
  ******************************************************************/
 
 package org.cybergarage.upnp.ssdp;
@@ -29,6 +11,30 @@ import org.cybergarage.upnp.device.*;
 import java.net.*;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Represents an SSDP packet received over UDP.
+ *
+ * <p>This class wraps a DatagramPacket to provide SSDP-specific functionality for parsing and
+ * handling UDP packets containing SSDP messages. It provides access to both the raw packet data and
+ * parsed SSDP message content.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>DatagramPacket wrapping and management
+ *   <li>Remote and local address access
+ *   <li>SSDP message parsing
+ *   <li>Root device detection
+ *   <li>Packet data extraction
+ * </ul>
+ *
+ * <p>This class is used by SSDP components to handle incoming UDP packets containing discovery and
+ * advertisement messages, providing convenient access to both network information and message
+ * content.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class SSDPPacket {
     ////////////////////////////////////////////////
     //	Constructor

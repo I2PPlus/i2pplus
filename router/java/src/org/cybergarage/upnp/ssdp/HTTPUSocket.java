@@ -1,24 +1,6 @@
 /******************************************************************
- *
- *	CyberLink for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2003
- *
- *	File: HTTPMU.java
- *
- *	Revision;
- *
- *	11/20/02
- *		- first revision.
- *	12/12/03
- *		- Inma Mar?n <inma@DIF.UM.ES>
- *		- Changed open(addr, port) to send IPv6 SSDP packets.
- *		- The socket binds only the port without the interface address.
- *		- The full binding socket can send SSDP IPv4 packets. Is it a bug of J2SE v.1.4.2-b28 ?.
- *	01/06/04
- *		- Oliver Newell <olivern@users.sourceforge.net>
- *		- Added to set a current timestamp when the packet are received.
- *
+ * CyberLink for Java
+ * Copyright (C) Satoshi Konno 2002-2003
  ******************************************************************/
 
 package org.cybergarage.upnp.ssdp;
@@ -31,6 +13,29 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * UDP socket implementation for SSDP (Simple Service Discovery Protocol) communication.
+ *
+ * <p>This class provides UDP socket functionality specifically designed for SSDP operations in UPnP
+ * networks. It handles both unicast and multicast UDP communication for device discovery and
+ * advertisement.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>UDP unicast socket management
+ *   <li>IPv4 and IPv6 support
+ *   <li>Packet sending and receiving
+ *   <li>Timestamp tracking for received packets
+ *   <li>Network interface binding
+ * </ul>
+ *
+ * <p>This class is used by SSDP components to send discovery messages (M-SEARCH) and receive device
+ * advertisements (NOTIFY messages) over UDP multicast and unicast communication.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class HTTPUSocket {
     ////////////////////////////////////////////////
     //	Member

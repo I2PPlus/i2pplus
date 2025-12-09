@@ -1,24 +1,13 @@
 /******************************************************************
- *
- *	CyberHTTP for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: HTTPRequestListener.java
- *
- *	Revision;
- *
- *	12/13/02
- *		- first revision.
- *
+ * CyberHTTP for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.http;
 
 /**
- * Interface for receiving HTTP request notifications.
- * Classes implementing this interface can handle incoming HTTP requests
- * when registered with an HTTPServer.
+ * Interface for receiving HTTP request notifications. Classes implementing this interface can
+ * handle incoming HTTP requests when registered with an HTTPServer.
  */
 public interface HTTPRequestListener {
     /**

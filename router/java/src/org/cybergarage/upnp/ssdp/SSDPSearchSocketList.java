@@ -1,19 +1,6 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2003
- *
- *	File: SSDPSearchSocketList.java
- *
- *	Revision;
- *
- *	05/08/03
- *		- first revision.
- *	05/28/03
- *		- Moved post() for SSDPSearchRequest to SSDPResponseSocket.
- *		- Removed open(int).
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002-2003
  ******************************************************************/
 
 package org.cybergarage.upnp.ssdp;
@@ -26,6 +13,30 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Vector;
 
+/**
+ * A collection of SSDP search sockets.
+ *
+ * <p>This class extends Vector to manage multiple SSDPSearchSocket objects that handle outgoing
+ * SSDP search requests. It provides type-safe management of the socket pool used for device
+ * discovery operations.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>Multi-socket management for search requests
+ *   <li>Control request broadcasting to all sockets
+ *   <li>Network interface support
+ *   <li>Socket lifecycle management
+ *   <li>Efficient search request distribution
+ * </ul>
+ *
+ * <p>This class is used by UPnP control points to manage multiple sockets for sending SSDP M-SEARCH
+ * requests across different network interfaces, enabling comprehensive device discovery in
+ * multi-homed environments.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class SSDPSearchSocketList extends Vector<SSDPSearchSocket> {
     ////////////////////////////////////////////////
     //	Constructor

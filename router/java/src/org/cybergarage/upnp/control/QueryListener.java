@@ -1,24 +1,19 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2003
- *
- *	File: QueryListener.java
- *
- *	Revision;
- *
- *	01/30/03
- *		- first revision.
- *	01/04/04
- *		- Changed the interface.
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002-2003
  ******************************************************************/
 
 package org.cybergarage.upnp.control;
 
 import org.cybergarage.upnp.*;
 
+/** Interface for handling UPnP query control events. */
 public interface QueryListener {
+    /**
+     * Called when a query control is received for a state variable.
+     *
+     * @param stateVar the state variable being queried
+     * @return true if the query was handled, false otherwise
+     */
     public boolean queryControlReceived(StateVariable stateVar);
 }

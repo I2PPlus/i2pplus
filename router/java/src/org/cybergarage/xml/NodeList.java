@@ -1,16 +1,6 @@
 /******************************************************************
- *
- *	CyberXML for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: NodeList.java
- *
- *	Revision;
- *
- *	11/27/02
- *		- first revision.
- *
+ * CyberXML for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.xml;
@@ -19,18 +9,15 @@ import java.util.Vector;
 
 /**
  * A vector-based collection of XML nodes.
- * 
- * <p>This class extends Vector to provide specialized methods for managing
- * collections of Node objects. It includes methods for finding nodes by name
- * or by name suffix.</p>
- * 
+ *
+ * <p>This class extends Vector to provide specialized methods for managing collections of Node
+ * objects. It includes methods for finding nodes by name or by name suffix.
+ *
  * @author Satoshi Konno
  * @since 1.0
  */
 public class NodeList extends Vector<Node> {
-    /**
-     * Creates an empty NodeList.
-     */
+    /** Creates an empty NodeList. */
     public NodeList() {}
 
     /**

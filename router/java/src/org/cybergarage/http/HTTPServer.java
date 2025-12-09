@@ -1,14 +1,6 @@
 /******************************************************************
- *
- *    CyberHTTP for Java
- *    Copyright (C) Satoshi Konno 2002-2003
- *
- *    File: HTTPServer.java
- *
- *    12/12/02 - first revision.
- *    10/20/03 - Improved the HTTP server using multithreading.
- *    08/27/04 - Changed accept() to set a default timeout, HTTP.DEFAULT_TIMEOUT, to the socket.
- *
+ * CyberHTTP for Java
+ * Copyright (C) Satoshi Konno 2002-2003
  ******************************************************************/
 
 package org.cybergarage.http;
@@ -147,6 +139,8 @@ public class HTTPServer implements Runnable {
             return true;
         }
         try {
+            bindAddr = addr;
+            bindPort = port;
             serverSock = new ServerSocket(bindPort, 0, bindAddr);
         } catch (IOException e) {
             return false;
@@ -157,7 +151,7 @@ public class HTTPServer implements Runnable {
     /**
      * Opens the server on specified port with default bind address.
      *
-     * @param addr bind address (ignored, uses default)
+     * @param addr bind address as hostname or IP address string
      * @param port port number to bind to
      * @return true if server was opened successfully, false otherwise
      */

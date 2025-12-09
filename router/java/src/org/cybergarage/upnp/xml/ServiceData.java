@@ -1,20 +1,6 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2003
- *
- *	File: ServiceData.java
- *
- *	Revision;
- *
- *	03/28/03
- *		- first revision.
- *	01/06/04
- *		- Moved setQueryListener() and getQueryListener() to StateVariableData class.
- *	03/30/05
- *		- Removed setDescriptionURL() and getDescriptionURL().
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002-2003
  ******************************************************************/
 
 package org.cybergarage.upnp.xml;
@@ -23,6 +9,29 @@ import org.cybergarage.upnp.event.*;
 import org.cybergarage.util.*;
 import org.cybergarage.xml.*;
 
+/**
+ * Data container for UPnP service information and metadata.
+ *
+ * <p>This class extends NodeData to represent service definitions from UPnP device descriptions. It
+ * encapsulates metadata about services including action listeners, subscribers, and service
+ * configuration.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>Action listener management
+ *   <li>Subscriber list handling
+ *   <li>Service configuration data
+ *   <li>XML node data inheritance
+ *   <li>Event notification support
+ * </ul>
+ *
+ * <p>This class is used by UPnP services to manage their metadata, listener registrations, and
+ * subscriber information, enabling proper service operation and event notification functionality.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class ServiceData extends NodeData {
     public ServiceData() {}
 

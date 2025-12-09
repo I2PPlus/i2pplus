@@ -1,36 +1,12 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: SSDP.java
- *
- *	Revision;
- *
- *	11/18/02
- *		- first revision.
- *	05/13/03
- *		- Added constants for IPv6.
- *	08/03/05
- *		- Thanks for Stefano Lenzi <kismet-sl at users.sourceforge.net>
- *		  and Mikael <mhakman at users.sourceforge.net>
- *		- Fixed getLeaseTime() to parse normally when the value includes extra strings such as white space.
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.upnp.ssdp;
 
 import org.cybergarage.util.Debug;
 
-/**
- * This class defines constant value related to SSDP.<br>
- * All the values defined here are complaint to the UPnP Standard
- *
- * @author Satoshi "skonno" Konno
- * @author Stefano "Kismet" Lenzi
- * @version 1.0
- */
 public class SSDP {
     ////////////////////////////////////////////////
     //	Constants

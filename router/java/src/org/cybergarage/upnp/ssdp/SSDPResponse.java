@@ -1,25 +1,6 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: SSDPResponse.java
- *
- *	Revision;
- *
- *	01/14/03
- *		- first revision.
- *	01/23/04
- *		- Oliver Newell
- *		- Overided HTTPResponse::getHeader() for Intel UPnP control points.
- *	03/16/04
- *		- Thanks for Darrell Young
- *		- Fixed to set v1.1 to the HTTP version.
- *	10/20/04
- *		- Brent Hills <bhills@openshores.com>
- *		- Added setMYNAME() and getMYNAME().
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.upnp.ssdp;
@@ -28,6 +9,30 @@ import org.cybergarage.http.*;
 
 import java.io.InputStream;
 
+/**
+ * Represents an SSDP response message.
+ *
+ * <p>This class extends HTTPResponse to handle SSDP (Simple Service Discovery Protocol) response
+ * messages used in UPnP device discovery. It manages the creation and parsing of responses to
+ * M-SEARCH requests from control points.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>SSDP response header management
+ *   <li>ST (Search Target) header handling
+ *   <li>USN (Unique Service Name) header management
+ *   <li>MYNAME header support for Intel compatibility
+ *   <li>HTTP/1.1 version compliance
+ * </ul>
+ *
+ * <p>This class is used by UPnP devices to respond to discovery searches from control points,
+ * providing information about device capabilities and availability. It handles both standard UPnP
+ * responses and vendor-specific extensions.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class SSDPResponse extends HTTPResponse {
     ////////////////////////////////////////////////
     //	Constructor

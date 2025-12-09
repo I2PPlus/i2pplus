@@ -1,34 +1,7 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: SubscriptionRequest.java
- *
- *	Revision;
- *
- *	01/31/03
- *		- first revision.
- *	05/21/03
- *		- Giordano Sassaroli <sassarol@cefriel.it>
- *		- Description: inserted a check at the beginning of the setService method
- *		- Problem : If the EventSubURL does not start with a '/', the device could refuse event subscription
- *		- Error : it is not an error, but adding the '/' when missing allows the integration with the Intel devices
- *	09/02/03
- *		- Giordano Sassaroli <sassarol@cefriel.it>
- *		- Problem : NullpointerException thrown for devices whose description use absolute urls
- *		- Error : the presence of a base url is not mandatory, the API code makes the assumption that control and event subscription urls are relative. If the baseUrl is not present, the request host and port should be extracted from the control/subscription url
- *		- Description: The method setRequestHost/setService should be changed as follows
- *	06/11/04
- *		- Markus Thurner <markus.thurner@fh-hagenberg.at> (06/11/2004)
- *		- Changed setServie() to get the host address from the SSDP Location field when the URLBase is null.
- *	12/06/04
- *		- Grzegorz Lehmann <grzegorz.lehmann@dai-labor.de>
- *		- Stefano Lenzi <kismet-sl@users.sourceforge.net>
- *		- Fixed getSID() to loop between getSID() and hasSID();
- *
- ********************************************************************/
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002
+ ******************************************************************/
 
 package org.cybergarage.upnp.event;
 
@@ -36,6 +9,29 @@ import org.cybergarage.http.*;
 import org.cybergarage.upnp.*;
 import org.cybergarage.upnp.device.*;
 
+/**
+ * Represents a UPnP event subscription request.
+ *
+ * <p>This class extends HTTPRequest to handle GENA (General Event Notification Architecture)
+ * subscription requests for UPnP event notifications. It manages the subscription process including
+ * SUBSCRIBE and UNSUBSCRIBE operations for UPnP services.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>SUBSCRIBE and UNSUBSCRIBE request handling
+ *   <li>Service URL resolution and management
+ *   <li>Subscription ID (SID) management
+ *   <li>Callback URL handling
+ *   <li>Timeout and renewal management
+ * </ul>
+ *
+ * <p>This class is used by UPnP control points to subscribe to event notifications from UPnP
+ * services, allowing them to receive updates when service state variables change.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class SubscriptionRequest extends HTTPRequest {
     ////////////////////////////////////////////////
     //	Constructor

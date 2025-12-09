@@ -1,27 +1,36 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: Subscriber.java
- *
- *	Revision;
- *
- *	01/29/03
- *		- first revision.
- *	07/31/04
- *		- Added isExpired().
- *	10/26/04
- *		- Oliver Newell <newell@media-rush.com>
- *		- Added support the intinite time and fixed a bug in isExpired().
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.upnp.event;
 
 import java.net.*;
 
+/**
+ * Represents a UPnP event subscriber.
+ *
+ * <p>This class encapsulates information about a control point that has subscribed to receive event
+ * notifications from a UPnP service. It manages the subscription lifecycle including timeout,
+ * renewal, and delivery URL information.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>Subscription ID (SID) management
+ *   <li>Delivery URL and callback address handling
+ *   <li>Subscription timeout and renewal tracking
+ *   <li>Expiration checking and management
+ *   <li>Sequence number tracking for notifications
+ * </ul>
+ *
+ * <p>This class is used by UPnP services to maintain information about each subscriber, enabling
+ * targeted delivery of event notifications and management of subscription lifecycles including
+ * automatic cleanup of expired subscriptions.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class Subscriber {
     ////////////////////////////////////////////////
     //	Constructor

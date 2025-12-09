@@ -1,16 +1,6 @@
 /******************************************************************
- *
- *	CyberUtil for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: Debug.java
- *
- *	Revision;
- *
- *	11/18/02
- *		- first revision.
- *
+ * CyberUtil for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.util;
@@ -50,8 +40,8 @@ public final class Debug {
     }
 
     /**
-     * Flag indicating whether debug output is enabled.
-     * When true, debug messages will be logged; when false, they are suppressed.
+     * Flag indicating whether debug output is enabled. When true, debug messages will be logged;
+     * when false, they are suppressed.
      */
     public static boolean enabled = false;
 

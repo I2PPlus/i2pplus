@@ -1,22 +1,35 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2003
- *
- *	File: ST.java
- *
- *	Revision;
- *
- *	01/31/03
- *		- first revision.
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002-2003
  ******************************************************************/
 
 package org.cybergarage.upnp.event;
 
 import org.cybergarage.upnp.*;
 
+/**
+ * Utility class for UPnP event subscription management.
+ *
+ * <p>This class provides constants and utility methods for managing UPnP event subscriptions,
+ * including timeout handling, subscription methods, and UUID generation. It serves as a helper
+ * class for the GENA (General Event Notification Architecture) protocol used in UPnP.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>Subscription timeout management and conversion
+ *   <li>SUBSCRIBE and UNSUBSCRIBE method constants
+ *   <li>UUID generation and management
+ *   <li>XML namespace definitions for event messages
+ *   <li>Infinite timeout support
+ * </ul>
+ *
+ * <p>This class provides the foundational constants and utility methods used throughout the UPnP
+ * event notification system for managing subscription lifecycles.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class Subscription {
     public static final String XMLNS = "urn:schemas-upnp-org:event-1-0";
     public static final String TIMEOUT_HEADER = "Second-";

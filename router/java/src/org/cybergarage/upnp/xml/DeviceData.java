@@ -1,18 +1,6 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2003
- *
- *	File: DeviceData.java
- *
- *	Revision;
- *
- *	03/28/03
- *		- first revision.
- *	12/25/03
- *		- Added Advertiser functions.
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002-2003
  ******************************************************************/
 
 package org.cybergarage.upnp.xml;
@@ -29,6 +17,29 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 /** I2P added multiple location support */
+/**
+ * Data container for UPnP device information and metadata.
+ *
+ * <p>This class extends NodeData to represent device definitions from UPnP device descriptions. It
+ * encapsulates metadata about devices including description files, locations, and advertisement
+ * settings.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>Device description file management
+ *   <li>Multiple location support (I2P enhancement)
+ *   <li>Advertisement configuration
+ *   <li>XML node data inheritance
+ *   <li>Device metadata handling
+ * </ul>
+ *
+ * <p>This class is used by UPnP devices to manage their description data and configuration,
+ * enabling proper device advertisement and service discovery functionality.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class DeviceData extends NodeData {
     public DeviceData() {}
 

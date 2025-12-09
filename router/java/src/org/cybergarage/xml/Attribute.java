@@ -1,26 +1,16 @@
 /******************************************************************
- *
- *	CyberXML for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: Attribute.java
- *
- *	Revision;
- *
- *	11/27/02
- *		- first revision.
- *
+ * CyberXML for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.xml;
 
 /**
  * Represents an XML attribute with name and value.
- * 
- * <p>This class provides a simple container for XML attribute name-value pairs.
- * Attributes can be created independently or copied from existing attributes.</p>
- * 
+ *
+ * <p>This class provides a simple container for XML attribute name-value pairs. Attributes can be
+ * created independently or copied from existing attributes.
+ *
  * @author Satoshi Konno
  * @since 1.0
  */
@@ -28,9 +18,7 @@ public class Attribute {
     private String name = new String();
     private String value = new String();
 
-    /**
-     * Creates an empty Attribute with empty name and value.
-     */
+    /** Creates an empty Attribute with empty name and value. */
     public Attribute() {}
 
     /**

@@ -1,21 +1,6 @@
 /******************************************************************
- *
- *	CyberHTTP for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2003
- *
- *	File : Date.java
- *
- *	Revision;
- *
- *	01/05/03
- *		- first revision
- *	10/20/04
- *		- Theo Beisch <theo.beisch@gmx.de>
- *		- Fixed the following methods to use HOUR_OF_DAY instead of HOUR.
- *			getHour(), getDateString() getTimeString()
- *		- Fixed getInstance() to return GMT instance.
- *
+ * CyberHTTP for Java
+ * Copyright (C) Satoshi Konno 2002-2003
  ******************************************************************/
 
 package org.cybergarage.http;
@@ -24,9 +9,8 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 /**
- * Utility class for handling HTTP date formatting and time operations.
- * Provides methods to format dates according to HTTP standards and
- * create date instances for different time zones.
+ * Utility class for handling HTTP date formatting and time operations. Provides methods to format
+ * dates according to HTTP standards and create date instances for different time zones.
  */
 public class Date {
     private Calendar cal;
@@ -193,8 +177,8 @@ public class Date {
     ////////////////////////////////////////////////
 
     /**
-     * Gets the time string in HH:MM format with a blinking colon effect.
-     * The colon blinks by alternating between ":" and " " based on the second.
+     * Gets the time string in HH:MM format with a blinking colon effect. The colon blinks by
+     * alternating between ":" and " " based on the second.
      *
      * @return formatted time string with blinking colon
      */

@@ -1,16 +1,6 @@
 /******************************************************************
- *
- *	CyberHTTP for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2004
- *
- *	File: ParameterList.java
- *
- *	Revision;
- *
- *	02/01/04
- *		- first revision.
- *
+ * CyberHTTP for Java
+ * Copyright (C) Satoshi Konno 2002-2004
  ******************************************************************/
 
 package org.cybergarage.http;
@@ -18,14 +8,12 @@ package org.cybergarage.http;
 import java.util.Vector;
 
 /**
- * A collection of Parameter objects that extends Vector.
- * This class provides methods to manage and retrieve parameters by name or index,
- * commonly used for handling HTTP query parameters, form data, and headers.
+ * A collection of Parameter objects that extends Vector. This class provides methods to manage and
+ * retrieve parameters by name or index, commonly used for handling HTTP query parameters, form
+ * data, and headers.
  */
 public class ParameterList extends Vector<Parameter> {
-    /**
-     * Creates a new empty ParameterList.
-     */
+    /** Creates a new empty ParameterList. */
     public ParameterList() {}
 
     /**

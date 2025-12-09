@@ -1,29 +1,19 @@
 /******************************************************************
- *
- *	CyberUtil for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2003
- *
- *	File: FileUtil.java
- *
- *	Revision:
- *
- *	01/12/03
- *		- first revision.
- *
+ * CyberUtil for Java
+ * Copyright (C) Satoshi Konno 2002-2003
  ******************************************************************/
 
 package org.cybergarage.util;
 
 /**
- * Utility class for string manipulation and conversion operations.
- * This class provides static methods for string validation, type conversion,
- * character searching, and custom trimming operations.
+ * Utility class for string manipulation and conversion operations. This class provides static
+ * methods for string validation, type conversion, character searching, and custom trimming
+ * operations.
  */
 public final class StringUtil {
     /**
      * Checks if a string contains valid data (not null and not empty).
-     * 
+     *
      * @param value the string to check
      * @return true if the string is not null and has length > 0, false otherwise
      */
@@ -35,7 +25,7 @@ public final class StringUtil {
 
     /**
      * Converts a string to an integer value.
-     * 
+     *
      * @param value the string to convert
      * @return the integer value, or 0 if conversion fails
      */
@@ -50,7 +40,7 @@ public final class StringUtil {
 
     /**
      * Converts a string to a long value.
-     * 
+     *
      * @param value the string to convert
      * @return the long value, or 0 if conversion fails
      */
@@ -65,7 +55,7 @@ public final class StringUtil {
 
     /**
      * Generic character finding method with customizable search parameters.
-     * 
+     *
      * @param str the string to search in
      * @param chars the characters to search for
      * @param startIdx the starting index
@@ -103,8 +93,8 @@ public final class StringUtil {
 
     /**
      * Finds the first occurrence of any character from the specified set.
-     * 
-     * @param str   string to search in
+     *
+     * @param str string to search in
      * @param chars characters to search for
      * @return index of first matching character, or -1 if not found
      */
@@ -114,8 +104,8 @@ public final class StringUtil {
 
     /**
      * Finds the first character that is NOT in the specified character set.
-     * 
-     * @param str   string to search in
+     *
+     * @param str string to search in
      * @param chars characters to exclude from search
      * @return index of first non-matching character, or -1 if not found
      */
@@ -125,8 +115,8 @@ public final class StringUtil {
 
     /**
      * Finds the last occurrence of any character from the specified set.
-     * 
-     * @param str   string to search in
+     *
+     * @param str string to search in
      * @param chars characters to search for
      * @return index of last matching character, or -1 if not found
      */
@@ -136,8 +126,8 @@ public final class StringUtil {
 
     /**
      * Finds the last character that is NOT in the specified character set.
-     * 
-     * @param str   string to search in
+     *
+     * @param str string to search in
      * @param chars characters to exclude from search
      * @return index of last non-matching character, or -1 if not found
      */
@@ -147,8 +137,8 @@ public final class StringUtil {
 
     /**
      * Trims specified characters from both ends of a string.
-     * 
-     * @param trimStr   string to trim
+     *
+     * @param trimStr string to trim
      * @param trimChars characters to remove from both ends
      * @return trimmed string
      */

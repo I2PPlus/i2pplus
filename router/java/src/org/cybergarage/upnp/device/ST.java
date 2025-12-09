@@ -1,20 +1,34 @@
 /******************************************************************
- *
- *	CyberUPnP for Java
- *
- *	Copyright (C) Satoshi Konno 2002-2003
- *
- *	File: ST.java
- *
- *	Revision;
- *
- *	01/07/03
- *		- first revision.
- *
+ * CyberUPnP for Java
+ * Copyright (C) Satoshi Konno 2002-2003
  ******************************************************************/
 
 package org.cybergarage.upnp.device;
 
+/**
+ * Utility class for SSDP ST (Search Target) header values and validation.
+ *
+ * <p>This class provides constants and utility methods for handling ST header used in SSDP M-SEARCH
+ * requests and responses. The ST header specifies the search target for device discovery
+ * operations.
+ *
+ * <p>Key features:
+ *
+ * <ul>
+ *   <li>Search target constants for different device types
+ *   <li>All device search support
+ *   <li>Root device detection
+ *   <li>UUID-based device identification
+ *   <li>URN device and service validation
+ *   <li>Quoted and unquoted value support
+ * </ul>
+ *
+ * <p>This class is used by SSDP components to validate and process ST headers in search requests
+ * and responses, enabling targeted device discovery and proper search target classification.
+ *
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class ST {
     public static final String ALL_DEVICE = "ssdp:all";
     public static final String ROOT_DEVICE = "upnp:rootdevice";

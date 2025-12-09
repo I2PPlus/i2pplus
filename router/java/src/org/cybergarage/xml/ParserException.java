@@ -1,29 +1,16 @@
 /******************************************************************
- *
- *	CyberXML for Java
- *
- *	Copyright (C) Satoshi Konno 2002
- *
- *	File: ParserException.java
- *
- *	Revision;
- *
- *	11/27/02
- *		- first revision.
- *	12/26/03
- *		- Changed to a sub class of Exception instead of SAXException.
- *
+ * CyberXML for Java
+ * Copyright (C) Satoshi Konno 2002
  ******************************************************************/
 
 package org.cybergarage.xml;
 
 /**
  * Exception thrown when XML parsing fails.
- * 
- * <p>This exception is used throughout the XML parsing framework to indicate
- * errors that occur during XML document parsing, including I/O errors,
- * malformed XML, and security violations.</p>
- * 
+ *
+ * <p>This exception is used throughout the XML parsing framework to indicate errors that occur
+ * during XML document parsing, including I/O errors, malformed XML, and security violations.
+ *
  * @author Satoshi Konno
  * @since 1.0
  */
