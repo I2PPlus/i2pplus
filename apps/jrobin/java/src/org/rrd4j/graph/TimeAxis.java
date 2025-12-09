@@ -5,22 +5,46 @@ import java.awt.Paint;
 import java.util.Calendar;
 import java.util.Date;
 
+/**
+ * Represents the time axis (x-axis) in RRD graphs. Handles time-based grid lines, labels, and tick
+ * marks with configurable formatting. Automatically selects appropriate time intervals based on
+ * graph time range and pixel density.
+ */
 class TimeAxis extends Axis {
     private static final TimeAxisSetting[] tickSettings = {
-            new TimeAxisSetting(0, TimeUnit.SECOND, 30, TimeUnit.MINUTE, 5, TimeUnit.MINUTE, 5, 0),
-            new TimeAxisSetting(2, TimeUnit.MINUTE, 1, TimeUnit.MINUTE, 5, TimeUnit.MINUTE, 5, 0),
-            new TimeAxisSetting(5, TimeUnit.MINUTE, 2, TimeUnit.MINUTE, 10, TimeUnit.MINUTE, 10, 0),
-            new TimeAxisSetting(10, TimeUnit.MINUTE, 5, TimeUnit.MINUTE, 20, TimeUnit.MINUTE, 20, 0),
-            new TimeAxisSetting(30, TimeUnit.MINUTE, 10, TimeUnit.HOUR, 1, TimeUnit.HOUR, 1, 0),
-            new TimeAxisSetting(60, TimeUnit.MINUTE, 30, TimeUnit.HOUR, 2, TimeUnit.HOUR, 2, 0),
-            new TimeAxisSetting(180, TimeUnit.HOUR, 1, TimeUnit.HOUR, 6, TimeUnit.HOUR, 6, 0),
-            new TimeAxisSetting(600, TimeUnit.HOUR, 6, TimeUnit.DAY, 1, TimeUnit.DAY, 1, 24 * 3600),
-            new TimeAxisSetting(1800, TimeUnit.HOUR, 12, TimeUnit.DAY, 1, TimeUnit.DAY, 2, 24 * 3600),
-            new TimeAxisSetting(3600, TimeUnit.DAY, 1, TimeUnit.WEEK, 1, TimeUnit.WEEK, 1, 7 * 24 * 3600),
-            new TimeAxisSetting(3 * 3600L, TimeUnit.WEEK, 1, TimeUnit.MONTH, 1, TimeUnit.WEEK, 2, 7 * 24 * 3600),
-            new TimeAxisSetting(6 * 3600L, TimeUnit.MONTH, 1, TimeUnit.MONTH, 1, TimeUnit.MONTH, 1, 30 * 24 * 3600),
-            new TimeAxisSetting(48 * 3600L, TimeUnit.MONTH, 1, TimeUnit.MONTH, 3, TimeUnit.MONTH, 3, 30 * 24 * 3600),
-            new TimeAxisSetting(10 * 24 * 3600L, TimeUnit.YEAR, 1, TimeUnit.YEAR, 1, TimeUnit.YEAR, 1, 365 * 24 * 3600),
+        new TimeAxisSetting(0, TimeUnit.SECOND, 30, TimeUnit.MINUTE, 5, TimeUnit.MINUTE, 5, 0),
+        new TimeAxisSetting(2, TimeUnit.MINUTE, 1, TimeUnit.MINUTE, 5, TimeUnit.MINUTE, 5, 0),
+        new TimeAxisSetting(5, TimeUnit.MINUTE, 2, TimeUnit.MINUTE, 10, TimeUnit.MINUTE, 10, 0),
+        new TimeAxisSetting(10, TimeUnit.MINUTE, 5, TimeUnit.MINUTE, 20, TimeUnit.MINUTE, 20, 0),
+        new TimeAxisSetting(30, TimeUnit.MINUTE, 10, TimeUnit.HOUR, 1, TimeUnit.HOUR, 1, 0),
+        new TimeAxisSetting(60, TimeUnit.MINUTE, 30, TimeUnit.HOUR, 2, TimeUnit.HOUR, 2, 0),
+        new TimeAxisSetting(180, TimeUnit.HOUR, 1, TimeUnit.HOUR, 6, TimeUnit.HOUR, 6, 0),
+        new TimeAxisSetting(600, TimeUnit.HOUR, 6, TimeUnit.DAY, 1, TimeUnit.DAY, 1, 24 * 3600),
+        new TimeAxisSetting(1800, TimeUnit.HOUR, 12, TimeUnit.DAY, 1, TimeUnit.DAY, 2, 24 * 3600),
+        new TimeAxisSetting(
+                3600, TimeUnit.DAY, 1, TimeUnit.WEEK, 1, TimeUnit.WEEK, 1, 7 * 24 * 3600),
+        new TimeAxisSetting(
+                3 * 3600L, TimeUnit.WEEK, 1, TimeUnit.MONTH, 1, TimeUnit.WEEK, 2, 7 * 24 * 3600),
+        new TimeAxisSetting(
+                6 * 3600L, TimeUnit.MONTH, 1, TimeUnit.MONTH, 1, TimeUnit.MONTH, 1, 30 * 24 * 3600),
+        new TimeAxisSetting(
+                48 * 3600L,
+                TimeUnit.MONTH,
+                1,
+                TimeUnit.MONTH,
+                3,
+                TimeUnit.MONTH,
+                3,
+                30 * 24 * 3600),
+        new TimeAxisSetting(
+                10 * 24 * 3600L,
+                TimeUnit.YEAR,
+                1,
+                TimeUnit.YEAR,
+                1,
+                TimeUnit.YEAR,
+                1,
+                365 * 24 * 3600),
     };
 
     private final ImageParameters im;
@@ -131,27 +155,27 @@ class TimeAxis extends Axis {
 
     private void findNextTime(TimeUnit timeUnit, int timeUnitCount) {
         switch (timeUnit) {
-        case SECOND:
-            calendar.add(Calendar.SECOND, timeUnitCount);
-            break;
-        case MINUTE:
-            calendar.add(Calendar.MINUTE, timeUnitCount);
-            break;
-        case HOUR:
-            calendar.add(Calendar.HOUR_OF_DAY, timeUnitCount);
-            break;
-        case DAY:
-            calendar.add(Calendar.DAY_OF_MONTH, timeUnitCount);
-            break;
-        case WEEK:
-            calendar.add(Calendar.DAY_OF_MONTH, 7 * timeUnitCount);
-            break;
-        case MONTH:
-            calendar.add(Calendar.MONTH, timeUnitCount);
-            break;
-        case YEAR:
-            calendar.add(Calendar.YEAR, timeUnitCount);
-            break;
+            case SECOND:
+                calendar.add(Calendar.SECOND, timeUnitCount);
+                break;
+            case MINUTE:
+                calendar.add(Calendar.MINUTE, timeUnitCount);
+                break;
+            case HOUR:
+                calendar.add(Calendar.HOUR_OF_DAY, timeUnitCount);
+                break;
+            case DAY:
+                calendar.add(Calendar.DAY_OF_MONTH, timeUnitCount);
+                break;
+            case WEEK:
+                calendar.add(Calendar.DAY_OF_MONTH, 7 * timeUnitCount);
+                break;
+            case MONTH:
+                calendar.add(Calendar.MONTH, timeUnitCount);
+                break;
+            case YEAR:
+                calendar.add(Calendar.YEAR, timeUnitCount);
+                break;
         }
     }
 
@@ -163,48 +187,50 @@ class TimeAxis extends Axis {
     private void adjustStartingTime(TimeUnit timeUnit, int timeUnitCount) {
         calendar.setTime(new Date(im.start * 1000L));
         switch (timeUnit) {
-        case SECOND:
-            calendar.add(Calendar.SECOND, -(calendar.get(Calendar.SECOND) % timeUnitCount));
-            break;
-        case MINUTE:
-            calendar.set(Calendar.SECOND, 0);
-            calendar.add(Calendar.MINUTE, -(calendar.get(Calendar.MINUTE) % timeUnitCount));
-            break;
-        case HOUR:
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.add(Calendar.HOUR_OF_DAY, -(calendar.get(Calendar.HOUR_OF_DAY) % timeUnitCount));
-            break;
-        case DAY:
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            break;
-        case WEEK:
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            int diffDays = calendar.get(Calendar.DAY_OF_WEEK) - calendar.getFirstDayOfWeek();
-            if (diffDays < 0) {
-                diffDays += 7;
-            }
-            calendar.add(Calendar.DAY_OF_MONTH, -diffDays);
-            break;
-        case MONTH:
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.DAY_OF_MONTH, 1);
-            calendar.add(Calendar.MONTH, -(calendar.get(Calendar.MONTH) % timeUnitCount));
-            break;
-        case YEAR:
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MINUTE, 0);
-            calendar.set(Calendar.HOUR_OF_DAY, 0);
-            calendar.set(Calendar.DAY_OF_MONTH, 1);
-            calendar.set(Calendar.MONTH, 0);
-            calendar.add(Calendar.YEAR, -(calendar.get(Calendar.YEAR) % timeUnitCount));
-            break;
+            case SECOND:
+                calendar.add(Calendar.SECOND, -(calendar.get(Calendar.SECOND) % timeUnitCount));
+                break;
+            case MINUTE:
+                calendar.set(Calendar.SECOND, 0);
+                calendar.add(Calendar.MINUTE, -(calendar.get(Calendar.MINUTE) % timeUnitCount));
+                break;
+            case HOUR:
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.add(
+                        Calendar.HOUR_OF_DAY,
+                        -(calendar.get(Calendar.HOUR_OF_DAY) % timeUnitCount));
+                break;
+            case DAY:
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                break;
+            case WEEK:
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                int diffDays = calendar.get(Calendar.DAY_OF_WEEK) - calendar.getFirstDayOfWeek();
+                if (diffDays < 0) {
+                    diffDays += 7;
+                }
+                calendar.add(Calendar.DAY_OF_MONTH, -diffDays);
+                break;
+            case MONTH:
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.DAY_OF_MONTH, 1);
+                calendar.add(Calendar.MONTH, -(calendar.get(Calendar.MONTH) % timeUnitCount));
+                break;
+            case YEAR:
+                calendar.set(Calendar.SECOND, 0);
+                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.HOUR_OF_DAY, 0);
+                calendar.set(Calendar.DAY_OF_MONTH, 1);
+                calendar.set(Calendar.MONTH, 0);
+                calendar.add(Calendar.YEAR, -(calendar.get(Calendar.YEAR) % timeUnitCount));
+                break;
         }
     }
 
@@ -212,7 +238,7 @@ class TimeAxis extends Axis {
         if (gdef.timeAxisSetting != null) {
             tickSetting = new TimeAxisSetting(gdef.timeAxisSetting);
         } else {
-            for (TimeAxisSetting i: tickSettings) {
+            for (TimeAxisSetting i : tickSettings) {
                 if (secPerPix < i.secPerPix) {
                     break;
                 } else {
@@ -223,8 +249,9 @@ class TimeAxis extends Axis {
         if (gdef.timeLabelFormat != null) {
             tickSetting = tickSetting.withLabelFormat(gdef.timeLabelFormat);
         } else {
-            gdef.formatProvider.apply(tickSetting.labelUnit).ifPresent(f -> tickSetting = tickSetting.withLabelFormat(f));
+            gdef.formatProvider
+                    .apply(tickSetting.labelUnit)
+                    .ifPresent(f -> tickSetting = tickSetting.withLabelFormat(f));
         }
     }
-
 }

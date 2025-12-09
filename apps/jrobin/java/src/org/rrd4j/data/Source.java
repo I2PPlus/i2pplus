@@ -1,5 +1,10 @@
 package org.rrd4j.data;
 
+/**
+ * Abstract base class for RRD data sources.<br>
+ * Provides common functionality for storing and managing time-series data with timestamps and
+ * values.
+ */
 abstract class Source {
     private final String name;
 
@@ -34,7 +39,8 @@ abstract class Source {
      * @param tStart
      * @param tEnd
      * @return the Aggregates
-     * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable}, used with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
+     * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable}, used
+     *     with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
      */
     @Deprecated
     Aggregates getAggregates(long tStart, long tEnd) {
@@ -47,7 +53,9 @@ abstract class Source {
      * @param tEnd
      * @param percentile
      * @return the percentile
-     * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable.PERCENTILE}, used with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
+     * @deprecated This method is deprecated. Uses instance of {@link
+     *     org.rrd4j.data.Variable.PERCENTILE}, used with {@link
+     *     org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
      */
     @Deprecated
     double getPercentile(long tStart, long tEnd, double percentile) {
@@ -55,5 +63,4 @@ abstract class Source {
         vpercent.calculate(this, tStart, tEnd);
         return vpercent.getValue().value;
     }
-
 }

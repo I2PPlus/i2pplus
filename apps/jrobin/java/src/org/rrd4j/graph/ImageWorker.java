@@ -11,13 +11,24 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * Abstract base class for image workers in RRD graphs. Provides drawing operations for creating
+ * graph images with various output formats.
+ */
 public abstract class ImageWorker {
 
     private static final String DUMMY_TEXT = "Dummy";
-//    private static final int IMG_BUFFER_CAPACITY = 10000; // bytes
-    private static final int IMG_BUFFER_CAPACITY = 40*1024; // bytes
+    //    private static final int IMG_BUFFER_CAPACITY = 10000; // bytes
+    private static final int IMG_BUFFER_CAPACITY = 40 * 1024; // bytes
+
+    /** Graphics context for drawing operations */
     private Graphics2D g2d;
 
+    /**
+     * Sets the graphics context for drawing operations. Disposes of previous context if exists.
+     *
+     * @param g2d new graphics context
+     */
     protected void setG2d(Graphics2D g2d) {
         if (g2d != null) {
             dispose();
@@ -172,24 +183,30 @@ public abstract class ImageWorker {
     }
 
     double getStringWidth(String text, Font font) {
-        return font.getStringBounds(text, 0, text.length(), g2d.getFontRenderContext()).getBounds().getWidth();
+        return font.getStringBounds(text, 0, text.length(), g2d.getFontRenderContext())
+                .getBounds()
+                .getWidth();
     }
 
     void setAntiAliasing(boolean enable) {
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+        g2d.setRenderingHint(
+                RenderingHints.KEY_ANTIALIASING,
                 enable ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
     }
 
     void setTextAntiAliasing(boolean enable) {
-        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-                enable ? RenderingHints.VALUE_TEXT_ANTIALIAS_ON : RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
+        g2d.setRenderingHint(
+                RenderingHints.KEY_TEXT_ANTIALIASING,
+                enable
+                        ? RenderingHints.VALUE_TEXT_ANTIALIAS_ON
+                        : RenderingHints.VALUE_TEXT_ANTIALIAS_OFF);
     }
 
-    void loadImage(RrdGraphDef.ImageSource imageSource, int x, int y, int w, int h) throws IOException {
+    void loadImage(RrdGraphDef.ImageSource imageSource, int x, int y, int w, int h)
+            throws IOException {
         BufferedImage wpImage = imageSource.apply(w, h).getSubimage(0, 0, w, h);
         g2d.drawImage(wpImage, new AffineTransform(1f, 0f, 0f, 1f, x, y), null);
     }
-
 
     void dispose() {
         if (g2d != null) {
@@ -203,17 +220,16 @@ public abstract class ImageWorker {
         }
     }
 
-    abstract void makeImage(OutputStream os) throws IOException ;
+    abstract void makeImage(OutputStream os) throws IOException;
 
     void saveImage(String path) throws IOException {
         makeImage(Paths.get(path));
     }
 
     byte[] getImageBytes() throws IOException {
-        try (ByteArrayOutputStream stream = new ByteArrayOutputStream(IMG_BUFFER_CAPACITY)){
+        try (ByteArrayOutputStream stream = new ByteArrayOutputStream(IMG_BUFFER_CAPACITY)) {
             makeImage(stream);
             return stream.toByteArray();
         }
     }
-
 }

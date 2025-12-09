@@ -2,7 +2,11 @@ package org.rrd4j.data;
 
 import java.util.Arrays;
 
-class VDef extends Source implements NonRrdSource  {
+/**
+ * RRD VDEF (Variable Definition) implementation.<br>
+ * Creates computed data sources by applying aggregation functions to existing data sources.
+ */
+class VDef extends Source implements NonRrdSource {
     private final String defName;
     private final Variable var;
 
@@ -37,5 +41,4 @@ class VDef extends Source implements NonRrdSource  {
         Arrays.fill(values, var.getValue().value);
         return values;
     }
-
 }

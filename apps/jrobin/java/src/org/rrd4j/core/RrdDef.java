@@ -1,10 +1,12 @@
 package org.rrd4j.core;
 
+import org.rrd4j.ConsolFun;
+import org.rrd4j.DsType;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
@@ -14,46 +16,41 @@ import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.rrd4j.ConsolFun;
-import org.rrd4j.DsType;
-
 /**
- * <p>Class to represent definition of new Round Robin Database (RRD).
- * Object of this class is used to create
- * new RRD from scratch - pass its reference as a <code>RrdDb</code> constructor
- * argument (see documentation for {@link org.rrd4j.core.RrdDb RrdDb} class). <code>RrdDef</code>
- * object <b>does not</b> actually create new RRD. It just holds all necessary
- * information which will be used during the actual creation process.</p>
+ * Class to represent definition of new Round Robin Database (RRD). Object of this class is used to
+ * create new RRD from scratch - pass its reference as a <code>RrdDb</code> constructor argument
+ * (see documentation for {@link org.rrd4j.core.RrdDb RrdDb} class). <code>RrdDef</code> object
+ * <b>does not</b> actually create new RRD. It just holds all necessary information which will be
+ * used during the actual creation process.
  *
- * <p>RRD definition (RrdDef object) consists of the following elements:</p>
+ * <p>RRD definition (RrdDef object) consists of the following elements:
  *
  * <ul>
- * <li> path to RRD that will be created
- * <li> starting timestamp
- * <li> step
- * <li> version, 1 for linear disposition of archives, 2 for matrix disposition
- * <li> one or more datasource definitions
- * <li> one or more archive definitions
+ *   <li>path to RRD that will be created
+ *   <li>starting timestamp
+ *   <li>step
+ *   <li>version, 1 for linear disposition of archives, 2 for matrix disposition
+ *   <li>one or more datasource definitions
+ *   <li>one or more archive definitions
  * </ul>
- * <p>RrdDef provides API to set all these elements. For the complete explanation of all
- * RRD definition parameters, see RRDTool's
- * <a href="../../../../man/rrdcreate.html" target="man">rrdcreate man page</a>.</p>
+ *
+ * <p>RrdDef provides API to set all these elements. For the complete explanation of all RRD
+ * definition parameters, see RRDTool's <a href="../../../../man/rrdcreate.html"
+ * target="man">rrdcreate man page</a>.
  *
  * @author Sasa Markovic
  */
 public class RrdDef {
-    /**
-     * Default RRD step to be used if not specified in constructor (300 seconds).
-     */
+    /** Default RRD step to be used if not specified in constructor (300 seconds). */
     public static final long DEFAULT_STEP = 300L;
 
     /**
-     * If not specified in constructor, starting timestamp will be set to the
-     * current timestamp plus DEFAULT_INITIAL_SHIFT seconds (-10).
+     * If not specified in constructor, starting timestamp will be set to current timestamp plus
+     * DEFAULT_INITIAL_SHIFT seconds (-10).
      */
     public static final long DEFAULT_INITIAL_SHIFT = -10L;
 
-    /** Constant <code>DEFAULTVERSION=2</code> */
+    /** Default RRD file format version. */
     public static final int DEFAULTVERSION = 2;
 
     private URI uri;
@@ -65,11 +62,10 @@ public class RrdDef {
     private final List<ArcDef> arcDefs = new ArrayList<>();
 
     /**
-     * <p>Creates new RRD definition object with the given path.
-     * When this object is passed to
-     * <code>RrdDb</code> constructor, new RRD will be created using the
-     * specified path.</p>
-     * <p>The will be transformed internally to an URI using the default backend factory.</p>
+     * Creates new RRD definition object with the given path. When this object is passed to <code>
+     * RrdDb</code> constructor, new RRD will be created using the specified path.
+     *
+     * <p>The will be transformed internally to an URI using the default backend factory.
      *
      * @param rrdpath Path to new RRD.
      */
@@ -81,10 +77,8 @@ public class RrdDef {
     }
 
     /**
-     * Creates new RRD definition object with the given path.
-     * When this object is passed to
-     * <code>RrdDb</code> constructor, new RRD will be created using the
-     * specified path.
+     * Creates new RRD definition object with the given path. When this object is passed to <code>
+     * RrdDb</code> constructor, new RRD will be created using the specified path.
      *
      * @param uri URI to the new RRD.
      */
@@ -93,8 +87,9 @@ public class RrdDef {
     }
 
     /**
-     * <p>Creates new RRD definition object with the given path and step.</p>
-     * <p>The will be transformed internally to an URI using the default backend factory.</p>
+     * Creates new RRD definition object with the given path and step.
+     *
+     * <p>The will be transformed internally to an URI using the default backend factory.
      *
      * @param path URI to new RRD.
      * @param step RRD step.
@@ -110,7 +105,7 @@ public class RrdDef {
     /**
      * Creates new RRD definition object with the given path and step.
      *
-     * @param uri  URI to new RRD.
+     * @param uri URI to new RRD.
      * @param step RRD step.
      */
     public RrdDef(URI uri, long step) {
@@ -122,13 +117,13 @@ public class RrdDef {
     }
 
     /**
-     * <p>Creates new RRD definition object with the given path, starting timestamp
-     * and step.</p>
-     * <p>The will be transformed internally to an URI using the default backend factory.</p>
+     * Creates new RRD definition object with the given path, starting timestamp and step.
      *
-     * @param path      Path to new RRD.
+     * <p>The will be transformed internally to an URI using the default backend factory.
+     *
+     * @param path Path to new RRD.
      * @param startTime RRD starting timestamp.
-     * @param step      RRD step.
+     * @param step RRD step.
      */
     public RrdDef(String path, long startTime, long step) {
         this(path, step);
@@ -139,12 +134,11 @@ public class RrdDef {
     }
 
     /**
-     * Creates new RRD definition object with the given path, starting timestamp
-     * and step.
+     * Creates new RRD definition object with the given path, starting timestamp and step.
      *
-     * @param uri       URI to new RRD.
+     * @param uri URI to new RRD.
      * @param startTime RRD starting timestamp.
-     * @param step      RRD step.
+     * @param step RRD step.
      */
     public RrdDef(URI uri, long startTime, long step) {
         this(uri, step);
@@ -155,45 +149,44 @@ public class RrdDef {
     }
 
     /**
-     * <p>Creates new RRD definition object with the given path, starting timestamp,
-     * step and version.</p>
-     * <p>The will be transformed internally to an URI using the default backend factory.</p>
+     * Creates new RRD definition object with the given path, starting timestamp, step and version.
+     *
+     * <p>The will be transformed internally to an URI using the default backend factory.
      *
      * @param path Path to new RRD.
      * @param startTime RRD starting timestamp.
-     * @param step      RRD step.
-     * @param version   RRD's file version.
+     * @param step RRD step.
+     * @param version RRD's file version.
      */
     public RrdDef(String path, long startTime, long step, int version) {
         this(path, startTime, step);
-        if(startTime < 0) {
+        if (startTime < 0) {
             throw new IllegalArgumentException("Invalid RRD start time specified: " + startTime);
         }
         this.version = version;
     }
 
     /**
-     * Creates new RRD definition object with the given path, starting timestamp,
-     * step and version.
+     * Creates new RRD definition object with the given path, starting timestamp, step and version.
      *
-     * @param uri       URI to new RRD.
+     * @param uri URI to new RRD.
      * @param startTime RRD starting timestamp.
-     * @param step      RRD step.
-     * @param version   RRD's file version.
+     * @param step RRD step.
+     * @param version RRD's file version.
      */
     public RrdDef(URI uri, long startTime, long step, int version) {
         this(uri, startTime, step);
-        if(startTime < 0) {
+        if (startTime < 0) {
             throw new IllegalArgumentException("Invalid RRD start time specified: " + startTime);
         }
         this.version = version;
     }
 
     /**
-     * Returns path for the new RRD. It's extracted from the URI. If it's an opaque URI, it return the scheme specific part.
-     * <br>
-     * It's not a reliable way to resolve an file path. Instead, one should use <code> Paths.get(def.getUri())</code>
-     * when the URI scheme is file.
+     * Returns path for the new RRD. It's extracted from the URI. If it's an opaque URI, it return
+     * the scheme specific part. <br>
+     * It's not a reliable way to resolve an file path. Instead, one should use <code>
+     *  Paths.get(def.getUri())</code> when the URI scheme is file.
      *
      * @return path to the new RRD which should be created
      */
@@ -246,8 +239,9 @@ public class RrdDef {
     }
 
     /**
-     * <p>Sets path to RRD.</p>
-     * <p>The will be transformed internally to an URI using the default backend factory.</p>
+     * Sets path to RRD.
+     *
+     * <p>The will be transformed internally to an URI using the default backend factory.
      *
      * @param path path to new RRD.
      */
@@ -322,48 +316,53 @@ public class RrdDef {
     }
 
     /**
-     * <p>Adds single datasource to RRD definition by specifying its data source name, source type,
-     * heartbeat, minimal and maximal value. For the complete explanation of all data
-     * source definition parameters see RRDTool's
-     * <a href="../../../../man/rrdcreate.html" target="man">rrdcreate man page</a>.</p>
+     * Adds single datasource to RRD definition by specifying its data source name, source type,
+     * heartbeat, minimal and maximal value. For the complete explanation of all data source
+     * definition parameters see RRDTool's <a href="../../../../man/rrdcreate.html"
+     * target="man">rrdcreate man page</a>.
+     *
      * <p><b>IMPORTANT NOTE:</b> If datasource name ends with '!', corresponding archives will never
      * store NaNs as datasource values. In that case, NaN datasource values will be silently
-     * replaced with zeros by the framework.</p>
+     * replaced with zeros by the framework.
      *
-     * @param dsName    Data source name.
-     * @param dsType    Data source type. Valid types are "COUNTER",
-     *                  "GAUGE", "DERIVE" and "ABSOLUTE" (these string constants are conveniently defined in
-     *                  the {@link org.rrd4j.DsType} class).
+     * @param dsName Data source name.
+     * @param dsType Data source type. Valid types are "COUNTER", "GAUGE", "DERIVE" and "ABSOLUTE"
+     *     (these string constants are conveniently defined in the {@link org.rrd4j.DsType} class).
      * @param heartbeat Data source heartbeat.
-     * @param minValue  Minimal acceptable value. Use <code>Double.NaN</code> if unknown.
-     * @param maxValue  Maximal acceptable value. Use <code>Double.NaN</code> if unknown.
-     * @throws java.lang.IllegalArgumentException Thrown if new datasource definition uses already used data
-     *                                  source name.
+     * @param minValue Minimal acceptable value. Use <code>Double.NaN</code> if unknown.
+     * @param maxValue Maximal acceptable value. Use <code>Double.NaN</code> if unknown.
+     * @throws java.lang.IllegalArgumentException Thrown if new datasource definition uses already
+     *     used data source name.
      */
-    public void addDatasource(String dsName, DsType dsType, long heartbeat, double minValue, double maxValue) {
+    public void addDatasource(
+            String dsName, DsType dsType, long heartbeat, double minValue, double maxValue) {
         addDatasource(new DsDef(dsName, dsType, heartbeat, minValue, maxValue));
     }
 
     /**
-     * <p>Adds single datasource to RRD definition from a RRDTool-like
-     * datasource definition string. The string must have six elements separated with colons
-     * (:) in the following order:</p>
+     * Adds single datasource to RRD definition from a RRDTool-like datasource definition string.
+     * The string must have six elements separated with colons (:) in the following order:
+     *
      * <pre>
      * DS:name:type:heartbeat:minValue:maxValue
      * </pre>
-     * <p>For example:</p>
+     *
+     * <p>For example:
+     *
      * <pre>
      * DS:input:COUNTER:600:0:U
      * </pre>
-     * <p>For more information on datasource definition parameters see <code>rrdcreate</code>
-     * man page.</p>
+     *
+     * <p>For more information on datasource definition parameters see <code>rrdcreate</code> man
+     * page.
      *
      * @param rrdToolDsDef Datasource definition string with the syntax borrowed from RRDTool.
      * @throws java.lang.IllegalArgumentException Thrown if invalid string is supplied.
      */
     public void addDatasource(String rrdToolDsDef) {
-        IllegalArgumentException illArgException = new IllegalArgumentException(
-                "Wrong rrdtool-like datasource definition: " + rrdToolDsDef);
+        IllegalArgumentException illArgException =
+                new IllegalArgumentException(
+                        "Wrong rrdtool-like datasource definition: " + rrdToolDsDef);
 
         if (rrdToolDsDef == null) throw illArgException;
 
@@ -383,16 +382,14 @@ public class RrdDef {
         long dsHeartbeat;
         try {
             dsHeartbeat = Long.parseLong(tokens[3]);
-        }
-        catch (NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             throw illArgException;
         }
         double minValue = Double.NaN;
         if (!"U".equalsIgnoreCase(tokens[4])) {
             try {
                 minValue = Double.parseDouble(tokens[4]);
-            }
-            catch (NumberFormatException nfe) {
+            } catch (NumberFormatException nfe) {
                 throw illArgException;
             }
         }
@@ -400,8 +397,7 @@ public class RrdDef {
         if (!"U".equalsIgnoreCase(tokens[5])) {
             try {
                 maxValue = Double.parseDouble(tokens[5]);
-            }
-            catch (NumberFormatException nfe) {
+            } catch (NumberFormatException nfe) {
                 throw illArgException;
             }
         }
@@ -423,8 +419,8 @@ public class RrdDef {
      * Adds single archive definition represented with object of class <code>ArcDef</code>.
      *
      * @param arcDef Archive definition.
-     * @throws java.lang.IllegalArgumentException Thrown if archive with the same consolidation function
-     *                                  and the same number of steps is already added.
+     * @throws java.lang.IllegalArgumentException Thrown if archive with the same consolidation
+     *     function and the same number of steps is already added.
      */
     public void addArchive(ArcDef arcDef) {
         if (arcDefs.contains(arcDef)) {
@@ -437,8 +433,8 @@ public class RrdDef {
      * Adds archive definitions to RRD definition in bulk.
      *
      * @param arcDefs Array of archive definition objects
-     * @throws java.lang.IllegalArgumentException Thrown if RRD definition already contains archive with
-     *                                  the same consolidation function and the same number of steps.
+     * @throws java.lang.IllegalArgumentException Thrown if RRD definition already contains archive
+     *     with the same consolidation function and the same number of steps.
      */
     public void addArchive(ArcDef... arcDefs) {
         for (ArcDef arcDef : arcDefs) {
@@ -448,41 +444,43 @@ public class RrdDef {
 
     /**
      * Adds single archive definition by specifying its consolidation function, X-files factor,
-     * number of steps and rows. For the complete explanation of all archive
-     * definition parameters see RRDTool's
-     * <a href="../../../../man/rrdcreate.html" target="man">rrdcreate man page</a>.
+     * number of steps and rows. For the complete explanation of all archive definition parameters
+     * see RRDTool's <a href="../../../../man/rrdcreate.html" target="man">rrdcreate man page</a>.
      *
      * @param consolFun Consolidation function.
-     * @param xff       X-files factor. Valid values are between 0 and 1.
-     * @param steps     Number of archive steps
-     * @param rows      Number of archive rows
-     * @throws java.lang.IllegalArgumentException Thrown if archive with the same consolidation function
-     *                                  and the same number of steps is already added.
+     * @param xff X-files factor. Valid values are between 0 and 1.
+     * @param steps Number of archive steps
+     * @param rows Number of archive rows
+     * @throws java.lang.IllegalArgumentException Thrown if archive with the same consolidation
+     *     function and the same number of steps is already added.
      */
     public void addArchive(ConsolFun consolFun, double xff, int steps, int rows) {
         addArchive(new ArcDef(consolFun, xff, steps, rows));
     }
 
     /**
-     * <p>Adds single archive to RRD definition from a RRDTool-like
-     * archive definition string. The string must have five elements separated with colons
-     * (:) in the following order:</p>
+     * Adds single archive to RRD definition from a RRDTool-like archive definition string. The
+     * string must have five elements separated with colons (:) in the following order:
+     *
      * <pre>
      * RRA:consolidationFunction:XFilesFactor:steps:rows
      * </pre>
-     * <p>For example:</p>
+     *
+     * <p>For example:
+     *
      * <pre>
      * RRA:AVERAGE:0.5:10:1000
      * </pre>
-     * <p>For more information on archive definition parameters see <code>rrdcreate</code>
-     * man page.</p>
+     *
+     * <p>For more information on archive definition parameters see <code>rrdcreate</code> man page.
      *
      * @param rrdToolArcDef Archive definition string with the syntax borrowed from RRDTool.
      * @throws java.lang.IllegalArgumentException Thrown if invalid string is supplied.
      */
     public void addArchive(String rrdToolArcDef) {
-        IllegalArgumentException illArgException = new IllegalArgumentException(
-                "Wrong rrdtool-like archive definition: " + rrdToolArcDef);
+        IllegalArgumentException illArgException =
+                new IllegalArgumentException(
+                        "Wrong rrdtool-like archive definition: " + rrdToolArcDef);
         StringTokenizer tokenizer = new StringTokenizer(rrdToolArcDef, ":");
         if (tokenizer.countTokens() != 5) {
             throw illArgException;
@@ -498,22 +496,19 @@ public class RrdDef {
         double xff;
         try {
             xff = Double.parseDouble(tokens[2]);
-        }
-        catch (NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             throw illArgException;
         }
         int steps;
         try {
             steps = Integer.parseInt(tokens[3]);
-        }
-        catch (NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             throw illArgException;
         }
         int rows;
         try {
             rows = Integer.parseInt(tokens[4]);
-        }
-        catch (NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             throw illArgException;
         }
         addArchive(new ArcDef(consolFun, xff, steps, rows));
@@ -556,18 +551,22 @@ public class RrdDef {
     }
 
     /**
-     * Returns string that represents all specified RRD creation parameters. Returned string
-     * has the syntax of RRDTool's <code>create</code> command.
+     * Returns string that represents all specified RRD creation parameters. Returned string has the
+     * syntax of RRDTool's <code>create</code> command.
      *
      * @return Dumped content of <code>RrdDb</code> object.
      */
     public String dump() {
         StringBuilder sb = new StringBuilder("create \"");
         sb.append(uri)
-        .append("\"")
-        .append(" --version ").append(getVersion())
-        .append(" --start ").append(getStartTime())
-        .append(" --step ").append(getStep()).append(" ");
+                .append("\"")
+                .append(" --version ")
+                .append(getVersion())
+                .append(" --start ")
+                .append(getStartTime())
+                .append(" --step ")
+                .append(getStep())
+                .append(" ");
         for (DsDef dsDef : dsDefs) {
             sb.append(dsDef.dump()).append(" ");
         }
@@ -599,7 +598,8 @@ public class RrdDef {
     void removeArchive(ConsolFun consolFun, int steps) {
         ArcDef arcDef = findArchive(consolFun, steps);
         if (!arcDefs.remove(arcDef)) {
-            throw new IllegalArgumentException("Could not remove archive " + consolFun + "/" + steps);
+            throw new IllegalArgumentException(
+                    "Could not remove archive " + consolFun + "/" + steps);
         }
     }
 
@@ -613,10 +613,10 @@ public class RrdDef {
     }
 
     /**
-     * <p>Exports RrdDef object to output stream in XML format. Generated XML code can be parsed
-     * with {@link org.rrd4j.core.RrdDefTemplate} class.</p>
-     * <p>It use a format compatible with previous RRD4J's version, using
-     * a path, instead of an URI.</p>
+     * Exports RrdDef object to output stream in XML format. Generated XML code can be parsed with
+     * {@link org.rrd4j.core.RrdDefTemplate} class.
+     *
+     * <p>It use a format compatible with previous RRD4J's version, using a path, instead of an URI.
      *
      * @param out Output stream
      */
@@ -625,10 +625,11 @@ public class RrdDef {
     }
 
     /**
-     * Exports RrdDef object to output stream in XML format. Generated XML code can be parsed
-     * with {@link org.rrd4j.core.RrdDefTemplate} class.
-     * <p>If <code>compatible</code> is set to true, it returns an XML compatible with previous RRD4J's versions, using
-     * a path, instead of an URI.</p>
+     * Exports RrdDef object to output stream in XML format. Generated XML code can be parsed with
+     * {@link org.rrd4j.core.RrdDefTemplate} class.
+     *
+     * <p>If <code>compatible</code> is set to true, it returns an XML compatible with previous
+     * RRD4J's versions, using a path, instead of an URI.
      *
      * @param out Output stream
      * @param compatible Compatible with previous versions.
@@ -640,10 +641,11 @@ public class RrdDef {
     }
 
     /**
-     * Exports RrdDef object to output stream in XML format. Generated XML code can be parsed
-     * with {@link org.rrd4j.core.RrdDefTemplate} class.
-     * <p>If <code>compatible</code> is set to true, it returns an XML compatible with previous RRD4J's versions, using
-     * a path, instead of an URI.</p>
+     * Exports RrdDef object to output stream in XML format. Generated XML code can be parsed with
+     * {@link org.rrd4j.core.RrdDefTemplate} class.
+     *
+     * <p>If <code>compatible</code> is set to true, it returns an XML compatible with previous
+     * RRD4J's versions, using a path, instead of an URI.
      *
      * @param xml XML writer
      * @param compatible Compatible with previous versions.
@@ -682,11 +684,11 @@ public class RrdDef {
     }
 
     /**
-     * <p>Exports RrdDef object to string in XML format. Generated XML string can be parsed
-     * with {@link org.rrd4j.core.RrdDefTemplate} class.</p>
-     * <p>If <code>compatible</code> is set to true, it returns an XML compatible with previous RRD4J's versions, using
-     * a path, instead of an URI.</p>
+     * Exports RrdDef object to string in XML format. Generated XML string can be parsed with {@link
+     * org.rrd4j.core.RrdDefTemplate} class.
      *
+     * <p>If <code>compatible</code> is set to true, it returns an XML compatible with previous
+     * RRD4J's versions, using a path, instead of an URI.
      *
      * @param compatible Compatible with previous versions.
      * @return XML formatted string representing this RrdDef object
@@ -699,10 +701,10 @@ public class RrdDef {
     }
 
     /**
-     * <p>Exports RrdDef object to string in XML format. Generated XML string can be parsed
-     * with {@link org.rrd4j.core.RrdDefTemplate} class.</p>
-     * <p>It use a format compatible with previous RRD4J's version, using
-     * a path, instead of an URI.</p>
+     * Exports RrdDef object to string in XML format. Generated XML string can be parsed with {@link
+     * org.rrd4j.core.RrdDefTemplate} class.
+     *
+     * <p>It use a format compatible with previous RRD4J's version, using a path, instead of an URI.
      *
      * @return XML formatted string representing this RrdDef object
      */
@@ -714,10 +716,10 @@ public class RrdDef {
     }
 
     /**
-     * <p>Exports RrdDef object to a file in XML format. Generated XML code can be parsed
-     * with {@link org.rrd4j.core.RrdDefTemplate} class.</p>
-     * <p>It use a format compatible with previous RRD4J's version, using
-     * a path, instead of an URI.</p>
+     * Exports RrdDef object to a file in XML format. Generated XML code can be parsed with {@link
+     * org.rrd4j.core.RrdDefTemplate} class.
+     *
+     * <p>It use a format compatible with previous RRD4J's version, using a path, instead of an URI.
      *
      * @param filePath Path to the file
      * @throws java.io.IOException if any.
@@ -727,10 +729,11 @@ public class RrdDef {
     }
 
     /**
-     * <p>Exports RrdDef object to a file in XML format. Generated XML code can be parsed
-     * with {@link org.rrd4j.core.RrdDefTemplate} class.</p>
-     * <p>If <code>compatible</code> is set to true, it returns an XML compatible with previous RRD4J versions, using
-     * a path, instead of an URI.</p>
+     * Exports RrdDef object to a file in XML format. Generated XML code can be parsed with {@link
+     * org.rrd4j.core.RrdDefTemplate} class.
+     *
+     * <p>If <code>compatible</code> is set to true, it returns an XML compatible with previous
+     * RRD4J versions, using a path, instead of an URI.
      *
      * @param filePath Path to the file
      * @param compatible Compatible with previous versions.
@@ -743,8 +746,7 @@ public class RrdDef {
     }
 
     /**
-     * Returns the number of storage bytes required to create RRD from this
-     * RrdDef object.
+     * Returns the number of storage bytes required to create RRD from this RrdDef object.
      *
      * @return Estimated byte count of the underlying RRD storage.
      */
@@ -756,7 +758,7 @@ public class RrdDef {
             rowsCount += arcDef.getRows();
         }
         String[] dsNames = new String[dsCount];
-        for (int i = 0; i < dsNames.length ; i++) {
+        for (int i = 0; i < dsNames.length; i++) {
             dsNames[i] = dsDefs.get(i).getDsName();
         }
         return calculateSize(dsCount, arcCount, rowsCount, dsNames);
@@ -764,27 +766,31 @@ public class RrdDef {
 
     static long calculateSize(int dsCount, int arcCount, int rowsCount, String[] dsNames) {
         int postStorePayload = 0;
-        for(String n: dsNames) {
+        for (String n : dsNames) {
             if (n.length() > RrdPrimitive.STRING_LENGTH) {
                 postStorePayload += n.length() * 2 + Short.SIZE / 8;
             }
         }
-        return (24L + 48L * dsCount + 16L * arcCount +
-                20L * dsCount * arcCount + 8L * dsCount * rowsCount) +
-                (1L + 2L * dsCount + arcCount) * 2L * RrdPrimitive.STRING_LENGTH +
-                postStorePayload;
+        return (24L
+                        + 48L * dsCount
+                        + 16L * arcCount
+                        + 20L * dsCount * arcCount
+                        + 8L * dsCount * rowsCount)
+                + (1L + 2L * dsCount + arcCount) * 2L * RrdPrimitive.STRING_LENGTH
+                + postStorePayload;
     }
 
     /**
      * {@inheritDoc}
      *
-     * <p>Compares the current RrdDef with another. RrdDefs are considered equal if:</p>
+     * <p>Compares the current RrdDef with another. RrdDefs are considered equal if:
+     *
      * <ul>
-     * <li>RRD steps match
-     * <li>all datasources have exactly the same definition in both RrdDef objects (datasource names,
-     * types, heartbeat, min and max values must match)
-     * <li>all archives have exactly the same definition in both RrdDef objects (archive consolidation
-     * functions, X-file factors, step and row counts must match)
+     *   <li>RRD steps match
+     *   <li>all datasources have exactly the same definition in both RrdDef objects (datasource
+     *       names, types, heartbeat, min and max values must match)
+     *   <li>all archives have exactly the same definition in both RrdDef objects (archive
+     *       consolidation functions, X-file factors, step and row counts must match)
      * </ul>
      */
     public boolean equals(Object obj) {
@@ -847,7 +853,7 @@ public class RrdDef {
     }
 
     /**
-     * <p>hasDatasources.</p>
+     * hasDatasources.
      *
      * @return a boolean.
      */
@@ -856,7 +862,7 @@ public class RrdDef {
     }
 
     /**
-     * <p>hasArchives.</p>
+     * hasArchives.
      *
      * @return a boolean.
      */
@@ -864,18 +870,13 @@ public class RrdDef {
         return !arcDefs.isEmpty();
     }
 
-    /**
-     * Removes all datasource definitions.
-     */
+    /** Removes all datasource definitions. */
     public void removeDatasources() {
         dsDefs.clear();
     }
 
-    /**
-     * Removes all RRA archive definitions.
-     */
+    /** Removes all RRA archive definitions. */
     public void removeArchives() {
         arcDefs.clear();
     }
-
 }

@@ -1,11 +1,11 @@
 /* ===================================================
  * JFreeSVG : an SVG library for the Java(tm) platform
  * ===================================================
- * 
+ *
  * (C)opyright 2013-2020, by Object Refinery Limited.  All rights reserved.
  *
  * Project Info:  http://www.jfree.org/jfreesvg/index.html
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -18,16 +18,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+ *
+ * [Oracle and Java are registered trademarks of Oracle and/or its affiliates.
  * Other names may be trademarks of their respective owners.]
- * 
+ *
  * If you do not wish to be bound by the terms of the GPL, an alternative
  * commercial license can be purchased.  For details, please see visit the
  * JFreeSVG home page:
- * 
+ *
  * http://www.jfree.org/jfreesvg
- * 
+ *
  */
 
 package org.jfree.svg.util;
@@ -36,42 +36,38 @@ import java.awt.RadialGradientPaint;
 import java.util.Arrays;
 
 /**
- * A wrapper for a {@code RadialGradientPaint} that can be used as the key
- * for a {@code Map} (including a {@code HashMap}).  This class is 
- * used internally by {@code SVGGraphics2D} to track and re-use gradient 
- * definitions.  {@code GradientPaint} itself does not implement the 
- * {@code equals()} and {@code hashCode()} methods, so it doesn't make a good 
- * key for a {@code Map}.
+ * A wrapper for a {@code RadialGradientPaint} that can be used as the key for a {@code Map}
+ * (including a {@code HashMap}). This class is used internally by {@code SVGGraphics2D} to track
+ * and re-use gradient definitions. {@code GradientPaint} itself does not implement the {@code
+ * equals()} and {@code hashCode()} methods, so it doesn't make a good key for a {@code Map}.
  */
 public class RadialGradientPaintKey {
-    
+
     private final RadialGradientPaint paint;
-    
+
     /**
      * Creates a new instance.
-     * 
-     * @param rgp  the radial gradient paint ({@code null} not permitted).
+     *
+     * @param rgp the radial gradient paint ({@code null} not permitted).
      */
     public RadialGradientPaintKey(RadialGradientPaint rgp) {
         Args.nullNotPermitted(rgp, "rgp");
         this.paint = rgp;
     }
- 
+
     /**
-     * Returns the {@code RadialGradientPaint} that was supplied to the 
-     * constructor.
-     * 
-     * @return The {@code RadialGradientPaint} (never {@code null}). 
+     * Returns the {@code RadialGradientPaint} that was supplied to the constructor.
+     *
+     * @return The {@code RadialGradientPaint} (never {@code null}).
      */
     public RadialGradientPaint getPaint() {
         return this.paint;
     }
-    
+
     /**
      * Tests this instance for equality with an arbitrary object.
-     * 
-     * @param obj  the object to test ({@code null} permitted).
-     * 
+     *
+     * @param obj the object to test ({@code null} permitted).
      * @return A boolean.
      */
     @Override
@@ -79,7 +75,7 @@ public class RadialGradientPaintKey {
         if (obj == this) {
             return true;
         }
-        if (! (obj instanceof RadialGradientPaintKey)) {
+        if (!(obj instanceof RadialGradientPaintKey)) {
             return false;
         }
         RadialGradientPaintKey that = (RadialGradientPaintKey) obj;
@@ -98,11 +94,11 @@ public class RadialGradientPaintKey {
         }
         return true;
     }
-    
+
     /**
      * Returns a hash code for this instance.
-     * 
-     * @return A hash code. 
+     *
+     * @return A hash code.
      */
     @Override
     public int hashCode() {
@@ -114,5 +110,4 @@ public class RadialGradientPaintKey {
         hash = 47 * hash + Arrays.hashCode(this.paint.getFractions());
         return hash;
     }
-
 }

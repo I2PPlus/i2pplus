@@ -1,15 +1,20 @@
 package org.rrd4j.data;
 
+import com.tomgibara.crinch.hashing.PerfectStringHash;
+
+import org.rrd4j.core.Util;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
 
-import org.rrd4j.core.Util;
-
-import com.tomgibara.crinch.hashing.PerfectStringHash;
-
+/**
+ * Reverse Polish Notation (RPN) expression calculator.<br>
+ * Evaluates mathematical expressions on RRD data sources using RPN notation for efficient
+ * computation.
+ */
 class RpnCalculator {
     private enum Token_Symbol {
         TKN_VAR("") {
@@ -373,7 +378,7 @@ class RpnCalculator {
             }
         },
 
-        //Time and date operator
+        // Time and date operator
         TKN_STEP("STEP") {
             @Override
             void do_method(RpnCalculator c, State s) {
@@ -453,7 +458,7 @@ class RpnCalculator {
             void do_method(RpnCalculator c, State s) {
                 int n = (int) c.pop();
                 double[] array = new double[n];
-                for(int i = 0; i < n; i++) {
+                for (int i = 0; i < n; i++) {
                     array[i] = c.pop();
                 }
                 Arrays.sort(array);
@@ -467,7 +472,7 @@ class RpnCalculator {
             void do_method(RpnCalculator c, State s) {
                 int n = (int) c.pop();
                 double[] array = new double[n];
-                for(int i = 0; i < n; i++) {
+                for (int i = 0; i < n; i++) {
                     array[i] = c.pop();
                 }
                 for (int i = 0; i < n; i++) {
@@ -475,7 +480,7 @@ class RpnCalculator {
                 }
             }
         },
-        TKN_AVG("AVG"){
+        TKN_AVG("AVG") {
             @Override
             void do_method(RpnCalculator c, State s) {
                 int count = 0;
@@ -515,7 +520,7 @@ class RpnCalculator {
                  *
                  */
 
-                if ((s.slot+1) < Math.ceil(dur / c.timeStep)) {
+                if ((s.slot + 1) < Math.ceil(dur / c.timeStep)) {
                     c.push(Double.NaN);
                 } else {
                     double[] vals = c.dataProcessor.getValues(c.tokens[s.token_rpi].variable);
@@ -526,10 +531,10 @@ class RpnCalculator {
                     int start = (int) (Math.ceil(dur / c.timeStep));
                     int row = 2;
                     while ((s.slot + row) > vals.length) {
-                        row --;
+                        row--;
                     }
 
-                    for(; start > 0; start--) {
+                    for (; start > 0; start--) {
                         double val = vals[s.slot + row - start];
                         if (ignorenan || !Double.isNaN(val)) {
                             accum = Util.sum(accum, val);
@@ -563,7 +568,7 @@ class RpnCalculator {
                     multipliers[0] = c.pop();
                 } else {
                     multipliers = new double[num_shifts];
-                    for(int i = 0; i < num_shifts; i++) {
+                    for (int i = 0; i < num_shifts; i++) {
                         multipliers[i] = c.pop();
                     }
                 }
@@ -572,7 +577,7 @@ class RpnCalculator {
                 double val;
 
                 /* the info on the datasource */
-                double[] vals = c.dataProcessor.getValues(c.tokens[s.rpi-1].variable);
+                double[] vals = c.dataProcessor.getValues(c.tokens[s.rpi - 1].variable);
 
                 int locstep = (int) Math.ceil((float) locstepsize / (float) c.timeStep);
 
@@ -613,12 +618,14 @@ class RpnCalculator {
                 }
                 /* do the final calculations */
                 val = Double.NaN;
-                if (s.token.id == TKN_PREDICT) {  /* the average */
+                if (s.token.id == TKN_PREDICT) {
+                    /* the average */
                     if (count > 0) {
                         val = sum / count;
                     }
                 } else {
-                    if (count > 1) { /* the sigma case */
+                    if (count > 1) {
+                        /* the sigma case */
                         val = count * sum2 - sum * sum;
                         if (val < 0) {
                             val = Double.NaN;
@@ -629,7 +636,6 @@ class RpnCalculator {
                 }
                 c.push(val);
             }
-
         },
         TKN_PREDICTSIGMA("PREDICTSIGMA") {
             @Override
@@ -639,19 +645,21 @@ class RpnCalculator {
         };
 
         public final String token_string;
+
         Token_Symbol(String token_string) {
             this.token_string = token_string;
         }
+
         abstract void do_method(RpnCalculator c, State s);
     }
 
     private static final Token_Symbol[] symbols;
     private static final PerfectStringHash perfect;
-    static
-    {
+
+    static {
         List<String> tokenStrings = new ArrayList<>(Token_Symbol.values().length);
-        for(Token_Symbol s: Token_Symbol.values()) {
-            if(! s.token_string.isEmpty()) {
+        for (Token_Symbol s : Token_Symbol.values()) {
+            if (!s.token_string.isEmpty()) {
                 tokenStrings.add(s.token_string);
             }
         }
@@ -659,9 +667,9 @@ class RpnCalculator {
         String[] array = tokenStrings.toArray(new String[0]);
         perfect = new PerfectStringHash(array);
         symbols = new Token_Symbol[tokenStrings.size()];
-        for(Token_Symbol s: Token_Symbol.values()) {
+        for (Token_Symbol s : Token_Symbol.values()) {
             int hash = perfect.hashAsInt(s.token_string);
-            if(hash >= 0) {
+            if (hash >= 0) {
                 symbols[hash] = s;
             }
         }
@@ -696,24 +704,21 @@ class RpnCalculator {
     private Token createToken(String parsedText) {
         Token token;
         int hash = perfect.hashAsInt(parsedText);
-        if (hash >= 0 ){
+        if (hash >= 0) {
             token = new Token(symbols[hash]);
-        }
-        else if (parsedText.equals("PREV")) {
+        } else if (parsedText.equals("PREV")) {
             token = new Token(Token_Symbol.TKN_PREV, sourceName, calculatedValues);
-        }
-        else if (parsedText.startsWith("PREV(") && parsedText.endsWith(")")) {
+        } else if (parsedText.startsWith("PREV(") && parsedText.endsWith(")")) {
             String variable = parsedText.substring(5, parsedText.length() - 1);
             token = new Token(Token_Symbol.TKN_PREV, variable, dataProcessor.getValues(variable));
-        }
-        else if (Util.isDouble(parsedText)) {
+        } else if (Util.isDouble(parsedText)) {
             token = new Token(Token_Symbol.TKN_NUM, Util.parseDouble(parsedText));
-        }
-        else if (sourcesNames.contains(parsedText)){
-            token = new Token(Token_Symbol.TKN_VAR, parsedText, dataProcessor.getValues(parsedText));
-        }
-        else {
-            throw new IllegalArgumentException("Unexpected RPN token encountered: " +  parsedText);
+        } else if (sourcesNames.contains(parsedText)) {
+            token =
+                    new Token(
+                            Token_Symbol.TKN_VAR, parsedText, dataProcessor.getValues(parsedText));
+        } else {
+            throw new IllegalArgumentException("Unexpected RPN token encountered: " + parsedText);
         }
         return token;
     }
@@ -724,7 +729,7 @@ class RpnCalculator {
             resetStack();
             s.rpi = 0;
             s.token_rpi = -1;
-            for (Token token: tokens) {
+            for (Token token : tokens) {
                 s.token = token;
                 s.slot = slot;
                 token.id.do_method(this, s);
@@ -733,8 +738,11 @@ class RpnCalculator {
             calculatedValues[slot] = pop();
             // check if stack is empty only on the first try
             if (slot == 0 && !isStackEmpty()) {
-                throw new IllegalArgumentException("Stack not empty at the end of calculation. " +
-                        "Probably bad RPN expression [" + rpnExpression + "]");
+                throw new IllegalArgumentException(
+                        "Stack not empty at the end of calculation. "
+                                + "Probably bad RPN expression ["
+                                + rpnExpression
+                                + "]");
             }
         }
         return calculatedValues;
@@ -772,7 +780,8 @@ class RpnCalculator {
 
         void push(double x) {
             if (pos >= MAX_STACK_SIZE) {
-                throw new IllegalArgumentException("PUSH failed, RPN stack full [" + MAX_STACK_SIZE + "]");
+                throw new IllegalArgumentException(
+                        "PUSH failed, RPN stack full [" + MAX_STACK_SIZE + "]");
             }
             stack[pos++] = x;
         }
@@ -805,6 +814,7 @@ class RpnCalculator {
         private int rpi;
         Token token;
         int slot;
+
         TimeZone getTimeZone() {
             return RpnCalculator.this.dataProcessor.getTimeZone();
         }
@@ -815,18 +825,21 @@ class RpnCalculator {
         final double number;
         final String variable;
         final double[] values;
+
         Token(Token_Symbol id) {
             this.id = id;
             this.values = null;
             this.variable = "";
             this.number = Double.NaN;
         }
+
         Token(Token_Symbol id, String variable, double[] values) {
             this.id = id;
             this.variable = variable;
             this.values = values;
             this.number = Double.NaN;
         }
+
         Token(Token_Symbol id, double number) {
             this.id = id;
             this.values = null;

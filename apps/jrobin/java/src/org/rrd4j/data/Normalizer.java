@@ -4,6 +4,11 @@ import org.rrd4j.core.Util;
 
 import java.util.Arrays;
 
+/**
+ * Normalizes RRD data timestamps and values to consistent intervals.<br>
+ * Handles alignment of time-series data to ensure regular sampling intervals and proper
+ * chronological ordering.
+ */
 class Normalizer {
     private final long[] timestamps;
     final int count;
@@ -42,8 +47,7 @@ class Normalizer {
                     if (t1 < t2) {
                         values[fillSeg] = Util.sum(values[fillSeg], (t2 - t1) * rawValues[rawSeg]);
                         weights[fillSeg] = Util.sum(weights[fillSeg], (t2 - t1));
-                    }
-                    else {
+                    } else {
                         overlap = false;
                     }
                 }

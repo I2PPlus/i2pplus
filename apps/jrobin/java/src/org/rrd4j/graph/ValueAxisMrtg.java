@@ -4,6 +4,10 @@ import org.rrd4j.core.Util;
 
 import java.awt.*;
 
+/**
+ * Represents MRTG-style value axis (y-axis) in RRD graphs. Provides MRTG-compatible axis formatting
+ * with quadrant-based scaling.
+ */
 class ValueAxisMrtg extends Axis {
 
     private final ImageParameters im;
@@ -41,12 +45,23 @@ class ValueAxisMrtg extends Axis {
         int xLeft = im.xorigin;
         int xRight = im.xorigin + im.xsize;
         String labfmt;
-        if (im.scaledstep / im.magfact * Math.max(Math.abs(im.quadrant), Math.abs(4 - im.quadrant)) <= 1.0) {
+        if (im.scaledstep / im.magfact * Math.max(Math.abs(im.quadrant), Math.abs(4 - im.quadrant))
+                <= 1.0) {
             labfmt = "%5.2f";
-        }
-        else {
+        } else {
             double scaledStepRatio = im.scaledstep / im.magfact;
-            labfmt = Util.sprintf(gdef.locale, "%%4.%df", 1 - ((scaledStepRatio > 10.0 || Math.abs(Math.ceil(scaledStepRatio) - scaledStepRatio) < 1e-10) ? 1 : 0));
+            labfmt =
+                    Util.sprintf(
+                            gdef.locale,
+                            "%%4.%df",
+                            1
+                                    - ((scaledStepRatio > 10.0
+                                                    || Math.abs(
+                                                                    Math.ceil(scaledStepRatio)
+                                                                            - scaledStepRatio)
+                                                            < 1e-10)
+                                            ? 1
+                                            : 0));
         }
         if (im.symbol != ' ' || gdef.unit != null) {
             labfmt += " ";
@@ -60,9 +75,18 @@ class ValueAxisMrtg extends Axis {
         for (int i = 0; i <= 4; i++) {
             int y = im.yorigin - im.ysize * i / 4;
             if (y >= im.yorigin - im.ysize && y <= im.yorigin) {
-                String graph_label = Util.sprintf(gdef.locale, labfmt, im.scaledstep / im.magfact * (i - im.quadrant));
+                String graph_label =
+                        Util.sprintf(
+                                gdef.locale,
+                                labfmt,
+                                im.scaledstep / im.magfact * (i - im.quadrant));
                 int length = (int) (worker.getStringWidth(graph_label, font));
-                worker.drawString(graph_label, xLeft - length - PADDING_VLABEL, y + labelOffset, font, fontColor);
+                worker.drawString(
+                        graph_label,
+                        xLeft - length - PADDING_VLABEL,
+                        y + labelOffset,
+                        font,
+                        fontColor);
                 if (gdef.drawTicks()) {
                     worker.drawLine(xLeft - 2, y, xLeft + 2, y, mGridColor, gdef.tickStroke);
                     worker.drawLine(xRight - 2, y, xRight + 2, y, mGridColor, gdef.tickStroke);
@@ -72,5 +96,4 @@ class ValueAxisMrtg extends Axis {
         }
         return true;
     }
-
 }

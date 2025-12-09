@@ -1,11 +1,11 @@
 /* ===================================================
  * JFreeSVG : an SVG library for the Java(tm) platform
  * ===================================================
- * 
+ *
  * (C)opyright 2013-2020, by Object Refinery Limited.  All rights reserved.
  *
  * Project Info:  http://www.jfree.org/jfreesvg/index.html
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -18,16 +18,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+ *
+ * [Oracle and Java are registered trademarks of Oracle and/or its affiliates.
  * Other names may be trademarks of their respective owners.]
- * 
+ *
  * If you do not wish to be bound by the terms of the GPL, an alternative
  * commercial license can be purchased.  For details, please see visit the
  * JFreeSVG home page:
- * 
+ *
  * http://www.jfree.org/jfreesvg
- * 
+ *
  */
 
 package org.jfree.svg.util;
@@ -35,43 +35,39 @@ package org.jfree.svg.util;
 import java.awt.GradientPaint;
 
 /**
- * A wrapper for a {@code GradientPaint} that can be used as the key for 
- * a {@code Map} (including a {@code HashMap}).  This class is used 
- * internally by {@code SVGGraphics2D} to track and re-use gradient 
- * definitions.  {@code GradientPaint} itself does not implement the 
- * equals() and hashCode() methods, so it doesn't make a good key for a 
- * {@code Map}.
+ * A wrapper for a {@code GradientPaint} that can be used as the key for a {@code Map} (including a
+ * {@code HashMap}). This class is used internally by {@code SVGGraphics2D} to track and re-use
+ * gradient definitions. {@code GradientPaint} itself does not implement the equals() and hashCode()
+ * methods, so it doesn't make a good key for a {@code Map}.
  */
 public final class GradientPaintKey {
 
     private final GradientPaint paint;
-    
+
     /**
      * Creates a new instance based on the specified {@code paint}.
-     * 
-     * @param paint  the paint ({@code null} not permitted). 
+     *
+     * @param paint the paint ({@code null} not permitted).
      */
     public GradientPaintKey(GradientPaint paint) {
         Args.nullNotPermitted(paint, "paint");
         this.paint = paint;
     }
-    
+
     /**
-     * Returns the {@code GradientPaint} that was supplied to the 
-     * constructor.
-     * 
-     * @return The {@code GradientPaint} (never {@code null}). 
+     * Returns the {@code GradientPaint} that was supplied to the constructor.
+     *
+     * @return The {@code GradientPaint} (never {@code null}).
      */
     public GradientPaint getPaint() {
         return this.paint;
     }
-    
+
     /**
      * Checks this instance for equality with an arbitrary object.
-     * 
-     * @param obj  the object to test against ({@code null} permitted).
-     * 
-     * @return A boolean. 
+     *
+     * @param obj the object to test against ({@code null} permitted).
+     * @return A boolean.
      */
     @Override
     public boolean equals(Object obj) {
@@ -107,8 +103,8 @@ public final class GradientPaintKey {
 
     /**
      * Returns a hash code for this instance.
-     * 
-     * @return A hash code. 
+     *
+     * @return A hash code.
      */
     @Override
     public int hashCode() {
@@ -119,5 +115,4 @@ public final class GradientPaintKey {
         hash = 47 * hash + this.paint.getColor2().hashCode();
         return hash;
     }
-
 }

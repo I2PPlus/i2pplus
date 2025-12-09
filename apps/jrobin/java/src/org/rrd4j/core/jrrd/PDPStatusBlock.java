@@ -13,7 +13,11 @@ public class PDPStatusBlock {
     final String lastReading;
     final int unknownSeconds;
     final double value;
-    private enum pdp_par_en {PDP_unkn_sec_cnt, PDP_val}
+
+    private enum pdp_par_en {
+        PDP_unkn_sec_cnt,
+        PDP_val
+    }
 
     PDPStatusBlock(RRDFile file) {
 
@@ -45,8 +49,7 @@ public class PDPStatusBlock {
     }
 
     /**
-     * Returns the number of seconds of the current primary data point is
-     * unknown data.
+     * Returns the number of seconds of the current primary data point is unknown data.
      *
      * @return the number of seconds of the current primary data point is unknown data.
      */

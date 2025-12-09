@@ -5,7 +5,6 @@ package org.rrd4j.core;
  *
  * @author Fabrice Bacchella
  * @since 3.4
- *
  */
 public class RrdBackendException extends RrdException {
 
@@ -16,5 +15,4 @@ public class RrdBackendException extends RrdException {
     public RrdBackendException(String message, Throwable cause) {
         super(message, cause);
     }
-
 }

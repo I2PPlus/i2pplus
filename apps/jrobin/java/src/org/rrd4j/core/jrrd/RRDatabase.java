@@ -1,5 +1,7 @@
 package org.rrd4j.core.jrrd;
 
+import org.rrd4j.core.RrdException;
+
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
@@ -14,12 +16,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.rrd4j.core.RrdException;
-
 /**
- * Instances of this class model
- * <a href="http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/">Round Robin Database</a>
- * (RRD) files.
+ * Instances of this class model <a href="http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/">Round
+ * Robin Database</a> (RRD) files.
  *
  * @author <a href="mailto:ciaran@codeloop.com">Ciaran Treanor</a>
  * @version $Revision: 1.1 $
@@ -33,8 +32,10 @@ public class RRDatabase implements Closeable {
     final Header header;
     private final ArrayList<DataSource> dataSources;
     private final ArrayList<Archive> archives;
+
     /** Timestamp of last data modification */
     final Date lastUpdate;
+
     /** Data source name to index */
     private final Map<String, Integer> nameindex;
 
@@ -123,7 +124,7 @@ public class RRDatabase implements Closeable {
     }
 
     /**
-     * <p>getDataSourcesName.</p>
+     * getDataSourcesName.
      *
      * @return a {@link java.util.Set} object.
      */
@@ -132,9 +133,8 @@ public class RRDatabase implements Closeable {
     }
 
     /**
-     * Returns the date this database was last updated. To convert this date to
-     * the form returned by <code>rrdtool last</code> call Date.getTime() and
-     * divide the result by 1000.
+     * Returns the date this database was last updated. To convert this date to the form returned by
+     * <code>rrdtool last</code> call Date.getTime() and divide the result by 1000.
      *
      * @return the date this database was last updated.
      */
@@ -172,7 +172,7 @@ public class RRDatabase implements Closeable {
     }
 
     /**
-     * <p>getArchive.</p>
+     * getArchive.
      *
      * @param name a {@link java.lang.String} object.
      * @return a {@link org.rrd4j.core.jrrd.Archive} object.
@@ -200,13 +200,10 @@ public class RRDatabase implements Closeable {
     }
 
     /**
-     * Returns an iterator over the archives in this database of the given type
-     * in proper sequence.
+     * Returns an iterator over the archives in this database of the given type in proper sequence.
      *
-     * @param type the consolidation function that should have been applied to
-     *             the data.
-     * @return an iterator over the archives in this database of the given type
-     *         in proper sequence.
+     * @param type the consolidation function that should have been applied to the data.
+     * @return an iterator over the archives in this database of the given type in proper sequence.
      */
     public Iterator<Archive> getArchives(ConsolidationFunctionType type) {
         return getArchiveList(type).iterator();
@@ -235,9 +232,8 @@ public class RRDatabase implements Closeable {
     }
 
     /**
-     * Outputs the header information of the database to the given print stream
-     * using the default number format. The default format for <code>double</code>
-     * is 0.0000000000E0.
+     * Outputs the header information of the database to the given print stream using the default
+     * number format. The default format for <code>double</code> is 0.0000000000E0.
      *
      * @param s the PrintStream to print the header information to.
      */
@@ -249,15 +245,14 @@ public class RRDatabase implements Closeable {
     }
 
     /**
-     * Returns data from the database corresponding to the given consolidation
-     * function and a step size of 1.
+     * Returns data from the database corresponding to the given consolidation function and a step
+     * size of 1.
      *
-     * @param type the consolidation function that should have been applied to
-     *             the data.
+     * @param type the consolidation function that should have been applied to the data.
      * @return the raw data.
-     * @throws java.lang.IllegalArgumentException if there was a problem locating a data archive with
-     *                                  the requested consolidation function.
-     * @throws java.io.IOException              if there was a problem reading data from the database.
+     * @throws java.lang.IllegalArgumentException if there was a problem locating a data archive
+     *     with the requested consolidation function.
+     * @throws java.io.IOException if there was a problem reading data from the database.
      */
     public DataChunk getData(ConsolidationFunctionType type) throws IOException {
         Calendar endCal = Calendar.getInstance();
@@ -272,20 +267,19 @@ public class RRDatabase implements Closeable {
     }
 
     /**
-     * Returns data from the database corresponding to the given consolidation
-     * function.
+     * Returns data from the database corresponding to the given consolidation function.
      *
-     * @param type the consolidation function that should have been applied to
-     *             the data.
+     * @param type the consolidation function that should have been applied to the data.
      * @param step the step size to use.
      * @return the raw data.
-     * @throws java.lang.IllegalArgumentException if there was a problem locating a data archive with
-     *                                  the requested consolidation function.
-     * @throws java.io.IOException              if there was a problem reading data from the database.
+     * @throws java.lang.IllegalArgumentException if there was a problem locating a data archive
+     *     with the requested consolidation function.
+     * @throws java.io.IOException if there was a problem reading data from the database.
      * @param startDate a {@link java.util.Date} object.
      * @param endDate a {@link java.util.Date} object.
      */
-    public DataChunk getData(ConsolidationFunctionType type, Date startDate, Date endDate, long step)
+    public DataChunk getData(
+            ConsolidationFunctionType type, Date startDate, Date endDate, long step)
             throws IOException {
         long end = endDate.getTime() / 1000;
         long start = startDate.getTime() / 1000;
@@ -293,7 +287,7 @@ public class RRDatabase implements Closeable {
     }
 
     /**
-     * <p>getData.</p>
+     * getData.
      *
      * @param type a {@link org.rrd4j.core.jrrd.ConsolidationFunctionType} object.
      * @param startTime seconds since epoch
@@ -302,14 +296,15 @@ public class RRDatabase implements Closeable {
      * @return a {@link org.rrd4j.core.jrrd.DataChunk} object.
      * @throws java.io.IOException if any.
      */
-    public DataChunk getData(ConsolidationFunctionType type, long startTime, long endTime, long stepSeconds)
+    public DataChunk getData(
+            ConsolidationFunctionType type, long startTime, long endTime, long stepSeconds)
             throws IOException {
 
         ArrayList<Archive> possibleArchives = getArchiveList(type);
 
         if (possibleArchives.size() == 0) {
-            throw new IllegalArgumentException("Database does not contain an Archive of consolidation function type "
-                    + type);
+            throw new IllegalArgumentException(
+                    "Database does not contain an Archive of consolidation function type " + type);
         }
 
         Archive archive = findBestArchive(startTime, endTime, stepSeconds, possibleArchives);
@@ -336,8 +331,15 @@ public class RRDatabase implements Closeable {
         int startOffset = (int) ((startTime - archiveStartTime) / stepSeconds);
         int endOffset = (int) ((archiveEndTime - endTime) / stepSeconds);
 
-        DataChunk chunk = new DataChunk(nameindex, startTime, startOffset, endOffset,
-                stepSeconds, header.dsCount, rows);
+        DataChunk chunk =
+                new DataChunk(
+                        nameindex,
+                        startTime,
+                        startOffset,
+                        endOffset,
+                        stepSeconds,
+                        header.dsCount,
+                        rows);
 
         archive.loadData(chunk);
 
@@ -348,8 +350,7 @@ public class RRDatabase implements Closeable {
      * This is almost a verbatim copy of the original C code by Tobias Oetiker.
      * I need to put more of a Java style on it - CT
      */
-    private Archive findBestArchive(long start, long end, long step,
-            ArrayList<Archive> archives) {
+    private Archive findBestArchive(long start, long end, long step, ArrayList<Archive> archives) {
 
         Archive archive = null;
         Archive bestFullArchive = null;
@@ -364,15 +365,11 @@ public class RRDatabase implements Closeable {
         for (Archive archive1 : archives) {
             archive = archive1;
 
-            long calEnd = lastUpdateLong
-                    - (lastUpdateLong
-                            % (archive.pdpCount * header.pdpStep));
-            long calStart = calEnd
-                    - (archive.pdpCount * archive.rowCount
-                            * header.pdpStep);
+            long calEnd = lastUpdateLong - (lastUpdateLong % (archive.pdpCount * header.pdpStep));
+            long calStart = calEnd - (archive.pdpCount * archive.rowCount * header.pdpStep);
             long fullMatch = end - start;
 
-            if ((calEnd >= end) && (calStart < start)) {    // Best full match
+            if ((calEnd >= end) && (calStart < start)) { // Best full match
                 tmpStepDiff = Math.abs(step - (header.pdpStep * archive.pdpCount));
 
                 if ((firstFull != 0) || (tmpStepDiff < bestStepDiff)) {
@@ -380,8 +377,7 @@ public class RRDatabase implements Closeable {
                     bestStepDiff = tmpStepDiff;
                     bestFullArchive = archive;
                 }
-            }
-            else {                                        // Best partial match
+            } else { // Best partial match
                 long tmpMatch = fullMatch;
 
                 if (calStart > start) {
@@ -404,8 +400,7 @@ public class RRDatabase implements Closeable {
         // optimize this
         if (firstFull == 0) {
             archive = bestFullArchive;
-        }
-        else if (firstPart == 0) {
+        } else if (firstPart == 0) {
             archive = bestPartialArchive;
         }
 
@@ -413,12 +408,12 @@ public class RRDatabase implements Closeable {
     }
 
     /**
-     * Outputs the header information of the database to the given print stream
-     * using the given number format. The format is almost identical to that
-     * produced by
-     * <a href="http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/manual/rrdinfo.html">rrdtool info</a>
+     * Outputs the header information of the database to the given print stream using the given
+     * number format. The format is almost identical to that produced by <a
+     * href="http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/manual/rrdinfo.html">rrdtool
+     * info</a>
      *
-     * @param s            the PrintStream to print the header information to.
+     * @param s the PrintStream to print the header information to.
      * @param numberFormat the format to print <code>double</code>s as.
      */
     public void printInfo(PrintStream s, NumberFormat numberFormat) {
@@ -446,11 +441,13 @@ public class RRDatabase implements Closeable {
     }
 
     /**
-     * Outputs the content of the database to the given print stream
-     * as a stream of XML. The XML format is almost identical to that produced by
-     * <a href="http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/manual/rrddump.html">rrdtool dump</a>
-     * <p>
-     * A flush is issued at the end of the XML generation, so auto flush of the PrintStream can be set to false
+     * Outputs the content of the database to the given print stream as a stream of XML. The XML
+     * format is almost identical to that produced by <a
+     * href="http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/manual/rrddump.html">rrdtool
+     * dump</a>
+     *
+     * <p>A flush is issued at the end of the XML generation, so auto flush of the PrintStream can
+     * be set to false
      *
      * @param s the PrintStream to send the XML to.
      */
@@ -500,19 +497,16 @@ public class RRDatabase implements Closeable {
     public String toString() {
 
         String endianness;
-        if(rrdFile.isBigEndian())
-            endianness = "Big";
-        else
-            endianness = "Little";
+        if (rrdFile.isBigEndian()) endianness = "Big";
+        else endianness = "Little";
 
-
-        StringBuilder sb = new StringBuilder(endianness + " endian" + ", " + rrdFile.getBits() + " bits\n");
+        StringBuilder sb =
+                new StringBuilder(endianness + " endian" + ", " + rrdFile.getBits() + " bits\n");
 
         sb.append(header.toString());
 
         sb.append(", lastupdate: ");
         sb.append(lastUpdate.getTime() / 1000);
-
 
         for (DataSource ds : dataSources) {
             sb.append("\n\t");

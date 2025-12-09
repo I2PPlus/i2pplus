@@ -1,17 +1,20 @@
 /**
- * <p>This package provides read-only access to natives RRD file.</p>
+ * This package provides read-only access to natives RRD file. Currently this can read RRD files
+ * that were generated big or little endian machines, 32 or 64 bits word, and 4 or 8 bytes
+ * alignment. So it's know to work on a least
  *
- * Currently this can read RRD files that were generated big or little endian machines, 32 or 64 bits word, and 4 or 8 bytes alignment.
- * So it's know to work on a least
  * <ul>
- * <li> x86 Linux
- * <li> x86_64 Linux
- * <li> x86_64 Solaris
- * <li> sparc v8 (32 bits) Solaris
- * <li> sparc v9 (64 bits) Solaris
+ *   <li>x86 Linux
+ *   <li>x86_64 Linux
+ *   <li>x86_64 Solaris
+ *   <li>sparc v8 (32 bits) Solaris
+ *   <li>sparc v9 (64 bits) Solaris
  * </ul>
- * <p>But it should work on other environments too.</p>
- * <p>Typical usage:</p>
+ *
+ * <p>But it should work on other environments too.
+ *
+ * <p>Typical usage:
+ *
  * <pre>
  * RRDatabase db = new RRDatabase("native.rrd");
  * RrdGraphDef() gd = RrdGraphDef();

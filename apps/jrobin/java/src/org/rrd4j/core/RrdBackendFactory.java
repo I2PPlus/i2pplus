@@ -20,63 +20,63 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /**
- * Base (abstract) backend factory class which holds references to all concrete
- * backend factories and defines abstract methods which must be implemented in
- * all concrete factory implementations.
- * <p>
+ * Base (abstract) backend factory class which holds references to all concrete backend factories
+ * and defines abstract methods which must be implemented in all concrete factory implementations.
  *
- * Factory classes are used to create concrete {@link org.rrd4j.core.RrdBackend} implementations.
+ * <p>Factory classes are used to create concrete {@link org.rrd4j.core.RrdBackend} implementations.
  * Each factory creates unlimited number of specific backend objects.
- * <p>
- * Rrd4j supports six different backend types (backend factories) out of the box:
+ *
+ * <p>Rrd4j supports six different backend types (backend factories) out of the box:
+ *
  * <ul>
- * <li>{@link org.rrd4j.core.RrdRandomAccessFileBackend}: objects of this class are created from the
- * {@link org.rrd4j.core.RrdRandomAccessFileBackendFactory} class. This was the default backend used in all
- * Rrd4j releases before 1.4.0 release. It uses java.io.* package and RandomAccessFile class to store
- * RRD data in files on the disk.
- *
- * <li>{@link org.rrd4j.core.RrdSafeFileBackend}: objects of this class are created from the
- * {@link org.rrd4j.core.RrdSafeFileBackendFactory} class. It uses java.io.* package and RandomAccessFile class to store
- * RRD data in files on the disk. This backend is SAFE:
- * it locks the underlying RRD file during update/fetch operations, and caches only static
- * parts of a RRD file in memory. Therefore, this backend is safe to be used when RRD files should
- * be shared <b>between several JVMs</b> at the same time. However, this backend is *slow* since it does
- * not use fast java.nio.* package (it's still based on the RandomAccessFile class).
- *
- * <li>{@link org.rrd4j.core.RrdNioBackend}: objects of this class are created from the
- * {@link org.rrd4j.core.RrdNioBackendFactory} class. The backend uses java.io.* and java.nio.*
- * classes (mapped ByteBuffer) to store RRD data in files on the disk. This is the default backend
- * since 1.4.0 release.
- *
- * <li>{@link org.rrd4j.core.RrdMemoryBackend}: objects of this class are created from the
- * {@link org.rrd4j.core.RrdMemoryBackendFactory} class. This backend stores all data in memory. Once
- * JVM exits, all data gets lost. The backend is extremely fast and memory hungry.
- *
+ *   <li>{@link org.rrd4j.core.RrdRandomAccessFileBackend}: objects of this class are created from
+ *       the {@link org.rrd4j.core.RrdRandomAccessFileBackendFactory} class. This was the default
+ *       backend used in all Rrd4j releases before 1.4.0 release. It uses java.io.* package and
+ *       RandomAccessFile class to store RRD data in files on the disk.
+ *   <li>{@link org.rrd4j.core.RrdSafeFileBackend}: objects of this class are created from the
+ *       {@link org.rrd4j.core.RrdSafeFileBackendFactory} class. It uses java.io.* package and
+ *       RandomAccessFile class to store RRD data in files on the disk. This backend is SAFE: it
+ *       locks the underlying RRD file during update/fetch operations, and caches only static parts
+ *       of a RRD file in memory. Therefore, this backend is safe to be used when RRD files should
+ *       be shared <b>between several JVMs</b> at the same time. However, this backend is *slow*
+ *       since it does not use fast java.nio.* package (it's still based on the RandomAccessFile
+ *       class).
+ *   <li>{@link org.rrd4j.core.RrdNioBackend}: objects of this class are created from the {@link
+ *       org.rrd4j.core.RrdNioBackendFactory} class. The backend uses java.io.* and java.nio.*
+ *       classes (mapped ByteBuffer) to store RRD data in files on the disk. This is the default
+ *       backend since 1.4.0 release.
+ *   <li>{@link org.rrd4j.core.RrdMemoryBackend}: objects of this class are created from the {@link
+ *       org.rrd4j.core.RrdMemoryBackendFactory} class. This backend stores all data in memory. Once
+ *       JVM exits, all data gets lost. The backend is extremely fast and memory hungry.
  * </ul>
- * <p>
- * Each backend factory used to be identified by its {@link #getName() name}. Constructors
- * are provided in the {@link org.rrd4j.core.RrdDb} class to create RrdDb objects (RRD databases)
- * backed with a specific backend.
- * <p>
- * A more generic management was added in version 3.2 that allows multiple instances of a backend to be used. Each backend can
- * manage custom URL. They are tried in the declared order by the {@link #setActiveFactories(RrdBackendFactory...)} or
- * {@link #addFactories(RrdBackendFactory...)} and the method {@link #canStore(URI)} return true when it can manage the given
- * URI. Using {@link #setActiveFactories(RrdBackendFactory...)} with new created instance is the preferred way to manage factories, as
- * it provides a much precise control of creation and end of life of factories.
- * <p>
- * Since 3.4, using only {@link #setActiveFactories(RrdBackendFactory...)} and {@link #addActiveFactories(RrdBackendFactory...)} will not register any
- * named backend at all. {@link #getDefaultFactory()} will return the first active factory. All methods using named backend and the registry of factory were deprecated.
- * <p>
- * For default implementation, the path is separated in a root URI prefix and the path components. The root URI can be
- * used to identify different name spaces or just be `/`.
- * <p>
- * See javadoc for {@link org.rrd4j.core.RrdBackend} to find out how to create your custom backends.
  *
+ * <p>Each backend factory used to be identified by its {@link #getName() name}. Constructors are
+ * provided in the {@link org.rrd4j.core.RrdDb} class to create RrdDb objects (RRD databases) backed
+ * with a specific backend.
+ *
+ * <p>A more generic management was added in version 3.2 that allows multiple instances of a backend
+ * to be used. Each backend can manage custom URL. They are tried in the declared order by the
+ * {@link #setActiveFactories(RrdBackendFactory...)} or {@link #addFactories(RrdBackendFactory...)}
+ * and the method {@link #canStore(URI)} return true when it can manage the given URI. Using {@link
+ * #setActiveFactories(RrdBackendFactory...)} with new created instance is the preferred way to
+ * manage factories, as it provides a much precise control of creation and end of life of factories.
+ *
+ * <p>Since 3.4, using only {@link #setActiveFactories(RrdBackendFactory...)} and {@link
+ * #addActiveFactories(RrdBackendFactory...)} will not register any named backend at all. {@link
+ * #getDefaultFactory()} will return the first active factory. All methods using named backend and
+ * the registry of factory were deprecated.
+ *
+ * <p>For default implementation, the path is separated in a root URI prefix and the path
+ * components. The root URI can be used to identify different name spaces or just be `/`.
+ *
+ * <p>See javadoc for {@link org.rrd4j.core.RrdBackend} to find out how to create your custom
+ * backends.
  */
 public abstract class RrdBackendFactory implements Closeable {
 
     private static final class Registry {
         private static final Map<String, RrdBackendFactory> factories = new HashMap<>();
+
         static {
             RrdRandomAccessFileBackendFactory fileFactory = new RrdRandomAccessFileBackendFactory();
             factories.put(fileFactory.name, fileFactory);
@@ -88,13 +88,12 @@ public abstract class RrdBackendFactory implements Closeable {
             factories.put(safeFactory.name, safeFactory);
             defaultFactory = factories.get(DEFAULTFACTORY);
         }
+
         private static final RrdBackendFactory defaultFactory;
     }
 
-    /**
-     * The default factory type. It will also put in the active factories list.
-     *
-     */
+    /** The default factory type. It will also put in the active factories list. */
+    /** Default backend factory name. */
     public static final String DEFAULTFACTORY = "NIO";
 
     private static final List<RrdBackendFactory> activeFactories = new ArrayList<>();
@@ -103,22 +102,22 @@ public abstract class RrdBackendFactory implements Closeable {
      * Returns backend factory for the given backend factory name.
      *
      * @param name Backend factory name. Initially supported names are:
-     *             <ul>
-     *             <li><b>FILE</b>: Default factory which creates backends based on the
-     *             java.io.* package. RRD data is stored in files on the disk
-     *             <li><b>SAFE</b>: Default factory which creates backends based on the
-     *             java.io.* package. RRD data is stored in files on the disk. This backend
-     *             is "safe". Being safe means that RRD files can be safely shared between
-     *             several JVM's.
-     *             <li><b>NIO</b>: Factory which creates backends based on the
-     *             java.nio.* package. RRD data is stored in files on the disk
-     *             <li><b>MEMORY</b>: Factory which creates memory-oriented backends.
-     *             RRD data is stored in memory, it gets lost as soon as JVM exits.
-     *             <li><b>BERKELEY</b>: a memory-oriented backend that ensure persistent
-     *             in a <a href="http://www.oracle.com/technetwork/database/berkeleydb/overview/index-093405.html">Berkeley Db</a> storage.
-     *             <li><b>MONGODB</b>: a memory-oriented backend that ensure persistent
-     *             in a <a href="http://www.mongodb.org/">MongoDB</a> storage.
-     *             </ul>
+     *     <ul>
+     *       <li><b>FILE</b>: Default factory which creates backends based on the java.io.* package.
+     *           RRD data is stored in files on the disk
+     *       <li><b>SAFE</b>: Default factory which creates backends based on the java.io.* package.
+     *           RRD data is stored in files on the disk. This backend is "safe". Being safe means
+     *           that RRD files can be safely shared between several JVM's.
+     *       <li><b>NIO</b>: Factory which creates backends based on the java.nio.* package. RRD
+     *           data is stored in files on the disk
+     *       <li><b>MEMORY</b>: Factory which creates memory-oriented backends. RRD data is stored
+     *           in memory, it gets lost as soon as JVM exits.
+     *       <li><b>BERKELEY</b>: a memory-oriented backend that ensure persistent in a <a
+     *           href="http://www.oracle.com/technetwork/database/berkeleydb/overview/index-093405.html">Berkeley
+     *           Db</a> storage.
+     *       <li><b>MONGODB</b>: a memory-oriented backend that ensure persistent in a <a
+     *           href="http://www.mongodb.org/">MongoDB</a> storage.
+     *     </ul>
      *
      * @deprecated Uses active factory instead
      * @return Backend factory for the given factory name
@@ -130,8 +129,7 @@ public abstract class RrdBackendFactory implements Closeable {
             return factory;
         } else {
             throw new IllegalArgumentException(
-                    "No backend factory found with the name specified ["
-                            + name + "]");
+                    "No backend factory found with the name specified [" + name + "]");
         }
     }
 
@@ -146,15 +144,15 @@ public abstract class RrdBackendFactory implements Closeable {
         String name = factory.getName();
         if (!Registry.factories.containsKey(name)) {
             Registry.factories.put(name, factory);
-        }
-        else {
-            throw new IllegalArgumentException("Backend factory '" + name + "' cannot be registered twice");
+        } else {
+            throw new IllegalArgumentException(
+                    "Backend factory '" + name + "' cannot be registered twice");
         }
     }
 
     /**
-     * Registers new (custom) backend factory within the Rrd4j framework and sets this
-     * factory as the default.
+     * Registers new (custom) backend factory within the Rrd4j framework and sets this factory as
+     * the default.
      *
      * @deprecated Uses {@link #setActiveFactories(RrdBackendFactory...)} instead.
      * @param factory Factory to be registered and set as default
@@ -166,8 +164,8 @@ public abstract class RrdBackendFactory implements Closeable {
     }
 
     /**
-     * Returns the default backend factory. This factory is used to construct
-     * {@link org.rrd4j.core.RrdDb} objects if no factory is specified in the RrdDb constructor.
+     * Returns the default backend factory. This factory is used to construct {@link
+     * org.rrd4j.core.RrdDb} objects if no factory is specified in the RrdDb constructor.
      *
      * @return Default backend factory.
      */
@@ -180,10 +178,11 @@ public abstract class RrdBackendFactory implements Closeable {
     }
 
     /**
-     * Replaces the default backend factory with a new one. This method must be called before
-     * the first RRD gets created.
-     * <p>
-     * It also clear the list of actives factories and set it to the default factory.
+     * Replaces the default backend factory with a new one. This method must be called before the
+     * first RRD gets created.
+     *
+     * <p>It also clear the list of actives factories and set it to the default factory.
+     *
      * <p>
      *
      * @deprecated Uses active factory instead
@@ -214,6 +213,7 @@ public abstract class RrdBackendFactory implements Closeable {
 
     /**
      * Return the current active factories as a stream.
+     *
      * @return the Stream
      * @since 3.7
      */
@@ -253,21 +253,22 @@ public abstract class RrdBackendFactory implements Closeable {
         if (activeFactories.isEmpty() && Registry.defaultFactory.canStore(uri)) {
             return Registry.defaultFactory;
         } else {
-            for (RrdBackendFactory tryfactory: activeFactories) {
+            for (RrdBackendFactory tryfactory : activeFactories) {
                 if (tryfactory.canStore(uri)) {
                     return tryfactory;
                 }
             }
-            throw new IllegalArgumentException(
-                    "no matching backend factory for " + uri);
+            throw new IllegalArgumentException("no matching backend factory for " + uri);
         }
     }
 
-    private static final Pattern URIPATTERN = Pattern.compile("^(?:(?<scheme>[a-zA-Z][a-zA-Z0-9+-\\.]*):)?(?://(?<authority>[^/\\?#]*))?(?<path>[^\\?#]*)(?:\\?(?<query>[^#]*))?(?:#(?<fragment>.*))?$");
+    private static final Pattern URIPATTERN =
+            Pattern.compile(
+                    "^(?:(?<scheme>[a-zA-Z][a-zA-Z0-9+-\\.]*):)?(?://(?<authority>[^/\\?#]*))?(?<path>[^\\?#]*)(?:\\?(?<query>[^#]*))?(?:#(?<fragment>.*))?$");
 
     /**
-     * Try to detect an URI from a path. It's needed because of Microsoft Windows path that look's like an URI
-     * and to URL-encode the path.
+     * Try to detect an URI from a path. It's needed because of Microsoft Windows path that look's
+     * like an URI and to URL-encode the path.
      *
      * @param rrdpath a file URI that can be a Windows path
      * @return an URI
@@ -301,13 +302,22 @@ public abstract class RrdBackendFactory implements Closeable {
         throw new IllegalArgumentException("Not an URI pattern");
     }
 
+    /** Phantom reference that closes the backend when the RRD database is garbage collected. */
     private static class ClosingReference extends PhantomReference<RrdDb> {
         private RrdBackend backend;
-        public ClosingReference(RrdDb db, RrdBackend backend,
-                ReferenceQueue<? super RrdDb> q) {
+
+        /**
+         * Creates a new closing reference.
+         *
+         * @param db the RRD database to reference
+         * @param backend the backend to close
+         * @param q the reference queue
+         */
+        public ClosingReference(RrdDb db, RrdBackend backend, ReferenceQueue<? super RrdDb> q) {
             super(db, q);
             this.backend = backend;
         }
+
         @Override
         public void clear() {
             try {
@@ -331,7 +341,7 @@ public abstract class RrdBackendFactory implements Closeable {
         if (annotation != null) {
             name = annotation.name();
             cachingAllowed = annotation.cachingAllowed();
-            if (annotation.scheme() != null && ! annotation.scheme().isEmpty()) {
+            if (annotation.scheme() != null && !annotation.scheme().isEmpty()) {
                 scheme = annotation.scheme();
             } else {
                 scheme = name.toLowerCase(Locale.ENGLISH);
@@ -345,11 +355,9 @@ public abstract class RrdBackendFactory implements Closeable {
         }
     }
 
-    /**
-     * Check that all phantom reference are indeed safely closed.
-     */
+    /** Check that all phantom reference are indeed safely closed. */
     public void checkClosing() {
-        while(true) {
+        while (true) {
             ClosingReference ref = (ClosingReference) refQueue.poll();
             if (ref == null) {
                 break;
@@ -383,27 +391,31 @@ public abstract class RrdBackendFactory implements Closeable {
 
     /**
      * Try to match an URI against a root URI using a few rules:
+     *
      * <ul>
-     * <li>scheme must match if they are given.
-     * <li>authority must match if they are given.
-     * <li>if uri is opaque (scheme:nonabsolute), the scheme specific part is resolve as a relative path.
-     * <li>query and fragment is kept as is.
+     *   <li>scheme must match if they are given.
+     *   <li>authority must match if they are given.
+     *   <li>if uri is opaque (scheme:nonabsolute), the scheme specific part is resolve as a
+     *       relative path.
+     *   <li>query and fragment is kept as is.
      * </ul>
      *
      * @param rootUri the URI to match against
      * @param uri an URI that the current backend can handle.
      * @param relative if true, return an URI relative to the {@code rootUri}
-     * @return a calculate normalized absolute URI or null if the tried URL don't match against the root.
+     * @return a calculate normalized absolute URI or null if the tried URL don't match against the
+     *     root.
      */
     protected URI resolve(URI rootUri, URI uri, boolean relative) {
         String scheme = uri.getScheme();
-        if (scheme != null && ! scheme.equals(rootUri.getScheme())) {
-            throw new IllegalArgumentException(String.format("scheme %s not compatible with %s", scheme, rootUri.getScheme()));
+        if (scheme != null && !scheme.equals(rootUri.getScheme())) {
+            throw new IllegalArgumentException(
+                    String.format("scheme %s not compatible with %s", scheme, rootUri.getScheme()));
         } else if (scheme == null) {
             scheme = rootUri.getScheme();
         }
         String authority = uri.getAuthority();
-        if (authority != null && ! authority.equals(rootUri.getAuthority())) {
+        if (authority != null && !authority.equals(rootUri.getAuthority())) {
             throw new IllegalArgumentException("URI credential not compatible");
         } else if (authority == null) {
             authority = rootUri.getAuthority();
@@ -412,14 +424,16 @@ public abstract class RrdBackendFactory implements Closeable {
         if (uri.isOpaque()) {
             // try to resolve an opaque uri as scheme:relativepath
             path = uri.getSchemeSpecificPart();
-        } else if (! uri.isAbsolute()) {
+        } else if (!uri.isAbsolute()) {
             // A relative URI, resolve it against the root
             path = rootUri.resolve(uri).normalize().getPath();
         } else {
             path = uri.normalize().getPath();
         }
-        if (! path.startsWith(rootUri.getPath())) {
-            throw new IllegalArgumentException(String.format("URI destination path %s not root with %s", path, rootUri.getPath()));
+        if (!path.startsWith(rootUri.getPath())) {
+            throw new IllegalArgumentException(
+                    String.format(
+                            "URI destination path %s not root with %s", path, rootUri.getPath()));
         }
         String query = uri.getQuery();
         String fragment = uri.getFragment();
@@ -430,7 +444,8 @@ public abstract class RrdBackendFactory implements Closeable {
         } catch (UnsupportedEncodingException e) {
             throw new IllegalArgumentException("UTF-8 is missing");
         }
-        String newUriString = String.format("%s://%s%s%s%s", scheme, authority, path , query, fragment);
+        String newUriString =
+                String.format("%s://%s%s%s%s", scheme, authority, path, query, fragment);
         URI newURI = URI.create(newUriString);
         if (relative) {
             return rootUri.relativize(newURI);
@@ -461,7 +476,8 @@ public abstract class RrdBackendFactory implements Closeable {
             path = path.substring(1);
         }
         try {
-            return new URI(getScheme(), rootUri.getAuthority(), rootUri.getPath() + path, null, null);
+            return new URI(
+                    getScheme(), rootUri.getAuthority(), rootUri.getPath() + path, null, null);
         } catch (URISyntaxException ex) {
             throw new IllegalArgumentException(ex.getMessage(), ex);
         }
@@ -487,9 +503,8 @@ public abstract class RrdBackendFactory implements Closeable {
     /**
      * Creates RrdBackend object for the given storage path.
      *
-     * @param path     Storage path
-     * @param readOnly True, if the storage should be accessed in read/only mode.
-     *                 False otherwise.
+     * @param path Storage path
+     * @param readOnly True, if the storage should be accessed in read/only mode. False otherwise.
      * @return Backend object which handles all I/O operations for the given storage path
      * @throws java.io.IOException Thrown in case of I/O error.
      */
@@ -502,17 +517,16 @@ public abstract class RrdBackendFactory implements Closeable {
 
     /**
      * Creates RrdBackend object for the given storage path.
-     * @param rrdDb
      *
-     * @param uri     Storage uri
-     * @param readOnly True, if the storage should be accessed in read/only mode.
-     *                 False otherwise.
+     * @param rrdDb
+     * @param uri Storage uri
+     * @param readOnly True, if the storage should be accessed in read/only mode. False otherwise.
      * @return Backend object which handles all I/O operations for the given storage path
      * @throws java.io.IOException Thrown in case of I/O error.
      */
     RrdBackend getBackend(RrdDb rrdDb, URI uri, boolean readOnly) throws IOException {
         checkClosing();
-        RrdBackend backend =  open(getPath(uri), readOnly);
+        RrdBackend backend = open(getPath(uri), readOnly);
         backend.done(this, new ClosingReference(rrdDb, backend, refQueue));
         return backend;
     }
@@ -568,11 +582,9 @@ public abstract class RrdBackendFactory implements Closeable {
 
     /**
      * A generic close handle, default implementation does nothing.
+     *
      * @since 3.4
      * @throws IOException if the close fails
      */
-    public void close() throws IOException {
-
-    }
-
+    public void close() throws IOException {}
 }

@@ -1,15 +1,16 @@
 package org.rrd4j.core;
 
-import java.io.IOException;
-
 import org.rrd4j.DsType;
 
+import java.io.IOException;
+
 /**
- * <p>Class to represent single datasource within RRD. Each datasource object holds the
- * following information: datasource definition (once set, never changed) and
- * datasource state variables (changed whenever RRD gets updated).</p>
- * <p>Normally, you don't need to manipulate Datasource objects directly, it's up to
- * Rrd4j framework to do it for you.</p>
+ * Class to represent single datasource within RRD. Each datasource object holds the following
+ * information: datasource definition (once set, never changed) and datasource state variables
+ * (changed whenever RRD gets updated).
+ *
+ * <p>Normally, you don't need to manipulate Datasource objects directly, it's up to Rrd4j framework
+ * to do it for you.
  *
  * @author Sasa Markovic
  */
@@ -69,13 +70,31 @@ public class Datasource implements RrdUpdater<Datasource> {
         nanSeconds.set(reader.getNanSeconds(dsIndex));
     }
 
+    /**
+     * Returns a string representation of datasource information.
+     *
+     * @return a string containing datasource information
+     * @throws java.io.IOException if an I/O error occurs
+     */
     String dump() throws IOException {
-        return "== DATASOURCE ==\n" +
-                "DS:" + dsName.get() + ":" + dsType.name() + ":" +
-                heartbeat.get() + ":" + minValue.get() + ":" +
-                maxValue.get() + "\nlastValue:" + lastValue.get() +
-                " nanSeconds:" + nanSeconds.get() +
-                " accumValue:" + accumValue.get() + "\n";
+        return "== DATASOURCE ==\n"
+                + "DS:"
+                + dsName.get()
+                + ":"
+                + dsType.name()
+                + ":"
+                + heartbeat.get()
+                + ":"
+                + minValue.get()
+                + ":"
+                + maxValue.get()
+                + "\nlastValue:"
+                + lastValue.get()
+                + " nanSeconds:"
+                + nanSeconds.get()
+                + " accumValue:"
+                + accumValue.get()
+                + "\n";
     }
 
     /**
@@ -168,8 +187,7 @@ public class Datasource implements RrdUpdater<Datasource> {
         double updateValue = calculateUpdateValue(oldTime, oldValue, newTime, newValue);
         if (newTime < endTime) {
             accumulate(oldTime, newTime, updateValue);
-        }
-        else {
+        } else {
             // should store something
             long boundaryTime = Util.normalize(newTime, step);
             accumulate(oldTime, boundaryTime, updateValue);
@@ -191,38 +209,38 @@ public class Datasource implements RrdUpdater<Datasource> {
         }
     }
 
-    private double calculateUpdateValue(long oldTime, double oldValue,
-            long newTime, double newValue) throws IOException {
+    private double calculateUpdateValue(
+            long oldTime, double oldValue, long newTime, double newValue) throws IOException {
         double updateValue = Double.NaN;
         if (newTime - oldTime <= heartbeat.get()) {
             switch (dsType.get()) {
-            case GAUGE:
-                updateValue = newValue;
-                break;
-            case COUNTER:
-                if (!Double.isNaN(newValue) && !Double.isNaN(oldValue)) {
-                    double diff = newValue - oldValue;
-                    if (diff < 0) {
-                        diff += MAX_32_BIT;
+                case GAUGE:
+                    updateValue = newValue;
+                    break;
+                case COUNTER:
+                    if (!Double.isNaN(newValue) && !Double.isNaN(oldValue)) {
+                        double diff = newValue - oldValue;
+                        if (diff < 0) {
+                            diff += MAX_32_BIT;
+                        }
+                        if (diff < 0) {
+                            diff += MAX_64_BIT - MAX_32_BIT;
+                        }
+                        if (diff >= 0) {
+                            updateValue = diff / (newTime - oldTime);
+                        }
                     }
-                    if (diff < 0) {
-                        diff += MAX_64_BIT - MAX_32_BIT;
+                    break;
+                case ABSOLUTE:
+                    if (!Double.isNaN(newValue)) {
+                        updateValue = newValue / (newTime - oldTime);
                     }
-                    if (diff >= 0) {
-                        updateValue = diff / (newTime - oldTime);
+                    break;
+                case DERIVE:
+                    if (!Double.isNaN(newValue) && !Double.isNaN(oldValue)) {
+                        updateValue = (newValue - oldValue) / (newTime - oldTime);
                     }
-                }
-                break;
-            case ABSOLUTE:
-                if (!Double.isNaN(newValue)) {
-                    updateValue = newValue / (newTime - oldTime);
-                }
-                break;
-            case DERIVE:
-                if (!Double.isNaN(newValue) && !Double.isNaN(oldValue)) {
-                    updateValue = (newValue - oldValue) / (newTime - oldTime);
-                }
-                break;
+                    break;
             }
 
             if (!Double.isNaN(updateValue)) {
@@ -243,8 +261,7 @@ public class Datasource implements RrdUpdater<Datasource> {
     private void accumulate(long oldTime, long newTime, double updateValue) throws IOException {
         if (Double.isNaN(updateValue)) {
             nanSeconds.set(nanSeconds.get() + (newTime - oldTime));
-        }
-        else {
+        } else {
             accumValue.set(accumValue.get() + updateValue * (newTime - oldTime));
             accumLastValue = updateValue;
         }
@@ -289,13 +306,13 @@ public class Datasource implements RrdUpdater<Datasource> {
         writer.writeTag("last_ds", lastValue.get(), "UNKN");
         writer.writeTag("value", accumValue.get());
         writer.writeTag("unknown_sec", nanSeconds.get());
-        writer.closeTag();  // ds
+        writer.closeTag(); // ds
     }
 
     /**
      * {@inheritDoc}
      *
-     * Copies object's internal state to another Datasource object.
+     * <p>Copies object's internal state to another Datasource object.
      */
     public void copyStateTo(Datasource datasource) throws IOException {
         if (!datasource.dsName.get().equals(dsName.get())) {
@@ -318,8 +335,7 @@ public class Datasource implements RrdUpdater<Datasource> {
     public int getDsIndex() throws IOException {
         try {
             return parentDb.getDsIndex(dsName.get());
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             return -1;
         }
     }
@@ -328,8 +344,9 @@ public class Datasource implements RrdUpdater<Datasource> {
      * Sets datasource heartbeat to a new value.
      *
      * @param heartbeat New heartbeat value
-     * @throws java.io.IOException              Thrown in case of I/O error
-     * @throws java.lang.IllegalArgumentException Thrown if invalid (non-positive) heartbeat value is specified.
+     * @throws java.io.IOException Thrown in case of I/O error
+     * @throws java.lang.IllegalArgumentException Thrown if invalid (non-positive) heartbeat value
+     *     is specified.
      */
     public void setHeartbeat(long heartbeat) throws IOException {
         if (heartbeat < 1L) {
@@ -346,14 +363,15 @@ public class Datasource implements RrdUpdater<Datasource> {
      */
     public void setDsName(String newDsName) throws IOException {
         if (parentDb.containsDs(newDsName)) {
-            throw new IllegalArgumentException("Datasource already defined in this RRD: " + newDsName);
+            throw new IllegalArgumentException(
+                    "Datasource already defined in this RRD: " + newDsName);
         }
 
         this.dsName.set(newDsName);
     }
 
     /**
-     * <p>Setter for the field <code>dsType</code>.</p>
+     * Setter for the field <code>dsType</code>.
      *
      * @param newDsType a {@link org.rrd4j.DsType} object.
      * @throws java.io.IOException if any.
@@ -373,16 +391,16 @@ public class Datasource implements RrdUpdater<Datasource> {
     }
 
     /**
-     * Sets minimum allowed value for this datasource. If <code>filterArchivedValues</code>
-     * argument is set to true, all archived values less then <code>minValue</code> will
-     * be fixed to NaN.
+     * Sets minimum allowed value for this datasource. If <code>filterArchivedValues</code> argument
+     * is set to true, all archived values less then <code>minValue</code> will be fixed to NaN.
      *
-     * @param minValue             New minimal value. Specify <code>Double.NaN</code> if no minimal
-     *                             value should be set
-     * @param filterArchivedValues true, if archived datasource values should be fixed;
-     *                             false, otherwise.
-     * @throws java.io.IOException              Thrown in case of I/O error
-     * @throws java.lang.IllegalArgumentException Thrown if invalid minValue was supplied (not less then maxValue)
+     * @param minValue New minimal value. Specify <code>Double.NaN</code> if no minimal value should
+     *     be set
+     * @param filterArchivedValues true, if archived datasource values should be fixed; false,
+     *     otherwise.
+     * @throws java.io.IOException Thrown in case of I/O error
+     * @throws java.lang.IllegalArgumentException Thrown if invalid minValue was supplied (not less
+     *     then maxValue)
      */
     public void setMinValue(double minValue, boolean filterArchivedValues) throws IOException {
         double maxValue = this.maxValue.get();
@@ -401,16 +419,16 @@ public class Datasource implements RrdUpdater<Datasource> {
     }
 
     /**
-     * Sets maximum allowed value for this datasource. If <code>filterArchivedValues</code>
-     * argument is set to true, all archived values greater then <code>maxValue</code> will
-     * be fixed to NaN.
+     * Sets maximum allowed value for this datasource. If <code>filterArchivedValues</code> argument
+     * is set to true, all archived values greater then <code>maxValue</code> will be fixed to NaN.
      *
-     * @param maxValue             New maximal value. Specify <code>Double.NaN</code> if no max
-     *                             value should be set.
-     * @param filterArchivedValues true, if archived datasource values should be fixed;
-     *                             false, otherwise.
-     * @throws java.io.IOException              Thrown in case of I/O error
-     * @throws java.lang.IllegalArgumentException Thrown if invalid maxValue was supplied (not greater then minValue)
+     * @param maxValue New maximal value. Specify <code>Double.NaN</code> if no max value should be
+     *     set.
+     * @param filterArchivedValues true, if archived datasource values should be fixed; false,
+     *     otherwise.
+     * @throws java.io.IOException Thrown in case of I/O error
+     * @throws java.lang.IllegalArgumentException Thrown if invalid maxValue was supplied (not
+     *     greater then minValue)
      */
     public void setMaxValue(double maxValue, boolean filterArchivedValues) throws IOException {
         double minValue = this.minValue.get();
@@ -430,19 +448,20 @@ public class Datasource implements RrdUpdater<Datasource> {
 
     /**
      * Sets min/max values allowed for this datasource. If <code>filterArchivedValues</code>
-     * argument is set to true, all archived values less then <code>minValue</code> or
-     * greater then <code>maxValue</code> will be fixed to NaN.
+     * argument is set to true, all archived values less then <code>minValue</code> or greater then
+     * <code>maxValue</code> will be fixed to NaN.
      *
-     * @param minValue             New minimal value. Specify <code>Double.NaN</code> if no min
-     *                             value should be set.
-     * @param maxValue             New maximal value. Specify <code>Double.NaN</code> if no max
-     *                             value should be set.
-     * @param filterArchivedValues true, if archived datasource values should be fixed;
-     *                             false, otherwise.
-     * @throws java.io.IOException              Thrown in case of I/O error
+     * @param minValue New minimal value. Specify <code>Double.NaN</code> if no min value should be
+     *     set.
+     * @param maxValue New maximal value. Specify <code>Double.NaN</code> if no max value should be
+     *     set.
+     * @param filterArchivedValues true, if archived datasource values should be fixed; false,
+     *     otherwise.
+     * @throws java.io.IOException Thrown in case of I/O error
      * @throws java.lang.IllegalArgumentException Thrown if invalid min/max values were supplied
      */
-    public void setMinMaxValue(double minValue, double maxValue, boolean filterArchivedValues) throws IOException {
+    public void setMinMaxValue(double minValue, double maxValue, boolean filterArchivedValues)
+            throws IOException {
         if (!Double.isNaN(minValue) && !Double.isNaN(maxValue) && minValue >= maxValue) {
             throw new IllegalArgumentException(INVALID_MIN_MAX_VALUES + minValue + "/" + maxValue);
         }
@@ -458,8 +477,7 @@ public class Datasource implements RrdUpdater<Datasource> {
     }
 
     /**
-     * Returns the underlying storage (backend) object which actually performs all
-     * I/O operations.
+     * Returns the underlying storage (backend) object which actually performs all I/O operations.
      *
      * @return I/O backend object
      */

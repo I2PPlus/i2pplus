@@ -3,17 +3,18 @@ package org.rrd4j.core;
 import org.rrd4j.ConsolFun;
 
 /**
- * Class to represent single archive definition within the RRD.
- * Archive definition consists of the following four elements:
+ * Class to represent single archive definition within the RRD. Archive definition consists of the
+ * following four elements:
  *
  * <ul>
- * <li>consolidation function
- * <li>X-files factor
- * <li>number of steps
- * <li>number of rows.
+ *   <li>consolidation function
+ *   <li>X-files factor
+ *   <li>number of steps
+ *   <li>number of rows.
  * </ul>
- * For the complete explanation of all archive definition parameters, see RRDTool's
- * <a href="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html" target="man">rrdcreate man page</a>
+ *
+ * For the complete explanation of all archive definition parameters, see RRDTool's <a
+ * href="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html" target="man">rrdcreate man page</a>
  *
  * @author Sasa Markovic
  */
@@ -24,18 +25,19 @@ public class ArcDef {
     private int rows;
 
     /**
-     * Creates new archive definition object. This object should be passed as argument to
-     * {@link org.rrd4j.core.RrdDef#addArchive(ArcDef) addArchive()} method of
-     * {@link RrdDb RrdDb} object.
-     * <p>For the complete explanation of all archive definition parameters, see RRDTool's
-     * <a href="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html" target="man">rrdcreate man page</a></p>
+     * Creates new archive definition object. This object should be passed as argument to {@link
+     * org.rrd4j.core.RrdDef#addArchive(ArcDef) addArchive()} method of {@link RrdDb RrdDb} object.
      *
-     * @param consolFun Consolidation function. Allowed values are "AVERAGE", "MIN",
-     *                  "MAX", "LAST" and "TOTAL" (these string constants are conveniently defined in the
-     *                  {@link org.rrd4j.ConsolFun} class).
-     * @param xff       X-files factor, between 0 and 1.
-     * @param steps     Number of archive steps.
-     * @param rows      Number of archive rows.
+     * <p>For the complete explanation of all archive definition parameters, see RRDTool's <a
+     * href="http://oss.oetiker.ch/rrdtool/doc/rrdcreate.en.html" target="man">rrdcreate man
+     * page</a>
+     *
+     * @param consolFun Consolidation function. Allowed values are "AVERAGE", "MIN", "MAX", "LAST"
+     *     and "TOTAL" (these string constants are conveniently defined in the {@link
+     *     org.rrd4j.ConsolFun} class).
+     * @param xff X-files factor, between 0 and 1.
+     * @param steps Number of archive steps.
+     * @param rows Number of archive rows.
      */
     public ArcDef(ConsolFun consolFun, double xff, int steps, int rows) {
         if (consolFun == null) {
@@ -45,8 +47,12 @@ public class ArcDef {
             throw new IllegalArgumentException("Invalid xff, must be >= 0 and < 1: " + xff);
         }
         if (steps < 1 || rows < 2) {
-            throw new IllegalArgumentException("Invalid steps/rows settings: " + steps + "/" + rows +
-                    ". Minimal values allowed are steps=1, rows=2");
+            throw new IllegalArgumentException(
+                    "Invalid steps/rows settings: "
+                            + steps
+                            + "/"
+                            + rows
+                            + ". Minimal values allowed are steps=1, rows=2");
         }
 
         this.consolFun = consolFun;
@@ -103,10 +109,9 @@ public class ArcDef {
     /**
      * {@inheritDoc}
      *
-     * Checks if two archive definitions are equal.
-     * Archive definitions are considered equal if they have the same number of steps
-     * and the same consolidation function. It is not possible to create RRD with two
-     * equal archive definitions.
+     * <p>Checks if two archive definitions are equal. Archive definitions are considered equal if
+     * they have the same number of steps and the same consolidation function. It is not possible to
+     * create RRD with two equal archive definitions.
      */
     public boolean equals(Object obj) {
         if (obj instanceof ArcDef) {
@@ -126,7 +131,9 @@ public class ArcDef {
     }
 
     boolean exactlyEqual(ArcDef def) {
-        return consolFun == def.consolFun && xff == def.xff && steps == def.steps && rows == def.rows;
+        return consolFun == def.consolFun
+                && xff == def.xff
+                && steps == def.steps
+                && rows == def.rows;
     }
-
 }

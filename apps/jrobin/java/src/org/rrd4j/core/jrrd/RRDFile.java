@@ -1,5 +1,7 @@
 package org.rrd4j.core.jrrd;
 
+import org.rrd4j.core.InvalidRrdException;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -9,32 +11,34 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 
-import org.rrd4j.core.InvalidRrdException;
-
 /**
- * This class is used read information from an RRD file. Writing
- * to RRD files is not currently supported. It uses NIO's RandomAccessFile to read the file
+ * This class is used read information from an RRD file. Writing to RRD files is not currently
+ * supported. It uses NIO's RandomAccessFile to read the file
  *
- * Currently this can read RRD files that were generated on Solaris (Sparc)
- * and Linux (x86).
+ * <p>Currently this can read RRD files that were generated on Solaris (Sparc) and Linux (x86).
  *
  * @author <a href="mailto:ciaran@codeloop.com">Ciaran Treanor</a>
  * @version $Revision: 1.1 $
  */
 class RRDFile implements Constants {
 
-    /** Constant <code>FLOAT_COOKIE_BIG_ENDIAN={0x5B, 0x1F, 0x2B, 0x43,
-    (byte) 0xC7, (byte) 0xC0, 0x25,
-    0x2F}</code> */
-    private static final byte[] FLOAT_COOKIE_BIG_ENDIAN = {0x5B, 0x1F, 0x2B, 0x43,
-            (byte) 0xC7, (byte) 0xC0, 0x25,
-            0x2F};
-    /** Constant <code>FLOAT_COOKIE_LITTLE_ENDIAN={0x2F, 0x25, (byte) 0xC0,
-    (byte) 0xC7, 0x43, 0x2B, 0x1F,
-    0x5B}</code> */
-    private static final byte[] FLOAT_COOKIE_LITTLE_ENDIAN = {0x2F, 0x25, (byte) 0xC0,
-            (byte) 0xC7, 0x43, 0x2B, 0x1F,
-            0x5B};
+    /**
+     * Constant <code>FLOAT_COOKIE_BIG_ENDIAN={0x5B, 0x1F, 0x2B, 0x43,
+     * (byte) 0xC7, (byte) 0xC0, 0x25,
+     * 0x2F}</code>
+     */
+    private static final byte[] FLOAT_COOKIE_BIG_ENDIAN = {
+        0x5B, 0x1F, 0x2B, 0x43, (byte) 0xC7, (byte) 0xC0, 0x25, 0x2F
+    };
+
+    /**
+     * Constant <code>FLOAT_COOKIE_LITTLE_ENDIAN={0x2F, 0x25, (byte) 0xC0,
+     * (byte) 0xC7, 0x43, 0x2B, 0x1F,
+     * 0x5B}</code>
+     */
+    private static final byte[] FLOAT_COOKIE_LITTLE_ENDIAN = {
+        0x2F, 0x25, (byte) 0xC0, (byte) 0xC7, 0x43, 0x2B, 0x1F, 0x5B
+    };
 
     private int alignment;
     private int longSize = 4;
@@ -52,7 +56,8 @@ class RRDFile implements Constants {
         long len = file.length();
         if (len > Integer.MAX_VALUE) {
             throw new IllegalArgumentException(
-                    "RRDFile cannot read files larger than 2**31 because of limitations of java.nio.ByteBuffer");
+                    "RRDFile cannot read files larger than 2**31 because of limitations of"
+                            + " java.nio.ByteBuffer");
         }
 
         boolean ok = false;
@@ -74,7 +79,7 @@ class RRDFile implements Constants {
 
     private void initDataLayout(File file) throws IOException {
 
-        if (file.exists()) {    // Load the data formats from the file
+        if (file.exists()) { // Load the data formats from the file
             byte[] buffer = new byte[32];
             mappedByteBuffer.get(buffer);
             ByteBuffer bbuffer = ByteBuffer.wrap(buffer);
@@ -83,48 +88,44 @@ class RRDFile implements Constants {
 
             if ((index = indexOf(FLOAT_COOKIE_BIG_ENDIAN, buffer)) != -1) {
                 order = ByteOrder.BIG_ENDIAN;
-            }
-            else if ((index = indexOf(FLOAT_COOKIE_LITTLE_ENDIAN, buffer))
-                    != -1) {
+            } else if ((index = indexOf(FLOAT_COOKIE_LITTLE_ENDIAN, buffer)) != -1) {
                 order = ByteOrder.LITTLE_ENDIAN;
-            }
-            else {
+            } else {
                 throw new InvalidRrdException("Invalid RRD file");
             }
             mappedByteBuffer.order(order);
             bbuffer.order(order);
 
             switch (index) {
+                case 12:
+                    alignment = 4;
+                    break;
 
-            case 12:
-                alignment = 4;
-                break;
+                case 16:
+                    alignment = 8;
+                    break;
 
-            case 16:
-                alignment = 8;
-                break;
-
-            default:
-                throw new RuntimeException("Unsupported architecture");
+                default:
+                    throw new RuntimeException("Unsupported architecture");
             }
 
             bbuffer.position(index + 8);
-            //We cannot have dsCount && rracount == 0
-            //If one is 0, it's a 64 bits rrd
-            int int1 = bbuffer.getInt();  //Should be dsCount in ILP32
-            int int2 = bbuffer.getInt();  //Should be rraCount in ILP32
-            if(int1  == 0 || int2 ==0) {
+            // We cannot have dsCount && rracount == 0
+            // If one is 0, it's a 64 bits rrd
+            int int1 = bbuffer.getInt(); // Should be dsCount in ILP32
+            int int2 = bbuffer.getInt(); // Should be rraCount in ILP32
+            if (int1 == 0 || int2 == 0) {
                 longSize = 8;
             }
-        }
-        else {                // Default to data formats for this hardware architecture
+        } else { // Default to data formats for this hardware architecture
         }
         // Reset file pointer to start of file
         mappedByteBuffer.rewind();
     }
 
     private int indexOf(byte[] pattern, byte[] array) {
-        return (new String(array, StandardCharsets.UTF_8)).indexOf(new String(pattern, StandardCharsets.UTF_8));
+        return (new String(array, StandardCharsets.UTF_8))
+                .indexOf(new String(pattern, StandardCharsets.UTF_8));
     }
 
     boolean isBigEndian() {
@@ -144,10 +145,9 @@ class RRDFile implements Constants {
     }
 
     int readLong() {
-        if(longSize == 4) {
+        if (longSize == 4) {
             return mappedByteBuffer.getInt();
-        }
-        else {
+        } else {
             return (int) mappedByteBuffer.getLong();
         }
     }
@@ -194,7 +194,9 @@ class RRDFile implements Constants {
 
     void read(ByteBuffer bb) {
         int count = bb.remaining();
-        bb.put((ByteBuffer) mappedByteBuffer.duplicate().limit(mappedByteBuffer.position() + count));
+        bb.put(
+                (ByteBuffer)
+                        mappedByteBuffer.duplicate().limit(mappedByteBuffer.position() + count));
         mappedByteBuffer.position(mappedByteBuffer.position() + count);
     }
 

@@ -11,15 +11,24 @@ import java.io.PrintStream;
 public class CDPStatusBlock {
 
     private enum cdp_par_en {
-        CDP_val, CDP_unkn_pdp_cnt, CDP_hw_intercept, CDP_hw_last_intercept, CDP_hw_slope,
-        CDP_hw_last_slope, CDP_null_count,
-        CDP_last_null_count, CDP_primary_val, CDP_secondary_val
+        CDP_val,
+        CDP_unkn_pdp_cnt,
+        CDP_hw_intercept,
+        CDP_hw_last_intercept,
+        CDP_hw_slope,
+        CDP_hw_last_slope,
+        CDP_null_count,
+        CDP_last_null_count,
+        CDP_primary_val,
+        CDP_secondary_val
     }
 
     /** Byte offset within file */
     final long offset;
+
     /** Size of block in bytes */
     final long size;
+
     final int unknownDatapoints;
     final double value;
 
@@ -27,8 +36,8 @@ public class CDPStatusBlock {
     final double primary_value;
 
     CDPStatusBlock(RRDFile file) {
-        //Should read MAX_CDP_PAR_EN = 10
-        //Size should be 0x50
+        // Should read MAX_CDP_PAR_EN = 10
+        // Size should be 0x50
         offset = file.getFilePointer();
         UnivalArray scratch = file.getUnivalArray(10);
         value = scratch.getDouble(cdp_par_en.CDP_val);

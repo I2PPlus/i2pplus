@@ -1,5 +1,10 @@
 package org.rrd4j.data;
 
+/**
+ * RRD CDEF (Computed Data Source Definition) implementation.<br>
+ * Creates computed data sources using Reverse Polish Notation (RPN) expressions on existing data
+ * sources.
+ */
 class CDef extends Source implements NonRrdSource {
     private final String rpnExpression;
 

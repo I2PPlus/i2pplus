@@ -2,41 +2,55 @@ package org.rrd4j.core.timespec;
 
 import org.rrd4j.core.Util;
 
-import javax.swing.*;
 import java.awt.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.swing.*;
+
 /**
- * <p>Small swing-based utility to convert timestamps (seconds since epoch) to readable dates and vice versa.
- * Supports at-style time specification (like "now-2d", "noon yesterday") and other human-readable
- * data formats:</p>
- * <ul>
- * <li>MM/dd/yy HH:mm:ss
- * <li>dd.MM.yy HH:mm:ss
- * <li>dd.MM.yy HH:mm:ss
- * <li>MM/dd/yy HH:mm
- * <li>dd.MM.yy HH:mm
- * <li>yy-MM-dd HH:mm
- * <li>MM/dd/yy
- * <li>dd.MM.yy
- * <li>yy-MM-dd
- * <li>HH:mm MM/dd/yy
- * <li>HH:mm dd.MM.yy
- * <li>HH:mm yy-MM-dd
- * <li>HH:mm:ss MM/dd/yy
- * <li>HH:mm:ss dd.MM.yy
- * <li>HH:mm:ss yy-MM-dd
- * </ul>
- * The current timestamp is displayed in the title bar :)
+ * Small swing-based utility to convert timestamps (seconds since epoch) to readable dates and vice
+ * versa. Supports at-style time specification (like "now-2d", "noon yesterday") and other
+ * human-readable data formats:
  *
+ * <ul>
+ *   <li>MM/dd/yy HH:mm:ss
+ *   <li>dd.MM.yy HH:mm:ss
+ *   <li>dd.MM.yy HH:mm:ss
+ *   <li>MM/dd/yy HH:mm
+ *   <li>dd.MM.yy HH:mm
+ *   <li>yy-MM-dd HH:mm
+ *   <li>MM/dd/yy
+ *   <li>dd.MM.yy
+ *   <li>yy-MM-dd
+ *   <li>HH:mm MM/dd/yy
+ *   <li>HH:mm dd.MM.yy
+ *   <li>HH:mm yy-MM-dd
+ *   <li>HH:mm:ss MM/dd/yy
+ *   <li>HH:mm:ss dd.MM.yy
+ *   <li>HH:mm:ss yy-MM-dd
+ * </ul>
+ *
+ * The current timestamp is displayed in the title bar :)
  */
 public class Epoch extends JFrame {
     private final String[] supportedFormats = {
-            "MM/dd/yy HH:mm:ss", "dd.MM.yy HH:mm:ss", "yy-MM-dd HH:mm:ss", "MM/dd/yy HH:mm",
-            "dd.MM.yy HH:mm", "yy-MM-dd HH:mm", "MM/dd/yy", "dd.MM.yy", "yy-MM-dd", "HH:mm MM/dd/yy",
-            "HH:mm dd.MM.yy", "HH:mm yy-MM-dd", "HH:mm:ss MM/dd/yy", "HH:mm:ss dd.MM.yy", "HH:mm:ss yy-MM-dd"
+        "MM/dd/yy HH:mm:ss",
+        "dd.MM.yy HH:mm:ss",
+        "yy-MM-dd HH:mm:ss",
+        "MM/dd/yy HH:mm",
+        "dd.MM.yy HH:mm",
+        "yy-MM-dd HH:mm",
+        "MM/dd/yy",
+        "dd.MM.yy",
+        "yy-MM-dd",
+        "HH:mm MM/dd/yy",
+        "HH:mm dd.MM.yy",
+        "HH:mm yy-MM-dd",
+        "HH:mm:ss MM/dd/yy",
+        "HH:mm:ss dd.MM.yy",
+        "HH:mm:ss yy-MM-dd"
     };
 
     private final SimpleDateFormat[] parsers = new SimpleDateFormat[supportedFormats.length];
@@ -47,7 +61,8 @@ public class Epoch extends JFrame {
     private final JButton convertButton = new JButton("Convert");
     private final JButton helpButton = new JButton("Help");
 
-    private final SimpleDateFormat OUTPUT_DATE_FORMAT = new SimpleDateFormat("MM/dd/yy HH:mm:ss EEE");
+    private final SimpleDateFormat OUTPUT_DATE_FORMAT =
+            new SimpleDateFormat("MM/dd/yy HH:mm:ss EEE");
 
     private Epoch() {
         super("Epoch");
@@ -62,7 +77,10 @@ public class Epoch extends JFrame {
         }
         tooltipBuff.append("<b>AT-style time specification</b><br>");
         tooltipBuff.append("timestamp<br><br>");
-        tooltipBuff.append("Copyright (c) 2013-2020 The RRD4J Authors. Copyright (c) 2001-2005 Sasa Markovic and Ciaran Treanor. Copyright (c) 2013 The OpenNMS Group, Inc. Licensed under the Apache License, Version 2.0.</html>");
+        tooltipBuff.append(
+                "Copyright (c) 2013-2020 The RRD4J Authors. Copyright (c) 2001-2005 Sasa Markovic"
+                        + " and Ciaran Treanor. Copyright (c) 2013 The OpenNMS Group, Inc. Licensed"
+                        + " under the Apache License, Version 2.0.</html>");
         helpText = tooltipBuff.toString();
         constructUI();
         Timer timer = new Timer(1000, e -> showTimestamp());
@@ -79,7 +97,12 @@ public class Epoch extends JFrame {
         convertButton.addActionListener(e -> convert());
         c.add(helpButton, BorderLayout.EAST);
         helpButton.addActionListener(
-                e -> JOptionPane.showMessageDialog(helpButton, helpText, "Epoch Help", JOptionPane.INFORMATION_MESSAGE));
+                e ->
+                        JOptionPane.showMessageDialog(
+                                helpButton,
+                                helpText,
+                                "Epoch Help",
+                                JOptionPane.INFORMATION_MESSAGE));
         inputField.requestFocus();
         getRootPane().setDefaultButton(convertButton);
         setResizable(false);
@@ -106,13 +129,11 @@ public class Epoch extends JFrame {
                 long timestamp = Long.parseLong(time);
                 Date date = new Date(timestamp * 1000L);
                 formatDate(date);
-            }
-            catch (NumberFormatException nfe) {
+            } catch (NumberFormatException nfe) {
                 // failed, try as a date
                 try {
                     inputField.setText(Long.toString(parseDate(time)));
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     inputField.setText("Could not convert, sorry");
                 }
             }
@@ -132,8 +153,7 @@ public class Epoch extends JFrame {
         for (SimpleDateFormat parser : parsers) {
             try {
                 return Util.getTimestamp(parser.parse(time));
-            }
-            catch (ParseException e) {
+            } catch (ParseException e) {
             }
         }
         return new TimeParser(time).parse().getTimestamp();

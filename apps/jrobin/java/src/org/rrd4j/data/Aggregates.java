@@ -1,31 +1,27 @@
 package org.rrd4j.data;
 
-import org.rrd4j.ConsolFun;
-import org.rrd4j.core.Util;
-
 /**
- * Simple class which holds aggregated values (MIN, MAX, FIRST, LAST, AVERAGE and TOTAL). You
- * don't need to create objects of this class directly. Objects of this class are returned from
- * <code>getAggregates()</code> method in
- * {@link org.rrd4j.core.FetchData#getAggregates(String) FetchData} and
- * {@link org.rrd4j.data.DataProcessor#getAggregates(String)} DataProcessor classes.
+ * Holds aggregated statistical values (MIN, MAX, FIRST, LAST, AVERAGE, TOTAL).<br>
+ * Returned from getAggregates() methods in FetchData and DataProcessor classes.
  *
- * @deprecated This class is deprecated. Uses instance of {@link org.rrd4j.data.Variable}, used with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}.
+ * <p>You don't need to create objects of this class directly.
+ *
+ * @deprecated Use {@link org.rrd4j.data.Variable} with {@link
+ *     org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)} instead.
  */
 @Deprecated
 public class Aggregates {
     /** Minimal value */
     double min = Double.NaN, max = Double.NaN;
+
     /** First and last values */
     double first = Double.NaN, last = Double.NaN;
+
     /** Average and total values */
     double average = Double.NaN, total = Double.NaN;
 
-    /**
-     * Default constructor.
-     */
-    public Aggregates() {
-    }
+    /** Default constructor. */
+    public Aggregates() {}
 
     /**
      * Returns minimal value

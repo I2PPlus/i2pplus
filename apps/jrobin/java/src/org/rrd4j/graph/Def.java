@@ -1,12 +1,16 @@
 package org.rrd4j.graph;
 
+import org.rrd4j.ConsolFun;
+import org.rrd4j.core.RrdBackendFactory;
 import org.rrd4j.data.DataProcessor;
 
 import java.net.URI;
 
-import org.rrd4j.ConsolFun;
-import org.rrd4j.core.RrdBackendFactory;
-
+/**
+ * Represents a data definition (DEF) in RRD graphs. A DEF defines a data source by specifying an
+ * RRD file, data source name, and consolidation function. This is the primary way to import data
+ * from RRD files into graphs.
+ */
 class Def extends Source {
 
     private final URI rrdUri;

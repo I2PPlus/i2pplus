@@ -4,15 +4,13 @@ import java.nio.ByteBuffer;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
-/**
- * Backend to be used to store all RRD bytes in memory.
- *
- */
+/** Backend to be used to store all RRD bytes in memory. */
 public class RrdMemoryBackend extends ByteBufferBackend {
 
     private final AtomicReference<ByteBuffer> refbb;
+
     /**
-     * <p>Constructor for RrdMemoryBackend.</p>
+     * Constructor for RrdMemoryBackend.
      *
      * @param path a {@link java.lang.String} object.
      * @param refbb
@@ -38,13 +36,11 @@ public class RrdMemoryBackend extends ByteBufferBackend {
     }
 
     /**
-     * This method is required by the base class definition, but it does not
-     * releases any memory resources at all.
-     *
+     * This method is required by the base class definition, but it does not releases any memory
+     * resources at all.
      */
     @Override
     protected void close() {
         // Don't release ressources, as backend are cached by the factory and reused
     }
-
 }

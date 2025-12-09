@@ -1,12 +1,17 @@
 package org.rrd4j.data;
 
-import java.net.URI;
-
 import org.rrd4j.ConsolFun;
 import org.rrd4j.core.FetchData;
 import org.rrd4j.core.RrdBackendFactory;
 import org.rrd4j.core.RrdDb;
 
+import java.net.URI;
+
+/**
+ * RRD DEF (Data Source Definition) implementation.<br>
+ * Represents a data source defined in an RRD file with specific name, consolidation function, and
+ * backend configuration.
+ */
 class Def extends Source {
     private final URI rrdUri;
     private final String dsName;
@@ -19,11 +24,12 @@ class Def extends Source {
     }
 
     Def(String name, String dsName, FetchData fetchData) {
-        this(name,
+        this(
+                name,
                 fetchData.getRequest().getParentDb().getCanonicalUri(),
-                dsName, fetchData.getRequest().getConsolFun(),
-                fetchData.getRequest().getParentDb().getRrdBackend().getFactory()
-                );
+                dsName,
+                fetchData.getRequest().getConsolFun(),
+                fetchData.getRequest().getParentDb().getRrdBackend().getFactory());
         this.fetchData = fetchData;
     }
 
@@ -36,10 +42,10 @@ class Def extends Source {
     }
 
     URI getCanonicalUri() {
-       return rrdUri;
+        return rrdUri;
     }
 
-     String getDsName() {
+    String getDsName() {
         return dsName;
     }
 
@@ -52,10 +58,10 @@ class Def extends Source {
     }
 
     boolean isCompatibleWith(Def def) {
-        return getCanonicalUri().equals(def.getCanonicalUri()) &&
-                getConsolFun() == def.consolFun &&
-                ((backend == null && def.backend == null) ||
-                        (backend != null && def.backend != null && backend.equals(def.backend)));
+        return getCanonicalUri().equals(def.getCanonicalUri())
+                && getConsolFun() == def.consolFun
+                && ((backend == null && def.backend == null)
+                        || (backend != null && def.backend != null && backend.equals(def.backend)));
     }
 
     RrdDb getRrdDb() {

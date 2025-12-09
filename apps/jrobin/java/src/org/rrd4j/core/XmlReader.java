@@ -1,34 +1,62 @@
 package org.rrd4j.core;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.rrd4j.ConsolFun;
 import org.rrd4j.DsType;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
+/**
+ * Reader for importing RRD data from XML format.
+ *
+ * <p>This class extends DataImporter to provide functionality for reading RRD definitions and data
+ * from XML files. It parses the XML structure and provides methods to access various RRD components
+ * like datasources, archives, and their properties.
+ */
 class XmlReader extends DataImporter {
 
     private final Element root;
     private final Node[] dsNodes;
     private final Node[] arcNodes;
 
+    /**
+     * Creates an XmlReader for the specified XML file.
+     *
+     * @param xmlFilePath the path to the XML file to read
+     * @throws java.io.IOException if an I/O error occurs while reading the file
+     */
     XmlReader(String xmlFilePath) throws IOException {
         root = Util.Xml.getRootElement(new File(xmlFilePath));
         dsNodes = Util.Xml.getChildNodes(root, "ds");
         arcNodes = Util.Xml.getChildNodes(root, "rra");
     }
 
+    /**
+     * Gets the RRD version from the XML file.
+     *
+     * @return the version string
+     */
     public String getVersion() {
         return Util.Xml.getChildValue(root, "version");
     }
 
+    /**
+     * Gets the last update time from the XML file.
+     *
+     * @return the last update time as Unix timestamp
+     */
     public long getLastUpdateTime() {
         return Util.Xml.getChildValueAsLong(root, "lastupdate");
     }
 
+    /**
+     * Gets the step interval from the XML file.
+     *
+     * @return the step interval in seconds
+     */
     public long getStep() {
         return Util.Xml.getChildValueAsLong(root, "step");
     }
@@ -82,11 +110,11 @@ class XmlReader extends DataImporter {
     public double getXff(int arcIndex) {
         Node arc = arcNodes[arcIndex];
         Node[] params = Util.Xml.getChildNodes(arc, "params");
-        //RRD4J xml, xff is in the archive definition
-        if(params.length == 0) {
+        // RRD4J xml, xff is in the archive definition
+        if (params.length == 0) {
             return Util.Xml.getChildValueAsDouble(arc, "xff");
         }
-        //RRDTool xml, xff is in the archive definition
+        // RRDTool xml, xff is in the archive definition
         else {
             return Util.Xml.getChildValueAsDouble(params[0], "xff");
         }

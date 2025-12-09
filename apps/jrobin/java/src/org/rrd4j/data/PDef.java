@@ -1,6 +1,10 @@
 package org.rrd4j.data;
 
-class PDef extends Source implements NonRrdSource  {
+/**
+ * RRD PDEF (Plottable Data Source Definition) implementation.<br>
+ * Creates data sources from plottable objects that can provide values based on timestamps.
+ */
+class PDef extends Source implements NonRrdSource {
     private final IPlottable plottable;
 
     PDef(String name, IPlottable plottable2) {

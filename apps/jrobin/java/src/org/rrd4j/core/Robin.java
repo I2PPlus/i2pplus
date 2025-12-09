@@ -3,14 +3,14 @@ package org.rrd4j.core;
 import java.io.IOException;
 
 /**
- * Class to represent archive values for a single datasource. Robin class is the heart of
- * the so-called "round robin database" concept. Basically, each Robin object is a
- * fixed length array of double values. Each double value represents consolidated, archived
- * value for the specific timestamp. When the underlying array of double values gets completely
- * filled, new values will replace the oldest ones.
- * <p>
- * Robin object does not hold values in memory - such object could be quite large.
- * Instead of it, Robin reads them from the backend I/O only when necessary.
+ * Class to represent archive values for a single datasource. Robin class is the heart of the
+ * so-called "round robin database" concept. Basically, each Robin object is a fixed length array of
+ * double values. Each double value represents consolidated, archived value for the specific
+ * timestamp. When the underlying array of double values gets completely filled, new values will
+ * replace the oldest ones.
+ *
+ * <p>Robin object does not hold values in memory - such object could be quite large. Instead of it,
+ * Robin reads them from the backend I/O only when necessary.
  *
  * @author Sasa Markovic
  */
@@ -28,9 +28,9 @@ public interface Robin extends RrdUpdater<Robin> {
      * Updates archived values in bulk.
      *
      * @param newValues Array of double values to be stored in the archive
-     * @throws java.io.IOException              Thrown in case of I/O error
-     * @throws java.lang.IllegalArgumentException Thrown if the length of the input array is different from the length of
-     *                                  this archive
+     * @throws java.io.IOException Thrown in case of I/O error
+     * @throws java.lang.IllegalArgumentException Thrown if the length of the input array is
+     *     different from the length of this archive
      */
     void setValues(double... newValues) throws IOException;
 
@@ -77,14 +77,14 @@ public interface Robin extends RrdUpdater<Robin> {
     /**
      * {@inheritDoc}
      *
-     * Copies object's internal state to another Robin object.
+     * <p>Copies object's internal state to another Robin object.
      */
     void copyStateTo(Robin other) throws IOException;
 
     /**
-     * Filters values stored in this archive based on the given boundary.
-     * Archived values found to be outside of <code>[minValue, maxValue]</code> interval (inclusive)
-     * will be silently replaced with <code>NaN</code>.
+     * Filters values stored in this archive based on the given boundary. Archived values found to
+     * be outside of <code>[minValue, maxValue]</code> interval (inclusive) will be silently
+     * replaced with <code>NaN</code>.
      *
      * @param minValue lower boundary
      * @param maxValue upper boundary
@@ -93,8 +93,7 @@ public interface Robin extends RrdUpdater<Robin> {
     void filterValues(double minValue, double maxValue) throws IOException;
 
     /**
-     * Returns the underlying storage (backend) object which actually performs all
-     * I/O operations.
+     * Returns the underlying storage (backend) object which actually performs all I/O operations.
      *
      * @return I/O backend object
      */
@@ -108,7 +107,7 @@ public interface Robin extends RrdUpdater<Robin> {
     RrdAllocator getRrdAllocator();
 
     /**
-     * <p>update.</p>
+     * update.
      *
      * @param newValues an array of double.
      * @throws java.io.IOException if any.
@@ -116,7 +115,7 @@ public interface Robin extends RrdUpdater<Robin> {
     void update(double[] newValues) throws IOException;
 
     /**
-     * <p>dump.</p>
+     * dump.
      *
      * @return a {@link java.lang.String} object.
      * @throws java.io.IOException if any.
@@ -124,7 +123,7 @@ public interface Robin extends RrdUpdater<Robin> {
     String dump() throws IOException;
 
     /**
-     * <p>store.</p>
+     * store.
      *
      * @param newValue a double.
      * @throws java.io.IOException if any.
@@ -132,7 +131,7 @@ public interface Robin extends RrdUpdater<Robin> {
     void store(double newValue) throws IOException;
 
     /**
-     * <p>bulkStore.</p>
+     * bulkStore.
      *
      * @param newValue a double.
      * @param bulkCount a int.
@@ -141,7 +140,7 @@ public interface Robin extends RrdUpdater<Robin> {
     void bulkStore(double newValue, int bulkCount) throws IOException;
 
     /**
-     * <p>getValues.</p>
+     * getValues.
      *
      * @param index a int.
      * @param count a int.

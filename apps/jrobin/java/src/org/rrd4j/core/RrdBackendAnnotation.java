@@ -12,15 +12,18 @@ import java.lang.annotation.Target;
  *
  * @author Fabrice Bacchella
  * @since 3.4
- *
  */
 @Documented
 @Retention(RUNTIME)
 @Target(TYPE)
 public @interface RrdBackendAnnotation {
     boolean DEFAULT_CACHING_ALLOWED = true;
+
     String name();
+
     boolean cachingAllowed() default DEFAULT_CACHING_ALLOWED;
+
     String scheme() default "";
+
     boolean shouldValidateHeader();
 }

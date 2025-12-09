@@ -1,5 +1,7 @@
 package org.rrd4j.graph;
 
+import org.rrd4j.data.DataProcessor;
+
 import java.awt.Graphics;
 import java.io.IOException;
 import java.util.function.Supplier;
@@ -8,11 +10,7 @@ import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.swing.ImageIcon;
 
-import org.rrd4j.data.DataProcessor;
-
-/**
- * Class which actually creates Rrd4j graphs (does the hard work).
- */
+/** Class which actually creates Rrd4j graphs (does the hard work). */
 public class RrdGraph implements RrdGraphConstants {
 
     final RrdGraphDef gdef;
@@ -31,6 +29,7 @@ public class RrdGraph implements RrdGraphConstants {
 
     /**
      * Create graph from a custom image worker
+     *
      * @param gdef
      * @param worker
      * @throws IOException
@@ -40,35 +39,46 @@ public class RrdGraph implements RrdGraphConstants {
     }
 
     /**
-     * <p>Creates graph from the corresponding {@link org.rrd4j.graph.RrdGraphDef} object.</p>
-     * <p>The graph will be created using customs {@link javax.imageio.ImageWriter} and {@link javax.imageio.ImageWriteParam} given.</p>
-     * <p>The ImageWriter type and ImageWriteParam settings have priority other the RrdGraphDef settings.
-
+     * Creates graph from the corresponding {@link org.rrd4j.graph.RrdGraphDef} object.
+     *
+     * <p>The graph will be created using customs {@link javax.imageio.ImageWriter} and {@link
+     * javax.imageio.ImageWriteParam} given.
+     *
+     * <p>The ImageWriter type and ImageWriteParam settings have priority other the RrdGraphDef
+     * settings.
+     *
      * @param gdef Graph definition
      * @param writer
      * @param param
      * @throws IOException Thrown in case of I/O error
      * @since 3.5
      */
-    public RrdGraph(RrdGraphDef gdef, ImageWriter writer, ImageWriteParam param) throws IOException {
+    public RrdGraph(RrdGraphDef gdef, ImageWriter writer, ImageWriteParam param)
+            throws IOException {
         this(gdef, () -> RrdGraph.generateImageWorker(gdef, writer, param));
     }
 
     private RrdGraph(RrdGraphDef gdef, Supplier<ImageWorker> worker) throws IOException {
         this.gdef = gdef;
-        RrdGraphGenerator generator = new RrdGraphGenerator(gdef, worker.get(), new DataProcessor(gdef.startTime, gdef.endTime));
+        RrdGraphGenerator generator =
+                new RrdGraphGenerator(
+                        gdef, worker.get(), new DataProcessor(gdef.startTime, gdef.endTime));
         try {
             generator.createGraph();
-        }
-        finally {
+        } finally {
             generator.worker.dispose();
         }
         info = generator.info;
         im = generator.im;
     }
 
-    private static ImageWorker generateImageWorker(RrdGraphDef gdef, ImageWriter writer, ImageWriteParam param) {
-        return BufferedImageWorker.getBuilder().setGdef(gdef).setWriter(writer).setImageWriteParam(param).build();
+    private static ImageWorker generateImageWorker(
+            RrdGraphDef gdef, ImageWriter writer, ImageWriteParam param) {
+        return BufferedImageWorker.getBuilder()
+                .setGdef(gdef)
+                .setWriter(writer)
+                .setImageWriteParam(param)
+                .build();
     }
 
     private static ImageWorker generateImageWorker(RrdGraphDef gdef) {
@@ -94,5 +104,4 @@ public class RrdGraph implements RrdGraphConstants {
         ImageIcon image = new ImageIcon(imageData);
         image.paintIcon(null, g, 0, 0);
     }
-
 }

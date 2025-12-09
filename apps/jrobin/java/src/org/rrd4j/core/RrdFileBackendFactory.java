@@ -9,17 +9,16 @@ import java.nio.file.Paths;
 
 /**
  * An abstract backend factory which is used to store RRD data to ordinary files on the disk.
- * <p>
- * Every backend factory storing RRD data as ordinary files should inherit from it, some check are done
- * in the code for instanceof.
  *
+ * <p>Every backend factory storing RRD data as ordinary files should inherit from it, some check
+ * are done in the code for instanceof.
  */
 public abstract class RrdFileBackendFactory extends RrdBackendFactory {
 
     /**
      * {@inheritDoc}
      *
-     * Method to determine if a file with the given path already exists.
+     * <p>Method to determine if a file with the given path already exists.
      */
     @Override
     protected boolean exists(String path) {
@@ -29,9 +28,11 @@ public abstract class RrdFileBackendFactory extends RrdBackendFactory {
     /** {@inheritDoc} */
     @Override
     public boolean canStore(URI uri) {
-        if ((uri.isOpaque() || uri.isAbsolute()) && ! "file".equals(uri.getScheme())) {
+        if ((uri.isOpaque() || uri.isAbsolute()) && !"file".equals(uri.getScheme())) {
             return false;
-        } else if (uri.getAuthority() != null || uri.getFragment() != null || uri.getQuery() != null) {
+        } else if (uri.getAuthority() != null
+                || uri.getFragment() != null
+                || uri.getQuery() != null) {
             return false;
         } else {
             return true;
@@ -74,5 +75,4 @@ public abstract class RrdFileBackendFactory extends RrdBackendFactory {
             return uri.getPath();
         }
     }
-
 }

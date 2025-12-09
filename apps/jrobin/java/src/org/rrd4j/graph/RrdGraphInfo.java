@@ -62,7 +62,8 @@ public class RrdGraphInfo {
     }
 
     /**
-     * Returns PRINT lines requested by {@link org.rrd4j.graph.RrdGraphDef#print(String, org.rrd4j.ConsolFun, String)} method.
+     * Returns PRINT lines requested by {@link org.rrd4j.graph.RrdGraphDef#print(String,
+     * org.rrd4j.ConsolFun, String)} method.
      *
      * @return An array of formatted PRINT lines
      */
@@ -71,7 +72,8 @@ public class RrdGraphInfo {
     }
 
     /**
-     * Returns image information requested by {@link org.rrd4j.graph.RrdGraphDef#setImageInfo(String)} method
+     * Returns image information requested by {@link
+     * org.rrd4j.graph.RrdGraphDef#setImageInfo(String)} method
      *
      * @return Image information
      */
@@ -97,14 +99,17 @@ public class RrdGraphInfo {
     public String dump() {
         StringBuilder b = new StringBuilder();
         b.append("filename = \"").append(getFilename()).append("\"\n");
-        b.append("width = ").append(getWidth()).append(", height = ").append(getHeight()).append("\n");
+        b.append("width = ")
+                .append(getWidth())
+                .append(", height = ")
+                .append(getHeight())
+                .append("\n");
         b.append("byteCount = ").append(getByteCount()).append("\n");
         b.append("imginfo = \"").append(getImgInfo()).append("\"\n");
         String[] plines = getPrintLines();
         if (plines.length == 0) {
             b.append("No print lines found\n");
-        }
-        else {
+        } else {
             for (int i = 0; i < plines.length; i++) {
                 b.append("print[").append(i).append("] = \"").append(plines[i]).append("\"\n");
             }

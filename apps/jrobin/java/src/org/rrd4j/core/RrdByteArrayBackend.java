@@ -3,16 +3,13 @@ package org.rrd4j.core;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-/**
- * Abstract byte array based backend.
- *
- */
+/** Abstract byte array based backend. */
 public abstract class RrdByteArrayBackend extends ByteBufferBackend {
 
     private byte[] buffer;
 
     /**
-     * <p>Constructor for RrdByteArrayBackend.</p>
+     * Constructor for RrdByteArrayBackend.
      *
      * @param path a {@link java.lang.String} object.
      */
@@ -30,7 +27,7 @@ public abstract class RrdByteArrayBackend extends ByteBufferBackend {
     }
 
     /**
-     * <p>read.</p>
+     * read.
      *
      * @param offset a long.
      * @param bytes an array of byte.
@@ -45,9 +42,9 @@ public abstract class RrdByteArrayBackend extends ByteBufferBackend {
 
         if (offset + bytes.length <= buffer.length) {
             System.arraycopy(buffer, (int) offset, bytes, 0, bytes.length);
-        }
-        else {
-            throw new RrdBackendException("Not enough bytes available in RRD buffer; RRD " + getPath());
+        } else {
+            throw new RrdBackendException(
+                    "Not enough bytes available in RRD buffer; RRD " + getPath());
         }
     }
 
@@ -63,8 +60,7 @@ public abstract class RrdByteArrayBackend extends ByteBufferBackend {
     /**
      * {@inheritDoc}
      *
-     * <p>It will reserves a memory section as a RRD storage.</p>
-     *
+     * <p>It will reserves a memory section as a RRD storage.
      */
     protected void setLength(long length) {
         if (length < 0 || length > Integer.MAX_VALUE) {
@@ -74,5 +70,4 @@ public abstract class RrdByteArrayBackend extends ByteBufferBackend {
         buffer = new byte[(int) length];
         setByteBuffer(ByteBuffer.wrap(buffer));
     }
-
 }

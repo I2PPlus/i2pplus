@@ -2,6 +2,10 @@ package org.rrd4j.graph;
 
 import java.awt.Paint;
 
+/**
+ * Represents a vertical span in RRD graphs. Draws a colored rectangular region spanning a range of
+ * timestamps on x-axis.
+ */
 class VSpan extends Span {
     final long start;
     final long end;
@@ -10,7 +14,7 @@ class VSpan extends Span {
         super(color, legend);
         this.start = start;
         this.end = end;
-        assert(start < end);
+        assert (start < end);
     }
 
     private boolean checkRange(long v, long min, long max) {
@@ -18,8 +22,10 @@ class VSpan extends Span {
     }
 
     void setLegendVisibility(long min, long max, boolean forceLegend) {
-        legend.enabled = legend.enabled && (forceLegend
-                || checkRange(start, min, max)
-                || checkRange(end, min, max));
+        legend.enabled =
+                legend.enabled
+                        && (forceLegend
+                                || checkRange(start, min, max)
+                                || checkRange(end, min, max));
     }
 }

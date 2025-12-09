@@ -17,11 +17,12 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.stream.Stream;
 
 /**
- * <p>This class should be used to synchronize access to RRD files
- * in a multithreaded environment. This class should be also used to prevent opening of
- * too many RRD files at the same time (thus avoiding operating system limits).
- * </p>
- * <p>It can also be used a factory for RrdDb, using a default backend factory.</p>
+ * This class should be used to synchronize access to RRD files in a multithreaded environment. This
+ * class should be also used to prevent opening of too many RRD files at the same time (thus
+ * avoiding operating system limits).
+ *
+ * <p>It can also be used a factory for RrdDb, using a default backend factory.
+ *
  * <p>In case of interruptions, it throws IllegalStateException.
  */
 public class RrdDbPool {
@@ -60,6 +61,7 @@ public class RrdDbPool {
         final Lock lock;
         final boolean placeholder;
         final URI uri;
+
         RrdEntry(URI canonicalPath) {
             placeholder = false;
             uri = canonicalPath;
@@ -67,14 +69,16 @@ public class RrdDbPool {
             lock = inuse.writeLock();
             waitempty = new CountDownLatch(1);
         }
+
         RrdEntry(RrdEntry parent) {
-            assert ! parent.placeholder;
+            assert !parent.placeholder;
             placeholder = true;
             uri = parent.uri;
             inuse = null;
             lock = parent.inuse.readLock();
             waitempty = null;
         }
+
         @Override
         public String toString() {
             if (placeholder) {
@@ -86,8 +90,8 @@ public class RrdDbPool {
     }
 
     /**
-     * Creates a single instance of the class on the first call,
-     * or returns already existing one. Uses Initialization On Demand Holder idiom.
+     * Creates a single instance of the class on the first call, or returns already existing one.
+     * Uses Initialization On Demand Holder idiom.
      *
      * @return Single instance of this class
      */
@@ -109,6 +113,7 @@ public class RrdDbPool {
 
     /**
      * Constructor for RrdDbPool. It will use the default backend factory.
+     *
      * @since 3.5
      */
     public RrdDbPool() {
@@ -117,6 +122,7 @@ public class RrdDbPool {
 
     /**
      * Constructor for RrdDbPool.
+     *
      * @param defaultFactory the default factory used when given a simple path of a RRD.
      * @since 3.6
      */
@@ -171,40 +177,44 @@ public class RrdDbPool {
             CompletableFuture<RrdEntry> holder = new CompletableFuture<>();
             do {
                 try {
-                    ref = pool.compute(uri, (u, e) -> {
-                        try {
-                            if (e == null) {
-                                if (cancreate) {
-                                    usageRLock.lockInterruptibly();
-                                    try {
-                                        if (! usage.tryAcquire()) {
-                                            throw new PoolFullException();
-                                        } else {
-                                            RrdEntry r = new RrdEntry(u);
-                                            holder.complete(r);
-                                            r.lock.lock();
-                                            return new RrdEntry(r);
+                    ref =
+                            pool.compute(
+                                    uri,
+                                    (u, e) -> {
+                                        try {
+                                            if (e == null) {
+                                                if (cancreate) {
+                                                    usageRLock.lockInterruptibly();
+                                                    try {
+                                                        if (!usage.tryAcquire()) {
+                                                            throw new PoolFullException();
+                                                        } else {
+                                                            RrdEntry r = new RrdEntry(u);
+                                                            holder.complete(r);
+                                                            r.lock.lock();
+                                                            return new RrdEntry(r);
+                                                        }
+                                                    } finally {
+                                                        usageRLock.unlock();
+                                                    }
+                                                } else {
+                                                    throw new IllegalStateException(
+                                                            "Unknown URI in pool: " + u);
+                                                }
+                                            } else {
+                                                if (e.placeholder) {
+                                                    return e;
+                                                } else {
+                                                    e.lock.lock();
+                                                    holder.complete(e);
+                                                    return new RrdEntry(e);
+                                                }
+                                            }
+                                        } catch (InterruptedException ex) {
+                                            holder.completeExceptionally(ex);
+                                            return null;
                                         }
-                                    } finally {
-                                        usageRLock.unlock();
-                                    }
-                                } else {
-                                    throw new IllegalStateException("Unknown URI in pool: " + u);
-                                }
-                            } else {
-                                if (e.placeholder) {
-                                    return e;
-                                } else {
-                                    e.lock.lock();
-                                    holder.complete(e);
-                                    return new RrdEntry(e);
-                                }
-                            }
-                        } catch (InterruptedException ex) {
-                            holder.completeExceptionally(ex);
-                            return null;
-                        }
-                    });
+                                    });
                 } catch (PoolFullException e) {
                     ref = null;
                     try {
@@ -226,7 +236,7 @@ public class RrdDbPool {
                     ref.lock.lockInterruptibly();
                     ref.lock.unlock();
                 }
-            } while (! holder.isDone());
+            } while (!holder.isDone());
             return holder.get();
         } catch (ExecutionException e) {
             InterruptedException ex = (InterruptedException) e.getCause();
@@ -243,7 +253,8 @@ public class RrdDbPool {
     }
 
     private enum ACTION {
-        SWAP, DROP
+        SWAP,
+        DROP
     }
 
     private void passNext(ACTION a, RrdEntry e) {
@@ -252,42 +263,45 @@ public class RrdDbPool {
         }
         RrdEntry o = null;
         switch (a) {
-        case SWAP:
-            o = pool.put(e.uri, e);
-            break;
-        case DROP:
-            o = pool.remove(e.uri);
-            usage.release();
-            assert o == null || o.placeholder;
-            if (waitFull.get()) {
-                try {
-                    usageWLock.lockInterruptibly();
-                    fullCondition.signalAll();
-                } catch (InterruptedException e1) {
-                    // Lost slot available notification
-                    Thread.currentThread().interrupt();
-                } finally {
-                    if (usageWLock.isHeldByCurrentThread()) {
-                        usageWLock.unlock();
+            case SWAP:
+                o = pool.put(e.uri, e);
+                break;
+            case DROP:
+                o = pool.remove(e.uri);
+                usage.release();
+                assert o == null || o.placeholder;
+                if (waitFull.get()) {
+                    try {
+                        usageWLock.lockInterruptibly();
+                        fullCondition.signalAll();
+                    } catch (InterruptedException e1) {
+                        // Lost slot available notification
+                        Thread.currentThread().interrupt();
+                    } finally {
+                        if (usageWLock.isHeldByCurrentThread()) {
+                            usageWLock.unlock();
+                        }
                     }
                 }
-            }
-            break;
+                break;
         }
         assert o != e : String.format("Same entry, action=%s, entry=%s\n", a, e);
-        assert o == null || ((e.placeholder && ! o.placeholder) || (o.placeholder && ! e.placeholder)) : String.format("Inconsistent entry, action=%s, in=%s out=%s\n", a, e, o);
-        //task finished, waiting on a place holder can go on
+        assert o == null || ((e.placeholder && !o.placeholder) || (o.placeholder && !e.placeholder))
+                : String.format("Inconsistent entry, action=%s, in=%s out=%s\n", a, e, o);
+        // task finished, waiting on a place holder can go on
         e.lock.unlock();
     }
 
     /**
-     * Releases RrdDb reference previously obtained from the pool. When a reference is released, its usage
-     * count is decremented by one. If usage count drops to zero, the underlying RRD will be closed.
+     * Releases RrdDb reference previously obtained from the pool. When a reference is released, its
+     * usage count is decremented by one. If usage count drops to zero, the underlying RRD will be
+     * closed.
      *
      * @param rrdDb RrdDb reference to be returned to the pool
      * @throws java.io.IOException Thrown in case of I/O error
      * @throws java.lang.IllegalStateException if the thread was interrupted
-     * @deprecated A RrdDb remember if it was open directly or from a pool, no need to manage it manually any more
+     * @deprecated A RrdDb remember if it was open directly or from a pool, no need to manage it
+     *     manually any more
      */
     @Deprecated
     public void release(RrdDb rrdDb) throws IOException {
@@ -305,15 +319,18 @@ public class RrdDbPool {
             throw new IllegalStateException("Release interrupted for " + rrdDb.getPath(), e);
         }
         if (ref == null) {
-            throw new IllegalStateException("Could not release [" + rrdDb.getPath() + "], not using pool for it");
+            throw new IllegalStateException(
+                    "Could not release [" + rrdDb.getPath() + "], not using pool for it");
         }
         if (ref.rrdDb == null) {
             passNext(ACTION.DROP, ref);
-            throw new IllegalStateException("Could not release [" + rrdDb.getPath() + "], pool corruption");
+            throw new IllegalStateException(
+                    "Could not release [" + rrdDb.getPath() + "], pool corruption");
         }
         if (ref.count <= 0) {
             passNext(ACTION.DROP, ref);
-            throw new IllegalStateException("Could not release [" + rrdDb.getPath() + "], the file was never requested");
+            throw new IllegalStateException(
+                    "Could not release [" + rrdDb.getPath() + "], the file was never requested");
         }
         if (--ref.count == 0) {
             try {
@@ -321,7 +338,7 @@ public class RrdDbPool {
                 ref.rrdDb = null;
             } finally {
                 passNext(ACTION.DROP, ref);
-                //If someone is waiting for an empty entry, signal it
+                // If someone is waiting for an empty entry, signal it
                 ref.waitempty.countDown();
             }
         } else {
@@ -330,16 +347,19 @@ public class RrdDbPool {
     }
 
     /**
-     * <p>Requests a RrdDb reference for the given RRD path.</p>
+     * Requests a RrdDb reference for the given RRD path.
+     *
      * <ul>
-     * <li>If the RRD is already open, previously returned RrdDb reference will be returned. Its usage count
-     * will be incremented by one.
-     * <li>If the RRD is not already open and the number of already open RRD is less than
-     * {@link #getCapacity()}, it will be opened and a new RrdDb reference will be returned.
-     * If the RRD is not already open and the number of already open RRD is equal to
-     * {@link #getCapacity()}, the method blocks until some RRD are closed.
+     *   <li>If the RRD is already open, previously returned RrdDb reference will be returned. Its
+     *       usage count will be incremented by one.
+     *   <li>If the RRD is not already open and the number of already open RRD is less than {@link
+     *       #getCapacity()}, it will be opened and a new RrdDb reference will be returned. If the
+     *       RRD is not already open and the number of already open RRD is equal to {@link
+     *       #getCapacity()}, the method blocks until some RRD are closed.
      * </ul>
-     * <p>The path is transformed to an URI using the default factory defined at the creation of the pool.</p>
+     *
+     * <p>The path is transformed to an URI using the default factory defined at the creation of the
+     * pool.
      *
      * @param path Path to existing RRD.
      * @return reference for the given RRD.
@@ -350,18 +370,19 @@ public class RrdDbPool {
     }
 
     /**
-     * <p>Requests a RrdDb reference for the given RRD URI.</p>
+     * Requests a RrdDb reference for the given RRD URI.
+     *
      * <ul>
-     * <li>If the RRD is already open, previously returned RrdDb reference will be returned. Its usage count
-     * will be incremented by one.
-     * <li>If the RRD is not already open and the number of already open RRD is less than
-     * {@link #getCapacity()}, it will be opened and a new RrdDb reference will be returned.
-     * If the RRD is not already open and the number of already open RRD is equal to
-     * {@link #getCapacity()}, the method blocks until some RRD are closed.
+     *   <li>If the RRD is already open, previously returned RrdDb reference will be returned. Its
+     *       usage count will be incremented by one.
+     *   <li>If the RRD is not already open and the number of already open RRD is less than {@link
+     *       #getCapacity()}, it will be opened and a new RrdDb reference will be returned. If the
+     *       RRD is not already open and the number of already open RRD is equal to {@link
+     *       #getCapacity()}, the method blocks until some RRD are closed.
      * </ul>
-     * <p>
-     * If the default backend factory for the pool can handle this URI, it will be used,
-     * or else {@link RrdBackendFactory#findFactory(URI)} will be used to find the backend factory used.
+     *
+     * <p>If the default backend factory for the pool can handle this URI, it will be used, or else
+     * {@link RrdBackendFactory#findFactory(URI)} will be used to find the backend factory used.
      *
      * @param uri {@link URI} to existing RRD file
      * @return reference for the give RRD file
@@ -373,6 +394,7 @@ public class RrdDbPool {
 
     /**
      * Wait for a empty reference with no usage
+     *
      * @param uri
      * @return an reference with no usage
      * @throws InterruptedException
@@ -381,7 +403,7 @@ public class RrdDbPool {
         RrdEntry ref = getEntry(uri, true);
         try {
             while (ref.count != 0) {
-                //Not empty, give it back, but wait for signal
+                // Not empty, give it back, but wait for signal
                 passNext(ACTION.SWAP, ref);
                 ref.waitempty.await();
                 ref = getEntry(uri, true);
@@ -395,8 +417,9 @@ public class RrdDbPool {
     }
 
     /**
-     * Got an empty reference, use it only if slots are available
-     * But don't hold any lock waiting for it
+     * Got an empty reference, use it only if slots are available But don't hold any lock waiting
+     * for it
+     *
      * @param uri
      * @return an reference with no usage
      * @throws InterruptedException
@@ -414,7 +437,12 @@ public class RrdDbPool {
             // Someone might have already open it, rechecks
             if (ref.count == 0) {
                 try {
-                    ref.rrdDb = RrdDb.getBuilder().setPath(factory.getPath(uri)).setBackendFactory(factory).setPoolInternal(this).build();
+                    ref.rrdDb =
+                            RrdDb.getBuilder()
+                                    .setPath(factory.getPath(uri))
+                                    .setBackendFactory(factory)
+                                    .setPoolInternal(this)
+                                    .build();
                 } catch (IOException | RuntimeException e) {
                     passNext(ACTION.DROP, ref);
                     throw e;
@@ -434,12 +462,18 @@ public class RrdDbPool {
         try {
             URI uri = factory.getCanonicalUri(rrdDef.getUri());
             ref = requestEmpty(uri);
-            ref.rrdDb = RrdDb.getBuilder().setRrdDef(rrdDef).setBackendFactory(factory).setPoolInternal(this).build();
+            ref.rrdDb =
+                    RrdDb.getBuilder()
+                            .setRrdDef(rrdDef)
+                            .setBackendFactory(factory)
+                            .setPoolInternal(this)
+                            .build();
             ref.count = 1;
             return ref.rrdDb;
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new IllegalStateException("request interrupted for new rrdDef " + rrdDef.getPath(), e);
+            throw new IllegalStateException(
+                    "request interrupted for new rrdDef " + rrdDef.getPath(), e);
         } catch (RuntimeException e) {
             passNext(ACTION.DROP, ref);
             ref = null;
@@ -455,7 +489,8 @@ public class RrdDbPool {
         uri = factory.getCanonicalUri(uri);
         try {
             ref = requestEmpty(uri);
-            ref.rrdDb = builder.setPath(uri).setBackendFactory(factory).setPoolInternal(this).build();
+            ref.rrdDb =
+                    builder.setPath(uri).setBackendFactory(factory).setPoolInternal(this).build();
             ref.count = 1;
             return ref.rrdDb;
         } catch (InterruptedException e) {
@@ -470,23 +505,25 @@ public class RrdDbPool {
         }
     }
 
-    RrdDb requestRrdDb(URI uri, RrdBackendFactory factory, DataImporter importer) throws IOException {
+    RrdDb requestRrdDb(URI uri, RrdBackendFactory factory, DataImporter importer)
+            throws IOException {
         return requestRrdDb(RrdDb.getBuilder().setImporter(importer), uri, factory);
     }
 
     /**
-     * <p>Requests a RrdDb reference for the given RRD definition object.</p>
+     * Requests a RrdDb reference for the given RRD definition object.
+     *
      * <ul>
-     * <li>If the RRD with the path specified in the RrdDef object is already open,
-     * the method blocks until the file is closed.
-     * <li>If the RRD is not already open and the number of already open RRD is less than
-     * {@link #getCapacity()}, a new RRD will be created and it's RrdDb reference will be returned.
-     * If the RRD is not already open and the number of already open RRD is equal to
-     * {@link #getCapacity()}, the method blocks until some RrdDb references are closed.
+     *   <li>If the RRD with the path specified in the RrdDef object is already open, the method
+     *       blocks until the file is closed.
+     *   <li>If the RRD is not already open and the number of already open RRD is less than {@link
+     *       #getCapacity()}, a new RRD will be created and it's RrdDb reference will be returned.
+     *       If the RRD is not already open and the number of already open RRD is equal to {@link
+     *       #getCapacity()}, the method blocks until some RrdDb references are closed.
      * </ul>
-     * <p>
-     * If the factory defined when creating the pool can handle the URI, it will be used,
-     * or else {@link RrdBackendFactory#findFactory(URI)} will be used.
+     *
+     * <p>If the factory defined when creating the pool can handle the URI, it will be used, or else
+     * {@link RrdBackendFactory#findFactory(URI)} will be used.
      *
      * @param rrdDef Definition of the RRD file to be created.
      * @return Reference to the newly created RRD file.
@@ -498,52 +535,56 @@ public class RrdDbPool {
     }
 
     /**
-     * <p>Requests a RrdDb reference for the given path. The RRD will be created from
-     * external data (from XML dump or RRDTool's binary RRD file).</p>
-     * <ul>
-     * <li>If the RRD with the path specified is already open,
-     * the method blocks until the file is closed.
-     * <li>If the RRD is not already open and the number of already open RRD is less than
-     * {@link #getCapacity()}, a new RRD will be created and it's RrdDb reference will be returned.
-     * If the RRD is not already open and the number of already open RRD is equal to
-     * {@link #getCapacity()}, the method blocks until some RrdDb references are closed.
-     * </ul>
-     * <p>The path is transformed to an URI using the default factory of the pool.</p>
+     * Requests a RrdDb reference for the given path. The RRD will be created from external data
+     * (from XML dump or RRDTool's binary RRD file).
      *
-     * @param path       Path to the RRD that should be created.
-     * @param sourcePath Path to external data which is to be converted to Rrd4j's native RRD file format.
+     * <ul>
+     *   <li>If the RRD with the path specified is already open, the method blocks until the file is
+     *       closed.
+     *   <li>If the RRD is not already open and the number of already open RRD is less than {@link
+     *       #getCapacity()}, a new RRD will be created and it's RrdDb reference will be returned.
+     *       If the RRD is not already open and the number of already open RRD is equal to {@link
+     *       #getCapacity()}, the method blocks until some RrdDb references are closed.
+     * </ul>
+     *
+     * <p>The path is transformed to an URI using the default factory of the pool.
+     *
+     * @param path Path to the RRD that should be created.
+     * @param sourcePath Path to external data which is to be converted to Rrd4j's native RRD file
+     *     format.
      * @return Reference to the newly created RRD.
      * @throws java.io.IOException Thrown in case of I/O error
      * @throws java.lang.IllegalStateException if the thread was interrupted
      */
-    public RrdDb requestRrdDb(String path, String sourcePath)
-            throws IOException {
+    public RrdDb requestRrdDb(String path, String sourcePath) throws IOException {
         URI uri = defaultFactory.getUri(path);
         return requestRrdDb(RrdDb.getBuilder().setExternalPath(sourcePath), uri, defaultFactory);
     }
 
     /**
-     * <p>Requests a RrdDb reference for the given URI. The RRD will be created from
-     * external data (from XML dump or RRDTool's binary RRD file).</p>
-     * <ul>
-     * <li>If the RRD with the URI specified is already open,
-     * the method blocks until the file is closed.
-     * <li>If the RRD is not already open and the number of already open RRD is less than
-     * {@link #getCapacity()}, a new RRD will be created and it's RrdDb reference will be returned.
-     * If the RRD is not already open and the number of already open RRD is equal to
-     * {@link #getCapacity()}, the method blocks until some RrdDb references are closed.
-     * </ul>
-     * If the factory defined when creating the pool can handle the URI, it will be used,
-     * or else {@link RrdBackendFactory#findFactory(URI)} will be used to choose the factory.
+     * Requests a RrdDb reference for the given URI. The RRD will be created from external data
+     * (from XML dump or RRDTool's binary RRD file).
      *
-     * @param uri        URI to the RRD that should be created
-     * @param sourcePath Path to external data which is to be converted to Rrd4j's native RRD file format
+     * <ul>
+     *   <li>If the RRD with the URI specified is already open, the method blocks until the file is
+     *       closed.
+     *   <li>If the RRD is not already open and the number of already open RRD is less than {@link
+     *       #getCapacity()}, a new RRD will be created and it's RrdDb reference will be returned.
+     *       If the RRD is not already open and the number of already open RRD is equal to {@link
+     *       #getCapacity()}, the method blocks until some RrdDb references are closed.
+     * </ul>
+     *
+     * If the factory defined when creating the pool can handle the URI, it will be used, or else
+     * {@link RrdBackendFactory#findFactory(URI)} will be used to choose the factory.
+     *
+     * @param uri URI to the RRD that should be created
+     * @param sourcePath Path to external data which is to be converted to Rrd4j's native RRD file
+     *     format
      * @return Reference to the newly created RRD
      * @throws java.io.IOException Thrown in case of I/O error
      * @throws java.lang.IllegalStateException if the thread was interrupted
      */
-    public RrdDb requestRrdDb(URI uri, String sourcePath)
-            throws IOException {
+    public RrdDb requestRrdDb(URI uri, String sourcePath) throws IOException {
         return requestRrdDb(RrdDb.getBuilder().setExternalPath(sourcePath), uri, checkFactory(uri));
     }
 
@@ -551,7 +592,8 @@ public class RrdDbPool {
      * Sets the default factory to use when obtaining RrdDb reference from simple path and not URI.
      *
      * @param defaultFactory The factory to use.
-     * @throws IllegalStateException if called while the pool is not empty or the thread was interrupted
+     * @throws IllegalStateException if called while the pool is not empty or the thread was
+     *     interrupted
      * @throws java.lang.IllegalStateException if the thread was interrupted
      * @deprecated the pool is no longer a singleton, create a new pool instead of changing it.
      */
@@ -577,7 +619,8 @@ public class RrdDbPool {
      * Sets the maximum number of simultaneously open RRD.
      *
      * @param newCapacity Maximum number of simultaneously open RRD.
-     * @throws IllegalStateException if called while the pool is not empty or the thread was interrupted.
+     * @throws IllegalStateException if called while the pool is not empty or the thread was
+     *     interrupted.
      */
     public void setCapacity(int newCapacity) {
         try {
@@ -630,7 +673,8 @@ public class RrdDbPool {
 
     /**
      * Returns the number of usage for a RRD.
-     * <p>The path is transformed to an URI using the default factory.</p>
+     *
+     * <p>The path is transformed to an URI using the default factory.
      *
      * @param path RRD's path for which informations is needed.
      * @return the number of request for this RRD.
@@ -665,10 +709,10 @@ public class RrdDbPool {
     }
 
     /**
-     * Wait until the pool is empty and return a lock that prevent any additions of new RrdDb references until it's released.
+     * Wait until the pool is empty and return a lock that prevent any additions of new RrdDb
+     * references until it's released.
      *
      * @since 3.7
-     *
      * @param timeout the time to wait for the write lock
      * @param unit the time unit of the timeout argument
      * @return a lock to release when operations on this pool are finished.
@@ -689,5 +733,4 @@ public class RrdDbPool {
     private RrdBackendFactory checkFactory(URI uri) {
         return defaultFactory.canStore(uri) ? defaultFactory : RrdBackendFactory.findFactory(uri);
     }
-
 }

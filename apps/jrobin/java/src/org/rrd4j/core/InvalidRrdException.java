@@ -16,5 +16,4 @@ public class InvalidRrdException extends RrdException {
     public InvalidRrdException(String message, Exception cause) {
         super(message, cause);
     }
-
 }

@@ -4,32 +4,27 @@ import java.io.IOException;
 
 /**
  * Factory class which creates actual {@link org.rrd4j.core.RrdSafeFileBackend} objects.
- * <p>
- * Because of locking, each RrdDb can be open only once even from within the JVM. So usage
- * of the {@link org.rrd4j.core.RrdDbPool} is mandatory with this backend.
  *
+ * <p>Because of locking, each RrdDb can be open only once even from within the JVM. So usage of the
+ * {@link org.rrd4j.core.RrdDbPool} is mandatory with this backend.
  */
-@RrdBackendAnnotation(name="SAFE", shouldValidateHeader=true, cachingAllowed=false)
+@RrdBackendAnnotation(name = "SAFE", shouldValidateHeader = true, cachingAllowed = false)
 public class RrdSafeFileBackendFactory extends RrdRandomAccessFileBackendFactory {
 
-    /**
-     * Default time (in milliseconds) this backend will wait for a file lock.
-     */
+    /** Default time (in milliseconds) this backend will wait for a file lock. */
     public static final long LOCK_WAIT_TIME = 3000L;
+
     private static long defaultLockWaitTime = LOCK_WAIT_TIME;
 
-    /**
-     * Default time between two consecutive file locking attempts.
-     */
+    /** Default time between two consecutive file locking attempts. */
     public static final long LOCK_RETRY_PERIOD = 50L;
+
     private static long defaultLockRetryPeriod = LOCK_RETRY_PERIOD;
 
     private final long lockWaitTime;
     private final long lockRetryPeriod;
 
-    /**
-     * Generate a factory using the default system wide lock settings
-     */
+    /** Generate a factory using the default system wide lock settings */
     public RrdSafeFileBackendFactory() {
         lockWaitTime = defaultLockWaitTime;
         lockRetryPeriod = defaultLockRetryPeriod;
@@ -37,6 +32,7 @@ public class RrdSafeFileBackendFactory extends RrdRandomAccessFileBackendFactory
 
     /**
      * Generate a factory with custom lock settings
+     *
      * @param lockWaitTime wait time in ms
      * @param lockRetryPeriod retry period in ms
      */
@@ -48,7 +44,7 @@ public class RrdSafeFileBackendFactory extends RrdRandomAccessFileBackendFactory
     /**
      * {@inheritDoc}
      *
-     * Creates RrdSafeFileBackend object for the given file path.
+     * <p>Creates RrdSafeFileBackend object for the given file path.
      */
     @Override
     protected RrdBackend open(String path, boolean readOnly) throws IOException {
@@ -90,5 +86,4 @@ public class RrdSafeFileBackendFactory extends RrdRandomAccessFileBackendFactory
     public static void setLockRetryPeriod(long lockRetryPeriod) {
         RrdSafeFileBackendFactory.defaultLockRetryPeriod = lockRetryPeriod;
     }
-
 }

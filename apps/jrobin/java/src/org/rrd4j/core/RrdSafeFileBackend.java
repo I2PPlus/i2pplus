@@ -6,12 +6,12 @@ import java.nio.channels.FileLock;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * Backend which is used to store RRD data to ordinary files on the disk, using locking. This backend
- * is SAFE: it locks the underlying RRD file during update/fetch operations, and caches only static
- * parts of a RRD file in memory. Therefore, this backend is safe to be used when RRD files should
- * be shared between several JVMs at the same time. However, this backend is a little bit slow
- * since it does not use fast java.nio.* package (it's still based on the RandomAccessFile class).
- *
+ * Backend which is used to store RRD data to ordinary files on the disk, using locking. This
+ * backend is SAFE: it locks the underlying RRD file during update/fetch operations, and caches only
+ * static parts of a RRD file in memory. Therefore, this backend is safe to be used when RRD files
+ * should be shared between several JVMs at the same time. However, this backend is a little bit
+ * slow since it does not use fast java.nio.* package (it's still based on the RandomAccessFile
+ * class).
  */
 public class RrdSafeFileBackend extends RrdRandomAccessFileBackend {
     private static final Counters counters = new Counters();
@@ -31,8 +31,7 @@ public class RrdSafeFileBackend extends RrdRandomAccessFileBackend {
         super(path, false);
         try {
             lockFile(lockWaitTime, lockRetryPeriod);
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             super.close();
             throw ioe;
         }
@@ -49,8 +48,7 @@ public class RrdSafeFileBackend extends RrdRandomAccessFileBackend {
         do {
             try {
                 Thread.sleep(lockRetryPeriod);
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 // NOP
             }
@@ -59,15 +57,18 @@ public class RrdSafeFileBackend extends RrdRandomAccessFileBackend {
                 counters.registerDelayedLock();
                 return;
             }
-        }
-        while (System.currentTimeMillis() - entryTime <= lockWaitTime);
+        } while (System.currentTimeMillis() - entryTime <= lockWaitTime);
         counters.registerError();
-        throw new RrdBackendException("Could not obtain exclusive lock on file: " + getPath() +
-                "] after " + lockWaitTime + " milliseconds");
+        throw new RrdBackendException(
+                "Could not obtain exclusive lock on file: "
+                        + getPath()
+                        + "] after "
+                        + lockWaitTime
+                        + " milliseconds");
     }
 
     /**
-     * <p>close.</p>
+     * close.
      *
      * @throws java.io.IOException if any.
      */
@@ -79,14 +80,13 @@ public class RrdSafeFileBackend extends RrdRandomAccessFileBackend {
                 lock = null;
                 counters.registerUnlock();
             }
-        }
-        finally {
+        } finally {
             super.close();
         }
     }
 
     /**
-     * <p>getLockInfo.</p>
+     * getLockInfo.
      *
      * @return a {@link java.lang.String} object.
      */
@@ -94,6 +94,13 @@ public class RrdSafeFileBackend extends RrdRandomAccessFileBackend {
         return counters.getInfo();
     }
 
+    /**
+     * Internal counters for tracking file locking operations.
+     *
+     * <p>This class maintains statistics about file locking operations including total locks, quick
+     * locks, unlocks, currently locked files, and errors. These counters are used for monitoring
+     * and debugging the file locking behavior.
+     */
     static class Counters {
         final AtomicLong locks = new AtomicLong(0);
         final AtomicLong quickLocks = new AtomicLong(0);
@@ -101,30 +108,50 @@ public class RrdSafeFileBackend extends RrdRandomAccessFileBackend {
         final AtomicLong locked = new AtomicLong(0);
         final AtomicLong errors = new AtomicLong(0);
 
+        /** Registers a quick lock operation. */
         void registerQuickLock() {
             locks.getAndIncrement();
             quickLocks.getAndIncrement();
             locked.getAndIncrement();
         }
 
+        /** Registers a delayed lock operation. */
         void registerDelayedLock() {
             locks.getAndIncrement();
             locked.getAndIncrement();
         }
 
+        /** Registers an unlock operation. */
         void registerUnlock() {
             unlocks.getAndIncrement();
             locked.getAndDecrement();
         }
 
+        /** Registers an error operation. */
         void registerError() {
             errors.getAndIncrement();
         }
 
+        /**
+         * Gets formatted information about the counters.
+         *
+         * @return a formatted string with counter statistics
+         */
         String getInfo() {
-            return "LOCKS=" + locks + ", " + "UNLOCKS=" + unlocks + ", " +
-                    "DELAYED_LOCKS=" + (locks.get() - quickLocks.get()) + ", " + "LOCKED=" + locked + ", " +
-                    "ERRORS=" + errors;
+            return "LOCKS="
+                    + locks
+                    + ", "
+                    + "UNLOCKS="
+                    + unlocks
+                    + ", "
+                    + "DELAYED_LOCKS="
+                    + (locks.get() - quickLocks.get())
+                    + ", "
+                    + "LOCKED="
+                    + locked
+                    + ", "
+                    + "ERRORS="
+                    + errors;
         }
     }
 }

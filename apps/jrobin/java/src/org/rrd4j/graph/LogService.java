@@ -2,13 +2,17 @@ package org.rrd4j.graph;
 
 import java.util.function.DoubleUnaryOperator;
 
+/**
+ * Utility service for logarithmic scaling operations in RRD graphs. Provides appropriate
+ * logarithmic functions based on data ranges and characteristics.
+ */
 class LogService {
 
     static DoubleUnaryOperator resolve(ImageParameters im) {
         boolean sameSign = Math.signum(im.minval) == Math.signum(im.maxval);
         double absMinVal = Math.min(Math.abs(im.minval), Math.abs(im.maxval));
         double absMaxVal = Math.max(Math.abs(im.minval), Math.abs(im.maxval));
-        if (! sameSign) {
+        if (!sameSign) {
             return LogService::log10;
         } else if (absMinVal == 0 && absMaxVal < 1) {
             double correction = 1.0 / absMaxVal;
@@ -23,13 +27,9 @@ class LogService {
         }
     }
 
-    private LogService() {
+    private LogService() {}
 
-    }
-
-    /**
-     * Compute logarithm for the purposes of y-axis.
-     */
+    /** Compute logarithm for the purposes of y-axis. */
     private static double log10(double v, double correction, double minval) {
         if (v == minval) {
             return 0.0;
@@ -53,5 +53,4 @@ class LogService {
             return Math.copySign(lv, v);
         }
     }
-
 }

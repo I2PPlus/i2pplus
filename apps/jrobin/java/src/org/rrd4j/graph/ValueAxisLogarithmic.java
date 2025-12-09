@@ -3,6 +3,10 @@ package org.rrd4j.graph;
 import java.awt.*;
 import java.util.Locale;
 
+/**
+ * Represents logarithmic value axis (y-axis) in RRD graphs. Handles logarithmic scaling with
+ * appropriate grid lines and labels for log-scale graphs.
+ */
 class ValueAxisLogarithmic extends Axis {
     private static final double[][] yloglab = {
         {1e9, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -17,6 +21,7 @@ class ValueAxisLogarithmic extends Axis {
     @FunctionalInterface
     private interface IntDoubleLabelConsumer {
         void accept(int a, double b, String formatPattern);
+
         default void accept(int a, double b) {
             accept(a, b, "%.0e");
         }
@@ -59,7 +64,10 @@ class ValueAxisLogarithmic extends Axis {
     }
 
     private double findStart(double positive, int idx) {
-        return Math.pow(10, im.log.applyAsDouble(positive) - im.log.applyAsDouble(positive) % im.log.applyAsDouble(yloglab[idx][0]));
+        return Math.pow(
+                10,
+                im.log.applyAsDouble(positive)
+                        - im.log.applyAsDouble(positive) % im.log.applyAsDouble(yloglab[idx][0]));
     }
 
     boolean draw() {
@@ -72,7 +80,8 @@ class ValueAxisLogarithmic extends Axis {
         if (Math.abs(im.maxval - im.minval) < 1e-10) {
             return false;
         }
-        double pixpex = im.ysize / (im.log.applyAsDouble(im.maxval) - im.log.applyAsDouble(im.minval));
+        double pixpex =
+                im.ysize / (im.log.applyAsDouble(im.maxval) - im.log.applyAsDouble(im.minval));
         if (Double.isNaN(pixpex)) {
             return false;
         }
@@ -104,22 +113,28 @@ class ValueAxisLogarithmic extends Axis {
             return false;
         }
         String zeroFormatted = String.format(locale, "%.0e", 0.0);
-        IntDoubleLabelConsumer drawAxisLabel = (y, v, f) -> {
-            String graphLabel = String.format(locale, f, v);
-            if (zeroFormatted.equals(graphLabel)) {
-                graphLabel = String.format(locale, "%.0f", v);
-            }
-            int length = (int) (worker.getStringWidth(graphLabel, font));
-            worker.drawString(graphLabel, x0 - length - PADDING_VLABEL, y + labelOffset, font, fontColor);
-        };
-        IntDoubleLineConsumer drawAxisLines = (y, v, p) -> {
-            if (gdef.drawTicks()) {
-                worker.drawLine(x0 - 1, y, x0 + 1, y, p, gdef.tickStroke);
-                worker.drawLine(x1 - 1, y, x1 + 1, y, p, gdef.tickStroke);
-            }
-            worker.drawLine(x0, y, x1, y, p, gdef.gridStroke);
-        };
-
+        IntDoubleLabelConsumer drawAxisLabel =
+                (y, v, f) -> {
+                    String graphLabel = String.format(locale, f, v);
+                    if (zeroFormatted.equals(graphLabel)) {
+                        graphLabel = String.format(locale, "%.0f", v);
+                    }
+                    int length = (int) (worker.getStringWidth(graphLabel, font));
+                    worker.drawString(
+                            graphLabel,
+                            x0 - length - PADDING_VLABEL,
+                            y + labelOffset,
+                            font,
+                            fontColor);
+                };
+        IntDoubleLineConsumer drawAxisLines =
+                (y, v, p) -> {
+                    if (gdef.drawTicks()) {
+                        worker.drawLine(x0 - 1, y, x0 + 1, y, p, gdef.tickStroke);
+                        worker.drawLine(x1 - 1, y, x1 + 1, y, p, gdef.tickStroke);
+                    }
+                    worker.drawLine(x0, y, x1, y, p, gdef.gridStroke);
+                };
 
         // Draw minor grid for positive values
         for (double value = findStart(positiveMin, minoridx);
@@ -214,5 +229,4 @@ class ValueAxisLogarithmic extends Axis {
 
         return true;
     }
-
 }

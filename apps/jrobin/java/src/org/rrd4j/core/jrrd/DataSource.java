@@ -11,7 +11,12 @@ import java.text.NumberFormat;
  */
 public class DataSource {
 
-    private enum ds_param_en { DS_mrhb_cnt, DS_min_val, DS_max_val, DS_cde }
+    private enum ds_param_en {
+        DS_mrhb_cnt,
+        DS_min_val,
+        DS_max_val,
+        DS_cde
+    }
 
     private final long offset;
     private final long size;
@@ -109,14 +114,10 @@ public class DataSource {
         s.println(minimumHeartbeat);
         s.print(sb);
         s.print("].min = ");
-        s.println(Double.isNaN(minimum)
-                ? "NaN"
-                        : numberFormat.format(minimum));
+        s.println(Double.isNaN(minimum) ? "NaN" : numberFormat.format(minimum));
         s.print(sb);
         s.print("].max = ");
-        s.println(Double.isNaN(maximum)
-                ? "NaN"
-                        : numberFormat.format(maximum));
+        s.println(Double.isNaN(maximum) ? "NaN" : numberFormat.format(maximum));
         s.print(sb);
         s.print("].last_ds = ");
         s.println(pdpStatusBlock.lastReading);
@@ -125,9 +126,7 @@ public class DataSource {
 
         double value = pdpStatusBlock.value;
 
-        s.println(Double.isNaN(value)
-                ? "NaN"
-                        : numberFormat.format(value));
+        s.println(Double.isNaN(value) ? "NaN" : numberFormat.format(value));
         s.print(sb);
         s.print("].unknown_sec = ");
         s.println(pdpStatusBlock.unknownSeconds);

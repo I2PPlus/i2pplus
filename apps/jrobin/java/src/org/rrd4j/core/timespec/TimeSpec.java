@@ -5,10 +5,39 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
- * Simple class to represent time obtained by parsing at-style date specification (described
- * in detail on the rrdfetch man page. See javadoc for {@link org.rrd4j.core.timespec.TimeParser}
- * for more information.
+ * Represents time specifications parsed from at-style date strings.
  *
+ * <p>This class stores the result of parsing time specifications in the format used by RRDTool and
+ * described in detail on the rrdfetch man page. It supports both absolute timestamps and relative
+ * time adjustments.
+ *
+ * <p>Time specification types:<br>
+ * - <strong>Absolute time</strong>: Specific date and time (e.g., "Jan 1 2023 12:00")<br>
+ * - <strong>Relative time</strong>: Offsets from reference time (e.g., "now-2hours")<br>
+ * - <strong>Start/End markers</strong>: Relative to another time spec (e.g., "start+1day")
+ *
+ * <p>Common usage patterns:<br>
+ *
+ * <pre>
+ * // Absolute time examples
+ * TimeParser p1 = new TimeParser("Jan 1 2023");
+ * TimeParser p2 = new TimeParser("12:30");
+ * TimeParser p3 = new TimeParser("2023/01/01 12:30:45");
+ *
+ * // Relative time examples
+ * TimeParser p4 = new TimeParser("now-1day");      // Yesterday
+ * TimeParser p5 = new TimeParser("now+2hours30min"); // 2.5 hours from now
+ * TimeParser p6 = new TimeParser("tomorrow");       // Tomorrow at midnight
+ * TimeParser p7 = new TimeParser("noon");           // Today at 12:00
+ *
+ * // Range examples
+ * TimeParser p8 = new TimeParser("start");           // Start of range
+ * TimeParser p9 = new TimeParser("end+1week");      // End of range + 1 week
+ * </pre>
+ *
+ * <p>See {@link TimeParser} for complete syntax reference and parsing details.
+ *
+ * @author Sasa Markovic
  */
 public class TimeSpec {
     static final int TYPE_ABSOLUTE = 0;
@@ -28,6 +57,15 @@ public class TimeSpec {
         this.dateString = dateString;
     }
 
+    /**
+     * Initializes this TimeSpec with local time components from a timestamp.
+     *
+     * <p>This helper method converts a Unix timestamp (seconds since epoch) into individual time
+     * components (year, month, day, hour, minute, second) and day of week. This is used to
+     * establish a baseline time for relative time calculations.
+     *
+     * @param timestamp Unix timestamp in seconds since epoch
+     */
     void localtime(long timestamp) {
         GregorianCalendar date = new GregorianCalendar();
         date.setTime(new Date(timestamp * 1000L));
@@ -52,8 +90,10 @@ public class TimeSpec {
         }
         // how would I guess what time it was?
         else {
-            throw new IllegalStateException("Relative times like '" +
-                    dateString + "' require proper absolute context to be evaluated");
+            throw new IllegalStateException(
+                    "Relative times like '"
+                            + dateString
+                            + "' require proper absolute context to be evaluated");
         }
         gc.add(Calendar.YEAR, dyear);
         gc.add(Calendar.MONTH, dmonth);
@@ -65,7 +105,8 @@ public class TimeSpec {
     }
 
     /**
-     * <p>Returns the corresponding timestamp (seconds since Epoch). Example:</p>
+     * Returns the corresponding timestamp (seconds since Epoch). Example:
+     *
      * <pre>
      * TimeParser p = new TimeParser("now-1day");
      * TimeSpec ts = p.parse();
@@ -78,17 +119,47 @@ public class TimeSpec {
         return getTime().toInstant().getEpochSecond();
     }
 
+    /**
+     * Returns a debug string representation of this TimeSpec.
+     *
+     * <p>This method formats the TimeSpec for debugging purposes, showing both the absolute time
+     * components and the relative delta components in a compact format.
+     *
+     * @return debug string showing type and all time components
+     */
     String dump() {
-        return (type == TYPE_ABSOLUTE ? "ABSTIME" : type == TYPE_START ? "START" : "END") +
-                ": " + year + "/" + month + "/" + day +
-                "/" + hour + "/" + min + "/" + sec + " (" +
-                dyear + "/" + dmonth + "/" + dday +
-                "/" + dhour + "/" + dmin + "/" + dsec + ")";
+        return (type == TYPE_ABSOLUTE ? "ABSTIME" : type == TYPE_START ? "START" : "END")
+                + ": "
+                + year
+                + "/"
+                + month
+                + "/"
+                + day
+                + "/"
+                + hour
+                + "/"
+                + min
+                + "/"
+                + sec
+                + " ("
+                + dyear
+                + "/"
+                + dmonth
+                + "/"
+                + dday
+                + "/"
+                + dhour
+                + "/"
+                + dmin
+                + "/"
+                + dsec
+                + ")";
     }
 
     /**
-     * <p>Use this static method to resolve relative time references and obtain the corresponding
-     * Calendar objects. Example:</p>
+     * Use this static method to resolve relative time references and obtain the corresponding
+     * Calendar objects. Example:
+     *
      * <pre>
      * TimeParser pStart = new TimeParser("now-1month"); // starting time
      * TimeParser pEnd = new TimeParser("start+1week");  // ending time
@@ -107,15 +178,13 @@ public class TimeSpec {
         }
         spec1.context = spec2;
         spec2.context = spec1;
-        return new Calendar[]{
-                spec1.getTime(),
-                spec2.getTime()
-        };
+        return new Calendar[] {spec1.getTime(), spec2.getTime()};
     }
 
     /**
-     * <p>Use this static method to resolve relative time references and obtain the corresponding
-     * timestamps (seconds since epoch). Example:</p>
+     * Use this static method to resolve relative time references and obtain the corresponding
+     * timestamps (seconds since epoch). Example:
+     *
      * <pre>
      * TimeParser pStart = new TimeParser("now-1month"); // starting time
      * TimeParser pEnd = new TimeParser("start+1week");  // ending time
@@ -131,7 +200,7 @@ public class TimeSpec {
     public static long[] getTimestamps(TimeSpec spec1, TimeSpec spec2) {
         Calendar[] gcs = getTimes(spec1, spec2);
         return new long[] {
-                gcs[0].toInstant().getEpochSecond(), gcs[1].toInstant().getEpochSecond()
+            gcs[0].toInstant().getEpochSecond(), gcs[1].toInstant().getEpochSecond()
         };
     }
 }

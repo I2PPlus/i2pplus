@@ -1,5 +1,14 @@
 package org.rrd4j.data;
 
+import org.rrd4j.ConsolFun;
+import org.rrd4j.core.DataHolder;
+import org.rrd4j.core.FetchData;
+import org.rrd4j.core.FetchRequest;
+import org.rrd4j.core.RrdBackendFactory;
+import org.rrd4j.core.RrdDb;
+import org.rrd4j.core.RrdDbPool;
+import org.rrd4j.core.Util;
+
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URI;
@@ -15,22 +24,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
-import org.rrd4j.ConsolFun;
-import org.rrd4j.core.DataHolder;
-import org.rrd4j.core.FetchData;
-import org.rrd4j.core.FetchRequest;
-import org.rrd4j.core.RrdBackendFactory;
-import org.rrd4j.core.RrdDb;
-import org.rrd4j.core.RrdDbPool;
-import org.rrd4j.core.Util;
-
 /**
- * <p>Class which should be used for all calculations based on the data fetched from RRD files. This class
- * supports ordinary DEF datasources (defined in RRD files), CDEF datasources (RPN expressions evaluation),
- * SDEF (static datasources - extension of Rrd4j) and PDEF (plottables, see
- * {@link org.rrd4j.data.Plottable Plottable} for more information.</p>
+ * Class which should be used for all calculations based on the data fetched from RRD files. This
+ * class supports ordinary DEF datasources (defined in RRD files), CDEF datasources (RPN expressions
+ * evaluation), SDEF (static datasources - extension of Rrd4j) and PDEF (plottables, see {@link
+ * org.rrd4j.data.Plottable Plottable} for more information.
  *
- * <p>Typical class usage:</p>
+ * <p>Typical class usage:
+ *
  * <pre>
  * final long t1 = ...
  * final long t2 = ...
@@ -49,11 +50,9 @@ import org.rrd4j.core.Util;
  */
 public class DataProcessor implements DataHolder {
 
-    /**
-     * Not used any more.
-     */
-    @Deprecated
-    public static final int DEFAULT_PIXEL_COUNT = 600;
+    /** Not used any more. */
+    @Deprecated public static final int DEFAULT_PIXEL_COUNT = 600;
+
     /** Constant <code>DEFAULT_PERCENTILE=95.0</code> */
     public static final double DEFAULT_PERCENTILE = 95.0; // %
 
@@ -79,9 +78,9 @@ public class DataProcessor implements DataHolder {
     private Def[] defSources;
 
     /**
-     * Creates new DataProcessor object for the given time span. Ending timestamp may be set to zero.
-     * In that case, the class will try to find the optimal ending timestamp based on the last update time of
-     * RRD files processed with the {@link #processData()} method.
+     * Creates new DataProcessor object for the given time span. Ending timestamp may be set to
+     * zero. In that case, the class will try to find the optimal ending timestamp based on the last
+     * update time of RRD files processed with the {@link #processData()} method.
      *
      * @param t1 Starting timestamp in seconds without milliseconds
      * @param t2 Ending timestamp in seconds without milliseconds
@@ -90,15 +89,14 @@ public class DataProcessor implements DataHolder {
         if ((t1 < t2 && t1 > 0 && t2 > 0) || (t1 > 0 && t2 == 0)) {
             this.tStart = t1;
             this.tEnd = t2;
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Invalid timestamps specified: " + t1 + ", " + t2);
         }
     }
 
     /**
-     * Creates new DataProcessor object for the given time span. Ending date may be set to null.
-     * In that case, the class will try to find optimal ending date based on the last update time of
+     * Creates new DataProcessor object for the given time span. Ending date may be set to null. In
+     * that case, the class will try to find optimal ending date based on the last update time of
      * RRD files processed with the {@link #processData()} method.
      *
      * @param d1 Starting date
@@ -109,11 +107,11 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Creates new DataProcessor object for the given time span. Ending date may be set to null.
-     * In that case, the class will try to find optimal ending date based on the last update time of
+     * Creates new DataProcessor object for the given time span. Ending date may be set to null. In
+     * that case, the class will try to find optimal ending date based on the last update time of
      * RRD files processed with the {@link #processData()} method.
-     * <p>
-     * It use the time zone for starting calendar date.
+     *
+     * <p>It use the time zone for starting calendar date.
      *
      * @param gc1 Starting Calendar date
      * @param gc2 Ending Calendar date
@@ -138,7 +136,8 @@ public class DataProcessor implements DataHolder {
     /**
      * Returns boolean value representing {@link org.rrd4j.core.RrdDbPool RrdDbPool} usage policy.
      *
-     * @return true, if the pool will be used internally to fetch data from RRD files, false otherwise.
+     * @return true, if the pool will be used internally to fetch data from RRD files, false
+     *     otherwise.
      */
     @Override
     public boolean isPoolUsed() {
@@ -148,7 +147,8 @@ public class DataProcessor implements DataHolder {
     /**
      * Sets the {@link org.rrd4j.core.RrdDbPool RrdDbPool} usage policy.
      *
-     * @param poolUsed true, if the pool should be used to fetch data from RRD files, false otherwise.
+     * @param poolUsed true, if the pool should be used to fetch data from RRD files, false
+     *     otherwise.
      */
     @Override
     public void setPoolUsed(boolean poolUsed) {
@@ -161,8 +161,9 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Defines the {@link org.rrd4j.core.RrdDbPool RrdDbPool} to use. If not defined, but {{@link #setPoolUsed(boolean)}
-     * set to true, the default {@link RrdDbPool#getInstance()} will be used.
+     * Defines the {@link org.rrd4j.core.RrdDbPool RrdDbPool} to use. If not defined, but {{@link
+     * #setPoolUsed(boolean)} set to true, the default {@link RrdDbPool#getInstance()} will be used.
+     *
      * @param pool an optional pool to use.
      */
     @Override
@@ -170,24 +171,24 @@ public class DataProcessor implements DataHolder {
         this.pool = pool;
     }
 
-
     /**
-     * <p>Sets the number of pixels (target graph width). This number is used only to calculate pixel coordinates
-     * for Rrd4j graphs (methods {@link #getValuesPerPixel(String)} and {@link #getTimestampsPerPixel()}),
-     * but has influence neither on datasource values calculated with the
-     * {@link #processData()} method nor on aggregated values returned from {@link #getAggregates(String)}
-     * and similar methods. In other words, aggregated values will not change once you decide to change
-     * the dimension of your graph.</p>
+     * Sets the number of pixels (target graph width). This number is used only to calculate pixel
+     * coordinates for Rrd4j graphs (methods {@link #getValuesPerPixel(String)} and {@link
+     * #getTimestampsPerPixel()}), but has influence neither on datasource values calculated with
+     * the {@link #processData()} method nor on aggregated values returned from {@link
+     * #getAggregates(String)} and similar methods. In other words, aggregated values will not
+     * change once you decide to change the dimension of your graph.
      *
-     * @param pixelCount The number of pixels. If you process RRD data in order to display it on the graph,
-     *                   this should be the width of your graph.
+     * @param pixelCount The number of pixels. If you process RRD data in order to display it on the
+     *     graph, this should be the width of your graph.
      */
     public void setPixelCount(int pixelCount) {
         this.pixelCount = pixelCount;
     }
 
     /**
-     * Returns the number of pixels (target graph width). See {@link #setPixelCount(int)} for more information.
+     * Returns the number of pixels (target graph width). See {@link #setPixelCount(int)} for more
+     * information.
      *
      * @return Target graph width
      */
@@ -196,8 +197,9 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Once data are fetched, the step value will be used to generate values. If not defined, or set to 0, a optimal
-     * step will be calculated.
+     * Once data are fetched, the step value will be used to generate values. If not defined, or set
+     * to 0, a optimal step will be calculated.
+     *
      * @param step Default to 0.
      */
     @Override
@@ -206,8 +208,8 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Returns the time step used for data processing. Initially, this method returns zero.
-     * Once {@link #processData()} is finished, the method will return the time stamp interval.
+     * Returns the time step used for data processing. Initially, this method returns zero. Once
+     * {@link #processData()} is finished, the method will return the time stamp interval.
      *
      * @return Step used for data processing.
      */
@@ -217,10 +219,11 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Returns desired RRD archive step (resolution) in seconds to be used while fetching data
-     * from RRD files. In other words, this value will used as the last parameter of
-     * {@link org.rrd4j.core.RrdDb#createFetchRequest(ConsolFun, long, long, long) RrdDb.createFetchRequest()} method
-     * when this method is called internally by this DataProcessor.
+     * Returns desired RRD archive step (resolution) in seconds to be used while fetching data from
+     * RRD files. In other words, this value will used as the last parameter of {@link
+     * org.rrd4j.core.RrdDb#createFetchRequest(ConsolFun, long, long, long)
+     * RrdDb.createFetchRequest()} method when this method is called internally by this
+     * DataProcessor.
      *
      * @return Desired archive step (fetch resolution) in seconds.
      */
@@ -229,11 +232,12 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Sets desired RRD archive step in seconds to be used internally while fetching data
-     * from RRD files. In other words, this value will used as the last parameter of
-     * {@link org.rrd4j.core.RrdDb#createFetchRequest(ConsolFun, long, long, long) RrdDb.createFetchRequest()} method
-     * when this method is called internally by this DataProcessor. If this method is never called, fetch
-     * request resolution defaults to 1 (smallest possible archive step will be chosen automatically).
+     * Sets desired RRD archive step in seconds to be used internally while fetching data from RRD
+     * files. In other words, this value will used as the last parameter of {@link
+     * org.rrd4j.core.RrdDb#createFetchRequest(ConsolFun, long, long, long)
+     * RrdDb.createFetchRequest()} method when this method is called internally by this
+     * DataProcessor. If this method is never called, fetch request resolution defaults to 1
+     * (smallest possible archive step will be chosen automatically).
      *
      * @param fetchRequestResolution Desired archive step (fetch resolution) in seconds.
      */
@@ -252,10 +256,10 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Returns ending timestamp. Basically, this value is equal to the ending timestamp
-     * specified in the constructor. However, if the ending timestamps was zero, it
-     * will be replaced with the real timestamp when the {@link #processData()} method returns. The real
-     * value will be calculated from the last update times of processed RRD files.
+     * Returns ending timestamp. Basically, this value is equal to the ending timestamp specified in
+     * the constructor. However, if the ending timestamps was zero, it will be replaced with the
+     * real timestamp when the {@link #processData()} method returns. The real value will be
+     * calculated from the last update times of processed RRD files.
      *
      * @return Ending timestamp in seconds
      * @deprecated Uses {@link #getEndTime()} instead.
@@ -273,27 +277,27 @@ public class DataProcessor implements DataHolder {
     public long[] getTimestamps() {
         if (timestamps == null) {
             throw new IllegalStateException("Timestamps not calculated yet");
-        }
-        else {
+        } else {
             return timestamps;
         }
     }
 
     /**
-     * Returns calculated values for a single datasource. Corresponding timestamps can be obtained from
-     * the {@link #getTimestamps()} method.
+     * Returns calculated values for a single datasource. Corresponding timestamps can be obtained
+     * from the {@link #getTimestamps()} method.
      *
      * @param sourceName Datasource name
      * @return an array of datasource values
-     * @throws java.lang.IllegalArgumentException Thrown if invalid datasource name is specified,
-     *                                  or if datasource values are not yet calculated (method {@link #processData()}
-     *                                  was not called)
+     * @throws java.lang.IllegalArgumentException Thrown if invalid datasource name is specified, or
+     *     if datasource values are not yet calculated (method {@link #processData()} was not
+     *     called)
      */
     public double[] getValues(String sourceName) {
         Source source = getSource(sourceName);
         double[] values = source.getValues();
         if (values == null) {
-            throw new IllegalArgumentException("Values not available for source [" + sourceName + "]");
+            throw new IllegalArgumentException(
+                    "Values not available for source [" + sourceName + "]");
         }
         return values;
     }
@@ -302,12 +306,12 @@ public class DataProcessor implements DataHolder {
      * Returns single aggregated value for a single datasource.
      *
      * @param sourceName Datasource name
-     * @param consolFun  Consolidation function to be applied to fetched datasource values.
-     *                   Valid consolidation functions are MIN, MAX, LAST, FIRST, AVERAGE and TOTAL
-     *                   (these string constants are conveniently defined in the {@link org.rrd4j.ConsolFun} class)
-     * @throws java.lang.IllegalArgumentException Thrown if invalid datasource name is specified,
-     *                                  or if datasource values are not yet calculated (method {@link #processData()}
-     *                                  was not called)
+     * @param consolFun Consolidation function to be applied to fetched datasource values. Valid
+     *     consolidation functions are MIN, MAX, LAST, FIRST, AVERAGE and TOTAL (these string
+     *     constants are conveniently defined in the {@link org.rrd4j.ConsolFun} class)
+     * @throws java.lang.IllegalArgumentException Thrown if invalid datasource name is specified, or
+     *     if datasource values are not yet calculated (method {@link #processData()} was not
+     *     called)
      * @return a aggregate value as a double calculated from the source.
      * @deprecated Use {@link Variable} based method instead.
      */
@@ -320,13 +324,14 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Returns all (MIN, MAX, LAST, FIRST, AVERAGE and TOTAL) aggregated values for a single datasource.
+     * Returns all (MIN, MAX, LAST, FIRST, AVERAGE and TOTAL) aggregated values for a single
+     * datasource.
      *
      * @param sourceName Datasource name
      * @return Object containing all aggregated values
-     * @throws java.lang.IllegalArgumentException Thrown if invalid datasource name is specified,
-     *                                  or if datasource values are not yet calculated (method {@link #processData()}
-     *                                  was not called)
+     * @throws java.lang.IllegalArgumentException Thrown if invalid datasource name is specified, or
+     *     if datasource values are not yet calculated (method {@link #processData()} was not
+     *     called)
      * @deprecated Use {@link Variable} based method instead.
      */
     @Deprecated
@@ -343,11 +348,11 @@ public class DataProcessor implements DataHolder {
      */
     public Variable.Value getVariable(String sourceName) {
         Source source = getSource(sourceName);
-        if( source instanceof VDef) {
+        if (source instanceof VDef) {
             return ((VDef) source).getValue();
-        }
-        else {
-            throw new IllegalArgumentException(String.format("%s is not a Variable source", source.getName()));
+        } else {
+            throw new IllegalArgumentException(
+                    String.format("%s is not a Variable source", source.getName()));
         }
     }
 
@@ -366,16 +371,17 @@ public class DataProcessor implements DataHolder {
 
     /**
      * This method is just an alias for {@link #getPercentile(String)} method.
-     * <p>
-     * Used by ISPs which charge for bandwidth utilization on a "95th percentile" basis.<p>
      *
-     * The 95th percentile is the highest source value left when the top 5% of a numerically sorted set
-     * of source data is discarded. It is used as a measure of the peak value used when one discounts
-     * a fair amount for transitory spikes. This makes it markedly different from the average.<p>
+     * <p>Used by ISPs which charge for bandwidth utilization on a "95th percentile" basis.
      *
-     * Read more about this topic at
-     * <a href="http://www.red.net/support/resourcecentre/leasedline/percentile.php">Rednet</a> or
-     * <a href="http://www.bytemark.co.uk/support/tech/95thpercentile.html">Bytemark</a>.
+     * <p>The 95th percentile is the highest source value left when the top 5% of a numerically
+     * sorted set of source data is discarded. It is used as a measure of the peak value used when
+     * one discounts a fair amount for transitory spikes. This makes it markedly different from the
+     * average.
+     *
+     * <p>Read more about this topic at <a
+     * href="http://www.red.net/support/resourcecentre/leasedline/percentile.php">Rednet</a> or <a
+     * href="http://www.bytemark.co.uk/support/tech/95thpercentile.html">Bytemark</a>.
      *
      * @param sourceName Datasource name
      * @return 95th percentile of fetched source values
@@ -387,15 +393,16 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Used by ISPs which charge for bandwidth utilization on a "95th percentile" basis.<p>
+     * Used by ISPs which charge for bandwidth utilization on a "95th percentile" basis.
      *
-     * The 95th percentile is the highest source value left when the top 5% of a numerically sorted set
-     * of source data is discarded. It is used as a measure of the peak value used when one discounts
-     * a fair amount for transitory spikes. This makes it markedly different from the average.<p>
+     * <p>The 95th percentile is the highest source value left when the top 5% of a numerically
+     * sorted set of source data is discarded. It is used as a measure of the peak value used when
+     * one discounts a fair amount for transitory spikes. This makes it markedly different from the
+     * average.
      *
-     * Read more about this topic at
-     * <a href="http://www.red.net/support/resourcecentre/leasedline/percentile.php">Rednet</a> or
-     * <a href="http://www.bytemark.co.uk/support/tech/95thpercentile.html">Bytemark</a>.
+     * <p>Read more about this topic at <a
+     * href="http://www.red.net/support/resourcecentre/leasedline/percentile.php">Rednet</a> or <a
+     * href="http://www.bytemark.co.uk/support/tech/95thpercentile.html">Bytemark</a>.
      *
      * @param sourceName Datasource name
      * @return 95th percentile of fetched source values
@@ -407,19 +414,20 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * The same as {@link #getPercentile(String)} but with a possibility to define custom percentile boundary
-     * (different from 95).
+     * The same as {@link #getPercentile(String)} but with a possibility to define custom percentile
+     * boundary (different from 95).
      *
      * @param sourceName Datasource name.
-     * @param percentile Boundary percentile. Value of 95 (%) is suitable in most cases, but you are free
-     *                   to provide your own percentile boundary between zero and 100.
+     * @param percentile Boundary percentile. Value of 95 (%) is suitable in most cases, but you are
+     *     free to provide your own percentile boundary between zero and 100.
      * @return Requested percentile of fetched source values
      * @deprecated Use {@link Variable} based method instead.
      */
     @Deprecated
     public double getPercentile(String sourceName, double percentile) {
         if (percentile <= 0.0 || percentile > 100.0) {
-            throw new IllegalArgumentException("Invalid percentile [" + percentile + "], should be between 0 and 100");
+            throw new IllegalArgumentException(
+                    "Invalid percentile [" + percentile + "], should be between 0 and 100");
         }
         Source source = getSource(sourceName);
         return source.getPercentile(tStart, tEnd, percentile);
@@ -435,16 +443,18 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Returns an array of all datasource values for all datasources. Each row in this two-dimensional
-     * array represents an array of calculated values for a single datasource. The order of rows is the same
-     * as the order in which datasources were added to this DataProcessor object.
+     * Returns an array of all datasource values for all datasources. Each row in this
+     * two-dimensional array represents an array of calculated values for a single datasource. The
+     * order of rows is the same as the order in which datasources were added to this DataProcessor
+     * object.
      *
-     * @return All datasource values for all datasources. The first index is the index of the datasource,
-     *         the second index is the index of the datasource value. The number of datasource values is equal
-     *         to the number of timestamps returned with {@link #getTimestamps()}  method.
-     * @throws java.lang.IllegalArgumentException Thrown if invalid datasource name is specified,
-     *                                  or if datasource values are not yet calculated (method {@link #processData()}
-     *                                  was not called)
+     * @return All datasource values for all datasources. The first index is the index of the
+     *     datasource, the second index is the index of the datasource value. The number of
+     *     datasource values is equal to the number of timestamps returned with {@link
+     *     #getTimestamps()} method.
+     * @throws java.lang.IllegalArgumentException Thrown if invalid datasource name is specified, or
+     *     if datasource values are not yet calculated (method {@link #processData()} was not
+     *     called)
      */
     public double[][] getValues() {
         String[] names = getSourceNames();
@@ -468,11 +478,11 @@ public class DataProcessor implements DataHolder {
     /////////////////////////////////////////////////////////////////
 
     /**
-     * Adds a custom, {@link org.rrd4j.data.Plottable plottable} datasource (<b>PDEF</b>).
-     * The datapoints should be made available by a class extending
-     * {@link org.rrd4j.data.Plottable Plottable} class.
+     * Adds a custom, {@link org.rrd4j.data.Plottable plottable} datasource (<b>PDEF</b>). The
+     * datapoints should be made available by a class extending {@link org.rrd4j.data.Plottable
+     * Plottable} class.
      *
-     * @param name      source name.
+     * @param name source name.
      * @param plottable class that extends Plottable class and is suited for graphing.
      * @deprecated Uses {@link #datasource(String, IPlottable)} instead
      */
@@ -482,11 +492,11 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Adds a custom, {@link org.rrd4j.data.Plottable plottable} datasource (<b>PDEF</b>).
-     * The datapoints should be made available by a class extending
-     * {@link org.rrd4j.data.Plottable Plottable} class.
+     * Adds a custom, {@link org.rrd4j.data.Plottable plottable} datasource (<b>PDEF</b>). The
+     * datapoints should be made available by a class extending {@link org.rrd4j.data.Plottable
+     * Plottable} class.
      *
-     * @param name      source name.
+     * @param name source name.
      * @param plottable class that extends Plottable class and is suited for graphing.
      * @since 3.7
      */
@@ -497,26 +507,26 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * <p>Adds complex source (<b>CDEF</b>).
-     * Complex sources are evaluated using the supplied <code>RPN</code> expression.</p>
-     * Complex source <code>name</code> can be used:
+     * Adds complex source (<b>CDEF</b>). Complex sources are evaluated using the supplied <code>RPN
+     * </code> expression. Complex source <code>name</code> can be used:
+     *
      * <ul>
-     * <li>To specify sources for line, area and stack plots.</li>
-     * <li>To define other complex sources.</li>
+     *   <li>To specify sources for line, area and stack plots.
+     *   <li>To define other complex sources.
      * </ul>
      *
-     * The supported RPN functions, operators and constants are detailed at
-     * <a href="https://github.com/rrd4j/rrd4j/wiki/RPNFuncs" target="man">RRD4J's wiki</a>.
-     * <p>
-     * Rrd4j does not force you to specify at least one simple source name as RRDTool.
-     * <p>
-     * For more details on RPN see RRDTool's
-     * <a href="http://oss.oetiker.ch/rrdtool/doc/rrdgraph_rpn.en.html" target="man">
-     * rrdgraph man page</a>.
+     * The supported RPN functions, operators and constants are detailed at <a
+     * href="https://github.com/rrd4j/rrd4j/wiki/RPNFuncs" target="man">RRD4J's wiki</a>.
      *
-     * @param name          source name.
-     * @param rpnExpression RPN expression containing comma delimited simple and complex
-     *                      source names, RPN constants, functions and operators.
+     * <p>Rrd4j does not force you to specify at least one simple source name as RRDTool.
+     *
+     * <p>For more details on RPN see RRDTool's <a
+     * href="http://oss.oetiker.ch/rrdtool/doc/rrdgraph_rpn.en.html" target="man"> rrdgraph man
+     * page</a>.
+     *
+     * @param name source name.
+     * @param rpnExpression RPN expression containing comma delimited simple and complex source
+     *     names, RPN constants, functions and operators.
      * @deprecated Uses {@link #datasource(String, String)} instead
      */
     @Deprecated
@@ -525,26 +535,26 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * <p>Adds complex source (<b>CDEF</b>).
-     * Complex sources are evaluated using the supplied <code>RPN</code> expression.</p>
-     * Complex source <code>name</code> can be used:
+     * Adds complex source (<b>CDEF</b>). Complex sources are evaluated using the supplied <code>RPN
+     * </code> expression. Complex source <code>name</code> can be used:
+     *
      * <ul>
-     * <li>To specify sources for line, area and stack plots.</li>
-     * <li>To define other complex sources.</li>
+     *   <li>To specify sources for line, area and stack plots.
+     *   <li>To define other complex sources.
      * </ul>
      *
-     * The supported RPN functions, operators and constants are detailed at
-     * <a href="https://github.com/rrd4j/rrd4j/wiki/RPNFuncs" target="man">RRD4J's wiki</a>.
-     * <p>
-     * Rrd4j does not force you to specify at least one simple source name as RRDTool.
-     * <p>
-     * For more details on RPN see RRDTool's
-     * <a href="http://oss.oetiker.ch/rrdtool/doc/rrdgraph_rpn.en.html" target="man">
-     * rrdgraph man page</a>.
+     * The supported RPN functions, operators and constants are detailed at <a
+     * href="https://github.com/rrd4j/rrd4j/wiki/RPNFuncs" target="man">RRD4J's wiki</a>.
      *
-     * @param name          source name.
-     * @param rpnExpression RPN expression containing comma delimited simple and complex
-     *                      source names, RPN constants, functions and operators.
+     * <p>Rrd4j does not force you to specify at least one simple source name as RRDTool.
+     *
+     * <p>For more details on RPN see RRDTool's <a
+     * href="http://oss.oetiker.ch/rrdtool/doc/rrdgraph_rpn.en.html" target="man"> rrdgraph man
+     * page</a>.
+     *
+     * @param name source name.
+     * @param rpnExpression RPN expression containing comma delimited simple and complex source
+     *     names, RPN constants, functions and operators.
      * @since 3.7
      */
     @Override
@@ -554,11 +564,11 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Adds static source (<b>SDEF</b>). Static sources are the result of a consolidation function applied
-     * to <em>any</em> other source that has been defined previously.
+     * Adds static source (<b>SDEF</b>). Static sources are the result of a consolidation function
+     * applied to <em>any</em> other source that has been defined previously.
      *
-     * @param name      source name.
-     * @param defName   Name of the datasource to calculate the value from.
+     * @param name source name.
+     * @param defName Name of the datasource to calculate the value from.
      * @param consolFun Consolidation function to use for value calculation
      * @deprecated Use {@link Variable} based method instead.
      */
@@ -569,15 +579,15 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Creates a datasource that performs a percentile calculation on an
-     * another named datasource to yield a single value.
-     * <p>
-     * Requires that the other datasource has already been defined; otherwise, it'll
-     * end up with no data
+     * Creates a datasource that performs a percentile calculation on an another named datasource to
+     * yield a single value.
+     *
+     * <p>Requires that the other datasource has already been defined; otherwise, it'll end up with
+     * no data
      *
      * @param name - the new virtual datasource name
-     * @param sourceName - the datasource from which to extract the percentile.  Must be a previously
-     *                     defined virtual datasource
+     * @param sourceName - the datasource from which to extract the percentile. Must be a previously
+     *     defined virtual datasource
      * @param percentile - the percentile to extract from the source datasource
      * @deprecated Use {@link Variable} based method instead.
      */
@@ -587,15 +597,15 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Creates a datasource that performs a variable calculation on an
-     * another named datasource to yield a single combined timestamp/value.
-     * <p>
-     * Requires that the other datasource has already been defined; otherwise, it'll
-     * end up with no data
+     * Creates a datasource that performs a variable calculation on an another named datasource to
+     * yield a single combined timestamp/value.
+     *
+     * <p>Requires that the other datasource has already been defined; otherwise, it'll end up with
+     * no data
      *
      * @param name - the new virtual datasource name
      * @param defName - the datasource from which to extract the percentile. Must be a previously
-     *                     defined virtual datasource
+     *     defined virtual datasource
      * @param var - a new instance of a Variable used to do the calculation
      * @deprecated Uses {@link #datasource(String, String, Variable)} instead.
      */
@@ -605,15 +615,15 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Creates a datasource that performs a variable calculation on an
-     * another named datasource to yield a single combined timestamp/value.
-     * <p>
-     * Requires that the other datasource has already been defined; otherwise, it'll
-     * end up with no data
+     * Creates a datasource that performs a variable calculation on an another named datasource to
+     * yield a single combined timestamp/value.
+     *
+     * <p>Requires that the other datasource has already been defined; otherwise, it'll end up with
+     * no data
      *
      * @param name - the new virtual datasource name
      * @param defName - the datasource from which to extract the percentile. Must be a previously
-     *                     defined virtual datasource
+     *     defined virtual datasource
      * @param var - a new instance of a Variable used to do the calculation
      * @since 3.7
      */
@@ -624,16 +634,16 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * <p>Adds simple datasource (<b>DEF</b>). Simple source <code>name</code>
-     * can be used:</p>
+     * Adds simple datasource (<b>DEF</b>). Simple source <code>name</code> can be used:
+     *
      * <ul>
-     * <li>To specify sources for line, area and stack plots.</li>
-     * <li>To define complex sources
+     *   <li>To specify sources for line, area and stack plots.
+     *   <li>To define complex sources
      * </ul>
      *
-     * @param name       source name.
-     * @param file       Path to RRD file.
-     * @param dsName     Datasource name defined in the RRD file.
+     * @param name source name.
+     * @param file Path to RRD file.
+     * @param dsName Datasource name defined in the RRD file.
      * @param consolFunc Consolidation function that will be used to extract data from the RRD
      * @deprecated Uses {@link #datasource(String, String, String, ConsolFun)} instead.
      */
@@ -643,16 +653,16 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * <p>Adds simple datasource (<b>DEF</b>). Simple source <code>name</code>
-     * can be used:</p>
+     * Adds simple datasource (<b>DEF</b>). Simple source <code>name</code> can be used:
+     *
      * <ul>
-     * <li>To specify sources for line, area and stack plots.</li>
-     * <li>To define complex sources
+     *   <li>To specify sources for line, area and stack plots.
+     *   <li>To define complex sources
      * </ul>
      *
-     * @param name       source name.
-     * @param file       Path to RRD file.
-     * @param dsName     Datasource name defined in the RRD file.
+     * @param name source name.
+     * @param file Path to RRD file.
+     * @param dsName Datasource name defined in the RRD file.
      * @param consolFunc Consolidation function that will be used to extract data from the RRD
      * @since 3.7
      */
@@ -664,120 +674,136 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * <p>Adds simple datasource (<b>DEF</b>). Simple source <code>name</code>
-     * can be used:</p>
+     * Adds simple datasource (<b>DEF</b>). Simple source <code>name</code> can be used:
+     *
      * <ul>
-     * <li>To specify sources for line, area and stack plots.</li>
-     * <li>To define complex sources
+     *   <li>To specify sources for line, area and stack plots.
+     *   <li>To define complex sources
      * </ul>
      *
-     * @param name       source name.
-     * @param rrdUri     URI to RRD file.
-     * @param dsName     Datasource name defined in the RRD file.
+     * @param name source name.
+     * @param rrdUri URI to RRD file.
+     * @param dsName Datasource name defined in the RRD file.
      * @param consolFunc Consolidation function that will be used to extract data from the RRD
      * @since 3.7
      */
     @Override
-    public void datasource(String name, URI rrdUri, String dsName,
-            ConsolFun consolFunc) {
+    public void datasource(String name, URI rrdUri, String dsName, ConsolFun consolFunc) {
         Def def = new Def(name, rrdUri, dsName, consolFunc, RrdBackendFactory.findFactory(rrdUri));
         sources.put(name, def);
     }
 
     /**
-     * <p>Adds simple source (<b>DEF</b>). Source <code>name</code> can be used:</p>
+     * Adds simple source (<b>DEF</b>). Source <code>name</code> can be used:
+     *
      * <ul>
-     * <li>To specify sources for line, area and stack plots.</li>
-     * <li>To define complex sources
+     *   <li>To specify sources for line, area and stack plots.
+     *   <li>To define complex sources
      * </ul>
      *
-     * @param name       Source name.
-     * @param file       Path to RRD file.
-     * @param dsName     Data source name defined in the RRD file.
-     * @param consolFunc Consolidation function that will be used to extract data from the RRD
-     *                   file ("AVERAGE", "MIN", "MAX" or "LAST" - these string constants are conveniently defined
-     *                   in the {@link org.rrd4j.ConsolFun ConsolFun} class).
-     * @param backend    Name of the RrdBackendFactory that should be used for this RrdDb.
-     * @deprecated uses {@link #datasource(String, String, String, ConsolFun, RrdBackendFactory)} instead
+     * @param name Source name.
+     * @param file Path to RRD file.
+     * @param dsName Data source name defined in the RRD file.
+     * @param consolFunc Consolidation function that will be used to extract data from the RRD file
+     *     ("AVERAGE", "MIN", "MAX" or "LAST" - these string constants are conveniently defined in
+     *     the {@link org.rrd4j.ConsolFun ConsolFun} class).
+     * @param backend Name of the RrdBackendFactory that should be used for this RrdDb.
+     * @deprecated uses {@link #datasource(String, String, String, ConsolFun, RrdBackendFactory)}
+     *     instead
      */
     @Deprecated
-    public void addDatasource(String name, String file, String dsName, ConsolFun consolFunc, String backend) {
+    public void addDatasource(
+            String name, String file, String dsName, ConsolFun consolFunc, String backend) {
         RrdBackendFactory factory = RrdBackendFactory.getFactory(backend);
         Def def = new Def(name, factory.getUri(file), dsName, consolFunc, factory);
         sources.put(name, def);
     }
 
     /**
-     * <p>Adds simple source (<b>DEF</b>). Source <code>name</code> can be used:</p>
+     * Adds simple source (<b>DEF</b>). Source <code>name</code> can be used:
+     *
      * <ul>
-     * <li>To specify sources for line, area and stack plots.</li>
-     * <li>To define complex sources
+     *   <li>To specify sources for line, area and stack plots.
+     *   <li>To define complex sources
      * </ul>
      *
-     * @param name       Source name.
-     * @param file       Path to RRD file.
-     * @param dsName     Data source name defined in the RRD file.
-     * @param consolFunc Consolidation function that will be used to extract data from the RRD
-     *                   file ("AVERAGE", "MIN", "MAX" or "LAST" - these string constants are conveniently defined
-     *                   in the {@link org.rrd4j.ConsolFun ConsolFun} class).
-     * @param backend    Name of the RrdBackendFactory that should be used for this RrdDb.
-     * @deprecated uses {@link #datasource(String, String, String, ConsolFun, RrdBackendFactory)} instead
+     * @param name Source name.
+     * @param file Path to RRD file.
+     * @param dsName Data source name defined in the RRD file.
+     * @param consolFunc Consolidation function that will be used to extract data from the RRD file
+     *     ("AVERAGE", "MIN", "MAX" or "LAST" - these string constants are conveniently defined in
+     *     the {@link org.rrd4j.ConsolFun ConsolFun} class).
+     * @param backend Name of the RrdBackendFactory that should be used for this RrdDb.
+     * @deprecated uses {@link #datasource(String, String, String, ConsolFun, RrdBackendFactory)}
+     *     instead
      */
     @Deprecated
-    public void addDatasource(String name, String file, String dsName, ConsolFun consolFunc, RrdBackendFactory backend) {
+    public void addDatasource(
+            String name,
+            String file,
+            String dsName,
+            ConsolFun consolFunc,
+            RrdBackendFactory backend) {
         datasource(name, file, dsName, consolFunc, backend);
     }
 
     /**
-     * <p>Adds simple source (<b>DEF</b>). Source <code>name</code> can be used:</p>
+     * Adds simple source (<b>DEF</b>). Source <code>name</code> can be used:
+     *
      * <ul>
-     * <li>To specify sources for line, area and stack plots.</li>
-     * <li>To define complex sources
+     *   <li>To specify sources for line, area and stack plots.
+     *   <li>To define complex sources
      * </ul>
      *
-     * @param name       Source name.
-     * @param file       Path to RRD file.
-     * @param dsName     Data source name defined in the RRD file.
-     * @param consolFunc Consolidation function that will be used to extract data from the RRD
-     *                   file ("AVERAGE", "MIN", "MAX" or "LAST" - these string constants are conveniently defined
-     *                   in the {@link org.rrd4j.ConsolFun ConsolFun} class).
-     * @param backend    Name of the RrdBackendFactory that should be used for this RrdDb.
+     * @param name Source name.
+     * @param file Path to RRD file.
+     * @param dsName Data source name defined in the RRD file.
+     * @param consolFunc Consolidation function that will be used to extract data from the RRD file
+     *     ("AVERAGE", "MIN", "MAX" or "LAST" - these string constants are conveniently defined in
+     *     the {@link org.rrd4j.ConsolFun ConsolFun} class).
+     * @param backend Name of the RrdBackendFactory that should be used for this RrdDb.
      * @since 3.7
      */
     @Override
-    public void datasource(String name, String file, String dsName, ConsolFun consolFunc, RrdBackendFactory backend) {
+    public void datasource(
+            String name,
+            String file,
+            String dsName,
+            ConsolFun consolFunc,
+            RrdBackendFactory backend) {
         Def def = new Def(name, backend.getUri(file), dsName, consolFunc, backend);
         sources.put(name, def);
     }
 
-
     /**
-     * <p>Adds simple source (<b>DEF</b>). Source <code>name</code> can be used:</p>
+     * Adds simple source (<b>DEF</b>). Source <code>name</code> can be used:
+     *
      * <ul>
-     * <li>To specify sources for line, area and stack plots.</li>
-     * <li>To define complex sources
+     *   <li>To specify sources for line, area and stack plots.
+     *   <li>To define complex sources
      * </ul>
      *
-     * @param name       Source name.
-     * @param uri        URI to RRD file.
-     * @param dsName     Data source name defined in the RRD file.
-     * @param consolFunc Consolidation function that will be used to extract data from the RRD
-     *                   file ("AVERAGE", "MIN", "MAX" or "LAST" - these string constants are conveniently defined
-     *                   in the {@link org.rrd4j.ConsolFun ConsolFun} class).
-     * @param backend    Name of the RrdBackendFactory that should be used for this RrdDb.
+     * @param name Source name.
+     * @param uri URI to RRD file.
+     * @param dsName Data source name defined in the RRD file.
+     * @param consolFunc Consolidation function that will be used to extract data from the RRD file
+     *     ("AVERAGE", "MIN", "MAX" or "LAST" - these string constants are conveniently defined in
+     *     the {@link org.rrd4j.ConsolFun ConsolFun} class).
+     * @param backend Name of the RrdBackendFactory that should be used for this RrdDb.
      * @since 3.7
      */
     @Override
-    public void datasource(String name, URI uri, String dsName, ConsolFun consolFunc, RrdBackendFactory backend) {
+    public void datasource(
+            String name, URI uri, String dsName, ConsolFun consolFunc, RrdBackendFactory backend) {
         Def def = new Def(name, uri, dsName, consolFunc, backend);
         sources.put(name, def);
     }
 
     /**
-     * Adds DEF datasource with datasource values already available in the FetchData object. This method is
-     * used internally by Rrd4j and probably has no purpose outside of it.
+     * Adds DEF datasource with datasource values already available in the FetchData object. This
+     * method is used internally by Rrd4j and probably has no purpose outside of it.
      *
-     * @param name      Source name.
+     * @param name Source name.
      * @param fetchData Fetched data containing values for the given source name.
      * @deprecated Uses {@link #datasource(String, FetchData)} instead.
      */
@@ -787,10 +813,10 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Adds DEF datasource with datasource values already available in the FetchData object. This method is
-     * used internally by Rrd4j and probably has no purpose outside of it.
+     * Adds DEF datasource with datasource values already available in the FetchData object. This
+     * method is used internally by Rrd4j and probably has no purpose outside of it.
      *
-     * @param name      Source name.
+     * @param name Source name.
      * @param fetchData Fetched data containing values for the given source name.
      * @since 3.7
      */
@@ -801,12 +827,12 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Adds DEF datasource with datasource values already available in the FetchData object. This method is
-     * used internally by Rrd4j and probably has no purpose outside of it.
-     * The values will be extracted from dsName in fetchData.
+     * Adds DEF datasource with datasource values already available in the FetchData object. This
+     * method is used internally by Rrd4j and probably has no purpose outside of it. The values will
+     * be extracted from dsName in fetchData.
      *
-     * @param name      Source name.
-     * @param dsName    Source name in the fetch data.
+     * @param name Source name.
+     * @param dsName Source name in the fetch data.
      * @param fetchData Fetched data containing values for the given source name.
      * @deprecated Uses {@link #datasource(String, String, FetchData)} instead.
      */
@@ -817,12 +843,12 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Adds DEF datasource with datasource values already available in the FetchData object. This method is
-     * used internally by Rrd4j and probably has no purpose outside of it.
-     * The values will be extracted from dsName in fetchData.
+     * Adds DEF datasource with datasource values already available in the FetchData object. This
+     * method is used internally by Rrd4j and probably has no purpose outside of it. The values will
+     * be extracted from dsName in fetchData.
      *
-     * @param name      Source name.
-     * @param dsName    Source name in the fetch data.
+     * @param name Source name.
+     * @param dsName Source name in the fetch data.
      * @param fetchData Fetched data containing values for the given source name.
      * @since 3.7
      */
@@ -837,8 +863,8 @@ public class DataProcessor implements DataHolder {
     /////////////////////////////////////////////////////////////////
 
     /**
-     * Method that should be called once all datasources are defined. Data will be fetched from
-     * RRD files, RPN expressions will be calculated, etc.
+     * Method that should be called once all datasources are defined. Data will be fetched from RRD
+     * files, RPN expressions will be calculated, etc.
      *
      * @throws java.io.IOException Thrown in case of I/O error (while fetching data from RRD files)
      */
@@ -854,16 +880,16 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Method used to calculate datasource values which should be presented on the graph
-     * based on the desired graph width. Each value returned represents a single pixel on the graph.
-     * Corresponding timestamp can be found in the array returned from {@link #getTimestampsPerPixel()}
-     * method.
+     * Method used to calculate datasource values which should be presented on the graph based on
+     * the desired graph width. Each value returned represents a single pixel on the graph.
+     * Corresponding timestamp can be found in the array returned from {@link
+     * #getTimestampsPerPixel()} method.
      *
      * @param sourceName Datasource name
      * @param pixelCount Graph width
      * @return Per-pixel datasource values
-     * @throws java.lang.IllegalArgumentException Thrown if datasource values are not yet calculated (method {@link #processData()}
-     *                                  was not called)
+     * @throws java.lang.IllegalArgumentException Thrown if datasource values are not yet calculated
+     *     (method {@link #processData()} was not called)
      */
     public double[] getValuesPerPixel(String sourceName, int pixelCount) {
         setPixelCount(pixelCount);
@@ -871,15 +897,15 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Method used to calculate datasource values which should be presented on the graph
-     * based on the graph width set with a {@link #setPixelCount(int)} method call.
-     * Each value returned represents a single pixel on the graph. Corresponding timestamp can be
-     * found in the array returned from {@link #getTimestampsPerPixel()} method.
+     * Method used to calculate datasource values which should be presented on the graph based on
+     * the graph width set with a {@link #setPixelCount(int)} method call. Each value returned
+     * represents a single pixel on the graph. Corresponding timestamp can be found in the array
+     * returned from {@link #getTimestampsPerPixel()} method.
      *
      * @param sourceName Datasource name
      * @return Per-pixel datasource values
-     * @throws java.lang.IllegalArgumentException Thrown if datasource values are not yet calculated (method {@link #processData()}
-     *                                  was not called)
+     * @throws java.lang.IllegalArgumentException Thrown if datasource values are not yet calculated
+     *     (method {@link #processData()} was not called)
      */
     public double[] getValuesPerPixel(String sourceName) {
         double[] values = getValues(sourceName);
@@ -893,13 +919,11 @@ public class DataProcessor implements DataHolder {
                 if (t <= timestamps[ref] - step) {
                     // too left, nothing to do, already NaN
                     break;
-                }
-                else if (t <= timestamps[ref]) {
+                } else if (t <= timestamps[ref]) {
                     // in brackets, get this value
                     pixelValues[pix] = values[ref];
                     break;
-                }
-                else {
+                } else {
                     // too right
                     ref++;
                 }
@@ -909,8 +933,8 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Calculates timestamps which correspond to individual pixels on the graph. It also
-     * set the timestampsPerPixel value.
+     * Calculates timestamps which correspond to individual pixels on the graph. It also set the
+     * timestampsPerPixel value.
      *
      * @param pixelCount Graph width
      * @return Array of timestamps
@@ -921,8 +945,8 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     * Calculates timestamps which correspond to individual pixels on the graph
-     * based on the graph width set with a {@link #setPixelCount(int)} method call.
+     * Calculates timestamps which correspond to individual pixels on the graph based on the graph
+     * width set with a {@link #setPixelCount(int)} method call.
      *
      * @return Array of timestamps
      */
@@ -983,22 +1007,32 @@ public class DataProcessor implements DataHolder {
             // Storing of the RrdDb in a array to batch open/close, useful if a pool
             // is used.
             int d = 0;
-            for (Def def: defSources) {
+            for (Def def : defSources) {
                 URI curi = def.getCanonicalUri();
-                batchRrd[d++] = openRrd.computeIfAbsent(curi, uri -> {
-                    if (! def.isLoaded()) {
-                        RrdBackendFactory backend = def.getBackend();
-                        try {
-                            RrdDb rrdDb =  RrdDb.getBuilder().setPath(curi).setBackendFactory(backend).readOnly().setPool(pool).setUsePool(poolUsed).build();
-                            newDb.add(rrdDb);
-                            return rrdDb;
-                        } catch (IOException e) {
-                            throw new UncheckedIOException(e);
-                        }
-                    } else {
-                        return def.getRrdDb();
-                    }
-                });
+                batchRrd[d++] =
+                        openRrd.computeIfAbsent(
+                                curi,
+                                uri -> {
+                                    if (!def.isLoaded()) {
+                                        RrdBackendFactory backend = def.getBackend();
+                                        try {
+                                            RrdDb rrdDb =
+                                                    RrdDb.getBuilder()
+                                                            .setPath(curi)
+                                                            .setBackendFactory(backend)
+                                                            .readOnly()
+                                                            .setPool(pool)
+                                                            .setUsePool(poolUsed)
+                                                            .build();
+                                            newDb.add(rrdDb);
+                                            return rrdDb;
+                                        } catch (IOException e) {
+                                            throw new UncheckedIOException(e);
+                                        }
+                                    } else {
+                                        return def.getRrdDb();
+                                    }
+                                });
             }
             for (int i = 0; i < defSources.length; i++) {
                 if (batchRrd[i] == null) {
@@ -1009,19 +1043,24 @@ public class DataProcessor implements DataHolder {
                     // not fetched yet
                     Set<String> dsNames = new HashSet<>();
                     dsNames.add(defSources[i].getDsName());
-                    // look for all other datasources with the same path and the same consolidation function
+                    // look for all other datasources with the same path and the same consolidation
+                    // function
                     for (int j = i + 1; j < defSources.length; j++) {
                         if (defSources[i].isCompatibleWith(defSources[j])) {
                             dsNames.add(defSources[j].getDsName());
                         }
                     }
                     // now we have everything
-                    lastRrdArchiveUpdateTime = Math.max(
-                            lastRrdArchiveUpdateTime,
-                            batchRrd[i].getLastArchiveUpdateTime());
-                    FetchRequest req = batchRrd[i].createFetchRequest(
-                            defSources[i].getConsolFun(), tStart, tEndFixed,
-                            fetchRequestResolution);
+                    lastRrdArchiveUpdateTime =
+                            Math.max(
+                                    lastRrdArchiveUpdateTime,
+                                    batchRrd[i].getLastArchiveUpdateTime());
+                    FetchRequest req =
+                            batchRrd[i].createFetchRequest(
+                                    defSources[i].getConsolFun(),
+                                    tStart,
+                                    tEndFixed,
+                                    fetchRequestResolution);
                     req.setFilter(dsNames);
                     FetchData data = req.fetchData();
                     assert data != null;
@@ -1033,22 +1072,24 @@ public class DataProcessor implements DataHolder {
                     }
                 }
             }
-        } catch (UncheckedIOException ex){
+        } catch (UncheckedIOException ex) {
             throw ex.getCause();
         } finally {
-            newDb.forEach(t -> {
-                try {
-                    t.close();
-                } catch (IOException e) {
-                }
-            });
+            newDb.forEach(
+                    t -> {
+                        try {
+                            t.close();
+                        } catch (IOException e) {
+                        }
+                    });
         }
     }
 
     private void fixZeroEndingTimestamp() {
         if (tEnd == 0) {
             if (defSources.length == 0) {
-                throw new IllegalStateException("Could not adjust zero ending timestamp, no DEF source provided");
+                throw new IllegalStateException(
+                        "Could not adjust zero ending timestamp, no DEF source provided");
             }
             tEnd = defSources[0].getArchiveEndTime();
             for (int i = 1; i < defSources.length; i++) {
@@ -1074,8 +1115,7 @@ public class DataProcessor implements DataHolder {
         if (newStep != Long.MAX_VALUE) {
             // step resolved from a RRD file
             step = newStep;
-        }
-        else if (pixelCount != 0) {
+        } else if (pixelCount != 0) {
             // Only calculated sources. But requested in a graph. So use the graph
             // width as an hint
             step = Math.max((tEnd - tStart) / pixelCount, 1);
@@ -1117,7 +1157,7 @@ public class DataProcessor implements DataHolder {
     private void calculateNonRrdSources() {
         for (Source source : sources.values()) {
             if (source instanceof NonRrdSource) {
-                ((NonRrdSource)source).calculate(tStart, tEnd, this);
+                ((NonRrdSource) source).calculate(tStart, tEnd, this);
             }
         }
     }
@@ -1131,7 +1171,6 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-     *
      * @since 3.7
      */
     @Override
@@ -1140,9 +1179,8 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-    *
-    * @since 3.7
-    */
+     * @since 3.7
+     */
     @Override
     public long getEndTime() {
         return tEnd;
@@ -1154,22 +1192,19 @@ public class DataProcessor implements DataHolder {
     }
 
     /**
-    *
-    * @since 3.7
-    */
+     * @since 3.7
+     */
     @Override
     public long getStartTime() {
         return tStart;
     }
 
     /**
-    *
-    * @since 3.7
-    */
+     * @since 3.7
+     */
     @Override
     public void setTimeSpan(long startTime, long endTime) {
         this.tStart = startTime;
         this.tEnd = endTime;
     }
-
 }

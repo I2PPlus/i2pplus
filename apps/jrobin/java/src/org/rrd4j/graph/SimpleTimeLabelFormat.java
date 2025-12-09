@@ -5,13 +5,12 @@ import java.util.Calendar;
 import java.util.Locale;
 
 /**
- * Simple time label using a format similar to {@code strftime}. For more details on the
- * supported conversions see the Date/Time Conversions section for {@link java.util.Formatter}.
- * Examples:
+ * Simple time label using a format similar to {@code strftime}. For more details on the supported
+ * conversions see the Date/Time Conversions section for {@link java.util.Formatter}. Examples:
  *
  * <ul>
- *   <li>strftime pattern: {@code %Y-%m-%dT%H:%M:%S}</li>
- *   <li>simple date format pattern: {@code yyyy'-'MM'-'dd'T'HH':'mm':'ss}</li>
+ *   <li>strftime pattern: {@code %Y-%m-%dT%H:%M:%S}
+ *   <li>simple date format pattern: {@code yyyy'-'MM'-'dd'T'HH':'mm':'ss}
  * </ul>
  */
 public class SimpleTimeLabelFormat implements TimeLabelFormat {

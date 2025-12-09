@@ -1,11 +1,11 @@
 /* ===================================================
  * JFreeSVG : an SVG library for the Java(tm) platform
  * ===================================================
- * 
+ *
  * (C)opyright 2013-2020, by Object Refinery Limited.  All rights reserved.
  *
  * Project Info:  http://www.jfree.org/jfreesvg/index.html
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -18,16 +18,16 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- * 
- * [Oracle and Java are registered trademarks of Oracle and/or its affiliates. 
+ *
+ * [Oracle and Java are registered trademarks of Oracle and/or its affiliates.
  * Other names may be trademarks of their respective owners.]
- * 
+ *
  * If you do not wish to be bound by the terms of the GPL, an alternative
  * commercial license can be purchased.  For details, please see visit the
  * JFreeSVG home page:
- * 
+ *
  * http://www.jfree.org/jfreesvg
- * 
+ *
  */
 
 package org.jfree.svg.util;
@@ -36,44 +36,40 @@ import java.awt.LinearGradientPaint;
 import java.util.Arrays;
 
 /**
- * A wrapper for a {@code LinearGradientPaint} that can be used as the key 
- * for a {@code Map} (including a {@code HashMap}).  This class is 
- * used internally by {@code SVGGraphics2D} to track and re-use gradient 
- * definitions.  {@code LinearGradientPaint} itself does not implement the 
- * {@code equals()} and {@code hashCode()} methods, so it doesn't make a good 
- * key for a {@code Map}.
- * 
+ * A wrapper for a {@code LinearGradientPaint} that can be used as the key for a {@code Map}
+ * (including a {@code HashMap}). This class is used internally by {@code SVGGraphics2D} to track
+ * and re-use gradient definitions. {@code LinearGradientPaint} itself does not implement the {@code
+ * equals()} and {@code hashCode()} methods, so it doesn't make a good key for a {@code Map}.
+ *
  * @since 1.9
  */
 public class LinearGradientPaintKey {
-    
+
     private final LinearGradientPaint paint;
-    
+
     /**
      * Creates a new instance.
-     * 
-     * @param lgp  the linear gradient paint ({@code null} not permitted).
+     *
+     * @param lgp the linear gradient paint ({@code null} not permitted).
      */
     public LinearGradientPaintKey(LinearGradientPaint lgp) {
         Args.nullNotPermitted(lgp, "lgp");
         this.paint = lgp;
     }
- 
+
     /**
-     * Returns the {@code LinearGradientPaint} that was supplied to the 
-     * constructor.
-     * 
-     * @return The {@code LinearGradientPaint} (never {@code null}). 
+     * Returns the {@code LinearGradientPaint} that was supplied to the constructor.
+     *
+     * @return The {@code LinearGradientPaint} (never {@code null}).
      */
     public LinearGradientPaint getPaint() {
         return this.paint;
     }
-    
+
     /**
      * Tests this instance for equality with an arbitrary object.
-     * 
-     * @param obj  the object to test ({@code null} permitted).
-     * 
+     *
+     * @param obj the object to test ({@code null} permitted).
      * @return A boolean.
      */
     @Override
@@ -81,7 +77,7 @@ public class LinearGradientPaintKey {
         if (obj == this) {
             return true;
         }
-        if (! (obj instanceof LinearGradientPaintKey)) {
+        if (!(obj instanceof LinearGradientPaintKey)) {
             return false;
         }
         LinearGradientPaintKey that = (LinearGradientPaintKey) obj;
@@ -100,11 +96,11 @@ public class LinearGradientPaintKey {
         }
         return true;
     }
-    
+
     /**
      * Returns a hash code for this instance.
-     * 
-     * @return A hash code. 
+     *
+     * @return A hash code.
      */
     @Override
     public int hashCode() {
@@ -115,5 +111,4 @@ public class LinearGradientPaintKey {
         hash = 47 * hash + Arrays.hashCode(this.paint.getFractions());
         return hash;
     }
-
 }

@@ -1,17 +1,34 @@
 package org.rrd4j.graph;
 
-import java.util.Locale;
-
 import org.rrd4j.data.DataProcessor;
 
+import java.util.Locale;
+
+/**
+ * Represents comment text elements in RRD graphs. Handles text resolution, marker processing, and
+ * positioning for graph comments and legends.
+ */
 class CommentText implements RrdGraphConstants {
-    protected final String text; // original text
+    /** Original text before resolution */
+    protected final String text;
 
-    String resolvedText; // resolved text
-    Markers marker; // end-of-text marker
-    boolean enabled; // hrule and vrule comments can be disabled at runtime
-    int x, y; // coordinates, evaluated in LegendComposer
+    /** Text after variable substitution and marker processing */
+    String resolvedText;
 
+    /** End-of-text alignment marker */
+    Markers marker;
+
+    /** Whether this comment is enabled for display */
+    boolean enabled;
+
+    /** Screen coordinates for positioning */
+    int x, y;
+
+    /**
+     * Creates a new comment text element.
+     *
+     * @param text the original text content
+     */
     CommentText(String text) {
         this.text = text;
     }
@@ -24,7 +41,8 @@ class CommentText implements RrdGraphConstants {
                 String tryMarker = m.marker;
                 if (resolvedText.endsWith(tryMarker)) {
                     marker = m;
-                    resolvedText = resolvedText.substring(0, resolvedText.length() - tryMarker.length());
+                    resolvedText =
+                            resolvedText.substring(0, resolvedText.length() - tryMarker.length());
                     trimIfGlue();
                     break;
                 }

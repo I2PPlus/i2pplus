@@ -3,6 +3,10 @@ package org.rrd4j.graph;
 import org.rrd4j.data.DataProcessor;
 import org.rrd4j.data.Variable;
 
+/**
+ * Represents a variable definition (VDEF) in RRD graphs. A VDEF defines a data source that computes
+ * values using variables like MIN, MAX, AVERAGE, etc.
+ */
 class VDef extends Source {
     private final String defName;
     private final Variable var;
@@ -16,5 +20,4 @@ class VDef extends Source {
     void requestData(DataProcessor dproc) {
         dproc.datasource(name, defName, var);
     }
-
 }

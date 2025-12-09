@@ -2,6 +2,10 @@ package org.rrd4j.graph;
 
 import java.awt.Paint;
 
+/**
+ * Represents a horizontal span in RRD graphs. Draws a colored rectangular region spanning a range
+ * of values on the y-axis.
+ */
 class HSpan extends Span {
     final double start;
     final double end;
@@ -10,7 +14,7 @@ class HSpan extends Span {
         super(color, legend);
         this.start = start;
         this.end = end;
-        assert(start < end);
+        assert (start < end);
     }
 
     private boolean checkRange(double v, double min, double max) {
@@ -18,8 +22,10 @@ class HSpan extends Span {
     }
 
     void setLegendVisibility(double min, double max, boolean forceLegend) {
-        legend.enabled = legend.enabled && (forceLegend
-                || checkRange(start, min, max)
-                || checkRange(end, min, max));
+        legend.enabled =
+                legend.enabled
+                        && (forceLegend
+                                || checkRange(start, min, max)
+                                || checkRange(end, min, max));
     }
 }

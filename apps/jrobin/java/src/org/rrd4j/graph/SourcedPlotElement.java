@@ -5,6 +5,11 @@ import org.rrd4j.data.DataProcessor;
 
 import java.awt.*;
 
+/**
+ * Represents a plot element that obtains data from a named source. Extends PlotElement to handle
+ * data assignment, stacking, and value calculations. Supports parent-child relationships for
+ * stacked graph elements and provides value range calculations.
+ */
 class SourcedPlotElement extends PlotElement {
     final String srcName;
     final SourcedPlotElement parent;
@@ -23,10 +28,9 @@ class SourcedPlotElement extends PlotElement {
     }
 
     void assignValues(DataProcessor dproc) {
-        if(parent == null) {
+        if (parent == null) {
             values = dproc.getValues(srcName);
-        }
-        else {
+        } else {
             values = stackValues(dproc);
         }
     }
@@ -38,11 +42,9 @@ class SourcedPlotElement extends PlotElement {
         for (int i = 0; i < stacked.length; i++) {
             if (Double.isNaN(parentValues[i])) {
                 stacked[i] = procValues[i];
-            }
-            else if (Double.isNaN(procValues[i])){
+            } else if (Double.isNaN(procValues[i])) {
                 stacked[i] = parentValues[i];
-            }
-            else {
+            } else {
                 stacked[i] = parentValues[i] + procValues[i];
             }
         }

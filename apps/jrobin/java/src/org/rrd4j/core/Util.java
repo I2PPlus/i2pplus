@@ -1,8 +1,8 @@
 package org.rrd4j.core;
 
+import org.rrd4j.ConsolFun;
 import org.rrd4j.core.timespec.TimeParser;
 import org.rrd4j.core.timespec.TimeSpec;
-import org.rrd4j.ConsolFun;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -12,17 +12,12 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.awt.*;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.charset.StandardCharsets;
 import java.net.JarURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,6 +29,11 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 /**
  * Class defines various utility functions used in Rrd4j.
  *
@@ -43,11 +43,13 @@ public class Util {
 
     /** Constant <code>MAX_LONG=Long.MAX_VALUE</code> */
     public static final long MAX_LONG = Long.MAX_VALUE;
+
     /** Constant <code>MIN_LONG=-Long.MAX_VALUE</code> */
     public static final long MIN_LONG = -Long.MAX_VALUE;
 
     /** Constant <code>MAX_DOUBLE=Double.MAX_VALUE</code> */
     public static final double MAX_DOUBLE = Double.MAX_VALUE;
+
     /** Constant <code>MIN_DOUBLE=-Double.MAX_VALUE</code> */
     public static final double MIN_DOUBLE = -Double.MAX_VALUE;
 
@@ -56,18 +58,20 @@ public class Util {
     // directory under $USER_HOME used for demo graphs storing
     static final String RRD4J_DIR = "rrd4j-demo";
 
-    static final ThreadLocal<NumberFormat> df = ThreadLocal.withInitial(() -> {
-        DecimalFormat ldf = (DecimalFormat) NumberFormat.getNumberInstance(Locale.ENGLISH);
-        ldf.applyPattern(PATTERN);
-        ldf.setPositivePrefix("+");
-        return ldf;
-    });
+    static final ThreadLocal<NumberFormat> df =
+            ThreadLocal.withInitial(
+                    () -> {
+                        DecimalFormat ldf =
+                                (DecimalFormat) NumberFormat.getNumberInstance(Locale.ENGLISH);
+                        ldf.applyPattern(PATTERN);
+                        ldf.setPositivePrefix("+");
+                        return ldf;
+                    });
 
-    private static final Pattern SPRINTF_PATTERN = Pattern.compile("([^%]|^)%([^a-zA-Z%]*)l(f|g|e)");
+    private static final Pattern SPRINTF_PATTERN =
+            Pattern.compile("([^%]|^)%([^a-zA-Z%]*)l(f|g|e)");
 
-    private Util() {
-
-    }
+    private Util() {}
 
     /**
      * Converts an array of long primitives to an array of doubles.
@@ -77,16 +81,15 @@ public class Util {
      */
     public static double[] toDoubleArray(final long[] array) {
         double[] values = new double[array.length];
-        for (int i = 0; i < array.length; i++)
-            values[i] = array[i];
+        for (int i = 0; i < array.length; i++) values[i] = array[i];
         return values;
     }
 
     /**
-     * Returns current timestamp in seconds (without milliseconds). Returned timestamp
-     * is obtained with the following expression:
-     * <p>
-     * <code>(System.currentTimeMillis() + 500L) / 1000L</code>
+     * Returns current timestamp in seconds (without milliseconds). Returned timestamp is obtained
+     * with the following expression:
+     *
+     * <p><code>(System.currentTimeMillis() + 500L) / 1000L</code>
      *
      * @return Current timestamp
      */
@@ -106,11 +109,11 @@ public class Util {
     /**
      * Rounds the given timestamp to the nearest whole &quot;step&quot;. Rounded value is obtained
      * from the following expression:
-     * <p>
-     * <code>timestamp - timestamp % step;</code>
+     *
+     * <p><code>timestamp - timestamp % step;</code>
      *
      * @param timestamp Timestamp in seconds
-     * @param step      Step in seconds
+     * @param step Step in seconds
      * @return "Rounded" timestamp
      */
     public static long normalize(long timestamp, long step) {
@@ -118,8 +121,8 @@ public class Util {
     }
 
     /**
-     * Returns the greater of two double values, but treats NaN as the smallest possible
-     * value. Note that <code>Math.max()</code> behaves differently for NaN arguments.
+     * Returns the greater of two double values, but treats NaN as the smallest possible value. Note
+     * that <code>Math.max()</code> behaves differently for NaN arguments.
      *
      * @param x an argument
      * @param y another argument
@@ -130,8 +133,8 @@ public class Util {
     }
 
     /**
-     * Returns the smaller of two double values, but treats NaN as the greatest possible
-     * value. Note that <code>Math.min()</code> behaves differently for NaN arguments.
+     * Returns the smaller of two double values, but treats NaN as the greatest possible value. Note
+     * that <code>Math.min()</code> behaves differently for NaN arguments.
      *
      * @param x an argument
      * @param y another argument
@@ -152,6 +155,14 @@ public class Util {
         return Double.isNaN(x) ? y : Double.isNaN(y) ? x : x + y;
     }
 
+    /**
+     * Formats a double value as a string.
+     *
+     * @param x value to format
+     * @param nanString string to use for NaN values
+     * @param forceExponents whether to force exponential notation
+     * @return formatted string
+     */
     static String formatDouble(double x, String nanString, boolean forceExponents) {
         if (Double.isNaN(x)) {
             return nanString;
@@ -162,6 +173,13 @@ public class Util {
         return Double.toString(x);
     }
 
+    /**
+     * Formats a double value as a string with default NaN string.
+     *
+     * @param x value to format
+     * @param forceExponents whether to force exponential notation
+     * @return formatted string
+     */
     static String formatDouble(double x, boolean forceExponents) {
         return formatDouble(x, Double.toString(Double.NaN), forceExponents);
     }
@@ -178,8 +196,7 @@ public class Util {
     }
 
     /**
-     * Returns <code>Date</code> object for the given timestamp (in seconds, without
-     * milliseconds)
+     * Returns <code>Date</code> object for the given timestamp (in seconds, without milliseconds)
      *
      * @param timestamp Timestamp in seconds.
      * @return Corresponding Date object.
@@ -189,8 +206,8 @@ public class Util {
     }
 
     /**
-     * Returns <code>Calendar</code> object for the given timestamp
-     * (in seconds, without milliseconds)
+     * Returns <code>Calendar</code> object for the given timestamp (in seconds, without
+     * milliseconds)
      *
      * @param timestamp Timestamp in seconds.
      * @return Corresponding Calendar object.
@@ -236,13 +253,14 @@ public class Util {
 
     /**
      * Returns timestamp (unix epoch) for the given year, month, day, hour and minute.
-     * <p>The date is resolved in the current time zone</p>
      *
-     * @param year  Year
+     * <p>The date is resolved in the current time zone
+     *
+     * @param year Year
      * @param month Month (zero-based)
-     * @param day   Day in month
-     * @param hour  Hour
-     * @param min   Minute
+     * @param day Day in month
+     * @param hour Hour
+     * @param min Minute
      * @return Corresponding timestamp
      */
     public static long getTimestamp(int year, int month, int day, int hour, int min) {
@@ -254,11 +272,12 @@ public class Util {
 
     /**
      * Returns timestamp (unix epoch) for the given year, month and day.
-     * <p>The date is resolved in the current time zone</p>
      *
-     * @param year  Year
+     * <p>The date is resolved in the current time zone
+     *
+     * @param year Year
      * @param month Month (zero-based)
-     * @param day   Day in month
+     * @param day Day in month
      * @return Corresponding timestamp
      */
     public static long getTimestamp(int year, int month, int day) {
@@ -266,13 +285,15 @@ public class Util {
     }
 
     /**
-     * <p>Parses at-style time specification and returns the corresponding timestamp. For example:</p>
+     * Parses at-style time specification and returns the corresponding timestamp. For example:
+     *
      * <pre>
      * long t = Util.getTimestamp("now-1d");
      * </pre>
      *
-     * @param atStyleTimeSpec at-style time specification. For the complete explanation of the syntax
-     *                        allowed see RRDTool's <code>rrdfetch</code> man page.<p>
+     * @param atStyleTimeSpec at-style time specification. For the complete explanation of the
+     *     syntax allowed see RRDTool's <code>rrdfetch</code> man page.
+     *     <p>
      * @return timestamp in seconds since epoch.
      */
     public static long getTimestamp(String atStyleTimeSpec) {
@@ -281,16 +302,21 @@ public class Util {
     }
 
     /**
-     * <p>Parses two related at-style time specifications and returns corresponding timestamps. For example:</p>
+     * Parses two related at-style time specifications and returns corresponding timestamps. For
+     * example:
+     *
      * <pre>
      * long[] t = Util.getTimestamps("end-1d","now");
      * </pre>
      *
-     * @param atStyleTimeSpec1 Starting at-style time specification. For the complete explanation of the syntax
-     *                         allowed see RRDTool's <code>rrdfetch</code> man page.<p>
-     * @param atStyleTimeSpec2 Ending at-style time specification. For the complete explanation of the syntax
-     *                         allowed see RRDTool's <code>rrdfetch</code> man page.<p>
-     * @return An array of two longs representing starting and ending timestamp in seconds since epoch.
+     * @param atStyleTimeSpec1 Starting at-style time specification. For the complete explanation of
+     *     the syntax allowed see RRDTool's <code>rrdfetch</code> man page.
+     *     <p>
+     * @param atStyleTimeSpec2 Ending at-style time specification. For the complete explanation of
+     *     the syntax allowed see RRDTool's <code>rrdfetch</code> man page.
+     *     <p>
+     * @return An array of two longs representing starting and ending timestamp in seconds since
+     *     epoch.
      */
     public static long[] getTimestamps(String atStyleTimeSpec1, String atStyleTimeSpec2) {
         TimeSpec timeSpec1 = new TimeParser(atStyleTimeSpec1).parse();
@@ -299,8 +325,8 @@ public class Util {
     }
 
     /**
-     * Parses input string as a double value. If the value cannot be parsed, Double.NaN
-     * is returned (NumberFormatException is never thrown).
+     * Parses input string as a double value. If the value cannot be parsed, Double.NaN is returned
+     * (NumberFormatException is never thrown).
      *
      * @param valueStr String representing double value
      * @return a double corresponding to the input string
@@ -309,8 +335,7 @@ public class Util {
         double value;
         try {
             value = Double.parseDouble(valueStr);
-        }
-        catch (NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             value = Double.NaN;
         }
         return value;
@@ -326,8 +351,7 @@ public class Util {
         try {
             Double.parseDouble(s);
             return true;
-        }
-        catch (NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             return false;
         }
     }
@@ -336,25 +360,27 @@ public class Util {
      * Parses input string as a boolean value. The parser is case insensitive.
      *
      * @param valueStr String representing boolean value
-     * @return <code>true</code>, if valueStr equals to 'true', 'on', 'yes', 'y' or '1';
-     *         <code>false</code> in all other cases.
+     * @return <code>true</code>, if valueStr equals to 'true', 'on', 'yes', 'y' or '1'; <code>false
+     *     </code> in all other cases.
      */
     public static boolean parseBoolean(String valueStr) {
-        return valueStr !=null && (valueStr.equalsIgnoreCase("true") ||
-                valueStr.equalsIgnoreCase("on") ||
-                valueStr.equalsIgnoreCase("yes") ||
-                valueStr.equalsIgnoreCase("y") ||
-                valueStr.equalsIgnoreCase("1"));
+        return valueStr != null
+                && (valueStr.equalsIgnoreCase("true")
+                        || valueStr.equalsIgnoreCase("on")
+                        || valueStr.equalsIgnoreCase("yes")
+                        || valueStr.equalsIgnoreCase("y")
+                        || valueStr.equalsIgnoreCase("1"));
     }
 
     /**
-     * Parses input string as color. The color string should be of the form #RRGGBB (no alpha specified,
-     * opaque color) or #RRGGBBAA (alpa specified, transparent colors). Leading character '#' is
-     * optional.
+     * Parses input string as color. The color string should be of the form #RRGGBB (no alpha
+     * specified, opaque color) or #RRGGBBAA (alpa specified, transparent colors). Leading character
+     * '#' is optional.
      *
      * @param valueStr Input string, for example #FFAA24, #AABBCC33, 010203 or ABC13E4F
      * @return Paint object
-     * @throws java.lang.IllegalArgumentException If the input string is not 6 or 8 characters long (without optional '#')
+     * @throws java.lang.IllegalArgumentException If the input string is not 6 or 8 characters long
+     *     (without optional '#')
      */
     public static Paint parseColor(String valueStr) {
         String c = valueStr.startsWith("#") ? valueStr.substring(1) : valueStr;
@@ -363,12 +389,15 @@ public class Util {
         }
         String r = c.substring(0, 2), g = c.substring(2, 4), b = c.substring(4, 6);
         if (c.length() == 6) {
-            return new Color(Integer.parseInt(r, 16), Integer.parseInt(g, 16), Integer.parseInt(b, 16));
-        }
-        else {
+            return new Color(
+                    Integer.parseInt(r, 16), Integer.parseInt(g, 16), Integer.parseInt(b, 16));
+        } else {
             String a = c.substring(6);
-            return new Color(Integer.parseInt(r, 16), Integer.parseInt(g, 16),
-                    Integer.parseInt(b, 16), Integer.parseInt(a, 16));
+            return new Color(
+                    Integer.parseInt(r, 16),
+                    Integer.parseInt(g, 16),
+                    Integer.parseInt(b, 16),
+                    Integer.parseInt(a, 16));
         }
     }
 
@@ -391,11 +420,11 @@ public class Util {
     }
 
     /**
-     * Returns path to directory used for placement of Rrd4j demo graphs and creates it
-     * if necessary.
+     * Returns path to directory used for placement of Rrd4j demo graphs and creates it if
+     * necessary.
      *
-     * @return Path to demo directory (defaults to $HOME/rrd4j/) if directory exists or
-     *         was successfully created. Null if such directory could not be created.
+     * @return Path to demo directory (defaults to $HOME/rrd4j/) if directory exists or was
+     *     successfully created. Null if such directory could not be created.
      */
     public static String getRrd4jDemoDirectory() {
         Path root;
@@ -415,16 +444,15 @@ public class Util {
     /**
      * Returns full path to the file stored in the demo directory of Rrd4j
      *
-     * @param filename Partial path to the file stored in the demo directory of Rrd4j
-     *                 (just name and extension, without parent directories)
+     * @param filename Partial path to the file stored in the demo directory of Rrd4j (just name and
+     *     extension, without parent directories)
      * @return Full path to the file
      */
     public static String getRrd4jDemoPath(String filename) {
         String demoDir = getRrd4jDemoDirectory();
         if (demoDir != null) {
             return demoDir + filename;
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -434,7 +462,7 @@ public class Util {
         Path path2 = Paths.get(pathname2);
         if (Files.exists(path1) != Files.exists(path2)) {
             return false;
-        } else if (Files.exists(path1) && Files.exists(path2)){
+        } else if (Files.exists(path1) && Files.exists(path2)) {
             path1 = Paths.get(pathname1).toRealPath().normalize();
             path2 = Paths.get(pathname2).toRealPath().normalize();
             return Files.isSameFile(path1, path2);
@@ -447,21 +475,18 @@ public class Util {
         String dsName = rrd1.getDatasource(dsIndex).getName();
         try {
             return rrd2.getDsIndex(dsName);
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             return -1;
         }
     }
 
-    static int getMatchingArchiveIndex(RrdDb rrd1, int arcIndex, RrdDb rrd2)
-            throws IOException {
+    static int getMatchingArchiveIndex(RrdDb rrd1, int arcIndex, RrdDb rrd2) throws IOException {
         Archive archive = rrd1.getArchive(arcIndex);
         ConsolFun consolFun = archive.getConsolFun();
         int steps = archive.getSteps();
         try {
             return rrd2.getArcIndex(consolFun, steps);
-        }
-        catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException e) {
             return -1;
         }
     }
@@ -470,13 +495,12 @@ public class Util {
         return File.createTempFile("rrd4j_", ".tmp").getCanonicalPath();
     }
 
-    static final String ISO_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";   // ISO
+    static final String ISO_DATE_FORMAT = "yyyy-MM-dd HH:mm:ss"; // ISO
 
     /**
-     * Creates Calendar object from a string. The string should represent
-     * either a long integer (UNIX timestamp in seconds without milliseconds,
-     * like "1002354657") or a human readable date string in the format "yyyy-MM-dd HH:mm:ss"
-     * (like "2004-02-25 12:23:45").
+     * Creates Calendar object from a string. The string should represent either a long integer
+     * (UNIX timestamp in seconds without milliseconds, like "1002354657") or a human readable date
+     * string in the format "yyyy-MM-dd HH:mm:ss" (like "2004-02-25 12:23:45").
      *
      * @param timeStr Input string
      * @return Calendar object
@@ -486,8 +510,7 @@ public class Util {
         try {
             long timestamp = Long.parseLong(timeStr);
             return Util.getCalendar(timestamp);
-        }
-        catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {
         }
         // not a long timestamp, try to parse it as data
         SimpleDateFormat df = new SimpleDateFormat(ISO_DATE_FORMAT);
@@ -495,51 +518,55 @@ public class Util {
         try {
             Date date = df.parse(timeStr);
             return Util.getCalendar(date);
-        }
-        catch (ParseException e) {
-            throw new IllegalArgumentException("Time/date not in " + ISO_DATE_FORMAT +
-                    " format: " + timeStr);
+        } catch (ParseException e) {
+            throw new IllegalArgumentException(
+                    "Time/date not in " + ISO_DATE_FORMAT + " format: " + timeStr);
         }
     }
 
-    /**
-     * Various DOM utility functions.
-     */
+    /** Various DOM utility functions. */
     public static class Xml {
 
         private static class SingletonHelper {
             private static final DocumentBuilderFactory factory;
+
             static {
                 factory = DocumentBuilderFactory.newInstance();
                 try {
                     factory.setIgnoringComments(true);
-                    factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-                    factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
-                    factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
+                    factory.setFeature(
+                            "http://apache.org/xml/features/nonvalidating/load-external-dtd",
+                            false);
+                    factory.setFeature(
+                            "http://xml.org/sax/features/external-general-entities", false);
+                    factory.setFeature(
+                            "http://xml.org/sax/features/external-parameter-entities", false);
                     factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
                     factory.setValidating(false);
                     factory.setNamespaceAware(false);
                 } catch (ParserConfigurationException e) {
-                    throw new UnsupportedOperationException("Missing DOM feature: " + e.getMessage(), e);
+                    throw new UnsupportedOperationException(
+                            "Missing DOM feature: " + e.getMessage(), e);
                 }
             }
         }
 
-        private static final ErrorHandler eh = new ErrorHandler() {
-            public void error(SAXParseException exception) throws SAXException {
-                throw exception;
-            }
-            public void fatalError(SAXParseException exception) throws SAXException {
-                throw exception;
-            }
-            public void warning(SAXParseException exception) throws SAXException {
-                throw exception;
-            }
-        };
+        private static final ErrorHandler eh =
+                new ErrorHandler() {
+                    public void error(SAXParseException exception) throws SAXException {
+                        throw exception;
+                    }
 
-        private Xml() {
+                    public void fatalError(SAXParseException exception) throws SAXException {
+                        throw exception;
+                    }
 
-        }
+                    public void warning(SAXParseException exception) throws SAXException {
+                        throw exception;
+                    }
+                };
+
+        private Xml() {}
 
         public static Node[] getChildNodes(Node parentNode) {
             return getChildNodes(parentNode, null);
@@ -550,7 +577,8 @@ public class Util {
             NodeList nodeList = parentNode.getChildNodes();
             for (int i = 0; i < nodeList.getLength(); i++) {
                 Node node = nodeList.item(i);
-                if (node.getNodeType() == Node.ELEMENT_NODE && (childName == null || node.getNodeName().equals(childName))) {
+                if (node.getNodeType() == Node.ELEMENT_NODE
+                        && (childName == null || node.getNodeName().equals(childName))) {
                     nodes.add(node);
                 }
             }
@@ -649,8 +677,7 @@ public class Util {
                 builder.setErrorHandler(eh);
                 Document doc = builder.parse(inputSource);
                 return doc.getDocumentElement();
-            }
-            catch (ParserConfigurationException | SAXException e) {
+            } catch (ParserConfigurationException | SAXException e) {
                 throw new RuntimeException(e.getMessage(), e);
             }
         }
@@ -660,7 +687,8 @@ public class Util {
         }
 
         public static Element getRootElement(File xmlFile) throws IOException {
-            try (Reader reader = new InputStreamReader(new FileInputStream(xmlFile), StandardCharsets.UTF_8)) {
+            try (Reader reader =
+                    new InputStreamReader(new FileInputStream(xmlFile), StandardCharsets.UTF_8)) {
                 return getRootElement(new InputSource(reader));
             }
         }
@@ -669,11 +697,10 @@ public class Util {
     private static long lastLap = System.currentTimeMillis();
 
     /**
-     * Function used for debugging purposes and performance bottlenecks detection.
-     * Probably of no use for end users of Rrd4j.
+     * Function used for debugging purposes and performance bottlenecks detection. Probably of no
+     * use for end users of Rrd4j.
      *
-     * @return String representing time in seconds since last
-     *         <code>getLapTime()</code> method call.
+     * @return String representing time in seconds since last <code>getLapTime()</code> method call.
      */
     public static String getLapTime() {
         long newLap = System.currentTimeMillis();
@@ -683,11 +710,12 @@ public class Util {
     }
 
     /**
-     * <p>Returns the root directory of the Rrd4j distribution. Useful in some demo applications,
-     * probably of no use anywhere else.</p>
-     * <p>The function assumes that all Rrd4j .class files are placed under
-     * the &lt;root&gt;/classes subdirectory and that all jars (libraries) are placed in the
-     * &lt;root&gt;/lib subdirectory (the original Rrd4j directory structure).</p>
+     * Returns the root directory of the Rrd4j distribution. Useful in some demo applications,
+     * probably of no use anywhere else.
+     *
+     * <p>The function assumes that all Rrd4j .class files are placed under the &lt;root&gt;/classes
+     * subdirectory and that all jars (libraries) are placed in the &lt;root&gt;/lib subdirectory
+     * (the original Rrd4j directory structure).
      *
      * @return absolute path to Rrd4j's home directory
      */
@@ -698,8 +726,7 @@ public class Util {
             URI uri = Util.class.getResource("/" + className + ".class").toURI();
             if ("file".equals(uri.getScheme())) {
                 homedir = Paths.get(uri).toString();
-            }
-            else if ("jar".equals(uri.getScheme())) {
+            } else if ("jar".equals(uri.getScheme())) {
                 // JarURLConnection doesn't open the JAR
                 JarURLConnection connection = (JarURLConnection) uri.toURL().openConnection();
                 homedir = connection.getJarFileURL().getFile();
@@ -714,12 +741,13 @@ public class Util {
     }
 
     /**
-     * Compares two doubles but treats all NaNs as equal.
-     * In Java (by default) Double.NaN == Double.NaN always returns <code>false</code>
+     * Compares two doubles but treats all NaNs as equal. In Java (by default) Double.NaN ==
+     * Double.NaN always returns <code>false</code>
      *
      * @param x the first value
      * @param y the second value
-     * @return <code>true</code> if x and y are both equal to Double.NaN, or if x == y. <code>false</code> otherwise
+     * @return <code>true</code> if x and y are both equal to Double.NaN, or if x == y. <code>false
+     *     </code> otherwise
      */
     public static boolean equal(double x, double y) {
         return (Double.isNaN(x) && Double.isNaN(y)) || (x == y);
@@ -775,8 +803,8 @@ public class Util {
     }
 
     /**
-     * Finds max value for an array of doubles (NaNs are ignored). If all values in the array
-     * are NaNs, NaN is returned.
+     * Finds max value for an array of doubles (NaNs are ignored). If all values in the array are
+     * NaNs, NaN is returned.
      *
      * @param values Array of double values
      * @return max value in the array (NaNs are ignored)
@@ -790,8 +818,8 @@ public class Util {
     }
 
     /**
-     * Finds min value for an array of doubles (NaNs are ignored). If all values in the array
-     * are NaNs, NaN is returned.
+     * Finds min value for an array of doubles (NaNs are ignored). If all values in the array are
+     * NaNs, NaN is returned.
      *
      * @param values Array of double values
      * @return min value in the array (NaNs are ignored)
@@ -808,12 +836,12 @@ public class Util {
      * Equivalent of the C-style sprintf function.
      *
      * @param format Format string
-     * @param args   Arbitrary list of arguments
+     * @param args Arbitrary list of arguments
      * @return Formatted string
      * @param l a {@link java.util.Locale} object.
      */
     public static String sprintf(Locale l, String format, Object... args) {
-        String fmt =  SPRINTF_PATTERN.matcher(format).replaceAll("$1%$2$3");
+        String fmt = SPRINTF_PATTERN.matcher(format).replaceAll("$1%$2$3");
         return String.format(l, fmt, args);
     }
 }

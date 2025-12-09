@@ -1,109 +1,193 @@
 package org.rrd4j.core.timespec;
 
+/**
+ * Token representation for time specification parsing.
+ *
+ * <p>This class represents individual tokens produced by the lexical scanner during time
+ * specification parsing. Each token contains both the original text value and a token type
+ * identifier that categorizes the token's meaning in the time specification grammar.
+ *
+ * <p>Token categories include:<br>
+ * - <strong>Time markers</strong>: Specific times like midnight, noon, teatime<br>
+ * - <strong>Relative references</strong>: yesterday, today, tomorrow, now<br>
+ * - <strong>Time units</strong>: seconds, minutes, hours, days, weeks, months, years<br>
+ * - <strong>Calendar units</strong>: Month names (JAN-DEC) and day names (SUN-SAT)<br>
+ * - <strong>Operators</strong>: Plus, minus, dot, colon, slash<br>
+ * - <strong>Special tokens</strong>: Numbers, identifiers, end-of-file marker
+ *
+ * <p>The token system supports both abbreviated and full forms where applicable, providing
+ * flexibility in time specification syntax. For example, both "January" and "Jan" map to the same
+ * JAN token type.
+ *
+ * <p>Tokens are immutable objects created by the TimeScanner and consumed by the TimeParser during
+ * the parsing process.
+ *
+ * @author Sasa Markovic
+ */
 class TimeToken {
-    /** Constant <code>MIDNIGHT=1</code> */
+    // ===== TIME OF DAY MARKERS =====
+    /** Token for "midnight" - represents 00:00:00 of today or tomorrow */
     public static final int MIDNIGHT = 1;
-    /** Constant <code>NOON=2</code> */
+
+    /** Token for "noon" - represents 12:00:00 of today or tomorrow */
     public static final int NOON = 2;
-    /** Constant <code>TEATIME=3</code> */
+
+    /** Token for "teatime" - represents 16:00:00 of today or tomorrow */
     public static final int TEATIME = 3;
-    /** Constant <code>PM=4</code> */
+
+    // ===== TIME PERIOD MODIFIERS =====
+    /** Token for "pm" - evening times for 0-12 hour clock */
     public static final int PM = 4;
-    /** Constant <code>AM=5</code> */
+
+    /** Token for "am" - morning times for 0-12 hour clock */
     public static final int AM = 5;
-    /** Constant <code>YESTERDAY=6</code> */
+
+    // ===== RELATIVE TIME REFERENCES =====
+    /** Token for "yesterday" - one day before current date */
     public static final int YESTERDAY = 6;
-    /** Constant <code>TODAY=7</code> */
+
+    /** Token for "today" - current date */
     public static final int TODAY = 7;
-    /** Constant <code>TOMORROW=8</code> */
+
+    /** Token for "tomorrow" - one day after current date */
     public static final int TOMORROW = 8;
-    /** Constant <code>NOW=9</code> */
+
+    /** Token for "now" or "n" - current timestamp */
     public static final int NOW = 9;
-    /** Constant <code>START=10</code> */
+
+    // ===== RANGE MARKERS =====
+    /** Token for "start" or "s" - beginning of time range */
     public static final int START = 10;
-    /** Constant <code>END=11</code> */
+
+    /** Token for "end" or "e" - end of time range */
     public static final int END = 11;
-    /** Constant <code>SECONDS=12</code> */
+
+    // ===== TIME UNIT MULTIPLIERS =====
+    /** Token for "second", "seconds", "sec", "s" - seconds multiplier */
     public static final int SECONDS = 12;
-    /** Constant <code>MINUTES=13</code> */
+
+    /** Token for "minute", "minutes", "min" - minutes multiplier */
     public static final int MINUTES = 13;
-    /** Constant <code>HOURS=14</code> */
+
+    /** Token for "hour", "hours", "hr", "h" - hours multiplier */
     public static final int HOURS = 14;
-    /** Constant <code>DAYS=15</code> */
+
+    /** Token for "day", "days", "d" - days multiplier */
     public static final int DAYS = 15;
-    /** Constant <code>WEEKS=16</code> */
+
+    /** Token for "week", "weeks", "wk", "w" - weeks multiplier */
     public static final int WEEKS = 16;
-    /** Constant <code>MONTHS=17</code> */
+
+    /** Token for "month", "months", "mon" - months multiplier */
     public static final int MONTHS = 17;
-    /** Constant <code>YEARS=18</code> */
+
+    /** Token for "year", "years", "yr", "y" - years multiplier */
     public static final int YEARS = 18;
-    /** Constant <code>MONTHS_MINUTES=19</code> */
+
+    /** Token for ambiguous "m" - requires context resolution to months or minutes */
     public static final int MONTHS_MINUTES = 19;
-    /** Constant <code>NUMBER=20</code> */
+
+    // ===== BASIC TOKEN TYPES =====
+    /** Token for numeric values - sequences of digits */
     public static final int NUMBER = 20;
-    /** Constant <code>PLUS=21</code> */
+
+    // ===== OPERATORS =====
+    /** Token for "+" - addition operator */
     public static final int PLUS = 21;
-    /** Constant <code>MINUS=22</code> */
+
+    /** Token for "-" - subtraction operator */
     public static final int MINUS = 22;
-    /** Constant <code>DOT=23</code> */
+
+    /** Token for "." - decimal point or date separator */
     public static final int DOT = 23;
-    /** Constant <code>COLON=24</code> */
+
+    /** Token for ":" - time separator */
     public static final int COLON = 24;
-    /** Constant <code>SLASH=25</code> */
+
+    /** Token for "/" - date separator */
     public static final int SLASH = 25;
-    /** Constant <code>ID=26</code> */
+
+    // ===== SPECIAL TOKEN TYPES =====
+    /** Token for unrecognized identifiers - unknown words */
     public static final int ID = 26;
-    /** Constant <code>JUNK=27</code> */
+
+    /** Token for invalid/unparseable input */
     public static final int JUNK = 27;
-    /** Constant <code>JAN=28</code> */
+
+    // ===== MONTH NAMES =====
+    /** Token for "jan", "january" - first month */
     public static final int JAN = 28;
-    /** Constant <code>FEB=29</code> */
+
+    /** Token for "feb", "february" - second month */
     public static final int FEB = 29;
-    /** Constant <code>MAR=30</code> */
+
+    /** Token for "mar", "march" - third month */
     public static final int MAR = 30;
-    /** Constant <code>APR=31</code> */
+
+    /** Token for "apr", "april" - fourth month */
     public static final int APR = 31;
-    /** Constant <code>MAY=32</code> */
+
+    /** Token for "may" - fifth month */
     public static final int MAY = 32;
-    /** Constant <code>JUN=33</code> */
+
+    /** Token for "jun", "june" - sixth month */
     public static final int JUN = 33;
-    /** Constant <code>JUL=34</code> */
+
+    /** Token for "jul", "july" - seventh month */
     public static final int JUL = 34;
-    /** Constant <code>AUG=35</code> */
+
+    /** Token for "aug", "august" - eighth month */
     public static final int AUG = 35;
-    /** Constant <code>SEP=36</code> */
+
+    /** Token for "sep", "september" - ninth month */
     public static final int SEP = 36;
-    /** Constant <code>OCT=37</code> */
+
+    /** Token for "oct", "october" - tenth month */
     public static final int OCT = 37;
-    /** Constant <code>NOV=38</code> */
+
+    /** Token for "nov", "november" - eleventh month */
     public static final int NOV = 38;
-    /** Constant <code>DEC=39</code> */
+
+    /** Token for "dec", "december" - twelfth month */
     public static final int DEC = 39;
-    /** Constant <code>SUN=40</code> */
+
+    // ===== DAY OF WEEK NAMES =====
+    /** Token for "sun", "sunday" - first day of week */
     public static final int SUN = 40;
-    /** Constant <code>MON=41</code> */
+
+    /** Token for "mon", "monday" - second day of week */
     public static final int MON = 41;
-    /** Constant <code>TUE=42</code> */
+
+    /** Token for "tue", "tuesday" - third day of week */
     public static final int TUE = 42;
-    /** Constant <code>WED=43</code> */
+
+    /** Token for "wed", "wednesday" - fourth day of week */
     public static final int WED = 43;
-    /** Constant <code>THU=44</code> */
+
+    /** Token for "thu", "thursday" - fifth day of week */
     public static final int THU = 44;
-    /** Constant <code>FRI=45</code> */
+
+    /** Token for "fri", "friday" - sixth day of week */
     public static final int FRI = 45;
-    /** Constant <code>SAT=46</code> */
+
+    /** Token for "sat", "saturday" - seventh day of week */
     public static final int SAT = 46;
-    /** Constant <code>EOF=-1</code> */
+
+    // ===== CONTROL TOKENS =====
+    /** Token for end of input - no more tokens available */
     public static final int EOF = -1;
 
-    final String value; /* token name */
-    final int token_id;   /* token id */
+    /** The original text value of this token */
+    final String value;
+
+    /** The token type identifier */
+    final int token_id;
 
     /**
-     * <p>Constructor for TimeToken.</p>
+     * Creates a new TimeToken with the specified value and type.
      *
-     * @param value a {@link java.lang.String} object.
-     * @param token_id a int.
+     * @param value the original text value of the token (may be null for EOF)
+     * @param token_id the token type identifier from the constant definitions
      */
     public TimeToken(String value, int token_id) {
         this.value = value;
@@ -111,9 +195,12 @@ class TimeToken {
     }
 
     /**
-     * <p>toString.</p>
+     * Returns a string representation of this token for debugging.
      *
-     * @return a {@link java.lang.String} object.
+     * <p>The format is "value [token_id]" which makes it easy to see both the original text and the
+     * token type during parsing and debugging.
+     *
+     * @return a formatted string containing the token value and type identifier
      */
     public String toString() {
         return value + " [" + token_id + "]";

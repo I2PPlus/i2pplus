@@ -4,14 +4,14 @@ import java.io.IOException;
 import java.util.Arrays;
 
 /**
- * Class to represent archive values for a single datasource. Robin class is the heart of
- * the so-called "round robin database" concept. Basically, each Robin object is a
- * fixed length array of double values. Each double value represents consolidated, archived
- * value for the specific timestamp. When the underlying array of double values gets completely
- * filled, new values will replace the oldest ones.<p>
+ * Class to represent archive values for a single datasource. Robin class is the heart of the
+ * so-called "round robin database" concept. Basically, each Robin object is a fixed length array of
+ * double values. Each double value represents consolidated, archived value for the specific
+ * timestamp. When the underlying array of double values gets completely filled, new values will
+ * replace the oldest ones.
  *
- * Robin object does not hold values in memory - such object could be quite large.
- * Instead of it, Robin reads them from the backend I/O only when necessary.
+ * <p>Robin object does not hold values in memory - such object could be quite large. Instead of it,
+ * Robin reads them from the backend I/O only when necessary.
  *
  * @author Sasa Markovic
  */
@@ -36,7 +36,7 @@ class RobinArray implements Robin {
      * @see org.rrd4j.core.Robin#getValues()
      */
     /**
-     * <p>Getter for the field <code>values</code>.</p>
+     * Getter for the field <code>values</code>.
      *
      * @return an array of double.
      * @throws java.io.IOException if any.
@@ -56,7 +56,7 @@ class RobinArray implements Robin {
     // stores the same value several times
     /** {@inheritDoc} */
     public void bulkStore(double newValue, int bulkCount) throws IOException {
-        assert bulkCount <= rows: "Invalid number of bulk updates: " + bulkCount + " rows=" + rows;
+        assert bulkCount <= rows : "Invalid number of bulk updates: " + bulkCount + " rows=" + rows;
 
         int position = pointer.get();
 
@@ -75,14 +75,18 @@ class RobinArray implements Robin {
     }
 
     /**
-     * <p>update.</p>
+     * update.
      *
      * @param newValues an array of double.
      * @throws java.io.IOException if any.
      */
     public void update(double[] newValues) throws IOException {
-        assert rows == newValues.length: "Invalid number of robin values supplied (" + newValues.length +
-        "), exactly " + rows + " needed";
+        assert rows == newValues.length
+                : "Invalid number of robin values supplied ("
+                        + newValues.length
+                        + "), exactly "
+                        + rows
+                        + " needed";
         pointer.set(0);
         values.writeDouble(0, newValues);
     }
@@ -93,8 +97,12 @@ class RobinArray implements Robin {
     /** {@inheritDoc} */
     public void setValues(double... newValues) throws IOException {
         if (rows != newValues.length) {
-            throw new IllegalArgumentException("Invalid number of robin values supplied (" + newValues.length +
-                    "), exactly " + rows + " needed");
+            throw new IllegalArgumentException(
+                    "Invalid number of robin values supplied ("
+                            + newValues.length
+                            + "), exactly "
+                            + rows
+                            + " needed");
         }
         update(newValues);
     }
@@ -110,7 +118,7 @@ class RobinArray implements Robin {
     }
 
     /**
-     * <p>dump.</p>
+     * dump.
      *
      * @return a {@link java.lang.String} object.
      * @throws java.io.IOException if any.
@@ -145,7 +153,7 @@ class RobinArray implements Robin {
 
     /** {@inheritDoc} */
     public double[] getValues(int index, int count) throws IOException {
-        assert count <= rows: "Too many values requested: " + count + " rows=" + rows;
+        assert count <= rows : "Too many values requested: " + count + " rows=" + rows;
 
         int startIndex = (pointer.get() + index) % rows;
         int tailReadCount = Math.min(rows - startIndex, count);
@@ -162,8 +170,7 @@ class RobinArray implements Robin {
                 values[k++] = headValue;
             }
             return values;
-        }
-        else {
+        } else {
             return tailValues;
         }
     }
@@ -172,7 +179,7 @@ class RobinArray implements Robin {
      * @see org.rrd4j.core.Robin#getParent()
      */
     /**
-     * <p>getParent.</p>
+     * getParent.
      *
      * @return a {@link org.rrd4j.core.Archive} object.
      */
@@ -184,7 +191,7 @@ class RobinArray implements Robin {
      * @see org.rrd4j.core.Robin#getSize()
      */
     /**
-     * <p>getSize.</p>
+     * getSize.
      *
      * @return a int.
      */
@@ -224,7 +231,7 @@ class RobinArray implements Robin {
      * @see org.rrd4j.core.Robin#getRrdBackend()
      */
     /**
-     * <p>getRrdBackend.</p>
+     * getRrdBackend.
      *
      * @return a {@link org.rrd4j.core.RrdBackend} object.
      */
@@ -236,7 +243,7 @@ class RobinArray implements Robin {
      * @see org.rrd4j.core.Robin#getRrdAllocator()
      */
     /**
-     * <p>getRrdAllocator.</p>
+     * getRrdAllocator.
      *
      * @return a {@link org.rrd4j.core.RrdAllocator} object.
      */

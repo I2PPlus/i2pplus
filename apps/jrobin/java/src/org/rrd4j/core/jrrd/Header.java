@@ -1,8 +1,8 @@
 package org.rrd4j.core.jrrd;
 
-import java.io.IOException;
-
 import org.rrd4j.core.InvalidRrdException;
+
+import java.io.IOException;
 
 /**
  * Instances of this class model the header section of an RRD file.
@@ -17,10 +17,13 @@ public class Header implements Constants {
     private final long size;
     final String version;
     private final int iVersion;
+
     /** Number of data sources */
     final int dsCount;
+
     /** Number of archives within file */
     final int rraCount;
+
     final int pdpStep;
 
     Header(RRDFile file) throws IOException {
@@ -42,7 +45,7 @@ public class Header implements Constants {
 
         // Consume the FLOAT_COOKIE
         double cookie = file.readDouble();
-        if(cookie != FLOAT_COOKIE) {
+        if (cookie != FLOAT_COOKIE) {
             throw new RuntimeException("This RRD was created on another architecture");
         }
 

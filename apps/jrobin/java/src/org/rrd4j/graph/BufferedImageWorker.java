@@ -13,28 +13,41 @@ import javax.imageio.ImageWriter;
 import javax.imageio.spi.ImageWriterSpi;
 import javax.imageio.stream.ImageOutputStream;
 
+/**
+ * Image worker implementation that creates buffered images for RRD graphs. Provides functionality
+ * to create, manipulate, and save graph images in various formats.
+ */
 class BufferedImageWorker extends ImageWorker {
 
+    /**
+     * Builder class for creating BufferedImageWorker instances with configurable parameters.
+     * Supports fluent API for setting image properties, writer, and output format.
+     */
     static class Builder {
         private int width = 1;
         private int height = 1;
         private RrdGraphDef gdef;
         private ImageWriter writer;
         private ImageWriteParam imageWriteParam;
+
         BufferedImageWorker build() {
             return new BufferedImageWorker(this);
         }
+
         private ImageWriteParam getImageParams() {
             ImageWriteParam iwp = writer.getDefaultWriteParam();
             ImageWriterSpi imgProvider = writer.getOriginatingProvider();
-            //If lossy compression, use the quality
-            if (! imgProvider.isFormatLossless()) {
+            // If lossy compression, use the quality
+            if (!imgProvider.isFormatLossless()) {
                 iwp.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
                 iwp.setCompressionQuality(gdef.imageQuality);
             }
 
             if (iwp.canWriteProgressive()) {
-                iwp.setProgressiveMode(gdef.interlaced ? ImageWriteParam.MODE_DEFAULT:ImageWriteParam.MODE_DISABLED);
+                iwp.setProgressiveMode(
+                        gdef.interlaced
+                                ? ImageWriteParam.MODE_DEFAULT
+                                : ImageWriteParam.MODE_DISABLED);
             }
             return iwp;
         }
@@ -73,6 +86,7 @@ class BufferedImageWorker extends ImageWorker {
             return this;
         }
     }
+
     public static Builder getBuilder() {
         return new Builder();
     }
@@ -132,17 +146,18 @@ class BufferedImageWorker extends ImageWorker {
 
         // Some format can't manage 16M colors images
         // JPEG don't like transparency
-        if (! imgProvider.canEncodeImage(outputImage) || "image/jpeg".equalsIgnoreCase(imgProvider.getMIMETypes()[0])) {
+        if (!imgProvider.canEncodeImage(outputImage)
+                || "image/jpeg".equalsIgnoreCase(imgProvider.getMIMETypes()[0])) {
             int w = img.getWidth();
             int h = img.getHeight();
             outputImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
             outputImage.getGraphics().drawImage(img, 0, 0, w, h, null);
-            if (! imgProvider.canEncodeImage(outputImage)) {
+            if (!imgProvider.canEncodeImage(outputImage)) {
                 throw new IllegalArgumentException("Invalid image type");
             }
         }
 
-        if (! imgProvider.canEncodeImage(outputImage)) {
+        if (!imgProvider.canEncodeImage(outputImage)) {
             throw new IllegalArgumentException("Invalid image type");
         }
 
@@ -157,5 +172,4 @@ class BufferedImageWorker extends ImageWorker {
             writer.dispose();
         }
     }
-
 }

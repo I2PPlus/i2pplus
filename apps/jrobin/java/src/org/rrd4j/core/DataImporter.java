@@ -1,13 +1,14 @@
 package org.rrd4j.core;
 
-import java.io.Closeable;
-import java.io.IOException;
-
 import org.rrd4j.ConsolFun;
 import org.rrd4j.DsType;
 
+import java.io.Closeable;
+import java.io.IOException;
+
 /**
- * <p>An abstract class to import data from external source.</p>
+ * An abstract class to import data from external source.
+ *
  * @author Fabrice Bacchella
  * @since 3.5
  */
@@ -66,7 +67,7 @@ public abstract class DataImporter implements Closeable {
             rowCount += getRows(i);
         }
         String[] dsNames = new String[getDsCount()];
-        for (int i = 0 ; i < dsNames.length; i++) {
+        for (int i = 0; i < dsNames.length; i++) {
             dsNames[i] = getDsName(i);
         }
         return RrdDef.calculateSize(dsCount, arcCount, rowCount, dsNames);
@@ -80,5 +81,4 @@ public abstract class DataImporter implements Closeable {
     public void close() throws IOException {
         release();
     }
-
 }

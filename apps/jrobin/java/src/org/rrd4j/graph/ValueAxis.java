@@ -1,12 +1,16 @@
 package org.rrd4j.graph;
 
+import org.rrd4j.core.Util;
+
 import java.awt.Font;
 import java.awt.Paint;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
-import org.rrd4j.core.Util;
-
+/**
+ * Represents value axis (y-axis) in RRD graphs. Handles value-based grid lines, labels, and scaling
+ * with automatic tick placement. Supports linear, logarithmic, and MRTG-style axis formatting.
+ */
 class ValueAxis extends Axis {
     private static final YLabel[] ylabels = {
         new YLabel(0.1, 1, 2, 5, 10),
@@ -73,14 +77,23 @@ class ValueAxis extends Axis {
         if (Double.isNaN(im.ygridstep)) {
             if (gdef.altYGrid) {
                 /* find the value with max number of digits. Get number of digits */
-                int decimals = (int) Math.ceil(Math.log10(Math.max(Math.abs(im.maxval),
-                                               Math.abs(im.minval))));
+                int decimals =
+                        (int)
+                                Math.ceil(
+                                        Math.log10(
+                                                Math.max(
+                                                        Math.abs(im.maxval), Math.abs(im.minval))));
                 if (decimals <= 0) /* everything is small. make place for zero */ {
                     decimals = 1;
                 }
                 int fractionals = (int) Math.floor(Math.log10(range));
                 if (fractionals < 99999999) {
-                    labfmt = Util.sprintf(gdef.locale, "%%%d.%df", decimals - fractionals + 1, -fractionals + 1);
+                    labfmt =
+                            Util.sprintf(
+                                    gdef.locale,
+                                    "%%%d.%df",
+                                    decimals - fractionals + 1,
+                                    -fractionals + 1);
                 }
                 gridstep = Math.pow(10, fractionals);
                 if (gridstep == 0) /* range is one -> 0.1 is reasonable scale */ {
@@ -98,29 +111,26 @@ class ValueAxis extends Axis {
                     if (range / gridstep > 8) {
                         labfact = 2;
                     }
-                }
-                else {
+                } else {
                     gridstep /= 5;
                     labfact = 5;
                 }
-            }
-            else {
-                //Start looking for a minimum of 3 labels, but settle for 2 or 1 if need be
+            } else {
+                // Start looking for a minimum of 3 labels, but settle for 2 or 1 if need be
                 int minimumLabelCount = 3;
                 YLabel selectedYLabel = null;
-                while(selectedYLabel == null) {
+                while (selectedYLabel == null) {
                     selectedYLabel = findYLabel(minimumLabelCount);
                     minimumLabelCount--;
                 }
                 gridstep = selectedYLabel.grid * im.magfact;
                 labfact = findLabelFactor(selectedYLabel);
-                if(labfact == -1) {
+                if (labfact == -1) {
                     // as a fallback, use the largest label factor of the selected label
                     labfact = selectedYLabel.labelFacts[3];
                 }
             }
-        }
-        else {
+        } else {
             gridstep = im.ygridstep;
             labfact = im.ylabfact;
         }
@@ -137,36 +147,36 @@ class ValueAxis extends Axis {
                     if (i == 0 || im.symbol == ' ') {
                         if (fractional) {
                             graph_label = Util.sprintf(gdef.locale, "%4.1f", scaledstep * i);
-/**
-                            if (i != 0 && gdef.altYGrid) {
-                                graph_label = Util.sprintf(gdef.locale, labfmt, scaledstep * i);
-                            }
-                            else {
-                                graph_label = Util.sprintf(gdef.locale, "%4.1f", scaledstep * i);
-                            }
-**/
-                        }
-                        else {
+                            /**
+                             * if (i != 0 && gdef.altYGrid) { graph_label =
+                             * Util.sprintf(gdef.locale, labfmt, scaledstep * i); } else {
+                             * graph_label = Util.sprintf(gdef.locale, "%4.1f", scaledstep * i); }
+                             */
+                        } else {
                             graph_label = Util.sprintf(gdef.locale, "%4.0f", scaledstep * i);
                         }
-                    }
-                    else {
+                    } else {
                         if (im.symbol == 'm') {
                             // I2P show 0.xxx instead of xxx m
                             graph_label = Util.sprintf(gdef.locale, "%.3f", scaledstep * i / 1000);
                         } else if (fractional) {
-                            graph_label = Util.sprintf(gdef.locale, "%4.1f%c", scaledstep * i, im.symbol);
-                        }
-                        else {
-                            graph_label = Util.sprintf(gdef.locale, "%4.0f%c", scaledstep * i, im.symbol);
+                            graph_label =
+                                    Util.sprintf(gdef.locale, "%4.1f%c", scaledstep * i, im.symbol);
+                        } else {
+                            graph_label =
+                                    Util.sprintf(gdef.locale, "%4.0f%c", scaledstep * i, im.symbol);
                         }
                     }
 
                     int length = (int) (worker.getStringWidth(graph_label, font));
-                    worker.drawString(graph_label, x0 - length - PADDING_VLABEL, y + labelOffset, font, fontColor);
+                    worker.drawString(
+                            graph_label,
+                            x0 - length - PADDING_VLABEL,
+                            y + labelOffset,
+                            font,
+                            fontColor);
                     worker.drawLine(x0, y, x1, y, mGridColor, gdef.gridStroke);
-                }
-                else if (!(gdef.noMinorGrid)) {
+                } else if (!(gdef.noMinorGrid)) {
                     worker.drawLine(x0, y, x1, y, gridColor, gdef.gridStroke);
                 }
             }
@@ -175,53 +185,55 @@ class ValueAxis extends Axis {
     }
 
     /**
-     * Finds an acceptable YLabel object for the current graph
-     * If the graph covers positive and negative on the y-axis, then
-     * desiredMinimumLabelCount is checked as well, to ensure the chosen YLabel definition
-     * will result in the required number of labels
-     * <p>
-     * Returns null if none are acceptable (none the right size or with
-     * enough labels)
+     * Finds an acceptable YLabel object for the current graph If the graph covers positive and
+     * negative on the y-axis, then desiredMinimumLabelCount is checked as well, to ensure the
+     * chosen YLabel definition will result in the required number of labels
+     *
+     * <p>Returns null if none are acceptable (none the right size or with enough labels)
      */
     private YLabel findYLabel(int desiredMinimumLabelCount) {
         double scaledrange = this.getScaledRange();
         int labelFactor;
-        //Check each YLabel definition to see if it's acceptable
+        // Check each YLabel definition to see if it's acceptable
         for (int i = 0; ylabels[i].grid > 0; i++) {
             YLabel thisYLabel = ylabels[i];
-            //First cut is whether this gridstep would give enough space per gridline
-            if (this.getPixelsPerGridline(thisYLabel) > 5 ) {
-                //Yep; now we might have to check the number of labels
-                if(im.minval < 0.0 && im.maxval > 0.0) {
+            // First cut is whether this gridstep would give enough space per gridline
+            if (this.getPixelsPerGridline(thisYLabel) > 5) {
+                // Yep; now we might have to check the number of labels
+                if (im.minval < 0.0 && im.maxval > 0.0) {
                     // The graph covers positive and negative values, so we need the
                     // desiredMinimumLabelCount number of labels, which is going to
                     // usually be 3, then maybe 2, then only as a last resort, 1.
                     // So, we need to find out what the label factor would be
                     // if we chose this ylab definition
                     labelFactor = findLabelFactor(thisYLabel);
-                    if(labelFactor == -1) {
-                        // Default to too many to satisfy the label count test, unless we're looking for just 1
+                    if (labelFactor == -1) {
+                        // Default to too many to satisfy the label count test, unless we're looking
+                        // for just 1
                         // in which case be sure to satisfy the label count test
-                        labelFactor = desiredMinimumLabelCount==1?1:desiredMinimumLabelCount+1;
+                        labelFactor =
+                                desiredMinimumLabelCount == 1 ? 1 : desiredMinimumLabelCount + 1;
                     }
-                    //Adding one?  Think fenceposts (need one more than just dividing length by space between)
-                    int labelCount = ((int)(scaledrange/thisYLabel.grid)/labelFactor)+1;
-                    if(labelCount > desiredMinimumLabelCount) {
-                        return thisYLabel; //Enough pixels, *and* enough labels
+                    // Adding one?  Think fenceposts (need one more than just dividing length by
+                    // space between)
+                    int labelCount = ((int) (scaledrange / thisYLabel.grid) / labelFactor) + 1;
+                    if (labelCount > desiredMinimumLabelCount) {
+                        return thisYLabel; // Enough pixels, *and* enough labels
                     }
 
                 } else {
-                    //Only positive or negative on the graph y-axis.  No need to care about the label count.
+                    // Only positive or negative on the graph y-axis.  No need to care about the
+                    // label count.
                     return thisYLabel;
                 }
             }
         }
 
         double val = 1;
-        while(val < scaledrange) {
+        while (val < scaledrange) {
             val = val * 10;
         }
-        return new YLabel(val/10, 1, 2, 5, 10);
+        return new YLabel(val / 10, 1, 2, 5, 10);
     }
 
     /**
@@ -239,9 +251,7 @@ class ValueAxis extends Axis {
         return -1;
     }
 
-    /**
-     * Finds the number of pixels per gridline that the given YLabel definition will result in
-     */
+    /** Finds the number of pixels per gridline that the given YLabel definition will result in */
     private int getPixelsPerGridline(YLabel thisYLabel) {
         double scaledrange = this.getScaledRange();
         return (int) (im.ysize / (scaledrange / thisYLabel.grid));
@@ -252,25 +262,28 @@ class ValueAxis extends Axis {
         return range / im.magfact;
     }
 
-    /**
-     * Returns true if some or all labels have fractional part (other than zero).
-     */
+    /** Returns true if some or all labels have fractional part (other than zero). */
     private static boolean isFractional(double scaledstep, int labfact) {
         if (scaledstep >= 1) {
             return false;
         }
-        BigDecimal bd = BigDecimal.valueOf(scaledstep)
-                .multiply(BigDecimal.valueOf(labfact), MathContext.DECIMAL32);
+        BigDecimal bd =
+                BigDecimal.valueOf(scaledstep)
+                        .multiply(BigDecimal.valueOf(labfact), MathContext.DECIMAL32);
         return !(bd.signum() == 0 || bd.scale() <= 0 || bd.stripTrailingZeros().scale() <= 0);
     }
 
+    /**
+     * Configuration for Y-axis labels and grid spacing. Defines grid step values and label factors
+     * for axis formatting.
+     */
     static class YLabel {
         final double grid;
         final int[] labelFacts;
 
         YLabel(double grid, int lfac1, int lfac2, int lfac3, int lfac4) {
             this.grid = grid;
-            labelFacts = new int[]{lfac1, lfac2, lfac3, lfac4};
+            labelFacts = new int[] {lfac1, lfac2, lfac3, lfac4};
         }
     }
 }

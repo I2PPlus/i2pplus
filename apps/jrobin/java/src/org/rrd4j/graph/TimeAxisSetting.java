@@ -1,5 +1,9 @@
 package org.rrd4j.graph;
 
+/**
+ * Configuration settings for time axis in RRD graphs. Defines major/minor grid units, label
+ * formatting, and time span settings.
+ */
 class TimeAxisSetting {
     final long secPerPix;
     final TimeUnit majorUnit;
@@ -11,8 +15,16 @@ class TimeAxisSetting {
     final int labelSpan;
     final TimeLabelFormat format;
 
-    TimeAxisSetting(long secPerPix, TimeUnit minorUnit, int minorUnitCount, TimeUnit majorUnit, int majorUnitCount,
-            TimeUnit labelUnit, int labelUnitCount, int labelSpan, TimeLabelFormat format) {
+    TimeAxisSetting(
+            long secPerPix,
+            TimeUnit minorUnit,
+            int minorUnitCount,
+            TimeUnit majorUnit,
+            int majorUnitCount,
+            TimeUnit labelUnit,
+            int labelUnitCount,
+            int labelSpan,
+            TimeLabelFormat format) {
         this.secPerPix = secPerPix;
         this.minorUnit = minorUnit;
         this.minorUnitCount = minorUnitCount;
@@ -24,8 +36,15 @@ class TimeAxisSetting {
         this.format = format;
     }
 
-    TimeAxisSetting(long secPerPix, TimeUnit minorUnit, int minorUnitCount, TimeUnit majorUnit, int majorUnitCount,
-            TimeUnit labelUnit, int labelUnitCount, int labelSpan) {
+    TimeAxisSetting(
+            long secPerPix,
+            TimeUnit minorUnit,
+            int minorUnitCount,
+            TimeUnit majorUnit,
+            int majorUnitCount,
+            TimeUnit labelUnit,
+            int labelUnitCount,
+            int labelSpan) {
         this.secPerPix = secPerPix;
         this.minorUnit = minorUnit;
         this.minorUnitCount = minorUnitCount;
@@ -49,15 +68,37 @@ class TimeAxisSetting {
         this.format = s.format;
     }
 
-    TimeAxisSetting(int minorUnit, int minorUnitCount, int majorUnit, int majorUnitCount,
-                    int labelUnit, int labelUnitCount, int labelSpan, TimeLabelFormat format) {
-        this(0, TimeUnit.resolveUnit(minorUnit), minorUnitCount, TimeUnit.resolveUnit(majorUnit), majorUnitCount,
-                TimeUnit.resolveUnit(labelUnit), labelUnitCount, labelSpan, format);
+    TimeAxisSetting(
+            int minorUnit,
+            int minorUnitCount,
+            int majorUnit,
+            int majorUnitCount,
+            int labelUnit,
+            int labelUnitCount,
+            int labelSpan,
+            TimeLabelFormat format) {
+        this(
+                0,
+                TimeUnit.resolveUnit(minorUnit),
+                minorUnitCount,
+                TimeUnit.resolveUnit(majorUnit),
+                majorUnitCount,
+                TimeUnit.resolveUnit(labelUnit),
+                labelUnitCount,
+                labelSpan,
+                format);
     }
 
     TimeAxisSetting withLabelFormat(TimeLabelFormat f) {
         return new TimeAxisSetting(
-            secPerPix, minorUnit, minorUnitCount, majorUnit, majorUnitCount,
-            labelUnit, labelUnitCount, labelSpan, f);
+                secPerPix,
+                minorUnit,
+                minorUnitCount,
+                majorUnit,
+                majorUnitCount,
+                labelUnit,
+                labelUnitCount,
+                labelSpan,
+                f);
     }
 }

@@ -4,26 +4,26 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Backend which is used to store RRD data to ordinary disk files
- * using java.nio.* package. This is the default backend engine.
+ * Backend which is used to store RRD data to ordinary disk files using java.nio.* package. This is
+ * the default backend engine.
  *
- * This version buffers all stat files in a single temporary buffer file sequentially,
- * keeping track of each file's offset and length, then flushes all to the mapped file in batch.
+ * <p>This version buffers all stat files in a single temporary buffer file sequentially, keeping
+ * track of each file's offset and length, then flushes all to the mapped file in batch.
  */
 public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
 
@@ -33,14 +33,19 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
     // The java 9+ methods
     private static final Method invokeCleaner;
     private static final Object unsafe;
+
     static {
         Method cleanerMethodTemp;
         Method cleanMethodTemp;
         Method invokeCleanerTemp;
         Object unsafeTemp;
         try {
-            Class<?> directBufferClass = RrdRandomAccessFileBackend.class.getClassLoader().loadClass("sun.nio.ch.DirectBuffer");
-            Class<?> cleanerClass = RrdNioBackend.class.getClassLoader().loadClass("sun.misc.Cleaner");
+            Class<?> directBufferClass =
+                    RrdRandomAccessFileBackend.class
+                            .getClassLoader()
+                            .loadClass("sun.nio.ch.DirectBuffer");
+            Class<?> cleanerClass =
+                    RrdNioBackend.class.getClassLoader().loadClass("sun.misc.Cleaner");
             cleanerMethodTemp = directBufferClass.getMethod("cleaner");
             cleanerMethodTemp.setAccessible(true);
             cleanMethodTemp = cleanerClass.getMethod("clean");
@@ -50,13 +55,20 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
             cleanMethodTemp = null;
         }
         try {
-            Field singletonInstanceField = RrdRandomAccessFileBackend.class.getClassLoader().loadClass("sun.misc.Unsafe").getDeclaredField("theUnsafe");
+            Field singletonInstanceField =
+                    RrdRandomAccessFileBackend.class
+                            .getClassLoader()
+                            .loadClass("sun.misc.Unsafe")
+                            .getDeclaredField("theUnsafe");
             singletonInstanceField.setAccessible(true);
             unsafeTemp = singletonInstanceField.get(null);
             invokeCleanerTemp = unsafeTemp.getClass().getMethod("invokeCleaner", ByteBuffer.class);
-        } catch (NoSuchFieldException | SecurityException
-                | IllegalArgumentException | IllegalAccessException
-                | NoSuchMethodException | ClassNotFoundException e) {
+        } catch (NoSuchFieldException
+                | SecurityException
+                | IllegalArgumentException
+                | IllegalAccessException
+                | NoSuchMethodException
+                | ClassNotFoundException e) {
             invokeCleanerTemp = null;
             unsafeTemp = null;
         }
@@ -72,18 +84,15 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
 
     private ScheduledFuture<?> syncRunnableHandle = null;
 
-    /**
-     * Path to the single temporary file used to buffer all stat files data sequentially.
-     */
+    /** Path to the single temporary file used to buffer all stat files data sequentially. */
     private Path tempBufferFilePath;
 
-    /**
-     * FileChannel to write and read stats data from the single temp buffer file.
-     */
+    /** FileChannel to write and read stats data from the single temp buffer file. */
     private FileChannel tempBufferFileChannel;
 
     /**
-     * Data structure to track each buffered stat file's offset and length within the single temp buffer file.
+     * Data structure to track each buffered stat file's offset and length within the single temp
+     * buffer file.
      */
     private final List<StatFileSegment> bufferedStatSegments = new ArrayList<>();
 
@@ -92,7 +101,7 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
      */
     private static class StatFileSegment {
         final long offset; // offset within temp buffer file where this stat file data begins
-        final int length;  // length of this stat file data in bytes
+        final int length; // length of this stat file data in bytes
         final long targetFileOffset; // offset within the mapped (RRD) file where this stat belongs
 
         StatFileSegment(long offset, int length, long targetFileOffset) {
@@ -105,13 +114,15 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
     /**
      * Creates RrdFileBackend object for the given file path, backed by java.nio.* classes.
      *
-     * @param path       Path to a file
-     * @param readOnly   True, if file should be open in read-only mode. False otherwise
+     * @param path Path to a file
+     * @param readOnly True, if file should be open in read-only mode. False otherwise
      * @param threadPool Sync thread pool; can be null
      * @param syncPeriod Sync period in seconds
      * @throws IOException On I/O error
      */
-    protected RrdNioBackend(String path, boolean readOnly, RrdSyncThreadPool threadPool, int syncPeriod) throws IOException {
+    protected RrdNioBackend(
+            String path, boolean readOnly, RrdSyncThreadPool threadPool, int syncPeriod)
+            throws IOException {
         super(path);
         Set<StandardOpenOption> options = new HashSet<>(3);
         options.add(StandardOpenOption.READ);
@@ -132,13 +143,17 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
 
         if (!readOnly) {
             tempBufferFilePath = Files.createTempFile("rrd_stats_buffer_", ".tmp");
-            tempBufferFileChannel = FileChannel.open(tempBufferFilePath, StandardOpenOption.READ, StandardOpenOption.WRITE);
+            tempBufferFileChannel =
+                    FileChannel.open(
+                            tempBufferFilePath, StandardOpenOption.READ, StandardOpenOption.WRITE);
         }
 
         try {
             if (!readOnly && threadPool != null) {
                 Runnable syncRunnable = this::flushBufferedStatFiles;
-                syncRunnableHandle = threadPool.scheduleWithFixedDelay(syncRunnable, syncPeriod, syncPeriod, TimeUnit.SECONDS);
+                syncRunnableHandle =
+                        threadPool.scheduleWithFixedDelay(
+                                syncRunnable, syncPeriod, syncPeriod, TimeUnit.SECONDS);
             }
         } catch (RuntimeException rte) {
             closeTempResources();
@@ -151,7 +166,8 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
 
     private void mapFile(long length) throws IOException {
         if (length > 0) {
-            FileChannel.MapMode mapMode = readOnly ? FileChannel.MapMode.READ_ONLY : FileChannel.MapMode.READ_WRITE;
+            FileChannel.MapMode mapMode =
+                    readOnly ? FileChannel.MapMode.READ_ONLY : FileChannel.MapMode.READ_WRITE;
             byteBuffer = file.map(mapMode, 0, length);
             setByteBuffer(byteBuffer);
         }
@@ -166,7 +182,9 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
                 } else {
                     invokeCleaner.invoke(unsafe, byteBuffer);
                 }
-            } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            } catch (IllegalAccessException
+                    | IllegalArgumentException
+                    | InvocationTargetException ex) {
                 throw new RuntimeException(ex);
             }
         }
@@ -174,9 +192,11 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
     }
 
     /**
-     * {@inheritDoc}
-     * Sets length of the underlying RRD file. This method is called only once, immediately after new RRD creation.
-     * @throws IllegalArgumentException if the length is bigger than the possible mapping position (2GiB).
+     * {@inheritDoc} Sets length of the underlying RRD file. This method is called only once,
+     * immediately after new RRD creation.
+     *
+     * @throws IllegalArgumentException if the length is bigger than the possible mapping position
+     *     (2GiB).
      */
     protected synchronized void setLength(long newLength) throws IOException {
         if (newLength < 0 || newLength > Integer.MAX_VALUE) {
@@ -189,8 +209,8 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
     }
 
     /**
-     * Closes the underlying RRD file.
-     * Also closes and deletes the temporary buffer file used for buffering.
+     * Closes the underlying RRD file. Also closes and deletes the temporary buffer file used for
+     * buffering.
      *
      * @throws IOException On I/O error
      */
@@ -226,15 +246,16 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
     }
 
     /**
-     * Buffers one stat file's data into the single temp buffer file sequentially.
-     * This method appends the data to the temp file and records the offset and length,
-     * including the target offset in the mapped file where this stat file belongs.
+     * Buffers one stat file's data into the single temp buffer file sequentially. This method
+     * appends the data to the temp file and records the offset and length, including the target
+     * offset in the mapped file where this stat file belongs.
      *
      * @param data ByteBuffer containing the stat file's bytes to buffer
      * @param targetFileOffset Position in the mapped RRD file to write this stat file to on flush
      * @throws IOException If writing to temp file fails
      */
-    public synchronized void bufferStatFile(ByteBuffer data, long targetFileOffset) throws IOException {
+    public synchronized void bufferStatFile(ByteBuffer data, long targetFileOffset)
+            throws IOException {
         if (readOnly) {
             throw new IOException("Backend opened in read-only mode; cannot buffer stats.");
         }
@@ -255,19 +276,25 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
     }
 
     /**
-     * Flushes all buffered stat files sequentially from the temp buffer file
-     * into their designated positions in the mapped RRD file in one batch operation.
-     * After flushing, the temp buffer file and index are cleared for the next batch.
+     * Flushes all buffered stat files sequentially from the temp buffer file into their designated
+     * positions in the mapped RRD file in one batch operation. After flushing, the temp buffer file
+     * and index are cleared for the next batch.
      */
     public synchronized void flushBufferedStatFiles() {
-        if (readOnly || byteBuffer == null || tempBufferFileChannel == null || tempBufferFilePath == null) {
+        if (readOnly
+                || byteBuffer == null
+                || tempBufferFileChannel == null
+                || tempBufferFilePath == null) {
             return;
         }
         try {
             for (StatFileSegment segment : bufferedStatSegments) {
-                try (FileChannel readChannel = FileChannel.open(tempBufferFilePath, StandardOpenOption.READ)) {
-                    MappedByteBuffer mappedSegment = readChannel.map(FileChannel.MapMode.READ_ONLY, segment.offset, segment.length);
-                    byteBuffer.position((int)segment.targetFileOffset);
+                try (FileChannel readChannel =
+                        FileChannel.open(tempBufferFilePath, StandardOpenOption.READ)) {
+                    MappedByteBuffer mappedSegment =
+                            readChannel.map(
+                                    FileChannel.MapMode.READ_ONLY, segment.offset, segment.length);
+                    byteBuffer.position((int) segment.targetFileOffset);
                     byteBuffer.put(mappedSegment);
                 }
             }
@@ -283,9 +310,7 @@ public class RrdNioBackend extends ByteBufferBackend implements RrdFileBackend {
         }
     }
 
-    /**
-     * Override sync to disable unbuffered flush.
-     */
+    /** Override sync to disable unbuffered flush. */
     protected synchronized void sync() {
         // Intentionally empty: use buffered write + flush instead
     }

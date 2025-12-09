@@ -1,14 +1,21 @@
 package org.rrd4j.core;
 
-import java.io.IOException;
-
 import org.rrd4j.ConsolFun;
 import org.rrd4j.DsType;
 import org.rrd4j.core.jrrd.RRDatabase;
 
+import java.io.IOException;
+
+/** Reader for RRDTool format RRD files. */
 class RrdToolReader extends DataImporter {
     private RRDatabase rrd;
 
+    /**
+     * Creates a new RRDTool reader.
+     *
+     * @param rrdPath path to the RRDTool file
+     * @throws java.io.IOException if an I/O error occurs
+     */
     RrdToolReader(String rrdPath) throws IOException {
         rrd = new RRDatabase(rrdPath);
     }
@@ -95,6 +102,11 @@ class RrdToolReader extends DataImporter {
         return rrd.getArchive(arcIndex).getValues()[dsIndex];
     }
 
+    /**
+     * Releases the RRDTool reader and closes the underlying RRD database.
+     *
+     * @throws java.io.IOException if an I/O error occurs
+     */
     @Override
     void release() throws IOException {
         if (rrd != null) {
@@ -102,5 +114,4 @@ class RrdToolReader extends DataImporter {
             rrd = null;
         }
     }
-
 }

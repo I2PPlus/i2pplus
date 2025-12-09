@@ -1,44 +1,37 @@
 package org.rrd4j.core;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 import org.rrd4j.ConsolFun;
 import org.rrd4j.data.Aggregates;
 import org.rrd4j.data.DataProcessor;
 import org.rrd4j.data.Variable;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+
 /**
- * Class used to represent data fetched from the RRD.
- * Object of this class is created when the method
- * {@link org.rrd4j.core.FetchRequest#fetchData() fetchData()} is
- * called on a {@link org.rrd4j.core.FetchRequest FetchRequest} object.
- * <p>
+ * Class used to represent data fetched from the RRD. Object of this class is created when the
+ * method {@link org.rrd4j.core.FetchRequest#fetchData() fetchData()} is called on a {@link
+ * org.rrd4j.core.FetchRequest FetchRequest} object.
  *
- * Data returned from the RRD is, simply, just one big table filled with
- * timestamps and corresponding datasource values.
- * Use {@link #getRowCount() getRowCount()} method to count the number
- * of returned timestamps (table rows).
- * <p>
+ * <p>Data returned from the RRD is, simply, just one big table filled with timestamps and
+ * corresponding datasource values. Use {@link #getRowCount() getRowCount()} method to count the
+ * number of returned timestamps (table rows).
  *
- * The first table column is filled with timestamps. Time intervals
- * between consecutive timestamps are guaranteed to be equal. Use
- * {@link #getTimestamps() getTimestamps()} method to get an array of
- * timestamps returned.
- * <p>
+ * <p>The first table column is filled with timestamps. Time intervals between consecutive
+ * timestamps are guaranteed to be equal. Use {@link #getTimestamps() getTimestamps()} method to get
+ * an array of timestamps returned.
  *
- * Remaining columns are filled with datasource values for the whole timestamp range,
- * on a column-per-datasource basis. Use {@link #getColumnCount() getColumnCount()} to find
- * the number of datasources and {@link #getValues(int) getValues(i)} method to obtain
- * all values for the i-th datasource. Returned datasource values correspond to
- * the values returned with {@link #getTimestamps() getTimestamps()} method.
- * <p>
- * This data structure holds the fetched information.
+ * <p>Remaining columns are filled with datasource values for the whole timestamp range, on a
+ * column-per-datasource basis. Use {@link #getColumnCount() getColumnCount()} to find the number of
+ * datasources and {@link #getValues(int) getValues(i)} method to obtain all values for the i-th
+ * datasource. Returned datasource values correspond to the values returned with {@link
+ * #getTimestamps() getTimestamps()} method.
+ *
+ * <p>This data structure holds the fetched information.
  *
  * @author Sasa Markovic
  */
@@ -67,17 +60,27 @@ public class FetchData {
         this.request = request;
     }
 
+    /**
+     * Sets the timestamps for the fetched data.
+     *
+     * @param timestamps array of timestamps
+     */
     void setTimestamps(long[] timestamps) {
         this.timestamps = timestamps;
     }
 
+    /**
+     * Sets the values for the fetched data.
+     *
+     * @param values 2D array of values
+     */
     void setValues(double[][] values) {
         this.values = values;
     }
 
     /**
-     * Returns the number of rows fetched from the corresponding RRD.
-     * Each row represents datasource values for the specific timestamp.
+     * Returns the number of rows fetched from the corresponding RRD. Each row represents datasource
+     * values for the specific timestamp.
      *
      * @return Number of rows.
      */
@@ -86,9 +89,9 @@ public class FetchData {
     }
 
     /**
-     * Returns the number of columns fetched from the corresponding RRD.
-     * This number is always equal to the number of datasources defined
-     * in the RRD. Each column represents values of a single datasource.
+     * Returns the number of columns fetched from the corresponding RRD. This number is always equal
+     * to the number of datasources defined in the RRD. Each column represents values of a single
+     * datasource.
      *
      * @return Number of columns (datasources).
      */
@@ -97,8 +100,8 @@ public class FetchData {
     }
 
     /**
-     * Returns an array of timestamps covering the whole range specified in the
-     * {@link FetchRequest FetchReguest} object.
+     * Returns an array of timestamps covering the whole range specified in the {@link FetchRequest
+     * FetchReguest} object.
      *
      * @return Array of equidistant timestamps.
      */
@@ -116,8 +119,7 @@ public class FetchData {
     }
 
     /**
-     * Returns all archived values for a single datasource.
-     * Returned values correspond to timestamps
+     * Returns all archived values for a single datasource. Returned values correspond to timestamps
      * returned with {@link #getTimestamps() getTimestamps()} method.
      *
      * @param dsIndex Datasource index.
@@ -128,8 +130,7 @@ public class FetchData {
     }
 
     /**
-     * Returns all archived values for all datasources.
-     * Returned values correspond to timestamps
+     * Returns all archived values for all datasources. Returned values correspond to timestamps
      * returned with {@link #getTimestamps() getTimestamps()} method.
      *
      * @return Two-dimensional aray of all datasource values.
@@ -139,8 +140,7 @@ public class FetchData {
     }
 
     /**
-     * Returns all archived values for a single datasource.
-     * Returned values correspond to timestamps
+     * Returns all archived values for a single datasource. Returned values correspond to timestamps
      * returned with {@link #getTimestamps() getTimestamps()} method.
      *
      * @param dsName Datasource name.
@@ -156,11 +156,11 @@ public class FetchData {
     }
 
     /**
-     * Returns a set of values created by applying RPN expression to the fetched data.
-     * For example, if you have two datasources named <code>x</code> and <code>y</code>
-     * in this FetchData and you want to calculate values for <code>(x+y)/2</code> use something like:
-     * <p>
-     * <code>getRpnValues("x,y,+,2,/");</code>
+     * Returns a set of values created by applying RPN expression to the fetched data. For example,
+     * if you have two datasources named <code>x</code> and <code>y</code> in this FetchData and you
+     * want to calculate values for <code>(x+y)/2</code> use something like:
+     *
+     * <p><code>getRpnValues("x,y,+,2,/");</code>
      *
      * @param rpnExpression RRDTool-like RPN expression
      * @return Calculated values
@@ -199,9 +199,9 @@ public class FetchData {
     }
 
     /**
-     * Returns Archive object which is determined to be the best match for the
-     * timestamps specified in the fetch request. All datasource values are obtained
-     * from round robin archives belonging to this archive.
+     * Returns Archive object which is determined to be the best match for the timestamps specified
+     * in the fetch request. All datasource values are obtained from round robin archives belonging
+     * to this archive.
      *
      * @return Matching archive.
      */
@@ -210,9 +210,9 @@ public class FetchData {
     }
 
     /**
-     * Returns array of datasource names found in the corresponding RRD. If the request
-     * was filtered (data was fetched only for selected datasources), only datasources selected
-     * for fetching are returned.
+     * Returns array of datasource names found in the corresponding RRD. If the request was filtered
+     * (data was fetched only for selected datasources), only datasources selected for fetching are
+     * returned.
      *
      * @return Array of datasource names.
      */
@@ -221,19 +221,20 @@ public class FetchData {
     }
 
     /**
-     * Retrieve the table index number of a datasource by name.  Names are case sensitive.
+     * Retrieve the table index number of a datasource by name. Names are case sensitive.
      *
      * @param dsName Name of the datasource for which to find the index.
      * @return Index number of the datasources in the value table.
      */
     public int getDsIndex(String dsName) {
-        // Let's assume the table of dsNames is always small, so it is not necessary to use a hashmap for lookups
+        // Let's assume the table of dsNames is always small, so it is not necessary to use a
+        // hashmap for lookups
         for (int i = 0; i < dsNames.length; i++) {
             if (dsNames[i].equals(dsName)) {
                 return i;
             }
         }
-        return -1;        // Datasource not found !
+        return -1; // Datasource not found !
     }
 
     /**
@@ -263,8 +264,7 @@ public class FetchData {
     public String toString() {
         // print header row
         StringBuilder buff = new StringBuilder();
-        buff.append(padWithBlanks("", 10))
-            .append(" ");
+        buff.append(padWithBlanks("", 10)).append(" ");
         for (String dsName : dsNames) {
             buff.append(padWithBlanks(dsName, 18));
         }
@@ -295,13 +295,15 @@ public class FetchData {
     /**
      * Returns single aggregated value from the fetched data for a single datasource.
      *
-     * @param dsName    Datasource name
-     * @param consolFun Consolidation function to be applied to fetched datasource values.
-     *                  Valid consolidation functions are "MIN", "MAX", "LAST", "FIRST", "AVERAGE" and "TOTAL"
-     *                  (these string constants are conveniently defined in the {@link org.rrd4j.ConsolFun} class)
-     * @throws java.lang.IllegalArgumentException Thrown if the given datasource name cannot be found in fetched data.
+     * @param dsName Datasource name
+     * @param consolFun Consolidation function to be applied to fetched datasource values. Valid
+     *     consolidation functions are "MIN", "MAX", "LAST", "FIRST", "AVERAGE" and "TOTAL" (these
+     *     string constants are conveniently defined in the {@link org.rrd4j.ConsolFun} class)
+     * @throws java.lang.IllegalArgumentException Thrown if the given datasource name cannot be
+     *     found in fetched data.
      * @return a double.
-     * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable}, used with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
+     * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable}, used
+     *     with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
      */
     @Deprecated
     public double getAggregate(String dsName, ConsolFun consolFun) {
@@ -311,16 +313,18 @@ public class FetchData {
 
     /**
      * Returns aggregated value for a set of values calculated by applying an RPN expression to the
-     * fetched data. For example, if you have two datasources named <code>x</code> and <code>y</code>
-     * in this FetchData and you want to calculate MAX value of <code>(x+y)/2</code> use something like:
-     * <p>
-     * <code>getRpnAggregate("x,y,+,2,/", "MAX");</code>
+     * fetched data. For example, if you have two datasources named <code>x</code> and <code>y
+     * </code> in this FetchData and you want to calculate MAX value of <code>(x+y)/2</code> use
+     * something like:
+     *
+     * <p><code>getRpnAggregate("x,y,+,2,/", "MAX");</code>
      *
      * @param rpnExpression RRDTool-like RPN expression
-     * @param consolFun     Consolidation function (MIN, MAX, LAST, FIRST, AVERAGE or TOTAL)
+     * @param consolFun Consolidation function (MIN, MAX, LAST, FIRST, AVERAGE or TOTAL)
      * @return Aggregated value
      * @throws java.lang.IllegalArgumentException Thrown if invalid RPN expression is supplied
-     * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable}, used with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
+     * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable}, used
+     *     with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
      */
     @Deprecated
     public double getRpnAggregate(String rpnExpression, ConsolFun consolFun) {
@@ -329,13 +333,15 @@ public class FetchData {
     }
 
     /**
-     * Returns all aggregated values (MIN, MAX, LAST, FIRST, AVERAGE or TOTAL) calculated from the fetched data
-     * for a single datasource.
+     * Returns all aggregated values (MIN, MAX, LAST, FIRST, AVERAGE or TOTAL) calculated from the
+     * fetched data for a single datasource.
      *
      * @param dsName Datasource name.
      * @return Simple object containing all aggregated values.
-     * @throws java.lang.IllegalArgumentException Thrown if the given datasource name cannot be found in the fetched data.
-     * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable}, used with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
+     * @throws java.lang.IllegalArgumentException Thrown if the given datasource name cannot be
+     *     found in the fetched data.
+     * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable}, used
+     *     with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
      */
     @Deprecated
     public Aggregates getAggregates(String dsName) {
@@ -344,41 +350,45 @@ public class FetchData {
     }
 
     /**
-     * Returns all aggregated values for a set of values calculated by applying an RPN expression to the
-     * fetched data. For example, if you have two datasources named <code>x</code> and <code>y</code>
-     * in this FetchData and you want to calculate MIN, MAX, LAST, FIRST, AVERAGE and TOTAL value
-     * of <code>(x+y)/2</code> use something like:
-     * <p>
-     * <code>getRpnAggregates("x,y,+,2,/");</code>
+     * Returns all aggregated values for a set of values calculated by applying an RPN expression to
+     * the fetched data. For example, if you have two datasources named <code>x</code> and <code>y
+     * </code> in this FetchData and you want to calculate MIN, MAX, LAST, FIRST, AVERAGE and TOTAL
+     * value of <code>(x+y)/2</code> use something like:
+     *
+     * <p><code>getRpnAggregates("x,y,+,2,/");</code>
      *
      * @param rpnExpression RRDTool-like RPN expression
      * @return Object containing all aggregated values
      * @throws java.lang.IllegalArgumentException Thrown if invalid RPN expression is supplied
-     * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable}, used with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
+     * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable}, used
+     *     with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
      */
     @Deprecated
-     public Aggregates getRpnAggregates(String rpnExpression) {
+    public Aggregates getRpnAggregates(String rpnExpression) {
         DataProcessor dataProcessor = createDataProcessor(rpnExpression);
         return dataProcessor.getAggregates(RPN_SOURCE_NAME);
     }
 
     /**
      * Used by ISPs which charge for bandwidth utilization on a "95th percentile" basis.
-     * <p>
      *
-     * The 95th percentile is the highest source value left when the top 5% of a numerically sorted set
-     * of source data is discarded. It is used as a measure of the peak value used when one discounts
-     * a fair amount for transitory spikes. This makes it markedly different from the average.
-     * <p>
+     * <p>The 95th percentile is the highest source value left when the top 5% of a numerically
+     * sorted set of source data is discarded. It is used as a measure of the peak value used when
+     * one discounts a fair amount for transitory spikes. This makes it markedly different from the
+     * average.
      *
-     * Read more about this topic at:<p>
-     * <a href="http://www.red.net/support/resourcecentre/leasedline/percentile.php">Rednet</a> or<br>
+     * <p>Read more about this topic at:
+     *
+     * <p><a href="http://www.red.net/support/resourcecentre/leasedline/percentile.php">Rednet</a>
+     * or<br>
      * <a href="http://www.bytemark.co.uk/support/tech/95thpercentile.html">Bytemark</a>.
      *
      * @param dsName Datasource name
      * @return 95th percentile of fetched source values
      * @throws java.lang.IllegalArgumentException Thrown if invalid source name is supplied
-     * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable.PERCENTILE}, used with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
+     * @deprecated This method is deprecated. Uses instance of {@link
+     *     org.rrd4j.data.Variable.PERCENTILE}, used with {@link
+     *     org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
      */
     @Deprecated
     public double get95Percentile(String dsName) {
@@ -393,7 +403,9 @@ public class FetchData {
      * @param rpnExpression RRDTool-like RPN expression
      * @return 95-percentile
      * @throws java.lang.IllegalArgumentException Thrown if invalid RPN expression is supplied
-     * @deprecated This method is deprecated. Uses instance of {@link org.rrd4j.data.Variable.PERCENTILE}, used with {@link org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
+     * @deprecated This method is deprecated. Uses instance of {@link
+     *     org.rrd4j.data.Variable.PERCENTILE}, used with {@link
+     *     org.rrd4j.data.DataProcessor#addDatasource(String, String, Variable)}
      */
     @Deprecated
     public double getRpn95Percentile(String rpnExpression) {
@@ -402,12 +414,13 @@ public class FetchData {
     }
 
     /**
-     * Dumps fetch data to output stream in XML format. A flush is issued at the end of the xml generation.
+     * Dumps fetch data to output stream in XML format. A flush is issued at the end of the xml
+     * generation.
      *
      * @param outputStream Output stream to dump fetch data to
      */
     public void exportXml(OutputStream outputStream) {
-        //No auto flush for XmlWriter, it will be flushed once, when export is finished
+        // No auto flush for XmlWriter, it will be flushed once, when export is finished
         try (XmlWriter writer = new XmlWriter(outputStream, false)) {
             exportXml(writer);
         }
@@ -489,7 +502,8 @@ public class FetchData {
     }
 
     private DataProcessor createDataProcessor(String rpnExpression) {
-        DataProcessor dataProcessor = new DataProcessor(request.getFetchStart(), request.getFetchEnd());
+        DataProcessor dataProcessor =
+                new DataProcessor(request.getFetchStart(), request.getFetchEnd());
         for (String dsName : dsNames) {
             dataProcessor.addDatasource(dsName, this);
         }
@@ -498,8 +512,7 @@ public class FetchData {
         }
         try {
             dataProcessor.processData();
-        }
-        catch (IOException ioe) {
+        } catch (IOException ioe) {
             // highly unlikely, since all datasources have already calculated values
             throw new RuntimeException("Impossible error: " + ioe);
         }

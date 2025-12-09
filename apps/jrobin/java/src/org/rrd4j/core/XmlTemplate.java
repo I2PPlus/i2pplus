@@ -12,12 +12,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Class used as a base class for various XML template related classes. Class provides
- * methods for XML source parsing and XML tree traversing. XML source may have unlimited
- * number of placeholders (variables) in the format <code>${variable_name}</code>.
- * Methods are provided to specify variable values at runtime.
- * Note that this class has limited functionality: XML source gets parsed, and variable
- * values are collected. You have to extend this class to do something more useful.
+ * Class used as a base class for various XML template related classes. Class provides methods for
+ * XML source parsing and XML tree traversing. XML source may have unlimited number of placeholders
+ * (variables) in the format <code>${variable_name}</code>. Methods are provided to specify variable
+ * values at runtime. Note that this class has limited functionality: XML source gets parsed, and
+ * variable values are collected. You have to extend this class to do something more useful.
  */
 public abstract class XmlTemplate {
     private static final String PATTERN_STRING = "\\$\\{(\\w+)\\}";
@@ -28,7 +27,7 @@ public abstract class XmlTemplate {
     private final HashSet<Node> validatedNodes = new HashSet<>();
 
     /**
-     * <p>Constructor for XmlTemplate.</p>
+     * Constructor for XmlTemplate.
      *
      * @param xmlSource a {@link org.xml.sax.InputSource} object.
      * @throws java.io.IOException if any.
@@ -38,7 +37,7 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * <p>Constructor for XmlTemplate.</p>
+     * Constructor for XmlTemplate.
      *
      * @param xmlString a {@link java.lang.String} object.
      * @throws java.io.IOException if any.
@@ -48,7 +47,7 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * <p>Constructor for XmlTemplate.</p>
+     * Constructor for XmlTemplate.
      *
      * @param xmlFile a {@link java.io.File} object.
      * @throws java.io.IOException if any.
@@ -57,19 +56,17 @@ public abstract class XmlTemplate {
         root = Util.Xml.getRootElement(xmlFile);
     }
 
-    /**
-     * Removes all placeholder-value mappings.
-     */
+    /** Removes all placeholder-value mappings. */
     public void clearValues() {
         valueMap.clear();
     }
 
     /**
-     * Sets value for a single XML template variable. Variable name should be specified
-     * without leading '${' and ending '}' placeholder markers. For example, for a placeholder
-     * <code>${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
+     * Sets value for a single XML template variable. Variable name should be specified without
+     * leading '${' and ending '}' placeholder markers. For example, for a placeholder <code>
+     * ${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
      *
-     * @param name  variable name
+     * @param name variable name
      * @param value value to be set in the XML template
      */
     public void setVariable(String name, String value) {
@@ -77,11 +74,11 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * Sets value for a single XML template variable. Variable name should be specified
-     * without leading '${' and ending '}' placeholder markers. For example, for a placeholder
-     * <code>${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
+     * Sets value for a single XML template variable. Variable name should be specified without
+     * leading '${' and ending '}' placeholder markers. For example, for a placeholder <code>
+     * ${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
      *
-     * @param name  variable name
+     * @param name variable name
      * @param value value to be set in the XML template
      */
     public void setVariable(String name, int value) {
@@ -89,11 +86,11 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * Sets value for a single XML template variable. Variable name should be specified
-     * without leading '${' and ending '}' placeholder markers. For example, for a placeholder
-     * <code>${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
+     * Sets value for a single XML template variable. Variable name should be specified without
+     * leading '${' and ending '}' placeholder markers. For example, for a placeholder <code>
+     * ${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
      *
-     * @param name  variable name
+     * @param name variable name
      * @param value value to be set in the XML template
      */
     public void setVariable(String name, long value) {
@@ -101,11 +98,11 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * Sets value for a single XML template variable. Variable name should be specified
-     * without leading '${' and ending '}' placeholder markers. For example, for a placeholder
-     * <code>${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
+     * Sets value for a single XML template variable. Variable name should be specified without
+     * leading '${' and ending '}' placeholder markers. For example, for a placeholder <code>
+     * ${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
      *
-     * @param name  variable name
+     * @param name variable name
      * @param value value to be set in the XML template
      */
     public void setVariable(String name, double value) {
@@ -113,11 +110,11 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * Sets value for a single XML template variable. Variable name should be specified
-     * without leading '${' and ending '}' placeholder markers. For example, for a placeholder
-     * <code>${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
+     * Sets value for a single XML template variable. Variable name should be specified without
+     * leading '${' and ending '}' placeholder markers. For example, for a placeholder <code>
+     * ${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
      *
-     * @param name  variable name
+     * @param name variable name
      * @param value value to be set in the XML template
      */
     public void setVariable(String name, Color value) {
@@ -137,11 +134,11 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * Sets value for a single XML template variable. Variable name should be specified
-     * without leading '${' and ending '}' placeholder markers. For example, for a placeholder
-     * <code>${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
+     * Sets value for a single XML template variable. Variable name should be specified without
+     * leading '${' and ending '}' placeholder markers. For example, for a placeholder <code>
+     * ${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
      *
-     * @param name  variable name
+     * @param name variable name
      * @param value value to be set in the XML template
      */
     public void setVariable(String name, Date value) {
@@ -149,11 +146,11 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * Sets value for a single XML template variable. Variable name should be specified
-     * without leading '${' and ending '}' placeholder markers. For example, for a placeholder
-     * <code>${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
+     * Sets value for a single XML template variable. Variable name should be specified without
+     * leading '${' and ending '}' placeholder markers. For example, for a placeholder <code>
+     * ${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
      *
-     * @param name  variable name
+     * @param name variable name
      * @param value value to be set in the XML template
      */
     public void setVariable(String name, Calendar value) {
@@ -161,11 +158,11 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * Sets value for a single XML template variable. Variable name should be specified
-     * without leading '${' and ending '}' placeholder markers. For example, for a placeholder
-     * <code>${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
+     * Sets value for a single XML template variable. Variable name should be specified without
+     * leading '${' and ending '}' placeholder markers. For example, for a placeholder <code>
+     * ${start}</code>, specify <code>start</code> for the <code>name</code> parameter.
      *
-     * @param name  variable name
+     * @param name variable name
      * @param value value to be set in the XML template
      */
     public void setVariable(String name, boolean value) {
@@ -173,8 +170,7 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * Searches the XML template to see if there are variables in there that
-     * will need to be set.
+     * Searches the XML template to see if there are variables in there that will need to be set.
      *
      * @return True if variables were detected, false if not.
      */
@@ -202,7 +198,7 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * <p>getChildNodes.</p>
+     * getChildNodes.
      *
      * @param parentNode a {@link org.w3c.dom.Node} object.
      * @param childName a {@link java.lang.String} object.
@@ -213,7 +209,7 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * <p>getChildNodes.</p>
+     * getChildNodes.
      *
      * @param parentNode a {@link org.w3c.dom.Node} object.
      * @return an array of {@link org.w3c.dom.Node} objects.
@@ -223,7 +219,7 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * <p>getFirstChildNode.</p>
+     * getFirstChildNode.
      *
      * @param parentNode a {@link org.w3c.dom.Node} object.
      * @param childName a {@link java.lang.String} object.
@@ -234,7 +230,7 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * <p>hasChildNode.</p>
+     * hasChildNode.
      *
      * @param parentNode a {@link org.w3c.dom.Node} object.
      * @param childName a {@link java.lang.String} object.
@@ -245,7 +241,7 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * <p>getChildValue.</p>
+     * getChildValue.
      *
      * @param parentNode a {@link org.w3c.dom.Node} object.
      * @param childName a {@link java.lang.String} object.
@@ -256,7 +252,7 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * <p>getChildValue.</p>
+     * getChildValue.
      *
      * @param parentNode a {@link org.w3c.dom.Node} object.
      * @param childName a {@link java.lang.String} object.
@@ -269,7 +265,7 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * <p>getValue.</p>
+     * getValue.
      *
      * @param parentNode a {@link org.w3c.dom.Node} object.
      * @return a {@link java.lang.String} object.
@@ -279,7 +275,7 @@ public abstract class XmlTemplate {
     }
 
     /**
-     * <p>getValue.</p>
+     * getValue.
      *
      * @param parentNode a {@link org.w3c.dom.Node} object.
      * @param trim a boolean.
@@ -304,11 +300,11 @@ public abstract class XmlTemplate {
                 result.append(templateValue, lastMatchEnd, matcher.start());
                 result.append(valueMap.get(var).toString());
                 lastMatchEnd = matcher.end();
-            }
-            else {
+            } else {
                 // no mapping found - this is illegal
                 // throw runtime exception
-                throw new IllegalArgumentException("No mapping found for template variable ${" + var + "}");
+                throw new IllegalArgumentException(
+                        "No mapping found for template variable ${" + var + "}");
             }
         }
         result.append(templateValue.substring(lastMatchEnd));
@@ -426,8 +422,8 @@ public abstract class XmlTemplate {
      */
     protected boolean isEmptyNode(Node node) {
         // comment node or empty text node
-        return node.getNodeName().equals("#comment") ||
-                (node.getNodeName().equals("#text") && node.getNodeValue().trim().length() == 0);
+        return node.getNodeName().equals("#comment")
+                || (node.getNodeName().equals("#text") && node.getNodeValue().trim().length() == 0);
     }
 
     /**
@@ -443,23 +439,23 @@ public abstract class XmlTemplate {
         }
         Node[] childs = getChildNodes(parentNode);
         main:
-            for (Node child : childs) {
-                String childName = child.getNodeName();
-                for (int j = 0; j < allowedChildNames.length; j++) {
-                    if (allowedChildNames[j].equals(childName)) {
-                        // only one such tag is allowed
-                        allowedChildNames[j] = "<--removed-->";
-                        continue main;
-                    }
-                    else if (allowedChildNames[j].equals(childName + "*")) {
-                        // several tags allowed
-                        continue main;
-                    }
-                }
-                if (!isEmptyNode(child)) {
-                    throw new IllegalArgumentException("Unexpected tag encountered: <" + childName + ">");
+        for (Node child : childs) {
+            String childName = child.getNodeName();
+            for (int j = 0; j < allowedChildNames.length; j++) {
+                if (allowedChildNames[j].equals(childName)) {
+                    // only one such tag is allowed
+                    allowedChildNames[j] = "<--removed-->";
+                    continue main;
+                } else if (allowedChildNames[j].equals(childName + "*")) {
+                    // several tags allowed
+                    continue main;
                 }
             }
+            if (!isEmptyNode(child)) {
+                throw new IllegalArgumentException(
+                        "Unexpected tag encountered: <" + childName + ">");
+            }
+        }
         // everything is OK
         validatedNodes.add(parentNode);
     }

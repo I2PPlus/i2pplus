@@ -3,8 +3,8 @@ package org.rrd4j.core;
 import java.io.IOException;
 
 /**
- * Class to represent internal RRD archive state for a single datasource. Objects of this
- * class are never manipulated directly, it's up to Rrd4j to manage internal archive states.
+ * Class to represent internal RRD archive state for a single datasource. Objects of this class are
+ * never manipulated directly, it's up to Rrd4j to manage internal archive states.
  *
  * @author Sasa Markovic
  */
@@ -23,8 +23,9 @@ public class ArcState implements RrdUpdater<ArcState> {
             long step = header.getStep();
             long lastUpdateTime = header.getLastUpdateTime();
             long arcStep = parentArc.getArcStep();
-            long initNanSteps = (Util.normalize(lastUpdateTime, step) -
-                    Util.normalize(lastUpdateTime, arcStep)) / step;
+            long initNanSteps =
+                    (Util.normalize(lastUpdateTime, step) - Util.normalize(lastUpdateTime, arcStep))
+                            / step;
             accumValue.set(Double.NaN);
             nanSteps.set(initNanSteps);
         }
@@ -81,7 +82,7 @@ public class ArcState implements RrdUpdater<ArcState> {
     /**
      * {@inheritDoc}
      *
-     * Copies object's internal state to another ArcState object.
+     * <p>Copies object's internal state to another ArcState object.
      */
     public void copyStateTo(ArcState arcState) throws IOException {
         arcState.accumValue.set(accumValue.get());
@@ -89,8 +90,7 @@ public class ArcState implements RrdUpdater<ArcState> {
     }
 
     /**
-     * Returns the underlying storage (backend) object which actually performs all
-     * I/O operations.
+     * Returns the underlying storage (backend) object which actually performs all I/O operations.
      *
      * @return I/O backend object
      */

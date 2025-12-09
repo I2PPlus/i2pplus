@@ -11,9 +11,9 @@ public interface TimeLabelFormat {
     /**
      * Format a timestamp.
      *
-     * @param calendar   calendar to use for the formatter
-     * @param locale     locale that will be used with {@code String.format}
-     * @return           formatted string for the timestamp
+     * @param calendar calendar to use for the formatter
+     * @param locale locale that will be used with {@code String.format}
+     * @return formatted string for the timestamp
      */
     String format(Calendar calendar, Locale locale);
 }

@@ -18,5 +18,4 @@ class TDef extends Source {
     void requestData(DataProcessor dproc) {
         dproc.datasource(name, dsName, fetchData);
     }
-
 }

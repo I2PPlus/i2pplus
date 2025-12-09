@@ -20,18 +20,27 @@ import java.util.Locale;
  */
 public class Archive {
 
-    private enum rra_par_en {RRA_cdp_xff_val, RRA_hw_alpha}
+    private enum rra_par_en {
+        RRA_cdp_xff_val,
+        RRA_hw_alpha
+    }
 
     final RRDatabase db;
+
     /** Header offset within file in bytes */
     final long headerOffset;
+
     /** Header size in bytes */
     private final long headerSize;
+
     /** Data offset within file in bytes */
     long dataOffset;
+
     private final ConsolidationFunctionType type;
+
     /** Data row count */
     final int rowCount;
+
     final int pdpCount;
     final double xff;
 
@@ -40,6 +49,7 @@ public class Archive {
 
     /** Consolitation data points */
     List<CDPStatusBlock> cdpStatusBlocks;
+
     /** Row for last modification time of database */
     int currentRow;
 
@@ -53,7 +63,9 @@ public class Archive {
         RRDFile file = db.rrdFile;
 
         headerOffset = file.getFilePointer();
-        type = ConsolidationFunctionType.valueOf(file.readString(Constants.CF_NAM_SIZE).toUpperCase());
+        type =
+                ConsolidationFunctionType.valueOf(
+                        file.readString(Constants.CF_NAM_SIZE).toUpperCase());
         file.align(file.getBits() / 8);
         rowCount = file.readLong();
         pdpCount = file.readLong();
@@ -120,13 +132,13 @@ public class Archive {
 
         if (chunk.startOffset < 0) {
             rowIndexPointer = currentRow + 1L;
-        }
-        else {
+        } else {
             rowIndexPointer = currentRow + chunk.startOffset + 1L;
         }
 
         if (rowIndexPointer < rowCount) {
-            db.rrdFile.seek((dataOffset + (chunk.dsCount * rowIndexPointer * Constants.SIZE_OF_DOUBLE)));
+            db.rrdFile.seek(
+                    (dataOffset + (chunk.dsCount * rowIndexPointer * Constants.SIZE_OF_DOUBLE)));
         } else {
             // Safety net: prevent from reading random portions of file
             // if something went wrong
@@ -140,17 +152,17 @@ public class Archive {
          */
         int row = 0;
         for (int i = chunk.startOffset; i < rowCount - chunk.endOffset; i++, row++) {
-            if (i < 0) {                   // no valid data yet
+            if (i < 0) { // no valid data yet
                 Arrays.fill(data[row], Double.NaN);
-            }
-            else if (i >= rowCount) {    // past valid data area
+            } else if (i >= rowCount) { // past valid data area
                 Arrays.fill(data[row], Double.NaN);
-            }
-            else {                       // inside the valid are but the pointer has to be wrapped
+            } else { // inside the valid are but the pointer has to be wrapped
                 if (rowIndexPointer >= rowCount) {
                     rowIndexPointer -= rowCount;
 
-                    db.rrdFile.seek(dataOffset + (chunk.dsCount * rowIndexPointer * Constants.SIZE_OF_DOUBLE));
+                    db.rrdFile.seek(
+                            dataOffset
+                                    + (chunk.dsCount * rowIndexPointer * Constants.SIZE_OF_DOUBLE));
                 }
 
                 for (int ii = 0; ii < chunk.dsCount; ii++) {
@@ -230,7 +242,8 @@ public class Archive {
 
         long lastUpdate = db.lastUpdate.getTime() / 1000;
         int pdpStep = db.header.pdpStep;
-        NumberFormat numberFormat = new DecimalFormat("0.0000000000E0", DecimalFormatSymbols.getInstance(Locale.US));
+        NumberFormat numberFormat =
+                new DecimalFormat("0.0000000000E0", DecimalFormatSymbols.getInstance(Locale.US));
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 
         while (counter++ < rowCount) {
@@ -242,8 +255,8 @@ public class Archive {
                 db.rrdFile.seek(dataOffset);
             }
 
-            long now = (lastUpdate - lastUpdate % (pdpCount * pdpStep))
-                        + (timer * pdpCount * pdpStep);
+            long now =
+                    (lastUpdate - lastUpdate % (pdpCount * pdpStep)) + (timer * pdpCount * pdpStep);
 
             timer++;
 
@@ -262,8 +275,7 @@ public class Archive {
                 // NumberFormat doesn't know how to handle NaN
                 if (Double.isNaN(value)) {
                     s.print("NaN");
-                }
-                else {
+                } else {
                     s.print(numberFormat.format(value));
                 }
 
@@ -278,7 +290,7 @@ public class Archive {
     }
 
     /**
-     * <p>Getter for the field <code>values</code>.</p>
+     * Getter for the field <code>values</code>.
      *
      * @return an array of double.
      */
@@ -304,11 +316,11 @@ public class Archive {
     }
 
     /**
-     * Returns the number of primary data points required for a consolidated
-     * data point in this archive.
+     * Returns the number of primary data points required for a consolidated data point in this
+     * archive.
      *
-     * @return the number of primary data points required for a consolidated
-     *         data point in this archive.
+     * @return the number of primary data points required for a consolidated data point in this
+     *     archive.
      */
     public int getPdpCount() {
         return pdpCount;
@@ -342,21 +354,21 @@ public class Archive {
         StringBuilder sb = new StringBuilder("[Archive: OFFSET=0x");
 
         sb.append(Long.toHexString(headerOffset))
-          .append(", SIZE=0x")
-          .append(Long.toHexString(headerSize))
-          .append(", type=")
-          .append(type)
-          .append(", rowCount=")
-          .append(rowCount)
-          .append(", pdpCount=")
-          .append(pdpCount)
-          .append(", xff=")
-          .append(xff)
-          .append(", currentRow=")
-          .append(currentRow)
-          .append("]");
+                .append(", SIZE=0x")
+                .append(Long.toHexString(headerSize))
+                .append(", type=")
+                .append(type)
+                .append(", rowCount=")
+                .append(rowCount)
+                .append(", pdpCount=")
+                .append(pdpCount)
+                .append(", xff=")
+                .append(xff)
+                .append(", currentRow=")
+                .append(currentRow)
+                .append("]");
 
-        for(CDPStatusBlock cdp: cdpStatusBlocks) {
+        for (CDPStatusBlock cdp : cdpStatusBlocks) {
             sb.append("\n\t\t");
             sb.append(cdp.toString());
         }
