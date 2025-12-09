@@ -1,45 +1,40 @@
 /******************************************************************
-*
-*	CyberUPnP for Java
-*
-*	Copyright (C) Satoshi Konno 2002
-*
-*	File: ServiceStateTable.java
-*
-*	Revision:
-*
-*	12/06/02
-*		- first revision.
-*
-******************************************************************/
+ *
+ *	CyberUPnP for Java
+ *
+ *	Copyright (C) Satoshi Konno 2002
+ *
+ *	File: ServiceStateTable.java
+ *
+ *	Revision:
+ *
+ *	12/06/02
+ *		- first revision.
+ *
+ ******************************************************************/
 
 package org.cybergarage.upnp;
 
 import java.util.Vector;
 
-public class ServiceStateTable extends Vector<StateVariable>
-{
-	////////////////////////////////////////////////
-	//	Constants
-	////////////////////////////////////////////////
+public class ServiceStateTable extends Vector<StateVariable> {
+    ////////////////////////////////////////////////
+    //	Constants
+    ////////////////////////////////////////////////
 
-	public final static String ELEM_NAME = "serviceStateTable";
+    public static final String ELEM_NAME = "serviceStateTable";
 
-	////////////////////////////////////////////////
-	//	Constructor
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	Constructor
+    ////////////////////////////////////////////////
 
-	public ServiceStateTable()
-	{
-	}
+    public ServiceStateTable() {}
 
-	////////////////////////////////////////////////
-	//	Methods
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	Methods
+    ////////////////////////////////////////////////
 
-	public StateVariable getStateVariable(int n)
-	{
-		return get(n);
-	}
+    public StateVariable getStateVariable(int n) {
+        return get(n);
+    }
 }
-

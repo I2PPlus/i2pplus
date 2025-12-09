@@ -18,6 +18,24 @@
 
 package org.cybergarage.xml;
 
+/**
+ * Utility class for XML character escaping and unescaping operations.
+ * 
+ * <p>This class provides static methods to escape and unescape XML special characters
+ * to ensure valid XML output and proper parsing of XML content.</p>
+ * 
+ * <p>The following characters are handled:</p>
+ * <ul>
+ *   <li>&amp; - escaped as &amp;amp;</li>
+ *   <li>&lt; - escaped as &amp;lt;</li>
+ *   <li>&gt; - escaped as &amp;gt;</li>
+ *   <li>&quot; - escaped as &amp;quot; (when quotes are enabled)</li>
+ *   <li>&apos; - escaped as &amp;apos; (when quotes are enabled)</li>
+ * </ul>
+ * 
+ * @author Satoshi Konno
+ * @since 1.0
+ */
 public class XML
 {
 	public final static String DEFAULT_CONTENT_TYPE = "text/xml; charset=\"utf-8\"";
@@ -28,6 +46,22 @@ public class XML
 	// escapeXMLChars
 	////////////////////////////////////////////////
 
+	/**
+	 * Escapes XML special characters in the input string.
+	 * 
+	 * <p>This method replaces the following characters with their XML entities:</p>
+	 * <ul>
+	 *   <li>&amp; - always escaped as &amp;amp;</li>
+	 *   <li>&lt; - always escaped as &amp;lt;</li>
+	 *   <li>&gt; - always escaped as &amp;gt;</li>
+	 *   <li>&apos; - escaped as &amp;apos; when quote is true</li>
+	 *   <li>&quot; - escaped as &amp;quot; when quote is true</li>
+	 * </ul>
+	 * 
+	 * @param input the string to escape, may be null
+	 * @param quote whether to escape quote characters (&apos; and &quot;)
+	 * @return the escaped string, or null if input is null
+	 */
 	private final static String escapeXMLChars(String input, boolean quote)
 	{
 		if (input == null)
@@ -59,6 +93,15 @@ public class XML
 		return out.toString();
 	}
 
+	/**
+	 * Escapes XML special characters in the input string, including quotes.
+	 * 
+	 * <p>This is a convenience method that calls {@link #escapeXMLChars(String, boolean)}
+	 * with quote set to true.</p>
+	 * 
+	 * @param input the string to escape, may be null
+	 * @return the escaped string, or null if input is null
+	 */
 	public final static String escapeXMLChars(String input)
 	{
 		return escapeXMLChars(input, true);
@@ -68,6 +111,21 @@ public class XML
 	// unescapeXMLChars
 	////////////////////////////////////////////////
 
+	/**
+	 * Unescapes XML entities in the input string.
+	 * 
+	 * <p>This method replaces the following XML entities with their characters:</p>
+	 * <ul>
+	 *   <li>&amp;amp; - replaced with &amp;</li>
+	 *   <li>&amp;lt; - replaced with &lt;</li>
+	 *   <li>&amp;gt; - replaced with &gt;</li>
+	 *   <li>&amp;apos; - replaced with &apos;</li>
+	 *   <li>&amp;quot; - replaced with &quot;</li>
+	 * </ul>
+	 * 
+	 * @param input string to unescape, may be null
+	 * @return the unescaped string, or null if input is null
+	 */
 	public final static String unescapeXMLChars(String input)
 	{
 		if (input == null)

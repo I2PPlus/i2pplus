@@ -1,45 +1,40 @@
 /******************************************************************
-*
-*	CyberUPnP for Java
-*
-*	Copyright (C) Satoshi Konno 2002
-*
-*	File: IconList.java
-*
-*	Revision;
-*
-*	12/04/02
-*		- first revision.
-*
-******************************************************************/
+ *
+ *	CyberUPnP for Java
+ *
+ *	Copyright (C) Satoshi Konno 2002
+ *
+ *	File: IconList.java
+ *
+ *	Revision;
+ *
+ *	12/04/02
+ *		- first revision.
+ *
+ ******************************************************************/
 
 package org.cybergarage.upnp;
 
 import java.util.Vector;
 
-public class IconList extends Vector<Icon>
-{
-	////////////////////////////////////////////////
-	//	Constants
-	////////////////////////////////////////////////
+public class IconList extends Vector<Icon> {
+    ////////////////////////////////////////////////
+    //	Constants
+    ////////////////////////////////////////////////
 
-	public final static String ELEM_NAME = "iconList";
+    public static final String ELEM_NAME = "iconList";
 
-	////////////////////////////////////////////////
-	//	Constructor
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	Constructor
+    ////////////////////////////////////////////////
 
-	public IconList()
-	{
-	}
+    public IconList() {}
 
-	////////////////////////////////////////////////
-	//	Methods
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	Methods
+    ////////////////////////////////////////////////
 
-	public Icon getIcon(int n)
-	{
-		return get(n);
-	}
+    public Icon getIcon(int n) {
+        return get(n);
+    }
 }
-

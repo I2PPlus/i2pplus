@@ -1,29 +1,29 @@
 /******************************************************************
-*
-*	CyberHTTP for Java
-*
-*	Copyright (C) Satoshi Konno 2002-2004
-*
-*	File: HTTPSocket.java
-*
-*	Revision;
-*
-*	12/12/02
-*		- first revision.
-*	03/11/04
-*		- Added the following methods about chunk size.
-*		  setChunkSize(), getChunkSize().
-*	08/26/04
-*		- Added a isOnlyHeader to post().
-*	03/02/05
-*		- Changed post() to suppot chunked stream.
-*	06/10/05
-*		- Changed post() to add a Date headedr to the HTTPResponse before the posting.
-*	07/07/05
-*		- Lee Peik Feng <pflee@users.sourceforge.net>
-*		- Fixed post() to output the chunk size as a hex string.
-*
-******************************************************************/
+ *
+ *	CyberHTTP for Java
+ *
+ *	Copyright (C) Satoshi Konno 2002-2004
+ *
+ *	File: HTTPSocket.java
+ *
+ *	Revision;
+ *
+ *	12/12/02
+ *		- first revision.
+ *	03/11/04
+ *		- Added the following methods about chunk size.
+ *		  setChunkSize(), getChunkSize().
+ *	08/26/04
+ *		- Added a isOnlyHeader to post().
+ *	03/02/05
+ *		- Changed post() to suppot chunked stream.
+ *	06/10/05
+ *		- Changed post() to add a Date headedr to the HTTPResponse before the posting.
+ *	07/07/05
+ *		- Lee Peik Feng <pflee@users.sourceforge.net>
+ *		- Fixed post() to output the chunk size as a hex string.
+ *
+ ******************************************************************/
 
 package org.cybergarage.http;
 
@@ -34,228 +34,290 @@ import java.net.Socket;
 import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 
-public class HTTPSocket
-{
-	////////////////////////////////////////////////
-	//	Constructor
-	////////////////////////////////////////////////
+/**
+ * HTTP socket wrapper for the CyberLink HTTP framework.
+ *
+ * <p>This class provides enhanced socket functionality for HTTP communication:
+ *
+ * <ul>
+ *   <li>Wrapper around standard Java Socket
+ *   <li>Stream management for HTTP requests/responses
+ *   <li>Chunked transfer encoding support
+ *   <li>Enhanced error handling and logging
+ * </ul>
+ *
+ * <p>HTTPSocket extends the basic Socket functionality to provide HTTP-specific features needed by
+ * the HTTP packet classes.
+ *
+ * @author Satoshi Konno
+ * @version 1.0
+ * @since 1.0
+ */
+public class HTTPSocket {
+    ////////////////////////////////////////////////
+    //	Constructor
+    ////////////////////////////////////////////////
 
-	public HTTPSocket(Socket socket)
-	{
-		setSocket(socket);
-		open();
-	}
+    /**
+     * Creates an HTTP socket wrapper around a standard socket.
+     *
+     * @param socket underlying socket to wrap
+     */
+    public HTTPSocket(Socket socket) {
+        setSocket(socket);
+        open();
+    }
 
-	public HTTPSocket(HTTPSocket socket)
-	{
-		setSocket(socket.getSocket());
-		setInputStream(socket.getInputStream());
-		setOutputStream(socket.getOutputStream());
-	}
+    /**
+     * Creates an HTTP socket wrapper around another HTTP socket.
+     *
+     * @param socket HTTP socket to wrap
+     */
+    public HTTPSocket(HTTPSocket socket) {
+        setSocket(socket.getSocket());
+        setInputStream(socket.getInputStream());
+        setOutputStream(socket.getOutputStream());
+    }
 
-	////////////////////////////////////////////////
-	//	Socket
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	Socket
+    ////////////////////////////////////////////////
 
-	private Socket socket = null;
+    private Socket socket = null;
 
-	private void setSocket(Socket socket)
-	{
-		this.socket = socket;
-	}
+    private void setSocket(Socket socket) {
+        this.socket = socket;
+    }
 
-	public Socket getSocket()
-	{
-		return socket;
-	}
+    public Socket getSocket() {
+        return socket;
+    }
 
-	////////////////////////////////////////////////
-	//	local address/port
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	local address/port
+    ////////////////////////////////////////////////
 
-	public String getLocalAddress()
-	{
-		return getSocket().getLocalAddress().getHostAddress();
-	}
+    /**
+     * Gets the local address of this socket.
+     *
+     * @return local host address
+     */
+    public String getLocalAddress() {
+        return getSocket().getLocalAddress().getHostAddress();
+    }
 
-	public int getLocalPort()
-	{
-		return getSocket().getLocalPort();
-	}
+    /**
+     * Gets the local port of this socket.
+     *
+     * @return local port number
+     */
+    public int getLocalPort() {
+        return getSocket().getLocalPort();
+    }
 
-	////////////////////////////////////////////////
-	//	in/out
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	in/out
+    ////////////////////////////////////////////////
 
-	private InputStream sockIn = null;
-	private OutputStream sockOut = null;
+    private InputStream sockIn = null;
+    private OutputStream sockOut = null;
 
-	private void setInputStream(InputStream in)
-	{
-		sockIn = in;
-	}
+    private void setInputStream(InputStream in) {
+        sockIn = in;
+    }
 
-	public InputStream getInputStream()
-	{
-		return sockIn;
-	}
+    public InputStream getInputStream() {
+        return sockIn;
+    }
 
-	private void setOutputStream(OutputStream out)
-	{
-		sockOut = out;
-	}
+    private void setOutputStream(OutputStream out) {
+        sockOut = out;
+    }
 
-	private OutputStream getOutputStream()
-	{
-		return sockOut;
-	}
+    private OutputStream getOutputStream() {
+        return sockOut;
+    }
 
-	////////////////////////////////////////////////
-	//	open/close
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	open/close
+    ////////////////////////////////////////////////
 
-	public boolean open()
-	{
-		Socket sock = getSocket();
- 		try {
-			sockIn = sock.getInputStream();
-			sockOut = sock.getOutputStream();
-		}
-		catch (Exception e) {
-			//TODO Add blacklistening of the UPnP Device
-			return false;
-		}
-		return true;
-	}
+    /**
+     * Opens the socket streams for input/output operations.
+     *
+     * @return true if streams were opened successfully, false otherwise
+     */
+    public boolean open() {
+        Socket sock = getSocket();
+        try {
+            sockIn = sock.getInputStream();
+            sockOut = sock.getOutputStream();
+        } catch (Exception e) {
+            // TODO Add blacklistening of the UPnP Device
+            return false;
+        }
+        return true;
+    }
 
-	public boolean close()
-	{
- 		if (sockIn != null)
- 			try {
-				sockIn.close();
-			} catch (IOException e) {}
-		if (sockOut != null)
-	 		try {
-				sockOut.close();
-			} catch (IOException e) {}
-		if (socket != null)
- 			try {
-				socket.close();
-			} catch (IOException e) {}
-		return true;
-	}
+    /**
+     * Closes the socket and all associated streams.
+     *
+     * @return true if closed successfully
+     */
+    public boolean close() {
+        if (sockIn != null)
+            try {
+                sockIn.close();
+            } catch (IOException e) {
+            }
+        if (sockOut != null)
+            try {
+                sockOut.close();
+            } catch (IOException e) {
+            }
+        if (socket != null)
+            try {
+                socket.close();
+            } catch (IOException e) {
+            }
+        return true;
+    }
 
-	////////////////////////////////////////////////
-	//	post
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	post
+    ////////////////////////////////////////////////
 
-	private boolean post(HTTPResponse httpRes, byte content[], long contentOffset, long contentLength, boolean isOnlyHeader)
-	{
-		//TODO Check for bad HTTP agents, this method may be list for IOInteruptedException and for blacklistening
-		httpRes.setDate(Calendar.getInstance());
+    private boolean post(
+            HTTPResponse httpRes,
+            byte content[],
+            long contentOffset,
+            long contentLength,
+            boolean isOnlyHeader) {
+        // TODO Check for bad HTTP agents, this method may be list for IOInteruptedException and for
+        // blacklistening
+        httpRes.setDate(Calendar.getInstance());
 
-		OutputStream out = getOutputStream();
+        OutputStream out = getOutputStream();
 
-		try {
-			httpRes.setContentLength(contentLength);
+        try {
+            httpRes.setContentLength(contentLength);
 
-			out.write(httpRes.getHeader().getBytes(StandardCharsets.UTF_8));
-			out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
-			if (isOnlyHeader == true) {
-				out.flush();
-				return true;
-			}
+            out.write(httpRes.getHeader().getBytes(StandardCharsets.UTF_8));
+            out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
+            if (isOnlyHeader == true) {
+                out.flush();
+                return true;
+            }
 
-			boolean isChunkedResponse = httpRes.isChunked();
+            boolean isChunkedResponse = httpRes.isChunked();
 
-			if (isChunkedResponse == true) {
-				// Thanks for Lee Peik Feng <pflee@users.sourceforge.net> (07/07/05)
-				String chunSizeBuf = Long.toHexString(contentLength);
-				out.write(chunSizeBuf.getBytes(StandardCharsets.UTF_8));
-				out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
-			}
+            if (isChunkedResponse == true) {
+                // Thanks for Lee Peik Feng <pflee@users.sourceforge.net> (07/07/05)
+                String chunSizeBuf = Long.toHexString(contentLength);
+                out.write(chunSizeBuf.getBytes(StandardCharsets.UTF_8));
+                out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
+            }
 
-			out.write(content, (int)contentOffset, (int)contentLength);
+            out.write(content, (int) contentOffset, (int) contentLength);
 
-			if (isChunkedResponse == true) {
-				out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
-				out.write("0".getBytes(StandardCharsets.UTF_8));
-				out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
-			}
+            if (isChunkedResponse == true) {
+                out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
+                out.write("0".getBytes(StandardCharsets.UTF_8));
+                out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
+            }
 
-			out.flush();
-		}
-		catch (Exception e) {
-			//Debug.warning(e);
-			return false;
-		}
+            out.flush();
+        } catch (Exception e) {
+            // Debug.warning(e);
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	private boolean post(HTTPResponse httpRes, InputStream in, long contentOffset, long contentLength, boolean isOnlyHeader)
-	{
-		//TODO Check for bad HTTP agents, this method may be list for IOInteruptedException and for blacklistening
-		httpRes.setDate(Calendar.getInstance());
+    private boolean post(
+            HTTPResponse httpRes,
+            InputStream in,
+            long contentOffset,
+            long contentLength,
+            boolean isOnlyHeader) {
+        // TODO Check for bad HTTP agents, this method may be list for IOInteruptedException and for
+        // blacklistening
+        httpRes.setDate(Calendar.getInstance());
 
-		OutputStream out = getOutputStream();
+        OutputStream out = getOutputStream();
 
-		try {
-			httpRes.setContentLength(contentLength);
+        try {
+            httpRes.setContentLength(contentLength);
 
-			out.write(httpRes.getHeader().getBytes(StandardCharsets.UTF_8));
-			out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
+            out.write(httpRes.getHeader().getBytes(StandardCharsets.UTF_8));
+            out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
 
-			if (isOnlyHeader == true) {
-				out.flush();
-				return true;
-			}
+            if (isOnlyHeader == true) {
+                out.flush();
+                return true;
+            }
 
-			boolean isChunkedResponse = httpRes.isChunked();
+            boolean isChunkedResponse = httpRes.isChunked();
 
-			if (0 < contentOffset)
-				in.skip(contentOffset);
+            if (0 < contentOffset) in.skip(contentOffset);
 
-			int chunkSize = HTTP.getChunkSize();
-			byte readBuf[] = new byte[chunkSize];
-			long readCnt = 0;
-			long readSize = (chunkSize < contentLength) ? chunkSize : contentLength;
-			int readLen = in.read(readBuf, 0, (int)readSize);
-			while (0 < readLen && readCnt < contentLength) {
-				if (isChunkedResponse == true) {
-					// Thanks for Lee Peik Feng <pflee@users.sourceforge.net> (07/07/05)
-					String chunSizeBuf = Long.toHexString(readLen);
-					out.write(chunSizeBuf.getBytes(StandardCharsets.UTF_8));
-					out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
-				}
-				out.write(readBuf, 0, readLen);
-				if (isChunkedResponse == true)
-					out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
-				readCnt += readLen;
-				readSize = (chunkSize < (contentLength-readCnt)) ? chunkSize : (contentLength-readCnt);
-				readLen = in.read(readBuf, 0, (int)readSize);
-			}
+            int chunkSize = HTTP.getChunkSize();
+            byte readBuf[] = new byte[chunkSize];
+            long readCnt = 0;
+            long readSize = (chunkSize < contentLength) ? chunkSize : contentLength;
+            int readLen = in.read(readBuf, 0, (int) readSize);
+            while (0 < readLen && readCnt < contentLength) {
+                if (isChunkedResponse == true) {
+                    // Thanks for Lee Peik Feng <pflee@users.sourceforge.net> (07/07/05)
+                    String chunSizeBuf = Long.toHexString(readLen);
+                    out.write(chunSizeBuf.getBytes(StandardCharsets.UTF_8));
+                    out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
+                }
+                out.write(readBuf, 0, readLen);
+                if (isChunkedResponse == true)
+                    out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
+                readCnt += readLen;
+                readSize =
+                        (chunkSize < (contentLength - readCnt))
+                                ? chunkSize
+                                : (contentLength - readCnt);
+                readLen = in.read(readBuf, 0, (int) readSize);
+            }
 
-			if (isChunkedResponse == true) {
-				out.write("0".getBytes(StandardCharsets.UTF_8));
-				out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
-			}
+            if (isChunkedResponse == true) {
+                out.write("0".getBytes(StandardCharsets.UTF_8));
+                out.write(HTTP.CRLF.getBytes(StandardCharsets.UTF_8));
+            }
 
-			out.flush();
-		}
-		catch (Exception e) {
-			//Debug.warning(e);
-			return false;
-		}
+            out.flush();
+        } catch (Exception e) {
+            // Debug.warning(e);
+            return false;
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	public boolean post(HTTPResponse httpRes, long contentOffset, long contentLength, boolean isOnlyHeader)
-	{
-		//TODO Close if Connection != keep-alive
-		if (httpRes.hasContentInputStream() == true)
-			return post(httpRes,httpRes.getContentInputStream(), contentOffset, contentLength, isOnlyHeader);
-		return post(httpRes,httpRes.getContent(), contentOffset, contentLength, isOnlyHeader);
-	}
+    /**
+     * Posts an HTTP response with the specified content parameters.
+     *
+     * @param httpRes the HTTP response to post
+     * @param contentOffset the offset in the content to start from
+     * @param contentLength the length of content to send
+     * @param isOnlyHeader true if only headers should be sent
+     * @return true if posted successfully
+     */
+    public boolean post(
+            HTTPResponse httpRes, long contentOffset, long contentLength, boolean isOnlyHeader) {
+        // TODO Close if Connection != keep-alive
+        if (httpRes.hasContentInputStream() == true)
+            return post(
+                    httpRes,
+                    httpRes.getContentInputStream(),
+                    contentOffset,
+                    contentLength,
+                    isOnlyHeader);
+        return post(httpRes, httpRes.getContent(), contentOffset, contentLength, isOnlyHeader);
+    }
 }

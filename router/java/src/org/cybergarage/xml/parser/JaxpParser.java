@@ -1,25 +1,33 @@
 /******************************************************************
-*
-*	CyberXML for Java
-*
-*	Copyright (C) Satoshi Konno 2004
-*
-*   Author: Markus Thurner (http://thoean.com)
-*
-*	File: JaxpParser.java
-*
-*	Revision;
-*
-*	06/15/04
-*		- first revision.
-*	01/08/08
-*		- Fixed parse() not to occur null exception when the NamedNodeMap is null on Android.
-*	02/08/08
-*		- Change parse() to use Node::addValue() instead of the setValue().
-*
-******************************************************************/
+ *
+ *	CyberXML for Java
+ *
+ *	Copyright (C) Satoshi Konno 2004
+ *
+ *   Author: Markus Thurner (http://thoean.com)
+ *
+ *	File: JaxpParser.java
+ *
+ *	Revision;
+ *
+ *	06/15/04
+ *		- first revision.
+ *	01/08/08
+ *		- Fixed parse() not to occur null exception when the NamedNodeMap is null on Android.
+ *	02/08/08
+ *		- Change parse() to use Node::addValue() instead of the setValue().
+ *
+ ******************************************************************/
 
 package org.cybergarage.xml.parser;
+
+import org.cybergarage.xml.Node;
+import org.cybergarage.xml.Parser;
+import org.cybergarage.xml.ParserException;
+import org.w3c.dom.Document;
+import org.w3c.dom.NamedNodeMap;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
 
 import java.io.ByteArrayInputStream;
 import java.io.FilterInputStream;
@@ -30,205 +38,276 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.cybergarage.xml.Node;
-import org.cybergarage.xml.Parser;
-import org.cybergarage.xml.ParserException;
-import org.w3c.dom.Document;
-import org.w3c.dom.NamedNodeMap;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
+/**
+ * JAXP-based XML parser implementation.
+ * 
+ * <p>This parser uses the Java API for XML Processing (JAXP) to parse XML documents.
+ * It includes security measures to prevent XXE (XML External Entity) attacks and
+ * handles null character filtering for compatibility.</p>
+ * 
+ * <p>Key features:</p>
+ * <ul>
+ *   <li>XXE attack prevention</li>
+ *   <li>DTD loading disabled</li>
+ *   <li>Null character filtering</li>
+ *   <li>Entity resolution blanking</li>
+ *   <li>DOM to Node tree conversion</li>
+ * </ul>
+ * 
+ * @author Satoshi Konno
+ * @author Markus Thurner
+ * @since 1.0
+ */
+public class JaxpParser extends Parser {
 
+    /**
+     * Creates a new JaxpParser instance.
+     */
+    public JaxpParser() {
+        super();
+    }
 
-public class JaxpParser extends Parser
-{
+    ////////////////////////////////////////////////
+    //	parse (Node)
+    ////////////////////////////////////////////////
 
-	public JaxpParser()
-	{
-		super();
-	}
+    /**
+     * Recursively parses a DOM node and converts it to a Node tree.
+     *
+     * @param parentNode the parent Node to attach parsed nodes to
+     * @param domNode the DOM node to parse
+     * @param rank the recursion depth level (for debugging)
+     * @return the parsed Node
+     */
+    public org.cybergarage.xml.Node parse(
+            org.cybergarage.xml.Node parentNode, org.w3c.dom.Node domNode, int rank) {
+        int domNodeType = domNode.getNodeType();
+        //		if (domNodeType != Node.ELEMENT_NODE)
+        //			return;
 
-	////////////////////////////////////////////////
-	//	parse (Node)
-	////////////////////////////////////////////////
+        String domNodeName = domNode.getNodeName();
+        String domNodeValue = domNode.getNodeValue();
+        NamedNodeMap attrs = domNode.getAttributes();
+        int arrrsLen = (attrs != null) ? attrs.getLength() : 0;
 
-	public org.cybergarage.xml.Node parse(org.cybergarage.xml.Node parentNode, org.w3c.dom.Node domNode, int rank)
-	{
-		int domNodeType = domNode.getNodeType();
-//		if (domNodeType != Node.ELEMENT_NODE)
-//			return;
+        //		Debug.message("[" + rank + "] ELEM : " + domNodeName + ", " + domNodeValue + ", type = "
+        // + domNodeType + ", attrs = " + arrrsLen);
 
-		String domNodeName = domNode.getNodeName();
-		String domNodeValue = domNode.getNodeValue();
-		NamedNodeMap attrs = domNode.getAttributes();
-		int arrrsLen = (attrs != null) ? attrs.getLength() : 0;
+        if (domNodeType == org.w3c.dom.Node.TEXT_NODE) {
+            // Change to use Node::addValue() instead of the setValue(). (2008/02/07)
+            // parentNode.setValue(domNodeValue);
+            parentNode.addValue(domNodeValue);
+            return parentNode;
+        }
 
-//		Debug.message("[" + rank + "] ELEM : " + domNodeName + ", " + domNodeValue + ", type = " + domNodeType + ", attrs = " + arrrsLen);
+        if (domNodeType != org.w3c.dom.Node.ELEMENT_NODE) return parentNode;
 
-		if (domNodeType == org.w3c.dom.Node.TEXT_NODE) {
-			// Change to use Node::addValue() instead of the setValue(). (2008/02/07)
-			//parentNode.setValue(domNodeValue);
-			parentNode.addValue(domNodeValue);
-			return parentNode;
-		}
+        org.cybergarage.xml.Node node = new org.cybergarage.xml.Node();
+        node.setName(domNodeName);
+        node.setValue(domNodeValue);
 
-		if (domNodeType != org.w3c.dom.Node.ELEMENT_NODE)
-			return parentNode;
+        if (parentNode != null) parentNode.addNode(node);
 
-		org.cybergarage.xml.Node node = new org.cybergarage.xml.Node();
-		node.setName(domNodeName);
-		node.setValue(domNodeValue);
+        NamedNodeMap attrMap = domNode.getAttributes();
+        if (attrMap != null) {
+            int attrLen = attrMap.getLength();
+            // Debug.message("attrLen = " + attrLen);
+            for (int n = 0; n < attrLen; n++) {
+                org.w3c.dom.Node attr = attrMap.item(n);
+                String attrName = attr.getNodeName();
+                String attrValue = attr.getNodeValue();
+                node.setAttribute(attrName, attrValue);
+            }
+        }
 
-		if (parentNode != null)
-			parentNode.addNode(node);
+        org.w3c.dom.Node child = domNode.getFirstChild();
+        if (child == null) {
+            node.setValue("");
+            return node;
+        }
+        do {
+            parse(node, child, rank + 1);
+            child = child.getNextSibling();
+        } while (child != null);
 
-		NamedNodeMap attrMap = domNode.getAttributes();
-		if (attrMap != null) {
-			int attrLen = attrMap.getLength();
-			//Debug.message("attrLen = " + attrLen);
-			for (int n = 0; n<attrLen; n++) {
-				org.w3c.dom.Node attr = attrMap.item(n);
-				String attrName = attr.getNodeName();
-				String attrValue = attr.getNodeValue();
-				node.setAttribute(attrName, attrValue);
-			}
-		}
+        return node;
+    }
 
-		org.w3c.dom.Node child = domNode.getFirstChild();
-		if(child==null){
-			node.setValue("");
-			return node;
-		}
-		do{
-			parse(node, child, rank+1);
-			child = child.getNextSibling();
-		}while (child != null);
+    /**
+     * Parses a DOM node and converts it to a Node tree.
+     * 
+     * <p>This is a convenience method that calls {@link #parse(Node, org.w3c.dom.Node, int)}
+     * with rank set to 0.</p>
+     *
+     * @param parentNode the parent Node to attach parsed nodes to
+     * @param domNode the DOM node to parse
+     * @return the parsed Node
+     */
+    public org.cybergarage.xml.Node parse(
+            org.cybergarage.xml.Node parentNode, org.w3c.dom.Node domNode) {
+        return parse(parentNode, domNode, 0);
+    }
 
-		return node;
-	}
+    /* (non-Javadoc)
+     * @see org.cybergarage.xml.Parser#parse(java.io.InputStream)
+     */
+    /**
+     * Parses XML content from the specified input stream using JAXP.
+     * 
+     * <p>This method creates a secure DocumentBuilderFactory with XXE protection
+     * disabled, parses the XML content, and converts the DOM tree to a Node tree.</p>
+     *
+     * @param inStream the input stream containing XML content
+     * @return the root node of the parsed XML document
+     * @throws ParserException if parsing fails
+     */
+    public Node parse(InputStream inStream) throws ParserException {
+        org.cybergarage.xml.Node root = null;
 
-	public org.cybergarage.xml.Node parse(org.cybergarage.xml.Node parentNode, org.w3c.dom.Node domNode)
-	{
-		return parse(parentNode, domNode, 0);
-	}
+        try {
+            // https://www.owasp.org/index.php/XML_External_Entity_%28XXE%29_Processing
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setValidating(false);
+            factory.setNamespaceAware(true);
+            factory.setExpandEntityReferences(false);
+            try {
+                try {
+                    factory.setFeature(
+                            "http://xml.org/sax/features/external-general-entities", false);
+                } catch (ParserConfigurationException pce) {
+                }
+                try {
+                    factory.setFeature(
+                            "http://xml.org/sax/features/external-parameter-entities", false);
+                } catch (ParserConfigurationException pce) {
+                }
+                try {
+                    factory.setFeature(
+                            "http://apache.org/xml/features/disallow-doctype-decl", true);
+                } catch (ParserConfigurationException pce) {
+                }
+                try {
+                    factory.setFeature(
+                            "http://apache.org/xml/features/nonvalidating/load-external-dtd",
+                            false);
+                } catch (ParserConfigurationException pce) {
+                }
+            } catch (AbstractMethodError ame) {
+            } // FreeBSD
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            builder.setEntityResolver(new BlankingResolver());
+            InputSource inSrc = new InputSource(new NullFilterInputStream(inStream));
+            Document doc = builder.parse(inSrc);
 
-	/* (non-Javadoc)
-	 * @see org.cybergarage.xml.Parser#parse(java.io.InputStream)
-	 */
-	public Node parse(InputStream inStream) throws ParserException
-	{
-		org.cybergarage.xml.Node root = null;
+            org.w3c.dom.Element docElem = doc.getDocumentElement();
 
-		try {
-			// https://www.owasp.org/index.php/XML_External_Entity_%28XXE%29_Processing
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			factory.setValidating(false);
-			factory.setNamespaceAware(true);
-			factory.setExpandEntityReferences(false);
-			try {
-				try {
-				    factory.setFeature("http://xml.org/sax/features/external-general-entities", false);
-				} catch (ParserConfigurationException pce) {}
-				try {
-				    factory.setFeature("http://xml.org/sax/features/external-parameter-entities", false);
-				} catch (ParserConfigurationException pce) {}
-				try {
-				    factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
-				} catch (ParserConfigurationException pce) {}
-				try {
-				    factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-				} catch (ParserConfigurationException pce) {}
-			} catch (AbstractMethodError ame) {}   // FreeBSD
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			builder.setEntityResolver(new BlankingResolver());
-			InputSource inSrc = new InputSource(new NullFilterInputStream(inStream));
-			Document doc = builder.parse(inSrc);
+            if (docElem != null) root = parse(root, docElem);
+            /*
+            			NodeList rootList = doc.getElementsByTagName("root");
+            			Debug.message("rootList = " + rootList.getLength());
 
-			org.w3c.dom.Element docElem = doc.getDocumentElement();
+            			if (0 < rootList.getLength())
+            				root = parse(root, rootList.item(0));
+            */
+        } catch (Exception e) {
+            throw new ParserException(e);
+        }
 
-			if (docElem != null)
-				root = parse(root, docElem);
-/*
-			NodeList rootList = doc.getElementsByTagName("root");
-			Debug.message("rootList = " + rootList.getLength());
+        return root;
+    }
 
-			if (0 < rootList.getLength())
-				root = parse(root, rootList.item(0));
-*/
-		}
-		catch (Exception e) {
-			throw new ParserException(e);
-		}
+    /**
+     * I2P - Filter out nulls, hopefully to avoid SAXParserException "Content not allowed in
+     * trailing section", which is apparently caused by nulls. Alternative is to remove all stuff
+     * between '>' and '<', which isn't so hard if we assume no CDATA.
+     */
+    /**
+     * Input stream filter that removes null characters.
+     * 
+     * <p>This filter prevents SAXParserException "Content not allowed in trailing section"
+     * which can be caused by null characters in the XML stream.</p>
+     */
+    private static class NullFilterInputStream extends FilterInputStream {
 
-		return root;
-	}
+        /**
+         * Creates a new NullFilterInputStream.
+         *
+         * @param is the underlying input stream
+         */
+        public NullFilterInputStream(InputStream is) {
+            super(is);
+        }
 
-	/**
-	 *  I2P -
-	 *  Filter out nulls, hopefully to avoid
-	 *  SAXParserException "Content not allowed in trailing section",
-	 *  which is apparently caused by nulls.
-	 *  Alternative is to remove all stuff between '>' and '<',
-         *  which isn't so hard if we assume no CDATA.
-	 */
-	private static class NullFilterInputStream extends FilterInputStream {
+        @Override
+        public int read() throws IOException {
+            int rv;
+            while ((rv = super.read()) == 0) {
+                // try again
+            }
+            return rv;
+        }
 
-		public NullFilterInputStream(InputStream is) {
-			super(is);
-		}
+        /**
+         * @since 0.9.22
+         */
+        @Override
+        public int read(byte[] b) throws IOException {
+            return this.read(b, 0, b.length);
+        }
 
-		@Override
-		public int read() throws IOException {
-			int rv;
-			while ((rv = super.read()) == 0) {
-				// try again
-			}
-			return rv;
-		}
+        /**
+         * @since 0.9.22
+         */
+        @Override
+        public int read(byte[] b, int off, int len) throws IOException {
+            if (b == null) {
+                throw new NullPointerException();
+            } else if (off < 0 || len < 0 || len > b.length - off) {
+                throw new IndexOutOfBoundsException();
+            } else if (len == 0) {
+                return 0;
+            }
 
-		/** @since 0.9.22 */
-		@Override
-		public int read(byte[] b) throws IOException {
-			return this.read(b, 0, b.length);
-		}
+            int rv = this.read();
+            if (-1 == rv) {
+                return -1;
+            }
 
-		/** @since 0.9.22 */
-		@Override
-		public int read(byte[] b, int off, int len) throws IOException {
-			if (b == null) {
-				throw new NullPointerException();
-			} else if (off < 0 || len < 0 || len > b.length - off) {
-				throw new IndexOutOfBoundsException();
-			} else if (len == 0) {
-				return 0;
-			}
+            int i = 1;
+            b[off] = (byte) rv;
+            for (; i < len; i++) {
+                rv = this.read();
+                if (-1 == rv) {
+                    break;
+                }
+                b[off + i] = (byte) rv;
+            }
+            return i;
+        }
+    }
 
-			int rv = this.read();
-			if (-1 == rv) {
-				return -1;
-			}
+    /**
+     * I2P -
+     * http://stackoverflow.com/questions/5883542/disable-xml-validation-based-on-external-dtd-xsd
+     */
+    /**
+     * Entity resolver that returns empty input for all external entities.
+     * 
+     * <p>This prevents XXE attacks by ensuring that no external entities
+     * are loaded during XML parsing.</p>
+     */
+    private static class BlankingResolver implements EntityResolver {
+        private static final byte[] DUMMY = new byte[0];
 
-			int i = 1;
-			b[off] = (byte) rv;
-			for (; i < len; i++) {
-				rv = this.read();
-				if (-1 == rv) {
-					break;
-				}
-				b[off + i] = (byte) rv;
-			}
-			return i;
-		}
-	}
-
-	/**
-	 *  I2P -
-	 *  http://stackoverflow.com/questions/5883542/disable-xml-validation-based-on-external-dtd-xsd
-	 */
-	private static class BlankingResolver implements EntityResolver {
-                private static final byte[] DUMMY = new byte[0];
-
-		public InputSource resolveEntity(String arg0, String arg1) {
-			return new InputSource(new ByteArrayInputStream(DUMMY));
-		}
-	}
+        /**
+         * Resolves external entities by returning empty input.
+         *
+         * @param arg0 the public identifier (may be null)
+         * @param arg1 the system identifier (may be null)
+         * @return an empty InputSource
+         */
+        public InputSource resolveEntity(String arg0, String arg1) {
+            return new InputSource(new ByteArrayInputStream(DUMMY));
+        }
+    }
 }

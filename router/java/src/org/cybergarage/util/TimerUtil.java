@@ -1,41 +1,50 @@
 /******************************************************************
-*
-*	CyberUtil for Java
-*
-*	Copyright (C) Satoshi Konno 2002-2003
-*
-*	File: TimerUtil.java
-*
-*	Revision:
-*
-*	01/15/03
-*		- first revision.
-*
-******************************************************************/
+ *
+ *	CyberUtil for Java
+ *
+ *	Copyright (C) Satoshi Konno 2002-2003
+ *
+ *	File: TimerUtil.java
+ *
+ *	Revision:
+ *
+ *	01/15/03
+ *		- first revision.
+ *
+ ******************************************************************/
 
 package org.cybergarage.util;
 
-public final class TimerUtil
-{
-	public final static void wait(int waitTime)
-	{
-		try {
-			Thread.sleep(waitTime);
-		}
-		catch (Exception e) {
-			// Ignore InterruptedException and other sleep exceptions
-		}
-	}
+/**
+ * Utility class providing timer and thread sleeping functionality.
+ * This class contains static methods for pausing execution and generating
+ * random wait times, useful for timing control and thread management.
+ */
+public final class TimerUtil {
+    /**
+     * Pauses the current thread for the specified amount of time.
+     * 
+     * @param waitTime the time to wait in milliseconds
+     */
+    public static final void wait(int waitTime) {
+        try {
+            Thread.sleep(waitTime);
+        } catch (Exception e) {
+            // Ignore InterruptedException and other sleep exceptions
+        }
+    }
 
-	public final static void waitRandom(int time)
-	{
-		int waitTime = (int)(Math.random() * (double)time);
-		try {
-			Thread.sleep(waitTime);
-		}
-		catch (Exception e) {
-			// Ignore InterruptedException and other sleep exceptions
-		}
-	}
+    /**
+     * Pauses the current thread for a random amount of time up to the specified maximum.
+     * 
+     * @param time the maximum time to wait in milliseconds
+     */
+    public static final void waitRandom(int time) {
+        int waitTime = (int) (Math.random() * (double) time);
+        try {
+            Thread.sleep(waitTime);
+        } catch (Exception e) {
+            // Ignore InterruptedException and other sleep exceptions
+        }
+    }
 }
-

@@ -1,247 +1,358 @@
 /******************************************************************
-*
-*	CyberUPnP for Java
-*
-*	Copyright (C) Satoshi Konno 2002
-*
-*	File: Icon.java
-*
-*	Revision;
-*
-*	11/28/02
-*		- first revision.
-*	04/12/06
-*		- Added setUserData() and getUserData() to set a user original data object.
-*
-******************************************************************/
+ *
+ *	CyberUPnP for Java
+ *
+ *	Copyright (C) Satoshi Konno 2002
+ *
+ *	File: Icon.java
+ *
+ *	Revision;
+ *
+ *	11/28/02
+ *		- first revision.
+ *	04/12/06
+ *		- Added setUserData() and getUserData() to set a user original data object.
+ *
+ ******************************************************************/
 
 package org.cybergarage.upnp;
 
 import org.cybergarage.xml.Node;
 
-public class Icon
-{
-	////////////////////////////////////////////////
-	//	Constants
-	////////////////////////////////////////////////
+/**
+ * Represents a UPnP device icon with its associated metadata and image data.
+ * 
+ * <p>This class encapsulates the properties of a UPnP device icon as defined
+ * in the UPnP Device Architecture specification. Each icon has properties
+ * such as MIME type, width, height, color depth, and URL. The class also
+ * supports storing the actual icon image data as a byte array.</p>
+ * 
+ * <p>Icons are used by UPnP devices to provide visual representations that
+ * can be displayed in control point applications or user interfaces.</p>
+ * 
+ * @since 1.0
+ * @author Satoshi Konno
+ */
+public class Icon {
+    ////////////////////////////////////////////////
+    //	Constants
+    ////////////////////////////////////////////////
 
-	public final static String ELEM_NAME = "icon";
+    /** XML element name for icon nodes. */
+    public static final String ELEM_NAME = "icon";
 
-	////////////////////////////////////////////////
-	//	Member
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	Member
+    ////////////////////////////////////////////////
 
-	private Node iconNode;
+    private Node iconNode;
 
-	public Node getIconNode()
-	{
-		return iconNode;
-	}
+    /**
+     * Gets the underlying XML node for this icon.
+     * 
+     * @return the XML node containing icon data
+     */
+    public Node getIconNode() {
+        return iconNode;
+    }
 
-	////////////////////////////////////////////////
-	//	Constructor
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	Constructor
+    ////////////////////////////////////////////////
 
-	public Icon(Node node)
-	{
-		iconNode = node;
-	}
+    /**
+     * Creates an Icon from an existing XML node.
+     * 
+     * @param node the XML node containing icon data
+     */
+    public Icon(Node node) {
+        iconNode = node;
+    }
 
-	public Icon() {
-		this(new Node(ELEM_NAME));
-	}
+    /**
+     * Creates a new Icon with a default XML node structure.
+     */
+    public Icon() {
+        this(new Node(ELEM_NAME));
+    }
 
-	////////////////////////////////////////////////
-	//	isIconNode
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	isIconNode
+    ////////////////////////////////////////////////
 
-	public static boolean isIconNode(Node node)
-	{
-		return Icon.ELEM_NAME.equals(node.getName());
-	}
+    /**
+     * Checks if the given XML node represents an icon.
+     * 
+     * @param node the XML node to check
+     * @return true if the node is an icon node, false otherwise
+     */
+    public static boolean isIconNode(Node node) {
+        return Icon.ELEM_NAME.equals(node.getName());
+    }
 
-	////////////////////////////////////////////////
-	//	mimeType
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	mimeType
+    ////////////////////////////////////////////////
 
-	private final static String MIME_TYPE = "mimeType";
+    private static final String MIME_TYPE = "mimeType";
 
-	public void setMimeType(String value)
-	{
-		getIconNode().setNode(MIME_TYPE, value);
-	}
+    /**
+     * Sets the MIME type of the icon.
+     * 
+     * @param value the MIME type (e.g., "image/png", "image/jpeg")
+     */
+    public void setMimeType(String value) {
+        getIconNode().setNode(MIME_TYPE, value);
+    }
 
-	public String getMimeType()
-	{
-		return getIconNode().getNodeValue(MIME_TYPE);
-	}
+    /**
+     * Gets the MIME type of the icon.
+     * 
+     * @return the MIME type of the icon
+     */
+    public String getMimeType() {
+        return getIconNode().getNodeValue(MIME_TYPE);
+    }
 
-	public boolean hasMimeType()
-	{
-		String iconMimeType = getMimeType();
-		if (iconMimeType == null)
-			return false;
-		return (0 < iconMimeType.length()) ? true : false;
-	}
+    /**
+     * Checks if the icon has a valid MIME type set.
+     * 
+     * @return true if a MIME type is set and not empty, false otherwise
+     */
+    public boolean hasMimeType() {
+        String iconMimeType = getMimeType();
+        if (iconMimeType == null) return false;
+        return (0 < iconMimeType.length()) ? true : false;
+    }
 
-	////////////////////////////////////////////////
-	//	width
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	width
+    ////////////////////////////////////////////////
 
-	private final static String WIDTH = "width";
+    private static final String WIDTH = "width";
 
-	public void setWidth(String value)
-	{
-		getIconNode().setNode(WIDTH, value);
-	}
+    /**
+     * Sets the width of the icon as a string.
+     * 
+     * @param value the width as a string
+     */
+    public void setWidth(String value) {
+        getIconNode().setNode(WIDTH, value);
+    }
 
-	public void setWidth(int value)
-	{
-		try {
-			setWidth(Integer.toString(value));
-		}
-		catch (Exception e) {
-			// Ignore exception in setWidth
-		}
-	}
+    /**
+     * Sets the width of the icon as an integer.
+     * 
+     * @param value the width in pixels
+     */
+    public void setWidth(int value) {
+        try {
+            setWidth(Integer.toString(value));
+        } catch (Exception e) {
+            // Ignore exception in setWidth
+        }
+    }
 
-	public int getWidth()
-	{
-		try {
-			return Integer.parseInt(getIconNode().getNodeValue(WIDTH));
-		}
-		catch (Exception e) {};
-		return 0;
-	}
+    /**
+     * Gets the width of the icon.
+     * 
+     * @return the width in pixels, or 0 if not set or invalid
+     */
+    public int getWidth() {
+        try {
+            return Integer.parseInt(getIconNode().getNodeValue(WIDTH));
+        } catch (Exception e) {
+        }
+        ;
+        return 0;
+    }
 
-	////////////////////////////////////////////////
-	//	height
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	height
+    ////////////////////////////////////////////////
 
-	private final static String HEIGHT = "height";
+    private static final String HEIGHT = "height";
 
-	public void setHeight(String value)
-	{
-		getIconNode().setNode(HEIGHT, value);
-	}
+    /**
+     * Sets the height of the icon as a string.
+     * 
+     * @param value the height as a string
+     */
+    public void setHeight(String value) {
+        getIconNode().setNode(HEIGHT, value);
+    }
 
-	public void setHeight(int value)
-	{
-		try {
-			setHeight(Integer.toString(value));
-		}
-		catch (Exception e) {
-			// Ignore exception in setHeight
-		}
-	}
+    /**
+     * Sets the height of the icon as an integer.
+     * 
+     * @param value the height in pixels
+     */
+    public void setHeight(int value) {
+        try {
+            setHeight(Integer.toString(value));
+        } catch (Exception e) {
+            // Ignore exception in setHeight
+        }
+    }
 
-	public int getHeight()
-	{
-		try {
-			return Integer.parseInt(getIconNode().getNodeValue(HEIGHT));
-		}
-		catch (Exception e) {};
-		return 0;
-	}
+    /**
+     * Gets the height of the icon.
+     * 
+     * @return the height in pixels, or 0 if not set or invalid
+     */
+    public int getHeight() {
+        try {
+            return Integer.parseInt(getIconNode().getNodeValue(HEIGHT));
+        } catch (Exception e) {
+        }
+        ;
+        return 0;
+    }
 
-	////////////////////////////////////////////////
-	//	depth
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	depth
+    ////////////////////////////////////////////////
 
-	private final static String DEPTH = "depth";
+    private static final String DEPTH = "depth";
 
-	public void setDepth(String value)
-	{
-		getIconNode().setNode(DEPTH, value);
-	}
+    /**
+     * Sets the color depth of the icon as a string.
+     * 
+     * @param value the color depth as a string
+     */
+    public void setDepth(String value) {
+        getIconNode().setNode(DEPTH, value);
+    }
 
-	public void setDepth(int value)
-	{
-		try {
-			setDepth(Integer.toString(value));
-		}
-		catch (Exception e) {
-			// Ignore exception in setDepth
-		}
-	}
+    /**
+     * Sets the color depth of the icon as an integer.
+     * 
+     * @param value the color depth in bits per pixel
+     */
+    public void setDepth(int value) {
+        try {
+            setDepth(Integer.toString(value));
+        } catch (Exception e) {
+            // Ignore exception in setDepth
+        }
+    }
 
-	public int getDepth()
-	{
-		try {
-			return Integer.parseInt(getIconNode().getNodeValue(DEPTH));
-		}
-		catch (Exception e) {};
-		return 0;
-	}
+    /**
+     * Gets the color depth of the icon.
+     * 
+     * @return the color depth in bits per pixel, or 0 if not set or invalid
+     */
+    public int getDepth() {
+        try {
+            return Integer.parseInt(getIconNode().getNodeValue(DEPTH));
+        } catch (Exception e) {
+        }
+        ;
+        return 0;
+    }
 
-	////////////////////////////////////////////////
-	//	URL
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	URL
+    ////////////////////////////////////////////////
 
-	private final static String URL = "url";
+    private static final String URL = "url";
 
-	public void setURL(String value)
-	{
-		getIconNode().setNode(URL, value);
-	}
+    /**
+     * Sets the URL where the icon image can be retrieved.
+     * 
+     * @param value the URL of the icon image
+     */
+    public void setURL(String value) {
+        getIconNode().setNode(URL, value);
+    }
 
-	public String getURL()
-	{
-		return getIconNode().getNodeValue(URL);
-	}
+    /**
+     * Gets the URL where the icon image can be retrieved.
+     * 
+     * @return the URL of the icon image
+     */
+    public String getURL() {
+        return getIconNode().getNodeValue(URL);
+    }
 
-	public boolean hasURL()
-	{
-		String iconURL = getURL();
-		if (iconURL == null)
-			return false;
-		return (0 < iconURL.length()) ? true : false;
-	}
+    /**
+     * Checks if the icon has a valid URL set.
+     * 
+     * @return true if a URL is set and not empty, false otherwise
+     */
+    public boolean hasURL() {
+        String iconURL = getURL();
+        if (iconURL == null) return false;
+        return (0 < iconURL.length()) ? true : false;
+    }
 
-	public boolean isURL(String url)
-	{
-		if (url == null)
-			return false;
-		String iconURL = getURL();
-		if (iconURL == null)
-			return false;
-		return iconURL.equals(url);
-	}
+    /**
+     * Checks if the given URL matches this icon's URL.
+     * 
+     * @param url the URL to compare
+     * @return true if the URLs match, false otherwise
+     */
+    public boolean isURL(String url) {
+        if (url == null) return false;
+        String iconURL = getURL();
+        if (iconURL == null) return false;
+        return iconURL.equals(url);
+    }
 
-	////////////////////////////////////////////////
-	//	userData
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	userData
+    ////////////////////////////////////////////////
 
-	private Object userData = null;
+    private Object userData = null;
 
-	public void setUserData(Object data)
-	{
-		userData = data;
-	}
+    /**
+     * Sets user-defined data associated with this icon.
+     * 
+     * @param data the user data object to associate
+     */
+    public void setUserData(Object data) {
+        userData = data;
+    }
 
-	public Object getUserData()
-	{
-		return userData;
-	}
+    /**
+     * Gets the user-defined data associated with this icon.
+     * 
+     * @return the user data object, or null if not set
+     */
+    public Object getUserData() {
+        return userData;
+    }
 
-	////////////////////////////////////////////////
-	//	Bytes
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	Bytes
+    ////////////////////////////////////////////////
 
-	private byte bytes[] = null;
+    private byte bytes[] = null;
 
-	public void setBytes(byte data[])
-	{
-		bytes = data;
-	}
+    /**
+     * Sets the raw image data for this icon.
+     * 
+     * @param data the byte array containing the icon image data
+     */
+    public void setBytes(byte data[]) {
+        bytes = data;
+    }
 
-	public boolean hasBytes()
-	{
-		return (bytes != null) ? true : false;
-	}
+    /**
+     * Checks if this icon has raw image data set.
+     * 
+     * @return true if image data is available, false otherwise
+     */
+    public boolean hasBytes() {
+        return (bytes != null) ? true : false;
+    }
 
-	public byte[]getBytes()
-	{
-		return bytes;
-	}
+    /**
+     * Gets the raw image data for this icon.
+     * 
+     * @return the byte array containing the icon image data, or null if not set
+     */
+    public byte[] getBytes() {
+        return bytes;
+    }
 }

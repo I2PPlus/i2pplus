@@ -1,45 +1,40 @@
 /******************************************************************
-*
-*	CyberUPnP for Java
-*
-*	Copyright (C) Satoshi Konno 2002
-*
-*	File: PropertyList.java
-*
-*	Revision;
-*
-*	09/08/03
-*		- first revision.
-*
-******************************************************************/
+ *
+ *	CyberUPnP for Java
+ *
+ *	Copyright (C) Satoshi Konno 2002
+ *
+ *	File: PropertyList.java
+ *
+ *	Revision;
+ *
+ *	09/08/03
+ *		- first revision.
+ *
+ ******************************************************************/
 
 package org.cybergarage.upnp.event;
 
 import java.util.*;
 
-public class PropertyList extends Vector<Property>
-{
-	////////////////////////////////////////////////
-	//	Constants
-	////////////////////////////////////////////////
+public class PropertyList extends Vector<Property> {
+    ////////////////////////////////////////////////
+    //	Constants
+    ////////////////////////////////////////////////
 
-	public final static String ELEM_NAME = "PropertyList";
+    public static final String ELEM_NAME = "PropertyList";
 
-	////////////////////////////////////////////////
-	//	Constructor
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	Constructor
+    ////////////////////////////////////////////////
 
-	public PropertyList()
-	{
-	}
+    public PropertyList() {}
 
-	////////////////////////////////////////////////
-	//	Methods
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	Methods
+    ////////////////////////////////////////////////
 
-	public Property getProperty(int n)
-	{
-		return get(n);
-	}
+    public Property getProperty(int n) {
+        return get(n);
+    }
 }
-

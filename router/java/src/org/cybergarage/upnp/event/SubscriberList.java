@@ -1,48 +1,42 @@
 /******************************************************************
-*
-*	CyberUPnP for Java
-*
-*	Copyright (C) Satoshi Konno 2002
-*
-*	File: SubscriberList.java
-*
-*	Revision;
-*
-*	01/31/03
-*		- first revision.
-*	06/18/03
-*		- Fixed to catch ArrayIndexOutOfBounds.
-*
-******************************************************************/
+ *
+ *	CyberUPnP for Java
+ *
+ *	Copyright (C) Satoshi Konno 2002
+ *
+ *	File: SubscriberList.java
+ *
+ *	Revision;
+ *
+ *	01/31/03
+ *		- first revision.
+ *	06/18/03
+ *		- Fixed to catch ArrayIndexOutOfBounds.
+ *
+ ******************************************************************/
 
 package org.cybergarage.upnp.event;
 
 import java.util.*;
 
-public class SubscriberList extends Vector<Subscriber>
-{
-	////////////////////////////////////////////////
-	//	Constructor
-	////////////////////////////////////////////////
+public class SubscriberList extends Vector<Subscriber> {
+    ////////////////////////////////////////////////
+    //	Constructor
+    ////////////////////////////////////////////////
 
-	public SubscriberList()
-	{
-	}
+    public SubscriberList() {}
 
-	////////////////////////////////////////////////
-	//	Methods
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	Methods
+    ////////////////////////////////////////////////
 
-	public Subscriber getSubscriber(int n)
-	{
-		Object obj = null;
-		try {
-			obj = get(n);
-		}
-		catch (Exception e) {
-			// Return null if get() fails
-		}
-		return (Subscriber)obj;
-	}
+    public Subscriber getSubscriber(int n) {
+        Object obj = null;
+        try {
+            obj = get(n);
+        } catch (Exception e) {
+            // Return null if get() fails
+        }
+        return (Subscriber) obj;
+    }
 }
-

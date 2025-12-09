@@ -1,54 +1,65 @@
 /******************************************************************
-*
-*	CyberUtil for Java
-*
-*	Copyright (C) Satoshi Konno 2002-2004
-*
-*	File: Mutex.java
-*
-*	Revision:
-*
-*	06/19/04
-*		- first revision.
-*
-******************************************************************/
+ *
+ *	CyberUtil for Java
+ *
+ *	Copyright (C) Satoshi Konno 2002-2004
+ *
+ *	File: Mutex.java
+ *
+ *	Revision:
+ *
+ *	06/19/04
+ *		- first revision.
+ *
+ ******************************************************************/
 
 package org.cybergarage.util;
 
-public class Mutex
-{
-	private boolean syncLock;
+/**
+ * A simple mutex implementation for thread synchronization.
+ * This class provides basic locking mechanisms using synchronized methods
+ * and wait/notify for inter-thread communication.
+ */
+public class Mutex {
+    private boolean syncLock;
 
-	////////////////////////////////////////////////
-	//	Constructor
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	Constructor
+    ////////////////////////////////////////////////
 
-	public Mutex()
-	{
-		syncLock = false;
-	}
+    /**
+     * Creates a new Mutex instance in the unlocked state.
+     */
+    public Mutex() {
+        syncLock = false;
+    }
 
-	////////////////////////////////////////////////
-	//	lock
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	lock
+    ////////////////////////////////////////////////
 
-	public synchronized void lock()
-	{
-		while(syncLock == true) {
-			try {
-				wait();
-			}
-			catch (Exception e) {
-				Debug.warning(e);
-			};
-		}
-		syncLock = true;
-	}
+    /**
+     * Acquires the lock, blocking if necessary until the lock is available.
+     * If the lock is already held, the calling thread will wait until it's released.
+     */
+    public synchronized void lock() {
+        while (syncLock == true) {
+            try {
+                wait();
+            } catch (Exception e) {
+                Debug.warning(e);
+            }
+            ;
+        }
+        syncLock = true;
+    }
 
-	public synchronized void unlock()
-	{
-		syncLock = false;
-		notifyAll();
-	}
-
+    /**
+     * Releases the lock and notifies all waiting threads.
+     * This method should only be called by the thread that currently holds the lock.
+     */
+    public synchronized void unlock() {
+        syncLock = false;
+        notifyAll();
+    }
 }

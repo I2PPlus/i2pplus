@@ -1,58 +1,49 @@
 /******************************************************************
-*
-*	CyberUPnP for Java
-*
-*	Copyright (C) Satoshi Konno 2002
-*
-*	File: ActionList.java
-*
-*	Revision:
-*
-*	12/05/02
-*		- first revision.
-*
-******************************************************************/
+ *
+ *	CyberUPnP for Java
+ *
+ *	Copyright (C) Satoshi Konno 2002
+ *
+ *	File: ActionList.java
+ *
+ *	Revision:
+ *
+ *	12/05/02
+ *		- first revision.
+ *
+ ******************************************************************/
 
 package org.cybergarage.upnp;
 
 import java.util.Vector;
 
-/**
- * A list of UPnP actions.
- * Extends Vector to provide action-specific functionality.
- */
-public class ActionList extends Vector<Action>
-{
-	////////////////////////////////////////////////
-	//	Constants
-	////////////////////////////////////////////////
+/** A list of UPnP actions. Extends Vector to provide action-specific functionality. */
+public class ActionList extends Vector<Action> {
+    ////////////////////////////////////////////////
+    //	Constants
+    ////////////////////////////////////////////////
 
-	/** The element name for action list in XML */
-	public final static String ELEM_NAME = "actionList";
+    /** The element name for action list in XML */
+    public static final String ELEM_NAME = "actionList";
 
-	////////////////////////////////////////////////
-	//	Constructor
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	Constructor
+    ////////////////////////////////////////////////
 
-	/**
-	 * Constructs a new ActionList.
-	 */
-	public ActionList()
-	{
-	}
+    /** Constructs a new ActionList. */
+    public ActionList() {}
 
-	////////////////////////////////////////////////
-	//	Methods
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	Methods
+    ////////////////////////////////////////////////
 
-	/**
-	 * Gets the action at the specified index.
-	 * @param n the index
-	 * @return the action at the specified index
-	 */
-	public Action getAction(int n)
-	{
-		return get(n);
-	}
+    /**
+     * Gets the action at the specified index.
+     *
+     * @param n the index
+     * @return the action at the specified index
+     */
+    public Action getAction(int n) {
+        return get(n);
+    }
 }
-

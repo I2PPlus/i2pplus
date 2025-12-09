@@ -1,78 +1,115 @@
 /******************************************************************
-*
-*	CyberXML for Java
-*
-*	Copyright (C) Satoshi Konno 2002
-*
-*	File: Attribute.java
-*
-*	Revision;
-*
-*	11/27/02
-*		- first revision.
-*
-******************************************************************/
+ *
+ *	CyberXML for Java
+ *
+ *	Copyright (C) Satoshi Konno 2002
+ *
+ *	File: Attribute.java
+ *
+ *	Revision;
+ *
+ *	11/27/02
+ *		- first revision.
+ *
+ ******************************************************************/
 
 package org.cybergarage.xml;
 
-public class Attribute
-{
-	private String name = new String();
-	private String value = new String();
+/**
+ * Represents an XML attribute with name and value.
+ * 
+ * <p>This class provides a simple container for XML attribute name-value pairs.
+ * Attributes can be created independently or copied from existing attributes.</p>
+ * 
+ * @author Satoshi Konno
+ * @since 1.0
+ */
+public class Attribute {
+    private String name = new String();
+    private String value = new String();
 
-	public Attribute()
-	{
-	}
+    /**
+     * Creates an empty Attribute with empty name and value.
+     */
+    public Attribute() {}
 
-	public Attribute(String name, String value)
-	{
-		this();
-		setName(name);
-		setValue(value);
-	}
+    /**
+     * Creates an Attribute with the specified name and value.
+     *
+     * @param name the attribute name
+     * @param value the attribute value
+     */
+    public Attribute(String name, String value) {
+        this();
+        setName(name);
+        setValue(value);
+    }
 
-	public Attribute(Attribute otherAttr)
-	{
-		this();
-		set(otherAttr);
-	}
+    /**
+     * Creates a copy of an existing Attribute.
+     *
+     * @param otherAttr the attribute to copy
+     */
+    public Attribute(Attribute otherAttr) {
+        this();
+        set(otherAttr);
+    }
 
-	////////////////////////////////////////////////
-	//	name
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	name
+    ////////////////////////////////////////////////
 
-	public void setName(String name)
-	{
-		this.name = name;
-	}
+    /**
+     * Sets the name of this attribute.
+     *
+     * @param name the attribute name
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public String getName()
-	{
-		return name;
-	}
+    /**
+     * Gets the name of this attribute.
+     *
+     * @return the attribute name
+     */
+    public String getName() {
+        return name;
+    }
 
-	////////////////////////////////////////////////
-	//	value
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	value
+    ////////////////////////////////////////////////
 
-	public void setValue(String value)
-	{
-		this.value = value;
-	}
+    /**
+     * Sets the value of this attribute.
+     *
+     * @param value the attribute value
+     */
+    public void setValue(String value) {
+        this.value = value;
+    }
 
-	public String getValue()
-	{
-		return value;
-	}
+    /**
+     * Gets the value of this attribute.
+     *
+     * @return the attribute value
+     */
+    public String getValue() {
+        return value;
+    }
 
-	////////////////////////////////////////////////
-	//	set
-	////////////////////////////////////////////////
+    ////////////////////////////////////////////////
+    //	set
+    ////////////////////////////////////////////////
 
-	public void set(Attribute otherAttr)
-	{
-		setName(otherAttr.getName());
-		setValue(otherAttr.getValue());
-	}
+    /**
+     * Copies the name and value from another attribute to this attribute.
+     *
+     * @param otherAttr the attribute to copy from
+     */
+    public void set(Attribute otherAttr) {
+        setName(otherAttr.getName());
+        setValue(otherAttr.getValue());
+    }
 }
-

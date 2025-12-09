@@ -1,119 +1,107 @@
 /******************************************************************
-*
-*	CyberUPnP for Java
-*
-*	Copyright (C) Satoshi Konno 2002
-*
-*	File: SSDPSearchResponseSocket.java
-*
-*	Revision;
-*
-*	11/20/02
-*		- first revision.
-*	05/28/03
-*		- Added post() to send a SSDPSearchRequest.
-*	01/31/08
-*		- Changed start() not to abort when the interface infomation is null on Android m3-rc37a.
-*
-******************************************************************/
+ *
+ *	CyberUPnP for Java
+ *
+ *	Copyright (C) Satoshi Konno 2002
+ *
+ *	File: SSDPSearchResponseSocket.java
+ *
+ *	Revision;
+ *
+ *	11/20/02
+ *		- first revision.
+ *	05/28/03
+ *		- Added post() to send a SSDPSearchRequest.
+ *	01/31/08
+ *		- Changed start() not to abort when the interface infomation is null on Android m3-rc37a.
+ *
+ ******************************************************************/
 
 package org.cybergarage.upnp.ssdp;
 
-import java.net.DatagramSocket;
-
 import org.cybergarage.upnp.*;
 
-public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable
-{
-	////////////////////////////////////////////////
-	//	Constructor
-	////////////////////////////////////////////////
+import java.net.DatagramSocket;
 
-	public SSDPSearchResponseSocket()
-	{
-		setControlPoint(null);
-	}
+public class SSDPSearchResponseSocket extends HTTPUSocket implements Runnable {
+    ////////////////////////////////////////////////
+    //	Constructor
+    ////////////////////////////////////////////////
 
-	public SSDPSearchResponseSocket(String bindAddr, int port)
-	{
-		super(bindAddr, port);
-		setControlPoint(null);
-	}
+    public SSDPSearchResponseSocket() {
+        setControlPoint(null);
+    }
 
-	////////////////////////////////////////////////
-	//	ControlPoint
-	////////////////////////////////////////////////
+    public SSDPSearchResponseSocket(String bindAddr, int port) {
+        super(bindAddr, port);
+        setControlPoint(null);
+    }
 
-	private ControlPoint controlPoint = null;
+    ////////////////////////////////////////////////
+    //	ControlPoint
+    ////////////////////////////////////////////////
 
-	public void setControlPoint(ControlPoint ctrlp)
-	{
-		this.controlPoint = ctrlp;
-	}
+    private ControlPoint controlPoint = null;
 
-	public ControlPoint getControlPoint()
-	{
-		return controlPoint;
-	}
+    public void setControlPoint(ControlPoint ctrlp) {
+        this.controlPoint = ctrlp;
+    }
 
-	////////////////////////////////////////////////
-	//	run
-	////////////////////////////////////////////////
+    public ControlPoint getControlPoint() {
+        return controlPoint;
+    }
 
-	private Thread deviceSearchResponseThread = null;
+    ////////////////////////////////////////////////
+    //	run
+    ////////////////////////////////////////////////
 
-	public void run()
-	{
-		Thread thisThread = Thread.currentThread();
+    private Thread deviceSearchResponseThread = null;
 
-		ControlPoint ctrlPoint = getControlPoint();
+    public void run() {
+        Thread thisThread = Thread.currentThread();
 
-		while (deviceSearchResponseThread == thisThread) {
-			Thread.yield();
-			SSDPPacket packet = receive();
-			if (packet == null)
-				break;
-			if (ctrlPoint != null)
-				ctrlPoint.searchResponseReceived(packet);
-		}
-	}
+        ControlPoint ctrlPoint = getControlPoint();
 
-	public void start()	{
+        while (deviceSearchResponseThread == thisThread) {
+            Thread.yield();
+            SSDPPacket packet = receive();
+            if (packet == null) break;
+            if (ctrlPoint != null) ctrlPoint.searchResponseReceived(packet);
+        }
+    }
 
-		StringBuffer name = new StringBuffer("Cyber.SSDPSearchResponseSocket/");
-		DatagramSocket s = getDatagramSocket();
-		// localAddr is null on Android m3-rc37a (01/30/08)
-		// I2P hide address from thread dumps
-		//InetAddress localAddr = s.getLocalAddress();
-		//if (localAddr != null) {
-		//	name.append(s.getLocalAddress()).append(':');
-		//	name.append(s.getLocalPort());
-		//}
-		deviceSearchResponseThread = new Thread(this,name.toString());
-		deviceSearchResponseThread.start();
-	}
+    public void start() {
 
-	public void stop()
-	{
-		deviceSearchResponseThread = null;
-	}
+        StringBuffer name = new StringBuffer("Cyber.SSDPSearchResponseSocket/");
+        DatagramSocket s = getDatagramSocket();
+        // localAddr is null on Android m3-rc37a (01/30/08)
+        // I2P hide address from thread dumps
+        // InetAddress localAddr = s.getLocalAddress();
+        // if (localAddr != null) {
+        //	name.append(s.getLocalAddress()).append(':');
+        //	name.append(s.getLocalPort());
+        // }
+        deviceSearchResponseThread = new Thread(this, name.toString());
+        deviceSearchResponseThread.start();
+    }
 
-	////////////////////////////////////////////////
-	//	post
-	////////////////////////////////////////////////
+    public void stop() {
+        deviceSearchResponseThread = null;
+    }
 
-	public boolean post(String addr, int port, SSDPSearchResponse res)
-	{
-		return post(addr, port, res.getHeader());
-	}
+    ////////////////////////////////////////////////
+    //	post
+    ////////////////////////////////////////////////
 
-	////////////////////////////////////////////////
-	//	post
-	////////////////////////////////////////////////
+    public boolean post(String addr, int port, SSDPSearchResponse res) {
+        return post(addr, port, res.getHeader());
+    }
 
-	public boolean post(String addr, int port, SSDPSearchRequest req)
-	{
-		return post(addr, port, req.toString());
-	}
+    ////////////////////////////////////////////////
+    //	post
+    ////////////////////////////////////////////////
+
+    public boolean post(String addr, int port, SSDPSearchRequest req) {
+        return post(addr, port, req.toString());
+    }
 }
-
