@@ -1,7 +1,7 @@
-/******************************************************************
+/*
  * CyberUPnP for Java
  * Copyright (C) Satoshi Konno 2002-2003
- ******************************************************************/
+ */
 
 package org.cybergarage.upnp.ssdp;
 
@@ -11,6 +11,15 @@ import org.cybergarage.upnp.*;
 import java.net.InetAddress;
 import java.util.*;
 
+/**
+ * A list of SSDP search response sockets for handling SSDP search responses.<br>
+ * This class manages multiple {@link SSDPSearchResponseSocket} instances to send SSDP search
+ * requests and receive responses across different network interfaces.
+ *
+ * @author Satoshi "skonno" Konno
+ * @author Stefano "Kismet" Lenzi
+ * @version 1.8
+ */
 public class SSDPSearchResponseSocketList extends Vector<SSDPSearchResponseSocket> {
     ////////////////////////////////////////////////
     //	Constructor

@@ -1,15 +1,8 @@
-/******************************************************************
+/*
  * CyberUPnP for Java
  * Copyright (C) Satoshi Konno 2002-2003
- ******************************************************************/
-
-/**
- * This class identifies a SSDP socket only for <b>notifing packet</b>.<br>
- *
- * @author Satoshi "skonno" Konno
- * @author Stefano "Kismet" Lenzi
- * @version 1.8
  */
+
 package org.cybergarage.upnp.ssdp;
 
 import org.cybergarage.http.*;
@@ -20,6 +13,13 @@ import org.cybergarage.util.Debug;
 import java.io.IOException;
 import java.net.*;
 
+/**
+ * This class identifies a SSDP socket only for <b>notifing packet</b>.
+ *
+ * @author Satoshi "skonno" Konno
+ * @author Stefano "Kismet" Lenzi
+ * @version 1.8
+ */
 public class SSDPNotifySocket extends HTTPMUSocket implements Runnable {
     private boolean useIPv6Address;
 
