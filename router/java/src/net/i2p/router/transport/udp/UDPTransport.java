@@ -62,24 +62,39 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**
- *  The SSU (Secure Semireliable UDP) transport implementation for I2P.
- *  This class manages UDP-based peer connections, packet handling, peer testing, and reachability.
+ * Secure Semi-reliable UDP (SSU) transport implementation for I2P.
  *
- *  <p>It supports both SSU1 (legacy) and SSU2 (modern) protocols, including:
- *  <ul>
- *      <li>Establishing and maintaining peer sessions</li>
- *      <li>Handling inbound and outbound messages</li>
- *      <li>Managing introducers and peer testing</li>
- *      <li>Reachability detection and reporting</li>
- *      <li>IPv4 and IPv6 support</li>
- *  </ul>
+ * <p>This class provides the primary UDP-based transport for I2P
+ * communication, implementing both SSU1 (legacy) and SSU2
+ * (modern) protocols. It handles peer connections, packet
+ * processing, session management, and reachability testing.</p>
  *
- *  <p>Internally, it uses various managers such as:
- *  <ul>
- *      <li>{@link EstablishmentManager} for session establishment</li>
- *      <li>{@link PacketHandler} for processing incoming packets</li>
- *      <li>{@link PeerTestManager} for peer reachability tests</li>
- *      <li>{@link IntroductionManager} for managing introducers</li>
+ * <p><strong>Protocol Features:</strong></p>
+ * <ul>
+ *   <li>Session establishment and maintenance</li>
+ *   <li>Inbound and outbound message handling</li>
+ *   <li>Peer introduction and testing systems</li>
+ *   <li>Reachability detection and reporting</li>
+ *   <li>IPv4 and IPv6 addressing support</li>
+ *   <li>Packet fragmentation and reassembly</li>
+ *   <li>Acknowledgment and reliability mechanisms</li>
+ * </ul>
+ *
+ * <p><strong>Internal Architecture:</strong></p>
+ * <ul>
+ *   <li>{@link EstablishmentManager} for session establishment</li>
+ *   <li>{@link PacketHandler} for processing incoming packets</li>
+ *   <li>{@link IntroductionManager} for managing introductions</li>
+ *   <li>{@link PeerTestManager} for reachability testing</li>
+ *   <li>Various state managers for connection tracking</li>
+ * </ul>
+ *
+ * <p><strong>SSU Protocol Support:</strong></p>
+ * <ul>
+ *   <li>SSU1: Legacy protocol for older peers</li>
+ *   <li>SSU2: Modern protocol with improved efficiency</li>
+ *   <li>Automatic protocol negotiation and fallback</li>
+ *   <li>Backward compatibility with existing peers</li>
  *  </ul>
  */
 public class UDPTransport extends TransportImpl {

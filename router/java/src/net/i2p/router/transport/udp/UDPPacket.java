@@ -14,12 +14,47 @@ import net.i2p.util.SystemVersion;
 import net.i2p.util.TryCache;
 
 /**
- * Represents a UDP packet with caching support for efficient reuse.
- *
- * This class wraps a {@link DatagramPacket} and maintains additional metadata such as priority,
- * timestamps, message type, fragment count, and bandwidth reservation requests.
- * It supports reuse through an internal object cache to reduce GC overhead.
- *
+ * UDP packet wrapper with caching and metadata support.
+ * 
+ * This class wraps standard DatagramPacket objects and adds
+ * I2P-specific metadata for efficient packet handling and reuse.
+ * It implements an object cache pattern to reduce garbage collection
+ * overhead and improve performance in high-throughput scenarios.
+ * 
+ * <strong>Core Features:</strong>
+ * <ul>
+ *   <li>Packet wrapping with metadata preservation</li>
+ *   <li>Object caching for reuse and GC reduction</li>
+ *   <li>Priority-based queuing and processing</li>
+ *   <li>Fragmentation and reassembly support</li>
+ *   <li>Bandwidth reservation and throttling integration</li>
+ *   <li>Timestamp and routing metadata</li>
+ * </ul>
+ * 
+ * <strong>Caching Strategy:</strong>
+ * <ul>
+ *   <li>Internal object pool for packet reuse</li>
+ *   <li>Cache size limits and eviction policies</li>
+ *   <li>Thread-safe cache operations</li>
+ *   <li>Memory-efficient packet allocation</li>
+ * </ul>
+ * 
+ * <strong>Metadata Support:</strong>
+ * <ul>
+ *   <li>Message type and protocol information</li>
+ *   <li>Priority levels for QoS handling</li>
+ *   <li>Fragment identification and sequencing</li>
+ *   <li>Bandwidth allocation tracking</li>
+ *   <li>Routing and forwarding information</li>
+ * </ul>
+ * 
+ * <strong>Performance Optimizations:</strong>
+ * <ul>
+ *   <li>Minimal object creation overhead</li>
+ *   <li>Efficient data copying and cloning</li>
+ *   <li>Cache-friendly packet lifecycle management</li>
+ *   <li>Reduced garbage collection pressure</li>
+ * </ul>
  */
 class UDPPacket implements CDPQEntry {
     private RouterContext _context;

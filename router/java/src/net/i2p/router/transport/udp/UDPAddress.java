@@ -15,7 +15,36 @@ import net.i2p.util.LHMCache;
 import net.i2p.util.SystemVersion;
 
 /**
- * basic helper to parse out peer info from a udp address
+ * UDP address parser and validator for I2P peer information.
+ * 
+ * This class parses and validates UDP address strings containing
+ * peer introduction information. It extracts hostnames,
+ * ports, introduction keys, and other metadata needed for
+ * establishing SSU connections.
+ * 
+ * <strong>Parsing Features:</strong>
+ * <ul>
+ *   <li>Hostname and IP address extraction</li>
+ *   <li>Port number parsing and validation</li>
+ *   <li>Introduction key and tag parsing</li>
+ *   <li>Multiple introduction point support</li>
+ *   <li>Expiration time and bandwidth information</li>
+ * </ul>
+ * 
+ * <strong>Validation:</strong>
+ * <ul>
+ *   <li>Address format validation</li>
+ *   <li>Port range checking</li>
+ *   <li>Introduction key format validation</li>
+ *   <li>Hostname resolution and verification</li>
+ * </ul>
+ * 
+ * <strong>Output Format:</strong>
+ * <ul>
+ *   <li>Structured peer information objects</li>
+ *   <li>Validated address components</li>
+ *   <li>Parsed introduction metadata</li>
+ * </ul>
  */
 class UDPAddress {
     private final String _host;

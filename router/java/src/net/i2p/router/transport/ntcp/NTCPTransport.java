@@ -57,10 +57,40 @@ import static net.i2p.router.transport.Transport.AddressSource.*;
 import static net.i2p.router.transport.TransportUtil.IPv6Config.*;
 
 /**
- * The NIO TCP transport implementation for I2P.
- * Manages inbound and outbound NTCP connections using non-blocking I/O,
- * supporting both NTCP 1 and NTCP 2 protocols with configurable
- * bandwidth limits, connection pooling, and peer management.
+ * Non-blocking TCP (NTCP) transport implementation for I2P.
+ * 
+ * This class provides the primary TCP-based transport for I2P
+ * communication using Java NIO for non-blocking I/O operations.
+ * It supports both NTCP 1 and NTCP 2 protocols with
+ * advanced features like connection pooling, bandwidth management,
+ * and sophisticated peer management.
+ * 
+ * <strong>Protocol Features:</strong>
+ * <ul>
+ *   <li>NTCP 1: Basic encrypted TCP transport</li>
+ *   <li>NTCP 2: Enhanced protocol with improved efficiency</li>
+ *   <li>Configurable bandwidth limits and throttling</li>
+ *   <li>Connection pooling and reuse</li>
+ *   <li>IPv4 and IPv6 support</li>
+ *   <li>Automatic protocol negotiation</li>
+ * </ul>
+ * 
+ * <strong>Architecture:</strong>
+ * <ul>
+ *   <li>Non-blocking I/O with NIO channels</li>
+ *   <li>Separate reader and writer threads</li>
+ *   <li>Event-driven message processing</li>
+ *   <li>Connection state machines for establishment</li>
+ *   <li>Peer reputation and cost-based routing</li>
+ * </ul>
+ * 
+ * <strong>Connection Management:</strong>
+ * <ul>
+ *   <li>Multiple bid tiers (fast, slow, high-cost)</li>
+ *   <li>Connection pooling and reuse</li>
+ *   <li>Automatic failover and retry logic</li>
+ *   <li>Peer blacklisting and banlist support</li>
+ * </ul>
  *
  * @since 0.9.16
  */

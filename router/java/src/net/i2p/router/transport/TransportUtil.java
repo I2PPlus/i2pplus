@@ -20,8 +20,39 @@ import net.i2p.util.Log;
 import net.i2p.router.RouterContext;
 
 /**
- * Utility class for transport operations.
- *  @since IPv6
+ * Utility class providing common transport operations and configurations.
+ * 
+ * This class contains static methods and constants used throughout
+ * the transport system for address validation, port management,
+ * IPv6 configuration, and network utility functions.
+ * 
+ * <strong>Key Features:</strong>
+ * <ul>
+ *   <li>IPv4 and IPv6 address validation and parsing</li>
+ *   <li>Port range validation and assignment</li>
+ *   <li>IPv6 configuration options for transports</li>
+ *   <li>Firewall and NAT detection utilities</li>
+ *   <li>Geographic IP filtering and validation</li>
+ *   <li>Transport-specific constants and defaults</li>
+ * </ul>
+ * 
+ * <strong>IPv6 Support:</strong>
+ * <ul>
+ *   <li>Configuration options for NTCP and SSU transports</li>
+ *   <li>Address format validation for IPv6</li>
+ *   <li>Port assignment and range checking</li>
+ *   <li>Compatibility helpers for mixed IPv4/IPv6 environments</li>
+ * </ul>
+ * 
+ * <strong>Network Utilities:</strong>
+ * <ul>
+ *   <li>Port assignment strategies (random vs. configured)</li>
+ *   <li>Firewall detection and bypass methods</li>
+ *   <li>Transport protocol constants and defaults</li>
+ *   <li>Address type detection and validation</li>
+ * </ul>
+ * 
+ * @since IPv6 support was added
  */
 public abstract class TransportUtil {
 

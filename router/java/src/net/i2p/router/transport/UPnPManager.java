@@ -26,9 +26,46 @@ import org.freenetproject.ForwardPortCallback;
 import org.freenetproject.ForwardPortStatus;
 
 /**
- * Manages UPnP operations and port forwarding.
- * Bridge from the I2P RouterAddress data structure to
- * the freenet data structures
+ * Universal Plug and Play (UPnP) manager for NAT traversal and port forwarding.
+ * 
+ * This class manages UPnP operations to automatically configure
+ * port forwarding on UPnP-enabled routers, allowing I2P to
+ * work through NAT and firewalls. It bridges between I2P's
+ * RouterAddress structures and the external FreeNet UPnP library.
+ * 
+ * <strong>Core Features:</strong>
+ * <ul>
+ *   <li>Automatic UPnP device discovery</li>
+ *   <li>Port forwarding request and management</li>
+ *   <li>External IP address detection</li>
+ *   <li>Gateway device mapping and configuration</li>
+ *   <li>Lease renewal and monitoring</li>
+ *   <li>Service advertisement for I2P</li>
+ * </ul>
+ * 
+ * <strong>UPnP Protocol Support:</strong>
+ * <ul>
+ *   <li>SSDP (Simple Service Discovery Protocol)</li>
+ *   <li>HTTP interface for device configuration</li>
+ *   <li>SOAP-based control messages</li>
+ *   <li>Event-driven architecture with callbacks</li>
+ * </ul>
+ * 
+ * <strong>Integration:</strong>
+ * <ul>
+ *   <li>Bridges I2P RouterAddress to FreeNet structures</li>
+ *   <li>Works with TransportManager for address updates</li>
+ *   <li>Provides callbacks for transport events</li>
+ *   <li>Handles multiple router discovery protocols</li>
+ * </ul>
+ * 
+ * <strong>Configuration:</strong>
+ * <ul>
+ *   <li>Configurable HTTP and SSDP ports</li>
+ *   <li>Automatic device selection and fallback</li>
+ *   <li>Error handling and retry logic</li>
+ *   <li>Logging and monitoring capabilities</li>
+ * </ul>
  *
  * @since 0.7.4
  * @author zzz

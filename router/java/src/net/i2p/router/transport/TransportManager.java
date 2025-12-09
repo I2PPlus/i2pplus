@@ -52,14 +52,45 @@ import net.i2p.util.Translate;
 import net.i2p.util.VersionComparator;
 
 /**
- * Manages and coordinates all enabled transport protocols.
- * Starts UPnP.
- * Pluggable transport support incomplete.
- *
- * Public only for a couple things in the console and Android.
- * To be made package private.
- * Everything external should go through CommSystemFacadeImpl.
- * Not a public API, not for external use.
+ * Central coordinator for all I2P transport protocols.
+ * 
+ * This class manages the lifecycle, configuration, and coordination
+ * of all enabled transport protocols (NTCP, UDP, SSU, etc.).
+ * It provides unified access to transport functionality and handles
+ * transport-specific operations like address management, peer discovery,
+ * and message routing.
+ * 
+ * <strong>Core Responsibilities:</strong>
+ * <ul>
+ *   <li>Transport lifecycle management (start/stop/restart)</li>
+ *   <li>Address discovery and configuration</li>
+ *   <li>Peer connection management and statistics</li>
+ *   <li>Message routing between transports</li>
+ *   <li>UPnP integration for NAT traversal</li>
+ *   <li>Bandwidth allocation and coordination</li>
+ *   <li>Transport event handling and notifications</li>
+ * </ul>
+ * 
+ * <strong>Transport Support:</strong>
+ * <ul>
+ *   <li>Built-in transports: NTCP, UDP, SSU</li>
+ *   <li>Pluggable transport support (incomplete)</li>
+ *   <li>IPv4 and IPv6 addressing</li>
+ *   <li>Automatic transport selection and failover</li>
+ * </ul>
+ * 
+ * <strong>UPnP Integration:</strong>
+ * Automatically starts and manages UPnP service for
+ * NAT traversal and port forwarding discovery.
+ * 
+ * <strong>API Access:</strong>
+ * This class is primarily internal to the router. Only a few
+ * methods are public for console and Android integration.
+ * External components should use CommSystemFacadeImpl for
+ * transport access rather than calling this class directly.
+ * 
+ * <strong>Note:</strong> This is not intended as a public API
+ * for external use. Implementation details may change without notice.
  */
 public class TransportManager implements TransportEventListener {
     private final Log _log;
@@ -179,9 +210,28 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  Pluggable transports. Not for NTCP or SSU.
-     *
-     *  @since 0.9.16
+     * Register and start a pluggable transport.
+     * 
+     * This method registers a new pluggable transport (not NTCP or SSU)
+     * with the transport manager and starts it if this is the first
+     * transport being registered. The method handles validation,
+     * initialization, and lifecycle management.
+     * 
+     * <strong>Process:</strong>
+     * <ul>
+     *   <li>Validates transport is not built-in (NTCP/UDP)</li>
+     *   <li>Checks for duplicate transport styles</li>
+     *   <li>Adds to pluggable transport registry</li>
+     *   <li>Sets transport event listener</li>
+     *   <li>Initializes transport addresses</li>
+     *   <li>Starts transport listening if first transport</li>
+     *   <li>Rebuilds router info with new addresses</li>
+     * </ul>
+     * 
+     * @param t the transport to register and start
+     * @throws IllegalArgumentException if transport is built-in type
+     * @throws IllegalStateException if transport style already exists
+     * @since 0.9.16
      */
     synchronized void registerAndStart(Transport t) {
         String style = t.getStyle();
@@ -201,9 +251,26 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  Pluggable transports. Not for NTCP or SSU.
-     *
-     *  @since 0.9.16
+     * Stop and unregister a pluggable transport.
+     * 
+     * This method gracefully shuts down a pluggable transport
+     * (not NTCP or SSU) and removes it from the
+     * transport registry. The method handles cleanup,
+     * listener removal, and address updates.
+     * 
+     * <strong>Process:</strong>
+     * <ul>
+     *   <li>Validates transport is not built-in (NTCP/UDP)</li>
+     *   <li>Removes transport event listener</li>
+     *   <li>Removes from pluggable transport registry</li>
+     *   <li>Stops transport listening</li>
+     *   <li>Removes from main transport registry</li>
+     *   <li>Rebuilds router info without transport addresses</li>
+     * </ul>
+     * 
+     * @param t the transport to stop and unregister
+     * @throws IllegalArgumentException if transport is built-in type
+     * @since 0.9.16
      */
     synchronized void stopAndUnregister(Transport t) {
         String style = t.getStyle();
@@ -217,8 +284,15 @@ public class TransportManager implements TransportEventListener {
     }
 
     /**
-     *  Factory for making X25519 key pairs.
-     *  @since 0.9.46
+     * Get the X25519 key factory used by transports.
+     * 
+     * This method returns the key factory that provides
+     * X25519 key pairs for transport encryption operations.
+     * The factory is used by NTCP and UDP transports for
+     * ephemeral key generation in session establishment.
+     * 
+     * @return X25519KeyFactory instance for transport cryptography
+     * @since 0.9.46
      */
     X25519KeyFactory getXDHFactory() {
         return _xdhThread;
@@ -638,6 +712,16 @@ public class TransportManager implements TransportEventListener {
      *  @return a new list, may be modified
      *  @since 0.9.34
      */
+    /**
+     * Get list of peers with established connections across all transports.
+     * 
+     * This method aggregates established peers from all active
+     * transports (NTCP, UDP, SSU, etc.) to provide a
+     * unified view of the router's current peer connections.
+     * 
+     * @return list of peer hashes with established connections,
+     *         may be empty if no connections exist
+     */
     public List<Hash> getEstablished() {
         // for efficiency
         Transport t = _transports.get("NTCP");
@@ -932,6 +1016,18 @@ public class TransportManager implements TransportEventListener {
      * @param fromRouter may be null
      * @param fromRouterHash may be null, calculated from fromRouter if null
      */
+    /**
+     * Handle incoming I2NP message from a peer.
+     * 
+     * This method is called by transports when they receive an
+     * I2NP message that needs to be processed by the router.
+     * The TransportManager acts as a central message dispatcher
+     * and routes messages to appropriate handlers.
+     * 
+     * @param message the received I2NP message to be processed
+     * @param fromRouter identity of the sending router
+     * @param fromRouterHash hash of the sending router for quick lookup
+     */
     public void messageReceived(I2NPMessage message, RouterIdentity fromRouter, Hash fromRouterHash) {
         if (_log.shouldDebug()) {
             _log.debug("I2NPMessage received: " + message.getClass().getSimpleName());
@@ -945,6 +1041,23 @@ public class TransportManager implements TransportEventListener {
     /**
      *  TransportEventListener
      *  calls UPnPManager rescan() and update()
+     */
+    /**
+     * Handle transport address change notifications.
+     * 
+     * This method is called when any transport reports a
+     * change in its advertised addresses. The TransportManager
+     * coordinates address updates across all transports and
+     * updates the router's published information accordingly.
+     * 
+     * This method is typically called by transports in response
+     * to:
+     * <ul>
+     *   <li>UPnP address discovery</li>
+     *   <li>Interface address changes</li>
+     *   <li>Configuration updates</li>
+     *   <li>Network topology changes</li>
+     * </ul>
      */
     public void transportAddressChanged() {
         if (_upnpManager != null) {
@@ -1011,6 +1124,19 @@ public class TransportManager implements TransportEventListener {
      *
      *  Warning - blocking, very slow, queries the active UPnP router,
      *  will take many seconds if it has vanished.
+     */
+    /**
+     * Render transport status information as HTML for console display.
+     * 
+     * This method generates detailed HTML status for all
+     * transports, including connection counts, peer information,
+     * bandwidth usage, and transport-specific statistics. The output
+     * is used by the router console for transport monitoring.
+     * 
+     * @param out writer to write HTML output to
+     * @param urlBase base URL for generating links
+     * @param sortFlags flags controlling sorting and display options
+     * @throws IOException if writing to output fails
      */
     public void renderStatusHTML(Writer out, String urlBase, int sortFlags) throws IOException {
         if (SystemVersion.isAndroid()) {

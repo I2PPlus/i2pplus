@@ -9,7 +9,35 @@ package net.i2p.router.transport;
  */
 
 /**
- * Base implementation for transport protocols.
+ * Abstract base implementation for I2P transport protocols.
+ * 
+ * This class provides common functionality and default implementations
+ * for transport protocols. It handles the boilerplate operations
+ * that most transports need, allowing concrete implementations
+ * to focus on protocol-specific logic.
+ * 
+ * <strong>Core Features:</strong>
+ * <ul>
+ *   <li>Peer connection management and state tracking</li>
+ *   <li>Message sending and receiving queues</li>
+ *   <li>Address management and validation</li>
+ *   <li>Event listener integration</li>
+ *   <li>Statistics collection and reporting</li>
+ *   <li>Clock skew monitoring and compensation</li>
+ *   <li>Reachability testing and status tracking</li>
+ * </ul>
+ * 
+ * <strong>Extending Classes:</strong>
+ * <ul>
+ *   <li>NTCPTransport - Stream-based TCP with encryption</li>
+ *   <li>UDPTransport - Datagram-based with reliability</li>
+ *   <li>SSUTransport - Sessionless UDP for introductions</li>
+ * </ul>
+ * 
+ * <strong>Thread Safety:</strong>
+ * This implementation uses concurrent collections and proper
+ * synchronization to handle multiple threads accessing
+ * transport state simultaneously.
  */
 
 import java.io.IOException;

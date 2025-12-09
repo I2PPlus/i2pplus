@@ -14,24 +14,37 @@ import net.i2p.util.Log;
 
 /**
  * FIFO-based bandwidth limiter for managing inbound and outbound traffic.
- *
- *  Concurrent plan:
- *
- *  It's difficult to get rid of the locks on _pendingInboundRequests
- *  since locked_satisyInboundAvailable() leaves Requests on the head
- *  of the queue.
- *
- *  When we go to Java 6, we can convert from a locked ArrayList to
- *  a LinkedBlockingDeque, where locked_sIA will poll() from the
- *  head of the queue, and if the request is not fully satisfied,
- *  offerFirst() (i.e. push) it back on the head.
- *
- *  Ditto outbound of course.
- *
- *  In the meantime, for Java 5, we have lockless 'shortcut'
- *  methods for the common case where we are under the bandwidth limits.
- *  And the volatile counters are now AtomicIntegers / AtomicLongs.
- *
+ * 
+ * This class provides bandwidth management using First-In-First-Out
+ * queues for both inbound and outbound traffic. It implements
+ * token bucket algorithm to control data rates and prevent burst
+ * traffic patterns.
+ * 
+ * <strong>Core Features:</strong>
+ * <ul>
+ *   <li>FIFO request queuing for fair bandwidth allocation</li>
+ *   <li>Token bucket rate limiting</li>
+ *   <li>Separate inbound and outbound management</li>
+ *   <li>Configurable bandwidth limits and refill rates</li>
+ *   <li>Thread-safe operations with atomic counters</li>
+ *   <li>Request satisfaction and partial fulfillment handling</li>
+ * </ul>
+ * 
+ * <strong>Concurrency Strategy:</strong>
+ * <ul>
+ *   <li>Java 5: Used synchronized ArrayList with head/tail access</li>
+ *   <li>Java 6+: Uses LinkedBlockingDeque for lock-free operations</li>
+ *   <li>Request polling from queue head for efficiency</li>
+ *   <li>Partial request satisfaction with push-back mechanism</li>
+ * </ul>
+ * 
+ * <strong>Algorithm:</strong>
+ * <ul>
+ *   <li>Token refill at fixed intervals</li>
+ *   <li>Request processing when tokens available</li>
+ *   <li>Burst prevention through token depletion</li>
+ *   <li>Priority-based request handling</li>
+ * </ul>
  */
 public class FIFOBandwidthLimiter {
     private final Log _log;

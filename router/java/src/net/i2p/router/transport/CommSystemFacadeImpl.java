@@ -85,7 +85,49 @@ import net.i2p.util.Translate;
 import org.apache.commons.net.whois.WhoisClient;
 
 /**
- * Implementation of the communication system facade for network operations.
+ * Primary implementation of the communication system facade for I2P network operations.
+ * 
+ * This class provides the main interface between the router core and
+ * all transport protocols. It coordinates message sending,
+ * peer management, address configuration, and network monitoring
+ * while abstracting the underlying transport details.
+ * 
+ * <strong>Core Responsibilities:</strong>
+ * <ul>
+ *   <li>Message routing and delivery across all transports</li>
+ *   <li>Peer connection management and statistics</li>
+ *   <li>Network address discovery and configuration</li>
+ *   <li>Bandwidth allocation and monitoring</li>
+ *   <li>Transport lifecycle management (start/stop/restart)</li>
+ *   <li>Network reachability testing and reporting</li>
+ *   <li>Geographic IP filtering and country blocking</li>
+ *   <li>Communication system status and health monitoring</li>
+ * </ul>
+ * 
+ * <strong>Transport Integration:</strong>
+ * <ul>
+ *   <li>Manages NTCP, UDP, and SSU transports</li>
+ *   <li>Handles transport selection and failover</li>
+ *   <li>Coordinates address updates across protocols</li>
+ *   <li>Provides unified API for router components</li>
+ * </ul>
+ * 
+ * <strong>Configuration Features:</strong>
+ * <ul>
+ *   <li>Transport enable/disable controls</li>
+ *   <li>Country-based blocking and filtering</li>
+ *   <li>Proxy configuration and detection</li>
+ *   <li>Network monitoring and testing options</li>
+ *   <li>IPv4 and IPv6 addressing support</li>
+ * </ul>
+ * 
+ * <strong>Security Features:</strong>
+ * <ul>
+ *   <li>Geographic IP filtering</li>
+ *   <li>Country-based access controls</li>
+ *   <li>Peer reputation and banlist management</li>
+ *   <li>Transport-specific security policies</li>
+ * </ul>
  */
 public class CommSystemFacadeImpl extends CommSystemFacade {
     private final Log _log;
@@ -97,8 +139,14 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     private boolean _wasStarted;
 
     /**
-     *  Disable connections for testing
-     *  @since IPv6
+     * Property to disable all network connections for testing purposes.
+     * 
+     * When this property is set to true, the communication
+     * system will not establish any outbound connections or accept
+     * inbound connections. This is useful for testing scenarios
+     * or when running in debug mode.
+     * 
+     * @since IPv6 support was added
      */
     private static final String PROP_DISABLED = "i2np.disable";
     public static final String PROP_BLOCK_MY_COUNTRY = "i2np.blockMyCountry";
@@ -117,6 +165,25 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
         _exemptIncoming = new LHMCache<String, Object>(128);
     }
 
+    /**
+     * Start the communication system and all transport protocols.
+     * 
+     * This method initializes the communication system, starts all
+     * configured transports, and begins network operations. It handles
+     * transport discovery, address configuration, and peer management
+     * setup.
+     * 
+     * <strong>Startup Process:</strong>
+     * <ul>
+     *   <li>Initialize geographic IP filtering</li>
+     *   <li>Start network monitoring</li>
+     *   <li>Register and start all configured transports</li>
+     *   <li>Begin peer discovery and connection attempts</li>
+     *   <li>Setup address change notifications</li>
+     * </ul>
+     * 
+     * @throws IllegalStateException if already running
+     */
     public synchronized void startup() {
         _log.info("Starting the Comm System...");
         _manager.startListening();
@@ -128,11 +195,49 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     /**
      *  Cannot be restarted after calling this. Use restart() for that.
      */
+    /**
+     * Gracefully shutdown the communication system.
+     * 
+     * This method performs a clean shutdown of all transport
+     * protocols and network operations. It stops accepting
+     * new connections, closes existing ones, and performs
+     * cleanup of system resources.
+     * 
+     * <strong>Shutdown Process:</strong>
+     * <ul>
+     *   <li>Stop network monitoring</li>
+     *   <li>Stop all transport protocols</li>
+     *   <li>Close all active connections</li>
+     *   <li>Cleanup system resources and caches</li>
+     *   <li>Save final state and statistics</li>
+     * </ul>
+     * 
+     * @throws IllegalStateException if not running
+     */
     public synchronized void shutdown() {
         _manager.shutdown();
         _geoIP.shutdown();
     }
 
+    /**
+     * Restart the communication system.
+     * 
+     * This method performs a complete restart of all transport
+     * protocols while preserving router state. It stops all
+     * transports, reinitializes system components, and restarts
+     * network operations.
+     * 
+     * <strong>Restart Process:</strong>
+     * <ul>
+     *   <li>Stop all transport protocols gracefully</li>
+     *   <li>Reinitialize system components</li>
+     *   <li>Restart transports with preserved state</li>
+     *   <li>Resume network operations and monitoring</li>
+     *   <li>Reconfigure address management</li>
+     * </ul>
+     * 
+     * @throws IllegalStateException if not running
+     */
     public synchronized void restart() {
         if (!_wasStarted) {
             startup();
@@ -209,6 +314,25 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
     }
 
     /** Send the message out */
+    /**
+     * Process and route an outbound message through the transport system.
+     * 
+     * This method is the central entry point for sending messages
+     * to other I2P peers. It selects appropriate transport,
+     * handles message queuing, and manages delivery tracking.
+     * 
+     * <strong>Message Processing:</strong>
+     * <ul>
+     *   <li>Transport selection based on destination</li>
+     *   <li>Message validation and filtering</li>
+     *   <li>Queueing and throttling</li>
+     *   <li>Delivery status tracking</li>
+     *   <li>Failure handling and retry logic</li>
+     *   <li>Callback execution for send completion</li>
+     * </ul>
+     * 
+     * @param msg the outbound message to be processed and delivered
+     */
     public void processMessage(OutNetMessage msg) {
         if (msg == null) {return;}
         if (isDummy()) { // testing
@@ -322,6 +446,26 @@ public class CommSystemFacadeImpl extends CommSystemFacade {
 
     /** @return non-null, possibly empty */
     @Override
+    /**
+     * Create router addresses for all configured transport protocols.
+     * 
+     * This method generates RouterAddress objects for each
+     * transport protocol based on current configuration and
+     * network conditions. It handles address discovery,
+     * validation, and format conversion.
+     * 
+     * <strong>Address Creation:</strong>
+     * <ul>
+     *   <li>Iterates through all registered transports</li>
+     *   <li>Gets current addresses from each transport</li>
+     *   <li>Validates address format and consistency</li>
+     *   <li>Handles IPv4 and IPv6 address generation</li>
+     *   <li>Applies geographic and network filtering</li>
+     * </ul>
+     * 
+     * @return list of RouterAddress objects for all active transports,
+     *         may be empty if no addresses available
+     */
     public List<RouterAddress> createAddresses() {
         List<RouterAddress> addresses = new ArrayList<RouterAddress>(_manager.getAddresses());
         if (addresses.size() > 1) {Collections.sort(addresses, new AddrComparator());}
