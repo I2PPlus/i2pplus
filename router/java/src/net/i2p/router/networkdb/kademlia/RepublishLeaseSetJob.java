@@ -80,6 +80,11 @@ public class RepublishLeaseSetJob extends JobImpl {
                 if (_log.shouldInfo()) {
                     _log.info("Client [" + _dest.toBase32().substring(0,8) + "] is no longer LOCAL -> Not republishing LeaseSet");
                 }
+                // Clean up the orphaned LeaseSet to prevent future expiration errors
+                LeaseSet ls = _facade.lookupLeaseSetLocally(_dest);
+                if (ls != null && !ls.isCurrent(Router.CLOCK_FUDGE_FACTOR)) {
+                    _facade.fail(_dest);
+                }
             }
             _facade.stopPublishing(_dest);
         } catch (RuntimeException re) {
