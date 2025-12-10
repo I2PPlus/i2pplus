@@ -21,6 +21,7 @@ import javax.net.ssl.SSLSocket;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Base32;
 import net.i2p.data.DataHelper;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.I2PSSLSocketFactory;
 import net.i2p.util.Log;
@@ -801,9 +802,9 @@ public class SAMStreamSink {
             _remoteDestination = remDest;
             _closed = false;
             _lastReceivedOn = _context.clock().now();
-            _context.statManager().createRateStat("sink." + conId + ".totalReceived", "Data size received", "swarm", new long[] { 30*1000, 60*1000, 5*60*1000 });
-            _context.statManager().createRateStat("sink." + conId + ".started", "When we start", "swarm", new long[] { 5*60*1000 });
-            _context.statManager().createRateStat("sink." + conId + ".lifetime", "How long we talk to a peer", "swarm", new long[] { 5*60*1000 });
+            _context.statManager().createRateStat("sink." + conId + ".totalReceived", "Data size received", "swarm", new long[] { RateConstants.ONE_MINUTE });
+            _context.statManager().createRateStat("sink." + conId + ".started", "When we start", "swarm", new long[] { RateConstants.ONE_MINUTE });
+            _context.statManager().createRateStat("sink." + conId + ".lifetime", "How long we talk to a peer", "swarm", new long[] { RateConstants.ONE_MINUTE });
 
             File sinkDir = new File(_sinkDir);
             if (!sinkDir.exists())

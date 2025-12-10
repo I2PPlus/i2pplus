@@ -58,7 +58,7 @@ public class PeerTestJob extends JobImpl {
         if (getContext() == null)
             return 0;
         RateStat rs = getContext().statManager().getRate("peer.testOK");
-        Rate r = rs.getRate(60*1000);
+        Rate r = rs.getRate(RateConstants.ONE_MINUTE);
         int avgTestTime = (int) r.getLifetimeAverageValue();
         return avgTestTime;
     }

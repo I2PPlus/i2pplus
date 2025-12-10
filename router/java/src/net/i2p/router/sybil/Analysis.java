@@ -36,6 +36,7 @@ import net.i2p.router.tunnel.pool.TunnelPool;
 import net.i2p.router.util.HashDistance;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
+import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Addresses;
 import net.i2p.util.I2PAppThread;
@@ -1088,7 +1089,7 @@ public class Analysis extends JobImpl implements RouterApp, Runnable {
                 if (dbh != null) {
                     RateStat rs = dbh.getFailedLookupRate();
                     if (rs != null) {
-                        Rate r = rs.getRate(24*60*60*1000);
+                        Rate r = rs.getRate(RateConstants.ONE_DAY);
                         if (r != null) {
                             r.computeAverages(ra, false);
                             if (ra.getTotalEventCount() > 0) {

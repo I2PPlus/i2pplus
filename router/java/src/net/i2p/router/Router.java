@@ -1160,7 +1160,7 @@ public class Router implements RouterClock.ClockShiftListener {
                 RateStat jobLag = _context.statManager().getRate("jobQueue.jobLag");
                 long avgLag = 0;
                 if (jobLag != null) {
-                    Rate lagRate = jobLag.getRate(60*1000);
+                    Rate lagRate = jobLag.getRate(RateConstants.ONE_MINUTE);
                     avgLag = (long) lagRate.getAverageValue();
                 }
                 if (maxLag > 1000 && avgLag > 200 && getUptime() > 10*60*1000) {
@@ -1175,7 +1175,7 @@ public class Router implements RouterClock.ClockShiftListener {
                         RateStat rs = _context.statManager().getRate("tunnel.participatingMessageCountAvgPerTunnel");
                         double messagesPerTunnel = 0;
                         if (rs != null) {
-                            Rate r = rs.getRate(20*60*1000);
+                            Rate r = rs.getRate(20*RateConstants.ONE_MINUTE);
                             if (r != null) {
                                 RateAverages ra = RateAverages.getTemp();
                                 messagesPerTunnel = r.computeAverages(ra, true).getAverage();
@@ -2038,11 +2038,11 @@ public class Router implements RouterClock.ClockShiftListener {
         int send = 0;
         StatManager mgr = _context.statManager();
         RateStat rs = mgr.getRate("bw.sendRate");
-        if (rs != null) {send = (int)rs.getRate(60*1000).getAverageValue();}
+        if (rs != null) {send = (int)rs.getRate(RateConstants.ONE_MINUTE).getAverageValue();}
         if (outboundOnly) {return send;}
         int recv = 0;
         rs = mgr.getRate("bw.recvRate");
-        if (rs != null) {recv = (int)rs.getRate(60*1000).getAverageValue();}
+        if (rs != null) {recv = (int)rs.getRate(RateConstants.ONE_MINUTE).getAverageValue();}
         return Math.max(send, recv);
     }
 
@@ -2053,7 +2053,7 @@ public class Router implements RouterClock.ClockShiftListener {
         StatManager mgr = _context.statManager();
         RateStat rs = mgr.getRate("bw.recvRate");
         int recv = 0;
-        if (rs != null) {recv = (int)rs.getRate(60*1000).getAverageValue();}
+        if (rs != null) {recv = (int)rs.getRate(RateConstants.ONE_MINUTE).getAverageValue();}
         return recv;
     }
 

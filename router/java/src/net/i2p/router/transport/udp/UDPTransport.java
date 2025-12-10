@@ -3745,7 +3745,7 @@ public class UDPTransport extends TransportImpl {
                 if (_log.shouldWarn())
                     _log.warn("Old status: " + old + " unchanged after update: UNKNOWN, reschedule test soon, ipv6? " + isIPv6);
                 // 60 sec, greater than MIN_TEST_FREQUENCY, so that IPv6 will get a chance if IPv4, and vice versa
-                _testEvent.forceRunSoon(isIPv6, 60*1000);
+                _testEvent.forceRunSoon(isIPv6, RateConstants.ONE_MINUTE);
             } else {
                 // run a little sooner than usual
                 _testEvent.forceRunSoon(isIPv6, 5*60*1000);
@@ -3810,7 +3810,7 @@ public class UDPTransport extends TransportImpl {
             if (_log.shouldWarn())
                 _log.warn("Old status: " + old + " New status: " + status +
                           "\n* Caused by update: " + newStatus);
-            if (old != Status.UNKNOWN && _context.router().getUptime() > 5*60*1000L) {
+            if (old != Status.UNKNOWN && _context.router().getUptime() > 5*60*1000) {
                 _context.router().eventLog().addEvent(EventLog.REACHABILITY,
                 _t(old.toStatusString()) + " ➜ " +  _t(status.toStatusString()));
             }

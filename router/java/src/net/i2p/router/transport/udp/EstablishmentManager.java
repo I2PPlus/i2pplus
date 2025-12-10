@@ -601,7 +601,7 @@ class EstablishmentManager {
         RateStat rs = _context.statManager().getRate("udp.inboundConn");
         if (rs == null)
             return true;
-        Rate r = rs.getRate(60*1000);
+        Rate r = rs.getRate(RateConstants.ONE_MINUTE);
         if (r == null)
             return true;
         int last;

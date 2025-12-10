@@ -32,6 +32,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.transport.FIFOBandwidthLimiter;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
+import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Addresses;
 import net.i2p.util.ConcurrentHashSet;
@@ -571,7 +572,7 @@ class EventPumper implements Runnable {
     private boolean shouldAllowInboundEstablishment() {
         RateStat rs = _context.statManager().getRate("ntcp.inboundConn");
         if (rs == null) return true;
-        Rate r = rs.getRate(60 * 1000);
+        Rate r = rs.getRate(RateConstants.ONE_MINUTE);
         if (r == null) return true;
         int last;
         long periodStart;

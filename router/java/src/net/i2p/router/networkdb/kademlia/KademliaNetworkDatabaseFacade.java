@@ -2094,8 +2094,8 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
         if (peer == null) {throw new IllegalArgumentException("Peer cannot be null");}
         PeerProfile prof = _context.profileOrganizer().getProfile(peer);
         if (prof == null) {return TIMEOUT_MULTIPLIER * MAX_PER_PEER_TIMEOUT;}
-        double responseTime = prof.getDbResponseTime() != null &&  prof.getDbResponseTime().getRate(60*60*1000L) != null
-                              ? prof.getDbResponseTime().getRate(60*60*1000L).getAvgOrLifetimeAvg() : 0;
+        double responseTime = prof.getDbResponseTime() != null &&  prof.getDbResponseTime().getRate(RateConstants.ONE_HOUR) != null
+                              ? prof.getDbResponseTime().getRate(RateConstants.ONE_HOUR).getAvgOrLifetimeAvg() : 0;
         if (responseTime <= 0) {responseTime = MAX_PER_PEER_TIMEOUT;}
         else if (responseTime > MAX_PER_PEER_TIMEOUT) {responseTime = MAX_PER_PEER_TIMEOUT;}
         else if (responseTime < MIN_PER_PEER_TIMEOUT) {responseTime = MIN_PER_PEER_TIMEOUT;}

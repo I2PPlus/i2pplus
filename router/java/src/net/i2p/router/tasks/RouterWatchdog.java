@@ -7,6 +7,7 @@ import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.util.EventLog;
 import net.i2p.stat.Rate;
+import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
@@ -117,11 +118,11 @@ public class RouterWatchdog implements Runnable {
         if (_log.shouldError()) {
             RateStat rs = _context.statManager().getRate("transport.sendProcessingTime");
             Rate r = null;
-            if (rs != null) {r = rs.getRate(60*1000);}
+            if (rs != null) {r = rs.getRate(RateConstants.ONE_MINUTE);}
             double processTime = (r != null ? r.getAverageValue() : 0);
             rs = _context.statManager().getRate("bw.sendBps");
             r = null;
-            if (rs != null) {r = rs.getRate(60*1000);}
+            if (rs != null) {r = rs.getRate(RateConstants.ONE_MINUTE);}
             double bps = (r != null ? r.getAverageValue() : 0);
             long max = Runtime.getRuntime().maxMemory();
             long used = Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory();
@@ -177,7 +178,7 @@ public class RouterWatchdog implements Runnable {
         else {
             RateStat rs = _context.statManager().getRate("udp.sendException");
             if (rs != null) {
-                Rate r = rs.getRate(60*1000);
+                Rate r = rs.getRate(RateConstants.ONE_MINUTE);
                 if (r != null) {netErrors = r.getLastEventCount();}
             }
         }

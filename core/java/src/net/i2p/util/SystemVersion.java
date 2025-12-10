@@ -12,6 +12,7 @@ import java.util.TimeZone;
 import java.util.TreeSet;
 import net.i2p.I2PAppContext;
 import net.i2p.stat.Rate;
+import net.i2p.stat.RateConstants;
 import net.i2p.stat.StatManager;
 
 /**
@@ -572,7 +573,7 @@ public abstract class SystemVersion {
             return 0;
         } else {
             int max = 100;
-            Rate stat = _ctx.statManager().getRate("router.cpuLoad").getRate(60*1000);
+            Rate stat = _ctx.statManager().getRate("router.cpuLoad").getRate(RateConstants.ONE_MINUTE);
             long loadAvg;
             long count = (1 + (3 * stat.getCurrentEventCount() + stat.getLastEventCount()));
             if (count > 1) {

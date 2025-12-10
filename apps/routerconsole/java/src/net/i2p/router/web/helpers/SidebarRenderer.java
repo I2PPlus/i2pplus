@@ -780,7 +780,7 @@ class SidebarRenderer {
     /** @since 0.9.57+ */
     public String renderMemoryBarHTML() {
         if (_helper == null) {return "";}
-        return _helper.getMemoryBar();
+        return _helper.getMemory();
     }
 
     /** @since 0.9.57+ */

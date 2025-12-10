@@ -17,6 +17,7 @@ import net.i2p.router.crypto.ratchet.RatchetSKM;
 import net.i2p.router.crypto.ratchet.RatchetSessionTag;
 import net.i2p.router.networkdb.kademlia.MessageWrapper;
 import net.i2p.stat.Rate;
+import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
@@ -418,7 +419,7 @@ public class TestJob extends JobImpl {
         RateStat tspt = ctx.statManager().getRate("transport.sendProcessingTime");
         int base = 0;
         if (tspt != null) {
-            Rate r = tspt.getRate(60 * 1000);
+            Rate r = tspt.getRate(RateConstants.ONE_MINUTE);
             if (r != null) {
                 base = 3 * (int) r.getAverageValue();
             }

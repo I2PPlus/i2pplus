@@ -16,6 +16,7 @@ import net.i2p.router.transport.TransportUtil;
 import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.router.util.EventLog;
 import net.i2p.stat.Rate;
+import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
@@ -251,12 +252,12 @@ class FloodfillMonitorJob extends JobImpl {
         // Should we consider avg. dropped ff jobs?
         RateStat lagStat = getContext().statManager().getRate("jobQueue.jobLag");
         if (lagStat != null) {
-            Rate rate = lagStat.getRate(60*60*1000L);
+            Rate rate = lagStat.getRate(RateConstants.ONE_HOUR);
             if (rate != null) {happy = happy && rate.getAvgOrLifetimeAvg() < 25;}
         }
         RateStat queueStat = getContext().statManager().getRate("router.tunnelBacklog");
         if (queueStat != null) {
-            Rate rate = queueStat.getRate(60*60*1000L);
+            Rate rate = queueStat.getRate(RateConstants.ONE_HOUR);
             if (rate != null) {happy = happy && rate.getAvgOrLifetimeAvg() < 5;}
         }
 
@@ -277,7 +278,7 @@ class FloodfillMonitorJob extends JobImpl {
         double elG = 0;
         RateStat stat = getContext().statManager().getRate("crypto.elGamal.decrypt");
         if (stat != null) {
-            Rate rate = stat.getRate(60*60*1000L);
+            Rate rate = stat.getRate(RateConstants.ONE_HOUR);
             if (rate != null) {
                 elG = rate.getAvgOrLifetimeAvg();
                 happy = happy && elG <= 40.0d;

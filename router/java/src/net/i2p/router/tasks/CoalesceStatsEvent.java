@@ -151,21 +151,21 @@ public class CoalesceStatsEvent implements SimpleTimer.TimedEvent {
 
         RateStat receiveRate = sm.getRate("transport.receiveMessageSize");
         if (receiveRate != null) {
-            Rate rate = receiveRate.getRate(60*1000);
+            Rate rate = receiveRate.getRate(RateConstants.ONE_MINUTE);
             if (rate != null) {
                 double bytes = rate.getLastTotalValue();
                 double bps = (bytes*1000.0d)/rate.getPeriod();
-                sm.addRateData("bw.receiveBps", (long)bps, 60*1000);
+                sm.addRateData("bw.receiveBps", (long)bps, RateConstants.ONE_MINUTE);
             }
         }
 
         RateStat sendRate = sm.getRate("transport.sendMessageSize");
         if (sendRate != null) {
-            Rate rate = sendRate.getRate(60*1000);
+            Rate rate = sendRate.getRate(RateConstants.ONE_MINUTE);
             if (rate != null) {
                 double bytes = rate.getLastTotalValue();
                 double bps = (bytes*1000.0d)/rate.getPeriod();
-                sm.addRateData("bw.sendBps", (long)bps, 60*1000);
+                sm.addRateData("bw.sendBps", (long)bps, RateConstants.ONE_MINUTE);
             }
         }
     }

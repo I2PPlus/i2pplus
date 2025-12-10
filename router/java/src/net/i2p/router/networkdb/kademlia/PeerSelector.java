@@ -20,6 +20,7 @@ import net.i2p.kademlia.KBucketSet;
 import net.i2p.kademlia.SelectionCollector;
 import net.i2p.router.RouterContext;
 import net.i2p.router.util.HashDistance;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 
 /**
@@ -186,7 +187,7 @@ abstract class PeerSelector {
                         PeerProfile profile = _context.profileOrganizer().getProfile(cur);
                         if (profile != null) {
                             RateStat invalidReplyRateStat = profile.getDBHistory().getInvalidReplyRate();
-                            Rate invalidReplyRate = invalidReplyRateStat.getRate(60*60*1000l);
+                            Rate invalidReplyRate = invalidReplyRateStat.getRate(RateConstants.ONE_HOUR);
                             _log.warn("Router [" + cur.toBase64().substring(0,6) + "] is sending us bad replies: current hour: "
                                       + invalidReplyRate.getCurrentEventCount() + " and last hour: "
                                       + invalidReplyRate.getLastEventCount() + ":\n" + invalidReplyRate.toString());

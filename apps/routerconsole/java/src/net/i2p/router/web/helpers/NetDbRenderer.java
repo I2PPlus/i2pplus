@@ -64,6 +64,7 @@ import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.router.transport.TransportImpl;
 import net.i2p.router.util.HashDistance;
 import net.i2p.router.web.Messages;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.Addresses;
 import net.i2p.util.ConvertToHash;
 import net.i2p.util.ObjectCounterUnsafe;
@@ -1877,7 +1878,7 @@ class NetDbRenderer {
                .append("\">").append(_t("Edit")).append("</a>")
                .append(_context.commSystem().renderPeerFlag(routerHash)).append("</span>");
         } else {
-            long memoryUsedBytes = (long) _context.statManager().getRate("router.memoryUsed").getRate(60 * 1000).getAvgOrLifetimeAvg();
+            long memoryUsedBytes = (long) _context.statManager().getRate("router.memoryUsed").getRate(RateConstants.ONE_MINUTE).getAvgOrLifetimeAvg();
             long memoryUsedMegabytes = memoryUsedBytes / (1024 * 1024);
             buf.append("&nbsp;<span id=netdb_ram><b>").append(_t("Memory usage")).append(":</b> ").append(memoryUsedMegabytes).append("M</span>");
         }

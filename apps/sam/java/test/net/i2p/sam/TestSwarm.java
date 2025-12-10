@@ -12,6 +12,7 @@ import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.sam.client.SAMEventHandler;
 import net.i2p.sam.client.SAMReader;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 
@@ -235,10 +236,10 @@ public class TestSwarm {
             _outOfSync = false;
             _lastReceived = -1;
             _lastReceivedOn = _context.clock().now();
-            _context.statManager().createRateStat("swarm." + conId + ".totalReceived", "Data size received", "swarm", new long[] { 30*1000, 60*1000, 5*60*1000 });
-            _context.statManager().createRateStat("swarm." + conId + ".totalSent", "Data size sent", "swarm", new long[] { 30*1000, 60*1000, 5*60*1000 });
-            _context.statManager().createRateStat("swarm." + conId + ".started", "When we start", "swarm", new long[] { 5*60*1000 });
-            _context.statManager().createRateStat("swarm." + conId + ".lifetime", "How long we talk to a peer", "swarm", new long[] { 5*60*1000 });
+            _context.statManager().createRateStat("swarm." + conId + ".totalReceived", "Data size received", "swarm", RateConstants.SHORT_TERM_RATES);
+            _context.statManager().createRateStat("swarm." + conId + ".totalSent", "Data size sent", "swarm", RateConstants.SHORT_TERM_RATES);
+            _context.statManager().createRateStat("swarm." + conId + ".started", "When we start", "swarm", new long[] { RateConstants.ONE_MINUTE });
+            _context.statManager().createRateStat("swarm." + conId + ".lifetime", "How long we talk to a peer", "swarm", new long[] { RateConstants.ONE_MINUTE });
         }
 
         public int getConnectionId() { return _connectionId; }

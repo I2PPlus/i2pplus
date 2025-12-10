@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PClientFactory;
 import net.i2p.data.Destination;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 
@@ -124,10 +125,10 @@ public class TestSwarm {
             _closed = false;
             _lastReceived = -1;
             _lastReceivedOn = _context.clock().now();
-            _context.statManager().createRateStat("swarm." + _connectionId + ".totalReceived", "Data size received", "swarm", new long[] { 30*1000, 60*1000, 5*60*1000 });
-            _context.statManager().createRateStat("swarm." + _connectionId + ".totalSent", "Data size sent", "swarm", new long[] { 30*1000, 60*1000, 5*60*1000 });
-            _context.statManager().createRateStat("swarm." + _connectionId + ".started", "When we start", "swarm", new long[] { 5*60*1000 });
-            _context.statManager().createRateStat("swarm." + _connectionId + ".lifetime", "How long we talk to a peer", "swarm", new long[] { 5*60*1000 });
+            _context.statManager().createRateStat("swarm." + _connectionId + ".totalReceived", "Data size received", "swarm", RateConstants.SHORT_TERM_RATES);
+            _context.statManager().createRateStat("swarm." + _connectionId + ".totalSent", "Data size sent", "swarm", RateConstants.SHORT_TERM_RATES);
+            _context.statManager().createRateStat("swarm." + _connectionId + ".started", "When we start", "swarm", new long[] { RateConstants.ONE_MINUTE });
+            _context.statManager().createRateStat("swarm." + _connectionId + ".lifetime", "How long we talk to a peer", "swarm", new long[] { RateConstants.ONE_MINUTE });
         }
 
         public Flooder(I2PSocket socket) {
@@ -137,10 +138,10 @@ public class TestSwarm {
             _closed = false;
             _lastReceived = -1;
             _lastReceivedOn = _context.clock().now();
-            _context.statManager().createRateStat("swarm." + _connectionId + ".totalReceived", "Data size received", "swarm", new long[] { 30*1000, 60*1000, 5*60*1000 });
-            _context.statManager().createRateStat("swarm." + _connectionId + ".totalSent", "Data size sent", "swarm", new long[] { 30*1000, 60*1000, 5*60*1000 });
-            _context.statManager().createRateStat("swarm." + _connectionId + ".started", "When we start", "swarm", new long[] { 5*60*1000 });
-            _context.statManager().createRateStat("swarm." + _connectionId + ".lifetime", "How long we talk to a peer", "swarm", new long[] { 5*60*1000 });
+            _context.statManager().createRateStat("swarm." + _connectionId + ".totalReceived", "Data size received", "swarm", RateConstants.SHORT_TERM_RATES);
+            _context.statManager().createRateStat("swarm." + _connectionId + ".totalSent", "Data size sent", "swarm", RateConstants.SHORT_TERM_RATES);
+            _context.statManager().createRateStat("swarm." + _connectionId + ".started", "When we start", "swarm", new long[] { RateConstants.ONE_MINUTE });
+            _context.statManager().createRateStat("swarm." + _connectionId + ".lifetime", "How long we talk to a peer", "swarm", new long[] { RateConstants.ONE_MINUTE });
         }
 
         public long getConnectionId() { return _connectionId; }

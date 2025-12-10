@@ -147,7 +147,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         int maxTunnels = _context.getProperty(PROP_MAX_TUNNELS, DEFAULT_MAX_TUNNELS);
         RateStat rs = _context.statManager().getRate("transport.sendProcessingTime");
         Rate r = null;
-        if (rs != null) {r = rs.getRate(60*1000);}
+        if (rs != null) {r = rs.getRate(RateConstants.ONE_MINUTE);}
 
         //Reject tunnels if the time to process messages and send them is too large. Too much time implies congestion.
         if (r != null) {
@@ -272,7 +272,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         r = null;
         double messagesPerTunnel = 0;
         if (rs != null) {
-            r = rs.getRate(60*1000);
+            r = rs.getRate(RateConstants.ONE_MINUTE);
             if (r != null) {messagesPerTunnel = r.computeAverages(ra, true).getAverage();}
         }
         if (messagesPerTunnel < DEFAULT_MESSAGES_PER_TUNNEL_ESTIMATE) {
@@ -425,7 +425,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     public long getMessageDelay() {
         RateStat rs = _context.statManager().getRate("transport.sendProcessingTime");
         if (rs == null) {return 0;}
-        Rate delayRate = rs.getRate(60*1000);
+        Rate delayRate = rs.getRate(RateConstants.ONE_MINUTE);
         return (long)delayRate.getAverageValue();
     }
 

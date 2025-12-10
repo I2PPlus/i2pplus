@@ -1533,7 +1533,7 @@ public class NTCPTransport extends TransportImpl {
                 _log.warn("[NTCP] Old status: " + old + " New status: " + status +
                           " from: ", new Exception("traceback"));
             }
-            if (old != Status.UNKNOWN && _context.router().getUptime() > 5*60*1000L) {
+            if (old != Status.UNKNOWN && _context.router().getUptime() > 5*60*1000) {
                 _context.router().eventLog().addEvent(EventLog.REACHABILITY,
                 _t(old.toStatusString()) + " ➜ " +  _t(status.toStatusString()));
             }

@@ -170,7 +170,7 @@ class BuildExecutor implements Runnable {
 
         final RateStat rs = _context.statManager().getRate("tunnel.buildRequestTime");
         if (rs != null) {
-            Rate r = rs.getRate(60 * 1000);
+            Rate r = rs.getRate(RateConstants.ONE_MINUTE);
             double avg = (r != null) ? r.getAverageValue() : rs.getLifetimeAverageValue();
             int throttleFactor = isSlow ? 100 : 200;
             if (avg > 100) { // If builds take more than 100ms, start throttling

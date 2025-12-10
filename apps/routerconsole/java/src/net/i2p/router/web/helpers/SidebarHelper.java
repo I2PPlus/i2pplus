@@ -346,7 +346,7 @@ public class SidebarHelper extends HelperBase {
         // This reads much higher than the graph, possibly because it's right in
         // the middle of a console refresh... so get it from the Rate instead.
         //long free = Runtime.getRuntime().freeMemory();
-        long used = (long) _context.statManager().getRate("router.memoryUsed").getRate(60*1000).getAvgOrLifetimeAvg();
+        long used = (long) _context.statManager().getRate("router.memoryUsed").getRate(RateConstants.ONE_MINUTE).getAvgOrLifetimeAvg();
         if (used <= 0) {
             long free = Runtime.getRuntime().freeMemory();
             used = tot - free;
@@ -363,7 +363,7 @@ public class SidebarHelper extends HelperBase {
         long tot = SystemVersion.getMaxMemory();
         // This reads much higher than the graph, possibly because it's right in
         // the middle of a console refresh... so get it from the Rate instead.
-        long used = (long) _context.statManager().getRate("router.memoryUsed").getRate(60*1000).getAvgOrLifetimeAvg();
+        long used = (long) _context.statManager().getRate("router.memoryUsed").getRate(RateConstants.ONE_MINUTE).getAvgOrLifetimeAvg();
         long usedPc;
         if (used <= 0) {
             long free = Runtime.getRuntime().freeMemory();
@@ -857,7 +857,7 @@ public class SidebarHelper extends HelperBase {
         if (_context == null) {return "0";}
         RateStat rs = _context.statManager().getRate("jobQueue.jobLag");
         if (rs == null) {return "0";}
-        Rate lagRate = rs.getRate(60*1000);
+        Rate lagRate = rs.getRate(RateConstants.ONE_MINUTE);
         long maxLag = _context.jobQueue().getMaxLag();
         if (!isAdvanced() || maxLag < (double)30) {
             if (lagRate.getAverageValue() < 1) {
@@ -905,8 +905,8 @@ public class SidebarHelper extends HelperBase {
         if (_context == null) {return "0 / 0";}
         RateStat cb = _context.statManager().getRate("tunnel.concurrentBuilds");
         RateStat brt = _context.statManager().getRate("tunnel.buildRequestTime");
-        Rate concurrentBuilds = cb.getRate(60*1000);
-        Rate buildRequestTime = brt.getRate(60*1000);
+        Rate concurrentBuilds = cb.getRate(RateConstants.ONE_MINUTE);
+        Rate buildRequestTime = brt.getRate(RateConstants.ONE_MINUTE);
         double cbavg = concurrentBuilds.getAvgOrLifetimeAvg();
         String brtavg = DataHelper.formatDuration2((long)buildRequestTime.getAvgOrLifetimeAvg());
         Router router = _context.router();

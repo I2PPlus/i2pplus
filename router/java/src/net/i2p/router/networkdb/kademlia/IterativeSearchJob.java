@@ -33,6 +33,7 @@ import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.util.MaskedIPSet;
 import net.i2p.router.util.RandomIterator;
 import net.i2p.stat.Rate;
+import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 import net.i2p.util.NativeBigInteger;
@@ -601,7 +602,7 @@ public class IterativeSearchJob extends FloodSearchJob {
         if (prof != null && prof.getIsExpandedDB()) {
             RateStat dbrt = prof.getDbResponseTime();
             if (dbrt != null) {
-                Rate r = dbrt.getRate(60*60*1000L);
+                Rate r = dbrt.getRate(RateConstants.ONE_HOUR);
                 if (r != null) {
                     long avg = (long) r.getAvgOrLifetimeAvg();
                     if (avg > 0) {
