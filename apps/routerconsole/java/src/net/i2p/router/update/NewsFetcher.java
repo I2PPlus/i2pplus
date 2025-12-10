@@ -163,7 +163,7 @@ class NewsFetcher extends UpdateRunner {
                             if (_gotNewEntry) {opts.put(NewsHelper.PROP_LAST_NEW_ENTRY, lastMod);}
                         }
                         _context.router().saveConfig(opts, null);
-                        if (_failMsg != null) {_mgr.notifyComplete(this, "<b>" + _failMsg + "</b>");} // from checkForUpdates()
+                        if (_failMsg != null) {_mgr.notifyComplete(this, "<b class=fail>" + _failMsg + "</b>");} // from checkForUpdates()
                         else if (_showStatus) {
                             if (status == 200) {_mgr.notifyComplete(this, "News updated from " + newsHost);}
                             else {_mgr.notifyComplete(this, "No news updates from " + newsHost);}
@@ -179,7 +179,7 @@ class NewsFetcher extends UpdateRunner {
                     else if (status == 404) {msg = "News: 404 from " + newsURL.replace("http://", "");}
                     else if (status == 429) {msg = "News: Too Many Requests";}
                     else {msg = status + " " + DataHelper.stripHTML(get.getStatusText());}
-                    if (_showStatus) {updateStatus("<b>" + msg + "</b>");} // only display if manually initiated
+                    if (_showStatus) {updateStatus("<b class=fail>" + msg + "</b>");} // only display if manually initiated
                     if (_log.shouldWarn()) {_log.warn(msg);}
                 }
             } catch (Throwable t) {_log.error("Error fetching the news", t);}
