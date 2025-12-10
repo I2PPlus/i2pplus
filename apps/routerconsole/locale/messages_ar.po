@@ -458,7 +458,7 @@ msgstr "خادم التحديث {0} غير موجود في دفتر العناو
 
 #, java-format
 msgid "Update not found:<br>{0}"
-msgstr "ملف التحديث غير موجود في {0}"
+msgstr "ملف التحديث غير موجود:<br>{0}"
 
 msgid "Updating I2P"
 msgstr "تحديث I2P"
@@ -591,7 +591,7 @@ msgid "Configuration saved successfully"
 msgstr "تم حفظ الإعدادات بنجاح"
 
 msgid "Error saving the configuration (applied but not saved) - please see the error logs"
-msgstr "خطأ في تسجيل الاعدادات"
+msgstr "خطأ في تسجيل الاعدادات (تم التطبيق ولكن لم يتم الحفظ) - يرجى مراجعة سجلات الأخطاء"
 
 msgid "Enabled system tray"
 msgstr "تمكين علبة النظام"
@@ -3019,25 +3019,25 @@ msgid "NTCP &amp; SSU with Introducers"
 msgstr "NTCP وSSU مع المُقدمين"
 
 msgid "SSU [IPv6 Only] with Introducers"
-msgstr "IPv6 فقط SSU، المُقدمين"
+msgstr "SSU [IPv6 فقط] مع المُقدمين"
 
 msgid "SSU [IPv6]"
 msgstr "SSU [IPv6]"
 
 msgid "SSU [IPv6] with Introducers"
-msgstr "IPv6 SSU، المقدمون"
+msgstr "SSU [IPv6] مع المقدمون"
 
 msgid "NTCP [IPv6]"
 msgstr "NTCP [IPv6]"
 
 msgid "NTCP [IPv6] &amp; SSU"
-msgstr "IPv6 NTCP، SSU"
+msgstr "NTCP [IPv6] و SSU"
 
 msgid "NTCP &amp; SSU with Introducers [IPv6 Only]"
-msgstr "IPv6 فقط NTCP، SSU، المُقدمين"
+msgstr "NTCP و SSU مع المُقدمين [IPv6 فقط]"
 
 msgid "NTCP [IPv6] &amp; SSU with Introducers"
-msgstr "IPv6 NTCP، SSU، المُقدمين"
+msgstr "NTCP [IPv6] و SSU مع المُقدمين"
 
 msgid "No peer connections available"
 msgstr "لا تتوفر اتصالات نظير"
@@ -4895,7 +4895,7 @@ msgid "To change client options, edit the file: {0}"
 msgstr "لتغيير خيارات العميل، قم بتحرير الملف: {0}"
 
 msgid "Be careful changing any settings here. The 'router console' and 'application tunnels' are required for most uses of I2P. Only advanced users should change these."
-msgstr "كن حذرًا عند تغيير أي إعدادات هنا. وحدة تحكم جهاز التوجيه وأنفاق التطبيقات مطلوبة لمعظم استخدامات I2P. يجب على المستخدمين المتقدمين فقط تغيير هذه."
+msgstr "كن حذرًا عند تغيير أي إعدادات هنا. 'وحدة تحكم جهاز التوجيه' و 'أنفاق التطبيقات' مطلوبة لمعظم استخدامات I2P. يجب على المستخدمين المتقدمين فقط تغيير هذه."
 
 msgid "config router family"
 msgstr "عائلة جهاز التوجيه التكوين"
@@ -5577,7 +5577,7 @@ msgid "Update URL"
 msgstr "تحديث عنوان URL"
 
 msgid "To update with unsigned I2P+ release builds: <code>http://skank.i2p/i2pupdate.zip</code> or for the latest unsigned development builds: <code>http://skank.i2p/dev/i2pupdate.zip</code>"
-msgstr "للتحديث باستخدام إصدارات إصدار I2P+ غير الموقعة: <code>http://skank.i2p/i2pupdate.zip</code> أو للحصول على أحدث إصدارات التطوير غير الموقعة: <code>http://skank.i2p/dev/i2pupdate.zip </كود>"
+msgstr "للتحديث باستخدام إصدارات إصدار I2P+ غير الموقعة: <code>http://skank.i2p/i2pupdate.zip</code> أو للحصول على أحدث إصدارات التطوير غير الموقعة: <code>http://skank.i2p/dev/i2pupdate.zip</code>"
 
 msgid "Update with unsigned development builds"
 msgstr "التحديث مع بنيات التطوير غير الموقعة"
@@ -5719,7 +5719,7 @@ msgid "Advanced Router Configuration"
 msgstr "تكوين جهاز التوجيه المتقدم"
 
 msgid "The router configuration options listed below are not available in the user interface, usually because they are rarely used or provide access to advanced settings that most users will not need. This is not a comprehensive list. Some settings will require a restart of the router to take effect. Note that all settings are case sensitive. You will need to edit your <code>router.config</code> file to add options, or, once you have added <code>routerconsole.advanced=true</code> to the router.config file, you may edit settings within the console on the <a href=/configadvanced>Advanced Configuration page</a>."
-msgstr "خيارات تكوين جهاز التوجيه المدرجة أدناه غير متوفرة في واجهة المستخدم، عادةً لأنها نادرًا ما يتم استخدامها أو توفر الوصول إلى الإعدادات المتقدمة التي لن يحتاجها معظم المستخدمين. "
+msgstr "خيارات تكوين جهاز التوجيه المدرجة أدناه غير متوفرة في واجهة المستخدم، عادةً لأنها نادرًا ما يتم استخدامها أو توفر الوصول إلى الإعدادات المتقدمة التي لن يحتاجها معظم المستخدمين. هذه ليست قائمة شاملة. سيتطلب بعض الإعدادات إعادة تشغيل جهاز التوجيه حتى تصبح سارية المفعول. لاحظ أن جميع الإعدادات حساسة لحالة الأحرف. ستحتاج إلى تحرير ملف <code>router.config</code> لإضافة خيارات، أو، بمجرد إضافة <code>routerconsole.advanced=true</code> إلى ملف router.config، يمكنك تحرير الإعدادات داخل وحدة التحكم على <a href=/configadvanced>صفحة التكوين المتقدم</a>."
 
 msgid "When set to true, additional functionality will be enabled in the console and the user will be able to edit settings directly on the <a href=/configadvanced>Advanced Configuration page</a>. Extra display options are provided in the <a href=/netdb>Network Database section</a>, including the <a href='/netdb?f=3'>Sybil Analysis tool</a>, and there are additional configuration options on the <a href=/configclients>Clients Configuration page</a>. This will also enable the installation of unsigned updates, manual configuration of the news URL, and additional sections on the sidebar."
 msgstr "عند التعيين على \"صحيح\"، سيتم تمكين وظائف إضافية في وحدة التحكم وسيتمكن المستخدم من تحرير الإعدادات مباشرة على <a href=/configadvanced>صفحة التكوين المتقدم</a>. "
@@ -6751,7 +6751,7 @@ msgid "Be Patient!"
 msgstr "كن صبورا!"
 
 msgid "I2P+ may be slow to integrate into network the first time you run it as it bootstraps into the network and learns of additional peers. The longer your I2P+ router is running, the better it will perform, so try and keep your router on as long as you can, 24/7 if possible! If, after 30 minutes, your <i>Active: [connected/recent]</i> count still has less than 10 peers, or your total number of <i>Integrated</i> peers is less than 5, there are several things you can do to check for problems:"
-msgstr "قد تتباطأ I2P+ في الاندماج مع الشبكة في المرة الأولى التي تقوم فيها بتشغيلها أثناء تهيئتها للشبكة وتعلمها بأقران إضافية. كلما استمر تشغيل موجهك I2P+، ستؤدي بشكل أفضل، لذا حاول الاحتفاظ بموجهك مشغلاً مدة أطول قدر الإمكان، 24 \\ 7 إذا أمكن! إذا لم يزل عدد أقرانك النشطين <i>نشط: [متصل \\ حديث]</i> بعد 30 دقيقة أقل من 10 أقران، أو إذا كان إجمالي عدد أقرانك المتكاملين أقل من 5، هناك عدة أمور يمكنك فعلها للتحقق من وجود مشاكل:"
+msgstr "قد تتباطأ I2P+ في الاندماج مع الشبكة في المرة الأولى التي تقوم فيها بتشغيلها أثناء تهيئتها للشبكة وتعلمها بأقران إضافية. كلما استمر تشغيل موجهك I2P+، ستؤدي بشكل أفضل، لذا حاول الاحتفاظ بموجهك مشغلاً مدة أطول قدر الإمكان، 24/7 إذا أمكن! إذا لم يزل عدد أقرانك النشطين <i>نشط: [متصل/حديث]</i> بعد 30 دقيقة أقل من 10 أقران، أو إذا كان إجمالي عدد أقرانك المتكاملين أقل من 5، هناك عدة أمور يمكنك فعلها للتحقق من وجود مشاكل:"
 
 msgid "Check your Configuration &amp; Bandwidth Allocation"
 msgstr "تحقق من التكوين وتخصيص النطاق الترددي"
@@ -7231,13 +7231,13 @@ msgid "Introduction to Hosting Websites on I2P"
 msgstr "مقدمة في استضافة المواقع على I2P"
 
 msgid "By default, I2P is supplied with a webserver to host your own anonymized website (traditionally referred to as an <i>eepsite</i>). Both the site and the I2P Router Console are running on a streamlined version of <a href='https://en.wikipedia.org/wiki/Jetty_(web_server)' target=_blank rel=noreferrer class='sitelink external'>Jetty</a>, customized for I2P."
-msgstr "افتراضيًا، يتم تزويد I2P بخادوم ويب لاستضافة موقعك الخاص المجهل (عادة ما يشار إليه بـ «eepsite»). كلا الموقع وواجهة تحكم موجه I2P يعملان على نسخة مخففة من Jetty. وهي مخصصة لـ I2P."
+msgstr "افتراضيًا، يتم تزويد I2P بخادوم ويب لاستضافة موقعك الخاص المجهل (عادة ما يشار إليه بـ «eepsite»). كلا الموقع وواجهة تحكم موجه I2P يعملان على نسخة مخففة من <a href='https://en.wikipedia.org/wiki/Jetty_(web_server)' target=_blank rel=noreferrer class='sitelink external'>Jetty</a>. وهي مخصصة لـ I2P."
 
 msgid "To serve your own static content, you only need to edit or replace the files in the webserver's root directory, and the site will be available on the I2P network after you've followed the instructions below. Additionally, cgi and python scripts can be run from the <code>cgi-bin</code> directory immediately above <code>docroot</code> if you have <a href=https://www.perl.org/about.html target=_blank rel=noreferrer class='sitelink external'>perl</a> and <a href=https://www.python.org/ target=_blank rel=noreferrer class='sitelink external'>python</a> installed."
 msgstr "لتقديم محتوى ثابت خاص بك، تحتاج فقط إلى تحرير أو استبدال الملفات في دليل جذر الخادوم الويب، وسيتوفر الموقع على شبكة I2P بعد اتباع التعليمات أدناه. علاوة على ذلك، يمكن تشغيل سكربتات CGI وبايثون من دليل <code>cgi-bin</code> مباشرة فوق <code>docroot</cod إذا كنت تمتلك <a href=https://www.perl.org/about.html target=_blank rel=noreferrer class='sitelink external'>perl</a> وـ <a href=https://www.python.org/ target=_blank rel=noreferrer class='sitelink external'>python</a>."
 
 msgid "Directory listings (sometimes referred to as virtual directories) are enabled by default, so you can host files from a sub-directory of <code>docroot</code> without providing a page with links to the files. You can also serve content that exists outside of <code>docroot</code> by using a <a href=https://en.wikipedia.org/wiki/Symbolic_link target=_blank rel=noreferrer class='sitelink external'>symbolic link</a> to the desired directory."
-msgstr "قوائم الدلائل مفعلة افتراضيًا (والتي تُشار إليها أحيانًا باسم الدلائل الافتراضية)، بحيث يمكنك استضافة الملفات من دليل فرعي لـ <code>docroot</code> دون تقديم صفحة تحتوي على روابط للملفات. كما يمكنك أيضًا تقديم المحتوى الموجود خارج <code>docroot</code> عبر استخدام رابط رمزي <a href=https://en.wikpedia.org/wiki/Symbolic_link target=_blank rel=noreferrer class='sitelink external'>رمزي</a> للدليل المطلوب."
+msgstr "قوائم الدلائل مفعلة افتراضيًا (والتي تُشار إليها أحيانًا باسم الدلائل الافتراضية)، بحيث يمكنك استضافة الملفات من دليل فرعي لـ <code>docroot</code> دون تقديم صفحة تحتوي على روابط للملفات. كما يمكنك أيضًا تقديم المحتوى الموجود خارج <code>docroot</code> عبر استخدام <a href=https://en.wikipedia.org/wiki/Symbolic_link target=_blank rel=noreferrer class='sitelink external'>رابط رمزي</a> للدليل المطلوب."
 
 msgid "You can override the <a href=http://127.0.0.1:7658/help/images/>default appearance</a> of the directory listing by supplying an edited <a href=http://127.0.0.1:7658/.resources/jetty-dir.css>jetty-dir.css</a> file to set a global appearance. Note that this file will not be displayed in the webserver's directory listing. Files and directories prefixed with . and files named favicon.ico or files ending with ~ or .bak or .old will also be hidden from view (though still accessible). Note: To create hidden files with a . prefix on Windows, add a trailing . to the file or directory e.g. <code>.hidden.</code>; Windows explorer will then save the file with the correct name, removing the trailing dot in the process."
 msgstr "يمكنك تجاوز <a href=http://127.0.0.1:7658/help/images/>المظهر الافتراضي</a> لقائمة الدليل عن طريق توفير ملف <a href=http://127.0.0.1:7658/.resources/jetty-dir.css>jetty-dir.css</a> محرر لتعيين مظهر عالمي. لاحظ أن هذا الملف لن يتم عرضه في قائمة دليل الخادوم الويب. سيتم أيضًا إخفاء الملفات والدلائل المُسبقة بـ . والملفات المسماة favicon.ico أو الملفات المنتهية بـ ~ أو .bak أو .old من العرض (على الرغم من إمكانية الوصول إليها). ملاحظة: لإنشاء ملفات مخفية باستخدام سابقة . على ويندوز، أضف نقطة تالية إلى الملف أو الدليل على سبيل المثال <code>.hidden.</code>؛ سيقوم متصفح ويندوز بحفظ الملف بالاسم الصحيح، مع إزالة النقطة التالية فيالعملية."
