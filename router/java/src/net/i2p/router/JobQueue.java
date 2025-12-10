@@ -27,6 +27,7 @@ import net.i2p.util.Clock;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+import net.i2p.stat.RateConstants;
 
 /**
  * Prioritizes and executes router jobs with preference for earlier scheduled tasks.
@@ -102,7 +103,7 @@ public class JobQueue {
      */
     private final Object _runnerLock = new Object();
 
-    private static final long[] RATES = {60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l};
+    private static final long[] RATES = RateConstants.STANDARD_RATES;
 
     /**
      *  Does not start the pumper. Caller MUST call startup.

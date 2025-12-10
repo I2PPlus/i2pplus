@@ -36,6 +36,7 @@ import net.i2p.router.web.NewsHelper;
 import net.i2p.servlet.util.ServletUtil;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.PortMapper;
 import net.i2p.util.SystemVersion;
 
@@ -427,12 +428,12 @@ public class SidebarHelper extends HelperBase {
      */
     public int getTunnelBuildSuccess() {
         if (_context == null) {return 0;}
-        Rate explSuccess = _context.statManager().getRate("tunnel.buildExploratorySuccess").getRate(10*60*1000);
-        Rate explReject = _context.statManager().getRate("tunnel.buildExploratoryReject").getRate(10*60*1000);
-        Rate explExpire = _context.statManager().getRate("tunnel.buildExploratoryExpire").getRate(10*60*1000);
-        Rate clientSuccess = _context.statManager().getRate("tunnel.buildClientSuccess").getRate(10*60*1000);
-        Rate clientReject = _context.statManager().getRate("tunnel.buildClientReject").getRate(10*60*1000);
-        Rate clientExpire = _context.statManager().getRate("tunnel.buildClientExpire").getRate(10*60*1000);
+        Rate explSuccess = _context.statManager().getRate("tunnel.buildExploratorySuccess").getRate(RateConstants.TEN_MINUTES);
+        Rate explReject = _context.statManager().getRate("tunnel.buildExploratoryReject").getRate(RateConstants.TEN_MINUTES);
+        Rate explExpire = _context.statManager().getRate("tunnel.buildExploratoryExpire").getRate(RateConstants.TEN_MINUTES);
+        Rate clientSuccess = _context.statManager().getRate("tunnel.buildClientSuccess").getRate(RateConstants.TEN_MINUTES);
+        Rate clientReject = _context.statManager().getRate("tunnel.buildClientReject").getRate(RateConstants.TEN_MINUTES);
+        Rate clientExpire = _context.statManager().getRate("tunnel.buildClientExpire").getRate(RateConstants.TEN_MINUTES);
         int success = (int)explSuccess.getLastEventCount() + (int)clientSuccess.getLastEventCount();
         int reject = (int)explReject.getLastEventCount() + (int)clientReject.getLastEventCount();
         int expire = (int)explExpire.getLastEventCount() + (int)clientExpire.getLastEventCount();
@@ -540,13 +541,13 @@ public class SidebarHelper extends HelperBase {
         RateStat receiveRate = _context.statManager().getRate("bw.recvRate");
         double in = 0;
         if (receiveRate != null) {
-            Rate r = receiveRate.getRate(5*60*1000);
+            Rate r = receiveRate.getRate(RateConstants.FIVE_MINUTES);
             if (r != null) {in = r.getAverageValue();}
         }
         RateStat sendRate = _context.statManager().getRate("bw.sendRate");
         double out = 0;
         if (sendRate != null) {
-            Rate r = sendRate.getRate(5*60*1000);
+            Rate r = sendRate.getRate(RateConstants.FIVE_MINUTES);
             if (r != null) {out = r.getAverageValue();}
         }
         if (in < 1024 * 1024 || out < 1024 * 1024) {

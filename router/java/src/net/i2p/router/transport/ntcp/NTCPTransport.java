@@ -53,6 +53,7 @@ import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
+import net.i2p.stat.RateConstants;
 import static net.i2p.router.transport.Transport.AddressSource.*;
 import static net.i2p.router.transport.TransportUtil.IPv6Config.*;
 
@@ -144,7 +145,7 @@ public class NTCPTransport extends TransportImpl {
     private final NTCPSendFinisher _finisher;
     private final X25519KeyFactory _xdhFactory;
     private long _lastBadSkew;
-    private static final long[] RATES = {60*1000, 10*60*1000, 60*60*1000, 24*60*60*1000 };
+    private static final long[] RATES = RateConstants.STANDARD_RATES;
 
     private static final int MIN_CONCURRENT_READERS = SystemVersion.isSlow() ? 3 : 6;  // unless < 32MB
     private static final int MIN_CONCURRENT_WRITERS = MIN_CONCURRENT_READERS;

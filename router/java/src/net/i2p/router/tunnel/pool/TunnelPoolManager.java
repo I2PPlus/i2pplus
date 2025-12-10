@@ -25,6 +25,7 @@ import net.i2p.util.Log;
 import net.i2p.util.ObjectCounterUnsafe;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
+import net.i2p.stat.RateConstants;
 
 /**
  * Manage all the exploratory and client tunnel pools.
@@ -82,7 +83,7 @@ public class TunnelPoolManager implements TunnelManagerFacade {
         }
 
         // The following are for TestJob
-        long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
+        long[] RATES = RateConstants.STANDARD_RATES;
         ctx.statManager().createRequiredRateStat("tunnel.testFailedTime", "Time for tunnel test failure (ms)", "Tunnels", RATES);
         ctx.statManager().createRateStat("tunnel.testExploratoryFailedTime", "Time to fail exploratory tunnel test (max 60s)", "Tunnels [Exploratory]", RATES);
         ctx.statManager().createRateStat("tunnel.testFailedCompletelyTime", "Time to complete fail for tunnel test (max 60s)", "Tunnels", RATES);

@@ -18,6 +18,7 @@ import net.i2p.router.TunnelInfo;
 import net.i2p.util.Log;
 
 import net.i2p.stat.Rate;
+import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
@@ -71,9 +72,9 @@ public class PeerTestJob extends JobImpl {
         if (getContext() == null)
             return 0;
         RateStat ok = getContext().statManager().getRate("peer.testOK");
-        Rate rok = ok.getRate(60*60*1000);
+        Rate rok = ok.getRate(RateConstants.ONE_HOUR);
         RateStat tooslow = getContext().statManager().getRate("peer.testTooSlow");
-        Rate rtooslow = ok.getRate(60*60*1000);
+        Rate rtooslow = tooslow.getRate(RateConstants.ONE_HOUR);
         int totalAvgTestTime = (int) rok.getLifetimeAverageValue() + (int) rtooslow.getLifetimeAverageValue();
         return totalAvgTestTime;
     }

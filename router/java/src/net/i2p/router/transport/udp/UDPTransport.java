@@ -58,6 +58,7 @@ import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
@@ -260,7 +261,7 @@ public class UDPTransport extends TransportImpl {
 
     public static final int DEFAULT_COST = 5;
     private static final int SSU_OUTBOUND_COST = 14;
-    static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
+    static final long[] RATES = RateConstants.STANDARD_RATES;
     /** Minimum active peers to maintain IP detection, etc. */
     private static final int MIN_PEERS = 80;
     private static final int MIN_PEERS_IF_HAVE_V6 = 100;

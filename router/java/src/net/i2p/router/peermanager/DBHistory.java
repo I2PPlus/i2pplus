@@ -6,6 +6,7 @@ import java.util.Properties;
 
 import net.i2p.router.RouterContext;
 import net.i2p.stat.RateStat;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 
 /**
@@ -32,9 +33,9 @@ public class DBHistory {
         _log = context.logManager().getLog(DBHistory.class);
         _statGroup = statGroup;
         _failedLookupRate = new RateStat("dbHistory.failedLookupRate", "How often peer responds to a lookup",
-                                         statGroup, new long[] {10*60*1000l, 60*60*1000l, 24*60*60*1000l });
+                                         statGroup, new long[] {RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR, RateConstants.ONE_DAY });
         _invalidReplyRate = new RateStat("dbHistory.invalidReplyRate", "How often peer sends us a bad RouterInfo?",
-                                         statGroup, new long[] {10*60*1000l, 60*60*1000l, 24*60*60*1000l });
+                                         statGroup, new long[] {RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR, RateConstants.ONE_DAY });
     }
 
     /** how many times we have sent them a db lookup and received the value back from them */

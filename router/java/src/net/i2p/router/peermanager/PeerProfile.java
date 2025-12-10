@@ -8,6 +8,7 @@ import net.i2p.data.Hash;
 import net.i2p.router.CommSystemFacade;
 import net.i2p.router.RouterContext;
 import net.i2p.stat.RateStat;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
@@ -99,7 +100,7 @@ public class PeerProfile {
     private static final float DEGRADE_FACTOR = (float) Math.pow(TOTAL_DEGRADE_PER_DAY, 1.0d / DEGRADES_PER_DAY);
     static final boolean ENABLE_TUNNEL_TEST_RESPONSE_TIME = true;
     private long _lastCoalesceDate = System.currentTimeMillis();
-    private static final long[] RATES = { 60*1000l, 5*60*1000l, 10*60*1000l, 30*60*1000l, 60*60*1000l, 24*60*60*1000 };
+    private static final long[] RATES = RateConstants.STANDARD_RATES;
 
     /**
      *  Countries with more than about a 2% share of the netdb.

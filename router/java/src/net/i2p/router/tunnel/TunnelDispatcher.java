@@ -28,6 +28,7 @@ import net.i2p.router.Service;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig;
 import net.i2p.util.Log;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.SyntheticREDQueue;
 
 /**
@@ -119,7 +120,7 @@ public class TunnelDispatcher implements Service {
     /** Location in the tunnel for RED logic */
     public enum Location { OBEP, PARTICIPANT, IBGW }
 
-    private static final long[] RATES = { 60*1000, 10*60*1000, 60*60*1000, 24*60*60*1000 };
+    private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR, RateConstants.ONE_DAY };
 
     /** Lock used when joining tunnels as participant, endpoint, or gateway */
     private final Object _joinParticipantLock = new Object();

@@ -6,6 +6,7 @@ import net.i2p.router.peermanager.TunnelHistory;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
 import net.i2p.stat.RateStat;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
@@ -53,7 +54,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     /** = TrivialPreprocessor.PREPROCESSED_SIZE */
     private static final int PREPROCESSED_SIZE = 1024;
 
-    private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
+    private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR, RateConstants.ONE_DAY };
 
     public RouterThrottleImpl(RouterContext context) {
         _context = context;
@@ -203,7 +204,7 @@ public class RouterThrottleImpl implements RouterThrottle {
         if (highload) {
             setTunnelStatus("[rejecting/overload]" + _x("Rejecting all tunnel requests" + ":<br>" + _x("High system load")));
         } else if (numTunnels > getMinThrottleTunnels() && DEFAULT_MAX_TUNNELS >= maxTunnels) {
-            Rate avgTunnels = _context.statManager().getRate("tunnel.participatingTunnels").getRate(10*60*1000);
+            Rate avgTunnels = _context.statManager().getRate("tunnel.participatingTunnels").getRate(RateConstants.TEN_MINUTES);
             if (avgTunnels != null) {
                 double avg = avgTunnels.getAvgOrLifetimeAvg();
                 double tunnelGrowthFactor = SystemVersion.isSlow() || highload ? getTunnelGrowthFactor() : getTunnelGrowthFactor() * 3 / 2;
@@ -245,22 +246,22 @@ public class RouterThrottleImpl implements RouterThrottle {
         }
 
         double tunnelTestTimeGrowthFactor = getTunnelTestTimeGrowthFactor();
-        Rate tunnelTestTime1m = _context.statManager().getRate("tunnel.testSuccessTime").getRate(1*60*1000);
-        Rate tunnelTestTime10m = _context.statManager().getRate("tunnel.testSuccessTime").getRate(10*60*1000);
-        if ( (tunnelTestTime1m != null) && (tunnelTestTime10m != null) && (tunnelTestTime1m.getLastEventCount() > 0) ) {
+        Rate tunnelTestTime1m = _context.statManager().getRate("tunnel.testSuccessTime").getRate(RateConstants.ONE_MINUTE);
+        Rate tunnelTestTime1h = _context.statManager().getRate("tunnel.testSuccessTime").getRate(RateConstants.ONE_HOUR);
+        if ( (tunnelTestTime1m != null) && (tunnelTestTime1h != null) && (tunnelTestTime1m.getLastEventCount() > 0) ) {
             double avg1m = tunnelTestTime1m.getAverageValue();
-            double avg10m = tunnelTestTime10m.getAvgOrLifetimeAvg();
+            double avg1h = tunnelTestTime1h.getAvgOrLifetimeAvg();
 
-            if (avg10m < 5000) {avg10m = 5000;} // minimum before complaining
+            if (avg1h < 5000) {avg1h = 5000;} // minimum before complaining
 
-            if ( (avg10m > 0) && (avg1m > avg10m * tunnelTestTimeGrowthFactor) ) {
-                double probAccept = (avg10m*tunnelTestTimeGrowthFactor)/avg1m;
+            if ( (avg1h > 0) && (avg1m > avg1h * tunnelTestTimeGrowthFactor) ) {
+                double probAccept = (avg1h*tunnelTestTimeGrowthFactor)/avg1m;
                 probAccept = probAccept * probAccept; // square the decelerator for test times
                 int v = _context.random().nextInt(100);
                 if (v < probAccept*100) { // ok
                     if (_log.shouldInfo()) {
                         _log.info("Probabalistically accepting Tunnel Request (p=" + probAccept
-                                  + " v=" + v + " test time avg 1m=" + avg1m + " 10m=" + avg10m + ")");
+                                  + " v=" + v + " test time avg 1m=" + avg1m + " 1h=" + avg1h + ")");
                     }
                 }
             }
@@ -429,7 +430,7 @@ public class RouterThrottleImpl implements RouterThrottle {
     }
 
     public long getTunnelLag() {
-        Rate lagRate = _context.statManager().getRate("tunnel.testSuccessTime").getRate(10*60*1000);
+        Rate lagRate = _context.statManager().getRate("tunnel.testSuccessTime").getRate(RateConstants.ONE_HOUR);
         return (long)lagRate.getAverageValue();
     }
 

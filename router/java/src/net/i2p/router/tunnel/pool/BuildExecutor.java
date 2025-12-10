@@ -18,6 +18,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
+import net.i2p.stat.RateConstants;
 import net.i2p.stat.StatManager;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
@@ -47,7 +48,7 @@ class BuildExecutor implements Runnable {
     private static final int LOOP_TIME = 500;
     private static final int TUNNEL_POOLS = SystemVersion.isSlow() ? 24 : 48;
     private static final long GRACE_PERIOD = 60*1000; // accept replies up to a minute after we gave up on them
-    private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
+    private static final long[] RATES = { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR, RateConstants.ONE_DAY };
     public boolean fullStats() {return _context.getBooleanProperty("stat.full");}
 
     /** Build result enumeration. @since 0.9.53 */

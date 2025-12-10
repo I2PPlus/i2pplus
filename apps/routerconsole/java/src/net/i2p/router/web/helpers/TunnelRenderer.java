@@ -32,6 +32,7 @@ import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.Messages;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
@@ -781,8 +782,8 @@ class TunnelRenderer {
            .append("</td><td>&nbsp;</td></tr>\n<tr><td>&nbsp;</td><td><span class=tunnel_cap><b>P</b></span></td><td>")
            .append(_t("{0} shared bandwidth", range(Router.MIN_BW_P, Router.MIN_BW_X)))
            .append("</td><td><span class=tunnel_cap><b>X</b></span></td><td>")
-           .append(_t("Over {0} shared bandwidth", Math.round(Router.MIN_BW_X * 1.024f)))
-           .append("KBps</td><td>&nbsp;</td></tr></tbody>\n</table>");
+           .append(_t("Over {0} shared bandwidth", Math.round(Router.MIN_BW_X * 1.024f) + "KB/s"))
+           .append("</td><td></td></tr></tbody>\n</table>");
         out.append(buf);
         out.flush();
         buf.setLength(0);
@@ -790,7 +791,7 @@ class TunnelRenderer {
 
     /** @since 0.9.33 */
     static String range(int f, int t) {
-        return Math.round(f * 1.024f) + " - " + (Math.round(t * 1.024f) - 1) + " KBps";
+        return Math.round(f * 1.024f) + " - " + (Math.round(t * 1.024f) - 1) + " KB/s";
     }
 
     private static class TunnelComparator implements Comparator<HopConfig>, Serializable {
@@ -858,8 +859,8 @@ class TunnelRenderer {
         RateStat irs = _context.statManager().getRate(irname);
         RateStat ors = _context.statManager().getRate(orname);
         if (irs == null || ors == null) {return;}
-        Rate ir = irs.getRate(5*60*1000L);
-        Rate or = ors.getRate(5*60*1000L);
+        Rate ir = irs.getRate(RateConstants.ONE_HOUR);
+        Rate or = ors.getRate(RateConstants.ONE_HOUR);
         if (ir == null || or == null) {return;}
         final String tgd = _t("Graph Data");
         final String tcg = _t("Configure Graph Display");

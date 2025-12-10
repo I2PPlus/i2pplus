@@ -57,7 +57,7 @@ public class GarlicMessageParser {
         boolean warn = _log.shouldWarn();
         try {
             if (debug) {
-                _log.debug("Decrypting with private key " + encryptionKey);
+                _log.debug("Decrypting with " + encryptionKey + "...");
             }
             EncType type = encryptionKey.getType();
             if (type == EncType.ELGAMAL_2048) {
@@ -97,7 +97,7 @@ public class GarlicMessageParser {
                 } else {
                     if (debug || warn) {
                         StringBuilder buf = new StringBuilder(256);
-                        buf.append("PQ decryption failed - Key type: ").append(type);
+                        buf.append("PQ decryption failed [").append(type).append("]");
                         if (skm instanceof MuxedPQSKM) {
                             MuxedPQSKM mpq = (MuxedPQSKM) skm;
                             if (debug) {
@@ -128,17 +128,20 @@ public class GarlicMessageParser {
                                 buf.append(" Tags: ").append(tags);
                             }
                             if (tags == 0) {
-                                buf.append(" -> No session tags available (PQ-only destination)");
+                                buf.append(" -> No session tags available");
                             } else {
-                                buf.append(" -> Decryption failed with available tags (PQ-only destination)");
+                                buf.append(" -> Decryption failed with available tags");
                             }
+                            buf.append(" (PQ-only destination)");
                         } else {
                             if (debug) {
                                 buf.append(" SKM type: ").append(skm.getClass().getSimpleName());
                             }
                             buf.append(" -> Incompatible Session Key Manager");
                         }
-                        buf.append(" (Data size: ").append(encData.length).append(")");
+                        if (debug) {
+                            buf.append(" (Data size: ").append(encData.length).append(")");
+                        }
                         _log.warn(buf.toString());
                     }
                     return null;

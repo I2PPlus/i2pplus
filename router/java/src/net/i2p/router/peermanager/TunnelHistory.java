@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import net.i2p.router.RouterContext;
 import net.i2p.stat.RateStat;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 
 /**
@@ -29,7 +30,7 @@ public class TunnelHistory {
     private final RateStat _rejectRate;
     private final RateStat _failRate;
     private final String _statGroup;
-    static final long[] RATES = new long[] {10*60*1000l, 60*60*1000l, 24*60*60*1000l };
+    static final long[] RATES = new long[] {RateConstants.TEN_MINUTES, RateConstants.ONE_HOUR, RateConstants.ONE_DAY };
 
     /** probabalistic tunnel rejection due to a flood of requests - infrequent */
     public static final int TUNNEL_REJECT_PROBABALISTIC_REJECT = 10;

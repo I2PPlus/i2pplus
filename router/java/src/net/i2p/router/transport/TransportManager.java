@@ -50,6 +50,7 @@ import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 import net.i2p.util.VersionComparator;
+import net.i2p.stat.RateConstants;
 
 /**
  * Central coordinator for all I2P transport protocols.
@@ -128,7 +129,7 @@ public class TransportManager implements TransportEventListener {
     private static final long SIGTYPE_BANLIST_DURATION = 36*60*60*1000L;
     private static final long UPNP_REFRESH_TIME = UPnP.LEASE_TIME_SECONDS * 1000L / 3;
     private final long _msgIDBloomXor;
-    private static final long[] RATES = { 60*1000, 10*60*1000, 60*60*1000 };
+    private static final long[] RATES = RateConstants.STANDARD_RATES;
 
     public TransportManager(RouterContext context) {
         _context = context;

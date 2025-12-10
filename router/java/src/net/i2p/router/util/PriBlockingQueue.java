@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+import net.i2p.stat.RateConstants;
 
 /**
  * Priority blocking queue with bounded capacity and FIFO ordering within priority levels.
@@ -55,7 +56,7 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
     /**
      * Time windows for rate statistics in milliseconds.
      */
-    protected static final long[] RATES = {60 * 1000, 10 * 60 * 1000, 60 * 60 * 1000};
+    protected static final long[] RATES = RateConstants.STANDARD_RATES;
 
     /**
      * Default backlog and max size depending on system speed.

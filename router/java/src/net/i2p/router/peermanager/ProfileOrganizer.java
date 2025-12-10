@@ -28,11 +28,12 @@ import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.tunnel.pool.TunnelPeerSelector;
 import net.i2p.router.util.MaskedIPSet;
-import net.i2p.router.util.RandomIterator;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+import net.i2p.router.util.RandomIterator;
 
 /**
  * Categorizes peers into performance tiers based on historical metrics. Requires periodic reorganize() calls to update peer classifications for optimal tunnel selection.
@@ -67,12 +68,11 @@ public class ProfileOrganizer {
     public static final int ABSOLUTE_MAX_PROFILES = 4000;
 
     private static final long[] RATES = {
-        60 * 1000L,
-        5 * 60 * 1000L,
-        10 * 60 * 1000L,
-        30 * 60 * 1000L,
-        60 * 60 * 1000L,
-        24 * 60 * 60 * 1000L
+        RateConstants.ONE_MINUTE,
+        RateConstants.FIVE_MINUTES,
+        RateConstants.TEN_MINUTES,
+        RateConstants.ONE_HOUR,
+        RateConstants.ONE_DAY
     };
 
     private final ReentrantReadWriteLock _reorganizeLock = new ReentrantReadWriteLock(false);
@@ -270,9 +270,9 @@ public class ProfileOrganizer {
         PeerProfile profile = getProfile(peer);
         if (profile != null && profile.getIsExpandedDB()) {
             RateStat invalidReplyRateStat = profile.getDBHistory().getInvalidReplyRate();
-            Rate invalidReplyRate = invalidReplyRateStat.getRate(60 * 60 * 1000L);
+            Rate invalidReplyRate = invalidReplyRateStat.getRate(RateConstants.ONE_HOUR);
             RateStat failedLookupRateStat = profile.getDBHistory().getFailedLookupRate();
-            Rate failedLookupRate = failedLookupRateStat.getRate(60 * 60 * 1000L);
+            Rate failedLookupRate = failedLookupRateStat.getRate(RateConstants.ONE_HOUR);
             return invalidReplyRate.getCurrentTotalValue() > MAX_BAD_REPLIES_PER_HOUR ||
                    invalidReplyRate.getLastTotalValue() > MAX_BAD_REPLIES_PER_HOUR ||
                    failedLookupRate.getCurrentTotalValue() > MAX_BAD_REPLIES_PER_HOUR ||

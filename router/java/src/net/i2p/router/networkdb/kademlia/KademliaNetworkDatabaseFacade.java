@@ -57,6 +57,7 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
+import net.i2p.stat.RateConstants;
 
 /**
  * Kademlia based version of network database.
@@ -190,7 +191,7 @@ public abstract class KademliaNetworkDatabaseFacade extends NetworkDatabaseFacad
     private static final int KAD_B = 4;
     static final String PROP_KAD_B = "router.exploreKadB";
 
-    private static final long[] RATES = {60*1000, 60*60*1000, 24*60*60*1000 };
+    private static final long[] RATES = {RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR, RateConstants.ONE_DAY };
 
     /**
      * Initializes the Kademlia-based network database facade.

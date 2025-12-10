@@ -12,6 +12,7 @@ import net.i2p.router.util.CoDelPriorityBlockingQueue;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+import net.i2p.stat.RateConstants;
 
 /**
  * Lowest level UDP packet sender that pushes packets from its queue ASAP.
@@ -59,7 +60,7 @@ class UDPSender {
     public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
 
     /** Time rate intervals for statistics collection. */
-    static final long[] RATES = { 60*1000, 10*60*1000, 60*60*1000, 24*60*60*1000 };
+    static final long[] RATES = RateConstants.STANDARD_RATES;
 
     /**
      * Returns whether detailed full statistics gathering is enabled.

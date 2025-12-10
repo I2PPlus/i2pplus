@@ -41,6 +41,7 @@ import net.i2p.router.util.CDQEntry;
 import net.i2p.util.Log;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 import static net.i2p.router.tunnel.pool.BuildExecutor.Result.*;
@@ -83,7 +84,7 @@ class BuildHandler implements Runnable {
     private static final long MAX_REQUEST_AGE = 65*60*1000; /** must be > 1 hour due to rounding down */
     private static final long MAX_REQUEST_AGE_ECIES = 8*60*1000;
     private static final long JOB_LAG_LIMIT_TUNNEL = isSlow ? 800 : 500;
-    private static final long[] RATES = {60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000};
+    private static final long[] RATES = RateConstants.STANDARD_RATES;
     /**
      * This is the baseline minimum for estimating tunnel bandwidth, if accepted.
      * We use an estimate of 40 messages (1 KB each) in 10 minutes.

@@ -77,6 +77,7 @@ import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 import net.i2p.util.VersionComparator;
+import net.i2p.stat.RateConstants;
 
 /**
  * Defines a way to send a message to another peer and start listening for messages
@@ -114,7 +115,7 @@ public abstract class TransportImpl implements Transport {
     /** @since 0.9.64+ */
     protected static final String PROP_BOOST_CONNECTION_LIMITS = "i2np.boostConnectionLimits";
 
-    private static final long[] RATES = {60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
+    private static final long[] RATES = RateConstants.STANDARD_RATES;
 
     static {
         long maxMemory = SystemVersion.getMaxMemory();
