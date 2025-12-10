@@ -34,6 +34,7 @@ import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.CommSystemFacadeImpl;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.FileSuffixFilter;
 import net.i2p.util.FileUtil;
@@ -75,7 +76,7 @@ public class PersistentDataStore extends TransientDataStore {
     private final static boolean DEFAULT_SHOULD_DISCONNECT = false;
     private final static String PROP_SHOULD_DISCONNECT = "router.enableImmediateDisconnect";
 
-    private static final long[] RATES = {60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l};
+    private static final long[] RATES = RateConstants.BASIC_RATES;
 
     /**
      *  @param dbDir relative path

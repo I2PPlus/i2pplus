@@ -13,6 +13,7 @@ import java.util.TreeMap;
 import net.i2p.app.ClientAppManager;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
+import net.i2p.stat.RateConstants;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.router.RouterAddress;
@@ -929,9 +930,9 @@ public class SidebarHelper extends HelperBase {
     public int getAvgPeerTestTime() {
         if (_context == null) {return 0;}
         RateStat ok = _context.statManager().getRate("peer.testOK");
-        Rate rok = ok.getRate(60*60*1000);
+        Rate rok = ok.getRate(RateConstants.ONE_HOUR);
         RateStat tooslow = _context.statManager().getRate("peer.testTooSlow");
-        Rate rtooslow = tooslow.getRate(60*60*1000);
+        Rate rtooslow = tooslow.getRate(RateConstants.ONE_HOUR);
         int avgTestTime = (int) rok.getLifetimeAverageValue() + (int) rtooslow.getLifetimeAverageValue();
         return avgTestTime;
     }
@@ -940,7 +941,7 @@ public class SidebarHelper extends HelperBase {
     public int getAvgPeerTestTimeGood() {
         if (_context == null) {return 0;}
         RateStat ok = _context.statManager().getRate("peer.testOK");
-        Rate rok = ok.getRate(60*60*1000);
+        Rate rok = ok.getRate(RateConstants.ONE_HOUR);
         int avgTestTimeGood = (int) rok.getLifetimeAverageValue();
         return avgTestTimeGood;
     }

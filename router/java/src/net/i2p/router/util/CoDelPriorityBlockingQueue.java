@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.SystemVersion;
 
 /**
@@ -46,7 +47,7 @@ public class CoDelPriorityBlockingQueue<E extends CDPQEntry> extends PriBlocking
     static final AtomicLong __id = new AtomicLong();
     private final long _id;
 
-    private static final long[] CODEL_RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
+    private static final long[] CODEL_RATES = RateConstants.SHORT_TERM_RATES;
 
     /**
      *  Quote:

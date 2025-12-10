@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.stat.RateConstants;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.CommSystemFacade;
 import net.i2p.router.CommSystemFacade.Status;
@@ -119,7 +120,7 @@ class BuildExecutor implements Runnable {
         // Adjust based on recent network performance
         RateStat buildTimeStat = _context.statManager().getRate("tunnel.buildRequestTime");
         if (buildTimeStat != null) {
-            Rate r = buildTimeStat.getRate(10*60*1000); // Last 10 minutes
+            Rate r = buildTimeStat.getRate(RateConstants.TEN_MINUTES); // Last 10 minutes
             if (r != null) {
                 double avgBuildTime = r.getAverageValue();
                 if (avgBuildTime > 100) { // If builds are taking longer than 100ms

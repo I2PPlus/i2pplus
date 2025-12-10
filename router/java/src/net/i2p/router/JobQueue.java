@@ -102,7 +102,7 @@ public class JobQueue {
      */
     private final Object _runnerLock = new Object();
 
-    private static final long[] RATES = RateConstants.STANDARD_RATES;
+    private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
     /**
      *  Does not start the pumper. Caller MUST call startup.

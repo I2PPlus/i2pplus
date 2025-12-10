@@ -11,6 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.crypto.EncType;
 import net.i2p.data.DataHelper;
 import net.i2p.data.EmptyProperties;
+import net.i2p.stat.RateConstants;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.BuildRequestRecord;
@@ -84,7 +85,7 @@ class BuildHandler implements Runnable {
     private static final long MAX_REQUEST_AGE = 65*60*1000; /** must be > 1 hour due to rounding down */
     private static final long MAX_REQUEST_AGE_ECIES = 8*60*1000;
     private static final long JOB_LAG_LIMIT_TUNNEL = isSlow ? 800 : 500;
-    private static final long[] RATES = RateConstants.STANDARD_RATES;
+    private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
     /**
      * This is the baseline minimum for estimating tunnel bandwidth, if accepted.
      * We use an estimate of 40 messages (1 KB each) in 10 minutes.
@@ -942,7 +943,7 @@ class BuildHandler implements Runnable {
                     else {
                         RateStat stat = _context.statManager().getRate("tunnel.participatingBandwidth");
                         if (stat != null) {
-                            Rate rate = stat.getRate(10*60*1000);
+                            Rate rate = stat.getRate(RateConstants.TEN_MINUTES);
                             if (rate != null) {
                                 int used = (int) rate.getAvgOrLifetimeAvg();
                                 avail = Math.min(max, (share - used) / 4);

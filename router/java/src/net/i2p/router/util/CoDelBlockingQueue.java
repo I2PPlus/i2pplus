@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 
@@ -55,7 +56,7 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     private static final AtomicLong __id = new AtomicLong();
     private final long _id;
 
-    private static final long[] CODEL_RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
+    private static final long[] CODEL_RATES = RateConstants.SHORT_TERM_RATES;
 
     public static final String PROP_CODEL_TARGET = "router.codelTarget";
     public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
@@ -80,7 +81,6 @@ public class CoDelBlockingQueue<E extends CDQEntry> extends LinkedBlockingQueue<
     private final long _interval;
     private final String STAT_DROP;
     private final String STAT_DELAY;
-    private static final long[] RATES = {60*1000, 5*60*1000, 60*60*1000};
     private static final long BACKLOG_TIME = SystemVersion.isSlow() ? 1000 : 500;
 
     /**

@@ -7,6 +7,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.DatabaseLookupMessage;
+import net.i2p.stat.RateConstants;
 import net.i2p.data.i2np.DatabaseSearchReplyMessage;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.i2np.DeliveryStatusMessage;
@@ -59,7 +60,7 @@ public class InNetMessagePool implements Service {
     /** Maximum valid I2NP message type */
     private static final int MAX_I2NP_MESSAGE_TYPE = 31;
     private static final int MAX_DELIVERY_SKEW = 5000; // 5s latitude
-    private static final long[] RATES = { 60*1000, 60*60*1000l };
+    private static final long[] RATES = RateConstants.BASIC_RATES;
 
     /**
      * Constructs the message pool with given context.

@@ -114,7 +114,7 @@ public abstract class TransportImpl implements Transport {
     /** @since 0.9.64+ */
     protected static final String PROP_BOOST_CONNECTION_LIMITS = "i2np.boostConnectionLimits";
 
-    private static final long[] RATES = RateConstants.STANDARD_RATES;
+    private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
     static {
         long maxMemory = SystemVersion.getMaxMemory();

@@ -10,6 +10,7 @@ import java.util.Set;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Destination;
+import net.i2p.stat.RateConstants;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.TunnelId;
@@ -856,14 +857,14 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
             if (_context.router().getUptime() > 60*60*1000) {
                 RateStat rs = _context.statManager().getRate("peer.failedLookupRate");
                 if (rs != null) {
-                    Rate r = rs.getRate(60*60*1000);
+                    Rate r = rs.getRate(RateConstants.ONE_HOUR);
                     if (r != null) {
                         double currentFailRate = r.getAverageValue();
                         maxFailRate = Math.min(0.95d, Math.max(0.20d, 1.25d * currentFailRate));
                     }
                 }
             }
-            double failRate = hist.getFailedLookupRate().getRate(60*60*1000).getAverageValue();
+            double failRate = hist.getFailedLookupRate().getRate(RateConstants.ONE_HOUR).getAverageValue();
             if (failRate >= 1 || failRate > maxFailRate) {
                 //_log.warn("skip lookup fail rate " + failRate + " max " + maxFailRate + ' ' + peer.toBase64());
                 //super.lookupBeforeDropping(peer, info);

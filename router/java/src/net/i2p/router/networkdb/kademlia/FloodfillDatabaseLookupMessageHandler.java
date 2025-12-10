@@ -11,6 +11,7 @@ package net.i2p.router.networkdb.kademlia;
 import java.util.Set;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.DatabaseLookupMessage;
+import net.i2p.stat.RateConstants;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
@@ -36,7 +37,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
     private FloodfillNetworkDatabaseFacade _facade;
     private Log _log;
     private final long _msgIDBloomXor = RandomSource.getInstance().nextLong(I2NPMessage.MAX_ID_VALUE);
-    private static final long[] RATES = { 60*1000, 60*60*1000l };
+    private static final long[] RATES = RateConstants.BASIC_RATES;
 
     /**
      * Constructs a new handler for floodfill DatabaseLookupMessages.

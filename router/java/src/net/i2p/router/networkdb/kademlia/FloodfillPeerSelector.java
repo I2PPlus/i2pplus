@@ -11,6 +11,7 @@ package net.i2p.router.networkdb.kademlia;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import net.i2p.stat.RateConstants;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -221,7 +222,7 @@ class FloodfillPeerSelector extends PeerSelector {
         if (_context.router().getUptime() > 2*60*60*1000) {
             RateStat rs = _context.statManager().getRate("peer.failedLookupRate");
             if (rs != null) {
-                Rate r = rs.getRate(60*60*1000);
+                Rate r = rs.getRate(RateConstants.ONE_HOUR);
                 if (r != null) {
                     double currentFailRate = r.getAverageValue();
                     maxFailRate = Math.min(0.95d, Math.max(0.20d, 1.25d * currentFailRate));
@@ -298,7 +299,7 @@ class FloodfillPeerSelector extends PeerSelector {
                     double maxGoodRespTime = MAX_GOOD_RESP_TIME;
                     RateStat ttst = _context.statManager().getRate("tunnel.testSuccessTime");
                     if (ttst != null) {
-                        Rate tunnelTestTime = ttst.getRate(10*60*1000);
+                        Rate tunnelTestTime = ttst.getRate(RateConstants.TEN_MINUTES);
                         if (tunnelTestTime != null && tunnelTestTime.getAverageValue() > 500)
                             maxGoodRespTime = 2 * tunnelTestTime.getAverageValue();
                     }
@@ -308,10 +309,10 @@ class FloodfillPeerSelector extends PeerSelector {
                                 _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Bad: Router is too new (less than 45m old)");
                             badff.add(entry);
                         } else if (prof.getDBHistory() != null) {
-                            if (prof.getDbResponseTime().getRate(60*60*1000L).getAvgOrLifetimeAvg() < maxGoodRespTime
+                            if (prof.getDbResponseTime().getRate(RateConstants.ONE_HOUR).getAvgOrLifetimeAvg() < maxGoodRespTime
                                 && prof.getDBHistory().getLastStoreFailed() < now - NO_FAIL_STORE_GOOD
                                 && prof.getDBHistory().getLastLookupFailed() < now - NO_FAIL_LOOKUP_GOOD
-                                && prof.getDBHistory().getFailedLookupRate().getRate(60*60*1000).getAverageValue() < maxFailRate) {
+                                && prof.getDBHistory().getFailedLookupRate().getRate(RateConstants.ONE_HOUR).getAverageValue() < maxFailRate) {
                                 // good
                                 if (_log.shouldDebug())
                                     _log.debug("Floodfill sort: [" + entry.toBase64().substring(0,6) + "] -> Good");

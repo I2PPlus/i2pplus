@@ -36,6 +36,27 @@ public final class RateConstants {
     };
 
     /**
+     * Tunnel test timing rate periods: 1 minute and 1 hour.
+     * Used for tunnel test performance analysis where short-term vs
+     * longer-term comparison is needed to detect performance degradation.
+     */
+    public static final long[] TUNNEL_TEST_RATES = {
+        60*1000l,        // 1 minute
+        60*60*1000l      // 1 hour
+    };
+
+    /**
+     * Tunnel verification rate periods: 1 minute, 10 minutes, and 1 hour.
+     * Used only for tunnel verification and build performance monitoring
+     * where 10-minute trends are useful but 24-hour is excessive.
+     */
+    public static final long[] TUNNEL_VERIFY_RATES = {
+        60*1000l,        // 1 minute
+        10*60*1000l,     //10 minutes - for verification performance
+        60*60*1000l      // 1 hour
+    };
+
+    /**
      * Tunnel-specific rate periods including 10 minutes for build statistics.
      * Used only where tunnel monitoring specifically requires 10-minute windows.
      */
@@ -44,6 +65,25 @@ public final class RateConstants {
         10*60*1000l,     // 10 minutes - for tunnel build success rates
         60*60*1000l,     // 1 hour
         24*60*60*1000l   // 24 hours - for tunnel capacity and reputation
+    };
+
+    /**
+     * Basic rate periods for simple statistics: 1 minute and 1 hour.
+     * Used where only basic rate tracking is needed.
+     */
+    public static final long[] BASIC_RATES = {
+        60*1000l,        // 1 minute
+        60*60*1000l      // 1 hour
+    };
+
+    /**
+     * Short-term rate periods for real-time metrics: 1 minute and 10 minutes.
+     * Used for transport, queue, and real-time operational statistics
+     * where long-term trends are not needed.
+     */
+    public static final long[] SHORT_TERM_RATES = {
+        60*1000l,        // 1 minute
+        10*60*1000l      // 10 minutes
     };
 
     /**

@@ -2,6 +2,7 @@ package net.i2p.router;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.Hash;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 
 /**
@@ -15,8 +16,8 @@ class RouterDoSThrottle extends RouterThrottleImpl {
     public RouterDoSThrottle(RouterContext context) {
         super(context);
         context.statManager().createRateStat("router.throttleNetDbDoS",
-                                             "NetDb lookup messages received during detected DoS", "Router [Throttle]",
-                                             new long[] { 60*1000, 10*60*1000, 60*60*1000, 24*60*60*1000 });
+                                              "NetDb lookup messages received during detected DoS", "Router [Throttle]",
+                                              RateConstants.TUNNEL_RATES);
         _log = context.logManager().getLog(RouterDoSThrottle.class);
     }
 

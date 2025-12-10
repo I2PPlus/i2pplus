@@ -9,6 +9,7 @@ import static net.i2p.router.transport.udp.UDPPacket.*;
 import com.southernstorm.noise.protocol.ChaChaPolyCipherState;
 import java.io.BufferedInputStream;
 import java.io.BufferedWriter;
+import net.i2p.stat.RateConstants;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -2378,7 +2379,7 @@ class EstablishmentManager {
         // shorten expiration based on average eviction time
         RateStat rs = _context.statManager().getRate("udp.inboundTokenLifetime");
         if (rs != null) {
-            Rate r = rs.getRate(10*60*1000);
+            Rate r = rs.getRate(RateConstants.TEN_MINUTES);
             if (r != null) {
                 long lifetime = (long) (r.getAverageValue() * 0.9d); // margin
                 if (lifetime > 0) {

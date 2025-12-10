@@ -4,6 +4,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 import org.xlattice.crypto.filters.BloomSHA1;
@@ -153,12 +154,12 @@ public class DecayingBloomFilter {
                      " numExtenders = " + numExtenders + " cycle (s) = " + (durationMs / 1000));
         // try to get a handle on memory usage vs. false positives
         context.statManager().createRateStat("router.decayingBloomFilter." + name + ".size",
-             "Size", "Router", new long[] { 10 * Math.max(60*1000, durationMs) });
+             "Size", "Router", RateConstants.BASIC_RATES);
         context.statManager().createRateStat("router.decayingBloomFilter." + name + ".dups",
-             "1000000 * Duplicates/Size", "Router", new long[] { 10 * Math.max(60*1000, durationMs) });
+             "1000000 * Duplicates/Size", "Router", RateConstants.BASIC_RATES);
         context.statManager().createRateStat("router.decayingBloomFilter." + name + ".log10(falsePos)",
              "log10 of the false positive rate (must have net.i2p.util.DecayingBloomFilter=DEBUG)",
-             "Router", new long[] { 10 * Math.max(60*1000, durationMs) });
+             "Router", RateConstants.BASIC_RATES);
         context.addShutdownTask(new Shutdown());
     }
 

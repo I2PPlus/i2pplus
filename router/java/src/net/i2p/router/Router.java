@@ -13,6 +13,7 @@ import freenet.support.CPUInformation.UnknownCPUException;
 import gnu.getopt.Getopt;
 import java.io.File;
 import java.io.IOException;
+import net.i2p.stat.RateConstants;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -2068,11 +2069,11 @@ public class Router implements RouterClock.ClockShiftListener {
     public int get5mRate(boolean outboundOnly) {
         int send = 0;
         RateStat rs = _context.statManager().getRate("bw.sendRate");
-        if (rs != null) {send = (int)rs.getRate(5*60*1000).getAverageValue();}
+        if (rs != null) {send = (int)rs.getRate(RateConstants.FIVE_MINUTES).getAverageValue();}
         if (outboundOnly) {return send;}
         int recv = 0;
         rs = _context.statManager().getRate("bw.recvRate");
-        if (rs != null) {recv = (int)rs.getRate(5*60*1000).getAverageValue();}
+        if (rs != null) {recv = (int)rs.getRate(RateConstants.FIVE_MINUTES).getAverageValue();}
         return Math.max(send, recv);
     }
 

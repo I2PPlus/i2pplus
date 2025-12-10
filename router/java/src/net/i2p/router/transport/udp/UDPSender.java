@@ -59,7 +59,7 @@ class UDPSender {
     public static final String PROP_CODEL_INTERVAL = "router.codelInterval";
 
     /** Time rate intervals for statistics collection. */
-    static final long[] RATES = RateConstants.STANDARD_RATES;
+    static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
     /**
      * Returns whether detailed full statistics gathering is enabled.

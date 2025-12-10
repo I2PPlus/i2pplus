@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.TreeSet;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
+import net.i2p.stat.RateConstants;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
@@ -204,7 +205,7 @@ class ProfileOrganizerRenderer {
                     isUnreachable = true;
                 }
                 RateAverages ra = RateAverages.getTemp();
-                Rate failed = prof.getTunnelHistory().getFailedRate().getRate(60*60*1000);
+                Rate failed = prof.getTunnelHistory().getFailedRate().getRate(RateConstants.ONE_HOUR);
                 long fails = failed.computeAverages(ra, false).getTotalEventCount();
                 long bonus = prof.getSpeedBonus();
                 long capBonus = prof.getCapacityBonus();
@@ -214,7 +215,7 @@ class ProfileOrganizerRenderer {
                        .append(isUnreachable ? " unreachable" : "");
 
                     if (fails > 0) {
-                        Rate accepted = prof.getTunnelCreateResponseTime().getRate(60*60*1000);
+                        Rate accepted = prof.getTunnelCreateResponseTime().getRate(RateConstants.ONE_HOUR);
                         long total = fails + accepted.computeAverages(ra, false).getTotalEventCount();
                         double failPercentage = (double) fails / total * 100;
 

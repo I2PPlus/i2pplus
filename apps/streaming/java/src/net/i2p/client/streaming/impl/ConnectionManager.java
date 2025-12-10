@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.I2PSession;
+import net.i2p.stat.RateConstants;
 import net.i2p.client.streaming.IncomingConnectionFilter;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
@@ -57,7 +58,7 @@ class ConnectionManager {
     private final ByteCache _cache = ByteCache.getInstance(32, 4*1024);
     private static final Object DUMMY = new Object();
 
-     private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
+     private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
     /** cache of the property to detect changes */
     private static volatile String _currentBlacklist = "";

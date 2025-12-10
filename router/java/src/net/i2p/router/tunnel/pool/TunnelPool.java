@@ -13,6 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.Lease;
+import net.i2p.stat.RateConstants;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.TunnelId;
 import net.i2p.router.RouterContext;
@@ -150,7 +151,7 @@ public class TunnelPool {
         RateStat stat = _context.statManager().getRate(_rateName);
         if (stat == null)
             return 0;
-        Rate rate = stat.getRate(5*60*1000);
+        Rate rate = stat.getRate(RateConstants.FIVE_MINUTES);
         if (rate == null)
             return 0;
         int count = _settings.isInbound() ? _settings.getQuantity() : _settings.getTotalQuantity();
@@ -385,9 +386,9 @@ public class TunnelPool {
            RateStat r = _context.statManager().getRate("tunnel.buildExploratoryReject");
            RateStat s = _context.statManager().getRate("tunnel.buildExploratorySuccess");
            if (e != null && r != null && s != null) {
-               Rate er = e.getRate(10*60*1000);
-               Rate rr = r.getRate(10*60*1000);
-               Rate sr = s.getRate(10*60*1000);
+               Rate er = e.getRate(RateConstants.TEN_MINUTES);
+               Rate rr = r.getRate(RateConstants.TEN_MINUTES);
+               Rate sr = s.getRate(RateConstants.TEN_MINUTES);
                if (er != null && rr != null && sr != null) {
                    RateAverages ra = RateAverages.getTemp();
                    long ec = er.computeAverages(ra, false).getTotalEventCount();
@@ -418,9 +419,9 @@ public class TunnelPool {
             RateStat r = _context.statManager().getRate("tunnel.buildExploratoryReject");
             RateStat s = _context.statManager().getRate("tunnel.buildExploratorySuccess");
             if (e != null && r != null && s != null) {
-                Rate er = e.getRate(10*60*1000);
-                Rate rr = r.getRate(10*60*1000);
-                Rate sr = s.getRate(10*60*1000);
+                Rate er = e.getRate(RateConstants.TEN_MINUTES);
+                Rate rr = r.getRate(RateConstants.TEN_MINUTES);
+                Rate sr = s.getRate(RateConstants.TEN_MINUTES);
                 if (er != null && rr != null && sr != null) {
                     RateAverages ra = RateAverages.getTemp();
                     long ec = er.computeAverages(ra, false).getTotalEventCount();
@@ -1389,7 +1390,7 @@ public class TunnelPool {
         }
 
         // Check longer time window (10 minutes) to be more forgiving
-        Rate r = rs.getRate(10*60*1000); // Last 10 minutes
+        Rate r = rs.getRate(RateConstants.TEN_MINUTES); // Last 10 minutes
         if (r == null) {
             return false;
         }

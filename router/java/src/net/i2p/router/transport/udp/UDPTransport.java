@@ -261,7 +261,7 @@ public class UDPTransport extends TransportImpl {
 
     public static final int DEFAULT_COST = 5;
     private static final int SSU_OUTBOUND_COST = 14;
-    static final long[] RATES = RateConstants.STANDARD_RATES;
+    static final long[] RATES = RateConstants.SHORT_TERM_RATES;
     /** Minimum active peers to maintain IP detection, etc. */
     private static final int MIN_PEERS = 80;
     private static final int MIN_PEERS_IF_HAVE_V6 = 100;

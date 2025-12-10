@@ -13,6 +13,7 @@ import net.i2p.data.LeaseSet;
 import net.i2p.data.LeaseSet2;
 import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.data.i2np.DatabaseSearchReplyMessage;
+import net.i2p.stat.RateConstants;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.router.RouterInfo;
@@ -51,7 +52,7 @@ class FloodfillVerifyStoreJob extends JobImpl {
     private static final int VERIFY_TIMEOUT = 30*1000;
     private static final int MAX_PEERS_TO_TRY = 8;
     private static final int IP_CLOSE_BYTES = 3;
-    private static final long[] RATES = { 60*1000, 10*60*1000l, 60*60*1000l, 24*60*60*1000l };
+    private static final long[] RATES = RateConstants.TUNNEL_VERIFY_RATES;
 
     /**
      *  Delay a few seconds, then start the verify

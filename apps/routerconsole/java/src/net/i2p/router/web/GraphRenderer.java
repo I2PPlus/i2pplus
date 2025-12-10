@@ -3,6 +3,7 @@ package net.i2p.router.web;
 import static net.i2p.router.web.GraphConstants.*;
 
 import eu.bengreen.data.utility.LargestTriangleThreeBucketsTime;
+import net.i2p.stat.RateConstants;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
@@ -87,7 +88,7 @@ class GraphRenderer {
     private static final int SIZE_MONO = 10;
     private static final int SIZE_LEGEND = 11;
     private static final int SIZE_TITLE = 12;
-    private static final long[] RATES = new long[] { 60*1000, 60*60*1000 };
+    private static final long[] RATES = RateConstants.BASIC_RATES;
     private static final Stroke GRID_STROKE = new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 1, new float[] {1, 1}, 0);
 
     GraphicsEnvironment e = GraphicsEnvironment.getLocalGraphicsEnvironment();

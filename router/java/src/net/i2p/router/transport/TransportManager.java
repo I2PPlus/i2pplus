@@ -129,7 +129,7 @@ public class TransportManager implements TransportEventListener {
     private static final long SIGTYPE_BANLIST_DURATION = 36*60*60*1000L;
     private static final long UPNP_REFRESH_TIME = UPnP.LEASE_TIME_SECONDS * 1000L / 3;
     private final long _msgIDBloomXor;
-    private static final long[] RATES = RateConstants.STANDARD_RATES;
+    private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
     public TransportManager(RouterContext context) {
         _context = context;

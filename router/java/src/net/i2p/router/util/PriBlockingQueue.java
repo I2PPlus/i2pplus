@@ -55,7 +55,7 @@ public class PriBlockingQueue<E extends PQEntry> extends PriorityBlockingQueue<E
     /**
      * Time windows for rate statistics in milliseconds.
      */
-    protected static final long[] RATES = RateConstants.STANDARD_RATES;
+    protected static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
     /**
      * Default backlog and max size depending on system speed.

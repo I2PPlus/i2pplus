@@ -3,6 +3,7 @@ package net.i2p.router.web.helpers;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
+import net.i2p.stat.RateConstants;
 import java.text.Collator;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -192,7 +193,7 @@ class TunnelRenderer {
                   .append("</th></tr>\n</thead>\n<tbody id=transitPeers>\n");
                 long processed = 0;
                 RateStat rs = _context.statManager().getRate("tunnel.participatingMessageCount");
-                if (rs != null) {processed = (long)rs.getRate(10*60*1000).getLifetimeTotalValue();}
+                if (rs != null) {processed = (long)rs.getRate(RateConstants.TEN_MINUTES).getLifetimeTotalValue();}
                 int inactive = 0;
                 displayed = 0;
                 for (int i = 0; i < participating.size(); i++) {

@@ -145,7 +145,7 @@ public class NTCPTransport extends TransportImpl {
     private final NTCPSendFinisher _finisher;
     private final X25519KeyFactory _xdhFactory;
     private long _lastBadSkew;
-    private static final long[] RATES = RateConstants.STANDARD_RATES;
+    private static final long[] RATES = RateConstants.SHORT_TERM_RATES;
 
     private static final int MIN_CONCURRENT_READERS = SystemVersion.isSlow() ? 3 : 6;  // unless < 32MB
     private static final int MIN_CONCURRENT_WRITERS = MIN_CONCURRENT_READERS;
