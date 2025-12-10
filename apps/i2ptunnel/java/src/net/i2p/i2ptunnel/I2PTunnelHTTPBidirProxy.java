@@ -20,7 +20,6 @@ package net.i2p.i2ptunnel;
 import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.util.EventDispatcher;
 
-
 /**
  * HTTP proxy reusing server's I2PSocketManager without outproxy capability.
  *

@@ -25,7 +25,6 @@ package i2p.susi.webmail.encoding;
 
 import i2p.susi.util.Buffer;
 import i2p.susi.util.StringBuilderWriter;
-
 import java.io.ByteArrayInputStream;
 import java.io.EOFException;
 import java.io.IOException;

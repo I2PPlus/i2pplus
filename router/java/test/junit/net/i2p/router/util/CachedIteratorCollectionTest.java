@@ -1,9 +1,9 @@
 package net.i2p.router.util;
 
-import org.junit.Test;
 import static org.junit.Assert.*;
 
 import java.util.*;
+import org.junit.Test;
 
 /**
  * Unit tests for the CachedIteratorCollection class.

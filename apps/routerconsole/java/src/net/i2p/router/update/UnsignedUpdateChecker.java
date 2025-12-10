@@ -2,7 +2,6 @@ package net.i2p.router.update;
 
 import java.net.URI;
 import java.util.List;
-
 import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.router.web.ConfigUpdateHandler;

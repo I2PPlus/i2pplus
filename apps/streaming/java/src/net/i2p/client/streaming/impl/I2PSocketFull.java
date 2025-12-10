@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.channels.SelectableChannel;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
 import net.i2p.client.streaming.I2PSocket;

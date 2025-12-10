@@ -1,7 +1,6 @@
 package net.i2p.router.tasks;
 
 import java.io.File;
-
 import net.i2p.router.RouterContext;
 import net.i2p.util.ShellCommand;
 import net.i2p.util.SystemVersion;

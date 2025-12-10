@@ -26,7 +26,6 @@ package i2p.susi.util;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-
 import net.i2p.data.DataHelper;
 
 /**

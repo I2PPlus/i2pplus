@@ -10,12 +10,11 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.i2ptunnel.I2PTunnel;
+import net.i2p.i2ptunnel.Logging;
 import net.i2p.i2ptunnel.irc.IrcInboundFilter;
 import net.i2p.i2ptunnel.irc.IrcOutboundFilter;
-import net.i2p.i2ptunnel.Logging;
 import net.i2p.socks.SOCKSException;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.I2PAppThread;

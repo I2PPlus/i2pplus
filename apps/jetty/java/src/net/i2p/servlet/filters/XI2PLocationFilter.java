@@ -1,27 +1,22 @@
 package net.i2p.servlet.filters;
 
-import java.io.IOException;
 import java.io.File;
-import java.net.URISyntaxException;
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.HandlerWrapper;
-
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.PrivateKeyFile;
-
-
 import net.i2p.util.Log;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.handler.HandlerWrapper;
 
 /**
  * Adds a header, X-I2P-Location, to requests when they do **not** come in on an I2P hostname.

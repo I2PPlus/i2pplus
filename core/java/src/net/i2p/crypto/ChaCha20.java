@@ -25,7 +25,6 @@ package net.i2p.crypto;
  */
 
 import com.southernstorm.noise.crypto.chacha20.ChaChaCore;
-
 import net.i2p.data.DataHelper;
 
 /**

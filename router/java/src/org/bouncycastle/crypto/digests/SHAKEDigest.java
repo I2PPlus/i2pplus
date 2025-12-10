@@ -4,7 +4,6 @@ import org.bouncycastle.crypto.CryptoServiceProperties;
 import org.bouncycastle.crypto.CryptoServicePurpose;
 import org.bouncycastle.crypto.Xof;
 
-
 /**
  * implementation of SHAKE based on following KeccakNISTInterface.c from https://keccak.noekeon.org/
  * <p>

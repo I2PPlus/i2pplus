@@ -11,13 +11,12 @@
  */
 package net.i2p.crypto.eddsa.math.ed25519;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+
+import java.math.BigInteger;
 import net.i2p.crypto.eddsa.math.*;
 import org.hamcrest.core.*;
 import org.junit.*;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-
-import java.math.BigInteger;
 
 /**
  * Tests rely on the BigInteger class.

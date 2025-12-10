@@ -3,7 +3,6 @@ package net.i2p.router.sybil;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-
 import net.i2p.data.DataHelper;
 
 /**

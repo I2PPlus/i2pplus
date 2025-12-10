@@ -1,7 +1,6 @@
 package org.bouncycastle.util;
 
 import java.util.Arrays;
-
 import net.i2p.data.DataHelper;
 
 /**

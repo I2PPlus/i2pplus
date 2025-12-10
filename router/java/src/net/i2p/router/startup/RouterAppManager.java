@@ -1,19 +1,19 @@
 package net.i2p.router.startup;
 
+import static net.i2p.app.ClientAppState.*;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.text.Collator;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
 import net.i2p.app.*;
-import static net.i2p.app.ClientAppState.*;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 

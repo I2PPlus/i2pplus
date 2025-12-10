@@ -11,17 +11,15 @@
  */
 package net.i2p.crypto.eddsa.math.ed25519;
 
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+
+import java.math.BigInteger;
 import net.i2p.crypto.eddsa.Utils;
 import net.i2p.crypto.eddsa.math.*;
 import org.hamcrest.core.IsEqual;
 import org.junit.*;
-
-import java.math.BigInteger;
-
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 
 /**
  * @author str4d

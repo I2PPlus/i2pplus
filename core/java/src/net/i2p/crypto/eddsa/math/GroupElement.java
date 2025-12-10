@@ -11,10 +11,9 @@
  */
 package net.i2p.crypto.eddsa.math;
 
-import net.i2p.crypto.eddsa.Utils;
-
 import java.io.Serializable;
 import java.util.Arrays;
+import net.i2p.crypto.eddsa.Utils;
 
 /**
  * A point $(x,y)$ on an EdDSA curve.

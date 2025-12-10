@@ -9,9 +9,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicLong;
-
 import javax.net.ssl.SSLException;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.ByteArray;
 import net.i2p.util.ByteCache;

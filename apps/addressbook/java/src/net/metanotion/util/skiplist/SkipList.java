@@ -30,7 +30,6 @@ package net.metanotion.util.skiplist;
 
 import java.io.Flushable;
 import java.util.Random;
-
 import net.i2p.util.RandomSource;
 
 //import net.metanotion.io.block.BlockFile;

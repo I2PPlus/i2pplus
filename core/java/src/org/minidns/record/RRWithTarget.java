@@ -12,7 +12,6 @@ package org.minidns.record;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-
 import org.minidns.dnsname.DnsName;
 
 /**

@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-
 import net.i2p.data.DataHelper;
 import net.i2p.router.Router;
 import net.i2p.router.web.HelperBase;

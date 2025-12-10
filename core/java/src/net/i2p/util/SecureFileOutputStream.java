@@ -3,7 +3,6 @@ package net.i2p.util;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-
 import net.i2p.I2PAppContext;
 
 /**

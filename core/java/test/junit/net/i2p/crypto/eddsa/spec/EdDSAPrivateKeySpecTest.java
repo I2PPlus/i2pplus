@@ -11,14 +11,13 @@
  */
 package net.i2p.crypto.eddsa.spec;
 
-import static org.hamcrest.Matchers.*;
-import net.i2p.crypto.eddsa.Utils;
 import static org.hamcrest.MatcherAssert.assertThat;
-
-import org.junit.Assert;
+import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import net.i2p.crypto.eddsa.Utils;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**

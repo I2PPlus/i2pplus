@@ -1,7 +1,5 @@
 package org.rrd4j.core.jrrd;
 
-import org.rrd4j.core.InvalidRrdException;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -10,6 +8,7 @@ import java.nio.ByteOrder;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
+import org.rrd4j.core.InvalidRrdException;
 
 /**
  * This class is used read information from an RRD file. Writing to RRD files is not currently

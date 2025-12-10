@@ -6,7 +6,6 @@ import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.net.ConnectException;
 import java.net.NoRouteToHostException;
-
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.data.DataFormatException;

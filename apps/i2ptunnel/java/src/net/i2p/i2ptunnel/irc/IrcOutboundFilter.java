@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.util.Log;
 

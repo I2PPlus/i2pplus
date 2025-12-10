@@ -1,21 +1,19 @@
 package org.klomp.snark;
 
-import net.i2p.I2PAppContext;
-import net.i2p.data.DataHelper;
-import net.i2p.util.Log;
-
-import org.klomp.snark.bencode.BDecoder;
-import org.klomp.snark.bencode.BEValue;
-import org.klomp.snark.bencode.BEncoder;
-import org.klomp.snark.comments.Comment;
-import org.klomp.snark.comments.CommentSet;
-
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import net.i2p.I2PAppContext;
+import net.i2p.data.DataHelper;
+import net.i2p.util.Log;
+import org.klomp.snark.bencode.BDecoder;
+import org.klomp.snark.bencode.BEValue;
+import org.klomp.snark.bencode.BEncoder;
+import org.klomp.snark.comments.Comment;
+import org.klomp.snark.comments.CommentSet;
 
 /**
  * REF: BEP 10 Extension Protocol

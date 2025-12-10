@@ -1,8 +1,5 @@
 package org.rrd4j.core;
 
-import org.rrd4j.ConsolFun;
-import org.rrd4j.DsType;
-
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,6 +12,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
+import org.rrd4j.ConsolFun;
+import org.rrd4j.DsType;
 
 /**
  * Class to represent definition of new Round Robin Database (RRD). Object of this class is used to

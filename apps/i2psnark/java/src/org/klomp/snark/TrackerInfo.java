@@ -6,12 +6,6 @@
 
 package org.klomp.snark;
 
-import net.i2p.data.Hash;
-
-import org.klomp.snark.bencode.BDecoder;
-import org.klomp.snark.bencode.BEValue;
-import org.klomp.snark.bencode.InvalidBEncodingException;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
@@ -19,6 +13,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import net.i2p.data.Hash;
+import org.klomp.snark.bencode.BDecoder;
+import org.klomp.snark.bencode.BEValue;
+import org.klomp.snark.bencode.InvalidBEncodingException;
 
 /**
  * The data structure for the tracker response. Handles both traditional and compact formats.

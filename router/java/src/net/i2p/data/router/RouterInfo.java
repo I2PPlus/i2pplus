@@ -24,13 +24,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.DSAEngine;
 import net.i2p.crypto.SigType;
-import net.i2p.data.DatabaseEntry;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
+import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.data.KeysAndCert;
 import net.i2p.data.Signature;

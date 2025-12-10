@@ -11,9 +11,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
-
 import javax.net.ssl.SSLException;
-
 import net.i2p.I2PAppContext;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketException;

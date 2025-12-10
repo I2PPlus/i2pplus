@@ -1,17 +1,5 @@
 package org.rrd4j.core;
 
-import org.rrd4j.ConsolFun;
-import org.rrd4j.core.timespec.TimeParser;
-import org.rrd4j.core.timespec.TimeSpec;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.ErrorHandler;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
-
 import java.awt.*;
 import java.io.*;
 import java.net.JarURLConnection;
@@ -28,11 +16,21 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
-
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import org.rrd4j.ConsolFun;
+import org.rrd4j.core.timespec.TimeParser;
+import org.rrd4j.core.timespec.TimeSpec;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.ErrorHandler;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 /**
  * Class defines various utility functions used in Rrd4j.

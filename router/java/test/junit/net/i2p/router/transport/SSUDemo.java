@@ -5,26 +5,22 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.Base64;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Hash;
-import net.i2p.data.router.RouterIdentity;
-import net.i2p.data.router.RouterInfo;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.i2np.I2NPMessageException;
 import net.i2p.data.i2np.I2NPMessageImpl;
-import net.i2p.router.RouterContext;
-import net.i2p.router.Router;
-import net.i2p.router.OutNetMessage;
-import net.i2p.router.JobImpl;
-import net.i2p.router.Job;
-import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
-import net.i2p.router.networkdb.kademlia.SegmentedNetworkDatabaseFacade;
-import net.i2p.router.NetworkDatabaseFacade;
+import net.i2p.data.router.RouterIdentity;
+import net.i2p.data.router.RouterInfo;
 import net.i2p.router.HandlerJobBuilder;
+import net.i2p.router.Job;
+import net.i2p.router.JobImpl;
+import net.i2p.router.OutNetMessage;
+import net.i2p.router.Router;
+import net.i2p.router.RouterContext;
 
 /**
  * Demo of a stripped down router - no tunnels, no netDb, no i2cp, no peer profiling,

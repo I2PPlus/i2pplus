@@ -5,14 +5,6 @@
 
 package org.cybergarage.xml;
 
-import net.i2p.router.transport.TransportUtil;
-import net.i2p.util.Addresses;
-
-import org.cybergarage.http.HTTP;
-import org.cybergarage.http.HTTPRequest;
-import org.cybergarage.http.HTTPResponse;
-import org.cybergarage.util.Debug;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,6 +13,12 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import net.i2p.router.transport.TransportUtil;
+import net.i2p.util.Addresses;
+import org.cybergarage.http.HTTP;
+import org.cybergarage.http.HTTPRequest;
+import org.cybergarage.http.HTTPResponse;
+import org.cybergarage.util.Debug;
 
 /**
  * Abstract base class for XML parsers.

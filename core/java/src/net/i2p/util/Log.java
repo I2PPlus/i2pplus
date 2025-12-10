@@ -10,7 +10,6 @@ package net.i2p.util;
  */
 
 import java.util.Locale;
-
 import net.i2p.I2PAppContext;
 
 /**

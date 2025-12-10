@@ -11,7 +11,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 
-
 /**
  * Buffering decoder that outputs to a Writer.
  * Adapted from SAM UTF8Reader.

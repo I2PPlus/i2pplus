@@ -25,7 +25,6 @@ import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Objects;
-
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.function.IOFunction;
 

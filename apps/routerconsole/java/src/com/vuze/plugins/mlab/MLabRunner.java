@@ -20,6 +20,7 @@
  */
 package com.vuze.plugins.mlab;
 
+import edu.internet2.ndt.Tcpbw100;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,19 +28,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import edu.internet2.ndt.Tcpbw100;
-
-import org.json.simple.JsonObject;
-import org.json.simple.Jsoner;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Addresses;
 import net.i2p.util.EepGet;
-import net.i2p.util.SSLEepGet;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
+import net.i2p.util.SSLEepGet;
+import org.json.simple.JsonObject;
+import org.json.simple.Jsoner;
 
 /**
  * As modified from BiglyBT MLabPlugin

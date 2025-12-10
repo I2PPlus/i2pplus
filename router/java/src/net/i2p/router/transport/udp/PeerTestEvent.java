@@ -1,13 +1,12 @@
 package net.i2p.router.transport.udp;
 
-import java.util.concurrent.atomic.AtomicLong;
+import static net.i2p.router.transport.TransportUtil.IPv6Config.*;
+import static net.i2p.router.transport.udp.PeerTestState.Role.*;
 
+import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
-
-import static net.i2p.router.transport.TransportUtil.IPv6Config.*;
-import static net.i2p.router.transport.udp.PeerTestState.Role.*;
 
 /**
  *  Initiate a test (we are Alice)

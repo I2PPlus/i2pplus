@@ -14,9 +14,6 @@
 
 package org.klomp.snark.web;
 
-import net.i2p.data.DataHelper;
-import net.i2p.util.SystemVersion;
-
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -27,6 +24,8 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.concurrent.ConcurrentHashMap;
+import net.i2p.data.DataHelper;
+import net.i2p.util.SystemVersion;
 
 /* ------------------------------------------------------------ */
 /**

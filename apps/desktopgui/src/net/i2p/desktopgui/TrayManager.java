@@ -4,6 +4,7 @@ import java.awt.AWTException;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
@@ -15,8 +16,6 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.net.URL;
-
-import java.awt.MenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -25,7 +24,6 @@ import javax.swing.event.MenuKeyEvent;
 import javax.swing.event.MenuKeyListener;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
-
 import net.i2p.I2PAppContext;
 import net.i2p.desktopgui.i18n.DesktopguiTranslator;
 import net.i2p.util.Log;

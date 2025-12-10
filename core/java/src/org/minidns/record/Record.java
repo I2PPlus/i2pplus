@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.minidns.dnsmessage.DnsMessage;
 import org.minidns.dnsmessage.Question;
 import org.minidns.dnsname.DnsName;

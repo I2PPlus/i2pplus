@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
-
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSessionException;
 import net.i2p.crypto.EncType;
@@ -27,9 +26,9 @@ import net.i2p.crypto.KeyPair;
 import net.i2p.crypto.SigType;
 import net.i2p.data.Base64;
 import net.i2p.data.BlindData;
-import net.i2p.data.DatabaseEntry;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
+import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Destination;
 import net.i2p.data.EncryptedLeaseSet;
 import net.i2p.data.Hash;

@@ -1,10 +1,9 @@
 package org.klomp.snark.dht;
 
+import java.util.Set;
 import net.i2p.I2PAppContext;
 import net.i2p.kademlia.KBucket;
 import net.i2p.kademlia.KBucketTrimmer;
-
-import java.util.Set;
 
 /**
  * Kademlia bucket trimmer for DHT node management.

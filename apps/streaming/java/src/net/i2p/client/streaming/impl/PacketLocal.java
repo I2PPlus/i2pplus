@@ -4,15 +4,14 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
+import net.i2p.client.streaming.I2PSocketException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.SessionKey;
 import net.i2p.data.SessionTag;
 import net.i2p.data.SigningPrivateKey;
-import net.i2p.client.streaming.I2PSocketException;
 import net.i2p.util.Log;
 
 /**

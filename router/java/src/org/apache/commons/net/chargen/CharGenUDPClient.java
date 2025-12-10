@@ -20,7 +20,6 @@ package org.apache.commons.net.chargen;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
-
 import org.apache.commons.net.DatagramSocketClient;
 import org.apache.commons.net.util.NetConstants;
 

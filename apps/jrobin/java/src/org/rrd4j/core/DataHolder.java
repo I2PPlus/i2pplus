@@ -1,11 +1,10 @@
 package org.rrd4j.core;
 
+import java.net.URI;
+import java.util.TimeZone;
 import org.rrd4j.ConsolFun;
 import org.rrd4j.data.IPlottable;
 import org.rrd4j.data.Variable;
-
-import java.net.URI;
-import java.util.TimeZone;
 
 /**
  * Interface for holding data sources.

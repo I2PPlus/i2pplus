@@ -36,7 +36,6 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;

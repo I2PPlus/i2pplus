@@ -1,7 +1,6 @@
 package net.i2p.router.transport.udp;
 
 import java.util.concurrent.BlockingQueue;
-
 import net.i2p.data.Base64;
 import net.i2p.data.ByteArray;
 import net.i2p.data.i2np.DatabaseStoreMessage;

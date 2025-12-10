@@ -11,10 +11,9 @@
  */
 package net.i2p.crypto.eddsa.math.ed25519;
 
+import java.util.Arrays;
 import net.i2p.crypto.eddsa.Utils;
 import net.i2p.crypto.eddsa.math.*;
-
-import java.util.Arrays;
 
 /**
  * Class to represent a field element of the finite field $p = 2^{255} - 19$ elements.

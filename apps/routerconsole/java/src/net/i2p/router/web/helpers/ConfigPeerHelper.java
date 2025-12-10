@@ -3,7 +3,6 @@ package net.i2p.router.web.helpers;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.List;
-
 import net.i2p.data.Hash;
 import net.i2p.router.Blocklist;
 import net.i2p.router.web.HelperBase;

@@ -1,22 +1,23 @@
 package net.i2p.util;
 
+import gnu.getopt.Getopt;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.IOException;
 import java.net.URI;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-
-import gnu.getopt.Getopt;
-
+import net.i2p.I2PAppContext;
+import net.i2p.data.Base64;
+import net.i2p.data.DataHelper;
 import org.minidns.dnsmessage.DnsMessage;
 import org.minidns.dnsmessage.Question;
 import org.minidns.record.A;
@@ -24,10 +25,6 @@ import org.minidns.record.AAAA;
 import org.minidns.record.CNAME;
 import org.minidns.record.Data;
 import org.minidns.record.Record.TYPE;
-
-import net.i2p.I2PAppContext;
-import net.i2p.data.Base64;
-import net.i2p.data.DataHelper;
 
 /**
  *  Simple implemetation of DNS over HTTPS.

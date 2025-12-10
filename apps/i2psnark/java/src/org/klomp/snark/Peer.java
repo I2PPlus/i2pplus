@@ -6,15 +6,6 @@
 
 package org.klomp.snark;
 
-import net.i2p.I2PAppContext;
-import net.i2p.client.streaming.I2PSocket;
-import net.i2p.data.DataHelper;
-import net.i2p.data.Destination;
-import net.i2p.util.Log;
-
-import org.klomp.snark.bencode.BEValue;
-import org.klomp.snark.bencode.InvalidBEncodingException;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -25,6 +16,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
+import net.i2p.I2PAppContext;
+import net.i2p.client.streaming.I2PSocket;
+import net.i2p.data.DataHelper;
+import net.i2p.data.Destination;
+import net.i2p.util.Log;
+import org.klomp.snark.bencode.BEValue;
+import org.klomp.snark.bencode.InvalidBEncodingException;
 
 /**
  * Represents a peer in the BitTorrent network, managing all public information and communication

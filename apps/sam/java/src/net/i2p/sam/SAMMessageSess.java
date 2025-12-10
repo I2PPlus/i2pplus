@@ -1,7 +1,6 @@
 package net.i2p.sam;
 
 import java.io.Closeable;
-
 import net.i2p.client.I2PSessionException;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Destination;

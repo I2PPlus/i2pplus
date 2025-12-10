@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;

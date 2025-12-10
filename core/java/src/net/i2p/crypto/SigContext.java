@@ -1,7 +1,6 @@
 package net.i2p.crypto;
 
 import java.security.spec.AlgorithmParameterSpec;
-
 import net.i2p.data.DataHelper;
 
 /**

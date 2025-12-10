@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
-
 import net.i2p.crypto.EncType;
 import net.i2p.data.Destination;
 import net.i2p.data.PrivateKey;

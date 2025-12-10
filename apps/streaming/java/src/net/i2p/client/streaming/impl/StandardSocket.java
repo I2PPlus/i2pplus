@@ -8,7 +8,6 @@ import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.nio.channels.SocketChannel;
-
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketAddress;
 import net.i2p.client.streaming.I2PSocketOptions;

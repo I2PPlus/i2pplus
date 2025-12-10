@@ -31,7 +31,6 @@ import java.security.cert.Certificate;
 import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Enumeration;
-
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.X509ExtendedKeyManager;
 

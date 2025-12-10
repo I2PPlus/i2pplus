@@ -12,22 +12,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-
-import net.i2p.data.DatabaseEntry;
 import net.i2p.data.DataHelper;
+import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
+import net.i2p.data.LeaseSet;
+import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.DatabaseSearchReplyMessage;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.i2np.I2NPMessage;
-import net.i2p.data.LeaseSet;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.data.TunnelId;
 import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
-import net.i2p.router.message.SendMessageDirectJob;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
+import net.i2p.router.message.SendMessageDirectJob;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 

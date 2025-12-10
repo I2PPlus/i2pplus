@@ -5,13 +5,12 @@
 
 package org.cybergarage.upnp.ssdp;
 
+import java.io.IOException;
+import java.net.*;
 import org.cybergarage.http.*;
 import org.cybergarage.net.*;
 import org.cybergarage.upnp.*;
 import org.cybergarage.util.Debug;
-
-import java.io.IOException;
-import java.net.*;
 
 /**
  * This class identifies a SSDP socket only for <b>notifing packet</b>.

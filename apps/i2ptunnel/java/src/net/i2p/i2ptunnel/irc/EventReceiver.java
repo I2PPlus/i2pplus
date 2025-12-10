@@ -10,7 +10,6 @@ package net.i2p.i2ptunnel.irc;
  */
 
 import java.util.Set;
-
 import net.i2p.util.EventDispatcher;
 
 /**

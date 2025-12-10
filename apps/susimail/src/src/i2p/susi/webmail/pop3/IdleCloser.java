@@ -1,13 +1,11 @@
 package i2p.susi.webmail.pop3;
 
-import i2p.susi.webmail.WebMail;
 import i2p.susi.util.Config;
-
+import i2p.susi.webmail.WebMail;
 import net.i2p.I2PAppContext;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
-
 
 /**
  *  Close the POP3 connection after a certain idle time

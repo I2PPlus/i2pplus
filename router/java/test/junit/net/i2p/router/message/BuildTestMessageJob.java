@@ -10,16 +10,15 @@ package net.i2p.router.message;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import net.i2p.data.Certificate;
 import net.i2p.data.Hash;
 import net.i2p.data.PublicKey;
-import net.i2p.data.router.RouterInfo;
 import net.i2p.data.SessionKey;
 import net.i2p.data.SessionTag;
 import net.i2p.data.i2np.DeliveryInstructions;
 import net.i2p.data.i2np.DeliveryStatusMessage;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
 import net.i2p.router.MessageSelector;

@@ -26,7 +26,6 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.io.SocketInputStream;
 

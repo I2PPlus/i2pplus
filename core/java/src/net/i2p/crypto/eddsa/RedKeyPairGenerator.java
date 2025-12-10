@@ -1,7 +1,6 @@
 package net.i2p.crypto.eddsa;
 
 import java.security.KeyPair;
-
 import net.i2p.crypto.eddsa.spec.EdDSAPrivateKeySpec;
 import net.i2p.crypto.eddsa.spec.EdDSAPublicKeySpec;
 import net.i2p.util.RandomSource;

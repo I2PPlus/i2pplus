@@ -9,7 +9,6 @@ package net.i2p.router.client;
  */
 
 import java.util.Locale;
-
 import net.i2p.data.Base32;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;

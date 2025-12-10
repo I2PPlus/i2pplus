@@ -27,10 +27,8 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.nio.charset.Charset;
 import java.util.Objects;
-
 import javax.net.ServerSocketFactory;
 import javax.net.SocketFactory;
-
 import org.apache.commons.io.IOUtils;
 
 /**

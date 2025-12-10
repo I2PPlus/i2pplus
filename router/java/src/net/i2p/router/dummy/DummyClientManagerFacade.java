@@ -10,7 +10,6 @@ package net.i2p.router.dummy;
 
 import java.util.Collections;
 import java.util.Set;
-
 import net.i2p.crypto.SessionKeyManager;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;

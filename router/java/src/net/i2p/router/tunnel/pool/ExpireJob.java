@@ -1,7 +1,6 @@
 package net.i2p.router.tunnel.pool;
 
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;

@@ -1,8 +1,7 @@
 package org.rrd4j.graph;
 
-import org.rrd4j.data.DataProcessor;
-
 import java.util.Locale;
+import org.rrd4j.data.DataProcessor;
 
 /**
  * Represents comment text elements in RRD graphs. Handles text resolution, marker processing, and

@@ -12,7 +12,6 @@ import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-
 import org.junit.Test;
 
 /**

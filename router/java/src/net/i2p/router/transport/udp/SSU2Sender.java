@@ -1,10 +1,9 @@
 package net.i2p.router.transport.udp;
 
+import com.southernstorm.noise.protocol.CipherState;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.List;
-
-import com.southernstorm.noise.protocol.CipherState;
 
 /**
  * Basic interface over top of PeerState2 and PeerStateDestroyed,

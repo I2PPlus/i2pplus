@@ -10,12 +10,12 @@
  */
 package org.minidns.record;
 
+import java.io.DataInputStream;
+import java.io.IOException;
 import org.minidns.constants.DnssecConstants.DigestAlgorithm;
 import org.minidns.constants.DnssecConstants.SignatureAlgorithm;
 import org.minidns.record.Record.TYPE;
 
-import java.io.DataInputStream;
-import java.io.IOException;
 /**
  * DNS DS (Delegation Signer) record payload for DNSSEC.<br>
  * Contains the hash of a DNSKEY record used to authenticate

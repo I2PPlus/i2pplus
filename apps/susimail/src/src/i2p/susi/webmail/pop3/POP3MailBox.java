@@ -7,16 +7,15 @@
  */
 package i2p.susi.webmail.pop3;
 
+import i2p.susi.util.Buffer;
+import i2p.susi.util.Config;
+import i2p.susi.util.MemoryBuffer;
 import i2p.susi.webmail.Messages;
 import i2p.susi.webmail.NewMailListener;
 import i2p.susi.webmail.WebMail;
-import i2p.susi.util.Config;
-import i2p.susi.util.Buffer;
-import i2p.susi.util.MemoryBuffer;
-
-import java.io.OutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
@@ -24,7 +23,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.I2PAppThread;

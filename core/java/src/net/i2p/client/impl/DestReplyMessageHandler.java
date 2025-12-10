@@ -6,11 +6,10 @@ package net.i2p.client.impl;
  */
 
 import net.i2p.I2PAppContext;
-import net.i2p.data.i2cp.I2CPMessage;
-import net.i2p.data.i2cp.DestReplyMessage;
-
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
+import net.i2p.data.i2cp.DestReplyMessage;
+import net.i2p.data.i2cp.I2CPMessage;
 
 /**
  * Handle I2CP dest replies from the router

@@ -12,7 +12,6 @@ package net.i2p.util;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-
 import net.i2p.data.DataHelper;
 
 /**

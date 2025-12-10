@@ -1,7 +1,6 @@
 package net.i2p.router.networkdb.kademlia;
 
 import java.util.List;
-
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.router.RouterInfo;

@@ -3,7 +3,6 @@ package net.i2p.router.web;
 import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.stat.Rate;
@@ -12,7 +11,6 @@ import net.i2p.stat.RateSummaryListener;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFile;
 import net.i2p.util.SecureFileOutputStream;
-
 import org.rrd4j.ConsolFun;
 import org.rrd4j.DsType;
 import org.rrd4j.core.Archive;

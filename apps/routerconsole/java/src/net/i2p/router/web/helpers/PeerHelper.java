@@ -1,19 +1,20 @@
 package net.i2p.router.web.helpers;
 
+import static net.i2p.router.web.helpers.UDPSorters.*;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 import java.math.RoundingMode;
-import java.util.Comparator;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeSet;
-
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.router.transport.Transport;
@@ -25,10 +26,8 @@ import net.i2p.router.transport.ntcp.NTCPTransport;
 import net.i2p.router.transport.udp.PeerState;
 import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.router.web.HelperBase;
-import static net.i2p.router.web.helpers.UDPSorters.*;
-import net.i2p.util.Addresses;
 import net.i2p.util.AddressType;
-
+import net.i2p.util.Addresses;
 
 /**
  * Helper for peer connections page rendering and form processing.

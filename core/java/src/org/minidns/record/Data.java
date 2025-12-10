@@ -15,7 +15,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
-
 import org.minidns.record.Record.TYPE;
 
 /**

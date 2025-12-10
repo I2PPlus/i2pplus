@@ -5,20 +5,19 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-
+import net.i2p.I2PAppContext;
 import net.i2p.crypto.DSAEngine;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
+import net.i2p.data.Signature;
+import net.i2p.data.SigningPublicKey;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.i2np.I2NPMessageException;
 import net.i2p.data.i2np.I2NPMessageImpl;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.data.Signature;
-import net.i2p.data.SigningPublicKey;
-import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 
 /**

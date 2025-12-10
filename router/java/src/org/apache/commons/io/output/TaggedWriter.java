@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
 import java.util.UUID;
-
 import org.apache.commons.io.TaggedIOException;
 
 /**

@@ -37,6 +37,7 @@ package net.i2p.util;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+import gnu.getopt.Getopt;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -45,14 +46,14 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
+import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.security.KeyStore;
 import java.security.GeneralSecurityException;
+import java.security.KeyStore;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Locale;
-import java.net.Socket;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLSocket;
@@ -60,9 +61,6 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
-
-import gnu.getopt.Getopt;
-
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.CertUtil;
 import net.i2p.crypto.KeyStoreUtil;

@@ -7,7 +7,6 @@ package net.i2p.data.i2cp;
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import net.i2p.data.Hash;
 
 /**

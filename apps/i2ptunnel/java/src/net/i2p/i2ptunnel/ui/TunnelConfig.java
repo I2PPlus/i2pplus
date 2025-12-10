@@ -1,8 +1,8 @@
 package net.i2p.i2ptunnel.ui;
 
 import java.security.GeneralSecurityException;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PClient;
 import net.i2p.crypto.EncType;

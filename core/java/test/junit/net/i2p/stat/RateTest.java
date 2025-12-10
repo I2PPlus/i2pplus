@@ -2,12 +2,9 @@ package net.i2p.stat;
 
 import java.io.ByteArrayInputStream;
 import java.util.Properties;
-import net.i2p.data.DataHelper;
-
-import org.junit.Test;
-
 import junit.framework.TestCase;
-
+import net.i2p.data.DataHelper;
+import org.junit.Test;
 
 public class RateTest extends TestCase {
 

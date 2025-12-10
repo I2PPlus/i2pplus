@@ -1,7 +1,6 @@
 package net.i2p.router.sybil;
 
 import java.io.BufferedReader;
-import java.util.Collections;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -9,13 +8,13 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientApp;
 import net.i2p.app.ClientAppManager;
@@ -25,8 +24,8 @@ import net.i2p.data.Hash;
 import net.i2p.router.Blocklist;
 import net.i2p.update.UpdateManager;
 import net.i2p.update.UpdateType;
-import net.i2p.util.Log;
 import net.i2p.util.FileSuffixFilter;
+import net.i2p.util.Log;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFileOutputStream;
 

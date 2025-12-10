@@ -28,7 +28,6 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Base64;
-
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
@@ -37,7 +36,6 @@ import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.util.SSLContextUtils;
 import org.apache.commons.net.util.SSLSocketUtils;

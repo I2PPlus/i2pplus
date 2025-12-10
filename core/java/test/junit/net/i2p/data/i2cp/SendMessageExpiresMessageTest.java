@@ -9,12 +9,12 @@ package net.i2p.data.i2cp;
  */
 
 import net.i2p.data.DataFormatException;
+import net.i2p.data.DateAndFlags;
+import net.i2p.data.DateAndFlagsTest;
 import net.i2p.data.Destination;
 import net.i2p.data.DestinationTest;
 import net.i2p.data.Payload;
 import net.i2p.data.PayloadTest;
-import net.i2p.data.DateAndFlags;
-import net.i2p.data.DateAndFlagsTest;
 
 /**
  * Test harness for loading / storing SendMessageExpiresMessage objects

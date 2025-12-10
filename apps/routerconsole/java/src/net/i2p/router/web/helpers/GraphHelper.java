@@ -1,21 +1,20 @@
 package net.i2p.router.web.helpers;
 
+import static net.i2p.router.web.GraphConstants.*;
+
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
 import net.i2p.data.DataHelper;
 import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.FormHandler;
-import static net.i2p.router.web.GraphConstants.*;
-import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.GraphGenerator;
 import net.i2p.router.web.GraphListener;
+import net.i2p.router.web.HelperBase;
 import net.i2p.stat.Rate;
 
 /**

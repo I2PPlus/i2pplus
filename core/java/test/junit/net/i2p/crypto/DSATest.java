@@ -9,7 +9,6 @@ package net.i2p.crypto;
  */
 
 import java.io.ByteArrayInputStream;
-
 import junit.framework.TestCase;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Signature;

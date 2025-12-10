@@ -3,9 +3,8 @@ package net.i2p.util;
 //import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.zip.Deflater;
 import java.util.concurrent.LinkedBlockingQueue;
-
+import java.util.zip.Deflater;
 import net.i2p.data.DataHelper;
 
 /**

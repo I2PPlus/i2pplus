@@ -4,8 +4,8 @@ import net.i2p.data.Hash;
 import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Job;
-import net.i2p.router.RouterContext;
 import net.i2p.router.OutNetMessage;
+import net.i2p.router.RouterContext;
 
 /**
  * Ask a connected peer for his RI.

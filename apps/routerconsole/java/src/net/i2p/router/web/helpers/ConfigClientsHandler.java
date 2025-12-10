@@ -1,9 +1,11 @@
 package net.i2p.router.web.helpers;
 
+import static net.i2p.update.UpdateType.*;
+
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -14,7 +16,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-
 import net.i2p.app.ClientApp;
 import net.i2p.app.ClientAppState;
 import net.i2p.crypto.SU3File;
@@ -24,7 +25,6 @@ import net.i2p.router.client.ClientManagerFacadeImpl;
 import net.i2p.router.startup.ClientAppConfig;
 import net.i2p.router.startup.LoadClientAppsJob;
 import net.i2p.router.update.ConsoleUpdateManager;
-import static net.i2p.update.UpdateType.*;
 import net.i2p.router.web.ConfigUpdateHandler;
 import net.i2p.router.web.ConsolePasswordManager;
 import net.i2p.router.web.FormHandler;
@@ -34,11 +34,9 @@ import net.i2p.router.web.PluginStarter;
 import net.i2p.router.web.RouterConsoleRunner;
 import net.i2p.router.web.UpdateHandler;
 import net.i2p.router.web.WebAppStarter;
-import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.PortMapper;
-
+import net.i2p.util.SecureFileOutputStream;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-
 
 /**
  *  Saves changes to clients.config or webapps.config

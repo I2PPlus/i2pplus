@@ -24,13 +24,12 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.app.ClientAppManager;
 import net.i2p.app.Outproxy;
-import net.i2p.crypto.ChaCha20;
 import net.i2p.crypto.Blinding;
+import net.i2p.crypto.ChaCha20;
 import net.i2p.data.Base64;
 import net.i2p.data.Certificate;
 import net.i2p.data.DataHelper;

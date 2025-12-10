@@ -6,8 +6,6 @@
 
 package org.klomp.snark.bencode;
 
-import net.i2p.data.DataHelper;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -19,6 +17,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import net.i2p.data.DataHelper;
 
 /**
  * Converts Java objects to bencoded format for BitTorrent protocol communication.

@@ -11,9 +11,6 @@ package net.i2p.data.router;
 import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
-
-import org.junit.Test;
-
 import net.i2p.data.Certificate;
 import net.i2p.data.CertificateTest;
 import net.i2p.data.DataFormatException;
@@ -23,6 +20,7 @@ import net.i2p.data.PublicKeyTest;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.data.SigningPublicKeyTest;
 import net.i2p.data.StructureTest;
+import org.junit.Test;
 
 /**
  * Test harness for loading / storing Hash objects

@@ -5,10 +5,9 @@ import java.io.OutputStream;
 import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicLong;
-
 import net.i2p.router.RouterContext;
-import net.i2p.stat.RateStat;
 import net.i2p.stat.RateConstants;
+import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 
 /**

@@ -8,12 +8,11 @@ package net.i2p.data;
  *
  */
 
-import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;
-
 import org.junit.Test;
 
 /**

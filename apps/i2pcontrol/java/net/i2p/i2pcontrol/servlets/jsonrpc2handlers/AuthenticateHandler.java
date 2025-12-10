@@ -5,12 +5,11 @@ import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
 import com.thetransactioncompany.jsonrpc2.server.MessageContext;
 import com.thetransactioncompany.jsonrpc2.server.RequestHandler;
+import java.util.HashMap;
+import java.util.Map;
 import net.i2p.i2pcontrol.I2PControlVersion;
 import net.i2p.i2pcontrol.security.AuthToken;
 import net.i2p.i2pcontrol.security.SecurityManager;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /*
  * 

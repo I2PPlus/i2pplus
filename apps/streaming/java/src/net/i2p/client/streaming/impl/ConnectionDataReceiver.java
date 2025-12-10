@@ -1,7 +1,6 @@
 package net.i2p.client.streaming.impl;
 
 import java.io.IOException;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;

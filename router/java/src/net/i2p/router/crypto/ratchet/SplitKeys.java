@@ -1,7 +1,6 @@
 package net.i2p.router.crypto.ratchet;
 
 import com.southernstorm.noise.protocol.HandshakeState;
-
 import net.i2p.crypto.HKDF;
 import net.i2p.data.SessionKey;
 

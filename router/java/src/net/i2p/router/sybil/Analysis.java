@@ -1,5 +1,7 @@
 package net.i2p.router.sybil;
 
+import static net.i2p.app.ClientAppState.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -13,10 +15,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import net.i2p.app.ClientAppManager;
 import net.i2p.app.ClientAppState;
-import static net.i2p.app.ClientAppState.*;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;

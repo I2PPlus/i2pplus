@@ -8,6 +8,12 @@ package net.i2p.util;
  *
  */
 
+import freenet.support.CPUInformation.AMDCPUInfo;
+import freenet.support.CPUInformation.CPUID;
+import freenet.support.CPUInformation.CPUInfo;
+import freenet.support.CPUInformation.IntelCPUInfo;
+import freenet.support.CPUInformation.UnknownCPUException;
+import freenet.support.CPUInformation.VIACPUInfo;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,13 +32,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
-
-import freenet.support.CPUInformation.AMDCPUInfo;
-import freenet.support.CPUInformation.CPUID;
-import freenet.support.CPUInformation.CPUInfo;
-import freenet.support.CPUInformation.IntelCPUInfo;
-import freenet.support.CPUInformation.VIACPUInfo;
-import freenet.support.CPUInformation.UnknownCPUException;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.CryptoConstants;
 import net.i2p.data.DataHelper;

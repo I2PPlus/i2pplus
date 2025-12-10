@@ -1,11 +1,12 @@
 package net.i2p.router.web;
 
+import static net.i2p.update.UpdateType.*;
+
 import net.i2p.app.ClientAppManager;
 import net.i2p.router.RouterContext;
 import net.i2p.router.update.ConsoleUpdateManager;
 import net.i2p.update.UpdateManager;
 import net.i2p.update.UpdateType;
-import static net.i2p.update.UpdateType.*;
 import net.i2p.util.Log;
 
 /**

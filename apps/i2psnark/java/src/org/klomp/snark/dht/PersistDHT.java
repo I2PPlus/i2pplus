@@ -1,10 +1,5 @@
 package org.klomp.snark.dht;
 
-import net.i2p.I2PAppContext;
-import net.i2p.data.DataFormatException;
-import net.i2p.util.Log;
-import net.i2p.util.SecureFileOutputStream;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -13,6 +8,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import net.i2p.I2PAppContext;
+import net.i2p.data.DataFormatException;
+import net.i2p.util.Log;
+import net.i2p.util.SecureFileOutputStream;
 
 /**
  * Retrieve / Store the local DHT in a file

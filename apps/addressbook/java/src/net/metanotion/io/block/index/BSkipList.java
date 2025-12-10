@@ -31,11 +31,9 @@ package net.metanotion.io.block.index;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.HashMap;
-
 import net.metanotion.io.Serializer;
 import net.metanotion.io.block.BlockFile;
 import net.metanotion.util.skiplist.*;
-
 
 /**
  * On-disk SkipList implementation for persistent key-value storage.

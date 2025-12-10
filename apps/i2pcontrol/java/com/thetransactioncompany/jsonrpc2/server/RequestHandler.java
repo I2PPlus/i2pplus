@@ -4,7 +4,6 @@ package com.thetransactioncompany.jsonrpc2.server;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
 
-
 /**
  * Interface for handling JSON-RPC 2.0 requests.
  *

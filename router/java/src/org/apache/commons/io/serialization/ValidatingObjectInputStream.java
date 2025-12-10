@@ -24,7 +24,6 @@ import java.io.InvalidClassException;
 import java.io.ObjectInputStream;
 import java.io.ObjectStreamClass;
 import java.util.regex.Pattern;
-
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**

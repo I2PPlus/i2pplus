@@ -1,7 +1,6 @@
 package net.i2p.router;
 
 import java.util.concurrent.atomic.AtomicInteger;
-
 import net.i2p.data.Hash;
 import net.i2p.util.Log;
 

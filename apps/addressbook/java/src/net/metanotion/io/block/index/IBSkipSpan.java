@@ -29,12 +29,10 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package net.metanotion.io.block.index;
 
 import java.io.IOException;
-
 import net.metanotion.io.Serializer;
 import net.metanotion.io.block.BlockFile;
 import net.metanotion.util.skiplist.SkipList;
 import net.metanotion.util.skiplist.SkipSpan;
-
 
 /**
  * Memory-efficient SkipList span implementation (I2P version).

@@ -24,14 +24,14 @@
  */
 package io.pack200;
 
+import io.pack200.ConstantPool.BootstrapMethodEntry;
 import io.pack200.ConstantPool.ClassEntry;
 import io.pack200.ConstantPool.DescriptorEntry;
+import io.pack200.ConstantPool.InvokeDynamicEntry;
 import io.pack200.ConstantPool.LiteralEntry;
 import io.pack200.ConstantPool.MemberEntry;
 import io.pack200.ConstantPool.MethodHandleEntry;
 import io.pack200.ConstantPool.MethodTypeEntry;
-import io.pack200.ConstantPool.InvokeDynamicEntry;
-import io.pack200.ConstantPool.BootstrapMethodEntry;
 import io.pack200.ConstantPool.SignatureEntry;
 import io.pack200.ConstantPool.Utf8Entry;
 import java.util.HashMap;

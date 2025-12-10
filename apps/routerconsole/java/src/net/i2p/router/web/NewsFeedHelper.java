@@ -4,14 +4,12 @@ import java.text.DateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientAppManager;
 import net.i2p.data.DataHelper;
 import net.i2p.router.news.NewsEntry;
 import net.i2p.router.news.NewsManager;
 import net.i2p.util.SystemVersion;
-
 
 /**
  *  HTML-formatted full news entries

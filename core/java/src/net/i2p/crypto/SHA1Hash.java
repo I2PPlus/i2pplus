@@ -11,7 +11,6 @@ package net.i2p.crypto;
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import net.i2p.data.DataFormatException;
 import net.i2p.data.SimpleDataStructure;
 

@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.util.Map;
 import java.util.Properties;
-
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.I2PClient;

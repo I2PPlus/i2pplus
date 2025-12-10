@@ -3,7 +3,6 @@ package net.i2p.data;
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.Map;
-
 import net.i2p.util.OrderedProperties;
 
 /**

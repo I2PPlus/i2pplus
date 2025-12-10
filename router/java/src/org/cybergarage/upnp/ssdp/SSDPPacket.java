@@ -5,11 +5,10 @@
 
 package org.cybergarage.upnp.ssdp;
 
-import org.cybergarage.http.*;
-import org.cybergarage.upnp.device.*;
-
 import java.net.*;
 import java.nio.charset.StandardCharsets;
+import org.cybergarage.http.*;
+import org.cybergarage.upnp.device.*;
 
 /**
  * Represents an SSDP packet received over UDP.

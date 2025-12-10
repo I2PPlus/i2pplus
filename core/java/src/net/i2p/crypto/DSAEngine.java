@@ -40,7 +40,6 @@ import java.security.PublicKey;
 import java.security.interfaces.DSAKey;
 import java.security.interfaces.ECKey;
 import java.security.interfaces.RSAKey;
-
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.eddsa.EdDSAEngine;
 import net.i2p.crypto.eddsa.EdDSAKey;

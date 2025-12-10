@@ -1,13 +1,13 @@
 package net.i2p.crypto.elgamal;
 
+import static net.i2p.crypto.CryptoConstants.I2P_ELGAMAL_2048_SPEC;
+
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidParameterException;
 import java.security.KeyPair;
 import java.security.KeyPairGeneratorSpi;
 import java.security.SecureRandom;
 import java.security.spec.AlgorithmParameterSpec;
-
-import static net.i2p.crypto.CryptoConstants.I2P_ELGAMAL_2048_SPEC;
 import net.i2p.crypto.KeyGenerator;
 import net.i2p.crypto.elgamal.impl.ElGamalPrivateKeyImpl;
 import net.i2p.crypto.elgamal.impl.ElGamalPublicKeyImpl;

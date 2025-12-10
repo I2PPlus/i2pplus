@@ -5,6 +5,8 @@
  */
 package net.i2p.i2ptunnel.socks;
 
+import static net.i2p.socks.SOCKS4Constants.*;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -14,7 +16,6 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
-
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.app.Outproxy;
@@ -23,9 +24,8 @@ import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketOptions;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Destination;
-import static net.i2p.socks.SOCKS4Constants.*;
-import net.i2p.util.HexDump;
 import net.i2p.socks.SOCKSException;
+import net.i2p.util.HexDump;
 
 /**
  * SOCKS4a server implementation for handling SOCKS version 4/4a connections.

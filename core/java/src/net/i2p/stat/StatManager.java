@@ -10,7 +10,6 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
-
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 

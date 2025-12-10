@@ -2,7 +2,6 @@ package net.i2p.router.crypto.ratchet;
 
 import java.util.List;
 
-
 /**
  *  Container for outbound ratchet encryption data including tag, key, nonce, and optional next session keys for message preparation
  *  The object returned from SKM.consumeNextAvailableTag() to the engine encrypt.

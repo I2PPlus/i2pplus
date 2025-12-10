@@ -1,13 +1,11 @@
 package i2p.susi.webmail;
 
+import i2p.susi.util.Buffer;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
-
-import i2p.susi.util.Buffer;
 
 /**
  * Represents a draft email message with attachments and Bcc support.

@@ -1,11 +1,11 @@
 package net.i2p.router.crypto.ratchet;
 
 import java.util.concurrent.LinkedBlockingQueue;
-
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.KeyFactory;
 import net.i2p.crypto.KeyPair;
 import net.i2p.router.RouterContext;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
@@ -43,10 +43,10 @@ public class Elg2KeyFactory extends I2PThread implements KeyFactory {
         _context = ctx;
         _log = ctx.logManager().getLog(Elg2KeyFactory.class);
         _elg2 = new Elligator2(ctx);
-        ctx.statManager().createRateStat("crypto.EDHGenerateTime", "Time to create x and X", "Encryption", new long[] { 60*1000, 60*60*1000 });
-        ctx.statManager().createRateStat("crypto.EDHUsed", "Need a DH from the queue", "Encryption", new long[] { 60*1000, 60*60*1000 });
-        ctx.statManager().createRateStat("crypto.EDHReused", "Unused DH requeued", "Encryption", new long[] { 60*1000, 60*60*1000 });
-        ctx.statManager().createRateStat("crypto.EDHEmpty", "DH queue empty", "Encryption", new long[] { 60*1000, 60*60*1000 });
+        ctx.statManager().createRateStat("crypto.EDHGenerateTime", "Time to create x and X", "Encryption", new long[] { RateConstants.ONE_MINUTE });
+        ctx.statManager().createRateStat("crypto.EDHUsed", "Need a DH from the queue", "Encryption", new long[] { RateConstants.ONE_MINUTE });
+        ctx.statManager().createRateStat("crypto.EDHReused", "Unused DH requeued", "Encryption", new long[] { RateConstants.ONE_MINUTE });
+        ctx.statManager().createRateStat("crypto.EDHEmpty", "DH queue empty", "Encryption", new long[] { RateConstants.ONE_MINUTE });
 
         // add to the defaults for every 128MB of RAM, up to 512MB
         long maxMemory = SystemVersion.getMaxMemory();

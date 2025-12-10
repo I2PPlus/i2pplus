@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Locale;
-
 import net.i2p.data.DataHelper;
 
 /**

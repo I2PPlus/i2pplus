@@ -1,10 +1,11 @@
 package net.i2p.router.tunnel.pool;
 
+import static net.i2p.router.tunnel.pool.BuildExecutor.Result.*;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
-
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SessionKeyManager;
 import net.i2p.data.EmptyProperties;
@@ -23,14 +24,13 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
-import net.i2p.router.crypto.ratchet.RatchetSKM;
 import net.i2p.router.crypto.ratchet.MuxedPQSKM;
 import net.i2p.router.crypto.ratchet.MuxedSKM;
+import net.i2p.router.crypto.ratchet.RatchetSKM;
 import net.i2p.router.networkdb.kademlia.MessageWrapper;
 import net.i2p.router.networkdb.kademlia.MessageWrapper.OneTimeSession;
 import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelCreatorConfig;
-import static net.i2p.router.tunnel.pool.BuildExecutor.Result.*;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;

@@ -10,12 +10,6 @@
  */
 package org.minidns.dnsmessage;
 
-import org.minidns.edns.Edns;
-import org.minidns.record.Data;
-import org.minidns.record.OPT;
-import org.minidns.record.Record;
-import org.minidns.record.Record.TYPE;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -37,6 +31,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.minidns.edns.Edns;
+import org.minidns.record.Data;
+import org.minidns.record.OPT;
+import org.minidns.record.Record;
+import org.minidns.record.Record.TYPE;
 
 /**
  * A DNS message as defined by RFC 1035. The message consists of a header and

@@ -10,13 +10,12 @@ package net.i2p.data.router;
  */
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Arrays;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.TimeZone;
-
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.SHA256Generator;
 import net.i2p.data.DataHelper;

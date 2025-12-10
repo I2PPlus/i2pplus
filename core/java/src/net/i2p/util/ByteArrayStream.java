@@ -1,9 +1,8 @@
 package net.i2p.util;
 
-import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
-
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.DSAEngine;
 import net.i2p.data.Signature;

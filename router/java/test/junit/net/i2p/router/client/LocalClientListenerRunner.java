@@ -1,7 +1,6 @@
 package net.i2p.router.client;
 
 import java.net.Socket;
-
 import net.i2p.router.RouterContext;
 
 /**

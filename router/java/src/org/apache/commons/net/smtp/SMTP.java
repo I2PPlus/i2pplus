@@ -24,7 +24,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-
 import org.apache.commons.net.MalformedServerReplyException;
 import org.apache.commons.net.ProtocolCommandSupport;
 import org.apache.commons.net.SocketClient;

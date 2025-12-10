@@ -5,6 +5,7 @@
 
 package org.cybergarage.upnp;
 
+import java.util.Iterator;
 import org.cybergarage.upnp.control.QueryListener;
 import org.cybergarage.upnp.control.QueryRequest;
 import org.cybergarage.upnp.control.QueryResponse;
@@ -12,8 +13,6 @@ import org.cybergarage.upnp.xml.NodeData;
 import org.cybergarage.upnp.xml.StateVariableData;
 import org.cybergarage.util.Debug;
 import org.cybergarage.xml.Node;
-
-import java.util.Iterator;
 
 public class StateVariable extends NodeData {
     ////////////////////////////////////////////////

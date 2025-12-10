@@ -5,11 +5,10 @@
 
 package org.cybergarage.upnp.ssdp;
 
-import org.cybergarage.net.*;
-import org.cybergarage.upnp.*;
-
 import java.net.InetAddress;
 import java.util.*;
+import org.cybergarage.net.*;
+import org.cybergarage.upnp.*;
 
 /**
  * A list of SSDP search response sockets for handling SSDP search responses.<br>

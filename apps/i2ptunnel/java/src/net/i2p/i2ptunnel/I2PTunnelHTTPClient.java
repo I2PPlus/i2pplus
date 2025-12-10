@@ -16,7 +16,6 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
-
 import net.i2p.I2PException;
 import net.i2p.app.ClientApp;
 import net.i2p.app.ClientAppManager;
@@ -40,7 +39,6 @@ import net.i2p.util.ConvertToHash;
 import net.i2p.util.DNSOverHTTPS;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.InternalSocket;
-import net.i2p.util.Log;
 import net.i2p.util.PortMapper;
 
 /**

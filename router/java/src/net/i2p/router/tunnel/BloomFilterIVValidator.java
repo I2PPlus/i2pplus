@@ -1,7 +1,6 @@
 package net.i2p.router.tunnel;
 
 import java.io.File;
-
 import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.router.tasks.OOMListener;

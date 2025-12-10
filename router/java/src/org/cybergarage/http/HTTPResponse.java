@@ -5,9 +5,8 @@
 
 package org.cybergarage.http;
 
-import org.cybergarage.util.Debug;
-
 import java.io.InputStream;
+import org.cybergarage.util.Debug;
 
 public class HTTPResponse extends HTTPPacket {
     ////////////////////////////////////////////////

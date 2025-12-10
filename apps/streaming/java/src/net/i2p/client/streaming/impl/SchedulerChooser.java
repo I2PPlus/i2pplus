@@ -2,7 +2,6 @@ package net.i2p.client.streaming.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 

@@ -1,9 +1,8 @@
 package org.rrd4j.data;
 
-import org.rrd4j.core.Util;
-
 import java.util.Calendar;
 import java.util.Date;
+import org.rrd4j.core.Util;
 
 /**
  * Interpolates datasource values from timestamp-value collections.<br>

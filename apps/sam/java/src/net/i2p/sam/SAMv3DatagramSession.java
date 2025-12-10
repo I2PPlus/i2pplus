@@ -6,17 +6,15 @@
 package net.i2p.sam;
 
 import java.io.IOException;
-import java.net.SocketAddress ;
+import java.net.SocketAddress;
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.Properties;
-
 import net.i2p.client.I2PSession;
 import net.i2p.client.I2PSessionException;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
-
 
 /**
  * SAM v3 datagram session implementation.

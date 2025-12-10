@@ -9,7 +9,6 @@ package net.i2p.data;
  *
  */
 
-import java.security.NoSuchAlgorithmException;
 
 
 

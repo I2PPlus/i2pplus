@@ -1,10 +1,9 @@
 package net.i2p.router;
 
-import java.util.Set;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-
+import java.util.Set;
 import net.i2p.data.Base64;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;

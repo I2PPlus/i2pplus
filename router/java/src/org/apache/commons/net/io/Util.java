@@ -28,7 +28,6 @@ import java.io.Reader;
 import java.io.Writer;
 import java.net.Socket;
 import java.nio.charset.Charset;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.util.NetConstants;
 

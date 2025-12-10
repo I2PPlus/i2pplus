@@ -1,10 +1,11 @@
 package net.i2p.router.update;
 
+import static net.i2p.update.UpdateType.*;
+
 import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.router.web.ConfigUpdateHandler;
 import net.i2p.router.web.NewsHelper;
-import static net.i2p.update.UpdateType.*;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;

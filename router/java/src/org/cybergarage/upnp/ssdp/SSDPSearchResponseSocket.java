@@ -5,9 +5,8 @@
 
 package org.cybergarage.upnp.ssdp;
 
-import org.cybergarage.upnp.*;
-
 import java.net.DatagramSocket;
+import org.cybergarage.upnp.*;
 
 /**
  * Socket for receiving SSDP search responses from UPnP devices.

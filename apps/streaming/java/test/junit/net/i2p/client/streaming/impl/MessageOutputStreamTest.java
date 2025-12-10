@@ -1,15 +1,12 @@
 package net.i2p.client.streaming.impl;
 
 import java.io.ByteArrayOutputStream;
-
 import junit.framework.TestCase;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.Base64;
 import net.i2p.util.SimpleTimer2;
+import org.junit.Before;
+import org.junit.Test;
 
 public class MessageOutputStreamTest extends TestCase {
     private I2PAppContext _context;

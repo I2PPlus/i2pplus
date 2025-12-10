@@ -5,9 +5,8 @@
 
 package org.cybergarage.http;
 
-import org.cybergarage.util.Debug;
-
 import java.util.StringTokenizer;
+import org.cybergarage.util.Debug;
 
 /**
  * Represents an HTTP status line with version, status code, and reason phrase. This class provides

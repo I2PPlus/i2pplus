@@ -1,7 +1,6 @@
 package org.bouncycastle.pqc.crypto.mlkem;
 
 import java.util.Arrays;
-
 import org.bouncycastle.util.Util;
 
 /**

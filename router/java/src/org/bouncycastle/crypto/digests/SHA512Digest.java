@@ -6,7 +6,6 @@ import org.bouncycastle.crypto.CryptoServicesRegistrar;
 import org.bouncycastle.util.Memoable;
 import org.bouncycastle.util.Pack;
 
-
 /**
  * FIPS 180-2 implementation of SHA-512.
  *

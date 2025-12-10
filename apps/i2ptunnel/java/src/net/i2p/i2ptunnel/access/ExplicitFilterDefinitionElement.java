@@ -1,7 +1,6 @@
 package net.i2p.i2ptunnel.access;
 
 import java.util.Map;
-
 import net.i2p.data.Hash;
 
 /**

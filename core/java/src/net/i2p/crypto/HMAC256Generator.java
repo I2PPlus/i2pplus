@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.concurrent.LinkedBlockingQueue;
 import javax.crypto.Mac;
 import javax.crypto.SecretKey;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.data.SessionKey;

@@ -10,10 +10,8 @@
 package net.i2p.router.web;
 
 import java.io.File;
-
-import java.util.Arrays;
 import java.util.ArrayList;
-
+import java.util.Arrays;
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientApp;
 import net.i2p.app.ClientAppManager;

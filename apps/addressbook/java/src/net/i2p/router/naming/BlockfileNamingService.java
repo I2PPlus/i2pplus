@@ -13,8 +13,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,7 +27,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
-
 import net.i2p.I2PAppContext;
 import net.i2p.client.naming.DummyNamingService;
 import net.i2p.client.naming.HostsTxtNamingService;
@@ -43,7 +42,6 @@ import net.i2p.util.Log;
 import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
-
 import net.metanotion.io.RAIFile;
 import net.metanotion.io.Serializer;
 import net.metanotion.io.block.BlockFile;
@@ -51,7 +49,6 @@ import net.metanotion.io.data.IntBytes;
 import net.metanotion.io.data.UTF8StringBytes;
 import net.metanotion.util.skiplist.SkipIterator;
 import net.metanotion.util.skiplist.SkipList;
-
 
 /**
  * A naming service using the net.metanotion BlockFile database.

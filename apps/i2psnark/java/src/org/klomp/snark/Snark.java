@@ -6,15 +6,6 @@
 
 package org.klomp.snark;
 
-import net.i2p.I2PAppContext;
-import net.i2p.client.streaming.I2PServerSocket;
-import net.i2p.data.Destination;
-import net.i2p.util.Log;
-import net.i2p.util.SecureFile;
-
-import org.klomp.snark.comments.Comment;
-import org.klomp.snark.comments.CommentSet;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -22,6 +13,13 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import net.i2p.I2PAppContext;
+import net.i2p.client.streaming.I2PServerSocket;
+import net.i2p.data.Destination;
+import net.i2p.util.Log;
+import net.i2p.util.SecureFile;
+import org.klomp.snark.comments.Comment;
+import org.klomp.snark.comments.CommentSet;
 
 /**
  * Main Snark program startup class.

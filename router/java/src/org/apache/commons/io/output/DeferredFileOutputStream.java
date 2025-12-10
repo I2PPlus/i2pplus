@@ -24,7 +24,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.function.Supplier;
-
 import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.file.PathUtils;
 

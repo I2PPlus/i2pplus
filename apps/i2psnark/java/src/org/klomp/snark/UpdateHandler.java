@@ -1,10 +1,9 @@
 package org.klomp.snark;
 
-import net.i2p.I2PAppContext;
-import net.i2p.update.*;
-
 import java.net.URI;
 import java.util.List;
+import net.i2p.I2PAppContext;
+import net.i2p.update.*;
 
 /**
  * Handles the request to update the router by firing up a magnet. {@link net.i2p.util.EepGet} calls

@@ -1,17 +1,15 @@
 package net.i2p.util;
 
+import gnu.getopt.Getopt;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-
-import gnu.getopt.Getopt;
-
+import java.nio.charset.StandardCharsets;
 import net.i2p.I2PAppContext;
 
 /**

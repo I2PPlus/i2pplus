@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.servlet.RequestWrapper;

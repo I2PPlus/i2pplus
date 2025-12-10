@@ -13,11 +13,10 @@ import java.io.Writer;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
-import net.i2p.router.RouterContext;
 import net.i2p.router.Banlist;
+import net.i2p.router.RouterContext;
 import net.i2p.router.web.Messages;
 
 /**

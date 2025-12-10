@@ -1,10 +1,8 @@
 package net.i2p.data.i2np;
 
+import com.southernstorm.noise.protocol.ChaChaPolyCipherState;
 import java.security.GeneralSecurityException;
 import java.util.Properties;
-
-import com.southernstorm.noise.protocol.ChaChaPolyCipherState;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;

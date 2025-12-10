@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
-
 import net.i2p.data.DataHelper;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.router.CommSystemFacade.Status;

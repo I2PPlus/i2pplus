@@ -3,7 +3,6 @@ package com.thetransactioncompany.jsonrpc2;
 
 import org.json.simple.JsonObject;
 
-
 /**
  * Represents a JSON-RPC 2.0 error that occurred during the processing of a
  * request. This class is immutable.

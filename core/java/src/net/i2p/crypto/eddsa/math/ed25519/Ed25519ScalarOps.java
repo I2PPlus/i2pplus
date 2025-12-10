@@ -11,9 +11,10 @@
  */
 package net.i2p.crypto.eddsa.math.ed25519;
 
-import net.i2p.crypto.eddsa.math.ScalarOps;
 import static net.i2p.crypto.eddsa.math.ed25519.Ed25519LittleEndianEncoding.load_3;
 import static net.i2p.crypto.eddsa.math.ed25519.Ed25519LittleEndianEncoding.load_4;
+
+import net.i2p.crypto.eddsa.math.ScalarOps;
 
 /**
  * Class for reducing a huge integer modulo the group order q and

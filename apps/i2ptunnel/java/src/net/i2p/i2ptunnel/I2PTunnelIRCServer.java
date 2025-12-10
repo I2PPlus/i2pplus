@@ -10,13 +10,12 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.util.Locale;
 import java.util.Properties;
-
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.crypto.SHA256Generator;
+import net.i2p.data.Base32;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
-import net.i2p.data.Base32;
 import net.i2p.util.EventDispatcher;
 
 /**

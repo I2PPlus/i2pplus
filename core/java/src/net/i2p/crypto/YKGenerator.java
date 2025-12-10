@@ -11,8 +11,8 @@ package net.i2p.crypto;
 
 import java.math.BigInteger;
 import java.util.concurrent.LinkedBlockingQueue;
-
 import net.i2p.I2PAppContext;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.I2PThread;
 import net.i2p.util.NativeBigInteger;
 import net.i2p.util.SystemVersion;
@@ -67,8 +67,8 @@ final class YKGenerator {
         MAX_NUM_BUILDERS = ctx.getProperty(PROP_YK_PRECALC_MAX, defaultMax);
         CALC_DELAY = ctx.getProperty(PROP_YK_PRECALC_DELAY, DEFAULT_YK_PRECALC_DELAY);
         _values = new LinkedBlockingQueue<BigInteger[]>(MAX_NUM_BUILDERS);
-        ctx.statManager().createRateStat("crypto.YKUsed", "How often a precalculated ephemeral key (YK) is needed from queue", "Encryption", new long[] { 60*1000, 60*60*1000 });
-        ctx.statManager().createRateStat("crypto.YKEmpty", "How often precalculated ephemeral key (YK) queue is empty", "Encryption", new long[] { 60*1000, 60*60*1000 });
+        ctx.statManager().createRateStat("crypto.YKUsed", "How often a precalculated ephemeral key (YK) is needed from queue", "Encryption", new long[] { RateConstants.ONE_MINUTE });
+        ctx.statManager().createRateStat("crypto.YKEmpty", "How often precalculated ephemeral key (YK) queue is empty", "Encryption", new long[] { RateConstants.ONE_MINUTE });
     }
 
     /**

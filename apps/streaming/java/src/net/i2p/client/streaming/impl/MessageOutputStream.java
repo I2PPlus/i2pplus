@@ -5,7 +5,6 @@ import java.io.InterruptedIOException;
 import java.io.OutputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.ByteArray;
 import net.i2p.util.ByteCache;

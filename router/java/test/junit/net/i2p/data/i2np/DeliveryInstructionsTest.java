@@ -14,7 +14,6 @@ import net.i2p.data.DataStructure;
 import net.i2p.data.Hash;
 import net.i2p.data.StructureTest;
 import net.i2p.data.TunnelId;
-
 import org.junit.Test;
 
 /**

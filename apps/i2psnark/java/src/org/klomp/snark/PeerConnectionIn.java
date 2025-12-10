@@ -6,11 +6,10 @@
 
 package org.klomp.snark;
 
-import net.i2p.I2PAppContext;
-import net.i2p.util.Log;
-
 import java.io.DataInputStream;
 import java.io.IOException;
+import net.i2p.I2PAppContext;
+import net.i2p.util.Log;
 
 /**
  * Handles incoming BitTorrent protocol messages from a peer.<br>

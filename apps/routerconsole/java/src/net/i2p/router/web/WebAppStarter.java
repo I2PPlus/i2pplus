@@ -2,27 +2,24 @@ package net.i2p.router.web;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
 import net.i2p.I2PAppContext;
 import net.i2p.router.RouterContext;
 import net.i2p.util.FileUtil;
 import net.i2p.util.PortMapper;
 import net.i2p.util.SecureDirectory;
-
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandler;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.webapp.WebAppContext;
-
 
 /**
  *  Add, start or stop a webapp.

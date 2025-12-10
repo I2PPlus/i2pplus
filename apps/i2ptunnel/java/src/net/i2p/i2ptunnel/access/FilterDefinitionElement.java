@@ -1,10 +1,9 @@
 package net.i2p.i2ptunnel.access;
 
-import java.util.Map;
 import java.io.IOException;
-
-import net.i2p.data.Hash;
+import java.util.Map;
 import net.i2p.data.Base32;
+import net.i2p.data.Hash;
 
 /**
  * Base class for filter definition elements.

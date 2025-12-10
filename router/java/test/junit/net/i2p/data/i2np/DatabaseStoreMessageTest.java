@@ -10,16 +10,15 @@ package net.i2p.data.i2np;
 
 import static org.junit.Assert.*;
 
-import org.junit.Test;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataStructure;
 import net.i2p.data.Hash;
+import net.i2p.data.StructureTest;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.data.router.RouterInfoTest;
-import net.i2p.data.StructureTest;
 import net.i2p.util.Clock;
+import org.junit.Test;
 
 /**
  * Test harness for loading / storing I2NP DatabaseStore message objects

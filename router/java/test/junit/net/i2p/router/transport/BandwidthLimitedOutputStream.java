@@ -11,7 +11,6 @@ package net.i2p.router.transport;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;

@@ -6,18 +6,17 @@
 
 package org.klomp.snark;
 
-import net.i2p.I2PAppContext;
-import net.i2p.client.streaming.I2PSocket;
-import net.i2p.data.Base64;
-import net.i2p.data.DataHelper;
-import net.i2p.util.Log;
-
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.SequenceInputStream;
+import net.i2p.I2PAppContext;
+import net.i2p.client.streaming.I2PSocket;
+import net.i2p.data.Base64;
+import net.i2p.data.DataHelper;
+import net.i2p.util.Log;
 
 /**
  * Accepts incomming connections from peers. The ConnectionAcceptor will call the connection()

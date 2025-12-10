@@ -8,7 +8,6 @@ import java.io.OutputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.Blinding;
 import net.i2p.crypto.ChaCha20;

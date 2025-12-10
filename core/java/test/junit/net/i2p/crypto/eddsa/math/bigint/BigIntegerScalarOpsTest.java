@@ -11,18 +11,15 @@
  */
 package net.i2p.crypto.eddsa.math.bigint;
 
-import static org.hamcrest.Matchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
-
+import static org.hamcrest.Matchers.*;
 
 import java.math.BigInteger;
-
 import net.i2p.crypto.eddsa.Utils;
 import net.i2p.crypto.eddsa.math.Field;
 import net.i2p.crypto.eddsa.math.ScalarOps;
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveSpec;
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable;
-
 import org.junit.Test;
 
 /**

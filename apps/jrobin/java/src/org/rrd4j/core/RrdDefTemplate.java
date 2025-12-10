@@ -1,15 +1,14 @@
 package org.rrd4j.core;
 
-import org.rrd4j.ConsolFun;
-import org.rrd4j.DsType;
-import org.w3c.dom.Node;
-import org.xml.sax.InputSource;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Calendar;
+import org.rrd4j.ConsolFun;
+import org.rrd4j.DsType;
+import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
 
 /**
  * Class used to create an arbitrary number of {@link org.rrd4j.core.RrdDef} (RRD definition)

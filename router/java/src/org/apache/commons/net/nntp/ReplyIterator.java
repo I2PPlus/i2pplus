@@ -21,7 +21,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.io.DotTerminatedMessageReader;
 

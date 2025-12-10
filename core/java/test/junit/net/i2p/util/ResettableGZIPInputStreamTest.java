@@ -11,10 +11,8 @@ package net.i2p.util;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.zip.GZIPOutputStream;
-
 import junit.framework.TestCase;
 import net.i2p.data.DataHelper;
-
 
 public class ResettableGZIPInputStreamTest extends TestCase {
     public void testResettableGZIPInputStream() throws Exception{

@@ -1,7 +1,7 @@
 package net.i2p.router.transport.udp;
 
-import java.net.InetAddress;
 import java.net.Inet6Address;
+import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -10,7 +10,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;

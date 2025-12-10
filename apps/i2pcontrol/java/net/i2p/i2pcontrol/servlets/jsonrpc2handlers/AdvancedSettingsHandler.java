@@ -5,15 +5,13 @@ import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
 import com.thetransactioncompany.jsonrpc2.server.MessageContext;
 import com.thetransactioncompany.jsonrpc2.server.RequestHandler;
-
-import net.i2p.I2PAppContext;
-import net.i2p.router.RouterContext;
-import net.i2p.util.Log;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import net.i2p.I2PAppContext;
+import net.i2p.router.RouterContext;
+import net.i2p.util.Log;
 
 /**
  * JSON-RPC handler for advanced router settings.

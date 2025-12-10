@@ -5,7 +5,6 @@ import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
-
 import net.i2p.router.RouterContext;
 import net.i2p.router.web.PluginStarter;
 import net.i2p.update.*;

@@ -6,11 +6,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
-import java.util.Map;
 import java.util.List;
-
-import net.i2p.I2PAppContext;
+import java.util.Map;
 import junit.framework.TestCase;
+import net.i2p.I2PAppContext;
 
 public class I2PTunnelHTTPServerTest extends TestCase {
 

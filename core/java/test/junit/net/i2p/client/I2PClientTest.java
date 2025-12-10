@@ -10,9 +10,7 @@ package net.i2p.client;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-
 import junit.framework.TestCase;
-
 
 /**
  *

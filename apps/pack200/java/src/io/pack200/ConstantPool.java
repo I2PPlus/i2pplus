@@ -25,6 +25,8 @@
 
 package io.pack200;
 
+import static io.pack200.Constants.*;
+
 import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +35,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
-import static io.pack200.Constants.*;
 
 /**
  * Representation of constant pool entries and indexes.

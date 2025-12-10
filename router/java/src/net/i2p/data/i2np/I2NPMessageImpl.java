@@ -10,16 +10,14 @@ package net.i2p.data.i2np;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleByteCache;
-
-import java.util.Date;
 
 /**
  * Defines the base message implementation.

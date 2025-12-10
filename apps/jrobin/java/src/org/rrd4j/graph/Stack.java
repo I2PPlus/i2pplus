@@ -1,8 +1,7 @@
 package org.rrd4j.graph;
 
-import org.rrd4j.data.DataProcessor;
-
 import java.awt.*;
+import org.rrd4j.data.DataProcessor;
 
 /**
  * Represents a stacked plot element in RRD graphs. Extends SourcedPlotElement to stack values on

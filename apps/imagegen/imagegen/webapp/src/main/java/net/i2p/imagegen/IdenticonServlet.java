@@ -1,27 +1,23 @@
 package net.i2p.imagegen;
 
+import com.docuverse.identicon.IdenticonCache;
+import com.docuverse.identicon.IdenticonRenderer;
+import com.docuverse.identicon.IdenticonUtil;
+import com.docuverse.identicon.NineBlockIdenticonRenderer2;
 import java.awt.image.RenderedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
-
 import javax.imageio.ImageIO;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.docuverse.identicon.IdenticonCache;
-import com.docuverse.identicon.IdenticonRenderer;
-import com.docuverse.identicon.IdenticonUtil;
-import com.docuverse.identicon.NineBlockIdenticonRenderer2;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.Hash;
 import net.i2p.util.ConvertToHash;
 import net.i2p.util.Log;
-
 
 /**
  * This servlet generates <i>identicon</i> (visual identifier) images ranging

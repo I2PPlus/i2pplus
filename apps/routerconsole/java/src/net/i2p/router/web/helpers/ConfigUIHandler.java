@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import net.i2p.data.DataHelper;
 import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.ConsolePasswordManager;
-import net.i2p.router.web.RouterConsoleRunner;
 import net.i2p.router.web.FormHandler;
-
+import net.i2p.router.web.RouterConsoleRunner;
 
 /** Set the theme */
 public class ConfigUIHandler extends FormHandler {

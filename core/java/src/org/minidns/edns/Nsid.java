@@ -11,7 +11,6 @@
 package org.minidns.edns;
 
 import java.nio.charset.StandardCharsets;
-
 import org.minidns.edns.Edns.OptionCode;
 import org.minidns.util.Hex;
 

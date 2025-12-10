@@ -5,9 +5,12 @@
 
 package org.cybergarage.upnp;
 
+import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Locale;
 import net.i2p.router.transport.TransportUtil;
 import net.i2p.util.Addresses;
-
 import org.cybergarage.http.HTTPRequest;
 import org.cybergarage.http.HTTPRequestListener;
 import org.cybergarage.http.HTTPServerList;
@@ -38,11 +41,6 @@ import org.cybergarage.xml.Node;
 import org.cybergarage.xml.NodeList;
 import org.cybergarage.xml.Parser;
 import org.cybergarage.xml.ParserException;
-
-import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Locale;
 
 /**
  * Main UPnP control point implementation for device discovery and control.

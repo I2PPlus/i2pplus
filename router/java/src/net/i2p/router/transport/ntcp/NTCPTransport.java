@@ -1,5 +1,8 @@
 package net.i2p.router.transport.ntcp;
 
+import static net.i2p.router.transport.Transport.AddressSource.*;
+import static net.i2p.router.transport.TransportUtil.IPv6Config.*;
+
 import java.io.IOException;
 import java.net.Inet6Address;
 import java.net.InetAddress;
@@ -10,7 +13,6 @@ import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -19,7 +21,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-
+import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.KeyPair;
 import net.i2p.crypto.SigType;
@@ -27,9 +29,9 @@ import net.i2p.data.Base64;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
+import net.i2p.data.PrivateKey;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.i2np.I2NPMessage;
-import net.i2p.data.PrivateKey;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
@@ -37,25 +39,23 @@ import net.i2p.router.Banlist;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
-import net.i2p.router.transport.crypto.X25519KeyFactory;
 import net.i2p.router.transport.Transport;
 import net.i2p.router.transport.TransportBid;
 import net.i2p.router.transport.TransportImpl;
 import net.i2p.router.transport.TransportManager;
 import net.i2p.router.transport.TransportUtil;
+import net.i2p.router.transport.crypto.X25519KeyFactory;
 import net.i2p.router.transport.udp.UDPTransport;
 import net.i2p.router.util.DecayingBloomFilter;
 import net.i2p.router.util.DecayingHashSet;
 import net.i2p.router.util.EventLog;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.Addresses;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.Log;
 import net.i2p.util.OrderedProperties;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
-import net.i2p.stat.RateConstants;
-import static net.i2p.router.transport.Transport.AddressSource.*;
-import static net.i2p.router.transport.TransportUtil.IPv6Config.*;
 
 /**
  * Non-blocking TCP (NTCP) transport implementation for I2P.

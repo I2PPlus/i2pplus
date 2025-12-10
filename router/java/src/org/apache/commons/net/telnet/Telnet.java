@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.time.Duration;
 import java.util.Arrays;
-
 import org.apache.commons.net.SocketClient;
 
 /**

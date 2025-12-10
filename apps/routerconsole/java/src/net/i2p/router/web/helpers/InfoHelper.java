@@ -8,7 +8,6 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.SortedMap;
-
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;

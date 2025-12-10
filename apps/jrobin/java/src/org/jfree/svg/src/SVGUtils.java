@@ -32,8 +32,6 @@
 
 package org.jfree.svg;
 
-import org.jfree.svg.util.Args;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,6 +41,7 @@ import java.io.OutputStreamWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPOutputStream;
+import org.jfree.svg.util.Args;
 
 /** Utility methods related to the {@link SVGGraphics2D} implementation. */
 public class SVGUtils {

@@ -16,11 +16,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import net.i2p.data.DataFormatException;
+import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.data.SigningPrivateKey;
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;

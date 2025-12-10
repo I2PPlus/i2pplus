@@ -1,16 +1,15 @@
 package net.i2p.router.update;
 
+import static net.i2p.update.UpdateType.*;
+
 import java.io.File;
 import java.net.URI;
 import java.util.List;
-
 import net.i2p.router.RouterContext;
 import net.i2p.router.web.ConfigUpdateHandler;
-import static net.i2p.update.UpdateType.*;
 import net.i2p.util.EepGet;
 import net.i2p.util.PortMapper;
 import net.i2p.util.RFC822Date;
-
 
 /**
  *  Eepget the .zip file to the temp dir, then notify.r

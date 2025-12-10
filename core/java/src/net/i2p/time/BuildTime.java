@@ -1,8 +1,8 @@
 package net.i2p.time;
 
 import java.io.File;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,7 +11,6 @@ import java.util.Locale;
 import java.util.TimeZone;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
-
 import net.i2p.I2PAppContext;
 import net.i2p.util.SystemVersion;
 

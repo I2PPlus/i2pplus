@@ -4,9 +4,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.CopyOnWriteArrayList;
-
+import java.util.concurrent.CopyOnWriteArraySet;
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientAppManager;
 import net.i2p.crypto.EncType;
@@ -17,9 +16,9 @@ import net.i2p.data.router.RouterKeyGenerator;
 import net.i2p.internal.InternalClientManager;
 import net.i2p.router.client.ClientManagerFacadeImpl;
 import net.i2p.router.crypto.ElGamalAESEngine;
+import net.i2p.router.crypto.TransientSessionKeyManager;
 import net.i2p.router.crypto.ratchet.ECIESAEADEngine;
 import net.i2p.router.crypto.ratchet.RatchetSKM;
-import net.i2p.router.crypto.TransientSessionKeyManager;
 import net.i2p.router.dummy.*;
 import net.i2p.router.message.GarlicMessageParser;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseSegmentor;
@@ -33,8 +32,8 @@ import net.i2p.router.transport.FIFOBandwidthLimiter;
 import net.i2p.router.transport.OutboundMessageRegistry;
 import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.router.tunnel.pool.TunnelPoolManager;
-import net.i2p.util.KeyRing;
 import net.i2p.util.I2PProperties.I2PPropertyCallback;
+import net.i2p.util.KeyRing;
 
 /**
  * Extended application context that provides centralized resource coordination for router instances.

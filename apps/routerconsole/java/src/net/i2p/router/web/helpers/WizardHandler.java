@@ -2,7 +2,6 @@ package net.i2p.router.web.helpers;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import net.i2p.router.Router;
 import net.i2p.router.transport.FIFOBandwidthRefiller;
 import net.i2p.router.web.FormHandler;

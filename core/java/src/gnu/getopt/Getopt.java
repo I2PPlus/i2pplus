@@ -22,9 +22,9 @@
 
 package gnu.getopt;
 
+import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.text.MessageFormat;
 
 /**************************************************************************/
 

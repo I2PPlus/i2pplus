@@ -14,13 +14,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
 import java.net.ConnectException;
+import java.net.NoRouteToHostException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
-import java.net.NoRouteToHostException;
 import java.nio.channels.SocketChannel;
 import java.util.Properties;
-
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.I2PClient;

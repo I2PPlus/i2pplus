@@ -2,13 +2,11 @@ package net.i2p.router.web.helpers;
 
 import java.io.File;
 import java.io.IOException;
-
 import net.i2p.data.DataHelper;
-import net.i2p.util.FileUtil;
-import net.i2p.util.FileSuffixFilter;
 import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.web.HelperBase;
-
+import net.i2p.util.FileSuffixFilter;
+import net.i2p.util.FileUtil;
 
 /**
  *  Dump out our local SSL certs, if any

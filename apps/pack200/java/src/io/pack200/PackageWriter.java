@@ -25,6 +25,8 @@
 
 package io.pack200;
 
+import static io.pack200.Constants.*;
+
 import io.pack200.ConstantPool.*;
 import io.pack200.Package.Class;
 import io.pack200.Package.File;
@@ -41,7 +43,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import static io.pack200.Constants.*;
 
 /**
  * Writer for a package file.

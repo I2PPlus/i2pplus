@@ -6,10 +6,6 @@
 
 package org.klomp.snark;
 
-import net.i2p.I2PAppContext;
-import net.i2p.util.I2PAppThread;
-import net.i2p.util.Log;
-
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
@@ -18,6 +14,9 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicLong;
+import net.i2p.I2PAppContext;
+import net.i2p.util.I2PAppThread;
+import net.i2p.util.Log;
 
 // import net.i2p.util.SimpleTimer;
 

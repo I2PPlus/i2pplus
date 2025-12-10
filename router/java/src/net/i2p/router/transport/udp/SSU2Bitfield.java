@@ -1,9 +1,7 @@
 package net.i2p.router.transport.udp;
 
 import java.util.Arrays;
-
 import net.i2p.router.transport.udp.SSU2Payload.AckBlock;
-
 
 /**
  * Container of a long array representing set and unset bits.

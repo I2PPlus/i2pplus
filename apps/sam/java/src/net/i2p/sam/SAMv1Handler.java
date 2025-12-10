@@ -17,11 +17,10 @@ import java.net.ConnectException;
 import java.net.NoRouteToHostException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.nio.channels.SocketChannel;
 import java.nio.ByteBuffer;
+import java.nio.channels.SocketChannel;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicLong;
-
 import net.i2p.I2PException;
 import net.i2p.client.I2PClient;
 import net.i2p.client.I2PSession;

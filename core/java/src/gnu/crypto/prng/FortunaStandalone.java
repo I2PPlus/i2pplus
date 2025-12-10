@@ -49,7 +49,6 @@ import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.util.Arrays;
 import java.util.Map;
-
 import net.i2p.crypto.CryptixAESKeyCache;
 import net.i2p.crypto.CryptixRijndael_Algorithm;
 import net.i2p.crypto.SHA256Generator;

@@ -2,8 +2,8 @@ package net.i2p.i2ptunnel.udp;
 
 import net.i2p.client.I2PSession;
 import net.i2p.client.I2PSessionException;
-import net.i2p.data.Destination;
 import net.i2p.client.datagram.I2PDatagramMaker;
+import net.i2p.data.Destination;
 
 /**
  * Producer

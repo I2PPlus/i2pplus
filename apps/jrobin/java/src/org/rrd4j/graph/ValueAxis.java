@@ -1,11 +1,10 @@
 package org.rrd4j.graph;
 
-import org.rrd4j.core.Util;
-
 import java.awt.Font;
 import java.awt.Paint;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import org.rrd4j.core.Util;
 
 /**
  * Represents value axis (y-axis) in RRD graphs. Handles value-based grid lines, labels, and scaling

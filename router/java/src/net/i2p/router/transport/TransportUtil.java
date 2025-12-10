@@ -12,12 +12,11 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.regex.Pattern;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.router.RouterAddress;
+import net.i2p.router.RouterContext;
 import net.i2p.util.AddressType;
 import net.i2p.util.Log;
-import net.i2p.router.RouterContext;
 
 /**
  * Utility class providing common transport operations and configurations.

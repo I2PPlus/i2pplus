@@ -37,7 +37,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.NoSuchElementException;
-
 import javax.naming.InvalidNameException;
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
@@ -48,11 +47,9 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLSession;
 import javax.security.auth.x500.X500Principal;
-
+import net.i2p.I2PAppContext;
 import net.i2p.apache.http.conn.util.InetAddressUtils;
 import net.i2p.apache.http.conn.util.PublicSuffixMatcher;
-
-import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 
 /**

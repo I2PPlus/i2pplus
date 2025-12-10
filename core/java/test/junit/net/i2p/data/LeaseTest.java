@@ -12,7 +12,6 @@ import static org.junit.Assert.*;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Date;
-
 import org.junit.Test;
 
 /**

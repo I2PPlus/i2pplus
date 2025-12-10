@@ -5,7 +5,6 @@ import java.net.SocketTimeoutException;
 import java.util.concurrent.LinkedBlockingDeque;
 //import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
-
 import net.i2p.I2PAppContext;
 import net.i2p.client.streaming.RouterRestartException;
 import net.i2p.data.ByteArray;

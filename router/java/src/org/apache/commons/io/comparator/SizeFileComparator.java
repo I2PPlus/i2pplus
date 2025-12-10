@@ -19,7 +19,6 @@ package org.apache.commons.io.comparator;
 import java.io.File;
 import java.io.Serializable;
 import java.util.Comparator;
-
 import org.apache.commons.io.FileUtils;
 
 /**

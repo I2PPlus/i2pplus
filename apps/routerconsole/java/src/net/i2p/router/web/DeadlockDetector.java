@@ -4,7 +4,6 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import net.i2p.app.ClientAppManager;
 import net.i2p.app.NotificationService;
 import net.i2p.router.RouterContext;

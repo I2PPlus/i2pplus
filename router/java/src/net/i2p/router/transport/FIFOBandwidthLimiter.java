@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-
 import net.i2p.router.RouterContext;
 import net.i2p.router.util.PQEntry;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 
@@ -102,10 +102,10 @@ public class FIFOBandwidthLimiter {
     public FIFOBandwidthLimiter(RouterContext context) {
         _context = context;
         _log = context.logManager().getLog(FIFOBandwidthLimiter.class);
-        _context.statManager().createRateStat("bwLimiter.pendingOutboundRequests", "Outbound non-zero length requests ahead of current", "BandwidthLimiter", new long[] { 60*1000l, 10*60*1000l, 60*60*1000l });
-        _context.statManager().createRateStat("bwLimiter.pendingInboundRequests", "Inbound non-zero length requests ahead of current", "BandwidthLimiter", new long[] { 60*1000l, 10*60*1000l, 60*60*1000l });
-        _context.statManager().createRateStat("bwLimiter.outboundDelayedTime", "Time to honor non-zero length outbound request (ms)", "BandwidthLimiter", new long[] { 60*1000l, 10*60*1000l, 60*60*1000l });
-        _context.statManager().createRateStat("bwLimiter.inboundDelayedTime", "Time to honor non-zero length inbound request (ms)", "BandwidthLimiter", new long[] { 60*1000l, 10*60*1000l, 60*60*1000l });
+        _context.statManager().createRateStat("bwLimiter.pendingOutboundRequests", "Outbound non-zero length requests ahead of current", "BandwidthLimiter", RateConstants.BANDWIDTH_RATES);
+        _context.statManager().createRateStat("bwLimiter.pendingInboundRequests", "Inbound non-zero length requests ahead of current", "BandwidthLimiter", RateConstants.BANDWIDTH_RATES);
+        _context.statManager().createRateStat("bwLimiter.outboundDelayedTime", "Time to honor non-zero length outbound request (ms)", "BandwidthLimiter", RateConstants.BANDWIDTH_RATES);
+        _context.statManager().createRateStat("bwLimiter.inboundDelayedTime", "Time to honor non-zero length inbound request (ms)", "BandwidthLimiter", RateConstants.BANDWIDTH_RATES);
         _pendingInboundRequests = new ArrayList<SimpleRequest>(16);
         _pendingOutboundRequests = new ArrayList<SimpleRequest>(16);
         _lastTotalSent = _totalAllocatedOutboundBytes.get();

@@ -17,11 +17,9 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.io.PrintStream;
 import java.util.Properties;
-
 import junit.framework.TestCase;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
-
 
 /**
  * @author Comwiz

@@ -23,7 +23,6 @@ import java.util.ListIterator;
 import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.commons.net.ftp.FTPClientConfig;
 
 /**

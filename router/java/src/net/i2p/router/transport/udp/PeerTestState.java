@@ -1,10 +1,9 @@
 package net.i2p.router.transport.udp;
 
-import java.util.ArrayList;
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;

@@ -23,17 +23,15 @@
  */
 package i2p.susi.webmail.encoding;
 
-import i2p.susi.util.HexTable;
 import i2p.susi.util.Buffer;
-import i2p.susi.util.ReadBuffer;
+import i2p.susi.util.HexTable;
 import i2p.susi.util.MemoryBuffer;
-
+import i2p.susi.util.ReadBuffer;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Locale;
-
 import net.i2p.data.DataHelper;
 
 /**

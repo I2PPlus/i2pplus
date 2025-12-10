@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
 import net.i2p.data.DataHelper;
 
 /**

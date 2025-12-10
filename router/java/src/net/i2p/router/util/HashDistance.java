@@ -9,7 +9,6 @@ package net.i2p.router.util;
  */
 
 import java.math.BigInteger;
-
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 

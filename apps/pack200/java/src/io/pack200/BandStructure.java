@@ -25,6 +25,8 @@
 
 package io.pack200;
 
+import static io.pack200.Constants.*;
+
 import io.pack200.ConstantPool.Entry;
 import io.pack200.ConstantPool.Index;
 import io.pack200.Package.Class.Field;
@@ -45,10 +47,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import static io.pack200.Constants.*;
-import java.util.LinkedList;
 
 /**
  * Define the structure and ordering of "bands" in a packed file.

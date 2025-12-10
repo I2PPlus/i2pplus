@@ -9,18 +9,14 @@ package net.i2p.crypto;
  *
  */
 
-import java.security.InvalidKeyException;
-
-// for using system version
-import java.util.concurrent.LinkedBlockingQueue;
+import freenet.support.CPUInformation.CPUID;
+import freenet.support.CPUInformation.UnknownCPUException;
 import java.security.GeneralSecurityException;
+import java.security.InvalidKeyException;
+import java.util.concurrent.LinkedBlockingQueue;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
-import freenet.support.CPUInformation.CPUID;
-import freenet.support.CPUInformation.UnknownCPUException;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.data.SessionKey;

@@ -2,12 +2,10 @@ package net.i2p.client.naming;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
-import org.junit.Test;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.Destination;
-
+import org.junit.Before;
+import org.junit.Test;
 
 public class DummyNamingServiceTest {
     // The good b64 and b32 are the destination of www.i2p-projekt.i2p =)

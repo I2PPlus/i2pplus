@@ -6,7 +6,6 @@ import static org.mockito.Mockito.*;
 
 import net.i2p.client.I2PSession;
 import net.i2p.util.SimpleTimer2;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;

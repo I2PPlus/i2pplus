@@ -3,28 +3,24 @@ package net.i2p.router.peermanager;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import net.i2p.data.Hash;
-import net.i2p.data.router.RouterInfo;
 import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.i2np.DeliveryStatusMessage;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;
 import net.i2p.router.MessageSelector;
 import net.i2p.router.ReplyJob;
+import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
-import net.i2p.util.Log;
-
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
+import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
-
-import net.i2p.data.Hash;
-import net.i2p.router.Router;
 
 /**
  * Grab some peers that we want to test and probe them briefly to get some
@@ -53,9 +49,9 @@ public class PeerTestJob extends JobImpl {
         super(context);
         _log = context.logManager().getLog(PeerTestJob.class);
         _keepTesting = false;
-        getContext().statManager().createRequiredRateStat("peer.testOK", "Time a successful test takes (ms)", "Peers", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-        getContext().statManager().createRequiredRateStat("peer.testTooSlow", "Excess time taken by too slow test (ms)", "Peers", new long[] { 60*1000, 10*60*1000, 60*60*1000 });
-        getContext().statManager().createRateStat("peer.testTimeout", "Frequency of test timeouts (no reply)", "Peers", new long[] { 60*1000, 10*60*1000 });
+        getContext().statManager().createRequiredRateStat("peer.testOK", "Time a successful test takes (ms)", "Peers", RateConstants.TUNNEL_RATES);
+        getContext().statManager().createRequiredRateStat("peer.testTooSlow", "Excess time taken by too slow test (ms)", "Peers", RateConstants.TUNNEL_RATES);
+        getContext().statManager().createRateStat("peer.testTimeout", "Frequency of test timeouts (no reply)", "Peers", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES });
     }
 
     public int getAvgPeerTestTime() {

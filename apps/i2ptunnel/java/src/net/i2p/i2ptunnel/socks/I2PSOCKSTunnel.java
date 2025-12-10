@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
-
 import net.i2p.client.naming.NamingService;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketOptions;

@@ -1,5 +1,7 @@
 package net.i2p.router.update;
 
+import static net.i2p.update.UpdateMethod.*;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -11,7 +13,6 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.RouterVersion;
 import net.i2p.router.web.ConfigUpdateHandler;
 import net.i2p.update.*;
-import static net.i2p.update.UpdateMethod.*;
 import net.i2p.util.EepGet;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;

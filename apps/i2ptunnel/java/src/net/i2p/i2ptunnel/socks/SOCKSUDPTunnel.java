@@ -16,9 +16,8 @@ package net.i2p.i2ptunnel.socks;
  */
 
 import java.net.InetAddress;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.Map;
-
+import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.i2ptunnel.I2PTunnel;
 import net.i2p.i2ptunnel.udpTunnel.I2PTunnelUDPClientBase;
 

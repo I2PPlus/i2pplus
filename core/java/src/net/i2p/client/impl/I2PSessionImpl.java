@@ -32,7 +32,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-
 import net.i2p.CoreVersion;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PClient;

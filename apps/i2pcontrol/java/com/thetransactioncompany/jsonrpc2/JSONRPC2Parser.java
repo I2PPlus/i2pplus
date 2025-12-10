@@ -3,10 +3,8 @@ package com.thetransactioncompany.jsonrpc2;
 
 import java.util.List;
 import java.util.Map;
-
-import org.json.simple.Jsoner;
 import org.json.simple.DeserializationException;
-
+import org.json.simple.Jsoner;
 
 /**
  * Parses JSON-RPC 2.0 request, notification and response messages.

@@ -9,12 +9,13 @@ package net.i2p.router.networkdb.kademlia;
  */
 
 import net.i2p.data.Hash;
-import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.data.router.RouterIdentity;
 import net.i2p.router.HandlerJobBuilder;
 import net.i2p.router.Job;
 import net.i2p.router.RouterContext;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.RandomSource;
 
 /**
@@ -38,11 +39,11 @@ public class FloodfillDatabaseStoreMessageHandler implements HandlerJobBuilder {
         _context = context;
         _facade = facade;
         // following are for HFDSMJ
-        context.statManager().createRateStat("netDb.storeHandled", "Number of DbStore messages we have handled", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        context.statManager().createRateStat("netDb.storeLeaseSetHandled", "Number of LeaseSet store messages we have handled", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        context.statManager().createRateStat("netDb.storeRouterInfoHandled", "Number of RouterInfo store messages we have handled", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        context.statManager().createRateStat("netDb.storeRecvTime", "Time to handle the local store part of a DbStore", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-        context.statManager().createRateStat("netDb.storeLocalLeaseSetAttempt", "Number of attempted local LeaseSet store messages", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+        context.statManager().createRateStat("netDb.storeHandled", "Number of DbStore messages we have handled", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
+        context.statManager().createRateStat("netDb.storeLeaseSetHandled", "Number of LeaseSet store messages we have handled", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
+        context.statManager().createRateStat("netDb.storeRouterInfoHandled", "Number of RouterInfo store messages we have handled", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
+        context.statManager().createRateStat("netDb.storeRecvTime", "Time to handle the local store part of a DbStore", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
+        context.statManager().createRateStat("netDb.storeLocalLeaseSetAttempt", "Number of attempted local LeaseSet store messages", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
     }
 
     public Job createJob(I2NPMessage receivedMessage, RouterIdentity from, Hash fromHash) {

@@ -1,7 +1,6 @@
 package net.i2p.internal;
 
 import java.io.Closeable;
-
 import net.i2p.data.i2cp.I2CPMessage;
 
 /**

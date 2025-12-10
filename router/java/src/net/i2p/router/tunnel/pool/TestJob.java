@@ -1,7 +1,6 @@
 package net.i2p.router.tunnel.pool;
 
 import java.util.concurrent.atomic.AtomicInteger;
-
 import net.i2p.crypto.SessionKeyManager;
 import net.i2p.data.SessionTag;
 import net.i2p.data.i2np.DeliveryStatusMessage;
@@ -14,8 +13,8 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.crypto.ratchet.MuxedPQSKM;
 import net.i2p.router.crypto.ratchet.MuxedSKM;
-import net.i2p.router.crypto.ratchet.RatchetSessionTag;
 import net.i2p.router.crypto.ratchet.RatchetSKM;
+import net.i2p.router.crypto.ratchet.RatchetSessionTag;
 import net.i2p.router.networkdb.kademlia.MessageWrapper;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;

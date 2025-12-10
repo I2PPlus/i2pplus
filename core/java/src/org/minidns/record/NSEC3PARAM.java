@@ -10,13 +10,12 @@
  */
 package org.minidns.record;
 
-import org.minidns.record.NSEC3.HashAlgorithm;
-import org.minidns.record.Record.TYPE;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
+import org.minidns.record.NSEC3.HashAlgorithm;
+import org.minidns.record.Record.TYPE;
 
 /**
  * DNS NSEC3PARAM record payload for DNSSEC.<br>

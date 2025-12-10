@@ -10,7 +10,6 @@ package net.i2p.router.dummy;
 
 import java.io.Writer;
 import java.util.Set;
-
 import net.i2p.data.Hash;
 import net.i2p.router.PeerManagerFacade;
 

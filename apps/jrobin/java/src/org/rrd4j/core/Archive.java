@@ -1,8 +1,7 @@
 package org.rrd4j.core;
 
-import org.rrd4j.ConsolFun;
-
 import java.io.IOException;
+import org.rrd4j.ConsolFun;
 
 /**
  * Class to represent single RRD archive in a RRD with its internal state. Normally, you don't need

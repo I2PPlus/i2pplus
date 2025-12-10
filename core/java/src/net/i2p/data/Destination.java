@@ -9,10 +9,9 @@ package net.i2p.data;
  *
  */
 
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
-
 import net.i2p.util.LHMCache;
 import net.i2p.util.SystemVersion;
 
@@ -44,7 +43,7 @@ public class Destination extends KeysAndCert {
         long maxMemory = SystemVersion.getMaxMemory();
         CACHE_SIZE = (int) Math.min(MAX_CACHE_SIZE, Math.max(MIN_CACHE_SIZE, maxMemory / 512*1024));
         //if (STATS)
-        //    I2PAppContext.getGlobalContext().statManager().createRateStat("DestCache", "Hit rate", "Router", new long[] { 10*60*1000 });
+        //    I2PAppContext.getGlobalContext().statManager().createRateStat("DestCache", "Hit rate", "Router", new long[] { RateConstants.TEN_MINUTES });
     }
 
     private static final Map<SigningPublicKey, Destination> _cache = new LHMCache<SigningPublicKey, Destination>(CACHE_SIZE);

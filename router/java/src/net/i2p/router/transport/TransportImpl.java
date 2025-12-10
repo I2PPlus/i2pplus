@@ -57,19 +57,19 @@ import java.util.Set;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
-
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
+import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.Job;
 import net.i2p.router.MessageSelector;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.LHMCache;
 import net.i2p.util.Log;
@@ -77,7 +77,6 @@ import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 import net.i2p.util.VersionComparator;
-import net.i2p.stat.RateConstants;
 
 /**
  * Defines a way to send a message to another peer and start listening for messages

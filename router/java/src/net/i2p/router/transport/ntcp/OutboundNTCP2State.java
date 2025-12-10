@@ -1,15 +1,13 @@
 package net.i2p.router.transport.ntcp;
 
-import java.nio.ByteBuffer;
-import java.security.GeneralSecurityException;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.southernstorm.noise.protocol.CipherState;
 import com.southernstorm.noise.protocol.CipherStatePair;
 import com.southernstorm.noise.protocol.HandshakeState;
-
+import java.nio.ByteBuffer;
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import net.i2p.crypto.HKDF;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;

@@ -22,7 +22,6 @@ package net.i2p.crypto;
 //package com.bitzi.util;
 
 import java.security.MessageDigest;
-
 import junit.framework.TestCase;
 
 public class SHA1HashTest extends TestCase{

@@ -23,7 +23,6 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.SocketClient;
 import org.apache.commons.net.io.SocketInputStream;

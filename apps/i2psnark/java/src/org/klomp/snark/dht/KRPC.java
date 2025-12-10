@@ -4,31 +4,6 @@ package org.klomp.snark.dht;
  *  GPLv2
  */
 
-import net.i2p.I2PAppContext;
-import net.i2p.client.I2PSession;
-import net.i2p.client.I2PSessionException;
-import net.i2p.client.I2PSessionMuxedListener;
-import net.i2p.client.SendMessageOptions;
-import net.i2p.client.datagram.I2PDatagramDissector;
-import net.i2p.client.datagram.I2PDatagramMaker;
-import net.i2p.client.datagram.I2PInvalidDatagramException;
-import net.i2p.data.DataFormatException;
-import net.i2p.data.DataHelper;
-import net.i2p.data.Destination;
-import net.i2p.data.Hash;
-import net.i2p.util.ConcurrentHashSet;
-import net.i2p.util.I2PAppThread;
-import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer2;
-
-import org.klomp.snark.I2PSnarkUtil;
-import org.klomp.snark.SnarkManager;
-import org.klomp.snark.TrackerClient;
-import org.klomp.snark.bencode.BDecoder;
-import org.klomp.snark.bencode.BEValue;
-import org.klomp.snark.bencode.BEncoder;
-import org.klomp.snark.bencode.InvalidBEncodingException;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -47,6 +22,29 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
+import net.i2p.I2PAppContext;
+import net.i2p.client.I2PSession;
+import net.i2p.client.I2PSessionException;
+import net.i2p.client.I2PSessionMuxedListener;
+import net.i2p.client.SendMessageOptions;
+import net.i2p.client.datagram.I2PDatagramDissector;
+import net.i2p.client.datagram.I2PDatagramMaker;
+import net.i2p.client.datagram.I2PInvalidDatagramException;
+import net.i2p.data.DataFormatException;
+import net.i2p.data.DataHelper;
+import net.i2p.data.Destination;
+import net.i2p.data.Hash;
+import net.i2p.util.ConcurrentHashSet;
+import net.i2p.util.I2PAppThread;
+import net.i2p.util.Log;
+import net.i2p.util.SimpleTimer2;
+import org.klomp.snark.I2PSnarkUtil;
+import org.klomp.snark.SnarkManager;
+import org.klomp.snark.TrackerClient;
+import org.klomp.snark.bencode.BDecoder;
+import org.klomp.snark.bencode.BEValue;
+import org.klomp.snark.bencode.BEncoder;
+import org.klomp.snark.bencode.InvalidBEncodingException;
 
 /**
  * Kademlia Remote Procedure Call implementation for BitTorrent DHT (BEP 5) adapted for I2P.

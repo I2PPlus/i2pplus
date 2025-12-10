@@ -1,9 +1,8 @@
 package org.rrd4j.core;
 
-import org.rrd4j.ConsolFun;
-
 import java.io.IOException;
 import java.util.Set;
+import org.rrd4j.ConsolFun;
 
 /**
  * Class to represent fetch request. For the complete explanation of all fetch parameters consult

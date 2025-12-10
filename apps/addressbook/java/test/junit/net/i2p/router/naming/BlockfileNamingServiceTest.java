@@ -1,7 +1,5 @@
 package net.i2p.router.naming;
 
-import junit.framework.TestCase;
-
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,11 +10,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-
+import junit.framework.TestCase;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
-
 
 public class BlockfileNamingServiceTest extends TestCase {
     BlockfileNamingService _bns;

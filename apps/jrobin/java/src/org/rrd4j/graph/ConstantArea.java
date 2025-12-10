@@ -1,9 +1,8 @@
 package org.rrd4j.graph;
 
-import org.rrd4j.data.DataProcessor;
-
 import java.awt.Paint;
 import java.util.Arrays;
+import org.rrd4j.data.DataProcessor;
 
 /**
  * Represents an area plot element with a constant value in RRD graphs. Extends Area to provide

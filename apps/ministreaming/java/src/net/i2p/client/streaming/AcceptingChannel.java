@@ -1,8 +1,8 @@
 package net.i2p.client.streaming;
 
-import net.i2p.I2PException;
 import java.net.ConnectException;
 import java.nio.channels.SelectableChannel;
+import net.i2p.I2PException;
 
 /**
  *  As this does not (yet) extend ServerSocketChannel it cannot be returned by StandardServerSocket.getChannel(),

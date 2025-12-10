@@ -9,7 +9,6 @@ package net.i2p.router.networkdb.kademlia;
  */
 
 import java.util.Set;
-
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;

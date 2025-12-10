@@ -15,10 +15,8 @@
 package net.i2p.jetty;
 
 import java.nio.channels.ClosedChannelException;
-
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
-
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.util.log.Logger;
 

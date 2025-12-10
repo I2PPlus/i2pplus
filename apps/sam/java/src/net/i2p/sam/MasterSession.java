@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
-
 import net.i2p.I2PException;
 import net.i2p.client.I2PSession;
 import net.i2p.client.I2PSessionException;

@@ -4,14 +4,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.KeyStore;
 import java.security.GeneralSecurityException;
+import java.security.KeyStore;
 import java.util.Properties;
-
 import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLContext;
-
+import javax.net.ssl.SSLServerSocketFactory;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.KeyStoreUtil;
 import net.i2p.util.Log;

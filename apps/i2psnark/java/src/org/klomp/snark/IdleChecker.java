@@ -4,13 +4,12 @@
  */
 package org.klomp.snark;
 
+import java.util.Map;
+import java.util.Properties;
 import net.i2p.client.I2PSession;
 import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
-
-import java.util.Map;
-import java.util.Properties;
 
 /**
  * Periodically check for idle condition based on connected peers, and reduce/restore tunnel count

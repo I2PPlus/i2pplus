@@ -12,15 +12,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
 import java.io.OutputStream;
-import java.nio.channels.Channels;
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
 import java.net.ConnectException;
 import java.net.NoRouteToHostException;
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
 import net.i2p.I2PException;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketOptions;

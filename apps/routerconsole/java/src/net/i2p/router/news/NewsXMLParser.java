@@ -12,10 +12,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
-
 import org.cybergarage.util.Debug;
 import org.cybergarage.xml.Attribute;
 import org.cybergarage.xml.Node;

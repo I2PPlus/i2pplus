@@ -24,7 +24,6 @@
 package com.vuze.plugins.mlab.tools.ndt.swingemu;
 
 import edu.internet2.ndt.Tcpbw100;
-
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 

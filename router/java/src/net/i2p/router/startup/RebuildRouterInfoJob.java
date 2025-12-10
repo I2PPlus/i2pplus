@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
-
 import net.i2p.data.DataFormatException;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;

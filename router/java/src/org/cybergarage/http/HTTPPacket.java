@@ -5,10 +5,6 @@
 
 package org.cybergarage.http;
 
-import org.cybergarage.net.HostInterface;
-import org.cybergarage.util.Debug;
-import org.cybergarage.util.StringUtil;
-
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,6 +14,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.StringTokenizer;
 import java.util.Vector;
+import org.cybergarage.net.HostInterface;
+import org.cybergarage.util.Debug;
+import org.cybergarage.util.StringUtil;
 
 public class HTTPPacket {
     ////////////////////////////////////////////////

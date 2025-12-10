@@ -5,13 +5,12 @@
 
 package org.cybergarage.upnp.ssdp;
 
-import org.cybergarage.util.Debug;
-
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
+import org.cybergarage.util.Debug;
 
 /**
  * UDP socket implementation for SSDP (Simple Service Discovery Protocol) communication.

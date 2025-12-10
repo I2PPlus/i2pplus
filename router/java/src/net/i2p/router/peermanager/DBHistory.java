@@ -3,10 +3,9 @@ package net.i2p.router.peermanager;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Properties;
-
 import net.i2p.router.RouterContext;
-import net.i2p.stat.RateStat;
 import net.i2p.stat.RateConstants;
+import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 
 /**

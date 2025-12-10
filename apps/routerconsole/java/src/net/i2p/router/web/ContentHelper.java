@@ -2,7 +2,6 @@ package net.i2p.router.web;
 
 import java.io.File;
 import java.util.Locale;
-
 import net.i2p.util.FileUtil;
 
 /**

@@ -4,10 +4,9 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import net.i2p.crypto.EncType;
-import net.i2p.crypto.TagSetHandle;
 import net.i2p.crypto.SessionKeyManager;
+import net.i2p.crypto.TagSetHandle;
 import net.i2p.data.PublicKey;
 import net.i2p.data.SessionKey;
 import net.i2p.data.SessionTag;

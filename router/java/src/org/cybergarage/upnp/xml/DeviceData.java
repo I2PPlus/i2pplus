@@ -5,16 +5,15 @@
 
 package org.cybergarage.upnp.xml;
 
+import java.io.*;
+import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.URL;
 import org.cybergarage.http.*;
 import org.cybergarage.upnp.*;
 import org.cybergarage.upnp.device.*;
 import org.cybergarage.upnp.ssdp.*;
 import org.cybergarage.util.*;
-
-import java.io.*;
-import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 /** I2P added multiple location support */
 /**

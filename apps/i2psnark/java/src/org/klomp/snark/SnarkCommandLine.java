@@ -1,10 +1,9 @@
 package org.klomp.snark;
 
-import net.i2p.CoreVersion;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import net.i2p.CoreVersion;
 
 /**
  * Simple command line access to various utilities. Not a public API. Subject to change. Apps and

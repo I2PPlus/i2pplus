@@ -1,5 +1,7 @@
 package net.i2p.router.web;
 
+import static net.i2p.app.ClientAppState.*;
+
 import java.awt.GraphicsEnvironment;
 import java.io.File;
 import java.io.FileFilter;
@@ -21,12 +23,10 @@ import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.concurrent.LinkedBlockingQueue;
 import javax.servlet.ServletRequest;
-
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientApp;
 import net.i2p.app.ClientAppManager;
 import net.i2p.app.ClientAppState;
-import static net.i2p.app.ClientAppState.*;
 import net.i2p.crypto.KeyStoreUtil;
 import net.i2p.data.DataHelper;
 import net.i2p.jetty.I2PLogger;
@@ -38,15 +38,14 @@ import net.i2p.util.Addresses;
 import net.i2p.util.FileSuffixFilter;
 import net.i2p.util.FileUtil;
 import net.i2p.util.I2PAppThread;
+import net.i2p.util.I2PSSLSocketFactory;
 import net.i2p.util.OrderedProperties;
 import net.i2p.util.PortMapper;
 import net.i2p.util.SecureDirectory;
-import net.i2p.util.I2PSSLSocketFactory;
 import net.i2p.util.SystemVersion;
-
-import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
+import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.security.authentication.DigestAuthenticator;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.HttpConfiguration;
@@ -54,9 +53,9 @@ import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.NCSARequestLog;
 import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.UserIdentity;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.SslConnectionFactory;
+import org.eclipse.jetty.server.UserIdentity;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
 import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerCollection;
@@ -64,7 +63,6 @@ import org.eclipse.jetty.server.handler.HandlerWrapper;
 import org.eclipse.jetty.server.handler.RequestLogHandler;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jetty.util.log.Log;
 import org.eclipse.jetty.util.resource.Resource;
 import org.eclipse.jetty.util.security.Constraint;
@@ -72,7 +70,7 @@ import org.eclipse.jetty.util.security.Credential;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.eclipse.jetty.util.thread.ScheduledExecutorScheduler;
-
+import org.eclipse.jetty.webapp.WebAppContext;
 import org.tanukisoftware.wrapper.WrapperManager;
 
 /**

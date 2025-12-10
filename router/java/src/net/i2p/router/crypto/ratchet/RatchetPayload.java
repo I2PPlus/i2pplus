@@ -3,7 +3,6 @@ package net.i2p.router.crypto.ratchet;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;

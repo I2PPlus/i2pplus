@@ -1,8 +1,7 @@
 package org.rrd4j.graph;
 
-import org.rrd4j.core.Util;
-
 import java.awt.*;
+import org.rrd4j.core.Util;
 
 /**
  * Represents MRTG-style value axis (y-axis) in RRD graphs. Provides MRTG-compatible axis formatting

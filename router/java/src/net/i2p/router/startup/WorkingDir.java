@@ -4,12 +4,11 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.util.Properties;
-
 import net.i2p.data.DataHelper;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFileOutputStream;

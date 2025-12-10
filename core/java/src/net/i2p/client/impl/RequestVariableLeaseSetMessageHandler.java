@@ -10,10 +10,9 @@ package net.i2p.client.impl;
  */
 
 import java.util.Properties;
-
 import net.i2p.I2PAppContext;
-import net.i2p.data.DatabaseEntry;
 import net.i2p.data.DataHelper;
+import net.i2p.data.DatabaseEntry;
 import net.i2p.data.EncryptedLeaseSet;
 import net.i2p.data.Lease;
 import net.i2p.data.Lease2;

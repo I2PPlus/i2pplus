@@ -1,7 +1,10 @@
 package net.i2p.router.update;
 
-import java.io.ByteArrayInputStream;
+import static net.i2p.update.UpdateMethod.*;
+import static net.i2p.update.UpdateType.*;
+
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -20,7 +23,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
-
 import net.i2p.app.ClientAppManager;
 import net.i2p.crypto.CertUtil;
 import net.i2p.crypto.SU3File;
@@ -41,8 +43,6 @@ import net.i2p.router.news.NewsXMLParser;
 import net.i2p.router.web.ConfigUpdateHandler;
 import net.i2p.router.web.NewsHelper;
 import net.i2p.update.*;
-import static net.i2p.update.UpdateType.*;
-import static net.i2p.update.UpdateMethod.*;
 import net.i2p.util.Addresses;
 import net.i2p.util.EepGet;
 import net.i2p.util.FileUtil;
@@ -50,13 +50,12 @@ import net.i2p.util.Log;
 import net.i2p.util.PortMapper;
 import net.i2p.util.RFC822Date;
 import net.i2p.util.ReusableGZIPInputStream;
+import net.i2p.util.SSLEepGet;
 import net.i2p.util.SecureFile;
 import net.i2p.util.SecureFileOutputStream;
-import net.i2p.util.SSLEepGet;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 import net.i2p.util.VersionComparator;
-
 import org.cybergarage.xml.Node;
 
 /**

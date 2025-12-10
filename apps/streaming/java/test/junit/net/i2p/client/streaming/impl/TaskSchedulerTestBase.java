@@ -2,10 +2,10 @@ package net.i2p.client.streaming.impl;
 
 import static org.junit.Assert.assertFalse;
 import static org.mockito.Mockito.*;
+
 import net.i2p.I2PAppContext;
 import net.i2p.util.Clock;
 import net.i2p.util.SimpleTimer2;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;

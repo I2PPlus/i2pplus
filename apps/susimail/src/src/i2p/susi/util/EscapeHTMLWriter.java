@@ -4,7 +4,6 @@ import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-
 /**
  * Writer that escapes HTML characters during streaming.
  * Streaming version of DataHelper.escapeHTML(), also escapes '-' for

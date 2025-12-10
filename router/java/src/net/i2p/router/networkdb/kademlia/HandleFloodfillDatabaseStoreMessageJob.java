@@ -9,20 +9,19 @@ package net.i2p.router.networkdb.kademlia;
  */
 
 import java.util.Collection;
-
-import net.i2p.data.DatabaseEntry;
 import net.i2p.data.DataHelper;
+import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.TunnelId;
-import net.i2p.data.router.RouterAddress;
-import net.i2p.data.router.RouterIdentity;
-import net.i2p.data.router.RouterInfo;
-import net.i2p.data.router.RouterKeyGenerator;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.i2np.DeliveryStatusMessage;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.i2np.TunnelGatewayMessage;
+import net.i2p.data.router.RouterAddress;
+import net.i2p.data.router.RouterIdentity;
+import net.i2p.data.router.RouterInfo;
+import net.i2p.data.router.RouterKeyGenerator;
 import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
 import net.i2p.router.OutNetMessage;

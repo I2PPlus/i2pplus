@@ -19,7 +19,6 @@ package org.apache.commons.net.ftp.parser;
 
 import java.text.ParseException;
 import java.util.List;
-
 import org.apache.commons.net.ftp.Configurable;
 import org.apache.commons.net.ftp.FTPClientConfig;
 import org.apache.commons.net.ftp.FTPFile;

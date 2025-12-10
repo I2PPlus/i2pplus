@@ -6,12 +6,10 @@ import static org.junit.Assert.*;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Properties;
-
 import net.i2p.client.I2PClient;
 import net.i2p.client.I2PClientFactory;
 import net.i2p.client.streaming.impl.I2PSocketManagerFull;
 import net.i2p.data.Destination;
-
 import org.junit.Test;
 
 public class I2PSocketManagerFactoryTest {

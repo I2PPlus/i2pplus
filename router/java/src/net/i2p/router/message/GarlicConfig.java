@@ -11,11 +11,10 @@ package net.i2p.router.message;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import net.i2p.data.Certificate;
 import net.i2p.data.PublicKey;
-import net.i2p.data.router.RouterInfo;
 import net.i2p.data.i2np.DeliveryInstructions;
+import net.i2p.data.router.RouterInfo;
 
 /**
  * Define the contents of a garlic chunk that contains 1 or more sub garlics.

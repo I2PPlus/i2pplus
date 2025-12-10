@@ -5,13 +5,12 @@
 
 package org.cybergarage.upnp.ssdp;
 
-import org.cybergarage.net.HostInterface;
-import org.cybergarage.upnp.device.SearchListener;
-import org.cybergarage.util.Debug;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Vector;
+import org.cybergarage.net.HostInterface;
+import org.cybergarage.upnp.device.SearchListener;
+import org.cybergarage.util.Debug;
 
 /**
  * A collection of SSDP search sockets.

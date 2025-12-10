@@ -1,7 +1,6 @@
 package net.i2p.router.sybil;
 
 import java.math.BigInteger;
-
 import net.i2p.data.router.RouterInfo;
 
 /**

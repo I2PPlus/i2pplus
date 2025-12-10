@@ -1,11 +1,10 @@
 package org.rrd4j.data;
 
-import org.rrd4j.core.Util;
-
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import org.rrd4j.core.Util;
 
 /**
  * Abstract class for extracting single values from data sets (VDEF in rrdtool).<br>

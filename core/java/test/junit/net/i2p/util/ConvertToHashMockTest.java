@@ -1,19 +1,18 @@
 package net.i2p.util;
 
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
+
 import net.i2p.TestContext;
 import net.i2p.client.naming.NamingService;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
 import org.junit.AfterClass;
 import org.junit.Before;
-
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
 
 public class ConvertToHashMockTest{
 

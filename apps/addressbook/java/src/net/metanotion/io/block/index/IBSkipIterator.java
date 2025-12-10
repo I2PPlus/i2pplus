@@ -30,7 +30,6 @@ package net.metanotion.io.block.index;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
-
 import net.metanotion.util.skiplist.SkipIterator;
 import net.metanotion.util.skiplist.SkipSpan;
 

@@ -3,14 +3,13 @@ package net.i2p.router.news;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.security.GeneralSecurityException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
-import java.util.List;
 import java.util.ArrayList;
-
+import java.util.List;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.DirKeyRing;
 import net.i2p.crypto.KeyRing;

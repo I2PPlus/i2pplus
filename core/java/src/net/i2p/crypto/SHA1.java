@@ -19,7 +19,6 @@ package net.i2p.crypto;
 import java.security.DigestException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 import net.i2p.util.SystemVersion;
 
 /**

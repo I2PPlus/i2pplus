@@ -8,12 +8,13 @@ package net.i2p.router;
  *
  */
 
+import freenet.support.CPUInformation.CPUID;
+import freenet.support.CPUInformation.UnknownCPUException;
+import gnu.getopt.Getopt;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -23,12 +24,8 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TimeZone;
-
-import freenet.support.CPUInformation.CPUID;
-import freenet.support.CPUInformation.UnknownCPUException;
-
-import gnu.getopt.Getopt;
-
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import net.i2p.client.impl.I2PSessionImpl;
 import net.i2p.crypto.SigUtil;
 import net.i2p.data.Base64;
@@ -36,27 +33,27 @@ import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
-import net.i2p.data.i2np.GarlicMessage;
 import net.i2p.data.PublicKey;
+import net.i2p.data.SigningPrivateKey;
+import net.i2p.data.SigningPublicKey;
+import net.i2p.data.i2np.GarlicMessage;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.data.SigningPrivateKey;
-import net.i2p.data.SigningPublicKey;
 import net.i2p.router.crypto.FamilyKeyCrypto;
 import net.i2p.router.message.GarlicMessageHandler;
+import net.i2p.router.networkdb.PublishLocalRouterInfoJob;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.startup.CreateRouterInfoJob;
 import net.i2p.router.startup.PortableWorkingDir;
-import net.i2p.router.networkdb.PublishLocalRouterInfoJob;
 import net.i2p.router.startup.StartupJob;
 import net.i2p.router.startup.WorkingDir;
 import net.i2p.router.sybil.Analysis;
 import net.i2p.router.tasks.*;
 import net.i2p.router.transport.FIFOBandwidthLimiter;
+import net.i2p.router.transport.UPnPScannerCallback;
 import net.i2p.router.transport.ntcp.NTCPTransport;
 import net.i2p.router.transport.udp.UDPTransport;
-import net.i2p.router.transport.UPnPScannerCallback;
 import net.i2p.router.util.EventLog;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;

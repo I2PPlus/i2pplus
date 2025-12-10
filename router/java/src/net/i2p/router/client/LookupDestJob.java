@@ -5,7 +5,6 @@
 package net.i2p.router.client;
 
 import java.util.Locale;
-
 import net.i2p.crypto.Blinding;
 import net.i2p.data.Base32;
 import net.i2p.data.BlindData;
@@ -13,13 +12,13 @@ import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Destination;
 import net.i2p.data.EncryptedLeaseSet;
 import net.i2p.data.Hash;
+import net.i2p.data.LeaseSet;
+import net.i2p.data.SigningPublicKey;
 import net.i2p.data.i2cp.DestReplyMessage;
 import net.i2p.data.i2cp.HostReplyMessage;
 import net.i2p.data.i2cp.I2CPMessage;
 import net.i2p.data.i2cp.I2CPMessageException;
 import net.i2p.data.i2cp.SessionId;
-import net.i2p.data.LeaseSet;
-import net.i2p.data.SigningPublicKey;
 import net.i2p.router.JobImpl;
 import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.RouterContext;

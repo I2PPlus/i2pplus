@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 

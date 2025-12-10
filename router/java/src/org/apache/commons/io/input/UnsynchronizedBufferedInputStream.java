@@ -20,7 +20,6 @@ package org.apache.commons.io.input;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 

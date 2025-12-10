@@ -2,12 +2,11 @@ package net.i2p.router.crypto.ratchet;
 
 import java.math.BigInteger;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
-import net.i2p.crypto.eddsa.math.bigint.BigIntegerLittleEndianEncoding;
 import net.i2p.crypto.eddsa.math.Curve;
 import net.i2p.crypto.eddsa.math.Field;
+import net.i2p.crypto.eddsa.math.bigint.BigIntegerLittleEndianEncoding;
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveSpec;
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable;
 import net.i2p.data.PublicKey;

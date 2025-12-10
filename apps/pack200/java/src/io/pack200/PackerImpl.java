@@ -45,7 +45,6 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
 
-
 /*
  * Implementation of the Pack provider.
  * </pre></blockquote>

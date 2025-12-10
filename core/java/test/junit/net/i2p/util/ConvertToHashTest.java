@@ -1,9 +1,9 @@
 package net.i2p.util;
 
+import static org.junit.Assert.*;
+
 import net.i2p.data.Hash;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class ConvertToHashTest {
     private static final String zzzDotI2pBase32Hash = "lhbd7ojcaiofbfku7ixh47qj537g572zmhdc4oilvugzxdpdghua";

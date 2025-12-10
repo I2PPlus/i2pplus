@@ -22,9 +22,8 @@
 
 package com.southernstorm.noise.crypto;
 
-import java.util.Arrays;
-
 import com.southernstorm.noise.protocol.Destroyable;
+import java.util.Arrays;
 
 /**
  * Simple implementation of the Poly1305 message authenticator.

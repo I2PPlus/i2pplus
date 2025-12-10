@@ -3,7 +3,6 @@ package net.i2p.router.tunnel.pool;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;

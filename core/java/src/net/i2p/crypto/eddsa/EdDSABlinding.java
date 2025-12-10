@@ -1,7 +1,6 @@
 package net.i2p.crypto.eddsa;
 
 import java.math.BigInteger;
-
 import net.i2p.crypto.eddsa.math.Field;
 import net.i2p.crypto.eddsa.math.GroupElement;
 import net.i2p.crypto.eddsa.math.ScalarOps;

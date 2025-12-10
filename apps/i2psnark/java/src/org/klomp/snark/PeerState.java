@@ -6,13 +6,6 @@
 
 package org.klomp.snark;
 
-import net.i2p.I2PAppContext;
-import net.i2p.data.ByteArray;
-import net.i2p.util.Log;
-
-import org.klomp.snark.bencode.BEValue;
-import org.klomp.snark.bencode.InvalidBEncodingException;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -20,6 +13,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import net.i2p.I2PAppContext;
+import net.i2p.data.ByteArray;
+import net.i2p.util.Log;
+import org.klomp.snark.bencode.BEValue;
+import org.klomp.snark.bencode.InvalidBEncodingException;
 
 /**
  * Manages the state and protocol logic for a BitTorrent peer connection.<br>

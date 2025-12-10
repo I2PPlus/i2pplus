@@ -20,7 +20,6 @@ package org.apache.commons.io.output;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Objects;
-
 import org.apache.commons.io.function.Uncheck;
 
 /**

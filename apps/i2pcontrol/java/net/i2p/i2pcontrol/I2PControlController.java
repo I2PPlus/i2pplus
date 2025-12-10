@@ -16,20 +16,23 @@ package net.i2p.i2pcontrol;
  *
  */
 
+import static net.i2p.app.ClientAppState.*;
+
+import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.StringTokenizer;
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientAppManager;
 import net.i2p.app.ClientAppState;
-import static net.i2p.app.ClientAppState.*;
-import net.i2p.router.RouterContext;
-import net.i2p.router.app.RouterApp;
-import net.i2p.util.I2PSSLSocketFactory;
-import net.i2p.util.Log;
-
 import net.i2p.i2pcontrol.security.KeyStoreProvider;
 import net.i2p.i2pcontrol.security.SecurityManager;
 import net.i2p.i2pcontrol.servlets.JSONRPC2Servlet;
 import net.i2p.i2pcontrol.servlets.configuration.ConfigurationManager;
-
+import net.i2p.router.RouterContext;
+import net.i2p.router.app.RouterApp;
+import net.i2p.util.I2PSSLSocketFactory;
+import net.i2p.util.Log;
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
@@ -40,12 +43,6 @@ import org.eclipse.jetty.server.SslConnectionFactory;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
-
-import java.io.File;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.StringTokenizer;
-
 
 /**
  * This handles the starting and stopping of Jetty

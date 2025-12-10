@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Date;
-
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
 import net.i2p.crypto.SigType;

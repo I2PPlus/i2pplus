@@ -9,7 +9,6 @@ package net.i2p.kademlia;
  */
 
 import java.util.Set;
-
 import net.i2p.data.SimpleDataStructure;
 
 /**

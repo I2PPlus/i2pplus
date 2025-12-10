@@ -2,11 +2,9 @@ package net.i2p.router.web.helpers;
 
 import java.io.File;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
-
-import java.util.Properties;
-
 import net.i2p.router.web.CSSHelper;
 import net.i2p.router.web.ConsolePasswordManager;
 import net.i2p.router.web.HelperBase;

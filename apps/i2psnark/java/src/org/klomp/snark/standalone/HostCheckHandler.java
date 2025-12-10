@@ -1,20 +1,17 @@
 package org.klomp.snark.standalone;
 
-import net.i2p.I2PAppContext;
-import net.i2p.util.Addresses;
-import net.i2p.util.Log;
-
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.AbstractHandler;
-
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.StringTokenizer;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.i2p.I2PAppContext;
+import net.i2p.util.Addresses;
+import net.i2p.util.Log;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.handler.AbstractHandler;
 
 /**
  * Block certain Host headers to prevent DNS rebinding attacks.

@@ -1,7 +1,7 @@
 package net.i2p.i2ptunnel.streamr;
 
-import net.i2p.i2ptunnel.udp.*;
 import net.i2p.I2PAppContext;
+import net.i2p.i2ptunnel.udp.*;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 

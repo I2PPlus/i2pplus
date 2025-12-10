@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-
 import net.i2p.CoreVersion;
 import net.i2p.crypto.SU3File;
 import net.i2p.crypto.TrustedUpdate;
@@ -30,7 +29,6 @@ import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFile;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
-
 
 /**
  * Check for an updated version of a plugin.

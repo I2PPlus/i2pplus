@@ -3,7 +3,6 @@ package net.i2p.router.web.helpers;
 
 import java.io.IOException;
 import java.io.StringWriter;
-
 import net.i2p.router.tunnel.pool.TunnelPool;
 import net.i2p.router.web.HelperBase;
 

@@ -33,12 +33,6 @@ package org.jfree.svg;
 
 import static org.jfree.svg.util.RyuDouble.doubleToString;
 
-import org.jfree.svg.util.Args;
-import org.jfree.svg.util.GradientPaintKey;
-import org.jfree.svg.util.GraphicsUtils;
-import org.jfree.svg.util.LinearGradientPaintKey;
-import org.jfree.svg.util.RadialGradientPaintKey;
-
 import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -92,8 +86,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-
 import javax.imageio.ImageIO;
+import org.jfree.svg.util.Args;
+import org.jfree.svg.util.GradientPaintKey;
+import org.jfree.svg.util.GraphicsUtils;
+import org.jfree.svg.util.LinearGradientPaintKey;
+import org.jfree.svg.util.RadialGradientPaintKey;
 
 /**
  * A {@code Graphics2D} implementation that creates SVG output. After rendering the graphics via the

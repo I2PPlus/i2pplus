@@ -4,11 +4,10 @@ import java.io.Serializable;
 import java.util.Comparator;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.atomic.AtomicLong;
-
 import net.i2p.I2PAppContext;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
-import net.i2p.stat.RateConstants;
 
 /**
  * Priority blocking queue with bounded capacity and FIFO ordering within priority levels.

@@ -4,7 +4,6 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
-
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.FIFOBandwidthLimiter;
 import net.i2p.router.util.CDPQEntry;

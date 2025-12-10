@@ -15,7 +15,6 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.regex.Pattern;
-
 import org.minidns.dnsname.DnsName;
 
 /**

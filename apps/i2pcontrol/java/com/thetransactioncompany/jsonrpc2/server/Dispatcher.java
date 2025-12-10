@@ -1,11 +1,10 @@
 package com.thetransactioncompany.jsonrpc2.server;
 
-import java.util.Hashtable;
-
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Notification;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
+import java.util.Hashtable;
 
 /**
  * Dispatcher for JSON-RPC 2.0 requests and notifications. This class is

@@ -1,11 +1,11 @@
 package net.i2p.router.networkdb.kademlia;
 
 import net.i2p.data.Hash;
-import net.i2p.data.router.RouterInfo;
 import net.i2p.data.i2np.DatabaseSearchReplyMessage;
-import net.i2p.util.Log;
+import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
+import net.i2p.util.Log;
 
 /**
  * Processes DatabaseSearchReplyMessage responses during iterative searches.

@@ -1,16 +1,18 @@
 package net.i2p.router.tunnel.pool;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
+import static net.i2p.router.tunnel.pool.BuildExecutor.Result.*;
+
 import java.util.List;
 import java.util.Properties;
-
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.crypto.EncType;
 import net.i2p.data.DataHelper;
 import net.i2p.data.EmptyProperties;
 import net.i2p.data.Hash;
+import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.BuildRequestRecord;
 import net.i2p.data.i2np.BuildResponseRecord;
 import net.i2p.data.i2np.EncryptedBuildRecord;
@@ -25,26 +27,24 @@ import net.i2p.data.i2np.VariableTunnelBuildMessage;
 import net.i2p.data.i2np.VariableTunnelBuildReplyMessage;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.data.TunnelId;
 import net.i2p.router.HandlerJobBuilder;
 import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
-import net.i2p.router.networkdb.kademlia.MessageWrapper;
 import net.i2p.router.OutNetMessage;
-import net.i2p.router.peermanager.TunnelHistory;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.RouterThrottleImpl;
+import net.i2p.router.networkdb.kademlia.MessageWrapper;
+import net.i2p.router.peermanager.TunnelHistory;
 import net.i2p.router.tunnel.HopConfig;
 import net.i2p.router.tunnel.TunnelDispatcher;
 import net.i2p.router.util.CDQEntry;
-import net.i2p.util.Log;
 import net.i2p.stat.Rate;
-import net.i2p.stat.RateStat;
 import net.i2p.stat.RateConstants;
+import net.i2p.stat.RateStat;
+import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
-import static net.i2p.router.tunnel.pool.BuildExecutor.Result.*;
 
 /**
  * Handle the received tunnel build message requests and replies,

@@ -21,7 +21,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.util.Objects;
-
 import org.apache.commons.io.output.CloseShieldOutputStream;
 
 /**

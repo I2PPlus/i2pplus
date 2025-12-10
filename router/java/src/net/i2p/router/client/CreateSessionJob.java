@@ -9,7 +9,6 @@ package net.i2p.router.client;
  */
 
 import java.util.Properties;
-
 import net.i2p.data.Hash;
 import net.i2p.data.i2cp.SessionConfig;
 import net.i2p.router.ClientTunnelSettings;

@@ -6,11 +6,13 @@
  */
 package net.i2p.i2ptunnel.socks;
 
+import static net.i2p.socks.SOCKS5Constants.*;
+
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -20,7 +22,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.app.Outproxy;
@@ -30,18 +31,17 @@ import net.i2p.client.streaming.I2PSocketOptions;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
+import net.i2p.i2ptunnel.I2PTunnel;
 import net.i2p.i2ptunnel.I2PTunnelHTTPClientBase;
 import net.i2p.i2ptunnel.I2PTunnelHTTPServer;
-import net.i2p.i2ptunnel.I2PTunnel;
-import static net.i2p.socks.SOCKS5Constants.*;
+import net.i2p.socks.SOCKS5Client;
+import net.i2p.socks.SOCKSException;
 import net.i2p.util.Addresses;
 import net.i2p.util.HexDump;
 import net.i2p.util.LHMCache;
 import net.i2p.util.Log;
 import net.i2p.util.PasswordManager;
 import net.i2p.util.SipHash;
-import net.i2p.socks.SOCKS5Client;
-import net.i2p.socks.SOCKSException;
 
 /**
  * SOCKS5 server implementation with comprehensive protocol support and authentication.

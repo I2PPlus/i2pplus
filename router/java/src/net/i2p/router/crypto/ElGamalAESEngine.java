@@ -13,8 +13,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.AESEngine;
 import net.i2p.crypto.EncType;
@@ -26,6 +24,7 @@ import net.i2p.data.PrivateKey;
 import net.i2p.data.PublicKey;
 import net.i2p.data.SessionKey;
 import net.i2p.data.SessionTag;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleByteCache;
 
@@ -52,19 +51,19 @@ public final class ElGamalAESEngine {
 
         _context.statManager().createFrequencyStat("crypto.elGamalAES.encryptNewSession",
                                                    "How often we encrypt to a new ElGamal/AES+SessionTag session",
-                                                   "Encryption", new long[] { 60*1000, 60*60*1000l});
+                                                   "Encryption", new long[] { RateConstants.ONE_MINUTE });
         _context.statManager().createFrequencyStat("crypto.elGamalAES.encryptExistingSession",
                                                    "How often we encrypt to an existing ElGamal/AES+SessionTag session",
-                                                   "Encryption", new long[] { 60*1000, 60*60*1000l});
+                                                   "Encryption", new long[] { RateConstants.ONE_MINUTE });
         _context.statManager().createFrequencyStat("crypto.elGamalAES.decryptNewSession",
                                                    "How often we decrypt with a new ElGamal/AES+SessionTag session",
-                                                   "Encryption", new long[] { 60*1000, 60*60*1000l});
+                                                   "Encryption", new long[] { RateConstants.ONE_MINUTE });
         _context.statManager().createFrequencyStat("crypto.elGamalAES.decryptExistingSession",
                                                    "How often we decrypt with an existing ElGamal/AES+SessionTag session",
-                                                   "Encryption", new long[] { 60*1000, 60*60*1000l});
+                                                   "Encryption", new long[] { RateConstants.ONE_MINUTE });
         _context.statManager().createFrequencyStat("crypto.elGamalAES.decryptFailed",
                                                    "How often we fail to decrypt with ElGamal/AES+SessionTag",
-                                                   "Encryption", new long[] { 60*1000, 60*60*1000l});
+                                                   "Encryption", new long[] { RateConstants.ONE_MINUTE });
     }
 
     /**

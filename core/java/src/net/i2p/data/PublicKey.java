@@ -9,10 +9,9 @@ package net.i2p.data;
  *
  */
 
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
-
 import net.i2p.crypto.EncType;
 
 /**

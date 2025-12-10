@@ -3,7 +3,6 @@ package net.i2p.util;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.ByteArray;
 

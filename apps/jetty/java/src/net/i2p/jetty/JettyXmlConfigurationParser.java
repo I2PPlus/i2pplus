@@ -18,12 +18,11 @@ package net.i2p.jetty;
 //  ========================================================================
 //
 
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
 import java.io.Writer;
 import java.net.URL;
 import java.util.Locale;
-
 import org.eclipse.jetty.util.Loader;
 import org.eclipse.jetty.util.security.Password;
 import org.eclipse.jetty.xml.XmlConfiguration;

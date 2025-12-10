@@ -1,17 +1,15 @@
 package org.klomp.snark;
 
+import java.io.File;
+import java.net.URI;
+import java.util.List;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.TrustedUpdate;
 import net.i2p.data.DataHelper;
 import net.i2p.update.*;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
-
 import org.klomp.snark.comments.CommentSet;
-
-import java.io.File;
-import java.net.URI;
-import java.util.List;
 
 /**
  * The downloader for router signed updates.

@@ -20,7 +20,6 @@ package org.apache.commons.net.nntp;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collections;
-
 import org.apache.commons.net.util.NetConstants;
 
 /**

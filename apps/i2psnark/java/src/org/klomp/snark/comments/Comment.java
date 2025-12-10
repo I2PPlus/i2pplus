@@ -3,10 +3,9 @@
  */
 package org.klomp.snark.comments;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Store a single comment and/or rating. Unmodifiable except for marking as hidden. Stores a

@@ -5,11 +5,10 @@ package net.i2p.client.impl;
  */
 
 import java.io.InputStream;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSessionException;
 import net.i2p.client.I2PSessionListener;

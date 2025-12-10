@@ -3,7 +3,6 @@ package net.i2p.router.tunnel;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
-
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.I2NPMessage;
@@ -11,7 +10,6 @@ import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.util.CoDelBlockingQueue;
 import net.i2p.router.util.CoDelPriorityBlockingQueue;
-
 import net.i2p.util.SystemVersion;
 
 /**

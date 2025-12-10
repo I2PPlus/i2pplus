@@ -3,9 +3,7 @@ package net.i2p.router.tunnel.pool;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import junit.framework.TestCase;
-
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.KeyPair;

@@ -9,7 +9,6 @@ package net.i2p.router.tasks;
  */
 
 import java.util.concurrent.atomic.AtomicInteger;
-
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.RouterVersion;

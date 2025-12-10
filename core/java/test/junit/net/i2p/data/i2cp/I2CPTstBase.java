@@ -12,11 +12,9 @@ import static org.junit.Assert.*;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-
-import org.junit.Test;
-
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
+import org.junit.Test;
 
 /**
  * Utility class for wrapping I2CP message tests

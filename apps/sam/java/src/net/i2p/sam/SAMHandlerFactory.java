@@ -13,7 +13,6 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.nio.channels.SocketChannel;
 import java.util.Properties;
-
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 import net.i2p.util.VersionComparator;

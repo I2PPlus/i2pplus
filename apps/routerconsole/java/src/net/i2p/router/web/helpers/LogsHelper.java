@@ -3,27 +3,25 @@ package net.i2p.router.web.helpers;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStreamReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.io.InputStreamReader;
 import java.lang.reflect.Method;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.jar.Attributes;
-
+import java.util.regex.*;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DataHelper;
-import net.i2p.router.web.ConfigServiceHandler;
+import net.i2p.router.RouterContext;
 import net.i2p.router.web.CSSHelper;
+import net.i2p.router.web.ConfigServiceHandler;
 import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.RouterConsoleRunner;
-import net.i2p.router.RouterContext;
 import net.i2p.util.Translate;
 import net.i2p.util.UIMessages;
-
-import java.util.regex.*;
 
 /**
  * Helper for logs page rendering and form processing.

@@ -1,7 +1,6 @@
 package net.i2p.util;
 
 import java.io.File;
-
 import net.i2p.I2PAppContext;
 
 /**

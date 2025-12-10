@@ -5,13 +5,12 @@
 
 package org.cybergarage.http;
 
-import org.cybergarage.util.Debug;
-import org.cybergarage.util.ListenerList;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import org.cybergarage.util.Debug;
+import org.cybergarage.util.ListenerList;
 
 /**
  * HTTP server implementation for the CyberLink HTTP framework.

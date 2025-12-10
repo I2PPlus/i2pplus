@@ -10,7 +10,6 @@ package net.i2p.router.crypto;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import junit.framework.TestCase;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.KeyGenerator;

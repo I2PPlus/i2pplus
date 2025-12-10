@@ -29,11 +29,9 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package net.metanotion.util.skiplist;
 
 import java.io.Flushable;
-
-import net.metanotion.io.block.BlockFile;
-
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
+import net.metanotion.io.block.BlockFile;
 
 /**
  * Manages the level structure for a skip list data structure.

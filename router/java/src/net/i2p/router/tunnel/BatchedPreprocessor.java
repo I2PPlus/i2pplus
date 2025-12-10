@@ -1,7 +1,6 @@
 package net.i2p.router.tunnel;
 
 import java.util.List;
-
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;

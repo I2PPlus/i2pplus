@@ -8,13 +8,12 @@ package net.i2p.router.tunnel;
  *
  */
 
-import java.util.ArrayList;
-
 import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import net.i2p.router.RouterContext;
 import org.junit.Before;
 import org.junit.Test;
-
-import net.i2p.router.RouterContext;
 
 /**
  * Test the batching behavior of the preprocessor with one, two, or three

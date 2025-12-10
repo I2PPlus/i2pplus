@@ -13,13 +13,12 @@ import i2p.susi.util.DummyOutputStream;
 import i2p.susi.util.EOFOnMatchInputStream;
 import i2p.susi.util.FilenameUtil;
 import i2p.susi.util.LimitInputStream;
-import i2p.susi.util.ReadCounter;
-import i2p.susi.util.OutputStreamBuffer;
 import i2p.susi.util.MemoryBuffer;
+import i2p.susi.util.OutputStreamBuffer;
+import i2p.susi.util.ReadCounter;
 import i2p.susi.webmail.encoding.DecodingException;
 import i2p.susi.webmail.encoding.Encoding;
 import i2p.susi.webmail.encoding.EncodingFactory;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -28,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Log;

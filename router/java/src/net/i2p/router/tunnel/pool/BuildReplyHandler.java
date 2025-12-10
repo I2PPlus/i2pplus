@@ -2,7 +2,6 @@ package net.i2p.router.tunnel.pool;
 
 import java.util.List;
 import java.util.Properties;
-
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.ChaCha20;
 import net.i2p.data.Base64;

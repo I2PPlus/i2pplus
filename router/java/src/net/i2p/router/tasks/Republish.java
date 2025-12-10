@@ -12,8 +12,8 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
-import net.i2p.util.SimpleTimer;
 import net.i2p.util.Log;
+import net.i2p.util.SimpleTimer;
 
 /**
  * Router information publisher for network database synchronization.

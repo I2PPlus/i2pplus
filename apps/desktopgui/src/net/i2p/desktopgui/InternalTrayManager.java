@@ -12,7 +12,6 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingWorker;
-
 import net.i2p.apps.systray.UrlLauncher;
 import net.i2p.data.DataHelper;
 import net.i2p.desktopgui.router.RouterManager;

@@ -44,7 +44,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 import java.util.zip.CRC32;
 import java.util.zip.Deflater;
-
 import net.i2p.I2PAppContext;
 import net.i2p.util.ByteArrayStream;
 import net.i2p.util.ByteCache;

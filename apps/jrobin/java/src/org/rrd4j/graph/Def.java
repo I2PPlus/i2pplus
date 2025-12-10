@@ -1,10 +1,9 @@
 package org.rrd4j.graph;
 
+import java.net.URI;
 import org.rrd4j.ConsolFun;
 import org.rrd4j.core.RrdBackendFactory;
 import org.rrd4j.data.DataProcessor;
-
-import java.net.URI;
 
 /**
  * Represents a data definition (DEF) in RRD graphs. A DEF defines a data source by specifying an

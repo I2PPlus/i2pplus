@@ -1,9 +1,8 @@
 package org.rrd4j.core.jrrd;
 
+import java.util.Map;
 import org.rrd4j.data.LinearInterpolator;
 import org.rrd4j.data.Plottable;
-
-import java.util.Map;
 
 /**
  * Models a chunk of result data from an RRDatabase.

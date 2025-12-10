@@ -4,7 +4,6 @@ import java.math.BigInteger;
 import java.security.spec.ECFieldFp;
 import java.security.spec.ECPoint;
 import java.security.spec.EllipticCurve;
-
 import net.i2p.util.NativeBigInteger;
 
 /**

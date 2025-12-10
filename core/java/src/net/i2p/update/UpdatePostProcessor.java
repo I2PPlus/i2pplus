@@ -1,7 +1,7 @@
 package net.i2p.update;
 
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
 
 /**
  *  An external class to handle complex processing of update files,

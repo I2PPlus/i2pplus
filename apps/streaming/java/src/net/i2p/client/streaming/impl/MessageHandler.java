@@ -3,13 +3,13 @@ package net.i2p.client.streaming.impl;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
 import net.i2p.client.I2PSessionException;
 import net.i2p.client.I2PSessionMuxedListener;
 import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.client.streaming.I2PSocketManager.DisconnectListener;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 
 /**
@@ -30,7 +30,7 @@ class MessageHandler implements I2PSessionMuxedListener {
         _context = ctx;
         _listeners = new CopyOnWriteArraySet<DisconnectListener>();
         _log = ctx.logManager().getLog(MessageHandler.class);
-        _context.statManager().createRateStat("stream.packetReceiveFailure", "Number of times we fail to decrypt or otherwise receive a packet sent to us", "Stream", new long[] { 60*1000, 60*60*1000, 24*60*60*1000 });
+        _context.statManager().createRateStat("stream.packetReceiveFailure", "Number of times we fail to decrypt or otherwise receive a packet sent to us", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
     }
 
     /** Instruct the client that the given session has received a message with

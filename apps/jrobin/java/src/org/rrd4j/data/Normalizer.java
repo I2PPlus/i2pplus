@@ -1,8 +1,7 @@
 package org.rrd4j.data;
 
-import org.rrd4j.core.Util;
-
 import java.util.Arrays;
+import org.rrd4j.core.Util;
 
 /**
  * Normalizes RRD data timestamps and values to consistent intervals.<br>

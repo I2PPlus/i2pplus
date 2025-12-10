@@ -4,9 +4,8 @@ package net.i2p.data.router;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.IOException;
-
+import java.io.InputStream;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DataFormatException;

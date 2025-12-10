@@ -9,6 +9,7 @@ package net.i2p.crypto;
  *
  */
 
+import com.southernstorm.noise.crypto.x25519.Curve25519;
 import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
@@ -26,12 +27,9 @@ import java.security.spec.ECPublicKeySpec;
 import java.security.spec.EllipticCurve;
 import java.security.spec.RSAKeyGenParameterSpec;
 import java.security.spec.RSAPublicKeySpec;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-
-import com.southernstorm.noise.crypto.x25519.Curve25519;
-
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.eddsa.EdDSAPrivateKey;
 import net.i2p.crypto.eddsa.EdDSAPublicKey;
@@ -42,17 +40,14 @@ import net.i2p.data.Hash;
 import net.i2p.data.PrivateKey;
 import net.i2p.data.PublicKey;
 import net.i2p.data.SessionKey;
+import net.i2p.data.Signature;
 import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.data.SimpleDataStructure;
 import net.i2p.util.Log;
 import net.i2p.util.NativeBigInteger;
-import net.i2p.util.SystemVersion;
-
-
-// main()
-import net.i2p.data.Signature;
 import net.i2p.util.RandomSource;
+import net.i2p.util.SystemVersion;
 
 /** Define a way of generating asymmetrical key pairs as well as symmetrical keys
  * @author jrandom

@@ -1,5 +1,7 @@
 package net.i2p.router.news;
 
+import static net.i2p.app.ClientAppState.*;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -10,17 +12,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientApp;
 import net.i2p.app.ClientAppManager;
 import net.i2p.app.ClientAppState;
-import static net.i2p.app.ClientAppState.*;
 import net.i2p.util.FileUtil;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.TranslateReader;
-
 import org.cybergarage.xml.Node;
 
 /**

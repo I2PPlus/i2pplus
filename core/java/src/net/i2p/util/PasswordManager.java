@@ -2,7 +2,6 @@ package net.i2p.util;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.SHA256Generator;
 import net.i2p.data.Base64;

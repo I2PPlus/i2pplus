@@ -3,6 +3,7 @@
  */
 package net.i2p.i2ptunnel;
 
+import gnu.getopt.Getopt;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -11,9 +12,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import gnu.getopt.Getopt;
-
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.I2PSession;

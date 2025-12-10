@@ -18,7 +18,6 @@
 package org.apache.commons.io.file;
 
 import java.util.stream.Stream;
-
 import org.apache.commons.io.IOUtils;
 
 /**

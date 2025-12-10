@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
-
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
@@ -13,10 +12,8 @@ import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
-import net.i2p.router.transport.CommSystemFacadeImpl;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
-import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
 
 /**

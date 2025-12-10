@@ -20,7 +20,6 @@ package org.apache.commons.io.input;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
-
 import org.apache.commons.io.input.ObservableInputStream.Observer;
 
 /**

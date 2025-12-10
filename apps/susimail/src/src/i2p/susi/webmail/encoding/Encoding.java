@@ -7,15 +7,13 @@
  */
 package i2p.susi.webmail.encoding;
 
+import i2p.susi.util.Buffer;
+import i2p.susi.util.MemoryBuffer;
+import i2p.susi.util.ReadBuffer;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
-
-import i2p.susi.util.Buffer;
-import i2p.susi.util.ReadBuffer;
-import i2p.susi.util.MemoryBuffer;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Log;

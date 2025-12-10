@@ -25,14 +25,16 @@
 
 package io.pack200;
 
+import static io.pack200.Constants.*;
+
 import io.pack200.Attribute.Layout;
+import io.pack200.ConstantPool.BootstrapMethodEntry;
 import io.pack200.ConstantPool.ClassEntry;
 import io.pack200.ConstantPool.DescriptorEntry;
-import io.pack200.ConstantPool.BootstrapMethodEntry;
+import io.pack200.ConstantPool.Entry;
 import io.pack200.ConstantPool.Index;
 import io.pack200.ConstantPool.LiteralEntry;
 import io.pack200.ConstantPool.Utf8Entry;
-import io.pack200.ConstantPool.Entry;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -53,7 +55,6 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.jar.JarFile;
-import static io.pack200.Constants.*;
 
 /**
  * Define the main data structure transmitted by pack/unpack.

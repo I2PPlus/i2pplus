@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import net.i2p.router.RouterContext;
 import net.i2p.router.util.RouterPasswordManager;
 

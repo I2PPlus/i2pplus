@@ -10,16 +10,15 @@
  */
 package org.minidns.record;
 
-import org.minidns.constants.DnssecConstants.SignatureAlgorithm;
-import org.minidns.record.Record.TYPE;
-import org.minidns.util.Base64;
-
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Arrays;
+import org.minidns.constants.DnssecConstants.SignatureAlgorithm;
+import org.minidns.record.Record.TYPE;
+import org.minidns.util.Base64;
 
 /**
  * DNS DNSKEY record payload for DNSSEC public keys.<br>

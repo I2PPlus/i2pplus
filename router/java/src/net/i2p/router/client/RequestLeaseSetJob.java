@@ -10,7 +10,6 @@ package net.i2p.router.client;
 
 import java.util.Date;
 import java.util.Properties;
-
 import net.i2p.data.Lease;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.i2cp.I2CPMessage;

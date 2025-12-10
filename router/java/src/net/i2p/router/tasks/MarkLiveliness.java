@@ -11,7 +11,6 @@ package net.i2p.router.tasks;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import net.i2p.data.DataHelper;
 import net.i2p.router.Router;
 import net.i2p.util.Log;

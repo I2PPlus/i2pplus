@@ -33,7 +33,6 @@ import java.lang.reflect.Constructor;
 import java.math.BigInteger;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.DSAParameterSpec;
-
 import net.i2p.crypto.elgamal.spec.ElGamalParameterSpec;
 import net.i2p.util.NativeBigInteger;
 

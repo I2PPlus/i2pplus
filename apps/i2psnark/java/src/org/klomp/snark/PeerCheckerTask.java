@@ -6,14 +6,12 @@
 
 package org.klomp.snark;
 
-import net.i2p.data.DataHelper;
-import net.i2p.util.Log;
-
-import org.klomp.snark.dht.DHT;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import net.i2p.data.DataHelper;
+import net.i2p.util.Log;
+import org.klomp.snark.dht.DHT;
 
 /**
  * TimerTask that checks for good/bad up/downloader. Works together with the PeerCoordinator to

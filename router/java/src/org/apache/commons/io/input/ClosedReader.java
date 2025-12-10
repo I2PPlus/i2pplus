@@ -20,7 +20,6 @@ import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.IOException;
 import java.io.Reader;
-
 import org.apache.commons.io.IOUtils;
 
 /**

@@ -11,12 +11,9 @@ package net.i2p.router.networkdb;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
-import net.i2p.data.router.RouterIdentity;
-import net.i2p.data.router.RouterInfo;
 import net.i2p.data.SessionKey;
 import net.i2p.data.SessionTag;
 import net.i2p.data.TunnelId;
@@ -25,14 +22,16 @@ import net.i2p.data.i2np.DatabaseSearchReplyMessage;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.i2np.TunnelGatewayMessage;
+import net.i2p.data.router.RouterIdentity;
+import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.crypto.ratchet.RatchetSessionTag;
-import net.i2p.router.networkdb.kademlia.MessageWrapper;
 import net.i2p.router.message.SendMessageDirectJob;
+import net.i2p.router.networkdb.kademlia.MessageWrapper;
 import net.i2p.util.Log;
 
 /**

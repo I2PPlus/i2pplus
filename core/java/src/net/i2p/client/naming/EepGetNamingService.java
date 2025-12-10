@@ -5,13 +5,11 @@
 package net.i2p.client.naming;
 
 import java.io.ByteArrayOutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.StringTokenizer;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.Destination;
 import net.i2p.util.EepGet;

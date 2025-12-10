@@ -3,7 +3,6 @@ package net.i2p.router.util;
 import net.i2p.I2PAppContext;
 import net.i2p.util.ConcurrentHashSet;
 
-
 /**
  * Double-buffered hash set with time-based decay for efficient data management.
  * <p>

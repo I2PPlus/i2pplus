@@ -26,7 +26,6 @@ import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.net.SocketClient;
 import org.apache.commons.net.io.CRLFLineReader;
 import org.apache.commons.net.util.NetConstants;

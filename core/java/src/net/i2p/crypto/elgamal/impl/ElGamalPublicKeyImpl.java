@@ -1,17 +1,16 @@
 package net.i2p.crypto.elgamal.impl;
 
+import static net.i2p.crypto.SigUtil.intToASN1;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigInteger;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
-
 import javax.crypto.interfaces.DHPublicKey;
 import javax.crypto.spec.DHParameterSpec;
 import javax.crypto.spec.DHPublicKeySpec;
-
-import static net.i2p.crypto.SigUtil.intToASN1;
 import net.i2p.crypto.elgamal.ElGamalPublicKey;
 import net.i2p.crypto.elgamal.spec.ElGamalParameterSpec;
 import net.i2p.crypto.elgamal.spec.ElGamalPublicKeySpec;

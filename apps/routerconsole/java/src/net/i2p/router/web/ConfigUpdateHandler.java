@@ -1,14 +1,14 @@
 package net.i2p.router.web;
 
+import static net.i2p.update.UpdateType.*;
+
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.TrustedUpdate;
 import net.i2p.data.DataHelper;
 import net.i2p.router.update.ConsoleUpdateManager;
-import static net.i2p.update.UpdateType.*;
 import net.i2p.util.FileUtil;
 import net.i2p.util.PortMapper;
 

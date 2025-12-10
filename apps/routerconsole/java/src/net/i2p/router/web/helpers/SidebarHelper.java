@@ -10,7 +10,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
 import net.i2p.app.ClientAppManager;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
@@ -24,23 +23,21 @@ import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.RouterVersion;
 import net.i2p.router.TunnelPoolSettings;
-import net.i2p.router.networkdb.kademlia.DataStore;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.networkdb.kademlia.KademliaNetworkDatabaseFacade;
 import net.i2p.router.networkdb.reseed.ReseedChecker;
 import net.i2p.router.transport.TransportUtil;
 import net.i2p.router.web.CSSHelper;
+import net.i2p.router.web.ConfigUpdateHandler;
 import net.i2p.router.web.DeadlockDetector;
 import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.NewsHelper;
 import net.i2p.servlet.util.ServletUtil;
 import net.i2p.stat.Rate;
-import net.i2p.stat.RateStat;
 import net.i2p.stat.RateConstants;
+import net.i2p.stat.RateStat;
 import net.i2p.util.PortMapper;
 import net.i2p.util.SystemVersion;
-
-import net.i2p.router.web.ConfigUpdateHandler;
 
 /**
  * Simple helper to query the appropriate router for data necessary to render

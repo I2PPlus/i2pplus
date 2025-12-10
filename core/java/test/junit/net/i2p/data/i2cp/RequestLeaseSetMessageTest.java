@@ -9,7 +9,6 @@ package net.i2p.data.i2cp;
  */
 
 import java.util.Date;
-
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;

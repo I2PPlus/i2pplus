@@ -6,18 +6,6 @@
 
 package org.klomp.snark;
 
-import net.i2p.crypto.SigType;
-import net.i2p.data.DataHelper;
-import net.i2p.data.Destination;
-import net.i2p.data.Hash;
-import net.i2p.util.ConvertToHash;
-import net.i2p.util.I2PAppThread;
-import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer2;
-
-import org.klomp.snark.bencode.InvalidBEncodingException;
-import org.klomp.snark.dht.DHT;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,6 +22,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.Set;
+import net.i2p.crypto.SigType;
+import net.i2p.data.DataHelper;
+import net.i2p.data.Destination;
+import net.i2p.data.Hash;
+import net.i2p.util.ConvertToHash;
+import net.i2p.util.I2PAppThread;
+import net.i2p.util.Log;
+import net.i2p.util.SimpleTimer2;
+import org.klomp.snark.bencode.InvalidBEncodingException;
+import org.klomp.snark.dht.DHT;
 
 /**
  * Handles communication with BitTorrent trackers and DHT to discover new peers.

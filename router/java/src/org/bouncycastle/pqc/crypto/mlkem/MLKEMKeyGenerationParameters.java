@@ -1,7 +1,6 @@
 package org.bouncycastle.pqc.crypto.mlkem;
 
 import java.security.SecureRandom;
-
 import org.bouncycastle.crypto.KeyGenerationParameters;
 
 /**

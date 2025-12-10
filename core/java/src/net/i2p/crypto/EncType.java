@@ -1,10 +1,10 @@
 package net.i2p.crypto;
 
+import static net.i2p.crypto.x25519.spec.X25519Spec.X25519_SPEC;
+
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidParameterSpecException;
 import java.util.Locale;
-
-import static net.i2p.crypto.x25519.spec.X25519Spec.X25519_SPEC;
 
 /**
  * Defines the properties for various encryption types

@@ -4,7 +4,6 @@ import java.security.DigestException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.LinkedBlockingQueue;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.Hash;
 

@@ -30,7 +30,6 @@ package net.i2p.crypto;
  */
 
 import java.math.BigInteger;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;

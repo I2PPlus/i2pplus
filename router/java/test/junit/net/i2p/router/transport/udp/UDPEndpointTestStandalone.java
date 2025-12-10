@@ -3,7 +3,6 @@ package net.i2p.router.transport.udp;
 import java.net.SocketException;
 import java.util.Properties;
 import java.util.Set;
-
 import net.i2p.data.ByteArray;
 import net.i2p.router.RouterContext;
 import net.i2p.util.ConcurrentHashSet;

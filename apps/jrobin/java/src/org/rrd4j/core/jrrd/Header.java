@@ -1,8 +1,7 @@
 package org.rrd4j.core.jrrd;
 
-import org.rrd4j.core.InvalidRrdException;
-
 import java.io.IOException;
+import org.rrd4j.core.InvalidRrdException;
 
 /**
  * Instances of this class model the header section of an RRD file.

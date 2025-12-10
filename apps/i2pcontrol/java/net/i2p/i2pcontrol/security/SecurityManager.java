@@ -16,21 +16,18 @@ package net.i2p.i2pcontrol.security;
  *
  */
 
-import net.i2p.I2PAppContext;
-import net.i2p.crypto.SHA256Generator;
-import net.i2p.data.Base64;
-import net.i2p.data.DataHelper;
-import net.i2p.util.Log;
-import net.i2p.util.SimpleTimer2;
-
-import org.mindrot.jbcrypt.BCrypt;
-
-import net.i2p.i2pcontrol.servlets.configuration.ConfigurationManager;
-
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.Iterator;
+import net.i2p.I2PAppContext;
+import net.i2p.crypto.SHA256Generator;
+import net.i2p.data.Base64;
+import net.i2p.data.DataHelper;
+import net.i2p.i2pcontrol.servlets.configuration.ConfigurationManager;
+import net.i2p.util.Log;
+import net.i2p.util.SimpleTimer2;
+import org.mindrot.jbcrypt.BCrypt;
 
 /**
  * Manage the password storing for I2PControl.

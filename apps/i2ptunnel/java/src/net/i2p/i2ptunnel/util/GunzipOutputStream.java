@@ -7,7 +7,6 @@ import java.io.OutputStream;
 import java.util.zip.CRC32;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterOutputStream;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.i2ptunnel.util.LimitOutputStream.DoneCallback;

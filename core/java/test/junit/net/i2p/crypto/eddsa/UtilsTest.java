@@ -11,13 +11,12 @@
  */
 package net.i2p.crypto.eddsa;
 
-import org.hamcrest.core.IsEqual;
-import org.junit.*;
-
-import java.security.SecureRandom;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+
+import java.security.SecureRandom;
+import org.hamcrest.core.IsEqual;
+import org.junit.*;
 
 /**
  * @author str4d

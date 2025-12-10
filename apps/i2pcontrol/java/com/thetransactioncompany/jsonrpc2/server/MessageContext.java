@@ -5,10 +5,8 @@ import java.net.InetAddress;
 import java.net.URLConnection;
 import java.security.Principal;
 import java.security.cert.X509Certificate;
-
 import javax.net.ssl.HttpsURLConnection;
 import javax.servlet.http.HttpServletRequest;
-
 
 /**
  * Context information about JSON-RPC 2.0 request and notification messages.

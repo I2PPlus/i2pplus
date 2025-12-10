@@ -2,11 +2,9 @@ package net.i2p.router.web;
 
 import java.util.Collections;
 import java.util.List;
-
-import org.eclipse.jetty.server.Server;
-
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
+import org.eclipse.jetty.server.Server;
 
 /**
  *  Stop all plugins that are installed and running

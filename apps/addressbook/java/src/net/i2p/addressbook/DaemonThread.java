@@ -22,7 +22,6 @@
 package net.i2p.addressbook;
 
 import java.util.Properties;
-
 import net.i2p.I2PAppContext;
 import net.i2p.client.naming.NamingServiceUpdater;
 import net.i2p.util.I2PAppThread;

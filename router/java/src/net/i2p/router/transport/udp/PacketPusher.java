@@ -2,7 +2,6 @@ package net.i2p.router.transport.udp;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
-
 import net.i2p.router.RouterContext;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;

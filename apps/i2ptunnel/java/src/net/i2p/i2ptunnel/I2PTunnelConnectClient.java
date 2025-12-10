@@ -10,7 +10,6 @@ import java.net.Socket;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.StringTokenizer;
-
 import net.i2p.I2PException;
 import net.i2p.app.ClientApp;
 import net.i2p.app.ClientAppManager;

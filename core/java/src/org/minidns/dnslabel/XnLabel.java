@@ -11,7 +11,6 @@
 package org.minidns.dnslabel;
 
 import java.util.Locale;
-
 import org.minidns.idna.MiniDnsIdna;
 
 /**

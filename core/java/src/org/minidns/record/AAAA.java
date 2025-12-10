@@ -13,7 +13,6 @@ package org.minidns.record;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Inet6Address;
-
 import org.minidns.record.Record.TYPE;
 import org.minidns.util.InetAddressUtil;
 

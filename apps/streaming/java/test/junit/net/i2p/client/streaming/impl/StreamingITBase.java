@@ -3,14 +3,12 @@ package net.i2p.client.streaming.impl;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.Properties;
-
+import junit.framework.TestCase;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PClient;
 import net.i2p.client.I2PClientFactory;
 import net.i2p.client.I2PSession;
 import net.i2p.util.Log;
-
-import junit.framework.TestCase;
 
 abstract class StreamingITBase extends TestCase {
 

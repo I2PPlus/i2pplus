@@ -2,9 +2,9 @@ package net.i2p.router.transport;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.FIFOBandwidthLimiter.Request;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 import net.i2p.util.SyntheticREDQueue;
 import net.i2p.util.SystemVersion;
@@ -139,7 +139,7 @@ public class FIFOBandwidthRefiller implements Runnable {
         _log = context.logManager().getLog(FIFOBandwidthRefiller.class);
         _context.statManager().createRateStat("bwLimiter.participatingBandwidthQueue",
                                               "Participating tunnel queue (bytes)", "BandwidthLimiter",
-                                              new long[] { 60*1000l, 5*60*1000l, 60*60*1000l });
+                                              RateConstants.SIDEBAR_RATES);
         reinitialize();
         _isRunning = true;
     }

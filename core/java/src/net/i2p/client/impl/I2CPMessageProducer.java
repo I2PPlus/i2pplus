@@ -16,14 +16,13 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
-
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PClient;
 import net.i2p.client.I2PSessionException;
 import net.i2p.client.SendMessageOptions;
-import net.i2p.data.DatabaseEntry;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
+import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Destination;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.Payload;
@@ -33,17 +32,18 @@ import net.i2p.data.SessionTag;
 import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.i2cp.AbuseReason;
 import net.i2p.data.i2cp.AbuseSeverity;
-import net.i2p.data.i2cp.CreateLeaseSetMessage;
 import net.i2p.data.i2cp.CreateLeaseSet2Message;
+import net.i2p.data.i2cp.CreateLeaseSetMessage;
 import net.i2p.data.i2cp.CreateSessionMessage;
 import net.i2p.data.i2cp.DestroySessionMessage;
 import net.i2p.data.i2cp.MessageId;
 import net.i2p.data.i2cp.ReconfigureSessionMessage;
 import net.i2p.data.i2cp.ReportAbuseMessage;
-import net.i2p.data.i2cp.SendMessageMessage;
 import net.i2p.data.i2cp.SendMessageExpiresMessage;
+import net.i2p.data.i2cp.SendMessageMessage;
 import net.i2p.data.i2cp.SessionConfig;
 import net.i2p.data.i2cp.SessionId;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 
 /**
@@ -87,8 +87,8 @@ class I2CPMessageProducer {
         _context = context;
         _log = context.logManager().getLog(I2CPMessageProducer.class);
         _lock = new ReentrantLock(true);
-        context.statManager().createRateStat("client.sendThrottled", "Time we waited for bandwidth (throttled)", "ClientMessages", new long[] { 60*1000 });
-        context.statManager().createRateStat("client.sendDropped", "Length of message dropped while waiting for bandwidth", "ClientMessages", new long[] { 60*1000 });
+        context.statManager().createRateStat("client.sendThrottled", "Time we waited for bandwidth (throttled)", "ClientMessages", new long[] { RateConstants.ONE_MINUTE });
+        context.statManager().createRateStat("client.sendDropped", "Length of message dropped while waiting for bandwidth", "ClientMessages", new long[] { RateConstants.ONE_MINUTE });
     }
 
     /**

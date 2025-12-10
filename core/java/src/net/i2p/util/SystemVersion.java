@@ -10,7 +10,6 @@ import java.lang.management.ThreadMXBean;
 import java.lang.reflect.Field;
 import java.util.TimeZone;
 import java.util.TreeSet;
-
 import net.i2p.I2PAppContext;
 import net.i2p.stat.Rate;
 import net.i2p.stat.StatManager;

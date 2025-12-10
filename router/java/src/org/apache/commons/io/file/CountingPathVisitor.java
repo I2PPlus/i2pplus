@@ -25,7 +25,6 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Objects;
 import java.util.function.UnaryOperator;
-
 import org.apache.commons.io.file.Counters.PathCounters;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.SymbolicLinkFileFilter;

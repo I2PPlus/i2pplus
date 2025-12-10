@@ -7,13 +7,12 @@
  */
 package i2p.susi.webmail.smtp;
 
+import i2p.susi.util.FilenameUtil;
 import i2p.susi.webmail.Attachment;
 import i2p.susi.webmail.Messages;
 import i2p.susi.webmail.encoding.Encoding;
 import i2p.susi.webmail.encoding.EncodingException;
 import i2p.susi.webmail.encoding.EncodingFactory;
-import i2p.susi.util.FilenameUtil;
-
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,7 +22,6 @@ import java.io.Writer;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.InternalSocket;

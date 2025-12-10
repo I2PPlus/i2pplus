@@ -6,8 +6,8 @@ package net.i2p.client.impl;
  */
 
 import net.i2p.I2PAppContext;
-import net.i2p.data.i2cp.I2CPMessage;
 import net.i2p.data.i2cp.BandwidthLimitsMessage;
+import net.i2p.data.i2cp.I2CPMessage;
 
 /**
  * Handle I2CP BW replies from the router

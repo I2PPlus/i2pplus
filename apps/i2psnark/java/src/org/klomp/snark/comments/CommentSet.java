@@ -4,8 +4,6 @@
  */
 package org.klomp.snark.comments;
 
-import net.i2p.util.SecureFileOutputStream;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+import net.i2p.util.SecureFileOutputStream;
 
 /**
  * Store comments.

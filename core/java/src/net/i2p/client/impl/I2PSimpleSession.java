@@ -13,7 +13,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.security.GeneralSecurityException;
 import java.util.Properties;
-
 import net.i2p.CoreVersion;
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PClient;

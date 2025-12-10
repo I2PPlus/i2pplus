@@ -1,18 +1,19 @@
 package net.i2p.router.transport.udp;
 
+import static net.i2p.router.transport.udp.PeerTestState.Role.*;
+import static net.i2p.router.transport.udp.SSU2Util.*;
+
+import com.southernstorm.noise.protocol.ChaChaPolyCipherState;
 import java.io.IOException;
 import java.net.DatagramPacket;
-import java.net.InetAddress;
 import java.net.Inet6Address;
+import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import com.southernstorm.noise.protocol.ChaChaPolyCipherState;
-
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
@@ -25,13 +26,11 @@ import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.RouterContext;
-import static net.i2p.router.transport.udp.PeerTestState.Role.*;
-import static net.i2p.router.transport.udp.SSU2Util.*;
 import net.i2p.router.transport.TransportImpl;
 import net.i2p.router.transport.TransportUtil;
 import net.i2p.util.Addresses;
-import net.i2p.util.Log;
 import net.i2p.util.HexDump;
+import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 
 /**

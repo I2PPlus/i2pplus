@@ -1,16 +1,16 @@
 package net.i2p.router.update;
 
+import static net.i2p.update.UpdateMethod.*;
+import static net.i2p.update.UpdateType.*;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.List;
-
 import net.i2p.router.RouterContext;
 import net.i2p.router.web.ConfigUpdateHandler;
 import net.i2p.router.web.NewsHelper;
 import net.i2p.update.*;
-import static net.i2p.update.UpdateType.*;
-import static net.i2p.update.UpdateMethod.*;
 
 /**
  * <p>Handles the request to update the router by firing off an

@@ -16,12 +16,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Locale;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.FileUtil;
 import net.i2p.util.SystemVersion;
-
 
 /**
  * A class for retrieveing details about the CPU using the CPUID assembly instruction.

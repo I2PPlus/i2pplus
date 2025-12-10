@@ -1,37 +1,5 @@
 package org.klomp.snark;
 
-import net.i2p.I2PAppContext;
-import net.i2p.app.ClientApp;
-import net.i2p.app.ClientAppManager;
-import net.i2p.app.ClientAppState;
-import net.i2p.app.NavService;
-import net.i2p.app.NotificationService;
-import net.i2p.client.I2PClient;
-import net.i2p.client.streaming.I2PSocketManager.DisconnectListener;
-import net.i2p.crypto.SHA1Hash;
-import net.i2p.crypto.SigType;
-import net.i2p.data.Base64;
-import net.i2p.data.DataHelper;
-import net.i2p.update.*;
-import net.i2p.util.ConcurrentHashSet;
-import net.i2p.util.FileSuffixFilter;
-import net.i2p.util.FileUtil;
-import net.i2p.util.I2PAppThread;
-import net.i2p.util.Log;
-import net.i2p.util.OrderedProperties;
-import net.i2p.util.SecureDirectory;
-import net.i2p.util.SecureFileOutputStream;
-import net.i2p.util.SimpleTimer;
-import net.i2p.util.SimpleTimer2;
-import net.i2p.util.SystemVersion;
-import net.i2p.util.Translate;
-import net.i2p.util.UIMessages;
-
-import org.klomp.snark.comments.Comment;
-import org.klomp.snark.comments.CommentSet;
-import org.klomp.snark.dht.DHT;
-import org.klomp.snark.dht.KRPC;
-
 import java.io.File;
 import java.io.FileFilter;
 import java.io.FileInputStream;
@@ -60,6 +28,36 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
+import net.i2p.I2PAppContext;
+import net.i2p.app.ClientApp;
+import net.i2p.app.ClientAppManager;
+import net.i2p.app.ClientAppState;
+import net.i2p.app.NavService;
+import net.i2p.app.NotificationService;
+import net.i2p.client.I2PClient;
+import net.i2p.client.streaming.I2PSocketManager.DisconnectListener;
+import net.i2p.crypto.SHA1Hash;
+import net.i2p.crypto.SigType;
+import net.i2p.data.Base64;
+import net.i2p.data.DataHelper;
+import net.i2p.update.*;
+import net.i2p.util.ConcurrentHashSet;
+import net.i2p.util.FileSuffixFilter;
+import net.i2p.util.FileUtil;
+import net.i2p.util.I2PAppThread;
+import net.i2p.util.Log;
+import net.i2p.util.OrderedProperties;
+import net.i2p.util.SecureDirectory;
+import net.i2p.util.SecureFileOutputStream;
+import net.i2p.util.SimpleTimer;
+import net.i2p.util.SimpleTimer2;
+import net.i2p.util.SystemVersion;
+import net.i2p.util.Translate;
+import net.i2p.util.UIMessages;
+import org.klomp.snark.comments.Comment;
+import org.klomp.snark.comments.CommentSet;
+import org.klomp.snark.dht.DHT;
+import org.klomp.snark.dht.KRPC;
 
 /**
  * Central manager for multiple torrent downloads and the I2PSnark application.

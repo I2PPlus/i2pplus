@@ -7,7 +7,6 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
 import java.security.SignatureException;
-
 import net.i2p.crypto.SHA256Generator;
 import net.i2p.crypto.SigUtil;
 import net.i2p.util.NativeBigInteger;

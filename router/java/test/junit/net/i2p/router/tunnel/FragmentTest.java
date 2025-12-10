@@ -8,22 +8,20 @@ package net.i2p.router.tunnel;
  *
  */
 
+import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import static org.junit.Assert.fail;
-import static org.junit.Assert.*;
-
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.DataMessage;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.router.RouterContext;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  * Simple test to see if the fragmentation is working, testing the preprocessor,

@@ -12,7 +12,6 @@ package org.minidns.record;
 
 import java.io.DataInputStream;
 import java.io.IOException;
-
 import org.minidns.dnsname.DnsName;
 import org.minidns.record.Record.TYPE;
 

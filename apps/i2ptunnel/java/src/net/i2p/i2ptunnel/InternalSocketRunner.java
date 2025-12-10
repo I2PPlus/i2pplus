@@ -3,7 +3,6 @@ package net.i2p.i2ptunnel;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.InternalServerSocket;
 import net.i2p.util.Log;

@@ -20,7 +20,6 @@ package org.apache.commons.net.io;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-
 import org.apache.commons.net.util.NetConstants;
 
 /**

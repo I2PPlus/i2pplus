@@ -4,10 +4,9 @@ package org.klomp.snark.dht;
  *  GPLv2
  */
 
+import java.util.Collection;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
-
-import java.util.Collection;
 
 /**
  * Stub for KRPC

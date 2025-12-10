@@ -1,12 +1,11 @@
 package net.i2p.router.networkdb.kademlia;
 
 import java.util.concurrent.atomic.AtomicInteger;
-
 import net.i2p.data.Hash;
-import net.i2p.data.router.RouterInfo;
 import net.i2p.data.i2np.DatabaseSearchReplyMessage;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.data.router.RouterInfo;
 import net.i2p.router.MessageSelector;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;

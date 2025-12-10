@@ -8,6 +8,9 @@ package net.i2p.sam;
  *
  */
 
+import static net.i2p.app.ClientAppState.*;
+
+import gnu.getopt.Getopt;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -21,15 +24,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
-
-import gnu.getopt.Getopt;
-
 import net.i2p.I2PAppContext;
 import net.i2p.app.*;
-import static net.i2p.app.ClientAppState.*;
 import net.i2p.data.DataHelper;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.I2PSSLSocketFactory;

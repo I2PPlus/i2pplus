@@ -13,18 +13,16 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.TimeZone;
-
 import javax.servlet.http.Cookie;
-
 import org.eclipse.jetty.http.PathMap;
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.RequestLog;
 import org.eclipse.jetty.server.Response;
-import org.eclipse.jetty.util.component.AbstractLifeCycle;
 import org.eclipse.jetty.util.DateCache;
-import org.eclipse.jetty.util.log.Log;
 import org.eclipse.jetty.util.RolloverFileOutputStream;
 import org.eclipse.jetty.util.Utf8StringBuilder;
+import org.eclipse.jetty.util.component.AbstractLifeCycle;
+import org.eclipse.jetty.util.log.Log;
 
 /**
  * This {@link RequestLog} implementation outputs logs in the pseudo-standard NCSA common log format.

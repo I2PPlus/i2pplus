@@ -4,6 +4,8 @@ package net.i2p.router.transport;
  * public domain
  */
 
+import static net.i2p.router.transport.Transport.AddressSource.SOURCE_UPNP;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -11,14 +13,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import net.i2p.router.RouterContext;
-import static net.i2p.router.transport.Transport.AddressSource.SOURCE_UPNP;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.Translate;
-
 import org.cybergarage.util.Debug;
 import org.freenetproject.DetectedIP;
 import org.freenetproject.ForwardPort;

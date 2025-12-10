@@ -10,15 +10,14 @@
  */
 package org.minidns.record;
 
-import org.minidns.edns.EdnsOption;
-import org.minidns.record.Record.TYPE;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.minidns.edns.EdnsOption;
+import org.minidns.record.Record.TYPE;
 
 /**
  * DNS OPT record payload for EDNS0 extensions.<br>

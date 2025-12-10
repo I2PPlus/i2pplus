@@ -2,7 +2,6 @@ package com.maxmind.geoip2;
 
 import com.maxmind.db.*;
 import com.maxmind.db.Reader.FileMode;
-
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;

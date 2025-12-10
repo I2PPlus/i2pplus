@@ -10,7 +10,6 @@ package net.i2p.router.message;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import net.i2p.data.SessionKey;
 import net.i2p.data.SessionTag;
 import net.i2p.data.i2np.GarlicMessage;

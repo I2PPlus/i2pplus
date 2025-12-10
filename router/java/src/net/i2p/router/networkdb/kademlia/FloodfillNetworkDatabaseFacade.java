@@ -7,28 +7,28 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import net.i2p.crypto.SigType;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
+import net.i2p.data.LeaseSet;
+import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.data.i2np.DatabaseStoreMessage;
-import net.i2p.data.LeaseSet;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.data.router.RouterKeyGenerator;
-import net.i2p.data.TunnelId;
 import net.i2p.kademlia.KBucketSet;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
 import net.i2p.router.OutNetMessage;
-import net.i2p.router.peermanager.DBHistory;
-import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelPoolSettings;
+import net.i2p.router.peermanager.DBHistory;
+import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.stat.Rate;
+import net.i2p.stat.RateConstants;
 import net.i2p.stat.RateStat;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.SimpleTimer2;
@@ -107,7 +107,7 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         _activeFloodQueries = new HashMap<Hash, FloodSearchJob>();
         _verifiesInProgress = new ConcurrentHashSet<Hash>(8);
 
-        long[] rate = new long[] { 60*1000, 60*60*1000L };
+        long[] rate = new long[] { RateConstants.ONE_MINUTE };
         _context.statManager().createRequiredRateStat("netDb.successTime", "Time for successful NetDb lookup", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.failedTime", "Time a failed NetDb search takes", "NetworkDatabase", rate);
         _context.statManager().createRateStat("netDb.failedAttemptedPeers", "Number of peers we sent a search to that failed", "NetworkDatabase", rate);
@@ -545,10 +545,10 @@ public class FloodfillNetworkDatabaseFacade extends KademliaNetworkDatabaseFacad
         _floodfillEnabled = yes;
         if (yes && _floodThrottler == null) {
             _floodThrottler = new FloodThrottler();
-            _context.statManager().createRateStat("netDb.floodThrottled", "How often we decline to flood the NetDb", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+            _context.statManager().createRateStat("netDb.floodThrottled", "How often we decline to flood the NetDb", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
             // following are for HFDSMJ
-            _context.statManager().createRateStat("netDb.storeFloodNew", "Time to flood out a newly received NetDb entry", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
-            _context.statManager().createRateStat("netDb.storeFloodOld", "How often we receive a stale NetDb entry", "NetworkDatabase", new long[] { 60*1000, 60*60*1000l });
+            _context.statManager().createRateStat("netDb.storeFloodNew", "Time to flood out a newly received NetDb entry", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
+            _context.statManager().createRateStat("netDb.storeFloodOld", "How often we receive a stale NetDb entry", "NetworkDatabase", new long[] { RateConstants.ONE_MINUTE });
         }
     }
 

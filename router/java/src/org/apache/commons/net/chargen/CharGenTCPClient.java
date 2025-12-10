@@ -18,7 +18,6 @@
 package org.apache.commons.net.chargen;
 
 import java.io.InputStream;
-
 import org.apache.commons.net.SocketClient;
 
 /**

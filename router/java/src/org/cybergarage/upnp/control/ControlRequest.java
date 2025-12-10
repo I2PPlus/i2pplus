@@ -5,11 +5,10 @@
 
 package org.cybergarage.upnp.control;
 
+import java.net.*;
 import org.cybergarage.http.*;
 import org.cybergarage.soap.*;
 import org.cybergarage.upnp.*;
-
-import java.net.*;
 
 /**
  * Base class for UPnP control requests. Extends SOAPRequest to provide functionality for handling

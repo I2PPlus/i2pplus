@@ -32,9 +32,8 @@
 
 package org.jfree.svg;
 
-import org.jfree.svg.util.Args;
-
 import java.awt.Image;
+import org.jfree.svg.util.Args;
 
 /**
  * A {@code (String, Image)} pair that links together a reference ID and the source image. This is

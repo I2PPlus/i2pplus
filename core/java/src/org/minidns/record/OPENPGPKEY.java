@@ -10,11 +10,10 @@
  */
 package org.minidns.record;
 
-import org.minidns.util.Base64;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import org.minidns.util.Base64;
 
 /**
  * DNS OPENPGPKEY record payload for OpenPGP public keys.<br>

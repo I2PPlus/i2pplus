@@ -2,9 +2,7 @@ package com.thetransactioncompany.jsonrpc2;
 
 
 import java.util.Map;
-
 import org.json.simple.JsonObject;
-
 
 /**
  * Represents a JSON-RPC 2.0 response.

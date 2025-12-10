@@ -2,7 +2,6 @@ package net.i2p.router.util;
 
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicLong;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.SystemVersion;

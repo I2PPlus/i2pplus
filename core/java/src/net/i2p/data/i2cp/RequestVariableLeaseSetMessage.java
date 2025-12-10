@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Lease;
 import net.i2p.util.ByteArrayStream;

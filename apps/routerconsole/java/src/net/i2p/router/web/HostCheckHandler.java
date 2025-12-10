@@ -3,17 +3,14 @@ package net.i2p.router.web;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;
 import net.i2p.util.PortMapper;
-
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.gzip.GzipHandler;
 

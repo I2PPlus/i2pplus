@@ -24,7 +24,6 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.regex.Pattern;
-
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.file.PathUtils;
 

@@ -29,7 +29,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package net.metanotion.io.data;
 
 import java.io.UnsupportedEncodingException;
-
 import net.metanotion.io.Serializer;
 
 /**

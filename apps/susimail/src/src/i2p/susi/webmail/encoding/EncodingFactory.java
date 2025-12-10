@@ -27,7 +27,6 @@ package i2p.susi.webmail.encoding;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 

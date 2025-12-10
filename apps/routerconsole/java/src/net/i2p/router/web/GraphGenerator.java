@@ -1,35 +1,34 @@
 package net.i2p.router.web;
 
+import static net.i2p.router.web.GraphConstants.*;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.StringTokenizer;
-
-import org.rrd4j.core.RrdBackendFactory;
-import org.rrd4j.core.RrdNioBackendFactory;
-
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientApp;
 import net.i2p.app.ClientAppState;
 import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
-import static net.i2p.router.web.GraphConstants.*;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
 import net.i2p.util.FileSuffixFilter;
 import net.i2p.util.FileUtil;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
+import org.rrd4j.core.RrdBackendFactory;
+import org.rrd4j.core.RrdNioBackendFactory;
 
 /**
  *  A thread started by RouterConsoleRunner that checks the configuration for

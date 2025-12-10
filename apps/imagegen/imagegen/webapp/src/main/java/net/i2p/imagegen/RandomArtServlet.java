@@ -1,14 +1,11 @@
 package net.i2p.imagegen;
 
+import com.docuverse.identicon.IdenticonUtil;
 import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.docuverse.identicon.IdenticonUtil;
-
 import net.i2p.data.Hash;
 import net.i2p.util.ConvertToHash;
 

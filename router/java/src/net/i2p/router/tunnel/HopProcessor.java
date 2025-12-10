@@ -4,10 +4,8 @@ import net.i2p.I2PAppContext;
 import net.i2p.crypto.AESEngine;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
-import net.i2p.util.Log;
-import net.i2p.router.Banlist;
-import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.util.Log;
 
 /**
  * Take a received tunnel message, verify that it isn't a

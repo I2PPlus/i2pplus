@@ -14,8 +14,8 @@ import java.io.OutputStream;
 import java.io.Writer;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -24,7 +24,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
 import java.util.SortedMap;
-
 import net.i2p.client.naming.NamingService;
 import net.i2p.client.naming.SingleFileNamingService;
 import net.i2p.data.Base32;

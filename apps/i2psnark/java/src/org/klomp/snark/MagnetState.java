@@ -1,16 +1,14 @@
 package org.klomp.snark;
 
-import net.i2p.data.DataHelper;
-import net.i2p.util.RandomSource;
-
-import org.klomp.snark.bencode.BDecoder;
-import org.klomp.snark.bencode.BEValue;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import net.i2p.data.DataHelper;
+import net.i2p.util.RandomSource;
+import org.klomp.snark.bencode.BDecoder;
+import org.klomp.snark.bencode.BEValue;
 
 /**
  * Simple state for the download of the metainfo, shared between Peer and ExtensionHandler.

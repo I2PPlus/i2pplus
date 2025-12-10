@@ -1,16 +1,17 @@
 package net.i2p.router.transport.ntcp;
 
+import com.southernstorm.noise.protocol.CipherState;
 import java.io.Closeable;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.Inet6Address;
+import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.CancelledKeyException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import java.security.GeneralSecurityException;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Queue;
 import java.util.Set;
@@ -19,23 +20,20 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-
-import com.southernstorm.noise.protocol.CipherState;
-
 import net.i2p.crypto.SipHashInline;
 import net.i2p.data.Base64;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
-import net.i2p.data.router.RouterAddress;
-import net.i2p.data.router.RouterIdentity;
-import net.i2p.data.router.RouterInfo;
 import net.i2p.data.SessionKey;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.i2np.I2NPMessageException;
 import net.i2p.data.i2np.I2NPMessageHandler;
+import net.i2p.data.router.RouterAddress;
+import net.i2p.data.router.RouterIdentity;
+import net.i2p.data.router.RouterInfo;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;

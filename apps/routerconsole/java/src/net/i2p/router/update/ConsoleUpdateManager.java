@@ -1,5 +1,9 @@
 package net.i2p.router.update;
 
+import static net.i2p.app.ClientAppState.*;
+import static net.i2p.update.UpdateMethod.*;
+import static net.i2p.update.UpdateType.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
@@ -13,15 +17,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.regex.*;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
-
+import java.util.regex.*;
 import net.i2p.CoreVersion;
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientAppManager;
 import net.i2p.app.ClientAppState;
-import static net.i2p.app.ClientAppState.*;
 import net.i2p.app.NotificationService;
 import net.i2p.crypto.SU3File;
 import net.i2p.crypto.TrustedUpdate;
@@ -37,8 +39,6 @@ import net.i2p.router.web.Messages;
 import net.i2p.router.web.NewsHelper;
 import net.i2p.router.web.PluginStarter;
 import net.i2p.update.*;
-import static net.i2p.update.UpdateType.*;
-import static net.i2p.update.UpdateMethod.*;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.FileUtil;
 import net.i2p.util.Log;

@@ -11,18 +11,17 @@ package net.i2p.data.i2np;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Date;
-
 import net.i2p.I2PAppContext;
-import net.i2p.data.DatabaseEntry;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
+import net.i2p.data.DatabaseEntry;
 import net.i2p.data.EncryptedLeaseSet;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.LeaseSet2;
 import net.i2p.data.MetaLeaseSet;
-import net.i2p.data.router.RouterInfo;
 import net.i2p.data.TunnelId;
+import net.i2p.data.router.RouterInfo;
 
 /**
  * Defines the message a router sends to another router to test the network

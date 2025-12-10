@@ -1,10 +1,9 @@
 package org.rrd4j.graph;
 
-import org.jfree.svg.SVGGraphics2D;
-
 import java.awt.*;
 import java.io.IOException;
 import java.io.OutputStream;
+import org.jfree.svg.SVGGraphics2D;
 
 /**
  * I2P adapter for jfreesvg. Requires: https://github.com/jfree/jfreesvg Requires: rrd4j

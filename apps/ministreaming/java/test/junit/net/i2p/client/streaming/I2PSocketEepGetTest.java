@@ -10,10 +10,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.Destination;
-
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;

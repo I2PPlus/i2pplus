@@ -1,7 +1,6 @@
 package net.i2p.router.tunnel;
 
 import java.util.Set;
-
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
 import net.i2p.util.ConcurrentHashSet;

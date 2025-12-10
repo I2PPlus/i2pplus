@@ -1,14 +1,13 @@
 package org.rrd4j.graph;
 
-import org.rrd4j.core.Util;
-import org.rrd4j.data.DataProcessor;
-
 import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import org.rrd4j.core.Util;
+import org.rrd4j.data.DataProcessor;
 
 /**
  * Core graph generation engine for RRD graphs. Orchestrates entire graph creation process from data

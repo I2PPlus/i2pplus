@@ -7,7 +7,6 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.nio.channels.SocketChannel;
-
 import net.i2p.I2PAppContext;
 
 /**

@@ -1,11 +1,10 @@
 package net.i2p.util;
 
-import org.junit.Test;
+import static org.junit.Assert.*;
 
 import java.net.Inet6Address;
 import java.net.UnknownHostException;
-
-import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  * @since 0.9.49

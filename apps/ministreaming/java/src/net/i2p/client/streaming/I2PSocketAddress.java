@@ -1,10 +1,9 @@
 package net.i2p.client.streaming;
 
 import java.net.SocketAddress;
-
 import net.i2p.I2PAppContext;
-import net.i2p.data.Destination;
 import net.i2p.data.DataHelper;
+import net.i2p.data.Destination;
 
 /**
  *  A SocketAddress (Destination + port) so we can have SocketChannels.

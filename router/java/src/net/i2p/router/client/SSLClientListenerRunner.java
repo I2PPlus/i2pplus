@@ -5,18 +5,16 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
-import java.net.Socket;
 import java.net.ServerSocket;
-import java.security.KeyStore;
+import java.net.Socket;
 import java.security.GeneralSecurityException;
+import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
-import javax.net.ssl.SSLContext;
-
 import net.i2p.client.I2PClient;
 import net.i2p.crypto.KeyStoreUtil;
 import net.i2p.router.RouterContext;

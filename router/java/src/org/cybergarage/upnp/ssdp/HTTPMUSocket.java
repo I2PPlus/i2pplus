@@ -5,10 +5,6 @@
 
 package org.cybergarage.upnp.ssdp;
 
-import org.cybergarage.http.HTTPRequest;
-import org.cybergarage.upnp.UPnP;
-import org.cybergarage.util.Debug;
-
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -16,6 +12,9 @@ import java.net.InetSocketAddress;
 import java.net.MulticastSocket;
 import java.net.NetworkInterface;
 import java.nio.charset.StandardCharsets;
+import org.cybergarage.http.HTTPRequest;
+import org.cybergarage.upnp.UPnP;
+import org.cybergarage.util.Debug;
 
 // Dummy Class for Android m3-rc37a
 // import org.cybergarage.android.MulticastSocket;

@@ -19,7 +19,6 @@ package org.apache.commons.net;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-
 import org.apache.commons.net.util.ListenerList;
 
 /**

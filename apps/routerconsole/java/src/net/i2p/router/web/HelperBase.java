@@ -1,7 +1,6 @@
 package net.i2p.router.web;
 
 import java.io.Writer;
-
 import net.i2p.router.RouterContext;
 
 /**

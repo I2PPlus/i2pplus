@@ -1,9 +1,8 @@
 package net.i2p.util;
 
+import java.util.Random;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
-
-import java.util.Random;
 
 /**
  * A "synthetic" queue that does not store data but estimates the average queue size

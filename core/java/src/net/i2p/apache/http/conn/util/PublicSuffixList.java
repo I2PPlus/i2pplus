@@ -28,7 +28,6 @@ package net.i2p.apache.http.conn.util;
 
 import java.util.Collections;
 import java.util.List;
-
 import net.i2p.apache.http.util.Args;
 
 /**

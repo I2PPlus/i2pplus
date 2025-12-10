@@ -17,7 +17,6 @@
 package com.google.zxing;
 
 import com.google.zxing.common.BitMatrix;
-
 import java.util.Map;
 
 /**

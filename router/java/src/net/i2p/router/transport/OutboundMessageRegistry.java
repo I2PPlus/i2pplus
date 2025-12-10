@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.router.Job;
 import net.i2p.router.MessageSelector;

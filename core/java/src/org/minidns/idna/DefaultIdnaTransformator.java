@@ -11,7 +11,6 @@
 package org.minidns.idna;
 
 import java.net.IDN;
-
 import org.minidns.dnsname.DnsName;
 
 public class DefaultIdnaTransformator implements IdnaTransformator {

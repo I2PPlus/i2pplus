@@ -7,7 +7,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.I2NPMessage;
@@ -17,8 +16,8 @@ import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.stat.Rate;
-import net.i2p.stat.RateStat;
 import net.i2p.stat.RateConstants;
+import net.i2p.stat.RateStat;
 import net.i2p.stat.StatManager;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;

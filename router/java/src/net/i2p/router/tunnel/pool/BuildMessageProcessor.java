@@ -1,7 +1,6 @@
 package net.i2p.router.tunnel.pool;
 
 import java.io.File;
-
 import net.i2p.crypto.ChaCha20;
 import net.i2p.crypto.EncType;
 import net.i2p.data.DataFormatException;

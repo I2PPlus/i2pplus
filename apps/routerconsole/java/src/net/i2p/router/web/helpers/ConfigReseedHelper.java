@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
-
 import net.i2p.router.networkdb.reseed.Reseeder;
 import net.i2p.router.web.HelperBase;
 

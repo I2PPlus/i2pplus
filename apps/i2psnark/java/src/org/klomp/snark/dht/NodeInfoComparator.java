@@ -4,11 +4,10 @@ package org.klomp.snark.dht;
  *  From zzzot, modded and relicensed to GPLv2
  */
 
-import net.i2p.crypto.SHA1Hash;
-import net.i2p.data.DataHelper;
-
 import java.io.Serializable;
 import java.util.Comparator;
+import net.i2p.crypto.SHA1Hash;
+import net.i2p.data.DataHelper;
 
 /**
  * Comparator for finding nodes closest to a target key in the DHT keyspace.

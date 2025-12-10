@@ -14,7 +14,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
-
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.kademlia.KBucketSet;

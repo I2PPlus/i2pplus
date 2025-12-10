@@ -14,9 +14,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import net.i2p.data.router.RouterInfo;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.data.router.RouterInfo;
 import net.i2p.router.util.CDPQEntry;
 import net.i2p.util.Log;
 

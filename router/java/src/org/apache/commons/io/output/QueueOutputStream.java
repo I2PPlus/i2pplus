@@ -24,7 +24,6 @@ import java.io.PipedOutputStream;
 import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-
 import org.apache.commons.io.input.QueueInputStream;
 
 /**

@@ -1,21 +1,20 @@
 package net.i2p.router.update;
 
+import static net.i2p.update.UpdateMethod.*;
+import static net.i2p.update.UpdateType.*;
+
+import gnu.getopt.Getopt;
 import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-
-import gnu.getopt.Getopt;
-
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.SU3File;
 import net.i2p.router.RouterContext;
 import net.i2p.router.web.ConfigUpdateHelper;
-import net.i2p.util.EepGet;
 import net.i2p.update.*;
-import static net.i2p.update.UpdateType.*;
-import static net.i2p.update.UpdateMethod.*;
+import net.i2p.util.EepGet;
 
 /**
  * Task to periodically look for updates to the news.xml, and to keep

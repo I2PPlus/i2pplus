@@ -1,5 +1,6 @@
 package net.i2p.router.crypto.ratchet;
 
+import com.southernstorm.noise.protocol.HandshakeState;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
@@ -14,9 +15,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
-
-import com.southernstorm.noise.protocol.HandshakeState;
-
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.HKDF;
 import net.i2p.crypto.KeyPair;

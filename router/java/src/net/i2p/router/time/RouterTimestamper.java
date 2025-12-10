@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.StringTokenizer;
 import java.util.concurrent.CopyOnWriteArrayList;
-
 import net.i2p.I2PAppContext;
 import net.i2p.time.Timestamper;
 import net.i2p.util.Addresses;

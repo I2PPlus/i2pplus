@@ -1,7 +1,6 @@
 package net.i2p.client.streaming.impl;
 
 import java.util.concurrent.atomic.AtomicInteger;
-
 import net.i2p.data.Hash;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.RandomSource;

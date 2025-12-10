@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Map;
-
 import net.i2p.crypto.DSAEngine;
 import net.i2p.crypto.SigType;
 import net.i2p.data.Base64;
@@ -17,7 +16,6 @@ import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.SigningPublicKey;
 import net.i2p.util.OrderedProperties;
 // for testing only
-
 
 /**
  * A hostname, b64 destination, and optional properties.

@@ -20,7 +20,6 @@ package org.apache.commons.net.ftp.parser;
 import java.io.File;
 import java.text.ParseException;
 import java.util.Locale;
-
 import org.apache.commons.net.ftp.FTPClientConfig;
 import org.apache.commons.net.ftp.FTPFile;
 

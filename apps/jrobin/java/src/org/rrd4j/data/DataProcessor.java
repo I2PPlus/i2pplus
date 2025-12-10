@@ -1,14 +1,5 @@
 package org.rrd4j.data;
 
-import org.rrd4j.ConsolFun;
-import org.rrd4j.core.DataHolder;
-import org.rrd4j.core.FetchData;
-import org.rrd4j.core.FetchRequest;
-import org.rrd4j.core.RrdBackendFactory;
-import org.rrd4j.core.RrdDb;
-import org.rrd4j.core.RrdDbPool;
-import org.rrd4j.core.Util;
-
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.URI;
@@ -23,6 +14,14 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
+import org.rrd4j.ConsolFun;
+import org.rrd4j.core.DataHolder;
+import org.rrd4j.core.FetchData;
+import org.rrd4j.core.FetchRequest;
+import org.rrd4j.core.RrdBackendFactory;
+import org.rrd4j.core.RrdDb;
+import org.rrd4j.core.RrdDbPool;
+import org.rrd4j.core.Util;
 
 /**
  * Class which should be used for all calculations based on the data fetched from RRD files. This

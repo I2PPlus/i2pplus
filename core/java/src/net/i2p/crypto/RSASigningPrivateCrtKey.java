@@ -9,7 +9,6 @@ import java.math.BigInteger;
 import java.security.GeneralSecurityException;
 import java.security.interfaces.RSAPrivateCrtKey;
 import java.security.spec.RSAKeyGenParameterSpec;
-
 import net.i2p.data.SigningPrivateKey;
 
 /**

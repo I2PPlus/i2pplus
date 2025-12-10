@@ -6,12 +6,10 @@ import java.awt.Toolkit;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URL;
-
 import javax.swing.SwingUtilities;
-
 import net.i2p.I2PAppContext;
-import net.i2p.app.ClientAppManager;
 import net.i2p.app.ClientApp;
+import net.i2p.app.ClientAppManager;
 import net.i2p.app.ClientAppState;
 import net.i2p.app.NotificationService;
 import net.i2p.util.Log;

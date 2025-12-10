@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
-
 import net.i2p.CoreVersion;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;

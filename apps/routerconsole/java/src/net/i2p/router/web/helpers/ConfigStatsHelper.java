@@ -10,9 +10,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
-
-import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.GraphGenerator;
+import net.i2p.router.web.HelperBase;
 import net.i2p.stat.FrequencyStat;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;

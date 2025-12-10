@@ -1,10 +1,6 @@
 package net.i2p.router.crypto.ratchet;
 
-import java.security.GeneralSecurityException;
-import java.util.Arrays;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import static net.i2p.router.crypto.ratchet.RatchetPayload.*;
 
 import com.southernstorm.noise.crypto.x25519.Curve25519;
 import com.southernstorm.noise.protocol.ChaChaPolyCipherState;
@@ -12,15 +8,19 @@ import com.southernstorm.noise.protocol.CipherState;
 import com.southernstorm.noise.protocol.CipherStatePair;
 import com.southernstorm.noise.protocol.DHState;
 import com.southernstorm.noise.protocol.HandshakeState;
-
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.HKDF;
 import net.i2p.crypto.KeyFactory;
 import net.i2p.data.Base64;
 import net.i2p.data.Certificate;
-import net.i2p.data.DatabaseEntry;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
+import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Destination;
 import net.i2p.data.LeaseSet2;
 import net.i2p.data.PrivateKey;
@@ -29,11 +29,10 @@ import net.i2p.data.SessionKey;
 import net.i2p.data.i2np.DatabaseStoreMessage;
 import net.i2p.data.i2np.GarlicClove;
 import net.i2p.data.i2np.I2NPMessage;
-import net.i2p.router.crypto.pqc.MLKEM;
-import static net.i2p.router.crypto.ratchet.RatchetPayload.*;
 import net.i2p.router.LeaseSetKeys;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
+import net.i2p.router.crypto.pqc.MLKEM;
 import net.i2p.router.message.CloveSet;
 import net.i2p.util.Log;
 

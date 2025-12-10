@@ -10,12 +10,11 @@
  */
 package org.minidns.record;
 
-import org.minidns.dnsname.DnsName;
-import org.minidns.record.Record.TYPE;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import org.minidns.dnsname.DnsName;
+import org.minidns.record.Record.TYPE;
 
 /**
  * DNS SOA (Start of Authority) record payload.<br>

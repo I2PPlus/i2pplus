@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Properties;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.OrderedProperties;

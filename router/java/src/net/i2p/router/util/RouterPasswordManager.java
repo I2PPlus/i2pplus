@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import net.i2p.client.I2PClient;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;

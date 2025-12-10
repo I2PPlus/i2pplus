@@ -1,7 +1,7 @@
 package net.i2p.router.web.helpers;
 
-import net.i2p.data.Hash;
 import net.i2p.data.Base64;
+import net.i2p.data.Hash;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.web.FormHandler;
 

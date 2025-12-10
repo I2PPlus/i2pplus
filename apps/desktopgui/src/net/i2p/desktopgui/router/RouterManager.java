@@ -1,7 +1,6 @@
 package net.i2p.desktopgui.router;
 
 import java.io.IOException;
-
 import net.i2p.I2PAppContext;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;

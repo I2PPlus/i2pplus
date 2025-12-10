@@ -3,7 +3,6 @@ package net.i2p.router.web.helpers;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Properties;
-
 import net.i2p.data.DataHelper;
 import net.i2p.router.web.FormHandler;
 import net.i2p.util.LogManager;

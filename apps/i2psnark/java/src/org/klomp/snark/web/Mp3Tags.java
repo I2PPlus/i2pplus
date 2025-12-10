@@ -3,10 +3,8 @@ package org.klomp.snark.web;
 import com.mpatric.mp3agic.ID3v1;
 import com.mpatric.mp3agic.ID3v2;
 import com.mpatric.mp3agic.Mp3File;
-
-import net.i2p.data.DataHelper;
-
 import java.io.File;
+import net.i2p.data.DataHelper;
 
 /**
  * Utility class for extracting MP3 metadata tags for display in the I2PSnark web interface.

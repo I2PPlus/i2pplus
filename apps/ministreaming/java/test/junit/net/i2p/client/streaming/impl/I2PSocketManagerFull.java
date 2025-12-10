@@ -10,7 +10,6 @@ import java.net.Socket;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.I2PSession;

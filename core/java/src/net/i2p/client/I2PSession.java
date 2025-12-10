@@ -13,7 +13,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-
 import net.i2p.data.BlindData;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;

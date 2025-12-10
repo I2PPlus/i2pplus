@@ -2,17 +2,6 @@ package net.i2p.router.crypto.pqc;
 
 import java.security.GeneralSecurityException;
 import java.security.InvalidKeyException;
-
-import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
-import org.bouncycastle.crypto.SecretWithEncapsulation;
-import org.bouncycastle.pqc.crypto.mlkem.MLKEMExtractor;
-import org.bouncycastle.pqc.crypto.mlkem.MLKEMGenerator;
-import org.bouncycastle.pqc.crypto.mlkem.MLKEMKeyGenerationParameters;
-import org.bouncycastle.pqc.crypto.mlkem.MLKEMKeyPairGenerator;
-import org.bouncycastle.pqc.crypto.mlkem.MLKEMParameters;
-import org.bouncycastle.pqc.crypto.mlkem.MLKEMPublicKeyParameters;
-import org.bouncycastle.pqc.crypto.mlkem.MLKEMPrivateKeyParameters;
-
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.KeyFactory;
@@ -20,6 +9,15 @@ import net.i2p.crypto.KeyPair;
 import net.i2p.data.PrivateKey;
 import net.i2p.data.PublicKey;
 import net.i2p.util.RandomSource;
+import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
+import org.bouncycastle.crypto.SecretWithEncapsulation;
+import org.bouncycastle.pqc.crypto.mlkem.MLKEMExtractor;
+import org.bouncycastle.pqc.crypto.mlkem.MLKEMGenerator;
+import org.bouncycastle.pqc.crypto.mlkem.MLKEMKeyGenerationParameters;
+import org.bouncycastle.pqc.crypto.mlkem.MLKEMKeyPairGenerator;
+import org.bouncycastle.pqc.crypto.mlkem.MLKEMParameters;
+import org.bouncycastle.pqc.crypto.mlkem.MLKEMPrivateKeyParameters;
+import org.bouncycastle.pqc.crypto.mlkem.MLKEMPublicKeyParameters;
 
 /**
  * Wrapper around bouncycastle

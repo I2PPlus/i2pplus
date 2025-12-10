@@ -2,7 +2,6 @@ package net.i2p.router.networkdb.kademlia;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SessionKeyManager;
 import net.i2p.crypto.TagSetHandle;

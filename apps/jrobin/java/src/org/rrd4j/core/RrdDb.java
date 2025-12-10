@@ -1,7 +1,5 @@
 package org.rrd4j.core;
 
-import org.rrd4j.ConsolFun;
-
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.FileNotFoundException;
@@ -12,6 +10,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import org.rrd4j.ConsolFun;
 
 /**
  * Main class used to create and manipulate round robin databases (RRDs). Use this class to perform

@@ -4,9 +4,7 @@ package com.thetransactioncompany.jsonrpc2;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.json.simple.JsonObject;
-
 
 /**
  * The base abstract class for JSON-RPC 2.0 requests, notifications and

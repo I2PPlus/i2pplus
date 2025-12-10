@@ -12,7 +12,6 @@ import java.security.spec.ECGenParameterSpec;
 import java.security.spec.ECParameterSpec;
 import java.security.spec.ECPoint;
 import java.security.spec.EllipticCurve;
-
 import net.i2p.util.NativeBigInteger;
 
 /**

@@ -1,26 +1,23 @@
 package org.klomp.snark.standalone;
 
-import net.i2p.CoreVersion;
-import net.i2p.I2PAppContext;
-import net.i2p.apps.systray.UrlLauncher;
-import net.i2p.data.DataHelper;
-import net.i2p.jetty.I2PLogger;
-import net.i2p.jetty.JettyStart;
-
-import org.eclipse.jetty.util.log.Log;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Properties;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import net.i2p.CoreVersion;
+import net.i2p.I2PAppContext;
+import net.i2p.apps.systray.UrlLauncher;
+import net.i2p.data.DataHelper;
+import net.i2p.jetty.I2PLogger;
+import net.i2p.jetty.JettyStart;
+import org.eclipse.jetty.util.log.Log;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * Standalone runner for I2PSnark.

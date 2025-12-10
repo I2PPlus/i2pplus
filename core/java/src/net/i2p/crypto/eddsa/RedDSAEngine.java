@@ -1,7 +1,6 @@
 package net.i2p.crypto.eddsa;
 
 import java.security.MessageDigest;
-
 import net.i2p.util.RandomSource;
 
 /**

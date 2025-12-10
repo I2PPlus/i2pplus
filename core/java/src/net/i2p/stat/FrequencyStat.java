@@ -2,7 +2,6 @@ package net.i2p.stat;
 
 import java.io.IOException;
 import java.io.OutputStream;
-
 import net.i2p.data.DataHelper;
 
 /** coordinate an event frequency over various periods */

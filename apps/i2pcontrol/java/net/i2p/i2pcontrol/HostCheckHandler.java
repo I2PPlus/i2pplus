@@ -3,17 +3,13 @@ package net.i2p.i2pcontrol;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import net.i2p.I2PAppContext;
+import net.i2p.apache.http.conn.util.InetAddressUtils;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
-
-import net.i2p.apache.http.conn.util.InetAddressUtils;
-
 import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.HandlerWrapper;
 

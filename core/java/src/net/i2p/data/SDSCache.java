@@ -8,8 +8,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Map;
-
 import net.i2p.I2PAppContext;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.LHMCache;
 import net.i2p.util.SimpleByteCache;
 import net.i2p.util.SystemVersion;
@@ -82,7 +82,7 @@ public class SDSCache<V extends SimpleDataStructure> {
         //if (_log.shouldDebug())
         //    _log.debug("New SDSCache for " + rvClass + " data size: " + len +
         //               " max: " + size + " max mem: " + (len * size));
-        I2PAppContext.getGlobalContext().statManager().createRateStat(_statName, "Hit rate", "Router [SDSCache]", new long[] { 10*60*1000 });
+        I2PAppContext.getGlobalContext().statManager().createRateStat(_statName, "Hit rate", "Router [SDSCache]", new long[] { RateConstants.TEN_MINUTES });
         I2PAppContext.getGlobalContext().addShutdownTask(new Shutdown());
     }
 

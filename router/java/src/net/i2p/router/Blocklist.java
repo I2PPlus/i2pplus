@@ -6,11 +6,10 @@ package net.i2p.router;
  */
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Writer;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -23,7 +22,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import net.i2p.app.ClientAppManager;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;

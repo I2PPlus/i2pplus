@@ -16,31 +16,28 @@ package net.i2p.i2pcontrol;
  *
  */
 
+import static net.i2p.app.ClientAppState.*;
+
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-
 import net.i2p.app.ClientAppManager;
 import net.i2p.app.ClientAppState;
-import static net.i2p.app.ClientAppState.*;
-import net.i2p.router.RouterContext;
-import net.i2p.router.app.RouterApp;
-import net.i2p.util.Log;
-
-import org.json.simple.Jsoner;
-import org.json.simple.DeserializationException;
-
 import net.i2p.i2pcontrol.security.KeyStoreProvider;
 import net.i2p.i2pcontrol.security.SecurityManager;
 import net.i2p.i2pcontrol.servlets.JSONRPC2Servlet;
 import net.i2p.i2pcontrol.servlets.configuration.ConfigurationManager;
-
+import net.i2p.router.RouterContext;
+import net.i2p.router.app.RouterApp;
+import net.i2p.util.Log;
+import org.json.simple.DeserializationException;
+import org.json.simple.Jsoner;
 
 /**
  * This handles the starting and stopping of a ServerSocket

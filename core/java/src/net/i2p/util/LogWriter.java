@@ -10,7 +10,6 @@ package net.i2p.util;
  */
 
 import java.util.Queue;
-
 import net.i2p.app.ClientAppManager;
 import net.i2p.app.NotificationService;
 

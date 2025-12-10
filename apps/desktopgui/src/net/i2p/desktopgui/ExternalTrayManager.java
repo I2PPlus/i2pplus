@@ -5,10 +5,8 @@ import java.awt.PopupMenu;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.JPopupMenu;
 import javax.swing.SwingWorker;
-
 import net.i2p.I2PAppContext;
 import net.i2p.desktopgui.router.RouterManager;
 

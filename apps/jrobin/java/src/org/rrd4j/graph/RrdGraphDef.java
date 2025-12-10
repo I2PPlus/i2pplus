@@ -1,15 +1,5 @@
 package org.rrd4j.graph;
 
-import org.rrd4j.ConsolFun;
-import org.rrd4j.core.DataHolder;
-import org.rrd4j.core.FetchData;
-import org.rrd4j.core.RrdBackendFactory;
-import org.rrd4j.core.RrdDbPool;
-import org.rrd4j.core.Util;
-import org.rrd4j.data.DataProcessor;
-import org.rrd4j.data.IPlottable;
-import org.rrd4j.data.Variable;
-
 import java.awt.BasicStroke;
 import java.awt.Font;
 import java.awt.Paint;
@@ -28,8 +18,16 @@ import java.util.Locale;
 import java.util.Optional;
 import java.util.TimeZone;
 import java.util.function.Function;
-
 import javax.imageio.ImageIO;
+import org.rrd4j.ConsolFun;
+import org.rrd4j.core.DataHolder;
+import org.rrd4j.core.FetchData;
+import org.rrd4j.core.RrdBackendFactory;
+import org.rrd4j.core.RrdDbPool;
+import org.rrd4j.core.Util;
+import org.rrd4j.data.DataProcessor;
+import org.rrd4j.data.IPlottable;
+import org.rrd4j.data.Variable;
 
 /**
  * Class which should be used to define new Rrd4j graph. Once constructed and populated with data

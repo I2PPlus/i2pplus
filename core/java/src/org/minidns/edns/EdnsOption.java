@@ -12,7 +12,6 @@ package org.minidns.edns;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-
 import org.minidns.edns.Edns.OptionCode;
 
 /**

@@ -20,7 +20,6 @@ package org.apache.commons.net.smtp;
 import java.io.IOException;
 import java.io.Writer;
 import java.net.InetAddress;
-
 import org.apache.commons.net.io.DotTerminatedMessageWriter;
 
 /**

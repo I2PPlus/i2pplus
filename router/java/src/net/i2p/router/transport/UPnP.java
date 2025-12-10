@@ -9,11 +9,11 @@ package net.i2p.router.transport;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.net.InetAddress;
 import java.net.Inet6Address;
-import java.net.UnknownHostException;
+import java.net.InetAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,14 +26,12 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Addresses;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.Translate;
-
 import org.cybergarage.http.HTTPServer;
 import org.cybergarage.http.HTTPServerList;
 import org.cybergarage.upnp.Action;

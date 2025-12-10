@@ -3,12 +3,11 @@ package net.i2p.router.peermanager;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-
 import net.i2p.data.Hash;
 import net.i2p.router.CommSystemFacade;
 import net.i2p.router.RouterContext;
-import net.i2p.stat.RateStat;
 import net.i2p.stat.RateConstants;
+import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 

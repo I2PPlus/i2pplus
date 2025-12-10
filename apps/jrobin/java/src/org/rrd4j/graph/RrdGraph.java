@@ -1,14 +1,12 @@
 package org.rrd4j.graph;
 
-import org.rrd4j.data.DataProcessor;
-
 import java.awt.Graphics;
 import java.io.IOException;
 import java.util.function.Supplier;
-
 import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.swing.ImageIcon;
+import org.rrd4j.data.DataProcessor;
 
 /** Class which actually creates Rrd4j graphs (does the hard work). */
 public class RrdGraph implements RrdGraphConstants {

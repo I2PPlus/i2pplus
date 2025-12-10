@@ -10,16 +10,15 @@ package net.i2p.client.datagram;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
 import net.i2p.crypto.DSAEngine;
 import net.i2p.crypto.SHA256Generator;
+import net.i2p.crypto.SigType;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Hash;
 import net.i2p.data.Signature;
 import net.i2p.data.SigningPrivateKey;
-import net.i2p.crypto.SigType;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleByteCache;
 

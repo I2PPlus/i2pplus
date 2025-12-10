@@ -1,11 +1,10 @@
 package org.rrd4j.data;
 
+import java.net.URI;
 import org.rrd4j.ConsolFun;
 import org.rrd4j.core.FetchData;
 import org.rrd4j.core.RrdBackendFactory;
 import org.rrd4j.core.RrdDb;
-
-import java.net.URI;
 
 /**
  * RRD DEF (Data Source Definition) implementation.<br>

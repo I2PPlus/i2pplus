@@ -1,8 +1,7 @@
 package net.i2p.i2ptunnel.streamr;
 
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.List;
-
+import java.util.concurrent.CopyOnWriteArrayList;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Destination;
 import net.i2p.i2ptunnel.udp.*;

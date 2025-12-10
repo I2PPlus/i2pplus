@@ -16,15 +16,13 @@ package net.i2p.router.news;
 *    Copyright (C) Satoshi Konno 2002
 ******************************************************************/
 
-import org.w3c.dom.NamedNodeMap;
-
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 import org.cybergarage.xml.Attribute;
 import org.cybergarage.xml.Node;
 import org.cybergarage.xml.XML;
 import org.cybergarage.xml.parser.JaxpParser;
-
+import org.w3c.dom.NamedNodeMap;
 
 /**
  * Enhanced XML parser for I2P news content with XHTML support.

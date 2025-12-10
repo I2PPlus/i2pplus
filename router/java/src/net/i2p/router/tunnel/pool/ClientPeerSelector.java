@@ -1,16 +1,16 @@
 package net.i2p.router.tunnel.pool;
 
+import static net.i2p.router.peermanager.ProfileOrganizer.Slice.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 import net.i2p.router.RouterContext;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
-import static net.i2p.router.peermanager.ProfileOrganizer.Slice.*;
 import net.i2p.router.util.MaskedIPSet;
 import net.i2p.util.ArraySet;
 

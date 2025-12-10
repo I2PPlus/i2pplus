@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.util.zip.CRC32;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
-
 import net.i2p.data.DataHelper;
 
 /**

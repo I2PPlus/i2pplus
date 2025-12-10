@@ -1,5 +1,9 @@
 package net.i2p.router.transport.udp;
 
+import static net.i2p.router.transport.udp.SSU2Util.*;
+
+import com.southernstorm.noise.protocol.ChaChaPolyCipherState;
+import com.southernstorm.noise.protocol.HandshakeState;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetSocketAddress;
@@ -10,10 +14,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import com.southernstorm.noise.protocol.ChaChaPolyCipherState;
-import com.southernstorm.noise.protocol.HandshakeState;
-
 import net.i2p.crypto.HKDF;
 import net.i2p.data.Base64;
 import net.i2p.data.DataFormatException;
@@ -26,7 +26,6 @@ import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.transport.TransportImpl;
-import static net.i2p.router.transport.udp.SSU2Util.*;
 import net.i2p.util.Addresses;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.VersionComparator;

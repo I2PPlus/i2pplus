@@ -1,9 +1,8 @@
 package edu.internet2.ndt;
 
+import com.vuze.plugins.mlab.tools.ndt.swingemu.JOptionPane;
 import java.util.Locale;
 import java.util.ResourceBundle;
-
-import com.vuze.plugins.mlab.tools.ndt.swingemu.JOptionPane;
 
 /**
  * Class to hold constants. These constants include both Protocol related

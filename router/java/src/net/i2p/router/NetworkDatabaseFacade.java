@@ -13,7 +13,6 @@ import java.io.Writer;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-
 import net.i2p.data.BlindData;
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Destination;

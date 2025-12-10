@@ -8,14 +8,14 @@ package net.i2p.router.tunnel;
  *
  */
 
-import junit.framework.TestCase;
-import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 
+import junit.framework.TestCase;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.router.RouterContext;
+import org.junit.Test;
 
 /**
  * Quick unit test for base functionality of inbound tunnel

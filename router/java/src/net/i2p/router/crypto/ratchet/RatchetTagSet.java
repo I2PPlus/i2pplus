@@ -1,10 +1,8 @@
 package net.i2p.router.crypto.ratchet;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 import com.southernstorm.noise.protocol.DHState;
 import com.southernstorm.noise.protocol.HandshakeState;
-
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.HKDF;

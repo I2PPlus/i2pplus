@@ -10,7 +10,6 @@ package net.i2p.sam;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-
 import net.i2p.data.Destination;
 
 /**

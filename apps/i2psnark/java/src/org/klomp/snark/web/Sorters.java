@@ -1,9 +1,5 @@
 package org.klomp.snark.web;
 
-import org.klomp.snark.MetaInfo;
-import org.klomp.snark.Snark;
-import org.klomp.snark.Storage;
-
 import java.io.File;
 import java.io.Serializable;
 import java.text.Collator;
@@ -11,6 +7,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.klomp.snark.MetaInfo;
+import org.klomp.snark.Snark;
+import org.klomp.snark.Storage;
 
 /**
  * Comparators for various columns

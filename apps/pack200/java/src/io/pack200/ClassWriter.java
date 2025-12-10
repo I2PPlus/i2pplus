@@ -26,11 +26,13 @@
 package io.pack200;
 
 
+import static io.pack200.Constants.*;
+
+import io.pack200.ConstantPool.BootstrapMethodEntry;
 import io.pack200.ConstantPool.Entry;
 import io.pack200.ConstantPool.Index;
-import io.pack200.ConstantPool.NumberEntry;
 import io.pack200.ConstantPool.MethodHandleEntry;
-import io.pack200.ConstantPool.BootstrapMethodEntry;
+import io.pack200.ConstantPool.NumberEntry;
 import io.pack200.Package.Class;
 import io.pack200.Package.InnerClass;
 import java.io.BufferedOutputStream;
@@ -39,7 +41,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
-import static io.pack200.Constants.*;
+
 /**
  * Writer for a class file that is incorporated into a package.
  * @author John Rose

@@ -8,6 +8,7 @@ package net.i2p.router.networkdb.kademlia;
  *
  */
 
+import gnu.getopt.Getopt;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,17 +21,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
-import gnu.getopt.Getopt;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.Base64;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.router.transport.StrictCountries;
 import net.i2p.router.transport.GeoIP;
+import net.i2p.router.transport.StrictCountries;
 import net.i2p.util.FileUtil;
 
 /**

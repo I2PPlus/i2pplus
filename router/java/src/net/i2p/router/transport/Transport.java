@@ -11,7 +11,6 @@ package net.i2p.router.transport;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.List;
-
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;

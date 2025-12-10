@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.Router;

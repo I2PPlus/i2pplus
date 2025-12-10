@@ -1,10 +1,9 @@
 package org.rrd4j.graph;
 
-import org.rrd4j.data.DataProcessor;
-
 import java.awt.BasicStroke;
 import java.awt.Paint;
 import java.util.Arrays;
+import org.rrd4j.data.DataProcessor;
 
 /**
  * Represents a line plot element with a constant value in RRD graphs. Extends Line to provide

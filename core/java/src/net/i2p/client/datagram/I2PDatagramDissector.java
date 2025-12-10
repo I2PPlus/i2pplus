@@ -10,7 +10,6 @@ package net.i2p.client.datagram;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-
 import net.i2p.crypto.DSAEngine;
 import net.i2p.crypto.SHA256Generator;
 import net.i2p.crypto.SigType;

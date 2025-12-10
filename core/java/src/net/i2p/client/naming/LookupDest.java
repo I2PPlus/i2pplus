@@ -5,11 +5,10 @@
 package net.i2p.client.naming;
 
 import java.util.Properties;
-
 import net.i2p.I2PAppContext;
-import net.i2p.client.I2PSessionException;
 import net.i2p.client.I2PClient;
 import net.i2p.client.I2PSession;
+import net.i2p.client.I2PSessionException;
 import net.i2p.client.I2PSimpleClient;
 import net.i2p.data.Base32;
 import net.i2p.data.Destination;

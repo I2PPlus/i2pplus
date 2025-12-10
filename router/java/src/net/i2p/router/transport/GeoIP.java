@@ -8,20 +8,23 @@ package net.i2p.router.transport;
  * Manages geographic IP lookups using Tor geoip format.
  */
 
+import com.maxmind.db.CHMCache;
+import com.maxmind.geoip.InvalidDatabaseException;
+import com.maxmind.geoip.LookupService;
+import com.maxmind.geoip2.DatabaseReader;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.IOException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
-import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -30,12 +33,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicBoolean;
-
-import com.maxmind.db.CHMCache;
-import com.maxmind.geoip.InvalidDatabaseException;
-import com.maxmind.geoip.LookupService;
-import com.maxmind.geoip2.DatabaseReader;
-
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientAppManager;
 import net.i2p.data.DataHelper;

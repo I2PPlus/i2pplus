@@ -6,12 +6,11 @@
 
 package org.klomp.snark.bencode;
 
-import net.i2p.data.Base64;
-import net.i2p.data.DataHelper;
-
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
+import net.i2p.data.Base64;
+import net.i2p.data.DataHelper;
 
 /**
  * Holds different types that a bencoded byte array can represent. You need to call the correct get

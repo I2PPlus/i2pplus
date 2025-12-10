@@ -10,8 +10,8 @@ import net.i2p.data.i2np.TunnelDataMessage;
 import net.i2p.data.i2np.UnknownI2NPMessage;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
-import net.i2p.util.SyntheticREDQueue;
 import net.i2p.util.Log;
+import net.i2p.util.SyntheticREDQueue;
 
 /**
  * We are the end of an outbound tunnel that we did not create.

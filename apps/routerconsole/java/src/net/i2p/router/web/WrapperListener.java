@@ -4,12 +4,11 @@ import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
-
 import org.tanukisoftware.wrapper.WrapperManager;
 import org.tanukisoftware.wrapper.event.WrapperControlEvent;
-import org.tanukisoftware.wrapper.event.WrapperServiceControlEvent;
 import org.tanukisoftware.wrapper.event.WrapperEvent;
 import org.tanukisoftware.wrapper.event.WrapperEventListener;
+import org.tanukisoftware.wrapper.event.WrapperServiceControlEvent;
 
 /**
  *  Listen for events. Requires wrapper 3.2.0 or higher.

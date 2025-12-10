@@ -3,7 +3,6 @@ package net.i2p.i2ptunnel.streamr;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.Destination;
 import net.i2p.i2ptunnel.udp.*;

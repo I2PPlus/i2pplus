@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
-
 import net.i2p.client.I2PSession;
 import net.i2p.client.I2PSessionException;
 import net.i2p.data.Destination;

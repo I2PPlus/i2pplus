@@ -30,6 +30,8 @@
 
 package net.i2p.i2ptunnel;
 
+import gnu.getopt.Getopt;
+import gnu.getopt.LongOpt;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -42,6 +44,7 @@ import java.io.OutputStream;
 import java.lang.reflect.Constructor;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -54,11 +57,6 @@ import java.util.StringTokenizer;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicLong;
-import java.nio.charset.StandardCharsets;
-
-import gnu.getopt.Getopt;
-import gnu.getopt.LongOpt;
-
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.I2PClient;

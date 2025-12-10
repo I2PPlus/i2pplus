@@ -8,15 +8,17 @@ package net.i2p.router.transport;
  *
  */
 
+import static net.i2p.router.transport.Transport.AddressSource.*;
+
 import java.io.IOException;
 import java.io.Writer;
-import java.net.InetAddress;
 import java.net.Inet6Address;
+import java.net.InetAddress;
 import java.net.Proxy;
 import java.net.ProxySelector;
-import java.net.UnknownHostException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,21 +30,20 @@ import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
-
 import net.i2p.crypto.SigType;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
+import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.router.CommSystemFacade.Status;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
-import static net.i2p.router.transport.Transport.AddressSource.*;
 import net.i2p.router.transport.crypto.X25519KeyFactory;
 import net.i2p.router.transport.ntcp.NTCPTransport;
 import net.i2p.router.transport.udp.UDPTransport;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.Addresses;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
@@ -50,7 +51,6 @@ import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 import net.i2p.util.VersionComparator;
-import net.i2p.stat.RateConstants;
 
 /**
  * Central coordinator for all I2P transport protocols.

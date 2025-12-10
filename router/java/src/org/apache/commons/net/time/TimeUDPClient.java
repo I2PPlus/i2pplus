@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.util.Date;
-
 import org.apache.commons.net.DatagramSocketClient;
 
 /**

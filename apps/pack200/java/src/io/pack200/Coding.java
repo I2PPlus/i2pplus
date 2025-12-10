@@ -25,12 +25,14 @@
 
 package io.pack200;
 
+import static io.pack200.Constants.*;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
-import static io.pack200.Constants.*;
+
 /**
  * Define the conversions between sequences of small integers and raw bytes.
  * This is a schema of encodings which incorporates varying lengths,

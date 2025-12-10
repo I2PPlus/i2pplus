@@ -25,31 +25,32 @@
 
 package io.pack200;
 
+import static io.pack200.Constants.*;
+
 import io.pack200.ConstantPool.*;
 import io.pack200.Package.Class;
 import io.pack200.Package.File;
 import io.pack200.Package.InnerClass;
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.EOFException;
+import java.io.FilterInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-import java.io.FilterInputStream;
-import java.io.BufferedInputStream;
-import java.io.InputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Set;
-import static io.pack200.Constants.*;
 
 /**
  * Reader for a package file.

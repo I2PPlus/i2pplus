@@ -1,8 +1,8 @@
 package net.i2p.router.dummy;
 
 import net.i2p.data.Hash;
-import net.i2p.router.RouterContext;
 import net.i2p.router.NetworkDatabaseFacade;
+import net.i2p.router.RouterContext;
 import net.i2p.router.networkdb.kademlia.SegmentedNetworkDatabaseFacade;
 
 /**

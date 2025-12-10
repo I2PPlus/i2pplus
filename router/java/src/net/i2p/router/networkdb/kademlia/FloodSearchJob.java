@@ -3,7 +3,6 @@ package net.i2p.router.networkdb.kademlia;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import net.i2p.data.Hash;
 import net.i2p.router.Job;
 import net.i2p.router.JobImpl;

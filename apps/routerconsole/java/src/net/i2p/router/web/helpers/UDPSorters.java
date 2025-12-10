@@ -3,7 +3,6 @@ package net.i2p.router.web.helpers;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.Comparator;
-
 import net.i2p.I2PAppContext;
 import net.i2p.router.transport.udp.PeerState;
 

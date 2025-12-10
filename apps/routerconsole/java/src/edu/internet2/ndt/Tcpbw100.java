@@ -51,28 +51,26 @@ package edu.internet2.ndt;
     Laboratory (http://miranda.ctd.anl.gov:7123/).
  */
 
-import java.io.InputStream;
+import com.vuze.plugins.mlab.tools.ndt.swingemu.*;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.StringTokenizer;
-
-import com.vuze.plugins.mlab.tools.ndt.swingemu.*;
-
+import java.util.concurrent.atomic.AtomicBoolean;
 import net.i2p.I2PAppContext;
 import net.i2p.util.Addresses;
 import net.i2p.util.I2PAppThread;

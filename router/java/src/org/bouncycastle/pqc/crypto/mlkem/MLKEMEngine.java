@@ -2,7 +2,6 @@ package org.bouncycastle.pqc.crypto.mlkem;
 
 import java.security.SecureRandom;
 import java.util.Arrays;
-
 import org.bouncycastle.util.Util;
 
 /**

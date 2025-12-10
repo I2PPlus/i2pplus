@@ -19,7 +19,6 @@ package org.apache.commons.io.input;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.function.Supplier;
-
 import org.apache.commons.io.function.Erase;
 
 /**

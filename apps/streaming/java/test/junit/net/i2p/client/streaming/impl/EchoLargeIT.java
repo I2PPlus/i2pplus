@@ -3,17 +3,14 @@ package net.i2p.client.streaming.impl;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Properties;
-
-import org.junit.Test;
-
-
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PSession;
-import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PServerSocket;
+import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.client.streaming.IncomingConnectionFilter;
 import net.i2p.util.Log;
+import org.junit.Test;
 
 /**
  *

@@ -10,11 +10,8 @@ package net.i2p.util;
  */
 
 import gnu.crypto.prng.AsyncFortunaStandalone;
-
 import java.io.IOException;
 import java.security.SecureRandom;
-import java.util.Random;
-
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.EntropyHarvester;
 import net.i2p.data.DataHelper;

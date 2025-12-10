@@ -3,7 +3,6 @@ package i2p.susi.util;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-
 import net.i2p.data.DataHelper;
 
 /**

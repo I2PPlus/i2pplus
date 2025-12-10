@@ -22,13 +22,11 @@
 
 package com.southernstorm.noise.protocol;
 
+import com.southernstorm.noise.crypto.Poly1305;
+import com.southernstorm.noise.crypto.chacha20.ChaChaCore;
 import java.util.Arrays;
-
 import javax.crypto.BadPaddingException;
 import javax.crypto.ShortBufferException;
-
-import com.southernstorm.noise.crypto.chacha20.ChaChaCore;
-import com.southernstorm.noise.crypto.Poly1305;
 
 /**
  * Implements the ChaChaPoly cipher for Noise.

@@ -1,15 +1,14 @@
 package net.i2p.router.web.helpers;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.io.Serializable;
+import java.io.StringWriter;
 import java.io.Writer;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-
 import net.i2p.data.DataHelper;
 import net.i2p.router.Job;
 import net.i2p.router.JobStats;

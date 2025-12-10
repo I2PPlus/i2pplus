@@ -7,17 +7,6 @@
 package org.klomp.snark;
 
 import gnu.getopt.Getopt;
-
-import net.i2p.I2PAppContext;
-import net.i2p.crypto.SHA1;
-import net.i2p.data.DataHelper;
-import net.i2p.util.Log;
-
-import org.klomp.snark.bencode.BDecoder;
-import org.klomp.snark.bencode.BEValue;
-import org.klomp.snark.bencode.BEncoder;
-import org.klomp.snark.bencode.InvalidBEncodingException;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,6 +17,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import net.i2p.I2PAppContext;
+import net.i2p.crypto.SHA1;
+import net.i2p.data.DataHelper;
+import net.i2p.util.Log;
+import org.klomp.snark.bencode.BDecoder;
+import org.klomp.snark.bencode.BEValue;
+import org.klomp.snark.bencode.BEncoder;
+import org.klomp.snark.bencode.InvalidBEncodingException;
 
 /**
  * Holds all information extracted from a torrent file.

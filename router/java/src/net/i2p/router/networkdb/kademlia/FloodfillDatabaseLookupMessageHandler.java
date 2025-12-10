@@ -8,17 +8,17 @@ package net.i2p.router.networkdb.kademlia;
  *
  */
 
+import java.util.Set;
 import net.i2p.data.Hash;
-import net.i2p.data.router.RouterIdentity;
-import net.i2p.data.router.RouterInfo;
 import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.data.router.RouterIdentity;
+import net.i2p.data.router.RouterInfo;
 import net.i2p.router.HandlerJobBuilder;
 import net.i2p.router.Job;
 import net.i2p.router.RouterContext;
 import net.i2p.util.Log;
 import net.i2p.util.RandomSource;
-import java.util.Set;
 
 /**
  * Handler for DatabaseLookupMessage received on floodfills.

@@ -4,15 +4,14 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.concurrent.BlockingQueue;
-
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.FIFOBandwidthLimiter;
 //import net.i2p.router.util.CoDelBlockingQueue;
 import net.i2p.router.util.CoDelPriorityBlockingQueue;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
-import net.i2p.stat.RateConstants;
 
 /**
  * Lowest level UDP packet sender that pushes packets from its queue ASAP.

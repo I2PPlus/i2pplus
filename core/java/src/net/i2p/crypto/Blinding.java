@@ -4,9 +4,8 @@ import java.security.GeneralSecurityException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.TimeZone;
-import java.util.zip.Checksum;
 import java.util.zip.CRC32;
-
+import java.util.zip.Checksum;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.eddsa.EdDSABlinding;
 import net.i2p.crypto.eddsa.EdDSAPrivateKey;
@@ -17,7 +16,6 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.SigningPublicKey;
-
 
 /**
  * Utilities for Blinding EdDSA keys.

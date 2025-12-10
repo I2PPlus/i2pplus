@@ -1,10 +1,10 @@
 package net.i2p.stat;
 
+import static java.util.Arrays.*;
+
 import java.io.IOException;
 import java.io.OutputStream;
-import static java.util.Arrays.*;
 import java.util.Properties;
-
 import net.i2p.data.DataHelper;
 
 /** coordinate a moving rate over various periods */

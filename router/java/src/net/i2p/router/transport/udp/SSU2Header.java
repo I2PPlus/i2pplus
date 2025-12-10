@@ -1,11 +1,11 @@
 package net.i2p.router.transport.udp;
 
-import java.net.DatagramPacket;
+import static net.i2p.router.transport.udp.SSU2Util.*;
 
+import java.net.DatagramPacket;
 import net.i2p.crypto.ChaCha20;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
-import static net.i2p.router.transport.udp.SSU2Util.*;
 
 /**
  *  Encrypt/decrypt headers

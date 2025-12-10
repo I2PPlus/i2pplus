@@ -30,7 +30,6 @@ import java.util.AbstractCollection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-
 /**
  * Thread-safe collection with cached iterator for efficient element iteration.
  * <p>

@@ -11,7 +11,6 @@ import java.security.GeneralSecurityException;
 import java.security.PublicKey;
 import java.security.cert.CRLException;
 import java.security.cert.X509Certificate;
-
 import net.i2p.util.SystemVersion;
 
 /**

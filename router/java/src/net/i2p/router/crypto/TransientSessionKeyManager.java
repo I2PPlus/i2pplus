@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SessionKeyManager;
@@ -32,6 +31,7 @@ import net.i2p.data.DataHelper;
 import net.i2p.data.PublicKey;
 import net.i2p.data.SessionKey;
 import net.i2p.data.SessionTag;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
 
@@ -176,8 +176,8 @@ public class TransientSessionKeyManager extends SessionKeyManager {
         _context = context;
         _outboundSessions = new HashMap<PublicKey, OutboundSession>(64);
         _inboundTagSets = new HashMap<SessionTag, TagSet>(128);
-        context.statManager().createRateStat("crypto.sessionTagsExpired", "Number of expired tags/sessions", "Encryption", new long[] { 60*1000, 10*60*1000, 60*60*1000, 3*60*60*1000 });
-        context.statManager().createRateStat("crypto.sessionTagsRemaining", "Number of remaining tags/sessions after a cleanup", "Encryption", new long[] { 60*1000, 10*60*1000, 60*60*1000, 3*60*60*1000 });
+        context.statManager().createRateStat("crypto.sessionTagsExpired", "Number of expired tags/sessions", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES });
+        context.statManager().createRateStat("crypto.sessionTagsRemaining", "Number of remaining tags/sessions after a cleanup", "Encryption", new long[] { RateConstants.ONE_MINUTE, RateConstants.TEN_MINUTES });
          _alive = true;
         _context.simpleTimer2().addEvent(new CleanupEvent(), 60*1000);
     }

@@ -20,7 +20,6 @@ package org.apache.commons.io.file;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
-
 import org.apache.commons.io.function.IOBiFunction;
 
 /**

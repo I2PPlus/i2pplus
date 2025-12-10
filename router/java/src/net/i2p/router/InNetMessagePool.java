@@ -1,13 +1,10 @@
 package net.i2p.router;
 
 import java.io.Writer;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
 import java.util.Date;
 import java.util.List;
-
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicBoolean;
 import net.i2p.data.Hash;
 import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.data.i2np.DatabaseSearchReplyMessage;

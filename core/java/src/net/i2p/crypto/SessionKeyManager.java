@@ -12,7 +12,6 @@ package net.i2p.crypto;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Set;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.PublicKey;
 import net.i2p.data.SessionKey;

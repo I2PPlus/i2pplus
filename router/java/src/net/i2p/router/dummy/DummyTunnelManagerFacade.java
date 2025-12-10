@@ -13,10 +13,8 @@ import java.io.Writer;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
-import net.i2p.data.TunnelId;
 import net.i2p.router.ClientTunnelSettings;
 import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;

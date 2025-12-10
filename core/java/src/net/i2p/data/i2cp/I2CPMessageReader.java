@@ -12,7 +12,6 @@ package net.i2p.data.i2cp;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicLong;
-
 import net.i2p.I2PAppContext;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;

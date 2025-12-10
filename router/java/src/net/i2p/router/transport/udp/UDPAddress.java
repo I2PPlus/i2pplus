@@ -4,11 +4,10 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.Map;
-
 import net.i2p.data.Base64;
 import net.i2p.data.Hash;
-import net.i2p.data.router.RouterAddress;
 import net.i2p.data.SessionKey;
+import net.i2p.data.router.RouterAddress;
 import net.i2p.router.transport.TransportUtil;
 import net.i2p.util.Addresses;
 import net.i2p.util.LHMCache;

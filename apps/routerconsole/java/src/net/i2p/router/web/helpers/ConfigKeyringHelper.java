@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-
 import net.i2p.data.BlindData;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
@@ -16,7 +15,6 @@ import net.i2p.data.PrivateKey;
 import net.i2p.data.SessionKey;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.web.HelperBase;
-
 
 /**
  * Helper for keyring configuration page rendering and form processing.

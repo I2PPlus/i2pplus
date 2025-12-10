@@ -4,12 +4,10 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.DataMessage;
 import net.i2p.data.i2np.I2NPMessage;
-
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;

@@ -2,7 +2,6 @@ package net.i2p.router.transport.udp;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.router.OutNetMessage;

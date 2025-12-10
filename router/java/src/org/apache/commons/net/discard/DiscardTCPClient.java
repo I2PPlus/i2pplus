@@ -18,7 +18,6 @@
 package org.apache.commons.net.discard;
 
 import java.io.OutputStream;
-
 import org.apache.commons.net.SocketClient;
 
 /**

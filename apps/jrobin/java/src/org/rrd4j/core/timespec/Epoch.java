@@ -1,13 +1,11 @@
 package org.rrd4j.core.timespec;
 
-import org.rrd4j.core.Util;
-
 import java.awt.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import javax.swing.*;
+import org.rrd4j.core.Util;
 
 /**
  * Small swing-based utility to convert timestamps (seconds since epoch) to readable dates and vice

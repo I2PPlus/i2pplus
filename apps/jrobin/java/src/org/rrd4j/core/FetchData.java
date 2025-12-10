@@ -1,16 +1,15 @@
 package org.rrd4j.core;
 
-import org.rrd4j.ConsolFun;
-import org.rrd4j.data.Aggregates;
-import org.rrd4j.data.DataProcessor;
-import org.rrd4j.data.Variable;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import org.rrd4j.ConsolFun;
+import org.rrd4j.data.Aggregates;
+import org.rrd4j.data.DataProcessor;
+import org.rrd4j.data.Variable;
 
 /**
  * Class used to represent data fetched from the RRD. Object of this class is created when the

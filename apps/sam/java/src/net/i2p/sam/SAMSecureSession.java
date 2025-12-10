@@ -1,7 +1,6 @@
 package net.i2p.sam;
 
 import java.util.Properties;
-
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 import net.i2p.util.PasswordManager;

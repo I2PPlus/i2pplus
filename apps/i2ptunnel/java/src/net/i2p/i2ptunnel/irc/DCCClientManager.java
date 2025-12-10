@@ -3,7 +3,6 @@ package net.i2p.i2ptunnel.irc;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentHashMap;
-
 import net.i2p.client.streaming.I2PSocketManager;
 import net.i2p.data.Base32;
 import net.i2p.i2ptunnel.I2PTunnel;

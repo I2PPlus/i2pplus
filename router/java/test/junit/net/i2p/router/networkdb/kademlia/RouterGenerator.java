@@ -13,16 +13,15 @@ import java.io.FileOutputStream;
 import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Set;
-
 import net.i2p.crypto.KeyGenerator;
 import net.i2p.data.Certificate;
 import net.i2p.data.PrivateKey;
 import net.i2p.data.PublicKey;
+import net.i2p.data.SigningPrivateKey;
+import net.i2p.data.SigningPublicKey;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.data.SigningPrivateKey;
-import net.i2p.data.SigningPublicKey;
 import net.i2p.util.Clock;
 import net.i2p.util.OrderedProperties;
 

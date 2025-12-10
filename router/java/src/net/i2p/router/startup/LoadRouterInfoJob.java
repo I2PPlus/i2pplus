@@ -11,10 +11,9 @@ package net.i2p.router.startup;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.KeyGenerator;
 import net.i2p.crypto.SigType;

@@ -10,7 +10,6 @@ package net.i2p.router;
 
 import java.util.Map;
 import java.util.Properties;
-
 import net.i2p.data.Hash;
 
 /**

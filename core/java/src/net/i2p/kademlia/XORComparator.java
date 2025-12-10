@@ -2,7 +2,6 @@ package net.i2p.kademlia;
 
 import java.io.Serializable;
 import java.util.Comparator;
-
 import net.i2p.data.SimpleDataStructure;
 
 /**

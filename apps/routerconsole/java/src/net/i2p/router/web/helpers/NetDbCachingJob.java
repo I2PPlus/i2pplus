@@ -1,5 +1,8 @@
 package net.i2p.router.web.helpers;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
@@ -7,10 +10,6 @@ import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SimpleTimer2.TimedEvent;
 import net.i2p.util.SystemVersion;
-
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * A caching job that periodically performs:

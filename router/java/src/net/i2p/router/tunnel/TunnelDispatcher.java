@@ -7,19 +7,12 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.I2NPMessage;
-import net.i2p.data.i2np.OutboundTunnelBuildReplyMessage;
-import net.i2p.data.i2np.ShortTunnelBuildMessage;
-import net.i2p.data.i2np.TunnelBuildMessage;
-import net.i2p.data.i2np.TunnelBuildReplyMessage;
 import net.i2p.data.i2np.TunnelDataMessage;
 import net.i2p.data.i2np.TunnelGatewayMessage;
-import net.i2p.data.i2np.VariableTunnelBuildMessage;
-import net.i2p.data.i2np.VariableTunnelBuildReplyMessage;
 import net.i2p.router.JobImpl;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
@@ -27,8 +20,8 @@ import net.i2p.router.RouterThrottleImpl;
 import net.i2p.router.Service;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.tunnel.pool.PooledTunnelCreatorConfig;
-import net.i2p.util.Log;
 import net.i2p.stat.RateConstants;
+import net.i2p.util.Log;
 import net.i2p.util.SyntheticREDQueue;
 
 /**

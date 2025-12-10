@@ -10,7 +10,6 @@ package net.i2p.data;
  */
 
 import java.util.Arrays;
-
 import net.i2p.util.RandomSource;
 import net.i2p.util.SimpleByteCache;
 import net.i2p.util.SipHash;

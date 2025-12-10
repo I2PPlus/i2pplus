@@ -1,11 +1,11 @@
 package net.i2p.router.transport.crypto;
 
 import java.util.concurrent.LinkedBlockingQueue;
-
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.KeyFactory;
 import net.i2p.crypto.KeyPair;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
@@ -40,10 +40,10 @@ public class X25519KeyFactory extends I2PThread implements KeyFactory {
         super("XDH Precalc");
         _context = ctx;
         _log = ctx.logManager().getLog(X25519KeyFactory.class);
-        ctx.statManager().createRateStat("crypto.XDHGenerateTime", "Time to create x and X", "Encryption", new long[] { 60*1000, 60*60*1000 });
-        ctx.statManager().createRateStat("crypto.XDHUsed", "Need a DH from the queue", "Encryption", new long[] { 60*1000, 60*60*1000 });
-        ctx.statManager().createRateStat("crypto.XDHReused", "Unused DH requeued", "Encryption", new long[] { 60*1000, 60*60*1000 });
-        ctx.statManager().createRateStat("crypto.XDHEmpty", "DH queue empty", "Encryption", new long[] { 60*1000, 60*60*1000 });
+        ctx.statManager().createRateStat("crypto.XDHGenerateTime", "Time to create x and X", "Encryption", new long[] { RateConstants.ONE_MINUTE });
+        ctx.statManager().createRateStat("crypto.XDHUsed", "Need a DH from the queue", "Encryption", new long[] { RateConstants.ONE_MINUTE });
+        ctx.statManager().createRateStat("crypto.XDHReused", "Unused DH requeued", "Encryption", new long[] { RateConstants.ONE_MINUTE });
+        ctx.statManager().createRateStat("crypto.XDHEmpty", "DH queue empty", "Encryption", new long[] { RateConstants.ONE_MINUTE });
 
         // add to the defaults for every 128MB of RAM, up to 512MB
         long maxMemory = SystemVersion.getMaxMemory();

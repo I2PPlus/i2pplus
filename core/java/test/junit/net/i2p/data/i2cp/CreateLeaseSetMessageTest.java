@@ -9,12 +9,12 @@ package net.i2p.data.i2cp;
  */
 
 import net.i2p.data.DataFormatException;
+import net.i2p.data.LeaseSet;
+import net.i2p.data.LeaseSetTest;
 import net.i2p.data.PrivateKey;
 import net.i2p.data.PrivateKeyTest;
 import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.SigningPrivateKeyTest;
-import net.i2p.data.LeaseSet;
-import net.i2p.data.LeaseSetTest;
 
 /**
  * Test harness for loading / storing CreateLeaseSetMessage objects

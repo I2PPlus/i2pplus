@@ -3,10 +3,9 @@
  */
 package net.i2p.i2ptunnel.udpTunnel;
 
-import java.io.ByteArrayOutputStream;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.concurrent.atomic.AtomicLong;
-
 import net.i2p.I2PAppContext;
 import net.i2p.client.I2PClient;
 import net.i2p.client.I2PClientFactory;
@@ -21,7 +20,7 @@ import net.i2p.i2ptunnel.Logging;
 import net.i2p.i2ptunnel.udp.*;
 import net.i2p.util.EventDispatcher;
 
-    /**
+/**
      * Base client class that sets up an I2P Datagram client destination.
      * The UDP side is not implemented here, as there are at least
      * two possibilities:

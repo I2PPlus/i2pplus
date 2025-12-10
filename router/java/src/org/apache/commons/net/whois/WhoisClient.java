@@ -19,7 +19,6 @@ package org.apache.commons.net.whois;
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import org.apache.commons.net.finger.FingerClient;
 
 /**

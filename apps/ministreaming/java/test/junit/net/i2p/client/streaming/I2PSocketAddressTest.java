@@ -7,10 +7,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import net.i2p.client.I2PClientFactory;
 import net.i2p.data.Destination;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;

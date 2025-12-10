@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
 import net.i2p.data.DataHelper;
 import net.i2p.router.Router;
 import net.i2p.router.transport.FIFOBandwidthRefiller;

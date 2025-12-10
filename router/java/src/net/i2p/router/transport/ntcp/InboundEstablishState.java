@@ -1,5 +1,10 @@
 package net.i2p.router.transport.ntcp;
 
+import static net.i2p.router.transport.ntcp.OutboundNTCP2State.*;
+
+import com.southernstorm.noise.protocol.CipherState;
+import com.southernstorm.noise.protocol.CipherStatePair;
+import com.southernstorm.noise.protocol.HandshakeState;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -8,26 +13,20 @@ import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
-
-import com.southernstorm.noise.protocol.CipherState;
-import com.southernstorm.noise.protocol.CipherStatePair;
-import com.southernstorm.noise.protocol.HandshakeState;
-
 import net.i2p.data.Base64;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
+import net.i2p.data.SessionKey;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.i2np.I2NPMessageException;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.data.SessionKey;
-import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
-import static net.i2p.router.transport.ntcp.OutboundNTCP2State.*;
+import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.util.Addresses;
 import net.i2p.util.ByteCache;
 import net.i2p.util.Log;

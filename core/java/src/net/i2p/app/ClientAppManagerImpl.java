@@ -1,7 +1,6 @@
 package net.i2p.app;
 
 import java.util.concurrent.ConcurrentHashMap;
-
 import net.i2p.I2PAppContext;
 
 /**

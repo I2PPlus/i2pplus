@@ -23,7 +23,6 @@ import java.net.SocketException;
 import java.nio.charset.Charset;
 import java.time.Duration;
 import java.util.Objects;
-
 import org.apache.commons.io.IOUtils;
 
 /**

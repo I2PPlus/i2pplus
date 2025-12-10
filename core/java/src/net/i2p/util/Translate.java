@@ -1,5 +1,6 @@
 package net.i2p.util;
 
+import gnu.gettext.GettextResource;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Locale;
@@ -8,9 +9,6 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import gnu.gettext.GettextResource;
-
 import net.i2p.I2PAppContext;
 
 /**

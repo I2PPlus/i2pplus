@@ -19,9 +19,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
-
+import java.util.concurrent.LinkedBlockingQueue;
 import net.i2p.CoreVersion;
 import net.i2p.client.I2PSessionException;
 import net.i2p.crypto.SessionKeyManager;
@@ -44,6 +43,7 @@ import net.i2p.router.Job;
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
@@ -106,9 +106,9 @@ class ClientManager {
         _port = port;
         _clientTimestamper = new ClientTimestamper();
         // following are for RequestLeaseSetJob
-        _ctx.statManager().createRateStat("client.requestLeaseSetSuccess", "Successful LeaseSet requests", "ClientMessages", new long[] { 60*1000, 60*60*1000 });
-        _ctx.statManager().createRateStat("client.requestLeaseSetTimeout", "Requests for new LeaseSet without reply", "ClientMessages", new long[] { 60*1000, 60*60*1000 });
-        _ctx.statManager().createRateStat("client.requestLeaseSetDropped", "Requests for new LeaseSet dropped by the client", "ClientMessages", new long[] { 60*1000, 60*60*1000 });
+        _ctx.statManager().createRateStat("client.requestLeaseSetSuccess", "Successful LeaseSet requests", "ClientMessages", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
+        _ctx.statManager().createRateStat("client.requestLeaseSetTimeout", "Requests for new LeaseSet without reply", "ClientMessages", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
+        _ctx.statManager().createRateStat("client.requestLeaseSetDropped", "Requests for new LeaseSet dropped by the client", "ClientMessages", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
     }
 
     /** @since 0.9.8 */

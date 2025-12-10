@@ -1,7 +1,6 @@
 package net.i2p.client.naming;
 
 import java.util.Properties;
-
 import net.i2p.data.Destination;
 
 /**

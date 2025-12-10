@@ -2,7 +2,6 @@ package net.i2p.router.client;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
-
 import net.i2p.data.i2cp.I2CPMessage;
 import net.i2p.internal.I2CPMessageQueue;
 

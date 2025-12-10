@@ -11,7 +11,6 @@ package net.i2p.data;
 
 import java.util.Arrays;
 import javax.security.auth.Destroyable;
-
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.KeyGenerator;
 import net.i2p.util.SimpleByteCache;

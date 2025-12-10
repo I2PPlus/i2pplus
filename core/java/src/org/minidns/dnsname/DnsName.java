@@ -19,7 +19,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
-
 import org.minidns.dnslabel.DnsLabel;
 import org.minidns.idna.MiniDnsIdna;
 

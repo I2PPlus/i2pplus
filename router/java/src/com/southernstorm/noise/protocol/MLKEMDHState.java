@@ -24,10 +24,9 @@ package com.southernstorm.noise.protocol;
 
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
-
+import net.i2p.crypto.EncType;
 import net.i2p.crypto.KeyFactory;
 import net.i2p.crypto.KeyPair;
-import net.i2p.crypto.EncType;
 import net.i2p.router.crypto.pqc.MLKEM;
 
 /**

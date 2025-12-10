@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Random;
 import java.util.Set;
-
 import net.i2p.app.ClientAppManager;
 import net.i2p.app.ClientAppManagerImpl;
 import net.i2p.client.naming.NamingService;
@@ -27,6 +26,7 @@ import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.FileUtil;
 import net.i2p.util.FortunaRandomSource;
 import net.i2p.util.I2PProperties;
+import net.i2p.util.I2PProperties.I2PPropertyCallback;
 import net.i2p.util.KeyRing;
 import net.i2p.util.LogManager;
 import net.i2p.util.PortMapper;
@@ -37,7 +37,6 @@ import net.i2p.util.SimpleTimer;
 import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.TempDirScanner;
-import net.i2p.util.I2PProperties.I2PPropertyCallback;
 
 /**
  * <p>Provide a base scope for accessing singletons that I2P exposes.  Rather than

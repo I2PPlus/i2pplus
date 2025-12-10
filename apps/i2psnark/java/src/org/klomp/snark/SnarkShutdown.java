@@ -6,9 +6,8 @@
 
 package org.klomp.snark;
 
-import net.i2p.util.I2PAppThread;
-
 import java.io.IOException;
+import net.i2p.util.I2PAppThread;
 
 /**
  * Makes sure everything ends correctly when shutting down.

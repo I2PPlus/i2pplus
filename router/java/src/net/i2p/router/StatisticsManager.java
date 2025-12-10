@@ -14,7 +14,6 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 import java.util.Properties;
-
 import net.i2p.CoreVersion;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;

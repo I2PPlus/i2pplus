@@ -1,14 +1,12 @@
 package org.rrd4j.data;
 
 import com.tomgibara.crinch.hashing.PerfectStringHash;
-
-import org.rrd4j.core.Util;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
+import org.rrd4j.core.Util;
 
 /**
  * Reverse Polish Notation (RPN) expression calculator.<br>

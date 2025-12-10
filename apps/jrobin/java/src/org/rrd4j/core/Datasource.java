@@ -1,8 +1,7 @@
 package org.rrd4j.core;
 
-import org.rrd4j.DsType;
-
 import java.io.IOException;
+import org.rrd4j.DsType;
 
 /**
  * Class to represent single datasource within RRD. Each datasource object holds the following

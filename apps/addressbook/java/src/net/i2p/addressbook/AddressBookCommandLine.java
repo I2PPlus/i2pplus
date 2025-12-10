@@ -3,7 +3,6 @@ package net.i2p.addressbook;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
 import net.i2p.CoreVersion;
 
 /**

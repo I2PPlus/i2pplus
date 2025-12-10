@@ -1,5 +1,7 @@
 package net.i2p.router.web.helpers;
 
+import static net.i2p.router.sybil.Util.biLog2;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -18,7 +20,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.LeaseSet;
@@ -34,7 +35,6 @@ import net.i2p.router.sybil.Analysis;
 import net.i2p.router.sybil.Pair;
 import net.i2p.router.sybil.PersistSybil;
 import net.i2p.router.sybil.Points;
-import static net.i2p.router.sybil.Util.biLog2;
 import net.i2p.router.tunnel.pool.TunnelPool;
 import net.i2p.router.util.HashDistance;
 import net.i2p.router.web.HelperBase;

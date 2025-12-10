@@ -18,7 +18,6 @@
 package org.apache.commons.net.daytime;
 
 import java.io.IOException;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.SocketClient;
 

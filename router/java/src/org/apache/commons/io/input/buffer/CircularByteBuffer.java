@@ -17,7 +17,6 @@
 package org.apache.commons.io.input.buffer;
 
 import java.util.Objects;
-
 import org.apache.commons.io.IOUtils;
 
 /**

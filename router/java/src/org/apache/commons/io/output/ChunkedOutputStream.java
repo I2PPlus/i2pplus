@@ -19,7 +19,6 @@ package org.apache.commons.io.output;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.build.AbstractStreamBuilder;
 

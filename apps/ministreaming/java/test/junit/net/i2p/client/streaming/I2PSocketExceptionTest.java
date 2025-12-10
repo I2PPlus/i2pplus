@@ -5,10 +5,8 @@ import static org.junit.Assert.*;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import net.i2p.client.SendMessageStatusListener;
 import net.i2p.data.i2cp.MessageStatusMessage;
-
 import org.junit.Test;
 
 public class I2PSocketExceptionTest {

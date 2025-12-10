@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-
 import net.i2p.client.naming.HostTxtEntry;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;

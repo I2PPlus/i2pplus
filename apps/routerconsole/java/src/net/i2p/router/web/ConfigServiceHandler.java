@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
-
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientApp;
 import net.i2p.app.ClientAppManager;
@@ -16,7 +15,6 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.startup.ClientAppConfig;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.VersionComparator;
-
 import org.tanukisoftware.wrapper.WrapperManager;
 
 /**

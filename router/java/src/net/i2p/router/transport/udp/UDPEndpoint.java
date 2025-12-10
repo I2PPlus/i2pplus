@@ -2,12 +2,11 @@ package net.i2p.router.transport.udp;
 
 import java.io.IOException;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
+import java.net.InetAddress;
 import java.net.SocketException;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.TransportUtil;
 import net.i2p.util.Log;

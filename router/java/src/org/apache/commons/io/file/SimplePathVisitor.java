@@ -22,7 +22,6 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.util.Objects;
-
 import org.apache.commons.io.build.AbstractSupplier;
 import org.apache.commons.io.function.IOBiFunction;
 

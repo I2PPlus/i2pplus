@@ -2,13 +2,12 @@ package net.i2p.router.startup;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
@@ -18,7 +17,6 @@ import net.i2p.util.ObjectCounterUnsafe;
 import net.i2p.util.OrderedProperties;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SystemVersion;
-
 
 /**
  * Contains a really simple ClientApp "structure" and some static methods

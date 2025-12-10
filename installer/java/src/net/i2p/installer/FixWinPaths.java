@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
-
 /**
  * <p>This class is used by the installer in Windows to process the <code>wrapper.config</code> file. It
  * <ul>

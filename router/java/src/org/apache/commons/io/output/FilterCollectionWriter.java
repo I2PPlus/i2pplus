@@ -25,7 +25,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.stream.Stream;
-
 import org.apache.commons.io.IOExceptionList;
 import org.apache.commons.io.IOIndexedException;
 import org.apache.commons.io.function.IOConsumer;

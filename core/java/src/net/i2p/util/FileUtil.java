@@ -16,18 +16,7 @@ import java.util.List;
 import java.util.jar.JarOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-
-// WARNING
-// Some methods called from install.jar (Windows installer utils)
-// or InstallUpdate (i2pupdate.zip installer),
-// where most external classes are not available, including DataHelper!
-// Use caution when adding dependencies.
 import net.i2p.data.DataHelper;
-
-// Pack200 now loaded dynamically in unpack() below
-//
-// For Sun, OpenJDK, IcedTea, etc, use this
-//import java.util.jar.Pack200;
 
 /**
  * General helper methods for messing with files

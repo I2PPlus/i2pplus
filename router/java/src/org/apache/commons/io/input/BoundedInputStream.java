@@ -20,7 +20,6 @@ import static org.apache.commons.io.IOUtils.EOF;
 
 import java.io.IOException;
 import java.io.InputStream;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.function.IOBiConsumer;
 

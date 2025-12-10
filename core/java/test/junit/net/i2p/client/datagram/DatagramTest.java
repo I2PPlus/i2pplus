@@ -10,7 +10,6 @@ package net.i2p.client.datagram;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-
 import junit.framework.TestCase;
 import net.i2p.client.I2PClient;
 import net.i2p.client.I2PClientFactory;
@@ -19,7 +18,6 @@ import net.i2p.crypto.DSAEngine;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
-
 
 /**
  *

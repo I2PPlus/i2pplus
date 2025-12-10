@@ -11,7 +11,6 @@ package net.i2p.router.networkdb.kademlia;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-
 import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
 

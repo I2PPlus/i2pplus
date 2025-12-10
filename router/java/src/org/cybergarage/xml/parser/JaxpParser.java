@@ -5,6 +5,13 @@
 
 package org.cybergarage.xml.parser;
 
+import java.io.ByteArrayInputStream;
+import java.io.FilterInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import org.cybergarage.xml.Node;
 import org.cybergarage.xml.Parser;
 import org.cybergarage.xml.ParserException;
@@ -12,15 +19,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
-
-import java.io.ByteArrayInputStream;
-import java.io.FilterInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * JAXP-based XML parser implementation.

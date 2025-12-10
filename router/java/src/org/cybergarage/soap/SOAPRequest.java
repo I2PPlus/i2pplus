@@ -5,6 +5,7 @@
 
 package org.cybergarage.soap;
 
+import java.io.ByteArrayInputStream;
 import org.cybergarage.http.HTTP;
 import org.cybergarage.http.HTTPRequest;
 import org.cybergarage.http.HTTPResponse;
@@ -12,8 +13,6 @@ import org.cybergarage.util.Debug;
 import org.cybergarage.xml.Node;
 import org.cybergarage.xml.Parser;
 import org.cybergarage.xml.ParserException;
-
-import java.io.ByteArrayInputStream;
 
 /**
  * Represents a SOAP (Simple Object Access Protocol) request message.

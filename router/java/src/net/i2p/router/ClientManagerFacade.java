@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Collections;
 import java.util.Set;
-
 import net.i2p.client.I2PSessionException;
 import net.i2p.crypto.SessionKeyManager;
 import net.i2p.data.Destination;

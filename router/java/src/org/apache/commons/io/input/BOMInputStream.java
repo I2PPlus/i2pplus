@@ -24,7 +24,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-
 import org.apache.commons.io.ByteOrderMark;
 import org.apache.commons.io.IOUtils;
 

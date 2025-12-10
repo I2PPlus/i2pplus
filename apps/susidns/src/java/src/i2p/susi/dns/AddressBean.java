@@ -11,7 +11,6 @@ package i2p.susi.dns;
 import java.net.IDN;
 import java.util.Locale;
 import java.util.Properties;
-
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;

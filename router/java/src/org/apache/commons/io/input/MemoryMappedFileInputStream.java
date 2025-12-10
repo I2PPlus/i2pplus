@@ -26,7 +26,6 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-
 import org.apache.commons.io.build.AbstractStreamBuilder;
 
 /**

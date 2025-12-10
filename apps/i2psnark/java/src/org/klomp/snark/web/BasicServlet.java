@@ -14,17 +14,6 @@
 
 package org.klomp.snark.web;
 
-import net.i2p.I2PAppContext;
-import net.i2p.data.ByteArray;
-import net.i2p.data.DataHelper;
-import net.i2p.servlet.util.WriterOutputStream;
-import net.i2p.util.ByteCache;
-import net.i2p.util.Log;
-import net.i2p.util.SecureFile;
-import net.i2p.util.SystemVersion;
-
-import org.klomp.snark.URIUtil;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,13 +25,21 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Enumeration;
 import java.util.List;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import net.i2p.I2PAppContext;
+import net.i2p.data.ByteArray;
+import net.i2p.data.DataHelper;
+import net.i2p.servlet.util.WriterOutputStream;
+import net.i2p.util.ByteCache;
+import net.i2p.util.Log;
+import net.i2p.util.SecureFile;
+import net.i2p.util.SystemVersion;
+import org.klomp.snark.URIUtil;
 
 /**
  * Based on DefaultServlet from Jetty 6.1.26, heavily simplified and modified to remove all

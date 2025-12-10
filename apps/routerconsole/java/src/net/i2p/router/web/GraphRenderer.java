@@ -1,31 +1,27 @@
 package net.i2p.router.web;
 
+import static net.i2p.router.web.GraphConstants.*;
+
+import eu.bengreen.data.utility.LargestTriangleThreeBucketsTime;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
 import java.awt.Stroke;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Map;
-
-import javax.imageio.stream.ImageOutputStream;
-
-// enumerate system fonts
-import java.awt.GraphicsEnvironment;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
-
+import java.util.Map;
+import javax.imageio.stream.ImageOutputStream;
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.router.util.EventLog;
-import static net.i2p.router.web.GraphConstants.*;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
-
 import org.rrd4j.core.RrdException;
 import org.rrd4j.data.Variable;
 import org.rrd4j.graph.ElementsNames;
@@ -33,8 +29,6 @@ import org.rrd4j.graph.RrdGraph;
 import org.rrd4j.graph.RrdGraphDef;
 import org.rrd4j.graph.RrdGraphInfo;
 import org.rrd4j.graph.SVGImageWorker;
-
-import eu.bengreen.data.utility.LargestTriangleThreeBucketsTime;
 
 /**
  *  Generate the RRD graph png images,

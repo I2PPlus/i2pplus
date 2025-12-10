@@ -1,7 +1,6 @@
 package net.i2p.router.networkdb.kademlia;
 
 import java.util.HashSet;
-
 import net.i2p.data.Hash;
 import net.i2p.router.Job;
 import net.i2p.router.MessageSelector;

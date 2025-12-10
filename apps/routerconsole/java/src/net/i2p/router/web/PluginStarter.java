@@ -1,5 +1,7 @@
 package net.i2p.router.web;
 
+import static net.i2p.update.UpdateType.*;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -16,21 +18,17 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.eclipse.jetty.server.Server;
-
 import net.i2p.CoreVersion;
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientApp;
 import net.i2p.app.ClientAppState;
-import net.i2p.data.DataHelper;
 import net.i2p.data.Base64;
+import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.router.RouterVersion;
 import net.i2p.router.startup.ClientAppConfig;
 import net.i2p.router.startup.LoadClientAppsJob;
 import net.i2p.router.update.ConsoleUpdateManager;
-import static net.i2p.update.UpdateType.*;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.FileSuffixFilter;
 import net.i2p.util.FileUtil;
@@ -42,9 +40,8 @@ import net.i2p.util.SimpleTimer2;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
 import net.i2p.util.VersionComparator;
-
+import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.ContextHandlerCollection;
-
 
 /**
  *  Start/stop/delete plugins that are already installed

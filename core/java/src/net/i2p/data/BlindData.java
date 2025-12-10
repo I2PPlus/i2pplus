@@ -1,7 +1,6 @@
 package net.i2p.data;
 
 import java.util.Date;
-
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.Blinding;
 import net.i2p.crypto.SigType;

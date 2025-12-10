@@ -7,14 +7,13 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.TreeSet;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.TimeUnit;
-
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.DataHelper;
 import net.i2p.router.message.HandleGarlicMessageJob;
 import net.i2p.router.networkdb.kademlia.ExploreJob;
@@ -23,11 +22,11 @@ import net.i2p.router.networkdb.kademlia.IterativeSearchJob;
 import net.i2p.router.networkdb.kademlia.RepublishLeaseSetJob;
 import net.i2p.router.peermanager.PeerTestJob;
 import net.i2p.router.tunnel.pool.TestJob;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.Clock;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
-import net.i2p.stat.RateConstants;
 
 /**
  * Prioritizes and executes router jobs with preference for earlier scheduled tasks.

@@ -5,12 +5,11 @@ import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
 import com.thetransactioncompany.jsonrpc2.server.MessageContext;
 import com.thetransactioncompany.jsonrpc2.server.RequestHandler;
+import java.util.HashMap;
+import java.util.Map;
 import net.i2p.I2PAppContext;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateStat;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /*
  *  Copyright 2011 hottuna (dev@robertfoss.se)

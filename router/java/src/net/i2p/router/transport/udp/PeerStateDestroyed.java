@@ -1,20 +1,19 @@
 package net.i2p.router.transport.udp;
 
+import static net.i2p.router.transport.udp.SSU2Util.*;
+
+import com.southernstorm.noise.protocol.CipherState;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import com.southernstorm.noise.protocol.CipherState;
-
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
-import net.i2p.data.router.RouterInfo;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.data.router.RouterInfo;
 import net.i2p.router.RouterContext;
-import static net.i2p.router.transport.udp.SSU2Util.*;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
 

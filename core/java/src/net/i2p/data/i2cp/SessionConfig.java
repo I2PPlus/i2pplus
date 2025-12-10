@@ -16,7 +16,6 @@ import java.io.OutputStream;
 import java.util.Date;
 import java.util.Map;
 import java.util.Properties;
-
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.DSAEngine;
 import net.i2p.crypto.SigType;

@@ -20,7 +20,6 @@ package org.apache.commons.net.time;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.util.Date;
-
 import org.apache.commons.net.SocketClient;
 
 /**

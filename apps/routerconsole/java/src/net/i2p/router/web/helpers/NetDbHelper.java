@@ -1,7 +1,6 @@
 package net.i2p.router.web.helpers;
 
 import java.io.IOException;
-import java.io.StringWriter;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -12,15 +11,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
-
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
-import net.i2p.util.SystemVersion;
 import net.i2p.router.sybil.Analysis;
 import net.i2p.router.web.FormHandler;
 import net.i2p.router.web.Messages;
+import net.i2p.util.SystemVersion;
 
 /**
  * Helper for network database page rendering and form processing.

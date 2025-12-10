@@ -8,10 +8,8 @@ package net.i2p.router.client;
  *
  */
 
-import java.util.Properties;
-
 import gnu.getopt.Getopt;
-
+import java.util.Properties;
 import net.i2p.data.Destination;
 import net.i2p.data.Payload;
 import net.i2p.data.i2cp.MessageId;

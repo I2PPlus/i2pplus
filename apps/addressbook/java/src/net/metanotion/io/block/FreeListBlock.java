@@ -29,10 +29,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package net.metanotion.io.block;
 
 import java.io.IOException;
-
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
-
 import net.metanotion.io.RandomAccessInterface;
 
 /**

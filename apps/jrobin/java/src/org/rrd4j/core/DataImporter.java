@@ -1,10 +1,9 @@
 package org.rrd4j.core;
 
-import org.rrd4j.ConsolFun;
-import org.rrd4j.DsType;
-
 import java.io.Closeable;
 import java.io.IOException;
+import org.rrd4j.ConsolFun;
+import org.rrd4j.DsType;
 
 /**
  * An abstract class to import data from external source.

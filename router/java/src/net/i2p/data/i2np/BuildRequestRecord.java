@@ -1,13 +1,11 @@
 package net.i2p.data.i2np;
 
+import com.southernstorm.noise.protocol.HandshakeState;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Date;
 import java.util.Properties;
-
-import com.southernstorm.noise.protocol.HandshakeState;
-
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.HKDF;
@@ -19,10 +17,10 @@ import net.i2p.data.Hash;
 import net.i2p.data.PrivateKey;
 import net.i2p.data.PublicKey;
 import net.i2p.data.SessionKey;
-import net.i2p.util.Log;
 import net.i2p.router.RouterContext;
 import net.i2p.router.crypto.ratchet.RatchetSessionTag;
 import net.i2p.router.networkdb.kademlia.MessageWrapper.OneTimeSession;
+import net.i2p.util.Log;
 
 /**
  * As of 0.9.48, supports two formats.

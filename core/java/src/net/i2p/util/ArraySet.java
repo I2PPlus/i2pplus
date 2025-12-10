@@ -2,8 +2,8 @@ package net.i2p.util;
 
 import java.io.Serializable;
 import java.util.AbstractSet;
-import java.util.ConcurrentModificationException;
 import java.util.Collection;
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;

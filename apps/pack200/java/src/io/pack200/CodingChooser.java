@@ -25,6 +25,8 @@
 
 package io.pack200;
 
+import static io.pack200.Constants.*;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -37,7 +39,7 @@ import java.util.Random;
 import java.util.Set;
 import java.util.zip.Deflater;
 import java.util.zip.DeflaterOutputStream;
-import static io.pack200.Constants.*;
+
 /**
  * Heuristic chooser of basic encodings.
  * Runs "zip" to measure the apparent information content after coding.

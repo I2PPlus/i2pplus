@@ -10,7 +10,6 @@ package net.i2p.data.router;
 
 import java.util.HashSet;
 import java.util.Properties;
-
 import net.i2p.crypto.KeyGenerator;
 import net.i2p.data.Certificate;
 import net.i2p.data.DataFormatException;

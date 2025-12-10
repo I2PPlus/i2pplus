@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
 import net.i2p.I2PException;
 import net.i2p.client.I2PClient;
 import net.i2p.client.I2PClientFactory;
@@ -21,7 +20,7 @@ import net.i2p.i2ptunnel.udp.*;
 import net.i2p.util.EventDispatcher;
 import net.i2p.util.Log;
 
-    /**
+/**
      * Base client class that sets up an I2P Datagram server destination.
      * The UDP side is not implemented here, as there are at least
      * two possibilities:

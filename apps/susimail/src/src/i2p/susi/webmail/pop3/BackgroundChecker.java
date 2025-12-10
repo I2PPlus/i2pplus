@@ -1,19 +1,16 @@
 package i2p.susi.webmail.pop3;
 
-import i2p.susi.webmail.WebMail;
 import i2p.susi.util.Config;
-
+import i2p.susi.webmail.WebMail;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
-
 import net.i2p.I2PAppContext;
-import net.i2p.util.I2PAppThread;
 import net.i2p.util.ConcurrentHashSet;
+import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
-
 
 /**
  *  Check for new mail periodically

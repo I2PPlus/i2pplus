@@ -1,11 +1,10 @@
 package net.i2p.servlet;
 
+import net.i2p.I2PAppContext;
 import org.apache.tomcat.SimpleInstanceManager;
 import org.eclipse.jetty.deploy.providers.WebAppProvider;
 import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.WebAppContext;
-
-import net.i2p.I2PAppContext;
 
 /**
  *  Work around the

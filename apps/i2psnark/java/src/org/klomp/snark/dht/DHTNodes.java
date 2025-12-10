@@ -4,18 +4,17 @@ package org.klomp.snark.dht;
  *  From zzzot, modded and relicensed to GPLv2
  */
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.I2PAppContext;
 import net.i2p.crypto.SHA1Hash;
 import net.i2p.data.DataHelper;
 import net.i2p.kademlia.KBucketSet;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * All the nodes we know about, stored as a mapping from node ID to a Destination and Port.

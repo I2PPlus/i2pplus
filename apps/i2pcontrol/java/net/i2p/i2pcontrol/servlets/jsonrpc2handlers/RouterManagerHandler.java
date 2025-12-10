@@ -5,7 +5,8 @@ import com.thetransactioncompany.jsonrpc2.JSONRPC2Request;
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Response;
 import com.thetransactioncompany.jsonrpc2.server.MessageContext;
 import com.thetransactioncompany.jsonrpc2.server.RequestHandler;
-
+import java.util.HashMap;
+import java.util.Map;
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientAppManager;
 import net.i2p.router.Router;
@@ -13,11 +14,7 @@ import net.i2p.router.RouterContext;
 import net.i2p.router.networkdb.reseed.ReseedChecker;
 import net.i2p.update.UpdateManager;
 import net.i2p.update.UpdateType;
-
 import org.tanukisoftware.wrapper.WrapperManager;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /*
  *  Copyright 2011 hottuna (dev@robertfoss.se)

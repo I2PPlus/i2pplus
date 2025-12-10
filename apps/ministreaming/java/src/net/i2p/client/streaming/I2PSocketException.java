@@ -1,7 +1,6 @@
 package net.i2p.client.streaming;
 
 import java.net.SocketException;
-
 import net.i2p.I2PAppContext;
 import net.i2p.client.SendMessageStatusListener;
 import net.i2p.data.i2cp.MessageStatusMessage;

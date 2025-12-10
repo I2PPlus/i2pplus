@@ -22,7 +22,6 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
-
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;

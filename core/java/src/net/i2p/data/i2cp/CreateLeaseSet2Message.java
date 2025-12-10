@@ -6,12 +6,11 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SigType;
-import net.i2p.data.DatabaseEntry;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
+import net.i2p.data.DatabaseEntry;
 import net.i2p.data.EncryptedLeaseSet;
 import net.i2p.data.LeaseSet;
 import net.i2p.data.LeaseSet2;

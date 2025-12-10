@@ -26,11 +26,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-
 import javax.crypto.BadPaddingException;
-
 import net.i2p.crypto.SHA256Generator;
-
 
 /**
  * Utility functions for the Noise protocol library.

@@ -25,13 +25,15 @@
 
 package io.pack200;
 
+import static io.pack200.Constants.*;
+
+import io.pack200.ConstantPool.BootstrapMethodEntry;
 import io.pack200.ConstantPool.ClassEntry;
 import io.pack200.ConstantPool.DescriptorEntry;
 import io.pack200.ConstantPool.Entry;
-import io.pack200.ConstantPool.SignatureEntry;
 import io.pack200.ConstantPool.MemberEntry;
 import io.pack200.ConstantPool.MethodHandleEntry;
-import io.pack200.ConstantPool.BootstrapMethodEntry;
+import io.pack200.ConstantPool.SignatureEntry;
 import io.pack200.ConstantPool.Utf8Entry;
 import io.pack200.Package.Class;
 import io.pack200.Package.InnerClass;
@@ -42,7 +44,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
-import static io.pack200.Constants.*;
 
 /**
  * Reader for a class file that is being incorporated into a package.

@@ -24,10 +24,8 @@ package com.southernstorm.noise.protocol;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-
 import javax.crypto.BadPaddingException;
 import javax.crypto.ShortBufferException;
-
 import net.i2p.crypto.KeyFactory;
 
 /**

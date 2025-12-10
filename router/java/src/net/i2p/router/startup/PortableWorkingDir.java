@@ -1,11 +1,10 @@
 package net.i2p.router.startup;
 
+import java.io.*;
+import java.util.Properties;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFileOutputStream;
 import net.i2p.util.SystemVersion;
-
-import java.io.*;
-import java.util.Properties;
 
 /**
  * Get a relative working directory for i2p based upon properties by parent process.

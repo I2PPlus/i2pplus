@@ -1,11 +1,9 @@
 package com.thetransactioncompany.jsonrpc2.util;
 
 
+import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
 import java.util.List;
 import java.util.Map;
-
-import com.thetransactioncompany.jsonrpc2.JSONRPC2Error;
-
 
 /**
  * Utility class for retrieving JSON-RPC 2.0 positional parameters (packed into

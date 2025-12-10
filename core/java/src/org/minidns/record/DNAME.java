@@ -10,11 +10,10 @@
  */
 package org.minidns.record;
 
-import org.minidns.dnsname.DnsName;
-import org.minidns.record.Record.TYPE;
-
 import java.io.DataInputStream;
 import java.io.IOException;
+import org.minidns.dnsname.DnsName;
+import org.minidns.record.Record.TYPE;
 
 /**
  * DNS DNAME (Domain Name) redirection record payload.<br>

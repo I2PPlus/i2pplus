@@ -22,15 +22,13 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
 import net.i2p.data.Base64;
-import net.i2p.data.DatabaseEntry;
 import net.i2p.data.DataFormatException;
+import net.i2p.data.DatabaseEntry;
 import net.i2p.data.Hash;
-import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;
 import net.i2p.router.Router;

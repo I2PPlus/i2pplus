@@ -7,6 +7,8 @@
  */
 package i2p.susi.webmail;
 
+import static i2p.susi.webmail.Sorters.*;
+
 import i2p.susi.util.Buffer;
 import i2p.susi.util.Config;
 import i2p.susi.util.DecodingOutputStream;
@@ -19,13 +21,11 @@ import i2p.susi.util.Folder.SortOrder;
 import i2p.susi.util.OutputStreamBuffer;
 import i2p.susi.util.RegexOutputStream;
 import i2p.susi.util.StringBuilderWriter;
-import static i2p.susi.webmail.Sorters.*;
 import i2p.susi.webmail.encoding.Encoding;
 import i2p.susi.webmail.encoding.EncodingException;
 import i2p.susi.webmail.encoding.EncodingFactory;
 import i2p.susi.webmail.pop3.POP3MailBox;
 import i2p.susi.webmail.smtp.SMTPClient;
-
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -56,7 +56,6 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -64,7 +63,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionBindingEvent;
 import javax.servlet.http.HttpSessionBindingListener;
-
 import net.i2p.CoreVersion;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Base64;

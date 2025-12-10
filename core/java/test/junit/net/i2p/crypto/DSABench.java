@@ -30,7 +30,6 @@ package net.i2p.crypto;
  */
 
 import java.io.ByteArrayInputStream;
-
 import net.i2p.data.Signature;
 import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.SigningPublicKey;

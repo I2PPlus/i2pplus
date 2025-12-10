@@ -2,17 +2,14 @@ package net.i2p.router.transport.udp;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-
+import java.util.concurrent.CopyOnWriteArrayList;
 import net.i2p.data.DataHelper;
 import net.i2p.data.router.RouterInfo;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;
 import net.i2p.router.transport.udp.PacketBuilder.Fragment;
-import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 

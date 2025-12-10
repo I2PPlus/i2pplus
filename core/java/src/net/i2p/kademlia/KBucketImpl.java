@@ -10,7 +10,6 @@ package net.i2p.kademlia;
 
 import java.util.Collections;
 import java.util.Set;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.SimpleDataStructure;
 import net.i2p.util.ConcurrentHashSet;

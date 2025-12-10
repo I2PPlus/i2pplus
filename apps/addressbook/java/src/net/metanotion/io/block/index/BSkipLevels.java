@@ -35,12 +35,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-
 import net.metanotion.io.block.BlockFile;
-import net.metanotion.util.skiplist.SkipList;
 import net.metanotion.util.skiplist.SkipLevels;
+import net.metanotion.util.skiplist.SkipList;
 import net.metanotion.util.skiplist.SkipSpan;
-
 
 /**
  * SkipList level management for multi-level indexing.

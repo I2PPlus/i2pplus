@@ -9,16 +9,15 @@ package net.i2p.data.i2cp;
  */
 
 import java.util.Properties;
-
-import net.i2p.data.StructureTest;
-import net.i2p.data.DataStructure;
 import net.i2p.data.DataFormatException;
+import net.i2p.data.DataStructure;
 import net.i2p.data.Destination;
 import net.i2p.data.DestinationTest;
 import net.i2p.data.Signature;
 import net.i2p.data.SignatureTest;
 import net.i2p.data.SigningPrivateKey;
 import net.i2p.data.SigningPrivateKeyTest;
+import net.i2p.data.StructureTest;
 
 /**
  * Test harness for loading / storing Hash objects

@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
 import net.i2p.data.DataHelper;
 import net.i2p.router.util.EventLog;
 import net.i2p.router.web.CSSHelper;

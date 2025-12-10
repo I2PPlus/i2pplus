@@ -2,9 +2,7 @@ package net.i2p.router.web.helpers;
 
 import java.io.IOException;
 import java.io.StringWriter;
-
 import net.i2p.router.web.HelperBase;
-
 
 /**
  * Helper for fastest participating tunnels page rendering and form processing.

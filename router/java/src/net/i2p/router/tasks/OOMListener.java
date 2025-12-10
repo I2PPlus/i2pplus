@@ -2,7 +2,6 @@ package net.i2p.router.tasks;
 
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.util.EventLog;

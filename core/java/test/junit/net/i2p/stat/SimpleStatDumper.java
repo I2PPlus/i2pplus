@@ -3,7 +3,6 @@ package net.i2p.stat;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.TreeSet;
-
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 

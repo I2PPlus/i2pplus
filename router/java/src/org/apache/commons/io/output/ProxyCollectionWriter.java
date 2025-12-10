@@ -20,7 +20,6 @@ import java.io.FilterWriter;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Collection;
-
 import org.apache.commons.io.IOUtils;
 
 /**

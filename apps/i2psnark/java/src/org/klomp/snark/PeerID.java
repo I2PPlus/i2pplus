@@ -6,18 +6,16 @@
 
 package org.klomp.snark;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
+import java.util.Map;
 import net.i2p.data.Base32;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
-
 import org.klomp.snark.bencode.BDecoder;
 import org.klomp.snark.bencode.BEValue;
 import org.klomp.snark.bencode.InvalidBEncodingException;
-
-import java.io.IOException;
-import java.net.UnknownHostException;
-import java.util.Map;
 
 /**
  * Store the address information about a peer. Prior to 0.8.1, an instantiation required a peer ID,

@@ -3,7 +3,6 @@ package net.i2p.i2ptunnel.util;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.OutputStream;
-
 import net.i2p.data.DataHelper;
 
 /**

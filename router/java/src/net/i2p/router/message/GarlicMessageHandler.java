@@ -9,9 +9,9 @@ package net.i2p.router.message;
  */
 
 import net.i2p.data.Hash;
-import net.i2p.data.router.RouterIdentity;
 import net.i2p.data.i2np.GarlicMessage;
 import net.i2p.data.i2np.I2NPMessage;
+import net.i2p.data.router.RouterIdentity;
 import net.i2p.router.HandlerJobBuilder;
 import net.i2p.router.Job;
 import net.i2p.router.RouterContext;

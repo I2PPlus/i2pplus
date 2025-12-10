@@ -1,12 +1,5 @@
 package org.klomp.snark;
 
-import net.i2p.I2PAppContext;
-import net.i2p.crypto.SHA1;
-import net.i2p.data.ByteArray;
-import net.i2p.util.ByteCache;
-import net.i2p.util.Log;
-import net.i2p.util.SecureFile;
-
 import java.io.DataInputStream;
 import java.io.DataOutput;
 import java.io.EOFException;
@@ -15,6 +8,12 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.security.MessageDigest;
 import java.util.Objects;
+import net.i2p.I2PAppContext;
+import net.i2p.crypto.SHA1;
+import net.i2p.data.ByteArray;
+import net.i2p.util.ByteCache;
+import net.i2p.util.Log;
+import net.i2p.util.SecureFile;
 
 /**
  * Represents a piece of a torrent being downloaded, storing partial data either on the heap or in a

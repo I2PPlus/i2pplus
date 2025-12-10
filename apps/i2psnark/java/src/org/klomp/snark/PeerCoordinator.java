@@ -6,22 +6,6 @@
 
 package org.klomp.snark;
 
-import net.i2p.I2PAppContext;
-import net.i2p.data.ByteArray;
-import net.i2p.data.DataHelper;
-import net.i2p.data.Destination;
-import net.i2p.util.ConcurrentHashSet;
-import net.i2p.util.I2PAppThread;
-import net.i2p.util.Log;
-import net.i2p.util.RandomSource;
-import net.i2p.util.SimpleTimer2;
-
-import org.klomp.snark.bencode.BEValue;
-import org.klomp.snark.bencode.InvalidBEncodingException;
-import org.klomp.snark.comments.Comment;
-import org.klomp.snark.comments.CommentSet;
-import org.klomp.snark.dht.DHT;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,6 +21,20 @@ import java.util.Set;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import net.i2p.I2PAppContext;
+import net.i2p.data.ByteArray;
+import net.i2p.data.DataHelper;
+import net.i2p.data.Destination;
+import net.i2p.util.ConcurrentHashSet;
+import net.i2p.util.I2PAppThread;
+import net.i2p.util.Log;
+import net.i2p.util.RandomSource;
+import net.i2p.util.SimpleTimer2;
+import org.klomp.snark.bencode.BEValue;
+import org.klomp.snark.bencode.InvalidBEncodingException;
+import org.klomp.snark.comments.Comment;
+import org.klomp.snark.comments.CommentSet;
+import org.klomp.snark.dht.DHT;
 
 /** Coordinates what peer does what. */
 class PeerCoordinator implements PeerListener, BandwidthListener {

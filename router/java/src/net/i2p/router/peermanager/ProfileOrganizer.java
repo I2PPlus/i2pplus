@@ -16,24 +16,21 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 import net.i2p.crypto.SipHashInline;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.SessionKey;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.router.JobImpl;
 import net.i2p.router.NetworkDatabaseFacade;
-import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
 import net.i2p.router.tunnel.pool.TunnelPeerSelector;
 import net.i2p.router.util.MaskedIPSet;
+import net.i2p.router.util.RandomIterator;
 import net.i2p.stat.Rate;
-import net.i2p.stat.RateStat;
 import net.i2p.stat.RateConstants;
+import net.i2p.stat.RateStat;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
-import net.i2p.router.util.RandomIterator;
 
 /**
  * Categorizes peers into performance tiers based on historical metrics. Requires periodic reorganize() calls to update peer classifications for optimal tunnel selection.

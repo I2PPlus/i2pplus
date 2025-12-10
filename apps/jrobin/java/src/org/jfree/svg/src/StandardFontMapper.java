@@ -32,11 +32,10 @@
 
 package org.jfree.svg;
 
-import org.jfree.svg.util.Args;
-
 import java.awt.Font;
 import java.util.HashMap;
 import java.util.Map;
+import org.jfree.svg.util.Args;
 
 /**
  * A default implementation of the {@link FontMapper} interface. This implementation will map the

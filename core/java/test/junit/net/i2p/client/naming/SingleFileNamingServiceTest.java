@@ -1,15 +1,13 @@
 package net.i2p.client.naming;
 
-import junit.framework.TestCase;
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import java.io.File;
 import java.util.Collections;
-
+import junit.framework.TestCase;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Destination;
-
 
 public class SingleFileNamingServiceTest extends TestCase {
     private I2PAppContext _context;

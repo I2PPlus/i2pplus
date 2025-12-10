@@ -1,11 +1,11 @@
 package net.i2p.router.transport.ntcp;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.Inet6Address;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
-import java.nio.ByteBuffer;
 import java.nio.Buffer;
+import java.nio.ByteBuffer;
 import java.nio.channels.CancelledKeyException;
 import java.nio.channels.ClosedChannelException;
 import java.nio.channels.ClosedSelectorException;
@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import net.i2p.I2PAppContext;
+import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.router.CommSystemFacade.Status;
@@ -32,14 +33,13 @@ import net.i2p.router.transport.FIFOBandwidthLimiter;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;
 import net.i2p.stat.RateStat;
-import net.i2p.data.Hash;
-import net.i2p.util.TryCache;
 import net.i2p.util.Addresses;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounter;
 import net.i2p.util.SystemVersion;
+import net.i2p.util.TryCache;
 
 /**
  * The main NTCP NIO event loop thread responsible for high-throughput, low-latency

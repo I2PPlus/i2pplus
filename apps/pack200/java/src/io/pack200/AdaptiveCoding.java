@@ -25,11 +25,12 @@
 
 package io.pack200;
 
+import static io.pack200.Constants.*;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import static io.pack200.Constants.*;
 
 /**
  * Adaptive coding.

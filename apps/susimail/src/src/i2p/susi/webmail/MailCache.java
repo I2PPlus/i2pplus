@@ -7,15 +7,15 @@
  */
 package i2p.susi.webmail;
 
-import i2p.susi.util.Config;
+import static i2p.susi.webmail.Sorters.*;
+
 import i2p.susi.util.Buffer;
+import i2p.susi.util.Config;
 import i2p.susi.util.FileBuffer;
 import i2p.susi.util.Folder;
 import i2p.susi.util.MemoryBuffer;
-import static i2p.susi.webmail.Sorters.*;
 import i2p.susi.webmail.pop3.POP3MailBox;
 import i2p.susi.webmail.pop3.POP3MailBox.FetchRequest;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,7 +24,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientAppManager;
 import net.i2p.app.NotificationService;

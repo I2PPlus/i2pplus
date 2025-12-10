@@ -13,7 +13,6 @@ package net.i2p.crypto.eddsa.spec;
 
 import java.util.HashMap;
 import java.util.Locale;
-
 import net.i2p.crypto.eddsa.Utils;
 import net.i2p.crypto.eddsa.math.Curve;
 import net.i2p.crypto.eddsa.math.Field;

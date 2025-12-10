@@ -25,9 +25,10 @@
 
 package io.pack200;
 
+import static io.pack200.Constants.*;
+
 import java.io.IOException;
 import java.util.Arrays;
-import static io.pack200.Constants.*;
 
 /**
  * A parsed bytecode instruction.

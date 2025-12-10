@@ -11,10 +11,8 @@ import java.util.List;
 import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
-
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.util.I2PAppThread;
-import net.i2p.util.Log;
 
 /**
  * HTTP client runner that filters response headers to enforce the

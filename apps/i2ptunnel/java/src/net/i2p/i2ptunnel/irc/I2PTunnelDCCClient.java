@@ -3,9 +3,8 @@
  */
 package net.i2p.i2ptunnel.irc;
 
-import java.net.Socket;
 import java.io.IOException;
-
+import java.net.Socket;
 import net.i2p.I2PException;
 import net.i2p.client.streaming.I2PSocket;
 import net.i2p.client.streaming.I2PSocketManager;

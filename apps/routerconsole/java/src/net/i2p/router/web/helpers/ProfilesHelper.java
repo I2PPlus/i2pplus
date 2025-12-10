@@ -1,9 +1,7 @@
 package net.i2p.router.web.helpers;
 
 import java.io.IOException;
-
 import net.i2p.router.web.HelperBase;
-
 
 /**
  * Helper for peer profiles page rendering and form processing.

@@ -4,26 +4,25 @@ package net.i2p.desktopgui;
  * Main.java
  */
 
+import static net.i2p.app.ClientAppState.*;
+
 import java.awt.Image;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.net.URL;
-
 import javax.swing.SwingUtilities;
-
 import net.i2p.I2PAppContext;
 import net.i2p.app.ClientAppManager;
 import net.i2p.app.ClientAppState;
-import static net.i2p.app.ClientAppState.*;
 import net.i2p.app.NotificationService;
 import net.i2p.router.RouterContext;
 import net.i2p.router.app.RouterApp;
+import net.i2p.util.I2PProperties.I2PPropertyCallback;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
 import net.i2p.util.Translate;
-import net.i2p.util.I2PProperties.I2PPropertyCallback;
 
 /**
  * The main class of the application.

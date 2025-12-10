@@ -1,6 +1,5 @@
 package net.i2p.router.news;
 
-import java.util.Collections;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -8,19 +7,18 @@ import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.Base64;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
-import net.i2p.util.Log;
 import net.i2p.util.FileSuffixFilter;
+import net.i2p.util.Log;
 import net.i2p.util.SecureDirectory;
 import net.i2p.util.SecureFileOutputStream;
-
 import org.cybergarage.xml.Node;
 import org.cybergarage.xml.ParserException;
 

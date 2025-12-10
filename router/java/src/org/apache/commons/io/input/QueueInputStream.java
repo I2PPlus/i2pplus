@@ -29,7 +29,6 @@ import java.util.Objects;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
-
 import org.apache.commons.io.build.AbstractStreamBuilder;
 import org.apache.commons.io.output.QueueOutputStream;
 

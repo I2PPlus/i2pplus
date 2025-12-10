@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Arrays;
-
 import net.i2p.crypto.EncType;
 import net.i2p.crypto.SHA256Generator;
 import net.i2p.crypto.SigType;

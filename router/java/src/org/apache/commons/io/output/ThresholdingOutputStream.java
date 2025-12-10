@@ -18,7 +18,6 @@ package org.apache.commons.io.output;
 
 import java.io.IOException;
 import java.io.OutputStream;
-
 import org.apache.commons.io.function.IOConsumer;
 import org.apache.commons.io.function.IOFunction;
 

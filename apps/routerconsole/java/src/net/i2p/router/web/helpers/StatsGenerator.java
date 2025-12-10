@@ -2,15 +2,14 @@ package net.i2p.router.web.helpers;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.text.DecimalFormat;
 import java.text.Collator;
+import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeMap;
-
 import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.router.web.Messages;

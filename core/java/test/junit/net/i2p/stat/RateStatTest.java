@@ -1,11 +1,8 @@
 package net.i2p.stat;
 
 import java.util.Properties;
-
-import org.junit.Test;
-
 import junit.framework.TestCase;
-
+import org.junit.Test;
 
 public class RateStatTest extends TestCase {
 

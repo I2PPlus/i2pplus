@@ -2,10 +2,9 @@ package gnu.crypto.prng;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Map;
-
 import net.i2p.data.DataHelper;
 
 /**

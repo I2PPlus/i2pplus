@@ -2,15 +2,14 @@ package net.i2p.router.tunnel;
 
 import java.util.HashSet;
 import java.util.Set;
-
 import net.i2p.data.Hash;
-import net.i2p.data.router.RouterInfo;
 import net.i2p.data.TunnelId;
 import net.i2p.data.i2np.DatabaseLookupMessage;
 import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.i2np.I2NPMessageException;
 import net.i2p.data.i2np.TunnelGatewayMessage;
 import net.i2p.data.i2np.UnknownI2NPMessage;
+import net.i2p.data.router.RouterInfo;
 import net.i2p.router.JobImpl;
 import net.i2p.router.OutNetMessage;
 import net.i2p.router.RouterContext;

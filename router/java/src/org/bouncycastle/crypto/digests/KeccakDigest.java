@@ -1,7 +1,6 @@
 package org.bouncycastle.crypto.digests;
 
 import java.util.Arrays;
-
 import org.bouncycastle.crypto.CryptoServiceProperties;
 import org.bouncycastle.crypto.CryptoServicePurpose;
 import org.bouncycastle.crypto.CryptoServicesRegistrar;

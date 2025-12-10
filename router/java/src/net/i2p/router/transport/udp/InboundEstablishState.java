@@ -3,7 +3,6 @@ package net.i2p.router.transport.udp;
 import java.net.InetSocketAddress;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
-
 import net.i2p.data.DataHelper;
 import net.i2p.data.router.RouterIdentity;
 import net.i2p.router.OutNetMessage;

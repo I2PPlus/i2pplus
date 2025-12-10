@@ -1,5 +1,6 @@
 package com.maxmind.db;
 
+import com.maxmind.db.Reader.FileMode;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -8,8 +9,6 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
-
-import com.maxmind.db.Reader.FileMode;
 
 /**
  * Holds a ByteBuffer for MaxMind database access.

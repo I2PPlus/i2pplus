@@ -11,7 +11,6 @@ package net.i2p.i2ptunnel.web;
 import java.io.File;
 import java.util.List;
 import java.util.Set;
-
 import net.i2p.client.I2PClient;
 import net.i2p.crypto.SigType;
 import net.i2p.data.DataHelper;

@@ -2,10 +2,9 @@ package net.i2p.util;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.ThreadFactory;
-
 import net.i2p.I2PAppContext;
 
 /**

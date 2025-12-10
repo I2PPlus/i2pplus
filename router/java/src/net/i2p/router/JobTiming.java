@@ -8,8 +8,8 @@ package net.i2p.router;
  *
  */
 
-import net.i2p.util.Clock;
 import java.util.concurrent.atomic.AtomicLong;
+import net.i2p.util.Clock;
 
 /**
  * Define the timing requirements and statistics for a particular job

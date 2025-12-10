@@ -1,7 +1,6 @@
 package net.i2p.client.streaming.impl;
 
 import java.util.List;
-
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.data.ByteArray;
@@ -49,7 +48,7 @@ class ConnectionPacketHandler {
         _context.statManager().createRateStat("stream.con.receiveMessageSize", "Size of a message received on a connection", "Stream", RATES);
         _context.statManager().createRateStat("stream.resetReceived", "Number of successful sent messages before receiving a RESET", "Stream", RATES);
         _context.statManager().createRateStat("stream.sendsBeforeAck", "Number of times a message was sent before it was ACKed", "Stream", RATES);
-        //_context.statManager().createRateStat("stream.trend", "What direction the RTT is trending in (with period = windowsize)", "Stream", new long[] { 60*1000, 60*60*1000 });
+        //_context.statManager().createRateStat("stream.trend", "What direction the RTT is trending in (with period = windowsize)", "Stream", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
     }
 
     /**

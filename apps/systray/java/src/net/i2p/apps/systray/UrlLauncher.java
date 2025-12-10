@@ -9,23 +9,23 @@
 
 package net.i2p.apps.systray;
 
-import java.net.InetSocketAddress;
+import static net.i2p.app.ClientAppState.*;
+
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Arrays;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
-import java.nio.charset.StandardCharsets;
-
 import net.i2p.I2PAppContext;
 import net.i2p.app.*;
-import static net.i2p.app.ClientAppState.*;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.ShellCommand;

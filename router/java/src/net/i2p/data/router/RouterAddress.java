@@ -16,7 +16,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Map;
 import java.util.Properties;
-
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.DataStructureImpl;

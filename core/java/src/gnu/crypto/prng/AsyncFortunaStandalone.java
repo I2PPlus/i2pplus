@@ -3,8 +3,8 @@ package gnu.crypto.prng;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
-
 import net.i2p.I2PAppContext;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.SystemVersion;
@@ -46,7 +46,7 @@ public class AsyncFortunaStandalone extends FortunaStandalone implements Runnabl
         _emptyBuffers = new LinkedBlockingQueue<AsyncBuffer>(_bufferCount);
         _fullBuffers = new LinkedBlockingQueue<AsyncBuffer>(_bufferCount);
         _context = context;
-        context.statManager().createRateStat("prng.bufferFillTime", "Time to fill random number buffer (ms)", "Encryption", new long[] { 60*1000, 10*60*1000, 60*60*1000 } );
+        context.statManager().createRateStat("prng.bufferFillTime", "Time to fill random number buffer (ms)", "Encryption", new long[] { RateConstants.ONE_MINUTE } );
         _log = context.logManager().getLog(AsyncFortunaStandalone.class);
     }
 

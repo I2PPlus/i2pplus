@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import net.i2p.app.ClientApp;
 import net.i2p.app.ClientAppState;
 import net.i2p.data.DataHelper;
@@ -25,7 +24,6 @@ import net.i2p.router.web.RouterConsoleRunner;
 import net.i2p.router.web.WebAppStarter;
 import net.i2p.util.Addresses;
 import net.i2p.util.SystemVersion;
-
 
 /**
  * Helper for clients configuration page rendering and form processing.

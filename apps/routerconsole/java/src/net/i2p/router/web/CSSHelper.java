@@ -1,10 +1,9 @@
 package net.i2p.router.web;
 
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
+import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.servlet.util.ServletUtil;
 import net.i2p.util.RandomSource;
 import net.i2p.util.SystemVersion;

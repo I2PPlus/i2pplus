@@ -5,13 +5,11 @@
 
 package org.cybergarage.http;
 
-import net.i2p.router.transport.UPnP;
-
-import org.cybergarage.upnp.Device;
-
 import java.net.InetAddress;
 import java.util.Set;
 import java.util.Vector;
+import net.i2p.router.transport.UPnP;
+import org.cybergarage.upnp.Device;
 
 /**
  * A collection of HTTPServer instances that extends Vector. This class manages multiple HTTP

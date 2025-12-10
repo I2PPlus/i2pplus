@@ -1,14 +1,12 @@
 package net.i2p.client.streaming.impl;
 
-import net.i2p.client.streaming.I2PSocketOptions;
-
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
-
 import net.i2p.I2PAppContext;
+import net.i2p.client.streaming.I2PSocketOptions;
 import net.i2p.data.Hash;
 import net.i2p.util.ConvertToHash;
 import net.i2p.util.Log;

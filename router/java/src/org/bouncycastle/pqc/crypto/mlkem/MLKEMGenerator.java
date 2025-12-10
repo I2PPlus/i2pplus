@@ -1,7 +1,6 @@
 package org.bouncycastle.pqc.crypto.mlkem;
 
 import java.security.SecureRandom;
-
 import org.bouncycastle.crypto.SecretWithEncapsulation;
 import org.bouncycastle.crypto.params.AsymmetricKeyParameter;
 import org.bouncycastle.pqc.crypto.util.SecretWithEncapsulationImpl;

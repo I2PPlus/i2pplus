@@ -1,10 +1,10 @@
 package edu.internet2.ndt;
 
-import org.json.simple.JsonObject;
-import org.json.simple.Jsoner;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
 import java.util.Map;
+import org.json.simple.JsonObject;
+import org.json.simple.Jsoner;
 
 /* Created by Sebastian Malecki on 13.05.14. */
 

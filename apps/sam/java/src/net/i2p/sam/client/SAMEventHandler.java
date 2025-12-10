@@ -3,7 +3,6 @@ package net.i2p.sam.client;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-
 import net.i2p.I2PAppContext;
 import net.i2p.util.Log;
 

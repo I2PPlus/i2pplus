@@ -2,19 +2,18 @@ package net.i2p.router.web.helpers;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.security.MessageDigest;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
-
 import net.i2p.crypto.SHA256Generator;
 import net.i2p.data.DataHelper;
 import net.i2p.router.web.HelperBase;

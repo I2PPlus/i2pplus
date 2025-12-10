@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Collections;
 import java.util.Set;
-
 import net.i2p.data.Hash;
 import net.i2p.router.PeerManagerFacade;
 import net.i2p.router.RouterContext;

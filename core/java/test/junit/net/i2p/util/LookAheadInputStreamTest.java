@@ -9,7 +9,6 @@ package net.i2p.util;
  */
 
 import java.io.ByteArrayInputStream;
-
 import junit.framework.TestCase;
 
 public class LookAheadInputStreamTest extends TestCase {

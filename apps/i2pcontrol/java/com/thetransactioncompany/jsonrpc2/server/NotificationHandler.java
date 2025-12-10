@@ -3,7 +3,6 @@ package com.thetransactioncompany.jsonrpc2.server;
 
 import com.thetransactioncompany.jsonrpc2.JSONRPC2Notification;
 
-
 /**
  * Interface for handling JSON-RPC 2.0 notifications.
  *

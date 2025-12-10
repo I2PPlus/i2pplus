@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.net.URI;
 import java.util.List;
-
 import net.i2p.crypto.TrustedUpdate;
 import net.i2p.router.RouterContext;
 import net.i2p.router.RouterVersion;

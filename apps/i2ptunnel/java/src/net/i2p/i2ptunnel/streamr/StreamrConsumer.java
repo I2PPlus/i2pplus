@@ -1,7 +1,6 @@
 package net.i2p.i2ptunnel.streamr;
 
 import java.net.InetAddress;
-
 import net.i2p.i2ptunnel.I2PTunnel;
 import net.i2p.i2ptunnel.Logging;
 import net.i2p.i2ptunnel.udp.*;

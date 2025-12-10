@@ -5,13 +5,12 @@
 
 package org.cybergarage.http;
 
-import org.cybergarage.util.Debug;
-
 import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
+import org.cybergarage.util.Debug;
 
 /**
  * Represents an HTTP header field with a name and value. This class provides methods to parse,

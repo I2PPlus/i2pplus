@@ -20,7 +20,6 @@ package org.apache.commons.net.imap;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.commons.net.MalformedServerReplyException;
 
 /**

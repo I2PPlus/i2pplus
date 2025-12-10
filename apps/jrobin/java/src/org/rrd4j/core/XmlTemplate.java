@@ -1,15 +1,14 @@
 package org.rrd4j.core;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.xml.sax.InputSource;
-
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
 
 /**
  * Class used as a base class for various XML template related classes. Class provides methods for

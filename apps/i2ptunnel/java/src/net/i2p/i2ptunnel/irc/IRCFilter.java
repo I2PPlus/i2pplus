@@ -4,10 +4,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
-
 import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
-
 
 /**
  * Static methods to filter individual lines.

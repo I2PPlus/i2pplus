@@ -13,7 +13,6 @@ import java.io.InputStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-
 import net.i2p.client.I2PClient;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;

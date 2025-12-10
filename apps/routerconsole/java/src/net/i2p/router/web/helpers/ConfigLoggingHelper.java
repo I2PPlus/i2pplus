@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
-
 import net.i2p.data.DataHelper;
 import net.i2p.router.web.HelperBase;
 import net.i2p.util.Log;

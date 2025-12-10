@@ -5,6 +5,9 @@ package org.klomp.snark.web;
  * with no warranty of any kind, either expressed or implied.
  */
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import net.i2p.I2PAppContext;
 import net.i2p.client.streaming.I2PSocketEepGet;
 import net.i2p.client.streaming.I2PSocketManager;
@@ -14,16 +17,11 @@ import net.i2p.util.EepGet;
 import net.i2p.util.I2PAppThread;
 import net.i2p.util.Log;
 import net.i2p.util.SecureFile;
-
 import org.klomp.snark.I2PSnarkUtil;
 import org.klomp.snark.MetaInfo;
 import org.klomp.snark.Snark;
 import org.klomp.snark.SnarkManager;
 import org.klomp.snark.Storage;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 
 /**
  * A cancellable torrent file downloader. We extend Snark so its status may be easily listed in the

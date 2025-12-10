@@ -3,16 +3,14 @@ package net.i2p.router.tunnel.pool;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
+import java.util.concurrent.ConcurrentHashMap;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
-import net.i2p.data.TunnelId;
 import net.i2p.router.ClientTunnelSettings;
 import net.i2p.router.JobImpl;
 import net.i2p.router.RouterContext;
@@ -20,12 +18,12 @@ import net.i2p.router.TunnelInfo;
 import net.i2p.router.TunnelManagerFacade;
 import net.i2p.router.TunnelPoolSettings;
 import net.i2p.router.tunnel.TunnelDispatcher;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.I2PThread;
 import net.i2p.util.Log;
 import net.i2p.util.ObjectCounterUnsafe;
 import net.i2p.util.SimpleTimer;
 import net.i2p.util.SystemVersion;
-import net.i2p.stat.RateConstants;
 
 /**
  * Manage all the exploratory and client tunnel pools.

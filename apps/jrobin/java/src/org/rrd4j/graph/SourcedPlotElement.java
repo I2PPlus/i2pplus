@@ -1,9 +1,8 @@
 package org.rrd4j.graph;
 
+import java.awt.*;
 import org.rrd4j.core.Util;
 import org.rrd4j.data.DataProcessor;
-
-import java.awt.*;
 
 /**
  * Represents a plot element that obtains data from a named source. Extends PlotElement to handle

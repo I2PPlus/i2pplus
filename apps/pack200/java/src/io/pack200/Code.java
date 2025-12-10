@@ -25,11 +25,12 @@
 
 package io.pack200;
 
+import static io.pack200.Constants.*;
+
 import io.pack200.Package.Class;
 import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.Collection;
-import static io.pack200.Constants.*;
 
 /**
  * Represents a chunk of bytecodes.

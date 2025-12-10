@@ -15,7 +15,6 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.I2PClient;
@@ -36,8 +35,8 @@ import net.i2p.data.PrivateKey;
 import net.i2p.data.PublicKey;
 import net.i2p.data.SimpleDataStructure;
 import net.i2p.util.ByteArrayStream;
-import net.i2p.util.ConvertToHash;
 import net.i2p.util.ConcurrentHashSet;
+import net.i2p.util.ConvertToHash;
 import net.i2p.util.Log;
 
 /**

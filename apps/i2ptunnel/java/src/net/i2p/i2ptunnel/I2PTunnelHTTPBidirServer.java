@@ -18,7 +18,6 @@ package net.i2p.i2ptunnel;
 import java.io.File;
 import java.io.InputStream;
 import java.net.InetAddress;
-
 import net.i2p.util.EventDispatcher;
 
 /** Bidirectional HTTP server tunnel for I2P */

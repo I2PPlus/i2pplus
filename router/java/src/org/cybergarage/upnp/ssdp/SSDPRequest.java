@@ -5,9 +5,8 @@
 
 package org.cybergarage.upnp.ssdp;
 
-import org.cybergarage.http.*;
-
 import java.io.InputStream;
+import org.cybergarage.http.*;
 
 /**
  * Base class for SSDP request messages.

@@ -33,7 +33,6 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
-
 import net.i2p.util.RandomSource;
 
 /**

@@ -7,8 +7,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
-
 import net.i2p.data.Hash;
 import net.i2p.router.RouterContext;
 import net.i2p.util.I2PThread;

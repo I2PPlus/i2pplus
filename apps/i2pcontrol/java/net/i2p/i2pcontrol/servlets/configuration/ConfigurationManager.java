@@ -1,10 +1,5 @@
 package net.i2p.i2pcontrol.servlets.configuration;
 
-import net.i2p.I2PAppContext;
-import net.i2p.data.DataHelper;
-import net.i2p.util.Log;
-import net.i2p.util.OrderedProperties;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,6 +7,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import net.i2p.I2PAppContext;
+import net.i2p.data.DataHelper;
+import net.i2p.util.Log;
+import net.i2p.util.OrderedProperties;
 
 /**
  * Manage the configuration of I2PControl.

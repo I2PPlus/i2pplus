@@ -3,7 +3,6 @@ package net.i2p.router.update;
 import java.net.URI;
 import java.util.Collections;
 import java.util.List;
-
 import net.i2p.router.RouterContext;
 import net.i2p.update.*;
 

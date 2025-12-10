@@ -3,9 +3,8 @@ package net.i2p.router.news;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import net.i2p.router.RouterVersion;
 import net.i2p.router.RouterCommandLine;
+import net.i2p.router.RouterVersion;
 
 /**
  * Command line interface for news and blocklist management utilities.

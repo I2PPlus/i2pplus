@@ -7,21 +7,21 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-
 import net.i2p.I2PAppContext;
 import net.i2p.I2PException;
 import net.i2p.client.I2PSession;
+import net.i2p.client.streaming.IncomingConnectionFilter;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
+import net.i2p.stat.RateConstants;
 import net.i2p.util.ByteCache;
 import net.i2p.util.ConcurrentHashSet;
 import net.i2p.util.ConvertToHash;
 import net.i2p.util.LHMCache;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
-import net.i2p.client.streaming.IncomingConnectionFilter;
 
 /**
  * Coordinate all of the connections for a single local destination.
@@ -146,7 +146,7 @@ class ConnectionManager {
         _context.statManager().createRateStat("stream.connectionReceived", "Number of stream connections received", "Stream", RATES);
         _context.statManager().createRateStat("stream.chokeSizeBegin", "Number of outstanding messages when we started to choke", "Stream", RATES);
         _context.statManager().createRateStat("stream.chokeSizeEnd", "Number of outstanding messages when we stopped being choked", "Stream", RATES);
-        _context.statManager().createRateStat("stream.fastRetransmit", "How long a packet has been around for if it has been resent per the fast retransmit timer", "Stream", new long[] { 10*60*1000 });
+        _context.statManager().createRateStat("stream.fastRetransmit", "How long a packet has been around for if it has been resent per the fast retransmit timer", "Stream", new long[] { RateConstants.TEN_MINUTES });
         // Stats for PacketQueue
         _context.statManager().createRateStat("stream.con.sendMessageSize", "Size of a message sent on a connection", "Stream", RATES);
         _context.statManager().createRateStat("stream.con.sendDuplicateSize", "Size of a message resent on a connection", "Stream", RATES);

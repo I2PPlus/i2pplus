@@ -7,16 +7,6 @@
 package org.klomp.snark;
 
 import gnu.getopt.Getopt;
-
-import net.i2p.I2PAppContext;
-import net.i2p.crypto.SHA1;
-import net.i2p.data.ByteArray;
-import net.i2p.data.DataHelper;
-import net.i2p.util.ByteCache;
-import net.i2p.util.Log;
-import net.i2p.util.SecureFile;
-import net.i2p.util.SystemVersion;
-
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -43,6 +33,14 @@ import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
+import net.i2p.I2PAppContext;
+import net.i2p.crypto.SHA1;
+import net.i2p.data.ByteArray;
+import net.i2p.data.DataHelper;
+import net.i2p.util.ByteCache;
+import net.i2p.util.Log;
+import net.i2p.util.SecureFile;
+import net.i2p.util.SystemVersion;
 
 /** Maintains pieces on disk. Can be used to store and retrieve pieces. */
 public class Storage implements Closeable {

@@ -7,11 +7,10 @@ package net.i2p.router.util;
  */
 
 import java.util.BitSet;
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
-
 import net.i2p.util.RandomSource;
 import net.i2p.util.SystemVersion;
 

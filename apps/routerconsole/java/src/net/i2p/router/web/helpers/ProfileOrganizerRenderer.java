@@ -1,5 +1,7 @@
 package net.i2p.router.web.helpers;
 
+import static net.i2p.router.web.helpers.TunnelRenderer.range;
+
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.Writer;
@@ -9,17 +11,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
 import net.i2p.data.DataHelper;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterInfo;
+import net.i2p.router.Router;
+import net.i2p.router.RouterContext;
 import net.i2p.router.peermanager.DBHistory;
 import net.i2p.router.peermanager.PeerProfile;
 import net.i2p.router.peermanager.ProfileOrganizer;
-import net.i2p.router.Router;
-import net.i2p.router.RouterContext;
 import net.i2p.router.transport.CommSystemFacadeImpl;
-import static net.i2p.router.web.helpers.TunnelRenderer.range;
 import net.i2p.router.web.Messages;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;

@@ -1,5 +1,6 @@
 package net.i2p.sam.client;
 
+import gnu.getopt.Getopt;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,12 +15,9 @@ import java.security.GeneralSecurityException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
-
-import gnu.getopt.Getopt;
-
+import javax.net.ssl.SSLSocket;
 import net.i2p.I2PAppContext;
 import net.i2p.data.Base32;
 import net.i2p.data.DataHelper;

@@ -1,13 +1,12 @@
 package org.rrd4j.core;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Locale;
 import org.rrd4j.ConsolFun;
 import org.rrd4j.DsType;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Locale;
 
 /**
  * Reader for importing RRD data from XML format.

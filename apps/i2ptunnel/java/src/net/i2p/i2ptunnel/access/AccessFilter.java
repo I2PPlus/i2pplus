@@ -1,31 +1,28 @@
 package net.i2p.i2ptunnel.access;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.LinkedHashSet;
-import java.util.Iterator;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ExecutorService;
-
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.BufferedWriter;
 import java.nio.charset.StandardCharsets;
-import java.io.IOException;
-
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 import net.i2p.I2PAppContext;
-import net.i2p.util.SimpleTimer2;
-import net.i2p.util.Log;
-import net.i2p.util.SecureFileOutputStream;
+import net.i2p.client.streaming.StatefulConnectionFilter;
 import net.i2p.data.Destination;
 import net.i2p.data.Hash;
-import net.i2p.client.streaming.StatefulConnectionFilter;
+import net.i2p.util.Log;
+import net.i2p.util.SecureFileOutputStream;
+import net.i2p.util.SimpleTimer2;
 
 /**
  * Incoming connection filter configurable through access list rules.

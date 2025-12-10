@@ -3,12 +3,12 @@ package net.i2p.util;
 import java.util.Date;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
-
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import net.i2p.I2PAppContext;
+import net.i2p.stat.RateConstants;
 import net.i2p.time.BuildTime;
 import net.i2p.time.Timestamper;
-
-import java.util.concurrent.atomic.AtomicInteger;import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Alternate location for determining the time which takes into account an offset.
@@ -132,8 +132,7 @@ public class Clock implements Timestamper.UpdateListener {
                 getLog().info("Updating clock offset to " + offsetMs + "ms from " + _offset + "ms");
 
             if (!_statCreated) {
-//                _context.statManager().createRateStat("clock.skew", "Clock step adjustment (ms)", "Router", new long[] { 60*1000, 10*60*1000, 3*60*60*1000, 24*60*60*1000 });
-                _context.statManager().createRateStat("clock.skew", "Clock step adjustment (ms)", "Router", new long[] { 60*1000, 3*60*60*1000, 24*60*60*1000 });
+                _context.statManager().createRateStat("clock.skew", "Clock step adjustment (ms)", "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR });
                 _statCreated = true;
             }
             _context.statManager().addRateData("clock.skew", delta, 0);
@@ -187,7 +186,6 @@ public class Clock implements Timestamper.UpdateListener {
      *
      */
     public long now() {
-//        return _offset + System.currentTimeMillis();
         // aims to check currentTimeMillis twice per ms under constant load        // negative clock shift avg 0.25 ms under constant load        // saves 99% system calls at 200 calls / sec        if (_iter.incrementAndGet() <= _frequency.get())            return _savedTime.get();        _iter.set(0);        long newTime = _offset + System.currentTimeMillis();        if (newTime == _savedTime.getAndSet(newTime))            _frequency.incrementAndGet();        else            _frequency.decrementAndGet();            // _frequency.set(_frequency.Get() / 2); // alternate version            // saves > 94% system calls at 200 calls / sec            // negative clock shift avg < 0.06 ms at 200 calls / sec        return newTime;
     }
 

@@ -1,16 +1,15 @@
 package net.i2p.router.networkdb.reseed;
 
 import java.io.File;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
-import net.i2p.util.Addresses;
 import net.i2p.util.AddressType;
+import net.i2p.util.Addresses;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer;
 

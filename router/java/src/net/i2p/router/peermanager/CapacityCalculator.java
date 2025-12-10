@@ -1,9 +1,9 @@
 package net.i2p.router.peermanager;
 
 import net.i2p.data.router.RouterInfo;
+import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.Router;
 import net.i2p.router.RouterContext;
-import net.i2p.router.NetworkDatabaseFacade;
 import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.stat.Rate;
 import net.i2p.stat.RateAverages;

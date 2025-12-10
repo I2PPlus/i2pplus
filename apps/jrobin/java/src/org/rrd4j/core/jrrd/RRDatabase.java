@@ -1,7 +1,5 @@
 package org.rrd4j.core.jrrd;
 
-import org.rrd4j.core.RrdException;
-
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
@@ -15,6 +13,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import org.rrd4j.core.RrdException;
 
 /**
  * Instances of this class model <a href="http://people.ee.ethz.ch/~oetiker/webtools/rrdtool/">Round

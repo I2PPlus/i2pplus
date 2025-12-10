@@ -5,6 +5,14 @@
 
 package org.cybergarage.upnp;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.InetAddress;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.Calendar;
+import java.util.HashMap;
 import org.cybergarage.http.HTTP;
 import org.cybergarage.http.HTTPRequest;
 import org.cybergarage.http.HTTPResponse;
@@ -45,15 +53,6 @@ import org.cybergarage.xml.Node;
 import org.cybergarage.xml.Parser;
 import org.cybergarage.xml.ParserException;
 import org.cybergarage.xml.XML;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.InetAddress;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Calendar;
-import java.util.HashMap;
 
 /**
  * Represents a UPnP device in the CyberLink framework.

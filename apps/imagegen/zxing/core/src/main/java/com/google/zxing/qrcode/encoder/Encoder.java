@@ -25,7 +25,6 @@ import com.google.zxing.common.reedsolomon.ReedSolomonEncoder;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.decoder.Mode;
 import com.google.zxing.qrcode.decoder.Version;
-
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;

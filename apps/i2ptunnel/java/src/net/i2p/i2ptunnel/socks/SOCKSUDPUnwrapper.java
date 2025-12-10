@@ -1,11 +1,10 @@
 package net.i2p.i2ptunnel.socks;
 
 import java.util.Map;
-
 import net.i2p.I2PAppContext;
+import net.i2p.client.streaming.I2PSocketAddress;
 import net.i2p.data.Destination;
 import net.i2p.i2ptunnel.udp.*;
-import net.i2p.client.streaming.I2PSocketAddress;
 import net.i2p.util.Log;
 
 /**

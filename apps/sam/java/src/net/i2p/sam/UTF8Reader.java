@@ -10,7 +10,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 
-
 /**
  *  An unbuffered version of InputStreamReader.
  *

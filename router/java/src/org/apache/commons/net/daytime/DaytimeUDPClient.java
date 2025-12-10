@@ -20,7 +20,6 @@ package org.apache.commons.net.daytime;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
-
 import org.apache.commons.net.DatagramSocketClient;
 
 /**

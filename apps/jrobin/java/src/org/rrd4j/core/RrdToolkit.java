@@ -1,7 +1,5 @@
 package org.rrd4j.core;
 
-import org.rrd4j.ConsolFun;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import org.rrd4j.ConsolFun;
 
 /**
  * Class used to perform various complex operations on RRD files. Use an instance of the RrdToolkit

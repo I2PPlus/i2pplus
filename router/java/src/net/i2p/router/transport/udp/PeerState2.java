@@ -1,18 +1,18 @@
 package net.i2p.router.transport.udp;
 
-import com.southernstorm.noise.protocol.CipherState;
+import static net.i2p.router.transport.udp.SSU2Util.*;
 
+import com.southernstorm.noise.protocol.CipherState;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.Iterator;
 import java.util.List;
-
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import net.i2p.data.ByteArray;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
@@ -21,11 +21,10 @@ import net.i2p.data.i2np.I2NPMessage;
 import net.i2p.data.i2np.I2NPMessageException;
 import net.i2p.data.i2np.I2NPMessageImpl;
 import net.i2p.data.router.RouterInfo;
-import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.RouterContext;
+import net.i2p.router.networkdb.kademlia.FloodfillNetworkDatabaseFacade;
 import net.i2p.router.transport.TransportUtil;
 import net.i2p.router.transport.udp.PacketBuilder.Fragment;
-import static net.i2p.router.transport.udp.SSU2Util.*;
 import net.i2p.util.HexDump;
 import net.i2p.util.SimpleTimer2;
 

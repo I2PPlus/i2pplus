@@ -1,14 +1,13 @@
 package net.i2p.i2pcontrol.security;
 
-import net.i2p.crypto.KeyStoreUtil;
-
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.cert.X509Certificate;
+import net.i2p.crypto.KeyStoreUtil;
 
 /**
  * Provider for managing I2PControl keystore operations.

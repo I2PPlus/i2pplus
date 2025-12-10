@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.function.Function;
 import java.util.function.Supplier;
-
 import org.apache.commons.io.function.Erase;
 
 /**

@@ -6,11 +6,10 @@
 
 package org.klomp.snark;
 
-import net.i2p.data.ByteArray;
-import net.i2p.util.ByteCache;
-
 import java.io.DataOutputStream;
 import java.io.IOException;
+import net.i2p.data.ByteArray;
+import net.i2p.util.ByteCache;
 
 /**
  * Used to queue outgoing connections sendMessage() should be used to translate them to wire format.

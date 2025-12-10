@@ -1,5 +1,6 @@
 package net.i2p.util;
 
+import gnu.getopt.Getopt;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -11,9 +12,6 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-
-import gnu.getopt.Getopt;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.Base32;
 import net.i2p.data.DataHelper;

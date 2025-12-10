@@ -11,15 +11,13 @@
  */
 package net.i2p.crypto.eddsa.spec;
 
+import java.io.Serializable;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.AlgorithmParameterSpec;
-
 import net.i2p.crypto.eddsa.math.Curve;
 import net.i2p.crypto.eddsa.math.GroupElement;
 import net.i2p.crypto.eddsa.math.ScalarOps;
-
-import java.io.Serializable;
 
 /**
  * Parameter specification for an EdDSA algorithm.

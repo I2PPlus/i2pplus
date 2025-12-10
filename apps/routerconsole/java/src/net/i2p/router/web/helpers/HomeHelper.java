@@ -6,12 +6,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-
 import net.i2p.data.DataHelper;
 import net.i2p.router.RouterContext;
 import net.i2p.router.web.App;
-import net.i2p.router.web.ConfigUpdateHandler;
 import net.i2p.router.web.CSSHelper;
+import net.i2p.router.web.ConfigUpdateHandler;
 import net.i2p.router.web.HelperBase;
 import net.i2p.router.web.Messages;
 import net.i2p.router.web.NavHelper;

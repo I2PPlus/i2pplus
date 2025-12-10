@@ -48,7 +48,6 @@ import java.util.Random;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.net.MalformedServerReplyException;
 import org.apache.commons.net.ftp.parser.DefaultFTPFileEntryParserFactory;

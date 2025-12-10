@@ -1,15 +1,14 @@
 package org.rrd4j.graph;
 
-import org.rrd4j.core.Util;
-import org.rrd4j.data.DataProcessor;
-import org.rrd4j.data.Variable;
-import org.rrd4j.data.Variable.Value;
-
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.rrd4j.core.Util;
+import org.rrd4j.data.DataProcessor;
+import org.rrd4j.data.Variable;
+import org.rrd4j.data.Variable.Value;
 
 /**
  * Represents printable text elements in RRD graphs. Extends CommentText to provide formatted text

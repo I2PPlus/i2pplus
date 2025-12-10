@@ -13,7 +13,6 @@ package org.minidns.record;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-
 import org.minidns.record.Record.TYPE;
 
 /**

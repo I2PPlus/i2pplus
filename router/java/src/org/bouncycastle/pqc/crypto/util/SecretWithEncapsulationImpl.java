@@ -2,9 +2,7 @@ package org.bouncycastle.pqc.crypto.util;
 
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicBoolean;
-
 import javax.security.auth.DestroyFailedException;
-
 import org.bouncycastle.crypto.SecretWithEncapsulation;
 import org.bouncycastle.util.Util;
 

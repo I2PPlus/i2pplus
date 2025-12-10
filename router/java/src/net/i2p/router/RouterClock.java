@@ -3,7 +3,6 @@ package net.i2p.router;
 import java.util.Date;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
-
 import net.i2p.data.DataHelper;
 import net.i2p.router.time.RouterTimestamper;
 import net.i2p.time.BuildTime;
@@ -191,11 +190,11 @@ public class RouterClock extends Clock {
             else if (getLog().shouldInfo())
                 getLog().info("Updating target clock offset to " + offsetMs + "ms from " + _offset + "ms (Stratum: " + stratum + ")");
 
-            if (!_statCreated) {
-//                  _context.statManager().createRateStat("clock.skew", "Clock step adjustment (ms)", "Router", new long[] { 60*1000, 10*60*1000, 3*60*60*1000, 24*60*60*1000 });
-                _context.statManager().createRateStat("clock.skew", "Clock step adjustment (ms)", "Router", new long[] { 60*1000, 3*60*60*1000, 24*60*60*1000 });
-                _statCreated = true;
-            }
+            // Clock skew stat is created by parent Clock class, no duplicate needed
+            // if (!_statCreated) {
+            //     _context.statManager().createRateStat("clock.skew", "Clock step adjustment (ms)", "Router", new long[] { RateConstants.ONE_MINUTE, RateConstants.ONE_HOUR, RateConstants.ONE_DAY });
+            //     _statCreated = true;
+            // }
             _context.statManager().addRateData("clock.skew", delta);
             if (_context.getBooleanProperty(PROP_DISABLE_ADJUSTMENT)) {
                 getLog().error("Clock adjustment disabled", new Exception());

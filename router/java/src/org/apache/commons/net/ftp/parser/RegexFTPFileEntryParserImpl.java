@@ -21,7 +21,6 @@ import java.util.regex.MatchResult;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
-
 import org.apache.commons.net.ftp.FTPFileEntryParserImpl;
 
 /**

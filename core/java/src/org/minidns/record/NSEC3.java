@@ -10,10 +10,6 @@
  */
 package org.minidns.record;
 
-import org.minidns.dnslabel.DnsLabel;
-import org.minidns.record.Record.TYPE;
-import org.minidns.util.Base32;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -22,6 +18,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.minidns.dnslabel.DnsLabel;
+import org.minidns.record.Record.TYPE;
+import org.minidns.util.Base32;
 
 /**
  * DNS NSEC3 (Next Secure 3) record payload for DNSSEC.<br>

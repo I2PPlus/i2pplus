@@ -1,16 +1,15 @@
 package net.i2p.servlet.util;
 
 import java.io.File;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
-
 import net.i2p.util.FileSuffixFilter;
 import net.i2p.util.VersionComparator;
 

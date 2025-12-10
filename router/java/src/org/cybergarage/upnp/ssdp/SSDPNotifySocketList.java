@@ -5,13 +5,12 @@
 
 package org.cybergarage.upnp.ssdp;
 
-import org.cybergarage.net.*;
-import org.cybergarage.upnp.*;
-import org.cybergarage.util.Debug;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.util.*;
+import org.cybergarage.net.*;
+import org.cybergarage.upnp.*;
+import org.cybergarage.util.Debug;
 
 /**
  * A list of SSDP notification sockets for receiving SSDP notify messages.<br>

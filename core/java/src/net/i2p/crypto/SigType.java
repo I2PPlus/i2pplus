@@ -7,7 +7,6 @@ import java.security.Signature;
 import java.security.spec.AlgorithmParameterSpec;
 import java.security.spec.InvalidParameterSpecException;
 import java.util.Locale;
-
 import net.i2p.crypto.eddsa.spec.EdDSANamedCurveTable;
 import net.i2p.data.Hash;
 import net.i2p.data.SigningPrivateKey;

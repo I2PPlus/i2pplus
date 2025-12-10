@@ -2,12 +2,10 @@ package net.i2p.router.util;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 import net.i2p.I2PAppContext;
 import net.i2p.data.DataHelper;
 import net.i2p.util.Log;
 import net.i2p.util.SimpleTimer2;
-
 import org.xlattice.crypto.filters.BloomSHA1;
 
 /**

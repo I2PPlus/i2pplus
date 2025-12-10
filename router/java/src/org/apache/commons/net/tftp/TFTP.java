@@ -22,7 +22,6 @@ import java.io.InterruptedIOException;
 import java.net.DatagramPacket;
 import java.net.SocketException;
 import java.time.Duration;
-
 import org.apache.commons.net.DatagramSocketClient;
 
 /**

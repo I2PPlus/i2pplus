@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
-
 import net.i2p.data.DataFormatException;
 import net.i2p.data.Hash;
 import net.i2p.data.router.RouterAddress;

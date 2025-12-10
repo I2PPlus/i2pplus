@@ -1,17 +1,19 @@
 package net.i2p.crypto;
 
+import static net.i2p.crypto.SigUtil.intToASN1;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
-import java.security.ProviderException;
 import java.security.MessageDigest;
 import java.security.PrivateKey;
+import java.security.ProviderException;
 import java.security.PublicKey;
 import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
 import java.security.cert.X509CRL;
+import java.security.cert.X509Certificate;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.text.SimpleDateFormat;
@@ -21,10 +23,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 import java.util.TreeSet;
-
 import javax.security.auth.x500.X500Principal;
-
-import static net.i2p.crypto.SigUtil.intToASN1;
 import net.i2p.crypto.eddsa.EdDSAPublicKey;
 import net.i2p.data.DataHelper;
 import net.i2p.data.Signature;

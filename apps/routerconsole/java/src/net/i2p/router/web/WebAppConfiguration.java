@@ -9,15 +9,12 @@ import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
-
 import net.i2p.I2PAppContext;
 import net.i2p.util.FileSuffixFilter;
-
 import org.apache.tomcat.SimpleInstanceManager;
 import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.WebAppClassLoader;
 import org.eclipse.jetty.webapp.WebAppContext;
-
 
 /**
  *  Add to the webapp classpath as specified in webapps.config.
