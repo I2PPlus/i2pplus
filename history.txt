@@ -1,3 +1,9 @@
+2025-12-10 dr|z3d
+ * Router: Reduce memory footprint by optimizing stats collection
+
+2025-12-08 dr|z3d
+ * Console/Webapps: Tibetan translation
+
 2025-12-07 dr|z3d
  * SusiDNS: Add source and date added columns to main hostlist tables
 
