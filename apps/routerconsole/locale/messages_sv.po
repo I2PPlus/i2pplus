@@ -6109,7 +6109,7 @@ msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP a
 msgstr "Exempel: För att tillåta åtkomst från både localhost och 192.168.1.10 över HTTP och HTTPS:"
 
 msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Hur ansluter jag till IRC inom I2P?"

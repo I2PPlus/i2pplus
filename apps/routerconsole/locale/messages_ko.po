@@ -2778,11 +2778,11 @@ msgstr "원격 리스셋"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
-msgstr ""
+msgstr "Hostname {0} not found in network database"
 
 #, java-format
 msgid "LeaseSet for {0} not found in network database"
-msgstr ""
+msgstr "LeaseSet for {0} not found in network database"
 
 msgid "Meta"
 msgstr "메타"
@@ -3495,7 +3495,7 @@ msgstr "참고: 'LU' 클래스 라우터는 목록에서 제외되었습니다."
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
-msgstr ""
+msgstr "To view, see {0}Session Bans{1}."
 
 msgid "Select search engine"
 msgstr "검색엔진 선택"
@@ -3743,7 +3743,7 @@ msgid "An introduction to hosting websites on the I2P network"
 msgstr "I2P 네트워크에서 웹 사이트 호스팅 소개"
 
 msgid "New hosts in last 24 hours"
-msgstr ""
+msgstr "New hosts in last 24 hours"
 
 msgid "I2PControl"
 msgstr "I2P제어"
@@ -5169,7 +5169,7 @@ msgstr "IP 주소별 차단 목록이 아래에 표시됩니다."
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
-msgstr ""
+msgstr "To view all active bans by router hash, see {0}Banned Peers{1}."
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
@@ -6091,7 +6091,7 @@ msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP a
 msgstr "예: localhost와 192.168.1.10에서 HTTP와 HTTPS를 통한 접근을 허용하려면:"
 
 msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "I2P 내부에서 IRC 접속은 어떻게 하나요?"
@@ -6715,7 +6715,7 @@ msgid "Getting Support Online"
 msgstr "온라인 지원"
 
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
-msgstr ""
+msgstr "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
 
 msgid "Reporting Bugs"
 msgstr "버그 보고"

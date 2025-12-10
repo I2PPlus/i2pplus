@@ -144,7 +144,7 @@ msgid "Unreachable on any transport"
 msgstr "Pole ühelgi transpordil kättesaadav"
 
 msgid "Cannot enumerate UPnP devices on Android."
-msgstr ""
+msgstr "Cannot enumerate UPnP devices on Android."
 
 msgid "UPnP is not enabled"
 msgstr "UPnP pole sisse lülitatud"
@@ -684,7 +684,7 @@ msgid "After reporting, please restart your router"
 msgstr "Pärast teatamist taaskäivitage ruuter"
 
 msgid "Invalid form submission, requires POST"
-msgstr ""
+msgstr "Invalid form submission, requires POST"
 
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Kehtetu vormipostitus, kasutasid ehk brauseri 'back' või 'reload' nuppu. Saada vorm uuesti."
@@ -818,13 +818,13 @@ msgid "To enable SSL access for the Router Console, see the commented <code>clie
 msgstr "Ruuteri konsooli SSL -i juurdepääsu lubamiseks vaadake lisateabe saamiseks faili <code> clients.config </code> fail, mis asub teie I2P rakenduste kataloogis. Peate redigeerima kaustas asuvat RouterConsolerunneri konfiguratsioonifaili: "
 
 msgid "Save disabled, edit the router.config file to make changes"
-msgstr ""
+msgstr "Save disabled, edit the router.config file to make changes"
 
 msgid "Error updating the configuration - please see the error logs"
 msgstr "Viga häälestuse uuendamisel - palun vaata vealogi"
 
 msgid "No changes made to the configuration"
-msgstr ""
+msgstr "No changes made to the configuration"
 
 msgid "Note"
 msgstr "NB"
@@ -845,7 +845,7 @@ msgid "Save Plugin Configuration"
 msgstr "Salvesta pluginate häälestus"
 
 msgid "Plugins disabled"
-msgstr ""
+msgstr "Plugins disabled"
 
 msgid "Install Plugin"
 msgstr "Paigalda plugin"
@@ -857,7 +857,7 @@ msgid "Update All Installed Plugins"
 msgstr "Uuenda Kõik Installitud Pluginad"
 
 msgid "Delete client disabled"
-msgstr ""
+msgstr "Delete client disabled"
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -941,17 +941,17 @@ msgid "Updating all plugins"
 msgstr "Uuendatakse kõiki pluginaid"
 
 msgid "Update manager not registered, cannot install"
-msgstr ""
+msgstr "Update manager not registered, cannot install"
 
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "pistikprogrammi installimine saidilt {0}"
 
 msgid "Cannot install, check logs"
-msgstr ""
+msgstr "Cannot install, check logs"
 
 msgid "Update manager not registered, cannot check"
-msgstr ""
+msgstr "Update manager not registered, cannot check"
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1051,17 +1051,17 @@ msgid "Join Family"
 msgstr "liituge perega"
 
 msgid "Bad certificate - No Subject CN"
-msgstr ""
+msgstr "Bad certificate - No Subject CN"
 
 msgid "Bad characters in Family: "
-msgstr ""
+msgstr "Bad characters in Family: "
 
 #, java-format
 msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
-msgstr ""
+msgstr "Keystore {0} already exists for family {1}! Delete or rename it first."
 
 msgid "Family key configured for router family: "
-msgstr ""
+msgstr "Family key configured for router family: "
 
 msgid "Load from file failed"
 msgstr "failist laadimine ebaõnnestus"
@@ -1079,7 +1079,7 @@ msgid "Restore defaults"
 msgstr "Taasta vaikimisi"
 
 msgid "Bad group detected, please retry"
-msgstr ""
+msgstr "Bad group detected, please retry"
 
 msgid "Restored default settings"
 msgstr "Taastatud vaikimisi seaded"
@@ -1112,7 +1112,7 @@ msgid "Invalid destination"
 msgstr "Kehtetu sihtvõti"
 
 msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
 
 #, java-format
 msgid "Key for {0} added to keyring"
@@ -1125,7 +1125,7 @@ msgid "Requires hostname, destination, or blinded Base32"
 msgstr "Nõuab hostinime, sihtkohta või pimendatud Base32"
 
 msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
-msgstr ""
+msgstr "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
 
 msgid "Destination requires lookup password"
 msgstr "Sihtkoht nõuab parooli otsimist"
@@ -1146,7 +1146,7 @@ msgid "Delete key"
 msgstr "Kustuta võti"
 
 msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1199,34 +1199,34 @@ msgid "Log overrides updated"
 msgstr "Logimise erandkäsud uuendatud"
 
 msgid "Error updating the log limits - levels not valid"
-msgstr ""
+msgstr "Error updating the log limits - levels not valid"
 
 msgid "Log limits cleared"
-msgstr ""
+msgstr "Log limits cleared"
 
 #, java-format
 msgid "Default log level updated from {0} to {1}"
-msgstr ""
+msgstr "Default log level updated from {0} to {1}"
 
 msgid "Date format updated"
-msgstr ""
+msgstr "Date format updated"
 
 #, java-format
 msgid "Specified date format is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Specified date format is not valid ({0}) - not updated"
 
 msgid "File size updated"
-msgstr ""
+msgstr "File size updated"
 
 #, java-format
 msgid "Specified file size limit is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Specified file size limit is not valid ({0}) - not updated"
 
 msgid "Compression setting updated"
-msgstr ""
+msgstr "Compression setting updated"
 
 msgid "Log record format updated"
-msgstr ""
+msgstr "Log record format updated"
 
 msgid "Log configuration saved"
 msgstr "Logimise häälestus salvestatud"
@@ -1436,10 +1436,10 @@ msgid "Bad capacity value"
 msgstr "Kehtetu mahu väärtus"
 
 msgid "Bonuses adjusted for: "
-msgstr ""
+msgstr "Bonuses adjusted for: "
 
 msgid "No profile exists for: "
-msgstr ""
+msgstr "No profile exists for: "
 
 msgid "Unsupported"
 msgstr "Mitte toetatud"
@@ -1455,7 +1455,7 @@ msgstr "Kuhu"
 
 #, java-format
 msgid "First {0} displayed, see the {1} file for the full list"
-msgstr ""
+msgstr "First {0} displayed, see the {1} file for the full list"
 
 msgid "IPs Banned Until Restart"
 msgstr "Uuesti käivitumiseni bännitud IP-d"
@@ -1556,7 +1556,7 @@ msgid "Save order"
 msgstr "Salvesta tellimus"
 
 msgid "Sidebar preferences updated"
-msgstr ""
+msgstr "Sidebar preferences updated"
 
 msgid "Refresh interval must be a number"
 msgstr "Värskendusintervall peab olema arv"
@@ -1565,16 +1565,16 @@ msgid "Restore full default"
 msgstr "taastage täielik vaikeseade"
 
 msgid "Full sidebar defaults restored."
-msgstr ""
+msgstr "Full sidebar defaults restored."
 
 msgid "Sidebar will refresh shortly."
-msgstr ""
+msgstr "Sidebar will refresh shortly."
 
 msgid "Restore minimal default"
 msgstr "Taasta minimaalne vaikeväärtus"
 
 msgid "Minimal sidebar defaults restored."
-msgstr ""
+msgstr "Minimal sidebar defaults restored."
 
 msgid "Order must be an integer"
 msgstr "Järjestus peab olema täisarv"
@@ -1603,11 +1603,11 @@ msgstr "graafikute loend on värskendatud, võib kuluda kuni 60 sekundit, enne k
 
 #, java-format
 msgid "Internal error: could not resolve pool name {0}."
-msgstr ""
+msgstr "Internal error: could not resolve pool name {0}."
 
 #, java-format
 msgid "Internal error: could not find pool settings for {0}."
-msgstr ""
+msgstr "Internal error: could not find pool settings for {0}."
 
 msgid "Updated settings for all pools."
 msgstr "Kõigi tunneligruppide seaded uuendatud."
@@ -1682,7 +1682,7 @@ msgid "Add user"
 msgstr "Lisage kasutaja"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
-msgstr ""
+msgstr "Cannot save theme choice, theme name has illegal characters"
 
 msgid "Theme change saved."
 msgstr "Teema muutus salvestatud."
@@ -1694,7 +1694,7 @@ msgid "No user name entered"
 msgstr "kasutajanime pole sisestatud"
 
 msgid "User name may not contain '='"
-msgstr ""
+msgstr "User name may not contain '='"
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "HOIATUS: Kasutajanimesid väljaspool ISO-8859-1 tähemärgikomplekti pole soovitatav. Tugi ei ole standardiseeritud ja see varieerub brauseri järgi."
@@ -2016,7 +2016,7 @@ msgid "Show list of all known I2P routers"
 msgstr "Näita nimekirja kõigist tuntud I2P ruuteritest"
 
 msgid "List of recently connected peers with profiling info"
-msgstr ""
+msgstr "List of recently connected peers with profiling info"
 
 msgid "Peer Profiles"
 msgstr "kaaslaste profiilid"
@@ -2184,7 +2184,7 @@ msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Redditi alternatiivne privaatsusele keskendunud kasutajaliides"
 
 msgid "AI Image generation & Chat hub"
-msgstr ""
+msgstr "AI Image generation & Chat hub"
 
 msgid "IRC Logs for multiple networks"
 msgstr "IRC logid mitme võrgu jaoks"
@@ -2325,10 +2325,10 @@ msgid "OpenDemocracy"
 msgstr "AvatudDemokraatia"
 
 msgid "Online privacy &amp; tech blog"
-msgstr ""
+msgstr "Online privacy &amp; tech blog"
 
 msgid "RightToPrivacy"
-msgstr ""
+msgstr "RightToPrivacy"
 
 msgid "Lifestyle magazine"
 msgstr "Elustiili ajakiri"
@@ -2349,7 +2349,7 @@ msgid "Community-driven tech news"
 msgstr "kogukonnapõhised tehnikauudised"
 
 msgid "Various services"
-msgstr ""
+msgstr "Various services"
 
 msgid "News for nerds"
 msgstr "Uudised nohikutele"
@@ -2425,7 +2425,7 @@ msgid "Add"
 msgstr "Lisage"
 
 msgid "Error displaying the info page."
-msgstr ""
+msgstr "Error displaying the info page."
 
 msgid "Identity"
 msgstr "Identiteet"
@@ -2473,7 +2473,7 @@ msgid "Performance"
 msgstr "jõudlus"
 
 msgid "Maximum available RAM"
-msgstr ""
+msgstr "Maximum available RAM"
 
 msgid "Classified as slow"
 msgstr "klassifitseeritud aeglaseks"
@@ -2485,7 +2485,7 @@ msgid "No"
 msgstr "Ei"
 
 msgid "GeoIP Db"
-msgstr ""
+msgstr "GeoIP Db"
 
 msgid "Target"
 msgstr "Sihtmärk"
@@ -2624,19 +2624,19 @@ msgid "Sybil Analysis"
 msgstr "Sybil -analüüs"
 
 msgid "Bad value supplied, please check and try again."
-msgstr ""
+msgstr "Bad value supplied, please check and try again."
 
 msgid "Router Map"
 msgstr "Routteri kaart"
 
 msgid "Network Database Search"
-msgstr ""
+msgstr "Network Database Search"
 
 msgid "Capabilities"
 msgstr "Võimalused"
 
 msgid "e.g. f or XOfR"
-msgstr ""
+msgstr "e.g. f or XOfR"
 
 msgid "Cost"
 msgstr "Maksumus"
@@ -2645,49 +2645,49 @@ msgid "Country"
 msgstr "Maa"
 
 msgid "Country Codes"
-msgstr ""
+msgstr "Country Codes"
 
 msgid "Hash Prefix"
-msgstr ""
+msgstr "Hash Prefix"
 
 msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
-msgstr ""
+msgstr "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
 
 msgid "Hostname or b32"
-msgstr ""
+msgstr "Hostname or b32"
 
 msgid "IPv6 Prefix"
-msgstr ""
+msgstr "IPv6 Prefix"
 
 msgid "Single port or range"
-msgstr ""
+msgstr "Single port or range"
 
 msgid "Signature Type"
-msgstr ""
+msgstr "Signature Type"
 
 msgid "SSU Capabilities"
-msgstr ""
+msgstr "SSU Capabilities"
 
 msgid "Encryption Type"
-msgstr ""
+msgstr "Encryption Type"
 
 msgid "Router Version"
-msgstr ""
+msgstr "Router Version"
 
 msgid "Transport"
 msgstr "Transpord"
 
 msgid "Add Sybil analysis (must pick at least one above)"
-msgstr ""
+msgstr "Add Sybil analysis (must pick at least one above)"
 
 msgid "Sybil close to"
-msgstr ""
+msgstr "Sybil close to"
 
 msgid "Router hash, destination hash, b32, or from address book"
-msgstr ""
+msgstr "Router hash, destination hash, b32, or from address book"
 
 msgid "or Sybil close to this router"
-msgstr ""
+msgstr "or Sybil close to this router"
 
 msgid "Lookup"
 msgstr "Otsi"
@@ -2702,13 +2702,13 @@ msgid "not found in network database"
 msgstr "ei leitud võrguandmebaasist"
 
 msgid "Bad Base64 Router hash"
-msgstr ""
+msgstr "Bad Base64 Router hash"
 
 msgid "No routers with"
-msgstr ""
+msgstr "No routers with"
 
 msgid "Hash prefix"
-msgstr ""
+msgstr "Hash prefix"
 
 msgid "Port"
 msgstr "Sadam"
@@ -2717,10 +2717,10 @@ msgid "MTU"
 msgstr "MTU"
 
 msgid "found in the network database"
-msgstr ""
+msgstr "found in the network database"
 
 msgid "results"
-msgstr ""
+msgstr "results"
 
 msgid "Previous Page"
 msgstr "Eelmine leht"
@@ -2729,43 +2729,43 @@ msgid "Next Page"
 msgstr "Järgmine leht"
 
 msgid "Results per page"
-msgstr ""
+msgstr "Results per page"
 
 msgid "Not initialized"
 msgstr "Lähtestamata"
 
 msgid "Total Remote Leasesets"
-msgstr ""
+msgstr "Total Remote Leasesets"
 
 msgid "Compact mode"
-msgstr ""
+msgstr "Compact mode"
 
 msgid "Local Leasesets"
-msgstr ""
+msgstr "Local Leasesets"
 
 msgid "Debug Mode"
-msgstr ""
+msgstr "Debug Mode"
 
 msgid "Published (RAP) Leasesets"
-msgstr ""
+msgstr "Published (RAP) Leasesets"
 
 msgid "Sorted by hash distance, closest first."
-msgstr ""
+msgstr "Sorted by hash distance, closest first."
 
 msgid "Mod Data"
-msgstr ""
+msgstr "Mod Data"
 
 msgid "Last Changed"
-msgstr ""
+msgstr "Last Changed"
 
 msgid "Next Mod Data"
-msgstr ""
+msgstr "Next Mod Data"
 
 msgid "Change in"
-msgstr ""
+msgstr "Change in"
 
 msgid "Floodfill mode enabled"
-msgstr ""
+msgstr "Floodfill mode enabled"
 
 msgid "Routing Key"
 msgstr "Marsruutimisvõti"
@@ -2780,21 +2780,21 @@ msgid "Estimated total leasesets"
 msgstr "hinnanguline rendisumma kokku"
 
 msgid "Total Local Leasesets"
-msgstr ""
+msgstr "Total Local Leasesets"
 
 msgid "Remote Leasesets"
-msgstr ""
+msgstr "Remote Leasesets"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
-msgstr ""
+msgstr "Hostname {0} not found in network database"
 
 #, java-format
 msgid "LeaseSet for {0} not found in network database"
-msgstr ""
+msgstr "LeaseSet for {0} not found in network database"
 
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 msgid "LeaseSet"
 msgstr "Lüüsikirjegrupp"
@@ -2826,7 +2826,7 @@ msgid "Signature type"
 msgstr "Allkirja tüüp"
 
 msgid "Public Key"
-msgstr ""
+msgstr "Public Key"
 
 msgid "Unsupported type"
 msgstr "Toetamata tüüp"
@@ -2843,10 +2843,10 @@ msgid "Unknown"
 msgstr "Teadmatu"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr ""
+msgstr "Advanced mode - includes all statistics published by floodfills."
 
 msgid "Compact mode - does not include statistics published by floodfills."
-msgstr ""
+msgstr "Compact mode - does not include statistics published by floodfills."
 
 msgid "Network Database Router Statistics"
 msgstr "Võrguandmebaasi ruuterite statistika"
@@ -2870,7 +2870,7 @@ msgid "Transports"
 msgstr "Transpordid"
 
 msgid "X Tier"
-msgstr ""
+msgstr "X Tier"
 
 msgid "Floodfills"
 msgstr "Üleujutused"
@@ -2888,10 +2888,10 @@ msgid "Router is banlisted"
 msgstr "ruuter on keelatud"
 
 msgid "Java I2P variant"
-msgstr ""
+msgstr "Java I2P variant"
 
 msgid "I2Pd variant"
-msgstr ""
+msgstr "I2Pd variant"
 
 msgid "RouterInfo is compressible"
 msgstr "RouterInfo on tihendatav"
@@ -2925,7 +2925,7 @@ msgid "Hostname"
 msgstr "Hostinimi"
 
 msgid "direct"
-msgstr ""
+msgstr "direct"
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "Kinnitatud perekond (allkirjastamissertifikaat on installitud ja kehtiv)"
@@ -2964,10 +2964,10 @@ msgid "Last heard from"
 msgstr "viimati kuulnud"
 
 msgid "Network Id"
-msgstr ""
+msgstr "Network Id"
 
 msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr ""
+msgstr "Count is always spoofed to avoid indicating router restarts"
 
 msgid "Hidden or starting up"
 msgstr "Peidetud või alles käivitub"
@@ -3035,10 +3035,10 @@ msgid "IPv6"
 msgstr "IPv6"
 
 msgid "Active connections / Max permitted"
-msgstr ""
+msgstr "Active connections / Max permitted"
 
 msgid "Connections / Limit"
-msgstr ""
+msgstr "Connections / Limit"
 
 msgid "Current / maximum permitted"
 msgstr "vool / maksimaalne lubatud"
@@ -3332,7 +3332,7 @@ msgid "Rejected"
 msgstr "tagasi lükatud"
 
 msgid "First Heard About"
-msgstr ""
+msgstr "First Heard About"
 
 msgid "Last Heard From"
 msgstr "Viimati kuuldud temalt"
@@ -3445,7 +3445,7 @@ msgstr "{0} jagatud ribalaius"
 
 #, java-format
 msgid "Over {0} KB/s shared bandwidth"
-msgstr ""
+msgstr "Over {0} KB/s shared bandwidth"
 
 msgid "status"
 msgstr "staatus"
@@ -3508,11 +3508,11 @@ msgid "Total number of banned peers"
 msgstr "keelatud kaaslaste koguarv"
 
 msgid "Note: 'LU' class routers have been excluded from the list."
-msgstr ""
+msgstr "Note: 'LU' class routers have been excluded from the list."
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
-msgstr ""
+msgstr "To view, see {0}Session Bans{1}."
 
 msgid "Select search engine"
 msgstr "valige otsingumootor"
@@ -3760,7 +3760,7 @@ msgid "An introduction to hosting websites on the I2P network"
 msgstr "Sissejuhatus veebisaitide hostimisse I2P-võrgus"
 
 msgid "New hosts in last 24 hours"
-msgstr ""
+msgstr "New hosts in last 24 hours"
 
 msgid "I2PControl"
 msgstr "I2PCkontroll"
@@ -3887,7 +3887,7 @@ msgid "Floodfill enabled"
 msgstr "Ülekannefunktsioon lubatud"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
-msgstr ""
+msgstr "Total number of remote LeaseSets stored in our NetDb"
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Hoiatus: ECDSA pole saadaval. Uuendage oma Java või OS -i"
@@ -3902,7 +3902,7 @@ msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Eakaaslased, kellega oleme viimastel minutitel/viimasel tunnil vestelnud"
 
 msgid "Peers we've been talking to in the last minute"
-msgstr ""
+msgstr "Peers we've been talking to in the last minute"
 
 msgid "The number of peers available for building client tunnels"
 msgstr "klienditunnelite ehitamiseks saadaolevate partnerite arv"
@@ -4411,7 +4411,7 @@ msgid "Data"
 msgstr "Andmed"
 
 msgid "Limit"
-msgstr ""
+msgstr "Limit"
 
 msgid "Receive on"
 msgstr "Kuulan tag'il"
@@ -4458,7 +4458,7 @@ msgid "No transit tunnels currently active."
 msgstr "praegu aktiivseid ühistransporditunneleid ei ole."
 
 msgid "Transit Tunnels by Peer (Top {0})"
-msgstr ""
+msgstr "Transit Tunnels by Peer (Top {0})"
 
 msgid "Address"
 msgstr "Aadress"
@@ -4537,7 +4537,7 @@ msgid "Bandwidth test did not complete"
 msgstr "Ribalaiuse testi ei lõpetatud"
 
 msgid "Bad state for test"
-msgstr ""
+msgstr "Bad state for test"
 
 msgid "Bandwidth test started"
 msgstr "Ribalaiuse test algas"
@@ -4552,16 +4552,16 @@ msgid "Bandwidth test was not running"
 msgstr "Ribalaiuse test ei töötanud"
 
 msgid "ready"
-msgstr ""
+msgstr "ready"
 
 msgid "inbound test"
-msgstr ""
+msgstr "inbound test"
 
 msgid "outbound test"
-msgstr ""
+msgstr "outbound test"
 
 msgid "done"
-msgstr ""
+msgstr "done"
 
 msgid "bits per second"
 msgstr "bitti sekundis"
@@ -4733,7 +4733,7 @@ msgid "Share"
 msgstr "jagamiseks"
 
 msgid "NOTE"
-msgstr ""
+msgstr "NOTE"
 
 #, java-format
 msgid "You have configured I2P+ to share only {0} KBps."
@@ -4760,7 +4760,7 @@ msgstr "config arenenud"
 
 #, java-format
 msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
-msgstr ""
+msgstr "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
 
 msgid "Floodfill Configuration"
 msgstr "Floodfill konfiguratsioon"
@@ -4790,7 +4790,7 @@ msgid "Advanced I2P+ Configuration"
 msgstr "I2P peenhäälestus"
 
 msgid "Help with additional configuration settings"
-msgstr ""
+msgstr "Help with additional configuration settings"
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5184,15 +5184,15 @@ msgid "Banning will prevent the participation of this peer in tunnels you create
 msgstr "Bännimine takistab ruuterit üheski sinu ruuteri tunnelis osalemast."
 
 msgid "A list of bans by IP address is presented below."
-msgstr ""
+msgstr "A list of bans by IP address is presented below."
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
-msgstr ""
+msgstr "To view all active bans by router hash, see {0}Banned Peers{1}."
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
-msgstr ""
+msgstr "A list of {0}session-only bans{1} by hash is also available."
 
 msgid "Adjust Profile Bonuses"
 msgstr "Muuda profiili boonuseid"
@@ -5383,7 +5383,7 @@ msgid "config sidebar"
 msgstr "config külgriba"
 
 msgid "Sidebar Options"
-msgstr ""
+msgstr "Sidebar Options"
 
 msgid "Refresh interval"
 msgstr "Värskendusintervall"
@@ -5395,10 +5395,10 @@ msgid "0 to disable"
 msgstr "0 keelamiseks"
 
 msgid "Unified sidebar"
-msgstr ""
+msgstr "Unified sidebar"
 
 msgid "Use the same sidebar on all pages"
-msgstr ""
+msgstr "Use the same sidebar on all pages"
 
 msgid "config stats"
 msgstr "konfiguratsioonistatistika"
@@ -5600,7 +5600,7 @@ msgid "Event Log"
 msgstr "Sündmuste logi"
 
 msgid "Combined"
-msgstr ""
+msgstr "Combined"
 
 msgid "graph"
 msgstr "Gráfik"
@@ -5681,7 +5681,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Selle seadistuse märkimisel tõeks kuvatakse <i>Huvipakkuva saidi</i> lingid <a href=/sitemap>saidikaardil</a>. [Vaikimisi on väär]"
 
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr ""
+msgstr "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "See on seade, mis määrab, kas ruuter peaks kasutama pakutud <i>blocklist.txt</i> faili ja kasutajate poolt seadistatud blokeeringunimekirju või keelama marsruuterid vastavalt täissumma või IP-aadressi järgi. IPv4 jaoks toetatakse vahemikke ja netimaske, kuid seda ei tehta IPv6 jaoks. Rohkem teavet leiate I2P+ rakenduse kataloogi failist <i>blocklist.txt</i>. [Vaikimisi on lubatud, taaskäivitamine on vajalik]"
@@ -5696,7 +5696,7 @@ msgid "This setting determines whether or not the router should use the provided
 msgstr "See seade määrab, kas ruuter kasutab kasutajate poolt pakutud <i>blocklist_tor.txt</i> faili I2P+ rakenduse kataloogis või mitte, et saaks keelata ruuterid, mis töötavad Tori väljumissõlme IP-aadressidest. [Vaikimisi on lubatud, taaskäivitamine on vajalik]"
 
 msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
-msgstr ""
+msgstr "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
 msgstr "Kui see on määratud valeks, ei blokeeri routter tunnelite loomise päringuid aeglasematest või kättesaadamatutest routteritest vanemates versioonides. [Vaikimisi on tõene, vajalik on taaskäivitamine]"
@@ -5834,7 +5834,7 @@ msgid "This setting determines whether routers classified as uninteresting (K or
 msgstr "See sättetus otsustab, kas värskenduste tööülesande raames kontrollitakse ruutereid, mis on määratletud kui mittehuvipakkuvad (K- või L-taseme, kättesaamatud või vanemad kui 0.9.50) pärast 1 tunni möödumist pärast käivitamist. [Vaikeväärtus on vale]"
 
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
-msgstr ""
+msgstr "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Kui konfigureeritud, seab see kindla piirmäära, kui palju tunnelit ruuter võib samaaegselt luua. Vaikimisi kasutab ruuter keskmist ehitusaega ja praegust väljaminevat ribalaiust, et määrata optimaalne ehituskiirus. [Nõutav taaskäivitamine]"
@@ -5849,10 +5849,10 @@ msgid "This setting (in minutes) allows you to manually configure how long to wa
 msgstr "See seadistus (minutites) võimaldab teil seadistada, kui kaua pärast käivitamist oodatakse enne kui kontrollitakse RouterInfos NetDb-s. Pärast seda aktsepteeritakse ainult kehtivad ruuterid. Edasilükatud RouterInfos ja SSU-ga kättesaamatud eakaaslased eemaldatakse NetDb-st validerimise ajal. [Vaikimisi on 60 minutit] Märkus: see seadistus ei mõjuta vanemaid ruutereid (vaikimisi vanemad kui 0.9.29), mis eemaldatakse NetDb-st ja keelatakse routeri seansi jaoks, niipea kui NetDb ladu on aset leidnud."
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
+msgstr "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr ""
+msgstr "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "See seadistus lubab keelata SSU testid, et teha kindlaks, kas teie ruuter on tulemüüri taga ja see saab lubada ruuteritele, mis pole kindlasti tulemüüri taga, kuid kogevad katkendlikke tulemüüri probleeme. Testimise keelamise korral peaksid nii SSU kui ka NTCP teatama teie praeguse avaliku IP-aadressi aadressil <a href=/info>ruuteri teabekülg</a>. [Nõutav taaskäivitamine]"
@@ -5861,7 +5861,7 @@ msgid "This setting determines which transport takes priority when communicating
 msgstr "Selle seade määrab, milline ühendusviis saab prioriteedi seosetute serveritega suhtlemisel. Vaikimisi eelistatakse NTCP-d UDP asemel (SSU). Kui seada väärtuseks true, eelistatakse UDP-d, välja arvatud juhul, kui juba on olemas NTCP-ühendus; kui seada väärtuseks always, kasutatakse alati UDP-d, hoolimata olemasolevast NTCP-ühendusest . [Vaikimisi on false]"
 
 msgid "miscellaneous"
-msgstr ""
+msgstr "miscellaneous"
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "Kui see on määratud väärtuseks tõene, siis see seadistus lisab põhi teenuse juhtimise valikud süsteemi salve/teavitusalasse. [Vaikimisi on keelatud]"
@@ -6101,16 +6101,16 @@ msgid "For SSL only"
 msgstr "Ainult SSL-i jaoks"
 
 msgid "How can I configure the console and web services to be accessible on my local network?"
-msgstr ""
+msgstr "How can I configure the console and web services to be accessible on my local network?"
 
 msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
-msgstr ""
+msgstr "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
 
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
-msgstr ""
+msgstr "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 
 msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Kuidas ma ühendun I2P-sisese IRC-ga?"
@@ -6497,7 +6497,7 @@ msgid "If you are in a hurry and can't wait a few hours, you can tell people to 
 msgstr "Kui olete kiirustanud ja ei saa mõnda tundi oodata, võite inimestele öelda, et nad saavad kasutada \"jump\" aadressiabistavaid ümbersuunamisteenuseid. Seda tavaliselt töötavad juba mõne minuti pärast pärast teie domeeni registreerimist samal saidil. Testige seda kõigepealt ise, sisestades oma veebibrauserisse <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code>. Kui see töötab, võite öelda teistele seda kasutada."
 
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
-msgstr ""
+msgstr "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
 
 msgid "Backup your private key!"
 msgstr "Varundage oma privaatvõti!"
@@ -6734,7 +6734,7 @@ msgid "Getting Support Online"
 msgstr "Veebitugi"
 
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
-msgstr ""
+msgstr "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
 
 msgid "Reporting Bugs"
 msgstr "Vigade teatamine"
@@ -7274,7 +7274,7 @@ msgid "Configure display language, theme and optional console password"
 msgstr "seadistage kuvakeel, teema ja valikuline konsooli parool"
 
 msgid "Language"
-msgstr ""
+msgstr "Language"
 
 msgid "Configure router bandwidth"
 msgstr "ruuteri ribalaiuse konfigureerimine"
@@ -7341,22 +7341,22 @@ msgid "network database"
 msgstr "võrgu andmebaas"
 
 msgid "Encryption type"
-msgstr ""
+msgstr "Encryption type"
 
 msgid "Encryption types"
-msgstr ""
+msgstr "Encryption types"
 
 msgid "Signature types"
-msgstr ""
+msgstr "Signature types"
 
 msgid "Locally hosted private service"
-msgstr ""
+msgstr "Locally hosted private service"
 
 msgid "Locally hosted public service"
-msgstr ""
+msgstr "Locally hosted public service"
 
 msgid "Requested client leaseset"
-msgstr ""
+msgstr "Requested client leaseset"
 
 msgid "network database router map"
 msgstr "Võrguandmebaasi routteri kaart"
@@ -7402,10 +7402,10 @@ msgid "Fast / High Capacity"
 msgstr "Kiire / suur võimsus"
 
 msgid "router logs"
-msgstr ""
+msgstr "router logs"
 
 msgid "service logs"
-msgstr ""
+msgstr "service logs"
 
 msgid "Manage I2P addresses"
 msgstr "I2P-aadresside haldamine"
@@ -7612,13 +7612,13 @@ msgid "Toggle Tunnels"
 msgstr "Läbi- ja väljutunneleid"
 
 msgid "Updating sidebar sections"
-msgstr ""
+msgstr "Updating sidebar sections"
 
 msgid "Peer Profile"
 msgstr "Ruuteri profiil"
 
 msgid "Profile View"
-msgstr ""
+msgstr "Profile View"
 
 msgid "Profile for peer"
 msgstr "Partneri profiil"

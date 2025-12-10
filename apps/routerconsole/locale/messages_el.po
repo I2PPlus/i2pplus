@@ -143,7 +143,7 @@ msgid "Unreachable on any transport"
 msgstr "Μη προσβάσιμο από κανένα μεταφορέα"
 
 msgid "Cannot enumerate UPnP devices on Android."
-msgstr ""
+msgstr "Cannot enumerate UPnP devices on Android."
 
 msgid "UPnP is not enabled"
 msgstr "Το UPnP δεν είναι ενεργοποιημένο"
@@ -683,7 +683,7 @@ msgid "After reporting, please restart your router"
 msgstr "Μετά την αναφορά, κάντε επανεκκίνηση του δρομολογητή σας"
 
 msgid "Invalid form submission, requires POST"
-msgstr ""
+msgstr "Invalid form submission, requires POST"
 
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Άκυρη φόρμα υποβολής, πιθανόν επειδή πατήσατε «πίσω» ή «επαναφόρτωση» στον περιηγητή σας. Παρακαλώ υποβάλετε εκ νέου."
@@ -817,13 +817,13 @@ msgid "To enable SSL access for the Router Console, see the commented <code>clie
 msgstr "Για να ενεργοποιήσετε την πρόσβαση SSL για την Κονσόλα του δρομολογητή, ανατρέξτε στο σχολιασμένο αρχείο <code>clients.config</code> που βρίσκεται στον κατάλογο της εφαρμογής I2P για περισσότερες πληροφορίες. Θα χρειαστεί να επεξεργαστείτε το αρχείο διαμόρφωσης RouterConsoleRunner που βρίσκεται στον κατάλογο: "
 
 msgid "Save disabled, edit the router.config file to make changes"
-msgstr ""
+msgstr "Save disabled, edit the router.config file to make changes"
 
 msgid "Error updating the configuration - please see the error logs"
 msgstr "Σφάλμα κατά την ενημέρωση των ρυθμίσεων - παρακαλούμε δείτε τις καταγραφές λαθών"
 
 msgid "No changes made to the configuration"
-msgstr ""
+msgstr "No changes made to the configuration"
 
 msgid "Note"
 msgstr "ΣΗΜΕΙΩΣΗ"
@@ -844,7 +844,7 @@ msgid "Save Plugin Configuration"
 msgstr "Αποθήκευση ρυθμίσεων πρόσθετου"
 
 msgid "Plugins disabled"
-msgstr ""
+msgstr "Plugins disabled"
 
 msgid "Install Plugin"
 msgstr "Εγκατάσταση πρόσθετου"
@@ -856,7 +856,7 @@ msgid "Update All Installed Plugins"
 msgstr "Ενημέρωση όλων εγκατεστημένων πρόσθετων"
 
 msgid "Delete client disabled"
-msgstr ""
+msgstr "Delete client disabled"
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -940,17 +940,17 @@ msgid "Updating all plugins"
 msgstr "Ενημέρωση όλων των πρόσθετων"
 
 msgid "Update manager not registered, cannot install"
-msgstr ""
+msgstr "Update manager not registered, cannot install"
 
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "Εγκατάσταση πρόσθετου από {0}"
 
 msgid "Cannot install, check logs"
-msgstr ""
+msgstr "Cannot install, check logs"
 
 msgid "Update manager not registered, cannot check"
-msgstr ""
+msgstr "Update manager not registered, cannot check"
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1050,17 +1050,17 @@ msgid "Join Family"
 msgstr "Εγγραφείτε στην οικογένεια"
 
 msgid "Bad certificate - No Subject CN"
-msgstr ""
+msgstr "Bad certificate - No Subject CN"
 
 msgid "Bad characters in Family: "
-msgstr ""
+msgstr "Bad characters in Family: "
 
 #, java-format
 msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
-msgstr ""
+msgstr "Keystore {0} already exists for family {1}! Delete or rename it first."
 
 msgid "Family key configured for router family: "
-msgstr ""
+msgstr "Family key configured for router family: "
 
 msgid "Load from file failed"
 msgstr "Η φόρτωση από αρχείο απέτυχε"
@@ -1078,7 +1078,7 @@ msgid "Restore defaults"
 msgstr "Επαναφορά προεπιλογών"
 
 msgid "Bad group detected, please retry"
-msgstr ""
+msgstr "Bad group detected, please retry"
 
 msgid "Restored default settings"
 msgstr "Επαναφορά προεπιλεγμένων ρυθμίσεων"
@@ -1111,7 +1111,7 @@ msgid "Invalid destination"
 msgstr "Μη έγκυρος προορισμός"
 
 msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
 
 #, java-format
 msgid "Key for {0} added to keyring"
@@ -1124,7 +1124,7 @@ msgid "Requires hostname, destination, or blinded Base32"
 msgstr "Απαιτεί hostname, προορισμό ή τυφλό Base32"
 
 msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
-msgstr ""
+msgstr "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
 
 msgid "Destination requires lookup password"
 msgstr "Ο προορισμός απαιτεί κωδικό αναζήτησης"
@@ -1145,7 +1145,7 @@ msgid "Delete key"
 msgstr "Διαγραφή κλειδιού"
 
 msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1198,34 +1198,34 @@ msgid "Log overrides updated"
 msgstr "Οι παρακάμψεις αρχείων καταγραφής ενημερώθηκαν"
 
 msgid "Error updating the log limits - levels not valid"
-msgstr ""
+msgstr "Error updating the log limits - levels not valid"
 
 msgid "Log limits cleared"
-msgstr ""
+msgstr "Log limits cleared"
 
 #, java-format
 msgid "Default log level updated from {0} to {1}"
-msgstr ""
+msgstr "Default log level updated from {0} to {1}"
 
 msgid "Date format updated"
-msgstr ""
+msgstr "Date format updated"
 
 #, java-format
 msgid "Specified date format is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Specified date format is not valid ({0}) - not updated"
 
 msgid "File size updated"
-msgstr ""
+msgstr "File size updated"
 
 #, java-format
 msgid "Specified file size limit is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Specified file size limit is not valid ({0}) - not updated"
 
 msgid "Compression setting updated"
-msgstr ""
+msgstr "Compression setting updated"
 
 msgid "Log record format updated"
-msgstr ""
+msgstr "Log record format updated"
 
 msgid "Log configuration saved"
 msgstr "Ρυθμίσεις καταγραφώ αποθηκευτήκαν"
@@ -1435,10 +1435,10 @@ msgid "Bad capacity value"
 msgstr "Κακή τιμή χωρητικότητας"
 
 msgid "Bonuses adjusted for: "
-msgstr ""
+msgstr "Bonuses adjusted for: "
 
 msgid "No profile exists for: "
-msgstr ""
+msgstr "No profile exists for: "
 
 msgid "Unsupported"
 msgstr "Μη υποστηριζόμενο"
@@ -1454,7 +1454,7 @@ msgstr "Σε"
 
 #, java-format
 msgid "First {0} displayed, see the {1} file for the full list"
-msgstr ""
+msgstr "First {0} displayed, see the {1} file for the full list"
 
 msgid "IPs Banned Until Restart"
 msgstr "Οι IP έχουν αποκλειστεί μέχρι την επανεκκίνηση"
@@ -1555,7 +1555,7 @@ msgid "Save order"
 msgstr "Αποθήκευση παραγγελίας"
 
 msgid "Sidebar preferences updated"
-msgstr ""
+msgstr "Sidebar preferences updated"
 
 msgid "Refresh interval must be a number"
 msgstr "Το διάστημα ανανέωσης πρέπει να είναι αριθμός"
@@ -1564,16 +1564,16 @@ msgid "Restore full default"
 msgstr "Επαναφορά πλήρους προεπιλεγμένης μπάρας"
 
 msgid "Full sidebar defaults restored."
-msgstr ""
+msgstr "Full sidebar defaults restored."
 
 msgid "Sidebar will refresh shortly."
-msgstr ""
+msgstr "Sidebar will refresh shortly."
 
 msgid "Restore minimal default"
 msgstr "Επαναφορά ελάχιστης προεπιλεγμένης μπάρας"
 
 msgid "Minimal sidebar defaults restored."
-msgstr ""
+msgstr "Minimal sidebar defaults restored."
 
 msgid "Order must be an integer"
 msgstr "Η σειρά πρέπει να είναι ακέραιος"
@@ -1602,11 +1602,11 @@ msgstr "Η λίστα γραφημάτων ενημερώθηκε, μπορεί 
 
 #, java-format
 msgid "Internal error: could not resolve pool name {0}."
-msgstr ""
+msgstr "Internal error: could not resolve pool name {0}."
 
 #, java-format
 msgid "Internal error: could not find pool settings for {0}."
-msgstr ""
+msgstr "Internal error: could not find pool settings for {0}."
 
 msgid "Updated settings for all pools."
 msgstr "Ενημερωμένες ρυθμίσεις για όλες τις πισίνες."
@@ -1681,7 +1681,7 @@ msgid "Add user"
 msgstr "Προσθήκη χρήστη"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
-msgstr ""
+msgstr "Cannot save theme choice, theme name has illegal characters"
 
 msgid "Theme change saved."
 msgstr "Η αλλαγή θέματος αποθηκεύτηκε."
@@ -1693,7 +1693,7 @@ msgid "No user name entered"
 msgstr "Δεν έχει καταχωρηθεί όνομα χρήστη"
 
 msgid "User name may not contain '='"
-msgstr ""
+msgstr "User name may not contain '='"
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "ΠΡΟΕΙΔΟΠΟΙΗΣΗ: Τα ονόματα χρηστών εκτός του συνόλου χαρακτήρων ISO-8859-1 δεν συνιστώνται. Η υποστήριξη δεν είναι τυποποιημένη και ποικίλλει ανάλογα με το πρόγραμμα περιήγησης."
@@ -2015,7 +2015,7 @@ msgid "Show list of all known I2P routers"
 msgstr "Εμφάνιση λίστας όλων των γνωστών δρομολογητών I2P"
 
 msgid "List of recently connected peers with profiling info"
-msgstr ""
+msgstr "List of recently connected peers with profiling info"
 
 msgid "Peer Profiles"
 msgstr "Προφίλ ομοτίμων"
@@ -2183,7 +2183,7 @@ msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Εναλλακτική διεπαφή με επίκεντρο το απόρρητο για το Reddit"
 
 msgid "AI Image generation & Chat hub"
-msgstr ""
+msgstr "AI Image generation & Chat hub"
 
 msgid "IRC Logs for multiple networks"
 msgstr "Καταγραφή IRC για πολλαπλά δίκτυα"
@@ -2324,10 +2324,10 @@ msgid "OpenDemocracy"
 msgstr "OpenDemocracy"
 
 msgid "Online privacy &amp; tech blog"
-msgstr ""
+msgstr "Online privacy &amp; tech blog"
 
 msgid "RightToPrivacy"
-msgstr ""
+msgstr "RightToPrivacy"
 
 msgid "Lifestyle magazine"
 msgstr "Περιοδικό Lifestyle"
@@ -2348,7 +2348,7 @@ msgid "Community-driven tech news"
 msgstr "Τεχνικές ειδήσεις με γνώμονα την κοινότητα"
 
 msgid "Various services"
-msgstr ""
+msgstr "Various services"
 
 msgid "News for nerds"
 msgstr "Ειδήσεις για σπασίκλες"
@@ -2424,7 +2424,7 @@ msgid "Add"
 msgstr "Προσθήκη"
 
 msgid "Error displaying the info page."
-msgstr ""
+msgstr "Error displaying the info page."
 
 msgid "Identity"
 msgstr "Ταυτότητα"
@@ -2472,7 +2472,7 @@ msgid "Performance"
 msgstr "Απόδοση"
 
 msgid "Maximum available RAM"
-msgstr ""
+msgstr "Maximum available RAM"
 
 msgid "Classified as slow"
 msgstr "Κατατάσσεται ως αργή"
@@ -2484,7 +2484,7 @@ msgid "No"
 msgstr "Όχι"
 
 msgid "GeoIP Db"
-msgstr ""
+msgstr "GeoIP Db"
 
 msgid "Target"
 msgstr "Στόχος"
@@ -2623,19 +2623,19 @@ msgid "Sybil Analysis"
 msgstr "Ανάλυση Sybil"
 
 msgid "Bad value supplied, please check and try again."
-msgstr ""
+msgstr "Bad value supplied, please check and try again."
 
 msgid "Router Map"
 msgstr "Χάρτης Διακομιστή"
 
 msgid "Network Database Search"
-msgstr ""
+msgstr "Network Database Search"
 
 msgid "Capabilities"
 msgstr "Ικανότητες"
 
 msgid "e.g. f or XOfR"
-msgstr ""
+msgstr "e.g. f or XOfR"
 
 msgid "Cost"
 msgstr "Κόστος"
@@ -2644,49 +2644,49 @@ msgid "Country"
 msgstr "Χώρα"
 
 msgid "Country Codes"
-msgstr ""
+msgstr "Country Codes"
 
 msgid "Hash Prefix"
-msgstr ""
+msgstr "Hash Prefix"
 
 msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
-msgstr ""
+msgstr "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
 
 msgid "Hostname or b32"
-msgstr ""
+msgstr "Hostname or b32"
 
 msgid "IPv6 Prefix"
-msgstr ""
+msgstr "IPv6 Prefix"
 
 msgid "Single port or range"
-msgstr ""
+msgstr "Single port or range"
 
 msgid "Signature Type"
-msgstr ""
+msgstr "Signature Type"
 
 msgid "SSU Capabilities"
-msgstr ""
+msgstr "SSU Capabilities"
 
 msgid "Encryption Type"
-msgstr ""
+msgstr "Encryption Type"
 
 msgid "Router Version"
-msgstr ""
+msgstr "Router Version"
 
 msgid "Transport"
 msgstr "Transport"
 
 msgid "Add Sybil analysis (must pick at least one above)"
-msgstr ""
+msgstr "Add Sybil analysis (must pick at least one above)"
 
 msgid "Sybil close to"
-msgstr ""
+msgstr "Sybil close to"
 
 msgid "Router hash, destination hash, b32, or from address book"
-msgstr ""
+msgstr "Router hash, destination hash, b32, or from address book"
 
 msgid "or Sybil close to this router"
-msgstr ""
+msgstr "or Sybil close to this router"
 
 msgid "Lookup"
 msgstr "Ψάχνω"
@@ -2701,13 +2701,13 @@ msgid "not found in network database"
 msgstr "δεν βρέθηκε στη βάση δεδομένων του δικτύου"
 
 msgid "Bad Base64 Router hash"
-msgstr ""
+msgstr "Bad Base64 Router hash"
 
 msgid "No routers with"
-msgstr ""
+msgstr "No routers with"
 
 msgid "Hash prefix"
-msgstr ""
+msgstr "Hash prefix"
 
 msgid "Port"
 msgstr "Θύρα"
@@ -2716,10 +2716,10 @@ msgid "MTU"
 msgstr "MTU"
 
 msgid "found in the network database"
-msgstr ""
+msgstr "found in the network database"
 
 msgid "results"
-msgstr ""
+msgstr "results"
 
 msgid "Previous Page"
 msgstr "Προηγούμενη σελίδα"
@@ -2728,43 +2728,43 @@ msgid "Next Page"
 msgstr "Επόμενη σελίδα"
 
 msgid "Results per page"
-msgstr ""
+msgstr "Results per page"
 
 msgid "Not initialized"
 msgstr "Δεν αρχικοποιήθηκε"
 
 msgid "Total Remote Leasesets"
-msgstr ""
+msgstr "Total Remote Leasesets"
 
 msgid "Compact mode"
-msgstr ""
+msgstr "Compact mode"
 
 msgid "Local Leasesets"
-msgstr ""
+msgstr "Local Leasesets"
 
 msgid "Debug Mode"
-msgstr ""
+msgstr "Debug Mode"
 
 msgid "Published (RAP) Leasesets"
-msgstr ""
+msgstr "Published (RAP) Leasesets"
 
 msgid "Sorted by hash distance, closest first."
-msgstr ""
+msgstr "Sorted by hash distance, closest first."
 
 msgid "Mod Data"
-msgstr ""
+msgstr "Mod Data"
 
 msgid "Last Changed"
-msgstr ""
+msgstr "Last Changed"
 
 msgid "Next Mod Data"
-msgstr ""
+msgstr "Next Mod Data"
 
 msgid "Change in"
-msgstr ""
+msgstr "Change in"
 
 msgid "Floodfill mode enabled"
-msgstr ""
+msgstr "Floodfill mode enabled"
 
 msgid "Routing Key"
 msgstr "Κλειδί δρομολόγησης"
@@ -2779,21 +2779,21 @@ msgid "Estimated total leasesets"
 msgstr "Εκτιμώμενες συνολικές μισθώσεις"
 
 msgid "Total Local Leasesets"
-msgstr ""
+msgstr "Total Local Leasesets"
 
 msgid "Remote Leasesets"
-msgstr ""
+msgstr "Remote Leasesets"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
-msgstr ""
+msgstr "Hostname {0} not found in network database"
 
 #, java-format
 msgid "LeaseSet for {0} not found in network database"
-msgstr ""
+msgstr "LeaseSet for {0} not found in network database"
 
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 msgid "LeaseSet"
 msgstr "LeaseSet"
@@ -2825,7 +2825,7 @@ msgid "Signature type"
 msgstr "Τύπος υπογραφής"
 
 msgid "Public Key"
-msgstr ""
+msgstr "Public Key"
 
 msgid "Unsupported type"
 msgstr "Μη υποστηριζόμενος τύπος"
@@ -2842,10 +2842,10 @@ msgid "Unknown"
 msgstr "Άγνωστο"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr ""
+msgstr "Advanced mode - includes all statistics published by floodfills."
 
 msgid "Compact mode - does not include statistics published by floodfills."
-msgstr ""
+msgstr "Compact mode - does not include statistics published by floodfills."
 
 msgid "Network Database Router Statistics"
 msgstr "Στατιστικά στοιχεία δρομολογητή βάσης δεδομένων δικτύου"
@@ -2869,7 +2869,7 @@ msgid "Transports"
 msgstr "Μεταφορές"
 
 msgid "X Tier"
-msgstr ""
+msgstr "X Tier"
 
 msgid "Floodfills"
 msgstr "Πλημμύρες"
@@ -2887,10 +2887,10 @@ msgid "Router is banlisted"
 msgstr "Ο δρομολογητής έχει συμπεριληφθεί στη λίστα αποκλεισμού"
 
 msgid "Java I2P variant"
-msgstr ""
+msgstr "Java I2P variant"
 
 msgid "I2Pd variant"
-msgstr ""
+msgstr "I2Pd variant"
 
 msgid "RouterInfo is compressible"
 msgstr "Το RouterInfo είναι συμπιέσιμο"
@@ -2924,7 +2924,7 @@ msgid "Hostname"
 msgstr "Όνομα κεντρικού υπολογιστή"
 
 msgid "direct"
-msgstr ""
+msgstr "direct"
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "Επαληθευμένη οικογένεια (το πιστοποιητικό υπογραφής είναι εγκατεστημένο και έγκυρο)"
@@ -2963,10 +2963,10 @@ msgid "Last heard from"
 msgstr "Τελευταία ενημέρωση από"
 
 msgid "Network Id"
-msgstr ""
+msgstr "Network Id"
 
 msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr ""
+msgstr "Count is always spoofed to avoid indicating router restarts"
 
 msgid "Hidden or starting up"
 msgstr "Κρυμμένο κατά την εκκίνηση"
@@ -3034,10 +3034,10 @@ msgid "IPv6"
 msgstr "IPv6"
 
 msgid "Active connections / Max permitted"
-msgstr ""
+msgstr "Active connections / Max permitted"
 
 msgid "Connections / Limit"
-msgstr ""
+msgstr "Connections / Limit"
 
 msgid "Current / maximum permitted"
 msgstr "Τρέχον / μέγιστο επιτρεπόμενο"
@@ -3331,7 +3331,7 @@ msgid "Rejected"
 msgstr "Απορρίφθηκε"
 
 msgid "First Heard About"
-msgstr ""
+msgstr "First Heard About"
 
 msgid "Last Heard From"
 msgstr "Τελευταία ακρόαση από"
@@ -3444,7 +3444,7 @@ msgstr "{0} κοινόχρηστο εύρος ζώνης"
 
 #, java-format
 msgid "Over {0} KB/s shared bandwidth"
-msgstr ""
+msgstr "Over {0} KB/s shared bandwidth"
 
 msgid "status"
 msgstr "κατάσταση"
@@ -3507,11 +3507,11 @@ msgid "Total number of banned peers"
 msgstr "Συνολικός αριθμός αποκλεισμένων συνομηλίκων"
 
 msgid "Note: 'LU' class routers have been excluded from the list."
-msgstr ""
+msgstr "Note: 'LU' class routers have been excluded from the list."
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
-msgstr ""
+msgstr "To view, see {0}Session Bans{1}."
 
 msgid "Select search engine"
 msgstr "Επιλογή μηχανής αναζήτησης"
@@ -3759,7 +3759,7 @@ msgid "An introduction to hosting websites on the I2P network"
 msgstr "Εισαγωγή στη φιλοξενία ιστοσελίδων στο δίκτυο I2P"
 
 msgid "New hosts in last 24 hours"
-msgstr ""
+msgstr "New hosts in last 24 hours"
 
 msgid "I2PControl"
 msgstr "I2PControl"
@@ -3886,7 +3886,7 @@ msgid "Floodfill enabled"
 msgstr "Η λειτουργία Floodfill είναι ενεργοποιημένη"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
-msgstr ""
+msgstr "Total number of remote LeaseSets stored in our NetDb"
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "ΠΡΟΕΙΔΟΠΟΙΗΣΗ: Το ECDSA δεν είναι διαθέσιμο. Ενημερώστε την Java ή το λειτουργικό σας σύστημα"
@@ -3901,7 +3901,7 @@ msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Συνομήλικοι με τους οποίους μιλάμε τα τελευταία λεπτά/τελευταία ώρα"
 
 msgid "Peers we've been talking to in the last minute"
-msgstr ""
+msgstr "Peers we've been talking to in the last minute"
 
 msgid "The number of peers available for building client tunnels"
 msgstr "Ο αριθμός των διαθέσιμων συνομηλίκων για την κατασκευή σηράγγων πελατών"
@@ -4410,7 +4410,7 @@ msgid "Data"
 msgstr "Δεδομένα"
 
 msgid "Limit"
-msgstr ""
+msgstr "Limit"
 
 msgid "Receive on"
 msgstr "Λήψη σε"
@@ -4457,7 +4457,7 @@ msgid "No transit tunnels currently active."
 msgstr "Επί του παρόντος δεν υπάρχουν ενεργές σήραγγες διέλευσης."
 
 msgid "Transit Tunnels by Peer (Top {0})"
-msgstr ""
+msgstr "Transit Tunnels by Peer (Top {0})"
 
 msgid "Address"
 msgstr "Διεύθυνση"
@@ -4536,7 +4536,7 @@ msgid "Bandwidth test did not complete"
 msgstr "Ο έλεγχος εύρους ζώνης δεν ολοκληρώθηκε"
 
 msgid "Bad state for test"
-msgstr ""
+msgstr "Bad state for test"
 
 msgid "Bandwidth test started"
 msgstr "Ξεκίνησε η δοκιμή εύρους ζώνης"
@@ -4551,16 +4551,16 @@ msgid "Bandwidth test was not running"
 msgstr "Ο έλεγχος εύρους ζώνης δεν εκτελούταν"
 
 msgid "ready"
-msgstr ""
+msgstr "ready"
 
 msgid "inbound test"
-msgstr ""
+msgstr "inbound test"
 
 msgid "outbound test"
-msgstr ""
+msgstr "outbound test"
 
 msgid "done"
-msgstr ""
+msgstr "done"
 
 msgid "bits per second"
 msgstr "bits ανά δευτερόλεπτο"
@@ -4732,7 +4732,7 @@ msgid "Share"
 msgstr "Κοινή χρήση"
 
 msgid "NOTE"
-msgstr ""
+msgstr "NOTE"
 
 #, java-format
 msgid "You have configured I2P+ to share only {0} KBps."
@@ -4759,7 +4759,7 @@ msgstr "config για προχωρημένους"
 
 #, java-format
 msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
-msgstr ""
+msgstr "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
 
 msgid "Floodfill Configuration"
 msgstr "Διαμόρφωση Floodfill"
@@ -4789,7 +4789,7 @@ msgid "Advanced I2P+ Configuration"
 msgstr "Προηγμένη διαμόρφωση I2P"
 
 msgid "Help with additional configuration settings"
-msgstr ""
+msgstr "Help with additional configuration settings"
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5183,15 +5183,15 @@ msgid "Banning will prevent the participation of this peer in tunnels you create
 msgstr "Η απαγόρευση θα αποτρέψει τη συμμετοχή αυτού του ομότιμου στα τούνελ που δημιουργείτε."
 
 msgid "A list of bans by IP address is presented below."
-msgstr ""
+msgstr "A list of bans by IP address is presented below."
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
-msgstr ""
+msgstr "To view all active bans by router hash, see {0}Banned Peers{1}."
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
-msgstr ""
+msgstr "A list of {0}session-only bans{1} by hash is also available."
 
 msgid "Adjust Profile Bonuses"
 msgstr "Προσαρμογή μπόνους προφίλ"
@@ -5382,7 +5382,7 @@ msgid "config sidebar"
 msgstr "διαμόρφωση πλευρικής στήλης"
 
 msgid "Sidebar Options"
-msgstr ""
+msgstr "Sidebar Options"
 
 msgid "Refresh interval"
 msgstr "Ανανέωση διαστήματος"
@@ -5394,10 +5394,10 @@ msgid "0 to disable"
 msgstr "0 για απενεργοποίηση"
 
 msgid "Unified sidebar"
-msgstr ""
+msgstr "Unified sidebar"
 
 msgid "Use the same sidebar on all pages"
-msgstr ""
+msgstr "Use the same sidebar on all pages"
 
 msgid "config stats"
 msgstr "στατιστικά ρυθμίσεων"
@@ -5599,7 +5599,7 @@ msgid "Event Log"
 msgstr "Αρχείο καταγραφής συμβάντων"
 
 msgid "Combined"
-msgstr ""
+msgstr "Combined"
 
 msgid "graph"
 msgstr "Γράφημα"
@@ -5680,7 +5680,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Αυτή η ρύθμιση, όταν είναι ενεργοποιημένη, θα εμφανίσει τους συνδέσμους <i>Τοποθεσίες ενδιαφέροντος</i> στην <a href=/sitemap>σελίδα χάρτης του δικτύου</a>. [Η προεπιλογή είναι ψευδής]"
 
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr ""
+msgstr "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Αυτή η ρύθμιση καθορίζει εάν ο δρομολογητής πρέπει ή όχι να χρησιμοποιεί το παρεχόμενο αρχείο <i>blocklist.txt</i> και οποιεσδήποτε ρυθμίσεις από τον χρήστη για απαγόρευση ομόκεντρων με βάση το κατακερματισμό ή τη διεύθυνση IP. Τα εύρη και τα δίκτυα μάσκας υποστηρίζονται για το IPv4 αλλά όχι για το IPv6. Δείτε το <i>blocklist.txt</i> στον κατάλογο της εφαρμογής I2P+ για περισσότερες πληροφορίες. [Ενεργοποιείται από προεπιλογή, απαιτείται επανεκκίνηση]"
@@ -5695,7 +5695,7 @@ msgid "This setting determines whether or not the router should use the provided
 msgstr "Αυτή η ρύθμιση καθορίζει εάν ο δρομολογητής πρέπει να χρησιμοποιήσει το παρεχόμενο αρχείο <i>blocklist_tor.txt</i> στον κατάλογο εφαρμογής I2P+ για να απαγορεύσει τους ομόκεντρους που λειτουργούν από διευθύνσεις IP κόμβων εξόδου Tor. [Ενεργοποιείται από προεπιλογή, απαιτείται επανεκκίνηση]"
 
 msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
-msgstr ""
+msgstr "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
 msgstr "Όταν ορίζεται ως ψευδές, το διακομιστήριο δεν θα αποκλείει αιτήσεις δημιουργίας διαδρόμων από πιο αργά ή μη προσβάσιμα διακομιστήρια που τρέχουν παλαιότερες εκδόσεις. [Το προεπιλεγμένο είναι αληθές, απαιτείται επανεκκίνηση]"
@@ -5833,7 +5833,7 @@ msgid "This setting determines whether routers classified as uninteresting (K or
 msgstr "Αυτή η ρύθμιση καθορίζει εάν οι δρομολογητές που ταξινομούνται ως μη ενδιαφέροντες (K ή L tier, ανεπίτευκτοι ή παλαιότεροι από 0.9.50) ελέγχονται κατά τη διαδικασία ανανέωσης δρομολογητή μετά από 1 ώρα λειτουργίας. [Η προεπιλεγμένη τιμή είναι false]"
 
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
-msgstr ""
+msgstr "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Όταν ρυθμίζεται, αυτό θέτει ένα αυστηρό όριο για τον αριθμό των τούνελ που ο δρομολογητής επιτρέπεται να χτίσει ταυτόχρονα. Από προεπιλογή, ο δρομολογητής χρησιμοποιεί το μέσο χρόνο εποικοδομήσεως και το τρέχον εξερχόμενο εύρος ζώνης για να καθορίσει το βέλτιστο ρυθμό εποικοδομήσεων. [Απαιτείται επανεκκίνηση]"
@@ -5848,10 +5848,10 @@ msgid "This setting (in minutes) allows you to manually configure how long to wa
 msgstr "Αυτή η ρύθμιση (σε λεπτά) σας επιτρέπει να ρυθμίσετε μηχανικά πόσο καιρό πρέπει να περιμένετε μετά την εκκίνηση πριν ελεγχθούν οι RouterInfos στο NetDb για την ισχύ τους, μετά από το σημείο αυτό θα γίνει δεκτοί μόνο έγκυροι δρομολογητές για συμπερίληψη. Κατά τη διάρκεια της επικύρωσης, οι ληγμένοι RouterInfos και οι μη ανταποκρινόμενοι χρήστες προσβάσιμοι μόνο μέσω SSU θα αφαιρεθούν από το NetDb. [Η προεπιλεγμένη τιμή είναι 60 λεπτά] Σημείωση: Αυτή η ρύθμιση δεν έχει καμία σχέση με τους παλαιότερους δρομολογητές (παλαιότερους από 0.9.29 από προεπιλογή), οι οποίοι αφαιρούνται από το NetDb και απαγορεύονται για τη διαδικασία του δρομολογητή αμέσως μόλις προσπαθηθεί μια αποθήκευση του NetDb."
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
+msgstr "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr ""
+msgstr "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Αυτή η ρύθμιση επιτρέπει την απενεργοποίηση των δοκιμών SSU για να προσδιορίσετε εάν ο δρομολογητής σας έχει τείχος προστασίας και μπορεί να ενεργοποιηθεί για δρομολογητές που σίγουρα δεν έχουν τείχος προστασίας, αλλά αντιμετωπίζουν προβλήματα τείχους προστασίας μεταβλητής συνδεσιμότητας. Στην περίπτωση που απενεργοποιηθούν οι δοκιμές, τόσο η SSU όσο και η NTCP θα αναφέρουν την τρέχουσα διεύθυνση IP του δικτύου σας στην <a href=/info>σελίδα πληροφοριών του δρομολογητή</a>. [Απαιτείται επανεκκίνηση]"
@@ -5860,7 +5860,7 @@ msgid "This setting determines which transport takes priority when communicating
 msgstr "Αυτή η ρύθμιση καθορίζει ποια μεταφορά έχει προτεραιότητα κατά την επικοινωνία με τους ομότιμους. Από προεπιλογή, προτιμάται η NTCP αντί για την UDP (SSU). Με την ορισμό της τιμής σε true, θα προτιμάται η UDP εκτός αν υπάρχει ήδη μια σύνδεση NTCP. Όταν ορίζεται σε πάντα, θα χρησιμοποιείται πάντα η UDP ανεξαρτήτως τυχόν υπάρχουσας σύνδεσης NTCP. [Προεπιλογή είναι το false]"
 
 msgid "miscellaneous"
-msgstr ""
+msgstr "miscellaneous"
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "Εάν οριστεί ως ψευδές, αυτή η επιλογή θα τοποθετήσει ένα εικονίδιο στη γραμμή συστήματος / περιοχή ειδοποιήσεων, με βασικές επιλογές ελέγχου της υπηρεσίας. [Απενεργοποιείται από προεπιλογή]"
@@ -6100,16 +6100,16 @@ msgid "For SSL only"
 msgstr "Μόνο για SSL"
 
 msgid "How can I configure the console and web services to be accessible on my local network?"
-msgstr ""
+msgstr "How can I configure the console and web services to be accessible on my local network?"
 
 msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
-msgstr ""
+msgstr "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
 
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
-msgstr ""
+msgstr "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
 
 msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
-msgstr ""
+msgstr "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
 
 msgid "How do I connect to IRC within I2P?"
 msgstr "Πώς συνδέομαι στο IRC μέσα στο I2P?"
@@ -6496,7 +6496,7 @@ msgid "If you are in a hurry and can't wait a few hours, you can tell people to 
 msgstr "Εάν έχετε βιαστεί και δεν μπορείτε να περιμένετε μερικές ώρες, μπορείτε να πείτε στους ανθρώπους να χρησιμοποιήσουν έναν υπηρεσία ανακατεύθυνσης βοηθού \"άλματος\". Αυτό συνήθως θα λειτουργήσει εντός μερικών λεπτών από την καταχώρηση του ονόματος του κεντρικού υπολογιστή σας στον ίδιο ιστότοπο. Δοκιμάστε το πρώτα εισάγοντας <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> στο πρόγραμμα περιήγησής σας. Μόλις λειτουργήσει, μπορείτε να πείτε σε άλλους να το χρησιμοποιήσουν."
 
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
-msgstr ""
+msgstr "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
 
 msgid "Backup your private key!"
 msgstr "Δημιουργήστε αντίγραφα ασφαλείας του ιδιωτικού κλειδιού σας!"
@@ -6733,7 +6733,7 @@ msgid "Getting Support Online"
 msgstr "Λήψη υποστήριξης στο διαδίκτυο"
 
 msgid "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
-msgstr ""
+msgstr "You may also want to review the information on the <a href=http://i2p-projekt.i2p/ target=_blank rel=noreferrer>I2P website</a>, post messages to the <a href='http://i2pforum.i2p/viewforum.php?f=8' target=_blank rel=noreferrer>I2P discussion forum</a> or swing by <a href=irc://127.0.0.1:6668/saltR class=chatlink>#saltR</a> or <a href=irc://127.0.0.1:6668/i2p class=chatlink>#i2p-dev</a> on I2P's internal IRC network."
 
 msgid "Reporting Bugs"
 msgstr "Αναφορά σφαλμάτων"
@@ -7273,7 +7273,7 @@ msgid "Configure display language, theme and optional console password"
 msgstr "Διαμόρφωση γλώσσας εμφάνισης, θέματος και προαιρετικού κωδικού πρόσβασης κονσόλας"
 
 msgid "Language"
-msgstr ""
+msgstr "Language"
 
 msgid "Configure router bandwidth"
 msgstr "Διαμόρφωση εύρους ζώνης δρομολογητή"
@@ -7340,22 +7340,22 @@ msgid "network database"
 msgstr "βάση δεδομένων δικτύου"
 
 msgid "Encryption type"
-msgstr ""
+msgstr "Encryption type"
 
 msgid "Encryption types"
-msgstr ""
+msgstr "Encryption types"
 
 msgid "Signature types"
-msgstr ""
+msgstr "Signature types"
 
 msgid "Locally hosted private service"
-msgstr ""
+msgstr "Locally hosted private service"
 
 msgid "Locally hosted public service"
-msgstr ""
+msgstr "Locally hosted public service"
 
 msgid "Requested client leaseset"
-msgstr ""
+msgstr "Requested client leaseset"
 
 msgid "network database router map"
 msgstr "Χάρτης διακομιστή βάσης δεδομένων δικτύου"
@@ -7401,10 +7401,10 @@ msgid "Fast / High Capacity"
 msgstr "Γρήγορο / Υψηλή χωρητικότητα"
 
 msgid "router logs"
-msgstr ""
+msgstr "router logs"
 
 msgid "service logs"
-msgstr ""
+msgstr "service logs"
 
 msgid "Manage I2P addresses"
 msgstr "Διαχείριση διευθύνσεων I2P"
@@ -7611,13 +7611,13 @@ msgid "Toggle Tunnels"
 msgstr "Εναλλαγή Διαδρόμων"
 
 msgid "Updating sidebar sections"
-msgstr ""
+msgstr "Updating sidebar sections"
 
 msgid "Peer Profile"
 msgstr "Προφίλ Ομότιμου"
 
 msgid "Profile View"
-msgstr ""
+msgstr "Profile View"
 
 msgid "Profile for peer"
 msgstr "Προφίλ για συνομήλικο"
