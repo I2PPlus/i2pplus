@@ -63,7 +63,7 @@ public class JobQueue {
     static {
         int cores = SystemVersion.getCores();
         int maxRunners = 32;
-        RUNNERS = Math.max(cores * 2, 16);
+        RUNNERS = SystemVersion.isSlow() ? 16 : Math.max(cores * 2, 24);
         if (RUNNERS > maxRunners) {RUNNERS = maxRunners;}
     }
 
