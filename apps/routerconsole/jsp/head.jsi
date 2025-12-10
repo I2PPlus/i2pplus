@@ -38,7 +38,8 @@ boolean viewProfile = uri.contains("viewprofile");
 <link rel=stylesheet href=/themes/console/images/images.css>
 <link rel=stylesheet href=<%=themePath%>images/images.css>
 <% if (lang.equals("zh")) {%> <link href="<%=themePath%>console_big.css?version=<%=v%>" rel=stylesheet> <% }
-else if (lang.equals("ar") || lang.equals("fa")) {%> <link rel=stylesheet href="<%=themePath%>console_ar.css?version=<%=v%>"> <% } %>
+else if (lang.equals("ar") || lang.equals("fa")) {%> <link rel=stylesheet href="<%=themePath%>console_ar.css?version=<%=v%>"> <% }
+else if (lang.equals("bo")) {%> <link rel=stylesheet href="<%=themePath%>console_bo.css?version=<%=v%>"> <% } %>
 <% if (hasOverride) {%> <link href=<%=themePath%>override.css rel=stylesheet> <% } %>
 <script nonce=<%=cspNonce%>>
   if (top.location.href !== location.href) top.location.href = location.href;
