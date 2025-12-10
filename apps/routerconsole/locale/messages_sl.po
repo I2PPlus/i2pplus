@@ -823,13 +823,13 @@ msgid "To enable SSL access for the Router Console, see the commented <code>clie
 msgstr "Da omogočite dostop SSL za konzolo usmerjevalnika, glejte komentiran datoteko <code>clients.config</code>, ki se nahaja v imeniku aplikacije I2P za dodatne informacije. Boste morali urejati datoteko konfiguracije RouterConsoleRunner, ki se nahaja v imeniku: "
 
 msgid "Save disabled, edit the router.config file to make changes"
-msgstr ""
+msgstr "Shranjevanje onemogočeno, urejanje datoteko router.config za spremembe."
 
 msgid "Error updating the configuration - please see the error logs"
 msgstr "Napaka pri posodabljanju konfiguracije - glejte dnevnike napak"
 
 msgid "No changes made to the configuration"
-msgstr ""
+msgstr "Ni sprememb v konfiguraciji."
 
 msgid "Note"
 msgstr "OPOMBA"
@@ -850,7 +850,7 @@ msgid "Save Plugin Configuration"
 msgstr "Shrani konfiguracijo vstavka"
 
 msgid "Plugins disabled"
-msgstr ""
+msgstr "Vtičniki so onemogočeni"
 
 msgid "Install Plugin"
 msgstr "Namesti vstavek"
@@ -862,7 +862,7 @@ msgid "Update All Installed Plugins"
 msgstr "Posodobi vse nameščene vstavke"
 
 msgid "Delete client disabled"
-msgstr ""
+msgstr "Brisanje klienta onemogočeno"
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -946,17 +946,17 @@ msgid "Updating all plugins"
 msgstr "Posodabljanje vseh vstavkov"
 
 msgid "Update manager not registered, cannot install"
-msgstr ""
+msgstr "Upravljalnik posodabljen ni registriran, name moreče namestiti."
 
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "Namestitev vstavka iz {0}"
 
 msgid "Cannot install, check logs"
-msgstr ""
+msgstr "Ni mogoče namestiti, preverite dnevnik."
 
 msgid "Update manager not registered, cannot check"
-msgstr ""
+msgstr "Upravljalnik posodabljen ni registriran, ne moreče preveriti."
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1056,17 +1056,17 @@ msgid "Join Family"
 msgstr "Pridruži družini"
 
 msgid "Bad certificate - No Subject CN"
-msgstr ""
+msgstr "Slab certifikat - Ni zadejke CN"
 
 msgid "Bad characters in Family: "
-msgstr ""
+msgstr "Slabi znaki v Družini: "
 
 #, java-format
 msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
-msgstr ""
+msgstr "Shramnica ključev {0} že obstaja za družino {1}! Izbrišite ali jo preimenujte."
 
 msgid "Family key configured for router family: "
-msgstr ""
+msgstr "Družinski ključ je konfiguriran za družino routerjev: "
 
 msgid "Load from file failed"
 msgstr "Naložitev iz datoteke je spodletela"
@@ -1084,7 +1084,7 @@ msgid "Restore defaults"
 msgstr "Obnovi privzeto"
 
 msgid "Bad group detected, please retry"
-msgstr ""
+msgstr "Zaznana slaba skupina, poskusite znova."
 
 msgid "Restored default settings"
 msgstr "Obnovljene so privzete nastavitve"
@@ -1117,7 +1117,7 @@ msgid "Invalid destination"
 msgstr "Neveljavna destinacija"
 
 msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Ni mogoče dodati ključ za lokalni cilj. Omogočite šifriranje v Upravljalniku Tunelov."
 
 #, java-format
 msgid "Key for {0} added to keyring"
@@ -1130,7 +1130,7 @@ msgid "Requires hostname, destination, or blinded Base32"
 msgstr "Zahteva domensko ime, destinacijo ali oslepil Base32"
 
 msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
-msgstr ""
+msgstr "Ni mogoče dodati ključ za lokalni cilj. Omogočite šifriranje v Upravljalniku Skritih Storitev."
 
 msgid "Destination requires lookup password"
 msgstr "Destinacija zahteva geslo za iskanje"
@@ -1151,7 +1151,7 @@ msgid "Delete key"
 msgstr "Izbriši ključ"
 
 msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Ni mogoče odstraniti ključ za lokalni cilj. Onemogočite šifriranje v Upravljalniku Tunelov."
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1204,34 +1204,34 @@ msgid "Log overrides updated"
 msgstr "Prepiši log"
 
 msgid "Error updating the log limits - levels not valid"
-msgstr ""
+msgstr "Napaka pri posodabljanju omejitev dnevnika - ravni niso veljavni."
 
 msgid "Log limits cleared"
-msgstr ""
+msgstr "Omejitve dnevnika so počiščena."
 
 #, java-format
 msgid "Default log level updated from {0} to {1}"
-msgstr ""
+msgstr "Privzeta raven dnevnika je posodobljena iz {0} v {1}"
 
 msgid "Date format updated"
-msgstr ""
+msgstr "Format datuma je posodobljen."
 
 #, java-format
 msgid "Specified date format is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Navedeni format datuma ni veljaven ({0}) - ni posodobljen."
 
 msgid "File size updated"
-msgstr ""
+msgstr "Velikost datoteke je posodobljena."
 
 #, java-format
 msgid "Specified file size limit is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Navedena omejitev velikosti datoteke ni veljavna ({0}) - ni posodobljena."
 
 msgid "Compression setting updated"
-msgstr ""
+msgstr "Nastavitev stiskanja je posodobljeno."
 
 msgid "Log record format updated"
-msgstr ""
+msgstr "Format zapisa dnevnika je posodobljen."
 
 msgid "Log configuration saved"
 msgstr "Konfiguracija loga je shranjena"
@@ -1441,10 +1441,10 @@ msgid "Bad capacity value"
 msgstr "Slabo vrednost kapacitete"
 
 msgid "Bonuses adjusted for: "
-msgstr ""
+msgstr "Bonusi so prilagođeni za: "
 
 msgid "No profile exists for: "
-msgstr ""
+msgstr "Profil ne obstaja za: "
 
 msgid "Unsupported"
 msgstr "Nepodprto"
@@ -1460,7 +1460,7 @@ msgstr "Do"
 
 #, java-format
 msgid "First {0} displayed, see the {1} file for the full list"
-msgstr ""
+msgstr "Prvih {0} je prikazan, glejte datoteko {1} za celoten seznam."
 
 msgid "IPs Banned Until Restart"
 msgstr "IP-ji Prepovedani Do Ponovnega Zagona"
@@ -1567,7 +1567,7 @@ msgid "Save order"
 msgstr "Shrani vrstni red"
 
 msgid "Sidebar preferences updated"
-msgstr ""
+msgstr "Nastavitve stranske vrstice so posodobljene."
 
 msgid "Refresh interval must be a number"
 msgstr "Interval osveževanja mora biti število"
@@ -1576,16 +1576,16 @@ msgid "Restore full default"
 msgstr "Obnovi celoten privzeto"
 
 msgid "Full sidebar defaults restored."
-msgstr ""
+msgstr "Privzete nastavitve stranske vrstice so bile obnovljene."
 
 msgid "Sidebar will refresh shortly."
-msgstr ""
+msgstr "Stranska vrstica se bo kmalu posodobila."
 
 msgid "Restore minimal default"
 msgstr "Obnovi minimalno privzeto"
 
 msgid "Minimal sidebar defaults restored."
-msgstr ""
+msgstr "Minimalne privzete nastavitve stranske vrstice so bile obnovljene."
 
 msgid "Order must be an integer"
 msgstr "Red mora biti celo število"
@@ -1614,11 +1614,11 @@ msgstr "Seznam grafov je posodobljen, lahko potrebuje do 60 sekund, da se odbije
 
 #, java-format
 msgid "Internal error: could not resolve pool name {0}."
-msgstr ""
+msgstr "Notranja napaka: ni mogoče razrešiti imez bazena {0}."
 
 #, java-format
 msgid "Internal error: could not find pool settings for {0}."
-msgstr ""
+msgstr "Notranja napaka: ni mogoče najti nastavitve bazena za {0}."
 
 msgid "Updated settings for all pools."
 msgstr "Nastavitve za vse bazene so posodobljene."
@@ -1697,7 +1697,7 @@ msgid "Add user"
 msgstr "Dodaj uporabnika"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
-msgstr ""
+msgstr "Ni mogoče shraniti izbiro teme, ime teme vsebuje neveljavne znake."
 
 msgid "Theme change saved."
 msgstr "Sprememba teme je shranjena."
@@ -1709,7 +1709,7 @@ msgid "No user name entered"
 msgstr "Ni vneseno uporabniškega imena"
 
 msgid "User name may not contain '='"
-msgstr ""
+msgstr "Uporabniško ime ne sme vsebovati '='"
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "Opozorilo: Uporabniška imena zunaj znakovnega množiča ISO-8859-1 niso priporočena. Podpora ni standardizirana in se razlikuje glede na brskalnik."
@@ -2031,7 +2031,7 @@ msgid "Show list of all known I2P routers"
 msgstr "Prikaži seznam vseh znanih usmerjevalnikov I2P"
 
 msgid "List of recently connected peers with profiling info"
-msgstr ""
+msgstr "Seznam nedavno povezanih vrstnikov z informacijami o profiliranju"
 
 msgid "Peer Profiles"
 msgstr "Profili sosednjih strežnikov"
@@ -2199,7 +2199,7 @@ msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Alternativni frontalni del Reddit, usmerjen na zasebnost"
 
 msgid "AI Image generation & Chat hub"
-msgstr ""
+msgstr "Center za generiranje slikov AI in klepet"
 
 msgid "IRC Logs for multiple networks"
 msgstr "Dnevniki IRC za več omrežij"
@@ -2340,10 +2340,10 @@ msgid "OpenDemocracy"
 msgstr "OpenDemocracy"
 
 msgid "Online privacy &amp; tech blog"
-msgstr ""
+msgstr "Blog o zasebni privatnosti in tehnologiji"
 
 msgid "RightToPrivacy"
-msgstr ""
+msgstr "PravicaDoZasebnosti"
 
 msgid "Lifestyle magazine"
 msgstr "Časopis o življenjskem slogu"
@@ -2364,7 +2364,7 @@ msgid "Community-driven tech news"
 msgstr "Novice o tehnologiji, pogonske skupnosti"
 
 msgid "Various services"
-msgstr ""
+msgstr "Različne storitve"
 
 msgid "News for nerds"
 msgstr "Vesti za nerde"
@@ -2440,7 +2440,7 @@ msgid "Add"
 msgstr "Dodaj"
 
 msgid "Error displaying the info page."
-msgstr ""
+msgstr "Napaka pri prikazovanju informacijske strani."
 
 msgid "Identity"
 msgstr "Identiteta"
@@ -2488,7 +2488,7 @@ msgid "Performance"
 msgstr "Zmožnost"
 
 msgid "Maximum available RAM"
-msgstr ""
+msgstr "Najvejši razpoložljiv RAM"
 
 msgid "Classified as slow"
 msgstr "Klasificiran kot počasen"
@@ -2500,7 +2500,7 @@ msgid "No"
 msgstr "Ne"
 
 msgid "GeoIP Db"
-msgstr ""
+msgstr "GeoIP zbirka podatkov"
 
 msgid "Target"
 msgstr "Cilj"
@@ -2639,19 +2639,19 @@ msgid "Sybil Analysis"
 msgstr "Analiza Sybil"
 
 msgid "Bad value supplied, please check and try again."
-msgstr ""
+msgstr "Navedena vrednost je napačna, preverite in poskusite znova."
 
 msgid "Router Map"
 msgstr "Karta usmerjevalnika"
 
 msgid "Network Database Search"
-msgstr ""
+msgstr "Iskanje v podatkovni zbirki"
 
 msgid "Capabilities"
 msgstr "Zmožnosti"
 
 msgid "e.g. f or XOfR"
-msgstr ""
+msgstr "npr. f ali XOfR"
 
 msgid "Cost"
 msgstr "Stroški"
@@ -2660,49 +2660,49 @@ msgid "Country"
 msgstr "Država"
 
 msgid "Country Codes"
-msgstr ""
+msgstr "Kode držav"
 
 msgid "Hash Prefix"
-msgstr ""
+msgstr "Predpona razpršila"
 
 msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
-msgstr ""
+msgstr "IPv4 ali IPv6, /24,/16,/8 priponke so izbirne za IPv4, predpona je v reduku za IPv6"
 
 msgid "Hostname or b32"
-msgstr ""
+msgstr "Ime gostitelja ali b32"
 
 msgid "IPv6 Prefix"
-msgstr ""
+msgstr "Predpona IPv6"
 
 msgid "Single port or range"
-msgstr ""
+msgstr "Eno vrata ali obseg"
 
 msgid "Signature Type"
-msgstr ""
+msgstr "Vrsta podpisa"
 
 msgid "SSU Capabilities"
-msgstr ""
+msgstr "SSU zmožnosti"
 
 msgid "Encryption Type"
-msgstr ""
+msgstr "Vrsta šifriranja"
 
 msgid "Router Version"
-msgstr ""
+msgstr "Različje routerja"
 
 msgid "Transport"
 msgstr "Prevoz"
 
 msgid "Add Sybil analysis (must pick at least one above)"
-msgstr ""
+msgstr "Dodaj analizo Sybil (morate izbrati vsaj enega zgoraj)"
 
 msgid "Sybil close to"
-msgstr ""
+msgstr "Sybil je blizu"
 
 msgid "Router hash, destination hash, b32, or from address book"
-msgstr ""
+msgstr "Razpršila routerja, razpršila cilja, b32 ali iz imenika naslovov"
 
 msgid "or Sybil close to this router"
-msgstr ""
+msgstr "ali Sybil je blizu temu routerju"
 
 msgid "Lookup"
 msgstr "Iskanje"
@@ -2717,13 +2717,13 @@ msgid "not found in network database"
 msgstr "ni najden v omrežni bazi"
 
 msgid "Bad Base64 Router hash"
-msgstr ""
+msgstr "Slab Base64 razpršila routerja"
 
 msgid "No routers with"
-msgstr ""
+msgstr "Ni routerjev z: "
 
 msgid "Hash prefix"
-msgstr ""
+msgstr "Predpona razpršila"
 
 msgid "Port"
 msgstr "Vrata"
@@ -2732,10 +2732,10 @@ msgid "MTU"
 msgstr "MTU"
 
 msgid "found in the network database"
-msgstr ""
+msgstr "najdeno v podatkovni zbirki"
 
 msgid "results"
-msgstr ""
+msgstr "rezultati"
 
 msgid "Previous Page"
 msgstr "Prejšnja stran"
@@ -2744,43 +2744,43 @@ msgid "Next Page"
 msgstr "Naslednja stran"
 
 msgid "Results per page"
-msgstr ""
+msgstr "Rezultatov na stran"
 
 msgid "Not initialized"
 msgstr "Ni inicializirano"
 
 msgid "Total Remote Leasesets"
-msgstr ""
+msgstr "Skupno oddaljenih LeaseSetov"
 
 msgid "Compact mode"
-msgstr ""
+msgstr "Kompaktni način"
 
 msgid "Local Leasesets"
-msgstr ""
+msgstr "Krajevni LeaseSeti"
 
 msgid "Debug Mode"
-msgstr ""
+msgstr "Način odpravljanja"
 
 msgid "Published (RAP) Leasesets"
-msgstr ""
+msgstr "Objavljeni (RAP) LeaseSeti"
 
 msgid "Sorted by hash distance, closest first."
-msgstr ""
+msgstr "Razvršeno po razdaljosti razpršile, najbližji prvi."
 
 msgid "Mod Data"
-msgstr ""
+msgstr "Podatki o spremembah"
 
 msgid "Last Changed"
-msgstr ""
+msgstr "Nazadnja sprememba"
 
 msgid "Next Mod Data"
-msgstr ""
+msgstr "Naslednji podatki o spremembah"
 
 msgid "Change in"
-msgstr ""
+msgstr "Sprememba v"
 
 msgid "Floodfill mode enabled"
-msgstr ""
+msgstr "Način Floodfill omogočen"
 
 msgid "Routing Key"
 msgstr "Ključ usmerjanja"
@@ -2795,10 +2795,10 @@ msgid "Estimated total leasesets"
 msgstr "Ocena skupaj leaseSet"
 
 msgid "Total Local Leasesets"
-msgstr ""
+msgstr "Skupno krajevnih LeaseSetov"
 
 msgid "Remote Leasesets"
-msgstr ""
+msgstr "Oddaljeni LeaseSeti"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2809,7 +2809,7 @@ msgid "LeaseSet for {0} not found in network database"
 msgstr ""
 
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 msgid "LeaseSet"
 msgstr "LeaseSet"
@@ -2841,7 +2841,7 @@ msgid "Signature type"
 msgstr "Vrsta podpisa"
 
 msgid "Public Key"
-msgstr ""
+msgstr "Javni ključ"
 
 msgid "Unsupported type"
 msgstr "Nepodprta vrsta"
@@ -2858,10 +2858,10 @@ msgid "Unknown"
 msgstr "Neznano"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr ""
+msgstr "Napredni način - vključuje vse statistike, objavljene s floodfills."
 
 msgid "Compact mode - does not include statistics published by floodfills."
-msgstr ""
+msgstr "Kompaktni način - ne vključuje statistike, objavljene s floodfills."
 
 msgid "Network Database Router Statistics"
 msgstr "Statistika usmerjevalnika v omrežni bazi"
@@ -2885,7 +2885,7 @@ msgid "Transports"
 msgstr "Prevozniki"
 
 msgid "X Tier"
-msgstr ""
+msgstr "X nivo"
 
 msgid "Floodfills"
 msgstr "Floodfills"
@@ -2903,10 +2903,10 @@ msgid "Router is banlisted"
 msgstr "Usmerjevalnik je na črni listi"
 
 msgid "Java I2P variant"
-msgstr ""
+msgstr "Java I2P različica"
 
 msgid "I2Pd variant"
-msgstr ""
+msgstr "I2Pd različica"
 
 msgid "RouterInfo is compressible"
 msgstr "RouterInfo je komprimirljivo"
@@ -2940,7 +2940,7 @@ msgid "Hostname"
 msgstr "Ime gostitelja"
 
 msgid "direct"
-msgstr ""
+msgstr "neposredno"
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "Preverjena družina (podpisni certifikat je nameščen in veljaven)"
@@ -2979,10 +2979,10 @@ msgid "Last heard from"
 msgstr "Zadnjič sem slišal od"
 
 msgid "Network Id"
-msgstr ""
+msgstr "ID omrežja"
 
 msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr ""
+msgstr "Številka je vedno prirejanj, da bi se izognjali restarti routerja."
 
 msgid "Hidden or starting up"
 msgstr "Skrito ali se zagonja"
@@ -3050,10 +3050,10 @@ msgid "IPv6"
 msgstr "IPv6"
 
 msgid "Active connections / Max permitted"
-msgstr ""
+msgstr "Aktivne povezave / Najvejše dovoljeno"
 
 msgid "Connections / Limit"
-msgstr ""
+msgstr "Povezave / Omejitev"
 
 msgid "Current / maximum permitted"
 msgstr "Trenutno / največja dovoljena"
@@ -3357,7 +3357,7 @@ msgid "Rejected"
 msgstr "Zavrnjeno"
 
 msgid "First Heard About"
-msgstr ""
+msgstr "Prvič slišali o"
 
 msgid "Last Heard From"
 msgstr "Zadnjič slišan od"
@@ -3476,7 +3476,7 @@ msgstr "{0} deljena širina pasma"
 
 #, java-format
 msgid "Over {0} KB/s shared bandwidth"
-msgstr ""
+msgstr "Nad {0} KB/s deljene pasovne pasovne pasovne"
 
 msgid "status"
 msgstr "stanje"
@@ -3539,7 +3539,7 @@ msgid "Total number of banned peers"
 msgstr "Skupno število prepovedanih parterjev"
 
 msgid "Note: 'LU' class routers have been excluded from the list."
-msgstr ""
+msgstr "Opomba: Routerji razreda 'LU' so izključeni s seznama."
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
@@ -3918,7 +3918,7 @@ msgid "Floodfill enabled"
 msgstr "Zalivni je omogočen"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
-msgstr ""
+msgstr "Skupno število oddaljenih LeaseSetov, shranjenih v naši NetDb"
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Opozorilo: ECDSA ni na voljo. Posodobite Java ali OS"
@@ -3933,7 +3933,7 @@ msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Parterji, z njimi smo razgovarjali v zadnjih minutah/zadnjo uro"
 
 msgid "Peers we've been talking to in the last minute"
-msgstr ""
+msgstr "Vrstniki, s katerimi smo govorili v zadnji minuti"
 
 msgid "The number of peers available for building client tunnels"
 msgstr "Število parterjev, na voljo za izgradnjo klientovih tuneljev"
@@ -4446,7 +4446,7 @@ msgid "Data"
 msgstr "Podatki"
 
 msgid "Limit"
-msgstr ""
+msgstr "Omejitev"
 
 msgid "Receive on"
 msgstr "Prejmi na"
@@ -4493,7 +4493,7 @@ msgid "No transit tunnels currently active."
 msgstr "Trenutno ni aktivnih prenosnih tuneljev."
 
 msgid "Transit Tunnels by Peer (Top {0})"
-msgstr ""
+msgstr "Tranzitni tuneli po Vrstniku (Top {0})"
 
 msgid "Address"
 msgstr "Naslov"
@@ -4572,7 +4572,7 @@ msgid "Bandwidth test did not complete"
 msgstr "Test širine pasma ni bil dokončan"
 
 msgid "Bad state for test"
-msgstr ""
+msgstr "Slabo stanje za test"
 
 msgid "Bandwidth test started"
 msgstr "Test širine pasma je začel"
@@ -4587,16 +4587,16 @@ msgid "Bandwidth test was not running"
 msgstr "Test širine pasma ni bil v teku"
 
 msgid "ready"
-msgstr ""
+msgstr "pripravljen"
 
 msgid "inbound test"
-msgstr ""
+msgstr "vhodni test"
 
 msgid "outbound test"
-msgstr ""
+msgstr "izhodni test"
 
 msgid "done"
-msgstr ""
+msgstr "končano"
 
 msgid "bits per second"
 msgstr "biti na sekundo"
@@ -4768,7 +4768,7 @@ msgid "Share"
 msgstr "Deli"
 
 msgid "NOTE"
-msgstr ""
+msgstr "OPOMBA"
 
 #, java-format
 msgid "You have configured I2P+ to share only {0} KBps."
@@ -4795,7 +4795,7 @@ msgstr "konfig napredno"
 
 #, java-format
 msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
-msgstr ""
+msgstr "Ključ <b>{0}</b> je izbran za brisanje. Za potrditev spremembe, shranite konfiguracijo ali prekliči za obnovitev ključ."
 
 msgid "Floodfill Configuration"
 msgstr "Konfiguracija zalivne"
@@ -4825,7 +4825,7 @@ msgid "Advanced I2P+ Configuration"
 msgstr "Napredna konfiguracija I2P"
 
 msgid "Help with additional configuration settings"
-msgstr ""
+msgstr "Pomoč z dodatnimi nastavitvami"
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5219,7 +5219,7 @@ msgid "Banning will prevent the participation of this peer in tunnels you create
 msgstr "Prepoved bo preprečila sodelovanje tega parterja v tunelih, ki jih ustvarite."
 
 msgid "A list of bans by IP address is presented below."
-msgstr ""
+msgstr "Spodaj je seznam prepovedov po IP naslovih."
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
@@ -5227,7 +5227,7 @@ msgstr ""
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
-msgstr ""
+msgstr "Na voljo je tudi seznam {0}samo-sesionske prepovedi{1} po razpršili."
 
 msgid "Adjust Profile Bonuses"
 msgstr "Prilagodi bonusi profila"
@@ -5418,7 +5418,7 @@ msgid "config sidebar"
 msgstr "konfig stranica"
 
 msgid "Sidebar Options"
-msgstr ""
+msgstr "Možnosti stranske vrstice"
 
 msgid "Refresh interval"
 msgstr "Interval osveževanja"
@@ -5430,10 +5430,10 @@ msgid "0 to disable"
 msgstr "0 za onemogočanje"
 
 msgid "Unified sidebar"
-msgstr ""
+msgstr "Enotna stranska vrstica"
 
 msgid "Use the same sidebar on all pages"
-msgstr ""
+msgstr "Uporabite enako stransko vrstico na vseh straneh."
 
 msgid "config stats"
 msgstr "konfig statistika"
@@ -5635,7 +5635,7 @@ msgid "Event Log"
 msgstr "Dnevnik dogodkov"
 
 msgid "Combined"
-msgstr ""
+msgstr "Kombinirano"
 
 msgid "graph"
 msgstr "graf"
@@ -5716,7 +5716,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Ta nastavitev, ko je nastavljeno na true, bo prikazala povezave <i>Spletne strani, ki vam zanimajo</i> na <a href=/sitemap>spletne mapi</a>. [Privzeto je false]"
 
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr ""
+msgstr "Ta nastavitev, ko je nastavljen na true, bo prikazovala standardno stransko vrstico na domači strani, omogočujo konfiguracijo preko <a href=/configsidebar>. [Privzeto je false]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Ta nastavitev določa, ali naj usmerjevalnik uporablja podano datoteko <i>blocklist.txt</i> in kakršne koli konfigurirane črne listice uporabnika za omogočanje prepovedi usmerjevalnikov po diju ali IP naslovu. Omrežni razponi in maski so podprti za IPv4, vendar ne za IPv6. Za dodatne informacije glejte <i>blocklist.txt</i> v imeniku aplikacije I2P+. [Omogočeno privzeto, potreben je ponovni zagon]"
@@ -5731,7 +5731,7 @@ msgid "This setting determines whether or not the router should use the provided
 msgstr "Ta nastavitev določa, ali naj usmerjevalnik uporablja datoteko <i>blocklist_tor.txt</i> v imeniku aplikacije I2P+, da omogoči prepoved delovanja usmerjevalnikov iz Tor izhodnih vozlišč IP naslovov. [Omogočeno privzeto, potreben je ponovni zagon]"
 
 msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
-msgstr ""
+msgstr "Ta nastavitev omogoča zahteve od routerjev v določenih državah, da bodo blokirani in prepovedovih zahtev, ko se naredoma naredajo prepovedovih. Države morajo biti določeni kot dvočrkovni državni kodi, ločeno z vejimami. npr. router.blockCountries=cn,ru"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
 msgstr "Če je nastavljeno na false, usmerjevalnik ne bo blokiriral zahtev za izgradnjo tuneljev iz počasnejših ali nedosegljivih usmerjevalnikov, ki delujejo starejše različice. [Privzeto je true, potreben je ponovni zagon]"
@@ -5869,7 +5869,7 @@ msgid "This setting determines whether routers classified as uninteresting (K or
 msgstr "Ta nastavitev določa, ali se usmerjevalniki, kategorizirani kot neinteresni (raven K ali L, nedosegljivi ali starški od 0.9.50) preverjajo med postopkom osvežitve usmerjevalnika po 1 uri časa delovanja. [Privzeto je false]"
 
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
-msgstr ""
+msgstr "Ko je nastavljen na true, bo ta nastavitev sprostila pogoje za router, da objavi omejitve, ko je določeno, da bo uporabljala omejitve, ko se bodo objavljale. Druge pogoje, kot visoko delo opravila ali router, klasificiran kot počasen, bodo še vedno povzrovaljala omejitve. [Privzeto je false]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Ko je nastavljeno, določi tvrdi omejitev števila tunelov, ki jih lahko usmerjevalnik izgradi hkrasno. Po privzemu uporablja usmerjevalnik povprečno obdobje izgradnje in trenutno izhodno širino pasma za določanje optimalne hitrosti izgradnje. [Ponovni zagon zahtoven]"
@@ -5884,10 +5884,10 @@ msgid "This setting (in minutes) allows you to manually configure how long to wa
 msgstr "Ta nastavitev (v minutah) vam omogoča ročno konfiguriranje, koliko počakati po zagonu, preden se RouterInfos v NetDb preverjajo glede na veljavnost, po kateri se bodo le veljavni usmerjevalniki sprejeli za vključitev. Ko se preverjanje izvede, bodo izbrisane potekle RouterInfos in nedelovanje parterjev, dostopni le preko SSU, odstranjeni iz NetDb. [Privzeto je 60 minut] Opomba: Ta nastavitev ni povezana z starškimi usmerjevalniki (privzeto starški od 0.9.29), ki jih NetDb odstranijo in prepove za sejansko usmerjevalnika takoj po poskusu shranjevanja NetDb."
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
+msgstr "Ta nastavitev, ko je nastavljen na true, bo blokirala neposredno komunikacijo z vseh routerjev v vaši državi in jih jih dodala na seznam prepovedovih, dok se router ne ponovno zagnene. [Privzeto je false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr ""
+msgstr "Ta nastavitev, ko je nastavljen na true, bo blokirala neposredno komunikacijo z vseh routerjev razreda X, ki objavljajo omejitve G in niso niti dosegljivi. Opomba: napredni način mora biti omogočen, da bi ta nastavitev imela učinek. [Privzeto je false]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Ta nastavitev dovoljuje onemogočanje SSU preizkusov za določanje, ali je vaš usmerjevalnik omejen, in se lahko omogoči za usmerjevalnike, ki so zanesljivo neomejeni, vendar doživljajo nepredvidljive težave z omejevalcem. Če je testiranje onemogočeno, bi morala SSU in NTCP poročata o vašem trenutnem javnem ip naslovu na <a href=/info>strani za informacije o usmerjevalniku</a>. [Ponovni zagon zahtoven]"
@@ -5896,7 +5896,7 @@ msgid "This setting determines which transport takes priority when communicating
 msgstr "Ta nastavitev določa, kateri prenos ima prednost pri komunikaciji z sosednjimi strežniki. Po privzemu je NTCP izbran pred UDP (SSU). Če nastavite vrednost na true, bo UDP izbran, razen če obstaja predhodno vzpostavljena povezava NTCP; ko je nastavljeno na vedno, bo UDP vedno uporabljen, ne glede na katero koli predhodno vzpostavljeno povezavo NTCP. [Privzeto je false]"
 
 msgid "miscellaneous"
-msgstr ""
+msgstr "različno"
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "Če je nastavljeno na true, ta možnost bo postavila ikono v sistemske vrstice / območje obvestil, z osnovnimi možnostmi kontrole storitve. [Onemogočeno privzeto]"
@@ -6136,13 +6136,13 @@ msgid "For SSL only"
 msgstr "Sam za SSL"
 
 msgid "How can I configure the console and web services to be accessible on my local network?"
-msgstr ""
+msgstr "Kako lahko konfiguriram konzolo in spletne storitve, da bi bili dostopni na mojem lokalnem omrežju?"
 
 msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
-msgstr ""
+msgstr "Da bi bila konzola dostopna na mojem lokalnem omrežju, uredite datoteko 00-net.i2p.router.web.RouterConsoleRunner-clients.config v mapi clients.config.d v imeniku I2P nastavitev. Posodobite ali dodajte potrebne IP naslove obstoječemu mapiranju localhost (127.0.0.1). Uporabite -s stikalo za dostop preko HTTPS."
 
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
-msgstr ""
+msgstr "Primer: Za dovoljenje dostopa iz localhost in 192.168.1.10 preko HTTP in HTTPS:"
 
 msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
 msgstr ""
@@ -6532,7 +6532,7 @@ msgid "If you are in a hurry and can't wait a few hours, you can tell people to 
 msgstr "Če ste v teku in ne morete počakati nekaj ur, ljudem lahko sporočite, da uporabljajo storitev usmerjanja pomočnika naslova \"skok\". To običajno deluje znotraj nekaj minut po registraciji vašega imena gostitelja na istem mestu. Najprej se sami preizkusite, vnesite <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>izbranoimegostitelja.i2p</i></code> v brskalnik. Ko to deluje, lahko drugim sporočite, da to uporabljajo."
 
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
-msgstr ""
+msgstr "Alternativno lahko kopirate <i>povezavico naslova</i> za vašo domeno, navedeno bod na seznamu naslovov ali na strani s podrobnostmi za vašo domeno npr. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>podrobnosti za skank.i2p</a>. In prilepite povezavnico kjer ga želite deliti z drugimi."
 
 msgid "Backup your private key!"
 msgstr "Naredite varnostno kopijo svojega zasebnega ključa!"
@@ -7309,7 +7309,7 @@ msgid "Configure display language, theme and optional console password"
 msgstr "Konfiguriraj jezik prikaza, temo in nepovrzeno geslo konzole"
 
 msgid "Language"
-msgstr ""
+msgstr "Jezik"
 
 msgid "Configure router bandwidth"
 msgstr "Konfigurirajte širino pasma strežnika"
@@ -7376,22 +7376,22 @@ msgid "network database"
 msgstr "baza podatkov omrežja"
 
 msgid "Encryption type"
-msgstr ""
+msgstr "Vrsta šifriranja"
 
 msgid "Encryption types"
-msgstr ""
+msgstr "Vrste šifriranj"
 
 msgid "Signature types"
-msgstr ""
+msgstr "Vrste podpisov"
 
 msgid "Locally hosted private service"
-msgstr ""
+msgstr "Lokalno gostovana zasebna storitev"
 
 msgid "Locally hosted public service"
-msgstr ""
+msgstr "Lokalno gostovana javna storitev"
 
 msgid "Requested client leaseset"
-msgstr ""
+msgstr "Zahtevan LeaseSet klienta"
 
 msgid "network database router map"
 msgstr "karta strežnika baze podatkov omrežja"
@@ -7437,10 +7437,10 @@ msgid "Fast / High Capacity"
 msgstr "Hitro / Visoka zmogljivost"
 
 msgid "router logs"
-msgstr ""
+msgstr "Dnevniki routerja"
 
 msgid "service logs"
-msgstr ""
+msgstr "Dnevniki storitev"
 
 msgid "Manage I2P addresses"
 msgstr "Upravljanje naslovov I2P"
@@ -7647,13 +7647,13 @@ msgid "Toggle Tunnels"
 msgstr "Preklopi tunele"
 
 msgid "Updating sidebar sections"
-msgstr ""
+msgstr "Posodabljanje odsekov stranske vrstice"
 
 msgid "Peer Profile"
 msgstr "Profil sosednjega strežnika"
 
 msgid "Profile View"
-msgstr ""
+msgstr "Prikaz profila"
 
 msgid "Profile for peer"
 msgstr "Profil za sosednje strežnike"

@@ -145,7 +145,7 @@ msgid "Unreachable on any transport"
 msgstr "Inaccesibil pe orice transport"
 
 msgid "Cannot enumerate UPnP devices on Android."
-msgstr ""
+msgstr "Nu se pot enumera dispozitivele UPnP pe Android."
 
 msgid "UPnP is not enabled"
 msgstr "UPnP nu este activat"
@@ -685,7 +685,7 @@ msgid "After reporting, please restart your router"
 msgstr "După raportare, vă rugăm să reporniți routerul"
 
 msgid "Invalid form submission, requires POST"
-msgstr ""
+msgstr "Trimitere de formular invalidă, necesită POST"
 
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Transmitere formular invalid, probabil pentru că ați folosit butonul \"reload\" sau \"back\" de pe browser-ul dumneavoastră. Vă rugăm retrimiteți."
@@ -820,13 +820,13 @@ msgid "To enable SSL access for the Router Console, see the commented <code>clie
 msgstr "Pentru a activa accesul SSL pentru consola routerului, consultați fișierul Comentat <code>client.config</code> situat în directorul dvs. de aplicații I2P pentru mai multe informații. Va trebui să editați fișierul de configurare a routerconsolerunner localizat în director:"
 
 msgid "Save disabled, edit the router.config file to make changes"
-msgstr ""
+msgstr "Salvarea dezactivată, editați fișierul router.config pentru a face modificări"
 
 msgid "Error updating the configuration - please see the error logs"
 msgstr "Eroare la actualizarea de configurare - vă rugăm să consultați jurnalele de eroare"
 
 msgid "No changes made to the configuration"
-msgstr ""
+msgstr "Nu s-au făcut modificări în configurație"
 
 msgid "Note"
 msgstr "NOTĂ"
@@ -847,7 +847,7 @@ msgid "Save Plugin Configuration"
 msgstr "Salvează configurația plugin"
 
 msgid "Plugins disabled"
-msgstr ""
+msgstr "Plugin-uri dezactivate"
 
 msgid "Install Plugin"
 msgstr "Instalează plugin"
@@ -859,7 +859,7 @@ msgid "Update All Installed Plugins"
 msgstr "Actualizează  toate plugin-urile instalate"
 
 msgid "Delete client disabled"
-msgstr ""
+msgstr "Ștergere client dezactivat"
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -943,17 +943,17 @@ msgid "Updating all plugins"
 msgstr "Actualizez toate plugin-urile"
 
 msgid "Update manager not registered, cannot install"
-msgstr ""
+msgstr "Managerul de actualizări nu este înregistrat, nu se poate instala"
 
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "Se instalează plugin de la {0}"
 
 msgid "Cannot install, check logs"
-msgstr ""
+msgstr "Nu se poate instala, verificați jurnalele"
 
 msgid "Update manager not registered, cannot check"
-msgstr ""
+msgstr "Managerul de actualizări nu este înregistrat, nu se poate verifica"
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1053,17 +1053,17 @@ msgid "Join Family"
 msgstr "Alăturați-vă familiei"
 
 msgid "Bad certificate - No Subject CN"
-msgstr ""
+msgstr "Certificat rău - Nici Subiect CN"
 
 msgid "Bad characters in Family: "
-msgstr ""
+msgstr "Caractere greșite în Familie: "
 
 #, java-format
 msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
-msgstr ""
+msgstr "Keystore {0} există deja pentru familia {1}! Ștergeți-l sau redenumiți-l mai întâi."
 
 msgid "Family key configured for router family: "
-msgstr ""
+msgstr "Cheie de familie configurată pentru familia de routere: "
 
 msgid "Load from file failed"
 msgstr "Încarcă din fișierele eșuate."
@@ -1081,7 +1081,7 @@ msgid "Restore defaults"
 msgstr "Restabileşte implicitele"
 
 msgid "Bad group detected, please retry"
-msgstr ""
+msgstr "Grup greșit detectat, vă rugăm să reîncercați"
 
 msgid "Restored default settings"
 msgstr "Setările implicite restaurate"
@@ -1114,7 +1114,7 @@ msgid "Invalid destination"
 msgstr "Destinație nevalidă"
 
 msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Nu se poate adăuga cheie pentru destinația locală. Activați criptarea în Managerul de Tuneluri."
 
 #, java-format
 msgid "Key for {0} added to keyring"
@@ -1127,7 +1127,7 @@ msgid "Requires hostname, destination, or blinded Base32"
 msgstr "Necesită nume host, destinație sau Base32 orbit"
 
 msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
-msgstr ""
+msgstr "Nu se poate adăuga cheie pentru destinația locală. Activați criptarea în Managerul de Servicii Ascunse."
 
 msgid "Destination requires lookup password"
 msgstr "Destinația necesită parola de căutare"
@@ -1148,7 +1148,7 @@ msgid "Delete key"
 msgstr "Șterge cheie"
 
 msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Nu se poate șterge cheia pentru destinația locală. Dezactivați criptarea în Managerul de Tuneluri."
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1201,34 +1201,34 @@ msgid "Log overrides updated"
 msgstr "Suprascrie jurnal actualizat"
 
 msgid "Error updating the log limits - levels not valid"
-msgstr ""
+msgstr "Eroare la actualizarea limitelor de jurnale - nivelurile nu sunt valide"
 
 msgid "Log limits cleared"
-msgstr ""
+msgstr "Limitele de jurnal au fost șterse"
 
 #, java-format
 msgid "Default log level updated from {0} to {1}"
-msgstr ""
+msgstr "Nivelul de jurnal implicit actualizat de la {0} la {1}"
 
 msgid "Date format updated"
-msgstr ""
+msgstr "Formatul de dată actualizat"
 
 #, java-format
 msgid "Specified date format is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Formatul de dată specificat nu este valid ({0}) - nu a fost actualizat"
 
 msgid "File size updated"
-msgstr ""
+msgstr "Dimensiunea fișierului actualizată"
 
 #, java-format
 msgid "Specified file size limit is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Limita de dimensiune fișier specificat nu este valid ({0}) - nu a fost actualizat"
 
 msgid "Compression setting updated"
-msgstr ""
+msgstr "Setarea de compresie actualizată"
 
 msgid "Log record format updated"
-msgstr ""
+msgstr "Formatul de înregistrare jurnal actualizat"
 
 msgid "Log configuration saved"
 msgstr "Jurnalul de configurare salvat"
@@ -1438,10 +1438,10 @@ msgid "Bad capacity value"
 msgstr "Valoare capacitate rea"
 
 msgid "Bonuses adjusted for: "
-msgstr ""
+msgstr "Bonusuri ajustate pentru: "
 
 msgid "No profile exists for: "
-msgstr ""
+msgstr "Nu există profil pentru: "
 
 msgid "Unsupported"
 msgstr "Nesuportat"
@@ -1457,7 +1457,7 @@ msgstr "Pentru"
 
 #, java-format
 msgid "First {0} displayed, see the {1} file for the full list"
-msgstr ""
+msgstr "Primele {0} afișate, consultați fișierul {1} pentru lista completă"
 
 msgid "IPs Banned Until Restart"
 msgstr "IP-uri Banate până la repornire"
@@ -1561,7 +1561,7 @@ msgid "Save order"
 msgstr "Ordinea salvarii"
 
 msgid "Sidebar preferences updated"
-msgstr ""
+msgstr "Preferințele barei laterale actualizate"
 
 msgid "Refresh interval must be a number"
 msgstr "Intervalul reinnoirii trebuie sa fie un număr"
@@ -1570,16 +1570,16 @@ msgid "Restore full default"
 msgstr "Restabiliți la setările de bază"
 
 msgid "Full sidebar defaults restored."
-msgstr ""
+msgstr "Setările implicite complete ale barei laterale au fost restaurate."
 
 msgid "Sidebar will refresh shortly."
-msgstr ""
+msgstr "Bara laterală se va reîmprospăta în curând."
 
 msgid "Restore minimal default"
 msgstr "Restabileşte implicitele minimale"
 
 msgid "Minimal sidebar defaults restored."
-msgstr ""
+msgstr "Setările implicite minime ale barei laterale au fost restaurate."
 
 msgid "Order must be an integer"
 msgstr "Ordinea trebuie să fie un număr întreg"
@@ -1608,11 +1608,11 @@ msgstr "Listă grafic actualizată, poate dura până la 60 secunde să se refle
 
 #, java-format
 msgid "Internal error: could not resolve pool name {0}."
-msgstr ""
+msgstr "Eroare internă: nu s-a putut rezolva numele poolului {0}."
 
 #, java-format
 msgid "Internal error: could not find pool settings for {0}."
-msgstr ""
+msgstr "Eroare internă: nu s-au găsit setările poolului pentru {0}."
 
 msgid "Updated settings for all pools."
 msgstr "Configurări actualizate pentru toate pools."
@@ -1689,7 +1689,7 @@ msgid "Add user"
 msgstr "Adaugă utilizator"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
-msgstr ""
+msgstr "Nu se poate salva alegerea temei, numele temei conține caractere ilegale"
 
 msgid "Theme change saved."
 msgstr "Tema schimbată salvată."
@@ -1701,7 +1701,7 @@ msgid "No user name entered"
 msgstr "Nu a fost introdus niciun nume de utilizator "
 
 msgid "User name may not contain '='"
-msgstr ""
+msgstr "Numele de utilizator nu pot conține '='"
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "Atenție: Numele de utilizatori în afara setului de caractere ISO-8859-1 nu sunt recomandate. Sprijinul nu este standardizat și variază în funcție de browser."
@@ -2023,7 +2023,7 @@ msgid "Show list of all known I2P routers"
 msgstr "Afișează lista tuturor router-urilor I2P cunoscute"
 
 msgid "List of recently connected peers with profiling info"
-msgstr ""
+msgstr "Lista de parteneri conectați recent cu informații de profilare"
 
 msgid "Peer Profiles"
 msgstr "Profiluri de la egal la egal"
@@ -2191,7 +2191,7 @@ msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Front-end alternativ centrat pe confidențialitate pentru Reddit"
 
 msgid "AI Image generation & Chat hub"
-msgstr ""
+msgstr "Centru de generare imagini AI și chat"
 
 msgid "IRC Logs for multiple networks"
 msgstr "Jurnalele IRC pentru mai multe rețele"
@@ -2332,10 +2332,10 @@ msgid "OpenDemocracy"
 msgstr "Democrație deschisă"
 
 msgid "Online privacy &amp; tech blog"
-msgstr ""
+msgstr "Blog de confidențialitate online și tehnologie"
 
 msgid "RightToPrivacy"
-msgstr ""
+msgstr "DreptulLaConfidențialitate"
 
 msgid "Lifestyle magazine"
 msgstr "Revista Lifestyle"
@@ -2356,7 +2356,7 @@ msgid "Community-driven tech news"
 msgstr "Știri despre tehnologie conduse de comunitate"
 
 msgid "Various services"
-msgstr ""
+msgstr "Diverse servicii"
 
 msgid "News for nerds"
 msgstr "Știri pentru tocilari"
@@ -2432,7 +2432,7 @@ msgid "Add"
 msgstr "Adaugă"
 
 msgid "Error displaying the info page."
-msgstr ""
+msgstr "Eroare la afișarea paginii de informații."
 
 msgid "Identity"
 msgstr "Identitate"
@@ -2480,7 +2480,7 @@ msgid "Performance"
 msgstr "Performanță"
 
 msgid "Maximum available RAM"
-msgstr ""
+msgstr "RAM maxim disponibil"
 
 msgid "Classified as slow"
 msgstr "Clasificat ca lent"
@@ -2492,7 +2492,7 @@ msgid "No"
 msgstr "Nu"
 
 msgid "GeoIP Db"
-msgstr ""
+msgstr "Bază de date GeoIP"
 
 msgid "Target"
 msgstr "țintă"
@@ -2631,19 +2631,19 @@ msgid "Sybil Analysis"
 msgstr "Analiza Sybil"
 
 msgid "Bad value supplied, please check and try again."
-msgstr ""
+msgstr "Valoare furnizată greșită, vă rugăm să verificați și să încercați din nou."
 
 msgid "Router Map"
 msgstr "Harta routerului"
 
 msgid "Network Database Search"
-msgstr ""
+msgstr "Căutare în baza de date de rețea"
 
 msgid "Capabilities"
 msgstr "Capabilități"
 
 msgid "e.g. f or XOfR"
-msgstr ""
+msgstr "de ex. f sau XOfR"
 
 msgid "Cost"
 msgstr "Cost"
@@ -2652,49 +2652,49 @@ msgid "Country"
 msgstr "Regiune"
 
 msgid "Country Codes"
-msgstr ""
+msgstr "Coduri de țară"
 
 msgid "Hash Prefix"
-msgstr ""
+msgstr "Prefix de hash"
 
 msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
-msgstr ""
+msgstr "IPv4 sau IPv6, sufixe /24,/16,/8 opționale pentru IPv4, prefix ok pentru IPv6"
 
 msgid "Hostname or b32"
-msgstr ""
+msgstr "Nume gazdă sau b32"
 
 msgid "IPv6 Prefix"
-msgstr ""
+msgstr "Prefix IPv6"
 
 msgid "Single port or range"
-msgstr ""
+msgstr "Port unic sau interval"
 
 msgid "Signature Type"
-msgstr ""
+msgstr "Tip de semnătură"
 
 msgid "SSU Capabilities"
-msgstr ""
+msgstr "Capacități SSU"
 
 msgid "Encryption Type"
-msgstr ""
+msgstr "Tip de criptare"
 
 msgid "Router Version"
-msgstr ""
+msgstr "Versiune router"
 
 msgid "Transport"
 msgstr "Transport"
 
 msgid "Add Sybil analysis (must pick at least one above)"
-msgstr ""
+msgstr "Adăugați analiză Sybil (trebuie să alegeți cel puțin unul de mai sus)"
 
 msgid "Sybil close to"
-msgstr ""
+msgstr "Sybil aproape de"
 
 msgid "Router hash, destination hash, b32, or from address book"
-msgstr ""
+msgstr "Hash router, hash destinație, b32 sau din agenda de adrese"
 
 msgid "or Sybil close to this router"
-msgstr ""
+msgstr "sau Sybil aproape de acest router"
 
 msgid "Lookup"
 msgstr "Căutare"
@@ -2709,13 +2709,13 @@ msgid "not found in network database"
 msgstr "nu a fost găsit în rețeaua bazei de date"
 
 msgid "Bad Base64 Router hash"
-msgstr ""
+msgstr "Hash router Base64 greșit"
 
 msgid "No routers with"
-msgstr ""
+msgstr "Nu există routere cu: "
 
 msgid "Hash prefix"
-msgstr ""
+msgstr "Prefix de hash"
 
 msgid "Port"
 msgstr "Port"
@@ -2724,10 +2724,10 @@ msgid "MTU"
 msgstr "MTU"
 
 msgid "found in the network database"
-msgstr ""
+msgstr "găsit în baza de date de rețea"
 
 msgid "results"
-msgstr ""
+msgstr "rezultate"
 
 msgid "Previous Page"
 msgstr "Pagina precedentă"
@@ -2736,43 +2736,43 @@ msgid "Next Page"
 msgstr "Pagina următoare"
 
 msgid "Results per page"
-msgstr ""
+msgstr "Rezultate pe pagină"
 
 msgid "Not initialized"
 msgstr "Nu este inițializat"
 
 msgid "Total Remote Leasesets"
-msgstr ""
+msgstr "Total LeaseSet-uri la distanță"
 
 msgid "Compact mode"
-msgstr ""
+msgstr "Mod compact"
 
 msgid "Local Leasesets"
-msgstr ""
+msgstr "LeaseSet-uri locale"
 
 msgid "Debug Mode"
-msgstr ""
+msgstr "Mod depanare"
 
 msgid "Published (RAP) Leasesets"
-msgstr ""
+msgstr "LeaseSet-uri publicate (RAP)"
 
 msgid "Sorted by hash distance, closest first."
-msgstr ""
+msgstr "Sortate după distanța hash, cele mai apropiate primele."
 
 msgid "Mod Data"
-msgstr ""
+msgstr "Date modificări"
 
 msgid "Last Changed"
-msgstr ""
+msgstr "Ultima modificare"
 
 msgid "Next Mod Data"
-msgstr ""
+msgstr "Următoarele date modificări"
 
 msgid "Change in"
-msgstr ""
+msgstr "Modificare în"
 
 msgid "Floodfill mode enabled"
-msgstr ""
+msgstr "Mod Floodfill activat"
 
 msgid "Routing Key"
 msgstr "Cheie de rutare"
@@ -2787,10 +2787,10 @@ msgid "Estimated total leasesets"
 msgstr "Seturi totale estimate de leasing"
 
 msgid "Total Local Leasesets"
-msgstr ""
+msgstr "Total LeaseSet-uri locale"
 
 msgid "Remote Leasesets"
-msgstr ""
+msgstr "LeaseSet-uri la distanță"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2801,7 +2801,7 @@ msgid "LeaseSet for {0} not found in network database"
 msgstr ""
 
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 msgid "LeaseSet"
 msgstr "LeaseSet"
@@ -2833,7 +2833,7 @@ msgid "Signature type"
 msgstr "Tipul semnăturii"
 
 msgid "Public Key"
-msgstr ""
+msgstr "Cheie publică"
 
 msgid "Unsupported type"
 msgstr "Tip neacceptat"
@@ -2850,10 +2850,10 @@ msgid "Unknown"
 msgstr "Necunoscut"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr ""
+msgstr "Mod avansat - include toate statisticile publicate de floodfills."
 
 msgid "Compact mode - does not include statistics published by floodfills."
-msgstr ""
+msgstr "Mod compact - nu include statisticile publicate de floodfills."
 
 msgid "Network Database Router Statistics"
 msgstr "Statisticile Router-ului in rețeaua bazei de date"
@@ -2877,7 +2877,7 @@ msgid "Transports"
 msgstr "Transporturi"
 
 msgid "X Tier"
-msgstr ""
+msgstr "Nivel X"
 
 msgid "Floodfills"
 msgstr "Inundații"
@@ -2895,10 +2895,10 @@ msgid "Router is banlisted"
 msgstr "Routerul este interzis"
 
 msgid "Java I2P variant"
-msgstr ""
+msgstr "Variantă Java I2P"
 
 msgid "I2Pd variant"
-msgstr ""
+msgstr "Variantă I2Pd"
 
 msgid "RouterInfo is compressible"
 msgstr "RouterInfo este compresibil"
@@ -2932,7 +2932,7 @@ msgid "Hostname"
 msgstr "Nume gazdă"
 
 msgid "direct"
-msgstr ""
+msgstr "direct"
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "Familie verificată (certificatul de semnare este instalat și valid)"
@@ -2971,10 +2971,10 @@ msgid "Last heard from"
 msgstr "Ultimul auzit"
 
 msgid "Network Id"
-msgstr ""
+msgstr "ID rețea"
 
 msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr ""
+msgstr "Numărul este mereu falsificat pentru a evita indicarea repornirilor routerului."
 
 msgid "Hidden or starting up"
 msgstr "Ascuns sau pentru pornire"
@@ -3042,10 +3042,10 @@ msgid "IPv6"
 msgstr "IPv6"
 
 msgid "Active connections / Max permitted"
-msgstr ""
+msgstr "Conexiuni active / Maxim permis"
 
 msgid "Connections / Limit"
-msgstr ""
+msgstr "Conexiuni / Limită"
 
 msgid "Current / maximum permitted"
 msgstr "Curent / maxim permis"
@@ -3344,7 +3344,7 @@ msgid "Rejected"
 msgstr "Respins"
 
 msgid "First Heard About"
-msgstr ""
+msgstr "Prima dată auzit despre"
 
 msgid "Last Heard From"
 msgstr "Ultima dată când am auzit de la"
@@ -3460,7 +3460,7 @@ msgstr "{0} lățime de bandă partajată"
 
 #, java-format
 msgid "Over {0} KB/s shared bandwidth"
-msgstr ""
+msgstr "Peste {0} KB/s lățime partajată"
 
 msgid "status"
 msgstr "stare"
@@ -3523,7 +3523,7 @@ msgid "Total number of banned peers"
 msgstr "Numărul total de colegi interziși"
 
 msgid "Note: 'LU' class routers have been excluded from the list."
-msgstr ""
+msgstr "Notă: Routerele de clasă 'LU' au fost excluse din listă."
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
@@ -3902,7 +3902,7 @@ msgid "Floodfill enabled"
 msgstr "Floodfill activat"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
-msgstr ""
+msgstr "Numărul total de LeaseSet-uri la distanță stocate în NetDb-ul nostru"
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Atenție: ECDSA nu este disponibil. Actualizați Java sau OS"
@@ -3917,7 +3917,7 @@ msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Utilizatorii ce au convorbit în ultimele câteva minute/ultima ora"
 
 msgid "Peers we've been talking to in the last minute"
-msgstr ""
+msgstr "Parteneri cu care am vorbit în ultimul minut"
 
 msgid "The number of peers available for building client tunnels"
 msgstr "Numărul de parteneri disponibili pentru construirea de tuneluri client"
@@ -4428,7 +4428,7 @@ msgid "Data"
 msgstr "Date"
 
 msgid "Limit"
-msgstr ""
+msgstr "Limită"
 
 msgid "Receive on"
 msgstr "Primite în "
@@ -4475,7 +4475,7 @@ msgid "No transit tunnels currently active."
 msgstr "Niciun tunel de tranzit activ în prezent."
 
 msgid "Transit Tunnels by Peer (Top {0})"
-msgstr ""
+msgstr "Tuneluri de tranzit pe Partener (Top {0})"
 
 msgid "Address"
 msgstr "Adresa"
@@ -4554,7 +4554,7 @@ msgid "Bandwidth test did not complete"
 msgstr "Testul de lățime de bandă nu a fost finalizat"
 
 msgid "Bad state for test"
-msgstr ""
+msgstr "Stare proastă pentru test"
 
 msgid "Bandwidth test started"
 msgstr "Testul de lățime de bandă a început"
@@ -4569,16 +4569,16 @@ msgid "Bandwidth test was not running"
 msgstr "Testul de lățime de bandă nu a fost difuzat"
 
 msgid "ready"
-msgstr ""
+msgstr "gata"
 
 msgid "inbound test"
-msgstr ""
+msgstr "test de intrare"
 
 msgid "outbound test"
-msgstr ""
+msgstr "test de ieșire"
 
 msgid "done"
-msgstr ""
+msgstr "gata"
 
 msgid "bits per second"
 msgstr "biți pe secundă"
@@ -4750,7 +4750,7 @@ msgid "Share"
 msgstr "Partajare"
 
 msgid "NOTE"
-msgstr ""
+msgstr "NOTĂ"
 
 #, java-format
 msgid "You have configured I2P+ to share only {0} KBps."
@@ -4777,7 +4777,7 @@ msgstr "configurare avansata"
 
 #, java-format
 msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
-msgstr ""
+msgstr "Cheia <b>{0}</b> selectată pentru eliminare. Pentru a confirma modificarea, salvați configurația sau anulați pentru a restaura cheia."
 
 msgid "Floodfill Configuration"
 msgstr "Configurație Floodfill"
@@ -4807,7 +4807,7 @@ msgid "Advanced I2P+ Configuration"
 msgstr "Configurare avansată I2P"
 
 msgid "Help with additional configuration settings"
-msgstr ""
+msgstr "Ajutor cu setări de configurare suplimentare"
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5201,7 +5201,7 @@ msgid "Banning will prevent the participation of this peer in tunnels you create
 msgstr "Blocarea va împiedica participarea acestui partener în tunelurile pe care le creați."
 
 msgid "A list of bans by IP address is presented below."
-msgstr ""
+msgstr "Mai jos este prezentată o listă de interdicții după adresă IP."
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
@@ -5209,7 +5209,7 @@ msgstr ""
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
-msgstr ""
+msgstr "Este disponibilă și o listă de {0}interdicții doar de sesiune{1} după hash."
 
 msgid "Adjust Profile Bonuses"
 msgstr "Reglați Bonusurile Profilului"
@@ -5400,7 +5400,7 @@ msgid "config sidebar"
 msgstr "configurați bara laterală"
 
 msgid "Sidebar Options"
-msgstr ""
+msgstr "Opțiuni bară laterală"
 
 msgid "Refresh interval"
 msgstr "Interval de Actualizare"
@@ -5412,10 +5412,10 @@ msgid "0 to disable"
 msgstr "0 pentru a dezactiva"
 
 msgid "Unified sidebar"
-msgstr ""
+msgstr "Bară laterală unificată"
 
 msgid "Use the same sidebar on all pages"
-msgstr ""
+msgstr "Folosiți aceeași bară laterală pe toate paginile"
 
 msgid "config stats"
 msgstr "config statistici"
@@ -5617,7 +5617,7 @@ msgid "Event Log"
 msgstr "Jurnal de evenimente"
 
 msgid "Combined"
-msgstr ""
+msgstr "Combinat"
 
 msgid "graph"
 msgstr "grafic"
@@ -5698,7 +5698,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Această setare, când este setată la adevărat, va afișa linkurile <i>Sites of Interest</i> în <a href=/sitemap>harta site-ului</a>. [Implicit este fals]"
 
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr ""
+msgstr "Această setare, când este setată la true, va prezenta bara laterală standard pe pagina de pornire, permițând configurarea prin <a href=/configsidebar>. [Implicit este false]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Această setare determină dacă routerul ar trebui să utilizeze fișierul <i>blocklist.txt</i> furnizat și orice listă de blocare configurată de utilizator pentru a permite interzicerea routerelor după hash sau adresă IP. Gama de adrese și măștile de rețea sunt acceptate pentru IPv4, dar nu pentru IPv6. Consultați fișierul <i>blocklist.txt</i> din directorul aplicației I2P+ pentru mai multe informații. [Activat în mod implicit, necesită repornire]"
@@ -5713,7 +5713,7 @@ msgid "This setting determines whether or not the router should use the provided
 msgstr "Această setare determină dacă routerul ar trebui să utilizeze fișierul <i>blocklist_tor.txt</i> furnizat în directorul aplicației dumneavoastră I2P+ pentru a permite interzicerea routerelor care funcționează din adresele IP ale nodurilor de ieșire Tor. [Activat în mod implicit, necesită repornire]"
 
 msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
-msgstr ""
+msgstr "Această setare permite solicitările de la routerele din țările specificate să fie blocate și interzise imediat ce ce se face o solicitare de tunel direct. Țările trebuie specificate ca coduri de țară de două litere, separate prin virgule. ex. router.blockCountries=cn,ru"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
 msgstr "Când este setat pe fals, routerul nu va bloca cererile de construire de tuneluri de la routeri mai lente sau necapabile care rulează versiuni mai vechi. [Valoarea implicită este adevărat, este necesară o restartare]"
@@ -5851,7 +5851,7 @@ msgid "This setting determines whether routers classified as uninteresting (K or
 msgstr "Această setare determină dacă ruterele clasificate ca fiind neinteresante (nivel K sau L, inaccesibile sau mai vechi de 0.9.50) sunt verificate în timpul procesului de reîmprospătare a rutereului după 1 oră de uptime. [Valoarea implicită este falsă]"
 
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
-msgstr ""
+msgstr "Când este setată la true, această setare va relaxa condițiile necesare pentru routerul dvs. să publiceze limite de congestie, în special când este determinat că utilizarea lățimii de bandă este ridicată. Alte condiții, cum ar fi întârziere mare sau un router clasificat ca lent, vor cauza în continuare publicarea limitelor. [Implicit este false]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Când este configurat, stabilește o limită strictă pentru numărul de tuneluri pe care routerul are voie să le construiască în mod concomitent. În mod implicit, routerul utilizează timpul mediu de construire și lățimea de bandă de ieșire curentă pentru a determina rata de construire optimă. [Este necesară repornirea]"
@@ -5866,10 +5866,10 @@ msgid "This setting (in minutes) allows you to manually configure how long to wa
 msgstr "Această setare (în minute) vă permite să configurați manual cât timp să se aștepte după pornirea routerelor RouterInfos în NetDb până când numai ruterele valide vor fi acceptate pentru includere. În momentul în care are loc validarea, RouterInfos expirate și peerii neaccesibili doar prin SSU vor fi eliminate din NetDb. [Implicit este de 60 de minute] Notă: Această setare nu are nicio influență asupra routerelor mai vechi (mai vechi de 0.9.29 implicit) care sunt eliminate din NetDb și interzise pentru sesiunea routerului din momentul în care se încearcă stocarea în NetDb."
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
+msgstr "Această setare, când este setată la true, va bloca comunicarea directă de la toate routerele din propria țară și le va adăuga la lista de interdicții până când routerul repornește. [Implicit este false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr ""
+msgstr "Această setare, când este setată la true, va bloca comunicarea directă de la toate routerele de nivel X care publică un limit de congestie G și nu sunt nici accesibile nici inaccesibile, adăugându-le la lista de interdicții de sesiune. Rețineți că modulul avansat trebuie să fie activat pentru ca această setare să aibă efect. [Implicit este false]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Această setare permite dezactivarea testelor SSU pentru a determina dacă router-ul dvs. are firewall și poate fi activat pentru ruterele care cu siguranță nu sunt firewall, dar întâmpină probleme de firewall intermitente. În cazul în care testarea este dezactivată, atât SSU, cât și NTCP ar trebui să raporteze adresa IP publică curentă pe pagina <a href=/info>informațiilor despre router</a>. [Necesită repornire]"
@@ -5878,7 +5878,7 @@ msgid "This setting determines which transport takes priority when communicating
 msgstr "Această setare determină care transport are prioritate în comunicarea cu colegii de rețea. În mod implicit, NTCP este preferat în defavoarea UDP (SSU). Setând valoarea pe true, UDP va fi preferat astfel dacă există deja o conexiune NTCP preexistentă; când este setat întotdeauna, UDP va fi utilizat întotdeauna indiferent dacă există o conexiune NTCP preexistentă. [Implicit este false]"
 
 msgid "miscellaneous"
-msgstr ""
+msgstr "diverse"
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "Dacă este setat la adevărat, această opțiune va plasa un icon în bara de sistem / zona de notificare, cu opțiuni de control ale serviciului de bază. [Dezactivat în mod implicit]"
@@ -6118,13 +6118,13 @@ msgid "For SSL only"
 msgstr "Doar pentru SSL"
 
 msgid "How can I configure the console and web services to be accessible on my local network?"
-msgstr ""
+msgstr "Cum pot configura consola și serviciile web pentru a fi accesibile în rețeaua mea locală?"
 
 msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
-msgstr ""
+msgstr "Pentru a face consola accesibilă în rețeaua mea locală, editați fișierul de configurare 00-net.i2p.router.web.RouterConsoleRunner-clients.config din folderul clients.config.d al directorului de setări I2P. Actualizați sau adăugați adresele IP necesare la maparea localhost existent (127.0.0.1). Folosiți comutatorul -s pentru acces HTTPS."
 
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
-msgstr ""
+msgstr "Exemplu: Pentru a permite accesul de la localhost și 192.168.1.10 prin HTTP și HTTPS:"
 
 msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
 msgstr ""
@@ -6514,7 +6514,7 @@ msgid "If you are in a hurry and can't wait a few hours, you can tell people to 
 msgstr "Dacă vă grăbiți și nu puteți aștepta câteva ore, puteți le puteți spune oamenilor să utilizeze un serviciu de redirecționare ajutatoare a adresei „jump”. Aceasta de obicei va funcționa în câteva minute de la înregistrarea numelui de gazdă pe același site. Testați mai întâi pătrunzând <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>yourchosenhostname.i2p</i></code> în browser. Odată ce funcționează, puteți spune și altora să îl utilizeze."
 
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
-msgstr ""
+msgstr "Alternativ, puteți copia <i>linkul de ajutor pentru adresă</i> pentru domeniul dvs., indicat fie pe pagina listei de adrese, fie pe pagina de detalii pentru domeniul dvs. ex. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>detalii pentru skank.i2p</a>, și lipiți linkul acolo unde este necesar să-l partajați cu alții."
 
 msgid "Backup your private key!"
 msgstr "Efectuați o copie de siguranță a cheii private!"
@@ -7291,7 +7291,7 @@ msgid "Configure display language, theme and optional console password"
 msgstr "Configurare limbaj de afișare, temă și parolă opțională a consolei"
 
 msgid "Language"
-msgstr ""
+msgstr "Limbă"
 
 msgid "Configure router bandwidth"
 msgstr "Configurare lățime de bandă a routerului"
@@ -7358,22 +7358,22 @@ msgid "network database"
 msgstr "baza de date a rețelei"
 
 msgid "Encryption type"
-msgstr ""
+msgstr "Tip de criptare"
 
 msgid "Encryption types"
-msgstr ""
+msgstr "Tipuri de criptare"
 
 msgid "Signature types"
-msgstr ""
+msgstr "Tipuri de semnătură"
 
 msgid "Locally hosted private service"
-msgstr ""
+msgstr "Serviciu privat găzduit local"
 
 msgid "Locally hosted public service"
-msgstr ""
+msgstr "Serviciu public găzduit local"
 
 msgid "Requested client leaseset"
-msgstr ""
+msgstr "LeaseSet client solicitat"
 
 msgid "network database router map"
 msgstr "Harta routerului din bază de date de rețea"
@@ -7419,10 +7419,10 @@ msgid "Fast / High Capacity"
 msgstr "Rapid / Capacitate mare"
 
 msgid "router logs"
-msgstr ""
+msgstr "Jurnale router"
 
 msgid "service logs"
-msgstr ""
+msgstr "Jurnale de servicii"
 
 msgid "Manage I2P addresses"
 msgstr "Gestionați adresele I2P"
@@ -7629,13 +7629,13 @@ msgid "Toggle Tunnels"
 msgstr "Comută tunelurile"
 
 msgid "Updating sidebar sections"
-msgstr ""
+msgstr "Actualizare secțiuni bară laterală"
 
 msgid "Peer Profile"
 msgstr "Profil partener"
 
 msgid "Profile View"
-msgstr ""
+msgstr "Vizualizare profil"
 
 msgid "Profile for peer"
 msgstr "Profil pentru egal"

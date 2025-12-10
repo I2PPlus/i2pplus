@@ -145,7 +145,7 @@ msgid "Unreachable on any transport"
 msgstr "Nedostupné na každém transportu"
 
 msgid "Cannot enumerate UPnP devices on Android."
-msgstr ""
+msgstr "Nelze vyjmenit zařízení UPnP na Androidu."
 
 msgid "UPnP is not enabled"
 msgstr "UPnP není povolen"
@@ -685,7 +685,7 @@ msgid "After reporting, please restart your router"
 msgstr "Po nahlášení restartujte router"
 
 msgid "Invalid form submission, requires POST"
-msgstr ""
+msgstr "Neplatné odeslání formuláře, vyžaduje POST"
 
 msgid "Invalid form submission, probably because you used the 'back' or 'reload' button on your browser. Please resubmit."
 msgstr "Neplatně odeslaný formulář, nejspíše jste použili tlačítka 'Zpět' nebo 'Znovu načíst' ve vašem prohlížeči. Prosím odešlete formulář znovu."
@@ -820,13 +820,13 @@ msgid "To enable SSL access for the Router Console, see the commented <code>clie
 msgstr "Chcete-li povolit SSL přístup pro Router Console, podívejte se do komentovaného souboru <code>clients.config</code> umístěného v adresáři vaší aplikace I2P, kde najdete další informace. "
 
 msgid "Save disabled, edit the router.config file to make changes"
-msgstr ""
+msgstr "Ukládání zakázáno, upravte soubor router.config pro provedení změn."
 
 msgid "Error updating the configuration - please see the error logs"
 msgstr "Chyba při aktualizaci konfigurace – prohlédněte si prosím protokoly chyb"
 
 msgid "No changes made to the configuration"
-msgstr ""
+msgstr "Do konfigurace nebyly provedeny žádné změny."
 
 msgid "Note"
 msgstr "POZNÁMKA"
@@ -847,7 +847,7 @@ msgid "Save Plugin Configuration"
 msgstr "Uložit konfiguraci pluginu"
 
 msgid "Plugins disabled"
-msgstr ""
+msgstr "Zásuvní moduly zakázány"
 
 msgid "Install Plugin"
 msgstr "Nainstalujte plugin"
@@ -859,7 +859,7 @@ msgid "Update All Installed Plugins"
 msgstr "Aktualizujte všechny nainstalované pluginy"
 
 msgid "Delete client disabled"
-msgstr ""
+msgstr "Mazání klienta zakázáno"
 
 #, java-format
 msgid "Error stopping plugin {0}"
@@ -943,17 +943,17 @@ msgid "Updating all plugins"
 msgstr "Aktualizace všech pluginů"
 
 msgid "Update manager not registered, cannot install"
-msgstr ""
+msgstr "Správce aktualizací není registrován, nelze nainstalovat"
 
 #, java-format
 msgid "Installing plugin from {0}"
 msgstr "Instalace pluginu z {0}"
 
 msgid "Cannot install, check logs"
-msgstr ""
+msgstr "Nelze nainstalovat, zkontrolujte protokoly."
 
 msgid "Update manager not registered, cannot check"
-msgstr ""
+msgstr "Správce aktualizací není registrován, nelze zkontrolovat"
 
 #, java-format
 msgid "Checking plugin {0} for updates"
@@ -1053,17 +1053,17 @@ msgid "Join Family"
 msgstr "Připojte se k rodině"
 
 msgid "Bad certificate - No Subject CN"
-msgstr ""
+msgstr "Špatný certifikát - Žádný předmět CN"
 
 msgid "Bad characters in Family: "
-msgstr ""
+msgstr "Špatné znaky v Rodině: "
 
 #, java-format
 msgid "Keystore {0} already exists for family {1}! Delete or rename it first."
-msgstr ""
+msgstr "Úložiště klíčů {0} již existuje pro rodinu {1}! Nejprve smažte nebo přejmenujte ho."
 
 msgid "Family key configured for router family: "
-msgstr ""
+msgstr "Klíč rodiny nakonfigurován pro rodinu routerů: "
 
 msgid "Load from file failed"
 msgstr "Načtení ze souboru se nezdařilo"
@@ -1081,7 +1081,7 @@ msgid "Restore defaults"
 msgstr "Obnovte výchozí nastavení"
 
 msgid "Bad group detected, please retry"
-msgstr ""
+msgstr "Zjištěna špatnou skupinu, zkuste to znovu."
 
 msgid "Restored default settings"
 msgstr "Obnoveno výchozí nastavení"
@@ -1114,7 +1114,7 @@ msgid "Invalid destination"
 msgstr "Neplatný cíl"
 
 msgid "Cannot add key for local destination. Enable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Nelze přidat klíč pro místní cíl. Povolte šifrování ve Správci tunelů."
 
 #, java-format
 msgid "Key for {0} added to keyring"
@@ -1127,7 +1127,7 @@ msgid "Requires hostname, destination, or blinded Base32"
 msgstr "Vyžaduje název hostitele, cíl nebo zaslepenou Base32"
 
 msgid "Cannot add key for local destination. Enable encryption in the Hidden Services Manager."
-msgstr ""
+msgstr "Nelze přidat klíč pro místní cíl. Povolte šifrování ve Správci skrytých služeb."
 
 msgid "Destination requires lookup password"
 msgstr "Cíl vyžaduje vyhledávací heslo"
@@ -1148,7 +1148,7 @@ msgid "Delete key"
 msgstr "Smazat klíč"
 
 msgid "Cannot remove key for local destination. Disable encryption in the Tunnel Manager."
-msgstr ""
+msgstr "Nelze odstranit klíč pro místní cíl. Zakažte šifrování ve Správci tunelů."
 
 #, java-format
 msgid "Key for {0} removed from keyring"
@@ -1201,34 +1201,34 @@ msgid "Log overrides updated"
 msgstr "Přepisy protokolu byly aktualizovány"
 
 msgid "Error updating the log limits - levels not valid"
-msgstr ""
+msgstr "Chyba při aktualizaci limitů protokolů - úrovně nejsou platné"
 
 msgid "Log limits cleared"
-msgstr ""
+msgstr "Limity protokolů vymazány"
 
 #, java-format
 msgid "Default log level updated from {0} to {1}"
-msgstr ""
+msgstr "Výchozí úroveň protokolu aktualizována z {0} na {1}"
 
 msgid "Date format updated"
-msgstr ""
+msgstr "Formát data aktualizován"
 
 #, java-format
 msgid "Specified date format is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Zadaný formát data není platný ({0}) - neaktualizován"
 
 msgid "File size updated"
-msgstr ""
+msgstr "Velikost souboru aktualizována"
 
 #, java-format
 msgid "Specified file size limit is not valid ({0}) - not updated"
-msgstr ""
+msgstr "Zadaný limit velikosti souboru není platný ({0}) - neaktualizován"
 
 msgid "Compression setting updated"
-msgstr ""
+msgstr "Nastavení komprese aktualizováno"
 
 msgid "Log record format updated"
-msgstr ""
+msgstr "Formát záznamu protokolu aktualizován"
 
 msgid "Log configuration saved"
 msgstr "Konfigurace protokolu uložena"
@@ -1438,10 +1438,10 @@ msgid "Bad capacity value"
 msgstr "Špatná hodnota kapacity"
 
 msgid "Bonuses adjusted for: "
-msgstr ""
+msgstr "Bonusy upraveny pro: "
 
 msgid "No profile exists for: "
-msgstr ""
+msgstr "Profil neexistuje pro: "
 
 msgid "Unsupported"
 msgstr "Nepodporováno"
@@ -1457,7 +1457,7 @@ msgstr "Do"
 
 #, java-format
 msgid "First {0} displayed, see the {1} file for the full list"
-msgstr ""
+msgstr "Zobrazeno prvních {0} položek, viz soubor {1} pro úplný seznam."
 
 msgid "IPs Banned Until Restart"
 msgstr "IPs Zakázáno Až Do Restartu"
@@ -1561,7 +1561,7 @@ msgid "Save order"
 msgstr "Uložte objednávku"
 
 msgid "Sidebar preferences updated"
-msgstr ""
+msgstr "Předvolby postranní lišty aktualizovány"
 
 msgid "Refresh interval must be a number"
 msgstr "Interval obnovy musí být číslo"
@@ -1570,16 +1570,16 @@ msgid "Restore full default"
 msgstr "Obnovit úplné výchozí nastavení"
 
 msgid "Full sidebar defaults restored."
-msgstr ""
+msgstr "Výchozí nastavení plné postranní lišty obnovena."
 
 msgid "Sidebar will refresh shortly."
-msgstr ""
+msgstr "Postranní lišta se brzy obnoví."
 
 msgid "Restore minimal default"
 msgstr "Obnovte minimální výchozí nastavení"
 
 msgid "Minimal sidebar defaults restored."
-msgstr ""
+msgstr "Minimální výchozí nastavení postranní lišty obnovena."
 
 msgid "Order must be an integer"
 msgstr "Pořadí musí být celé číslo"
@@ -1608,11 +1608,11 @@ msgstr "Seznam grafů aktualizován, může trvat až 60 s, než se projeví na 
 
 #, java-format
 msgid "Internal error: could not resolve pool name {0}."
-msgstr ""
+msgstr "Vnitřní chyba: nelze přelošit název poolu {0}."
 
 #, java-format
 msgid "Internal error: could not find pool settings for {0}."
-msgstr ""
+msgstr "Vnitřní chyba: nelze najít nastavení poolu pro {0}."
 
 msgid "Updated settings for all pools."
 msgstr "Aktualizováno nastavení pro všechny bazény."
@@ -1689,7 +1689,7 @@ msgid "Add user"
 msgstr "Přidat uživatele"
 
 msgid "Cannot save theme choice, theme name has illegal characters"
-msgstr ""
+msgstr "Nelze uložit výběr tématu, název tématu obsahuje neplatné znaky."
 
 msgid "Theme change saved."
 msgstr "Změna motivu uložena."
@@ -1701,7 +1701,7 @@ msgid "No user name entered"
 msgstr "Nebylo zadáno žádné uživatelské jméno"
 
 msgid "User name may not contain '='"
-msgstr ""
+msgstr "Uživatelské jméno nesmí obsahovat '='"
 
 msgid "Warning: User names outside the ISO-8859-1 character set are not recommended. Support is not standardized and varies by browser."
 msgstr "Warning: Uživatelská jména mimo znakovou sadu ISO-8859-1 se nedoporučují. "
@@ -2023,7 +2023,7 @@ msgid "Show list of all known I2P routers"
 msgstr "Zobrazit seznam všech známých I2P routerů"
 
 msgid "List of recently connected peers with profiling info"
-msgstr ""
+msgstr "Seznam nedávno připojených protějů s informacemi o profilování"
 
 msgid "Peer Profiles"
 msgstr "Profily vrstevníků"
@@ -2191,7 +2191,7 @@ msgid "Alternative privacy-focused front-end for Reddit"
 msgstr "Alternativní front-end zaměřený na soukromí pro Reddit"
 
 msgid "AI Image generation & Chat hub"
-msgstr ""
+msgstr "Centrum generování obrázků AI a chatu"
 
 msgid "IRC Logs for multiple networks"
 msgstr "IRC Záznamy pro více sítí"
@@ -2332,10 +2332,10 @@ msgid "OpenDemocracy"
 msgstr "Otevřená demokracie"
 
 msgid "Online privacy &amp; tech blog"
-msgstr ""
+msgstr "Blog o online soukromí a technologiích"
 
 msgid "RightToPrivacy"
-msgstr ""
+msgstr "PrávoNaSoukromí"
 
 msgid "Lifestyle magazine"
 msgstr "Časopis o životním stylu"
@@ -2356,7 +2356,7 @@ msgid "Community-driven tech news"
 msgstr "Technické novinky řízené komunitou"
 
 msgid "Various services"
-msgstr ""
+msgstr "Různé služby"
 
 msgid "News for nerds"
 msgstr "Novinky pro nerdy"
@@ -2432,7 +2432,7 @@ msgid "Add"
 msgstr "Přidat"
 
 msgid "Error displaying the info page."
-msgstr ""
+msgstr "Chyba při zobrazování informační stránky."
 
 msgid "Identity"
 msgstr "Identita"
@@ -2480,7 +2480,7 @@ msgid "Performance"
 msgstr "Výkon"
 
 msgid "Maximum available RAM"
-msgstr ""
+msgstr "Maximální dostupná RAM"
 
 msgid "Classified as slow"
 msgstr "Klasifikováno jako pomalé"
@@ -2492,7 +2492,7 @@ msgid "No"
 msgstr "Ne"
 
 msgid "GeoIP Db"
-msgstr ""
+msgstr "Databáze GeoIP"
 
 msgid "Target"
 msgstr "Cíl"
@@ -2631,19 +2631,19 @@ msgid "Sybil Analysis"
 msgstr "Analýza sybil"
 
 msgid "Bad value supplied, please check and try again."
-msgstr ""
+msgstr "Zadána špatná hodnota, zkontrolujte a zkuste to znovu."
 
 msgid "Router Map"
 msgstr "Mapa Routeru"
 
 msgid "Network Database Search"
-msgstr ""
+msgstr "Vyhledávání v databázi sítě"
 
 msgid "Capabilities"
 msgstr "Schopnosti"
 
 msgid "e.g. f or XOfR"
-msgstr ""
+msgstr "např. f nebo XOfR"
 
 msgid "Cost"
 msgstr "Cena"
@@ -2652,49 +2652,49 @@ msgid "Country"
 msgstr "Země"
 
 msgid "Country Codes"
-msgstr ""
+msgstr "Kódy zemí"
 
 msgid "Hash Prefix"
-msgstr ""
+msgstr "Prefix hashe"
 
 msgid "IPv4 or IPv6, /24,/16,/8 suffixes optional for IPv4, prefix ok for IPv6"
-msgstr ""
+msgstr "IPv4 nebo IPv6, přípony /24,/16,/8 volitelné pro IPv4, prefix ok pro IPv6"
 
 msgid "Hostname or b32"
-msgstr ""
+msgstr "Název hostitele nebo b32"
 
 msgid "IPv6 Prefix"
-msgstr ""
+msgstr "Prefix IPv6"
 
 msgid "Single port or range"
-msgstr ""
+msgstr "Jeden port nebo rozsah"
 
 msgid "Signature Type"
-msgstr ""
+msgstr "Typ podpisu"
 
 msgid "SSU Capabilities"
-msgstr ""
+msgstr "Schopnosti SSU"
 
 msgid "Encryption Type"
-msgstr ""
+msgstr "Typ šifrování"
 
 msgid "Router Version"
-msgstr ""
+msgstr "Verze routeru"
 
 msgid "Transport"
 msgstr "Doprava"
 
 msgid "Add Sybil analysis (must pick at least one above)"
-msgstr ""
+msgstr "Přidat analýzu Sybil (musíte vybrat alespoň jednu výše)"
 
 msgid "Sybil close to"
-msgstr ""
+msgstr "Sybil blízko"
 
 msgid "Router hash, destination hash, b32, or from address book"
-msgstr ""
+msgstr "Hash routeru, hash cíle, b32 nebo z adresáře"
 
 msgid "or Sybil close to this router"
-msgstr ""
+msgstr "nebo Sybil blízko tomuto routeru"
 
 msgid "Lookup"
 msgstr "Vyhledání"
@@ -2709,13 +2709,13 @@ msgid "not found in network database"
 msgstr "nenalezeno v síťové databázi"
 
 msgid "Bad Base64 Router hash"
-msgstr ""
+msgstr "Špatný Base64 hash routeru"
 
 msgid "No routers with"
-msgstr ""
+msgstr "Žádné routery s"
 
 msgid "Hash prefix"
-msgstr ""
+msgstr "Prefix hashe"
 
 msgid "Port"
 msgstr "Port"
@@ -2724,10 +2724,10 @@ msgid "MTU"
 msgstr "MTU"
 
 msgid "found in the network database"
-msgstr ""
+msgstr "nalezeno v databázi sítě"
 
 msgid "results"
-msgstr ""
+msgstr "výsledky"
 
 msgid "Previous Page"
 msgstr "Předchozí strana"
@@ -2736,43 +2736,43 @@ msgid "Next Page"
 msgstr "Další stránka"
 
 msgid "Results per page"
-msgstr ""
+msgstr "Výsledků na stránku"
 
 msgid "Not initialized"
 msgstr "Neinicializováno"
 
 msgid "Total Remote Leasesets"
-msgstr ""
+msgstr "Celkový počet vzdálených LeaseSetů"
 
 msgid "Compact mode"
-msgstr ""
+msgstr "Kompaktní režim"
 
 msgid "Local Leasesets"
-msgstr ""
+msgstr "Místní LeaseSety"
 
 msgid "Debug Mode"
-msgstr ""
+msgstr "Ladicí režim"
 
 msgid "Published (RAP) Leasesets"
-msgstr ""
+msgstr "Publikované (RAP) LeaseSety"
 
 msgid "Sorted by hash distance, closest first."
-msgstr ""
+msgstr "Seřazeno podle vzdálenosti hashe, nejblíže první."
 
 msgid "Mod Data"
-msgstr ""
+msgstr "Data modifikace"
 
 msgid "Last Changed"
-msgstr ""
+msgstr "Naposledy změna"
 
 msgid "Next Mod Data"
-msgstr ""
+msgstr "Další data modifikace"
 
 msgid "Change in"
-msgstr ""
+msgstr "Změna v"
 
 msgid "Floodfill mode enabled"
-msgstr ""
+msgstr "Režim Floodfill povolen"
 
 msgid "Routing Key"
 msgstr "Směrovací klíč"
@@ -2787,10 +2787,10 @@ msgid "Estimated total leasesets"
 msgstr "Odhadovaný celkový počet pronájmů"
 
 msgid "Total Local Leasesets"
-msgstr ""
+msgstr "Celkový počet místních LeaseSetů"
 
 msgid "Remote Leasesets"
-msgstr ""
+msgstr "Vzdálené LeaseSety"
 
 #, java-format
 msgid "Hostname {0} not found in network database"
@@ -2801,7 +2801,7 @@ msgid "LeaseSet for {0} not found in network database"
 msgstr ""
 
 msgid "Meta"
-msgstr ""
+msgstr "Meta"
 
 msgid "LeaseSet"
 msgstr "LeaseSet"
@@ -2833,7 +2833,7 @@ msgid "Signature type"
 msgstr "Typ podpisu"
 
 msgid "Public Key"
-msgstr ""
+msgstr "Veřejný klíč"
 
 msgid "Unsupported type"
 msgstr "Nepodporovaný typ"
@@ -2850,10 +2850,10 @@ msgid "Unknown"
 msgstr "Neznámý"
 
 msgid "Advanced mode - includes all statistics published by floodfills."
-msgstr ""
+msgstr "Pokročilý režim - zahrnuje všechny statistiky publikované floodfills."
 
 msgid "Compact mode - does not include statistics published by floodfills."
-msgstr ""
+msgstr "Kompaktní režim - nezahrnuje statistiky publikované floodfills."
 
 msgid "Network Database Router Statistics"
 msgstr "Statistika směrovače síťové databáze"
@@ -2877,7 +2877,7 @@ msgid "Transports"
 msgstr "Doprava"
 
 msgid "X Tier"
-msgstr ""
+msgstr "X úroveň"
 
 msgid "Floodfills"
 msgstr "Záplavy"
@@ -2895,10 +2895,10 @@ msgid "Router is banlisted"
 msgstr "Směrovač je zakázán"
 
 msgid "Java I2P variant"
-msgstr ""
+msgstr "Varianta Java I2P"
 
 msgid "I2Pd variant"
-msgstr ""
+msgstr "Varianta I2Pd"
 
 msgid "RouterInfo is compressible"
 msgstr "RouterInfo je komprimovatelné"
@@ -2932,7 +2932,7 @@ msgid "Hostname"
 msgstr "Název hostitele"
 
 msgid "direct"
-msgstr ""
+msgstr "přímý"
 
 msgid "Verified family (signing certificate is installed and valid)"
 msgstr "Ověřená rodina (podpisový certifikát je nainstalován a platný)"
@@ -2971,10 +2971,10 @@ msgid "Last heard from"
 msgstr "Naposledy slyšel od"
 
 msgid "Network Id"
-msgstr ""
+msgstr "ID sítě"
 
 msgid "Count is always spoofed to avoid indicating router restarts"
-msgstr ""
+msgstr "Počet je vždy padělen, aby se zabránilo indikaci restartů routeru."
 
 msgid "Hidden or starting up"
 msgstr "Skryto nebo spouštění"
@@ -3042,10 +3042,10 @@ msgid "IPv6"
 msgstr "IPv6"
 
 msgid "Active connections / Max permitted"
-msgstr ""
+msgstr "Aktivní připojení / Max povoleno"
 
 msgid "Connections / Limit"
-msgstr ""
+msgstr "Připojení / Limit"
 
 msgid "Current / maximum permitted"
 msgstr "Aktuální / maximální povolený"
@@ -3344,7 +3344,7 @@ msgid "Rejected"
 msgstr "Zamítnuto"
 
 msgid "First Heard About"
-msgstr ""
+msgstr "Poprvé slyšel o"
 
 msgid "Last Heard From"
 msgstr "Poslední odezva"
@@ -3460,7 +3460,7 @@ msgstr "{0} sdílená šířka pásma"
 
 #, java-format
 msgid "Over {0} KB/s shared bandwidth"
-msgstr ""
+msgstr "Nad {0} KB/s sdílené šířky"
 
 msgid "status"
 msgstr "stav"
@@ -3523,7 +3523,7 @@ msgid "Total number of banned peers"
 msgstr "Celkový počet zakázaných vrstevníků"
 
 msgid "Note: 'LU' class routers have been excluded from the list."
-msgstr ""
+msgstr "Poznámka: Routery třídy 'LU' byly vyloučeny ze seznamu."
 
 #, java-format
 msgid "To view, see {0}Session Bans{1}."
@@ -3902,7 +3902,7 @@ msgid "Floodfill enabled"
 msgstr "Floodfill je povolen"
 
 msgid "Total number of remote LeaseSets stored in our NetDb"
-msgstr ""
+msgstr "Celkový počet vzdálených LeaseSetů uložených v naší NetDb"
 
 msgid "Warning: ECDSA is not available. Update your Java or OS"
 msgstr "Varování: ECDSA není k dispozici. "
@@ -3917,7 +3917,7 @@ msgid "Peers we've been talking to in the last minute / last hour"
 msgstr "Vrstovníci, se kterými jsme mluvili v posledních minutách/poslední hodině"
 
 msgid "Peers we've been talking to in the last minute"
-msgstr ""
+msgstr "Protěji, se kterými jsme mluvili v poslední minutě"
 
 msgid "The number of peers available for building client tunnels"
 msgstr "Počet partnerů dostupných pro vytváření klientských tunelů"
@@ -4428,7 +4428,7 @@ msgid "Data"
 msgstr "Data"
 
 msgid "Limit"
-msgstr ""
+msgstr "Limit"
 
 msgid "Receive on"
 msgstr "Příjem na"
@@ -4475,7 +4475,7 @@ msgid "No transit tunnels currently active."
 msgstr "Momentálně nejsou aktivní žádné tranzitní tunely."
 
 msgid "Transit Tunnels by Peer (Top {0})"
-msgstr ""
+msgstr "Tranzitní tunely podle protěje (Top {0})"
 
 msgid "Address"
 msgstr "Adresa"
@@ -4554,7 +4554,7 @@ msgid "Bandwidth test did not complete"
 msgstr "Test šířky pásma nebyl dokončen"
 
 msgid "Bad state for test"
-msgstr ""
+msgstr "Špatný stav pro test"
 
 msgid "Bandwidth test started"
 msgstr "Byl spuštěn test šířky pásma"
@@ -4569,16 +4569,16 @@ msgid "Bandwidth test was not running"
 msgstr "Test šířky pásma neproběhl"
 
 msgid "ready"
-msgstr ""
+msgstr "připraven"
 
 msgid "inbound test"
-msgstr ""
+msgstr "příchozí test"
 
 msgid "outbound test"
-msgstr ""
+msgstr "výchozí test"
 
 msgid "done"
-msgstr ""
+msgstr "hotovo"
 
 msgid "bits per second"
 msgstr "bitů za sekundu"
@@ -4750,7 +4750,7 @@ msgid "Share"
 msgstr "Sdílet"
 
 msgid "NOTE"
-msgstr ""
+msgstr "POZNÁMKA"
 
 #, java-format
 msgid "You have configured I2P+ to share only {0} KBps."
@@ -4777,7 +4777,7 @@ msgstr "Pokročilá konfigurace"
 
 #, java-format
 msgid "Key <b>{0}</b> selected for removal. To commit the change, save the configuration, or cancel to restore the key."
-msgstr ""
+msgstr "Klíč <b>{0}</b> vybrán pro odstranění. Pro potvrzení změny uložte konfiguraci, nebo ji zrušte pro obnovení klíče."
 
 msgid "Floodfill Configuration"
 msgstr "Konfigurace Floodfill"
@@ -4807,7 +4807,7 @@ msgid "Advanced I2P+ Configuration"
 msgstr "Pokročilá konfigurace I2P"
 
 msgid "Help with additional configuration settings"
-msgstr ""
+msgstr "Nápověda k dalším nastavením konfigurace"
 
 #, java-format
 msgid "To make changes, edit the file: {0}"
@@ -5201,7 +5201,7 @@ msgid "Banning will prevent the participation of this peer in tunnels you create
 msgstr "Banning zabrání účasti tohoto partnera v tunelech, které vytvoříte."
 
 msgid "A list of bans by IP address is presented below."
-msgstr ""
+msgstr "Níže je prezentován seznam zákazů podle IP adresy."
 
 #, java-format
 msgid "To view all active bans by router hash, see {0}Banned Peers{1}."
@@ -5209,7 +5209,7 @@ msgstr ""
 
 #, java-format
 msgid "A list of {0}session-only bans{1} by hash is also available."
-msgstr ""
+msgstr "Dostupný je také seznam {0}pouze zákazů relace{1} podle hashe."
 
 msgid "Adjust Profile Bonuses"
 msgstr "Upravte profilové bonusy"
@@ -5400,7 +5400,7 @@ msgid "config sidebar"
 msgstr "postranní panel konfigurace"
 
 msgid "Sidebar Options"
-msgstr ""
+msgstr "Možnosti postranní lišty"
 
 msgid "Refresh interval"
 msgstr "Interval Obnovení"
@@ -5412,10 +5412,10 @@ msgid "0 to disable"
 msgstr "0 zakázat"
 
 msgid "Unified sidebar"
-msgstr ""
+msgstr "Jednotná postranní lišta"
 
 msgid "Use the same sidebar on all pages"
-msgstr ""
+msgstr "Použijte stejnou postranní lištu na všech stránkách"
 
 msgid "config stats"
 msgstr "config statistiky"
@@ -5617,7 +5617,7 @@ msgid "Event Log"
 msgstr "Záznam událostí"
 
 msgid "Combined"
-msgstr ""
+msgstr "Kombinované"
 
 msgid "graph"
 msgstr "Graf"
@@ -5698,7 +5698,7 @@ msgid "This setting, when set to true, will display the <i>Sites of Interest</i>
 msgstr "Toto nastavení, když je nastaveno na true, zobrazí odkazy na <i>Sites of Interest</i> na <a href=/sitemap>mapě stránek</a>. [Výchozí hodnota je false]"
 
 msgid "This setting, when set to true, will present the standard sidebar on the homepage, enabling configuration via <a href=/configsidebar>. [Default is false]"
-msgstr ""
+msgstr "Toto nastavení, když je nastaveno na true, zobrazí standardní postranní lištu na domovské stránce a umožní konfiguraci přes <a href=/configsidebar>. [Výchozí je false]"
 
 msgid "This setting determines whether or not the router should use the provided <i>blocklist.txt</i> file and any user configured blocklists to enable banning of routers by hash or ip address. Ranges and net masks are supported for IPv4 but not IPv6. See the <i>blocklist.txt</i> in your I2P+ application directory for more info. [Enabled by default, restart required]"
 msgstr "Toto nastavení určuje, zda router používá poskytnutý soubor <i>blocklist.txt</i> a jakékoli uživatelsky nastavené blokovací seznamy, aby umožnil zákazy routerů podle hash nebo IP adresy. Rozsahy a síťové masky jsou podporovány pro IPv4, ale ne pro IPv6. Další informace naleznete v souboru <i>blocklist.txt</i> ve vašem adresáři aplikace I2P+. [Výchozí hodnota je zapnuta, je potřeba restartovat]"
@@ -5713,7 +5713,7 @@ msgid "This setting determines whether or not the router should use the provided
 msgstr "Toto nastavení určuje, zda router používá poskytnutý soubor <i>blocklist_tor.txt</i> ve vašem adresáři aplikace I2P+, aby umožnil zákazy routerů, které fungují z Tor výstupních IP adres. [Výchozí hodnota je zapnuta, je potřeba restartovat]"
 
 msgid "This setting enables requests from routers in the specified countries to be blocked and banned as soon as a direct tunnel request is made. Countries must be specified as two letter country codes, separated with commas. e.g. router.blockCountries=cn,ru"
-msgstr ""
+msgstr "Toto nastavení umožňuje požadavkům od routerů v zadaných zemích být zablokován a zakázán, jakmile je učiněn přímý požadavek na tunel. Země musí být specifikovány jako dvoupísmerné kódy země, oddělené čárkami. např. router.blockCountries=cn,ru"
 
 msgid "When set to false, the router will not block tunnel build requests from slower or unreachable routers running older versions. [Default is true, restart required]"
 msgstr "Pokud je nastaveno na Nepravda, router nebude blokovat žádosti o vytváření tunelů od pomalejších nebo nedosažitelných routerů s staršími verzemi. [Výchozí hodnota je Pravda, vyžaduje se restart]"
@@ -5851,7 +5851,7 @@ msgid "This setting determines whether routers classified as uninteresting (K or
 msgstr "Toto nastavení určuje, zda se routerům klasifikovaným jako nezajímavým (K nebo L vrstva, nedosažitelný nebo starší než 0.9.50) ověří se během procesu obnovy routeru po dobu 1 hodiny provozu. [Standartní hodnota je false]"
 
 msgid "When set to true, this setting will relax the conditions required for your router to publish congestion caps, specifically when it's determined that your bandwidth usage is high. Other conditions, such as high job lag or a router classified as slow, will still cause caps to be published. [Default is false]"
-msgstr ""
+msgstr "Když je nastaveno na true, toto nastavení uvolní podmínky potřebné pro váš router k publikování omezení přetížení, konkrétně když je určeno, že využívání šířky je vysoké. Další podmínky, jako je vysoká latence práce nebo router klasifikovaný jako pomalý, stále způsobí publikování omezení. [Výchozí je false]"
 
 msgid "When configured, this sets a hard limit for the number of tunnels the router is permitted to build concurrently. By default the router uses the average build time and current outbound bandwidth to determine the optimum build rate. [Restart required]"
 msgstr "Pokud je nakonfigurováno, nastaví pevný limit pro počet tunelů, které je směrovač povolen stavět souběžně. Výchozí hodnota je průměrný čas stavby a současná odchozí šířka pásma, které směrovač používá k určení optimální rychlosti stavby. [Je vyžadován restart]"
@@ -5866,10 +5866,10 @@ msgid "This setting (in minutes) allows you to manually configure how long to wa
 msgstr "Toto nastavení (v minutách) vám umožňuje manuálně nastavit, jak dlouho po spuštění počkáte, než se kontrolují RouterInfos v NetDb z hlediska platnosti, po kterém budou do příjmu přijaty pouze platné routery. Při validaci jsou z NetDb odebrány neplatné RouterInfos a nepřístupné servery, které jsou přístupné pouze prostřednictvím SSU. [Výchozí hodnota je 60 minut] Poznámka: Toto nastavení nemá vliv na starší routery (starší než ve výchozím nastavení 0.9.29), které jsou z NetDb odebrány a banovány pro aktuální sezení routování hned, jakmile je pokus o uložení do NetDb."
 
 msgid "This setting, when set to true, will block direct communication from all routers in your own country and add them to your banlist until your router restarts. [Default is false]"
-msgstr ""
+msgstr "Toto nastavení, když je nastaveno na true, zablokuje přímou komunikaci se všemi routery ve vaší vlastní zemi a přidá je na váš seznam zakazů, dokud váš router nerestartuje. [Výchozí je false]"
 
 msgid "This setting, when set to true, will block direct communication from all X tier routers that publish a G congestion cap and are neither reachable or unreachable, adding them to the session banlist. Note that advanced mode must be enabled for this setting to take effect. [Default is false]"
-msgstr ""
+msgstr "Toto nastavení, když je nastaveno na true, zablokuje přímou komunikaci se všemi routery úrovně X, které publikují omezení přetížení G a nejsou ani dosažitelné ani nedosažitelné, a přidá je na seznam zákazů relace. Upozorňte, že pro účinnost tohoto nastavení musí být povolen pokročilý režim. [Výchozí je false]"
 
 msgid "This setting permits disabling SSU tests to determine if your router is firewalled and can be enabled for routers that are definitely not firewalled but are experiencing intermittent firewalling issues. In the event that testing is disabled, both SSU and NTCP should report your current public ip address on <a href=/info>the router info page</a>. [Restart required]"
 msgstr "Toto nastavení umožňuje deaktivovat testy SSU, aby se zjistilo, zda je váš směrovač chráněn firewallem, a může být povoleno pro směrovače, které jsou určitě bez firewalu, ale mají problémy s přerušovaným blokováním firewallu. Pokud jsou testy zakázány, měly by oba protokoly SSU a NTCP hlásit vaši aktuální veřejnou IP adresu na <a href=/info>stránce s informacemi o směrovači</a>. [Je vyžadován restart]"
@@ -5878,7 +5878,7 @@ msgid "This setting determines which transport takes priority when communicating
 msgstr "Toto nastavení určuje, který přenos má přednost při komunikaci s vrstevníky. Výchozí nastavení upřednostňuje NTCP před UDP (SSU). Pokud hodnota bude nastavena na true, UDP bude upřednostňováno, pokud již existuje předem zavedené spojení NTCP; pokud bude nastaveno na always, bude vždy použito UDP bez ohledu na předem zavedené spojení NTCP. [Výchozí hodnota je false]"
 
 msgid "miscellaneous"
-msgstr ""
+msgstr "různé"
 
 msgid "If set to true, this option will place an icon in the system tray / notification area, with basic service control options. [Disabled by default]"
 msgstr "Pokud je nastaveno na true, tato možnost umístí ikonu do systémového panelu / oznámení s jednoduchými ovládacími prvky služby. [Výchozí hodnota je deaktivována]"
@@ -6118,13 +6118,13 @@ msgid "For SSL only"
 msgstr "Pouze pro SSL"
 
 msgid "How can I configure the console and web services to be accessible on my local network?"
-msgstr ""
+msgstr "Jak mohu nakonfigurovat konzoli a webové služby, aby byly přístupné v mé místní síti?"
 
 msgid "To make your console accessible on your local network, edit the configuration file 00-net.i2p.router.web.RouterConsoleRunner-clients.config in the clients.config.d folder of your I2P settings directory. Update or add the necessary IP addresses to the existing localhost (127.0.0.1) mapping. Use the -s switch for HTTPS access."
-msgstr ""
+msgstr "Chcete-li zpřístupnit konzoli ve vaší místní síti, upravte konfigurační soubor 00-net.i2p.router.web.RouterConsoleRunner-clients.config ve složce clients.config.d adresáře vašeho nastavení I2P. Aktualizujte nebo přidejte potřebné IP adresy do existujícího mapování localhost (127.0.0.1). Použijte přepínač -s pro přístup přes HTTPS."
 
 msgid "Example: To allow access from both localhost and 192.168.1.10 over HTTP and HTTPS:"
-msgstr ""
+msgstr "Příklad: Chcete-li povolit přístup z localhost a 192.168.1.10 přes HTTP a HTTPS:"
 
 msgid "For most client services, change listening address for relevant service in Tunnel Manager's configuration section using <i>reachable by</i> dropdown."
 msgstr ""
@@ -6520,7 +6520,7 @@ msgid "If you are in a hurry and can't wait a few hours, you can tell people to 
 msgstr "Pokud máte náhodou náhle a nemůžete počkat pár hodin, můžete lidem říct, aby použili službu přesměrování pomocných adres \"jump\". Obvykle to funguje do několika minut poté, co zaregistrujete svůj hostname na stejném webu. Nejdříve to otestujte sami tím, že zadáte <code>http://stats.i2p/cgi-bin/jump.cgi?a=<i>vášvolenýhostname.i2p</i></code> do svého prohlížeče. Jakmile to funguje, můžete říct ostatním, aby to také používali."
 
 msgid "Alternatively, you can copy the <i>address helper link</i> for your domain, indicated either on the addressbook list page, or on the details page for your domain e.g. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>details for skank.i2p</a>, and paste the link where it's required to share it with others."
-msgstr ""
+msgstr "Alternativně můžete zkopírovat <i>odkazovou adresu</i> pro vaši doménu, uvedenou buď na stránce seznamu adresářů nebo na stránce s podrobnostmi vaší domény např. <a href='/dns?details&amp;h=skank.i2p&amp;book=router' target=_blank rel=noreferrer>podrobnosti pro skank.i2p</a>. A odkaz vložte tam, kde je vyžadováno jeho sdílení s ostatními."
 
 msgid "Backup your private key!"
 msgstr "Zálohujte si svůj soukromý klíč!"
@@ -7297,7 +7297,7 @@ msgid "Configure display language, theme and optional console password"
 msgstr "Nakonfigurujte jazyk zobrazení, téma a volitelné heslo konzoly"
 
 msgid "Language"
-msgstr ""
+msgstr "Jazyk"
 
 msgid "Configure router bandwidth"
 msgstr "Nakonfigurujte šířku pásma routeru"
@@ -7364,22 +7364,22 @@ msgid "network database"
 msgstr "síťová databáze"
 
 msgid "Encryption type"
-msgstr ""
+msgstr "Typ šifrování"
 
 msgid "Encryption types"
-msgstr ""
+msgstr "Typy šifrování"
 
 msgid "Signature types"
-msgstr ""
+msgstr "Typy podpisu"
 
 msgid "Locally hosted private service"
-msgstr ""
+msgstr "Místně hostovaná soukromá služba"
 
 msgid "Locally hosted public service"
-msgstr ""
+msgstr "Místně hostovaná veřejná služba"
 
 msgid "Requested client leaseset"
-msgstr ""
+msgstr "Požadovaný klient LeaseSet"
 
 msgid "network database router map"
 msgstr "Mapa routeru v síťové databázi"
@@ -7425,10 +7425,10 @@ msgid "Fast / High Capacity"
 msgstr "Rychlý / Vysoká kapacita"
 
 msgid "router logs"
-msgstr ""
+msgstr "Protokoly routeru"
 
 msgid "service logs"
-msgstr ""
+msgstr "Protokoly služeb"
 
 msgid "Manage I2P addresses"
 msgstr "Správa I2P adres"
@@ -7635,13 +7635,13 @@ msgid "Toggle Tunnels"
 msgstr "Přepnout tunely"
 
 msgid "Updating sidebar sections"
-msgstr ""
+msgstr "Aktualizace sekcí postranní lišty"
 
 msgid "Peer Profile"
 msgstr "Profil peeru"
 
 msgid "Profile View"
-msgstr ""
+msgstr "Zobrazení profilu"
 
 msgid "Profile for peer"
 msgstr "Profil pro peer"
