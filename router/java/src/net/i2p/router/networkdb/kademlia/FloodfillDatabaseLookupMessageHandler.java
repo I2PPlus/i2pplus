@@ -240,7 +240,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
      */
     private void logDroppedLookup(String searchType, String fromBase64, String searchKeyBase64, int keyLength, boolean isFF,
                                   boolean floodfillMode, boolean isDirect, boolean isBanned, int maxLookups) {
-        if (!_log.shouldWarn() || isBanned) {return;}
+        if (!_log.shouldInfo() || isBanned) {return;}
         StringBuilder msg = new StringBuilder(128);
         msg.append("Dropping ").append(isDirect ? "direct " : "").append(searchType)
            .append(" lookup from ").append(isFF? "floodfill " : "").append("[").append(fromBase64.substring(0,6)).append("]")
@@ -252,7 +252,7 @@ public class FloodfillDatabaseLookupMessageHandler implements HandlerJobBuilder 
         } else if (isFF && isDirect && (searchType.equals("ANY") || searchType.equals("EXPL"))) {
             msg.append(" -> Direct search for Exploratory or Any from floodfill");
         }
-        _log.warn(msg.toString());
+        _log.info(msg.toString());
     }
 
     /**
