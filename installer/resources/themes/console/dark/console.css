@@ -3255,7 +3255,7 @@ span#newtab{margin-top:4px}
 #sidebar #sb_advanced a:link,#sidebar #sb_internals a:link,#sidebar #sb_help a:link,#sidebar #sb_services a:link{max-width:216px}
 #sidebar .sb_netstatus.running.floodfill .badge{font-size:8.5pt!important}
 #sidebar .sb_update{width:calc(100% - 5px)}
-#sidebar .sb_info .percentBarOuter{width:calc(100% - 4px)}
+#sidebar .sb_info .percentBarOuter{width:calc(100% - 8px)}
 #sidebar #sb_tunnelBuildStatus{height:32px}
 #sitemap h3{font-size:12pt}
 #stacktrace p:first-of-type::first-line{font-size:110%;font-weight:700;font-variant:super;text-decoration:underline}
