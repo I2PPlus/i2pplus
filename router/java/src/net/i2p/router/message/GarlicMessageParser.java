@@ -14,6 +14,7 @@ import net.i2p.data.Certificate;
 import net.i2p.data.DataFormatException;
 import net.i2p.data.DataHelper;
 import net.i2p.data.PrivateKey;
+import net.i2p.data.PublicKey;
 import net.i2p.data.i2np.GarlicClove;
 import net.i2p.data.i2np.GarlicMessage;
 import net.i2p.router.RouterContext;
@@ -52,8 +53,10 @@ public class GarlicMessageParser {
     CloveSet getGarlicCloves(GarlicMessage message, PrivateKey encryptionKey, SessionKeyManager skm) {
         byte encData[] = message.getData();
         byte decrData[];
+        boolean debug = _log.shouldDebug();
+        boolean warn = _log.shouldWarn();
         try {
-            if (_log.shouldDebug()) {
+            if (debug) {
                 _log.debug("Decrypting with private key " + encryptionKey);
             }
             EncType type = encryptionKey.getType();
@@ -65,12 +68,12 @@ public class GarlicMessageParser {
                 else if (skm instanceof MuxedSKM) {rskm = ((MuxedSKM) skm).getECSKM();}
                 else if (skm instanceof MuxedPQSKM) {rskm = ((MuxedPQSKM) skm).getECSKM();}
                 else {
-                    if (_log.shouldWarn()) {_log.warn("No SKM to decrypt ECIES");}
+                    if (warn) {_log.warn("No SKM to decrypt ECIES");}
                     return null;
                 }
                 CloveSet rv = _context.eciesEngine().decrypt(encData, encryptionKey, rskm);
                 if (rv != null) {
-                    if (_log.shouldDebug()) {
+                    if (debug) {
                         _log.debug("ECIES decryption success, cloves: " + rv.getCloveCount());
                     }
                     return rv;
@@ -82,41 +85,86 @@ public class GarlicMessageParser {
                 } else if (skm instanceof MuxedPQSKM) {
                     rskm = ((MuxedPQSKM) skm).getPQSKM();
                 } else {
-                    if (_log.shouldWarn()) {_log.warn("No SessionKeyManager to decrypt PQ");}
+                    if (warn) {_log.warn("No SessionKeyManager to decrypt PQ");}
                     return null;
                 }
                 CloveSet rv = _context.eciesEngine().decrypt(encData, encryptionKey, rskm);
                 if (rv != null) {
-                    if (_log.shouldDebug()) {
+                    if (debug) {
                         _log.debug("PQ decryption success -> Cloves: " + rv.getCloveCount());
                     }
                     return rv;
                 } else {
-                    if (_log.shouldWarn()) {_log.warn("PQ decryption fail");}
+                    if (debug || warn) {
+                        StringBuilder buf = new StringBuilder(256);
+                        buf.append("PQ decryption failed - Key type: ").append(type);
+                        if (skm instanceof MuxedPQSKM) {
+                            MuxedPQSKM mpq = (MuxedPQSKM) skm;
+                            if (debug) {
+                                buf.append(" SKM type: MuxedPQSKM");
+                            }
+                            // Convert PrivateKey to PublicKey for tag lookup
+                            PublicKey ecPubKey = encryptionKey.toPublic();
+                            int ecTags = mpq.getECSKM().getAvailableTags(ecPubKey, null);
+                            int pqTags = mpq.getPQSKM().getAvailableTags(ecPubKey, null);
+                            if (debug) {
+                                buf.append(" EC tags: ").append(ecTags);
+                                buf.append(" PQ tags: ").append(pqTags);
+                            }
+                            if (ecTags == 0 && pqTags == 0) {
+                                buf.append(" -> No session tags available");
+                            } else if (pqTags == 0) {
+                                buf.append(" -> No PQ session tags available");
+                            } else if (ecTags == 0) {
+                                buf.append(" -> No EC session tags available");
+                            } else {
+                                buf.append(" -> Decryption failed with available tags");
+                            }
+                        } else if (skm instanceof RatchetSKM) {
+                            // Convert PrivateKey to PublicKey for tag lookup
+                            PublicKey pubKey = encryptionKey.toPublic();
+                            int tags = ((RatchetSKM) skm).getAvailableTags(pubKey, null);
+                            if (debug) {
+                                buf.append(" Tags: ").append(tags);
+                            }
+                            if (tags == 0) {
+                                buf.append(" -> No session tags available (PQ-only destination)");
+                            } else {
+                                buf.append(" -> Decryption failed with available tags (PQ-only destination)");
+                            }
+                        } else {
+                            if (debug) {
+                                buf.append(" SKM type: ").append(skm.getClass().getSimpleName());
+                            }
+                            buf.append(" -> Incompatible Session Key Manager");
+                        }
+                        buf.append(" (Data size: ").append(encData.length).append(")");
+                        _log.warn(buf.toString());
+                    }
                     return null;
                 }
             } else {
-                if (_log.shouldWarn()) {_log.warn("Can't decrypt with key type " + type);}
+                if (warn) {_log.warn("Can't decrypt with key type " + type);}
                 return null;
             }
         } catch (DataFormatException dfe) {
-            if (_log.shouldInfo()) {_log.warn("Error decrypting", dfe);}
-            else if (_log.shouldWarn()) {_log.warn("Error decrypting cloves -> " + dfe.getMessage());}
+            if (debug) {_log.warn("Error decrypting", dfe);}
+            else if (warn) {_log.warn("Error decrypting cloves -> " + dfe.getMessage());}
             return null;
         }
         if (decrData == null) {
             // This is the usual error path and it's logged at WARN level in GarlicMessageReceiver
-            if (_log.shouldDebug()) {
+            if (debug) {
                 _log.debug("Decryption of garlic message failed", new Exception("Decrypt fail"));
             }
             return null;
         } else {
             try {
                 CloveSet rv = readCloveSet(decrData, 0);
-                if (_log.shouldDebug()) {_log.debug("Got cloves: " + rv.getCloveCount());}
+                if (debug) {_log.debug("Got cloves: " + rv.getCloveCount());}
                 return rv;
             } catch (DataFormatException dfe) {
-                if (_log.shouldWarn()) {_log.warn("Unable to read cloveSet -> " +  dfe.getMessage());}
+                if (warn) {_log.warn("Unable to read cloveSet -> " +  dfe.getMessage());}
                 return null;
             }
         }

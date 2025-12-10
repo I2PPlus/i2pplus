@@ -11,6 +11,7 @@ import net.i2p.crypto.SessionKeyManager;
 import net.i2p.data.PublicKey;
 import net.i2p.data.SessionKey;
 import net.i2p.data.SessionTag;
+import net.i2p.util.Log;
 
 /**
  * Post-quantum hybrid session key manager combining ECIES and ML-KEM operations
@@ -23,6 +24,7 @@ public class MuxedPQSKM extends SessionKeyManager {
     private final RatchetSKM _pq;
     private final AtomicInteger _ecCounter = new AtomicInteger();
     private final AtomicInteger _pqCounter = new AtomicInteger();
+    private final Log _log = new Log(MuxedPQSKM.class);
     // PQ is about this much slower than EC
     private static final int PQ_SLOW_FACTOR = 2;
     private static final int RESTART_COUNTERS = 500;
@@ -67,16 +69,34 @@ public class MuxedPQSKM extends SessionKeyManager {
             else
                 _pqCounter.incrementAndGet();
         }
-        // Debug logging for PQ failures
-        //if (!success && !isRatchet) {
-            int ec = _ecCounter.get();
-            int pq = _pqCounter.get();
-            // Log every 10th PQ failure to avoid spam
-            //if ((pq % 10) == 1) {
-            //    System.err.println("PQ decrypt failure #" + pq + " vs EC success #" + ec +
-            //                     " - preferRatchet: " + preferRatchet());
-            //}
-        //}
+        
+        // Structured logging for PQ vs EC success/failure ratios
+        int ec = _ecCounter.get();
+        int pq = _pqCounter.get();
+        int total = ec + pq;
+        
+        // Log every 25th decrypt attempt or when ratios are interesting
+        if ((total % 25) == 0 || (total > 0 && (pq == 0 || ec == 0))) {
+            if (_log.shouldInfo()) {
+                double ecRatio = total > 0 ? (double) ec / total * 100.0 : 0.0;
+                double pqRatio = total > 0 ? (double) pq / total * 100.0 : 0.0;
+                String status = String.format("PQ vs EC decrypt ratios after %d attempts - EC: %d (%.1f%%) PQ: %d (%.1f%%) - Prefer ratchet: %s", 
+                                              total, ec, ecRatio, pq, pqRatio, preferRatchet());
+                
+                // Add warnings for concerning patterns
+                if (pq == 0 && total >= 50) {
+                    status += " [WARNING: No PQ successes detected]";
+                } else if (ec == 0 && total >= 50) {
+                    status += " [INFO: Only PQ successes detected]";
+                } else if (pqRatio > 90.0 && total >= 25) {
+                    status += " [INFO: PQ heavily preferred]";
+                } else if (ecRatio > 90.0 && total >= 25) {
+                    status += " [INFO: EC heavily preferred]";
+                }
+                
+                _log.info(status);
+            }
+        }
     }
 
     /**

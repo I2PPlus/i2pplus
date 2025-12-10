@@ -303,7 +303,7 @@ public final class ECIESAEADEngine {
             } else {
                 decrypted = null;
                 if (_log.shouldWarn()) {
-                    _log.warn("NewSessionReply decryption failure -> Tag found but no state and too small (" + data.length + " bytes) for NewSessionReply");
+                    _log.warn("NewSessionReply decryption failure -> Tag found but no state and too small (" + data.length + " bytes) for NewSessionReply (minimum " + (KEYLEN + KEYLEN + MACLEN + MACLEN) + " bytes)");
                 }
             }
             if (decrypted != null) {
@@ -311,7 +311,8 @@ public final class ECIESAEADEngine {
             } else {
                 _context.statManager().updateFrequency("crypto.eciesAEAD.decryptFailed");
                 if (_log.shouldWarn()) {
-                    _log.warn("ECIES decryption failure -> Known tag [" + st + "] but failed decrypt with key \n* Key: " + key);
+                    _log.warn("ECIES decryption failure -> Known tag [" + st + "] but failed decrypt with key \n* Key: " + key + 
+                             "\n* Failure type: Cryptographic verification failed (MAC or decryption error)");
                 }
             }
         }
@@ -358,7 +359,11 @@ public final class ECIESAEADEngine {
             } else {
                 _context.statManager().updateFrequency("crypto.eciesAEAD.decryptFailed");
                 // we'll get this a lot on muxed SKM
-                if (_log.shouldInfo()) {_log.info("ECIES decryption failure for NewSession");}
+                if (_log.shouldInfo()) {
+                    _log.info("ECIES decryption failure for NewSession -> Type: " + type + 
+                             " Data size: " + data.length + " (minimum " + minns + ")" +
+                             " Is router: " + isRouter);
+                }
             }
         } else {
             decrypted = null;
@@ -550,8 +555,23 @@ public final class ECIESAEADEngine {
         } catch (GeneralSecurityException gse) {
             // we'll get this a lot on muxed SKM
             // logged at INFO in caller
-            if (_log.shouldDebug())
-                _log.debug("NewSession decryption failure -> State at failure: " + state, gse);
+            if (_log.shouldDebug()) {
+                String failureType = gse.getMessage();
+                if (failureType != null) {
+                    if (failureType.contains("MAC") || failureType.contains("mac")) {
+                        failureType = "MAC verification failed";
+                    } else if (failureType.contains("decrypt") || failureType.contains("Decrypt")) {
+                        failureType = "Decryption failed";
+                    } else if (failureType.contains("length") || failureType.contains("size")) {
+                        failureType = "Invalid data length";
+                    } else {
+                        failureType = "Cryptographic error: " + failureType;
+                    }
+                } else {
+                    failureType = "Unknown cryptographic error";
+                }
+                _log.debug("NewSession decryption failure -> " + failureType + " -> State at failure: " + state, gse);
+            }
             // restore original data for subsequent ElG attempt
             System.arraycopy(xx, 0, data, 0, KEYLEN - 1);
             data[KEYLEN - 1] = xx31;
@@ -762,7 +782,7 @@ public final class ECIESAEADEngine {
             state = oldState.clone();
         } catch (CloneNotSupportedException e) {
             if (_log.shouldWarn())
-                _log.warn("ECIES decryption failure: clone()", e);
+                _log.warn("ECIES decryption failure: Unable to clone handshake state for NewSessionReply", e);
             return null;
         }
 
@@ -985,8 +1005,23 @@ public final class ECIESAEADEngine {
             // this is safe to do in-place, it checks the mac before starting decryption
             chacha.decryptWithAd(ad, encrypted, offset, encrypted, offset, encryptedLen);
         } catch (GeneralSecurityException e) {
-            if (_log.shouldWarn())
-                _log.warn("Unable to decrypt AEAD block", e);
+            if (_log.shouldWarn()) {
+                String failureType = e.getMessage();
+                if (failureType != null) {
+                    if (failureType.contains("MAC") || failureType.contains("mac")) {
+                        failureType = "AEAD MAC verification failed";
+                    } else if (failureType.contains("decrypt") || failureType.contains("Decrypt")) {
+                        failureType = "AEAD decryption failed";
+                    } else if (failureType.contains("nonce") || failureType.contains("Nonce")) {
+                        failureType = "AEAD nonce error";
+                    } else {
+                        failureType = "AEAD cryptographic error: " + failureType;
+                    }
+                } else {
+                    failureType = "AEAD unknown error";
+                }
+                _log.warn("Unable to decrypt AEAD block -> " + failureType, e);
+            }
             return false;
         } finally {
             chacha.destroy();
