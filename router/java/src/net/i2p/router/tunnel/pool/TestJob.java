@@ -41,7 +41,7 @@ public class TestJob extends JobImpl {
     private static final AtomicInteger __id = new AtomicInteger();
     private int _id;
 
-    private static final int TEST_DELAY = 2 * 60 * 1000; // 2 minutes base
+    private static final int TEST_DELAY = 90 * 1000; // 90s base
     private static final int MIN_TEST_PERIOD = 8*1000;
     private static final int MAX_TEST_PERIOD = 20*1000;
 
@@ -50,20 +50,20 @@ public class TestJob extends JobImpl {
      * Prevents overwhelming the router with too many simultaneous tunnel tests.
      * This value can be adjusted based on system capacity.
      */
-    private static final int MAX_CONCURRENT_TESTS = 6;
+    private static final int MAX_CONCURRENT_TESTS = SystemVersion.isSlow() ? 4 : 8;
 
     /**
      * Maximum number of TestJob instances that should be queued before deferring new ones.
      * Prevents job queue saturation from too many waiting tunnel tests.
      */
-    private static final int MAX_QUEUED_TESTS = 20;
+    private static final int MAX_QUEUED_TESTS = SystemVersion.isSlow() ? 20 : 32;
 
     /**
      * Hard limit for total TestJob instances (queued + active).
      * Above this threshold, no new tests are scheduled until count decreases.
      * Prevents ever-increasing backlogs that could cause job lag.
      */
-    private static final int HARD_TEST_JOB_LIMIT = 72;
+    private static final int HARD_TEST_JOB_LIMIT = SystemVersion.isSlow() ? 64 : 128;
 
     /**
      * Static counter tracking the number of currently active tunnel tests.
