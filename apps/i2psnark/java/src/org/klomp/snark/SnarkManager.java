@@ -1188,9 +1188,9 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
         updateConfig();
         // Initialize bandwidth from config (not from I2CP detection)
         int maxdown = getInt(PROP_DOWNBW_MAX, DEFAULT_MAX_DOWN_BW);
-        _bwManager.setDownBWLimit(maxdown * 1000L);
+        _bwManager.setDownBWLimit(maxdown * 1024L);
         int maxup = getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW);
-        _bwManager.setUpBWLimit(maxup * 1000L);
+        _bwManager.setUpBWLimit(maxup * 1024L);
     }
 
     /**
@@ -1520,8 +1520,32 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                         System.out.println(" • " + msg);
                     }
                 } else {
-                    String msg =
-                            _t("Minimum total uploaders limit is {0}", Snark.MIN_TOTAL_UPLOADERS);
+                    String msg = _t("Minimum uploaders limit is {0}", Snark.MIN_TOTAL_UPLOADERS);
+                    addMessage(msg);
+                    if (!_context.isRouterContext()) {
+                        System.out.println(" • " + msg);
+                    }
+                }
+            }
+        }
+        if (upBW != null) {
+            int limit = _util.getMaxUpBW();
+            try {
+                limit = Integer.parseInt(upBW.trim());
+            } catch (NumberFormatException nfe) {
+            }
+            if (limit != _util.getMaxUpBW()) {
+                if (limit >= MIN_UP_BW) {
+                    _bwManager.setUpBWLimit(limit * 1024L);
+                    changed = true;
+                    _config.setProperty(PROP_UPBW_MAX, Integer.toString(limit));
+                    String msg = _t("Up BW limit changed to {0}KBps", limit);
+                    // addMessage(msg);
+                    if (!_context.isRouterContext()) {
+                        System.out.println(" • " + msg);
+                    }
+                } else {
+                    String msg = _t("Minimum up bandwidth limit is {0}KBps", MIN_UP_BW);
                     addMessage(msg);
                     if (!_context.isRouterContext()) {
                         System.out.println(" • " + msg);
@@ -1538,7 +1562,8 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
             if (limit != _util.getMaxUpBW()) {
                 if (limit >= MIN_UP_BW) {
                     _util.setMaxUpBW(limit);
-                    _bwManager.setUpBWLimit(limit * 1000L);
+                    _bwManager.setUpBWLimit(limit * 1024L);
+                    changed = true;
                     _config.setProperty(PROP_UPBW_MAX, Integer.toString(limit));
                     String msg = _t("Up BW limit changed to {0}KBps", limit);
                     // addMessage(msg);
@@ -1560,10 +1585,11 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 limit = Integer.parseInt(downBW.trim());
             } catch (NumberFormatException nfe) {
             }
-            if (limit != _bwManager.getDownBWLimit()) {
+            if (limit != _bwManager.getDownBWLimit() / 1024) {
                 if (limit >= MIN_DOWN_BW) {
-                    _bwManager.setDownBWLimit(limit * 1000L);
+                    _bwManager.setDownBWLimit(limit * 1024L);
                     _config.setProperty(PROP_DOWNBW_MAX, Integer.toString(limit));
+                    changed = true;
                     String msg = _t("Maximum download speed changed to {0}KB/s", limit);
                     // addMessage(msg);
                     if (!_context.isRouterContext()) {
@@ -1848,7 +1874,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 _util.setVaryOutboundHops(enableVaryOutboundHops);
                 int max = getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW);
                 _util.setMaxUpBW(max);
-                _bwManager.setUpBWLimit(max * 1000);
+                _bwManager.setUpBWLimit(max * 1024);
                 String msg =
                         _t("I2CP and tunnel changes will take effect after stopping all torrents");
                 addMessage(msg);
@@ -1883,7 +1909,7 @@ public class SnarkManager implements CompleteListener, ClientApp, DisconnectList
                 _util.setI2CPConfig(i2cpHost, port, opts);
                 int max = getInt(PROP_UPBW_MAX, DEFAULT_MAX_UP_BW);
                 _util.setMaxUpBW(max);
-                _bwManager.setUpBWLimit(max * 1000);
+                _bwManager.setUpBWLimit(max * 1024);
                 boolean ok = _util.connect();
                 if (!ok) {
                     msg =
