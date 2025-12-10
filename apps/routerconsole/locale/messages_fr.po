@@ -53,7 +53,7 @@ msgstr "Échec du {0}réinitialisation{1}:"
 
 #, java-format
 msgid "For assistance, see the {0}"
-msgstr "Pour obtenir de l'aide, consultez le {0}"
+msgstr "Pour obtenir de l\'aide, consultez le {0}"
 
 msgid "reseed help"
 msgstr "réamorcer l'aide"
@@ -249,7 +249,7 @@ msgstr "Échec de vérification de mise à jour du greffon {0}"
 
 #, java-format
 msgid "No new version is available for plugin {0}"
-msgstr "Aucune nouvelle version n'est proposée pour le greffon {0}"
+msgstr "Aucune nouvelle version n'est pas proposée pour le greffon {0}"
 
 msgid "HTTP client proxy tunnel must be running"
 msgstr "Le tunnel mandataire client HTTP doit être en fonction"
@@ -300,7 +300,7 @@ msgid "No write permission for I2P install directory."
 msgstr "Aucun droit d'écriture pour le répertoire d'installation d'I2P."
 
 msgid "No update certificates installed."
-msgstr "Aucun certificat de mise à jour n'est installé."
+msgstr "Aucun certificat de mise à jour n'est pas installé."
 
 #, java-format
 msgid "You must first update to version {0}"
@@ -778,7 +778,7 @@ msgid "Expiry"
 msgstr "Expiration"
 
 msgid "Total session-only bans"
-msgstr "Total session-only bans"
+msgstr ""
 
 msgid "Certificates are used to authenticate encrypted services running on the network, provision optional SSL for hosted services and the router console, or provide proof of ownership of a router family."
 msgstr "Les certificats sont utilisés pour authentifier les services cryptés exécutés sur le réseau, la fourniture de SSL facultative pour les services hébergés et la console de routeur, ou fournir une preuve de propriété d'une famille de routeurs."
@@ -4335,7 +4335,7 @@ msgid "Possible Sybil Warning - above routers are closer than average minimum di
 msgstr "avertissement Sybil possible : les routeurs ci-dessus sont plus proches que la distance minimale moyenne"
 
 msgid "Major Sybil Warning - above router is closer than average minimum distance"
-msgstr "Avertissement majeur Sybil – le routeur au-dessus est plus proche que la distance minimale moyenne"
+msgstr "Avertissement majeur Sybil - le routeur au-dessus est plus proche que la distance minimale moyenne"
 
 msgid "Totals for"
 msgstr "Totaux pour"
